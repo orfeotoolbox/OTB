@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -17,9 +17,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-otb_add_test(NAME leTuSharkRFMachineLearningModelNew COMMAND otbSupervisedTestDriver
-  otbSharkRFMachineLearningModelNew)
 
 otb_add_test(NAME leTvSharkRFMachineLearningModel COMMAND otbSupervisedTestDriver
   otbSharkRFMachineLearningModel
@@ -49,6 +46,7 @@ otb_add_test(NAME leTvImageClassificationFilterSharkFast COMMAND  otbSupervisedT
   ${INPUTDATA}/Classification/QB_1_ortho.tif
   ${TEMP}/leSharkImageClassificationFilterOutput.tif
   ${TEMP}/leSharkImageClassificationFilterConfidence.tif
+  ${TEMP}/leSharkImageClassificationFilterProba.tif
   1
   ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
   )
@@ -75,6 +73,7 @@ otb_add_test(NAME leTvImageClassificationFilterSharkFastMask COMMAND  otbSupervi
   ${INPUTDATA}/Classification/QB_1_ortho.tif
   ${TEMP}/leSharkImageClassificationFilterWithMaskOutput.tif
   ${TEMP}/leSharkImageClassificationFilterWithMaskConfidence.tif
+  ${TEMP}/leSharkImageClassificationFilterWithMaskProba.tif
   1
   ${INPUTDATA}/Classification/otbSharkImageClassificationFilter_RFmodel.txt
   ${INPUTDATA}/Classification/QB_1_ortho_mask.tif

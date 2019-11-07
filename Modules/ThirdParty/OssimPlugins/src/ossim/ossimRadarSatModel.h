@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -39,7 +39,6 @@
 #include <RadarSat/Trailer/Trailer.h>
 #include <RadarSat/VolumeDir/VolumeDir.h>
 
-#include <iostream>
 
 namespace ossimplugins
 {

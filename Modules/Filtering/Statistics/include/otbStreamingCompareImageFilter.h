@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -47,16 +47,15 @@ namespace otb
  *
  * \ingroup OTBStatistics
  */
-template<class TInputImage>
-class ITK_EXPORT PersistentCompareImageFilter :
-  public PersistentImageFilter<TInputImage, TInputImage>
+template <class TInputImage>
+class ITK_EXPORT PersistentCompareImageFilter : public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentCompareImageFilter                    Self;
+  typedef PersistentCompareImageFilter Self;
   typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -68,18 +67,16 @@ public:
   typedef TInputImage                   ImageType;
   typedef typename TInputImage::Pointer InputImagePointer;
 
-  typedef typename TInputImage::RegionType RegionType;
-  typedef typename TInputImage::SizeType   SizeType;
-  typedef typename TInputImage::IndexType  IndexType;
-  typedef typename TInputImage::PixelType  PixelType;
+  typedef typename TInputImage::RegionType                   RegionType;
+  typedef typename TInputImage::SizeType                     SizeType;
+  typedef typename TInputImage::IndexType                    IndexType;
+  typedef typename TInputImage::PixelType                    PixelType;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Image related typedefs. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Type to use for computations. */
   typedef typename itk::NumericTraits<PixelType>::RealType RealType;
@@ -92,21 +89,21 @@ public:
   typedef itk::SimpleDataObjectDecorator<PixelType> PixelObjectType;
 
   /** Get the inputs */
-  const TInputImage * GetInput1();
-  const TInputImage * GetInput2();
+  const TInputImage* GetInput1();
+  const TInputImage* GetInput2();
 
   /** Connect one the first operands. */
-  void SetInput1(const TInputImage *image);
+  void SetInput1(const TInputImage* image);
 
   /** Connect one the second operands. */
-  void SetInput2(const TInputImage *image);
+  void SetInput2(const TInputImage* image);
 
   /** Return the computed PSNR. */
   RealType GetPSNR() const
   {
     return this->GetPSNROutput()->Get();
   }
-  RealObjectType* GetPSNROutput();
+  RealObjectType*       GetPSNROutput();
   const RealObjectType* GetPSNROutput() const;
 
   /** Return the computed MSE. */
@@ -114,7 +111,7 @@ public:
   {
     return this->GetMSEOutput()->Get();
   }
-  RealObjectType* GetMSEOutput();
+  RealObjectType*       GetMSEOutput();
   const RealObjectType* GetMSEOutput() const;
 
   /** Return the computed MAE. */
@@ -122,19 +119,19 @@ public:
   {
     return this->GetMAEOutput()->Get();
   }
-  RealObjectType* GetMAEOutput();
+  RealObjectType*       GetMAEOutput();
   const RealObjectType* GetMAEOutput() const;
-  
+
   /** Return the Number of Pixel which are different. */
   RealType GetDiffCount() const
   {
     return this->GetDiffCountOutput()->Get();
   }
-  RealObjectType* GetDiffCountOutput();
+  RealObjectType*       GetDiffCountOutput();
   const RealObjectType* GetDiffCountOutput() const;
 
-  itkGetMacro(PhysicalSpaceCheck,bool);
-  itkSetMacro(PhysicalSpaceCheck,bool);
+  itkGetMacro(PhysicalSpaceCheck, bool);
+  itkSetMacro(PhysicalSpaceCheck, bool);
 
   /** Make a DataObject of the correct type to be used as the specified
    * output. */
@@ -151,13 +148,13 @@ public:
 
 protected:
   PersistentCompareImageFilter();
-  ~PersistentCompareImageFilter() override {}
+  ~PersistentCompareImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType&
-                             outputRegionForThread,
-                             itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** Allows skipping the verification of physical space between
    *  the two input images (see flag m_PhysicalSpaceCheck)
@@ -165,8 +162,8 @@ protected:
   void VerifyInputInformation() override;
 
 private:
-  PersistentCompareImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentCompareImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   itk::Array<RealType>  m_SquareOfDifferences;
   itk::Array<RealType>  m_AbsoluteValueOfDifferences;
@@ -208,17 +205,15 @@ private:
  * \ingroup OTBStatistics
  */
 
-template<class TInputImage>
-class ITK_EXPORT StreamingCompareImageFilter :
-  public PersistentFilterStreamingDecorator<PersistentCompareImageFilter<TInputImage> >
+template <class TInputImage>
+class ITK_EXPORT StreamingCompareImageFilter : public PersistentFilterStreamingDecorator<PersistentCompareImageFilter<TInputImage>>
 {
 public:
   /** Standard Self typedef */
-  typedef StreamingCompareImageFilter Self;
-  typedef PersistentFilterStreamingDecorator
-  <PersistentCompareImageFilter<TInputImage> > Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef StreamingCompareImageFilter                                                   Self;
+  typedef PersistentFilterStreamingDecorator<PersistentCompareImageFilter<TInputImage>> Superclass;
+  typedef itk::SmartPointer<Self>                                                       Pointer;
+  typedef itk::SmartPointer<const Self>                                                 ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -236,13 +231,13 @@ public:
   typedef itk::SimpleDataObjectDecorator<PixelType> PixelObjectType;
 
   /** Connect one the first operands. */
-  void SetInput1(InputImageType * input)
+  void SetInput1(InputImageType* input)
   {
     this->GetFilter()->SetInput1(input);
   }
 
   /** Connect one the second operands. */
-  void SetInput2(InputImageType * input)
+  void SetInput2(InputImageType* input)
   {
     this->GetFilter()->SetInput2(input);
   }
@@ -288,7 +283,7 @@ public:
   {
     return this->GetFilter()->GetMAEOutput();
   }
-  
+
   /** Return the Number of Pixel different. */
   RealType GetDiffCount() const
   {
@@ -317,19 +312,21 @@ public:
 
 protected:
   /** Constructor */
-  StreamingCompareImageFilter() {};
+  StreamingCompareImageFilter(){};
   /** Destructor */
-  ~StreamingCompareImageFilter() override {}
+  ~StreamingCompareImageFilter() override
+  {
+  }
 
 private:
-  StreamingCompareImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  StreamingCompareImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingCompareImageFilter.txx"
+#include "otbStreamingCompareImageFilter.hxx"
 #endif
 
 #endif

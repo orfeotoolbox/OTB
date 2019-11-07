@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,15 +19,14 @@
  */
 
 
-
 #include "otbTimeSeries.h"
 
 int otbPolynomialTimeSeriesTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
 
-  typedef double CoefficientPrecisionType;
+  typedef double     CoefficientPrecisionType;
   const unsigned int Degree = 2;
-  typedef otb::PolynomialTimeSeries< Degree, CoefficientPrecisionType > FunctionType;
+  typedef otb::PolynomialTimeSeries<Degree, CoefficientPrecisionType> FunctionType;
   typedef FunctionType::CoefficientsType CoefficientsType;
 
   CoefficientsType coefs;
@@ -37,15 +36,15 @@ int otbPolynomialTimeSeriesTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   coefs[2] = 4;
 
   FunctionType f;
-  f.SetCoefficients( coefs );
+  f.SetCoefficients(coefs);
 
-  for( unsigned int i=0; i<=Degree; ++i)
-    if(coefs[i] != f.GetCoefficient(i))
+  for (unsigned int i = 0; i <= Degree; ++i)
+    if (coefs[i] != f.GetCoefficient(i))
       return EXIT_FAILURE;
 
   int VALMAX = 10;
-  for(int val = -VALMAX; val <= VALMAX; ++val)
-    if( f.GetValue( val ) != (coefs[0]+coefs[1]*val+coefs[2]*val*val) )
+  for (int val = -VALMAX; val <= VALMAX; ++val)
+    if (f.GetValue(val) != (coefs[0] + coefs[1] * val + coefs[2] * val * val))
       return EXIT_FAILURE;
 
   return EXIT_SUCCESS;

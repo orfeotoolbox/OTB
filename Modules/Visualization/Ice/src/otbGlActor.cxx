@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,14 +23,19 @@
 namespace otb
 {
 GlActor::GlActor()
-  : m_Settings(ViewSettings::New()),
-    m_Name("Actor"),
-    m_Visible(true),
-    m_GeometryChanged( false ),
-    m_Overlay( false )
+  : m_Shader()
+  , m_Settings(ViewSettings::New())
+  , m_Name("Actor")
+  , m_Visible(true)
+  , m_GeometryChanged( false )
+  , m_Overlay( false )
 {}
 
 GlActor::~GlActor()
+{}
+
+void
+GlActor::CreateShader()
 {}
 
 } // End namespace 'otb'.

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,40 +38,39 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT InputImageListParameter :
-    public ParameterList< InputImageParameter >
+class OTBApplicationEngine_EXPORT InputImageListParameter : public ParameterList<InputImageParameter>
 {
 public:
   /** Standard class typedef */
-  typedef InputImageListParameter Self;
-  typedef ParameterList< InputImageParameter > Superclass;
-  typedef itk::SmartPointer< Self > Pointer;
-  typedef itk::SmartPointer< const Self > ConstPointer;
+  typedef InputImageListParameter            Self;
+  typedef ParameterList<InputImageParameter> Superclass;
+  typedef itk::SmartPointer<Self>            Pointer;
+  typedef itk::SmartPointer<const Self>      ConstPointer;
 
   /** Defining ::New() static method */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro( InputImageListParameter, ParameterList );
+  itkTypeMacro(InputImageListParameter, ParameterList);
 
   /** Get one list of the stored image. WARNING : if the parameter list changes,
    *  the returned image list may become obsolete. You should call
    *  GetImageList() again to make sure your image list is up-to-date. */
-  const FloatVectorImageListType * GetImageList() const;
-  FloatVectorImageListType * GetImageList();
+  const FloatVectorImageListType* GetImageList() const;
+  FloatVectorImageListType*       GetImageList();
 
   /** Get one specific stored image. */
-  const FloatVectorImageType * GetNthImage( std::size_t ) const;
-  FloatVectorImageType * GetNthImage( std::size_t );
+  const FloatVectorImageType* GetNthImage(std::size_t) const;
+  FloatVectorImageType*       GetNthImage(std::size_t);
 
   /** Set one specific image. */
-  void SetNthImage( std::size_t, ImageBaseType * );
+  void SetNthImage(std::size_t, ImageBaseType*);
 
   /** Set the list of image. */
-  void SetImageList( FloatVectorImageListType * );
+  void SetImageList(FloatVectorImageListType*);
 
   /** Add an image to the list. */
-  void AddImage( ImageBaseType * );
+  void AddImage(ImageBaseType*);
 
   /** Clear all the list. */
   void ClearValue() override;
@@ -82,7 +81,12 @@ public:
 
   /** */
   using StringListInterface::GetFilenameFilter;
-  const std::string & GetFilenameFilter() const override;
+  const std::string& GetFilenameFilter() const override;
+
+  ParameterType GetType() const override
+  {
+    return ParameterType_InputImageList;
+  }
 
 protected:
   /** Constructor */
@@ -91,33 +95,18 @@ protected:
   /** Destructor */
   ~InputImageListParameter() override;
 
-//
-// Protected methods.
-protected:
-
-  /** */
-  const std::string & ToString( const ParameterType::Pointer & ) const override;
-
-  /** */
-  using Superclass::FromString;
-  const ParameterType::Pointer &
-    FromString( const ParameterType::Pointer &,
-		const std::string & ) const override;
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-  InputImageListParameter( const Parameter & ); //purposely not implemented
-  void operator = ( const Parameter & ); //purposely not implemented
+  InputImageListParameter(const Parameter&) = delete;
+  void operator=(const Parameter&) = delete;
 
-  InputImageParameter::Pointer
-    FromImage( ImageBaseType * );
+  InputImageParameter::Pointer FromImage(ImageBaseType*);
 
-  InputImageParameter::Pointer &
-    FromImage( InputImageParameter::Pointer &, ImageBaseType * );
+  InputImageParameter::Pointer& FromImage(InputImageParameter::Pointer&, ImageBaseType*);
 
-//
-// Private attributes
+  //
+  // Private attributes
 private:
   FloatVectorImageListType::Pointer m_ImageList;
 

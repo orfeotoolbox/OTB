@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,16 +30,16 @@
 
 #include "itkMacro.h"
 
-int otbMultiScaleConvexOrConcaveClassificationFilter(int itkNotUsed(argc), char * argv[])
+int otbMultiScaleConvexOrConcaveClassificationFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char *       inputFilename = argv[1];
-  const char *       outputFilename = argv[2];
-  const unsigned int profileSize = atoi(argv[3]);
-  const unsigned int initialValue = atoi(argv[4]);
-  const unsigned int step = atoi(argv[5]);
-  const double       sigma = atof(argv[6]);
+  const char*        inputFilename  = argv[1];
+  const char*        outputFilename = argv[2];
+  const unsigned int profileSize    = atoi(argv[3]);
+  const unsigned int initialValue   = atoi(argv[4]);
+  const unsigned int step           = atoi(argv[5]);
+  const double       sigma          = atof(argv[6]);
 
-  const unsigned int Dimension = 2;
+  const unsigned int     Dimension = 2;
   typedef double         InputPixelType;
   typedef double         OutputPixelType;
   typedef unsigned short LabeledPixelType;
@@ -48,19 +48,15 @@ int otbMultiScaleConvexOrConcaveClassificationFilter(int itkNotUsed(argc), char 
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   typedef otb::Image<LabeledPixelType, 2>        LabeledImageType;
 
-  typedef otb::ImageFileReader<InputImageType>            ReaderType;
+  typedef otb::ImageFileReader<InputImageType>   ReaderType;
   typedef otb::ImageFileWriter<LabeledImageType> LabeledWriterType;
 
   typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension> StructuringElementType;
-  typedef otb::MorphologicalOpeningProfileFilter<InputImageType, InputImageType, StructuringElementType>
-  OpeningProfileFilterType;
-  typedef otb::MorphologicalClosingProfileFilter<InputImageType, InputImageType, StructuringElementType>
-  ClosingProfileFilterType;
+  typedef otb::MorphologicalOpeningProfileFilter<InputImageType, InputImageType, StructuringElementType> OpeningProfileFilterType;
+  typedef otb::MorphologicalClosingProfileFilter<InputImageType, InputImageType, StructuringElementType> ClosingProfileFilterType;
   typedef otb::ProfileToProfileDerivativeFilter<InputImageType, InputImageType> DerivativeFilterType;
-  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType, OutputImageType, LabeledImageType>
-  MultiScaleCharacteristicsFilterType;
-  typedef otb::MultiScaleConvexOrConcaveClassificationFilter<InputImageType,
-      LabeledImageType> MultiScaleClassificationFilterType;
+  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InputImageType, OutputImageType, LabeledImageType> MultiScaleCharacteristicsFilterType;
+  typedef otb::MultiScaleConvexOrConcaveClassificationFilter<InputImageType, LabeledImageType> MultiScaleClassificationFilterType;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
@@ -96,12 +92,13 @@ int otbMultiScaleConvexOrConcaveClassificationFilter(int itkNotUsed(argc), char 
   cmsCharFilter->SetStep(step);
 
   MultiScaleClassificationFilterType::Pointer classificationFilter = MultiScaleClassificationFilterType::New();
-  classificationFilter->SetOpeningProfileDerivativeMaxima(omsCharFilter->GetOutput());
-  classificationFilter->SetOpeningProfileCharacteristics(omsCharFilter->GetOutputCharacteristics());
-  classificationFilter->SetClosingProfileDerivativeMaxima(cmsCharFilter->GetOutput());
-  classificationFilter->SetClosingProfileCharacteristics(cmsCharFilter->GetOutputCharacteristics());
-  classificationFilter->SetSigma(sigma);
-  classificationFilter->SetLabelSeparator(initialValue + profileSize * step);
+  using namespace otb::Functor::MultiScaleConvexOrConcaveDecisionRule_tags;
+  classificationFilter->SetInput<max_opening_profile_derivative>(omsCharFilter->GetOutput());
+  classificationFilter->SetInput<opening_profile_characteristics>(omsCharFilter->GetOutputCharacteristics());
+  classificationFilter->SetInput<max_closing_profile_derivative>(cmsCharFilter->GetOutput());
+  classificationFilter->SetInput<closing_profile_characteristics>(cmsCharFilter->GetOutputCharacteristics());
+  classificationFilter->GetModifiableFunctor().SetSigma(sigma);
+  classificationFilter->GetModifiableFunctor().SetLabelSeparator(initialValue + profileSize * step);
 
   LabeledWriterType::Pointer labeledWriter = LabeledWriterType::New();
 

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -53,16 +53,15 @@ namespace otb
  *
  * \ingroup OTBEndmembersExtraction
  */
-template<class TPrecision>
-class ITK_EXPORT EigenvalueLikelihoodMaximisation :
-  public itk::LightObject
+template <class TPrecision>
+class ITK_EXPORT EigenvalueLikelihoodMaximisation : public itk::LightObject
 {
 public:
   /** Standard Self typedef */
-  typedef EigenvalueLikelihoodMaximisation           Self;
-  typedef itk::LightObject                           Superclass;
-  typedef itk::SmartPointer<Self>                    Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef EigenvalueLikelihoodMaximisation Self;
+  typedef itk::LightObject                 Superclass;
+  typedef itk::SmartPointer<Self>          Pointer;
+  typedef itk::SmartPointer<const Self>    ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -73,8 +72,8 @@ public:
   /** Types to use for computations. */
   typedef TPrecision PrecisionType;
 
-  typedef vnl_vector<PrecisionType>   VectorType;
-  typedef vnl_matrix<PrecisionType>   MatrixType;
+  typedef vnl_vector<PrecisionType> VectorType;
+  typedef vnl_matrix<PrecisionType> MatrixType;
 
   void SetCovariance(const MatrixType& m)
   {
@@ -105,26 +104,26 @@ public:
 
 protected:
   EigenvalueLikelihoodMaximisation();
-  ~EigenvalueLikelihoodMaximisation() override {}
+  ~EigenvalueLikelihoodMaximisation() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  EigenvalueLikelihoodMaximisation(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  EigenvalueLikelihoodMaximisation(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   MatrixType m_Covariance;
   MatrixType m_Correlation;
 
   unsigned int m_NumberOfPixels;
   unsigned int m_NumberOfEndmembers;
-  VectorType m_Likelihood;
-
+  VectorType   m_Likelihood;
 };
-
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbEigenvalueLikelihoodMaximisation.txx"
+#include "otbEigenvalueLikelihoodMaximisation.hxx"
 #endif
 
 #endif

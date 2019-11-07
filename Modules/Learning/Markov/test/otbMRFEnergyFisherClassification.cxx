@@ -19,33 +19,17 @@
  */
 
 
-
 #include "otbMRFEnergyFisherClassification.h"
 #include "otbImage.h"
 #include <fstream>
 
-int otbMRFEnergyFisherClassificationNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+
+int otbMRFEnergyFisherClassification(int itkNotUsed(argc), char* argv[])
 {
-  typedef double                        PixelTypeInput;
-  typedef int                           PixelTypeLabel;
-  typedef otb::Image<PixelTypeInput, 2> ImageType;
-  typedef otb::Image<PixelTypeLabel, 2> LabelType;
+  const char* outputFile = argv[1];
 
-  typedef otb::MRFEnergyFisherClassification<ImageType, LabelType> MRFFisherType;
-
-  MRFFisherType::Pointer classif = MRFFisherType::New();
-
-  std::cout << classif << std::endl;
-
-  return EXIT_SUCCESS;
-}
-
-int otbMRFEnergyFisherClassification(int itkNotUsed(argc), char * argv[])
-{
-  const char * outputFile = argv[1];
-
-  typedef double                        PixelTypeInput;
-  typedef int                           PixelTypeLabel;
+  typedef double PixelTypeInput;
+  typedef int    PixelTypeLabel;
   typedef otb::Image<PixelTypeInput, 2> ImageType;
   typedef otb::Image<PixelTypeLabel, 2> LabelType;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,46 +30,38 @@
 #include "otbVectorDataProjectionFilter.h"
 
 // common typedefs
-typedef otb::VectorData<>                      VectorDataType;
-typedef otb::VectorDataTransformFilter
-        <VectorDataType, VectorDataType>       VectorDataTransformType;
+typedef otb::VectorData<> VectorDataType;
+typedef otb::VectorDataTransformFilter<VectorDataType, VectorDataType> VectorDataTransformType;
 
-int otbVectorDataTransformFilterNew (int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbVectorDataTransformFilter(int itkNotUsed(argc), char* argv[])
 {
-  VectorDataTransformType::Pointer transformFilter = VectorDataTransformType::New();
-  return EXIT_SUCCESS;
-}
+  typedef otb::VectorImage<double, 2> ImageType;
 
-int otbVectorDataTransformFilter (int itkNotUsed(argc), char * argv[])
-{
-  typedef otb::VectorImage<double, 2>             ImageType;
+  typedef otb::ImageFileReader<ImageType>           ReaderType;
+  typedef otb::VectorDataFileReader<VectorDataType> VectorDataFileReaderType;
+  typedef otb::VectorDataFileWriter<VectorDataType> VectorDataFileWriterType;
 
-  typedef otb::ImageFileReader<ImageType>             ReaderType;
-  typedef otb::VectorDataFileReader<VectorDataType>   VectorDataFileReaderType;
-  typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataFileWriterType;
-
-  typedef otb::VectorDataProjectionFilter<VectorDataType,
-    VectorDataType>                                   VDProjectionFilterType;
+  typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> VDProjectionFilterType;
 
   // Instantiate the image reader
-  ReaderType::Pointer      reader = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
 
-  VectorDataFileReaderType::Pointer  vdreader = VectorDataFileReaderType::New();
+  VectorDataFileReaderType::Pointer vdreader = VectorDataFileReaderType::New();
   vdreader->SetFileName(argv[2]);
   vdreader->Update();
 
   // Reproject the VectorData In the image coordinate system
-  VDProjectionFilterType::Pointer  vdproj = VDProjectionFilterType::New();
+  VDProjectionFilterType::Pointer vdproj = VDProjectionFilterType::New();
   vdproj->SetInput(vdreader->GetOutput());
   vdproj->SetInputProjectionRef(vdreader->GetOutput()->GetProjectionRef());
   vdproj->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
   vdproj->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
 
   // Test the translation using the ApplyTransformTo
-  typedef itk::AffineTransform<double, 2>           TransformType;
-  typedef TransformType::OutputVectorType          TranslationParamType;
+  typedef itk::AffineTransform<double, 2> TransformType;
+  typedef TransformType::OutputVectorType TranslationParamType;
 
   // Set up the transform (Apply a translation of 8 pixels in the y direction)
   TransformType::Pointer transform = TransformType::New();
@@ -83,13 +75,13 @@ int otbVectorDataTransformFilter (int itkNotUsed(argc), char * argv[])
   transformFilter->SetTransform(transform);
 
   // retransform int the input vector projection
-  VDProjectionFilterType::Pointer  reverseVdProj = VDProjectionFilterType::New();
+  VDProjectionFilterType::Pointer reverseVdProj = VDProjectionFilterType::New();
   reverseVdProj->SetInput(transformFilter->GetOutput());
   reverseVdProj->SetOutputProjectionRef(vdreader->GetOutput()->GetProjectionRef());
   reverseVdProj->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
   reverseVdProj->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
 
-  //Write the vectordata
+  // Write the vectordata
   VectorDataFileWriterType::Pointer vdwriter = VectorDataFileWriterType::New();
   vdwriter->SetInput(reverseVdProj->GetOutput());
   vdwriter->SetFileName(argv[3]);

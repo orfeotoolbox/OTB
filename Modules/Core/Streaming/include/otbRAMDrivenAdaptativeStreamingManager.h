@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -45,15 +45,15 @@ namespace otb
  *
  * \ingroup OTBStreaming
  */
-template<class TImage>
+template <class TImage>
 class ITK_EXPORT RAMDrivenAdaptativeStreamingManager : public StreamingManager<TImage>
 {
 public:
   /** Standard class typedefs. */
   typedef RAMDrivenAdaptativeStreamingManager Self;
-  typedef StreamingManager<TImage>       Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef StreamingManager<TImage>            Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   typedef TImage                          ImageType;
   typedef typename Superclass::RegionType RegionType;
@@ -83,7 +83,7 @@ public:
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
-  void PrepareStreaming(itk::DataObject * input, const RegionType &region) override;
+  void PrepareStreaming(itk::DataObject* input, const RegionType& region) override;
 
 protected:
   RAMDrivenAdaptativeStreamingManager();
@@ -96,15 +96,14 @@ protected:
   double m_Bias;
 
 private:
-  RAMDrivenAdaptativeStreamingManager(const RAMDrivenAdaptativeStreamingManager &);
-  void operator =(const RAMDrivenAdaptativeStreamingManager&);
+  RAMDrivenAdaptativeStreamingManager(const RAMDrivenAdaptativeStreamingManager&);
+  void operator=(const RAMDrivenAdaptativeStreamingManager&);
 };
 
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRAMDrivenAdaptativeStreamingManager.txx"
+#include "otbRAMDrivenAdaptativeStreamingManager.hxx"
 #endif
 
 #endif
-

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,8 +22,6 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbHooverMatrixFilterNew);
-  REGISTER_TEST(otbHooverInstanceFilterNew);
   REGISTER_TEST(otbHooverInstanceFilterToAttributeImage);
   REGISTER_TEST(otbHooverMatrixFilter);
 }

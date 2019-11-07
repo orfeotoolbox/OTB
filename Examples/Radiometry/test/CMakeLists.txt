@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -19,7 +19,7 @@
 #
 
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Radiometry)
-set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 # -------            ARVIMultiChannelRAndBAndNIRVegetationIndexImageFilter   ------------------------------
 
@@ -35,7 +35,6 @@ otb_add_test(NAME raTeARVIMultiChannelRAndBAndNIRVegetationIndexImageFilterTest 
     1
     2
     3
-    0.6 # Gamma parameter
 )
 
 # -------            AVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest   ------------------------------
@@ -52,24 +51,6 @@ otb_add_test(NAME raTeAVIMultiChannelRAndGAndNIRVegetationIndexImageFilterTest C
     3
     2
     4 # indices of the channels
-    660.
-    560.
-    830. # lambdaR, lambdaG, lambdaNir
-)
-
-# -------            NDVIRAndNIRVegetationIndexImageFilter   ------------------------------
-
-otb_add_test(NAME raTeNDVIRAndNIRVegetationIndexImageFilterTest COMMAND ${OTB_TEST_DRIVER}
-  --compare-image ${NOTOL}
-    ${BASELINE}/NDVIRAndNIRVegetationIndex.tif
-    ${TEMP}/NDVIRAndNIRVegetationIndex.tif
-  Execute $<TARGET_FILE:NDVIRAndNIRVegetationIndexImageFilter>
-    ${INPUTDATA}/poupees_sub_c1.png
-    ${INPUTDATA}/poupees_sub_c2.png
-    ${TEMP}/NDVIRAndNIRVegetationIndex.tif
-    ${TEMP}/NDVIRAndNIRVegetationIndex2.tif
-    ${TEMP}/NDVIRAndNIRVegetationIndex3.tif
-    ${TEMP}/NDVIRAndNIRVegetationIndex4.tif
 )
 
 if(OTBOpticalCalibration_LOADED)

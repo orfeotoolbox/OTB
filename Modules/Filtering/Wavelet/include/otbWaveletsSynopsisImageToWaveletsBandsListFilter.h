@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,48 +36,44 @@ namespace otb
  */
 
 template <class TImage, class TImageList>
-class ITK_EXPORT WaveletsSynopsisImageToWaveletsBandsListFilter
-      : public ImageToImageListFilter<TImage,typename TImageList::ImageType>
+class ITK_EXPORT WaveletsSynopsisImageToWaveletsBandsListFilter : public ImageToImageListFilter<TImage, typename TImageList::ImageType>
 {
 public:
   /** Standard typedefs */
   typedef WaveletsSynopsisImageToWaveletsBandsListFilter Self;
-  typedef ImageToImageListFilter<TImage,
-  typename TImageList::ImageType>                        Superclass;
-  typedef itk::SmartPointer<Self>                        Pointer;
-  typedef itk::SmartPointer<const Self>                  ConstPointer;
+  typedef ImageToImageListFilter<TImage, typename TImageList::ImageType> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Creation through object factory macro */
-  itkTypeMacro(WaveletsSynopsisImageToWaveletsBandsListFilter,ImageToImageListFilter);
+  itkTypeMacro(WaveletsSynopsisImageToWaveletsBandsListFilter, ImageToImageListFilter);
 
   /** Template parameters typedefs */
-  typedef TImage                                          InputImageType;
-  typedef typename InputImageType::RegionType             RegionType;
-  typedef TImageList                                      OutputImageListType;
-  typedef typename OutputImageListType::ImageType         OutputImageType;
+  typedef TImage                                  InputImageType;
+  typedef typename InputImageType::RegionType     RegionType;
+  typedef TImageList                              OutputImageListType;
+  typedef typename OutputImageListType::ImageType OutputImageType;
 
-  typedef itk::RegionOfInterestImageFilter<
-	  InputImageType,
-	  InputImageType > ExtractFilterType;
-  
+  typedef itk::RegionOfInterestImageFilter<InputImageType, InputImageType> ExtractFilterType;
+
   typedef typename ExtractFilterType::Pointer ExtractFilterPointerType;
-  
-  typedef std::vector<ExtractFilterPointerType>           ExtractFilterVectorType;
+
+  typedef std::vector<ExtractFilterPointerType> ExtractFilterVectorType;
 
   /** Set the number of levels */
-  itkSetMacro(NumberOfLevels,unsigned int);
+  itkSetMacro(NumberOfLevels, unsigned int);
 
   /** Get the number of levels */
-  itkGetMacro(NumberOfLevels,unsigned int);
+  itkGetMacro(NumberOfLevels, unsigned int);
 
   /** Set the decimation ratio */
-  itkSetMacro(DecimationRatio,unsigned int);
+  itkSetMacro(DecimationRatio, unsigned int);
 
   /** Get the decimation ratio */
-  itkGetMacro(DecimationRatio,unsigned int);
+  itkGetMacro(DecimationRatio, unsigned int);
 
   /** If the filter is modified, the extract list need to be regenerated */
   virtual void Modified() const override;
@@ -102,8 +98,8 @@ protected:
   virtual void GenerateData(void) override;
 
 private:
-  WaveletsSynopsisImageToWaveletsBandsListFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  WaveletsSynopsisImageToWaveletsBandsListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The number of levels in the decomposition */
   unsigned int m_NumberOfLevels;
@@ -117,9 +113,9 @@ private:
   /** True if extract list is up-to-date */
   mutable bool m_ExtractFiltersUpToDate;
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletsSynopsisImageToWaveletsBandsListFilter.txx"
+#include "otbWaveletsSynopsisImageToWaveletsBandsListFilter.hxx"
 #endif
 
 #endif

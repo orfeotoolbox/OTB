@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,24 +25,15 @@
 
 using namespace otb;
 
-int otbGDALOverviewsBuilderNew(int itkNotUsed(argc), char* itkNotUsed(argv) [])
-{
-  typedef otb::GDALOverviewsBuilder GDALOverviewsBuilderType;
-  GDALOverviewsBuilderType::Pointer object = GDALOverviewsBuilderType::New();
-
-  std::cout << object << std::endl;
-
-  return EXIT_SUCCESS;
-}
 
 int otbGDALOverviewsBuilder(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  int nbResolution = atoi(argv[2]);
+  const char* inputFilename = argv[1];
+  int         nbResolution  = atoi(argv[2]);
   std::string filename(inputFilename);
 
   typedef otb::GDALOverviewsBuilder FilterType;
-  FilterType::Pointer filter = FilterType::New();
+  FilterType::Pointer               filter = FilterType::New();
 
   otb::GDALResamplingType resamp = GDAL_RESAMPLING_AVERAGE;
 
@@ -51,7 +42,7 @@ int otbGDALOverviewsBuilder(int itkNotUsed(argc), char* argv[])
   filter->SetResamplingMethod(resamp);
 
   {
-    StandardOneLineFilterWatcher watcher(filter,"Overviews creation");
+    StandardOneLineFilterWatcher<> watcher(filter, "Overviews creation");
     filter->Update();
   }
 
@@ -59,20 +50,20 @@ int otbGDALOverviewsBuilder(int itkNotUsed(argc), char* argv[])
   io->SetFileName(inputFilename);
   bool canRead = io->CanReadFile(inputFilename);
 
-  if(!canRead)
-    {
-    std::cerr<<"Failed to read file "<< inputFilename <<" with GdalImageIO."<<std::endl;
+  if (!canRead)
+  {
+    std::cerr << "Failed to read file " << inputFilename << " with GdalImageIO." << std::endl;
     return EXIT_FAILURE;
-    }
-  
-  io->ReadImageInformation();
-  //std::cout << io->GetOverviewsCount() << std::endl;
+  }
 
-  if (io->GetOverviewsCount() != static_cast<unsigned int>(nbResolution) )
-    {
-    std::cout << "Got "<<io->GetOverviewsCount()<< " overviews, expected "<< nbResolution << std::endl;
+  io->ReadImageInformation();
+  // std::cout << io->GetOverviewsCount() << std::endl;
+
+  if (io->GetOverviewsCount() != static_cast<unsigned int>(nbResolution))
+  {
+    std::cout << "Got " << io->GetOverviewsCount() << " overviews, expected " << nbResolution << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -32,7 +32,8 @@
 
 #include "otbWaveletOperatorBase.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class WaveletFilterBank
  * \brief One level stationary wavelet transform
@@ -82,18 +83,15 @@ namespace otb {
  *
  * \ingroup OTBWavelet
  */
-template <class TInputImage, class TOutputImage,
-    class TWaveletOperator,
-    Wavelet::WaveletDirection TDirectionOfTransformation>
-class ITK_EXPORT WaveletFilterBank
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TWaveletOperator, Wavelet::WaveletDirection TDirectionOfTransformation>
+class ITK_EXPORT WaveletFilterBank : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef WaveletFilterBank                                  Self;
+  typedef WaveletFilterBank Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -106,8 +104,8 @@ protected:
   virtual ~WaveletFilterBank();
 
 private:
-  WaveletFilterBank(const Self &);
-  void operator =(const Self&);
+  WaveletFilterBank(const Self&);
+  void operator=(const Self&);
 }; // end of class
 
 /** \class WaveletFilterBank
@@ -154,15 +152,14 @@ private:
  * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
-class ITK_EXPORT WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD>
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::FORWARD> : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef WaveletFilterBank                                  Self;
+  typedef WaveletFilterBank Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -214,7 +211,9 @@ public:
 
 protected:
   WaveletFilterBank();
-  ~WaveletFilterBank() override {}
+  ~WaveletFilterBank() override
+  {
+  }
 
   /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
@@ -231,8 +230,7 @@ protected:
    * pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion()
-    throw (itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
 
   /** BeforeThreadedGenerateData.
    * It allocates also internal images
@@ -255,33 +253,26 @@ protected:
    * subsampling factor has tp be applied, Region estimation
    * functions has to be reimplemented
    */
-  void CallCopyOutputRegionToInputRegion
-    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) override;
-  void CallCopyInputRegionToOutputRegion
-    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) override;
+  void CallCopyOutputRegionToInputRegion(InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) override;
+  void CallCopyInputRegionToOutputRegion(OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) override;
 
   /** CallCopyOutputRegionToInputRegion
    * This function is also redefined in order to adapt the shape of the regions with
    * resect to the direction (among the dimensions) of the filtering.
    */
-  virtual void CallCopyOutputRegionToInputRegion(unsigned int direction,
-                                                 InputImageRegionType& destRegion,
-                                                 const OutputImageRegionType& srcRegion);
-  virtual void CallCopyInputRegionToOutputRegion(unsigned int direction,
-                                                 OutputImageRegionType& destRegion,
-                                                 const InputImageRegionType& srcRegion);
+  virtual void CallCopyOutputRegionToInputRegion(unsigned int direction, InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion);
+  virtual void CallCopyInputRegionToOutputRegion(unsigned int direction, OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion);
 
   /** Generate data redefinition */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** Iterative call to the forward filter bank at each dimension. */
-  virtual void ThreadedGenerateDataAtDimensionN(unsigned int idx, unsigned int direction,
-                                                itk::ProgressReporter& reporter,
+  virtual void ThreadedGenerateDataAtDimensionN(unsigned int idx, unsigned int direction, itk::ProgressReporter& reporter,
                                                 const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:
-  WaveletFilterBank(const Self &);
-  void operator =(const Self&);
+  WaveletFilterBank(const Self&);
+  void operator=(const Self&);
 
   unsigned int m_UpSampleFilterFactor;
   unsigned int m_SubsampleImageFactor;
@@ -292,7 +283,7 @@ private:
    * images.
    */
   typedef std::vector<OutputImagePointerType> InternalImagesTabular;
-  std::vector<InternalImagesTabular> m_InternalImages;
+  std::vector<InternalImagesTabular>          m_InternalImages;
 }; // end of class
 
 /** \class WaveletFilterBank
@@ -339,15 +330,14 @@ private:
  * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage, class TWaveletOperator>
-class ITK_EXPORT WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE>
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT WaveletFilterBank<TInputImage, TOutputImage, TWaveletOperator, Wavelet::INVERSE> : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef WaveletFilterBank                                  Self;
+  typedef WaveletFilterBank Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -399,11 +389,12 @@ public:
 
 protected:
   WaveletFilterBank();
-  ~WaveletFilterBank() override {}
+  ~WaveletFilterBank() override
+  {
+  }
 
   void VerifyInputInformation() override
   {
-
   }
 
   /** GenerateOutputInformation
@@ -421,8 +412,7 @@ protected:
    * pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion()
-    throw (itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
 
   /** BeforeThreadedGenerateData
    * If SubsampleImageFactor neq 1, it is necessary to up sample input images in the Wavelet::INVERSE mode
@@ -445,21 +435,15 @@ protected:
    * subsampling factor has tp be applied, Region estimation
    * functions has to be reimplemented
    */
-  void CallCopyOutputRegionToInputRegion
-    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) override;
-  void CallCopyInputRegionToOutputRegion
-    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) override;
+  void CallCopyOutputRegionToInputRegion(InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) override;
+  void CallCopyInputRegionToOutputRegion(OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) override;
 
   /** CallCopyOutputRegionToInputRegion
    * This function is also redefined in order to adapt the shape of the regions with
    * resect to the direction (among the dimensions) of the filtering.
    */
-  virtual void CallCopyOutputRegionToInputRegion(unsigned int direction,
-                                                 InputImageRegionType& destRegion,
-                                                 const OutputImageRegionType& srcRegion);
-  virtual void CallCopyInputRegionToOutputRegion(unsigned int direction,
-                                                 OutputImageRegionType& destRegion,
-                                                 const InputImageRegionType& srcRegion);
+  virtual void CallCopyOutputRegionToInputRegion(unsigned int direction, InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion);
+  virtual void CallCopyInputRegionToOutputRegion(unsigned int direction, OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion);
 
   /** Generate data redefinition */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
@@ -468,13 +452,12 @@ protected:
    * Iterative call to the forward filter bank at each dimension.
    * Used for the multiresolution case only.
    */
-  virtual void ThreadedGenerateDataAtDimensionN(unsigned int direction,
-                                                itk::ProgressReporter& reporter,
-                                                const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
+  virtual void ThreadedGenerateDataAtDimensionN(unsigned int direction, itk::ProgressReporter& reporter, const OutputImageRegionType& outputRegionForThread,
+                                                itk::ThreadIdType threadId);
 
 private:
-  WaveletFilterBank(const Self &);
-  void operator =(const Self&);
+  WaveletFilterBank(const Self&);
+  void operator=(const Self&);
 
   unsigned int m_UpSampleFilterFactor;
   unsigned int m_SubsampleImageFactor;
@@ -485,14 +468,14 @@ private:
    * images. Internal images are used for multiresolution case only.
    */
   typedef std::vector<OutputImagePointerType> InternalImagesTabular;
-  std::vector<InternalImagesTabular> m_InternalImages;
+  std::vector<InternalImagesTabular>          m_InternalImages;
 
 }; // end of class
 
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletFilterBank.txx"
+#include "otbWaveletFilterBank.hxx"
 #endif
 
 #endif

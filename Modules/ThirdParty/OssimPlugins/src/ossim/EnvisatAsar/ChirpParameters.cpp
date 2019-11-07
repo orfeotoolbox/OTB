@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -38,13 +38,13 @@ namespace ossimplugins
 
    std::ostream& operator<<(std::ostream& os, const ChirpParameters& data)
    {
-      os<<"zero_doppler_time:"<<data._zero_doppler_time.c_str()<<std::endl;
+      os<<"zero_doppler_time:"<<data._zero_doppler_time <<std::endl;
 
       os<<"attach_flag:"<<data._attach_flag<<std::endl;
 
-      os<<"swath:"<<data._swath.c_str()<<std::endl;
+      os<<"swath:"<<data._swath <<std::endl;
 
-      os<<"polar:"<<data._polar.c_str()<<std::endl;
+      os<<"polar:"<<data._polar <<std::endl;
 
       os<<"chirp_width:"<<data._chirp_width<<std::endl;
 
@@ -62,7 +62,7 @@ namespace ossimplugins
 
       os<<"ref_chirp_power:"<<data._ref_chirp_power<<std::endl;
 
-      os<<"normalisation_source:"<<data._normalisation_source.c_str()<<std::endl;
+      os<<"normalisation_source:"<<data._normalisation_source <<std::endl;
 
       for (int i = 0 ; i<352; i++) {
          os<<"cal_pulse_info["<<i<<"]:"<<data._cal_pulse_info[i]<<std::endl;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -77,8 +77,7 @@ class VectorImageModel;
 *
  * \brief Main-window widget base for the i18n application.
  */
-class OTBMonteverdiGUI_EXPORT I18nMainWindow
-  : public QMainWindow
+class OTBMonteverdiGUI_EXPORT I18nMainWindow : public QMainWindow
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -87,20 +86,20 @@ class OTBMonteverdiGUI_EXPORT I18nMainWindow
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
   enum DockLayout
   {
-    DOCK_LAYOUT_NONE = 0,
-    DOCK_LAYOUT_FLOATING = 1,
+    DOCK_LAYOUT_NONE       = 0,
+    DOCK_LAYOUT_FLOATING   = 1,
     DOCK_LAYOUT_SCROLLABLE = 2,
   };
 
-  typedef QFlags< DockLayout > DockLayoutFlags;
+  typedef QFlags<DockLayout> DockLayoutFlags;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
   /** \brief Destructor. */
   ~I18nMainWindow() override;
@@ -111,55 +110,38 @@ public:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// SIGNALS.
+  //
+  // SIGNALS.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** \brief Constructor. */
-  I18nMainWindow( QWidget* Parent =0, Qt::WindowFlags flags =0 );
+  I18nMainWindow(QWidget* Parent = 0, Qt::WindowFlags flags = 0);
 
   /**
    */
-  QDockWidget*
-    AddWidgetToDock( QWidget* widget,
-		     const QString& dockName,
-		     const QString& dockTitle,
-		     Qt::DockWidgetArea dockArea,
-		     DockLayoutFlags flags = DOCK_LAYOUT_NONE );
+  QDockWidget* AddWidgetToDock(QWidget* widget, const QString& dockName, const QString& dockTitle, Qt::DockWidgetArea dockArea,
+                               DockLayoutFlags flags = DOCK_LAYOUT_NONE);
 
   /**
    */
-  template< typename TWidget, typename TDockWidget >
-    inline
-    TDockWidget*
-    AddDockWidget( const QString& dockName,
-		   const QString& dockTitle,
-		   Qt::DockWidgetArea dockArea,
-		   DockLayoutFlags flags = DOCK_LAYOUT_NONE );
+  template <typename TWidget, typename TDockWidget>
+  inline TDockWidget* AddDockWidget(const QString& dockName, const QString& dockTitle, Qt::DockWidgetArea dockArea, DockLayoutFlags flags = DOCK_LAYOUT_NONE);
 
   /**
    */
-  template< typename TWidget, typename TController, typename TDockWidget >
-    inline
-    TDockWidget*
-    AddDockWidget( const QString& dockName,
-		   const QString& dockTitle,
-		   Qt::DockWidgetArea dockArea,
-		   DockLayoutFlags flags = DOCK_LAYOUT_NONE );
+  template <typename TWidget, typename TController, typename TDockWidget>
+  inline TDockWidget* AddDockWidget(const QString& dockName, const QString& dockTitle, Qt::DockWidgetArea dockArea, DockLayoutFlags flags = DOCK_LAYOUT_NONE);
   /**
    */
-  const AbstractModelController *
-    GetController( const QDockWidget * ) const;
+  const AbstractModelController* GetController(const QDockWidget*) const;
   /**
    */
-  AbstractModelController *
-    GetController( const QDockWidget * );
+  AbstractModelController* GetController(const QDockWidget*);
 
   /**
    * \brief Assign model to the controller which is child of given
@@ -170,71 +152,65 @@ protected:
    *
    * \param model The model to assign to the controller.
    */
-  inline void SetControllerModel( QDockWidget* dock, AbstractModel* model );
+  inline void SetControllerModel(QDockWidget* dock, AbstractModel* model);
 
   /**
    */
-  VectorImageModel *
-    ImportImage( const QString & filename,
-                 int width,
-                 int height );
+  VectorImageModel* ImportImage(const QString& filename, int width, int height);
 
   /**
    */
-  bool BuildGDALOverviews( const QStringList & filenames );
+  bool BuildGDALOverviews(const QStringList& filenames);
 
   /**
    */
-  void SaveLayout( int version ) const;
+  void SaveLayout(int version) const;
 
   /**
    */
-  bool RestoreLayout( int version );
+  bool RestoreLayout(int version);
 
   //
   // QMainWindow methods.
 
-  void closeEvent( QCloseEvent* event ) override;
+  void closeEvent(QCloseEvent* event) override;
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PROTECTED SLOTS SECTION ]---------------------------------------------*/
 
-//
-// Protected slots.
+  //
+  // Protected slots.
 protected slots:
 
   /**
    */
-  virtual void OnAboutToChangeModel( const AbstractModel* ) =0;
+  virtual void OnAboutToChangeModel(const AbstractModel*) = 0;
 
   /**
    */
-  virtual void OnModelChanged( AbstractModel* ) =0;
+  virtual void OnModelChanged(AbstractModel*) = 0;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private nested classes.
+  //
+  // Private nested classes.
 private:
-
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
-  QObject * Import( AbstractWorker * );
+  QObject* Import(AbstractWorker*);
 
   /**
    */
-  virtual void virtual_SetupUI() =0;
+  virtual void virtual_SetupUI() = 0;
 
   /**
    */
-  virtual void virtual_ConnectUI() =0;
+  virtual void virtual_ConnectUI() = 0;
 
   /**
    */
@@ -243,14 +219,13 @@ private:
   /**
    */
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Private slots.
+  //
+  // Private slots.
 private slots:
 
   /**
@@ -265,6 +240,7 @@ private slots:
    */
   virtual void on_action_About_triggered();
 
+  virtual void on_action_Documentation_triggered();
 };
 
 } // end namespace 'mvd'
@@ -290,108 +266,71 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-const AbstractModelController *
-I18nMainWindow
-::GetController( const QDockWidget * dock ) const
+inline const AbstractModelController* I18nMainWindow::GetController(const QDockWidget* dock) const
 {
-  assert( dock!=NULL );
+  assert(dock != NULL);
 
-  return dock->findChild< const AbstractModelController * >();
+  return dock->findChild<const AbstractModelController*>();
 }
 
 /*****************************************************************************/
-inline
-AbstractModelController *
-I18nMainWindow
-::GetController( const QDockWidget * dock )
+inline AbstractModelController* I18nMainWindow::GetController(const QDockWidget* dock)
 {
-  assert( dock!=NULL );
+  assert(dock != NULL);
 
-  return dock->findChild< AbstractModelController * >();
+  return dock->findChild<AbstractModelController*>();
 }
 
 /*****************************************************************************/
-inline
-void
-I18nMainWindow
-::SetControllerModel( QDockWidget* dock, AbstractModel* model )
+inline void I18nMainWindow::SetControllerModel(QDockWidget* dock, AbstractModel* model)
 {
-  assert( dock );
+  assert(dock);
 
-  AbstractModelController* controller =
-    dock->findChild< AbstractModelController* >();
+  AbstractModelController* controller = dock->findChild<AbstractModelController*>();
 
-  assert( controller!=NULL );
+  assert(controller != NULL);
 
-  controller->SetModel( model );
+  controller->SetModel(model);
 }
 
 /*****************************************************************************/
-template< typename TWidget, typename TDockWidget >
-inline
-TDockWidget*
-I18nMainWindow
-::AddDockWidget( const QString & dockName,
-		 const QString & dockTitle,
-		 Qt::DockWidgetArea dockArea,
-		 DockLayoutFlags flags )
+template <typename TWidget, typename TDockWidget>
+inline TDockWidget* I18nMainWindow::AddDockWidget(const QString& dockName, const QString& dockTitle, Qt::DockWidgetArea dockArea, DockLayoutFlags flags)
 {
-  TWidget * widget = new TWidget( this );
+  TWidget* widget = new TWidget(this);
 
-  TDockWidget * dockWidget =
-    AddWidgetToDock(
-      widget,
-      dockName,
-      dockTitle,
-      dockArea,
-      flags
-    );
+  TDockWidget* dockWidget = AddWidgetToDock(widget, dockName, dockTitle, dockArea, flags);
 
   return dockWidget;
 }
 
 /*****************************************************************************/
-template< typename TWidget, typename TController, typename TDockWidget >
-inline
-TDockWidget*
-I18nMainWindow
-::AddDockWidget( const QString & dockName,
-		 const QString & dockTitle,
-		 Qt::DockWidgetArea dockArea,
-		 DockLayoutFlags flags )
+template <typename TWidget, typename TController, typename TDockWidget>
+inline TDockWidget* I18nMainWindow::AddDockWidget(const QString& dockName, const QString& dockTitle, Qt::DockWidgetArea dockArea, DockLayoutFlags flags)
 {
-  TWidget * widget = new TWidget( this );
+  TWidget* widget = new TWidget(this);
 
-  QWidget * pannel = widget;
+  QWidget* pannel = widget;
 
-  if( flags.testFlag( DOCK_LAYOUT_SCROLLABLE ) )
-    {
-    QScrollArea * scrollArea = new QScrollArea( this );
+  if (flags.testFlag(DOCK_LAYOUT_SCROLLABLE))
+  {
+    QScrollArea* scrollArea = new QScrollArea(this);
 
-    scrollArea->setWidgetResizable( true );
+    scrollArea->setWidgetResizable(true);
 
-    scrollArea->setWidget( widget );
+    scrollArea->setWidget(widget);
 
     pannel = scrollArea;
-    }
+  }
 
 
-  TDockWidget * dockWidget =
-    AddWidgetToDock(
-      pannel,
-      dockName,
-      dockTitle,
-      dockArea,
-      flags
-    );
+  TDockWidget* dockWidget = AddWidgetToDock(pannel, dockName, dockTitle, dockArea, flags);
 
   new TController(
-    // wraps:
-    widget,
-    // as chid of:
-    dockWidget
-  );
+      // wraps:
+      widget,
+      // as chid of:
+      dockWidget);
 
   return dockWidget;
 }

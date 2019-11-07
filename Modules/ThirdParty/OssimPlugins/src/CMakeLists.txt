@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -74,6 +74,7 @@ target_link_libraries(otbossimplugins
   ${OTBGDAL_LIBRARIES}
   ${OTBOssim_LIBRARIES}
   ${OTBGeoTIFF_LIBRARIES}
+  ${OTBCommon_LIBRARIES}
   )
 
 # Apply user-defined properties to the library target.

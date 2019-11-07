@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,18 +25,18 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbImageToHessianDeterminantImageFilter(int itkNotUsed(argc), char * argv[])
+int otbImageToHessianDeterminantImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * ifname   = argv[1];
-  const char * outfname = argv[2];
+  const char*  ifname   = argv[1];
+  const char*  outfname = argv[2];
   const double sigma    = atof(argv[3]);
 
   const unsigned int Dimension = 2;
-  typedef double                                                          PixelType;
+  typedef double     PixelType;
   typedef otb::Image<PixelType, Dimension>                                ImageType;
   typedef otb::ImageToHessianDeterminantImageFilter<ImageType, ImageType> FilterType;
-  typedef otb::ImageFileReader<ImageType>                                 ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                                 WriterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   // Instantiating object
   FilterType::Pointer filter = FilterType::New();

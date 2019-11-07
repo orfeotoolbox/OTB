@@ -1,0 +1,5 @@
+Radiometric moments: [10]
+Radiometric Moment(1) = 110.877551
+Radiometric Moment(2) = 615.6096939
+Radiometric Moment(3) = 1.79653331
+Radiometric Moment(4) = 3.828562169

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,25 +22,14 @@ otb_module_test()
 
 set(OTBInterpolationTests
 otbInterpolationTestDriver.cxx
-otbWindowedSincInterpolateImageCosineFunctionNew.cxx
 otbWindowedSincInterpolateImageLanczosFunction.cxx
-otbWindowedSincInterpolateImageLanczosFunctionNew.cxx
-otbWindowedSincInterpolateImageFunctionBaseNew.cxx
-otbProlateInterpolateImageFunctionNew.cxx
-otbBSplineDecompositionImageFilterNew.cxx
-otbBSplineInterpolateImageFunctionNew.cxx
 otbWindowedSincInterpolateImageBlackmanFunction.cxx
 otbBSplineDecompositionImageFilter.cxx
-otbWindowedSincInterpolateImageWelchFunctionNew.cxx
 otbWindowedSincInterpolateImageGaussianFunction.cxx
-otbGenericInterpolateImageFunctionNew.cxx
-otbWindowedSincInterpolateImageBlackmanFunctionNew.cxx
 otbWindowedSincInterpolateImageCosineFunction.cxx
 otbWindowedSincInterpolateImageHammingFunction.cxx
 otbWindowedSincInterpolateImageWelchFunction.cxx
 otbBSplineInterpolateImageFunction.cxx
-otbWindowedSincInterpolateImageGaussianFunctionNew.cxx
-otbWindowedSincInterpolateImageHammingFunctionNew.cxx
 otbStreamingTraits.cxx
 otbBCOInterpolateImageFunction.cxx
 otbProlateInterpolateImageFunction.cxx
@@ -52,9 +41,6 @@ target_link_libraries(otbInterpolationTestDriver ${OTBInterpolation-Test_LIBRARI
 otb_module_target_label(otbInterpolationTestDriver)
 
 # Tests Declaration
-
-otb_add_test(NAME bfTuWindowedSincInterpolateImageCosineFunctionNew COMMAND otbInterpolationTestDriver
-  otbWindowedSincInterpolateImageCosineFunctionNew)
 
 otb_add_test(NAME bfTvWindowedSincInterpolateImageLanczosFunction COMMAND otbInterpolationTestDriver
   --compare-ascii ${NOTOL}
@@ -73,21 +59,6 @@ otb_add_test(NAME bfTvWindowedSincInterpolateImageLanczosFunction COMMAND otbInt
   127.255 128.73
   -1 -1
   )
-
-otb_add_test(NAME bfTuWindowedSincInterpolateImageLanczosFunctionNew COMMAND otbInterpolationTestDriver
-  otbWindowedSincInterpolateImageLanczosFunctionNew)
-
-otb_add_test(NAME bfTuWindowedSincInterpolateImageFunctionBaseNew COMMAND otbInterpolationTestDriver
-  otbWindowedSincInterpolateImageFunctionBaseNew)
-
-otb_add_test(NAME bfTuProlateInterpolateImageFunctionNew COMMAND otbInterpolationTestDriver
-  otbProlateInterpolateImageFunctionNew)
-
-otb_add_test(NAME bfTuBSplineDecompositionImageFilterNew COMMAND otbInterpolationTestDriver
-  otbBSplineDecompositionImageFilterNew)
-
-otb_add_test(NAME bfTuBSplineInterpolateImageFunctionNew COMMAND otbInterpolationTestDriver
-  otbBSplineInterpolateImageFunctionNew)
 
 otb_add_test(NAME bfTvWindowedSincInterpolateImageBlackmanFunction COMMAND otbInterpolationTestDriver
   --compare-ascii ${NOTOL}
@@ -116,9 +87,6 @@ otb_add_test(NAME bfTvBSplineDecompositionImageFilter COMMAND otbInterpolationTe
   ${TEMP}/bfBSplineDecompositionImageFilterOutput.tif
   )
 
-otb_add_test(NAME bfTuWindowedSincInterpolateImageWelchFunctionNew COMMAND otbInterpolationTestDriver
-  otbWindowedSincInterpolateImageWelchFunctionNew)
-
 otb_add_test(NAME bfTvWindowedSincInterpolateImageGaussianFunction COMMAND otbInterpolationTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/bfWindowedSincInterpolateImageGaussianFunctionOutput.txt
@@ -137,12 +105,6 @@ otb_add_test(NAME bfTvWindowedSincInterpolateImageGaussianFunction COMMAND otbIn
   -1 -1
   )
 
-otb_add_test(NAME coTuGenericInterpolateImageFunctionNew COMMAND otbInterpolationTestDriver
-  otbGenericInterpolateImageFunctionNew
-  )
-
-otb_add_test(NAME bfTuWindowedSincInterpolateImageBlackmanFunctionNew COMMAND otbInterpolationTestDriver
-  otbWindowedSincInterpolateImageBlackmanFunctionNew)
 
 otb_add_test(NAME bfTvWindowedSincInterpolateImageCosineFunction COMMAND otbInterpolationTestDriver
   --compare-ascii ${NOTOL}
@@ -215,12 +177,6 @@ otb_add_test(NAME bfTvBSplineInterpolateImageFunction COMMAND otbInterpolationTe
   -1 -1
   )
 
-otb_add_test(NAME bfTuWindowedSincInterpolateImageGaussianFunctionNew COMMAND otbInterpolationTestDriver
-  otbWindowedSincInterpolateImageGaussianFunctionNew)
-
-otb_add_test(NAME bfTuWindowedSincInterpolateImageHammingFunctionNew COMMAND otbInterpolationTestDriver
-  otbWindowedSincInterpolateImageHammingFunctionNew)
-
 otb_add_test(NAME bfTuStreamingTraitsVectorImage COMMAND otbInterpolationTestDriver
   otbStreamingTraitsVectorImage
   )
@@ -249,9 +205,6 @@ otb_add_test(NAME bfTvBCOInterpolateImageFunctionTest COMMAND otbInterpolationTe
   3 # radius
   -0.5 # optimised bicubic
   )
-otb_add_test(NAME bfTuBCOInterpolateImageFunctionNew COMMAND otbInterpolationTestDriver
-  otbBCOInterpolateImageFunctionNew
-  )
 otb_add_test(NAME bfTvBCOInterpolateImageFunctionOverVectorImage COMMAND otbInterpolationTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/bfTvBCOInterpolateImageFunctionOverVectorImageOutput.txt
@@ -270,8 +223,6 @@ otb_add_test(NAME bfTvBCOInterpolateImageFunctionOverVectorImage COMMAND otbInte
   127.255 128.73
   -1 -1
   )
-otb_add_test(NAME bfTuBCOInterpolateImageFunctionOverVectorImageNew COMMAND otbInterpolationTestDriver
-  otbBCOInterpolateImageFunctionOverVectorImageNew)
 otb_add_test(NAME bfTvBCOInterpolateImageFunction2 COMMAND otbInterpolationTestDriver
   otbBCOInterpolateImageFunction2
   3 # radius

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,6 +23,7 @@
 
 #include "otbVectorDataSource.h"
 #include "otbGenericRSTransform.h"
+#include <string>
 
 namespace otb
 {
@@ -45,8 +46,7 @@ namespace otb
  * \ingroup OTBProjection
   */
 template <class TInputImage, class TOutputVectorData>
-class ITK_EXPORT ImageToEnvelopeVectorDataFilter :
-  public otb::VectorDataSource<TOutputVectorData>
+class ITK_EXPORT ImageToEnvelopeVectorDataFilter : public otb::VectorDataSource<TOutputVectorData>
 {
 
 public:
@@ -56,30 +56,26 @@ public:
   typedef itk::SmartPointer<Self>                  Pointer;
   typedef itk::SmartPointer<const Self>            ConstPointer;
 
-  typedef TInputImage                              InputImageType;
-  typedef TOutputVectorData                        OutputVectorDataType;
-  typedef typename TInputImage::ConstPointer       InputImagePointer;
-  typedef typename TOutputVectorData::Pointer      OutputVectorDataPointer;
+  typedef TInputImage                         InputImageType;
+  typedef TOutputVectorData                   OutputVectorDataType;
+  typedef typename TInputImage::ConstPointer  InputImagePointer;
+  typedef typename TOutputVectorData::Pointer OutputVectorDataPointer;
 
   /** Some typedefs. */
-  typedef otb::GenericRSTransform<double, 2, 2>    InternalTransformType;
-  typedef typename InternalTransformType::Pointer  InternalTransformPointerType;
-  typedef typename OutputVectorDataType
-                   ::DataNodeType                  OutputDataNodeType;
-  typedef typename OutputVectorDataType
-                   ::DataNodePointerType           OutputDataNodePointerType;
-  typedef typename OutputVectorDataType
-                   ::DataTreePointerType           OutputDataTreePointerType;
-  typedef typename OutputVectorDataType
-                   ::DataTreeType::TreeNodeType    OutputInternalTreeNodeType;
-  typedef typename OutputDataNodeType::PolygonType PolygonType;
+  typedef otb::GenericRSTransform<double, 2, 2> InternalTransformType;
+  typedef typename InternalTransformType::Pointer                   InternalTransformPointerType;
+  typedef typename OutputVectorDataType::DataNodeType               OutputDataNodeType;
+  typedef typename OutputVectorDataType::DataNodePointerType        OutputDataNodePointerType;
+  typedef typename OutputVectorDataType::DataTreePointerType        OutputDataTreePointerType;
+  typedef typename OutputVectorDataType::DataTreeType::TreeNodeType OutputInternalTreeNodeType;
+  typedef typename OutputDataNodeType::PolygonType                  PolygonType;
 
   /** Set input image */
   using Superclass::SetInput;
-  void SetInput(const InputImageType *input);
+  void SetInput(const InputImageType* input);
 
   /** Get input image */
-  const InputImageType * GetInput();
+  const InputImageType* GetInput();
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -96,7 +92,9 @@ public:
 
 protected:
   ImageToEnvelopeVectorDataFilter();
-  ~ImageToEnvelopeVectorDataFilter() override {}
+  ~ImageToEnvelopeVectorDataFilter() override
+  {
+  }
 
   void GenerateOutputInformation(void) override;
 
@@ -107,18 +105,18 @@ protected:
   void InstantiateTransform();
 
 private:
-  ImageToEnvelopeVectorDataFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageToEnvelopeVectorDataFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InternalTransformPointerType m_Transform;
   std::string                  m_OutputProjectionRef;
-  unsigned int                 m_SamplingRate;      // Sampling rate for edges (in pixels)
+  unsigned int                 m_SamplingRate; // Sampling rate for edges (in pixels)
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToEnvelopeVectorDataFilter.txx"
+#include "otbImageToEnvelopeVectorDataFilter.hxx"
 #endif
 
 #endif

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -42,6 +42,8 @@
 
 include(CheckCXXSourceCompiles)
 
+# This could be replaced by a simple check_cxx_compiler_flag(<flag> <var>)
+# https://cmake.org/cmake/help/v3.10/module/CheckCXXCompilerFlag.html?highlight=checkcxxcompilerflag
 macro (OTB_CHECK_CXX_COMPILER_FLAG _FLAG _RESULT)
    set(SAFE_CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS}")
    set(CMAKE_REQUIRED_DEFINITIONS "${_FLAG}")

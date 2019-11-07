@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -58,7 +58,7 @@ otb_add_test(NAME ioTvExtendedFilenameToReaderOptions_FullOptions COMMAND otbExt
   ${BASELINE}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
   ${TEMP}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
   otbExtendedFilenameToReaderOptions
-  /home/data/filename.tif?&geom=/home/dev/custom.geom&sdataidx=2&resol=4&skipcarto=On&bands=-23,:3,45:,-6:-6,234:-5
+  /home/data/filename.tif?&geom=/home/dev/custom.geom&sdataidx=2&resol=4&skipcarto=On&bands=-23,:3,45:,-6:-6,234:-5&nodata=-99999
   ${TEMP}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
   )
 
@@ -174,3 +174,8 @@ otb_add_test(NAME ioTvImageFileReaderExtendedFileName_SkipPR COMMAND otbExtended
   ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR.txt
   )
 
+otb_add_test(NAME ioTvImageFileWriterExtendedFileName_NODATA COMMAND otbExtendedFilenameTestDriver
+  otbImageFileWriterWithExtendedFilename
+  ${INPUTDATA}/ToulouseExtract_WithGeom.tif
+  ${TEMP}/ioImageFileWriterExtendedFileName_NODATA.tif?nodata=1:-99999,2:-88888
+  )

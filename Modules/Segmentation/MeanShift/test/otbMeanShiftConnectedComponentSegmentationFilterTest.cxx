@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,50 +23,48 @@
 #include "otbImageFileWriter.h"
 #include "otbMeanShiftConnectedComponentSegmentationFilter.h"
 
-typedef float InputPixelType;
+typedef float      InputPixelType;
 const unsigned int Dimension = 2;
-typedef otb::Image<unsigned int, Dimension>             LabelImageType;
-typedef otb::Image<unsigned int, Dimension>             MaskImageType;
+typedef otb::Image<unsigned int, Dimension> LabelImageType;
+typedef otb::Image<unsigned int, Dimension> MaskImageType;
 
 
-typedef otb::VectorImage<InputPixelType, Dimension>     ImageType;
-typedef otb::ImageFileReader<ImageType>                 ReaderType;
-typedef otb::ImageFileWriter<LabelImageType>            WriterType;
+typedef otb::VectorImage<InputPixelType, Dimension> ImageType;
+typedef otb::ImageFileReader<ImageType>      ReaderType;
+typedef otb::ImageFileWriter<LabelImageType> WriterType;
 
 
-typedef otb::MeanShiftConnectedComponentSegmentationFilter
-  < ImageType, MaskImageType,
-    LabelImageType >  MeanShiftConnectedComponentsegmentationFilterType;
+typedef otb::MeanShiftConnectedComponentSegmentationFilter<ImageType, MaskImageType, LabelImageType> MeanShiftConnectedComponentsegmentationFilterType;
 
 typedef otb::MeanShiftSmoothingImageFilter<ImageType, ImageType> MeanShiftFilterType;
 
 
-int otbMeanShiftConnectedComponentSegmentationFilter(int itkNotUsed(argc), char * argv[])
+int otbMeanShiftConnectedComponentSegmentationFilter(int itkNotUsed(argc), char* argv[])
 {
 
   /* mean shift parameters */
 
-  const char * infname = argv[1];
-  const char * outputFilename = argv[2];
+  const char* infname        = argv[1];
+  const char* outputFilename = argv[2];
 
   /* mean shift parameters */
   const double spatialBandwidth = atof(argv[3]);
-  const double rangeBandwidth = atof(argv[4]);
-  const double threshold = atof(argv[5]);
+  const double rangeBandwidth   = atof(argv[4]);
+  const double threshold        = atof(argv[5]);
 
   /* conencted component parameters */
 
-  const char * segmentationexpression = argv[6];
-  unsigned int minobjectsize = atoi(argv[7]);
+  const char*  segmentationexpression = argv[6];
+  unsigned int minobjectsize          = atoi(argv[7]);
 
-   // add meanshift options
+  // add meanshift options
 
 
   // Instantiating object
-  MeanShiftFilterType::Pointer meanShiftFilter = MeanShiftFilterType::New();
-  MeanShiftConnectedComponentsegmentationFilterType::Pointer segmentationFilter= MeanShiftConnectedComponentsegmentationFilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  MeanShiftFilterType::Pointer                               meanShiftFilter    = MeanShiftFilterType::New();
+  MeanShiftConnectedComponentsegmentationFilterType::Pointer segmentationFilter = MeanShiftConnectedComponentsegmentationFilterType::New();
+  ReaderType::Pointer                                        reader             = ReaderType::New();
+  WriterType::Pointer                                        writer             = WriterType::New();
 
   reader->SetFileName(infname);
 
@@ -87,11 +85,11 @@ int otbMeanShiftConnectedComponentSegmentationFilter(int itkNotUsed(argc), char 
   segmentationFilter->SetConnectedComponentExpression(segmentationexpression);
   segmentationFilter->SetMinimumObjectSize(minobjectsize);
 
-  //segmentationFilter->Update();
+  // segmentationFilter->Update();
 
- writer->SetInput(segmentationFilter->GetOutput());
- writer->SetFileName(outputFilename);
- writer->Update();
+  writer->SetInput(segmentationFilter->GetOutput());
+  writer->SetFileName(outputFilename);
+  writer->Update();
 
   return EXIT_SUCCESS;
 }

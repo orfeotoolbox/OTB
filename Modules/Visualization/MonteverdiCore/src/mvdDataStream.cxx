@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -76,9 +76,7 @@ public:
   }
 
 private:
-  inline
-  void
-  Initialize()
+  inline void Initialize()
   {
     //
     // Call qRegisterMetaType<>() to make type available in
@@ -88,9 +86,7 @@ private:
     // Register serialization operators for custom meta-types.
   }
 
-  inline
-  void
-  Finalize()
+  inline void Finalize()
   {
   }
 };
@@ -108,29 +104,27 @@ static const StaticInitializer STATIC_INITIALIZER;
 /*****************************************************************************/
 /* GLOBAL FUNCTION IMPLEMENTATION SECTION                                    */
 /*****************************************************************************/
-QDataStream&
-operator << ( QDataStream& out, void const * & pointer )
+QDataStream& operator<<(QDataStream& out, void const*& pointer)
 {
   /*
   qDebug()
     << "QDataStream& operator << ( QDataStream&, void const * & );";
   */
 
-  DATA_STREAM_OUT( out, void, pointer );
+  DATA_STREAM_OUT(out, void, pointer);
 
   return out;
 }
 
 /*****************************************************************************/
-QDataStream&
-operator >>( QDataStream& in, void * & pointer )
+QDataStream& operator>>(QDataStream& in, void*& pointer)
 {
   /*
   qDebug()
     << "QDataStream& operator >> ( QDataStream&, void * & );";
   */
 
-  DATA_STREAM_IN( in, void, pointer );
+  DATA_STREAM_IN(in, void, pointer);
 
   return in;
 }

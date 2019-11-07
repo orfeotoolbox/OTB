@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,7 +21,6 @@
 #ifndef otbClampVectorImageFilter_h
 #define otbClampVectorImageFilter_h
 
-#include <vcl_deprecated_header.h>
 #include "itkImageToImageFilter.h"
 
 namespace otb
@@ -45,15 +44,15 @@ namespace otb
  *
  * \ingroup OTBImageManipulation
  */
-  template <class TInputImage, class TOutputImage=TInputImage>
-  class ITK_EXPORT ClampVectorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage = TInputImage>
+class ITK_EXPORT ClampVectorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ClampVectorImageFilter               Self;
-  typedef itk::ImageToImageFilter<TInputImage, TOutputImage>  Superclass;
-  typedef itk::SmartPointer<Self>                 Pointer;
-  typedef itk::SmartPointer<const Self>           ConstPointer;
+  typedef ClampVectorImageFilter Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -64,32 +63,32 @@ public:
 
   /** Some additional typedefs.  */
   typedef TInputImage                                InputImageType;
-  typedef typename InputImageType::ConstPointer InputImagePointer;
-  typedef typename InputImageType::RegionType   InputImageRegionType;
-  typedef typename InputImageType::PixelType    InputImagePixelType;
-  typedef typename InputImageType::InternalPixelType    InputImageInternalPixelType;
+  typedef typename InputImageType::ConstPointer      InputImagePointer;
+  typedef typename InputImageType::RegionType        InputImageRegionType;
+  typedef typename InputImageType::PixelType         InputImagePixelType;
+  typedef typename InputImageType::InternalPixelType InputImageInternalPixelType;
 
   /** Some additional typedefs.  */
-  typedef TOutputImage                             OutputImageType;
-  typedef typename OutputImageType::Pointer     OutputImagePointer;
-  typedef typename OutputImageType::RegionType  OutputImageRegionType;
-  typedef typename OutputImageType::PixelType   OutputImagePixelType;
-  typedef typename OutputImageType::InternalPixelType   OutputImageInternalPixelType;
+  typedef TOutputImage                                OutputImageType;
+  typedef typename OutputImageType::Pointer           OutputImagePointer;
+  typedef typename OutputImageType::RegionType        OutputImageRegionType;
+  typedef typename OutputImageType::PixelType         OutputImagePixelType;
+  typedef typename OutputImageType::InternalPixelType OutputImageInternalPixelType;
 
 
   /** The values greater than or equal to the value are set to OutsideValue. */
-  void ClampAbove(const OutputImageInternalPixelType &thresh);
+  void ClampAbove(const OutputImageInternalPixelType& thresh);
 
   /** The values less than or equal to the value are set to OutsideValue. */
-  void ClampBelow(const OutputImageInternalPixelType &thresh);
+  void ClampBelow(const OutputImageInternalPixelType& thresh);
 
   /** The values outside the range are set to OutsideValue. */
-  void ClampOutside(const OutputImageInternalPixelType &lower, const OutputImageInternalPixelType &upper);
+  void ClampOutside(const OutputImageInternalPixelType& lower, const OutputImageInternalPixelType& upper);
 
   /** Set/Get methods to set the lower threshold */
   void SetLower(OutputImageInternalPixelType val)
   {
-    m_Lower = val;
+    m_Lower  = val;
     m_DLower = static_cast<double>(val);
     this->Modified();
   }
@@ -98,7 +97,7 @@ public:
   /** Set/Get methods to set the upper threshold */
   void SetUpper(OutputImageInternalPixelType val)
   {
-    m_Upper = val;
+    m_Upper  = val;
     m_DUpper = static_cast<double>(val);
     this->Modified();
   }
@@ -107,7 +106,7 @@ public:
 
 protected:
   ClampVectorImageFilter();
-  ~ClampVectorImageFilter() override {};
+  ~ClampVectorImageFilter() override{};
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** ClampVectorImageFilter can be implemented as a multithreaded filter.
@@ -120,19 +119,18 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId ) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   void GenerateOutputInformation(void) override
   {
     Superclass::GenerateOutputInformation();
 
-    this->GetOutput()->SetNumberOfComponentsPerPixel( this->GetInput()->GetNumberOfComponentsPerPixel() );
+    this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput()->GetNumberOfComponentsPerPixel());
   }
 
 private:
-  ClampVectorImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ClampVectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   double m_DLower;
   double m_DUpper;
@@ -145,7 +143,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbClampVectorImageFilter.txx"
+#include "otbClampVectorImageFilter.hxx"
 #endif
 
 #endif

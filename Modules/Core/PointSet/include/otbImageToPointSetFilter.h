@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -54,36 +54,37 @@ public:
   itkTypeMacro(ImageToPointSetFilter, PointSetSource);
 
   /** Some Image related typedefs. */
-  typedef   TInputImage                           InputImageType;
-  typedef   typename InputImageType::Pointer      InputImagePointer;
-  typedef   typename InputImageType::ConstPointer InputImageConstPointer;
-  typedef   typename InputImageType::RegionType   InputImageRegionType;
-  typedef   typename InputImageType::PixelType    InputImagePixelType;
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  typedef TInputImage                           InputImageType;
+  typedef typename InputImageType::Pointer      InputImagePointer;
+  typedef typename InputImageType::ConstPointer InputImageConstPointer;
+  typedef typename InputImageType::RegionType   InputImageRegionType;
+  typedef typename InputImageType::PixelType    InputImagePixelType;
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Some PointSet related typedefs. */
-  typedef   typename Superclass::OutputPointSetType     OutputPointSetType;
-  typedef   typename Superclass::OutputPointSetPointer  OutputPointSetPointer;
-  typedef   typename Superclass::PointsContainerType    PointsContainerType;
-  typedef   typename Superclass::PointDataContainerType PointDataContainerType;
-  typedef   itk::ProcessObject                          ProcessObjectType;
+  typedef typename Superclass::OutputPointSetType     OutputPointSetType;
+  typedef typename Superclass::OutputPointSetPointer  OutputPointSetPointer;
+  typedef typename Superclass::PointsContainerType    PointsContainerType;
+  typedef typename Superclass::PointDataContainerType PointDataContainerType;
+  typedef itk::ProcessObject                          ProcessObjectType;
 
   /** Set the input image of this process object.  */
   using Superclass::SetInput;
-  void SetInput(unsigned int idx, const InputImageType *input);
-  void SetInput(const InputImageType *input);
+  void SetInput(unsigned int idx, const InputImageType* input);
+  void SetInput(const InputImageType* input);
 
   /** Get the input image of this process object.  */
-  const InputImageType * GetInput(unsigned int idx);
-  const InputImageType * GetInput();
+  const InputImageType* GetInput(unsigned int idx);
+  const InputImageType* GetInput();
 
   /** Prepare the output */
   void GenerateOutputInformation(void) override;
 
 protected:
   ImageToPointSetFilter();
-  ~ImageToPointSetFilter() override {}
+  ~ImageToPointSetFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void GenerateData(void) override;
@@ -104,7 +105,7 @@ protected:
   /** Static function used as a "callback" by the MultiThreader.  The threading
    * library will call this routine for each thread, which will delegate the
    * control to ThreadedGenerateData(). */
-  static ITK_THREAD_RETURN_TYPE ThreaderCallback(void *arg);
+  static ITK_THREAD_RETURN_TYPE ThreaderCallback(void* arg);
 
   /** Internal structure used for passing image data into the threading library */
   struct ThreadStruct
@@ -119,20 +120,19 @@ protected:
 
   /** Setup for streaming */
   typedef RAMDrivenAdaptativeStreamingManager<InputImageType> StreamingManagerType;
-  typedef typename StreamingManagerType::Pointer StreamingManagerPointer;
+  typedef typename StreamingManagerType::Pointer              StreamingManagerPointer;
 
   StreamingManagerPointer m_StreamingManager;
 
 private:
-  ImageToPointSetFilter(const ImageToPointSetFilter &); //purposely not implemented
-  void operator =(const ImageToPointSetFilter&); //purposely not implemented
-
+  ImageToPointSetFilter(const ImageToPointSetFilter&) = delete;
+  void operator=(const ImageToPointSetFilter&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToPointSetFilter.txx"
+#include "otbImageToPointSetFilter.hxx"
 #endif
 
 #endif

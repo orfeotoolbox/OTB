@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -43,9 +43,8 @@ namespace otb
  * \ingroup OTBSOM
  */
 
-template<class TSample, class TSOMMap, class TLabel>
-class ITK_EXPORT SOMClassifier :
-  public itk::ProcessObject
+template <class TSample, class TSOMMap, class TLabel>
+class ITK_EXPORT SOMClassifier : public itk::ProcessObject
 {
 public:
   /** Standard class typedef*/
@@ -77,18 +76,20 @@ public:
   typedef TLabel ClassLabelType;
 
   /// Accessors
-  void SetMap(SOMMapType * sommap);
-  SOMMapType * GetMap(void);
+  void SetMap(SOMMapType* sommap);
+  SOMMapType* GetMap(void);
   itkSetObjectMacro(Sample, SampleType);
   itkGetObjectMacro(Sample, SampleType);
-  
-  OutputType * GetOutput();
+
+  OutputType* GetOutput();
 
 protected:
   /** Constructor */
   SOMClassifier();
   /** Destructor */
-  ~SOMClassifier() override {}
+  ~SOMClassifier() override
+  {
+  }
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Starts the classification process */
@@ -102,7 +103,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSOMClassifier.txx"
+#include "otbSOMClassifier.hxx"
 #endif
 
 #endif

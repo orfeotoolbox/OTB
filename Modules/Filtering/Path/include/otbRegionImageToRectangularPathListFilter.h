@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -45,21 +45,20 @@ class ITK_EXPORT RegionImageToRectangularPathListFilter : public ImageToPathList
 {
 public:
   /** Standard class typedefs. */
-  typedef RegionImageToRectangularPathListFilter          Self;
+  typedef RegionImageToRectangularPathListFilter Self;
   typedef ImageToPathListFilter<TInputImage, TOutputPath> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(RegionImageToRectangularPathListFilter, ImageToPathListFilter);
-//  itkTypeMacro(ImageToPathListAlignFilter, itk::ImageSource);
+  //  itkTypeMacro(ImageToPathListAlignFilter, itk::ImageSource);
 
   /** ImageDimension constants */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Some convenient typedefs. */
   typedef typename Superclass::OutputPathListType OutputPathListType;
@@ -77,13 +76,13 @@ public:
   // typedef typename Superclass::OutputPathListType     OutputPathListType;
   typedef typename Superclass::OutputPathPointerType OutputPathPointerType;
 
-//  typedef          float                                        RealType;
-//typedef typename itk::NumericTraits<PixelType>::RealType       RealType;
+  //  typedef          float                                        RealType;
+  // typedef typename itk::NumericTraits<PixelType>::RealType       RealType;
   typedef double RealType;
-//  typedef typename itk::Image<RealType, InputImageDimension>      RealImageType;
+  //  typedef typename itk::Image<RealType, InputImageDimension>      RealImageType;
   typedef typename otb::Image<RealType, InputImageDimension> RealImageType;
-  typedef typename RealImageType::Pointer                    RealImageTypePointer;
-  typedef typename RealImageType::IndexType                  RealImageTypeIndexType;
+  typedef typename RealImageType::Pointer   RealImageTypePointer;
+  typedef typename RealImageType::IndexType RealImageTypeIndexType;
 
   /** The minimum rectangular fit of returned rectangles. */
   itkSetMacro(MinimumFit, double);
@@ -93,7 +92,7 @@ public:
   itkSetMacro(MinimumSize, double);
   itkGetConstReferenceMacro(MinimumSize, double);
 
-  //jgc
+  // jgc
   /** Dimension of the image the iterator walks.  This constant is needed so
    * that functions that are templated over image iterator type (as opposed to
    * being templated over pixel type and dimension) can have compile time
@@ -104,7 +103,9 @@ protected:
   RegionImageToRectangularPathListFilter();
   ~RegionImageToRectangularPathListFilter() override;
 
-  void GenerateOutputInformation() override{}  // do nothing
+  void GenerateOutputInformation() override
+  {
+  } // do nothing
   void GenerateData() override;
 
   double m_MinimumFit;
@@ -113,19 +114,19 @@ protected:
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  //jgc
+  // jgc
   typedef Image<unsigned char, itkGetStaticConstMacro(NDimensions)> MarkerImageType;
   typename MarkerImageType::Pointer markerImage;
 
 private:
-  RegionImageToRectangularPathListFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  RegionImageToRectangularPathListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRegionImageToRectangularPathListFilter.txx"
+#include "otbRegionImageToRectangularPathListFilter.hxx"
 #endif
 
 #endif

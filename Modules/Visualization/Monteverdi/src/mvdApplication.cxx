@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,7 +41,7 @@
 
 //
 #ifdef OTB_USE_QT
-#  include "mvdOTBApplicationsModel.h"
+#include "mvdOTBApplicationsModel.h"
 #endif
 
 #if USE_OTB_APPS
@@ -72,16 +72,12 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-Application
-::Application( QApplication* qtApp ) :
-  I18nApplication( qtApp ),
-  m_OTBApplicationsModel( NULL )
+Application::Application(QApplication* qtApp) : I18nApplication(qtApp), m_OTBApplicationsModel(NULL)
 {
 }
 
 /*******************************************************************************/
-Application
-::~Application()
+Application::~Application()
 {
 #if USE_OTB_APPS
   otb::Wrapper::ApplicationRegistry::CleanRegistry();
@@ -117,30 +113,23 @@ Application
 */
 
 /*******************************************************************************/
-void
-Application
-::OpenApplicationsBrowser()
+void Application::OpenApplicationsBrowser()
 {
 #ifdef OTB_USE_QT
-  m_OTBApplicationsModel = new OTBApplicationsModel( this );
+  m_OTBApplicationsModel = new OTBApplicationsModel(this);
 
   m_OTBApplicationsModel->BuildModel();
 #endif
 }
 
 /*******************************************************************************/
-void
-Application
-::virtual_InitializeCore()
+void Application::virtual_InitializeCore()
 {
   I18nApplication::virtual_InitializeCore();
 
-  setObjectName( "Application" );
+  setObjectName("Application");
 
-  InitializeCore(
-    PROJECT_NAME, QString( "OTB %1" ).arg(  OTB_VERSION_STRING ),
-    "OrfeoToolBox", "orfeo-toolbox.org"
-  );
+  InitializeCore(PROJECT_NAME, QString("OTB %1").arg(OTB_VERSION_STRING), "OrfeoToolBox", "orfeo-toolbox.org");
 
   //
   // Create the OTBApplications model

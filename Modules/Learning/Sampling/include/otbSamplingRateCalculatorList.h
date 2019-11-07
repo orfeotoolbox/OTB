@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,25 +38,24 @@ namespace otb
  *
  * \ingroup OTBSampling
  */
-class OTBSampling_EXPORT SamplingRateCalculatorList
-  : public ObjectList<SamplingRateCalculator>
+class OTBSampling_EXPORT SamplingRateCalculatorList : public ObjectList<SamplingRateCalculator>
 {
 public:
   /** Standard typedefs */
-  typedef SamplingRateCalculatorList          Self;
-  typedef ObjectList<SamplingRateCalculator>  Superclass;
-  typedef itk::SmartPointer<Self>             Pointer;
-  typedef itk::SmartPointer<const Self>       ConstPointer;
+  typedef SamplingRateCalculatorList         Self;
+  typedef ObjectList<SamplingRateCalculator> Superclass;
+  typedef itk::SmartPointer<Self>            Pointer;
+  typedef itk::SmartPointer<const Self>      ConstPointer;
 
-  typedef SamplingRateCalculator::ClassCountMapType   ClassCountMapType;
-  typedef SamplingRateCalculator::MapRateType         MapRateType;
+  typedef SamplingRateCalculator::ClassCountMapType ClassCountMapType;
+  typedef SamplingRateCalculator::MapRateType       MapRateType;
 
   enum PartitionType
-    {
+  {
     PROPORTIONAL,
     EQUAL,
     CUSTOM
-    };
+  };
 
   /** Type macro */
   itkNewMacro(Self);
@@ -65,10 +64,10 @@ public:
   itkTypeMacro(SamplingRateCalculatorList, ObjectList);
 
   /** Set the class counts for input 'index' */
-  void SetNthClassCount(unsigned int index,const ClassCountMapType &map);
+  void SetNthClassCount(unsigned int index, const ClassCountMapType& map);
 
   /** Get the sampling rates computed for input 'index' */
-  const MapRateType & GetRatesByClass(unsigned int index);
+  const MapRateType& GetRatesByClass(unsigned int index);
 
   /** Clear internal data */
   void ClearRates(void);
@@ -81,34 +80,37 @@ public:
   void SetMinimumNbOfSamplesByClass(PartitionType t);
 
   /** Method to set the same number of required samples in each class */
-  void SetNbOfSamplesAllClasses(std::vector<unsigned long> &nb, PartitionType t);
+  void SetNbOfSamplesAllClasses(std::vector<unsigned long>& nb, PartitionType t);
 
   /** Method to manually set the number of samples required in each class */
-  void SetNbOfSamplesByClass(const std::vector<ClassCountMapType> &required, PartitionType t);
+  void SetNbOfSamplesByClass(const std::vector<ClassCountMapType>& required, PartitionType t);
 
   /** Method to use a percentage of the samples available in each
     * class */
-  void SetPercentageOfSamples(std::vector<double> &p, PartitionType t);
+  void SetPercentageOfSamples(std::vector<double>& p, PartitionType t);
 
-  /** Method to set the total number of samples and use classes proportions 
+  /** Method to set the total number of samples and use classes proportions
    */
-  void SetTotalNumberOfSamples(std::vector<unsigned long> &tot, PartitionType t);
-  
+  void SetTotalNumberOfSamples(std::vector<unsigned long>& tot, PartitionType t);
+
 protected:
   /** Constructor */
-  SamplingRateCalculatorList(){}
+  SamplingRateCalculatorList()
+  {
+  }
 
   /** Destructor */
-  ~SamplingRateCalculatorList() override {}
+  ~SamplingRateCalculatorList() override
+  {
+  }
 
 private:
-  SamplingRateCalculatorList(const Self &);    //purposely not implemented
-  void operator =(const Self&);    //purposely not implemented
+  SamplingRateCalculatorList(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   void UpdateGlobalCounts();
 
   ClassCountMapType m_GlobalCountMap;
-
 };
 } // end namespace otb
 

@@ -1,0 +1,7 @@
+Angl 30
+PSoil 0.7
+Skyl 0.7
+HSpot 0.2
+TTS 30
+TTO 0
+PSI 0

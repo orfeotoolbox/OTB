@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,7 +23,8 @@
 
 #include "itkLabelMapFilter.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class LabelMapWithClassLabelToClassLabelImageFilter
  * \brief Converts a LabelMap<LabelObjectWithClassLabel> to an image
@@ -31,68 +32,61 @@ namespace otb {
  *
  * \ingroup OTBLabelMap
  */
-template<class TInputImage, class TOutputImage>
-class ITK_EXPORT LabelMapWithClassLabelToClassLabelImageFilter :
-    public itk::LabelMapFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage>
+class ITK_EXPORT LabelMapWithClassLabelToClassLabelImageFilter : public itk::LabelMapFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
   typedef LabelMapWithClassLabelToClassLabelImageFilter Self;
-  typedef itk::LabelMapFilter<TInputImage, TOutputImage>
-  Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::LabelMapFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TInputImage InputImageType;
-  typedef TOutputImage OutputImageType;
+  typedef TInputImage                              InputImageType;
+  typedef TOutputImage                             OutputImageType;
   typedef typename InputImageType::Pointer         InputImagePointer;
   typedef typename InputImageType::ConstPointer    InputImageConstPointer;
   typedef typename InputImageType::RegionType      InputImageRegionType;
   typedef typename InputImageType::PixelType       InputImagePixelType;
   typedef typename InputImageType::LabelObjectType LabelObjectType;
 
-  typedef typename LabelObjectType::ConstLineIterator  ConstLineIteratorType;
+  typedef typename LabelObjectType::ConstLineIterator ConstLineIteratorType;
 
-  typedef typename OutputImageType::Pointer        OutputImagePointer;
-  typedef typename OutputImageType::ConstPointer   OutputImageConstPointer;
-  typedef typename OutputImageType::RegionType     OutputImageRegionType;
-  typedef typename OutputImageType::PixelType      OutputImagePixelType;
-  typedef typename OutputImageType::IndexType      IndexType;
+  typedef typename OutputImageType::Pointer      OutputImagePointer;
+  typedef typename OutputImageType::ConstPointer OutputImageConstPointer;
+  typedef typename OutputImageType::RegionType   OutputImageRegionType;
+  typedef typename OutputImageType::PixelType    OutputImagePixelType;
+  typedef typename OutputImageType::IndexType    IndexType;
 
   /** ImageDimension constants */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** Standard New method. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelMapWithClassLabelToClassLabelImageFilter,
-               ImageToImageFilter);
+  itkTypeMacro(LabelMapWithClassLabelToClassLabelImageFilter, ImageToImageFilter);
 
 protected:
   LabelMapWithClassLabelToClassLabelImageFilter();
-  ~LabelMapWithClassLabelToClassLabelImageFilter() override {};
+  ~LabelMapWithClassLabelToClassLabelImageFilter() override{};
 
   void BeforeThreadedGenerateData() override;
 
-  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
+  void ThreadedProcessLabelObject(LabelObjectType* labelObject) override;
 
 private:
-  LabelMapWithClassLabelToClassLabelImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  LabelMapWithClassLabelToClassLabelImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 }; // end of class
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLabelMapWithClassLabelToClassLabelImageFilter.txx"
+#include "otbLabelMapWithClassLabelToClassLabelImageFilter.hxx"
 #endif
 
 #endif
-
-

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,51 +24,51 @@
 #include "otbImageFileReader.h"
 #include "itksys/SystemTools.hxx"
 
-int otbOGRLayerStreamStitchingFilter(int argc, char * argv[])
+int otbOGRLayerStreamStitchingFilter(int argc, char* argv[])
 {
   if (argc != 5)
-    {
-      std::cerr << "Usage: " << argv[0];
-      std::cerr << " inputImage inputOGR outputOGR streamingSize" << std::endl;
-      return EXIT_FAILURE;
-    }
+  {
+    std::cerr << "Usage: " << argv[0];
+    std::cerr << " inputImage inputOGR outputOGR streamingSize" << std::endl;
+    return EXIT_FAILURE;
+  }
 
-  const char * infname      = argv[1];
-  const char * inOGRfname   = argv[2];
-  const char * tmpOGRfname  = argv[3];
-  unsigned int size         = atoi(argv[4]);
+  const char*  infname     = argv[1];
+  const char*  inOGRfname  = argv[2];
+  const char*  tmpOGRfname = argv[3];
+  unsigned int size        = atoi(argv[4]);
 
   /** Typedefs */
   const unsigned int Dimension = 2;
-  typedef float PixelType;
+  typedef float      PixelType;
   typedef otb::Image<PixelType, Dimension> ImageType;
 
-  typedef otb::OGRLayerStreamStitchingFilter<ImageType>   FilterType;
-  typedef otb::ImageFileReader<ImageType>       ReaderType;
+  typedef otb::OGRLayerStreamStitchingFilter<ImageType> FilterType;
+  typedef otb::ImageFileReader<ImageType>               ReaderType;
 
   ReaderType::Pointer reader = ReaderType::New();
   FilterType::Pointer filter = FilterType::New();
 
-  //first copy the input OGR file as it will be updated with the fusionned polygons
-  itksys::SystemTools::CopyAFile(inOGRfname,tmpOGRfname,true);
+  // first copy the input OGR file as it will be updated with the fusionned polygons
+  itksys::SystemTools::CopyAFile(inOGRfname, tmpOGRfname, true);
 
-  //Get the base name of the .shp file
-  std::string inPathName = itksys::SystemTools::GetFilenamePath(inOGRfname);
-  std::string inBaseName = itksys::SystemTools::GetFilenameWithoutExtension(inOGRfname);
+  // Get the base name of the .shp file
+  std::string inPathName  = itksys::SystemTools::GetFilenamePath(inOGRfname);
+  std::string inBaseName  = itksys::SystemTools::GetFilenameWithoutExtension(inOGRfname);
   std::string outPathName = itksys::SystemTools::GetFilenamePath(tmpOGRfname);
   std::string outBaseName = itksys::SystemTools::GetFilenameWithoutExtension(tmpOGRfname);
 
 
-  //copy the .shx, .dbf, .prj files
-  std::string in = inPathName+"/"+inBaseName+".shx";
-  std::string out = outPathName+"/"+outBaseName+".shx";
-  itksys::SystemTools::CopyAFile(in.c_str(),out.c_str(),true);
-  in = inPathName+"/"+inBaseName+".dbf";
-  out = outPathName+"/"+outBaseName+".dbf";
-  itksys::SystemTools::CopyAFile(in.c_str(),out.c_str(),true);
-  in = inPathName+"/"+inBaseName+".prj";
-  out = outPathName+"/"+outBaseName+".prj";
-  itksys::SystemTools::CopyAFile(in.c_str(),out.c_str(),true);
+  // copy the .shx, .dbf, .prj files
+  std::string in  = inPathName + "/" + inBaseName + ".shx";
+  std::string out = outPathName + "/" + outBaseName + ".shx";
+  itksys::SystemTools::CopyAFile(in.c_str(), out.c_str(), true);
+  in  = inPathName + "/" + inBaseName + ".dbf";
+  out = outPathName + "/" + outBaseName + ".dbf";
+  itksys::SystemTools::CopyAFile(in.c_str(), out.c_str(), true);
+  in  = inPathName + "/" + inBaseName + ".prj";
+  out = outPathName + "/" + outBaseName + ".prj";
+  itksys::SystemTools::CopyAFile(in.c_str(), out.c_str(), true);
 
   const std::string layerName = outBaseName;
 
@@ -85,10 +85,10 @@ int otbOGRLayerStreamStitchingFilter(int argc, char * argv[])
   filter->SetStreamSize(streamSize);
   filter->GenerateData();
 
-  //REPACK the layer to remove features marked as deleted in the Shapefile.
+  // REPACK the layer to remove features marked as deleted in the Shapefile.
   std::string sql("REPACK ");
   sql = sql + layerName;
-  ogrDS->ExecuteSQL(sql , ITK_NULLPTR, ITK_NULLPTR);
+  ogrDS->ExecuteSQL(sql, nullptr, nullptr);
 
   return EXIT_SUCCESS;
 }

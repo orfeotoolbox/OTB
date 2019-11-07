@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -50,12 +50,8 @@ namespace mvd
   Context comment for translator.
 */
 
-const char*
-STREAM_TAG_NAMES[ STREAM_TAG_COUNT ] =
-{
-  "SIZE",
-  "VECTOR",
-  "VARIABLE_LENGTH_VECTOR",
+const char* STREAM_TAG_NAMES[STREAM_TAG_COUNT] = {
+    "SIZE", "VECTOR", "VARIABLE_LENGTH_VECTOR",
 };
 
 /*******************************************************************************/

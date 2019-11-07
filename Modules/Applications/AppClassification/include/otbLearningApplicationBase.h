@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,14 +25,14 @@
 
 #include "otbWrapperApplication.h"
 
-#include <iostream>
 
 // ListSample
 #include "itkListSample.h"
 #include "itkVariableLengthVector.h"
 
-//Estimator
+// Estimator
 #include "otbMachineLearningModelFactory.h"
+#include <string>
 
 namespace otb
 {
@@ -72,41 +72,41 @@ namespace Wrapper
  * \ingroup OTBAppClassification
  */
 template <class TInputValue, class TOutputValue>
-class LearningApplicationBase: public Application
+class LearningApplicationBase : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef LearningApplicationBase Self;
-  typedef Application             Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef LearningApplicationBase       Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
-  itkTypeMacro(LearningApplicationBase, otb::Application)
+  itkTypeMacro(LearningApplicationBase, otb::Application);
 
-  typedef TInputValue                             InputValueType;
-  typedef TOutputValue                            OutputValueType;
+  typedef TInputValue  InputValueType;
+  typedef TOutputValue OutputValueType;
 
-  typedef otb::VectorImage<InputValueType>        SampleImageType;
-  typedef typename SampleImageType::PixelType     PixelType;
+  typedef otb::VectorImage<InputValueType>    SampleImageType;
+  typedef typename SampleImageType::PixelType PixelType;
 
   // Machine Learning models
-  typedef otb::MachineLearningModelFactory<
-            InputValueType, OutputValueType>             ModelFactoryType;
+  typedef otb::MachineLearningModelFactory<InputValueType, OutputValueType> ModelFactoryType;
   typedef typename ModelFactoryType::MachineLearningModelTypePointer ModelPointerType;
   typedef typename ModelFactoryType::MachineLearningModelType        ModelType;
-  
+
   typedef typename ModelType::InputSampleType     SampleType;
   typedef typename ModelType::InputListSampleType ListSampleType;
-  
-  typedef typename ModelType::TargetSampleType      TargetSampleType;
-  typedef typename ModelType::TargetListSampleType  TargetListSampleType;
-  typedef typename ModelType::TargetValueType       TargetValueType;
+
+  typedef typename ModelType::TargetSampleType     TargetSampleType;
+  typedef typename ModelType::TargetListSampleType TargetListSampleType;
+  typedef typename ModelType::TargetValueType      TargetValueType;
 
   itkGetConstReferenceMacro(SupervisedClassifier, std::vector<std::string>);
   itkGetConstReferenceMacro(UnsupervisedClassifier, std::vector<std::string>);
 
-  enum ClassifierCategory{
+  enum ClassifierCategory
+  {
     Supervised,
     Unsupervised
   };
@@ -125,14 +125,10 @@ protected:
 
   /** Generic method to train and save the machine learning model. This method
    * uses specific train methods depending on the chosen model.*/
-  void Train(typename ListSampleType::Pointer trainingListSample,
-             typename TargetListSampleType::Pointer trainingLabeledListSample,
-             std::string modelPath);
+  void Train(typename ListSampleType::Pointer trainingListSample, typename TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
 
   /** Generic method to load a model file and use it to classify a sample list*/
-  typename TargetListSampleType::Pointer Classify(
-    typename ListSampleType::Pointer validationListSample,
-    std::string modelPath);
+  typename TargetListSampleType::Pointer Classify(typename ListSampleType::Pointer validationListSample, std::string modelPath);
 
   /** Init method that creates all the parameters for machine learning models */
   void DoInit() override;
@@ -145,92 +141,73 @@ private:
   /** Specific Init and Train methods for each machine learning model */
 
   /** Init Parameters for Supervised Classifier */
-  void InitSupervisedClassifierParams();
+  void                     InitSupervisedClassifierParams();
   std::vector<std::string> m_SupervisedClassifier;
 
   /** Init Parameters for Unsupervised Classifier */
-  void InitUnsupervisedClassifierParams();
+  void                     InitUnsupervisedClassifierParams();
   std::vector<std::string> m_UnsupervisedClassifier;
 
-  //@{
-#ifdef OTB_USE_LIBSVM 
+//@{
+#ifdef OTB_USE_LIBSVM
   void InitLibSVMParams();
 
-  void TrainLibSVM(typename ListSampleType::Pointer trainingListSample,
-                   typename TargetListSampleType::Pointer trainingLabeledListSample,
+  void TrainLibSVM(typename ListSampleType::Pointer trainingListSample, typename TargetListSampleType::Pointer trainingLabeledListSample,
                    std::string modelPath);
-#endif  
+#endif
 
 #ifdef OTB_USE_OPENCV
   void InitBoostParams();
   void InitSVMParams();
   void InitDecisionTreeParams();
-  void InitGradientBoostedTreeParams();
   void InitNeuralNetworkParams();
   void InitNormalBayesParams();
   void InitRandomForestsParams();
   void InitKNNParams();
 
-  void TrainBoost(typename ListSampleType::Pointer trainingListSample,
-                  typename TargetListSampleType::Pointer trainingLabeledListSample,
-                  std::string modelPath);
-  void TrainSVM(typename ListSampleType::Pointer trainingListSample,
-                typename TargetListSampleType::Pointer trainingLabeledListSample,
-                std::string modelPath);
-  void TrainDecisionTree(typename ListSampleType::Pointer trainingListSample,
-                         typename TargetListSampleType::Pointer trainingLabeledListSample,
+  void TrainBoost(typename ListSampleType::Pointer trainingListSample, typename TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
+  void TrainSVM(typename ListSampleType::Pointer trainingListSample, typename TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
+  void TrainDecisionTree(typename ListSampleType::Pointer trainingListSample, typename TargetListSampleType::Pointer trainingLabeledListSample,
                          std::string modelPath);
-  void TrainGradientBoostedTree(typename ListSampleType::Pointer trainingListSample,
-                                typename TargetListSampleType::Pointer trainingLabeledListSample,
-                                std::string modelPath);
-  void TrainNeuralNetwork(typename ListSampleType::Pointer trainingListSample,
-                          typename TargetListSampleType::Pointer trainingLabeledListSample,
+  void TrainNeuralNetwork(typename ListSampleType::Pointer trainingListSample, typename TargetListSampleType::Pointer trainingLabeledListSample,
                           std::string modelPath);
-  void TrainNormalBayes(typename ListSampleType::Pointer trainingListSample,
-                        typename TargetListSampleType::Pointer trainingLabeledListSample,
+  void TrainNormalBayes(typename ListSampleType::Pointer trainingListSample, typename TargetListSampleType::Pointer trainingLabeledListSample,
                         std::string modelPath);
-  void TrainRandomForests(typename ListSampleType::Pointer trainingListSample,
-                          typename TargetListSampleType::Pointer trainingLabeledListSample,
+  void TrainRandomForests(typename ListSampleType::Pointer trainingListSample, typename TargetListSampleType::Pointer trainingLabeledListSample,
                           std::string modelPath);
-  void TrainKNN(typename ListSampleType::Pointer trainingListSample,
-                typename TargetListSampleType::Pointer trainingLabeledListSample,
-                std::string modelPath);
+  void TrainKNN(typename ListSampleType::Pointer trainingListSample, typename TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath);
 #endif
 
 #ifdef OTB_USE_SHARK
   void InitSharkRandomForestsParams();
-  void TrainSharkRandomForests(typename ListSampleType::Pointer trainingListSample,
-                               typename TargetListSampleType::Pointer trainingLabeledListSample,
+  void TrainSharkRandomForests(typename ListSampleType::Pointer trainingListSample, typename TargetListSampleType::Pointer trainingLabeledListSample,
                                std::string modelPath);
   void InitSharkKMeansParams();
-  void TrainSharkKMeans(typename ListSampleType::Pointer trainingListSample,
-                        typename TargetListSampleType::Pointer trainingLabeledListSample,
+  void TrainSharkKMeans(typename ListSampleType::Pointer trainingListSample, typename TargetListSampleType::Pointer trainingLabeledListSample,
                         std::string modelPath);
 #endif
   //@}
 };
-
 }
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLearningApplicationBase.txx"
+#include "otbLearningApplicationBase.hxx"
 #ifdef OTB_USE_OPENCV
-#include "otbTrainBoost.txx"
-#include "otbTrainDecisionTree.txx"
-#include "otbTrainGradientBoostedTree.txx"
-#include "otbTrainKNN.txx"
-#include "otbTrainNeuralNetwork.txx"
-#include "otbTrainNormalBayes.txx"
-#include "otbTrainRandomForests.txx"
-#include "otbTrainSVM.txx"
+#include "otbTrainBoost.hxx"
+#include "otbTrainDecisionTree.hxx"
+#include "otbTrainKNN.hxx"
+#include "otbTrainNeuralNetwork.hxx"
+#include "otbTrainNormalBayes.hxx"
+#include "otbTrainRandomForests.hxx"
+#include "otbTrainSVM.hxx"
 #endif
 #ifdef OTB_USE_LIBSVM
-#include "otbTrainLibSVM.txx"
+#include "otbTrainLibSVM.hxx"
 #endif
 #ifdef OTB_USE_SHARK
-#include "otbTrainSharkRandomForests.txx"
-#include "otbTrainSharkKMeans.txx"
+#include "otbTrainSharkRandomForests.hxx"
+#include "otbTrainSharkKMeans.hxx"
 #endif
 #endif
 

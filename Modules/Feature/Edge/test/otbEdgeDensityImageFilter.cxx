@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,32 +29,32 @@
 int otbEdgeDensityImageFilter(int itkNotUsed(argc), char* argv[])
 {
 
-  const char *       infname       = argv[1];
-  const char *       outfname      = argv[2];
-  const unsigned int radius      = atoi(argv[3]);
+  const char*        infname  = argv[1];
+  const char*        outfname = argv[2];
+  const unsigned int radius   = atoi(argv[3]);
 
   /** Variables for the canny detector*/
-  const double upperThreshold   = atof(argv[4]);
-  const double lowerThreshold   = atof(argv[5]);
-  const double variance         = atof(argv[6]);
-  const double maximumError     = atof(argv[7]);
+  const double upperThreshold = atof(argv[4]);
+  const double lowerThreshold = atof(argv[5]);
+  const double variance       = atof(argv[6]);
+  const double maximumError   = atof(argv[7]);
   /*--*/
 
   const unsigned int Dimension = 2;
-  typedef float PixelType;
+  typedef float      PixelType;
 
   typedef otb::Image<PixelType, Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
-  typedef otb::ImageFileWriter<ImageType>  WriterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
-  typedef otb::BinaryImageDensityFunction<ImageType>               CountFunctionType;
+  typedef otb::BinaryImageDensityFunction<ImageType> CountFunctionType;
   typedef itk::CannyEdgeDetectionImageFilter<ImageType, ImageType> CannyDetectorType;
 
   typedef otb::EdgeDensityImageFilter<ImageType, ImageType, CannyDetectorType, CountFunctionType> EdgeDensityFilterType;
 
   /**Instantiation of an object*/
-  EdgeDensityFilterType::Pointer filter =      EdgeDensityFilterType::New();
-  ReaderType::Pointer            reader =      ReaderType::New();
+  EdgeDensityFilterType::Pointer filter      = EdgeDensityFilterType::New();
+  ReaderType::Pointer            reader      = ReaderType::New();
   CannyDetectorType::Pointer     CannyFilter = CannyDetectorType::New();
 
   /** Set The input*/
@@ -64,8 +64,8 @@ int otbEdgeDensityImageFilter(int itkNotUsed(argc), char* argv[])
   /** Update the Canny Filter Information*/
   CannyFilter->SetUpperThreshold(static_cast<ImageType::PixelType>(upperThreshold)); /** 30*/
   CannyFilter->SetLowerThreshold(static_cast<ImageType::PixelType>(lowerThreshold)); /** 10*/
-  CannyFilter->SetVariance(variance); //1.
-  CannyFilter->SetMaximumError(maximumError); ///0.01f
+  CannyFilter->SetVariance(variance);                                                // 1.
+  CannyFilter->SetMaximumError(maximumError);                                        /// 0.01f
 
   filter->SetDetector(CannyFilter);
   filter->SetNeighborhoodRadius(radius);

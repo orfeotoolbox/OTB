@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -42,14 +42,14 @@ namespace otb
  * \ingroup OTBMarkov
  */
 
-template<class TInput1, class TInput2>
+template <class TInput1, class TInput2>
 class ITK_EXPORT MRFSamplerRandom : public MRFSampler<TInput1, TInput2>
 {
 public:
-  typedef MRFSamplerRandom                  Self;
+  typedef MRFSamplerRandom Self;
   typedef otb::MRFSampler<TInput1, TInput2> Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename Superclass::InputImageNeighborhoodIterator    InputImageNeighborhoodIterator;
   typedef typename Superclass::LabelledImageNeighborhoodIterator LabelledImageNeighborhoodIterator;
@@ -69,13 +69,12 @@ public:
   inline int Compute(const InputImageNeighborhoodIterator& itData, const LabelledImageNeighborhoodIterator& itRegul) override
   {
     this->m_EnergyBefore = this->m_EnergyFidelity->GetValue(itData, itRegul.GetCenterPixel());
-    this->m_EnergyBefore += this->m_Lambda
-                            * this->m_EnergyRegularization->GetValue(itRegul, itRegul.GetCenterPixel());
+    this->m_EnergyBefore += this->m_Lambda * this->m_EnergyRegularization->GetValue(itRegul, itRegul.GetCenterPixel());
 
-    this->m_Value = static_cast<LabelledImagePixelType>(m_Generator->GetIntegerVariate() % this->m_NumberOfClasses);
+    this->m_Value       = static_cast<LabelledImagePixelType>(m_Generator->GetIntegerVariate() % this->m_NumberOfClasses);
     this->m_EnergyAfter = this->m_EnergyFidelity->GetValue(itData, this->m_Value);
-    this->m_EnergyAfter +=  this->m_Lambda * this->m_EnergyRegularization->GetValue(itRegul, this->m_Value);
-    this->m_DeltaEnergy =  this->m_EnergyAfter - this->m_EnergyBefore;
+    this->m_EnergyAfter += this->m_Lambda * this->m_EnergyRegularization->GetValue(itRegul, this->m_Value);
+    this->m_DeltaEnergy = this->m_EnergyAfter - this->m_EnergyBefore;
 
     return 0;
   }
@@ -93,11 +92,13 @@ public:
 protected:
   // The constructor and destructor.
   MRFSamplerRandom()
-    {
+  {
     m_Generator = RandomGeneratorType::GetInstance();
     m_Generator->SetSeed();
-    }
-  ~MRFSamplerRandom() override {}
+  }
+  ~MRFSamplerRandom() override
+  {
+  }
 
 private:
   RandomGeneratorType::Pointer m_Generator;

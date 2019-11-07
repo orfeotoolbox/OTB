@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -25,32 +25,24 @@ otbPolarimetryTestDriver.cxx
 otbMuellerToPolarisationDegreeAndPowerImageFilter.cxx
 otbVectorMultiChannelsPolarimetricSynthesisFilter.cxx
 otbReciprocalHAlphaImageFilter.cxx
-otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilterNew.cxx
 otbReciprocalCovarianceToReciprocalCoherencyImageFilter.cxx
-otbReciprocalHAlphaImageFilterNew.cxx
 otbSinclairToCoherencyMatrixFunctor.cxx
 otbPolarimetricSynthesisFunctor.cxx
 otbMultiChannelsPolarimetricSynthesisFilter.cxx
 otbSinclairImageFilter.cxx
-otbReciprocalCovarianceToReciprocalCoherencyImageFilterNew.cxx
 otbSinclairToCircularCovarianceMatrixFunctor.cxx
 otbSinclairReciprocalImageFilter.cxx
 otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter.cxx
 otbReciprocalCoherencyToReciprocalMuellerImageFilter.cxx
 otbSinclairToReciprocalCovarianceMatrixFunctor.cxx
-otbReciprocalCovarianceToCoherencyDegreeImageFilterNew.cxx
 otbMuellerToReciprocalCovarianceImageFilter.cxx
-otbReciprocalCoherencyToReciprocalMuellerImageFilterNew.cxx
 otbSinclairToMuellerMatrixFunctor.cxx
 otbMuellerToReciprocalCovarianceFunctor.cxx
 otbPolarimetricData.cxx
-otbMuellerToReciprocalCovarianceImageFilterNew.cxx
 otbSinclairToReciprocalCoherencyMatrixFunctor.cxx
 otbSinclairToReciprocalCircularCovarianceMatrixFunctor.cxx
-otbMultiChannelsPolarimetricSynthesisFilterNew.cxx
 otbSinclairToCovarianceMatrixFunctor.cxx
 otbReciprocalCovarianceToCoherencyDegreeImageFilter.cxx
-otbMuellerToPolarisationDegreeAndPowerImageFilterNew.cxx
 otbReciprocalBarnesDecomp.cxx
 otbReciprocalHuynenDecomp.cxx
 otbReciprocalPauliDecomp.cxx
@@ -125,9 +117,6 @@ otb_add_test(NAME saTvReciprocalPauliDecompImageFilter COMMAND otbPolarimetryTes
   ${TEMP}/saTvReciprocalPauliDecompImageFilter.tif
   )
 
-otb_add_test(NAME saTuReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilterNew COMMAND otbPolarimetryTestDriver
-  otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilterNew
-  )
 
 otb_add_test(NAME saTvReciprocalCovarianceToReciprocalCoherencyImageFilter COMMAND otbPolarimetryTestDriver
   --compare-image ${EPSILON_7}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCoherency.tif
@@ -137,21 +126,9 @@ otb_add_test(NAME saTvReciprocalCovarianceToReciprocalCoherencyImageFilter COMMA
   ${TEMP}/saTvMLCToCoherencyImageFilter.tif
   )
 
-otb_add_test(NAME saTuReciprocalHAlphaImageFilterNew COMMAND otbPolarimetryTestDriver
-  otbReciprocalHAlphaImageFilterNew
-  )
   
-otb_add_test(NAME saTuReciprocalBarnesDecompImageFilterNew COMMAND otbPolarimetryTestDriver
-  otbReciprocalBarnesDecompImageFilterNew
-  )
   
-otb_add_test(NAME saTuReciprocalHuynenDecompImageFilterNew COMMAND otbPolarimetryTestDriver
-  otbReciprocalHuynenDecompImageFilterNew
-  )
   
-otb_add_test(NAME saTuReciprocalPauliDecompImageFilterNew COMMAND otbPolarimetryTestDriver
-  otbReciprocalPauliDecompImageFilterNew
-  )
 
 otb_add_test(NAME saTuSinclairToCoherencyMatrixFunctor COMMAND otbPolarimetryTestDriver
   otbSinclairToCoherencyMatrixFunctor
@@ -232,9 +209,6 @@ otb_add_test(NAME saTvSinclairImageFilter_SinclairToCovariance_C COMMAND otbPola
   ${TEMP}/saTvSinclairImageFilter_SinclairToCovariance_C.tif
   )
 
-otb_add_test(NAME saTuSinclairImageFilterNew COMMAND otbPolarimetryTestDriver
-  otbSinclairImageFilterNew
-  )
 
 otb_add_test(NAME saTvSinclairImageFilter_SinclairToCircularCovarianceMatrix COMMAND otbPolarimetryTestDriver
   --compare-image ${EPSILON_7}   ${BASELINE}/saTvSinclairImageFilter_SinclairToCircularCovarianceMatrix.tif
@@ -280,17 +254,11 @@ otb_add_test(NAME saTvSinclairImageFilter_SinclairToCoherency_C COMMAND otbPolar
   ${TEMP}/saTvSinclairImageFilter_SinclairToCoherency_C.tif
   )
 
-otb_add_test(NAME saTuReciprocalCovarianceToReciprocalCoherencyImageFilterNew COMMAND otbPolarimetryTestDriver
-  otbReciprocalCovarianceToReciprocalCoherencyImageFilterNew
-  )
 
 otb_add_test(NAME saTuSinclairToCircularCovarianceMatrixFunctor COMMAND otbPolarimetryTestDriver
   otbSinclairToCircularCovarianceMatrixFunctor
   )
 
-otb_add_test(NAME saTuSinclairReciprocalImageFilterNew COMMAND otbPolarimetryTestDriver
-  otbSinclairReciprocalImageFilterNew
-  )
 
 otb_add_test(NAME saTvSinclairReciprocalImageFilter_SinclairToReciprocalCovariance COMMAND otbPolarimetryTestDriver
   --compare-image ${EPSILON_7}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
@@ -380,9 +348,6 @@ otb_add_test(NAME saTuSinclairToReciprocalCovarianceMatrixFunctor COMMAND otbPol
   otbSinclairToReciprocalCovarianceMatrixFunctor
   )
 
-otb_add_test(NAME saTuReciprocalCovarianceToCoherencyDegreeImageFilterNew COMMAND otbPolarimetryTestDriver
-  otbReciprocalCovarianceToCoherencyDegreeImageFilterNew
-  )
 
 otb_add_test(NAME saTvMuellerToReciprocalCovarianceImageFilter COMMAND otbPolarimetryTestDriver
   --compare-image ${EPSILON_7}   ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
@@ -392,9 +357,6 @@ otb_add_test(NAME saTvMuellerToReciprocalCovarianceImageFilter COMMAND otbPolari
   ${TEMP}/saTvMuellerToMLCImageFilter.tif
   )
 
-otb_add_test(NAME saTuReciprocalCoherencyToReciprocalMuellerImageFilterNew COMMAND otbPolarimetryTestDriver
-  otbReciprocalCoherencyToReciprocalMuellerImageFilterNew
-  )
 
 otb_add_test(NAME saTuSinclairToMuellerMatrixFunctor COMMAND otbPolarimetryTestDriver
   otbSinclairToMuellerMatrixFunctor
@@ -404,17 +366,11 @@ otb_add_test(NAME saTvMuellerToReciprocalCovarianceFunctor COMMAND otbPolarimetr
   otbMuellerToReciprocalCovarianceFunctor
   )
 
-otb_add_test(NAME saTuPolarimetricDataNew COMMAND otbPolarimetryTestDriver
-  otbPolarimetricDataNew
-  )
 
 otb_add_test(NAME saTvPolarimetricDataTest COMMAND otbPolarimetryTestDriver
   otbPolarimetricDataTest
   )
 
-otb_add_test(NAME saTuMuellerToReciprocalCovarianceImageFilterNew COMMAND otbPolarimetryTestDriver
-  otbMuellerToReciprocalCovarianceImageFilterNew
-  )
 
 otb_add_test(NAME saTuSinclairToReciprocalCoherencyMatrixFunctor COMMAND otbPolarimetryTestDriver
   otbSinclairToReciprocalCoherencyMatrixFunctor
@@ -424,9 +380,6 @@ otb_add_test(NAME saTuSinclairToReciprocalCircularCovarianceMatrixFunctor COMMAN
   otbSinclairToReciprocalCircularCovarianceMatrixFunctor
   )
 
-otb_add_test(NAME saTuMultiChannelsPolarimetricSynthesisFilterNew COMMAND otbPolarimetryTestDriver
-  otbMultiChannelsPolarimetricSynthesisFilterNew
-  )
 
 otb_add_test(NAME saTuSinclairToCovarianceMatrixFunctor COMMAND otbPolarimetryTestDriver
   otbSinclairToCovarianceMatrixFunctor
@@ -440,7 +393,4 @@ otb_add_test(NAME saTvReciprocalCovarianceToCoherencyDegreeImageFilter COMMAND o
   ${TEMP}/saTvMLCToCoherencyDegreeImageFilter.tif
   )
 
-otb_add_test(NAME saTuMuellerToPolarisationDegreeAndPowerImageFilterNew COMMAND otbPolarimetryTestDriver
-  otbMuellerToPolarisationDegreeAndPowerImageFilterNew
-  )
 

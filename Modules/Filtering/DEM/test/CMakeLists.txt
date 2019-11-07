@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -21,10 +21,8 @@
 otb_module_test()
 set(OTBDEMTests
   otbDEMToImageGeneratorFromImageTest.cxx
-  otbDEMToImageGeneratorNew.cxx
   otbDEMToImageGeneratorTest.cxx
   otbDEMCaracteristicsExtractor.cxx
-  otbDEMCaracteristicsExtractorNew.cxx
   otbDEMTestDriver.cxx  )
 
 add_executable(otbDEMTestDriver ${OTBDEMTests})
@@ -65,7 +63,6 @@ otb_add_test(NAME ioTvDEMToImageGeneratorFromImageTest2 COMMAND otbDEMTestDriver
   ${TEMP}/ioTvDEMToImageGeneratorFromImage_DEM_Extract2.tif
   10 15 16 64
   )
-otb_add_test(NAME ioTuDEMToImageGeneratorNew COMMAND otbDEMTestDriver otbDEMToImageGeneratorNew )
 otb_add_test(NAME ioTvDEMToImageGeneratorTest2 COMMAND otbDEMTestDriver
   --compare-image ${EPSILON_5}  ${BASELINE}/ioTvDEMToImageGenerator2.tif
   ${TEMP}/ioTvDEMToImageGenerator2.tif
@@ -116,7 +113,4 @@ otb_add_test(NAME raTvDEMCaracteristicsExtractor COMMAND otbDEMTestDriver
   ${TEMP}/raTvDEMCaracteristicsExtractorAspect.tif
   ${TEMP}/raTvDEMCaracteristicsExtractorIncidence.tif
   ${TEMP}/raTvDEMCaracteristicsExtractorExitance.tif
-  )
-otb_add_test(NAME raTuDEMCaracteristicsExtractorNew COMMAND otbDEMTestDriver
-  otbDEMCaracteristicsExtractorNew
   )

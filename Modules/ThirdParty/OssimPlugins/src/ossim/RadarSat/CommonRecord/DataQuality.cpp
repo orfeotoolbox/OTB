@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -40,9 +40,9 @@ std::ostream& operator<<(std::ostream& os, const DataQuality& data)
 
 	os<<"rec_seq:"<<data._rec_seq<<std::endl;
 
-	os<<"sar_chn:"<<data._sar_chn.c_str()<<std::endl;
+	os<<"sar_chn:"<<data._sar_chn <<std::endl;
 
-    os<<"cali_date:"<<data._cali_date.c_str()<<std::endl;
+    os<<"cali_date:"<<data._cali_date <<std::endl;
 
     os<<"nchn:"<<data._nchn<<std::endl;
 
@@ -96,7 +96,7 @@ std::ostream& operator<<(std::ostream& os, const DataQuality& data)
 
     os<<"enl:"<<data._enl<<std::endl;
 
-    os<<"tb_update:"<<data._tb_update.c_str()<<std::endl;
+    os<<"tb_update:"<<data._tb_update <<std::endl;
 
 
 	return os;

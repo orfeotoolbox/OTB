@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,9 +25,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 /*****************************************************************************/
@@ -35,10 +33,8 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdTypes.h"
 #include "mvdVectorImageModel.h"
-#endif //tag=QT4-boost-compatibility
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -52,7 +48,6 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-
 
 
 /*****************************************************************************/
@@ -78,8 +73,7 @@ namespace mvd
  * \ingroup OTBMonteverdiCore
  *
  */
-class OTBMonteverdiCore_EXPORT QuicklookModel :
-    public VectorImageModel
+class OTBMonteverdiCore_EXPORT QuicklookModel : public VectorImageModel
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -88,16 +82,14 @@ class OTBMonteverdiCore_EXPORT QuicklookModel :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
-
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** Constructor */
-  QuicklookModel( QObject* p =NULL );
+  QuicklookModel(QObject* p = NULL);
 
   /** Destructor */
   ~QuicklookModel() override;
@@ -124,8 +116,8 @@ public:
    *
    * \return The parent image-model of this quicklook image.
    */
-  template< typename TImageModel >
-    inline const TImageModel* GetImageModel() const;
+  template <typename TImageModel>
+  inline const TImageModel* GetImageModel() const;
 
   /**
    * \brief Get the parent image-model of this quicklook image as a
@@ -133,22 +125,22 @@ public:
    *
    * \return The parent image-model of this quicklook image.
    */
-  template< typename TImageModel >
-    inline TImageModel* GetImageModel();
+  template <typename TImageModel>
+  inline TImageModel* GetImageModel();
 
   //
   // VectorImageModel overloads.
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public slots.
+  //
+  // Public slots.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   /**
    */
@@ -156,35 +148,30 @@ signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** */
-  void virtual_BuildModel( void* context =NULL ) override;
+  void virtual_BuildModel(void* context = NULL) override;
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types.
+  //
+  // Private types.
 private:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 
@@ -197,37 +184,29 @@ namespace mvd
 {
 
 /*****************************************************************************/
-const AbstractImageModel*
-QuicklookModel
-::GetImageModel() const
+const AbstractImageModel* QuicklookModel::GetImageModel() const
 {
-  return GetImageModel< AbstractImageModel >();
+  return GetImageModel<AbstractImageModel>();
 }
 
 /*****************************************************************************/
-AbstractImageModel*
-QuicklookModel
-::GetImageModel()
+AbstractImageModel* QuicklookModel::GetImageModel()
 {
-  return GetImageModel< AbstractImageModel >();
+  return GetImageModel<AbstractImageModel>();
 }
 
 /*****************************************************************************/
-template< typename TImageModel >
-const TImageModel*
-QuicklookModel
-::GetImageModel() const
+template <typename TImageModel>
+const TImageModel* QuicklookModel::GetImageModel() const
 {
-  return qobject_cast< const TImageModel* >( parent() );
+  return qobject_cast<const TImageModel*>(parent());
 }
 
 /*****************************************************************************/
-template< typename TImageModel >
-TImageModel*
-QuicklookModel
-::GetImageModel()
+template <typename TImageModel>
+TImageModel* QuicklookModel::GetImageModel()
 {
-  return qobject_cast< TImageModel* >( parent() );
+  return qobject_cast<TImageModel*>(parent());
 }
 
 } // end namespace 'mvd'

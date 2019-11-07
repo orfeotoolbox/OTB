@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,6 +22,7 @@
 #define otbSpot6ImageMetadataInterface_h
 
 #include "otbOpticalImageMetadataInterface.h"
+#include <string>
 
 namespace otb
 {
@@ -35,9 +36,8 @@ namespace otb
 class OTBMetadata_EXPORT Spot6ImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
-
-  typedef Spot6ImageMetadataInterface    Self;
-  typedef OpticalImageMetadataInterface    Superclass;
+  typedef Spot6ImageMetadataInterface   Self;
+  typedef OpticalImageMetadataInterface Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -122,17 +122,17 @@ public:
 
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
      * There values a computed by 6S. */
-  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const override;
+  WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
 protected:
   Spot6ImageMetadataInterface();
-  ~Spot6ImageMetadataInterface() override {}
+  ~Spot6ImageMetadataInterface() override
+  {
+  }
 
 private:
-
-  Spot6ImageMetadataInterface(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
+  Spot6ImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

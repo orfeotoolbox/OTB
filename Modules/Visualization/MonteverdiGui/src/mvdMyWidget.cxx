@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -65,17 +65,13 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-MyWidget
-::MyWidget( QWidget* p, Qt::WindowFlags flags  ):
-  QWidget( p, flags ),
-  m_UI( new mvd::Ui::MyWidget() )
+MyWidget::MyWidget(QWidget* p, Qt::WindowFlags flags) : QWidget(p, flags), m_UI(new mvd::Ui::MyWidget())
 {
-  m_UI->setupUi( this );
+  m_UI->setupUi(this);
 }
 
 /*******************************************************************************/
-MyWidget
-::~MyWidget()
+MyWidget::~MyWidget()
 {
   delete m_UI;
   m_UI = NULL;

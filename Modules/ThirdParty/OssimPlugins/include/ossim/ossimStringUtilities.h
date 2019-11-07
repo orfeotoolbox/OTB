@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -32,7 +32,6 @@
 #include <cassert>
 #include <cstring>
 #include <ostream>
-// #include <iostream>
 #include <sstream>
 #include <typeinfo>
 #include <stdexcept>

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -26,7 +26,7 @@ macro(otb_create_application)
    # Build the library as a MODULE (shared lib even if OTB is built statically)
    include_directories(${APPLICATION_INCLUDE_DIRS})
    add_library(${APPLICATION_TARGET_NAME} MODULE ${APPLICATION_SOURCES})
-   target_link_libraries(${APPLICATION_TARGET_NAME} OTBApplicationEngine ${APPLICATION_LINK_LIBRARIES})
+   target_link_libraries(${APPLICATION_TARGET_NAME} ${APPLICATION_LINK_LIBRARIES})
    if(otb-module)
      otb_module_target_label(${APPLICATION_TARGET_NAME})
    endif()
@@ -117,8 +117,6 @@ macro(otb_create_application)
    list(REMOVE_DUPLICATES OTB_APPLICATIONS_NAME_LIST)
    set(OTB_APPLICATIONS_NAME_LIST ${OTB_APPLICATIONS_NAME_LIST}
        CACHE STRING "List of all applications" FORCE)
-   mark_as_advanced(OTB_APPLICATIONS_NAME_LIST)
-
 endmacro()
 
 macro(otb_test_application)

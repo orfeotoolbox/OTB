@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -37,14 +37,14 @@ VolumeDescriptorRecord::~VolumeDescriptorRecord()
 
 std::ostream& operator<<(std::ostream& os, const VolumeDescriptorRecord& data)
 {
-  os<<"ascii_flag:"<<data._ascii_flag.c_str()<<std::endl;
-  os<<"format_doc:"<<data._format_doc.c_str()<<std::endl;
-  os<<"format_ver:"<<data._format_ver.c_str()<<std::endl;
-  os<<"format_rev:"<<data._format_rev.c_str()<<std::endl;
-  os<<"software_id:"<<data._software_id.c_str()<<std::endl;
-  os<<"phyvol_id:"<<data._phyvol_id.c_str()<<std::endl;
-  os<<"logvol_id:"<<data._logvol_id.c_str()<<std::endl;
-  os<<"volset_id:"<<data._volset_id.c_str()<<std::endl;
+  os<<"ascii_flag:"<<data._ascii_flag <<std::endl;
+  os<<"format_doc:"<<data._format_doc <<std::endl;
+  os<<"format_ver:"<<data._format_ver <<std::endl;
+  os<<"format_rev:"<<data._format_rev <<std::endl;
+  os<<"software_id:"<<data._software_id <<std::endl;
+  os<<"phyvol_id:"<<data._phyvol_id <<std::endl;
+  os<<"logvol_id:"<<data._logvol_id <<std::endl;
+  os<<"volset_id:"<<data._volset_id <<std::endl;
   os<<"phyvol_cnt:"<<data._phyvol_cnt<<std::endl;
   os<<"first_phyvol:"<<data._first_phyvol<<std::endl;
   os<<"last_phyvol:"<<data._last_phyvol<<std::endl;
@@ -52,14 +52,14 @@ std::ostream& operator<<(std::ostream& os, const VolumeDescriptorRecord& data)
   os<<"first_file:"<<data._first_file<<std::endl;
   os<<"volset_log:"<<data._volset_log<<std::endl;
   os<<"phyvol_log:"<<data._phyvol_log<<std::endl;
-  os<<"logvol_date:"<<data._logvol_date.c_str()<<std::endl;
-  os<<"logvol_time:"<<data._logvol_time.c_str()<<std::endl;
-  os<<"logvol_country:"<<data._logvol_country.c_str()<<std::endl;
-  os<<"logvol_agency:"<<data._logvol_agency.c_str()<<std::endl;
-  os<<"logvol_facility:"<<data._logvol_facility.c_str()<<std::endl;
+  os<<"logvol_date:"<<data._logvol_date <<std::endl;
+  os<<"logvol_time:"<<data._logvol_time <<std::endl;
+  os<<"logvol_country:"<<data._logvol_country <<std::endl;
+  os<<"logvol_agency:"<<data._logvol_agency <<std::endl;
+  os<<"logvol_facility:"<<data._logvol_facility <<std::endl;
   os<<"n_filepoint:"<<data._n_filepoint<<std::endl;
   os<<"n_voldir:"<<data._n_voldir<<std::endl;
-  os<<"product_id:"<<data._product_id.c_str()<<std::endl;
+  os<<"product_id:"<<data._product_id <<std::endl;
 
 
   return os;

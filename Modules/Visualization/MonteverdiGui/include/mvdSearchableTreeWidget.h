@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -80,8 +80,7 @@ class SearchableTreeWidget;
  * \brief Database content browser. Presents:
  * - Cached datasets.
  */
-class OTBMonteverdiGUI_EXPORT SearchableTreeWidget :
-    public QWidget
+class OTBMonteverdiGUI_EXPORT SearchableTreeWidget : public QWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -90,64 +89,60 @@ class OTBMonteverdiGUI_EXPORT SearchableTreeWidget :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
-
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  SearchableTreeWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
+  SearchableTreeWidget(QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** \brief Destructor. */
   ~SearchableTreeWidget() override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types.
+  //
+  // Private types.
 private:
   /**
    * \brief List of dataset item names displayed under the 'dataset'
    * root item.
    */
-  QList< QTreeWidgetItem* > TreeWidgetItemList;
+  QList<QTreeWidgetItem*> TreeWidgetItemList;
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    * \brief Setup UI sub-items.
    */
   void SetupUI();
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    * \brief uic generated.
@@ -156,8 +151,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 
   /**
@@ -169,13 +164,12 @@ private slots:
    */
   /*
   void on_databaseTreeWidget_currentItemChanged( QTreeWidgetItem* current,
-						 QTreeWidgetItem* previous );
+             QTreeWidgetItem* previous );
   */
 
   /**
    */
   // void on_searchLineEdit_textChanged( const QString& text );
-
 };
 
 } // end namespace 'mvd'

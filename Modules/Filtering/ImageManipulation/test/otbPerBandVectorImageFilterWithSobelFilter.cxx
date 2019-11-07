@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,19 +27,18 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbPerBandVectorImageFilterWithSobelFilter(int itkNotUsed(argc), char * argv[])
+int otbPerBandVectorImageFilterWithSobelFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef double                                                   PixelType;
+  typedef double     PixelType;
   typedef otb::Image<PixelType, Dimension>                         ImageType;
   typedef otb::VectorImage<PixelType, Dimension>                   VectorImageType;
   typedef itk::SobelEdgeDetectionImageFilter<ImageType, ImageType> SobelFilterType;
 
-  typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, SobelFilterType>
-  PerBandVectorImageFilterType;
+  typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, SobelFilterType> PerBandVectorImageFilterType;
 
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
   typedef otb::ImageFileWriter<VectorImageType> WriterType;

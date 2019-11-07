@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -47,7 +47,6 @@ private:
     SetName("TestApplication");
     SetDescription("This application helps developers to test parameters types");
 
-    SetDocName("Test");
     SetDocLongDescription("The purpose of this application is to test parameters types.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -55,8 +54,7 @@ private:
 
     AddDocTag("Test");
 
-    //std::cout << "TestApplication::DoInit" << std::endl;
-    AddParameter(ParameterType_Empty, "empty", "Boolean (old impl.)");
+    // std::cout << "TestApplication::DoInit" << std::endl;
     AddParameter(ParameterType_Bool, "boolean", "Boolean");
     AddParameter(ParameterType_Int, "int", "Integer");
     MandatoryOff("int");
@@ -72,39 +70,36 @@ private:
     AddChoice("choice.choice1", "Choice 1");
     AddChoice("choice.choice2", "Choice 2");
     AddChoice("choice.choice3", "Choice 3");
-    AddParameter(ParameterType_Float,  "choice.choice1.floatchoice1", "Float of choice1");
-    SetDefaultParameterFloat("choice.choice1.floatchoice1",   0.125);
-    AddParameter(ParameterType_Float,  "choice.choice3.floatchoice3", "Float of choice3");
-    SetDefaultParameterFloat("choice.choice3.floatchoice3",   5.0);
+    AddParameter(ParameterType_Float, "choice.choice1.floatchoice1", "Float of choice1");
+    SetDefaultParameterFloat("choice.choice1.floatchoice1", 0.125);
+    AddParameter(ParameterType_Float, "choice.choice3.floatchoice3", "Float of choice3");
+    SetDefaultParameterFloat("choice.choice3.floatchoice3", 5.0);
 
     AddParameter(ParameterType_Group, "ingroup", "Input Group");
     MandatoryOff("ingroup");
-    AddParameter(ParameterType_Float,  "ingroup.integer", "Integer of Group");
+    AddParameter(ParameterType_Float, "ingroup.integer", "Integer of Group");
     AddParameter(ParameterType_Group, "ingroup.images", "Input Images Group");
     AddParameter(ParameterType_InputImage, "ingroup.images.inputimage", "Input Image");
 
     AddParameter(ParameterType_Group, "outgroup", "Output Group");
     AddParameter(ParameterType_OutputImage, "outgroup.outputimage", "Output Image");
 
-    AddParameter(ParameterType_InputImageList,  "il",   "Input image list");
+    AddParameter(ParameterType_InputImageList, "il", "Input image list");
     MandatoryOff("il");
 
-    AddParameter( ParameterType_InputFilenameList, "fl", "Input filename list" );
-    MandatoryOff( "fl" );
+    AddParameter(ParameterType_InputFilenameList, "fl", "Input filename list");
+    MandatoryOff("fl");
 
-    AddParameter( ParameterType_InputVectorDataList, "vdl", "Input vector-data list" );
-    MandatoryOff( "vdl" );
+    AddParameter(ParameterType_InputVectorDataList, "vdl", "Input vector-data list");
+    MandatoryOff("vdl");
 
-    AddParameter( ParameterType_StringList, "sl", "Input string list" );
-    MandatoryOff( "sl" );
+    AddParameter(ParameterType_StringList, "sl", "Input string list");
+    MandatoryOff("sl");
 
-    AddParameter(ParameterType_ListView,  "cl", "Output Image channels");
+    AddParameter(ParameterType_ListView, "cl", "Output Image channels");
     AddChoice("cl.choice1", "Choice1");
     AddChoice("cl.choice2", "Choice2");
     MandatoryOff("cl");
-
-    AddParameter(ParameterType_ComplexInputImage,  "cin", "Input Complex Image");
-    AddParameter(ParameterType_ComplexOutputImage,  "cout", "Output Complex Image");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("boolean", "true");
@@ -114,62 +109,53 @@ private:
   }
 
   void DoUpdateParameters() override
-  {}
+  {
+  }
 
   void DoExecute() override
   {
-    if( HasValue("il") && IsParameterEnabled("il") )
-      {
-      FloatVectorImageListType * imgList = GetParameterImageList( "il" );
-      SetParameterOutputImage(
-        "outgroup.outputimage",
-        imgList->GetNthElement( 0 )
-      );
-      }
-    else if (HasValue("ingroup.images.inputimage") && IsParameterEnabled("ingroup") )
-      {
-      SetParameterOutputImage("outgroup.outputimage",
-        GetParameterImage("ingroup.images.inputimage"));
-      }
+    if (HasValue("il") && IsParameterEnabled("il"))
+    {
+      FloatVectorImageListType* imgList = GetParameterImageList("il");
+      SetParameterOutputImage("outgroup.outputimage", imgList->GetNthElement(0));
+    }
+    else if (HasValue("ingroup.images.inputimage") && IsParameterEnabled("ingroup"))
+    {
+      SetParameterOutputImage("outgroup.outputimage", GetParameterImage("ingroup.images.inputimage"));
+    }
     else
-      {
+    {
       otbAppLogFATAL("Waiting at least one input image");
-      }
+    }
 
-    SetParameterComplexOutputImage(
-      "cout",
-      GetParameterComplexImage( "cin" )
-    );
-
-    PrintStrings( "fl" );
+    PrintStrings("fl");
   }
 
 private:
-  void PrintStrings( const std::string & key ) const
+  void PrintStrings(const std::string& key) const
   {
-    if( !IsParameterEnabled(key) )
+    if (!IsParameterEnabled(key))
       return;
 
-    const Parameter * p = GetParameterByKey( key );
-    assert( p!=nullptr );
-    const StringListInterface * sli =
-      dynamic_cast< const StringListInterface * >(p);
-    assert( sli!=nullptr );
+    const Parameter* p = GetParameterByKey(key);
+    assert(p != nullptr);
+    const StringListInterface* sli = dynamic_cast<const StringListInterface*>(p);
+    assert(sli != nullptr);
 
     StringListInterface::StringVector strings;
 
-    sli->GetStrings( strings );
+    sli->GetStrings(strings);
 
     std::cout << "{" << std::endl;
     {
-      for( auto s : strings )
+      for (auto s : strings)
         std::cout << "'" << s << "'" << std::endl;
     }
-    std::cout << "}"<< std::endl;
+    std::cout << "}" << std::endl;
   }
 };
 
 } // end of namespace Wrapper
 } // end of namespace otb
 
-OTB_APPLICATION_EXPORT( otb::Wrapper::TestApplication )
+OTB_APPLICATION_EXPORT(otb::Wrapper::TestApplication)

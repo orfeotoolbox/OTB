@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -67,23 +67,17 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-ApplicationsBrowser
-::ApplicationsBrowser( QObject* p ) :
-  QObject( p ),
-  m_AutoLoadPath("")
+ApplicationsBrowser::ApplicationsBrowser(QObject* p) : QObject(p), m_AutoLoadPath("")
 {
 }
 
 /*******************************************************************************/
-ApplicationsBrowser
-::~ApplicationsBrowser()
+ApplicationsBrowser::~ApplicationsBrowser()
 {
 }
 
 /*******************************************************************************/
-void
-ApplicationsBrowser
-::SetAutoLoadPath(const std::string & itk_auto_load_path)
+void ApplicationsBrowser::SetAutoLoadPath(const std::string& itk_auto_load_path)
 {
   m_AutoLoadPath = itk_auto_load_path;
 
@@ -93,130 +87,110 @@ ApplicationsBrowser
 }
 
 /*******************************************************************************/
-StringVector
-ApplicationsBrowser
-::GetAvailableApplications()
+StringVector ApplicationsBrowser::GetAvailableApplications()
 {
   //
   // get available application in search path
-  StringVector appList(
-    otb::Wrapper::ApplicationRegistry::GetAvailableApplications()
-  );
+  StringVector appList(otb::Wrapper::ApplicationRegistry::GetAvailableApplications());
 
-  // 
+  //
   // some verbosity
   // TODO : remove this verbosity later
-  if ( appList.size() == 0 )
-    {
+  if (appList.size() == 0)
+  {
     qWarning() << "Available OTB applications: NONE!";
-    }
+  }
   else
-    {
+  {
     qDebug() << "Available OTB applications:";
 
-    for( StringVector::const_iterator it( appList.begin() );
-	 it!=appList.end();
-	 ++it )
-      {
+    for (StringVector::const_iterator it(appList.begin()); it != appList.end(); ++it)
+    {
       qDebug() << "- " << it->c_str();
-      }
     }
+  }
 
   return appList;
 }
 
 /*******************************************************************************/
-StringVector
-ApplicationsBrowser
-::GetApplicationTags( const std::string& appName )
+StringVector ApplicationsBrowser::GetApplicationTags(const std::string& appName)
 {
   //
   // instantiate the application using the factory
-  otb::Wrapper::Application::Pointer application(
-    otb::Wrapper::ApplicationRegistry::CreateApplication( appName )
-  );
+  otb::Wrapper::Application::Pointer application(otb::Wrapper::ApplicationRegistry::CreateApplication(appName));
 
-  if( application.IsNull() )
+  if (application.IsNull())
     return StringVector();
 
   //
   // get tags
-  StringVector vtags( application->GetDocTags() );
-
-  //
-  // fill the OTBApps 'docName <-> name' map
-  m_DocNameToNameMap[ application->GetDocName() ] = appName;
+  StringVector vtags(application->GetDocTags());
 
   return vtags;
 }
 
 /*******************************************************************************/
-void
-ApplicationsBrowser
-::SearchAvailableApplicationsTags()
+void ApplicationsBrowser::SearchAvailableApplicationsTags()
 {
   //
-  // clear previously filled map
-  m_DocNameToNameMap.clear();
-
-  //
   // get all the applications in the search path
-  StringVector vapp( GetAvailableApplications() );
+  StringVector vapp(GetAvailableApplications());
 
   //
   // Fill the  map as following
   // - key   -> tag
   // - value -> list of applications having this tag
-  ApplicationsTagContainer      outputContainer;
-  StringVector::const_iterator  it = vapp.begin();
+  ApplicationsTagContainer     outputContainer;
+  StringVector::const_iterator it = vapp.begin();
 
-  while ( it != vapp.end() )
-    {
+  while (it != vapp.end())
+  {
     // get tags of current app
-    StringVector ctags = GetApplicationTags( *it );
+    StringVector ctags = GetApplicationTags(*it);
 
-    // case applications has no tag associated 
-    if (ctags.size() == 0 )
-      {
+    // case applications has no tag associated
+    if (ctags.size() == 0)
+    {
       // add a default tag 'unknown'. The processing after remains
       // unchanged
-      ctags.push_back( ToStdString(tr("Uncategorized")) );
-      }
+      ctags.push_back(ToStdString(tr("Uncategorized")));
+    }
 
     // key will be the tag (easier for tree origanisation in )
-    StringVector::const_iterator  itTag = ctags.begin();
-    
-    while ( itTag != ctags.end() )
-      {
+    StringVector::const_iterator itTag = ctags.begin();
+
+    while (itTag != ctags.end())
+    {
 
       // search for this tag in the output container
-      ApplicationsTagContainer::iterator  pos = outputContainer.find( *itTag );
-      if ( pos != outputContainer.end() )  // key found
-        {
+      ApplicationsTagContainer::iterator pos = outputContainer.find(*itTag);
+      if (pos != outputContainer.end()) // key found
+      {
         //
         // append the application name (*it)
         (*pos).second.push_back(*it);
-        }
+      }
       else
-        {
+      {
         //
         // if tag not found in the container, add it
-        std::pair< std::string, StringVector > currentAppTags;
-        currentAppTags.first  = *itTag;
-        currentAppTags.second.push_back( *it );
-        outputContainer.insert( currentAppTags );
-        }
+        std::pair<std::string, StringVector> currentAppTags;
+        currentAppTags.first = *itTag;
+        currentAppTags.second.push_back(*it);
+        outputContainer.insert(currentAppTags);
+      }
 
       ++itTag;
-      }
-    
-    ++it;
     }
+
+    ++it;
+  }
 
   //
   // emit a signal with the ApplicationsTagContainer as
-  // parameter 
-  emit AvailableApplicationsTagsChanged(outputContainer, m_DocNameToNameMap);
+  // parameter
+  emit AvailableApplicationsTagsChanged(outputContainer);
 }
 
 /*******************************************************************************/

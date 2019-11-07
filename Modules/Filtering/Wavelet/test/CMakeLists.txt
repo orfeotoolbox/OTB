@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -26,15 +26,7 @@ otbWaveletOperator.cxx
 otbWaveletPacketTransform.cxx
 otbWaveletTransform.cxx
 otbSubsampleImageFilter.cxx
-otbSubsampleImageFilterNew.cxx
-otbWaveletInverseFilterBankNew.cxx
-otbWaveletInverseTransformNew.cxx
-otbWaveletTransformNew.cxx
-otbWaveletPacketInverseTransformNew.cxx
 otbWaveletFilterBank.cxx
-otbWaveletPacketTransformNew.cxx
-otbWaveletFilterBankNew.cxx
-otbWaveletOperatorNew.cxx
 otbWaveletImageToImageFilter.cxx
 )
 
@@ -549,21 +541,6 @@ otb_add_test(NAME msTvSubsampleImageFilter COMMAND otbWaveletTestDriver
   ${TEMP}/msSubsampleImageFilterOnePixelOutOf2.tif
   )
 
-otb_add_test(NAME msTuSubsampleImageFilterNew COMMAND otbWaveletTestDriver
-  otbSubsampleImageFilterNew)
-
-otb_add_test(NAME msTuWaveletInverseFilterBankNew COMMAND otbWaveletTestDriver
-  otbWaveletInverseFilterBankNew)
-
-otb_add_test(NAME msTuWaveletInverseTransformNew COMMAND otbWaveletTestDriver
-  otbWaveletInverseTransformNew)
-
-otb_add_test(NAME msTuWaveletTransformNew COMMAND otbWaveletTestDriver
-  otbWaveletTransformNew)
-
-otb_add_test(NAME msTuWaveletPacketInverseTransformNew COMMAND otbWaveletTestDriver
-  otbWaveletPacketInverseTransformNew)
-
 otb_add_test(NAME msTvWaveletMultiScaleFilterBank COMMAND otbWaveletTestDriver
   --compare-image ${EPSILON_6}
   ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
@@ -583,15 +560,6 @@ otb_add_test(NAME msTvWaveletFilterBank COMMAND otbWaveletTestDriver
   2
   ${TEMP}/ROI_IKO_PAN_LesHalles_FilterBank.tif
   )
-
-otb_add_test(NAME msTuWaveletPacketTransformNew COMMAND otbWaveletTestDriver
-  otbWaveletPacketTransformNew)
-
-otb_add_test(NAME msTuWaveletFilterBankNew COMMAND otbWaveletTestDriver
-  otbWaveletFilterBankNew)
-
-otb_add_test(NAME msTuWaveletOperatorNew COMMAND otbWaveletTestDriver
-  otbWaveletOperatorNew )
 
 otb_add_test(NAME msTvWaveletImageToImageFilter COMMAND otbWaveletTestDriver
   --compare-image ${EPSILON_6}

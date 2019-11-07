@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -45,8 +45,7 @@ public:
   itkTypeMacro(ImageEnvelope, otb::Application);
 
   /** Filters typedef */
-  typedef otb::ImageToEnvelopeVectorDataFilter
-      <FloatVectorImageType, VectorDataType>          EnvelopeFilterType;
+  typedef otb::ImageToEnvelopeVectorDataFilter<FloatVectorImageType, VectorDataType> EnvelopeFilterType;
 
 private:
   void DoInit() override
@@ -55,11 +54,11 @@ private:
     SetDescription("Extracts an image envelope.");
 
     // Documentation
-    SetDocName("Image Envelope");
-    SetDocLongDescription("Build a vector data containing the image envelope polygon. "
-      "Useful for some projection, you can set the polygon with more points with the sr parameter. "
-      "This filter supports user-specified output projection. "
-      "If no projection is defined, the standard WGS84 projection will be used.");
+    SetDocLongDescription(
+        "Build a vector data containing the image envelope polygon. "
+        "Useful for some projection, you can set the polygon with more points with the sr parameter. "
+        "This filter supports user-specified output projection. "
+        "If no projection is defined, the standard WGS84 projection will be used.");
 
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
@@ -75,18 +74,18 @@ private:
 
     AddParameter(ParameterType_Int, "sr", "Sampling Rate");
     SetParameterDescription("sr", "Sampling rate for image edges (in pixel).");
-    SetDefaultParameterInt("sr",0);
+    SetDefaultParameterInt("sr", 0);
     MandatoryOff("sr");
     DisableParameter("sr");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
-    AddParameter(ParameterType_String, "proj",  "Projection");
+    AddParameter(ParameterType_String, "proj", "Projection");
     SetParameterDescription("proj", "Projection to be used to compute the envelope (default is WGS84)");
     MandatoryOff("proj");
 
-   // Doc example parameter settings
+    // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_TOULOUSE_MUL_Extract_500_500.tif");
     SetDocExampleParameterValue("out", "ImageEnvelope.shp");
 
@@ -107,19 +106,17 @@ private:
     m_Envelope->SetSamplingRate(GetParameterInt("sr"));
 
     // Setup the DEM Handler
-    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
     if (HasValue("proj"))
-      {
+    {
       m_Envelope->SetOutputProjectionRef(GetParameterString("proj"));
-      }
+    }
 
     SetParameterOutputVectorData("out", m_Envelope->GetOutput());
   }
 
   EnvelopeFilterType::Pointer m_Envelope;
-
 };
-
 }
 }
 

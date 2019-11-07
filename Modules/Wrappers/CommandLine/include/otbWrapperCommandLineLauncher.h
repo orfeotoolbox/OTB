@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,6 +34,7 @@
 #include "itkCommand.h"
 
 #include <vector>
+#include <string>
 
 namespace otb
 {
@@ -70,24 +71,22 @@ public:
 
   /** Parse result enum */
   typedef CommandLineParser::ParseResultType ParseResultType;
-  typedef enum { OKPARAM, MISSINGMANDATORYPARAMETER,
-                 MISSINGPARAMETERVALUE, WRONGPARAMETERVALUE,
-                 INVALIDNUMBEROFVALUE, DEFAULT} ParamResultType;
+  typedef enum { OKPARAM, MISSINGMANDATORYPARAMETER, MISSINGPARAMETERVALUE, WRONGPARAMETERVALUE, INVALIDNUMBEROFVALUE, DEFAULT } ParamResultType;
 
   /** Filter watcher list type */
-  typedef std::vector<StandardOneLineFilterWatcher *> WatcherListType;
+  typedef std::vector<StandardOneLineFilterWatcher<>*> WatcherListType;
 
   /** Command Member */
-  typedef itk::MemberCommand< Self >        AddProcessCommandType;
+  typedef itk::MemberCommand<Self> AddProcessCommandType;
 
   /** Load the application in several steps :
    * - Load the paths
    * - Load the application using the ApplicationRegistry
    */
   bool Load();
-  
+
   /** same as Load method but set the expression before. */
-  bool Load(const std::vector<std::string> &vexp);
+  bool Load(const std::vector<std::string>& vexp);
 
   /** Launch the process, using the Execute application method
    * The method will check if the user asked for help (looking at
@@ -109,10 +108,7 @@ public:
   bool BeforeExecute();
 
   /** Create and display the help of the application */
-  void DisplayHelp(bool longHelp=false);
-
-   /** Create and display the long help of the application */
-  void DisplayLongHelp();
+  void DisplayHelp(bool longHelp = false);
 
   /** Performs specific action for testing environment */
   void LoadTestEnv();
@@ -143,8 +139,7 @@ protected:
   CommandLineLauncher::ParamResultType LoadParameters();
 
   /** Create and display the help of the application */
-  std::string DisplayParameterHelp( const Parameter::Pointer & param,
-                                    const std::string paramKey, bool longHelp = false);
+  std::string DisplayParameterHelp(const Parameter::Pointer& param, const std::string paramKey, bool longHelp = false);
 
   /** Check if each key is unique in the expression. */
   bool CheckUnicity();
@@ -159,7 +154,7 @@ protected:
   void DisplayOutputParameters();
 
   /** Load the watchers for internal progress and writing progress report. */
-  void LinkWatchers(itk::Object * caller, const itk::EventObject & event);
+  void LinkWatchers(itk::Object* caller, const itk::EventObject& event);
 
   /** Clear watcher list, deleting its pointers. */
   void DeleteWatcherList();
@@ -168,27 +163,42 @@ protected:
   unsigned int GetMaxKeySize() const;
 
 private:
+  /** \return false if paramKey is a missing mandatory parameter */
+  bool CheckMissingMandatoryParameter(const std::string& paramKey) const;
 
-  CommandLineLauncher(const CommandLineLauncher &); //purposely not implemented
-  void operator =(const CommandLineLauncher&); //purposely not implemented
+  /** Prints a warning to std::cerr if paramKey is an unused parameter */
+  void CheckUnusedParameter(const std::string& paramKey) const;
 
-  std::string                       m_Path;
+  /** \return false if paramKey is an OutputFilename parameter
+  pointing to a path that does not exist */
+  bool CheckOutputPathsValidity(const std::string& paramKey) const;
 
-  Application::Pointer              m_Application;
-  //std::string                       m_Expression;
-  std::vector<std::string>          m_VExpression;
-  CommandLineParser::Pointer        m_Parser;
+  CommandLineLauncher(const CommandLineLauncher&) = delete;
+  void operator=(const CommandLineLauncher&) = delete;
 
-  WatcherListType                   m_WatcherList;
+  /**
+   * Actually launch the process and write outputs, without catching exceptions.
+   */
+  bool ExecuteAndWriteOutputNoCatch();
 
-  itk::StdStreamLogOutput::Pointer  m_LogOutput;
 
-  AddProcessCommandType::Pointer    m_AddProcessCommand;
-  bool                              m_ReportProgress;
+  std::string m_Path;
 
-}; //end class
+  Application::Pointer m_Application;
+  // std::string                       m_Expression;
+  std::vector<std::string>   m_VExpression;
+  CommandLineParser::Pointer m_Parser;
+
+  WatcherListType m_WatcherList;
+
+  itk::StdStreamLogOutput::Pointer m_LogOutput;
+
+  AddProcessCommandType::Pointer m_AddProcessCommand;
+  bool                           m_ReportProgress;
+
+}; // end class
 
 } // end namespace Wrapper
-} //end namespace otb
+} // end namespace otb
 
 #endif // otbWrapperCommandLineLauncher_h_

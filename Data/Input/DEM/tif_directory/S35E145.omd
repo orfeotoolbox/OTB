@@ -1,0 +1,11 @@
+band1.null_value:  -32768
+byte_order:  big_endian
+decimal_degrees_per_pixel_lat:  0.000833333333333333
+decimal_degrees_per_pixel_lon:  0.000833333333333333
+filename:  /home/cpalmann/mydev/OTB-Sandbox3/otb-data/Input/DEM/tif_directory/S35E145.hgt
+number_bands:  1
+number_lines:  1201
+number_samples:  1201
+scalar_type:  ossim_sint16
+tie_point_lat:  -34
+tie_point_lon:  145

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,9 +25,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 
@@ -40,27 +38,22 @@
 
 //
 // System includes (sorted by alphabetic order)
+#include <string>
 
 //
 // ITK includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "itkExtractImageFilter.h"
-#endif //tag=QT4-boost-compatibility
 
 //
 // OTB includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbGenericRSTransform.h"
-#endif //tag=QT4-boost-compatibility
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdAbstractImageModel.h"
 #include "mvdFilenameInterface.h"
 #include "mvdVectorImageSettings.h"
 #include "mvdTypes.h"
-#endif //tag=QT4-boost-compatibility
 
 
 /*****************************************************************************/
@@ -87,9 +80,7 @@ class DatasetModel;
  * \ingroup OTBMonteverdiCore
  *
  */
-class OTBMonteverdiCore_EXPORT VectorImageModel :
-    public AbstractImageModel,
-    public FilenameInterface
+class OTBMonteverdiCore_EXPORT VectorImageModel : public AbstractImageModel, public FilenameInterface
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -98,30 +89,29 @@ class OTBMonteverdiCore_EXPORT VectorImageModel :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
   /**
    * In-memory storage type of source image (from file).
    */
   typedef DefaultImageType SourceImageType;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /**
    */
   static const unsigned int DEFAULT_LOD_SIZE;
 
   /** Constructor */
-  VectorImageModel( QObject* p =NULL );
+  VectorImageModel(QObject* p = NULL);
 
   /** Destructor */
   ~VectorImageModel() override;
 
   /** */
-  static void EnsureValidImage( const QString& filename );
+  static void EnsureValidImage(const QString& filename);
 
   /** */
   // TODO: Move into template wrapper base-class.
@@ -133,32 +123,32 @@ public:
 
   /**
    */
-  inline const VectorImageSettings & GetSettings() const;
+  inline const VectorImageSettings& GetSettings() const;
 
   /** */
-  inline VectorImageSettings & GetSettings();
+  inline VectorImageSettings& GetSettings();
 
   /** */
-  inline void SetSettings( const VectorImageSettings & settings );
+  inline void SetSettings(const VectorImageSettings& settings);
 
   /** */
-  inline const otb::GenericRSTransform<> * GetGenericRSTransform() const;
+  inline const otb::GenericRSTransform<>* GetGenericRSTransform() const;
 
   /**
    * Width and height are added to compute the best level of detail to
    * load from the image if multi-resolution image.
    */
-  void SetFilename( const QString& filename, int width, int height );
+  void SetFilename(const QString& filename, int width, int height);
 
   /**
    * Following the zoom factor, get the best level of detail
    */
-  CountType ComputeBestLod( double ZoomFactor ) const;
+  CountType ComputeBestLod(double ZoomFactor) const;
 
   /**
    * Following the zoom factor, get the best level of detail
    */
-  CountType ComputeBestLod( int width, int height ) const;
+  CountType ComputeBestLod(int width, int height) const;
 
   //
   // AbstractImageModel methods.
@@ -198,51 +188,46 @@ public:
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public slots.
+  //
+  // Public slots.
 public slots:
   /**
    */
-  void OnPhysicalCursorPositionChanged( const QPoint &,
-                                        const PointType &,
-                                        const PointType &,
-                                        const DefaultImageType::PixelType & );
+  void OnPhysicalCursorPositionChanged(const QPoint&, const PointType&, const PointType&, const DefaultImageType::PixelType&);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   /**
    */
-  void SettingsUpdated( AbstractImageModel* imageModel =NULL );
+  void SettingsUpdated(AbstractImageModel* imageModel = NULL);
 
   /**
    */
-  void PropertiesUpdated( AbstractImageModel* imageModel =NULL );
+  void PropertiesUpdated(AbstractImageModel* imageModel = NULL);
 
   /**   */
   void ViewportRegionChanged(double, double);
 
   /** */
-  void CurrentIndexUpdated( const IndexType&, bool isInside );
+  void CurrentIndexUpdated(const IndexType&, bool isInside);
   void CurrentIndexUpdated(const QString&);
   void CurrentPhysicalUpdated(const QStringList&);
   void CurrentGeographicUpdated(const QStringList&);
   void CurrentRadioUpdated(const QString&);
-  void CurrentPixelValueUpdated(const VectorImageType::PixelType &,
-                                const QStringList& );
+  void CurrentPixelValueUpdated(const VectorImageType::PixelType&, const QStringList&);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   //
   // AbstractModel methods.
 
-  void virtual_BuildModel( void* context =NULL ) override;
+  void virtual_BuildModel(void* context = NULL) override;
 
   //
   // AbstractImageModel methods.
@@ -251,30 +236,24 @@ protected:
 
   void InitializeColorDynamicsSettings();
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /** */
   SourceImageType::Pointer m_Image;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types.
+  //
+  // Private types.
 private:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   /**
     * Helper method to get the best closest Jpeg2K level of detail.
     */
-  static
-    unsigned int
-    Closest( double invZoomfactor,
-             unsigned int lodCount );
+  static unsigned int Closest(double invZoomfactor, unsigned int lodCount);
 
   /**
     * helper to setup the lod image using a width/height or a zoom factor
@@ -293,20 +272,18 @@ private:
   // AbstractLayerModel methods.
 
   std::string virtual_GetWkt() const override;
-  bool virtual_HasKwl() const override;
-  void virtual_ToWgs84( const PointType &,
-				PointType &,
-				double & alt ) const override;
+  bool        virtual_HasKwl() const override;
+  void virtual_ToWgs84(const PointType&, PointType&, double& alt) const override;
 
   //
   // AbstractImageModel methods.
 
-  void virtual_SetCurrentLod( CountType lod ) override;
+  void virtual_SetCurrentLod(CountType lod) override;
 
   void virtual_RefreshHistogram() override;
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   // Default image reader
   DefaultImageFileReaderType::Pointer m_ImageFileReader;
@@ -324,8 +301,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /** */
   void OnModelUpdated();
@@ -344,56 +321,38 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-VectorImageModel::SourceImageType::ConstPointer
-VectorImageModel
-::ToImage() const
+inline VectorImageModel::SourceImageType::ConstPointer VectorImageModel::ToImage() const
 {
   // TODO: Fix unsafe weak-pointer dereferencing.
-  return otb::ConstCast< VectorImageModel::SourceImageType >( m_Image );
+  return otb::ConstCast<VectorImageModel::SourceImageType>(m_Image);
 }
 
 /*****************************************************************************/
-inline
-const VectorImageModel::SourceImageType::Pointer&
-VectorImageModel
-::ToImage()
+inline const VectorImageModel::SourceImageType::Pointer& VectorImageModel::ToImage()
 {
   return m_Image;
 }
 
 /*****************************************************************************/
-inline
-void
-VectorImageModel
-::SetSettings( const VectorImageSettings & settings )
+inline void VectorImageModel::SetSettings(const VectorImageSettings& settings)
 {
   m_Settings = settings;
 }
 
 /*****************************************************************************/
-inline
-const VectorImageSettings &
-VectorImageModel
-::GetSettings() const
+inline const VectorImageSettings& VectorImageModel::GetSettings() const
 {
   return m_Settings;
 }
 
 /*****************************************************************************/
-inline
-VectorImageSettings &
-VectorImageModel
-::GetSettings()
+inline VectorImageSettings& VectorImageModel::GetSettings()
 {
   return m_Settings;
 }
 
 /*****************************************************************************/
-inline
-const otb::GenericRSTransform<> *
-VectorImageModel
-::GetGenericRSTransform() const
+inline const otb::GenericRSTransform<>* VectorImageModel::GetGenericRSTransform() const
 {
   return m_ToWgs84;
 }

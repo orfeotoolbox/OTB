@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -107,8 +107,8 @@ namespace ossimplugins
       // Capture stream flags since we are going to mess with them.
       std::ios_base::fmtflags f = out.flags();
 
-      out << "\nDump of ossimPleiadesModel at address " << (hex) << this
-          << (dec)
+      out << "\nDump of ossimPleiadesModel at address " << (std::hex) << this
+          << (std::dec)
           << "\n------------------------------------------------"
           << "\n  theImageID            = " << theImageID
           << "\n  theImageSize          = " << theImageSize
@@ -116,7 +116,7 @@ namespace ossimplugins
           << "\n  theRefImgPt           = " << theRefImgPt
           << "\n  theProcessingLevel    = " << theSupportData->getProcessingLevel()
           << "\n------------------------------------------------"
-          << "\n  " << endl;
+          << "\n  " << std::endl;
 
       // Set the flags back.
       out.flags(f);

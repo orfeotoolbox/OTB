@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,30 +31,30 @@
 
 #include "otbCorrectPolygonFunctor.h"
 
-int otbLabelObjectMapVectorizer(int argc, char * argv[])
+int otbLabelObjectMapVectorizer(int argc, char* argv[])
 {
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   // Labeled image type
-  const unsigned int Dimension                 = 2;
-  typedef unsigned short                         LabelType;
-  typedef otb::Image<LabelType, Dimension>       LabeledImageType;
+  const unsigned int     Dimension = 2;
+  typedef unsigned short LabelType;
+  typedef otb::Image<LabelType, Dimension> LabeledImageType;
   typedef otb::ImageFileReader<LabeledImageType> LabeledReaderType;
 
   // Label map typedef
-  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double>             LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>                                          LabelMapType;
-  typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType>         LabelMapFilterType;
-  typedef otb::Polygon<double>                                                    PolygonType;
+  typedef otb::AttributesMapLabelObject<LabelType, Dimension, double> LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType> LabelMapType;
+  typedef itk::LabelImageToLabelMapFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
+  typedef otb::Polygon<double> PolygonType;
   typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType, PolygonType> FunctorType;
   typedef otb::VectorData<double, 2>                                              VectorDataType;
-  typedef VectorDataType::DataNodeType                                            DataNodeType;
-  typedef otb::VectorDataFileWriter<VectorDataType>                               WriterType;
-  typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType>         VectorDataFilterType;
-  typedef itk::MinimumMaximumImageCalculator<LabeledImageType>                    MinMaxCalculatorType;
+  typedef VectorDataType::DataNodeType              DataNodeType;
+  typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
+  typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> VectorDataFilterType;
+  typedef itk::MinimumMaximumImageCalculator<LabeledImageType> MinMaxCalculatorType;
 
-  typedef otb::CorrectPolygonFunctor <PolygonType> CorrectPolygonFunctorType;
+  typedef otb::CorrectPolygonFunctor<PolygonType> CorrectPolygonFunctorType;
 
   LabeledReaderType::Pointer lreader = LabeledReaderType::New();
   lreader->SetFileName(infname);
@@ -64,19 +64,19 @@ int otbLabelObjectMapVectorizer(int argc, char * argv[])
   labelMapFilter->SetBackgroundValue(itk::NumericTraits<LabelType>::max());
   std::cout << "min: " << itk::NumericTraits<LabelType>::min() << std::endl;
   std::cout << "max: " << itk::NumericTraits<LabelType>::max() << std::endl;
-  //labelMapFilter->SetBackgroundValue(0);
+  // labelMapFilter->SetBackgroundValue(0);
   labelMapFilter->Update();
 
   FunctorType functor;
 
-  //correct
+  // correct
   CorrectPolygonFunctorType correctPolygon;
 
   WriterType::Pointer     writer = WriterType::New();
-  VectorDataType::Pointer data = VectorDataType::New();
+  VectorDataType::Pointer data   = VectorDataType::New();
 
   DataNodeType::Pointer document = DataNodeType::New();
-  DataNodeType::Pointer folder1 = DataNodeType::New();
+  DataNodeType::Pointer folder1  = DataNodeType::New();
 
   document->SetNodeType(otb::DOCUMENT);
   folder1->SetNodeType(otb::FOLDER);
@@ -91,42 +91,42 @@ int otbLabelObjectMapVectorizer(int argc, char * argv[])
 
   // If a label is given, extract only this label
   if (argc == 4)
-    {
+  {
     std::cout << "Label is given; Vectorizing object " << atoi(argv[3]) << std::endl;
     PolygonType::Pointer polygon = functor(labelMapFilter->GetOutput()->GetLabelObject(atoi(argv[3])));
 
-    //correct polygon
+    // correct polygon
     PolygonType::Pointer correct_polygon = correctPolygon(polygon);
 
     DataNodeType::Pointer node = DataNodeType::New();
     node->SetNodeType(otb::FEATURE_POLYGON);
     node->SetPolygonExteriorRing(correct_polygon);
     data->GetDataTree()->Add(node, folder1);
-    }
+  }
   // Else extract all labels
   else
-    {
+  {
     MinMaxCalculatorType::Pointer minMax = MinMaxCalculatorType::New();
     minMax->SetImage(lreader->GetOutput());
     minMax->Compute();
 
     for (LabelType label = minMax->GetMinimum(); label <= minMax->GetMaximum(); ++label)
-      {
+    {
       if (labelMapFilter->GetOutput()->HasLabel(label) && label != labelMapFilter->GetOutput()->GetBackgroundValue())
-        {
+      {
         std::cout << "Vectorizing object " << label << std::endl;
         PolygonType::Pointer polygon = functor(labelMapFilter->GetOutput()->GetLabelObject(label));
 
-        //correct polygon
+        // correct polygon
         PolygonType::Pointer correct_polygon = correctPolygon(polygon);
 
         DataNodeType::Pointer node = DataNodeType::New();
         node->SetNodeType(otb::FEATURE_POLYGON);
         node->SetPolygonExteriorRing(correct_polygon);
         data->GetDataTree()->Add(node, folder1);
-        }
       }
     }
+  }
 
   std::cout << "Total vectorization time: " << chrono.GetElapsedMilliseconds() << " ms." << std::endl;
 

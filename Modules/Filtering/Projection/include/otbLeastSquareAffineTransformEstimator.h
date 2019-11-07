@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,7 +27,8 @@
 #include "itkVector.h"
 #include "itkAffineTransform.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class LeastSquareAffineTransformEstimator
  * \brief This class provide the affine transform LSQR estimation
@@ -65,8 +66,7 @@ namespace otb {
  * \ingroup OTBProjection
  */
 template <class TPoint>
-class ITK_EXPORT LeastSquareAffineTransformEstimator :
-  public itk::Object
+class ITK_EXPORT LeastSquareAffineTransformEstimator : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -82,25 +82,19 @@ public:
   itkTypeMacro(LeastSquareAffineTransformEstimator, Object);
 
   /** Extract dimension from input and output image. */
-  itkStaticConstMacro(PointDimension, unsigned int,
-                      TPoint::PointDimension);
+  itkStaticConstMacro(PointDimension, unsigned int, TPoint::PointDimension);
 
   /** Points typedefs */
   typedef TPoint                           PointType;
   typedef typename PointType::CoordRepType PrecisionType;
-  typedef itk::CovariantVector<PrecisionType,
-      PointDimension>  CovariantVectorType;
-  typedef std::pair<PointType, PointType> TiePointsType;
-  typedef std::vector<TiePointsType>      TiePointsContainerType;
+  typedef itk::CovariantVector<PrecisionType, PointDimension> CovariantVectorType;
+  typedef std::pair<PointType, PointType>                     TiePointsType;
+  typedef std::vector<TiePointsType> TiePointsContainerType;
 
   /** Affine transform components typedefs */
-  typedef itk::Matrix<PrecisionType,
-      PointDimension,
-      PointDimension>           MatrixType;
-  typedef itk::Vector<PrecisionType,
-      PointDimension>           VectorType;
-  typedef itk::AffineTransform<PrecisionType,
-      PointDimension>  AffineTransformType;
+  typedef itk::Matrix<PrecisionType, PointDimension, PointDimension> MatrixType;
+  typedef itk::Vector<PrecisionType, PointDimension>          VectorType;
+  typedef itk::AffineTransform<PrecisionType, PointDimension> AffineTransformType;
   typedef typename AffineTransformType::Pointer AffineTransformPointerType;
 
   /** Get the affine transform matrix */
@@ -144,8 +138,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LeastSquareAffineTransformEstimator (const Self &);   // purposely not implemented
-  void operator =(const Self&);    // purposely not implemented
+  LeastSquareAffineTransformEstimator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Container of GCPs */
   TiePointsContainerType m_TiePointsContainer;
@@ -170,7 +164,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLeastSquareAffineTransformEstimator.txx"
+#include "otbLeastSquareAffineTransformEstimator.hxx"
 #endif
 
 #endif

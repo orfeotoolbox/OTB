@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,24 +24,24 @@
 #include "otbVectorData.h"
 #include "otbVectorDataFileWriter.h"
 
-int otbVectorDataFileWriter(int itkNotUsed(argc), char * argv[])
+int otbVectorDataFileWriter(int itkNotUsed(argc), char* argv[])
 {
 
-  typedef otb::VectorData<double, 2>                VectorDataType;
+  typedef otb::VectorData<double, 2> VectorDataType;
   typedef VectorDataType::DataNodeType              DataNodeType;
   typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
   typedef DataNodeType::LineType                    LineType;
   typedef LineType::VertexType                      VertexType;
 
-  //Instantiation
+  // Instantiation
   WriterType::Pointer     writer = WriterType::New();
-  VectorDataType::Pointer data = VectorDataType::New();
+  VectorDataType::Pointer data   = VectorDataType::New();
 
   DataNodeType::Pointer document = DataNodeType::New();
-  DataNodeType::Pointer folder1 = DataNodeType::New();
-  DataNodeType::Pointer folder2 = DataNodeType::New();
-  DataNodeType::Pointer folder3 = DataNodeType::New();
-  DataNodeType::Pointer line = DataNodeType::New();
+  DataNodeType::Pointer folder1  = DataNodeType::New();
+  DataNodeType::Pointer folder2  = DataNodeType::New();
+  DataNodeType::Pointer folder3  = DataNodeType::New();
+  DataNodeType::Pointer line     = DataNodeType::New();
 
   document->SetNodeType(otb::DOCUMENT);
   folder1->SetNodeType(otb::FOLDER);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,63 +32,49 @@ namespace Wrapper
 
 
 /*****************************************************************************/
-QtWidgetParameterList
-::QtWidgetParameterList( AbstractParameterList * param, QtWidgetModel * m ) :
-  QtWidgetParameterBase( param, m )
+QtWidgetParameterList::QtWidgetParameterList(AbstractParameterList* param, QtWidgetModel* m, QWidget* parent) : QtWidgetParameterBase(param, m, parent)
 {
-  assert( m!=nullptr );
+  assert(m != nullptr);
 
-  QObject::connect(
-    this, SIGNAL( NotifyUpdate() ),
-    m, SLOT( NotifyUpdate() )
-  );
+  QObject::connect(this, &QtWidgetParameterList::NotifyUpdate, m, &QtWidgetModel::NotifyUpdate);
 }
 
 /*****************************************************************************/
-QtWidgetParameterList
-::~QtWidgetParameterList()
+QtWidgetParameterList::~QtWidgetParameterList()
 {
 }
 
 /*****************************************************************************/
-void
-QtWidgetParameterList
-::DoUpdateGUI()
+void QtWidgetParameterList::DoUpdateGUI()
 {
 }
 
 /*****************************************************************************/
-void
-QtWidgetParameterList
-::DoCreateWidget()
+void QtWidgetParameterList::DoCreateWidget()
 {
   //
   // List-edit widget.
-  assert( dynamic_cast< StringListInterface * >( GetParam() )!=nullptr );
+  assert(dynamic_cast<StringListInterface*>(GetParam()) != nullptr);
 
-  ListEditWidget * widget = new ListEditWidget(
-    dynamic_cast< StringListInterface * >( GetParam() )
-  );
+  ListEditWidget* widget = new ListEditWidget(dynamic_cast<StringListInterface*>(GetParam()), this);
 
   //
   // Global Layout
-  QGridLayout * gLayout = new QGridLayout();
+  QGridLayout* gLayout = new QGridLayout;
 
-  gLayout->setSpacing( 1 );
-  gLayout->setContentsMargins( 2, 2, 2, 2 );
+  gLayout->setSpacing(1);
+  gLayout->setContentsMargins(2, 2, 2, 2);
 
-  gLayout->addWidget( widget );
+  gLayout->addWidget(widget);
 
-  setLayout( gLayout );
+  setLayout(gLayout);
 
   //
-  // Connections.
-  QObject::connect(
-    widget, SIGNAL( Updated() ),
-    this, SIGNAL( NotifyUpdate() )
-  );
-}
+  // Connections (Update UserValue flag).
+  QObject::connect(widget, &ListEditWidget::ValueChanged, this, [=]() { emit ParameterChanged(GetParam()->GetKey()); });
 
+  // Connections (Update app parameters).
+  QObject::connect(widget, &ListEditWidget::Updated, this, &QtWidgetParameterList::NotifyUpdate);
 }
-
+}
 }

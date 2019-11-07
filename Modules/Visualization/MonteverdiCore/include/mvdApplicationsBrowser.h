@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,9 +25,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 
@@ -50,9 +48,9 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdTypes.h"
-#endif //tag=QT4-boost-compatibility
+
+#include <string>
 
 /*****************************************************************************/
 /* PRE-DECLARATION SECTION                                                   */
@@ -92,8 +90,7 @@ namespace mvd
  * signal.
  *
  */
-class OTBMonteverdiCore_EXPORT ApplicationsBrowser :
-    public QObject
+class OTBMonteverdiCore_EXPORT ApplicationsBrowser : public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -102,20 +99,19 @@ class OTBMonteverdiCore_EXPORT ApplicationsBrowser :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** typedef */
 
   /** \brief Constructor. */
-  ApplicationsBrowser( QObject* p =NULL );
+  ApplicationsBrowser(QObject* p = NULL);
 
   /** \brief Destructor. */
   ~ApplicationsBrowser() override;
 
   /** set the path where to look for applications */
-  void SetAutoLoadPath(const std::string & itk_auto_load_path);
+  void SetAutoLoadPath(const std::string& itk_auto_load_path);
 
   /** get available applications in the search path */
   StringVector GetAvailableApplications();
@@ -131,47 +127,39 @@ public:
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
-  void AvailableApplicationsTagsChanged(const ApplicationsTagContainer &,
-                                        const ApplicationDocNameToNameMap &);
+  void AvailableApplicationsTagsChanged(const ApplicationsTagContainer&);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   std::string m_AutoLoadPath;
-
-  ApplicationDocNameToNameMap m_DocNameToNameMap;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 

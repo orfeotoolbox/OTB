@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -53,21 +53,14 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = double>
-class ITK_EXPORT ComplexMomentsImageFunction :
-    public itk::ImageFunction <TInputImage,
-      std::vector< std::vector< std::complex<double> > >,
-      TCoordRep>
+class ITK_EXPORT ComplexMomentsImageFunction : public itk::ImageFunction<TInputImage, std::vector<std::vector<std::complex<double>>>, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef ComplexMomentsImageFunction                                          Self;
-  typedef itk::ImageFunction<TInputImage,
-                             std::vector<
-                             std::vector<
-                             std::complex<double> > >,
-                             TCoordRep>                                        Superclass;
-  typedef itk::SmartPointer<Self>                                              Pointer;
-  typedef itk::SmartPointer<const Self>                                        ConstPointer;
+  typedef ComplexMomentsImageFunction Self;
+  typedef itk::ImageFunction<TInputImage, std::vector<std::vector<std::complex<double>>>, TCoordRep> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ComplexMomentsImageFunction, ImageFunction);
@@ -82,14 +75,13 @@ public:
   typedef typename Superclass::PointType           PointType;
   typedef typename Superclass::OutputType          OutputType;
 
-  typedef double                                   ScalarRealType;
-  typedef typename std::complex<ScalarRealType>    ScalarComplexType;
+  typedef double                                ScalarRealType;
+  typedef typename std::complex<ScalarRealType> ScalarComplexType;
 
-  typedef TCoordRep                                CoordRepType;
+  typedef TCoordRep CoordRepType;
 
   /** Dimension of the underlying image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
   OutputType EvaluateAtIndex(const IndexType& index) const override;
@@ -101,8 +93,7 @@ public:
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const override
+  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -112,8 +103,8 @@ public:
   /** Get/Set the radius of the neighborhood over which the
    *  statistics are evaluated
    */
-  itkSetMacro( NeighborhoodRadius, unsigned int );
-  itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
+  itkSetMacro(NeighborhoodRadius, unsigned int);
+  itkGetConstReferenceMacro(NeighborhoodRadius, unsigned int);
 
   itkSetMacro(Pmax, unsigned int);
   itkGetConstReferenceMacro(Pmax, unsigned int);
@@ -122,23 +113,24 @@ public:
 
 protected:
   ComplexMomentsImageFunction();
-  ~ComplexMomentsImageFunction() override {}
+  ~ComplexMomentsImageFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ComplexMomentsImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ComplexMomentsImageFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   unsigned int m_Pmax;
   unsigned int m_Qmax;
   unsigned int m_NeighborhoodRadius;
-
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbComplexMomentsImageFunction.txx"
+#include "otbComplexMomentsImageFunction.hxx"
 #endif
 
 #endif

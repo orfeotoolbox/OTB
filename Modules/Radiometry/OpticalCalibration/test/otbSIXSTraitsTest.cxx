@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,9 +21,9 @@
 
 #include "otbSIXSTraits.h"
 
-int otbSIXSTraitsTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbSIXSTraitsTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  otb::SIXSTraits *var(ITK_NULLPTR);
+  otb::SIXSTraits* var(nullptr);
   var = new otb::SIXSTraits();
   delete var;
   return EXIT_SUCCESS;

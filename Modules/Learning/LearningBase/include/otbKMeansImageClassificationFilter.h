@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -42,15 +42,14 @@ namespace otb
  * \ingroup OTBLearningBase
  */
 template <class TInputImage, class TOutputImage, unsigned int VMaxSampleDimension = 10, class TMaskImage = TOutputImage>
-class ITK_EXPORT KMeansImageClassificationFilter
-  : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT KMeansImageClassificationFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef KMeansImageClassificationFilter                    Self;
+  typedef KMeansImageClassificationFilter Self;
   typedef itk::InPlaceImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -78,8 +77,8 @@ public:
   typedef typename OutputImageType::PixelType  LabelType;
 
   typedef itk::FixedArray<ValueType, MaxSampleDimension> SampleType;
-  typedef itk::Array<double>                             KMeansParametersType;
-  typedef std::map<LabelType, SampleType>                CentroidsMapType;
+  typedef itk::Array<double> KMeansParametersType;
+  typedef std::map<LabelType, SampleType> CentroidsMapType;
   typedef itk::Statistics::EuclideanDistanceMetric<SampleType> DistanceType;
 
   /** Set/Get the centroids */
@@ -94,19 +93,21 @@ public:
    * If set, only pixels within the mask will be classified.
    * \param mask The input mask.
    */
-  void SetInputMask(const MaskImageType * mask);
+  void SetInputMask(const MaskImageType* mask);
 
   /**
    * Get the input mask.
    * \return The mask.
    */
-  const MaskImageType * GetInputMask(void);
+  const MaskImageType* GetInputMask(void);
 
 protected:
   /** Constructor */
   KMeansImageClassificationFilter();
   /** Destructor */
-  ~KMeansImageClassificationFilter() override {}
+  ~KMeansImageClassificationFilter() override
+  {
+  }
 
   /** Threaded generate data */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
@@ -116,8 +117,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  KMeansImageClassificationFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  KMeansImageClassificationFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Centroids used for classification */
   KMeansParametersType m_Centroids;
@@ -128,7 +129,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbKMeansImageClassificationFilter.txx"
+#include "otbKMeansImageClassificationFilter.hxx"
 #endif
 
 #endif

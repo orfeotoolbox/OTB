@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,31 +19,30 @@
  */
 
 
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbVectorImage.h"
 
 #include "otbPrintableImageFilter.h"
 
-int otbPrintableImageFilterWithMask(int itkNotUsed(argc), char * argv[])
+int otbPrintableImageFilterWithMask(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * masktFilename  = argv[2];
-  const char * outputFilename = argv[3];
+  const char* inputFilename  = argv[1];
+  const char* masktFilename  = argv[2];
+  const char* outputFilename = argv[3];
 
-  typedef double InputPixelType;
+  typedef double     InputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
-  typedef otb::PrintableImageFilter<InputImageType>    FilterType;
-  typedef FilterType::OutputImageType                  OutputImageType;
-  typedef OutputImageType::PixelType                   OutputPixelType;
-  typedef FilterType::MaskImageType                    MaskImageType;
-  typedef FilterType::MaskPixelType                    MaskPixelType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
+  typedef otb::PrintableImageFilter<InputImageType> FilterType;
+  typedef FilterType::OutputImageType               OutputImageType;
+  typedef OutputImageType::PixelType                OutputPixelType;
+  typedef FilterType::MaskImageType                 MaskImageType;
+  typedef FilterType::MaskPixelType                 MaskPixelType;
 
-  typedef otb::ImageFileReader<InputImageType>           InputReaderType;
-  typedef otb::ImageFileReader<MaskImageType>            MaskReaderType;
+  typedef otb::ImageFileReader<InputImageType>  InputReaderType;
+  typedef otb::ImageFileReader<MaskImageType>   MaskReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   FilterType::Pointer      printableImageFilter = FilterType::New();

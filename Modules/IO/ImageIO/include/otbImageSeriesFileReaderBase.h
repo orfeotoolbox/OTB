@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -23,8 +23,6 @@
 #ifndef otbImageSeriesFileReaderBase_h
 #define otbImageSeriesFileReaderBase_h
 
-#include <iostream>
-#include <fstream>
 #include <string>
 
 #include "itkMacro.h"
@@ -35,22 +33,28 @@
 #include "otbImageListSource.h"
 #include "otbImageFileReader.h"
 
-namespace otb {
+namespace otb
+{
 
 class ImageSeriesFileReaderException : public itk::ExceptionObject
 {
 public:
   itkTypeMacro(ImageSeriesFileReaderException, ExceptionObject);
 
-  ImageSeriesFileReaderException(const char *file, unsigned int line,
-                                 const char* message = "Error in IO",
-                                 const char* loc = "Unknown") :
-    itk::ExceptionObject(file, line, message, loc) {}
+  ImageSeriesFileReaderException(const char* file, unsigned int line, const char* message = "Error in IO", const char* loc = "Unknown")
+    : itk::ExceptionObject(file, line, message, loc)
+  {
+  }
 
-  ImageSeriesFileReaderException(const std::string& file, unsigned int line,
-                                 const char* message = "Error in IO",
-                                 const char* loc = "Unknown") :
-    itk::ExceptionObject(file, line, message, loc) {}
+  ImageSeriesFileReaderException(const std::string& file, unsigned int line, const char* message = "Error in IO", const char* loc = "Unknown")
+    : itk::ExceptionObject(file, line, message, loc)
+  {
+  }
+
+  ImageSeriesFileReaderException(const std::string& file, unsigned int line, const std::string& message = "Error in IO", const std::string& loc = "Unknown")
+    : itk::ExceptionObject(file, line, message, loc)
+  {
+  }
 };
 
 /** \class ImageSeriesFileReaderBase
@@ -61,8 +65,7 @@ public:
  */
 
 template <class TImage, class TInternalImage = TImage>
-class ITK_EXPORT ImageSeriesFileReaderBase
-  : public ImageListSource<TImage>
+class ImageSeriesFileReaderBase : public ImageListSource<TImage>
 {
 public:
   /** Standard typedefs */
@@ -101,7 +104,7 @@ public:
 
   typedef ObjectList<ReaderType>           ReaderListType;
   typedef typename ReaderListType::Pointer ReaderListPointerType;
-  
+
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Get the file to be read */
@@ -113,7 +116,6 @@ public:
    * selection
    */
   virtual void SetFileName(const std::string& file);
-  virtual void SetFileName(const char * file);
 
   /** get the Filenames */
   std::string GetFileName(unsigned int i) const
@@ -123,7 +125,7 @@ public:
 
   /** Get the readers */
   itkGetObjectMacro(ImageFileReaderList, ReaderListType);
-  ReaderType * GetImageFileReader(unsigned int i) const
+  ReaderType* GetImageFileReader(unsigned int i) const
   {
     return this->m_ImageFileReaderList->GetNthElement(i);
   }
@@ -133,12 +135,12 @@ public:
   {
     return m_ListOfFileNames.size();
   }
-  OutputImageListType * GetOutput(void) override;
-  virtual OutputImageType *     GetOutput(DataObjectPointerArraySizeType idx);
+  OutputImageListType*     GetOutput(void) override;
+  virtual OutputImageType* GetOutput(DataObjectPointerArraySizeType idx);
 
   /** Performs selective file extraction */
-  virtual OutputImageListType * GenerateOutput(void);
-  virtual OutputImageType * GenerateOutput(DataObjectPointerArraySizeType idx);
+  virtual OutputImageListType* GenerateOutput(void);
+  virtual OutputImageType* GenerateOutput(DataObjectPointerArraySizeType idx);
 
   /** Synchronization */
   void Update() override
@@ -148,16 +150,25 @@ public:
 
 protected:
   ImageSeriesFileReaderBase();
-  ~ImageSeriesFileReaderBase () override {}
+  ~ImageSeriesFileReaderBase() override
+  {
+  }
 
-  enum FileType { kFileName = 0, kImageFileName, kAnyFileName };
+  enum FileType
+  {
+    kFileName = 0,
+    kImageFileName,
+    kAnyFileName
+  };
   /**
    * Test files.
    * If the filename to test is an imageFileName, the file name may be modified in
    * order to add the appropriated path
    */
   virtual void TestFileExistenceAndReadability(std::string& file, FileType fileType);
-  virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) {}
+  virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands))
+  {
+  }
 
   void GenerateData(void) override;
 
@@ -186,21 +197,21 @@ protected:
   std::string                m_FileName;
   OutputImageListPointerType m_OutputList;
 
-  std::vector<std::string>                m_ListOfFileNames;
-  std::vector<std::vector<unsigned int> > m_ListOfBandSelection;
-  std::vector<InternalRegionType>         m_ListOfRegionSelection;
+  std::vector<std::string>               m_ListOfFileNames;
+  std::vector<std::vector<unsigned int>> m_ListOfBandSelection;
+  std::vector<InternalRegionType>        m_ListOfRegionSelection;
 
   ReaderListPointerType m_ImageFileReaderList;
 
 private:
-  ImageSeriesFileReaderBase (const Self &);
-  void operator =(const Self&);
+  ImageSeriesFileReaderBase(const Self&);
+  void operator=(const Self&);
 }; // end of class
 
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageSeriesFileReaderBase.txx"
+#include "otbImageSeriesFileReaderBase.hxx"
 #endif
 
 #endif

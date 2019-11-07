@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -38,17 +38,17 @@ namespace ossimplugins
 
    std::ostream& operator<<(std::ostream& os, const MainProcessingParameters& data)
    {
-      os<<"first_zero_doppler_time:"<<data._first_zero_doppler_time.c_str()<<std::endl;
+      os<<"first_zero_doppler_time:"<<data._first_zero_doppler_time <<std::endl;
 
       os<<"attach_flag:"<<data._attach_flag<<std::endl;
 
-      os<<"last_zero_doppler_time:"<<data._last_zero_doppler_time.c_str()<<std::endl;
+      os<<"last_zero_doppler_time:"<<data._last_zero_doppler_time <<std::endl;
 
-      os<<"work_order_id:"<<data._work_order_id.c_str()<<std::endl;
+      os<<"work_order_id:"<<data._work_order_id <<std::endl;
 
       os<<"time_diff:"<<data._time_diff<<std::endl;
 
-      os<<"swath_num:"<<data._swath_num.c_str()<<std::endl;
+      os<<"swath_num:"<<data._swath_num <<std::endl;
 
       os<<"range_spacing:"<<data._range_spacing<<std::endl;
 
@@ -60,7 +60,7 @@ namespace ossimplugins
 
       os<<"num_samples_per_line:"<<data._num_samples_per_line<<std::endl;
 
-      os<<"data_type:"<<data._data_type.c_str()<<std::endl;
+      os<<"data_type:"<<data._data_type <<std::endl;
 
       os<<"num_range_lines_per_burst:"<<data._num_range_lines_per_burst<<std::endl;
 
@@ -96,21 +96,21 @@ namespace ossimplugins
 
       os<<"gm_rng_comp_inv_filter_flag:"<<data._gm_rng_comp_inv_filter_flag<<std::endl;
 
-      os<<"raw_data_analysis:"<<data._raw_data_analysis.c_str()<<std::endl;
+      os<<"raw_data_analysis:"<<data._raw_data_analysis <<std::endl;
 
-      os<<"start_time_mds1:"<<data._start_time_mds1.c_str()<<std::endl;
+      os<<"start_time_mds1:"<<data._start_time_mds1 <<std::endl;
 
-      os<<"start_time_mds2:"<<data._start_time_mds2.c_str()<<std::endl;
+      os<<"start_time_mds2:"<<data._start_time_mds2 <<std::endl;
 
-      os<<"parameter_code:"<<data._parameter_code.c_str()<<std::endl;
+      os<<"parameter_code:"<<data._parameter_code <<std::endl;
 
-      os<<"errors_counters:"<<data._errors_counters.c_str()<<std::endl;
+      os<<"errors_counters:"<<data._errors_counters <<std::endl;
 
-      os<<"image_parameters 1:"<<data._image_parameters1.c_str()<<std::endl;
+      os<<"image_parameters 1:"<<data._image_parameters1 <<std::endl;
 
       os<<"prf_values[0]:"<<data._prf_values[0]<<std::endl;
 
-      os<<"image_parameters 1:"<<data._image_parameters2.c_str()<<std::endl;
+      os<<"image_parameters 1:"<<data._image_parameters2 <<std::endl;
 
       os<<"first_proc_range_samp:"<<data._first_proc_range_samp<<std::endl;
 
@@ -122,13 +122,13 @@ namespace ossimplugins
 
       os<<"num_looks_range:"<<data._num_looks_range<<std::endl;
 
-      os<<"filter_range:"<<data._filter_range.c_str()<<std::endl;
+      os<<"filter_range:"<<data._filter_range <<std::endl;
 
       os<<"filter_coef_range:"<<data._filter_coef_range<<std::endl;
 
-      os<<"bandwidth:"<<data._bandwidth.c_str()<<std::endl;
+      os<<"bandwidth:"<<data._bandwidth <<std::endl;
 
-      os<<"nominal_chirp:"<<data._nominal_chirp.c_str()<<std::endl;
+      os<<"nominal_chirp:"<<data._nominal_chirp <<std::endl;
 
       os<<"num_lines_proc:"<<data._num_lines_proc<<std::endl;
 
@@ -138,7 +138,7 @@ namespace ossimplugins
 
       os<<"to_bw_az:"<<data._to_bw_az<<std::endl;
 
-      os<<"filter_az:"<<data._filter_az.c_str()<<std::endl;
+      os<<"filter_az:"<<data._filter_az <<std::endl;
 
       os<<"filter_coef_az:"<<data._filter_coef_az<<std::endl;
 
@@ -150,29 +150,29 @@ namespace ossimplugins
 
       os<<"dop_amb_coef:"<<data._dop_amb_coef<<std::endl;
 
-      os<<"calibration_factors:"<<data._calibration_factors.c_str()<<std::endl;
+      os<<"calibration_factors:"<<data._calibration_factors <<std::endl;
 
-      os<<"noise_estimation:"<<data._noise_estimation.c_str()<<std::endl;
+      os<<"noise_estimation:"<<data._noise_estimation <<std::endl;
 
-      os<<"output_statistics:"<<data._output_statistics.c_str()<<std::endl;
+      os<<"output_statistics:"<<data._output_statistics <<std::endl;
 
       os<<"avg_scene_height_ellpsoid:"<<data._avg_scene_height_ellpsoid<<std::endl;
 
-      os<<"echo_comp:"<<data._echo_comp.c_str()<<std::endl;
+      os<<"echo_comp:"<<data._echo_comp <<std::endl;
 
-      os<<"echo_comp_ratio:"<<data._echo_comp_ratio.c_str()<<std::endl;
+      os<<"echo_comp_ratio:"<<data._echo_comp_ratio <<std::endl;
 
-      os<<"init_cal_comp:"<<data._init_cal_comp.c_str()<<std::endl;
+      os<<"init_cal_comp:"<<data._init_cal_comp <<std::endl;
 
-      os<<"init_cal_ratio:"<<data._init_cal_ratio.c_str()<<std::endl;
+      os<<"init_cal_ratio:"<<data._init_cal_ratio <<std::endl;
 
-      os<<"per_cal_comp:"<<data._per_cal_comp.c_str()<<std::endl;
+      os<<"per_cal_comp:"<<data._per_cal_comp <<std::endl;
 
-      os<<"per_cal_ratio:"<<data._per_cal_ratio.c_str()<<std::endl;
+      os<<"per_cal_ratio:"<<data._per_cal_ratio <<std::endl;
 
-      os<<"noise_comp:"<<data._noise_comp.c_str()<<std::endl;
+      os<<"noise_comp:"<<data._noise_comp <<std::endl;
 
-      os<<"noise_comp_ratio:"<<data._noise_comp_ratio.c_str()<<std::endl;
+      os<<"noise_comp_ratio:"<<data._noise_comp_ratio <<std::endl;
 
       os<<"beam_overlap[0]:"<<data._beam_overlap[0]<<std::endl;
       os<<"beam_overlap[1]:"<<data._beam_overlap[1]<<std::endl;
@@ -185,7 +185,7 @@ namespace ossimplugins
       os<<"lines_per_burst[3]:"<<data._lines_per_burst[3]<<std::endl;
       os<<"lines_per_burst[4]:"<<data._lines_per_burst[4]<<std::endl;
 
-      os<<"time_first_SS1_echo:"<<data._time_first_SS1_echo.c_str()<<std::endl;
+      os<<"time_first_SS1_echo:"<<data._time_first_SS1_echo <<std::endl;
 
       os<<"state_vector_time_1:"<<data._state_vector_time_1_day<<std::endl;
 

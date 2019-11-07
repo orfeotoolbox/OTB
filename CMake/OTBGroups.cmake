@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -120,13 +120,11 @@ foreach( group ${group_list} )
   set( _${group}_on_module_list )
   list( LENGTH _${group}_module_list _num_modules )
   set( _current_module 0 )
-  while( ${_current_module} LESS ${_num_modules} )
-    list( GET _${group}_module_list ${_current_module} _module_name )
-    if( NOT OTB_MODULE_${_module_name}_EXCLUDE_FROM_DEFAULT )
+  foreach(module ${_${group}_module_list})
+    if( NOT OTB_MODULE_${module}_EXCLUDE_FROM_DEFAULT )
       list( APPEND _${group}_on_module_list ${_module_name} )
     endif()
-  math( EXPR _current_module "${_current_module} + 1" )
-  endwhile()
+  endforeach()
 endforeach()
 
 if("$ENV{DASHBOARD_TEST_FROM_CTEST}" STREQUAL "")

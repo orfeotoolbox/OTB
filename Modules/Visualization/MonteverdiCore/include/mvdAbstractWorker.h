@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,9 +24,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 
@@ -76,8 +74,7 @@ namespace mvd
  *
  * \brief Abstract worker object used as a base-class for threaded tasks.
  */
-class OTBMonteverdiCore_EXPORT AbstractWorker :
-    public QObject
+class OTBMonteverdiCore_EXPORT AbstractWorker : public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -86,10 +83,9 @@ class OTBMonteverdiCore_EXPORT AbstractWorker :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Destructor. */
   ~AbstractWorker() override;
 
@@ -99,8 +95,8 @@ public:
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /**
@@ -110,22 +106,22 @@ public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   /**
    * \brief Signal emitted when progress text has changed.
    *
    * \param text New progress text to display;
    */
-  void ProgressTextChanged( const QString& text );
+  void ProgressTextChanged(const QString& text);
 
   /**
    * \brief Signal emitted when progress value has changed.
    *
    * \param value New progress value to display.
    */
-  void ProgressValueChanged( int value );
+  void ProgressValueChanged(int value);
 
   /**
    * \brief Signal emitted when progress range has changed.
@@ -133,7 +129,7 @@ signals:
    * \param min Minimum progress value.
    * \param max Maximum progress value.
    */
-  void ProgressRangeChanged( int min, int max );
+  void ProgressRangeChanged(int min, int max);
 
   /**
    * \brief Signal emitted when job has correctly been done.
@@ -142,7 +138,7 @@ signals:
    *
    * \param result Resulting QObject instance of NULL if none.
    */
-  void Done( QObject* result =NULL );
+  void Done(QObject* result = NULL);
 
   /**
    *  \brief Signal emitted when task (i.e. thread) has finished
@@ -158,44 +154,41 @@ signals:
    *
    * \param
    */
-  void ExceptionRaised( QString what );
+  void ExceptionRaised(QString what);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** \brief Constructor. */
-  AbstractWorker( QObject* p =NULL );
+  AbstractWorker(QObject* p = NULL);
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    * \brief Do job/task abstract method to implement.
    */
-  virtual QObject* virtual_Do() =0;
+  virtual QObject* virtual_Do() = 0;
 
   /**
    */
-  virtual QString virtual_GetFirstProgressText() const =0;
+  virtual QString virtual_GetFirstProgressText() const = 0;
 
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 
@@ -224,9 +217,7 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-QString
-AbstractWorker::GetFirstProgressText() const
+inline QString AbstractWorker::GetFirstProgressText() const
 {
   return virtual_GetFirstProgressText();
 }

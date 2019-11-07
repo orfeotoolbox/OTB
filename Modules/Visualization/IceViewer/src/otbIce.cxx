@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,81 +22,80 @@
 #include "otbDEMHandler.h"
 
 
-
 void error_callback(int, const char* description)
 {
-  std::cerr<<description<<std::endl;
+  std::cerr << description << std::endl;
 }
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
-  if(argc < 2)
-    {
-    std::cerr<<"Usage: "<<argv[0]<<" img1 ... imgN"<<std::endl<<std::endl;
-    
-    return EXIT_FAILURE;
-    }
+  if (argc < 2)
+  {
+    std::cerr << "Usage: " << argv[0] << " img1 ... imgN" << std::endl << std::endl;
 
-  char * demdir = getenv("OTB_DEM_DIR");
-  char * geoidfile = getenv("OTB_GEOID_FILE");
+    return EXIT_FAILURE;
+  }
+
+  char* demdir    = getenv("OTB_DEM_DIR");
+  char* geoidfile = getenv("OTB_GEOID_FILE");
 
   otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
-  
-  if(demdir != ITK_NULLPTR)
-    {
-    std::cout<<"Configuring DEM directory: "<<demdir<<std::endl;
-    demHandler->OpenDEMDirectory(demdir);
-    }
 
-  if(geoidfile != ITK_NULLPTR)
-    {
-    std::cout<<"Configuring geoid file: "<<geoidfile<<std::endl;
+  if (demdir != nullptr)
+  {
+    std::cout << "Configuring DEM directory: " << demdir << std::endl;
+    demHandler->OpenDEMDirectory(demdir);
+  }
+
+  if (geoidfile != nullptr)
+  {
+    std::cout << "Configuring geoid file: " << geoidfile << std::endl;
     demHandler->OpenGeoidFile(geoidfile);
-    }
+  }
 
   otb::IceViewer::Pointer viewer = otb::IceViewer::New();
 
   // Initialize viewer
   try
-    {
-    viewer->Initialize(800,600);
-    }
-  catch(itk::ExceptionObject& err)
-    {
-    std::cerr<<"Failed to initialized viewer: "<<err<<std::endl;
+  {
+    viewer->Initialize(800, 600);
+  }
+  catch (itk::ExceptionObject& err)
+  {
+    std::cerr << "Failed to initialized viewer: " << err << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  for(int i = 1; i<argc;++i)
-    {
+  for (int i = 1; i < argc; ++i)
+  {
     try
-      {
-      viewer->AddImage(argv[i],argv[i]);
-      }
-    catch(itk::ExceptionObject & err)
-      {
-      std::cerr<<"Failed to open object as image: "<<err<<std::endl;
+    {
+      viewer->AddImage(argv[i], argv[i]);
+    }
+    catch (itk::ExceptionObject& err)
+    {
+      std::cerr << "Failed to open object as image: " << err << std::endl;
       try
-        {
-        viewer->AddVector(argv[i],argv[i]);
-        }
-      catch(itk::ExceptionObject & err2)
-        {
+      {
+        viewer->AddVector(argv[i], argv[i]);
+      }
+      catch (itk::ExceptionObject& err2)
+      {
         std::cerr << "Failed to open object as vector: " << err2 << std::endl;
         std::cerr << "Could not open file " << argv[i] << " as an image or a vector, skipping." << std::endl;
-        }
-      }
-    catch(std::runtime_error & err)
-      {
-      std::cerr<<"Runtime error: "<< err.what() <<std::endl;
-      return EXIT_FAILURE;
       }
     }
+    catch (std::runtime_error& err)
+    {
+      std::cerr << "Runtime error: " << err.what() << std::endl;
+      return EXIT_FAILURE;
+    }
+  }
 
-  std::cout<<"Press F1 for help"<<std::endl;
+  std::cout << "Press F1 for help" << std::endl;
 
   viewer->Start();
-  
-  
+
+
   return EXIT_SUCCESS;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,20 +25,16 @@ void RegisterTests()
   REGISTER_TEST(otbReduceSpectralResponseSVMClassifier);
   REGISTER_TEST(otbProspectTransTest);
   REGISTER_TEST(otbReduceSpectralResponseClassifierRAndNIR);
-  REGISTER_TEST(otbSpectralResponseNew);
   REGISTER_TEST(otbSatelliteRSR);
   REGISTER_TEST(otbSatelliteRSRCheckValue);
   REGISTER_TEST(otbSatelliteRSRSolarIrradianceCheckValue);
-  REGISTER_TEST(otbSurfaceReflectanceToReflectanceFilterNew);
   REGISTER_TEST(otbSurfaceReflectanceToReflectanceFilterTest);
   REGISTER_TEST(otbImageSimulationMethodWithSpatialisationTest);
   REGISTER_TEST(otbImageSimulationMethodSVMClassif);
-  REGISTER_TEST(otbReduceSpectralResponseNew);
   REGISTER_TEST(otbReduceSpectralResponse);
   REGISTER_TEST(otbReduceSpectralResponseSimpleValues);
   REGISTER_TEST(otbAtmosphericEffects);
   REGISTER_TEST(otbProspectReflTest);
-  REGISTER_TEST(otbSpatialisationTestNew);
   REGISTER_TEST(otbLabelMapToSimulatedImageFilterTest);
   REGISTER_TEST(otbImageSimulationMethodKMeansClassif);
   REGISTER_TEST(otbSpectralResponse);
@@ -46,7 +42,6 @@ void RegisterTests()
   REGISTER_TEST(otbSpatialisationTest);
   REGISTER_TEST(otbImageSimulationMethodWithVectorDataTest);
   REGISTER_TEST(otbSailReflVTest);
-  REGISTER_TEST(otbSatelliteRSRNew);
   REGISTER_TEST(otbSailReflHTest);
   REGISTER_TEST(otbFilterFunctionValuesSpectralResponseTest);
   REGISTER_TEST(otbFilterFunctionValuesTest);

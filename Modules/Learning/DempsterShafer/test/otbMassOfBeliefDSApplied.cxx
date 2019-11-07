@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,26 +19,24 @@
  */
 
 
-
 #include "otbMassOfBelief.h"
 
 #include "otbFuzzyVariable.h"
 #include "otbJointMassOfBeliefFilter.h"
+#include "otbMacro.h"
 
 
-typedef float                           PrecisionType;
-typedef otb::FuzzyVariable<std::string, PrecisionType>
-                                        FuzzyVarType;
-typedef otb::MassOfBelief<std::string>  MassOfBeliefFunctionType;
-typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType>
-                                        JointMassOfBeliefFilterType;
+typedef float PrecisionType;
+typedef otb::FuzzyVariable<std::string, PrecisionType> FuzzyVarType;
+typedef otb::MassOfBelief<std::string>                         MassOfBeliefFunctionType;
+typedef otb::JointMassOfBeliefFilter<MassOfBeliefFunctionType> JointMassOfBeliefFilterType;
 
 int otbMassOfBeliefDSApplied(int itkNotUsed(argc), char* argv[])
 {
-  const char * hyp_1  = argv[1];
-  const char * hyp_2  = argv[2];
-  double desc1Val = atof(argv[3]);
-  double desc2Val = atof(argv[4]);
+  const char* hyp_1    = argv[1];
+  const char* hyp_2    = argv[2];
+  double      desc1Val = atof(argv[3]);
+  double      desc2Val = atof(argv[4]);
 
 
   // Descriptors and associated fuzzy variables
@@ -52,8 +50,8 @@ int otbMassOfBeliefDSApplied(int itkNotUsed(argc), char* argv[])
   desc2->SetMembership("H2_", 0.68, 0.98, 1.0, 1.0, 0, 0.99);
 
   // Corresponding masses
-  MassOfBeliefFunctionType::Pointer mass1 = MassOfBeliefFunctionType::New();
-  MassOfBeliefFunctionType::Pointer mass2 = MassOfBeliefFunctionType::New();
+  MassOfBeliefFunctionType::Pointer mass1     = MassOfBeliefFunctionType::New();
+  MassOfBeliefFunctionType::Pointer mass2     = MassOfBeliefFunctionType::New();
   MassOfBeliefFunctionType::Pointer jointMass = MassOfBeliefFunctionType::New();
 
   MassOfBeliefFunctionType::LabelSetType H1, H1_, H2, H2_, universe, Hyp;
@@ -90,31 +88,27 @@ int otbMassOfBeliefDSApplied(int itkNotUsed(argc), char* argv[])
   jointMassFilter->Update();
   jointMass = jointMassFilter->GetOutput();
 
-  std::cout<<mass1<<std::endl;
+  otbLogMacro(Debug, << "Mass 1:" << mass1);
 
-  std::cout<<mass2<<std::endl;
+  otbLogMacro(Debug, << "Mass 2:" << mass2);
 
-  std::cout << jointMass << std::endl;
-  
-  std::cout << "Considered Hypothesis : ";
-  MassOfBeliefFunctionType::PrintLabelSet(std::cout, Hyp);
-  std::cout << std::endl;
-  
-  std::cout << "Belief(Hyp) : "
-            << jointMass->GetBelief(Hyp)
-            << "  -  Plausibility(Hyp) : "
-            << jointMass->GetPlausibility(Hyp)
-            << "  -  Score(Hyp) : "
-            << (jointMass->GetBelief(Hyp) + jointMass->GetPlausibility(Hyp))/2.0
-            << std::endl;
+  otbLogMacro(Debug, << "Joint mass :" << jointMass);
+
+  std::ostringstream oss;
+  MassOfBeliefFunctionType::PrintLabelSet(oss, Hyp);
+  otbLogMacro(Info, << "Considered Hypothesis : " << oss.str());
+
+  otbLogMacro(Info, << "Belief(Hyp) : " << jointMass->GetBelief(Hyp));
+  otbLogMacro(Info, << "Plausibility(Hyp) : " << jointMass->GetPlausibility(Hyp));
+  otbLogMacro(Info, << "Score(Hyp) : " << (jointMass->GetBelief(Hyp) + jointMass->GetPlausibility(Hyp)) / 2.0);
 
   if (jointMass->GetBelief(Hyp) > jointMass->GetPlausibility(Hyp))
-    {
-    std::cout << "Belief > Plausibility" << std::endl;
+  {
+    otbLogMacro(Warning, << "Belief > Plausibility");
     return EXIT_FAILURE;
-    }
+  }
   else
-    {
+  {
     return EXIT_SUCCESS;
-    }
+  }
 }

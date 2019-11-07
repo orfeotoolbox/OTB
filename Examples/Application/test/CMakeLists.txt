@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -20,7 +20,7 @@
 
 otb_test_application(NAME apTeGenerateAnApplicationExample
   APP ApplicationExample
-  OPTIONS -in ${OTB_DATA_ROOT}/Examples/QB_Suburb.png
+  OPTIONS -in ${OTB_DATA_ROOT}/Input/QB_Suburb.png
           -out ${TEMP}/apTeGenerateAnApplicationExampleOutput.png uint8)
 
 set_tests_properties(apTeGenerateAnApplicationExample PROPERTIES DEPENDS otbapp_ApplicationExample)

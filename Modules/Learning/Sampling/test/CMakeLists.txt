@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -35,10 +35,6 @@ otb_module_target_label(otbSamplingTestDriver)
 
 # Tests Declaration
 # ---------------- SamplingRateCalculator ------------------------------------
-otb_add_test(NAME leTuSamplingRateCalculatorNew COMMAND otbSamplingTestDriver
-            otbSamplingRateCalculatorNew 
-  
-  )
 
 otb_add_test(NAME leTvSamplingRateCalculator COMMAND otbSamplingTestDriver
   --compare-ascii ${NOTOL}
@@ -48,9 +44,6 @@ otb_add_test(NAME leTvSamplingRateCalculator COMMAND otbSamplingTestDriver
             ${TEMP}/leTvSamplingRateCalculator.txt)
   
 # ----------------- OGRDataToSamplePositionFilter ----------------------------
-otb_add_test(NAME leTuOGRDataToSamplePositionFilterNew COMMAND otbSamplingTestDriver
-  otbOGRDataToSamplePositionFilterNew )
-
 otb_add_test(NAME leTvOGRDataToSamplePositionFilterPoly COMMAND otbSamplingTestDriver
   otbOGRDataToSamplePositionFilter
   ${INPUTDATA}/variousVectors.sqlite
@@ -83,9 +76,6 @@ otb_add_test(NAME leTvOGRDataToSamplePositionFilterPoints COMMAND otbSamplingTes
   )
 
 # --------------- OGRDataToClassStatisticsFilter -----------------------------
-otb_add_test(NAME leTuOGRDataToClassStatisticsFilterNew COMMAND otbSamplingTestDriver
-  otbOGRDataToClassStatisticsFilterNew )
-
 otb_add_test(NAME leTvOGRDataToClassStatisticsFilter COMMAND otbSamplingTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/leTvOGRDataToClassStatisticsFilterOutput.txt
@@ -95,9 +85,6 @@ otb_add_test(NAME leTvOGRDataToClassStatisticsFilter COMMAND otbSamplingTestDriv
   ${TEMP}/leTvOGRDataToClassStatisticsFilterOutput.txt)
 
 # --------------- ImageSampleExtractorFilter -----------------------------
-otb_add_test(NAME leTuImageSampleExtractorFilterNew COMMAND otbSamplingTestDriver
-  otbImageSampleExtractorFilterNew )
-
 otb_add_test(NAME leTvImageSampleExtractorFilter COMMAND otbSamplingTestDriver
   --compare-ogr ${EPSILON_6}
   ${BASELINE_FILES}/leTvImageSampleExtractorFilterTest.sqlite
@@ -115,10 +102,6 @@ otb_add_test(NAME leTvImageSampleExtractorFilterUpdate COMMAND otbSamplingTestDr
   ${TEMP}/leTvImageSampleExtractorFilterUpdateTest.shp)
 
 # ---------------- SamplingRateCalculatorList ---------------------------------
-otb_add_test(NAME leTuSamplingRateCalculatorListNew COMMAND otbSamplingTestDriver
-            otbSamplingRateCalculatorListNew 
-  
-  )
 
 otb_add_test(NAME leTvSamplingRateCalculatorList COMMAND otbSamplingTestDriver
   --compare-ascii ${NOTOL}

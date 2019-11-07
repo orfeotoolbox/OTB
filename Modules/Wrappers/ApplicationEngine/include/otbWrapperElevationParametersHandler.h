@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -50,22 +50,21 @@ public:
     * Add a Group containing several choices for map projections
     *
     */
-  static OTBApplicationEngine_EXPORT void AddElevationParameters(Application::Pointer app, const std::string & key);
+  static OTBApplicationEngine_EXPORT void AddElevationParameters(Application::Pointer app, const std::string& key);
 
   /** Method for getting the value of the elevation mode selected */
   static OTBApplicationEngine_EXPORT float GetDefaultElevation(const Application::Pointer app, const std::string& key);
   static OTBApplicationEngine_EXPORT const std::string GetGeoidFile(const Application::Pointer app, const std::string& key);
   static OTBApplicationEngine_EXPORT const std::string GetDEMDirectory(const Application::Pointer app, const std::string& key);
   static OTBApplicationEngine_EXPORT bool IsGeoidUsed(const Application::Pointer app, const std::string& key);
-  static OTBApplicationEngine_EXPORT bool IsDEMUsed(const Application::Pointer app, const std::string & key);
+  static OTBApplicationEngine_EXPORT bool IsDEMUsed(const Application::Pointer app, const std::string& key);
 
   static OTBApplicationEngine_EXPORT void SetupDEMHandlerFromElevationParameters(const Application::Pointer app, const std::string& key);
 
 protected:
-  ElevationParametersHandler(); // not implemented
+  ElevationParametersHandler();          // not implemented
   virtual ~ElevationParametersHandler(); // not implemented
 };
-
 }
 }
 

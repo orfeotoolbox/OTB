@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,17 +27,18 @@
 
 #include "OTBMetadataExport.h"
 
-namespace otb {
+namespace otb
+{
 
-class OTBMetadata_EXPORT SarCalibrationLookupData : public itk::LightObject {
+class OTBMetadata_EXPORT SarCalibrationLookupData : public itk::LightObject
+{
 
-  public:
-
-    /** Standard typedefs */
-  typedef SarCalibrationLookupData          Self;
-  typedef itk::LightObject                 Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+public:
+  /** Standard typedefs */
+  typedef SarCalibrationLookupData      Self;
+  typedef itk::LightObject              Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through the object factory */
   itkNewMacro(Self);
@@ -47,15 +48,15 @@ class OTBMetadata_EXPORT SarCalibrationLookupData : public itk::LightObject {
 
   typedef itk::IndexValueType IndexValueType;
 
-  enum {
+  enum
+  {
     SIGMA = 0,
     BETA,
     GAMMA,
     DN
   };
 
-  SarCalibrationLookupData()
-    :m_Type(0)
+  SarCalibrationLookupData() : m_Type(0)
   {
   }
 
@@ -75,19 +76,16 @@ class OTBMetadata_EXPORT SarCalibrationLookupData : public itk::LightObject {
 
   itkGetMacro(Type, short);
 
-  void PrintSelf(std::ostream & os, itk::Indent indent) const override
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     os << indent << " lookup table type:'" << m_Type << "'" << std::endl;
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-
-  SarCalibrationLookupData(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  SarCalibrationLookupData(const Self&) = delete;
+  void  operator=(const Self&) = delete;
   short m_Type;
-
 };
-
 }
 #endif

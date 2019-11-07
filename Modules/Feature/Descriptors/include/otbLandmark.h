@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,8 +37,7 @@ namespace otb
  * \ingroup OTBDescriptors
  */
 template <class TPoint, class TPointData, class TLandmarkData = TPointData>
-class ITK_EXPORT Landmark
-  : public itk::DataObject
+class ITK_EXPORT Landmark : public itk::DataObject
 {
 public:
   /// standard class typedefs
@@ -70,9 +69,13 @@ public:
 
 protected:
   /// Constructor
-  Landmark() {}
+  Landmark()
+  {
+  }
   /// Destructor
-  ~Landmark() override {}
+  ~Landmark() override
+  {
+  }
   /// PrintSelf method
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
@@ -81,8 +84,8 @@ protected:
   }
 
 private:
-  Landmark(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  Landmark(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /// First landmark point
   PointType m_Point1;

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -26,8 +26,15 @@ if("${OpenCV_VERSION}" VERSION_LESS "2.4.0")
     "it may not be fully compatible with OTB")
 endif()
 
-if(OpenCV_VERSION_MAJOR EQUAL 3)
+# OTB_OPENCV_3 is true for OpenCV 3 and 4
+if(OpenCV_VERSION_MAJOR GREATER_EQUAL 3)
 set(OTB_OPENCV_3 1)
 else()
 set(OTB_OPENCV_3 0)
+endif()
+
+if(OpenCV_VERSION_MAJOR EQUAL 4)
+set(OTB_OPENCV_4 1)
+else()
+set(OTB_OPENCV_4 0)
 endif()

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,28 +18,17 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.1.0)
+cmake_minimum_required(VERSION 3.10.2)
 
 foreach(p
-    CMP0025 # CMake 3.0
-    CMP0042 # CMake 3.0
-    CMP0058
+    CMP0072 # CMake 3.11
+    CMP0078 # CMake 3.13
+    CMP0086 # CMake 3.14
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
   endif()
 endforeach()
-
-# CMP0046 : from CMake 3.0, old behaviour is more convenient
-if(POLICY CMP0046)
-  cmake_policy(SET CMP0046 OLD)
-endif()
-
-# TODO Check if OTB cmake is compatible with CMP0054 NEW policy
-# CMP0054 : New policy introduce in CMake 3.1, keep old behaviour for now
-if(POLICY CMP0054)
-  cmake_policy(SET CMP0054 OLD)
-endif()
 
 project(OTB)
 
@@ -67,6 +56,10 @@ include(ExternalProject)
 
 #mantis: 1193
 if(APPLE)
+  # https://cmake.org/cmake/help/v3.10/variable/CMAKE_SYSTEM_FRAMEWORK_PATH.html
+  # By default it contains the standard directories for the current system. It 
+  # is not intended to be modified by the project, use CMAKE_FRAMEWORK_PATH 
+  # for this.
   set(CMAKE_SYSTEM_FRAMEWORK_PATH "" CACHE PATH "" FORCE)
 endif()
 
@@ -91,10 +84,12 @@ if( CMAKE_HOST_WIN32 )
   endif()
 
 endif()
+set(OTB_APPLICATIONS_NAME_LIST "" CACHE STRING "List of all applications" FORCE)
+mark_as_advanced(OTB_APPLICATIONS_NAME_LIST)
 
 set(OTB_CMAKE_DIR ${OTB_SOURCE_DIR}/CMake)
 set(CMAKE_MODULE_PATH ${OTB_CMAKE_DIR} ${CMAKE_MODULE_PATH})
-include (SourceStatus)
+include(SourceStatus)
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
 include(OTBModuleMacros)
@@ -106,12 +101,27 @@ reset_qt_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
+# Find python stuff
+# Version 3 is preferred before 2
+set ( Python_ADDITIONAL_VERSIONS "3;2" )
+set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+find_package( PythonInterp )
+if ( OTB_WRAP_PYTHON AND ( "x${PYTHON_VERSION_MAJOR}" STREQUAL "x2" ) )
+    message (WARNING "Python3 not found. There is no longer support of \
+    wrapping in python2 in OTB, but it can still be used.")
+endif()
+# Now that we have a python version the addditional versions should only
+# contain the version we have to get the corresponding libs
+set (Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+find_package ( PythonLibs )
+
 #-----------------------------------------------------------------------------
 # Configure the default OTB_DATA_ROOT for the location of OTB Data.
 find_path(OTB_DATA_ROOT
   NAMES README-OTB-Data
-  HINTS $ENV{OTB_DATA_ROOT} ${OTB_SOURCE_DIR}/../OTB-Data
-)
+  HINTS ${OTB_SOURCE_DIR}/Data
+  )
 #mark_as_advanced(OTB_DATA_ROOT)
 
 if(OTB_DATA_ROOT)
@@ -122,8 +132,8 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 
 #-----------------------------------------------------------------------------
 # OTB version number.
-set(OTB_VERSION_MAJOR "6")
-set(OTB_VERSION_MINOR "6")
+set(OTB_VERSION_MAJOR "7")
+set(OTB_VERSION_MINOR "0")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -153,42 +163,24 @@ if(NOT OTB_INSTALL_INCLUDE_DIR)
   set(OTB_INSTALL_INCLUDE_DIR include/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
 endif()
 if(NOT OTB_INSTALL_APP_DIR)
-  set(OTB_INSTALL_APP_DIR "lib/otb/applications")
+  set(OTB_INSTALL_APP_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/applications")
 endif()
 if(NOT OTB_INSTALL_PYTHON_DIR)
-  set(OTB_INSTALL_PYTHON_DIR "lib/otb/python")
-endif()
-if(NOT OTB_INSTALL_PYTHON3_DIR)
-  set(OTB_INSTALL_PYTHON3_DIR "lib/otb/python3")
-endif()
-if(NOT OTB_INSTALL_JAVA_DIR)
-  set(OTB_INSTALL_JAVA_DIR "lib/otb/java")
+  set(OTB_INSTALL_PYTHON_DIR "${OTB_INSTALL_LIBRARY_DIR}/otb/python")
 endif()
 if(NOT OTB_INSTALL_DATA_DIR)
-  set(OTB_INSTALL_DATA_DIR share/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
+  set(OTB_INSTALL_DATA_DIR "share/otb")
 endif()
+
 if(NOT OTB_INSTALL_DOC_DIR)
-  set(OTB_INSTALL_DOC_DIR share/doc/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
+  set(OTB_INSTALL_DOC_DIR "share/doc/otb")
 endif()
 if(NOT OTB_INSTALL_PACKAGE_DIR)
   set(OTB_INSTALL_PACKAGE_DIR "${OTB_INSTALL_LIBRARY_DIR}/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
 endif()
 
-if(NOT OTB_INSTALL_DESCR_DIR)
-  set (OTB_INSTALL_DESCR_DIR "share/otb/description")
-endif()
-
 #convert path to native for reconfiguring otbcli.bat.in
 file(TO_NATIVE_PATH "${OTB_INSTALL_APP_DIR}" OTB_INSTALL_APP_DIR_NATIVE)
-
-# Override CMake's built-in add_* commands: assign LABELS to tests and targets
-# automatically. Depends on the CMake variable otb-module being set to the
-# "current" module when add_* is called.
-macro(verify_otb_module_is_set)
-  if("" STREQUAL "${otb-module}")
-    message(FATAL_ERROR "CMake variable otb-module is not set")
-  endif()
-endmacro()
 
 #-----------------------------------------------------------------------------
 # Set a default build type if none was specified
@@ -219,19 +211,20 @@ endmacro()
 
 # TODO : handle shared libs on windows
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
+mark_as_advanced(BUILD_SHARED_LIBS)
+
+# The following variable can be deleted and replace by BUILD_SHARED_LIBS
+# in otbConfigure.h.in
 set(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
+
 
 if(MSVC)
   option(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "Build OTB with shared libraries." ON)
+  mark_as_advanced(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS)
   set(OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ${CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS})
 else()
   set(OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 endif()
-
-#-----------------------------------------------------------------------------
-# Option to activate deprecated classes
-option(OTB_USE_DEPRECATED "Turn on the use and test of deprecated classes" OFF)
-mark_as_advanced(OTB_USE_DEPRECATED)
 
 # Although the OpenMP option looks like a 3rd party module, it is NOT. This option
 # is handled with other compilation flags in file OTBSetStandardCompilerFlags.cmake
@@ -242,6 +235,7 @@ mark_as_advanced(OTB_USE_DEPRECATED)
 option(OTB_USE_OPENMP "Add openmp compiler and linker flags" OFF)
 
 option(OTB_USE_SSE_FLAGS "Enable SIMD optimizations (hardware dependent)." ON)
+mark_as_advanced(OTB_USE_SSE_FLAGS)
 
 include(OTBSetStandardCompilerFlags)
 #---------------------------------------------------------------
@@ -274,10 +268,6 @@ if(NOT CMAKE_ARCHIVE_OUTPUT_DIRECTORY)
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OTB_BINARY_DIR}/lib)
 endif()
 set(OTB_MODULES_DIR "${OTB_BINARY_DIR}/${OTB_INSTALL_PACKAGE_DIR}/Modules")
-
-#-----------------------------------------------------------------------------
-# OTB uses KWStyle for checking the coding style
-#include(${OTB_SOURCE_DIR}/Utilities/KWStyle/KWStyle.cmake)
 
 #-----------------------------------------------------------------------------
 # By default, OTB does not build the Examples that are illustrated in the Software Guide
@@ -316,7 +306,6 @@ set(BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB/Images)
 set(BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB/Files)
 set(INPUTDATA      ${OTB_DATA_ROOT}/Input)
 set(TEMP           ${OTB_BINARY_DIR}/Testing/Temporary)
-set(EXAMPLEDATA    ${OTB_DATA_ROOT}/Examples)
 set(OTBAPP_BASELINE       ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Images)
 set(OTBAPP_BASELINE_FILES ${OTB_DATA_ROOT}/Baseline/OTB-Applications/Files)
 
@@ -354,6 +343,7 @@ set(OTB_CONFIG_CODE "
 set(OTB_MODULES_DIR \"${OTB_MODULES_DIR}\")")
 set(OTB_CONFIG_CMAKE_DIR "${OTB_SOURCE_DIR}/CMake")
 set(OTB_USE_FILE "${OTB_CONFIG_CMAKE_DIR}/UseOTB.cmake")
+
 if(OTB_WRAP_PYTHON)
 set(OTB_CONFIG_CODE "${OTB_CONFIG_CODE}
 set(OTB_PYTHONPATH \"${OTB_BINARY_DIR}/${OTB_INSTALL_PYTHON_DIR}\")")
@@ -381,10 +371,12 @@ set(OTB_CONFIG_CODE "${OTB_CONFIG_CODE}
 set(OTB_MODULES_DIR \"\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/Modules\")")
 set(OTB_USE_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/UseOTB.cmake")
 set(OTB_CONFIG_CMAKE_DIR "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}")
+
 if(OTB_WRAP_PYTHON)
 set(OTB_CONFIG_CODE "${OTB_CONFIG_CODE}
 set(OTB_PYTHONPATH \"\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PYTHON_DIR}\")")
 endif()
+
 set(OTB_CONFIG_APPLICATION_PATH "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_APP_DIR}")
 set(OTB_CONFIG_TARGETS_CONDITION "")
 set(OTB_CONFIG_TARGETS_FILE "\${OTB_INSTALL_PREFIX}/${OTB_INSTALL_PACKAGE_DIR}/OTBTargets.cmake")
@@ -409,6 +401,9 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               CMake/OTBStandaloneModuleMacros.cmake
               CMake/OTBModuleExternal.cmake
               CMake/UseOTB.cmake
+              CMake/GenerateExportHeaderCustom.cmake
+              CMake/exportheader.cmake.in
+              CMake/NamespaceHandler.cmake
   DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
   COMPONENT Development)
 get_property(OTBTargets_MODULES GLOBAL PROPERTY OTBTargets_MODULES)
@@ -429,11 +424,13 @@ install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
 
 # TODO : install release notes, copyright notice, ...
 # install(FILES "LICENSE" "NOTICE" "README.txt" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
-install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
+install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR})
 
 # Configure and install VERSION file
 configure_file(VERSION VERSION @ONLY)
-install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
+install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_INSTALL_DOC_DIR})
+
+install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION share)
 
 if(BUILD_TESTING)
   add_subdirectory(Utilities/InstallTest)
@@ -452,6 +449,12 @@ endif()
 add_subdirectory(Utilities/Doxygen)
 
 add_subdirectory(Utilities/Completion)
+
+option(BUILD_COOKBOOK "Build the CookBook documentation." OFF)
+
+if (BUILD_COOKBOOK)
+    add_subdirectory(Documentation/Cookbook)
+endif()
 
 #----------------------------------------------------------------------------
 # Provide a target to generate the SuperBuild archive (only for Unix)
@@ -477,18 +480,6 @@ configure_file(
 
 add_custom_target(uninstall
   COMMAND ${CMAKE_COMMAND} -P ${CMAKE_BINARY_DIR}/cmake_uninstall.cmake)
-
-# #-----------------------------------------------------------------------------
-# # Packaging options for Windows packages
-# if(WIN32 OR CMAKE_CROSSCOMPILING)
-#   option(GENERATE_PACKAGE "Generate OTB package" OFF)
-#   option(GENERATE_XDK "Generate XDK for OTB development" OFF)
-#   if(GENERATE_PACKAGE OR GENERATE_XDK)
-#     set(MXE_TARGET_DIR "" CACHE PATH "path to mxe directory")
-#     set(PACKAGE_OTB_SRC_DIR ${OTB_SOURCE_DIR})
-#     add_subdirectory(${OTB_SOURCE_DIR}/SuperBuild/Packaging ${CMAKE_BINARY_DIR}/Packaging)
-#   endif() # (GENERATE_PACKAGE OR GENERATE_XDK)
-# endif() # (WIN32 OR CMAKE_CROSSCOMPILING)
 
 #-----------------------------------------------------------------------------
 #macro to put a fixed space between key, value  in summary
@@ -527,7 +518,6 @@ foreach(otb_option
     CMAKE_CXX_FLAGS
     ${option_list}
     OTB_WRAP_PYTHON
-    OTB_WRAP_JAVA
     OTB_DATA_ROOT
     OTB_USE_OPENMP
     OTB_USE_SSE_FLAGS
@@ -536,18 +526,8 @@ foreach(otb_option
   message("${otb_option} ${spaces} = ${${otb_option}}")
 endforeach()
 
-# set(modules_list_for_summary "${OTB_MODULES_ENABLED}")
-# list(SORT modules_list_for_summary)
-# string(REPLACE ";" " " modules_list_for_summary "${modules_list_for_summary}")
-# message("OTB_MODULES_ENABLED      = ${modules_list_for_summary}")
-# unset(modules_list_for_summary)
-
-list(REMOVE_ITEM option_list "OTB_USE_6S" "OTB_USE_SIFTFAST" "OTB_USE_QT")
-foreach(item ${option_list})
-  if(NOT ${item})
-    list(REMOVE_ITEM option_list "${item}" )
-  endif()
-endforeach()
+# Cleaning option_list as we are using a new one now
+unset(option_list)
 
 #To report non-optional dependencies inside summary
 list(APPEND option_list Boost)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,15 +21,14 @@
 #ifndef otbTwoNRIBandsImageToNComplexBandsImage_h
 #define otbTwoNRIBandsImageToNComplexBandsImage_h
 
-#include <vcl_deprecated_header.h>
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
 #include "itkNumericTraits.h"
 
 /*
- * Inputs : one single image made of 2N real bands 
+ * Inputs : one single image made of 2N real bands
  * Output : one single image made of N complex bands
- * 
+ *
  * */
 
 
@@ -38,25 +37,21 @@ namespace otb
 
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT TwoNRIBandsImageToNComplexBandsImage :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT TwoNRIBandsImageToNComplexBandsImage : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**   Extract input and output image dimension */
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension,
-                      unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
   /** standard class typedefs */
-  typedef TwoNRIBandsImageToNComplexBandsImage                                           Self;
+  typedef TwoNRIBandsImageToNComplexBandsImage Self;
   typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Object factory management */
   itkNewMacro(Self);
@@ -73,24 +68,23 @@ public:
 
 protected:
   TwoNRIBandsImageToNComplexBandsImage();
-  ~TwoNRIBandsImageToNComplexBandsImage() override {}
+  ~TwoNRIBandsImageToNComplexBandsImage() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void GenerateOutputInformation(void) override;
   void BeforeThreadedGenerateData(void) override;
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  TwoNRIBandsImageToNComplexBandsImage(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
-
+  TwoNRIBandsImageToNComplexBandsImage(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTwoNRIBandsImageToNComplexBandsImage.txx"
+#include "otbTwoNRIBandsImageToNComplexBandsImage.hxx"
 #endif
 
 #endif

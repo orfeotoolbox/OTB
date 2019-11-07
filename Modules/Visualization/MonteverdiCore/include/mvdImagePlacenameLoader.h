@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,9 +25,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 //
 // Qt includes (sorted by alphabetic order)
@@ -74,7 +72,7 @@ class VectorImageModel;
  */
 class OTBMonteverdiCore_EXPORT ImagePlacenameLoader : public QObject
 {
-    Q_OBJECT;
+  Q_OBJECT;
 
 public:
   /** \brief Constructor */
@@ -86,13 +84,12 @@ public slots:
 
 signals:
   /** \brief Triggered after a non empty placename was loaded */
-  void PlacenameLoaded( const QString& );
+  void PlacenameLoaded(const QString&);
 
   /** \brief Triggered when processing is finished */
   void Finished();
 
 private:
-
   VectorImageModel* m_Model;
 };
 

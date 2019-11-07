@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,12 +22,10 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbStreamingManagerNew);
   REGISTER_TEST(otbNumberOfLinesStrippedStreamingManager);
   REGISTER_TEST(otbRAMDrivenStrippedStreamingManager);
   REGISTER_TEST(otbTileDimensionTiledStreamingManager);
   REGISTER_TEST(otbRAMDrivenTiledStreamingManager);
   REGISTER_TEST(otbRAMDrivenAdaptativeStreamingManager);
   REGISTER_TEST(otbPipelineMemoryPrintCalculatorTest);
-  REGISTER_TEST(otbPipelineMemoryPrintCalculatorNew);
 }

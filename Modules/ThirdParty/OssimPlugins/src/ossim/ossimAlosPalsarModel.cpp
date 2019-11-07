@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2008-2010 by Centre for Remote Imaging, Sensing and Processing (CRISP)
  *
  * This file is licensed under MIT license:
@@ -124,7 +124,7 @@ namespace ossimplugins
       _sensor = new SensorParams();
 
       /*
-        if(strcmp(time_dir_pix.c_str(), "INCREASE") == 0)
+        if(time_dir_pix == "INCREASE")
         {
         _sensor->set_col_direction(1);
         }
@@ -138,7 +138,7 @@ namespace ossimplugins
 
       // TODO: Have to verify whether the time direction indicator should be always positive
       /*
-        if(strcmp(time_dir_lin.c_str(), "INCREASE") == 0)
+        if(time_dir_lin == "INCREASE")
         {
         _sensor->set_lin_direction(1);
         }
@@ -217,7 +217,7 @@ namespace ossimplugins
             /*
              * Leader file data reading
              */
-            std::ifstream leaderFile(leaFilename.c_str(), ios::in | ios::binary);
+            std::ifstream leaderFile(leaFilename.c_str(), std::ios::in | std::ios::binary);
             leaderFile >> *theAlosPalsarLeader;
             leaderFile.close();
 
@@ -241,7 +241,7 @@ namespace ossimplugins
                /*
                 * Read header of data file for image size info
                 */
-               std::ifstream dataFile(datFilename.c_str(), ios::in | ios::binary);
+               std::ifstream dataFile(datFilename.c_str(), std::ios::in | std::ios::binary);
                dataFile >> *theAlosPalsarData;
                dataFile.close();
 
@@ -682,7 +682,7 @@ namespace ossimplugins
 
    bool ossimAlosPalsarModel::isAlosPalsarLeader(const ossimFilename& file) const
    {
-      std::ifstream candidate(file.c_str(), ios::in | ios::binary);
+      std::ifstream candidate(file.c_str(), std::ios::in | std::ios::binary);
       char alosFileName[16];
 
       candidate.seekg(48);
@@ -745,7 +745,7 @@ namespace ossimplugins
 
    bool ossimAlosPalsarModel::isAlosPalsarData(const ossimFilename& file) const
    {
-      std::ifstream candidate(file.c_str(), ios::in | ios::binary);
+      std::ifstream candidate(file.c_str(), std::ios::in | std::ios::binary);
       char alosFileName[16];
 
       candidate.seekg(48);

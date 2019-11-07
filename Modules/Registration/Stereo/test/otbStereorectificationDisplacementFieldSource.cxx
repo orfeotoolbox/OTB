@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,28 +23,20 @@
 #include "otbImageFileWriter.h"
 #include "otbStereorectificationDisplacementFieldSource.h"
 
-typedef itk::Vector<double,2>                               DisplacementType;
-typedef otb::Image<DisplacementType>                         DisplacementFieldType;
-typedef otb::Image<unsigned short>                          ImageType;
-typedef otb::StereorectificationDisplacementFieldSource
-   <ImageType,DisplacementFieldType>                         DisplacementFieldSourceType;
-typedef otb::ImageFileReader<ImageType>                     ReaderType;
+typedef itk::Vector<double, 2> DisplacementType;
+typedef otb::Image<DisplacementType> DisplacementFieldType;
+typedef otb::Image<unsigned short>   ImageType;
+typedef otb::StereorectificationDisplacementFieldSource<ImageType, DisplacementFieldType> DisplacementFieldSourceType;
+typedef otb::ImageFileReader<ImageType>             ReaderType;
 typedef otb::ImageFileWriter<DisplacementFieldType> WriterType;
 
-int otbStereorectificationDisplacementFieldSourceNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  // Instantiation
-  DisplacementFieldSourceType::Pointer dfSource = DisplacementFieldSourceType::New();
 
-  return EXIT_SUCCESS;
-}
-
-int otbStereorectificationDisplacementFieldSource(int itkNotUsed(argc), char * argv[])
+int otbStereorectificationDisplacementFieldSource(int itkNotUsed(argc), char* argv[])
 {
-  char * infname1  = argv[1];
-  char * infname2  = argv[2];
-  char * outfname1 = argv[3];
-  char * outfname2 = argv[4];
+  char*  infname1  = argv[1];
+  char*  infname2  = argv[2];
+  char*  outfname1 = argv[3];
+  char*  outfname2 = argv[4];
   double avgElev   = atof(argv[5]);
   double scale     = atof(argv[6]);
   double gridStep  = atoi(argv[7]);

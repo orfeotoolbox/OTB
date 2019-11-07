@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,16 +24,12 @@ void RegisterTests()
 {
   REGISTER_TEST(otbJHMIChangeDetectionTest);
   REGISTER_TEST(otbMeanDiffChangeDetectionTest);
-  REGISTER_TEST(otbMultivariateAlterationDetectorImageFilterNew);
   REGISTER_TEST(otbMultivariateAlterationDetectorImageFilter);
   REGISTER_TEST(otbCBAMIChangeDetectionTest);
   REGISTER_TEST(otbKullbackLeiblerSupervizedDistanceImageFilter);
   REGISTER_TEST(otbCorrelChangeDetectionTest);
   REGISTER_TEST(otbKullbackLeiblerProfileImageFilter);
-  REGISTER_TEST(otbKullbackLeiblerSupervizedDistanceImageFilterNew);
-  REGISTER_TEST(otbKullbackLeiblerProfileImageFilterNew);
   REGISTER_TEST(otbKullbackLeiblerDistanceImageFilter);
   REGISTER_TEST(otbMeanRatioChangeDetectionTest);
-  REGISTER_TEST(otbKullbackLeiblerDistanceImageFilterNew);
   REGISTER_TEST(otbLHMIChangeDetectionTest);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,44 +29,28 @@
 #include "otbImageFileWriter.h"
 
 
-int otbVectorDataToRightAngleVectorDataFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbVectorDataToRightAngleVectorDataFilter(int itkNotUsed(argc), char* argv[])
 {
-  /** Typedefs */
-  typedef otb::VectorData< >                    VectorDataType;
-  typedef otb::VectorDataToRightAngleVectorDataFilter<VectorDataType>
-                                                RightAngleFilterType;
-
-  RightAngleFilterType::Pointer filter  = RightAngleFilterType::New();
-
-  std::cout << filter << std::endl;
-
-  return EXIT_SUCCESS;
-}
-
-
-int otbVectorDataToRightAngleVectorDataFilter(int itkNotUsed(argc), char * argv[])
-{
-  const char * infname  = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   /** Typedefs */
-  typedef otb::VectorData< >                          VectorDataType;
-  typedef otb::VectorDataToRightAngleVectorDataFilter<VectorDataType>
-                                                      RightAngleFilterType;
+  typedef otb::VectorData<>                                           VectorDataType;
+  typedef otb::VectorDataToRightAngleVectorDataFilter<VectorDataType> RightAngleFilterType;
 
-  typedef otb::VectorDataFileReader<VectorDataType>   vDataReaderType;
-  typedef otb::VectorDataFileWriter<VectorDataType>   vDataWriterType;
+  typedef otb::VectorDataFileReader<VectorDataType> vDataReaderType;
+  typedef otb::VectorDataFileWriter<VectorDataType> vDataWriterType;
 
   // Create instances
-  vDataReaderType::Pointer      vDataReader       = vDataReaderType::New();
-  RightAngleFilterType::Pointer rightAngleFilter  = RightAngleFilterType::New();
-  vDataWriterType::Pointer      vDataWriter       = vDataWriterType::New();
+  vDataReaderType::Pointer      vDataReader      = vDataReaderType::New();
+  RightAngleFilterType::Pointer rightAngleFilter = RightAngleFilterType::New();
+  vDataWriterType::Pointer      vDataWriter      = vDataWriterType::New();
 
   // Begin the process
   vDataReader->SetFileName(infname);
   rightAngleFilter->SetInput(vDataReader->GetOutput());
   rightAngleFilter->SetDistanceThreshold(10.0);
-  rightAngleFilter->SetAngleThreshold(3.141592/18.0);
+  rightAngleFilter->SetAngleThreshold(3.141592 / 18.0);
   vDataWriter->SetFileName(outfname);
   vDataWriter->SetInput(rightAngleFilter->GetOutput());
   vDataWriter->Update();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,28 +33,20 @@ namespace otb
  * \ingroup OTBEdge
  */
 
-template <class TInputImage,
-    class TOutputImage,
-    class TOutputImageDirection = TOutputImage,
-    class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
-class ITK_EXPORT LineCorrelationDetectorImageFilter :  public LineDetectorImageFilterBase<TInputImage, TOutputImage,
-      TOutputImageDirection,
-      TInterpolator>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection = TOutputImage,
+          class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage>>
+class ITK_EXPORT LineCorrelationDetectorImageFilter : public LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 {
 public:
   /**   Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension,
-                      unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
-  typedef LineCorrelationDetectorImageFilter                                                           Self;
+  typedef LineCorrelationDetectorImageFilter Self;
   typedef LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator> Superclass;
-  typedef itk::SmartPointer<Self>                                                                      Pointer;
-  typedef itk::SmartPointer<const Self>                                                                ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for management of the "object factory". */
   itkNewMacro(Self);
@@ -85,21 +77,22 @@ public:
 
 protected:
   LineCorrelationDetectorImageFilter();
-  ~LineCorrelationDetectorImageFilter() override {}
+  ~LineCorrelationDetectorImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Compute the measure */
   double ComputeMeasure(std::vector<double>* m1, std::vector<double>* m2, std::vector<double>* m3) override;
 
 private:
-  LineCorrelationDetectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
+  LineCorrelationDetectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLineCorrelationDetectorImageFilter.txx"
+#include "otbLineCorrelationDetectorImageFilter.hxx"
 #endif
 
 #endif

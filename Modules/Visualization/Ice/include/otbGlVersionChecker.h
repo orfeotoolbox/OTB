@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -48,7 +48,7 @@ public:
    * std::runtime_error() is thrown when glGetError() is different
    * than GL_NO_ERROR.
    */
-  static const char * GLVersion();
+  static const char * GLVersion() noexcept;
 
   /**
    * \return The OpenGL Shading-Language version used at runtime. The
@@ -59,7 +59,15 @@ public:
    * 2.0. (@see
    * http://www.opengl.org/sdk/docs/man2/xhtml/glGetString.xml).
    */
-  static const char * GLSLVersion();
+  static const char * GLSLVersion() noexcept;
+
+  /**
+   * \brief Check that OpenGL required capabilities have been reached.
+   *
+   * \return true if OpengGL capabilities of running platform meets
+   * the needs of the library.
+   */
+  static bool CheckGLCapabilities() noexcept;
 
   /**
    * \brief Check that OpenGL required capabilities have been reached.
@@ -74,7 +82,7 @@ public:
    * the needs of the library.
    */
   static bool CheckGLCapabilities( const char * & glVersion,
-                                   const char * & glslVersion );
+                                   const char * & glslVersion ) noexcept;
 
   /**
    * \brief Compares to version-strings on the model of strcmp().
@@ -90,14 +98,7 @@ public:
    * \return <code>-1</code> if version<required; <code>0</code> if
    * version==required; <code>+1</code> if version>=required.
    */
-  static int VerCmp( const char * version, const char * required );
-
-private:
-  // Prevent instantiation
-  GlVersionChecker();
-  ~GlVersionChecker();
-  GlVersionChecker(const GlVersionChecker&);
-  void operator=(const GlVersionChecker&);
+  static int VerCmp( const char * version, const char * required ) noexcept;
 
   /**
    * \brief Split version string into Major.minor.release triplet.
@@ -114,7 +115,14 @@ private:
   static bool SplitVersion( const char * version,
                             int& major,
                             int& minor,
-                            int& release );
+                            int& release ) noexcept;
+
+private:
+  // Prevent instantiation
+  GlVersionChecker() = delete;
+  ~GlVersionChecker() = delete;
+  GlVersionChecker( const GlVersionChecker & ) = delete;
+  void operator = ( const GlVersionChecker & ) = delete;
 };
 
 } // End namespace otb

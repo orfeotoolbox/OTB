@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,25 +28,19 @@ namespace otb
 
 MSTARImageIOFactory::MSTARImageIOFactory()
 {
-  this->RegisterOverride("otbImageIOBase",
-                         "otbMSTARImageIO",
-                         "MSTAR Image IO",
-                         1,
-                         itk::CreateObjectFunction<MSTARImageIO>::New());
+  this->RegisterOverride("otbImageIOBase", "otbMSTARImageIO", "MSTAR Image IO", 1, itk::CreateObjectFunction<MSTARImageIO>::New());
 }
 
 MSTARImageIOFactory::~MSTARImageIOFactory()
 {
 }
 
-const char*
-MSTARImageIOFactory::GetITKSourceVersion(void) const
+const char* MSTARImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-MSTARImageIOFactory::GetDescription() const
+const char* MSTARImageIOFactory::GetDescription() const
 {
   return "MSTAR ImageIO Factory, permettant le chargement d'image MSTAR dans l'OTB";
 }
@@ -58,10 +52,10 @@ static bool MSTARImageIOFactoryHasBeenRegistered;
 
 void MSTARImageIOFactoryRegister__Private(void)
 {
-  if( ! MSTARImageIOFactoryHasBeenRegistered )
-    {
+  if (!MSTARImageIOFactoryHasBeenRegistered)
+  {
     MSTARImageIOFactoryHasBeenRegistered = true;
     MSTARImageIOFactory::RegisterOneFactory();
-    }
+  }
 }
 } // end namespace otb

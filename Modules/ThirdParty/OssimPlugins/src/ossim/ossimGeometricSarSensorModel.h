@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -118,7 +118,7 @@ public:
     * @param position Position of the sensor at line line
     * @param speed Speed of the sensor at line line
     */
-  virtual bool getPlatformPositionAtLine(double line, vector<double>& position, vector<double>& speed);
+  virtual bool getPlatformPositionAtLine(double line, std::vector<double>& position, std::vector<double>& speed);
 
    /**
     * @brief This function is able to convert image coordinates into world

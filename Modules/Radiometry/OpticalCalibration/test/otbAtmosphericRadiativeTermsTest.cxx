@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,52 +19,31 @@
  */
 
 
-
 #include <fstream>
 
 #include "otbAtmosphericRadiativeTerms.h"
 #include <cstdlib>
 
-int otbAtmosphericRadiativeTermsNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef otb::AtmosphericRadiativeTerms AtmosphericRadiativeTermsType;
-
-  // Instantiating object
-  AtmosphericRadiativeTermsType::Pointer object = AtmosphericRadiativeTermsType::New();
-
-  return EXIT_SUCCESS;
-}
-
-int otbAtmosphericRadiativeTermsSingleChannelNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef otb::AtmosphericRadiativeTermsSingleChannel AtmosphericRadiativeTermsType;
-
-  // Instantiating object
-  AtmosphericRadiativeTermsType::Pointer object = AtmosphericRadiativeTermsType::New();
-
-  std::cout << object << std::endl;
-  return EXIT_SUCCESS;
-}
 
 std::ostream& operator<<(std::ostream& os, const otb::AtmosphericRadiativeTerms::DataVectorType& values)
 {
   os << "[";
   if (values.size() > 0)
-    {
+  {
     os << values[0];
-    }
+  }
   for (unsigned int i = 1; i < values.size(); ++i)
-    {
+  {
     os << ", ";
     os << values[i];
-    }
+  }
   os << "]\n";
   return os;
 }
 
-int otbAtmosphericRadiativeTermsTest(int itkNotUsed(argc), char * argv[])
+int otbAtmosphericRadiativeTermsTest(int itkNotUsed(argc), char* argv[])
 {
-  char * filename = argv[1];
+  char*         filename = argv[1];
   std::ofstream file;
   file.open(filename);
 

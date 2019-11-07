@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,11 +22,10 @@
 #define otbQtStringSelectionWidget_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperStringListParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 #include "OTBQtWidgetExport.h"
+#include <string>
 
 namespace otb
 {
@@ -42,7 +41,7 @@ class OTBQtWidget_EXPORT QtStringSelectionWidget : public QWidget
 {
   Q_OBJECT
 
-  Q_PROPERTY( QString text READ GetText WRITE SetText RESET ClearText );
+  Q_PROPERTY(QString text READ GetText WRITE SetText RESET ClearText);
 
 signals:
   void InternalQLineEditEditionFinished();
@@ -51,55 +50,34 @@ public:
   QtStringSelectionWidget();
   ~QtStringSelectionWidget() override;
 
-  bool IsChecked()
-  {
-    return m_Checkbox->isChecked();
-  }
+  bool IsChecked() const;
 
-  void SetChecked( bool val )
-  {
-    return m_Checkbox->setChecked( val );
-  }
+  void SetChecked(bool val);
 
-  inline const QString GetText() const
-  {
-    return m_Input->text();
-  }
+  const QString GetText() const;
 
-  inline void SetText( const QString& qString)
-  {
-    m_Input->setText(qString);
-  }
+  void SetText(const QString& qString);
 
-  std::string ToStdString()
-  {
-    return m_Input->text().toLatin1().constData();
-  }
+  std::string ToStdString();
 
-  void ClearText()
-  {
-    m_Input->clear();
-  }
-
+  void ClearText();
 
 protected slots:
-   void OnEditionFinished();
+  void OnEditionFinished();
 
 private:
-  QtStringSelectionWidget(const QtStringSelectionWidget&); //purposely not implemented
-  void operator=(const QtStringSelectionWidget&); //purposely not implemented
+  QtStringSelectionWidget(const QtStringSelectionWidget&) = delete;
+  void operator=(const QtStringSelectionWidget&) = delete;
 
   virtual void DoCreateWidget();
 
   virtual void DoUpdateGUI();
 
 
-  QHBoxLayout * m_HLayout;
-  QLineEdit*    m_Input;
-  QCheckBox *   m_Checkbox;
+  QHBoxLayout* m_HLayout;
+  QLineEdit*   m_Input;
+  QCheckBox*   m_Checkbox;
 };
-
-
 }
 }
 

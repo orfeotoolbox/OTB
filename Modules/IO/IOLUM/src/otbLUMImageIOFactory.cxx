@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,25 +29,19 @@ namespace otb
 
 LUMImageIOFactory::LUMImageIOFactory()
 {
-  this->RegisterOverride("otbImageIOBase",
-                         "otbLUMImageIO",
-                         "LUM Image IO",
-                         1,
-                         itk::CreateObjectFunction<LUMImageIO>::New());
+  this->RegisterOverride("otbImageIOBase", "otbLUMImageIO", "LUM Image IO", 1, itk::CreateObjectFunction<LUMImageIO>::New());
 }
 
 LUMImageIOFactory::~LUMImageIOFactory()
 {
 }
 
-const char*
-LUMImageIOFactory::GetITKSourceVersion(void) const
+const char* LUMImageIOFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-LUMImageIOFactory::GetDescription() const
+const char* LUMImageIOFactory::GetDescription() const
 {
   return "LUM ImageIO Factory, permettant le chargement d'image au format LUM dans l'OTB";
 }
@@ -59,10 +53,10 @@ static bool LUMImageIOFactoryHasBeenRegistered;
 
 void LUMImageIOFactoryRegister__Private(void)
 {
-  if( ! LUMImageIOFactoryHasBeenRegistered )
-    {
+  if (!LUMImageIOFactoryHasBeenRegistered)
+  {
     LUMImageIOFactoryHasBeenRegistered = true;
     LUMImageIOFactory::RegisterOneFactory();
-    }
+  }
 }
 } // end namespace otb

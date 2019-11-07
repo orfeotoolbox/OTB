@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,18 +28,18 @@
 #include "otbImageFileWriter.h"
 #include "otbComplexToVectorImageCastFilter.h"
 
-int otbTerraSarBrightnessImageComplexFilterTest(int itkNotUsed(argc), char * argv[])
+int otbTerraSarBrightnessImageComplexFilterTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFileName  = argv[1];
-  const char * outputFileName = argv[2];
-  const bool   useMetadata    = atoi(argv[3]);
-  const bool   resultsInDb    = atoi(argv[4]);
+  const char* inputFileName  = argv[1];
+  const char* outputFileName = argv[2];
+  const bool  useMetadata    = atoi(argv[3]);
+  const bool  resultsInDb    = atoi(argv[4]);
 
-  typedef std::complex<double>                                            ComplexType;
-  typedef otb::Image<ComplexType, 2>                                      ImageType;
-  typedef otb::VectorImage<double, 2>                                     VectorImageType;
-  typedef otb::ImageFileReader<ImageType>                                 ReaderType;
-  typedef otb::ImageFileWriter<VectorImageType>                           WriterType;
+  typedef std::complex<double> ComplexType;
+  typedef otb::Image<ComplexType, 2>  ImageType;
+  typedef otb::VectorImage<double, 2> VectorImageType;
+  typedef otb::ImageFileReader<ImageType>       ReaderType;
+  typedef otb::ImageFileWriter<VectorImageType> WriterType;
 
   typedef otb::TerraSarBrightnessImageFilter<ImageType, ImageType>        FilterType;
   typedef itk::ExtractImageFilter<ImageType, ImageType>                   ExtractorType;
@@ -58,25 +58,27 @@ int otbTerraSarBrightnessImageComplexFilterTest(int itkNotUsed(argc), char * arg
   filter->SetResultsInDecibels(resultsInDb);
 
   if (useMetadata)
-    {
+  {
     // Generate an extract from the large input
     ImageType::RegionType region;
     ImageType::IndexType  id;
-    id[0] = atoi(argv[5]);   id[1] = atoi(argv[6]);
+    id[0] = atoi(argv[5]);
+    id[1] = atoi(argv[6]);
     ImageType::SizeType size;
-    size[0] = atoi(argv[7]);   size[1] = atoi(argv[8]);
+    size[0] = atoi(argv[7]);
+    size[1] = atoi(argv[8]);
     region.SetIndex(id);
     region.SetSize(size);
     extractor->SetExtractionRegion(region);
 
     extractor->SetInput(filter->GetOutput());
     caster->SetInput(extractor->GetOutput());
-    }
+  }
   else
-    {
+  {
     filter->SetCalibrationFactor(10);
     caster->SetInput(filter->GetOutput());
-    }
+  }
 
 
   writer->SetInput(caster->GetOutput());

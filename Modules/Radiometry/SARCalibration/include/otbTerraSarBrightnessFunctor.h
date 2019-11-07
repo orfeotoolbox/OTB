@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -53,7 +53,9 @@ class TerraSarBrightnessFunctor
 {
 public:
   TerraSarBrightnessFunctor();
-  virtual ~TerraSarBrightnessFunctor() {}
+  virtual ~TerraSarBrightnessFunctor()
+  {
+  }
 
   /** Accessors */
   void SetCalibrationFactor(double val)
@@ -91,9 +93,9 @@ public:
   }
 
   /** We assume that the input pixel is a scalar -> modulus image */
-  inline TOutput operator ()(const TInput& inPix);
+  inline TOutput operator()(const TInput& inPix);
   /** We assume that the input pixel is a complex -> complex image */
-  inline std::complex<TOutput> operator ()(const std::complex<TInput>& inPix);
+  inline std::complex<TOutput> operator()(const std::complex<TInput>& inPix);
 
 private:
   /** Calibration Factor */
@@ -110,7 +112,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTerraSarBrightnessFunctor.txx"
+#include "otbTerraSarBrightnessFunctor.hxx"
 #endif
 
 #endif

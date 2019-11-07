@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -37,20 +37,20 @@ FileDescriptor::~FileDescriptor()
 
 std::ostream& operator<<(std::ostream& os, const FileDescriptor& data)
 {
-	os<<"ascii_flag:"<<data._ascii_flag.c_str()<<std::endl;
-	os<<"format_doc:"<<data._format_doc.c_str()<<std::endl;
-	os<<"format_ver:"<<data._format_ver.c_str()<<std::endl;
-	os<<"design_rev:"<<data._design_rev.c_str()<<std::endl;
-	os<<"software_id:"<<data._software_id.c_str()<<std::endl;
+	os<<"ascii_flag:"<<data._ascii_flag <<std::endl;
+	os<<"format_doc:"<<data._format_doc <<std::endl;
+	os<<"format_ver:"<<data._format_ver <<std::endl;
+	os<<"design_rev:"<<data._design_rev <<std::endl;
+	os<<"software_id:"<<data._software_id <<std::endl;
 	os<<"file_num:"<<data._file_num<<std::endl;
-	os<<"file_name:"<<data._file_name.c_str()<<std::endl;
-	os<<"rec_seq:"<<data._rec_seq.c_str()<<std::endl;
+	os<<"file_name:"<<data._file_name <<std::endl;
+	os<<"rec_seq:"<<data._rec_seq <<std::endl;
 	os<<"seq_loc:"<<data._seq_loc<<std::endl;
 	os<<"seq_len:"<<data._seq_len<<std::endl;
-	os<<"rec_code:"<<data._rec_code.c_str()<<std::endl;
+	os<<"rec_code:"<<data._rec_code <<std::endl;
 	os<<"code_loc:"<<data._code_loc<<std::endl;
 	os<<"code_len:"<<data._code_len<<std::endl;
-	os<<"rec_len:"<<data._rec_len.c_str()<<std::endl;
+	os<<"rec_len:"<<data._rec_len <<std::endl;
 	os<<"rlen_loc:"<<data._rlen_loc<<std::endl;
 	os<<"rlen_len:"<<data._rlen_len<<std::endl;
 	os<<"n_dataset:"<<data._n_dataset<<std::endl;

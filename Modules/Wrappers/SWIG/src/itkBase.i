@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,7 +31,7 @@
     $action
   } catch(otb::ImageFileReaderException& err) {
     std::ostringstream oss;
-    oss << "Cannot open image " << err.m_Filename + ". " + err.GetDescription();
+    oss << err.GetDescription();
     SWIG_exception( SWIG_RuntimeError, oss.str().c_str() );
   } catch( itk::ExceptionObject &ex ) {
     std::ostringstream oss;
@@ -256,9 +256,6 @@ class itkIndent {
      virtual void SetReferenceCount(int arg0);
    protected:
      itkLightObject();
-#if SWIGJAVA
-     ~itkLightObject();
-#endif
  };
  DECLARE_REF_COUNT_CLASS( itkLightObject )
  
@@ -290,9 +287,6 @@ class itkIndent {
      void SetMetaDataDictionary(itkMetaDataDictionary const & rhs);
    protected:
      itkObject();
-#if SWIGJAVA
-     ~itkObject();
-#endif
  };
  DECLARE_REF_COUNT_CLASS( itkObject )
 
@@ -302,9 +296,6 @@ class itkIndent {
      const float& GetProgress();
    protected:
      itkProcessObject();
-#if SWIGJAVA
-     ~itkProcessObject();
-#endif
  };
  DECLARE_REF_COUNT_CLASS( itkProcessObject )
 
@@ -330,9 +321,6 @@ class itkIndent {
      char const * GetLibraryPath();
    protected:
      itkObjectFactoryBase();
-#if SWIGJAVA
-     ~itkObjectFactoryBase();
-#endif
  };
  DECLARE_REF_COUNT_CLASS( itkObjectFactoryBase )
 
@@ -345,9 +333,6 @@ public:
   virtual void Print(std::ostream &os) const;
 protected:
   itkMetaDataObjectBase();
-#if SWIGJAVA
-  ~itkMetaDataObjectBase();
-#endif
 };
 DECLARE_REF_COUNT_CLASS(itkMetaDataObjectBase)
 
@@ -380,9 +365,6 @@ inline void EncapsulateMetaData(itkMetaDataDictionary & Dictionary, const std::s
      virtual void Execute(itkObject * caller, itkEventObject const & event) = 0;
    protected:
      itkCommand();
-#if SWIGJAVA
-     ~itkCommand();
-#endif
  };
  DECLARE_REF_COUNT_CLASS( itkCommand )
 

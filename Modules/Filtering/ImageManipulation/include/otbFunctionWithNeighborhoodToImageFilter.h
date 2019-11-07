@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -48,15 +48,14 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage, class TFunction>
-class ITK_EXPORT FunctionWithNeighborhoodToImageFilter :
-  public itk::InPlaceImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT FunctionWithNeighborhoodToImageFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef FunctionWithNeighborhoodToImageFilter              Self;
+  typedef FunctionWithNeighborhoodToImageFilter Self;
   typedef itk::InPlaceImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -83,7 +82,7 @@ public:
   typedef typename FunctionType::OutputType FunctionValueType;
   typedef typename FunctionType::InputType  FunctionPositionType;
 
-//  itkGetObjectMacro(Function, FunctionType);
+  //  itkGetObjectMacro(Function, FunctionType);
 
   /** Set the internal spatial function. */
   void SetFunction(FunctionPointerType function)
@@ -98,10 +97,8 @@ public:
 
 
   /** Image dimensions */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
 
   /** Accessors */
@@ -122,7 +119,9 @@ public:
 
 protected:
   FunctionWithNeighborhoodToImageFilter();
-  ~FunctionWithNeighborhoodToImageFilter() override{}
+  ~FunctionWithNeighborhoodToImageFilter() override
+  {
+  }
 
   void BeforeThreadedGenerateData() override;
 
@@ -138,14 +137,13 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  FunctionWithNeighborhoodToImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  FunctionWithNeighborhoodToImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  //FunctionPointerType  m_Function;
+  // FunctionPointerType  m_Function;
   FunctionPointerType              m_Function;
   std::vector<FunctionPointerType> m_FunctionList;
   InputImageSizeType               m_Radius;
@@ -155,7 +153,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFunctionWithNeighborhoodToImageFilter.txx"
+#include "otbFunctionWithNeighborhoodToImageFilter.hxx"
 #endif
 
 #endif

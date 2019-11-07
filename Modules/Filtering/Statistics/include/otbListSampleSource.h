@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,8 +24,10 @@
 #include "itkProcessObject.h"
 #include "itkDataObjectDecorator.h"
 
-namespace otb {
-namespace Statistics {
+namespace otb
+{
+namespace Statistics
+{
 
 /** \class ListSampleSource
  *  \brief This class is a base class for filters using ListSample as
@@ -39,16 +41,15 @@ namespace Statistics {
  *
  * \ingroup OTBStatistics
  */
-template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
-class ITK_EXPORT ListSampleSource :
-  public itk::ProcessObject
+template <class TInputSampleList, class TOutputSampleList = TInputSampleList>
+class ITK_EXPORT ListSampleSource : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */
-  typedef ListSampleSource               Self;
-  typedef itk::ProcessObject                         Superclass;
-  typedef itk::SmartPointer< Self >                  Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef ListSampleSource              Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ListSampleSource, itk::ProcessObject);
@@ -62,14 +63,14 @@ public:
   typedef typename OutputSampleListType::ConstPointer          OutputSampleListConstPointer;
   typedef typename OutputSampleListType::MeasurementVectorType OutputMeasurementVectorType;
   typedef typename OutputMeasurementVectorType::ValueType      OutputValueType;
-  typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
+  typedef itk::ProcessObject::DataObjectPointerArraySizeType   DataObjectPointerArraySizeType;
 
   /** ListSample is not a DataObject, we need to decorate it to push it down
    * a ProcessObject's pipeline */
-  typedef itk::DataObject::Pointer                             DataObjectPointer;
+  typedef itk::DataObject::Pointer DataObjectPointer;
 
   /** Returns the output sample list as a data object */
-  OutputSampleListType * GetOutput();
+  OutputSampleListType* GetOutput();
 
 protected:
   /** Standard itk::ProcessObject subclass method. */
@@ -77,12 +78,14 @@ protected:
   using Superclass::MakeOutput;
 
   ListSampleSource();
-  ~ListSampleSource() override {}
+  ~ListSampleSource() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ListSampleSource(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ListSampleSource(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 }; // end of class ListSampleSource
 
@@ -90,7 +93,7 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbListSampleSource.txx"
+#include "otbListSampleSource.hxx"
 #endif
 
 #endif

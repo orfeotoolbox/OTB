@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,17 +37,15 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage, class TEdgeDetector, class TDensityCount>
-class ITK_EXPORT EdgeDensityImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT EdgeDensityImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 
 public:
-
   /** Standard class typedefs. */
-  typedef EdgeDensityImageFilter                             Self;
+  typedef EdgeDensityImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -74,9 +72,7 @@ public:
   typedef TDensityCount DensityCountFunctionType;
 
   /** PointSetToDensityImageFilter support*/
-  typedef otb::BinaryImageToDensityImageFilter<InputImageType,
-      OutputImageType,
-      DensityCountFunctionType>   DensityImageType;
+  typedef otb::BinaryImageToDensityImageFilter<InputImageType, OutputImageType, DensityCountFunctionType> DensityImageType;
 
   typedef typename DensityImageType::Pointer DensityImagePointerType;
 
@@ -96,7 +92,6 @@ public:
   itkGetObjectMacro(DensityImageFilter, DensityImageType);
 
 protected:
-
   /**
    * Constructor.
    */
@@ -115,9 +110,8 @@ protected:
   void GenerateData() override;
 
 private:
-
-  EdgeDensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  EdgeDensityImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   DetectorPointerType     m_Detector;
   DensityImagePointerType m_DensityImageFilter;
@@ -125,7 +119,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbEdgeDensityImageFilter.txx"
+#include "otbEdgeDensityImageFilter.hxx"
 #endif
 
 #endif

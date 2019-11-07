@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -25,7 +25,6 @@ otbIOGDALTestDriver.cxx
 otbGDALImageIOTest.cxx
 otbGDALImageIOTestWriteMetadata.cxx
 otbGDALOverviewsBuilder.cxx
-otbOGRVectorDataIONew.cxx
 otbGDALImageIOTestCanWrite.cxx
 otbOGRVectorDataIOCanWrite.cxx
 otbGDALReadPxlComplex.cxx
@@ -130,18 +129,12 @@ otb_add_test(NAME ioTvGDALImageIOWriteMetadata COMMAND otbIOGDALTestDriver
   ${TEMP}/ioTvGDALImageIOWriteMetadata_Report.txt
   )
 
-otb_add_test(NAME ioTuGDALOverviewsBuilder COMMAND otbIOGDALTestDriver
-  otbGDALOverviewsBuilderNew)
-
 otb_add_test(NAME ioTvGDALOverviewsBuilder_TIFF COMMAND otbIOGDALTestDriver
   otbGDALOverviewsBuilder
   ${TEMP}/ioTvGDALImageIO_Tiff_NoOption.tif
   4
   )
 set_property(TEST ioTvGDALOverviewsBuilder_TIFF PROPERTY DEPENDS ioTvGDALImageIO_Tiff_NoOption)
-
-otb_add_test(NAME ioTuOGRVectorDataIO COMMAND otbIOGDALTestDriver
-  otbOGRVectorDataIONew )
 
 otb_add_test(NAME ioTuGDALImageIOCanWrite_HFA COMMAND otbIOGDALTestDriver otbGDALImageIOTestCanWrite
   ${INPUTDATA}/HFAGeoreferenced.img)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,7 +23,7 @@
 
 #include "otbConfigure.h"
 #ifndef OTB_USE_OPENCV
-#  error "You need to enable OpenCV to compile this file"
+#error "You need to enable OpenCV to compile this file"
 #endif
 
 #include "otb_opencv_api.h"

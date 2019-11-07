@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,15 +25,15 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbBSplineDecompositionImageFilter(int itkNotUsed(argc), char * argv[])
+int otbBSplineDecompositionImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   typedef otb::Image<double, 2>                                      ImageType;
   typedef otb::BSplineDecompositionImageFilter<ImageType, ImageType> BSplineDecompositionImageFilterType;
-  typedef otb::ImageFileReader<ImageType>                            ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                            WriterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
 
   // Instantiating object
   BSplineDecompositionImageFilterType::Pointer filter = BSplineDecompositionImageFilterType::New();

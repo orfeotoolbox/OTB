@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -20,10 +20,10 @@
 
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
-#include "otbMultiToMonoChannelExtractROI.h"
 
 #include "itkComplexToPhaseImageFilter.h"
 #include "itkComplexToModulusImageFilter.h"
+
 #include "itkMacro.h"
 
 namespace otb
@@ -38,56 +38,55 @@ namespace Wrapper
  *
  * \ingroup AppSARUtils
  */
-class ComputeModulusAndPhase: public Application
+class ComputeModulusAndPhase : public Application
 {
 public:
   // Class declaration is followed by ITK public types for the class, the superclass and smart pointers.
-  typedef ComputeModulusAndPhase Self;
-  typedef Application Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef ComputeModulusAndPhase        Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
-  itkNewMacro (Self);
+  itkNewMacro(Self);
   itkTypeMacro(ComputeModulusAndPhase, otb::Wrapper::Application);
 
-  //typedefs for the application
-  typedef otb::MultiToMonoChannelExtractROI<ComplexFloatVectorImageType::InternalPixelType, ComplexFloatImageType::PixelType> ExtractFilterType;
-  typedef itk::ComplexToModulusImageFilter<ComplexFloatImageType, FloatImageType>   ModulusFilterType;
+  // typedefs for the application
+  typedef itk::ComplexToModulusImageFilter<ComplexFloatImageType, FloatImageType> ModulusFilterType;
   typedef itk::ComplexToPhaseImageFilter<ComplexFloatImageType, FloatImageType>   PhaseFilterType;
 
 private:
   void DoInit() override
   {
     SetName("ComputeModulusAndPhase");
-    SetDescription("This application computes the modulus and the phase of a complex SAR image.");
+    SetDescription("This application computes the modulus and the phase of a complex SAR image or an image with 2 components (real and imaginary parts).");
 
-    SetDocName("Compute Modulus And Phase");
     SetDocLongDescription(
-      "This application computes the modulus and the phase of a "
-      "complex SAR image. The input should be a single band image with "
-      "complex pixels."
-    );
-    SetDocLimitations("The application takes as input single band image with complex pixels.");
+        "This application computes the modulus and the phase of a "
+        "complex SAR image. The input should be a single band image with "
+        "complex pixels or a 2 bands image (real and imaginary components in separate bands).");
+    SetDocLimitations("The application takes as input single band image with complex pixels or a 2 bands image (real and imaginary part in separate bands).");
     SetDocAuthors("Alexia Mondot (alexia.mondot@c-s.fr) and Mickael Savinaud (mickael.savinaud@c-s.fr)");
     SetDocSeeAlso("Despeckle, SARPolarMatrixConvert, SARPolarSynth");
 
     AddDocTag(Tags::SAR);
     AddDocTag(Tags::Manip);
     // Input images
-    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
-    SetParameterDescription("in", "Input image (complex single band)");
+    AddParameter(ParameterType_InputImage, "in", "Input Image");
+    SetParameterDescription("in", "Input image (complex single band or 2 bands (real/imaginary parts))");
 
     // Outputs
     AddParameter(ParameterType_OutputImage, "modulus", "Modulus");
-    SetParameterDescription("modulus", "Modulus of the input image computes with the\n"
+    SetParameterDescription("modulus",
+                            "Modulus of the input image computes with the\n"
                             "following formula: :math:`\\sqrt{real*real + imag*imag}` where real and imag \n"
                             "are respectively the real and the imaginary part of the input complex image.\n");
-    
+
     AddParameter(ParameterType_OutputImage, "phase", "Phase");
-    SetParameterDescription("phase", "Phase of the input image computes with the following formula:\n"
-    ":math:`\\tan^{-1}(\\frac{imag}{real})` where real and imag are respectively the real and\n"
-    "the imaginary part of the input complex image.");
+    SetParameterDescription("phase",
+                            "Phase of the input image computes with the following formula:\n"
+                            ":math:`\\tan^{-1}(\\frac{imag}{real})` where real and imag are respectively the real and\n"
+                            "the imaginary part of the input complex image.");
 
     AddRAMParameter();
 
@@ -107,31 +106,24 @@ private:
   // DoExecute() contains the application core.
   void DoExecute() override
   {
-    m_Modulus = ModulusFilterType::New();
-    m_Phase = PhaseFilterType::New();
+    // Read the input as a complex image (with one component) Input with 2
+    // components are also supported (band 1 is interpreted as the real part and
+    // band 2 as the imaginary part VectorImage of complex image are not
+    // supported by the application
+    ComplexFloatImageType::Pointer inImage = GetParameterComplexFloatImage("in");
 
-    ComplexFloatVectorImageType::Pointer inImage = GetParameterComplexFloatVectorImage("in");
-
-    if (inImage->GetNumberOfComponentsPerPixel() != 1)
-    {
-        otbAppLogFATAL("Input must be a single band complex image.");
-    }
-
-    // Get first band
-    m_Extract = ExtractFilterType::New();
-    m_Extract->SetInput(inImage);
+    ModulusFilterType::Pointer modulus = ModulusFilterType::New();
+    PhaseFilterType::Pointer   phase   = PhaseFilterType::New();
 
     // Compute modulus and phase
-    m_Modulus->SetInput(m_Extract->GetOutput());
-    m_Phase->SetInput(m_Extract->GetOutput());
+    modulus->SetInput(inImage);
+    phase->SetInput(inImage);
 
-    SetParameterOutputImage("modulus", m_Modulus->GetOutput() );
-    SetParameterOutputImage("phase", m_Phase->GetOutput());
+    SetParameterOutputImage("modulus", modulus->GetOutput());
+    SetParameterOutputImage("phase", phase->GetOutput());
+
+    RegisterPipeline();
   }
-
-  ExtractFilterType::Pointer m_Extract;
-  ModulusFilterType::Pointer m_Modulus;
-  PhaseFilterType::Pointer m_Phase;
 };
 
 } // namespace Wrapper

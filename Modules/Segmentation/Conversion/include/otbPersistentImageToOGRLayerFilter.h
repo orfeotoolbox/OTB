@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -47,16 +47,15 @@ namespace otb
  *
  * \ingroup OTBConversion
  */
-template<class TImage>
-class ITK_EXPORT PersistentImageToOGRLayerFilter :
-  public PersistentImageFilter<TImage, TImage>
+template <class TImage>
+class ITK_EXPORT PersistentImageToOGRLayerFilter : public PersistentImageFilter<TImage, TImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentImageToOGRLayerFilter                  Self;
-  typedef PersistentImageFilter<TImage, TImage>           Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef PersistentImageToOGRLayerFilter Self;
+  typedef PersistentImageFilter<TImage, TImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Runtime information support. */
   itkTypeMacro(PersistentImageToOGRLayerFilter, PersistentImageFilter);
@@ -69,10 +68,10 @@ public:
   typedef typename InputImageType::PixelType         PixelType;
   typedef typename InputImageType::InternalPixelType InternalPixelType;
 
-  typedef ogr::DataSource                            OGRDataSourceType;
-  typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
-  typedef ogr::Layer                                 OGRLayerType;
-  typedef ogr::Feature                               OGRFeatureType;
+  typedef ogr::DataSource                     OGRDataSourceType;
+  typedef typename OGRDataSourceType::Pointer OGRDataSourcePointerType;
+  typedef ogr::Layer                          OGRLayerType;
+  typedef ogr::Feature                        OGRFeatureType;
 
   void AllocateOutputs() override;
   void Reset(void) override;
@@ -90,9 +89,9 @@ public:
   itkGetMacro(StreamSize, SizeType);
 
   /** Set the \c ogr::Layer in which the geometries will be dumped */
-  void SetOGRLayer( const OGRLayerType & ogrLayer );
+  void SetOGRLayer(const OGRLayerType& ogrLayer);
   /** Get the \c ogr::Layer output. */
-  const OGRLayerType & GetOGRLayer( void ) const;
+  const OGRLayerType& GetOGRLayer(void) const;
 
 protected:
   PersistentImageToOGRLayerFilter();
@@ -104,8 +103,8 @@ protected:
 
 
 private:
-  PersistentImageToOGRLayerFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PersistentImageToOGRLayerFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   virtual OGRDataSourcePointerType ProcessTile() = 0;
 
@@ -117,7 +116,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPersistentImageToOGRLayerFilter.txx"
+#include "otbPersistentImageToOGRLayerFilter.hxx"
 #endif
 
 #endif

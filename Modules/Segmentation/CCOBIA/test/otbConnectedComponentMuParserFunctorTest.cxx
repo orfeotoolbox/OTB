@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,65 +32,64 @@
 #include "otbImageFileWriter.h"
 
 
-
-int otbConnectedComponentMuParserFunctorTest(int argc, char *argv[])
+int otbConnectedComponentMuParserFunctorTest(int argc, char* argv[])
 {
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
-  const char * expression =     argv[3];
-  const char * maskFilename;
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
+  const char* expression     = argv[3];
+  const char* maskFilename;
 
-   // maskFilename option is present
-   if (argc == 5)
-   {
-       maskFilename = argv[4];
-   }
-   else
-       {
-       maskFilename = ITK_NULLPTR;
-       }
+  // maskFilename option is present
+  if (argc == 5)
+  {
+    maskFilename = argv[4];
+  }
+  else
+  {
+    maskFilename = nullptr;
+  }
 
-  typedef float InputPixelType;
-  const unsigned int     Dimension = 2;
+  typedef float      InputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage<InputPixelType,  Dimension>      InputVectorImageType;
-  typedef otb::Image<unsigned int, Dimension>                InputMaskImageType;
-  typedef otb::ImageFileReader<InputVectorImageType>        ReaderType;
-  typedef otb::ImageFileReader<InputMaskImageType>          MaskReaderType;
-  typedef otb::Image<unsigned int, Dimension>               OutputImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputVectorImageType;
+  typedef otb::Image<unsigned int, Dimension>         InputMaskImageType;
+  typedef otb::ImageFileReader<InputVectorImageType> ReaderType;
+  typedef otb::ImageFileReader<InputMaskImageType>   MaskReaderType;
+  typedef otb::Image<unsigned int, Dimension> OutputImageType;
 
-  typedef otb::ImageFileWriter<OutputImageType>             WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
-  typedef otb::Functor::ConnectedComponentMuParserFunctor<InputVectorImageType::PixelType>  FunctorType;
+  typedef otb::Functor::ConnectedComponentMuParserFunctor<InputVectorImageType::PixelType> FunctorType;
   typedef itk::ConnectedComponentFunctorImageFilter<InputVectorImageType, OutputImageType, FunctorType, InputMaskImageType> FilterType;
 
 
   MaskReaderType::Pointer maskReader;
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
-  FilterType::Pointer filter = FilterType::New();
+  ReaderType::Pointer     reader = ReaderType::New();
+  WriterType::Pointer     writer = WriterType::New();
+  FilterType::Pointer     filter = FilterType::New();
 
   reader->SetFileName(inputFilename);
   reader->GenerateOutputInformation();
   writer->SetFileName(outputFilename);
 
- filter->SetInput(reader->GetOutput());
+  filter->SetInput(reader->GetOutput());
 
- if(ITK_NULLPTR != maskFilename)
- {
-  maskReader = MaskReaderType::New();
-  maskReader->SetFileName(maskFilename);
-  maskReader->GenerateOutputInformation();
+  if (nullptr != maskFilename)
+  {
+    maskReader = MaskReaderType::New();
+    maskReader->SetFileName(maskFilename);
+    maskReader->GenerateOutputInformation();
 
-  filter->SetMaskImage(maskReader->GetOutput());
- }
+    filter->SetMaskImage(maskReader->GetOutput());
+  }
 
 
   std::string stringExpression(expression);
 
- filter->GetFunctor().SetExpression(stringExpression);
- filter->Update();
+  filter->GetFunctor().SetExpression(stringExpression);
+  filter->Update();
 
   writer->SetInput(filter->GetOutput());
   writer->Update();

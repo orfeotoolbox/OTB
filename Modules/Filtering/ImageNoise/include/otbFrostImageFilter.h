@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,27 +33,23 @@ namespace otb
  *
  * Uses a negative exponential convolution kernel.
  * The kernel is defined as follows:
- * exp(-A*D), where 
+ * exp(-A*D), where
  * D is the distance from the current pixel to the center pixel
  * A = k*Ci*Ci  with Ci = VAR[I]/ (E[I]*E[I])
  * The final result is normalized by the sum of the kernel coefficients.
  *
  * (http://www.isprs.org/proceedings/XXXV/congress/comm2/papers/110.pdf)
- * 
+ *
  * \ingroup OTBImageNoise
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT FrostImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT FrostImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Extract input and output images sizes. */
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension,
-                      unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** typedef to simplify variables definition and declaration. */
   typedef TInputImage InputImageType;
@@ -61,10 +57,10 @@ public:
   typedef TOutputImage OutputImageType;
 
   /** typedef for standard classes. */
-  typedef FrostImageFilter                                         Self;
+  typedef FrostImageFilter Self;
   typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** "object factory" management method. */
   itkNewMacro(Self);
@@ -98,12 +94,13 @@ public:
   /** To be allowed to use the pipeline method FrostImageFilter needs
     * an input processing area larger than the output one.
     * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
 
 protected:
   FrostImageFilter();
-  ~FrostImageFilter() override {}
+  ~FrostImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** FrostImageFilter can be implemented for a multithreaded filter treatment.
@@ -114,12 +111,11 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  FrostImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  FrostImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Radius declaration */
   SizeType m_Radius;
@@ -129,7 +125,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbFrostImageFilter.txx"
+#include "otbFrostImageFilter.hxx"
 #endif
 
 #endif

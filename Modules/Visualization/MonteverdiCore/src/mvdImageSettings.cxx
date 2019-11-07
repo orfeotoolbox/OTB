@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -61,18 +61,8 @@ namespace
 } // end of anonymous namespace.
 
 
-char const * const
-ImageSettings
-::EFFECT_VALUE_NAME[ EFFECT_COUNT ] =
-{
-  NULL,
-  NULL,
-  QT_TRANSLATE_NOOP( "mvd::ImageSettings", "Range" ),
-  NULL,
-  NULL,
-  QT_TRANSLATE_NOOP( "mvd::ImageSettings", "Angle" ),
-  NULL,
-  NULL,
+char const* const ImageSettings::EFFECT_VALUE_NAME[EFFECT_COUNT] = {
+    NULL, NULL, QT_TRANSLATE_NOOP("mvd::ImageSettings", "Range"), NULL, NULL, QT_TRANSLATE_NOOP("mvd::ImageSettings", "Angle"), NULL, NULL,
 };
 
 /*****************************************************************************/
@@ -82,133 +72,114 @@ ImageSettings
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
-ImageSettings
-::ImageSettings() :
-  m_IsModified( false ),
-  m_IsApplied( false ),
-  m_Effect( EFFECT_NORMAL ),
-  m_Size( 256 ),
-  m_Range( 50.0 ),
-  m_Angle( 10.0 ),
-  m_Alpha( 1.0 )
+ImageSettings::ImageSettings() : m_IsModified(false), m_IsApplied(false), m_Effect(EFFECT_NORMAL), m_Size(256), m_Range(50.0), m_Angle(10.0), m_Alpha(1.0)
 {
 }
 
 /*****************************************************************************/
-ImageSettings
-::~ImageSettings()
+ImageSettings::~ImageSettings()
 {
 }
 
 /*****************************************************************************/
-const char *
-ImageSettings
-::GetEffectName() const
+const char* ImageSettings::GetEffectName() const
 {
-  assert( m_Effect>=0 && m_Effect<EFFECT_COUNT );
-  assert( qApp!=NULL );
+  assert(m_Effect >= 0 && m_Effect < EFFECT_COUNT);
+  assert(qApp != NULL);
 
-  return
-    qApp->translate(
-      "mvd", EFFECT_NAMES[ m_Effect ]
-    )
-    .toLatin1().constData();
+  return qApp->translate("mvd", EFFECT_NAMES[m_Effect]).toLatin1().constData();
 }
 
 /*****************************************************************************/
-double
-ImageSettings
-::GetValue() const
+double ImageSettings::GetValue() const
 {
-  switch( m_Effect )
-    {
-    case EFFECT_LOCAL_CONTRAST:
-      // qDebug() << "Range:" << m_Range;
-      return m_Range;
-      break;
+  switch (m_Effect)
+  {
+  case EFFECT_LOCAL_CONTRAST:
+    // qDebug() << "Range:" << m_Range;
+    return m_Range;
+    break;
 
-    case EFFECT_SPECTRAL_ANGLE :
-      // qDebug() << "Angle:" << m_Angle;
-      return m_Angle;
-      break;
+  case EFFECT_SPECTRAL_ANGLE:
+    // qDebug() << "Angle:" << m_Angle;
+    return m_Angle;
+    break;
 
-    case EFFECT_LUT_LOCAL_JET:
-      // qDebug() << "Range:" << m_Range;
-      return m_Range;
-      break;
+  case EFFECT_LUT_LOCAL_JET:
+    // qDebug() << "Range:" << m_Range;
+    return m_Range;
+    break;
 
-    case EFFECT_LUT_LOCAL_HOT:
-      // qDebug() << "Range:" << m_Range;
-      return m_Range;
-      break;
-      
-    case EFFECT_LUT_LOCAL_WINTER:
-      // qDebug() << "Range:" << m_Range;
-      return m_Range;
-      break;
-      
-    case EFFECT_LUT_LOCAL_SUMMER:
-      // qDebug() << "Range:" << m_Range;
-      return m_Range;
-      break;
-      
-    case EFFECT_LUT_LOCAL_COOL:
-      // qDebug() << "Range:" << m_Range;
-      return m_Range;
-      break;
+  case EFFECT_LUT_LOCAL_HOT:
+    // qDebug() << "Range:" << m_Range;
+    return m_Range;
+    break;
 
-    default:
-      break;
-    }
+  case EFFECT_LUT_LOCAL_WINTER:
+    // qDebug() << "Range:" << m_Range;
+    return m_Range;
+    break;
 
-  return std::numeric_limits< double >::signaling_NaN();
+  case EFFECT_LUT_LOCAL_SUMMER:
+    // qDebug() << "Range:" << m_Range;
+    return m_Range;
+    break;
+
+  case EFFECT_LUT_LOCAL_COOL:
+    // qDebug() << "Range:" << m_Range;
+    return m_Range;
+    break;
+
+  default:
+    break;
+  }
+
+  return std::numeric_limits<double>::signaling_NaN();
 }
 
 /*****************************************************************************/
-void
-ImageSettings
-::SetValue( double value )
+void ImageSettings::SetValue(double value)
 {
-  switch( m_Effect )
-    {
-    case EFFECT_LOCAL_CONTRAST:
-      // qDebug() << "Range = " << value;
-      m_Range = value;
-      break;
+  switch (m_Effect)
+  {
+  case EFFECT_LOCAL_CONTRAST:
+    // qDebug() << "Range = " << value;
+    m_Range = value;
+    break;
 
-    case EFFECT_SPECTRAL_ANGLE :
-      // qDebug() << "Angle = " << value;
-      m_Angle = value;
-      break;
+  case EFFECT_SPECTRAL_ANGLE:
+    // qDebug() << "Angle = " << value;
+    m_Angle = value;
+    break;
 
-    case EFFECT_LUT_LOCAL_JET:
-      // qDebug() << "Range = " << value;
-      m_Range = value;
-      break;
+  case EFFECT_LUT_LOCAL_JET:
+    // qDebug() << "Range = " << value;
+    m_Range = value;
+    break;
 
-    case EFFECT_LUT_LOCAL_HOT:
-      // qDebug() << "Range = " << value;
-      m_Range = value;
-      break;
+  case EFFECT_LUT_LOCAL_HOT:
+    // qDebug() << "Range = " << value;
+    m_Range = value;
+    break;
 
-    case EFFECT_LUT_LOCAL_WINTER:
-      // qDebug() << "Range = " << value;
-      m_Range = value;
-      break;
-      
-    case EFFECT_LUT_LOCAL_SUMMER:
-      // qDebug() << "Range = " << value;
-      m_Range = value;
-      break;
-      
-    case EFFECT_LUT_LOCAL_COOL:
-      // qDebug() << "Range = " << value;
-      m_Range = value;
-      break;
+  case EFFECT_LUT_LOCAL_WINTER:
+    // qDebug() << "Range = " << value;
+    m_Range = value;
+    break;
 
-    default:
-      break;
-    }
+  case EFFECT_LUT_LOCAL_SUMMER:
+    // qDebug() << "Range = " << value;
+    m_Range = value;
+    break;
+
+  case EFFECT_LUT_LOCAL_COOL:
+    // qDebug() << "Range = " << value;
+    m_Range = value;
+    break;
+
+  default:
+    break;
+  }
 
   SetModified();
 }

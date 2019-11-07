@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,14 +26,28 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "itkRescaleIntensityImageFilter.h"
 
-//  Software Guide : BeginCommandLineArgs
-//    INPUTS: {suburb2.jpeg}
-//    OUTPUTS: {SFSLengthOutput.tif}, {SFSWidthOutput.tif}, {SFSMeanOutput.tif}, {SFSRatioOutput.tif}, {SFSSDOutput.tif}, {SFSPsiOutput.tif}, {SFSLengthPrettyOutput.tif}, {SFSWidthPrettyOutput.tif}, {SFSMeanPrettyOutput.tif}, {SFSRatioPrettyOutput.tif}, {SFSSDPrettyOutput.tif}, {SFSPsiPrettyOutput.tif}
-//    20 50 8 4 0.6
-//  Software Guide : EndCommandLineArgs
+/* Example usage:
+./SFSExample Input/suburb2.jpeg \
+             Output/SFSLengthOutput.tif \
+             Output/SFSWidthOutput.tif \
+             Output/SFSMeanOutput.tif \
+             Output/SFSRatioOutput.tif \
+             Output/SFSSDOutput.tif \
+             Output/SFSPsiOutput.tif \
+             Output/SFSLengthPrettyOutput.tif \
+             Output/SFSWidthPrettyOutput.tif \
+             Output/SFSMeanPrettyOutput.tif \
+             Output/SFSRatioPrettyOutput.tif \
+             Output/SFSSDPrettyOutput.tif \
+             Output/SFSPsiPrettyOutput.tif \
+             20 \
+             50 \
+             8 \
+             4 \
+             0.6
+*/
 
-// Software Guide : BeginLatex
-//
+
 // This example illustrates the use of the
 // \doxygen{otb}{SFSTexturesImageFilter}.
 // This filter computes the Structural Feature Set as described in
@@ -42,16 +56,12 @@
 // of the image.
 //
 // The first step required to use this filter is to include its header file.
-//
-// Software Guide : EndLatex
 
-// Software Guide : BeginCodeSnippet
 #include "otbSFSTexturesImageFilter.h"
-// Software Guide : EndCodeSnippet
 
-int main(int itkNotUsed(argc), char * argv[])
+int main(int itkNotUsed(argc), char* argv[])
 {
-  typedef double PixelType;
+  using PixelType              = double;
   const unsigned int Dimension = 2;
 
   std::string  inName            = argv[1];
@@ -60,51 +70,34 @@ int main(int itkNotUsed(argc), char * argv[])
   std::string  outNameWMean      = argv[4];
   std::string  outNameRatio      = argv[5];
   std::string  outNameSD         = argv[6];
-  std::string  outNamePsi         = argv[7];
-  std::string  lengthprettyfname     = argv[8];
-  std::string  widthprettyfname      = argv[9];
-  std::string  wmeanprettyfname      = argv[10];
-  std::string  ratioprettyfname      = argv[11];
-  std::string  sdprettyfname         = argv[12];
-  std::string  psiprettyfname         = argv[13];
-  PixelType    spectThresh         = atof(argv[14]);
-  unsigned int spatialThresh    = atoi(argv[15]);
-  unsigned int dirNb            = atoi(argv[16]);
-  unsigned int maxConsideration = atoi(argv[17]);
-  double       alpha                  = atof(argv[18]);
+  std::string  outNamePsi        = argv[7];
+  std::string  lengthprettyfname = argv[8];
+  std::string  widthprettyfname  = argv[9];
+  std::string  wmeanprettyfname  = argv[10];
+  std::string  ratioprettyfname  = argv[11];
+  std::string  sdprettyfname     = argv[12];
+  std::string  psiprettyfname    = argv[13];
+  PixelType    spectThresh       = atof(argv[14]);
+  unsigned int spatialThresh     = atoi(argv[15]);
+  unsigned int dirNb             = atoi(argv[16]);
+  unsigned int maxConsideration  = atoi(argv[17]);
+  double       alpha             = atof(argv[18]);
 
-// Software Guide : BeginLatex
-//
-// As with every OTB program, we start by defining the types for the
-// images, the readers and the writers.
-//
-// Software Guide : EndLatex
+  // As with every OTB program, we start by defining the types for the
+  // images, the readers and the writers.
 
-// Software Guide : BeginCodeSnippet
-  typedef otb::Image<PixelType, Dimension> ImageType;
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
-  typedef otb::ImageFileWriter<ImageType>  WriterType;
-// Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
-// The we can instantiate the type for the SFS filter, which is
-// templated over the input and output pixel types.
-//
-// Software Guide : EndLatex
+  using ImageType  = otb::Image<PixelType, Dimension>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using WriterType = otb::ImageFileWriter<ImageType>;
+  // The we can instantiate the type for the SFS filter, which is
+  // templated over the input and output pixel types.
 
-// Software Guide : BeginCodeSnippet
-  typedef otb::SFSTexturesImageFilter<ImageType, ImageType> SFSFilterType;
-// Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
-// After that, we can instantiate the filter. We will also instantiate
-// the reader and one writer for each output image, since the SFS
-// filter generates 6 different features.
-//
-// Software Guide : EndLatex
+  using SFSFilterType = otb::SFSTexturesImageFilter<ImageType, ImageType>;
+  // After that, we can instantiate the filter. We will also instantiate
+  // the reader and one writer for each output image, since the SFS
+  // filter generates 6 different features.
 
-// Software Guide : BeginCodeSnippet
-  SFSFilterType::Pointer filter    = SFSFilterType::New();
+  SFSFilterType::Pointer filter       = SFSFilterType::New();
   ReaderType::Pointer    reader       = ReaderType::New();
   WriterType::Pointer    writerLength = WriterType::New();
   WriterType::Pointer    writerWidth  = WriterType::New();
@@ -112,55 +105,37 @@ int main(int itkNotUsed(argc), char * argv[])
   WriterType::Pointer    writerRatio  = WriterType::New();
   WriterType::Pointer    writerSD     = WriterType::New();
   WriterType::Pointer    writerPsi    = WriterType::New();
-// Software Guide : EndCodeSnippet
 
   reader->SetFileName(inName);
 
-// Software Guide : BeginLatex
-//
-// The SFS filter has several parameters which have to be
-// selected. They are:
-// \begin{enumerate}
-// \item a spectral threshold to decide if 2 neighboring pixels are
-// connected;
-//\item a spatial threshold defining the maximum length for an
-// extracted line;
-//\item the number of directions which will be analyzed (the first
-// one is to the right and they are equally distributed between 0 and
-// $2\pi$);
-// \item the $\alpha$ parameter fort the $\omega-mean$ feature;
-// \item the RatioMax parameter fort the $\omega-mean$ feature.
-// \end{enumerate}
-//
-// Software Guide : EndLatex
+  // The SFS filter has several parameters which have to be
+  // selected. They are:
+  // \begin{enumerate}
+  // \item a spectral threshold to decide if 2 neighboring pixels are
+  // connected;
+  //\item a spatial threshold defining the maximum length for an
+  // extracted line;
+  //\item the number of directions which will be analyzed (the first
+  // one is to the right and they are equally distributed between 0 and
+  // $2\pi$);
+  // \item the $\alpha$ parameter fort the $\omega-mean$ feature;
+  // \item the RatioMax parameter fort the $\omega-mean$ feature.
+  // \end{enumerate}
 
-// Software Guide : BeginCodeSnippet
   filter->SetSpectralThreshold(spectThresh);
   filter->SetSpatialThreshold(spatialThresh);
   filter->SetNumberOfDirections(dirNb);
   filter->SetRatioMaxConsiderationNumber(maxConsideration);
   filter->SetAlpha(alpha);
-  // Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
-// In order to disable the computation of a feature, the
-// \code{SetFeatureStatus} parameter can be used. The $true$ value
-// enables the feature (default behavior) and the $false$ value
-// disables the computation. Therefore, the following line is useless,
-// but is given here as an example.
-//
-// Software Guide : EndLatex
+  // In order to disable the computation of a feature, the
+  // \code{SetFeatureStatus} parameter can be used. The $true$ value
+  // enables the feature (default behavior) and the $false$ value
+  // disables the computation. Therefore, the following line is useless,
+  // but is given here as an example.
 
-// Software Guide : BeginCodeSnippet
   filter->SetFeatureStatus(SFSFilterType::PSI, true);
-  // Software Guide : EndCodeSnippet
-// Software Guide : BeginLatex
-//
-// Now, we plug the pipeline using all the writers.
-//
-// Software Guide : EndLatex
+  // Now, we plug the pipeline using all the writers.
 
-// Software Guide : BeginCodeSnippet
   filter->SetInput(reader->GetOutput());
 
   writerLength->SetFileName(outNameLength);
@@ -186,8 +161,6 @@ int main(int itkNotUsed(argc), char * argv[])
   writerPsi->SetFileName(outNamePsi);
   writerPsi->SetInput(filter->GetPSIOutput());
   writerPsi->Update();
-  // Software Guide : EndCodeSnippet
-  //  Software Guide : BeginLatex
   // Figure~\ref{fig:SFS_FILTER} shows the result of applying
   // the SFS computation to an image
   // \begin{figure}
@@ -206,16 +179,11 @@ int main(int itkNotUsed(argc), char * argv[])
   // original image, .}
   // \label{fig:SFS_FILTER}
   // \end{figure}
-  //
-  //  Software Guide : EndLatex
 
   /************** pretty images for printing *********/
-  typedef otb::Image<unsigned char,
-      2>                                     OutputImageType;
-  typedef itk::RescaleIntensityImageFilter<ImageType,
-      OutputImageType> RescalerType;
-  typedef otb::ImageFileWriter<OutputImageType>
-  OutputWriterType;
+  using OutputImageType  = otb::Image<unsigned char, 2>;
+  using RescalerType     = itk::RescaleIntensityImageFilter<ImageType, OutputImageType>;
+  using OutputWriterType = otb::ImageFileWriter<OutputImageType>;
 
   RescalerType::Pointer rescaler = RescalerType::New();
   rescaler->SetOutputMinimum(0);

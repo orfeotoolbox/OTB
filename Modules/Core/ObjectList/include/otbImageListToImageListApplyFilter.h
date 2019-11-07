@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,15 +44,12 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TInputImageList, class TOutputImageList, class TFilter>
-class ITK_EXPORT ImageListToImageListApplyFilter
-  : public ImageListToImageListFilter<typename TInputImageList::ImageType,
-      typename TOutputImageList::ImageType>
+class ITK_EXPORT ImageListToImageListApplyFilter : public ImageListToImageListFilter<typename TInputImageList::ImageType, typename TOutputImageList::ImageType>
 {
 public:
   /** Standard typedefs */
   typedef ImageListToImageListApplyFilter Self;
-  typedef ImageListToImageListFilter<typename TInputImageList::ImageType,
-      typename TOutputImageList::ImageType> Superclass;
+  typedef ImageListToImageListFilter<typename TInputImageList::ImageType, typename TOutputImageList::ImageType> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -92,13 +89,15 @@ protected:
   /** Constructor */
   ImageListToImageListApplyFilter();
   /** Destructor */
-  ~ImageListToImageListApplyFilter() override {}
+  ~ImageListToImageListApplyFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageListToImageListApplyFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageListToImageListApplyFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The processing filter */
   FilterPointerType m_Filter;
@@ -107,7 +106,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageListToImageListApplyFilter.txx"
+#include "otbImageListToImageListApplyFilter.hxx"
 #endif
 
 #endif

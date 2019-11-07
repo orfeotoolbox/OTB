@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,20 +40,18 @@ namespace otb
  *
  * \ingroup OTBLabelMap
  */
-template<class TImage >
+template <class TImage>
 class ITK_EXPORT AttributesMapOpeningLabelMapFilter
-  : public itk::AttributeOpeningLabelMapFilter<TImage,
-      typename otb::Functor::AttributesMapLabelObjectAccessor< typename TImage::LabelObjectType> >
+    : public itk::AttributeOpeningLabelMapFilter<TImage, typename otb::Functor::AttributesMapLabelObjectAccessor<typename TImage::LabelObjectType>>
 {
 public:
   /** Standard class typedefs. */
   typedef AttributesMapOpeningLabelMapFilter Self;
-  typedef itk::AttributeOpeningLabelMapFilter <TImage,
-      Functor::AttributesMapLabelObjectAccessor<typename TImage::LabelObjectType> > Superclass;
+  typedef itk::AttributeOpeningLabelMapFilter<TImage, Functor::AttributesMapLabelObjectAccessor<typename TImage::LabelObjectType>> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename Superclass::AttributeAccessorType      AttributeAccessorType;
+  typedef typename Superclass::AttributeAccessorType AttributeAccessorType;
 
   /** Standard New method. */
   itkNewMacro(Self);
@@ -62,14 +60,14 @@ public:
   itkTypeMacro(AttributesMapOpeningLabelMapFilter, itk::AttributeOpeningLabelMapFilter);
 
   /** Set the name of the attribute to perform opening on */
-  void SetAttributeName(const char * name);
+  void SetAttributeName(const char* name);
 
   /** Get the name of the attribute to perform opening on */
-  const char * GetAttributeName();
+  const char* GetAttributeName();
 
   void SetAccessor(const AttributeAccessorType& accessor);
 
-  AttributeAccessorType & GetAccessor();
+  AttributeAccessorType& GetAccessor();
 
   void GenerateData() override;
 
@@ -84,17 +82,17 @@ protected:
 
 
 private:
-  AttributesMapOpeningLabelMapFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  AttributesMapOpeningLabelMapFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  AttributeAccessorType  m_Accessor;
+  AttributeAccessorType m_Accessor;
 
 }; // end of class
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAttributesMapOpeningLabelMapFilter.txx"
+#include "otbAttributesMapOpeningLabelMapFilter.hxx"
 #endif
 
 #endif // otbAttributesMapOpeningLabelMapFilter_h

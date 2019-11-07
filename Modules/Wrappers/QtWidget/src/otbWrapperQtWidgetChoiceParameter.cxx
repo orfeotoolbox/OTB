@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,15 +28,14 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetChoiceParameter::QtWidgetChoiceParameter( ChoiceParameter* param,
-                                            QtWidgetModel* m ) :
-  QtWidgetParameterBase(param, m),
-  m_ChoiceParam(param),
-  m_ComboBox( ITK_NULLPTR ),
-  m_StackWidget( ITK_NULLPTR ),
-  m_VLayout( ITK_NULLPTR ),
-  m_VLayoutGroup( ITK_NULLPTR ),
-  m_WidgetList()
+QtWidgetChoiceParameter::QtWidgetChoiceParameter(ChoiceParameter* param, QtWidgetModel* m, QWidget* parent)
+  : QtWidgetParameterBase(param, m, parent),
+    m_ChoiceParam(param),
+    m_ComboBox(nullptr),
+    m_StackWidget(nullptr),
+    m_VLayout(nullptr),
+    m_VLayoutGroup(nullptr),
+    m_WidgetList()
 {
 }
 
@@ -47,65 +46,65 @@ QtWidgetChoiceParameter::~QtWidgetChoiceParameter()
 void QtWidgetChoiceParameter::DoUpdateGUI()
 {
   // Update the combobox value
-  unsigned int value = m_ChoiceParam->GetValue( );
+  unsigned int value = m_ChoiceParam->GetValue();
   m_ComboBox->setCurrentIndex(value);
 
   // Update the choice subparameters
   WidgetListIteratorType it = m_WidgetList.begin();
   for (it = m_WidgetList.begin(); it != m_WidgetList.end(); ++it)
-    {
+  {
     (*it)->UpdateGUI();
-    }
+  }
 }
 
 void QtWidgetChoiceParameter::DoCreateWidget()
 {
-  m_ComboBox = new QComboBox;
-  m_ComboBox->setToolTip(
-    QString::fromStdString( m_ChoiceParam->GetDescription() )
-  );
+  m_ComboBox = new QComboBox(this);
+  m_ComboBox->setToolTip(QString::fromStdString(m_ChoiceParam->GetDescription()));
 
-  m_StackWidget = new QStackedWidget;
+  m_StackWidget = new QStackedWidget(this);
 
   for (unsigned int i = 0; i < m_ChoiceParam->GetNbChoices(); ++i)
-    {
+  {
     QString key = m_ChoiceParam->GetChoiceName(i).c_str();
-    m_ComboBox->addItem( key, QVariant(key) );
+    m_ComboBox->addItem(key, QVariant(key));
 
     ParameterGroup::Pointer param = m_ChoiceParam->GetChoiceParameterGroupByIndex(i);
     if (param.IsNotNull())
-      {
-      QtWidgetParameterBase* widget =
-       QtWidgetParameterFactory::CreateQtWidget( param, GetModel() );
+    {
+      QtWidgetParameterBase* widget = QtWidgetParameterFactory::CreateQtWidget(param, GetModel(), this);
 
       m_StackWidget->addWidget(widget);
 
       m_WidgetList.push_back(widget);
-      }
     }
+  }
 
-  connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(SetValue(int)) );
-  connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), m_StackWidget, SLOT(setCurrentIndex(int)) );
-  connect( m_ComboBox, SIGNAL(currentIndexChanged(int)), GetModel(), SLOT(NotifyUpdate()) );
+  connect(m_ComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &QtWidgetChoiceParameter::SetValue);
+  connect(m_ComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), m_StackWidget, &QStackedWidget::setCurrentIndex);
+  connect(m_ComboBox, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), GetModel(), &QtWidgetModel::NotifyUpdate);
 
   m_VLayout = new QVBoxLayout;
   m_VLayout->addWidget(m_ComboBox);
   if (!m_WidgetList.empty())
-    {
+  {
     m_VLayout->addWidget(m_StackWidget);
-    }
+  }
   m_VLayout->addStretch();
 
   this->setLayout(m_VLayout);
+
+  // Block mouse wheel events
+  m_ComboBox->setFocusPolicy(Qt::StrongFocus);
+  m_ComboBox->installEventFilter(this);
 }
 
 void QtWidgetChoiceParameter::SetValue(int value)
 {
-  m_ChoiceParam->SetValue( value );
+  m_ChoiceParam->SetValue(value);
 
-  QString key( m_ChoiceParam->GetKey() );
-  emit ParameterChanged(key);
+  QString key(m_ChoiceParam->GetKey());
+  emit    ParameterChanged(key);
 }
-
 }
 }

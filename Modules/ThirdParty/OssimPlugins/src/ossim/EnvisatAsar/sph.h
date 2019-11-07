@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -26,11 +26,11 @@
 #ifndef sph_h
 #define sph_h
 
-#include <iostream>
 #include <vector>
 #include <EnvisatAsar/EnvisatAsarRecord.h>
 #include <EnvisatAsar/mph.h>
 #include <EnvisatAsar/dsd.h>
+#include <string>
 
 namespace ossimplugins
 {

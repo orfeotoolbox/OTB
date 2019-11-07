@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,8 +21,8 @@
 #ifndef otbDEMToImageGenerator_h
 #define otbDEMToImageGenerator_h
 
-#include <iostream>
 #include <stdio.h>
+#include <string>
 
 #include "itkImageSource.h"
 #include "otbImage.h"
@@ -48,8 +48,7 @@ namespace otb
  * \ingroup OTBDEM
  */
 template <class TDEMImage>
-class ITK_EXPORT DEMToImageGenerator :
-  public itk::ImageSource<TDEMImage>
+class ITK_EXPORT DEMToImageGenerator : public itk::ImageSource<TDEMImage>
 {
 public:
   /** Standard class typedefs. */
@@ -76,8 +75,8 @@ public:
   /** Specialisation of OptResampleFilter with a remote
     * sensing  transform
     */
-  typedef GenericRSTransform<>                       GenericRSTransformType;
-  typedef typename GenericRSTransformType::Pointer   GenericRSTransformPointerType;
+  typedef GenericRSTransform<>                     GenericRSTransformType;
+  typedef typename GenericRSTransformType::Pointer GenericRSTransformPointerType;
 
 
   /** Method for creation through the object factory. */
@@ -104,8 +103,8 @@ public:
 
   /** Set/Get the above ellipsoid flag. If false, height is given
   above MSL */
-  itkSetMacro(AboveEllipsoid,bool);
-  itkGetMacro(AboveEllipsoid,bool);
+  itkSetMacro(AboveEllipsoid, bool);
+  itkGetMacro(AboveEllipsoid, bool);
   itkBooleanMacro(AboveEllipsoid);
 
   void InstantiateTransform();
@@ -116,7 +115,7 @@ public:
    * The macro are not used here cause the input and the output are
    * inversed.
    */
-  void SetInputProjectionRef(const std::string&  ref)
+  void SetInputProjectionRef(const std::string& ref)
   {
     m_Transform->SetOutputProjectionRef(ref);
     this->Modified();
@@ -127,7 +126,7 @@ public:
     return m_Transform->GetOutputProjectionRef();
   }
 
-  void SetOutputProjectionRef(const std::string&  ref)
+  void SetOutputProjectionRef(const std::string& ref)
   {
     m_Transform->SetInputProjectionRef(ref);
     this->Modified();
@@ -162,26 +161,28 @@ public:
   }
 
   /** Useful to set the output parameters from an existing image*/
-  template <class TImageType> void SetOutputParametersFromImage(const TImageType * image)
-    {
-    this->SetOutputOrigin ( image->GetOrigin() );
-    this->SetOutputSpacing ( image->GetSignedSpacing() );
-    //this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
-    this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
+  template <class TImageType>
+  void SetOutputParametersFromImage(const TImageType* image)
+  {
+    this->SetOutputOrigin(image->GetOrigin());
+    this->SetOutputSpacing(image->GetSignedSpacing());
+    // this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
+    this->SetOutputSize(image->GetLargestPossibleRegion().GetSize());
     this->SetOutputProjectionRef(image->GetProjectionRef());
     this->SetOutputKeywordList(image->GetImageKeywordlist());
 
     InstantiateTransform();
-    }
+  }
 
 protected:
   DEMToImageGenerator();
-  ~DEMToImageGenerator() override{}
+  ~DEMToImageGenerator() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   void BeforeThreadedGenerateData() override;
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
   void GenerateOutputInformation() override;
 
   DEMHandlerType::Pointer m_DEMHandler;
@@ -192,16 +193,16 @@ protected:
   bool                    m_AboveEllipsoid;
 
 private:
-  DEMToImageGenerator(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  DEMToImageGenerator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  GenericRSTransformPointerType      m_Transform;
+  GenericRSTransformPointerType m_Transform;
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDEMToImageGenerator.txx"
+#include "otbDEMToImageGenerator.hxx"
 #endif
 
 #endif

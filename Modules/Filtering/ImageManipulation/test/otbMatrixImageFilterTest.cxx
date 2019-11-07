@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbMatrixImageFilter.h"
 
 #include "otbImageFileReader.h"
@@ -27,30 +26,18 @@
 #include "otbImageFileWriter.h"
 #include <complex>
 
-int otbMatrixImageFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+
+int otbMatrixImageFilterTest(int itkNotUsed(argc), char* argv[])
 {
-  typedef std::complex<double> PixelType;
-
-  typedef otb::VectorImage<PixelType> ImageType;
-  typedef otb::MatrixImageFilter<ImageType, ImageType> FilterType;
-
-  FilterType::Pointer filter = FilterType::New();
-
-  return EXIT_SUCCESS;
-}
-
-
-int otbMatrixImageFilterTest(int itkNotUsed(argc), char * argv[])
-{
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
-  unsigned   int nbCol =atoi(argv[3]);
+  const char*  inputFilename  = argv[1];
+  const char*  outputFilename = argv[2];
+  unsigned int nbCol          = atoi(argv[3]);
 
   typedef double PixelType;
 
   typedef otb::VectorImage<PixelType> ImageType;
 
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
   typedef otb::MatrixImageFilter<ImageType, ImageType> FilterType;
@@ -67,14 +54,14 @@ int otbMatrixImageFilterTest(int itkNotUsed(argc), char * argv[])
   FilterType::MatrixType mat(reader->GetOutput()->GetNumberOfComponentsPerPixel(), nbCol, 0.);
 
   double val = 0;
-  for(unsigned int i=0; i<mat.rows(); ++i)
+  for (unsigned int i = 0; i < mat.rows(); ++i)
+  {
+    for (unsigned int j = 0; j < mat.cols(); ++j)
     {
-      for(unsigned int j=0; j<mat.cols(); ++j)
-        {
-          mat[i][j] = val;
-          val += 0.5;
-        }
+      mat[i][j] = val;
+      val += 0.5;
     }
+  }
 
 
   filter->SetInput(reader->GetOutput());

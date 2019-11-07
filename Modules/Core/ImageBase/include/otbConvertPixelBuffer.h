@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,6 +24,7 @@
 
 #include <complex>
 #include "itkObject.h"
+#include "OTBImageBaseExport.h"
 
 namespace otb
 {
@@ -31,50 +32,37 @@ namespace otb
  * \class ConvertPixelBuffer
  *  \brief Class to convert blocks of data from one type to another.
  *
- * ConvertPixelBuffer uses itk::ConvertPixelBuffer to perform most of the 
- * conversions. The monoband to complex conversion is done in this class 
+ * ConvertPixelBuffer uses itk::ConvertPixelBuffer to perform most of the
+ * conversions. The monoband to complex conversion is done in this class
  * (different rule than in ITK). New conversions methods are also added in
- * this class : 
+ * this class :
  *   ConvertComplexVectorImageToVectorImage
  *   ConvertComplexVectorImageToVectorImageComplex
  *   ConvertComplexToGray
  *
  * \ingroup OTBImageBase
  */
-template <
-  typename InputPixelType,
-  typename OutputPixelType,
-  class OutputConvertTraits
-  >
-class ConvertPixelBuffer
+template <typename InputPixelType, typename OutputPixelType, class OutputConvertTraits>
+class OTBImageBase_EXPORT_TEMPLATE ConvertPixelBuffer
 {
 public:
   /** Determine the output data type. */
   typedef typename OutputConvertTraits::ComponentType OutputComponentType;
 
   /** General method converts from one type to another. */
-  static void Convert(InputPixelType* inputData,
-                      int inputNumberOfComponents,
-                      OutputPixelType* outputData , size_t size);
-  static void ConvertVectorImage(InputPixelType* inputData,
-                      int inputNumberOfComponents,
-                      OutputPixelType* outputData , size_t size);
-  static void ConvertComplexVectorImageToVectorImage(std::complex<InputPixelType>* inputData,
-                      int inputNumberOfComponents,
-                      OutputPixelType* outputData , size_t size);
-  static void ConvertComplexVectorImageToVectorImageComplex(std::complex<InputPixelType>* inputData,
-                        int inputNumberOfComponents,
-                        OutputPixelType* outputData , size_t size);
+  static void Convert(InputPixelType* inputData, int inputNumberOfComponents, OutputPixelType* outputData, size_t size);
+  static void ConvertVectorImage(InputPixelType* inputData, int inputNumberOfComponents, OutputPixelType* outputData, size_t size);
+  static void ConvertComplexVectorImageToVectorImage(std::complex<InputPixelType>* inputData, int inputNumberOfComponents, OutputPixelType* outputData,
+                                                     size_t size);
+  static void ConvertComplexVectorImageToVectorImageComplex(std::complex<InputPixelType>* inputData, int inputNumberOfComponents, OutputPixelType* outputData,
+                                                            size_t size);
 
-  static void ConvertComplexToGray(std::complex<InputPixelType>* inputData,
-                      int inputNumberOfComponents,
-                      OutputPixelType* outputData , size_t size);
+  static void ConvertComplexToGray(std::complex<InputPixelType>* inputData, int inputNumberOfComponents, OutputPixelType* outputData, size_t size);
 
 protected:
   /** Conversions related to complex */
-  static void ConvertGrayToComplex(InputPixelType * inputData,
-                                OutputPixelType * OutputData, size_t size);
-  
+  static void ConvertGrayToComplex(InputPixelType* inputData, OutputPixelType* OutputData, size_t size);
+
 private:
   ConvertPixelBuffer();
   ~ConvertPixelBuffer();
@@ -83,7 +71,7 @@ private:
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConvertPixelBuffer.txx"
+#include "otbConvertPixelBuffer.hxx"
 #endif
 
 #endif // otbConvertPixelBuffer_h

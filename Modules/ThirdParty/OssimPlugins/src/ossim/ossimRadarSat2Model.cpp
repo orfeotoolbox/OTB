@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -115,7 +115,7 @@ double ossimRadarSat2Model::getSlantRangeFromGeoreferenced(double col) const
          << "\n(col-_refPoint->get_pix_col()) "
          << (col-_refPoint->get_pix_col())
          << "\n_refPoint->get_pix_col() : " << _refPoint->get_pix_col()
-         << "\n relativeGroundRange : " << relativeGroundRange << endl;
+         << "\n relativeGroundRange : " << relativeGroundRange << std::endl;
    }
 
    int numSet = FindSRGRSetNumber((_refPoint->get_ephemeris())->get_date()) ;
@@ -303,7 +303,7 @@ bool ossimRadarSat2Model::open(const ossimFilename& file)
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "theImageClipRect : " << theImageClipRect
             << "ul, ur, lr, ll " << ul << ", " << ur
-            << ", " << lr << " , " << ll << endl;
+            << ", " << lr << " , " << ll << std::endl;
       }
 
       setGroundRect(ul, ur, lr, ll);  // ossimSensorModel method.
@@ -328,7 +328,7 @@ std::ostream& ossimRadarSat2Model::print(std::ostream& out) const
    // Capture the original flags.
    std::ios_base::fmtflags f = out.flags();
 
-   out << setprecision(15) << setiosflags(ios::fixed)
+   out << std::setprecision(15) << std::setiosflags(std::ios::fixed)
        << "\nossimRadarSat2Model class data members:\n"
        << "_n_srgr: " << _n_srgr << "\n";
 

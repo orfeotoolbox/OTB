@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -26,4 +26,14 @@ otb_create_application(
 otb_create_application(
   NAME           SARDeburst
   SOURCES        otbSARDeburst.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           SARBurstExtraction
+  SOURCES        otbSARBurstExtraction.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           SARConcatenateBursts
+  SOURCES        otbSARConcatenateBursts.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})

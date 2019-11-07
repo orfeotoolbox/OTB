@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,29 +44,30 @@ public:
   typedef CurlHelperInterface           Superclass;
 
   itkTypeMacro(CurlHelperStub, CurlHelperInterface);
-  
+
   itkNewMacro(Self);
 
   bool TestUrlAvailability(const std::string& url) const override;
-  
+
   int RetrieveUrlInMemory(const std::string& urlString, std::string& output) const override;
-  
+
   int RetrieveFile(const std::ostringstream& urlStream, std::string filename) const override;
-  
+
   int RetrieveFile(const std::string& urlString, std::string filename) const override;
 
-  int RetrieveFileMulti(const std::vector<std::string>& listURLs,
-                        const std::vector<std::string>& listFiles,
-                        int maxConnect) const override;
+  int RetrieveFileMulti(const std::vector<std::string>& listURLs, const std::vector<std::string>& listFiles, int maxConnect) const override;
+
 protected:
-  CurlHelperStub() {}
-  ~CurlHelperStub() override {}
+  CurlHelperStub()
+  {
+  }
+  ~CurlHelperStub() override
+  {
+  }
 
 private:
-  CurlHelperStub(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
-
-
+  CurlHelperStub(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 }
 #endif

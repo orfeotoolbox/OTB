@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,10 +26,10 @@
 class OGRFieldDefn;
 class OGRFeature;
 #if defined(_MSC_VER)
-#pragma warning ( push )
-#pragma warning ( disable: 4251 )
+#pragma warning(push)
+#pragma warning(disable : 4251)
 #include "ogr_core.h" // OGR enums
-#pragma warning ( pop )
+#pragma warning(pop)
 #else
 #include "ogr_core.h" // OGR enums
 #endif
@@ -37,7 +37,10 @@ class OGRFeature;
 
 #include "OTBGdalAdaptersExport.h"
 
-namespace otb { namespace ogr {
+namespace otb
+{
+namespace ogr
+{
 
 /*===========================================================================*/
 /*===========================[ Field definition ]============================*/
@@ -54,31 +57,36 @@ namespace otb { namespace ogr {
  * \ingroup OTBGdalAdapters
  */
 class OTBGdalAdapters_EXPORT FieldDefn
-  {
+{
 public:
-  FieldDefn(OGRFieldDefn& definition) : m_Definition(&definition){ }
+  FieldDefn(OGRFieldDefn& definition) : m_Definition(&definition)
+  {
+  }
   std::string  GetName() const; //!< Field name accessor.
   OGRFieldType GetType() const; //!< Field type accessor.
 
-  OGRFieldDefn & ogr()       { return *m_Definition; }
-  OGRFieldDefn & ogr() const { return *m_Definition; }
+  OGRFieldDefn& ogr()
+  {
+    return *m_Definition;
+  }
+  OGRFieldDefn& ogr() const
+  {
+    return *m_Definition;
+  }
 
 private:
   /**Pointer to the actual definition.
    * \internal pointer in order to support assignments
    */
-  OGRFieldDefn * m_Definition;
-  };
+  OGRFieldDefn* m_Definition;
+};
 
-inline
-bool operator==(FieldDefn const& lhs, FieldDefn const& rhs)
-  {
-  return lhs.GetName() == rhs.GetName()
-    &&   lhs.GetType() == rhs.GetType();
-  }
+inline bool operator==(FieldDefn const& lhs, FieldDefn const& rhs)
+{
+  return lhs.GetName() == rhs.GetName() && lhs.GetType() == rhs.GetType();
+}
 
-OTBGdalAdapters_EXPORT
-std::ostream & operator<<(std::ostream & os, FieldDefn const& defn);
+OTBGdalAdapters_EXPORT std::ostream& operator<<(std::ostream& os, FieldDefn const& defn);
 
 /*===========================================================================*/
 /*=================================[ Field ]=================================*/
@@ -113,16 +121,22 @@ public:
    * \param[in] index  Index of the field in the \c Feature.
    * \throw None
    */
-  Field(Feature & feature, int index);
+  Field(Feature& feature, int index);
   /// %Field definition accessor.
   FieldDefn const& GetDefinition() const
-    { return m_Definition; }
+  {
+    return m_Definition;
+  }
   /// %Field type accessor.
   OGRFieldType GetType() const
-    { return m_Definition.GetType(); }
+  {
+    return m_Definition.GetType();
+  }
   /// %Field name accessor.
   std::string GetName() const
-    { return m_Definition.GetName(); }
+  {
+    return m_Definition.GetName();
+  }
 
   /// Tells whether the field value has been set.
   bool HasBeenSet() const;
@@ -138,7 +152,8 @@ public:
    * This function automagically decodes the type of the parameter in order to
    * use the ad'hoc setter from \c OGRFeature.
    */
-  template <typename T> void SetValue(T const& value);
+  template <typename T>
+  void SetValue(T const& value);
 
   /**
    * Value getter.
@@ -150,10 +165,11 @@ public:
    * This function automagically deduce the ad'hoc getter (from \c OGRFeature)
    * from \c T.
    */
-  template <typename T> T GetValue() const;
+  template <typename T>
+  T GetValue() const;
 
   /** Prints self into stream. */
-  std::ostream & PrintSelf(std::ostream&os, itk::Indent indent) const;
+  std::ostream& PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Copies a field.
    * As \c Field is a proxy type, this function is the only possible way to copy a field.
@@ -170,15 +186,15 @@ public:
   void Assign(Field const& f);
 
   /** \copydoc Field::ogr() const */
-  OGRField & ogr();
-  
+  OGRField& ogr();
+
   /** Access to the raw underlying OGR data.
    * This function provides an abstraction leak in case deeper control on the
    * underlying \c OGRFeature is required.
    * \warning You must under no circumstance try to delete the \c OGRField
    * obtained this way.
    */
-  OGRField & ogr() const;
+  OGRField& ogr() const;
 
 private:
   /**\name Unchecked definitions
@@ -189,10 +205,10 @@ private:
    * - While the private functions do the work.
    */
   //@{
-  bool           UncheckedHasBeenSet() const;
-  void           UncheckedUnset() const;
-  std::ostream & UncheckedPrintSelf(std::ostream&os, itk::Indent indent) const;
-  void           UncheckedAssign(Field const& f);
+  bool          UncheckedHasBeenSet() const;
+  void          UncheckedUnset() const;
+  std::ostream& UncheckedPrintSelf(std::ostream& os, itk::Indent indent) const;
+  void UncheckedAssign(Field const& f);
   //@}
 
   /**
@@ -206,23 +222,22 @@ private:
   void CheckInvariants() const;
 
   /// Definition of the field.
-  FieldDefn                       m_Definition;
+  FieldDefn m_Definition;
   /// Link to the actual \c OGRFeature in charge of the fields.
-  boost::shared_ptr<OGRFeature> & m_Feature;
+  boost::shared_ptr<OGRFeature>& m_Feature;
   /** Index of the field according to the feature definition.
    * \internal
    * All the fields decoding is at the wrong place (\c OGRFeature instead of
    * \c OGRField) => need for an index.
    */
 
-  int        m_index;
+  int m_index;
 };
-
 }
 } // end namespace otb::ogr
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbOGRFieldWrapper.txx"
+#include "otbOGRFieldWrapper.hxx"
 #endif
 
 #endif // otbOGRFieldWrapper_h

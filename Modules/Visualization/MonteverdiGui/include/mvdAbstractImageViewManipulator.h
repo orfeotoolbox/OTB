@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -75,8 +75,7 @@ namespace mvd
  *
  *  \brief Base class for QWidget manipulation
  */
-class OTBMonteverdiGUI_EXPORT AbstractImageViewManipulator :
-    public QObject
+class OTBMonteverdiGUI_EXPORT AbstractImageViewManipulator : public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -85,130 +84,125 @@ class OTBMonteverdiGUI_EXPORT AbstractImageViewManipulator :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Destructor. */
-  ~AbstractImageViewManipulator() override {};
+  ~AbstractImageViewManipulator() override{};
 
   //
   // Accessors
 
   /**
    */
-  virtual void SetViewportSize( int width, int height ) =0;
+  virtual void SetViewportSize(int width, int height) = 0;
   /**
    */
-  virtual SizeType GetViewportSize() const =0;
+  virtual SizeType GetViewportSize() const = 0;
 
   /**
    */
-  virtual void SetOrigin( const PointType& origin ) =0;
+  virtual void SetOrigin(const PointType& origin) = 0;
   /**
    */
-  virtual PointType GetOrigin() const =0;
+  virtual PointType GetOrigin() const = 0;
 
   /**
    */
-  virtual void SetSpacing( const SpacingType& spacing ) =0;
+  virtual void SetSpacing(const SpacingType& spacing) = 0;
   /**
    */
-  virtual SpacingType GetSpacing() const =0;
+  virtual SpacingType GetSpacing() const = 0;
 
   /**
    */
-  virtual void SetNativeSpacing( const SpacingType& spacing ) =0;
+  virtual void SetNativeSpacing(const SpacingType& spacing) = 0;
 
   /**
    */
-  virtual void SetWkt( const std::string& wkt ) =0;
+  virtual void SetWkt(const std::string& wkt) = 0;
 
   /**
    */
-  virtual
-    void SetKeywordList( const DefaultImageType::ImageKeywordlistType& kwl ) =0;
+  virtual void SetKeywordList(const DefaultImageType::ImageKeywordlistType& kwl) = 0;
 
   /**
    */
-  virtual PointType GetCenter() const =0;
+  virtual PointType GetCenter() const = 0;
 
   /**
    */
-  virtual ZoomType GetFixedZoomType() const =0;
+  virtual ZoomType GetFixedZoomType() const = 0;
 
   //
   // Controls
 
   /**
    */
-  virtual
-    void
-    SetupRenderingContext(
-      AbstractImageViewRenderer::RenderingContext * const ) const =0;
+  virtual void SetupRenderingContext(AbstractImageViewRenderer::RenderingContext* const) const = 0;
 
   /**
    */
-  virtual void ZoomIn() =0;
+  virtual void ZoomIn() = 0;
 
   /**
    */
-  virtual void ZoomOut() =0;
+  virtual void ZoomOut() = 0;
 
   /**
    */
-  virtual const PointType& Transform( PointType&, const QPoint& ) const =0;
+  virtual const PointType& Transform(PointType&, const QPoint&) const = 0;
 
   //
   // Events
 
   /**
    */
-  virtual void MouseMoveEvent( QMouseEvent* event ) =0;
+  virtual void MouseMoveEvent(QMouseEvent* event) = 0;
   /**
    */
-  virtual void MousePressEvent( QMouseEvent* event ) =0;
+  virtual void MousePressEvent(QMouseEvent* event) = 0;
   /**
    */
-  virtual void MouseReleaseEvent( QMouseEvent* event ) =0;
+  virtual void MouseReleaseEvent(QMouseEvent* event) = 0;
   /**
    */
-  virtual void MouseDoubleClickEvent( QMouseEvent * ) {};
+  virtual void MouseDoubleClickEvent(QMouseEvent*){};
 
   /**
    */
-  virtual void WheelEvent( QWheelEvent* event) =0;
+  virtual void WheelEvent(QWheelEvent* event) = 0;
 
   /**
    */
-  virtual void KeyPressEvent( QKeyEvent* event ) =0;
+  virtual void KeyPressEvent(QKeyEvent* event) = 0;
 
   /**
    */
-  virtual void KeyReleaseEvent( QKeyEvent* event ) =0;
+  virtual void KeyReleaseEvent(QKeyEvent* event) = 0;
 
   /**
    */
-  virtual void ResizeEvent( QResizeEvent* event ) =0;
+  virtual void ResizeEvent(QResizeEvent* event) = 0;
 
   /**
    */
-  virtual void ResetViewport() =0;
+  virtual void ResetViewport() = 0;
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
   /**
    */
-  virtual void CenterOn( const PointType& point ) =0;
+  virtual void CenterOn(const PointType& point) = 0;
   /**
    */
-  virtual void ZoomTo( double scale ) =0;
+  virtual void ZoomTo(double scale) = 0;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// SIGNALS.
+  //
+  // SIGNALS.
 signals:
   /**
    */
@@ -221,21 +215,18 @@ signals:
   void ZoomToFullResolutionRequested();
   /**
    */
-  void CenterRoiRequested( const PointType& center );
+  void CenterRoiRequested(const PointType& center);
   /**
    */
-  void RoiChanged( const PointType& origin,
-                   const SizeType& size,
-                   const SpacingType& spacing,
-                   const PointType& center );
+  void RoiChanged(const PointType& origin, const SizeType& size, const SpacingType& spacing, const PointType& center);
 
   // Signal for DatasetModel
   // void RenderingContextChanged(const PointType& center, double zoom);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected types.
+  //
+  // Protected types.
 protected:
   /** Navigation context  */
   struct NavigationContext
@@ -262,35 +253,30 @@ protected:
     }
   };
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** \brief Constructor. */
-  AbstractImageViewManipulator( QObject* p =NULL ):QObject( p ){};
+  AbstractImageViewManipulator(QObject* p = NULL) : QObject(p){};
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types.
+  //
+  // Private types.
 private:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// SLOTS.
+  //
+  // SLOTS.
 private slots:
 };
 

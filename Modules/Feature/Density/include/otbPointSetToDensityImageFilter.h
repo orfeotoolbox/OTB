@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,19 +36,16 @@ namespace otb
  * \ingroup OTBDensity
  */
 
-template <class TInputPointSet, class TOutputImage,
-    class TDensityFunction = PointSetDensityFunction<TInputPointSet, typename TOutputImage::PixelType> >
-class ITK_EXPORT PointSetToDensityImageFilter
-  : public itk::PointSetToImageFilter<TInputPointSet, TOutputImage>
+template <class TInputPointSet, class TOutputImage, class TDensityFunction = PointSetDensityFunction<TInputPointSet, typename TOutputImage::PixelType>>
+class ITK_EXPORT PointSetToDensityImageFilter : public itk::PointSetToImageFilter<TInputPointSet, TOutputImage>
 {
 
 public:
-
   /** Standard class typedefs. */
-  typedef PointSetToDensityImageFilter                             Self;
+  typedef PointSetToDensityImageFilter Self;
   typedef itk::PointSetToImageFilter<TInputPointSet, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -59,10 +56,10 @@ public:
   /**   typedefs parameters support */
   typedef TInputPointSet PointSetType;
 
-  typedef TOutputImage                          OutputImageType;
-  typedef typename  OutputImageType::PixelType  PixelType;
-  typedef typename  OutputImageType::IndexType  IndexType;
-  typedef typename  OutputImageType::RegionType OutputImageRegionType;
+  typedef TOutputImage                         OutputImageType;
+  typedef typename OutputImageType::PixelType  PixelType;
+  typedef typename OutputImageType::IndexType  IndexType;
+  typedef typename OutputImageType::RegionType OutputImageRegionType;
 
   /**   typedef filter support*/
   typedef TDensityFunction                                PointSetDensityFunctionType;
@@ -74,7 +71,6 @@ public:
   itkSetMacro(Radius, unsigned int);
 
 protected:
-
   /**
    * Constructor.
    */
@@ -82,7 +78,9 @@ protected:
   /**
    * Destructor.
    */
-  ~PointSetToDensityImageFilter() override {}
+  ~PointSetToDensityImageFilter() override
+  {
+  }
   /**
    * Standard PrintSelf method.
    */
@@ -96,24 +94,22 @@ protected:
   /**
    * Main computation method.
    */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /**
   * Main computation method.
   */
-  void  GenerateOutputInformation() override;
+  void GenerateOutputInformation() override;
 
 private:
-
-  PointSetToDensityImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PointSetToDensityImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   unsigned int m_Radius;
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPointSetToDensityImageFilter.txx"
+#include "otbPointSetToDensityImageFilter.hxx"
 #endif
 
 #endif

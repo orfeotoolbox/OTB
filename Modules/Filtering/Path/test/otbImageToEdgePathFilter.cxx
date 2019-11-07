@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,17 +25,18 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
+#include "otbMacro.h"
 
-int otbImageToEdgePathFilter(int itkNotUsed(argc), char * argv[])
+int otbImageToEdgePathFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char *       inputFilename  = argv[1];
-  const char *       outputFilename = argv[2];
-  const unsigned int foreground((const unsigned int) ::atoi(argv[3]));
+  const char*        inputFilename  = argv[1];
+  const char*        outputFilename = argv[2];
+  const unsigned int foreground     = atoi(argv[3]);
 
-  const unsigned int Dimension = 2;
-  typedef unsigned char                    PixelType;
+  const unsigned int    Dimension = 2;
+  typedef unsigned char PixelType;
   typedef otb::Image<PixelType, Dimension> ImageType;
-  typedef ImageType::IndexType             IndexType;
+  typedef ImageType::IndexType IndexType;
 
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef otb::ImageFileReader<ImageType>        ReaderType;
@@ -54,23 +55,23 @@ int otbImageToEdgePathFilter(int itkNotUsed(argc), char * argv[])
 
   pathFilter->Update();
 
-  std::cout << " pathFilter = " << pathFilter << std::endl;
+  otbLogMacro(Debug, << " pathFilter = " << pathFilter);
 
-  PathType * outputPath = pathFilter->GetOutput();
+  PathType* outputPath = pathFilter->GetOutput();
 
-  typedef PathType::VertexType                    VertexType;
-  typedef PathType::VertexListType                VertexListType;
-  typedef VertexListType::ConstPointer            VertexListTypePointer;
+  typedef PathType::VertexType         VertexType;
+  typedef PathType::VertexListType     VertexListType;
+  typedef VertexListType::ConstPointer VertexListTypePointer;
 
   VertexListTypePointer vertexList;
   VertexType            cindex;
 
-  VertexListTypePointer ptrVertexList =  outputPath->GetVertexList();
+  VertexListTypePointer ptrVertexList = outputPath->GetVertexList();
 
-  std::cout << "Size : " << ptrVertexList->Size() << std::endl;
+  otbLogMacro(Info, << "Size : " << ptrVertexList->Size());
 
   // Initialize Output Image
-  ImageType::Pointer outputImage = ImageType::New();
+  ImageType::Pointer                                   outputImage = ImageType::New();
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
   outputImage->SetRegions(reader->GetOutput()->GetLargestPossibleRegion());
   outputImage->Allocate();
@@ -78,15 +79,14 @@ int otbImageToEdgePathFilter(int itkNotUsed(argc), char * argv[])
   // Create one iterator for the Input Image (this is a light object)
   IteratorType it(outputImage, outputImage->GetBufferedRegion());
 
-  for (unsigned int cpt = 0; cpt <  ptrVertexList->Size(); ++cpt)
-    {
-    std::cout << " Point " << cpt << " : " << ptrVertexList->GetElement(cpt) << std::endl;
+  for (unsigned int cpt = 0; cpt < ptrVertexList->Size(); ++cpt)
+  {
+    otbLogMacro(Debug, << " Point " << cpt << " : " << ptrVertexList->GetElement(cpt));
     IndexType pos;
     pos[0] = static_cast<unsigned long>(ptrVertexList->GetElement(cpt)[0]);
     pos[1] = static_cast<unsigned long>(ptrVertexList->GetElement(cpt)[1]);
     outputImage->SetPixel(pos, 0);
-
-    }
+  }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(outputImage);

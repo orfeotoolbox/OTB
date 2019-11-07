@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -94,7 +94,7 @@ add_to_qt_i18n_sources( ${OTBMonteverdiCore_SRCS} )
 add_to_qt_i18n_headers( "../include" ${OTBMonteverdiCore_SRCS} )
 
 #############################################################################
-qt5_wrap_cpp( OTBMonteverdiCore_SRC_MOC ${OTBMonteverdiCore_HEADERS_MOC} )
+qt5_wrap_cpp( OTBMonteverdiCore_SRC_MOC ${OTBMonteverdiCore_HEADERS_MOC} OPTIONS -p "." )
 
 add_library( OTBMonteverdiCore ${OTBMonteverdiCore_SRCS} ${OTBMonteverdiCore_SRC_MOC})
 

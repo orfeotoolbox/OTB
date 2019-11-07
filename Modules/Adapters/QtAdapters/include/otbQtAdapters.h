@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,9 +31,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include <QFileDialog>
-#endif //tag=QT4-boost-compatibility
 
 //
 // System includes (sorted by alphabetic order)
@@ -91,12 +89,8 @@ namespace otb
  * \return The selected path or an null QString if QFileDialog has
  * been rejected.
  */
-QString
-OTBQtAdapters_EXPORT
-GetExistingDirectory( QWidget * p = 0,
-		      const QString & caption = QString(),
-		      const QString & dir =  QString(),
-		      QFileDialog::Options options = QFileDialog::ShowDirsOnly );
+QString OTBQtAdapters_EXPORT GetExistingDirectory(QWidget* p = 0, const QString& caption = QString(), const QString& dir = QString(),
+                                                  QFileDialog::Options options = QFileDialog::ShowDirsOnly);
 
 /**
  * \brief This is a convenience static method that will return an
@@ -116,14 +110,8 @@ GetExistingDirectory( QWidget * p = 0,
  * \return The selected filename or an null QString if QFileDialog has
  * been rejected.
  */
-QString
-OTBQtAdapters_EXPORT
-GetOpenFilename( QWidget * p =0,
-		 const QString & caption = QString(),
-		 const QString & dir = QString(),
-		 const QString & filter = QString(),
-		 QString * selectedFilter = 0,
-		 QFileDialog::Options options = 0 );
+QString OTBQtAdapters_EXPORT GetOpenFilename(QWidget* p = 0, const QString& caption = QString(), const QString& dir = QString(),
+                                             const QString& filter = QString(), QString* selectedFilter = 0, QFileDialog::Options options = 0);
 
 /**
  * \brief This is a convenience static method that will return a
@@ -143,14 +131,8 @@ GetOpenFilename( QWidget * p =0,
  * \return The selected filename list or an empty QStringLIst if
  * QFileDialog has been rejected.
  */
-QStringList
-OTBQtAdapters_EXPORT
-GetOpenFilenames( QWidget * p =0,
-		  const QString & caption = QString(),
-		  const QString & dir = QString(),
-		  const QString & filter = QString(),
-		  QString * selectedFilter = 0,
-		  QFileDialog::Options options = 0 );
+QStringList OTBQtAdapters_EXPORT GetOpenFilenames(QWidget* p = 0, const QString& caption = QString(), const QString& dir = QString(),
+                                                  const QString& filter = QString(), QString* selectedFilter = 0, QFileDialog::Options options = 0);
 
 /**
  * \brief This is a convenience static method that will return a
@@ -170,22 +152,14 @@ GetOpenFilenames( QWidget * p =0,
  * \return The selected filename list or an empty QStringLIst if
  * QFileDialog has been rejected.
  */
-QString
-OTBQtAdapters_EXPORT
-GetSaveFilename( QWidget * p =0,
-		 const QString & caption = QString(),
-		 const QString & dir = QString(),
-		 const QString & filter = QString(),
-		 QString * selectedFilter = 0,
-		 QFileDialog::Options options = 0 );
+QString OTBQtAdapters_EXPORT GetSaveFilename(QWidget* p = 0, const QString& caption = QString(), const QString& dir = QString(),
+                                             const QString& filter = QString(), QString* selectedFilter = 0, QFileDialog::Options options = 0);
 
 /**
  * \return Working directory of Qt-based applications (see
  * http://doc.qt.io/qt-4.8/qdir.html#currentPath).
  */
-QString
-OTBQtAdapters_EXPORT
-GetWorkingDir();
+QString OTBQtAdapters_EXPORT GetWorkingDir();
 
 /**
  * \brief Set working directory for Qt-based applications (see
@@ -196,9 +170,7 @@ GetWorkingDir();
  * \return <code>true</code> if working directory has successfully
  * been changed.
  */
-bool
-OTBQtAdapters_EXPORT
-SetWorkingDir( const QString & path );
+bool OTBQtAdapters_EXPORT SetWorkingDir(const QString& path);
 
 /**
  * \brief Static path to the last directory used in file dialogs

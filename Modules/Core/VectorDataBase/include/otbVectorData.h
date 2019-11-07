@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -55,8 +55,7 @@ namespace otb
  * \ingroup OTBVectorDataBase
  */
 template <class TPrecision = double, unsigned int VDimension = 2, class TValuePrecision = double>
-class VectorData
-  : public itk::DataObject
+class VectorData : public itk::DataObject
 {
 public:
   /** Standard class typedefs */
@@ -73,11 +72,11 @@ public:
   /** Template parameters typedef */
   typedef TPrecision      PrecisionType;
   typedef TValuePrecision ValuePrecisionType;
-  //define VDimension Dimension;
+  // define VDimension Dimension;
   typedef otb::DataNode<TPrecision, VDimension, TValuePrecision> DataNodeType;
-  typedef typename DataNodeType::Pointer                         DataNodePointerType;
-  typedef itk::TreeContainer<DataNodePointerType>                DataTreeType;
-  typedef typename DataTreeType::Pointer                         DataTreePointerType;
+  typedef typename DataNodeType::Pointer          DataNodePointerType;
+  typedef itk::TreeContainer<DataNodePointerType> DataTreeType;
+  typedef typename DataTreeType::Pointer          DataTreePointerType;
 
   typedef typename DataNodeType::PointType   PointType;
   typedef typename DataNodeType::LineType    LineType;
@@ -129,19 +128,21 @@ public:
    * SmartPointers to the same VectorData since separate DataObjects are
    * still maintained. This method is similar to
    * VectorDataSource::GraftOutput(). */
-  void Graft(const itk::DataObject *data) override;
+  void Graft(const itk::DataObject* data) override;
 
 protected:
   /** Constructor */
   VectorData();
   /** Destructor */
-  ~VectorData() override {}
+  ~VectorData() override
+  {
+  }
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  VectorData(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorData(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Data tree */
   DataTreePointerType m_DataTree;
@@ -152,7 +153,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorData.txx"
+#include "otbVectorData.hxx"
 #endif
 
 #endif

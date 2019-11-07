@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -24,25 +24,15 @@ set(OTBMarkovTests
 otbMarkovTestDriver.cxx
 otbMRFEnergyFisherClassification.cxx
 otbMRFSamplerRandom.cxx
-otbMRFEnergyPottsNew.cxx
-otbMRFSamplerMAPNew.cxx
 otbMarkovRandomFieldFilter.cxx
-otbMRFSamplerRandomMAPNew.cxx
-otbMRFSamplerRandomNew.cxx
-otbMRFEnergyGaussianNew.cxx
-otbMRFOptimizerMetropolisNew.cxx
 otbMRFSamplerMAP.cxx
 otbMRFEnergyGaussian.cxx
-otbMarkovRandomFieldFilterNew.cxx
 otbMRFOptimizerMetropolis.cxx
 otbMRFEnergyPotts.cxx
 otbMRFEnergyEdgeFidelity.cxx
 otbMRFSamplerRandomMAP.cxx
-otbMRFEnergyEdgeFidelityNew.cxx
 otbMRFOptimizerICM.cxx
 otbMRFEnergyGaussianClassification.cxx
-otbMRFOptimizerICMNew.cxx
-otbMRFEnergyGaussianClassificationNew.cxx
 )
 
 add_executable(otbMarkovTestDriver ${OTBMarkovTests})
@@ -58,9 +48,6 @@ otb_add_test(NAME maTvMRFEnergyFisherClassification COMMAND otbMarkovTestDriver
   ${TEMP}/maTvMRFEnergyFisherClassification.txt
   )
 
-otb_add_test(NAME maTuMRFEnergyFisherClassificationNew COMMAND otbMarkovTestDriver
-  otbMRFEnergyFisherClassificationNew )
-
 otb_add_test(NAME maTvMRFSamplerRandom COMMAND otbMarkovTestDriver
   --compare-ascii ${NOTOL}
   ${BASELINE_FILES}/maTvMRFSamplerRandom.txt
@@ -70,12 +57,6 @@ otb_add_test(NAME maTvMRFSamplerRandom COMMAND otbMarkovTestDriver
   ${INPUTDATA}/poupees_sub_c2.png
   ${TEMP}/maTvMRFSamplerRandom.txt
   )
-
-otb_add_test(NAME maTuMRFEnergyPottsNew COMMAND otbMarkovTestDriver
-  otbMRFEnergyPottsNew )
-
-otb_add_test(NAME maTuMRFSamplerMAPNew COMMAND otbMarkovTestDriver
-  otbMRFSamplerMAPNew )
 
 otb_add_test(NAME maTvMarkovRandomFieldFilter COMMAND otbMarkovTestDriver
   --compare-image ${NOTOL}  ${BASELINE}/maTvMarkovRandomField.png
@@ -87,18 +68,6 @@ otb_add_test(NAME maTvMarkovRandomFieldFilter COMMAND otbMarkovTestDriver
   30
   1.0
   )
-
-otb_add_test(NAME maTuMRFSamplerRandomMAPNew COMMAND otbMarkovTestDriver
-  otbMRFSamplerRandomMAPNew )
-
-otb_add_test(NAME maTuMRFSamplerRandomNew COMMAND otbMarkovTestDriver
-  otbMRFSamplerRandomNew )
-
-otb_add_test(NAME maTuMRFEnergyGaussianNew COMMAND otbMarkovTestDriver
-  otbMRFEnergyGaussianNew )
-
-otb_add_test(NAME maTuMRFOptimizerMetropolisNew COMMAND otbMarkovTestDriver
-  otbMRFOptimizerMetropolisNew )
 
 otb_add_test(NAME maTvMRFSamplerMAP COMMAND otbMarkovTestDriver
   --compare-ascii ${NOTOL}
@@ -113,9 +82,6 @@ otb_add_test(NAME maTvMRFSamplerMAP COMMAND otbMarkovTestDriver
 otb_add_test(NAME maTvMRFEnergyGaussian COMMAND otbMarkovTestDriver
   otbMRFEnergyGaussian
   )
-
-otb_add_test(NAME maTuMarkovRandomFieldFilterNew COMMAND otbMarkovTestDriver
-  otbMarkovRandomFieldFilterNew )
 
 otb_add_test(NAME maTvMRFOptimizerMetropolis COMMAND otbMarkovTestDriver
   --compare-ascii ${NOTOL}
@@ -150,9 +116,6 @@ otb_add_test(NAME maTvMRFSamplerRandomMAP COMMAND otbMarkovTestDriver
   ${TEMP}/maTvMRFSamplerRandomMAP.txt
   )
 
-otb_add_test(NAME maTuMRFEnergyEdgeFidelityNew COMMAND otbMarkovTestDriver
-  otbMRFEnergyEdgeFidelityNew )
-
 otb_add_test(NAME maTuMRFOptimizerICM COMMAND otbMarkovTestDriver
   otbMRFOptimizerICM
   ${TEMP}/maTuMRFOptimizerICM.txt
@@ -164,10 +127,4 @@ otb_add_test(NAME maTvMRFEnergyGaussianClassification COMMAND otbMarkovTestDrive
   otbMRFEnergyGaussianClassification
   ${TEMP}/maTvMRFEnergyGaussianClassification.txt
   )
-
-otb_add_test(NAME maTuMRFOptimizerICMNew COMMAND otbMarkovTestDriver
-  otbMRFOptimizerICMNew )
-
-otb_add_test(NAME maTuMRFEnergyGaussianClassificationNew COMMAND otbMarkovTestDriver
-  otbMRFEnergyGaussianClassificationNew )
 

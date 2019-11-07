@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -20,15 +20,15 @@
 
 otb_module_test()
 
-#----------- BandMathX TESTS ----------------
-otb_test_application(NAME apTvUtBandMathX
-                     APP  BandMathX
-                     OPTIONS -il ${INPUTDATA}/poupees_sub_c1.png
-                                  ${INPUTDATA}/poupees_sub_c2.png
-                                  ${INPUTDATA}/poupees_sub.png
-                             -out ${TEMP}/apTvUtBandMathXOutput.tif
-                             -incontext ${INPUTDATA}/apTvUtExportBandMathX.txt
-                     VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/apTvUtBandMathOutput.tif
-                             ${TEMP}/apTvUtBandMathXOutput.tif)
+set(OTBBandMathXAppTest
+otbBandMathXAppTests.cxx
+)
 
+add_executable(OTBBandMathXAppTest ${OTBBandMathXAppTest})
+target_link_libraries(OTBBandMathXAppTest ${OTBAppMathParserX-Test_LIBRARIES})
+otb_module_target_label(OTBBandMathXAppTest)
+
+otb_add_test(NAME apTvUtBandMathX COMMAND OTBBandMathXAppTest
+  $<TARGET_FILE_DIR:otbapp_BandMathX>
+  ${INPUTDATA}/apTvUtExportBandMathX.txt
+  )

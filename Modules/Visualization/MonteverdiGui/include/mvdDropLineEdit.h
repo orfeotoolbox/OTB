@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -79,8 +79,7 @@ namespace Ui
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class OTBMonteverdiGUI_EXPORT DropLineEdit :
-    public QLineEdit
+class OTBMonteverdiGUI_EXPORT DropLineEdit : public QLineEdit
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -89,53 +88,49 @@ class OTBMonteverdiGUI_EXPORT DropLineEdit :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
+  /** \brief Constructor. */
+  DropLineEdit(QWidget* p = 0);
 
   /** \brief Constructor. */
-  DropLineEdit( QWidget* p =0 );
-
-  /** \brief Constructor. */
-  DropLineEdit( const QString& contents, QWidget* p =0 );
+  DropLineEdit(const QString& contents, QWidget* p = 0);
 
   /** \brief Destructor. */
   ~DropLineEdit() override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-  void dragEnterEvent( QDragEnterEvent* event ) override;
-  void dragMoveEvent( QDragMoveEvent* event ) override;
-  void dropEvent( QDropEvent* event ) override;
+  void dragEnterEvent(QDragEnterEvent* event) override;
+  void dragMoveEvent(QDragMoveEvent* event) override;
+  void dropEvent(QDropEvent* event) override;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    * \brief uic generated.
@@ -144,8 +139,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 

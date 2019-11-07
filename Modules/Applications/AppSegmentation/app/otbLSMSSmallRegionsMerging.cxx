@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,7 +30,7 @@
 #include "otbTileImageFilter.h"
 
 #include <time.h>
-#include <vcl_algorithm.h>
+#include <algorithm>
 #include <climits>
 
 #include "otbWrapperApplication.h"
@@ -46,9 +46,9 @@ namespace Wrapper
 class LSMSSmallRegionsMerging : public Application
 {
 public:
-  typedef LSMSSmallRegionsMerging Self;
-  typedef Application Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef LSMSSmallRegionsMerging       Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef FloatVectorImageType              ImageType;
@@ -56,15 +56,15 @@ public:
   typedef UInt32ImageType                   LabelImageType;
   typedef LabelImageType::InternalPixelType LabelImagePixelType;
 
-  typedef otb::MultiChannelExtractROI <ImagePixelType,ImagePixelType > MultiChannelExtractROIFilterType;
-  typedef otb::ExtractROI<LabelImagePixelType,LabelImagePixelType> ExtractROIFilterType;
+  typedef otb::MultiChannelExtractROI<ImagePixelType, ImagePixelType> MultiChannelExtractROIFilterType;
+  typedef otb::ExtractROI<LabelImagePixelType, LabelImagePixelType>   ExtractROIFilterType;
 
   typedef otb::StreamingStatisticsImageFilter<LabelImageType> StatisticsImageFilterType;
 
   typedef itk::ImageRegionConstIterator<LabelImageType> LabelImageIterator;
-  typedef itk::ImageRegionConstIterator<ImageType> ImageIterator;
+  typedef itk::ImageRegionConstIterator<ImageType>      ImageIterator;
 
-  typedef itk::ChangeLabelImageFilter<LabelImageType,LabelImageType> ChangeLabelImageFilterType;
+  typedef itk::ChangeLabelImageFilter<LabelImageType, LabelImageType> ChangeLabelImageFilterType;
   typedef otb::TileImageFilter<LabelImageType> TileImageFilterType;
 
   itkNewMacro(Self);
@@ -78,45 +78,52 @@ private:
     SetName("LSMSSmallRegionsMerging");
     SetDescription("This application performs the third (optional) step of the exact Large-Scale Mean-Shift segmentation workflow [1].");
 
-    SetDocName("Exact Large-Scale Mean-Shift segmentation, step 3 (optional)");
-    SetDocLongDescription("Given a segmentation result (can be the out output parameter of the"
-                          " LSMSSegmentation application [2]) and the original image, it will"
-                          " merge segments whose size in pixels is lower than minsize parameter"
-                          " with the adjacent segments with the adjacent segment with closest"
-                          " radiometry and acceptable size.\n\n"
-                          "Small segments will be processed by increasing size: first all segments"
-                          " for which area is equal to 1 pixel will be merged with adjacent"
-                          " segments, then all segments of area equal to 2 pixels will be processed,"
-                          " until segments of area minsize. For large images one can use the"
-                          " tilesizex and tilesizey parameters for tile-wise processing, with the"
-                          " guarantees of identical results.\n\n"
-                          "The output of this application can be passed to the"
-                          " LSMSVectorization application [3] to complete the LSMS workflow.");
-    SetDocLimitations("This application is part of the Large-Scale Mean-Shift segmentation"
-                      " workflow (LSMS) and may not be suited for any other purpose. This"
-                      " application is not compatible with in-memory connection since it does"
-                      " its own internal streaming.");
+    SetDocLongDescription(
+        "Given a segmentation result (can be the out output parameter of the"
+        " LSMSSegmentation application [2]) and the original image, it will"
+        " merge segments whose size in pixels is lower than minsize parameter"
+        " with the adjacent segments with the adjacent segment with closest"
+        " radiometry and acceptable size.\n\n"
+        "Small segments will be processed by increasing size: first all segments"
+        " for which area is equal to 1 pixel will be merged with adjacent"
+        " segments, then all segments of area equal to 2 pixels will be processed,"
+        " until segments of area minsize. For large images one can use the"
+        " tilesizex and tilesizey parameters for tile-wise processing, with the"
+        " guarantees of identical results.\n\n"
+        "The output of this application can be passed to the"
+        " LSMSVectorization application [3] to complete the LSMS workflow.");
+    SetDocLimitations(
+        "This application is part of the Large-Scale Mean-Shift segmentation"
+        " workflow (LSMS) and may not be suited for any other purpose. This"
+        " application is not compatible with in-memory connection since it does"
+        " its own internal streaming.");
     SetDocAuthors("David Youssefi");
-    SetDocSeeAlso( "[1] Michel, J., Youssefi, D., & Grizonnet, M. (2015). Stable"
-                   " mean-shift algorithm and its application to the segmentation of"
-                   " arbitrarily large remote sensing images. IEEE Transactions on"
-                   " Geoscience and Remote Sensing, 53(2), 952-964.\n"
-                   "[2] LSMSegmentation\n"
-                   "[3] LSMSVectorization");
+    SetDocSeeAlso(
+        "Alternative: SmallRegionsMerging\n"
+        "[1] Michel, J., Youssefi, D., & Grizonnet, M. (2015). Stable"
+        " mean-shift algorithm and its application to the segmentation of"
+        " arbitrarily large remote sensing images. IEEE Transactions on"
+        " Geoscience and Remote Sensing, 53(2), 952-964.\n"
+        "[2] LSMSSegmentation\n"
+        "[3] LSMSVectorization");
     AddDocTag(Tags::Segmentation);
+    AddDocTag(Tags::Deprecated);
     AddDocTag("LSMS");
 
-    AddParameter(ParameterType_InputImage,  "in",    "Input image");
-    SetParameterDescription( "in", "The input image, containing initial spectral signatures corresponding to the segmented image (inseg)." );
-    AddParameter(ParameterType_InputImage,  "inseg",    "Segmented image");
-    SetParameterDescription( "inseg", "Segmented image where each pixel value is the unique integer label of the segment it belongs to." );
+    AddParameter(ParameterType_InputImage, "in", "Input image");
+    SetParameterDescription("in", "The input image, containing initial spectral signatures corresponding to the segmented image (inseg).");
+    AddParameter(ParameterType_InputImage, "inseg", "Segmented image");
+    SetParameterDescription("inseg", "Segmented image where each pixel value is the unique integer label of the segment it belongs to.");
 
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription( "out", "The output image. The output image is the segmented image where the minimal segments have been merged. An ecoding of uint32 is advised." );
-    SetDefaultOutputPixelType("out",ImagePixelType_uint32);
+    SetParameterDescription(
+        "out", "The output image. The output image is the segmented image where the minimal segments have been merged. An ecoding of uint32 is advised.");
+    SetDefaultOutputPixelType("out", ImagePixelType_uint32);
 
     AddParameter(ParameterType_Int, "minsize", "Minimum Segment Size");
-    SetParameterDescription("minsize", "Minimum Segment Size. If, after the segmentation, a segment is of size lower than this criterion, the segment is merged with the segment that has the closest sepctral signature.");
+    SetParameterDescription("minsize",
+                            "Minimum Segment Size. If, after the segmentation, a segment is of size lower than this criterion, the segment is merged with the "
+                            "segment that has the closest sepctral signature.");
     SetDefaultParameterInt("minsize", 50);
     SetMinimumParameterIntValue("minsize", 0);
     MandatoryOff("minsize");
@@ -134,12 +141,12 @@ private:
     AddRAMParameter();
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("in","smooth.tif");
-    SetDocExampleParameterValue("inseg","segmentation.tif");
-    SetDocExampleParameterValue("out","merged.tif");
-    SetDocExampleParameterValue("minsize","20");
-    SetDocExampleParameterValue("tilesizex","256");
-    SetDocExampleParameterValue("tilesizey","256");
+    SetDocExampleParameterValue("in", "smooth.tif");
+    SetDocExampleParameterValue("inseg", "segmentation.tif");
+    SetDocExampleParameterValue("out", "merged.tif");
+    SetDocExampleParameterValue("minsize", "20");
+    SetDocExampleParameterValue("tilesizex", "256");
+    SetDocExampleParameterValue("tilesizey", "256");
 
     SetOfficialDocLink();
   }
@@ -152,17 +159,16 @@ private:
   {
     clock_t tic = clock();
 
-    unsigned int minSize     = GetParameterInt("minsize");
+    unsigned int minSize = GetParameterInt("minsize");
 
     unsigned long sizeTilesX = GetParameterInt("tilesizex");
     unsigned long sizeTilesY = GetParameterInt("tilesizey");
 
-    //Acquisition of the input image dimensions
+    // Acquisition of the input image dimensions
     ImageType::Pointer imageIn = GetParameterImage("in");
     imageIn->UpdateOutputInformation();
-    unsigned long sizeImageX = imageIn->GetLargestPossibleRegion().GetSize()[0],
-      sizeImageY = imageIn->GetLargestPossibleRegion().GetSize()[1];
-    unsigned int numberOfComponentsPerPixel = imageIn->GetNumberOfComponentsPerPixel();
+    unsigned long sizeImageX = imageIn->GetLargestPossibleRegion().GetSize()[0], sizeImageY = imageIn->GetLargestPossibleRegion().GetSize()[1];
+    unsigned int  numberOfComponentsPerPixel = imageIn->GetNumberOfComponentsPerPixel();
 
     LabelImageType::Pointer labelIn = GetParameterUInt32Image("inseg");
 
@@ -171,36 +177,36 @@ private:
     stats->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
     AddProcess(stats->GetStreamer(), "Retrieve region count...");
     stats->Update();
-    unsigned int regionCount=stats->GetMaximum();
+    unsigned int regionCount = stats->GetMaximum();
 
-    std::vector<unsigned int>nbPixels;
+    std::vector<unsigned int> nbPixels;
     nbPixels.clear();
-    nbPixels.resize(regionCount+1);
-    for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
-      nbPixels[curLabel] = 0;
+    nbPixels.resize(regionCount + 1);
+    for (LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
+      nbPixels[curLabel]              = 0;
 
     ImageType::PixelType defaultValue(numberOfComponentsPerPixel);
     defaultValue.Fill(0);
 
-    std::vector<ImageType::PixelType>sum(regionCount+1,defaultValue);
+    std::vector<ImageType::PixelType> sum(regionCount + 1, defaultValue);
 
-    unsigned int nbTilesX = sizeImageX/sizeTilesX + (sizeImageX%sizeTilesX > 0 ? 1 : 0);
-    unsigned int nbTilesY = sizeImageY/sizeTilesY + (sizeImageY%sizeTilesY > 0 ? 1 : 0);
+    unsigned int nbTilesX = sizeImageX / sizeTilesX + (sizeImageX % sizeTilesX > 0 ? 1 : 0);
+    unsigned int nbTilesY = sizeImageY / sizeTilesY + (sizeImageY % sizeTilesY > 0 ? 1 : 0);
 
-    otbAppLogINFO(<<"Number of tiles: "<<nbTilesX<<" x "<<nbTilesY);
+    otbAppLogINFO(<< "Number of tiles: " << nbTilesX << " x " << nbTilesY);
 
-    //Sums calculation per label
-    otbAppLogINFO(<<"Sums calculation ...");
+    // Sums calculation per label
+    otbAppLogINFO(<< "Sums calculation ...");
 
-    for(unsigned int row = 0; row < nbTilesY; row++)
-      for(unsigned int column = 0; column < nbTilesX; column++)
-       {
-        unsigned long startX = column*sizeTilesX;
-        unsigned long startY = row*sizeTilesY;
-        unsigned long sizeX = vcl_min(sizeTilesX,sizeImageX-startX);
-        unsigned long sizeY = vcl_min(sizeTilesY,sizeImageY-startY);
+    for (unsigned int row = 0; row < nbTilesY; row++)
+      for (unsigned int column = 0; column < nbTilesX; column++)
+      {
+        unsigned long startX = column * sizeTilesX;
+        unsigned long startY = row * sizeTilesY;
+        unsigned long sizeX  = std::min(sizeTilesX, sizeImageX - startX);
+        unsigned long sizeY  = std::min(sizeTilesY, sizeImageY - startY);
 
-        //Tiles extraction of the input image
+        // Tiles extraction of the input image
         MultiChannelExtractROIFilterType::Pointer imageROI = MultiChannelExtractROIFilterType::New();
         imageROI->SetInput(imageIn);
         imageROI->SetStartX(startX);
@@ -209,7 +215,7 @@ private:
         imageROI->SetSizeY(sizeY);
         imageROI->Update();
 
-        //Tiles extraction of the segmented image
+        // Tiles extraction of the segmented image
         ExtractROIFilterType::Pointer labelImageROI = ExtractROIFilterType::New();
         labelImageROI->SetInput(labelIn);
         labelImageROI->SetStartX(startX);
@@ -218,53 +224,52 @@ private:
         labelImageROI->SetSizeY(sizeY);
         labelImageROI->Update();
 
-        //Sums calculation for the mean calculation per label
-        LabelImageIterator itLabel( labelImageROI->GetOutput(), labelImageROI->GetOutput()->GetLargestPossibleRegion());
-        ImageIterator itImage( imageROI->GetOutput(), imageROI->GetOutput()->GetLargestPossibleRegion());
+        // Sums calculation for the mean calculation per label
+        LabelImageIterator itLabel(labelImageROI->GetOutput(), labelImageROI->GetOutput()->GetLargestPossibleRegion());
+        ImageIterator      itImage(imageROI->GetOutput(), imageROI->GetOutput()->GetLargestPossibleRegion());
 
         for (itLabel.GoToBegin(), itImage.GoToBegin(); !itLabel.IsAtEnd(); ++itLabel, ++itImage)
-          {
+        {
           nbPixels[itLabel.Value()]++;
-          for(unsigned int comp = 0; comp<numberOfComponentsPerPixel; ++comp)
-            {
-            sum[itLabel.Value()][comp]+=itImage.Get()[comp];
-            }
+          for (unsigned int comp = 0; comp < numberOfComponentsPerPixel; ++comp)
+          {
+            sum[itLabel.Value()][comp] += itImage.Get()[comp];
           }
         }
-
-    //LUT creation for the final relabelling
-    std::vector<LabelImagePixelType> LUT;
-    LUT.clear();
-    LUT.resize(regionCount+1);
-    for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
-      {
-      LUT[curLabel] = curLabel;
       }
 
-    //Minimal size region suppression
-    otbAppLogINFO(<<"Building LUT for small regions merging ...");
+    // LUT creation for the final relabelling
+    std::vector<LabelImagePixelType> LUT;
+    LUT.clear();
+    LUT.resize(regionCount + 1);
+    for (LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
+    {
+      LUT[curLabel] = curLabel;
+    }
 
-    for (unsigned int size=1; size<minSize; size++)
-      {
+    // Minimal size region suppression
+    otbAppLogINFO(<< "Building LUT for small regions merging ...");
+
+    for (unsigned int size = 1; size < minSize; size++)
+    {
       // LUTtmp creation in order to modify the LUT only at the end of the pass
       std::vector<LabelImagePixelType> LUTtmp;
       LUTtmp.clear();
-      LUTtmp.resize(regionCount+1);
-      for(LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
-        {
+      LUTtmp.resize(regionCount + 1);
+      for (LabelImagePixelType curLabel = 1; curLabel <= regionCount; ++curLabel)
+      {
         LUTtmp[curLabel] = LUT[curLabel];
-        }
+      }
 
-      for(unsigned int row = 0; row < nbTilesY; row++)
+      for (unsigned int row = 0; row < nbTilesY; row++)
+      {
+        for (unsigned int column = 0; column < nbTilesX; column++)
         {
-        for(unsigned int column = 0; column < nbTilesX; column++)
-          {
           std::set<int> minLabel, edgeLabel, labelMerged;
-          std::map<int,std::set<int> > adjMap;
+          std::map<int, std::set<int>> adjMap;
 
-          unsigned long startX = column*sizeTilesX, startY = row*sizeTilesY;
-          unsigned long sizeX = vcl_min(sizeTilesX+size+1,sizeImageX-startX),
-            sizeY = vcl_min(sizeTilesY+size+1,sizeImageY-startY);
+          unsigned long startX = column * sizeTilesX, startY = row * sizeTilesY;
+          unsigned long sizeX = std::min(sizeTilesX + size + 1, sizeImageX - startX), sizeY = std::min(sizeTilesY + size + 1, sizeImageY - startY);
 
           ExtractROIFilterType::Pointer labelImageROI = ExtractROIFilterType::New();
           labelImageROI->SetInput(labelIn);
@@ -277,175 +282,176 @@ private:
           LabelImageType::IndexType pixelIndex;
 
           //"Adjacency map" creation for the region with nbPixels=="size"
-          for(pixelIndex[0]=0; pixelIndex[0]<static_cast<long>(sizeX); ++pixelIndex[0])
-            for(pixelIndex[1]=0; pixelIndex[1]<static_cast<long>(sizeY); ++pixelIndex[1])
-              {
+          for (pixelIndex[0] = 0; pixelIndex[0] < static_cast<long>(sizeX); ++pixelIndex[0])
+            for (pixelIndex[1] = 0; pixelIndex[1] < static_cast<long>(sizeY); ++pixelIndex[1])
+            {
               LabelImagePixelType curLabel = labelImageROI->GetOutput()->GetPixel(pixelIndex);
 
-              if(labelMerged.count(LUT[curLabel]))
-                {
+              if (labelMerged.count(LUT[curLabel]))
+              {
                 edgeLabel.insert(LUT[curLabel]);
-                }
-              if((pixelIndex[0]==0)&&(startX!=0))
-                {
+              }
+              if ((pixelIndex[0] == 0) && (startX != 0))
+              {
                 edgeLabel.insert(LUT[curLabel]);
-                }
-              if((pixelIndex[1]==0)&&(startY!=0))
-                {
+              }
+              if ((pixelIndex[1] == 0) && (startY != 0))
+              {
                 edgeLabel.insert(LUT[curLabel]);
-                }
+              }
 
-              if(pixelIndex[0]==static_cast<long>(sizeX)-1)
-                {
-                if(startX!=(nbTilesX-1)*sizeTilesX) edgeLabel.insert(LUT[curLabel]);
-                }
+              if (pixelIndex[0] == static_cast<long>(sizeX) - 1)
+              {
+                if (startX != (nbTilesX - 1) * sizeTilesX)
+                  edgeLabel.insert(LUT[curLabel]);
+              }
               else
-                {
+              {
                 ++pixelIndex[0];
                 LabelImagePixelType adjLabelX = labelImageROI->GetOutput()->GetPixel(pixelIndex);
                 --pixelIndex[0];
 
-                if(LUT[adjLabelX]!=LUT[curLabel])
+                if (LUT[adjLabelX] != LUT[curLabel])
+                {
+                  if ((nbPixels[LUT[curLabel]] > 0) && (nbPixels[LUT[curLabel]] == size))
                   {
-                  if((nbPixels[LUT[curLabel]]>0)&&(nbPixels[LUT[curLabel]]==size))
-                    {
                     adjMap[LUT[curLabel]].insert(LUT[adjLabelX]);
                     minLabel.insert(LUT[curLabel]);
-                    }
-                  if((nbPixels[LUT[adjLabelX]]>0)&&(nbPixels[LUT[adjLabelX]]==size))
-                    {
+                  }
+                  if ((nbPixels[LUT[adjLabelX]] > 0) && (nbPixels[LUT[adjLabelX]] == size))
+                  {
                     adjMap[LUT[adjLabelX]].insert(LUT[curLabel]);
                     minLabel.insert(LUT[adjLabelX]);
-                    }
                   }
                 }
-              if(pixelIndex[1]==static_cast<long>(sizeY)-1)
-                {
-                if(startY!=(nbTilesY-1)*sizeTilesY) edgeLabel.insert(LUT[curLabel]);
-                }
+              }
+              if (pixelIndex[1] == static_cast<long>(sizeY) - 1)
+              {
+                if (startY != (nbTilesY - 1) * sizeTilesY)
+                  edgeLabel.insert(LUT[curLabel]);
+              }
               else
-                {
+              {
                 ++pixelIndex[1];
                 LabelImagePixelType adjLabelY = labelImageROI->GetOutput()->GetPixel(pixelIndex);
                 --pixelIndex[1];
-                if(LUT[adjLabelY]!=LUT[curLabel])
+                if (LUT[adjLabelY] != LUT[curLabel])
+                {
+                  if ((nbPixels[LUT[curLabel]] > 0) && (nbPixels[LUT[curLabel]] == size))
                   {
-                  if((nbPixels[LUT[curLabel]]>0)&&(nbPixels[LUT[curLabel]]==size))
-                    {
                     adjMap[LUT[curLabel]].insert(LUT[adjLabelY]);
                     minLabel.insert(LUT[curLabel]);
-                    }
-                  if((nbPixels[LUT[adjLabelY]]>0)&&(nbPixels[LUT[adjLabelY]]==size))
-                    {
+                  }
+                  if ((nbPixels[LUT[adjLabelY]] > 0) && (nbPixels[LUT[adjLabelY]] == size))
+                  {
                     adjMap[LUT[adjLabelY]].insert(LUT[curLabel]);
-                    minLabel.insert(LUT[adjLabelY]); }
-                  }
-                }
-              }
-
-          //Searching the "nearest" region
-          for(std::set<int>::iterator itMinLabel=minLabel.begin(); itMinLabel!=minLabel.end(); ++itMinLabel)
-            {
-            LabelImagePixelType curLabel = *itMinLabel, adjLabel(0);
-            double err = itk::NumericTraits<double>::max();
-            if(edgeLabel.count(curLabel)==0)
-              {
-              if(nbPixels[curLabel]==size)
-                {
-                edgeLabel.insert(curLabel);
-                for(std::set<int>::iterator itAdjLabel=(adjMap[curLabel]).begin();
-                    itAdjLabel!=(adjMap[curLabel]).end(); ++itAdjLabel)
-                  {
-                  double tmpError = 0;
-                  LabelImagePixelType tmpLabel = *itAdjLabel;
-                  if(tmpLabel!=curLabel)
-                    {
-                    for(unsigned int comp = 0; comp<numberOfComponentsPerPixel; ++comp)
-                      {
-                      double curComp = static_cast<double>(sum[curLabel][comp])/nbPixels[curLabel];
-                      int tmpComp = static_cast<double>(sum[tmpLabel][comp])/nbPixels[tmpLabel];
-                      tmpError += (curComp-tmpComp)*(curComp-tmpComp);
-                      }
-                    if(tmpError<err)
-                      {
-                      err = tmpError;
-                      adjLabel = tmpLabel;
-                      }
-                    }
-                  }
-
-                //Fusion of the two regions
-                if(adjLabel!=curLabel)
-                  {
-                  unsigned int curLabelLUT = curLabel, adjLabelLUT = adjLabel;
-                  while(LUTtmp[curLabelLUT] != curLabelLUT)
-                    {
-                    curLabelLUT = LUTtmp[curLabelLUT];
-                    }
-                  while(LUTtmp[adjLabelLUT] != adjLabelLUT)
-                    {
-                    adjLabelLUT = LUTtmp[adjLabelLUT];
-                    }
-                  if(curLabelLUT < adjLabelLUT)
-                    {
-                    LUTtmp[adjLabelLUT] = curLabelLUT;
-                    }
-                  else
-                    {
-                    LUTtmp[LUTtmp[curLabelLUT]] = adjLabelLUT; LUTtmp[curLabelLUT] = adjLabelLUT;
-                    }
+                    minLabel.insert(LUT[adjLabelY]);
                   }
                 }
               }
             }
 
-          for(LabelImagePixelType label = 1; label < regionCount+1; ++label)
+          // Searching the "nearest" region
+          for (std::set<int>::iterator itMinLabel = minLabel.begin(); itMinLabel != minLabel.end(); ++itMinLabel)
+          {
+            LabelImagePixelType curLabel = *itMinLabel, adjLabel(0);
+            double              err      = itk::NumericTraits<double>::max();
+            if (edgeLabel.count(curLabel) == 0)
             {
-            LabelImagePixelType can = label;
-            while(LUTtmp[can] != can)
+              if (nbPixels[curLabel] == size)
               {
-              can = LUTtmp[can];
+                edgeLabel.insert(curLabel);
+                for (std::set<int>::iterator itAdjLabel = (adjMap[curLabel]).begin(); itAdjLabel != (adjMap[curLabel]).end(); ++itAdjLabel)
+                {
+                  double              tmpError = 0;
+                  LabelImagePixelType tmpLabel = *itAdjLabel;
+                  if (tmpLabel != curLabel)
+                  {
+                    for (unsigned int comp = 0; comp < numberOfComponentsPerPixel; ++comp)
+                    {
+                      double curComp = static_cast<double>(sum[curLabel][comp]) / nbPixels[curLabel];
+                      int    tmpComp = static_cast<double>(sum[tmpLabel][comp]) / nbPixels[tmpLabel];
+                      tmpError += (curComp - tmpComp) * (curComp - tmpComp);
+                    }
+                    if (tmpError < err)
+                    {
+                      err      = tmpError;
+                      adjLabel = tmpLabel;
+                    }
+                  }
+                }
+
+                // Fusion of the two regions
+                if (adjLabel != curLabel)
+                {
+                  unsigned int curLabelLUT = curLabel, adjLabelLUT = adjLabel;
+                  while (LUTtmp[curLabelLUT] != curLabelLUT)
+                  {
+                    curLabelLUT = LUTtmp[curLabelLUT];
+                  }
+                  while (LUTtmp[adjLabelLUT] != adjLabelLUT)
+                  {
+                    adjLabelLUT = LUTtmp[adjLabelLUT];
+                  }
+                  if (curLabelLUT < adjLabelLUT)
+                  {
+                    LUTtmp[adjLabelLUT] = curLabelLUT;
+                  }
+                  else
+                  {
+                    LUTtmp[LUTtmp[curLabelLUT]] = adjLabelLUT;
+                    LUTtmp[curLabelLUT]         = adjLabelLUT;
+                  }
+                }
               }
-            LUTtmp[label] = can;
             }
           }
-        }
 
-      for(LabelImagePixelType label = 1; label < regionCount+1; ++label)
-        {
-        LUT[label]=LUTtmp[label];
-        if((nbPixels[label]!=0)&&(LUT[label]!=label))
+          for (LabelImagePixelType label = 1; label < regionCount + 1; ++label)
           {
-          nbPixels[LUT[label]]+=nbPixels[label];
-          nbPixels[label]=0;
-          for(unsigned int comp = 0; comp<numberOfComponentsPerPixel; ++comp)
+            LabelImagePixelType can = label;
+            while (LUTtmp[can] != can)
             {
-            sum[LUT[label]][comp]+=sum[label][comp];
+              can = LUTtmp[can];
             }
+            LUTtmp[label] = can;
           }
         }
       }
-    //Relabelling
+
+      for (LabelImagePixelType label = 1; label < regionCount + 1; ++label)
+      {
+        LUT[label] = LUTtmp[label];
+        if ((nbPixels[label] != 0) && (LUT[label] != label))
+        {
+          nbPixels[LUT[label]] += nbPixels[label];
+          nbPixels[label] = 0;
+          for (unsigned int comp = 0; comp < numberOfComponentsPerPixel; ++comp)
+          {
+            sum[LUT[label]][comp] += sum[label][comp];
+          }
+        }
+      }
+    }
+    // Relabelling
     m_ChangeLabelFilter = ChangeLabelImageFilterType::New();
     m_ChangeLabelFilter->SetInput(labelIn);
-    for(LabelImagePixelType label = 1; label<regionCount+1; ++label)
+    for (LabelImagePixelType label = 1; label < regionCount + 1; ++label)
+    {
+      if (label != LUT[label])
       {
-      if(label!=LUT[label])
-        {
-        m_ChangeLabelFilter->SetChange(label,LUT[label]);
-        }
+        m_ChangeLabelFilter->SetChange(label, LUT[label]);
       }
+    }
 
     SetParameterOutputImage("out", m_ChangeLabelFilter->GetOutput());
 
     clock_t toc = clock();
 
-    otbAppLogINFO(<<"Elapsed time: "<<(double)(toc - tic) / CLOCKS_PER_SEC<<" seconds");
+    otbAppLogINFO(<< "Elapsed time: " << (double)(toc - tic) / CLOCKS_PER_SEC << " seconds");
   }
 };
 }
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::LSMSSmallRegionsMerging)
-
-

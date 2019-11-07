@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -29,7 +29,8 @@
 #include "otbWaveletGenerator.h"
 #include "otbWaveletOperatorBase.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class WaveletTransform
  * \brief Wavelet transformation framework
@@ -53,10 +54,8 @@ namespace otb {
  *
  * \ingroup OTBWavelet
  */
-template <class TInputImage, class TOutputImage, class TFilter,
-    Wavelet::WaveletDirection TDirectionOfTransformation>
-class ITK_EXPORT WaveletTransform
-  : public itk::ImageSource<TOutputImage>
+template <class TInputImage, class TOutputImage, class TFilter, Wavelet::WaveletDirection TDirectionOfTransformation>
+class ITK_EXPORT WaveletTransform : public itk::ImageSource<TOutputImage>
 {
 public:
   /** Standard typedefs */
@@ -77,8 +76,8 @@ protected:
   virtual ~WaveletTransform();
 
 private:
-  WaveletTransform (const Self &);
-  void operator =(const Self&);
+  WaveletTransform(const Self&);
+  void operator=(const Self&);
 };
 
 /** \class WaveletTransform
@@ -106,15 +105,14 @@ private:
  * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage, class TFilter>
-class ITK_EXPORT WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD>
-  : public ImageToImageListFilter<TInputImage, TOutputImage>
+class ITK_EXPORT WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::FORWARD> : public ImageToImageListFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef WaveletTransform                                  Self;
+  typedef WaveletTransform Self;
   typedef ImageToImageListFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -122,7 +120,7 @@ public:
   /** Creation through object factory macro */
   itkTypeMacro(WaveletTransform, ImageToImageListFilter);
 
-  typedef          TInputImage                  InputImageType;
+  typedef TInputImage                           InputImageType;
   typedef typename InputImageType::Pointer      InputImagePointerType;
   typedef typename InputImageType::ConstPointer InputImageConstPointerType;
   typedef typename InputImageType::RegionType   InputImageRegionType;
@@ -143,14 +141,13 @@ public:
   typedef typename FilterListType::Iterator FilterListIterator;
 
   itkGetObjectMacro(FilterList, FilterListType);
-  FilterType * GetNthFilter(unsigned int idx) const
+  FilterType* GetNthFilter(unsigned int idx) const
   {
     if (idx >= m_NumberOfDecompositions)
-      {
-      itkExceptionMacro(<< "Impossible to GetNthFilter with the index element "
-                        << idx << "; this element don't exist, the size of the filter list is "
+    {
+      itkExceptionMacro(<< "Impossible to GetNthFilter with the index element " << idx << "; this element don't exist, the size of the filter list is "
                         << m_FilterList->Size() << ".");
-      }
+    }
     return static_cast<FilterType*>(m_FilterList->GetNthElement(idx));
   }
 
@@ -175,14 +172,16 @@ public:
 
 protected:
   WaveletTransform();
-  ~WaveletTransform() override {}
+  ~WaveletTransform() override
+  {
+  }
 
   /** Generate data redefinition */
   void GenerateData() override;
 
 private:
-  WaveletTransform (const Self &);
-  void operator =(const Self&);
+  WaveletTransform(const Self&);
+  void operator=(const Self&);
 
   /**
    * Number of decomposition of the multi-scale/-resolution decomposition.
@@ -232,15 +231,14 @@ private:
  * \ingroup OTBWavelet
  */
 template <class TInputImage, class TOutputImage, class TFilter>
-class ITK_EXPORT WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE>
-  : public ImageListToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT WaveletTransform<TInputImage, TOutputImage, TFilter, Wavelet::INVERSE> : public ImageListToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef WaveletTransform                                  Self;
+  typedef WaveletTransform Self;
   typedef ImageListToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -248,7 +246,7 @@ public:
   /** Creation through object factory macro */
   itkTypeMacro(WaveletTransform, ImageListToImageFilter);
 
-  typedef          TInputImage                  InputImageType;
+  typedef TInputImage                           InputImageType;
   typedef typename InputImageType::Pointer      InputImagePointerType;
   typedef typename InputImageType::ConstPointer InputImageConstPointerType;
   typedef typename InputImageType::RegionType   InputImageRegionType;
@@ -275,14 +273,13 @@ public:
   typedef typename FilterListType::Iterator FilterListIterator;
 
   itkGetObjectMacro(FilterList, FilterListType);
-  FilterType * GetNthFilter(unsigned int idx) const
+  FilterType* GetNthFilter(unsigned int idx) const
   {
     if (idx >= m_NumberOfDecompositions)
-      {
-      itkExceptionMacro(<< "Impossible to GetNthFilter with the index element "
-                        << idx << "; this element don't exist, the size of the filter list is "
+    {
+      itkExceptionMacro(<< "Impossible to GetNthFilter with the index element " << idx << "; this element don't exist, the size of the filter list is "
                         << m_FilterList->Size() << ".");
-      }
+    }
     return static_cast<FilterType*>(m_FilterList->GetNthElement(idx));
   }
 
@@ -306,7 +303,9 @@ public:
 
 protected:
   WaveletTransform();
-  ~WaveletTransform() override {}
+  ~WaveletTransform() override
+  {
+  }
 
   /** GenerateOutputInformation
     * Set the size of the output image depending on the decimation factor
@@ -318,8 +317,8 @@ protected:
   void GenerateData() override;
 
 private:
-  WaveletTransform (const Self &);
-  void operator =(const Self&);
+  WaveletTransform(const Self&);
+  void operator=(const Self&);
 
   /**
    * Number of decomposition of the multi-scale/-resolution decomposition.
@@ -343,7 +342,7 @@ private:
 } // end of namespace
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletTransform.txx"
+#include "otbWaveletTransform.hxx"
 #endif
 
 #endif

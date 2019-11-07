@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -48,11 +48,6 @@ otb_create_application(
   SOURCES        otbFusionOfClassifications.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-otb_create_application(
-  NAME           ComputePolylineFeatureFromImage
-  SOURCES        otbComputePolylineFeatureFromImage.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
 if(OTB_USE_SHARK)
   otb_create_application(
     NAME           KMeansClassification
@@ -71,13 +66,13 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           PredictRegression
-  SOURCES        otbPredictRegression.cxx
+  NAME           TrainVectorRegression
+  SOURCES        otbTrainVectorRegression.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           DSFuzzyModelEstimation
-  SOURCES        otbDSFuzzyModelEstimation.cxx
+  NAME           ImageRegression
+  SOURCES        otbImageRegression.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
@@ -93,11 +88,6 @@ otb_create_application(
 otb_create_application(
   NAME           ComputeImagesStatistics
   SOURCES        otbComputeImagesStatistics.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
-  NAME           VectorDataDSValidation
-  SOURCES        otbVectorDataDSValidation.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
@@ -126,8 +116,23 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
+  NAME           VectorRegression
+  SOURCES        otbVectorRegression.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
   NAME           SampleAugmentation
   SOURCES        otbSampleAugmentation.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           ZonalStatistics
+  SOURCES        otbZonalStatistics.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           TrainImagesRegression
+  SOURCES        otbTrainImagesRegression.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 # Mantis-1427 : temporary fix

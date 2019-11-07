@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,9 +32,9 @@
 // Qwt includes.
 
 #if defined(__GNUC__) || defined(__clang__)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wunused-parameter"
-# pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wshadow"
 #endif
 
 #include <qwt_plot_curve.h>
@@ -42,12 +42,12 @@
 #include <qwt_picker_machine.h>
 #include <qwt_plot.h>
 #if QWT_IS_ABOVE_6_1
-#  include <qwt_plot_canvas.h>
+#include <qwt_plot_canvas.h>
 #endif // QWT_ABOVE_6_1
 #include <qwt_text.h>
 
 #if defined(__GNUC__) || defined(__clang__)
-# pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
 #endif
 
 //
@@ -88,256 +88,200 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-HistogramPlotPicker
-::HistogramPlotPicker( const PlotCurveVector& curves, QwtPlotCanvas* can ) :
-  QwtPlotPicker( can ),
-  m_PlotCurves( curves ),
-  m_RubberBandPens(),
-  m_IsGrayscaleActivated( false )
+HistogramPlotPicker::HistogramPlotPicker(const PlotCurveVector& curves, QwtPlotCanvas* can)
+  : QwtPlotPicker(can), m_PlotCurves(curves), m_RubberBandPens(), m_IsGrayscaleActivated(false)
 {
-  assert( m_PlotCurves.size()==HistogramPlotPicker::CURVE_COUNT );
+  assert(m_PlotCurves.size() == HistogramPlotPicker::CURVE_COUNT);
 
-  setStateMachine( new QwtPickerDragPointMachine() );
+  setStateMachine(new QwtPickerDragPointMachine());
 
-  setRubberBand( QwtPicker::UserRubberBand );
+  setRubberBand(QwtPicker::UserRubberBand);
 }
 
 /*******************************************************************************/
-HistogramPlotPicker
-::HistogramPlotPicker( const PlotCurveVector& curves,
-		       int xA,
-		       int yA,
-		       QwtPlotCanvas* can ) :
-  QwtPlotPicker( xA, yA, can ),
-  m_PlotCurves( curves ),
-  m_RubberBandPens(),
-  m_IsGrayscaleActivated( false )
+HistogramPlotPicker::HistogramPlotPicker(const PlotCurveVector& curves, int xA, int yA, QwtPlotCanvas* can)
+  : QwtPlotPicker(xA, yA, can), m_PlotCurves(curves), m_RubberBandPens(), m_IsGrayscaleActivated(false)
 
 {
-  assert( m_PlotCurves.size()==HistogramPlotPicker::CURVE_COUNT );
+  assert(m_PlotCurves.size() == HistogramPlotPicker::CURVE_COUNT);
 
-  setStateMachine( new QwtPickerDragPointMachine() );
+  setStateMachine(new QwtPickerDragPointMachine());
 
-  setRubberBand( QwtPicker::UserRubberBand );
+  setRubberBand(QwtPicker::UserRubberBand);
 }
 
 /*******************************************************************************/
-HistogramPlotPicker
-::HistogramPlotPicker( const PlotCurveVector& curves,
-		       int xA,
-		       int yA,
-		       DisplayMode tracker,
-		       QwtPlotCanvas* can ) :
-  QwtPlotPicker(
-    xA,
-    yA,
-    QwtPicker::UserRubberBand,
-    tracker,
-    can ),
-  m_PlotCurves( curves ),
-  m_RubberBandPens(),
-  m_IsGrayscaleActivated( false )
+HistogramPlotPicker::HistogramPlotPicker(const PlotCurveVector& curves, int xA, int yA, DisplayMode tracker, QwtPlotCanvas* can)
+  : QwtPlotPicker(xA, yA, QwtPicker::UserRubberBand, tracker, can), m_PlotCurves(curves), m_RubberBandPens(), m_IsGrayscaleActivated(false)
 {
-  assert( m_PlotCurves.size()==HistogramPlotPicker::CURVE_COUNT );
+  assert(m_PlotCurves.size() == HistogramPlotPicker::CURVE_COUNT);
 
-  setStateMachine( new QwtPickerDragPointMachine() );
+  setStateMachine(new QwtPickerDragPointMachine());
 }
 
 /*******************************************************************************/
-HistogramPlotPicker
-::~HistogramPlotPicker()
+HistogramPlotPicker::~HistogramPlotPicker()
 {
 }
 
 /*******************************************************************************/
-void
-HistogramPlotPicker
-::SetRubberBandPen( RgbwChannel channel, const QPen& pen )
+void HistogramPlotPicker::SetRubberBandPen(RgbwChannel channel, const QPen& pen)
 {
   CountType start = 0;
-  CountType stop = 0;
+  CountType stop  = 0;
 
-  if( !RgbwBounds( start, stop, channel ) )
+  if (!RgbwBounds(start, stop, channel))
     return;
 
-  for( CountType i=start; i<stop; ++i )
-    {
-    m_RubberBandPens[ i ] = pen;
-    }
+  for (CountType i = start; i < stop; ++i)
+  {
+    m_RubberBandPens[i] = pen;
+  }
 }
 
 /*******************************************************************************/
-void
-HistogramPlotPicker
-::SetGrayscaleActivated( bool isGrayscale )
+void HistogramPlotPicker::SetGrayscaleActivated(bool isGrayscale)
 {
   m_IsGrayscaleActivated = isGrayscale;
 }
 
 /*******************************************************************************/
-void
-HistogramPlotPicker
-::drawRubberBand( QPainter* painter ) const
+void HistogramPlotPicker::drawRubberBand(QPainter* painter) const
 {
-  assert( painter!=NULL );
+  assert(painter != NULL);
 
-  if( rubberBand()!=QwtPicker::UserRubberBand )
-    {
-    QwtPlotPicker::drawRubberBand( painter );
+  if (rubberBand() != QwtPicker::UserRubberBand)
+  {
+    QwtPlotPicker::drawRubberBand(painter);
     return;
-    }
+  }
 
-  if( !isActive() ||
-      rubberBand()==QwtPicker::NoRubberBand ||
-      rubberBandPen().style()==Qt::NoPen )
+  if (!isActive() || rubberBand() == QwtPicker::NoRubberBand || rubberBandPen().style() == Qt::NoPen)
     return;
 
-  const QPolygon & pa = selection();
+  const QPolygon& pa = selection();
 
-  if( rubberBand()==QwtPicker::UserRubberBand &&
+  if (rubberBand() == QwtPicker::UserRubberBand &&
       // ( selectionType()==QwtPicker::PointSelection ) &&
-      selection().count() >= 1 )
-    {
+      selection().count() >= 1)
+  {
 #if QWT_IS_ABOVE_6_1
-    assert( parentWidget()!=nullptr );
+    assert(parentWidget() != nullptr);
 
-    const QRect & rect = parentWidget()->contentsRect();
+    const QRect& rect = parentWidget()->contentsRect();
 
 #else // QWT_IS_ABOVE_6_1
-    const QRect & rect = pickRect();
+    const QRect& rect = pickRect();
 
-#endif //QWT_IS_ABOVE_6_1
+#endif // QWT_IS_ABOVE_6_1
 
-    const QPoint& pos = pa[ 0 ];
+    const QPoint& pos = pa[0];
 
-    QwtPainter::drawLine(
-      painter,
-      pos.x(), rect.bottom(),
-      pos.x(), rect.top()
-    );
+    QwtPainter::drawLine(painter, pos.x(), rect.bottom(), pos.x(), rect.top());
 
     CountType start = 0;
-    CountType stop = 0;
+    CountType stop  = 0;
 
-    if( !RgbwBounds( start, stop, RGBW_CHANNEL_ALL ) )
+    if (!RgbwBounds(start, stop, RGBW_CHANNEL_ALL))
       return;
 
-    QPointF p( invTransform( pos ) );
+    QPointF p(invTransform(pos));
 
-    for( CountType i=start; i<stop; ++i )
-      if( m_PlotCurves[ i ]->isVisible() )
-	{
-	// RgbwChannel channel = static_cast< RgbwChannel >( i );
+    for (CountType i = start; i < stop; ++i)
+      if (m_PlotCurves[i]->isVisible())
+      {
+        // RgbwChannel channel = static_cast< RgbwChannel >( i );
 
-	p.setY( Find( m_PlotCurves[ i ], p.x() ) );
-	QPoint pos2( transform( p ) );
+        p.setY(Find(m_PlotCurves[i], p.x()));
+        QPoint pos2(transform(p));
 
-	/*
-	  QPen pen( m_RubberBandPens[ i ] );
-	  painter->setPen( rubberBandPen() );
-	*/
+        /*
+          QPen pen( m_RubberBandPens[ i ] );
+          painter->setPen( rubberBandPen() );
+        */
 
-	QwtPainter::drawLine(
-	  painter,
-	  rect.left(), pos2.y(),
-	  rect.right(), pos2.y()
-	);
+        QwtPainter::drawLine(painter, rect.left(), pos2.y(), rect.right(), pos2.y());
 
-	// painter->setPen( pen );
-	}
-    }
+        // painter->setPen( pen );
+      }
+  }
 }
 
 /*******************************************************************************/
-QwtText
-HistogramPlotPicker
-::trackerTextF( const QPointF & point ) const
+QwtText HistogramPlotPicker::trackerTextF(const QPointF& point) const
 {
-  if( rubberBand()!=QwtPicker::UserRubberBand )
-    return QwtPlotPicker::trackerTextF( point );
+  if (rubberBand() != QwtPicker::UserRubberBand)
+    return QwtPlotPicker::trackerTextF(point);
 
-  if( !isActive() )
-    return QwtText(
-      QString().sprintf(
-      "%.4f, %.4f",
-      point.x(), point.y()
-      )
-    );
+  if (!isActive())
+    return QwtText(QString().sprintf("%.4f, %.4f", point.x(), point.y()));
 
   QString text;
-  text.sprintf( "%.4f", point.x() );
+  text.sprintf("%.4f", point.x());
 
   CountType start = 0;
-  CountType stop = 0;
+  CountType stop  = 0;
 
-  if( RgbwBounds( start, stop, RGBW_CHANNEL_ALL ) )
-    for( CountType i=start; i<stop; ++i )
-      if( m_PlotCurves[ i ]->isVisible() )
-	{
-	double c0 = 0.0;
-	double c1 = 0.0;
-	double cf = 0.0;
+  if (RgbwBounds(start, stop, RGBW_CHANNEL_ALL))
+    for (CountType i = start; i < stop; ++i)
+      if (m_PlotCurves[i]->isVisible())
+      {
+        double c0 = 0.0;
+        double c1 = 0.0;
+        double cf = 0.0;
 
-	Find( m_PlotCurves[ i ], point.x(), c0, c1, cf );
+        Find(m_PlotCurves[i], point.x(), c0, c1, cf);
 
-	text.append(
-	  QString().sprintf(
-	    "\n[%.4f; %.4f[, %.0f",
-	    c0, c1, cf
-	  )
-	);
-	}
+        text.append(QString().sprintf("\n[%.4f; %.4f[, %.0f", c0, c1, cf));
+      }
 
   return text;
 }
 
 /*******************************************************************************/
-double
-HistogramPlotPicker
-::Find( const QwtPlotCurve* curve, double x ) const
+double HistogramPlotPicker::Find(const QwtPlotCurve* curve, double x) const
 {
-  typedef QwtSeriesData< QPointF > SeriesData;
+  typedef QwtSeriesData<QPointF> SeriesData;
 
-  const SeriesData * data = curve->data();
+  const SeriesData* data = curve->data();
 
-  assert( data!=nullptr );
+  assert(data != nullptr);
 
-/*
-#if HISTOGRAM_CURVE_TYPE==0
-  assert( false && "Not yet implemented!" );
+  /*
+  #if HISTOGRAM_CURVE_TYPE==0
+    assert( false && "Not yet implemented!" );
 
-#elif HISTOGRAM_CURVE_TYPE==1
-  assert( false && "Not yet implemented!" );
+  #elif HISTOGRAM_CURVE_TYPE==1
+    assert( false && "Not yet implemented!" );
 
-#elif HISTOGRAM_CURVE_TYPE==2
-*/
+  #elif HISTOGRAM_CURVE_TYPE==2
+  */
 
-  assert( data->size() % 4 == 0 );
+  assert(data->size() % 4 == 0);
 
   CountType steps = 0;
 
-  if( data->size()==0 )
+  if (data->size() == 0)
     return -1.0;
 
   CountType i0 = 0;
   CountType i1 = data->size() / 4 - 1;
 
   // assert( x>=data->sample( 4 * i0 ).x() && x<=data->sample( 4 * i1 + 3 ).x() );
-  if( x<data->sample( 4 * i0 ).x() ||
-      x>data->sample( 4 * i1 + 3 ).x() )
+  if (x < data->sample(4 * i0).x() || x > data->sample(4 * i1 + 3).x())
     return -1.0;
 
-  while( i0!=i1 )
-    {
-    assert( data->sample( 4 * i0 ).x()==data->sample( 4 * i0 + 1 ).x() );
-    assert( data->sample( 4 * i0 + 2 ).x()==data->sample( 4 * i0 + 3 ).x() );
-    assert( data->sample( 4 * i0 + 1 ).y()==data->sample( 4 * i0 + 2 ).y() );
-    assert( data->sample( 4 * i0 ).y()==data->sample( 4 * i0 + 3 ).y() );
+  while (i0 != i1)
+  {
+    assert(data->sample(4 * i0).x() == data->sample(4 * i0 + 1).x());
+    assert(data->sample(4 * i0 + 2).x() == data->sample(4 * i0 + 3).x());
+    assert(data->sample(4 * i0 + 1).y() == data->sample(4 * i0 + 2).y());
+    assert(data->sample(4 * i0).y() == data->sample(4 * i0 + 3).y());
 
-    assert( data->sample( 4 * i1 ).x()==data->sample( 4 * i1 + 1 ).x() );
-    assert( data->sample( 4 * i1 + 2 ).x()==data->sample( 4 * i1 + 3 ).x() );
-    assert( data->sample( 4 * i1 + 1 ).y()==data->sample( 4 * i1 + 2 ).y() );
-    assert( data->sample( 4 * i1 ).y()==data->sample( 4 * i1 + 3 ).y() );
+    assert(data->sample(4 * i1).x() == data->sample(4 * i1 + 1).x());
+    assert(data->sample(4 * i1 + 2).x() == data->sample(4 * i1 + 3).x());
+    assert(data->sample(4 * i1 + 1).y() == data->sample(4 * i1 + 2).y());
+    assert(data->sample(4 * i1).y() == data->sample(4 * i1 + 3).y());
 
     CountType i = (i0 + i1 + 1) / 2;
 
@@ -357,16 +301,16 @@ HistogramPlotPicker
       << ")";
 #endif
 
-    if( x<data->sample( 4 * i ).x() )
+    if (x < data->sample(4 * i).x())
       i1 = i - 1;
     else
       i0 = i;
 
-    ++ steps;
-    }
+    ++steps;
+  }
 
-  assert( x>=data->sample( 4 * i0 ).x() && x<=data->sample( 4 * i0 + 2 ).x() );
-  assert( x>=data->sample( 4 * i0 + 1 ).x() && x<=data->sample( 4 * i0 + 3 ).x() );
+  assert(x >= data->sample(4 * i0).x() && x <= data->sample(4 * i0 + 2).x());
+  assert(x >= data->sample(4 * i0 + 1).x() && x <= data->sample(4 * i0 + 3).x());
 
 #if 0
   qDebug()
@@ -375,66 +319,59 @@ HistogramPlotPicker
     << data->sample( 4 * i0 + 1 ).y();
 #endif
 
-  return data->sample( 4 * i0 + 1 ).y();
+  return data->sample(4 * i0 + 1).y();
 
-/*
-#else
-  assert( false && "Unknown HISTOGRAM_CURVE_TYPE value" );
+  /*
+  #else
+    assert( false && "Unknown HISTOGRAM_CURVE_TYPE value" );
 
-#endif
-*/
+  #endif
+  */
 }
 
 /*******************************************************************************/
-CountType
-HistogramPlotPicker
-::Find( const QwtPlotCurve* curve,
-	double x,
-	double& xmin,
-	double& xmax,
-	double& y ) const
+CountType HistogramPlotPicker::Find(const QwtPlotCurve* curve, double x, double& xmin, double& xmax, double& y) const
 {
-  typedef QwtSeriesData< QPointF > SeriesData;
+  typedef QwtSeriesData<QPointF> SeriesData;
 
-  const SeriesData * data = curve->data();
+  const SeriesData* data = curve->data();
 
-  assert( data!=nullptr );
+  assert(data != nullptr);
 
-/*
-#if HISTOGRAM_CURVE_TYPE==0
-  assert( false && "Not yet implemented!" );
+  /*
+  #if HISTOGRAM_CURVE_TYPE==0
+    assert( false && "Not yet implemented!" );
 
-#elif HISTOGRAM_CURVE_TYPE==1
-  assert( false && "Not yet implemented!" );
+  #elif HISTOGRAM_CURVE_TYPE==1
+    assert( false && "Not yet implemented!" );
 
-#elif HISTOGRAM_CURVE_TYPE==2
-*/
+  #elif HISTOGRAM_CURVE_TYPE==2
+  */
 
-  assert( data->size() % 4 == 0 );
+  assert(data->size() % 4 == 0);
 
   CountType steps = 0;
 
-  if( data->size()==0 )
+  if (data->size() == 0)
     return 0;
 
   CountType i0 = 0;
   CountType i1 = data->size() / 4 - 1;
 
-  if( x<data->sample( 4 * i0 ).x() ||
-      x>data->sample( 4 * i1 + 3 ).x() )
+  if (x < data->sample(4 * i0).x() || x > data->sample(4 * i1 + 3).x())
     return 0;
 
-  while( i0!=i1 )
-    {
-    assert( data->sample( 4 * i0 ).x()==data->sample( 4 * i0 + 1 ).x() );
-    assert( data->sample( 4 * i0 + 2 ).x()==data->sample( 4 * i0 + 3 ).x() );
-    assert( data->sample( 4 * i0 + 1 ).y()==data->sample( 4 * i0 + 2 ).y() );
-    assert( data->sample( 4 * i0 ).y()==data->sample( 4 * i0 + 3 ).y() );
+  while (i0 != i1)
+  {
+    assert(data->sample(4 * i0).x() == data->sample(4 * i0 + 1).x());
+    assert(data->sample(4 * i0 + 2).x() == data->sample(4 * i0 + 3).x());
+    assert(data->sample(4 * i0 + 1).y() == data->sample(4 * i0 + 2).y());
+    assert(data->sample(4 * i0).y() == data->sample(4 * i0 + 3).y());
 
-    assert( data->sample( 4 * i1 ).x()==data->sample( 4 * i1 + 1 ).x() );
-    assert( data->sample( 4 * i1 + 2 ).x()==data->sample( 4 * i1 + 3 ).x() );
-    assert( data->sample( 4 * i1 + 1 ).y()==data->sample( 4 * i1 + 2 ).y() );
-    assert( data->sample( 4 * i1 ).y()==data->sample( 4 * i1 + 3 ).y() );
+    assert(data->sample(4 * i1).x() == data->sample(4 * i1 + 1).x());
+    assert(data->sample(4 * i1 + 2).x() == data->sample(4 * i1 + 3).x());
+    assert(data->sample(4 * i1 + 1).y() == data->sample(4 * i1 + 2).y());
+    assert(data->sample(4 * i1).y() == data->sample(4 * i1 + 3).y());
 
     CountType i = (i0 + i1 + 1) / 2;
 
@@ -454,16 +391,16 @@ HistogramPlotPicker
       << ")";
 #endif
 
-    if( x<data->sample( 4 * i ).x() )
+    if (x < data->sample(4 * i).x())
       i1 = i - 1;
     else
       i0 = i;
 
-    ++ steps;
-    }
+    ++steps;
+  }
 
-  assert( x>=data->sample( 4 * i0 ).x() && x<=data->sample( 4 * i0 + 2 ).x() );
-  assert( x>=data->sample( 4 * i0 + 1 ).x() && x<=data->sample( 4 * i0 + 3 ).x() );
+  assert(x >= data->sample(4 * i0).x() && x <= data->sample(4 * i0 + 2).x());
+  assert(x >= data->sample(4 * i0 + 1).x() && x <= data->sample(4 * i0 + 3).x());
 
 #if 0
   qDebug()
@@ -472,18 +409,18 @@ HistogramPlotPicker
     << data->sample( 4 * i0 + 1 ).y();
 #endif
 
-  xmin = data->sample( 4 * i0 ).x();
-  xmax = data->sample( 4 * i0 + 2 ).x();
-  y = data->sample( 4 * i0 + 1 ).y();
+  xmin = data->sample(4 * i0).x();
+  xmax = data->sample(4 * i0 + 2).x();
+  y    = data->sample(4 * i0 + 1).y();
 
   return steps;
 
-/*
-#else
-  assert( false && "Unknown HISTOGRAM_CURVE_TYPE value" );
+  /*
+  #else
+    assert( false && "Unknown HISTOGRAM_CURVE_TYPE value" );
 
-#endif
-*/
+  #endif
+  */
 }
 
 /*******************************************************************************/

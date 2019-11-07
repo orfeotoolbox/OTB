@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 CS Systemes d'Information (CS SI)
+# Copyright (C) 2005-2019 CS Systemes d'Information (CS SI)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -19,7 +19,7 @@
 #
 
 set(TEST_DRIVER otbTestDriver
-    --add-before-env PYTHONPATH        $<TARGET_FILE_DIR:_otbApplication>
+    --add-before-env PYTHONPATH        ${CMAKE_BINARY_DIR}/${OTB_INSTALL_PYTHON_DIR}
     --add-before-env OTB_APPLICATION_PATH $<TARGET_FILE_DIR:otbapp_Smoothing> )
 
 if(WIN32)
@@ -53,14 +53,6 @@ add_test( NAME pyTvHyperspectralUnmixingUCLS
   ucls
   )
 
-add_test( NAME pyTvBug440
-  COMMAND ${TEST_DRIVER} Execute
-  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
-  Bug440
-  ${OTB_DATA_ROOT}/Input/scene.png
-  ${TEMP}/pyTvBug440Output.tif
-  )
-
 add_test( NAME pyTvBug804
   COMMAND ${TEST_DRIVER} Execute
   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
@@ -85,6 +77,16 @@ add_test( NAME pyTvBug736
   ${TEMP}/pyTvBug736Output.tif
   )
 
+add_test( NAME pyTvBug1899
+  COMMAND ${TEST_DRIVER}
+  Execute
+  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
+  Bug1899
+  ${OTB_DATA_ROOT}/Input/veryverySmallFSATSW.tif
+  ${TEMP}/pyTvBug1899Output.tif
+)
+
+
 add_test( NAME pyTvBandMathOutXML
   COMMAND ${TEST_DRIVER} Execute
   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
@@ -106,18 +108,30 @@ add_test( NAME pyTvBandMathInXML
 
 set_tests_properties(pyTvBandMathInXML PROPERTIES DEPENDS pyTvBandMathOutXML)
 
+if ( NUMPY_FOUND )
+
 add_test( NAME pyTvNumpyIO
   COMMAND ${TEST_DRIVER} Execute
   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
   PythonNumpyTest
-  ${OTB_DATA_ROOT}/Examples/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+  ${OTB_DATA_ROOT}/Input/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
   ${TEMP}/pyTvNumpyIO_SmoothingOut.png )
+
+
+add_test( NAME pyTvImageInterface
+  COMMAND ${TEST_DRIVER} Execute
+  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
+  PythonImageInterface
+  ${OTB_DATA_ROOT}/Input/QB_Toulouse_Ortho_XS.tif
+  )
+
+endif()
 
 add_test( NAME pyTvNewStyleParameters
   COMMAND ${TEST_DRIVER} Execute
   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
   PythonNewStyleParametersTest
-  ${OTB_DATA_ROOT}/Input/poupees.tif
+  ${OTB_DATA_ROOT}/Input/sensor_stereo_left.tif
   ${TEMP}/pyTvNewStyleParametersTest.tif
   ${OTB_DATA_ROOT}/Input/apTvUtSmoothingTest_OutXML.xml)
 
@@ -147,9 +161,11 @@ add_test( NAME pyTvParametersDict
   PythonParametersDict
   ${OTB_DATA_ROOT}/Input/poupees.tif)
 
-add_test( NAME pyTvImageInterface
+add_test( NAME pyTvNoUpdateParameter
   COMMAND ${TEST_DRIVER} Execute
   ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
-  PythonImageInterface
-  ${OTB_DATA_ROOT}/Examples/QB_Toulouse_Ortho_XS.tif
+  PythonNoUpdateParameter
+  ${OTB_DATA_ROOT}/Input/poupees.tif
+  ${OTB_DATA_ROOT}/Input/training/training.shp
   )
+

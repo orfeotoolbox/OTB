@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,17 +19,16 @@
  */
 
 
-
 #include "otbPointSetExtractROI.h"
 #include "itkPointSet.h"
 #include "otbRandomPointSetSource.h"
 
-int otbPointSetExtractROITest(int, char*[])
+int otbPointSetExtractROITest(int, char* [])
 {
-  typedef float                                PixelType;
-  typedef itk::PointSet<PixelType, 2>          PointSetType;
-  typedef PointSetType::PointsContainer        PointsContainerType;
-  typedef PointSetType::PointType              PointType;
+  typedef float PixelType;
+  typedef itk::PointSet<PixelType, 2> PointSetType;
+  typedef PointSetType::PointsContainer PointsContainerType;
+  typedef PointSetType::PointType       PointType;
 
   typedef otb::RandomPointSetSource<PointSetType> PointSetSource;
 
@@ -58,7 +57,7 @@ int otbPointSetExtractROITest(int, char*[])
   std::cout << "Keeping points from " << filter->GetStartX() << ", " << filter->GetStartY() << std::endl;
   std::cout << "with a region size of " << filter->GetSizeX() << ", " << filter->GetSizeY() << std::endl;
 
-  //Output the result
+  // Output the result
 
   // Get the Smart Pointer to the Filter Output
   PointSetType::Pointer outputPointSet = filter->GetOutput();
@@ -67,25 +66,26 @@ int otbPointSetExtractROITest(int, char*[])
   std::cout << " points " << std::endl;
 
   // Get the the point container
-  PointSetType::PointsContainerPointer
-    extractedPoints = outputPointSet->GetPoints();
+  PointSetType::PointsContainerPointer extractedPoints = outputPointSet->GetPoints();
 
   PointsContainerType::ConstIterator it = extractedPoints->Begin();
   while (it != extractedPoints->End())
-    {
+  {
     PointType p = it.Value();
-    std::cout.width(5); std::cout << p[0] << ", ";
-    std::cout.width(5); std::cout << p[1] << std::endl;
+    std::cout.width(5);
+    std::cout << p[0] << ", ";
+    std::cout.width(5);
+    std::cout << p[1] << std::endl;
     ++it;
-    }
+  }
 
   // All objects should be automatically destroyed at this point
 
   if (outputPointSet->GetNumberOfPoints() != 6)
-    {
+  {
     std::cout << "Wrong number of point in the output" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

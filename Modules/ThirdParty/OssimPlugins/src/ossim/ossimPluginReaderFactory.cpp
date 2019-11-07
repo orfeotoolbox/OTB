@@ -47,7 +47,7 @@ namespace ossimplugins
 
    ossimPluginReaderFactory::~ossimPluginReaderFactory()
    {
-      theInstance = 0;
+      theInstance = nullptr;
    }
 
    ossimPluginReaderFactory* ossimPluginReaderFactory::instance()
@@ -179,10 +179,4 @@ namespace ossimplugins
    {
       extensionList.push_back(ossimString("xml"));
    }
-
-   ossimPluginReaderFactory::ossimPluginReaderFactory(){}
-
-   ossimPluginReaderFactory::ossimPluginReaderFactory(const ossimPluginReaderFactory&){}
-
-   void ossimPluginReaderFactory::operator=(const ossimPluginReaderFactory&){}
 }

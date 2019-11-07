@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,8 +34,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT StringParameter
-  : public Parameter
+class OTBApplicationEngine_EXPORT StringParameter : public Parameter
 {
 public:
   /** Standard class typedef */
@@ -51,14 +50,14 @@ public:
   itkTypeMacro(StringParameter, Parameter);
 
   /** Set the value */
-  void SetValue( const std::string & value )
+  void SetValue(const std::string& value)
   {
     m_Value = value;
-    SetActive( true );
+    SetActive(true);
   }
 
   /** Get the value */
-  const std::string & GetValue() const
+  const std::string& GetValue() const
   {
     return m_Value;
   }
@@ -73,20 +72,37 @@ public:
     m_Value = "";
   }
 
+  ParameterType GetType() const override
+  {
+    return ParameterType_String;
+  }
+
+  std::string ToString() const override
+  {
+    return m_Value;
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetValue(value);
+  }
+
 protected:
   /** Constructor */
   StringParameter()
-  {}
+  {
+  }
 
   /** Destructor */
   ~StringParameter() override
-  {}
+  {
+  }
 
-  std::string  m_Value;
+  std::string m_Value;
 
 private:
-  StringParameter(const StringParameter &); //purposely not implemented
-  void operator =(const StringParameter&); //purposely not implemented
+  StringParameter(const StringParameter&) = delete;
+  void operator=(const StringParameter&) = delete;
 
 }; // End class Parameter
 

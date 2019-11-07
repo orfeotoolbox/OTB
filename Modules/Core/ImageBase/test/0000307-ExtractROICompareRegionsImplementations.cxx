@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "itkExtractImageFilter.h"
 #include "itkVectorIndexSelectionCastImageFilter.h"
 #include "otbExtractROI.h"
@@ -30,28 +28,23 @@
 
 typedef unsigned char PixelType;
 
-typedef otb::Image<PixelType>  ImageType;
+typedef otb::Image<PixelType>       ImageType;
 typedef otb::VectorImage<PixelType> VectorImageType;
 
-typedef ImageType::RegionType      RegionType;
-typedef ImageType::IndexType       IndexType;
-typedef IndexType::IndexValueType  IndexValueType;
-typedef ImageType::SizeType        SizeType;
-typedef SizeType::SizeValueType    SizeValueType;
+typedef ImageType::RegionType     RegionType;
+typedef ImageType::IndexType      IndexType;
+typedef IndexType::IndexValueType IndexValueType;
+typedef ImageType::SizeType       SizeType;
+typedef SizeType::SizeValueType   SizeValueType;
 
 // ITK filters
-typedef itk::ExtractImageFilter<ImageType, ImageType>
-  ExtractImageFilterType;
-typedef itk::VectorIndexSelectionCastImageFilter<VectorImageType, ImageType>
-  VectorIndexSelectionCastImageFilterType;
+typedef itk::ExtractImageFilter<ImageType, ImageType>                        ExtractImageFilterType;
+typedef itk::VectorIndexSelectionCastImageFilter<VectorImageType, ImageType> VectorIndexSelectionCastImageFilterType;
 
 // OTB filters
-typedef otb::ExtractROI<PixelType, PixelType>
-  ExtractROIType;
-typedef otb::MultiChannelExtractROI<PixelType, PixelType>
-  MultiChannelExtractROIType;
-typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType>
-  MultiToMonoChannelExtractROIType;
+typedef otb::ExtractROI<PixelType, PixelType>                   ExtractROIType;
+typedef otb::MultiChannelExtractROI<PixelType, PixelType>       MultiChannelExtractROIType;
+typedef otb::MultiToMonoChannelExtractROI<PixelType, PixelType> MultiToMonoChannelExtractROIType;
 
 
 ImageType::Pointer makeImage(IndexValueType startX, IndexValueType startY, SizeValueType sizeX, SizeValueType sizeY)
@@ -89,10 +82,10 @@ VectorImageType::Pointer makeVectorImage(IndexValueType startX, IndexValueType s
   return im;
 }
 
-int otbITKExtractImageFilterROITestRegion(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbITKExtractImageFilterROITestRegion(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  ImageType::Pointer in;
-  RegionType extractionRegion;
+  ImageType::Pointer              in;
+  RegionType                      extractionRegion;
   ExtractImageFilterType::Pointer extract;
 
   in = makeImage(0, 0, 100, 100);
@@ -112,9 +105,9 @@ int otbITKExtractImageFilterROITestRegion(int itkNotUsed(argc), char * itkNotUse
   std::cout << "Output LargestPossibleRegion : " << extract->GetOutput()->GetLargestPossibleRegion() << std::endl;
 
   if (extract->GetOutput()->GetLargestPossibleRegion() != extract->GetExtractionRegion())
-    {
+  {
     return EXIT_FAILURE;
-    }
+  }
 
   in = makeImage(20, 20, 100, 100);
 
@@ -133,18 +126,18 @@ int otbITKExtractImageFilterROITestRegion(int itkNotUsed(argc), char * itkNotUse
   std::cout << "Output LargestPossibleRegion : " << extract->GetOutput()->GetLargestPossibleRegion() << std::endl;
 
   if (extract->GetOutput()->GetLargestPossibleRegion() != extract->GetExtractionRegion())
-    {
+  {
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }
 
 
-int otbITKVectorIndexSelectionCastTestRegion(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbITKVectorIndexSelectionCastTestRegion(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  VectorImageType::Pointer in;
-  RegionType extractionRegion;
+  VectorImageType::Pointer                         in;
+  RegionType                                       extractionRegion;
   VectorIndexSelectionCastImageFilterType::Pointer extract;
 
   in = makeVectorImage(0, 0, 100, 100, 3);
@@ -158,9 +151,9 @@ int otbITKVectorIndexSelectionCastTestRegion(int itkNotUsed(argc), char * itkNot
   std::cout << "Output LargestPossibleRegion : " << extract->GetOutput()->GetLargestPossibleRegion() << std::endl;
 
   if (extract->GetOutput()->GetLargestPossibleRegion() != in->GetLargestPossibleRegion())
-    {
+  {
     return EXIT_FAILURE;
-    }
+  }
 
   in = makeVectorImage(50, 50, 100, 100, 3);
 
@@ -173,18 +166,18 @@ int otbITKVectorIndexSelectionCastTestRegion(int itkNotUsed(argc), char * itkNot
   std::cout << "Output LargestPossibleRegion : " << extract->GetOutput()->GetLargestPossibleRegion() << std::endl;
 
   if (extract->GetOutput()->GetLargestPossibleRegion() != in->GetLargestPossibleRegion())
-    {
+  {
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }
 
 
-int otbMultiToMonoChannelExtractROITestRegion(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbMultiToMonoChannelExtractROITestRegion(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  VectorImageType::Pointer in;
-  RegionType extractionRegion;
+  VectorImageType::Pointer                  in;
+  RegionType                                extractionRegion;
   MultiToMonoChannelExtractROIType::Pointer extract;
 
   in = makeVectorImage(0, 0, 100, 100, 3);
@@ -204,9 +197,9 @@ int otbMultiToMonoChannelExtractROITestRegion(int itkNotUsed(argc), char * itkNo
   std::cout << "Output LargestPossibleRegion : " << extract->GetOutput()->GetLargestPossibleRegion() << std::endl;
 
   if (extract->GetOutput()->GetLargestPossibleRegion() != extract->GetExtractionRegion())
-    {
+  {
     return EXIT_FAILURE;
-    }
+  }
 
   in = makeVectorImage(20, 20, 100, 100, 3);
 
@@ -225,19 +218,18 @@ int otbMultiToMonoChannelExtractROITestRegion(int itkNotUsed(argc), char * itkNo
   std::cout << "Output LargestPossibleRegion : " << extract->GetOutput()->GetLargestPossibleRegion() << std::endl;
 
   if (extract->GetOutput()->GetLargestPossibleRegion() != extract->GetExtractionRegion())
-    {
+  {
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }
 
 
-
-int otbMultiChannelExtractROITestRegion(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbMultiChannelExtractROITestRegion(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  VectorImageType::Pointer in;
-  RegionType extractionRegion;
+  VectorImageType::Pointer            in;
+  RegionType                          extractionRegion;
   MultiChannelExtractROIType::Pointer extract;
 
   in = makeVectorImage(0, 0, 100, 100, 3);
@@ -257,9 +249,9 @@ int otbMultiChannelExtractROITestRegion(int itkNotUsed(argc), char * itkNotUsed(
   std::cout << "Output LargestPossibleRegion : " << extract->GetOutput()->GetLargestPossibleRegion() << std::endl;
 
   if (extract->GetOutput()->GetLargestPossibleRegion() != extract->GetExtractionRegion())
-    {
+  {
     return EXIT_FAILURE;
-    }
+  }
 
   in = makeVectorImage(20, 20, 100, 100, 3);
 
@@ -278,18 +270,18 @@ int otbMultiChannelExtractROITestRegion(int itkNotUsed(argc), char * itkNotUsed(
   std::cout << "Output LargestPossibleRegion : " << extract->GetOutput()->GetLargestPossibleRegion() << std::endl;
 
   if (extract->GetOutput()->GetLargestPossibleRegion() != extract->GetExtractionRegion())
-    {
+  {
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }
 
 
-int otbExtractROITestRegion(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbExtractROITestRegion(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  ImageType::Pointer in;
-  RegionType extractionRegion;
+  ImageType::Pointer      in;
+  RegionType              extractionRegion;
   ExtractROIType::Pointer extract;
 
   in = makeImage(0, 0, 100, 100);
@@ -309,9 +301,9 @@ int otbExtractROITestRegion(int itkNotUsed(argc), char * itkNotUsed(argv)[])
   std::cout << "Output LargestPossibleRegion : " << extract->GetOutput()->GetLargestPossibleRegion() << std::endl;
 
   if (extract->GetOutput()->GetLargestPossibleRegion() != extract->GetExtractionRegion())
-    {
+  {
     return EXIT_FAILURE;
-    }
+  }
 
   in = makeImage(20, 20, 100, 100);
 
@@ -330,16 +322,15 @@ int otbExtractROITestRegion(int itkNotUsed(argc), char * itkNotUsed(argv)[])
   std::cout << "Output LargestPossibleRegion : " << extract->GetOutput()->GetLargestPossibleRegion() << std::endl;
 
   if (extract->GetOutput()->GetLargestPossibleRegion() != extract->GetExtractionRegion())
-    {
+  {
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }
 
 
-
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   int unitaryResult;
   int finalResult = EXIT_SUCCESS;
@@ -348,71 +339,70 @@ int main(int argc, char * argv[])
   std::cout << "Starting test itk::ExtractImageFilter" << std::endl;
   unitaryResult = otbITKExtractImageFilterROITestRegion(argc, argv);
   if (unitaryResult == EXIT_FAILURE)
-    {
+  {
     std::cout << "-> Testing itk::ExtractImageFilter FAILED" << std::endl;
     finalResult = EXIT_FAILURE;
-    }
+  }
   else
-    {
+  {
     std::cout << "-> Testing itk::ExtractImageFilter OK" << std::endl;
-    }
+  }
 
 
   std::cout << "*******************************" << std::endl;
   std::cout << "Starting test itk::VectorIndexSelectionCast" << std::endl;
   unitaryResult = otbITKVectorIndexSelectionCastTestRegion(argc, argv);
   if (unitaryResult == EXIT_FAILURE)
-    {
+  {
     std::cout << "-> Testing itk::VectorIndexSelectionCast FAILED" << std::endl;
     finalResult = EXIT_FAILURE;
-    }
+  }
   else
-    {
+  {
     std::cout << "-> Testing itk::VectorIndexSelectionCast OK" << std::endl;
-    }
+  }
 
 
   std::cout << "*******************************" << std::endl;
   std::cout << "Starting test otb::MultiToMonoChannelExtractROI" << std::endl;
   unitaryResult = otbMultiToMonoChannelExtractROITestRegion(argc, argv);
   if (unitaryResult == EXIT_FAILURE)
-    {
+  {
     std::cout << "-> Testing otb::MultiToMonoChannelExtractROI FAILED" << std::endl;
     finalResult = EXIT_FAILURE;
-    }
+  }
   else
-    {
+  {
     std::cout << "-> Testing otb::MultiToMonoChannelExtractROI OK" << std::endl;
-    }
+  }
 
 
   std::cout << "*******************************" << std::endl;
   std::cout << "Starting test otb::MultiChannelExtractROI" << std::endl;
   unitaryResult = otbMultiChannelExtractROITestRegion(argc, argv);
   if (unitaryResult == EXIT_FAILURE)
-    {
+  {
     std::cout << "-> Testing otb::MultiChannelExtractROI FAILED" << std::endl;
     finalResult = EXIT_FAILURE;
-    }
+  }
   else
-    {
+  {
     std::cout << "-> Testing otb::MultiChannelExtractROI OK" << std::endl;
-    }
+  }
 
 
   std::cout << "*******************************" << std::endl;
   std::cout << "Starting test otb::ExtractROI" << std::endl;
   unitaryResult = otbExtractROITestRegion(argc, argv);
   if (unitaryResult == EXIT_FAILURE)
-    {
+  {
     std::cout << "-> Testing otb::ExtractROI FAILED" << std::endl;
     finalResult = EXIT_FAILURE;
-    }
+  }
   else
-    {
+  {
     std::cout << "-> Testing otb::ExtractROI OK" << std::endl;
-    }
+  }
 
   return finalResult;
-
 }

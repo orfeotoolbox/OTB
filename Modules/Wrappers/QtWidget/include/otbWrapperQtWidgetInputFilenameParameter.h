@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,8 @@
 #define otbWrapperQtWidgetInputFilenameParameter_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbWrapperInputFilenameParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 
 namespace otb
@@ -42,19 +40,19 @@ class OTBQtWidget_EXPORT QtWidgetInputFilenameParameter : public QtWidgetParamet
 {
   Q_OBJECT
 public:
-  QtWidgetInputFilenameParameter(InputFilenameParameter*, QtWidgetModel*);
+  QtWidgetInputFilenameParameter(InputFilenameParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetInputFilenameParameter() override;
 
-  inline const QLineEdit* GetInput() const;
-  inline QLineEdit* GetInput();
+  const QLineEdit* GetInput() const;
+  QLineEdit*       GetInput();
 
 protected slots:
-  void SetFileName( const QString& value );
+  void SetFileName(const QString& value);
   void SelectFile();
 
 private:
-  QtWidgetInputFilenameParameter(const QtWidgetInputFilenameParameter&); //purposely not implemented
-  void operator=(const QtWidgetInputFilenameParameter&); //purposely not implemented
+  QtWidgetInputFilenameParameter(const QtWidgetInputFilenameParameter&) = delete;
+  void operator=(const QtWidgetInputFilenameParameter&) = delete;
 
   void DoCreateWidget() override;
 
@@ -63,27 +61,10 @@ private:
 
   InputFilenameParameter::Pointer m_FilenameParam;
 
-  QHBoxLayout * m_HLayout;
-  QLineEdit*    m_Input;
-  QPushButton * m_Button;
+  QHBoxLayout* m_HLayout;
+  QLineEdit*   m_Input;
+  QPushButton* m_Button;
 };
-
-
-inline
-const QLineEdit*
-QtWidgetInputFilenameParameter
-::GetInput() const
-{
-  return m_Input;
-}
-
-inline
-QLineEdit*
-QtWidgetInputFilenameParameter
-::GetInput()
-{
-  return m_Input;
-}
 
 } // Wrapper
 

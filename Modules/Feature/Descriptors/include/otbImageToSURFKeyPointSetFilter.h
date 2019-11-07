@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,7 +30,6 @@
 #include "otbImageToPointSetFilter.h"
 #include "itkVector.h"
 
-#include <iostream>
 namespace otb
 {
 
@@ -60,17 +59,15 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputPointSet>
-class ITK_EXPORT ImageToSURFKeyPointSetFilter
-  : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
+class ITK_EXPORT ImageToSURFKeyPointSetFilter : public ImageToPointSetFilter<TInputImage, TOutputPointSet>
 {
 
 public:
-
   /** Standard class typedefs. */
-  typedef ImageToSURFKeyPointSetFilter                        Self;
+  typedef ImageToSURFKeyPointSetFilter Self;
   typedef ImageToPointSetFilter<TInputImage, TOutputPointSet> Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -111,11 +108,11 @@ public:
   typedef typename NeighborhoodType::OffsetType               OffsetType;
 
   typedef otb::ImageToHessianDeterminantImageFilter<InputImageType, InputImageType> ImageToDetHessianImageType;
-  typedef typename ImageToDetHessianImageType::Pointer                              DetHessianPointerFilter;
+  typedef typename ImageToDetHessianImageType::Pointer DetHessianPointerFilter;
 
   /** Filter for  resampling images for the multi-scale analysis */
   typedef itk::ResampleImageFilter<InputImageType, InputImageType> ResampleFilterType;
-  typedef typename ResampleFilterType::Pointer                     ResampleFilterPointerType;
+  typedef typename ResampleFilterType::Pointer ResampleFilterPointerType;
 
   /** ImageList  to store the Hessian determinant image at each scale (sigma width)*/
   typedef otb::ImageList<InputImageType>  ImageListType;
@@ -126,7 +123,6 @@ public:
   typedef itk::Vector<PixelValue, 3> VectorPointType;
 
 protected:
-
   /**
    * Constructor.
    */
@@ -142,7 +138,7 @@ protected:
   /**
    * Main computation method.
    */
-  void  GenerateData() override;
+  void GenerateData() override;
 
   /** Check local extremum for 8 neighbors (current)
    *
@@ -159,8 +155,7 @@ protected:
    *
    *  \return true if the Central pixel is extremum
    */
-  virtual bool IsLocalExtremumAround(const NeighborhoodType& neigh,
-                                     double CenterValue);
+  virtual bool IsLocalExtremumAround(const NeighborhoodType& neigh, double CenterValue);
 
   /** Refine location key point
    *
@@ -174,10 +169,8 @@ protected:
    *
    *  \return true if key point is accepted, false otherwise
    */
-  bool RefineLocationKeyPoint(const NeighborhoodIteratorType& currentScale,
-                              const NeighborhoodIteratorType& previousScale,
-                              const NeighborhoodIteratorType& nextScale,
-                              VectorPointType& solution);
+  bool RefineLocationKeyPoint(const NeighborhoodIteratorType& currentScale, const NeighborhoodIteratorType& previousScale,
+                              const NeighborhoodIteratorType& nextScale, VectorPointType& solution);
 
   /** AssignOrientation
    *
@@ -186,8 +179,7 @@ protected:
    *
    * \return  key point orientation
    */
-  virtual double AssignOrientation(const NeighborhoodType& neigh,
-                                   double S);
+  virtual double AssignOrientation(const NeighborhoodType& neigh, double S);
 
   /** ComputeDescriptor
    *
@@ -197,18 +189,15 @@ protected:
    *
    * \return hsitogram descriptor
    */
-  virtual VectorType ComputeDescriptor(const NeighborhoodType& neigh,
-                                       double O,
-                                       double S);
+  virtual VectorType ComputeDescriptor(const NeighborhoodType& neigh, double O, double S);
   /**
    * Compute min a b c
    */
   virtual int GetMin(int a, int b, int c);
 
 private:
-
-  ImageToSURFKeyPointSetFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageToSURFKeyPointSetFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Number of octaves */
   int m_OctavesNumber;
@@ -245,7 +234,7 @@ private:
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToSURFKeyPointSetFilter.txx"
+#include "otbImageToSURFKeyPointSetFilter.hxx"
 #endif
 
 #endif

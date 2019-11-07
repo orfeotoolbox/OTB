@@ -1,0 +1,2 @@
+GetValue(const InputImagePixelType = 10, const LabelledImagePixelType = 5): 1
+GetValue(const InputImagePixelType = 5, const LabelledImagePixelType = 5) : -1

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,48 +22,28 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbListSampleToHistogramListGeneratorNew);
   REGISTER_TEST(otbStreamingMinMaxImageFilter);
-  REGISTER_TEST(otbStreamingMinMaxVectorImageFilterNew);
-  REGISTER_TEST(otbVarianceImageFilterNew);
-  REGISTER_TEST(otbStreamingStatisticsImageFilterNew);
-  REGISTER_TEST(otbListSampleToVariableDimensionHistogramGeneratorNew);
-  REGISTER_TEST(otbStreamingHistogramVectorImageFilterNew);
   REGISTER_TEST(otbStreamingHistogramVectorImageFilterTest);
-  REGISTER_TEST(otbStreamingStatisticsVectorImageFilterNew);
   REGISTER_TEST(otbRealImageToComplexImageFilterTest);
   REGISTER_TEST(otbHistogramStatisticsFunction);
-  REGISTER_TEST(otbGaussianAdditiveNoiseSampleListFilterNew);
   REGISTER_TEST(otbGaussianAdditiveNoiseSampleListFilter);
-  REGISTER_TEST(otbNormalizeVectorImageFilterNewTest);
   REGISTER_TEST(otbNormalizeVectorImageFilterTest);
-  REGISTER_TEST(otbVectorImageToMatrixNewTest);
   REGISTER_TEST(otbVectorImageToMatrixTest);
   REGISTER_TEST(otbListSampleToVariableDimensionHistogramGenerator);
-  REGISTER_TEST(otbStreamingMinMaxImageFilterNew);
-  REGISTER_TEST(otbShiftScaleSampleListFilterNew);
   REGISTER_TEST(otbShiftScaleSampleListFilter);
   REGISTER_TEST(otbVectorImageToIntensityImageFilter);
   REGISTER_TEST(otbVarianceImageFilter);
-  REGISTER_TEST(otbConcatenateSampleListFilterNew);
   REGISTER_TEST(otbConcatenateSampleListFilter);
   REGISTER_TEST(otbLocalHistogramImageFunctionTest);
-  REGISTER_TEST(otbVectorImageToIntensityImageFilterNew);
-  REGISTER_TEST(otbProjectiveProjectionNew);
   REGISTER_TEST(otbProjectiveProjectionTestHighSNR);
   REGISTER_TEST(otbShiftScaleVectorImageFilterTest);
-  REGISTER_TEST(otbContinuousMinimumMaximumImageCalculatorNew);
-  REGISTER_TEST(otbStreamingCompareImageFilterNew);
   REGISTER_TEST(otbStreamingCompareImageFilter);
   REGISTER_TEST(otbStreamingStatisticsMapFromLabelImageFilterTest);
-  REGISTER_TEST(otbLocalHistogramImageFunctionNew);
   REGISTER_TEST(otbRealAndImaginaryImageToComplexImageFilterTest);
   REGISTER_TEST(otbStreamingStatisticsImageFilter);
-  REGISTER_TEST(otbListSampleToBalancedListSampleFilterNew);
   REGISTER_TEST(otbListSampleToBalancedListSampleFilter);
   REGISTER_TEST(otbStreamingStatisticsVectorImageFilter);
   REGISTER_TEST(otbStreamingMinMaxVectorImageFilter);
-  REGISTER_TEST(otbListSampleGeneratorNew);
   REGISTER_TEST(otbListSampleGenerator);
   REGISTER_TEST(otbImaginaryImageToComplexImageFilterTest);
   REGISTER_TEST(otbListSampleToHistogramListGenerator);

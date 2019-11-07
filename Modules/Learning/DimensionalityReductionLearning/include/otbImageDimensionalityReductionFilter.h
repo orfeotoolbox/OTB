@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,15 +39,14 @@ namespace otb
  * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputImage, class TOutputImage, class TMaskImage = TOutputImage>
-class ITK_EXPORT ImageDimensionalityReductionFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT ImageDimensionalityReductionFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef ImageDimensionalityReductionFilter                       Self;
+  typedef ImageDimensionalityReductionFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -63,13 +62,13 @@ public:
   typedef typename MaskImageType::ConstPointer MaskImageConstPointerType;
   typedef typename MaskImageType::Pointer      MaskImagePointerType;
 
-  typedef TOutputImage                         OutputImageType;
-  typedef typename OutputImageType::Pointer    OutputImagePointerType;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
-  typedef typename OutputImageType::InternalPixelType  LabelType;
+  typedef TOutputImage                                OutputImageType;
+  typedef typename OutputImageType::Pointer           OutputImagePointerType;
+  typedef typename OutputImageType::RegionType        OutputImageRegionType;
+  typedef typename OutputImageType::InternalPixelType LabelType;
 
   typedef MachineLearningModel<itk::VariableLengthVector<ValueType>, itk::VariableLengthVector<LabelType>> ModelType;
-  typedef typename ModelType::Pointer                ModelPointerType;
+  typedef typename ModelType::Pointer ModelPointerType;
 
   typedef otb::Image<double>                    ConfidenceImageType;
   typedef typename ConfidenceImageType::Pointer ConfidenceImagePointerType;
@@ -89,35 +88,37 @@ public:
   itkSetMacro(BatchMode, bool);
   itkGetMacro(BatchMode, bool);
   itkBooleanMacro(BatchMode);
-  
+
   /**
    * If set, only pixels within the mask will be classified.
    * All pixels with a value greater than 0 in the mask, will be classified.
    * \param mask The input mask.
    */
-  void SetInputMask(const MaskImageType * mask);
+  void SetInputMask(const MaskImageType* mask);
 
   /**
    * Get the input mask.
    * \return The mask.
    */
-  const MaskImageType * GetInputMask(void);
+  const MaskImageType* GetInputMask(void);
 
   /**
    * Get the output confidence map
    */
-  ConfidenceImageType * GetOutputConfidence(void);
+  ConfidenceImageType* GetOutputConfidence(void);
 
 protected:
   /** Constructor */
   ImageDimensionalityReductionFilter();
   /** Destructor */
-  ~ImageDimensionalityReductionFilter() override {}
+  ~ImageDimensionalityReductionFilter() override
+  {
+  }
 
   /** Generate output information */
-  virtual void GenerateOutputInformation() override; 
+  virtual void GenerateOutputInformation() override;
 
-  /** Threaded generate data */  
+  /** Threaded generate data */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
   void ClassicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
   void BatchThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
@@ -127,8 +128,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageDimensionalityReductionFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ImageDimensionalityReductionFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The model used for classification */
   ModelPointerType m_Model;
@@ -140,7 +141,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageDimensionalityReductionFilter.txx"
+#include "otbImageDimensionalityReductionFilter.hxx"
 #endif
 
 #endif

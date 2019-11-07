@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -20,7 +20,6 @@
 
 
 #include "otbUtils.h"
-#include <sstream>
 
 namespace otb
 {
@@ -30,21 +29,23 @@ namespace Utils
 
 bool IsLonLatValid(double lon, double lat)
 {
-  if (lon < -180.0) return false;
-  if (lon > 180.0) return false;
-  if (lat < -90.0) return false;
-  if (lat > 90.0) return false;
+  if (lon < -180.0)
+    return false;
+  if (lon > 180.0)
+    return false;
+  if (lat < -90.0)
+    return false;
+  if (lat > 90.0)
+    return false;
   return true;
 }
 
-void PrintNothing(const char * /* s */)
+void PrintNothing(const char* /* s */)
 {
 }
 
 bool const TrueConstant = true;
 
 bool const FalseConstant = false;
-
 }
-
 }

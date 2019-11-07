@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -37,14 +37,14 @@ TextRecord::~TextRecord()
 
 std::ostream& operator<<(std::ostream& os, const TextRecord& data)
 {
-  os<<"ascii_flag:"<<data._ascii_flag.c_str()<<std::endl;
-  os<<"cont_flag:"<<data._cont_flag.c_str()<<std::endl;
-  os<<"product_type:"<<data._product_type.c_str()<<std::endl;
-  os<<"product_create:"<<data._product_create.c_str()<<std::endl;
-  os<<"phyvol_id:"<<data._phyvol_id.c_str()<<std::endl;
-  os<<"scene_id:"<<data._scene_id.c_str()<<std::endl;
-  os<<"scene_loc:"<<data._scene_loc.c_str()<<std::endl;
-  os<<"copyright_info:"<<data._copyright_info.c_str()<<std::endl;
+  os<<"ascii_flag:"<<data._ascii_flag <<std::endl;
+  os<<"cont_flag:"<<data._cont_flag <<std::endl;
+  os<<"product_type:"<<data._product_type <<std::endl;
+  os<<"product_create:"<<data._product_create <<std::endl;
+  os<<"phyvol_id:"<<data._phyvol_id <<std::endl;
+  os<<"scene_id:"<<data._scene_id <<std::endl;
+  os<<"scene_loc:"<<data._scene_loc <<std::endl;
+  os<<"copyright_info:"<<data._copyright_info <<std::endl;
   return os;
 }
 

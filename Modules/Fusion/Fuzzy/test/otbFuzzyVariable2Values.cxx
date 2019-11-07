@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,10 +19,9 @@
  */
 
 
-
 #include "otbFuzzyVariable.h"
 
-int otbFuzzyVariable2Values(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbFuzzyVariable2Values(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef float PrecisionType;
 
@@ -50,32 +49,32 @@ int otbFuzzyVariable2Values(int itkNotUsed(argc), char * itkNotUsed(argv)[])
   PrecisionType mem;
   mem = fv->GetMembership("Low", 0.2);
 
-  if( mem != 1 )
+  if (mem != 1)
     return EXIT_FAILURE;
 
   mem = fv->GetMembership("Low", 0.9);
 
-  if( mem != 0 )
+  if (mem != 0)
     return EXIT_FAILURE;
 
   mem = fv->GetMembership("Low", 0.5);
 
-  if( mem != 0.5 )
+  if (mem != 0.5)
     return EXIT_FAILURE;
 
   mem = fv->GetMembership("High", 0.2);
 
-  if( mem != 0 )
+  if (mem != 0)
     return EXIT_FAILURE;
 
   mem = fv->GetMembership("High", 0.9);
 
-  if( mem != 1 )
+  if (mem != 1)
     return EXIT_FAILURE;
 
   mem = fv->GetMembership("High", 0.5);
 
-  if( mem != 0.5 )
+  if (mem != 0.5)
     return EXIT_FAILURE;
 
   // For the sake of coverage

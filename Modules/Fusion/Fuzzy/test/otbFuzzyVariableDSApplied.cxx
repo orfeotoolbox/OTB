@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbFuzzyVariable.h"
 
 int otbFuzzyVariableDSApplied(int itkNotUsed(argc), char* itkNotUsed(argv)[])
@@ -34,36 +33,24 @@ int otbFuzzyVariableDSApplied(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   fv->SetMembership("!H1", 0.5, 0.8, 1.0, 1.0, 0, 0.8);
   fv->SetMembership("Theta", 0.1, 0.5, 0.5, 0.8, 0.2, 1);
 
-  std::string maxVar;
+  std::string   maxVar;
   PrecisionType pos;
   PrecisionType memH1;
   PrecisionType memH1_;
   PrecisionType memTheta;
 
 
-  for(unsigned int i=0; i<=100; ++i)
-    {
-    pos       = (PrecisionType)i/100;
-    maxVar    = fv->GetMaxVar(pos);
-    memH1     = fv->GetMembership("H1", pos);
-    memH1_    = fv->GetMembership("!H1", pos);
-    memTheta  = fv->GetMembership("Theta", pos);
+  for (unsigned int i = 0; i <= 100; ++i)
+  {
+    pos      = (PrecisionType)i / 100;
+    maxVar   = fv->GetMaxVar(pos);
+    memH1    = fv->GetMembership("H1", pos);
+    memH1_   = fv->GetMembership("!H1", pos);
+    memTheta = fv->GetMembership("Theta", pos);
 
 
-    std::cout << "Memberships("
-              << pos
-              << "): ["
-              << memH1
-              << ", "
-              << memH1_
-              << ", "
-              << memTheta
-              <<"] - MaxVar("
-              << pos
-              << ") : "
-              << maxVar
-              << std::endl;
-    }
+    std::cout << "Memberships(" << pos << "): [" << memH1 << ", " << memH1_ << ", " << memTheta << "] - MaxVar(" << pos << ") : " << maxVar << std::endl;
+  }
 
   fv->RemoveMembership("H1");
   fv->RemoveMembership("!H1");

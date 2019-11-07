@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -25,7 +25,8 @@
 
 #include "otbSubsampledImageRegionConstIterator.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class SubsampledImageRegionIterator
  * \brief Regular subsample iterator over an image
@@ -42,8 +43,7 @@ namespace otb {
  * \ingroup OTBCommon
  */
 template <class TImage>
-class ITK_EXPORT SubsampledImageRegionIterator
-  : public SubsampledImageRegionConstIterator<TImage>
+class ITK_EXPORT SubsampledImageRegionIterator : public SubsampledImageRegionConstIterator<TImage>
 {
 public:
   /** Standard typedef. */
@@ -53,8 +53,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(SubsampledImageRegionConstIterator, SubsampledImageRegionConstIterator);
 
-  itkStaticConstMacro(ImageIteratorDimension, unsigned int,
-                      Superclass::ImageIteratorDimension);
+  itkStaticConstMacro(ImageIteratorDimension, unsigned int, Superclass::ImageIteratorDimension);
 
   // typedef redefinition from superclass
   typedef typename Superclass::IndexType             IndexType;
@@ -70,28 +69,31 @@ public:
   typedef typename Superclass::IndexValueType        IndexValueType;
 
   // Constructors
-  SubsampledImageRegionIterator()
-    : SubsampledImageRegionConstIterator<TImage> () {}
+  SubsampledImageRegionIterator() : SubsampledImageRegionConstIterator<TImage>()
+  {
+  }
 
-  SubsampledImageRegionIterator (const ImageType * ptr, const RegionType &region)
-    : SubsampledImageRegionConstIterator<TImage> (ptr, region) {}
+  SubsampledImageRegionIterator(const ImageType* ptr, const RegionType& region) : SubsampledImageRegionConstIterator<TImage>(ptr, region)
+  {
+  }
 
-  SubsampledImageRegionIterator(const itk::ImageIterator<TImage> &it)
-    : SubsampledImageRegionConstIterator<TImage> (it) {}
+  SubsampledImageRegionIterator(const itk::ImageIterator<TImage>& it) : SubsampledImageRegionConstIterator<TImage>(it)
+  {
+  }
 
-  SubsampledImageRegionIterator(const itk::ImageConstIterator<TImage> &it)
-    : SubsampledImageRegionConstIterator<TImage> (it) {}
+  SubsampledImageRegionIterator(const itk::ImageConstIterator<TImage>& it) : SubsampledImageRegionConstIterator<TImage>(it)
+  {
+  }
 
   /** Set the current pixel value */
   void Set(const PixelType& value) const
   {
-    this->m_PixelAccessorFunctor.Set(*(const_cast<InternalPixelType *>(
-                                         this->m_Buffer + this->m_Offset)), value);
+    this->m_PixelAccessorFunctor.Set(*(const_cast<InternalPixelType*>(this->m_Buffer + this->m_Offset)), value);
   }
 
   PixelType& Value(void)
   {
-    return *(const_cast<InternalPixelType *>(this->m_Buffer + this->m_Offset));
+    return *(const_cast<InternalPixelType*>(this->m_Buffer + this->m_Offset));
   }
 
 }; // end of class

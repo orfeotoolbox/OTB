@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,8 +34,10 @@
 #include "otbShapeAttributesLabelMapFilter.h"
 #include "otbLabelObjectOpeningMuParserFilter.h"
 #include "otbLabelMapToVectorDataFilter.h"
+#include <string>
 
-namespace otb {
+namespace otb
+{
 
 /** \class PersistentConnectedComponentSegmentationOBIAToVectorDataFilter
 *   \brief [internal] Helper class to perform connected component segmentation on an input image,
@@ -63,10 +65,10 @@ class PersistentConnectedComponentSegmentationOBIAToVectorDataFilter : public ot
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentConnectedComponentSegmentationOBIAToVectorDataFilter      Self;
-  typedef PersistentImageToVectorDataFilter<TVImage, TOutputVectorData >       Superclass;
-  typedef itk::SmartPointer<Self>                                             Pointer;
-  typedef itk::SmartPointer<const Self>                                       ConstPointer;
+  typedef PersistentConnectedComponentSegmentationOBIAToVectorDataFilter Self;
+  typedef PersistentImageToVectorDataFilter<TVImage, TOutputVectorData> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef TVImage           VectorImageType;
   typedef TLabelImage       LabelImageType;
@@ -85,34 +87,27 @@ public:
   itkTypeMacro(PersistentConnectedComponentSegmentationOBIAToVectorDataFilter, PersistentImageToVectorDataFilter);
 
   /** ImageDimension constants */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TVImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TVImage::ImageDimension);
 
   // Mask generation
   typedef Functor::ConnectedComponentMuParserFunctor<VectorImagePixelType> FunctorType;
-  typedef itk::ConnectedComponentFunctorImageFilter<
-      VectorImageType,
-      LabelImageType,
-      FunctorType,
-      MaskImageType > ConnectedComponentFilterType;
+  typedef itk::ConnectedComponentFunctorImageFilter<VectorImageType, LabelImageType, FunctorType, MaskImageType> ConnectedComponentFilterType;
 
   // mask typedef
   typedef otb::MaskMuParserFilter<VectorImageType, MaskImageType> MaskMuParserFilterType;
 
   // Labelization
   typedef itk::RelabelComponentImageFilter<LabelImageType, LabelImageType> RelabelComponentFilterType;
-  typedef otb::AttributesMapLabelObject<unsigned int, InputImageDimension, double>   AttributesMapLabelObjectType;
+  typedef otb::AttributesMapLabelObject<unsigned int, InputImageDimension, double> AttributesMapLabelObjectType;
 
   typedef otb::LabelMapWithAdjacency<AttributesMapLabelObjectType> AttributesLabelMapType;
-  typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabelImageType, AttributesLabelMapType>
-      LabelImageToLabelMapFilterType;
+  typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabelImageType, AttributesLabelMapType> LabelImageToLabelMapFilterType;
 
-  typedef otb::BandsStatisticsAttributesLabelMapFilter<AttributesLabelMapType, VectorImageType>
-      RadiometricLabelMapFilterType;
+  typedef otb::BandsStatisticsAttributesLabelMapFilter<AttributesLabelMapType, VectorImageType> RadiometricLabelMapFilterType;
   typedef otb::ShapeAttributesLabelMapFilter<AttributesLabelMapType> ShapeLabelMapFilterType;
 
-  typedef otb::LabelObjectOpeningMuParserFilter<AttributesLabelMapType>            LabelObjectOpeningFilterType;
-  typedef otb::LabelMapToVectorDataFilter<AttributesLabelMapType, VectorDataType>  LabelMapToVectorDataFilterType;
+  typedef otb::LabelObjectOpeningMuParserFilter<AttributesLabelMapType> LabelObjectOpeningFilterType;
+  typedef otb::LabelMapToVectorDataFilter<AttributesLabelMapType, VectorDataType> LabelMapToVectorDataFilterType;
 
   typedef typename RelabelComponentFilterType::ObjectSizeType ObjectSizeType;
 
@@ -186,8 +181,8 @@ protected:
   ~PersistentConnectedComponentSegmentationOBIAToVectorDataFilter() override;
 
   void GenerateInputRequestedRegion() override;
-private:
 
+private:
   ObjectSizeType m_MinimumObjectSize;
   std::string    m_MaskExpression;
   std::string    m_ConnectedComponentExpression;
@@ -235,11 +230,9 @@ template <class TVImage, class TLabelImage, class TMaskImage, class TOutputVecto
 class StreamingConnectedComponentSegmentationOBIAToVectorDataFilter
 {
 public:
-
   // define the PersistentStreamingLineSegmentDetector template
-  typedef PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<
-        TVImage, TLabelImage, TMaskImage, TOutputVectorData>
-    PersistentConnectedComponentSegmentationOBIAToVectorDataFilterType;
+  typedef PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>
+      PersistentConnectedComponentSegmentationOBIAToVectorDataFilterType;
 
   typedef typename PersistentConnectedComponentSegmentationOBIAToVectorDataFilterType::VectorImageType VectorImageType;
   typedef typename PersistentConnectedComponentSegmentationOBIAToVectorDataFilterType::LabelImageType  LabelImageType;
@@ -247,14 +240,13 @@ public:
   typedef typename PersistentConnectedComponentSegmentationOBIAToVectorDataFilterType::VectorDataType  VectorDataType;
 
   // typedef for streaming capable filter
-  typedef PersistentFilterStreamingDecorator<PersistentConnectedComponentSegmentationOBIAToVectorDataFilterType>
-    FilterType;
+  typedef PersistentFilterStreamingDecorator<PersistentConnectedComponentSegmentationOBIAToVectorDataFilterType> FilterType;
 };
 
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.txx"
+#include "otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.hxx"
 #endif
 
 #endif

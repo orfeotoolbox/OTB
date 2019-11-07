@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,7 +21,6 @@
 #ifndef otbDEMHandler_h
 #define otbDEMHandler_h
 
-#include <iostream>
 #include <cstdio>
 
 #include "itkIndent.h"
@@ -30,6 +29,7 @@
 #include "itkPoint.h"
 
 #include "OTBOSSIMAdaptersExport.h"
+#include <string>
 
 class ossimElevManager;
 
@@ -169,7 +169,9 @@ public:
 
 protected:
   DEMHandler();
-  ~DEMHandler() override {}
+  ~DEMHandler() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
@@ -182,7 +184,6 @@ protected:
   double m_DefaultHeightAboveEllipsoid;
 
   static Pointer m_Singleton;
-
 };
 
 } // namespace otb

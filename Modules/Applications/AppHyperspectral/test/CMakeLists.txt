@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -30,17 +30,6 @@ otb_test_application(NAME  apTvHyHyperspectralUnmixing_UCLS
                               ${BASELINE}/apTvHyHyperspectralUnmixing_UCLS.tif
                   			  ${TEMP}/apTvHyHyperspectralUnmixing_UCLS.tif)
 
-otb_test_application(NAME  apTvHyHyperspectralUnmixing_NCLS
-                     APP  HyperspectralUnmixing
-                     OPTIONS -in ${INPUTDATA}/Hyperspectral/synthetic/hsi_cube.tif
-                			 -ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
-                 			 -out ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif double
-                 			 -ua ncls
-                     VALID   --compare-image ${EPSILON_9}
-                              ${BASELINE}/apTvHyHyperspectralUnmixing_NCLS.tif
-                  			  ${TEMP}/apTvHyHyperspectralUnmixing_NCLS.tif)
-
-
 #----------- VertexComponentAnalysis TESTS ----------------
 otb_test_application(NAME  apTvHyVertexComponentAnalysis
                      APP  VertexComponentAnalysis
@@ -53,3 +42,36 @@ otb_test_application(NAME  apTvHyVertexComponentAnalysis
                   	             ${TEMP}/apTvHyVertexComponentAnalysis.tif
 )
 
+#----------- EndmemberNumberEstimation TESTS ----------------
+otb_test_application(NAME  apTvHyEndmemberNumberEstimation_vd
+                     APP  EndmemberNumberEstimation
+                     OPTIONS -in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
+                             -algo vd
+                             -algo.vd.far 0.2
+                     TESTENVOPTIONS ${TEMP}/aptTvHyEndmemberNumberEstimation_vd.txt
+                     VALID --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation_vd.txt
+                       ${TEMP}/aptTvHyEndmemberNumberEstimation_vd.txt
+)
+
+otb_test_application(NAME  apTvHyEndmemberNumberEstimation_elm
+                     APP  EndmemberNumberEstimation
+                     OPTIONS -in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
+                             -algo elm
+                     TESTENVOPTIONS ${TEMP}/aptTvHyEndmemberNumberEstimation_elm.txt
+                     VALID --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/aptTvHyEndmemberNumberEstimation_elm.txt
+                       ${TEMP}/aptTvHyEndmemberNumberEstimation_elm.txt
+)
+
+#----------- LocalRxDetection TESTS ------------------------
+otb_test_application(NAME  apTvHyLocalRxDetection
+                     APP  LocalRxDetection
+                     OPTIONS -in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif?&bands=1:10
+                             -out ${TEMP}/apTvHyLocalRxDetection.tif double
+                             -ir 1
+                             -er 3
+                     VALID   --compare-image ${EPSILON_9}
+                              ${BASELINE}/apTvHyLocalRxDetection.tif
+                              ${TEMP}/apTvHyLocalRxDetection.tif
+)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,27 +19,25 @@
  */
 
 
-
 #include "otbImage.h"
 #include "otbContinuousMinimumMaximumImageCalculator.h"
 #include "itkSize.h"
 
-int
-otbContinuousMinimumMaximumImageCalculatorTest(int, char *[])
+int otbContinuousMinimumMaximumImageCalculatorTest(int, char* [])
 {
 
-  typedef short int                PixelType;
-  typedef itk::Size<2>             SizeType;
+  typedef short int    PixelType;
+  typedef itk::Size<2> SizeType;
   typedef otb::Image<PixelType, 2> ImageType;
 
   typedef otb::ContinuousMinimumMaximumImageCalculator<ImageType> MinMaxCalculatorType;
 
   /* Define the image size and physical coordinates */
-  SizeType size = {{20, 20}};
-  double   origin[2] = { 0.0, 0.0};
-  double   spacing[2] = { 1, 1};
+  SizeType size       = {{20, 20}};
+  double   origin[2]  = {0.0, 0.0};
+  double   spacing[2] = {1, 1};
 
-  int flag = 0;           /* Did this test program work? */
+  int flag = 0; /* Did this test program work? */
 
   std::cout << "Testing Minimum and Maximum Image Calculator:\n";
 
@@ -62,14 +60,14 @@ otbContinuousMinimumMaximumImageCalculatorTest(int, char *[])
   // Initialize the image contents with the minimum value
   itk::Index<2> index;
   for (int row = 0; row < 20; row++)
-    {
+  {
     index[1] = row;
     for (int col = 0; col < 20; col++)
-      {
+    {
       index[0] = col;
       image->SetPixel(index, minimum);
-      }
     }
+  }
 
   // Set voxel (10, 10) to maximum value
   index[0] = 10;
@@ -91,11 +89,11 @@ otbContinuousMinimumMaximumImageCalculatorTest(int, char *[])
   std::cout << "Its index position is : " << calculator->GetContinuousIndexOfMinimum() << std::endl;
 
   if (minimumResult != minimum)
-    {
+  {
     std::cout << "Minimum Value is wrong : " << minimumResult;
     std::cout << " != " << minimum << std::endl;
     flag = 1;
-    }
+  }
 
   // Return maximum of intensity
   PixelType maximumResult = calculator->GetMaximum();
@@ -103,23 +101,23 @@ otbContinuousMinimumMaximumImageCalculatorTest(int, char *[])
   std::cout << "Its index position is : " << calculator->GetContinuousIndexOfMaximum() << std::endl;
 
   if (maximumResult != maximum)
-    {
+  {
     std::cout << "Maximum Value is wrong : " << maximumResult;
     std::cout << " != " << maximum << std::endl;
     flag = 2;
-    }
+  }
 
   // Return results of test
   if (flag != 0)
-    {
+  {
     std::cout << "*** Some tests failed" << std::endl;
     return flag;
-    }
+  }
   else
-    {
+  {
     std::cout << "All tests successfully passed" << std::endl;
     return EXIT_SUCCESS;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -24,22 +24,14 @@ set(OTBTransformTests
 otbTransformTestDriver.cxx
 otbGenericRSTransformWithSRID.cxx
 otbCreateInverseForwardSensorModel.cxx
-otbGenericRSTransform.cxx
 otbCreateProjectionWithOSSIM.cxx
 otbLogPolarTransformResample.cxx
-otbStreamingWarpImageFilterNew.cxx
 otbLogPolarTransform.cxx
-otbGenericRSTransformNew.cxx
-otbLogPolarTransformNew.cxx
 otbGeocentricTransform.cxx
 otbCreateProjectionWithOTB.cxx
-otbGeocentricTransformNew.cxx
 otbGenericMapProjection.cxx
 otbStreamingWarpImageFilter.cxx
-otbSensorModelsNew.cxx
-otbGenericMapProjectionNew.cxx
 otbInverseLogPolarTransform.cxx
-otbInverseLogPolarTransformNew.cxx
 otbInverseLogPolarTransformResample.cxx
 otbStreamingResampleImageFilterWithAffineTransform.cxx
 )
@@ -78,16 +70,6 @@ otb_add_test(NAME prTvTestCreateInverseForwardSensorModel_Toulouse COMMAND otbTr
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   )
 
-otb_add_test(NAME prTvGenericRSTransform COMMAND otbTransformTestDriver
-  --compare-ascii ${EPSILON_4}
-  ${BASELINE_FILES}/prTvGenericRSTransform.txt
-  ${TEMP}/prTvGenericRSTransform.txt
-  otbGenericRSTransform
-  1.35617289802566
-  43.4876035537
-  ${TEMP}/prTvGenericRSTransform.txt
-  )
-
 otb_add_test(NAME prTvTestCreateProjectionWithOSSIM_Cevennes COMMAND otbTransformTestDriver
   otbCreateProjectionWithOSSIM
   LARGEINPUT{QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF}
@@ -99,15 +81,12 @@ otb_add_test(NAME prTvTestCreateProjectionWithOSSIM_Toulouse COMMAND otbTransfor
   )
 
 otb_add_test(NAME bfTvLogPolarTransformResample COMMAND otbTransformTestDriver
-  --compare-image ${EPSILON_7}  ${BASELINE}/bfLogPolarTransformResampleOutput.hdr
-  ${TEMP}/bfLogPolarTransformResampleOutput.hdr
+  --compare-image ${EPSILON_7}  ${BASELINE}/bfLogPolarTransformResampleOutput.tif
+  ${TEMP}/bfLogPolarTransformResampleOutput.tif
   otbLogPolarTransformResample
-  ${INPUTDATA}/circle.hdr
-  ${TEMP}/bfLogPolarTransformResampleOutput.hdr
+  ${INPUTDATA}/circle.raw.hdr
+  ${TEMP}/bfLogPolarTransformResampleOutput.tif
   )
-
-otb_add_test(NAME dmTuStreamingWarpImageFilterNew COMMAND otbTransformTestDriver
-  otbStreamingWarpImageFilterNew)
 
 otb_add_test(NAME bfTvLogPolarTransform COMMAND otbTransformTestDriver
   --compare-ascii ${NOTOL}
@@ -118,13 +97,6 @@ otb_add_test(NAME bfTvLogPolarTransform COMMAND otbTransformTestDriver
   ${TEMP}/bfLogPolarTransformResults.txt
   5 0 0 0 10 45 0 3.14 3.14 18 1
   )
-
-otb_add_test(NAME prTuGenericRSTransformNew COMMAND otbTransformTestDriver  otbGenericRSTransformNew )
-
-otb_add_test(NAME bfTuLogPolarTransformNew COMMAND otbTransformTestDriver
-  otbLogPolarTransformNew)
-
-
 
 otb_add_test(NAME prTvGeocentricTransform COMMAND otbTransformTestDriver
   --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvGeocentricTransform.txt
@@ -143,8 +115,6 @@ otb_add_test(NAME prTvTestCreateProjectionWithOTB_Cevennes COMMAND otbTransformT
   LARGEINPUT{QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF}
   )
 
-otb_add_test(NAME prTuGeocentricTransformNew COMMAND otbTransformTestDriver  otbGeocentricTransformNew )
-
 otb_add_test(NAME dmTvStreamingWarpImageFilter COMMAND otbTransformTestDriver
   --compare-image ${EPSILON_10}
   ${BASELINE}/dmStreamingWarpImageFilterOutput.tif
@@ -156,9 +126,8 @@ otb_add_test(NAME dmTvStreamingWarpImageFilter COMMAND otbTransformTestDriver
   5
   )
 
-otb_add_test(NAME prTuSensorModelsNew COMMAND otbTransformTestDriver  otbSensorModelsNew )
-
-otb_add_test(NAME prTuGenericMapProjectionNew COMMAND otbTransformTestDriver  otbGenericMapProjectionNew )
+otb_add_test(NAME dmTvStreamingWarpImageFilterEmtpyRegion COMMAND otbTransformTestDriver
+                  otbStreamingWarpImageFilterEmptyRegion)
 
 # Forward / Backward projection consistency checking
 set(FWDBWDChecking_INPUTS
@@ -190,21 +159,16 @@ otb_add_test(NAME bfTvInverseLogPolarTransform COMMAND otbTransformTestDriver
   ${TEMP}/bfInverseLogPolarTransformResults.txt
   6 0 0 10 20 45 60 3.14 3.14 1 0 0 1
   )
-otb_add_test(NAME bfTuInverseLogPolarTransformNew COMMAND otbTransformTestDriver
-  otbInverseLogPolarTransformNew)
 otb_add_test(NAME bfTvInverseLogPolarTransformResample COMMAND otbTransformTestDriver
-  --compare-image ${NOTOL}  ${BASELINE}/bfInverseLogPolarTransformResampleOutput.hdr
-  ${TEMP}/bfInverseLogPolarTransformResampleOutput.hdr
+  --compare-image ${NOTOL}  ${BASELINE}/bfInverseLogPolarTransformResampleOutput.tif
+  ${TEMP}/bfInverseLogPolarTransformResampleOutput.tif
   otbInverseLogPolarTransformResample
-  ${BASELINE}/bfLogPolarTransformResampleOutput.hdr
-  ${TEMP}/bfInverseLogPolarTransformResampleOutput.hdr
+  ${BASELINE}/bfLogPolarTransformResampleOutput.tif
+  ${TEMP}/bfInverseLogPolarTransformResampleOutput.tif
   )
 otb_add_test(NAME bfTvStreamingResampleImageFilterWithAffineTransform COMMAND otbTransformTestDriver
   otbStreamingResampleImageFilterWithAffineTransform
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   500
   ${TEMP}/bfTvotbStreamingResampledImageWithAffineTransform.tif
-  )
-otb_add_test(NAME bfTuStreamingResampleImageFilterWithAffineTransformNew COMMAND otbTransformTestDriver
-  otbStreamingResampleImageFilterWithAffineTransform
   )

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,7 +23,7 @@
 
 #include "otbWrapperParameter.h"
 #include "itkNumericTraits.h"
-#include <boost/any.hpp>
+#include <boost/optional.hpp>
 
 namespace otb
 {
@@ -44,12 +44,6 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Defining ::New() static method */
-  itkNewMacro(Self);
-
-  /** RTTI support */
-  itkTypeMacro(NumericalParameter, Parameter);
-
   /** Typedef of the scalar type */
   typedef T ScalarType;
 
@@ -60,42 +54,40 @@ public:
   }
 
   /** Set the value */
-  void SetValue( ScalarType value)
+  void SetValue(ScalarType value)
   {
-    m_Value = ( value < m_MinimumValue ) ? m_MinimumValue :
-              ( value < m_MaximumValue ) ? value : m_MaximumValue ;
+    m_Value = (value < m_MinimumValue) ? m_MinimumValue : (value < m_MaximumValue) ? value : m_MaximumValue;
 
     // Set Active only if the parameter is not automatically set
     if (!GetAutomaticValue())
-      {
+    {
       SetActive(true);
-      }
+    }
   }
 
-  void SetValue( const std::string & valueStr )
+  void SetValue(const std::string& valueStr)
   {
     ScalarType value = static_cast<ScalarType>(atof(valueStr.c_str()));
     SetValue(value);
   }
 
-  /** Get the value */
   ScalarType GetValue() const
   {
     if (!HasValue())
-      {
+    {
       itkGenericExceptionMacro(<< "Parameter " << this->GetKey() << " has no value yet.");
-      }
-    return boost::any_cast<ScalarType>(m_Value);
+    }
+    return static_cast<ScalarType>(*m_Value);
   }
 
   bool HasValue() const override
   {
-    return !m_Value.empty();
+    return m_Value != boost::none;
   }
 
   void ClearValue() override
   {
-    m_Value = boost::any();
+    m_Value.reset();
   }
 
   /** Set the default value */
@@ -116,20 +108,56 @@ public:
   /** Get the maximum value */
   itkGetMacro(MaximumValue, ScalarType);
 
+  // TODO move to hxx
+  int ToInt() const override
+  {
+    if (!HasValue())
+    {
+      itkExceptionMacro("Cannot convert parameter " << GetKey() << " to int (no value).");
+    }
+    return static_cast<int>(*m_Value);
+  }
+
+  float ToFloat() const override
+  {
+    if (!HasValue())
+    {
+      itkExceptionMacro("Cannot convert parameter " << GetKey() << " to float (no value).");
+    }
+    return static_cast<float>(*m_Value);
+  }
+
+  void FromInt(int value) override
+  {
+    SetValue(value);
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetValue(value);
+  }
+
+  std::string ToString() const override
+  {
+    std::ostringstream oss;
+    oss << this->GetValue();
+    return oss.str();
+  }
+
 protected:
   /** Constructor */
   NumericalParameter()
-    : m_DefaultValue(itk::NumericTraits<T>::Zero),
-      m_MinimumValue(itk::NumericTraits<T>::NonpositiveMin()),
-      m_MaximumValue(itk::NumericTraits<T>::max())
-  {}
+    : m_DefaultValue(itk::NumericTraits<T>::Zero), m_MinimumValue(itk::NumericTraits<T>::NonpositiveMin()), m_MaximumValue(itk::NumericTraits<T>::max())
+  {
+  }
 
   /** Destructor */
   ~NumericalParameter() override
-  {}
+  {
+  }
 
   /** Value */
-  boost::any m_Value;
+  boost::optional<T> m_Value;
 
   /** Default value (when appliable) */
   ScalarType m_DefaultValue;
@@ -141,16 +169,110 @@ protected:
   ScalarType m_MaximumValue;
 
 private:
-  NumericalParameter(const Parameter &); //purposely not implemented
-  void operator =(const Parameter&); //purposely not implemented
+  NumericalParameter(const Parameter&) = delete;
+  void operator=(const Parameter&) = delete;
 
 }; // End class Numerical Parameter
 
-// Helper typedef for float
-typedef NumericalParameter<float> FloatParameter;
+class OTBApplicationEngine_EXPORT FloatParameter : public NumericalParameter<float>
+{
+public:
+  /** Standard class typedef */
+  typedef FloatParameter                Self;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-// Helper typedef for int
-typedef NumericalParameter<int> IntParameter;
+  itkNewMacro(Self);
+  itkTypeMacro(NumericalParameter, Parameter);
+
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_Float;
+  }
+
+  void FromFloat(float value) override
+  {
+    SetValue(value);
+  }
+};
+
+class OTBApplicationEngine_EXPORT IntParameter : public NumericalParameter<int>
+{
+public:
+  /** Standard class typedef */
+  typedef IntParameter                  Self;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  itkNewMacro(Self);
+  itkTypeMacro(NumericalParameter, Parameter);
+
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_Int;
+  }
+};
+
+class OTBApplicationEngine_EXPORT RAMParameter : public NumericalParameter<unsigned int>
+{
+public:
+  /** Standard class typedef */
+  typedef RAMParameter                  Self;
+  typedef Parameter                     Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  /** Defining ::New() static method */
+  itkNewMacro(Self);
+
+  /** RTTI support */
+  itkTypeMacro(RAMParameter, Parameter);
+
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_RAM;
+  }
+
+  /** Constructor */
+  RAMParameter() : NumericalParameter<unsigned int>()
+  {
+    this->SetName("RAM");
+    this->SetDescription("Set the maximum of available memory for the pipeline execution in mega bytes (optional, 256 by default).");
+    this->SetKey("ram");
+
+    // 0 RAM is not allowed, make the minimum to 1 by default
+    this->SetMinimumValue(1);
+  }
+};
+
+class OTBApplicationEngine_EXPORT RadiusParameter : public IntParameter
+{
+public:
+  typedef RadiusParameter               Self;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  itkNewMacro(Self);
+  itkTypeMacro(RadiusParameter, Parameter);
+
+  bool HasValue() const override
+  {
+    return true;
+  }
+
+  virtual ParameterType GetType() const override
+  {
+    return ParameterType_Radius;
+  }
+
+protected:
+  RadiusParameter()
+  {
+    this->SetName("Radius");
+    this->SetKey("r");
+    this->SetDescription("Radius in pixels");
+  }
+};
 
 } // End namespace Wrapper
 } // End namespace otb

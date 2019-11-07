@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,7 +35,7 @@ namespace otb
 namespace Functor
 {
 
-template<class TInput, class TOutput>
+template <class TInput, class TOutput>
 class HessianToScalar
 {
 public:
@@ -43,8 +43,10 @@ public:
   {
     m_Alpha = 1.0;
   }
-  virtual ~HessianToScalar() {}
-  inline TOutput operator ()(const TInput& Hessian)
+  virtual ~HessianToScalar()
+  {
+  }
+  inline TOutput operator()(const TInput& Hessian)
   {
 
     TOutput det;
@@ -74,22 +76,16 @@ private:
 }
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT HessianToScalarImageFilter :
-  public itk::UnaryFunctorImageFilter<
-      TInputImage, TOutputImage,
-      Functor::HessianToScalar<
-          typename TInputImage::PixelType,
-          typename TOutputImage::PixelType> >
+class ITK_EXPORT HessianToScalarImageFilter
+    : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                          Functor::HessianToScalar<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs. */
   typedef HessianToScalarImageFilter Self;
-  typedef typename itk::UnaryFunctorImageFilter<
-      TInputImage,
-      TOutputImage,
-      Functor::HessianToScalar<
-          typename TInputImage::PixelType,
-          typename TOutputImage::PixelType> > Superclass;
+  typedef typename itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                                Functor::HessianToScalar<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -105,14 +101,18 @@ public:
   {
     return (this->GetFunctor().GetAlpha());
   }
+
 protected:
-  HessianToScalarImageFilter() {}
-  ~HessianToScalarImageFilter() override {}
+  HessianToScalarImageFilter()
+  {
+  }
+  ~HessianToScalarImageFilter() override
+  {
+  }
 
 private:
-  HessianToScalarImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
+  HessianToScalarImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

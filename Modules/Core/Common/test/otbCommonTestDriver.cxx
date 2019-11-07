@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,23 +22,16 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbVariableLengthVectorConverterNew);
   REGISTER_TEST(otbImageRegionTileMapSplitter);
-  REGISTER_TEST(otbImageRegionAdaptativeSplitterNew);
   REGISTER_TEST(otbImageRegionAdaptativeSplitter);
-  REGISTER_TEST(otbRGBAPixelConverterNew);
   REGISTER_TEST(otbRGBAPixelConverter);
   REGISTER_TEST(otbRectangle);
-  REGISTER_TEST(otbImageRegionNonUniformMultidimensionalSplitterNew);
   REGISTER_TEST(otbSystemTest);
   REGISTER_TEST(otbStopwatchTest);
   REGISTER_TEST(otbParseHdfSubsetName);
   REGISTER_TEST(otbParseHdfFileName);
-  REGISTER_TEST(otbImageRegionSquareTileSplitterNew);
   REGISTER_TEST(otbImageRegionSquareTileSplitter);
-  REGISTER_TEST(otbImageRegionTileMapSplitterNew);
   REGISTER_TEST(otbImageRegionNonUniformMultidimensionalSplitter);
-  REGISTER_TEST(otbRectangleNew);
   REGISTER_TEST(otbConfigurationManagerTest);
   REGISTER_TEST(otbStandardFilterWatcherNew);
   REGISTER_TEST(otbStandardOneLineFilterWatcherTest);

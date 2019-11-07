@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -67,18 +67,16 @@ namespace otb
  * \ingroup OTBDescriptors
  */
 
-template <class TInputImage, class TOutputPrecision = double, class TCoordRep = double >
-class ITK_EXPORT HistogramOfOrientedGradientCovariantImageFunction :
-  public itk::ImageFunction< TInputImage, std::vector< std::vector<
-       TOutputPrecision > >, TCoordRep >
+template <class TInputImage, class TOutputPrecision = double, class TCoordRep = double>
+class ITK_EXPORT HistogramOfOrientedGradientCovariantImageFunction
+    : public itk::ImageFunction<TInputImage, std::vector<std::vector<TOutputPrecision>>, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef HistogramOfOrientedGradientCovariantImageFunction              Self;
-  typedef itk::ImageFunction< TInputImage, std::vector<std::vector
-    <TOutputPrecision> >, TCoordRep >                                    Superclass;
-  typedef itk::SmartPointer<Self>                                        Pointer;
-  typedef itk::SmartPointer<const Self>                                  ConstPointer;
+  typedef HistogramOfOrientedGradientCovariantImageFunction Self;
+  typedef itk::ImageFunction<TInputImage, std::vector<std::vector<TOutputPrecision>>, TCoordRep> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(HistogramOfOrientedGradientCovariantImageFunction, ImageFunction);
@@ -93,14 +91,13 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::PointType           PointType;
 
-  typedef TOutputPrecision                         OutputPrecisionType;
-  typedef typename Superclass::OutputType          OutputType;
+  typedef TOutputPrecision                OutputPrecisionType;
+  typedef typename Superclass::OutputType OutputType;
 
-  typedef TCoordRep                                CoordRepType;
+  typedef TCoordRep CoordRepType;
 
   /** Dimension of the underlying image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
   OutputType EvaluateAtIndex(const IndexType& index) const override;
@@ -112,8 +109,7 @@ public:
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const override
+  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -123,23 +119,25 @@ public:
   /** Get/Set the radius of the neighborhood over which the
    *  statistics are evaluated
    */
-  itkSetMacro( NeighborhoodRadius, unsigned int );
-  itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
+  itkSetMacro(NeighborhoodRadius, unsigned int);
+  itkGetConstReferenceMacro(NeighborhoodRadius, unsigned int);
 
   /** Get/Set the number of bins of the orientation histograms
    */
-  itkSetMacro( NumberOfOrientationBins, unsigned int );
-  itkGetConstReferenceMacro( NumberOfOrientationBins, unsigned int );
+  itkSetMacro(NumberOfOrientationBins, unsigned int);
+  itkGetConstReferenceMacro(NumberOfOrientationBins, unsigned int);
 
 
 protected:
   HistogramOfOrientedGradientCovariantImageFunction();
-  ~HistogramOfOrientedGradientCovariantImageFunction() override {}
+  ~HistogramOfOrientedGradientCovariantImageFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  HistogramOfOrientedGradientCovariantImageFunction(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  HistogramOfOrientedGradientCovariantImageFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   // Radius over which the principal orientation will be computed
   unsigned int m_NeighborhoodRadius;
@@ -151,8 +149,7 @@ private:
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHistogramOfOrientedGradientCovariantImageFunction.txx"
+#include "otbHistogramOfOrientedGradientCovariantImageFunction.hxx"
 #endif
 
 #endif
-

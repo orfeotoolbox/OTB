@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -21,6 +21,9 @@
 set(OTBImageIO_SRC
   otbImageIOFactory.cxx
   otbMultiImageFileWriter.cxx
+  otbImageFileReader.cxx
+  otbImageFileWriter.cxx
+  otbImageFileReaderException.cxx
   )
 
 add_library(OTBImageIO ${OTBImageIO_SRC})
@@ -34,7 +37,6 @@ target_link_libraries(OTBImageIO
   ${OTBIOGDAL_LIBRARIES}
   ${OTBStreaming_LIBRARIES}
   ${OTBBoost_LIBRARIES}
-  ${OTBIOTileMap_LIBRARIES}
   ${OTBCommon_LIBRARIES}
   ${OTBExtendedFilename_LIBRARIES}
   ${OTBOSSIMAdapters_LIBRARIES}

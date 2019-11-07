@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2018 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -71,7 +72,6 @@ class GDALDataTypeWrapper;
 class OTBIOGDAL_EXPORT GDALImageIO : public otb::ImageIOBase
 {
 public:
-
   typedef unsigned char InputPixelType;
 
   /** Standard class typedefs. */
@@ -80,6 +80,8 @@ public:
   typedef itk::SmartPointer<Self> Pointer;
 
   typedef std::vector<std::string> GDALCreationOptionsType;
+
+  typedef std::vector<std::pair<int, double>> NoDataListType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -101,10 +103,10 @@ public:
   itkGetMacro(IsVectorImage, bool);
 
   /** Set/get whether the driver will write RPC tags to TIFF */
-  itkSetMacro(WriteRPCTags,bool);
-  itkGetMacro(WriteRPCTags,bool);
+  itkSetMacro(WriteRPCTags, bool);
+  itkGetMacro(WriteRPCTags, bool);
 
-  
+
   /** Set/Get the options */
   void SetOptions(const GDALCreationOptionsType& opts)
   {
@@ -115,11 +117,16 @@ public:
   {
     return m_CreationOptions;
   }
-  
+
+  /** Set NoDataList */
+  void SetNoDataList(const NoDataListType& noDataList)
+  {
+    m_NoDataList = noDataList;
+  }
+
   /** Provide hist about the output container to deal with complex pixel
-   *  type */ 
-  void SetOutputImagePixelType( bool isComplexInternalPixelType, 
-                                        bool isVectorImage) override
+   *  type */
+  void SetOutputImagePixelType(bool isComplexInternalPixelType, bool isVectorImage) override
   {
     this->SetIsComplex(isComplexInternalPixelType);
     this->SetIsVectorImage(isVectorImage);
@@ -174,9 +181,9 @@ public:
 
   /** Get Info about all resolution possible from the file dimensions  */
   bool GetResolutionInfo(std::vector<unsigned int>& res, std::vector<std::string>& desc);
-  
+
   /** Get number of available overviews in the file
-   *  Return 0 if no overviews available 
+   *  Return 0 if no overviews available
    *  Currently this overview count is only based on the first band
    *  If no pre-computed overviews are available we provide the overview
    *  count based on size division by 2*/
@@ -187,6 +194,8 @@ public:
 
   /** Returns gdal pixel type as string */
   std::string GetGdalPixelTypeAsString() const;
+
+  itkGetMacro(NbBands, int);
 
 protected:
   /**
@@ -206,20 +215,20 @@ protected:
   /** Number of bands of the image*/
   int m_NbBands;
   /** Buffer*/
-  //float **pafimas;
+  // float **pafimas;
 
   /** Determines the level of compression for written files.
    *  Range 0-9; 0 = none, 9 = maximum , default = 4 */
-  int         m_CompressionLevel;
+  int m_CompressionLevel;
 
-  bool        m_IsIndexed;
+  bool m_IsIndexed;
 
   /** Dataset index to extract (starting at 0)*/
   unsigned int m_DatasetNumber;
 
 private:
-  GDALImageIO(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GDALImageIO(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Determine real file name to write the image */
   std::string GetGdalWriteImageFileName(const std::string& gdalDriverShortName, const std::string& filename) const;
@@ -227,8 +236,8 @@ private:
   std::string FilenameToGdalDriverShortName(const std::string& name) const;
 
   /** Parse a GML box from a Jpeg2000 file and get the origin */
-  bool GetOriginFromGMLBox(std::vector<double> &origin);
-  
+  bool GetOriginFromGMLBox(std::vector<double>& origin);
+
   /** Test whether m_CreationOptions has an option
    *  \param partialOption The beginning of a creation option (for example "QUALITY=")
    */
@@ -236,14 +245,13 @@ private:
 
   /** GDAL parameters. */
   typedef itk::SmartPointer<GDALDatasetWrapper> GDALDatasetWrapperPointer;
-  GDALDatasetWrapperPointer m_Dataset;
+  GDALDatasetWrapperPointer                     m_Dataset;
 
-  GDALDataTypeWrapper*    m_PxType;
+  GDALDataTypeWrapper* m_PxType;
   /** Nombre d'octets par pixel */
   int m_BytePerPixel;
 
-  bool GDALInfoReportCorner(const char * corner_name, double x, double y,
-                            double& dfGeoX, double& dfGeoY) const;
+  bool GDALInfoReportCorner(const char* corner_name, double x, double y, double& dfGeoX, double& dfGeoY) const;
 
   bool m_FlagWriteImageInformation;
   bool m_CanStreamWrite;
@@ -266,7 +274,7 @@ private:
 
   /**
    * Size of the different overviews of the file */
-  std::vector<std::pair<unsigned int, unsigned int> > m_OverviewsSize;
+  std::vector<std::pair<unsigned int, unsigned int>> m_OverviewsSize;
 
   /** Resolution factor
    */
@@ -281,7 +289,9 @@ private:
    * True if RPC tags should be exported
    */
   bool m_WriteRPCTags;
-  
+
+
+  NoDataListType m_NoDataList;
 };
 
 } // end namespace otb

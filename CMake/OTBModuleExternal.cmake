@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -33,12 +33,17 @@ if(NOT OTB_VERSION VERSION_GREATER "5.2")
 endif()
 if(NOT EXISTS ${OTB_CMAKE_DIR}/OTBModuleMacros.cmake)
   if(NOT OTB_BUILD_MODULE_AS_STANDALONE)
-    message(FATAL_ERROR "Modules can only be built against an OTB build tree; they cannot be built against an OTB install tree. You can build your module as a standalone CMake project instead, by activating the BUILD_MODULE_AS_STANDALONE option. Beware that dependency between remote modules will NOT be tracked.")
+    message(FATAL_ERROR "Modules can only be built against an OTB build tree; "
+            "they cannot be built against an OTB install tree. You can build "
+            "your module as a standalone CMake project instead, by activating "
+            "the BUILD_MODULE_AS_STANDALONE option. Beware that dependency "
+            "between remote modules will NOT be tracked.")
   endif()
 endif()
 
 if(OTB_BUILD_MODULE_AS_STANDALONE)
-  message(STATUS "You are building this module as a standalone CMake project. Beware that dependencies to other remote modules will not be tracked.")
+  message(STATUS "You are building this module as a standalone CMake project. "
+          "Beware that dependencies to other remote modules will not be tracked.")
   include(OTBStandaloneModuleMacros)
   otb_module_impl()
 else()
@@ -68,10 +73,10 @@ else()
     set(OTB_INSTALL_INCLUDE_DIR include/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
   endif()
   if(NOT OTB_INSTALL_DATA_DIR)
-    set(OTB_INSTALL_DATA_DIR share/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
+    set(OTB_INSTALL_DATA_DIR share/otb)
   endif()
   if(NOT OTB_INSTALL_DOC_DIR)
-    set(OTB_INSTALL_DOC_DIR share/doc/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR})
+    set(OTB_INSTALL_DOC_DIR share/doc/otb)
   endif()
   if(NOT OTB_INSTALL_PACKAGE_DIR)
     set(OTB_INSTALL_PACKAGE_DIR "lib/cmake/OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
@@ -86,7 +91,8 @@ else()
   set(CMAKE_EXE_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
   set(CMAKE_SHARED_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS}")
   set(CMAKE_MODULE_LINKER_FLAGS "${OTB_REQUIRED_LINK_FLAGS} ${CMAKE_MODULE_LINKER_FLAGS}")
-  option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ${OTB_BUILD_SHARED})
+  option(BUILD_SHARED_LIBS "Build with shared libraries." ${OTB_BUILD_SHARED})
+  mark_as_advanced(BUILD_SHARED_LIBS)
 
   # Add the OTB_MODULES_DIR to the CMAKE_MODULE_PATH and then use the binary
   # directory for the project to write out new ones to.

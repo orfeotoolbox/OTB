@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,17 +28,17 @@
 int otbBinaryImageToDensityImageFilter(int itkNotUsed(argc), char* argv[])
 {
 
-  const char *       infname        = argv[1];
-  const char *       outfname       = argv[2];
-  const unsigned int radius         = atoi(argv[3]);
+  const char*        infname  = argv[1];
+  const char*        outfname = argv[2];
+  const unsigned int radius   = atoi(argv[3]);
 
   const unsigned int Dimension = 2;
-  typedef float                                PixelType;
-  typedef otb::Image<PixelType, Dimension>     InputImageType;
+  typedef float      PixelType;
+  typedef otb::Image<PixelType, Dimension> InputImageType;
   typedef otb::ImageFileReader<InputImageType> ReaderType;
   typedef otb::ImageFileWriter<InputImageType> WriterType;
 
-  typedef otb::BinaryImageDensityFunction<InputImageType>                                         CountFunctionType;
+  typedef otb::BinaryImageDensityFunction<InputImageType> CountFunctionType;
   typedef otb::BinaryImageToDensityImageFilter<InputImageType, InputImageType, CountFunctionType> FilterType;
 
   /** Instantiation of a Smart Pointer*/

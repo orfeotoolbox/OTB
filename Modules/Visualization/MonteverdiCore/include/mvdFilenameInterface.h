@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,9 +25,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 
 #include "OTBMonteverdiCoreExport.h"
@@ -83,45 +81,44 @@ class OTBMonteverdiCore_EXPORT FilenameInterface
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Destructor. */
   virtual ~FilenameInterface();
 
   /**
    */
-  const QString & GetFilename() const;
+  const QString& GetFilename() const;
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** \brief Constructor. */
   FilenameInterface();
 
   /**
    */
-  void SetFilename( const QString & );
+  void SetFilename(const QString&);
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
-  void virtual_SetFilename( const QString & ) {}
+  void virtual_SetFilename(const QString&)
+  {
+  }
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */

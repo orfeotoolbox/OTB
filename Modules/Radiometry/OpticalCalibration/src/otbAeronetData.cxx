@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,26 +26,24 @@ namespace otb
  * Constructor
  */
 
-AeronetData
-::AeronetData() :
-  m_AngstromCoefficient(0),
-  m_Water(0),
-  m_AerosolOpticalThickness(0),
-  m_CloudEstimation(false),
-  m_SolarZenithAngle(0),
-  m_StdDev(0.0),
-  m_DataDate(""),
-  m_EpsilonDate(0.0),
-  m_NumberOfDateUsed(0)
-{}
+AeronetData::AeronetData()
+  : m_AngstromCoefficient(0),
+    m_Water(0),
+    m_AerosolOpticalThickness(0),
+    m_CloudEstimation(false),
+    m_SolarZenithAngle(0),
+    m_StdDev(0.0),
+    m_DataDate(""),
+    m_EpsilonDate(0.0),
+    m_NumberOfDateUsed(0)
+{
+}
 
 /**
  * PrintSelf method
  */
 
-void
-AeronetData
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void AeronetData::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << "Angstrom coefficient  :              " << m_AngstromCoefficient << std::endl;
@@ -57,6 +55,5 @@ AeronetData
   os << "Data Date  :                         " << m_DataDate << std::endl;
   os << "Epsilon to select time  :            " << m_EpsilonDate << std::endl;
   os << "Number of date used:                 " << m_NumberOfDateUsed << std::endl;
-
 }
 } // end namespace otb

@@ -1,0 +1,7 @@
+Used pixels: (50, 50) -> 50 , (70, 70) -> 61
+
+Compute( Compute( const InputImageNeighborhoodIterator, const LabelledImageNeighborhoodIterator) 0
+m_EnergyBefore: 1.86667
+m_EnergyAfter: 2
+m_Value: 0
+m_DeltaEnergy: 0.133333

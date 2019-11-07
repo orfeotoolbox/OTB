@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,10 +22,7 @@ otb_module_test()
 
 set(OTBCornerTests
 otbCornerTestDriver.cxx
-otbLineSpatialObjectListToRightAnglePointSetFilter.cxx
 otbVectorDataToRightAngleVectorDataFilter.cxx
-otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.cxx
-otbLineSpatialObjectListToRightAnglePointSetFilterNew.cxx
 otbHarrisImage.cxx
 otbHarrisToPointSet.cxx
 )
@@ -36,15 +33,6 @@ otb_module_target_label(otbCornerTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME feTvLineSpatialObjectListToRightAnglePointSetFilter COMMAND otbCornerTestDriver
-  --compare-ascii ${EPSILON_3}
-  ${BASELINE_FILES}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
-  ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
-  otbLineSpatialObjectListToRightAnglePointSetFilter
-  ${INPUTDATA}/carre.png
-  ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
-  )
-
 otb_add_test(NAME feTvVectorDataToRightAngleVectorDataFilter COMMAND otbCornerTestDriver
   --compare-ogr ${EPSILON_8}
   ${BASELINE_FILES}/feTvVectorDataToRightAngleVectorDataFilterOutput.shp
@@ -53,21 +41,6 @@ otb_add_test(NAME feTvVectorDataToRightAngleVectorDataFilter COMMAND otbCornerTe
   ${BASELINE_FILES}/feTvLineSegmentDetectorOutput.shp     #input vectordata
   ${TEMP}/feTvVectorDataToRightAngleVectorDataFilterOutput.shp  #output text file
   )
-
-otb_add_test(NAME feTuVectorDataToRightAngleVectorDataFilterNew COMMAND otbCornerTestDriver
-  otbVectorDataToRightAngleVectorDataFilterNew)
-
-otb_add_test(NAME feTvLineSpatialObjectListToRightAnglePointSetFilterBySteps COMMAND otbCornerTestDriver
-  --compare-ascii ${EPSILON_3}
-  ${BASELINE_FILES}/feTvLineSpatialObjectListToRightAnglePointSetFilterOutputAscii.txt
-  ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.txt
-  otbLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii
-  ${INPUTDATA}/carre.png
-  ${TEMP}/feTvLineSpatialObjectListToRightAnglePointSetFilterByStepsOutputAscii.txt
-  )
-
-otb_add_test(NAME feTuLineSpatialObjectListToRightAnglePointSetFilterNew COMMAND otbCornerTestDriver
-  otbLineSpatialObjectListToRightAnglePointSetFilterNew)
 
 otb_add_test(NAME feTvHarrisImage COMMAND otbCornerTestDriver
   --compare-image ${NOTOL}  ${BASELINE}/feHarrisImage.png
@@ -87,8 +60,8 @@ otb_add_test(NAME feTvHarrisPoupee COMMAND otbCornerTestDriver
 
 otb_add_test(NAME feTvHarrisProduceImageToValidHarrisToPointSet COMMAND otbCornerTestDriver
   otbHarrisImage
-  ${INPUTDATA}/small_points.hdr
-  ${TEMP}/small_points_harris.hdr
+  ${INPUTDATA}/small_points.raw.hdr
+  ${TEMP}/small_points_harris.tif
   1.0 1.0 1.0)
 
 otb_add_test(NAME feTvHarrisImageQB COMMAND otbCornerTestDriver
@@ -103,7 +76,7 @@ otb_add_test(NAME feTvHarrisToPointSet2 COMMAND otbCornerTestDriver
   --compare-ascii ${EPSILON_3}        ${BASELINE_FILES}/feHarrisToPointSet_Threshold_20To90.txt
   ${TEMP}/feHarrisToPointSet_Threshold_20To90.txt
   otbHarrisToPointSet
-  ${INPUTDATA}/small_points.hdr
+  ${INPUTDATA}/small_points.raw.hdr
   ${TEMP}/feHarrisToPointSet_Threshold_20To90.txt
   1.0 1.0 1.0 20 90)
 
@@ -111,7 +84,7 @@ otb_add_test(NAME feTvHarrisToPointSet3 COMMAND otbCornerTestDriver
   --compare-ascii ${EPSILON_3}        ${BASELINE_FILES}/feHarrisToPointSet_Threshold_100To160.txt
   ${TEMP}/feHarrisToPointSet_Threshold_100To160.txt
   otbHarrisToPointSet
-  ${INPUTDATA}/small_points.hdr
+  ${INPUTDATA}/small_points.raw.hdr
   ${TEMP}/feHarrisToPointSet_Threshold_100To160.txt
   1.0 1.0 1.0 100 160)
 
@@ -119,7 +92,6 @@ otb_add_test(NAME feTvHarrisToPointSet1 COMMAND otbCornerTestDriver
   --compare-ascii ${EPSILON_3}        ${BASELINE_FILES}/feHarrisToPointSet_Threshold_2To255.txt
   ${TEMP}/feHarrisToPointSet_Threshold_2To255.txt
   otbHarrisToPointSet
-  ${INPUTDATA}/small_points.hdr
+  ${INPUTDATA}/small_points.raw.hdr
   ${TEMP}/feHarrisToPointSet_Threshold_2To255.txt
   1.0 1.0 1.0 2.0 255.0)
-

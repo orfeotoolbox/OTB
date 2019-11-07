@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -32,6 +32,7 @@
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimXmlNode.h>
 #include <stdexcept>
+#include <string>
 
 namespace ossimplugins {
    class kw_runtime_error : public std::runtime_error {

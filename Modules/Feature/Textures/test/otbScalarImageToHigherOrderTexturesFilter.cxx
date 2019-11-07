@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,32 +22,24 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "itkExtractImageFilter.h"
+#include "otbMacro.h"
 
 const unsigned int Dimension = 2;
-typedef float                            PixelType;
-typedef otb::Image<PixelType, Dimension> ImageType;
-typedef otb::ScalarImageToHigherOrderTexturesFilter
-      <ImageType, ImageType>             TexturesFilterType;
-typedef otb::ImageFileReader<ImageType>  ReaderType;
-typedef ImageType::IndexType             IndexType;
-typedef ImageType::IndexValueType        IndexValueType;
+typedef float      PixelType;
+typedef otb::Image<PixelType, Dimension>                                  ImageType;
+typedef otb::ScalarImageToHigherOrderTexturesFilter<ImageType, ImageType> TexturesFilterType;
+typedef otb::ImageFileReader<ImageType>                                  ReaderType;
+typedef ImageType::IndexType                                             IndexType;
+typedef ImageType::IndexValueType                                        IndexValueType;
 typedef itk::Statistics::ScalarImageToRunLengthFeaturesFilter<ImageType> RunLengthFeaturesFilterType;
-typedef itk::ExtractImageFilter<ImageType,ImageType> ExtractImageFilterType;
+typedef itk::ExtractImageFilter<ImageType, ImageType> ExtractImageFilterType;
 
 typedef RunLengthFeaturesFilterType::OffsetType          OffsetType;
 typedef RunLengthFeaturesFilterType::OffsetVector        OffsetVector;
 typedef RunLengthFeaturesFilterType::OffsetVectorPointer OffsetVectorPointer;
 
-int otbScalarImageToHigherOrderTexturesFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  TexturesFilterType::Pointer filter = TexturesFilterType::New();
 
-  std::cout << filter << std::endl;
-
-  return EXIT_SUCCESS;
-}
-
-ImageType::Pointer ReadInputImage(const char *  filename)
+ImageType::Pointer ReadInputImage(const char* filename)
 {
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(filename);
@@ -57,7 +49,7 @@ ImageType::Pointer ReadInputImage(const char *  filename)
   return image;
 }
 
-std::vector<ImageType::Pointer> Compute( ImageType* inputImage, unsigned int nbBins, unsigned int radius, OffsetVector* offsetVector )
+std::vector<ImageType::Pointer> Compute(ImageType* inputImage, unsigned int nbBins, unsigned int radius, OffsetVector* offsetVector)
 {
 
   TexturesFilterType::Pointer textureFilter = TexturesFilterType::New();
@@ -70,7 +62,7 @@ std::vector<ImageType::Pointer> Compute( ImageType* inputImage, unsigned int nbB
   textureFilter->SetNumberOfBinsPerAxis(nbBins);
   textureFilter->SetRadius(sradius);
 
-  if ( offsetVector )
+  if (offsetVector)
   {
     textureFilter->SetOffsets(offsetVector);
   }
@@ -89,15 +81,16 @@ std::vector<ImageType::Pointer> Compute( ImageType* inputImage, unsigned int nbB
   return outputs;
 }
 
-int ValidateAt( ImageType* inputImage, std::vector<ImageType::Pointer> computeResults, unsigned int nbBins, unsigned int radius, OffsetVector* offsetVector, IndexValueType x, IndexValueType y )
+int ValidateAt(ImageType* inputImage, std::vector<ImageType::Pointer> computeResults, unsigned int nbBins, unsigned int radius, OffsetVector* offsetVector,
+               IndexValueType x, IndexValueType y)
 {
 
   ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
-  ImageType::RegionType region;
-  region.SetIndex(0,x - radius);
-  region.SetIndex(1,y - radius);
-  region.SetSize(0,2 * radius + 1);
-  region.SetSize(1,2 * radius + 1);
+  ImageType::RegionType           region;
+  region.SetIndex(0, x - radius);
+  region.SetIndex(1, y - radius);
+  region.SetSize(0, 2 * radius + 1);
+  region.SetSize(1, 2 * radius + 1);
   region.Crop(inputImage->GetLargestPossibleRegion());
   extract->SetExtractionRegion(region);
   extract->SetInput(inputImage);
@@ -105,27 +98,26 @@ int ValidateAt( ImageType* inputImage, std::vector<ImageType::Pointer> computeRe
   RunLengthFeaturesFilterType::Pointer itkFilter = RunLengthFeaturesFilterType::New();
   itkFilter->SetInput(extract->GetOutput());
   itkFilter->SetNumberOfBinsPerAxis(nbBins);
-  if ( offsetVector )
+  if (offsetVector)
   {
     itkFilter->SetOffsets(offsetVector);
   }
   itkFilter->SetPixelValueMinMax(0, 256);
 
-  ImageType::PointType  topLeftPoint;
-  ImageType::PointType  bottomRightPoint;
-  ImageType::IndexType  topLeftIndex = region.GetIndex();
-  ImageType::IndexType  bottomRightIndex = region.GetIndex();
-  bottomRightIndex[0] +=  2 * radius;
-  bottomRightIndex[1] +=  2 * radius;
-  inputImage->TransformIndexToPhysicalPoint(topLeftIndex, topLeftPoint );
-  inputImage->TransformIndexToPhysicalPoint(bottomRightIndex, bottomRightPoint );
+  ImageType::PointType topLeftPoint;
+  ImageType::PointType bottomRightPoint;
+  ImageType::IndexType topLeftIndex     = region.GetIndex();
+  ImageType::IndexType bottomRightIndex = region.GetIndex();
+  bottomRightIndex[0] += 2 * radius;
+  bottomRightIndex[1] += 2 * radius;
+  inputImage->TransformIndexToPhysicalPoint(topLeftIndex, topLeftPoint);
+  inputImage->TransformIndexToPhysicalPoint(bottomRightIndex, bottomRightPoint);
   double maxDistance = topLeftPoint.EuclideanDistanceTo(bottomRightPoint);
 
-  itkFilter->SetDistanceValueMinMax(0, maxDistance );
+  itkFilter->SetDistanceValueMinMax(0, maxDistance);
   itkFilter->Update();
 
-  RunLengthFeaturesFilterType::FeatureValueVector&
-     featuresMeans = *(itkFilter->GetFeatureMeans().GetPointer());
+  RunLengthFeaturesFilterType::FeatureValueVector& featuresMeans = *(itkFilter->GetFeatureMeans().GetPointer());
 
   for (int i = 0; i < 10; ++i)
   {
@@ -133,12 +125,10 @@ int ValidateAt( ImageType* inputImage, std::vector<ImageType::Pointer> computeRe
     idx[0] = x;
     idx[1] = y;
 
-    PixelType output = computeResults[i]->GetPixel(idx);
+    PixelType output    = computeResults[i]->GetPixel(idx);
     PixelType reference = featuresMeans[i];
 
-    std::cout << "index     : " << idx << std::endl;
-    std::cout << "compute : " << output << std::endl;
-    std::cout << "ref     : " << reference << std::endl;
+    otbLogMacro(Debug, << "index = " << idx << " ; compute = " << output << " ; ref = " << reference);
 
     if (reference != output)
     {
@@ -151,17 +141,17 @@ int ValidateAt( ImageType* inputImage, std::vector<ImageType::Pointer> computeRe
 }
 
 
-int otbScalarImageToHigherOrderTexturesFilter(int argc, char * argv[])
+int otbScalarImageToHigherOrderTexturesFilter(int argc, char* argv[])
 {
   if (argc != 2)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " infname" << std::endl;
     return EXIT_FAILURE;
-    }
-  const char *       infname      = argv[1];
-  const unsigned int nbBins = 8;
+  }
+  const char*        infname = argv[1];
+  const unsigned int nbBins  = 8;
 
-  unsigned int radius;
+  unsigned int        radius;
   OffsetVectorPointer offsetVector;
 
   // radius = 5, offset = [1,1]
@@ -177,14 +167,14 @@ int otbScalarImageToHigherOrderTexturesFilter(int argc, char * argv[])
 
     std::cout << "Testing radius = " << radius << " and offset = " << offset << std::endl;
 
-    ImageType::Pointer inputImage = ReadInputImage(infname);
-    std::vector<ImageType::Pointer> results = Compute(inputImage, nbBins, radius, offsetVector);
+    ImageType::Pointer              inputImage = ReadInputImage(infname);
+    std::vector<ImageType::Pointer> results    = Compute(inputImage, nbBins, radius, offsetVector);
 
-    if ( ValidateAt(inputImage, results, nbBins, radius, offsetVector, 5, 5) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, offsetVector, 5, 5) == EXIT_FAILURE)
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, offsetVector, 7, 11) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, offsetVector, 7, 11) == EXIT_FAILURE)
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, offsetVector, 10, 5) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, offsetVector, 10, 5) == EXIT_FAILURE)
       return EXIT_FAILURE;
   }
 
@@ -201,16 +191,16 @@ int otbScalarImageToHigherOrderTexturesFilter(int argc, char * argv[])
 
     std::cout << "Testing radius = " << radius << " and offset = " << offset << std::endl;
 
-    ImageType::Pointer inputImage = ReadInputImage(infname);
-    std::vector<ImageType::Pointer> results = Compute(inputImage, nbBins, radius, offsetVector);
+    ImageType::Pointer              inputImage = ReadInputImage(infname);
+    std::vector<ImageType::Pointer> results    = Compute(inputImage, nbBins, radius, offsetVector);
 
-    if ( ValidateAt(inputImage, results, nbBins, radius, offsetVector, 7, 11) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, offsetVector, 7, 11) == EXIT_FAILURE)
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, offsetVector, 5, 5) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, offsetVector, 5, 5) == EXIT_FAILURE)
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, offsetVector, 7, 11) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, offsetVector, 7, 11) == EXIT_FAILURE)
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, offsetVector, 10, 5) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, offsetVector, 10, 5) == EXIT_FAILURE)
       return EXIT_FAILURE;
   }
 
@@ -220,16 +210,16 @@ int otbScalarImageToHigherOrderTexturesFilter(int argc, char * argv[])
 
     std::cout << "Testing radius = " << radius << " and default offsets" << std::endl;
 
-    ImageType::Pointer inputImage = ReadInputImage(infname);
-    std::vector<ImageType::Pointer> results = Compute(inputImage, nbBins, radius, ITK_NULLPTR);
+    ImageType::Pointer              inputImage = ReadInputImage(infname);
+    std::vector<ImageType::Pointer> results    = Compute(inputImage, nbBins, radius, nullptr);
 
-    if ( ValidateAt(inputImage, results, nbBins, radius, ITK_NULLPTR, 7, 11) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, nullptr, 7, 11) == EXIT_FAILURE)
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, ITK_NULLPTR, 5, 5) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, nullptr, 5, 5) == EXIT_FAILURE)
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, ITK_NULLPTR, 7, 11) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, nullptr, 7, 11) == EXIT_FAILURE)
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, ITK_NULLPTR, 10, 5) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, nullptr, 10, 5) == EXIT_FAILURE)
       return EXIT_FAILURE;
   }
 
@@ -246,16 +236,16 @@ int otbScalarImageToHigherOrderTexturesFilter(int argc, char * argv[])
 
     std::cout << "Testing radius = " << radius << " and offset = " << offset << std::endl;
 
-    ImageType::Pointer inputImage = ReadInputImage(infname);
-    std::vector<ImageType::Pointer> results = Compute(inputImage, nbBins, radius, offsetVector);
+    ImageType::Pointer              inputImage = ReadInputImage(infname);
+    std::vector<ImageType::Pointer> results    = Compute(inputImage, nbBins, radius, offsetVector);
 
-    if ( ValidateAt(inputImage, results, nbBins, radius, offsetVector, 7, 11) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, offsetVector, 7, 11) == EXIT_FAILURE)
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, offsetVector, 5, 5) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, offsetVector, 5, 5) == EXIT_FAILURE)
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, offsetVector, 7, 11) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, offsetVector, 7, 11) == EXIT_FAILURE)
       return EXIT_FAILURE;
-    if ( ValidateAt(inputImage, results, nbBins, radius, offsetVector, 10, 5) == EXIT_FAILURE )
+    if (ValidateAt(inputImage, results, nbBins, radius, offsetVector, 10, 5) == EXIT_FAILURE)
       return EXIT_FAILURE;
   }
 

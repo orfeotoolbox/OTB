@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -51,16 +51,15 @@ namespace otb
  * \ingroup OTBDempsterShafer
  */
 
-template <class TConfusionMatrix = itk::VariableSizeMatrix<double>, class TLabel = int >
-class ITK_EXPORT ConfusionMatrixToMassOfBelief :
-  public itk::ProcessObject
+template <class TConfusionMatrix = itk::VariableSizeMatrix<double>, class TLabel = int>
+class ITK_EXPORT ConfusionMatrixToMassOfBelief : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */
-  typedef ConfusionMatrixToMassOfBelief             Self;
-  typedef itk::ProcessObject                        Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef ConfusionMatrixToMassOfBelief Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ConfusionMatrixToMassOfBelief, itk::ProcessObject);
@@ -70,20 +69,26 @@ public:
 
 
   /** Type for the confusion matrix */
-  typedef TConfusionMatrix                                                      ConfusionMatrixType;
+  typedef TConfusionMatrix ConfusionMatrixType;
 
   /** Type for the labels */
-  typedef TLabel                                                                ClassLabelType;
+  typedef TLabel ClassLabelType;
 
   /** Type for the confusion matrix measurements calculator*/
   typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType, ClassLabelType> ConfusionMatrixMeasurementsType;
-  typedef typename ConfusionMatrixMeasurementsType::MapOfClassesType            MapOfClassesType;
-  typedef typename ConfusionMatrixMeasurementsType::MapOfIndicesType            MapOfIndicesType;
+  typedef typename ConfusionMatrixMeasurementsType::MapOfClassesType MapOfClassesType;
+  typedef typename ConfusionMatrixMeasurementsType::MapOfIndicesType MapOfIndicesType;
 
-  typedef double                                                                MassType;
-  typedef std::map<ClassLabelType, MassType>                                    LabelMassMapType;
+  typedef double MassType;
+  typedef std::map<ClassLabelType, MassType> LabelMassMapType;
 
-  enum MassOfBeliefDefinitionMethod {PRECISION, RECALL, ACCURACY, KAPPA};
+  enum MassOfBeliefDefinitionMethod
+  {
+    PRECISION,
+    RECALL,
+    ACCURACY,
+    KAPPA
+  };
 
   void Update() override;
 
@@ -100,9 +105,9 @@ public:
     typename MapOfClassesType::iterator itMapOfClasses;
     m_MapOfIndices.clear();
     for (itMapOfClasses = m_MapOfClasses.begin(); itMapOfClasses != m_MapOfClasses.end(); ++itMapOfClasses)
-      {
+    {
       m_MapOfIndices[itMapOfClasses->second] = itMapOfClasses->first;
-      }
+    }
   }
 
   MapOfClassesType GetMapOfClasses() const
@@ -119,9 +124,9 @@ public:
     typename MapOfIndicesType::iterator itMapOfIndices;
     m_MapOfClasses.clear();
     for (itMapOfIndices = m_MapOfIndices.begin(); itMapOfIndices != m_MapOfIndices.end(); ++itMapOfIndices)
-      {
+    {
       m_MapOfClasses[itMapOfIndices->second] = itMapOfIndices->first;
-      }
+    }
   }
 
   MapOfIndicesType GetMapOfIndices() const
@@ -141,31 +146,30 @@ protected:
   ConfusionMatrixToMassOfBelief();
 
   /** Destructor */
-  ~ConfusionMatrixToMassOfBelief() override {};
+  ~ConfusionMatrixToMassOfBelief() override{};
 
   /** Triggers the computation of the confusion matrix */
   void GenerateData(void) override;
 
 private:
-  ConfusionMatrixToMassOfBelief(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ConfusionMatrixToMassOfBelief(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  ConfusionMatrixType m_ConfusionMatrix;
+  ConfusionMatrixType                               m_ConfusionMatrix;
   typename ConfusionMatrixMeasurementsType::Pointer m_ConfMatMeasurements;
 
   MapOfClassesType m_MapOfClasses;
   MapOfIndicesType m_MapOfIndices;
 
   MassOfBeliefDefinitionMethod m_DefinitionMethod;
-  LabelMassMapType m_MapMassOfBelief;
+  LabelMassMapType             m_MapMassOfBelief;
 };
 
 } // end namespace otb
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbConfusionMatrixToMassOfBelief.txx"
+#include "otbConfusionMatrixToMassOfBelief.hxx"
 #endif
 
 #endif
-

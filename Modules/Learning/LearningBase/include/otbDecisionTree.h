@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -61,8 +61,16 @@ template <class AttributeValueType, class LabelType>
 class ITK_EXPORT DecisionTree : public itk::DataObject
 {
 public:
-
-  enum DecisionTreeTestType { MIN, LT=MIN, LE, EQ, GE, GT, MAX=GT};
+  enum DecisionTreeTestType
+  {
+    MIN,
+    LT = MIN,
+    LE,
+    EQ,
+    GE,
+    GT,
+    MAX = GT
+  };
   /** Standard typedefs */
   typedef DecisionTree                  Self;
   typedef itk::DataObject               Superclass;
@@ -74,10 +82,10 @@ public:
   /** Runtime information macro */
   itkTypeMacro(DecisionTree, DataObject);
 
-  typedef typename std::pair< AttributeValueType, DecisionTreeTestType > KeyType;
-  typedef typename std::map< KeyType, Pointer >                          TreeMapType;
-  typedef typename std::map< KeyType, LabelType >                        LabelMapType;
-  typedef std::vector<AttributeValueType>                                ExampleType;
+  typedef typename std::pair<AttributeValueType, DecisionTreeTestType> KeyType;
+  typedef typename std::map<KeyType, Pointer>                          TreeMapType;
+  typedef typename std::map<KeyType, LabelType>                        LabelMapType;
+  typedef std::vector<AttributeValueType> ExampleType;
 
   itkSetMacro(Attribute, unsigned int);
   itkGetMacro(Attribute, unsigned int);
@@ -107,8 +115,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  DecisionTree(const Self &); // purposely not implemented
-  void operator =(const Self&); // purposely not implemented
+  DecisionTree(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Map holding the subtrees */
   TreeMapType* m_TreeMap;
@@ -121,13 +129,11 @@ private:
   bool m_IsFinal;
 
   LabelType m_Label;
-
-
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbDecisionTree.txx"
+#include "otbDecisionTree.hxx"
 #endif
 
 #endif

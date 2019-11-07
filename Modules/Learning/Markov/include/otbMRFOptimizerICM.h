@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -42,7 +42,6 @@ namespace otb
 class ITK_EXPORT MRFOptimizerICM : public MRFOptimizer
 {
 public:
-
   typedef MRFOptimizerICM               Self;
   typedef MRFOptimizer                  Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -55,21 +54,23 @@ public:
   inline bool Compute(double deltaEnergy) override
   {
     if (deltaEnergy < 0)
-      {
+    {
       return true;
-      }
+    }
     else
-      {
+    {
       return false;
-      }
+    }
   }
 
 protected:
-  MRFOptimizerICM() {}
-  ~MRFOptimizerICM() override {}
-
+  MRFOptimizerICM()
+  {
+  }
+  ~MRFOptimizerICM() override
+  {
+  }
 };
-
 }
 
 #endif

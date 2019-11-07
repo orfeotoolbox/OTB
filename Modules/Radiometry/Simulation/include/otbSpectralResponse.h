@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,7 +25,6 @@
 #include <itkObjectFactory.h>
 #include <vector>
 #include <utility>
-#include <fstream>
 #include <limits>
 
 #include "otbVectorImage.h"
@@ -54,31 +53,31 @@ namespace otb
  *
  * \ingroup OTBSimulation
  */
-template<class TPrecision = double, class TValuePrecision = double>
-class SpectralResponse: public itk::DataObject
+template <class TPrecision = double, class TValuePrecision = double>
+class SpectralResponse : public itk::DataObject
 {
 public:
   /** Standard class typedefs */
-  typedef SpectralResponse Self;
-  typedef itk::DataObject Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef SpectralResponse              Self;
+  typedef itk::DataObject               Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Template parameters typedef */
-  typedef TPrecision PrecisionType;
+  typedef TPrecision      PrecisionType;
   typedef TValuePrecision ValuePrecisionType;
 
   typedef std::pair<TPrecision, TValuePrecision> PairType;
-  //typedef boost::shared_ptr<PairType> PairPointerType;
+  // typedef boost::shared_ptr<PairType> PairPointerType;
   typedef typename std::vector<PairType> VectorPairType;
 
   /** Standard image typedef */
   typedef otb::VectorImage<TValuePrecision, 2> ImageType;
-  typedef typename ImageType::Pointer ImagePointerType;
+  typedef typename ImageType::Pointer         ImagePointerType;
   typedef itk::ImageRegionIterator<ImageType> IteratorType;
 
   /** Standard filter functions values typedef */
-  typedef otb::FilterFunctionValues FilterFunctionValuesType;
+  typedef otb::FilterFunctionValues                   FilterFunctionValuesType;
   typedef itk::SmartPointer<FilterFunctionValuesType> FilterFunctionValuesPointerType;
 
   typedef std::pair<TPrecision, TPrecision> IntervalType;
@@ -101,13 +100,13 @@ public:
   virtual unsigned int Size() const;
 
   /** Fill from a ASCII file (CD-ROM ASTER Spectral library Version 1.2)*/
-  void Load(const std::string & filename, ValuePrecisionType coefNormalization = 1.0);
+  void Load(const std::string& filename, ValuePrecisionType coefNormalization = 1.0);
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** get vector of spectral responses */
-  VectorPairType & GetResponse()
+  VectorPairType& GetResponse()
   {
     return m_Response;
   }
@@ -121,7 +120,7 @@ public:
    * \param PrecisionType
    * \return The interpolate value of the SR (for now a simple linear interpolation is used).
    */
-  inline ValuePrecisionType operator()(const PrecisionType & lambda);
+  inline ValuePrecisionType operator()(const PrecisionType& lambda);
 
 
   /** Operator for comparing Pair Lambda/Response
@@ -136,7 +135,7 @@ public:
   };
 
   /** Drop null value of reflectance in the Vector */
-  //void DropNullReflectance() {}
+  // void DropNullReflectance() {}
 
   /** Transform the SR in a image to compute the TOA reflectance*/
   ImagePointerType GetImage(ImagePointerType image) const;
@@ -149,49 +148,46 @@ public:
   /** Get the wavelength of the first and last not null reflectance  */
   IntervalType GetInterval()
   {
-    if (!m_IntervalComputed) this->ComputeInterval();
+    if (!m_IntervalComputed)
+      this->ComputeInterval();
     return m_Interval;
   }
 
   /** set index in m_Response vector to accelerate () operator **/
-  void SetPosGuessMin(const PrecisionType & lambda);
+  void SetPosGuessMin(const PrecisionType& lambda);
 
 
 protected:
   /** Constructor */
   SpectralResponse();
   /** Constructor from a ASCII file */
-  //SpectralResponse( const std::string & filename );
+  // SpectralResponse( const std::string & filename );
   /** Destructor */
-  ~SpectralResponse() override
-  {
-  }
-;
+  ~SpectralResponse() override{};
   /** PrintSelf method */
-  //void PrintSelf(std::ostream& os, itk::Indent indent) const;
+  // void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Spectral response vector of pairs (first=lambda; second=response)*/
   VectorPairType m_Response;
 
   /** Minimum value to consider that the spectral response is not null  */
-  TPrecision m_SensitivityThreshold;
-  IntervalType m_Interval;
+  TPrecision    m_SensitivityThreshold;
+  IntervalType  m_Interval;
   unsigned long m_PosGuess;
-  bool m_IntervalComputed;
-  bool m_UsePosGuess;
-  void ComputeInterval();
+  bool          m_IntervalComputed;
+  bool          m_UsePosGuess;
+  void          ComputeInterval();
 
 private:
-  SpectralResponse(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  SpectralResponse(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
-}// end namespace otb
+} // end namespace otb
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbSpectralResponse.txx"
+#include "otbSpectralResponse.hxx"
 #endif
 
 #endif

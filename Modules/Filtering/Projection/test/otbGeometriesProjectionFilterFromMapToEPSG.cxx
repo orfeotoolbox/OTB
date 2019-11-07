@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,33 +23,31 @@
 #include "otbGeometriesSet.h"
 #include "otbGeometriesProjectionFilter.h"
 
-int otbGeometriesProjectionFilterFromMapToEPSG(int argc, char * argv[])
+int otbGeometriesProjectionFilterFromMapToEPSG(int argc, char* argv[])
 {
   if (argc < 4)
-    {
-    std::cout << argv[0] << " <input vector filename> <output vector filename> <epsg>"  << std::endl;
+  {
+    std::cout << argv[0] << " <input vector filename> <output vector filename> <epsg>" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char* inputVDFilename = argv[1];
+  const char* inputVDFilename  = argv[1];
   const char* outputVDFilename = argv[2];
-  int epsg = atoi(argv[3]);
+  int         epsg             = atoi(argv[3]);
 
   typedef otb::GeometriesSet InputGeometriesType;
   typedef otb::GeometriesSet OutputGeometriesType;
 
-  otb::ogr::DataSource::Pointer input = otb::ogr::DataSource::New(
-      inputVDFilename, otb::ogr::DataSource::Modes::Read);
-  InputGeometriesType::Pointer in_set = InputGeometriesType::New(input);
+  otb::ogr::DataSource::Pointer input  = otb::ogr::DataSource::New(inputVDFilename, otb::ogr::DataSource::Modes::Read);
+  InputGeometriesType::Pointer  in_set = InputGeometriesType::New(input);
 
   typedef otb::GeometriesProjectionFilter GeometriesFilterType;
-  GeometriesFilterType::Pointer filter = GeometriesFilterType::New();
+  GeometriesFilterType::Pointer           filter = GeometriesFilterType::New();
 
   filter->SetInput(in_set);
-  filter->SetOutputProjectionRef( otb::GeoInformationConversion::ToWKT(epsg) );
+  filter->SetOutputProjectionRef(otb::SpatialReference::FromEPSG(epsg).ToWkt());
 
-  otb::ogr::DataSource::Pointer output = otb::ogr::DataSource::New(
-      outputVDFilename, otb::ogr::DataSource::Modes::Overwrite);
+  otb::ogr::DataSource::Pointer output  = otb::ogr::DataSource::New(outputVDFilename, otb::ogr::DataSource::Modes::Overwrite);
   OutputGeometriesType::Pointer out_set = OutputGeometriesType::New(output);
 
   filter->SetOutput(out_set);

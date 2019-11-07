@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,12 +28,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetInputFilenameParameter::QtWidgetInputFilenameParameter(InputFilenameParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
-  m_FilenameParam(param),
-  m_HLayout( ITK_NULLPTR ),
-  m_Input( ITK_NULLPTR ),
-  m_Button( ITK_NULLPTR )
+QtWidgetInputFilenameParameter::QtWidgetInputFilenameParameter(InputFilenameParameter* param, QtWidgetModel* m, QWidget* parent)
+  : QtWidgetParameterBase(param, m, parent), m_FilenameParam(param), m_HLayout(nullptr), m_Input(nullptr), m_Button(nullptr)
 {
 }
 
@@ -41,14 +37,20 @@ QtWidgetInputFilenameParameter::~QtWidgetInputFilenameParameter()
 {
 }
 
+const QLineEdit* QtWidgetInputFilenameParameter::GetInput() const
+{
+  return m_Input;
+}
+
+QLineEdit* QtWidgetInputFilenameParameter::GetInput()
+{
+  return m_Input;
+}
+
 void QtWidgetInputFilenameParameter::DoUpdateGUI()
 {
   // Update the lineEdit
-  QString text(
-    QFile::decodeName(
-      m_FilenameParam->GetValue().c_str()
-    )
-  );
+  QString text(QFile::decodeName(m_FilenameParam->GetValue().c_str()));
 
   if (text != m_Input->text())
     m_Input->setText(text);
@@ -61,11 +63,9 @@ void QtWidgetInputFilenameParameter::DoCreateWidget()
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
   m_Input = new QLineEdit;
-  m_Input->setToolTip(
-    QString::fromStdString( m_FilenameParam->GetDescription() )
-  );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+  m_Input->setToolTip(QString::fromStdString(m_FilenameParam->GetDescription()));
+  connect(m_Input, &QLineEdit::textChanged, this, &QtWidgetInputFilenameParameter::SetFileName);
+  connect(m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate);
 
   m_HLayout->addWidget(m_Input);
 
@@ -74,49 +74,36 @@ void QtWidgetInputFilenameParameter::DoCreateWidget()
   m_Button->setText("...");
   m_Button->setToolTip("Select file...");
   m_Button->setMaximumWidth(m_Button->width());
-  connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
+  connect(m_Button, &QPushButton::clicked, this, &QtWidgetInputFilenameParameter::SelectFile);
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);
 }
 
 
-void
-QtWidgetInputFilenameParameter
-::SelectFile()
+void QtWidgetInputFilenameParameter::SelectFile()
 {
-  assert( m_Input!=NULL );
+  assert(m_Input != NULL);
 
-  QString filename(
-    otb::GetOpenFilename(
-      this,
-      QString(),
-      m_Input->text(),
-      tr( "All files (*)" ),
-      NULL,
-      QFileDialog::ReadOnly )
-  );
+  QString filename(otb::GetOpenFilename(this, QString(), m_Input->text(), tr("All files (*)"), NULL, QFileDialog::ReadOnly));
 
-  if( filename.isEmpty() )
+  if (filename.isEmpty())
     return;
 
-  SetFileName( filename );
+  SetFileName(filename);
 
-  m_Input->setText( filename  );
+  m_Input->setText(filename);
 }
 
 
 void QtWidgetInputFilenameParameter::SetFileName(const QString& value)
 {
   // save value
-  m_FilenameParam->SetValue(
-    QFile::encodeName( value ).constData()
-  );
+  m_FilenameParam->SetValue(QFile::encodeName(value).constData());
 
   // notify of value change
-  QString key( m_FilenameParam->GetKey() );
-  emit ParameterChanged(key);
+  QString key(m_FilenameParam->GetKey());
+  emit    ParameterChanged(key);
 }
-
 }
 }

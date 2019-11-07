@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-#detection of OpenGL is apply is bit tricy as we deactivate
+#detection of OpenGL is apply is a bit tricky as we deactivate
 #framework on OSX globally. see mantis #1193
 if(APPLE)
   set( OPENGL_FOUND FALSE )
@@ -38,7 +38,7 @@ if(APPLE)
     PATHS "/System/Library/Frameworks/"
     DOC "OpenGL lib for OSX"
     )
-  
+
   find_library(
     OPENGL_glu_LIBRARY AGL
     PATHS "/System/Library/Frameworks/"
@@ -62,6 +62,7 @@ if(APPLE)
     )
 else(APPLE)
   find_package(OpenGL REQUIRED)
+
   mark_as_advanced(OPENGL_INCLUDE_DIR)
   mark_as_advanced(OPENGL_LIBRARIES)
 endif(APPLE)
@@ -73,11 +74,15 @@ if(NOT OPENGL_INCLUDE_DIR)
   endif()
 endif()
 
-if(NOT OPENGL_gl_LIBRARY)
-  message(FATAL_ERROR "Could not find OpenGL (missing: OPENGL_gl_LIBRARY")
+# For CMake > 3.11 the default GLVND instead of legacy GL library
+# Test both of them to 
+# FIXME: As stated in CMake documentation we should use the OpenGL::* import targets instead available
+# It should be done when OTB will increase CMake minimum version to 3.X
+# See: https://cmake.org/cmake/help/v3.11/module/FindOpenGL.html
+if(NOT OPENGL_gl_LIBRARY AND NOT OPENGL_opengl_LIBRARY)
+  message(FATAL_ERROR "Could not find OpenGL (missing: OPENGL_gl_LIBRARY or OPENGL_opengl_LIBRARY")
 endif()
 
 if(NOT OPENGL_glu_LIBRARY)
   message(FATAL_ERROR "Could not find OpenGL (missing: OPENGL_glu_LIBRARY")
 endif()
-

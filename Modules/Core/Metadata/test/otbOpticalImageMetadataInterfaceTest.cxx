@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "itkMacro.h"
 
 #include <fstream>
@@ -32,18 +30,18 @@
 int otbOpticalImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * inputFilename  = argv[1];
-  const char * outputFilename  = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  typedef otb::VectorImage<double,  2>         InputImageType;
+  typedef otb::VectorImage<double, 2> InputImageType;
   typedef otb::ImageFileReader<InputImageType> ImageReaderType;
 
   ImageReaderType::Pointer reader = ImageReaderType::New();
   reader->SetFileName(inputFilename);
   reader->UpdateOutputInformation();
 
-  otb::OpticalImageMetadataInterface::Pointer lImageMetadata = otb::OpticalImageMetadataInterfaceFactory::CreateIMI(
-    reader->GetOutput()->GetMetaDataDictionary());
+  otb::OpticalImageMetadataInterface::Pointer lImageMetadata =
+      otb::OpticalImageMetadataInterfaceFactory::CreateIMI(reader->GetOutput()->GetMetaDataDictionary());
 
   std::ofstream file;
   file.open(outputFilename);
@@ -62,5 +60,4 @@ int otbOpticalImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
   std::cout << lImageMetadata << std::endl;
 
   return EXIT_SUCCESS;
-
 }

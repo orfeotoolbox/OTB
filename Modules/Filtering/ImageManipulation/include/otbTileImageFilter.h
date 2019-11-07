@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -50,21 +50,20 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TImage>
-class ITK_EXPORT TileImageFilter :
-    public itk::ImageToImageFilter<TImage, TImage>
+class ITK_EXPORT TileImageFilter : public itk::ImageToImageFilter<TImage, TImage>
 {
 public:
   /** Standard class typedef */
-  typedef TileImageFilter                         Self;
+  typedef TileImageFilter Self;
   typedef itk::ImageToImageFilter<TImage, TImage> Superclass;
-  typedef itk::SmartPointer<Self>                 Pointer;
-  typedef itk::SmartPointer<const Self>           ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Helper typedefs */
-  typedef TImage                                  ImageType;
-  typedef typename ImageType::Pointer             ImagePointerType;
-  typedef typename ImageType::SizeType            SizeType;
-  typedef typename ImageType::RegionType          RegionType;
+  typedef TImage                         ImageType;
+  typedef typename ImageType::Pointer    ImagePointerType;
+  typedef typename ImageType::SizeType   SizeType;
+  typedef typename ImageType::RegionType RegionType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -72,8 +71,8 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(TileImageFilter, ImageToImageFilter);
 
-  itkSetMacro(Layout,SizeType);
-  itkGetConstReferenceMacro(Layout,SizeType);
+  itkSetMacro(Layout, SizeType);
+  itkGetConstReferenceMacro(Layout, SizeType);
 
 protected:
   /** Constructor */
@@ -99,18 +98,20 @@ protected:
      *
      * \sa ProcessObject::VerifyInputInformation
      */
-  void VerifyInputInformation() override {}
+  void VerifyInputInformation() override
+  {
+  }
 
 
 private:
-  TileImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  TileImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   // Compute the overlapping region between the output requested
   // region and the nth input tile largest region
-  RegionType OutputRegionToInputRegion(unsigned int tileIndex, const RegionType & requestedRegion);
+  RegionType OutputRegionToInputRegion(unsigned int tileIndex, const RegionType& requestedRegion);
 
-RegionType InputRegionToOutputRegion(unsigned int tileIndex, const RegionType & requestedRegion);
+  RegionType InputRegionToOutputRegion(unsigned int tileIndex, const RegionType& requestedRegion);
 
   // Layout of the images
   SizeType m_Layout;
@@ -125,7 +126,7 @@ RegionType InputRegionToOutputRegion(unsigned int tileIndex, const RegionType & 
 } // end namespace itk
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTileImageFilter.txx"
+#include "otbTileImageFilter.hxx"
 #endif
 
 #endif

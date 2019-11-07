@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,25 +26,24 @@
 #include "otbImageFileWriter.h"
 #include "otbStandardFilterWatcher.h"
 
-int otbScalarImageToTexturesFilter(int argc, char * argv[])
+int otbScalarImageToTexturesFilter(int argc, char* argv[])
 {
   if (argc != 7)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " infname outprefix nbBins radius offsetx offsety" << std::endl;
     return EXIT_FAILURE;
-    }
-  const char *       infname      = argv[1];
-  const char *       outprefix    = argv[2];
-  const unsigned int nbBins       = atoi(argv[3]);
-  const unsigned int radius       = atoi(argv[4]);
-  const int          offsetx      = atoi(argv[5]);
-  const int          offsety      = atoi(argv[6]);
+  }
+  const char*        infname   = argv[1];
+  const char*        outprefix = argv[2];
+  const unsigned int nbBins    = atoi(argv[3]);
+  const unsigned int radius    = atoi(argv[4]);
+  const int          offsetx   = atoi(argv[5]);
+  const int          offsety   = atoi(argv[6]);
 
   const unsigned int Dimension = 2;
-  typedef float                            PixelType;
-  typedef otb::Image<PixelType, Dimension> ImageType;
-  typedef otb::ScalarImageToTexturesFilter
-  <ImageType, ImageType>                        TexturesFilterType;
+  typedef float      PixelType;
+  typedef otb::Image<PixelType, Dimension>                       ImageType;
+  typedef otb::ScalarImageToTexturesFilter<ImageType, ImageType> TexturesFilterType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,7 +28,6 @@
 #include "itkListSample.h"
 #include "itkVariableLengthVector.h"
 
-#include <iostream>
 
 namespace otb
 {
@@ -68,50 +67,46 @@ namespace Wrapper
  * \ingroup OTBAppDimensionalityReduction
  */
 template <class TInputValue, class TOutputValue>
-class TrainDimensionalityReductionApplicationBase: public Application
+class TrainDimensionalityReductionApplicationBase : public Application
 {
 public:
-	/** Standard class typedefs. */
+  /** Standard class typedefs. */
   typedef TrainDimensionalityReductionApplicationBase Self;
-  typedef Application             Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef Application                                 Superclass;
+  typedef itk::SmartPointer<Self>                     Pointer;
+  typedef itk::SmartPointer<const Self>               ConstPointer;
 
   /** Standard macro */
-  itkTypeMacro(TrainDimensionalityReductionApplicationBase, otb::Application)
+  itkTypeMacro(TrainDimensionalityReductionApplicationBase, otb::Application);
 
-  typedef TInputValue                             InputValueType;
-  typedef TOutputValue                            OutputValueType;
+  typedef TInputValue  InputValueType;
+  typedef TOutputValue OutputValueType;
 
-  typedef otb::VectorImage<InputValueType>        SampleImageType;
-  typedef typename SampleImageType::PixelType     PixelType;
+  typedef otb::VectorImage<InputValueType>    SampleImageType;
+  typedef typename SampleImageType::PixelType PixelType;
 
-  typedef otb::DimensionalityReductionModelFactory<
-    InputValueType, OutputValueType>             ModelFactoryType;
+  typedef otb::DimensionalityReductionModelFactory<InputValueType, OutputValueType> ModelFactoryType;
   typedef typename ModelFactoryType::DimensionalityReductionModelTypePointer ModelPointerType;
   typedef typename ModelFactoryType::DimensionalityReductionModelType        ModelType;
-	  
+
   typedef typename ModelType::InputSampleType     SampleType;
   typedef typename ModelType::InputListSampleType ListSampleType;
-  
+
 protected:
   TrainDimensionalityReductionApplicationBase();
   ~TrainDimensionalityReductionApplicationBase() override;
 
   /** Generic method to train and save the machine learning model. This method
      * uses specific train methods depending on the chosen model.*/
-  void Train(typename ListSampleType::Pointer trainingListSample,
-             std::string modelPath);
+  void Train(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
 
   /** Generic method to load a model file and use it to classify a sample list*/
-  void Reduce(typename ListSampleType::Pointer validationListSample,
-              std::string modelPath);
+  void Reduce(typename ListSampleType::Pointer validationListSample, std::string modelPath);
 
   /** Init method that creates all the parameters for machine learning models */
   void DoInit() override;
 
 private:
-
   /** Specific Init and Train methods for each machine learning model */
 
   void InitSOMParams();
@@ -122,11 +117,11 @@ private:
 #ifdef OTB_USE_SHARK
   void InitAutoencoderParams();
   void InitPCAParams();
-  
+
   void BeforeTrainAutoencoder(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
   template <class autoencoderchoice>
   void TrainAutoencoder(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
-  
+
   void TrainPCA(typename ListSampleType::Pointer trainingListSample, std::string modelPath);
 #endif
 };
@@ -135,12 +130,13 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTrainDimensionalityReductionApplicationBase.txx"
-#include "otbDimensionalityReductionTrainSOM.txx"
+#include "otbTrainDimensionalityReductionApplicationBase.hxx"
+#include "otbDimensionalityReductionTrainSOM.hxx"
+#include <string>
 
 #ifdef OTB_USE_SHARK
-#include "otbDimensionalityReductionTrainAutoencoder.txx"
-#include "otbDimensionalityReductionTrainPCA.txx"
+#include "otbDimensionalityReductionTrainAutoencoder.hxx"
+#include "otbDimensionalityReductionTrainPCA.hxx"
 #endif
 #endif
 

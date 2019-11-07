@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,13 +19,11 @@
  */
 
 
-
-
 #include "itkPointSet.h"
 #include "otbPointSetSource.h"
 #include "itkMacro.h"
 
-int otbPointSetSourceTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbPointSetSourceTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   // Declare the PointSet pixel type.
   // Those are the values associated
@@ -39,25 +37,24 @@ int otbPointSetSourceTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   typedef PointSetType::PointsContainer PointsContainerType;
 
   // Declare the type for PointsContainerPointer
-  typedef PointSetType::PointsContainerPointer
-  PointsContainerPointer;
+  typedef PointSetType::PointsContainerPointer PointsContainerPointer;
   // Declare the type for Points
   typedef PointSetType::PointType PointType;
 
   // Create an input Point Set
-  PointSetType::Pointer inputPointSet  = PointSetType::New();
+  PointSetType::Pointer inputPointSet = PointSetType::New();
 
   // Insert data on the PointSet
   PointsContainerPointer points = inputPointSet->GetPoints();
 
   // Fill a square with points , just to get some data
-  int                                    n = 1; // let's start with a few of them
-  PointsContainerType::ElementIdentifier count = 0;  // count them
+  int                                    n     = 1; // let's start with a few of them
+  PointsContainerType::ElementIdentifier count = 0; // count them
 
   for (int x = -n; x <= n; x++)
-    {
+  {
     for (int y = -n; y <= n; y++)
-      {
+    {
       PointType p;
       p[0] = x;
       p[1] = y;
@@ -70,8 +67,8 @@ int otbPointSetSourceTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
       std::cout << p[1] << std::endl;
       points->InsertElement(count, p);
       count++;
-      }
     }
+  }
 
   std::cout << "Input PointSet has " << inputPointSet->GetNumberOfPoints();
   std::cout << "   points " << std::endl;
@@ -79,5 +76,4 @@ int otbPointSetSourceTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
   // All objects should be automatically destroyed at this point
 
   return EXIT_SUCCESS;
-
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,8 +37,7 @@ namespace otb
  * \ingroup OTBSampling
  */
 
-class OTBSampling_EXPORT SamplingRateCalculator
-  : public itk::Object
+class OTBSampling_EXPORT SamplingRateCalculator : public itk::Object
 {
 public:
   /** Standard typedefs */
@@ -48,17 +47,17 @@ public:
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** typdefs **/
-  typedef std::map<std::string, unsigned long>  ClassCountMapType;
+  typedef std::map<std::string, unsigned long> ClassCountMapType;
   typedef ClassCountMapType::const_iterator constItMapType;
-  typedef struct OTBSampling_EXPORT Triplet
-   {
-     unsigned long Required;
-     unsigned long Tot;
-     double Rate;
-     bool operator==(const struct Triplet  & triplet) const;
-   } TripletType;
+  typedef struct OTBSampling_EXPORT         Triplet
+  {
+    unsigned long Required;
+    unsigned long Tot;
+    double        Rate;
+    bool operator==(const struct Triplet& triplet) const;
+  } TripletType;
 
-  typedef std::map<std::string, TripletType > MapRateType;
+  typedef std::map<std::string, TripletType> MapRateType;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -67,7 +66,7 @@ public:
   itkTypeMacro(SamplingRateCalculator, itk::Object);
 
   /** Method to manually set the number of samples required in each class */
-  void SetNbOfSamplesByClass(const ClassCountMapType &required);
+  void SetNbOfSamplesByClass(const ClassCountMapType& required);
 
   /** Method to set the same number of required samples in each class */
   void SetNbOfSamplesAllClasses(unsigned long);
@@ -76,8 +75,8 @@ public:
   void SetPercentageOfSamples(double percent);
 
   /** Method to set the total number of samples to generate */
-  void SetTotalNumberOfSamples(unsigned long value);  
-  
+  void SetTotalNumberOfSamples(unsigned long value);
+
   /** Method to choose a sampling strategy based on the smallest class.
    * The number of samples in each class is set to this minimum size*/
   void SetMinimumNbOfSamplesByClass(void);
@@ -94,7 +93,7 @@ public:
   void Read(std::string filename);
 
   /** Get macro to the computed sampling rates.*/
-  itkGetConstReferenceMacro(RatesByClass,MapRateType);
+  itkGetConstReferenceMacro(RatesByClass, MapRateType);
 
   /** Set method to input the total number of samples in each class.
    *  This method should be called before the other Set... methods
@@ -111,17 +110,19 @@ protected:
   SamplingRateCalculator();
 
   /** Destructor */
-  ~SamplingRateCalculator() override {}
+  ~SamplingRateCalculator() override
+  {
+  }
 
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SamplingRateCalculator(const Self &);    //purposely not implemented
-  void operator =(const Self&);    //purposely not implemented
+  SamplingRateCalculator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Update the computed rate for a given class.*/
-  void UpdateRate(const std::string &name);
+  void UpdateRate(const std::string& name);
 
   /** Internal sampling rates.*/
   MapRateType m_RatesByClass;

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -21,7 +21,6 @@
 otb_module_test()
 set(OTBComplexImageTests
   otbAmplitudePhaseToRGBFunctor.cxx
-  otbAmplitudePhaseToRGBFunctorNew.cxx
   otbComplexImageTestDriver.cxx  )
 
 add_executable(otbComplexImageTestDriver ${OTBComplexImageTests})
@@ -35,5 +34,3 @@ otb_add_test(NAME bfTvAmplitudePhaseToRGBFunctor COMMAND otbComplexImageTestDriv
   ${INPUTDATA}/RSAT_imagery_HH.tif
   ${TEMP}/bfTvAmplitudePhaseToRGBFunctor.png
   )
-otb_add_test(NAME bfTuAmplitudePhaseToRGBFunctorNew COMMAND otbComplexImageTestDriver
-  otbAmplitudePhaseToRGBFunctorNew)

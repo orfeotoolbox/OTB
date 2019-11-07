@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -27,6 +27,7 @@
 #define ossimTerraSarXSarSensorModel_HEADER
 
 #include "ossim/ossimSarSensorModel.h"
+#include <string>
 
 namespace ossimplugins
 {

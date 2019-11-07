@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -60,8 +60,7 @@ public:
   typedef TImage          ImageType;
 
   /** Dimension of input image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      ImageType::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, ImageType::ImageDimension);
 
   // ITK Interpolators
   typedef itk::InterpolateImageFunction<ImageType, double>                InterpolationType;
@@ -70,41 +69,40 @@ public:
   typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> NearestNeighborInterpolationType;
 
   // OTB Interpolators (supported for otb::Image)
-  typedef WindowedSincInterpolateImageGaussianFunction<ImageType>         GaussianInterpolationType;
-  typedef WindowedSincInterpolateImageCosineFunction<ImageType>           CosineInterpolationType;
-  typedef WindowedSincInterpolateImageHammingFunction<ImageType>          HammingInterpolationType;
-  typedef WindowedSincInterpolateImageWelchFunction<ImageType>            WelchInterpolationType;
-  typedef WindowedSincInterpolateImageLanczosFunction<ImageType>          LanczosInterpolationType;
-  typedef WindowedSincInterpolateImageBlackmanFunction<ImageType>         BlackmanInterpolationType;
-  typedef ProlateInterpolateImageFunction<ImageType>                      ProlateInterpolationType;
-  typedef BCOInterpolateImageFunction<ImageType>                          BCOInterpolationType;
+  typedef WindowedSincInterpolateImageGaussianFunction<ImageType> GaussianInterpolationType;
+  typedef WindowedSincInterpolateImageCosineFunction<ImageType>   CosineInterpolationType;
+  typedef WindowedSincInterpolateImageHammingFunction<ImageType>  HammingInterpolationType;
+  typedef WindowedSincInterpolateImageWelchFunction<ImageType>    WelchInterpolationType;
+  typedef WindowedSincInterpolateImageLanczosFunction<ImageType>  LanczosInterpolationType;
+  typedef WindowedSincInterpolateImageBlackmanFunction<ImageType> BlackmanInterpolationType;
+  typedef ProlateInterpolateImageFunction<ImageType>              ProlateInterpolationType;
+  typedef BCOInterpolateImageFunction<ImageType>                  BCOInterpolationType;
 
   static unsigned int CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator);
 };
 
- /** \class StreamingTraits
-  *  \brief This class provides internal information for streamable filters
-  *
-  *  \note
-  *  This class is specialized for otb::VectorImage because VectorImage support less interpolator types
-  *
-  * \sa ImageFileWriter
-  * \sa StreamingStatisticsImageFilter
-  * \sa StreamingResampleImageFilter
+/** \class StreamingTraits
+ *  \brief This class provides internal information for streamable filters
  *
- * \ingroup OTBInterpolation
-  */
+ *  \note
+ *  This class is specialized for otb::VectorImage because VectorImage support less interpolator types
+ *
+ * \sa ImageFileWriter
+ * \sa StreamingStatisticsImageFilter
+ * \sa StreamingResampleImageFilter
+*
+* \ingroup OTBInterpolation
+ */
 template <typename TPixel, unsigned int VImageDimension>
-class ITK_EXPORT StreamingTraits< otb::VectorImage<TPixel, VImageDimension> >
+class ITK_EXPORT StreamingTraits<otb::VectorImage<TPixel, VImageDimension>>
 {
 public:
   /** Standard class typedefs. */
-  typedef StreamingTraits                           Self;
+  typedef StreamingTraits Self;
   typedef otb::VectorImage<TPixel, VImageDimension> ImageType;
 
   /** Dimension of input image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      ImageType::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, ImageType::ImageDimension);
 
   // ITK Interpolators
   typedef itk::InterpolateImageFunction<ImageType, double>                InterpolationType;
@@ -112,8 +110,8 @@ public:
   typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> NearestNeighborInterpolationType;
 
   // OTB Interpolators (supported for otb::VectorImage)
-  typedef WindowedSincInterpolateImageGaussianFunction<ImageType>         GaussianInterpolationType;
-  typedef BCOInterpolateImageFunction<ImageType>                          BCOInterpolationType;
+  typedef WindowedSincInterpolateImageGaussianFunction<ImageType> GaussianInterpolationType;
+  typedef BCOInterpolateImageFunction<ImageType>                  BCOInterpolationType;
 
   static unsigned int CalculateNeededRadiusForInterpolator(const InterpolationType* interpolator);
 };
@@ -122,7 +120,7 @@ public:
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingTraits.txx"
+#include "otbStreamingTraits.hxx"
 #endif
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -78,8 +78,7 @@ namespace mvd
  *
  *  \brief TODO.
  */
-class OTBMonteverdiGUI_EXPORT ImageViewManipulator :
-    public AbstractImageViewManipulator
+class OTBMonteverdiGUI_EXPORT ImageViewManipulator : public AbstractImageViewManipulator
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -88,8 +87,8 @@ class OTBMonteverdiGUI_EXPORT ImageViewManipulator :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Constants
+  //
+  // Constants
 public:
   /**
    */
@@ -110,16 +109,14 @@ public:
    */
   static const int DEFAULT_ZOOM_GRANULARITY;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
-  /** \brief Constructor. */
+/** \brief Constructor. */
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
-  ImageViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
-                        QObject* p =NULL );
-#else // USE_VIEW_SETTINGS_SIDE_EFFECT
-  ImageViewManipulator( QObject* p =NULL );
+  ImageViewManipulator(const otb::ViewSettings::Pointer& viewSettings, QObject* p = NULL);
+#else  // USE_VIEW_SETTINGS_SIDE_EFFECT
+  ImageViewManipulator(QObject* p = NULL);
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 
   /** \brief Destructor. */
@@ -132,25 +129,23 @@ public:
   //
   // Accessors.
 
-  void SetViewportSize( int width, int height ) override;
+  void SetViewportSize(int width, int height) override;
 
   SizeType GetViewportSize() const override;
 
-  void SetOrigin( const PointType& origin ) override;
+  void SetOrigin(const PointType& origin) override;
 
   PointType GetOrigin() const override;
 
-  void SetSpacing( const SpacingType& spacing ) override;
+  void SetSpacing(const SpacingType& spacing) override;
 
   SpacingType GetSpacing() const override;
 
-  void SetNativeSpacing( const SpacingType& ) override;
+  void SetNativeSpacing(const SpacingType&) override;
 
-  void SetWkt( const std::string& wkt ) override;
+  void SetWkt(const std::string& wkt) override;
 
-  void SetKeywordList(
-    const DefaultImageType::ImageKeywordlistType& kwl
-  ) override;
+  void SetKeywordList(const DefaultImageType::ImageKeywordlistType& kwl) override;
 
   PointType GetCenter() const override;
 
@@ -159,55 +154,53 @@ public:
   //
   // Controls.
 
-  
-    void
-    SetupRenderingContext(
-      AbstractImageViewRenderer::RenderingContext * const ) const override;
+
+  void SetupRenderingContext(AbstractImageViewRenderer::RenderingContext* const) const override;
 
   void ZoomIn() override;
 
   void ZoomOut() override;
 
-  const PointType& Transform( PointType&, const QPoint& ) const override;
+  const PointType& Transform(PointType&, const QPoint&) const override;
 
   void ResetViewport() override;
 
   //
   // Events.
 
-  void MouseMoveEvent( QMouseEvent* event ) override;
+  void MouseMoveEvent(QMouseEvent* event) override;
 
-  void MousePressEvent( QMouseEvent* event ) override;
+  void MousePressEvent(QMouseEvent* event) override;
 
-  void MouseReleaseEvent( QMouseEvent* event ) override;
+  void MouseReleaseEvent(QMouseEvent* event) override;
 
-  void MouseDoubleClickEvent( QMouseEvent * ) override;
+  void MouseDoubleClickEvent(QMouseEvent*) override;
 
-  void WheelEvent( QWheelEvent* event) override;
+  void WheelEvent(QWheelEvent* event) override;
 
-  void ResizeEvent( QResizeEvent* event ) override;
+  void ResizeEvent(QResizeEvent* event) override;
 
-  void KeyPressEvent( QKeyEvent* event ) override;
+  void KeyPressEvent(QKeyEvent* event) override;
 
-  void KeyReleaseEvent( QKeyEvent* event ) override;
+  void KeyReleaseEvent(QKeyEvent* event) override;
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   //
   // AbstractImageViewManipulator overloads.
 
-  void CenterOn( const PointType& point ) override;
+  void CenterOn(const PointType& point) override;
 
-  void ZoomTo( double scale ) override;
+  void ZoomTo(double scale) override;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   /**
    */
@@ -242,10 +235,10 @@ signals:
   void DeleteSelectedRequested();
   /**
    */
-  void ToggleLayerVisibilityRequested( bool );
+  void ToggleLayerVisibilityRequested(bool);
   /**
    */
-  void RotateLayersRequested( int );
+  void RotateLayersRequested(int);
   /**
    */
   void ZoomToFullResolutionRequested();
@@ -258,28 +251,28 @@ signals:
 
   /**
    */
-  void ShiftAlphaRequested( double );
+  void ShiftAlphaRequested(double);
   /**
    */
-  void UpdateGammaRequested( double );
+  void UpdateGammaRequested(double);
   /**
    */
-  void ResizeShaderRequested( double );
+  void ResizeShaderRequested(double);
   /**
    */
-  void ReparamShaderRequested( double );
+  void ReparamShaderRequested(double);
   /**
    */
-  void ShiftDynamicsRequested( double );
+  void ShiftDynamicsRequested(double);
   /**
    */
-  void ScaleDynamicsRequested( double );
+  void ScaleDynamicsRequested(double);
   /**
    */
-  void ResetQuantilesRequested( bool );
+  void ResetQuantilesRequested(bool);
   /**
    */
-  void ShaderEffectRequested( Effect );
+  void ShaderEffectRequested(Effect);
   /**
    */
   void ApplyAllRequested();
@@ -288,21 +281,19 @@ signals:
   void SetReferenceRequested();
   /**
    */
-  void TakeScreenshotRequested( bool isQuickMode );
+  void TakeScreenshotRequested(bool isQuickMode);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
   /**
    */
-  static PointType Translate( const QPoint& vector,
-                              const PointType& origin,
-                              const SpacingType& spacing );
+  static PointType Translate(const QPoint& vector, const PointType& origin, const SpacingType& spacing);
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
   /**
    */
@@ -313,48 +304,41 @@ protected:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Private types.
+  //
+  // Private types.
 private:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
-  template< typename T1, typename T2, typename T3, typename T4 >
-    inline static
-    double Factor( T1 wheel,
-		   T2 degrees,
-		   T3 delta,
-		   T4 granularity );
+  template <typename T1, typename T2, typename T3, typename T4>
+  inline static double Factor(T1 wheel, T2 degrees, T3 delta, T4 granularity);
   /**
    */
-  template< typename T1, typename T2 >
-    inline static
-    double Factor( T1 wheel,
-		   T2 degrees );
+  template <typename T1, typename T2>
+  inline static double Factor(T1 wheel, T2 degrees);
 
   /**
    */
-  void Translate( const QPoint& vector );
+  void Translate(const QPoint& vector);
   /**
    */
-  void Scale( const QPoint& center, int degrees, PointType* centerPoint =NULL );
+  void Scale(const QPoint& center, int degrees, PointType* centerPoint = NULL);
 
   /**
    */
   // inline void SetRenderMode( const QInputEvent* event );
   /**
    */
-  inline void SetFastRenderMode( bool isEnabled );
+  inline void SetFastRenderMode(bool isEnabled);
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
-  QTimer * m_Timer;
+  QTimer* m_Timer;
   /**
    */
   SpacingType m_NativeSpacing;
@@ -385,8 +369,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /**
    */
@@ -402,42 +386,25 @@ namespace mvd
 {
 
 /*****************************************************************************/
-template< typename T1, typename T2, typename T3, typename T4 >
-inline
-double
-ImageViewManipulator
-::Factor( T1 wheel, T2 degrees, T3 delta, T4 granularity )
+template <typename T1, typename T2, typename T3, typename T4>
+inline double ImageViewManipulator::Factor(T1 wheel, T2 degrees, T3 delta, T4 granularity)
 {
   // qDebug() << "wheel:" << wheel;
   // qDebug() << "degrees:" << degrees;
   // qDebug() << "delta:" << delta;
   // qDebug() << "granularity:" << granularity;
 
-  if( abs( granularity )<=std::numeric_limits< T1 >::min() )
+  if (abs(granularity) <= std::numeric_limits<T1>::min())
     granularity = 1;
 
-  return
-    pow(
-      ( 1.0 + static_cast< double >( delta ) ),
-      static_cast< double >( wheel ) /
-      ( static_cast< double >( granularity ) * static_cast< double >( degrees ) )
-    );
+  return pow((1.0 + static_cast<double>(delta)), static_cast<double>(wheel) / (static_cast<double>(granularity) * static_cast<double>(degrees)));
 }
 
 /*****************************************************************************/
-template< typename T1, typename T2 >
-inline
-double
-ImageViewManipulator
-::Factor( T1 wheel, T2 degrees )
+template <typename T1, typename T2>
+inline double ImageViewManipulator::Factor(T1 wheel, T2 degrees)
 {
-  return
-    ImageViewManipulator::Factor(
-      wheel,
-      degrees,
-      ImageViewManipulator::DEFAULT_DELTA,
-      ImageViewManipulator::DEFAULT_GRANULARITY
-    );
+  return ImageViewManipulator::Factor(wheel, degrees, ImageViewManipulator::DEFAULT_DELTA, ImageViewManipulator::DEFAULT_GRANULARITY);
 }
 
 /*****************************************************************************/
@@ -459,15 +426,9 @@ ImageViewManipulator
 */
 
 /*****************************************************************************/
-inline
-void
-ImageViewManipulator
-::SetFastRenderMode( bool isEnabled )
+inline void ImageViewManipulator::SetFastRenderMode(bool isEnabled)
 {
-  m_RenderMode =
-    isEnabled
-    ? AbstractImageViewRenderer::RenderingContext::RENDER_MODE_LIGHT
-    : AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL;
+  m_RenderMode = isEnabled ? AbstractImageViewRenderer::RenderingContext::RENDER_MODE_LIGHT : AbstractImageViewRenderer::RenderingContext::RENDER_MODE_FULL;
 
   // qDebug() << "Render-mode:" << m_RenderMode;
 }

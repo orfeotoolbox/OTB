@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,23 +28,23 @@
 int otbSarParametricMapFunctionTest(int itkNotUsed(argc), char* argv[])
 {
 
-  const char * infname  = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef float PixelType;
+  typedef float      PixelType;
 
-  typedef otb::Image<PixelType, Dimension>                InputImageType;
-  typedef InputImageType::IndexType                       IndexType;
-  typedef InputImageType::PixelType                       InputPixelType;
-  typedef otb::ImageFileReader<InputImageType>            ReaderType;
-  typedef otb::SarParametricMapFunction<InputImageType>   FunctionType;
-  typedef FunctionType::PointSetType                      PointSetType;
+  typedef otb::Image<PixelType, Dimension> InputImageType;
+  typedef InputImageType::IndexType                     IndexType;
+  typedef InputImageType::PixelType                     InputPixelType;
+  typedef otb::ImageFileReader<InputImageType>          ReaderType;
+  typedef otb::SarParametricMapFunction<InputImageType> FunctionType;
+  typedef FunctionType::PointSetType                    PointSetType;
 
   /**Instantiation ofa Smart Pointer*/
-  FunctionType::Pointer filter = FunctionType::New();
-  ReaderType::Pointer   reader = ReaderType::New();
-  PointSetType::Pointer points = PointSetType::New();
+  FunctionType::Pointer filter    = FunctionType::New();
+  ReaderType::Pointer   reader    = ReaderType::New();
+  PointSetType::Pointer points    = PointSetType::New();
   PointSetType::Pointer coefValue = PointSetType::New();
 
   std::ofstream outfile(outfname);
@@ -83,7 +83,7 @@ int otbSarParametricMapFunctionTest(int itkNotUsed(argc), char* argv[])
   points->SetPointData(1, value);
   filter->SetPointSet(points);
 
-  IndexType       polynomalSize;
+  IndexType polynomalSize;
   polynomalSize[0] = 1;
   polynomalSize[1] = 0;
   filter->SetPolynomalSize(polynomalSize);
@@ -92,15 +92,18 @@ int otbSarParametricMapFunctionTest(int itkNotUsed(argc), char* argv[])
 
   index[0] = 0;
   index[1] = 0;
-  outfile << "Sar Radiometric Calibration computed for the point : DN[" << index <<"] = " << reader->GetOutput()->GetPixel(index) << " is " << filter->EvaluateAtIndex(index) << std::endl;
+  outfile << "Sar Radiometric Calibration computed for the point : DN[" << index << "] = " << reader->GetOutput()->GetPixel(index) << " is "
+          << filter->EvaluateAtIndex(index) << std::endl;
 
   index[0] = static_cast<unsigned int>(size[0] / 2.);
   index[1] = static_cast<unsigned int>(size[1] / 4.);
-  outfile << "Sar Radiometric Calibration computed for the point : DN[" << index <<"] = " << reader->GetOutput()->GetPixel(index) << " is " << filter->EvaluateAtIndex(index) << std::endl;
+  outfile << "Sar Radiometric Calibration computed for the point : DN[" << index << "] = " << reader->GetOutput()->GetPixel(index) << " is "
+          << filter->EvaluateAtIndex(index) << std::endl;
 
   index[0] = static_cast<unsigned int>(size[0] / 2.);
   index[1] = static_cast<unsigned int>(size[1] / 8.);
-  outfile << "Sar Radiometric Calibration computed for the point : DN[" << index <<"] = " << reader->GetOutput()->GetPixel(index) << " is " << filter->EvaluateAtIndex(index) << std::endl;
+  outfile << "Sar Radiometric Calibration computed for the point : DN[" << index << "] = " << reader->GetOutput()->GetPixel(index) << " is "
+          << filter->EvaluateAtIndex(index) << std::endl;
 
   outfile.close();
 

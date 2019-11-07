@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -76,8 +76,7 @@ class HistogramWidget;
  *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */
-class OTBMonteverdiGUI_EXPORT HistogramController :
-    public AbstractModelController
+class OTBMonteverdiGUI_EXPORT HistogramController : public AbstractModelController
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -86,17 +85,16 @@ class OTBMonteverdiGUI_EXPORT HistogramController :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /**
    * \brief Constructor.
    *
    * \param widget Controlled widget.
    * \param parent Parent QObject of this QObject.
    */
-  HistogramController( HistogramWidget* widget, QObject* p =NULL );
+  HistogramController(HistogramWidget* widget, QObject* p = NULL);
 
   /**
    * \brief Destructor.
@@ -106,50 +104,46 @@ public:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   /**
    * \brief
    */
-  void ResetWidget( RgbwChannel channel );
+  void ResetWidget(RgbwChannel channel);
 
   //
   // AbstractModelController methods.
 
-  void Connect( AbstractModel* ) override;
+  void Connect(AbstractModel*) override;
 
   void ClearWidget() override;
 
-  void virtual_ResetWidget( bool = false ) override;
+  void virtual_ResetWidget(bool = false) override;
 
-  void Disconnect( AbstractModel* ) override;
+  void Disconnect(AbstractModel*) override;
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /**
    * \brief Slot called when the band-index of a RGB channel has
@@ -158,7 +152,7 @@ private slots:
    * \param channel The RGB channel for which the band-index has changed.
    * \param band The new band-index of the RGB channel.
    */
-  void OnRgbChannelIndexChanged( RgbwChannel channel, int band );
+  void OnRgbChannelIndexChanged(RgbwChannel channel, int band);
 
   /**
    * \brief Slot called when the band-index of the white (gray)
@@ -166,7 +160,7 @@ private slots:
    *
    * \param band The new band-index of the white (gray) channel.
    */
-  void OnGrayChannelIndexChanged( int band );
+  void OnGrayChannelIndexChanged(int band);
 
   /**
    * \brief Slot called when the activation-state of the
@@ -174,17 +168,17 @@ private slots:
    *
    * \param activated The new grayscale-mode activation state.
    */
-  void OnGrayscaleActivated( bool activated );
+  void OnGrayscaleActivated(bool activated);
 
   /**
    * \brief
    */
-  void OnLowIntensityChanged( RgbwChannel channel, double value, bool refresh );
+  void OnLowIntensityChanged(RgbwChannel channel, double value, bool refresh);
 
   /**
    * \brief
    */
-  void OnHighIntensityChanged( RgbwChannel channel, double value, bool refresh );
+  void OnHighIntensityChanged(RgbwChannel channel, double value, bool refresh);
 
   /**
    */

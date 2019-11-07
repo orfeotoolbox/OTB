@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -53,18 +53,14 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef itk::ImageToImageFilter<FloatVectorImageType, FloatVectorImageType> FusionFilterType;
-
   typedef otb::SimpleRcsPanSharpeningFusionImageFilter<FloatImageType, FloatVectorImageType, FloatVectorImageType> SimpleRCSFilterType;
 
-  typedef otb::LmvmPanSharpeningFusionImageFilter
-    <FloatImageType, FloatVectorImageType, FloatVectorImageType, double> LmvmFilterType;
+  typedef otb::LmvmPanSharpeningFusionImageFilter<FloatImageType, FloatVectorImageType, FloatVectorImageType, double> LmvmFilterType;
 
   typedef otb::BayesianFusionFilter<FloatVectorImageType, FloatVectorImageType, FloatImageType, FloatVectorImageType> BayesianFilterType;
 
-  typedef otb::BCOInterpolateImageFunction<FloatVectorImageType>   InterpolatorType;
-  typedef otb::GenericRSResampleImageFilter<FloatVectorImageType,
-                                            FloatVectorImageType>  ResamplerType;
+  typedef otb::BCOInterpolateImageFunction<FloatVectorImageType> InterpolatorType;
+  typedef otb::GenericRSResampleImageFilter<FloatVectorImageType, FloatVectorImageType> ResamplerType;
 
   /** Standard macro */
   itkNewMacro(Self);
@@ -72,15 +68,16 @@ public:
   itkTypeMacro(Pansharpening, otb::Application);
 
 private:
-
   void DoInit() override
   {
     SetName("Pansharpening");
     SetDescription("Perform P+XS pansharpening");
 
     // Documentation
-    SetDocName("Pansharpening");
-    SetDocLongDescription("This application performs P+XS pansharpening. Pansharpening is a process of merging high-resolution panchromatic and lower resolution multispectral imagery to create a single high-resolution color image. Algorithms available in the applications are: RCS, bayesian fusion and Local Mean and Variance Matching(LMVM).");
+    SetDocLongDescription(
+        "This application performs P+XS pansharpening. Pansharpening is a process of merging high-resolution panchromatic and lower resolution multispectral "
+        "imagery to create a single high-resolution color image. Algorithms available in the applications are: RCS, bayesian fusion and Local Mean and "
+        "Variance Matching(LMVM).");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
@@ -88,13 +85,13 @@ private:
     AddDocTag(Tags::Geometry);
     AddDocTag(Tags::Pansharpening);
 
-    AddParameter(ParameterType_InputImage,   "inp",   "Input PAN Image");
-    SetParameterDescription("inp"," Input panchromatic image.");
-    AddParameter(ParameterType_InputImage,   "inxs",  "Input XS Image");
-    SetParameterDescription("inxs"," Input XS image.");
+    AddParameter(ParameterType_InputImage, "inp", "Input PAN Image");
+    SetParameterDescription("inp", " Input panchromatic image.");
+    AddParameter(ParameterType_InputImage, "inxs", "Input XS Image");
+    SetParameterDescription("inxs", " Input XS image.");
 
-    AddParameter(ParameterType_OutputImage,  "out",   "Output image");
-    SetParameterDescription("out"," Output image.");
+    AddParameter(ParameterType_OutputImage, "out", "Output image");
+    SetParameterDescription("out", "Output image.");
 
     AddParameter(ParameterType_Choice, "method", "Algorithm");
     SetParameterDescription("method", "Selection of the pan-sharpening method.");
@@ -105,8 +102,8 @@ private:
     AddChoice("method.lmvm", "LMVM");
     SetParameterDescription("method.lmvm", "Local Mean and Variance Matching (LMVM) Pan sharpening.");
 
-    AddParameter(ParameterType_Int, "method.lmvm.radiusx", "X radius" );
-    SetParameterDescription("method.lmvm.radiusx","Set the x radius of the sliding window." );
+    AddParameter(ParameterType_Int, "method.lmvm.radiusx", "X radius");
+    SetParameterDescription("method.lmvm.radiusx", "Set the x radius of the sliding window.");
     SetMinimumParameterIntValue("method.lmvm.radiusx", 1);
     SetDefaultParameterInt("method.lmvm.radiusx", 3);
 
@@ -146,10 +143,10 @@ private:
   void DoExecute() override
   {
     FloatVectorImageType* panchroV = GetParameterImage("inp");
-    if ( panchroV->GetNumberOfComponentsPerPixel() != 1 )
-      {
+    if (panchroV->GetNumberOfComponentsPerPixel() != 1)
+    {
       itkExceptionMacro(<< "The panchromatic image must be a single channel image")
-      }
+    }
 
     // Transform the PAN image to otb::Image
     typedef otb::Image<FloatVectorImageType::InternalPixelType> InternalFloatImageType;
@@ -162,32 +159,34 @@ private:
     channelSelect->UpdateOutputInformation();
 
     InternalFloatImageType::Pointer panchro = channelSelect->GetOutput();
-    FloatVectorImageType* xs = GetParameterImage("inxs");
+    FloatVectorImageType*           xs      = GetParameterImage("inxs");
 
     switch (GetParameterInt("method"))
-      {
-      case 0:
-      {
-      SimpleRCSFilterType::Pointer  filter = SimpleRCSFilterType::New();
+    {
+    case 0:
+    {
+      SimpleRCSFilterType::Pointer filter = SimpleRCSFilterType::New();
       m_Ref.push_back(filter.GetPointer());
 
       filter->SetPanInput(panchro);
       filter->SetXsInput(xs);
 
       filter->UpdateOutputInformation();
-      otbAppLogINFO( << "Simple RCS algorithm" );
-      m_FusionFilter = filter;
+      otbAppLogINFO(<< "Simple RCS algorithm");
+      m_Ref.push_back(filter.GetPointer());
+      SetParameterOutputImage("out", filter->GetOutput());
+
       break;
-      }
-      case 1:
-      {
+    }
+    case 1:
+    {
       LmvmFilterType::Pointer filter = LmvmFilterType::New();
 
       filter->SetXsInput(xs);
       filter->SetPanInput(panchro);
 
-      double radiusx = static_cast<unsigned int> (GetParameterInt("method.lmvm.radiusx"));
-      double radiusy = static_cast<unsigned int> (GetParameterInt("method.lmvm.radiusy"));
+      double radiusx = static_cast<unsigned int>(GetParameterInt("method.lmvm.radiusx"));
+      double radiusy = static_cast<unsigned int>(GetParameterInt("method.lmvm.radiusy"));
 
       InternalFloatImageType::SizeType radius;
       radius[0] = radiusx;
@@ -202,17 +201,18 @@ private:
 
       filter->UpdateOutputInformation();
 
-      otbAppLogINFO( << "Lmvm algorithm" );
+      otbAppLogINFO(<< "Lmvm algorithm");
+      m_Ref.push_back(filter.GetPointer());
+      SetParameterOutputImage("out", filter->GetOutput());
 
-      m_FusionFilter = filter;
       break;
-      }
-      case 2:
-      {
+    }
+    case 2:
+    {
       BayesianFilterType::Pointer filter = BayesianFilterType::New();
 
-      double lambda = static_cast<double> (GetParameterFloat("method.bayes.lambda"));
-      double s = static_cast<double> (GetParameterFloat("method.bayes.s"));
+      double lambda = static_cast<double>(GetParameterFloat("method.bayes.lambda"));
+      double s      = static_cast<double>(GetParameterFloat("method.bayes.s"));
 
       filter->SetS(s);
       filter->SetLambda(lambda);
@@ -223,25 +223,24 @@ private:
       filter->SetPanchro(panchro);
 
       filter->UpdateOutputInformation();
-      otbAppLogINFO( << "Bayesian fusion algorithm" );
-      m_FusionFilter = filter;
+      otbAppLogINFO(<< "Bayesian fusion algorithm");
+
+      m_Ref.push_back(filter.GetPointer());
+      SetParameterOutputImage("out", filter->GetOutput());
 
       break;
-      }
+    }
 
-      default:
-      {
-      otbAppLogFATAL(<<"non defined method "<<GetParameterInt("method")<<std::endl);
+    default:
+    {
+      otbAppLogFATAL(<< "non defined method " << GetParameterInt("method") << std::endl);
       break;
-      }
+    }
       return;
-      }
-
-    SetParameterOutputImage("out", m_FusionFilter->GetOutput());
+    }
   }
 
   std::vector<itk::ProcessObject::Pointer> m_Ref;
-  FusionFilterType::Pointer m_FusionFilter;
 };
 }
 }

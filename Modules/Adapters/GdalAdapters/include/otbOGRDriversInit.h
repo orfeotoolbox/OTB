@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,29 +25,33 @@
 
 #include "OTBGdalAdaptersExport.h"
 
-namespace otb { namespace ogr {
-  /**\ingroup Geometry
-   * Singleton-like class to provide lazy-registering of all \c OGRDriver's.
-   *
-   * Call
-   * \code
-   * otb::ogr::Drivers::Init();
-   * \endcode
-   * before using classes wrapping OGR.
-   *
-   * <p><b>Properties</b><br>
-   * - Follows Meyer's Singleton design.
-   * - Implicitly initialized with a default constructor
-   * - MT-Safe in C++11, and some compilers like GCC (not on old releases of
-   * VC++)
-   * - Non-copyable
-   */
-  class OTBGdalAdapters_EXPORT Drivers : private boost::noncopyable
-  {
+namespace otb
+{
+namespace ogr
+{
+/**\ingroup Geometry
+ * Singleton-like class to provide lazy-registering of all \c OGRDriver's.
+ *
+ * Call
+ * \code
+ * otb::ogr::Drivers::Init();
+ * \endcode
+ * before using classes wrapping OGR.
+ *
+ * <p><b>Properties</b><br>
+ * - Follows Meyer's Singleton design.
+ * - Implicitly initialized with a default constructor
+ * - MT-Safe in C++11, and some compilers like GCC (not on old releases of
+ * VC++)
+ * - Non-copyable
+ */
+class OTBGdalAdapters_EXPORT Drivers : private boost::noncopyable
+{
   /** \name Singleton related functions */
   //@{
 public:
-  static Drivers & Init();
+  static Drivers& Init();
+
 private:
   /** Constructor.
    * Calls \c OGRRegisterAll().
@@ -58,8 +62,8 @@ private:
    */
   ~Drivers();
   //@}
-  };
-
-} } // end namespace otb::ogr
+};
+}
+} // end namespace otb::ogr
 
 #endif // otbOGRDriversInit_h

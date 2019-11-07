@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,6 +26,7 @@
 #include "itkInPlaceLabelMapFilter.h"
 #include "itkVariableSizeMatrix.h"
 #include "itkVariableLengthVector.h"
+#include <string>
 
 namespace otb
 {
@@ -69,16 +70,15 @@ namespace otb
  * \ingroup OTBMetrics
  */
 
-template< class TLabelMap >
-class ITK_EXPORT HooverInstanceFilter :
-    public itk::InPlaceLabelMapFilter< TLabelMap >
+template <class TLabelMap>
+class ITK_EXPORT HooverInstanceFilter : public itk::InPlaceLabelMapFilter<TLabelMap>
 {
 public:
   /** Standard class typedefs. */
-  typedef HooverInstanceFilter   Self;
-  typedef itk::InPlaceLabelMapFilter< TLabelMap >      Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef HooverInstanceFilter                  Self;
+  typedef itk::InPlaceLabelMapFilter<TLabelMap> Superclass;
+  typedef itk::SmartPointer<Self>               Pointer;
+  typedef itk::SmartPointer<const Self>         ConstPointer;
 
   /** Standard New method. */
   itkNewMacro(Self);
@@ -96,22 +96,22 @@ public:
   typedef typename LabelMapType::LabelVectorType        LabelVectorType;
   typedef typename LabelMapType::RegionType             ImageRegionType;
 
-  //typedef typename LabelObjectType::LineContainerType   LineContainerType;
-  typedef typename LabelObjectType::IndexType           IndexType;
-  typedef typename LabelObjectType::LabelType           LabelType;
+  // typedef typename LabelObjectType::LineContainerType   LineContainerType;
+  typedef typename LabelObjectType::IndexType IndexType;
+  typedef typename LabelObjectType::LabelType LabelType;
 
-  typedef unsigned long                                 CoefficientType;
-  typedef itk::VariableSizeMatrix<CoefficientType>      MatrixType;
+  typedef unsigned long                            CoefficientType;
+  typedef itk::VariableSizeMatrix<CoefficientType> MatrixType;
 
-  typedef itk::VariableLengthVector<CoefficientType>    CardinalVector;
-  typedef std::set<CoefficientType>                     RegionSetType;
-  typedef std::vector<LabelObjectType*>                 ObjectVectorType;
+  typedef itk::VariableLengthVector<CoefficientType> CardinalVector;
+  typedef std::set<CoefficientType>                  RegionSetType;
+  typedef std::vector<LabelObjectType*>              ObjectVectorType;
 
-  void SetGroundTruthLabelMap(const LabelMapType *gt);
-  void SetMachineSegmentationLabelMap(const LabelMapType *ms);
+  void SetGroundTruthLabelMap(const LabelMapType* gt);
+  void SetMachineSegmentationLabelMap(const LabelMapType* ms);
 
   const LabelMapType* GetGroundTruthLabelMap();
-  LabelMapType* GetMachineSegmentationLabelMap();
+  LabelMapType*       GetMachineSegmentationLabelMap();
 
   LabelMapType* GetOutputGroundTruthLabelMap();
   LabelMapType* GetOutputMachineSegmentationLabelMap();
@@ -132,8 +132,9 @@ public:
   itkGetMacro(MeanRM, AttributesValueType);
   itkGetMacro(MeanRN, AttributesValueType);
 
-  enum AttributeTypes {
-    ATTRIBUTE_CD=100,
+  enum AttributeTypes
+  {
+    ATTRIBUTE_CD = 100,
     ATTRIBUTE_OS,
     ATTRIBUTE_US,
     ATTRIBUTE_M,
@@ -145,72 +146,92 @@ public:
     ATTRIBUTE_RN
   };
 
-  static std::string GetNameFromAttribute( const AttributeType & a )
-    {
+  static std::string GetNameFromAttribute(const AttributeType& a)
+  {
     std::string name;
-    switch( a )
-      {
-      case ATTRIBUTE_CD: name = "HooverInstance_Ext_CD"; break;
-      case ATTRIBUTE_OS: name = "HooverInstance_Ext_OS"; break;
-      case ATTRIBUTE_US: name = "HooverInstance_Ext_US"; break;
-      case ATTRIBUTE_M:  name = "HooverInstance_Ext_M";  break;
-      case ATTRIBUTE_N:  name = "HooverInstance_Ext_N";  break;
-      case ATTRIBUTE_RC: name = "HooverInstance_RC";     break;
-      case ATTRIBUTE_RF: name = "HooverInstance_RF";     break;
-      case ATTRIBUTE_RA: name = "HooverInstance_RA";     break;
-      case ATTRIBUTE_RM: name = "HooverInstance_RM";     break;
-      case ATTRIBUTE_RN: name = "HooverInstance_RN";     break;
-      }
-    return name;
-    }
-
-  static AttributeType GetAttributeFromName( const std::string & name )
+    switch (a)
     {
-    if ( name == "HooverInstance_Ext_CD" )
-      {
-      return ATTRIBUTE_CD;
-      }
-    else if ( name == "HooverInstance_Ext_OS" )
-      {
-      return ATTRIBUTE_OS;
-      }
-    else if ( name == "HooverInstance_Ext_US" )
-      {
-      return ATTRIBUTE_US;
-      }
-    else if ( name == "HooverInstance_Ext_M" )
-      {
-      return ATTRIBUTE_M;
-      }
-    else if ( name == "HooverInstance_Ext_N" )
-      {
-      return ATTRIBUTE_N;
-      }
-    else if ( name == "HooverInstance_RC" )
-      {
-      return ATTRIBUTE_RC;
-      }
-    else if ( name == "HooverInstance_RF" )
-      {
-      return ATTRIBUTE_RF;
-      }
-    else if ( name == "HooverInstance_RA" )
-      {
-      return ATTRIBUTE_RA;
-      }
-    else if ( name == "HooverInstance_RM" )
-      {
-      return ATTRIBUTE_RM;
-      }
-    else if ( name == "HooverInstance_RN" )
-      {
-      return ATTRIBUTE_RN;
-      }
+    case ATTRIBUTE_CD:
+      name = "HooverInstance_Ext_CD";
+      break;
+    case ATTRIBUTE_OS:
+      name = "HooverInstance_Ext_OS";
+      break;
+    case ATTRIBUTE_US:
+      name = "HooverInstance_Ext_US";
+      break;
+    case ATTRIBUTE_M:
+      name = "HooverInstance_Ext_M";
+      break;
+    case ATTRIBUTE_N:
+      name = "HooverInstance_Ext_N";
+      break;
+    case ATTRIBUTE_RC:
+      name = "HooverInstance_RC";
+      break;
+    case ATTRIBUTE_RF:
+      name = "HooverInstance_RF";
+      break;
+    case ATTRIBUTE_RA:
+      name = "HooverInstance_RA";
+      break;
+    case ATTRIBUTE_RM:
+      name = "HooverInstance_RM";
+      break;
+    case ATTRIBUTE_RN:
+      name = "HooverInstance_RN";
+      break;
     }
+    return name;
+  }
+
+  static AttributeType GetAttributeFromName(const std::string& name)
+  {
+    if (name == "HooverInstance_Ext_CD")
+    {
+      return ATTRIBUTE_CD;
+    }
+    else if (name == "HooverInstance_Ext_OS")
+    {
+      return ATTRIBUTE_OS;
+    }
+    else if (name == "HooverInstance_Ext_US")
+    {
+      return ATTRIBUTE_US;
+    }
+    else if (name == "HooverInstance_Ext_M")
+    {
+      return ATTRIBUTE_M;
+    }
+    else if (name == "HooverInstance_Ext_N")
+    {
+      return ATTRIBUTE_N;
+    }
+    else if (name == "HooverInstance_RC")
+    {
+      return ATTRIBUTE_RC;
+    }
+    else if (name == "HooverInstance_RF")
+    {
+      return ATTRIBUTE_RF;
+    }
+    else if (name == "HooverInstance_RA")
+    {
+      return ATTRIBUTE_RA;
+    }
+    else if (name == "HooverInstance_RM")
+    {
+      return ATTRIBUTE_RM;
+    }
+    else if (name == "HooverInstance_RN")
+    {
+      return ATTRIBUTE_RN;
+    }
+  }
 
 protected:
   HooverInstanceFilter();
-  ~HooverInstanceFilter() override {};
+  ~HooverInstanceFilter() override{};
 
   /** Re implement the allocate output method to handle the second output correctly */
   void AllocateOutputs() override;
@@ -221,7 +242,7 @@ protected:
   /** Actions :
    *    - Fill cardinalities of GT regions
    */
-  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
+  void ThreadedProcessLabelObject(LabelObjectType* labelObject) override;
 
   /** Actions:
    *    - Check matrix size
@@ -236,27 +257,26 @@ protected:
   void AfterThreadedGenerateData() override;
 
 private:
-
   /** number of regions (label objects) found in ground truth (GT) */
-  unsigned long     m_NumberOfRegionsGT;
+  unsigned long m_NumberOfRegionsGT;
 
   /** number of regions (label objects) found in machine segmentation (MS) */
-  unsigned long     m_NumberOfRegionsMS;
+  unsigned long m_NumberOfRegionsMS;
 
   /** List of labels in GT segmentation */
-  LabelVectorType   m_LabelsGT;
+  LabelVectorType m_LabelsGT;
 
   /** Hoover confusion matrix computed between GT and MS*/
-  MatrixType        m_HooverMatrix;
+  MatrixType m_HooverMatrix;
 
   /** List of region sizes in GT */
-  CardinalVector    m_CardRegGT;
+  CardinalVector m_CardRegGT;
 
   /** List of region sizes in MS */
-  CardinalVector    m_CardRegMS;
+  CardinalVector m_CardRegMS;
 
   /** Threshold used to compute Hoover instances */
-  double            m_Threshold;
+  double m_Threshold;
 
   /** Flag to output additional information in label maps */
   bool m_UseExtendedAttributes;
@@ -275,13 +295,11 @@ private:
 
   /** Average score for noise on the whole segmentation */
   AttributesValueType m_MeanRN;
-
 };
-
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbHooverInstanceFilter.txx"
+#include "otbHooverInstanceFilter.hxx"
 #endif
 
 #endif

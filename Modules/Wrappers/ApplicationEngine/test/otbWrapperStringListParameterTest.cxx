@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,24 +19,16 @@
  */
 
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 #include "otbWrapperStringListParameter.h"
-
-int otbWrapperStringListParameterNew(int itkNotUsed(argc), char * itkNotUsed(argv)[])
-{
-  typedef otb::Wrapper::StringListParameter StringListParameterType;
-  StringListParameterType::Pointer parameter = StringListParameterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 
 int otbWrapperStringListParameterTest1(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::Wrapper::StringListParameter StringListParameterType;
-  StringListParameterType::Pointer numParam = StringListParameterType::New();
+  StringListParameterType::Pointer          numParam = StringListParameterType::New();
 
   const std::string value1 = argv[1];
   const std::string value2 = argv[2];
@@ -48,19 +40,19 @@ int otbWrapperStringListParameterTest1(int itkNotUsed(argc), char* argv[])
   StringListParameterType::StringListType sList;
   sList.push_back(value2);
   sList.push_back(value3);
-  numParam->SetValue( sList );
+  numParam->SetValue(sList);
   numParam->SetKey(key);
   numParam->SetDescription(desc);
 
-  if( numParam->GetValue()[0] != value2 )
-    {
-      return EXIT_FAILURE;
-    }
+  if (numParam->GetValue()[0] != value2)
+  {
+    return EXIT_FAILURE;
+  }
 
-  if( numParam->GetNthElement(1) != value3 )
-    {
-      return EXIT_FAILURE;
-    }
+  if (numParam->GetNthElement(1) != value3)
+  {
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }

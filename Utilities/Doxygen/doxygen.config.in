@@ -773,7 +773,7 @@ INPUT_ENCODING         = UTF-8
 
 FILE_PATTERNS          = *.cxx \
                          *.h \
-                         *.txx \
+                         *.hxx \
                          *.hxx \
                          *.dox
 

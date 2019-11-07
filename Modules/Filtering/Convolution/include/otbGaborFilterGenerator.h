@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -70,8 +70,7 @@ namespace otb
  */
 
 template <class TPrecision>
-class GaborFilterGenerator
-  : public itk::Object
+class GaborFilterGenerator : public itk::Object
 {
 public:
   // Standard class typedefs
@@ -112,7 +111,9 @@ protected:
   /** constructor */
   GaborFilterGenerator();
   /** destructor */
-  ~GaborFilterGenerator() override {}
+  ~GaborFilterGenerator() override
+  {
+  }
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
@@ -125,8 +126,8 @@ protected:
   void Modified() const override;
 
 private:
-  GaborFilterGenerator(const Self&); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  GaborFilterGenerator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Radius of the filter */
   RadiusType m_Radius;
@@ -144,12 +145,11 @@ private:
 
   /** Whether we need to regenerate the filter */
   mutable bool m_NeedToRegenerateFilter;
-
 };
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbGaborFilterGenerator.txx"
+#include "otbGaborFilterGenerator.hxx"
 #endif
 
 #endif

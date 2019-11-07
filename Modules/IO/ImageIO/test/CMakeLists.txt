@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -50,7 +50,6 @@ otbMultiResolutionReadingInfo.cxx
 otbImageFileReaderTestFloat.cxx
 otbComplexImageTests.cxx
 otbImageFileReaderRADChar.cxx
-otbScalarBufferToImageFileWriterNew.cxx
 otbShortImageIOTest.cxx
 otbImageSeriesFileReader.cxx
 otbStreamingShortImageFileWriterTest.cxx
@@ -60,7 +59,6 @@ otbImageFileReaderRADFloat.cxx
 otbVectorImageFileReaderWriterTest.cxx
 otbIntImageIOTest.cxx
 otbImageFileReaderONERA.cxx
-otbImageFileReaderServerName.cxx
 otbPNGIndexedNbBandsTest.cxx
 otbImageFileReaderTest.cxx
 otbVectorImageFileWriterTestWithoutInput.cxx
@@ -72,11 +70,11 @@ otbStreamingImageFilterTest.cxx
 otbImageFileWriterRGBTest.cxx
 otbComplexImageManipulationTest.cxx
 otbImageFileWriterTest.cxx
-otbImageIOFactoryNew.cxx
 otbCompareWritingComplexImage.cxx
 otbImageFileReaderOptBandTest.cxx
 otbImageFileWriterOptBandTest.cxx
 otbMultiImageFileWriterTest.cxx
+otbWriteGeomFile.cxx
 )
 
 add_executable(otbImageIOTestDriver ${OTBImageIOTests})
@@ -98,14 +96,14 @@ otb_add_test(NAME ioTvImageFileWriterExtendedFileName_Box COMMAND otbImageIOTest
 
 otb_add_test(NAME ioTvONERAImageFileReaderComplex COMMAND otbImageIOTestDriver
   --compare-n-images ${EPSILON_9} 2
-  ${BASELINE}/ioImageFileReaderONERAComplexReal.hdr
-  ${TEMP}/ioImageFileReaderONERAComplexReal.hdr
-  ${BASELINE}/ioImageFileReaderONERAComplexImag.hdr
-  ${TEMP}/ioImageFileReaderONERAComplexImag.hdr
+  ${BASELINE}/ioImageFileReaderONERAComplexReal.tif
+  ${TEMP}/ioImageFileReaderONERAComplexReal.tif
+  ${BASELINE}/ioImageFileReaderONERAComplexImag.tif
+  ${TEMP}/ioImageFileReaderONERAComplexImag.tif
   otbImageFileReaderONERAComplex
   LARGEINPUT{ONERA/spa3_0215_rad.ent}
-  ${TEMP}/ioImageFileReaderONERAComplexReal.hdr
-  ${TEMP}/ioImageFileReaderONERAComplexImag.hdr )
+  ${TEMP}/ioImageFileReaderONERAComplexReal.tif
+  ${TEMP}/ioImageFileReaderONERAComplexImag.tif )
 
 otb_add_test(NAME ioTvImageFileReaderRADCR42TIF COMMAND otbImageIOTestDriver
   otbImageFileReaderRADComplexFloat
@@ -160,10 +158,10 @@ otb_add_test(NAME ioTvImageMetadataWriterTest_TIF COMMAND otbImageIOTestDriver
   )
 
 otb_add_test(NAME ioTvImageFileReaderRGB_BSQ2PNG COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.hdr
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/ioImageFileReaderRGB_BSQ2PNG_poupees.png
   otbImageFileReaderRGBTest
-  ${INPUTDATA}/poupees.hdr
+  ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/ioImageFileReaderRGB_BSQ2PNG_poupees.png )
 
 otb_add_test(NAME ioTvImageFileReaderRGB_Gdal_SPOT5TIF2PNG COMMAND otbImageIOTestDriver
@@ -197,10 +195,10 @@ otb_add_test(NAME ioTvImageReaderWriterRgbPNG2PNGBox COMMAND otbImageIOTestDrive
   )
 
 otb_add_test(NAME ioTvImageReaderWriterRgbENVI2PNG COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.raw
   ${TEMP}/ioImageReaderWriterRgbENVI2PNG_poupees.png
   otbImageFileReaderRGBTest
-  ${INPUTDATA}/poupees
+  ${INPUTDATA}/poupees.raw
   ${TEMP}/ioImageReaderWriterRgbENVI2PNG_poupees.png )
 
 otb_add_test(NAME ioTvImageFileReaderRGB_Cai_SPOT5TIF2PNG COMMAND otbImageIOTestDriver
@@ -254,10 +252,10 @@ otb_add_test(NAME ioTvImageReaderWriterRgbJPEG2PNG COMMAND otbImageIOTestDriver
   ${TEMP}/ioImageReaderWriterRgbJPEG2PNG_couleurs.png )
 
 otb_add_test(NAME ioTvImageFileReaderRGB_BSQ2TIFF COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.hdr
+  --compare-image ${EPSILON_9}   ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/ioImageFileReaderRGB_BSQ2TIFF_poupees.tiff
   otbImageFileReaderRGBTest
-  ${INPUTDATA}/poupees.hdr
+  ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/ioImageFileReaderRGB_BSQ2TIFF_poupees.tiff )
 
 otb_add_test(NAME ioTvImageReaderWriterRgbPNG2JPEG COMMAND otbImageIOTestDriver
@@ -488,13 +486,13 @@ otb_add_test(NAME ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetAuto
   10
   )
 
-otb_add_test(NAME ioTvImageFileReaderRADCI22ENVI COMMAND otbImageIOTestDriver
+otb_add_test(NAME ioTvImageFileReaderRADCI22TIF COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}
-  ${BASELINE}/ioImageFileReaderRADCI22ENVI.hdr
-  ${TEMP}/ioImageFileReaderRADCI22ENVI.hdr
+  ${BASELINE}/ioImageFileReaderRADCI22TIF.tif
+  ${TEMP}/ioImageFileReaderRADCI22TIF.tif
   otbImageFileReaderRADComplexFloatExtract
   LARGEINPUT{RAD_CI2/3017_HH.rad}
-  ${TEMP}/ioImageFileReaderRADCI22ENVI.hdr )
+  ${TEMP}/ioImageFileReaderRADCI22TIF.tif )
 
 otb_add_test(NAME ioTvImageFileReaderTIF2RADCI4 COMMAND otbImageIOTestDriver
   otbImageFileReaderRADComplexInt
@@ -519,17 +517,6 @@ otb_add_test(NAME ioTvONERAImageFileWriterComplex COMMAND otbImageIOTestDriver
   otbImageFileWriterONERAComplex
   LARGEINPUT{ONERA/spa3_0215_rad.ent}
   ${TEMP}/ioImageFileReaderONERAComplexWrite.ent )
-
-otb_add_test(NAME ioTvImageFileReaderServerNameOTBTest COMMAND otbImageIOTestDriver
-  otbImageFileReaderServerName
-  ${OTB_DATA_ROOT}/Examples/osmfile.otb)
-set_property(TEST ioTvImageFileReaderServerNameOTBTest PROPERTY RESOURCE_LOCK web_access)
-
-#dashboard_hell
-# otb_add_test(NAME ioTvImageFileReaderServerNameHTTPTest COMMAND otbImageIOTestDriver
-#   otbImageFileReaderServerName
-#   http://tile.openstreetmap.org/)
-# set_property(TEST ioTvImageFileReaderServerNameHTTPTest PROPERTY RESOURCE_LOCK web_access)
 
 otb_add_test(NAME ioTvPipelineMetadataHandlingTest COMMAND otbImageIOTestDriver
   --compare-metadata ${EPSILON_9}
@@ -580,39 +567,33 @@ otb_add_test(NAME ioTvImageFileReaderTIF2PCI COMMAND otbImageIOTestDriver
 
 otb_add_test(NAME ioTvVectorImageComplexIntoRealDoubleTest COMMAND otbImageIOTestDriver
   otbVectorImageComplexIntoRealDoubleTest
-  ${INPUTDATA}/multibandComplexDouble_2bands.hdr
+  ${INPUTDATA}/multibandComplexDouble_2bands.raw.hdr
   )
 
 otb_add_test(NAME ioTvVectorImageComplexDoubleTest COMMAND otbImageIOTestDriver
   otbVectorImageComplexDoubleTest
-  ${INPUTDATA}/multibandComplexDouble_2bands.hdr
+  ${INPUTDATA}/multibandComplexDouble_2bands.raw.hdr
   )
 
 otb_add_test(NAME ioTvVectorImageComplexFloatTest COMMAND otbImageIOTestDriver
   otbVectorImageComplexFloatTest
-  ${INPUTDATA}/multibandComplexFloat_2bands.hdr
+  ${INPUTDATA}/multibandComplexFloat_2bands.raw.hdr
   )
 
 otb_add_test(NAME ioTvVectorImageComplexIntoRealFloatTest COMMAND otbImageIOTestDriver
   otbVectorImageComplexIntoRealFloatTest
-  ${INPUTDATA}/multibandComplexFloat_2bands.hdr
+  ${INPUTDATA}/multibandComplexFloat_2bands.raw.hdr
   )
 
 otb_add_test(NAME ioTvImageComplexFloatTest COMMAND otbImageIOTestDriver
   otbImageComplexFloatTest
-  ${INPUTDATA}/multibandComplexFloat_2bands.hdr
+  ${INPUTDATA}/multibandComplexFloat_2bands.raw.hdr
   )
-
-otb_add_test(NAME ioTuVectorImageComplexNew COMMAND otbImageIOTestDriver
-  otbVectorImageComplexNew)
 
 otb_add_test(NAME ioTvImageComplexDoubleTest COMMAND otbImageIOTestDriver
   otbImageComplexDoubleTest
-  ${INPUTDATA}/multibandComplexDouble_2bands.hdr
+  ${INPUTDATA}/multibandComplexDouble_2bands.raw.hdr
   )
-
-otb_add_test(NAME ioTuScalarBufferToImageFileWriter COMMAND otbImageIOTestDriver
-  otbScalarBufferToImageFileWriterNew )
 
 otb_add_test(NAME ioTvImageFileReaderShortLUM2LUM COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}        ${INPUTDATA}/poupees_I2.lum
@@ -643,7 +624,7 @@ otb_add_test(NAME ioTvImageSeriesFileReader COMMAND otbImageIOTestDriver
   ${BASELINE}/ioTvImageSeries-1.png
   ${TEMP}/ioTvImageSeries-1.png
   otbImageSeriesFileReader
-  ${EXAMPLEDATA}/GomaAvantApres
+  ${INPUTDATA}/GomaAvantApres
   ${TEMP}/ioTvImageSeries.png
   )
 
@@ -720,7 +701,7 @@ otb_add_test(NAME ioTvVImageFileReader_RESOLUTION_4 COMMAND otbImageIOTestDriver
   ${TEMP}/ioImageFileReader_RESOLUTION_4.tif )
 
 otb_add_test(NAME ioTvVectorImageFileReaderWriterJP22TIF COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput
+  --compare-image ${EPSILON_9}  ${BASELINE}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
   ${TEMP}/ioTvVectorImageFileReaderWriterJP22TIFOutput.tif
   otbVectorImageFileReaderWriterTest
   LARGEINPUT{JPEG2000/QB_multicomp_small.jpx}
@@ -744,11 +725,11 @@ set_property(TEST ioTvImageFileReaderIntHDR2BSQ PROPERTY DEPENDS ioTvImageFileRe
 
 otb_add_test(NAME ioTvONERAImageFileReader COMMAND otbImageIOTestDriver
   --compare-image ${EPSILON_9}
-  ${BASELINE}/ioImageFileReaderONERA.hdr
-  ${TEMP}/ioImageFileReaderONERA.hdr
+  ${BASELINE}/ioImageFileReaderONERA.tif
+  ${TEMP}/ioImageFileReaderONERA.tif
   otbImageFileReaderONERATest
   LARGEINPUT{ONERA/spa3_0215_rad.ent}
-  ${TEMP}/ioImageFileReaderONERA.hdr
+  ${TEMP}/ioImageFileReaderONERA.tif
   10 10 100 100 )
 
 otb_add_test(NAME ioTvImageFileReaderFloatHDR2BSQ COMMAND otbImageIOTestDriver
@@ -929,9 +910,6 @@ otb_add_test(NAME ioTvImageFileWriterPNG2BSQ COMMAND otbImageIOTestDriver
   otbImageFileWriterTest
   ${INPUTDATA}/cthead1.png
   ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr )
-
-otb_add_test(NAME ioTuImageIOFactoryNew COMMAND otbImageIOTestDriver
-  otbImageIOFactoryNew )
 
 otb_add_test(NAME ioTvCompareWritingComplexImage_TIF COMMAND otbImageIOTestDriver
   otbCompareWritingComplexImageTest
@@ -1299,7 +1277,7 @@ otb_add_test(NAME  ioTvImageFileReaderIntHDR2LUM COMMAND otbImageIOTestDriver
 set_tests_properties(ioTvImageFileReaderIntHDR2LUM PROPERTIES DEPENDS ioTvImageFileReaderIntLUM2HDR)
 
 otb_add_test(NAME  ioTvImageFileReaderPNG2ENVI COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}        ${BASELINE}/ioImageFileReaderPNG2ENVI.hdr
+  --compare-image ${EPSILON_9}        ${BASELINE}/ioImageFileReaderPNG2ENVI.tif
                                 ${TEMP}/ioImageFileReaderPNG2ENVI.hdr
         otbImageFileReaderTest
         ${INPUTDATA}/cthead1.png
@@ -1368,3 +1346,13 @@ otb_add_test(NAME ioTvMultiImageFileWriter_DiffSize
   ${TEMP}/ioTvMultiImageFileWriter_DiffSize1.tif
   ${TEMP}/ioTvMultiImageFileWriter_DiffSize2.tif
   25)
+
+otb_add_test(NAME ioTvCompoundMetadataReaderTest
+  COMMAND otbImageIOTestDriver
+  --compare-ascii ${EPSILON_9}
+  ${INPUTDATA}/QB_Toulouse_SensorModel_labelImage.geom
+  ${TEMP}/ioTvCompoundMetadataReaderTest.geom
+  --ignore-lines-with 1 support_data.
+  otbWriteGeomFile
+  ${INPUTDATA}/QB_Toulouse_combo.vrt
+  ${TEMP}/ioTvCompoundMetadataReaderTest.tif)

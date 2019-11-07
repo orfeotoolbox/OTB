@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -47,8 +47,6 @@ otb_test_application(NAME apTvTestApplicationOutputXML_All
           -outgroup.outputimage ${TEMP}/foo.tif double
           -il ${INPUTDATA}/anaglyphInput1.tif ${INPUTDATA}/anaglyphInput2.tif
           -cl Choice2
-          -cin ${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.tif
-          -cout ${TEMP}/fooCplx.tif
           -outxml ${TEMP}/apTvTestApplicationOutputXML_All.xml
   VALID --compare-ascii ${NOTOL}
     ${OTBAPP_BASELINE_FILES}/apTvTestApplicationOutputXML_All.xml

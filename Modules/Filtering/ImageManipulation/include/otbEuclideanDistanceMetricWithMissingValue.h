@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -25,9 +25,11 @@
 
 #include "otbEuclideanDistanceMetricWithMissingValuePow2.h"
 
-namespace otb {
+namespace otb
+{
 
-namespace Statistics {
+namespace Statistics
+{
 
 /** \class EuclideanDistanceMetricWithMissingValue
  * \brief Euclidean distance function facing missing value.
@@ -45,20 +47,17 @@ namespace Statistics {
  *
  * \ingroup OTBImageManipulation
  */
-template<class TVector>
-class ITK_EXPORT EuclideanDistanceMetricWithMissingValue :
-  public otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector>
+template <class TVector>
+class ITK_EXPORT EuclideanDistanceMetricWithMissingValue : public otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector>
 {
 public:
   /** Standard "Self" typedef. */
-  typedef EuclideanDistanceMetricWithMissingValue Self;
-  typedef otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector>
-  Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef EuclideanDistanceMetricWithMissingValue                               Self;
+  typedef otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector> Superclass;
+  typedef itk::SmartPointer<Self>                                               Pointer;
+  typedef itk::SmartPointer<const Self>                                         ConstPointer;
 
-  typedef typename Superclass::MeasurementVectorSizeType
-  MeasurementVectorSizeType;
+  typedef typename Superclass::MeasurementVectorSizeType MeasurementVectorSizeType;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(EuclideanDistanceMetricWithMissingValue, EuclideanDistanceMetricWithMissingValuePow2);
@@ -72,20 +71,20 @@ public:
   /** Gets the distance between the origin and x */
   double Evaluate(const TVector& x) const override
   {
-    return ::vcl_sqrt(Superclass::Evaluate(x));
+    return ::std::sqrt(Superclass::Evaluate(x));
   }
 
   /** Gets the distance between x1 and x2 */
   double Evaluate(const TVector& x1, const TVector& x2) const override
   {
-    return ::vcl_sqrt(Superclass::Evaluate(x1, x2));
+    return ::std::sqrt(Superclass::Evaluate(x1, x2));
   }
 
   /** Gets the cooridnate distance between a and b. NOTE: a and b
   * should be type of component */
   double Evaluate(const ValueType& a, const ValueType& b) const
   {
-    return ::vcl_sqrt(Superclass::Evaluate(a, b));
+    return ::std::sqrt(Superclass::Evaluate(a, b));
   }
 
   /** Returns true if the distance between x and the origin is less
@@ -96,8 +95,12 @@ public:
   }
 
 protected:
-  EuclideanDistanceMetricWithMissingValue() {}
-  ~EuclideanDistanceMetricWithMissingValue() override {}
+  EuclideanDistanceMetricWithMissingValue()
+  {
+  }
+  ~EuclideanDistanceMetricWithMissingValue() override
+  {
+  }
 }; // end of class
 
 } // end namespace statistics

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,15 +40,14 @@ namespace otb
  * \ingroup OTBPointSet
  */
 template <class TInputPointSet, class TOutputPointSet, class TTransform>
-class ITK_EXPORT TransformPointSetFilter :
-  public PointSetToPointSetFilter<TInputPointSet, TOutputPointSet>
+class ITK_EXPORT TransformPointSetFilter : public PointSetToPointSetFilter<TInputPointSet, TOutputPointSet>
 {
 public:
   /** Standard class typedefs. */
-  typedef TransformPointSetFilter                                   Self;
+  typedef TransformPointSetFilter Self;
   typedef PointSetToPointSetFilter<TInputPointSet, TOutputPointSet> Superclass;
-  typedef itk::SmartPointer<Self>                                   Pointer;
-  typedef itk::SmartPointer<const Self>                             ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef TInputPointSet                       InputPointSetType;
   typedef TOutputPointSet                      OutputPointSetType;
@@ -75,7 +74,9 @@ public:
 
 protected:
   TransformPointSetFilter();
-  ~TransformPointSetFilter() override {}
+  ~TransformPointSetFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Generate Requested Data */
@@ -85,15 +86,14 @@ protected:
   typename TransformType::Pointer m_Transform;
 
 private:
-  TransformPointSetFilter(const TransformPointSetFilter &); //purposely not implemented
-  void operator =(const TransformPointSetFilter&); //purposely not implemented
-
+  TransformPointSetFilter(const TransformPointSetFilter&) = delete;
+  void operator=(const TransformPointSetFilter&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbTransformPointSetFilter.txx"
+#include "otbTransformPointSetFilter.hxx"
 #endif
 
 #endif

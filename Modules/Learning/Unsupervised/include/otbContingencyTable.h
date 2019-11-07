@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,15 +22,15 @@
 #define otbContingencyTable_h
 
 #include <vector>
-#include <iostream>
 #include <iomanip>
 #include <itkObject.h>
 #include <itkObjectFactory.h>
 #include <itkVariableSizeMatrix.h>
+#include <string>
 
 namespace otb
 {
-template<class TClassLabel>
+template <class TClassLabel>
 class ContingencyTable : public itk::Object
 {
 public:
@@ -51,56 +51,56 @@ public:
 
   MatrixType matrix;
 
-  void SetLabels(const LabelList &referenceLabels, const LabelList &producedLabels)
+  void SetLabels(const LabelList& referenceLabels, const LabelList& producedLabels)
   {
-    m_RefLabels = referenceLabels;
-    m_ProdLabels = producedLabels;
+    m_RefLabels       = referenceLabels;
+    m_ProdLabels      = producedLabels;
     unsigned int rows = static_cast<unsigned int>(m_RefLabels.size());
     unsigned int cols = static_cast<unsigned int>(m_ProdLabels.size());
-    matrix.SetSize( rows, cols );
-    matrix.Fill( 0 );
+    matrix.SetSize(rows, cols);
+    matrix.Fill(0);
   }
 
-  friend std::ostream &operator<<(std::ostream &o, const ContingencyTable<TClassLabel> &contingencyTable)
+  friend std::ostream& operator<<(std::ostream& o, const ContingencyTable<TClassLabel>& contingencyTable)
   {
 
     // Retrieve the maximal width from the matrix and the labels
     size_t maxWidth = 6;
-    maxWidth = GetLabelsMaximumLength(contingencyTable.m_ProdLabels, maxWidth);
-    maxWidth = GetLabelsMaximumLength(contingencyTable.m_RefLabels, maxWidth);
+    maxWidth        = GetLabelsMaximumLength(contingencyTable.m_ProdLabels, maxWidth);
+    maxWidth        = GetLabelsMaximumLength(contingencyTable.m_RefLabels, maxWidth);
 
-    for( unsigned int i = 0; i < contingencyTable.matrix.Rows(); ++i )
+    for (unsigned int i = 0; i < contingencyTable.matrix.Rows(); ++i)
+    {
+      for (unsigned int j = 0; j < contingencyTable.matrix.Cols(); ++j)
       {
-      for( unsigned int j = 0; j < contingencyTable.matrix.Cols(); ++j )
-        {
         std::ostringstream oss;
-        oss << contingencyTable.matrix( i, j );
+        oss << contingencyTable.matrix(i, j);
         size_t length = oss.str().length();
-        if( length > maxWidth )
+        if (length > maxWidth)
           maxWidth = length;
-        }
       }
+    }
 
-    int width = static_cast<int>(maxWidth)+1;
+    int width = static_cast<int>(maxWidth) + 1;
 
     // Write the first line of the matrix (produced labels)
-    o << std::setfill(' ') << std::setw( width ) << "labels";
-    for( size_t i = 0; i < contingencyTable.m_ProdLabels.size(); ++i )
-      {
-      o << std::setfill(' ') << std::setw( width ) << contingencyTable.m_ProdLabels[i];
-      }
+    o << std::setfill(' ') << std::setw(width) << "labels";
+    for (size_t i = 0; i < contingencyTable.m_ProdLabels.size(); ++i)
+    {
+      o << std::setfill(' ') << std::setw(width) << contingencyTable.m_ProdLabels[i];
+    }
     o << std::endl;
 
     // For each line write the reference label, then the count value
-    for( unsigned int i = 0; i < contingencyTable.matrix.Rows(); ++i )
+    for (unsigned int i = 0; i < contingencyTable.matrix.Rows(); ++i)
+    {
+      o << std::setfill(' ') << std::setw(width) << contingencyTable.m_RefLabels[i];
+      for (unsigned int j = 0; j < contingencyTable.matrix.Cols(); ++j)
       {
-      o << std::setfill(' ') << std::setw( width ) << contingencyTable.m_RefLabels[i];
-      for( unsigned int j = 0; j < contingencyTable.matrix.Cols(); ++j )
-        {
-        o << std::setfill(' ') << std::setw( width ) << contingencyTable.matrix( i, j );
-        }
-      o << std::endl;
+        o << std::setfill(' ') << std::setw(width) << contingencyTable.matrix(i, j);
       }
+      o << std::endl;
+    }
 
     return o;
   }
@@ -111,22 +111,22 @@ public:
 
     std::ostringstream oss;
     oss << "labels";
-    for( size_t i = 0; i < m_ProdLabels.size(); ++i )
-      {
+    for (size_t i = 0; i < m_ProdLabels.size(); ++i)
+    {
       oss << separator << m_ProdLabels[i];
-      }
+    }
     oss << std::endl;
 
     // For each line write the reference label, then the count value
-    for( unsigned int i = 0; i < matrix.Rows(); ++i )
-      {
+    for (unsigned int i = 0; i < matrix.Rows(); ++i)
+    {
       oss << m_RefLabels[i];
-      for( unsigned int j = 0; j < matrix.Cols(); ++j )
-        {
-        oss << separator << matrix( i, j );
-        }
-      oss << std::endl;
+      for (unsigned int j = 0; j < matrix.Cols(); ++j)
+      {
+        oss << separator << matrix(i, j);
       }
+      oss << std::endl;
+    }
     oss << std::endl;
 
     return oss.str();
@@ -137,35 +137,35 @@ protected:
   {
     SetLabels(LabelList(), LabelList());
   }
-  ~ContingencyTable() override {}
+  ~ContingencyTable() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent itkNotUsed(indent)) const override
   {
     os << *this;
   }
 
 private:
-  ContingencyTable(const Self &); //purposely not implemented
-  void operator=(const Self &); //purposely not implemented
+  ContingencyTable(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   static size_t GetLabelsMaximumLength(const LabelList& labels, size_t maxWidth)
   {
     size_t tmpMaxWidth = maxWidth;
-    for( size_t i = 0; i < labels.size(); ++i )
-      {
+    for (size_t i = 0; i < labels.size(); ++i)
+    {
       std::ostringstream oss;
       oss << labels[i];
       size_t length = oss.str().length();
-      if( length > tmpMaxWidth )
+      if (length > tmpMaxWidth)
         tmpMaxWidth = length;
-      }
+    }
     return tmpMaxWidth;
   }
 
   LabelList m_RefLabels;
   LabelList m_ProdLabels;
-
-
 };
 }
 
-#endif //otbContingencyTable_h
+#endif // otbContingencyTable_h

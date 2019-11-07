@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -43,10 +43,10 @@ namespace Wrapper
 class ProxyParameter : public Parameter
 {
 public:
-  typedef ProxyParameter                       Self;
-  typedef Parameter                            Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef ProxyParameter                Self;
+  typedef Parameter                     Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkNewMacro(Self);
 
@@ -58,39 +58,48 @@ public:
    *  \param target pair of a group parameter containing the target and its key
    */
   void SetTarget(const ProxyTargetType& target)
-    {
+  {
     m_Target = target;
-    }
+  }
 
   /** Get the target parameter of the proxy
    *  First part is the group parameter containing the target
    *  Second part is the key of the target */
-  const ProxyTargetType & GetTarget(void)
-    {
+  const ProxyTargetType& GetTarget(void)
+  {
     return m_Target;
-    }
+  }
 
   bool HasValue() const override
-    {
+  {
     return m_Target.first.IsNotNull();
-    }
+  }
+
+  ParameterType GetType() const override
+  {
+    return m_Target.first->GetType();
+  }
+
 
 protected:
-  ProxyParameter() {}
-  ~ProxyParameter() override {}
+  ProxyParameter()
+  {
+  }
+  ~ProxyParameter() override
+  {
+  }
 
 private:
-  ProxyParameter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ProxyParameter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ProxyTargetType m_Target;
 };
-
 }
 }
 
 //#ifndef OTB_MANUAL_INSTANTIATION
-//#include "otbWrapperProxyParameter.txx"
+//#include "otbWrapperProxyParameter.hxx"
 //#endif
 
 #endif

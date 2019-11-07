@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -98,32 +98,29 @@
 }*/
 
 
-
-int otbVectorDataIntoImageProjectionFilterCompareImplTest(int itkNotUsed(argc), char * argv[])
+int otbVectorDataIntoImageProjectionFilterCompareImplTest(int itkNotUsed(argc), char* argv[])
 {
-  typedef float                                           PixelType;
-  typedef otb::VectorImage<PixelType, 2>                  VectorImageType;
-  typedef otb::Image<PixelType, 2>                        ImageType;
-  typedef otb::ImageFileReader<VectorImageType>           ReaderType;
+  typedef float PixelType;
+  typedef otb::VectorImage<PixelType, 2> VectorImageType;
+  typedef otb::Image<PixelType, 2>       ImageType;
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
 
   // Vector Data
-  typedef otb::VectorData<>                               VectorDataType;
-  typedef otb::VectorDataFileReader<VectorDataType>       VectorDataReaderType;
-  typedef otb::VectorDataFileWriter<VectorDataType>       VectorDataWriterType;
+  typedef otb::VectorData<>                         VectorDataType;
+  typedef otb::VectorDataFileReader<VectorDataType> VectorDataReaderType;
+  typedef otb::VectorDataFileWriter<VectorDataType> VectorDataWriterType;
 
   //
-  typedef otb::VectorDataIntoImageProjectionFilter
-                 <VectorDataType, VectorImageType>        VectorDataReProjFilter;
+  typedef otb::VectorDataIntoImageProjectionFilter<VectorDataType, VectorImageType> VectorDataReProjFilter;
 
-  typedef otb::VectorDataProjectionFilter
-  <VectorDataType, VectorDataType>                        VectorDataProjectionFilterType;
-  typedef otb::VectorDataExtractROI<VectorDataType>       VectorDataExtractROIType;
-  typedef VectorDataExtractROIType::RegionType            RemoteSensingRegionType;
+  typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> VectorDataProjectionFilterType;
+  typedef otb::VectorDataExtractROI<VectorDataType> VectorDataExtractROIType;
+  typedef VectorDataExtractROIType::RegionType      RemoteSensingRegionType;
 
-  std::string imageInputFilename = argv[1];
-  std::string vectorDataInputFilename = argv[2];
-  std::string demDirectory = argv[3];
-  std::string vectorDataOutputFilename = argv[4];
+  std::string imageInputFilename        = argv[1];
+  std::string vectorDataInputFilename   = argv[2];
+  std::string demDirectory              = argv[3];
+  std::string vectorDataOutputFilename  = argv[4];
   std::string vectorDataOutputFilename2 = argv[5];
 
   std::cout << imageInputFilename << "\n"
@@ -133,12 +130,12 @@ int otbVectorDataIntoImageProjectionFilterCompareImplTest(int itkNotUsed(argc), 
             << vectorDataOutputFilename2 << std::endl;
 
   if (!demDirectory.empty())
-    {
+  {
     otb::DEMHandler::Instance()->OpenDEMDirectory(demDirectory);
-    }
+  }
 
   // Read the image
-  ReaderType::Pointer    reader  = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(imageInputFilename);
   reader->UpdateOutputInformation();
 
@@ -151,21 +148,21 @@ int otbVectorDataIntoImageProjectionFilterCompareImplTest(int itkNotUsed(argc), 
   vdReProjFilter->SetInputImage(reader->GetOutput());
   vdReProjFilter->SetInputVectorData(vdReader->GetOutput());
 
-  std::string stateOutput ="";
+  std::string stateOutput = "";
   if (atoi(argv[6]) == 1)
-   {
-   stateOutput = "true";
-   vdReProjFilter->SetUseOutputSpacingAndOriginFromImage(true);
-   }
+  {
+    stateOutput = "true";
+    vdReProjFilter->SetUseOutputSpacingAndOriginFromImage(true);
+  }
   else
-   {
-   stateOutput = "false";
-   vdReProjFilter->SetUseOutputSpacingAndOriginFromImage(false);
-   }
+  {
+    stateOutput = "false";
+    vdReProjFilter->SetUseOutputSpacingAndOriginFromImage(false);
+  }
 
   //----------
   // WRITE
-  //vdReProjFilter->Update();
+  // vdReProjFilter->Update();
 
   VectorDataWriterType::Pointer vdwriter = VectorDataWriterType::New();
   vdwriter->SetFileName(vectorDataOutputFilename);
@@ -176,9 +173,9 @@ int otbVectorDataIntoImageProjectionFilterCompareImplTest(int itkNotUsed(argc), 
   // do the same with old code
 
   VectorDataProjectionFilterType::Pointer vproj;
-  VectorDataExtractROIType::Pointer vdextract;
+  VectorDataExtractROIType::Pointer       vdextract;
 
-      // Extract The part of the VectorData that actually overlaps with
+  // Extract The part of the VectorData that actually overlaps with
   // the image extent
   vdextract = VectorDataExtractROIType::New();
   vdextract->SetInput(vdReader->GetOutput());
@@ -204,13 +201,13 @@ int otbVectorDataIntoImageProjectionFilterCompareImplTest(int itkNotUsed(argc), 
   reader->GetOutput()->TransformIndexToPhysicalPoint(lr, plr);
 
   // Build the cartographic region
-  RemoteSensingRegionType rsRegion;
+  RemoteSensingRegionType            rsRegion;
   RemoteSensingRegionType::IndexType rsOrigin;
-  RemoteSensingRegionType::SizeType rsSize;
+  RemoteSensingRegionType::SizeType  rsSize;
   rsOrigin[0] = std::min(pul[0], plr[0]);
   rsOrigin[1] = std::min(pul[1], plr[1]);
-  rsSize[0] = vcl_abs(pul[0] - plr[0]);
-  rsSize[1] = vcl_abs(pul[1] - plr[1]);
+  rsSize[0]   = std::abs(pul[0] - plr[0]);
+  rsSize[1]   = std::abs(pul[1] - plr[1]);
 
   rsRegion.SetOrigin(rsOrigin);
   rsRegion.SetSize(rsSize);

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -27,3 +27,14 @@ otb_create_application(
   NAME           VertexComponentAnalysis
   SOURCES        otbVertexComponentAnalysis.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           LocalRxDetection
+  SOURCES        otbLocalRxDetection.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           EndmemberNumberEstimation
+  SOURCES        otbEndmemberNumberEstimation.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+

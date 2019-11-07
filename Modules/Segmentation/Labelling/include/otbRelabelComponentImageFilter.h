@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -77,15 +77,14 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT RelabelComponentImageFilter :
-    public itk::RelabelComponentImageFilter< TInputImage, TOutputImage >
+class ITK_EXPORT RelabelComponentImageFilter : public itk::RelabelComponentImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**
    * Standard "Self" & Superclass typedef.
    */
-  typedef RelabelComponentImageFilter                     Self;
-  typedef itk::RelabelComponentImageFilter < TInputImage, TOutputImage > Superclass;
+  typedef RelabelComponentImageFilter Self;
+  typedef itk::RelabelComponentImageFilter<TInputImage, TOutputImage> Superclass;
 
   /**
    * Types from the Superclass
@@ -100,25 +99,23 @@ public:
   typedef typename TOutputImage::InternalPixelType OutputInternalPixelType;
   typedef typename TInputImage::PixelType          InputPixelType;
   typedef typename TInputImage::InternalPixelType  InputInternalPixelType;
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /**
    * Image typedef support
    */
-  typedef TInputImage                             InputImageType;
-  typedef TOutputImage                            OutputImageType;
-  typedef   typename TInputImage::IndexType       IndexType;
-  typedef   typename TInputImage::SizeType        SizeType;
-  typedef   typename TOutputImage::RegionType     RegionType;
+  typedef TInputImage                       InputImageType;
+  typedef TOutputImage                      OutputImageType;
+  typedef typename TInputImage::IndexType   IndexType;
+  typedef typename TInputImage::SizeType    SizeType;
+  typedef typename TOutputImage::RegionType RegionType;
 
   /**
    * Smart pointer typedef support
    */
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /**
    * Run-time type information (and related methods)
@@ -131,30 +128,30 @@ public:
   itkNewMacro(Self);
 
   /** Type used as identifier for the different component labels. */
-  typedef unsigned long int    LabelType;
+  typedef unsigned long int LabelType;
 
   /** Type used to count number of pixels in objects. */
-  typedef unsigned long int    ObjectSizeType;
+  typedef unsigned long int ObjectSizeType;
 
 protected:
-
   RelabelComponentImageFilter();
-  virtual ~RelabelComponentImageFilter() {}
+  virtual ~RelabelComponentImageFilter()
+  {
+  }
 
   void GenerateInputRequestedRegion();
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *){};
+  void EnlargeOutputRequestedRegion(itk::DataObject*){};
 
 private:
-  RelabelComponentImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
+  RelabelComponentImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "otbRelabelComponentImageFilter.txx"
+#include "otbRelabelComponentImageFilter.hxx"
 #endif
 
 #endif

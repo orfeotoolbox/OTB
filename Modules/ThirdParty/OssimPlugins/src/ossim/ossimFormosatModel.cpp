@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -472,8 +472,8 @@ std::ostream& ossimplugins::ossimFormosatModel::print(std::ostream& out) const
    // Capture stream flags since we are going to mess with them.
    std::ios_base::fmtflags f = out.flags();
 
-   out << "\nDump of ossimFormosatModel at address " << (hex) << this
-       << (dec)
+   out << "\nDump of ossimFormosatModel at address " << (std::hex) << this
+       << (std::dec)
        << "\n------------------------------------------------"
        << "\n  theImageID            = " << theImageID
        << "\n  theMetadataFile       = " << theMetaDataFile
@@ -495,7 +495,7 @@ std::ostream& ossimplugins::ossimFormosatModel::print(std::ostream& out) const
        << "\n  theYawRate            = " << theYawRate
        << "\n  theFocalLenOffset     = " << theFocalLenOffset
        << "\n------------------------------------------------"
-       << "\n  " << endl;
+       << "\n  " << std::endl;
 
    // Set the flags back.
    out.flags(f);
@@ -596,14 +596,14 @@ void ossimplugins::ossimFormosatModel::imagingRay(const ossimDpt& image_point,
     {
        ossimNotify(ossimNotifyLevel_DEBUG)
           << "DEBUG:\n\t Psi_x = " << Psi_x
-          << "\n\t Psi_y = " << Psi_y << endl;
+          << "\n\t Psi_y = " << Psi_y << std::endl;
     }
 
     ossimColumnVector3d u_sat (-tan(Psi_y), tan(Psi_x), -(1.0 + theFocalLenOffset));
     if (traceDebug() || runtime_dbflag)
     {
        ossimNotify(ossimNotifyLevel_DEBUG)
-          << "DEBUG \n\t u_sat = " << u_sat << endl;
+          << "DEBUG \n\t u_sat = " << u_sat << std::endl;
     }
 
    //
@@ -617,7 +617,7 @@ void ossimplugins::ossimFormosatModel::imagingRay(const ossimDpt& image_point,
     {
        ossimNotify(ossimNotifyLevel_DEBUG)
           << "DEBUG:\n\t theSatToOrbRotation = " << satToOrbit
-          << "\n\t u_orb = " << u_orb << endl;
+          << "\n\t u_orb = " << u_orb << std::endl;
     }
 
    //
@@ -648,7 +648,7 @@ void ossimplugins::ossimFormosatModel::imagingRay(const ossimDpt& image_point,
     {
        ossimNotify(ossimNotifyLevel_DEBUG)
           << "DEBUG:\n\t orbToEcfRotation = " << orbToEcfRotation
-          << "\n\t u_ecf = " << u_ecf << endl;
+          << "\n\t u_ecf = " << u_ecf << std::endl;
     }
 
    //

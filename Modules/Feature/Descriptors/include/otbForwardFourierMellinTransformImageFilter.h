@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -48,28 +48,24 @@ namespace otb
  * \ingroup OTBDescriptors
  */
 
-template <class TPixel,
-    class TInterpol,
-    unsigned int Dimension = 2>
+template <class TPixel, class TInterpol, unsigned int Dimension = 2>
 
-class ITK_EXPORT ForwardFourierMellinTransformImageFilter :
-  public itk::ImageToImageFilter<Image<TPixel, Dimension>,
-                                 itk::Image<std::complex<TPixel>, Dimension> >
+class ITK_EXPORT ForwardFourierMellinTransformImageFilter
+    : public itk::ImageToImageFilter<Image<TPixel, Dimension>, itk::Image<std::complex<TPixel>, Dimension>>
 {
 public:
-
-  //typedef TPixel                 PixelType;
+  // typedef TPixel                 PixelType;
   typedef Image<TPixel, Dimension> InputImageType;
   /*   typedef otb::Image< std::complex< TPixel > , Dimension >           OutputImageType; */
 
-  typedef typename itk::ForwardFFTImageFilter<InputImageType>                      FourierImageFilterType;
-  typedef typename FourierImageFilterType::OutputImageType                         OutputImageType;
+  typedef typename itk::ForwardFFTImageFilter<InputImageType> FourierImageFilterType;
+  typedef typename FourierImageFilterType::OutputImageType    OutputImageType;
 
   /** Standard class typedefs. */
-  typedef ForwardFourierMellinTransformImageFilter                 Self;
+  typedef ForwardFourierMellinTransformImageFilter Self;
   typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ForwardFourierMellinTransformImageFilter, itk::ImageToImageFilter);
@@ -102,11 +98,11 @@ public:
   typedef typename InterpolatorType::CoordRepType CoordRepType;
   typedef typename InterpolatorType::PointType    PointType;
 
-  typedef LogPolarTransform<CoordRepType>                                        LogPolarTransformType;
-  typedef typename LogPolarTransformType::Pointer                                LogPolarTransformPointerType;
+  typedef LogPolarTransform<CoordRepType>         LogPolarTransformType;
+  typedef typename LogPolarTransformType::Pointer LogPolarTransformPointerType;
   typedef itk::ResampleImageFilter<InputImageType, InputImageType, CoordRepType> ResampleFilterType;
-  typedef typename ResampleFilterType::Pointer                                   ResampleFilterPointerType;
-  typedef itk::ImageRegionIteratorWithIndex<InputImageType>                      IteratorType;
+  typedef typename ResampleFilterType::Pointer              ResampleFilterPointerType;
+  typedef itk::ImageRegionIteratorWithIndex<InputImageType> IteratorType;
 
   typedef typename FourierImageFilterType::Pointer      FourierImageFilterPointer;
   typedef typename FourierImageFilterType::ConstPointer FourierImageFilterConstPointer;
@@ -129,7 +125,9 @@ public:
 
 protected:
   ForwardFourierMellinTransformImageFilter();
-  ~ForwardFourierMellinTransformImageFilter() override {}
+  ~ForwardFourierMellinTransformImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void GenerateOutputInformation(void) override;
@@ -140,8 +138,8 @@ protected:
   void GenerateData() override;
 
 private:
-  ForwardFourierMellinTransformImageFilter(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ForwardFourierMellinTransformImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Sigma for normalization */
   double m_Sigma;
@@ -163,13 +161,12 @@ private:
 
   /** FFT Filter */
   FourierImageFilterPointer m_FFTFilter;
-
 };
 
 } // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbForwardFourierMellinTransformImageFilter.txx"
+#include "otbForwardFourierMellinTransformImageFilter.hxx"
 #endif
 
 #endif

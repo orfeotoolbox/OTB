@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="fr_FR">
+<TS version="2.1" language="fr_FR">
 <context>
     <name>ColorSetupController</name>
     <message>
@@ -136,11 +136,11 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     <name>QObject</name>
     <message>
         <source>Execute</source>
-        <translation>Exécuter</translation>
+        <translation type="vanished">Exécuter</translation>
     </message>
     <message>
         <source>Quit</source>
-        <translation>Quitter</translation>
+        <translation type="vanished">Quitter</translation>
     </message>
 </context>
 <context>
@@ -278,7 +278,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
         <translation>Version OTB M.m.pl (nom_de_code)</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2005-2017 Centre National d&apos;Etudes Spatiales (CNES)&lt;/p&gt;&lt;p&gt;Monteverdi is part of Orfeo Toolbox&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.orfeo-toolbox.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://www.orfeo-toolbox.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Licensed under the Apache License, Version 2.0 (the &amp;quot;License&amp;quot;); you may not use this file except in compliance with&lt;br/&gt;the License. You may obtain a copy of the License at:&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://www.apache.org/licenses/LICENSE-2.0&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.apache.org/licenses/LICENSE-2.0&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &lt;br/&gt;&amp;quot;AS IS&amp;quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License&lt;br/&gt;for the specific language governing permissions and limitations under the License.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Copyright (C) 2005-2019 Centre National d&apos;Etudes Spatiales (CNES)&lt;/p&gt;&lt;p&gt;Monteverdi is part of Orfeo Toolbox&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;https://www.orfeo-toolbox.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;https://www.orfeo-toolbox.org/&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Licensed under the Apache License, Version 2.0 (the &amp;quot;License&amp;quot;); you may not use this file except in compliance with&lt;br/&gt;the License. You may obtain a copy of the License at:&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;http://www.apache.org/licenses/LICENSE-2.0&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;http://www.apache.org/licenses/LICENSE-2.0&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an &lt;br/&gt;&amp;quot;AS IS&amp;quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License&lt;br/&gt;for the specific language governing permissions and limitations under the License.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation></translation>
     </message>
 </context>
@@ -455,7 +455,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Title</source>
-        <translation>Titre</translation>
+        <translation type="vanished">Titre</translation>
     </message>
     <message>
         <source>Name</source>
@@ -692,7 +692,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
         <source>Form</source>
         <translation></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Image bands&lt;br/&gt;↓&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="obsolete">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Bandes&lt;br/&gt;↓&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -731,7 +731,7 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>BAND %1</source>
-        <translation>BANDE %1</translation>
+        <translation type="vanished">BANDE %1</translation>
     </message>
     <message>
         <source>Red</source>
@@ -1206,23 +1206,8 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
         <translation></translation>
     </message>
     <message>
-        <source>WARNG&gt; %s
-</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>ERROR&gt; %s
-</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Error: </source>
         <translation>Erreur : </translation>
-    </message>
-    <message>
-        <source>FATAL&gt; %s
-</source>
-        <translation></translation>
     </message>
     <message>
         <source>Fatal error: </source>
@@ -1314,11 +1299,11 @@ Veuillez, s&apos;il vous plait, supprimer votre répertoire de cache Monteverdi.
     </message>
     <message>
         <source>Cannot access settings file.</source>
-        <translation>Impossible d&apos;accéder au fichiers des paramètres</translation>
+        <translation type="vanished">Impossible d&apos;accéder au fichiers des paramètres</translation>
     </message>
     <message>
         <source>Bad settings file format.</source>
-        <translation>Mauvais format pour le fichier de paramètres</translation>
+        <translation type="vanished">Mauvais format pour le fichier de paramètres</translation>
     </message>
     <message>
         <source>An error occurred while loading the geoid file, no geoid file will be used:</source>
@@ -1633,7 +1618,7 @@ Si vous exécutez cette application via une système d&apos;écran déporté, le
         <source>Version M.m.pl (codename)</source>
         <translation>Version M.m.pl (codename)</translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -2620,7 +2605,7 @@ p, li { white-space: pre-wrap; }
         <comment>Necessary for lupdate to be aware of C++ namespaces. Context comment for translator.</comment>
         <translation></translation>
     </message>
-    <message utf8="true">
+    <message>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -3964,11 +3949,11 @@ Voulez-vous sauvegarder avant de quitter ?</translation>
     </message>
     <message>
         <source>Image view</source>
-        <translation>Vue image</translation>
+        <translation type="vanished">Vue image</translation>
     </message>
     <message>
         <source>Tab cannot be closed while OTB application is running.</source>
-        <translation>L&apos;onglet de l&apos;application OTB ne peut pas être fermé lors de l&apos;exécution de l&apos;application OTB.</translation>
+        <translation type="vanished">L&apos;onglet de l&apos;application OTB ne peut pas être fermé lors de l&apos;exécution de l&apos;application OTB.</translation>
     </message>
     <message>
         <source>Welcome new Montevedi2 user !</source>
@@ -4152,6 +4137,14 @@ Charger &apos;%1&apos; provoquera l&apos;affichage des couches dans une vue non 
         <source>Use OpenGL Shading Language (GLSL)</source>
         <translation>Utiliser OpenGL Shading Language (GLSL)</translation>
     </message>
+    <message>
+        <source>Documentation</source>
+        <translation>Documentation</translation>
+    </message>
+    <message>
+        <source>F1</source>
+        <translation>F1</translation>
+    </message>
 </context>
 <context>
     <name>mvd::MainWindowTitleLoader</name>
@@ -4242,6 +4235,14 @@ Charger &apos;%1&apos; provoquera l&apos;affichage des couches dans une vue non 
     <message>
         <source>Enable OTB_USE_QT preprocessor definition at compile time!</source>
         <translation>Activer la définition de pré-processeur OTB_USE_QT lors de la compilation !</translation>
+    </message>
+    <message>
+        <source>Documentation</source>
+        <translation>Documentation</translation>
+    </message>
+    <message>
+        <source>F1</source>
+        <translation>F1</translation>
     </message>
 </context>
 <context>
@@ -4405,11 +4406,15 @@ Charger &apos;%1&apos; provoquera l&apos;affichage des couches dans une vue non 
     </message>
     <message>
         <source>Generting overviews for file %1/%2 &apos;%3&apos;.</source>
-        <translation>Génération des Overview pour le fichier %1/%2 &apos;%3&apos;.</translation>
+        <translation type="vanished">Génération des Overview pour le fichier %1/%2 &apos;%3&apos;.</translation>
     </message>
     <message>
         <source>Preparing to build GDAL overviews...</source>
         <translation>Préparation à la construction des Overview GDAL...</translation>
+    </message>
+    <message>
+        <source>Generating overviews for file %1/%2 &apos;%3&apos;.</source>
+        <translation>Génération des Overview pour le fichier %1/%2 &apos;%3&apos;.</translation>
     </message>
 </context>
 <context>
@@ -5091,11 +5096,11 @@ Le(s) résultat(s) vont être importés en tant que jeu de données.</translatio
     </message>
     <message>
         <source>Warning!</source>
-        <translation>Avertissement !</translation>
+        <translation type="vanished">Avertissement !</translation>
     </message>
     <message>
         <source>OTB-Application &apos;%1&apos; cannot be closed while running!</source>
-        <translation>Impossible de fermer l&apos;OTB-Application &apos;%1&apos; pendant sont exécution !</translation>
+        <translation type="vanished">Impossible de fermer l&apos;OTB-Application &apos;%1&apos; pendant sont exécution !</translation>
     </message>
     <message>
         <source>Following files will be overwritten. Are you sure you want to continue?
@@ -5104,43 +5109,43 @@ Le(s) résultat(s) vont être importés en tant que jeu de données.</translatio
     </message>
     <message>
         <source>File &apos;%1&apos; is being viewed in </source>
-        <translation>Le fichier &apos;%1&apos; est en cours de visualisation dans </translation>
+        <translation type="vanished">Le fichier &apos;%1&apos; est en cours de visualisation dans </translation>
     </message>
     <message>
         <source>Following files are being viewed in </source>
-        <translation>Les fichiers suivants sont en cours de visualisation dans </translation>
+        <translation type="vanished">Les fichiers suivants sont en cours de visualisation dans </translation>
     </message>
     <message>
         <source>Running</source>
-        <translation>En cours</translation>
+        <translation type="vanished">En cours</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation>Terminé</translation>
+        <translation type="vanished">Terminé</translation>
     </message>
     <message>
         <source>Failed</source>
-        <translation>Echec</translation>
+        <translation type="vanished">Echec</translation>
     </message>
     <message>
         <source>Ready to run</source>
-        <translation>Prêt à démarrer</translation>
+        <translation type="vanished">Prêt à démarrer</translation>
     </message>
     <message>
         <source>Select parameters</source>
-        <translation>Choix des paramètres</translation>
+        <translation type="vanished">Choix des paramètres</translation>
     </message>
     <message>
         <source>Parameters</source>
-        <translation>Paramètres</translation>
+        <translation type="vanished">Paramètres</translation>
     </message>
     <message>
         <source>Documentation</source>
-        <translation>Documentation</translation>
+        <translation type="vanished">Documentation</translation>
     </message>
     <message>
         <source>Logs</source>
-        <translation>Logs</translation>
+        <translation type="vanished">Logs</translation>
     </message>
 </context>
 </TS>

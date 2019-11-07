@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,7 @@
  */
 
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 #include "otbWrapperApplicationRegistry.h"
@@ -32,8 +32,8 @@ int otbWrapperApplicationRegistry(int itkNotUsed(argc), char* itkNotUsed(argv)[]
   std::cout << "Available applications :" << std::endl;
   std::vector<std::string>::const_iterator it;
   for (it = list.begin(); it != list.end(); ++it)
-    {
+  {
     std::cout << *it << std::endl;
-    }
+  }
   return EXIT_SUCCESS;
 }

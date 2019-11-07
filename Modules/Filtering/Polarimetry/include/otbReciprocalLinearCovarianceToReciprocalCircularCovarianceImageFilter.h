@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,13 +22,14 @@
 #ifndef otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter_h
 #define otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter_h
 
-#include "itkUnaryFunctorImageFilter.h"
-#include "vcl_complex.h"
+#include "otbFunctorImageFilter.h"
+#include <complex>
 
 namespace otb
- {
+{
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
  * \brief Compute the reciprocal Covariance circular matrix from the reciprocal Covariance linear matrix.
@@ -56,100 +57,63 @@ namespace Functor {
  *
  * \ingroup OTBPolarimetry
  */
-template< class TInput, class TOutput>
+template <class TInput, class TOutput>
 class ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
 {
 public:
-  typedef double                                   RealType;
-  typedef typename std::complex <double>           ComplexType;
-  typedef typename TOutput::ValueType              OutputValueType;
+  typedef double                        RealType;
+  typedef typename std::complex<double> ComplexType;
+  typedef typename TOutput::ValueType   OutputValueType;
 
-  inline TOutput operator()( const TInput & Covariance ) const
-    {
-    TOutput result;
-    result.SetSize(m_NumberOfComponentsPerPixel);
-    result.Fill(0.0);
-    
-    
-    const ComplexType C11 =  static_cast<ComplexType>(  Covariance[0]    );     //   <hh.hh*>
-    const ComplexType C12 =  static_cast<ComplexType>(  Covariance[1]    );     //   <sqrt(2).hh.hv*>
-    const ComplexType C13 =  static_cast<ComplexType>(  Covariance[2]    );     //   <hh.vv*>
-    const ComplexType C22 =  static_cast<ComplexType>(  Covariance[3]    );     //   <2.hv.hv*>
-    const ComplexType C23 =  static_cast<ComplexType>(  Covariance[4]    );     //   <sqrt(2).hv.vv*>
-    const ComplexType C33 =  static_cast<ComplexType>(  Covariance[5]    );     //   <vv.vv*>
-    
-    
-    const ComplexType cst1 = ComplexType(0.0, vcl_sqrt(2.0));
-    const ComplexType two = ComplexType(2.0, 0 );
+  inline void operator()(TOutput& result, const TInput& Covariance) const
+  {
+    const ComplexType C11 = static_cast<ComplexType>(Covariance[0]); //   <hh.hh*>
+    const ComplexType C12 = static_cast<ComplexType>(Covariance[1]); //   <sqrt(2).hh.hv*>
+    const ComplexType C13 = static_cast<ComplexType>(Covariance[2]); //   <hh.vv*>
+    const ComplexType C22 = static_cast<ComplexType>(Covariance[3]); //   <2.hv.hv*>
+    const ComplexType C23 = static_cast<ComplexType>(Covariance[4]); //   <sqrt(2).hv.vv*>
+    const ComplexType C33 = static_cast<ComplexType>(Covariance[5]); //   <vv.vv*>
 
-    result[0] = static_cast<ComplexType>( C33-cst1*C23-C13+cst1*vcl_conj(C23)-vcl_conj(C13)+two*C22-cst1*C12+cst1*vcl_conj(C12)+C11  ) ;
-    result[1] = static_cast<ComplexType>( cst1*C33+two*C23-cst1*C13+cst1*vcl_conj(C13)+two*vcl_conj(C12)-cst1*C11 );
-    result[2] = static_cast<ComplexType>( -C33+cst1*C23+C13+cst1*vcl_conj(C23)+vcl_conj(C13)+two*C22-cst1*C12-cst1*vcl_conj(C12)-C11  ) ;
-    result[3] = static_cast<ComplexType>( two*C33+two*C13+two*vcl_conj(C13)+two*C11 ) ;
-    result[4] = static_cast<ComplexType>( cst1*C33+cst1*C13+two*vcl_conj(C23)-cst1*vcl_conj(C13)+two*C12-cst1*C11 ) ;
-    result[5] = static_cast<ComplexType>( C33+cst1*C23-C13-cst1*vcl_conj(C23)-vcl_conj(C13)+two*C22+cst1*C12-cst1*vcl_conj(C12)+C11 ) ;
 
-	result /= 4.0;
+    const ComplexType cst1 = ComplexType(0.0, std::sqrt(2.0));
+    const ComplexType two  = ComplexType(2.0, 0);
 
-    return result;
-    }
+    result[0] =
+        static_cast<ComplexType>(C33 - cst1 * C23 - C13 + cst1 * std::conj(C23) - std::conj(C13) + two * C22 - cst1 * C12 + cst1 * std::conj(C12) + C11);
+    result[1] = static_cast<ComplexType>(cst1 * C33 + two * C23 - cst1 * C13 + cst1 * std::conj(C13) + two * std::conj(C12) - cst1 * C11);
+    result[2] =
+        static_cast<ComplexType>(-C33 + cst1 * C23 + C13 + cst1 * std::conj(C23) + std::conj(C13) + two * C22 - cst1 * C12 - cst1 * std::conj(C12) - C11);
+    result[3] = static_cast<ComplexType>(two * C33 + two * C13 + two * std::conj(C13) + two * C11);
+    result[4] = static_cast<ComplexType>(cst1 * C33 + cst1 * C13 + two * std::conj(C23) - cst1 * std::conj(C13) + two * C12 - cst1 * C11);
+    result[5] =
+        static_cast<ComplexType>(C33 + cst1 * C23 - C13 - cst1 * std::conj(C23) - std::conj(C13) + two * C22 + cst1 * C12 - cst1 * std::conj(C12) + C11);
 
-   unsigned int GetOutputSize()
-   {
-     return m_NumberOfComponentsPerPixel;
-   }
+    result /= 4.0;
+  }
 
-   /** Constructor */
-   ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor() : m_NumberOfComponentsPerPixel(6)  {}
-
-   /** Destructor */
-   virtual ~ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor() {}
-
-private:
-    unsigned int m_NumberOfComponentsPerPixel;
+  constexpr size_t OutputSize(...) const
+  {
+    // Size of the result (entropy, alpha, anisotropy)
+    return 6;
+  }
 };
-}
+} // namespace Functor
 
-
-/** \class otbReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
- * \brief Compute the reciprocal Covariance circular matrix image from the reciprocal Covariance linear matrix image.
- * For more details, please refer to the class ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor.
+/**
+ * \typedef ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter
+ * \brief Applies otb::Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
+ * \sa otb::Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
  *
- * \ingroup SARPolarimetry
- * \sa ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor
+ * Set inputs with:
+ * \code
+ * SetInput<0>(inputPtr);
+ * \endcode
  *
  * \ingroup OTBPolarimetry
  */
- template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter :
-   public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor<
-    typename TInputImage::PixelType, typename TOutputImage::PixelType> >
-{
-public:
-   /** Standard class typedefs. */
-   typedef ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter  Self;
-   typedef typename Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor<
-     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
-   typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
-   typedef itk::SmartPointer<Self>        Pointer;
-   typedef itk::SmartPointer<const Self>  ConstPointer;
-
-   /** Method for creation through the object factory. */
-   itkNewMacro(Self);
-
-   /** Runtime information support. */
-   itkTypeMacro(ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter, itk::UnaryFunctorImageFilter);
-
-
-protected:
-  ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter() {}
-  ~ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter() override {}
-
-private:
-  ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&);                          //purposely not implemented
-
-};
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalLinearCovarianceToReciprocalCircularCovarianceImageFilter = FunctorImageFilter<
+    Functor::ReciprocalLinearCovarianceToReciprocalCircularCovarianceFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 
 } // end namespace otb
 

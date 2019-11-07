@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,24 +26,19 @@
 #include "otbWrapperStringListParameter.h"
 
 #include "otbWrapperQtWidgetChoiceParameter.h"
-#include "otbWrapperQtWidgetComplexInputImageParameter.h"
-#include "otbWrapperQtWidgetComplexOutputImageParameter.h"
 #include "otbWrapperQtWidgetDirectoryParameter.h"
-#include "otbWrapperQtWidgetEmptyParameter.h"
 #include "otbWrapperQtWidgetFloatParameter.h"
 #include "otbWrapperQtWidgetIntParameter.h"
 #include "otbWrapperQtWidgetInputFilenameParameter.h"
 #include "otbWrapperQtWidgetInputFilenameListParameter.h"
 #include "otbWrapperQtWidgetInputImageParameter.h"
 #include "otbWrapperQtWidgetInputImageListParameter.h"
-#include "otbWrapperQtWidgetInputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataListParameter.h"
 #include "otbWrapperQtWidgetInputVectorDataParameter.h"
 #include "otbWrapperQtWidgetListViewParameter.h"
 #include "otbWrapperQtWidgetModel.h"
 #include "otbWrapperQtWidgetOutputFilenameParameter.h"
 #include "otbWrapperQtWidgetOutputImageParameter.h"
-#include "otbWrapperQtWidgetOutputProcessXMLParameter.h"
 #include "otbWrapperQtWidgetOutputVectorDataParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 #include "otbWrapperQtWidgetParameterGroup.h"
@@ -65,21 +60,20 @@ template <class TParameterType, class TQtWidget>
 class QtWidgetParameterGenericFactory
 {
 public:
-
-  static bool CanCreate( Parameter* param )
+  static bool CanCreate(Parameter* param)
   {
-    return dynamic_cast<TParameterType *>(param) != ITK_NULLPTR;
+    return dynamic_cast<TParameterType*>(param) != nullptr;
   }
 
-  static QtWidgetParameterBase* Create( Parameter* param, QtWidgetModel* model )
+  static QtWidgetParameterBase* Create(Parameter* param, QtWidgetModel* model, QWidget* parent)
   {
-    QtWidgetParameterBase * widget = ITK_NULLPTR;
-    TParameterType * specificParam = dynamic_cast< TParameterType * >( param );
+    QtWidgetParameterBase* widget        = nullptr;
+    TParameterType*        specificParam = dynamic_cast<TParameterType*>(param);
 
     // Code should break if param is not a TParameterType and not be silent!
-    assert( specificParam!=nullptr );
+    assert(specificParam != nullptr);
 
-    widget = new TQtWidget( specificParam, model );
+    widget = new TQtWidget(specificParam, model, parent);
 
     return widget;
   }
@@ -93,55 +87,47 @@ QtWidgetParameterFactory::~QtWidgetParameterFactory()
 {
 }
 
-QtWidgetParameterBase*
-QtWidgetParameterFactory::CreateQtWidget( Parameter* param, QtWidgetModel* model )
+QtWidgetParameterBase* QtWidgetParameterFactory::CreateQtWidget(Parameter* param, QtWidgetModel* model, QWidget* parent)
 {
-  QtWidgetParameterBase* widget = ITK_NULLPTR;
+  QtWidgetParameterBase* widget = nullptr;
 
-#define CREATEWIDGET( ParameterType, WidgetType ) \
-  else if ( QtWidgetParameterGenericFactory<ParameterType,  WidgetType>::CanCreate(param) ) \
-    { \
-    widget = QtWidgetParameterGenericFactory<ParameterType,  WidgetType>::Create(param, model); \
-    }
+#define CREATEWIDGET(ParameterType, WidgetType)                                                        \
+  else if (QtWidgetParameterGenericFactory<ParameterType, WidgetType>::CanCreate(param))               \
+  {                                                                                                    \
+    widget = QtWidgetParameterGenericFactory<ParameterType, WidgetType>::Create(param, model, parent); \
+  }
 
-  if (0) {}
-  CREATEWIDGET(EmptyParameter,          QtWidgetEmptyParameter)
-  CREATEWIDGET(IntParameter,            QtWidgetIntParameter)
-  CREATEWIDGET(FloatParameter,          QtWidgetFloatParameter)
-  CREATEWIDGET(InputFilenameParameter,       QtWidgetInputFilenameParameter)
-  CREATEWIDGET(OutputFilenameParameter,       QtWidgetOutputFilenameParameter)
-  CREATEWIDGET(DirectoryParameter,      QtWidgetDirectoryParameter)
-  CREATEWIDGET(StringParameter,         QtWidgetStringParameter)
-  CREATEWIDGET(StringListParameter,     QtWidgetStringListParameter)
-  CREATEWIDGET(ChoiceParameter,         QtWidgetChoiceParameter)
-  CREATEWIDGET(ListViewParameter,       QtWidgetListViewParameter)
-  CREATEWIDGET(InputImageParameter,     QtWidgetInputImageParameter)
-  CREATEWIDGET(ComplexInputImageParameter,     QtWidgetComplexInputImageParameter)
-  CREATEWIDGET(ComplexOutputImageParameter,     QtWidgetComplexOutputImageParameter)
+  if (0)
+  {
+  }
+  CREATEWIDGET(IntParameter, QtWidgetIntParameter)
+  CREATEWIDGET(FloatParameter, QtWidgetFloatParameter)
+  CREATEWIDGET(InputFilenameParameter, QtWidgetInputFilenameParameter)
+  CREATEWIDGET(OutputFilenameParameter, QtWidgetOutputFilenameParameter)
+  CREATEWIDGET(DirectoryParameter, QtWidgetDirectoryParameter)
+  CREATEWIDGET(StringParameter, QtWidgetStringParameter)
+  CREATEWIDGET(StringListParameter, QtWidgetStringListParameter)
+  CREATEWIDGET(ChoiceParameter, QtWidgetChoiceParameter)
+  CREATEWIDGET(ListViewParameter, QtWidgetListViewParameter)
+  CREATEWIDGET(InputImageParameter, QtWidgetInputImageParameter)
   CREATEWIDGET(InputImageListParameter, QtWidgetInputImageListParameter)
   CREATEWIDGET(InputFilenameListParameter, QtWidgetInputFilenameListParameter)
   CREATEWIDGET(InputVectorDataListParameter, QtWidgetInputVectorDataListParameter)
   CREATEWIDGET(InputVectorDataParameter, QtWidgetInputVectorDataParameter)
-  CREATEWIDGET(OutputImageParameter,    QtWidgetOutputImageParameter)
+  CREATEWIDGET(OutputImageParameter, QtWidgetOutputImageParameter)
   CREATEWIDGET(OutputVectorDataParameter, QtWidgetOutputVectorDataParameter)
-  CREATEWIDGET(BoolParameter,          QtWidgetBoolParameter)
-  CREATEWIDGET(ParameterGroup,          QtWidgetParameterGroup)
-  CREATEWIDGET(RAMParameter,            QtWidgetRAMParameter)
-  CREATEWIDGET(OutputProcessXMLParameter,        QtWidgetOutputProcessXMLParameter)
-  CREATEWIDGET(InputProcessXMLParameter,        QtWidgetInputProcessXMLParameter)
+  CREATEWIDGET(BoolParameter, QtWidgetBoolParameter)
+  CREATEWIDGET(ParameterGroup, QtWidgetParameterGroup)
+  CREATEWIDGET(RAMParameter, QtWidgetRAMParameter)
 #undef CREATEWIDGET
 
   if (widget)
-    {
+  {
     widget->CreateWidget();
     widget->UpdateGUI();
-    }
+  }
 
   return widget;
-
-
 }
-
-
 }
 }

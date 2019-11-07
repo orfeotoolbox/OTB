@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -72,9 +72,9 @@ namespace ossimplugins
          os<<"longs["<<i<<"]:"<<data._longs[i]<<std::endl;
       }
 
-      os<<"last_zero_doppler_time:"<<data._last_zero_doppler_time.c_str()<<std::endl;
+      os<<"last_zero_doppler_time:"<<data._last_zero_doppler_time <<std::endl;
 
-      os<<"last_line_tie_points:"<<data._last_line_tie_points.c_str()<<std::endl;
+      os<<"last_line_tie_points:"<<data._last_line_tie_points <<std::endl;
 
       return os;
 

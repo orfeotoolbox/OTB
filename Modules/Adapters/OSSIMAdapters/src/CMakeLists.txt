@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -21,13 +21,9 @@
 set(OTBOSSIMAdapters_SRC
   otbDEMHandler.cxx
   otbImageKeywordlist.cxx
-  otbGeometricSarSensorModelAdapter.cxx
   otbSensorModelAdapter.cxx
-  otbPlatformPositionAdapter.cxx
-  otbDEMConvertAdapter.cxx
   otbRPCSolverAdapter.cxx
   otbDateTimeAdapter.cxx
-  otbMapProjectionAdapter.cxx
   otbFilterFunctionValues.cxx
   otbMetaDataKey.cxx
   otbEllipsoidAdapter.cxx

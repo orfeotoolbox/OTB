@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,23 +40,20 @@ namespace otb
  * \ingroup OTBMarkov
  */
 
-template<class TInput1, class TInput2>
+template <class TInput1, class TInput2>
 class ITK_EXPORT MRFSampler : public itk::Object
 {
 public:
-
   typedef MRFSampler                    Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef itk::ConstNeighborhoodIterator
-  <TInput1>         InputImageNeighborhoodIterator;
-  typedef typename TInput1::PixelType InputImagePixelType;
+  typedef itk::ConstNeighborhoodIterator<TInput1> InputImageNeighborhoodIterator;
+  typedef typename TInput1::PixelType             InputImagePixelType;
 
-  typedef itk::NeighborhoodIterator
-  <TInput2>         LabelledImageNeighborhoodIterator;
-  typedef typename TInput2::PixelType LabelledImagePixelType;
+  typedef itk::NeighborhoodIterator<TInput2> LabelledImageNeighborhoodIterator;
+  typedef typename TInput2::PixelType        LabelledImagePixelType;
 
   typedef MRFEnergy<TInput1, TInput2> EnergyFidelityType;
   typedef MRFEnergy<TInput2, TInput2> EnergyRegularizationType;
@@ -82,8 +79,7 @@ public:
   itkSetObjectMacro(EnergyRegularization, EnergyRegularizationType);
   itkSetObjectMacro(EnergyFidelity, EnergyFidelityType);
 
-  virtual int Compute(const InputImageNeighborhoodIterator& itData,
-                      const LabelledImageNeighborhoodIterator& itRegul) = 0;
+  virtual int Compute(const InputImageNeighborhoodIterator& itData, const LabelledImageNeighborhoodIterator& itRegul) = 0;
 
 protected:
   unsigned int m_NumberOfClasses;
@@ -100,21 +96,15 @@ protected:
 
 protected:
   // The constructor and destructor.
-  MRFSampler() :
-    m_NumberOfClasses(1),
-    m_EnergyBefore(1.0),
-    m_EnergyAfter(1.0),
-    m_DeltaEnergy(1.0),
-    m_EnergyCurrent(1.0),
-    m_Lambda(1.0)
-    {
+  MRFSampler() : m_NumberOfClasses(1), m_EnergyBefore(1.0), m_EnergyAfter(1.0), m_DeltaEnergy(1.0), m_EnergyCurrent(1.0), m_Lambda(1.0)
+  {
     m_EnergyRegularization = EnergyRegularizationType::New();
-    m_EnergyFidelity =  EnergyFidelityType::New();
-    };
-  ~MRFSampler() override {}
-
+    m_EnergyFidelity       = EnergyFidelityType::New();
+  };
+  ~MRFSampler() override
+  {
+  }
 };
-
 }
 
 #endif

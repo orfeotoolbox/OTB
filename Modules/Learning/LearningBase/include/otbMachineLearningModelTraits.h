@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,29 +40,35 @@ namespace otb
  * a VariableLengthVector
  * \tparam isNumber either TrueType or FalseType for partial
  * specialization
-  
+
  */
-template <typename TInput, typename isNumber> struct MLMSampleTraitsImpl;
+template <typename TInput, typename isNumber>
+struct MLMSampleTraitsImpl;
 
 
 /// \cond SPECIALIZATION_IMPLEMENTATION
 // For Numbers
-template <typename TInput> struct MLMSampleTraitsImpl<TInput, itk::mpl::TrueType> {
-  typedef TInput                             ValueType;
-   typedef itk::VariableLengthVector<TInput> SampleType;
+template <typename TInput>
+struct MLMSampleTraitsImpl<TInput, itk::mpl::TrueType>
+{
+  typedef TInput                            ValueType;
+  typedef itk::VariableLengthVector<TInput> SampleType;
 };
 
 // For Vectors
-template <typename TInput> struct MLMSampleTraitsImpl<TInput, itk::mpl::FalseType> {
-  typedef typename TInput::ValueType        ValueType;
-  typedef TInput                            SampleType;
+template <typename TInput>
+struct MLMSampleTraitsImpl<TInput, itk::mpl::FalseType>
+{
+  typedef typename TInput::ValueType ValueType;
+  typedef TInput                     SampleType;
 };
 /// \endcond
 
 /**
  * Simplified implementation of SampleTraits using MLMSampleTraitsImpl
  */
-template <typename TInput> using MLMSampleTraits = MLMSampleTraitsImpl< TInput, typename itk::mpl::IsNumber<TInput>::Type >;
+template <typename TInput>
+using MLMSampleTraits = MLMSampleTraitsImpl<TInput, typename itk::mpl::IsNumber<TInput>::Type>;
 
 
 /**
@@ -74,29 +80,35 @@ template <typename TInput> using MLMSampleTraits = MLMSampleTraitsImpl< TInput, 
  * a VariableLengthVector or a FixedArray
  * \tparam isNumber either TrueType or FalseType for partial
  * specialization
-  
+
  */
-template <typename TInput, typename isNumber> struct MLMTargetTraitsImpl;
+template <typename TInput, typename isNumber>
+struct MLMTargetTraitsImpl;
 
 
 /// \cond SPECIALIZATION_IMPLEMENTATION
 // For Numbers
-template <typename TInput> struct MLMTargetTraitsImpl<TInput, itk::mpl::TrueType> {
-  typedef TInput                             ValueType;
-  typedef itk::FixedArray<TInput,1>          SampleType;
+template <typename TInput>
+struct MLMTargetTraitsImpl<TInput, itk::mpl::TrueType>
+{
+  typedef TInput ValueType;
+  typedef itk::FixedArray<TInput, 1> SampleType;
 };
 
 // For Vectors
-template <typename TInput> struct MLMTargetTraitsImpl<TInput, itk::mpl::FalseType> {
-  typedef typename TInput::ValueType        ValueType;
-  typedef TInput                            SampleType;
+template <typename TInput>
+struct MLMTargetTraitsImpl<TInput, itk::mpl::FalseType>
+{
+  typedef typename TInput::ValueType ValueType;
+  typedef TInput                     SampleType;
 };
 /// \endcond
 
 /**
  * Simplified implementation of TargetTraits using MLMTargetTraitsImpl
  */
-template <typename TInput> using MLMTargetTraits = MLMTargetTraitsImpl< TInput, typename itk::mpl::IsNumber<TInput>::Type >;
+template <typename TInput>
+using MLMTargetTraits = MLMTargetTraitsImpl<TInput, typename itk::mpl::IsNumber<TInput>::Type>;
 
 
 } // End namespace otb

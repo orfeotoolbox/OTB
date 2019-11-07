@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,21 +25,18 @@
 #include "otbOGRGeometryWrapper.h"
 #include "ogr_geometry.h"
 
-#if GDAL_VERSION_NUM < 1900
-#  include "itkMacro.h"
-#endif
-
 #ifdef _MSC_VER
 // warning conversion int -> bool
-#pragma warning ( disable : 4800 )
+#pragma warning(disable : 4800)
 #endif
 /*===========================================================================*/
 /*================================[ Deleter ]================================*/
 /*===========================================================================*/
 void otb::ogr::internal::GeometryDeleter::operator()(OGRGeometry* p)
 {
-  if (p) { // OGR refuses delete 0...
-    OGRGeometryFactory::destroyGeometry (p);
+  if (p)
+  { // OGR refuses delete 0...
+    OGRGeometryFactory::destroyGeometry(p);
   }
 }
 
@@ -49,13 +46,13 @@ void otb::ogr::internal::GeometryDeleter::operator()(OGRGeometry* p)
 bool otb::ogr::Intersects(OGRGeometry const& lhs, OGRGeometry const& rhs)
 {
   // OGRGeometry::Intersects is not const-correct ...
-  return lhs.Intersects(const_cast <OGRGeometry*>(&rhs));
+  return lhs.Intersects(const_cast<OGRGeometry*>(&rhs));
 }
 
 bool otb::ogr::Equals(OGRGeometry const& lhs, OGRGeometry const& rhs)
 {
   // OGRGeometry::Equals is not const-correct ...
-  return lhs.Equals(const_cast <OGRGeometry*>(&rhs));
+  return lhs.Equals(const_cast<OGRGeometry*>(&rhs));
 }
 
 bool otb::ogr::Disjoint(OGRGeometry const& lhs, OGRGeometry const& rhs)
@@ -105,12 +102,7 @@ otb::ogr::UniqueGeometryPtr otb::ogr::Union(OGRGeometry const& lhs, OGRGeometry 
 
 otb::ogr::UniqueGeometryPtr otb::ogr::UnionCascaded(OGRGeometry const& this_)
 {
-#if GDAL_VERSION_NUM >= 1800
   return UniqueGeometryPtr(this_.UnionCascaded());
-#else
-  itkGenericExceptionMacro("OGRGeometry::UnionCascaded is not supported by OGR v"
-    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.8.0, and recompile OTB.");
-#endif
 }
 
 otb::ogr::UniqueGeometryPtr otb::ogr::Difference(OGRGeometry const& lhs, OGRGeometry const& rhs)
@@ -120,41 +112,20 @@ otb::ogr::UniqueGeometryPtr otb::ogr::Difference(OGRGeometry const& lhs, OGRGeom
 
 otb::ogr::UniqueGeometryPtr otb::ogr::SymDifference(OGRGeometry const& lhs, OGRGeometry const& rhs)
 {
-#if GDAL_VERSION_NUM >= 1800
   return UniqueGeometryPtr(lhs.SymDifference(&rhs));
-#else
-  return UniqueGeometryPtr(lhs.SymmetricDifference(&rhs));
-#endif
 }
 
 otb::ogr::UniqueGeometryPtr otb::ogr::SimplifyDontPreserveTopology(OGRGeometry const& g, double tolerance)
 {
-#if GDAL_VERSION_NUM >= 1800
   return UniqueGeometryPtr(g.Simplify(tolerance));
-#else
-  itkGenericExceptionMacro("OGRGeometry::Simplify is not supported by OGR v"
-    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.8.0, and recompile OTB.");
-#endif
 }
 
 otb::ogr::UniqueGeometryPtr otb::ogr::SimplifyPreserveTopology(OGRGeometry const& g, double tolerance)
 {
-#if GDAL_VERSION_NUM >= 1900
   return UniqueGeometryPtr(g.SimplifyPreserveTopology(tolerance));
-#else
-  itkGenericExceptionMacro("OGRGeometry::Simplify is not supported by OGR v"
-    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.");
-#endif
 }
 
 otb::ogr::UniqueGeometryPtr otb::ogr::Simplify(OGRGeometry const& g, double tolerance)
 {
-#if   GDAL_VERSION_NUM >= 1900
   return UniqueGeometryPtr(g.SimplifyPreserveTopology(tolerance));
-#elif GDAL_VERSION_NUM >= 1800
-  return UniqueGeometryPtr(g.Simplify(tolerance));
-#else
-  itkGenericExceptionMacro("OGRGeometry::Simplify(PreserveTopology) is not supported by OGR v"
-    << GDAL_VERSION_NUM << ". Upgrade to a version >= 1.9.0, and recompile OTB.");
-#endif
 }

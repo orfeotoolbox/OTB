@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,6 +33,7 @@
 #include "itkMetaDataObject.h"
 #include "otbRemoteSensingRegion.h"
 #include "otbMacro.h"
+#include <string>
 
 namespace otb
 {
@@ -46,8 +47,7 @@ namespace otb
  * \ingroup OTBVectorDataBase
  */
 template <class TValue, unsigned int VDimension = 2>
-class ITK_EXPORT PolyLineParametricPathWithValue
-  : public itk::PolyLineParametricPath<VDimension>
+class ITK_EXPORT PolyLineParametricPathWithValue : public itk::PolyLineParametricPath<VDimension>
 {
 public:
   /** Standard typedefs */
@@ -71,7 +71,7 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename VertexListType::ConstIterator   VertexListConstIteratorType;
 
-//   typedef itk::ImageRegion<2>                       RegionType;
+  //   typedef itk::ImageRegion<2>                       RegionType;
   typedef otb::RemoteSensingRegion<double> RegionType;
   typedef typename RegionType::SizeType    SizeType;
   typedef typename RegionType::IndexType   IndexType;
@@ -89,13 +89,13 @@ public:
     ValueType                      resp(0);
     const itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
     if (dict.HasKey(m_Key))
-      {
+    {
       itk::ExposeMetaData<ValueType>(dict, m_Key, resp);
-      }
+    }
     else
-      {
+    {
       itkGenericExceptionMacro(<< "Key " << m_Key << " not found in metadata dictionary !");
-      }
+    }
     return resp;
   }
 
@@ -105,7 +105,7 @@ public:
    */
   virtual double GetLength() const;
 
-  virtual void  AddVertex(const ContinuousIndexType& vertex);
+  virtual void AddVertex(const ContinuousIndexType& vertex);
 
   /**
  * Compute the path bounding region.
@@ -117,28 +117,29 @@ protected:
   /** Constructor */
   PolyLineParametricPathWithValue();
   /** Destructor */
-  ~PolyLineParametricPathWithValue() override {}
+  ~PolyLineParametricPathWithValue() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   virtual void ComputeLength() const;
   virtual void ComputeBoundingRegion() const;
-  void Modified() const override;
+  void         Modified() const override;
 
 private:
-  PolyLineParametricPathWithValue(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  PolyLineParametricPathWithValue(const Self&) = delete;
+  void               operator=(const Self&) = delete;
   std::string        m_Key;
   mutable double     m_Length;
   mutable bool       m_LengthIsValid;
   mutable RegionType m_BoundingRegion;
   mutable bool       m_BoundingRegionIsValid;
-
 };
 } // End namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbPolyLineParametricPathWithValue.txx"
+#include "otbPolyLineParametricPathWithValue.hxx"
 #endif
 
 #endif

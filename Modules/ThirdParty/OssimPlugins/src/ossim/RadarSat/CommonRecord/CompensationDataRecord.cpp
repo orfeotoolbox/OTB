@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -37,9 +37,9 @@ CompensationDataRecord::~CompensationDataRecord()
 
 std::ostream& operator<<(std::ostream& os, const CompensationDataRecord& data)
 {
-	os<<"comp_desig:"<<data._comp_desig.c_str()<<std::endl;
+	os<<"comp_desig:"<<data._comp_desig <<std::endl;
 
-	os<<"comp_descr:"<<data._comp_descr.c_str()<<std::endl;
+	os<<"comp_descr:"<<data._comp_descr <<std::endl;
 
     os<<"n_comp_rec:"<<data._n_comp_rec<<std::endl;
 
@@ -52,7 +52,7 @@ std::ostream& operator<<(std::ostream& os, const CompensationDataRecord& data)
 		os<<"beam_tab["<<i<<"]:"<<data._beam_tab[i]<<std::endl;
 	}
 
-    os<<"beam_type:"<<data._beam_type.c_str()<<std::endl;
+    os<<"beam_type:"<<data._beam_type <<std::endl;
 
     os<<"look_angle:"<<data._look_angle<<std::endl;
 

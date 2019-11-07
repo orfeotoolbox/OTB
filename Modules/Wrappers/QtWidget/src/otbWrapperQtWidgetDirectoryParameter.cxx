@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,9 +27,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetDirectoryParameter::QtWidgetDirectoryParameter(DirectoryParameter* param, QtWidgetModel* m)
-: QtWidgetParameterBase(param, m),
-  m_DirectoryParam(param)
+QtWidgetDirectoryParameter::QtWidgetDirectoryParameter(DirectoryParameter* param, QtWidgetModel* m, QWidget* parent)
+  : QtWidgetParameterBase(param, m, parent), m_DirectoryParam(param)
 {
 }
 
@@ -40,11 +39,7 @@ QtWidgetDirectoryParameter::~QtWidgetDirectoryParameter()
 void QtWidgetDirectoryParameter::DoUpdateGUI()
 {
   // Update the lineEdit
-  QString text(
-    QFile::decodeName(
-      m_DirectoryParam->GetValue().c_str()
-    )
-  );
+  QString text(QFile::decodeName(m_DirectoryParam->GetValue().c_str()));
 
   m_Input->setText(text);
 }
@@ -55,59 +50,46 @@ void QtWidgetDirectoryParameter::DoCreateWidget()
   m_HLayout = new QHBoxLayout;
   m_HLayout->setSpacing(0);
   m_HLayout->setContentsMargins(0, 0, 0, 0);
-  m_Input = new QLineEdit;
-  m_Input->setToolTip(
-    QString::fromStdString( m_DirectoryParam->GetDescription() )
-  );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), this, SLOT(SetFileName(const QString&)) );
-  connect( m_Input, SIGNAL(textChanged(const QString&)), GetModel(), SLOT(NotifyUpdate()) );
+  m_Input = new QLineEdit(this);
+  m_Input->setToolTip(QString::fromStdString(m_DirectoryParam->GetDescription()));
+  connect(m_Input, &QLineEdit::textChanged, this, &QtWidgetDirectoryParameter::SetFileName);
+  connect(m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate);
 
   m_HLayout->addWidget(m_Input);
 
   // Set up input text edit
-  m_Button = new QPushButton;
+  m_Button = new QPushButton(this);
   m_Button->setText("...");
-  m_Button->setToolTip("Select d Directory...");
+  m_Button->setToolTip("Select a directory...");
   m_Button->setMaximumWidth(m_Button->width());
-  connect( m_Button, SIGNAL(clicked()), this, SLOT(SelectFile()) );
+  connect(m_Button, &QPushButton::clicked, this, &QtWidgetDirectoryParameter::SelectFile);
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);
 }
 
 
-void
-QtWidgetDirectoryParameter
-::SelectFile()
+void QtWidgetDirectoryParameter::SelectFile()
 {
-  assert( m_Input!=NULL );
+  assert(m_Input != NULL);
 
-  QString dir(
-    GetExistingDirectory(
-      this,
-      QString(),
-      m_Input->text()
-    )
-  );
+  QString dir(GetExistingDirectory(this, QString(), m_Input->text()));
 
-  if( dir.isEmpty() )
+  if (dir.isEmpty())
     return;
 
-  m_Input->setText( dir );
+  m_Input->setText(dir);
 }
 
 
 void QtWidgetDirectoryParameter::SetFileName(const QString& value)
 {
   // save value
-  m_DirectoryParam->SetValue(
-    QFile::encodeName( value ).constData()
-  );
+  m_DirectoryParam->SetValue(QFile::encodeName(value).constData());
 
   // notify of value change
-  QString key( m_DirectoryParam->GetKey() );
-  emit ParameterChanged(key);
+  QString key(m_DirectoryParam->GetKey());
+  emit    ParameterChanged(key);
 }
-
 }
 }

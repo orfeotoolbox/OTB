@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,23 +27,23 @@
 #include "otbImageFileWriter.h"
 #include "otbStreamingResampleImageFilter.h"
 
-int otbProlateValidationTest(int itkNotUsed(argc), char * argv[])
+int otbProlateValidationTest(int itkNotUsed(argc), char* argv[])
 {
-  const char *       infname = argv[1];
-  const char *       outfname = argv[2];
-  const unsigned int rad = atoi(argv[3]);
-  const double       factor = atof(argv[4]);
-  //const char * defaultoutfname = argv[6];
+  const char*        infname  = argv[1];
+  const char*        outfname = argv[2];
+  const unsigned int rad      = atoi(argv[3]);
+  const double       factor   = atof(argv[4]);
+  // const char * defaultoutfname = argv[6];
 
-  typedef otb::Image<double, 2>                                           ImageType;
-  typedef otb::ImageFileReader<ImageType>                                 ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                        WriterType;
+  typedef otb::Image<double, 2> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef otb::StreamingResampleImageFilter<ImageType, ImageType, double> StreamingResampleImageFilterType;
 
   typedef otb::ProlateInterpolateImageFunction<ImageType> InterpolatorType;
-  //typedef InterpolatorType::FunctionType FunctionType;
-  //typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> DefaultInterpolatorType;
-  //DefaultInterpolatorType::Pointer def = DefaultInterpolatorType::New();
+  // typedef InterpolatorType::FunctionType FunctionType;
+  // typedef itk::NearestNeighborInterpolateImageFunction<ImageType, double> DefaultInterpolatorType;
+  // DefaultInterpolatorType::Pointer def = DefaultInterpolatorType::New();
 
   InterpolatorType::Pointer                 prolate      = InterpolatorType::New();
   ReaderType::Pointer                       reader       = ReaderType::New();
@@ -53,7 +53,7 @@ int otbProlateValidationTest(int itkNotUsed(argc), char * argv[])
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
 
-  ImageType::PointType   origin = reader->GetOutput()->GetOrigin();
+  ImageType::PointType   origin  = reader->GetOutput()->GetOrigin();
   ImageType::SpacingType spacing = reader->GetOutput()->GetSignedSpacing();
   ImageType::SpacingType newSpacing;
   newSpacing[0] = spacing[0] * factor;

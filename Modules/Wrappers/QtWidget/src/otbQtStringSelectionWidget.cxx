@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,14 +25,43 @@ namespace otb
 namespace Wrapper
 {
 
-QtStringSelectionWidget::QtStringSelectionWidget()
-  : QWidget()
+QtStringSelectionWidget::QtStringSelectionWidget() : QWidget()
 {
   this->DoCreateWidget();
 }
 
 QtStringSelectionWidget::~QtStringSelectionWidget()
 {
+}
+
+bool QtStringSelectionWidget::IsChecked() const
+{
+  return m_Checkbox->isChecked();
+}
+
+void QtStringSelectionWidget::SetChecked(bool val)
+{
+  return m_Checkbox->setChecked(val);
+}
+
+const QString QtStringSelectionWidget::GetText() const
+{
+  return m_Input->text();
+}
+
+void QtStringSelectionWidget::SetText(const QString& qString)
+{
+  m_Input->setText(qString);
+}
+
+std::string QtStringSelectionWidget::ToStdString()
+{
+  return m_Input->text().toLatin1().constData();
+}
+
+void QtStringSelectionWidget::ClearText()
+{
+  m_Input->clear();
 }
 
 void QtStringSelectionWidget::DoUpdateGUI()
@@ -52,21 +81,13 @@ void QtStringSelectionWidget::DoCreateWidget()
   m_HLayout->addWidget(m_Checkbox);
 
   m_Input = new QLineEdit;
-  m_Input->setEnabled( m_Checkbox->isChecked() );
+  m_Input->setEnabled(m_Checkbox->isChecked());
 
   m_HLayout->addWidget(m_Input);
 
-  QObject::connect(
-          m_Checkbox, SIGNAL( toggled( bool ) ),
-          m_Input, SLOT( setEnabled( bool ) )
-  );
+  connect(m_Checkbox, &QCheckBox::toggled, m_Input, &QLineEdit::setEnabled);
 
-  QObject::connect(
-        m_Input,
-        SIGNAL( editingFinished( ) ),
-        this,
-        SLOT( OnEditionFinished() )
-        );
+  connect(m_Input, &QLineEdit::editingFinished, this, &QtStringSelectionWidget::OnEditionFinished);
 
   this->setLayout(m_HLayout);
 }
@@ -76,7 +97,5 @@ void QtStringSelectionWidget::OnEditionFinished()
   // used to propagate m_Input (QLineEdit type) editingFinished signal
   emit InternalQLineEditEditionFinished();
 }
-
 }
-
 }

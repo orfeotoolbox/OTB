@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,16 +35,16 @@
 namespace otb
 {
 
-const char * GlVersionChecker::REQUIRED_GL_VERSION = "2.0.0";
-const char * GlVersionChecker::REQUIRED_GLSL_VERSION = "1.20";
+const char * GlVersionChecker::REQUIRED_GL_VERSION = "3.0.0";
+const char * GlVersionChecker::REQUIRED_GLSL_VERSION = "1.30";
 
 const char *
 GlVersionChecker
-::GLVersion()
+::GLVersion() noexcept
 {
   const GLubyte * glVersionStr = glGetString( GL_VERSION );
 
-  if( glVersionStr==ITK_NULLPTR )
+  if( glVersionStr==nullptr )
     {
     std::ostringstream oss;
 
@@ -61,11 +61,11 @@ GlVersionChecker
 
 const char *
 GlVersionChecker
-::GLSLVersion()
+::GLSLVersion() noexcept
 {
   const GLubyte * slVersionStr = glGetString( GL_SHADING_LANGUAGE_VERSION );
 
-  if( slVersionStr==ITK_NULLPTR )
+  if( slVersionStr==nullptr )
     {
     std::ostringstream oss;
 
@@ -82,7 +82,18 @@ GlVersionChecker
 
 bool
 GlVersionChecker
-::CheckGLCapabilities( const char * & glVersion, const char * & glslVersion )
+::CheckGLCapabilities() noexcept
+{
+  char const * glVersion = nullptr;
+  char const * glslVersion = nullptr;
+
+  return GlVersionChecker::CheckGLCapabilities( glVersion, glslVersion );
+}
+
+
+bool
+GlVersionChecker
+::CheckGLCapabilities( const char * & glVersion, const char * & glslVersion ) noexcept
 {
   // Get OpenGL version.
   glVersion = GlVersionChecker::GLVersion();
@@ -90,7 +101,7 @@ GlVersionChecker
   // If OpenGL version is at least 2.0, get (and return) GLSL version
   // (before checking against OpenGL required version).
   if( GlVersionChecker::VerCmp( glVersion, "2.0" )<0 )
-    glslVersion = ITK_NULLPTR;
+    glslVersion = nullptr;
   else
     glslVersion = GlVersionChecker::GLSLVersion();
 
@@ -114,11 +125,11 @@ GlVersionChecker
 ::SplitVersion( const char * version,
                 int& major,
                 int& minor,
-                int& release )
+                int& release ) noexcept
 {
   //
   // Special case: empty strings returns 0.0.0 and true.
-  if( version==ITK_NULLPTR || strlen( version )==0 )
+  if( version==nullptr || strlen( version )==0 )
     {
     major = 0;
     minor = 0;
@@ -147,7 +158,7 @@ GlVersionChecker
 
   const char * minorStr = strchr( version, '.' );
 
-  if( minorStr==ITK_NULLPTR )
+  if( minorStr==nullptr )
     return false;
 
   minor = atoi( ++minorStr );
@@ -161,7 +172,7 @@ GlVersionChecker
 
   // In this case, it is Ok to return because version of the form
   // Major.minor are handled.
-  if( releaseStr==ITK_NULLPTR )
+  if( releaseStr==nullptr )
     return true;
 
   release = atoi( ++releaseStr );
@@ -174,7 +185,7 @@ GlVersionChecker
 
 int
 GlVersionChecker
-::VerCmp( const char * version, const char * required )
+::VerCmp( const char * version, const char * required ) noexcept
 {
   //
   // Split version.
@@ -231,4 +242,3 @@ GlVersionChecker
 
 
 } // End namespace otb
-

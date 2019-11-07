@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,9 +21,13 @@
 #ifndef otbExtendedFilenameHelper_h
 #define otbExtendedFilenameHelper_h
 
+#include <map>
+#include <vector>
+
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "OTBCommonExport.h"
+#include <string>
 
 namespace otb
 {
@@ -40,7 +44,7 @@ namespace otb
 class OTBCommon_EXPORT ExtendedFilenameHelper : public itk::Object
 {
 public:
-/** Standard class typedefs. */
+  /** Standard class typedefs. */
   typedef ExtendedFilenameHelper        Self;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -49,51 +53,60 @@ public:
   itkTypeMacro(ExtendedFilenameHelper, itk::Object);
   itkNewMacro(Self);
 
-  typedef std::map< std::string, std::string > OptionMapType;
+  typedef std::map<std::string, std::string> OptionMapType;
 
-  virtual void SetExtendedFileName(const char * extFname);
-  const OptionMapType & GetOptionMap(void) const;
-  
+  /** \deprecated const char* overload of SetExtendedFileName is deprecated, use std::string instead */
+  virtual void SetExtendedFileName(const char* extFname);
+
+  virtual void SetExtendedFileName(const std::string& extFname);
+
+  const OptionMapType& GetOptionMap(void) const;
+
   itkGetStringMacro(ExtendedFileName);
   itkGetStringMacro(SimpleFileName);
 
-  struct OTBCommon_EXPORT GenericBandRange : std::pair<int,int>
+  struct OTBCommon_EXPORT GenericBandRange : std::pair<int, int>
   {
-    GenericBandRange() {}
+    GenericBandRange()
+    {
+    }
 
     GenericBandRange(int a);
 
-    GenericBandRange(const std::pair<int,int>& a);
+    GenericBandRange(const std::pair<int, int>& a);
 
-    GenericBandRange(int a,int b);
+    GenericBandRange(int a, int b);
 
-    bool SetString(const std::string& str, size_t start=0 , size_t size=std::string::npos);
+    bool SetString(const std::string& str, size_t start = 0, size_t size = std::string::npos);
 
     void Print(std::ostream& os);
   };
 
   /**  Decode the string into a list of GenericBandRange, band indexes are
    *  1-based. */
-  std::vector<ExtendedFilenameHelper::GenericBandRange> GetGenericBandRange(const std::string &bandRange) const;
+  std::vector<ExtendedFilenameHelper::GenericBandRange> GetGenericBandRange(const std::string& bandRange) const;
 
   /** Resolve the list of band ranges into real band indexes, according to
    *  a total number of bands in the image. Note that the output indexes are
    *  zero-based (0 is the first component) */
-  bool ResolveBandRange(const std::string &bandRange, const unsigned int &nbBands, std::vector<unsigned int> &output) const;
+  bool ResolveBandRange(const std::string& bandRange, const unsigned int& nbBands, std::vector<unsigned int>& output) const;
 
 protected:
-  ExtendedFilenameHelper() {}
-  ~ExtendedFilenameHelper() override {}
+  ExtendedFilenameHelper()
+  {
+  }
+  ~ExtendedFilenameHelper() override
+  {
+  }
 
 private:
-  ExtendedFilenameHelper(const Self &);  //purposely not implemented
-  void operator =(const Self&);  //purposely not implemented
+  ExtendedFilenameHelper(const Self&) = delete;
+  void operator=(const Self&) = delete;
   itkSetStringMacro(SimpleFileName);
 
-  std::string                          m_ExtendedFileName;
-  std::string                          m_SimpleFileName;
-  OptionMapType                        m_OptionMap;
-
+  std::string   m_ExtendedFileName;
+  std::string   m_SimpleFileName;
+  OptionMapType m_OptionMap;
 };
 } // end namespace otb
 

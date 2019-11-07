@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+	<name>KmlFile</name>
+	<StyleMap id="parcel">
+		<Pair>
+			<key>normal</key>
+			<styleUrl>#parcelNormal</styleUrl>
+		</Pair>
+		<Pair>
+			<key>highlight</key>
+			<styleUrl>#parcelHighlight</styleUrl>
+		</Pair>
+	</StyleMap>
+	<Style id="parcelNormal">
+		<IconStyle>
+			<scale>0.8</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pal4/icon56.png</href>
+			</Icon>
+		</IconStyle>
+		<LabelStyle>
+			<scale>0</scale>
+		</LabelStyle>
+		<LineStyle>
+			<color>ff4090ff</color>
+			<width>10</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>00000000</color>
+		</PolyStyle>
+	</Style>
+	<Style id="parcelHighlight">
+		<IconStyle>
+			<scale>0.85</scale>
+			<Icon>
+				<href>http://maps.google.com/mapfiles/kml/pal4/icon48.png</href>
+			</Icon>
+		</IconStyle>
+		<LabelStyle>
+			<scale>0.9</scale>
+		</LabelStyle>
+		<LineStyle>
+			<color>ff07cefe</color>
+			<width>30</width>
+		</LineStyle>
+		<PolyStyle>
+			<color>5007cefe</color>
+		</PolyStyle>
+	</Style>
+	<Placemark>
+		<name>238 Franklyn St.</name>
+		<styleUrl>#parcel</styleUrl>
+		<MultiGeometry>
+			<Point>
+				<coordinates>-123.938788334,49.1646409443,0</coordinates>
+			</Point>
+			<Polygon>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+-123.93904811,49.16434558280001,0 -123.939274779,49.16457225540001,0 -123.939105984,49.1646449658,0 -123.93924107,49.1647800536,0 -123.938876261,49.16493630590001,0 -123.938424057,49.1646143977,0 -123.93904811,49.16434558280001,0 </coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</MultiGeometry>
+	</Placemark>
+</Document>
+</kml>

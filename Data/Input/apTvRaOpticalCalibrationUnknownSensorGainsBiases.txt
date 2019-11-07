@@ -1,0 +1,4 @@
+# Gain values for each band. Each value must be separated with colons (:), with eventual spaces. Blank lines not allowed.
+4.23908 : 6.88231 : 5.60224 : 7.39098 
+# Bias values for each band.
+0.0 : 0.0 : 0.0 : 0.0

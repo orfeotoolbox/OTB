@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -56,15 +56,15 @@ namespace otb
  *
  * \ingroup OTBStreaming
  */
-template <class TInputImage >
+template <class TInputImage>
 class ITK_EXPORT StreamingImageVirtualWriter : public itk::ImageToImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef StreamingImageVirtualWriter                       Self;
+  typedef StreamingImageVirtualWriter Self;
   typedef itk::ImageToImageFilter<TInputImage, TInputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -83,22 +83,21 @@ public:
   typedef typename StreamingManagerType::Pointer StreamingManagerPointerType;
 
   /** Dimension of input image. */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /**  Return the StreamingManager object responsible for dividing
    *   the region to write */
   StreamingManagerType* GetStreamingManager(void)
-    {
+  {
     return m_StreamingManager;
-    }
+  }
 
   /**  Set a user-specific implementation of StreamingManager
    *   used to divide the largest possible region in several divisions */
   void SetStreamingManager(StreamingManagerType* streamingManager)
-    {
+  {
     m_StreamingManager = streamingManager;
-    }
+  }
 
   /**  Set the streaming mode to 'stripped' and configure the number of strips
    *   which will be used to stream the image */
@@ -144,7 +143,7 @@ public:
   void Update() override;
 
   /** This override doesn't return a const ref on the actual boolean */
-  const bool & GetAbortGenerateData() const override;
+  const bool& GetAbortGenerateData() const override;
 
   void SetAbortGenerateData(const bool val) override;
 
@@ -160,33 +159,33 @@ protected:
   void GenerateInputRequestedRegion(void) override;
 
 private:
-  StreamingImageVirtualWriter(const StreamingImageVirtualWriter &); //purposely not implemented
-  void operator =(const StreamingImageVirtualWriter&); //purposely not implemented
+  StreamingImageVirtualWriter(const StreamingImageVirtualWriter&) = delete;
+  void operator=(const StreamingImageVirtualWriter&) = delete;
 
-  void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event )
+  void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject& event)
   {
     if (typeid(event) != typeid(itk::ProgressEvent))
-      {
+    {
       return;
-      }
+    }
 
     itk::ProcessObject* processObject = dynamic_cast<itk::ProcessObject*>(object);
     if (processObject)
-      {
+    {
       m_DivisionProgress = processObject->GetProgress();
-      }
+    }
 
     this->UpdateFilterProgress();
   }
 
   void UpdateFilterProgress()
   {
-    this->UpdateProgress( (m_DivisionProgress + m_CurrentDivision) / m_NumberOfDivisions );
+    this->UpdateProgress((m_DivisionProgress + m_CurrentDivision) / m_NumberOfDivisions);
   }
 
   unsigned int m_NumberOfDivisions;
   unsigned int m_CurrentDivision;
-  float m_DivisionProgress;
+  float        m_DivisionProgress;
 
   StreamingManagerPointerType m_StreamingManager;
 
@@ -200,7 +199,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbStreamingImageVirtualWriter.txx"
+#include "otbStreamingImageVirtualWriter.hxx"
 #endif
 
 #endif

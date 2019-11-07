@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,9 +24,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 #include "OTBMonteverdiCoreExport.h"
 
@@ -45,9 +43,7 @@
 //
 // ITK includes (sorted by alphabetic order)
 #if USE_VNL
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "vnl_vector.h"
-#endif //tag=QT4-boost-compatibility
 #endif
 
 //
@@ -55,9 +51,7 @@
 
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdTypes.h"
-#endif //tag=QT4-boost-compatibility
 
 
 /*****************************************************************************/
@@ -87,40 +81,25 @@ namespace mvd
 {
 /**
  */
-template< typename X, typename Y, typename K >
-void
-Lerp2( X& x, Y& y,
-       const K& k,
-       const X& x0, const Y& y0,
-       const X& x1, const Y& y1 );
+template <typename X, typename Y, typename K>
+void Lerp2(X& x, Y& y, const K& k, const X& x0, const Y& y0, const X& x1, const Y& y1);
 /**
  */
-template< typename X, typename Y >
-const Y&
-Lerp2( const X& x,
-       const X& x0, const Y& y0,
-       const X& x1, const Y& y1 );
+template <typename X, typename Y>
+const Y& Lerp2(const X& x, const X& x0, const Y& y0, const X& x1, const Y& y1);
 
 /**
  */
 #if USE_VNL
-template< typename T, unsigned int N >
-inline
-const vnl_vector< T, N >&
-Lerp( const T& k,
-      const vnl_vector< T, N >& v0,
-      const vnl_vector< T, N >& v1 );
+template <typename T, unsigned int N>
+inline const vnl_vector<T, N>& Lerp(const T& k, const vnl_vector<T, N>& v0, const vnl_vector<T, N>& v1);
 #endif // USE_VNL
 
 /**
  */
 #if USE_VNL
-template< typename T >
-inline
-const T&
-Lerp( const T& k,
-      const T& x0, const T& x1,
-      const T& y0, const T& y1 );
+template <typename T>
+inline const T& Lerp(const T& k, const T& x0, const T& x1, const T& y0, const T& y1);
 #endif // USE_VNL
 
 } // end namespace 'mvd'.
@@ -135,52 +114,37 @@ namespace otb
 namespace mvd
 {
 /*******************************************************************************/
-template< typename X, typename Y, typename K >
-void
-Lerp2( X& x, Y& y,
-       const K& k,
-       const X& x0, const Y& y0,
-       const X& x1, const Y& y1 )
+template <typename X, typename Y, typename K>
+void Lerp2(X& x, Y& y, const K& k, const X& x0, const Y& y0, const X& x1, const Y& y1)
 {
-  const K& _1_minus_k( 1 - k );
+  const K& _1_minus_k(1 - k);
 
   x = k * x1 + _1_minus_k * x0;
   y = k * y1 + _1_minus_k * y0;
 }
 
 /*******************************************************************************/
-template< typename X, typename Y, typename K >
-const Y&
-Lerp2( const X& x,
-       const X& x0, const Y& y0,
-       const X& x1, const Y& y1 )
+template <typename X, typename Y, typename K>
+const Y& Lerp2(const X& x, const X& x0, const Y& y0, const X& x1, const Y& y1)
 {
   return y0 + (x - x0) * (y1 - y0) / (x1 - x0);
 }
 
 /*******************************************************************************/
 #if USE_VNL
-template< typename T >
-inline
-const vnl_vector< T, N >&
-Lerp( const T& k,
-      const vnl_vector< T, N >& v0,
-      const vnl_vector< T, N >& v1 )
+template <typename T>
+inline const vnl_vector<T, N>& Lerp(const T& k, const vnl_vector<T, N>& v0, const vnl_vector<T, N>& v1)
 {
-  return k * v1 + ( T( 1 ) - k ) * v2;
+  return k * v1 + (T(1) - k) * v2;
 }
 #endif // USE_VNL
 
 /*******************************************************************************/
 #if USE_VNL
-template< typename T >
-inline
-const T&
-Lerp( const T& k,
-      const T& x0, const T& x1,
-      const T& y0, const T& y1 )
+template <typename T>
+inline const T& Lerp(const T& k, const T& x0, const T& x1, const T& y0, const T& y1)
 {
-  return Lerp( k, vnl_vector< T, 2 >( x0, x1 ), vnl_vector< T, 2 >( y0, y1 ) );
+  return Lerp(k, vnl_vector<T, 2>(x0, x1), vnl_vector<T, 2>(y0, y1));
 }
 #endif // USE_VNL
 

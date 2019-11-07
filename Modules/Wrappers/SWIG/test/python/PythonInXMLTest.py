@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -26,10 +26,10 @@
 #
 
 def test(otb, argv):
-	app = otb.Registry.CreateApplication('BandMath')
+    app = otb.Registry.CreateApplication('BandMath')
 
-	app.SetParameterString("inxml", argv[1])
-	app.UpdateParameters()
+    app.LoadParametersFromXML(argv[1])
+    #app.UpdateParameters()
 
-	app.SetParameterString("out"  , argv[-1])
-	app.ExecuteAndWriteOutput()
+    app.SetParameterString("out"  , argv[-1])
+    app.ExecuteAndWriteOutput()

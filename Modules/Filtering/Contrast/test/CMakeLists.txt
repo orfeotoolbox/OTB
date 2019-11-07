@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,13 +22,9 @@ otb_module_test()
 
 set(OTBContrastTests
 otbContrastTestDriver.cxx
-otbComputeHistoFilterNew.cxx
 otbComputeHistoFilter.cxx
-otbApplyGainFilterNew.cxx
 otbApplyGainFilter.cxx
-otbComputeGainLutFilterNew.cxx
 otbComputeGainLutFilter.cxx
-otbCLHistogramEqualizationFilterNew.cxx
 otbCLHistogramEqualizationFilter.cxx
 otbHelperCLAHE.cxx
 )
@@ -36,18 +32,6 @@ otbHelperCLAHE.cxx
 add_executable(otbContrastTestDriver ${OTBContrastTests})
 target_link_libraries(otbContrastTestDriver ${OTBContrast-Test_LIBRARIES})
 otb_module_target_label(otbContrastTestDriver)
-
-otb_add_test(NAME bfTuCLHistogramEqualizationFilterNew COMMAND otbContrastTestDriver
-  otbCLHistogramEqualizationFilterNew)
-
-otb_add_test(NAME bfTuApplyGainFilterNew COMMAND otbContrastTestDriver
-  otbApplyGainFilterNew)
-
-otb_add_test(NAME bfTuComputeGainLutFilterNew COMMAND otbContrastTestDriver
-  otbComputeGainLutFilterNew)
-
-otb_add_test(NAME bfTuComputeHistoFilterNew COMMAND otbContrastTestDriver
-  otbComputeHistoFilterNew)
 
 otb_add_test(NAME bfTvComputeHistoFilter COMMAND otbContrastTestDriver
   --compare-image ${EPSILON_7}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -25,19 +25,22 @@
 #include "itkVariableLengthVector.h"
 #include "otbEuclideanDistanceMetricWithMissingValue.h"
 
-int otbEuclideanDistanceMetricWithMissingValue(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbEuclideanDistanceMetricWithMissingValue(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
 
-  typedef itk::VariableLengthVector<double>                              VectorType;
+  typedef itk::VariableLengthVector<double>                                    VectorType;
   typedef otb::Statistics::EuclideanDistanceMetricWithMissingValue<VectorType> DistanceType;
 
   DistanceType::Pointer dist = DistanceType::New();
 
-  if (dist->IsMissingValue(0.0)) return EXIT_FAILURE;
+  if (dist->IsMissingValue(0.0))
+    return EXIT_FAILURE;
 
-  if (dist->IsMissingValue(1.0)) return EXIT_FAILURE;
+  if (dist->IsMissingValue(1.0))
+    return EXIT_FAILURE;
 
-  if (dist->IsMissingValue(-1.0)) return EXIT_FAILURE;
+  if (dist->IsMissingValue(-1.0))
+    return EXIT_FAILURE;
 
   /*
     std::cerr << "Is O Nan ?? -> " << dist->IsMissingValue( 0.0 ) << "\n";
@@ -48,7 +51,8 @@ int otbEuclideanDistanceMetricWithMissingValue(int itkNotUsed(argc), char * itkN
   double x = 0.0;
 
   dist->SetToMissingValue(x);
-  if (!dist->IsMissingValue(x)) return EXIT_FAILURE;
+  if (!dist->IsMissingValue(x))
+    return EXIT_FAILURE;
   // std::cerr << "Is x (=" << x << ") Nan ?? -> " << dist->IsMissingValue( x ) << "\n";
 
   return EXIT_SUCCESS;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,45 +21,9 @@
 #ifndef otbListEditItemModel_h
 #define otbListEditItemModel_h
 
-//
-// Configuration include.
-//// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "otbMacro.h"
-#endif //tag=QT4-boost-compatibility
-
 #include "OTBQtWidgetExport.h"
-
-/*****************************************************************************/
-/* INCLUDE SECTION                                                           */
-
-//
-// Qt includes (sorted by alphabetic order)
-//// Must be included before system/custom includes.
 #include <QtCore>
-
-//
-// System includes (sorted by alphabetic order)
-
-//
-// ITK includes (sorted by alphabetic order)
-
-//
-// OTB includes (sorted by alphabetic order)
-
-//
-// Monteverdi includes (sorted by alphabetic order)
-
-
-/*****************************************************************************/
-/* PRE-DECLARATION SECTION                                                   */
-
-//
-// External classes pre-declaration.
-namespace
-{
-
-}
 
 namespace otb
 {
@@ -67,13 +31,8 @@ namespace otb
 namespace Wrapper
 {
 
-//
-// Internal classes pre-declaration.
+// Internal classes forward declarations
 class StringListInterface;
-
-
-/*****************************************************************************/
-/* CLASS DEFINITION SECTION                                                  */
 
 /**
  * \class ListEditItemModel
@@ -82,20 +41,13 @@ class StringListInterface;
  *
  * \brief WIP.
  */
-class OTBQtWidget_EXPORT ListEditItemModel :
-    public QAbstractItemModel
+class OTBQtWidget_EXPORT ListEditItemModel : public QAbstractItemModel
 {
-
-  /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
 
   Q_OBJECT;
 
-  /*-[ PUBLIC SECTION ]------------------------------------------------------*/
-
-//
-// Public types.
+  // Public types
 public:
-
   enum Columns
   {
     COLUMN_NONE = -1,
@@ -113,176 +65,91 @@ public:
     USER_ROLE_FILTER,
   };
 
-//
-// Public methods.
+  // Public methods
 public:
-
   /** \brief Constructor. */
-  ListEditItemModel( StringListInterface *,
-		     QObject * p = nullptr );
+  ListEditItemModel(StringListInterface*, QObject* p = nullptr);
 
   /** \brief Destructor. */
   ~ListEditItemModel() override;
 
-  //
   // QAbstractItemModel overloads.
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#columnCount
    */
-  int columnCount( const QModelIndex & p = QModelIndex() ) const override;
+  int columnCount(const QModelIndex& p = QModelIndex()) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#data
    */
-  QVariant
-    data( const QModelIndex & index,
-	  int role = Qt::DisplayRole ) const override;
+  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
    */
-  Qt::ItemFlags flags( const QModelIndex & index ) const override;
+  Qt::ItemFlags flags(const QModelIndex& index) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#hasChildren
    */
-  bool hasChildren( const QModelIndex & p = QModelIndex() ) const override;
+  bool hasChildren(const QModelIndex& p = QModelIndex()) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#headerData
    */
-  QVariant headerData( int section,
-                               Qt::Orientation orientation,
-                               int role = Qt::DisplayRole ) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#index
    */
-  QModelIndex
-    index( int row,
-           int column,
-           const QModelIndex & p = QModelIndex() ) const override;
+  QModelIndex index(int row, int column, const QModelIndex& p = QModelIndex()) const override;
 
   /**
    * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#insertRow
    */
-  bool
-    insertRow( int row, const QModelIndex & parent = QModelIndex() );
+  bool insertRow(int row, const QModelIndex& parent = QModelIndex());
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#insertRows
    */
-  bool
-    insertRows( int row,
-                int count,
-                const QModelIndex & p = QModelIndex() ) override;
+  bool insertRows(int row, int count, const QModelIndex& p = QModelIndex()) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#parent
    */
-  QModelIndex parent( const QModelIndex & index ) const override;
+  QModelIndex parent(const QModelIndex& index) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#removeRows
    */
-  bool
-    removeRows( int row,
-                int count,
-                const QModelIndex & p = QModelIndex() ) override;
+  bool removeRows(int row, int count, const QModelIndex& p = QModelIndex()) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#rowCount
    */
-  int rowCount( const QModelIndex & p = QModelIndex() ) const override;
+  int rowCount(const QModelIndex& p = QModelIndex()) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#setData
    */
-  bool
-    setData( const QModelIndex & index,
-             const QVariant & value,
-             int role = Qt::EditRole ) override;
+  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
-  /** */
-  virtual bool Swap( int, int );
+  virtual bool Swap(int, int);
 
-  /** */
   virtual bool IsInput() const;
 
-  /** */
   virtual QString GetFilter() const;
 
-  /** */
   virtual bool IsBrowsable() const;
 
-  /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
-
-//
-// Public SLOTS.
-public slots:
-
-  /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
-
-//
-// Signals.
-signals:
-
-  /*-[ PROTECTED SECTION ]---------------------------------------------------*/
-
-//
-// Protected methods.
-protected:
-
-//
-// Protected attributes.
-protected:
-
-  /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
-
-//
-// Private methods.
+  // Private attributes
 private:
-
-
-//
-// Private attributes.
-private:
-  /** */
-  StringListInterface * m_StringList;
-
-  /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
-
-//
-// Slots.
-private slots:
+  StringListInterface* m_StringList;
 };
 
 } // end namespace 'Wrapper'.
 
 } // end namespace 'otb'.
-
-/*****************************************************************************/
-/* INLINE SECTION                                                            */
-
-//
-// Qt includes (sorted by alphabetic order)
-//// Must be included before system/custom includes.
-
-//
-// System includes (sorted by alphabetic order)
-
-//
-// ITK includes (sorted by alphabetic order)
-
-//
-// OTB includes (sorted by alphabetic order)
-
-//
-// Monteverdi includes (sorted by alphabetic order)
-
-namespace otb
-{
-} // end namespace 'otb'
 
 #endif // otbListEditItemModel_h

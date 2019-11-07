@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,9 +25,7 @@
 //
 // Configuration include.
 //// Included at first position before any other ones.
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "ConfigureMonteverdi.h"
-#endif //tag=QT4-boost-compatibility
 
 
 /*****************************************************************************/
@@ -48,9 +46,7 @@
 #include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
 #include "mvdAbstractModel.h"
-#endif //tag=QT4-boost-compatibility
 
 
 /*****************************************************************************/
@@ -77,8 +73,7 @@ class ApplicationLauncher;
  * \ingroup OTBMonteverdiGUI
  *
  */
-class OTBMonteverdiGUI_EXPORT OTBApplicationsModel :
-    public AbstractModel
+class OTBMonteverdiGUI_EXPORT OTBApplicationsModel : public AbstractModel
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -87,16 +82,14 @@ class OTBMonteverdiGUI_EXPORT OTBApplicationsModel :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
-
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  OTBApplicationsModel( QObject* p =NULL );
+  OTBApplicationsModel(QObject* p = NULL);
 
   /** \brief Destructor. */
   ~OTBApplicationsModel() override;
@@ -122,39 +115,34 @@ public:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   //
   // AbstractModel methods.
 
-  void virtual_BuildModel( void* context =NULL ) override;
+  void virtual_BuildModel(void* context = NULL) override;
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types.
+  //
+  // Private types.
 private:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /**
    */
   ApplicationsBrowser* m_ApplicationsBrowser;
@@ -165,8 +153,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 
@@ -181,36 +169,24 @@ private slots:
 namespace mvd
 {
 /*****************************************************************************/
-inline
-const ApplicationsBrowser*
-OTBApplicationsModel
-::GetBrowser() const
+inline const ApplicationsBrowser* OTBApplicationsModel::GetBrowser() const
 {
   return m_ApplicationsBrowser;
 }
 
 /*****************************************************************************/
-inline
-ApplicationsBrowser*
-OTBApplicationsModel
-::GetBrowser()
+inline ApplicationsBrowser* OTBApplicationsModel::GetBrowser()
 {
   return m_ApplicationsBrowser;
 }
 /*****************************************************************************/
-inline
-const ApplicationLauncher*
-OTBApplicationsModel
-::GetLauncher() const
+inline const ApplicationLauncher* OTBApplicationsModel::GetLauncher() const
 {
   return m_ApplicationLauncher;
 }
 
 /*****************************************************************************/
-inline
-ApplicationLauncher*
-OTBApplicationsModel
-::GetLauncher()
+inline ApplicationLauncher* OTBApplicationsModel::GetLauncher()
 {
   return m_ApplicationLauncher;
 }

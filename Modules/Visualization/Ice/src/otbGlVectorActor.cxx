@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -20,6 +20,8 @@
 
 #include "otbGlVectorActor.h"
 #include "otbViewSettings.h"
+#include "otbMinimalShader.h"
+#include "otbCast.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -107,7 +109,6 @@ GlVectorActor::GlVectorActor()
     m_PointMarkerSize(5),
     m_ViewportForwardRotationTransform(RigidTransformType::New()),
     m_ViewportBackwardRotationTransform(RigidTransformType::New())
-    
 {
   m_Color.Fill(0);
   m_Color[0]=1.0;
@@ -135,6 +136,16 @@ GlVectorActor::~GlVectorActor()
     glDeleteLists(m_DisplayList,1);
     }
 
+}
+
+void GlVectorActor::CreateShader()
+{
+  if (m_Shader.IsNull())
+    {
+    MinimalShader::Pointer shader( MinimalShader::New() );
+    m_Shader = shader;
+    shader->SetColor(m_Color.GetDataPointer(), &m_Alpha);
+    }
 }
 
 void GlVectorActor::SetFill(bool flag)
@@ -210,8 +221,8 @@ void GlVectorActor::SetCurrentLayer(const std::string & layername)
   m_CurrentLayer = m_OGRDataSource->GetLayerChecked(layername).GetName();
   
   // Clear transforms
-  m_VectorToViewportTransform = ITK_NULLPTR;
-  m_ViewportToVectorTransform = ITK_NULLPTR;
+  m_VectorToViewportTransform = nullptr;
+  m_ViewportToVectorTransform = nullptr;
 
   // Clear features
   m_InternalFeatures.clear();
@@ -339,7 +350,7 @@ void GlVectorActor::UpdateData()
     m_ExtentLRX = lrx;
     m_ExtentLRY = lry;
 
-    double areaOfScreenPixel = vcl_abs(lrx-ulx)*vcl_abs(lry-uly)
+    double areaOfScreenPixel = std::abs(lrx-ulx)*std::abs(lry-uly)
       /(settings->GetViewportSize()[0]*settings->GetViewportSize()[1]);
 
     OGRPolygon spatialFilter;
@@ -371,7 +382,7 @@ void GlVectorActor::UpdateData()
       {
       std::ostringstream oss;
       oss<<"SELECT * FROM "<<m_CurrentLayer<<" WHERE OGR_GEOM_AREA>"<<100*areaOfScreenPixel;
-      filtered = m_OGRDataSource->ExecuteSQL(oss.str(), &spatialFilter,ITK_NULLPTR);
+      filtered = m_OGRDataSource->ExecuteSQL(oss.str(), &spatialFilter,nullptr);
       }
    
     m_InternalFeatures.clear();
@@ -386,7 +397,7 @@ void GlVectorActor::UpdateData()
       newInternalFeature.m_SourceFeature = srcFeature.Clone();
       if(m_OptimizedRenderingActive)
         {
-        newInternalFeature.m_SourceFeature.SetGeometry(srcFeature.GetGeometry()->SimplifyPreserveTopology(vcl_sqrt(areaOfScreenPixel)));
+        newInternalFeature.m_SourceFeature.SetGeometry(srcFeature.GetGeometry()->SimplifyPreserveTopology(std::sqrt(areaOfScreenPixel)));
         }
       m_InternalFeatures.push_back(newInternalFeature);
       }
@@ -427,7 +438,7 @@ void GeometryRender(const OGRPolygon * in, GLUtesselator * tesselator, bool fill
 
       gluTessProperty(tesselator, GLU_TESS_BOUNDARY_ONLY, !fill);
       // Begin a new polygon
-      gluTessBeginPolygon(tesselator, ITK_NULLPTR);
+      gluTessBeginPolygon(tesselator, nullptr);
       
       // Render the outer boundary
       gluTessBeginContour(tesselator);
@@ -473,7 +484,7 @@ void GeometryRender(const OGRPolygon * in, GLUtesselator * tesselator, bool fill
 
         gluTessProperty(tesselator, GLU_TESS_BOUNDARY_ONLY, true);
         // Begin a new polygon
-        gluTessBeginPolygon(tesselator, ITK_NULLPTR);
+        gluTessBeginPolygon(tesselator, nullptr);
         
         // Render the outer boundary
         gluTessBeginContour(tesselator);
@@ -624,17 +635,20 @@ void GlVectorActor::Render()
     UpdateDisplayList();
     }
 
+  m_Shader->LoadShader();
+  m_Shader->SetupShader();
+
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
    glEnable(GL_LINE_SMOOTH);
    glLineWidth(m_LineWidth);
-   glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Alpha);
    
    glCallList(m_DisplayList);
 
    glDisable(GL_LINE_SMOOTH);
    glDisable(GL_BLEND);
-   
+
+  m_Shader->UnloadShader();
 }
 
 

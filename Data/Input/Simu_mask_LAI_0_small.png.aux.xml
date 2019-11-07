@@ -1,0 +1,11 @@
+<PAMDataset>
+  <SRS>GEOGCS[&quot;GCS_WGS_1984&quot;,
+    DATUM[&quot;D_WGS_1984&quot;,
+        SPHEROID[&quot;WGS_1984&quot;,6378137,298.257223563]],
+    PRIMEM[&quot;Greenwich&quot;,0],
+    UNIT[&quot;degree&quot;,0.0174532925199433]]</SRS>
+  <GeoTransform>  5.0105600000000000e+05,  8.0000000000000000e+00,  0.0000000000000000e+00,  1.8366560000000000e+06,  0.0000000000000000e+00, -8.0000000000000000e+00</GeoTransform>
+  <Metadata>
+    <MDI key="AREA_OR_POINT">Area</MDI>
+  </Metadata>
+</PAMDataset>

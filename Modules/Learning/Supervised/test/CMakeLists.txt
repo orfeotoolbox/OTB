@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -27,10 +27,8 @@ otbMachineLearningModelCanRead.cxx
 otbTrainMachineLearningModel.cxx
 otbImageClassificationFilter.cxx
 otbMachineLearningRegressionTests.cxx
-otbExhaustiveExponentialOptimizerNew.cxx
 otbExhaustiveExponentialOptimizerTest.cxx
 otbLabelMapClassifier.cxx
-otbSVMCrossValidationCostFunctionNew.cxx
 otbSVMMarginSampler.cxx
 )
 
@@ -57,14 +55,8 @@ otb_add_test(NAME leTvConfusionMatrixCalculatorUpdateWithBaseline COMMAND otbSup
 otb_add_test(NAME leTvConfusionMatrixCalculatorSetListSamples COMMAND otbSupervisedTestDriver
   otbConfusionMatrixCalculatorSetListSamples 1000 4)
 
-otb_add_test(NAME leTuConfusionMatrixCalculatorNew COMMAND otbSupervisedTestDriver
-  otbConfusionMatrixCalculatorNew)
-
 otb_add_test(NAME leTvConfusionMatrixMeasurementsTest COMMAND otbSupervisedTestDriver
   otbConfusionMatrixMeasurementsTest)
-
-otb_add_test(NAME leTuConfusionMatrixMeasurementsNew COMMAND otbSupervisedTestDriver
-  otbConfusionMatrixMeasurementsNew)
 
 otb_add_test(NAME leTvConfusionMatrixConcatenateTest COMMAND otbSupervisedTestDriver
   otbConfusionMatrixConcatenateTest
@@ -74,9 +66,6 @@ otb_add_test(NAME leTvConfusionMatrixConcatenateTest COMMAND otbSupervisedTestDr
   ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
   ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
   ${INPUTDATA}/Classification/QB_1_ortho_C6.csv)
-
-otb_add_test(NAME leTuExhaustiveExponentialOptimizerNew COMMAND otbSupervisedTestDriver
-  otbExhaustiveExponentialOptimizerNew)
 
 otb_add_test(NAME leTvExhaustiveExponentialOptimizerTest COMMAND otbSupervisedTestDriver
   --compare-ascii ${NOTOL}

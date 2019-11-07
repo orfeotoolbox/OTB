@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,19 +19,17 @@
  */
 
 
-
-
 #include <cstdlib>
 #include "otbMath.h"
 #include "otbOrientationPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 #include "itkMacro.h"
 
-int otbOrientationPath(int itkNotUsed(argc), char * argv[])
+int otbOrientationPath(int itkNotUsed(argc), char* argv[])
 {
-  double Theta((double) ::atof(argv[1]));
+  double Theta((double)::atof(argv[1]));
 
-  const unsigned int Dimension = 2;
+  const unsigned int                             Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef otb::OrientationPathFunction<PathType> FunctionType;
   typedef FunctionType::RealType                 RealType;
@@ -46,8 +44,8 @@ int otbOrientationPath(int itkNotUsed(argc), char * argv[])
   cindex[0] = 30;
   cindex[1] = 30;
   pathElt->AddVertex(cindex);
-  cindex[0] += 100 * vcl_cos(Theta);
-  cindex[1] += 100 * vcl_sin(Theta);
+  cindex[0] += 100 * std::cos(Theta);
+  cindex[1] += 100 * std::sin(Theta);
   pathElt->AddVertex(cindex);
 
   FunctionType::Pointer function = FunctionType::New();
@@ -56,11 +54,11 @@ int otbOrientationPath(int itkNotUsed(argc), char * argv[])
   RealType ResultTheta = function->Evaluate();
   std::cout.precision(10);
   std::cout << "Orientation found : " << ResultTheta << std::endl;
-  if (vcl_abs(static_cast<double>(ResultTheta - Theta)) >= 10e-15)
-    {
+  if (std::abs(static_cast<double>(ResultTheta - Theta)) >= 10e-15)
+  {
     std::cout << "Error in Theta estimation:" << (ResultTheta - Theta) << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

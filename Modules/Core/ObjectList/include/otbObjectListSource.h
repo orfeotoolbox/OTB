@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -61,8 +61,8 @@ public:
 
   /** Some typedefs. */
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
-  typedef TOutputList                   OutputListType;
-  typedef typename TOutputList::Pointer OutputListPointer;
+  typedef TOutputList                                        OutputListType;
+  typedef typename TOutputList::Pointer                      OutputListPointer;
 
   typedef itk::DataObject::Pointer DataObjectPointer;
 
@@ -116,7 +116,7 @@ public:
   * how the mini-pipeline will execute (in other words, the outer
   * filter's pipeline mechanism must be consistent with what the
    * mini-pipeline will do). */
-  void GraftOutput(itk::DataObject *graft);
+  void GraftOutput(itk::DataObject* graft);
 
   /** Graft the specified data object onto this ProcessObject's idx'th
   * output. This is the similar to GraftOutput method except is
@@ -124,7 +124,7 @@ public:
   * must be a valid output number (less than
   * ProcessObject::GetNumberOfOutputs()). See the GraftOutput for
    * general usage information. */
-  void GraftNthOutput(DataObjectPointerArraySizeType idx, itk::DataObject *graft);
+  void GraftNthOutput(DataObjectPointerArraySizeType idx, itk::DataObject* graft);
 
   /** Get the output data of this process object.  The output of this
   * function is not valid until an appropriate Update() method has
@@ -166,19 +166,21 @@ public:
   * Region, which can be set using ImageBase::SetRequestedRegion().
   * By default, the largest possible region is requested.
    */
-  OutputListType * GetOutput(void);
-  OutputListType * GetOutput(DataObjectPointerArraySizeType idx);
+  OutputListType* GetOutput(void);
+  OutputListType* GetOutput(DataObjectPointerArraySizeType idx);
 
 protected:
   /** Constructor */
   ObjectListSource();
   /** Destructor */
-  ~ObjectListSource() override {}
+  ~ObjectListSource() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Ensure that the output lists are cleared before processing */
-  virtual void  AllocateOutputs();
+  virtual void AllocateOutputs();
 
   /** ObjectListSource can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -193,15 +195,14 @@ protected:
   void GenerateData(void) override;
 
 private:
-  ObjectListSource(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
+  ObjectListSource(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbObjectListSource.txx"
+#include "otbObjectListSource.hxx"
 #endif
 
 #endif

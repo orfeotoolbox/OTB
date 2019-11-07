@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -58,99 +58,81 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-SerializableInterface
-::SerializableInterface()
+SerializableInterface::SerializableInterface()
 {
 }
 
 /*******************************************************************************/
-SerializableInterface
-::~SerializableInterface()
+SerializableInterface::~SerializableInterface()
 {
 }
 
 /*******************************************************************************/
-void
-SerializableInterface
-::Read( const QString& filename, Mode mode )
+void SerializableInterface::Read(const QString& filename, Mode mode)
 {
   // File instance.
-  QFile file( filename );
+  QFile file(filename);
 
   // Setup open-mode.
-  QIODevice::OpenMode openMode( QIODevice::ReadOnly );
+  QIODevice::OpenMode openMode(QIODevice::ReadOnly);
 
-  if( mode==MODE_TEXT )
+  if (mode == MODE_TEXT)
     openMode |= QIODevice::Text;
 
   // Open file on device.
-  if( !file.open( openMode ) )
-    throw SystemError(
-      ToStdString(
-	QString( "('%1')" ).arg( filename ) )
-    );
+  if (!file.open(openMode))
+    throw SystemError(ToStdString(QString("('%1')").arg(filename)));
 
   try
-    {
+  {
     // Read file context.
-    virtual_Read( &file );
-    }
-  catch( SystemError& syserr )
-    {
+    virtual_Read(&file);
+  }
+  catch (SystemError& syserr)
+  {
     // Catch any SystemError thrown by DatasetDescriptor::Write() and
     // morph it into the same SystemError containing filename
     // information.
-    syserr = SystemError(
-      ToStdString(
-	QString( "('%1')" ).arg( filename ) )
-    );
+    syserr = SystemError(ToStdString(QString("('%1')").arg(filename)));
 
     // Throw morphed SystemError.
     throw syserr;
-    }
+  }
 
   // File is closed by automatic scope detruction of QFile instance.
 }
 
 /*******************************************************************************/
-void
-SerializableInterface
-::Write( const QString& filename, Mode mode ) const
+void SerializableInterface::Write(const QString& filename, Mode mode) const
 {
   // File instance.
-  QFile file( filename );
+  QFile file(filename);
 
   // Setup open-mode.
-  QIODevice::OpenMode openMode( QIODevice::WriteOnly );
+  QIODevice::OpenMode openMode(QIODevice::WriteOnly);
 
-  if( mode==MODE_TEXT )
+  if (mode == MODE_TEXT)
     openMode |= QIODevice::Text;
 
   // Open file on device.
-  if( !file.open( openMode ) )
-    throw SystemError(
-      ToStdString(
-	QString( "('%1')" ).arg( filename ) )
-    );
+  if (!file.open(openMode))
+    throw SystemError(ToStdString(QString("('%1')").arg(filename)));
 
   try
-    {
+  {
     // Write file context.
-    virtual_Write( file );
-    }
-  catch( SystemError& syserr )
-    {
+    virtual_Write(file);
+  }
+  catch (SystemError& syserr)
+  {
     // Catch any SystemError thrown by DatasetDescriptor::Write() and
     // morph it into the same SystemError containing filename
     // information.
-    syserr = SystemError(
-      ToStdString(
-	QString( "('%1')" ).arg( filename ) )
-    );
+    syserr = SystemError(ToStdString(QString("('%1')").arg(filename)));
 
     // Throw morphed SystemError.
     throw syserr;
-    }
+  }
 
   // File is closed by automatic scope detruction of QFile instance.
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<FeatureStatistics>
+    <Statistic name="mean">
+        <StatisticVector value="236.171" />
+        <StatisticVector value="326.549" />
+        <StatisticVector value="208.376" />
+        <StatisticVector value="380.566" />
+        <StatisticVector value="36.8817" />
+        <StatisticVector value="123.326" />
+        <StatisticVector value="132.215" />
+        <StatisticVector value="424.022" />
+    </Statistic>
+    <Statistic name="stddev">
+        <StatisticVector value="33.2164" />
+        <StatisticVector value="63.3579" />
+        <StatisticVector value="67.6316" />
+        <StatisticVector value="134.318" />
+        <StatisticVector value="62.0664" />
+        <StatisticVector value="147.451" />
+        <StatisticVector value="129.375" />
+        <StatisticVector value="390.287" />
+    </Statistic>
+</FeatureStatistics>

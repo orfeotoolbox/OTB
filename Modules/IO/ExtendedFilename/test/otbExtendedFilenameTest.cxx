@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,16 +29,16 @@
 int otbImageFileReaderWithExtendedFilename(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * inputFilename  = argv[1];
-  const char * outputFilename1 = argv[2];
-  const char * outputFilename2 = argv[3];
+  const char* inputFilename   = argv[1];
+  const char* outputFilename1 = argv[2];
+  const char* outputFilename2 = argv[3];
 
-  typedef float InputPixelType;
+  typedef float      InputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
 
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   ReaderType::Pointer reader = ReaderType::New();
 
@@ -54,7 +54,7 @@ int otbImageFileReaderWithExtendedFilename(int itkNotUsed(argc), char* argv[])
   file1 << reader->GetOutput()->GetImageKeywordlist();
 
   file2 << "ProjRef: " << reader->GetOutput()->GetProjectionRef() << std::endl;
-  file2 << "Origin: "  << reader->GetOutput()->GetOrigin() << std::endl;
+  file2 << "Origin: " << reader->GetOutput()->GetOrigin() << std::endl;
   file2 << "Spacing: " << reader->GetOutput()->GetSignedSpacing() << std::endl;
 
   return EXIT_SUCCESS;
@@ -63,16 +63,16 @@ int otbImageFileReaderWithExtendedFilename(int itkNotUsed(argc), char* argv[])
 int otbImageFileWriterWithExtendedFilename(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   typedef unsigned char InputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
 
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<InputImageType>  WriterType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<InputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();

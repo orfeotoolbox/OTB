@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -26,6 +26,9 @@ otb_module(OTBAppMathParserX
     OTBMathParserX
     OTBObjectList
 
+  TEST_DEPENDS
+    OTBTestKernel
+    
   DESCRIPTION
     "${DOCUMENTATION}"
 )

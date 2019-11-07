@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -19,9 +19,6 @@
 #
 
 project(PatentedExamples)
-
-add_executable(EstimateAffineTransformationExample EstimateAffineTransformationExample.cxx)
-target_link_libraries(EstimateAffineTransformationExample ${OTB_LIBRARIES})
 
 if (OTBSiftFast_LOADED)
 add_executable(SIFTDisparityMapEstimation SIFTDisparityMapEstimation.cxx)

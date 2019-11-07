@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -26,7 +26,6 @@
 #ifndef TemperatureSettingsRecord_h
 #define TemperatureSettingsRecord_h
 
-#include <iostream>
 #include <RadarSat/RadarSatRecord.h>
 
 namespace ossimplugins

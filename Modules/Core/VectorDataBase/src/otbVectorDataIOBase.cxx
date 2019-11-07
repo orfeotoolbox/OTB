@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -18,51 +18,44 @@
  * limitations under the License.
  */
 
+#include <ostream>
 
 #include "otbVectorDataIOBase.h"
 
 namespace otb
 {
-VectorDataIOBase
-::VectorDataIOBase() :
-  m_ByteOrder(OrderNotApplicable)
+VectorDataIOBase::VectorDataIOBase() : m_ByteOrder(OrderNotApplicable)
 {
   this->Reset(false);
 }
 
-void
-VectorDataIOBase
-::Reset(const bool)
+void VectorDataIOBase::Reset(const bool)
 {
   m_Initialized = false;
-  m_FileName = "";
+  m_FileName    = "";
 }
 
 
-VectorDataIOBase
-::~VectorDataIOBase()
-{}
+VectorDataIOBase::~VectorDataIOBase()
+{
+}
 
-std::string
-VectorDataIOBase
-::GetByteOrderAsString(ByteOrder t) const
+std::string VectorDataIOBase::GetByteOrderAsString(ByteOrder t) const
 {
   std::string s;
   switch (t)
-    {
-    case BigEndian:
-      return s = "BigEndian";
-    case LittleEndian:
-      return s = "LittleEndian";
-    case OrderNotApplicable:
-    default:
-      return s = "OrderNotApplicable";
-    }
+  {
+  case BigEndian:
+    return s = "BigEndian";
+  case LittleEndian:
+    return s = "LittleEndian";
+  case OrderNotApplicable:
+  default:
+    return s = "OrderNotApplicable";
+  }
 }
 
-void
-VectorDataIOBase
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void VectorDataIOBase::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
@@ -70,4 +63,4 @@ VectorDataIOBase
   os << indent << "ByteOrder: " << this->GetByteOrderAsString(m_ByteOrder) << std::endl;
 }
 
-} //namespace otb
+} // namespace otb

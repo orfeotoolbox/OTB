@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,16 +21,15 @@
 #ifndef otbWrapperInputImageParameterMacros__h
 #define otbWrapperInputImageParameterMacros__h
 
-#define otbGetImageMacro(image)                       \
-  image##Type *                                       \
-  InputImageParameter::Get##image ()                  \
-  {                                                   \
-    return this->GetImage< image##Type > ();          \
+#define otbGetImageMacro(image)                  \
+  image##Type* InputImageParameter::Get##image() \
+  {                                              \
+    return this->GetImage<image##Type>();        \
   }
 
 #define otbGetImageAndVectorImageMacro(type) \
   otbGetImageMacro(type##Image);             \
-  otbGetImageMacro(type##VectorImage); 
+  otbGetImageMacro(type##VectorImage);
 
 
 #endif

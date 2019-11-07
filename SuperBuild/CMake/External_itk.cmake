@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -124,33 +124,30 @@ ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(ITK ZLIB FFTW)
 ADD_SUPERBUILD_CMAKE_VAR(ITK ZLIB_INCLUDE_DIR)
 ADD_SUPERBUILD_CMAKE_VAR(ITK ZLIB_LIBRARY)
 
-# By default activate FFTW, but with an external fftw build
 # These variables are used in ITK to initialize the value of the ITK_USE_FFTW_XXX options
+list(APPEND ITK_SB_CONFIG
+  -DUSE_FFTWF:BOOL=ON
+  -DUSE_FFTWD:BOOL=ON
+  -DUSE_SYSTEM_FFTW:BOOL=ON
+  )
+ADD_SUPERBUILD_CMAKE_VAR(ITK FFTW_INCLUDE_PATH)
+
 if (WIN32)
   list(APPEND ITK_SB_CONFIG
-    -DUSE_FFTWF:BOOL=OFF
-    -DUSE_FFTWD:BOOL=OFF
     -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS:BOOL=ON
     )
-else()
-  list(APPEND ITK_SB_CONFIG
-    -DUSE_FFTWF:BOOL=ON
-    -DUSE_FFTWD:BOOL=ON
-    -DUSE_SYSTEM_FFTW:BOOL=ON
-    )
-  ADD_SUPERBUILD_CMAKE_VAR(ITK FFTW_INCLUDE_PATH)
 endif()
 
 #variables are later used in packaging
 set(SB_ITK_VERSION_MAJOR "4")
-set(SB_ITK_VERSION_MINOR "12")
+set(SB_ITK_VERSION_MINOR "13")
 
 set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-${SB_ITK_VERSION_MAJOR}.${SB_ITK_VERSION_MINOR})
 
 ExternalProject_Add(ITK
   PREFIX ITK
-  URL "https://sourceforge.net/projects/itk/files/itk/4.12/InsightToolkit-4.12.0.tar.gz"
-  URL_MD5 561a403f93c88c64085b5623e8e61f79
+  URL "https://sourceforge.net/projects/itk/files/itk/4.13/InsightToolkit-4.13.1.tar.gz"
+  URL_MD5 c7e229802c4ee64e1b2a6d48b1df67e9
   SOURCE_DIR ${ITK_SB_SRC}
   BINARY_DIR ${ITK_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

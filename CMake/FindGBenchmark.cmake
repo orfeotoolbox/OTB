@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -41,7 +41,7 @@ find_library(GBENCHMARK_LIBRARY NAMES benchmark)
 mark_as_advanced(GBENCHMARK_LIBRARY)
 
 include(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(GBENCHMARK
+find_package_handle_standard_args(GBENCHMARK
   REQUIRED_VARS GBENCHMARK_LIBRARY GBENCHMARK_INCLUDE_DIR
   )
 #VERSION_VAR GBENCHMARK_VERSION_STRING

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -39,6 +39,8 @@ set(cmake_gen)
 if(WIN32)
   set(cmake_gen "-GNinja")
 endif()
+
+message( "CMAKE_PREFIX_PATH: '${CMAKE_PREFIX_PATH}'" )
 
 execute_process(
   COMMAND ${CMAKE_COMMAND}
@@ -93,5 +95,5 @@ if( build_Pipeline_rv )
   message(FATAL_ERROR "Build FAILED. build_Pipeline_ov=${build_Pipeline_ov}")
   return()
 else()
-  message("Build PASSED. build_Pipeline_ov=${build_Pipeline_ov}")  
+  message("Build PASSED. build_Pipeline_ov=${build_Pipeline_ov}")
 endif()

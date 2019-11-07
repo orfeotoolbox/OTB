@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -50,18 +50,17 @@ namespace otb
  *
  * \ingroup OTBLabelMap
  */
-template < class TLabel, unsigned int VImageDimension, class TAttributesValue, class TClassLabel >
+template <class TLabel, unsigned int VImageDimension, class TAttributesValue, class TClassLabel>
 class ITK_EXPORT AttributesMapLabelObjectWithClassLabel : public AttributesMapLabelObject<TLabel, VImageDimension, TAttributesValue>
 {
 public:
   /** Standard class typedefs */
-  typedef AttributesMapLabelObjectWithClassLabel      Self;
-  typedef AttributesMapLabelObject<TLabel,
-      VImageDimension, TAttributesValue>  Superclass;
-  typedef itk::LabelObject<TLabel, VImageDimension>    LabelObjectType;
-  typedef itk::SmartPointer<Self>                     Pointer;
-  typedef itk::SmartPointer<const Self>               ConstPointer;
-  typedef itk::WeakPointer <const Self>               ConstWeakPointer;
+  typedef AttributesMapLabelObjectWithClassLabel Self;
+  typedef AttributesMapLabelObject<TLabel, VImageDimension, TAttributesValue> Superclass;
+  typedef itk::LabelObject<TLabel, VImageDimension> LabelObjectType;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::WeakPointer<const Self>  ConstWeakPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -72,23 +71,23 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, VImageDimension);
 
   /** Class label typedef */
-  typedef TClassLabel                                  ClassLabelType;
+  typedef TClassLabel ClassLabelType;
 
   /** Set the class label */
   void SetClassLabel(const ClassLabelType& label)
   {
-    m_ClassLabel = label;
+    m_ClassLabel    = label;
     m_HasClassLabel = true;
   }
 
   /** Get the class label. Throws an exception if no class label is
    *  available */
-  const ClassLabelType & GetClassLabel() const
+  const ClassLabelType& GetClassLabel() const
   {
-    if(!m_HasClassLabel)
-      {
-      itkExceptionMacro(<<"LabelObject has no class label!");
-      }
+    if (!m_HasClassLabel)
+    {
+      itkExceptionMacro(<< "LabelObject has no class label!");
+    }
     return m_ClassLabel;
   }
 
@@ -101,56 +100,58 @@ public:
   /** Invalidate the class label if any */
   void RemoveClassLabel()
   {
-    m_ClassLabel = itk::NumericTraits<ClassLabelType>::Zero;
+    m_ClassLabel    = itk::NumericTraits<ClassLabelType>::Zero;
     m_HasClassLabel = false;
   }
 
-  void CopyAttributesFrom( const LabelObjectType * lo ) override
-    {
-    Superclass::CopyAttributesFrom( lo );
+  void CopyAttributesFrom(const LabelObjectType* lo) override
+  {
+    Superclass::CopyAttributesFrom(lo);
 
     // copy the data of the current type if possible
-    const Self * src = dynamic_cast<const Self *>( lo );
-    if( src == ITK_NULLPTR )
-      {
+    const Self* src = dynamic_cast<const Self*>(lo);
+    if (src == nullptr)
+    {
       return;
-      }
-
-    m_ClassLabel = src->m_ClassLabel;
-    m_HasClassLabel = src->m_HasClassLabel;
     }
+
+    m_ClassLabel    = src->m_ClassLabel;
+    m_HasClassLabel = src->m_HasClassLabel;
+  }
 
 protected:
   /** Constructor */
   AttributesMapLabelObjectWithClassLabel() : m_ClassLabel(itk::NumericTraits<ClassLabelType>::Zero), m_HasClassLabel(false)
-    {}
+  {
+  }
   /** Destructor */
-  ~AttributesMapLabelObjectWithClassLabel() override {}
+  ~AttributesMapLabelObjectWithClassLabel() override
+  {
+  }
 
   /** The printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
+  {
+    Superclass::PrintSelf(os, indent);
+    if (m_HasClassLabel)
     {
-      Superclass::PrintSelf( os, indent );
-      if(m_HasClassLabel)
-  {
-  os<<indent<<"Class Label: "<<m_ClassLabel<<std::endl;
-  }
-      else
-  {
-  os<<indent<<"No class label available."<<std::endl;
-  }
+      os << indent << "Class Label: " << m_ClassLabel << std::endl;
     }
+    else
+    {
+      os << indent << "No class label available." << std::endl;
+    }
+  }
 
 private:
-  AttributesMapLabelObjectWithClassLabel(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  AttributesMapLabelObjectWithClassLabel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The class label */
   ClassLabelType m_ClassLabel;
 
   /** Does the LabelObject have a class label ? */
-  bool           m_HasClassLabel;
-
+  bool m_HasClassLabel;
 };
 
 } // end namespace otb

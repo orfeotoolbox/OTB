@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -52,15 +52,14 @@ namespace otb
  * \ingroup OTBVectorDataManipulation
  */
 template <class TVectorData>
-class ITK_EXPORT VectorDataExtractROI :
-  public VectorDataToVectorDataFilter<TVectorData, TVectorData>
+class ITK_EXPORT VectorDataExtractROI : public VectorDataToVectorDataFilter<TVectorData, TVectorData>
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorDataExtractROI                                   Self;
+  typedef VectorDataExtractROI Self;
   typedef VectorDataToVectorDataFilter<TVectorData, TVectorData> Superclass;
-  typedef itk::SmartPointer<Self>                                Pointer;
-  typedef itk::SmartPointer<const Self>                          ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -86,8 +85,8 @@ public:
 
   /** TODO : automate the dimension of the region*/
   typedef otb::RemoteSensingRegion<typename VertexType::CoordRepType> RegionType;
-  typedef typename  RegionType::IndexType                             IndexType;
-  typedef typename  RegionType::SizeType                              SizeType;
+  typedef typename RegionType::IndexType                              IndexType;
+  typedef typename RegionType::SizeType                               SizeType;
 
   typedef itk::Point<typename VertexType::CoordRepType, IndexType::IndexDimension> ProjPointType;
 
@@ -96,17 +95,21 @@ public:
   typedef typename InternalTreeNodeType::ChildrenListType                  ChildrenListType;
 
   /** Method to Set/Get the Region of intereset*/
-  void SetRegion(const RegionType&  region)
+  void SetRegion(const RegionType& region)
   {
     m_ROI = region;
   }
 
   const RegionType& GetRegion()
-  {return m_ROI; }
+  {
+    return m_ROI;
+  }
 
 protected:
   VectorDataExtractROI();
-  ~VectorDataExtractROI() override {}
+  ~VectorDataExtractROI() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Method to compare the projection embedded in the cartoRegion And the the InputVectorData*/
@@ -119,7 +122,7 @@ protected:
   virtual RegionType ComputeVertexListBoundingRegion(typename VertexListType::ConstPointer vertexlist);
 
   /** Method to transform itk::Point to itk::ContinuousIndex*/
-  virtual VertexType  PointToContinuousIndex(ProjPointType point);
+  virtual VertexType PointToContinuousIndex(ProjPointType point);
 
   /** Prototype of the generate data method*/
   void GenerateData(void) override;
@@ -130,19 +133,19 @@ protected:
   /** Method to check if the line Bounding Box ha ve a non-null intersection with the ROI*/
   virtual bool IsLineIntersectionNotNull(LinePointerType line);
 
-  virtual void ProcessNode(InternalTreeNodeType * source, InternalTreeNodeType * destination);
+  virtual void ProcessNode(InternalTreeNodeType* source, InternalTreeNodeType* destination);
   using Superclass::ProcessNode;
 
 private:
-  VectorDataExtractROI(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  VectorDataExtractROI(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   int CounterClockWise(PointType firstPoint, PointType secondPoint, PointType thirdPoint);
   bool IsSegmentIntersectSegment(LinePointerType segmentLineAB, LinePointerType segmentLineCD);
 
-  bool        m_ProjectionNeeded;
-  RegionType  m_ROI;
-  RegionType  m_GeoROI;
+  bool       m_ProjectionNeeded;
+  RegionType m_ROI;
+  RegionType m_GeoROI;
 
   unsigned int m_Kept;
 };
@@ -150,7 +153,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbVectorDataExtractROI.txx"
+#include "otbVectorDataExtractROI.hxx"
 #endif
 
 #endif

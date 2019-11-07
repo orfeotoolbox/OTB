@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -78,15 +78,14 @@ namespace otb
  * \ingroup OTBChangeDetection
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MultivariateAlterationDetectorImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT MultivariateAlterationDetectorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef MultivariateAlterationDetectorImageFilter           Self;
-  typedef itk::ImageToImageFilter<TInputImage, TOutputImage>  Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef MultivariateAlterationDetectorImageFilter Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -95,37 +94,37 @@ public:
   itkTypeMacro(MultivariateAlterationDetectorImageFilter, ImageToImageFilter);
 
   /** Some convenient typedefs. */
-  typedef TInputImage                            InputImageType;
+  typedef TInputImage                           InputImageType;
   typedef typename InputImageType::Pointer      InputImagePointer;
   typedef typename InputImageType::ConstPointer InputImageConstPointer;
   typedef typename InputImageType::RegionType   InputImageRegionType;
-  typedef typename InputImageType::PixelType     InputImagePixelType;
-  typedef TOutputImage                           OutputImageType;
-  typedef typename OutputImageType::Pointer      OutputImagePointer;
-  typedef typename OutputImageType::RegionType   OutputImageRegionType;
-  typedef typename OutputImageType::PixelType    OutputImagePixelType;
+  typedef typename InputImageType::PixelType    InputImagePixelType;
+  typedef TOutputImage                          OutputImageType;
+  typedef typename OutputImageType::Pointer     OutputImagePointer;
+  typedef typename OutputImageType::RegionType  OutputImageRegionType;
+  typedef typename OutputImageType::PixelType   OutputImagePixelType;
 
   /** Internal filters types */
   typedef StreamingStatisticsVectorImageFilter<InputImageType> CovarianceEstimatorType;
   typedef typename CovarianceEstimatorType::Pointer            CovarianceEstimatorPointer;
   typedef otb::ConcatenateVectorImageFilter<InputImageType, InputImageType, InputImageType> ConcatenateImageFilterType;
-  typedef typename ConcatenateImageFilterType::Pointer         ConcatenateImageFilterPointer;
+  typedef typename ConcatenateImageFilterType::Pointer ConcatenateImageFilterPointer;
 
-  typedef typename CovarianceEstimatorType::MatrixObjectType   MatrixObjectType;
-  typedef typename MatrixObjectType::ComponentType             MatrixType;
-  typedef typename MatrixType::InternalMatrixType              InternalMatrixType;
-  typedef typename CovarianceEstimatorType::RealPixelType      VectorType;
+  typedef typename CovarianceEstimatorType::MatrixObjectType MatrixObjectType;
+  typedef typename MatrixObjectType::ComponentType           MatrixType;
+  typedef typename MatrixType::InternalMatrixType            InternalMatrixType;
+  typedef typename CovarianceEstimatorType::RealPixelType    VectorType;
 
-  typedef typename VectorType::ValueType                       RealType;
+  typedef typename VectorType::ValueType RealType;
 
-  typedef vnl_vector<RealType>                                 VnlVectorType;
-  typedef vnl_matrix<RealType>                                 VnlMatrixType;
+  typedef vnl_vector<RealType> VnlVectorType;
+  typedef vnl_matrix<RealType> VnlMatrixType;
 
   /** Get the mean of bands from image 1 */
-  itkGetMacro(Mean1,VnlVectorType);
+  itkGetMacro(Mean1, VnlVectorType);
 
   /** Get the mean of bands from image 2 */
-  itkGetMacro(Mean2,VnlVectorType);
+  itkGetMacro(Mean2, VnlVectorType);
 
   /** Get the linear combinations of bands of image 1 associated to
    *  multivariate alteration detector. This is a square matrix of
@@ -144,42 +143,44 @@ public:
   itkGetObjectMacro(CovarianceEstimator, CovarianceEstimatorType);
 
   /** Connect one of the operands for pixel-wise addition */
-  void SetInput1(const TInputImage * image1);
+  void SetInput1(const TInputImage* image1);
 
   /** Connect one of the operands for pixel-wise addition */
-  void SetInput2(const TInputImage * image2);
+  void SetInput2(const TInputImage* image2);
 
   /** Get the inputs */
-  const TInputImage * GetInput1();
-  const TInputImage * GetInput2();
+  const TInputImage* GetInput1();
+  const TInputImage* GetInput2();
 
 protected:
   MultivariateAlterationDetectorImageFilter();
-  ~MultivariateAlterationDetectorImageFilter() override {}
+  ~MultivariateAlterationDetectorImageFilter() override
+  {
+  }
 
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   void GenerateOutputInformation() override;
 
 private:
-  MultivariateAlterationDetectorImageFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  MultivariateAlterationDetectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   CovarianceEstimatorPointer m_CovarianceEstimator;
   MatrixType                 m_CovarianceMatrix;
   VectorType                 m_MeanValues;
 
-  VnlMatrixType              m_V1;
-  VnlMatrixType              m_V2;
-  VnlVectorType              m_Mean1;
-  VnlVectorType              m_Mean2;
-  VnlVectorType              m_Rho;
+  VnlMatrixType m_V1;
+  VnlMatrixType m_V2;
+  VnlVectorType m_Mean1;
+  VnlVectorType m_Mean2;
+  VnlVectorType m_Rho;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMultivariateAlterationDetectorImageFilter.txx"
+#include "otbMultivariateAlterationDetectorImageFilter.hxx"
 #endif
 
 #endif

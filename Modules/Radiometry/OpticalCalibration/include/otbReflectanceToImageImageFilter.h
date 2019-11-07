@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -46,8 +46,12 @@ template <class TInput, class TOutput>
 class ReflectanceToImageImageFunctor
 {
 public:
-  ReflectanceToImageImageFunctor() {}
-  virtual ~ReflectanceToImageImageFunctor() {}
+  ReflectanceToImageImageFunctor()
+  {
+  }
+  virtual ~ReflectanceToImageImageFunctor()
+  {
+  }
 
   typedef Functor::RadianceToImageImageFunctor<TInput, TOutput>       LumToImFunctorType;
   typedef Functor::ReflectanceToRadianceImageFunctor<TInput, TOutput> ReflecToLumFunctorType;
@@ -86,11 +90,11 @@ public:
     return m_ReflecToLumFunctor.GetIlluminationCorrectionCoefficient();
   }
 
-  inline TOutput operator ()(const TInput& inPixel) const
+  inline TOutput operator()(const TInput& inPixel) const
   {
     TOutput outPixel;
     TOutput tempPix;
-    tempPix = m_ReflecToLumFunctor(inPixel);
+    tempPix  = m_ReflecToLumFunctor(inPixel);
     outPixel = m_LumToImFunctor(tempPix);
 
     return outPixel;
@@ -99,7 +103,6 @@ public:
 private:
   LumToImFunctorType     m_LumToImFunctor;
   ReflecToLumFunctorType m_ReflecToLumFunctor;
-
 };
 }
 
@@ -107,7 +110,8 @@ private:
  *  \brief Convert a reflectance into a raw value value
  *
  *  Transform a reflectance image into a classical image image. For this it uses the functor ReflectanceToImageFunctor calling for each component of each pixel.
- *  The flux normalization coefficient (that is the ratio solar distance over mean solar distance) can be directly set or the user can
+ *  The flux normalization coefficient (that is the ratio solar distance over mean solar distance) can be directly set, as well as the solar distance (in AU),
+ * or the user can
  *  give the day and the month of the observation and the class will used a coefficient given by a 6S routine that will give the corresponding coefficient.
  *  To note that in the case, 6S gives the square of the distances ratio.
  *
@@ -123,15 +127,10 @@ private:
  * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReflectanceToImageImageFilter :
-  public UnaryImageFunctorWithVectorImageFilter<TInputImage,
-      TOutputImage,
-      typename Functor::ReflectanceToImageImageFunctor<typename
-          TInputImage::
-          InternalPixelType,
-          typename
-          TOutputImage::
-          InternalPixelType> >
+class ITK_EXPORT ReflectanceToImageImageFilter
+    : public UnaryImageFunctorWithVectorImageFilter<
+          TInputImage, TOutputImage,
+          typename Functor::ReflectanceToImageImageFunctor<typename TInputImage::InternalPixelType, typename TOutputImage::InternalPixelType>>
 {
 public:
   /**   Extract input and output images dimensions.*/
@@ -141,14 +140,13 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
-  typedef typename Functor::ReflectanceToImageImageFunctor<typename InputImageType::InternalPixelType,
-      typename OutputImageType::InternalPixelType> FunctorType;
+  typedef typename Functor::ReflectanceToImageImageFunctor<typename InputImageType::InternalPixelType, typename OutputImageType::InternalPixelType> FunctorType;
 
   /** "typedef" for standard classes. */
-  typedef ReflectanceToImageImageFilter                                                        Self;
+  typedef ReflectanceToImageImageFilter Self;
   typedef UnaryImageFunctorWithVectorImageFilter<InputImageType, OutputImageType, FunctorType> Superclass;
-  typedef itk::SmartPointer<Self>                                                              Pointer;
-  typedef itk::SmartPointer<const Self>                                                        ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** object factory method. */
   itkNewMacro(Self);
@@ -194,10 +192,10 @@ public:
   {
     double zenithalAngle = 90.0 - elevationAngle;
     if (this->m_ZenithalSolarAngle != zenithalAngle)
-      {
+    {
       this->m_ZenithalSolarAngle = zenithalAngle;
       this->Modified();
-      }
+    }
   }
 
   virtual double GetElevationSolarAngle() const
@@ -208,10 +206,24 @@ public:
   /** Set the flux normalization coefficient. */
   void SetFluxNormalizationCoefficient(double coef)
   {
-    m_FluxNormalizationCoefficient = coef;
+    m_FluxNormalizationCoefficient      = coef;
     m_IsSetFluxNormalizationCoefficient = true;
     this->Modified();
   }
+
+  /** Set the solar distance. */
+  void SetSolarDistance(double value)
+  {
+    m_SolarDistance      = value;
+    m_IsSetSolarDistance = true;
+    this->Modified();
+  }
+  /** Give the solar distance. */
+  itkGetConstReferenceMacro(SolarDistance, double);
+  /** Set the IsSetSolarDistance boolean. */
+  itkSetMacro(IsSetSolarDistance, bool);
+  /** Give the IsSetSolarDistance boolean. */
+  itkGetConstReferenceMacro(IsSetSolarDistance, bool);
 
   /** Set the acquisition day. */
   itkSetClampMacro(Day, int, 1, 31);
@@ -224,57 +236,60 @@ public:
 
 protected:
   /** Constructor */
-  ReflectanceToImageImageFilter() :
-    m_ZenithalSolarAngle(120.), //invalid value which will lead to negative radiometry
-    m_FluxNormalizationCoefficient(1.),
-    m_IsSetFluxNormalizationCoefficient(false),
-    m_Day(0),
-    m_Month(0)
-    {
+  ReflectanceToImageImageFilter()
+    : m_ZenithalSolarAngle(120.), // invalid value which will lead to negative radiometry
+      m_FluxNormalizationCoefficient(1.),
+      m_IsSetFluxNormalizationCoefficient(false),
+      m_Day(0),
+      m_Month(0),
+      m_SolarDistance(1.0),
+      m_IsSetSolarDistance(false)
+  {
     m_Alpha.SetSize(0);
     m_Beta.SetSize(0);
     m_SolarIllumination.SetSize(0);
-    };
+  };
 
   /** Destructor */
-  ~ReflectanceToImageImageFilter() override {}
+  ~ReflectanceToImageImageFilter() override
+  {
+  }
 
   /** Update the functor list and input parameters */
   void BeforeThreadedGenerateData(void) override
   {
 
-    OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(
-      this->GetInput()->GetMetaDataDictionary());
+    OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(this->GetInput()->GetMetaDataDictionary());
     if (m_Alpha.GetSize() == 0)
-      {
+    {
       m_Alpha = imageMetadataInterface->GetPhysicalGain();
-      }
+    }
 
     if (m_Beta.GetSize() == 0)
-      {
+    {
       m_Beta = imageMetadataInterface->GetPhysicalBias();
-      }
+    }
 
-    if ((m_Day == 0) && (!m_IsSetFluxNormalizationCoefficient))
-      {
+    if ((m_Day == 0) && (!m_IsSetFluxNormalizationCoefficient) && (!m_IsSetSolarDistance))
+    {
       m_Day = imageMetadataInterface->GetDay();
-      }
+    }
 
-    if ((m_Month == 0) && (!m_IsSetFluxNormalizationCoefficient))
-      {
+    if ((m_Month == 0) && (!m_IsSetFluxNormalizationCoefficient) && (!m_IsSetSolarDistance))
+    {
       m_Month = imageMetadataInterface->GetMonth();
-      }
+    }
 
     if (m_SolarIllumination.GetSize() == 0)
-      {
+    {
       m_SolarIllumination = imageMetadataInterface->GetSolarIrradiance();
-      }
+    }
 
     if (m_ZenithalSolarAngle == 120.0)
-      {
-      //the zenithal angle is the complementary of the elevation angle
+    {
+      // the zenithal angle is the complementary of the elevation angle
       m_ZenithalSolarAngle = 90.0 - imageMetadataInterface->GetSunElevation();
-      }
+    }
 
     otbMsgDevMacro(<< "Using correction parameters: ");
     otbMsgDevMacro(<< "Alpha (gain): " << m_Alpha);
@@ -284,42 +299,41 @@ protected:
     otbMsgDevMacro(<< "Solar irradiance:  " << m_SolarIllumination);
     otbMsgDevMacro(<< "Zenithal angle:    " << m_ZenithalSolarAngle);
 
-    if ((m_Alpha.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel())
-        || (m_Beta.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel())
-        || (m_SolarIllumination.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))
-      {
-      itkExceptionMacro(
-        << "Alpha, Beta and SolarIllumination parameters should have the same size as the number of bands");
-      }
+    if ((m_Alpha.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()) || (m_Beta.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()) ||
+        (m_SolarIllumination.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))
+    {
+      itkExceptionMacro(<< "Alpha, Beta and SolarIllumination parameters should have the same size as the number of bands");
+    }
 
     this->GetFunctorVector().clear();
     for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
-      {
+    {
       FunctorType functor;
       double      coefTemp = 0.;
-      if (!m_IsSetFluxNormalizationCoefficient)
-        {
-        if (m_Day * m_Month != 0 && m_Day < 32 && m_Month < 13)
-          {
-          coefTemp = vcl_cos(m_ZenithalSolarAngle * CONST_PI_180) * VarSol::GetVarSol(m_Day,m_Month);
-          }
-        else
-          {
-          itkExceptionMacro(<< "Day has to be included between 1 and 31, Month between 1 and 12.");
-          }
-        }
+
+      if (m_IsSetFluxNormalizationCoefficient)
+      {
+        coefTemp = std::cos(m_ZenithalSolarAngle * CONST_PI_180) * m_FluxNormalizationCoefficient * m_FluxNormalizationCoefficient;
+      }
+      else if (m_IsSetSolarDistance)
+      {
+        coefTemp = std::cos(m_ZenithalSolarAngle * CONST_PI_180) / (m_SolarDistance * m_SolarDistance);
+      }
+      else if (m_Day * m_Month != 0 && m_Day < 32 && m_Month < 13)
+      {
+        coefTemp = std::cos(m_ZenithalSolarAngle * CONST_PI_180) * VarSol::GetVarSol(m_Day, m_Month);
+      }
       else
-        {
-        coefTemp =
-          vcl_cos(m_ZenithalSolarAngle *
-                  CONST_PI_180) * m_FluxNormalizationCoefficient * m_FluxNormalizationCoefficient;
-        }
+      {
+        itkExceptionMacro(<< "Day has to be included between 1 and 31, Month between 1 and 12.");
+      }
+
       functor.SetIlluminationCorrectionCoefficient(coefTemp);
       functor.SetAlpha(m_Alpha[i]);
       functor.SetBeta(m_Beta[i]);
       functor.SetSolarIllumination(m_SolarIllumination[i]);
       this->GetFunctorVector().push_back(functor);
-      }
+    }
   }
 
 private:
@@ -339,6 +353,11 @@ private:
   int m_Day;
   /** Acquisition Month*/
   int m_Month;
+  /** Solar distance. */
+  double m_SolarDistance;
+  /** Used to know if the user has set a value for the SolarDistance parameter
+   * or if the class has to compute it */
+  bool m_IsSetSolarDistance;
 };
 
 } // end namespace otb

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -65,10 +65,10 @@ public:
   static std::string GetApplicationPath();
 
   /** Return the list of available applications */
-  static std::vector<std::string> GetAvailableApplications(bool useFactory=true);
+  static std::vector<std::string> GetAvailableApplications(bool useFactory = true);
 
   /** Create the specified Application */
-  static Application::Pointer CreateApplication(const std::string& applicationName, bool useFactory=true);
+  static Application::Pointer CreateApplication(const std::string& applicationName, bool useFactory = true);
 
   /** Create the specified Application (faster)
    *  method using dynamic library name to load the right module */
@@ -82,15 +82,14 @@ protected:
   ~ApplicationRegistry() override;
 
 private:
-  ApplicationRegistry(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  ApplicationRegistry(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Load an application from a shared library */
-  static Application::Pointer LoadApplicationFromPath(std::string path,std::string name);
-
+  static Application::Pointer LoadApplicationFromPath(std::string path, std::string name);
 };
 
 } // end namespace Wrapper
-} //end namespace otb
+} // end namespace otb
 
 #endif // otbWrapperApplication_h_

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,17 +30,16 @@
 #include "itkNumericTraits.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 
-int otbPolygonizationRasterizationTest(int itkNotUsed(argc), char * argv[])
+int otbPolygonizationRasterizationTest(int itkNotUsed(argc), char* argv[])
 {
-  typedef unsigned int                                          PixelType;
-  typedef otb::Image<PixelType, 2>                              ImageType;
-  typedef otb::ImageFileReader<ImageType>                       ReaderType;
+  typedef unsigned int PixelType;
+  typedef otb::Image<PixelType, 2> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
 
-  typedef otb::VectorData<>                                     VectorDataType;
+  typedef otb::VectorData<> VectorDataType;
 
-  typedef otb::LabelImageToVectorDataFilter<ImageType>          LabelImageToVDFilterType;
-  typedef otb::VectorDataToLabelImageFilter<VectorDataType,
-                                            ImageType>          RasterizationFilterType;
+  typedef otb::LabelImageToVectorDataFilter<ImageType> LabelImageToVDFilterType;
+  typedef otb::VectorDataToLabelImageFilter<VectorDataType, ImageType> RasterizationFilterType;
 
   // Read the label image
   ReaderType::Pointer reader = ReaderType::New();
@@ -52,7 +51,7 @@ int otbPolygonizationRasterizationTest(int itkNotUsed(argc), char * argv[])
   polygonize->Update();
 
   // rasterize
-  RasterizationFilterType::Pointer  rasterization = RasterizationFilterType::New();
+  RasterizationFilterType::Pointer rasterization = RasterizationFilterType::New();
   rasterization->AddVectorData(polygonize->GetOutput());
   rasterization->SetOutputParametersFromImage(reader->GetOutput());
   rasterization->SetBurnAttribute("DN");
@@ -60,20 +59,16 @@ int otbPolygonizationRasterizationTest(int itkNotUsed(argc), char * argv[])
 
   // Compare the input label image and the output of the rasterization
   // filter, they must be exactly similar
-  itk::ImageRegionConstIteratorWithIndex<ImageType> itRef(reader->GetOutput(),
-                                                          reader->GetOutput()->GetLargestPossibleRegion());
-  itk::ImageRegionConstIteratorWithIndex<ImageType> itTest(rasterization->GetOutput(),
-                                                           rasterization->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionConstIteratorWithIndex<ImageType> itRef(reader->GetOutput(), reader->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionConstIteratorWithIndex<ImageType> itTest(rasterization->GetOutput(), rasterization->GetOutput()->GetLargestPossibleRegion());
 
-  for(itRef.GoToBegin(), itTest.GoToBegin();
-      !itRef.IsAtEnd()  && !itTest.IsAtEnd();
-      ++itRef, ++itTest)
-    {
+  for (itRef.GoToBegin(), itTest.GoToBegin(); !itRef.IsAtEnd() && !itTest.IsAtEnd(); ++itRef, ++itTest)
+  {
     if (itRef.Get() != itTest.Get())
-      {
+    {
       std::cerr << "Pixel at position " << itRef.GetIndex() << " differs : in=" << itRef.Get() << " while out=" << itTest.Get() << std::endl;
       return EXIT_FAILURE;
-      }
     }
+  }
   return EXIT_SUCCESS;
 }

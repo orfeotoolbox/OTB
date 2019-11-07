@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,7 +32,7 @@
 int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
 {
   typedef unsigned char IOLabelPixelType; // 8 bits
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
   typedef otb::Image<IOLabelPixelType, Dimension> IOLabelImageType;
 
@@ -45,11 +45,11 @@ int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
 
   // Binary ball Structuring Element type
   typedef NeighborhoodMajorityVotingFilterType::KernelType StructuringType;
-  typedef StructuringType::RadiusType RadiusType;
+  typedef StructuringType::RadiusType                      RadiusType;
 
 
-  const char * inputFileName = argv[1];
-  const char * outputFileName = argv[2];
+  const char* inputFileName  = argv[1];
+  const char* outputFileName = argv[2];
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFileName);
@@ -61,7 +61,7 @@ int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
   NeighMajVotingFilter->SetInput(reader->GetOutput());
 
   StructuringType seBall;
-  RadiusType rad;
+  RadiusType      rad;
 
 
   std::string KeepOriginalLabelBoolStr = argv[3];
@@ -101,10 +101,10 @@ int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
   seBall.CreateStructuringElement();
   NeighMajVotingFilter->SetKernel(seBall);
 
-  if(argc==9)
-    {
+  if (argc == 9)
+  {
     NeighMajVotingFilter->SetOnlyIsolatedPixels(static_cast<bool>(atoi(argv[8])));
-    }
+  }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(outputFileName);
@@ -117,19 +117,19 @@ int otbNeighborhoodMajorityVotingImageFilterTest(int argc, char* argv[])
 int otbNeighborhoodMajorityVotingImageFilterIsolatedTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef unsigned char PixelType; // 8 bits
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
   typedef otb::Image<PixelType, Dimension> ImageType;
 
-  ImageType::Pointer image = ImageType::New();
+  ImageType::Pointer   image = ImageType::New();
   ImageType::IndexType start;
 
-  start[0] =   0;
-  start[1] =   0;
+  start[0] = 0;
+  start[1] = 0;
 
   ImageType::SizeType size;
-  size[0]  = 100;
-  size[1]  = 100;
+  size[0] = 100;
+  size[1] = 100;
 
   ImageType::RegionType region;
 
@@ -144,7 +144,7 @@ int otbNeighborhoodMajorityVotingImageFilterIsolatedTest(int itkNotUsed(argc), c
 
   // Binary ball Structuring Element type
   typedef NeighborhoodMajorityVotingFilterType::KernelType StructuringType;
-  typedef StructuringType::RadiusType RadiusType;
+  typedef StructuringType::RadiusType                      RadiusType;
 
 
   // Neighborhood majority voting filter
@@ -154,7 +154,7 @@ int otbNeighborhoodMajorityVotingImageFilterIsolatedTest(int itkNotUsed(argc), c
   NeighMajVotingFilter->SetInput(image);
 
   StructuringType seBall;
-  RadiusType rad;
+  RadiusType      rad;
 
 
   NeighMajVotingFilter->SetKeepOriginalLabelBool(true);
@@ -167,7 +167,7 @@ int otbNeighborhoodMajorityVotingImageFilterIsolatedTest(int itkNotUsed(argc), c
   seBall.CreateStructuringElement();
   NeighMajVotingFilter->SetKernel(seBall);
   NeighMajVotingFilter->SetOnlyIsolatedPixels(true);
-  PixelType value = 255;
+  PixelType            value = 255;
   ImageType::IndexType coordinate;
   coordinate[0] = 10;
   coordinate[1] = 10;
@@ -176,33 +176,33 @@ int otbNeighborhoodMajorityVotingImageFilterIsolatedTest(int itkNotUsed(argc), c
   NeighMajVotingFilter->SetIsolatedThreshold(1);
   NeighMajVotingFilter->Update();
   PixelType result = NeighMajVotingFilter->GetOutput()->GetPixel(coordinate);
-//Should be filtered
-  if(result == value)
-    {
+  // Should be filtered
+  if (result == value)
+  {
     std::cout << "one pixel\n";
     return EXIT_FAILURE;
-    }
+  }
   coordinate[0] = 10;
   coordinate[1] = 11;
   image->SetPixel(coordinate, value);
   image->Update();
-  NeighMajVotingFilter->Modified(); //needed for the filter to be updated
+  NeighMajVotingFilter->Modified(); // needed for the filter to be updated
   NeighMajVotingFilter->Update();
   result = NeighMajVotingFilter->GetOutput()->GetPixel(coordinate);
   // Should not be filtered
-  if( result != value)
-    {
+  if (result != value)
+  {
     std::cout << "2 pixels thres = 1 result = " << int(result) << '\n';
     return EXIT_FAILURE;
-    }
+  }
   NeighMajVotingFilter->SetIsolatedThreshold(3);
   NeighMajVotingFilter->Update();
   result = NeighMajVotingFilter->GetOutput()->GetPixel(coordinate);
-//Should be filtered
-  if(result == value)
-    {
+  // Should be filtered
+  if (result == value)
+  {
     std::cout << "2 pixels thres = 2" << '\n';
     return EXIT_FAILURE;
-    }
+  }
   return EXIT_SUCCESS;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -86,7 +86,7 @@ public:
 
   /**
    * Logger level controls the level of logging that OTB will output.
-   * 
+   *
    * This is used to set-up the otb::Logger class.
    *
    * If OTB_LOGGER_LEVEL environment variable is set to one of DEBUG,
@@ -94,24 +94,29 @@ public:
    * set accordingly.
    *
    * Priority is DEBUG < INFO < WARNING < CRITICAL < FATAL.
-   * 
+   *
    * Only messages with a higher priority than the logger level will
    * be displayed.
    *
    * By default (if OTB_LOGGER_LEVEL is not set or can not be
    * decoded), level is INFO.
-   * 
+   *
    */
   static itk::LoggerBase::PriorityLevelType GetLoggerLevel();
- 
-  
+
+  /**
+   * If OpenMP is enabled, the number of threads for openMP is set to the
+   * same number as in ITK (see GetGlobalDefaultNumberOfThreads()). This number
+   * of threads is returned.
+   * If OpenMP is disabled, this function does nothing
+   */
+  static int InitOpenMPThreads();
+
 private:
-  ConfigurationManager(); //purposely not implemented
-  ~ConfigurationManager(); //purposely not implemented
-  ConfigurationManager(const ConfigurationManager&); //purposely not implemented
-  void operator =(const ConfigurationManager&); //purposely not implemented
-
-
+  ConfigurationManager()                            = delete;
+  ~ConfigurationManager()                           = delete;
+  ConfigurationManager(const ConfigurationManager&) = delete;
+  void operator=(const ConfigurationManager&) = delete;
 };
 }
 

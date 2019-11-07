@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,14 +21,12 @@
 void RegisterTests()
 {
 
-  REGISTER_TEST(otbContingencyTableCalculatorNew);
   REGISTER_TEST(otbContingencyTableCalculatorSetListSamples);
   REGISTER_TEST(otbContingencyTableCalculatorCompute);
   REGISTER_TEST(otbContingencyTableCalculatorComputeWithBaseline);
 
 #ifdef OTB_USE_SHARK
   REGISTER_TEST(otbSharkKMeansMachineLearningModelCanRead);
-  REGISTER_TEST(otbSharkKMeansMachineLearningModelNew);
   REGISTER_TEST(otbSharkKMeansMachineLearningModelTrain);
   REGISTER_TEST(otbSharkKMeansMachineLearningModelPredict);
   REGISTER_TEST(otbSharkUnsupervisedImageClassificationFilter);

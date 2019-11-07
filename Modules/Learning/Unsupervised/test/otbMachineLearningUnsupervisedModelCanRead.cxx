@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,7 +23,7 @@
 #include <otbConfigure.h>
 #include <otbMachineLearningModel.h>
 
-typedef otb::MachineLearningModel<float,short>         MachineLearningModelType;
+typedef otb::MachineLearningModel<float, short> MachineLearningModelType;
 typedef MachineLearningModelType::InputValueType       InputValueType;
 typedef MachineLearningModelType::InputSampleType      InputSampleType;
 typedef MachineLearningModelType::InputListSampleType  InputListSampleType;
@@ -35,28 +35,27 @@ typedef MachineLearningModelType::TargetListSampleType TargetListSampleType;
 
 #include "otbSharkKMeansMachineLearningModel.h"
 
-int otbSharkKMeansMachineLearningModelCanRead(int argc, char *argv[])
+int otbSharkKMeansMachineLearningModelCanRead(int argc, char* argv[])
 {
-  if( argc != 2 )
-    {
+  if (argc != 2)
+  {
     std::cerr << "Usage: " << argv[0] << "<model>" << std::endl;
     std::cerr << "Called here with " << argc << " arguments\n";
-    for( int i = 1; i < argc; ++i )
-      {
+    for (int i = 1; i < argc; ++i)
+    {
       std::cerr << " - " << argv[i] << "\n";
-      }
-    return EXIT_FAILURE;
     }
-  std::string filename( argv[1] );
+    return EXIT_FAILURE;
+  }
+  std::string filename(argv[1]);
   typedef otb::SharkKMeansMachineLearningModel<InputValueType, TargetValueType> KMType;
   KMType::Pointer classifier = KMType::New();
-  bool lCanRead = classifier->CanReadFile( filename );
-  if( !lCanRead )
-    {
-    std::cerr << "Error otb::SharkKMeansMachineLearningModel : impossible to open the file " << filename << "."
-              << std::endl;
+  bool            lCanRead   = classifier->CanReadFile(filename);
+  if (!lCanRead)
+  {
+    std::cerr << "Error otb::SharkKMeansMachineLearningModel : impossible to open the file " << filename << "." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

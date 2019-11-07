@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -37,163 +37,163 @@ namespace ossimplugins
 
    std::ostream& operator<<(std::ostream& os, const mph& data)
    {
-      os<<"product_name:"<<data._product_name.c_str()<<std::endl;
+      os<<"product_name:"<<data._product_name <<std::endl;
 
-      os<<"product:"<<data._product.c_str()<<std::endl;
+      os<<"product:"<<data._product <<std::endl;
 
-      os<<"proc_stage_title:"<<data._proc_stage_title.c_str()<<std::endl;
+      os<<"proc_stage_title:"<<data._proc_stage_title <<std::endl;
 
-      os<<"proc_stage:"<<data._proc_stage.c_str()<<std::endl;
+      os<<"proc_stage:"<<data._proc_stage <<std::endl;
 
-      os<<"ref_doc_title:"<<data._ref_doc_title.c_str()<<std::endl;
+      os<<"ref_doc_title:"<<data._ref_doc_title <<std::endl;
 
-      os<<"ref_doc:"<<data._ref_doc.c_str()<<std::endl;
+      os<<"ref_doc:"<<data._ref_doc <<std::endl;
 
-      os<<"acq_stat_id_title:"<<data._acq_stat_id_title.c_str()<<std::endl;
+      os<<"acq_stat_id_title:"<<data._acq_stat_id_title <<std::endl;
 
-      os<<"acq_station:"<<data._acq_station.c_str()<<std::endl;
+      os<<"acq_station:"<<data._acq_station <<std::endl;
 
-      os<<"proc_center_title:"<<data._proc_center_title.c_str()<<std::endl;
+      os<<"proc_center_title:"<<data._proc_center_title <<std::endl;
 
-      os<<"proc_center:"<<data._proc_center.c_str()<<std::endl;
+      os<<"proc_center:"<<data._proc_center <<std::endl;
 
-      os<<"proc_time_title:"<<data._proc_time_title.c_str()<<std::endl;
+      os<<"proc_time_title:"<<data._proc_time_title <<std::endl;
 
-      os<<"proc_time:"<<data._proc_time.c_str()<<std::endl;
+      os<<"proc_time:"<<data._proc_time <<std::endl;
 
-      os<<"soft_version_title:"<<data._soft_version_title.c_str()<<std::endl;
+      os<<"soft_version_title:"<<data._soft_version_title <<std::endl;
 
-      os<<"soft_version:"<<data._soft_version.c_str()<<std::endl;
+      os<<"soft_version:"<<data._soft_version <<std::endl;
 
-      os<<"sensing_start_title:"<<data._sensing_start_title.c_str()<<std::endl;
+      os<<"sensing_start_title:"<<data._sensing_start_title <<std::endl;
 
-      os<<"sensing_start:"<<data._sensing_start.c_str()<<std::endl;
+      os<<"sensing_start:"<<data._sensing_start <<std::endl;
 
-      os<<"sensing_stop_title:"<<data._sensing_stop_title.c_str()<<std::endl;
+      os<<"sensing_stop_title:"<<data._sensing_stop_title <<std::endl;
 
-      os<<"sensing_stop:"<<data._sensing_stop.c_str()<<std::endl;
+      os<<"sensing_stop:"<<data._sensing_stop <<std::endl;
 
-      os<<"phase_title:"<<data._phase_title.c_str()<<std::endl;
+      os<<"phase_title:"<<data._phase_title <<std::endl;
 
-      os<<"phase:"<<data._phase.c_str()<<std::endl;
+      os<<"phase:"<<data._phase <<std::endl;
 
-      os<<"cycle_title:"<<data._cycle_title.c_str()<<std::endl;
+      os<<"cycle_title:"<<data._cycle_title <<std::endl;
 
-      os<<"cycle:"<<data._cycle.c_str()<<std::endl;
+      os<<"cycle:"<<data._cycle <<std::endl;
 
-      os<<"relative_orbit_title:"<<data._relative_orbit_title.c_str()<<std::endl;
+      os<<"relative_orbit_title:"<<data._relative_orbit_title <<std::endl;
 
-      os<<"rel_orbit:"<<data._rel_orbit.c_str()<<std::endl;
+      os<<"rel_orbit:"<<data._rel_orbit <<std::endl;
 
-      os<<"absolute_orbit_title:"<<data._absolute_orbit_title.c_str()<<std::endl;
+      os<<"absolute_orbit_title:"<<data._absolute_orbit_title <<std::endl;
 
-      os<<"abs_orbit:"<<data._abs_orbit.c_str()<<std::endl;
+      os<<"abs_orbit:"<<data._abs_orbit <<std::endl;
 
-      os<<"state_vector_time_title:"<<data._state_vector_time_title.c_str()<<std::endl;
+      os<<"state_vector_time_title:"<<data._state_vector_time_title <<std::endl;
 
-      os<<"state_vector_time:"<<data._state_vector_time.c_str()<<std::endl;
+      os<<"state_vector_time:"<<data._state_vector_time <<std::endl;
 
-      os<<"delta_ut1_title:"<<data._delta_ut1_title.c_str()<<std::endl;
+      os<<"delta_ut1_title:"<<data._delta_ut1_title <<std::endl;
 
-      os<<"delta_ut1:"<<data._delta_ut1.c_str()<<std::endl;
+      os<<"delta_ut1:"<<data._delta_ut1 <<std::endl;
 
-      os<<"delta_ut1_units:"<<data._delta_ut1_units.c_str()<<std::endl;
+      os<<"delta_ut1_units:"<<data._delta_ut1_units <<std::endl;
 
-      os<<"x_position_title:"<<data._x_position_title.c_str()<<std::endl;
+      os<<"x_position_title:"<<data._x_position_title <<std::endl;
 
-      os<<"x_position:"<<data._x_position.c_str()<<std::endl;
+      os<<"x_position:"<<data._x_position <<std::endl;
 
-      os<<"x_position_units:"<<data._x_position_units.c_str()<<std::endl;
+      os<<"x_position_units:"<<data._x_position_units <<std::endl;
 
-      os<<"y_position_title:"<<data._y_position_title.c_str()<<std::endl;
+      os<<"y_position_title:"<<data._y_position_title <<std::endl;
 
-      os<<"y_position:"<<data._y_position.c_str()<<std::endl;
+      os<<"y_position:"<<data._y_position <<std::endl;
 
-      os<<"y_position_units:"<<data._y_position_units.c_str()<<std::endl;
+      os<<"y_position_units:"<<data._y_position_units <<std::endl;
 
-      os<<"z_position_title:"<<data._z_position_title.c_str()<<std::endl;
+      os<<"z_position_title:"<<data._z_position_title <<std::endl;
 
-      os<<"z_position:"<<data._z_position.c_str()<<std::endl;
+      os<<"z_position:"<<data._z_position <<std::endl;
 
-      os<<"z_position_units:"<<data._z_position_units.c_str()<<std::endl;
+      os<<"z_position_units:"<<data._z_position_units <<std::endl;
 
-      os<<"x_velocity_title:"<<data._x_velocity_title.c_str()<<std::endl;
+      os<<"x_velocity_title:"<<data._x_velocity_title <<std::endl;
 
-      os<<"x_velocity:"<<data._x_velocity.c_str()<<std::endl;
+      os<<"x_velocity:"<<data._x_velocity <<std::endl;
 
-      os<<"x_velocity_units:"<<data._x_velocity_units.c_str()<<std::endl;
+      os<<"x_velocity_units:"<<data._x_velocity_units <<std::endl;
 
-      os<<"y_velocity_title:"<<data._y_velocity_title.c_str()<<std::endl;
+      os<<"y_velocity_title:"<<data._y_velocity_title <<std::endl;
 
-      os<<"y_velocity:"<<data._y_velocity.c_str()<<std::endl;
+      os<<"y_velocity:"<<data._y_velocity <<std::endl;
 
-      os<<"y_velocity_units:"<<data._y_velocity_units.c_str()<<std::endl;
+      os<<"y_velocity_units:"<<data._y_velocity_units <<std::endl;
 
-      os<<"z_velocity_title:"<<data._z_velocity_title.c_str()<<std::endl;
+      os<<"z_velocity_title:"<<data._z_velocity_title <<std::endl;
 
-      os<<"z_velocity:"<<data._z_velocity.c_str()<<std::endl;
+      os<<"z_velocity:"<<data._z_velocity <<std::endl;
 
-      os<<"z_velocity_units:"<<data._z_velocity_units.c_str()<<std::endl;
+      os<<"z_velocity_units:"<<data._z_velocity_units <<std::endl;
 
-      os<<"vector_source_title:"<<data._vector_source_title.c_str()<<std::endl;
+      os<<"vector_source_title:"<<data._vector_source_title <<std::endl;
 
-      os<<"vector_source:"<<data._vector_source.c_str()<<std::endl;
+      os<<"vector_source:"<<data._vector_source <<std::endl;
 
-      os<<"spare_4:"<<data._spare_4.c_str()<<std::endl;
+      os<<"spare_4:"<<data._spare_4 <<std::endl;
 
-      os<<"utc_sbt_time_title:"<<data._utc_sbt_time_title.c_str()<<std::endl;
+      os<<"utc_sbt_time_title:"<<data._utc_sbt_time_title <<std::endl;
 
-      os<<"utc_sbt_time:"<<data._utc_sbt_time.c_str()<<std::endl;
+      os<<"utc_sbt_time:"<<data._utc_sbt_time <<std::endl;
 
-      os<<"sat_binary_time_title:"<<data._sat_binary_time_title.c_str()<<std::endl;
+      os<<"sat_binary_time_title:"<<data._sat_binary_time_title <<std::endl;
 
-      os<<"sat_binary_time:"<<data._sat_binary_time.c_str()<<std::endl;
+      os<<"sat_binary_time:"<<data._sat_binary_time <<std::endl;
 
-      os<<"clock_step_title:"<<data._clock_step_title.c_str()<<std::endl;
+      os<<"clock_step_title:"<<data._clock_step_title <<std::endl;
 
-      os<<"clock_step:"<<data._clock_step.c_str()<<std::endl;
+      os<<"clock_step:"<<data._clock_step <<std::endl;
 
-      os<<"clock_step_units:"<<data._clock_step_units.c_str()<<std::endl;
+      os<<"clock_step_units:"<<data._clock_step_units <<std::endl;
 
-      os<<"leap_utc_title:"<<data._leap_utc_title.c_str()<<std::endl;
+      os<<"leap_utc_title:"<<data._leap_utc_title <<std::endl;
 
-      os<<"leap_utc:"<<data._leap_utc.c_str()<<std::endl;
+      os<<"leap_utc:"<<data._leap_utc <<std::endl;
 
-      os<<"leap_sign_title:"<<data._leap_sign_title.c_str()<<std::endl;
+      os<<"leap_sign_title:"<<data._leap_sign_title <<std::endl;
 
-      os<<"leap_sign:"<<data._leap_sign.c_str()<<std::endl;
+      os<<"leap_sign:"<<data._leap_sign <<std::endl;
 
-      os<<"leap_err_title:"<<data._leap_err_title.c_str()<<std::endl;
+      os<<"leap_err_title:"<<data._leap_err_title <<std::endl;
 
-      os<<"leap_err:"<<data._leap_err.c_str()<<std::endl;
+      os<<"leap_err:"<<data._leap_err <<std::endl;
 
-      os<<"product_err_title:"<<data._product_err_title.c_str()<<std::endl;
+      os<<"product_err_title:"<<data._product_err_title <<std::endl;
 
-      os<<"product_err:"<<data._product_err.c_str()<<std::endl;
+      os<<"product_err:"<<data._product_err <<std::endl;
 
-      os<<"total_size_title:"<<data._total_size_title.c_str()<<std::endl;
+      os<<"total_size_title:"<<data._total_size_title <<std::endl;
 
-      os<<"tot_size:"<<data._tot_size.c_str()<<std::endl;
+      os<<"tot_size:"<<data._tot_size <<std::endl;
 
-      os<<"total_size_units:"<<data._total_size_units.c_str()<<std::endl;
+      os<<"total_size_units:"<<data._total_size_units <<std::endl;
 
-      os<<"sph_size_title:"<<data._sph_size_title.c_str()<<std::endl;
+      os<<"sph_size_title:"<<data._sph_size_title <<std::endl;
 
-      os<<"sph_size:"<<data._sph_size.c_str()<<std::endl;
+      os<<"sph_size:"<<data._sph_size <<std::endl;
 
-      os<<"sph_size_units:"<<data._sph_size_units.c_str()<<std::endl;
+      os<<"sph_size_units:"<<data._sph_size_units <<std::endl;
 
-      os<<"number_of_dsd_title:"<<data._number_of_dsd_title.c_str()<<std::endl;
+      os<<"number_of_dsd_title:"<<data._number_of_dsd_title <<std::endl;
 
       os<<"num_dsd:"<<data._num_dsd<<std::endl;
 
-      os<<"size_of_dsd_title:"<<data._size_of_dsd_title.c_str()<<std::endl;
+      os<<"size_of_dsd_title:"<<data._size_of_dsd_title <<std::endl;
 
       os<<"dsd_size:"<<data._dsd_size<<std::endl;
 
-      os<<"size_of_dsd_units:"<<data._size_of_dsd_units.c_str()<<std::endl;
+      os<<"size_of_dsd_units:"<<data._size_of_dsd_units <<std::endl;
 
-      os<<"number_of_ds_att_title:"<<data._number_of_ds_att_title.c_str()<<std::endl;
+      os<<"number_of_ds_att_title:"<<data._number_of_ds_att_title <<std::endl;
 
       os<<"num_data_sets:"<<data._num_data_sets<<std::endl;
 

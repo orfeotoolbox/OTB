@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -44,13 +44,13 @@ std::ostream& operator<<(std::ostream& os, const RadiometricData& data)
 
     os<<"field_size:"<<data._field_size<<std::endl;
 
-	os<<"chan_ind:"<<data._chan_ind.c_str()<<std::endl;
+	os<<"chan_ind:"<<data._chan_ind <<std::endl;
 
-    os<<"table_desig:"<<data._table_desig.c_str()<<std::endl;
+    os<<"table_desig:"<<data._table_desig <<std::endl;
 
     os<<"n_samp:"<<data._n_samp<<std::endl;
 
-    os<<"samp_type:"<<data._samp_type.c_str()<<std::endl;
+    os<<"samp_type:"<<data._samp_type <<std::endl;
 
     os<<"samp_inc:"<<data._samp_inc<<std::endl;
 

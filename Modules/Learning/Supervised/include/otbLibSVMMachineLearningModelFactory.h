@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,10 +36,10 @@ class ITK_EXPORT LibSVMMachineLearningModelFactory : public itk::ObjectFactoryBa
 {
 public:
   /** Standard class typedefs. */
-  typedef LibSVMMachineLearningModelFactory             Self;
-  typedef itk::ObjectFactoryBase        Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef LibSVMMachineLearningModelFactory Self;
+  typedef itk::ObjectFactoryBase            Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   const char* GetITKSourceVersion(void) const override;
@@ -63,15 +63,14 @@ protected:
   ~LibSVMMachineLearningModelFactory() override;
 
 private:
-  LibSVMMachineLearningModelFactory(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
-
+  LibSVMMachineLearningModelFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbLibSVMMachineLearningModelFactory.txx"
+#include "otbLibSVMMachineLearningModelFactory.hxx"
 #endif
 
 #endif

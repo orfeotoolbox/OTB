@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,6 +26,7 @@
 #include "otbParser.h"
 #include "otbMacro.h"
 #include "otbBinarySpectralAngleFunctor.h"
+#include <string>
 
 namespace otb
 {
@@ -56,8 +57,8 @@ namespace otb
 namespace Functor
 {
 
-template<class TInputPixel>
-class ITK_EXPORT MaskMuParserFunctor: public itk::LightObject
+template <class TInputPixel>
+class ITK_EXPORT MaskMuParserFunctor : public itk::LightObject
 {
 public:
   typedef MaskMuParserFunctor           Self;
@@ -72,11 +73,11 @@ public:
   itkTypeMacro(MaskMuParserFunctor, itk::LightObject);
 
   typedef TInputPixel PixelType;
-  typedef Parser ParserType;
+  typedef Parser      ParserType;
 
   typedef BinarySpectralAngleFunctor<PixelType, PixelType, double> SpectralAngleFunctorType;
 
-  bool operator()(const PixelType &p);
+  bool operator()(const PixelType& p);
 
   const std::map<std::string, Parser::ValueType*>& GetVar() const;
 
@@ -101,33 +102,31 @@ protected:
   ~MaskMuParserFunctor() override;
 
 private:
+  MaskMuParserFunctor(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  MaskMuParserFunctor(const Self &); //purposely not implemented
-  void operator =(const Self &); //purposely not implemented
-
-  std::string m_Expression;
+  std::string         m_Expression;
   ParserType::Pointer m_Parser;
   std::vector<double> m_AImage;
-  //std::vector<std::string > m_VarName;
+  // std::vector<std::string > m_VarName;
   unsigned int m_NbOfBands;
-  //unsigned int m_NbVar;
+  // unsigned int m_NbVar;
   double m_ParserResult;
 
-  //user defined variables
+  // user defined variables
   double m_Intensity;
   double m_SpectralAngle;
 
-  PixelType m_SpectralAngleReferencePixel;
+  PixelType                m_SpectralAngleReferencePixel;
   SpectralAngleFunctorType m_SpectralAngleFunctor;
-
 };
 
 } // end of Functor namespace
-}//end namespace otb
+} // end namespace otb
 
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbMaskMuParserFunctor.txx"
+#include "otbMaskMuParserFunctor.hxx"
 #endif
 
 #endif

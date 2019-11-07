@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,7 +26,7 @@
 
 namespace otb
 {
-  
+
 /** \class WaveletsBandsListToWaveletsSynopsisImageFilter
  *  \brief Converts a list of wavelets bands to the traditional multi-resolution wavelets view
  *
@@ -37,38 +37,36 @@ namespace otb
  */
 
 template <class TImageList, class TImage>
-class ITK_EXPORT WaveletsBandsListToWaveletsSynopsisImageFilter
-      : public ImageListToImageFilter<typename TImageList::ImageType, TImage>
+class ITK_EXPORT WaveletsBandsListToWaveletsSynopsisImageFilter : public ImageListToImageFilter<typename TImageList::ImageType, TImage>
 {
 public:
   /** Standard typedefs */
   typedef WaveletsBandsListToWaveletsSynopsisImageFilter Self;
-  typedef ImageListToImageFilter<
-          typename TImageList::ImageType,TImage>         Superclass;
-  typedef itk::SmartPointer<Self>                        Pointer;
-  typedef itk::SmartPointer<const Self>                  ConstPointer;
+  typedef ImageListToImageFilter<typename TImageList::ImageType, TImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
 
   /** Useful typedefs */
-  typedef TImageList                                     InputImageListType;
-  typedef typename InputImageListType::ImageType         InputImageType;
-  typedef TImage                                         OutputImageType;
-  typedef typename OutputImageType::RegionType           RegionType;
+  typedef TImageList                             InputImageListType;
+  typedef typename InputImageListType::ImageType InputImageType;
+  typedef TImage                                 OutputImageType;
+  typedef typename OutputImageType::RegionType   RegionType;
 
   /** Creation through object factory macro */
-  itkTypeMacro(WaveletsBandsListToWaveletsSynopsisImageFilter,ImageToImageListFilter);
+  itkTypeMacro(WaveletsBandsListToWaveletsSynopsisImageFilter, ImageToImageListFilter);
 
   /** Set the decimation ratio */
-  itkSetMacro(DecimationRatio,unsigned int);
+  itkSetMacro(DecimationRatio, unsigned int);
 
   /** Get the decimation ratio */
-  itkGetMacro(DecimationRatio,unsigned int);
+  itkGetMacro(DecimationRatio, unsigned int);
 
 protected:
   /** Main computation method */
-  virtual void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
+  virtual void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** GenerateOutputInformation
    * Set the number of bands of the output.
@@ -92,15 +90,15 @@ protected:
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  WaveletsBandsListToWaveletsSynopsisImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
+  WaveletsBandsListToWaveletsSynopsisImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The decimation ratio used in the decomposition */
   unsigned int m_DecimationRatio;
 };
-}// End namespace otb
+} // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbWaveletsBandsListToWaveletsSynopsisImageFilter.txx"
+#include "otbWaveletsBandsListToWaveletsSynopsisImageFilter.hxx"
 #endif
 
 #endif

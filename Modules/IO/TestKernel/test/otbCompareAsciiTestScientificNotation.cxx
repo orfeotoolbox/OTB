@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,14 +23,14 @@
 
 #include "otbMacro.h"
 
-int otbCompareAsciiTestScientificNotation(int argc, char * argv[])
+int otbCompareAsciiTestScientificNotation(int argc, char* argv[])
 {
   if (argc != 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " referenceFile testFile" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   std::ofstream fileRef;
   fileRef.open(argv[1]);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,8 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilterNew);
   REGISTER_TEST(otbStreamingConnectedComponentSegmentationOBIAToVectorDataFilter);
   REGISTER_TEST(otbConnectedComponentMuParserFunctorTest);
   REGISTER_TEST(otbMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter);
-  REGISTER_TEST(otbLabelObjectOpeningMuParserFilterNew);
   REGISTER_TEST(otbLabelObjectOpeningMuParserFilterTest);
 }

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -25,7 +25,7 @@ otb_test_application(NAME  apTvFEBinaryMorphologicalOperation
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask.tif
                              -channel 1
                              -structype ball
-                             -structype.ball.xradius 10
+                             -xradius 10
                              -filter opening
                              -filter.opening.foreval 1.0
                              -filter.opening.backval 0.0
@@ -41,7 +41,7 @@ otb_test_application(NAME  apTvFEGrayScaleMorphologicalOperation
                      OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
                              -channel 1
                              -structype ball
-                             -structype.ball.xradius 10
+                             -xradius 10
                              -filter opening
                              -out ${TEMP}/apTvFEGrayScaleMorphologicalOperation.tif
                      VALID   --compare-image ${NOTOL}
@@ -142,7 +142,7 @@ otb_test_application(NAME  apTvFEMorphologicalProfilesAnalysisClassification
 						     -radius 1
 						     -step 1
 							 -profile.classification.sigma 1
-						     -out ${TEMP}/apTvFEMorphologicalProfilesClosingAnalysis.tif
+						     -out ${TEMP}/apTvFEMorphologicalProfilesAnalysisClassif.tif
 					 VALID   --compare-image ${NOTOL}
 							 ${BASELINE}/msMultiScaleConvexOrConcaveClassificationFilterOutput.tif
-					 		 ${TEMP}/apTvFEMorphologicalProfilesClosingAnalysis.tif)
+							 ${TEMP}/apTvFEMorphologicalProfilesAnalysisClassif.tif)

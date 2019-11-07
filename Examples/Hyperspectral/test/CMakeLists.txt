@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -19,7 +19,7 @@
 #
 
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Hyperspectral)
-set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 otb_add_test(NAME siTvHyperspectralExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-n-images ${NOTOL} 3
@@ -30,7 +30,7 @@ otb_add_test(NAME siTvHyperspectralExampleTest COMMAND ${OTB_TEST_DRIVER}
     ${BASELINE}/siTvHyperspectralUnmixingExampleTestBand3.png
     ${TEMP}/siTvHyperspectralUnmixingExampleTestBand3.png
   Execute $<TARGET_FILE:HyperspectralUnmixingExample>
-    LARGEINPUT{AVIRIS/Indian_pines_corrected.tif}
+    ${INPUTDATA}/AVIRIS/Indian_pines_corrected.tif
     ${TEMP}/siTvHyperspectralUnmixingExampleTest.tif
     ${TEMP}/siTvHyperspectralUnmixingExampleTestBand1.png
     ${TEMP}/siTvHyperspectralUnmixingExampleTestBand2.png

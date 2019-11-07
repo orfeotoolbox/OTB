@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -25,6 +25,7 @@ to instantiate it and another one which uses the class. The output of each test
 the result hasn't changed.")
 
 otb_module(OTBTestKernel
+  ENABLE_SHARED
   DEPENDS
     OTBGdalAdapters
     OTBImageIO

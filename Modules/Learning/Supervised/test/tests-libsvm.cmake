@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -23,9 +23,6 @@ otb_add_test(NAME leTvLibSVMMachineLearningModel COMMAND otbSupervisedTestDriver
   ${INPUTDATA}/letter_light.scale
   ${TEMP}/libsvm_model.txt
   )
-otb_add_test(NAME leTuLibSVMMachineLearningModelNew COMMAND otbSupervisedTestDriver
-  otbLibSVMMachineLearningModelNew)
-
 otb_add_test(NAME leTvImageClassificationFilterLibSVM COMMAND otbSupervisedTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/leSVMImageClassificationFilterOutput.tif
@@ -52,11 +49,3 @@ otb_add_test(NAME leTvLibSVMMachineLearningModelReg COMMAND otbSupervisedTestDri
   #${INPUTDATA}/maur_labelled.tif
   #${TEMP}/obTvLabelMapSVMClassifierLabeledOutput.tif)
 
-otb_add_test(NAME obTuLabelMapSVMClassifierNew COMMAND otbSupervisedTestDriver
-  otbLabelMapClassifierNew)
-
-otb_add_test(NAME leTuSVMCrossValidationCostFunctionNew COMMAND otbSupervisedTestDriver
-  otbSVMCrossValidationCostFunctionNew)
-
-otb_add_test(NAME leTuSVMMarginSamplerNew COMMAND otbSupervisedTestDriver
-  otbSVMMarginSamplerNew)

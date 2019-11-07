@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
@@ -29,31 +27,31 @@
 int otbImageFileReaderWithComplexPixelTest(int argc, char* argv[])
 {
   if (argc < 7)
-    {
-    std::cout << argv[0] << "<inputImage> <outputImage> <startX> <startY> <sizeX> <sizeY>"  << std::endl;
+  {
+    std::cout << argv[0] << "<inputImage> <outputImage> <startX> <startY> <sizeX> <sizeY>" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
-  unsigned int startX = (unsigned int)(::atoi(argv[3]));
-  unsigned int startY = (unsigned int)(::atoi(argv[4]));
-  unsigned int sizeX = (unsigned int)(::atoi(argv[5]));
-  unsigned int sizeY = (unsigned int)(::atoi(argv[6]));
+  const char*  inputFilename  = argv[1];
+  const char*  outputFilename = argv[2];
+  unsigned int startX         = (unsigned int)(::atoi(argv[3]));
+  unsigned int startY         = (unsigned int)(::atoi(argv[4]));
+  unsigned int sizeX          = (unsigned int)(::atoi(argv[5]));
+  unsigned int sizeY          = (unsigned int)(::atoi(argv[6]));
 
   typedef std::complex<float> PixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int          Dimension = 2;
 
-  typedef otb::Image<PixelType,  Dimension> ImageType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
 
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
   ReaderType::Pointer complexReader = ReaderType::New();
 
   complexReader->SetFileName(inputFilename);
 
-  typedef otb::ExtractROI<PixelType, PixelType>  ExtractROIFilterType;
+  typedef otb::ExtractROI<PixelType, PixelType> ExtractROIFilterType;
 
   ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
 
@@ -75,28 +73,27 @@ int otbImageFileReaderWithComplexPixelTest(int argc, char* argv[])
 int otbVectorImageFileReaderWithComplexPixelTest(int argc, char* argv[])
 {
   if (argc < 7)
-    {
-    std::cout << argv[0] << "<inputImage> <outputImage> <startX> <startY> <sizeX> <sizeY>"  << std::endl;
+  {
+    std::cout << argv[0] << "<inputImage> <outputImage> <startX> <startY> <sizeX> <sizeY>" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
-  unsigned int startX = (unsigned int)(::atoi(argv[3]));
-  unsigned int startY = (unsigned int)(::atoi(argv[4]));
-  unsigned int sizeX = (unsigned int)(::atoi(argv[5]));
-  unsigned int sizeY = (unsigned int)(::atoi(argv[6]));
+  const char*  inputFilename  = argv[1];
+  const char*  outputFilename = argv[2];
+  unsigned int startX         = (unsigned int)(::atoi(argv[3]));
+  unsigned int startY         = (unsigned int)(::atoi(argv[4]));
+  unsigned int sizeX          = (unsigned int)(::atoi(argv[5]));
+  unsigned int sizeY          = (unsigned int)(::atoi(argv[6]));
 
-  typedef std::complex<float>                            PixelType;
-  const unsigned int Dimension = 2;
+  typedef std::complex<float> PixelType;
+  const unsigned int          Dimension = 2;
 
-  typedef otb::VectorImage<PixelType, Dimension>         CplVectorImageType;
+  typedef otb::VectorImage<PixelType, Dimension> CplVectorImageType;
 
-  typedef otb::ImageFileReader<CplVectorImageType>  ReaderType;
-  typedef otb::ImageFileWriter<CplVectorImageType>  WriterType;
+  typedef otb::ImageFileReader<CplVectorImageType> ReaderType;
+  typedef otb::ImageFileWriter<CplVectorImageType> WriterType;
 
-  typedef otb::MultiChannelExtractROI<CplVectorImageType::InternalPixelType,
-      CplVectorImageType::InternalPixelType>               ExtractROIFilterType;
+  typedef otb::MultiChannelExtractROI<CplVectorImageType::InternalPixelType, CplVectorImageType::InternalPixelType> ExtractROIFilterType;
 
 
   ReaderType::Pointer complexReader = ReaderType::New();

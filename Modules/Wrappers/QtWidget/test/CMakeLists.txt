@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -23,7 +23,6 @@ otb_module_test()
 set(OTBQtWidgetTests
 otbQtWidgetTestDriver.cxx
 otbWrapperQtWidgetShowWidget.cxx
-otbQtLogOutputTests.cxx
 otbWrapperQtWidgetParameterFactory.cxx
 )
 
@@ -32,9 +31,6 @@ target_link_libraries(otbQtWidgetTestDriver ${OTBQtWidget-Test_LIBRARIES})
 otb_module_target_label(otbQtWidgetTestDriver)
 
 # Tests Declaration
-
-otb_add_test(NAME owTvQtLogOutputNew COMMAND otbQtWidgetTestDriver
-  otbQtLogOutputNew)
 
 otb_add_test(NAME owTvQtWidgetParameterGroup COMMAND otbQtWidgetTestDriver
   otbWrapperQtWidgetParameterGroup)

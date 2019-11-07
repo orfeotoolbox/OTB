@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,9 +21,12 @@
 #ifndef otbVectorDataKeywordlist_h
 #define otbVectorDataKeywordlist_h
 
+#include <iosfwd>
+#include <vector>
+#include <string>
+
 #include "itkLightObject.h"
 #include "itkObjectFactory.h"
-#include <vector>
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
@@ -58,10 +61,12 @@ public:
   typedef VectorDataKeywordlist Self;
 
   typedef std::pair<OGRFieldDefn*, OGRField> FieldType;
-  typedef std::vector<FieldType>             FieldListType;
+  typedef std::vector<FieldType> FieldListType;
 
-  virtual const char *GetNameOfClass() const
-  {return "VectorDataKeywordlist"; }
+  virtual const char* GetNameOfClass() const
+  {
+    return "VectorDataKeywordlist";
+  }
 
   void AddField(OGRFieldDefn* fieldDefn, OGRField* field);
 
@@ -103,11 +108,11 @@ public:
     */
   void SetFieldAsDouble(const std::string& key, double value);
 
-   /**
-    * Set the field as an integer
-    * \param key The name of the field.
-    * \param value The value of the field.
-    */
+  /**
+   * Set the field as an integer
+   * \param key The name of the field.
+   * \param value The value of the field.
+   */
   void SetFieldAsInt(const std::string& key, int value);
 
   /**
@@ -153,22 +158,17 @@ public:
   VectorDataKeywordlist(const Self& other);
 
   /** Deep copy operator*/
-  void operator =(const Self&);
+  void operator=(const Self&);
 
 protected:
-
   virtual void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
 private:
-
   std::string PrintField(FieldType field) const;
   FieldType CopyOgrField(FieldType field);
   FieldListType m_FieldList;
-
 };
-OTBVectorDataBase_EXPORT
-extern std::ostream & operator <<(std::ostream& os, const VectorDataKeywordlist& kwl);
-
+OTBVectorDataBase_EXPORT extern std::ostream& operator<<(std::ostream& os, const VectorDataKeywordlist& kwl);
 }
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,14 +19,12 @@
  */
 
 
-
-
 #include "itkMacro.h"
 #include "otbImage.h"
 #include "itkImageRegionIteratorWithIndex.h"
 #include "otbMultiplyByScalarImageFilter.h"
 
-int otbMultiplyByScalarImageFilterTest(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbMultiplyByScalarImageFilterTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   // Define the dimension of the images
   const unsigned int ImageDimension = 2;
@@ -35,11 +33,9 @@ int otbMultiplyByScalarImageFilterTest(int itkNotUsed(argc), char * itkNotUsed(a
   typedef otb::Image<float, ImageDimension> OutputImageType;
 
   // Declare Iterator types apropriated for each image
-  typedef itk::ImageRegionIteratorWithIndex<
-      InputImageType>  InputIteratorType;
+  typedef itk::ImageRegionIteratorWithIndex<InputImageType> InputIteratorType;
 
-  typedef itk::ImageRegionIteratorWithIndex<
-      OutputImageType>  OutputIteratorType;
+  typedef itk::ImageRegionIteratorWithIndex<OutputImageType> OutputIteratorType;
 
   // Declare the type of the index to access images
   typedef itk::Index<ImageDimension> IndexType;
@@ -51,7 +47,7 @@ int otbMultiplyByScalarImageFilterTest(int itkNotUsed(argc), char * itkNotUsed(a
   typedef itk::ImageRegion<ImageDimension> RegionType;
 
   // Create two images
-  InputImageType::Pointer inputImage  = InputImageType::New();
+  InputImageType::Pointer inputImage = InputImageType::New();
 
   // Define their size, and start index
   SizeType size;
@@ -73,16 +69,16 @@ int otbMultiplyByScalarImageFilterTest(int itkNotUsed(argc), char * itkNotUsed(a
   InputIteratorType it(inputImage, inputImage->GetBufferedRegion());
 
   // Initialize the content of Image A
-  const double pi    = vcl_atan(1.0) * 4.0;
+  const double pi    = std::atan(1.0) * 4.0;
   const double value = pi / 6.0;
   std::cout << "Content of the Input " << std::endl;
   it.GoToBegin();
   while (!it.IsAtEnd())
-    {
+  {
     it.Set(value);
     std::cout << it.Get() << std::endl;
     ++it;
-    }
+  }
 
   // Declare the type for the Acos filter
   typedef otb::MultiplyByScalarImageFilter<InputImageType, OutputImageType> FilterType;
@@ -109,23 +105,23 @@ int otbMultiplyByScalarImageFilterTest(int itkNotUsed(argc), char * itkNotUsed(a
   ot.GoToBegin();
   it.GoToBegin();
   while (!ot.IsAtEnd())
+  {
+    std::cout << ot.Get() << " = ";
+    std::cout << 10.0 * (it.Get()) << std::endl;
+    const InputImageType::PixelType  input          = it.Get();
+    const OutputImageType::PixelType output         = ot.Get();
+    const OutputImageType::PixelType multiplyByScal = 10.0 * input;
+    if (std::abs(multiplyByScal - output) > epsilon)
     {
-    std::cout <<  ot.Get() << " = ";
-    std::cout <<  10.0 * (it.Get())  << std::endl;
-    const InputImageType::PixelType  input  = it.Get();
-    const OutputImageType::PixelType output = ot.Get();
-    const OutputImageType::PixelType multiplyByScal  = 10.0 * input;
-    if (vcl_abs(multiplyByScal - output) > epsilon)
-      {
       std::cerr << "Error in otbMultiplyScalarImageFilterTest " << std::endl;
       std::cerr << " 10.0 * " << input << ") = " << multiplyByScal << std::endl;
       std::cerr << " differs from " << output;
       std::cerr << " by more than " << epsilon << std::endl;
       return 1;
-      }
+    }
     ++ot;
     ++it;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

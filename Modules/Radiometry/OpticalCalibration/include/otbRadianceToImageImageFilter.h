@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,7 +28,6 @@
 #include "otbMacro.h"
 #include "otbOpticalImageMetadataInterfaceFactory.h"
 
-#include <fstream>
 
 namespace otb
 {
@@ -49,12 +48,13 @@ template <class TInput, class TOutput>
 class RadianceToImageImageFunctor
 {
 public:
-  RadianceToImageImageFunctor() :
-    m_Alpha(1.),
-    m_Beta(0.)
-  {}
+  RadianceToImageImageFunctor() : m_Alpha(1.), m_Beta(0.)
+  {
+  }
 
-  virtual ~RadianceToImageImageFunctor() {}
+  virtual ~RadianceToImageImageFunctor()
+  {
+  }
 
   void SetAlpha(double alpha)
   {
@@ -73,11 +73,11 @@ public:
     return m_Beta;
   }
 
-  inline TOutput operator ()(const TInput& inPixel) const
+  inline TOutput operator()(const TInput& inPixel) const
   {
     TOutput outPixel;
     double  temp;
-    temp = (static_cast<double>(inPixel) - m_Beta) * m_Alpha;
+    temp     = (static_cast<double>(inPixel) - m_Beta) * m_Alpha;
     outPixel = static_cast<TOutput>(temp);
     return outPixel;
   }
@@ -106,15 +106,10 @@ private:
  * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT RadianceToImageImageFilter :
-  public UnaryImageFunctorWithVectorImageFilter<TInputImage,
-      TOutputImage,
-      typename Functor::RadianceToImageImageFunctor<typename
-          TInputImage::
-          InternalPixelType,
-          typename
-          TOutputImage::
-          InternalPixelType> >
+class ITK_EXPORT RadianceToImageImageFilter
+    : public UnaryImageFunctorWithVectorImageFilter<
+          TInputImage, TOutputImage,
+          typename Functor::RadianceToImageImageFunctor<typename TInputImage::InternalPixelType, typename TOutputImage::InternalPixelType>>
 {
 public:
   /**   Extract input and output images dimensions.*/
@@ -124,14 +119,13 @@ public:
   /** "typedef" to simplify the variables definition and the declaration. */
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
-  typedef typename Functor::RadianceToImageImageFunctor<typename InputImageType::InternalPixelType,
-      typename OutputImageType::InternalPixelType> FunctorType;
+  typedef typename Functor::RadianceToImageImageFunctor<typename InputImageType::InternalPixelType, typename OutputImageType::InternalPixelType> FunctorType;
 
   /** "typedef" for standard classes. */
-  typedef RadianceToImageImageFilter                                                          Self;
+  typedef RadianceToImageImageFilter Self;
   typedef UnaryImageFunctorWithVectorImageFilter<InputImageType, OutputImageType, FunctorType> Superclass;
-  typedef itk::SmartPointer<Self>                                                              Pointer;
-  typedef itk::SmartPointer<const Self>                                                        ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** object factory method. */
   itkNewMacro(Self);
@@ -166,40 +160,39 @@ public:
 protected:
   /** Constructor */
   RadianceToImageImageFilter()
-    {
+  {
     m_Alpha.SetSize(0);
     m_Beta.SetSize(0);
-    };
+  };
 
   /** Destructor */
-  ~RadianceToImageImageFilter() override {}
+  ~RadianceToImageImageFilter() override
+  {
+  }
 
   /** Update the functor list and input parameters */
   void BeforeThreadedGenerateData(void) override
   {
-    OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(
-      this->GetInput()->GetMetaDataDictionary());
+    OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(this->GetInput()->GetMetaDataDictionary());
     if (m_Alpha.GetSize() == 0)
-      {
+    {
       m_Alpha = imageMetadataInterface->GetPhysicalGain();
-      }
+    }
 
     if (m_Beta.GetSize() == 0)
-      {
+    {
       m_Beta = imageMetadataInterface->GetPhysicalBias();
-      }
+    }
 
     otbMsgDevMacro(<< "Dimension: ");
     otbMsgDevMacro(<< "m_Alpha.GetSize(): " << m_Alpha.GetSize());
     otbMsgDevMacro(<< "m_Beta.GetSize() : " << m_Beta.GetSize());
-    otbMsgDevMacro(
-      << "this->GetInput()->GetNumberOfComponentsPerPixel() : " << this->GetInput()->GetNumberOfComponentsPerPixel());
+    otbMsgDevMacro(<< "this->GetInput()->GetNumberOfComponentsPerPixel() : " << this->GetInput()->GetNumberOfComponentsPerPixel());
 
-    if ((m_Alpha.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel())
-        || (m_Beta.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))
-      {
+    if ((m_Alpha.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()) || (m_Beta.GetSize() != this->GetInput()->GetNumberOfComponentsPerPixel()))
+    {
       itkExceptionMacro(<< "Alpha and Beta parameters should have the same size as the number of bands");
-      }
+    }
 
     otbMsgDevMacro(<< "Using correction parameters: ");
     otbMsgDevMacro(<< "Alpha (gain): " << m_Alpha);
@@ -207,12 +200,12 @@ protected:
 
     this->GetFunctorVector().clear();
     for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
-      {
+    {
       FunctorType functor;
       functor.SetAlpha(m_Alpha[i]);
       functor.SetBeta(m_Beta[i]);
       this->GetFunctorVector().push_back(functor);
-      }
+    }
   }
 
 private:

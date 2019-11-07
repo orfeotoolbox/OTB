@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -95,7 +95,7 @@ otb_test_application(NAME  apTvSARPolarMatrixConvertRecLinCovToRecCirCov
                      OPTIONS 
 							 -inc ${BASELINE}/saTvSinclairImageFilter_SinclairToReciprocalCovariance.tif
 							 -conv mlinearcovariancetocircularcovariance
-							 -outc ${TEMP}/apTvSARPolarMatrixConvertRecCovToRecCoh.tif
+							 -outc ${TEMP}/apTvSARPolarMatrixConvertRecLinCovToRecCirCov.tif
 							 
                      )
                              

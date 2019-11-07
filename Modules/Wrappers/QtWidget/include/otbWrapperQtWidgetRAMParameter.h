@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,10 +22,8 @@
 #define otbWrapperQtWidgetRAMParameter_h
 
 #include <QtWidgets>
-#ifndef Q_MOC_RUN  // See: https://bugreports.qt-project.org/browse/QTBUG-22829  //tag=QT4-boost-compatibility
-#include "otbWrapperRAMParameter.h"
+#include "otbWrapperNumericalParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#endif //tag=QT4-boost-compatibility
 
 
 namespace otb
@@ -42,27 +40,25 @@ class OTBQtWidget_EXPORT QtWidgetRAMParameter : public QtWidgetParameterBase
 {
   Q_OBJECT
 public:
-  QtWidgetRAMParameter(RAMParameter*, QtWidgetModel*);
+  QtWidgetRAMParameter(RAMParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetRAMParameter() override;
 
 protected slots:
-  void SetValue( int value );
+  void SetValue(int value);
 
 private:
-  QtWidgetRAMParameter(const QtWidgetRAMParameter&); //purposely not implemented
-  void operator=(const QtWidgetRAMParameter&); //purposely not implemented
+  QtWidgetRAMParameter(const QtWidgetRAMParameter&) = delete;
+  void operator=(const QtWidgetRAMParameter&) = delete;
 
   void DoCreateWidget() override;
 
   void DoUpdateGUI() override;
 
-  QHBoxLayout *         m_QHBoxLayout;
-  QSpinBox *            m_QSpinBox;
+  QHBoxLayout* m_QHBoxLayout;
+  QSpinBox*    m_QSpinBox;
 
   RAMParameter::Pointer m_RAMParam;
 };
-
-
 }
 }
 

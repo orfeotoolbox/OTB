@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,26 +35,27 @@ namespace Functor
  *
  * \ingroup OTBImageManipulation
  */
-template < class TInput, class TOutput >
+template <class TInput, class TOutput>
 class LocalGradientOperator
 {
 public:
-  LocalGradientOperator() { }
-  virtual ~LocalGradientOperator() { }
+  LocalGradientOperator()
+  {
+  }
+  virtual ~LocalGradientOperator()
+  {
+  }
 
-  TOutput operator() ( const TInput & input )
+  TOutput operator()(const TInput& input)
   {
     /*
      * it is assumed that input and output have the same size
      */
     unsigned int length = input.GetPixel(0).Size();
-    TOutput output ( length );
-    for ( unsigned int i = 0; i < length; ++i )
+    TOutput      output(length);
+    for (unsigned int i = 0; i < length; ++i)
     {
-      output[i] = static_cast<typename TOutput::ValueType>(
-                  input.GetCenterPixel()[i]
-                  - input.GetPixel(5)[i] / 2.
-                  - input.GetPixel(7)[i] / 2. );
+      output[i] = static_cast<typename TOutput::ValueType>(input.GetCenterPixel()[i] - input.GetPixel(5)[i] / 2. - input.GetPixel(7)[i] / 2.);
     }
     return output;
   }
@@ -67,21 +68,18 @@ public:
  *
  * \ingroup OTBImageManipulation
  */
-template < class TInputImage, class TOutputImage >
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LocalGradientVectorImageFilter
-  : public UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
-            Functor::LocalGradientOperator<
-              typename itk::ConstNeighborhoodIterator<TInputImage>,
-              typename TOutputImage::PixelType > >
+    : public UnaryFunctorNeighborhoodVectorImageFilter<
+          TInputImage, TOutputImage, Functor::LocalGradientOperator<typename itk::ConstNeighborhoodIterator<TInputImage>, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs */
   typedef LocalGradientVectorImageFilter Self;
-  typedef UnaryFunctorNeighborhoodVectorImageFilter< TInputImage, TOutputImage,
-            Functor::LocalGradientOperator<
-              typename itk::ConstNeighborhoodIterator<TInputImage>,
-              typename TOutputImage::PixelType > >  Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef UnaryFunctorNeighborhoodVectorImageFilter<
+      TInputImage, TOutputImage, Functor::LocalGradientOperator<typename itk::ConstNeighborhoodIterator<TInputImage>, typename TOutputImage::PixelType>>
+                                        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
@@ -94,14 +92,16 @@ protected:
   LocalGradientVectorImageFilter()
   {
     typename Superclass::RadiusType radius = {{1, 1}};
-    this->SetRadius( radius );
+    this->SetRadius(radius);
   }
-  ~LocalGradientVectorImageFilter() override { }
+  ~LocalGradientVectorImageFilter() override
+  {
+  }
 
 private:
-  LocalGradientVectorImageFilter( const Self & ); // Not implemented
-  void operator=( const Self & ); // Not implemented
-}; // end of class
+  LocalGradientVectorImageFilter(const Self&); // Not implemented
+  void operator=(const Self&);                 // Not implemented
+};                                             // end of class
 
 } // end of namespace otb
 

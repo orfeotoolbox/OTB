@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -23,26 +23,15 @@ otb_module_test()
 set(OTBMorphologicalProfilesTests
 otbMorphologicalProfilesTestDriver.cxx
 otbMorphologicalProfilesSegmentationFilter.cxx
-otbProfileToProfileDerivativeFilterNew.cxx
 otbGeodesicMorphologyDecompositionImageFilter.cxx
-otbMorphologicalClosingProfileFilterNew.cxx
 otbConvexOrConcaveClassificationFilter.cxx
 otbGeodesicMorphologyLevelingFilter.cxx
-otbConvexOrConcaveClassificationFilterNew.cxx
 otbMultiScaleConvexOrConcaveClassificationFilter.cxx
 otbMorphologicalOpeningProfileFilter.cxx
 otbGeodesicMorphologyIterativeDecompositionImageFilter.cxx
-otbGeodesicMorphologyIterativeDecompositionImageFilterNew.cxx
-otbGeodesicMorphologyLevelingFilterNew.cxx
 otbClosingOpeningMorphologicalFilter.cxx
-otbProfileDerivativeToMultiScaleCharacteristicsFilterNew.cxx
 otbProfileToProfileDerivativeFilter.cxx
-otbOpeningClosingMorphologicalFilterNew.cxx
-otbGeodesicMorphologyDecompositionImageFilterNew.cxx
-otbMorphologicalOpeningProfileFilterNew.cxx
 otbProfileDerivativeToMultiScaleCharacteristicsFilter.cxx
-otbMultiScaleConvexOrConcaveClassificationFilterNew.cxx
-otbClosingOpeningMorphologicalFilterNew.cxx
 otbOpeningClosingMorphologicalFilter.cxx
 otbMorphologicalClosingProfileFilter.cxx
 )
@@ -65,9 +54,6 @@ otb_add_test(NAME obTvMorphologicalProfilesSegmentationFilter COMMAND otbMorphol
   5
   )
 
-otb_add_test(NAME msTuProfileToProfileDerivativeFilterNew COMMAND otbMorphologicalProfilesTestDriver
-  otbProfileToProfileDerivativeFilterNew)
-
 otb_add_test(NAME msTvGeodesicMorphologyDecompositionImageFilter COMMAND otbMorphologicalProfilesTestDriver
   --compare-n-images ${NOTOL} 3
   ${BASELINE}/msGeodesicMorphologyDecompositionImageFilterConvexOutput.tif
@@ -83,9 +69,6 @@ otb_add_test(NAME msTvGeodesicMorphologyDecompositionImageFilter COMMAND otbMorp
   ${TEMP}/msGeodesicMorphologyDecompositionImageFilterLevelingOutput.tif
   4
   )
-
-otb_add_test(NAME msTuMorphologicalClosingProfileFilterNew COMMAND otbMorphologicalProfilesTestDriver
-  otbMorphologicalClosingProfileFilterNew)
 
 otb_add_test(NAME msTvConvexOrConcaveClassificationFilter COMMAND otbMorphologicalProfilesTestDriver
   --compare-image ${NOTOL}
@@ -108,9 +91,6 @@ otb_add_test(NAME msTvGeodesicMorphologyLevelingFilter COMMAND otbMorphologicalP
   ${INPUTDATA}/ROI_IKO_PAN_LesHalles_concave.tif
   ${TEMP}/msGeodesicMorphologyLevelingFilterOutput.tif
   )
-
-otb_add_test(NAME msTuConvexOrConcaveClassificationFilterNew COMMAND otbMorphologicalProfilesTestDriver
-  otbConvexOrConcaveClassificationFilterNew)
 
 otb_add_test(NAME msTvMultiScaleConvexOrConcaveClassificationFilter COMMAND otbMorphologicalProfilesTestDriver
   --compare-image ${NOTOL}
@@ -167,12 +147,6 @@ otb_add_test(NAME msTvGeodesicMorphologyIterativeDecompositionImageFilter COMMAN
   2
   )
 
-otb_add_test(NAME msTuGeodesicMorphologyIterativeDecompositionImageFilterNew COMMAND otbMorphologicalProfilesTestDriver
-  otbGeodesicMorphologyIterativeDecompositionImageFilterNew)
-
-otb_add_test(NAME msTuGeodesicMorphologyLevelingFilterNew COMMAND otbMorphologicalProfilesTestDriver
-  otbGeodesicMorphologyLevelingFilterNew)
-
 otb_add_test(NAME bfTvClosingOpeningFilter COMMAND otbMorphologicalProfilesTestDriver
   --compare-image ${NOTOL}  ${BASELINE}/bfFiltreClosingOpening_1.tif
   ${TEMP}/bfFiltreClosingOpening_1.tif
@@ -180,9 +154,6 @@ otb_add_test(NAME bfTvClosingOpeningFilter COMMAND otbMorphologicalProfilesTestD
   ${INPUTDATA}/ROI_IKO_PAN_LesHalles.tif
   ${TEMP}/bfFiltreClosingOpening_1.tif
   1)
-
-otb_add_test(NAME msTuProfileDerivativeToMultiScaleCharacteristicsFilterNew COMMAND otbMorphologicalProfilesTestDriver
-  otbProfileDerivativeToMultiScaleCharacteristicsFilterNew)
 
 otb_add_test(NAME msTvProfileToProfileDerivativeFilter COMMAND otbMorphologicalProfilesTestDriver
   --compare-n-images ${NOTOL} 4
@@ -203,15 +174,6 @@ otb_add_test(NAME msTvProfileToProfileDerivativeFilter COMMAND otbMorphologicalP
   1
   )
 
-otb_add_test(NAME bfTuOpeningClosingFilterNew COMMAND otbMorphologicalProfilesTestDriver
-  otbOpeningClosingMorphologicalFilterNew )
-
-otb_add_test(NAME msTuGeodesicMorphologyDecompositionImageFilterNew COMMAND otbMorphologicalProfilesTestDriver
-  otbGeodesicMorphologyDecompositionImageFilterNew)
-
-otb_add_test(NAME msTuMorphologicalOpeningProfileFilterNew COMMAND otbMorphologicalProfilesTestDriver
-  otbMorphologicalOpeningProfileFilterNew)
-
 otb_add_test(NAME msTvProfileDerivativeToMultiScaleCharacteristicsFilter COMMAND otbMorphologicalProfilesTestDriver
   --compare-n-images ${NOTOL} 2
   ${BASELINE}/msProfileDerivativeToMultiScaleCharacteristicsFilterOutput.tif
@@ -226,12 +188,6 @@ otb_add_test(NAME msTvProfileDerivativeToMultiScaleCharacteristicsFilter COMMAND
   1
   1
   )
-
-otb_add_test(NAME msTuMultiScaleConvexOrConcaveClassificationFilterNew COMMAND otbMorphologicalProfilesTestDriver
-  otbMultiScaleConvexOrConcaveClassificationFilterNew)
-
-otb_add_test(NAME bfTuClosingOpeningFilterNew COMMAND otbMorphologicalProfilesTestDriver
-  otbClosingOpeningMorphologicalFilterNew )
 
 otb_add_test(NAME bfTvOpeningClosingFilter COMMAND otbMorphologicalProfilesTestDriver
   --compare-image ${NOTOL}  ${BASELINE}/bfFiltreOpeningClosing_1.tif

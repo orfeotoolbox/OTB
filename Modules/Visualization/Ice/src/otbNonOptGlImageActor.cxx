@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -176,9 +176,9 @@ void NonOptGlImageActor::UpdateData()
   // corresponding tiles
 
   // First compute needed tiles
-  unsigned int nbTilesX = vcl_ceil(static_cast<double>(requested.GetIndex()[0] + requested.GetSize()[0])/m_TileSize) -vcl_floor(static_cast<double>(requested.GetIndex()[0])/m_TileSize);
-  unsigned int nbTilesY = vcl_ceil(static_cast<double>(requested.GetIndex()[1] + requested.GetSize()[1])/m_TileSize) -vcl_floor(static_cast<double>(requested.GetIndex()[1])/m_TileSize);
-  //unsigned int nbTilesY = vcl_ceil(static_cast<double>(requested.GetSize()[1])/m_TileSize);
+  unsigned int nbTilesX = std::ceil(static_cast<double>(requested.GetIndex()[0] + requested.GetSize()[0])/m_TileSize) -std::floor(static_cast<double>(requested.GetIndex()[0])/m_TileSize);
+  unsigned int nbTilesY = std::ceil(static_cast<double>(requested.GetIndex()[1] + requested.GetSize()[1])/m_TileSize) -std::floor(static_cast<double>(requested.GetIndex()[1])/m_TileSize);
+  //unsigned int nbTilesY = std::ceil(static_cast<double>(requested.GetSize()[1])/m_TileSize);
   unsigned int tileStartX = m_TileSize*(requested.GetIndex()[0]/m_TileSize);
   unsigned int tileStartY = m_TileSize*(requested.GetIndex()[1]/m_TileSize);
 
@@ -671,8 +671,8 @@ void NonOptGlImageActor::UpdateResolution()
   // std::cout<<"Estimated spacing: "<<outSpacing<<std::endl;
 
   // Last, divide by image spacing to get the resolution
-  double resolution = std::min(vcl_abs(m_Spacing[0]/outSpacing[0]), 
-                               vcl_abs(m_Spacing[1]/outSpacing[1]));
+  double resolution = std::min(std::abs(m_Spacing[0]/outSpacing[0]), 
+                               std::abs(m_Spacing[1]/outSpacing[1]));
 
   // std::cout<<"Resolution: "<<resolution<<std::endl;
   
@@ -685,7 +685,7 @@ void NonOptGlImageActor::UpdateResolution()
        it != m_AvailableResolutions.end(); ++it)
     {
     // std::cout<<(*it)<<" "<<(1/((double)(1<<(*it))))<<std::endl;
-    double diff = vcl_abs(1/((double)(1<<(*it))) - resolution);
+    double diff = std::abs(1/((double)(1<<(*it))) - resolution);
 
     if (diff < minDist)
       {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,7 +22,6 @@
 #define otbProfileToProfileDerivativeFilter_h
 
 #include "otbImageListToImageListFilter.h"
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkSubtractImageFilter.h"
 #include "itkAbsImageFilter.h"
 
@@ -45,15 +44,14 @@ namespace otb
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ProfileToProfileDerivativeFilter
-  : public ImageListToImageListFilter<TInputImage, TOutputImage>
+class ITK_EXPORT ProfileToProfileDerivativeFilter : public ImageListToImageListFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef ProfileToProfileDerivativeFilter                      Self;
+  typedef ProfileToProfileDerivativeFilter Self;
   typedef ImageListToImageListFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                               Pointer;
-  typedef itk::SmartPointer<const Self>                         ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -72,9 +70,9 @@ public:
 
   /** typedefs of the filters used for the derivative */
   typedef itk::SubtractImageFilter<InputImageType, InputImageType, InputImageType> SubtractFilterType;
-  typedef itk::AbsImageFilter<InputImageType, InputImageType>                      AbsFilterType;
-  typedef typename SubtractFilterType::Pointer                                     SubtractFilterPointerType;
-  typedef typename AbsFilterType::Pointer                                          AbsFilterPointerType;
+  typedef itk::AbsImageFilter<InputImageType, InputImageType> AbsFilterType;
+  typedef typename SubtractFilterType::Pointer SubtractFilterPointerType;
+  typedef typename AbsFilterType::Pointer      AbsFilterPointerType;
 
   /** Generate output information for the ImageList and for each image
       in the list. */
@@ -89,13 +87,15 @@ protected:
   /** Constructor */
   ProfileToProfileDerivativeFilter();
   /** Destructor */
-  ~ProfileToProfileDerivativeFilter() override {}
+  ~ProfileToProfileDerivativeFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ProfileToProfileDerivativeFilter(const Self &); //purposely not implemented
-  void operator =(const Self&); //purposely not implemented
+  ProfileToProfileDerivativeFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Subtract filter for the dervivative */
   SubtractFilterPointerType m_SubtractFilter;
@@ -104,7 +104,7 @@ private:
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbProfileToProfileDerivativeFilter.txx"
+#include "otbProfileToProfileDerivativeFilter.hxx"
 #endif
 
 #endif

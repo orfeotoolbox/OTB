@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,43 +25,29 @@
 #include "otbImageFileWriter.h"
 #include "otbVectorImageToImageListFilter.h"
 
-typedef otb::Image<float, 2>                    FloatImageType;
+typedef otb::Image<float, 2> FloatImageType;
 
-typedef otb::VectorImage<float, 2>              FloatVectorImageType;
+typedef otb::VectorImage<float, 2> FloatVectorImageType;
 
-typedef otb::BijectionCoherencyFilter
-  <FloatImageType,
-    FloatImageType>                             BijectionFilterType;
+typedef otb::BijectionCoherencyFilter<FloatImageType, FloatImageType> BijectionFilterType;
 
-
-int otbBijectionCoherencyFilterNew(int itkNotUsed(argc), char * itkNotUsed(argv) [])
-{
-  // Instantiation
-  BijectionFilterType::Pointer bijectFilter = BijectionFilterType::New();
-
-  return EXIT_SUCCESS;
-}
 
 int otbBijectionCoherencyFilter(int argc, char* argv[])
 {
 
-  typedef otb::ImageFileReader
-    <FloatVectorImageType>                        ReaderVectorType;
+  typedef otb::ImageFileReader<FloatVectorImageType> ReaderVectorType;
 
-  typedef otb::ImageFileWriter
-    <FloatImageType>                              WriterScalarType;
+  typedef otb::ImageFileWriter<FloatImageType> WriterScalarType;
 
-  typedef otb::ImageList<FloatImageType>          ImageListType;
+  typedef otb::ImageList<FloatImageType> ImageListType;
 
-  typedef otb::VectorImageToImageListFilter
-    <FloatVectorImageType,
-     ImageListType>                               VectorToListFilterType;
+  typedef otb::VectorImageToImageListFilter<FloatVectorImageType, ImageListType> VectorToListFilterType;
 
   if (argc < 8)
-    {
-    std::cout << "Usage: "<<argv[0]<<" left2right right2left minHDisp maxHDisp minVDisp maxVDisp output" << std::endl;
+  {
+    std::cout << "Usage: " << argv[0] << " left2right right2left minHDisp maxHDisp minVDisp maxVDisp output" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   ReaderVectorType::Pointer l2rReader = ReaderVectorType::New();
   l2rReader->SetFileName(argv[1]);

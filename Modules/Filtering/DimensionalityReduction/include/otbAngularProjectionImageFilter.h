@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,7 +25,8 @@
 #include "itkProgressReporter.h"
 #include "itkImageToImageFilter.h"
 
-namespace otb {
+namespace otb
+{
 /** \class AngularProjectionImageFilter
  * \brief Performs spherical transformation in ND space
  *
@@ -38,16 +39,15 @@ namespace otb {
  *
  * \ingroup OTBDimensionalityReduction
  */
-template < class TInputImage, class TOutputImage, class TAngleArray, class TPrecision >
-class ITK_EXPORT AngularProjectionImageFilter
-  : public itk::ImageToImageFilter< TInputImage, TOutputImage >
+template <class TInputImage, class TOutputImage, class TAngleArray, class TPrecision>
+class ITK_EXPORT AngularProjectionImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
   typedef AngularProjectionImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>            Pointer;
-  typedef itk::SmartPointer<const Self>      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -56,9 +56,9 @@ public:
   itkTypeMacro(AngularProjectionImageFilter, ImageToImageFilter);
 
   /** Dimension */
-  itkStaticConstMacro(InputImageDimension,  unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
   itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
-  //itkStaticConstMacro(NumberOfInputImages,  unsigned int, TAngleArray::Dimension+1);
+  // itkStaticConstMacro(NumberOfInputImages,  unsigned int, TAngleArray::Dimension+1);
 
   /** Template parameters typedefs */
   typedef TInputImage                         InputImageType;
@@ -73,33 +73,35 @@ public:
   typedef typename OutputImageType::RegionType OutputImageRegionType;
   typedef typename OutputImageType::Pointer    OutputImagePointerType;
 
-  typedef TPrecision PrecisionType;
-  typedef TAngleArray AngleArrayType;
+  typedef TPrecision                         PrecisionType;
+  typedef TAngleArray                        AngleArrayType;
   typedef typename AngleArrayType::ValueType AngleValueType;
 
   typedef itk::ImageRegionConstIterator<InputImageType> ImageRegionConstIteratorType;
-  typedef std::vector< ImageRegionConstIteratorType >   ImageRegionConstIteratorVectorType;
+  typedef std::vector<ImageRegionConstIteratorType>     ImageRegionConstIteratorVectorType;
 
   /** Set/Get Angle set */
   itkGetMacro(AngleArray, AngleArrayType);
   itkSetMacro(AngleArray, AngleArrayType);
 
-  void SetInput ( unsigned int i, const InputImageType * ) override;
+  void SetInput(unsigned int i, const InputImageType*) override;
   using Superclass::SetInput;
 
-  const InputImageType * GetInput( unsigned int i ) const;
+  const InputImageType* GetInput(unsigned int i) const;
 
 
 protected:
   AngularProjectionImageFilter();
-  ~AngularProjectionImageFilter() override { }
+  ~AngularProjectionImageFilter() override
+  {
+  }
 
-  void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, itk::ThreadIdType threadID ) override;
-  virtual OutputImagePixelType InternalGenerateData ( const ImageRegionConstIteratorVectorType & ) const;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadID) override;
+  virtual OutputImagePixelType InternalGenerateData(const ImageRegionConstIteratorVectorType&) const;
 
 private:
   AngularProjectionImageFilter(const Self&); // not implemented
-  void operator=(const Self&); // not implemented
+  void operator=(const Self&);               // not implemented
 
   AngleArrayType m_AngleArray;
 
@@ -108,9 +110,8 @@ private:
 } // end of namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbAngularProjectionImageFilter.txx"
+#include "otbAngularProjectionImageFilter.hxx"
 #endif
 
 
 #endif
-

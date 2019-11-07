@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -27,66 +27,6 @@ otb_test_application(NAME apTuUtDownloadSRTMTiles
                              -tiledir ${INPUTDATA}/DEM/srtm_directory
                      )
 
-
-
-
-#----------- Convert TESTS ----------------
-otb_test_application(NAME apTvUtConvertBasic
-                     APP Convert
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtConvertBasicOutput.tif float
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtConvertBasicOutput.tif
-                	     ${TEMP}/apTvUtConvertBasicOutput.tif
-)
-
-otb_test_application(NAME apTuUtConvertExtendedFilename_writer
-                     APP  Convert
-                     OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif
-                             -out ${TEMP}/apTvUtGeomExtendedFilename.tif?&gdal:co:TILED=YES&writegeom=false
-                     )
-
-otb_test_application(NAME apTvUtConvertWithScaling
-                     APP Convert
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtConvertWithScalingOutput.tif
-                             -type linear
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtConvertWithScalingOutput.tif
-                             ${TEMP}/apTvUtConvertWithScalingOutput.tif
-)
-
-otb_test_application(NAME apTvUtConvertExtendedFilename_readerGEOM
-                     APP  Convert
-                     OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&geom=${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
-                             -out ${TEMP}/apTvUtGeomExtendedFilename.tif
-                     VALID   --compare-ascii ${EPSILON_7}
-                             ${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
-                             ${TEMP}/apTvUtGeomExtendedFilename.geom)
-
-otb_test_application(NAME apTvUtConvertSelectChannels
-                     APP Convert
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-                             -out ${TEMP}/apTvUtConvertSelectChannelsRgbOutput.tif
-                             -channels rgb
-                             -channels.rgb.red 2
-                             -channels.rgb.green 3
-                             -channels.rgb.blue 1
-                             -type linear
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtConvertSelectChannelsRgbOutput.tif
-                             ${TEMP}/apTvUtConvertSelectChannelsRgbOutput.tif)
-
-otb_test_application(NAME apTvUtConvertMonoChannel
-                     APP Convert
-                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-                             -out ${TEMP}/apTvUtConvertMonoChannelOutput.tif
-                             -channels grayscale
-                             -type linear
-                     VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/apTvUtConvertMonoChannelOutput.tif
-                             ${TEMP}/apTvUtConvertMonoChannelOutput.tif)
-
 #----------- DynamicConvert TESTS ------------
 otb_test_application(NAME apTvUtDynamicConvertBasic
                      APP DynamicConvert
@@ -100,6 +40,20 @@ otb_test_application(NAME apTvUtDynamicConvertBasic
                      VALID   --compare-image ${NOTOL}
                              ${OTBAPP_BASELINE}/apTvUtConvertSelectChannelsRgbOutput.tif
                              ${TEMP}/apTvUtDynamicConvertOutput.tif)
+
+otb_test_application(NAME apTuUtDynamicConvertExtendedFilename_writer
+                     APP  DynamicConvert
+                     OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif
+                             -out ${TEMP}/apTvUtNoGeomExtendedFilename.tif?&gdal:co:TILED=YES&writegeom=false
+                     )
+
+otb_test_application(NAME apTvUtDynamicConvertExtendedFilename_readerGEOM
+                     APP  DynamicConvert
+                     OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&geom=${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
+                             -out ${TEMP}/apTvUtGeomExtendedFilename.tif
+                     VALID   --compare-ascii ${EPSILON_7}
+                             ${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
+                             ${TEMP}/apTvUtGeomExtendedFilename.geom)
 
 otb_test_application(NAME apTvUtDynamicConvertLog2
                      APP DynamicConvert
@@ -123,6 +77,20 @@ otb_test_application(NAME apTvUtDynamicConvertFloat
                      VALID   --compare-image ${NOTOL}
                              ${OTBAPP_BASELINE}/apTvUtDynamicConvertFloatOutput.tif
                              ${TEMP}/apTvUtDynamicConvertFloatOutput.tif)
+
+otb_test_application(NAME apTvUtDynamicConvertMask
+                     APP DynamicConvert
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -out ${TEMP}/apTvUtDynamicConvertMaskOutput.tif
+                             -outmin 0
+                             -outmax 255
+                             -quantile.low 4
+                             -quantile.high 4
+                             -mask ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask.tif
+                     VALID   --compare-image ${NOTOL}
+                             ${OTBAPP_BASELINE}/apTvUtDynamicConvertMaskOutput.tif
+                             ${TEMP}/apTvUtDynamicConvertMaskOutput.tif)
+
 
 #----------- PixelInfo TESTS ----------------
 
@@ -197,15 +165,15 @@ otb_test_application(NAME  apTvUtRescaleTest
 #----------- TileFusion TESTS ----------------
 otb_test_application(NAME apTvUtTileFusion
                      APP TileFusion
-                     OPTIONS -il ${EXAMPLEDATA}/Scene_R1C1.png
-                                 ${EXAMPLEDATA}/Scene_R1C2.png
-                                 ${EXAMPLEDATA}/Scene_R2C1.png
-                                 ${EXAMPLEDATA}/Scene_R2C2.png
+                     OPTIONS -il ${INPUTDATA}/Scene_R1C1.png
+                                 ${INPUTDATA}/Scene_R1C2.png
+                                 ${INPUTDATA}/Scene_R2C1.png
+                                 ${INPUTDATA}/Scene_R2C2.png
                              -cols 2
                              -rows 2
                              -out ${TEMP}/apTvUtTileFusion.png uint8
                      VALID   --compare-image ${NOTOL}
-                             ${EXAMPLEDATA}/Scene.png
+                             ${INPUTDATA}/Scene.png
                            ${TEMP}/apTvUtTileFusion.png)
 
 
@@ -280,11 +248,6 @@ otb_test_application(NAME apTvUtQuicklookSpot5
                              ${TEMP}/apTvUtQuicklookSpot5.img
                      )
 
-
-#----------- DEMConvert TESTS ----------------
-
-
-
 #----------- ConcatenateImages TESTS ----------------
 otb_test_application(NAME apTvUtConcatenateImages
                      APP  ConcatenateImages
@@ -298,10 +261,10 @@ otb_test_application(NAME apTvUtConcatenateImages
 
 otb_test_application(NAME apTvUtConcatenateImages_1Image
                      APP  ConcatenateImages
-                     OPTIONS -il ${INPUTDATA}/poupees_c1
+                     OPTIONS -il ${INPUTDATA}/poupees_c1.raw
                              -out ${TEMP}/apTvUtConcatenateImages_1Image.tif
                      VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/poupees_c1
+                             ${INPUTDATA}/poupees_c1.raw
                              ${TEMP}/apTvUtConcatenateImages_1Image.tif)
 
 
@@ -371,7 +334,7 @@ otb_test_application(NAME apTvUtColorMappingColorToLabelOptimalLUTQB
 
 otb_test_application(NAME apTvUtColorMappingLabelToColorCustomLUTQB
                      APP ColorMapping
-                     OPTIONS -in ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                     OPTIONS -in ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
                              -method custom
                              -method.custom.lut ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI_PNG_ColorTable.txt
                              -out ${TEMP}/apTvUtColorMappingLabelToColorCustomLUTQB.tif uint8
@@ -392,7 +355,7 @@ otb_test_application(NAME apTvUtColorMappingColorToLabelOptimalLUT
 
 otb_test_application(NAME apTvUtColorMappingLabelToColorOptimalLUTQB
                      APP ColorMapping
-                     OPTIONS -in ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                     OPTIONS -in ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
                              -method optimal
                              -out ${TEMP}/apTvUtColorMappingLabelToColorOptimalLUTQB.tif uint8
                      VALID   --compare-image ${NOTOL}
@@ -408,7 +371,7 @@ otb_test_application(NAME apTvUtColorMappingColorToLabelCustomLUTQB
                              -method.custom.lut ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI_PNG_ColorTable.txt
                              -out ${TEMP}/apTvUtColorMappingColorToLabelCustomLUTQB.tif uint8
                      VALID   --compare-image ${NOTOL}
-                	         ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                	         ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
                 	         ${TEMP}/apTvUtColorMappingColorToLabelCustomLUTQB.tif)
 
 otb_test_application(NAME apTvUtColorMappingLabelToColorContinuousLUTJet
@@ -425,9 +388,9 @@ otb_test_application(NAME apTvUtColorMappingLabelToColorContinuousLUTJet
 
 otb_test_application(NAME apTvUtColorMappingLabelToColorSupportImage
                      APP ColorMapping
-                     OPTIONS -in ${EXAMPLEDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
+                     OPTIONS -in ${INPUTDATA}/ROI_QB_MUL_1_SVN_CLASS_MULTI.png
                              -method image
-                             -method.image.in ${EXAMPLEDATA}/ROI_QB_MUL_1.tif
+                             -method.image.in ${INPUTDATA}/ROI_QB_MUL_1.tif
                              -out ${TEMP}/apTvUtColorMappingLabelToColorSupportImage.tif uint8
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvUtColorMappingLabelToColorSupportImage.tif
@@ -492,3 +455,63 @@ otb_test_application(NAME apTvUtSplitImage
 
                              ${INPUTDATA}/poupees_sub_c3.png
                              ${TEMP}/apTvUtSplitImageOutput_2.tif)
+
+#----------- Mosaic TESTS ----------------
+otb_test_application(NAME MosaicTestLargeFeathering
+                     APP  Mosaic
+                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif 
+                             -out ${TEMP}/apTvMosaicTestLargeFeathering.tif uint8 
+                             -comp.feather large
+                     VALID   --compare-image ${EPSILON_8}
+                             ${BASELINE}/apTvMosaicTestLargeFeathering.tif
+                             ${TEMP}/apTvMosaicTestLargeFeathering.tif)
+
+
+otb_test_application(NAME MosaicTestSlimFeathering
+                     APP  Mosaic
+                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif 
+                             -out ${TEMP}/apTvMosaicTestSlimFeathering.tif uint8 
+                             -comp.feather slim 
+                             -comp.feather.slim.length 100
+                     VALID   --compare-image ${EPSILON_8}
+                             ${BASELINE}/apTvMosaicTestSlimFeathering.tif
+                             ${TEMP}/apTvMosaicTestSlimFeathering.tif)
+
+
+otb_test_application(NAME MosaicTestSimpleWithHarmoBandRmse
+                     APP  Mosaic
+                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif 
+                             -out ${TEMP}/apTvMosaicTestSimpleWithHarmoBandRmse.tif uint8 
+                             -harmo.method band 
+                             -harmo.cost rmse
+                     VALID   --compare-image ${EPSILON_8}
+                             ${BASELINE}/apTvMosaicTestSimpleWithHarmoBandRmse.tif
+                             ${TEMP}/apTvMosaicTestSimpleWithHarmoBandRmse.tif)
+
+otb_test_application(NAME MosaicTestSimpleWithHarmoRgbRmse
+                     APP  Mosaic
+                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif 
+                             -out ${TEMP}/apTvMosaicTestSimpleWithHarmoRgbRmse.tif uint8 
+                             -harmo.method rgb 
+                             -harmo.cost rmse
+                     VALID   --compare-image ${EPSILON_8}
+                             ${BASELINE}/apTvMosaicTestSimpleWithHarmoRgbRmse.tif
+                             ${TEMP}/apTvMosaicTestSimpleWithHarmoRgbRmse.tif)
+
+otb_test_application(NAME MosaicTestSimpleWithCutline
+                     APP  Mosaic
+                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif 
+                             -out ${TEMP}/apTvMosaicTestSimpleWithCutline.tif uint8 
+                             -vdcut ${INPUTDATA}/SP67_FR_subset_1_cutline.shp ${INPUTDATA}/SP67_FR_subset_2_cutline.shp 
+                     VALID   --compare-image ${EPSILON_8}
+                             ${BASELINE}/apTvMosaicTestSimpleWithCutline.tif
+                             ${TEMP}/apTvMosaicTestSimpleWithCutline.tif)
+
+otb_test_application(NAME MosaicTestSimpleWithVdstats
+                     APP  Mosaic
+                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif 
+                             -out ${TEMP}/apTvMosaicTestSimpleWithVdstats.tif uint8 
+                             -vdstats ${INPUTDATA}/SP67_FR_subset_1_cutline.shp ${INPUTDATA}/SP67_FR_subset_2_cutline.shp 
+                     VALID   --compare-image ${EPSILON_8}
+                             ${BASELINE}/apTvMosaicTestSimpleWithVdstats.tif
+                             ${TEMP}/apTvMosaicTestSimpleWithVdstats.tif)
