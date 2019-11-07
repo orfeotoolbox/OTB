@@ -48,11 +48,11 @@
   }
 
 
+
 namespace otb
 {
 namespace Wrapper
 {
-
 
 // Declare specialisation for UInt8RGBAImageType
 template <>
@@ -68,7 +68,6 @@ OutputImageParameter::OutputImageParameter() : m_PixelType(ImagePixelType_float)
   SetName("Output Image");
   SetKey("out");
 }
-
 
 OutputImageParameter::~OutputImageParameter()
 {
@@ -302,13 +301,21 @@ void OutputImageParameter::ClampAndWriteVectorImage(TInputImage* in)
   m_OutputCaster = clamp.ocif;
 
   m_Writer = writer;
-  if (writer->GetFilenameHelper()->GetMultiWrite() && m_MultiWriting && m_MultiWriter)
-  {
-    m_MultiWriter->AddInputWriter<otb::ImageFileWriter<TOutputImage>>(writer);
-    m_MultiWritingEnabled = true;
-  }
+
+  addWriterToMultiWriter<otb::ImageFileWriter<TOutputImage>>(writer);
 }
 
+
+template <class TWriter>
+void OutputImageParameter::addWriterToMultiWriter(typename TWriter::Pointer writer)
+{
+  if (writer->GetFilenameHelper()->GetMultiWrite() && m_MultiWriting && m_MultiWriter)
+  {
+    m_MultiWriter->AddInputWriter<TWriter>(writer);
+    m_MultiWritingEnabled = true;
+    
+  }
+}
 
 template <typename TInputImage>
 void OutputImageParameter::SwitchInput(TInputImage* image)
@@ -455,12 +462,8 @@ void OutputImageParameter::SwitchInput(UInt8RGBAImageType* img)
   writer->SetInput(img);
   writer->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
   
-  if (writer->GetFilenameHelper()->GetMultiWrite() && m_MultiWriting && m_MultiWriter)
-  {
-    m_MultiWriter->AddInputWriter<otb::ImageFileWriter<UInt8RGBAImageType>>(writer);
-    m_MultiWritingEnabled = true;
-  }
   m_Writer = writer;
+  addWriterToMultiWriter<otb::ImageFileWriter<UInt8RGBAImageType>>(writer);
 }
 
 // Specialization for UInt8RGBImageType
@@ -478,11 +481,7 @@ void OutputImageParameter::SwitchInput(UInt8RGBImageType* img)
 
   m_Writer = writer;
 
-  if (writer->GetFilenameHelper()->GetMultiWrite() && m_MultiWriting && m_MultiWriter)
-  {
-    m_MultiWriter->AddInputWriter<otb::ImageFileWriter<UInt8RGBImageType>>(writer);
-    m_MultiWritingEnabled = true;
-  }
+  addWriterToMultiWriter<otb::ImageFileWriter<UInt8RGBImageType>>(writer);
 }
 
 void OutputImageParameter::SetFileName(const char* filename)

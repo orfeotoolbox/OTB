@@ -150,6 +150,9 @@ private:
   template <typename TOutputImage, typename TInputImage>
   void ClampAndWriteVectorImage(TInputImage*);
 
+  template <class TWriter>
+  void addWriterToMultiWriter(typename TWriter::Pointer);
+
   // FloatVectorImageType::Pointer m_Image;
   ImageBaseType::Pointer m_Image;
 
