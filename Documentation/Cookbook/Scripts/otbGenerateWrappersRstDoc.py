@@ -364,6 +364,17 @@ def render_deprecation_string(app):
     else:
         return ""
 
+def render_multiwriting_string(app):
+    if app.GetMultiWriting():
+        return ("This application has several output images and supports \"multi-writing\". Instead of computing and writing each "
+          "image independently, the streamed image blocks are written in a synchronous way for each output. The output images will "
+          "be computed strip by strip, using the available RAM to compute the strip size, and a user defined streaming mode can be specified "
+          "using the streaming extended filenames (type, mode and value). Note that multi-writing can be disabled using the multi-write extended "
+          "filename option: &multiwrite=false, in this case the output images will be written one by one. Note that multi-writing is not supported for "
+          "MPI writers.")
+    else:
+        return ""
+
 def render_application(appname, allapps):
     "Render app to rst"
 
@@ -378,6 +389,7 @@ def render_application(appname, allapps):
     output = template_application.format(
         label=appname,
         deprecation_string=render_deprecation_string(app),
+        multiwriting_string=render_multiwriting_string(app),
         heading=rst_section(app.GetName(), '='),
         description=app.GetDescription(),
         longdescription=make_links(app.GetDocLongDescription(), allapps),
