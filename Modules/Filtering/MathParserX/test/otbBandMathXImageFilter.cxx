@@ -31,6 +31,23 @@
 #include "itkImageRegionIteratorWithIndex.h"
 
 
+double relativeError(double a, double b)
+{
+  return std::pow(a-b, 2) / std::fabs(a+b);
+}
+
+template<typename T> typename T::Pointer createTestImage(typename T::RegionType& region,
+                                                         unsigned int components)
+{
+  typename T::Pointer image = T::New();
+  image->SetLargestPossibleRegion(region);
+  image->SetBufferedRegion(region);
+  image->SetRequestedRegion(region);
+  image->SetNumberOfComponentsPerPixel(components);
+  image->Allocate();
+  return image;
+}
+
 int otbBandMathXImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
 
@@ -49,41 +66,11 @@ int otbBandMathXImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   region.SetSize(size);
   region.SetIndex(index);
 
-  ImageType::Pointer image1 = ImageType::New();
-  ImageType::Pointer image2 = ImageType::New();
-  ImageType::Pointer image3 = ImageType::New();
-  ImageType::Pointer image4 = ImageType::New();
-  ImageType::Pointer image5 = ImageType::New();
-
-  image1->SetLargestPossibleRegion(region);
-  image1->SetBufferedRegion(region);
-  image1->SetRequestedRegion(region);
-  image1->SetNumberOfComponentsPerPixel(D1);
-  image1->Allocate();
-
-  image2->SetLargestPossibleRegion(region);
-  image2->SetBufferedRegion(region);
-  image2->SetRequestedRegion(region);
-  image2->SetNumberOfComponentsPerPixel(D2);
-  image2->Allocate();
-
-  image3->SetLargestPossibleRegion(region);
-  image3->SetBufferedRegion(region);
-  image3->SetRequestedRegion(region);
-  image3->SetNumberOfComponentsPerPixel(D3);
-  image3->Allocate();
-
-  image4->SetLargestPossibleRegion(region);
-  image4->SetBufferedRegion(region);
-  image4->SetRequestedRegion(region);
-  image4->SetNumberOfComponentsPerPixel(D2);
-  image4->Allocate();
-
-  image5->SetLargestPossibleRegion(region);
-  image5->SetBufferedRegion(region);
-  image5->SetRequestedRegion(region);
-  image5->SetNumberOfComponentsPerPixel(D4);
-  image5->Allocate();
+  ImageType::Pointer image1 = createTestImage<ImageType>(region, D1);
+  ImageType::Pointer image2 = createTestImage<ImageType>(region, D2);
+  ImageType::Pointer image3 = createTestImage<ImageType>(region, D3);
+  ImageType::Pointer image4 = createTestImage<ImageType>(region, D2);
+  ImageType::Pointer image5 = createTestImage<ImageType>(region, D4);
 
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
   IteratorType                                         it1(image1, region);
@@ -200,9 +187,9 @@ int otbBandMathXImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
         << "     Result =  " << itoutput1.Get()[0] << "     Expected =  " << expected1 << std::endl; */
 
 
-    error1 = (result1 - expected1) * (result1 - expected1) / std::fabs(result1 + expected1);
-    error2 = (result2 - expected2) * (result2 - expected2) / std::fabs(result2 + expected2);
-    error3 = (result3 - expected3) * (result3 - expected3) / std::fabs(result3 + expected3);
+    error1 = relativeError(result1, expected1);
+    error2 = relativeError(result2, expected2);
+    error3 = relativeError(result3, expected3);
 
     if ((error1 > 1E-9) || (error2 > 1E-9) || (error3 > 1E-9))
     {
@@ -354,27 +341,9 @@ int otbBandMathXImageFilterConv(int itkNotUsed(argc), char* argv[])
   region.SetSize(size);
   region.SetIndex(index);
 
-  ImageType::Pointer image1 = ImageType::New();
-  ImageType::Pointer image2 = ImageType::New();
-  ImageType::Pointer image3 = ImageType::New();
-
-  image1->SetLargestPossibleRegion(region);
-  image1->SetBufferedRegion(region);
-  image1->SetRequestedRegion(region);
-  image1->SetNumberOfComponentsPerPixel(D1);
-  image1->Allocate();
-
-  image2->SetLargestPossibleRegion(region);
-  image2->SetBufferedRegion(region);
-  image2->SetRequestedRegion(region);
-  image2->SetNumberOfComponentsPerPixel(D2);
-  image2->Allocate();
-
-  image3->SetLargestPossibleRegion(region);
-  image3->SetBufferedRegion(region);
-  image3->SetRequestedRegion(region);
-  image3->SetNumberOfComponentsPerPixel(D3);
-  image3->Allocate();
+  ImageType::Pointer image1 = createTestImage<ImageType>(region, D1);
+  ImageType::Pointer image2 = createTestImage<ImageType>(region, D2);
+  ImageType::Pointer image3 = createTestImage<ImageType>(region, D3);
 
   typedef itk::ConstNeighborhoodIterator<ImageType> IteratorType;
   IteratorType::RadiusType                          radius;
@@ -530,13 +499,13 @@ int otbBandMathXImageFilterConv(int itkNotUsed(argc), char* argv[])
 
     double expected1 = px1[0], expected2 = px1[1], expected3 = px1[2], expected4 = px1[3], expected5 = px1[4], expected6 = px1[5], expected7 = px1[6];
 
-    error1 = (result1 - expected1) * (result1 - expected1) / std::fabs(result1 + expected1);
-    error2 = (result2 - expected2) * (result2 - expected2) / std::fabs(result2 + expected2);
-    error3 = (result3 - expected3) * (result3 - expected3) / std::fabs(result3 + expected3);
-    error4 = (result4 - expected4) * (result4 - expected4) / std::fabs(result4 + expected4);
-    error5 = (result5 - expected5) * (result5 - expected5) / std::fabs(result5 + expected5);
-    error6 = (result6 - expected6) * (result6 - expected6) / std::fabs(result6 + expected6);
-    error7 = (result7 - expected7) * (result7 - expected7) / std::fabs(result7 + expected7);
+    error1 = relativeError(result1, expected1);
+    error2 = relativeError(result2, expected2);
+    error3 = relativeError(result3, expected3);
+    error4 = relativeError(result4, expected4);
+    error5 = relativeError(result5, expected5);
+    error6 = relativeError(result6, expected6);
+    error7 = relativeError(result7, expected7);
 
 
     // expression 2
@@ -544,8 +513,8 @@ int otbBandMathXImageFilterConv(int itkNotUsed(argc), char* argv[])
     double result9   = itoutput2.GetCenterPixel()[1];
     double expected8 = px2[0];
     double expected9 = px2[1];
-    double error8    = (result8 - expected8) * (result8 - expected8) / std::fabs(result8 + expected8);
-    double error9    = (result9 - expected9) * (result9 - expected9) / std::fabs(result9 + expected9);
+    double error8    = relativeError(result8, expected8);
+    double error9    = relativeError(result9, expected9);
 
     if ((error1 > 1E-9) || (error2 > 1E-9) || (error3 > 1E-9) || (error4 > 1E-9) || (error5 > 1E-9) || (error6 > 1E-9) || (error7 > 1E-9) || (error8 > 1E-9) ||
         (error9 > 1E-9))
@@ -619,27 +588,9 @@ int otbBandMathXImageFilterWithIdx(int itkNotUsed(argc), char* argv[])
   spacing[0] = 0.5;
   spacing[1] = 0.5;
 
-  ImageType::Pointer image1 = ImageType::New();
-  ImageType::Pointer image2 = ImageType::New();
-  ImageType::Pointer image3 = ImageType::New();
-
-  image1->SetLargestPossibleRegion(region);
-  image1->SetBufferedRegion(region);
-  image1->SetRequestedRegion(region);
-  image1->SetNumberOfComponentsPerPixel(D1);
-  image1->Allocate();
-
-  image2->SetLargestPossibleRegion(region);
-  image2->SetBufferedRegion(region);
-  image2->SetRequestedRegion(region);
-  image2->SetNumberOfComponentsPerPixel(D2);
-  image2->Allocate();
-
-  image3->SetLargestPossibleRegion(region);
-  image3->SetBufferedRegion(region);
-  image3->SetRequestedRegion(region);
-  image3->SetNumberOfComponentsPerPixel(D3);
-  image3->Allocate();
+  ImageType::Pointer image1 = createTestImage<ImageType>(region, D1);
+  ImageType::Pointer image2 = createTestImage<ImageType>(region, D2);
+  ImageType::Pointer image3 = createTestImage<ImageType>(region, D3);
 
   typedef itk::ImageRegionIteratorWithIndex<ImageType> IteratorType;
   IteratorType                                         it1(image1, region);
@@ -664,10 +615,8 @@ int otbBandMathXImageFilterWithIdx(int itkNotUsed(argc), char* argv[])
     it3.Get()[0] = i3[0] + i3[1] * i3[1];
   }
 
-
   FilterType::Pointer filter = FilterType::New();
   std::cout << "Number Of Threads  :  " << filter->GetNumberOfThreads() << std::endl;
-
 
   filter->SetNthInput(0, image1);
   filter->SetNthInput(1, image2);
@@ -705,13 +654,7 @@ int otbBandMathXImageFilterBandsFailures(int itkNotUsed(argc), char* itkNotUsed(
   region.SetSize(size);
   region.SetIndex(index);
 
-  ImageType::Pointer image = ImageType::New();
-
-  image->SetLargestPossibleRegion(region);
-  image->SetBufferedRegion(region);
-  image->SetRequestedRegion(region);
-  image->SetNumberOfComponentsPerPixel(D1);
-  image->Allocate();
+  ImageType::Pointer image = createTestImage<ImageType>(region, D1);
 
   FilterType::Pointer filter = FilterType::New();
 
