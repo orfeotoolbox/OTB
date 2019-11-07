@@ -154,28 +154,31 @@ void MultiImageFileWriter::InitializeStreaming()
     RegionType      region  = fakeOut->GetLargestPossibleRegion();
     m_StreamingManager->PrepareStreaming(fakeOut, region);
     m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
-    // Check this number of division is compatible with all inputs
-    bool nbDivValid = false;
-    while ((!nbDivValid) && 1 < m_NumberOfDivisions)
+    if (m_NumberOfDivisions > 1)
     {
-      unsigned int smallestNbDiv = m_NumberOfDivisions;
-      for (unsigned int i = 0; i < m_SinkList.size(); ++i)
+      // Check this number of division is compatible with all inputs
+      bool nbDivValid = false;
+      while ((!nbDivValid) && 1 < m_NumberOfDivisions)
       {
-        unsigned int div = m_StreamingManager->GetSplitter()->GetNumberOfSplits(m_SinkList[i]->GetRegionToWrite(), m_NumberOfDivisions);
-        smallestNbDiv    = std::min(div, smallestNbDiv);
+        unsigned int smallestNbDiv = m_NumberOfDivisions;
+        for (unsigned int i = 0; i < m_SinkList.size(); ++i)
+        {
+          unsigned int div = m_StreamingManager->GetSplitter()->GetNumberOfSplits(m_SinkList[i]->GetRegionToWrite(), m_NumberOfDivisions);
+          smallestNbDiv    = std::min(div, smallestNbDiv);
+        }
+        if (smallestNbDiv == m_NumberOfDivisions)
+        {
+          nbDivValid = true;
+        }
+        else
+        {
+          m_NumberOfDivisions = smallestNbDiv;
+        }
       }
-      if (smallestNbDiv == m_NumberOfDivisions)
+      if (m_NumberOfDivisions == 1)
       {
-        nbDivValid = true;
+        otbWarningMacro("Can't find a common split scheme between all inputs, streaming disabled\n");
       }
-      else
-      {
-        m_NumberOfDivisions = smallestNbDiv;
-      }
-    }
-    if (m_NumberOfDivisions == 1)
-    {
-      otbWarningMacro("Can't find a common split scheme between all inputs, streaming disabled\n");
     }
     otbMsgDebugMacro(<< "Number Of Stream Divisions : " << m_NumberOfDivisions);
   }
