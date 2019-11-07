@@ -246,6 +246,9 @@ if __name__ == "__main__":
   if ( len(sys.argv) < 6 and len(sys.argv) > 1 ):
     print("Usage : "+sys.argv[0]+" commit_sha1 project_id project_directory token ref_name")
     sys.exit(1)
+
+  allow_failure = os.environ.get('CI_ALLOW_FAILURE', False)
+
   if ( len(sys.argv) >= 6):
     sha1 = sys.argv[1]
     proj = sys.argv[2]
@@ -286,6 +289,10 @@ if __name__ == "__main__":
     sys.exit(0)
   gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
   gitlab_url += proj + "/statuses/" + sha1
+
+  if allow_failure:
+    state = 'success'
+
   params = urllib.parse.urlencode({'name':'cdash:' + handler.site , 'state': state ,\
    'target_url' : cdash_url , 'description' : error , 'ref' : refn })
   gitlab_request = urllib.request.Request(gitlab_url)
