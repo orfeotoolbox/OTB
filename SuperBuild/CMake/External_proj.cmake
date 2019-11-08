@@ -24,8 +24,8 @@ SETUP_SUPERBUILD(PROJ)
 
 ExternalProject_Add(PROJ
   PREFIX PROJ
-  URL "http://download.osgeo.org/proj/proj-4.9.3.tar.gz"
-  URL_MD5 d598336ca834742735137c5674b214a1
+  URL "http://download.osgeo.org/proj/proj-6.2.1.tar.gz"
+  URL_MD5 9f874e227d221daf95f7858dc55dfa3e
   BINARY_DIR ${PROJ_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
