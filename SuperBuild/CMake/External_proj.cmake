@@ -22,7 +22,11 @@ INCLUDE_ONCE_MACRO(PROJ)
 
 SETUP_SUPERBUILD(PROJ)
 
+# declare dependencies
+ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(PROJ SQLITE)
+
 ExternalProject_Add(PROJ
+  DEPENDS ${PROJ_DEPENDENCIES}
   PREFIX PROJ
   URL "http://download.osgeo.org/proj/proj-6.2.1.tar.gz"
   URL_MD5 9f874e227d221daf95f7858dc55dfa3e
