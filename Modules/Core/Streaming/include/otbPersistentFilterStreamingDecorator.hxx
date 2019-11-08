@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,17 +29,14 @@ namespace otb
  * Constructor
  */
 template <class TFilter>
-PersistentFilterStreamingDecorator<TFilter>
-::PersistentFilterStreamingDecorator()
+PersistentFilterStreamingDecorator<TFilter>::PersistentFilterStreamingDecorator()
 {
-  m_Filter = FilterType::New();
+  m_Filter   = FilterType::New();
   m_Streamer = StreamerType::New();
 }
 
 template <class TFilter>
-void
-PersistentFilterStreamingDecorator<TFilter>
-::GenerateData(void)
+void PersistentFilterStreamingDecorator<TFilter>::GenerateData(void)
 {
   // Reset the filter before the generation.
   this->GetFilter()->Reset();
@@ -59,9 +56,7 @@ PersistentFilterStreamingDecorator<TFilter>
 }
 
 template <class TFilter>
-void
-PersistentFilterStreamingDecorator<TFilter>
-::Update(void)
+void PersistentFilterStreamingDecorator<TFilter>::Update(void)
 {
   this->GenerateData();
 }
@@ -70,9 +65,7 @@ PersistentFilterStreamingDecorator<TFilter>
  * PrintSelf Method
  */
 template <class TFilter>
-void
-PersistentFilterStreamingDecorator<TFilter>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void PersistentFilterStreamingDecorator<TFilter>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

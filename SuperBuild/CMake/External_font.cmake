@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -30,11 +30,10 @@ if ( EXISTS "${DOWNLOAD_LOCATION}/dejavu-fonts-ttf-2.37.tar.bz2" )
   file( MD5 "${DOWNLOAD_LOCATION}/dejavu-fonts-ttf-2.37.tar.bz2" MD5_FONT )
 endif()
 
-SET(CMAKE_TLS_VERIFY "OFF")
 if ( NOT ( "${MD5_FONT}" STREQUAL "d0efec10b9f110a32e9b8f796e21782c" ) )
 MESSAGE("DOWNLOADING FONTS")
 file(DOWNLOAD 
-  "https://netix.dl.sourceforge.net/project/dejavu/dejavu/2.37/dejavu-fonts-ttf-2.37.tar.bz2"
+  "https://sourceforge.net/projects/dejavu/files/dejavu/2.37/dejavu-fonts-ttf-2.37.tar.bz2"
   ${DOWNLOAD_LOCATION}/dejavu-fonts-ttf-2.37.tar.bz2
   EXPECTED_MD5 d0efec10b9f110a32e9b8f796e21782c)
 endif()

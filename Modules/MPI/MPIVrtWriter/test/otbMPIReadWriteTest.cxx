@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,17 +30,17 @@
 #include <iostream>
 
 // Test
-int otbMPIReadWriteTest(int argc, char * argv[]) 
+int otbMPIReadWriteTest(int argc, char* argv[])
 {
 
   // Mono-thread execution
   itk::MultiThreader::SetGlobalMaximumNumberOfThreads(1);
   itk::MultiThreader::SetGlobalDefaultNumberOfThreads(1);
-  
+
   // MPI Initialization
-  typedef otb::MPIConfig    MPIConfigType;
+  typedef otb::MPIConfig MPIConfigType;
   MPIConfigType::Pointer config = MPIConfigType::Instance();
-  config->Init(argc,argv,true);
+  config->Init(argc, argv, true);
 
   // Verify the number of parameters in the command line
   if (argc != 3)
@@ -50,16 +50,16 @@ int otbMPIReadWriteTest(int argc, char * argv[])
     message << argv[0] << " inputImageFile outputImageFile " << std::endl;
     config->logError(message.str());
     config->abort(EXIT_FAILURE);
-  } 
+  }
 
   // Image types
-  typedef float PixelType;
+  typedef float      PixelType;
   const unsigned int Dimension = 2;
-  typedef otb::VectorImage<PixelType,  Dimension> ImageType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
   // Reader
-  typedef otb::ImageFileReader<ImageType>  ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  ReaderType::Pointer                     reader = ReaderType::New();
 
   // Reader configuration
   std::string inputFilename = std::string(argv[1]);
@@ -68,10 +68,9 @@ int otbMPIReadWriteTest(int argc, char * argv[])
   // Update MPI Pipeline
   std::string outputFilename = std::string(argv[2]);
 
-  otb::WriteMPI(reader->GetOutput(),outputFilename);
+  otb::WriteMPI(reader->GetOutput(), outputFilename);
 
   config->barrier();
 
   return EXIT_SUCCESS;
 }
-

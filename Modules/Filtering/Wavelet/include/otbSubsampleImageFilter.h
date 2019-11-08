@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -26,10 +26,11 @@
 #include "itkImageToImageFilter.h"
 #include "itkImage.h"
 
-//Just to get the forward/inverse definitions
+// Just to get the forward/inverse definitions
 #include "otbWaveletOperatorBase.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class SubsampleImageFilter
  * \brief Performs a down sampling of an image
@@ -49,17 +50,15 @@ namespace otb {
  *
  * \ingroup OTBWavelet
  */
-template <class TInputImage, class TOutputImage,
-    Wavelet::WaveletDirection TDirectionOfTransformation>
-class ITK_EXPORT SubsampleImageFilter :
-  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, Wavelet::WaveletDirection TDirectionOfTransformation>
+class ITK_EXPORT SubsampleImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef SubsampleImageFilter                               Self;
+  typedef SubsampleImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -68,10 +67,8 @@ public:
   itkTypeMacro(SubsampleImageFilter, ImageToImageFilter);
 
   /** Extract dimension from input and output image. */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** Direction definition */
   typedef Wavelet::WaveletDirection DirectionOfTransformationEnumType;
@@ -91,8 +88,8 @@ public:
   typedef typename OutputImageType::PixelType  OutputPixelType;
 
   /** Set/Get the SubsampleFactor */
-  itkGetMacro(SubsampleFactor, const InputImageIndexType &);
-  itkSetMacro(SubsampleFactor, InputImageIndexType &);
+  itkGetMacro(SubsampleFactor, const InputImageIndexType&);
+  itkSetMacro(SubsampleFactor, InputImageIndexType&);
   void SetSubSampleFactor(InputImageIndexValueType factor)
   {
     InputImageIndexType indexFactor;
@@ -101,11 +98,13 @@ public:
   }
 
 protected:
-  SubsampleImageFilter ()
-    {
+  SubsampleImageFilter()
+  {
     m_SubsampleFactor.Fill(1);
-    }
-  ~SubsampleImageFilter() override {}
+  }
+  ~SubsampleImageFilter() override
+  {
+  }
 
   /** Internal test function to check if there is any direction to subsample */
   bool IsSubsampleFactorOne() const;
@@ -113,10 +112,8 @@ protected:
   /** Since input and output image are very likely to be of different size.
    * Region estimation functions has to be reimplemented
    */
-  void CallCopyOutputRegionToInputRegion
-    (InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) override;
-  void CallCopyInputRegionToOutputRegion
-    (OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) override;
+  void CallCopyOutputRegionToInputRegion(InputImageRegionType& destRegion, const OutputImageRegionType& srcRegion) override;
+  void CallCopyInputRegionToOutputRegion(OutputImageRegionType& destRegion, const InputImageRegionType& srcRegion) override;
 
   /** Output image region size is not of the same dimension as the input.
    * That is why GenerateOutputInformation has to be redefined.
@@ -127,14 +124,13 @@ protected:
   void BeforeThreadedGenerateData() override;
 
   /** Allows multithreading */
-  void ThreadedGenerateData
-    (const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SubsampleImageFilter (const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SubsampleImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InputImageIndexType m_SubsampleFactor;
 }; // end of class

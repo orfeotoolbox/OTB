@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -67,64 +67,43 @@ namespace Wrapper
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
-ListEditWidget
-::ListEditWidget( StringListInterface * sli,
-		  QWidget * p,
-		  Qt::WindowFlags flags ) :
-  QWidget( p, flags ),
-  m_UI( new otb::Wrapper::Ui::ListEditWidget() )
+ListEditWidget::ListEditWidget(StringListInterface* sli, QWidget* p, Qt::WindowFlags flags) : QWidget(p, flags), m_UI(new otb::Wrapper::Ui::ListEditWidget())
 {
-  m_UI->setupUi( this );
+  m_UI->setupUi(this);
 
   setAcceptDrops(true);
 
-  assert( m_UI->treeView->selectionModel()==nullptr );
+  assert(m_UI->treeView->selectionModel() == nullptr);
 
   //
   // Item-model.
-  ListEditItemModel * model = new ListEditItemModel( sli, m_UI->treeView );
+  ListEditItemModel* model = new ListEditItemModel(sli, m_UI->treeView);
 
-  m_UI->treeView->setModel( model );
+  m_UI->treeView->setModel(model);
 
-  QObject::connect(
-    model, &ListEditItemModel::dataChanged,
-    this, &ListEditWidget::OnDataChanged
-  );
+  QObject::connect(model, &ListEditItemModel::dataChanged, this, &ListEditWidget::OnDataChanged);
 
-  QObject::connect(
-    model, &ListEditItemModel::modelReset,
-    this, &ListEditWidget::OnModelReset
-  );
+  QObject::connect(model, &ListEditItemModel::modelReset, this, &ListEditWidget::OnModelReset);
 
-  QObject::connect(
-    model, &ListEditItemModel::rowsInserted,
-    this, &ListEditWidget::OnRowsInserted
-  );
+  QObject::connect(model, &ListEditItemModel::rowsInserted, this, &ListEditWidget::OnRowsInserted);
 
-  QObject::connect(
-    model, &ListEditItemModel::rowsRemoved,
-    this, &ListEditWidget::OnRowsRemoved
-  );
+  QObject::connect(model, &ListEditItemModel::rowsRemoved, this, &ListEditWidget::OnRowsRemoved);
 
   //
   // Selection-model.
-  assert( m_UI->treeView->selectionModel()!=nullptr );
+  assert(m_UI->treeView->selectionModel() != nullptr);
 
-  QObject::connect(
-    m_UI->treeView->selectionModel(), &QItemSelectionModel::selectionChanged,
-    this, &ListEditWidget::OnSelectionChanged
-  );
+  QObject::connect(m_UI->treeView->selectionModel(), &QItemSelectionModel::selectionChanged, this, &ListEditWidget::OnSelectionChanged);
 
   //
   // Browse-button.
-  assert( m_UI->browseButton!=nullptr );
+  assert(m_UI->browseButton != nullptr);
 
-  m_UI->browseButton->setEnabled( model->IsBrowsable() );
+  m_UI->browseButton->setEnabled(model->IsBrowsable());
 }
 
 /*******************************************************************************/
-ListEditWidget
-::~ListEditWidget()
+ListEditWidget::~ListEditWidget()
 {
   delete m_UI;
   m_UI = nullptr;
@@ -157,413 +136,312 @@ ListEditWidget
 #endif
 
 /*******************************************************************************/
-const ListEditItemModel *
-ListEditWidget
-::GetItemModel() const
+const ListEditItemModel* ListEditWidget::GetItemModel() const
 {
-  return const_cast< ListEditWidget * >( this )->GetItemModel();
+  return const_cast<ListEditWidget*>(this)->GetItemModel();
 }
 
 /*******************************************************************************/
-ListEditItemModel *
-ListEditWidget
-::GetItemModel()
+ListEditItemModel* ListEditWidget::GetItemModel()
 {
-  assert(
-    m_UI->treeView->model()==
-    qobject_cast< ListEditItemModel * >( m_UI->treeView->model() )
-    );
+  assert(m_UI->treeView->model() == qobject_cast<ListEditItemModel*>(m_UI->treeView->model()));
 
-  return qobject_cast< ListEditItemModel * >( m_UI->treeView->model() );
+  return qobject_cast<ListEditItemModel*>(m_UI->treeView->model());
 }
 
 /*******************************************************************************/
-void
-ListEditWidget
-::Swap( int row1, int row2, SwapSelection s )
+void ListEditWidget::Swap(int row1, int row2, SwapSelection s)
 {
-  assert( GetItemModel()!=nullptr );
+  assert(GetItemModel() != nullptr);
 
-  assert( row1>=0 );
-  assert( row1<GetItemModel()->rowCount() );
+  assert(row1 >= 0);
+  assert(row1 < GetItemModel()->rowCount());
 
-  assert( row2>=0 );
-  assert( row2<GetItemModel()->rowCount() );
-
-
-  ListEditItemModel * itemModel = GetItemModel();
-
-  assert( itemModel!=nullptr );
+  assert(row2 >= 0);
+  assert(row2 < GetItemModel()->rowCount());
 
 
-  itemModel->Swap( row1, row2 );
+  ListEditItemModel* itemModel = GetItemModel();
+
+  assert(itemModel != nullptr);
+
+
+  itemModel->Swap(row1, row2);
 
 
   {
-    int row =
-      s==LEFT
-      ? row1
-      : ( s==RIGHT
-	  ? row2
-	  : -1 );
+    int row = s == LEFT ? row1 : (s == RIGHT ? row2 : -1);
 
-    if( row<0 )
+    if (row < 0)
       return;
 
-    assert( m_UI!=nullptr );
-    assert( m_UI->treeView!=nullptr );
-    assert( m_UI->treeView->selectionModel()!=nullptr );
+    assert(m_UI != nullptr);
+    assert(m_UI->treeView != nullptr);
+    assert(m_UI->treeView->selectionModel() != nullptr);
 
-    QItemSelectionModel * ism =  m_UI->treeView->selectionModel();
+    QItemSelectionModel* ism = m_UI->treeView->selectionModel();
 
-    assert( ism!=nullptr );
+    assert(ism != nullptr);
 
     ism->clear();
 
-    ism->setCurrentIndex(
-      itemModel->index( row, ListEditItemModel::COLUMN_NAME ),
-      QItemSelectionModel::Clear |
-      QItemSelectionModel::Select |
-      QItemSelectionModel::Current |
-      QItemSelectionModel::Rows
-    );
+    ism->setCurrentIndex(itemModel->index(row, ListEditItemModel::COLUMN_NAME),
+                         QItemSelectionModel::Clear | QItemSelectionModel::Select | QItemSelectionModel::Current | QItemSelectionModel::Rows);
   }
 }
 
 /*******************************************************************************/
-QStringList
-ListEditWidget
-::browseFilenames( bool multi , const QString & filename )
+QStringList ListEditWidget::browseFilenames(bool multi, const QString& filename)
 {
-  const ListEditItemModel * itemModel = GetItemModel();
-  assert( itemModel!=nullptr );
+  const ListEditItemModel* itemModel = GetItemModel();
+  assert(itemModel != nullptr);
 
-  QString filePath(
-    QDir::current().filePath(
-      filename
-    )
-  );
+  QString filePath(QDir::current().filePath(filename));
 
-  QString selectedFilter;
+  QString     selectedFilter;
   QStringList output;
-  if(itemModel->IsInput())
-    {
+  if (itemModel->IsInput())
+  {
     if (multi)
-      {
-      output = otb::GetOpenFilenames(
-        this,
-        tr( "Select input filename..." ),
-        filePath,
-        itemModel->GetFilter(),
-        &selectedFilter
-        );
-      }
-    else
-      {
-      output.push_back(
-        otb::GetOpenFilename(
-          this,
-          tr( "Select input filename..." ),
-          filePath,
-          itemModel->GetFilter(),
-          &selectedFilter
-          )
-        );
-      }
-    }
-  else
     {
-    output.push_back(
-      otb::GetSaveFilename(
-        this,
-        tr( "Select output filename..." ),
-        filePath,
-        itemModel->GetFilter(),
-        &selectedFilter
-        )
-      );
+      output = otb::GetOpenFilenames(this, tr("Select input filename..."), filePath, itemModel->GetFilter(), &selectedFilter);
     }
+    else
+    {
+      output.push_back(otb::GetOpenFilename(this, tr("Select input filename..."), filePath, itemModel->GetFilter(), &selectedFilter));
+    }
+  }
+  else
+  {
+    output.push_back(otb::GetSaveFilename(this, tr("Select output filename..."), filePath, itemModel->GetFilter(), &selectedFilter));
+  }
   return output;
 }
 
 /*******************************************************************************/
-QString
-ListEditWidget
-::browseFilename( const QModelIndex & index )
+QString ListEditWidget::browseFilename(const QModelIndex& index)
 {
-  assert( index.isValid() );
-  assert( index.row()>=0 );
-  assert( index.column()>=0 );
+  assert(index.isValid());
+  assert(index.row() >= 0);
+  assert(index.column() >= 0);
 
   //
   // Get item-model.
-  const ListEditItemModel * itemModel = GetItemModel();
-  assert( itemModel!=nullptr );
+  const ListEditItemModel* itemModel = GetItemModel();
+  assert(itemModel != nullptr);
 
   //
   // Pick-up filename.
-  assert(
-    itemModel->data( index, ListEditItemModel::USER_ROLE_DIRECTION ).isValid()
-  );
+  assert(itemModel->data(index, ListEditItemModel::USER_ROLE_DIRECTION).isValid());
 
-  assert(
-    itemModel->data( index, ListEditItemModel::USER_ROLE_DIRECTION )==Role_Input
-    ||
-    itemModel->data( index, ListEditItemModel::USER_ROLE_DIRECTION )==Role_Output
-  );
+  assert(itemModel->data(index, ListEditItemModel::USER_ROLE_DIRECTION) == Role_Input ||
+         itemModel->data(index, ListEditItemModel::USER_ROLE_DIRECTION) == Role_Output);
 
-  return
-    (browseFilenames( false, itemModel->data( index ).toString() )).front();
+  return (browseFilenames(false, itemModel->data(index).toString())).front();
 }
 
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-void
-ListEditWidget
-::OnFilenameDropped(const QString & filename)
+void ListEditWidget::OnFilenameDropped(const QString& filename)
 {
-  ListEditItemModel * itemModel = GetItemModel();
-  assert( itemModel!=nullptr );
+  ListEditItemModel* itemModel = GetItemModel();
+  assert(itemModel != nullptr);
 
-  if( filename.isEmpty() )
+  if (filename.isEmpty())
     return;
 
   int row = itemModel->rowCount();
-  assert( row>=0 );
+  assert(row >= 0);
 
-  if( !itemModel->insertRow( row ) )
+  if (!itemModel->insertRow(row))
     return;
 
-  itemModel->setData(
-    itemModel->index( row, ListEditItemModel::COLUMN_NAME ),
-    filename
-  );
+  itemModel->setData(itemModel->index(row, ListEditItemModel::COLUMN_NAME), filename);
 }
 
 
-void
-ListEditWidget
-::on_addButton_clicked()
+void ListEditWidget::on_addButton_clicked()
 {
   // qDebug() << this << "::on_addButton_clicked()";
 
-  ListEditItemModel * itemModel = GetItemModel();
-  assert( itemModel!=nullptr );
+  ListEditItemModel* itemModel = GetItemModel();
+  assert(itemModel != nullptr);
 
   //
   // When not browsable
-  if( !itemModel->IsBrowsable() )
-    {
-    itemModel->insertRow( itemModel->rowCount() );
+  if (!itemModel->IsBrowsable())
+  {
+    itemModel->insertRow(itemModel->rowCount());
 
     return;
-    }
+  }
 
   //
   // When browsable.
-  QStringList filenames( browseFilenames(true) );
+  QStringList filenames(browseFilenames(true));
 
-  if( filenames.isEmpty() )
+  if (filenames.isEmpty())
     return;
 
   int row = itemModel->rowCount();
-  assert( row>=0 );
+  assert(row >= 0);
 
-  for (int i=0 ; i<filenames.size() ; i++)
-    {
-    if( !itemModel->insertRow( row ) )
+  for (int i = 0; i < filenames.size(); i++)
+  {
+    if (!itemModel->insertRow(row))
       return;
 
-    itemModel->setData(
-      itemModel->index( row, ListEditItemModel::COLUMN_NAME ),
-      filenames[i]
-    );
+    itemModel->setData(itemModel->index(row, ListEditItemModel::COLUMN_NAME), filenames[i]);
     row++;
-    }
+  }
 }
 
 /*******************************************************************************/
-void
-ListEditWidget
-::on_removeButton_clicked()
+void ListEditWidget::on_removeButton_clicked()
 {
   // qDebug() << this << "::on_removeButton_clicked()";
 
-  assert( m_UI->treeView->selectionModel()!=nullptr );
+  assert(m_UI->treeView->selectionModel() != nullptr);
 
 
-  QModelIndexList indexes(
-    m_UI->treeView->selectionModel()->selectedRows()
-  );
+  QModelIndexList indexes(m_UI->treeView->selectionModel()->selectedRows());
 
-  if( indexes.empty() )
+  if (indexes.empty())
     return;
 
 
-  ListEditItemModel * itemModel = GetItemModel();
+  ListEditItemModel* itemModel = GetItemModel();
 
-  assert( itemModel!=nullptr );
+  assert(itemModel != nullptr);
 
 
-  for( const QModelIndex & i : indexes )
-    {
-    assert( i.isValid() );
+  for (const QModelIndex& i : indexes)
+  {
+    assert(i.isValid());
 
-    itemModel->removeRow( i.row() );
-    }
+    itemModel->removeRow(i.row());
+  }
 }
 
 /*******************************************************************************/
-void
-ListEditWidget
-::on_removeAllButton_clicked()
+void ListEditWidget::on_removeAllButton_clicked()
 {
   // qDebug() << this << "::on_removeAllButton_clicked()";
 
-  ListEditItemModel * model = GetItemModel();
-  assert( model );
+  ListEditItemModel* model = GetItemModel();
+  assert(model);
 
-  if( model->rowCount()<1 )
+  if (model->rowCount() < 1)
     return;
 
-  assert( qApp );
-  assert( !qApp->applicationName().isEmpty() );
+  assert(qApp);
+  assert(!qApp->applicationName().isEmpty());
 
-  if( QMessageBox::question(
-	this,
-	qApp->applicationName(),
-	tr("Are you sure you want to delete all (%1) item(s)?")
-	.arg( model->rowCount() ),
-	QMessageBox::Yes | QMessageBox::No,
-	QMessageBox::No
-      )
-      ==QMessageBox::No )
+  if (QMessageBox::question(this, qApp->applicationName(), tr("Are you sure you want to delete all (%1) item(s)?").arg(model->rowCount()),
+                            QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::No)
     return;
 
-  model->removeRows( 0, model->rowCount() );
+  model->removeRows(0, model->rowCount());
 }
 
 /*******************************************************************************/
-void
-ListEditWidget
-::on_upButton_clicked()
+void ListEditWidget::on_upButton_clicked()
 {
   // qDebug() << this << "::on_upButton_clicked()";
 
-  assert( m_UI!=nullptr );
-  assert( m_UI->treeView!=nullptr );
-  assert( m_UI->treeView->selectionModel()!=nullptr );
+  assert(m_UI != nullptr);
+  assert(m_UI->treeView != nullptr);
+  assert(m_UI->treeView->selectionModel() != nullptr);
 
 
-  QModelIndexList indexes(
-    m_UI->treeView->selectionModel()->selectedRows()
-  );
+  QModelIndexList indexes(m_UI->treeView->selectionModel()->selectedRows());
 
-  if( indexes.empty() )
+  if (indexes.empty())
     return;
 
-  assert( indexes.size()==1 );
+  assert(indexes.size() == 1);
 
 
-  const QModelIndex & front = indexes.front();
+  const QModelIndex& front = indexes.front();
 
-  if( front.row()<1 )
+  if (front.row() < 1)
     return;
 
 
-  Swap(
-    front.row(),
-    front.row() - 1,
-    RIGHT
-  );
+  Swap(front.row(), front.row() - 1, RIGHT);
 }
 
 /*******************************************************************************/
-void
-ListEditWidget
-::on_downButton_clicked()
+void ListEditWidget::on_downButton_clicked()
 {
   // qDebug() << this << "::on_downButton_clicked()";
 
-  assert( m_UI!=nullptr );
-  assert( m_UI->treeView!=nullptr );
-  assert( m_UI->treeView->selectionModel()!=nullptr );
+  assert(m_UI != nullptr);
+  assert(m_UI->treeView != nullptr);
+  assert(m_UI->treeView->selectionModel() != nullptr);
 
 
-  QModelIndexList indexes(
-    m_UI->treeView->selectionModel()->selectedRows()
-  );
+  QModelIndexList indexes(m_UI->treeView->selectionModel()->selectedRows());
 
-  if( indexes.empty() )
+  if (indexes.empty())
     return;
 
-  assert( indexes.size()==1 );
+  assert(indexes.size() == 1);
 
 
-  const QModelIndex & front = indexes.front();
+  const QModelIndex& front = indexes.front();
 
-  if( front.row() >= GetItemModel()->rowCount() - 1 )
+  if (front.row() >= GetItemModel()->rowCount() - 1)
     return;
 
 
-  Swap(
-    front.row(),
-    front.row() + 1,
-    RIGHT
-  );
+  Swap(front.row(), front.row() + 1, RIGHT);
 }
 
 /*******************************************************************************/
-void
-ListEditWidget
-::on_browseButton_clicked()
+void ListEditWidget::on_browseButton_clicked()
 {
   // qDebug() << this << "::on_browseButton_clicked()";
 
-  assert( m_UI!=nullptr );
-  assert( m_UI->treeView!=nullptr );
-  assert( m_UI->treeView->selectionModel()!=nullptr );
+  assert(m_UI != nullptr);
+  assert(m_UI->treeView != nullptr);
+  assert(m_UI->treeView->selectionModel() != nullptr);
 
 
   //
   // Pick-up first item of selection.
-  QModelIndexList indexes(
-    m_UI->treeView->selectionModel()->selectedRows()
-  );
+  QModelIndexList indexes(m_UI->treeView->selectionModel()->selectedRows());
 
-  if( indexes.isEmpty() )
+  if (indexes.isEmpty())
     return;
 
-  assert( indexes.size()==1 );
+  assert(indexes.size() == 1);
 
-  const QModelIndex & front = indexes.front();
+  const QModelIndex& front = indexes.front();
 
   //
   // Get item-model.
-  ListEditItemModel * itemModel = GetItemModel();
-  assert( itemModel!=nullptr );
+  ListEditItemModel* itemModel = GetItemModel();
+  assert(itemModel != nullptr);
 
   //
   // Pick-up filename.
   QString selectedFilter;
 
-  QString filename( browseFilename( front ) );
+  QString filename(browseFilename(front));
 
-  if( filename.isEmpty() )
+  if (filename.isEmpty())
     return;
 
   //
   // Foo.
-  itemModel->setData( front, filename );
+  itemModel->setData(front, filename);
 }
 
 /*******************************************************************************/
-void
-ListEditWidget
-::OnSelectionChanged( const QItemSelection & /* selected */,
-		      const QItemSelection & /* deselected */ )
+void ListEditWidget::OnSelectionChanged(const QItemSelection& /* selected */, const QItemSelection& /* deselected */)
 {
   // qDebug()
   //   << this
@@ -604,26 +482,22 @@ ListEditWidget
 }
 
 /*****************************************************************************/
-void
-ListEditWidget
-::OnDataChanged( const QModelIndex &, const QModelIndex & )
+void ListEditWidget::OnDataChanged(const QModelIndex&, const QModelIndex&)
 {
   // qDebug() << this << "::OnDataChanged()";
 
-  assert( GetItemModel()!=nullptr );
+  assert(GetItemModel() != nullptr);
 
-  //Notify the ParameterList that the parameter has been modified (UserValue)
+  // Notify the ParameterList that the parameter has been modified (UserValue)
   // ParameterList is not available in this class, transfer the signal to WidgetParameterList
   emit ValueChanged();
 
-  //Then, trigger the update the application parameters
+  // Then, trigger the update the application parameters
   emit Updated();
 }
 
 /*****************************************************************************/
-void
-ListEditWidget
-::OnModelReset()
+void ListEditWidget::OnModelReset()
 {
   // qDebug() << this << "::OnModelReset()";
 
@@ -631,9 +505,7 @@ ListEditWidget
 }
 
 /*****************************************************************************/
-void
-ListEditWidget
-::OnRowsInserted( const QModelIndex &, int, int )
+void ListEditWidget::OnRowsInserted(const QModelIndex&, int, int)
 {
   // qDebug() << this << "::OnRowsInserted()";
 
@@ -641,9 +513,7 @@ ListEditWidget
 }
 
 /*****************************************************************************/
-void
-ListEditWidget
-::OnRowsRemoved( const QModelIndex &, int, int )
+void ListEditWidget::OnRowsRemoved(const QModelIndex&, int, int)
 {
   // qDebug() << this << "::OnRowsRemoved()";
 

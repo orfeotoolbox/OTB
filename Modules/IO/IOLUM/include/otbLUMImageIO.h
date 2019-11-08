@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -43,7 +43,6 @@ namespace otb
 class ITK_EXPORT LUMImageIO : public otb::ImageIOBase
 {
 public:
-
   /** Standard class typedefs. */
   typedef LUMImageIO              Self;
   typedef otb::ImageIOBase        Superclass;
@@ -99,7 +98,7 @@ public:
    * that the IORegion has been set properly. */
   void Write(const void* buffer) override;
   // JULIEN: NOT USED, NOT IMPLEMENTED
-  //void SampleImage(void* buffer, int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
+  // void SampleImage(void* buffer, int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
 
   /** Get the number of overviews available into the file specified
    *  This imageIO didn't support overviews */
@@ -109,19 +108,20 @@ public:
     // resolution overview.
     return 1;
   }
-  
+
   /** Get information about overviews available into the file specified
-   * This imageIO didn't support overviews */ 
+   * This imageIO didn't support overviews */
   std::vector<std::string> GetOverviewsInfo() override
   {
     std::vector<std::string> desc;
     return desc;
   }
-  
+
   /** Provide hist about the output container to deal with complex pixel
-   *  type (Not used here) */ 
-  void SetOutputImagePixelType( bool itkNotUsed(isComplexInternalPixelType), 
-                                        bool itkNotUsed(isVectorImage)) override{}
+   *  type (Not used here) */
+  void SetOutputImagePixelType(bool itkNotUsed(isComplexInternalPixelType), bool itkNotUsed(isVectorImage)) override
+  {
+  }
 
 protected:
   /** Constructor.*/
@@ -139,58 +139,54 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LUMImageIO(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  LUMImageIO(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Internal method to read header information */
   bool InternalReadHeaderInformation(std::fstream& file, const bool reportError);
   /** This method get the LUM type */
-  int CaiGetTypeLum(const char *          type_code,
-                    std::string&   str_sens_code,
-                    int&           inbbits,
-                    std::string&   str_cod_pix);
+  int CaiGetTypeLum(const char* type_code, std::string& str_sens_code, int& inbbits, std::string& str_cod_pix);
 
-#define otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \
-    { \
-    typedef itk::ByteSwapper<StrongType> InternalByteSwapperType; \
-    if (m_ByteOrder != m_FileByteOrder) \
-      { \
-      if (m_ByteOrder == LittleEndian) \
-        { \
-        InternalByteSwapperType::SwapRangeFromSystemToBigEndian((StrongType *) buffer, buffer_size); \
-        } \
-      else if (m_ByteOrder == BigEndian) \
-        { \
-        InternalByteSwapperType::SwapRangeFromSystemToLittleEndian((StrongType *) buffer, buffer_size); \
-        } \
-      } \
-    }
+#define otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size)                          \
+  {                                                                                                   \
+    typedef itk::ByteSwapper<StrongType> InternalByteSwapperType;                                     \
+    if (m_ByteOrder != m_FileByteOrder)                                                               \
+    {                                                                                                 \
+      if (m_ByteOrder == LittleEndian)                                                                \
+      {                                                                                               \
+        InternalByteSwapperType::SwapRangeFromSystemToBigEndian((StrongType*)buffer, buffer_size);    \
+      }                                                                                               \
+      else if (m_ByteOrder == BigEndian)                                                              \
+      {                                                                                               \
+        InternalByteSwapperType::SwapRangeFromSystemToLittleEndian((StrongType*)buffer, buffer_size); \
+      }                                                                                               \
+    }                                                                                                 \
+  }
 
 #define otbSwappFileToSystemMacro(StrongType, WeakType, buffer, buffer_size) \
-  else if (this->GetComponentType() == WeakType) \
-    { \
-    otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \
-    }
+  else if (this->GetComponentType() == WeakType)                             \
+  {                                                                          \
+    otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size)     \
+  }
 
 #define otbSetTypeLumMacro(WeakType, CAI_VALUE_BE, CAI_VALUE_LE) \
-  else if (this->GetComponentType() == WeakType) \
-    { \
-    if (m_ByteOrder == LittleEndian) \
-      { \
-      m_TypeLum = CAI_VALUE_LE; \
-      } \
-    else \
-      { \
-      m_TypeLum = CAI_VALUE_BE; \
-      } \
-    }
+  else if (this->GetComponentType() == WeakType)                 \
+  {                                                              \
+    if (m_ByteOrder == LittleEndian)                             \
+    {                                                            \
+      m_TypeLum = CAI_VALUE_LE;                                  \
+    }                                                            \
+    else                                                         \
+    {                                                            \
+      m_TypeLum = CAI_VALUE_BE;                                  \
+    }                                                            \
+  }
 
   bool                        m_FlagWriteImageInformation;
-  std::vector<std::string>    m_CaiLumTyp;     //used for read
-  std::string                 m_TypeLum; //used for write
+  std::vector<std::string>    m_CaiLumTyp; // used for read
+  std::string                 m_TypeLum;   // used for write
   otb::ImageIOBase::ByteOrder m_FileByteOrder;
   std::fstream                m_File;
-
 };
 
 } // end namespace otb

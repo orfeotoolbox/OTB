@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,11 +23,9 @@
 
 #include <QtWidgets>
 #include "otbWrapperParameterGroup.h"
-#include "otbWrapperRadiusParameter.h"
-#include "otbWrapperRAMParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
-#include "otbWrapperInputProcessXMLParameter.h"
-#include "otbWrapperOutputProcessXMLParameter.h"
+#include "otbWrapperInputXML.h"
+#include "otbWrapperOutputXML.h"
 
 namespace otb
 {
@@ -47,7 +45,7 @@ public:
   ~QtWidgetParameterGroup() override;
 
 public slots:
-  void SetActivationState( bool value ) override;
+  void SetActivationState(bool value) override;
 
 private:
   QtWidgetParameterGroup(const QtWidgetParameterGroup&) = delete;
@@ -62,12 +60,9 @@ private:
   ParameterGroup::Pointer m_ParamList;
 
   typedef std::vector<QtWidgetParameterBase*> WidgetListType;
-  typedef WidgetListType::iterator WidgetListIteratorType;
-  WidgetListType m_WidgetList;
-
+  typedef WidgetListType::iterator            WidgetListIteratorType;
+  WidgetListType                              m_WidgetList;
 };
-
-
 }
 }
 

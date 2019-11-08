@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -97,9 +97,7 @@ enum RgbwChannel
 /**
  * Constant naming video-channels.
  */
-extern OTBMonteverdiCore_EXPORT
-const char*
-RGBW_CHANNEL_NAMES[ RGBW_CHANNEL_COUNT ];
+extern OTBMonteverdiCore_EXPORT const char* RGBW_CHANNEL_NAMES[RGBW_CHANNEL_COUNT];
 
 /**
  */
@@ -113,9 +111,7 @@ enum Bound
 /**
  * Constant naming bound values.
  */
-extern
-const char*
-BOUND_NAMES[ BOUND_COUNT ];
+extern const char* BOUND_NAMES[BOUND_COUNT];
 
 /**
  */
@@ -148,24 +144,15 @@ enum Effect
 /**
  * Constant naming effect values.
  */
-OTBMonteverdiCore_EXPORT
-extern
-char const * const
-EFFECT_NAMES[ EFFECT_COUNT ];
+OTBMonteverdiCore_EXPORT extern char const* const EFFECT_NAMES[EFFECT_COUNT];
 
 /**
  */
-OTBMonteverdiCore_EXPORT
-extern
-bool
-OVERVIEWS_ENABLED_DEFAULT;
+OTBMonteverdiCore_EXPORT extern bool OVERVIEWS_ENABLED_DEFAULT;
 
 /**
  */
-OTBMonteverdiCore_EXPORT
-extern
-int
-OVERVIEWS_SIZE_DEFAULT;
+OTBMonteverdiCore_EXPORT extern int OVERVIEWS_SIZE_DEFAULT;
 
 } // end of namespace mvd.
 
@@ -197,7 +184,7 @@ namespace mvd
  * \return true if iteration indices have been set and loop can be
  * processed.
  */
-inline bool RgbBounds( CountType& begin, CountType& end, RgbwChannel channels );
+inline bool RgbBounds(CountType& begin, CountType& end, RgbwChannel channels);
 
 /**
  * \brief Convenience method used to compute integer indices in order
@@ -220,7 +207,7 @@ inline bool RgbBounds( CountType& begin, CountType& end, RgbwChannel channels );
  * \return true if iteration indices have been set and loop can be
  * processed.
  */
-inline bool RgbwBounds( CountType& begin, CountType& end, RgbwChannel channels );
+inline bool RgbwBounds(CountType& begin, CountType& end, RgbwChannel channels);
 
 /**
  * \brief Provide a lexicographical version-string 'M.m.p' less operator.
@@ -230,7 +217,7 @@ inline bool RgbwBounds( CountType& begin, CountType& end, RgbwChannel channels )
  *
  * \return true if left-operand is lesser than right-operand.
  */
-inline bool IsVersionLess( const QString& v0, const QString& v1 );
+inline bool IsVersionLess(const QString& v0, const QString& v1);
 
 /**
  * \brief Provide a lexicographical version-string 'M.m.p'
@@ -241,7 +228,7 @@ inline bool IsVersionLess( const QString& v0, const QString& v1 );
  *
  * \return true if left-operand is greater-or-equal than right-operand.
  */
-inline bool IsVersionGreaterEqual( const QString& v0, const QString& v1 );
+inline bool IsVersionGreaterEqual(const QString& v0, const QString& v1);
 
 /**
  * \brief Provide a lexicographical version-string 'M.m.p' equal
@@ -252,7 +239,7 @@ inline bool IsVersionGreaterEqual( const QString& v0, const QString& v1 );
  *
  * \return true if left-operand is equal than right-operand.
  */
-inline bool IsVersionEqual( const QString& v0, const QString& v1 );
+inline bool IsVersionEqual(const QString& v0, const QString& v1);
 
 } // end namespace 'mvd'.
 
@@ -263,140 +250,121 @@ inline bool IsVersionEqual( const QString& v0, const QString& v1 );
 namespace mvd
 {
 /*****************************************************************************/
-inline
-bool
-RgbBounds( CountType& begin, CountType& end, RgbwChannel channels )
+inline bool RgbBounds(CountType& begin, CountType& end, RgbwChannel channels)
 {
-  assert( channels!=RGBW_CHANNEL_COUNT );
+  assert(channels != RGBW_CHANNEL_COUNT);
 
-  switch( channels )
-    {
-    case RGBW_CHANNEL_NONE:
-    case RGBW_CHANNEL_WHITE:
-      begin = RGBW_CHANNEL_NONE;
-      end = RGBW_CHANNEL_NONE;
-      break;
+  switch (channels)
+  {
+  case RGBW_CHANNEL_NONE:
+  case RGBW_CHANNEL_WHITE:
+    begin = RGBW_CHANNEL_NONE;
+    end   = RGBW_CHANNEL_NONE;
+    break;
 
-    case RGBW_CHANNEL_RED:
-    case RGBW_CHANNEL_GREEN:
-    case RGBW_CHANNEL_BLUE:
-      begin = channels;
-      end = channels + 1;
-      break;
+  case RGBW_CHANNEL_RED:
+  case RGBW_CHANNEL_GREEN:
+  case RGBW_CHANNEL_BLUE:
+    begin = channels;
+    end   = channels + 1;
+    break;
 
-    case RGBW_CHANNEL_RGB:
-    case RGBW_CHANNEL_ALL:
-      begin = RGBW_CHANNEL_RED;
-      end = RGBW_CHANNEL_WHITE;
-      break;
+  case RGBW_CHANNEL_RGB:
+  case RGBW_CHANNEL_ALL:
+    begin = RGBW_CHANNEL_RED;
+    end   = RGBW_CHANNEL_WHITE;
+    break;
 
-    default:
-      assert( false && "Non-managed RgbwChannel value.!" );
-      return false;
-      break;
-    }
+  default:
+    assert(false && "Non-managed RgbwChannel value.!");
+    return false;
+    break;
+  }
 
   return true;
 }
 
 /*****************************************************************************/
-inline
-bool
-RgbwBounds( CountType& begin, CountType& end, RgbwChannel channels )
+inline bool RgbwBounds(CountType& begin, CountType& end, RgbwChannel channels)
 {
-  assert( channels!=RGBW_CHANNEL_COUNT );
+  assert(channels != RGBW_CHANNEL_COUNT);
 
-  switch( channels )
-    {
-    case RGBW_CHANNEL_NONE:
-      begin = RGBW_CHANNEL_NONE;
-      end = RGBW_CHANNEL_NONE;
-      break;
+  switch (channels)
+  {
+  case RGBW_CHANNEL_NONE:
+    begin = RGBW_CHANNEL_NONE;
+    end   = RGBW_CHANNEL_NONE;
+    break;
 
-    case RGBW_CHANNEL_RED:
-    case RGBW_CHANNEL_GREEN:
-    case RGBW_CHANNEL_BLUE:
-    case RGBW_CHANNEL_WHITE:
-      begin = channels;
-      end = channels + 1;
-      break;
+  case RGBW_CHANNEL_RED:
+  case RGBW_CHANNEL_GREEN:
+  case RGBW_CHANNEL_BLUE:
+  case RGBW_CHANNEL_WHITE:
+    begin = channels;
+    end   = channels + 1;
+    break;
 
-    case RGBW_CHANNEL_RGB:
-      begin = RGBW_CHANNEL_RED;
-      end = RGBW_CHANNEL_WHITE;
-      break;
+  case RGBW_CHANNEL_RGB:
+    begin = RGBW_CHANNEL_RED;
+    end   = RGBW_CHANNEL_WHITE;
+    break;
 
-    case RGBW_CHANNEL_ALL:
-      begin = RGBW_CHANNEL_RED;
-      end = RGBW_CHANNEL_RGB;
-      break;
+  case RGBW_CHANNEL_ALL:
+    begin = RGBW_CHANNEL_RED;
+    end   = RGBW_CHANNEL_RGB;
+    break;
 
-    default:
-      assert( false && "Non-managed RgbwChannel value.!" );
-      return false;
-      break;
-    }
+  default:
+    assert(false && "Non-managed RgbwChannel value.!");
+    return false;
+    break;
+  }
 
   return true;
 }
 
 /*****************************************************************************/
-inline
-bool
-IsVersionLess( const QString& v0, const QString& v1 )
+inline bool IsVersionLess(const QString& v0, const QString& v1)
 {
-  QStringList V0List( v0.split( "." ) );
-  assert( V0List.size()>=3 );
+  QStringList V0List(v0.split("."));
+  assert(V0List.size() >= 3);
 
-  QStringList V1List( v1.split( "." ) );
-  assert( V1List.size()>=3 );
+  QStringList V1List(v1.split("."));
+  assert(V1List.size() >= 3);
 
-  return
-    V0List[ 0 ].toInt() < V1List[ 0 ].toInt() ||
+  return V0List[0].toInt() < V1List[0].toInt() ||
 
-    ( V0List[ 0 ].toInt() == V1List[ 0 ].toInt() &&
-      V0List[ 1 ].toInt() < V1List[ 1 ].toInt() ) ||
+         (V0List[0].toInt() == V1List[0].toInt() && V0List[1].toInt() < V1List[1].toInt()) ||
 
-    ( V0List[ 1 ].toInt() == V1List[ 1 ].toInt() &&
-      V0List[ 2 ].toInt() < V1List[ 2 ].toInt() );
+         (V0List[1].toInt() == V1List[1].toInt() && V0List[2].toInt() < V1List[2].toInt());
 }
 
 /*****************************************************************************/
-inline
-bool
-IsVersionEqual( const QString& v0, const QString& v1 )
+inline bool IsVersionEqual(const QString& v0, const QString& v1)
 {
-  QStringList V0List( v0.split( "." ) );
-  assert( V0List.size()>=3 );
+  QStringList V0List(v0.split("."));
+  assert(V0List.size() >= 3);
 
-  QStringList V1List( v1.split( "." ) );
-  assert( V1List.size()>=3 );
+  QStringList V1List(v1.split("."));
+  assert(V1List.size() >= 3);
 
-  return
-    V0List[ 0 ].toInt() == V1List[ 0 ].toInt() &&
-    V0List[ 1 ].toInt() == V1List[ 1 ].toInt() &&
-    V0List[ 2 ].toInt() == V1List[ 2 ].toInt();
+  return V0List[0].toInt() == V1List[0].toInt() && V0List[1].toInt() == V1List[1].toInt() && V0List[2].toInt() == V1List[2].toInt();
 }
 
 /*****************************************************************************/
-inline
-bool
-IsVersionGreaterEqual( const QString& v0, const QString& v1 )
+inline bool IsVersionGreaterEqual(const QString& v0, const QString& v1)
 {
-  QStringList V0List( v0.split( "." ) );
-  assert( V0List.size()>=3 );
+  QStringList V0List(v0.split("."));
+  assert(V0List.size() >= 3);
 
-  QStringList V1List( v1.split( "." ) );
-  assert( V1List.size()>=3 );
+  QStringList V1List(v1.split("."));
+  assert(V1List.size() >= 3);
 
-  return
-    V0List[ 0 ].toInt() > V1List[ 0 ].toInt() ||
+  return V0List[0].toInt() > V1List[0].toInt() ||
 
-    ( V0List[ 0 ].toInt() == V1List[ 0 ].toInt() &&
-      V0List[ 1 ].toInt() > V1List[ 1 ].toInt() ) ||
+         (V0List[0].toInt() == V1List[0].toInt() && V0List[1].toInt() > V1List[1].toInt()) ||
 
-    ( V0List[ 1 ].toInt() == V1List[ 1 ].toInt() &&
-      V0List[ 2 ].toInt() >= V1List[ 2 ].toInt() );
+         (V0List[1].toInt() == V1List[1].toInt() && V0List[2].toInt() >= V1List[2].toInt());
 }
 
 } // end namespace 'mvd'.

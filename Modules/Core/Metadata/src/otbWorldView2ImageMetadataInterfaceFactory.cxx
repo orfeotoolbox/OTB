@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include <typeinfo>
 #include <cassert>
 
@@ -32,29 +31,22 @@
 namespace otb
 {
 
-WorldView2ImageMetadataInterfaceFactory
-::WorldView2ImageMetadataInterfaceFactory()
+WorldView2ImageMetadataInterfaceFactory::WorldView2ImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("OpticalImageMetadataInterface",
-                         "otbWorldView2ImageMetadataInterface",
-                         "WorldView2 Metadata Interface",
-                         1,
+  this->RegisterOverride("OpticalImageMetadataInterface", "otbWorldView2ImageMetadataInterface", "WorldView2 Metadata Interface", 1,
                          itk::CreateObjectFunction<WorldView2ImageMetadataInterface>::New());
 }
 
-WorldView2ImageMetadataInterfaceFactory
-::~WorldView2ImageMetadataInterfaceFactory()
+WorldView2ImageMetadataInterfaceFactory::~WorldView2ImageMetadataInterfaceFactory()
 {
 }
 
-const char*
-WorldView2ImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+const char* WorldView2ImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-WorldView2ImageMetadataInterfaceFactory::GetDescription() const
+const char* WorldView2ImageMetadataInterfaceFactory::GetDescription() const
 {
   return "WorldView2 Metadata Interface Factory, handle WorldView2 metadata in OTB";
 }

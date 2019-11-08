@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,15 +38,15 @@ namespace otb
  *
  * \ingroup OTBStreaming
  */
-template<class TImage>
+template <class TImage>
 class ITK_EXPORT NumberOfDivisionsTiledStreamingManager : public StreamingManager<TImage>
 {
 public:
   /** Standard class typedefs. */
   typedef NumberOfDivisionsTiledStreamingManager Self;
-  typedef StreamingManager<TImage>              Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef StreamingManager<TImage>               Superclass;
+  typedef itk::SmartPointer<Self>                Pointer;
+  typedef itk::SmartPointer<const Self>          ConstPointer;
 
   typedef TImage                          ImageType;
   typedef typename Superclass::RegionType RegionType;
@@ -67,7 +67,7 @@ public:
   itkGetMacro(NumberOfDivisions, unsigned int);
 
   /** Actually computes the stream divisions given a DataObject and its region to write */
-  void PrepareStreaming(itk::DataObject * input, const RegionType &region) override;
+  void PrepareStreaming(itk::DataObject* input, const RegionType& region) override;
 
 protected:
   NumberOfDivisionsTiledStreamingManager();
@@ -76,9 +76,10 @@ protected:
   /** The number of lines per strip desired by the user.
    *  This may be different than the one computed by the Splitter */
   unsigned int m_NumberOfDivisions;
+
 private:
-  NumberOfDivisionsTiledStreamingManager(const NumberOfDivisionsTiledStreamingManager &);
-  void operator =(const NumberOfDivisionsTiledStreamingManager&);
+  NumberOfDivisionsTiledStreamingManager(const NumberOfDivisionsTiledStreamingManager&);
+  void operator=(const NumberOfDivisionsTiledStreamingManager&);
 };
 
 } // End namespace otb
@@ -88,4 +89,3 @@ private:
 #endif
 
 #endif
-

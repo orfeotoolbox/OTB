@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -72,7 +72,7 @@ namespace otb
  */
 
 template <unsigned int VImageDimension>
-class ITK_EXPORT ImageRegionTileMapSplitter : public itk::ImageRegionSplitter<VImageDimension>
+class ITK_EXPORT       ImageRegionTileMapSplitter : public itk::ImageRegionSplitter<VImageDimension>
 {
 public:
   /** Standard class typedefs. */
@@ -113,23 +113,25 @@ public:
        * a certain dimensions, then some splits will not be possible. This
        * method returns a number less than or equal to the requested number
    * of pieces. */
-  unsigned int GetNumberOfSplits(const RegionType& region,
-                                         unsigned int requestedNumber) override;
+  unsigned int GetNumberOfSplits(const RegionType& region, unsigned int requestedNumber) override;
 
   /** Get a region definition that represents the ith piece a specified region.
        * The "numberOfPieces" specified should be less than or equal to what
    * GetNumberOfSplits() returns. */
-  RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
-                              const RegionType& region) override;
+  RegionType GetSplit(unsigned int i, unsigned int numberOfPieces, const RegionType& region) override;
 
 protected:
-  ImageRegionTileMapSplitter() : m_AlignStep(256){}
-  ~ImageRegionTileMapSplitter() override {}
+  ImageRegionTileMapSplitter() : m_SplitsPerDimension{0}, m_AlignStep(256)
+  {
+  }
+  ~ImageRegionTileMapSplitter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageRegionTileMapSplitter(const ImageRegionTileMapSplitter &) = delete;
-  void operator =(const ImageRegionTileMapSplitter&) = delete;
+  ImageRegionTileMapSplitter(const ImageRegionTileMapSplitter&) = delete;
+  void operator=(const ImageRegionTileMapSplitter&) = delete;
 
   unsigned int m_SplitsPerDimension[VImageDimension];
   unsigned int m_AlignStep;
@@ -138,7 +140,7 @@ private:
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbImageRegionTileMapSplitter.hxx"
+#include "otbImageRegionTileMapSplitter.hxx"
 #endif
 
 #endif

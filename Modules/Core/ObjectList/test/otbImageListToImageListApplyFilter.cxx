@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,32 +23,30 @@
 #include "otbImageListToImageListApplyFilter.h"
 #include "otbImageList.h"
 #include "otbImage.h"
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkMeanImageFilter.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbImageListToImageListApplyFilter(int itkNotUsed(argc), char * argv[])
+int otbImageListToImageListApplyFilter(int itkNotUsed(argc), char* argv[])
 {
-  char * infname1  = argv[1];
-  char * infname2  = argv[2];
-  char * infname3  = argv[3];
-  char * outfname1 = argv[4];
-  char * outfname2 = argv[5];
-  char * outfname3 = argv[6];
+  char* infname1  = argv[1];
+  char* infname2  = argv[2];
+  char* infname3  = argv[3];
+  char* outfname1 = argv[4];
+  char* outfname2 = argv[5];
+  char* outfname3 = argv[6];
 
-  const unsigned int Dimension = 2;
-  typedef unsigned char                              PixelType;
-  typedef otb::Image<PixelType, Dimension>           ImageType;
-  typedef otb::ImageList<ImageType>                  ImageListType;
+  const unsigned int    Dimension = 2;
+  typedef unsigned char PixelType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef otb::ImageList<ImageType> ImageListType;
   typedef itk::MeanImageFilter<ImageType, ImageType> MeanFilterType;
 
   // IO
   typedef otb::ImageFileReader<ImageType> ReaderType;
   typedef otb::ImageFileWriter<ImageType> WriterType;
 
-  typedef otb::ImageListToImageListApplyFilter<ImageListType, ImageListType, MeanFilterType>
-  ImageListToImageListApplyFilterType;
+  typedef otb::ImageListToImageListApplyFilter<ImageListType, ImageListType, MeanFilterType> ImageListToImageListApplyFilterType;
 
   // Instantiating object
   ImageListToImageListApplyFilterType::Pointer filter = ImageListToImageListApplyFilterType::New();

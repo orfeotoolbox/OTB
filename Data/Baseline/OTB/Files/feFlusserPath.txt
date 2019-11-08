@@ -1,0 +1,12 @@
+Flusser Path moments: [12]
+Flusser(1) = 5000
+Flusser(2) = 0
+Flusser(3) = 0
+Flusser(4) = 0
+Flusser(5) = 0
+Flusser(6) = 0
+Flusser(7) = 62500
+Flusser(8) = 0
+Flusser(9) = 0
+Flusser(10) = -0
+Flusser(11) = 0

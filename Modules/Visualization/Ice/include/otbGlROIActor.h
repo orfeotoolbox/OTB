@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,7 +24,6 @@
 #include "otbGlActor.h"
 
 #include "otbGenericRSTransform.h"
-#include "otbFragmentShader.h"
 #include "otbImageKeywordlist.h"
 #include "itkImageRegion.h"
 #include "itkVector.h"
@@ -32,6 +31,11 @@
 
 namespace otb
 {
+
+namespace gl
+{
+struct Mesh;
+}
 
 class OTBIce_EXPORT GlROIActor 
   : public GlActor
@@ -60,6 +64,8 @@ public:
 
   // Gl rendering of current state
   void Render() override;
+
+  void CreateShader() override;
 
   void SetUL( const PointType & );
 
@@ -105,6 +111,7 @@ private:
 
   ColorType            m_Color;
   double               m_Alpha;
+  double               m_CurrentAlpha;
   bool                 m_Fill;
   
   RSTransformType::Pointer m_ViewportToImageTransform;
@@ -114,6 +121,9 @@ private:
   PointType            m_VpUR;
   PointType            m_VpLL;
   PointType            m_VpLR;
+
+  /** OpenGL quad. */
+  std::unique_ptr< gl::Mesh > m_Mesh;
 
 }; // End class GlROIActor
 

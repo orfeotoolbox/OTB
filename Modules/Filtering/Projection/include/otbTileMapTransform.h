@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,23 +34,20 @@ namespace otb
  * \ingroup OTBProjection
  **/
 
-template <TransformDirection::TransformationDirection TTransformDirection,
-    class TScalarType = double,
-    unsigned int NInputDimensions = 2,
-    unsigned int NOutputDimensions = 2>
-class ITK_EXPORT TileMapTransform : public Transform<TScalarType,           // Data type for scalars
-      NInputDimensions,                                                     // Number of dimensions in the input space
-      NOutputDimensions>                                                    // Number of dimensions in the output space
+template <TransformDirection::TransformationDirection TTransformDirection, class TScalarType = double, unsigned int NInputDimensions = 2,
+          unsigned int NOutputDimensions = 2>
+class ITK_EXPORT       TileMapTransform : public Transform<TScalarType, // Data type for scalars
+                                                     NInputDimensions,  // Number of dimensions in the input space
+                                                     NOutputDimensions> // Number of dimensions in the output space
 {
 public:
   /** Standard class typedefs. */
   typedef TileMapTransform Self;
-  typedef Transform<TScalarType,
-      NInputDimensions,  NOutputDimensions>  Superclass;
+  typedef Transform<TScalarType, NInputDimensions, NOutputDimensions> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename Superclass::ScalarType           ScalarType;
+  typedef typename Superclass::ScalarType ScalarType;
   typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
   typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
 
@@ -65,7 +62,7 @@ public:
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
   itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
-  itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions * (NInputDimensions + 1));
+  itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions*(NInputDimensions + 1));
 
   itkGetConstMacro(Depth, int);
   itkSetMacro(Depth, int);
@@ -88,8 +85,8 @@ protected:
   ~TileMapTransform() override;
 
 private:
-  TileMapTransform(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  TileMapTransform(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   int m_Depth;
 };

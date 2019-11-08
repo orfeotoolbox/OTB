@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -47,19 +47,19 @@ otb::GeometriesSource::~GeometriesSource()
 }
 
 /*virtual*/
-otb::GeometriesSource::OutputGeometriesType* otb::GeometriesSource::GetOutput(void )
+otb::GeometriesSource::OutputGeometriesType* otb::GeometriesSource::GetOutput(void)
 {
-  return static_cast<GeometriesSet*> (Superclass::GetOutput(0));
+  return static_cast<GeometriesSet*>(Superclass::GetOutput(0));
 }
 
 /*virtual*/
 otb::GeometriesSource::OutputGeometriesType* otb::GeometriesSource::GetOutput(DataObjectPointerArraySizeType idx)
 {
-  return static_cast<GeometriesSet*> (Superclass::GetOutput(idx));
+  return static_cast<GeometriesSet*>(Superclass::GetOutput(idx));
 }
 
 /*virtual*/
-void otb::GeometriesSource::SetOutput(OutputGeometriesType* output, DataObjectPointerArraySizeType idx/* = 0 */)
+void otb::GeometriesSource::SetOutput(OutputGeometriesType* output, DataObjectPointerArraySizeType idx /* = 0 */)
 {
   Superclass::SetNthOutput(idx, output);
 }
@@ -72,13 +72,13 @@ void otb::GeometriesSource::DoAllocateOutputs()
   // In the filter is meant to produce a file, use SetOutput, or the New(string)
   // function to built the GeometriesSource and filters
   if (!GetOutput() || !GetOutput()->IsSet())
-    {
+  {
     GeometriesSet::Pointer gs = GeometriesSet::New(); // in-memory DataSource
     assert(gs);
     this->SetOutput(gs);
     ///\todo Check whether we need to increase the count of the \c GeometriesSet as
-    ///it'll get reelased at the end of function the scope.
-    }
+    /// it'll get reelased at the end of function the scope.
+  }
 }
 
 /*virtual*/

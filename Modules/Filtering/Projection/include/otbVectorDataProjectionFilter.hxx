@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,8 +33,7 @@ namespace otb
    * Constructor
  */
 template <class TInputVectorData, class TOutputVectorData>
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::VectorDataProjectionFilter()
+VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::VectorDataProjectionFilter()
 {
   m_InputProjectionRef.clear();
   m_OutputProjectionRef.clear();
@@ -48,23 +47,19 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetInputSpacing(const SpacingType& spacing)
+void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::SetInputSpacing(const SpacingType& spacing)
 {
   itkDebugMacro("setting Spacing to " << spacing);
   if (this->m_InputSpacing != spacing)
-    {
+  {
     this->m_InputSpacing = spacing;
     this->Modified();
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetInputSpacing(const double spacing[2])
+void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::SetInputSpacing(const double spacing[2])
 {
   SpacingType s(spacing);
   this->SetInputSpacing(s);
@@ -72,9 +67,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetInputSpacing(const float spacing[2])
+void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::SetInputSpacing(const float spacing[2])
 {
   itk::Vector<float, 2> sf(spacing);
   SpacingType s;
@@ -84,9 +77,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetInputOrigin(const double origin[2])
+void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::SetInputOrigin(const double origin[2])
 {
   OriginType p(origin);
   this->SetInputOrigin(p);
@@ -94,9 +85,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetInputOrigin(const float origin[2])
+void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::SetInputOrigin(const float origin[2])
 {
   itk::Point<float, 2> of(origin);
   OriginType p;
@@ -106,23 +95,19 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetOutputSpacing(const SpacingType& spacing)
+void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::SetOutputSpacing(const SpacingType& spacing)
 {
   itkDebugMacro("setting Spacing to " << spacing);
   if (this->m_OutputSpacing != spacing)
-    {
+  {
     this->m_OutputSpacing = spacing;
     this->Modified();
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetOutputSpacing(const double spacing[2])
+void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::SetOutputSpacing(const double spacing[2])
 {
   SpacingType s(spacing);
   this->SetOutputSpacing(s);
@@ -130,9 +115,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetOutputSpacing(const float spacing[2])
+void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::SetOutputSpacing(const float spacing[2])
 {
   itk::Vector<float, 2> sf(spacing);
   SpacingType s;
@@ -142,9 +125,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetOutputOrigin(const double origin[2])
+void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::SetOutputOrigin(const double origin[2])
 {
   OriginType p(origin);
   this->SetOutputOrigin(p);
@@ -152,9 +133,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetOutputOrigin(const float origin[2])
+void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::SetOutputOrigin(const float origin[2])
 {
   itk::Point<float, 2> of(origin);
   OriginType p;
@@ -163,17 +142,14 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
 }
 
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::GenerateOutputInformation(void)
+void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::GenerateOutputInformation(void)
 {
   Superclass::GenerateOutputInformation();
 
   OutputVectorDataPointer  output = this->GetOutput();
-  itk::MetaDataDictionary& dict = output->GetMetaDataDictionary();
+  itk::MetaDataDictionary& dict   = output->GetMetaDataDictionary();
 
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef);
-
 }
 
 /**
@@ -181,8 +157,7 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
  */
 template <class TInputVectorData, class TOutputVectorData>
 typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::OutputPointType
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::ProcessPoint(InputPointType pointCoord) const
+VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::ProcessPoint(InputPointType pointCoord) const
 {
 
   itk::Point<double, 2> point;
@@ -195,26 +170,25 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
  */
 template <class TInputVectorData, class TOutputVectorData>
 typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::OutputLinePointerType
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::ProcessLine(InputLinePointerType line) const
+VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::ProcessLine(InputLinePointerType line) const
 {
   typedef typename InputLineType::VertexListType::ConstPointer VertexListConstPointerType;
   typedef typename InputLineType::VertexListConstIteratorType  VertexListConstIteratorType;
-  VertexListConstPointerType  vertexList = line->GetVertexList();
-  VertexListConstIteratorType it = vertexList->Begin();
-  typename OutputLineType::Pointer  newLine = OutputLineType::New();
+  VertexListConstPointerType                                   vertexList = line->GetVertexList();
+  VertexListConstIteratorType                                  it         = vertexList->Begin();
+  typename OutputLineType::Pointer                             newLine    = OutputLineType::New();
   while (it != vertexList->End())
-    {
+  {
     itk::Point<double, 2>           point;
     itk::ContinuousIndex<double, 2> index;
-    typename InputLineType::VertexType   pointCoord = it.Value();
-    point = m_Transform->TransformPoint(pointCoord);
-    index[0] = point[0];
-    index[1] = point[1];
-//       otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << pointCoord << " -> " << point << " -> " << index);
+    typename InputLineType::VertexType pointCoord = it.Value();
+    point                                         = m_Transform->TransformPoint(pointCoord);
+    index[0]                                      = point[0];
+    index[1]                                      = point[1];
+    //       otbMsgDevMacro(<< "Converting: " << it.Value() << " -> " << pointCoord << " -> " << point << " -> " << index);
     newLine->AddVertex(index);
     ++it;
-    }
+  }
 
   return newLine;
 }
@@ -224,25 +198,24 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
  */
 template <class TInputVectorData, class TOutputVectorData>
 typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::OutputPolygonPointerType
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::ProcessPolygon(InputPolygonPointerType polygon) const
+VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::ProcessPolygon(InputPolygonPointerType polygon) const
 {
   typedef typename InputPolygonType::VertexListType::ConstPointer VertexListConstPointerType;
   typedef typename InputPolygonType::VertexListConstIteratorType  VertexListConstIteratorType;
-  VertexListConstPointerType    vertexList = polygon->GetVertexList();
-  VertexListConstIteratorType   it = vertexList->Begin();
-  typename OutputPolygonType::Pointer newPolygon = OutputPolygonType::New();
+  VertexListConstPointerType                                      vertexList = polygon->GetVertexList();
+  VertexListConstIteratorType                                     it         = vertexList->Begin();
+  typename OutputPolygonType::Pointer                             newPolygon = OutputPolygonType::New();
   while (it != vertexList->End())
-    {
-    itk::Point<double, 2>            point;
-    itk::ContinuousIndex<double, 2>  index;
+  {
+    itk::Point<double, 2>           point;
+    itk::ContinuousIndex<double, 2> index;
     typename InputPolygonType::VertexType pointCoord = it.Value();
-    point = m_Transform->TransformPoint(pointCoord);
-    index[0] = point[0];
-    index[1] = point[1];
+    point                                            = m_Transform->TransformPoint(pointCoord);
+    index[0]                                         = point[0];
+    index[1]                                         = point[1];
     newPolygon->AddVertex(index);
     ++it;
-    }
+  }
   return newPolygon;
 }
 
@@ -251,16 +224,14 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
  */
 template <class TInputVectorData, class TOutputVectorData>
 typename VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::OutputPolygonListPointerType
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::ProcessPolygonList(InputPolygonListPointerType polygonList) const
+VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::ProcessPolygonList(InputPolygonListPointerType polygonList) const
 {
 
   OutputPolygonListPointerType newPolygonList = OutputPolygonListType::New();
-  for (typename InputPolygonListType::ConstIterator it = polygonList->Begin();
-       it != polygonList->End(); ++it)
-    {
+  for (typename InputPolygonListType::ConstIterator it = polygonList->Begin(); it != polygonList->End(); ++it)
+  {
     newPolygonList->PushBack(this->ProcessPolygon(it.Get()));
-    }
+  }
   return newPolygonList;
 }
 
@@ -268,32 +239,30 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
  * Instantiate the transformation according to information
  */
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::InstantiateTransform(void)
+void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::InstantiateTransform(void)
 {
 
-//   otbMsgDevMacro(<< "Information to instantiate transform (VectorDataProjectionFilter): ");
-//   otbMsgDevMacro(<< " * Input Origin: " << m_InputOrigin);
-//   otbMsgDevMacro(<< " * Input Spacing: " << m_InputSpacing);
-//   otbMsgDevMacro(<< " * Input keyword list: "
-//       << ((m_InputKeywordList.GetSize() == 0)?"Empty":"Full"));
-//   otbMsgDevMacro(<< " * Input projection: " << m_InputProjectionRef);
-//   otbMsgDevMacro(<< " * Output keyword list: "
-//       << ((m_OutputKeywordList.GetSize() == 0)?"Empty":"Full"));
-//   otbMsgDevMacro(<< " * Output projection: " << m_OutputProjectionRef);
-//   otbMsgDevMacro(<< " * Output Origin: " << m_OutputOrigin);
-//   otbMsgDevMacro(<< " * Output Spacing: " << m_OutputSpacing);
+  //   otbMsgDevMacro(<< "Information to instantiate transform (VectorDataProjectionFilter): ");
+  //   otbMsgDevMacro(<< " * Input Origin: " << m_InputOrigin);
+  //   otbMsgDevMacro(<< " * Input Spacing: " << m_InputSpacing);
+  //   otbMsgDevMacro(<< " * Input keyword list: "
+  //       << ((m_InputKeywordList.GetSize() == 0)?"Empty":"Full"));
+  //   otbMsgDevMacro(<< " * Input projection: " << m_InputProjectionRef);
+  //   otbMsgDevMacro(<< " * Output keyword list: "
+  //       << ((m_OutputKeywordList.GetSize() == 0)?"Empty":"Full"));
+  //   otbMsgDevMacro(<< " * Output projection: " << m_OutputProjectionRef);
+  //   otbMsgDevMacro(<< " * Output Origin: " << m_OutputOrigin);
+  //   otbMsgDevMacro(<< " * Output Spacing: " << m_OutputSpacing);
 
   m_Transform = InternalTransformType::New();
 
-  InputVectorDataPointer         input = this->GetInput();
+  InputVectorDataPointer         input     = this->GetInput();
   const itk::MetaDataDictionary& inputDict = input->GetMetaDataDictionary();
 
-  OutputVectorDataPointer  output = this->GetOutput();
+  OutputVectorDataPointer  output     = this->GetOutput();
   itk::MetaDataDictionary& outputDict = output->GetMetaDataDictionary();
 
-//   m_Transform->SetInputDictionary(input->GetMetaDataDictionary());
+  //   m_Transform->SetInputDictionary(input->GetMetaDataDictionary());
   m_Transform->SetInputDictionary(inputDict);
   m_Transform->SetOutputDictionary(output->GetMetaDataDictionary());
 
@@ -312,45 +281,42 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
   // only the m_Transform will know
   m_OutputProjectionRef = m_Transform->GetOutputProjectionRef();
 
-  //If the projection information for the output is provided, propagate it
+  // If the projection information for the output is provided, propagate it
 
   if (m_OutputKeywordList.GetSize() != 0)
-    {
+  {
     itk::EncapsulateMetaData<ImageKeywordlist>(outputDict, MetaDataKey::OSSIMKeywordlistKey, m_OutputKeywordList);
-    }
+  }
   if (!m_OutputProjectionRef.empty())
-    {
+  {
     itk::EncapsulateMetaData<std::string>(outputDict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef);
-    }
+  }
   output->SetSpacing(m_OutputSpacing);
   output->SetOrigin(m_OutputOrigin);
-
 }
 
 /**
    * GenerateData Performs the coordinate conversion for each element in the tree
  */
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>
-::GenerateData(void)
+void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::GenerateData(void)
 {
   this->AllocateOutputs();
-  InputVectorDataPointer  inputPtr = this->GetInput();
+  InputVectorDataPointer  inputPtr  = this->GetInput();
   OutputVectorDataPointer outputPtr = this->GetOutput();
 
-  //Instantiate the transform
+  // Instantiate the transform
   this->InstantiateTransform();
 
   typedef typename OutputVectorDataType::DataTreePointerType OutputDataTreePointerType;
-  OutputDataTreePointerType tree = outputPtr->GetDataTree();
+  OutputDataTreePointerType                                  tree = outputPtr->GetDataTree();
 
-// Get the input tree root
-  InputInternalTreeNodeType * inputRoot = const_cast<InputInternalTreeNodeType *>(inputPtr->GetDataTree()->GetRoot());
+  // Get the input tree root
+  InputInternalTreeNodeType* inputRoot = const_cast<InputInternalTreeNodeType*>(inputPtr->GetDataTree()->GetRoot());
 
   // Create the output tree root
   typedef typename OutputVectorDataType::DataNodePointerType OutputDataNodePointerType;
-  OutputDataNodePointerType newDataNode = OutputDataNodeType::New();
+  OutputDataNodePointerType                                  newDataNode = OutputDataNodeType::New();
   newDataNode->SetNodeType(inputRoot->Get()->GetNodeType());
   newDataNode->SetNodeId(inputRoot->Get()->GetNodeId());
   typename OutputInternalTreeNodeType::Pointer outputRoot = OutputInternalTreeNodeType::New();

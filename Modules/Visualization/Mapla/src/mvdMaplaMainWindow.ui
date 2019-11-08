@@ -23,7 +23,7 @@
      <x>0</x>
      <y>0</y>
      <width>400</width>
-     <height>27</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -38,6 +38,7 @@
      <string>&amp;Help</string>
     </property>
     <addaction name="action_About"/>
+    <addaction name="action_Documentation"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">
@@ -98,6 +99,14 @@
    </property>
    <property name="text">
     <string>Prefere&amp;nces</string>
+   </property>
+  </action>
+  <action name="action_Documentation">
+   <property name="text">
+    <string>Documentation</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
    </property>
   </action>
  </widget>

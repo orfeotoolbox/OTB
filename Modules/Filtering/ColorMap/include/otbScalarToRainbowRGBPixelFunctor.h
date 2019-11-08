@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,57 +40,59 @@ namespace Functor
  *
  * \ingroup OTBColorMap
  */
-template<class TRGBPixel>
+template <class TRGBPixel>
 class ITK_EXPORT HSVToRGBFunctor
 {
 public:
   HSVToRGBFunctor(){};
-  ~HSVToRGBFunctor(){}
-  inline TRGBPixel operator ()(double h, double s, double v) const
+  ~HSVToRGBFunctor()
   {
-    const double onethird = 1.0 / 3.0;
-    const double onesixth = 1.0 / 6.0;
-    const double twothird = 2.0 / 3.0;
+  }
+  inline TRGBPixel operator()(double h, double s, double v) const
+  {
+    const double onethird  = 1.0 / 3.0;
+    const double onesixth  = 1.0 / 6.0;
+    const double twothird  = 2.0 / 3.0;
     const double fivesixth = 5.0 / 6.0;
     double       r, g, b;
 
     // compute RGB from HSV
-    if (h > onesixth && h <= onethird)     // green/red
-      {
+    if (h > onesixth && h <= onethird) // green/red
+    {
       g = 1.0;
       r = (onethird - h) / onesixth;
       b = 0.0;
-      }
-    else if (h > onethird && h <= 0.5)     // green/blue
-      {
+    }
+    else if (h > onethird && h <= 0.5) // green/blue
+    {
       g = 1.0;
       b = (h - onethird) / onesixth;
       r = 0.0;
-      }
-    else if (h > 0.5 && h <= twothird)     // blue/green
-      {
+    }
+    else if (h > 0.5 && h <= twothird) // blue/green
+    {
       b = 1.0;
       g = (twothird - h) / onesixth;
       r = 0.0;
-      }
-    else if (h > twothird && h <= fivesixth)     // blue/red
-      {
+    }
+    else if (h > twothird && h <= fivesixth) // blue/red
+    {
       b = 1.0;
       r = (h - twothird) / onesixth;
       g = 0.0;
-      }
-    else if (h > fivesixth && h <= 1.0)     // red/blue
-      {
+    }
+    else if (h > fivesixth && h <= 1.0) // red/blue
+    {
       r = 1.0;
       b = (1.0 - h) / onesixth;
       g = 0.0;
-      }
-    else     // red/green
-      {
+    }
+    else // red/green
+    {
       r = 1.0;
       g = h / onesixth;
       b = 0.0;
-      }
+    }
 
     // add Saturation to the equation.
     r = (s * r + (1.0 - s));
@@ -101,15 +103,14 @@ public:
     g *= v;
     b *= v;
 
-//         std::cout << h << ", " << s << ", " << v << " -> " << r << ", " << g << ", " << b << std::endl;
+    //         std::cout << h << ", " << s << ", " << v << " -> " << r << ", " << g << ", " << b << std::endl;
 
-    TRGBPixel ans;
+    TRGBPixel                                 ans;
     typedef typename TRGBPixel::ComponentType RGBComponentType;
     ans[0] = static_cast<RGBComponentType>(r);
     ans[1] = static_cast<RGBComponentType>(g);
     ans[2] = static_cast<RGBComponentType>(b);
     return ans;
-
   }
 };
 }
@@ -132,19 +133,20 @@ namespace Functor
  *
  * \ingroup OTBColorMap
  */
-template<class TScalar, class TRGBPixel = itk::RGBPixel<unsigned char> >
-class ITK_EXPORT ScalarToRainbowRGBPixelFunctor
-  : public itk::Function::ColormapFunction<TScalar, TRGBPixel>
+template <class TScalar, class TRGBPixel = itk::RGBPixel<unsigned char>>
+class ITK_EXPORT ScalarToRainbowRGBPixelFunctor : public itk::Function::ColormapFunction<TScalar, TRGBPixel>
 //      public itk::Functor::ScalarToRGBPixelFunctor<TScalar>
 {
 public:
   ScalarToRainbowRGBPixelFunctor();
-  ~ScalarToRainbowRGBPixelFunctor() override {}
+  ~ScalarToRainbowRGBPixelFunctor() override
+  {
+  }
 
-  typedef ScalarToRainbowRGBPixelFunctor                      Self;
+  typedef ScalarToRainbowRGBPixelFunctor Self;
   typedef itk::Function::ColormapFunction<TScalar, TRGBPixel> Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -154,14 +156,14 @@ public:
   typedef TScalar                              ScalarType;
   typedef HSVToRGBFunctor<RGBPixelType>        HSVToRGBFunctorType;
 
-  RGBPixelType operator ()(const TScalar&) const override;
+  RGBPixelType operator()(const TScalar&) const override;
 
 protected:
   RGBPixelType HSVToRGB(double h, double s, double v) const;
 
 private:
-  ScalarToRainbowRGBPixelFunctor(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ScalarToRainbowRGBPixelFunctor(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   HSVToRGBFunctorType m_HSVToRGBFunctor;
 };

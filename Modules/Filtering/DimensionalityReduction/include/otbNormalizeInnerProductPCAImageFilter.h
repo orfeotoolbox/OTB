@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,10 +40,10 @@ class ITK_EXPORT NormalizeInnerProductPCAImageFilter : public itk::InPlaceImageF
 {
 public:
   /** Standard class typedefs. */
-  typedef NormalizeInnerProductPCAImageFilter                Self;
+  typedef NormalizeInnerProductPCAImageFilter Self;
   typedef itk::InPlaceImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -82,7 +82,9 @@ public:
 
 protected:
   NormalizeInnerProductPCAImageFilter();
-  ~NormalizeInnerProductPCAImageFilter() override {}
+  ~NormalizeInnerProductPCAImageFilter() override
+  {
+  }
 
   /** NormalizeInnerProductPCAImageFilter can produce an image which is a different
    * resolution than its input image.  As such, NormalizeInnerProductPCAImageFilter
@@ -112,7 +114,6 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-
   /** Contains normalization coefficient input image */
   RealPixelType m_CoefNorm;
 

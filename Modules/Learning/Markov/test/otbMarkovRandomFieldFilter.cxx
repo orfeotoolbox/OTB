@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
@@ -36,25 +35,25 @@ int otbMarkovRandomFieldFilter(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
 
-  typedef double                                   InternalPixelType;
-  typedef unsigned char                            LabelledPixelType;
+  typedef double        InternalPixelType;
+  typedef unsigned char LabelledPixelType;
   typedef otb::Image<InternalPixelType, Dimension> InputImageType;
   typedef otb::Image<LabelledPixelType, Dimension> LabelledImageType;
-  typedef otb::ImageFileReader<InputImageType>     ReaderType;
-  typedef otb::ImageFileWriter<LabelledImageType>  WriterType;
+  typedef otb::ImageFileReader<InputImageType>    ReaderType;
+  typedef otb::ImageFileWriter<LabelledImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   reader->SetFileName(inputFilename);
   writer->SetFileName(outputFilename);
 
-  typedef otb::MarkovRandomFieldFilter<InputImageType, LabelledImageType>         MarkovRandomFieldFilterType;
-  typedef otb::MRFSamplerRandom<InputImageType, LabelledImageType>                SamplerType;
-  typedef otb::MRFOptimizerMetropolis                                             OptimizerType;
+  typedef otb::MarkovRandomFieldFilter<InputImageType, LabelledImageType> MarkovRandomFieldFilterType;
+  typedef otb::MRFSamplerRandom<InputImageType, LabelledImageType>        SamplerType;
+  typedef otb::MRFOptimizerMetropolis OptimizerType;
   typedef otb::MRFEnergyPotts<LabelledImageType, LabelledImageType>               EnergyRegularizationType;
   typedef otb::MRFEnergyGaussianClassification<InputImageType, LabelledImageType> EnergyFidelityType;
 
@@ -73,14 +72,14 @@ int otbMarkovRandomFieldFilter(int itkNotUsed(argc), char* argv[])
   energyFidelity->SetNumberOfParameters(2 * nClass);
   EnergyFidelityType::ParametersType parameters;
   parameters.SetSize(energyFidelity->GetNumberOfParameters());
-  parameters[0] = 10.0; //Class 0 mean
-  parameters[1] = 10.0; //Class 0 stdev
-  parameters[2] = 80.0; //Class 1 mean
-  parameters[3] = 10.0; //Class 1 stdev
-  parameters[4] = 150.0; //Class 2 mean
-  parameters[5] = 10.0; //Class 2 stdev
-  parameters[6] = 220.0; //Class 3 mean
-  parameters[7] = 10.0; //Class 3 stde
+  parameters[0] = 10.0;  // Class 0 mean
+  parameters[1] = 10.0;  // Class 0 stdev
+  parameters[2] = 80.0;  // Class 1 mean
+  parameters[3] = 10.0;  // Class 1 stdev
+  parameters[4] = 150.0; // Class 2 mean
+  parameters[5] = 10.0;  // Class 2 stdev
+  parameters[6] = 220.0; // Class 3 mean
+  parameters[7] = 10.0;  // Class 3 stde
   energyFidelity->SetParameters(parameters);
 
   optimizer->SetSingleParameter(atof(argv[5]));
@@ -97,8 +96,7 @@ int otbMarkovRandomFieldFilter(int itkNotUsed(argc), char* argv[])
 
   markovFilter->SetInput(reader->GetOutput());
 
-  typedef itk::RescaleIntensityImageFilter
-  <LabelledImageType, LabelledImageType> RescaleType;
+  typedef itk::RescaleIntensityImageFilter<LabelledImageType, LabelledImageType> RescaleType;
   RescaleType::Pointer rescaleFilter = RescaleType::New();
   rescaleFilter->SetOutputMinimum(0);
   rescaleFilter->SetOutputMaximum(255);
@@ -110,5 +108,4 @@ int otbMarkovRandomFieldFilter(int itkNotUsed(argc), char* argv[])
   writer->Update();
 
   return EXIT_SUCCESS;
-
 }

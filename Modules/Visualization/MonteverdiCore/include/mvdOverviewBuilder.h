@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -76,9 +76,7 @@ namespace mvd
  * \brief Import image worker. It is parametrized by the image
  * filename and the desired (width, height) best-fit size.
  */
-class OTBMonteverdiCore_EXPORT OverviewBuilder :
-    public AbstractWorker,
-    public ProgressInterface
+class OTBMonteverdiCore_EXPORT OverviewBuilder : public AbstractWorker, public ProgressInterface
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -87,21 +85,19 @@ class OTBMonteverdiCore_EXPORT OverviewBuilder :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types
+  //
+  // Public types
 public:
-  typedef std::vector< otb::GDALOverviewsBuilder::Pointer > GDALOverviewsBuilderVector;
+  typedef std::vector<otb::GDALOverviewsBuilder::Pointer> GDALOverviewsBuilderVector;
 
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /**
    * \brief Constructor.
    */
-  OverviewBuilder( const GDALOverviewsBuilderVector & builders,
-		   QObject * p =NULL );
+  OverviewBuilder(const GDALOverviewsBuilderVector& builders, QObject* p = NULL);
 
   /**
    * \brief Destructor.
@@ -111,18 +107,18 @@ public:
   //
   // ProgressInterface overloads.
 
-  void SetProgress( double ) override;
+  void SetProgress(double) override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /**
@@ -130,45 +126,41 @@ signals:
    *
    * \param result Resulting QObject instance of NULL if none.
    */
-  //void Done( QObject* result =NULL );
+  // void Done( QObject* result =NULL );
 
   /**
    * \brief Signal emitted when an exception has been caught by this worker.
    *
    * \param exc The copy (thread safety) exception which has been caught.
    */
-  //void ExceptionRaised( std::exception exc );
+  // void ExceptionRaised( std::exception exc );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types.
+  //
+  // Private types.
 private:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   //
   // AbstractWorker oveloads.
 
-  QObject * virtual_Do() override;
+  QObject* virtual_Do() override;
 
   QString virtual_GetFirstProgressText() const override;
 
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
@@ -182,8 +174,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 

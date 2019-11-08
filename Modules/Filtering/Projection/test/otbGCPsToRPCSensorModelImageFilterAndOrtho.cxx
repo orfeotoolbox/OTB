@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,34 +21,34 @@
 #include "otbImageFileReader.h"
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 #include "otbImageFileWriter.h"
-#include "otbMapProjections.h"
-#include "otbOrthoRectificationFilter.h"
-#include "otbMapProjections.h"
+#include "otbGenericRSResampleImageFilter.h"
+#include "otbMacro.h"
 
 int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
 {
   if (argc < 11)
-    {
-    std::cerr << "Usage: " << argv[0] << " infname outfname <origin easting> <origin northing> <x size> <y size> <x spacing> <y spacing> <UTM zone> <UTM hemisphere> a1x a1y b1x b1y b1z ... aNx aNy bNx bNy bNz " << std::endl;
+  {
+    std::cerr << "Usage: " << argv[0] << " infname outfname <origin easting> <origin northing> <x size> <y size> <x spacing> <y spacing> <UTM zone> <UTM "
+                                         "hemisphere> a1x a1y b1x b1y b1z ... aNx aNy bNx bNy bNz "
+              << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   else if ((argc - 11) % 5 != 0)
-    {
+  {
     std::cerr << "Inconsistent GCPs description!" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * infname       = argv[1];
-  const char * outfname      = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
-  typedef otb::VectorImage<float, 2>                      ImageType;
+  typedef otb::VectorImage<float, 2> ImageType;
   typedef otb::ImageFileReader<ImageType>                 ReaderType;
   typedef otb::GCPsToRPCSensorModelImageFilter<ImageType> GCPsToSensorModelFilterType;
   typedef GCPsToSensorModelFilterType::Point2DType        Point2DType;
   typedef GCPsToSensorModelFilterType::Point3DType        Point3DType;
-  typedef otb::ImageFileWriter<ImageType>                                  WriterType;
-  typedef otb::UtmInverseProjection                                                 UtmMapProjectionType;
-  typedef otb::OrthoRectificationFilter<ImageType, ImageType, UtmMapProjectionType> OrthoRectifFilterType;
+  typedef otb::ImageFileWriter<ImageType>                 WriterType;
+  typedef otb::GenericRSResampleImageFilter<ImageType, ImageType> OrthoRectifFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
@@ -59,10 +59,10 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
 
   unsigned int nbGCPs = (argc - 11) / 5;
 
-  std::cout << "Receiving " << nbGCPs << " from command line." << std::endl;
+  otbLogMacro(Info, << "Receiving " << nbGCPs << " from command line.");
 
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
-    {
+  {
     Point2DType sensorPoint;
     sensorPoint[0] = atof(argv[11 + gcpId * 5]);
     sensorPoint[1] = atof(argv[12 + gcpId * 5]);
@@ -72,10 +72,10 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
     geoPoint[1] = atof(argv[14 + 5 * gcpId]);
     geoPoint[2] = atof(argv[15 + 5 * gcpId]);
 
-    std::cout << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint << std::endl;
+    otbLogMacro(Debug, << "Adding GCP sensor: " << sensorPoint << " <-> geo: " << geoPoint);
 
     rpcEstimator->AddGCP(sensorPoint, geoPoint);
-    }
+  }
 
   rpcEstimator->GetOutput()->UpdateOutputInformation();
 
@@ -83,14 +83,13 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   std::cout.setf(std::ios::fixed, std::ios::floatfield);
   std::cout.precision(10);
 
-  std::cout << rpcEstimator->GetOutput()->GetImageKeywordlist() << std::endl;
-  std::cout << "Residual ground error: " << rpcEstimator->GetRMSGroundError() << std::endl;
+  otbLogMacro(Debug, << rpcEstimator->GetOutput()->GetImageKeywordlist());
+  otbLogMacro(Info, << "Residual ground error: " << rpcEstimator->GetRMSGroundError());
 
   // Orthorectify the output image
   WriterType::Pointer writer = WriterType::New();
 
   OrthoRectifFilterType::Pointer orthoRectifFilter = OrthoRectifFilterType::New();
-  UtmMapProjectionType::Pointer  utmMapProjection = UtmMapProjectionType::New();
 
   orthoRectifFilter->SetInput(rpcEstimator->GetOutput());
 
@@ -100,8 +99,8 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   orthoRectifFilter->SetOutputStartIndex(start);
 
   ImageType::SizeType size;
-  size[0] = atoi(argv[5]);      // X size
-  size[1] = atoi(argv[6]);            //Y size
+  size[0] = atoi(argv[5]); // X size
+  size[1] = atoi(argv[6]); // Y size
   orthoRectifFilter->SetOutputSize(size);
 
   ImageType::SpacingType spacing;
@@ -110,20 +109,22 @@ int otbGCPsToRPCSensorModelImageFilterAndOrtho(int argc, char* argv[])
   orthoRectifFilter->SetOutputSpacing(spacing);
 
   ImageType::PointType origin;
-  origin[0] = strtod(argv[3], nullptr);         //Origin easting
-  origin[1] = strtod(argv[4], nullptr);         //Origin northing
+  origin[0] = strtod(argv[3], nullptr); // Origin easting
+  origin[1] = strtod(argv[4], nullptr); // Origin northing
   orthoRectifFilter->SetOutputOrigin(origin);
 
-  utmMapProjection->SetZone(atoi(argv[9]));
-  utmMapProjection->SetHemisphere(argv[10][0]);
-  orthoRectifFilter->SetMapProjection(utmMapProjection);
+  std::string wkt =
+      otb::SpatialReference::FromUTM(atoi(argv[9]), argv[10][0] == 'N' ? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south)
+          .ToWkt();
+
+  orthoRectifFilter->SetOutputProjectionRef(wkt);
 
   ImageType::PixelType no_data(reader->GetOutput()->GetNumberOfComponentsPerPixel());
   no_data.Fill(0.0);
   orthoRectifFilter->SetEdgePaddingValue(no_data);
 
   // Displacement Field spacing
-  ImageType::SpacingType  gridSpacing;
+  ImageType::SpacingType gridSpacing;
   gridSpacing[0] = 16.0 * atof(argv[7]);
   gridSpacing[1] = 16.0 * atof(argv[8]);
 

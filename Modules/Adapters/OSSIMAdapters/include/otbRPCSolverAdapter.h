@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,7 +33,8 @@
 
 class ossimRpcSolver;
 
-namespace otb {
+namespace otb
+{
 
 class ImageKeywordlist;
 
@@ -51,11 +52,11 @@ class OTBOSSIMAdapters_EXPORT RPCSolverAdapter
 {
 public:
   /** Standard class typedefs. */
-  typedef RPCSolverAdapter                    Self;
+  typedef RPCSolverAdapter Self;
   typedef itk::Point<double, 2>               Point2DType;
   typedef itk::Point<double, 3>               Point3DType;
   typedef std::pair<Point2DType, Point3DType> GCPType;
-  typedef std::vector<GCPType>                GCPsContainerType;
+  typedef std::vector<GCPType> GCPsContainerType;
 
   /** Solve RPC modelling from a set of GCPs and image bounds.
    *  The estimated RPC model is written in a keywordlist understood
@@ -66,24 +67,20 @@ public:
    *  to estimate all the coefficients. Starting at 40 points, a full
    *  RPC model is estimated.
    */
-  static void Solve(const GCPsContainerType& gcpContainer,
-                    double& rmsError,
-                    ImageKeywordlist& otb_kwl);
+  static void Solve(const GCPsContainerType& gcpContainer, double& rmsError, ImageKeywordlist& otb_kwl);
 
   /** Solve RPC modelling from a set of GCPs and image bounds. The
    * estimated RPC model is written to a geom file.
    */
-  static bool Solve(const GCPsContainerType& gcpContainer,
-                    double& rmsError,
-                    const std::string & outgeom);
+  static bool Solve(const GCPsContainerType& gcpContainer, double& rmsError, const std::string& outgeom);
 
 
 private:
-  RPCSolverAdapter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  RPCSolverAdapter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   // This class defines typedefs and exposes static methods
-  RPCSolverAdapter() = delete;
+  RPCSolverAdapter()          = delete;
   virtual ~RPCSolverAdapter() = delete;
 };
 

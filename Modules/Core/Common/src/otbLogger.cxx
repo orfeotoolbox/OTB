@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,63 +26,72 @@
 #include "gdal.h"
 #include "itkMultiThreader.h"
 
+#include <type_traits>
+#include <cassert>
+
 namespace otb
 {
 
-Logger::Pointer Logger::CreateInstance()
+namespace
 {
-  Logger::Pointer instance = Logger::New();
+static bool is_logger_singleton_level_set;
+}
 
-  // By default, redirect logs to std::cout
+Logger::Logger() : m_LogSetupInfoDone(false)
+{
+  m_LevelForFlushing    = itk::LoggerBase::CRITICAL;
+  m_TimeStampFormat     = itk::LoggerBase::HUMANREADABLE;
+  m_HumanReadableFormat = "%Y-%m-%d %H:%M:%S";
+}
+
+Logger* Logger::CreateInstance()
+{
+  Logger* logger = new Logger;
+
+  // By default redirect logs to std::cout
   itk::StdStreamLogOutput::Pointer defaultOutput = itk::StdStreamLogOutput::New();
   defaultOutput->SetStream(std::cout);
-  
-  instance->AddLogOutput(defaultOutput);
+  logger->AddLogOutput(defaultOutput);
 
-  return instance;
+  return logger;
 }
 
-Logger::Pointer Logger::Instance()
+Logger* Logger::Instance()
 {
-  // Static locales are initialized once in a thread-safe way
-  static Logger::Pointer instance = CreateInstance();
-
-  return instance;
+  static Logger* logger_singleton = CreateInstance();
+  if (!is_logger_singleton_level_set)
+  {
+    is_logger_singleton_level_set = true;
+    logger_singleton->SetPriorityLevel(ConfigurationManager::GetLoggerLevel());
+  }
+  return logger_singleton;
 }
 
-Logger::Logger()
+Logger::Pointer Logger::New()
 {
-  this->SetPriorityLevel(otb::ConfigurationManager::GetLoggerLevel());
-
-  this->SetLevelForFlushing(itk::LoggerBase::CRITICAL);
-
-  this->SetTimeStampFormat(itk::LoggerBase::HUMANREADABLE);
-  this->SetHumanReadableFormat("%Y-%m-%d %H:%M:%S");
-
-  m_LogSetupInfoDone = false;
-}
-
-Logger::~Logger()
-{
+  Pointer smartPtr = new Logger;
+  smartPtr->UnRegister();
+  smartPtr->SetPriorityLevel(Instance()->GetPriorityLevel());
+  return smartPtr;
 }
 
 void Logger::LogSetupInformation()
 {
-  if (! IsLogSetupInformationDone())
-    {
+  if (!IsLogSetupInformationDone())
+  {
     std::ostringstream oss;
 
-    oss<<"Default RAM limit for OTB is "<<otb::ConfigurationManager::GetMaxRAMHint()<<" MB"<<std::endl;
+    oss << "Default RAM limit for OTB is " << otb::ConfigurationManager::GetMaxRAMHint() << " MB" << std::endl;
     this->Info(oss.str());
     oss.str("");
     oss.clear();
 
-    oss<<"GDAL maximum cache size is "<<GDALGetCacheMax64()/(1024*1024)<<" MB"<<std::endl;
+    oss << "GDAL maximum cache size is " << GDALGetCacheMax64() / (1024 * 1024) << " MB" << std::endl;
     this->Info(oss.str());
     oss.str("");
     oss.clear();
 
-    oss<<"OTB will use at most "<<itk::MultiThreader::GetGlobalDefaultNumberOfThreads()<<" threads"<<std::endl;
+    oss << "OTB will use at most " << itk::MultiThreader::GetGlobalDefaultNumberOfThreads() << " threads" << std::endl;
     this->Info(oss.str());
     oss.str("");
     oss.clear();
@@ -91,36 +100,12 @@ void Logger::LogSetupInformation()
     // skipped by the singleton when it has already been printed by an other instance
     LogSetupInformationDone();
     Instance()->LogSetupInformationDone();
-    }
+  }
 }
 
-std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, std::string const & content)
+void Logger::ResetOutputs()
 {
- static const std::string levelString[] = { "(MUSTFLUSH)", "(FATAL)", "(CRITICAL)",
-                                         "(WARNING)", "(INFO)", "(DEBUG)", "(NOTSET)" };
-
-  // TODO: assert(level <= std::extent<decltype(levelString)>::value);  // requires C++11
-
-  std::ostringstream s;
-
-
-  switch ( this->m_TimeStampFormat )
-  {
-    case REALVALUE:
-    {
-      s.precision(30);
-      s << m_Clock->GetTimeInSeconds();
-      break;
-    }
-    case HUMANREADABLE:
-    {
-      s << itksys::SystemTools::GetCurrentDateTime( this->m_HumanReadableFormat.c_str() );
-      break;
-    }
-  }
-  s << " " << levelString[level] << ": " << content;
-
-  return s.str();
+  m_Output = itk::MultipleLogOutput::New();
 }
 
 bool Logger::IsLogSetupInformationDone()
@@ -132,5 +117,22 @@ void Logger::LogSetupInformationDone()
 {
   m_LogSetupInfoDone = true;
 }
+
+std::string Logger::BuildFormattedEntry(itk::Logger::PriorityLevelType level, std::string const& content)
+{
+  static const std::string levelString[] = {"(MUSTFLUSH)", "(FATAL)", "(CRITICAL)", "(WARNING)", "(INFO)", "(DEBUG)", "(NOTSET)"};
+
+  assert(level <= std::extent<decltype(levelString)>::value);
+
+  if (strcmp(this->GetName(), "") == 0)
+  {
+    return itksys::SystemTools::GetCurrentDateTime("%Y-%m-%d %H:%M:%S") + " " + levelString[level] + ": " + content;
+  }
+  else
+  {
+    return itksys::SystemTools::GetCurrentDateTime("%Y-%m-%d %H:%M:%S") + " " + levelString[level] + " " + this->GetName() + ": " + content;
+  }
+}
+
 
 } // namespace otb

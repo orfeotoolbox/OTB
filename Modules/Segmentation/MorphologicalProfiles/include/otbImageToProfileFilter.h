@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,15 +44,14 @@ namespace otb
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage, class TFilter, class TParameter = unsigned int>
-class ITK_EXPORT ImageToProfileFilter
-  : public ImageToImageListFilter<TInputImage, TOutputImage>
+class ITK_EXPORT ImageToProfileFilter : public ImageToImageListFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef ImageToProfileFilter                              Self;
+  typedef ImageToProfileFilter Self;
   typedef ImageToImageListFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -61,14 +60,14 @@ public:
   itkTypeMacro(ImageToProfileFilter, ImageToImageListFilter);
 
   /** Template parameters typedefs */
-  typedef TInputImage                                         InputImageType;
-  typedef TOutputImage                                        OutputImageType;
-  typedef TParameter                                          ParameterType;
-  typedef TFilter                                             FilterType;
-  typedef typename     FilterType::Pointer                    FilterPointerType;
-  typedef typename     Superclass::OutputImageListType        OutputImageListType;
-  typedef typename     Superclass::OutputImageListPointerType OutputImageListPointerType;
-  typedef typename     Superclass::InputImagePointer          InputImagePointerType;
+  typedef TInputImage                                     InputImageType;
+  typedef TOutputImage                                    OutputImageType;
+  typedef TParameter                                      ParameterType;
+  typedef TFilter                                         FilterType;
+  typedef typename FilterType::Pointer                    FilterPointerType;
+  typedef typename Superclass::OutputImageListType        OutputImageListType;
+  typedef typename Superclass::OutputImageListPointerType OutputImageListPointerType;
+  typedef typename Superclass::InputImagePointer          InputImagePointerType;
 
   /** Get/Set the initial value */
   itkSetMacro(InitialValue, ParameterType);
@@ -87,7 +86,9 @@ protected:
   /**
    * Set the profile parameter
    */
-  virtual void SetProfileParameter(ParameterType /*param*/) {}
+  virtual void SetProfileParameter(ParameterType /*param*/)
+  {
+  }
   /** Get the pointer to the filter */
   itkGetObjectMacro(Filter, FilterType);
   /** GenerateData method */
@@ -99,13 +100,15 @@ protected:
   /** Constructor */
   ImageToProfileFilter();
   /** Destructor */
-  ~ImageToProfileFilter() override {}
+  ~ImageToProfileFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageToProfileFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ImageToProfileFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The filter used to compute the profile */
   FilterPointerType m_Filter;
@@ -117,7 +120,6 @@ private:
   ParameterType m_Step;
   /** The index of the output of the filter used for the profile */
   unsigned int m_OutputIndex;
-
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

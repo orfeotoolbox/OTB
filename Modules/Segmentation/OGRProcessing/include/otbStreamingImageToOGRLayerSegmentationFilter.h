@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -43,11 +43,11 @@ namespace otb
  * \ingroup OTBOGRProcessing
  */
 template <class TInputImage, class TOutputImage, class TOutputImage2, class TKernelType>
-class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TOutputImage2, TKernelType> >
+class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TOutputImage2, TKernelType>>
 {
-   public:
-      typedef typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TOutputImage2, TKernelType>::OutputLabelImageType    LabelImageType;
-      itkStaticConstMacro(LabeledOutputIndex, unsigned int, 0);
+public:
+  typedef typename MeanShiftSmoothingImageFilter<TInputImage, TOutputImage, TOutputImage2, TKernelType>::OutputLabelImageType LabelImageType;
+  itkStaticConstMacro(LabeledOutputIndex, unsigned int, 0);
 };
 
 /** \class PersistentStreamingLabelImageToOGRDataFilter
@@ -56,31 +56,30 @@ class LabeledOutputAccessor<MeanShiftSmoothingImageFilter<TInputImage, TOutputIm
  *
  * \ingroup OTBOGRProcessing
  */
-template <class TImageType,  class TSegmentationFilter>
-class PersistentImageToOGRLayerSegmentationFilter
-  : public otb::PersistentImageToOGRLayerFilter<TImageType>
+template <class TImageType, class TSegmentationFilter>
+class PersistentImageToOGRLayerSegmentationFilter : public otb::PersistentImageToOGRLayerFilter<TImageType>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentImageToOGRLayerSegmentationFilter      Self;
-  typedef PersistentImageToOGRLayerFilter<TImageType>      Superclass;
-  typedef itk::SmartPointer<Self>                          Pointer;
-  typedef itk::SmartPointer<const Self>                    ConstPointer;
+  typedef PersistentImageToOGRLayerSegmentationFilter Self;
+  typedef PersistentImageToOGRLayerFilter<TImageType> Superclass;
+  typedef itk::SmartPointer<Self>                     Pointer;
+  typedef itk::SmartPointer<const Self>               ConstPointer;
 
-  typedef typename Superclass::InputImageType              InputImageType;
-  typedef typename Superclass::InputImagePointer           InputImagePointerType;
+  typedef typename Superclass::InputImageType    InputImageType;
+  typedef typename Superclass::InputImagePointer InputImagePointerType;
 
-  typedef TSegmentationFilter                              SegmentationFilterType;
-  typedef typename LabeledOutputAccessor<SegmentationFilterType>::LabelImageType  LabelImageType;
-  typedef typename LabelImageType::PixelType                                      LabelPixelType;
+  typedef TSegmentationFilter                                                    SegmentationFilterType;
+  typedef typename LabeledOutputAccessor<SegmentationFilterType>::LabelImageType LabelImageType;
+  typedef typename LabelImageType::PixelType                                     LabelPixelType;
 
-  typedef otb::LabelImageToOGRDataSourceFilter<LabelImageType>          LabelImageToOGRDataSourceFilterType;
-  typedef typename Superclass::OGRDataSourceType                        OGRDataSourceType;
-  typedef typename Superclass::OGRDataSourcePointerType                 OGRDataSourcePointerType;
-  typedef typename Superclass::OGRLayerType                             OGRLayerType;
+  typedef otb::LabelImageToOGRDataSourceFilter<LabelImageType> LabelImageToOGRDataSourceFilterType;
+  typedef typename Superclass::OGRDataSourceType               OGRDataSourceType;
+  typedef typename Superclass::OGRDataSourcePointerType        OGRDataSourcePointerType;
+  typedef typename Superclass::OGRLayerType                    OGRLayerType;
 
-  typedef RelabelComponentImageFilter<LabelImageType,LabelImageType>    RelabelComponentImageFilterType;
-  typedef itk::MultiplyImageFilter<LabelImageType,LabelImageType,LabelImageType>  MultiplyImageFilterType;
+  typedef RelabelComponentImageFilter<LabelImageType, LabelImageType> RelabelComponentImageFilterType;
+  typedef itk::MultiplyImageFilter<LabelImageType, LabelImageType, LabelImageType> MultiplyImageFilterType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -95,10 +94,10 @@ public:
   itkGetStringMacro(FieldName);
 
   /** Set the first Label value (default is 1). Incremental step is 1.*/
-  void SetStartLabel(const LabelPixelType & label)
+  void SetStartLabel(const LabelPixelType& label)
   {
-     m_StartLabel = label;
-     m_TileMaxLabel = label;
+    m_StartLabel   = label;
+    m_TileMaxLabel = label;
   }
   /** Return the first label value*/
   itkGetMacro(StartLabel, LabelPixelType);
@@ -139,8 +138,8 @@ public:
    * All pixels in the mask with a value of 0 will not be considered
    * suitable for vectorization.
    */
-  virtual void SetInputMask(const LabelImageType *mask);
-  virtual const LabelImageType * GetInputMask(void);
+  virtual void SetInputMask(const LabelImageType* mask);
+  virtual const LabelImageType* GetInputMask(void);
 
 protected:
   PersistentImageToOGRLayerSegmentationFilter();
@@ -149,26 +148,24 @@ protected:
 
 
 private:
-  PersistentImageToOGRLayerSegmentationFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PersistentImageToOGRLayerSegmentationFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   OGRDataSourcePointerType ProcessTile() override;
 
 
-  int m_TileMaxLabel;
-  LabelPixelType m_StartLabel;
+  int                                      m_TileMaxLabel;
+  LabelPixelType                           m_StartLabel;
   typename SegmentationFilterType::Pointer m_SegmentationFilter;
 
   std::string m_FieldName;
 
   unsigned int m_TileNumber;
-  bool m_Use8Connected;
-  bool m_FilterSmallObject;
+  bool         m_Use8Connected;
+  bool         m_FilterSmallObject;
   unsigned int m_MinimumObjectSize;
-  bool m_Simplify;
-  double m_SimplificationTolerance;
-
-
+  bool         m_Simplify;
+  double       m_SimplificationTolerance;
 };
 
 /** \class StreamingImageToOGRLayerSegmentationFilter
@@ -194,18 +191,17 @@ private:
  *
  * \ingroup OTBOGRProcessing
  */
-template <class TImageType,  class TSegmentationFilter>
-class ITK_EXPORT StreamingImageToOGRLayerSegmentationFilter :
-public PersistentFilterStreamingDecorator<PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter> >
+template <class TImageType, class TSegmentationFilter>
+class ITK_EXPORT StreamingImageToOGRLayerSegmentationFilter
+    : public PersistentFilterStreamingDecorator<PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>>
 {
 
 public:
   /** Standard Self typedef */
   typedef StreamingImageToOGRLayerSegmentationFilter Self;
-  typedef PersistentFilterStreamingDecorator
-  <PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter> >   Superclass;
-  typedef itk::SmartPointer<Self>                                                    Pointer;
-  typedef itk::SmartPointer<const Self>                                              ConstPointer;
+  typedef PersistentFilterStreamingDecorator<PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -213,26 +209,22 @@ public:
   /** Creation through object factory macro */
   itkTypeMacro(StreamingImageToOGRLayerSegmentationFilter, PersistentFilterStreamingDecorator);
 
-  typedef TSegmentationFilter                      SegmentationFilterType;
-  typedef TImageType                               InputImageType;
-  typedef typename PersistentImageToOGRLayerSegmentationFilter<TImageType,
-               TSegmentationFilter>::LabelPixelType                           LabelPixelType;
-  typedef typename PersistentImageToOGRLayerSegmentationFilter<TImageType,
-               TSegmentationFilter>::LabelImageType                           LabelImageType;
-  typedef typename PersistentImageToOGRLayerSegmentationFilter<TImageType,
-               TSegmentationFilter>::OGRDataSourcePointerType                 OGRDataSourcePointerType;
-  typedef typename PersistentImageToOGRLayerSegmentationFilter<TImageType,
-               TSegmentationFilter>::OGRLayerType                             OGRLayerType;
+  typedef TSegmentationFilter SegmentationFilterType;
+  typedef TImageType          InputImageType;
+  typedef typename PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>::LabelPixelType           LabelPixelType;
+  typedef typename PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>::LabelImageType           LabelImageType;
+  typedef typename PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>::OGRDataSourcePointerType OGRDataSourcePointerType;
+  typedef typename PersistentImageToOGRLayerSegmentationFilter<TImageType, TSegmentationFilter>::OGRLayerType             OGRLayerType;
 
-  typedef typename InputImageType::SizeType                                   SizeType;
+  typedef typename InputImageType::SizeType SizeType;
 
   /** Set the input image. */
   using Superclass::SetInput;
-  void SetInput(InputImageType * input)
+  void SetInput(InputImageType* input)
   {
     this->GetFilter()->SetInput(input);
   }
-  const InputImageType * GetInput()
+  const InputImageType* GetInput()
   {
     return this->GetFilter()->GetInput();
   }
@@ -240,45 +232,45 @@ public:
    * All pixels in the mask with a value of 0 will not be considered
    * suitable for vectorization.
    */
-  void SetInputMask(LabelImageType * mask)
+  void SetInputMask(LabelImageType* mask)
   {
     this->GetFilter()->SetInputMask(mask);
   }
-  const LabelImageType * GetInputMask()
+  const LabelImageType* GetInputMask()
   {
     return this->GetFilter()->GetInputMask();
   }
   /** Set the \c ogr::Layer in which the layer LayerName will be created. */
-  void SetOGRLayer( const OGRLayerType & ogrLayer )
+  void SetOGRLayer(const OGRLayerType& ogrLayer)
   {
     this->GetFilter()->SetOGRLayer(ogrLayer);
   }
 
-  void SetFieldName( const std::string & fieldName )
+  void SetFieldName(const std::string& fieldName)
   {
     this->GetFilter()->SetFieldName(fieldName);
   }
 
-  const std::string & GetFieldName() const
+  const std::string& GetFieldName() const
   {
     return this->GetFilter()->GetFieldName();
   }
 
 
-  SegmentationFilterType * GetSegmentationFilter()
+  SegmentationFilterType* GetSegmentationFilter()
   {
-     return this->GetFilter()->GetSegmentationFilter();
+    return this->GetFilter()->GetSegmentationFilter();
   }
 
   /** Set the first Label value (default is 1). Incremental step is 1.*/
-  void SetStartLabel(const LabelPixelType & label)
+  void SetStartLabel(const LabelPixelType& label)
   {
-     this->GetFilter()->SetStartLabel(label);
+    this->GetFilter()->SetStartLabel(label);
   }
   /** Return the first label value*/
-  const LabelPixelType & GetStartLabel()
+  const LabelPixelType& GetStartLabel()
   {
-     return this->GetFilter()->GetStartLabel();
+    return this->GetFilter()->GetStartLabel();
   }
 
   /** Retrieve the actual streamsize used */
@@ -289,75 +281,77 @@ public:
 
   void Initialize()
   {
-     this->GetFilter()->Initialize();
+    this->GetFilter()->Initialize();
   }
   /**
    * Set the value of 8-connected neighborhood option used in \c LabelImageToOGRDataSourceFilter
    */
   void SetUse8Connected(bool flag)
   {
-     this->GetFilter()->SetUse8Connected(flag);
+    this->GetFilter()->SetUse8Connected(flag);
   }
 
   bool GetUse8Connected()
   {
-     return this->GetFilter()->GetUse8Connected();
+    return this->GetFilter()->GetUse8Connected();
   }
   /** Set the option for filtering small objects. Default to false. */
   void SetFilterSmallObject(bool flag)
   {
-     this->GetFilter()->SetFilterSmallObject(flag);
+    this->GetFilter()->SetFilterSmallObject(flag);
   }
 
   bool GetFilterSmallObject()
   {
-     return this->GetFilter()->GetFilterSmallObject();
+    return this->GetFilter()->GetFilterSmallObject();
   }
   /** Set the minimum object size (in pixels) in case FilterSmallObject option is true.*/
-  void SetMinimumObjectSize(const unsigned int & size)
+  void SetMinimumObjectSize(const unsigned int& size)
   {
-     this->GetFilter()->SetMinimumObjectSize(size);
+    this->GetFilter()->SetMinimumObjectSize(size);
   }
 
   unsigned int GetMinimumObjectSize()
   {
-     return this->GetFilter()->GetMinimumObjectSize();
+    return this->GetFilter()->GetMinimumObjectSize();
   }
   /** Option for simplifying geometries. Default to false.*/
   void SetSimplify(bool flag)
   {
-     this->GetFilter()->SetSimplify(flag);
+    this->GetFilter()->SetSimplify(flag);
   }
 
   bool GetSimplify()
   {
-     return this->GetFilter()->GetSimplify();
+    return this->GetFilter()->GetSimplify();
   }
   /** Set the tolerance value for simplifying geometries.
    * \sa \c OGRGeometry::Simplify() \c OGRGeometry::SimplifyPreserveTopology()
    */
-  void SetSimplificationTolerance(const double & tol)
+  void SetSimplificationTolerance(const double& tol)
   {
-     this->GetFilter()->SetSimplificationTolerance(tol);
+    this->GetFilter()->SetSimplificationTolerance(tol);
   }
 
   double GetSimplificationTolerance()
   {
-     return this->GetFilter()->GetSimplificationTolerance();
+    return this->GetFilter()->GetSimplificationTolerance();
   }
 
 protected:
   /** Constructor */
-  StreamingImageToOGRLayerSegmentationFilter() {}
+  StreamingImageToOGRLayerSegmentationFilter()
+  {
+  }
   /** Destructor */
-  ~StreamingImageToOGRLayerSegmentationFilter() override {}
+  ~StreamingImageToOGRLayerSegmentationFilter() override
+  {
+  }
 
 private:
-  StreamingImageToOGRLayerSegmentationFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  StreamingImageToOGRLayerSegmentationFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
-
-
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION

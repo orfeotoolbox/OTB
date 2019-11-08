@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,34 +40,33 @@ namespace otb
  *
  * \ingroup OTBOpticalCalibration
  */
-  class ITK_EXPORT VarSol
+class ITK_EXPORT VarSol
+{
+public:
+  /** Call the varSol function*/
+  static double GetVarSol(const int day, const int month)
   {
-  public:
+    /* System generated locals */
+    double d__1;
 
-    /** Call the varSol function*/
-    static double GetVarSol(const int day, const int month)
-    {
-      /* System generated locals */
-      double d__1;
+    /* Local variables */
+    int    j;
+    double om;
 
-      /* Local variables */
-      int j;
-      double om;
+    /* calculation of the variability of the solar constant during the year. */
+    /* day is the number of the day in the month */
+    if (month <= 2)
+      j = (month - 1) * 31 + day;
+    else if (month > 8)
+      j = (month - 1) * 31 - (month - 2) / 2 - 2 + day;
+    else
+      j = (month - 1) * 31 - (month - 1) / 2 - 2 + day;
 
-      /* calculation of the variability of the solar constant during the year. */
-      /* day is the number of the day in the month */
-      if (month <= 2)
-        j = (month - 1) * 31 + day;
-      else if (month > 8)
-        j = (month - 1) * 31 - (month - 2) / 2 - 2 + day;
-      else
-        j = (month - 1) * 31 - (month - 1) / 2 - 2 + day;
-
-      om = (double) (j - 4) * .9856 * CONST_PI_180;
-      /* Computing 2nd power */
-      d__1 = 1. - std::cos(om) * .01673;
-      return 1. / (d__1 * d__1);
-    }
-  };
-} //end namespace otb
+    om = (double)(j - 4) * .9856 * CONST_PI_180;
+    /* Computing 2nd power */
+    d__1 = 1. - std::cos(om) * .01673;
+    return 1. / (d__1 * d__1);
+  }
+};
+} // end namespace otb
 #endif

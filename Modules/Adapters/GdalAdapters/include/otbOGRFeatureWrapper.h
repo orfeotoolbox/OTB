@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,12 +37,13 @@
 class OGRFeature;
 class OGRFeatureDefn;
 
-namespace otb {
-namespace ogr {
+namespace otb
+{
+namespace ogr
+{
 class Feature;
 
-OTBGdalAdapters_EXPORT
-bool operator==(Feature const& lhs, Feature const& rhs);
+OTBGdalAdapters_EXPORT bool operator==(Feature const& lhs, Feature const& rhs);
 
 /**\ingroup gGeometry
  * \class Feature proxy class.
@@ -67,7 +68,7 @@ bool operator==(Feature const& lhs, Feature const& rhs);
  * \ingroup OTBGdalAdapters
  */
 class OTBGdalAdapters_EXPORT Feature
-  {
+{
 public:
   /**\name Construction, copy and destruction */
   //@{
@@ -83,7 +84,7 @@ public:
    * \sa \c OGRFeature::CreateFeature()
    * \todo See whether wrapping \c OGRFeatureDefn makes sense
    */
-  Feature(OGRFeatureDefn & definition);
+  Feature(OGRFeatureDefn& definition);
 
   /**
    * Construction from a pre-existing \c OGRFeature.
@@ -96,7 +97,7 @@ public:
    * of the responsibility of the client code, this constructor is perfect. It
    * has been used in \c Layer interface to return features.
    */
-  Feature(OGRFeature * feature);
+  Feature(OGRFeature* feature);
 
   /**
    * Destructor.
@@ -128,14 +129,14 @@ public:
    * \throw itk::ExceptionObject if no value is transferred
    * \sa \c OGRFeature::SetFrom()
    */
-  void SetFrom(Feature const& rhs, int *map, bool mustForgive = true);
+  void SetFrom(Feature const& rhs, int* map, bool mustForgive = true);
   /** \copydoc Feature::SetFrom(Feature const&, int *, bool mustForgive);
    */
   void SetFrom(Feature const& rhs, bool mustForgive = true);
   //@}
 
   /** Prints self into stream. */
-  void PrintSelf(std::ostream &os, itk::Indent indent) const;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const;
 
   /** Access to raw \c OGRFeature.
    * This function provides an abstraction leak in case deeper control on the
@@ -145,9 +146,9 @@ public:
    * \warning You must under no circumstance try to delete the \c OGRFeature
    * obtained this way.
    */
-  OGRFeature & ogr() const;
+  OGRFeature& ogr() const;
   /** \copydoc Feature::ogr() const */
-  OGRFeature & ogr();
+  OGRFeature& ogr();
 
   /** Abstraction leak to the internal shared \c OGRFeature.
    * \throw None
@@ -156,9 +157,15 @@ public:
    * stored, without introducing a cyclic dependency, nor deporting the fields
    * R/W to \c Feature interface.
    */
-  boost::shared_ptr<OGRFeature>      & sptr()       {return m_Feature; }
+  boost::shared_ptr<OGRFeature>& sptr()
+  {
+    return m_Feature;
+  }
   /** \copydoc Feature::sptr() */
-  boost::shared_ptr<OGRFeature> const& sptr() const {return m_Feature; }
+  boost::shared_ptr<OGRFeature> const& sptr() const
+  {
+    return m_Feature;
+  }
 
   /**
    * Obtains feature ID..
@@ -207,7 +214,7 @@ public:
    * \pre <tt>index < GetSize()</tt>
    * \throw None
    */
-  Field       operator[](int index);
+  Field operator[](int index);
   /**
    * Read-only access to the i-th field.
    * \invariant <tt>m_Feature != 0</tt>
@@ -220,7 +227,7 @@ public:
    * \invariant <tt>m_Feature != 0</tt>
    * \throw itk::ExceptionObject if no field named \c name exists.
    */
-  Field       operator[](std::string const& name);
+  Field operator[](std::string const& name);
   /**
    * Read-Only access to a field by name.
    * \invariant <tt>m_Feature != 0</tt>
@@ -233,13 +240,13 @@ public:
    * \throw None
    * \sa \c OGRFeature::GetFieldDefnRef()
    */
-  FieldDefn   GetFieldDefn(int index) const;
+  FieldDefn GetFieldDefn(int index) const;
   /** Accessor to the definition of a field gven its name.
    * \invariant <tt>m_Feature != 0</tt>
    * \throw itk::ExceptionObject if no field named \c name exists.
    * \sa \c OGRFeature::GetFieldDefnRef()
    */
-  FieldDefn   GetFieldDefn(std::string const& name) const;
+  FieldDefn GetFieldDefn(std::string const& name) const;
   //@}
 
   /**\name Geometries
@@ -312,7 +319,11 @@ public:
    * equal.
    */
   friend bool otb::ogr::operator==(Feature const& lhs, Feature const& rhs);
-  OGRFeature const* addr() const { return m_Feature.get(); }
+  OGRFeature const* addr() const
+  {
+    return m_Feature.get();
+  }
+
 private:
   /**\name Unchecked definitions
    * All the definitions that follow do the real work. However, they are not the
@@ -322,22 +333,22 @@ private:
    * - While the private functions do the work.
    */
   //@{
-  Feature            UncheckedClone() const;
-  void               UncheckedSetFrom(Feature const& rhs, int *map, bool mustForgive = true);
-  void               UncheckedSetFrom(Feature const& rhs, bool mustForgive = true);
-  void               UncheckedPrintSelf(std::ostream &os, itk::Indent indent) const;
-  Field              UncheckedGetElement(int index);
-  Field              UncheckedGetElement(std::string const& name);
-  FieldDefn          UncheckedGetFieldDefn(int index) const;
-  FieldDefn          UncheckedGetFieldDefn(std::string const& name) const;
-  int                UncheckedGetFieldIndex(std::string const& name) const;
-  long               UncheckedGetFID() const;
-  void               UncheckedSetFID(long fid);
-  OGRFeatureDefn&    UncheckedGetDefn() const;
-  void               UncheckedSetGeometryDirectly(UniqueGeometryPtr geometry);
+  Feature UncheckedClone() const;
+  void UncheckedSetFrom(Feature const& rhs, int* map, bool mustForgive = true);
+  void UncheckedSetFrom(Feature const& rhs, bool mustForgive = true);
+  void UncheckedPrintSelf(std::ostream& os, itk::Indent indent) const;
+  Field UncheckedGetElement(int index);
+  Field UncheckedGetElement(std::string const& name);
+  FieldDefn UncheckedGetFieldDefn(int index) const;
+  FieldDefn UncheckedGetFieldDefn(std::string const& name) const;
+  int UncheckedGetFieldIndex(std::string const& name) const;
+  long UncheckedGetFID() const;
+  void UncheckedSetFID(long fid);
+  OGRFeatureDefn& UncheckedGetDefn() const;
+  void UncheckedSetGeometryDirectly(UniqueGeometryPtr geometry);
   UniqueGeometryPtr  UncheckedStealGeometry();
   OGRGeometry const* UncheckedGetGeometry() const;
-  void               UncheckedSetGeometry(OGRGeometry const* geometry);
+  void UncheckedSetGeometry(OGRGeometry const* geometry);
   //@}
 
   /** Searches the index of a field given a name.
@@ -359,7 +370,7 @@ private:
   /** Internal pointer to the shared \c OGRFeature.
    */
   boost::shared_ptr<OGRFeature> m_Feature;
-  };
+};
 
 
 } // ogr namespace

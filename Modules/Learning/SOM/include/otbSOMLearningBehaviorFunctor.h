@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -48,17 +48,17 @@ class SOMLearningBehaviorFunctor
 {
 public:
   /** Empty constructor / descructor */
-  SOMLearningBehaviorFunctor () {}
-  virtual ~SOMLearningBehaviorFunctor() {}
+  SOMLearningBehaviorFunctor()
+  {
+  }
+  virtual ~SOMLearningBehaviorFunctor()
+  {
+  }
 
   /** Functor */
-  virtual double operator ()(unsigned int currentIteration,
-                             unsigned int numberOfIterations,
-                             double betaInit, double betaEnd) const
+  virtual double operator()(unsigned int currentIteration, unsigned int numberOfIterations, double betaInit, double betaEnd) const
   {
-    return betaInit + (betaEnd - betaInit)
-           * static_cast<double>(currentIteration)
-           / static_cast<double>(numberOfIterations);
+    return betaInit + (betaEnd - betaInit) * static_cast<double>(currentIteration) / static_cast<double>(numberOfIterations);
   }
 
 }; // end of class SOMLearningBehaviorFunctor

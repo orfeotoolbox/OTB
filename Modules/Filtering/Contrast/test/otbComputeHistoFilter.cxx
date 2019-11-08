@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,36 +24,36 @@
 #include "otbVectorImage.h"
 #include "otbComputeHistoFilter.h"
 
-int otbComputeHistoFilter(int itkNotUsed(argc), char * argv [])
+int otbComputeHistoFilter(int itkNotUsed(argc), char* argv[])
 {
-  typedef int InputPixelType;
-  typedef int OutputPixelType;
+  typedef int        InputPixelType;
+  typedef int        OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType ,  Dimension > InputImageType;
-  typedef otb::VectorImage< OutputPixelType , Dimension > HistoImageType;
-  typedef otb::ComputeHistoFilter< InputImageType , HistoImageType > FilterType;
+  typedef otb::Image<InputPixelType, Dimension>                   InputImageType;
+  typedef otb::VectorImage<OutputPixelType, Dimension>            HistoImageType;
+  typedef otb::ComputeHistoFilter<InputImageType, HistoImageType> FilterType;
 
-  typedef otb::ImageFileReader< InputImageType > ReaderType; 
-  typedef otb::ImageFileWriter< HistoImageType > WriterType;
-  ReaderType::Pointer reader ( ReaderType::New() );
-  WriterType::Pointer writer ( WriterType::New() );
-  reader->SetFileName( argv[1] );
-  writer->SetFileName( argv[2] );
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<HistoImageType> WriterType;
+  ReaderType::Pointer                          reader(ReaderType::New());
+  WriterType::Pointer                          writer(WriterType::New());
+  reader->SetFileName(argv[1]);
+  writer->SetFileName(argv[2]);
   reader->UpdateOutputInformation();
 
-  FilterType::Pointer computeHisto ( FilterType::New() );
-  
-  computeHisto->SetInput( reader->GetOutput() );
+  FilterType::Pointer computeHisto(FilterType::New());
+
+  computeHisto->SetInput(reader->GetOutput());
   computeHisto->SetMin(0);
   computeHisto->SetMax(255);
   computeHisto->SetNbBin(256);
   auto size = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
   size[0] /= 4;
   size[1] /= 4;
-  computeHisto->SetThumbSize( size );
+  computeHisto->SetThumbSize(size);
 
-  writer->SetInput( computeHisto->GetHistoOutput() );
+  writer->SetInput(computeHisto->GetHistoOutput());
   writer->Update();
   return EXIT_SUCCESS;
 }

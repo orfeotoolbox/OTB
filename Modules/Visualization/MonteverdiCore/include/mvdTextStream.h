@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -81,8 +81,7 @@ enum StreamTag
 /**
  * \brief TODO.
  */
-extern
-const char* STREAM_TAG_NAMES[ STREAM_TAG_COUNT ];
+extern const char* STREAM_TAG_NAMES[STREAM_TAG_COUNT];
 
 //
 // Internal classes pre-declaration.
@@ -102,9 +101,7 @@ namespace mvd
  * \brief Check status Qt stream and throw SystemError exception if
  * status is not Ok.
  */
-inline
-void
-CheckStreamStatus( QTextStream& stream );
+inline void CheckStreamStatus(QTextStream& stream);
 
 /**
  * \brief Write a text tag followed by a white space to the stream.
@@ -115,11 +112,7 @@ CheckStreamStatus( QTextStream& stream );
  *
  * \return stream instance.
  */
-inline
-QTextStream&
-WriteStreamTag( QTextStream& stream,
-		const QString& name,
-		bool enqueueWS =true );
+inline QTextStream& WriteStreamTag(QTextStream& stream, const QString& name, bool enqueueWS = true);
 
 /**
  * \brief Read a text tag followed by a whitespace from the stream and
@@ -134,12 +127,7 @@ WriteStreamTag( QTextStream& stream,
  *
  * \return stream instance.
  */
-inline
-QTextStream&
-ReadStreamTag( QTextStream& stream,
-	       QString& tag,
-	       const QString& expected =QString(),
-	       bool skipWS =true );
+inline QTextStream& ReadStreamTag(QTextStream& stream, QString& tag, const QString& expected = QString(), bool skipWS = true);
 
 /*****************************************************************************/
 
@@ -152,10 +140,7 @@ ReadStreamTag( QTextStream& stream,
  *
  * \return stream instance.
  */
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      StreamTag tag );
+inline QTextStream& operator<<(QTextStream& stream, StreamTag tag);
 
 /**
  * \brief Read a StreamTag followed by a whitespace from a
@@ -166,10 +151,7 @@ operator << ( QTextStream& stream,
  *
  * \return stream instance.
  */
-inline
-QTextStream&
-operator >> ( QTextStream& stream,
-	      StreamTag& tag );
+inline QTextStream& operator>>(QTextStream& stream, StreamTag& tag);
 
 /*****************************************************************************/
 
@@ -181,29 +163,20 @@ operator >> ( QTextStream& stream,
  *
  * \return stream instance.
  */
-template< typename T >
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      const std::vector< T, std::allocator< T > >& vector );
+template <typename T>
+inline QTextStream& operator<<(QTextStream& stream, const std::vector<T, std::allocator<T>>& vector);
 
 /**
  * \brief
  */
-template<>
-inline
-QTextStream&
-operator << < double >( QTextStream& stream,
-			const std::vector< double >& vector );
+template <>
+inline QTextStream& operator<<<double>(QTextStream& stream, const std::vector<double>& vector);
 
 /**
  * \brief
  */
-template<>
-inline
-QTextStream&
-operator << < float >( QTextStream& stream,
-		       const std::vector< float >& vector );
+template <>
+inline QTextStream& operator<<<float>(QTextStream& stream, const std::vector<float>& vector);
 
 /**
  * \brief Read an std::vector< T, Alloc > from a QTextStream.
@@ -213,11 +186,8 @@ operator << < float >( QTextStream& stream,
  *
  * \return stream instance.
  */
-template< typename T, typename Alloc >
-inline
-QTextStream&
-operator >> ( QTextStream& stream,
-	      std::vector< T, Alloc >& vector );
+template <typename T, typename Alloc>
+inline QTextStream& operator>>(QTextStream& stream, std::vector<T, Alloc>& vector);
 
 /*****************************************************************************/
 
@@ -229,11 +199,8 @@ operator >> ( QTextStream& stream,
  *
  * \return stream instance.
  */
-template< typename T >
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      const itk::Array< T >& array );
+template <typename T>
+inline QTextStream& operator<<(QTextStream& stream, const itk::Array<T>& array);
 
 /**
  * \brief Read an itk::Array< T > from a QTextStream.
@@ -243,11 +210,8 @@ operator << ( QTextStream& stream,
  *
  * \return stream instance.
  */
-template< typename T >
-inline
-QTextStream&
-operator >> ( QTextStream& stream,
-	      itk::Array< T >& array );
+template <typename T>
+inline QTextStream& operator>>(QTextStream& stream, itk::Array<T>& array);
 
 /*****************************************************************************/
 
@@ -259,27 +223,18 @@ operator >> ( QTextStream& stream,
  *
  * \return stream instance.
  */
-template< typename T >
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      const itk::VariableLengthVector< T >& vector );
+template <typename T>
+inline QTextStream& operator<<(QTextStream& stream, const itk::VariableLengthVector<T>& vector);
 
 /**
  */
-template<>
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      const itk::VariableLengthVector< float >& vector );
+template <>
+inline QTextStream& operator<<(QTextStream& stream, const itk::VariableLengthVector<float>& vector);
 
 /**
  */
-template<>
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      const itk::VariableLengthVector< double >& vector );
+template <>
+inline QTextStream& operator<<(QTextStream& stream, const itk::VariableLengthVector<double>& vector);
 
 /**
  * \brief Read an itk::VariableLengthVector< T > from a QTextStream.
@@ -289,11 +244,8 @@ operator << ( QTextStream& stream,
  *
  * \return stream instance.
  */
-template< typename T >
-inline
-QTextStream&
-operator >> ( QTextStream& stream,
-	      itk::VariableLengthVector< T >& vector );
+template <typename T>
+inline QTextStream& operator>>(QTextStream& stream, itk::VariableLengthVector<T>& vector);
 
 /*****************************************************************************/
 
@@ -305,11 +257,8 @@ operator >> ( QTextStream& stream,
  *
  * \return stream instance.
  */
-template< typename T, typename FC >
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      const itk::Statistics::Histogram< T, FC >& histogram );
+template <typename T, typename FC>
+inline QTextStream& operator<<(QTextStream& stream, const itk::Statistics::Histogram<T, FC>& histogram);
 
 /**
  * \brief Read an itk::statistics::Histogram< T, FC > from a QTextStream.
@@ -320,11 +269,8 @@ operator << ( QTextStream& stream,
  *
  * \return stream instance.
  */
-template< typename T, typename FC >
-inline
-QTextStream&
-operator >> ( QTextStream& stream,
-	      itk::Statistics::Histogram< T, FC >& histogram );
+template <typename T, typename FC>
+inline QTextStream& operator>>(QTextStream& stream, itk::Statistics::Histogram<T, FC>& histogram);
 
 } // end namespace 'mvd'.
 
@@ -336,389 +282,300 @@ namespace mvd
 {
 
 /*******************************************************************************/
-inline
-void
-CheckStreamStatus( QTextStream& stream )
+inline void CheckStreamStatus(QTextStream& stream)
 {
-  if( stream.status()!=QTextStream::Ok )
+  if (stream.status() != QTextStream::Ok)
     throw SystemError();
 }
 
 /*******************************************************************************/
-inline
-QTextStream&
-WriteStreamTag( QTextStream& stream,
-		const QString& name,
-		bool queueWhiteSpace )
+inline QTextStream& WriteStreamTag(QTextStream& stream, const QString& name, bool queueWhiteSpace)
 {
   stream << name;
 
-  if( queueWhiteSpace )
+  if (queueWhiteSpace)
     stream << " ";
 
-  CheckStreamStatus( stream );
+  CheckStreamStatus(stream);
 
   return stream;
 }
 
 /*******************************************************************************/
-inline
-QTextStream&
-ReadStreamTag( QTextStream& stream,
-	       QString& name,
-	       const QString& expected,
-	       bool skipWhiteSpace )
+inline QTextStream& ReadStreamTag(QTextStream& stream, QString& name, const QString& expected, bool skipWhiteSpace)
 {
   stream >> name;
 
-  if( skipWhiteSpace )
+  if (skipWhiteSpace)
     stream >> ws;
 
-  CheckStreamStatus( stream );
+  CheckStreamStatus(stream);
 
-  if( !expected.isEmpty() &&
-      expected.compare( name, Qt::CaseInsensitive )!=0 )
-    {
+  if (!expected.isEmpty() && expected.compare(name, Qt::CaseInsensitive) != 0)
+  {
     throw std::runtime_error(
-      ToStdString(
-	QCoreApplication::translate(
-	  "mvd::TextStream",
-	  "Read tag '%1' does not match expected tag '%2'."
-	)
-	.arg( name )
-	.arg( expected )
-      )
-    );
-    }
+        ToStdString(QCoreApplication::translate("mvd::TextStream", "Read tag '%1' does not match expected tag '%2'.").arg(name).arg(expected)));
+  }
 
   return stream;
 }
 
 /*******************************************************************************/
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      StreamTag tag )
+inline QTextStream& operator<<(QTextStream& stream, StreamTag tag)
 {
-  WriteStreamTag( stream, STREAM_TAG_NAMES[ tag ] );
+  WriteStreamTag(stream, STREAM_TAG_NAMES[tag]);
 
   return stream;
 }
 
 /*******************************************************************************/
-inline
-QTextStream&
-operator >> ( QTextStream& stream,
-	      StreamTag& tag )
+inline QTextStream& operator>>(QTextStream& stream, StreamTag& tag)
 {
   QString name;
 
-  ReadStreamTag( stream, name );
+  ReadStreamTag(stream, name);
 
   bool found = false;
 
-  for( int i=0; i<STREAM_TAG_COUNT && !found; ++i )
+  for (int i = 0; i < STREAM_TAG_COUNT && !found; ++i)
+  {
+    if (name.compare(STREAM_TAG_NAMES[i], Qt::CaseInsensitive) == 0)
     {
-    if( name.compare( STREAM_TAG_NAMES[ i ], Qt::CaseInsensitive )==0 )
-      {
       found = true;
-      tag = static_cast< StreamTag >( i );
-      }
+      tag   = static_cast<StreamTag>(i);
     }
+  }
 
-  if( !found )
-    {
-    throw std::runtime_error(
-      ToStdString(
-	QCoreApplication::translate(
-	  "mvd::TextStream",
-	  "Invalid tag name '%1'."
-	)
-	.arg( name )
-      )
-    );
-    }
+  if (!found)
+  {
+    throw std::runtime_error(ToStdString(QCoreApplication::translate("mvd::TextStream", "Invalid tag name '%1'.").arg(name)));
+  }
 
   return stream;
 }
 
 /*******************************************************************************/
-template< typename T >
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      const std::vector< T, std::allocator< T > >& vector )
+template <typename T>
+inline QTextStream& operator<<(QTextStream& stream, const std::vector<T, std::allocator<T>>& vector)
 {
-  typedef std::vector< T, std::allocator< T > > Vector;
+  typedef std::vector<T, std::allocator<T>> Vector;
 
   stream << STREAM_TAG_VECTOR << vector.size();
 
-  for( typename Vector::const_iterator it( vector.begin() );
-       it!=vector.end();
-       ++it )
-    {
+  for (typename Vector::const_iterator it(vector.begin()); it != vector.end(); ++it)
+  {
     stream << " " << *it;
-    }
+  }
 
   return stream;
 }
 
 /*******************************************************************************/
-template<>
-inline
-QTextStream&
-operator << < float >( QTextStream& stream,
-		       const std::vector< float >& vector )
+template <>
+inline QTextStream& operator<<<float>(QTextStream& stream, const std::vector<float>& vector)
 {
-  typedef std::vector< float, std::allocator< float > > Vector;
+  typedef std::vector<float, std::allocator<float>> Vector;
 
   stream << STREAM_TAG_VECTOR << vector.size();
 
-  for( Vector::const_iterator it( vector.begin() );
-       it!=vector.end();
-       ++it )
-    {
-    stream << " " << ToQString( *it );
-    }
+  for (Vector::const_iterator it(vector.begin()); it != vector.end(); ++it)
+  {
+    stream << " " << ToQString(*it);
+  }
 
   return stream;
 }
 
 /*******************************************************************************/
-template<>
-inline
-QTextStream&
-operator << < double >( QTextStream& stream,
-			const std::vector< double >& vector )
+template <>
+inline QTextStream& operator<<<double>(QTextStream& stream, const std::vector<double>& vector)
 {
-  typedef std::vector< double, std::allocator< double > > Vector;
+  typedef std::vector<double, std::allocator<double>> Vector;
 
   stream << STREAM_TAG_VECTOR << vector.size();
 
-  for( Vector::const_iterator it( vector.begin() );
-       it!=vector.end();
-       ++it )
-    {
-    stream << " " << ToQString( *it );
-    }
+  for (Vector::const_iterator it(vector.begin()); it != vector.end(); ++it)
+  {
+    stream << " " << ToQString(*it);
+  }
 
   return stream;
 }
 
 /*******************************************************************************/
-template< typename T, typename Alloc >
-inline
-QTextStream&
-operator >> ( QTextStream& stream,
-	      std::vector< T, Alloc >& vector )
+template <typename T, typename Alloc>
+inline QTextStream& operator>>(QTextStream& stream, std::vector<T, Alloc>& vector)
 {
-  typedef std::vector< T, Alloc > Vector;
+  typedef std::vector<T, Alloc> Vector;
 
   QString type;
-  ReadStreamTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_VECTOR ] );
+  ReadStreamTag(stream, type, STREAM_TAG_NAMES[STREAM_TAG_VECTOR]);
 
   typename Vector::size_type size = 0;
 
   stream >> size;
 
-  vector.resize( size );
+  vector.resize(size);
 
-  for( typename Vector::iterator it( vector.begin() );
-       it!=vector.end();
-       ++it )
-    {
+  for (typename Vector::iterator it(vector.begin()); it != vector.end(); ++it)
+  {
     stream >> ws >> *it;
-    }
+  }
 
   return stream;
 }
 
 /*****************************************************************************/
-template< typename T >
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      const itk::Array< T >& array )
+template <typename T>
+inline QTextStream& operator<<(QTextStream& stream, const itk::Array<T>& array)
 {
 
   stream << STREAM_TAG_SIZE << array.GetSize();
-  CheckStreamStatus( stream );
+  CheckStreamStatus(stream);
 
-  for( CountType i=0; i<array.GetSize(); ++i )
-    {
-    stream << " " << array[ i ];
-    CheckStreamStatus( stream );
-    }
+  for (CountType i = 0; i < array.GetSize(); ++i)
+  {
+    stream << " " << array[i];
+    CheckStreamStatus(stream);
+  }
 
   return stream;
 }
 
 /*******************************************************************************/
-template< typename T >
-inline
-QTextStream&
-operator >> ( QTextStream& stream,
-	      itk::Array< T >& array )
+template <typename T>
+inline QTextStream& operator>>(QTextStream& stream, itk::Array<T>& array)
 {
 
   CountType dimension = 0;
 
   QString type;
-  ReadStreamTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_SIZE ] );
+  ReadStreamTag(stream, type, STREAM_TAG_NAMES[STREAM_TAG_SIZE]);
 
   stream >> dimension;
 
-  if( dimension!=array.GetSize() )
-    {
-    throw std::length_error(
-      ToStdString(
-	QCoreApplication::translate(
-	  "mvd::TextStream",
-	  "Array dimension (%1) does not match "
-	  "expected dimension (%2)."
-	)
-	.arg( dimension )
-	.arg( array.GetSize() )
-      )
-    );
-    }
+  if (dimension != array.GetSize())
+  {
+    throw std::length_error(ToStdString(QCoreApplication::translate("mvd::TextStream",
+                                                                    "Array dimension (%1) does not match "
+                                                                    "expected dimension (%2).")
+                                            .arg(dimension)
+                                            .arg(array.GetSize())));
+  }
 
-  for( CountType i=0; i<array.GetSize(); ++i )
-    {
-    stream >> ws >> array[ i ];
-    CheckStreamStatus( stream );
-    }
+  for (CountType i = 0; i < array.GetSize(); ++i)
+  {
+    stream >> ws >> array[i];
+    CheckStreamStatus(stream);
+  }
 
   return stream;
 }
 
 /*******************************************************************************/
-template< typename T >
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      const itk::VariableLengthVector< T >& vector )
+template <typename T>
+inline QTextStream& operator<<(QTextStream& stream, const itk::VariableLengthVector<T>& vector)
 {
-  typedef typename itk::VariableLengthVector< T > Vector;
+  typedef typename itk::VariableLengthVector<T> Vector;
 
   // Write number of elements.
   stream << STREAM_TAG_VARIABLE_LENGTH_VECTOR << vector.Size();
-  CheckStreamStatus( stream );
+  CheckStreamStatus(stream);
 
   // Write each element prefixed by a delimitting whitespace.
-  for( typename Vector::ElementIdentifier i=0;
-       i<vector.Size();
-       ++i )
-    {
-    stream << " " << vector[ i ];
-    CheckStreamStatus( stream );
-    }
+  for (typename Vector::ElementIdentifier i = 0; i < vector.Size(); ++i)
+  {
+    stream << " " << vector[i];
+    CheckStreamStatus(stream);
+  }
 
   return stream;
 }
 
 /*******************************************************************************/
-template<>
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      const itk::VariableLengthVector< double >& vector )
+template <>
+inline QTextStream& operator<<(QTextStream& stream, const itk::VariableLengthVector<double>& vector)
 {
-  typedef itk::VariableLengthVector< double > Vector;
+  typedef itk::VariableLengthVector<double> Vector;
 
   // Write number of elements.
   stream << STREAM_TAG_VARIABLE_LENGTH_VECTOR << vector.Size();
-  CheckStreamStatus( stream );
+  CheckStreamStatus(stream);
 
   // Write each element prefixed by a delimitting whitespace.
-  for( Vector::ElementIdentifier i=0;
-       i<vector.Size();
-       ++i )
-    {
-    stream << " " << ToQString( vector[ i ] );
-    CheckStreamStatus( stream );
-    }
+  for (Vector::ElementIdentifier i = 0; i < vector.Size(); ++i)
+  {
+    stream << " " << ToQString(vector[i]);
+    CheckStreamStatus(stream);
+  }
 
   return stream;
 }
 
 /*******************************************************************************/
-template<>
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      const itk::VariableLengthVector< float >& vector )
+template <>
+inline QTextStream& operator<<(QTextStream& stream, const itk::VariableLengthVector<float>& vector)
 {
-  typedef itk::VariableLengthVector< float > Vector;
+  typedef itk::VariableLengthVector<float> Vector;
 
   // Write number of elements.
   stream << STREAM_TAG_VARIABLE_LENGTH_VECTOR << vector.Size();
-  CheckStreamStatus( stream );
+  CheckStreamStatus(stream);
 
   // Write each element prefixed by a delimitting whitespace.
-  for( Vector::ElementIdentifier i=0;
-       i<vector.Size();
-       ++i )
-    {
-    stream << " " << ToQString( vector[ i ] );
-    CheckStreamStatus( stream );
-    }
+  for (Vector::ElementIdentifier i = 0; i < vector.Size(); ++i)
+  {
+    stream << " " << ToQString(vector[i]);
+    CheckStreamStatus(stream);
+  }
 
   return stream;
 }
 
 /*******************************************************************************/
-template< typename T >
-inline
-QTextStream&
-operator >> ( QTextStream& stream,
-	      itk::VariableLengthVector< T >& vector )
+template <typename T>
+inline QTextStream& operator>>(QTextStream& stream, itk::VariableLengthVector<T>& vector)
 {
-  typedef typename itk::VariableLengthVector< T > Vector;
+  typedef typename itk::VariableLengthVector<T> Vector;
 
   QString type;
-  ReadStreamTag( stream, type, STREAM_TAG_NAMES[ STREAM_TAG_VARIABLE_LENGTH_VECTOR ] );
+  ReadStreamTag(stream, type, STREAM_TAG_NAMES[STREAM_TAG_VARIABLE_LENGTH_VECTOR]);
 
   // Read number of elements.
   typename Vector::ElementIdentifier size = 0;
   stream >> size;
-  CheckStreamStatus( stream );
+  CheckStreamStatus(stream);
 
   // Allocates vector elements.
-  vector.SetSize( size );
+  vector.SetSize(size);
 
   // Read each element prefixed by a delimitting whitespace.
-  for( typename Vector::ElementIdentifier i=0;
-       i<vector.Size();
-       ++i )
-    {
-    stream >> ws >> vector[ i ];
-    CheckStreamStatus( stream );
-    }
+  for (typename Vector::ElementIdentifier i = 0; i < vector.Size(); ++i)
+  {
+    stream >> ws >> vector[i];
+    CheckStreamStatus(stream);
+  }
 
   return stream;
 }
 
 /*******************************************************************************/
-template< typename T, typename FC >
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      const itk::Statistics::Histogram< T, FC >& histogram )
+template <typename T, typename FC>
+inline QTextStream& operator<<(QTextStream& stream, const itk::Statistics::Histogram<T, FC>& histogram)
 {
-  typedef typename itk::Statistics::Histogram< T, FC > Histogram;
+  typedef typename itk::Statistics::Histogram<T, FC> Histogram;
 
-  WriteStreamTag( stream, "HISTOGRAM", false );
+  WriteStreamTag(stream, "HISTOGRAM", false);
   stream << endl;
 
-  WriteStreamTag( stream, "MEASUREMENT" );
+  WriteStreamTag(stream, "MEASUREMENT");
   stream << histogram.GetSize() << endl;
 
 #if 1
-  WriteStreamTag( stream, "MINS" );
+  WriteStreamTag(stream, "MINS");
   stream << histogram.GetMins() << endl;
 
-  WriteStreamTag( stream, "MAXS" );
+  WriteStreamTag(stream, "MAXS");
   stream << histogram.GetMaxs() << endl;
 #endif
 
@@ -744,66 +601,53 @@ operator << ( QTextStream& stream,
 #else
   CountType size = histogram.Size();
 
-  WriteStreamTag( stream, "SAMPLES" );
+  WriteStreamTag(stream, "SAMPLES");
   stream << size << endl;
-  CheckStreamStatus( stream );
+  CheckStreamStatus(stream);
 
   CountType count = 0;
 
-  for( typename Histogram::ConstIterator it( histogram.Begin() );
-       it!=histogram.End();
-       ++it, ++count )
-    {
-    stream
-      << it.GetInstanceIdentifier() << " "
-      << ToQString( it.GetFrequency() ) << endl;
+  for (typename Histogram::ConstIterator it(histogram.Begin()); it != histogram.End(); ++it, ++count)
+  {
+    stream << it.GetInstanceIdentifier() << " " << ToQString(it.GetFrequency()) << endl;
 
-    CheckStreamStatus( stream );
-    }
+    CheckStreamStatus(stream);
+  }
 
-  WriteStreamTag( stream, "COUNT" );
+  WriteStreamTag(stream, "COUNT");
   stream << count << endl;
-  CheckStreamStatus( stream );
+  CheckStreamStatus(stream);
 
-  if( count!=size )
-    {
-    throw std::runtime_error(
-      ToStdString(
-	QCoreApplication::translate(
-	  "mvd::TextStream",
-	  "Histogram sample count (%1) does not match "
-	  "written sample count (%2)."
-	)
-	.arg( size )
-	.arg( count )
-      )
-    );
-    }
+  if (count != size)
+  {
+    throw std::runtime_error(ToStdString(QCoreApplication::translate("mvd::TextStream",
+                                                                     "Histogram sample count (%1) does not match "
+                                                                     "written sample count (%2).")
+                                             .arg(size)
+                                             .arg(count)));
+  }
 #endif
 
   return stream;
 }
 
 /*******************************************************************************/
-template< typename T, typename FC >
-inline
-QTextStream&
-operator >> ( QTextStream& stream,
-	      itk::Statistics::Histogram< T, FC >& histogram )
+template <typename T, typename FC>
+inline QTextStream& operator>>(QTextStream& stream, itk::Statistics::Histogram<T, FC>& histogram)
 {
-  typedef itk::Statistics::Histogram< T, FC > Histogram;
+  typedef itk::Statistics::Histogram<T, FC> Histogram;
 
-  QString string;
+  QString      string;
   unsigned int N = histogram.GetMeasurementVectorSize();
 
 
   //
   // Histogram section.
-  ReadStreamTag( stream, string, "HISTOGRAM" );
+  ReadStreamTag(stream, string, "HISTOGRAM");
 
   //
   // Measurement-size section.
-  ReadStreamTag( stream, string, "MEASUREMENT" );
+  ReadStreamTag(stream, string, "MEASUREMENT");
   typename Histogram::SizeType size;
   size.SetSize(N);
 
@@ -812,65 +656,49 @@ operator >> ( QTextStream& stream,
   // Dimension of size is checked in operator >> ( QTextStream&,
   // itk::Size< T > ).
 
-  histogram.Initialize( size );
+  histogram.Initialize(size);
 
 #if 1
   //
   // Bin mins.
-  ReadStreamTag( stream, string, "MINS" );
+  ReadStreamTag(stream, string, "MINS");
   typename Histogram::BinMinContainerType mins;
   stream >> mins;
 
   //
   // Bin maxes.
-  ReadStreamTag( stream, string, "MAXS" );
+  ReadStreamTag(stream, string, "MAXS");
   typename Histogram::BinMaxContainerType maxs;
   stream >> maxs;
 
-  if( mins.size()!=N )
-    {
-    throw std::runtime_error(
-      ToStdString(
-	QCoreApplication::translate(
-	  "mvd::TextStream",
-	  "Histogram mins dimension (%1) does not match "
-	  "expected dimension (%2)."
-	)
-	.arg( mins.size() )
-	.arg( N )
-      )
-    );
-    }
+  if (mins.size() != N)
+  {
+    throw std::runtime_error(ToStdString(QCoreApplication::translate("mvd::TextStream",
+                                                                     "Histogram mins dimension (%1) does not match "
+                                                                     "expected dimension (%2).")
+                                             .arg(mins.size())
+                                             .arg(N)));
+  }
 
-  if( maxs.size()!=N )
-    {
-    throw std::runtime_error(
-      ToStdString(
-	QCoreApplication::translate(
-	  "mvd::TextStream",
-	  "Histogram maxs dimension (%1) does not match "
-	  "expected dimension (%2)."
-	)
-	.arg( maxs.size() )
-	.arg( N )
-      )
-    );
-    }
+  if (maxs.size() != N)
+  {
+    throw std::runtime_error(ToStdString(QCoreApplication::translate("mvd::TextStream",
+                                                                     "Histogram maxs dimension (%1) does not match "
+                                                                     "expected dimension (%2).")
+                                             .arg(maxs.size())
+                                             .arg(N)));
+  }
 
   //
   // Initialize histogram mins & maxs within single pass.
-  for( typename Histogram::BinMaxContainerType::size_type dim=0;
-       dim<maxs.size();
-       ++dim )
+  for (typename Histogram::BinMaxContainerType::size_type dim = 0; dim < maxs.size(); ++dim)
+  {
+    for (typename Histogram::BinMaxContainerType::value_type::size_type bin = 0; bin < maxs[dim].size(); ++bin)
     {
-    for( typename Histogram::BinMaxContainerType::value_type::size_type bin=0;
-	 bin<maxs[ dim ].size();
-	 ++bin )
-      {
-      histogram.SetBinMin( dim, bin, mins[ dim ][ bin ] );
-      histogram.SetBinMax( dim, bin, maxs[ dim ][ bin ] );
-      }
+      histogram.SetBinMin(dim, bin, mins[dim][bin]);
+      histogram.SetBinMax(dim, bin, maxs[dim][bin]);
     }
+  }
 #endif
 
 #if 0
@@ -955,59 +783,47 @@ operator >> ( QTextStream& stream,
 #else
   CountType samples = 0;
 
-  ReadStreamTag( stream, string, "SAMPLES" );
+  ReadStreamTag(stream, string, "SAMPLES");
   stream >> samples;
-  CheckStreamStatus( stream );
+  CheckStreamStatus(stream);
 
   CountType space = histogram.Size();
 
-  if( samples!=space )
-    {
-    throw std::runtime_error(
-      ToStdString(
-	QCoreApplication::translate(
-	  "mvd::TextStream",
-	  "Histogram sample count (%1) does not match "
-	  "expected sample count (%2)."
-	)
-	.arg( samples )
-	.arg( space )
-      )
-    );
-    }
+  if (samples != space)
+  {
+    throw std::runtime_error(ToStdString(QCoreApplication::translate("mvd::TextStream",
+                                                                     "Histogram sample count (%1) does not match "
+                                                                     "expected sample count (%2).")
+                                             .arg(samples)
+                                             .arg(space)));
+  }
 
   CountType i = 0;
-  for( ; i<samples; ++i )
-    {
-    typename Histogram::InstanceIdentifier id( 0 );
-    typename Histogram::AbsoluteFrequencyType freq( 0 );
+  for (; i < samples; ++i)
+  {
+    typename Histogram::InstanceIdentifier    id(0);
+    typename Histogram::AbsoluteFrequencyType freq(0);
 
     stream >> id >> ws >> freq;
-    CheckStreamStatus( stream );
+    CheckStreamStatus(stream);
 
-    histogram.SetFrequency( id, freq );
-    }
+    histogram.SetFrequency(id, freq);
+  }
 
   CountType count = 0;
 
-  ReadStreamTag( stream, string, "COUNT" );
+  ReadStreamTag(stream, string, "COUNT");
   stream >> count;
-  CheckStreamStatus( stream );
+  CheckStreamStatus(stream);
 
-  if( count!=i )
-    {
-    throw std::runtime_error(
-      ToStdString(
-	QCoreApplication::translate(
-	  "mvd::TextStream",
-	  "Read sample count (histogram) (%1) does not match "
-	  "written sample count (%2)."
-	)
-	.arg( i )
-	.arg( count )
-      )
-    );
-    }
+  if (count != i)
+  {
+    throw std::runtime_error(ToStdString(QCoreApplication::translate("mvd::TextStream",
+                                                                     "Read sample count (histogram) (%1) does not match "
+                                                                     "written sample count (%2).")
+                                             .arg(i)
+                                             .arg(count)));
+  }
 
 #endif
 

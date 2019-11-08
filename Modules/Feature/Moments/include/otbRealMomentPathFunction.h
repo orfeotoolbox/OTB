@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,28 +36,25 @@ namespace otb
  * \ingroup OTBMoments
  */
 
-template <class TInputPath,
-    class TOutput      = double,
-    class TPrecision   = double>
-class ITK_EXPORT RealMomentPathFunction :
-  public GeometricMomentPathFunction<TInputPath, TOutput, TPrecision>
+template <class TInputPath, class TOutput = double, class TPrecision = double>
+class ITK_EXPORT RealMomentPathFunction : public GeometricMomentPathFunction<TInputPath, TOutput, TPrecision>
 {
 public:
   /** Standard class typedefs. */
-  typedef RealMomentPathFunction                                       Self;
+  typedef RealMomentPathFunction Self;
   typedef GeometricMomentPathFunction<TInputPath, TOutput, TPrecision> Superclass;
-  typedef itk::SmartPointer<Self>                                      Pointer;
-  typedef itk::SmartPointer<const Self>                                ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(RealMomentPathFunction, GeometricMomentPathFunction);
 
   /** InputPathType typedef support. */
-  typedef typename Superclass::PathType              PathType;
-  typedef typename Superclass::PathConstPointer      PathConstPointer;
-  typedef typename PathType::ContinuousIndexType     VertexType;
+  typedef typename Superclass::PathType          PathType;
+  typedef typename Superclass::PathConstPointer  PathConstPointer;
+  typedef typename PathType::ContinuousIndexType VertexType;
   typedef itk::VectorContainer<unsigned, VertexType> VertexListType;
-  typedef typename VertexListType::ConstPointer      VertexListPointer;
+  typedef typename VertexListType::ConstPointer VertexListPointer;
 
   /** Type for calculation precision */
   typedef typename Superclass::PrecisionType PrecisionType;
@@ -66,16 +63,20 @@ public:
   typedef typename Superclass::OutputType RealType;
 
 protected:
-  RealMomentPathFunction() {}
-  ~RealMomentPathFunction() override {}
+  RealMomentPathFunction()
+  {
+  }
+  ~RealMomentPathFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  RealMomentPathFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  RealMomentPathFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // namespace otb

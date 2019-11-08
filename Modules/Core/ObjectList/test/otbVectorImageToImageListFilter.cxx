@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,18 +27,18 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbVectorImageToImageListFilter(int itkNotUsed(argc), char * argv[])
+int otbVectorImageToImageListFilter(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
-  char *             infname   = argv[1];
-  char *             outfname1 = argv[2];
-  char *             outfname2 = argv[3];
-  char *             outfname3 = argv[4];
+  char*              infname   = argv[1];
+  char*              outfname1 = argv[2];
+  char*              outfname2 = argv[3];
+  char*              outfname3 = argv[4];
 
-  typedef unsigned char                          PixelType;
+  typedef unsigned char PixelType;
   typedef otb::Image<PixelType, Dimension>       ImageType;
   typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
-  typedef otb::ImageList<ImageType>              ImageListType;
+  typedef otb::ImageList<ImageType> ImageListType;
 
   // IO
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
@@ -74,17 +74,17 @@ int otbVectorImageToImageListFilter(int itkNotUsed(argc), char * argv[])
   return EXIT_SUCCESS;
 }
 
-int otbVectorImageToImageListFilterIterator(int itkNotUsed(argc), char * argv[])
+int otbVectorImageToImageListFilterIterator(int itkNotUsed(argc), char* argv[])
 {
-  const unsigned int Dimension = 2;
-  const char *       infname   = argv[1];
-  const char *       outputFilenamePrefix = argv[2];
-  const char *       outputFilenameSuffix = argv[3];
+  const unsigned int Dimension            = 2;
+  const char*        infname              = argv[1];
+  const char*        outputFilenamePrefix = argv[2];
+  const char*        outputFilenameSuffix = argv[3];
 
-  typedef unsigned char                          PixelType;
+  typedef unsigned char PixelType;
   typedef otb::Image<PixelType, Dimension>       ImageType;
   typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
-  typedef otb::ImageList<ImageType>              ImageListType;
+  typedef otb::ImageList<ImageType> ImageListType;
 
   // IO
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
@@ -110,8 +110,8 @@ int otbVectorImageToImageListFilterIterator(int itkNotUsed(argc), char * argv[])
 
   int i = 1;
 
-  while ((itOutput != filter->GetOutput()->End()) )
-    {
+  while ((itOutput != filter->GetOutput()->End()))
+  {
     std::stringstream oss;
     oss << outputFilenamePrefix << "Band" << i << "." << outputFilenameSuffix;
 
@@ -123,7 +123,7 @@ int otbVectorImageToImageListFilterIterator(int itkNotUsed(argc), char * argv[])
 
     ++itOutput;
     ++i;
-    }
+  }
 
   /*
   while ((itOutput != filter->GetOutput()->End()) )

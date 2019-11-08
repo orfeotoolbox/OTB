@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,42 +27,37 @@
 #include "otbVectorImageToImageListFilter.h"
 
 
+const unsigned int Dimension = 2;
+typedef float      PixelType;
+typedef otb::Image<PixelType, Dimension> FloatImageType;
+typedef unsigned char MaskPixelType;
+typedef otb::Image<MaskPixelType, Dimension>   MaskImageType;
+typedef otb::VectorImage<PixelType, Dimension> FloatVectorImageType;
+
+typedef otb::ImageList<FloatImageType> ImageListType;
+typedef otb::VectorImageToImageListFilter<FloatVectorImageType, ImageListType> VectorImageToListFilterType;
 
 
-  const unsigned int Dimension = 2;
-  typedef float                                                        PixelType;
-  typedef otb::Image<PixelType, Dimension>                             FloatImageType;
-  typedef unsigned char                                                MaskPixelType;
-  typedef otb::Image<MaskPixelType, Dimension>                         MaskImageType;
-  typedef otb::VectorImage<PixelType, Dimension>                       FloatVectorImageType;
+typedef otb::ImageFileReader<FloatVectorImageType> ReaderType;
+typedef otb::ImageFileReader<MaskImageType>        MaskReaderType;
+typedef otb::ImageFileWriter<FloatImageType>       WriterType;
 
-  typedef otb::ImageList<FloatImageType>                  ImageListType;
-  typedef otb::VectorImageToImageListFilter
-    <FloatVectorImageType, ImageListType>                 VectorImageToListFilterType;
-
-
-  typedef otb::ImageFileReader<FloatVectorImageType>            ReaderType;
-  typedef otb::ImageFileReader<MaskImageType>                   MaskReaderType;
-  typedef otb::ImageFileWriter  <FloatImageType>       WriterType;
-
-  typedef otb::DisparityMapToDEMFilter <FloatImageType, FloatVectorImageType>      DisparityToElevationFilterType;
+typedef otb::DisparityMapToDEMFilter<FloatImageType, FloatVectorImageType> DisparityToElevationFilterType;
 
 
 int otbDisparityMapToDEMFilter(int argc, char* argv[])
 {
   if ((argc != 11) && (argc != 12))
-    {
+  {
     std::cerr << "Usage: " << argv[0];
-    std::cerr
-        << " dispinput_fname sensorleftinput_fname sensorrighttinput_fname gridleftinput_fname gridrightinput_fname"
-        << std::endl;
+    std::cerr << " dispinput_fname sensorleftinput_fname sensorrighttinput_fname gridleftinput_fname gridrightinput_fname" << std::endl;
     std::cerr << " outputDEM_filename " << std::endl;
     std::cerr << " elevmin elevmax avgelev DEMgridstep (maskinput_fname) " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  DisparityToElevationFilterType::Pointer filter = DisparityToElevationFilterType::New();
-  VectorImageToListFilterType::Pointer vectorToList = VectorImageToListFilterType::New();
+  DisparityToElevationFilterType::Pointer filter       = DisparityToElevationFilterType::New();
+  VectorImageToListFilterType::Pointer    vectorToList = VectorImageToListFilterType::New();
 
   ReaderType::Pointer dispReader = ReaderType::New();
   dispReader->SetFileName(argv[1]);
@@ -93,11 +88,11 @@ int otbDisparityMapToDEMFilter(int argc, char* argv[])
 
   MaskReaderType::Pointer maskReader;
   if (argc == 12)
-    {
+  {
     maskReader = MaskReaderType::New();
     maskReader->SetFileName(argv[11]);
     filter->SetDisparityMaskInput(maskReader->GetOutput());
-    }
+  }
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(filter->GetOutput());

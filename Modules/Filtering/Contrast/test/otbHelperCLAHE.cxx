@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,52 +25,48 @@
 #include "itkImageRegionIterator.h"
 #include "otbCLHistogramEqualizationFilter.h"
 
-int otbHelperCLAHE(int itkNotUsed(argc), char * argv [])
+int otbHelperCLAHE(int itkNotUsed(argc), char* argv[])
 {
-  typedef int InputPixelType;
+  typedef int        InputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType ,  Dimension > InputImageType;
-  typedef otb::ImageFileReader< InputImageType > ReaderType; 
-  typedef otb::ImageFileWriter< InputImageType > WriterType;
-  ReaderType::Pointer reader ( ReaderType::New() );
-  WriterType::Pointer writer ( WriterType::New() );
-  reader->SetFileName( argv[1] );
-  writer->SetFileName( argv[2] );
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<InputImageType> WriterType;
+  ReaderType::Pointer                          reader(ReaderType::New());
+  WriterType::Pointer                          writer(WriterType::New());
+  reader->SetFileName(argv[1]);
+  writer->SetFileName(argv[2]);
   reader->UpdateOutputInformation();
 
-  typedef otb::VectorImage< int , 2 > HistogramType;
-  typedef otb::VectorImage< double , 2 > LutType;
+  typedef otb::VectorImage<int, 2>    HistogramType;
+  typedef otb::VectorImage<double, 2> LutType;
 
-  typedef itk::StreamingImageFilter< LutType , LutType >
-    StreamingImageFilter;
+  typedef itk::StreamingImageFilter<LutType, LutType> StreamingImageFilter;
 
-  typedef otb::InPlacePassFilter < InputImageType > BufferFilter;
+  typedef otb::InPlacePassFilter<InputImageType> BufferFilter;
 
-  typedef otb::ComputeHistoFilter< InputImageType , HistogramType >
-    HistoFilter;
+  typedef otb::ComputeHistoFilter<InputImageType, HistogramType> HistoFilter;
 
-  typedef otb::ComputeGainLutFilter< HistogramType , LutType >
-    GainLutFilter;
+  typedef otb::ComputeGainLutFilter<HistogramType, LutType> GainLutFilter;
 
-  typedef otb::ApplyGainFilter< InputImageType , LutType , InputImageType >
-    ApplyGainFilter;
+  typedef otb::ApplyGainFilter<InputImageType, LutType, InputImageType> ApplyGainFilter;
 
-  HistoFilter::Pointer histoFilter( HistoFilter::New() );
-  GainLutFilter::Pointer lutFilter( GainLutFilter::New() );
-  ApplyGainFilter::Pointer applyFilter( ApplyGainFilter::New() );
-  BufferFilter::Pointer buffer( BufferFilter::New() );
-  StreamingImageFilter::Pointer streamFilter( StreamingImageFilter::New() );
-  InputImageType::SizeType size;
+  HistoFilter::Pointer          histoFilter(HistoFilter::New());
+  GainLutFilter::Pointer        lutFilter(GainLutFilter::New());
+  ApplyGainFilter::Pointer      applyFilter(ApplyGainFilter::New());
+  BufferFilter::Pointer         buffer(BufferFilter::New());
+  StreamingImageFilter::Pointer streamFilter(StreamingImageFilter::New());
+  InputImageType::SizeType      size;
   size = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
   // histoEqualize->SetThreshold(100);
 
-  histoFilter->SetInput( reader->GetOutput() );
-  buffer->SetInput( reader->GetOutput() );
-  lutFilter->SetInput( histoFilter->GetHistoOutput() );
-  streamFilter->SetInput( lutFilter->GetOutput() );
-  applyFilter->SetInputLut( streamFilter->GetOutput() );
-  applyFilter->SetInputImage( buffer->GetOutput() );
+  histoFilter->SetInput(reader->GetOutput());
+  buffer->SetInput(reader->GetOutput());
+  lutFilter->SetInput(histoFilter->GetHistoOutput());
+  streamFilter->SetInput(lutFilter->GetOutput());
+  applyFilter->SetInputLut(streamFilter->GetOutput());
+  applyFilter->SetInputImage(buffer->GetOutput());
 
   histoFilter->SetMin(0);
   histoFilter->SetMax(255);
@@ -81,8 +77,7 @@ int otbHelperCLAHE(int itkNotUsed(argc), char * argv [])
 
   histoFilter->SetThumbSize(size);
   applyFilter->SetThumbSize(size);
-  lutFilter->SetNbPixel(size[0]*size[1]);
-
+  lutFilter->SetNbPixel(size[0] * size[1]);
 
 
   writer->SetInput(applyFilter->GetOutput());

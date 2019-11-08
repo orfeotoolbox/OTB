@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "itkMacro.h"
 
 #include <fstream>
@@ -29,30 +27,30 @@
 #include "otbImageFileReader.h"
 #include "otbSarImageMetadataInterfaceFactory.h"
 
-void printPointSet(otb::SarImageMetadataInterface::PointSetPointer pointSet, std::ostream& stream )
+void printPointSet(otb::SarImageMetadataInterface::PointSetPointer pointSet, std::ostream& stream)
 {
   stream << pointSet << std::endl;
   if (pointSet->GetNumberOfPoints() < 20)
-    {
+  {
     stream << "PointSet values :" << std::endl;
     otb::SarImageMetadataInterface::PointSetType::PointType point;
     otb::SarImageMetadataInterface::PointSetType::PixelType pointValue;
     for (unsigned int i = 0; i < pointSet->GetNumberOfPoints(); ++i)
-       {
-       pointSet->GetPoint(i, &point);
-       pointSet->GetPointData(i, &pointValue);
-       stream << point << " : " << pointValue << std::endl;
-       }
+    {
+      pointSet->GetPoint(i, &point);
+      pointSet->GetPointData(i, &pointValue);
+      stream << point << " : " << pointValue << std::endl;
     }
+  }
 }
 
 int otbSarImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * inputFilename  = argv[1];
-  const char * outputFilename  = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  typedef otb::VectorImage<double,  2>         InputImageType;
+  typedef otb::VectorImage<double, 2> InputImageType;
   typedef otb::ImageFileReader<InputImageType> ImageReaderType;
 
   ImageReaderType::Pointer reader = ImageReaderType::New();
@@ -90,5 +88,4 @@ int otbSarImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
   std::cout << lImageMetadata << std::endl;
 
   return EXIT_SUCCESS;
-
 }

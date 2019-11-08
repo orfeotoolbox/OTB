@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -71,17 +71,8 @@ const char* I18nCoreApplication::DEFAULT_CACHE_RESULT_DIR_NAME = "result";
 
 const char* I18nCoreApplication::DATASET_EXT = ".ds";
 
-const char* I18nCoreApplication::SETTINGS_KEYS[ SETTINGS_KEY_COUNT ] =
-{
-  "geoidPath",
-  "geoidPathActive",
-  "overviewsEnabled",
-  "overviewsSize",
-  "resolutionAlgorithm",
-  "resultsDir",
-  "srtmDir",
-  "srtmDirActive",
-  "tileSize",
+const char* I18nCoreApplication::SETTINGS_KEYS[SETTINGS_KEY_COUNT] = {
+    "geoidPath", "geoidPathActive", "overviewsEnabled", "overviewsSize", "resolutionAlgorithm", "resultsDir", "srtmDir", "srtmDirActive", "tileSize",
 };
 
 /*****************************************************************************/
@@ -90,81 +81,58 @@ const char* I18nCoreApplication::SETTINGS_KEYS[ SETTINGS_KEY_COUNT ] =
 I18nCoreApplication* I18nCoreApplication::m_Instance = NULL;
 
 /*******************************************************************************/
-bool
-I18nCoreApplication
-::IsResultsDirValid( const QString& path )
+bool I18nCoreApplication::IsResultsDirValid(const QString& path)
 {
-  QDir dir( path );
-  QFileInfo fileInfo( path );
+  QDir      dir(path);
+  QFileInfo fileInfo(path);
 
-  return
-    fileInfo.exists() &&
-    fileInfo.isDir() &&
-    fileInfo.isReadable() &&
-    fileInfo.isWritable();
+  return fileInfo.exists() && fileInfo.isDir() && fileInfo.isReadable() && fileInfo.isWritable();
 }
 
 /*******************************************************************************/
-bool
-I18nCoreApplication
-::MakeDirTree( const QString& path, const QString& tree, QDir* dir )
+bool I18nCoreApplication::MakeDirTree(const QString& path, const QString& tree, QDir* dir)
 {
-  QDir pathDir( path );
+  QDir pathDir(path);
 
-  if( !pathDir.exists() )
-    throw SystemError( ToStdString( QString( "('%1')" ).arg( path ) ) );
+  if (!pathDir.exists())
+    throw SystemError(ToStdString(QString("('%1')").arg(path)));
 
-  QDir treeDir( pathDir.filePath( tree ) );
-  if( treeDir.exists() )
+  QDir treeDir(pathDir.filePath(tree));
+  if (treeDir.exists())
+  {
+    if (dir != NULL)
     {
-    if( dir!=NULL )
-      {
       *dir = treeDir;
-      }
+    }
 
     return false;
-    }
+  }
 
-  if( !pathDir.mkpath( tree ) )
-    throw SystemError(
-      ToStdString(
-	QString( "('%1')" ).arg( pathDir.filePath( tree ) )
-      )
-    );
+  if (!pathDir.mkpath(tree))
+    throw SystemError(ToStdString(QString("('%1')").arg(pathDir.filePath(tree))));
 
-  if( !pathDir.cd( tree ) )
-    throw SystemError(
-      ToStdString(
-	QString( "('%1')" ).arg(
-	  pathDir.filePath( tree )
-	)
-      )
-    );
+  if (!pathDir.cd(tree))
+    throw SystemError(ToStdString(QString("('%1')").arg(pathDir.filePath(tree))));
 
-  if( dir!=NULL )
-    {
+  if (dir != NULL)
+  {
     *dir = pathDir;
-    }
+  }
 
   return true;
 }
 
 /*****************************************************************************/
-QString
-I18nCoreApplication
-::DatasetPathName( QString& name,
-		   const QString& imageFilename )
+QString I18nCoreApplication::DatasetPathName(QString& name, const QString& imageFilename)
 {
   // convenient QFileInfo
-  QFileInfo fileInfo( imageFilename );
+  QFileInfo fileInfo(imageFilename);
 
   // get the md5 of the filename
-  QByteArray result =
-    QCryptographicHash::hash( fileInfo.absoluteFilePath().toLatin1(),
-			      QCryptographicHash::Md5 );
+  QByteArray result = QCryptographicHash::hash(fileInfo.absoluteFilePath().toLatin1(), QCryptographicHash::Md5);
 
   // MD5 hash-code.
-  QString hash( result.toHex() );
+  QString hash(result.toHex());
 
   // store the md5 + the dataset extension at the end
   name = hash + I18nCoreApplication::DATASET_EXT;
@@ -174,225 +142,173 @@ I18nCoreApplication
 }
 
 /*****************************************************************************/
-VectorImageModel *
-I18nCoreApplication
-::LoadImageModel( const QString & filename,
-                  int width,
-                  int height,
-                  QObject * p )
+VectorImageModel* I18nCoreApplication::LoadImageModel(const QString& filename, int width, int height, QObject* p)
 {
   try
-    {
-    VectorImageModel::EnsureValidImage( filename );
-    }
-  catch( ... )
-    {
+  {
+    VectorImageModel::EnsureValidImage(filename);
+  }
+  catch (...)
+  {
     throw;
-    }
+  }
 
-  VectorImageModel * imageModel = NULL;
+  VectorImageModel* imageModel = NULL;
 
   try
-    {
-    AbstractImageModel::BuildContext context( filename );
+  {
+    AbstractImageModel::BuildContext context(filename);
 
-    imageModel = new VectorImageModel( p );
+    imageModel = new VectorImageModel(p);
 
-    imageModel->SetFilename( filename, width, height );
+    imageModel->SetFilename(filename, width, height);
 
-    imageModel->BuildModel( &context );
-    }
-  catch( ... )
-    {
+    imageModel->BuildModel(&context);
+  }
+  catch (...)
+  {
     delete imageModel;
     imageModel = NULL;
 
     throw;
-    }
+  }
 
   return imageModel;
 }
 
 /*****************************************************************************/
-void
-I18nCoreApplication
-::DeleteDatasetModel( const QString & path, const QString & hash )
+void I18nCoreApplication::DeleteDatasetModel(const QString& path, const QString& hash)
 {
-  QFileInfo finfo( path, hash );
+  QFileInfo finfo(path, hash);
 
-  QDir dir( finfo.filePath() );
+  QDir dir(finfo.filePath());
 
-  QFileInfoList fileInfos(
-    dir.entryInfoList( QDir::NoDotAndDotDot | QDir::Files )
-  );
+  QFileInfoList fileInfos(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::Files));
 
-  for( QFileInfoList::const_iterator it( fileInfos.begin() );
-       it!=fileInfos.end();
-       ++it )
-    {
-    if( !dir.remove( it->fileName() ) )
-      throw SystemError(
-        ToStdString(
-          tr( "Failed to remove file '%1'." ).arg( it->filePath() )
-        )
-      );
-    }
+  for (QFileInfoList::const_iterator it(fileInfos.begin()); it != fileInfos.end(); ++it)
+  {
+    if (!dir.remove(it->fileName()))
+      throw SystemError(ToStdString(tr("Failed to remove file '%1'.").arg(it->filePath())));
+  }
 
-  QDir parentDir( dir );
+  QDir parentDir(dir);
 
-  if( !parentDir.cdUp() )
-    throw SystemError(
-      ToStdString(
-        tr( "Failed to access parent directory of '%1'." ).arg( dir.path() )
-      )
-    );
+  if (!parentDir.cdUp())
+    throw SystemError(ToStdString(tr("Failed to access parent directory of '%1'.").arg(dir.path())));
 
-  if( !parentDir.rmdir( hash  ) )
-    throw SystemError(
-      ToStdString(
-        tr( "Failed to remove dataset directory '%1'." ).arg( dir.path() )
-      )
-    );
+  if (!parentDir.rmdir(hash))
+    throw SystemError(ToStdString(tr("Failed to remove dataset directory '%1'.").arg(dir.path())));
 }
 
 /*****************************************************************************/
-void
-I18nCoreApplication
-::HandleQtMessage( QtMsgType type ,
-                   const QMessageLogContext & ,
-                   const QString & message )
+void I18nCoreApplication::HandleQtMessage(QtMsgType type, const QMessageLogContext&, const QString& message)
 {
-  std::string msg = ToStdString( message );
+  std::string msg = ToStdString(message);
 
-  switch( type )
-    {
-    //
-    // DEBUG
-    case QtDebugMsg:
+  switch (type)
+  {
+  //
+  // DEBUG
+  case QtDebugMsg:
 #if ECHO_QDEBUG || FORCE_QDEBUG
 #if _WIN32
-      OutputDebugString( msg.c_str() );
-      OutputDebugString( "\n" );
+    OutputDebugString(msg.c_str());
+    OutputDebugString("\n");
 #endif
-      std::cerr << msg << std::endl;
+    std::cerr << msg << std::endl;
 #endif
 #if LOG_QDEBUG
-      static_assert( false, "Not yet implemented!" );
+    static_assert(false, "Not yet implemented!");
 #endif
-      break;
-    //
-    // WARNING
-    case QtWarningMsg:
+    break;
+  //
+  // WARNING
+  case QtWarningMsg:
 #if ECHO_QWARNING || FORCE_QWARNING
 #if _WIN32
-      OutputDebugString( "WARNG> " );
-      OutputDebugString( msg.c_str() );
-      OutputDebugString( "\n" );
+    OutputDebugString("WARNG> ");
+    OutputDebugString(msg.c_str());
+    OutputDebugString("\n");
 #endif
-      std::cerr << "WARNG> " << msg << std::endl;
+    std::cerr << "WARNG> " << msg << std::endl;
 #endif
 #if LOG_QWARNING
-      static_assert( false, "Not yet implemented!" );
+    static_assert(false, "Not yet implemented!");
 #endif
-      break;
-    //
-    // CRITICAL
-    case QtCriticalMsg:
+    break;
+  //
+  // CRITICAL
+  case QtCriticalMsg:
 #if ECHO_QCRITICAL || FORCE_QCRITICAL
 #if _WIN32
-      OutputDebugString( "ERROR> " );
-      OutputDebugString( qPrintable(message) );
-      OutputDebugString( "\n" );
+    OutputDebugString("ERROR> ");
+    OutputDebugString(qPrintable(message));
+    OutputDebugString("\n");
 #endif
-      std::cerr << "ERROR> " << msg << std::endl;
+    std::cerr << "ERROR> " << msg << std::endl;
 #endif
 #if LOG_QCRITICAL
-      static_assert( false, "Not yet implemented!" );
+    static_assert(false, "Not yet implemented!");
 #endif
 #if THROW_QCRITICAL
-      throw std::runtime_error(
-	ToStdString(
-	  tr( "Error: " )
-	  .arg( message )
-	)
-      );
+    throw std::runtime_error(ToStdString(tr("Error: ").arg(message)));
 #endif
-      break;
-    //
-    // FATAL
-    case QtFatalMsg:
+    break;
+  //
+  // FATAL
+  case QtFatalMsg:
 #if ECHO_QFATAL || FORCE_QFATAL
 #if _WIN32
-      OutputDebugString( "FATAL> " );
-      OutputDebugString( qPrintable(message) );
-      OutputDebugString( "\n" );
+    OutputDebugString("FATAL> ");
+    OutputDebugString(qPrintable(message));
+    OutputDebugString("\n");
 #endif
-      std::cerr << "FATAL> " << msg << std::endl;
+    std::cerr << "FATAL> " << msg << std::endl;
 #endif
 #if LOG_QFATAL
-      static_assert( false, "Not yet implemented!" );
+    static_assert(false, "Not yet implemented!");
 #endif
 #if THROW_QFATAL
-      throw std::runtime_error(
-	ToStdString(
-	  tr( "Fatal error: " )
-	  .arg( message )
-	)
-      );
+    throw std::runtime_error(ToStdString(tr("Fatal error: ").arg(message)));
 #endif
-      abort();
-      break;
+    abort();
+    break;
 
-    default:
-      assert( false && "Unhandled message QtMsgType!" );
-      break;
-    }
+  default:
+    assert(false && "Unhandled message QtMsgType!");
+    break;
+  }
 }
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
-I18nCoreApplication
-::I18nCoreApplication( QCoreApplication* qtApp ) :
-  QObject( qtApp ),
-  m_Settings( NULL ),
-  m_Model( NULL ),
-  m_IsRunningFromBuildDir( false )
+I18nCoreApplication::I18nCoreApplication(QCoreApplication* qtApp) : QObject(qtApp), m_Settings(NULL), m_Model(NULL), m_IsRunningFromBuildDir(false)
 {
-  if( m_Instance!=NULL )
-    {
-    throw std::runtime_error(
-      ToStdString(
-        tr( "I18nCoreApplication is a singleton class!" )
-      )
-    );
-    }
+  if (m_Instance != NULL)
+  {
+    throw std::runtime_error(ToStdString(tr("I18nCoreApplication is a singleton class!")));
+  }
 
-  if( qtApp==NULL )
-    {
+  if (qtApp == NULL)
+  {
     throw std::invalid_argument(
-      ToStdString(
-	tr( "Class 'I18nCoreApplication' instance must be provided a "
-	    "QCoreApplication' pointer at construction time!" )
-      )
-    );
-    }
+        ToStdString(tr("Class 'I18nCoreApplication' instance must be provided a "
+                       "QCoreApplication' pointer at construction time!")));
+  }
 
-  qInstallMessageHandler( I18nCoreApplication::HandleQtMessage );
+  qInstallMessageHandler(I18nCoreApplication::HandleQtMessage);
 
   m_Instance = this;
 }
 
 /*******************************************************************************/
-I18nCoreApplication
-::~I18nCoreApplication()
+I18nCoreApplication::~I18nCoreApplication()
 {
 }
 
 /*******************************************************************************/
-void
-I18nCoreApplication
-::Initialize()
+void I18nCoreApplication::Initialize()
 {
   // Initialize internationlization.
   InitializeLocale();
@@ -402,7 +318,7 @@ I18nCoreApplication
   // See issue #635
   //
   // TODO: Check it is still needed here!
-  setlocale( LC_NUMERIC, "C" );
+  setlocale(LC_NUMERIC, "C");
 
   // Initialize QCoreApplication.
   virtual_InitializeCore();
@@ -415,328 +331,246 @@ I18nCoreApplication
 }
 
 /*******************************************************************************/
-void
-I18nCoreApplication
-::SetModel( AbstractModel* model )
+void I18nCoreApplication::SetModel(AbstractModel* model)
 {
-  emit AboutToChangeModel( model );
+  emit AboutToChangeModel(model);
 
   delete m_Model;
 
   m_Model = model;
 
-  if( model!=NULL )
-    m_Model->setParent( this );
+  if (model != NULL)
+    m_Model->setParent(this);
 
-  emit ModelChanged( m_Model );
+  emit ModelChanged(m_Model);
 }
 
 /*******************************************************************************/
-bool
-I18nCoreApplication
-::ElevationSetup()
+bool I18nCoreApplication::ElevationSetup()
 {
-  assert( !otb::DEMHandler::Instance().IsNull() );
+  assert(!otb::DEMHandler::Instance().IsNull());
 
-  otb::DEMHandler::Pointer demHandlerInstance( otb::DEMHandler::Instance() );
+  otb::DEMHandler::Pointer demHandlerInstance(otb::DEMHandler::Instance());
 
   bool geoidUpdated = false;
 
-  if( I18nCoreApplication::HasSettingsKey(
-	I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE ) &&
-      I18nCoreApplication::RetrieveSettingsKey(
-	I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE ).toBool() )
-    {
-    qDebug() <<
-      "Settings/GeoidFile:" <<
-      I18nCoreApplication::RetrieveSettingsKey(
-	I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
-      ).toString();
+  if (I18nCoreApplication::HasSettingsKey(I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE) &&
+      I18nCoreApplication::RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE).toBool())
+  {
+    qDebug() << "Settings/GeoidFile:" << I18nCoreApplication::RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_GEOID_PATH).toString();
 
     try
-      {
-      QString filename(
-	I18nCoreApplication::RetrieveSettingsKey(
-	  I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
-	).toString()
-      );
+    {
+      QString filename(I18nCoreApplication::RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_GEOID_PATH).toString());
 
-      geoidUpdated =
-	demHandlerInstance->OpenGeoidFile(
-	  QFile::encodeName(
-	    filename
-	  )
-	);
+      geoidUpdated = demHandlerInstance->OpenGeoidFile(QFile::encodeName(filename));
 
       // BUGFIX: When geoid file has not been updated by
       // otb::DEMHandler, the filename may be erroneous and unchecked
       // so, add a check, in this case, to report input error to the
       // user.
-      if( !geoidUpdated )
-	{
-	QFileInfo finfo( filename );
-
-	if( !finfo.exists() )
-	  throw std::runtime_error(
-	    ToStdString(
-	      tr( "Geoid file '%1' not found!" )
-	      .arg( filename )
-	    )
-	  );
-	}
-      }
-    catch( const std::exception & err )
+      if (!geoidUpdated)
       {
-      qWarning()
-	<< ToStdString( tr( "An error occurred while loading the geoid file, "
-			    "no geoid file will be used:" ) ).c_str()
-	<< err.what();
+        QFileInfo finfo(filename);
 
-      throw;
+        if (!finfo.exists())
+          throw std::runtime_error(ToStdString(tr("Geoid file '%1' not found!").arg(filename)));
       }
     }
+    catch (const std::exception& err)
+    {
+      qWarning() << ToStdString(tr("An error occurred while loading the geoid file, "
+                                   "no geoid file will be used:"))
+                        .c_str()
+                 << err.what();
+
+      throw;
+    }
+  }
   else
     geoidUpdated = true;
 
-  if( I18nCoreApplication::HasSettingsKey(
-	I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE ) &&
-      I18nCoreApplication::RetrieveSettingsKey(
-	I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE ).toBool() )
-    {
-    qDebug() <<
-      "Settings/DEMDir:" <<
-      I18nCoreApplication::RetrieveSettingsKey(
-	I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
-      ).toString();
+  if (I18nCoreApplication::HasSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE) &&
+      I18nCoreApplication::RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE).toBool())
+  {
+    qDebug() << "Settings/DEMDir:" << I18nCoreApplication::RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR).toString();
 
     try
-      {
+    {
       demHandlerInstance->ClearDEMs();
 
-      demHandlerInstance->OpenDEMDirectory(
-	QFile::encodeName(
-	  I18nCoreApplication::RetrieveSettingsKey(
-	    I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
-	  )
-	  .toString()
-	)
-      );
-      }
-    catch( const std::exception & err )
-      {
-      qWarning()
-	<< ToStdString( tr( "An error occurred while loading the DEM directory, "
-			    "no DEM will be used:" ) ).c_str()
-	<< err.what();
+      demHandlerInstance->OpenDEMDirectory(QFile::encodeName(I18nCoreApplication::RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR).toString()));
+    }
+    catch (const std::exception& err)
+    {
+      qWarning() << ToStdString(tr("An error occurred while loading the DEM directory, "
+                                   "no DEM will be used:"))
+                        .c_str()
+                 << err.what();
 
       throw;
-      }
     }
+  }
   else
-    {
+  {
     otb::DEMHandler::Instance()->ClearDEMs();
-    }
+  }
 
   return geoidUpdated;
 }
 
 /*******************************************************************************/
-void
-I18nCoreApplication
-::InitializeLocale()
+void I18nCoreApplication::InitializeLocale()
 {
   {
-  typedef QList< QByteArray > ByteArrayList;
+    typedef QList<QByteArray> ByteArrayList;
 
-  ByteArrayList codecs( QTextCodec::availableCodecs() );
+    ByteArrayList codecs(QTextCodec::availableCodecs());
 
-  qDebug() << "Available codecs:";
+    qDebug() << "Available codecs:";
 
-  foreach( const QByteArray & codec, codecs )
-    qDebug() << "\t" << codec;
+    foreach (const QByteArray& codec, codecs)
+      qDebug() << "\t" << codec;
   }
 
   // Literal strings to be translated are UTF-8 encoded because source
   // files are UTF-8 encoded.
-   /*/////////////////////////////// Warning //////////////////////
-  we need to replace those lines with a function of Qt5
-  QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
-  //////////////////////////////////////////////////////////////////*/
+  /*/////////////////////////////// Warning //////////////////////
+ we need to replace those lines with a function of Qt5
+ QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
+ //////////////////////////////////////////////////////////////////*/
 
   // QTextCodec::setCodecForLocale( QTextCodec::codecForName("UTF-8") );
 
   // QTextCodec::setCodecForCStrings( QTextCodec::codecForName("System") );
- /*/////////////////////////////// Warning //////////////////////
-  we need to replace those lines with a function of Qt5
-  qDebug()
-    << "Codec for C-strings:"
-    << ( QTextCodec::codecForCStrings()!=NULL
-   ? QTextCodec::codecForCStrings()->name()
-   : "none" );
-  //////////////////////////////////////////////////////////////////*/
+  /*/////////////////////////////// Warning //////////////////////
+   we need to replace those lines with a function of Qt5
+   qDebug()
+     << "Codec for C-strings:"
+     << ( QTextCodec::codecForCStrings()!=NULL
+    ? QTextCodec::codecForCStrings()->name()
+    : "none" );
+   //////////////////////////////////////////////////////////////////*/
 
-  qDebug()
-    << "Codec for Locale:"
-    << ( QTextCodec::codecForLocale()!=NULL
-	 ? QTextCodec::codecForLocale()->name()
-	 : "none" );
+  qDebug() << "Codec for Locale:" << (QTextCodec::codecForLocale() != NULL ? QTextCodec::codecForLocale()->name() : "none");
 
-   /*/////////////////////////////// Warning //////////////////////
-  we need to replace those lines with a function of Qt5
-  qDebug()
-    << "Codec for Tr:"
-    << ( QTextCodec::codecForTr()!=NULL
-   ? QTextCodec::codecForTr()->name()
-   : "none" );
-  //////////////////////////////////////////////////////////////////*/
+  /*/////////////////////////////// Warning //////////////////////
+ we need to replace those lines with a function of Qt5
+ qDebug()
+   << "Codec for Tr:"
+   << ( QTextCodec::codecForTr()!=NULL
+  ? QTextCodec::codecForTr()->name()
+  : "none" );
+ //////////////////////////////////////////////////////////////////*/
 
   //
   // 1. default UI language is english (no translation).
-  QLocale sys_lc( QLocale::system() );
+  QLocale sys_lc(QLocale::system());
 
   // Trace system locale.
-  qDebug()
-    << "Language:" << QLocale::languageToString( sys_lc.language() );
+  qDebug() << "Language:" << QLocale::languageToString(sys_lc.language());
 
-  qDebug()
-    << "Country:" << QLocale::countryToString( sys_lc.country() );
+  qDebug() << "Country:" << QLocale::countryToString(sys_lc.country());
 
   // Check system locale.
-  if( sys_lc.language() == QLocale::C ||
-      ( sys_lc.language() == QLocale::English &&
-        sys_lc.country() == QLocale::UnitedStates ) )
-    {
+  if (sys_lc.language() == QLocale::C || (sys_lc.language() == QLocale::English && sys_lc.country() == QLocale::UnitedStates))
+  {
     return;
-    }
+  }
 
   //
   // 2. Choose i18n path between build dir and install dir.
 
   // Begin from the executable path
-  QDir bin_dir( QDir::cleanPath(QCoreApplication::applicationDirPath()) );
+  QDir bin_dir(QDir::cleanPath(QCoreApplication::applicationDirPath()));
 
   // Go up in the directory hierarchy until we have a candidate install prefix
   bool prefixFound = false;
-  QDir prefix( bin_dir );
-  while ( prefix.cdUp() )
+  QDir prefix(bin_dir);
+  while (prefix.cdUp())
+  {
+    if (QDir(prefix).cd(Monteverdi_INSTALL_BIN_DIR))
     {
-    if ( QDir(prefix).cd( Monteverdi_INSTALL_BIN_DIR) )
-      {
       prefixFound = true;
       break;
-      }
     }
+  }
 
-  if( !prefixFound )
-    throw std::runtime_error(
-      ToStdString(
-	tr( "Failed to locate translation files directory 'i18n' in '%1'." )
-	.arg( prefix.path() )
-      )
-    );
+  if (!prefixFound)
+    throw std::runtime_error(ToStdString(tr("Failed to locate translation files directory 'i18n' in '%1'.").arg(prefix.path())));
 
-  QDir i18n_dir( prefix );
+  QDir i18n_dir(prefix);
 
   // At this point the candidate install prefix can also be the build dir root
-  if ( prefix.exists( Monteverdi_BUILD_DIR_FILE  )
-       && i18n_dir.cd( "i18n" ) )
-    {
+  if (prefix.exists(Monteverdi_BUILD_DIR_FILE) && i18n_dir.cd("i18n"))
+  {
     m_IsRunningFromBuildDir = true;
 
     // Report found build dir root
-    qDebug() <<
-      tr( "Running from build directory '%1'." )
-      .arg( prefix.path() );
+    qDebug() << tr("Running from build directory '%1'.").arg(prefix.path());
 
-    qDebug()
-      << tr( "Loading translation files from directory '%1'." )
-      .arg( i18n_dir.path() );
-    }
+    qDebug() << tr("Loading translation files from directory '%1'.").arg(i18n_dir.path());
+  }
   else
-    {
+  {
     m_IsRunningFromBuildDir = false;
 
     // Report found install prefix
-    qDebug()
-      << tr( "Running from install directory '%1'." )
-      .arg( prefix.path() );
+    qDebug() << tr("Running from install directory '%1'.").arg(prefix.path());
 
-    if ( i18n_dir.cd( Monteverdi_INSTALL_DATA_I18N_DIR ) )
-      {
-      qDebug()
-	<< tr( "Loading translation files from directory '%1'." )
-	.arg( i18n_dir.path() );
-      }
-    else
-      {
-      throw std::runtime_error(
-	ToStdString(
-	  tr( "Failed to access translation-files directory '%1'" )
-	  .arg( QDir::cleanPath(
-		  prefix.path()
-		  + QDir::separator()
-		  + Monteverdi_INSTALL_DATA_I18N_DIR
-		)
-	  )
-	)
-      );
-      }
+    if (i18n_dir.cd(Monteverdi_INSTALL_DATA_I18N_DIR))
+    {
+      qDebug() << tr("Loading translation files from directory '%1'.").arg(i18n_dir.path());
     }
+    else
+    {
+      throw std::runtime_error(ToStdString(
+          tr("Failed to access translation-files directory '%1'").arg(QDir::cleanPath(prefix.path() + QDir::separator() + Monteverdi_INSTALL_DATA_I18N_DIR))));
+    }
+  }
 
   try
-    {
+  {
     //
     // 3.1 Stack Qt translator.
-    LoadAndInstallTranslator(
-      "qt_" + sys_lc.name(),
-      QLibraryInfo::location( QLibraryInfo::TranslationsPath  )
-    );
-    }
-  catch( std::exception& exc )
-    {
+    LoadAndInstallTranslator("qt_" + sys_lc.name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+  }
+  catch (std::exception& exc)
+  {
     qWarning() << exc.what();
-    }
+  }
 
   try
-    {
+  {
     //
     // 3.2 Stack Monteverdi translator as prioritary over Qt translator.
-    LoadAndInstallTranslator( sys_lc.name(), i18n_dir.path() );
-    }
-  catch( std::exception& exc )
-    {
+    LoadAndInstallTranslator(sys_lc.name(), i18n_dir.path());
+  }
+  catch (std::exception& exc)
+  {
     qWarning() << exc.what();
-    }
+  }
 
   // TODO: Record locale translation filename(s) used in UI component (e.g.
   // AboutDialog, Settings dialog, Information dialog etc.)
 }
 
 /*******************************************************************************/
-void
-I18nCoreApplication
-::InitializeCore( const QString& appName,
-		  const QString& appVersion,
-		  const QString& orgName,
-		  const QString& orgDomain )
+void I18nCoreApplication::InitializeCore(const QString& appName, const QString& appVersion, const QString& orgName, const QString& orgDomain)
 {
-  setObjectName( "Application" );
+  setObjectName("Application");
 
   //
   // Setup application tags.
   //
-  QCoreApplication::setApplicationName(
-    appName
-  );
-  QCoreApplication::setApplicationVersion(
-    appVersion
-  );
+  QCoreApplication::setApplicationName(appName);
+  QCoreApplication::setApplicationVersion(appVersion);
 
   //
   // Setup organization tags.
   //
-  QCoreApplication::setOrganizationName( orgName );
-  QCoreApplication::setOrganizationDomain( orgDomain );
+  QCoreApplication::setOrganizationName(orgName);
+  QCoreApplication::setOrganizationDomain(orgDomain);
 
 #if 0
 #ifndef Q_WS_MAC
@@ -746,80 +580,50 @@ I18nCoreApplication
 }
 
 /*******************************************************************************/
-void
-I18nCoreApplication
-::InitializeSettings()
+void I18nCoreApplication::InitializeSettings()
 {
   //
   // Create settings proxy.
-  m_Settings = new QSettings(
-    QSettings::IniFormat,
-    QSettings::UserScope,
-    QCoreApplication::organizationName(),
-    QCoreApplication::applicationName(),
-    this
-  );
+  m_Settings = new QSettings(QSettings::IniFormat, QSettings::UserScope, QCoreApplication::organizationName(), QCoreApplication::applicationName(), this);
 
   //
   // Restore result directory.
-  QVariant resultDir(
-    RetrieveSettingsKey( I18nCoreApplication::SETTINGS_KEY_RESULTS_DIR )
-  );
+  QVariant resultDir(RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_RESULTS_DIR));
 
-  if( !resultDir.isNull() )
-    {
-    QString resultPath( resultDir.toString() );
+  if (!resultDir.isNull())
+  {
+    QString resultPath(resultDir.toString());
 
     qDebug() << "Settings/resultsDir:" << resultPath;
 
-    if( I18nCoreApplication::IsResultsDirValid( resultPath  ) )
-      {
-      m_ResultsDir.setPath( resultPath );
-      }
+    if (I18nCoreApplication::IsResultsDirValid(resultPath))
+    {
+      m_ResultsDir.setPath(resultPath);
     }
+  }
 }
 
 /*******************************************************************************/
-void
-I18nCoreApplication
-::LoadAndInstallTranslator( const QString& filename,
-			    const QString& directory,
-			    const QString& searchDelimiters,
-			    const QString& suffix )
+void I18nCoreApplication::LoadAndInstallTranslator(const QString& filename, const QString& directory, const QString& searchDelimiters, const QString& suffix)
 {
-  QString filename_ext(
-    filename +
-    ( suffix.isNull()
-      ? ".qm"
-      : suffix )
-  );
+  QString filename_ext(filename + (suffix.isNull() ? ".qm" : suffix));
 
   // (a) Do need to new QTranslator() here!
-  QTranslator* lc_translator = new QTranslator( this );
+  QTranslator* lc_translator = new QTranslator(this);
 
-  if( !lc_translator->load( filename, directory, searchDelimiters, suffix ) )
-    {
+  if (!lc_translator->load(filename, directory, searchDelimiters, suffix))
+  {
     delete lc_translator;
     lc_translator = NULL;
 
-    throw std::runtime_error(
-      ToStdString(
-	tr( "Failed to load '%1' translation file from '%2'." )
-	.arg( filename_ext )
-	.arg( directory )
-      )
-    );
-    }
+    throw std::runtime_error(ToStdString(tr("Failed to load '%1' translation file from '%2'.").arg(filename_ext).arg(directory)));
+  }
 
   // (a) ...because QTranslator needs to be alive during the whole
   // lifespan of the application.
-  QCoreApplication::installTranslator( lc_translator );
+  QCoreApplication::installTranslator(lc_translator);
 
-  QString message(
-    tr( "Successfully loaded '%1' translation file from '%2'." )
-    .arg( filename_ext )
-    .arg( directory )
-  );
+  QString message(tr("Successfully loaded '%1' translation file from '%2'.").arg(filename_ext).arg(directory));
 
   // TODO: Log locale translation filename used.
 

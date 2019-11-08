@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,10 +29,9 @@ namespace otb
 {
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-VectorData<TPrecision, VDimension, TValuePrecision>
-::VectorData()
+VectorData<TPrecision, VDimension, TValuePrecision>::VectorData()
 {
-  m_DataTree = DataTreeType::New();
+  m_DataTree               = DataTreeType::New();
   DataNodePointerType root = DataNodeType::New();
   root->SetNodeId("Root");
   m_DataTree->SetRoot(root);
@@ -40,10 +39,8 @@ VectorData<TPrecision, VDimension, TValuePrecision>
   m_Spacing.Fill(1);
 }
 
-template<class TPrecision, unsigned int VDimension, class TValuePrecision>
-void
-VectorData<TPrecision, VDimension, TValuePrecision>
-::SetProjectionRef(const std::string& projectionRef)
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+void VectorData<TPrecision, VDimension, TValuePrecision>::SetProjectionRef(const std::string& projectionRef)
 {
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
 
@@ -51,10 +48,8 @@ VectorData<TPrecision, VDimension, TValuePrecision>
   this->Modified();
 }
 
-template<class TPrecision, unsigned int VDimension, class TValuePrecision>
-std::string
-VectorData<TPrecision, VDimension, TValuePrecision>
-::GetProjectionRef() const
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+std::string VectorData<TPrecision, VDimension, TValuePrecision>::GetProjectionRef() const
 {
   const itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
 
@@ -64,32 +59,26 @@ VectorData<TPrecision, VDimension, TValuePrecision>
   return projectionRef;
 }
 
-template<class TPrecision, unsigned int VDimension, class TValuePrecision>
-void
-VectorData<TPrecision, VDimension, TValuePrecision>
-::SetSpacing(const SpacingType& spacing)
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+void VectorData<TPrecision, VDimension, TValuePrecision>::SetSpacing(const SpacingType& spacing)
 {
   itkDebugMacro("setting Spacing to " << spacing);
   if (this->m_Spacing != spacing)
-    {
+  {
     this->m_Spacing = spacing;
     this->Modified();
-    }
+  }
 }
 
-template<class TPrecision, unsigned int VDimension, class TValuePrecision>
-void
-VectorData<TPrecision, VDimension, TValuePrecision>
-::SetSpacing(const double spacing[2])
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+void VectorData<TPrecision, VDimension, TValuePrecision>::SetSpacing(const double spacing[2])
 {
   SpacingType s(spacing);
   this->SetSpacing(s);
 }
 
-template<class TPrecision, unsigned int VDimension, class TValuePrecision>
-void
-VectorData<TPrecision, VDimension, TValuePrecision>
-::SetSpacing(const float spacing[2])
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+void VectorData<TPrecision, VDimension, TValuePrecision>::SetSpacing(const float spacing[2])
 {
   itk::Vector<float, 2> sf(spacing);
   SpacingType s;
@@ -97,19 +86,15 @@ VectorData<TPrecision, VDimension, TValuePrecision>
   this->SetSpacing(s);
 }
 
-template<class TPrecision, unsigned int VDimension, class TValuePrecision>
-void
-VectorData<TPrecision, VDimension, TValuePrecision>
-::SetOrigin(const double origin[2])
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+void VectorData<TPrecision, VDimension, TValuePrecision>::SetOrigin(const double origin[2])
 {
   OriginType p(origin);
   this->SetOrigin(p);
 }
 
-template<class TPrecision, unsigned int VDimension, class TValuePrecision>
-void
-VectorData<TPrecision, VDimension, TValuePrecision>
-::SetOrigin(const float origin[2])
+template <class TPrecision, unsigned int VDimension, class TValuePrecision>
+void VectorData<TPrecision, VDimension, TValuePrecision>::SetOrigin(const float origin[2])
 {
   itk::Point<float, 2> of(origin);
   OriginType p;
@@ -118,25 +103,19 @@ VectorData<TPrecision, VDimension, TValuePrecision>
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-bool
-VectorData<TPrecision, VDimension, TValuePrecision>
-::Clear()
+bool VectorData<TPrecision, VDimension, TValuePrecision>::Clear()
 {
   return m_DataTree->Clear();
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-int
-VectorData<TPrecision, VDimension, TValuePrecision>
-::Size() const
+int VectorData<TPrecision, VDimension, TValuePrecision>::Size() const
 {
   return m_DataTree->Count();
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-void
-VectorData<TPrecision, VDimension, TValuePrecision>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void VectorData<TPrecision, VDimension, TValuePrecision>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << std::endl;
@@ -145,58 +124,54 @@ VectorData<TPrecision, VDimension, TValuePrecision>
   it.GoToBegin();
 
   while (!it.IsAtEnd())
-    {
+  {
     itk::PreOrderTreeIterator<DataTreeType> itParent = it;
-    bool                                    goesOn = true;
+    bool                                    goesOn   = true;
     while (itParent.HasParent() && goesOn)
-      {
+    {
       os << indent;
       goesOn = itParent.GoToParent();
-      }
+    }
     os << "+" << it.Get()->GetNodeTypeAsString() << std::endl;
     ++it;
-    }
+  }
 }
 
 template <class TPrecision, unsigned int VDimension, class TValuePrecision>
-void
-VectorData<TPrecision, VDimension, TValuePrecision>
-::Graft(const itk::DataObject *data)
+void VectorData<TPrecision, VDimension, TValuePrecision>::Graft(const itk::DataObject* data)
 {
   // call the superclass' implementation
-  Superclass::Graft( data );
+  Superclass::Graft(data);
 
-  if ( data )
-    {
+  if (data)
+  {
     // Attempt to cast data to an Image
-    const Self * vdData;
+    const Self* vdData;
 
     try
-      {
-      vdData = dynamic_cast<const Self *>( data );
-      }
-    catch( ... )
-      {
+    {
+      vdData = dynamic_cast<const Self*>(data);
+    }
+    catch (...)
+    {
       return;
-      }
+    }
 
-    if ( vdData )
-      {
+    if (vdData)
+    {
       // Copy all the needed data : DataTree, spacing, origin and
       // Projection Ref
-      m_DataTree = const_cast<DataTreeType*> (vdData->GetDataTree());
+      m_DataTree = const_cast<DataTreeType*>(vdData->GetDataTree());
       this->SetSpacing(vdData->GetSpacing());
       this->SetOrigin(vdData->GetOrigin());
       this->SetProjectionRef(vdData->GetProjectionRef());
-      }
-    else
-      {
-      // pointer could not be cast back down
-      itkExceptionMacro( << "otb::VectorData::Graft() cannot cast "
-                         << typeid(data).name() << " to "
-                         << typeid(const Self *).name() );
-      }
     }
+    else
+    {
+      // pointer could not be cast back down
+      itkExceptionMacro(<< "otb::VectorData::Graft() cannot cast " << typeid(data).name() << " to " << typeid(const Self*).name());
+    }
+  }
 }
 } // end namespace otb
 

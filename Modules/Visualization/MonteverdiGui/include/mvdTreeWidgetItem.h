@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -76,19 +76,18 @@ class TreeWidgetItem;
  *
  * \brief
  */
-class OTBMonteverdiGUI_EXPORT TreeWidgetItem :
-    public QTreeWidgetItem // not a QObject
+class OTBMonteverdiGUI_EXPORT TreeWidgetItem : public QTreeWidgetItem // not a QObject
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
   enum ColumnIndex
   {
     COLUMN_INDEX_TEXT = 0,
-    COLUMN_INDEX_ID = 1,
+    COLUMN_INDEX_ID   = 1,
     COLUMN_INDEX_HASH = 2,
   };
 
@@ -104,18 +103,14 @@ public:
     ITEM_ROLE_ID = Qt::UserRole + 1,
   };
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /**
    * \brief Constructor.
    */
-  TreeWidgetItem( QTreeWidgetItem* p =NULL,
-                  const QString& text =QString(),
-                  const QVariant& id =QVariant(),
-                  const QStringList& columns = QStringList(),
-                  TreeWidgetItem::ItemType type =TreeWidgetItem::ITEM_TYPE_LEAF );
+  TreeWidgetItem(QTreeWidgetItem* p = NULL, const QString& text = QString(), const QVariant& id = QVariant(), const QStringList& columns = QStringList(),
+                 TreeWidgetItem::ItemType type = TreeWidgetItem::ITEM_TYPE_LEAF);
 
   /**
    * \brief Destructor.
@@ -149,32 +144,29 @@ public:
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   /**
    */
   static const int m_MetaTypeId;
@@ -187,18 +179,16 @@ private:
 
   /**
    */
-  inline void SetId( const QVariant& id );
+  inline void SetId(const QVariant& id);
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
-
 };
 
 } // end namespace 'mvd'
@@ -217,52 +207,34 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-TreeWidgetItem::ItemType
-TreeWidgetItem
-::GetType() const
+inline TreeWidgetItem::ItemType TreeWidgetItem::GetType() const
 {
-  return
-    type() < QTreeWidgetItem::UserType
-    ? TreeWidgetItem::ITEM_TYPE_NONE
-    : TreeWidgetItem::ItemType( type() );
+  return type() < QTreeWidgetItem::UserType ? TreeWidgetItem::ITEM_TYPE_NONE : TreeWidgetItem::ItemType(type());
 }
 
 /*****************************************************************************/
-inline
-QVariant
-TreeWidgetItem
-::GetId() const
+inline QVariant TreeWidgetItem::GetId() const
 {
-  return data( COLUMN_INDEX_ID, TreeWidgetItem::ITEM_ROLE_ID );
+  return data(COLUMN_INDEX_ID, TreeWidgetItem::ITEM_ROLE_ID);
 }
 
 /*****************************************************************************/
-inline
-void
-TreeWidgetItem
-::SetId( const QVariant& id )
+inline void TreeWidgetItem::SetId(const QVariant& id)
 {
-  setData( COLUMN_INDEX_ID, TreeWidgetItem::ITEM_ROLE_ID, id );
-  setText( COLUMN_INDEX_ID, id.toString() );
+  setData(COLUMN_INDEX_ID, TreeWidgetItem::ITEM_ROLE_ID, id);
+  setText(COLUMN_INDEX_ID, id.toString());
 }
 
 /*****************************************************************************/
-inline
-QString
-TreeWidgetItem
-::GetText() const
+inline QString TreeWidgetItem::GetText() const
 {
-  return text( COLUMN_INDEX_TEXT );
+  return text(COLUMN_INDEX_TEXT);
 }
 
 /*****************************************************************************/
-inline
-QString
-TreeWidgetItem
-::GetHash() const
+inline QString TreeWidgetItem::GetHash() const
 {
-  return text( COLUMN_INDEX_HASH );
+  return text(COLUMN_INDEX_HASH);
 }
 
 } // end namespace 'mvd'

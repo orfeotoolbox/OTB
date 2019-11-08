@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -66,15 +66,14 @@ namespace otb
  * \ingroup OTBDempsterShafer
  */
 template <class TInputImage, class TOutputImage, class TMaskImage = TOutputImage>
-class ITK_EXPORT DSFusionOfClassifiersImageFilter :
-  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT DSFusionOfClassifiersImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef DSFusionOfClassifiersImageFilter                    Self;
-  typedef itk::ImageToImageFilter<TInputImage, TOutputImage>  Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef DSFusionOfClassifiersImageFilter Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -83,27 +82,27 @@ public:
   itkTypeMacro(DSFusionOfClassifiersImageFilter, ImageToImageFilter);
 
   // TInputImage is expected to be a vector image
-  typedef TInputImage                                 InputImageType;
-  typedef typename InputImageType::ConstPointer       InputImageConstPointerType;
-  typedef typename InputImageType::InternalPixelType  ValueType;
-  typedef typename InputImageType::PixelType          PixelType;
-  typedef typename InputImageType::InternalPixelType  InternalPixelType;
+  typedef TInputImage                                InputImageType;
+  typedef typename InputImageType::ConstPointer      InputImageConstPointerType;
+  typedef typename InputImageType::InternalPixelType ValueType;
+  typedef typename InputImageType::PixelType         PixelType;
+  typedef typename InputImageType::InternalPixelType InternalPixelType;
 
   // TMaskImage is expected to be a mono band image
-  typedef TMaskImage                                  MaskImageType;
-  typedef typename MaskImageType::ConstPointer        MaskImageConstPointerType;
-  typedef typename MaskImageType::Pointer             MaskImagePointerType;
+  typedef TMaskImage                           MaskImageType;
+  typedef typename MaskImageType::ConstPointer MaskImageConstPointerType;
+  typedef typename MaskImageType::Pointer      MaskImagePointerType;
 
   // TOutputImage is expected to be a mono band image
-  typedef TOutputImage                                OutputImageType;
-  typedef typename OutputImageType::Pointer           OutputImagePointerType;
-  typedef typename OutputImageType::RegionType        OutputImageRegionType;
-  typedef typename OutputImageType::PixelType         LabelType;
+  typedef TOutputImage                         OutputImageType;
+  typedef typename OutputImageType::Pointer    OutputImagePointerType;
+  typedef typename OutputImageType::RegionType OutputImageRegionType;
+  typedef typename OutputImageType::PixelType  LabelType;
 
-  typedef double                                      MassType;
-  typedef typename std::map<LabelType, MassType>      LabelMassMapType;
-  typedef typename std::map<LabelType, unsigned int>  ClassifierHistogramType;
-  typedef typename std::vector<LabelMassMapType>      VectorOfMapOfMassesOfBeliefType;
+  typedef double MassType;
+  typedef typename std::map<LabelType, MassType>     LabelMassMapType;
+  typedef typename std::map<LabelType, unsigned int> ClassifierHistogramType;
+  typedef typename std::vector<LabelMassMapType> VectorOfMapOfMassesOfBeliefType;
 
 
   /** Set/Get the m_LabelForNoDataPixels */
@@ -121,17 +120,17 @@ public:
    * in the Output fused image.
    * \param mask The input mask.
    */
-  void SetInputMask(const MaskImageType * mask);
+  void SetInputMask(const MaskImageType* mask);
 
-  void SetInputMapsOfMassesOfBelief(const VectorOfMapOfMassesOfBeliefType * ptrVectorOfMapOfMassesOfBelief);
+  void SetInputMapsOfMassesOfBelief(const VectorOfMapOfMassesOfBeliefType* ptrVectorOfMapOfMassesOfBelief);
 
   /**
    * Get the input mask.
    * \return The mask.
    */
-  const MaskImageType * GetInputMask(void);
+  const MaskImageType* GetInputMask(void);
 
-  const VectorOfMapOfMassesOfBeliefType * GetInputMapsOfMassesOfBelief(void);
+  const VectorOfMapOfMassesOfBeliefType* GetInputMapsOfMassesOfBelief(void);
 
   const LabelType OptimizedDSMassCombination(PixelType vectorPixelValue);
 
@@ -140,7 +139,9 @@ protected:
   /** Constructor */
   DSFusionOfClassifiersImageFilter();
   /** Destructor */
-  ~DSFusionOfClassifiersImageFilter() override {}
+  ~DSFusionOfClassifiersImageFilter() override
+  {
+  }
 
   /** Generate output information */
   void GenerateOutputInformation() override;
@@ -152,21 +153,20 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  DSFusionOfClassifiersImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  DSFusionOfClassifiersImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  unsigned int                              m_NumberOfClassifiers;
-  ClassifierHistogramType                   m_Universe;
-  unsigned int                              m_NumberOfClassesInUniverse;
+  unsigned int            m_NumberOfClassifiers;
+  ClassifierHistogramType m_Universe;
+  unsigned int            m_NumberOfClassesInUniverse;
 
-  VectorOfMapOfMassesOfBeliefType           m_VectorOfMapMOBs;
-  std::vector<MassType>                     m_VectorOfUniverseMOBs;
+  VectorOfMapOfMassesOfBeliefType m_VectorOfMapMOBs;
+  std::vector<MassType>           m_VectorOfUniverseMOBs;
 
   /** No Data label for invalid pixels (when using a mask) */
-  LabelType                                 m_LabelForNoDataPixels;
+  LabelType m_LabelForNoDataPixels;
   /** Undecided label for pixels with NOT unique DS voting */
-  LabelType                                 m_LabelForUndecidedPixels;
-
+  LabelType m_LabelForUndecidedPixels;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

@@ -1,0 +1,251 @@
+AtmosphericRadiativeTerms (0x2ac9eb0)
+3 channels:
+Channel 0 : 
+  Intrinsic Atmospheric Reflectance     : 1
+  Shperical Albedo of the Atmosphere    : 1
+  Total Gaseous Transmission            : 1
+  Atmosphere Downward Transmittance     : 1
+  Atmosphere Upward Transmittance       : 1
+  Upward Diffuse Transmittance          : 1
+  Upward Direct Transmittance           : 1
+  Rayleigh Upward Diffuse Transmittance : 1
+  Aerosols Upward Diffuse Transmittance : 1
+  Wavelength           : 1
+Channel 1 : 
+  Intrinsic Atmospheric Reflectance     : 2
+  Shperical Albedo of the Atmosphere    : 2
+  Total Gaseous Transmission            : 2
+  Atmosphere Downward Transmittance     : 2
+  Atmosphere Upward Transmittance       : 2
+  Upward Diffuse Transmittance          : 2
+  Upward Direct Transmittance           : 2
+  Rayleigh Upward Diffuse Transmittance : 2
+  Aerosols Upward Diffuse Transmittance : 2
+  Wavelength           : 2
+Channel 2 : 
+  Intrinsic Atmospheric Reflectance     : 3
+  Shperical Albedo of the Atmosphere    : 3
+  Total Gaseous Transmission            : 3
+  Atmosphere Downward Transmittance     : 3
+  Atmosphere Upward Transmittance       : 3
+  Upward Diffuse Transmittance          : 3
+  Upward Direct Transmittance           : 3
+  Rayleigh Upward Diffuse Transmittance : 3
+  Aerosols Upward Diffuse Transmittance : 3
+  Wavelength           : 3
+
+
+
+ TESTING ACCESSOR OUT OF RANGE 
+
+AtmosphericRadiativeTerms (0x2ac9eb0)
+13 channels:
+Channel 0 : 
+  Intrinsic Atmospheric Reflectance     : 1
+  Shperical Albedo of the Atmosphere    : 1
+  Total Gaseous Transmission            : 1
+  Atmosphere Downward Transmittance     : 1
+  Atmosphere Upward Transmittance       : 1
+  Upward Diffuse Transmittance          : 1
+  Upward Direct Transmittance           : 1
+  Rayleigh Upward Diffuse Transmittance : 1
+  Aerosols Upward Diffuse Transmittance : 1
+  Wavelength           : 1
+Channel 1 : 
+  Intrinsic Atmospheric Reflectance     : 2
+  Shperical Albedo of the Atmosphere    : 2
+  Total Gaseous Transmission            : 2
+  Atmosphere Downward Transmittance     : 2
+  Atmosphere Upward Transmittance       : 2
+  Upward Diffuse Transmittance          : 2
+  Upward Direct Transmittance           : 2
+  Rayleigh Upward Diffuse Transmittance : 2
+  Aerosols Upward Diffuse Transmittance : 2
+  Wavelength           : 2
+Channel 2 : 
+  Intrinsic Atmospheric Reflectance     : 3
+  Shperical Albedo of the Atmosphere    : 3
+  Total Gaseous Transmission            : 3
+  Atmosphere Downward Transmittance     : 3
+  Atmosphere Upward Transmittance       : 3
+  Upward Diffuse Transmittance          : 3
+  Upward Direct Transmittance           : 3
+  Rayleigh Upward Diffuse Transmittance : 3
+  Aerosols Upward Diffuse Transmittance : 3
+  Wavelength           : 3
+Channel 3 : 
+  Intrinsic Atmospheric Reflectance     : 0.04
+  Shperical Albedo of the Atmosphere    : 4
+  Total Gaseous Transmission            : 0.95
+  Atmosphere Downward Transmittance     : 0.91
+  Atmosphere Upward Transmittance       : 0.94
+  Upward Diffuse Transmittance          : 0.09
+  Upward Direct Transmittance           : 0.85
+  Rayleigh Upward Diffuse Transmittance : 0.05
+  Aerosols Upward Diffuse Transmittance : 0.04
+  Wavelength           : 0
+Channel 4 : 
+  Intrinsic Atmospheric Reflectance     : 0.04
+  Shperical Albedo of the Atmosphere    : 0.09
+  Total Gaseous Transmission            : 0.95
+  Atmosphere Downward Transmittance     : 0.91
+  Atmosphere Upward Transmittance       : 0.94
+  Upward Diffuse Transmittance          : 0.09
+  Upward Direct Transmittance           : 0.85
+  Rayleigh Upward Diffuse Transmittance : 0.05
+  Aerosols Upward Diffuse Transmittance : 0.04
+  Wavelength           : 0
+Channel 5 : 
+  Intrinsic Atmospheric Reflectance     : 0.04
+  Shperical Albedo of the Atmosphere    : 0.09
+  Total Gaseous Transmission            : 5
+  Atmosphere Downward Transmittance     : 0.91
+  Atmosphere Upward Transmittance       : 0.94
+  Upward Diffuse Transmittance          : 0.09
+  Upward Direct Transmittance           : 0.85
+  Rayleigh Upward Diffuse Transmittance : 0.05
+  Aerosols Upward Diffuse Transmittance : 0.04
+  Wavelength           : 0
+Channel 6 : 
+  Intrinsic Atmospheric Reflectance     : 0.04
+  Shperical Albedo of the Atmosphere    : 0.09
+  Total Gaseous Transmission            : 0.95
+  Atmosphere Downward Transmittance     : 6
+  Atmosphere Upward Transmittance       : 0.94
+  Upward Diffuse Transmittance          : 0.09
+  Upward Direct Transmittance           : 0.85
+  Rayleigh Upward Diffuse Transmittance : 0.05
+  Aerosols Upward Diffuse Transmittance : 0.04
+  Wavelength           : 0
+Channel 7 : 
+  Intrinsic Atmospheric Reflectance     : 0.04
+  Shperical Albedo of the Atmosphere    : 0.09
+  Total Gaseous Transmission            : 0.95
+  Atmosphere Downward Transmittance     : 0.91
+  Atmosphere Upward Transmittance       : 7
+  Upward Diffuse Transmittance          : 0.09
+  Upward Direct Transmittance           : 0.85
+  Rayleigh Upward Diffuse Transmittance : 0.05
+  Aerosols Upward Diffuse Transmittance : 0.04
+  Wavelength           : 0
+Channel 8 : 
+  Intrinsic Atmospheric Reflectance     : 0.04
+  Shperical Albedo of the Atmosphere    : 0.09
+  Total Gaseous Transmission            : 0.95
+  Atmosphere Downward Transmittance     : 0.91
+  Atmosphere Upward Transmittance       : 0.94
+  Upward Diffuse Transmittance          : 8
+  Upward Direct Transmittance           : 0.85
+  Rayleigh Upward Diffuse Transmittance : 0.05
+  Aerosols Upward Diffuse Transmittance : 0.04
+  Wavelength           : 0
+Channel 9 : 
+  Intrinsic Atmospheric Reflectance     : 0.04
+  Shperical Albedo of the Atmosphere    : 0.09
+  Total Gaseous Transmission            : 0.95
+  Atmosphere Downward Transmittance     : 0.91
+  Atmosphere Upward Transmittance       : 0.94
+  Upward Diffuse Transmittance          : 0.09
+  Upward Direct Transmittance           : 9
+  Rayleigh Upward Diffuse Transmittance : 0.05
+  Aerosols Upward Diffuse Transmittance : 0.04
+  Wavelength           : 0
+Channel 10 : 
+  Intrinsic Atmospheric Reflectance     : 0.04
+  Shperical Albedo of the Atmosphere    : 0.09
+  Total Gaseous Transmission            : 0.95
+  Atmosphere Downward Transmittance     : 0.91
+  Atmosphere Upward Transmittance       : 0.94
+  Upward Diffuse Transmittance          : 0.09
+  Upward Direct Transmittance           : 0.85
+  Rayleigh Upward Diffuse Transmittance : 10
+  Aerosols Upward Diffuse Transmittance : 0.04
+  Wavelength           : 0
+Channel 11 : 
+  Intrinsic Atmospheric Reflectance     : 0.04
+  Shperical Albedo of the Atmosphere    : 0.09
+  Total Gaseous Transmission            : 0.95
+  Atmosphere Downward Transmittance     : 0.91
+  Atmosphere Upward Transmittance       : 0.94
+  Upward Diffuse Transmittance          : 0.09
+  Upward Direct Transmittance           : 0.85
+  Rayleigh Upward Diffuse Transmittance : 0.05
+  Aerosols Upward Diffuse Transmittance : 11
+  Wavelength           : 0
+Channel 12 : 
+  Intrinsic Atmospheric Reflectance     : 0.04
+  Shperical Albedo of the Atmosphere    : 0.09
+  Total Gaseous Transmission            : 0.95
+  Atmosphere Downward Transmittance     : 0.91
+  Atmosphere Upward Transmittance       : 0.94
+  Upward Diffuse Transmittance          : 0.09
+  Upward Direct Transmittance           : 0.85
+  Rayleigh Upward Diffuse Transmittance : 0.05
+  Aerosols Upward Diffuse Transmittance : 0.04
+  Wavelength           : 12
+
+
+
+ TESTING ACCESSOR 
+
+[1, 2, 3, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04]
+
+[1, 2, 3, 4, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09, 0.09]
+
+[1, 2, 3, 0.95, 0.95, 5, 0.95, 0.95, 0.95, 0.95, 0.95, 0.95, 0.95]
+
+[1, 2, 3, 0.91, 0.91, 0.91, 6, 0.91, 0.91, 0.91, 0.91, 0.91, 0.91]
+
+[1, 2, 3, 0.94, 0.94, 0.94, 0.94, 7, 0.94, 0.94, 0.94, 0.94, 0.94]
+
+[1, 2, 3, 0.09, 0.09, 0.09, 0.09, 0.09, 8, 0.09, 0.09, 0.09, 0.09]
+
+[1, 2, 3, 0.85, 0.85, 0.85, 0.85, 0.85, 0.85, 9, 0.85, 0.85, 0.85]
+
+[1, 2, 3, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 10, 0.05, 0.05]
+
+[1, 2, 3, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 0.04, 11, 0.04]
+
+[1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12]
+
+
+
+ TESTING ACCESSOR WITH INDEX
+
+1
+0.09
+5
+0.91
+0.94
+0.09
+0.85
+0.05
+0.04
+12
+
+AtmosphericRadiativeTermsSingleChannel (0x2aca470)
+  RTTI typeinfo:   otb::AtmosphericRadiativeTermsSingleChannel
+  Reference Count: 2
+  Modified Time: 41
+  Debug: Off
+  Object Name: 
+  Observers: 
+    none
+  Source: (none)
+  Source output name: (none)
+  Release Data: Off
+  Data Released: False
+  Global Release Data: Off
+  PipelineMTime: 0
+  UpdateMTime: 0
+  RealTimeStamp: 0 seconds 
+  Atmospheric Intrinsic Reflectance        : 0.04
+  Atmosphere Shperical Albedo              : 0.09
+  Total Gaseous Transmission               : 5
+  Atmospher Downward Transmittance         : 0.91
+  Atmospher Upward Transmittance           : 0.94
+  Upward Diffuse Transmittance             : 0.09
+  Upward Direct Transmittance              : 0.85
+  Upward Diffuse Transmittance for Rayleigh: 0.05
+  Upward Diffuse Transmittance for aerosols: 0.04
+

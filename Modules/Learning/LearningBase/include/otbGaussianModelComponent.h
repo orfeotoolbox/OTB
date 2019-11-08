@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -44,9 +44,8 @@ namespace Statistics
  * \ingroup OTBLearningBase
  */
 
-template<class TSample>
-class ITK_EXPORT GaussianModelComponent :
-  public ModelComponentBase<TSample>
+template <class TSample>
+class ITK_EXPORT GaussianModelComponent : public ModelComponentBase<TSample>
 {
 public:
   /**Standard class typedefs. */
@@ -60,16 +59,14 @@ public:
   itkTypeMacro(GaussianModelComponent, ModelComponentBase);
 
   /** Typedefs from the superclass */
-  typedef typename Superclass::MeasurementVectorType MeasurementVectorType;
-  typedef typename Superclass::MeasurementVectorSizeType
-  MeasurementVectorSizeType;
-  typedef typename Superclass::MembershipFunctionType MembershipFunctionType;
-  typedef typename Superclass::ParametersType         ParametersType;
+  typedef typename Superclass::MeasurementVectorType     MeasurementVectorType;
+  typedef typename Superclass::MeasurementVectorSizeType MeasurementVectorSizeType;
+  typedef typename Superclass::MembershipFunctionType    MembershipFunctionType;
+  typedef typename Superclass::ParametersType            ParametersType;
 
   /** Type of the membership function. Gaussian density function */
-  typedef itk::Statistics::GaussianMembershipFunction<MeasurementVectorType>
-  NativeMembershipFunctionType;
-  typedef typename NativeMembershipFunctionType::MeanVectorType  MeanVectorType;
+  typedef itk::Statistics::GaussianMembershipFunction<MeasurementVectorType> NativeMembershipFunctionType;
+  typedef typename NativeMembershipFunctionType::MeanVectorType              MeanVectorType;
 
   /** Types of the mean and the covariance calculator that will update
    *  this component's distribution parameters */
@@ -91,21 +88,23 @@ public:
 
 protected:
   GaussianModelComponent();
-  ~GaussianModelComponent() override {}
+  ~GaussianModelComponent() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void GenerateData() override;
 
 private:
-  GaussianModelComponent(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  GaussianModelComponent(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   typename NativeMembershipFunctionType::Pointer m_GaussianMembershipFunction;
   // TODO add a m_GaussianCumulativeFunction
   typename CovarianceEstimatorType::Pointer m_CovarianceEstimator;
 
-  MeanVectorType  m_Mean;
-  CovarianceType  m_Covariance;
+  MeanVectorType m_Mean;
+  CovarianceType m_Covariance;
 
 }; // end of class
 

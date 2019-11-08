@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -60,19 +60,15 @@ namespace otb
  *
  * \ingroup OTBLearningBase
  */
-template<class TInputImage, class TOutputImage>
-class ITK_EXPORT SEMClassifier
-  : public itk::Statistics::SampleClassifierFilter<
-      typename itk::Statistics::ListSample<typename TInputImage::PixelType> >
+template <class TInputImage, class TOutputImage>
+class ITK_EXPORT SEMClassifier : public itk::Statistics::SampleClassifierFilter<typename itk::Statistics::ListSample<typename TInputImage::PixelType>>
 {
 public:
   /** Standard class typedef*/
-  typedef SEMClassifier Self;
-  typedef itk::Statistics::SampleClassifierFilter<
-      typename itk::Statistics::ListSample<typename TInputImage::PixelType> >
-  Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef SEMClassifier                                                                                                  Self;
+  typedef itk::Statistics::SampleClassifierFilter<typename itk::Statistics::ListSample<typename TInputImage::PixelType>> Superclass;
+  typedef itk::SmartPointer<Self>                                                                                        Pointer;
+  typedef itk::SmartPointer<const Self>                                                                                  ConstPointer;
 
   /** Standard macros */
   itkTypeMacro(SEMClassifier, itk::Object);
@@ -115,26 +111,26 @@ public:
   typedef std::vector<ProbaVectorType> ProbaByClassVectorType;
 
   /** Sets the target data that will be classified by this */
-  void SetSample(const TInputImage * sample);
+  void SetSample(const TInputImage* sample);
 
   /** Returns the target data */
   const TInputImage* GetSample() const;
-  SampleType * GetSampleList() const;
+  SampleType*        GetSampleList() const;
 
   /** Set/Gets the initial proportion values. The size of proportion
    * vector should be same as the number of component (or classes).
    * Choose between SetInitialProportions, SetClassLabels or
    * SetNumberOfComponents */
   void SetInitialProportions(ProportionVectorType& proportions);
-  itkGetConstReferenceMacro(InitialProportions,ProportionVectorType);	
+  itkGetConstReferenceMacro(InitialProportions, ProportionVectorType);
 
   /** Gets the result proportion values */
-  itkGetConstReferenceMacro(Proportions,ProportionVectorType);	
+  itkGetConstReferenceMacro(Proportions, ProportionVectorType);
 
   /** Set/Gets the initial segmentation. the size of the vector should be
    * the same as the number of samples (length of MeasurementVector) */
-  void SetClassLabels(OutputType * labels);
-  void SetClassLabels(TOutputImage * imgLabels);
+  void SetClassLabels(OutputType* labels);
+  void SetClassLabels(TOutputImage* imgLabels);
   ClassLabelVectorType& GetClassLabels();
 
   /** Set/Gets the maximum number of iterations. When the optimization
@@ -171,16 +167,18 @@ public:
   itkGetMacro(TerminationCode, TerminationCodeType);
 
   /* Return the classification result (as a standard classification result) */
-  OutputType * GetOutput();
+  OutputType* GetOutput();
 
   /* Return the classification result (as an image) */
-  TOutputImage * GetOutputImage();
-  
+  TOutputImage* GetOutputImage();
+
   void Modified() const override;
 
 protected:
   SEMClassifier();
-  ~SEMClassifier() override {}
+  ~SEMClassifier() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Initialize the first segmentation, either randomly or by using
@@ -199,8 +197,8 @@ protected:
 
 private:
   /** Target data sample pointer*/
-  const TInputImage* m_Sample;
-  int                m_NbSamples;
+  const TInputImage*           m_Sample;
+  int                          m_NbSamples;
   typename SampleType::Pointer m_SampleList;
 
   int    m_MaximumIteration;
@@ -209,18 +207,18 @@ private:
   double m_TerminationThreshold;
   int    m_Neighborhood;
 
-  TerminationCodeType    m_TerminationCode;
-  mutable ComponentVectorType    m_ComponentVector;
-  ProportionVectorType   m_InitialProportions;
-  ProportionVectorType   m_Proportions;
-  ProbaByClassVectorType m_Proba;
-  ClassLabelVectorType   m_ClassLabels;
+  TerminationCodeType         m_TerminationCode;
+  mutable ComponentVectorType m_ComponentVector;
+  ProportionVectorType        m_InitialProportions;
+  ProportionVectorType        m_Proportions;
+  ProbaByClassVectorType      m_Proba;
+  ClassLabelVectorType        m_ClassLabels;
 
-  int m_ExternalLabels;
+  int         m_ExternalLabels;
   mutable int m_ComponentDeclared;
 
   typename TOutputImage::Pointer m_OutputImage;
-  typename OutputType::Pointer m_Output;
+  typename OutputType::Pointer   m_Output;
 }; // end of class
 
 } // end of namespace

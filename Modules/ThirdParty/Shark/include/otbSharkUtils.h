@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,8 +30,10 @@
 #pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wsign-compare"
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wheader-guard"
+#pragma clang diagnostic ignored "-Wexpansion-to-defined"
 #endif
 #endif
 #include "otb_shark.h"
@@ -133,13 +135,18 @@ template <class T> void ListSampleToSharkVector(const T * listSample, std::vecto
 }
 
 /** Shark assumes that labels are 0 ... (nbClasses-1). This function modifies the labels contained in the input vector and returns a vector with size = nbClasses which allows the translation from the normalised labels to the new ones oldLabel = dictionary[newLabel].
+When we want to generate the image containing the probability for each class, we need to ensure that the probabilities are in the correct order wrt the incoming labels. We therefore sort the labels before building the encoding.
 */
 template <typename T> void NormalizeLabelsAndGetDictionary(std::vector<T>& labels, 
                                                            std::vector<T>& dictionary)
 {
+  std::vector<T> sorted_labels = labels;
+  std::sort(std::begin(sorted_labels), std::end(sorted_labels));
+  auto last = std::unique(std::begin(sorted_labels), std::end(sorted_labels));
+  sorted_labels.erase(last, std::end(sorted_labels));
   std::unordered_map<T, T> dictMap;
   T labelCount{0};
-  for(const auto& l : labels)
+  for(const auto& l : sorted_labels)
     {
     if(dictMap.find(l)==dictMap.end())
       dictMap.insert({l, labelCount++});

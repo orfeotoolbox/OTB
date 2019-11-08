@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,6 +22,7 @@
 #define otbScalarImageToAdvancedTexturesFilter_h
 
 #include "otbGreyLevelCooccurrenceIndexedList.h"
+#include "itkMacro.h"
 #include "itkImageToImageFilter.h"
 
 namespace otb
@@ -43,7 +44,7 @@ namespace otb
  * window. :(where each element in GLCIL is a pair of pixel index and it's
  * frequency, $ g(i, j) $ is the frequency value of the pair having index is i, j).
  *
- * "Mean" \f$ = \sum_{i, j}i g(i, j) \f$
+ * "Mean" \f$ = f_{mean} = \sum_{i, j}i g(i, j) \f$
  *
  * "Sum of squares: Variance" \f$ = f_4 = \sum_{i, j}(i - \mu)^2 g(i, j) \f$
  *
@@ -55,22 +56,23 @@ namespace otb
  *
  * "Sum Entropy" \f$= f_8 = -\sum_{i}g_{x+y}(i) log (g_{x+y}(i)) \f$
  *
- * "Difference variance" \f$ = f_10 = variance of g_{x-y}(i) \f$
+ * "Difference variance" \f$ = f_{10} = variance of g_{x-y}(i) \f$
  *
- * "Difference entropy" \f$ = f_11 = -\sum_{i}g_{x-y}(i) log (g_{x-y}(i)) \f$
+ * "Difference entropy" \f$ = f_{11} = -\sum_{i}g_{x-y}(i) log (g_{x-y}(i)) \f$
  *
- * "Information Measures of Correlation IC1" \f$ = f_12 = \frac{f_9 - HXY1}{H} \f$
+ * "Information Measures of Correlation IC1" \f$ = f_{12} = \frac{f_9 - HXY1}{H} \f$
  *
- * "Information Measures of Correlation IC2" \f$ = f_13 = \sqrt{1 - \exp{-2}|HXY2 - f_9|} \f$
+ * "Information Measures of Correlation IC2" \f$ = f_{13} = \sqrt{1 - \exp{-2}|HXY2 - f_9|} \f$
  *
  * Above, \f$ \mu =  \f$ (weighted pixel average) \f$ = \sum_{i, j}i \cdot g(i, j) =
- * \sum_{i, j}j \cdot g(i, j) \f$ (due to matrix summetry), and
+ * \sum_{i, j}j \cdot g(i, j) \f$ (due to matrix simmetry), and
  *
- * \f$ \g_{x+y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i+j=k \f$ and \f$ k = 2, 3, .., 2N_[g}  \f$ and
+ * \f$ g_{x+y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i+j=k \f$ and \f$ k = 2, 3, .., 2N_{g}  \f$ and
  *
- * \f$ \g_{x-y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i-j=k \f$ and \f$ k = 0, 1, .., N_[g}-1  \f$
+ * \f$ g_{x-y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i-j=k \f$ and \f$ k = 0, 1, .., N_{g}-1  \f$
+ * \f$N_{g}\f$ : Number of distinct gray levels in the quantized image.
  *
- * Print references:
+ * References:
  *
  * Haralick, R.M., K. Shanmugam and I. Dinstein. 1973.  Textural Features for
  * Image Classification. IEEE Transactions on Systems, Man and Cybernetics.
@@ -99,16 +101,15 @@ namespace otb
  *
  * \ingroup OTBTextures
  */
-template<class TInpuImage, class TOutputImage>
-class ScalarImageToAdvancedTexturesFilter : public itk::ImageToImageFilter
-  <TInpuImage, TOutputImage>
+template <class TInpuImage, class TOutputImage>
+class ScalarImageToAdvancedTexturesFilter : public itk::ImageToImageFilter<TInpuImage, TOutputImage>
 {
 public:
   /** Standard class typedefs */
-  typedef ScalarImageToAdvancedTexturesFilter               Self;
+  typedef ScalarImageToAdvancedTexturesFilter Self;
   typedef itk::ImageToImageFilter<TInpuImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through the object factory */
   itkNewMacro(Self);
@@ -127,16 +128,16 @@ public:
   typedef typename OutputImageType::Pointer    OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputRegionType;
 
-  typedef GreyLevelCooccurrenceIndexedList< InputPixelType >   CooccurrenceIndexedListType;
-  typedef typename CooccurrenceIndexedListType::Pointer       CooccurrenceIndexedListPointerType;
-  typedef typename CooccurrenceIndexedListType::ConstPointer  CooccurrenceIndexedListConstPointerType;
-  typedef typename CooccurrenceIndexedListType::IndexType              CooccurrenceIndexType;
-  typedef typename CooccurrenceIndexedListType::PixelValueType         PixelValueType;
-  typedef typename CooccurrenceIndexedListType::RelativeFrequencyType  RelativeFrequencyType;
-  typedef typename CooccurrenceIndexedListType::VectorType             VectorType;
+  typedef GreyLevelCooccurrenceIndexedList<InputPixelType>            CooccurrenceIndexedListType;
+  typedef typename CooccurrenceIndexedListType::Pointer               CooccurrenceIndexedListPointerType;
+  typedef typename CooccurrenceIndexedListType::ConstPointer          CooccurrenceIndexedListConstPointerType;
+  typedef typename CooccurrenceIndexedListType::IndexType             CooccurrenceIndexType;
+  typedef typename CooccurrenceIndexedListType::PixelValueType        PixelValueType;
+  typedef typename CooccurrenceIndexedListType::RelativeFrequencyType RelativeFrequencyType;
+  typedef typename CooccurrenceIndexedListType::VectorType            VectorType;
 
-  typedef typename VectorType::iterator                    VectorIteratorType;
-  typedef typename VectorType::const_iterator              VectorConstIteratorType;
+  typedef typename VectorType::iterator       VectorIteratorType;
+  typedef typename VectorType::const_iterator VectorConstIteratorType;
 
   /** Set the radius of the window on which textures will be computed */
   itkSetMacro(Radius, SizeType);
@@ -180,34 +181,34 @@ public:
   itkGetMacro(SubsampleOffset, OffsetType);
 
   /** Get the mean output image */
-  OutputImageType * GetMeanOutput();
+  OutputImageType* GetMeanOutput();
 
   /** Get the variance output image */
-  OutputImageType * GetVarianceOutput();
+  OutputImageType* GetVarianceOutput();
 
   /** Get the dissimilarity output image */
-  OutputImageType * GetDissimilarityOutput();
+  OutputImageType* GetDissimilarityOutput();
 
   /** Get the sum average output image */
-  OutputImageType * GetSumAverageOutput();
+  OutputImageType* GetSumAverageOutput();
 
   /** Get the sum of variances output image */
-  OutputImageType * GetSumVarianceOutput();
+  OutputImageType* GetSumVarianceOutput();
 
   /** Get the sum of entropies output image */
-  OutputImageType * GetSumEntropyOutput();
+  OutputImageType* GetSumEntropyOutput();
 
   /** Get the difference of entropies output image */
-  OutputImageType * GetDifferenceEntropyOutput();
+  OutputImageType* GetDifferenceEntropyOutput();
 
   /** Get the difference of variance output image */
-  OutputImageType * GetDifferenceVarianceOutput();
+  OutputImageType* GetDifferenceVarianceOutput();
 
   /** Get the IC1 image */
-  OutputImageType * GetIC1Output();
+  OutputImageType* GetIC1Output();
 
   /** Get the IC2 output image */
-  OutputImageType * GetIC2Output();
+  OutputImageType* GetIC2Output();
 
 protected:
   /** Constructor */
@@ -225,7 +226,7 @@ protected:
 
 private:
   ScalarImageToAdvancedTexturesFilter(const Self&) = delete;
-  void operator =(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Convenient method to compute union of 2 regions */
   static OutputRegionType RegionUnion(const OutputRegionType& region1, const OutputRegionType& region2);

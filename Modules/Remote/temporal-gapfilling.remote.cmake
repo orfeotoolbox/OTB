@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -26,6 +26,5 @@ A more detailed description can be found on the project website:
 https://gitlab.orfeo-toolbox.org/jinglada/temporalgapfilling
 "
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/temporalgapfilling.git
-  # Commit on develop branch which includes patches for Windows support
-  GIT_TAG 4fc4a71acf7b9b051cda5a3b950de2cdb9d26287
+  GIT_TAG master
 )

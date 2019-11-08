@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,11 +41,10 @@
 #endif
 
 #include "itkDataObject.h"
-#include "itkMacro.h" // itkNewMacro
+#include "itkMacro.h"         // itkNewMacro
 #include "itkObjectFactory.h" // that should have been included by itkMacro.h
 
 #include "otbOGRLayerWrapper.h"
-#include "otbOGRVersionProxy.h"
 #include "otbOGRExtendedFilenameToOptions.h"
 
 class OGRLayer;
@@ -53,7 +52,10 @@ class OGRSpatialReference;
 class OGRGeometry;
 // #include "ogr_core.h" // OGRwkbGeometryType, included from Layer
 
-namespace otb { namespace ogr {
+namespace otb
+{
+namespace ogr
+{
 /**\ingroup gGeometry
  * \class DataSource
  * \brief Collection of geometric objects.
@@ -76,10 +78,10 @@ namespace otb { namespace ogr {
  *
  * \ingroup OTBGdalAdapters
  */
- #include "OTBGdalAdaptersExport.h"
- 
-class OTBGdalAdapters_EXPORT DataSource : public itk::DataObject , public boost::noncopyable
-  {
+#include "OTBGdalAdaptersExport.h"
+
+class OTBGdalAdapters_EXPORT DataSource : public itk::DataObject, public boost::noncopyable
+{
 public:
   /**\name Standard ITK typedefs */
   //@{
@@ -113,33 +115,35 @@ public:
    * \note Read/Write mode should have been <tt>read | write</tt>, but actually
    * OGR data source are always at least in read mode.
    */
-  struct Modes {
+  struct Modes
+  {
     enum type
     {
       Invalid,
-      Read, ///< Open data source in read-only mode
-      Overwrite, ///< Open data source in overwrite mode
-                 ///<
-                 ///< Data source is deleted if it exists
-                 ///< and a new data source is created
-                 ///< Warning : this can delete a whole database
-                 ///<           if the existing datasource contains a list of layers
-      Update_LayerOverwrite, ///< Open data source in update mode with layers being overwritten
-                             ///<
-                             ///< When requesting a layer, it is opened in overwrite mode
-                             ///< with OVERWRITE=YES creation option.
-                             ///< If the layer does not exists, it is created on the fly
-      Update_LayerUpdate,    ///< Open data source in update mode with layers being updated
-                             ///<
-                             ///< New geometries are added to existing layers.
-                             ///< If the layer does not exists, it is created on the fly
-      Update_LayerCreateOnly,///< Open data source in update mode with layers being created only
-                             ///<
-                             ///< This option prevents the loss of data.
-                             ///< One can open an existing database with existing layer, and
-                             ///< and add new layers to it.
-                             ///< Only non-existing layers can be requested
-      MAX__ };
+      Read,                   ///< Open data source in read-only mode
+      Overwrite,              ///< Open data source in overwrite mode
+                              ///<
+                              ///< Data source is deleted if it exists
+                              ///< and a new data source is created
+                              ///< Warning : this can delete a whole database
+                              ///<           if the existing datasource contains a list of layers
+      Update_LayerOverwrite,  ///< Open data source in update mode with layers being overwritten
+                              ///<
+                              ///< When requesting a layer, it is opened in overwrite mode
+                              ///< with OVERWRITE=YES creation option.
+                              ///< If the layer does not exists, it is created on the fly
+      Update_LayerUpdate,     ///< Open data source in update mode with layers being updated
+                              ///<
+                              ///< New geometries are added to existing layers.
+                              ///< If the layer does not exists, it is created on the fly
+      Update_LayerCreateOnly, ///< Open data source in update mode with layers being created only
+                              ///<
+                              ///< This option prevents the loss of data.
+                              ///< One can open an existing database with existing layer, and
+                              ///< and add new layers to it.
+                              ///< Only non-existing layers can be requested
+      MAX__
+    };
   };
 
   /**
@@ -164,11 +168,11 @@ public:
    * \note No condition is assumed on the non-nullity of \c source.
    * \see \c DataSource(GDALDataset *)
    */
-  static Pointer New(ogr::version_proxy::GDALDatasetType * sourcemode, Modes::type mode = Modes::Read , const std::vector< std::string > & layerOptions = std::vector< std::string >() );
-  //@}
+  static Pointer New(GDALDataset* sourcemode, Modes::type mode = Modes::Read, const std::vector<std::string>& layerOptions = std::vector<std::string>());
+//@}
 
-  /**\name Projection Reference property */
-  //@{
+/**\name Projection Reference property */
+//@{
 #if 0
   void SetProjectionRef(const std::string& projectionRef);
   std::string GetProjectionRef() const;
@@ -198,10 +202,12 @@ public:
  *
  * \ingroup OTBGdalAdapters
    */
-  template <class Value> class layer_iter
-    : public boost::iterator_facade<layer_iter<Value>, Value, boost::random_access_traversal_tag, Value>
+  template <class Value>
+  class layer_iter : public boost::iterator_facade<layer_iter<Value>, Value, boost::random_access_traversal_tag, Value>
+  {
+    struct enabler
     {
-    struct enabler {};
+    };
 
     /** Const-synchronized type of the \c DataSource container.
      * \internal
@@ -216,40 +222,46 @@ public:
      * So here is the hard-coded result of what \c boost::copy_const would have
      * given in order to avoid any licensing issue.
      */
-    typedef typename boost::mpl::if_ <boost::is_const<Value> , otb::ogr::DataSource const , otb::ogr::DataSource >::type
-      container_type;
+    typedef typename boost::mpl::if_<boost::is_const<Value>, otb::ogr::DataSource const, otb::ogr::DataSource>::type container_type;
+
   public:
-    layer_iter(container_type & datasource, size_t index);
+    layer_iter(container_type& datasource, size_t index);
     layer_iter();
 
-    template <class OtherValue> layer_iter(
-      layer_iter<OtherValue> const& other,
-      typename boost::enable_if<boost::is_convertible<OtherValue*,Value*>
-      , enabler
-      >::type = enabler()
-    );
+    template <class OtherValue>
+    layer_iter(layer_iter<OtherValue> const& other, typename boost::enable_if<boost::is_convertible<OtherValue*, Value*>, enabler>::type = enabler());
+
   private:
     friend class boost::iterator_core_access;
-    template <class> friend class layer_iter;
+    template <class>
+    friend class layer_iter;
 
-    template <class OtherValue> bool equal(layer_iter<OtherValue> const& other) const;
-    void increment();
+    template <class OtherValue>
+    bool equal(layer_iter<OtherValue> const& other) const;
+    void  increment();
     Value dereference() const;
 
-    container_type * m_DataSource;
-    size_t           m_index;
-    };
+    container_type* m_DataSource;
+    size_t          m_index;
+  };
 
-  template <class> friend class layer_iter;
-  typedef layer_iter<Layer      > iterator;
+  template <class>
+  friend class layer_iter;
+  typedef layer_iter<Layer>       iterator;
   typedef layer_iter<Layer const> const_iterator;
 
-  const_iterator begin () const { return cbegin(); }
-  const_iterator end   () const { return cend  (); }
+  const_iterator begin() const
+  {
+    return cbegin();
+  }
+  const_iterator end() const
+  {
+    return cend();
+  }
   const_iterator cbegin() const;
-  const_iterator cend  () const;
-  iterator       begin ();
-  iterator       end   ();
+  const_iterator cend() const;
+  iterator       begin();
+  iterator       end();
   //@}
 
   /** Returns the number of elements in the Data Source.
@@ -273,7 +285,7 @@ public:
    *  layer SRS)
    *  \throw itk::ExceptionObject if the layers extents can not be retrieved.
    */
-  std::string GetGlobalExtent(double & ulx, double & uly, double & lrx, double & lry, bool force = false) const;
+  std::string GetGlobalExtent(double& ulx, double& uly, double& lrx, double& lry, bool force = false) const;
 
   /** Retrieves the union of the extents of all layers.
    *  \param[in] force Force computation of layers extents if not available. May
@@ -283,7 +295,7 @@ public:
    *  \return the extent of all layers
    *  \throw itk::ExceptionObject if the layers extents can not be retrieved.
    */
-  OGREnvelope GetGlobalExtent(bool force = false, std::string * outwkt=nullptr) const;
+  OGREnvelope GetGlobalExtent(bool force = false, std::string* outwkt = nullptr) const;
 
   /** Grafts data and information from one data source to another.
    * \deprecated \c OGRLayer has an embedded input iterator. As a consequence,
@@ -293,7 +305,7 @@ public:
    * meta information of another data source and use the same underlying \c
    * GDALDataset.
    */
-  void Graft(const itk::DataObject *data) override;
+  void Graft(const itk::DataObject* data) override;
 
   /**
    * Resets current data source with the one in parameter.
@@ -301,7 +313,7 @@ public:
    * \throw None
    * \post Assumes ownership of the \c source.
    */
-  void Reset(ogr::version_proxy::GDALDatasetType * source);
+  void Reset(GDALDataset* source);
 
   /**\name Layers modification */
   //@{
@@ -328,11 +340,8 @@ public:
    * std::vector<std::string>.
    * \sa \c GDALDataset::CreateLayer()
    */
-  Layer CreateLayer(
-    std::string        const& name,
-    OGRSpatialReference     * poSpatialRef = nullptr,
-    OGRwkbGeometryType        eGType = wkbUnknown,
-    std::vector<std::string> const& papszOptions = std::vector<std::string>());
+  Layer CreateLayer(std::string const& name, OGRSpatialReference* poSpatialRef = nullptr, OGRwkbGeometryType eGType = wkbUnknown,
+                    std::vector<std::string> const& papszOptions = std::vector<std::string>());
 
   /**
    * Deletes the i-th layer from the data source.
@@ -367,10 +376,7 @@ public:
    * std::vector<std::string>.
    * \sa \c GDALDataset::CopyLayer()
    */
-  Layer CopyLayer(
-    Layer            & srcLayer,
-    std::string const& newName,
-    std::vector<std::string> const& papszOptions = std::vector<std::string>() );
+  Layer CopyLayer(Layer& srcLayer, std::string const& newName, std::vector<std::string> const& papszOptions = std::vector<std::string>());
   //@}
 
   /**\name Layers access
@@ -392,7 +398,7 @@ public:
    * \note Use \c GetLayerUnchecked() if invalid indices are programming
    * errors, or if null layers are to be expected.
    */
-  Layer       GetLayer(size_t i);
+  Layer GetLayer(size_t i);
   /**\copydoc otb::ogr::DataSource::GetLayer(size_t)
   */
   Layer const GetLayer(size_t i) const;
@@ -405,7 +411,7 @@ public:
    * \note Use \c GetLayerChecked(std::string const&) if you'd rather have
    * an exception instead of testing whether the layer obtained is valid.
    */
-  Layer       GetLayer(std::string const& name);
+  Layer GetLayer(std::string const& name);
   /**\copydoc otb::ogr::DataSource::GetLayer(std::string const&)
   */
   Layer const GetLayer(std::string const& name) const;
@@ -433,7 +439,7 @@ public:
    * \note Use \c GetLayer(std::string const&) if you'd rather test the
    * obtained layer instead of catching an exception.
    */
-  Layer       GetLayerChecked(std::string const& name);
+  Layer GetLayerChecked(std::string const& name);
   /**\copydoc otb::ogr::DataSource::GetLayerChecked(std::string const&)
   */
   Layer const GetLayerChecked(std::string const& name) const;
@@ -457,28 +463,27 @@ public:
    * GDALDataset::ReleaseResultSet().
    * \sa \c GDALDataset::ExecuteSQL()
    */
-  Layer ExecuteSQL(
-    std::string const& statement,
-    OGRGeometry *      poSpatialFilter,
-    char        const* pszDialect);
+  Layer ExecuteSQL(std::string const& statement, OGRGeometry* poSpatialFilter, char const* pszDialect);
 
   //@}
 
 
-  struct boolean{ int i; };
+  struct boolean
+  {
+    int i;
+  };
   /** Can the data source be used (ie not null).
    *
    * Hack to provide a boolean operator that is convertible only to a
    * boolean expression to be used in \c if tests.
    * \see <em>Imperfect C++</em>, Matthew Wilson, Addisson-Welsey, par 24.6
    */
-  operator int boolean ::* () const {
+  operator int boolean::*() const
+  {
     return m_DataSource ? &boolean::i : nullptr;
-    }
+  }
 
   /** Flushes all changes to disk.
-   * \throw itd::ExceptionObject in case the flush operation failed.
-   * \sa \c GDALDataset::SyncToDisk()
    */
   void SyncToDisk();
 
@@ -497,11 +502,11 @@ public:
    * \warning You must under no circumstance try to delete the \c GDALDataset
    * obtained this way.
    */
-    ogr::version_proxy::GDALDatasetType & ogr();
+  GDALDataset& ogr();
 
-    void SetLayerCreationOptions( const std::vector< std::string > & options );
-    void AddLayerCreationOptions( std::vector< std::string > options );
-    const std::vector< std::string > & GetLayerCreationOptions() const ;
+  void SetLayerCreationOptions(const std::vector<std::string>& options);
+  void AddLayerCreationOptions(std::vector<std::string> options);
+  const std::vector<std::string>& GetLayerCreationOptions() const;
 
 protected:
   /** Default constructor.
@@ -517,7 +522,7 @@ protected:
   /** Init constructor.
    * \post The newly constructed object owns the \c source parameter.
    */
-  DataSource(ogr::version_proxy::GDALDatasetType * source, Modes::type mode , const std::vector< std::string > & layerOption = std::vector< std::string >() );
+  DataSource(GDALDataset* source, Modes::type mode, const std::vector<std::string>& layerOption = std::vector<std::string>());
   /** Destructor.
    * \post The \c GDALDataset owned is released (if not null).
    */
@@ -554,12 +559,13 @@ private:
   std::string GetDatasetDescription() const;
 
 private:
-  ogr::version_proxy::GDALDatasetType *m_DataSource;
-  std::vector< std::string > m_LayerOptions;
-  Modes::type    m_OpenMode;
-  int            m_FirstModifiableLayerID;
-  }; // end class DataSource
-} } // end namespace otb::ogr
+  GDALDataset*             m_DataSource;
+  std::vector<std::string> m_LayerOptions;
+  Modes::type              m_OpenMode;
+  int                      m_FirstModifiableLayerID;
+}; // end class DataSource
+}
+} // end namespace otb::ogr
 
 #if 0
 // Either this, or inheriting from noncopyable is required for DataSource to be

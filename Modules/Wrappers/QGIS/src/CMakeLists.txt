@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -27,6 +27,8 @@ add_custom_command(TARGET otbQgisDescriptor PRE_BUILD
   COMMAND "${CMAKE_COMMAND}" "-E" "make_directory"   "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/"
   )
 
+file(RELATIVE_PATH app_location ${OTB_BINARY_DIR} ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/otb/applications)
+
 set(app_names ${OTB_APPLICATIONS_NAME_LIST})
 list(REMOVE_ITEM app_names "TestApplication")
 list(REMOVE_ITEM app_names "ApplicationExample")
@@ -44,9 +46,9 @@ foreach(app_name ${app_names})
   set(dfile "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/${app_name}.txt")
   add_custom_command(OUTPUT "${dfile}"
     COMMAND ${generate_descriptor_cmd}
-    "${app_name}" "${OTB_BINARY_DIR}/${OTB_INSTALL_APP_DIR}" "${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/"
+    "${app_name}" "${app_location}" "./${OTB_INSTALL_DATA_DIR}/description/"
     WORKING_DIRECTORY ${OTB_BINARY_DIR}
-    COMMENT "./bin/otbQgisDescriptor ${app_name} ./${OTB_INSTALL_APP_DIR} ./${OTB_INSTALL_DATA_DIR}/description/"
+    COMMENT "./bin/otbQgisDescriptor ${app_name} ${app_location} ./${OTB_INSTALL_DATA_DIR}/description/"
     VERBATIM)
   list(APPEND dfiles "${dfile}")
 endforeach()

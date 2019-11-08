@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,8 +23,10 @@
 #define otbStandardOneLineFilterWatcher_h
 
 #include <iosfwd>
+#include <memory>
 
 #include "otbFilterWatcherBase.h"
+#include "otbStandardOutputPrintCallback.h"
 
 namespace otb
 {
@@ -46,25 +48,27 @@ namespace otb
  *  StandardOneLineFilterWatcher watcher(thresholdFilter, "Threshold");
  *  \endcode
  *
+ *  \see otb::StandardOutputPrintCallback
  *  \see itk::SimpleFilterWatcher
  *  \see otb::fltkFilterWatcher
  *
  * \ingroup OTBCommon
  */
-class OTBCommon_EXPORT StandardOneLineFilterWatcher : public FilterWatcherBase
+template <class PrintCallbackType = StandardOutputPrintCallback>
+class OTBCommon_EXPORT_TEMPLATE StandardOneLineFilterWatcher : public FilterWatcherBase
 {
 public:
-
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
-  StandardOneLineFilterWatcher(itk::ProcessObject* process,
-                        const char *comment = "");
+  StandardOneLineFilterWatcher(itk::ProcessObject* process, const char* comment = "");
 
-  StandardOneLineFilterWatcher(itk::ProcessObject* process,
-                        const std::string& comment = "");
+  StandardOneLineFilterWatcher(itk::ProcessObject* process, const std::string& comment = "");
 
   /** Default constructor */
   StandardOneLineFilterWatcher();
+
+  /** Destrucotr */
+  ~StandardOneLineFilterWatcher() override = default;
 
   /** Get/Set number of stars */
   void SetStars(int count)
@@ -76,8 +80,13 @@ public:
     return m_StarsCount;
   }
 
-protected:
+  /** Set the callback class */
+  void SetCallback(PrintCallbackType* callback)
+  {
+    m_Callback = callback;
+  }
 
+protected:
   /** Callback method to show the ProgressEvent */
   void ShowProgress() override;
 
@@ -88,13 +97,31 @@ protected:
   void EndFilter() override;
 
 private:
-
-  /** Stars coutning */
+  /** Stars counting */
   int m_StarsCount;
 
+  /** Current number of stars, we keep track of this to avoid reprinting the
+   * progress if it hasn't changed */
   int m_CurrentNbStars;
+
+  /** If the output is not interactive (e.g. it is redirected to a file), it
+   * is buffered and only written at the end of the processing */
+  std::string m_Buffer;
+
+  /** The point to the callback used for printing. It is set to the default
+   * callback on construction and can be changed later using the setter.
+   * Delete will not be called on this pointer. */
+  PrintCallbackType* m_Callback;
+
+  /** A default callback created in the constructor and deleted in the
+   * destructor. */
+  std::shared_ptr<PrintCallbackType> m_DefaultCallback;
 };
 
 } // end namespace otb
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbStandardOneLineFilterWatcher.hxx"
+#endif
 
 #endif

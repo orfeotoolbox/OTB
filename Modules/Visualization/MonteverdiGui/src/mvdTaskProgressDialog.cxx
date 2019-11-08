@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -67,14 +67,8 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-TaskProgressDialog
-::TaskProgressDialog( BackgroundTask* task,
-		      QWidget* p,
-		      Qt::WindowFlags flags ):
-  QProgressDialog( p, flags ),
-  m_BackgroundTask( task ),
-  m_Object( NULL ),
-  m_Exception()
+TaskProgressDialog::TaskProgressDialog(BackgroundTask* task, QWidget* p, Qt::WindowFlags flags)
+  : QProgressDialog(p, flags), m_BackgroundTask(task), m_Object(NULL), m_Exception()
 {
   // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
   //
@@ -83,39 +77,25 @@ TaskProgressDialog
   //
   // m_BackgroundTask->setParent( this );
 
-  QObject::connect(
-    task->GetWorker(), SIGNAL( ProgressTextChanged( const QString& ) ),
-    // to:
-    this, SLOT( setLabelText( const QString& ) )
-  );
+  QObject::connect(task->GetWorker(), SIGNAL(ProgressTextChanged(const QString&)),
+                   // to:
+                   this, SLOT(setLabelText(const QString&)));
 
-  QObject::connect(
-    task->GetWorker(), SIGNAL( ProgressValueChanged( int ) ),
-    // to:
-    this, SLOT( setValue( int ) )
-  );
+  QObject::connect(task->GetWorker(), SIGNAL(ProgressValueChanged(int)),
+                   // to:
+                   this, SLOT(setValue(int)));
 
-  QObject::connect(
-    task->GetWorker(), SIGNAL( ProgressRangeChanged( int, int ) ),
-    // to:
-    this, SLOT( setRange( int, int ) )
-  );
+  QObject::connect(task->GetWorker(), SIGNAL(ProgressRangeChanged(int, int)),
+                   // to:
+                   this, SLOT(setRange(int, int)));
 
-  QObject::connect(
-    task->GetWorker(),
-    SIGNAL( Done( QObject* ) ),
-    // to:
-    this,
-    SLOT( OnDone( QObject* ) )
-  );
+  QObject::connect(task->GetWorker(), SIGNAL(Done(QObject*)),
+                   // to:
+                   this, SLOT(OnDone(QObject*)));
 
-  QObject::connect(
-    task->GetWorker(),
-    SIGNAL( ExceptionRaised( QString ) ),
-    // to:
-    this,
-    SLOT( OnExceptionRaised( QString ) )
-  );
+  QObject::connect(task->GetWorker(), SIGNAL(ExceptionRaised(QString)),
+                   // to:
+                   this, SLOT(OnExceptionRaised(QString)));
 
   // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
   //
@@ -123,54 +103,42 @@ TaskProgressDialog
   // finished() and not when worker object has done or finished it's
   // job (while the thread is still running when Done() or Finished()
   // is signalled).
-  QObject::connect(
-    task,
-    SIGNAL( finished() ),
-    // to:
-    this,
-    SLOT( accept() )
-  );
+  QObject::connect(task, SIGNAL(finished()),
+                   // to:
+                   this, SLOT(accept()));
 
   // Keep informed When some object is destroyed.
-  QObject::connect(
-    m_BackgroundTask,
-    SIGNAL( destroyed( QObject* ) ),
-    // to:
-    this,
-    SLOT( OnObjectDestroyed( QObject* ) )
-  );
+  QObject::connect(m_BackgroundTask, SIGNAL(destroyed(QObject*)),
+                   // to:
+                   this, SLOT(OnObjectDestroyed(QObject*)));
 }
 
 /*******************************************************************************/
-TaskProgressDialog
-::~TaskProgressDialog()
+TaskProgressDialog::~TaskProgressDialog()
 {
-  // qDebug() << this << "is being destroyed.";
+// qDebug() << this << "is being destroyed.";
 
 
-  // MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
-  //
-  // Trace (for debugging purposes) if background-task thread is still
-  // running when destroying this dialog.
-#if ( defined( OTB_DEBUG ) && 1 ) || 0
-  if( m_BackgroundTask!=NULL &&
-      m_BackgroundTask->isRunning() )
-    {
+// MANTIS-921 (http://bugs.orfeo-toolbox.org/view.php?id=921).
+//
+// Trace (for debugging purposes) if background-task thread is still
+// running when destroying this dialog.
+#if (defined(OTB_DEBUG) && 1) || 0
+  if (m_BackgroundTask != NULL && m_BackgroundTask->isRunning())
+  {
     qDebug() << m_BackgroundTask << "is still running!";
-    }
+  }
 #endif
 
   // qDebug() << this << "has been destroyed.";
 }
 
 /*****************************************************************************/
-int
-TaskProgressDialog
-::Exec()
+int TaskProgressDialog::Exec()
 {
   m_BackgroundTask->start();
 
-  setLabelText( m_BackgroundTask->GetWorker()->GetFirstProgressText() );
+  setLabelText(m_BackgroundTask->GetWorker()->GetFirstProgressText());
 
   return exec();
 }
@@ -178,9 +146,7 @@ TaskProgressDialog
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-void
-TaskProgressDialog
-::OnDone( QObject* res )
+void TaskProgressDialog::OnDone(QObject* res)
 {
   m_Object = res;
 
@@ -193,30 +159,22 @@ TaskProgressDialog
 }
 
 /*******************************************************************************/
-void
-TaskProgressDialog
-::OnExceptionRaised( QString what )
+void TaskProgressDialog::OnExceptionRaised(QString what)
 {
-  QMessageBox::warning(
-    this->parentWidget(),
-    tr( "%1 - Warning!" ).arg( PROJECT_NAME ),
-    what
-  );
+  QMessageBox::warning(this->parentWidget(), tr("%1 - Warning!").arg(PROJECT_NAME), what);
 
   reject();
 }
 
 /*******************************************************************************/
-void
-TaskProgressDialog
-::OnObjectDestroyed( QObject* object )
+void TaskProgressDialog::OnObjectDestroyed(QObject* object)
 {
   // qDebug() << this << "::OnObjectDestryed(" << object << ")";
 
-  assert( object==m_BackgroundTask );
+  assert(object == m_BackgroundTask);
 
-  if( object==m_BackgroundTask )
-    {
+  if (object == m_BackgroundTask)
+  {
     // qDebug() << this << "forgetting" << m_BackgroundTask;
 
     // Forget background-task.
@@ -224,7 +182,7 @@ TaskProgressDialog
 
     // Accept QDialog te prevent locking the UI.
     accept();
-    }
+  }
 }
 
 } // end namespace 'mvd'

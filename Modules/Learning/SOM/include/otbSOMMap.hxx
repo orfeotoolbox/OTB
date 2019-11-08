@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -31,26 +31,23 @@ namespace otb
  * Constructor
  */
 template <class TNeuron, class TDistance, unsigned int VMapDimension>
-SOMMap<TNeuron, TDistance, VMapDimension>
-::SOMMap()
-{}
+SOMMap<TNeuron, TDistance, VMapDimension>::SOMMap()
+{
+}
 /**
  * Destructor
  */
 template <class TNeuron, class TDistance, unsigned int VMapDimension>
-SOMMap<TNeuron, TDistance, VMapDimension>
-::~SOMMap()
-{}
+SOMMap<TNeuron, TDistance, VMapDimension>::~SOMMap()
+{
+}
 /**
  * Get The index of the winning neuron for a sample.
  * \param sample The sample
  * \return The index of the winning neuron.
  */
-template <class TNeuron, class TDistance, unsigned int VMapDimension>
-typename SOMMap<TNeuron, TDistance, VMapDimension>
-::IndexType
-SOMMap<TNeuron, TDistance, VMapDimension>
-::GetWinner(const NeuronType& sample)
+template <class TNeuron, class TDistance, unsigned int        VMapDimension>
+typename SOMMap<TNeuron, TDistance, VMapDimension>::IndexType SOMMap<TNeuron, TDistance, VMapDimension>::GetWinner(const NeuronType& sample)
 {
   // Some typedefs
   typedef itk::ImageRegionIteratorWithIndex<Self> IteratorType;
@@ -69,21 +66,19 @@ SOMMap<TNeuron, TDistance, VMapDimension>
 
   // Iterate through the map to get the minimum distance position
   for (; !it.IsAtEnd(); ++it)
-    {
+  {
     double tempDistance = activation->Evaluate(sample, it.Get());
     if (tempDistance <= minDistance)
-      {
+    {
       minDistance = tempDistance;
-      minPos = it.GetIndex();
-      }
+      minPos      = it.GetIndex();
     }
+  }
   // Return the index of the winner
   return minPos;
 }
 template <class TNeuron, class TDistance, unsigned int VMapDimension>
-void
-SOMMap<TNeuron, TDistance, VMapDimension>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void SOMMap<TNeuron, TDistance, VMapDimension>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

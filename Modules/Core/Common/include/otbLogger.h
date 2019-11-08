@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,7 +27,8 @@
 #include "itkLogger.h"
 #include "OTBCommonExport.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class Logger
  *  \brief An ITK logger specialized for OTB
@@ -39,10 +40,10 @@ namespace otb {
 class OTBCommon_EXPORT Logger : public itk::Logger
 {
 public:
-  typedef Logger                          Self;
-  typedef itk::Logger                     Superclass;
-  typedef itk::SmartPointer< Self >       Pointer;
-  typedef itk::SmartPointer< const Self > ConstPointer;
+  typedef Logger                        Self;
+  typedef itk::Logger                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkTypeMacro(Logger, itk::Logger);
 
@@ -54,15 +55,15 @@ public:
    *
    * See https://stackoverflow.com/questions/335369/finding-c-static-initialization-order-problems#335746
    */
-  static Pointer Instance();
+  static Logger* Instance();
 
-  itkNewMacro(Self);
-  
-  // Overwrite this to provide custom formatting of log entries
-  std::string BuildFormattedEntry(itk::Logger::PriorityLevelType, std::string const&) override;
+  void ResetOutputs();
 
-  /** Output logs about the RAM, caching and multi-threading settings */
-  void LogSetupInformation();
+  static Pointer New();
+  itkCreateAnotherMacro(Logger) itkCloneMacro(Logger)
+
+      /** Output logs about the RAM, caching and multi-threading settings */
+      void LogSetupInformation();
 
   /** Return true if the LogSetupInformation has already been called*/
   bool IsLogSetupInformationDone();
@@ -70,15 +71,19 @@ public:
   /** Set the flag m_LogSetupInfoDone to true */
   void LogSetupInformationDone();
 
+  // Overwrite this to provide custom formatting of log entries
+  std::string BuildFormattedEntry(itk::Logger::PriorityLevelType, std::string const&) override;
+
 protected:
   Logger();
-  virtual ~Logger() override;
+  virtual ~Logger() override = default;
 
 private:
-  Logger(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  Logger(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  static Pointer CreateInstance();
+  static Logger* CreateInstance();
+
 
   bool m_LogSetupInfoDone;
 

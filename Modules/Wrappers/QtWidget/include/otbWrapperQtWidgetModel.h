@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,20 +34,19 @@ namespace Wrapper
 
 class OTBQtWidget_EXPORT AppliThread : public QThread
 {
- Q_OBJECT
+  Q_OBJECT
 
- public:
-  AppliThread(Application* app)
-    {
-      m_Application = app;
-    }
+public:
+  AppliThread(Application::Pointer app) : m_Application(app)
+  {
+  }
 
   ~AppliThread() override;
 
-  void Execute()
+  /** Ask the running application to stop */
+  void Stop()
   {
-    // Call the signal start to begin running the program
-    start();
+    m_Application->Stop();
   }
 
 signals:
@@ -56,7 +55,7 @@ signals:
    *
    * \param status 0 The result status of the OTB-application.
    */
-  void ApplicationExecutionDone( int status =0 );
+  void ApplicationExecutionDone(int status = 0);
 
   /**
    * \brief Signal emitted when an exception has been raised by an
@@ -64,14 +63,7 @@ signals:
    *
    * \param what The std::exception::what() which is forwarded to listeners.
    */
-  void ExceptionRaised( QString what );
-
-public slots:
-  /** Ask the running application to stop */
-  void Stop()
-    {
-    m_Application->Stop();
-    }
+  void ExceptionRaised(QString what);
 
 protected:
   void run() override;
@@ -107,19 +99,16 @@ public:
     return m_LogOutput;
   }
 
-  /** Logger warning message sender */
-  void SendLogWARNING( const std::string & mes );
-  /** Logger info message sender */
-  void SendLogINFO( const std::string & mes );
-  /** Logger debug message sender */
-  void SendLogDEBUG( const std::string & mes );
+  bool IsRunning() const;
 
-  /** Used by inxml when forcing xml parse flag to update widget data via UpdateGui */
-  void UpdateAllWidgets()
-  {
-    GetApplication()->ForceInXMLParseFlag();
-    emit UpdateGui();
-  }
+  void Stop();
+
+  /** Logger warning message sender */
+  void SendLogWARNING(const std::string& mes);
+  /** Logger info message sender */
+  void SendLogINFO(const std::string& mes);
+  /** Logger debug message sender */
+  void SendLogDEBUG(const std::string& mes);
 
 signals:
   void SetApplicationReady(bool);
@@ -132,7 +121,7 @@ signals:
    * \param status The result status of the otb::application (-1 when
    * an exception has occurred).
    */
-  void SetProgressReportDone( int status =0 );
+  void SetProgressReportDone(int status = 0);
 
   /**
    * \brief Signal emitted when an exception has been raised by an
@@ -140,11 +129,9 @@ signals:
    *
    * \param what The std::exception::what() which is forwarded to listeners.
    */
-  void ExceptionRaised( QString what );
+  void ExceptionRaised(QString what);
 
   void UpdateGui();
-
-  void Stop();
 
 public slots:
   /**
@@ -166,24 +153,21 @@ private slots:
    *
    * \param status
    */
-  void OnApplicationExecutionDone( int status );
-
-  void TimerDone();
+  void OnApplicationExecutionDone(int status);
 
 private:
   QtWidgetModel(const QtWidgetModel&) = delete;
   void operator=(const QtWidgetModel&) = delete;
 
-  Application::Pointer m_Application;
+  QtLogOutput::Pointer m_LogOutput;
 
-  QtLogOutput::Pointer  m_LogOutput;
+  AppliThread* m_taskAppli;
 
   bool m_IsRunning;
 
-  QTimer *m_Timer;
+public:
+  Application::Pointer m_Application;
 };
-
-
 }
 }
 

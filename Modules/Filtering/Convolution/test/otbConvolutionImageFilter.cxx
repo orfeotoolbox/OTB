@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,28 +19,27 @@
  */
 
 
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbConvolutionImageFilter.h"
 #include "itkConstantBoundaryCondition.h"
 
-int otbConvolutionImageFilter(int itkNotUsed(argc), char * argv[])
+int otbConvolutionImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFileName = argv[1];
-  const char * outputFileName = argv[2];
+  const char* inputFileName  = argv[1];
+  const char* outputFileName = argv[2];
 
-  typedef double InputPixelType;
-  typedef double OutputPixelType;
+  typedef double     InputPixelType;
+  typedef double     OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> PanchroImageType;
+  typedef otb::Image<InputPixelType, Dimension>  PanchroImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   typedef otb::ImageFileReader<PanchroImageType> ReaderType;
   typedef otb::ImageFileWriter<OutputImageType>  WriterType;
   // Overriding boundary condition to compare with the overlap save convolution results.
-  typedef itk::ConstantBoundaryCondition<PanchroImageType>                                      BoundaryConditionType;
+  typedef itk::ConstantBoundaryCondition<PanchroImageType> BoundaryConditionType;
   typedef otb::ConvolutionImageFilter<PanchroImageType, OutputImageType, BoundaryConditionType> ConvFilterType;
 
   ReaderType::Pointer     reader     = ReaderType::New();
@@ -53,7 +52,7 @@ int otbConvolutionImageFilter(int itkNotUsed(argc), char * argv[])
   ConvFilterType::InputSizeType radius;
   radius[0] = 3;
   radius[1] = 3;
-  //itk::Array< double > filterCoeffs;
+  // itk::Array< double > filterCoeffs;
   ConvFilterType::ArrayType filterCoeffs;
   filterCoeffs.SetSize((2 * radius[0] + 1) * (2 * radius[1] + 1));
   filterCoeffs.Fill(1);

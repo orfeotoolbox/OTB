@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,21 +39,19 @@ namespace otb
  * of composition of the two basic morphological operation, the filtered details are dark
  * on a brighter background.
  *
- * \sa ClosingOpeningMorphologicalFilter,
- * MorphologicalPyramidAnalyseFilter
+ * \sa ClosingOpeningMorphologicalFilter
  *
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage, class TKernel>
-class ITK_EXPORT OpeningClosingMorphologicalFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT OpeningClosingMorphologicalFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef OpeningClosingMorphologicalFilter                  Self;
+  typedef OpeningClosingMorphologicalFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
@@ -79,7 +77,9 @@ protected:
   /** Constructor */
   OpeningClosingMorphologicalFilter();
   /** Destructor */
-  ~OpeningClosingMorphologicalFilter() override {}
+  ~OpeningClosingMorphologicalFilter() override
+  {
+  }
 
   /* void GenerateInputRequestedRegion(); */
   /*   void EnlargeOutputRequestedRegion(itk::DataObject *itkNotUsed(output)); */
@@ -90,8 +90,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  OpeningClosingMorphologicalFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  OpeningClosingMorphologicalFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
   /** Morphological operation kernel  */
   KernelType m_Kernel;
 };

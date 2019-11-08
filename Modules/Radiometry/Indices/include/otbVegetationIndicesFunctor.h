@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,383 +22,13 @@
 #define otbVegetationIndicesFunctor_h
 
 #include "otbMath.h"
-#include "itkVariableLengthVector.h"
-#include "otbBandName.h"
-#include <string>
+#include "otbRadiometricIndex.h"
 
 namespace otb
 {
 
 namespace Functor
 {
-
-/**
-   * \class RAndNIRIndexBase
-   * \brief Base class for R And NIR based Index
-   *
-   *  Implement operators for UnaryFunctorImageFilter templated with a
-   *  VectorImage and BinaryFunctorImageFilter templated with single
-   *  images.
-   *  Subclasses should NOT overload operators, they must  re-implement
-   *  the Evaluate() method.
-   *
-   * \ingroup Radiometry
- *
- * \ingroup OTBIndices
- */
-template<class TInput1, class TInput2, class TOutput>
-class RAndNIRIndexBase
-{
-public:
-  /// Vector pixel type used to support both vector images and multiple
-  /// input images
-  typedef itk::VariableLengthVector<TInput1> InputVectorType;
-
-  //operators !=
-  bool operator !=(const RAndNIRIndexBase&) const
-  {
-    return true;
-  }
-  //operator ==
-  bool operator ==(const RAndNIRIndexBase& other) const
-  {
-    return !(*this != other);
-  }
-
-  // Operator on vector pixel type
-  inline TOutput operator ()(const InputVectorType& inputVector) const
-  {
-    return this->Evaluate(inputVector[m_RedIndex - 1], static_cast<TInput2>(inputVector[m_NIRIndex - 1]));
-  }
-
-  // Binary operator
-  inline TOutput operator ()(const TInput1& r, const TInput2& nir) const
-  {
-    return this->Evaluate(r, nir);
-  }
-  /// Constructor
-  RAndNIRIndexBase() :  m_EpsilonToBeConsideredAsZero(0.0000001), m_RedIndex(3), m_NIRIndex(4) {}
-  /// Desctructor
-  virtual ~RAndNIRIndexBase() {}
-
-  /** Set index, generic method */
-  void SetIndex(BandName::BandName band, unsigned int channel)
-  {
-    if (band == BandName::RED)
-      {
-      m_RedIndex = channel;
-      }
-    if (band == BandName::NIR)
-      {
-      m_NIRIndex = channel;
-      }
-  }
-  /** Get index, generic method */
-  unsigned int GetIndex(BandName::BandName band) const
-  {
-    if (band == BandName::RED)
-      {
-      return m_RedIndex;
-      }
-    if (band == BandName::NIR)
-      {
-      return m_NIRIndex;
-      }
-  }
-
-  /// Set Red Index
-  void SetRedIndex(unsigned int channel)
-  {
-    m_RedIndex = channel;
-  }
-  /// Get Red Index
-  unsigned int GetRedIndex() const
-  {
-    return m_RedIndex;
-  }
-  /// Set NIR Index
-  void SetNIRIndex(unsigned int channel)
-  {
-    m_NIRIndex = channel;
-  }
-  /// Get NIR Index
-  unsigned int GetNIRIndex() const
-  {
-    return m_NIRIndex;
-  }
-
-  /** Return the index name */
-  virtual std::string GetName() const = 0;
-
-protected:
-  // This method must be reimplemented in subclasses to actually
-  // compute the index value
-  virtual TOutput Evaluate(const TInput1& r, const TInput2& nir) const = 0;
-  double m_EpsilonToBeConsideredAsZero;
-
-private:
-  unsigned int m_RedIndex;
-  unsigned int m_NIRIndex;
-};
-
-/**
- * \class RAndBAndNIRIndexBase
- * \brief base class for R, B And NIR based Index
- *  Implement operators for UnaryFunctorImageFilter templated with a
- *  VectorImage and BinaryFunctorImageFilter templated with single
- *  images.
- *  Subclasses should NOT overload operators, they must  re-implement
- *  the Evaluate() method.
- * \ingroup Radiometry
- *
- * \ingroup OTBIndices
- */
-template<class TInput1, class TInput2, class TInput3, class TOutput>
-class RAndBAndNIRIndexBase
-{
-public:
-  /// Vector pixel type used to support both vector images and multiple
-  /// input images
-  typedef itk::VariableLengthVector<TInput1> InputVectorType;
-
-  //operators !=
-  bool operator !=(const RAndBAndNIRIndexBase&) const
-  {
-    return true;
-  }
-
-  //operator ==
-  bool operator ==(const RAndBAndNIRIndexBase& other) const
-  {
-    return !(*this != other);
-  }
-
-  // Operator on vector pixel type
-  inline TOutput operator ()(const InputVectorType& inputVector)
-  {
-    return this->Evaluate(inputVector[m_RedIndex - 1],
-                          static_cast<TInput2>(inputVector[m_BlueIndex - 1]),
-                          static_cast<TInput3>(inputVector[m_NIRIndex - 1]));
-  }
-  // Binary operator
-  inline TOutput operator ()(const TInput1& r, const TInput2& b, const TInput2& nir)
-  {
-    return this->Evaluate(r, b, nir);
-  }
-  /// Constructor
-  RAndBAndNIRIndexBase() : m_EpsilonToBeConsideredAsZero(0.0000001), m_RedIndex(3), m_BlueIndex(1), m_NIRIndex(4) {}
-  /// Desctructor
-  virtual ~RAndBAndNIRIndexBase() {}
-
-  /** Set index, generic method */
-  void SetIndex(BandName::BandName band, unsigned int channel)
-  {
-    if (band == BandName::RED)
-      {
-      m_RedIndex = channel;
-      }
-    if (band == BandName::BLUE)
-      {
-      m_BlueIndex = channel;
-      }
-    if (band == BandName::NIR)
-      {
-      m_NIRIndex = channel;
-      }
-  }
-  /** Get index, generic method */
-  unsigned int GetIndex(BandName::BandName band) const
-  {
-    if (band == BandName::RED)
-      {
-      return m_RedIndex;
-      }
-    if (band == BandName::BLUE)
-      {
-      return m_BlueIndex;
-      }
-    if (band == BandName::NIR)
-      {
-      return m_NIRIndex;
-      }
-  }
-
-  /// Set Red Index
-  void SetRedIndex(unsigned int channel)
-  {
-    m_RedIndex = channel;
-  }
-  /// Get Red Index
-  unsigned int GetRedIndex() const
-  {
-    return m_RedIndex;
-  }
-  /// Set Blue Index
-  void SetBlueIndex(unsigned int channel)
-  {
-    m_BlueIndex = channel;
-  }
-  /// Get Blue Index
-  unsigned int GetBlueIndex() const
-  {
-    return m_BlueIndex;
-  }
-
-  /// Set NIR Index
-  void SetNIRIndex(unsigned int channel)
-  {
-    m_NIRIndex = channel;
-  }
-  /// Get NIR Index
-  unsigned int GetNIRIndex() const
-  {
-    return m_NIRIndex;
-  }
-
-  /** Return the index name */
-  virtual std::string GetName() const = 0;
-
-protected:
-  // This method must be reimplemented in subclasses to actually
-  // compute the index value
-  virtual TOutput Evaluate(const TInput1& r, const TInput2& b, const TInput3& nir) const = 0;
-  double m_EpsilonToBeConsideredAsZero;
-
-private:
-  unsigned int m_RedIndex;
-  unsigned int m_BlueIndex;
-  unsigned int m_NIRIndex;
-};
-
-/**
- * \class RAndGAndNIRIndexBase
- * \brief base class for R, G And NIR based Index
- *  Implement operators for UnaryFunctorImageFilter templated with a
- *  VectorImage and BinaryFunctorImageFilter templated with single
- *  images.
- *  Subclasses should NOT overload operators, they must  re-implement
- *  the Evaluate() method.
- * \ingroup Radiometry
- *
- * \ingroup OTBIndices
- */
-template<class TInput1, class TInput2, class TInput3, class TOutput>
-class RAndGAndNIRIndexBase
-{
-public:
-  /// Vector pixel type used to support both vector images and multiple
-  /// input images
-  typedef itk::VariableLengthVector<TInput1> InputVectorType;
-
-  //operators !=
-  bool operator !=(const RAndGAndNIRIndexBase&) const
-  {
-    return true;
-  }
-  //operator ==
-  bool operator ==(const RAndGAndNIRIndexBase& other) const
-  {
-    return !(*this != other);
-  }
-
-  // Operator on vector pixel type
-  inline TOutput operator ()(const InputVectorType& inputVector)
-  {
-    return this->Evaluate(inputVector[m_RedIndex - 1],
-                          static_cast<TInput2>(inputVector[m_GreenIndex - 1]),
-                          static_cast<TInput3>(inputVector[m_NIRIndex - 1]));
-  }
-
-  // Binary operator
-  inline TOutput operator ()(const TInput1& r, const TInput2& g, const TInput2& nir)
-  {
-    return this->Evaluate(r, g, nir);
-  }
-  /// Constructor
-  RAndGAndNIRIndexBase() : m_EpsilonToBeConsideredAsZero(0.0000001), m_RedIndex(3), m_GreenIndex(2), m_NIRIndex(4)  {}
-  /// Desctructor
-  virtual ~RAndGAndNIRIndexBase() {}
-
-  /** Set index, generic method */
-  void SetIndex(BandName::BandName band, unsigned int channel)
-  {
-    if (band == BandName::RED)
-      {
-      m_RedIndex = channel;
-      }
-    if (band == BandName::GREEN)
-      {
-      m_GreenIndex = channel;
-      }
-    if (band == BandName::NIR)
-      {
-      m_NIRIndex = channel;
-      }
-  }
-  /** Get index, generic method */
-  unsigned int GetIndex(BandName::BandName band) const
-  {
-    if (band == BandName::RED)
-      {
-      return m_RedIndex;
-      }
-    if (band == BandName::GREEN)
-      {
-      return m_GreenIndex;
-      }
-    if (band == BandName::NIR)
-      {
-      return m_NIRIndex;
-      }
-  }
-
-  /// Set Red Index
-  void SetRedIndex(unsigned int channel)
-  {
-    m_RedIndex = channel;
-  }
-  /// Get Red Index
-  unsigned int GetRedIndex() const
-  {
-    return m_RedIndex;
-  }
-  /// Set Green Index
-  void SetGreenIndex(unsigned int channel)
-  {
-    m_GreenIndex = channel;
-  }
-  /// Get Green Index
-  unsigned int GetGreenIndex() const
-  {
-    return m_GreenIndex;
-  }
-
-  /// Set NIR Index
-  void SetNIRIndex(unsigned int channel)
-  {
-    m_NIRIndex = channel;
-  }
-  /// Get NIR Index
-  unsigned int GetNIRIndex() const
-  {
-    return m_NIRIndex;
-  }
-
-  /** Return the index name */
-  virtual std::string GetName() const = 0;
-
-protected:
-  // This method must be reimplemented in subclasses to actually
-  // compute the index value
-  virtual TOutput Evaluate(const TInput1& r, const TInput2& g, const TInput3& nir) const = 0;
-  double m_EpsilonToBeConsideredAsZero;
-
-private:
-  unsigned int m_RedIndex;
-  unsigned int m_GreenIndex;
-  unsigned int m_NIRIndex;
-};
-
 /** \class NDVI
  *  \brief This functor computes the Normalized Difference Vegetation Index (NDVI)
  *
@@ -409,33 +39,31 @@ private:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class NDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class NDVI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-
-  /** Return the index name */
-  std::string GetName() const override
+  NDVI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR})
   {
-    return "NDVI";
   }
 
-  /// Constructor
-  NDVI() {}
-  /// Desctructor
-  ~NDVI() override {}
-  // Operator on r and nir single pixel values
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
   {
-    double dr = static_cast<double>(r);
-    double dnir = static_cast<double>(nir);
-    if (std::abs(dnir + dr) < this->m_EpsilonToBeConsideredAsZero)
-      {
-      return static_cast<TOutput>(0.);
-      }
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
 
-    return (static_cast<TOutput>((dnir - dr) / (dnir + dr)));
+    return static_cast<TOutput>(Compute(red, nir));
+  }
+
+  // This static compute will be used in indices derived from NDVI
+  static double Compute(const double& red, const double& nir)
+  {
+    if (std::abs(nir + red) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
+      return 0.;
+    }
+
+    return (nir - red) / (nir + red);
   }
 };
 
@@ -449,29 +77,24 @@ protected:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class RVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class RVI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-
-  /** Return the index name */
-  std::string GetName() const override
+  RVI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR})
   {
-    return "RVI";
   }
 
-  RVI() {}
-  ~RVI() override {}
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
   {
-    double dr = static_cast<double>(r);
-    double dnir = static_cast<double>(nir);
-    if (std::abs(dr)  < this->m_EpsilonToBeConsideredAsZero)
-      {
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
+
+    if (std::abs(red) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return static_cast<TOutput>(0.);
-      }
-    return (static_cast<TOutput>(dnir / dr));
+    }
+    return (static_cast<TOutput>(nir / red));
   }
 };
 
@@ -484,57 +107,31 @@ protected:
  * C. L. Wiegand, A. J. Richardson, D. E. Escobar, and A. H. Gerbermann,
  * "Vegetation Indices in Crop Assessments", REMOTE SENS. ENVIRON. 35:105-119 (1991)
  *
- *  \ingroup Functor2
+ *  \ingroup Functor
  * \ingroup Radiometry
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class PVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class PVI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
+  PVI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR})
   {
-    return "PVI";
   }
 
-  PVI() : m_A(0.90893), m_B(7.46216), m_Coeff(0.74) {}
-  ~PVI() override {}
-  /** Set/Get A and B parameters */
-  void SetA(const double A)
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
   {
-    m_A = A;
-    m_Coeff = 1. / (std::sqrt(m_A * m_A + 1.));
-  }
-  double GetA(void) const
-  {
-    return (m_A);
-  }
-  void SetB(const double B)
-  {
-    m_B = B;
-  }
-  double GetB(void) const
-  {
-    return (m_B);
-  }
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
-  {
-    double dnir = static_cast<double>(nir);
-    double dr = static_cast<double>(r);
-    return (static_cast<TOutput>((dnir - m_A * dr - m_B) * m_Coeff));
-  }
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
 
-private:
+    return (static_cast<TOutput>((nir - A * red - B) * C));
+  }
 
   /** A and B parameters */
-  double m_A;
-  double m_B;
-  /** Denominator, pre-calculed when the A variable is set */
-  double m_Coeff;
-
+  static constexpr double A = 0.90893;
+  static constexpr double B = 7.46216;
+  static constexpr double C = 9.74;
 };
 
 /** \class SAVI
@@ -547,48 +144,28 @@ private:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class SAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class SAVI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-
-  /** Return the index name */
-  std::string GetName() const override
+  SAVI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR})
   {
-    return "SAVI";
   }
 
-  SAVI() : m_L(0.5) {}
-  ~SAVI() override {}
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
+  {
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
 
-  /** Set/Get L correction */
-  void SetL(const double L)
-  {
-    m_L = L;
-  }
-  double GetL(void) const
-  {
-    return (m_L);
-  }
-
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
-  {
-    double dnir = static_cast<double>(nir);
-    double dr = static_cast<double>(r);
-    double denominator = dnir + dr + m_L;
-    if (std::abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
-      {
+    if (std::abs(nir + red + L) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return static_cast<TOutput>(0.);
-      }
-    return (static_cast<TOutput>(((dnir - dr) * (1 + m_L)) / denominator));
+    }
+    return (static_cast<TOutput>(((nir - red) * (1 + L)) / (nir + red + L)));
   }
-
-private:
 
   /** L correction */
-  double m_L;
-
+  static constexpr double L = 0.5;
 };
 
 /** \class TSAVI
@@ -601,68 +178,33 @@ private:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class TSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class TSAVI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-
-  /** Return the index name */
-  std::string GetName() const override
+  TSAVI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR})
   {
-    return "TSAVI";
   }
 
-  TSAVI() : m_A(0.7), m_S(0.9), m_X(0.08) {}
-  ~TSAVI() override {}
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
+  {
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
 
-  /** Set/Get S and A parameters */
-  void SetS(const double S)
-  {
-    m_S = S;
-  }
-  double GetS(void) const
-  {
-    return (m_S);
-  }
-  void SetA(const double A)
-  {
-    m_A = A;
-  }
-  double GetA(void) const
-  {
-    return (m_A);
-  }
-  /** Set/Get X parameter */
-  void SetX(const double X)
-  {
-    m_X = X;
-  }
-  double GetX(void) const
-  {
-    return (m_X);
-  }
+    double denominator = A * nir + red + X * (1. + A * A);
 
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
-  {
-    double dnir = static_cast<double>(nir);
-    double dr = static_cast<double>(r);
-    double denominator = m_A * dnir + dr + m_X * (1. + m_A * m_A);
-    if (std::abs(denominator) < this->m_EpsilonToBeConsideredAsZero)
-      {
+    if (std::abs(denominator) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return static_cast<TOutput>(0.);
-      }
-    return (static_cast<TOutput>((m_A * (dnir - m_A * dr - m_S)) / denominator));
+    }
+    return (static_cast<TOutput>((A * (nir - A * red - S)) / denominator));
   }
-
-private:
 
   /** A and S parameters */
-  double m_A;
-  double m_S;
+  static constexpr double A = 0.7;
+  static constexpr double S = 0.9;
   /** X parameter */
-  double m_X;
-
+  static constexpr double X = 0.08;
 };
 
 /** \class WDVI
@@ -675,41 +217,30 @@ private:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class WDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class WDVI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
-  {
-    return "WDVI";
-  }
-
   /// Constructor
-  WDVI() : m_S(0.4) {}
-  /// Desctructor
-  ~WDVI() override {}
-  // Operator on r and nir single pixel values
-/** Set/Get Slop of soil line */
-  void SetS(const double s)
+  WDVI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR})
   {
-    m_S = s;
   }
-  double GetS(void) const
-  {
-    return (m_S);
-  }
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
-  {
-    double dr = static_cast<double>(r);
-    double dnir = static_cast<double>(nir);
 
-    return (dnir - m_S * dr);
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
+  {
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
+
+    return static_cast<TOutput>(Compute(red, nir));
   }
-private:
+
+  static double Compute(const double& red, const double& nir)
+  {
+    return (nir - S * red);
+  }
+
   /** Slope of soil line */
-  double m_S;
+  static constexpr double S = 0.4;
 };
 
 /** \class MSAVI
@@ -723,69 +254,37 @@ private:
  * \ingroup OTBIndices
  */
 
-template <class TInput1, class TInput2, class TOutput>
-class MSAVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class MSAVI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
+  MSAVI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR})
   {
-    return "MSAVI";
   }
 
-  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
-  typedef SAVI<TInput1, TInput2, TOutput> SAVIFunctorType;
-  typedef WDVI<TInput1, TInput2, TOutput> WDVIFunctorType;
-  MSAVI() : m_S(0.4)
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
   {
-    m_WDVIfunctor.SetS(m_S);
-  }
-  ~MSAVI() override {}
-/** Set/Get Slop of soil line */
-  void SetS(const double s)
-  {
-    m_S = s;
-    m_WDVIfunctor.SetS(m_S);
-  }
-  double GetS(void) const
-  {
-    return (m_S);
-  }
-  NDVIFunctorType GetNDVI(void) const
-  {
-    return (m_NDVIfunctor);
-  }
-  WDVIFunctorType GetWDVI(void) const
-  {
-    return (m_WDVIfunctor);
-  }
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
 
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
-  {
-    double dnir = static_cast<double>(nir);
-    double dr = static_cast<double>(r);
+    double ndvi = NDVI<TInput, TOutput>::Compute(red, nir);
+    double wdvi = WDVI<TInput, TOutput>::Compute(red, nir);
 
-    double dNDVI = this->GetNDVI() (r, nir);
-    double dWDVI = this->GetWDVI() (r, nir);
-    double dL = 1 - 2 * m_S * dNDVI * dWDVI;
+    double L = 1 - 2 * S * ndvi * wdvi;
 
-    double denominator = dnir + dr + dL;
+    double denominator = nir + red + L;
 
-    if (std::abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
-      {
+    if (std::abs(denominator) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return static_cast<TOutput>(0.);
-      }
+    }
 
-    return (static_cast<TOutput>(((dnir - dr) * (1 + dL)) / denominator));
+    return (static_cast<TOutput>(((nir - red) * (1 + L)) / denominator));
   }
 
 private:
   /** Slope of soil line */
-  double                m_S;
-  NDVIFunctorType m_NDVIfunctor;
-  WDVIFunctorType       m_WDVIfunctor;
-
+  static constexpr double S = 0.4;
 };
 
 /** \class MSAVI2
@@ -798,32 +297,26 @@ private:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class MSAVI2 : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class MSAVI2 : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
+  MSAVI2() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR})
   {
-    return "MSAVI2";
   }
 
-  MSAVI2() {}
-  ~MSAVI2() override {}
-
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
   {
-    double dnir = static_cast<double>(nir);
-    double dr = static_cast<double>(r);
-    double sqrt_value = (2 * dnir + 1) * (2 * dnir + 1) - 8 * (dnir - dr);
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
+
+    double sqrt_value = (2 * nir + 1) * (2 * nir + 1) - 8 * (nir - red);
     if (sqrt_value < 0.)
-      {
+    {
       return static_cast<TOutput>(0.);
-      }
-    return (static_cast<TOutput>((2 * dnir + 1 - std::sqrt(sqrt_value)) / 2.));
+    }
+    return (static_cast<TOutput>((2 * nir + 1 - std::sqrt(sqrt_value)) / 2.));
   }
-
 };
 
 /** \class GEMI
@@ -836,46 +329,40 @@ protected:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class GEMI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class GEMI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
+  GEMI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR})
   {
-    return "GEMI";
   }
 
-  GEMI() {}
-  ~GEMI() override {}
-
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
   {
-    double dnir = static_cast<double>(nir);
-    double dr = static_cast<double>(r);
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
 
-    double dnu;
-    double dnumerateur_nu;
-    double ddenominateur_nu = dnir + dr + 0.5;
-    if (std::abs(ddenominateur_nu)  < this->m_EpsilonToBeConsideredAsZero)
-      {
-      dnu = 0;
-      }
+    double nu;
+    double num_nu;
+    double denom_nu = nir + red + 0.5;
+
+    if (std::abs(denom_nu) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
+      nu = 0;
+    }
     else
-      {
-      dnumerateur_nu = 2 * (dnir * dnir - dr * dr) + 1.5 * dnir + 0.5 * dr;
-      dnu = dnumerateur_nu / ddenominateur_nu;
-      }
+    {
+      num_nu = 2 * (nir * nir - red * red) + 1.5 * nir + 0.5 * red;
+      nu     = num_nu / denom_nu;
+    }
 
-    double ddenominateur_GEMI = 1 - dr;
-    if (std::abs(ddenominateur_GEMI)  < this->m_EpsilonToBeConsideredAsZero)
-      {
+    double denom_GEMI = 1 - red;
+    if (std::abs(denom_GEMI) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return static_cast<TOutput>(0.);
-      }
-    return (static_cast<TOutput>((dnu * (1 - 0.25 * dnu) - (dr - 0.125)) / ddenominateur_GEMI));
+    }
+    return (static_cast<TOutput>((nu * (1 - 0.25 * nu) - (red - 0.125)) / denom_GEMI));
   }
-
 };
 
 /** \class AVI
@@ -890,87 +377,53 @@ protected:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TInput3, class TOutput>
-class AVI : public RAndGAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
+template <class TInput, class TOutput>
+class AVI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
+  AVI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::GREEN, CommonBandNames::RED, CommonBandNames::NIR})
   {
-    return "AVI";
   }
 
-  AVI() : m_LambdaG(560.), m_LambdaR(660.), m_LambdaNir(830.) {}
-  ~AVI() override {}
-/** Set/Get Lambda red parameter*/
-  void SetLambdaR(const double lr)
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
   {
-    m_LambdaR = lr;
-  }
-  double GetLambdaR(void) const
-  {
-    return (m_LambdaR);
-  }
-/** Set/Get Lambda green parameter */
-  void SetLambdaG(const double lg)
-  {
-    m_LambdaG = lg;
-  }
-  double GetLambdaG(void) const
-  {
-    return (m_LambdaG);
-  }
-/** Set/Get Lambda red parameter */
-  void SetLambdaNir(const double lnir)
-  {
-    m_LambdaNir = lnir;
-  }
-  double GetLambdaNir(void) const
-  {
-    return (m_LambdaNir);
-  }
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& g, const TInput3& nir) const override
-  {
-    double dr = static_cast<double>(r);
-    double dg = static_cast<double>(g);
-    double dnir = static_cast<double>(nir);
+    auto green = this->Value(CommonBandNames::GREEN, input);
+    auto red   = this->Value(CommonBandNames::RED, input);
+    auto nir   = this->Value(CommonBandNames::NIR, input);
 
-    double dfact1 = (m_LambdaNir - m_LambdaR) / m_LambdaR;
-    double dfact2 = (m_LambdaR - m_LambdaG) / m_LambdaR;
-    double dterm1;
-    double dterm2;
-    if (std::abs(dnir - dr)  < this->m_EpsilonToBeConsideredAsZero)
-      {
+    constexpr double dfact1 = (LambdaNir - LambdaR) / LambdaR;
+    constexpr double dfact2 = (LambdaR - LambdaG) / LambdaR;
+    double           dterm1;
+    double           dterm2;
+    if (std::abs(nir - red) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       dterm1 = 0;
-      }
+    }
     else
-      {
-      dterm1 = std::atan(dfact1 / (dnir - dr));
-      }
+    {
+      dterm1 = std::atan(dfact1 / (nir - red));
+    }
 
-    if (std::abs(dg - dr)  < this->m_EpsilonToBeConsideredAsZero)
-      {
+    if (std::abs(green - red) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       dterm2 = 0;
-      }
+    }
     else
-      {
-      dterm2 = std::atan(dfact2 / (dg - dr));
-      }
+    {
+      dterm2 = std::atan(dfact2 / (green - red));
+    }
 
     return static_cast<TOutput>(dterm1 + dterm2);
-
   }
-private:
 
   /**  Central wavelength of the green channel (=Lambda1) */
-  double m_LambdaG;
+  static constexpr double LambdaG = 560;
 
   /**  Central wavelength of the red channel (=Lambda2) */
-  double m_LambdaR;
+  static constexpr double LambdaR = 660;
 
   /**  Central wavelength of the nir channel (=Lambda3) */
-  double m_LambdaNir;
+  static constexpr double LambdaNir = 830;
 };
 
 /** \class ARVI
@@ -985,134 +438,31 @@ private:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TInput3, class TOutput>
-class ARVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
+template <class TInput, class TOutput>
+class ARVI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
+  ARVI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::BLUE, CommonBandNames::RED, CommonBandNames::NIR})
   {
-    return "ARVI";
   }
 
-  ARVI() : m_Gamma(0.5) {}
-  ~ARVI() override {}
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
+  {
+    auto blue = this->Value(CommonBandNames::BLUE, input);
+    auto red  = this->Value(CommonBandNames::RED, input);
+    auto nir  = this->Value(CommonBandNames::NIR, input);
 
-  /** Set/Get Gamma parameter */
-  void SetGamma(const double gamma)
-  {
-    m_Gamma = gamma;
-  }
-  double GetGamma(void) const
-  {
-    return (m_Gamma);
-  }
-
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& b, const TInput3& nir) const override
-  {
-    double dr = static_cast<double>(r);
-    double db = static_cast<double>(b);
-    double dnir = static_cast<double>(nir);
-    double RHOrb = dr - m_Gamma * (db - dr);
-    double denominator = dnir + RHOrb;
-    if (std::abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
-      {
+    double RHOrb       = red - Gamma * (blue - red);
+    double denominator = nir + RHOrb;
+    if (std::abs(denominator) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return static_cast<TOutput>(0.);
-      }
-    return (static_cast<TOutput>((dnir - RHOrb) / denominator));
+    }
+    return (static_cast<TOutput>((nir - RHOrb) / denominator));
   }
-
-private:
 
   /** Gamma parameter */
-  double m_Gamma;
-};
-
-/** \class TSARVI
- *  \brief This functor computes the Transformed Soil Atmospherical Resistant Vegetation Index (TSARVI)
- *
- *  [Yoram J. Kaufman and Didier Tanre, 1992]
- *
- *  \ingroup Functor
- * \ingroup Radiometry
- *
- * \ingroup OTBIndices
- */
-template <class TInput1, class TInput2, class TInput3, class TOutput>
-class TSARVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
-{
-public:
-  /** Return the index name */
-  std::string GetName() const override
-  {
-    return "TSARVI";
-  }
-
-  TSARVI() : m_A(0.0), m_B(0.0), m_X(0.08), m_Gamma(0.5) {}
-  ~TSARVI() override {}
-
-  /** Set/Get A and B parameters */
-  void SetA(const double A)
-  {
-    m_A = A;
-  }
-  double GetA(void) const
-  {
-    return (m_A);
-  }
-  void SetB(const double B)
-  {
-    m_B = B;
-  }
-  double GetB(void) const
-  {
-    return (m_B);
-  }
-  /** Set/Get X parameter */
-  void SetX(const double X)
-  {
-    m_X = X;
-  }
-  double GetX(void) const
-  {
-    return (m_X);
-  }
-  /** Set/Get the gamma parameter */
-  void SetGamma(const double gamma)
-  {
-    m_Gamma = gamma;
-  }
-  double GetGamma(void) const
-  {
-    return (m_Gamma);
-  }
-
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& b, const TInput3& nir) const override
-  {
-    double dr = static_cast<double>(r);
-    double db = static_cast<double>(b);
-    double dnir = static_cast<double>(nir);
-    double dRB = dr - m_Gamma * (db - dr);
-    double denominator = dRB + m_A * dnir - m_A * m_B + m_X * (1. + m_A * m_A);
-    if (std::abs(denominator)  < this->m_EpsilonToBeConsideredAsZero)
-      {
-      return static_cast<TOutput>(0.);
-      }
-    return (static_cast<TOutput>((m_A * (dnir - m_A * dRB - m_B)) / denominator));
-  }
-
-private:
-
-  /** A and B parameters */
-  double m_A;
-  double m_B;
-  /** X parameter */
-  double m_X;
-  /** Gamma parameter */
-  double m_Gamma;
-
+  static constexpr double Gamma = 0.5;
 };
 
 /** \class EVI
@@ -1127,81 +477,39 @@ private:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TInput3, class TOutput>
-class EVI : public RAndBAndNIRIndexBase<TInput1, TInput2, TInput3, TOutput>
+template <class TInput, class TOutput>
+class EVI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
+  EVI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::BLUE, CommonBandNames::RED, CommonBandNames::NIR})
   {
-    return "EVI";
   }
 
-  EVI() : m_G(2.5), m_C1(6.0), m_C2(7.5), m_L(1.0) {}
-  ~EVI() override {}
-/** Set/Get G parameter */
-  void SetG(const double g)
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
   {
-    m_G = g;
-  }
-  double GetG(void) const
-  {
-    return (m_G);
-  }
-  /** Set/Get C1 parameter */
-  void SetC1(const double c1)
-  {
-    m_C1 = c1;
-  }
-  double GetC1(void) const
-  {
-    return (m_C1);
-  }
-  /** Set/Get C2 parameter */
-  void SetC2(const double c2)
-  {
-    m_C2 = c2;
-  }
-  double GetC2(void) const
-  {
-    return (m_C2);
-  }
-  /** Set/Get L parameter */
-  void SetL(const double l)
-  {
-    m_L = l;
-  }
-  double GetL(void) const
-  {
-    return (m_L);
-  }
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& b, const TInput3& nir) const override
-  {
-    double dr = static_cast<double>(r);
-    double db = static_cast<double>(b);
-    double dnir = static_cast<double>(nir);
-    double denominator = dnir + m_C1 * dr - m_C2 * db + m_L;
-    if (std::abs(denominator) < this->m_EpsilonToBeConsideredAsZero)
-      {
+    auto blue = this->Value(CommonBandNames::BLUE, input);
+    auto red  = this->Value(CommonBandNames::RED, input);
+    auto nir  = this->Value(CommonBandNames::NIR, input);
+
+    double denominator = nir + C1 * red - C2 * blue + L;
+    if (std::abs(denominator) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return (static_cast<TOutput>(0.));
-      }
-    return (static_cast<TOutput>(m_G * (dnir - dr) / denominator));
+    }
+    return (static_cast<TOutput>(G * (nir - red) / denominator));
   }
-
-private:
 
   /** Gain factor */
-  double m_G;
+  static constexpr double G = 2.5;
 
   /** Coefficient of the aerosol resistance term */
-  double m_C1;
+  static constexpr double C1 = 6.0;
 
   /** Coefficient of the aerosol resistance term */
-  double m_C2;
+  static constexpr double C2 = 7.5;
 
   /** Canopy background adjustment */
-  double m_L;
+  static constexpr double L = 1.0;
 };
 
 /** \class IPVI
@@ -1214,32 +522,27 @@ private:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class IPVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class IPVI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
+  IPVI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR})
   {
-    return "IPVI";
   }
 
-  IPVI() {}
-  ~IPVI() override {}
-
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
   {
-    double dr = static_cast<double>(r);
-    double dnir = static_cast<double>(nir);
-    if (std::abs(dnir + dr)  < this->m_EpsilonToBeConsideredAsZero)
-      {
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
+
+    if (std::abs(nir + red) < RadiometricIndex<TInput, TOutput>::Epsilon)
+    {
       return static_cast<TOutput>(0.);
-      }
+    }
     else
-      {
-      return (static_cast<TOutput>(dnir / (dnir + dr)));
-      }
+    {
+      return (static_cast<TOutput>(nir / (nir + red)));
+    }
   }
 };
 
@@ -1253,40 +556,30 @@ protected:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class TNDVI : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class TNDVI : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
+  TNDVI() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR})
   {
-    return "TNDVI";
   }
 
-  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
-  TNDVI() {}
-  ~TNDVI() override {}
-
-  NDVIFunctorType GetNDVI(void) const
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
   {
-    return (m_NDVIfunctor);
-  }
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
 
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
-  {
-    double dval = this->GetNDVI() (r, nir) + 0.5;
-    if (dval < 0)
-      {
-      return  (static_cast<TOutput>(0));
-      }
+    double val = NDVI<TInput, TOutput>::Compute(red, nir) + 0.5;
+
+    if (val < 0)
+    {
+      return (static_cast<TOutput>(0));
+    }
     else
-      {
-      return (static_cast<TOutput>(std::sqrt(dval)));
-      }
+    {
+      return (static_cast<TOutput>(std::sqrt(val)));
+    }
   }
-private:
-  NDVIFunctorType m_NDVIfunctor;
 };
 
 /** \class LAIFromNDVILogarithmic
@@ -1305,69 +598,62 @@ private:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class LAIFromNDVILogarithmic : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class LAIFromNDVILogarithmic : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
+  LAIFromNDVILogarithmic()
+    : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR}), m_NdviSoil(0.1), m_NdviInf(0.89), m_ExtinctionCoefficient(0.71)
   {
-    return "LAIFromNDVILogarithmic";
   }
 
-  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
-  LAIFromNDVILogarithmic() : m_NdviSoil(0.10), m_NdviInf(0.89), m_ExtinctionCoefficient(0.71) {}
-  ~LAIFromNDVILogarithmic() override {}
-
-  NDVIFunctorType GetNDVI(void) const
-  {
-    return (m_NDVIfunctor);
-  }
-
-  void SetNdviSoil(const double val)
+  void SetNdviSoil(const double& val)
   {
     m_NdviSoil = val;
   }
-  double GetNdviSoil(void) const
+
+  const double& GetNdviSoil() const
   {
-    return (m_NdviSoil);
+    return m_NdviSoil;
   }
 
-  void SetNdviInf(const double val)
+  void SetNdviInf(const double& val)
   {
     m_NdviInf = val;
   }
-  double GetNdviInf(void) const
+
+  const double& GetNdviInf() const
   {
-    return (m_NdviInf);
+    return m_NdviInf;
   }
 
-  void SetExtinctionCoefficient(const double val)
+  void SetExtinctionCoefficient(const double& val)
   {
     m_ExtinctionCoefficient = val;
   }
-  double GetExtinctionCoefficient(void) const
+
+  const double& GetExtionctionCoefficient() const
   {
-    return (m_ExtinctionCoefficient);
+    return m_ExtinctionCoefficient;
   }
 
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
   {
-    double dval = this->GetNDVI() (r, nir);
-    if (dval < 0)
-      {
-      return  (static_cast<TOutput>(0));
-      }
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
+
+    double val = NDVI<TInput, TOutput>::Compute(red, nir);
+
+    if (val < 0)
+    {
+      return (static_cast<TOutput>(0));
+    }
     else
-      {
-      return (static_cast<TOutput>(
-    -(1.0/m_ExtinctionCoefficient)*std::log((dval- m_NdviInf)/(m_NdviSoil-m_NdviInf))
-    ));
-      }
+    {
+      return static_cast<TOutput>(-(1.0 / m_ExtinctionCoefficient) * std::log((val - m_NdviInf) / (m_NdviSoil - m_NdviInf)));
+    }
   }
-private:
-  NDVIFunctorType m_NDVIfunctor;
+
   double m_NdviSoil;
   double m_NdviInf;
   double m_ExtinctionCoefficient;
@@ -1391,50 +677,42 @@ private:
  *
  * \ingroup OTBIndices
  */
-template <class TInput1, class TInput2, class TOutput>
-class LAIFromReflectancesLinear : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class LAIFromReflectancesLinear : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  /** Return the index name */
-  std::string GetName() const override
+  LAIFromReflectancesLinear() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR}), m_RedCoef(-17.91), m_NirCoef(12.26)
   {
-    return "LAIFromReflectancesLinear";
   }
 
-  typedef NDVI<TInput1, TInput2, TOutput> NDVIFunctorType;
-  LAIFromReflectancesLinear() : m_RedCoef(-17.91), m_NirCoef(12.26) {}
-  ~LAIFromReflectancesLinear() override {}
-
-  NDVIFunctorType GetReflectances(void) const
-  {
-    return (m_NDVIfunctor);
-  }
-
-  void SetRedCoef(const double val)
+  void SetRedCoef(const double& val)
   {
     m_RedCoef = val;
   }
-  double GetRedCoef(void) const
+
+  const double& GetRedCoef() const
   {
-    return (m_RedCoef);
+    return m_RedCoef;
   }
 
-  void SetNirCoef(const double val)
+  void SetNirCoef(const double& val)
   {
     m_NirCoef = val;
   }
-  double GetNirCoef(void) const
+
+  const double& GetNirCoef() const
   {
-    return (m_NirCoef);
+    return m_NirCoef;
   }
 
-protected:
-  inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
   {
-      return (static_cast<TOutput>(m_RedCoef*r+m_NirCoef*nir));
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
+
+    return (static_cast<TOutput>(m_RedCoef * red + m_NirCoef * nir));
   }
-private:
-  NDVIFunctorType m_NDVIfunctor;
+
   double m_RedCoef;
   double m_NirCoef;
 };
@@ -1459,40 +737,29 @@ private:
   */
 
 
-  template <class TInput1, class TInput2, class TOutput>
-  class LAIFromNDVIFormosat2Functor : public RAndNIRIndexBase<TInput1, TInput2, TOutput>
+template <class TInput, class TOutput>
+class LAIFromNDVIFormosat2Functor : public RadiometricIndex<TInput, TOutput>
+{
+public:
+  LAIFromNDVIFormosat2Functor() : RadiometricIndex<TInput, TOutput>({CommonBandNames::RED, CommonBandNames::NIR})
   {
-  public:
+  }
 
-    /** Return the index name */
-    std::string GetName() const override
+  TOutput operator()(const itk::VariableLengthVector<TInput>& input) const override
+  {
+    auto red = this->Value(CommonBandNames::RED, input);
+    auto nir = this->Value(CommonBandNames::NIR, input);
+
+    if (std::abs(nir + red) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
-      return "LAIFromNDVIFormosat2Functor";
+      return static_cast<TOutput>(0.);
     }
+    return static_cast<TOutput>(A * (std::exp((nir - red) / (red + nir) * B) - std::exp(C * B)));
+  }
 
-    /// Constructor
-    LAIFromNDVIFormosat2Functor() {}
-    /// Desctructor
-    ~LAIFromNDVIFormosat2Functor() override {}
-    // Operator on r and nir single pixel values
-  protected:
-    inline TOutput Evaluate(const TInput1& r, const TInput2& nir) const override
-    {
-    double a = 0.1519;
-    double b = 3.9443;
-    double c = 0.13;
-
-      double dr = static_cast<double>(r);
-      double dnir = static_cast<double>(nir);
-      if (std::abs(dnir + dr) < this->m_EpsilonToBeConsideredAsZero)
-        {
-        return static_cast<TOutput>(0.);
-        }
-
-      return  static_cast<TOutput>(a*(std::exp(static_cast<double>(dnir-dr)/static_cast<double>(dr+dnir)*b)-std::exp(c*b)));
-    };
-
-
+  static constexpr double A = 0.1519;
+  static constexpr double B = 3.9443;
+  static constexpr double C = 0.13;
 };
 
 

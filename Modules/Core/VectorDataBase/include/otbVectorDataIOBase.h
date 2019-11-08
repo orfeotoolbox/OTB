@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -78,7 +78,7 @@ public:
 
   /** Enums used to specify byte order; whether Big Endian or Little Endian.
    * Some subclasses use this, some ignore it. */
-  typedef  enum {BigEndian, LittleEndian, OrderNotApplicable} ByteOrder;
+  typedef enum { BigEndian, LittleEndian, OrderNotApplicable } ByteOrder;
 
   /** These methods indicate the byte ordering of the file you are
    * trying to read in. These methods will then either swap or not
@@ -133,7 +133,7 @@ public:
 
   /** Determine the file type. Returns true if this VectorDataIO can read the
    * file specified. */
-  virtual bool CanWriteFile(const char*) const  = 0;
+  virtual bool CanWriteFile(const char*) const = 0;
 
   /** Determine if the ImageIO can stream writing to this
       file. Default is false. */
@@ -149,7 +149,7 @@ public:
   /** Writes the data to disk from the memory buffer provided. Make sure
    * that the IORegions has been set properly. The buffer is cast to a
    * pointer to the beginning of the image data. */
-  virtual void Write(const itk::DataObject* data, char ** papszOptions = nullptr) = 0;
+  virtual void Write(const itk::DataObject* data, char** papszOptions = nullptr) = 0;
 
 protected:
   VectorDataIOBase();
@@ -170,9 +170,8 @@ protected:
   virtual void Reset(const bool freeDynamic = true);
 
 private:
-  VectorDataIOBase(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  VectorDataIOBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

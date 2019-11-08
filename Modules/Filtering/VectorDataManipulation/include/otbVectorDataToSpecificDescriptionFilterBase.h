@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -43,16 +43,14 @@ namespace otb
  */
 
 template <class TVectorData>
-class ITK_EXPORT VectorDataToSpecificDescriptionFilterBase :
-  public VectorDataToVectorDataFilter<TVectorData, TVectorData>
+class ITK_EXPORT VectorDataToSpecificDescriptionFilterBase : public VectorDataToVectorDataFilter<TVectorData, TVectorData>
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorDataToSpecificDescriptionFilterBase    Self;
-  typedef VectorDataToVectorDataFilter<TVectorData,
-    TVectorData>                                       Superclass;
-  typedef itk::SmartPointer<Self>                      Pointer;
-  typedef itk::SmartPointer<const Self>                ConstPointer;
+  typedef VectorDataToSpecificDescriptionFilterBase Self;
+  typedef VectorDataToVectorDataFilter<TVectorData, TVectorData> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -61,29 +59,30 @@ public:
   itkTypeMacro(VectorDataToSpecificDescriptionFilterBase, VectorDataToVectorDataFilter);
 
   /** Some typedefs. */
-  typedef TVectorData                             VectorDataType;
-  typedef typename VectorDataType::Pointer        VectorDataPointer;
-  typedef typename VectorDataType::DataNodeType   DataNodeType;
+  typedef TVectorData                           VectorDataType;
+  typedef typename VectorDataType::Pointer      VectorDataPointer;
+  typedef typename VectorDataType::DataNodeType DataNodeType;
 
   typedef itk::DataObject::Pointer DataObjectPointer;
   typedef itk::DataObject          DataObject;
 
   /** Support accessors. */
-  virtual void AddSupport(const itk::DataObject * support, unsigned int idx);
-  const itk::DataObject * GetSupport(unsigned int idx);
+  virtual void AddSupport(const itk::DataObject* support, unsigned int idx);
+  const itk::DataObject* GetSupport(unsigned int idx);
 
 protected:
   /** Constructor */
   VectorDataToSpecificDescriptionFilterBase();
   /** Destructor */
-  ~VectorDataToSpecificDescriptionFilterBase() override {}
+  ~VectorDataToSpecificDescriptionFilterBase() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  VectorDataToSpecificDescriptionFilterBase(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  VectorDataToSpecificDescriptionFilterBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

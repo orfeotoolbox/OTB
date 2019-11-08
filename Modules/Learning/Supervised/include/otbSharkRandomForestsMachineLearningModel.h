@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,8 +34,10 @@
 #pragma GCC diagnostic ignored "-Wcast-align"
 #pragma GCC diagnostic ignored "-Wunknown-pragmas"
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wheader-guard"
+#pragma clang diagnostic ignored "-Wexpansion-to-defined"
 #else
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
@@ -55,36 +57,36 @@
  *  use Shark implementation of the Random Forests algorithm.
  *
  *  It is noteworthy that training step is parallel.
- * 
+ *
  *  For more information, see
  *  http://image.diku.dk/shark/doxygen_pages/html/classshark_1_1_r_f_trainer.html
- * 
+ *
  *  \ingroup OTBSupervised
  */
 
 namespace otb
 {
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT SharkRandomForestsMachineLearningModel
-  : public MachineLearningModel <TInputValue, TTargetValue>
+class ITK_EXPORT SharkRandomForestsMachineLearningModel : public MachineLearningModel<TInputValue, TTargetValue>
 {
 public:
   /** Standard class typedefs. */
-  typedef SharkRandomForestsMachineLearningModel               Self;
+  typedef SharkRandomForestsMachineLearningModel Self;
   typedef MachineLearningModel<TInputValue, TTargetValue> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename Superclass::InputValueType             InputValueType;
-  typedef typename Superclass::InputSampleType            InputSampleType;
-  typedef typename Superclass::InputListSampleType        InputListSampleType;
-  typedef typename Superclass::TargetValueType            TargetValueType;
-  typedef typename Superclass::TargetSampleType           TargetSampleType;
-  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
-  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
-  typedef typename Superclass::ConfidenceSampleType       ConfidenceSampleType;
-  typedef typename Superclass::ConfidenceListSampleType   ConfidenceListSampleType;
-  
+  typedef typename Superclass::InputValueType           InputValueType;
+  typedef typename Superclass::InputSampleType          InputSampleType;
+  typedef typename Superclass::InputListSampleType      InputListSampleType;
+  typedef typename Superclass::TargetValueType          TargetValueType;
+  typedef typename Superclass::TargetSampleType         TargetSampleType;
+  typedef typename Superclass::TargetListSampleType     TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType      ConfidenceValueType;
+  typedef typename Superclass::ConfidenceSampleType     ConfidenceSampleType;
+  typedef typename Superclass::ConfidenceListSampleType ConfidenceListSampleType;
+  typedef typename Superclass::ProbaSampleType          ProbaSampleType;
+  typedef typename Superclass::ProbaListSampleType      ProbaListSampleType;
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
   itkTypeMacro(SharkRandomForestsMachineLearningModel, MachineLearningModel);
@@ -93,24 +95,24 @@ public:
   virtual void Train() override;
 
   /** Save the model to file */
-  virtual void Save(const std::string & filename, const std::string & name="") override;
+  virtual void Save(const std::string& filename, const std::string& name = "") override;
 
   /** Load the model from file */
-  virtual void Load(const std::string & filename, const std::string & name="") override;
+  virtual void Load(const std::string& filename, const std::string& name = "") override;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  virtual bool CanReadFile(const std::string &) override;
+  virtual bool CanReadFile(const std::string&) override;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  virtual bool CanWriteFile(const std::string &) override;
+  virtual bool CanWriteFile(const std::string&) override;
   //@}
 
   /** From Shark doc: Get the number of trees to grow.*/
-  itkGetMacro(NumberOfTrees,unsigned int);
+  itkGetMacro(NumberOfTrees, unsigned int);
   /** From Shark doc: Set the number of trees to grow.*/
-  itkSetMacro(NumberOfTrees,unsigned int);
+  itkSetMacro(NumberOfTrees, unsigned int);
 
   /** From Shark doc: Get the number of random attributes to investigate at each node.*/
   itkGetMacro(MTry, unsigned int);
@@ -121,9 +123,9 @@ public:
 * to 1, a node is pure when it only consists of a single node.
 */
   itkGetMacro(NodeSize, unsigned int);
-    /** From Shark doc: Controls when a node is considered pure. If
+  /** From Shark doc: Controls when a node is considered pure. If
 * set to 1, a node is pure when it only consists of a single node.
- */
+*/
   itkSetMacro(NodeSize, unsigned int);
 
   /** From Shark doc: Get the fraction of the original training
@@ -153,33 +155,31 @@ protected:
   virtual ~SharkRandomForestsMachineLearningModel();
 
   /** Predict values using the model */
-  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr) const override;
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
 
-  
-  virtual void DoPredictBatch(const InputListSampleType *, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType *, ConfidenceListSampleType * = nullptr) const override;
-  
+  void DoPredictBatch(const InputListSampleType*, const unsigned int& startIndex, const unsigned int& size, TargetListSampleType*,
+                      ConfidenceListSampleType* = nullptr, ProbaListSampleType* = nullptr) const override;
+
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SharkRandomForestsMachineLearningModel(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SharkRandomForestsMachineLearningModel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   shark::RFClassifier<unsigned int> m_RFModel;
-  shark::RFTrainer<unsigned int> m_RFTrainer;
-  std::vector<unsigned int> m_ClassDictionary;
-  bool m_NormalizeClassLabels;
+  shark::RFTrainer<unsigned int>    m_RFTrainer;
+  std::vector<unsigned int>         m_ClassDictionary;
+  bool                              m_NormalizeClassLabels;
 
   unsigned int m_NumberOfTrees;
   unsigned int m_MTry;
   unsigned int m_NodeSize;
-  float m_OobRatio;
-  bool m_ComputeMargin;
+  float        m_OobRatio;
+  bool         m_ComputeMargin;
 
   /** Confidence list sample */
-  ConfidenceValueType ComputeConfidence(shark::RealVector & probas, 
-                                        bool computeMargin) const;
-
+  ConfidenceValueType ComputeConfidence(shark::RealVector& probas, bool computeMargin) const;
 };
 } // end namespace otb
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,38 +29,31 @@ namespace Wrapper
 {
 
 template <class TInputValue, class TOutputValue>
-void
-TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
-::InitPCAParams()
+void TrainDimensionalityReductionApplicationBase<TInputValue, TOutputValue>::InitPCAParams()
 {
   AddChoice("algorithm.pca", "Shark PCA");
-  SetParameterDescription("algorithm.pca",
-                          "This group of parameters allows setting Shark PCA parameters. "
-                          );
+  SetParameterDescription("algorithm.pca", "This group of parameters allows setting Shark PCA parameters. ");
 
-   //Output Dimension
-  AddParameter(ParameterType_Int, "algorithm.pca.dim",
-               "Dimension of the output of the pca transformation");
-  SetParameterInt("algorithm.pca.dim",10, false);
-  SetParameterDescription(
-    "algorithm.pca.dim",
-    "Dimension of the output of the pca transformation.");
+  // Output Dimension
+  AddParameter(ParameterType_Int, "algorithm.pca.dim", "Dimension of the output of the pca transformation");
+  SetParameterInt("algorithm.pca.dim", 10, false);
+  SetParameterDescription("algorithm.pca.dim", "Dimension of the output of the pca transformation.");
 }
 
 template <class TInputValue, class TOutputValue>
-void TrainDimensionalityReductionApplicationBase<TInputValue,TOutputValue>
-::TrainPCA(typename ListSampleType::Pointer trainingListSample,std::string modelPath)
+void TrainDimensionalityReductionApplicationBase<TInputValue, TOutputValue>::TrainPCA(typename ListSampleType::Pointer trainingListSample,
+                                                                                      std::string modelPath)
 {
-    typedef otb::PCAModel<InputValueType> PCAModelType;
-    typename PCAModelType::Pointer dimredTrainer = PCAModelType::New();
-    dimredTrainer->SetDimension(GetParameterInt("algorithm.pca.dim"));
-    dimredTrainer->SetInputListSample(trainingListSample);
-    dimredTrainer->SetWriteEigenvectors(true);
-    dimredTrainer->Train();
-    dimredTrainer->Save(modelPath);
+  typedef otb::PCAModel<InputValueType> PCAModelType;
+  typename PCAModelType::Pointer        dimredTrainer = PCAModelType::New();
+  dimredTrainer->SetDimension(GetParameterInt("algorithm.pca.dim"));
+  dimredTrainer->SetInputListSample(trainingListSample);
+  dimredTrainer->SetWriteEigenvectors(true);
+  dimredTrainer->Train();
+  dimredTrainer->Save(modelPath);
 }
 
-} //end namespace wrapper
-} //end namespace otb
+} // end namespace wrapper
+} // end namespace otb
 
 #endif

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,9 +27,7 @@
 namespace otb
 {
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
-LmvmPanSharpeningFusionImageFilter
-<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
-::LmvmPanSharpeningFusionImageFilter()
+LmvmPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>::LmvmPanSharpeningFusionImageFilter()
 {
   // Fix number of required inputs
   this->SetNumberOfRequiredInputs(2);
@@ -39,10 +37,10 @@ LmvmPanSharpeningFusionImageFilter
   m_PanConvolutionFilter->NormalizeFilterOn();
   m_XsConvolutionFilter = XsConvolutionFilterType::New();
   m_XsConvolutionFilter->NormalizeFilterOn();
-  m_PanNoiseFilter = PanNoiseFilterType::New();
-  m_XsNoiseFilter = XsNoiseFilterType::New();
+  m_PanNoiseFilter            = PanNoiseFilterType::New();
+  m_XsNoiseFilter             = XsNoiseFilterType::New();
   m_XsVectorConvolutionFilter = XsVectorConvolutionFilterType::New();
-  m_XsVectorNoiseFilter = XsVectorNoiseFilterType::New();
+  m_XsVectorNoiseFilter       = XsVectorNoiseFilterType::New();
 
 
   // Set-up default parameters
@@ -66,80 +64,61 @@ LmvmPanSharpeningFusionImageFilter
 }
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
-void
-LmvmPanSharpeningFusionImageFilter
-<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
-::SetPanInput(const TPanImageType *image)
+void LmvmPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>::SetPanInput(const TPanImageType* image)
 {
   // We have 2 inputs:  an image and a vector image
 
   // Process object is not const-correct so the const_cast is required here
-  this->itk::ProcessObject::SetNthInput(1,
-                                        const_cast<TPanImageType*>(image));
+  this->itk::ProcessObject::SetNthInput(1, const_cast<TPanImageType*>(image));
   this->Modified();
 }
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
-const TPanImageType *
-LmvmPanSharpeningFusionImageFilter
-<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
-::GetPanInput(void) const
+const TPanImageType* LmvmPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>::GetPanInput(void) const
 {
   if (this->GetNumberOfInputs() < 2)
-    {
+  {
     return nullptr;
-    }
+  }
 
-  return static_cast<const TPanImageType *>
-           (this->itk::ProcessObject::GetInput(1));
+  return static_cast<const TPanImageType*>(this->itk::ProcessObject::GetInput(1));
 }
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
-void
-LmvmPanSharpeningFusionImageFilter
-<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
-::SetXsInput(const TXsImageType *image)
+void LmvmPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>::SetXsInput(const TXsImageType* image)
 {
   // We have 2 inputs:  an image and a vector image
 
   // Process object is not const-correct so the const_cast is required here
-  this->itk::ProcessObject::SetNthInput(0,
-                                        const_cast<TXsImageType*>(image));
+  this->itk::ProcessObject::SetNthInput(0, const_cast<TXsImageType*>(image));
   this->Modified();
 }
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
-const TXsImageType *
-LmvmPanSharpeningFusionImageFilter
-<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
-::GetXsInput(void) const
+const TXsImageType* LmvmPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>::GetXsInput(void) const
 {
   if (this->GetNumberOfInputs() < 1)
-    {
+  {
     return nullptr;
-    }
+  }
 
-  return static_cast<const TXsImageType *>
-           (this->itk::ProcessObject::GetInput(0));
+  return static_cast<const TXsImageType*>(this->itk::ProcessObject::GetInput(0));
 }
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
-void
-LmvmPanSharpeningFusionImageFilter
-<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
-::GenerateData()
+void LmvmPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>::GenerateData()
 {
-  //Check if size is correct
-  typename TPanImageType::SizeType       sizePan;
-  typename TXsImageType::SizeType        sizeXs;
+  // Check if size is correct
+  typename TPanImageType::SizeType sizePan;
+  typename TXsImageType::SizeType  sizeXs;
   sizePan = this->GetPanInput()->GetLargestPossibleRegion().GetSize();
-  sizeXs = this->GetXsInput()->GetLargestPossibleRegion().GetSize();
+  sizeXs  = this->GetXsInput()->GetLargestPossibleRegion().GetSize();
   if ((sizePan[0] != sizeXs[0]) || (sizePan[1] != sizeXs[1]))
   {
     itkExceptionMacro(<< "LmvmPanSharpeningFusionImageFilter: Wrong Pan/Xs size");
   }
 
-  //Process the fusion
+  // Process the fusion
   m_PanConvolutionFilter->SetInput(this->GetPanInput());
   m_PanConvolutionFilter->SetRadius(this->m_Radius);
   m_PanConvolutionFilter->SetFilter(this->m_Filter);
@@ -171,15 +150,11 @@ LmvmPanSharpeningFusionImageFilter
 }
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision>
-void
-LmvmPanSharpeningFusionImageFilter
-<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void LmvmPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImageType, TInternalPrecision>::PrintSelf(std::ostream& os,
+                                                                                                                      itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os
-  << indent << "Radius:" << this->m_Radius
-  << std::endl;
+  os << indent << "Radius:" << this->m_Radius << std::endl;
 }
 
 } // end namespace otb

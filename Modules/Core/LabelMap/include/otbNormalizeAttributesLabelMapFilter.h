@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -57,16 +57,18 @@ public:
   NormalizeAttributesLabelObjectFunctor();
 
   /** Destructor */
-  virtual ~NormalizeAttributesLabelObjectFunctor() {}
+  virtual ~NormalizeAttributesLabelObjectFunctor()
+  {
+  }
 
   /** The comparators */
-  bool operator !=(const Self& self);
-  bool operator ==(const Self& self);
+  bool operator!=(const Self& self);
+  bool operator==(const Self& self);
 
   /** This is the functor implementation
    *  Calling the functor on a label object
    *  will update its shape attributes */
-  inline void operator ()(LabelObjectType * lo) const;
+  inline void operator()(LabelObjectType* lo) const;
 
   void SetMinAttributesValues(const AttributesMapType& minValues)
   {
@@ -82,7 +84,6 @@ private:
   AttributesMapType m_Min;
   AttributesMapType m_Max;
 };
-
 }
 
 /** \class NormalizeAttributesLabelMapFilter
@@ -94,28 +95,23 @@ private:
  *
  * \ingroup OTBLabelMap
  */
-template<class TImage>
+template <class TImage>
 class ITK_EXPORT NormalizeAttributesLabelMapFilter
-  : public otb::LabelMapFeaturesFunctorImageFilter
-  <TImage,
-      typename Functor::NormalizeAttributesLabelObjectFunctor
-      <typename TImage::LabelObjectType> >
+    : public otb::LabelMapFeaturesFunctorImageFilter<TImage, typename Functor::NormalizeAttributesLabelObjectFunctor<typename TImage::LabelObjectType>>
 {
 public:
   /** Template parameters typedefs */
-  typedef TImage                                        ImageType;
-  typedef typename ImageType::LabelObjectType           LabelObjectType;
-  typedef typename LabelObjectType::AttributesMapType   AttributesMapType;
+  typedef TImage                                      ImageType;
+  typedef typename ImageType::LabelObjectType         LabelObjectType;
+  typedef typename LabelObjectType::AttributesMapType AttributesMapType;
 
-  typedef Functor::NormalizeAttributesLabelObjectFunctor
-  <LabelObjectType>                           FunctorType;
+  typedef Functor::NormalizeAttributesLabelObjectFunctor<LabelObjectType> FunctorType;
 
   /** Standard class typedefs. */
   typedef NormalizeAttributesLabelMapFilter Self;
-  typedef LabelMapFeaturesFunctorImageFilter
-  <ImageType, FunctorType>                  Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef LabelMapFeaturesFunctorImageFilter<ImageType, FunctorType> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** ImageDimension constants */
   itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
@@ -140,17 +136,21 @@ public:
 
 protected:
   /** Constructor */
-  NormalizeAttributesLabelMapFilter(){}
+  NormalizeAttributesLabelMapFilter()
+  {
+  }
 
   /** Destructor */
-  ~NormalizeAttributesLabelMapFilter() override{}
+  ~NormalizeAttributesLabelMapFilter() override
+  {
+  }
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  NormalizeAttributesLabelMapFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  NormalizeAttributesLabelMapFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 }; // end of class
 

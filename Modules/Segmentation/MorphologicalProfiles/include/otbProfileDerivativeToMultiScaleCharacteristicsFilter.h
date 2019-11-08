@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -42,15 +42,14 @@ namespace otb
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage, class TLabeledImage>
-class ITK_EXPORT ProfileDerivativeToMultiScaleCharacteristicsFilter
-  : public ImageListToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT ProfileDerivativeToMultiScaleCharacteristicsFilter : public ImageListToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
   typedef ProfileDerivativeToMultiScaleCharacteristicsFilter Self;
-  typedef ImageListToImageFilter<TInputImage, TOutputImage>  Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef ImageListToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -75,7 +74,7 @@ public:
    * Returns the characteristics image.
    * \return The Characteristics image.
    */
-  virtual TLabeledImage * GetOutputCharacteristics(void);
+  virtual TLabeledImage* GetOutputCharacteristics(void);
 
   /** Set/Get the initial profile value */
   itkSetMacro(InitialValue, LabeledPixelType);
@@ -103,13 +102,15 @@ protected:
   /** Constructor */
   ProfileDerivativeToMultiScaleCharacteristicsFilter();
   /** Destructor */
-  ~ProfileDerivativeToMultiScaleCharacteristicsFilter() override {}
+  ~ProfileDerivativeToMultiScaleCharacteristicsFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ProfileDerivativeToMultiScaleCharacteristicsFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ProfileDerivativeToMultiScaleCharacteristicsFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The initial value of the profile */
   LabeledPixelType m_InitialValue;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,83 +44,43 @@ namespace Wrapper
 namespace MetaDataHelper
 {
 
-  enum class MDType
-  {
-    String,
-    Int,
-    Double,
-    GCP,
-    Vector,
-    ImageKWL,
-    VectorDataKWL,
-    BoolVector
-  };
+enum class MDType
+{
+  String,
+  Int,
+  Double,
+  GCP,
+  Vector,
+  ImageKWL,
+  VectorDataKWL,
+  BoolVector
+};
 
-  OTBApplicationEngine_EXPORT MDType GetType(const std::string &val);
+OTBApplicationEngine_EXPORT MDType GetType(const std::string& val);
 
-  OTBApplicationEngine_EXPORT std::string GetString(
-    const itk::MetaDataDictionary &dict,
-    const std::string &key);
-  OTBApplicationEngine_EXPORT void SetString(
-    itk::MetaDataDictionary &dict,
-    const std::string &key,
-    const std::string &val);
+OTBApplicationEngine_EXPORT std::string GetString(const itk::MetaDataDictionary& dict, const std::string& key);
+OTBApplicationEngine_EXPORT void SetString(itk::MetaDataDictionary& dict, const std::string& key, const std::string& val);
 
-  OTBApplicationEngine_EXPORT unsigned int GetInt(
-    const itk::MetaDataDictionary &dict,
-    const std::string &key);
-  OTBApplicationEngine_EXPORT void SetInt(
-    itk::MetaDataDictionary &dict,
-    const std::string &key,
-    unsigned int val);
+OTBApplicationEngine_EXPORT unsigned int GetInt(const itk::MetaDataDictionary& dict, const std::string& key);
+OTBApplicationEngine_EXPORT void SetInt(itk::MetaDataDictionary& dict, const std::string& key, unsigned int val);
 
-  OTBApplicationEngine_EXPORT double GetDouble(
-    const itk::MetaDataDictionary &dict,
-    const std::string &key);
-  OTBApplicationEngine_EXPORT void SetDouble(
-    itk::MetaDataDictionary &dict,
-    const std::string &key,
-    double val);
+OTBApplicationEngine_EXPORT double GetDouble(const itk::MetaDataDictionary& dict, const std::string& key);
+OTBApplicationEngine_EXPORT void SetDouble(itk::MetaDataDictionary& dict, const std::string& key, double val);
 
-  OTBApplicationEngine_EXPORT otb::OTB_GCP GetGCP(
-    const itk::MetaDataDictionary &dict,
-    const std::string &key);
-  OTBApplicationEngine_EXPORT void SetGCP(
-    itk::MetaDataDictionary &dict,
-    const std::string &key,
-    const otb::OTB_GCP &val);
+OTBApplicationEngine_EXPORT otb::OTB_GCP GetGCP(const itk::MetaDataDictionary& dict, const std::string& key);
+OTBApplicationEngine_EXPORT void SetGCP(itk::MetaDataDictionary& dict, const std::string& key, const otb::OTB_GCP& val);
 
-  OTBApplicationEngine_EXPORT otb::MetaDataKey::VectorType GetVector(
-    const itk::MetaDataDictionary &dict,
-    const std::string &key);
-  OTBApplicationEngine_EXPORT void SetVector(
-    itk::MetaDataDictionary &dict,
-    const std::string &key,
-    const otb::MetaDataKey::VectorType &val);
+OTBApplicationEngine_EXPORT otb::MetaDataKey::VectorType GetVector(const itk::MetaDataDictionary& dict, const std::string& key);
+OTBApplicationEngine_EXPORT void SetVector(itk::MetaDataDictionary& dict, const std::string& key, const otb::MetaDataKey::VectorType& val);
 
-  OTBApplicationEngine_EXPORT otb::ImageKeywordlist GetImageKWL(
-    const itk::MetaDataDictionary &dict,
-    const std::string &key);
-  OTBApplicationEngine_EXPORT void SetImageKWL(
-    itk::MetaDataDictionary &dict,
-    const std::string &key,
-    const otb::ImageKeywordlist &val);
+OTBApplicationEngine_EXPORT otb::ImageKeywordlist GetImageKWL(const itk::MetaDataDictionary& dict, const std::string& key);
+OTBApplicationEngine_EXPORT void SetImageKWL(itk::MetaDataDictionary& dict, const std::string& key, const otb::ImageKeywordlist& val);
 
-  OTBApplicationEngine_EXPORT otb::VectorDataKeywordlist GetVectorDataKWL(
-    const itk::MetaDataDictionary &dict,
-    const std::string &key);
-  OTBApplicationEngine_EXPORT void SetVectorDataKWL(
-    itk::MetaDataDictionary &dict,
-    const std::string &key,
-    const otb::VectorDataKeywordlist &val);
+OTBApplicationEngine_EXPORT otb::VectorDataKeywordlist GetVectorDataKWL(const itk::MetaDataDictionary& dict, const std::string& key);
+OTBApplicationEngine_EXPORT void SetVectorDataKWL(itk::MetaDataDictionary& dict, const std::string& key, const otb::VectorDataKeywordlist& val);
 
-  OTBApplicationEngine_EXPORT otb::MetaDataKey::BoolVectorType GetBoolVector(
-    const itk::MetaDataDictionary &dict,
-    const std::string &key);
-  OTBApplicationEngine_EXPORT void SetBoolVector(
-    itk::MetaDataDictionary &dict,
-    const std::string &key,
-    const otb::MetaDataKey::BoolVectorType &val);
+OTBApplicationEngine_EXPORT otb::MetaDataKey::BoolVectorType GetBoolVector(const itk::MetaDataDictionary& dict, const std::string& key);
+OTBApplicationEngine_EXPORT void SetBoolVector(itk::MetaDataDictionary& dict, const std::string& key, const otb::MetaDataKey::BoolVectorType& val);
 
 } // end of namespace MetaDataHelper
 

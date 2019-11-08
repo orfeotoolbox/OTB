@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,17 +39,16 @@ namespace otb
 class OTBCommon_EXPORT StringToHTML
 {
 public:
-  StringToHTML(const std::string & str);
+  StringToHTML(const std::string& str);
 
   void Print(std::ostream& os) const;
 
 protected:
-
 private:
-  const std::string & m_Str;
+  const std::string& m_Str;
 };
 
-extern OTBCommon_EXPORT std::ostream & operator<< (std::ostream& os, const otb::StringToHTML& str);
+extern OTBCommon_EXPORT std::ostream& operator<<(std::ostream& os, const otb::StringToHTML& str);
 
 } // end of namespace otb
 

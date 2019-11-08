@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,59 +30,50 @@ namespace Wrapper
 {
 
 template <class TInputValue, class TOutputValue>
-void
-LearningApplicationBase<TInputValue,TOutputValue>
-::InitSharkRandomForestsParams()
+void LearningApplicationBase<TInputValue, TOutputValue>::InitSharkRandomForestsParams()
 {
 
 
   AddChoice("classifier.sharkrf", "Shark Random forests classifier");
   SetParameterDescription("classifier.sharkrf",
-                          "This group of parameters allows setting Shark Random Forests classifier parameters. "
-                          "See complete documentation here \\url{http://image.diku.dk/shark/doxygen_pages/html/classshark_1_1_r_f_trainer.html}.\n It is noteworthy that training is parallel.");
-  //MaxNumberOfTrees
-  AddParameter(ParameterType_Int, "classifier.sharkrf.nbtrees",
-               "Maximum number of trees in the forest");
-  SetParameterInt("classifier.sharkrf.nbtrees",100);
-  SetParameterDescription(
-    "classifier.sharkrf.nbtrees",
-    "The maximum number of trees in the forest. Typically, the more trees you have, the better the accuracy. "
-    "However, the improvement in accuracy generally diminishes and reaches an asymptote for a certain number of trees. "
-    "Also to keep in mind, increasing the number of trees increases the prediction time linearly.");
-  
-  
-  //NodeSize
+                          "http://image.diku.dk/shark/doxygen_pages/html/classshark_1_1_r_f_trainer.html.\n It is noteworthy that training is parallel.");
+  // MaxNumberOfTrees
+  AddParameter(ParameterType_Int, "classifier.sharkrf.nbtrees", "Maximum number of trees in the forest");
+  SetParameterInt("classifier.sharkrf.nbtrees", 100);
+  SetParameterDescription("classifier.sharkrf.nbtrees",
+                          "The maximum number of trees in the forest. Typically, the more trees you have, the better the accuracy. "
+                          "However, the improvement in accuracy generally diminishes and reaches an asymptote for a certain number of trees. "
+                          "Also to keep in mind, increasing the number of trees increases the prediction time linearly.");
+
+
+  // NodeSize
   AddParameter(ParameterType_Int, "classifier.sharkrf.nodesize", "Min size of the node for a split");
-  SetParameterInt("classifier.sharkrf.nodesize",25);
-  SetParameterDescription(
-    "classifier.sharkrf.nodesize",
-    "If the number of samples in a node is smaller than this parameter, "
-    "then the node will not be split. A reasonable value is a small percentage of the total data e.g. 1 percent.");
+  SetParameterInt("classifier.sharkrf.nodesize", 25);
+  SetParameterDescription("classifier.sharkrf.nodesize",
+                          "If the number of samples in a node is smaller than this parameter, "
+                          "then the node will not be split. A reasonable value is a small percentage of the total data e.g. 1 percent.");
 
-  //MTry
+  // MTry
   AddParameter(ParameterType_Int, "classifier.sharkrf.mtry", "Number of features tested at each node");
-  SetParameterInt("classifier.sharkrf.mtry",0);
-  SetParameterDescription(
-    "classifier.sharkrf.mtry",
-    "The number of features (variables) which will be tested at each node in "
-    "order to compute the split. If set to zero, the square root of the number of "
-    "features is used.");
+  SetParameterInt("classifier.sharkrf.mtry", 0);
+  SetParameterDescription("classifier.sharkrf.mtry",
+                          "The number of features (variables) which will be tested at each node in "
+                          "order to compute the split. If set to zero, the square root of the number of "
+                          "features is used.");
 
 
-  //OOB Ratio
+  // OOB Ratio
   AddParameter(ParameterType_Float, "classifier.sharkrf.oobr", "Out of bound ratio");
-  SetParameterFloat("classifier.sharkrf.oobr",0.66);
-  SetParameterDescription("classifier.sharkrf.oobr", 
-                          "Set the fraction of the original training dataset to use as the out of bag sample." 
+  SetParameterFloat("classifier.sharkrf.oobr", 0.66);
+  SetParameterDescription("classifier.sharkrf.oobr",
+                          "Set the fraction of the original training dataset to use as the out of bag sample."
                           "A good default value is 0.66. ");
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LearningApplicationBase<TInputValue,TOutputValue>
-::TrainSharkRandomForests(typename ListSampleType::Pointer trainingListSample,
-                          typename TargetListSampleType::Pointer trainingLabeledListSample,
-                          std::string modelPath)
+void LearningApplicationBase<TInputValue, TOutputValue>::TrainSharkRandomForests(typename ListSampleType::Pointer trainingListSample,
+                                                                                 typename TargetListSampleType::Pointer trainingLabeledListSample,
+                                                                                 std::string                            modelPath)
 {
   typedef otb::SharkRandomForestsMachineLearningModel<InputValueType, OutputValueType> SharkRandomForestType;
   typename SharkRandomForestType::Pointer classifier = SharkRandomForestType::New();
@@ -98,7 +89,7 @@ LearningApplicationBase<TInputValue,TOutputValue>
   classifier->Save(modelPath);
 }
 
-} //end namespace wrapper
-} //end namespace otb
+} // end namespace wrapper
+} // end namespace otb
 
 #endif

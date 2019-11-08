@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -26,60 +26,53 @@
 #include "itkMacro.h"
 #include "otbMath.h"
 
-namespace otb {
+namespace otb
+{
 
 /**
  * Standard (useless) definition for unknown wavelet
  */
 template <Wavelet::Wavelet TMotherWaveletOperator>
-const char *
-WaveletGenerator<TMotherWaveletOperator>
-::GetWaveletName() const
+const char*                WaveletGenerator<TMotherWaveletOperator>::GetWaveletName() const
 {
   std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
   msg << " is unknown or has to be implemented...\n";
-  throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+  throw itk::ExceptionObject(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
 
   return "Unknown";
 }
 
 template <Wavelet::Wavelet TMotherWaveletOperator>
-void
-WaveletGenerator<TMotherWaveletOperator>
-::GetLowPassCoefficientVector(CoefficientVector& itkNotUsed(coeff)) const
+void WaveletGenerator<TMotherWaveletOperator>::GetLowPassCoefficientVector(CoefficientVector& itkNotUsed(coeff)) const
 {
   std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
   msg << " is unknown or has to be implemented...\n";
-  throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+  throw itk::ExceptionObject(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
 }
 
 template <Wavelet::Wavelet TMotherWaveletOperator>
-void
-WaveletGenerator<TMotherWaveletOperator>
-::GetHighPassCoefficientVector(CoefficientVector& itkNotUsed(coeff)) const
+void WaveletGenerator<TMotherWaveletOperator>::GetHighPassCoefficientVector(CoefficientVector& itkNotUsed(coeff)) const
 {
   std::ostringstream msg;
   msg << "The mother wavelet ID " << TMotherWaveletOperator;
   msg << " is unknown or has to be implemented (check the hxx file)...\n";
-  throw itk::ExceptionObject(__FILE__, __LINE__, msg.str().c_str(), ITK_LOCATION);
+  throw itk::ExceptionObject(__FILE__, __LINE__, msg.str(), ITK_LOCATION);
 }
 
 /**
  * Template specialization for the Haar wavelet
  */
 template <>
-const char * WaveletGenerator<Wavelet::HAAR>::GetWaveletName() const
+const char* WaveletGenerator<Wavelet::HAAR>::GetWaveletName() const
 {
-  static const std::string waveletName ("Haar");
+  static const std::string waveletName("Haar");
   return waveletName.c_str();
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::HAAR>
-::GetLowPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::HAAR>::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(3);
   // stands for z^{-1}
@@ -91,9 +84,7 @@ WaveletGenerator<Wavelet::HAAR>
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::HAAR>
-::GetHighPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::HAAR>::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(3);
   // stands for z^{-1}
@@ -108,16 +99,14 @@ WaveletGenerator<Wavelet::HAAR>
  * Template specialization for the Daubechies 4 wavelet
  */
 template <>
-const char * WaveletGenerator<Wavelet::DAUBECHIES4>::GetWaveletName() const
+const char* WaveletGenerator<Wavelet::DAUBECHIES4>::GetWaveletName() const
 {
-  static const std::string waveletName ("Daubechies_4");
+  static const std::string waveletName("Daubechies_4");
   return waveletName.c_str();
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::DAUBECHIES4>
-::GetLowPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::DAUBECHIES4>::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(5);
   coeff[0] = 0.;
@@ -128,9 +117,7 @@ WaveletGenerator<Wavelet::DAUBECHIES4>
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::DAUBECHIES4>
-::GetHighPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::DAUBECHIES4>::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(5);
   coeff[0] = 0;
@@ -144,16 +131,14 @@ WaveletGenerator<Wavelet::DAUBECHIES4>
  * Template specialization for the Daubechies 6 tap wavelet
  */
 template <>
-const char * WaveletGenerator<Wavelet::DAUBECHIES6>::GetWaveletName() const
+const char* WaveletGenerator<Wavelet::DAUBECHIES6>::GetWaveletName() const
 {
-  static const std::string waveletName ("Daubechies_6");
+  static const std::string waveletName("Daubechies_6");
   return waveletName.c_str();
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::DAUBECHIES6>
-::GetLowPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::DAUBECHIES6>::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(7);
   coeff[0] = 0.;
@@ -166,9 +151,7 @@ WaveletGenerator<Wavelet::DAUBECHIES6>
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::DAUBECHIES6>
-::GetHighPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::DAUBECHIES6>::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(7);
   coeff[0] = 0.;
@@ -184,16 +167,14 @@ WaveletGenerator<Wavelet::DAUBECHIES6>
  * Template specialization for the Daubechies 8 wavelet
  */
 template <>
-const char * WaveletGenerator<Wavelet::DAUBECHIES8>::GetWaveletName() const
+const char* WaveletGenerator<Wavelet::DAUBECHIES8>::GetWaveletName() const
 {
-  static const std::string waveletName ("Daubechies_8");
+  static const std::string waveletName("Daubechies_8");
   return waveletName.c_str();
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::DAUBECHIES8>
-::GetLowPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::DAUBECHIES8>::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(9);
   coeff[0] = 0.;
@@ -208,9 +189,7 @@ WaveletGenerator<Wavelet::DAUBECHIES8>
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::DAUBECHIES8>
-::GetHighPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::DAUBECHIES8>::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(9);
   coeff[0] = 0.;
@@ -228,49 +207,45 @@ WaveletGenerator<Wavelet::DAUBECHIES8>
  * Template specialization for the Daubechies 12 tap wavelet
  */
 template <>
-const char * WaveletGenerator<Wavelet::DAUBECHIES12>::GetWaveletName() const
+const char* WaveletGenerator<Wavelet::DAUBECHIES12>::GetWaveletName() const
 {
-  static const std::string waveletName ("Daubechies_12");
+  static const std::string waveletName("Daubechies_12");
   return waveletName.c_str();
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::DAUBECHIES12>
-::GetLowPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::DAUBECHIES12>::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(13);
-  coeff[0] = 0.;
-  coeff[1] = 0.1115407433501095;
-  coeff[2] = 0.4946238903984533;
-  coeff[3] = 0.7511339080210959;
-  coeff[4] = 0.3152503517091982;
-  coeff[5] = -0.2262646939654400;
-  coeff[6] = -0.1297668675672625;
-  coeff[7] = 0.0975016055873225;
-  coeff[8] = 0.0275228655303053;
-  coeff[9] = -0.0315820393184862;
+  coeff[0]  = 0.;
+  coeff[1]  = 0.1115407433501095;
+  coeff[2]  = 0.4946238903984533;
+  coeff[3]  = 0.7511339080210959;
+  coeff[4]  = 0.3152503517091982;
+  coeff[5]  = -0.2262646939654400;
+  coeff[6]  = -0.1297668675672625;
+  coeff[7]  = 0.0975016055873225;
+  coeff[8]  = 0.0275228655303053;
+  coeff[9]  = -0.0315820393184862;
   coeff[10] = 0.0005538422011614;
   coeff[11] = 0.0047772575119455;
   coeff[12] = -0.0010773010853085;
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::DAUBECHIES12>
-::GetHighPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::DAUBECHIES12>::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(13);
-  coeff[0] = 0.;
-  coeff[1] = 0.0010773010853085;
-  coeff[2] = 0.0047772575119455;
-  coeff[3] = -0.0005538422011614;
-  coeff[4] = -0.0315820393184862;
-  coeff[5] = -0.0275228655303053;
-  coeff[6] = 0.0975016055873225;
-  coeff[7] = 0.1297668675672625;
-  coeff[8] = -0.2262646939654400;
-  coeff[9] = -0.3152503517091982;
+  coeff[0]  = 0.;
+  coeff[1]  = 0.0010773010853085;
+  coeff[2]  = 0.0047772575119455;
+  coeff[3]  = -0.0005538422011614;
+  coeff[4]  = -0.0315820393184862;
+  coeff[5]  = -0.0275228655303053;
+  coeff[6]  = 0.0975016055873225;
+  coeff[7]  = 0.1297668675672625;
+  coeff[8]  = -0.2262646939654400;
+  coeff[9]  = -0.3152503517091982;
   coeff[10] = 0.7511339080210959;
   coeff[11] = -0.4946238903984533;
   coeff[12] = 0.1115407433501095;
@@ -280,28 +255,26 @@ WaveletGenerator<Wavelet::DAUBECHIES12>
  * Template specialization for the Daubechies 20 tap wavelet
  */
 template <>
-const char * WaveletGenerator<Wavelet::DAUBECHIES20>::GetWaveletName() const
+const char* WaveletGenerator<Wavelet::DAUBECHIES20>::GetWaveletName() const
 {
-  static const std::string waveletName ("Daubechies_20");
+  static const std::string waveletName("Daubechies_20");
   return waveletName.c_str();
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::DAUBECHIES20>
-::GetLowPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::DAUBECHIES20>::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(21);
-  coeff[0] = 0.;
-  coeff[1] = 0.026670057901;
-  coeff[2] = 0.188176800078;
-  coeff[3] = 0.527201188932;
-  coeff[4] = 0.688459039454;
-  coeff[5] = 0.281172343661;
-  coeff[6] = -0.249846424327;
-  coeff[7] = -0.195946274377;
-  coeff[8] = 0.127369340336;
-  coeff[9] = 0.093057364604;
+  coeff[0]  = 0.;
+  coeff[1]  = 0.026670057901;
+  coeff[2]  = 0.188176800078;
+  coeff[3]  = 0.527201188932;
+  coeff[4]  = 0.688459039454;
+  coeff[5]  = 0.281172343661;
+  coeff[6]  = -0.249846424327;
+  coeff[7]  = -0.195946274377;
+  coeff[8]  = 0.127369340336;
+  coeff[9]  = 0.093057364604;
   coeff[10] = -0.071394147166;
   coeff[11] = -0.029457536822;
   coeff[12] = 0.033212674059;
@@ -316,21 +289,19 @@ WaveletGenerator<Wavelet::DAUBECHIES20>
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::DAUBECHIES20>
-::GetHighPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::DAUBECHIES20>::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(21);
-  coeff[0] = 0.;
-  coeff[1] = 0.000013264203;
-  coeff[2] = 0.000093588670;
-  coeff[3] = 0.000116466855;
-  coeff[4] = -0.000685856695;
-  coeff[5] = -0.001992405295;
-  coeff[6] = 0.001395351747;
-  coeff[7] = 0.010733175483;
-  coeff[8] = 0.003606553567;
-  coeff[9] = -0.033212674059;
+  coeff[0]  = 0.;
+  coeff[1]  = 0.000013264203;
+  coeff[2]  = 0.000093588670;
+  coeff[3]  = 0.000116466855;
+  coeff[4]  = -0.000685856695;
+  coeff[5]  = -0.001992405295;
+  coeff[6]  = 0.001395351747;
+  coeff[7]  = 0.010733175483;
+  coeff[8]  = 0.003606553567;
+  coeff[9]  = -0.033212674059;
   coeff[10] = -0.029457536822;
   coeff[11] = 0.071394147166;
   coeff[12] = 0.093057364604;
@@ -353,33 +324,29 @@ WaveletGenerator<Wavelet::DAUBECHIES20>
  *       vol 1(2), pp:205-220, April 1992
  */
 template <>
-const char * WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_2_4>::GetWaveletName() const
+const char* WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_2_4>::GetWaveletName() const
 {
-  static const std::string waveletName ("SplineBiorthoonal_2_4");
+  static const std::string waveletName("SplineBiorthoonal_2_4");
   return waveletName.c_str();
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_2_4>
-::GetLowPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_2_4>::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(9);
   coeff[0] = 3.0 / 128.0 * CONST_SQRT2;
-  coeff[1] = -3.0 /  64.0 * CONST_SQRT2;
-  coeff[2] = -1.0 /   8.0 * CONST_SQRT2;
-  coeff[3] = 19.0 /  64.0 * CONST_SQRT2;
-  coeff[4] = 45.0 /  64.0 * CONST_SQRT2;
-  coeff[5] = 19.0 /  64.0 * CONST_SQRT2;
-  coeff[6] = -1.0 /   8.0 * CONST_SQRT2;
-  coeff[7] = -3.0 /  64.0 * CONST_SQRT2;
+  coeff[1] = -3.0 / 64.0 * CONST_SQRT2;
+  coeff[2] = -1.0 / 8.0 * CONST_SQRT2;
+  coeff[3] = 19.0 / 64.0 * CONST_SQRT2;
+  coeff[4] = 45.0 / 64.0 * CONST_SQRT2;
+  coeff[5] = 19.0 / 64.0 * CONST_SQRT2;
+  coeff[6] = -1.0 / 8.0 * CONST_SQRT2;
+  coeff[7] = -3.0 / 64.0 * CONST_SQRT2;
   coeff[8] = 3.0 / 128.0 * CONST_SQRT2;
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_2_4>
-::GetHighPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_2_4>::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(9);
   coeff[0] = 0.;
@@ -407,16 +374,14 @@ WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_2_4>
  *       Also known as 7/9 filter.
  */
 template <>
-const char * WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_4_4>::GetWaveletName() const
+const char* WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_4_4>::GetWaveletName() const
 {
-  static const std::string waveletName ("SplineBiorthoonal_4_4");
+  static const std::string waveletName("SplineBiorthoonal_4_4");
   return waveletName.c_str();
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_4_4>
-::GetLowPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_4_4>::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(9);
   coeff[0] = 0.026748757411 * CONST_SQRT2;
@@ -431,9 +396,7 @@ WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_4_4>
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_4_4>
-::GetHighPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_4_4>::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(9);
   coeff[0] = 0.;
@@ -451,16 +414,14 @@ WaveletGenerator<Wavelet::SPLINE_BIORTHOGONAL_4_4>
  * Template specialization for the Symlet 8 tap orthogonal wavelet
  */
 template <>
-const char * WaveletGenerator<Wavelet::SYMLET8>::GetWaveletName() const
+const char* WaveletGenerator<Wavelet::SYMLET8>::GetWaveletName() const
 {
-  static const std::string waveletName ("Symlet_8");
+  static const std::string waveletName("Symlet_8");
   return waveletName.c_str();
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::SYMLET8>
-::GetLowPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::SYMLET8>::GetLowPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(9);
   coeff[0] = 0.;
@@ -475,9 +436,7 @@ WaveletGenerator<Wavelet::SYMLET8>
 }
 
 template <>
-void
-WaveletGenerator<Wavelet::SYMLET8>
-::GetHighPassCoefficientVector(CoefficientVector& coeff) const
+void WaveletGenerator<Wavelet::SYMLET8>::GetHighPassCoefficientVector(CoefficientVector& coeff) const
 {
   coeff.resize(9);
   coeff[0] = 0.;

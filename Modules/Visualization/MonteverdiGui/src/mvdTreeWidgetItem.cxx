@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -80,59 +80,43 @@ int count = 0;
 // mvd::TreeWidgetItem, not only those in DatabaseBrowser view.
 #define BUG_WORKAROUND_MANTIS_947 1
 
-TreeWidgetItem
-::TreeWidgetItem( QTreeWidgetItem* p,
-                  const QString& txt,
-                  const QVariant& id,
-                  const QStringList& columns,
-                  TreeWidgetItem::ItemType itemType ) :
+TreeWidgetItem::TreeWidgetItem(QTreeWidgetItem* p, const QString& txt, const QVariant& id, const QStringList& columns, TreeWidgetItem::ItemType itemType)
+  :
 #if BUG_WORKAROUND_MANTIS_947
-  QTreeWidgetItem( QStringList( txt ) << QString() << columns, itemType )
-#else // BUG_WORKAROUND_MANTIS_947
-  QTreeWidgetItem( p, QStringList( txt ) << QString() << columns, itemType )
+    QTreeWidgetItem(QStringList(txt) << QString() << columns, itemType)
+#else  // BUG_WORKAROUND_MANTIS_947
+    QTreeWidgetItem(p, QStringList(txt) << QString() << columns, itemType)
 #endif // BUG_WORKAROUND_MANTIS_947
 {
-  assert( p!=NULL );
+  assert(p != NULL);
   // parent->addChild( this );
 
-  SetId( id );
+  SetId(id);
 
-  switch( itemType )
-    {
-    case TreeWidgetItem::ITEM_TYPE_NODE:
-      setChildIndicatorPolicy(
-        QTreeWidgetItem::ShowIndicator
-      );
-      setFlags(
+  switch (itemType)
+  {
+  case TreeWidgetItem::ITEM_TYPE_NODE:
+    setChildIndicatorPolicy(QTreeWidgetItem::ShowIndicator);
+    setFlags(
         // Qt::ItemIsDragEnabled |
-        Qt::ItemIsDropEnabled |
-        Qt::ItemIsEditable |
-        Qt::ItemIsEnabled
-      );
+        Qt::ItemIsDropEnabled | Qt::ItemIsEditable | Qt::ItemIsEnabled);
 #if BUG_WORKAROUND_MANTIS_947
-      p->insertChild( 0, this );
+    p->insertChild(0, this);
 #endif // BUG_WORKAROUND_MANTIS_947
     break;
 
-    case TreeWidgetItem::ITEM_TYPE_LEAF:
-      setChildIndicatorPolicy(
-        QTreeWidgetItem::DontShowIndicator
-      );
-      setFlags(
-        Qt::ItemIsDragEnabled |
-        Qt::ItemIsEditable |
-        Qt::ItemIsEnabled |
-        Qt::ItemIsSelectable
-      );
+  case TreeWidgetItem::ITEM_TYPE_LEAF:
+    setChildIndicatorPolicy(QTreeWidgetItem::DontShowIndicator);
+    setFlags(Qt::ItemIsDragEnabled | Qt::ItemIsEditable | Qt::ItemIsEnabled | Qt::ItemIsSelectable);
 #if BUG_WORKAROUND_MANTIS_947
-      p->addChild( this );
+    p->addChild(this);
 #endif // BUG_WORKAROUND_MANTIS_947
-      break;
+    break;
 
-    default:
-      assert( false );
-      break;
-    }
+  default:
+    assert(false);
+    break;
+  }
 
   /*
   qDebug()
@@ -145,14 +129,13 @@ TreeWidgetItem
     << "text[ 0 ]:" << parent->text( 0 );
   */
 
-  ++ count;
+  ++count;
 
   qDebug() << "Item count:" << count;
 }
 
 /*******************************************************************************/
-TreeWidgetItem
-::~TreeWidgetItem()
+TreeWidgetItem::~TreeWidgetItem()
 {
   /*
   qDebug()
@@ -165,19 +148,17 @@ TreeWidgetItem
     << "text[ 0 ]:" << (parent()==NULL ? "" : parent()->text( 0 ));
   */
 
-  -- count;
+  --count;
 
   qDebug() << "Item count:" << count;
 }
 
 /*******************************************************************************/
-QTreeWidgetItem*
-TreeWidgetItem
-::clone() const
+QTreeWidgetItem* TreeWidgetItem::clone() const
 {
   qDebug() << this << "::clone()";
 
-  return new TreeWidgetItem( *this );
+  return new TreeWidgetItem(*this);
 }
 
 } // end namespace 'mvd'

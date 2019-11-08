@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,15 +40,14 @@ namespace otb
  * \ingroup OTBInterpolation
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT BSplineDecompositionImageFilter :
-  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT BSplineDecompositionImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef BSplineDecompositionImageFilter                    Self;
+  typedef BSplineDecompositionImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(BSplineDecompositionImageFilter, ImageToImageFilter);
@@ -64,8 +63,7 @@ public:
 
   /** Dimension underlying input image. */
   itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** Iterator typedef support */
   typedef itk::ImageLinearIteratorWithIndex<TOutputImage> OutputLinearIterator;
@@ -77,23 +75,25 @@ public:
 
 protected:
   BSplineDecompositionImageFilter();
-  ~BSplineDecompositionImageFilter() override {}
+  ~BSplineDecompositionImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void GenerateData() override;
 
   /** These are needed by the smoothing spline routine. */
-  std::vector<double> m_Scratch;             // temp storage for processing of Coefficients
-  typename TInputImage::SizeType m_DataLength;    // Image size
-  unsigned int m_SplineOrder;                // User specified spline order (3rd or cubic is the default)
-  double       m_SplinePoles[3];             // Poles calculated for a given spline order
-  int          m_NumberOfPoles;              // number of poles
-  double       m_Tolerance;                  // Tolerance used for determining initial causal coefficient
-  unsigned int m_IteratorDirection;              // Direction for iterator incrementing
+  std::vector<double>            m_Scratch;           // temp storage for processing of Coefficients
+  typename TInputImage::SizeType m_DataLength;        // Image size
+  unsigned int                   m_SplineOrder;       // User specified spline order (3rd or cubic is the default)
+  double                         m_SplinePoles[3];    // Poles calculated for a given spline order
+  int                            m_NumberOfPoles;     // number of poles
+  double                         m_Tolerance;         // Tolerance used for determining initial causal coefficient
+  unsigned int                   m_IteratorDirection; // Direction for iterator incrementing
 
 private:
-  BSplineDecompositionImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  BSplineDecompositionImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Determines the poles given the Spline Order. */
   virtual void SetPoles();
@@ -119,7 +119,6 @@ private:
 
   /** Copies a vector of data from m_Scratch to the Coefficients image. */
   void CopyScratchToCoefficients(OutputLinearIterator&);
-
 };
 
 } // namespace itk

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -51,16 +51,15 @@ namespace otb
  *
  * \ingroup OTBImageManipulation
  */
-template<class TInputImage>
-class ITK_EXPORT PersistentInnerProductVectorImageFilter :
-  public PersistentImageFilter<TInputImage, TInputImage>
+template <class TInputImage>
+class ITK_EXPORT PersistentInnerProductVectorImageFilter : public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentInnerProductVectorImageFilter         Self;
+  typedef PersistentInnerProductVectorImageFilter Self;
   typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -80,7 +79,7 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Smart Pointer type to a DataObject. */
-  typedef typename itk::DataObject::Pointer DataObjectPointer;
+  typedef typename itk::DataObject::Pointer                  DataObjectPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Type definition for a double matrix. */
@@ -96,7 +95,7 @@ public:
   {
     return this->GetInnerProductOutput()->Get();
   }
-  MatrixObjectType* GetInnerProductOutput();
+  MatrixObjectType*       GetInnerProductOutput();
   const MatrixObjectType* GetInnerProductOutput() const;
 
   /** Make a DataObject of the correct type to be used as the specified
@@ -120,14 +119,16 @@ public:
 
 protected:
   PersistentInnerProductVectorImageFilter();
-  ~PersistentInnerProductVectorImageFilter() override {}
+  ~PersistentInnerProductVectorImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentInnerProductVectorImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PersistentInnerProductVectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ArrayMatrixType m_ThreadInnerProduct;
 
@@ -158,17 +159,15 @@ private:
  * \ingroup OTBImageManipulation
  */
 
-template<class TInputImage>
-class ITK_EXPORT StreamingInnerProductVectorImageFilter :
-  public PersistentFilterStreamingDecorator<PersistentInnerProductVectorImageFilter<TInputImage> >
+template <class TInputImage>
+class ITK_EXPORT StreamingInnerProductVectorImageFilter : public PersistentFilterStreamingDecorator<PersistentInnerProductVectorImageFilter<TInputImage>>
 {
 public:
   /** Standard Self typedef */
-  typedef StreamingInnerProductVectorImageFilter Self;
-  typedef PersistentFilterStreamingDecorator
-  <PersistentInnerProductVectorImageFilter<TInputImage> > Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef StreamingInnerProductVectorImageFilter                                                   Self;
+  typedef PersistentFilterStreamingDecorator<PersistentInnerProductVectorImageFilter<TInputImage>> Superclass;
+  typedef itk::SmartPointer<Self>                                                                  Pointer;
+  typedef itk::SmartPointer<const Self>                                                            ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -184,11 +183,11 @@ public:
   typedef typename StatFilterType::MatrixObjectType MatrixObjectType;
 
   using Superclass::SetInput;
-  void SetInput(TInputImage * input)
+  void SetInput(TInputImage* input)
   {
     this->GetFilter()->SetInput(input);
   }
-  TInputImage * GetInput()
+  TInputImage* GetInput()
   {
     return this->GetFilter()->GetInput();
   }
@@ -215,14 +214,15 @@ public:
 
 protected:
   /** Constructor */
-  StreamingInnerProductVectorImageFilter() {};
+  StreamingInnerProductVectorImageFilter(){};
   /** Destructor */
-  ~StreamingInnerProductVectorImageFilter() override {}
+  ~StreamingInnerProductVectorImageFilter() override
+  {
+  }
 
 private:
-  StreamingInnerProductVectorImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  StreamingInnerProductVectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

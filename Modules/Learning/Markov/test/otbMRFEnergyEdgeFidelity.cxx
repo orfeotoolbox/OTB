@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,17 +19,16 @@
  */
 
 
-
 #include "otbMRFEnergyEdgeFidelity.h"
 #include "otbImage.h"
 #include <fstream>
 
-int otbMRFEnergyEdgeFidelity(int itkNotUsed(argc), char * argv[])
+int otbMRFEnergyEdgeFidelity(int itkNotUsed(argc), char* argv[])
 {
-  const char * outputFile = argv[1];
+  const char* outputFile = argv[1];
 
-  typedef double                                           PixelTypeInput;
-  typedef int                                              PixelTypeLabel;
+  typedef double PixelTypeInput;
+  typedef int    PixelTypeLabel;
   typedef otb::Image<PixelTypeInput, 2>                    ImageType;
   typedef otb::Image<PixelTypeLabel, 2>                    LabelType;
   typedef otb::MRFEnergyEdgeFidelity<ImageType, LabelType> MRFEnergyType;

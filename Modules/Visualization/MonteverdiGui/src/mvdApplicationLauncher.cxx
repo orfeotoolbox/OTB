@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -20,30 +20,11 @@
 
 #include "mvdApplicationLauncher.h"
 
-
-/*****************************************************************************/
-/* INCLUDE SECTION                                                           */
-
-//
-// Qt includes (sorted by alphabetic order)
-//// Must be included before system/custom includes.
-
-//
-// System includes (sorted by alphabetic order)
-
-//
-// ITK includes (sorted by alphabetic order)
-
-//
-// OTB includes (sorted by alphabetic order)
 #include "otbWrapperApplicationRegistry.h"
-#include "otbWrapperApplication.h"
- 
-//
-// Monteverdi includes (sorted by alphabetic order)
+#include "otbWrapperQtWidgetMainWindow.h"
+
 #include "mvdAlgorithm.h"
 #include "mvdI18nCoreApplication.h"
-//#include "mvdTextStream.h"
 #include "mvdQtWidgetView.h"
 
 namespace mvd
@@ -69,60 +50,41 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-ApplicationLauncher
-::ApplicationLauncher( QObject* p ) :
-  QObject( p )
+ApplicationLauncher::ApplicationLauncher(QObject* p) : QObject(p)
 {
 }
 
 /*******************************************************************************/
-ApplicationLauncher
-::~ApplicationLauncher()
+ApplicationLauncher::~ApplicationLauncher()
 {
 }
 
 /*******************************************************************************/
-Wrapper::QtWidgetView *
-ApplicationLauncher
-::NewOtbApplicationWidget( const QString & appName,
-			   bool isStandalone,
-			   QWidget * p,
-			   Qt::WindowFlags flags ) const
+otb::Wrapper::Application::Pointer ApplicationLauncher::PrepareApplication(const QString& appName, bool isStandalone) const
 {
   // Create module
-  otb::Wrapper::Application::Pointer otbApp(
-    otb::Wrapper::ApplicationRegistry::CreateApplication(
-      ToStdString( appName )
-    )
-  );
+  otb::Wrapper::Application::Pointer otbApp(otb::Wrapper::ApplicationRegistry::CreateApplication(ToStdString(appName)));
 
-  if( otbApp.IsNull() )
-    {
-    throw std::runtime_error(
-      ToStdString(
-	tr( "Failed to instantiate OTB-application '%1'." )
-	.arg( appName )
-      )
-    );
-    }
+  if (otbApp.IsNull())
+  {
+    throw std::runtime_error(ToStdString(tr("Failed to instantiate OTB-application '%1'.").arg(appName)));
+  }
 
-  if( !isStandalone )
-    {
+  if (!isStandalone)
+  {
     // Search for elev parameters
-    typedef std::vector< std::string > ParametersKeys;
-    const ParametersKeys parameters( otbApp->GetParametersKeys() );
+    typedef std::vector<std::string> ParametersKeys;
+    const ParametersKeys             parameters(otbApp->GetParametersKeys());
 
     // Little flag structure with bool operator to optimize look
     // scanning parameter keys.
     struct Flags
     {
-      Flags() :
-        m_HasDem( false ),
-        m_HasGeoid( false )
+      Flags() : m_HasDem(false), m_HasGeoid(false)
       {
       }
 
-      inline operator bool () const
+      inline operator bool() const
       {
         return m_HasDem && m_HasGeoid;
       }
@@ -133,146 +95,61 @@ ApplicationLauncher
 
     Flags found;
 
-    for( ParametersKeys::const_iterator it( parameters.begin() );
-         it!=parameters.end() && !found;
-         ++it )
-      {
+    for (ParametersKeys::const_iterator it(parameters.begin()); it != parameters.end() && !found; ++it)
+    {
       std::size_t lastDot = it->find_last_of('.');
 
-      assert( I18nCoreApplication::ConstInstance()!=NULL );
+      assert(I18nCoreApplication::ConstInstance() != NULL);
       const I18nCoreApplication* i18nApp = I18nCoreApplication::ConstInstance();
 
-      if( lastDot != std::string::npos )
-        {
-        std::string lastKey(
-          it->substr( lastDot + 1, it->size() - lastDot - 1 )
-        );
+      if (lastDot != std::string::npos)
+      {
+        std::string lastKey(it->substr(lastDot + 1, it->size() - lastDot - 1));
 
-        if( lastKey=="dem" )
-          {
+        if (lastKey == "dem")
+        {
           found.m_HasDem = true;
 
-          if( i18nApp->HasSettingsKey(
-                I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE ) &&
-              i18nApp->RetrieveSettingsKey(
-                I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE ).toBool() )
-            {
-            otbApp->EnableParameter( *it );
-            otbApp->SetParameterString(
-              *it,
-              ToStdString(
-                i18nApp->RetrieveSettingsKey(
-                  I18nCoreApplication::SETTINGS_KEY_SRTM_DIR
-                )
-                .toString()
-              )
-            );
-            }
-          }
-        else if( lastKey=="geoid" )
+          if (i18nApp->HasSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE) &&
+              i18nApp->RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR_ACTIVE).toBool())
           {
+            otbApp->EnableParameter(*it);
+            otbApp->SetParameterString(*it, ToStdString(i18nApp->RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR).toString()));
+          }
+        }
+        else if (lastKey == "geoid")
+        {
           found.m_HasGeoid = true;
 
-          if( i18nApp->HasSettingsKey(
-                I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE ) &&
-              i18nApp->RetrieveSettingsKey(
-                I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE )
-              .toBool() )
-            {
-            otbApp->EnableParameter( *it );
+          if (i18nApp->HasSettingsKey(I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE) &&
+              i18nApp->RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_GEOID_PATH_ACTIVE).toBool())
+          {
+            otbApp->EnableParameter(*it);
 
-            otbApp->SetParameterString(
-              *it,
-              ToStdString(
-                i18nApp->RetrieveSettingsKey(
-                  I18nCoreApplication::SETTINGS_KEY_GEOID_PATH
-                )
-                .toString()
-              )
-            );
-            }
+            otbApp->SetParameterString(*it, ToStdString(i18nApp->RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_GEOID_PATH).toString()));
           }
         }
       }
     }
+  }
 
-  // Create GUI based on module
-  Wrapper::QtWidgetView * gui =
-    new Wrapper::QtWidgetView( otbApp, p, flags );
+  return otbApp;
+}
 
+
+otb::Wrapper::QtMainWindow* ApplicationLauncher::NewOtbApplicationWindow(const QString& appName, bool isStandalone, QWidget* parent) const
+{
+  // Setup the otb application
+  auto otbApp = PrepareApplication(appName, isStandalone);
+
+  // Create main application widget
+  auto gui = new ::mvd::Wrapper::QtWidgetView(otbApp);
   gui->CreateGui();
 
-  return gui;
+  // Make the application window
+  auto window = new ::otb::Wrapper::QtMainWindow(otbApp, gui, parent);
+
+  return window;
 }
-/*******************************************************************************/
-QWidget * 
-ApplicationLauncher
-::NewOtbApplicationWindow( const QString & appName,
-			   bool isStandalone,
-			   QWidget * p,
-			   Qt::WindowFlags flags  ) const
-{
-#if 0
-  Wrapper::QtWidgetView * appWidget =
-    ApplicationLauncher::NewOtbApplicationWidget( appName, isStandalone );
-
-  assert( appWidget!=NULL );
-  assert( appWidget->GetModel()->GetApplication() );
-
-  QMainWindow * mainWindow = new QMainWindow( p, flags );
-
-  mainWindow->setWindowTitle(
-    QString( "%1 (OTB-" OTB_VERSION_STRING ")" )
-    .arg( appWidget->GetModel()->GetApplication()->GetDocName() )
-  );
-
-  mainWindow->setWindowIcon( QIcon( ":/otb_small.png" ) );
- 
-  mainWindow->setCentralWidget( appWidget );
-
-  // Connect OTB-app widget quit signal, to the mainWindow close slot.
-  QObject::connect(
-    appWidget,
-    SIGNAL( QuitSignal() ),
-    // to:
-    mainWindow,
-    SLOT( close() )
-  );
-
-  return mainWindow;
-
-#else
-  Wrapper::QtWidgetView * appWidget =
-    ApplicationLauncher::NewOtbApplicationWidget(
-      appName,
-      isStandalone,
-      p,
-      flags | Qt::Window
-    );
-
-  assert( appWidget!=NULL );
-  assert( appWidget->GetModel()->GetApplication() );
-
-  appWidget->setWindowTitle(
-    QString( "%1 (OTB-" OTB_VERSION_STRING ")" )
-    .arg( appWidget->GetModel()->GetApplication()->GetDocName() )
-  );
-
-  appWidget->setWindowIcon( QIcon( ":/icons/process" ) );
- 
-  QObject::connect(
-    appWidget,
-    SIGNAL( QuitSignal() ),
-    // to:
-    appWidget,
-    SLOT( close() )
-  );
-
-  return appWidget;
-#endif
-}
-
-/*******************************************************************************/
-/* SLOTS                                                                       */
 
 } // end namespace 'mvd'

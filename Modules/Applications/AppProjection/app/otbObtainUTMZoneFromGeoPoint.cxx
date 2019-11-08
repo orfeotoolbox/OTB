@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,7 +21,7 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
-#include "otbMapProjectionAdapter.h"
+#include "otbSpatialReference.h"
 
 namespace otb
 {
@@ -57,29 +57,27 @@ private:
     SetDescription("UTM zone determination from a geographic point.");
 
     // Documentation
-    SetDocName("Obtain UTM Zone From Geo Point");
     SetDocLongDescription("This application returns the UTM zone of an input geographic point.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
-	AddDocTag("Miscellaneous");
-    AddDocTag(Tags::Coordinates);
+    AddDocTag(Tags::Geometry);
 
-    AddParameter(ParameterType_Float,  "lat", "Latitude");
+    AddParameter(ParameterType_Float, "lat", "Latitude");
     SetParameterDescription("lat", "Latitude value of desired point.");
 
-    AddParameter(ParameterType_Float,  "lon", "Longitude");
+    AddParameter(ParameterType_Float, "lon", "Longitude");
     SetParameterDescription("lon", "Longitude value of desired point.");
 
-    AddParameter(ParameterType_Int,"utm","UTMZone");
-    SetParameterDescription("utm","UTM Zone");
+    AddParameter(ParameterType_Int, "utm", "UTMZone");
+    SetParameterDescription("utm", "UTM Zone");
     MandatoryOff("utm");
     SetParameterRole("utm", Role_Output);
 
     SetExampleComment("Obtain a UTM Zone", 0);
-    SetDocExampleParameterValue("lat","10.0");
-    SetDocExampleParameterValue("lon","124.0");
+    SetDocExampleParameterValue("lat", "10.0");
+    SetDocExampleParameterValue("lon", "124.0");
 
     SetOfficialDocLink();
   }
@@ -91,13 +89,15 @@ private:
 
   void DoExecute() override
   {
-    int utmZone = otb::Utils::GetZoneFromGeoPoint(GetParameterFloat("lon"),
-                                                  GetParameterFloat("lat"));
-    SetParameterInt("utm",utmZone);
+    unsigned int                      utmZone = 0;
+    otb::SpatialReference::hemisphere hem;
+
+
+    otb::SpatialReference::UTMFromGeoPoint(GetParameterFloat("lon"), GetParameterFloat("lat"), utmZone, hem);
+
+    SetParameterInt("utm", utmZone);
   }
-
 };
-
 }
 }
 

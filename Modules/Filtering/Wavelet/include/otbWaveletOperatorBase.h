@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -33,7 +33,11 @@ namespace otb
 
 namespace Wavelet
 {
-enum WaveletDirection {FORWARD = 0, INVERSE = 1};
+enum WaveletDirection
+{
+  FORWARD = 0,
+  INVERSE = 1
+};
 }
 
 /**
@@ -68,15 +72,12 @@ enum WaveletDirection {FORWARD = 0, INVERSE = 1};
  *
  * \ingroup OTBWavelet
  */
-template <Wavelet::Wavelet TMotherWaveletOperator,
-    class TPixel, unsigned int VDimension,
-    class TAllocator = itk::NeighborhoodAllocator<TPixel> >
-class ITK_EXPORT WaveletOperatorBase
-  : public itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>
+template <Wavelet::Wavelet TMotherWaveletOperator, class TPixel, unsigned int VDimension, class TAllocator = itk::NeighborhoodAllocator<TPixel>>
+class ITK_EXPORT WaveletOperatorBase : public itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>
 {
 public:
   /** Standard typedefs */
-  typedef WaveletOperatorBase                                       Self;
+  typedef WaveletOperatorBase Self;
   typedef itk::NeighborhoodOperator<TPixel, VDimension, TAllocator> Superclass;
 
   itkTypeMacro(WaveletOperatorBase, NeighborhoodOperator);
@@ -86,27 +87,26 @@ public:
   itkStaticConstMacro(MotherWaveletOperator, MotherWaveletOperatorEnumType, TMotherWaveletOperator);
 
   /** Construction */
-  WaveletOperatorBase() :
-    m_UpSampleFactor(0)
-    {
+  WaveletOperatorBase() : m_UpSampleFactor(0)
+  {
     m_WaveletGenerator = WaveletGeneratorType::New();
-    }
+  }
 
   /** Construction by copy */
-  WaveletOperatorBase(const Self &other)
-    : itk::NeighborhoodOperator<TPixel, VDimension, TAllocator> (other),
-    m_UpSampleFactor(other.GetUpSampleFactor())
-    {
+  WaveletOperatorBase(const Self& other) : itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>(other), m_UpSampleFactor(other.GetUpSampleFactor())
+  {
     m_WaveletGenerator = WaveletGeneratorType::New();
-    }
+  }
 
-  ~WaveletOperatorBase() override {}
+  ~WaveletOperatorBase() override
+  {
+  }
 
   /** Assignment operator */
-  Self & operator =(const Self& other)
+  Self& operator=(const Self& other)
   {
-    Superclass::operator =(other);
-    m_UpSampleFactor = other.GetUpSampleFactor();
+    Superclass::operator=(other);
+    m_UpSampleFactor    = other.GetUpSampleFactor();
     return *this;
   }
 
@@ -129,7 +129,7 @@ public:
   /**
    * Get the name of the wavelet when necessary
    */
-  virtual const char * GetWaveletName() const
+  virtual const char* GetWaveletName() const
   {
     return this->m_WaveletGenerator->GetWaveletName();
   }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,7 +28,7 @@
 #include "itkVector.h"
 #include "otbObjectList.h"
 
-//TODO : write a HistogramSource when outputting Histogram
+// TODO : write a HistogramSource when outputting Histogram
 
 namespace otb
 {
@@ -45,7 +45,7 @@ namespace otb
  * \ingroup OTBPath
  */
 
-template<class TPath, class TFunction>
+template <class TPath, class TFunction>
 class PathListToHistogramGenerator : public itk::ProcessObject
 {
 public:
@@ -61,28 +61,25 @@ public:
   /** standard New() method support */
   itkNewMacro(Self);
 
-  typedef TPath                         PathType;
-  typedef typename PathType::Pointer    PathPointer;
-  typedef ObjectList<PathType>          PathListType;
+  typedef TPath                      PathType;
+  typedef typename PathType::Pointer PathPointer;
+  typedef ObjectList<PathType>       PathListType;
 
-  typedef TFunction                     FunctionType;
+  typedef TFunction FunctionType;
 
   typedef typename TFunction::OutputType RealType;
 
-  typedef RealType                                          MeasurementType;
-  typedef itk::Vector<MeasurementType, 1>                   ListSampleVectorType;
+  typedef RealType MeasurementType;
+  typedef itk::Vector<MeasurementType, 1> ListSampleVectorType;
   typedef itk::Statistics::ListSample<ListSampleVectorType> ListSampleType;
   typedef typename ListSampleType::Pointer                  ListSamplePointer;
   typedef typename ListSampleType::ConstPointer             ListSampleConstPointer;
 
-  typedef itk::Statistics::DenseFrequencyContainer2         FrequencyContainerType;
-  typedef itk::Statistics::Histogram< MeasurementType,
-            FrequencyContainerType >                        HistogramType;
+  typedef itk::Statistics::DenseFrequencyContainer2 FrequencyContainerType;
+  typedef itk::Statistics::Histogram<MeasurementType, FrequencyContainerType> HistogramType;
 
-  typedef itk::Statistics::SampleToHistogramFilter<
-      ListSampleType,
-      HistogramType>                                    GeneratorType;
-  typedef typename GeneratorType::Pointer               GeneratorPointer;
+  typedef itk::Statistics::SampleToHistogramFilter<ListSampleType, HistogramType> GeneratorType;
+  typedef typename GeneratorType::Pointer GeneratorPointer;
 
   typedef typename HistogramType::Pointer               HistogramPointer;
   typedef typename HistogramType::ConstPointer          HistogramConstPointer;
@@ -90,21 +87,20 @@ public:
   typedef typename HistogramType::MeasurementVectorType MeasurementVectorType;
 
   /** DataObject typedef*/
-  typedef typename Superclass::DataObjectPointer        DataObjectPointer;
+  typedef typename Superclass::DataObjectPointer             DataObjectPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
-  void GraftNthOutput(unsigned int idx, itk::DataObject *graft);
-  void GraftOutput(itk::DataObject *graft);
+  void GraftNthOutput(unsigned int idx, itk::DataObject* graft);
+  void GraftOutput(itk::DataObject* graft);
 
 public:
-
   /** Connects the input PathList for which the histogram is going to be computed */
   using Superclass::SetInput;
   void SetInput(const PathListType* path);
   const PathListType* GetInput() const;
 
   // Return the output histogram.
-   const HistogramType * GetOutput() const;
+  const HistogramType* GetOutput() const;
 
   /** Set number of histogram bins */
   void SetNumberOfBins(const SizeType& size);
@@ -117,17 +113,17 @@ public:
 
 protected:
   PathListToHistogramGenerator();
-  ~PathListToHistogramGenerator() override {}
-  void GenerateData() override;
+  ~PathListToHistogramGenerator() override
+  {
+  }
+  void              GenerateData() override;
   DataObjectPointer MakeOutput(DataObjectPointerArraySizeType) override;
   using Superclass::MakeOutput;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-
   GeneratorPointer m_HistogramGenerator;
-
 };
 
 } // end of namespace OTB

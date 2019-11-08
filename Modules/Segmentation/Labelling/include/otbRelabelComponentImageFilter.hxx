@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,16 +32,13 @@ namespace otb
 {
 
 template <class TInputImage, class TOutputImage>
-RelabelComponentImageFilter<TInputImage, TOutputImage>
-::RelabelComponentImageFilter()
+RelabelComponentImageFilter<TInputImage, TOutputImage>::RelabelComponentImageFilter()
 {
 }
 
 
-template< class TInputImage, class TOutputImage >
-void
-RelabelComponentImageFilter< TInputImage, TOutputImage >
-::GenerateInputRequestedRegion()
+template <class TInputImage, class TOutputImage>
+void RelabelComponentImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 {
   itk::ImageToImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion();
 }

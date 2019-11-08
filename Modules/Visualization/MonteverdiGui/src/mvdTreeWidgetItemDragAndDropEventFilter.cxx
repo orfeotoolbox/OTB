@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -67,26 +67,21 @@ const char* TREE_WIDGET_ITEM_MIME_TYPE = "application/x-qtreewidgetitemptrlist";
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*****************************************************************************/
-TreeWidgetItemDragAndDropEventFilter
-::TreeWidgetItemDragAndDropEventFilter( QObject* p  ) :
-  AbstractDragAndDropEventFilter( p )
+TreeWidgetItemDragAndDropEventFilter::TreeWidgetItemDragAndDropEventFilter(QObject* p) : AbstractDragAndDropEventFilter(p)
 {
 }
 
 /*****************************************************************************/
-TreeWidgetItemDragAndDropEventFilter
-::~TreeWidgetItemDragAndDropEventFilter()
+TreeWidgetItemDragAndDropEventFilter::~TreeWidgetItemDragAndDropEventFilter()
 {
 }
 
 /*****************************************************************************/
-bool
-TreeWidgetItemDragAndDropEventFilter
-::DragEnterEvent( QObject *, QDragEnterEvent* e )
+bool TreeWidgetItemDragAndDropEventFilter::DragEnterEvent(QObject*, QDragEnterEvent* e)
 {
   //
   // Bypass event its MIME data does not contain not URL(s).
-  if( !e->mimeData()->hasFormat( TREE_WIDGET_ITEM_MIME_TYPE ) )
+  if (!e->mimeData()->hasFormat(TREE_WIDGET_ITEM_MIME_TYPE))
     return false;
 
   //
@@ -100,9 +95,7 @@ TreeWidgetItemDragAndDropEventFilter
 }
 
 /*****************************************************************************/
-bool
-TreeWidgetItemDragAndDropEventFilter
-::DragLeaveEvent( QObject *, QDragLeaveEvent * )
+bool TreeWidgetItemDragAndDropEventFilter::DragLeaveEvent(QObject*, QDragLeaveEvent*)
 {
   //
   // Nothing to do: bypass event & let default behaviour occur.
@@ -110,9 +103,7 @@ TreeWidgetItemDragAndDropEventFilter
 }
 
 /*****************************************************************************/
-bool
-TreeWidgetItemDragAndDropEventFilter
-::DragMoveEvent( QObject *, QDragMoveEvent * )
+bool TreeWidgetItemDragAndDropEventFilter::DragMoveEvent(QObject*, QDragMoveEvent*)
 {
   //
   // Nothing to do: bypass event & let default behaviour occur.
@@ -120,35 +111,31 @@ TreeWidgetItemDragAndDropEventFilter
 }
 
 /*****************************************************************************/
-bool
-TreeWidgetItemDragAndDropEventFilter
-::DropEvent( QObject *, QDropEvent * e )
+bool TreeWidgetItemDragAndDropEventFilter::DropEvent(QObject*, QDropEvent* e)
 {
-  assert( e!=NULL );
-  assert( e->mimeData()!=NULL );
+  assert(e != NULL);
+  assert(e->mimeData() != NULL);
 
 
   //
   // Decode MIME data.
 
-  typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
+  typedef QList<QTreeWidgetItem*> QTreeWidgetItemList;
 
   QTreeWidgetItemList items;
 
-  int count = DecodeMimeData( items, e->mimeData() );
+  int count = DecodeMimeData(items, e->mimeData());
 
-  if( count==0 )
+  if (count == 0)
     return false;
 
   //
   // Emit signals.
 
-  for( QTreeWidgetItemList::const_iterator it = items.begin();
-       it!=items.end();
-       ++it )
-    {
-    emit ItemDropped( *it );
-    }
+  for (QTreeWidgetItemList::const_iterator it = items.begin(); it != items.end(); ++it)
+  {
+    emit ItemDropped(*it);
+  }
 
   //
   // Eatup event.

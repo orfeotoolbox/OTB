@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,12 +21,17 @@
 #ifndef otbWrapperParameter_h
 #define otbWrapperParameter_h
 
-#include "otbMacro.h"
-#include "itkObjectFactory.h"
 
-#include "otbWrapperTypes.h"
 #include "OTBApplicationEngineExport.h"
+#include "otbMacro.h"
+#include "otbWrapperTypes.h"
+
+
+#include <itkObjectFactory.h>
+
+
 #include <string>
+
 
 namespace otb
 {
@@ -41,8 +46,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT Parameter
-  : public itk::Object
+class OTBApplicationEngine_EXPORT Parameter : public itk::Object
 {
 public:
   /** Standard class typedef */
@@ -55,21 +59,21 @@ public:
   itkTypeMacro(Parameter, itk::Object);
 
   /** Set/get the parameter name */
-  virtual void SetName(const std::string&);
+  virtual void        SetName(const std::string&);
   virtual const char* GetName() const;
 
   /** Set/get the parameter description */
-  virtual void SetDescription(const std::string&);
-  virtual const std::string & GetDescription() const;
+  virtual void               SetDescription(const std::string&);
+  virtual const std::string& GetDescription() const;
 
   /** Set/get the parameter key */
-  virtual void SetKey(const std::string&);
+  virtual void        SetKey(const std::string&);
   virtual const char* GetKey() const;
-  
+
   /** Set the parameter Active flag */
   virtual void SetActive(bool flag);
   bool GetActive(bool recurseParents = false) const;
-  
+
   /** Set the parameter Mandatory flag */
   virtual void SetMandatory(bool flag);
   virtual bool GetMandatory() const;
@@ -78,19 +82,19 @@ public:
 
   /** Set the parameter AutomaticValue flag (which is the opposite of UserValue)*/
   virtual void SetAutomaticValue(bool flag);
- 
+
   /** Get the parameter AutomaticValue flag */
   virtual bool GetAutomaticValue() const;
-  
+
   /** Toogle ON the parameter AutomaticValue flag */
   void AutomaticValueOn();
-  
+
   /** Toogle OFF the parameter AutomaticValue flag */
   void AutomaticValueOff();
 
   /** Set the user access level */
   virtual void SetUserLevel(const UserLevel level);
-  
+
   /** Get the user access level */
   virtual UserLevel GetUserLevel() const;
 
@@ -104,7 +108,7 @@ public:
    * nothing
    */
   virtual void Reset();
-  
+
   virtual bool HasValue() const = 0;
 
   virtual bool HasUserValue() const;
@@ -114,7 +118,7 @@ public:
   virtual void ClearValue();
 
   /** Set/Get the root of the current parameter (direct parent) */
-  virtual void SetRoot(const Parameter::Pointer  root);
+  virtual void SetRoot(const Parameter::Pointer root);
 
   virtual const Parameter::Pointer GetRoot() const;
 
@@ -130,44 +134,63 @@ public:
   /** Get the children pointer list : not const cause we need to
     * alterate the m_Active status and the m_IsCheckbox
     */
-  virtual std::vector<Parameter::Pointer > GetChildrenList();
+  virtual std::vector<Parameter::Pointer> GetChildrenList();
+
+  /** Get the dynamic type as declared in WrapperTypes.h */
+  virtual ParameterType GetType() const = 0;
+
+  /** Error raising function to indicate a type conversion error */
+  [[noreturn]] void TypeError(const std::string& target_type) const;
+
+  /** Parameter conversion functions. They are used by WrapperApplication
+   * to provide functions like SetParameterInt, GetParameterString, etc.
+   */
+  virtual int                      ToInt() const;
+  virtual float                    ToFloat() const;
+  virtual std::string              ToString() const;
+  virtual std::vector<std::string> ToStringList() const;
+
+  virtual void FromInt(int);
+  virtual void FromFloat(float);
+  virtual void FromString(const std::string&);
+  virtual void FromStringList(const std::vector<std::string>&);
 
 protected:
   /** Constructor */
   Parameter();
 
   /** Name of the parameter */
-  std::string                        m_Name;
+  std::string m_Name;
 
   /** Description of the parameter */
-  std::string                        m_Description;
+  std::string m_Description;
 
   /** Key of the parameter */
-  std::string                        m_Key;
+  std::string m_Key;
 
   /** True if the parameter is mandatory */
-  bool                               m_Mandatory;
+  bool m_Mandatory;
 
   /** True if activated (a mandatory parameter is always active) */
-  bool                               m_Active;
+  bool m_Active;
 
   /** True if the value is set in user mode (otherwise, it is an automatic value)*/
-  bool                               m_UserValue;
+  bool m_UserValue;
 
-  UserLevel                          m_UserLevel;
+  UserLevel m_UserLevel;
 
   /** Default iotype mode */
-  Role                               m_Role;
+  Role m_Role;
 
   /** List of parents Parameters */
-  itk::WeakPointer<Parameter>        m_Root;
+  itk::WeakPointer<Parameter> m_Root;
 
   /** List of children parameters */
-  std::vector<Parameter::Pointer >   m_ChildrenList;
+  std::vector<Parameter::Pointer> m_ChildrenList;
 
 private:
-  Parameter(const Parameter &) = delete;
-  void operator =(const Parameter&) = delete;
+  Parameter(const Parameter&) = delete;
+  void operator=(const Parameter&) = delete;
 
 }; // End class Parameter
 

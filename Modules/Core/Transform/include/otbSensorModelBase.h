@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -42,28 +42,21 @@ namespace otb
  *
  * \ingroup OTBTransform
  */
-template <class TScalarType,
-    unsigned int NInputDimensions = 3,
-    unsigned int NOutputDimensions = 2>
-class ITK_EXPORT SensorModelBase : public Transform<TScalarType,
-      NInputDimensions,
-      NOutputDimensions>
+template <class TScalarType, unsigned int NInputDimensions = 3, unsigned int NOutputDimensions = 2>
+class ITK_EXPORT SensorModelBase : public Transform<TScalarType, NInputDimensions, NOutputDimensions>
 {
 
 public:
-
   /** Standard class typedefs. */
-  typedef SensorModelBase               Self;
-  typedef Transform<TScalarType,
-      NInputDimensions,
-      NOutputDimensions>                Superclass;
+  typedef SensorModelBase Self;
+  typedef Transform<TScalarType, NInputDimensions, NOutputDimensions> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef itk::Point<TScalarType, NInputDimensions>  InputPointType;
   typedef itk::Point<TScalarType, NOutputDimensions> OutputPointType;
 
-  typedef TScalarType                                      PixelType;
+  typedef TScalarType PixelType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -71,7 +64,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(SensorModelBase, Transform);
 
-  itkStaticConstMacro(InputSpaceDimension,  unsigned int, NInputDimensions);
+  itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
 
   /* Get the ImageKeywordlist */
@@ -102,9 +95,8 @@ protected:
   SensorModelAdapter::Pointer m_Model;
 
 private:
-  SensorModelBase(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  SensorModelBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // namespace otb

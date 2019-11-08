@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,17 +38,15 @@ namespace otb
  *
  * \ingroup OTBImageManipulation
  */
-template <class TInputImage1, class TInputImage2,
-    class TOutputImage, class TFunction>
-class ITK_EXPORT BinaryFunctorNeighborhoodVectorImageFilter
-  : public itk::InPlaceImageFilter<TInputImage1, TOutputImage>
+template <class TInputImage1, class TInputImage2, class TOutputImage, class TFunction>
+class ITK_EXPORT BinaryFunctorNeighborhoodVectorImageFilter : public itk::InPlaceImageFilter<TInputImage1, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef BinaryFunctorNeighborhoodVectorImageFilter          Self;
+  typedef BinaryFunctorNeighborhoodVectorImageFilter Self;
   typedef itk::InPlaceImageFilter<TInputImage1, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -74,10 +72,10 @@ public:
   typedef itk::ProcessObject ProcessObjectType;
 
   /** Connect one of the operands for pixel-wise addition */
-  void SetInput1(const TInputImage1 * image1);
+  void SetInput1(const TInputImage1* image1);
 
   /** Connect one of the operands for pixel-wise addition */
-  void SetInput2(const TInputImage2 * image2);
+  void SetInput2(const TInputImage2* image2);
 
   /** Connect the set of radius. In fact, Self keeps the larger size
    * only to define neighborhood parameters, and gives the min and max
@@ -105,10 +103,8 @@ public:
     this->Modified();
   }
 
-  typedef itk::ConstNeighborhoodIterator<TInputImage1>
-  NeighborhoodIteratorType1;
-  typedef itk::ConstNeighborhoodIterator<TInputImage2>
-  NeighborhoodIteratorType2;
+  typedef itk::ConstNeighborhoodIterator<TInputImage1> NeighborhoodIteratorType1;
+  typedef itk::ConstNeighborhoodIterator<TInputImage2> NeighborhoodIteratorType2;
 
   typedef typename NeighborhoodIteratorType1::RadiusType RadiusType1;
   typedef typename NeighborhoodIteratorType2::RadiusType RadiusType2;
@@ -119,7 +115,9 @@ public:
 
 protected:
   BinaryFunctorNeighborhoodVectorImageFilter();
-  ~BinaryFunctorNeighborhoodVectorImageFilter() override {}
+  ~BinaryFunctorNeighborhoodVectorImageFilter() override
+  {
+  }
 
   /** BinaryFunctorNeighborhoodVectorImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -131,8 +129,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /**
    * Since the number of components per pixel depends on the radius range, one must reimplement
@@ -143,8 +140,8 @@ protected:
   RadiusSizeType m_Radius;
 
 private:
-  BinaryFunctorNeighborhoodVectorImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  BinaryFunctorNeighborhoodVectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   FunctorType m_Functor;
 };

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,7 +24,8 @@
 #include "otbPCAImageFilter.h"
 
 
-namespace otb {
+namespace otb
+{
 
 /** \class MNFImageFilter
  * \brief Performs a Maximum Noise Fraction analysis of a vector image.
@@ -42,18 +43,15 @@ namespace otb {
  *
  * \ingroup OTBDimensionalityReduction
  */
-template <class TInputImage, class TOutputImage,
-            class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
-class ITK_EXPORT MNFImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TNoiseImageFilter, Transform::TransformDirection TDirectionOfTransformation>
+class ITK_EXPORT MNFImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef MNFImageFilter                                     Self;
+  typedef MNFImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -73,23 +71,23 @@ public:
   typedef TOutputImage OutputImageType;
 
   /** Filter types and related */
-  typedef StreamingStatisticsVectorImageFilter< InputImageType > CovarianceEstimatorFilterType;
-  typedef typename CovarianceEstimatorFilterType::Pointer CovarianceEstimatorFilterPointerType;
+  typedef StreamingStatisticsVectorImageFilter<InputImageType> CovarianceEstimatorFilterType;
+  typedef typename CovarianceEstimatorFilterType::Pointer      CovarianceEstimatorFilterPointerType;
 
-  typedef typename CovarianceEstimatorFilterType::RealType RealType;
-  typedef typename CovarianceEstimatorFilterType::RealPixelType VectorType;
+  typedef typename CovarianceEstimatorFilterType::RealType         RealType;
+  typedef typename CovarianceEstimatorFilterType::RealPixelType    VectorType;
   typedef typename CovarianceEstimatorFilterType::MatrixObjectType MatrixObjectType;
-  typedef typename MatrixObjectType::ComponentType MatrixType;
-  typedef typename MatrixType::InternalMatrixType InternalMatrixType;
-  typedef typename InternalMatrixType::element_type MatrixElementType;
+  typedef typename MatrixObjectType::ComponentType                 MatrixType;
+  typedef typename MatrixType::InternalMatrixType                  InternalMatrixType;
+  typedef typename InternalMatrixType::element_type                MatrixElementType;
 
-  typedef MatrixImageFilter< InputImageType, OutputImageType > TransformFilterType;
+  typedef MatrixImageFilter<InputImageType, OutputImageType> TransformFilterType;
   typedef typename TransformFilterType::Pointer TransformFilterPointerType;
 
-  typedef TNoiseImageFilter NoiseImageFilterType;
+  typedef TNoiseImageFilter                      NoiseImageFilterType;
   typedef typename NoiseImageFilterType::Pointer NoiseImageFilterPointerType;
 
-  typedef NormalizeVectorImageFilter< InputImageType, OutputImageType > NormalizeFilterType;
+  typedef NormalizeVectorImageFilter<InputImageType, OutputImageType> NormalizeFilterType;
   typedef typename NormalizeFilterType::Pointer NormalizeFilterPointerType;
 
   /**
@@ -100,56 +98,71 @@ public:
 
   itkGetConstMacro(Normalizer, NormalizeFilterType*);
   itkGetMacro(Normalizer, NormalizeFilterType*);
-  itkGetMacro(NoiseCovarianceEstimator, CovarianceEstimatorFilterType *);
-  itkGetMacro(Transformer, TransformFilterType *);
-  itkGetMacro(NoiseImageFilter, NoiseImageFilterType *);
+  itkGetMacro(NoiseCovarianceEstimator, CovarianceEstimatorFilterType*);
+  itkGetMacro(Transformer, TransformFilterType*);
+  itkGetMacro(NoiseImageFilter, NoiseImageFilterType*);
 
   /** Normalization only impact the use of variance. The data is always centered */
   itkGetMacro(UseNormalization, bool);
   itkSetMacro(UseNormalization, bool);
 
   itkGetConstMacro(MeanValues, VectorType);
-  void SetMeanValues ( const VectorType & vec )
+  void SetMeanValues(const VectorType& vec)
   {
-    m_MeanValues = vec;
+    m_MeanValues      = vec;
     m_GivenMeanValues = true;
   }
 
   itkGetConstMacro(StdDevValues, VectorType);
-  void SetStdDevValues ( const VectorType & vec )
+  void SetStdDevValues(const VectorType& vec)
   {
-    m_StdDevValues = vec;
-    m_UseNormalization = true;
+    m_StdDevValues      = vec;
+    m_UseNormalization  = true;
     m_GivenStdDevValues = true;
   }
 
   itkGetConstMacro(CovarianceMatrix, MatrixType);
-  void SetCovarianceMatrix ( const MatrixType & cov )
+  void SetCovarianceMatrix(const MatrixType& cov)
   {
-    m_CovarianceMatrix = cov;
+    m_CovarianceMatrix      = cov;
     m_GivenCovarianceMatrix = true;
   }
 
   itkGetConstMacro(NoiseCovarianceMatrix, MatrixType);
-  void SetNoiseCovarianceMatrix ( const MatrixType & mat )
+  void SetNoiseCovarianceMatrix(const MatrixType& mat)
   {
-    m_NoiseCovarianceMatrix = mat;
+    m_NoiseCovarianceMatrix      = mat;
     m_GivenNoiseCovarianceMatrix = true;
   }
 
   itkGetConstMacro(TransformationMatrix, MatrixType);
-  void SetTransformationMatrix( const MatrixType & transf, bool isForward = true )
+  void SetTransformationMatrix(const MatrixType& transf, bool isForward = true)
   {
-    m_TransformationMatrix = transf;
-    m_GivenTransformationMatrix = true;
+    m_TransformationMatrix          = transf;
+    m_GivenTransformationMatrix     = true;
     m_IsTransformationMatrixForward = isForward;
+  }
+
+  void SetStatisticsUserIgnoredValue(RealType value)
+  {
+    /** User ignored value for the normalizer */
+    m_Normalizer->GetCovarianceEstimator()->SetUserIgnoredValue(value);
+    m_Normalizer->GetCovarianceEstimator()->SetIgnoreUserDefinedValue(true);
+    /** User ignored value for the covariance estimator */
+    m_CovarianceEstimator->SetUserIgnoredValue(value);
+    m_CovarianceEstimator->SetIgnoreUserDefinedValue(true);
+    /** User ignored value for the noise covariance estimator */
+    m_NoiseCovarianceEstimator->SetUserIgnoredValue(value);
+    m_NoiseCovarianceEstimator->SetIgnoreUserDefinedValue(true);
   }
 
   itkGetConstMacro(EigenValues, VectorType);
 
 protected:
   MNFImageFilter();
-  ~MNFImageFilter() override { }
+  ~MNFImageFilter() override
+  {
+  }
 
   /** GenerateOutputInformation
    * Propagate vector length info and modify if needed
@@ -164,13 +177,13 @@ protected:
   /** GenerateData
    * Through a filter of filter structure
    */
-  void GenerateData () override;
+  void GenerateData() override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Internal methods */
-  void ForwardGenerateOutputInformation();
-  void ReverseGenerateOutputInformation();
+  void         ForwardGenerateOutputInformation();
+  void         ReverseGenerateOutputInformation();
   virtual void ForwardGenerateData();
   virtual void ReverseGenerateData();
 
@@ -196,16 +209,16 @@ protected:
   MatrixType m_TransformationMatrix;
   VectorType m_EigenValues;
 
-  NormalizeFilterPointerType m_Normalizer;
-  NoiseImageFilterPointerType m_NoiseImageFilter;
+  NormalizeFilterPointerType           m_Normalizer;
+  NoiseImageFilterPointerType          m_NoiseImageFilter;
   CovarianceEstimatorFilterPointerType m_CovarianceEstimator;
   CovarianceEstimatorFilterPointerType m_NoiseCovarianceEstimator;
-  TransformFilterPointerType m_Transformer;
+  TransformFilterPointerType           m_Transformer;
 
 private:
-  MNFImageFilter( const Self & ); // not implemented
-  void operator=( const Self & ); // not implemented
-}; // end of class
+  MNFImageFilter(const Self&); // not implemented
+  void operator=(const Self&); // not implemented
+};                             // end of class
 
 } // end of namespace otb
 
@@ -215,5 +228,3 @@ private:
 
 
 #endif
-
-

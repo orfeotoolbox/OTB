@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -43,66 +43,66 @@ namespace otb
 
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT RadiometricMomentsImageFilter :
-  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT RadiometricMomentsImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-    typedef RadiometricMomentsImageFilter                      Self;
-    typedef itk::ImageToImageFilter<TInputImage,TOutputImage>  Superclass;
-    typedef itk::SmartPointer<Self>                            Pointer;
-    typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef RadiometricMomentsImageFilter Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-    /** Method for creation through the object factory. */
-    itkNewMacro(Self);
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
 
-    /** Run-time type information (and related methods). */
-    itkTypeMacro(RadiometricMomentsImageFilter, ImageToImageFilter);
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(RadiometricMomentsImageFilter, ImageToImageFilter);
 
-    /** Some convenient typedefs. */
-    typedef typename Superclass::InputImageType           InputImageType;
-    typedef typename InputImageType::ConstPointer         InputImagePointer;
-    typedef typename InputImageType::RegionType           InputImageRegionType;
-    typedef typename InputImageType::PixelType            InputImagePixelType;
-    typedef typename InputImageType::SizeType             InputImageSizeType;
-    typedef typename Superclass::OutputImageType          OutputImageType;
-    typedef typename OutputImageType::Pointer             OutputImagePointer;
-    typedef typename OutputImageType::RegionType          OutputImageRegionType;
-    typedef typename OutputImageType::PixelType           OutputImagePixelType;
-    typedef typename OutputImageType::InternalPixelType   ScalarType;
+  /** Some convenient typedefs. */
+  typedef typename Superclass::InputImageType         InputImageType;
+  typedef typename InputImageType::ConstPointer       InputImagePointer;
+  typedef typename InputImageType::RegionType         InputImageRegionType;
+  typedef typename InputImageType::PixelType          InputImagePixelType;
+  typedef typename InputImageType::SizeType           InputImageSizeType;
+  typedef typename Superclass::OutputImageType        OutputImageType;
+  typedef typename OutputImageType::Pointer           OutputImagePointer;
+  typedef typename OutputImageType::RegionType        OutputImageRegionType;
+  typedef typename OutputImageType::PixelType         OutputImagePixelType;
+  typedef typename OutputImageType::InternalPixelType ScalarType;
 
-    typedef Functor::RadiometricMomentsFunctor< itk::ConstNeighborhoodIterator<InputImageType>, ScalarType>
-                                                          FunctorType;
+  typedef Functor::RadiometricMomentsFunctor<itk::ConstNeighborhoodIterator<InputImageType>, ScalarType> FunctorType;
 
-    typedef itk::ProcessObject ProcessObjectType;
+  typedef itk::ProcessObject ProcessObjectType;
 
-    /**Set/Get the radius of neighborhood.*/
-    itkSetMacro(Radius, InputImageSizeType);
-    itkGetMacro(Radius, InputImageSizeType);
+  /**Set/Get the radius of neighborhood.*/
+  itkSetMacro(Radius, InputImageSizeType);
+  itkGetMacro(Radius, InputImageSizeType);
 
-    /** Set unsigned int radius */
-    void SetRadius(unsigned int radius)
-    {
-      m_Radius.Fill(radius);
-    }
+  /** Set unsigned int radius */
+  void SetRadius(unsigned int radius)
+  {
+    m_Radius.Fill(radius);
+  }
 
-    typedef itk::ConstNeighborhoodIterator<TInputImage>   NeighborhoodIteratorType;
-    typedef typename NeighborhoodIteratorType::RadiusType RadiusType;
-    typedef unsigned char                                 RadiusSizeType;
+  typedef itk::ConstNeighborhoodIterator<TInputImage>   NeighborhoodIteratorType;
+  typedef typename NeighborhoodIteratorType::RadiusType RadiusType;
+  typedef unsigned char                                 RadiusSizeType;
 
 protected:
   RadiometricMomentsImageFilter();
-  ~RadiometricMomentsImageFilter() override {}
+  ~RadiometricMomentsImageFilter() override
+  {
+  }
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
   void GenerateInputRequestedRegion(void) override;
   void GenerateOutputInformation(void) override;
 
 private:
-  RadiometricMomentsImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  RadiometricMomentsImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InputImageSizeType m_Radius;
-  FunctorType m_Functor;
+  FunctorType        m_Functor;
 };
 
 } // namespace otb

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -24,7 +24,8 @@
 
 #include "otbWaveletOperatorBase.h"
 
-namespace otb {
+namespace otb
+{
 
 /**
  * \class WaveletHighPassOperator
@@ -39,27 +40,21 @@ namespace otb {
  *
  * \ingroup OTBWavelet
  */
-template <Wavelet::Wavelet TMotherWaveletOperator,
-    Wavelet::WaveletDirection TDirectionOfTransformation,
-    class TPixel, unsigned int VDimension,
-    class TAllocator = itk::NeighborhoodAllocator<TPixel> >
-class ITK_EXPORT WaveletHighPassOperator
-  : public WaveletOperatorBase<TMotherWaveletOperator,
-      TPixel, VDimension, TAllocator>
+template <Wavelet::Wavelet TMotherWaveletOperator, Wavelet::WaveletDirection TDirectionOfTransformation, class TPixel, unsigned int VDimension,
+          class TAllocator = itk::NeighborhoodAllocator<TPixel>>
+class ITK_EXPORT WaveletHighPassOperator : public WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator>
 {
 public:
   /** Standard typedefs */
   typedef WaveletHighPassOperator Self;
-  typedef WaveletOperatorBase<TMotherWaveletOperator,
-      TPixel, VDimension, TAllocator>  Superclass;
+  typedef WaveletOperatorBase<TMotherWaveletOperator, TPixel, VDimension, TAllocator> Superclass;
 
   itkTypeMacro(WaveletHighPassOperator, WaveletOperatorBase);
 
-  typedef typename Superclass::SizeType SizeType;
+  typedef typename Superclass::SizeType  SizeType;
   static const Wavelet::WaveletDirection DirectionOfTransformation = TDirectionOfTransformation;
 
 protected:
-
   void PrintSelf(std::ostream& os, itk::Indent i) const override
   {
     os << i << "WaveletHighPassOperator {this=" << this << "}" << std::endl;
@@ -80,14 +75,14 @@ protected:
   {
     CoefficientVector coeff;
     if (DirectionOfTransformation == Wavelet::FORWARD)
-      {
+    {
       this->m_WaveletGenerator->GetHighPassCoefficientVector(coeff);
-      }
+    }
     if (DirectionOfTransformation == Wavelet::INVERSE)
-      {
+    {
       this->m_WaveletGenerator->GetLowPassCoefficientVector(coeff);
       Superclass::GenerateInverseHighPassFilterFromLowPassFilter(coeff);
-      }
+    }
 
     Superclass::UpSamplingCoefficients(coeff);
     return coeff;

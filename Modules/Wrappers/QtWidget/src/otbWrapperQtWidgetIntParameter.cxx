@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,9 +25,7 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetIntParameter::QtWidgetIntParameter(IntParameter* param, QtWidgetModel* m, QWidget * parent)
-: QtWidgetParameterBase(param, m, parent),
-  m_IntParam(param)
+QtWidgetIntParameter::QtWidgetIntParameter(IntParameter* param, QtWidgetModel* m, QWidget* parent) : QtWidgetParameterBase(param, m, parent), m_IntParam(param)
 {
 }
 
@@ -49,13 +47,13 @@ void QtWidgetIntParameter::DoUpdateGUI()
   // Set style depending on UserValue parameter flag
   QFont f = m_QSpinBox->font();
   if (m_IntParam->HasUserValue())
-    {
+  {
     f.setBold(true);
-    }
+  }
   else
-    {
+  {
     f.setBold(false);
-    }
+  }
   m_QSpinBox->setFont(f);
 }
 
@@ -80,18 +78,15 @@ void QtWidgetIntParameter::DoCreateWidget()
     m_QSpinBox->SetValueNoSignal(m_IntParam->GetValue());
 
   // What happens when the Reset button is clicked
-  connect(m_QSpinBox, &QtWidgetSpinBox::Cleared,
-          this, &QtWidgetIntParameter::OnCleared);
+  connect(m_QSpinBox, &QtWidgetSpinBox::Cleared, this, &QtWidgetIntParameter::OnCleared);
 
   // What happens when the value changed because of user interaction (keyboard or arrows pressed)
   // Note: to avoid calling this when the value changes automatically (reset button, DoParameterUpdate, XML load),
   // calls to QSpinBox::setValue() are wrapped with signal blockers
-  connect(m_QSpinBox, static_cast<void (QtWidgetSpinBox::*)(int)>(&QtWidgetSpinBox::valueChanged),
-          this, &QtWidgetIntParameter::OnValueChanged);
+  connect(m_QSpinBox, static_cast<void (QtWidgetSpinBox::*)(int)>(&QtWidgetSpinBox::valueChanged), this, &QtWidgetIntParameter::OnValueChanged);
 
   // What happens when the SpinBox looses focus, or enter is pressed
-  connect(m_QSpinBox, &QtWidgetSpinBox::editingFinished,
-          this, &QtWidgetIntParameter::OnEditingFinished);
+  connect(m_QSpinBox, &QtWidgetSpinBox::editingFinished, this, &QtWidgetIntParameter::OnEditingFinished);
 
   m_QHBoxLayout->addWidget(m_QSpinBox);
   m_QHBoxLayout->addStretch();
@@ -99,9 +94,9 @@ void QtWidgetIntParameter::DoCreateWidget()
   this->setLayout(m_QHBoxLayout);
 
   if (m_IntParam->GetRole() == Role_Output)
-    {
-    m_QSpinBox->setEnabled( false );
-    }
+  {
+    m_QSpinBox->setEnabled(false);
+  }
 }
 
 void QtWidgetIntParameter::OnCleared()
@@ -123,7 +118,7 @@ void QtWidgetIntParameter::OnCleared()
 void QtWidgetIntParameter::OnValueChanged(int value)
 {
   // Set the parameter value, user value flag and show the Reset button
-  m_IntParam->SetValue( static_cast<float>(value) );
+  m_IntParam->SetValue(static_cast<float>(value));
   m_IntParam->SetUserValue(true);
   m_QSpinBox->EnableClearButton();
 }
@@ -133,18 +128,5 @@ void QtWidgetIntParameter::OnEditingFinished()
   // Call the application DoUpdateParameters, then all widgets' DoUpdateGUI (including this one)
   this->GetModel()->NotifyUpdate();
 }
-
-// Filter mouse wheel events to avoid scrolling issues in parent QScrollArea
-bool QtWidgetIntParameter::eventFilter( QObject * o, QEvent * e )
-{
-  if ( e->type() == QEvent::Wheel && qobject_cast<QAbstractSpinBox*>( o ) )
-  {
-    e->ignore();
-    return true;
-  }
-  return QWidget::eventFilter( o, e );
-}
-
-
 }
 }

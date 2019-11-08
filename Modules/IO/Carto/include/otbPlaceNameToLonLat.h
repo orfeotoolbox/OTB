@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -17,7 +17,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 #ifndef otbPlaceNameToLonLat_h
 #define otbPlaceNameToLonLat_h
 
@@ -60,7 +59,9 @@ public:
 
 protected:
   PlaceNameToLonLat();
-  ~PlaceNameToLonLat() override {}
+  ~PlaceNameToLonLat() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   void RetrieveXML(const std::ostringstream& urlStream);
   void ParseXMLYahoo();
@@ -68,17 +69,16 @@ protected:
   void ParseXMLGeonames();
 
 private:
-  PlaceNameToLonLat(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PlaceNameToLonLat(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  double           m_Lon;
-  double           m_Lat;
-  std::string      m_PlaceName;
+  double      m_Lon;
+  double      m_Lat;
+  std::string m_PlaceName;
 
   CurlHelperInterface::Pointer m_Curl;
   std::string                  m_CurlOutput;
   bool                         m_RequestSucceed;
-
 };
 
 } // namespace otb

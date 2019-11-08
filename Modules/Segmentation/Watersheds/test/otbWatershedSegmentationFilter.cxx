@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,36 +25,34 @@
 #include "otbImageFileWriter.h"
 #include "itkGradientMagnitudeImageFilter.h"
 
-int otbWatershedSegmentationFilter(int argc, char * argv[])
+int otbWatershedSegmentationFilter(int argc, char* argv[])
 {
   if (argc != 5)
-    {
-    std::cerr << "Usage: " << argv[0] <<
-    " inputFileName outputLabelFileName threshold level"
-              << std::endl;
+  {
+    std::cerr << "Usage: " << argv[0] << " inputFileName outputLabelFileName threshold level" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char *       inputFileName             = argv[1];
-  const char *       outputLabelFileName       = argv[2];
-  const double       threshold                 = atof(argv[3]);
-  const double       level                     = atof(argv[4]);
+  const char*  inputFileName       = argv[1];
+  const char*  outputLabelFileName = argv[2];
+  const double threshold           = atof(argv[3]);
+  const double level               = atof(argv[4]);
 
   /* maxit - threshold */
   const unsigned int Dimension = 2;
-  typedef float                                            PixelType;
-  typedef otb::Image<PixelType,Dimension>                  InputImageType;
-  typedef otb::Image<unsigned int, Dimension>              LabelImageType;
-  typedef otb::ImageFileReader<InputImageType>             ReaderType;
-  typedef otb::ImageFileWriter<LabelImageType>             LabelWriterType;
+  typedef float      PixelType;
+  typedef otb::Image<PixelType, Dimension>    InputImageType;
+  typedef otb::Image<unsigned int, Dimension> LabelImageType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<LabelImageType> LabelWriterType;
 
-  typedef itk::GradientMagnitudeImageFilter<InputImageType,InputImageType> GradientMagnitudeFilterType;
-  typedef otb::WatershedSegmentationFilter<InputImageType, LabelImageType> FilterType;
+  typedef itk::GradientMagnitudeImageFilter<InputImageType, InputImageType> GradientMagnitudeFilterType;
+  typedef otb::WatershedSegmentationFilter<InputImageType, LabelImageType>  FilterType;
 
   // Instantiating object
   GradientMagnitudeFilterType::Pointer gradientMagnitudeFilter = GradientMagnitudeFilterType::New();
-  FilterType::Pointer filter = FilterType::New();
-  ReaderType::Pointer reader = ReaderType::New();
+  FilterType::Pointer                  filter                  = FilterType::New();
+  ReaderType::Pointer                  reader                  = ReaderType::New();
 
   reader->SetFileName(inputFileName);
 

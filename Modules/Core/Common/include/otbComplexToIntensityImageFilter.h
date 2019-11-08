@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,75 +36,76 @@ namespace otb
  * \ingroup OTBCommon
  */
 
-namespace Function {
+namespace Function
+{
 
-template< class TInput, class TOutput>
+template <class TInput, class TOutput>
 class ComplexToIntensity
 {
 public:
-  ComplexToIntensity() {}
-  ~ComplexToIntensity() {}
-  bool operator!=( const ComplexToIntensity & ) const
-    {
+  ComplexToIntensity()
+  {
+  }
+  ~ComplexToIntensity()
+  {
+  }
+  bool operator!=(const ComplexToIntensity&) const
+  {
     return false;
-    }
-  bool operator==( const ComplexToIntensity & other ) const
-    {
+  }
+  bool operator==(const ComplexToIntensity& other) const
+  {
     return !(*this != other);
-    }
-  inline TOutput operator()( const TInput & A ) const
-    {
-    return static_cast<TOutput>( A.real()*A.real() + A.imag()*A.imag() );
-    }
+  }
+  inline TOutput operator()(const TInput& A) const
+  {
+    return static_cast<TOutput>(A.real() * A.real() + A.imag() * A.imag());
+  }
 };
 }
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ComplexToIntensityImageFilter :
-    public
-itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-                        Function::ComplexToIntensity<
-  typename TInputImage::PixelType,
-  typename TOutputImage::PixelType>   >
+class ITK_EXPORT ComplexToIntensityImageFilter
+    : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                          Function::ComplexToIntensity<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs. */
-  typedef ComplexToIntensityImageFilter  Self;
-  typedef itk::UnaryFunctorImageFilter<
-    TInputImage, TOutputImage,
-    Function::ComplexToIntensity< typename TInputImage::PixelType,
-                              typename TOutputImage::PixelType> >
-                                         Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef ComplexToIntensityImageFilter Self;
+  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                       Function::ComplexToIntensity<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
+                                        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(ComplexToIntensityImageFilter,
-               UnaryFunctorImageFilter);
+  itkTypeMacro(ComplexToIntensityImageFilter, UnaryFunctorImageFilter);
 
-  typedef typename TInputImage::PixelType                          InputPixelType;
-  typedef typename TOutputImage::PixelType                         OutputPixelType;
-  typedef typename itk::NumericTraits< InputPixelType >::ValueType InputPixelValueType;
+  typedef typename TInputImage::PixelType                        InputPixelType;
+  typedef typename TOutputImage::PixelType                       OutputPixelType;
+  typedef typename itk::NumericTraits<InputPixelType>::ValueType InputPixelValueType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
-  itkConceptMacro(InputConvertibleToOutputCheck,
-    (itk::Concept::Convertible<InputPixelValueType, OutputPixelType>));
-  /** End concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck, (itk::Concept::Convertible<InputPixelValueType, OutputPixelType>));
+/** End concept checking */
 #endif
 
 
 protected:
-  ComplexToIntensityImageFilter() {}
-  ~ComplexToIntensityImageFilter() override {}
+  ComplexToIntensityImageFilter()
+  {
+  }
+  ~ComplexToIntensityImageFilter() override
+  {
+  }
 
 private:
   ComplexToIntensityImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
-
 };
 
 } // end namespace otb

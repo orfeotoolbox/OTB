@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,7 +41,7 @@ class OTBApplicationEngine_EXPORT OutputVectorDataParameter : public Parameter
 {
 public:
   /** Standard class typedef */
-  typedef OutputVectorDataParameter      Self;
+  typedef OutputVectorDataParameter     Self;
   typedef Parameter                     Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -66,16 +66,31 @@ public:
   void SetValue(VectorDataType* vd);
 
   /** Return any value */
-  VectorDataType* GetValue( void );
+  VectorDataType* GetValue(void);
 
-  void SetFileName (const char* filename);
-  void SetFileName (const std::string& filename);
+  void SetFileName(const char* filename);
+  void SetFileName(const std::string& filename);
 
   itkGetStringMacro(FileName);
 
-  void Write();
+  void                Write();
   itk::ProcessObject* GetWriter();
-  void InitializeWriters();
+  void                InitializeWriters();
+
+  ParameterType GetType() const override
+  {
+    return ParameterType_OutputVectorData;
+  }
+
+  std::string ToString() const override
+  {
+    return GetFileName();
+  }
+
+  void FromString(const std::string& value) override
+  {
+    SetFileName(value);
+  }
 
 protected:
   /** Constructor */
@@ -83,18 +98,18 @@ protected:
 
   /** Destructor */
   ~OutputVectorDataParameter() override
-  {}
+  {
+  }
 
 
   VectorDataType::Pointer m_VectorData;
-  std::string m_FileName;
+  std::string             m_FileName;
 
   otb::VectorDataFileWriter<VectorDataType>::Pointer m_Writer;
 
 private:
-  OutputVectorDataParameter(const Parameter &) = delete;
-  void operator =(const Parameter&) = delete;
-
+  OutputVectorDataParameter(const Parameter&) = delete;
+  void operator=(const Parameter&) = delete;
 };
 
 } // End namespace Wrapper

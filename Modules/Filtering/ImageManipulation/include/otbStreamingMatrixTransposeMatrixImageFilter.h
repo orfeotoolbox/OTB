@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -51,16 +51,15 @@ namespace otb
  *
  * \ingroup OTBImageManipulation
  */
-template<class TInputImage, class TInputImage2>
-class ITK_EXPORT PersistentMatrixTransposeMatrixImageFilter :
-  public PersistentImageFilter<TInputImage, TInputImage>
+template <class TInputImage, class TInputImage2>
+class ITK_EXPORT PersistentMatrixTransposeMatrixImageFilter : public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentMatrixTransposeMatrixImageFilter      Self;
+  typedef PersistentMatrixTransposeMatrixImageFilter Self;
   typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -98,7 +97,7 @@ public:
   typedef itk::VariableLengthVector<RealType> RealPixelType;
 
   /** Smart Pointer type to a DataObject. */
-  typedef typename itk::DataObject::Pointer DataObjectPointer;
+  typedef typename itk::DataObject::Pointer                  DataObjectPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Type of DataObjects used for scalar outputs */
@@ -116,7 +115,7 @@ public:
   {
     return this->GetResultOutput()->Get();
   }
-  MatrixObjectType* GetResultOutput();
+  MatrixObjectType*       GetResultOutput();
   const MatrixObjectType* GetResultOutput() const;
 
   /** Make a DataObject of the correct type to be used as the specified
@@ -136,11 +135,11 @@ public:
   void Synthetize(void) override;
 
   /** Input wrapper */
-  void SetFirstInput(const TInputImage  *input1)
+  void SetFirstInput(const TInputImage* input1)
   {
     this->SetInput(0, input1);
   }
-  void SetSecondInput(const TInputImage2 *input2)
+  void SetSecondInput(const TInputImage2* input2)
   {
     this->SetInput(1, input2);
   }
@@ -148,31 +147,35 @@ public:
   const TInputImage* GetFirstInput()
   {
     if (this->GetNumberOfInputs() < 1)
-      {
+    {
       return nullptr;
-      }
-    else return (static_cast<const TInputImage *>(this->itk::ProcessObject::GetInput(0)));
+    }
+    else
+      return (static_cast<const TInputImage*>(this->itk::ProcessObject::GetInput(0)));
   }
 
   const TInputImage2* GetSecondInput()
   {
     if (this->GetNumberOfInputs() < 2)
-      {
+    {
       return nullptr;
-      }
-    else return (static_cast<const TInputImage2 *>(this->itk::ProcessObject::GetInput(1)));
+    }
+    else
+      return (static_cast<const TInputImage2*>(this->itk::ProcessObject::GetInput(1)));
   }
 
 protected:
   PersistentMatrixTransposeMatrixImageFilter();
-  ~PersistentMatrixTransposeMatrixImageFilter() override {}
+  ~PersistentMatrixTransposeMatrixImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentMatrixTransposeMatrixImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PersistentMatrixTransposeMatrixImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ArrayMatrixType m_ThreadSum;
   bool            m_UsePadFirstInput;
@@ -206,16 +209,14 @@ private:
  * \ingroup OTBImageManipulation
  */
 
-template<class TInputImage1, class TInputImage2>
-class ITK_EXPORT StreamingMatrixTransposeMatrixImageFilter :
-  public PersistentFilterStreamingDecorator
-  <PersistentMatrixTransposeMatrixImageFilter<TInputImage1, TInputImage2> >
+template <class TInputImage1, class TInputImage2>
+class ITK_EXPORT StreamingMatrixTransposeMatrixImageFilter
+    : public PersistentFilterStreamingDecorator<PersistentMatrixTransposeMatrixImageFilter<TInputImage1, TInputImage2>>
 {
 public:
   /** Standard Self typedef */
   typedef StreamingMatrixTransposeMatrixImageFilter Self;
-  typedef PersistentFilterStreamingDecorator
-  <PersistentMatrixTransposeMatrixImageFilter<TInputImage1, TInputImage2> > Superclass;
+  typedef PersistentFilterStreamingDecorator<PersistentMatrixTransposeMatrixImageFilter<TInputImage1, TInputImage2>> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -233,11 +234,11 @@ public:
   typedef TInputImage2 InputImage2Type;
 
   /** Interfaces to the embedded filter */
-  void SetFirstInput(InputImage1Type * input1)
+  void SetFirstInput(InputImage1Type* input1)
   {
     this->GetFilter()->SetFirstInput(input1);
   }
-  void SetSecondInput(InputImage2Type * input2)
+  void SetSecondInput(InputImage2Type* input2)
   {
     this->GetFilter()->SetSecondInput(input2);
   }
@@ -270,15 +271,18 @@ public:
   {
     return this->GetFilter()->GetResultOutput();
   }
+
 protected:
   /** Constructor */
-  StreamingMatrixTransposeMatrixImageFilter() {};
+  StreamingMatrixTransposeMatrixImageFilter(){};
   /** Destructor */
-  ~StreamingMatrixTransposeMatrixImageFilter() override {}
+  ~StreamingMatrixTransposeMatrixImageFilter() override
+  {
+  }
 
 private:
-  StreamingMatrixTransposeMatrixImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  StreamingMatrixTransposeMatrixImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

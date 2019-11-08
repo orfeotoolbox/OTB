@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,14 +37,14 @@ namespace otb
  * \tparam TClassLabel the label data type
  * \ingroup OTBUnsupervised
  */
-template<class TClassLabel>
+template <class TClassLabel>
 class ITK_EXPORT ContingencyTableCalculator : public itk::Object
 {
 public:
   /** Standard class typedefs */
   typedef ContingencyTableCalculator    Self;
   typedef itk::Object                   Superclass;
-  typedef itk::SmartPointer <Self>      Pointer;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
@@ -57,13 +57,13 @@ public:
   typedef typename ContingencyTableType::Pointer ContingencyTablePointerType;
 
   typedef typename std::map<TClassLabel, unsigned long> CountMapType;
-  typedef typename std::map<TClassLabel, CountMapType > MapOfClassesType;
+  typedef typename std::map<TClassLabel, CountMapType>  MapOfClassesType;
 
   /** Populate the confusion Matrix for a image iteration.
    *  \tparam TRefListLabel data structure type which contain the reference labels.
    *  \tparam TProdListLabel data structure type which contain the produced labels.
    */
-  template<class TRefIterator, class TProdIterator>
+  template <class TRefIterator, class TProdIterator>
   void Compute(TRefIterator itRef, TProdIterator itProd, bool refHasNoData = false, typename TRefIterator::InternalPixelType refNoData = 0,
                bool prodHasNoData = false, typename TProdIterator::InternalPixelType prodNoData = 0);
 
@@ -71,29 +71,31 @@ public:
    *  \tparam TRefListLabel data structure type which contain the reference labels.
    *  \tparam TProdListLabel data structure type which contain the produced labels.
    */
-  template<class TRefIterator, class TProdIterator>
+  template <class TRefIterator, class TProdIterator>
   void Compute(TRefIterator refBegin, TRefIterator refEnd, TProdIterator prodBegin, TProdIterator prodEnd);
 
   itkGetConstMacro(NumberOfRefClasses, unsigned long);
   itkGetConstMacro(NumberOfProdClasses, unsigned long);
   itkGetConstMacro(NumberOfSamples, unsigned long);
 
-  void Clear();
+  void                        Clear();
   ContingencyTablePointerType BuildContingencyTable();
 
 protected:
   ContingencyTableCalculator();
-  ~ContingencyTableCalculator() override {}
-  //void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  ~ContingencyTableCalculator() override
+  {
+  }
+  // void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ContingencyTableCalculator(const Self &) = delete;
-  void operator=(const Self &) = delete;
+  ContingencyTableCalculator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   MapOfClassesType m_LabelCount;
-  unsigned long m_NumberOfRefClasses;
-  unsigned long m_NumberOfProdClasses;
-  unsigned long m_NumberOfSamples;
+  unsigned long    m_NumberOfRefClasses;
+  unsigned long    m_NumberOfProdClasses;
+  unsigned long    m_NumberOfSamples;
 };
 }
 
@@ -101,4 +103,4 @@ private:
 #include "otbContingencyTableCalculator.hxx"
 #endif
 
-#endif //otbContingencyTableCalculator_h
+#endif // otbContingencyTableCalculator_h

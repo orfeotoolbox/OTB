@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,25 +19,135 @@
  */
 
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 #include "otbWrapperNumericalParameter.h"
 
+using namespace otb::Wrapper;
 
-
-int otbWrapperNumericalParameterTest1(int itkNotUsed(argc), char* argv[])
+template <typename T>
+void assert_equal(const T& a, const T& b)
 {
-  typedef otb::Wrapper::NumericalParameter <double> NumericalParameterType;
-  NumericalParameterType::Pointer numParam = NumericalParameterType::New();
+  if (a != b)
+  {
+    itkGenericExceptionMacro("assert_equal failed");
+  }
+}
 
-  const double value = atof (argv[1]);
-  const std::string key = argv[2];
-  const std::string desc = argv[3];
+int otbWrapperFloatParameterTest(int, char* [])
+{
+  auto param = FloatParameter::New();
 
-  numParam->SetValue(value);
-  numParam->SetKey(key);
-  numParam->SetDescription(desc);
+  param->SetKey("mykey");
+  param->SetDescription("My description.");
+
+  assert_equal(param->GetType(), ParameterType_Float);
+
+  { // SetValue
+    const float val = 42.005;
+    param->SetValue(val);
+    assert_equal(param->GetValue(), val);
+    assert_equal(param->ToInt(), int(val));
+    assert_equal(param->ToFloat(), val);
+    assert_equal(param->ToString(), std::string("42.005"));
+  }
+
+  { // FromFloat
+    const float val = -6.5;
+    param->FromFloat(val);
+    assert_equal(param->GetValue(), val);
+    assert_equal(param->ToInt(), int(val));
+    assert_equal(param->ToFloat(), val);
+    assert_equal(param->ToString(), std::string("-6.5"));
+  }
+
+  { // FromString
+    const std::string str = "-100.01";
+    const float       val = -100.01;
+    param->FromString(str);
+    assert_equal(param->GetValue(), val);
+    assert_equal(param->ToInt(), int(val));
+    assert_equal(param->ToFloat(), val);
+    assert_equal(param->ToString(), std::string("-100.01"));
+  }
+
+  return EXIT_SUCCESS;
+}
+
+int otbWrapperIntParameterTest(int, char* [])
+{
+  auto param = IntParameter::New();
+
+  param->SetKey("mykey");
+  param->SetDescription("My description.");
+
+  assert_equal(param->GetType(), ParameterType_Int);
+
+  { // SetValue
+    const int val = 42;
+    param->SetValue(val);
+    assert_equal(param->GetValue(), val);
+    assert_equal(param->ToInt(), val);
+    assert_equal(param->ToFloat(), float(val));
+    assert_equal(param->ToString(), std::string("42"));
+  }
+
+  { // FromString
+    const std::string str = "-100";
+    const int         val = -100;
+    param->FromString(str);
+    assert_equal(param->GetValue(), val);
+    assert_equal(param->ToInt(), val);
+    assert_equal(param->ToFloat(), float(val));
+    assert_equal(param->ToString(), std::string("-100"));
+  }
+
+  return EXIT_SUCCESS;
+}
+
+int otbWrapperRAMParameterTest(int, char* [])
+{
+  typedef RAMParameter      RAMParameterType;
+  RAMParameterType::Pointer parameter = RAMParameterType::New();
+
+  // Test Set/Get Value
+  parameter->SetValue(256);
+  parameter->SetValue(2560);
+  parameter->SetValue(128);
+  std::cout << "Last RAMParameter Value set : " << parameter->GetValue() << std::endl;
+
+  // Test Set/Get Default, extremum value
+  RAMParameterType::ScalarType min = 0;
+  RAMParameterType::ScalarType max = 1024;
+  RAMParameterType::ScalarType def = 256;
+
+  parameter->SetDefaultValue(def);
+  parameter->SetMinimumValue(min);
+  parameter->SetMaximumValue(max);
+
+  if (parameter->GetMinimumValue() != min)
+  {
+    std::cout << "Minimum Value : expexted " << min << " --> got " << parameter->GetMinimumValue() << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  if (parameter->GetMaximumValue() != max)
+  {
+    std::cout << "Maximum Value : expexted " << max << " --> got " << parameter->GetMaximumValue() << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  if (parameter->GetDefaultValue() != def)
+  {
+    std::cout << "Default Value : expexted " << def << " --> got " << parameter->GetDefaultValue() << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  // Reset Value
+  parameter->Reset();
+  std::cout << "Last RAMParameter Value set : " << parameter->GetValue() << std::endl;
+
 
   return EXIT_SUCCESS;
 }

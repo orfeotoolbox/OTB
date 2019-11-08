@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,21 +27,20 @@ int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
 {
 
   if (argc != 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " nbSamples nbClasses " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   typedef itk::VariableLengthVector<int>          PLabelType;
   typedef itk::Statistics::ListSample<PLabelType> PListLabelType;
-  typedef itk::FixedArray<int, 1>                 RLabelType;
+  typedef itk::FixedArray<int, 1> RLabelType;
   typedef itk::Statistics::ListSample<RLabelType> RListLabelType;
-  typedef otb::ConfusionMatrixCalculator<RListLabelType,
-      PListLabelType> CalculatorType;
+  typedef otb::ConfusionMatrixCalculator<RListLabelType, PListLabelType> CalculatorType;
 
   CalculatorType::Pointer calculator = CalculatorType::New();
 
-  RListLabelType::Pointer refLabels = RListLabelType::New();
+  RListLabelType::Pointer refLabels  = RListLabelType::New();
   PListLabelType::Pointer prodLabels = PListLabelType::New();
 
   // Set the measurement vector size for the list sample labels
@@ -52,19 +51,19 @@ int otbConfusionMatrixCalculatorSetListSamples(int argc, char* argv[])
   int nbClasses = atoi(argv[2]);
 
   for (int i = 0; i < nbSamples; ++i)
-    {
+  {
     int        label = (i % nbClasses) + 1;
     PLabelType plab;
     plab.SetSize(1);
     plab[0] = label;
     refLabels->PushBack(label);
     prodLabels->PushBack(plab);
-    }
+  }
 
   calculator->SetReferenceLabels(refLabels);
   calculator->SetProducedLabels(prodLabels);
 
-  //calculator->Compute();
+  // calculator->Compute();
 
   return EXIT_SUCCESS;
 }
@@ -78,21 +77,20 @@ int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
 {
 
   if (argc != 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " nbSamples nbClasses " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   typedef itk::VariableLengthVector<int>          PLabelType;
   typedef itk::Statistics::ListSample<PLabelType> PListLabelType;
-  typedef itk::FixedArray<int, 1>                 RLabelType;
+  typedef itk::FixedArray<int, 1> RLabelType;
   typedef itk::Statistics::ListSample<RLabelType> RListLabelType;
-  typedef otb::ConfusionMatrixCalculator<RListLabelType,
-      PListLabelType> CalculatorType;
+  typedef otb::ConfusionMatrixCalculator<RListLabelType, PListLabelType> CalculatorType;
 
   CalculatorType::Pointer calculator = CalculatorType::New();
 
-  RListLabelType::Pointer refLabels = RListLabelType::New();
+  RListLabelType::Pointer refLabels  = RListLabelType::New();
   PListLabelType::Pointer prodLabels = PListLabelType::New();
 
   // Set the measurement vector size for the list sample labels
@@ -103,14 +101,14 @@ int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
   int nbClasses = atoi(argv[2]);
 
   for (int i = 0; i < nbSamples; ++i)
-    {
+  {
     int        label = (i % nbClasses) + 1;
     PLabelType plab;
     plab.SetSize(1);
     plab[0] = label;
     refLabels->PushBack(label);
     prodLabels->PushBack(plab);
-    }
+  }
 
   PLabelType plab;
   plab.SetSize(1);
@@ -121,13 +119,13 @@ int otbConfusionMatrixCalculatorWrongSize(int argc, char* argv[])
   calculator->SetProducedLabels(prodLabels);
 
   try
-    {
+  {
     calculator->Compute();
-    }
-  catch ( itk::ExceptionObject & )
-    {
+  }
+  catch (itk::ExceptionObject&)
+  {
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }
@@ -136,22 +134,21 @@ int otbConfusionMatrixCalculatorCompute(int argc, char* argv[])
 {
 
   if (argc != 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " nbSamples nbClasses " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   typedef itk::VariableLengthVector<int>          PLabelType;
   typedef itk::Statistics::ListSample<PLabelType> PListLabelType;
-  typedef itk::FixedArray<int, 1>                 RLabelType;
+  typedef itk::FixedArray<int, 1> RLabelType;
   typedef itk::Statistics::ListSample<RLabelType> RListLabelType;
-  typedef otb::ConfusionMatrixCalculator<RListLabelType,
-      PListLabelType> CalculatorType;
-  typedef CalculatorType::ConfusionMatrixType     ConfusionMatrixType;
+  typedef otb::ConfusionMatrixCalculator<RListLabelType, PListLabelType> CalculatorType;
+  typedef CalculatorType::ConfusionMatrixType ConfusionMatrixType;
 
   CalculatorType::Pointer calculator = CalculatorType::New();
 
-  RListLabelType::Pointer refLabels = RListLabelType::New();
+  RListLabelType::Pointer refLabels  = RListLabelType::New();
   PListLabelType::Pointer prodLabels = PListLabelType::New();
 
   // Set the measurement vector size for the list sample labels
@@ -169,7 +166,7 @@ int otbConfusionMatrixCalculatorCompute(int argc, char* argv[])
   // confusionMatrix(0,1) =;
 
   for (int i = 0; i < nbSamples; ++i)
-    {
+  {
     int label;
 
     label = (i % nbClasses) + 1;
@@ -177,33 +174,33 @@ int otbConfusionMatrixCalculatorCompute(int argc, char* argv[])
     PLabelType plab;
     plab.SetSize(1);
     if (i == 0)
-      {
+    {
       plab[0] = nbClasses;
-      }
+    }
     else
-      {
+    {
       plab[0] = label;
-      }
+    }
     refLabels->PushBack(label);
     prodLabels->PushBack(plab);
-    }
+  }
 
   calculator->SetReferenceLabels(refLabels);
   calculator->SetProducedLabels(prodLabels);
 
-  //calculator->SetConfusionMatrix(confusionMatrix);
+  // calculator->SetConfusionMatrix(confusionMatrix);
   calculator->Compute();
 
   if (static_cast<int>(calculator->GetNumberOfClasses()) != nbClasses)
-    {
+  {
     std::cerr << "Wrong number of classes" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
   if (static_cast<int>(calculator->GetNumberOfSamples()) != nbSamples)
-    {
+  {
     std::cerr << "Wrong number of samples" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   CalculatorType::ConfusionMatrixType confmat = calculator->GetConfusionMatrix();
 
@@ -237,14 +234,14 @@ int otbConfusionMatrixCalculatorCompute(int argc, char* argv[])
   //   return EXIT_FAILURE;
   //   }
 
-  std::cout << "confusion matrix" << std::endl  << confmat << std::endl;
+  std::cout << "confusion matrix" << std::endl << confmat << std::endl;
 
   for (int itClasses = 0; itClasses < nbClasses; itClasses++)
-      {
-      std::cout << "Precision of class [" << itClasses << "] vs all: " << calculator->GetPrecisions()[itClasses] << std::endl;
-      std::cout <<"Recall of class [" << itClasses << "] vs all: " << calculator->GetRecalls()[itClasses] << std::endl;
-      std::cout <<"F-score of class [" << itClasses << "] vs all: " << calculator->GetFScores()[itClasses] << "\n" << std::endl;
-      }
+  {
+    std::cout << "Precision of class [" << itClasses << "] vs all: " << calculator->GetPrecisions()[itClasses] << std::endl;
+    std::cout << "Recall of class [" << itClasses << "] vs all: " << calculator->GetRecalls()[itClasses] << std::endl;
+    std::cout << "F-score of class [" << itClasses << "] vs all: " << calculator->GetFScores()[itClasses] << "\n" << std::endl;
+  }
   std::cout << "Precision of the different class: " << calculator->GetPrecisions() << std::endl;
   std::cout << "Recall of the different class: " << calculator->GetRecalls() << std::endl;
   std::cout << "F-score of the different class: " << calculator->GetFScores() << std::endl;
@@ -254,31 +251,31 @@ int otbConfusionMatrixCalculatorCompute(int argc, char* argv[])
 
   const double oa = 3 / static_cast<double>(nbSamples);
 
-  if (std::abs (calculator->GetOverallAccuracy() - oa) > 0.000001)
-    {
+  if (std::abs(calculator->GetOverallAccuracy() - oa) > 0.000001)
+  {
     return EXIT_FAILURE;
-    }
+  }
   else
-    {
+  {
     return EXIT_SUCCESS;
-    }
+  }
 }
 
 
-int otbConfusionMatrixCalculatorComputeWithBaseline(int itkNotUsed(argc), char* itkNotUsed(argv) [])
+int otbConfusionMatrixCalculatorComputeWithBaseline(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  typedef char                                                           ClassLabelType;
-  typedef itk::VariableLengthVector<ClassLabelType>                      PLabelType;
-  typedef itk::Statistics::ListSample<PLabelType>                        PListLabelType;
-  typedef itk::FixedArray<ClassLabelType, 1>                             RLabelType;
-  typedef itk::Statistics::ListSample<RLabelType>                        RListLabelType;
+  typedef char                                      ClassLabelType;
+  typedef itk::VariableLengthVector<ClassLabelType> PLabelType;
+  typedef itk::Statistics::ListSample<PLabelType>   PListLabelType;
+  typedef itk::FixedArray<ClassLabelType, 1> RLabelType;
+  typedef itk::Statistics::ListSample<RLabelType> RListLabelType;
   typedef otb::ConfusionMatrixCalculator<RListLabelType, PListLabelType> CalculatorType;
 
   typedef CalculatorType::MeasurementType MeasurementType;
 
   CalculatorType::Pointer calculator = CalculatorType::New();
 
-  RListLabelType::Pointer refLabels = RListLabelType::New();
+  RListLabelType::Pointer refLabels  = RListLabelType::New();
   PListLabelType::Pointer prodLabels = PListLabelType::New();
 
   int nbSamples = 12;
@@ -307,29 +304,29 @@ int otbConfusionMatrixCalculatorComputeWithBaseline(int itkNotUsed(argc), char* 
   labelsClassified.push_back('c');
 
   for (int i = 0; i < nbSamples; ++i)
-    {
+  {
     ClassLabelType label = labelsUniverse[(i % nbClasses)];
-    PLabelType plab;
+    PLabelType     plab;
     plab.SetSize(1);
     plab[0] = labelsClassified[i];
     if (i == 0)
-      {
+    {
       prodLabels->SetMeasurementVectorSize(itk::NumericTraits<PLabelType>::GetLength(plab));
-      }
+    }
     refLabels->PushBack(label);
     prodLabels->PushBack(plab);
-    }
+  }
 
-  int k = 0;
+  int                           k = 0;
   RListLabelType::ConstIterator itRefLabels(refLabels->Begin());
   PListLabelType::ConstIterator itProdLabels(prodLabels->Begin());
 
   for (; itRefLabels != refLabels->End(); ++itRefLabels, ++itProdLabels)
-    {
+  {
     std::cout << "refLabels[" << k << "] = " << itRefLabels.GetMeasurementVector()[0] << "; prodLabels[" << k
-        << "] = " << itProdLabels.GetMeasurementVector()[0] << std::endl;
+              << "] = " << itProdLabels.GetMeasurementVector()[0] << std::endl;
     ++k;
-    }
+  }
 
   calculator->SetReferenceLabels(refLabels);
   calculator->SetProducedLabels(prodLabels);
@@ -343,26 +340,20 @@ int otbConfusionMatrixCalculatorComputeWithBaseline(int itkNotUsed(argc), char* 
   std::cout << "confusion matrix" << std::endl << confmat << std::endl;
 
   for (int itClasses = 0; itClasses < nbClasses; itClasses++)
-    {
-    std::cout << "Number of True Positives of class [" << labelsUniverse[itClasses] << "] = "
-        << calculator->GetTruePositiveValues()[itClasses] << std::endl;
-    std::cout << "Number of False Negatives of class [" << labelsUniverse[itClasses] << "] = "
-            << calculator->GetFalseNegativeValues()[itClasses] << std::endl;
-    std::cout << "Number of False Positives of class [" << labelsUniverse[itClasses] << "] = "
-            << calculator->GetFalsePositiveValues()[itClasses] << std::endl;
-    std::cout << "Number of True Negatives of class [" << labelsUniverse[itClasses] << "] = "
-            << calculator->GetTrueNegativeValues()[itClasses] << std::endl;
+  {
+    std::cout << "Number of True Positives of class [" << labelsUniverse[itClasses] << "] = " << calculator->GetTruePositiveValues()[itClasses] << std::endl;
+    std::cout << "Number of False Negatives of class [" << labelsUniverse[itClasses] << "] = " << calculator->GetFalseNegativeValues()[itClasses] << std::endl;
+    std::cout << "Number of False Positives of class [" << labelsUniverse[itClasses] << "] = " << calculator->GetFalsePositiveValues()[itClasses] << std::endl;
+    std::cout << "Number of True Negatives of class [" << labelsUniverse[itClasses] << "] = " << calculator->GetTrueNegativeValues()[itClasses] << std::endl;
 
-    std::cout << "Precision of class [" << labelsUniverse[itClasses] << "] vs all: " << calculator->GetPrecisions()[itClasses]
-        << std::endl;
+    std::cout << "Precision of class [" << labelsUniverse[itClasses] << "] vs all: " << calculator->GetPrecisions()[itClasses] << std::endl;
     std::cout << "Recall of class [" << labelsUniverse[itClasses] << "] vs all: " << calculator->GetRecalls()[itClasses] << std::endl;
-    std::cout << "F-score of class [" << labelsUniverse[itClasses] << "] vs all: " << calculator->GetFScores()[itClasses] << "\n"
-        << std::endl;
-    }
-  std::cout << "Number of True Positives of the different classes: "<< calculator->GetTruePositiveValues()<< std::endl;
-  std::cout << "Number of False Negatives of the different classes: "<< calculator->GetFalseNegativeValues()<< std::endl;
-  std::cout << "Number of False Positives of the different classes: "<< calculator->GetFalsePositiveValues()<< std::endl;
-  std::cout << "Number of True Negatives of the different classes: "<< calculator->GetTrueNegativeValues()<< std::endl;
+    std::cout << "F-score of class [" << labelsUniverse[itClasses] << "] vs all: " << calculator->GetFScores()[itClasses] << "\n" << std::endl;
+  }
+  std::cout << "Number of True Positives of the different classes: " << calculator->GetTruePositiveValues() << std::endl;
+  std::cout << "Number of False Negatives of the different classes: " << calculator->GetFalseNegativeValues() << std::endl;
+  std::cout << "Number of False Positives of the different classes: " << calculator->GetFalsePositiveValues() << std::endl;
+  std::cout << "Number of True Negatives of the different classes: " << calculator->GetTrueNegativeValues() << std::endl;
   std::cout << "Precision of the different classes: " << calculator->GetPrecisions() << std::endl;
   std::cout << "Recall of the different classes: " << calculator->GetRecalls() << std::endl;
   std::cout << "F-score of the different classes: " << calculator->GetFScores() << std::endl;
@@ -391,7 +382,7 @@ int otbConfusionMatrixCalculatorComputeWithBaseline(int itkNotUsed(argc), char* 
    *
 */
 
-  MeasurementType blTP, blFN, blFP, blTN, blPrecisions, blRecalls, blFScores;
+  MeasurementType                     blTP, blFN, blFP, blTN, blPrecisions, blRecalls, blFScores;
   CalculatorType::ConfusionMatrixType blConfmat;
 
   blConfmat.SetSize(nbClasses, nbClasses);
@@ -437,84 +428,83 @@ int otbConfusionMatrixCalculatorComputeWithBaseline(int itkNotUsed(argc), char* 
   blRecalls.SetSize(nbClasses);
   blFScores.SetSize(nbClasses);
   for (int itC = 0; itC < nbClasses; itC++)
-    {
+  {
     blPrecisions[itC] = blTP[itC] / (blTP[itC] + blFP[itC]);
-    blRecalls[itC] = blTP[itC] / (blTP[itC] + blFN[itC]);
-    blFScores[itC] = 2 * blPrecisions[itC] * blRecalls[itC] / (blPrecisions[itC] + blRecalls[itC]);
-    }
+    blRecalls[itC]    = blTP[itC] / (blTP[itC] + blFN[itC]);
+    blFScores[itC]    = 2 * blPrecisions[itC] * blRecalls[itC] / (blPrecisions[itC] + blRecalls[itC]);
+  }
 
   if (confmat != blConfmat)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in Confusion Matrix" << std::endl;
     std::cout << "baseline confmat = " << std::endl << blConfmat << std::endl;
     std::cout << "calculated confmat = " << std::endl << confmat;
     return EXIT_FAILURE;
-    }
+  }
 
   if (calculator->GetTruePositiveValues() != blTP)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in True Positive Values" << std::endl;
     std::cout << "baseline TPs = " << blTP << std::endl;
     std::cout << "calculated TPs = " << calculator->GetTruePositiveValues();
     return EXIT_FAILURE;
-    }
+  }
 
   if (calculator->GetFalseNegativeValues() != blFN)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in False Negative Values" << std::endl;
     std::cout << "baseline FNs = " << blFN << std::endl;
     std::cout << "calculated FNs = " << calculator->GetFalseNegativeValues();
     return EXIT_FAILURE;
-    }
+  }
 
   if (calculator->GetFalsePositiveValues() != blFP)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in False Positive Values" << std::endl;
     std::cout << "baseline FPs = " << blFP << std::endl;
     std::cout << "calculated FPs = " << calculator->GetFalsePositiveValues();
     return EXIT_FAILURE;
-    }
+  }
 
   if (calculator->GetTrueNegativeValues() != blTN)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in True Negative Values" << std::endl;
     std::cout << "baseline TNs = " << blTN << std::endl;
     std::cout << "calculated TNs = " << calculator->GetTrueNegativeValues();
     return EXIT_FAILURE;
-    }
+  }
 
   if (calculator->GetPrecisions() != blPrecisions)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in Precisions" << std::endl;
     std::cout << "baseline Precisions = " << blPrecisions << std::endl;
     std::cout << "calculated Precisions = " << calculator->GetPrecisions();
     return EXIT_FAILURE;
-    }
+  }
 
   if (calculator->GetRecalls() != blRecalls)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in Recalls" << std::endl;
     std::cout << "baseline Recalls = " << blRecalls << std::endl;
     std::cout << "calculated Recalls = " << calculator->GetRecalls();
     return EXIT_FAILURE;
-    }
+  }
 
   if (calculator->GetFScores() != blFScores)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in FScores" << std::endl;
     std::cout << "baseline FScores = " << blFScores << std::endl;
     std::cout << "calculated FScores = " << calculator->GetFScores();
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
-
 }

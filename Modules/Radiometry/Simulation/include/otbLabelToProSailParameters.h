@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -68,36 +68,35 @@ template <class TLabel>
 class ITK_EXPORT LabelToProSailParameters : public LabelToSimulationParametersBase<TLabel>
 {
 public:
+  /**Standard "Self" & Superclass typedef*/
+  typedef LabelToProSailParameters                Self;
+  typedef LabelToSimulationParametersBase<TLabel> Superclass;
+  typedef itk::SmartPointer<Self>                 Pointer;
+  typedef itk::SmartPointer<const Self>           ConstPointer;
 
-   /**Standard "Self" & Superclass typedef*/
-   typedef LabelToProSailParameters                    Self;
-   typedef LabelToSimulationParametersBase<TLabel>     Superclass;
-   typedef itk::SmartPointer<Self>                     Pointer;
-   typedef itk::SmartPointer<const Self>               ConstPointer;
+  /** Some convenient typedefs. */
+  typedef typename Superclass::ParametersType ParametersType;
+  typedef typename Superclass::LabelType      LabelType;
 
-   /** Some convenient typedefs. */
-   typedef typename Superclass::ParametersType           ParametersType;
-   typedef typename Superclass::LabelType                LabelType;
-
-   /** Standard Macro*/
-   itkTypeMacro(LabelToProSailParameters, LabelToSimulationParametersBase);
-   itkNewMacro(Self);
+  /** Standard Macro*/
+  itkTypeMacro(LabelToProSailParameters, LabelToSimulationParametersBase);
+  itkNewMacro(Self);
 
   // virtual const ParametersType & GetStep1Parameters();
-  //virtual const ParametersType & GetStep2Parameters();
+  // virtual const ParametersType & GetStep2Parameters();
 
-   void GenerateData() override;
+  void GenerateData() override;
 
 protected:
-   LabelToProSailParameters();
-   ~LabelToProSailParameters() override {}
+  LabelToProSailParameters();
+  ~LabelToProSailParameters() override
+  {
+  }
 
 
 private:
-   LabelToProSailParameters(const Self &) = delete;
-   void operator =(const Self&) = delete;
-
-
+  LabelToProSailParameters(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

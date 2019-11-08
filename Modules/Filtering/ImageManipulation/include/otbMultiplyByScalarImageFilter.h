@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,7 +35,7 @@ namespace otb
 namespace Functor
 {
 
-template<class TInput, class TOutput>
+template <class TInput, class TOutput>
 class MultiplyByScalar
 {
 public:
@@ -43,8 +43,10 @@ public:
   {
     m_Coef = 1.0;
   }
-  virtual ~MultiplyByScalar() {}
-  inline TOutput operator ()(const TInput& value)
+  virtual ~MultiplyByScalar()
+  {
+  }
+  inline TOutput operator()(const TInput& value)
   {
     TOutput result;
 
@@ -68,22 +70,16 @@ private:
 }
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MultiplyByScalarImageFilter :
-  public itk::UnaryFunctorImageFilter<
-      TInputImage, TOutputImage,
-      Functor::MultiplyByScalar<
-          typename TInputImage::PixelType,
-          typename TOutputImage::PixelType> >
+class ITK_EXPORT MultiplyByScalarImageFilter
+    : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                          Functor::MultiplyByScalar<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs. */
   typedef MultiplyByScalarImageFilter Self;
-  typedef typename itk::UnaryFunctorImageFilter<
-      TInputImage,
-      TOutputImage,
-      Functor::MultiplyByScalar<
-          typename TInputImage::PixelType,
-          typename TOutputImage::PixelType> > Superclass;
+  typedef typename itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                                Functor::MultiplyByScalar<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -99,14 +95,18 @@ public:
   {
     return (this->GetFunctor().GetCoef());
   }
+
 protected:
-  MultiplyByScalarImageFilter() {}
-  ~MultiplyByScalarImageFilter() override {}
+  MultiplyByScalarImageFilter()
+  {
+  }
+  ~MultiplyByScalarImageFilter() override
+  {
+  }
 
 private:
-  MultiplyByScalarImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  MultiplyByScalarImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

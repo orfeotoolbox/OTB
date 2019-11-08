@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -40,7 +40,6 @@ set(OTBImageBaseTests
   otbImageTest.cxx
   otbImageFunctionAdaptor.cxx
   otbMetaImageFunction.cxx
-
   )
 
 add_executable(otbImageBaseTestDriver ${OTBImageBaseTests})
@@ -102,7 +101,7 @@ otb_add_test(NAME bfTvComplexToVectorImageCastFilterTest COMMAND otbImageBaseTes
   ${BASELINE}/bfTvComplexToVectorImageCastFilterTest.tif
   ${TEMP}/bfTvVectorComplexToVectorImageCastFilterTest.tif
   otbComplexToVectorImageCastFilterTest
-  ${INPUTDATA}/monobandComplexDouble
+  ${INPUTDATA}/monobandComplexDouble.raw
   ${TEMP}/bfTvComplexToVectorImageCastFilterTest.tif
   ${TEMP}/bfTvVectorComplexToVectorImageCastFilterTest.tif
   )
@@ -133,11 +132,11 @@ otb_add_test(NAME coTvMultiChannelROI_RGB2RGB_PNG COMMAND otbImageBaseTestDriver
   -channels 1 2 3 )
 
 otb_add_test(NAME coTvMultiChannelROI_5c_BSQ COMMAND otbImageBaseTestDriver
-  --compare-image ${NOTOL} ${BASELINE}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.hdr
-  ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.hdr
+  --compare-image ${NOTOL} ${BASELINE}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.tif
+  ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.tif
   otbMultiChannelExtractROI
-  ${INPUTDATA}/poupees.hdr
-  ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.hdr
+  ${INPUTDATA}/poupees.raw.hdr
+  ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.tif
   -startX 303 -startY 2 -sizeX 134  -sizeY 330 -channels 1 2 3 2 1 )
 
 otb_add_test(NAME coTvMultiChannelROI_RGB2NG_PNG1 COMMAND otbImageBaseTestDriver
@@ -204,8 +203,8 @@ otb_add_test(NAME coTvExtractROITestMetaData_HDR COMMAND otbImageBaseTestDriver
   --ignore-lines-with 4 Origin: Source: Image ImportImageContainer
   otbExtractROITestMetaData
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  ${TEMP}/coTvExtractROITestMetaData1.hdr
-  ${TEMP}/coTvExtractROITestMetaData2.hdr
+  ${TEMP}/coTvExtractROITestMetaData1_hdr.tif
+  ${TEMP}/coTvExtractROITestMetaData2_hdr.tif
   ${TEMP}/coTvExtractROITestMetaData1_hdr.txt
   ${TEMP}/coTvExtractROITestMetaData2_hdr.txt
   )
@@ -444,7 +443,7 @@ otb_add_test(NAME  ioTvMultiChannelROI_ENVI2PNG_2 COMMAND otbImageBaseTestDriver
   #   --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
   #                     ${TEMP}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
   otbMultiChannelExtractROI
-  -uchar ${INPUTDATA}/poupees.hdr
+  -uchar ${INPUTDATA}/poupees.raw.hdr
   -uchar ${TEMP}/ioExtractROI_ENVI2PNG_poupees_100_100_77_300_channels_1_2_3.png
   -startX 100 -startY 100 -sizeX 77 -sizeY 300
   -channels 1 2 3 )
@@ -698,7 +697,7 @@ otb_add_test(NAME   ioTvMultiChannelROI_JPEG2000_2_TIF_res3_2 COMMAND otbImageBa
 otb_add_test(NAME  ioTvMultiMonoChannelROI_RADARSAT2ENVI COMMAND otbImageBaseTestDriver
   otbMultiToMonoChannelExtractROI
   -ushort LARGEINPUT{RADARSAT1/GOMA/SCENE01/}
-  -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
+  -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.tif
   -startX 2559 -startY 3591 -sizeX 337 -sizeY 280 )
 
 # FIXME this test depends on an other test which requires largeinput. Need to circle the test with it(otb_data_use_large_input). It should not happen
@@ -706,11 +705,11 @@ if(OTB_DATA_USE_LARGEINPUT)
   # ---  RADARSAT (GDAL)  dir name ---
   otb_add_test(NAME  ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI COMMAND otbImageBaseTestDriver
     # THOMAS (provisoire) : Images OK mais erreur au DIFF ITK !!!
-    #   --compare-image ${EPSILON_9} ${BASELINE}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
-    #                      ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.hdr
+    #   --compare-image ${EPSILON_9} ${BASELINE}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.tif
+    #                      ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.tif
     otbMultiToMonoChannelExtractROI
-    -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.hdr
-    -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.hdr
+    -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT2ENVI_2559_3591_337_280.tif
+    -ushort ${TEMP}/ioMultiMonoChannelROI_RADARSAT_ENVI2ENVI_2559_3591_337_280_2.tif
     -startX 0 -startY 0 -sizeX ParseHdfSubsetName337 -sizeY 280 )
 
   set_tests_properties(ioTvMultiMonoChannelROI_RADARSAT_ENVI2ENVI PROPERTIES DEPENDS ioTvMultiMonoChannelROI_RADARSAT2ENVI)

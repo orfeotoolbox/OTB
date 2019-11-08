@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,7 +22,7 @@
 #define otbWrapperQtWidgetParameterList_h
 
 #include <QtWidgets>
-#  include "otbWrapperQtWidgetParameterBase.h"
+#include "otbWrapperQtWidgetParameterBase.h"
 
 
 namespace otb
@@ -43,33 +43,32 @@ class OTBQtWidget_EXPORT QtWidgetParameterList : public QtWidgetParameterBase
 {
   Q_OBJECT
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-  QtWidgetParameterList( AbstractParameterList *, QtWidgetModel * , QWidget*);
+  QtWidgetParameterList(AbstractParameterList*, QtWidgetModel*, QWidget*);
   ~QtWidgetParameterList() override;
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   void NotifyUpdate();
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-  QtWidgetParameterList( const QtWidgetParameterList & ) = delete;
-  void operator = (const QtWidgetParameterList & ) = delete;
+  QtWidgetParameterList(const QtWidgetParameterList&) = delete;
+  void operator=(const QtWidgetParameterList&) = delete;
 
   void DoCreateWidget() override;
 
   void DoUpdateGUI() override;
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
-//
-// Private slots.
+  //
+  // Private slots.
 private slots:
 };
 

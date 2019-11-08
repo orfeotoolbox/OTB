@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,8 +29,10 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #pragma GCC diagnostic ignored "-Wsign-compare"
+#pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wheader-guard"
+#pragma clang diagnostic ignored "-Wexpansion-to-defined"
 #else
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif
@@ -51,17 +53,12 @@ namespace otb
  * \ingroup OTBDimensionalityReductionLearning
  */
 template <class TInputValue>
-class ITK_EXPORT PCAModel
-  : public  MachineLearningModel<
-    itk::VariableLengthVector< TInputValue >,
-    itk::VariableLengthVector< TInputValue > >    
+class ITK_EXPORT PCAModel : public MachineLearningModel<itk::VariableLengthVector<TInputValue>, itk::VariableLengthVector<TInputValue>>
 {
 public:
   typedef PCAModel Self;
-  typedef MachineLearningModel<
-    itk::VariableLengthVector< TInputValue >,
-    itk::VariableLengthVector< TInputValue> > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef MachineLearningModel<itk::VariableLengthVector<TInputValue>, itk::VariableLengthVector<TInputValue>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename Superclass::InputValueType       InputValueType;
@@ -73,47 +70,44 @@ public:
   typedef typename Superclass::TargetListSampleType TargetListSampleType;
 
   // Confidence map related typedefs
-  typedef typename Superclass::ConfidenceValueType       ConfidenceValueType;
-  typedef typename Superclass::ConfidenceSampleType      ConfidenceSampleType;
-  typedef typename Superclass::ConfidenceListSampleType  ConfidenceListSampleType;
+  typedef typename Superclass::ConfidenceValueType      ConfidenceValueType;
+  typedef typename Superclass::ConfidenceSampleType     ConfidenceSampleType;
+  typedef typename Superclass::ConfidenceListSampleType ConfidenceListSampleType;
+
+  typedef typename Superclass::ProbaSampleType     ProbaSampleType;
+  typedef typename Superclass::ProbaListSampleType ProbaListSampleType;
 
   itkNewMacro(Self);
   itkTypeMacro(PCAModel, DimensionalityReductionModel);
 
-  itkSetMacro(DoResizeFlag,bool);
+  itkSetMacro(DoResizeFlag, bool);
 
   itkSetMacro(WriteEigenvectors, bool);
   itkGetMacro(WriteEigenvectors, bool);
 
-  bool CanReadFile(const std::string & filename) override;
-  bool CanWriteFile(const std::string & filename) override;
+  bool CanReadFile(const std::string& filename) override;
+  bool CanWriteFile(const std::string& filename) override;
 
-  void Save(const std::string & filename, const std::string & name="")  override;
-  void Load(const std::string & filename, const std::string & name="")  override;
+  void Save(const std::string& filename, const std::string& name = "") override;
+  void Load(const std::string& filename, const std::string& name = "") override;
 
   void Train() override;
 
 protected:
-  PCAModel(); 
+  PCAModel();
   ~PCAModel() override;
- 
-  virtual TargetSampleType DoPredict(
-    const InputSampleType& input,
-    ConfidenceValueType * quality = nullptr) const override;
 
-  virtual void DoPredictBatch(
-    const InputListSampleType *,
-    const unsigned int & startIndex,
-    const unsigned int & size,
-    TargetListSampleType *,
-    ConfidenceListSampleType * quality = nullptr) const override;
+  virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
+
+  virtual void DoPredictBatch(const InputListSampleType*, const unsigned int& startIndex, const unsigned int& size, TargetListSampleType*,
+                              ConfidenceListSampleType* quality = nullptr, ProbaListSampleType* proba = nullptr) const override;
 
 private:
   shark::LinearModel<> m_Encoder;
   shark::LinearModel<> m_Decoder;
-  shark::PCA m_PCA;
-  bool m_DoResizeFlag;
-  bool m_WriteEigenvectors;
+  shark::PCA           m_PCA;
+  bool                 m_DoResizeFlag;
+  bool                 m_WriteEigenvectors;
 };
 } // end namespace otb
 
@@ -124,4 +118,3 @@ private:
 
 
 #endif
-

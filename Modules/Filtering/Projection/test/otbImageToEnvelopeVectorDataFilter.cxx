@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,13 +25,12 @@
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"
 
-typedef unsigned short                            PixelType;
-typedef otb::Image<PixelType, 2>                   ImageType;
+typedef unsigned short PixelType;
+typedef otb::Image<PixelType, 2> ImageType;
 typedef otb::ImageFileReader<ImageType>           ReaderType;
 typedef otb::VectorData<>                         VectorDataType;
 typedef otb::VectorDataFileWriter<VectorDataType> WriterType;
-typedef otb::ImageToEnvelopeVectorDataFilter
-    <ImageType, VectorDataType>                    FilterType;
+typedef otb::ImageToEnvelopeVectorDataFilter<ImageType, VectorDataType> FilterType;
 
 
 int otbImageToEnvelopeVectorDataFilter(int itkNotUsed(argc), char* argv[])

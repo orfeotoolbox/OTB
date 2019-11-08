@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,27 +31,24 @@ namespace otb
  * Constructor
  */
 
-ImageMetadataCorrectionParameters
-::ImageMetadataCorrectionParameters()
+ImageMetadataCorrectionParameters::ImageMetadataCorrectionParameters()
 {
-  m_SolarZenithalAngle   = 361.;
-  m_SolarAzimutalAngle   = 361.;
-  m_ViewingZenithalAngle = 361.;
-  m_ViewingAzimutalAngle = 361.;
-  m_Month                = 0;
-  m_Day                  = 0;
-  m_Year                 = 0;
+  m_SolarZenithalAngle           = 361.;
+  m_SolarAzimutalAngle           = 361.;
+  m_ViewingZenithalAngle         = 361.;
+  m_ViewingAzimutalAngle         = 361.;
+  m_Month                        = 0;
+  m_Day                          = 0;
+  m_Year                         = 0;
   m_FilterFunctionValuesFileName = "";
-  
+
   m_WavelengthSpectralBand = InternalWavelengthSpectralBandVectorType::New();
   m_WavelengthSpectralBand->Clear();
 }
 
 
 /** Get data from filter function file*/
-void
-ImageMetadataCorrectionParameters
-::LoadFilterFunctionValue(const std::string& filename)
+void ImageMetadataCorrectionParameters::LoadFilterFunctionValue(const std::string& filename)
 {
   m_WavelengthSpectralBand->Clear();
   SpectralSensitivityReader::Pointer spectralSensitivityReader = SpectralSensitivityReader::New();
@@ -61,9 +58,7 @@ ImageMetadataCorrectionParameters
 }
 
 /**PrintSelf method */
-void
-ImageMetadataCorrectionParameters
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ImageMetadataCorrectionParameters::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   os << "Solar zenithal angle  : " << m_SolarZenithalAngle << std::endl;
   os << "Solar azimutal angle  : " << m_SolarAzimutalAngle << std::endl;
@@ -76,9 +71,9 @@ ImageMetadataCorrectionParameters
   // Function values print :
   os << "Filter function values: " << std::endl;
   for (unsigned int i = 0; i < m_WavelengthSpectralBand->Size(); ++i)
-    {
+  {
     os << indent << "Channel " << i + 1 << " : " << std::endl;
     os << indent << m_WavelengthSpectralBand->GetNthElement(i) << std::endl;
-    }
+  }
 }
 } // end namespace otb

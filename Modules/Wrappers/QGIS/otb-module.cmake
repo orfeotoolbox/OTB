@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module allows to generate application descriptor files for QGIS processing plugin.")
+set(DOCUMENTATION "This module allows for the generation of the application descriptor files for the QGIS processing plugin.")
 
 otb_module(OTBQGIS
   DEPENDS

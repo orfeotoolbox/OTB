@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "itkMacro.h"
 #include <iostream>
 
@@ -31,18 +29,18 @@
 
 int otbLineCorrelationDetector(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   // Parameters of the line to detect
-  unsigned int WidthLine((unsigned int) ::atoi(argv[3]));
-  unsigned int LengthLine((unsigned int) ::atoi(argv[4]));
+  unsigned int WidthLine((unsigned int)::atoi(argv[3]));
+  unsigned int LengthLine((unsigned int)::atoi(argv[4]));
 
   typedef unsigned char InputPixelType;
   typedef double        OutputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;

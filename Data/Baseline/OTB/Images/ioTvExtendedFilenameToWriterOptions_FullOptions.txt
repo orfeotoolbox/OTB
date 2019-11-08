@@ -1,0 +1,8 @@
+1
+/home/data/filename.tif
+1
+1
+1
+BLOCKYSIZE=1024
+QUALITY=75
+TILED=YES

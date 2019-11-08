@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -102,21 +102,21 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(MassOfBelief, DataObject);
 
-  typedef TLabel                          LabelType;
-  typedef TMass                           MassType;
-  typedef std::set<LabelType>             LabelSetType;
+  typedef TLabel              LabelType;
+  typedef TMass               MassType;
+  typedef std::set<LabelType> LabelSetType;
   typedef std::map<LabelSetType, MassType> MassMapType;
-  typedef std::set<LabelSetType>          LabelSetOfSetType;
+  typedef std::set<LabelSetType> LabelSetOfSetType;
 
   /** Register a mass associated with an element of the power-set */
-  void SetMass(const LabelSetType & labelSet, const MassType & mass);
+  void SetMass(const LabelSetType& labelSet, const MassType& mass);
 
   /** Retrieve the mass associated with the given element of the power
    *  set */
-  MassType GetMass(const LabelSetType & labelSet) const;
+  MassType GetMass(const LabelSetType& labelSet) const;
 
   /** Remove mass from the support */
-  void RemoveMass(const LabelSetType & labelSet);
+  void RemoveMass(const LabelSetType& labelSet);
 
   /** Retrieve the support of the mass of belief (i.e. a vector of
    * element of the power set for which the mass of belief is not
@@ -141,24 +141,24 @@ public:
    *  to ensure that two mass functions share the same universe, even
    *  if most of masses are null.
    */
-  void InitializePowerSetMasses(const LabelSetType & universe);
+  void InitializePowerSetMasses(const LabelSetType& universe);
 
   /** Get the belief of a given element of the power-set */
-  MassType GetBelief(const LabelSetType & labelSet) const;
+  MassType GetBelief(const LabelSetType& labelSet) const;
 
   /** Get the plausibility of a given element of the power-set */
-  MassType GetPlausibility(const LabelSetType & labelSet) const;
+  MassType GetPlausibility(const LabelSetType& labelSet) const;
 
   /** Get the belief for an hypothesis containing a given set of
    *  elements from the power-set */
-  MassType GetBelief(const LabelSetOfSetType & containedLabelSet) const;
+  MassType GetBelief(const LabelSetOfSetType& containedLabelSet) const;
 
   /** Get the belief for an hypothesis intersecting a given set of
    *  elements from the power set.*/
-  MassType GetPlausibility(const LabelSetOfSetType & intersectedLabelSet) const;
+  MassType GetPlausibility(const LabelSetOfSetType& intersectedLabelSet) const;
 
   /** Copy masses of two mass functions */
-  void Copy(const Self * massOfBelief);
+  void Copy(const Self* massOfBelief);
 
   /** Return true if the support set is null */
   bool IsEmpty() const;
@@ -166,21 +166,23 @@ public:
   /** Define a Print static method for label sets
    *  Do not overload << for std::set since it causes
    *  namespace issues. */
-  static std::ostream & PrintLabelSet(std::ostream & out,
-                                      const LabelSetType & labelSet);
+  static std::ostream& PrintLabelSet(std::ostream& out, const LabelSetType& labelSet);
 
   /** Define a Print static method for label sets
    *  Do not overload << for std::set since it causes
    *  namespace issues. */
-  static std::ostream & PrintLabelSetOfSet(std::ostream & out,
-                                           const LabelSetOfSetType & labelSet);
+  static std::ostream& PrintLabelSetOfSet(std::ostream& out, const LabelSetOfSetType& labelSet);
 
 protected:
   /** Constructor */
-  MassOfBelief() {}
+  MassOfBelief()
+  {
+  }
 
   /** Desctructor */
-  ~MassOfBelief() override {}
+  ~MassOfBelief() override
+  {
+  }
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
@@ -190,7 +192,7 @@ private:
   void operator=(const Self&) = delete;
 
   /** The masses map */
-  MassMapType  m_MassesMap;
+  MassMapType m_MassesMap;
 };
 
 } // end namespace otb

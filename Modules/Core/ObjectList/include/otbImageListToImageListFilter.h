@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,8 +34,7 @@ namespace otb
  * \ingroup OTBObjectList
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ImageListToImageListFilter
-  : public ImageListSource<TOutputImage>
+class ITK_EXPORT ImageListToImageListFilter : public ImageListSource<TOutputImage>
 {
 public:
   /** Standard typedefs */
@@ -48,7 +47,7 @@ public:
   /** Creation through object factory macro */
   itkTypeMacro(ImageListToImageListFilter, ImageListSource);
   /** Template parameters typedefs */
-  typedef          TInputImage                      InputImageType;
+  typedef TInputImage                               InputImageType;
   typedef typename InputImageType::ConstPointer     InputImagePointer;
   typedef typename InputImageType::RegionType       InputImageRegionType;
   typedef typename InputImageType::PixelType        InputImagePixelType;
@@ -66,20 +65,22 @@ public:
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
   /** Overriding the SetInput() and GetInput() methods */
   using Superclass::SetInput;
-  virtual void SetInput(const InputImageListType * imageList);
-  virtual InputImageListType * GetInput(void);
+  virtual void SetInput(const InputImageListType* imageList);
+  virtual InputImageListType* GetInput(void);
 
 protected:
   /** Constructor */
   ImageListToImageListFilter();
   /** Destructor */
-  ~ImageListToImageListFilter() override {}
+  ~ImageListToImageListFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageListToImageListFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ImageListToImageListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

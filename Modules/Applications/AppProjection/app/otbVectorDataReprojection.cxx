@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,9 +41,9 @@ class VectorDataReprojection : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorDataReprojection Self;
-  typedef Application Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef VectorDataReprojection        Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** filter typedef  **/
@@ -53,29 +53,26 @@ public:
   typedef otb::GeometriesSet OutputGeometriesType;
 
   /** Standard macro */
-  itkNewMacro(Self)
-;
+  itkNewMacro(Self);
 
-  itkTypeMacro(VectorDataReprojection, otb::Application)
-;
+  itkTypeMacro(VectorDataReprojection, otb::Application);
 
 private:
   void DoInit() override
   {
     SetName("VectorDataReprojection");
     SetDescription("Reproject a vector data using support image projection reference, or a user specified map projection");
-    SetDocName("Vector Data reprojection");
-    std::ostringstream oss;
-    oss <<" This application allows reprojecting a vector data using support image projection reference"
-        ", or a user given map projection." << std::endl;
-    oss <<" If given, image keywordlist can be added to reprojected vectordata.";
-    SetDocLongDescription(oss.str());
+
+    SetDocLongDescription(
+        "Reproject vector data using a support image as projection reference or to a user given map projection. "
+        " If given an image keywordlist can be added to the reprojected vectordata.");
+
     SetDocLimitations(" ");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Vector);
-    AddDocTag(Tags::Geometry);	
+    AddDocTag(Tags::Geometry);
     AddDocTag(Tags::Coordinates);
 
     // Set the parameters
@@ -108,14 +105,13 @@ private:
     SetDocExampleParameterValue("in.vd", "VectorData_QB1.shp");
     SetDocExampleParameterValue("out.proj", "image");
     SetDocExampleParameterValue("out.proj.image.in", "ROI_QB_MUL_1.tif");
-    SetDocExampleParameterValue("out.vd","reprojected_vd.shp");
+    SetDocExampleParameterValue("out.vd", "reprojected_vd.shp");
 
     SetOfficialDocLink();
   }
 
   void DoUpdateParameters() override
   {
-
   }
 
   void DoExecute() override
@@ -123,12 +119,11 @@ private:
     GetLogger()->Debug("Entering DoExecute\n");
 
     // Setup the DEM Handler
-    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
 
     // Get the input image
 
-    otb::ogr::DataSource::Pointer OGRDSin = otb::ogr::DataSource::New(GetParameterString("in.vd"),
-                                                                      otb::ogr::DataSource::Modes::Read);
+    otb::ogr::DataSource::Pointer OGRDSin = otb::ogr::DataSource::New(GetParameterString("in.vd"), otb::ogr::DataSource::Modes::Read);
 
     m_InputGeomSet = InputGeometriesType::New(OGRDSin);
 
@@ -137,43 +132,40 @@ private:
     m_GeometriesProjFilter->SetInput(m_InputGeomSet);
 
     if (HasValue("in.kwl"))
-      {
+    {
       FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in.kwl");
       m_GeometriesProjFilter->SetInputKeywordList(inImage->GetImageKeywordlist());
-      //otbAppLogINFO(<<"kwl."<<std::endl);
-      }
+      // otbAppLogINFO(<<"kwl."<<std::endl);
+    }
 
     if (GetParameterInt("out.proj") == 0)
-      {
+    {
       FloatVectorImageType::Pointer outImage = GetParameterFloatVectorImage("out.proj.image.in");
 
       if (outImage)
-        {
+      {
         m_OutputProjectionRef = outImage->GetProjectionRef(); // ~ wkt
         if (m_OutputProjectionRef.empty())
-          {
-            m_GeometriesProjFilter->SetOutputKeywordList(outImage->GetImageKeywordlist()); // nec qd capteur
-          }
-        }
-      else
         {
-        // LogFATAl
+          m_GeometriesProjFilter->SetOutputKeywordList(outImage->GetImageKeywordlist()); // nec qd capteur
         }
       }
-    else
+      else
       {
+        // LogFATAl
+      }
+    }
+    else
+    {
 
       // Get the output projection Ref
       m_OutputProjectionRef = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "out.proj.user.map");
-
-      }
-    otbAppLogINFO(<<"Geometries reprojection with following projection reference :"
-        <<std::endl<<m_OutputProjectionRef<<std::endl);
+    }
+    otbAppLogINFO(<< "Geometries reprojection with following projection reference :" << std::endl << m_OutputProjectionRef << std::endl);
 
     m_GeometriesProjFilter->SetOutputProjectionRef(m_OutputProjectionRef);
 
-    OGRDSout = otb::ogr::DataSource::New(GetParameterString("out.vd"),
-                                         otb::ogr::DataSource::Modes::Update_LayerOverwrite);
+    OGRDSout = otb::ogr::DataSource::New(GetParameterString("out.vd"), otb::ogr::DataSource::Modes::Update_LayerOverwrite);
 
     m_OutputGeomSet = OutputGeometriesType::New(OGRDSout);
 
@@ -183,16 +175,16 @@ private:
   }
 
   otb::ogr::DataSource::Pointer OGRDSout;
-  std::string m_OutputProjectionRef;
-  ImageKeywordlist m_KeywordList;
-  InputGeometriesType::Pointer m_InputGeomSet;
+  std::string                   m_OutputProjectionRef;
+  ImageKeywordlist              m_KeywordList;
+  InputGeometriesType::Pointer  m_InputGeomSet;
   OutputGeometriesType::Pointer m_OutputGeomSet;
-  //FloatVectorImageType::Pointer m_inImage;
- // FloatVectorImageType::Pointer m_outImage;
+  // FloatVectorImageType::Pointer m_inImage;
+  // FloatVectorImageType::Pointer m_outImage;
   ProjectionFilterType::Pointer m_GeometriesProjFilter;
 };
 
-  } // namespace Wrapper
+} // namespace Wrapper
 } // namespace otb
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::VectorDataReprojection)

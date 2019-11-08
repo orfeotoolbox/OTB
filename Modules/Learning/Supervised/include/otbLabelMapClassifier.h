@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,7 +26,8 @@
 #include "itkListSample.h"
 #include "otbAttributesMapLabelObject.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class LabelMapClassifier
  * \brief Classify each LabelObject of the input LabelMap in place
@@ -37,13 +38,12 @@ namespace otb {
  *
  * \ingroup OTBSupervised
  */
-template<class TInputLabelMap>
-class ITK_EXPORT LabelMapClassifier :
-    public itk::InPlaceLabelMapFilter<TInputLabelMap>
+template <class TInputLabelMap>
+class ITK_EXPORT LabelMapClassifier : public itk::InPlaceLabelMapFilter<TInputLabelMap>
 {
 public:
   /** Standard class typedefs. */
-  typedef LabelMapClassifier                      Self;
+  typedef LabelMapClassifier                         Self;
   typedef itk::InPlaceLabelMapFilter<TInputLabelMap> Superclass;
   typedef itk::SmartPointer<Self>                    Pointer;
   typedef itk::SmartPointer<const Self>              ConstPointer;
@@ -54,26 +54,23 @@ public:
   typedef typename LabelMapType::ConstPointer    LabelMaponstPointer;
   typedef typename LabelMapType::LabelObjectType LabelObjectType;
 
-  typedef typename LabelObjectType::AttributesValueType     AttributesValueType;
-  typedef typename LabelObjectType::ClassLabelType          ClassLabelType;
+  typedef typename LabelObjectType::AttributesValueType AttributesValueType;
+  typedef typename LabelObjectType::ClassLabelType      ClassLabelType;
 
   /** ImageDimension constants */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputLabelMap::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputLabelMap::ImageDimension);
 
   /** Type definitions for the learning model. */
   typedef MachineLearningModel<AttributesValueType, ClassLabelType> ModelType;
-  typedef typename ModelType::Pointer ModelPointer;
+  typedef typename ModelType::Pointer         ModelPointer;
   typedef typename ModelType::InputSampleType MeasurementVectorType;
-  typedef Functor::AttributesMapMeasurementFunctor
-      <LabelObjectType, MeasurementVectorType>   MeasurementFunctorType;
+  typedef Functor::AttributesMapMeasurementFunctor<LabelObjectType, MeasurementVectorType> MeasurementFunctorType;
 
   /** Standard New method. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelMapClassifier,
-               itk::InPlaceLabelMapFilter);
+  itkTypeMacro(LabelMapClassifier, itk::InPlaceLabelMapFilter);
 
   itkSetObjectMacro(Model, ModelType);
 
@@ -82,16 +79,16 @@ public:
     m_MeasurementFunctor = functor;
   }
 
-  MeasurementFunctorType & GetMeasurementFunctor()
+  MeasurementFunctorType& GetMeasurementFunctor()
   {
     return m_MeasurementFunctor;
   }
 
 protected:
   LabelMapClassifier();
-  ~LabelMapClassifier() override {};
+  ~LabelMapClassifier() override{};
 
-  void ThreadedProcessLabelObject( LabelObjectType * labelObject ) override;
+  void ThreadedProcessLabelObject(LabelObjectType* labelObject) override;
 
   void ReleaseInputs() override;
 
@@ -115,5 +112,3 @@ private:
 #endif
 
 #endif
-
-

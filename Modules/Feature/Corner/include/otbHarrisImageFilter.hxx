@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,8 +30,7 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputImage>
-HarrisImageFilter<TInputImage, TOutputImage>
-::HarrisImageFilter()
+HarrisImageFilter<TInputImage, TOutputImage>::HarrisImageFilter()
 {
   m_SigmaD = 1.0;
   m_SigmaI = 1.0;
@@ -45,9 +44,7 @@ HarrisImageFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-void
-HarrisImageFilter<TInputImage, TOutputImage>
-::GenerateData()
+void HarrisImageFilter<TInputImage, TOutputImage>::GenerateData()
 {
   m_HessianFilter->SetInput(this->GetInput());
   m_HessianFilter->SetSigma(this->m_SigmaD);
@@ -79,14 +76,12 @@ HarrisImageFilter<TInputImage, TOutputImage>
  * Standard "PrintSelf" method
  */
 template <class TInputImage, class TOutput>
-void
-HarrisImageFilter<TInputImage, TOutput>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void HarrisImageFilter<TInputImage, TOutput>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Sigma_D : " << this->m_SigmaD << std::endl;
   os << indent << "Sigma_I : " << this->m_SigmaI << std::endl;
-  os << indent << "Alpha   : " << this->m_Alpha  << std::endl;
+  os << indent << "Alpha   : " << this->m_Alpha << std::endl;
 }
 
 } // end namespace otb

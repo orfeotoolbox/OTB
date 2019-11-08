@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -124,13 +124,6 @@ option(OTB_BUILD_DEFAULT_MODULES "Build the default OTB modules." ON)
 option(OTB_BUILD_ALL_MODULES_FOR_TESTS "Build the tests of module dependencies." OFF)
 mark_as_advanced(OTB_BUILD_ALL_MODULES_FOR_TESTS)
 
-# To maintain backward compatibility
-if(DEFINED OTB_BUILD_ALL_MODULES)
-  message(WARNING "OTB_BUILD_ALL_MODULES is deprecated, please remove this entry from the CMake "
-                  "cache (edit the CMakeCache.txt file located in the top level of the OTB build "
-                  "tree directly or via the CMake GUI), and use OTB_BUILD_DEFAULT_MODULES instead.")
-  set(OTB_BUILD_DEFAULT_MODULES ${OTB_BUILD_ALL_MODULES} CACHE BOOL "Build the default OTB modules." FORCE)
-endif()
 # Provide module selections by groups
 include(${OTB_SOURCE_DIR}/CMake/OTBGroups.cmake)
 
@@ -227,28 +220,6 @@ list(SORT OTB_MODULES_DISABLED) # Deterministic order.
 include(CMake/TopologicalSort.cmake)
 topological_sort(OTB_MODULES_ENABLED OTB_MODULE_ _DEPENDS_FOR_SORT)
 
-# TODO : shall we set up CPack ?
-# #
-# # Set up CPack support
-# #
-# set(OTB_MODULES_DISABLED_CPACK )
-# foreach(m ${OTB_MODULES_DISABLED})
-#   list(APPEND OTB_MODULES_DISABLED_CPACK "/${m}/")
-# endforeach()
-# set(CPACK_SOURCE_IGNORE_FILES
-#   "${OTB_MODULES_DISABLED_CPACK};/\\\\.git")
-# 
-# set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Insight Toolkit version ${OTB_VERSION_MAJOR}")
-# set(CPACK_PACKAGE_VENDOR "ISC")
-# set(CPACK_PACKAGE_VERSION_MAJOR "${OTB_VERSION_MAJOR}")
-# set(CPACK_PACKAGE_VERSION_MINOR "${OTB_VERSION_MINOR}")
-# set(CPACK_PACKAGE_VERSION_PATCH "${OTB_VERSION_PATCH}")
-# set(CPACK_PACKAGE_INSTALL_DIRECTORY "OTB-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}")
-# set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README.txt")
-# set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
-# 
-# include(CPack)
-
 # Report what will be built.
 set(_enabled_modules "${OTB_MODULES_ENABLED}")
 list(SORT _enabled_modules)
@@ -276,100 +247,6 @@ foreach(otb-module ${OTB_MODULES_ALL})
   endif()
 endforeach()
 
-#-----------------------------------------------------------------------------
-# Construct an in-build-order list of "CDash subproject" modules from the
-# list of enabled modules:
-
-set(OTB_CDASH_SUBPROJECT_MODULES)
-
-if(OTB_GENERATE_PROJECT_XML OR OTB_GENERATE_SUBPROJECTS_CMAKE)
-  # Since a "CDash subproject" for OTB logically contains both a non-test
-  # module and its corresponding test module, the subproject order must take
-  # both modules into account. The subprojects in this list are named after
-  # the non-test modules in the enabled modules list. But the ordering of
-  # these subprojects use the dependencies of the modules *and* their test
-  # modules
-  foreach(module ${OTB_MODULES_ENABLED})
-    if(${module}_TESTED_BY)
-      # module that HAS a test module: skip for now... will be added as a
-      # subproject later, in the slot when its corresponding "-test" module
-      # is encountered
-    elseif(${module}_TESTS_FOR)
-      # this is a test module... *now* list the module which it tests as
-      # the subproject name:
-      list(APPEND OTB_CDASH_SUBPROJECT_MODULES ${${module}_TESTS_FOR})
-    else()
-      # a module that is not a test module, and has no tested by...
-      # is just a module-only subproject with no test module:
-      list(APPEND OTB_CDASH_SUBPROJECT_MODULES ${module})
-    endif()
-  endforeach()
-endif()
-
-#-----------------------------------------------------------------------------
-# Write a Project.xml file to send the description of the submodules and
-# their dependencies up to CDash:
-
-if(OTB_GENERATE_PROJECT_XML)
-  set(filename "${OTB_BINARY_DIR}/${main_project_name}.Project.xml")
-
-  set(xml "<?xml version='1.0' encoding='UTF-8'?>\n")
-  set(xml "${xml}<Project name='${main_project_name}'>\n")
-  foreach(module ${OTB_CDASH_SUBPROJECT_MODULES})
-    if(${module}_IS_TEST)
-      message(FATAL_ERROR "unexpected: subproject names should not be test modules module='${module}' tests_for='${${module}_TESTS_FOR}'")
-    endif()
-    set(xml "${xml}  <SubProject name='${module}'>\n")
-    set(deps "")
-    set(dep_list ${OTB_MODULE_${module}_DEPENDS})
-    if(${module}_TESTED_BY)
-      list(APPEND dep_list ${OTB_MODULE_${${module}_TESTED_BY}_DEPENDS})
-      if(dep_list)
-        list(SORT dep_list)
-      endif()
-    endif()
-    foreach(dep ${dep_list})
-      if(NOT ${dep}_IS_TEST AND NOT "${module}" STREQUAL "${dep}")
-        set(xml "${xml}    <Dependency name='${dep}'/>\n")
-      endif()
-    endforeach()
-    set(xml "${xml}  </SubProject>\n")
-  endforeach()
-  set(xml "${xml}</Project>\n")
-
-  # Always write out "${filename}.in":
-  file(WRITE ${filename}.in "${xml}")
-
-  # Use configure_file so "${filename}" only changes when its content changes:
-  configure_file(${filename}.in ${filename} COPYONLY)
-endif()
-
-#-----------------------------------------------------------------------------
-# Write the list of enabled modules out for ctest scripts to use as an
-# in-order subproject list:
-
-if(OTB_GENERATE_SUBPROJECTS_CMAKE)
-  set(filename "${OTB_BINARY_DIR}/${main_project_name}.SubProjects.cmake")
-
-  set(s "# Generated by CMake, do not edit!\n")
-  set(s "${s}set(otb_subprojects\n")
-  foreach(otb-module ${OTB_CDASH_SUBPROJECT_MODULES})
-    if(${otb-module}_IS_TEST)
-      message(FATAL_ERROR "unexpected: subproject names should not be test modules otb-module='${otb-module}' tests_for='${${otb-module}_TESTS_FOR}'")
-    endif()
-    set(s "${s}  \"${otb-module}\"\n")
-  endforeach()
-  set(s "${s})\n")
-
-  # Always write out "${filename}.in":
-  file(WRITE ${filename}.in "${s}")
-
-  # Use configure_file so "${filename}" only changes when its content changes:
- configure_file(${filename}.in ${filename} COPYONLY)
-endif()
-
-#-----------------------------------------------------------------------------
-
 if(NOT OTB_MODULES_ENABLED)
   message(WARNING "No modules enabled!")
   file(REMOVE "${OTB_BINARY_DIR}/OTBTargets.cmake")
@@ -380,7 +257,9 @@ file(WRITE "${OTB_BINARY_DIR}/OTBTargets.cmake"
   "# Generated by CMake, do not edit!")
 
 macro(init_module_vars)
-  verify_otb_module_is_set()
+  if( "${otb-module}" STREQUAL "" )
+    message(FATAL_ERROR "CMake variable otb-module is not set")
+  endif()
   set(${otb-module}-targets OTBTargets)
   set(${otb-module}-targets-install "${OTB_INSTALL_PACKAGE_DIR}/OTBTargets.cmake")
   set(${otb-module}-targets-build "${OTB_BINARY_DIR}/OTBTargets.cmake")

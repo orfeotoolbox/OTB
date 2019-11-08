@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -72,8 +72,7 @@ namespace mvd
  * \ingroup OTBMonteverdiCore
  *
  */
-class OTBMonteverdiCore_EXPORT AbstractModel :
-    public QObject
+class OTBMonteverdiCore_EXPORT AbstractModel : public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -82,30 +81,29 @@ class OTBMonteverdiCore_EXPORT AbstractModel :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** Destructor */
   ~AbstractModel() override;
 
   /** */
-  template< typename TModel >
-    inline const TModel* GetParentModel() const;
+  template <typename TModel>
+  inline const TModel* GetParentModel() const;
 
   /** */
-  template< typename TModel >
-    inline TModel* GetParentModel();
+  template <typename TModel>
+  inline TModel* GetParentModel();
 
   /** */
-  template< typename TModel >
-    TModel* newChildModel( void* context =NULL );
+  template <typename TModel>
+  TModel* newChildModel(void* context = NULL);
 
   /** */
-  inline void attachChildModel( AbstractModel* model, void* context =NULL );
+  inline void attachChildModel(AbstractModel* model, void* context = NULL);
 
   /** */
-  inline void BuildModel( void* context =NULL );
+  inline void BuildModel(void* context = NULL);
 
   /**
    */
@@ -121,44 +119,41 @@ public:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
   /** Constructor */
-  AbstractModel( QObject* p =NULL );
+  AbstractModel(QObject* p = NULL);
 
   /**
    */
-  virtual void virtual_BuildModel( void* context =NULL );
+  virtual void virtual_BuildModel(void* context = NULL);
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   /**
    */
   virtual void virtual_Save();
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 
@@ -171,76 +166,61 @@ namespace mvd
 {
 
 /*****************************************************************************/
-template< typename TModel >
-const TModel*
-AbstractModel
-::GetParentModel() const
+template <typename TModel>
+const TModel* AbstractModel::GetParentModel() const
 {
-  return qobject_cast< const TModel* >( parent() );
+  return qobject_cast<const TModel*>(parent());
 }
 
 /*****************************************************************************/
-template< typename TModel >
-TModel*
-AbstractModel
-::GetParentModel()
+template <typename TModel>
+TModel* AbstractModel::GetParentModel()
 {
   // qDebug()
   //   << "parent:" << parent()
   //   << ";" << qobject_cast< TModel* >( parent() );
 
-  return qobject_cast< TModel* >( parent() );
+  return qobject_cast<TModel*>(parent());
 }
 
 /*****************************************************************************/
-template< typename T >
-T *
-AbstractModel
-::newChildModel( void * context )
+template <typename T>
+T* AbstractModel::newChildModel(void* context)
 {
-  T* model = new T( this );
+  T* model = new T(this);
 
   try
-    {
-    attachChildModel( model, context );
-    }
-  catch( ... )
-    {
+  {
+    attachChildModel(model, context);
+  }
+  catch (...)
+  {
     delete model;
     model = NULL;
 
     throw;
-    }
+  }
 
   return model;
 }
 
 /*****************************************************************************/
-inline
-void
-AbstractModel
-::attachChildModel( AbstractModel* model, void* context )
+inline void AbstractModel::attachChildModel(AbstractModel* model, void* context)
 {
-  assert( model!=NULL );
+  assert(model != NULL);
 
-  model->setParent( this );
-  model->BuildModel( context );
+  model->setParent(this);
+  model->BuildModel(context);
 }
 
 /*****************************************************************************/
-inline
-void
-AbstractModel
-::BuildModel( void* context )
+inline void AbstractModel::BuildModel(void* context)
 {
-  virtual_BuildModel( context );
+  virtual_BuildModel(context);
 }
 
 /*****************************************************************************/
-inline
-void
-AbstractModel
-::Save()
+inline void AbstractModel::Save()
 {
   virtual_Save();
 

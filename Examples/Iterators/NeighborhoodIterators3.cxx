@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,8 +27,6 @@
 #include "itkConstNeighborhoodIterator.h"
 #include "itkImageRegionIterator.h"
 
-// Software Guide : BeginLatex
-//
 // This example illustrates a technique for improving the efficiency of
 // neighborhood calculations by eliminating unnecessary bounds checking. As
 // described in Section~\ref{sec:NeighborhoodIterators}, the neighborhood
@@ -53,47 +51,41 @@
 //
 // The face calculator object is defined in \code{itkNeighborhoodAlgorithm.h}.
 // We include this file in addition to those from the previous two examples.
-//
-// Software Guide : EndLatex
 
 #include "itkSobelOperator.h"
 #include "itkNeighborhoodInnerProduct.h"
 
-// Software Guide : BeginCodeSnippet
 #include "itkNeighborhoodAlgorithm.h"
-// Software Guide : EndCodeSnippet
 
-int main(int argc, char * argv[])
+int main(int argc, char* argv[])
 {
   if (argc < 4)
-    {
+  {
     std::cerr << "Missing parameters. " << std::endl;
     std::cerr << "Usage: " << std::endl;
-    std::cerr << argv[0]
-              << " inputImageFile outputImageFile direction"
-              << std::endl;
+    std::cerr << argv[0] << " inputImageFile outputImageFile direction" << std::endl;
     return -1;
-    }
+  }
 
-  typedef float                           PixelType;
-  typedef otb::Image<PixelType, 2>        ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
+  using PixelType  = float;
+  using ImageType  = otb::Image<PixelType, 2>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
 
-  typedef itk::ConstNeighborhoodIterator<ImageType> NeighborhoodIteratorType;
-  typedef itk::ImageRegionIterator<ImageType>       IteratorType;
+  using NeighborhoodIteratorType = itk::ConstNeighborhoodIterator<ImageType>;
+  using IteratorType             = itk::ImageRegionIterator<ImageType>;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   try
-    {
+  {
     reader->Update();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
   ImageType::Pointer output = ImageType::New();
   output->SetRegions(reader->GetOutput()->GetRequestedRegion());
@@ -105,107 +97,75 @@ int main(int argc, char * argv[])
 
   itk::NeighborhoodInnerProduct<ImageType> innerProduct;
 
-// Software Guide : BeginLatex
-//
-// First we load the input image and create the output image and inner product
-// function as in the previous examples.  The image iterators will be created
-// in a later step.  Next we create a face calculator object.  An empty list is
-// created to hold the regions that will later on be returned by the face
-// calculator.
-//
-// Software Guide : EndLatex
+  // First we load the input image and create the output image and inner product
+  // function as in the previous examples.  The image iterators will be created
+  // in a later step.  Next we create a face calculator object.  An empty list is
+  // created to hold the regions that will later on be returned by the face
+  // calculator.
 
-// Software Guide : BeginCodeSnippet
-  typedef itk::NeighborhoodAlgorithm
-  ::ImageBoundaryFacesCalculator<ImageType> FaceCalculatorType;
+  using FaceCalculatorType = itk::NeighborhoodAlgorithm::ImageBoundaryFacesCalculator<ImageType>;
 
   FaceCalculatorType               faceCalculator;
   FaceCalculatorType::FaceListType faceList;
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
-// The face calculator function is invoked by passing it an image pointer, an
-// image region, and a neighborhood radius.  The image pointer is the same
-// image used to initialize the neighborhood iterator, and the image region is
-// the region that the algorithm is going to process.  The radius is the radius
-// of the iterator.
-//
-// Notice that in this case the image region is given as the region of the
-// \emph{output} image and the image pointer is given as that of the
-// \emph{input} image.  This is important if the input and output images differ
-// in size, i.e. the input image is larger than the output image.  ITK
-// and OTB image
-// filters, for example, operate on data from the input image but only generate
-// results in the \code{RequestedRegion} of the output image, which may be
-// smaller than the full extent of the input.
-//
-// Software Guide : EndLatex
+  // The face calculator function is invoked by passing it an image pointer, an
+  // image region, and a neighborhood radius.  The image pointer is the same
+  // image used to initialize the neighborhood iterator, and the image region is
+  // the region that the algorithm is going to process.  The radius is the radius
+  // of the iterator.
+  //
+  // Notice that in this case the image region is given as the region of the
+  // \emph{output} image and the image pointer is given as that of the
+  // \emph{input} image.  This is important if the input and output images differ
+  // in size, i.e. the input image is larger than the output image.  ITK
+  // and OTB image
+  // filters, for example, operate on data from the input image but only generate
+  // results in the \code{RequestedRegion} of the output image, which may be
+  // smaller than the full extent of the input.
 
-// Software Guide : BeginCodeSnippet
-  faceList = faceCalculator(reader->GetOutput(), output->GetRequestedRegion(),
-                            sobelOperator.GetRadius());
-// Software Guide : EndCodeSnippet
+  faceList = faceCalculator(reader->GetOutput(), output->GetRequestedRegion(), sobelOperator.GetRadius());
 
-// Software Guide : BeginLatex
-//
-// The face calculator has returned a list of $2N+1$ regions. The first element
-// in the list is always the inner region, which may or may not be important
-// depending on the application.  For our purposes it does not matter because
-// all regions are processed the same way.  We use an iterator to traverse the
-// list of faces.
-//
-// Software Guide : EndLatex
+  // The face calculator has returned a list of $2N+1$ regions. The first element
+  // in the list is always the inner region, which may or may not be important
+  // depending on the application.  For our purposes it does not matter because
+  // all regions are processed the same way.  We use an iterator to traverse the
+  // list of faces.
 
-// Software Guide : BeginCodeSnippet
   FaceCalculatorType::FaceListType::iterator fit;
-// Software Guide : EndCodeSnippet
 
-// Software Guide : BeginLatex
-//
-// We now rewrite the main loop of the previous example so that each region in the
-// list is processed by a separate iterator.  The iterators \code{it} and
-// \code{out} are reinitialized over each region in turn.  Bounds checking is
-// automatically enabled for those regions that require it, and disabled for
-// the region that does not.
-//
-// Software Guide : EndLatex
+  // We now rewrite the main loop of the previous example so that each region in the
+  // list is processed by a separate iterator.  The iterators \code{it} and
+  // \code{out} are reinitialized over each region in turn.  Bounds checking is
+  // automatically enabled for those regions that require it, and disabled for
+  // the region that does not.
 
-// Software Guide : BeginCodeSnippet
   IteratorType             out;
   NeighborhoodIteratorType it;
 
   for (fit = faceList.begin(); fit != faceList.end(); ++fit)
-    {
-    it = NeighborhoodIteratorType(sobelOperator.GetRadius(),
-                                  reader->GetOutput(), *fit);
+  {
+    it  = NeighborhoodIteratorType(sobelOperator.GetRadius(), reader->GetOutput(), *fit);
     out = IteratorType(output, *fit);
 
     for (it.GoToBegin(), out.GoToBegin(); !it.IsAtEnd(); ++it, ++out)
-      {
+    {
       out.Set(innerProduct(it, sobelOperator));
-      }
     }
-// Software Guide : EndCodeSnippet
+  }
 
-// Software Guide : BeginLatex
-//
-// The output is written as before.  Results for this example are the same as
-// the previous example.  You may not notice the speedup except on larger
-// images.  When moving to 3D and higher dimensions, the effects are greater
-// because the volume to surface area ratio is usually larger.  In other
-// words, as the number of interior pixels increases relative to the number of
-// face pixels, there is a corresponding increase in efficiency from disabling
-// bounds checking on interior pixels.
-//
-// Software Guide : EndLatex
+  // The output is written as before.  Results for this example are the same as
+  // the previous example.  You may not notice the speedup except on larger
+  // images.  When moving to 3D and higher dimensions, the effects are greater
+  // because the volume to surface area ratio is usually larger.  In other
+  // words, as the number of interior pixels increases relative to the number of
+  // face pixels, there is a corresponding increase in efficiency from disabling
+  // bounds checking on interior pixels.
 
-  typedef unsigned char                        WritePixelType;
-  typedef otb::Image<WritePixelType, 2>        WriteImageType;
-  typedef otb::ImageFileWriter<WriteImageType> WriterType;
+  using WritePixelType = unsigned char;
+  using WriteImageType = otb::Image<WritePixelType, 2>;
+  using WriterType     = otb::ImageFileWriter<WriteImageType>;
 
-  typedef itk::RescaleIntensityImageFilter<
-      ImageType, WriteImageType> RescaleFilterType;
+  using RescaleFilterType = itk::RescaleIntensityImageFilter<ImageType, WriteImageType>;
 
   RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
 
@@ -217,15 +177,15 @@ int main(int argc, char * argv[])
   writer->SetFileName(argv[2]);
   writer->SetInput(rescaler->GetOutput());
   try
-    {
+  {
     writer->Update();
-    }
+  }
   catch (itk::ExceptionObject& err)
-    {
+  {
     std::cout << "ExceptionObject caught !" << std::endl;
     std::cout << err << std::endl;
     return -1;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

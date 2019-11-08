@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,33 +26,33 @@
 #include "itkCommand.h"
 #include "OTBQtWidgetExport.h"
 
-namespace itk {
+namespace itk
+{
 
 class OTBQtWidget_EXPORT QtProgressBar : public ::QProgressBar
 {
   Q_OBJECT
 public:
-
   /** Command Class invoked for button redraw */
-  typedef itk::MemberCommand< QtProgressBar >  RedrawCommandType;
+  typedef itk::MemberCommand<QtProgressBar> RedrawCommandType;
 
   /** Constructor */
-  QtProgressBar( QWidget *parent );
+  QtProgressBar(QWidget* parent);
 
   /** Destructor */
   ~QtProgressBar() override;
 
   /** Get Command */
-  RedrawCommandType * GetRedrawCommand( void ) const;
+  RedrawCommandType* GetRedrawCommand(void) const;
 
 
   /** Manage a Progress event */
-  void ProcessEvent(itk::Object * caller, const itk::EventObject & event );
-  void ConstProcessEvent(const itk::Object * caller, const itk::EventObject & event );
+  void ProcessEvent(itk::Object* caller, const itk::EventObject& event);
+  void ConstProcessEvent(const itk::Object* caller, const itk::EventObject& event);
 
 
   /** Manage a Progress event */
-  void Observe( itk::Object *caller );
+  void Observe(itk::Object* caller);
 
 signals:
   void SetValueChanged(int);
@@ -63,6 +63,6 @@ private:
 };
 
 
-}  // end of namespace
+} // end of namespace
 
 #endif

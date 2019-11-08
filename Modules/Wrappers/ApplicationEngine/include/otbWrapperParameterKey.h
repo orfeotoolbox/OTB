@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,12 +44,11 @@ namespace Wrapper
 class OTBApplicationEngine_EXPORT ParameterKey
 {
 public:
-
   typedef ParameterKey Self;
 
   ParameterKey();
-  ParameterKey( const char * val );
-  ParameterKey( const std::string & val );
+  ParameterKey(const char* val);
+  ParameterKey(const std::string& val);
   virtual ~ParameterKey();
 
 
@@ -72,55 +71,52 @@ last() : return "tata"
   /** Returns the string before the last point separator */
   std::string GetRoot();
 
-   /** Returns the vector of string that contains each element separated by a point. */
+  /** Returns the vector of string that contains each element separated by a point. */
   std::vector<std::string> Split();
 
   /** Append a string at the end of the key. A point separator will be added before the string. */
-  void Append( const std::string & val );
+  void Append(const std::string& val);
 
   /** Append a string at the end of the key. A point separator will be added before the string. */
-  void Append( const ParameterKey & pKey );
+  void Append(const ParameterKey& pKey);
 
   /** Get Key value */
   std::string GetKey()
-    {
-      return m_Key;
-    }
+  {
+    return m_Key;
+  }
 
   /** Get Key value */
   std::string GetKey() const
-    {
-      return m_Key;
-    }
+  {
+    return m_Key;
+  }
 
   /** Set Key value */
-  void SetKey( const std::string & val )
-    {
-      // Check chain : lowercase, alphanumerical or "."
-      itksys::RegularExpression reg;
-      reg.compile("([^0-9a-z\\.])");
+  void SetKey(const std::string& val)
+  {
+    // Check chain : lowercase, alphanumerical or "."
+    itksys::RegularExpression reg;
+    reg.compile("([^0-9a-z\\.])");
 
-      if(!reg.find(val))
-        {
-          m_Key = val;
-        }
-      else
-        {
-            itkGenericExceptionMacro( "Invalid key '"
-                                      << val <<
-                                      "'. Must be in lowercase, containing alphanumerical characters or \".\"");
-        }
+    if (!reg.find(val))
+    {
+      m_Key = val;
     }
+    else
+    {
+      itkGenericExceptionMacro("Invalid key '" << val << "'. Must be in lowercase, containing alphanumerical characters or \".\"");
+    }
+  }
 
 private:
   ParameterKey(const Self&) = delete;
   void operator=(const Self&) = delete;
 
   std::string m_Key;
-
 };
 
 } // end namespace Wrapper
-} //end namespace otb
+} // end namespace otb
 
 #endif // otbWrapperParameterKey_h_

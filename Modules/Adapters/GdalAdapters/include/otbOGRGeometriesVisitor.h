@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,18 +40,21 @@ namespace ogr
  */
 template <typename Tin, typename Tout>
 struct propagate_const
-{ typedef Tout type; };
+{
+  typedef Tout type;
+};
 template <typename Tin, typename Tout>
 struct propagate_const<Tin const, Tout>
-{ typedef typename boost::add_const<Tout>::type type; };
+{
+  typedef typename boost::add_const<Tout>::type type;
+};
 /** @} */
 
-#define TRY_APPLY(TYPE, geometry, functor) \
-if (typename propagate_const<TGeometry, TYPE>::type * dc_##TYPE \
-  = dynamic_cast<typename propagate_const<TGeometry, TYPE>::type*>(geometry))\
-{\
-  return functor(dc_##TYPE); \
-}
+#define TRY_APPLY(TYPE, geometry, functor)                                                                                                   \
+  if (typename propagate_const<TGeometry, TYPE>::type* dc_##TYPE = dynamic_cast<typename propagate_const<TGeometry, TYPE>::type*>(geometry)) \
+  {                                                                                                                                          \
+    return functor(dc_##TYPE);                                                                                                               \
+  }
 
 
 /**\ingroup gGeometry
@@ -71,23 +74,20 @@ if (typename propagate_const<TGeometry, TYPE>::type * dc_##TYPE \
  * \since OTB v 3.14.0
  */
 template <typename TResult, class TGeometry, typename TFunctor>
-TResult apply(TGeometry * geometry, TFunctor functor)
+TResult apply(TGeometry* geometry, TFunctor functor)
 {
-  BOOST_MPL_ASSERT((boost::is_same<OGRGeometry, typename boost::remove_const<TGeometry>::type >));
+  BOOST_MPL_ASSERT((boost::is_same<OGRGeometry, typename boost::remove_const<TGeometry>::type>));
   TRY_APPLY(OGRPoint, geometry, functor)
-    else TRY_APPLY(OGRLinearRing, geometry, functor)
-    else TRY_APPLY(OGRLineString, geometry, functor)
-    // else TRY_APPLY(OGRCurve, geometry, functor)
-    else TRY_APPLY(OGRPolygon, geometry, functor)
-    // else TRY_APPLY(OGRSurface, geometry, functor)
-    else TRY_APPLY(OGRMultiLineString, geometry, functor)
-    else TRY_APPLY(OGRMultiPoint, geometry, functor)
-    else TRY_APPLY(OGRMultiPolygon, geometry, functor)
-    else TRY_APPLY(OGRGeometryCollection, geometry, functor)
-      {
-      // functor(geometry);
-      }
-    return TResult(); // keep compiler happy
+  else TRY_APPLY(OGRLinearRing, geometry, functor) else TRY_APPLY(OGRLineString, geometry, functor)
+      // else TRY_APPLY(OGRCurve, geometry, functor)
+      else TRY_APPLY(OGRPolygon, geometry, functor)
+      // else TRY_APPLY(OGRSurface, geometry, functor)
+      else TRY_APPLY(OGRMultiLineString, geometry, functor) else TRY_APPLY(OGRMultiPoint, geometry, functor) else TRY_APPLY(
+          OGRMultiPolygon, geometry, functor) else TRY_APPLY(OGRGeometryCollection, geometry, functor)
+  {
+    // functor(geometry);
+  }
+  return TResult(); // keep compiler happy
 }
 } // ogr namespace
 

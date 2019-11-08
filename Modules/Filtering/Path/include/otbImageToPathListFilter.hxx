@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,8 +32,7 @@ namespace otb
  *
  */
 template <class TInputImage, class TOutputPath>
-ImageToPathListFilter<TInputImage, TOutputPath>
-::ImageToPathListFilter()
+ImageToPathListFilter<TInputImage, TOutputPath>::ImageToPathListFilter()
 {
   // Modify superclass default values, can be overridden by subclasses
   this->SetNumberOfRequiredInputs(1);
@@ -43,38 +42,31 @@ ImageToPathListFilter<TInputImage, TOutputPath>
  *
  */
 template <class TInputImage, class TOutputPath>
-void
-ImageToPathListFilter<TInputImage, TOutputPath>
-::SetInput(const InputImageType *image)
+void ImageToPathListFilter<TInputImage, TOutputPath>::SetInput(const InputImageType* image)
 {
   // We have 1 input:  an image
 
   // Process object is not const-correct so the const_cast is required here
-  this->ProcessObjectType::SetNthInput(0, const_cast<InputImageType *>(image));
+  this->ProcessObjectType::SetNthInput(0, const_cast<InputImageType*>(image));
 }
 
 template <class TInputImage, class TOutputPath>
-const typename ImageToPathListFilter<TInputImage, TOutputPath>::InputImageType *
-ImageToPathListFilter<TInputImage, TOutputPath>
-::GetInput(void)
+const typename ImageToPathListFilter<TInputImage, TOutputPath>::InputImageType* ImageToPathListFilter<TInputImage, TOutputPath>::GetInput(void)
 {
 
   if (this->GetNumberOfInputs() < 1)
-    {
+  {
     return nullptr;
-    }
+  }
 
-  return static_cast<const TInputImage *>
-           (this->ProcessObjectType::GetInput(0));
+  return static_cast<const TInputImage*>(this->ProcessObjectType::GetInput(0));
 }
 
 /**
  *
  */
 template <class TInputImage, class TOutputPath>
-void
-ImageToPathListFilter<TInputImage, TOutputPath>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ImageToPathListFilter<TInputImage, TOutputPath>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

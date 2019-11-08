@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -77,8 +77,7 @@ class QuicklookModel;
  * \ingroup OTBMonteverdiCore
  *
  */
-class OTBMonteverdiCore_EXPORT AbstractImageModel :
-    public AbstractLayerModel
+class OTBMonteverdiCore_EXPORT AbstractImageModel : public AbstractLayerModel
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -87,8 +86,8 @@ class OTBMonteverdiCore_EXPORT AbstractImageModel :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
   /**
    * \class BuildContext
@@ -101,40 +100,20 @@ public:
     // Public methods.
   public:
     /** \brief Contrustor (testing consistency). */
-    BuildContext() :
-      m_Id( -1 ),
-      m_Filename(),
-      m_Quicklook(),
-      m_Histogram(),
-      m_Settings( NULL ),
-      m_Properties( NULL ),
-      m_IsBeingStored( false )
+    BuildContext() : m_Id(-1), m_Filename(), m_Quicklook(), m_Histogram(), m_Settings(NULL), m_Properties(NULL), m_IsBeingStored(false)
     {
     }
 
     /** \brief Constructor (importing image). */
-    BuildContext( const QString& filename ) :
-      m_Id( -1 ),
-      m_Filename( filename ),
-      m_Quicklook(),
-      m_Histogram(),
-      m_Settings( NULL ),
-      m_Properties( NULL ),
-      m_IsBeingStored( true )
+    BuildContext(const QString& filename)
+      : m_Id(-1), m_Filename(filename), m_Quicklook(), m_Histogram(), m_Settings(NULL), m_Properties(NULL), m_IsBeingStored(true)
     {
-      assert( !filename.isEmpty() );
+      assert(!filename.isEmpty());
     }
 
     /** \brief Constructor (loading image). */
-    BuildContext( void* const settings,
-		  ImageProperties* const properties ) :
-      m_Id( -1 ),
-      m_Filename(),
-      m_Quicklook(),
-      m_Histogram(),
-      m_Settings( settings ),
-      m_Properties( properties ),
-      m_IsBeingStored( false )
+    BuildContext(void* const settings, ImageProperties* const properties)
+      : m_Id(-1), m_Filename(), m_Quicklook(), m_Histogram(), m_Settings(settings), m_Properties(properties), m_IsBeingStored(false)
     {
     }
 
@@ -148,22 +127,20 @@ public:
     //
     // Public attributes
   public:
-    int m_Id;
-    QString m_Filename;
-    QString m_Quicklook;
-    QString m_Histogram;
-    void * const m_Settings;
-    ImageProperties * const m_Properties;
+    int                    m_Id;
+    QString                m_Filename;
+    QString                m_Quicklook;
+    QString                m_Histogram;
+    void* const            m_Settings;
+    ImageProperties* const m_Properties;
 
   private:
     bool m_IsBeingStored;
-
   };
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** Destructor */
   ~AbstractImageModel() override;
 
@@ -185,7 +162,7 @@ public:
    *
    * \param properties External properties.
    */
-  inline void SetProperties( const ImageProperties& properties );
+  inline void SetProperties(const ImageProperties& properties);
 
   /** */
   const QuicklookModel* GetQuicklookModel() const;
@@ -202,12 +179,12 @@ public:
   /**
    * Get a smart-pointer to the current LOD image-base.
    */
-  virtual ImageBaseType::ConstPointer ToImageBase() const =0;
+  virtual ImageBaseType::ConstPointer ToImageBase() const = 0;
 
   /**
    * Get a smart-pointer to the current LOD image-base.
    */
-  virtual ImageBaseType::Pointer ToImageBase() =0;
+  virtual ImageBaseType::Pointer ToImageBase() = 0;
 
   /**
    * \return The largest possible region of the current LOD level.
@@ -237,18 +214,18 @@ public:
 
   /**
    */
-  QStringList GetBandNames( bool enhanced =false ) const;
+  QStringList GetBandNames(bool enhanced = false) const;
 
   /**
    * Get the number of available LOD.
    */
-  virtual CountType GetNbLod() const =0;
+  virtual CountType GetNbLod() const = 0;
 
   /**
    * Set the current LOD index (which may causes disk IOs,
    * decompressing and buffering etc.)
    */
-  inline void SetCurrentLod( CountType lod );
+  inline void SetCurrentLod(CountType lod);
 
   /**
    * Get the current LOD index.
@@ -267,8 +244,8 @@ public:
    */
   inline PointType GetCenter() const;
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /**
@@ -278,50 +255,46 @@ public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   /** */
-  void SpacingChanged( const SpacingType& );
+  void SpacingChanged(const SpacingType&);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** Constructor */
-  AbstractImageModel( QObject* p =NULL );
+  AbstractImageModel(QObject* p = NULL);
 
   /**
    * \brief Set image properties pointer.
    *
    * \param properties The new properties instance.
    */
-  inline void SetProperties( ImageProperties* properties );
+  inline void SetProperties(ImageProperties* properties);
 
   /**
    * \brief Refresh histogram-model based on no-data settings.
    *
    * \param context Pointer to a histogram build-context.
    */
-  void RefreshHistogram( void* const context );
+  void RefreshHistogram(void* const context);
 
   /**
    */
-  inline
-    otb::ImageMetadataInterfaceBase::ConstPointer
-    GetMetaDataInterface() const;
+  inline otb::ImageMetadataInterfaceBase::ConstPointer GetMetaDataInterface() const;
 
   //
   // AbstractModel methods.
 
-  void virtual_BuildModel( void* context ) override;
+  void virtual_BuildModel(void* context) override;
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /**
    * The largest possible region of the native image, which is, by
    * default, LOD level zero.
@@ -342,13 +315,12 @@ protected:
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   /**
    */
-  virtual void virtual_SetCurrentLod( CountType lod ) =0;
+  virtual void virtual_SetCurrentLod(CountType lod) = 0;
 
   /**
    * \brief Private virtual implementation of RefreshHistogram.
@@ -357,10 +329,10 @@ private:
    * HistogramModel::BuildContext and call RefreshHistogram(void*
    * const).
    */
-  virtual void virtual_RefreshHistogram() {};
+  virtual void virtual_RefreshHistogram(){};
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
@@ -376,8 +348,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 
@@ -400,195 +372,137 @@ namespace mvd
 {
 
 /*****************************************************************************/
-int
-AbstractImageModel
-::GetId() const
+int AbstractImageModel::GetId() const
 {
   return m_Id;
 }
 
 /*****************************************************************************/
-inline
-const ImageProperties*
-AbstractImageModel
-::GetProperties() const
+inline const ImageProperties* AbstractImageModel::GetProperties() const
 {
   return m_Properties;
 }
 
 /*****************************************************************************/
-inline
-ImageProperties*
-AbstractImageModel
-::GetProperties()
+inline ImageProperties* AbstractImageModel::GetProperties()
 {
   return m_Properties;
 }
 
 /*****************************************************************************/
-inline
-void
-AbstractImageModel
-::SetProperties( const ImageProperties& properties )
+inline void AbstractImageModel::SetProperties(const ImageProperties& properties)
 {
-  assert( m_Properties!=NULL );
+  assert(m_Properties != NULL);
 
   *m_Properties = properties;
 }
 
 /*****************************************************************************/
-const HistogramModel*
-AbstractImageModel
-::GetHistogramModel() const
+const HistogramModel* AbstractImageModel::GetHistogramModel() const
 {
-  return findChild< const HistogramModel* >();
+  return findChild<const HistogramModel*>();
 }
 
 /*****************************************************************************/
-HistogramModel*
-AbstractImageModel
-::GetHistogramModel()
+HistogramModel* AbstractImageModel::GetHistogramModel()
 {
-  return findChild< HistogramModel* >();
+  return findChild<HistogramModel*>();
 }
 
 /*****************************************************************************/
-CountType
-AbstractImageModel
-::GetCurrentLod() const
+CountType AbstractImageModel::GetCurrentLod() const
 {
   return m_CurrentLod;
 }
 
 /*****************************************************************************/
-void
-AbstractImageModel
-::SetCurrentLod( CountType lod )
+void AbstractImageModel::SetCurrentLod(CountType lod)
 {
-  assert( lod<GetNbLod() );
-  virtual_SetCurrentLod( lod );
+  assert(lod < GetNbLod());
+  virtual_SetCurrentLod(lod);
 
   m_CurrentLod = lod;
 
   // if everything ok emit the new spacing of the current lod
-  emit SpacingChanged( otb::internal::GetSignedSpacing( 
-    static_cast< ImageBaseType * > ( ToImageBase() ) ) );
+  emit SpacingChanged(otb::internal::GetSignedSpacing(static_cast<ImageBaseType*>(ToImageBase())));
 }
 
 /*****************************************************************************/
-inline
-const ImageRegionType&
-AbstractImageModel
-::GetLodLargestRegion() const
+inline const ImageRegionType& AbstractImageModel::GetLodLargestRegion() const
 {
   return ToImageBase()->GetLargestPossibleRegion();
 }
 
 /*****************************************************************************/
-inline
-const ImageRegionType&
-AbstractImageModel
-::GetNativeLargestRegion() const
+inline const ImageRegionType& AbstractImageModel::GetNativeLargestRegion() const
 {
   return m_NativeLargestRegion;
 }
 
 /*****************************************************************************/
-inline
-const SpacingType&
-AbstractImageModel
-::GetNativeSpacing() const
+inline const SpacingType& AbstractImageModel::GetNativeSpacing() const
 {
   return m_NativeSpacing;
 }
 
 
 /*****************************************************************************/
-inline
-const SpacingType&
-AbstractImageModel
-::GetEstimatedGroundSpacing() const
+inline const SpacingType& AbstractImageModel::GetEstimatedGroundSpacing() const
 {
   return m_EstimatedGroundSpacing;
 }
 
 /*****************************************************************************/
-inline
-CountType
-AbstractImageModel
-::GetNbComponents() const
+inline CountType AbstractImageModel::GetNbComponents() const
 {
   return ToImageBase()->GetNumberOfComponentsPerPixel();
 }
 
 /*****************************************************************************/
-inline
-otb::ImageMetadataInterfaceBase::ConstPointer
-AbstractImageModel
-::GetMetaDataInterface() const
+inline otb::ImageMetadataInterfaceBase::ConstPointer AbstractImageModel::GetMetaDataInterface() const
 {
-  return otb::ConstCast< const otb::ImageMetadataInterfaceBase >(
-    otb::ImageMetadataInterfaceFactory::CreateIMI(
-      ToImageBase()->GetMetaDataDictionary()
-    )
-  );
+  return otb::ConstCast<const otb::ImageMetadataInterfaceBase>(otb::ImageMetadataInterfaceFactory::CreateIMI(ToImageBase()->GetMetaDataDictionary()));
 }
 
 /*****************************************************************************/
-inline
-const PointType&
-AbstractImageModel
-::GetOrigin() const
+inline const PointType& AbstractImageModel::GetOrigin() const
 {
-  assert( !ToImageBase().IsNull() );
+  assert(!ToImageBase().IsNull());
 
   return ToImageBase()->GetOrigin();
 }
 
 /*****************************************************************************/
-inline
-const SpacingType
-AbstractImageModel
-::GetSpacing() const
+inline const SpacingType AbstractImageModel::GetSpacing() const
 {
-  assert( !ToImageBase().IsNull() );
+  assert(!ToImageBase().IsNull());
 
-  return otb::internal::GetSignedSpacing( 
-    static_cast< ImageBaseType const * >( ToImageBase() ) );
+  return otb::internal::GetSignedSpacing(static_cast<ImageBaseType const*>(ToImageBase()));
 }
 
 /*****************************************************************************/
-inline
-PointType
-AbstractImageModel
-::GetCenter() const
+inline PointType AbstractImageModel::GetCenter() const
 {
-  PointType center( GetOrigin() );
-  SpacingType spacing( GetSpacing() );
-  SizeType size( GetNativeLargestRegion().GetSize() );
+  PointType   center(GetOrigin());
+  SpacingType spacing(GetSpacing());
+  SizeType    size(GetNativeLargestRegion().GetSize());
 
-  center[ 0 ] += 0.5 * spacing[ 0 ] * static_cast< double >( size[ 0 ] );
-  center[ 1 ] += 0.5 * spacing[ 1 ] * static_cast< double >( size[ 1 ] );
+  center[0] += 0.5 * spacing[0] * static_cast<double>(size[0]);
+  center[1] += 0.5 * spacing[1] * static_cast<double>(size[1]);
 
   return center;
 }
 
 /*****************************************************************************/
-inline
-void
-AbstractImageModel
-::RefreshHistogram()
+inline void AbstractImageModel::RefreshHistogram()
 {
   virtual_RefreshHistogram();
 }
 
 /*****************************************************************************/
-inline
-void
-AbstractImageModel
-::SetProperties( ImageProperties* properties )
+inline void AbstractImageModel::SetProperties(ImageProperties* properties)
 {
-  if( m_Properties==properties )
+  if (m_Properties == properties)
     return;
 
   delete m_Properties;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,12 +41,12 @@ namespace otb
 
 class OTBQtWidget_EXPORT QtLogOutput : public QObject, public itk::LogOutput
 {
-Q_OBJECT
+  Q_OBJECT
 public:
-  typedef QtLogOutput                    Self;
-  typedef itk::LogOutput                 Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef QtLogOutput                   Self;
+  typedef itk::LogOutput                Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkTypeMacro(QtLogOutput, itk::LogOutput);
 
@@ -59,10 +59,10 @@ public:
   void Write(double timestamp) override;
 
   /** Write to a buffer */
-  void Write(std::string const &content) override;
+  void Write(std::string const& content) override;
 
   /** Write to a buffer */
-  void Write(std::string const &content, double timestamp) override;
+  void Write(std::string const& content, double timestamp) override;
 
 signals:
   void NewContentLog(QString);
@@ -74,9 +74,8 @@ protected:
   /** Destructor */
   ~QtLogOutput() override;
 
-  void PrintSelf(std::ostream &os, itk::Indent indent) const override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 };
-
 }
 
 #endif

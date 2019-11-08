@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,26 +30,26 @@ namespace Wrapper
 namespace Tags
 {
 
-static const std::string Analysis="Image Analysis";
-static const std::string Calibration="Calibration";
-static const std::string ChangeDetection="Change Detection";
-static const std::string Coordinates="Coordinates";
-static const std::string DimensionReduction="Dimensionality Reduction";
-static const std::string FeatureExtraction="Feature Extraction";
-static const std::string Filter="Image Filtering";
-static const std::string Geometry="Geometry";
-static const std::string Hyperspectral="Hyperspectral";
-static const std::string Learning="Learning";
-static const std::string Manip="Image Manipulation";
-static const std::string Meta="Image MetaData";
-static const std::string Multi="Image MultiResolution";
-static const std::string Pansharpening="Pansharpening";
-static const std::string Raster="Raster";
-static const std::string SAR="SAR";
-static const std::string Stereo="Stereo";
-static const std::string Segmentation="Segmentation";
-static const std::string Vector="Vector Data Manipulation";
-static const std::string Deprecated="Deprecated";
+static const std::string Analysis           = "Image Analysis";
+static const std::string Calibration        = "Calibration";
+static const std::string ChangeDetection    = "Change Detection";
+static const std::string Coordinates        = "Coordinates";
+static const std::string DimensionReduction = "Dimensionality Reduction";
+static const std::string FeatureExtraction  = "Feature Extraction";
+static const std::string Filter             = "Image Filtering";
+static const std::string Geometry           = "Geometry";
+static const std::string Hyperspectral      = "Hyperspectral";
+static const std::string Learning           = "Learning";
+static const std::string Manip              = "Image Manipulation";
+static const std::string Meta               = "Image MetaData";
+static const std::string Multi              = "Image MultiResolution";
+static const std::string Pansharpening      = "Pansharpening";
+static const std::string Raster             = "Raster";
+static const std::string SAR                = "SAR";
+static const std::string Stereo             = "Stereo";
+static const std::string Segmentation       = "Segmentation";
+static const std::string Vector             = "Vector Data Manipulation";
+static const std::string Deprecated         = "Deprecated";
 
 } // end namespace Wrappers
 } // end namespace Tags

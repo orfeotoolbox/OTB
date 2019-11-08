@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,78 +19,76 @@
  */
 
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 #include "otbWrapperApplicationRegistry.h"
 
 
-int otbWrapperImageInterface(int argc, char * argv[])
+int otbWrapperImageInterface(int argc, char* argv[])
 {
-  if(argc<4)
-    {
-    std::cerr<<"Usage: "<<argv[0]<<" application_path  input_image  output_txt"<<std::endl;
+  if (argc < 4)
+  {
+    std::cerr << "Usage: " << argv[0] << " application_path  input_image  output_txt" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  std::string path = argv[1];
-  std::string input = argv[2];
+  std::string path   = argv[1];
+  std::string input  = argv[2];
   std::string output = argv[3];
 
   otb::Wrapper::ApplicationRegistry::SetApplicationPath(path);
-  
-  otb::Wrapper::Application::Pointer app1 = otb::Wrapper::ApplicationRegistry::CreateApplication("Smoothing");
-  
-  if(app1.IsNull())
-    {
-    std::cerr<<"Failed to create application"<<std::endl;
-    return EXIT_FAILURE;
-    }
 
-  std::ofstream ofs( output );
+  otb::Wrapper::Application::Pointer app1 = otb::Wrapper::ApplicationRegistry::CreateApplication("Smoothing");
+
+  if (app1.IsNull())
+  {
+    std::cerr << "Failed to create application" << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  std::ofstream ofs(output);
   if (!ofs.is_open())
-    {
+  {
     fprintf(stderr, "Error, can't open file");
     return EXIT_FAILURE;
-    }
+  }
 
-  app1->SetParameterString("in",input);
+  app1->SetParameterString("in", input);
   app1->Execute();
 
-  ofs << "Size: "<< app1->GetImageSize("out") << std::endl;
-  ofs << "Origin: "<< app1->GetImageOrigin("out") << std::endl;
-  ofs << "Spacing: "<< app1->GetImageSpacing("out") << std::endl;
-  ofs << "Keywordlist: "<< std::endl;
+  ofs << "Size: " << app1->GetImageSize("out") << std::endl;
+  ofs << "Origin: " << app1->GetImageOrigin("out") << std::endl;
+  ofs << "Spacing: " << app1->GetImageSpacing("out") << std::endl;
+  ofs << "Keywordlist: " << std::endl;
   otb::ImageKeywordlist kwl = app1->GetImageKeywordlist("out");
   kwl.Print(ofs);
-  ofs << "ProjectionRef:"<< std::endl;
+  ofs << "ProjectionRef:" << std::endl;
   ofs << app1->GetImageProjection("out") << std::endl;
 
   itk::MetaDataDictionary dict = app1->GetImageMetaData("out");
-  ofs << "Dictionary keys:"<< std::endl;
-  for (auto & key : dict.GetKeys())
-    {
-    ofs << "  - "<< key << std::endl;
-    }
+  ofs << "Dictionary keys:" << std::endl;
+  for (auto& key : dict.GetKeys())
+  {
+    ofs << "  - " << key << std::endl;
+  }
 
   otb::Wrapper::ImageBaseType::RegionType region;
-  region.SetIndex(0,10);
-  region.SetIndex(1,10);
-  region.SetSize(0,7);
-  region.SetSize(1,7);
+  region.SetIndex(0, 10);
+  region.SetIndex(1, 10);
+  region.SetSize(0, 7);
+  region.SetSize(1, 7);
 
-  ofs << "RAM usage (in Bytes): "<< app1->PropagateRequestedRegion("out",region) << std::endl;
-  ofs << "Input requested: "<< app1->GetImageRequestedRegion("in") << std::endl;
+  ofs << "RAM usage (in Bytes): " << app1->PropagateRequestedRegion("out", region) << std::endl;
+  ofs << "Input requested: " << app1->GetImageRequestedRegion("in") << std::endl;
 
-  otb::Wrapper::Application::Pointer app2 =
-    otb::Wrapper::ApplicationRegistry::CreateApplication("ConcatenateImages");
-  app2->AddParameterStringList("il",input);
-  app2->AddParameterStringList("il",input);
+  otb::Wrapper::Application::Pointer app2 = otb::Wrapper::ApplicationRegistry::CreateApplication("ConcatenateImages");
+  app2->AddParameterStringList("il", input);
+  app2->AddParameterStringList("il", input);
   app2->Execute();
 
-  ofs << "Number of bands [il]: "<< app2->GetImageNbBands("il",0) << "+"
-    << app2->GetImageNbBands("il",1) << std::endl;
-  ofs << "Number of bands [out]: "<< app2->GetImageNbBands("out")<< std::endl;
+  ofs << "Number of bands [il]: " << app2->GetImageNbBands("il", 0) << "+" << app2->GetImageNbBands("il", 1) << std::endl;
+  ofs << "Number of bands [out]: " << app2->GetImageNbBands("out") << std::endl;
   ofs.close();
   return EXIT_SUCCESS;
 }

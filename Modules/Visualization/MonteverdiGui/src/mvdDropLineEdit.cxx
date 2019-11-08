@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -65,35 +65,28 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-DropLineEdit
-::DropLineEdit( QWidget* p ) :
-  QLineEdit( p )
+DropLineEdit::DropLineEdit(QWidget* p) : QLineEdit(p)
 {
-  setReadOnly( true );
-  setAcceptDrops( true );
+  setReadOnly(true);
+  setAcceptDrops(true);
 }
 
 /*******************************************************************************/
-DropLineEdit
-::DropLineEdit( const QString& contents, QWidget* p ) :
-  QLineEdit( contents, p )
+DropLineEdit::DropLineEdit(const QString& contents, QWidget* p) : QLineEdit(contents, p)
 {
-  setReadOnly( true );
-  setAcceptDrops( true );
+  setReadOnly(true);
+  setAcceptDrops(true);
 }
 
 /*******************************************************************************/
-DropLineEdit
-::~DropLineEdit()
+DropLineEdit::~DropLineEdit()
 {
 }
 
 /*******************************************************************************/
-void
-DropLineEdit
-::dragEnterEvent( QDragEnterEvent* e )
+void DropLineEdit::dragEnterEvent(QDragEnterEvent* e)
 {
-  assert( e!=NULL );
+  assert(e != NULL);
 
   // Accepts all proposed actions: check will be made in
   // dragMoveEvent().
@@ -101,58 +94,49 @@ DropLineEdit
 }
 
 /*******************************************************************************/
-void 
-DropLineEdit
-::dragMoveEvent( QDragMoveEvent* e )
+void DropLineEdit::dragMoveEvent(QDragMoveEvent* e)
 {
-  assert( e!=NULL );
+  assert(e != NULL);
 
   /*
   if( ( e->mimeData()->hasText() &&
-	QUrl( e->mimeData()->text() ).isLocalFile() ) ||
+  QUrl( e->mimeData()->text() ).isLocalFile() ) ||
       ( e->mimeData()->hasFormat(
-	"application/x-qabstractitemmodeldatalist" ) ) )
+  "application/x-qabstractitemmodeldatalist" ) ) )
   */
-  if( e->mimeData()->hasText() ||
-      e->mimeData()->hasFormat(
-	"application/x-qabstractitemmodeldatalist" ) )
-    {
+  if (e->mimeData()->hasText() || e->mimeData()->hasFormat("application/x-qabstractitemmodeldatalist"))
+  {
     e->acceptProposedAction();
-    }
+  }
   else
-    {
+  {
     e->ignore();
-    }
+  }
 }
 
 /*******************************************************************************/
-void
-DropLineEdit
-::dropEvent( QDropEvent *e )
+void DropLineEdit::dropEvent(QDropEvent* e)
 {
-  assert( e!=NULL );
+  assert(e != NULL);
 
-  if( e->mimeData()->hasText() )
-    {
-    QUrl url( e->mimeData()->text() );
+  if (e->mimeData()->hasText())
+  {
+    QUrl url(e->mimeData()->text());
 
     /*
     if( url.isLocalFile() )
       {
     */
-    setText( url.toLocalFile() );
+    setText(url.toLocalFile());
     /*
       }
     */
-    }
-  else if( e->mimeData()->hasFormat(
-	     "application/x-qabstractitemmodeldatalist" ) )
-    {
+  }
+  else if (e->mimeData()->hasFormat("application/x-qabstractitemmodeldatalist"))
+  {
     // TODO: use  simpler mime type
-    setText(
-      e->mimeData()->data( "application/x-qabstractitemmodeldatalist" )
-    );
-    }
+    setText(e->mimeData()->data("application/x-qabstractitemmodeldatalist"));
+  }
 }
 
 /*******************************************************************************/

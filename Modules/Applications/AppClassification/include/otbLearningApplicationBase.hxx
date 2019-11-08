@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,23 +31,19 @@ namespace Wrapper
 {
 
 template <class TInputValue, class TOutputValue>
-LearningApplicationBase<TInputValue,TOutputValue>
-::LearningApplicationBase() : m_RegressionFlag(false)
+LearningApplicationBase<TInputValue, TOutputValue>::LearningApplicationBase() : m_RegressionFlag(false)
 
 {
 }
 
 template <class TInputValue, class TOutputValue>
-LearningApplicationBase<TInputValue,TOutputValue>
-::~LearningApplicationBase()
+LearningApplicationBase<TInputValue, TOutputValue>::~LearningApplicationBase()
 {
   ModelFactoryType::CleanFactories();
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LearningApplicationBase<TInputValue,TOutputValue>
-::DoInit()
+void LearningApplicationBase<TInputValue, TOutputValue>::DoInit()
 {
   AddDocTag(Tags::Learning);
 
@@ -61,34 +57,30 @@ LearningApplicationBase<TInputValue,TOutputValue>
   InitUnsupervisedClassifierParams();
   std::vector<std::string> allClassifier = GetChoiceKeys("classifier");
   // Check for empty unsupervised classifier
-  if( allClassifier.size() > m_UnsupervisedClassifier.size() )
-    m_UnsupervisedClassifier.assign( allClassifier.begin() + m_SupervisedClassifier.size(), allClassifier.end() );
+  if (allClassifier.size() > m_UnsupervisedClassifier.size())
+    m_UnsupervisedClassifier.assign(allClassifier.begin() + m_SupervisedClassifier.size(), allClassifier.end());
 }
 
 template <class TInputValue, class TOutputValue>
-typename LearningApplicationBase<TInputValue,TOutputValue>::ClassifierCategory
-LearningApplicationBase<TInputValue,TOutputValue>
-::GetClassifierCategory()
+typename LearningApplicationBase<TInputValue, TOutputValue>::ClassifierCategory LearningApplicationBase<TInputValue, TOutputValue>::GetClassifierCategory()
 {
-  if( m_UnsupervisedClassifier.empty() )
-    {
+  if (m_UnsupervisedClassifier.empty())
+  {
     return Supervised;
-    }
+  }
   else
-    {
-    bool foundUnsupervised = std::find( m_UnsupervisedClassifier.begin(), m_UnsupervisedClassifier.end(),
-                                        GetParameterString( "classifier" ) ) != m_UnsupervisedClassifier.end();
+  {
+    bool foundUnsupervised =
+        std::find(m_UnsupervisedClassifier.begin(), m_UnsupervisedClassifier.end(), GetParameterString("classifier")) != m_UnsupervisedClassifier.end();
     return foundUnsupervised ? Unsupervised : Supervised;
-    }
+  }
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LearningApplicationBase<TInputValue,TOutputValue>
-::InitSupervisedClassifierParams()
+void LearningApplicationBase<TInputValue, TOutputValue>::InitSupervisedClassifierParams()
 {
 
-  //Group LibSVM
+// Group LibSVM
 #ifdef OTB_USE_LIBSVM
   InitLibSVMParams();
 #endif
@@ -98,16 +90,15 @@ LearningApplicationBase<TInputValue,TOutputValue>
   // Users should use the libSVM implementation instead.
   // InitSVMParams();
   if (!m_RegressionFlag)
-    {
-    InitBoostParams();  // Regression not supported
-    }
+  {
+    InitBoostParams(); // Regression not supported
+  }
   InitDecisionTreeParams();
-  InitGradientBoostedTreeParams();
   InitNeuralNetworkParams();
   if (!m_RegressionFlag)
-    {
+  {
     InitNormalBayesParams(); // Regression not supported
-    }
+  }
   InitRandomForestsParams();
   InitKNNParams();
 #endif
@@ -118,37 +109,33 @@ LearningApplicationBase<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LearningApplicationBase<TInputValue,TOutputValue>
-::InitUnsupervisedClassifierParams()
+void LearningApplicationBase<TInputValue, TOutputValue>::InitUnsupervisedClassifierParams()
 {
 #ifdef OTB_USE_SHARK
-  InitSharkKMeansParams();
+  if (!m_RegressionFlag)
+  {
+    InitSharkKMeansParams(); // Regression not supported
+  }
 #endif
 }
 
 template <class TInputValue, class TOutputValue>
-typename LearningApplicationBase<TInputValue,TOutputValue>
-::TargetListSampleType::Pointer
-LearningApplicationBase<TInputValue,TOutputValue>
-::Classify(typename ListSampleType::Pointer validationListSample,
-           std::string modelPath)
+typename LearningApplicationBase<TInputValue, TOutputValue>::TargetListSampleType::Pointer
+LearningApplicationBase<TInputValue, TOutputValue>::Classify(typename ListSampleType::Pointer validationListSample, std::string modelPath)
 {
   // Setup fake reporter
-  RGBAPixelConverter<int,int>::Pointer dummyFilter =
-    RGBAPixelConverter<int,int>::New();
+  RGBAPixelConverter<int, int>::Pointer dummyFilter = RGBAPixelConverter<int, int>::New();
   dummyFilter->SetProgress(0.0f);
-  this->AddProcess(dummyFilter,"Classify...");
+  this->AddProcess(dummyFilter, "Validation...");
   dummyFilter->InvokeEvent(itk::StartEvent());
 
   // load a machine learning model from file and predict the input sample list
-  ModelPointerType model = ModelFactoryType::CreateMachineLearningModel(modelPath,
-                                                                        ModelFactoryType::ReadMode);
+  ModelPointerType model = ModelFactoryType::CreateMachineLearningModel(modelPath, ModelFactoryType::ReadMode);
 
   if (model.IsNull())
-    {
+  {
     otbAppLogFATAL(<< "Error when loading model " << modelPath);
-    }
+  }
 
   model->Load(modelPath);
   model->SetRegressionMode(this->m_RegressionFlag);
@@ -163,116 +150,104 @@ LearningApplicationBase<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LearningApplicationBase<TInputValue,TOutputValue>
-::Train(typename ListSampleType::Pointer trainingListSample,
-        typename TargetListSampleType::Pointer trainingLabeledListSample,
-        std::string modelPath)
+void LearningApplicationBase<TInputValue, TOutputValue>::Train(typename ListSampleType::Pointer trainingListSample,
+                                                               typename TargetListSampleType::Pointer trainingLabeledListSample, std::string modelPath)
 {
+  otbAppLogINFO("Computing model file : " << modelPath);
   // Setup fake reporter
-  RGBAPixelConverter<int,int>::Pointer dummyFilter =
-    RGBAPixelConverter<int,int>::New();
+  RGBAPixelConverter<int, int>::Pointer dummyFilter = RGBAPixelConverter<int, int>::New();
   dummyFilter->SetProgress(0.0f);
-  this->AddProcess(dummyFilter,"Training model...");
+  this->AddProcess(dummyFilter, "Training model...");
   dummyFilter->InvokeEvent(itk::StartEvent());
 
   // get the name of the chosen machine learning model
   const std::string modelName = GetParameterString("classifier");
   // call specific train function
   if (modelName == "libsvm")
-    {
-	#ifdef OTB_USE_LIBSVM
+  {
+#ifdef OTB_USE_LIBSVM
     TrainLibSVM(trainingListSample, trainingLabeledListSample, modelPath);
-    #else
+#else
     otbAppLogFATAL("Module LIBSVM is not installed. You should consider turning OTB_USE_LIBSVM on during cmake configuration.");
-    #endif
-    }
-  if(modelName == "sharkrf")
-    {
-    #ifdef OTB_USE_SHARK
-    TrainSharkRandomForests(trainingListSample,trainingLabeledListSample,modelPath);
-    #else
+#endif
+  }
+  if (modelName == "sharkrf")
+  {
+#ifdef OTB_USE_SHARK
+    TrainSharkRandomForests(trainingListSample, trainingLabeledListSample, modelPath);
+#else
     otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
-    #endif
-    }
-  else if(modelName == "sharkkm")
-    {
-    #ifdef OTB_USE_SHARK
-    TrainSharkKMeans( trainingListSample, trainingLabeledListSample, modelPath );
-    #else
+#endif
+  }
+  else if (modelName == "sharkkm")
+  {
+#ifdef OTB_USE_SHARK
+    TrainSharkKMeans(trainingListSample, trainingLabeledListSample, modelPath);
+#else
     otbAppLogFATAL("Module SharkLearning is not installed. You should consider turning OTB_USE_SHARK on during cmake configuration.");
-    #endif
-    }
+#endif
+  }
   else if (modelName == "svm")
-    {
-    #ifdef OTB_USE_OPENCV
+  {
+#ifdef OTB_USE_OPENCV
     TrainSVM(trainingListSample, trainingLabeledListSample, modelPath);
-    #else
+#else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
-    #endif
-    }
+#endif
+  }
   else if (modelName == "boost")
-    {
-	#ifdef OTB_USE_OPENCV
+  {
+#ifdef OTB_USE_OPENCV
     TrainBoost(trainingListSample, trainingLabeledListSample, modelPath);
-    #else
+#else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
-    #endif
-    }
+#endif
+  }
   else if (modelName == "dt")
-    {
-	#ifdef OTB_USE_OPENCV
+  {
+#ifdef OTB_USE_OPENCV
     TrainDecisionTree(trainingListSample, trainingLabeledListSample, modelPath);
-    #else
+#else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
-    #endif
-    }
-  else if (modelName == "gbt")
-    {
-	#ifdef OTB_USE_OPENCV
-    TrainGradientBoostedTree(trainingListSample, trainingLabeledListSample, modelPath);
-    #else
-    otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
-    #endif
-    }
+#endif
+  }
   else if (modelName == "ann")
-    {
-	#ifdef OTB_USE_OPENCV
+  {
+#ifdef OTB_USE_OPENCV
     TrainNeuralNetwork(trainingListSample, trainingLabeledListSample, modelPath);
-    #else
+#else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
-    #endif
-    }
+#endif
+  }
   else if (modelName == "bayes")
-    {
-	#ifdef OTB_USE_OPENCV
+  {
+#ifdef OTB_USE_OPENCV
     TrainNormalBayes(trainingListSample, trainingLabeledListSample, modelPath);
-    #else
+#else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
-    #endif
-    }
+#endif
+  }
   else if (modelName == "rf")
-    {
-	#ifdef OTB_USE_OPENCV
+  {
+#ifdef OTB_USE_OPENCV
     TrainRandomForests(trainingListSample, trainingLabeledListSample, modelPath);
-    #else
+#else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
-    #endif
-    }
+#endif
+  }
   else if (modelName == "knn")
-    {
-	#ifdef OTB_USE_OPENCV
+  {
+#ifdef OTB_USE_OPENCV
     TrainKNN(trainingListSample, trainingLabeledListSample, modelPath);
-    #else
+#else
     otbAppLogFATAL("Module OPENCV is not installed. You should consider turning OTB_USE_OPENCV on during cmake configuration.");
-    #endif
-    }
+#endif
+  }
 
   // update reporter
   dummyFilter->UpdateProgress(1.0f);
   dummyFilter->InvokeEvent(itk::EndEvent());
 }
-
 }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,43 +37,44 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT InputFilenameListParameter :
-    public ParameterList< StringParameter >
+class OTBApplicationEngine_EXPORT InputFilenameListParameter : public ParameterList<StringParameter>
 {
-//
-// Public types.
+  //
+  // Public types.
 public:
   /** Standard class typedef */
-  typedef InputFilenameListParameter Self;
-  typedef ParameterList< StringParameter > Superclass;
+  typedef InputFilenameListParameter     Self;
+  typedef ParameterList<StringParameter> Superclass;
 
-  typedef itk::SmartPointer< Self > Pointer;
-  typedef itk::SmartPointer< const Self > ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
   /** Defining ::New() static method */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** RTTI support */
-  itkTypeMacro( InputFilenameListParameter, Superclass );
+  itkTypeMacro(InputFilenameListParameter, Superclass);
 
   /** */
-  Role GetDirection( std::size_t ) const override;
+  Role GetDirection(std::size_t) const override;
 
   /** */
   Role GetDirection() const override;
 
   /** */
-  const std::string & GetFilenameFilter( std::size_t ) const override;
+  const std::string& GetFilenameFilter(std::size_t) const override;
 
   /** */
-  const std::string & GetFilenameFilter() const override;
+  const std::string& GetFilenameFilter() const override;
+
+  ParameterType GetType() const override;
 
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
   /** Constructor */
   InputFilenameListParameter();
@@ -81,20 +82,11 @@ protected:
   /** Destructor */
   ~InputFilenameListParameter() override;
 
-  /** */
-  const std::string & ToString( const ParameterType::Pointer & ) const override;
-
-  /** */
-  using Superclass::FromString;
-  const ParameterType::Pointer &
-    FromString( const ParameterType::Pointer &,
-		const std::string & ) const override;
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-  InputFilenameListParameter( const Parameter & ) = delete;
-  void operator = ( const Parameter & ) = delete;
+  InputFilenameListParameter(const Parameter&) = delete;
+  void operator=(const Parameter&) = delete;
 
 }; // End class InputFilenameList Parameter
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,7 +41,7 @@ class OTBQtWidget_EXPORT QtStringSelectionWidget : public QWidget
 {
   Q_OBJECT
 
-  Q_PROPERTY( QString text READ GetText WRITE SetText RESET ClearText );
+  Q_PROPERTY(QString text READ GetText WRITE SetText RESET ClearText);
 
 signals:
   void InternalQLineEditEditionFinished();
@@ -52,18 +52,18 @@ public:
 
   bool IsChecked() const;
 
-  void SetChecked( bool val );
+  void SetChecked(bool val);
 
   const QString GetText() const;
 
-  void SetText( const QString& qString);
+  void SetText(const QString& qString);
 
   std::string ToStdString();
 
   void ClearText();
 
 protected slots:
-   void OnEditionFinished();
+  void OnEditionFinished();
 
 private:
   QtStringSelectionWidget(const QtStringSelectionWidget&) = delete;
@@ -74,12 +74,10 @@ private:
   virtual void DoUpdateGUI();
 
 
-  QHBoxLayout * m_HLayout;
-  QLineEdit*    m_Input;
-  QCheckBox *   m_Checkbox;
+  QHBoxLayout* m_HLayout;
+  QLineEdit*   m_Input;
+  QCheckBox*   m_Checkbox;
 };
-
-
 }
 }
 

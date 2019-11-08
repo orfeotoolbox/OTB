@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -48,9 +48,9 @@ class OTBOpticalCalibration_EXPORT ImageMetadataCorrectionParameters : public it
 public:
   /** Standard typedefs */
   typedef ImageMetadataCorrectionParameters Self;
-  typedef itk::Object                 Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef itk::Object                       Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
   /** Type macro */
   itkTypeMacro(ImageMetadataCorrectionParameters, Object);
@@ -104,7 +104,7 @@ public:
   /** Get/Set FilterFunction file name. */
   itkSetMacro(FilterFunctionValuesFileName, std::string);
   itkGetMacro(FilterFunctionValuesFileName, std::string);
- 
+
   /**
    * Set/Get the wavelength spectral band.
    */
@@ -114,28 +114,28 @@ public:
   }
   void SetWavelengthSpectralBandWithIndex(unsigned int id, const FilterFunctionValues::Pointer& function)
   {
-    if (m_WavelengthSpectralBand->Size() <  id + 1)
-      {
+    if (m_WavelengthSpectralBand->Size() < id + 1)
+    {
       for (unsigned int j = 0; j < (id + 1 - m_WavelengthSpectralBand->Size()); ++j)
-        {
+      {
         FilterFunctionValues::Pointer temp;
         m_WavelengthSpectralBand->PushBack(temp);
-        }
       }
+    }
     m_WavelengthSpectralBand->SetNthElement(id, function);
   }
   WavelengthSpectralBandVectorType GetWavelengthSpectralBand() const
   {
     return m_WavelengthSpectralBand;
   }
-  const WavelengthSpectralBandVectorType * GetWavelengthSpectralBandRef() const
+  const WavelengthSpectralBandVectorType* GetWavelengthSpectralBandRef() const
   {
     return &m_WavelengthSpectralBand;
   }
 
-   /**
-   * Read a file that contains filter function values on the 6S format.
-   */
+  /**
+  * Read a file that contains filter function values on the 6S format.
+  */
   void LoadFilterFunctionValue(const std::string& filename);
   void LoadFilterFunctionValue()
   {
@@ -145,16 +145,17 @@ public:
   /** Constructor */
   ImageMetadataCorrectionParameters();
   /** Destructor */
-  ~ImageMetadataCorrectionParameters() override {}
+  ~ImageMetadataCorrectionParameters() override
+  {
+  }
 
 protected:
-
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageMetadataCorrectionParameters(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ImageMetadataCorrectionParameters(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The Solar zenithal angle */
   double m_SolarZenithalAngle;
@@ -170,8 +171,8 @@ private:
   unsigned int m_Day;
   /** The Year */
   unsigned int m_Year;
-  std::string m_FilterFunctionValuesFileName;
- 
+  std::string  m_FilterFunctionValuesFileName;
+
   /** Wavelength for the each spectral band definition */
   WavelengthSpectralBandVectorType m_WavelengthSpectralBand;
 };

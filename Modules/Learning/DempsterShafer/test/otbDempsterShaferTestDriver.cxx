@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,7 +24,6 @@ void RegisterTests()
 {
   REGISTER_TEST(otbMassOfBeliefDSApplied);
   REGISTER_TEST(otbConfusionMatrixToMassOfBeliefTest);
-  REGISTER_TEST(otbVectorDataToDSValidatedVectorDataFilter);
   REGISTER_TEST(otbDempsterShaferFusionOptRecConfMatTest);
   REGISTER_TEST(otbDempsterShaferFusionOptRecTest);
   REGISTER_TEST(otbDempsterShaferFusionOptTest);

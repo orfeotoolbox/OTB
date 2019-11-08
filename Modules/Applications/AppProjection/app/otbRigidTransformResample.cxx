@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,7 +24,7 @@
 #include "otbBCOInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 
-//Transform
+// Transform
 #include "otbCompositeTransform.h"
 #include "itkScalableAffineTransform.h"
 #include "itkTranslationTransform.h"
@@ -66,104 +66,111 @@ public:
   itkNewMacro(Self);
 
   typedef itk::TranslationTransform<double, FloatVectorImageType::ImageDimension> TransformType;
-  typedef otb::StreamingResampleImageFilter<FloatVectorImageType, FloatVectorImageType, double>    ResampleFilterType;
-  typedef otb::GridResampleImageFilter<FloatVectorImageType,FloatVectorImageType> GridResampleFilterType;
+  typedef otb::StreamingResampleImageFilter<FloatVectorImageType, FloatVectorImageType, double> ResampleFilterType;
+  typedef otb::GridResampleImageFilter<FloatVectorImageType, FloatVectorImageType> GridResampleFilterType;
 
   typedef itk::ScalableAffineTransform<double, FloatVectorImageType::ImageDimension> ScalableTransformType;
-  typedef ScalableTransformType::OutputVectorType                         OutputVectorType;
+  typedef ScalableTransformType::OutputVectorType OutputVectorType;
 
   /** Rotation transform */
-  typedef itk::CenteredRigid2DTransform< double > RotationTransformType;
-  typedef RotationTransformType::ScalarType              ScalarType;
+  typedef itk::CenteredRigid2DTransform<double> RotationTransformType;
+  typedef RotationTransformType::ScalarType     ScalarType;
 
   itkTypeMacro(RigidTransformResample, otb::Application);
 
 private:
-
   void DoInit() override
   {
     SetName("RigidTransformResample");
     SetDescription("Resample an image with a rigid transform");
     // Documentation
-    SetDocName("Image resampling with a rigid transform");
-    SetDocLongDescription("This application performs a parametric transform on the input image. Scaling, translation and rotation with scaling factor are handled."
-        " Parameters of the transform is expressed in physical units, thus particular attention must be paid on pixel size (value, and sign). Moreover transform is expressed from input space to output space (on the contrary ITK Transforms are expressed form output space to input space). ");
+    SetDocLongDescription(
+        "This application performs a parametric transform on the input image. Scaling, translation and rotation with scaling factor are handled."
+        " Parameters of the transform is expressed in physical units, thus particular attention must be paid on pixel size (value, and sign). Moreover "
+        "transform is expressed from input space to output space (on the contrary ITK Transforms are expressed form output space to input space). ");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("Translation");
 
-	AddDocTag(Tags::Geometry);
+    AddDocTag(Tags::Geometry);
     AddDocTag("Conversion");
 
-    AddParameter(ParameterType_InputImage,   "in",   "Input image");
-    SetParameterDescription("in","The input image to translate.");
-    AddParameter(ParameterType_OutputImage,  "out",  "Output image");
-    SetParameterDescription("out","The transformed output image.");
+    AddParameter(ParameterType_InputImage, "in", "Input image");
+    SetParameterDescription("in", "The input image to translate.");
+    AddParameter(ParameterType_OutputImage, "out", "Output image");
+    SetParameterDescription("out", "The transformed output image.");
 
-    //Transform
-    AddParameter(ParameterType_Group,"transform","Transform parameters");
-    SetParameterDescription("transform","This group of parameters allows setting the transformation to apply.");
+    // Transform
+    AddParameter(ParameterType_Group, "transform", "Transform parameters");
+    SetParameterDescription("transform", "This group of parameters allows setting the transformation to apply.");
 
     AddParameter(ParameterType_Choice, "transform.type", "Type of transformation");
-    SetParameterDescription("transform.type","Type of transformation. Available transformations are spatial scaling, translation and rotation with scaling factor");
+    SetParameterDescription("transform.type",
+                            "Type of transformation. Available transformations are spatial scaling, translation and rotation with scaling factor");
 
     AddChoice("transform.type.id", "id");
-    SetParameterDescription("transform.type.id","Spatial scaling");
+    SetParameterDescription("transform.type.id", "Spatial scaling");
 
-    AddParameter(ParameterType_Float,"transform.type.id.scalex",   "X scaling");
-    SetParameterDescription("transform.type.id.scalex","Scaling factor between the output X spacing and the input X spacing");
-    SetDefaultParameterFloat("transform.type.id.scalex",1.);
-    AddParameter(ParameterType_Float,"transform.type.id.scaley",   "Y scaling");
-    SetParameterDescription("transform.type.id.scaley","Scaling factor between the output Y spacing and the input Y spacing");
-    SetDefaultParameterFloat("transform.type.id.scaley",1.);
+    AddParameter(ParameterType_Float, "transform.type.id.scalex", "X scaling");
+    SetParameterDescription("transform.type.id.scalex", "Scaling factor between the output X spacing and the input X spacing");
+    SetDefaultParameterFloat("transform.type.id.scalex", 1.);
+    AddParameter(ParameterType_Float, "transform.type.id.scaley", "Y scaling");
+    SetParameterDescription("transform.type.id.scaley", "Scaling factor between the output Y spacing and the input Y spacing");
+    SetDefaultParameterFloat("transform.type.id.scaley", 1.);
 
     AddChoice("transform.type.translation", "translation");
-    SetParameterDescription("transform.type.translation","translation");
+    SetParameterDescription("transform.type.translation", "translation");
 
-    AddParameter(ParameterType_Float,"transform.type.translation.tx",   "The X translation (in physical units)");
-    SetParameterDescription("transform.type.translation.tx","The translation value along X axis (in physical units).");
-    SetDefaultParameterFloat("transform.type.translation.tx",0.);
-    AddParameter(ParameterType_Float,"transform.type.translation.ty",   "The Y translation (in physical units)");
-    SetParameterDescription("transform.type.translation.ty","The translation value along Y axis (in physical units)");
-    SetDefaultParameterFloat("transform.type.translation.ty",0.);
-    AddParameter(ParameterType_Float,"transform.type.translation.scalex",   "X scaling");
-    SetParameterDescription("transform.type.translation.scalex","Scaling factor between the output X spacing and the input X spacing");
-    SetDefaultParameterFloat("transform.type.translation.scalex",1.);
-    AddParameter(ParameterType_Float,"transform.type.translation.scaley",   "Y scaling");
-    SetParameterDescription("transform.type.translation.scaley","Scaling factor between the output Y spacing and the input Y spacing");
-    SetDefaultParameterFloat("transform.type.translation.scaley",1.);
+    AddParameter(ParameterType_Float, "transform.type.translation.tx", "The X translation (in physical units)");
+    SetParameterDescription("transform.type.translation.tx", "The translation value along X axis (in physical units).");
+    SetDefaultParameterFloat("transform.type.translation.tx", 0.);
+    AddParameter(ParameterType_Float, "transform.type.translation.ty", "The Y translation (in physical units)");
+    SetParameterDescription("transform.type.translation.ty", "The translation value along Y axis (in physical units)");
+    SetDefaultParameterFloat("transform.type.translation.ty", 0.);
+    AddParameter(ParameterType_Float, "transform.type.translation.scalex", "X scaling");
+    SetParameterDescription("transform.type.translation.scalex", "Scaling factor between the output X spacing and the input X spacing");
+    SetDefaultParameterFloat("transform.type.translation.scalex", 1.);
+    AddParameter(ParameterType_Float, "transform.type.translation.scaley", "Y scaling");
+    SetParameterDescription("transform.type.translation.scaley", "Scaling factor between the output Y spacing and the input Y spacing");
+    SetDefaultParameterFloat("transform.type.translation.scaley", 1.);
 
     AddChoice("transform.type.rotation", "rotation");
-    SetParameterDescription("transform.type.rotation","rotation");
+    SetParameterDescription("transform.type.rotation", "rotation");
 
     AddParameter(ParameterType_Float, "transform.type.rotation.angle", "Rotation angle");
-    SetParameterDescription("transform.type.rotation.angle","The rotation angle in degree (values between -180 and 180)");
-    SetDefaultParameterFloat("transform.type.rotation.angle",0.);
+    SetParameterDescription("transform.type.rotation.angle", "The rotation angle in degree (values between -180 and 180)");
+    SetDefaultParameterFloat("transform.type.rotation.angle", 0.);
 
     AddParameter(ParameterType_Float, "transform.type.rotation.scalex", "X scaling");
-    SetParameterDescription("transform.type.rotation.scalex","Scale factor between the X spacing of the rotated output image and the X spacing of the unrotated image");
-    SetDefaultParameterFloat("transform.type.rotation.scalex",1.);
+    SetParameterDescription("transform.type.rotation.scalex",
+                            "Scale factor between the X spacing of the rotated output image and the X spacing of the unrotated image");
+    SetDefaultParameterFloat("transform.type.rotation.scalex", 1.);
 
     AddParameter(ParameterType_Float, "transform.type.rotation.scaley", "Y scaling");
-    SetParameterDescription("transform.type.rotation.scaley","Scale factor between the Y spacing of the rotated output image and the Y spacing of the unrotated image");
-    SetDefaultParameterFloat("transform.type.rotation.scaley",1.);
+    SetParameterDescription("transform.type.rotation.scaley",
+                            "Scale factor between the Y spacing of the rotated output image and the Y spacing of the unrotated image");
+    SetDefaultParameterFloat("transform.type.rotation.scaley", 1.);
 
     // Interpolators
-    AddParameter(ParameterType_Choice,   "interpolator", "Interpolation");
-    SetParameterDescription("interpolator","This group of parameters allows one to define how the input image will be interpolated during resampling.");
-    AddChoice("interpolator.nn",     "Nearest Neighbor interpolation");
-    SetParameterDescription("interpolator.nn","Nearest neighbor interpolation leads to poor image quality, but it is very fast.");
+    AddParameter(ParameterType_Choice, "interpolator", "Interpolation");
+    SetParameterDescription("interpolator", "This group of parameters allows one to define how the input image will be interpolated during resampling.");
+    AddChoice("interpolator.nn", "Nearest Neighbor interpolation");
+    SetParameterDescription("interpolator.nn", "Nearest neighbor interpolation leads to poor image quality, but it is very fast.");
     AddChoice("interpolator.linear", "Linear interpolation");
-    SetParameterDescription("interpolator.linear","Linear interpolation leads to average image quality but is quite fast");
-    AddChoice("interpolator.bco",    "Bicubic interpolation");
+    SetParameterDescription("interpolator.linear", "Linear interpolation leads to average image quality but is quite fast");
+    AddChoice("interpolator.bco", "Bicubic interpolation");
     AddParameter(ParameterType_Radius, "interpolator.bco.radius", "Radius for bicubic interpolation");
-    SetParameterDescription("interpolator.bco.radius","This parameter allows controlling the size of the bicubic interpolation filter. If the target pixel size is higher than the input pixel size, increasing this parameter will reduce aliasing artifacts.");
+    SetParameterDescription("interpolator.bco.radius",
+                            "This parameter allows controlling the size of the bicubic interpolation filter. If the target pixel size is higher than the input "
+                            "pixel size, increasing this parameter will reduce aliasing artifacts.");
     SetDefaultParameterInt("interpolator.bco.radius", 2);
-    SetParameterString("interpolator","bco");
+    SetParameterString("interpolator", "bco");
 
     // RAM available
     AddRAMParameter("ram");
-    SetParameterDescription("ram","This allows setting the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)");
+    SetParameterDescription("ram",
+                            "This allows setting the maximum amount of RAM available for processing. As the writing task is time consuming, it is better to "
+                            "write large pieces of data, which can be achieved by increasing this parameter (pay attention to your system capabilities)");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_toulouse_sub.tif");
@@ -185,49 +192,47 @@ private:
   {
     FloatVectorImageType* inputImage = GetParameterImage("in");
 
-    m_Resampler = ResampleFilterType::New();
+    m_Resampler     = ResampleFilterType::New();
     m_GridResampler = GridResampleFilterType::New();
     m_Resampler->SetInput(inputImage);
     m_GridResampler->SetInput(inputImage);
 
     // Get Interpolator
-    switch ( GetParameterInt("interpolator") )
-      {
-      case Interpolator_Linear:
-      {
-      typedef itk::LinearInterpolateImageFunction<FloatVectorImageType,
-                                                  double>          LinearInterpolationType;
+    switch (GetParameterInt("interpolator"))
+    {
+    case Interpolator_Linear:
+    {
+      typedef itk::LinearInterpolateImageFunction<FloatVectorImageType, double> LinearInterpolationType;
       LinearInterpolationType::Pointer interpolator = LinearInterpolationType::New();
       m_Resampler->SetInterpolator(interpolator);
       m_GridResampler->SetInterpolator(interpolator);
-      }
-      break;
-      case Interpolator_NNeighbor:
-      {
-      typedef itk::NearestNeighborInterpolateImageFunction<FloatVectorImageType,
-                                                           double> NearestNeighborInterpolationType;
+    }
+    break;
+    case Interpolator_NNeighbor:
+    {
+      typedef itk::NearestNeighborInterpolateImageFunction<FloatVectorImageType, double> NearestNeighborInterpolationType;
       NearestNeighborInterpolationType::Pointer interpolator = NearestNeighborInterpolationType::New();
       m_Resampler->SetInterpolator(interpolator);
       m_GridResampler->SetInterpolator(interpolator);
-      }
-      break;
-      case Interpolator_BCO:
-      {
+    }
+    break;
+    case Interpolator_BCO:
+    {
       typedef otb::BCOInterpolateImageFunction<FloatVectorImageType> BCOInterpolationType;
-      BCOInterpolationType::Pointer interpolator = BCOInterpolationType::New();
+      BCOInterpolationType::Pointer                                  interpolator = BCOInterpolationType::New();
       interpolator->SetRadius(GetParameterInt("interpolator.bco.radius"));
       m_Resampler->SetInterpolator(interpolator);
       m_GridResampler->SetInterpolator(interpolator);
-      }
-      break;
-      }
+    }
+    break;
+    }
 
     // Get Transform
-    switch ( GetParameterInt("transform.type") )
-      {
-      case Transform_Identity:
-      {
-      m_GridResampler->SetOutputParametersFromImage( inputImage );
+    switch (GetParameterInt("transform.type"))
+    {
+    case Transform_Identity:
+    {
+      m_GridResampler->SetOutputParametersFromImage(inputImage);
       // Scale Transform
       OutputVectorType scale;
       scale[0] = 1.0 / GetParameterFloat("transform.type.id.scalex");
@@ -254,23 +259,22 @@ private:
       recomputedSize[1] = inputImage->GetLargestPossibleRegion().GetSize()[1] / scale[1];
 
       m_GridResampler->SetOutputSize(recomputedSize);
-      otbAppLogINFO( << "Output image size : " << recomputedSize );
+      otbAppLogINFO(<< "Output image size : " << recomputedSize);
 
       // Output Image
       SetParameterOutputImage("out", m_GridResampler->GetOutput());
+    }
+    break;
 
-      }
-      break;
-
-      case Transform_Translation:
-      {
+    case Transform_Translation:
+    {
       m_Resampler->SetOutputParametersFromImage(inputImage);
 
-      TransformType::Pointer transform = TransformType::New();
+      TransformType::Pointer          transform = TransformType::New();
       TransformType::OutputVectorType offset;
       offset[0] = -1.0 * GetParameterFloat("transform.type.translation.tx"); // Offset is inverted to make transform from input cs. to output cs.
       offset[1] = -1.0 * GetParameterFloat("transform.type.translation.ty");
-      otbAppLogINFO( << "Offset (inverted to respect ITK transform convention e.g. from output space to input space) : " << offset );
+      otbAppLogINFO(<< "Offset (inverted to respect ITK transform convention e.g. from output space to input space) : " << offset);
       transform->SetOffset(offset);
 
       // Scale Transform
@@ -299,25 +303,25 @@ private:
 
       m_Resampler->SetOutputSize(recomputedSize);
 
-      otbAppLogINFO( << "Output image size : " << recomputedSize );
+      otbAppLogINFO(<< "Output image size : " << recomputedSize);
       m_Resampler->SetTransform(transform);
 
-          // Output Image
+      // Output Image
       SetParameterOutputImage("out", m_Resampler->GetOutput());
-      }
-      break;
+    }
+    break;
 
-      case Transform_Rotation:
-      {
+    case Transform_Rotation:
+    {
       ScalableTransformType::Pointer transform = ScalableTransformType::New();
 
-      FloatVectorImageType::SizeType inSize = inputImage->GetLargestPossibleRegion().GetSize();
+      FloatVectorImageType::SizeType    inSize  = inputImage->GetLargestPossibleRegion().GetSize();
       FloatVectorImageType::SpacingType spacing = inputImage->GetSignedSpacing();
 
-      itk::ContinuousIndex<double,2> ULindex(inputImage->GetLargestPossibleRegion().GetIndex());
+      itk::ContinuousIndex<double, 2> ULindex(inputImage->GetLargestPossibleRegion().GetIndex());
       ULindex[0] += -0.5;
       ULindex[1] += -0.5;
-      itk::ContinuousIndex<double,2> center, URindex, LRindex, LLindex;
+      itk::ContinuousIndex<double, 2> center, URindex, LRindex, LLindex;
       center[0] = ULindex[0] + static_cast<double>(inSize[0]) / 2.0;
       center[1] = ULindex[1] + static_cast<double>(inSize[1]) / 2.0;
 
@@ -332,7 +336,7 @@ private:
       FloatVectorImageType::PointType centerPoint;
       inputImage->TransformContinuousIndexToPhysicalPoint(center, centerPoint);
 
-      //image boundary
+      // image boundary
       FloatVectorImageType::PointType ULpoint, URpoint, LRpoint, LLpoint;
       inputImage->TransformContinuousIndexToPhysicalPoint(ULindex, ULpoint);
       inputImage->TransformContinuousIndexToPhysicalPoint(URindex, URpoint);
@@ -344,34 +348,36 @@ private:
       scale[0] = 1.0 / GetParameterFloat("transform.type.rotation.scalex");
       scale[1] = 1.0 / GetParameterFloat("transform.type.rotation.scaley");
 
-      //angle of rotation
+      // angle of rotation
       ScalarType rot_angle = GetParameterFloat("transform.type.rotation.angle");
       if (rot_angle < -180 || rot_angle > 180)
-        {
-        itkExceptionMacro(<<"The rotation angle must value  be between -180 and 180.");
-        }
+      {
+        itkExceptionMacro(<< "The rotation angle must value  be between -180 and 180.");
+      }
 
       transform->SetIdentity();
-      if(spacing[0] > 0 && spacing[1] > 0) transform->Rotate2D( rot_angle * CONST_PI_180 );
-      else transform->Rotate2D( - rot_angle * CONST_PI_180 );
+      if (spacing[0] > 0 && spacing[1] > 0)
+        transform->Rotate2D(rot_angle * CONST_PI_180);
+      else
+        transform->Rotate2D(-rot_angle * CONST_PI_180);
 
-      transform->SetCenter( centerPoint );
+      transform->SetCenter(centerPoint);
       // transform->Scale( scale ); // Scaling is done by modification of the output spacing
 
-      //inverse transform
+      // inverse transform
       ScalableTransformType::Pointer inverseTransform = ScalableTransformType::New();
       transform->GetInverse(inverseTransform);
       m_Resampler->SetTransform(transform);
 
 
       FloatVectorImageType::PointType ULpointTrans, URpointTrans, LRpointTrans, LLpointTrans;
-      ULpointTrans=inverseTransform->TransformPoint(ULpoint);
-      URpointTrans=inverseTransform->TransformPoint(URpoint);
-      LRpointTrans=inverseTransform->TransformPoint(LRpoint);
-      LLpointTrans=inverseTransform->TransformPoint(LLpoint);
+      ULpointTrans = inverseTransform->TransformPoint(ULpoint);
+      URpointTrans = inverseTransform->TransformPoint(URpoint);
+      LRpointTrans = inverseTransform->TransformPoint(LRpoint);
+      LLpointTrans = inverseTransform->TransformPoint(LLpoint);
 
-      //compute min and max
-      std::vector<FloatVectorImageType::PointType>   voutput;
+      // compute min and max
+      std::vector<FloatVectorImageType::PointType> voutput;
       voutput.push_back(ULpointTrans);
       voutput.push_back(URpointTrans);
       voutput.push_back(LRpointTrans);
@@ -382,40 +388,44 @@ private:
       double minY = voutput[0][1];
       double maxY = voutput[0][1];
 
-      for(unsigned int i = 1; i<voutput.size(); i++)
-        {
+      for (unsigned int i = 1; i < voutput.size(); i++)
+      {
         // Origins
-        if ( minX > voutput[i][0] )
-          {
+        if (minX > voutput[i][0])
+        {
           minX = voutput[i][0];
-          }
-        if ( minY > voutput[i][1] )
-          {
+        }
+        if (minY > voutput[i][1])
+        {
           minY = voutput[i][1];
-          }
-
-        // Sizes
-        if ( maxX < voutput[i][0] )
-          {
-          maxX = voutput[i][0];
-          }
-        if ( maxY < voutput[i][1] )
-          {
-          maxY = voutput[i][1];
-          }
         }
 
+        // Sizes
+        if (maxX < voutput[i][0])
+        {
+          maxX = voutput[i][0];
+        }
+        if (maxY < voutput[i][1])
+        {
+          maxY = voutput[i][1];
+        }
+      }
+
       FloatVectorImageType::PointType outputOrig;
-      if( spacing[0] > 0 ) outputOrig[0] = minX;
-      else outputOrig[0] = maxX;
+      if (spacing[0] > 0)
+        outputOrig[0] = minX;
+      else
+        outputOrig[0] = maxX;
 
-      if( spacing[1] > 0 ) outputOrig[1] = minY;
-      else outputOrig[1] = maxY;
+      if (spacing[1] > 0)
+        outputOrig[1] = minY;
+      else
+        outputOrig[1] = maxY;
 
-      //size of output image
+      // size of output image
       FloatVectorImageType::PointType size;
-      size[0]=std::abs(maxX-minX);
-      size[1]=std::abs(maxY-minY);
+      size[0] = std::abs(maxX - minX);
+      size[1] = std::abs(maxY - minY);
 
       // Evaluate spacing
       FloatVectorImageType::SpacingType OutputSpacing;
@@ -430,16 +440,16 @@ private:
 
       // Evaluate size
       ResampleFilterType::SizeType recomputedSize;
-      recomputedSize[0] = static_cast<unsigned int>(std::floor(std::abs(size[0]/OutputSpacing[0])));
-      recomputedSize[1] = static_cast<unsigned int>(std::floor(std::abs(size[1]/OutputSpacing[1])));
-      m_Resampler->SetOutputSize( recomputedSize );
-      otbAppLogINFO( << "Output image size : " << recomputedSize );
+      recomputedSize[0] = static_cast<unsigned int>(std::floor(std::abs(size[0] / OutputSpacing[0])));
+      recomputedSize[1] = static_cast<unsigned int>(std::floor(std::abs(size[1] / OutputSpacing[1])));
+      m_Resampler->SetOutputSize(recomputedSize);
+      otbAppLogINFO(<< "Output image size : " << recomputedSize);
 
       // Output Image
       SetParameterOutputImage("out", m_Resampler->GetOutput());
-      }
-      break;
-      }
+    }
+    break;
+    }
 
     FloatVectorImageType::PixelType defaultValue;
     itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, inputImage->GetNumberOfComponentsPerPixel());
@@ -450,13 +460,13 @@ private:
     m_GridResampler->UpdateOutputInformation();
   }
 
-  ResampleFilterType::Pointer m_Resampler;
+  ResampleFilterType::Pointer     m_Resampler;
   GridResampleFilterType::Pointer m_GridResampler;
-  
-}; //class
+
+}; // class
 
 
-} //namespace wrapper
-} //namespace otb
+} // namespace wrapper
+} // namespace otb
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::RigidTransformResample)

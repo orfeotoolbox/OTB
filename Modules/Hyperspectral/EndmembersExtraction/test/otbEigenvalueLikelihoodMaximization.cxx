@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,18 +25,18 @@
 #include "otbStreamingStatisticsVectorImageFilter.h"
 
 const unsigned int Dimension = 2;
-typedef double PixelType;
+typedef double     PixelType;
 
 typedef otb::VectorImage<PixelType, Dimension> ImageType;
-typedef otb::ImageFileReader<ImageType> ReaderType;
+typedef otb::ImageFileReader<ImageType>                      ReaderType;
 typedef otb::StreamingStatisticsVectorImageFilter<ImageType> StreamingStatisticsVectorImageFilterType;
 
 typedef otb::EigenvalueLikelihoodMaximisation<double> ELMType;
 
-int otbEigenvalueLikelihoodMaximizationTest(int itkNotUsed(argc), char * argv[])
+int otbEigenvalueLikelihoodMaximizationTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   StreamingStatisticsVectorImageFilterType::Pointer stats = StreamingStatisticsVectorImageFilterType::New();
 

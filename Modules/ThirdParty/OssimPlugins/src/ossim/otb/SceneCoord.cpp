@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -152,7 +152,7 @@ bool SceneCoord::loadState(const ossimKeywordlist& kwl, const char* prefix)
 
 std::ostream& SceneCoord::print(std::ostream& out) const
 {
-   out << setprecision(15) << setiosflags(ios::fixed)
+   out << std::setprecision(15) << std::setiosflags(std::ios::fixed)
        << "\n SceneCoord class data members:\n";
 
    const char* prefix = 0;

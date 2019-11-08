@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,41 +19,37 @@
  */
 
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 #include "otbWrapperCommandLineLauncher.h"
 
 
-
-
-
-
 int otbWrapperCommandLineLauncherTest(int argc, char* argv[])
 {
   typedef otb::Wrapper::CommandLineLauncher LauncherType;
-  LauncherType::Pointer launcher = LauncherType::New();
+  LauncherType::Pointer                     launcher = LauncherType::New();
 
   std::vector<std::string> cmdVector;
   if (argc > 2)
-    {
+  {
     for (int i = 1; i < argc; i++)
-      {
+    {
       cmdVector.push_back(std::string(argv[i]));
-      }
     }
+  }
 
   if (launcher->Load(cmdVector) == true)
-    {
+  {
     if (launcher->ExecuteAndWriteOutput() == false)
-      {
-      return EXIT_FAILURE;
-      }
-    }
-  else
     {
-    return EXIT_FAILURE;
+      return EXIT_FAILURE;
     }
+  }
+  else
+  {
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }

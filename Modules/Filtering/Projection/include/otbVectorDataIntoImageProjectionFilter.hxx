@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,8 +30,7 @@ namespace otb
    * Constructor
  */
 template <class TInputVectorData, class TInputImage>
-VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
-::VectorDataIntoImageProjectionFilter()
+VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>::VectorDataIntoImageProjectionFilter()
 {
   m_OutputSpacing.Fill(1);
   m_OutputOrigin.Fill(0);
@@ -44,32 +43,26 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
 }
 
 template <class TInputVectorData, class TInputImage>
-void
-VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
-::SetUseOutputSpacingAndOriginFromImage(bool flag)
+void VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>::SetUseOutputSpacingAndOriginFromImage(bool flag)
 {
   m_UseOutputSpacingAndOriginFromImage = flag;
 }
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetOutputSpacing(const SpacingType& spacing)
+void VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>::SetOutputSpacing(const SpacingType& spacing)
 {
   itkDebugMacro("setting Spacing to " << spacing);
   if (this->m_OutputSpacing != spacing)
-    {
+  {
     this->m_OutputSpacing = spacing;
     this->Modified();
-    }
+  }
 }
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetOutputSpacing(const double spacing[2])
+void VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>::SetOutputSpacing(const double spacing[2])
 {
   SpacingType s(spacing);
   this->SetOutputSpacing(s);
@@ -77,9 +70,7 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetOutputSpacing(const float spacing[2])
+void VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>::SetOutputSpacing(const float spacing[2])
 {
   itk::Vector<float, 2> sf(spacing);
   SpacingType s;
@@ -89,9 +80,7 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetOutputOrigin(const double origin[2])
+void VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>::SetOutputOrigin(const double origin[2])
 {
   OriginType p(origin);
   this->SetOutputOrigin(p);
@@ -99,9 +88,7 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>
 
 //----------------------------------------------------------------------------
 template <class TInputVectorData, class TOutputVectorData>
-void
-VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>
-::SetOutputOrigin(const float origin[2])
+void VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>::SetOutputOrigin(const float origin[2])
 {
   itk::Point<float, 2> of(origin);
   OriginType p;
@@ -114,19 +101,17 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TOutputVectorData>
    * GenerateData Performs the coordinate conversion for each element in the tree
  */
 template <class TInputVectorData, class TInputImage>
-void
-VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
-::GenerateData(void)
+void VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>::GenerateData(void)
 {
   m_VdExtractFilter->SetInput(this->GetInput());
 
-  typedef typename ImageType::PointType       PointType;
-  typedef typename ImageType::SizeType       SizeType;
+  typedef typename ImageType::PointType PointType;
+  typedef typename ImageType::SizeType  SizeType;
 
   if (m_InputImage.IsNull())
-    {
+  {
     itkExceptionMacro("Invalid input image.");
-    }
+  }
 
   /*std::cout << "Spacing of the input image: "<< m_InputImage->GetSignedSpacing() << std::endl;
   std::cout << "Origin of the input image: "<< m_InputImage->GetOrigin() << std::endl;
@@ -136,13 +121,13 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
 
   // Get the index of the corner of the image
   PointType pul, pur, pll, plr;
-  itk::ContinuousIndex<double,2> ul(m_InputImage->GetLargestPossibleRegion().GetIndex());
+  itk::ContinuousIndex<double, 2> ul(m_InputImage->GetLargestPossibleRegion().GetIndex());
   ul[0] += -0.5;
   ul[1] += -0.5;
 
-  itk::ContinuousIndex<double,2> ur(ul);
-  itk::ContinuousIndex<double,2> ll(ul);
-  itk::ContinuousIndex<double,2> lr(ul);
+  itk::ContinuousIndex<double, 2> ur(ul);
+  itk::ContinuousIndex<double, 2> ll(ul);
+  itk::ContinuousIndex<double, 2> lr(ul);
 
   SizeType size = m_InputImage->GetLargestPossibleRegion().GetSize();
   ur[0] += size[0];
@@ -150,39 +135,38 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
   lr[1] += size[1];
   ll[1] += size[1];
 
-  //std::cout << "bounding box of the input image (pixel): "<< ur << ", " << ul << ", " << lr << ", " << ll << std::endl;
+  // std::cout << "bounding box of the input image (pixel): "<< ur << ", " << ul << ", " << lr << ", " << ll << std::endl;
 
   // Transform to physical point
   m_InputImage->TransformContinuousIndexToPhysicalPoint(ul, pul);
   m_InputImage->TransformContinuousIndexToPhysicalPoint(ur, pur);
   m_InputImage->TransformContinuousIndexToPhysicalPoint(ll, pll);
   m_InputImage->TransformContinuousIndexToPhysicalPoint(lr, plr);
-  //std::cout << "bounding box of the input image (physical): "<< pur << ", " << pul << ", " << plr << ", " << pll << std::endl;
+  // std::cout << "bounding box of the input image (physical): "<< pur << ", " << pul << ", " << plr << ", " << pll << std::endl;
 
   // Build the cartographic region
-  RemoteSensingRegionType rsRegion;
+  RemoteSensingRegionType                     rsRegion;
   typename RemoteSensingRegionType::IndexType rsOrigin;
   typename RemoteSensingRegionType::SizeType  rsSize;
   rsOrigin[0] = std::min(pul[0], plr[0]);
   rsOrigin[1] = std::min(pul[1], plr[1]);
-  rsSize[0] = std::abs(pul[0] - plr[0]);
-  rsSize[1] = std::abs(pul[1] - plr[1]);
+  rsSize[0]   = std::abs(pul[0] - plr[0]);
+  rsSize[1]   = std::abs(pul[1] - plr[1]);
 
   rsRegion.SetOrigin(rsOrigin);
   rsRegion.SetSize(rsSize);
 
-  if (m_InputImage->GetProjectionRef().empty()
-      || boost::algorithm::istarts_with(m_InputImage->GetProjectionRef(), "LOCAL_CS") )
-    {
+  if (m_InputImage->GetProjectionRef().empty() || boost::algorithm::istarts_with(m_InputImage->GetProjectionRef(), "LOCAL_CS"))
+  {
     rsRegion.SetKeywordList(m_InputImage->GetImageKeywordlist());
-    }
+  }
   else
-    {
+  {
     rsRegion.SetRegionProjection(m_InputImage->GetProjectionRef());
-    }
+  }
 
-  //std::cout << "remote sensing region origin and size (physical): " << rsOrigin << ", " << rsSize << std::endl;
-  //std::cout << "remote sensing region ProjRef: " << rsRegion.GetRegionProjection() << std::endl;
+  // std::cout << "remote sensing region origin and size (physical): " << rsOrigin << ", " << rsSize << std::endl;
+  // std::cout << "remote sensing region ProjRef: " << rsRegion.GetRegionProjection() << std::endl;
 
   // Set the cartographic region to the extract roi filter
   m_VdExtractFilter->SetRegion(rsRegion);
@@ -190,26 +174,25 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
   // Reproject VectorData in image projection
   m_VdProjFilter->SetInputProjectionRef(this->GetInput()->GetProjectionRef());
 
-  if (m_InputImage->GetProjectionRef().empty()
-      || boost::algorithm::istarts_with(m_InputImage->GetProjectionRef(), "LOCAL_CS") )
-    {
+  if (m_InputImage->GetProjectionRef().empty() || boost::algorithm::istarts_with(m_InputImage->GetProjectionRef(), "LOCAL_CS"))
+  {
     m_VdProjFilter->SetOutputKeywordList(m_InputImage->GetImageKeywordlist());
-    }
+  }
   else
-    {
+  {
     m_VdProjFilter->SetOutputProjectionRef(m_InputImage->GetProjectionRef());
-    }
+  }
 
   if (m_UseOutputSpacingAndOriginFromImage)
-    {
+  {
     m_VdProjFilter->SetOutputOrigin(m_InputImage->GetOrigin());
     m_VdProjFilter->SetOutputSpacing(m_InputImage->GetSignedSpacing());
-    }
+  }
   else
-    {
+  {
     m_VdProjFilter->SetOutputOrigin(this->GetOutputOrigin());
     m_VdProjFilter->SetOutputSpacing(this->GetOutputSpacing());
-    }
+  }
 
   m_VdProjFilter->Update();
 
@@ -233,9 +216,9 @@ VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>
   */
 
   if (m_UseOutputSpacingAndOriginFromImage)
-    {
+  {
     m_VdProjFilter->GetOutput()->SetProjectionRef("");
-    }
+  }
 
   this->GraftOutput(m_VdProjFilter->GetOutput());
   this->UpdateProgress(1.0f);

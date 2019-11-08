@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,16 +22,18 @@
 #ifndef otbMuellerToPolarisationDegreeAndPowerImageFilter_h
 #define otbMuellerToPolarisationDegreeAndPowerImageFilter_h
 
-#include "otbUnaryFunctorImageFilter.h"
 #include "itkNumericTraits.h"
 #include "itkMatrix.h"
 #include "itkVector.h"
 #include "otbMath.h"
 
-namespace otb
- {
+#include "otbFunctorImageFilter.h"
 
-namespace Functor {
+namespace otb
+{
+
+namespace Functor
+{
 
 /** \class MuellerToPolarisationDegreeAndPowerFunctor
  * \brief Evaluate the  min and max polarisation degree and min and max power
@@ -67,6 +69,8 @@ namespace Functor {
  * - channel #2 : \f$ DegP_{min} \f$
  * - channel #3 : \f$ DegP_{max} \f$
  *
+ * Use otb::MuellerToPolarisationDegreeAndPowerImageFilter to apply
+ *
  * \ingroup Functor
  * \ingroup SARPolarimetry
  *
@@ -76,20 +80,20 @@ namespace Functor {
  *
  * \ingroup OTBPolarimetry
  */
-template< class TInput, class TOutput>
+template <class TInput, class TOutput>
 class MuellerToPolarisationDegreeAndPowerFunctor
 {
 public:
-  typedef typename TOutput::ValueType               OutputValueType;
-  typedef itk::Matrix<double, 4, 4>                 MuellerMatrixType;
-  typedef itk::Vector<double, 4>                   StokesVectorType;
+  typedef typename TOutput::ValueType OutputValueType;
+  typedef itk::Matrix<double, 4, 4> MuellerMatrixType;
+  typedef itk::Vector<double, 4> StokesVectorType;
 
-  inline TOutput operator()( const TInput & Mueller ) const
-    {
-    double P;
-    double deg_pol;
-    double tau;
-    double psi;
+  inline void operator()(TOutput& result, const TInput& Mueller) const
+  {
+    double           P;
+    double           deg_pol;
+    double           tau;
+    double           psi;
     StokesVectorType Si;
     StokesVectorType Sr;
 
@@ -97,9 +101,6 @@ public:
     double l_PowerMax(itk::NumericTraits<double>::min());
     double l_PolarisationDegreeMin(itk::NumericTraits<double>::max());
     double l_PolarisationDegreeMax(itk::NumericTraits<double>::min());
-
-     TOutput result;
-    result.SetSize(m_NumberOfComponentsPerPixel);
 
     MuellerMatrixType muellerMatrix;
     muellerMatrix[0][0] = Mueller[0];
@@ -121,121 +122,87 @@ public:
 
     tau = -45.0;
     while (tau < 46.0)
+    {
+      psi = -90.0;
+      while (psi < 91.0)
       {
-        psi = -90.0;
-        while (psi < 91.0)
-          {
-            // Define the incident Stokes vector
-            Si[0] = 1.0;
-            Si[1] = cos(psi * m_PI_90) * cos(tau * m_PI_90);
-            Si[2] = sin(psi * m_PI_90) * cos(tau * m_PI_90);
-            Si[3] = sin(tau * m_PI_90);
+        // Define the incident Stokes vector
+        Si[0] = 1.0;
+        Si[1] = cos(psi * m_PI_90) * cos(tau * m_PI_90);
+        Si[2] = sin(psi * m_PI_90) * cos(tau * m_PI_90);
+        Si[3] = sin(tau * m_PI_90);
 
-            // Evaluate the received Stokes vector
-            Sr = muellerMatrix * Si;
+        // Evaluate the received Stokes vector
+        Sr = muellerMatrix * Si;
 
-            //Evaluate Power and Polarisation degree
-            P = Sr[0];
+        // Evaluate Power and Polarisation degree
+        P = Sr[0];
 
-            if (P < m_Epsilon)
-              {
-                deg_pol = 0.;
-              }
-            else
-              {
-                deg_pol = std::sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
-              }
+        if (P < m_Epsilon)
+        {
+          deg_pol = 0.;
+        }
+        else
+        {
+          deg_pol = std::sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
+        }
 
-            if (P > l_PowerMax)
-              {
-                l_PowerMax = P;
-              }
-            else
-              {
-                l_PowerMin = P;
-              }
+        if (P > l_PowerMax)
+        {
+          l_PowerMax = P;
+        }
+        else
+        {
+          l_PowerMin = P;
+        }
 
-            if (deg_pol > l_PolarisationDegreeMax)
-              {
-                l_PolarisationDegreeMax = deg_pol;
-              }
-            else
-              {
-                l_PolarisationDegreeMin = deg_pol;
-              }
-            psi += 5.0;
-          }
-        tau += 5.0;
+        if (deg_pol > l_PolarisationDegreeMax)
+        {
+          l_PolarisationDegreeMax = deg_pol;
+        }
+        else
+        {
+          l_PolarisationDegreeMin = deg_pol;
+        }
+        psi += 5.0;
       }
+      tau += 5.0;
+    }
 
     result[0] = l_PowerMin;
     result[1] = l_PowerMax;
     result[2] = l_PolarisationDegreeMin;
     result[3] = l_PolarisationDegreeMax;
-
-
-    return result;
-    }
-
-  unsigned int GetOutputSize()
-  {
-    return m_NumberOfComponentsPerPixel;
   }
 
-   /** Constructor */
-   MuellerToPolarisationDegreeAndPowerFunctor() : m_NumberOfComponentsPerPixel(4), m_Epsilon(1e-6), m_PI_90(2*CONST_PI_180) {}
-
-   /** Destructor */
-   virtual ~MuellerToPolarisationDegreeAndPowerFunctor() {}
+  constexpr size_t OutputSize(...) const
+  {
+    // Size of the result
+    return 4;
+  }
 
 private:
-    unsigned int m_NumberOfComponentsPerPixel;
-    const double m_Epsilon;
-    const double m_PI_90;
+  static constexpr double m_Epsilon = 1e-6;
+  static constexpr double m_PI_90   = 2 * CONST_PI_180;
 };
-}
+} // namespace Functor
 
-
-/** \class otbMuellerToPolarisationDegreeAndPowerImageFilter
- * \brief Compute the polarization degree and power (4 channels : Power min and max, Polarization degree min and max)
- * from the Mueller image (16 real channels)
- * For more details, please refer to the class MuellerToPolarisationDegreeAndPowerFunctor.
+/**
+ * \typedef MuellerToPolarisationDegreeAndPowerImageFilter
+ * \brief Applies otb::Functor::MuellerToPolarisationDegreeAndPowerFunctor
+ * \sa otb::Functor::MuellerToPolarisationDegreeAndPowerFunctor
  *
- * \ingroup SARPolarimetry
- * \sa MuellerToPolarisationDegreeAndPowerFunctor
- *
+ * Set inputs with:
+ * \code
+ * SetInput<0>(inputPtr);
+ * \endcode
  *
  * \ingroup OTBPolarimetry
  */
-template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MuellerToPolarisationDegreeAndPowerImageFilter :
-   public UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::MuellerToPolarisationDegreeAndPowerFunctor<
-    typename TInputImage::PixelType, typename TOutputImage::PixelType> >
-{
-public:
-   /** Standard class typedefs. */
-   typedef MuellerToPolarisationDegreeAndPowerImageFilter  Self;
-  typedef typename Functor::MuellerToPolarisationDegreeAndPowerFunctor<
-     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
-   typedef UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
-   typedef itk::SmartPointer<Self>        Pointer;
-   typedef itk::SmartPointer<const Self>  ConstPointer;
+template <typename TInputImage, typename TOutputImage>
+using MuellerToPolarisationDegreeAndPowerImageFilter =
+    FunctorImageFilter<Functor::MuellerToPolarisationDegreeAndPowerFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 
-   /** Method for creation through the object factory. */
-   itkNewMacro(Self);
-
-   /** Runtime information support. */
-   itkTypeMacro(MuellerToPolarisationDegreeAndPowerImageFilter, UnaryFunctorImageFilter);
-
-
-protected:
-   MuellerToPolarisationDegreeAndPowerImageFilter() {}
-  ~MuellerToPolarisationDegreeAndPowerImageFilter() override {}
-
-private:
-  MuellerToPolarisationDegreeAndPowerImageFilter(const Self&) = delete;
-  void operator=(const Self&) = delete;
-};
 
 } // end namespace otb
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -20,6 +20,8 @@
 
 #include "otbGlVectorActor.h"
 #include "otbViewSettings.h"
+#include "otbMinimalShader.h"
+#include "otbCast.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -107,7 +109,6 @@ GlVectorActor::GlVectorActor()
     m_PointMarkerSize(5),
     m_ViewportForwardRotationTransform(RigidTransformType::New()),
     m_ViewportBackwardRotationTransform(RigidTransformType::New())
-    
 {
   m_Color.Fill(0);
   m_Color[0]=1.0;
@@ -135,6 +136,16 @@ GlVectorActor::~GlVectorActor()
     glDeleteLists(m_DisplayList,1);
     }
 
+}
+
+void GlVectorActor::CreateShader()
+{
+  if (m_Shader.IsNull())
+    {
+    MinimalShader::Pointer shader( MinimalShader::New() );
+    m_Shader = shader;
+    shader->SetColor(m_Color.GetDataPointer(), &m_Alpha);
+    }
 }
 
 void GlVectorActor::SetFill(bool flag)
@@ -624,17 +635,20 @@ void GlVectorActor::Render()
     UpdateDisplayList();
     }
 
+  m_Shader->LoadShader();
+  m_Shader->SetupShader();
+
    glEnable(GL_BLEND);
    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
    glEnable(GL_LINE_SMOOTH);
    glLineWidth(m_LineWidth);
-   glColor4d(m_Color[0],m_Color[1],m_Color[2],m_Alpha);
    
    glCallList(m_DisplayList);
 
    glDisable(GL_LINE_SMOOTH);
    glDisable(GL_BLEND);
-   
+
+  m_Shader->UnloadShader();
 }
 
 

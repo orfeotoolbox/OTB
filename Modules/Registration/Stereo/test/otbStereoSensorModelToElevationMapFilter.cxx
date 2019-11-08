@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,7 @@
  */
 
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 #include "otbImage.h"
@@ -40,16 +40,14 @@ typedef otb::ImageFileReader<ImageType> ReaderType;
 typedef itk::DiscreteGaussianImageFilter<ImageType, ImageType> GaussianFilterType;
 typedef otb::ImageFileWriter<ImageType> SingleWriterType;
 typedef otb::StereoSensorModelToElevationFilter<ImageType, HeightImageType> StereoFilterType;
-typedef otb::VectorImage<float, 2> VectorImageType;
+typedef otb::VectorImage<float, 2>                                          VectorImageType;
 typedef otb::ImageList<HeightImageType> ImageListType;
 typedef otb::ImageListToVectorImageFilter<ImageListType, VectorImageType> IL2VIFilterType;
-typedef itk::MedianImageFilter<HeightImageType, HeightImageType> MedianFilterType;
+typedef itk::MedianImageFilter<HeightImageType, HeightImageType>          MedianFilterType;
 typedef otb::ImageFileWriter<HeightImageType> WriterType;
 
 
-
-
-int otbStereoSensorModelToElevationMapFilter( int itkNotUsed(argc), char * argv[] )
+int otbStereoSensorModelToElevationMapFilter(int itkNotUsed(argc), char* argv[])
 {
   ReaderType::Pointer masterReader = ReaderType::New();
   masterReader->SetFileName(argv[1]);
@@ -58,7 +56,7 @@ int otbStereoSensorModelToElevationMapFilter( int itkNotUsed(argc), char * argv[
   slaveReader->SetFileName(argv[2]);
 
   GaussianFilterType::ArrayType sigma;
-  sigma.Fill(0.5*atof(argv[8]));
+  sigma.Fill(0.5 * atof(argv[8]));
 
   GaussianFilterType::Pointer gaussian1 = GaussianFilterType::New();
   gaussian1->SetInput(masterReader->GetOutput());
@@ -79,7 +77,7 @@ int otbStereoSensorModelToElevationMapFilter( int itkNotUsed(argc), char * argv[
   stereoFilter->SetElevationStep(atof(argv[8]));
   stereoFilter->SetRadius(atoi(argv[9]));
 
-  otb::StandardFilterWatcher watcher(stereoFilter,"Performing stereo-matching");
+  otb::StandardFilterWatcher watcher(stereoFilter, "Performing stereo-matching");
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(stereoFilter->GetOutput());

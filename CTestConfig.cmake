@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -19,9 +19,7 @@
 #
 
 set(CTEST_PROJECT_NAME "OTB")
-set(CTEST_NIGHTLY_START_TIME "20:00:00 CEST")
-
 set(CTEST_DROP_METHOD "https")
-set(CTEST_DROP_SITE "dash.orfeo-toolbox.org")
+set(CTEST_DROP_SITE "cdash.orfeo-toolbox.org")
 set(CTEST_DROP_LOCATION "/submit.php?project=OTB")
 set(CTEST_DROP_SITE_CDASH TRUE)

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,29 +28,26 @@ namespace otb
 {
 
 template <class TInputImage, class TMaskImage>
-PrintableImageFilter<TInputImage, TMaskImage>
-::PrintableImageFilter()
+PrintableImageFilter<TInputImage, TMaskImage>::PrintableImageFilter()
 {
 
-  m_Rescaler = VectorRescalerType::New();
+  m_Rescaler  = VectorRescalerType::New();
   m_Extractor = ChannelExtractorType::New();
 
   m_Rescaler->SetInput(m_Extractor->GetOutput());
   m_MaskFilter = FunctorFilterType::New();
 
-  m_ChannelList = ChannelsType(3, 2);
+  m_ChannelList    = ChannelsType(3, 2);
   m_ChannelList[1] = 3;
   m_ChannelList[2] = 4;
   m_ObjectColor.SetSize(3);
   m_ObjectColor.Fill(255);
-  m_UseMask = false;
+  m_UseMask             = false;
   m_BackgroundMaskValue = 0;
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PrintableImageFilter<TInputImage, TMaskImage>
-::SetChannel(unsigned int channel)
+void PrintableImageFilter<TInputImage, TMaskImage>::SetChannel(unsigned int channel)
 {
   m_ChannelList.push_back(channel);
   m_Extractor->SetChannel(channel);
@@ -58,38 +55,30 @@ PrintableImageFilter<TInputImage, TMaskImage>
 }
 
 template <class TInputImage, class TMaskImage>
-const typename PrintableImageFilter<TInputImage, TMaskImage>::ChannelsType
-PrintableImageFilter<TInputImage, TMaskImage>
-::GetChannels() const
+const typename PrintableImageFilter<TInputImage, TMaskImage>::ChannelsType PrintableImageFilter<TInputImage, TMaskImage>::GetChannels() const
 {
   return m_ChannelList;
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PrintableImageFilter<TInputImage, TMaskImage>
-::SetInputMask(const MaskImageType * mask)
+void PrintableImageFilter<TInputImage, TMaskImage>::SetInputMask(const MaskImageType* mask)
 {
-  this->itk::ProcessObject::SetNthInput(1, const_cast<MaskImageType *>(mask));
+  this->itk::ProcessObject::SetNthInput(1, const_cast<MaskImageType*>(mask));
   m_UseMask = true;
 }
 
 template <class TInputImage, class TMaskImage>
-typename PrintableImageFilter<TInputImage, TMaskImage>::MaskImageType *
-PrintableImageFilter<TInputImage, TMaskImage>
-::GetInputMask()
+typename PrintableImageFilter<TInputImage, TMaskImage>::MaskImageType* PrintableImageFilter<TInputImage, TMaskImage>::GetInputMask()
 {
   if (this->GetNumberOfInputs() < 2)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<MaskImageType *>(this->itk::ProcessObject::GetInput(1));
+  }
+  return static_cast<MaskImageType*>(this->itk::ProcessObject::GetInput(1));
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PrintableImageFilter<TInputImage, TMaskImage>
-::GenerateOutputInformation()
+void PrintableImageFilter<TInputImage, TMaskImage>::GenerateOutputInformation()
 {
   // Call to the superclass implementation
   Superclass::GenerateOutputInformation();
@@ -99,39 +88,36 @@ PrintableImageFilter<TInputImage, TMaskImage>
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PrintableImageFilter<TInputImage, TMaskImage>
-::BeforeGenerateData()
+void PrintableImageFilter<TInputImage, TMaskImage>::BeforeGenerateData()
 {
   if (m_Extractor->GetNbChannels() == 0 && m_ChannelList.size() > 3)
-    {
+  {
     itkExceptionMacro(<< "Invalid channel list (must be three channels instead of " << m_ChannelList.size());
-    }
+  }
   if (m_Extractor->GetNbChannels() == 0 && m_Extractor->GetNbChannels() > 3)
-    {
+  {
     itkExceptionMacro(<< "Invalid channel list (must be three channels instead of " << m_Extractor->GetNbChannels());
-    }
+  }
   if (m_ObjectColor.GetSize() != 3)
-    {
+  {
     itkExceptionMacro(<< "Invalid m_ObjectColor pixel size");
-    }
+  }
 
   if (m_UseMask == true)
-    {
-    MaskImagePointerType                  inputMaskPtr  = this->GetInputMask();
-    typename InputImageType::ConstPointer inputPtr = this->GetInput();
+  {
+    MaskImagePointerType                  inputMaskPtr = this->GetInputMask();
+    typename InputImageType::ConstPointer inputPtr     = this->GetInput();
 
     if (!inputMaskPtr)
-      {
+    {
       itkExceptionMacro(<< "No mask detected");
-      }
-    if (inputMaskPtr->GetLargestPossibleRegion().GetSize() !=  inputPtr->GetLargestPossibleRegion().GetSize())
-      {
-      itkExceptionMacro(
-        << "Input size (" << inputPtr->GetLargestPossibleRegion().GetSize() << ") and Mask size (" <<
-        inputMaskPtr->GetLargestPossibleRegion().GetSize() << ") must be the same");
-      }
     }
+    if (inputMaskPtr->GetLargestPossibleRegion().GetSize() != inputPtr->GetLargestPossibleRegion().GetSize())
+    {
+      itkExceptionMacro(<< "Input size (" << inputPtr->GetLargestPossibleRegion().GetSize() << ") and Mask size ("
+                        << inputMaskPtr->GetLargestPossibleRegion().GetSize() << ") must be the same");
+    }
+  }
 }
 
 /*
@@ -139,18 +125,16 @@ PrintableImageFilter<TInputImage, TMaskImage>
  * Else, sur M%askFunctor.
  */
 template <class TInputImage, class TMaskImage>
-void
-PrintableImageFilter<TInputImage, TMaskImage>
-::GenerateData()
+void PrintableImageFilter<TInputImage, TMaskImage>::GenerateData()
 {
   this->BeforeGenerateData();
 
   // let this loop to be compliant with previous version of the class where m_ChannelList didn't exist...
   if (m_Extractor->GetNbChannels() == 0)
-    {
+  {
     for (unsigned int i = 0; i < m_ChannelList.size(); ++i)
       m_Extractor->SetChannel(m_ChannelList[i]);
-    }
+  }
 
   m_Extractor->SetInput(this->GetInput());
   m_Extractor->UpdateOutputInformation();
@@ -166,26 +150,23 @@ PrintableImageFilter<TInputImage, TMaskImage>
   m_Rescaler->SetClampThreshold(0.01);
 
   if (m_UseMask == false)
-    {
+  {
     m_Rescaler->GraftOutput(this->GetOutput());
     m_Rescaler->Update();
     this->GraftOutput(m_Rescaler->GetOutput());
-    }
+  }
   else
-    {
+  {
     m_MaskFilter->SetInput1(m_Rescaler->GetOutput());
     m_MaskFilter->SetInput2(this->GetInputMask());
     m_MaskFilter->GraftOutput(this->GetOutput());
     m_MaskFilter->Update();
     this->GraftOutput(m_MaskFilter->GetOutput());
-    }
-
+  }
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PrintableImageFilter<TInputImage, TMaskImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void PrintableImageFilter<TInputImage, TMaskImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

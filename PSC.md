@@ -212,12 +212,14 @@ establishing a fully functioning PSC. PSC has now 4 members.
 
 **Name**                    | **Affiliation**  | **Email**                        | **Role**                                   |
 ----------------------------|------------------|----------------------------------|--------------------------------------------|
-Manuel Grizonnet (resigned) | CNES             | manuel.grizonnet AT cnes DOT fr  | Infrastructure, legal issues               |
+Agustin Lobo                | ICTJA-CSIC       | Agustin DOT Lobo AT ictja.csic.es| User perspective, documentation            |
+Julien Radoux               | UCLouvain        | jradoux AT hotmail DOT com       | User perpsective, documentation            |
 Rémi Cresson                | IRSTEA           | cresson.r AT gmail DOT com       | Release Manager for release 5.2            |
 Guillaume Pasero            | CS-SI            | guillaume.pasero AT c-s DOT fr   | release planner                            |
-Jordi Inglada (resigned)    | CNES/CESBIO      | jordi.inglada AT cesbio DOT eu   |                                            |
 Julien Michel               | CNES             | julien.michel AT cnes DOT fr     | Communication, contributions               |
 Victor Poughon              | CNES             | victor.poughon AT cnes DOT fr    | User support and documentation, roadmaps   |
+Jordi Inglada (resigned)    | CNES/CESBIO      | jordi.inglada AT cesbio DOT eu   |                                            |
+Manuel Grizonnet (resigned) | CNES             | manuel.grizonnet AT cnes DOT fr  | Infrastructure, legal issues               |
 
 ## Release manager
 

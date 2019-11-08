@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,21 +25,49 @@
 
 namespace otb
 {
-
-template <class TInputImage, class TOutputImage, class TPrecision>
-ProjectiveProjectionImageFilter<TInputImage, TOutputImage, TPrecision>
-::ProjectiveProjectionImageFilter()
+namespace Functor
 {
+
+template <class TInput, class TOutput, class TPrecision>
+size_t ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>::OutputSize(const std::array<size_t, 1>&) const
+{
+  return m_OutputSize;
 }
 
-template <class TInputImage, class TOutputImage, class TPrecision>
-void
-ProjectiveProjectionImageFilter<TInputImage, TOutputImage, TPrecision>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TInput, class TOutput, class TPrecision>
+const typename ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>::InputType&
+ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>::GetProjectionDirection()
 {
-  Superclass::PrintSelf(os, indent);
+  return m_ProjectionDirection;
 }
 
-} // end namespace
+template <class TInput, class TOutput, class TPrecision>
+void ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>::SetProjectionDirection(const InputType& p)
+{
+  m_ProjectionDirection = p;
+  m_OutputSize          = m_ProjectionDirection.Size();
+}
+
+template <class TInput, class TOutput, class TPrecision>
+typename ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>::OutputType ProjectiveProjectionFunctor<TInput, TOutput, TPrecision>::
+operator()(const InputType& in)
+{
+  PrecisionType dotProduct = 0;
+  for (unsigned int i = 0; i < in.Size(); ++i)
+  {
+    dotProduct += in[i] * m_ProjectionDirection[i];
+  }
+
+  OutputType projected(in.Size());
+  for (unsigned int j = 0; j < in.Size(); ++j)
+  {
+    projected[j] = in[j] / dotProduct;
+  }
+
+  return projected;
+}
+
+} // end namespace Functor
+} // end namespace otb
 
 #endif

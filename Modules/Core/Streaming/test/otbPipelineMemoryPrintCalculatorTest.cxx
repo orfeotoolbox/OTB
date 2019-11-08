@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,14 +26,12 @@
 #include "otbVectorImageToIntensityImageFilter.h"
 
 
-
-int otbPipelineMemoryPrintCalculatorTest(int itkNotUsed(argc), char * argv[])
+int otbPipelineMemoryPrintCalculatorTest(int itkNotUsed(argc), char* argv[])
 {
-  typedef otb::VectorImage<double, 2>            VectorImageType;
-  typedef otb::Image<double, 2>                  ImageType;
-  typedef otb::ImageFileReader<VectorImageType>  ReaderType;
-  typedef otb::VectorImageToIntensityImageFilter
-    <VectorImageType, ImageType>                 IntensityImageFilterType;
+  typedef otb::VectorImage<double, 2> VectorImageType;
+  typedef otb::Image<double, 2>       ImageType;
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  typedef otb::VectorImageToIntensityImageFilter<VectorImageType, ImageType> IntensityImageFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
@@ -46,17 +44,15 @@ int otbPipelineMemoryPrintCalculatorTest(int itkNotUsed(argc), char * argv[])
   calculator->Compute();
 
   otb::PipelineMemoryPrintCalculator::MemoryPrintType availableMemoryInBytes = 104858;
-  otb::PipelineMemoryPrintCalculator::MemoryPrintType memoryPrint = calculator->GetMemoryPrint();
+  otb::PipelineMemoryPrintCalculator::MemoryPrintType memoryPrint            = calculator->GetMemoryPrint();
 
   unsigned int optimalNbDiv = otb::PipelineMemoryPrintCalculator::EstimateOptimalNumberOfStreamDivisions(memoryPrint, availableMemoryInBytes);
 
   std::ofstream ofs(argv[2]);
-  ofs<<"Memory print of whole pipeline:     "<<calculator->GetMemoryPrint()
-    * otb::PipelineMemoryPrintCalculator::ByteToMegabyte << " Mb"<<std::endl;
-  ofs<<"Available memory:                   "<<availableMemoryInBytes
-    * otb::PipelineMemoryPrintCalculator::ByteToMegabyte << " Mb"<<std::endl;
-  ofs<<"Optimal number of stream divisions: "<<optimalNbDiv<<std::endl;
-  ofs<<"Bias correction factor applied:     "<<calculator->GetBiasCorrectionFactor()<<std::endl;
+  ofs << "Memory print of whole pipeline:     " << calculator->GetMemoryPrint() * otb::PipelineMemoryPrintCalculator::ByteToMegabyte << " Mb" << std::endl;
+  ofs << "Available memory:                   " << availableMemoryInBytes * otb::PipelineMemoryPrintCalculator::ByteToMegabyte << " Mb" << std::endl;
+  ofs << "Optimal number of stream divisions: " << optimalNbDiv << std::endl;
+  ofs << "Bias correction factor applied:     " << calculator->GetBiasCorrectionFactor() << std::endl;
   ofs.close();
 
   return EXIT_SUCCESS;

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -19,7 +19,7 @@
 #
 
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/Markov)
-set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 otb_add_test(NAME maTeMarkovClassification1ExampleTest COMMAND ${OTB_TEST_DRIVER}
   --compare-image ${EPSILON_8}

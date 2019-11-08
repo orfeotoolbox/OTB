@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,31 +19,30 @@
  */
 
 
-
 #include "otbMetaImageFunction.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbFlusserMomentsImageFunction.h"
 #include "otbImageFunctionAdaptor.h"
 
-typedef unsigned short                                                InputPixelType;
-typedef double                                                        PrecisionType;
-const unsigned int Dimension =                                        2;
+typedef unsigned short InputPixelType;
+typedef double         PrecisionType;
+const unsigned int     Dimension = 2;
 
-typedef otb::Image<InputPixelType,  Dimension>                        InputImageType;
-typedef otb::ImageFileReader<InputImageType>                          ReaderType;
-typedef otb::FlusserMomentsImageFunction<InputImageType>              FlusserFunctionType;
+typedef otb::Image<InputPixelType, Dimension> InputImageType;
+typedef otb::ImageFileReader<InputImageType>             ReaderType;
+typedef otb::FlusserMomentsImageFunction<InputImageType> FlusserFunctionType;
 typedef otb::ImageFunctionAdaptor<FlusserFunctionType, PrecisionType> FunctionType;
 
-typedef otb::MetaImageFunction<PrecisionType, double>                 MetaImageFunctionType;
-typedef MetaImageFunctionType::PointType                              PointType;
-typedef MetaImageFunctionType::OutputType                             OutputType;
+typedef otb::MetaImageFunction<PrecisionType, double> MetaImageFunctionType;
+typedef MetaImageFunctionType::PointType  PointType;
+typedef MetaImageFunctionType::OutputType OutputType;
 
 
-int otbMetaImageFunction(int itkNotUsed(argc), char * argv[])
+int otbMetaImageFunction(int itkNotUsed(argc), char* argv[])
 {
   // Read the input image
-  ReaderType::Pointer   reader = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   reader->Update();
 
@@ -67,21 +66,21 @@ int otbMetaImageFunction(int itkNotUsed(argc), char * argv[])
   metaFunction->AddFunction(function2);
   metaFunction->AddFunction(function3);
 
-  outputStream<<"Initial number of functions: "<<metaFunction->GetNumberOfFunctions()<<std::endl;
+  outputStream << "Initial number of functions: " << metaFunction->GetNumberOfFunctions() << std::endl;
 
   metaFunction->RemoveNthFunction(2);
 
-  outputStream<<"Number of functions after removing the 2nd: "<<metaFunction->GetNumberOfFunctions()<<std::endl;
+  outputStream << "Number of functions after removing the 2nd: " << metaFunction->GetNumberOfFunctions() << std::endl;
 
   metaFunction->ClearFunctions();
 
-  outputStream<<"Number of functions after clear: "<<metaFunction->GetNumberOfFunctions()<<std::endl;
+  outputStream << "Number of functions after clear: " << metaFunction->GetNumberOfFunctions() << std::endl;
 
   metaFunction->AddFunction(function1);
   metaFunction->AddFunction(function2);
   metaFunction->AddFunction(function3);
 
-  outputStream<<"Adding functions again: "<<metaFunction->GetNumberOfFunctions()<<std::endl;
+  outputStream << "Adding functions again: " << metaFunction->GetNumberOfFunctions() << std::endl;
 
   // For coverage
   metaFunction->GetNthFunction(0);
@@ -92,7 +91,7 @@ int otbMetaImageFunction(int itkNotUsed(argc), char * argv[])
 
   OutputType output = metaFunction->Evaluate(p);
 
-  outputStream<<"Evaluate("<<p<<") = "<<output<<std::endl;
+  outputStream << "Evaluate(" << p << ") = " << output << std::endl;
 
   outputStream.close();
 

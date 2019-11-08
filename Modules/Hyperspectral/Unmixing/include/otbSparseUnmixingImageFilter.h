@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,7 +32,8 @@
 #include "otbSparseWvltToAngleMapperListFilter.h"
 #include "otbAngularProjectionSetImageFilter.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class SparseUnmixingImageFilter
  * \brief This class detects linear dependencies from N wavelet decompositions
@@ -50,16 +51,13 @@ namespace otb {
  *
  * \ingroup OTBUnmixing
  */
-template < class TInputImage, class TOutputImage,
-            unsigned int VNbInputImage,
-            class TPrecision = double,
-            Wavelet::Wavelet TMotherWaveletOperator = Wavelet::SYMLET8 >
-class ITK_EXPORT SparseUnmixingImageFilter
-  : public ImageToImageListFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, unsigned int VNbInputImage, class TPrecision = double,
+          Wavelet::Wavelet TMotherWaveletOperator = Wavelet::SYMLET8>
+class ITK_EXPORT           SparseUnmixingImageFilter : public ImageToImageListFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef SparseUnmixingImageFilter     Self;
+  typedef SparseUnmixingImageFilter Self;
   typedef ImageToImageListFilter<TInputImage, TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -76,66 +74,66 @@ public:
   itkStaticConstMacro(NumberOfInputImages, unsigned int, VNbInputImage);
 
   /** Template parameters typedefs */
-  typedef TInputImage  InputImageType;
-  typedef TOutputImage OutputImageType;
-  typedef TPrecision PrecisionType;
+  typedef TInputImage           InputImageType;
+  typedef TOutputImage          OutputImageType;
+  typedef TPrecision            PrecisionType;
   static const Wavelet::Wavelet MotherWaveletOperatorID = TMotherWaveletOperator;
 
   /** Filter types and related */
-  typedef Image< PrecisionType, InputImageDimension > InternalImageType;
+  typedef Image<PrecisionType, InputImageDimension> InternalImageType;
 
-  typedef WaveletOperator< MotherWaveletOperatorID, Wavelet::FORWARD, PrecisionType, InputImageDimension > WaveletOperatorType;
-  typedef WaveletFilterBank< InternalImageType, InternalImageType, WaveletOperatorType, Wavelet::FORWARD > FilterBankType;
-  typedef WaveletTransform< InternalImageType, InternalImageType, FilterBankType, Wavelet::FORWARD >       WvltFilterType;
+  typedef WaveletOperator<MotherWaveletOperatorID, Wavelet::FORWARD, PrecisionType, InputImageDimension> WaveletOperatorType;
+  typedef WaveletFilterBank<InternalImageType, InternalImageType, WaveletOperatorType, Wavelet::FORWARD> FilterBankType;
+  typedef WaveletTransform<InternalImageType, InternalImageType, FilterBankType, Wavelet::FORWARD>       WvltFilterType;
   typedef typename WvltFilterType::Pointer             WvltFilterPointerType;
   typedef typename WvltFilterType::OutputImageListType InternalImageListType;
-  typedef ObjectList< WvltFilterType >                 WvltFilterListType;
+  typedef ObjectList<WvltFilterType>                   WvltFilterListType;
   typedef typename WvltFilterListType::Pointer         WvltFilterListPointerType;
 
-//  typedef itk::FixedArray< PrecisionType, NumberOfInputImages-1 > AngleType;
-  typedef itk::Array< PrecisionType >                             AngleType;
-  typedef itk::Statistics::ListSample< AngleType >                AngleListType;
-  typedef typename AngleListType::Pointer                         AngleListPointerType;
-  typedef SparseWvltToAngleMapperListFilter< InternalImageListType, AngleListType, NumberOfInputImages > AngleListFilterType;
-  typedef typename AngleListFilterType::Pointer                   AngleListFilterPointerType;
-  typedef typename AngleListFilterType::OutputSampleListType      InternalSampleListType;
+  //  typedef itk::FixedArray< PrecisionType, NumberOfInputImages-1 > AngleType;
+  typedef itk::Array<PrecisionType>              AngleType;
+  typedef itk::Statistics::ListSample<AngleType> AngleListType;
+  typedef typename AngleListType::Pointer        AngleListPointerType;
+  typedef SparseWvltToAngleMapperListFilter<InternalImageListType, AngleListType, NumberOfInputImages> AngleListFilterType;
+  typedef typename AngleListFilterType::Pointer              AngleListFilterPointerType;
+  typedef typename AngleListFilterType::OutputSampleListType InternalSampleListType;
 
-  typedef typename itk::Statistics::Histogram< PrecisionType > HistogramType;
-  typedef typename HistogramType::Pointer               HistogramPointerType;
-  typedef typename HistogramType::SizeType              HistogramSizeType;
-  typedef typename HistogramType::IndexType             HistogramIndexType;
-  typedef typename HistogramType::MeasurementVectorType MeasurementVectorType;
-  typedef typename HistogramType::MeasurementType       MeasurementType;
+  typedef typename itk::Statistics::Histogram<PrecisionType> HistogramType;
+  typedef typename HistogramType::Pointer                    HistogramPointerType;
+  typedef typename HistogramType::SizeType                   HistogramSizeType;
+  typedef typename HistogramType::IndexType                  HistogramIndexType;
+  typedef typename HistogramType::MeasurementVectorType      MeasurementVectorType;
+  typedef typename HistogramType::MeasurementType            MeasurementType;
 
-  typedef AngularProjectionSetImageFilter< InputImageType, OutputImageType, AngleListType, PrecisionType > TransformFilterType;
+  typedef AngularProjectionSetImageFilter<InputImageType, OutputImageType, AngleListType, PrecisionType> TransformFilterType;
   typedef typename TransformFilterType::Pointer                    TransformFilterPointerType;
   typedef typename TransformFilterType::OutputImageListType        OutputImageListType;
   typedef typename TransformFilterType::OutputImageListPointerType OutputImageListPointerType;
   typedef typename TransformFilterType::OutputImageIterator        OutputImageIterator;
 
   using Superclass::SetInput;
-  void SetInput ( unsigned int i, const InputImageType * );
-  const InputImageType * GetInput( unsigned int i ) const;
+  void SetInput(unsigned int i, const InputImageType*);
+  const InputImageType* GetInput(unsigned int i) const;
 
-  void SetNumberOfDecomposition ( unsigned int nb )
+  void SetNumberOfDecomposition(unsigned int nb)
   {
-    for ( unsigned int i = 0; i < NumberOfInputImages; ++i )
+    for (unsigned int i = 0; i < NumberOfInputImages; ++i)
     {
-      m_WvltFilterList->GetNthElement(i)->SetNumberOfDecomposition( nb );
+      m_WvltFilterList->GetNthElement(i)->SetNumberOfDecomposition(nb);
     }
     this->Modified();
   }
-  unsigned int GetNumberOfDecomposition () const
+  unsigned int GetNumberOfDecomposition() const
   {
     return m_WvltFilterList->GetNthElement(0)->GetNumberOfDecomposition();
   }
 
-  void SetThresholdValue( PrecisionType th )
+  void SetThresholdValue(PrecisionType th)
   {
-    m_AngleListFilter->SetThresholdValue( th );
+    m_AngleListFilter->SetThresholdValue(th);
     this->Modified();
   }
-  PrecisionType GetThresholdValue () const
+  PrecisionType GetThresholdValue() const
   {
     return m_AngleListFilter->GetThresholdValue();
   }
@@ -143,9 +141,9 @@ public:
   /**
    * This number of end-members is estimated from number of modes in the histogram.
    */
-  unsigned int GetNumberOfComponentsRequired () const
+  unsigned int GetNumberOfComponentsRequired() const
   {
-    if ( m_NumberOfComponentsRequired == 0 )
+    if (m_NumberOfComponentsRequired == 0)
       GenerateNumberOfComponentsRequired();
     return m_NumberOfComponentsRequired;
   }
@@ -162,13 +160,16 @@ public:
 
 protected:
   SparseUnmixingImageFilter();
-  ~SparseUnmixingImageFilter() override { }
+  ~SparseUnmixingImageFilter() override
+  {
+  }
 
-  void GenerateData() override;
-  virtual void GenerateNumberOfComponentsRequired ();
+  void         GenerateData() override;
+  virtual void GenerateNumberOfComponentsRequired();
+
 private:
-  SparseUnmixingImageFilter(const Self &) = delete;
-  void operator=(const Self &) = delete;
+  SparseUnmixingImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   unsigned int         m_NumberOfComponentsRequired;
   unsigned int         m_NumberOfHistogramBins;
@@ -187,5 +188,3 @@ private:
 #endif
 
 #endif
-
-

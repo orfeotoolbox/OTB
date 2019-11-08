@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,8 +25,10 @@
 #include "itkDataObjectDecorator.h"
 #include "otbMacro.h"
 
-namespace otb {
-namespace Statistics {
+namespace otb
+{
+namespace Statistics
+{
 
 /** \class ListSampleToBalancedListSampleFilter
  *  \brief This class generate a balanced ListSample in order to have
@@ -42,20 +44,15 @@ namespace Statistics {
  *
  * \ingroup OTBStatistics
  */
-template < class TInputSampleList,
-           class TLabelSampleList,
-           class TOutputSampleList = TInputSampleList >
-class ITK_EXPORT ListSampleToBalancedListSampleFilter :
-    public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList,
-                                                         TOutputSampleList>
+template <class TInputSampleList, class TLabelSampleList, class TOutputSampleList = TInputSampleList>
+class ITK_EXPORT ListSampleToBalancedListSampleFilter : public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 {
 public:
   /** Standard class typedefs */
-  typedef ListSampleToBalancedListSampleFilter       Self;
-  typedef otb::Statistics::ListSampleToListSampleFilter
-  <TInputSampleList, TOutputSampleList>               Superclass;
-  typedef itk::SmartPointer< Self >                  Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef ListSampleToBalancedListSampleFilter Self;
+  typedef otb::Statistics::ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ListSampleToBalancedListSampleFilter, otb::Statistics::ListSampleToListSampleFilter);
@@ -76,7 +73,7 @@ public:
   typedef typename LabelSampleListType::ConstPointer          LabelSampleListConstPointer;
   typedef typename LabelSampleListType::MeasurementVectorType LabelMeasurementVectorType;
   typedef typename LabelMeasurementVectorType::ValueType      LabelValueType;
-  typedef itk::DataObjectDecorator< LabelSampleListType >     LabelSampleListObjectType;
+  typedef itk::DataObjectDecorator<LabelSampleListType>       LabelSampleListObjectType;
 
   /** OutputSampleList typedefs */
   typedef TOutputSampleList                                    OutputSampleListType;
@@ -86,22 +83,21 @@ public:
   typedef typename OutputMeasurementVectorType::ValueType      OutputValueType;
 
   /** DataObject typedef*/
-  typedef typename Superclass::DataObjectPointer               DataObjectPointer;
+  typedef typename Superclass::DataObjectPointer             DataObjectPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Filter adding noise to a ListSample */
-  typedef otb::Statistics::GaussianAdditiveNoiseSampleListFilter
-  <InputSampleListType, OutputSampleListType>                   GaussianAdditiveNoiseType;
-  typedef typename GaussianAdditiveNoiseType::Pointer          GaussianAdditiveNoisePointerType;
+  typedef otb::Statistics::GaussianAdditiveNoiseSampleListFilter<InputSampleListType, OutputSampleListType> GaussianAdditiveNoiseType;
+  typedef typename GaussianAdditiveNoiseType::Pointer GaussianAdditiveNoisePointerType;
 
   /** Get/Set the label sample list */
-  void SetInputLabel( const LabelSampleListType * label );
+  void SetInputLabel(const LabelSampleListType* label);
 
   /** Returns the label sample list */
-  const LabelSampleListType * GetInputLabel() const;
+  const LabelSampleListType* GetInputLabel() const;
 
   /** Returns the label sample list as a data object */
-  LabelSampleListType * GetOutputLabel();
+  LabelSampleListType* GetOutputLabel();
 
   /** Set/Get the mean for the white gaussian noise to generate  */
   otbSetObjectMemberMacro(AddGaussianNoiseFilter, Mean, double);
@@ -133,16 +129,18 @@ protected:
   using Superclass::MakeOutput;
 
   ListSampleToBalancedListSampleFilter();
-  ~ListSampleToBalancedListSampleFilter() override {}
+  ~ListSampleToBalancedListSampleFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   ListSampleToBalancedListSampleFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  GaussianAdditiveNoisePointerType       m_AddGaussianNoiseFilter;
-  std::vector<unsigned int>              m_MultiplicativeCoefficient;
-  unsigned int                           m_BalancingFactor;
+  GaussianAdditiveNoisePointerType m_AddGaussianNoiseFilter;
+  std::vector<unsigned int>        m_MultiplicativeCoefficient;
+  unsigned int                     m_BalancingFactor;
 
 }; // end of class ListSampleToBalancedListSampleFilter
 

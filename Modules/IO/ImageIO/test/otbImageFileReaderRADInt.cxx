@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include <iostream>
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -29,14 +27,14 @@
 int otbImageFileReaderRADInt(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  typedef int InputPixelType;
-  typedef int OutputPixelType;
+  typedef int        InputPixelType;
+  typedef int        OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;

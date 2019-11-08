@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -49,15 +49,14 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage, class TDisplacementField>
-class ITK_EXPORT StreamingWarpImageFilter
-  :  public itk::WarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
+class ITK_EXPORT StreamingWarpImageFilter : public itk::WarpImageFilter<TInputImage, TOutputImage, TDisplacementField>
 {
 public:
   /** Standard class typedefs. */
-  typedef StreamingWarpImageFilter                                            Self;
+  typedef StreamingWarpImageFilter Self;
   typedef itk::WarpImageFilter<TInputImage, TOutputImage, TDisplacementField> Superclass;
-  typedef itk::SmartPointer<Self>                                             Pointer;
-  typedef itk::SmartPointer<const Self>                                       ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -66,15 +65,15 @@ public:
   itkTypeMacro(StreamingWarpImageFilter, itk::WarpImageFilter);
 
   /** template parameters typedef */
-  typedef TInputImage                               InputImageType;
-  typedef typename  InputImageType::Pointer         InputImagePointerType;
-  typedef TOutputImage                              OutputImageType;
-  typedef typename OutputImageType::PointType       PointType;
-  typedef typename OutputImageType::IndexType       IndexType;
-  typedef typename OutputImageType::PixelType       PixelType;
-  typedef typename OutputImageType::SpacingType     SpacingType;
-  typedef typename OutputImageType::Pointer         OutputImagePointerType;
-  typedef typename OutputImageType::RegionType      OutputImageRegionType;
+  typedef TInputImage                                InputImageType;
+  typedef typename InputImageType::Pointer           InputImagePointerType;
+  typedef TOutputImage                               OutputImageType;
+  typedef typename OutputImageType::PointType        PointType;
+  typedef typename OutputImageType::IndexType        IndexType;
+  typedef typename OutputImageType::PixelType        PixelType;
+  typedef typename OutputImageType::SpacingType      SpacingType;
+  typedef typename OutputImageType::Pointer          OutputImagePointerType;
+  typedef typename OutputImageType::RegionType       OutputImageRegionType;
   typedef TDisplacementField                         DisplacementFieldType;
   typedef typename DisplacementFieldType::PixelType  DisplacementValueType;
   typedef typename DisplacementFieldType::Pointer    DisplacementFieldPointerType;
@@ -84,19 +83,21 @@ public:
   itkSetMacro(MaximumDisplacement, DisplacementValueType);
   itkGetConstReferenceMacro(MaximumDisplacement, DisplacementValueType);
 
-  const SpacingType & GetOutputSpacing() const override
+  const SpacingType& GetOutputSpacing() const override
   {
     return m_OutputSignedSpacing;
   };
 
-  void SetOutputSpacing( const SpacingType OutputSpacing ) override ;
-  void SetOutputSpacing( const double *values ) override ;
+  void SetOutputSpacing(const SpacingType OutputSpacing) override;
+  void SetOutputSpacing(const double* values) override;
 
 protected:
   /** Constructor */
   StreamingWarpImageFilter();
   /** Destructor */
-  ~StreamingWarpImageFilter() override {}
+  ~StreamingWarpImageFilter() override
+  {
+  }
   /** PrintSelf */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /**
@@ -110,15 +111,14 @@ protected:
   /**
    * Re-implement the method ThreadedGenerateData to mask area outside the deformation grid
    */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId ) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  StreamingWarpImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  StreamingWarpImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  //Because of itk positive spacing we need this member to be compliant with otb
-  //signed spacing
+  // Because of itk positive spacing we need this member to be compliant with otb
+  // signed spacing
   SpacingType m_OutputSignedSpacing;
 
   // Assessment of the maximum displacement for streaming

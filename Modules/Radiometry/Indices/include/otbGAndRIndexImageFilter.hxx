@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,21 +31,16 @@ namespace otb
 /**
  * Constructor
  */
-template <class TInputImageG, class TInputImageR,
-    class TOutputImage, class TFunction>
-GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>
-::GAndRIndexImageFilter()
+template <class TInputImageG, class TInputImageR, class TOutputImage, class TFunction>
+GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>::GAndRIndexImageFilter()
 {
 }
 
 /**
  * Connect one of the operands for pixel-wise addition
  */
-template <class TInputImageG, class TInputImageR,
-    class TOutputImage, class TFunction>
-void
-GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>
-::SetInputG(const TInputImageG * image1)
+template <class TInputImageG, class TInputImageR, class TOutputImage, class TFunction>
+void GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>::SetInputG(const TInputImageG* image1)
 {
   // Process object is not const-correct so the const casting is required.
   this->SetInput1(image1);
@@ -54,14 +49,11 @@ GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>
 /**
  * Connect one of the operands for pixel-wise addition
  */
-template <class TInputImageG, class TInputImageR,
-    class TOutputImage, class TFunction>
-void
-GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>
-::SetInputR(const TInputImageR * image2)
+template <class TInputImageG, class TInputImageR, class TOutputImage, class TFunction>
+void GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>::SetInputR(const TInputImageR* image2)
 {
   // Process object is not const-correct so the const casting is required.
-//  SetNthInput(1, const_cast<TInputImageR *>( image2 ));
+  //  SetNthInput(1, const_cast<TInputImageR *>( image2 ));
   this->SetInput2(image2);
 }
 
@@ -108,13 +100,10 @@ GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>
 }
 */
 template <class TInputImageG, class TInputImageR, class TOutputImage, class TFunction>
-void
-GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void GAndRIndexImageFilter<TInputImageG, TInputImageR, TOutputImage, TFunction>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
-
 }
 
 #endif

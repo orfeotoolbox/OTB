@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -65,16 +65,15 @@ namespace otb
   */
 
 template <class TInputVectorData, class TOutputVectorData>
-class ITK_EXPORT VectorDataProjectionFilter :
-  public otb::VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
+class ITK_EXPORT VectorDataProjectionFilter : public otb::VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData>
 {
 
 public:
   /** Standard class typedefs. */
-  typedef VectorDataProjectionFilter                                             Self;
+  typedef VectorDataProjectionFilter Self;
   typedef otb::VectorDataToVectorDataFilter<TInputVectorData, TOutputVectorData> Superclass;
-  typedef itk::SmartPointer<Self>                                                Pointer;
-  typedef itk::SmartPointer<const Self>                                          ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef TInputVectorData                        InputVectorDataType;
   typedef TOutputVectorData                       OutputVectorDataType;
@@ -82,38 +81,38 @@ public:
   typedef typename TOutputVectorData::Pointer     OutputVectorDataPointer;
 
   /** Some typedefs. */
-  typedef itk::Transform<double, 2, 2>           GenericTransformType;
+  typedef itk::Transform<double, 2, 2> GenericTransformType;
   typedef typename GenericTransformType::Pointer GenericTransformPointerType;
-//   typedef otb::CompositeTransform<GenericTransformType, GenericTransformType, double, 2, 2> InternalTransformType;
-  typedef otb::GenericRSTransform<double, 2, 2>   InternalTransformType;
+  //   typedef otb::CompositeTransform<GenericTransformType, GenericTransformType, double, 2, 2> InternalTransformType;
+  typedef otb::GenericRSTransform<double, 2, 2> InternalTransformType;
   typedef typename InternalTransformType::Pointer InternalTransformPointerType;
 
   typedef itk::Vector<double, 2> SpacingType;
   typedef itk::Point<double, 2>  OriginType;
 
-  typedef typename OutputVectorDataType::DataNodeType        OutputDataNodeType;
-  typedef typename InputVectorDataType::DataNodeType         InputDataNodeType;
+  typedef typename OutputVectorDataType::DataNodeType OutputDataNodeType;
+  typedef typename InputVectorDataType::DataNodeType  InputDataNodeType;
 
   typedef typename InputVectorDataType::DataTreeType::TreeNodeType  InputInternalTreeNodeType;
   typedef typename OutputVectorDataType::DataTreeType::TreeNodeType OutputInternalTreeNodeType;
 
-  typedef typename InputDataNodeType::PointType        InputPointType;
-  typedef typename InputDataNodeType::LineType         InputLineType;
-  typedef typename InputDataNodeType::PolygonType      InputPolygonType;
-  typedef typename InputDataNodeType::PolygonListType  InputPolygonListType;
+  typedef typename InputDataNodeType::PointType       InputPointType;
+  typedef typename InputDataNodeType::LineType        InputLineType;
+  typedef typename InputDataNodeType::PolygonType     InputPolygonType;
+  typedef typename InputDataNodeType::PolygonListType InputPolygonListType;
 
-  typedef typename InputLineType::Pointer         InputLinePointerType;
-  typedef typename InputPolygonType::Pointer      InputPolygonPointerType;
-  typedef typename InputPolygonListType::Pointer  InputPolygonListPointerType;
+  typedef typename InputLineType::Pointer        InputLinePointerType;
+  typedef typename InputPolygonType::Pointer     InputPolygonPointerType;
+  typedef typename InputPolygonListType::Pointer InputPolygonListPointerType;
 
   typedef typename OutputDataNodeType::PointType       OutputPointType;
   typedef typename OutputDataNodeType::LineType        OutputLineType;
   typedef typename OutputDataNodeType::PolygonType     OutputPolygonType;
   typedef typename OutputDataNodeType::PolygonListType OutputPolygonListType;
 
-  typedef typename OutputLineType::Pointer         OutputLinePointerType;
-  typedef typename OutputPolygonType::Pointer      OutputPolygonPointerType;
-  typedef typename OutputPolygonListType::Pointer  OutputPolygonListPointerType;
+  typedef typename OutputLineType::Pointer        OutputLinePointerType;
+  typedef typename OutputPolygonType::Pointer     OutputPolygonPointerType;
+  typedef typename OutputPolygonListType::Pointer OutputPolygonListPointerType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -176,7 +175,9 @@ public:
 
 protected:
   VectorDataProjectionFilter();
-  ~VectorDataProjectionFilter() override {}
+  ~VectorDataProjectionFilter() override
+  {
+  }
 
   OutputPointType ProcessPoint(InputPointType point) const override;
   OutputLinePointerType ProcessLine(InputLinePointerType line) const override;
@@ -189,8 +190,8 @@ protected:
   void GenerateData(void) override;
 
 private:
-  VectorDataProjectionFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  VectorDataProjectionFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InternalTransformPointerType m_Transform;
   std::string                  m_InputProjectionRef;
@@ -202,7 +203,6 @@ private:
   OriginType  m_InputOrigin;
   SpacingType m_OutputSpacing;
   OriginType  m_OutputOrigin;
-
 };
 
 } // end namespace otb

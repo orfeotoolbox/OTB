@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,9 +31,8 @@
 namespace otb
 {
 
-template<class TInputImage>
-PersistentMinMaxImageFilter<TInputImage>
-::PersistentMinMaxImageFilter()
+template <class TInputImage>
+PersistentMinMaxImageFilter<TInputImage>::PersistentMinMaxImageFilter()
 {
   // TODO : SetNumberOfRequiredOutputs
 
@@ -43,9 +42,9 @@ PersistentMinMaxImageFilter<TInputImage>
   // allocate the data objects for the outputs which are
   // just decorators around pixel & index types
   for (int i = 1; i < 5; ++i)
-    {
+  {
     this->itk::ProcessObject::SetNthOutput(i, this->MakeOutput(i));
-    }
+  }
 
   this->GetMinimumOutput()->Set(itk::NumericTraits<PixelType>::max());
   this->GetMaximumOutput()->Set(itk::NumericTraits<PixelType>::NonpositiveMin());
@@ -53,129 +52,105 @@ PersistentMinMaxImageFilter<TInputImage>
   this->Reset();
 }
 
-template<class TInputImage>
-typename itk::DataObject::Pointer
-PersistentMinMaxImageFilter<TInputImage>
-::MakeOutput(DataObjectPointerArraySizeType output)
+template <class TInputImage>
+typename itk::DataObject::Pointer PersistentMinMaxImageFilter<TInputImage>::MakeOutput(DataObjectPointerArraySizeType output)
 {
   itk::DataObject::Pointer ret;
   switch (output)
-    {
-    case 0:
-      ret = static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-      break;
-    case 1:
-    case 2:
-      ret = static_cast<itk::DataObject*>(PixelObjectType::New().GetPointer());
-      break;
-    case 3:
-    case 4:
-      ret = static_cast<itk::DataObject*>(IndexObjectType::New().GetPointer());
-      break;
-    }
+  {
+  case 0:
+    ret = static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+    break;
+  case 1:
+  case 2:
+    ret = static_cast<itk::DataObject*>(PixelObjectType::New().GetPointer());
+    break;
+  case 3:
+  case 4:
+    ret = static_cast<itk::DataObject*>(IndexObjectType::New().GetPointer());
+    break;
+  }
   return ret;
 }
 
-template<class TInputImage>
-typename PersistentMinMaxImageFilter<TInputImage>::PixelObjectType*
-PersistentMinMaxImageFilter<TInputImage>
-::GetMinimumOutput()
+template <class TInputImage>
+typename PersistentMinMaxImageFilter<TInputImage>::PixelObjectType* PersistentMinMaxImageFilter<TInputImage>::GetMinimumOutput()
 {
   return static_cast<PixelObjectType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
-template<class TInputImage>
-const typename PersistentMinMaxImageFilter<TInputImage>::PixelObjectType*
-PersistentMinMaxImageFilter<TInputImage>
-::GetMinimumOutput() const
+template <class TInputImage>
+const typename PersistentMinMaxImageFilter<TInputImage>::PixelObjectType* PersistentMinMaxImageFilter<TInputImage>::GetMinimumOutput() const
 {
   return static_cast<const PixelObjectType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
-template<class TInputImage>
-typename PersistentMinMaxImageFilter<TInputImage>::PixelObjectType*
-PersistentMinMaxImageFilter<TInputImage>
-::GetMaximumOutput()
+template <class TInputImage>
+typename PersistentMinMaxImageFilter<TInputImage>::PixelObjectType* PersistentMinMaxImageFilter<TInputImage>::GetMaximumOutput()
 {
   return static_cast<PixelObjectType*>(this->itk::ProcessObject::GetOutput(2));
 }
 
-template<class TInputImage>
-const typename PersistentMinMaxImageFilter<TInputImage>::PixelObjectType*
-PersistentMinMaxImageFilter<TInputImage>
-::GetMaximumOutput() const
+template <class TInputImage>
+const typename PersistentMinMaxImageFilter<TInputImage>::PixelObjectType* PersistentMinMaxImageFilter<TInputImage>::GetMaximumOutput() const
 {
   return static_cast<const PixelObjectType*>(this->itk::ProcessObject::GetOutput(2));
 }
 
 
-template<class TInputImage>
-typename PersistentMinMaxImageFilter<TInputImage>::IndexObjectType*
-PersistentMinMaxImageFilter<TInputImage>
-::GetMinimumIndexOutput()
+template <class TInputImage>
+typename PersistentMinMaxImageFilter<TInputImage>::IndexObjectType* PersistentMinMaxImageFilter<TInputImage>::GetMinimumIndexOutput()
 {
   return static_cast<IndexObjectType*>(this->itk::ProcessObject::GetOutput(3));
 }
 
-template<class TInputImage>
-const typename PersistentMinMaxImageFilter<TInputImage>::IndexObjectType*
-PersistentMinMaxImageFilter<TInputImage>
-::GetMinimumIndexOutput() const
+template <class TInputImage>
+const typename PersistentMinMaxImageFilter<TInputImage>::IndexObjectType* PersistentMinMaxImageFilter<TInputImage>::GetMinimumIndexOutput() const
 {
   return static_cast<const IndexObjectType*>(this->itk::ProcessObject::GetOutput(3));
 }
 
-template<class TInputImage>
-typename PersistentMinMaxImageFilter<TInputImage>::IndexObjectType*
-PersistentMinMaxImageFilter<TInputImage>
-::GetMaximumIndexOutput()
+template <class TInputImage>
+typename PersistentMinMaxImageFilter<TInputImage>::IndexObjectType* PersistentMinMaxImageFilter<TInputImage>::GetMaximumIndexOutput()
 {
   return static_cast<IndexObjectType*>(this->itk::ProcessObject::GetOutput(4));
 }
 
-template<class TInputImage>
-const typename PersistentMinMaxImageFilter<TInputImage>::IndexObjectType*
-PersistentMinMaxImageFilter<TInputImage>
-::GetMaximumIndexOutput() const
+template <class TInputImage>
+const typename PersistentMinMaxImageFilter<TInputImage>::IndexObjectType* PersistentMinMaxImageFilter<TInputImage>::GetMaximumIndexOutput() const
 {
   return static_cast<const IndexObjectType*>(this->itk::ProcessObject::GetOutput(4));
 }
 
-template<class TInputImage>
-void
-PersistentMinMaxImageFilter<TInputImage>
-::GenerateOutputInformation()
+template <class TInputImage>
+void PersistentMinMaxImageFilter<TInputImage>::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
   if (this->GetInput())
-    {
+  {
     this->GetOutput()->CopyInformation(this->GetInput());
     this->GetOutput()->SetLargestPossibleRegion(this->GetInput()->GetLargestPossibleRegion());
 
     if (this->GetOutput()->GetRequestedRegion().GetNumberOfPixels() == 0)
-      {
+    {
       this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
-      }
     }
+  }
 }
-template<class TInputImage>
-void
-PersistentMinMaxImageFilter<TInputImage>
-::AllocateOutputs()
+template <class TInputImage>
+void PersistentMinMaxImageFilter<TInputImage>::AllocateOutputs()
 {
   // This is commented to prevent the streaming of the whole image for the first stream strip
   // It shall not cause any problem because the output image of this filter is not intended to be used.
-  //InputImagePointer image = const_cast< TInputImage * >( this->GetInput() );
-  //this->GraftOutput( image );
+  // InputImagePointer image = const_cast< TInputImage * >( this->GetInput() );
+  // this->GraftOutput( image );
   // Nothing that needs to be allocated for the remaining outputs
 }
 
-template<class TInputImage>
-void
-PersistentMinMaxImageFilter<TInputImage>
-::Synthetize()
+template <class TInputImage>
+void PersistentMinMaxImageFilter<TInputImage>::Synthetize()
 {
-  int      i;
+  int i;
   int numberOfThreads = this->GetNumberOfThreads();
 
   PixelType minimum = itk::NumericTraits<PixelType>::max();
@@ -184,18 +159,18 @@ PersistentMinMaxImageFilter<TInputImage>
   IndexType maximumIdx;
 
   for (i = 0; i < numberOfThreads; ++i)
-    {
+  {
     if (m_ThreadMin[i] < minimum)
-      {
-      minimum = m_ThreadMin[i];
+    {
+      minimum    = m_ThreadMin[i];
       minimumIdx = m_ThreadMinIndex[i];
-      }
-    if (m_ThreadMax[i] > maximum)
-      {
-      maximum = m_ThreadMax[i];
-      maximumIdx = m_ThreadMaxIndex[i];
-      }
     }
+    if (m_ThreadMax[i] > maximum)
+    {
+      maximum    = m_ThreadMax[i];
+      maximumIdx = m_ThreadMaxIndex[i];
+    }
+  }
 
   // Set the outputs
   this->GetMinimumOutput()->Set(minimum);
@@ -204,10 +179,8 @@ PersistentMinMaxImageFilter<TInputImage>
   this->GetMaximumIndexOutput()->Set(maximumIdx);
 }
 
-template<class TInputImage>
-void
-PersistentMinMaxImageFilter<TInputImage>
-::Reset()
+template <class TInputImage>
+void PersistentMinMaxImageFilter<TInputImage>::Reset()
 {
   int numberOfThreads = this->GetNumberOfThreads();
 
@@ -224,48 +197,41 @@ PersistentMinMaxImageFilter<TInputImage>
   std::fill(m_ThreadMaxIndex.begin(), m_ThreadMaxIndex.end(), zeroIdx);
 }
 
-template<class TInputImage>
-void
-PersistentMinMaxImageFilter<TInputImage>
-::ThreadedGenerateData(const RegionType& outputRegionForThread,
-                       itk::ThreadIdType threadId)
+template <class TInputImage>
+void PersistentMinMaxImageFilter<TInputImage>::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-  InputImagePointer inputPtr =  const_cast<TInputImage *>(this->GetInput(0));
+  InputImagePointer                          inputPtr = const_cast<TInputImage*>(this->GetInput(0));
   itk::ImageRegionConstIterator<TInputImage> it(inputPtr, outputRegionForThread);
   it.GoToBegin();
   // do the work
   while (!it.IsAtEnd())
-    {
+  {
     PixelType value = it.Get();
     if (value < m_ThreadMin[threadId])
-      {
-      m_ThreadMin[threadId] = value;
+    {
+      m_ThreadMin[threadId]      = value;
       m_ThreadMinIndex[threadId] = it.GetIndex();
-      }
+    }
     if (value > m_ThreadMax[threadId])
-      {
-      m_ThreadMax[threadId] = value;
+    {
+      m_ThreadMax[threadId]      = value;
       m_ThreadMaxIndex[threadId] = it.GetIndex();
-      }
+    }
     ++it;
     progress.CompletedPixel();
-    }
+  }
 }
 
 template <class TImage>
-void
-PersistentMinMaxImageFilter<TImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void PersistentMinMaxImageFilter<TImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Minimum: "
-     << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(this->GetMinimum()) << std::endl;
-  os << indent << "Maximum: "
-     << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(this->GetMaximum()) << std::endl;
+  os << indent << "Minimum: " << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(this->GetMinimum()) << std::endl;
+  os << indent << "Maximum: " << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(this->GetMaximum()) << std::endl;
   os << indent << "Minimum Index: " << this->GetMinimumIndex() << std::endl;
   os << indent << "Maximum Index: " << this->GetMaximumIndex() << std::endl;
 }

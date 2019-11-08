@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,32 +31,25 @@ namespace otb
  * Constructor
  */
 template <class TImage, class TSourceImage>
-ImportGeoInformationImageFilter<TImage, TSourceImage>
-::ImportGeoInformationImageFilter()
+ImportGeoInformationImageFilter<TImage, TSourceImage>::ImportGeoInformationImageFilter()
 {
   this->InPlaceOn();
   this->SetNumberOfRequiredInputs(2);
 }
 
 template <class TImage, class TSourceImage>
-void
-ImportGeoInformationImageFilter<TImage, TSourceImage>
-::SetSource(const TSourceImage * source)
+void ImportGeoInformationImageFilter<TImage, TSourceImage>::SetSource(const TSourceImage* source)
 {
-  this->SetNthInput(1, const_cast<TSourceImage *>(source));
+  this->SetNthInput(1, const_cast<TSourceImage*>(source));
 }
 template <class TImage, class TSourceImage>
-const TSourceImage *
-ImportGeoInformationImageFilter<TImage, TSourceImage>
-::GetSource()
+const TSourceImage* ImportGeoInformationImageFilter<TImage, TSourceImage>::GetSource()
 {
-  return static_cast<const TSourceImage *>(this->itk::ProcessObject::GetInput(1));
+  return static_cast<const TSourceImage*>(this->itk::ProcessObject::GetInput(1));
 }
 
 template <class TImage, class TSourceImage>
-void
-ImportGeoInformationImageFilter<TImage, TSourceImage>
-::GenerateInputRequestedRegion(void)
+void ImportGeoInformationImageFilter<TImage, TSourceImage>::GenerateInputRequestedRegion(void)
 {
   Superclass::GenerateInputRequestedRegion();
 
@@ -69,19 +62,17 @@ ImportGeoInformationImageFilter<TImage, TSourceImage>
   region.SetSize(size);
   region.SetIndex(index);
 
-  SourceImageType * sourcePtr = const_cast<SourceImageType *>(this->GetSource());
+  SourceImageType* sourcePtr = const_cast<SourceImageType*>(this->GetSource());
   sourcePtr->SetRequestedRegion(region);
 }
 
 template <class TImage, class TSourceImage>
-void
-ImportGeoInformationImageFilter<TImage, TSourceImage>
-::GenerateOutputInformation(void)
+void ImportGeoInformationImageFilter<TImage, TSourceImage>::GenerateOutputInformation(void)
 {
   Superclass::GenerateOutputInformation();
   // Get output and source pointer
-  ImagePointerType  outputPtr = this->GetOutput();
-  SourceImageType * sourcePtr = const_cast<SourceImageType *>(this->GetSource());
+  ImagePointerType outputPtr = this->GetOutput();
+  SourceImageType* sourcePtr = const_cast<SourceImageType*>(this->GetSource());
   // Import metdata
   outputPtr->CopyInformation(sourcePtr);
 
@@ -109,9 +100,7 @@ ImportGeoInformationImageFilter<TImage, TSourceImage>
  * PrintSelf Method
  */
 template <class TImage, class TSourceImage>
-void
-ImportGeoInformationImageFilter<TImage, TSourceImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ImportGeoInformationImageFilter<TImage, TSourceImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

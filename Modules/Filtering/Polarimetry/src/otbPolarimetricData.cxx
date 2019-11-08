@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,95 +25,88 @@ namespace otb
 /**
  * Constructor
  */
-PolarimetricData
-::PolarimetricData()
+PolarimetricData::PolarimetricData()
 {
   SetArchitectureType(UNKNOWN_ARCHITECTURE);
 }
 
-void
-PolarimetricData
-::DetermineArchitecture(bool *IsPresent)
+void PolarimetricData::DetermineArchitecture(bool* IsPresent)
 {
 
   // With all the channels
   if (IsPresent[0] && IsPresent[1] && IsPresent[2] && IsPresent[3])
-    {
+  {
     SetArchitectureType(HH_HV_VH_VV);
-    }
+  }
   else
-  // With 3 channels : HH HV VV
-  if (IsPresent[0] && IsPresent[1] && !IsPresent[2] && IsPresent[3])
-    {
+      // With 3 channels : HH HV VV
+      if (IsPresent[0] && IsPresent[1] && !IsPresent[2] && IsPresent[3])
+  {
     SetArchitectureType(HH_HV_VV);
-    }
+  }
   else
-  // With 3 channels : HH VH VV
-  if (IsPresent[0] && !IsPresent[1] && IsPresent[2] && IsPresent[3])
-    {
+      // With 3 channels : HH VH VV
+      if (IsPresent[0] && !IsPresent[1] && IsPresent[2] && IsPresent[3])
+  {
     SetArchitectureType(HH_VH_VV);
-    }
+  }
   else
-  // Only HH and HV are present
-  if (IsPresent[0] && IsPresent[1] && !IsPresent[2] && !IsPresent[3])
-    {
+      // Only HH and HV are present
+      if (IsPresent[0] && IsPresent[1] && !IsPresent[2] && !IsPresent[3])
+  {
     SetArchitectureType(HH_HV);
-    }
+  }
   else
-  // Only VH and VV are present
-  if (!IsPresent[0] && !IsPresent[1] && IsPresent[2] && IsPresent[3])
-    {
+      // Only VH and VV are present
+      if (!IsPresent[0] && !IsPresent[1] && IsPresent[2] && IsPresent[3])
+  {
     SetArchitectureType(VH_VV);
-    }
+  }
   else
-  // Only HH and VV are present
-  if (IsPresent[0] && !IsPresent[1] && !IsPresent[2] && IsPresent[3])
-    {
+      // Only HH and VV are present
+      if (IsPresent[0] && !IsPresent[1] && !IsPresent[2] && IsPresent[3])
+  {
     SetArchitectureType(HH_VV);
-    }
+  }
   else
-    {
+  {
     SetArchitectureType(UNKNOWN_ARCHITECTURE);
-    }
+  }
 }
 
-void
-PolarimetricData
-::DetermineArchitecture(int NumberOfImages, bool EmissionH, bool EmissionV)
+void PolarimetricData::DetermineArchitecture(int NumberOfImages, bool EmissionH, bool EmissionV)
 {
 
   switch (NumberOfImages)
+  {
+  case 4:
+    SetArchitectureType(HH_HV_VH_VV);
+    break;
+
+  case 3:
+    SetArchitectureType(HH_HV_VV);
+    break;
+
+  case 2:
+
+    if (EmissionH && !EmissionV)
     {
-    case 4:
-      SetArchitectureType(HH_HV_VH_VV);
-      break;
-
-    case 3:
-      SetArchitectureType(HH_HV_VV);
-      break;
-
-    case 2:
-
-      if (EmissionH && !EmissionV)
-        {
-        SetArchitectureType(HH_HV);
-        }
-      else if (!EmissionH && EmissionV)
-        {
-        SetArchitectureType(VH_VV);
-        }
-      break;
-
-    default:
-      itkExceptionMacro("Unknown architecture !");
-      return;
+      SetArchitectureType(HH_HV);
     }
+    else if (!EmissionH && EmissionV)
+    {
+      SetArchitectureType(VH_VV);
+    }
+    break;
+
+  default:
+    itkExceptionMacro("Unknown architecture !");
+    return;
+  }
 }
 
 /**PrintSelf method */
-void
-PolarimetricData
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void PolarimetricData::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   os << indent << "ArchitectureType " << m_ArchitectureType << " : " << std::endl;
 }

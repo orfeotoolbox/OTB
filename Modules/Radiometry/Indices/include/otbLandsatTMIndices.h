@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,8 +22,8 @@
 #define otbLandsatTMIndices_h
 
 #include "otbMath.h"
-#include "itkVariableLengthVector.h"
 #include "otbBandName.h"
+#include "itkVariableLengthVector.h"
 #include "otbFuzzyVariable.h"
 #include <vector>
 #include <algorithm>
@@ -39,11 +39,24 @@ namespace LandsatTM
 {
 
 /// Landsat 5 or 7
-enum SATType {L5, L7};
+enum SATType
+{
+  L5,
+  L7
+};
 /// Thermal band in Kelvin or Celsius
-enum DegreeType {Kelvin, HundredsKelvin, Celsius};
+enum DegreeType
+{
+  Kelvin,
+  HundredsKelvin,
+  Celsius
+};
 /// Reflectances in thousands or in (0-1)
-enum ReflectanceType {Thousands, Normalized};
+enum ReflectanceType
+{
+  Thousands,
+  Normalized
+};
 /**
    * \class LandsatTMIndexBase
    * \brief Base class for Landsat-TM indices
@@ -63,94 +76,110 @@ enum ReflectanceType {Thousands, Normalized};
  *
  * \ingroup OTBIndices
  */
-template<class TInput, class TOutput>
+template <class TInput, class TOutput>
 class LandsatTMIndexBase
 {
 public:
-
-  //operators !=
-  bool operator !=(const LandsatTMIndexBase&) const
+  // operators !=
+  bool operator!=(const LandsatTMIndexBase&) const
   {
     return false;
   }
-  //operator ==
-  bool operator ==(const LandsatTMIndexBase& other) const
+  // operator ==
+  bool operator==(const LandsatTMIndexBase& other) const
   {
     return !(*this != other);
   }
 
   /// Constructor
-  LandsatTMIndexBase() :  m_EpsilonToBeConsideredAsZero(0.0000001), m_TM1(0), m_TM2(1), m_TM3(2), m_TM4(3), m_TM5(4), m_TM60(5), m_TM61(5), m_TM62(6), m_TM7(7), m_SAT(L7), m_Degree(Celsius), m_Reflectance(Normalized) {}
+  LandsatTMIndexBase()
+    : m_EpsilonToBeConsideredAsZero(0.0000001),
+      m_TM1(0),
+      m_TM2(1),
+      m_TM3(2),
+      m_TM4(3),
+      m_TM5(4),
+      m_TM60(5),
+      m_TM61(5),
+      m_TM62(6),
+      m_TM7(7),
+      m_SAT(L7),
+      m_Degree(Celsius),
+      m_Reflectance(Normalized)
+  {
+  }
   /// Desctructor
-  virtual ~LandsatTMIndexBase() {}
+  virtual ~LandsatTMIndexBase()
+  {
+  }
 
   /** Set index, generic method */
   void SetIndex(BandName::LandsatTMBandNames band, unsigned int channel)
   {
-    switch( band )
-      {
-      case BandName::TM1:
-        m_TM1 = channel;
-        break;
-      case BandName::TM2:
-        m_TM2 = channel;
-        break;
-      case BandName::TM3:
-        m_TM3 = channel;
-        break;
-      case BandName::TM4:
-        m_TM4 = channel;
-        break;
-      case BandName::TM5:
-        m_TM5 = channel;
-        break;
-      case BandName::TM60:
-        m_TM60 = channel;
-        break;
-      case BandName::TM61:
-        m_TM61 = channel;
-        break;
-      case BandName::TM62:
-        m_TM62 = channel;
-        break;
-      case BandName::TM7:
-        m_TM7 = channel;
-        break;
-      }
+    switch (band)
+    {
+    case BandName::TM1:
+      m_TM1 = channel;
+      break;
+    case BandName::TM2:
+      m_TM2 = channel;
+      break;
+    case BandName::TM3:
+      m_TM3 = channel;
+      break;
+    case BandName::TM4:
+      m_TM4 = channel;
+      break;
+    case BandName::TM5:
+      m_TM5 = channel;
+      break;
+    case BandName::TM60:
+      m_TM60 = channel;
+      break;
+    case BandName::TM61:
+      m_TM61 = channel;
+      break;
+    case BandName::TM62:
+      m_TM62 = channel;
+      break;
+    case BandName::TM7:
+      m_TM7 = channel;
+      break;
+    }
   }
   /** Get index, generic method */
   unsigned int GetIndex(BandName::LandsatTMBandNames band) const
   {
-    switch( band )
-      {
-      case BandName::TM1:
-        return m_TM1;
-        break;
-      case BandName::TM2:
-        return m_TM2;
-        break;
-      case BandName::TM3:
-        return m_TM3;
-        break;
-      case BandName::TM4:
-        return m_TM4;
-        break;
-      case BandName::TM5:
-        return m_TM5;
-        break;
-      case BandName::TM60:
-        return m_TM60;
-        break;
-      case BandName::TM61:
-        return m_TM61;
-        break;
-      case BandName::TM62:
-        return m_TM62;
-        break;
-      case BandName::TM7:
-        return m_TM7;
-        break;
-      }
+    switch (band)
+    {
+    case BandName::TM1:
+      return m_TM1;
+      break;
+    case BandName::TM2:
+      return m_TM2;
+      break;
+    case BandName::TM3:
+      return m_TM3;
+      break;
+    case BandName::TM4:
+      return m_TM4;
+      break;
+    case BandName::TM5:
+      return m_TM5;
+      break;
+    case BandName::TM60:
+      return m_TM60;
+      break;
+    case BandName::TM61:
+      return m_TM61;
+      break;
+    case BandName::TM62:
+      return m_TM62;
+      break;
+    case BandName::TM7:
+      return m_TM7;
+      break;
+    }
     return m_TM1;
   }
 
@@ -204,29 +233,29 @@ public:
 
     this->m_SAT = sat;
 
-    if( sat == L5 )
-      {
-      m_TM1 = 0;
-      m_TM2 = 1;
-      m_TM3 = 2;
-      m_TM4 = 3;
-      m_TM5 = 4;
+    if (sat == L5)
+    {
+      m_TM1  = 0;
+      m_TM2  = 1;
+      m_TM3  = 2;
+      m_TM4  = 3;
+      m_TM5  = 4;
       m_TM60 = 5;
-      m_TM7 = 6;
-      m_SAT = L5;
-      }
+      m_TM7  = 6;
+      m_SAT  = L5;
+    }
     else
-      {
-      m_TM1 = 0;
-      m_TM2 = 1;
-      m_TM3 = 2;
-      m_TM4 = 3;
-      m_TM5 = 4;
+    {
+      m_TM1  = 0;
+      m_TM2  = 1;
+      m_TM3  = 2;
+      m_TM4  = 3;
+      m_TM5  = 4;
       m_TM61 = 5;
       m_TM62 = 6;
-      m_TM7 = 7;
-      m_SAT = L7;
-      }
+      m_TM7  = 7;
+      m_SAT  = L7;
+    }
   }
 
   SATType GetSAT() const
@@ -265,41 +294,40 @@ protected:
   TInput PrepareValues(const TInput& inputPixel)
   {
 
-    TInput newPix( inputPixel );
-    if( this->m_Degree == Kelvin )
+    TInput newPix(inputPixel);
+    if (this->m_Degree == Kelvin)
+    {
+      if (this->m_SAT == L5)
       {
-      if(this->m_SAT == L5)
-        {
-        newPix[this->m_TM60] = newPix[this->m_TM60]-273.15;
-        }
+        newPix[this->m_TM60] = newPix[this->m_TM60] - 273.15;
+      }
       else
-        {
-        newPix[this->m_TM61] = newPix[this->m_TM61]-273.15;
-        newPix[this->m_TM62] = newPix[this->m_TM62]-273.15;
-        }
-      }
-    else
-      if( this->m_Degree == HundredsKelvin )
       {
-            if(this->m_SAT == L5)
-        {
-        newPix[this->m_TM60] = newPix[this->m_TM60]/100.-273.15;
-        }
+        newPix[this->m_TM61] = newPix[this->m_TM61] - 273.15;
+        newPix[this->m_TM62] = newPix[this->m_TM62] - 273.15;
+      }
+    }
+    else if (this->m_Degree == HundredsKelvin)
+    {
+      if (this->m_SAT == L5)
+      {
+        newPix[this->m_TM60] = newPix[this->m_TM60] / 100. - 273.15;
+      }
       else
-        {
-        newPix[this->m_TM61] = newPix[this->m_TM61]/100.-273.15;
-        newPix[this->m_TM62] = newPix[this->m_TM62]/100.-273.15;
-        }
-      }
-    if( this->m_Reflectance == Thousands )
       {
-      newPix[this->m_TM1] = newPix[this->m_TM1]/1000.;
-      newPix[this->m_TM2] = newPix[this->m_TM2]/1000.;
-      newPix[this->m_TM3] = newPix[this->m_TM3]/1000.;
-      newPix[this->m_TM4] = newPix[this->m_TM4]/1000.;
-      newPix[this->m_TM5] = newPix[this->m_TM5]/1000.;
-      newPix[this->m_TM7] = newPix[this->m_TM7]/1000.;
+        newPix[this->m_TM61] = newPix[this->m_TM61] / 100. - 273.15;
+        newPix[this->m_TM62] = newPix[this->m_TM62] / 100. - 273.15;
       }
+    }
+    if (this->m_Reflectance == Thousands)
+    {
+      newPix[this->m_TM1] = newPix[this->m_TM1] / 1000.;
+      newPix[this->m_TM2] = newPix[this->m_TM2] / 1000.;
+      newPix[this->m_TM3] = newPix[this->m_TM3] / 1000.;
+      newPix[this->m_TM4] = newPix[this->m_TM4] / 1000.;
+      newPix[this->m_TM5] = newPix[this->m_TM5] / 1000.;
+      newPix[this->m_TM7] = newPix[this->m_TM7] / 1000.;
+    }
 
     return newPix;
   }
@@ -317,10 +345,9 @@ protected:
   unsigned int m_TM62;
   unsigned int m_TM7;
 
-  SATType m_SAT;
-  DegreeType m_Degree;
+  SATType         m_SAT;
+  DegreeType      m_Degree;
   ReflectanceType m_Reflectance;
-
 };
 
 
@@ -336,17 +363,18 @@ template <class TInput, class TOutput>
 class LandsatTMIndex : public LandsatTMIndexBase<TInput, TOutput>
 {
 public:
-
   // Operator performing the work
-  inline TOutput operator ()(const TInput& inputPixel) const;
+  inline TOutput operator()(const TInput& inputPixel) const;
 
   /** Return the index name */
   virtual std::string GetName() const = 0;
 
-  LandsatTMIndex() {}
-  ~LandsatTMIndex() override {}
-
-
+  LandsatTMIndex()
+  {
+  }
+  ~LandsatTMIndex() override
+  {
+  }
 };
 
 /** \class Bright
@@ -376,18 +404,22 @@ public:
     return "Bright";
   }
 
-  Bright() {}
-  ~Bright() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  Bright()
   {
-
-    TInput newPixel(this->PrepareValues( inputPixel ));
-    double result = (newPixel[this->m_TM1]+newPixel[this->m_TM2]+2*newPixel[this->m_TM3]+2*newPixel[this->m_TM4]+newPixel[this->m_TM5]+newPixel[this->m_TM7])/8.0;
-    return static_cast<TOutput>(result);
+  }
+  ~Bright() override
+  {
   }
 
+  inline TOutput operator()(const TInput& inputPixel)
+  {
 
+    TInput newPixel(this->PrepareValues(inputPixel));
+    double result = (newPixel[this->m_TM1] + newPixel[this->m_TM2] + 2 * newPixel[this->m_TM3] + 2 * newPixel[this->m_TM4] + newPixel[this->m_TM5] +
+                     newPixel[this->m_TM7]) /
+                    8.0;
+    return static_cast<TOutput>(result);
+  }
 };
 
 /** \class Vis
@@ -417,17 +449,19 @@ public:
     return "Vis";
   }
 
-  Vis() {}
-  ~Vis() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  Vis()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
-    double result = (newPixel[this->m_TM1]+newPixel[this->m_TM2]+newPixel[this->m_TM3])/3.0;
-    return static_cast<TOutput>(result);
+  }
+  ~Vis() override
+  {
   }
 
-
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
+    double result = (newPixel[this->m_TM1] + newPixel[this->m_TM2] + newPixel[this->m_TM3]) / 3.0;
+    return static_cast<TOutput>(result);
+  }
 };
 
 
@@ -450,17 +484,19 @@ public:
     return "NIR";
   }
 
-  NIR() {}
-  ~NIR() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  NIR()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
+  }
+  ~NIR() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
     double result = newPixel[this->m_TM4];
     return static_cast<TOutput>(result);
   }
-
-
 };
 
 /** \class MIR1
@@ -482,17 +518,19 @@ public:
     return "MIR1";
   }
 
-  MIR1() {}
-  ~MIR1() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  MIR1()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
+  }
+  ~MIR1() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
     double result = newPixel[this->m_TM5];
     return static_cast<TOutput>(result);
   }
-
-
 };
 
 /** \class MIR2
@@ -514,17 +552,19 @@ public:
     return "MIR2";
   }
 
-  MIR2() {}
-  ~MIR2() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  MIR2()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
+  }
+  ~MIR2() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
     double result = newPixel[this->m_TM7];
     return static_cast<TOutput>(result);
   }
-
-
 };
 
 /** \class TIR
@@ -546,21 +586,23 @@ public:
     return "TIR";
   }
 
-  TIR() {}
-  ~TIR() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  TIR()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
+  }
+  ~TIR() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
     double result = newPixel[this->m_TM62];
 
-    if( this->m_SAT == L5 )
+    if (this->m_SAT == L5)
       result = newPixel[this->m_TM60];
 
     return static_cast<TOutput>(result);
   }
-
-
 };
 
 /** \class MIRTIR
@@ -592,24 +634,26 @@ public:
     return "MIRTIR";
   }
 
-  MIRTIR() {}
-  ~MIRTIR() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  MIRTIR()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
-    double tir = newPixel[this->m_TM62];
+  }
+  ~MIRTIR() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
+    double tir  = newPixel[this->m_TM62];
     double mir1 = newPixel[this->m_TM5];
 
-    if( this->m_SAT == L5 )
+    if (this->m_SAT == L5)
       tir = newPixel[this->m_TM60];
 
-    double result = 255*(1 - mir1)*(tir+100)/100.;
+    double result = 255 * (1 - mir1) * (tir + 100) / 100.;
 
     return static_cast<TOutput>(result);
   }
-
-
 };
 
 /** \class NDVI
@@ -632,19 +676,20 @@ public:
     return "NDVI";
   }
 
-  NDVI() {}
-  ~NDVI() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  NDVI()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
-    double result = (newPixel[this->m_TM4] - newPixel[this->m_TM3])/
-      (newPixel[this->m_TM4] + newPixel[this->m_TM3] + this->m_EpsilonToBeConsideredAsZero);
+  }
+  ~NDVI() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
+    double result = (newPixel[this->m_TM4] - newPixel[this->m_TM3]) / (newPixel[this->m_TM4] + newPixel[this->m_TM3] + this->m_EpsilonToBeConsideredAsZero);
 
     return static_cast<TOutput>(result);
   }
-
-
 };
 
 /** \class NDBSI
@@ -679,19 +724,20 @@ public:
     return "NDBSI";
   }
 
-  NDBSI() {}
-  ~NDBSI() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  NDBSI()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
-    double result = (newPixel[this->m_TM5] - newPixel[this->m_TM4])/
-      (newPixel[this->m_TM5] + newPixel[this->m_TM4] + this->m_EpsilonToBeConsideredAsZero);
+  }
+  ~NDBSI() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
+    double result = (newPixel[this->m_TM5] - newPixel[this->m_TM4]) / (newPixel[this->m_TM5] + newPixel[this->m_TM4] + this->m_EpsilonToBeConsideredAsZero);
 
     return static_cast<TOutput>(result);
   }
-
-
 };
 
 /** \class BIO
@@ -722,21 +768,21 @@ public:
     return "BIO";
   }
 
-  BIO() {}
-  ~BIO() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  BIO()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
-    double result = ((newPixel[this->m_TM5] + newPixel[this->m_TM3])
-                     - (newPixel[this->m_TM4] + newPixel[this->m_TM1]))
-      /((newPixel[this->m_TM5] + newPixel[this->m_TM3])
-        + (newPixel[this->m_TM4] + newPixel[this->m_TM1]));
+  }
+  ~BIO() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
+    double result = ((newPixel[this->m_TM5] + newPixel[this->m_TM3]) - (newPixel[this->m_TM4] + newPixel[this->m_TM1])) /
+                    ((newPixel[this->m_TM5] + newPixel[this->m_TM3]) + (newPixel[this->m_TM4] + newPixel[this->m_TM1]));
 
     return static_cast<TOutput>(result);
   }
-
-
 };
 
 
@@ -768,19 +814,20 @@ public:
     return "NDSI";
   }
 
-  NDSI() {}
-  ~NDSI() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  NDSI()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
-    double result = (newPixel[this->m_TM2] - newPixel[this->m_TM5])
-      /(newPixel[this->m_TM2] + newPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
+  }
+  ~NDSI() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
+    double result = (newPixel[this->m_TM2] - newPixel[this->m_TM5]) / (newPixel[this->m_TM2] + newPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
 
     return static_cast<TOutput>(result);
   }
-
-
 };
 
 /** \class NDSIVis
@@ -825,19 +872,21 @@ public:
     return "NDSIVis";
   }
 
-  NDSIVis() {}
-  ~NDSIVis() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  NDSIVis()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
-    double vis = (newPixel[this->m_TM1]+newPixel[this->m_TM2]+newPixel[this->m_TM3])/3.0;
-    double result = (vis - newPixel[this->m_TM5])/(vis + newPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
+  }
+  ~NDSIVis() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
+    double vis    = (newPixel[this->m_TM1] + newPixel[this->m_TM2] + newPixel[this->m_TM3]) / 3.0;
+    double result = (vis - newPixel[this->m_TM5]) / (vis + newPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
 
     return static_cast<TOutput>(result);
   }
-
-
 };
 
 /** \class NDBBBI
@@ -870,18 +919,19 @@ public:
     return "NDBBBI";
   }
 
-  NDBBBI() {}
-  ~NDBBBI() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  NDBBBI()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
-    double result = (newPixel[this->m_TM1] - newPixel[this->m_TM5])
-      /(newPixel[this->m_TM1] + newPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
-    return static_cast<TOutput>(result);
+  }
+  ~NDBBBI() override
+  {
   }
 
-
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
+    double result = (newPixel[this->m_TM1] - newPixel[this->m_TM5]) / (newPixel[this->m_TM1] + newPixel[this->m_TM5] + this->m_EpsilonToBeConsideredAsZero);
+    return static_cast<TOutput>(result);
+  }
 };
 
 /** \class LandsatTMLinguisticVariables
@@ -906,60 +956,81 @@ public:
  * \ingroup OTBIndices
  */
 template <class TInput>
-class LinguisticVariables : public LandsatTMIndexBase<TInput, itk::FixedArray<unsigned int, 11> >
+class LinguisticVariables : public LandsatTMIndexBase<TInput, itk::FixedArray<unsigned int, 11>>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef typename itk::FixedArray<unsigned int, 11> OutputPixelType;
+  typedef typename itk::FixedArray<unsigned int, 11>        OutputPixelType;
   typedef otb::FuzzyVariable<unsigned short, PrecisionType> FuzzyVarType;
 
-  enum LinguisticValues {MINlv=0, Low=MINlv, Medium, MAXlv=2, High=MAXlv};
-  enum Indices { MINid=0, bright=MINid, vis, nir, mir1, mir2, tir, mirtir, ndsivis, ndbbbi, ndvi, MAXid=10, ndbsi=MAXid };
+  enum LinguisticValues
+  {
+    MINlv = 0,
+    Low   = MINlv,
+    Medium,
+    MAXlv = 2,
+    High  = MAXlv
+  };
+  enum Indices
+  {
+    MINid  = 0,
+    bright = MINid,
+    vis,
+    nir,
+    mir1,
+    mir2,
+    tir,
+    mirtir,
+    ndsivis,
+    ndbbbi,
+    ndvi,
+    MAXid = 10,
+    ndbsi = MAXid
+  };
 
-    /** Return the index name */
+  /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM Linguistic Variables";
   }
 
   LinguisticVariables()
-    {
-    m_FvBright = FuzzyVarType::New();
-    m_FvVis = FuzzyVarType::New();
-    m_FvNIR = FuzzyVarType::New();
-    m_FvMIR1 = FuzzyVarType::New();
-    m_FvMIR2 = FuzzyVarType::New();
-    m_FvTIR = FuzzyVarType::New();
-    m_FvMIRTIR = FuzzyVarType::New();
+  {
+    m_FvBright  = FuzzyVarType::New();
+    m_FvVis     = FuzzyVarType::New();
+    m_FvNIR     = FuzzyVarType::New();
+    m_FvMIR1    = FuzzyVarType::New();
+    m_FvMIR2    = FuzzyVarType::New();
+    m_FvTIR     = FuzzyVarType::New();
+    m_FvMIRTIR  = FuzzyVarType::New();
     m_FvNDSIVis = FuzzyVarType::New();
-    m_FvNDBBBI = FuzzyVarType::New();
-    m_FvNDVI = FuzzyVarType::New();
-    m_FvNDBSI = FuzzyVarType::New();
+    m_FvNDBBBI  = FuzzyVarType::New();
+    m_FvNDVI    = FuzzyVarType::New();
+    m_FvNDBSI   = FuzzyVarType::New();
 
     PrecisionType maximumValue = itk::NumericTraits<PrecisionType>::max();
     PrecisionType minimumValue = itk::NumericTraits<PrecisionType>::NonpositiveMin();
 
     // the thresholds are computed wrt Baraldi's paper (normalized 0-255 values)
-    m_FvBright->SetMembership(Low, minimumValue, minimumValue, 40/255., 40/255.);
-    m_FvBright->SetMembership(Medium, 40/255., 40/255., 60/255., 60/255.);
-    m_FvBright->SetMembership(High, 60/255., 60/255., maximumValue, maximumValue);
+    m_FvBright->SetMembership(Low, minimumValue, minimumValue, 40 / 255., 40 / 255.);
+    m_FvBright->SetMembership(Medium, 40 / 255., 40 / 255., 60 / 255., 60 / 255.);
+    m_FvBright->SetMembership(High, 60 / 255., 60 / 255., maximumValue, maximumValue);
 
-    m_FvVis->SetMembership(Low, minimumValue, minimumValue, 30/255., 30/255.);
-    m_FvVis->SetMembership(Medium, 30/255., 30/255., 50/255., 50/255.);
-    m_FvVis->SetMembership(High, 50/255., 50/255., maximumValue, maximumValue);
+    m_FvVis->SetMembership(Low, minimumValue, minimumValue, 30 / 255., 30 / 255.);
+    m_FvVis->SetMembership(Medium, 30 / 255., 30 / 255., 50 / 255., 50 / 255.);
+    m_FvVis->SetMembership(High, 50 / 255., 50 / 255., maximumValue, maximumValue);
 
-    m_FvNIR->SetMembership(Low, minimumValue, minimumValue, 40/255., 40/255.);
-    m_FvNIR->SetMembership(Medium, 40/255., 40/255., 60/255., 60/255.);
-    m_FvNIR->SetMembership(High, 60/255., 60/255., maximumValue, maximumValue);
+    m_FvNIR->SetMembership(Low, minimumValue, minimumValue, 40 / 255., 40 / 255.);
+    m_FvNIR->SetMembership(Medium, 40 / 255., 40 / 255., 60 / 255., 60 / 255.);
+    m_FvNIR->SetMembership(High, 60 / 255., 60 / 255., maximumValue, maximumValue);
 
-    m_FvMIR1->SetMembership(Low, minimumValue, minimumValue, 40/255., 40/255.);
-    m_FvMIR1->SetMembership(Medium, 40/255., 40/255., 60/255., 60/255.);
-    m_FvMIR1->SetMembership(High, 60/255., 60/255., maximumValue, maximumValue);
+    m_FvMIR1->SetMembership(Low, minimumValue, minimumValue, 40 / 255., 40 / 255.);
+    m_FvMIR1->SetMembership(Medium, 40 / 255., 40 / 255., 60 / 255., 60 / 255.);
+    m_FvMIR1->SetMembership(High, 60 / 255., 60 / 255., maximumValue, maximumValue);
 
-    m_FvMIR2->SetMembership(Low, minimumValue, minimumValue, 30/255., 30/255.);
-    m_FvMIR2->SetMembership(Medium, 30/255., 30/255., 50/255., 50/255.);
-    m_FvMIR2->SetMembership(High, 50/255., 50/255., maximumValue, maximumValue);
+    m_FvMIR2->SetMembership(Low, minimumValue, minimumValue, 30 / 255., 30 / 255.);
+    m_FvMIR2->SetMembership(Medium, 30 / 255., 30 / 255., 50 / 255., 50 / 255.);
+    m_FvMIR2->SetMembership(High, 50 / 255., 50 / 255., maximumValue, maximumValue);
 
     m_FvTIR->SetMembership(Low, minimumValue, minimumValue, 0, 0);
     m_FvTIR->SetMembership(Medium, 0, 0, 28, 28);
@@ -973,7 +1044,7 @@ public:
     m_FvNDSIVis->SetMembership(Medium, 0, 0, 0.5, 0.5);
     m_FvNDSIVis->SetMembership(High, 0.5, 0.5, maximumValue, maximumValue);
 
-    m_FvNDBBBI ->SetMembership(Low, minimumValue, minimumValue, -0.20, -0.20);
+    m_FvNDBBBI->SetMembership(Low, minimumValue, minimumValue, -0.20, -0.20);
     m_FvNDBBBI->SetMembership(Medium, -0.20, -0.20, 0.10, 0.10);
     m_FvNDBBBI->SetMembership(High, 0.10, 0.10, maximumValue, maximumValue);
 
@@ -984,38 +1055,40 @@ public:
     m_FvNDBSI->SetMembership(Low, minimumValue, minimumValue, -0.20, -0.20);
     m_FvNDBSI->SetMembership(Medium, -0.20, -0.20, 0.0, 0.0);
     m_FvNDBSI->SetMembership(High, 0.0, 0.0, maximumValue, maximumValue);
-    }
-  ~LinguisticVariables() override {}
-
-  inline itk::FixedArray<unsigned int, 11> operator ()(const TInput& inputPixel)
+  }
+  ~LinguisticVariables() override
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
+  }
+
+  inline itk::FixedArray<unsigned int, 11> operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
     itk::FixedArray<unsigned int, 11> result;
 
-    result[ bright ] = m_FvBright->GetMaxVar(Bright<TInput, PrecisionType>()( newPixel ));
-    result[ vis ] = m_FvVis->GetMaxVar(Vis<TInput, PrecisionType>()( newPixel ));
-    result[ nir ] = m_FvNIR->GetMaxVar(NIR<TInput, PrecisionType>()( newPixel ));
-    result[ mir1 ] = m_FvMIR1->GetMaxVar(MIR1<TInput, PrecisionType>()( newPixel ));
+    result[bright] = m_FvBright->GetMaxVar(Bright<TInput, PrecisionType>()(newPixel));
+    result[vis]    = m_FvVis->GetMaxVar(Vis<TInput, PrecisionType>()(newPixel));
+    result[nir]    = m_FvNIR->GetMaxVar(NIR<TInput, PrecisionType>()(newPixel));
+    result[mir1]   = m_FvMIR1->GetMaxVar(MIR1<TInput, PrecisionType>()(newPixel));
 
     MIR2<TInput, PrecisionType> mir2F;
-    mir2F.SetSAT( this->m_SAT );
-    result[ mir2 ] = m_FvMIR2->GetMaxVar(mir2F( newPixel ));
+    mir2F.SetSAT(this->m_SAT);
+    result[mir2] = m_FvMIR2->GetMaxVar(mir2F(newPixel));
 
     TIR<TInput, PrecisionType> tirF;
-    tirF.SetSAT( this->m_SAT );
-    result[ tir ] = m_FvTIR->GetMaxVar(tirF( newPixel ));
+    tirF.SetSAT(this->m_SAT);
+    result[tir] = m_FvTIR->GetMaxVar(tirF(newPixel));
 
     MIRTIR<TInput, PrecisionType> mirtirF;
-    mirtirF.SetSAT( this->m_SAT );
-    result[ mirtir ] = m_FvMIRTIR->GetMaxVar(mirtirF( newPixel ));
+    mirtirF.SetSAT(this->m_SAT);
+    result[mirtir] = m_FvMIRTIR->GetMaxVar(mirtirF(newPixel));
 
-    result[ ndsivis ] = m_FvNDSIVis->GetMaxVar(NDSIVis<TInput, PrecisionType>()( newPixel ));
+    result[ndsivis] = m_FvNDSIVis->GetMaxVar(NDSIVis<TInput, PrecisionType>()(newPixel));
 
-    result[ ndbbbi ] = m_FvNDBBBI->GetMaxVar(NDBBBI<TInput, PrecisionType>()( newPixel ));
+    result[ndbbbi] = m_FvNDBBBI->GetMaxVar(NDBBBI<TInput, PrecisionType>()(newPixel));
 
-    result[ ndvi ] = m_FvNDVI->GetMaxVar(NDVI<TInput, PrecisionType>()( newPixel ));
+    result[ndvi] = m_FvNDVI->GetMaxVar(NDVI<TInput, PrecisionType>()(newPixel));
 
-    result[ ndbsi ] = m_FvNDBSI->GetMaxVar(NDBSI<TInput, PrecisionType>()( newPixel ));
+    result[ndbsi] = m_FvNDBSI->GetMaxVar(NDBSI<TInput, PrecisionType>()(newPixel));
 
     return result;
   }
@@ -1032,8 +1105,6 @@ protected:
   typename FuzzyVarType::Pointer m_FvNDBBBI;
   typename FuzzyVarType::Pointer m_FvNDVI;
   typename FuzzyVarType::Pointer m_FvNDBSI;
-
-
 };
 
 
@@ -1055,21 +1126,24 @@ protected:
  * \ingroup OTBIndices
  */
 template <class TInput, class TOutput>
-class KernelSpectralRule : public LandsatTMIndexBase<TInput, TOutput >
+class KernelSpectralRule : public LandsatTMIndexBase<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   virtual std::string GetName() const
   {
     return "LandsatTM KernelSpectralRule";
   }
 
-  KernelSpectralRule() : m_TV1(0.7), m_TV2(0.5) { }
-  ~KernelSpectralRule() override {}
+  KernelSpectralRule() : m_TV1(0.7), m_TV2(0.5)
+  {
+  }
+  ~KernelSpectralRule() override
+  {
+  }
 
   void SetTV1(PrecisionType tv1)
   {
@@ -1097,46 +1171,47 @@ protected:
   /** Tolerance value 2*/
   PrecisionType m_TV2;
 
-  void SetMinMax(const TInput& inputPixel, PrecisionType* max13, PrecisionType* min123, PrecisionType* max123, PrecisionType* min12347, PrecisionType* max12347, PrecisionType* max234, PrecisionType* max45)
+  void SetMinMax(const TInput& inputPixel, PrecisionType* max13, PrecisionType* min123, PrecisionType* max123, PrecisionType* min12347, PrecisionType* max12347,
+                 PrecisionType* max234, PrecisionType* max45)
   {
-  std::vector< PrecisionType > v13;
-  v13.push_back(inputPixel[this->m_TM1]);
-  v13.push_back(inputPixel[this->m_TM3]);
+    std::vector<PrecisionType> v13;
+    v13.push_back(inputPixel[this->m_TM1]);
+    v13.push_back(inputPixel[this->m_TM3]);
 
-  *max13 = *(std::max_element ( v13.begin(), v13.end() ));
-
-
-  std::vector< PrecisionType > v123;
-  v123.push_back(inputPixel[this->m_TM1]);
-  v123.push_back(inputPixel[this->m_TM2]);
-  v123.push_back(inputPixel[this->m_TM3]);
-
-  *max123 = *(std::max_element ( v123.begin(), v123.end() ));
-  *min123 = *(std::min_element ( v123.begin(), v123.end() ));
+    *max13 = *(std::max_element(v13.begin(), v13.end()));
 
 
-  std::vector< PrecisionType > v12347;
-  v12347.push_back(inputPixel[this->m_TM1]);
-  v12347.push_back(inputPixel[this->m_TM2]);
-  v12347.push_back(inputPixel[this->m_TM3]);
-  v12347.push_back(inputPixel[this->m_TM4]);
-  v12347.push_back(inputPixel[this->m_TM7]);
+    std::vector<PrecisionType> v123;
+    v123.push_back(inputPixel[this->m_TM1]);
+    v123.push_back(inputPixel[this->m_TM2]);
+    v123.push_back(inputPixel[this->m_TM3]);
 
-  *max12347 = *(std::max_element ( v12347.begin(), v12347.end() ));
-  *min12347 = *(std::min_element ( v12347.begin(), v12347.end() ));
+    *max123 = *(std::max_element(v123.begin(), v123.end()));
+    *min123 = *(std::min_element(v123.begin(), v123.end()));
 
-  std::vector< PrecisionType > v234;
-  v234.push_back(inputPixel[this->m_TM2]);
-  v234.push_back(inputPixel[this->m_TM3]);
-  v234.push_back(inputPixel[this->m_TM4]);
 
-  *max234 = *(std::max_element ( v234.begin(), v234.end() ));
+    std::vector<PrecisionType> v12347;
+    v12347.push_back(inputPixel[this->m_TM1]);
+    v12347.push_back(inputPixel[this->m_TM2]);
+    v12347.push_back(inputPixel[this->m_TM3]);
+    v12347.push_back(inputPixel[this->m_TM4]);
+    v12347.push_back(inputPixel[this->m_TM7]);
 
-  std::vector< PrecisionType > v45;
-  v45.push_back(inputPixel[this->m_TM4]);
-  v45.push_back(inputPixel[this->m_TM5]);
+    *max12347 = *(std::max_element(v12347.begin(), v12347.end()));
+    *min12347 = *(std::min_element(v12347.begin(), v12347.end()));
 
-  *max45 = *(std::max_element ( v45.begin(), v45.end() ));
+    std::vector<PrecisionType> v234;
+    v234.push_back(inputPixel[this->m_TM2]);
+    v234.push_back(inputPixel[this->m_TM3]);
+    v234.push_back(inputPixel[this->m_TM4]);
+
+    *max234 = *(std::max_element(v234.begin(), v234.end()));
+
+    std::vector<PrecisionType> v45;
+    v45.push_back(inputPixel[this->m_TM4]);
+    v45.push_back(inputPixel[this->m_TM5]);
+
+    *max45 = *(std::max_element(v45.begin(), v45.end()));
   }
 };
 
@@ -1159,22 +1234,25 @@ template <class TInput, class TOutput>
 class ThickCloudsSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   std::string GetName() const override
   {
     return "LandsatTM ThickCloudsSpectralRule";
   }
 
-  ThickCloudsSpectralRule() { }
-  ~ThickCloudsSpectralRule() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  ThickCloudsSpectralRule()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
+  }
+  ~ThickCloudsSpectralRule() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput        newPixel(this->PrepareValues(inputPixel));
     PrecisionType max13;
     PrecisionType max123;
     PrecisionType min123;
@@ -1184,18 +1262,13 @@ public:
     PrecisionType max45;
     this->SetMinMax(newPixel, &max13, &min123, &max123, &min12347, &max12347, &max234, &max45);
 
-    bool result = (
-      ((min123 >= (this->m_TV1 * max123)
-        && (max123 <= this->m_TV1 * newPixel[this->m_TM4]))
-       || ((newPixel[this->m_TM2] >= this->m_TV1 * max13)
-           && (max123 <= newPixel[this->m_TM4])))
-      && (newPixel[this->m_TM5] <= this->m_TV1 * newPixel[this->m_TM4])
-      && (newPixel[this->m_TM5] >= this->m_TV1 * max123)
-      && (newPixel[this->m_TM7] <= this->m_TV1 * newPixel[this->m_TM4]));
+    bool result = (((min123 >= (this->m_TV1 * max123) && (max123 <= this->m_TV1 * newPixel[this->m_TM4])) ||
+                    ((newPixel[this->m_TM2] >= this->m_TV1 * max13) && (max123 <= newPixel[this->m_TM4]))) &&
+                   (newPixel[this->m_TM5] <= this->m_TV1 * newPixel[this->m_TM4]) && (newPixel[this->m_TM5] >= this->m_TV1 * max123) &&
+                   (newPixel[this->m_TM7] <= this->m_TV1 * newPixel[this->m_TM4]));
 
     return static_cast<TOutput>(result);
   }
-
 };
 
 /** \class ThinCloudsSpectralRule
@@ -1217,22 +1290,25 @@ template <class TInput, class TOutput>
 class ThinCloudsSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   std::string GetName() const override
   {
     return "LandsatTM ThinCloudsSpectralRule";
   }
 
-  ThinCloudsSpectralRule() { }
-  ~ThinCloudsSpectralRule() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  ThinCloudsSpectralRule()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
+  }
+  ~ThinCloudsSpectralRule() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput        newPixel(this->PrepareValues(inputPixel));
     PrecisionType max13;
     PrecisionType max123;
     PrecisionType min123;
@@ -1243,20 +1319,15 @@ public:
     this->SetMinMax(newPixel, &max13, &min123, &max123, &min12347, &max12347, &max234, &max45);
 
 
-    bool result = (min123 >= (this->m_TV1 * max123))
-      && (newPixel[this->m_TM4] >= max123)
-      && !((newPixel[this->m_TM1] <= newPixel[this->m_TM2]
-             && newPixel[this->m_TM2] <= newPixel[this->m_TM3]
-              && newPixel[this->m_TM3] <= newPixel[this->m_TM4])
-            && (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM4]))
-      && (newPixel[this->m_TM4] >= this->m_TV1 * newPixel[this->m_TM5])
-      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
-      && (newPixel[this->m_TM5] >= this->m_TV1 * max123)
-      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7]);
+    bool result = (min123 >= (this->m_TV1 * max123)) && (newPixel[this->m_TM4] >= max123) &&
+                  !((newPixel[this->m_TM1] <= newPixel[this->m_TM2] && newPixel[this->m_TM2] <= newPixel[this->m_TM3] &&
+                     newPixel[this->m_TM3] <= newPixel[this->m_TM4]) &&
+                    (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM4])) &&
+                  (newPixel[this->m_TM4] >= this->m_TV1 * newPixel[this->m_TM5]) && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4]) &&
+                  (newPixel[this->m_TM5] >= this->m_TV1 * max123) && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7]);
 
     return static_cast<TOutput>(result);
   }
-
 };
 
 /** \class SnowOrIceSpectralRule
@@ -1278,22 +1349,25 @@ template <class TInput, class TOutput>
 class SnowOrIceSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   std::string GetName() const override
   {
     return "LandsatTM SnowOrIceSpectralRule";
   }
 
-  SnowOrIceSpectralRule() { }
-  ~SnowOrIceSpectralRule() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  SnowOrIceSpectralRule()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
+  }
+  ~SnowOrIceSpectralRule() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput        newPixel(this->PrepareValues(inputPixel));
     PrecisionType max13;
     PrecisionType max123;
     PrecisionType min123;
@@ -1304,17 +1378,13 @@ public:
     this->SetMinMax(newPixel, &max13, &min123, &max123, &min12347, &max12347, &max234, &max45);
 
 
-    bool result = (min123 >= (this->m_TV1 * max123))
-      && (newPixel[this->m_TM4] >= (this->m_TV1 * max123))
-      && (newPixel[this->m_TM5] <= this->m_TV2 * newPixel[this->m_TM4])
-      && (newPixel[this->m_TM5] <= this->m_TV1 * min123)
-      && (newPixel[this->m_TM5] <= this->m_TV1 * max123)
-      && (newPixel[this->m_TM7] <= this->m_TV2 * newPixel[this->m_TM4])
-      && (newPixel[this->m_TM7] <= this->m_TV1 * min123);
+    bool result = (min123 >= (this->m_TV1 * max123)) && (newPixel[this->m_TM4] >= (this->m_TV1 * max123)) &&
+                  (newPixel[this->m_TM5] <= this->m_TV2 * newPixel[this->m_TM4]) && (newPixel[this->m_TM5] <= this->m_TV1 * min123) &&
+                  (newPixel[this->m_TM5] <= this->m_TV1 * max123) && (newPixel[this->m_TM7] <= this->m_TV2 * newPixel[this->m_TM4]) &&
+                  (newPixel[this->m_TM7] <= this->m_TV1 * min123);
 
     return static_cast<TOutput>(result);
   }
-
 };
 
 
@@ -1337,31 +1407,31 @@ template <class TInput, class TOutput>
 class WaterOrShadowSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   std::string GetName() const override
   {
     return "LandsatTM WaterOrShadowSpectralRule";
   }
 
-  WaterOrShadowSpectralRule() { }
-  ~WaterOrShadowSpectralRule() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  WaterOrShadowSpectralRule()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
-    bool result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2])
-      && (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
-      && (newPixel[this->m_TM3] >= newPixel[this->m_TM4])
-      && (newPixel[this->m_TM4] >= newPixel[this->m_TM5])
-      && (newPixel[this->m_TM4] >= newPixel[this->m_TM7]);
+  }
+  ~WaterOrShadowSpectralRule() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
+    bool   result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2]) && (newPixel[this->m_TM2] >= newPixel[this->m_TM3]) &&
+                  (newPixel[this->m_TM3] >= newPixel[this->m_TM4]) && (newPixel[this->m_TM4] >= newPixel[this->m_TM5]) &&
+                  (newPixel[this->m_TM4] >= newPixel[this->m_TM7]);
 
     return static_cast<TOutput>(result);
   }
-
 };
 
 
@@ -1384,22 +1454,25 @@ template <class TInput, class TOutput>
 class PitbogOrGreenhouseSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   std::string GetName() const override
   {
     return "LandsatTM PitbogOrGreenhouseSpectralRule";
   }
 
-  PitbogOrGreenhouseSpectralRule() { }
-  ~PitbogOrGreenhouseSpectralRule() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  PitbogOrGreenhouseSpectralRule()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
+  }
+  ~PitbogOrGreenhouseSpectralRule() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput        newPixel(this->PrepareValues(inputPixel));
     PrecisionType max13;
     PrecisionType max123;
     PrecisionType min123;
@@ -1410,17 +1483,13 @@ public:
     this->SetMinMax(newPixel, &max13, &min123, &max123, &min12347, &max12347, &max234, &max45);
 
 
-    bool result = (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM1])
-      && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM3])
-      && (max123 <= this->m_TV1 * newPixel[this->m_TM4])
-      && (newPixel[this->m_TM5] <= this->m_TV1 * newPixel[this->m_TM4])
-      && (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM5])
-      && (min123 >= this->m_TV1 * newPixel[this->m_TM7]);
+    bool result = (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM1]) && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM3]) &&
+                  (max123 <= this->m_TV1 * newPixel[this->m_TM4]) && (newPixel[this->m_TM5] <= this->m_TV1 * newPixel[this->m_TM4]) &&
+                  (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM5]) && (min123 >= this->m_TV1 * newPixel[this->m_TM7]);
 
 
     return static_cast<TOutput>(result);
   }
-
 };
 
 /** \class DominantBlueSpectralRule
@@ -1442,32 +1511,32 @@ template <class TInput, class TOutput>
 class DominantBlueSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   std::string GetName() const override
   {
     return "LandsatTM DominantBlueSpectralRule";
   }
 
-  DominantBlueSpectralRule() { }
-  ~DominantBlueSpectralRule() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  DominantBlueSpectralRule()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
-    bool result = (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM2])
-      && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM3])
-      && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM4])
-      && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM5])
-      && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM7]);
+  }
+  ~DominantBlueSpectralRule() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
+    bool   result = (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM2]) && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM3]) &&
+                  (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM4]) && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM5]) &&
+                  (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM7]);
 
 
     return static_cast<TOutput>(result);
   }
-
 };
 
 
@@ -1490,22 +1559,25 @@ template <class TInput, class TOutput>
 class VegetationSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   std::string GetName() const override
   {
     return "LandsatTM VegetationSpectralRule";
   }
 
-  VegetationSpectralRule() { }
-  ~VegetationSpectralRule() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  VegetationSpectralRule()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
+  }
+  ~VegetationSpectralRule() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput        newPixel(this->PrepareValues(inputPixel));
     PrecisionType max13;
     PrecisionType max123;
     PrecisionType min123;
@@ -1516,18 +1588,14 @@ public:
     this->SetMinMax(newPixel, &max13, &min123, &max123, &min12347, &max12347, &max234, &max45);
 
 
-    bool result = (newPixel[this->m_TM2] >= this->m_TV2 * newPixel[this->m_TM1])
-      && (newPixel[this->m_TM2] >= this->m_TV1 * newPixel[this->m_TM3])
-      && (newPixel[this->m_TM3] < this->m_TV1 * newPixel[this->m_TM4])
-      && (newPixel[this->m_TM4] > max123)
-      && (newPixel[this->m_TM5] < this->m_TV1 * newPixel[this->m_TM4])
-      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM3])
-      && (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM5]);
+    bool result = (newPixel[this->m_TM2] >= this->m_TV2 * newPixel[this->m_TM1]) && (newPixel[this->m_TM2] >= this->m_TV1 * newPixel[this->m_TM3]) &&
+                  (newPixel[this->m_TM3] < this->m_TV1 * newPixel[this->m_TM4]) && (newPixel[this->m_TM4] > max123) &&
+                  (newPixel[this->m_TM5] < this->m_TV1 * newPixel[this->m_TM4]) && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM3]) &&
+                  (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM5]);
 
 
     return static_cast<TOutput>(result);
   }
-
 };
 
 
@@ -1550,22 +1618,25 @@ template <class TInput, class TOutput>
 class RangelandSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   std::string GetName() const override
   {
     return "LandsatTM RangelandSpectralRule";
   }
 
-  RangelandSpectralRule() { }
-  ~RangelandSpectralRule() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  RangelandSpectralRule()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
+  }
+  ~RangelandSpectralRule() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput        newPixel(this->PrepareValues(inputPixel));
     PrecisionType max13;
     PrecisionType max123;
     PrecisionType min123;
@@ -1576,20 +1647,14 @@ public:
     this->SetMinMax(newPixel, &max13, &min123, &max123, &min12347, &max12347, &max234, &max45);
 
 
-    bool result = (newPixel[this->m_TM2] >= this->m_TV2 * newPixel[this->m_TM1])
-      && (newPixel[this->m_TM2] >= this->m_TV1 * newPixel[this->m_TM3])
-      && (newPixel[this->m_TM4] > max123)
-      && (newPixel[this->m_TM3] < this->m_TV1 * newPixel[this->m_TM4])
-      && (newPixel[this->m_TM4] >= this->m_TV1 * newPixel[this->m_TM5])
-      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
-      && (newPixel[this->m_TM5] > max123)
-      && (newPixel[this->m_TM7] < this->m_TV1 * max45)
-      && (newPixel[this->m_TM5] >= newPixel[this->m_TM7]);
+    bool result = (newPixel[this->m_TM2] >= this->m_TV2 * newPixel[this->m_TM1]) && (newPixel[this->m_TM2] >= this->m_TV1 * newPixel[this->m_TM3]) &&
+                  (newPixel[this->m_TM4] > max123) && (newPixel[this->m_TM3] < this->m_TV1 * newPixel[this->m_TM4]) &&
+                  (newPixel[this->m_TM4] >= this->m_TV1 * newPixel[this->m_TM5]) && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4]) &&
+                  (newPixel[this->m_TM5] > max123) && (newPixel[this->m_TM7] < this->m_TV1 * max45) && (newPixel[this->m_TM5] >= newPixel[this->m_TM7]);
 
 
     return static_cast<TOutput>(result);
   }
-
 };
 
 /** \class BarrenLandOrBuiltUpOrCloudsSpectralRule
@@ -1611,22 +1676,25 @@ template <class TInput, class TOutput>
 class BarrenLandOrBuiltUpOrCloudsSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   std::string GetName() const override
   {
     return "LandsatTM BarrenLandOrBuiltUpOrCloudsSpectralRule";
   }
 
-  BarrenLandOrBuiltUpOrCloudsSpectralRule() { }
-  ~BarrenLandOrBuiltUpOrCloudsSpectralRule() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  BarrenLandOrBuiltUpOrCloudsSpectralRule()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
+  }
+  ~BarrenLandOrBuiltUpOrCloudsSpectralRule() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput        newPixel(this->PrepareValues(inputPixel));
     PrecisionType max13;
     PrecisionType max123;
     PrecisionType min123;
@@ -1637,17 +1705,13 @@ public:
     this->SetMinMax(newPixel, &max13, &min123, &max123, &min12347, &max12347, &max234, &max45);
 
 
-    bool result = (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM1])
-      && (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM2])
-      && (newPixel[this->m_TM4] >= this->m_TV1 * max123)
-      && (newPixel[this->m_TM5] >= max123)
-      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
-      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7])
-      && (newPixel[this->m_TM7] >= this->m_TV2 * max45);
+    bool result = (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM1]) && (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM2]) &&
+                  (newPixel[this->m_TM4] >= this->m_TV1 * max123) && (newPixel[this->m_TM5] >= max123) &&
+                  (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4]) && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7]) &&
+                  (newPixel[this->m_TM7] >= this->m_TV2 * max45);
 
     return static_cast<TOutput>(result);
   }
-
 };
 
 /** \class FlatResponseBarrenLandOrBuiltUpSpectralRule
@@ -1669,22 +1733,25 @@ template <class TInput, class TOutput>
 class FlatResponseBarrenLandOrBuiltUpSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   std::string GetName() const override
   {
     return "LandsatTM FlatResponseBarrenLandOrBuiltUpSpectralRule";
   }
 
-  FlatResponseBarrenLandOrBuiltUpSpectralRule() { }
-  ~FlatResponseBarrenLandOrBuiltUpSpectralRule() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  FlatResponseBarrenLandOrBuiltUpSpectralRule()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
+  }
+  ~FlatResponseBarrenLandOrBuiltUpSpectralRule() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput        newPixel(this->PrepareValues(inputPixel));
     PrecisionType max13;
     PrecisionType max123;
     PrecisionType min123;
@@ -1695,12 +1762,10 @@ public:
     this->SetMinMax(newPixel, &max13, &min123, &max123, &min12347, &max12347, &max234, &max45);
 
 
-    bool result = (newPixel[this->m_TM5] >= this->m_TV1 * max12347)
-      && (min12347 >= this->m_TV2 * newPixel[this->m_TM5]);
+    bool result = (newPixel[this->m_TM5] >= this->m_TV1 * max12347) && (min12347 >= this->m_TV2 * newPixel[this->m_TM5]);
 
     return static_cast<TOutput>(result);
   }
-
 };
 
 
@@ -1723,28 +1788,28 @@ template <class TInput, class TOutput>
 class ShadowWithBarrenLandSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   std::string GetName() const override
   {
     return "LandsatTM ShadowWithBarrenLandSpectralRule";
   }
 
-  ShadowWithBarrenLandSpectralRule() { }
-  ~ShadowWithBarrenLandSpectralRule() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  ShadowWithBarrenLandSpectralRule()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
-    bool result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2])
-      &&  (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
-      &&  (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM4])
-      &&  (newPixel[this->m_TM1] >= newPixel[this->m_TM5])
-      &&  (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
-      &&  (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7]);
+  }
+  ~ShadowWithBarrenLandSpectralRule() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
+    bool   result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2]) && (newPixel[this->m_TM2] >= newPixel[this->m_TM3]) &&
+                  (newPixel[this->m_TM3] >= this->m_TV1 * newPixel[this->m_TM4]) && (newPixel[this->m_TM1] >= newPixel[this->m_TM5]) &&
+                  (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4]) && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM7]);
 
     return static_cast<TOutput>(result);
   }
@@ -1770,29 +1835,29 @@ template <class TInput, class TOutput>
 class ShadowWithVegetationSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   std::string GetName() const override
   {
     return "LandsatTM ShadowWithVegetationSpectralRule";
   }
 
-  ShadowWithVegetationSpectralRule() { }
-  ~ShadowWithVegetationSpectralRule() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  ShadowWithVegetationSpectralRule()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
-    bool result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2])
-      &&  (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
-      &&  (newPixel[this->m_TM1] >= this->m_TV2 * newPixel[this->m_TM4])
-      &&  (newPixel[this->m_TM3] < this->m_TV1 * newPixel[this->m_TM4])
-      &&  (newPixel[this->m_TM5] < this->m_TV1 * newPixel[this->m_TM4])
-      &&  (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM5])
-      &&  (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM4]);
+  }
+  ~ShadowWithVegetationSpectralRule() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
+    bool   result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2]) && (newPixel[this->m_TM2] >= newPixel[this->m_TM3]) &&
+                  (newPixel[this->m_TM1] >= this->m_TV2 * newPixel[this->m_TM4]) && (newPixel[this->m_TM3] < this->m_TV1 * newPixel[this->m_TM4]) &&
+                  (newPixel[this->m_TM5] < this->m_TV1 * newPixel[this->m_TM4]) && (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM5]) &&
+                  (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM4]);
 
     return static_cast<TOutput>(result);
   }
@@ -1818,22 +1883,25 @@ template <class TInput, class TOutput>
 class ShadowCloudOrSnowSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   std::string GetName() const override
   {
     return "LandsatTM ShadowCloudOrSnowSpectralRule";
   }
 
-  ShadowCloudOrSnowSpectralRule() { }
-  ~ShadowCloudOrSnowSpectralRule() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  ShadowCloudOrSnowSpectralRule()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
+  }
+  ~ShadowCloudOrSnowSpectralRule() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput        newPixel(this->PrepareValues(inputPixel));
     PrecisionType max13;
     PrecisionType max123;
     PrecisionType min123;
@@ -1844,10 +1912,8 @@ public:
     this->SetMinMax(newPixel, &max13, &min123, &max123, &min12347, &max12347, &max234, &max45);
 
 
-    bool result = (newPixel[this->m_TM1] >= this->m_TV1 * max234)
-      && (max234 >= this->m_TV1 * newPixel[this->m_TM1])
-      && (newPixel[this->m_TM5] < newPixel[this->m_TM1])
-      && (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM1]);
+    bool result = (newPixel[this->m_TM1] >= this->m_TV1 * max234) && (max234 >= this->m_TV1 * newPixel[this->m_TM1]) &&
+                  (newPixel[this->m_TM5] < newPixel[this->m_TM1]) && (newPixel[this->m_TM7] < this->m_TV1 * newPixel[this->m_TM1]);
 
     return static_cast<TOutput>(result);
   }
@@ -1873,30 +1939,29 @@ template <class TInput, class TOutput>
 class WetlandSpectralRule : public KernelSpectralRule<TInput, TOutput>
 {
 public:
-
   typedef typename TInput::ValueType PrecisionType;
-  typedef bool OutputPixelType;
+  typedef bool                       OutputPixelType;
 
-    /** Return the index name */
+  /** Return the index name */
   std::string GetName() const override
   {
     return "LandsatTM WetlandSpectralRule";
   }
 
-  WetlandSpectralRule() { }
-  ~WetlandSpectralRule() override {}
-
-  inline TOutput operator ()(const TInput& inputPixel)
+  WetlandSpectralRule()
   {
-    TInput newPixel(this->PrepareValues( inputPixel ));
-    bool result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2])
-      && (newPixel[this->m_TM2] >= newPixel[this->m_TM3])
-      && (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM4])
-      && (newPixel[this->m_TM3] < newPixel[this->m_TM4])
-      && (newPixel[this->m_TM4] >= this->m_TV1 * newPixel[this->m_TM5])
-      && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4])
-      && (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM5])
-      && (newPixel[this->m_TM5] >= newPixel[this->m_TM7]);
+  }
+  ~WetlandSpectralRule() override
+  {
+  }
+
+  inline TOutput operator()(const TInput& inputPixel)
+  {
+    TInput newPixel(this->PrepareValues(inputPixel));
+    bool   result = (newPixel[this->m_TM1] >= newPixel[this->m_TM2]) && (newPixel[this->m_TM2] >= newPixel[this->m_TM3]) &&
+                  (newPixel[this->m_TM1] >= this->m_TV1 * newPixel[this->m_TM4]) && (newPixel[this->m_TM3] < newPixel[this->m_TM4]) &&
+                  (newPixel[this->m_TM4] >= this->m_TV1 * newPixel[this->m_TM5]) && (newPixel[this->m_TM5] >= this->m_TV1 * newPixel[this->m_TM4]) &&
+                  (newPixel[this->m_TM3] >= this->m_TV2 * newPixel[this->m_TM5]) && (newPixel[this->m_TM5] >= newPixel[this->m_TM7]);
 
     return static_cast<TOutput>(result);
   }

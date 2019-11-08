@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,16 +21,19 @@
 #ifndef otbOGR_h
 #define otbOGR_h
 
-namespace otb {
-  /**\defgroup gGeometry Geometry
-   * \ingroup Thematic
-   * \brief Classes and functions aimed toward the manipulation of set of geometric objects.
-   * This module mainly provides an encapsulation of <a
-   * href="http://www.gdal.org/ogr/">OGR API</a>.
-   * @{
-   */
-  namespace ogr { }
-  //@}
+namespace otb
+{
+/**\defgroup gGeometry Geometry
+ * \ingroup Thematic
+ * \brief Classes and functions aimed toward the manipulation of set of geometric objects.
+ * This module mainly provides an encapsulation of <a
+ * href="http://www.gdal.org/ogr/">OGR API</a>.
+ * @{
+ */
+namespace ogr
+{
+}
+//@}
 } // namespace otb
 
 #include "otbOGRDriversInit.h"

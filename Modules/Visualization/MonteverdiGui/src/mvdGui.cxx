@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -65,68 +65,44 @@ namespace
 } // end of anonymous namespace.
 
 const int MOUSE_WHEEL_STEP_DEGREES = 15;
-const int MOUSE_WHEEL_STEP_FACTOR = 8;
+const int MOUSE_WHEEL_STEP_FACTOR  = 8;
 
-char const * const
-RESOLUTION_NAMES[ RESOLUTION_COUNT ] =
-{
-  // QT_TRANSLATE_NOOP( "mvd", "None" ),
-  QT_TRANSLATE_NOOP( "mvd", "Nearest" ),
-  QT_TRANSLATE_NOOP( "mvd", "Lower bound" ),
-  QT_TRANSLATE_NOOP( "mvd", "Upper bound" ),
+char const* const RESOLUTION_NAMES[RESOLUTION_COUNT] = {
+    // QT_TRANSLATE_NOOP( "mvd", "None" ),
+    QT_TRANSLATE_NOOP("mvd", "Nearest"), QT_TRANSLATE_NOOP("mvd", "Lower bound"), QT_TRANSLATE_NOOP("mvd", "Upper bound"),
 };
 
-char const * const
-TILE_SIZE_NAMES[ TILE_SIZE_COUNT ] =
-{
-  // QT_TRANSLATE_NOOP( "mvd", "None" ),
-  QT_TRANSLATE_NOOP( "mvd", "64" ),
-  QT_TRANSLATE_NOOP( "mvd", "128" ),
-  QT_TRANSLATE_NOOP( "mvd", "256" ),
-  QT_TRANSLATE_NOOP( "mvd", "512" ),
+char const* const TILE_SIZE_NAMES[TILE_SIZE_COUNT] = {
+    // QT_TRANSLATE_NOOP( "mvd", "None" ),
+    QT_TRANSLATE_NOOP("mvd", "64"), QT_TRANSLATE_NOOP("mvd", "128"), QT_TRANSLATE_NOOP("mvd", "256"), QT_TRANSLATE_NOOP("mvd", "512"),
 };
 
-int
-TILE_SIZE_VALUE[ TILE_SIZE_COUNT ] =
-{
-  64, 128, 256, 512,
+int TILE_SIZE_VALUE[TILE_SIZE_COUNT] = {
+    64, 128, 256, 512,
 };
 
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 /*****************************************************************************/
-void
-AddItemsInto( QComboBox * comboBox,
-	      const char * context,
-	      char const * const names[],
-	      size_t count )
+void AddItemsInto(QComboBox* comboBox, const char* context, char const* const names[], size_t count)
 {
-  assert( comboBox!=NULL );
-  assert( names!=NULL );
+  assert(comboBox != NULL);
+  assert(names != NULL);
 
-  for( size_t i=0; i<count; ++i )
-    comboBox->addItem(
-      qApp->translate(
-	context,
-	names[ i ] )
-    );
+  for (size_t i = 0; i < count; ++i)
+    comboBox->addItem(qApp->translate(context, names[i]));
 }
 
 /*****************************************************************************/
-QMessageBox &
-CustomizeMessageBox( QMessageBox & messageBox,
-                     QWidget * widget )
+QMessageBox& CustomizeMessageBox(QMessageBox& messageBox, QWidget* widget)
 {
-  assert( widget!=NULL );
+  assert(widget != NULL);
 
-  assert(
-    messageBox.layout()==qobject_cast< QGridLayout * >( messageBox.layout() )
-  );
+  assert(messageBox.layout() == qobject_cast<QGridLayout*>(messageBox.layout()));
 
-  QGridLayout * gridLayout =
-    qobject_cast< QGridLayout * >( messageBox.layout() );
-  assert( gridLayout!=NULL );
+  QGridLayout* gridLayout = qobject_cast<QGridLayout*>(messageBox.layout());
+  assert(gridLayout != NULL);
 
   /*
   qDebug() << layout;
@@ -135,7 +111,7 @@ CustomizeMessageBox( QMessageBox & messageBox,
   */
 
   // Add custom widget into message-box layout.
-  gridLayout->addWidget( widget, 1, 1 );
+  gridLayout->addWidget(widget, 1, 1);
 
   // Return input message-box to chain function calls, if needed.
   return messageBox;

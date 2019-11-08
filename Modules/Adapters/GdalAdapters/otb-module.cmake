@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Adapters for the Gdal Library ( for reading and writing  ).")
+set(DOCUMENTATION "Adapters for the GDAL Library ( for reading and writing  ).")
 
 otb_module(OTBGdalAdapters
 ENABLE_SHARED

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,13 +41,12 @@ template <unsigned int Radius, class TSeries, class TDates, class TWeight = TSer
 class EnvelopeSavitzkyGolayInterpolationFunctor
 {
 public:
-
   typedef typename TSeries::ValueType ValueType;
-  typedef typename TDates::ValueType DateType;
+  typedef typename TDates::ValueType  DateType;
   typedef typename TWeight::ValueType WeightType;
-  static const unsigned int Degree = 2;
-  typedef double CoefficientPrecisionType;
-  typedef otb::PolynomialTimeSeries< Degree, CoefficientPrecisionType > TSFunctionType;
+  static const unsigned int           Degree = 2;
+  typedef double                      CoefficientPrecisionType;
+  typedef otb::PolynomialTimeSeries<Degree, CoefficientPrecisionType> TSFunctionType;
   static const unsigned int nbDates = TSeries::Dimension;
 
   typedef otb::Functor::SavitzkyGolayInterpolationFunctor<Radius, TSeries, TDates, TWeight> SGFunctorType;
@@ -57,18 +56,20 @@ public:
   {
   }
   /// Destructor
-  virtual ~EnvelopeSavitzkyGolayInterpolationFunctor() {}
+  virtual ~EnvelopeSavitzkyGolayInterpolationFunctor()
+  {
+  }
 
   inline void SetWeights(const TWeight weights)
   {
-    for(unsigned int i=0; i<m_WeightSeries.Size(); ++i)
+    for (unsigned int i = 0; i < m_WeightSeries.Size(); ++i)
       m_WeightSeries[i] = weights[i];
-    m_SGFunctor.SetWeights( weights );
+    m_SGFunctor.SetWeights(weights);
   }
 
   inline void SetDates(const TDates doy)
   {
-    m_SGFunctor.SetDates( doy );
+    m_SGFunctor.SetDates(doy);
   }
 
   inline void SetUpperEnvelope()
@@ -83,7 +84,7 @@ public:
 
   inline void SetDecreaseFactor(double df)
   {
-    if(df>0.0 && df <1.0)
+    if (df > 0.0 && df < 1.0)
       m_DecreaseFactor = df;
   }
 
@@ -92,36 +93,34 @@ public:
     m_Iterations = its;
   }
 
-  inline TSeries operator ()(const TSeries& series)
+  inline TSeries operator()(const TSeries& series)
   {
     TSeries outSeries = m_SGFunctor(series);
 
-    for(unsigned int i=0; i<m_Iterations; ++i)
+    for (unsigned int i = 0; i < m_Iterations; ++i)
+    {
+      for (unsigned int j = 0; j < nbDates; ++j)
       {
-      for(unsigned int j=0; j<nbDates; ++j)
-        {
-        if( m_UpperEnvelope && outSeries[j]<series[j] )
-          m_WeightSeries[j] = m_WeightSeries[j]*m_DecreaseFactor;
-        if( !m_UpperEnvelope && outSeries[j]>series[j] )
-          m_WeightSeries[j] = m_WeightSeries[j]*m_DecreaseFactor;
-        }
+        if (m_UpperEnvelope && outSeries[j] < series[j])
+          m_WeightSeries[j] = m_WeightSeries[j] * m_DecreaseFactor;
+        if (!m_UpperEnvelope && outSeries[j] > series[j])
+          m_WeightSeries[j] = m_WeightSeries[j] * m_DecreaseFactor;
+      }
 
       m_SGFunctor.SetWeights(m_WeightSeries);
       outSeries = m_SGFunctor(series);
-      }
+    }
 
     return outSeries;
   }
 
 private:
-
-  TWeight m_WeightSeries;
+  TWeight       m_WeightSeries;
   SGFunctorType m_SGFunctor;
-  unsigned int m_Iterations;
-  bool m_UpperEnvelope;
-  double m_DecreaseFactor;
-
+  unsigned int  m_Iterations;
+  bool          m_UpperEnvelope;
+  double        m_DecreaseFactor;
 };
 }
-} //namespace otb
+} // namespace otb
 #endif

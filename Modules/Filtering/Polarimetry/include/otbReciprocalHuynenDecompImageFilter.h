@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -18,47 +18,43 @@
  * limitations under the License.
  */
 
-
 #ifndef otbReciprocalHuynenDecompImageFilter_h
 #define otbReciprocalHuynenDecompImageFilter_h
 
-#include "otbUnaryFunctorImageFilter.h"
-
+#include "otbFunctorImageFilter.h"
 
 namespace otb
- {
+{
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class ReciprocalHuynenDecompFunctor
- * 
+ *
  * \brief Evaluate the Huynen decomposition from the reciprocal Sinclair matrix image.
+ *
+ * Use otb::HuynenDecompImageFilter to apply
  *
  * \ingroup OTBPolarimetry
  */
-template< class TInput, class TOutput>
+template <class TInput, class TOutput>
 class ReciprocalHuynenDecompFunctor
 {
 public:
+  typedef typename TOutput::ValueType OutputValueType;
 
-  typedef typename TOutput::ValueType   OutputValueType;
-
-
-  inline TOutput operator()( const TInput & Covariance ) const
-    {
-    TOutput result;
-    result.SetSize(m_NumberOfComponentsPerPixel);
-    
+  inline void operator()(TOutput& result, const TInput& Covariance) const
+  {
     OutputValueType A0 = static_cast<OutputValueType>(Covariance[0].real() / 2.0);
     OutputValueType B0 = static_cast<OutputValueType>((Covariance[3] + Covariance[5]).real() / 2.0);
-    OutputValueType B = static_cast<OutputValueType>(Covariance[3].real() - B0);
-    OutputValueType C = static_cast<OutputValueType>(Covariance[1].real());
-    OutputValueType D = static_cast<OutputValueType>(-Covariance[1].imag());
-    OutputValueType E = static_cast<OutputValueType>(Covariance[4].real());
-    OutputValueType F = static_cast<OutputValueType>(Covariance[4].imag());
-    OutputValueType G = static_cast<OutputValueType>(Covariance[2].imag());
-    OutputValueType H = static_cast<OutputValueType>(Covariance[2].real());
-    
+    OutputValueType B  = static_cast<OutputValueType>(Covariance[3].real() - B0);
+    OutputValueType C  = static_cast<OutputValueType>(Covariance[1].real());
+    OutputValueType D  = static_cast<OutputValueType>(-Covariance[1].imag());
+    OutputValueType E  = static_cast<OutputValueType>(Covariance[4].real());
+    OutputValueType F  = static_cast<OutputValueType>(Covariance[4].imag());
+    OutputValueType G  = static_cast<OutputValueType>(Covariance[2].imag());
+    OutputValueType H  = static_cast<OutputValueType>(Covariance[2].real());
+
     result[0] = A0;
     result[1] = B0;
     result[2] = B;
@@ -68,68 +64,34 @@ public:
     result[6] = F;
     result[7] = G;
     result[8] = H;
+  }
 
-    return result;
-    }
-
-   unsigned int GetOutputSize()
-   {
-     return m_NumberOfComponentsPerPixel;
-   }
-
-   /** Constructor */
-   ReciprocalHuynenDecompFunctor() : m_Epsilon(1e-6) {}
-
-   /** Destructor */
-   virtual ~ReciprocalHuynenDecompFunctor() {}
+  constexpr size_t OutputSize(...) const
+  {
+    // Size of the result
+    return 9;
+  }
 
 private:
-   itkStaticConstMacro(m_NumberOfComponentsPerPixel, unsigned int, 9);
-   const double m_Epsilon;
+  static constexpr double m_Epsilon = 1e-6;
 };
-}
+} // namespace Functor
 
-
-/** \class ReciprocalHuynenDecompImageFilter
- * \brief Compute the Huynen decomposition image (9 complex channels)
- * from the Reciprocal Covariance image (6 complex channels)
+/**
+ * \typedef ReciprocalHuynenDecompImageFilter
+ * \brief Applies otb::Functor::ReciprocalHuynenDecompFunctor
+ * \sa otb::Functor::ReciprocalHuynenDecompFunctor
  *
- * For more details, please refer to the class ReciprocalHuynenDecompFunctor.
+ * Set inputs with:
+ * \code
+ * SetInput<0>(inputPtr);
+ * \endcode
  *
  * \ingroup OTBPolarimetry
- * \sa ReciprocalHuynenDecompFunctor
- *
  */
-template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReciprocalHuynenDecompImageFilter :
-   public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::ReciprocalHuynenDecompFunctor<
-    typename TInputImage::PixelType, typename TOutputImage::PixelType> >
-{
-public:
-   /** Standard class typedefs. */
-   typedef ReciprocalHuynenDecompImageFilter  Self;
-   typedef typename Functor::ReciprocalHuynenDecompFunctor<
-     typename TInputImage::PixelType, typename TOutputImage::PixelType> FunctionType;
-   typedef otb::UnaryFunctorImageFilter<TInputImage, TOutputImage, FunctionType> Superclass;
-   typedef itk::SmartPointer<Self>        Pointer;
-   typedef itk::SmartPointer<const Self>  ConstPointer;
-
-   /** Method for creation through the object factory. */
-   itkNewMacro(Self);
-
-   /** Runtime information support. */
-   itkTypeMacro(ReciprocalHuynenDecompImageFilter, UnaryFunctorImageFilter);
-
-protected:
-   ReciprocalHuynenDecompImageFilter() {}
-  ~ReciprocalHuynenDecompImageFilter() override {}
-
-private:
-  ReciprocalHuynenDecompImageFilter(const Self&) = delete;
-  void operator=(const Self&) = delete;
-
-};
-
+template <typename TInputImage, typename TOutputImage>
+using ReciprocalHuynenDecompImageFilter =
+    FunctorImageFilter<Functor::ReciprocalHuynenDecompFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>;
 } // end namespace otb
 
 #endif

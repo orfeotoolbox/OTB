@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,6 +22,9 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <chrono>
+
+#include "otbMacro.h"
 
 #include <otbMachineLearningModel.h>
 #include "otbConfusionMatrixCalculator.h"
@@ -30,7 +33,7 @@
 
 #include "otb_boost_string_header.h"
 
-typedef otb::MachineLearningModel<float,short>         MachineLearningModelType;
+typedef otb::MachineLearningModel<float, short> MachineLearningModelType;
 typedef MachineLearningModelType::InputValueType       InputValueType;
 typedef MachineLearningModelType::InputSampleType      InputSampleType;
 typedef MachineLearningModelType::InputListSampleType  InputListSampleType;
@@ -38,7 +41,7 @@ typedef MachineLearningModelType::TargetValueType      TargetValueType;
 typedef MachineLearningModelType::TargetSampleType     TargetSampleType;
 typedef MachineLearningModelType::TargetListSampleType TargetListSampleType;
 
-typedef otb::MachineLearningModel<float,float>                   MachineLearningModelRegressionType;
+typedef otb::MachineLearningModel<float, float> MachineLearningModelRegressionType;
 typedef MachineLearningModelRegressionType::InputValueType       InputValueRegressionType;
 typedef MachineLearningModelRegressionType::InputSampleType      InputSampleRegressionType;
 typedef MachineLearningModelRegressionType::InputListSampleType  InputListSampleRegressionType;
@@ -48,80 +51,78 @@ typedef MachineLearningModelRegressionType::TargetListSampleType TargetListSampl
 
 typedef otb::ConfusionMatrixCalculator<TargetListSampleType, TargetListSampleType> ConfusionMatrixCalculatorType;
 
+float GetConfusionMatrixResults(TargetListSampleType::Pointer predicted, TargetListSampleType::Pointer ref)
+{
+  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
+  cmCalculator->SetProducedLabels(predicted);
+  cmCalculator->SetReferenceLabels(ref);
+  cmCalculator->Compute();
+
+  otbLogMacro(Debug, << "Confusion matrix:\n" << cmCalculator->GetConfusionMatrix());
+  otbLogMacro(Info, << "Kappa: " << cmCalculator->GetKappaIndex());
+  otbLogMacro(Debug, << "Overall Accuracy: " << cmCalculator->GetOverallAccuracy());
+
+  return cmCalculator->GetKappaIndex();
+}
+
+template <class TModel>
+void SetupModel(TModel* /*model*/)
+{
+  // do nothing by default
+}
+
+template <class TModel>
+int otbGenericMachineLearningModel(int argc, char* argv[])
+{
+  if (argc != 3)
+  {
+    std::cout << "Wrong number of arguments " << std::endl;
+    std::cout << "Usage : sample file, output file " << std::endl;
+    return EXIT_FAILURE;
+  }
+  InputListSampleType::Pointer  samples = InputListSampleType::New();
+  TargetListSampleType::Pointer labels  = TargetListSampleType::New();
+  if (!otb::ReadDataFile(argv[1], samples, labels))
+  {
+    std::cout << "Failed to read samples file " << argv[1] << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  typename TModel::Pointer classifier = TModel::New();
+  classifier->SetInputListSample(samples);
+  classifier->SetTargetListSample(labels);
+  SetupModel<TModel>(classifier);
+  classifier->Train();
+  classifier->Save(argv[2]);
+  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
+  const float                   kappa     = GetConfusionMatrixResults(predicted, labels);
+
+  typename TModel::Pointer classifierLoad = TModel::New();
+  classifierLoad->Load(argv[2]);
+  auto start = std::chrono::system_clock::now();
+  otbLogMacro(Debug, << "Predict loaded");
+  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
+  using TimeT                                 = std::chrono::milliseconds;
+  auto duration                               = std::chrono::duration_cast<TimeT>(std::chrono::system_clock::now() - start);
+  auto elapsed                                = duration.count();
+  otbLogMacro(Debug, << "PredictBatch took " << elapsed << " ms");
+  const float kappaLoad = GetConfusionMatrixResults(predictedLoad, labels);
+
+  return (std::abs(kappaLoad - kappa) < 0.00000001 ? EXIT_SUCCESS : EXIT_FAILURE);
+}
+
+// -------------------------- LibSVM -------------------------------------------
 #ifdef OTB_USE_LIBSVM
 #include "otbLibSVMMachineLearningModel.h"
 
-int otbLibSVMMachineLearningModel(int argc, char * argv[])
+using LibSVMType = otb::LibSVMMachineLearningModel<InputValueType, TargetValueType>;
+int otbLibSVMMachineLearningModel(int argc, char* argv[])
 {
-  if (argc != 3)
-    {
-      std::cout<<"Wrong number of arguments "<<std::endl;
-      std::cout<<"Usage : sample file, output file "<<std::endl;
-      return EXIT_FAILURE;
-    }
-
-
-  typedef otb::LibSVMMachineLearningModel<InputValueType, TargetValueType> SVMType;
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer labels = TargetListSampleType::New();
-
-  if (!otb::ReadDataFile(argv[1], samples, labels))
-    {
-    std::cout << "Failed to read samples file " << argv[1] << std::endl;
-    return EXIT_FAILURE;
-    }
-
-  SVMType::Pointer classifier = SVMType::New();
-  classifier->SetInputListSample(samples);
-  classifier->SetTargetListSample(labels);
-  classifier->Train();
-
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
-
-  cmCalculator->SetProducedLabels(predicted);
-  cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Compute();
-
-  std::cout << "Confusion matrix: " << std::endl;
-  std::cout << cmCalculator->GetConfusionMatrix() << std::endl;
-  const float kappaIdx = cmCalculator->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdx<<std::endl;
-  std::cout << "Overall Accuracy: " << cmCalculator->GetOverallAccuracy() << std::endl;
-
-  classifier->Save(argv[2]);
-
-  //Load Model to new LibSVM
-  SVMType::Pointer classifierLoad = SVMType::New();
-
-  classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
-
-  cmCalculatorLoad->SetProducedLabels(predictedLoad);
-  cmCalculatorLoad->SetReferenceLabels(labels);
-  cmCalculatorLoad->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
-  const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
-
-
-  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
-    {
-    return EXIT_SUCCESS;
-    }
-  else
-    {
-    return EXIT_FAILURE;
-    }
+  return otbGenericMachineLearningModel<LibSVMType>(argc, argv);
 }
 #endif
 
+// -------------------------- OpenCV -------------------------------------------
 #ifdef OTB_USE_OPENCV
 #include "otbSVMMachineLearningModel.h"
 #include "otbKNearestNeighborsMachineLearningModel.h"
@@ -130,103 +131,37 @@ int otbLibSVMMachineLearningModel(int argc, char * argv[])
 #include "otbNeuralNetworkMachineLearningModel.h"
 #include "otbNormalBayesMachineLearningModel.h"
 #include "otbDecisionTreeMachineLearningModel.h"
-#include "otbGradientBoostedTreeMachineLearningModel.h"
 #include "otbKNearestNeighborsMachineLearningModel.h"
 
-
-int otbSVMMachineLearningModel(int argc, char * argv[])
+using SVMType = otb::SVMMachineLearningModel<InputValueType, TargetValueType>;
+int otbSVMMachineLearningModel(int argc, char* argv[])
 {
-  if (argc != 3 )
-    {
-      std::cout<<"Wrong number of arguments "<<std::endl;
-      std::cout<<"Usage : sample file, output file "<<std::endl;
-      return EXIT_FAILURE;
-    }
-
-  typedef otb::SVMMachineLearningModel<InputValueType, TargetValueType> SVMType;
-
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer labels = TargetListSampleType::New();
-
-  if(!otb::ReadDataFile(argv[1],samples,labels))
-    {
-    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
-    return EXIT_FAILURE;
-    }
-
-  SVMType::Pointer classifier = SVMType::New();
-  classifier->SetInputListSample(samples);
-  classifier->SetTargetListSample(labels);
-  classifier->Train();
-
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
-
-  classifier->Save(argv[2]);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
-
-  cmCalculator->SetProducedLabels(predicted);
-  cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
-  const float kappaIdx = cmCalculator->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdx<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
-
-  //Load Model to new SVM
-  SVMType::Pointer classifierLoad = SVMType::New();
-
-  classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
-
-  cmCalculatorLoad->SetProducedLabels(predictedLoad);
-  cmCalculatorLoad->SetReferenceLabels(labels);
-  cmCalculatorLoad->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
-  const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
-
-
-  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
-    {
-    return EXIT_SUCCESS;
-    }
-  else
-    {
-    return EXIT_FAILURE;
-    }
+  return otbGenericMachineLearningModel<SVMType>(argc, argv);
 }
 
-int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
+int otbSVMMachineLearningRegressionModel(int argc, char* argv[])
 {
-  if (argc != 3 )
-    {
-      std::cout<<"Wrong number of arguments "<<std::endl;
-      std::cout<<"Usage : sample file, output file "<<std::endl;
-      return EXIT_FAILURE;
-    }
+  if (argc != 3)
+  {
+    std::cout << "Wrong number of arguments " << std::endl;
+    std::cout << "Usage : sample file, output file " << std::endl;
+    return EXIT_FAILURE;
+  }
 
   typedef otb::SVMMachineLearningModel<InputValueRegressionType, TargetValueRegressionType> SVMType;
 
-  InputListSampleRegressionType::Pointer samples = InputListSampleRegressionType::New();
-  TargetListSampleRegressionType::Pointer labels = TargetListSampleRegressionType::New();
+  InputListSampleRegressionType::Pointer  samples = InputListSampleRegressionType::New();
+  TargetListSampleRegressionType::Pointer labels  = TargetListSampleRegressionType::New();
 
-  if(!otb::ReadDataFile(argv[1],samples,labels))
-    {
-    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
+  if (!otb::ReadDataFile(argv[1], samples, labels))
+  {
+    std::cout << "Failed to read samples file " << argv[1] << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   SVMType::Pointer classifier = SVMType::New();
 
-  //Init SVM type in regression mode
+  // Init SVM type in regression mode
   classifier->SetRegressionMode(1);
   classifier->SetSVMType(CvSVM::EPS_SVR);
   classifier->SetP(10);
@@ -237,13 +172,13 @@ int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  //Predict age using first line of abalone dataset
-  //1:-1 2:0.027027 3:0.0420168 4:-0.831858 5:-0.63733 6:-0.699395 7:-0.735352
-  //8:-0.704036
+  // Predict age using first line of abalone dataset
+  // 1:-1 2:0.027027 3:0.0420168 4:-0.831858 5:-0.63733 6:-0.699395 7:-0.735352
+  // 8:-0.704036
   // Input value is 15.
   InputListSampleRegressionType::Pointer samplesT = InputListSampleRegressionType::New();
 
-  //Init sample list to 8 (size of abalone dataset)
+  // Init sample list to 8 (size of abalone dataset)
   InputSampleRegressionType sample(8);
   sample.Fill(0);
   sample[0] = -1;
@@ -262,653 +197,104 @@ int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
 
   const float age = 15;
 
-  if ( std::abs(age - predicted->GetMeasurementVector(0)[0]) <= 0.3 )
-    {
+  if (std::abs(age - predicted->GetMeasurementVector(0)[0]) <= 0.3)
+  {
     return EXIT_SUCCESS;
-    }
+  }
   else
-    {
+  {
     std::cout << age << "\t" << predicted->GetMeasurementVector(0)[0] << "\n";
     return EXIT_FAILURE;
-    }
+  }
 }
 
-
-int otbKNearestNeighborsMachineLearningModel(int argc, char * argv[])
+using KNearestNeighborsType = otb::KNearestNeighborsMachineLearningModel<InputValueType, TargetValueType>;
+int otbKNearestNeighborsMachineLearningModel(int argc, char* argv[])
 {
-  if (argc != 3 )
-    {
-    std::cout<<"Wrong number of arguments "<<std::endl;
-    std::cout<<"Usage : sample file, output file"<<std::endl;
-    return EXIT_FAILURE;
-    }
-
-  typedef otb::KNearestNeighborsMachineLearningModel<InputValueType,TargetValueType> KNearestNeighborsType;
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer labels = TargetListSampleType::New();
-
-  if(!otb::ReadDataFile(argv[1],samples,labels))
-    {
-    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
-    return EXIT_FAILURE;
-    }
-
-  KNearestNeighborsType::Pointer classifier = KNearestNeighborsType::New();
-  classifier->SetInputListSample(samples);
-  classifier->SetTargetListSample(labels);
-  classifier->Train();
-  //write the model
-  classifier->Save(argv[2]);
-
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
-
-  cmCalculator->SetProducedLabels(predicted);
-  cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
-  const float kappaIdx = cmCalculator->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdx<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
-
-
-  //Load Model to new KNN
-  KNearestNeighborsType::Pointer classifierLoad = KNearestNeighborsType::New();
-
-  classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
-
-  cmCalculatorLoad->SetProducedLabels(predictedLoad);
-  cmCalculatorLoad->SetReferenceLabels(labels);
-  cmCalculatorLoad->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
-  const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
-
-
-  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
-    {
-    return EXIT_SUCCESS;
-    }
-  else
-    {
-    return EXIT_FAILURE;
-    }
+  return otbGenericMachineLearningModel<KNearestNeighborsType>(argc, argv);
 }
 
-
-int otbRandomForestsMachineLearningModel(int argc, char * argv[])
+using RandomForestType = otb::RandomForestsMachineLearningModel<InputValueType, TargetValueType>;
+int otbRandomForestsMachineLearningModel(int argc, char* argv[])
 {
-  if (argc != 3 )
-    {
-    std::cout<<"Wrong number of arguments "<<std::endl;
-    std::cout<<"Usage : sample file, output file "<<std::endl;
-    return EXIT_FAILURE;
-    }
-
-  typedef otb::RandomForestsMachineLearningModel<InputValueType,TargetValueType> RandomForestType;
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer labels = TargetListSampleType::New();
-
-  if(!otb::ReadDataFile(argv[1],samples,labels))
-    {
-    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
-    return EXIT_FAILURE;
-    }
-
-  std::vector<float> priors(26,1.);
-
-
-  RandomForestType::Pointer classifier = RandomForestType::New();
-  classifier->SetInputListSample(samples);
-  classifier->SetTargetListSample(labels);
-
-  //set parameters
-  classifier->SetPriors(priors);
-  // classifier->SetMaxNumberOfTrees(30);
-  // classifier->SetMaxDepth(30);
-  // classifier->SetMaxNumberOfCategories(30);
-  // classifier->SetMaxNumberOfVariables(4);
-
-  classifier->Train();
-  classifier->Save(argv[2]);
-
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
-
-  cmCalculator->SetProducedLabels(predicted);
-  cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
-  const float kappaIdx = cmCalculator->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdx<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
-
-  //Load Model to new RF
-  RandomForestType::Pointer classifierLoad = RandomForestType::New();
-
-  classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
-
-  cmCalculatorLoad->SetProducedLabels(predictedLoad);
-  cmCalculatorLoad->SetReferenceLabels(labels);
-  cmCalculatorLoad->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
-  const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
-
-
-  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
-    {
-    return EXIT_SUCCESS;
-    }
-  else
-    {
-    return EXIT_FAILURE;
-    }
+  return otbGenericMachineLearningModel<RandomForestType>(argc, argv);
 }
 
-
-int otbBoostMachineLearningModel(int argc, char * argv[])
+template <>
+void SetupModel(RandomForestType* model)
 {
-  if (argc != 3 )
-    {
-    std::cout<<"Wrong number of arguments "<<std::endl;
-    std::cout<<"Usage : sample file, output file "<<std::endl;
-    return EXIT_FAILURE;
-    }
+  std::vector<float> priors(26, 1.);
+  model->SetPriors(priors);
+}
 
-  typedef otb::BoostMachineLearningModel<InputValueType, TargetValueType> BoostType;
+using BoostType = otb::BoostMachineLearningModel<InputValueType, TargetValueType>;
+int otbBoostMachineLearningModel(int argc, char* argv[])
+{
+  return otbGenericMachineLearningModel<BoostType>(argc, argv);
+}
 
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer labels = TargetListSampleType::New();
-
-  if(!otb::ReadDataFile(argv[1],samples,labels))
-    {
-    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
-    return EXIT_FAILURE;
-    }
-
+template <>
+void SetupModel(BoostType* model)
+{
   // Since otb::BoostMachineLearningModel ONLY handles 2-class classifications, then the
   // labels are split into 2 subsets: even (label = 1) and odd (label = 3) labels
-  TargetSampleType currentLabel;
+  TargetListSampleType::Pointer labels = model->GetTargetListSample();
+  TargetSampleType              currentLabel;
   for (unsigned itLabel = 0; itLabel < labels->Size(); ++itLabel)
-    {
+  {
     currentLabel = labels->GetMeasurementVector(itLabel);
     labels->SetMeasurementVector(itLabel, (2 * (currentLabel[0] % 2)) + 1);
-    }
-
-  BoostType::Pointer classifier = BoostType::New();
-  classifier->SetInputListSample(samples);
-  classifier->SetTargetListSample(labels);
-  classifier->Train();
-
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
-
-  classifier->Save(argv[2]);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
-
-  cmCalculator->SetProducedLabels(predicted);
-  cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
-  const float kappaIdx = cmCalculator->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdx<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
-
-  //Load Model to new Boost model
-  BoostType::Pointer classifierLoad = BoostType::New();
-
-  classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
-
-  cmCalculatorLoad->SetProducedLabels(predictedLoad);
-  cmCalculatorLoad->SetReferenceLabels(labels);
-  cmCalculatorLoad->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
-  const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
-
-
-  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
-    {
-    return EXIT_SUCCESS;
-    }
-  else
-    {
-    return EXIT_FAILURE;
-    }
+  }
+  model->SetTargetListSample(labels);
 }
 
-
-int otbANNMachineLearningModel(int argc, char * argv[])
+using ANNType = otb::NeuralNetworkMachineLearningModel<InputValueType, TargetValueType>;
+int otbANNMachineLearningModel(int argc, char* argv[])
 {
-  if (argc != 3)
-    {
-      std::cout<<"Wrong number of arguments "<<std::endl;
-      std::cout<<"Usage : sample file, output file "<<std::endl;
-      return EXIT_FAILURE;
-    }
+  return otbGenericMachineLearningModel<ANNType>(argc, argv);
+}
 
-
-  typedef otb::NeuralNetworkMachineLearningModel<InputValueType, TargetValueType> ANNType;
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer labels = TargetListSampleType::New();
-
-  if (!otb::ReadDataFile(argv[1], samples, labels))
-    {
-    std::cout << "Failed to read samples file " << argv[1] << std::endl;
-    return EXIT_FAILURE;
-    }
-
+template <>
+void SetupModel(ANNType* model)
+{
   std::vector<unsigned int> layerSizes;
   layerSizes.push_back(16);
   layerSizes.push_back(100);
   layerSizes.push_back(100);
   layerSizes.push_back(26);
-
-  ANNType::Pointer classifier = ANNType::New();
-  classifier->SetInputListSample(samples);
-  classifier->SetTargetListSample(labels);
-  classifier->SetLayerSizes(layerSizes);
-  /*classifier->SetTrainMethod(CvANN_MLP_TrainParams::RPROP);
-  classifier->SetRegPropDW0(0.1);
-  classifier->SetRegPropDWMin(0.1);
-  classifier->SetTermCriteriaType(CV_TERMCRIT_ITER);
-  classifier->SetMaxIter(300);
-  classifier->SetEpsilon(0.01); */
-  classifier->Train();
-
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
-
-  cmCalculator->SetProducedLabels(predicted);
-  cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Compute();
-
-  std::cout << "Confusion matrix: " << std::endl;
-  std::cout << cmCalculator->GetConfusionMatrix() << std::endl;
-  const float kappaIdx = cmCalculator->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdx<<std::endl;
-  std::cout << "Overall Accuracy: " << cmCalculator->GetOverallAccuracy() << std::endl;
-
-  classifier->Save(argv[2]);
-
-  //Load Model to new ANN
-  ANNType::Pointer classifierLoad = ANNType::New();
-
-  classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
-
-  cmCalculatorLoad->SetProducedLabels(predictedLoad);
-  cmCalculatorLoad->SetReferenceLabels(labels);
-  cmCalculatorLoad->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
-  const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
-
-
-  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
-    {
-    return EXIT_SUCCESS;
-    }
-  else
-    {
-    return EXIT_FAILURE;
-    }
+  model->SetLayerSizes(layerSizes);
 }
 
-
-int otbNormalBayesMachineLearningModel(int argc, char * argv[])
+using NormalBayesType = otb::NormalBayesMachineLearningModel<InputValueType, TargetValueType>;
+int otbNormalBayesMachineLearningModel(int argc, char* argv[])
 {
-  if (argc != 3 )
-    {
-      std::cout<<"Wrong number of arguments "<<std::endl;
-      std::cout<<"Usage : sample file, output file "<<std::endl;
-      return EXIT_FAILURE;
-    }
-
-  typedef otb::NormalBayesMachineLearningModel<InputValueType, TargetValueType> NormalBayesType;
-
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer labels = TargetListSampleType::New();
-
-  if(!otb::ReadDataFile(argv[1],samples,labels))
-    {
-    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
-    return EXIT_FAILURE;
-    }
-
-  NormalBayesType::Pointer classifier = NormalBayesType::New();
-  classifier->SetInputListSample(samples);
-  classifier->SetTargetListSample(labels);
-  classifier->Train();
-
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
-
-  classifier->Save(argv[2]);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
-
-  cmCalculator->SetProducedLabels(predicted);
-  cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
-  const float kappaIdx = cmCalculator->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdx<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
-
-  //Load Model to new Normal Bayes
-  NormalBayesType::Pointer classifierLoad = NormalBayesType::New();
-
-  classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
-
-  cmCalculatorLoad->SetProducedLabels(predictedLoad);
-  cmCalculatorLoad->SetReferenceLabels(labels);
-  cmCalculatorLoad->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
-  const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
-
-
-  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
-    {
-    return EXIT_SUCCESS;
-    }
-  else
-    {
-    return EXIT_FAILURE;
-    }
+  return otbGenericMachineLearningModel<NormalBayesType>(argc, argv);
 }
 
-
-int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
+using DecisionTreeType = otb::DecisionTreeMachineLearningModel<InputValueType, TargetValueType>;
+int otbDecisionTreeMachineLearningModel(int argc, char* argv[])
 {
-  if (argc != 3 )
-    {
-      std::cout<<"Wrong number of arguments "<<std::endl;
-      std::cout<<"Usage : sample file, output file "<<std::endl;
-      return EXIT_FAILURE;
-    }
-
-  typedef otb::DecisionTreeMachineLearningModel<InputValueType, TargetValueType> DecisionTreeType;
-
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer labels = TargetListSampleType::New();
-
-  if(!otb::ReadDataFile(argv[1],samples,labels))
-    {
-    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
-    return EXIT_FAILURE;
-    }
-
-  DecisionTreeType::Pointer classifier = DecisionTreeType::New();
-  classifier->SetInputListSample(samples);
-  classifier->SetTargetListSample(labels);
-  classifier->Train();
-
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
-
-  classifier->Save(argv[2]);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
-
-  cmCalculator->SetProducedLabels(predicted);
-  cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
-  const float kappaIdx = cmCalculator->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdx<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
-
-  //Load Model to new Decision Tree
-  DecisionTreeType::Pointer classifierLoad = DecisionTreeType::New();
-
-  classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
-
-  cmCalculatorLoad->SetProducedLabels(predictedLoad);
-  cmCalculatorLoad->SetReferenceLabels(labels);
-  cmCalculatorLoad->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
-  const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
-
-
-  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
-    {
-    return EXIT_SUCCESS;
-    }
-  else
-    {
-    return EXIT_FAILURE;
-    }
+  return otbGenericMachineLearningModel<DecisionTreeType>(argc, argv);
 }
-
-#ifndef OTB_OPENCV_3
-
-int otbGradientBoostedTreeMachineLearningModel(int argc, char * argv[])
-{
-  if (argc != 3 )
-    {
-      std::cout<<"Wrong number of arguments "<<std::endl;
-      std::cout<<"Usage : sample file, output file "<<std::endl;
-      return EXIT_FAILURE;
-    }
-
-  typedef otb::GradientBoostedTreeMachineLearningModel<InputValueType, TargetValueType> GBTreeType;
-
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer labels = TargetListSampleType::New();
-
-  if(!otb::ReadDataFile(argv[1],samples,labels))
-    {
-    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
-    return EXIT_FAILURE;
-    }
-
-  GBTreeType::Pointer classifier = GBTreeType::New();
-  classifier->SetInputListSample(samples);
-  classifier->SetTargetListSample(labels);
-  classifier->Train();
-
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
-
-  classifier->Save(argv[2]);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
-
-  cmCalculator->SetProducedLabels(predicted);
-  cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
-  const float kappaIdx = cmCalculator->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdx<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
-
-  //Load Model to new GBT
-  GBTreeType::Pointer classifierLoad = GBTreeType::New();
-
-  classifierLoad->Load(argv[2]);
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
-
-  cmCalculatorLoad->SetProducedLabels(predictedLoad);
-  cmCalculatorLoad->SetReferenceLabels(labels);
-  cmCalculatorLoad->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
-  const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
-
-
-  if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
-    {
-    return EXIT_SUCCESS;
-    }
-  else
-    {
-    return EXIT_FAILURE;
-    }
-}
-#endif // if not OpenCV 3
 #endif
 
+// -------------------------- Shark --------------------------------------------
 #ifdef OTB_USE_SHARK
-#include <chrono> // If shark is on, then we are using c++11
-
 #include "otbSharkRandomForestsMachineLearningModel.h"
 
-int otbSharkRFMachineLearningModel(int argc, char * argv[])
+using SharkRandomForestType = otb::SharkRandomForestsMachineLearningModel<InputValueType, TargetValueType>;
+int otbSharkRFMachineLearningModel(int argc, char* argv[])
 {
-  if (argc != 3 )
-    {
-    std::cout<<"Wrong number of arguments "<<std::endl;
-    std::cout<<"Usage : sample file, output file "<<std::endl;
-    return EXIT_FAILURE;
-    }
-
-  typedef otb::SharkRandomForestsMachineLearningModel<InputValueType,TargetValueType> RandomForestType;
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer labels = TargetListSampleType::New();
-
-  if(!otb::ReadDataFile(argv[1],samples,labels))
-    {
-    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
-    return EXIT_FAILURE;
-    }
-
-
-  RandomForestType::Pointer classifier = RandomForestType::New();
-  classifier->SetInputListSample(samples);
-  classifier->SetTargetListSample(labels);
-  classifier->SetRegressionMode(false);
-  classifier->SetNumberOfTrees(100);
-  classifier->SetMTry(0);
-  classifier->SetNodeSize(25);
-  classifier->SetOobRatio(0.3);
-  std::cout << "Train\n";
-  classifier->Train();
-  std::cout << "Save\n";
-  classifier->Save(argv[2]);
-
-  std::cout << "Predict\n";
-  TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
-
-  ConfusionMatrixCalculatorType::Pointer cmCalculator = ConfusionMatrixCalculatorType::New();
-
-  cmCalculator->SetProducedLabels(predicted);
-  cmCalculator->SetReferenceLabels(labels);
-  cmCalculator->Compute();
-
-  std::cout<<"Confusion matrix: "<<std::endl;
-  std::cout<<cmCalculator->GetConfusionMatrix()<<std::endl;
-  const float kappaIdx = cmCalculator->GetKappaIndex();
-  std::cout<<"Kappa: "<<kappaIdx<<std::endl;
-  std::cout<<"Overall Accuracy: "<<cmCalculator->GetOverallAccuracy()<<std::endl;
-
-  // //Predict single samples. Written for benchmarking purposes, but
-  // too long for regression testing
-  // std::cout << "Predict single samples\n";
-  // auto sIt = samples->Begin();
-  // auto lIt = labels->Begin();
-  // auto start = std::chrono::system_clock::now();
-  // for(; sIt != samples->End(); ++sIt, ++lIt)
-  //   {
-  //   classifier->Predict(sIt.GetMeasurementVector())[0];
-  //   }
-  // auto duration = std::chrono::duration_cast< TimeT>
-  //   (std::chrono::system_clock::now() - start);
-  // auto elapsed = duration.count();
-  // std::cout << "Predict took " << elapsed << " ms\n";
-  //  std::cout << "Single sample OA = " << oa << '\n';
-//Load Model to new RF
-  RandomForestType::Pointer classifierLoad = RandomForestType::New();
-
-  std::cout << "Load\n";
-  classifierLoad->Load(argv[2]);
-  auto start = std::chrono::system_clock::now();
-  std::cout << "Predict loaded\n";
-  TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
-  using TimeT = std::chrono::milliseconds;
-  auto duration = std::chrono::duration_cast< TimeT>
-    (std::chrono::system_clock::now() - start);
-  auto elapsed = duration.count();
-  std::cout << "PredictBatch took " << elapsed << " ms\n";
-  ConfusionMatrixCalculatorType::Pointer cmCalculatorLoad = ConfusionMatrixCalculatorType::New();
-
-   cmCalculatorLoad->SetProducedLabels(predictedLoad);
-   cmCalculatorLoad->SetReferenceLabels(labels);
-   cmCalculatorLoad->Compute();
-
-   std::cout<<"Confusion matrix: "<<std::endl;
-   std::cout<<cmCalculatorLoad->GetConfusionMatrix()<<std::endl;
-   const float kappaIdxLoad = cmCalculatorLoad->GetKappaIndex();
-   std::cout<<"Kappa: "<<kappaIdxLoad<<std::endl;
-   std::cout<<"Overall Accuracy: "<<cmCalculatorLoad->GetOverallAccuracy()<<std::endl;
-
-
-   if ( std::abs(kappaIdxLoad - kappaIdx) < 0.00000001)
-     {
-     return EXIT_SUCCESS;
-     }
-   else
-     {
-     return EXIT_FAILURE;
-     }
-
-   return EXIT_SUCCESS;
+  return otbGenericMachineLearningModel<SharkRandomForestType>(argc, argv);
 }
 
-
+template <>
+void SetupModel(SharkRandomForestType* model)
+{
+  model->SetRegressionMode(false);
+  model->SetNumberOfTrees(100);
+  model->SetMTry(0);
+  model->SetNodeSize(25);
+  model->SetOobRatio(0.3);
+}
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,27 +23,26 @@
 namespace otb
 {
 
-unsigned int
-StreamingShrinkImageRegionSplitter
-::GetNumberOfSplits(const RegionType& region, unsigned int requestedNumber)
+unsigned int StreamingShrinkImageRegionSplitter::GetNumberOfSplits(const RegionType& region, unsigned int requestedNumber)
 {
   unsigned int theoricalNbPixelPerTile = region.GetNumberOfPixels() / requestedNumber;
-  unsigned int theoricalTileDimension = static_cast<unsigned int> (std::sqrt(static_cast<double>(theoricalNbPixelPerTile)) );
+  unsigned int theoricalTileDimension  = static_cast<unsigned int>(std::sqrt(static_cast<double>(theoricalNbPixelPerTile)));
 
   // Take the previous multiple of m_ShrinkFactor (eventually generate more splits than requested)
   m_TileDimension = theoricalTileDimension / m_ShrinkFactor * m_ShrinkFactor;
 
   // Minimal tile size is m_ShrinkFactor * m_ShrinkFactor
   if (m_TileDimension < m_ShrinkFactor)
-    {
+  {
     otbMsgDevMacro(<< "Using the minimal tile size : " << m_ShrinkFactor << " * " << m_ShrinkFactor);
     m_TileDimension = m_ShrinkFactor;
-    }
+  }
 
-  const SizeType&  regionSize = region.GetSize();
+  const SizeType& regionSize = region.GetSize();
   // Compute the alignment of the sampling grid
   m_TileSizeAlignment = (m_ShrinkFactor - 1) / 2;
-  if (m_ShrinkFactor > regionSize[1]) m_TileSizeAlignment = (regionSize[1] - 1)/2;
+  if (m_ShrinkFactor > regionSize[1])
+    m_TileSizeAlignment = (regionSize[1] - 1) / 2;
 
   // Use the computed tile size, and generate (m_TileDimension * 1) tiles
   m_SplitsPerDimension[0] = (regionSize[0] + m_TileDimension - 1) / m_TileDimension;
@@ -51,19 +50,18 @@ StreamingShrinkImageRegionSplitter
 
   unsigned int numPieces = 1;
   for (unsigned int j = 0; j < ImageDimension; ++j)
-    {
+  {
     numPieces *= m_SplitsPerDimension[j];
-    }
+  }
 
   otbMsgDevMacro(<< "Tile dimension : " << m_TileDimension)
-  otbMsgDevMacro(<< "Number of splits per dimension : " << m_SplitsPerDimension[0] << " " <<  m_SplitsPerDimension[1])
+      otbMsgDevMacro(<< "Number of splits per dimension : " << m_SplitsPerDimension[0] << " " << m_SplitsPerDimension[1])
 
-  return numPieces;
+          return numPieces;
 }
 
-StreamingShrinkImageRegionSplitter::RegionType
-StreamingShrinkImageRegionSplitter
-::GetSplit(unsigned int i, unsigned int itkNotUsed(numberOfPieces), const RegionType& region)
+StreamingShrinkImageRegionSplitter::RegionType StreamingShrinkImageRegionSplitter::GetSplit(unsigned int i, unsigned int itkNotUsed(numberOfPieces),
+                                                                                            const RegionType& region)
 {
   RegionType splitRegion;
   IndexType  splitIndex;
@@ -71,14 +69,14 @@ StreamingShrinkImageRegionSplitter
   // Compute the actual number of splits
   unsigned int numPieces = 1;
   for (unsigned int j = 0; j < ImageDimension; ++j)
-    {
+  {
     numPieces *= m_SplitsPerDimension[j];
-    }
+  }
 
   if (i >= numPieces)
-    {
+  {
     itkExceptionMacro("Requested split number " << i << " but region contains only " << numPieces << " splits");
-    }
+  }
 
   // Compute the split index in the streaming grid
   splitIndex[1] = i / m_SplitsPerDimension[0];
@@ -97,9 +95,7 @@ StreamingShrinkImageRegionSplitter
   return splitRegion;
 }
 
-void
-StreamingShrinkImageRegionSplitter
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void StreamingShrinkImageRegionSplitter::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "ShrinkFactor       : " << m_ShrinkFactor << std::endl;

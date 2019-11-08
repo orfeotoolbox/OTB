@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,10 +29,10 @@
 
 #include "gdal.h"
 #include "ogr_api.h"
-#include "otbOGRVersionProxy.h"
 #include <string>
 
-namespace otb {
+namespace otb
+{
 
 /** \class VectorDataToLabelImageFilter
  *  \brief Burn geometries from the specified VectorData into raster
@@ -50,16 +50,15 @@ namespace otb {
  *
  * \ingroup OTBConversion
  */
-template <class TVectorData, class TOutputImage  >
-class  ITK_EXPORT VectorDataToLabelImageFilter :
-    public itk::ImageSource<TOutputImage>
+template <class TVectorData, class TOutputImage>
+class ITK_EXPORT VectorDataToLabelImageFilter : public itk::ImageSource<TOutputImage>
 {
 public:
   /** Standard class typedefs */
-  typedef VectorDataToLabelImageFilter                           Self;
-  typedef itk::ImageSource<TOutputImage>     Superclass;
-  typedef itk::SmartPointer< Self >                           Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef VectorDataToLabelImageFilter   Self;
+  typedef itk::ImageSource<TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(VectorDataToLabelImageFilter, itk::ImageSource);
@@ -78,16 +77,16 @@ public:
   typedef typename OutputImageType::InternalPixelType OutputImageInternalPixelType;
 
   /** VectorData typedefs*/
-  typedef TVectorData                            VectorDataType;
-  typedef typename VectorDataType::DataTreeType  DataTreeType;
-  typedef typename DataTreeType::TreeNodeType    InternalTreeNodeType;
-  typedef typename DataTreeType::Pointer         DataTreePointerType;
-  typedef typename DataTreeType::ConstPointer    DataTreeConstPointerType;
+  typedef TVectorData                           VectorDataType;
+  typedef typename VectorDataType::DataTreeType DataTreeType;
+  typedef typename DataTreeType::TreeNodeType   InternalTreeNodeType;
+  typedef typename DataTreeType::Pointer        DataTreePointerType;
+  typedef typename DataTreeType::ConstPointer   DataTreeConstPointerType;
 
-  typedef itk::ImageBase<OutputImageType::ImageDimension>      ImageBaseType;
+  typedef itk::ImageBase<OutputImageType::ImageDimension> ImageBaseType;
 
   /** Get Nth input VectorData */
-  const VectorDataType*  GetInput(unsigned int idx);
+  const VectorDataType* GetInput(unsigned int idx);
 
   /** Method for adding VectorData to rasterize  */
   virtual void AddVectorData(const VectorDataType* vd);
@@ -129,8 +128,13 @@ public:
   itkSetMacro(DefaultBurnValue, OutputImageInternalPixelType);
   itkGetMacro(DefaultBurnValue, OutputImageInternalPixelType);
 
+  /** Set/Get the AllTouchedMode flag */
+  itkSetMacro(AllTouchedMode, bool);
+  itkGetConstReferenceMacro(AllTouchedMode, bool);
+  itkBooleanMacro(AllTouchedMode);
+
   /** Useful to set the output parameters from an existing image*/
-  void SetOutputParametersFromImage(const ImageBaseType * image);
+  void SetOutputParametersFromImage(const ImageBaseType* image);
 
 protected:
   void GenerateData() override;
@@ -140,14 +144,14 @@ protected:
   {
     // Destroy the geometries stored
     for (unsigned int idx = 0; idx < m_SrcDataSetGeometries.size(); ++idx)
-      {
+    {
       OGR_G_DestroyGeometry(m_SrcDataSetGeometries[idx]);
-      }
+    }
 
     if (m_OGRDataSourcePointer != nullptr)
-      {
-      ogr::version_proxy::Close(m_OGRDataSourcePointer);
-      }
+    {
+      GDALClose(m_OGRDataSourcePointer);
+    }
   }
 
   void GenerateOutputInformation() override;
@@ -158,36 +162,39 @@ private:
   VectorDataToLabelImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  ogr::version_proxy::GDALDatasetType * m_OGRDataSourcePointer;
+  GDALDataset* m_OGRDataSourcePointer;
 
   // Vector Of OGRGeometyH
-  std::vector< OGRGeometryH >   m_SrcDataSetGeometries;
+  std::vector<OGRGeometryH> m_SrcDataSetGeometries;
 
-  std::vector<double>           m_BurnValues;
-  std::vector<double>           m_FullBurnValues;
-  std::vector<int>              m_BandsToBurn;
+  std::vector<double> m_BurnValues;
+  std::vector<double> m_FullBurnValues;
+  std::vector<int>    m_BandsToBurn;
 
   // Field used to extract the burn value
-  std::string                   m_BurnAttribute;
+  std::string m_BurnAttribute;
 
   // Default burn value
-  double                        m_DefaultBurnValue;
+  double m_DefaultBurnValue;
 
   // Background value
-  OutputImageInternalPixelType  m_BackgroundValue;
+  OutputImageInternalPixelType m_BackgroundValue;
+
+  // All touched mode
+  bool m_AllTouchedMode;
 
   // Output params
-  std::string                   m_OutputProjectionRef;
-  OutputSpacingType             m_OutputSpacing;
-  OutputOriginType              m_OutputOrigin;
-  OutputSizeType                m_OutputSize;
-  OutputIndexType               m_OutputStartIndex;
+  std::string       m_OutputProjectionRef;
+  OutputSpacingType m_OutputSpacing;
+  OutputOriginType  m_OutputOrigin;
+  OutputSizeType    m_OutputSize;
+  OutputIndexType   m_OutputStartIndex;
 }; // end of class VectorDataToLabelImageFilter
 
 } // end of namespace otb
 
 
-#ifndef  OTB_MANUAL_INSTANTIATION
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbVectorDataToLabelImageFilter.hxx"
 #endif
 

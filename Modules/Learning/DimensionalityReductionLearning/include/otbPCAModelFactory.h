@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,7 +27,7 @@ namespace otb
 {
 
 /** \class PCAModelFactory
- * 
+ *
  * Factory for the PCAModel
  *
  * \ingroup OTBDimensionalityReductionLearning
@@ -37,7 +37,7 @@ class ITK_EXPORT PCAModelFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef PCAModelFactory   Self;
+  typedef PCAModelFactory               Self;
   typedef itk::ObjectFactoryBase        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -64,11 +64,11 @@ protected:
   ~PCAModelFactory() override;
 
 private:
-  PCAModelFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PCAModelFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
-} //namespace otb
+} // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbPCAModelFactory.hxx"

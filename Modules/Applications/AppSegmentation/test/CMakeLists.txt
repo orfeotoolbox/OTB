@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,10 +22,9 @@ otb_module_test()
 #----------- Segmentation TESTS ----------------
 
 # Segmentation algorithms parameters
-set(cc_parameters "-filter.cc.expr" "distance<25")
-set(edison_parameters "-filter.edison.spatialr" "5" "-filter.edison.ranger" "50" "-filter.edison.minsize" "10")
+set(cc_parameters "-filter.cc.expr" "distance<50")
 set(meanshift_parameters "-filter.meanshift.spatialr" "5" "-filter.meanshift.ranger" "50" "-filter.meanshift.minsize" "10")
-set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ovw")
+set(vector_parameters "-mode.vector.tilesize" "50" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ovw")
 
 # validation option
 set(meanshift_option "--without-threads")
@@ -36,7 +35,7 @@ set(raster_output_option "uint16")
 set(vector_output_format ".sqlite")
 
 # Validation depending on mode
-set(vector_comparison --compare-ogr ${NOTOL})
+set(vector_comparison --compare-ogr ${EPSILON_9})
 set(raster_comparison --compare-image ${NOTOL})
 
 # Reference ffiles depending on modes
@@ -57,14 +56,16 @@ string(TOLOWER ${filter} lfilter)
 set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
 if(NOT (${filter} STREQUAL "Meanshift" AND ${mode} STREQUAL "Raster"))
+
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}
                      APP      Segmentation
-                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
+                     OPTIONS  -in ${INPUTDATA}/WV2_MUL_ROI_1000_100.tif
                               -filter ${lfilter}
                               ${${lfilter}_parameters}
                               -mode ${lmode}
                               -mode.${lmode}.out ${TEMP}/${OUTFILE} ${${lmode}_output_option}
                               ${${lmode}_parameters}
+			      --add-before-env ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS 4
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
                               ${${lmode}_ref_path}/${OUTFILE}
@@ -79,15 +80,16 @@ set(filter "CC")
 set(mode "Vector")
 
 string(TOLOWER ${filter} lfilter)
+string(TOLOWER ${mode} lmode)
 
 # Add a test for ULOVW
-set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulovw")
+set(vector_parameters "-mode.vector.tilesize" "50" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulovw")
 
 set(OUTFILE apTvSeSegmentation${filter}${mode}${${lmode}_output_format})
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULOVW
                      APP      Segmentation
-                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
+                     OPTIONS  -in ${INPUTDATA}/WV2_MUL_ROI_1000_100.tif
                               -filter ${lfilter}
                               ${${lfilter}_parameters}
                               -mode ${lmode}
@@ -104,11 +106,11 @@ set_tests_properties(apTvSeSegmentation${filter}${mode}_ULOVW
                                 RESOURCE_LOCK ${OUTFILE})
 
 # Add a test for ULU
-set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulu")
+set(vector_parameters "-mode.vector.tilesize" "50" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulu")
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULU
                      APP      Segmentation
-                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
+                     OPTIONS  -in ${INPUTDATA}/WV2_MUL_ROI_1000_100.tif
                               -filter ${lfilter}
                               ${${lfilter}_parameters}
                               -mode ${lmode}
@@ -116,7 +118,7 @@ OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULU
                               ${${lmode}_parameters}
                      VALID    ${${lfilter}_option}
                               ${${lmode}_comparison}
-                              ${${lmode}_ref_path}/${OUTFILE}_ULU
+                              ${${lmode}_ref_path}/apTvSeSegmentation${filter}${mode}_ULU${${lmode}_output_format}
                               ${TEMP}/${OUTFILE}
                      )
 
@@ -125,11 +127,11 @@ set_tests_properties(apTvSeSegmentation${filter}${mode}_ULU
                                 RESOURCE_LOCK ${OUTFILE})
 
 # Add a test for ULCO
-set(vector_parameters "-mode.vector.tilesize" "500" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulco")
+set(vector_parameters "-mode.vector.tilesize" "50" "-mode.vector.minsize" "50" "-mode.vector.simplify" "0.1" "-mode.vector.outmode" "ulco")
 
 OTB_TEST_APPLICATION(NAME     apTvSeSegmentation${filter}${mode}_ULCO
                      APP      Segmentation
-                     OPTIONS  -in ${EXAMPLEDATA}/qb_RoadExtract2.tif
+                     OPTIONS  -in ${INPUTDATA}/WV2_MUL_ROI_1000_100.tif
                               -filter ${lfilter}
                               ${${lfilter}_parameters}
                               -mode ${lmode}
@@ -174,7 +176,7 @@ otb_test_application(NAME  apTvCcConnectedComponentSegmentatioNoMask
 #----------- MeanShiftSmoothing TESTS ----------------
 otb_test_application(NAME     apTvLSMS1MeanShiftSmoothingNoModeSearch
                      APP      MeanShiftSmoothing
-                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
+                     OPTIONS  -in ${INPUTDATA}/QB_1_ortho.tif
                               -fout ${TEMP}/apTvLSMS1_filtered_range.tif
                               -foutpos ${TEMP}/apTvLSMS1_filtered_spatial.tif
                               -ranger 30
@@ -250,10 +252,24 @@ otb_test_application(NAME     apTvLSMS3SmallRegionsMerging
 
 set_property(TEST apTvLSMS3SmallRegionsMerging PROPERTY DEPENDS apTvLSMS2Segmentation)
 
+#----------- SmallRegionsMerging TESTS ----------------
+otb_test_application(NAME     apTvSmallRegionsMerging
+                     APP      SmallRegionsMerging
+                     OPTIONS  -in ${TEMP}/apTvLSMS1_filtered_range.tif
+                              -inseg  ${TEMP}/apTvLSMS2_Segmentation.tif
+                              -out ${TEMP}/apTvSmallMerged.tif uint32
+                              -minsize 10
+                     VALID    --compare-image ${NOTOL}
+                              ${BASELINE}/apTvSmallMerged.tif
+                              ${TEMP}/apTvSmallMerged.tif
+                     )
+                     
+set_property(TEST apTvSmallRegionsMerging PROPERTY DEPENDS apTvLSMS2Segmentation)
+
 #----------- LSMSVectorization TESTS ----------------
 otb_test_application(NAME     apTvLSMS4Vectorization_SmallMerged
                      APP      LSMSVectorization
-                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
+                     OPTIONS  -in ${INPUTDATA}/QB_1_ortho.tif
                               -inseg  ${BASELINE}/apTvLSMS3_Segmentation_SmallMerged.tif
                               -out ${TEMP}/apTvLSMS4_Segmentation_SmallMerged.shp
                               -tilesizex 100
@@ -267,7 +283,7 @@ set_property(TEST apTvLSMS4Vectorization_SmallMerged PROPERTY DEPENDS apTvLSMS3S
 
 otb_test_application(NAME     apTvLSMS4Vectorization_NoSmall
                      APP      LSMSVectorization
-                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
+                     OPTIONS  -in ${INPUTDATA}/QB_1_ortho.tif
                               -inseg  ${TEMP}/apTvLSMS2_Segmentation_NoSmall.tif
                               -out ${TEMP}/apTvLSMS4_Segmentation_NoSmall.shp
                               -tilesizex 100
@@ -296,7 +312,7 @@ otb_test_application(NAME     apTvSeHooverCompareSegmentationTest
 #----------- LargeScaleMeanShift TESTS ----------------
 otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
                      APP      LargeScaleMeanShift
-                     OPTIONS  -in ${EXAMPLEDATA}/QB_1_ortho.tif
+                     OPTIONS  -in ${INPUTDATA}/QB_1_ortho.tif
                               -spatialr 3
                               -ranger 80
                               -minsize 16
@@ -308,3 +324,4 @@ otb_test_application(NAME     apTvSeLargeScaleMeanShiftTest
                               ${BASELINE_FILES}/apTvSeLargeScaleMeanShiftTestOut.shp
                               ${TEMP}/apTvSeLargeScaleMeanShiftTestOut.shp
                      )
+                     

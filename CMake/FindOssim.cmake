@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -91,7 +91,7 @@ find_library(OSSIM_LIBRARY
 # handle the QUIETLY and REQUIRED arguments and set OSSIM_FOUND to TRUE if
 # all listed variables are TRUE
 include( FindPackageHandleStandardArgs )
-FIND_PACKAGE_HANDLE_STANDARD_ARGS( Ossim DEFAULT_MSG OSSIM_LIBRARY OSSIM_INCLUDE_DIR )
+find_package_handle_standard_args( Ossim DEFAULT_MSG OSSIM_LIBRARY OSSIM_INCLUDE_DIR )
 
 mark_as_advanced( OSSIM_INCLUDE_DIR OSSIM_LIBRARY )
 

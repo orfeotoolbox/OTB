@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -75,7 +75,7 @@ namespace mvd
  */
 enum SpatialReferenceType
 {
-  SRT_UNKNOWN =0,
+  SRT_UNKNOWN = 0,
   SRT_CARTO,
   SRT_GEO,
   SRT_SENSOR,
@@ -86,11 +86,11 @@ enum SpatialReferenceType
 
 /**
  */
-OTBMonteverdiCore_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & filename );
+OTBMonteverdiCore_EXPORT SpatialReferenceType GetSpatialReferenceType(const std::string& filename);
 
 /**
  */
-OTBMonteverdiCore_EXPORT SpatialReferenceType GetSpatialReferenceType( const std::string & wkt, bool hasKwl );
+OTBMonteverdiCore_EXPORT SpatialReferenceType GetSpatialReferenceType(const std::string& wkt, bool hasKwl);
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -102,9 +102,7 @@ OTBMonteverdiCore_EXPORT SpatialReferenceType GetSpatialReferenceType( const std
  *
  * \brief WIP.
  */
-class OTBMonteverdiCore_EXPORT AbstractLayerModel :
-    public AbstractModel,
-    public VisibleInterface
+class OTBMonteverdiCore_EXPORT AbstractLayerModel : public AbstractModel, public VisibleInterface
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -113,10 +111,9 @@ class OTBMonteverdiCore_EXPORT AbstractLayerModel :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Destructor. */
   ~AbstractLayerModel() override;
 
@@ -130,63 +127,60 @@ public:
 
   /**
    */
-  std::string GetAuthorityCode( bool ) const;
+  std::string GetAuthorityCode(bool) const;
 
   /**
    */
-  void ToWgs84( const PointType &, PointType & wgs84, double & alt ) const;
+  void ToWgs84(const PointType&, PointType& wgs84, double& alt) const;
 
   /** Setter for the m_Name attribute ( should be initialized by subclasses )*/
-  void SetName(const QString & name);
+  void SetName(const QString& name);
 
   /** Getter for the m_Name attribute */
-  const QString & GetName() const;
+  const QString& GetName() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   /**
    */
-  void VisibilityChanged( bool =true );
-  void VisibilityChanged( AbstractLayerModel *, bool );
+  void VisibilityChanged(bool = true);
+  void VisibilityChanged(AbstractLayerModel*, bool);
 
   /** Signal to other components that the name has changed */
   void NameChanged();
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** \brief Constructor. */
-  AbstractLayerModel( QObject* p =NULL );
+  AbstractLayerModel(QObject* p = NULL);
 
   /**
    */
   bool HasKwl() const;
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   /**
    */
-  virtual std::string virtual_GetWkt() const =0;
+  virtual std::string virtual_GetWkt() const = 0;
 
   /**
    */
@@ -194,21 +188,20 @@ private:
 
   /**
    */
-  virtual void virtual_ToWgs84( const PointType &, PointType & wgs84, double & alt ) const =0;
+  virtual void virtual_ToWgs84(const PointType&, PointType& wgs84, double& alt) const = 0;
 
   //
   // VisibleInterface overloads.
-  void virtual_SignalVisibilityChanged( bool ) override;
+  void virtual_SignalVisibilityChanged(bool) override;
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   QString m_Name;
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 

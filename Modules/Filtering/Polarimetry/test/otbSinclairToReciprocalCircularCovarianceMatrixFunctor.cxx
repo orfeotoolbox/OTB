@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,41 +19,37 @@
  */
 
 
-#include "otbSinclairToReciprocalCircularCovarianceMatrixFunctor.h"
+#include "otbSinclairToReciprocalCircularCovarianceMatrixImageFilter.h"
 #include "itkVariableLengthVector.h"
 
-int otbSinclairToReciprocalCircularCovarianceMatrixFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbSinclairToReciprocalCircularCovarianceMatrixFunctor(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   typedef std::complex<double>                   ComplexType;
   typedef itk::VariableLengthVector<ComplexType> OutputType;
 
-  typedef otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<ComplexType, ComplexType, ComplexType, OutputType >         FunctorType;
+  typedef otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<ComplexType, ComplexType, ComplexType, OutputType> FunctorType;
 
   OutputType  result(6);
   FunctorType funct;
-  OutputType outputFunct;
+  OutputType  outputFunct(6);
 
-  result[0] = ComplexType( 25.,  0.);
-  result[1] = ComplexType( 25.4558441227157,-1.4142135623731);
-  result[2] = ComplexType( 11.,  -2.);
-  result[3] = ComplexType( 26.,  0.);
-  result[4] = ComplexType( 11.3137084989848,-1.41421356237309);
-  result[5] = ComplexType( 5, .0);
+  result[0] = ComplexType(25., 0.);
+  result[1] = ComplexType(25.4558441227157, -1.4142135623731);
+  result[2] = ComplexType(11., -2.);
+  result[3] = ComplexType(26., 0.);
+  result[4] = ComplexType(11.3137084989848, -1.41421356237309);
+  result[5] = ComplexType(5, .0);
 
-  outputFunct = funct.operator ()( ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.) );
+  funct.operator()(outputFunct, ComplexType(1., 4.), ComplexType(2., 3.), ComplexType(3., 2.));
 
-  if( std::abs(result[0]-outputFunct[0]) > 1e-10 ||
-      std::abs(result[1]-outputFunct[1]) > 1e-10 ||
-      std::abs(result[2]-outputFunct[2]) > 1e-10 ||
-      std::abs(result[3]-outputFunct[3]) > 1e-10 ||
-      std::abs(result[4]-outputFunct[4]) > 1e-10 ||
-      std::abs(result[5]-outputFunct[5]) > 1e-10   )
+  if (std::abs(result[0] - outputFunct[0]) > 1e-10 || std::abs(result[1] - outputFunct[1]) > 1e-10 || std::abs(result[2] - outputFunct[2]) > 1e-10 ||
+      std::abs(result[3] - outputFunct[3]) > 1e-10 || std::abs(result[4] - outputFunct[4]) > 1e-10 || std::abs(result[5] - outputFunct[5]) > 1e-10)
   {
-	  std::cout.precision(15);
-    std::cout<<"Test gives :"<<std::endl;
-    std::cout<<outputFunct<<std::endl;
-    std::cout<<"Wanted results are :"<<std::endl;
-    std::cout<<result<<std::endl;
+    std::cout.precision(15);
+    std::cout << "Test gives :" << std::endl;
+    std::cout << outputFunct << std::endl;
+    std::cout << "Wanted results are :" << std::endl;
+    std::cout << result << std::endl;
 
     return EXIT_FAILURE;
   }

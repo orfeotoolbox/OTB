@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,11 +31,10 @@ namespace otb
 /*
   * Constructor
  */
-template<class TInputImage>
-ContinuousMinimumMaximumImageCalculator<TInputImage>
-::ContinuousMinimumMaximumImageCalculator()
+template <class TInputImage>
+ContinuousMinimumMaximumImageCalculator<TInputImage>::ContinuousMinimumMaximumImageCalculator()
 {
-  m_Image = TInputImage::New();
+  m_Image   = TInputImage::New();
   m_Maximum = itk::NumericTraits<PixelType>::NonpositiveMin();
   m_Minimum = itk::NumericTraits<PixelType>::max();
   m_IndexOfMinimum.Fill(0);
@@ -46,58 +45,56 @@ ContinuousMinimumMaximumImageCalculator<TInputImage>
 /*
   * Compute Min and Max of m_Image
  */
-template<class TInputImage>
-void
-ContinuousMinimumMaximumImageCalculator<TInputImage>
-::Compute(void)
+template <class TInputImage>
+void ContinuousMinimumMaximumImageCalculator<TInputImage>::Compute(void)
 {
   if (!m_RegionSetByUser)
-    {
+  {
     m_Region = m_Image->GetRequestedRegion();
-    }
+  }
 
-  itk::ImageRegionConstIteratorWithIndex<TInputImage>  it(m_Image, m_Region);
+  itk::ImageRegionConstIteratorWithIndex<TInputImage> it(m_Image, m_Region);
   m_Maximum = itk::NumericTraits<PixelType>::NonpositiveMin();
   m_Minimum = itk::NumericTraits<PixelType>::max();
 
   while (!it.IsAtEnd())
-    {
+  {
     const RealPixelType value = it.Get();
     if (value > static_cast<RealPixelType>(m_Maximum))
-      {
-      m_Maximum = static_cast<PixelType>(value);
+    {
+      m_Maximum        = static_cast<PixelType>(value);
       m_IndexOfMaximum = it.GetIndex();
-      }
-    if (value < static_cast<RealPixelType>(m_Minimum))
-      {
-      m_Minimum = static_cast<PixelType>(value);
-      m_IndexOfMinimum = it.GetIndex();
-      }
-    ++it;
     }
+    if (value < static_cast<RealPixelType>(m_Minimum))
+    {
+      m_Minimum        = static_cast<PixelType>(value);
+      m_IndexOfMinimum = it.GetIndex();
+    }
+    ++it;
+  }
 
   IndexType indexNeighbor;
 
-    { //Continuous Minimum calculation
-      //Compute horizontal offset
+  { // Continuous Minimum calculation
+    // Compute horizontal offset
     indexNeighbor[0] = m_IndexOfMinimum[0] - 1;
     indexNeighbor[1] = m_IndexOfMinimum[1];
     it.SetIndex(indexNeighbor);
     const RealPixelType leftValue = it.Get();
-    indexNeighbor[0] = m_IndexOfMinimum[0] + 1;
-    indexNeighbor[1] = m_IndexOfMinimum[1];
+    indexNeighbor[0]              = m_IndexOfMinimum[0] + 1;
+    indexNeighbor[1]              = m_IndexOfMinimum[1];
     it.SetIndex(indexNeighbor);
     const RealPixelType rightValue = it.Get();
 
     double hOffset = -(rightValue - leftValue) / (2 * (rightValue + leftValue - 2 * m_Minimum));
 
-    //Compute vertical offset
+    // Compute vertical offset
     indexNeighbor[0] = m_IndexOfMinimum[0];
     indexNeighbor[1] = m_IndexOfMinimum[1] - 1;
     it.SetIndex(indexNeighbor);
     const RealPixelType topValue = it.Get();
-    indexNeighbor[0] = m_IndexOfMinimum[0];
-    indexNeighbor[1] = m_IndexOfMinimum[1] + 1;
+    indexNeighbor[0]             = m_IndexOfMinimum[0];
+    indexNeighbor[1]             = m_IndexOfMinimum[1] + 1;
     it.SetIndex(indexNeighbor);
     const RealPixelType bottomValue = it.Get();
 
@@ -105,28 +102,28 @@ ContinuousMinimumMaximumImageCalculator<TInputImage>
 
     m_ContinuousIndexOfMinimum[0] = m_IndexOfMinimum[0] + hOffset;
     m_ContinuousIndexOfMinimum[1] = m_IndexOfMinimum[1] + vOffset;
-    }
+  }
 
-    { //Continuous Maximum calculation
-      //Compute horizontal offset
+  { // Continuous Maximum calculation
+    // Compute horizontal offset
     indexNeighbor[0] = m_IndexOfMaximum[0] - 1;
     indexNeighbor[1] = m_IndexOfMaximum[1];
     it.SetIndex(indexNeighbor);
     const RealPixelType leftValue = it.Get();
-    indexNeighbor[0] = m_IndexOfMaximum[0] + 1;
-    indexNeighbor[1] = m_IndexOfMaximum[1];
+    indexNeighbor[0]              = m_IndexOfMaximum[0] + 1;
+    indexNeighbor[1]              = m_IndexOfMaximum[1];
     it.SetIndex(indexNeighbor);
     const RealPixelType rightValue = it.Get();
 
     double hOffset = -(rightValue - leftValue) / (2 * (rightValue + leftValue - 2 * m_Maximum));
 
-    //Compute vertical offset
+    // Compute vertical offset
     indexNeighbor[0] = m_IndexOfMaximum[0];
     indexNeighbor[1] = m_IndexOfMaximum[1] - 1;
     it.SetIndex(indexNeighbor);
     const RealPixelType topValue = it.Get();
-    indexNeighbor[0] = m_IndexOfMaximum[0];
-    indexNeighbor[1] = m_IndexOfMaximum[1] + 1;
+    indexNeighbor[0]             = m_IndexOfMaximum[0];
+    indexNeighbor[1]             = m_IndexOfMaximum[1] + 1;
     it.SetIndex(indexNeighbor);
     const RealPixelType bottomValue = it.Get();
 
@@ -134,57 +131,54 @@ ContinuousMinimumMaximumImageCalculator<TInputImage>
 
     m_ContinuousIndexOfMaximum[0] = m_IndexOfMaximum[0] + hOffset;
     m_ContinuousIndexOfMaximum[1] = m_IndexOfMaximum[1] + vOffset;
-    }
-
+  }
 }
 
 /*
   * Compute the minimum intensity value of the image
  */
-template<class TInputImage>
-void
-ContinuousMinimumMaximumImageCalculator<TInputImage>
-::ComputeMinimum(void)
+template <class TInputImage>
+void ContinuousMinimumMaximumImageCalculator<TInputImage>::ComputeMinimum(void)
 {
   if (!m_RegionSetByUser)
-    {
+  {
     m_Region = m_Image->GetRequestedRegion();
-    }
-  itk::ImageRegionConstIteratorWithIndex<TInputImage>  it(m_Image,  m_Region);
+  }
+  itk::ImageRegionConstIteratorWithIndex<TInputImage> it(m_Image, m_Region);
   m_Minimum = itk::NumericTraits<PixelType>::max();
 
   while (!it.IsAtEnd())
-    {
+  {
     const RealPixelType value = it.Get();
     if (value < static_cast<RealPixelType>(m_Minimum))
-      {
-      m_Minimum = static_cast<PixelType>(value);
+    {
+      m_Minimum        = static_cast<PixelType>(value);
       m_IndexOfMinimum = it.GetIndex();
-      }
-    ++it;
     }
+    ++it;
+  }
 
   IndexType indexNeighbor;
 
-  //Compute horizontal offset
+  // Compute horizontal offset
   indexNeighbor[0] = m_IndexOfMinimum[0] - 1;
   indexNeighbor[1] = m_IndexOfMinimum[1];
   it.SetIndex(indexNeighbor);
   const RealPixelType leftValue = it.Get();
-  indexNeighbor[0] = m_IndexOfMinimum[0] + 1;
-  indexNeighbor[1] = m_IndexOfMinimum[1];
+  indexNeighbor[0]              = m_IndexOfMinimum[0] + 1;
+  indexNeighbor[1]              = m_IndexOfMinimum[1];
   it.SetIndex(indexNeighbor);
   const RealPixelType rightValue = it.Get();
 
   double hOffset = -(rightValue - leftValue) / (2 * (rightValue + leftValue - 2 * m_Minimum));
 
-  //Compute vertical offset
+  // Compute vertical offset
   indexNeighbor[0] = m_IndexOfMinimum[0];
   indexNeighbor[1] = m_IndexOfMinimum[1] - 1;
   it.SetIndex(indexNeighbor);
   const RealPixelType topValue = it.Get();
-  indexNeighbor[0] = m_IndexOfMinimum[0];
-  indexNeighbor[1] = m_IndexOfMinimum[1] + 1;
+  indexNeighbor[0]             = m_IndexOfMinimum[0];
+  indexNeighbor[1]             = m_IndexOfMinimum[1] + 1;
   it.SetIndex(indexNeighbor);
   const RealPixelType bottomValue = it.Get();
 
@@ -192,68 +186,65 @@ ContinuousMinimumMaximumImageCalculator<TInputImage>
 
   m_ContinuousIndexOfMinimum[0] = m_IndexOfMinimum[0] + hOffset;
   m_ContinuousIndexOfMinimum[1] = m_IndexOfMinimum[1] + vOffset;
-
 }
 
 /*
   * Compute the maximum intensity value of the image
  */
-template<class TInputImage>
-void
-ContinuousMinimumMaximumImageCalculator<TInputImage>
-::ComputeMaximum(void)
+template <class TInputImage>
+void ContinuousMinimumMaximumImageCalculator<TInputImage>::ComputeMaximum(void)
 {
   if (!m_RegionSetByUser)
-    {
+  {
     m_Region = m_Image->GetRequestedRegion();
-    }
-  itk::ImageRegionConstIteratorWithIndex<TInputImage>  it(m_Image,  m_Region);
+  }
+  itk::ImageRegionConstIteratorWithIndex<TInputImage> it(m_Image, m_Region);
   m_Maximum = itk::NumericTraits<PixelType>::NonpositiveMin();
 
   while (!it.IsAtEnd())
-    {
+  {
     const RealPixelType value = it.Get();
     if (value > static_cast<RealPixelType>(m_Maximum))
-      {
-      m_Maximum = static_cast<PixelType>(value);
+    {
+      m_Maximum        = static_cast<PixelType>(value);
       m_IndexOfMaximum = it.GetIndex();
-      }
-    ++it;
     }
+    ++it;
+  }
 
-  //Solve equations a, b, c
-//     y0 = a*x0^2 + b*x0 +c
-//     y1 = a*x1^2 + b*x1 +c
-//     y2 = a*x2^2 + b*x2 +c
-//
-//     y0 = a - b +c
-//     y1 = c
-//     y2 = a + b +c
-//
-//
-// Max is at -b/2a
-// -(y2-y0)/(2*(y0+y2-2y1))
+  // Solve equations a, b, c
+  //     y0 = a*x0^2 + b*x0 +c
+  //     y1 = a*x1^2 + b*x1 +c
+  //     y2 = a*x2^2 + b*x2 +c
+  //
+  //     y0 = a - b +c
+  //     y1 = c
+  //     y2 = a + b +c
+  //
+  //
+  // Max is at -b/2a
+  // -(y2-y0)/(2*(y0+y2-2y1))
   IndexType indexNeighbor;
 
-  //Compute horizontal offset
+  // Compute horizontal offset
   indexNeighbor[0] = m_IndexOfMaximum[0] - 1;
   indexNeighbor[1] = m_IndexOfMaximum[1];
   it.SetIndex(indexNeighbor);
   const RealPixelType leftValue = it.Get();
-  indexNeighbor[0] = m_IndexOfMaximum[0] + 1;
-  indexNeighbor[1] = m_IndexOfMaximum[1];
+  indexNeighbor[0]              = m_IndexOfMaximum[0] + 1;
+  indexNeighbor[1]              = m_IndexOfMaximum[1];
   it.SetIndex(indexNeighbor);
   const RealPixelType rightValue = it.Get();
 
   double hOffset = -(rightValue - leftValue) / (2 * (rightValue + leftValue - 2 * m_Maximum));
 
-  //Compute vertical offset
+  // Compute vertical offset
   indexNeighbor[0] = m_IndexOfMaximum[0];
   indexNeighbor[1] = m_IndexOfMaximum[1] - 1;
   it.SetIndex(indexNeighbor);
   const RealPixelType topValue = it.Get();
-  indexNeighbor[0] = m_IndexOfMaximum[0];
-  indexNeighbor[1] = m_IndexOfMaximum[1] + 1;
+  indexNeighbor[0]             = m_IndexOfMaximum[0];
+  indexNeighbor[1]             = m_IndexOfMaximum[1] + 1;
   it.SetIndex(indexNeighbor);
   const RealPixelType bottomValue = it.Get();
 
@@ -261,31 +252,22 @@ ContinuousMinimumMaximumImageCalculator<TInputImage>
 
   m_ContinuousIndexOfMaximum[0] = m_IndexOfMaximum[0] + hOffset;
   m_ContinuousIndexOfMaximum[1] = m_IndexOfMaximum[1] + vOffset;
-
 }
 
-template<class TInputImage>
-void
-ContinuousMinimumMaximumImageCalculator<TInputImage>
-::SetRegion(const RegionType& region)
+template <class TInputImage>
+void ContinuousMinimumMaximumImageCalculator<TInputImage>::SetRegion(const RegionType& region)
 {
-  m_Region = region;
+  m_Region          = region;
   m_RegionSetByUser = true;
 }
 
-template<class TInputImage>
-void
-ContinuousMinimumMaximumImageCalculator<TInputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TInputImage>
+void ContinuousMinimumMaximumImageCalculator<TInputImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Minimum: "
-     << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(m_Minimum)
-     << std::endl;
-  os << indent << "Maximum: "
-     << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(m_Maximum)
-     << std::endl;
+  os << indent << "Minimum: " << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(m_Minimum) << std::endl;
+  os << indent << "Maximum: " << static_cast<typename itk::NumericTraits<PixelType>::PrintType>(m_Maximum) << std::endl;
   os << indent << "Index of Minimum: " << m_IndexOfMinimum << std::endl;
   os << indent << "Index of Maximum: " << m_IndexOfMaximum << std::endl;
   os << indent << "Continuous Index of Minimum: " << m_ContinuousIndexOfMinimum << std::endl;

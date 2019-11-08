@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -30,6 +30,8 @@
 #include <string>
 #include <boost/config.hpp>
 
+#include "ossimPluginConstants.h" // OSSIM_PLUGINS_DLL
+
 #include <ossim/base/ossimCommon.h>
 #include <ossim/base/ossimFilename.h>
 #include <ossim/base/ossimKeywordNames.h>
@@ -40,7 +42,6 @@
 //#include <ossim/projection/ossimSensorModel.h>
 //#include <ossim/projection/ossimCoarseGridModel.h>
 #include "ossim/ossimSarSensorModel.h"
-#include "ossimPluginConstants.h" // OSSIM_PLUGINS_DLL
 
 #include <ossim/support_data/ossimSupportFilesList.h>
 
@@ -163,6 +164,7 @@ namespace ossimplugins
       void readGeoLocationGrid(ossimXmlNode const& productRoot);
       void addOrbitStateVectors(ossimXmlNode const& orbitList);
       void addDopplerCentroidCoefficients(ossimXmlNode const& dcEstimateList);
+      void addAzimuthFmRateCoefficients(ossimXmlNode const& aziFmRateList);
       bool openMetadataFile(ossimXmlDocument& doc, ossimString const& file) const;
 
       ossimFilename      theManifestDirectory;

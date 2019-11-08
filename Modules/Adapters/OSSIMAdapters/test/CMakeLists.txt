@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -24,11 +24,8 @@ set(OTBOSSIMAdaptersTests
 otbOSSIMAdaptersTestDriver.cxx
 otbTestImageKeywordlist.cxx
 otbOssimJpegFileResourceLeakTest.cxx
-otbMapProjectionAdapterTest.cxx
 otbOssimElevManagerTest2.cxx
 otbOssimElevManagerTest4.cxx
-otbGeometricSarSensorModelAdapter.cxx
-otbPlatformPositionAdapter.cxx
 otbDEMHandlerTest.cxx
 otbRPCSolverAdapterTest.cxx
 otbSarSensorModelAdapterTest.cxx
@@ -147,14 +144,6 @@ otb_add_test(NAME ioTvOssimJpegFileResourceLeak COMMAND otbOSSIMAdaptersTestDriv
   1200
   )
 
-otb_add_test(NAME ioTvMapProjectionAdapterTest COMMAND otbOSSIMAdaptersTestDriver
-  --compare-ascii ${EPSILON_9}
-  ${BASELINE_FILES}/ioTvMapProjectionAdapterTest.txt
-  ${TEMP}/ioTvMapProjectionAdapterTest.txt
-  otbMapProjectionAdapterTest
-  ${TEMP}/ioTvMapProjectionAdapterTest.txt
-  )
-
 otb_add_test(NAME prTvossimElevManagerTest2 COMMAND otbOSSIMAdaptersTestDriver
   --compare-ascii ${EPSILON_9}  ${BASELINE_FILES}/prTvossimElevManagerTest2.txt
   ${TEMP}/prTvossimElevManagerTest2.txt
@@ -168,30 +157,13 @@ otb_add_test(NAME prTvossimElevManagerTest2 COMMAND otbOSSIMAdaptersTestDriver
   )
 
 otb_add_test(NAME prTvossimElevManagerTest4 COMMAND otbOSSIMAdaptersTestDriver
-  --compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest4
-  ${TEMP}/prTvossimElevManagerTest4.hdr
+  --compare-image ${EPSILON_9}  ${BASELINE}/prTvossimElevManagerTest4.tif
+  ${TEMP}/prTvossimElevManagerTest4.tif
   otbOssimElevManagerTest4
   ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/prTvossimElevManagerTest4
+  ${TEMP}/prTvossimElevManagerTest4.tif
   -1.8 52   0.02 -0.018 232 422
   )
-
-#commented below test. these are moved to dev_sar_tsx branch for further checks
-# otb_add_test(NAME uaTvGeometricSarSensorModelAdapterTest COMMAND otbOSSIMAdaptersTestDriver
-#   --compare-ascii ${EPSILON_9}
-#   ${BASELINE_FILES}/uaTvGeometricSarSensorModelAdapterTest.txt
-#   ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt
-#   otbGeometricSarSensorModelAdapterTest
-#   LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC//TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml}
-#   ${TEMP}/uaTvGeometricSarSensorModelAdapterTest.txt)
-
-# otb_add_test(NAME uaTvPlatformPositionComputeBaselineTest COMMAND otbOSSIMAdaptersTestDriver
-#   --compare-ascii ${EPSILON_9}
-#   ${BASELINE_FILES}/uaTvPlatformPositionComputeBaselineTest.txt
-#   ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt
-#   otbPlatformPositionComputeBaselineTest
-#   LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC//TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228.xml}
-#   ${TEMP}/uaTvPlatformPositionComputeBaselineTest.txt)
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid_NoData COMMAND otbOSSIMAdaptersTestDriver
   otbDEMHandlerTest
@@ -498,4 +470,9 @@ otb_add_test(NAME uaTvRPCSolverAdapterValidationTest COMMAND otbOSSIMAdaptersTes
 otb_add_test(NAME uaTvSarSensorModelAdapter COMMAND otbOSSIMAdaptersTestDriver
   otbSarSensorModelAdapterTest
   ${INPUTDATA}/s1a-iw1-slc-vh-amp_xt.geom
+  )
+
+otb_add_test(NAME uaTvSarSensorModelAdapter2 COMMAND otbOSSIMAdaptersTestDriver
+  otbSarSensorModelAdapterTest
+  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.geom
   )

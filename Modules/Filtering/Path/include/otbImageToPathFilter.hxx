@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,8 +29,7 @@ namespace otb
  * Constructor.
  */
 template <class TInputImage, class TOutputPath>
-ImageToPathFilter<TInputImage, TOutputPath>
-::ImageToPathFilter()
+ImageToPathFilter<TInputImage, TOutputPath>::ImageToPathFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 }
@@ -38,29 +37,23 @@ ImageToPathFilter<TInputImage, TOutputPath>
  * Input image setter.
  */
 template <class TInputImage, class TOutputPath>
-void
-ImageToPathFilter<TInputImage, TOutputPath>
-::SetInput(const InputImageType * image)
+void ImageToPathFilter<TInputImage, TOutputPath>::SetInput(const InputImageType* image)
 {
-  this->ProcessObjectType::SetNthInput(0, const_cast<InputImageType *>(image));
+  this->ProcessObjectType::SetNthInput(0, const_cast<InputImageType*>(image));
 }
 /**
  * Input image getter.
  */
 template <class TInputImage, class TOutputPath>
-const typename ImageToPathFilter<TInputImage, TOutputPath>::InputImageType *
-ImageToPathFilter<TInputImage, TOutputPath>
-::GetInput(void)
+const typename ImageToPathFilter<TInputImage, TOutputPath>::InputImageType* ImageToPathFilter<TInputImage, TOutputPath>::GetInput(void)
 {
-  return static_cast<const TInputImage *>(this->ProcessObjectType::GetInput(0));
+  return static_cast<const TInputImage*>(this->ProcessObjectType::GetInput(0));
 }
 /**
  * PrintSelf Method.
  */
 template <class TInputImage, class TOutputPath>
-void
-ImageToPathFilter<TInputImage, TOutputPath>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ImageToPathFilter<TInputImage, TOutputPath>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

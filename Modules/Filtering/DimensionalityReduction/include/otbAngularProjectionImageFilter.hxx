@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,74 +27,64 @@
 #include <itkImageRegionIterator.h>
 #include <itkProgressAccumulator.h>
 
-namespace otb {
-
-template < class TInputImage, class TOutputImage, class TAngleArray, class TPrecision >
-AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision >
-::AngularProjectionImageFilter ()
+namespace otb
 {
-  //this->SetNumberOfRequiredInputs(NumberOfInputImages);
+
+template <class TInputImage, class TOutputImage, class TAngleArray, class TPrecision>
+AngularProjectionImageFilter<TInputImage, TOutputImage, TAngleArray, TPrecision>::AngularProjectionImageFilter()
+{
+  // this->SetNumberOfRequiredInputs(NumberOfInputImages);
   this->SetNumberOfRequiredOutputs(1);
 }
 
-template < class TInputImage, class TOutputImage, class TAngleArray, class TPrecision >
-void
-AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision >
-::SetInput ( unsigned int i, const InputImageType * img )
+template <class TInputImage, class TOutputImage, class TAngleArray, class TPrecision>
+void AngularProjectionImageFilter<TInputImage, TOutputImage, TAngleArray, TPrecision>::SetInput(unsigned int i, const InputImageType* img)
 {
-  this->itk::ProcessObject::SetNthInput(i,
-    const_cast< InputImageType * >( img ) );
+  this->itk::ProcessObject::SetNthInput(i, const_cast<InputImageType*>(img));
 }
 
-template < class TInputImage, class TOutputImage, class TAngleArray, class TPrecision >
-const TInputImage *
-AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision >
-::GetInput ( unsigned int i ) const
+template <class TInputImage, class TOutputImage, class TAngleArray, class TPrecision>
+const TInputImage* AngularProjectionImageFilter<TInputImage, TOutputImage, TAngleArray, TPrecision>::GetInput(unsigned int i) const
 {
-  if ( i >= this->GetNumberOfInputs() )
+  if (i >= this->GetNumberOfInputs())
   {
     return nullptr;
   }
 
-  return static_cast<const InputImageType * >
-    (this->itk::ProcessObject::GetInput(i) );
+  return static_cast<const InputImageType*>(this->itk::ProcessObject::GetInput(i));
 }
 
-template < class TInputImage, class TOutputImage, class TAngleArray, class TPrecision >
-void
-AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision >
-::ThreadedGenerateData
-  ( const OutputImageRegionType & outputRegionForThread, itk::ThreadIdType threadId )
+template <class TInputImage, class TOutputImage, class TAngleArray, class TPrecision>
+void AngularProjectionImageFilter<TInputImage, TOutputImage, TAngleArray, TPrecision>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                                                                                            itk::ThreadIdType threadId)
 {
-  itk::ProgressReporter reporter(this, threadId,
-                                 outputRegionForThread.GetNumberOfPixels() );
+  itk::ProgressReporter reporter(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   InputImageRegionType inputRegionForThread;
-  this->CallCopyOutputRegionToInputRegion( inputRegionForThread, outputRegionForThread );
+  this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
 
-  bool iteratorsAtEnd = false;
-  ImageRegionConstIteratorVectorType it ( this->GetNumberOfInputs() );
-  for ( unsigned int i = 0; i < this->GetNumberOfInputs(); ++i )
+  bool                               iteratorsAtEnd = false;
+  ImageRegionConstIteratorVectorType it(this->GetNumberOfInputs());
+  for (unsigned int i = 0; i < this->GetNumberOfInputs(); ++i)
   {
-    it[i] = ImageRegionConstIteratorType( this->GetInput(i), inputRegionForThread );
+    it[i] = ImageRegionConstIteratorType(this->GetInput(i), inputRegionForThread);
     it[i].GoToBegin();
-    if ( it[i].IsAtEnd() )
+    if (it[i].IsAtEnd())
       iteratorsAtEnd = true;
   }
 
-  itk::ImageRegionIterator<OutputImageType> outIter
-    ( this->GetOutput(), outputRegionForThread );
+  itk::ImageRegionIterator<OutputImageType> outIter(this->GetOutput(), outputRegionForThread);
   outIter.GoToBegin();
 
-  while ( !iteratorsAtEnd && !outIter.IsAtEnd() )
+  while (!iteratorsAtEnd && !outIter.IsAtEnd())
   {
-    outIter.Set( InternalGenerateData( it ) );
+    outIter.Set(InternalGenerateData(it));
 
     ++outIter;
-    for ( unsigned int i = 0; i < this->GetNumberOfInputs(); ++i )
+    for (unsigned int i = 0; i < this->GetNumberOfInputs(); ++i)
     {
       ++(it[i]);
-      if ( it[i].IsAtEnd() )
+      if (it[i].IsAtEnd())
         iteratorsAtEnd = true;
     }
 
@@ -102,46 +92,40 @@ AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision
   }
 }
 
-template < class TInputImage, class TOutputImage, class TAngleArray, class TPrecision >
-typename AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision >
-::OutputImagePixelType
-AngularProjectionImageFilter< TInputImage, TOutputImage, TAngleArray, TPrecision >
-::InternalGenerateData ( const ImageRegionConstIteratorVectorType & it ) const
+template <class TInputImage, class TOutputImage, class TAngleArray, class TPrecision>
+typename AngularProjectionImageFilter<TInputImage, TOutputImage, TAngleArray, TPrecision>::OutputImagePixelType
+AngularProjectionImageFilter<TInputImage, TOutputImage, TAngleArray, TPrecision>::InternalGenerateData(const ImageRegionConstIteratorVectorType& it) const
 {
   PrecisionType output = 0;
 
-  if ( this->GetNumberOfInputs() == 2 )
+  if (this->GetNumberOfInputs() == 2)
   {
-    PrecisionType alpha = static_cast<PrecisionType>( m_AngleArray[0] );
-    output = static_cast<PrecisionType>( it[0].Get() ) * std::cos( alpha )
-              - static_cast<PrecisionType>( it[1].Get() ) * std::sin( alpha );
+    PrecisionType alpha = static_cast<PrecisionType>(m_AngleArray[0]);
+    output              = static_cast<PrecisionType>(it[0].Get()) * std::cos(alpha) - static_cast<PrecisionType>(it[1].Get()) * std::sin(alpha);
   }
-  else if ( this->GetNumberOfInputs() == 3 )
+  else if (this->GetNumberOfInputs() == 3)
   {
-    PrecisionType alpha = static_cast<PrecisionType>( m_AngleArray[0] );
-    PrecisionType beta = static_cast<PrecisionType>( m_AngleArray[1] );
+    PrecisionType alpha = static_cast<PrecisionType>(m_AngleArray[0]);
+    PrecisionType beta  = static_cast<PrecisionType>(m_AngleArray[1]);
 
-    output = static_cast<PrecisionType>( it[0].Get() ) * std::cos( alpha )
-            - static_cast<PrecisionType>( it[1].Get() ) * std::sin( alpha ) * std::cos ( beta )
-            + static_cast<PrecisionType>( it[2].Get() ) * std::sin( alpha ) * std::sin ( beta );
+    output = static_cast<PrecisionType>(it[0].Get()) * std::cos(alpha) - static_cast<PrecisionType>(it[1].Get()) * std::sin(alpha) * std::cos(beta) +
+             static_cast<PrecisionType>(it[2].Get()) * std::sin(alpha) * std::sin(beta);
   }
   else
   {
-    unsigned int i = this->GetNumberOfInputs()-1;
-    output = static_cast<PrecisionType>( it[i--].Get() );
+    unsigned int i = this->GetNumberOfInputs() - 1;
+    output         = static_cast<PrecisionType>(it[i--].Get());
 
-    do {
-      PrecisionType alpha = static_cast<PrecisionType>( m_AngleArray[i] );
-      output = static_cast<PrecisionType>( it[i].Get() ) * std::cos( alpha )
-                - output * std::sin( alpha );
-    } while ( i-- == 0 );
+    do
+    {
+      PrecisionType alpha = static_cast<PrecisionType>(m_AngleArray[i]);
+      output              = static_cast<PrecisionType>(it[i].Get()) * std::cos(alpha) - output * std::sin(alpha);
+    } while (i-- == 0);
   }
 
-  return static_cast<OutputImagePixelType>( output );
+  return static_cast<OutputImagePixelType>(output);
 }
 
 } // end of namespace otb
 
 #endif
-
-

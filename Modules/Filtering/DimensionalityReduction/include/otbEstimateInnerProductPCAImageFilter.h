@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,10 +38,10 @@ class ITK_EXPORT EstimateInnerProductPCAImageFilter : public itk::ImageToImageFi
 {
 public:
   /** Standard class typedefs. */
-  typedef EstimateInnerProductPCAImageFilter                           Self;
-  typedef typename itk::ImageToImageFilter <TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                                      Pointer;
-  typedef itk::SmartPointer<const Self>                                ConstPointer;
+  typedef EstimateInnerProductPCAImageFilter Self;
+  typedef typename itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -50,11 +50,11 @@ public:
   itkTypeMacro(EstimateInnerProductPCAImageFilter, ImageToImageFilter);
 
   /** Some convenient typedefs. */
-  typedef          TInputImage                        InputImageType;
+  typedef TInputImage                                 InputImageType;
   typedef typename InputImageType::Pointer            InputImagePointer;
   typedef typename InputImageType::PixelType          InputPixelType;
   typedef typename InputImageType::RegionType         InputImageRegionType;
-  typedef          TOutputImage                       OutputImageType;
+  typedef TOutputImage                                OutputImageType;
   typedef typename OutputImageType::Pointer           OutputImagePointer;
   typedef typename OutputImageType::RegionType        OutputImageRegionType;
   typedef typename OutputImageType::PixelType         OutputPixelType;
@@ -78,7 +78,9 @@ public:
 
 protected:
   EstimateInnerProductPCAImageFilter();
-  ~EstimateInnerProductPCAImageFilter() override {}
+  ~EstimateInnerProductPCAImageFilter() override
+  {
+  }
 
   /** GenerateOutputInformation
    * Set the number of bands of the output.
@@ -95,8 +97,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  EstimateInnerProductPCAImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  EstimateInnerProductPCAImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The number of output Principal Components */
   unsigned int m_NumberOfPrincipalComponentsRequired;
@@ -109,7 +111,6 @@ private:
 
   /** Contains Eigen Vectors Of Inner Product Matrix computed */
   MatrixType m_EigenVectorsOfInnerProductMatrix;
-
 };
 
 } // end namespace otb

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -64,7 +64,7 @@ public:
    : private equality_comparable<ProductType>
    , private less_than_comparable<ProductType>
    {
-      enum Type { SLC, GRD, MGD, GEC, EEC, MAX__, UNDEFINED__, FIRST__=0 };
+     enum Type { SLC, GRD, MGD, GEC, EEC, SCS_B, SCS_U, MAX__, UNDEFINED__, FIRST__=0 };
 
       explicit ProductType(unsigned char value)
          : m_value(Type(value))
@@ -157,12 +157,18 @@ public:
       unsigned long startLine;
       TimeType      azimuthStopTime;
       unsigned long endLine;
+      unsigned long startSample;
+      unsigned long endSample;
+      double        azimuthAnxTime;
       friend std::ostream & operator<<(std::ostream & os, const BurstRecordType & v)
       {
          return os << "{ azimuthStartTime: " << v.azimuthStartTime
             <<        ", azimuthStopTime: "  << v.azimuthStopTime
             <<        ", startLine: "        << v.startLine
             <<        ", stopLine: "         << v.endLine
+	    <<        ", startSample: "      << v.startSample
+            <<        ", stopSample: "       << v.endSample
+	    <<        ", azimuthAnxTime:"    << v.azimuthAnxTime
             <<        "}";
       }
    };
@@ -286,12 +292,19 @@ public:
     * Note that the deburst operation has no effect if theBurstRecords
     * contains a single burst. Otherwise it will merge burst together
     * into a single burst, and update GCPs accordingly.
+    * Two modes are available for the output image : with all samples and
+    * with only valid samples. A pair of samples specifies first and last samples
     * \return true if the deburst operation succeeded. No changes is
     * made to the object if the operation fails.
     * \param lines A container for the lines ranges to keep in the
     * deburst image.
+    * \param samples A container for the samples to keep in the
+    * deburst image.
+    * \param onlyValidSample If true, the selected mode is with only valid sample.
     */
-   bool deburst(std::vector<std::pair<unsigned long,unsigned long> >& lines);
+   bool deburst(std::vector<std::pair<unsigned long,unsigned long> >& lines, 
+		std::pair<unsigned long,unsigned long> & samples, bool onlyValidSample=false);
+   
 
    /**
     * This is a helper function to convert image line to deburst image
@@ -311,6 +324,61 @@ public:
     * \param deburstLine The output original image line
     */
    static void deburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, unsigned long deburstLine, unsigned long & imageLine);
+
+   /**
+    * This method will perform an extration of one burst. It wil return the
+    * lines and samples to extract in the image file.
+    * \return true if the extraction operation succeeded. No changes is
+    * made to the object if the operation fails.
+    * \param burst_index Index of Burst.
+    * \param lines A container for the lines to keep in the
+    * standalone burst.
+    * \param samples A container for the samples to keep in the
+    * standalone burst.
+    */
+   bool burstExtraction(const unsigned int burst_index, std::pair<unsigned long,unsigned long> & lines, 
+			std::pair<unsigned long,unsigned long> & samples, bool allPixels=false);
+
+   /**
+    * This method will perform a deburst and concatenation operation, and return the
+    * vector of lines and the vector of samples to keep in the 
+    * image file. The lines and samples represents start/size into each indepedent bursts. 
+    * Note that the deburst operation has no effect if theBurstRecords
+    * contains a single burst. Otherwise it will merge burst together
+    * into a single burst, and update GCPs accordingly.
+    * \return true if the deburst operation succeeded. No changes is
+    * made to the object if the operation fails.
+    * \param lines A container for the lines ranges to keep in the
+    * deburst image.
+    * \param samples A container for the samples ranges to keep in the
+    * deburst image.
+    * \param lines A Boolean to indicate only valids samples are required.
+    */
+   bool deburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts, 
+			      std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts,
+			      unsigned int & linesOffset, unsigned int first_burstInd,
+			      bool inputWithInvalidPixels=false);
+
+   /**
+    * This method will estime the overlap area between two bursts and return the
+    * vector of lines and the vector of samples (with two elements : Burst Up and Burst Low). 
+    * Note that this operation has no effect if theBurstRecords
+    * contains a single burst. 
+    * \return true if this operation succeeded. No changes is
+    * made to the object if the operation fails.
+    * \param linesUp A container for the lines ranges to keep into the first Burst
+    * \param linesLow A container for the lines ranges to keep into the second Burst
+    * \param samplesUp A container for the samples ranges to keep into the first Burst.
+    * \param samplesDown A container for the samples ranges to keep into the second Burst.
+    * \param burstIndUp Index of the first Burst
+    * \param inputWithInvalidPixels A Boolean to indicate if invalids pixels are into inputs.
+    */
+   bool overlap(std::pair<unsigned long,unsigned long> & linesUp, 
+		std::pair<unsigned long,unsigned long> & linesLow,
+		std::pair<unsigned long,unsigned long> & samplesUp,
+		std::pair<unsigned long,unsigned long> & samplesLow,
+		unsigned int burstIndUp,
+		bool inputWithInvalidPixels=false);
 
    /**
     * Returns pointer to a new instance, copy of this.
@@ -451,9 +519,20 @@ protected:
    double                                      theRangeTimeOffset; // Offset in seconds, computed
    bool                                        theRightLookingFlag;
    
+   TimeType                                    theFirstLineTime;
+   TimeType                                    theLastLineTime;
+
+   unsigned int                                theGeomVersion; // version of input geom
+
+   unsigned long                                theNumberOfLinesPerBurst;
+   unsigned long                                theNumberOfSamplesPerBurst;
+
+   bool redaptMedataAfterDeburst;
+   
    static const double C;
 
    static const unsigned int thePluginVersion; // version of the SarSensorModel plugin
+   static const unsigned int thePluginVersionMin; // minimal version required of the SarSensorModel plugin
 
 private:
    /** Disabled assignment operator.  */

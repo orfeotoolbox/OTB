@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,8 +37,7 @@ namespace otb
  * \ingroup OTBPath
  */
 template <class TPath, class TImage>
-class ITK_EXPORT ImageFittingPolygonListFilter
-  : public PathListToPathListFilter<TPath>
+class ITK_EXPORT ImageFittingPolygonListFilter : public PathListToPathListFilter<TPath>
 {
 public:
   /** Standard typedefs */
@@ -74,13 +73,13 @@ public:
    * Set the input Likelihood image.
    * \param image The Likelihood image.
    */
-  void SetInputImage(const ImageType * image);
+  void SetInputImage(const ImageType* image);
 
   /**
    * Get the input Likelihood image.
    * \return The input Likelihood image.
    */
-  const ImageType * GetInputImage(void);
+  const ImageType* GetInputImage(void);
 
   /** Set/Get the search radius. */
   itkSetMacro(Radius, unsigned int);
@@ -94,24 +93,22 @@ protected:
   /** Constructor */
   ImageFittingPolygonListFilter();
   /** Destructor */
-  ~ImageFittingPolygonListFilter() override {}
+  ~ImageFittingPolygonListFilter() override
+  {
+  }
   /** GenerateData method */
   void GenerateData() override;
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  virtual double computeValue(ImageConstPointerType image,
-                              VertexType middlePoint,
-                              VertexType previousPoint,
-                              VertexType nextPoint) const;
+  virtual double computeValue(ImageConstPointerType image, VertexType middlePoint, VertexType previousPoint, VertexType nextPoint) const;
 
   unsigned int m_Radius;
   unsigned int m_NumberOfIterations;
 
 private:
-  ImageFittingPolygonListFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  ImageFittingPolygonListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

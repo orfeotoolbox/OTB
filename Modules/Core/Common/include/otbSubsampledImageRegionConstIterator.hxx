@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -25,85 +25,78 @@
 
 #include "otbSubsampledImageRegionConstIterator.h"
 
-namespace otb {
+namespace otb
+{
 
 template <class TImage>
-SubsampledImageRegionConstIterator<TImage>
-::SubsampledImageRegionConstIterator()
-  : itk::ImageRegionConstIterator<TImage> ()
+SubsampledImageRegionConstIterator<TImage>::SubsampledImageRegionConstIterator() : itk::ImageRegionConstIterator<TImage>()
 {
   m_SubsampleFactor.Fill(1);
   m_SubSampledEndOffset = this->m_EndOffset;
 
   const IndexType& startIndex = this->m_Region.GetIndex();
-  const SizeType&  size = this->m_Region.GetSize();
+  const SizeType&  size       = this->m_Region.GetSize();
 
   for (unsigned int i = 0; i < ImageIteratorDimension; ++i)
-    {
+  {
     m_FirstUsableIndex[i] = startIndex[i];
-    m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>(size[i] - 1);
-    }
+    m_LastUsableIndex[i]  = startIndex[i] + static_cast<IndexValueType>(size[i] - 1);
+  }
 }
 
 template <class TImage>
-SubsampledImageRegionConstIterator<TImage>
-::SubsampledImageRegionConstIterator (const ImageType *ptr, const RegionType& region)
-  : itk::ImageRegionConstIterator<TImage> (ptr, region)
+SubsampledImageRegionConstIterator<TImage>::SubsampledImageRegionConstIterator(const ImageType* ptr, const RegionType& region)
+  : itk::ImageRegionConstIterator<TImage>(ptr, region)
 {
   m_SubsampleFactor.Fill(1);
   m_SubSampledEndOffset = this->m_EndOffset;
 
   const IndexType& startIndex = this->m_Region.GetIndex();
-  const SizeType&  size = this->m_Region.GetSize();
+  const SizeType&  size       = this->m_Region.GetSize();
 
   for (unsigned int i = 0; i < ImageIteratorDimension; ++i)
-    {
+  {
     m_FirstUsableIndex[i] = startIndex[i];
-    m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>(size[i] - 1);
-    }
+    m_LastUsableIndex[i]  = startIndex[i] + static_cast<IndexValueType>(size[i] - 1);
+  }
 }
 
 template <class TImage>
-SubsampledImageRegionConstIterator<TImage>
-::SubsampledImageRegionConstIterator(const itk::ImageIterator<TImage>& it)
-  : itk::ImageRegionConstIterator<TImage>(it)
+SubsampledImageRegionConstIterator<TImage>::SubsampledImageRegionConstIterator(const itk::ImageIterator<TImage>& it) : itk::ImageRegionConstIterator<TImage>(it)
 {
   m_SubsampleFactor.Fill(1);
   m_SubSampledEndOffset = this->m_EndOffset;
 
   const IndexType& startIndex = this->m_Region.GetIndex();
-  const SizeType&  size = this->m_Region.GetSize();
+  const SizeType&  size       = this->m_Region.GetSize();
 
   for (unsigned int i = 0; i < ImageIteratorDimension; ++i)
-    {
+  {
     m_FirstUsableIndex[i] = startIndex[i];
-    m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>(size[i] - 1);
-    }
+    m_LastUsableIndex[i]  = startIndex[i] + static_cast<IndexValueType>(size[i] - 1);
+  }
 }
 
 template <class TImage>
-SubsampledImageRegionConstIterator<TImage>
-::SubsampledImageRegionConstIterator(const itk::ImageConstIterator<TImage>& it)
+SubsampledImageRegionConstIterator<TImage>::SubsampledImageRegionConstIterator(const itk::ImageConstIterator<TImage>& it)
   : itk::ImageRegionConstIterator<TImage>(it)
 {
   m_SubsampleFactor.Fill(1);
 
   const IndexType& startIndex = this->m_Region.GetIndex();
-  const SizeType&  size = this->m_Region.GetSize();
+  const SizeType&  size       = this->m_Region.GetSize();
 
   for (unsigned int i = 0; i < ImageIteratorDimension; ++i)
-    {
+  {
     m_FirstUsableIndex[i] = startIndex[i];
-    m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>(size[i] - 1);
-    }
+    m_LastUsableIndex[i]  = startIndex[i] + static_cast<IndexValueType>(size[i] - 1);
+  }
 
   m_SubSampledEndOffset = this->m_Image->ComputeOffset(m_LastUsableIndex) + 1;
 }
 
 template <class TImage>
-void
-SubsampledImageRegionConstIterator<TImage>
-::SetSubsampleFactor(typename IndexType::IndexValueType factor)
+void SubsampledImageRegionConstIterator<TImage>::SetSubsampleFactor(typename IndexType::IndexValueType factor)
 {
   IndexType index;
   index.Fill(factor);
@@ -111,123 +104,103 @@ SubsampledImageRegionConstIterator<TImage>
 }
 
 template <class TImage>
-void
-SubsampledImageRegionConstIterator<TImage>
-::SetSubsampleFactor(const IndexType& factor)
+void SubsampledImageRegionConstIterator<TImage>::SetSubsampleFactor(const IndexType& factor)
 {
   this->m_SubsampleFactor = factor;
 
   // Evaluate the last possible pixel.
   const IndexType& startIndex = this->m_Region.GetIndex();
-  const SizeType&  size = this->m_Region.GetSize();
+  const SizeType&  size       = this->m_Region.GetSize();
 
   for (unsigned int i = 0; i < ImageIteratorDimension; ++i)
-    {
+  {
     m_FirstUsableIndex[i] = startIndex[i];
-    while (m_FirstUsableIndex[i]
-           != (m_SubsampleFactor[i] * (m_FirstUsableIndex[i] / m_SubsampleFactor[i])))
-      {
+    while (m_FirstUsableIndex[i] != (m_SubsampleFactor[i] * (m_FirstUsableIndex[i] / m_SubsampleFactor[i])))
+    {
       ++m_FirstUsableIndex[i];
-      }
-    m_LastUsableIndex[i] = startIndex[i]
-                           + static_cast<IndexValueType>(m_SubsampleFactor[i] * ((size[i] - 1) / m_SubsampleFactor[i]));
     }
+    m_LastUsableIndex[i] = startIndex[i] + static_cast<IndexValueType>(m_SubsampleFactor[i] * ((size[i] - 1) / m_SubsampleFactor[i]));
+  }
 
   m_SubSampledBeginOffset = this->m_Image->ComputeOffset(m_FirstUsableIndex);
 
-  //m_SubSampledReverseEndOffset = m_SubSampledBeginOffset - 1;
+  // m_SubSampledReverseEndOffset = m_SubSampledBeginOffset - 1;
   m_SubSampledEndOffset = this->m_Image->ComputeOffset(m_LastUsableIndex) + 1;
 }
 
 template <class TImage>
-void
-SubsampledImageRegionConstIterator<TImage>
-::GoToBegin()
+void SubsampledImageRegionConstIterator<TImage>::GoToBegin()
 {
   this->m_Offset = m_SubSampledBeginOffset;
 
   const SizeType& size = this->m_Region.GetSize();
 
   this->m_SpanBeginOffset = this->m_Offset;
-  this->m_SpanEndOffset = this->m_Offset
-                          + static_cast<IndexValueType>(m_SubsampleFactor[0] * ((size[0] - 1) / m_SubsampleFactor[0]))
-                          + 1;
+  this->m_SpanEndOffset   = this->m_Offset + static_cast<IndexValueType>(m_SubsampleFactor[0] * ((size[0] - 1) / m_SubsampleFactor[0])) + 1;
 }
 
 template <class TImage>
-void
-SubsampledImageRegionConstIterator<TImage>
-::GoToEnd()
+void SubsampledImageRegionConstIterator<TImage>::GoToEnd()
 {
-  this->m_Offset = m_SubSampledEndOffset - 1;
-  this->m_SpanEndOffset = this->m_Offset + 1;
+  this->m_Offset          = m_SubSampledEndOffset - 1;
+  this->m_SpanEndOffset   = this->m_Offset + 1;
   this->m_SpanBeginOffset = this->m_Offset - m_LastUsableIndex[0];
 }
 
 template <class TImage>
-void
-SubsampledImageRegionConstIterator<TImage>
-::SetIndex(const IndexType& ind)
+void SubsampledImageRegionConstIterator<TImage>::SetIndex(const IndexType& ind)
 {
   IndexType theIndex = ind;
 
   for (unsigned int i = 0; i < ImageIteratorDimension; ++i)
+  {
+    while (theIndex[i] != (m_SubsampleFactor[i] * (theIndex[i] / m_SubsampleFactor[i])))
     {
-    while (theIndex[i]
-           != (m_SubsampleFactor[i] * (theIndex[i] / m_SubsampleFactor[i])))
-      {
       ++theIndex[i];
-      }
-
-    if (theIndex[i] >  static_cast<IndexValueType>(this->m_Region.GetIndex()[i] + this->m_Region.GetSize()[i]))
-      {
-      theIndex[i] = ind[i];
-      while (theIndex[i]
-             != (m_SubsampleFactor[i] * (theIndex[i] / m_SubsampleFactor[i])))
-        {
-        --theIndex[i];
-        }
-
-      if (theIndex[i] < this->m_Region.GetIndex()[i]) theIndex[i] = ind[i];
-      }
     }
-  //Superclass::SetIndex( theIndex );
+
+    if (theIndex[i] > static_cast<IndexValueType>(this->m_Region.GetIndex()[i] + this->m_Region.GetSize()[i]))
+    {
+      theIndex[i] = ind[i];
+      while (theIndex[i] != (m_SubsampleFactor[i] * (theIndex[i] / m_SubsampleFactor[i])))
+      {
+        --theIndex[i];
+      }
+
+      if (theIndex[i] < this->m_Region.GetIndex()[i])
+        theIndex[i] = ind[i];
+    }
+  }
+  // Superclass::SetIndex( theIndex );
 
   OffsetType theOffset = this->m_Image->ComputeOffset(theIndex);
   SetOffset(theOffset);
 }
 
 template <class TImage>
-void
-SubsampledImageRegionConstIterator<TImage>
-::SetOffset(const OffsetType& offset)
+void SubsampledImageRegionConstIterator<TImage>::SetOffset(const OffsetType& offset)
 {
   this->m_Offset = offset;
 
   const SizeType& size = this->m_Region.GetSize();
 
   this->m_SpanBeginOffset = this->m_Offset;
-  this->m_SpanEndOffset = this->m_Offset
-                          + static_cast<IndexValueType>(m_SubsampleFactor[0] * ((size[0] - 1) / m_SubsampleFactor[0]))
-                          + 1;
-
+  this->m_SpanEndOffset   = this->m_Offset + static_cast<IndexValueType>(m_SubsampleFactor[0] * ((size[0] - 1) / m_SubsampleFactor[0])) + 1;
 }
 
 template <class TImage>
-typename SubsampledImageRegionConstIterator<TImage>::RegionType
-SubsampledImageRegionConstIterator<TImage>
-::GenerateOutputInformation() const
+typename SubsampledImageRegionConstIterator<TImage>::RegionType SubsampledImageRegionConstIterator<TImage>::GenerateOutputInformation() const
 {
   IndexType startIndex = this->m_Region.GetIndex();
-  SizeType  size = this->m_Region.GetSize();
+  SizeType  size       = this->m_Region.GetSize();
 
   for (unsigned int i = 0; i < ImageIteratorDimension; ++i)
-    {
+  {
     startIndex[i] /= m_SubsampleFactor[i];
     --size[i];
     size[i] /= m_SubsampleFactor[i];
     ++size[i];
-    }
+  }
 
   RegionType newRegion;
   newRegion.SetIndex(startIndex);
@@ -268,16 +241,13 @@ SubsampledImageRegionConstIterator<TImage>
 }
 
 template <class TImage>
-void
-SubsampledImageRegionConstIterator<TImage>
-::Increment()
+void SubsampledImageRegionConstIterator<TImage>::Increment()
 {
   // Get the index of the last pixel on the span (row)
-  IndexType ind = this->m_Image->ComputeIndex(
-    static_cast<typename TImage::OffsetValueType>(this->m_Offset));
+  IndexType ind = this->m_Image->ComputeIndex(static_cast<typename TImage::OffsetValueType>(this->m_Offset));
 
   const IndexType& startIndex = this->m_Region.GetIndex();
-  const SizeType&  size = this->m_Region.GetSize();
+  const SizeType&  size       = this->m_Region.GetSize();
 
   // Increment along a row, then wrap at the end of the region row.
   unsigned int dim;
@@ -287,37 +257,32 @@ SubsampledImageRegionConstIterator<TImage>
   ind[0] += m_SubsampleFactor[0];
   bool done = (ind[0] > m_LastUsableIndex[0]);
   for (unsigned int i = 1; done && i < ImageIteratorDimension; ++i)
-    {
+  {
     done = (ind[i] >= m_LastUsableIndex[i]);
-    }
+  }
 
   // if the iterator is outside the region (but not past region end) then
   // we need to wrap around the region
   dim = 0;
   if (!done)
+  {
+    while ((dim + 1 < ImageIteratorDimension) && (ind[dim] > m_LastUsableIndex[dim]))
     {
-    while ((dim + 1 < ImageIteratorDimension)
-           && (ind[dim] > m_LastUsableIndex[dim]))
-      {
       ind[dim] = startIndex[dim];
       ++dim;
       ind[dim] += m_SubsampleFactor[dim];
-      }
     }
-  this->m_Offset = this->m_Image->ComputeOffset(ind);
-  this->m_SpanEndOffset = this->m_Offset
-                          + static_cast<IndexValueType>(m_SubsampleFactor[0] * ((size[0] - 1) / m_SubsampleFactor[0]))
-                          + 1;
+  }
+  this->m_Offset          = this->m_Image->ComputeOffset(ind);
+  this->m_SpanEndOffset   = this->m_Offset + static_cast<IndexValueType>(m_SubsampleFactor[0] * ((size[0] - 1) / m_SubsampleFactor[0])) + 1;
   this->m_SpanBeginOffset = this->m_Offset;
 }
 
 template <class TImage>
-void
-SubsampledImageRegionConstIterator<TImage>
-::Decrement()
+void SubsampledImageRegionConstIterator<TImage>::Decrement()
 {
   // Get the index of the first pixel on the span (row)
-  IndexType  ind = this->m_Image->ComputeIndex(static_cast<IndexValueType>(this->m_Offset));
+  IndexType        ind        = this->m_Image->ComputeIndex(static_cast<IndexValueType>(this->m_Offset));
   const IndexType& startIndex = this->m_Region.GetIndex();
 
   // Deccrement along a row, then wrap at the beginning of the region row.
@@ -329,25 +294,24 @@ SubsampledImageRegionConstIterator<TImage>
   ind[0] -= m_SubsampleFactor[0];
   done = (ind[0] <= startIndex[0] - 1);
   for (unsigned int i = 1; done && i < ImageIteratorDimension; ++i)
-    {
+  {
     done = (ind[i] <= startIndex[i]);
-    }
+  }
 
   // if the iterator is outside the region (but not past region begin) then
   // we need to wrap around the region
   dim = 0;
   if (!done)
+  {
+    while ((dim < ImageIteratorDimension - 1) && (ind[dim] < startIndex[dim]))
     {
-    while ((dim < ImageIteratorDimension - 1)
-           && (ind[dim] < startIndex[dim]))
-      {
       ind[dim] = m_LastUsableIndex[dim];
       ++dim;
       ind[dim] -= m_SubsampleFactor[dim];
-      }
     }
-  this->m_Offset = this->m_Image->ComputeOffset(ind);
-  this->m_SpanEndOffset = this->m_Offset + 1;
+  }
+  this->m_Offset          = this->m_Image->ComputeOffset(ind);
+  this->m_SpanEndOffset   = this->m_Offset + 1;
   this->m_SpanBeginOffset = this->m_Offset - m_LastUsableIndex[0];
 }
 

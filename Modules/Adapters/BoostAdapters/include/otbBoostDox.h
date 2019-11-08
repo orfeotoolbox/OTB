@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,11 +23,13 @@
 
 /**\defgroup boost Boost alike helpers
  * \ingroup  Thematic
- * \brief Various helpers that are likelly to end-up in boost by themselves eventually.
+ * \brief Various helpers that are likely to eventually end-up in boost by themselves.
  * \see http://www.boost.org/
  * @{
  */
-namespace boost { }
+namespace boost
+{
+}
 //@}
 
 #endif // otbBoostDox_h

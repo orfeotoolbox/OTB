@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,7 +44,7 @@ public:
   ~QtWidgetDirectoryParameter() override;
 
 protected slots:
-  void SetFileName( const QString& value );
+  void SetFileName(const QString& value);
   void SelectFile();
 
 private:
@@ -58,12 +58,10 @@ private:
 
   DirectoryParameter::Pointer m_DirectoryParam;
 
-  QHBoxLayout * m_HLayout;
-  QLineEdit*    m_Input;
-  QPushButton * m_Button;
+  QHBoxLayout* m_HLayout;
+  QLineEdit*   m_Input;
+  QPushButton* m_Button;
 };
-
-
 }
 }
 

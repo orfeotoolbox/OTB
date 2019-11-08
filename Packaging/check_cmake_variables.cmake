@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -19,10 +19,6 @@
 #
 macro(check_cmake_variables)
   set(required_vars)
-  if(OTB_WRAP_PYTHON)
-    list(APPEND required_vars PYTHON_EXECUTABLE)
-  endif()
-  
   if(LINUX)
     list(APPEND required_vars FILE_COMMAND)
     list(APPEND required_vars READLINK)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,20 +44,17 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage,
-    class TFunction = Functor::PolarimetricSynthesisFunctor<
-        typename TInputImage::InternalPixelType,
-        typename TInputImage::InternalPixelType,
-        typename TInputImage::InternalPixelType,
-        typename TInputImage::InternalPixelType,
-        typename TOutputImage::PixelType> >
+          class TFunction = Functor::PolarimetricSynthesisFunctor<typename TInputImage::InternalPixelType, typename TInputImage::InternalPixelType,
+                                                                  typename TInputImage::InternalPixelType, typename TInputImage::InternalPixelType,
+                                                                  typename TOutputImage::PixelType>>
 class ITK_EXPORT MultiChannelsPolarimetricSynthesisFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef MultiChannelsPolarimetricSynthesisFilter           Self;
+  typedef MultiChannelsPolarimetricSynthesisFilter Self;
   typedef itk::InPlaceImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -66,19 +63,19 @@ public:
   itkTypeMacro(MultiChannelsPolarimetricSynthesisFilter, InPlaceImageFilter);
 
   /** Some typedefs. */
-  typedef std::complex <double>                        InputPixelType;
-  typedef TFunction                                    FunctorType;
-  typedef TInputImage                                  InputImageType;
-  typedef typename     InputImageType::ConstPointer    InputImagePointer;
-  typedef typename     InputImageType::RegionType      InputImageRegionType;
-  typedef typename     InputImageType::PixelType       InputImagePixelType;
-  typedef TOutputImage                                 OutputImageType;
-  typedef typename     OutputImageType::Pointer        OutputImagePointer;
-  typedef typename     OutputImageType::RegionType     OutputImageRegionType;
-  typedef typename     OutputImageType::PixelType      OutputImagePixelType;
-  typedef typename     std::complex <double>           ComplexType;
-  typedef typename     itk::FixedArray<ComplexType, 2> ComplexArrayType;
-  typedef typename     itk::FixedArray<int, 4>         IndexArrayType;
+  typedef std::complex<double>                  InputPixelType;
+  typedef TFunction                             FunctorType;
+  typedef TInputImage                           InputImageType;
+  typedef typename InputImageType::ConstPointer InputImagePointer;
+  typedef typename InputImageType::RegionType   InputImageRegionType;
+  typedef typename InputImageType::PixelType    InputImagePixelType;
+  typedef TOutputImage                          OutputImageType;
+  typedef typename OutputImageType::Pointer     OutputImagePointer;
+  typedef typename OutputImageType::RegionType  OutputImageRegionType;
+  typedef typename OutputImageType::PixelType   OutputImagePixelType;
+  typedef typename std::complex<double>         ComplexType;
+  typedef typename itk::FixedArray<ComplexType, 2> ComplexArrayType;
+  typedef typename itk::FixedArray<int, 4>         IndexArrayType;
 
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
@@ -102,10 +99,10 @@ public:
   void SetFunctor(const FunctorType& functor)
   {
     if (m_Functor != functor)
-      {
+    {
       m_Functor = functor;
       this->Modified();
-      }
+    }
   }
   /** Set the Incident ElectroMagneticField */
   void SetEi(ComplexArrayType ei)
@@ -155,7 +152,9 @@ protected:
   /** Constructor */
   MultiChannelsPolarimetricSynthesisFilter();
   /** Destructor */
-  ~MultiChannelsPolarimetricSynthesisFilter() override {}
+  ~MultiChannelsPolarimetricSynthesisFilter() override
+  {
+  }
 
   /** MultiChannelsPolarimetricSynthesisFilter can produce an image
    * which is a synthesis of channels HH, HV, VH and VV.
@@ -181,8 +180,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** Computation of the electromagnetic fields Ei Er */
   void ComputeElectromagneticFields();
@@ -193,7 +191,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  MultiChannelsPolarimetricSynthesisFilter(const Self &) = delete;
+  MultiChannelsPolarimetricSynthesisFilter(const Self&) = delete;
 
   /** Psi Incident */
   double m_PsiI;
@@ -223,7 +221,6 @@ private:
   /** Emission mode */
   bool m_EmissionH;
   bool m_EmissionV;
-
 };
 
 } // end namespace otb

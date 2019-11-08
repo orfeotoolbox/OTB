@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -64,72 +64,52 @@ namespace mvd
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
-StatusBarWidget
-::StatusBarWidget( QWidget* p, Qt::WindowFlags flags  ):
-  QWidget( p, flags ),
-  m_UI( new mvd::Ui::StatusBarWidget() )
+StatusBarWidget::StatusBarWidget(QWidget* p, Qt::WindowFlags flags) : QWidget(p, flags), m_UI(new mvd::Ui::StatusBarWidget())
 {
-  m_UI->setupUi( this );
+  m_UI->setupUi(this);
   // mantis-1385 hide scaleLineEdit
   m_UI->label_4->hide();
   m_UI->scaleLineEdit->hide();
 }
 
 /*****************************************************************************/
-StatusBarWidget
-::~StatusBarWidget()
+StatusBarWidget::~StatusBarWidget()
 {
   delete m_UI;
   m_UI = NULL;
 }
 
 /*****************************************************************************/
-QString
-StatusBarWidget
-::ZoomLevel( double scale )
+QString StatusBarWidget::ZoomLevel(double scale)
 {
-  if( scale>1.0 )
-    return QString( "%1:1" ).arg( scale );
+  if (scale > 1.0)
+    return QString("%1:1").arg(scale);
 
-  else if( scale<1.0 )
-    return QString( "1:%1" ).arg( 1.0 / scale );
+  else if (scale < 1.0)
+    return QString("1:%1").arg(1.0 / scale);
 
   return "1:1";
 }
 
 /*****************************************************************************/
-void
-StatusBarWidget
-::SetGLSLEnabled( bool enabled )
+void StatusBarWidget::SetGLSLEnabled(bool enabled)
 {
-  m_UI->renderModelLabel->setText(
-    enabled
-    ? tr( "GLSL" )
-    : tr( "OpenGL" )
-  );
+  m_UI->renderModelLabel->setText(enabled ? tr("GLSL") : tr("OpenGL"));
 }
 
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
-void
-StatusBarWidget
-::SetPixelIndex( const IndexType & pixel, bool isInsideRegion )
+void StatusBarWidget::SetPixelIndex(const IndexType& pixel, bool isInsideRegion)
 {
-  assert( m_UI!=NULL );
-  assert( m_UI->pixelIndexLineEdit!=NULL );
+  assert(m_UI != NULL);
+  assert(m_UI->pixelIndexLineEdit != NULL);
 
-  m_UI->pixelIndexLineEdit->setText(
-    isInsideRegion
-    ? QString( "%1, %2" ).arg( pixel[ 0 ] ).arg( pixel[ 1 ] )
-    : QString()
-  );
+  m_UI->pixelIndexLineEdit->setText(isInsideRegion ? QString("%1, %2").arg(pixel[0]).arg(pixel[1]) : QString());
 }
 
 /*****************************************************************************/
-void
-StatusBarWidget
-::SetScale( double sx, double )
+void StatusBarWidget::SetScale(double sx, double)
 {
   // qDebug() << this << "::SetScale(" << sx << "," << sy << ")";
 
@@ -138,7 +118,7 @@ StatusBarWidget
     zoomLevel.append( "/" + StatusBarWidget::ZoomLevel( sy ) );
   */
 
-  m_UI->scaleLineEdit->setText( StatusBarWidget::ZoomLevel( sx ) );
+  m_UI->scaleLineEdit->setText(StatusBarWidget::ZoomLevel(sx));
 }
 
 /*****************************************************************************/
@@ -154,107 +134,97 @@ StatusBarWidget
 */
 
 /*****************************************************************************/
-void
-StatusBarWidget
-::SetText( const QString & text )
+void StatusBarWidget::SetText(const QString& text)
 {
-  assert( m_UI!=NULL );
-  assert( m_UI->pixelIndexLineEdit!=NULL );
+  assert(m_UI != NULL);
+  assert(m_UI->pixelIndexLineEdit != NULL);
 
-  m_UI->pixelRadiometryLabel->setText( text );
+  m_UI->pixelRadiometryLabel->setText(text);
 }
 
 /*****************************************************************************/
-void
-StatusBarWidget
-::on_pixelIndexLineEdit_returnPressed()
+void StatusBarWidget::on_pixelIndexLineEdit_returnPressed()
 {
   //
   // Cancel if pixel-index coordinates text is empty.
-  if( m_UI->pixelIndexLineEdit->text().isEmpty() )
+  if (m_UI->pixelIndexLineEdit->text().isEmpty())
     return;
 
   //
   // Split coordinates.
-  QStringList coordinates( m_UI->pixelIndexLineEdit->text().split( ',' ) );
+  QStringList coordinates(m_UI->pixelIndexLineEdit->text().split(','));
 
   //
   // Check split coordinates format.
-  assert( coordinates.size()==1 || coordinates.size()==2 );
+  assert(coordinates.size() == 1 || coordinates.size() == 2);
 
-  if( coordinates.size()!=1 && coordinates.size()!=2 )
+  if (coordinates.size() != 1 && coordinates.size() != 2)
     return;
 
   //
   // Construct resulting pixel-index.
   IndexType index;
 
-  index.Fill( 0 );
+  index.Fill(0);
 
   //
   // Convert first pixel-index coordinate.
   bool isOk = true;
-  index[ 0 ] = coordinates.front().toUInt( &isOk );
+  index[0]  = coordinates.front().toUInt(&isOk);
 
   // assert( isOk );
 
-  if( !isOk )
+  if (!isOk)
     return;
 
   //
   // Convert second pixel-index coordinate.
-  if( coordinates.size()>1 )
-    {
-    index[ 1 ] = coordinates.back().toUInt( &isOk );
+  if (coordinates.size() > 1)
+  {
+    index[1] = coordinates.back().toUInt(&isOk);
 
     // assert( isOk );
 
-    if( !isOk )
+    if (!isOk)
       return;
-    }
+  }
 
   //
   // If both pixel-index coordinates have correctly been converted,
   // emit pixel-index changed signal.
-  emit PixelIndexChanged( index );
+  emit PixelIndexChanged(index);
 }
 
 /*****************************************************************************/
-void
-StatusBarWidget
-::on_scaleLineEdit_returnPressed()
+void StatusBarWidget::on_scaleLineEdit_returnPressed()
 {
   ChangeScale();
 }
 
-void
-StatusBarWidget
-::on_scaleLineEdit_editingFinished()
+void StatusBarWidget::on_scaleLineEdit_editingFinished()
 {
-  if(m_UI->scaleLineEdit->isModified())
-    {
-      ChangeScale();
-    }
+  if (m_UI->scaleLineEdit->isModified())
+  {
+    ChangeScale();
+  }
 }
 
-void
-StatusBarWidget
-::ChangeScale()
+void StatusBarWidget::ChangeScale()
 {
   //
   // Cancel if scale text is empty.
-  if( m_UI->scaleLineEdit->text().isEmpty() )
+  if (m_UI->scaleLineEdit->text().isEmpty())
     return;
 
   //
   // Split scale text.
-  QStringList scale( m_UI->scaleLineEdit->text().split( ':' ) );
+  QStringList scale(m_UI->scaleLineEdit->text().split(':'));
 
   //
   // Check scale text format.
   // assert( scale.size()==1 || scale.size()==2 );
 
-  if( scale.size()!=1 && scale.size()!=2 )
+  if (scale.size() != 1 && scale.size() != 2)
     return;
 
   /*
@@ -270,13 +240,13 @@ StatusBarWidget
 
   //
   // Convert scale numerator.
-  bool isOk = true;
-  double numerator = scale.front().toDouble( &isOk );
+  bool   isOk      = true;
+  double numerator = scale.front().toDouble(&isOk);
 
   // assert( isOk );
   // assert( numerator!=0.0 );
 
-  if( !isOk || numerator==0.0 )
+  if (!isOk || numerator == 0.0)
     return;
 
   /*
@@ -294,13 +264,13 @@ StatusBarWidget
   // Convert scale denominator.
   double denominator = 1.0;
 
-  if( scale.size()>1 )
-    {
-    denominator = scale.back().toDouble( &isOk );
+  if (scale.size() > 1)
+  {
+    denominator = scale.back().toDouble(&isOk);
 
     // assert( isOk );
 
-    if( !isOk )
+    if (!isOk)
       return;
 
     /*
@@ -313,11 +283,11 @@ StatusBarWidget
       );
       }
     */
-    }
+  }
 
   //
   // Emit scale changed.
-  emit ScaleChanged( numerator / denominator );
+  emit ScaleChanged(numerator / denominator);
 }
 
 } // end namespace 'mvd'

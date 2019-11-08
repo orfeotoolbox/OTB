@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -53,8 +53,7 @@ namespace otb
  * \ingroup OTBDisparityMap
  */
 template <class TFixedImage, class TMovingImage, class TPointSet>
-class ITK_EXPORT DisparityMapEstimationMethod
-  : public PointSetSource<TPointSet>
+class ITK_EXPORT DisparityMapEstimationMethod : public PointSetSource<TPointSet>
 {
 public:
   /** Standard class typedefs. */
@@ -86,8 +85,8 @@ public:
 
   /**  Typedef for the generic metric. */
   typedef itk::ImageToImageMetric<FixedImageType, MovingImageType> MetricType;
-  typedef typename MetricType::Pointer                             MetricPointerType;
-  typedef typename MetricType::FixedImageRegionType                FixedImageRegionType;
+  typedef typename MetricType::Pointer              MetricPointerType;
+  typedef typename MetricType::FixedImageRegionType FixedImageRegionType;
 
   /** Typedef for the generic transform . */
   typedef typename MetricType::TransformType TransformType;
@@ -145,36 +144,36 @@ public:
    * Set the source pointset.
    * \param pointset The source pointset.
    */
-  void SetPointSet(const TPointSet * pointset);
+  void SetPointSet(const TPointSet* pointset);
   /**
    * Get the source pointset.
    * \return The source pointset.
    */
-  const TPointSet * GetPointSet(void);
+  const TPointSet* GetPointSet(void);
 
   /**
    * Set the fixed image.
    * \param image The fixed image.
    **/
-  void SetFixedImage(const TFixedImage * image);
+  void SetFixedImage(const TFixedImage* image);
 
   /**
    * Get the fixed image.
    * \return The fixed image.
    **/
-  const TFixedImage * GetFixedImage(void);
+  const TFixedImage* GetFixedImage(void);
 
   /**
    * Set the moving image.
    * \param image The mobing image.
    **/
-  void SetMovingImage(const TMovingImage * image);
+  void SetMovingImage(const TMovingImage* image);
 
   /**
    * Get the fixed image.
    * \return The fixed image.
    **/
-  const TMovingImage * GetMovingImage(void);
+  const TMovingImage* GetMovingImage(void);
 
 protected:
   /**
@@ -192,11 +191,11 @@ protected:
   /**
    * Main computation method.
    */
-  void  GenerateData() override;
+  void GenerateData() override;
 
 private:
-  DisparityMapEstimationMethod(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  DisparityMapEstimationMethod(const Self&) = delete;
+  void operator=(const Self&) = delete;
   /**
    * The metric used for local registration.
    */

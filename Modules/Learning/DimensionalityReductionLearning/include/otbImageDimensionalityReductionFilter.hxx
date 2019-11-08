@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,76 +30,66 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage, class TMaskImage>
-ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
-::ImageDimensionalityReductionFilter()
+ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::ImageDimensionalityReductionFilter()
 {
   this->SetNumberOfIndexedInputs(2);
   this->SetNumberOfRequiredInputs(1);
 
   this->SetNumberOfRequiredOutputs(2);
-  this->SetNthOutput(0,TOutputImage::New());
-  this->SetNthOutput(1,ConfidenceImageType::New());
+  this->SetNthOutput(0, TOutputImage::New());
+  this->SetNthOutput(1, ConfidenceImageType::New());
   m_UseConfidenceMap = false;
-  m_BatchMode = true;
+  m_BatchMode        = true;
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
-void
-ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
-::SetInputMask(const MaskImageType * mask)
+void ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::SetInputMask(const MaskImageType* mask)
 {
-  this->itk::ProcessObject::SetNthInput(1, const_cast<MaskImageType *>(mask));
+  this->itk::ProcessObject::SetNthInput(1, const_cast<MaskImageType*>(mask));
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
-const typename ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
-::MaskImageType *
-ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
-::GetInputMask()
+const typename ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::MaskImageType*
+ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::GetInputMask()
 {
   if (this->GetNumberOfInputs() < 2)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<const MaskImageType *>(this->itk::ProcessObject::GetInput(1));
+  }
+  return static_cast<const MaskImageType*>(this->itk::ProcessObject::GetInput(1));
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
-typename ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
-::ConfidenceImageType *
-ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
-::GetOutputConfidence()
+typename ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::ConfidenceImageType*
+ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::GetOutputConfidence()
 {
   if (this->GetNumberOfOutputs() < 2)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<ConfidenceImageType *>(this->itk::ProcessObject::GetOutput(1));
+  }
+  return static_cast<ConfidenceImageType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
-void
-ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
-::BeforeThreadedGenerateData()
+void ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::BeforeThreadedGenerateData()
 {
-  if(m_BatchMode)
-    {
-    #ifdef _OPENMP
+  if (m_BatchMode)
+  {
+#ifdef _OPENMP
     // OpenMP will take care of threading
     this->SetNumberOfThreads(1);
-    #endif
-    }
+#endif
+  }
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
-void
-ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
-::ClassicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::ClassicThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                                                                                            itk::ThreadIdType threadId)
 {
   // Get the input pointers
-  InputImageConstPointerType inputPtr     = this->GetInput();
+  InputImageConstPointerType inputPtr      = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
-  OutputImagePointerType     outputPtr    = this->GetOutput();
+  OutputImagePointerType     outputPtr     = this->GetOutput();
   ConfidenceImagePointerType confidencePtr = this->GetOutputConfidence();
 
   // Progress reporting
@@ -109,16 +99,16 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
 
-  InputIteratorType inIt(inputPtr, outputRegionForThread);
+  InputIteratorType  inIt(inputPtr, outputRegionForThread);
   OutputIteratorType outIt(outputPtr, outputRegionForThread);
 
   // Walk the part of the image
   for (inIt.GoToBegin(), outIt.GoToBegin(); !inIt.IsAtEnd() && !outIt.IsAtEnd(); ++inIt, ++outIt)
-    {
+  {
     // Classifify
     outIt.Set(m_Model->Predict(inIt.Get()));
     progress.CompletedPixel();
-    }
+  }
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
@@ -126,21 +116,20 @@ void ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::
 {
   Superclass::GenerateOutputInformation();
   if (!m_Model)
-    {
+  {
     itkGenericExceptionMacro(<< "No model for dimensionality reduction");
-    }
-  this->GetOutput()->SetNumberOfComponentsPerPixel( m_Model->GetDimension() );
+  }
+  this->GetOutput()->SetNumberOfComponentsPerPixel(m_Model->GetDimension());
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
-void
-ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
-::BatchThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::BatchThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                                                                                          itk::ThreadIdType threadId)
 {
   // Get the input pointers
-  InputImageConstPointerType inputPtr     = this->GetInput();
+  InputImageConstPointerType inputPtr      = this->GetInput();
   MaskImageConstPointerType  inputMaskPtr  = this->GetInputMask();
-  OutputImagePointerType     outputPtr    = this->GetOutput();
+  OutputImagePointerType     outputPtr     = this->GetOutput();
   ConfidenceImagePointerType confidencePtr = this->GetOutputConfidence();
 
   // Progress reporting
@@ -150,7 +139,7 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   typedef itk::ImageRegionConstIterator<InputImageType> InputIteratorType;
   typedef itk::ImageRegionIterator<OutputImageType>     OutputIteratorType;
 
-  InputIteratorType inIt(inputPtr, outputRegionForThread);
+  InputIteratorType  inIt(inputPtr, outputRegionForThread);
   OutputIteratorType outIt(outputPtr, outputRegionForThread);
 
   typedef typename ModelType::InputSampleType      InputSampleType;
@@ -158,22 +147,22 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   typedef typename ModelType::TargetValueType      TargetValueType;
   typedef typename ModelType::TargetListSampleType TargetListSampleType;
 
-  typename InputListSampleType::Pointer samples = InputListSampleType::New();
-  unsigned int num_features = inputPtr->GetNumberOfComponentsPerPixel();
+  typename InputListSampleType::Pointer samples      = InputListSampleType::New();
+  unsigned int                          num_features = inputPtr->GetNumberOfComponentsPerPixel();
   samples->SetMeasurementVectorSize(num_features);
   InputSampleType sample(num_features);
 
   // Fill the samples
   for (inIt.GoToBegin(); !inIt.IsAtEnd(); ++inIt)
-    {
+  {
     typename InputImageType::PixelType pix = inIt.Get();
-    for(size_t feat=0; feat<num_features; ++feat)
-      {
-      sample[feat]=pix[feat];
-      }
-    samples->PushBack(sample);
+    for (size_t feat = 0; feat < num_features; ++feat)
+    {
+      sample[feat] = pix[feat];
     }
-  //Make the batch prediction
+    samples->PushBack(sample);
+  }
+  // Make the batch prediction
   typename TargetListSampleType::Pointer labels;
 
   // This call is threadsafe
@@ -182,37 +171,34 @@ ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
   // Set the output values
   typename TargetListSampleType::ConstIterator labIt = labels->Begin();
   for (outIt.GoToBegin(); !outIt.IsAtEnd(); ++outIt)
-    {
+  {
     itk::VariableLengthVector<TargetValueType> labelValue;
     labelValue = labIt.GetMeasurementVector();
-    ++labIt;    
+    ++labIt;
     outIt.Set(labelValue);
     progress.CompletedPixel();
-    }
+  }
 }
 
 template <class TInputImage, class TOutputImage, class TMaskImage>
-void
-ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                                                                                     itk::ThreadIdType threadId)
 {
-  if(m_BatchMode)
-    {
+  if (m_BatchMode)
+  {
     this->BatchThreadedGenerateData(outputRegionForThread, threadId);
-    }
+  }
   else
-    {
+  {
     this->ClassicThreadedGenerateData(outputRegionForThread, threadId);
-    }
+  }
 }
 
 /**
  * PrintSelf Method
  */
 template <class TInputImage, class TOutputImage, class TMaskImage>
-void
-ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ImageDimensionalityReductionFilter<TInputImage, TOutputImage, TMaskImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

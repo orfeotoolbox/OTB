@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -47,7 +47,7 @@ class ImageKeywordlist;
  * \ingroup OTBOSSIMAdapters
  **/
 
-class OTBOSSIMAdapters_EXPORT SensorModelAdapter: public itk::Object
+class OTBOSSIMAdapters_EXPORT SensorModelAdapter : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -71,21 +71,17 @@ public:
   // FIXME check if it should be protected instead
 
   /** Forward sensor modelling with elevation (above ellipsoid) provided by the user */
-  void ForwardTransformPoint(double x, double y, double z,
-                             double& lon, double& lat, double& h) const;
+  void ForwardTransformPoint(double x, double y, double z, double& lon, double& lat, double& h) const;
 
   /** Forward sensor modelling with elevation (above ellipsoid) estimated by the
    *  algorithm */
-  void ForwardTransformPoint(double x, double y,
-                             double& lon, double& lat, double& h) const;
+  void ForwardTransformPoint(double x, double y, double& lon, double& lat, double& h) const;
 
   /** Inverse sensor modelling with elevation (above ellipsoid) provided by the user */
-  void InverseTransformPoint(double lon, double lat, double h,
-                             double& x, double& y, double& z) const;
+  void InverseTransformPoint(double lon, double lat, double h, double& x, double& y, double& z) const;
 
   /** Inverse sensor modelling with elevation (above ellipsoid) from DEMHandler */
-  void InverseTransformPoint(double lon, double lat,
-                             double& x, double& y, double& z) const;
+  void InverseTransformPoint(double lon, double lat, double& x, double& y, double& z) const;
 
 
   /** Add a tie point with elevation (above ellipsoid) provided by the user */
@@ -104,7 +100,7 @@ public:
   bool IsValidSensorModel() const;
 
   /** Read geom file and instantiate sensor model */
-  bool ReadGeomFile(const std::string & infile);
+  bool ReadGeomFile(const std::string& infile);
 
   /** Write geom file corresponding to sensor model */
   bool WriteGeomFile(const std::string& outfile);
@@ -114,8 +110,8 @@ protected:
   ~SensorModelAdapter() override;
 
 private:
-  SensorModelAdapter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SensorModelAdapter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InternalMapProjectionPointer m_SensorModel;
 

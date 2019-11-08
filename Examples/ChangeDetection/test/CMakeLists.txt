@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -19,7 +19,7 @@
 #
 
 set(BASELINE ${OTB_DATA_ROOT}/Baseline/Examples/ChangeDetection)
-set(INPUTDATA ${OTB_DATA_ROOT}/Examples)
+set(INPUTDATA ${OTB_DATA_ROOT}/Input)
 
 # ------- CorrelChDetTest----------
 
@@ -83,5 +83,5 @@ otb_add_test(NAME cdTeKullbackLeiblerProfileChDetTest COMMAND ${OTB_TEST_DRIVER}
     ${INPUTDATA}/GomaAvant.png
     ${INPUTDATA}/GomaApres.png
     ${TEMP}/KullbackLeiblerProfileChDetTest.png
-    5 51 1 12 24
+    5 30 1 6 12
 )

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -89,7 +89,6 @@ public:
 private:
   InternalType m_Shift;
   InternalType m_Scale;
-
 };
 
 } // end namespace Accessor
@@ -105,25 +104,17 @@ private:
  * \ingroup OTBImageManipulation
  */
 template <class TImage, class TOutputPixelType>
-class ITK_EXPORT ShiftScaleImageAdaptor : public
-  itk::ImageAdaptor<TImage, Accessor::ShiftScalePixelAccessor<
-          typename TImage::PixelType,
-          TOutputPixelType> >
+class ITK_EXPORT ShiftScaleImageAdaptor : public itk::ImageAdaptor<TImage, Accessor::ShiftScalePixelAccessor<typename TImage::PixelType, TOutputPixelType>>
 {
 public:
   /** Standard class typedefs. */
   typedef ShiftScaleImageAdaptor Self;
-  typedef itk::ImageAdaptor<
-      TImage,
-      Accessor::ShiftScalePixelAccessor<typename TImage::PixelType, TOutputPixelType>
-      >                                    Superclass;
+  typedef itk::ImageAdaptor<TImage, Accessor::ShiftScalePixelAccessor<typename TImage::PixelType, TOutputPixelType>> Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
   typedef typename TImage::PixelType     InternalType;
   typedef typename Superclass::IndexType IndexType;
-  typedef typename Accessor::ShiftScalePixelAccessor<
-      typename TImage::PixelType,
-      TOutputPixelType>                 AccessorType;
+  typedef typename Accessor::ShiftScalePixelAccessor<typename TImage::PixelType, TOutputPixelType> AccessorType;
   typedef typename AccessorType::ExternalType PixelType;
 
   /** Method for creation through the object factory. */
@@ -134,7 +125,8 @@ public:
 
   typename TImage::PixelType GetShift() const
   {
-    itkDebugMacro("returning " << " m_Shift of " << this->GetPixelAccessor().GetShift());
+    itkDebugMacro("returning "
+                  << " m_Shift of " << this->GetPixelAccessor().GetShift());
     return this->GetPixelAccessor().GetShift();
   }
 
@@ -142,15 +134,16 @@ public:
   {
     itkDebugMacro("setting m_Shift to " << value);
     if (this->GetPixelAccessor().GetShift() != value)
-      {
+    {
       this->GetPixelAccessor().SetShift(value);
       this->Modified();
-      }
+    }
   }
 
   typename TImage::PixelType GetScale() const
   {
-    itkDebugMacro("returning " << " m_Scale of " << this->GetPixelAccessor().GetScale());
+    itkDebugMacro("returning "
+                  << " m_Scale of " << this->GetPixelAccessor().GetScale());
     return this->GetPixelAccessor().GetScale();
   }
 
@@ -158,20 +151,23 @@ public:
   {
     itkDebugMacro("setting m_Scale to " << value);
     if (this->GetPixelAccessor().GetScale() != value)
-      {
+    {
       this->GetPixelAccessor().SetScale(value);
       this->Modified();
-      }
+    }
   }
 
 protected:
-  ShiftScaleImageAdaptor() {}
-  ~ShiftScaleImageAdaptor() override {}
+  ShiftScaleImageAdaptor()
+  {
+  }
+  ~ShiftScaleImageAdaptor() override
+  {
+  }
 
 private:
-  ShiftScaleImageAdaptor(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  ShiftScaleImageAdaptor(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

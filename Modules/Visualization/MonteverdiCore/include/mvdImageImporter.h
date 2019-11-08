@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -74,8 +74,7 @@ namespace mvd
  * \brief Import image worker. It is parametrized by the image
  * filename and the desired (width, height) best-fit size.
  */
-class OTBMonteverdiCore_EXPORT ImageImporter :
-    public AbstractWorker
+class OTBMonteverdiCore_EXPORT ImageImporter : public AbstractWorker
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -84,10 +83,9 @@ class OTBMonteverdiCore_EXPORT ImageImporter :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /**
    * \brief Constructor (dataset-model).
    *
@@ -96,11 +94,7 @@ public:
    * \param height Height of the best-fit size or -1 if none.
    * \param isForceCreateEnabled true to force creation of dataset.
    */
-  ImageImporter( const QString& filename,
-		 bool isForceCreateEnabled,
-		 int width =-1,
-		 int height =-1,
-		 QObject* p =NULL );
+  ImageImporter(const QString& filename, bool isForceCreateEnabled, int width = -1, int height = -1, QObject* p = NULL);
 
   /**
    * \brief Constructor (image-model).
@@ -110,10 +104,7 @@ public:
    * \param height Height of the best-fit size or -1 if none.
    * \param isForceCreateEnabled true to force creation of dataset.
    */
-  ImageImporter( const QString& filename,
-		 int width =-1,
-		 int height =-1,
-		 QObject* p =NULL );
+  ImageImporter(const QString& filename, int width = -1, int height = -1, QObject* p = NULL);
 
   /**
    * \brief Destructor.
@@ -122,14 +113,14 @@ public:
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /**
@@ -137,39 +128,36 @@ signals:
    *
    * \param result Resulting QObject instance of NULL if none.
    */
-  //void Done( QObject* result =NULL );
+  // void Done( QObject* result =NULL );
 
   /**
    * \brief Signal emitted when an exception has been caught by this worker.
    *
    * \param exc The copy (thread safety) exception which has been caught.
    */
-  //void ExceptionRaised( std::exception exc );
+  // void ExceptionRaised( std::exception exc );
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types.
+  //
+  // Private types.
 private:
   enum ModelType
   {
     IMAGE,
   };
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   //
   // AbstractWorker oveloads.
 
@@ -178,8 +166,8 @@ private:
   QString virtual_GetFirstProgressText() const override;
 
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
@@ -195,12 +183,12 @@ private:
   int m_Height;
   /**
    */
-  bool m_IsForceCreateEnabled: 1;
+  bool m_IsForceCreateEnabled : 1;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 

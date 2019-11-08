@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,20 +29,20 @@
 int otbLeastSquareAffineTransformEstimator(int argc, char* argv[])
 {
   if (argc < 8)
-    {
+  {
     std::cerr << "Usage: " << argv[0] << " outfname a1x a1y a1z b1x b1y b1z ... aNx aNy aNz bNx bNy bNz" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   if ((argc - 2) % 6 != 0)
-    {
+  {
     std::cerr << "Inconsistent points description." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * outfname = argv[1];
+  const char* outfname = argv[1];
 
-  typedef itk::Point<float, 3>                                PointType;
+  typedef itk::Point<float, 3> PointType;
   typedef otb::LeastSquareAffineTransformEstimator<PointType> EstimatorType;
 
   // instantiation
@@ -54,7 +54,7 @@ int otbLeastSquareAffineTransformEstimator(int argc, char* argv[])
   std::cout << "Reading " << nbTiePoints << " tie points from command line." << std::endl;
 
   for (unsigned int pId = 0; pId < nbTiePoints; ++pId)
-    {
+  {
     PointType p1, p2;
 
     // Reading first point
@@ -71,7 +71,7 @@ int otbLeastSquareAffineTransformEstimator(int argc, char* argv[])
 
     // Add it to the estimator
     estimator->AddTiePoints(p1, p2);
-    }
+  }
 
   // Trigger computation
   estimator->Compute();

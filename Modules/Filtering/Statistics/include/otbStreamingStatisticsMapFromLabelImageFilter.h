@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,7 +27,7 @@
 #include "itkArray.h"
 #include "itkSimpleDataObjectDecorator.h"
 #include "otbPersistentFilterStreamingDecorator.h"
-
+#include <unordered_map>
 
 namespace otb
 {
@@ -49,68 +49,76 @@ namespace otb
  *
  * \ingroup OTBStatistics
  */
-template<class TRealVectorPixelType>
+template <class TRealVectorPixelType>
 class StatisticsAccumulator
 {
 public:
-
-  typedef typename TRealVectorPixelType::ValueType RealValueType;
+  typedef typename TRealVectorPixelType::ValueType  RealValueType;
+  typedef uint64_t                                  PixelCountType;
+  typedef itk::VariableLengthVector<PixelCountType> PixelCountVectorType;
 
   // Constructor (default)
-  StatisticsAccumulator(){}
+  StatisticsAccumulator() : m_Count(), m_NoDataValue(), m_UseNoDataValue()
+  {
+  }
 
   // Constructor (initialize the accumulator with the given pixel)
-  StatisticsAccumulator(const TRealVectorPixelType & pixel)
+  StatisticsAccumulator(RealValueType noDataValue, bool useNoDataValue, const TRealVectorPixelType& pixel)
+    : m_NoDataValue(noDataValue), m_Count(1), m_UseNoDataValue(useNoDataValue)
   {
     m_Count = 1;
-    m_Sum = pixel;
-    m_Min = pixel;
-    m_Max = pixel;
+    m_Sum   = pixel;
+    m_Min   = pixel;
+    m_Max   = pixel;
     m_SqSum = pixel;
-    for (unsigned int band = 0 ; band < m_SqSum.GetSize() ; band++)
-      m_SqSum[band] *= m_SqSum[band];
+    m_BandCount.SetSize(pixel.GetSize());
+    for (unsigned int band = 0; band < m_SqSum.GetSize(); band++)
+    {
+      auto val = pixel[band];
+      if (!m_UseNoDataValue || val != m_NoDataValue)
+      {
+        m_BandCount[band] = 1;
+        m_SqSum[band] *= m_SqSum[band];
+      }
+      else
+      {
+        m_BandCount[band] = 0;
+      }
+    }
   }
-
-  // Constructor (other)
-  StatisticsAccumulator(const StatisticsAccumulator & other)
-  {
-    m_Count = other.m_Count;
-    m_Sum = other.m_Sum;
-    m_Min = other.m_Min;
-    m_Max = other.m_Max;
-    m_SqSum = other.m_SqSum;
-  }
-
-  // Destructor
-  ~StatisticsAccumulator(){}
 
   // Function update (pixel)
-  void Update(const TRealVectorPixelType & pixel)
+  void Update(const TRealVectorPixelType& pixel)
   {
     m_Count++;
     const unsigned int nBands = pixel.GetSize();
-    for (unsigned int band = 0 ; band < nBands ; band ++ )
-      {
-      const RealValueType value = pixel[band];
+    for (unsigned int band = 0; band < nBands; band++)
+    {
+      const RealValueType value   = pixel[band];
       const RealValueType sqValue = value * value;
-      UpdateValues(value, sqValue, value, value,
-                   m_Sum[band], m_SqSum[band], m_Min[band], m_Max[band]);
-      }
+
+      if(!m_UseNoDataValue || value != m_NoDataValue)
+        {
+        UpdateValues(1, value, sqValue, value, value, m_BandCount[band], m_Sum[band], m_SqSum[band], m_Min[band],
+                   m_Max[band]);
+        }
+    }
   }
 
   // Function update (self)
-  void Update(const StatisticsAccumulator & other)
+  void Update(const StatisticsAccumulator& other)
   {
     m_Count += other.m_Count;
     const unsigned int nBands = other.m_Sum.GetSize();
-    for (unsigned int band = 0 ; band < nBands ; band ++ )
-      {
-      UpdateValues(other.m_Sum[band], other.m_SqSum[band], other.m_Min[band], other.m_Max[band],
-                   m_Sum[band], m_SqSum[band], m_Min[band], m_Max[band]);
-      }
+    for (unsigned int band = 0; band < nBands; band++)
+    {
+      UpdateValues(other.m_BandCount[band], other.m_Sum[band], other.m_SqSum[band], other.m_Min[band], other.m_Max[band], m_BandCount[band], m_Sum[band],
+                   m_SqSum[band], m_Min[band], m_Max[band]);
+    }
   }
 
   // Accessors
+  itkGetMacro(BandCount, PixelCountVectorType);
   itkGetMacro(Sum, TRealVectorPixelType);
   itkGetMacro(SqSum, TRealVectorPixelType);
   itkGetMacro(Min, TRealVectorPixelType);
@@ -118,25 +126,27 @@ public:
   itkGetMacro(Count, double);
 
 private:
-  void UpdateValues(const RealValueType & otherSum, const RealValueType & otherSqSum,
-                    const RealValueType & otherMin, const RealValueType & otherMax,
-                    RealValueType & sum, RealValueType & sqSum,
-                    RealValueType & min, RealValueType & max)
+  void UpdateValues(PixelCountType otherCount, RealValueType otherSum, RealValueType otherSqSum, RealValueType otherMin, RealValueType otherMax,
+                    PixelCountType& count, RealValueType& sum, RealValueType& sqSum, RealValueType& min, RealValueType& max)
   {
-  sum += otherSum;
-  sqSum += otherSqSum;
-  if (otherMin < min)
-    min = otherMin;
-  if (otherMax > max)
-    max = otherMax;
+    count += otherCount;
+    sum += otherSum;
+    sqSum += otherSqSum;
+    if (otherMin < min)
+      min = otherMin;
+    if (otherMax > max)
+      max = otherMax;
   }
 
 protected:
+  PixelCountVectorType m_BandCount;
   TRealVectorPixelType m_Sum;
   TRealVectorPixelType m_SqSum;
   TRealVectorPixelType m_Min;
   TRealVectorPixelType m_Max;
-  double m_Count;
+  RealValueType        m_NoDataValue;
+  PixelCountType       m_Count;
+  bool                 m_UseNoDataValue;
 };
 
 /** \class PersistentStreamingStatisticsMapFromLabelImageFilter
@@ -157,16 +167,15 @@ protected:
  *
  * \ingroup OTBStatistics
  */
-template<class TInputVectorImage, class TLabelImage>
-class ITK_EXPORT PersistentStreamingStatisticsMapFromLabelImageFilter :
-public PersistentImageFilter<TInputVectorImage, TInputVectorImage>
+template <class TInputVectorImage, class TLabelImage>
+class ITK_EXPORT PersistentStreamingStatisticsMapFromLabelImageFilter : public PersistentImageFilter<TInputVectorImage, TInputVectorImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentStreamingStatisticsMapFromLabelImageFilter               Self;
+  typedef PersistentStreamingStatisticsMapFromLabelImageFilter Self;
   typedef PersistentImageFilter<TInputVectorImage, TInputVectorImage> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -180,39 +189,42 @@ public:
   typedef TLabelImage                         LabelImageType;
   typedef typename TLabelImage::Pointer       LabelImagePointer;
 
-  typedef typename VectorImageType::RegionType                          RegionType;
-  typedef typename VectorImageType::PixelType                           VectorPixelType;
-  typedef typename VectorImageType::PixelType::ValueType                VectorPixelValueType;
-  typedef typename LabelImageType::PixelType                            LabelPixelType;
-  typedef itk::VariableLengthVector<double>                             RealVectorPixelType;
-  typedef StatisticsAccumulator<RealVectorPixelType>                    AccumulatorType;
-  typedef std::map<LabelPixelType, AccumulatorType >                    AccumulatorMapType;
-  typedef std::vector<AccumulatorMapType>                               AccumulatorMapCollectionType;
-  typedef std::map<LabelPixelType, RealVectorPixelType >  PixelValueMapType;
-  typedef std::map<LabelPixelType, double>                LabelPopulationMapType;
+  typedef typename VectorImageType::RegionType           RegionType;
+  typedef typename VectorImageType::PixelType            VectorPixelType;
+  typedef typename VectorImageType::PixelType::ValueType VectorPixelValueType;
+  typedef typename LabelImageType::PixelType             LabelPixelType;
+  typedef itk::VariableLengthVector<double>              RealVectorPixelType;
+  typedef StatisticsAccumulator<RealVectorPixelType>     AccumulatorType;
+  typedef std::unordered_map<LabelPixelType, AccumulatorType> AccumulatorMapType;
+  typedef std::vector<AccumulatorMapType> AccumulatorMapCollectionType;
+  typedef std::unordered_map<LabelPixelType, RealVectorPixelType> PixelValueMapType;
+  typedef std::unordered_map<LabelPixelType, double>              LabelPopulationMapType;
 
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputVectorImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputVectorImage::ImageDimension);
 
   /** Image related typedefs. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      TInputVectorImage::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, TInputVectorImage::ImageDimension);
+
+  itkGetMacro(NoDataValue, VectorPixelValueType);
+  itkSetMacro(NoDataValue, VectorPixelValueType);
+  itkGetMacro(UseNoDataValue, bool);
+  itkSetMacro(UseNoDataValue, bool);
 
   /** Smart Pointer type to a DataObject. */
-  typedef typename itk::DataObject::Pointer DataObjectPointer;
+  typedef typename itk::DataObject::Pointer                  DataObjectPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   typedef itk::ImageBase<InputImageDimension> ImageBaseType;
-  typedef typename ImageBaseType::RegionType InputImageRegionType;
+  typedef typename ImageBaseType::RegionType  InputImageRegionType;
 
   /** Type of DataObjects used for scalar outputs */
-  typedef itk::SimpleDataObjectDecorator<PixelValueMapType>  PixelValueMapObjectType;
+  typedef itk::SimpleDataObjectDecorator<PixelValueMapType> PixelValueMapObjectType;
 
   /** Set input label image */
-  virtual void SetInputLabelImage( const LabelImageType *image);
+  virtual void SetInputLabelImage(const LabelImageType* image);
 
   /** Get input label image */
-  virtual const LabelImageType * GetInputLabelImage();
+  virtual const LabelImageType* GetInputLabelImage();
 
   /** Return the computed Mean for each label in the input label image */
   PixelValueMapType GetMeanValueMap() const;
@@ -251,23 +263,28 @@ public:
 
 protected:
   PersistentStreamingStatisticsMapFromLabelImageFilter();
-  ~PersistentStreamingStatisticsMapFromLabelImageFilter() override {}
+  ~PersistentStreamingStatisticsMapFromLabelImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId ) override;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentStreamingStatisticsMapFromLabelImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PersistentStreamingStatisticsMapFromLabelImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  AccumulatorMapCollectionType           m_AccumulatorMaps;
+  VectorPixelValueType m_NoDataValue;
+  bool                 m_UseNoDataValue;
 
-  PixelValueMapType                      m_MeanRadiometricValue;
-  PixelValueMapType                      m_StDevRadiometricValue;
-  PixelValueMapType                      m_MinRadiometricValue;
-  PixelValueMapType                      m_MaxRadiometricValue;
+  AccumulatorMapCollectionType m_AccumulatorMaps;
 
-  LabelPopulationMapType                 m_LabelPopulation;
+  PixelValueMapType m_MeanRadiometricValue;
+  PixelValueMapType m_StDevRadiometricValue;
+  PixelValueMapType m_MinRadiometricValue;
+  PixelValueMapType m_MaxRadiometricValue;
+
+  LabelPopulationMapType m_LabelPopulation;
 
 }; // end of class PersistentStreamingStatisticsMapFromLabelImageFilter
 
@@ -316,15 +333,14 @@ private:
  * \ingroup OTBStatistics
  */
 
-template<class TInputVectorImage, class TLabelImage>
-class ITK_EXPORT StreamingStatisticsMapFromLabelImageFilter :
-public PersistentFilterStreamingDecorator<PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage> >
+template <class TInputVectorImage, class TLabelImage>
+class ITK_EXPORT StreamingStatisticsMapFromLabelImageFilter
+    : public PersistentFilterStreamingDecorator<PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>>
 {
 public:
   /** Standard Self typedef */
   typedef StreamingStatisticsMapFromLabelImageFilter Self;
-  typedef PersistentFilterStreamingDecorator
-      <PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage> > Superclass;
+  typedef PersistentFilterStreamingDecorator<PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLabelImage>> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -334,35 +350,38 @@ public:
   /** Creation through object factory macro */
   itkTypeMacro(StreamingStatisticsMapFromLabelImageFilter, PersistentFilterStreamingDecorator);
 
-  typedef TInputVectorImage                   VectorImageType;
-  typedef TLabelImage                         LabelImageType;
+  typedef TInputVectorImage VectorImageType;
+  typedef TLabelImage       LabelImageType;
 
-  typedef typename Superclass::FilterType::PixelValueMapType         PixelValueMapType;
-  typedef typename Superclass::FilterType::PixelValueMapObjectType   PixelValueMapObjectType;
+  typedef typename VectorImageType::PixelType            VectorPixelType;
+  typedef typename VectorImageType::PixelType::ValueType VectorPixelValueType;
 
-  typedef typename Superclass::FilterType::LabelPopulationMapType    LabelPopulationMapType;
+  typedef typename Superclass::FilterType::PixelValueMapType       PixelValueMapType;
+  typedef typename Superclass::FilterType::PixelValueMapObjectType PixelValueMapObjectType;
+
+  typedef typename Superclass::FilterType::LabelPopulationMapType LabelPopulationMapType;
 
   /** Set input multispectral image */
   using Superclass::SetInput;
-  void SetInput(const VectorImageType * input)
+  void SetInput(const VectorImageType* input)
   {
     this->GetFilter()->SetInput(input);
   }
 
   /** Get input multispectral image */
-  const VectorImageType * GetInput()
+  const VectorImageType* GetInput()
   {
     return this->GetFilter()->GetInput();
   }
 
   /** Set input label image (monoband) */
-  void SetInputLabelImage(const LabelImageType * input)
+  void SetInputLabelImage(const LabelImageType* input)
   {
     this->GetFilter()->SetInputLabelImage(input);
   }
 
   /** Get input label image (monoband) */
-  const LabelImageType * GetInputLabelImage()
+  const LabelImageType* GetInputLabelImage()
   {
     return this->GetFilter()->GetInputLabelImage();
   }
@@ -397,15 +416,43 @@ public:
     return this->GetFilter()->GetLabelPopulationMap();
   }
 
+  /** Set the no data value */
+  void SetNoDataValue(VectorPixelValueType value)
+  {
+    this->GetFilter()->SetNoDataValue(value);
+  }
+
+  /** Return the no data value */
+  VectorPixelValueType GetNoDataValue() const
+  {
+    return this->GetFilter()->GetNoDataValue();
+  }
+
+  /** Configure whether no data pixels ignored, treating each band independently */
+  void SetUseNoDataValue(bool useNoDataValue)
+  {
+    this->GetFilter()->SetUseNoDataValue(useNoDataValue);
+  }
+
+  /** Return whether no data pixels are ignored */
+  bool GetUseNoDataValue() const
+  {
+    return this->GetFilter()->GetUseNoDataValue();
+  }
+
 protected:
   /** Constructor */
-  StreamingStatisticsMapFromLabelImageFilter() {}
+  StreamingStatisticsMapFromLabelImageFilter()
+  {
+  }
   /** Destructor */
-  ~StreamingStatisticsMapFromLabelImageFilter() override {}
+  ~StreamingStatisticsMapFromLabelImageFilter() override
+  {
+  }
 
 private:
-  StreamingStatisticsMapFromLabelImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  StreamingStatisticsMapFromLabelImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

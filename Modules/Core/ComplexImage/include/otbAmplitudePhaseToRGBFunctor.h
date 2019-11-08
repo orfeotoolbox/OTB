@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -46,7 +46,7 @@ namespace Functor
  *
  * \ingroup OTBComplexImage
  */
-template<class TInput1, class TInput2 = TInput1, class TInput3 = TInput1, class TOutput = TInput1>
+template <class TInput1, class TInput2 = TInput1, class TInput3 = TInput1, class TOutput = TInput1>
 class ITK_EXPORT AmplitudePhaseToRGBFunctor
 {
 public:
@@ -56,11 +56,13 @@ public:
   typedef TInput1                          ScalarType;
 
   AmplitudePhaseToRGBFunctor()
-    {
+  {
     m_Minimum = 0;
     m_Maximum = itk::NumericTraits<ScalarType>::max();
-    };
-  ~AmplitudePhaseToRGBFunctor(){}
+  };
+  ~AmplitudePhaseToRGBFunctor()
+  {
+  }
 
   void SetMaximum(ScalarType max)
   {
@@ -72,9 +74,9 @@ public:
     this->m_Minimum = min;
   }
 
-  inline TOutput operator ()(const TInput1& amplitude, const TInput2& coherence, const TInput3& phase) const
+  inline TOutput operator()(const TInput1& amplitude, const TInput2& coherence, const TInput3& phase) const
   {
-//           std::cout << amplitude << " - " << phase << std::endl;
+    //           std::cout << amplitude << " - " << phase << std::endl;
     double hinc;
     hinc = 0.6 / (CONST_2PI);
 
@@ -82,27 +84,25 @@ public:
 
     hue = 0.6 - (phase + CONST_PI) * hinc;
     sat = 0.6 * coherence + 0.3;
-    val = itk::NumericTraits<RGBComponentType>::max() / 2
-          * ((amplitude - m_Minimum) / (m_Maximum - m_Minimum) + 1.0);
+    val = itk::NumericTraits<RGBComponentType>::max() / 2 * ((amplitude - m_Minimum) / (m_Maximum - m_Minimum) + 1.0);
 
     if (amplitude < m_Minimum)
-      {
+    {
       val = 0;
-      }
+    }
     if (amplitude > m_Maximum)
-      {
+    {
       val = itk::NumericTraits<RGBComponentType>::max();
-      }
+    }
 
     return m_HSVToRGBFunctor(hue, sat, val);
-
   }
+
 private:
   ScalarType          m_Maximum;
   ScalarType          m_Minimum;
   HSVToRGBFunctorType m_HSVToRGBFunctor;
 };
 }
-
 }
 #endif

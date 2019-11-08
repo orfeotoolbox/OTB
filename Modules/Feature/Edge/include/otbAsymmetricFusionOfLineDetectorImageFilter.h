@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,26 +41,18 @@ namespace otb
  * \ingroup OTBEdge
  */
 
-template <class TInputImage,
-    class TOutputImage,
-    class TOutputImageDirection = TOutputImage,
-    class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage> >
-class ITK_EXPORT AsymmetricFusionOfLineDetectorImageFilter :
-  public LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection = TOutputImage,
+          class TInterpolator = itk::LinearInterpolateImageFunction<TInputImage>>
+class ITK_EXPORT AsymmetricFusionOfLineDetectorImageFilter : public LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator>
 {
 public:
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension,
-                      unsigned int,
-                      TOutputImage::ImageDimension);
-
-  typedef AsymmetricFusionOfLineDetectorImageFilter                                                   Self;
+  typedef AsymmetricFusionOfLineDetectorImageFilter Self;
   typedef LineDetectorImageFilterBase<TInputImage, TOutputImage, TOutputImageDirection, TInterpolator> Superclass;
-  typedef itk::SmartPointer<Self>                                                                      Pointer;
-  typedef itk::SmartPointer<const Self>                                                                ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkNewMacro(Self);
 
@@ -81,26 +73,25 @@ public:
 
 protected:
   AsymmetricFusionOfLineDetectorImageFilter();
-  ~AsymmetricFusionOfLineDetectorImageFilter() override {}
+  ~AsymmetricFusionOfLineDetectorImageFilter() override
+  {
+  }
 
-  typedef otb::LineRatioDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType,
-      InterpolatorType>        LineRatioType;
-  typedef otb::LineCorrelationDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType,
-      InterpolatorType>  LineCorrelationType;
-  typedef otb::AssociativeSymmetricalSumImageFilter<InputImageType1, InputImageType2,
-      OutputImageType> AssSymSumType;
+  typedef otb::LineRatioDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType, InterpolatorType>       LineRatioType;
+  typedef otb::LineCorrelationDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType, InterpolatorType> LineCorrelationType;
+  typedef otb::AssociativeSymmetricalSumImageFilter<InputImageType1, InputImageType2, OutputImageType> AssSymSumType;
 
   void GenerateData() override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  AsymmetricFusionOfLineDetectorImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  AsymmetricFusionOfLineDetectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  typename LineRatioType::Pointer m_LineRatio;
+  typename LineRatioType::Pointer       m_LineRatio;
   typename LineCorrelationType::Pointer m_LineCorrelation;
-  typename AssSymSumType::Pointer m_AssSymSum;
+  typename AssSymSumType::Pointer       m_AssSymSum;
 };
 } // end namespace otb
 

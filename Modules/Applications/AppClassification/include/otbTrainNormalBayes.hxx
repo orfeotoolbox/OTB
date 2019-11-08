@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,34 +28,28 @@ namespace otb
 namespace Wrapper
 {
 
-  template <class TInputValue, class TOutputValue>
-  void
-  LearningApplicationBase<TInputValue,TOutputValue>
-  ::InitNormalBayesParams()
-  {
-    AddChoice("classifier.bayes", "Normal Bayes classifier");
-    SetParameterDescription("classifier.bayes", "Use a Normal Bayes Classifier. "
-        "See complete documentation here \\url{http://docs.opencv.org/modules/ml/doc/normal_bayes_classifier.html}.");
+template <class TInputValue, class TOutputValue>
+void LearningApplicationBase<TInputValue, TOutputValue>::InitNormalBayesParams()
+{
+  AddChoice("classifier.bayes", "Normal Bayes classifier");
+  SetParameterDescription("classifier.bayes", "http://docs.opencv.org/modules/ml/doc/normal_bayes_classifier.html");
+}
 
-  }
+template <class TInputValue, class TOutputValue>
+void LearningApplicationBase<TInputValue, TOutputValue>::TrainNormalBayes(typename ListSampleType::Pointer trainingListSample,
+                                                                          typename TargetListSampleType::Pointer trainingLabeledListSample,
+                                                                          std::string                            modelPath)
+{
+  typedef otb::NormalBayesMachineLearningModel<InputValueType, OutputValueType> NormalBayesType;
+  typename NormalBayesType::Pointer classifier = NormalBayesType::New();
+  classifier->SetRegressionMode(this->m_RegressionFlag);
+  classifier->SetInputListSample(trainingListSample);
+  classifier->SetTargetListSample(trainingLabeledListSample);
+  classifier->Train();
+  classifier->Save(modelPath);
+}
 
-  template <class TInputValue, class TOutputValue>
-  void
-  LearningApplicationBase<TInputValue,TOutputValue>
-  ::TrainNormalBayes(typename ListSampleType::Pointer trainingListSample,
-                     typename TargetListSampleType::Pointer trainingLabeledListSample,
-                     std::string modelPath)
-  {
-    typedef otb::NormalBayesMachineLearningModel<InputValueType, OutputValueType> NormalBayesType;
-    typename NormalBayesType::Pointer classifier = NormalBayesType::New();
-    classifier->SetRegressionMode(this->m_RegressionFlag);
-    classifier->SetInputListSample(trainingListSample);
-    classifier->SetTargetListSample(trainingLabeledListSample);
-    classifier->Train();
-    classifier->Save(modelPath);
-  }
-
-} //end namespace wrapper
-} //end namespace otb
+} // end namespace wrapper
+} // end namespace otb
 
 #endif

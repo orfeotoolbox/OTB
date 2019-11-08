@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,50 +28,45 @@ namespace otb
 {
 
 template <class TVector>
-GeographicalDistance<TVector>
-::GeographicalDistance() : m_EarthRadius(6371000)
-{}
+GeographicalDistance<TVector>::GeographicalDistance() : m_EarthRadius(6371000)
+{
+}
 
 
 template <class TVector>
-double
-GeographicalDistance<TVector>
-::Evaluate(const VectorType & x) const
+double GeographicalDistance<TVector>::Evaluate(const VectorType& x) const
 {
   // First check if vector length is sufficient
-  if(x.Size()<2)
-    itkExceptionMacro(<<"Vector length must be at least 2 to compute geographical distance.");
+  if (x.Size() < 2)
+    itkExceptionMacro(<< "Vector length must be at least 2 to compute geographical distance.");
 
   // Call evaluate implementation with the first point being the
   // origin
   VectorType origin(x);
-  origin[0]=this->GetOrigin()[0];
-  origin[1]=this->GetOrigin()[1];
+  origin[0] = this->GetOrigin()[0];
+  origin[1] = this->GetOrigin()[1];
 
   return this->Evaluate(origin, x);
 }
 
 template <class TVector>
-double
-GeographicalDistance<TVector>
-::Evaluate(const VectorType & x, const VectorType & y) const
+double GeographicalDistance<TVector>::Evaluate(const VectorType& x, const VectorType& y) const
 {
   // First check if vector length is sufficient
-  if(x.Size()<2 || y.Size()<2)
-    itkExceptionMacro(<<"Vector length must be at least 2 to compute geographical distance.");
+  if (x.Size() < 2 || y.Size() < 2)
+    itkExceptionMacro(<< "Vector length must be at least 2 to compute geographical distance.");
 
   // Build some const variables
-  const double One = itk::NumericTraits<double>::One;
-  const double Two = One + One;
-  const double Deg2Rad = CONST_PI/180.;
+  const double One     = itk::NumericTraits<double>::One;
+  const double Two     = One + One;
+  const double Deg2Rad = CONST_PI / 180.;
 
   // Compute latitude and longitude differences
   double dLat = (std::fabs(x[1] - y[1])) * Deg2Rad;
   double dLon = (std::fabs(x[0] - y[0])) * Deg2Rad;
 
   // Compute dx in meters
-  double a = std::sin(dLat / Two) * std::sin(dLat / Two) + std::cos(y[1] * Deg2Rad) * std::cos(
-    x[1] * Deg2Rad) * std::sin(dLon / Two) * std::sin(dLon / Two);
+  double a = std::sin(dLat / Two) * std::sin(dLat / Two) + std::cos(y[1] * Deg2Rad) * std::cos(x[1] * Deg2Rad) * std::sin(dLon / Two) * std::sin(dLon / Two);
   double c = Two * std::atan2(std::sqrt(a), std::sqrt(One - a));
   double d = m_EarthRadius * c;
 
@@ -80,15 +75,13 @@ GeographicalDistance<TVector>
 }
 
 template <class TVector>
-void
-GeographicalDistance<TVector>
-::PrintSelf(std::ostream & os, itk::Indent indent) const
+void GeographicalDistance<TVector>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
   Superclass::PrintSelf(os, indent);
 
   // Earth radius
-  os<<indent<<"Earth radius: "<<m_EarthRadius<<std::endl;
+  os << indent << "Earth radius: " << m_EarthRadius << std::endl;
 }
 } // End namespace otb
 

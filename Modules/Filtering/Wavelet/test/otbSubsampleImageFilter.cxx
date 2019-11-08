@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -20,29 +20,27 @@
  */
 
 
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
 #include "otbSubsampleImageFilter.h"
 
-int otbSubsampleImageFilter(int itkNotUsed(argc), char * argv[])
+int otbSubsampleImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFileName = argv[1];
-  const char * outputFileName1 = argv[2];
-  const char * outputFileName2 = argv[3];
+  const char* inputFileName   = argv[1];
+  const char* outputFileName1 = argv[2];
+  const char* outputFileName2 = argv[3];
 
   const unsigned int Dimension = 2;
-  typedef double                           PixelType;
+  typedef double     PixelType;
   typedef otb::Image<PixelType, Dimension> ImageType;
 
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                     reader = ReaderType::New();
   reader->SetFileName(inputFileName);
 
-  typedef otb::SubsampleImageFilter<ImageType, ImageType, otb::Wavelet::INVERSE>
-  InvFilterType;
+  typedef otb::SubsampleImageFilter<ImageType, ImageType, otb::Wavelet::INVERSE> InvFilterType;
   InvFilterType::Pointer invFilter = InvFilterType::New();
   invFilter->SetInput(reader->GetOutput());
 
@@ -50,13 +48,12 @@ int otbSubsampleImageFilter(int itkNotUsed(argc), char * argv[])
   invFilter->SetSubsampleFactor(delta);
 
   typedef otb::ImageFileWriter<ImageType> WriterType;
-  WriterType::Pointer writer1 = WriterType::New();
+  WriterType::Pointer                     writer1 = WriterType::New();
   writer1->SetFileName(outputFileName1);
   writer1->SetInput(invFilter->GetOutput());
   writer1->Update();
 
-  typedef otb::SubsampleImageFilter<ImageType, ImageType, otb::Wavelet::FORWARD>
-  ForwardFilterType;
+  typedef otb::SubsampleImageFilter<ImageType, ImageType, otb::Wavelet::FORWARD> ForwardFilterType;
   ForwardFilterType::Pointer filter = ForwardFilterType::New();
   filter->SetInput(invFilter->GetOutput());
   filter->SetSubsampleFactor(invFilter->GetSubsampleFactor());

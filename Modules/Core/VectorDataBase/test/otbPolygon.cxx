@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,7 +24,7 @@
 
 #include "otbPolygon.h"
 
-int otbPolygon(int itkNotUsed(argc), char * argv[])
+int otbPolygon(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::Polygon<>                   PolygonType;
   typedef PolygonType::ContinuousIndexType ContinuousIndexType;
@@ -35,29 +35,31 @@ int otbPolygon(int itkNotUsed(argc), char * argv[])
   PolygonType::Pointer polygon1 = PolygonType::New();
   PolygonType::Pointer polygon2 = PolygonType::New();
 
-  const char * outfile = argv[1];
+  const char* outfile = argv[1];
 
   // Reading vertices from command line
-  int  cpt = 2;
+  int  cpt   = 2;
   bool first = true;
   while (argv[cpt] != nullptr && argv[cpt + 1] != nullptr)
-    {
+  {
     if (argv[cpt][0] == 'n')
-      {
+    {
       first = false;
       ++cpt;
-      }
+    }
     else
-      {
+    {
       ContinuousIndexType newVertex;
       newVertex[0] = atof(argv[cpt]);
       newVertex[1] = atof(argv[cpt + 1]);
-      if (first) polygon1->AddVertex(newVertex);
-      else polygon2->AddVertex(newVertex);
+      if (first)
+        polygon1->AddVertex(newVertex);
+      else
+        polygon2->AddVertex(newVertex);
       ++cpt;
       ++cpt;
-      }
     }
+  }
 
   IteratorType        begin1 = polygon1->GetVertexList()->Begin();
   IteratorType        end1   = polygon1->GetVertexList()->End();
@@ -70,87 +72,55 @@ int otbPolygon(int itkNotUsed(argc), char * argv[])
   file.open(outfile);
 
   for (it = begin1; it != end1; ++it)
-    {
+  {
     file << "polygon1->IsInside(" << it.Value() << ") = " << polygon1->IsInside(it.Value()) << std::endl;
     file << "polygon1->IsOnEdge(" << it.Value() << ") = " << polygon1->IsOnEdge(it.Value()) << std::endl;
     file << "polygon2->IsInside(" << it.Value() << ") = " << polygon2->IsInside(it.Value()) << std::endl;
     file << "polygon2->IsOnEdge(" << it.Value() << ") = " << polygon2->IsOnEdge(it.Value()) << std::endl;
-    }
+  }
   file << std::endl << std::endl;
   for (it = begin2; it != end2; ++it)
-    {
+  {
     file << "polygon1->IsInside(" << it.Value() << ") = " << polygon1->IsInside(it.Value()) << std::endl;
     file << "polygon1->IsOnEdge(" << it.Value() << ") = " << polygon1->IsOnEdge(it.Value()) << std::endl;
     file << "polygon2->IsInside(" << it.Value() << ") = " << polygon2->IsInside(it.Value()) << std::endl;
     file << "polygon2->IsOnEdge(" << it.Value() << ") = " << polygon2->IsOnEdge(it.Value()) << std::endl;
-    }
+  }
   file << std::endl << std::endl;
 
-  current = begin1.Value();
+  current     = begin1.Value();
   firstVertex = current;
   ++begin1;
   for (it = begin1; it != end1; ++it)
-    {
-    file << "polygon1->NbCrossing(" << current << ", " << it.Value() << ") = " << polygon1->NbCrossing(current,
-                                                                                                       it.Value()) <<
-    std::endl;
-    file << "polygon1->NbTouching(" << current << ", " << it.Value() << ") = " << polygon1->NbTouching(current,
-                                                                                                       it.Value()) <<
-    std::endl;
-    file << "polygon2->NbCrossing(" << current << ", " << it.Value() << ") = " << polygon2->NbCrossing(current,
-                                                                                                       it.Value()) <<
-    std::endl;
-    file << "polygon2->NbTouching(" << current << ", " << it.Value() << ") = " << polygon2->NbTouching(current,
-                                                                                                       it.Value()) <<
-    std::endl;
+  {
+    file << "polygon1->NbCrossing(" << current << ", " << it.Value() << ") = " << polygon1->NbCrossing(current, it.Value()) << std::endl;
+    file << "polygon1->NbTouching(" << current << ", " << it.Value() << ") = " << polygon1->NbTouching(current, it.Value()) << std::endl;
+    file << "polygon2->NbCrossing(" << current << ", " << it.Value() << ") = " << polygon2->NbCrossing(current, it.Value()) << std::endl;
+    file << "polygon2->NbTouching(" << current << ", " << it.Value() << ") = " << polygon2->NbTouching(current, it.Value()) << std::endl;
     current = it.Value();
-    }
-  file << "polygon1->NbCrossing(" << current << ", " << firstVertex << ") = " << polygon1->NbCrossing(current,
-                                                                                                      firstVertex) <<
-  std::endl;
-  file << "polygon1->NbTouching(" << current << ", " << firstVertex << ") = " << polygon1->NbTouching(current,
-                                                                                                      firstVertex) <<
-  std::endl;
-  file << "polygon2->NbCrossing(" << current << ", " << firstVertex << ") = " << polygon2->NbCrossing(current,
-                                                                                                      firstVertex) <<
-  std::endl;
-  file << "polygon2->NbTouching(" << current << ", " << firstVertex << ") = " << polygon2->NbTouching(current,
-                                                                                                      firstVertex) <<
-  std::endl;
+  }
+  file << "polygon1->NbCrossing(" << current << ", " << firstVertex << ") = " << polygon1->NbCrossing(current, firstVertex) << std::endl;
+  file << "polygon1->NbTouching(" << current << ", " << firstVertex << ") = " << polygon1->NbTouching(current, firstVertex) << std::endl;
+  file << "polygon2->NbCrossing(" << current << ", " << firstVertex << ") = " << polygon2->NbCrossing(current, firstVertex) << std::endl;
+  file << "polygon2->NbTouching(" << current << ", " << firstVertex << ") = " << polygon2->NbTouching(current, firstVertex) << std::endl;
 
   file << std::endl << std::endl;
 
-  current = begin2.Value();
+  current     = begin2.Value();
   firstVertex = current;
   ++begin2;
   for (it = begin2; it != end2; ++it)
-    {
-    file << "polygon1->NbCrossing(" << current << ", " << it.Value() << ") = " << polygon1->NbCrossing(current,
-                                                                                                       it.Value()) <<
-    std::endl;
-    file << "polygon1->NbTouching(" << current << ", " << it.Value() << ") = " << polygon1->NbTouching(current,
-                                                                                                       it.Value()) <<
-    std::endl;
-    file << "polygon2->NbCrossing(" << current << ", " << it.Value() << ") = " << polygon2->NbCrossing(current,
-                                                                                                       it.Value()) <<
-    std::endl;
-    file << "polygon2->NbTouching(" << current << ", " << it.Value() << ") = " << polygon2->NbTouching(current,
-                                                                                                       it.Value()) <<
-    std::endl;
+  {
+    file << "polygon1->NbCrossing(" << current << ", " << it.Value() << ") = " << polygon1->NbCrossing(current, it.Value()) << std::endl;
+    file << "polygon1->NbTouching(" << current << ", " << it.Value() << ") = " << polygon1->NbTouching(current, it.Value()) << std::endl;
+    file << "polygon2->NbCrossing(" << current << ", " << it.Value() << ") = " << polygon2->NbCrossing(current, it.Value()) << std::endl;
+    file << "polygon2->NbTouching(" << current << ", " << it.Value() << ") = " << polygon2->NbTouching(current, it.Value()) << std::endl;
     current = it.Value();
-    }
-  file << "polygon1->NbCrossing(" << current << ", " << firstVertex << ") = " << polygon1->NbCrossing(current,
-                                                                                                      firstVertex) <<
-  std::endl;
-  file << "polygon1->NbTouching(" << current << ", " << firstVertex << ") = " << polygon1->NbTouching(current,
-                                                                                                      firstVertex) <<
-  std::endl;
-  file << "polygon2->NbCrossing(" << current << ", " << firstVertex << ") = " << polygon2->NbCrossing(current,
-                                                                                                      firstVertex) <<
-  std::endl;
-  file << "polygon2->NbTouching(" << current << ", " << firstVertex << ") = " << polygon2->NbTouching(current,
-                                                                                                      firstVertex) <<
-  std::endl;
+  }
+  file << "polygon1->NbCrossing(" << current << ", " << firstVertex << ") = " << polygon1->NbCrossing(current, firstVertex) << std::endl;
+  file << "polygon1->NbTouching(" << current << ", " << firstVertex << ") = " << polygon1->NbTouching(current, firstVertex) << std::endl;
+  file << "polygon2->NbCrossing(" << current << ", " << firstVertex << ") = " << polygon2->NbCrossing(current, firstVertex) << std::endl;
+  file << "polygon2->NbTouching(" << current << ", " << firstVertex << ") = " << polygon2->NbTouching(current, firstVertex) << std::endl;
 
   file << std::endl << std::endl;
   file << "Bounding Boxs computation : " << std::endl;
@@ -163,12 +133,12 @@ int otbPolygon(int itkNotUsed(argc), char * argv[])
 
   file << std::endl << std::endl;
   file << "Surface computation : " << std::endl;
-  file << "Surface 1 :" << (double) polygon1->GetArea() << std::endl;
+  file << "Surface 1 :" << (double)polygon1->GetArea() << std::endl;
   file << "Surface 2 :" << polygon2->GetArea() << std::endl;
 
   file << std::endl << std::endl;
   file << "Length computation : " << std::endl;
-  file << "Length 1 :" << (double) polygon1->GetLength() << std::endl;
+  file << "Length 1 :" << (double)polygon1->GetLength() << std::endl;
   file << "Length 2 :" << polygon2->GetLength() << std::endl;
 
   file.close();

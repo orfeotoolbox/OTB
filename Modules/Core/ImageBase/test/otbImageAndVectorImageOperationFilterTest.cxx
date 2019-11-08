@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include "itkMacro.h"
 #include <iostream>
 
@@ -29,18 +28,18 @@
 #include "otbImageFileWriter.h"
 #include "otbImageAndVectorImageOperationFilter.h"
 
-int otbImageAndVectorImageOperationFilterTest(int itkNotUsed(argc), char * argv[])
+int otbImageAndVectorImageOperationFilterTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname       = argv[1];
-  const char * invectfname   = argv[2];
-  const char * outfnameAdd   = argv[3];
-  const char * outfnameSub   = argv[4];
-  const char * outfnameMul   = argv[5];
-  const char * outfnameDiv   = argv[6];
+  const char* infname     = argv[1];
+  const char* invectfname = argv[2];
+  const char* outfnameAdd = argv[3];
+  const char* outfnameSub = argv[4];
+  const char* outfnameMul = argv[5];
+  const char* outfnameDiv = argv[6];
 
-  typedef double                                PixelType;
-  typedef otb::Image<PixelType, 2>              ScalarImageType;
-  typedef otb::VectorImage<PixelType, 2>        VectorImageType;
+  typedef double PixelType;
+  typedef otb::Image<PixelType, 2>       ScalarImageType;
+  typedef otb::VectorImage<PixelType, 2> VectorImageType;
   typedef otb::ImageFileReader<ScalarImageType> ReaderType;
   typedef otb::ImageFileReader<VectorImageType> VectorReaderType;
   typedef otb::ImageFileWriter<VectorImageType> WriterType;

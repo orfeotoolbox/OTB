@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,28 +41,25 @@ class StringListParameter;
  *
  * \ingroup OTBQtWidget
  */
-class OTBQtWidget_EXPORT QtWidgetStringListParameter :
-    public QtWidgetParameterList
+class OTBQtWidget_EXPORT QtWidgetStringListParameter : public QtWidgetParameterList
 {
   Q_OBJECT;
 
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-  QtWidgetStringListParameter( StringListParameter *, QtWidgetModel * , QWidget *);
+  QtWidgetStringListParameter(StringListParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetStringListParameter() override;
 
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-  QtWidgetStringListParameter( const QtWidgetStringListParameter & ) = delete;
+  QtWidgetStringListParameter(const QtWidgetStringListParameter&) = delete;
 
-  void operator = ( const QtWidgetStringListParameter & ) = delete;
+  void operator=(const QtWidgetStringListParameter&) = delete;
 };
-
-
 }
 }
 

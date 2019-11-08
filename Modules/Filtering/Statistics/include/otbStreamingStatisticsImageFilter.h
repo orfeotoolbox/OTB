@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -48,16 +48,15 @@ namespace otb
  *
  * \ingroup OTBStatistics
  */
-template<class TInputImage>
-class ITK_EXPORT PersistentStatisticsImageFilter :
-  public PersistentImageFilter<TInputImage, TInputImage>
+template <class TInputImage>
+class ITK_EXPORT PersistentStatisticsImageFilter : public PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentStatisticsImageFilter                 Self;
+  typedef PersistentStatisticsImageFilter Self;
   typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -74,18 +73,16 @@ public:
   typedef typename TInputImage::IndexType  IndexType;
   typedef typename TInputImage::PixelType  PixelType;
 
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Image related typedefs. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Type to use for computations. */
   typedef typename itk::NumericTraits<PixelType>::RealType RealType;
 
   /** Smart Pointer type to a DataObject. */
-  typedef typename itk::DataObject::Pointer DataObjectPointer;
+  typedef typename itk::DataObject::Pointer                  DataObjectPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Type of DataObjects used for scalar outputs */
@@ -97,7 +94,7 @@ public:
   {
     return this->GetMinimumOutput()->Get();
   }
-  PixelObjectType* GetMinimumOutput();
+  PixelObjectType*       GetMinimumOutput();
   const PixelObjectType* GetMinimumOutput() const;
 
   /** Return the computed Maximum. */
@@ -105,7 +102,7 @@ public:
   {
     return this->GetMaximumOutput()->Get();
   }
-  PixelObjectType* GetMaximumOutput();
+  PixelObjectType*       GetMaximumOutput();
   const PixelObjectType* GetMaximumOutput() const;
 
   /** Return the computed Mean. */
@@ -113,7 +110,7 @@ public:
   {
     return this->GetMeanOutput()->Get();
   }
-  RealObjectType* GetMeanOutput();
+  RealObjectType*       GetMeanOutput();
   const RealObjectType* GetMeanOutput() const;
 
   /** Return the computed Standard Deviation. */
@@ -121,7 +118,7 @@ public:
   {
     return this->GetSigmaOutput()->Get();
   }
-  RealObjectType* GetSigmaOutput();
+  RealObjectType*       GetSigmaOutput();
   const RealObjectType* GetSigmaOutput() const;
 
   /** Return the computed Variance. */
@@ -129,7 +126,7 @@ public:
   {
     return this->GetVarianceOutput()->Get();
   }
-  RealObjectType* GetVarianceOutput();
+  RealObjectType*       GetVarianceOutput();
   const RealObjectType* GetVarianceOutput() const;
 
   /** Return the compute Sum. */
@@ -137,7 +134,7 @@ public:
   {
     return this->GetSumOutput()->Get();
   }
-  RealObjectType* GetSumOutput();
+  RealObjectType*       GetSumOutput();
   const RealObjectType* GetSumOutput() const;
 
   /** Make a DataObject of the correct type to be used as the specified
@@ -164,30 +161,30 @@ public:
 
 protected:
   PersistentStatisticsImageFilter();
-  ~PersistentStatisticsImageFilter() override {}
+  ~PersistentStatisticsImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Multi-thread version GenerateData. */
-  void  ThreadedGenerateData(const RegionType&
-                             outputRegionForThread,
-                             itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  PersistentStatisticsImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PersistentStatisticsImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  itk::Array<RealType>       m_ThreadSum;
-  itk::Array<RealType>       m_SumOfSquares;
-  itk::Array<long>           m_Count;
-  itk::Array<PixelType>      m_ThreadMin;
-  itk::Array<PixelType>      m_ThreadMax;
+  itk::Array<RealType>  m_ThreadSum;
+  itk::Array<RealType>  m_SumOfSquares;
+  itk::Array<long>      m_Count;
+  itk::Array<PixelType> m_ThreadMin;
+  itk::Array<PixelType> m_ThreadMax;
 
   /* Ignored values */
-  bool                       m_IgnoreInfiniteValues;
-  bool                       m_IgnoreUserDefinedValue;
-  RealType                   m_UserIgnoredValue;
-  std::vector<unsigned int>  m_IgnoredInfinitePixelCount;
-  std::vector<unsigned int>  m_IgnoredUserPixelCount;
+  bool                      m_IgnoreInfiniteValues;
+  bool                      m_IgnoreUserDefinedValue;
+  RealType                  m_UserIgnoredValue;
+  std::vector<unsigned int> m_IgnoredInfinitePixelCount;
+  std::vector<unsigned int> m_IgnoredUserPixelCount;
 
 
 }; // end of class PersistentStatisticsImageFilter
@@ -226,17 +223,15 @@ private:
  * \ingroup OTBStatistics
  */
 
-template<class TInputImage>
-class ITK_EXPORT StreamingStatisticsImageFilter :
-  public PersistentFilterStreamingDecorator<PersistentStatisticsImageFilter<TInputImage> >
+template <class TInputImage>
+class ITK_EXPORT StreamingStatisticsImageFilter : public PersistentFilterStreamingDecorator<PersistentStatisticsImageFilter<TInputImage>>
 {
 public:
   /** Standard Self typedef */
-  typedef StreamingStatisticsImageFilter Self;
-  typedef PersistentFilterStreamingDecorator
-  <PersistentStatisticsImageFilter<TInputImage> > Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef StreamingStatisticsImageFilter                                                   Self;
+  typedef PersistentFilterStreamingDecorator<PersistentStatisticsImageFilter<TInputImage>> Superclass;
+  typedef itk::SmartPointer<Self>                                                          Pointer;
+  typedef itk::SmartPointer<const Self>                                                    ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -254,11 +249,11 @@ public:
   typedef itk::SimpleDataObjectDecorator<PixelType> PixelObjectType;
 
   using Superclass::SetInput;
-  void SetInput(InputImageType * input)
+  void SetInput(InputImageType* input)
   {
     this->GetFilter()->SetInput(input);
   }
-  const InputImageType * GetInput()
+  const InputImageType* GetInput()
   {
     return this->GetFilter()->GetInput();
   }
@@ -356,13 +351,15 @@ public:
 
 protected:
   /** Constructor */
-  StreamingStatisticsImageFilter() {};
+  StreamingStatisticsImageFilter(){};
   /** Destructor */
-  ~StreamingStatisticsImageFilter() override {}
+  ~StreamingStatisticsImageFilter() override
+  {
+  }
 
 private:
-  StreamingStatisticsImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  StreamingStatisticsImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

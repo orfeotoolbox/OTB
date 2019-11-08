@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,13 +26,12 @@
 
 namespace otb
 {
-template <unsigned int TDegree=2, class TCoefPrecision = double>
+template <unsigned int TDegree = 2, class TCoefPrecision = double>
 class PolynomialTimeSeries
 {
 public:
-
   typedef TCoefPrecision CoefficientsPrecisionType;
-  typedef itk::FixedArray< CoefficientsPrecisionType, TDegree+1 > CoefficientsType;
+  typedef itk::FixedArray<CoefficientsPrecisionType, TDegree + 1> CoefficientsType;
 
 
   /// Constructor
@@ -40,11 +39,13 @@ public:
   {
   }
   /// Destructor
-  virtual ~PolynomialTimeSeries() {}
+  virtual ~PolynomialTimeSeries()
+  {
+  }
 
   inline void SetCoefficients(CoefficientsType& coeffs)
   {
-    for(unsigned int i=0; i<=TDegree; ++i)
+    for (unsigned int i = 0; i <= TDegree; ++i)
       m_Coefficients[i] = coeffs[i];
   }
 
@@ -58,11 +59,11 @@ public:
     return m_Coefficients;
   }
 
-  inline CoefficientsPrecisionType GetValue( CoefficientsPrecisionType val) const
+  inline CoefficientsPrecisionType GetValue(CoefficientsPrecisionType val) const
   {
     CoefficientsPrecisionType tmpVal = 0;
-    for( unsigned int i=0; i<=TDegree; ++i)
-      tmpVal += m_Coefficients[i]*std::pow(val, static_cast<CoefficientsPrecisionType>(i));
+    for (unsigned int i = 0; i <= TDegree; ++i)
+      tmpVal += m_Coefficients[i] * std::pow(val, static_cast<CoefficientsPrecisionType>(i));
     return tmpVal;
   }
 

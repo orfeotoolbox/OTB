@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,8 +29,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage>
-ImageListToImageFilter<TInputImage, TOutputImage>
-::ImageListToImageFilter()
+ImageListToImageFilter<TInputImage, TOutputImage>::ImageListToImageFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 }
@@ -39,9 +38,7 @@ ImageListToImageFilter<TInputImage, TOutputImage>
  * \param image The input image.
  */
 template <class TInputImage, class TOutputImage>
-void
-ImageListToImageFilter<TInputImage, TOutputImage>
-::SetInput(const InputImageListType *image)
+void ImageListToImageFilter<TInputImage, TOutputImage>::SetInput(const InputImageListType* image)
 {
   // A single input image
   this->itk::ProcessObject::SetNthInput(0, const_cast<InputImageListType*>(image));
@@ -51,27 +48,22 @@ ImageListToImageFilter<TInputImage, TOutputImage>
  * \return The input image.
  */
 template <class TInputImage, class TOutputImage>
-typename ImageListToImageFilter<TInputImage, TOutputImage>::InputImageListType *
-ImageListToImageFilter<TInputImage, TOutputImage>
-::GetInput(void)
+typename ImageListToImageFilter<TInputImage, TOutputImage>::InputImageListType* ImageListToImageFilter<TInputImage, TOutputImage>::GetInput(void)
 {
   // If there is no input
   if (this->GetNumberOfInputs() < 1)
-    {
+  {
     // exit
     return nullptr;
-    }
+  }
   // else return the first input
-  return static_cast<InputImageListType *>
-           (this->itk::ProcessObject::GetInput(0));
+  return static_cast<InputImageListType*>(this->itk::ProcessObject::GetInput(0));
 }
 /**
  * PrintSelf Method
  */
 template <class TInputImage, class TOutputImage>
-void
-ImageListToImageFilter<TInputImage, TOutputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ImageListToImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

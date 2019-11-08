@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -46,8 +46,12 @@ template <class TNeighIter, class TOutput>
 class ComputeNeighborhoodContributionFunctor
 {
 public:
-  ComputeNeighborhoodContributionFunctor() {}
-  virtual ~ComputeNeighborhoodContributionFunctor() {}
+  ComputeNeighborhoodContributionFunctor()
+  {
+  }
+  virtual ~ComputeNeighborhoodContributionFunctor()
+  {
+  }
 
   typedef itk::VariableSizeMatrix<double>           WeightingMatrixType;
   typedef typename std::vector<WeightingMatrixType> WeightingValuesContainerType;
@@ -79,10 +83,10 @@ public:
     return m_DiffuseRatio;
   }
 
-  inline TOutput operator ()(const TNeighIter& it)
+  inline TOutput operator()(const TNeighIter& it)
   {
     unsigned int neighborhoodSize = it.Size();
-    double       contribution = 0.;
+    double       contribution     = 0.;
     TOutput      outPixel;
     outPixel.SetSize(it.GetCenterPixel().Size());
 
@@ -99,21 +103,19 @@ public:
         // Current neighborhood pixel index calculation
         unsigned int RowIdx = 0;
         unsigned int ColIdx = 0;
-        RowIdx = i / TempChannelWeighting.Cols();
-        ColIdx = i - RowIdx*TempChannelWeighting.Cols();
-   
+        RowIdx              = i / TempChannelWeighting.Cols();
+        ColIdx              = i - RowIdx * TempChannelWeighting.Cols();
+
         // Extract the current neighborhood pixel ponderation
         double idVal = TempChannelWeighting(RowIdx, ColIdx);
         // Extract the current neighborhood pixel value
         TOutput tempPix = it.GetPixel(i);
 
         contribution += static_cast<double>(tempPix[j]) * idVal;
-
-        }
-        
-        outPixel[j] = static_cast<RealValueType>(it.GetCenterPixel()[j]) *m_UpwardTransmittanceRatio[j]
-                        + contribution * m_DiffuseRatio[j];
       }
+
+      outPixel[j] = static_cast<RealValueType>(it.GetCenterPixel()[j]) * m_UpwardTransmittanceRatio[j] + contribution * m_DiffuseRatio[j];
+    }
     return outPixel;
   }
 
@@ -122,7 +124,6 @@ private:
   DoubleContainerType          m_UpwardTransmittanceRatio;
   DoubleContainerType          m_DiffuseRatio;
 };
-
 }
 
 /** \class SurfaceAdjacencyEffectCorrectionSchemeFilter
@@ -138,24 +139,19 @@ private:
  * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT SurfaceAdjacencyEffectCorrectionSchemeFilter :
-  public UnaryFunctorNeighborhoodImageFilter<
-      TInputImage,
-      TOutputImage,
-      typename Functor::ComputeNeighborhoodContributionFunctor<itk::
-          ConstNeighborhoodIterator <TInputImage>,
-      typename TOutputImage::PixelType> >
+class ITK_EXPORT SurfaceAdjacencyEffectCorrectionSchemeFilter
+    : public UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, typename Functor::ComputeNeighborhoodContributionFunctor<
+                                                                                itk::ConstNeighborhoodIterator<TInputImage>, typename TOutputImage::PixelType>>
 {
 public:
   /** "typedef" to simplify the variables definition and the declaration. */
-  typedef Functor::ComputeNeighborhoodContributionFunctor<itk::ConstNeighborhoodIterator<TInputImage>,
-      typename TOutputImage::PixelType> FunctorType;
+  typedef Functor::ComputeNeighborhoodContributionFunctor<itk::ConstNeighborhoodIterator<TInputImage>, typename TOutputImage::PixelType> FunctorType;
 
   /** "typedef" for standard classes. */
-  typedef SurfaceAdjacencyEffectCorrectionSchemeFilter                              Self;
+  typedef SurfaceAdjacencyEffectCorrectionSchemeFilter Self;
   typedef UnaryFunctorNeighborhoodImageFilter<TInputImage, TOutputImage, FunctorType> Superclass;
-  typedef itk::SmartPointer<Self>                                                     Pointer;
-  typedef itk::SmartPointer<const Self>                                               ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename Superclass::InputImageType  InputImageType;
   typedef typename Superclass::OutputImageType OutputImageType;
@@ -181,23 +177,23 @@ public:
   typedef typename OutputImageType::RegionType        OutputImageRegionType;
 
 
-  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms     CorrectionParametersToRadiativeTermsType;
+  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms CorrectionParametersToRadiativeTermsType;
 
-  typedef otb::AtmosphericCorrectionParameters                               AtmoCorrectionParametersType;
-  typedef typename AtmoCorrectionParametersType::Pointer                    AtmoCorrectionParametersPointerType;
+  typedef otb::AtmosphericCorrectionParameters           AtmoCorrectionParametersType;
+  typedef typename AtmoCorrectionParametersType::Pointer AtmoCorrectionParametersPointerType;
 
-  typedef otb::ImageMetadataCorrectionParameters                             AcquiCorrectionParametersType;
-  typedef typename AcquiCorrectionParametersType::Pointer                   AcquiCorrectionParametersPointerType;
+  typedef otb::ImageMetadataCorrectionParameters          AcquiCorrectionParametersType;
+  typedef typename AcquiCorrectionParametersType::Pointer AcquiCorrectionParametersPointerType;
 
-  typedef otb::AtmosphericRadiativeTerms                                     AtmosphericRadiativeTermsType;
-  typedef typename AtmosphericRadiativeTermsType::Pointer                   AtmosphericRadiativeTermsPointerType;
+  typedef otb::AtmosphericRadiativeTerms                  AtmosphericRadiativeTermsType;
+  typedef typename AtmosphericRadiativeTermsType::Pointer AtmosphericRadiativeTermsPointerType;
 
 
-  typedef otb::FilterFunctionValues                                     FilterFunctionValuesType;
-  typedef FilterFunctionValuesType::WavelengthSpectralBandType          ValueType;                //float
-  typedef FilterFunctionValuesType::ValuesVectorType                    ValuesVectorType;         //std::vector<float>
+  typedef otb::FilterFunctionValues                            FilterFunctionValuesType;
+  typedef FilterFunctionValuesType::WavelengthSpectralBandType ValueType;        // float
+  typedef FilterFunctionValuesType::ValuesVectorType           ValuesVectorType; // std::vector<float>
 
-  typedef typename AcquiCorrectionParametersType::WavelengthSpectralBandVectorType        WavelengthSpectralBandVectorType;
+  typedef typename AcquiCorrectionParametersType::WavelengthSpectralBandVectorType WavelengthSpectralBandVectorType;
 
   typedef itk::MetaDataDictionary MetaDataDictionaryType;
 
@@ -267,7 +263,9 @@ public:
 
 protected:
   SurfaceAdjacencyEffectCorrectionSchemeFilter();
-  ~SurfaceAdjacencyEffectCorrectionSchemeFilter() override {}
+  ~SurfaceAdjacencyEffectCorrectionSchemeFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Initialize the parameters of the functor before the threads run. */
@@ -283,15 +281,14 @@ protected:
   void Modified() const override;
 
 private:
-
   bool m_IsSetAtmosphericRadiativeTerms;
   bool m_IsSetAtmoCorrectionParameters;
   bool m_IsSetAcquiCorrectionParameters;
 
   /** Radiative terms object */
-  AtmosphericRadiativeTermsPointerType     m_AtmosphericRadiativeTerms;
-  AtmoCorrectionParametersPointerType      m_AtmoCorrectionParameters;
-  AcquiCorrectionParametersPointerType     m_AcquiCorrectionParameters;
+  AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
+  AtmoCorrectionParametersPointerType  m_AtmoCorrectionParameters;
+  AcquiCorrectionParametersPointerType m_AcquiCorrectionParameters;
 
   /** Size of the window. */
   unsigned int m_WindowRadius;

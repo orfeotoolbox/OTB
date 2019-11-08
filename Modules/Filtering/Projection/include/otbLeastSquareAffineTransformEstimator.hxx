@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,59 +28,45 @@
 #include "otbMacro.h"
 #include "otbLeastSquareAffineTransformEstimator.h"
 
-namespace otb {
+namespace otb
+{
 
 template <class TPoint>
-LeastSquareAffineTransformEstimator<TPoint>
-::LeastSquareAffineTransformEstimator() : m_TiePointsContainer(),
-  m_RMSError(),
-  m_RelativeResidual(),
-  m_Matrix(),
-  m_Offset(),
-  m_AffineTransform()
+LeastSquareAffineTransformEstimator<TPoint>::LeastSquareAffineTransformEstimator()
+  : m_TiePointsContainer(), m_RMSError(), m_RelativeResidual(), m_Matrix(), m_Offset(), m_AffineTransform()
 {
   // Build the affine transform object
   m_AffineTransform = AffineTransformType::New();
 }
 
 template <class TPoint>
-LeastSquareAffineTransformEstimator<TPoint>
-::~LeastSquareAffineTransformEstimator()
+LeastSquareAffineTransformEstimator<TPoint>::~LeastSquareAffineTransformEstimator()
 {
   // Clear the tie points list
   this->ClearTiePoints();
 }
 
 template <class TPoint>
-typename LeastSquareAffineTransformEstimator<TPoint>
-::TiePointsContainerType&
-LeastSquareAffineTransformEstimator<TPoint>
-::GetTiePointsContainer()
+typename LeastSquareAffineTransformEstimator<TPoint>::TiePointsContainerType& LeastSquareAffineTransformEstimator<TPoint>::GetTiePointsContainer()
 {
   return m_TiePointsContainer;
 }
 
 template <class TPoint>
-void
-LeastSquareAffineTransformEstimator<TPoint>
-::SetTiePointsContainer(const TiePointsContainerType& container)
+void LeastSquareAffineTransformEstimator<TPoint>::SetTiePointsContainer(const TiePointsContainerType& container)
 {
   m_TiePointsContainer = container;
 }
 
 template <class TPoint>
-void
-LeastSquareAffineTransformEstimator<TPoint>
-::ClearTiePoints()
+void LeastSquareAffineTransformEstimator<TPoint>::ClearTiePoints()
 {
   // Clear the container
   m_TiePointsContainer.clear();
 }
 
 template <class TPoint>
-void
-LeastSquareAffineTransformEstimator<TPoint>
-::AddTiePoints(const PointType& src, const PointType& dst)
+void LeastSquareAffineTransformEstimator<TPoint>::AddTiePoints(const PointType& src, const PointType& dst)
 {
   // Build the tie point
   TiePointsType tpoints(src, dst);
@@ -90,18 +76,16 @@ LeastSquareAffineTransformEstimator<TPoint>
 }
 
 template <class TPoint>
-void
-LeastSquareAffineTransformEstimator<TPoint>
-::Compute()
+void LeastSquareAffineTransformEstimator<TPoint>::Compute()
 {
   // Get the number of tie points
   unsigned int nbPoints = m_TiePointsContainer.size();
 
   // Check if there are some points in
   if (nbPoints == 0)
-    {
+  {
     itkExceptionMacro(<< "No tie points were given to the LeastSquareAffineTransformEstimator");
-    }
+  }
 
   // Convenient typedefs
   typedef vnl_sparse_matrix<double> VnlMatrixType;
@@ -114,38 +98,37 @@ LeastSquareAffineTransformEstimator<TPoint>
 
   // Iterate on points
   for (unsigned int pId = 0; pId < nbPoints; ++pId)
-    {
+  {
     // Iterate on dimension
     for (unsigned int dim1 = 0; dim1 < PointDimension; ++dim1)
-      {
+    {
       // Fill the vector
       vectorPerDim[dim1][pId] = static_cast<double>(m_TiePointsContainer[pId].second[dim1]);
 
       // Iterate on dimension (second loop)
       for (unsigned int dim2 = 0; dim2 < PointDimension; ++dim2)
-        {
+      {
         matrixPerDim[dim1](pId, dim2) = static_cast<double>(m_TiePointsContainer[pId].first[dim2]);
-        }
+      }
 
       // Fill the last column
       matrixPerDim[dim1](pId, PointDimension) = 1.;
-      }
     }
+  }
 
   // Step 2: Solve linear systems
 
   for (unsigned int dim1 = 0; dim1 < PointDimension; ++dim1)
-    {
+  {
     // Declare a linear system
     vnl_sparse_matrix_linear_system<double> linearSystem(matrixPerDim[dim1], vectorPerDim[dim1]);
 
     // Check if there are enough points to solve
     if (linearSystem.get_number_of_unknowns() > nbPoints * PointDimension)
-      {
-      itkExceptionMacro(<< "There are " << linearSystem.get_number_of_unknowns()
-                        << " unknowns in the linear systems but only " << nbPoints
+    {
+      itkExceptionMacro(<< "There are " << linearSystem.get_number_of_unknowns() << " unknowns in the linear systems but only " << nbPoints
                         << " points are provided.");
-      }
+    }
     otbMsgDebugMacro(<< "Number of unknowns: " << linearSystem.get_number_of_unknowns());
     otbMsgDebugMacro(<< "Number of equations: " << nbPoints);
 
@@ -166,12 +149,12 @@ LeastSquareAffineTransformEstimator<TPoint>
 
     // Fill the affine transform matrix
     for (unsigned int dim2 = 0; dim2 < PointDimension; ++dim2)
-      {
+    {
       m_Matrix(dim1, dim2) = static_cast<PrecisionType>(solution[dim2]);
-      }
+    }
     // Fill the offset
     m_Offset[dim1] = static_cast<PrecisionType>(solution[PointDimension]);
-    }
+  }
 
   // Set the affine transform parameters
   m_AffineTransform->SetMatrix(m_Matrix);
@@ -179,9 +162,7 @@ LeastSquareAffineTransformEstimator<TPoint>
 }
 
 template <class TPoint>
-void
-LeastSquareAffineTransformEstimator<TPoint>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void LeastSquareAffineTransformEstimator<TPoint>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Number of tie points: " << m_TiePointsContainer.size() << std::endl;

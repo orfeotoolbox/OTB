@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,68 +36,71 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 
-namespace Function {
+namespace Function
+{
 
-template< class TInputImageRealPart, class TOutput>
+template <class TInputImageRealPart, class TOutput>
 class RealToComplex
 {
 public:
   typedef typename TOutput::value_type OutputValueType;
 
-  RealToComplex() {}
-  ~RealToComplex() {}
-  bool operator!=( const RealToComplex & ) const
-    {
+  RealToComplex()
+  {
+  }
+  ~RealToComplex()
+  {
+  }
+  bool operator!=(const RealToComplex&) const
+  {
     return false;
-    }
-  bool operator==( const RealToComplex & other ) const
-    {
+  }
+  bool operator==(const RealToComplex& other) const
+  {
     return !(*this != other);
-    }
-  inline TOutput operator()( const TInputImageRealPart & real) const
-    {
+  }
+  inline TOutput operator()(const TInputImageRealPart& real) const
+  {
     return TOutput(static_cast<OutputValueType>(real), static_cast<OutputValueType>(0.0));
-    }
+  }
 };
 }
 
 template <class TInputImageRealPart, class TOutputImage>
-class ITK_EXPORT RealImageToComplexImageFilter :
-    public itk::UnaryFunctorImageFilter<TInputImageRealPart, TOutputImage,
-                        Function::RealToComplex<
-                                  typename TInputImageRealPart::PixelType,
-                                  typename TOutputImage::PixelType>   >
+class ITK_EXPORT RealImageToComplexImageFilter
+    : public itk::UnaryFunctorImageFilter<TInputImageRealPart, TOutputImage,
+                                          Function::RealToComplex<typename TInputImageRealPart::PixelType, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs. */
-  typedef RealImageToComplexImageFilter  Self;
-  typedef itk::UnaryFunctorImageFilter<
-      TInputImageRealPart, TOutputImage,
-      Function::RealToComplex< typename TInputImageRealPart::PixelType,
-                              typename TOutputImage::PixelType> >
-                                         Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  typedef RealImageToComplexImageFilter Self;
+  typedef itk::UnaryFunctorImageFilter<TInputImageRealPart, TOutputImage,
+                                       Function::RealToComplex<typename TInputImageRealPart::PixelType, typename TOutputImage::PixelType>>
+                                        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(RealImageToComplexImageFilter,
-               UnaryFunctorImageFilter);
+  itkTypeMacro(RealImageToComplexImageFilter, UnaryFunctorImageFilter);
 
-  typedef typename TInputImageRealPart::PixelType                   InputRealPartPixelType;
-  typedef typename TOutputImage::PixelType                          OutputPixelType;
-  typedef typename itk::NumericTraits< OutputPixelType >::ValueType OutputPixelValueType;
+  typedef typename TInputImageRealPart::PixelType                 InputRealPartPixelType;
+  typedef typename TOutputImage::PixelType                        OutputPixelType;
+  typedef typename itk::NumericTraits<OutputPixelType>::ValueType OutputPixelValueType;
 
 protected:
-  RealImageToComplexImageFilter() {}
-  ~RealImageToComplexImageFilter() override {}
+  RealImageToComplexImageFilter()
+  {
+  }
+  ~RealImageToComplexImageFilter() override
+  {
+  }
 
 private:
   RealImageToComplexImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
-
 };
 
 } // end namespace otb

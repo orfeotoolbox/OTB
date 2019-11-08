@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -75,8 +75,7 @@ class LayerStackWidget;
  *
  * \brief WIP.
  */
-class OTBMonteverdiGUI_EXPORT LayerStackController :
-    public AbstractModelController
+class OTBMonteverdiGUI_EXPORT LayerStackController : public AbstractModelController
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -85,26 +84,25 @@ class OTBMonteverdiGUI_EXPORT LayerStackController :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  LayerStackController( LayerStackWidget * widget, QObject * p =NULL );
+  LayerStackController(LayerStackWidget* widget, QObject* p = NULL);
 
   /** \brief Destructor. */
   ~LayerStackController() override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   /**
    */
@@ -113,18 +111,16 @@ signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
@@ -135,11 +131,11 @@ private:
 
   /**
    */
-  void Connect( AbstractModel * ) override;
+  void Connect(AbstractModel*) override;
 
   /**
    */
-  void Disconnect( AbstractModel * ) override;
+  void Disconnect(AbstractModel*) override;
 
   /**
    */
@@ -147,27 +143,26 @@ private:
 
   /**
    */
-  void virtual_ResetWidget( bool ) override;
+  void virtual_ResetWidget(bool) override;
 
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /**
    */
-  void OnCurrentChanged( int );
+  void OnCurrentChanged(int);
   /**
    */
-  void OnSelectionChanged( int );
+  void OnSelectionChanged(int);
   /**
    */
-  void OnStackedLayerCurrentChanged( size_t );
+  void OnStackedLayerCurrentChanged(size_t);
   /**
    */
   void OnProjectionButtonClicked();
@@ -179,7 +174,7 @@ private slots:
   void OnStackedLayerContentReset();
   /**
    */
-  void OnCopyLayerRequested( const AbstractLayerModel * );
+  void OnCopyLayerRequested(const AbstractLayerModel*);
 };
 
 } // end namespace 'mvd'.

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -47,15 +47,14 @@
 #include "itksys/Process.h"
 
 // Temporary definition of otbTestMain
-int otbTestMain(int arc, char * arv[]);
+int otbTestMain(int arc, char* arv[]);
 
 /** Display usage */
 void usage()
 {
   std::cerr << "usage: otbTestDriver [global_options] [non_regression_commands] Execute prg [args]" << std::endl;
   std::cerr << std::endl;
-  std::cerr <<
-  "otbTestDriver alter the environment, run a test program and does regression testing based on capabilities provided by otbTestMain.h"
+  std::cerr << "otbTestDriver alter the environment, run a test program and does regression testing based on capabilities provided by otbTestMain.h"
             << std::endl;
   std::cerr << std::endl;
   std::cerr << "Global options:" << std::endl;
@@ -71,85 +70,84 @@ void usage()
   std::cerr << "  --help" << std::endl;
   std::cerr << "      Display this message and exit." << std::endl;
   std::cerr << std::endl;
-
 }
 
 /** This function parses the command line and process everything
  *  related to the --add-before-libpath, --add-before-env and --help.
  *  Every other args are added to the remainingArgs vector */
-int parseCommandLine(int ac, char * av[], std::vector<char *>& remainingArgs)
+int parseCommandLine(int ac, char* av[], std::vector<char*>& remainingArgs)
 {
   // parse the command line
-  int  i = 1;
+  int  i    = 1;
   bool skip = false;
   while (i < ac)
-    {
+  {
     if (!skip && strcmp(av[i], "--add-before-libpath") == 0)
-      {
+    {
       if (i + 1 >= ac)
-        {
+      {
         usage();
         return 1;
-        }
+      }
       std::string libpath = KWSYS_SHARED_FORWARD_LDPATH;
       libpath += "=";
       libpath += av[i + 1];
-      char * oldenv = getenv(KWSYS_SHARED_FORWARD_LDPATH);
+      char* oldenv = getenv(KWSYS_SHARED_FORWARD_LDPATH);
       if (oldenv)
-        {
+      {
         libpath += KWSYS_SHARED_FORWARD_PATH_SEP;
         libpath += oldenv;
-        }
+      }
       itksys::SystemTools::PutEnv(libpath);
       // on some 64 bit systems, LD_LIBRARY_PATH_64 is used before
       // LD_LIBRARY_PATH if it is set. It can lead the test to load
       // the system library instead of the expected one, so this
       // var must also be set
       if (std::string(KWSYS_SHARED_FORWARD_LDPATH) == "LD_LIBRARY_PATH")
-        {
+      {
         std::string libpath64 = "LD_LIBRARY_PATH_64";
         libpath64 += "=";
         libpath64 += av[i + 1];
-        char * oldenv2 = getenv("LD_LIBRARY_PATH_64");
+        char* oldenv2 = getenv("LD_LIBRARY_PATH_64");
         if (oldenv2)
-          {
+        {
           libpath64 += KWSYS_SHARED_FORWARD_PATH_SEP;
           libpath64 += oldenv2;
-          }
-        itksys::SystemTools::PutEnv(libpath64);
         }
-      i += 2;
+        itksys::SystemTools::PutEnv(libpath64);
       }
+      i += 2;
+    }
     else if (!skip && strcmp(av[i], "--add-before-env") == 0)
-      {
+    {
       if (i + 2 >= ac)
-        {
+      {
         usage();
         return 1;
-        }
+      }
       std::string env = av[i + 1];
       env += "=";
       env += av[i + 2];
-      char * oldenv = getenv(av[i + 1]);
+      char* oldenv = getenv(av[i + 1]);
       if (oldenv)
-        {
+      {
         env += KWSYS_SHARED_FORWARD_PATH_SEP;
         env += oldenv;
-        }
+      }
       itksys::SystemTools::PutEnv(env);
       i += 3;
-      }
+    }
     else if (!skip && strcmp(av[i], "--help") == 0)
-      {
+    {
       usage();
       return 0;
-      }
+    }
     else
-      {
+    {
       remainingArgs.push_back(av[i]);
       i += 1;
-      }
     }
+  }
   return 0;
 }
 
@@ -163,43 +161,42 @@ int main(int ac, char* av[])
 
   // Check for the return code
   if (ret)
-    {
+  {
     std::cerr << "Error while parsing arguments, exiting ..." << std::endl;
     return 1;
-    }
+  }
 
   // Check if there are remaining args
   if (remainingArgs.empty())
-    {
+  {
     usage();
     return 1;
-    }
+  }
   // a NULL is required at the end of the table
   char** argv = new char*[remainingArgs.size() + 2];
   for (int i = 0; i < static_cast<int>(remainingArgs.size()); ++i)
-    {
+  {
     argv[i + 1] = remainingArgs[i];
-    }
+  }
   argv[remainingArgs.size() + 1] = nullptr;
 
   /** Call to the otbTestMain */
   return otbTestMain(static_cast<int>(remainingArgs.size()), argv);
-
 }
 
 // This is a dummy main to be registered as a test for the otbTestMain
-int Execute(int argc, char * argv[])
+int Execute(int, char* argv[])
 {
-  argc -= 1;
   argv += 1;
   // Create the appropriate itk process
-  itksysProcess * process = itksysProcess_New();
+  itksysProcess* process = itksysProcess_New();
   itksysProcess_SetCommand(process, argv);
   itksysProcess_SetPipeShared(process, itksysProcess_Pipe_STDOUT, true);
   itksysProcess_SetPipeShared(process, itksysProcess_Pipe_STDERR, true);
   itksysProcess_Execute(process);
   itksysProcess_WaitForExit(process, nullptr);
   int retCode = itksysProcess_GetExitValue(process);
+  itksysProcess_Delete(process);
   return retCode;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -43,7 +43,6 @@ namespace otb
 class OTBMetadata_EXPORT ImageMetadataInterfaceBase : public itk::Object
 {
 public:
-
   typedef ImageMetadataInterfaceBase    Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -63,7 +62,7 @@ public:
 
 
   /** Set the image used to get the metadata */
-  void SetImage (ImageType* image)
+  void SetImage(ImageType* image)
   {
     this->SetMetaDataDictionary(image->GetMetaDataDictionary());
   }
@@ -75,7 +74,7 @@ public:
   }
 
   /** Get the MetadataDictionary  */
-  const MetaDataDictionaryType&  GetMetaDataDictionary() const
+  const MetaDataDictionaryType& GetMetaDataDictionary() const
   {
     return m_MetaDataDictionary;
   }
@@ -85,59 +84,59 @@ public:
 
   /** Get the GCP projection coordinates of the image. */
   std::string GetGCPProjection() const;
-//  otbMetadataGetMacro(GCPProjection, std::string);
+  //  otbMetadataGetMacro(GCPProjection, std::string);
 
   UnsignedIntType GetGCPCount() const;
-//  otbMetadataGetMacro(GCPCount, unsigned int);
+  //  otbMetadataGetMacro(GCPCount, unsigned int);
 
   OTB_GCP& GetGCPs(unsigned int GCPnum);
-  //otbMetadataGetGCPnumMacro(GCPs, OTB_GCP&, GCPnum, unsigned int);
+  // otbMetadataGetGCPnumMacro(GCPs, OTB_GCP&, GCPnum, unsigned int);
 
   std::string GetGCPId(unsigned int GCPnum) const;
-//  otbMetadataGetGCPnumMacro(GCPId, std::string, GCPnum, unsigned int);
+  //  otbMetadataGetGCPnumMacro(GCPId, std::string, GCPnum, unsigned int);
 
   std::string GetGCPInfo(unsigned int GCPnum) const;
-//  otbMetadataGetGCPnumMacro(GCPInfo, std::string, GCPnum, unsigned int);
+  //  otbMetadataGetGCPnumMacro(GCPInfo, std::string, GCPnum, unsigned int);
 
   double GetGCPRow(unsigned int GCPnum) const;
-//  otbMetadataGetGCPnumMacro(GCPRow, double, GCPnum, unsigned int);
+  //  otbMetadataGetGCPnumMacro(GCPRow, double, GCPnum, unsigned int);
 
   double GetGCPCol(unsigned int GCPnum) const;
-//  otbMetadataGetGCPnumMacro(GCPCol, double, GCPnum, unsigned int);
+  //  otbMetadataGetGCPnumMacro(GCPCol, double, GCPnum, unsigned int);
 
   double GetGCPX(unsigned int GCPnum) const;
-//  otbMetadataGetGCPnumMacro(GCPX, double, GCPnum, unsigned int);
+  //  otbMetadataGetGCPnumMacro(GCPX, double, GCPnum, unsigned int);
 
   double GetGCPY(unsigned int GCPnum) const;
-//  otbMetadataGetGCPnumMacro(GCPY, double, GCPnum, unsigned int);
+  //  otbMetadataGetGCPnumMacro(GCPY, double, GCPnum, unsigned int);
 
   double GetGCPZ(unsigned int GCPnum) const;
-//  otbMetadataGetGCPnumMacro(GCPZ, double, GCPnum, unsigned int);
+  //  otbMetadataGetGCPnumMacro(GCPZ, double, GCPnum, unsigned int);
 
   /**
    * Get The no data flags if existing
    * return False otherwise
    */
-  bool GetNoDataFlags(std::vector<bool> & flags, std::vector<double> & values) const;
+  bool GetNoDataFlags(std::vector<bool>& flags, std::vector<double>& values) const;
 
   /** Get the six coefficients of affine geoTtransform. */
 
   VectorType GetGeoTransform() const;
-//  otbMetadataGetMacro(GeoTransform, VectorType);
+  //  otbMetadataGetMacro(GeoTransform, VectorType);
 
   /** Get image corners. */
 
   VectorType GetUpperLeftCorner() const;
-//  otbMetadataGetMacro(UpperLeftCorner, VectorType);
+  //  otbMetadataGetMacro(UpperLeftCorner, VectorType);
 
   VectorType GetUpperRightCorner() const;
-//  otbMetadataGetMacro(UpperRightCorner, VectorType);
+  //  otbMetadataGetMacro(UpperRightCorner, VectorType);
 
   VectorType GetLowerLeftCorner() const;
-//  otbMetadataGetMacro(LowerLeftCorner, VectorType);
+  //  otbMetadataGetMacro(LowerLeftCorner, VectorType);
 
   VectorType GetLowerRightCorner() const;
-//  otbMetadataGetMacro(LowerRightCorner, VectorType);
+  //  otbMetadataGetMacro(LowerRightCorner, VectorType);
 
   /** Get the ImageKeywordlist */
   ImageKeywordlistType GetImageKeywordlist();
@@ -149,60 +148,60 @@ public:
   std::string const GetSensorID() const;
 
   /** Get the sensor ID from the ossim metadata */
-  bool GetSensorID(std::string & sensorId) const;
+  bool GetSensorID(std::string& sensorId) const;
 
-  //otbMetadataGetMacro(SensorID, std::string);
+  // otbMetadataGetMacro(SensorID, std::string);
 
   /** Get the number of bands from the ossim metadata */
   UnsignedIntType GetNumberOfBands() const;
-  //otbMetadataGetMacro(NumberOfBands, unsigned int);
+  // otbMetadataGetMacro(NumberOfBands, unsigned int);
 
   /** Get the band name from the ossim metadata */
   StringVectorType GetBandName() const;
-  //otbMetadataGetMacro(BandName, std::vector<std::string>);
+  // otbMetadataGetMacro(BandName, std::vector<std::string>);
 
   /** Get the x pixel spacing*/
   double GetXPixelSpacing() const;
-  //otbMetadataGetMacro(XPixelSpacing, double);
+  // otbMetadataGetMacro(XPixelSpacing, double);
 
   /** Get the y pixel spacing*/
   double GetYPixelSpacing() const;
-  //otbMetadataGetMacro(YPixelSpacing, double);
+  // otbMetadataGetMacro(YPixelSpacing, double);
 
   /** Get the imaging acquisition day from the ossim metadata */
   virtual int GetDay() const = 0;
-//  otbMetadataGetMacro(Day, int);
+  //  otbMetadataGetMacro(Day, int);
 
   /** Get the imaging acquisition month from the ossim metadata */
   virtual int GetMonth() const = 0;
-  //otbMetadataGetMacro(Month, int);
+  // otbMetadataGetMacro(Month, int);
 
   /** Get the imaging acquisition year from the ossim metadata */
   virtual int GetYear() const = 0;
-  //otbMetadataGetMacro(Year, int);
+  // otbMetadataGetMacro(Year, int);
 
   /** Get the imaging acquisition hour from the ossim metadata */
   virtual int GetHour() const = 0;
-  //otbMetadataGetMacro(Hour, int);
+  // otbMetadataGetMacro(Hour, int);
 
   /** Get the imaging acquisition minute from the ossim metadata */
   virtual int GetMinute() const = 0;
-  //otbMetadataGetMacro(Minute, int);
+  // otbMetadataGetMacro(Minute, int);
 
   /** Get the imaging production day from the ossim metadata */
   virtual int GetProductionDay() const = 0;
-  //otbMetadataGetMacro(ProductionDay, int);
+  // otbMetadataGetMacro(ProductionDay, int);
 
   /** Get the imaging production month from the ossim metadata */
   virtual int GetProductionMonth() const = 0;
-  //otbMetadataGetMacro(ProductionMonth, int);
+  // otbMetadataGetMacro(ProductionMonth, int);
 
   /** Get the imaging production year from the ossim metadata */
   virtual int GetProductionYear() const = 0;
-  //otbMetadataGetMacro(ProductionYear, int);
+  // otbMetadataGetMacro(ProductionYear, int);
 
   /** Convert the band names provided by ossim to the official band names  */
-  virtual StringVectorType GetEnhancedBandNames () const = 0;
+  virtual StringVectorType GetEnhancedBandNames() const = 0;
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
@@ -214,17 +213,19 @@ public:
 
 protected:
   ImageMetadataInterfaceBase();
-  ~ImageMetadataInterfaceBase() override {}
+  ~ImageMetadataInterfaceBase() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   MetaDataDictionaryType m_MetaDataDictionary;
 
 private:
-  ImageMetadataInterfaceBase(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ImageMetadataInterfaceBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  OTB_GCP            m_GCP;
+  OTB_GCP m_GCP;
 };
 
 } // end namespace otb

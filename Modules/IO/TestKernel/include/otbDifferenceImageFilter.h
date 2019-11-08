@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -42,15 +42,14 @@ namespace otb
  * \ingroup OTBTestKernel
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT DifferenceImageFilter :
-  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT DifferenceImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef DifferenceImageFilter                              Self;
+  typedef DifferenceImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -59,14 +58,13 @@ public:
   itkTypeMacro(DifferenceImageFilter, ImageToImageFilter);
 
   /** Some convenient typedefs. */
-  typedef TInputImage                                            InputImageType;
-  typedef TOutputImage                                           OutputImageType;
-  typedef typename OutputImageType::PixelType                    OutputPixelType;
-  typedef typename OutputImageType::RegionType                   OutputImageRegionType;
-  typedef typename itk::NumericTraits<OutputPixelType>::RealType RealType;
-  typedef typename itk::NumericTraits<RealType>::AccumulateType  AccumulateType;
-  typedef typename itk::NumericTraits<OutputPixelType>
-                      ::ScalarRealType                           ScalarRealType;
+  typedef TInputImage                                                  InputImageType;
+  typedef TOutputImage                                                 OutputImageType;
+  typedef typename OutputImageType::PixelType                          OutputPixelType;
+  typedef typename OutputImageType::RegionType                         OutputImageRegionType;
+  typedef typename itk::NumericTraits<OutputPixelType>::RealType       RealType;
+  typedef typename itk::NumericTraits<RealType>::AccumulateType        AccumulateType;
+  typedef typename itk::NumericTraits<OutputPixelType>::ScalarRealType ScalarRealType;
 
   /** Set the valid image input.  This will be input 0.  */
   virtual void SetValidInput(const InputImageType* validImage);
@@ -91,7 +89,9 @@ public:
 
 protected:
   DifferenceImageFilter();
-  ~DifferenceImageFilter() override {}
+  ~DifferenceImageFilter() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
@@ -106,8 +106,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& threadRegion,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& threadRegion, itk::ThreadIdType threadId) override;
 
   void BeforeThreadedGenerateData() override;
   void AfterThreadedGenerateData() override;
@@ -123,8 +122,8 @@ protected:
   itk::Array<unsigned long>   m_ThreadNumberOfPixels;
 
 private:
-  DifferenceImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  DifferenceImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

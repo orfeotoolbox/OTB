@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,19 +33,16 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage>
-VectorImageToIntensityImageFilter<TInputImage, TOutputImage>
-::VectorImageToIntensityImageFilter()
+VectorImageToIntensityImageFilter<TInputImage, TOutputImage>::VectorImageToIntensityImageFilter()
 {
-
 }
 
 template <class TInputImage, class TOutputImage>
-void
-VectorImageToIntensityImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void VectorImageToIntensityImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                                                                        itk::ThreadIdType threadId)
 {
 
-  InputImageConstPointerType inputPtr = this->GetInput();
+  InputImageConstPointerType inputPtr  = this->GetInput();
   OutputImagePointerType     outputPtr = this->GetOutput();
 
   // Define the portion of the input to walk for this thread, using
@@ -55,36 +52,34 @@ VectorImageToIntensityImageFilter<TInputImage, TOutputImage>
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
 
   // Define the iterators
-  itk::ImageRegionConstIterator<InputImageType>  inputIt(inputPtr, inputRegionForThread);
-  itk::ImageRegionIterator<OutputImageType> outputIt(outputPtr, outputRegionForThread);
-  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+  itk::ImageRegionConstIterator<InputImageType> inputIt(inputPtr, inputRegionForThread);
+  itk::ImageRegionIterator<OutputImageType>     outputIt(outputPtr, outputRegionForThread);
+  itk::ProgressReporter                         progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
   inputIt.GoToBegin();
   outputIt.GoToBegin();
 
   while (!inputIt.IsAtEnd() && !outputIt.IsAtEnd())
-    {
-    double         sum = 0.0;
+  {
+    double         sum   = 0.0;
     InputPixelType pixel = inputIt.Get();
     for (unsigned int i = 0; i < pixel.Size(); ++i)
-      {
+    {
       sum += pixel[i];
-      }
+    }
     sum /= pixel.Size();
 
     outputIt.Set(static_cast<OutputPixelType>(sum));
     ++inputIt;
     ++outputIt;
-    progress.CompletedPixel();  // potential exception thrown here
-    }
+    progress.CompletedPixel(); // potential exception thrown here
+  }
 }
 /**
  * PrintSelf Method
  */
 template <class TInputImage, class TOutputImage>
-void
-VectorImageToIntensityImageFilter<TInputImage, TOutputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void VectorImageToIntensityImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

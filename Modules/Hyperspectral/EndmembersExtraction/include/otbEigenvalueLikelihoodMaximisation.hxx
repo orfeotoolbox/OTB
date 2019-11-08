@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,80 +29,72 @@
 namespace otb
 {
 
-template<class TPrecision>
-EigenvalueLikelihoodMaximisation<TPrecision>
-::EigenvalueLikelihoodMaximisation()
- : m_NumberOfPixels(0),
-   m_NumberOfEndmembers(0)
+template <class TPrecision>
+EigenvalueLikelihoodMaximisation<TPrecision>::EigenvalueLikelihoodMaximisation() : m_NumberOfPixels(0), m_NumberOfEndmembers(0)
 {
 }
 
-template<class TInputImage>
-void
-EigenvalueLikelihoodMaximisation<TInputImage>
-::Compute()
+template <class TInputImage>
+void EigenvalueLikelihoodMaximisation<TInputImage>::Compute()
 {
   // TODO check size
   const unsigned int nbBands = m_Covariance.rows();
 
   // Compute diagonalisation of covariance and correlation
   vnl_symmetric_eigensystem<PrecisionType> eigenK(m_Covariance);
-  VectorType eigenCovariance = eigenK.D.diagonal();
+  VectorType                               eigenCovariance = eigenK.D.diagonal();
   std::sort(eigenCovariance.begin(), eigenCovariance.end());
   eigenCovariance.flip();
 
   vnl_symmetric_eigensystem<PrecisionType> eigenR(m_Correlation);
-  VectorType eigenCorrelation = eigenR.D.diagonal();
+  VectorType                               eigenCorrelation = eigenR.D.diagonal();
   std::sort(eigenCorrelation.begin(), eigenCorrelation.end());
   eigenCorrelation.flip();
 
   // Compute likelihood log
   m_Likelihood.set_size(nbBands);
-  const double coef = 2.0/m_NumberOfPixels;
+  const double coef = 2.0 / m_NumberOfPixels;
 
-  for(unsigned int i=0; i < nbBands; ++i)
-    {
+  for (unsigned int i = 0; i < nbBands; ++i)
+  {
     const unsigned int nl = nbBands - i;
-    VectorType sigma(nl), t(nl);
+    VectorType         sigma(nl), t(nl);
 
-    for (unsigned int j = 0; j < nl; ++j )
-      {
+    for (unsigned int j = 0; j < nl; ++j)
+    {
       PrecisionType r = eigenCorrelation[j + i];
       PrecisionType k = eigenCovariance[j + i];
 
       sigma[j] = coef * (r * r + k * k);
-      //std::cout << "sigma[" << j << "]=" << sigma[j] << std::endl;
+      // std::cout << "sigma[" << j << "]=" << sigma[j] << std::endl;
       t[j] = (r - k) * (r - k) / sigma[j];
-      //std::cout << "t[" << j <<"]=" << t[j] << std::endl;
+      // std::cout << "t[" << j <<"]=" << t[j] << std::endl;
       sigma[j] = std::log(sigma[j]);
-      }
-    m_Likelihood(i) = -0.5*t.sum() - 0.5*sigma.sum();
     }
+    m_Likelihood(i) = -0.5 * t.sum() - 0.5 * sigma.sum();
+  }
 
   // Extract first local maximum
-  //double max = m_Likelihood[0];
+  // double max = m_Likelihood[0];
   unsigned int iMax = 0;
   for (unsigned int i = 1; i < m_Likelihood.size() - 1; ++i)
+  {
+    if ((m_Likelihood[i] > m_Likelihood[i - 1]) && (m_Likelihood[i] > m_Likelihood[i + 1]))
     {
-    if ( (m_Likelihood[i] > m_Likelihood[i - 1])
-         && (m_Likelihood[i] > m_Likelihood[i + 1]) )
-      {
-      //max = m_Likelihood[i];
+      // max = m_Likelihood[i];
       iMax = i;
       break;
-      }
     }
+  }
   m_NumberOfEndmembers = iMax;
 }
 
 template <class TImage>
-void
-EigenvalueLikelihoodMaximisation<TImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void EigenvalueLikelihoodMaximisation<TImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Covariance:         " << m_Covariance  << std::endl;
+  os << indent << "Covariance:         " << m_Covariance << std::endl;
   os << indent << "Correlation:        " << m_Correlation << std::endl;
   os << indent << "NumberOfEndmembers: " << m_NumberOfEndmembers << std::endl;
   os << indent << "Likelihood:         " << m_Likelihood << std::endl;

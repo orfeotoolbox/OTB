@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,7 +22,7 @@
 #define otbWrapperQtWidgetRAMParameter_h
 
 #include <QtWidgets>
-#include "otbWrapperRAMParameter.h"
+#include "otbWrapperNumericalParameter.h"
 #include "otbWrapperQtWidgetParameterBase.h"
 
 
@@ -44,7 +44,7 @@ public:
   ~QtWidgetRAMParameter() override;
 
 protected slots:
-  void SetValue( int value );
+  void SetValue(int value);
 
 private:
   QtWidgetRAMParameter(const QtWidgetRAMParameter&) = delete;
@@ -54,13 +54,11 @@ private:
 
   void DoUpdateGUI() override;
 
-  QHBoxLayout *         m_QHBoxLayout;
-  QSpinBox *            m_QSpinBox;
+  QHBoxLayout* m_QHBoxLayout;
+  QSpinBox*    m_QSpinBox;
 
   RAMParameter::Pointer m_RAMParam;
 };
-
-
 }
 }
 

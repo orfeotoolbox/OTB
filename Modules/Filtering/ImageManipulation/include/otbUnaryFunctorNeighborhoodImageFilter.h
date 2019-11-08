@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,15 +40,14 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-class ITK_EXPORT UnaryFunctorNeighborhoodImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT UnaryFunctorNeighborhoodImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef UnaryFunctorNeighborhoodImageFilter                Self;
+  typedef UnaryFunctorNeighborhoodImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -123,7 +122,9 @@ protected:
   /**
    * Destructor
    */
-  ~UnaryFunctorNeighborhoodImageFilter() override {}
+  ~UnaryFunctorNeighborhoodImageFilter() override
+  {
+  }
 
   /** UnaryFunctorNeighborhoodImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -143,8 +144,8 @@ protected:
   void GenerateInputRequestedRegion(void) override;
 
 private:
-  UnaryFunctorNeighborhoodImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  UnaryFunctorNeighborhoodImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InputImageSizeType m_Radius;
   FunctorType        m_Functor;

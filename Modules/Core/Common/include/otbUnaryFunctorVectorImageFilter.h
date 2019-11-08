@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,15 +37,14 @@ namespace otb
  * \ingroup OTBCommon
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-class ITK_EXPORT UnaryFunctorVectorImageFilter
-  : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT UnaryFunctorVectorImageFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef UnaryFunctorVectorImageFilter                      Self;
+  typedef UnaryFunctorVectorImageFilter Self;
   typedef itk::InPlaceImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -93,7 +92,9 @@ public:
 
 protected:
   UnaryFunctorVectorImageFilter();
-  ~UnaryFunctorVectorImageFilter() override { }
+  ~UnaryFunctorVectorImageFilter() override
+  {
+  }
 
   /** UnaryFunctorVectorImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -105,8 +106,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /**
    * Since the number of components per pixel depends on the radius range, one must reimplement
@@ -115,8 +115,8 @@ protected:
   void GenerateOutputInformation(void) override;
 
 private:
-  UnaryFunctorVectorImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  UnaryFunctorVectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   FunctorType m_Functor;
 }; // end of class
@@ -128,5 +128,3 @@ private:
 #endif
 
 #endif
-
-

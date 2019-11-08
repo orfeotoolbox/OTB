@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,7 +22,6 @@
 #define otbClosingOpeningMorphologicalFilter_hxx
 
 #include "otbClosingOpeningMorphologicalFilter.h"
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkGrayscaleMorphologicalOpeningImageFilter.h"
 #include "itkGrayscaleMorphologicalClosingImageFilter.h"
 #include "itkProgressAccumulator.h"
@@ -33,8 +32,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage, class TKernel>
-ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>
-::ClosingOpeningMorphologicalFilter()
+ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>::ClosingOpeningMorphologicalFilter()
 {
   m_Kernel.SetRadius(1);
   m_Kernel.CreateStructuringElement();
@@ -43,9 +41,7 @@ ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>
  * Main computation method
  */
 template <class TInputImage, class TOutputImage, class TKernel>
-void
-ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>
-::GenerateData()
+void ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>::GenerateData()
 {
   // Filters Typedefs (this class is actually a composite filter)
   typedef itk::GrayscaleMorphologicalOpeningImageFilter<InputImageType, OutputImageType, KernelType> OpenFilterType;
@@ -73,9 +69,7 @@ ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>
  * PrintSelf method
  */
 template <class TInputImage, class TOutputImage, class TKernel>
-void
-ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ClosingOpeningMorphologicalFilter<TInputImage, TOutputImage, TKernel>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Kernel: " << m_Kernel << std::endl;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -63,15 +63,14 @@ namespace otb
  * \ingroup OTBDimensionalityReduction
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT InnerProductPCAImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT InnerProductPCAImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef InnerProductPCAImageFilter                         Self;
+  typedef InnerProductPCAImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -83,21 +82,20 @@ public:
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
-  typedef EstimateInnerProductPCAImageFilter<InputImageType, OutputImageType>   EstimatePCAFilterType;
-  typedef typename EstimatePCAFilterType::Pointer                               EstimatePCAFilterPointer;
+  typedef EstimateInnerProductPCAImageFilter<InputImageType, OutputImageType> EstimatePCAFilterType;
+  typedef typename EstimatePCAFilterType::Pointer EstimatePCAFilterPointer;
   typedef NormalizeInnerProductPCAImageFilter<OutputImageType, OutputImageType> NormalizePCAFilterType;
-  typedef typename NormalizePCAFilterType::Pointer                              NormalizePCAFilterPointer;
+  typedef typename NormalizePCAFilterType::Pointer NormalizePCAFilterPointer;
 
   /** Template parameters typedefs for mean component generation */
   typedef Image<typename InputImageType::InternalPixelType> InternalImageType;
-  typedef Functor::MeanFunctor<typename InputImageType::PixelType, typename InternalImageType::PixelType>
-  MeanFunctorType;
+  typedef Functor::MeanFunctor<typename InputImageType::PixelType, typename InternalImageType::PixelType> MeanFunctorType;
   typedef itk::UnaryFunctorImageFilter<InputImageType, InternalImageType, MeanFunctorType> MeanFilterType;
-  typedef typename MeanFilterType::Pointer                                                 MeanFilterPointer;
-  typedef ImageToVectorImageCastFilter<InternalImageType, OutputImageType>                 CastFilterType;
-  typedef typename CastFilterType::Pointer                                                 CastFilterPointer;
-  typedef ConcatenateVectorImageFilter<OutputImageType, OutputImageType, OutputImageType>  ConcatenateFilterType;
-  typedef typename ConcatenateFilterType::Pointer                                          ConcatenateFilterPointer;
+  typedef typename MeanFilterType::Pointer MeanFilterPointer;
+  typedef ImageToVectorImageCastFilter<InternalImageType, OutputImageType> CastFilterType;
+  typedef typename CastFilterType::Pointer CastFilterPointer;
+  typedef ConcatenateVectorImageFilter<OutputImageType, OutputImageType, OutputImageType> ConcatenateFilterType;
+  typedef typename ConcatenateFilterType::Pointer ConcatenateFilterPointer;
 
   /** Set/Get the number of required largest principal components. The filter produces
    the required number of principal components plus one outputs. Output index 0 represents
@@ -125,7 +123,9 @@ protected:
   /** Constructor */
   InnerProductPCAImageFilter();
   /** Destructor */
-  ~InnerProductPCAImageFilter() override {}
+  ~InnerProductPCAImageFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
@@ -140,8 +140,8 @@ protected:
   void GenerateOutputInformation() override;
 
 private:
-  InnerProductPCAImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  InnerProductPCAImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The number of largest principal components  */
   unsigned int m_NumberOfPrincipalComponentsRequired;

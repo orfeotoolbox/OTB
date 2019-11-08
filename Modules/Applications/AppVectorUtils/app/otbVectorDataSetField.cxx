@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -49,7 +49,6 @@ private:
     SetDescription("Set a field in vector data.");
 
     // Documentation
-    SetDocName("Vector data set field");
     SetDocLongDescription("Set a specified field to a specified value on all features of a vector data.");
     SetDocLimitations("Doesn't work with KML files yet");
     SetDocAuthors("OTB-Team");
@@ -87,7 +86,7 @@ private:
 
     typedef VectorDataType::DataTreeType            DataTreeType;
     typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
-    TreeIteratorType it(m_InputData->GetDataTree());
+    TreeIteratorType                                it(m_InputData->GetDataTree());
 
     for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
@@ -95,12 +94,10 @@ private:
     }
 
     SetParameterOutputVectorData("out", m_InputData);
-
   }
 
   VectorDataType::Pointer m_InputData;
 };
-
 }
 }
 

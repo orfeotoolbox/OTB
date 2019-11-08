@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -29,16 +27,16 @@
 #include "itkMacro.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbComplexMomentPathFloat(int itkNotUsed(argc), char * argv[])
+int otbComplexMomentPathFloat(int itkNotUsed(argc), char* argv[])
 {
-  unsigned int p((unsigned int) ::atoi(argv[1]));
-  unsigned int q((unsigned int) ::atoi(argv[2]));
-  const char * outputFilename  = argv[3];
+  unsigned int p((unsigned int)::atoi(argv[1]));
+  unsigned int q((unsigned int)::atoi(argv[2]));
+  const char*  outputFilename = argv[3];
 
   const unsigned int Dimension = 2;
 
-  typedef itk::PolyLineParametricPath<Dimension>                PathType;
-  typedef std::complex<float>                                   ComplexType;
+  typedef itk::PolyLineParametricPath<Dimension> PathType;
+  typedef std::complex<float>                    ComplexType;
   typedef otb::ComplexMomentPathFunction<PathType, ComplexType> CMType;
 
   // Draw a square

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -86,105 +86,104 @@ namespace otb
  *
  * \ingroup OTBStereo
  */
-template <class TInputImage, class TOutputImage >
-class ITK_EXPORT StereorectificationDisplacementFieldSource
-  : public itk::ImageSource<TOutputImage>
+template <class TInputImage, class TOutputImage>
+class ITK_EXPORT StereorectificationDisplacementFieldSource : public itk::ImageSource<TOutputImage>
 {
 public:
   /** Standard class typedefs */
   typedef StereorectificationDisplacementFieldSource Self;
-  typedef itk::ImageSource<TOutputImage>            Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef itk::ImageSource<TOutputImage>             Superclass;
+  typedef itk::SmartPointer<Self>                    Pointer;
+  typedef itk::SmartPointer<const Self>              ConstPointer;
 
   // Inputs and outputs relative typedefs
-  typedef TInputImage                               InputImageType;
-  typedef typename InputImageType::Pointer          InputImagePointerType;
-  typedef TOutputImage                              OutputImageType;
-  typedef typename OutputImageType::Pointer         OutputImagePointerType;
+  typedef TInputImage                       InputImageType;
+  typedef typename InputImageType::Pointer  InputImagePointerType;
+  typedef TOutputImage                      OutputImageType;
+  typedef typename OutputImageType::Pointer OutputImagePointerType;
 
   // Image related typedefs
-  typedef typename OutputImageType::SizeType        SizeType;
-  typedef typename OutputImageType::PointType       PointType;
-  typedef typename OutputImageType::SpacingType     SpacingType;
-  typedef typename OutputImageType::RegionType      RegionType;
+  typedef typename OutputImageType::SizeType    SizeType;
+  typedef typename OutputImageType::PointType   PointType;
+  typedef typename OutputImageType::SpacingType SpacingType;
+  typedef typename OutputImageType::RegionType  RegionType;
 
   // 3D RS transform
   // TODO: Allow tuning precision (i.e. double or float)
-  typedef otb::GenericRSTransform<double,3,3>       RSTransformType;
-  typedef typename RSTransformType::Pointer         RSTransformPointerType;
+  typedef otb::GenericRSTransform<double, 3, 3> RSTransformType;
+  typedef typename RSTransformType::Pointer RSTransformPointerType;
 
   // 3D points
-  typedef typename RSTransformType::InputPointType  TDPointType;
+  typedef typename RSTransformType::InputPointType TDPointType;
 
   /** Method for creation through the object factory. */
-  itkNewMacro( Self );
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro( StereorectificationDisplacementFieldSource, ImageSource );
+  itkTypeMacro(StereorectificationDisplacementFieldSource, ImageSource);
 
   /** Get/Set the scale */
-  itkSetMacro(Scale,double);
-  itkGetConstReferenceMacro(Scale,double);
+  itkSetMacro(Scale, double);
+  itkGetConstReferenceMacro(Scale, double);
 
   /** Get/Set the grid scale */
-  itkSetMacro(GridStep,double);
-  itkGetMacro(GridStep,double);
+  itkSetMacro(GridStep, double);
+  itkGetMacro(GridStep, double);
 
   /** Get/Set left image for stereo-rectification */
-  itkSetObjectMacro(LeftImage,InputImageType);
-  itkGetObjectMacro(LeftImage,InputImageType);
+  itkSetObjectMacro(LeftImage, InputImageType);
+  itkGetObjectMacro(LeftImage, InputImageType);
 
   /** Get/Set right image for stereo-rectification */
-  itkSetObjectMacro(RightImage,InputImageType);
-  itkGetObjectMacro(RightImage,InputImageType);
+  itkSetObjectMacro(RightImage, InputImageType);
+  itkGetObjectMacro(RightImage, InputImageType);
 
   /** Get the size of the rectified image */
-  itkGetConstReferenceMacro(RectifiedImageSize,SizeType);
+  itkGetConstReferenceMacro(RectifiedImageSize, SizeType);
 
   /** Get the estimated mean baseline ratio */
-  itkGetConstReferenceMacro(MeanBaselineRatio,double);
+  itkGetConstReferenceMacro(MeanBaselineRatio, double);
 
   /** Return the left deformation field (const version)  */
-  const OutputImageType * GetLeftDisplacementFieldOutput() const;
+  const OutputImageType* GetLeftDisplacementFieldOutput() const;
 
   /** Return the left deformation field */
-  OutputImageType * GetLeftDisplacementFieldOutput();
+  OutputImageType* GetLeftDisplacementFieldOutput();
 
   /** Return the left deformation field (const version)  */
-  const OutputImageType * GetRightDisplacementFieldOutput() const;
+  const OutputImageType* GetRightDisplacementFieldOutput() const;
 
   /** Return the left deformation field */
-  OutputImageType * GetRightDisplacementFieldOutput();
+  OutputImageType* GetRightDisplacementFieldOutput();
 
-  itkSetMacro(UseDEM,bool);
-  itkGetMacro(UseDEM,bool);
+  itkSetMacro(UseDEM, bool);
+  itkGetMacro(UseDEM, bool);
   itkBooleanMacro(UseDEM);
 
 protected:
   /** Constructor */
-  StereorectificationDisplacementFieldSource( void );
+  StereorectificationDisplacementFieldSource(void);
 
   /** Destructor */
-  ~StereorectificationDisplacementFieldSource( void ) override {};
+  ~StereorectificationDisplacementFieldSource(void) override{};
 
   /** Generate output images information */
   void GenerateOutputInformation() override;
 
   /** Enlarge output requested region (no streaming) */
-  void EnlargeOutputRequestedRegion(itk::DataObject * itkNotUsed(output)) override;
+  void EnlargeOutputRequestedRegion(itk::DataObject* itkNotUsed(output)) override;
 
   /** Compute the deformation field */
   void GenerateData() override;
 
   /** PrintSelf method */
-  void PrintSelf( std::ostream& os, itk::Indent indent ) const override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  StereorectificationDisplacementFieldSource( const Self& ); // purposely
-                                                            // not
-                                                            // implemented
-  void operator=( const Self& ) = delete;
+  StereorectificationDisplacementFieldSource(const Self&); // purposely
+                                                           // not
+                                                           // implemented
+  void operator=(const Self&) = delete;
 
   /** This elevation offset is used to compute the epipolar direction */
   double m_ElevationOffset;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,36 +39,42 @@ namespace otb
  * \ingroup OTBPointSet
  */
 
-template<class TPointSet, class TRadiusType, class TIndexType>
+template <class TPointSet, class TRadiusType, class TIndexType>
 class Count
 {
 public:
-  Count() {}
-  ~Count() {}
+  Count()
+  {
+  }
+  ~Count()
+  {
+  }
 
-  inline float operator ()(const TPointSet * pointSet, const TRadiusType& size, const TIndexType& index)
+  inline float operator()(const TPointSet* pointSet, const TRadiusType& size, const TIndexType& index)
   {
 
-    int    accu = 0;
+    int    accu    = 0;
     double surface = CONST_PI * size * size;
 
     if (pointSet->GetNumberOfPoints() != 0)
-      {
+    {
       typedef typename TPointSet::PointsContainer::ConstIterator iteratorType;
-      iteratorType it = pointSet->GetPoints()->Begin();
+      iteratorType                                               it = pointSet->GetPoints()->Begin();
 
       while (it != pointSet->GetPoints()->End())
-        {
+      {
         float distX2 = (index[0] - it.Value()[0]) * (index[0] - it.Value()[0]);
         float distY2 = (index[1] - it.Value()[1]) * (index[1] - it.Value()[1]);
-        float dist = std::sqrt(distX2 + distY2);
+        float dist   = std::sqrt(distX2 + distY2);
 
-        if (dist <= size) accu++;
+        if (dist <= size)
+          accu++;
 
         ++it;
-        }
       }
-    else return 0.;
+    }
+    else
+      return 0.;
 
     return static_cast<float>(accu / surface);
   }

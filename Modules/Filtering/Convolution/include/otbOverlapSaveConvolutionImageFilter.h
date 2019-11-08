@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -58,10 +58,8 @@ namespace otb
  *
  * \ingroup OTBConvolution
  */
-template <class TInputImage, class TOutputImage,
-    class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage> >
-class ITK_EXPORT OverlapSaveConvolutionImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage>>
+class ITK_EXPORT OverlapSaveConvolutionImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Extract dimension from input and output image. */
@@ -73,10 +71,10 @@ public:
   typedef TOutputImage OutputImageType;
 
   /** Standard class typedefs. */
-  typedef OverlapSaveConvolutionImageFilter                        Self;
+  typedef OverlapSaveConvolutionImageFilter Self;
   typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -99,17 +97,17 @@ public:
   {
     itkDebugMacro("setting radius to " << rad);
     if (this->m_Radius != rad)
-      {
-      this->m_Radius = rad;
+    {
+      this->m_Radius         = rad;
       unsigned int arraySize = 1;
       for (unsigned int i = 0; i < m_Radius.GetSizeDimension(); ++i)
-        {
+      {
         arraySize *= 2 * this->m_Radius[i] + 1;
-        }
+      }
       this->m_Filter.SetSize(arraySize);
       this->m_Filter.Fill(1);
       this->Modified();
-      }
+    }
   }
 
   /** Get the radius of the neighborhood used to compute the mean */
@@ -119,15 +117,13 @@ public:
   void SetFilter(ArrayType filter)
   {
     if ((filter.Size() != m_Filter.Size()))
-      {
-      itkExceptionMacro(
-        "Error in SetFilter, invalid filter size:" << filter.Size() <<
-        " instead of 2*(m_Radius[0]+1)*(2*m_Radius[1]+1): " << m_Filter.Size());
-      }
+    {
+      itkExceptionMacro("Error in SetFilter, invalid filter size:" << filter.Size() << " instead of 2*(m_Radius[0]+1)*(2*m_Radius[1]+1): " << m_Filter.Size());
+    }
     else
-      {
+    {
       m_Filter = filter;
-      }
+    }
     this->Modified();
   }
   /** Get the filter */
@@ -141,20 +137,21 @@ public:
   /** Since this filter implements a neighborhood operation, it requests a largest input
    * region than the output region.
    */
-  void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
   itkConceptMacro(InputHasNumericTraitsCheck, (itk::Concept::HasNumericTraits<InputPixelType>));
-  /** End concept checking */
+/** End concept checking */
 #endif
 
 protected:
   /** Constructor */
   OverlapSaveConvolutionImageFilter();
   /** destructor */
-  ~OverlapSaveConvolutionImageFilter() override {}
+  ~OverlapSaveConvolutionImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /* TODO For the moment this class provide only a GenerateData(),
@@ -164,8 +161,8 @@ protected:
   // void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
 private:
-  OverlapSaveConvolutionImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  OverlapSaveConvolutionImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Radius of the filter */
   InputSizeType m_Radius;

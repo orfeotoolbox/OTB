@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -46,15 +46,14 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage, class TFilter>
-class ITK_EXPORT PerBandVectorImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT PerBandVectorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef PerBandVectorImageFilter                           Self;
+  typedef PerBandVectorImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -63,29 +62,28 @@ public:
   itkTypeMacro(PerBandVectorImageFilter, ImageToImageFilter);
 
   /** Template parameters typedefs */
-  typedef TInputImage                                                 InputVectorImageType;
-  typedef typename InputVectorImageType::Pointer                      InputVectorImagePointerType;
-  typedef typename InputVectorImageType::InternalPixelType            InputPixelType;
+  typedef TInputImage                                      InputVectorImageType;
+  typedef typename InputVectorImageType::Pointer           InputVectorImagePointerType;
+  typedef typename InputVectorImageType::InternalPixelType InputPixelType;
   typedef Image<InputPixelType, InputVectorImageType::ImageDimension> InputImageType;
-  typedef ImageList<InputImageType>                                   InputImageListType;
+  typedef ImageList<InputImageType> InputImageListType;
 
-  typedef TOutputImage                                                  OutputVectorImageType;
-  typedef typename OutputVectorImageType::Pointer                       OutputVectorImagePointerType;
-  typedef typename OutputVectorImageType::InternalPixelType             OutputPixelType;
+  typedef TOutputImage                                      OutputVectorImageType;
+  typedef typename OutputVectorImageType::Pointer           OutputVectorImagePointerType;
+  typedef typename OutputVectorImageType::InternalPixelType OutputPixelType;
   typedef Image<OutputPixelType, OutputVectorImageType::ImageDimension> OutputImageType;
-  typedef ImageList<OutputImageType>                                    OutputImageListType;
+  typedef ImageList<OutputImageType> OutputImageListType;
 
   typedef TFilter                      FilterType;
   typedef typename FilterType::Pointer FilterPointerType;
 
   // Internal filters definition
   typedef VectorImageToImageListFilter<InputVectorImageType, InputImageListType> DecompositionFilterType;
-  typedef typename DecompositionFilterType::Pointer                              DecompositionFilterPointerType;
-  typedef ImageListToImageListApplyFilter<InputImageListType, OutputImageListType, FilterType>
-  ProcessingFilterType;
-  typedef typename ProcessingFilterType::Pointer                                   ProcessingFilterPointerType;
+  typedef typename DecompositionFilterType::Pointer DecompositionFilterPointerType;
+  typedef ImageListToImageListApplyFilter<InputImageListType, OutputImageListType, FilterType> ProcessingFilterType;
+  typedef typename ProcessingFilterType::Pointer ProcessingFilterPointerType;
   typedef ImageListToVectorImageFilter<OutputImageListType, OutputVectorImageType> RecompositionFilterType;
-  typedef typename RecompositionFilterType::Pointer                                RecompositionFilterPointerType;
+  typedef typename RecompositionFilterType::Pointer RecompositionFilterPointerType;
 
   /// Accessors
   itkSetObjectMacro(Filter, FilterType);
@@ -103,13 +101,15 @@ protected:
   /** Constructor */
   PerBandVectorImageFilter();
   /** Destructor */
-  ~PerBandVectorImageFilter() override {}
+  ~PerBandVectorImageFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  PerBandVectorImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PerBandVectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /// The processing filter
   FilterPointerType m_Filter;

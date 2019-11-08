@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,19 +25,19 @@
 #include "otbVectorImage.h"
 #include "otbImage.h"
 
-int otbImageToVectorImageCastFilter(int itkNotUsed(argc), char * argv[])
+int otbImageToVectorImageCastFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char *       infilename = argv[1];
-  const char *       outfilename = argv[2];
-  const unsigned int Dimension = 2;
-  typedef double PixelType;
+  const char*        infilename  = argv[1];
+  const char*        outfilename = argv[2];
+  const unsigned int Dimension   = 2;
+  typedef double     PixelType;
 
   typedef otb::Image<PixelType, Dimension>       ImageType;
   typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
 
   typedef otb::ImageToVectorImageCastFilter<ImageType, VectorImageType> VectorImageCastFilterType;
-  typedef otb::ImageFileReader<ImageType>                               ReaderType;
-  typedef otb::ImageFileWriter<VectorImageType>                         WriterType;
+  typedef otb::ImageFileReader<ImageType>       ReaderType;
+  typedef otb::ImageFileWriter<VectorImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infilename);

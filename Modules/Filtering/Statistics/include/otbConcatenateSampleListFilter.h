@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,8 +23,10 @@
 
 #include "otbListSampleToListSampleFilter.h"
 
-namespace otb {
-namespace Statistics {
+namespace otb
+{
+namespace Statistics
+{
 
 /** \class ConcatenateSampleListFilter
  *  \brief This class concatenates several sample list into a single one.
@@ -36,17 +38,15 @@ namespace Statistics {
  *
  * \ingroup OTBStatistics
  */
-template < class TSampleList >
-class ITK_EXPORT ConcatenateSampleListFilter :
-  public otb::Statistics::ListSampleToListSampleFilter<TSampleList, TSampleList>
+template <class TSampleList>
+class ITK_EXPORT ConcatenateSampleListFilter : public otb::Statistics::ListSampleToListSampleFilter<TSampleList, TSampleList>
 {
 public:
   /** Standard class typedefs */
-  typedef ConcatenateSampleListFilter                Self;
-  typedef otb::Statistics::ListSampleToListSampleFilter
-  <TSampleList, TSampleList>                          Superclass;
-  typedef itk::SmartPointer< Self >                  Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef ConcatenateSampleListFilter Self;
+  typedef otb::Statistics::ListSampleToListSampleFilter<TSampleList, TSampleList> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ConcatenateSampleListFilter, otb::Statistics::ListSampleToListSampleFilter);
@@ -62,15 +62,17 @@ public:
   typedef typename MeasurementVectorType::ValueType      ValueType;
 
   /** Method to set/get the input list sample */
-  void AddInput( const SampleListType * inputPtr );
+  void AddInput(const SampleListType* inputPtr);
   using Superclass::AddInput;
 
 protected:
   /** This method causes the filter to generate its output. */
-   void GenerateData() override;
+  void GenerateData() override;
 
   ConcatenateSampleListFilter();
-  ~ConcatenateSampleListFilter() override {}
+  ~ConcatenateSampleListFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:

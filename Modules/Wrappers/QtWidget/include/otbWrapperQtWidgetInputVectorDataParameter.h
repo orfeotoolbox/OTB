@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,10 +44,10 @@ public:
   ~QtWidgetInputVectorDataParameter() override;
 
   const QLineEdit* GetInput() const;
-  QLineEdit* GetInput();
+  QLineEdit*       GetInput();
 
 protected slots:
-  bool SetFileName( const QString& value );
+  bool SetFileName(const QString& value);
   void SelectFile();
 
 private:
@@ -61,9 +61,9 @@ private:
 
   InputVectorDataParameter::Pointer m_InputVectorDataParam;
 
-  QHBoxLayout * m_HLayout;
-  QLineEdit*    m_Input;
-  QPushButton * m_Button;
+  QHBoxLayout* m_HLayout;
+  QLineEdit*   m_Input;
+  QPushButton* m_Button;
 };
 
 

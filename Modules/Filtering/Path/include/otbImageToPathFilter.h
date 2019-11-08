@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,8 +33,7 @@ namespace otb
  * \ingroup OTBPath
  */
 template <class TInputImage, class TOutputPath>
-class ITK_EXPORT ImageToPathFilter
-  : public itk::PathSource<TOutputPath>
+class ITK_EXPORT ImageToPathFilter : public itk::PathSource<TOutputPath>
 {
 public:
   /// Standard class typedefs
@@ -48,25 +47,27 @@ public:
   /// Runtime information
   itkTypeMacro(PathToImageFilter, PathSource);
   /// template parameters typedefs
-  typedef          TInputImage             InputImageType;
+  typedef TInputImage                      InputImageType;
   typedef typename InputImageType::Pointer InputImagePointerType;
-  typedef          TOutputPath             OutputPathType;
+  typedef TOutputPath                      OutputPathType;
   typedef typename OutputPathType::Pointer OutputPathPointerType;
   /// Input image dimension
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
   /// Input image Setters and getters
   using Superclass::SetInput;
-  virtual void SetInput(const InputImageType * Image);
-  const InputImageType * GetInput(void);
+  virtual void SetInput(const InputImageType* Image);
+  const InputImageType* GetInput(void);
 
 protected:
   ImageToPathFilter();
-  ~ImageToPathFilter() override {}
+  ~ImageToPathFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageToPathFilter(const Self &);
-  void operator =(const Self&);
+  ImageToPathFilter(const Self&);
+  void operator=(const Self&);
 };
 } // end namespace otb
 

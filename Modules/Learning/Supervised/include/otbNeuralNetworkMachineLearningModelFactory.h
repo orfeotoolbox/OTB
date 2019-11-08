@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,10 +38,10 @@ class ITK_EXPORT NeuralNetworkMachineLearningModelFactory : public itk::ObjectFa
 {
 public:
   /** Standard class typedefs. */
-  typedef NeuralNetworkMachineLearningModelFactory             Self;
-  typedef itk::ObjectFactoryBase        Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef NeuralNetworkMachineLearningModelFactory Self;
+  typedef itk::ObjectFactoryBase                   Superclass;
+  typedef itk::SmartPointer<Self>                  Pointer;
+  typedef itk::SmartPointer<const Self>            ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   const char* GetITKSourceVersion(void) const override;
@@ -65,9 +65,8 @@ protected:
   ~NeuralNetworkMachineLearningModelFactory() override;
 
 private:
-  NeuralNetworkMachineLearningModelFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  NeuralNetworkMachineLearningModelFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,7 +27,7 @@
 namespace otb
 {
 /** \class ScalarImageToHigherOrderTexturesFilter
- *  \brief This class compute 11 local higher order statistics textures coefficients
+ *  \brief This class compute 10 local higher order statistics textures coefficients
  *  based on the grey level run-length matrix
  *
  *  This filter computes the following Haralick textures over a sliding window with
@@ -69,16 +69,15 @@ namespace otb
  *
  * \ingroup OTBTextures
  */
-template<class TInpuImage, class TOutputImage>
-class ScalarImageToHigherOrderTexturesFilter : public itk::ImageToImageFilter
-  <TInpuImage, TOutputImage>
+template <class TInpuImage, class TOutputImage>
+class ScalarImageToHigherOrderTexturesFilter : public itk::ImageToImageFilter<TInpuImage, TOutputImage>
 {
 public:
   /** Standard class typedefs */
-  typedef ScalarImageToHigherOrderTexturesFilter            Self;
+  typedef ScalarImageToHigherOrderTexturesFilter Self;
   typedef itk::ImageToImageFilter<TInpuImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through the object factory */
   itkNewMacro(Self);
@@ -96,24 +95,11 @@ public:
   typedef typename OutputImageType::Pointer    OutputImagePointerType;
   typedef typename OutputImageType::RegionType OutputRegionType;
 
-  /** Co-occurence matrix and textures calculator */
-/*  typedef otb::MaskedScalarImageToGreyLevelRunLengthMatrixGenerator
-    <InputImageType>                                           RunLengthMatrixGeneratorType;
-  typedef typename RunLengthMatrixGeneratorType::Pointer       RunLengthMatrixGeneratorPointerType;
-  typedef typename RunLengthMatrixGeneratorType::OffsetType    OffsetType;
-  typedef typename RunLengthMatrixGeneratorType::HistogramType HistogramType;
-  typedef itk::Statistics::GreyLevelRunLengthMatrixTextureCoefficientsCalculator
-    <HistogramType>                                            TextureCoefficientsCalculatorType;
-  typedef typename TextureCoefficientsCalculatorType::Pointer  TextureCoefficientsCalculatorPointerType;
-  */
-
-  typedef itk::Statistics::ScalarImageToRunLengthFeaturesFilter
-    <InputImageType> ScalarImageToRunLengthFeaturesFilterType;
-  //typedef typename ImageType::PixelType                PixelType;
-  typedef typename InputImageType::OffsetType          OffsetType;
-  typedef itk::VectorContainer< unsigned char, OffsetType > OffsetVector;
-  typedef typename OffsetVector::Pointer               OffsetVectorPointer;
-  typedef typename OffsetVector::ConstPointer          OffsetVectorConstPointer;
+  typedef itk::Statistics::ScalarImageToRunLengthFeaturesFilter<InputImageType> ScalarImageToRunLengthFeaturesFilterType;
+  typedef typename InputImageType::OffsetType                                   OffsetType;
+  typedef itk::VectorContainer<unsigned char, OffsetType> OffsetVector;
+  typedef typename OffsetVector::Pointer      OffsetVectorPointer;
+  typedef typename OffsetVector::ConstPointer OffsetVectorConstPointer;
 
 
   /** Set the radius of the window on which textures will be computed */
@@ -164,37 +150,34 @@ public:
   itkGetMacro(SubsampleOffset, OffsetType);
 
   /** Get the Short Run Emphasis output image */
-  OutputImageType * GetShortRunEmphasisOutput();
+  OutputImageType* GetShortRunEmphasisOutput();
 
   /** Get the Long Run Emphasis output image */
-  OutputImageType * GetLongRunEmphasisOutput();
+  OutputImageType* GetLongRunEmphasisOutput();
 
   /** Get the Grey-Level Nonuniformity output image */
-  OutputImageType * GetGreyLevelNonuniformityOutput();
+  OutputImageType* GetGreyLevelNonuniformityOutput();
 
   /** Get the Run Length Nonuniformity output image */
-  OutputImageType * GetRunLengthNonuniformityOutput();
-
-  /** Get the Run Percentage output image */
-  OutputImageType * GetRunPercentageOutput();
+  OutputImageType* GetRunLengthNonuniformityOutput();
 
   /** Get the Low Grey-Level Run Emphasis output image */
-  OutputImageType * GetLowGreyLevelRunEmphasisOutput();
+  OutputImageType* GetLowGreyLevelRunEmphasisOutput();
 
   /** Get the High Grey-Level Run Emphasis output image */
-  OutputImageType * GetHighGreyLevelRunEmphasisOutput();
+  OutputImageType* GetHighGreyLevelRunEmphasisOutput();
 
   /** Get the Short Run Low Grey-Level Emphasis output image */
-  OutputImageType * GetShortRunLowGreyLevelEmphasisOutput();
+  OutputImageType* GetShortRunLowGreyLevelEmphasisOutput();
 
   /** Get the Short Run High Grey-Level Emphasis output image */
-  OutputImageType * GetShortRunHighGreyLevelEmphasisOutput();
+  OutputImageType* GetShortRunHighGreyLevelEmphasisOutput();
 
   /** Get the Long Run Low Grey-Level Emphasis output image */
-  OutputImageType * GetLongRunLowGreyLevelEmphasisOutput();
+  OutputImageType* GetLongRunLowGreyLevelEmphasisOutput();
 
   /** Get the Long Run High Grey-Level Emphasis output image */
-  OutputImageType * GetLongRunHighGreyLevelEmphasisOutput();
+  OutputImageType* GetLongRunHighGreyLevelEmphasisOutput();
 
 protected:
   /** Constructor */
@@ -210,7 +193,7 @@ protected:
 
 private:
   ScalarImageToHigherOrderTexturesFilter(const Self&) = delete;
-  void operator =(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Convenient method to compute union of 2 regions */
   static OutputRegionType RegionUnion(const OutputRegionType& region1, const OutputRegionType& region2);

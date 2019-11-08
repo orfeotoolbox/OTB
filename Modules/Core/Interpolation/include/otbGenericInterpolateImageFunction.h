@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,17 +40,15 @@ namespace otb
  *
  * \ingroup OTBInterpolation
  */
-template <class TInputImage, class TFunction, class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage>,
-    class TCoordRep = double>
-class ITK_EXPORT GenericInterpolateImageFunction :
-  public itk::InterpolateImageFunction<TInputImage, TCoordRep>
+template <class TInputImage, class TFunction, class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage>, class TCoordRep = double>
+class ITK_EXPORT GenericInterpolateImageFunction : public itk::InterpolateImageFunction<TInputImage, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef GenericInterpolateImageFunction                       Self;
+  typedef GenericInterpolateImageFunction Self;
   typedef itk::InterpolateImageFunction<TInputImage, TCoordRep> Superclass;
-  typedef itk::SmartPointer<Self>                               Pointer;
-  typedef itk::SmartPointer<const Self>                         ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(GenericInterpolateImageFunction, itk::InterpolateImageFunction);
@@ -63,13 +61,13 @@ public:
   typedef typename Superclass::InputImageType InputImageType;
 
   /** Dimension underlying input image. */
-  //itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
+  // itkStaticConstMacro(ImageDimension, unsigned int, Superclass::ImageDimension);
 
   /** Index and typedef support. */
-  typedef typename Superclass::IndexType                                     IndexType;
-  typedef typename InputImageType::SizeType                                  SizeType;
-  typedef typename Superclass::RealType                                      RealType;
-  typedef TFunction                                                          FunctionType;
+  typedef typename Superclass::IndexType    IndexType;
+  typedef typename InputImageType::SizeType SizeType;
+  typedef typename Superclass::RealType     RealType;
+  typedef TFunction                         FunctionType;
   typedef itk::ConstNeighborhoodIterator<InputImageType, TBoundaryCondition> IteratorType;
 
   /** ContinuousIndex typedef support. */
@@ -94,11 +92,11 @@ public:
   {
     return m_Function.GetRadius();
   }
-  //unsigned int GetRadius() { return this->GetFunction().GetRadius(); };
+  // unsigned int GetRadius() { return this->GetFunction().GetRadius(); };
 
   /** Set/Get the window radius*/
   // Don't have to be used here, just declared for the inheritance classes.
-  //virtual void SetWindowSize(unsigned int win){ m_WindowSize = win; };
+  // virtual void SetWindowSize(unsigned int win){ m_WindowSize = win; };
 
   /** Get the functor list */
   virtual FunctionType& GetFunction(void)
@@ -130,10 +128,10 @@ protected:
   virtual void FillWeightOffsetTable();
 
 private:
-  GenericInterpolateImageFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  GenericInterpolateImageFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
   /** Store the window radius. */
-  //unsigned int m_Radius;
+  // unsigned int m_Radius;
   // Constant to store twice the radius
   unsigned int m_WindowSize;
 
@@ -149,9 +147,9 @@ private:
   mutable unsigned int m_OffsetTableSize;
   /** The offset array, used to keep a list of relevant
    * offsets in the neihborhoodIterator */
-  mutable unsigned int *m_OffsetTable;
+  mutable unsigned int* m_OffsetTable;
   /** Index into the weights array for each offset */
-  mutable unsigned int **m_WeightOffsetTable;
+  mutable unsigned int** m_WeightOffsetTable;
   /** True if internal statistics have been generated */
   mutable bool m_TablesHaveBeenGenerated;
   /** Weights normalization */

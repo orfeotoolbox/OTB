@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,11 +27,10 @@
 namespace otb
 {
 template <class TInputImage, class TOutputImage, class TPrecision>
-ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>
-::ImageToHessianDeterminantImageFilter()
+ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>::ImageToHessianDeterminantImageFilter()
 {
   // Filter initialization
-  m_HessianFilter = ImageToHessianImageFilterType::New();
+  m_HessianFilter     = ImageToHessianImageFilterType::New();
   m_DeterminantFilter = DeterminantFilterType::New();
 
   // pipeline wiring
@@ -42,14 +41,12 @@ ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>
 }
 
 template <class TInputImage, class TOutputImage, class TPrecision>
-ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>
-::~ImageToHessianDeterminantImageFilter()
-{}
+ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>::~ImageToHessianDeterminantImageFilter()
+{
+}
 
 template <class TInputImage, class TOutputImage, class TPrecision>
-void
-ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>
-::GenerateData(void)
+void ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>::GenerateData(void)
 {
   // Execute minipipeline
   m_HessianFilter->SetInput(this->GetInput());
@@ -61,13 +58,10 @@ ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>
 
 /*PrintSelf*/
 template <class TInputImage, class TOutputImage, class TPrecision>
-void
-ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ImageToHessianDeterminantImageFilter<TInputImage, TOutputImage, TPrecision>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Sigma: " << m_Sigma << std::endl;
 }
-
 }
 #endif

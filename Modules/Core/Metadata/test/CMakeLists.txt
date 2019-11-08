@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -284,7 +284,7 @@ otb_add_test(NAME ioTvImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
   --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterface.txt
   ${TEMP}/ioTvImageMetadataInterface.txt
   otbImageMetadataInterfaceTest2
-  ${EXAMPLEDATA}/qb_RoadExtract.tif
+  ${INPUTDATA}/qb_RoadExtract.tif
   ${TEMP}/ioTvImageMetadataInterface.txt
   )
 

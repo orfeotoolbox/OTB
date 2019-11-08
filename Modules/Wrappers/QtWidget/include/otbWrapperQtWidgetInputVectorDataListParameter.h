@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,7 +25,7 @@
 #include <QtWidgets>
 
 
-#  include "otbWrapperQtWidgetParameterList.h"
+#include "otbWrapperQtWidgetParameterList.h"
 
 namespace otb
 {
@@ -43,28 +43,24 @@ class InputVectorDataListParameter;
  *
  * \ingroup OTBQtWidget
  */
-class OTBQtWidget_EXPORT QtWidgetInputVectorDataListParameter
-  : public QtWidgetParameterList
+class OTBQtWidget_EXPORT QtWidgetInputVectorDataListParameter : public QtWidgetParameterList
 {
   Q_OBJECT;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-  QtWidgetInputVectorDataListParameter( InputVectorDataListParameter *,
-					QtWidgetModel *, QWidget * );
+  QtWidgetInputVectorDataListParameter(InputVectorDataListParameter*, QtWidgetModel*, QWidget*);
 
   ~QtWidgetInputVectorDataListParameter() override;
 
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-  QtWidgetInputVectorDataListParameter( const QtWidgetInputVectorDataListParameter & ) = delete;
-  void operator = ( const QtWidgetInputVectorDataListParameter & ) = delete;
+  QtWidgetInputVectorDataListParameter(const QtWidgetInputVectorDataListParameter&) = delete;
+  void operator=(const QtWidgetInputVectorDataListParameter&) = delete;
 };
-
-
 }
 }
 

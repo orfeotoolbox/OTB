@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -26,7 +26,6 @@
 # python is needed to verify the presence of the module name in the doxygen header
 # Don't require it to not force the developers to install python to be able to build
 # OTB. The tests will simply not be run if python is not available.
-find_package(PythonInterp)
 
 macro( otb_module_doxygen _name )
 

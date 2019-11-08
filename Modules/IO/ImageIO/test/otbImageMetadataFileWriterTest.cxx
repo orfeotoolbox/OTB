@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbVectorImage.h"
 #include "itkMacro.h"
 #include <iostream>
@@ -31,14 +29,14 @@
 int otbImageMetadataFileWriterTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension>  InputImageType;
   typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;

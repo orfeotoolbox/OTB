@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -80,15 +80,14 @@ namespace otb
  * \ingroup OTBStereo
  */
 template <class TInputImage, class TOutputHeight>
-class ITK_EXPORT StereoSensorModelToElevationFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputHeight>
+class ITK_EXPORT StereoSensorModelToElevationFilter : public itk::ImageToImageFilter<TInputImage, TOutputHeight>
 {
 public:
   /** Standard class typedefs */
-  typedef StereoSensorModelToElevationFilter                 Self;
+  typedef StereoSensorModelToElevationFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputHeight> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -97,35 +96,34 @@ public:
   itkTypeMacro(StereoSensorModelToElevationFilter, ImageToImageFilter);
 
   /** Convenient typedefs */
-  typedef TInputImage                                        InputImageType;
-  typedef typename InputImageType::PixelType                 InputPixelType;
-  typedef TOutputHeight                                      OutputImageType;
-  typedef typename OutputImageType::RegionType               OutputRegionType;
-  typedef typename OutputImageType::PixelType                HeightType;
-  typedef typename OutputImageType::PointType                OutputPointType;
+  typedef TInputImage                          InputImageType;
+  typedef typename InputImageType::PixelType   InputPixelType;
+  typedef TOutputHeight                        OutputImageType;
+  typedef typename OutputImageType::RegionType OutputRegionType;
+  typedef typename OutputImageType::PixelType  HeightType;
+  typedef typename OutputImageType::PointType  OutputPointType;
 
   typedef itk::InterpolateImageFunction<TInputImage, double> InterpolatorType;
-  typedef typename InterpolatorType::Pointer                 InterpolatorPointerType;
-  typedef GenericRSTransform<>                               GenericRSTransformType;
-  typedef GenericRSTransform<double, 3, 3>                   GenericRSTransform3DType;
-  typedef itk::NormalizedCorrelationImageToImageMetric
-    <TInputImage, TInputImage>                               CorrelationMetricType;
-  typedef typename InputImageType::SizeType                  RadiusType;
+  typedef typename InterpolatorType::Pointer InterpolatorPointerType;
+  typedef GenericRSTransform<>               GenericRSTransformType;
+  typedef GenericRSTransform<double, 3, 3> GenericRSTransform3DType;
+  typedef itk::NormalizedCorrelationImageToImageMetric<TInputImage, TInputImage> CorrelationMetricType;
+  typedef typename InputImageType::SizeType RadiusType;
 
   /** Set the master input image */
-  void SetMasterInput(const TInputImage * image);
+  void SetMasterInput(const TInputImage* image);
 
   /** Set the slave input iamge */
-  void SetSlaveInput(const TInputImage * image);
+  void SetSlaveInput(const TInputImage* image);
 
   /** Get the master input image */
-  const TInputImage * GetMasterInput() const;
+  const TInputImage* GetMasterInput() const;
 
   /** Get the slave input image */
-  const TInputImage * GetSlaveInput() const;
+  const TInputImage* GetSlaveInput() const;
 
   /** Get the output correlation map */
-  TOutputHeight * GetCorrelationOutput();
+  TOutputHeight* GetCorrelationOutput();
 
   /** Set the lower offset for the local elevation
    * exploration. Default is -20 meters.
@@ -193,8 +191,7 @@ protected:
   ~StereoSensorModelToElevationFilter() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** Generate the input requested regions  */
   void GenerateInputRequestedRegion(void) override;
@@ -207,15 +204,16 @@ protected:
       *
       * \sa ProcessObject::VerifyInputInformation
       */
-  void VerifyInputInformation() override {}
+  void VerifyInputInformation() override
+  {
+  }
 
 
 private:
   StereoSensorModelToElevationFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  inline double Correlation(const std::vector<double>& master,
-                            const std::vector<double>& slave) const;
+  inline double Correlation(const std::vector<double>& master, const std::vector<double>& slave) const;
 
   /** Interpolator for slave image */
   InterpolatorPointerType m_Interpolator;
@@ -224,13 +222,13 @@ private:
   RadiusType m_Radius;
 
   /** Lower offset for the local elevation exploration. */
-  double  m_LowerElevation;
+  double m_LowerElevation;
 
   /** Higher offset for the local elevation exploration. */
-  double  m_HigherElevation;
+  double m_HigherElevation;
 
   /** Step of the elevation exploration. */
-  double  m_ElevationStep;
+  double m_ElevationStep;
 
   /** Threshold of the correlation to keep estimated height. */
   double m_CorrelationThreshold;
@@ -243,10 +241,9 @@ private:
    *  difference between the estimated elevation and the initial
    *  one. If set to false, elevation is absolute. Default is false. */
   bool m_SubtractInitialElevation;
-  
+
   /** Master to slave transform */
   GenericRSTransform3DType::Pointer m_MasterToSlave;
-  
 };
 } // End namespace otb
 

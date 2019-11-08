@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -25,9 +25,11 @@
 
 #include "itkEuclideanDistanceMetric.h"
 
-namespace otb {
+namespace otb
+{
 
-namespace Statistics {
+namespace Statistics
+{
 
 /** \class EuclideanDistanceMetricWithMissingValuePow2
  * \brief Euclidean comparison distance function facing missing value. The square root is not performed in this class.
@@ -47,17 +49,16 @@ namespace Statistics {
  *
  * \ingroup OTBImageManipulation
  */
-template<class TVector>
-class ITK_EXPORT EuclideanDistanceMetricWithMissingValuePow2 :
-  public itk::Statistics::EuclideanDistanceMetric<TVector>
+template <class TVector>
+class ITK_EXPORT EuclideanDistanceMetricWithMissingValuePow2 : public itk::Statistics::EuclideanDistanceMetric<TVector>
 {
 public:
   /** Standard "Self" typedef. */
-  typedef EuclideanDistanceMetricWithMissingValuePow2          Self;
-  typedef itk::Statistics::EuclideanDistanceMetric<TVector>    Superclass;
-  typedef itk::SmartPointer<Self>                        Pointer;
-  typedef itk::SmartPointer<const Self>                  ConstPointer;
-  typedef typename Superclass::MeasurementVectorSizeType MeasurementVectorSizeType;
+  typedef EuclideanDistanceMetricWithMissingValuePow2       Self;
+  typedef itk::Statistics::EuclideanDistanceMetric<TVector> Superclass;
+  typedef itk::SmartPointer<Self>                           Pointer;
+  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef typename Superclass::MeasurementVectorSizeType    MeasurementVectorSizeType;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(EuclideanDistanceMetricWithMissingValuePow2, EuclideanDistanceMetric);
@@ -92,8 +93,12 @@ public:
   static void SetToMissingValue(ValueType& v);
 
 protected:
-  EuclideanDistanceMetricWithMissingValuePow2() {}
-  ~EuclideanDistanceMetricWithMissingValuePow2() override {}
+  EuclideanDistanceMetricWithMissingValuePow2()
+  {
+  }
+  ~EuclideanDistanceMetricWithMissingValuePow2() override
+  {
+  }
 }; // end of class
 
 } // end namespace statistics

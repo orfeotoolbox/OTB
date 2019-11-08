@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,11 +24,11 @@
 #include "otbPhysicalToRPCSensorModelImageFilter.h"
 #include "otbDEMHandler.h"
 
-namespace otb {
+namespace otb
+{
 
 template <class TImage>
-PhysicalToRPCSensorModelImageFilter<TImage>
-::PhysicalToRPCSensorModelImageFilter()
+PhysicalToRPCSensorModelImageFilter<TImage>::PhysicalToRPCSensorModelImageFilter()
 {
   // This filter does not modify the image buffer, but only its
   // metadata.Therefore, it can be run inplace to reduce memory print.
@@ -47,76 +47,68 @@ PhysicalToRPCSensorModelImageFilter<TImage>
 }
 
 template <class TImage>
-PhysicalToRPCSensorModelImageFilter<TImage>
-::~PhysicalToRPCSensorModelImageFilter()
+PhysicalToRPCSensorModelImageFilter<TImage>::~PhysicalToRPCSensorModelImageFilter()
 {
 }
 
 template <class TImage>
-void
-PhysicalToRPCSensorModelImageFilter<TImage>
-::GenerateOutputInformation()
+void PhysicalToRPCSensorModelImageFilter<TImage>::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
 
-  if(!m_OutputInformationGenerated)
-    {
+  if (!m_OutputInformationGenerated)
+  {
 
     // Get the input
-    ImageType * input = const_cast<ImageType*>(this->GetInput());
+    ImageType* input = const_cast<ImageType*>(this->GetInput());
 
     // Build the grid
     // Generate GCPs from physical sensor model
-    RSTransformPointerType  rsTransform = RSTransformType::New();
+    RSTransformPointerType rsTransform = RSTransformType::New();
     rsTransform->SetInputKeywordList(input->GetImageKeywordlist());
     rsTransform->InstantiateTransform();
 
     // Compute the size of the grid
-    typename ImageType::SizeType  size = input->GetLargestPossibleRegion().GetSize();
-    double gridSpacingX = size[0]/m_GridSize[0];
-    double gridSpacingY = size[1]/m_GridSize[1];
+    typename ImageType::SizeType size         = input->GetLargestPossibleRegion().GetSize();
+    double                       gridSpacingX = size[0] / m_GridSize[0];
+    double                       gridSpacingY = size[1] / m_GridSize[1];
 
-    for(unsigned int px = 0; px<m_GridSize[0]; ++px)
+    for (unsigned int px = 0; px < m_GridSize[0]; ++px)
+    {
+      for (unsigned int py = 0; py < m_GridSize[1]; ++py)
       {
-      for(unsigned int py = 0; py<m_GridSize[1]; ++py)
-        {
-        PointType inputPoint =  input->GetOrigin();
+        PointType inputPoint = input->GetOrigin();
         inputPoint[0] += (px * gridSpacingX + 0.5) * input->GetSignedSpacing()[0];
         inputPoint[1] += (py * gridSpacingY + 0.5) * input->GetSignedSpacing()[1];
         PointType outputPoint = rsTransform->TransformPoint(inputPoint);
         m_GCPsToSensorModelFilter->AddGCP(inputPoint, outputPoint);
-        }
       }
+    }
 
     m_GCPsToSensorModelFilter->SetInput(input);
     m_GCPsToSensorModelFilter->UpdateOutputInformation();
 
-    otbGenericMsgDebugMacro(<<"RPC model estimated. RMS ground error: "<<m_GCPsToSensorModelFilter->GetRMSGroundError()
-             <<", Mean error: "<<m_GCPsToSensorModelFilter->GetMeanError());
+    otbGenericMsgDebugMacro(<< "RPC model estimated. RMS ground error: " << m_GCPsToSensorModelFilter->GetRMSGroundError()
+                            << ", Mean error: " << m_GCPsToSensorModelFilter->GetMeanError());
 
     // Encapsulate the keywordlist
     itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey,
-                                               m_GCPsToSensorModelFilter->GetKeywordlist());
+    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, m_GCPsToSensorModelFilter->GetKeywordlist());
 
     // put the flag to true
     m_OutputInformationGenerated = true;
-    }
+  }
 }
 
 template <class TImage>
-void
-PhysicalToRPCSensorModelImageFilter<TImage>
-::Modified() const
+void PhysicalToRPCSensorModelImageFilter<TImage>::Modified() const
 {
   Superclass::Modified();
-  m_OutputInformationGenerated= false;
+  m_OutputInformationGenerated = false;
 }
 
 template <class TImage>
-void
-PhysicalToRPCSensorModelImageFilter<TImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void PhysicalToRPCSensorModelImageFilter<TImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

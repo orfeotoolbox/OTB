@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,19 +37,14 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT LabelizeConfidenceConnectedImageFilter
-  : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
-      itk::ConfidenceConnectedImageFilter<TInputImage, TOutputImage> >
+    : public otb::LabelizeImageFilterBase<TInputImage, TOutputImage, itk::ConfidenceConnectedImageFilter<TInputImage, TOutputImage>>
 {
 public:
   /** typedef for standard classes. */
-  typedef LabelizeConfidenceConnectedImageFilter
-  Self;
-  typedef otb::LabelizeImageFilterBase<TInputImage, TOutputImage,
-      itk::ConfidenceConnectedImageFilter<TInputImage, TOutputImage> > Superclass;
-  typedef itk::SmartPointer<Self>
-  Pointer;
-  typedef itk::SmartPointer<const Self>
-  ConstPointer;
+  typedef LabelizeConfidenceConnectedImageFilter Self;
+  typedef otb::LabelizeImageFilterBase<TInputImage, TOutputImage, itk::ConfidenceConnectedImageFilter<TInputImage, TOutputImage>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** typedef to simplify variables definition and declaration. */
   typedef TInputImage  InputImageType;
@@ -109,15 +104,17 @@ public:
 
 protected:
   LabelizeConfidenceConnectedImageFilter();
-  ~LabelizeConfidenceConnectedImageFilter() override {}
+  ~LabelizeConfidenceConnectedImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Region growing */
   void RegionGrowing(const IndexType indexSeed) override;
 
 private:
-  LabelizeConfidenceConnectedImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  LabelizeConfidenceConnectedImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Initial replace value*/
   OutputPixelType m_ReplaceValue;

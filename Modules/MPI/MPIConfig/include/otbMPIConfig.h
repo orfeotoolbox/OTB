@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,7 +26,8 @@
 #include "itkMacro.h"
 #include "itkObjectFactory.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class MPI config
   *  \brief Manage MPI resources
@@ -35,7 +36,7 @@ namespace otb {
   *
   * \ingroup OTBMPIConfig
   */
-class MPIConfig: public itk::LightObject
+class MPIConfig : public itk::LightObject
 {
 public:
   /** Standard class typedefs. */
@@ -46,16 +47,16 @@ public:
 
   /** Retrieve the singleton instance */
   static Pointer Instance();
-  
+
   /** Run-time type information (and related methods). */
   itkTypeMacro(MPIConfig, itk::LightObject);
 
   /** MPI Parameters accessors */
   itkGetMacro(MyRank, unsigned int);
-  itkGetMacro(NbProcs,unsigned int);
+  itkGetMacro(NbProcs, unsigned int);
 
   /** Initialize MPI Processus */
-  void Init(int& argc, char** &argv, bool abortOnException = true);
+  void Init(int& argc, char**& argv, bool abortOnException = true);
 
   /** Shuts down the MPI environment. */
   void terminate();
@@ -80,9 +81,8 @@ protected:
   virtual ~MPIConfig();
 
 private:
-
-  MPIConfig(const MPIConfig &) = delete;
-  void operator =(const MPIConfig&) = delete;
+  MPIConfig(const MPIConfig&) = delete;
+  void operator=(const MPIConfig&) = delete;
 
   // MPI rank
   unsigned int m_MyRank;

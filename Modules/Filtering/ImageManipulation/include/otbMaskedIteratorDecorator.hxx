@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,133 +28,116 @@ namespace otb
 {
 
 template <typename TIteratorType, typename TMaskIteratorType>
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::MaskedIteratorDecorator( MaskType* mask, 
-                           ImageType* image,
-                          const RegionType& region)
+MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::MaskedIteratorDecorator(MaskType* mask, ImageType* image, const RegionType& region)
 {
-  m_ItImage = TIteratorType(image,region);
+  m_ItImage = TIteratorType(image, region);
   if (mask == nullptr)
-    {
+  {
     m_UseMask = false;
-    }
+  }
   else
-    {
+  {
     if (image->GetLargestPossibleRegion() != mask->GetLargestPossibleRegion())
-      {
+    {
       itkGenericExceptionMacro("Input image and mask have different largest regions : mask is discarded!");
-      }
-    else
-      {
-      m_UseMask = true;
-      m_ItMask = TMaskIteratorType(mask,region);
-      m_StartMask = TMaskIteratorType(mask,region);
-      m_StartImage = TIteratorType(image,region);
-      }
     }
+    else
+    {
+      m_UseMask    = true;
+      m_ItMask     = TMaskIteratorType(mask, region);
+      m_StartMask  = TMaskIteratorType(mask, region);
+      m_StartImage = TIteratorType(image, region);
+    }
+  }
 }
 
 template <typename TIteratorType, typename TMaskIteratorType>
-typename MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>::IndexType
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::GetIndex() const
+typename MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::IndexType MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::GetIndex() const
 {
   return m_ItImage.GetIndex();
 }
 
 template <typename TIteratorType, typename TMaskIteratorType>
-void
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::GoToBegin()
+void MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::GoToBegin()
 {
   if (m_UseMask)
-    {
+  {
     this->ComputeMaskedBegin();
-    }
+  }
   else
-    {
+  {
     m_ItImage.GoToBegin();
-    }
+  }
 }
 
 template <typename TIteratorType, typename TMaskIteratorType>
-void
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::GoToEnd()
+void MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::GoToEnd()
 {
   if (m_UseMask)
-    {
-    // make sure masked begin is computed as next calls might be operator--() 
+  {
+    // make sure masked begin is computed as next calls might be operator--()
     // and IsAtBegin() (for a reverse iteration)
     this->ComputeMaskedBegin();
     m_ItMask.GoToEnd();
-    }
+  }
   m_ItImage.GoToEnd();
 }
 
 template <typename TIteratorType, typename TMaskIteratorType>
-bool
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::IsAtBegin() const
+bool MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::IsAtBegin() const
 {
   if (m_UseMask)
-    {
+  {
     return m_ItMask == m_StartMask || m_ItImage == m_StartImage;
-    }
+  }
   return m_ItImage.IsAtBegin();
 }
 
 template <typename TIteratorType, typename TMaskIteratorType>
-bool
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::IsAtEnd() const
+bool MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::IsAtEnd() const
 {
   if (m_UseMask)
-    {
+  {
     return m_ItMask.IsAtEnd() || m_ItImage.IsAtEnd();
-    }
+  }
   return m_ItImage.IsAtEnd();
 }
 
 // Wrap the underlying iterators to skip masked pixels
 template <typename TIteratorType, typename TMaskIteratorType>
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>&
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::operator++()
+MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>& MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::operator++()
 {
   if (m_UseMask)
-    {
+  {
     do
-      {
+    {
       ++m_ItMask;
       ++m_ItImage;
-      } while (m_ItMask.Value() == 0 && !this->IsAtEnd());
-    }
+    } while (m_ItMask.Value() == 0 && !this->IsAtEnd());
+  }
   else
-    {
+  {
     ++m_ItImage;
-    }
+  }
   return *this;
 }
 
 // Wrap the underlying iterators to skip masked pixels
 template <typename TIteratorType, typename TMaskIteratorType>
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>&
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::operator--()
+MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>& MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::operator--()
 {
   if (m_UseMask)
-    {
+  {
     do
-      {
+    {
       --m_ItMask;
       --m_ItImage;
-      } while (m_ItMask.Value() == 0 && !this->IsAtBegin());
-    }
+    } while (m_ItMask.Value() == 0 && !this->IsAtBegin());
+  }
   else
-    {
+  {
     --m_ItImage;
-    }
+  }
   return *this;
 }
 
@@ -167,58 +150,45 @@ void MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>::Set(const PixelTy
 */
 
 template <typename TIteratorType, typename TMaskIteratorType>
-const typename MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>::PixelType&
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::Value(void) const
+const typename MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::PixelType&
+MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::Value(void) const
 {
   return m_ItImage.Value();
 }
 
 template <typename TIteratorType, typename TMaskIteratorType>
-TMaskIteratorType&
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::GetMaskIterator()
+TMaskIteratorType& MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::GetMaskIterator()
 {
   return m_ItMask;
 }
 
 template <typename TIteratorType, typename TMaskIteratorType>
-const TMaskIteratorType&
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::GetMaskIterator() const
+const TMaskIteratorType& MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::GetMaskIterator() const
 {
   return m_ItMask;
 }
 
 template <typename TIteratorType, typename TMaskIteratorType>
-TIteratorType&
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::GetImageIterator()
+TIteratorType& MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::GetImageIterator()
 {
   return m_ItImage;
 }
 
 template <typename TIteratorType, typename TMaskIteratorType>
-const TIteratorType&
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::GetImageIterator() const
+const TIteratorType& MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::GetImageIterator() const
 {
   return m_ItImage;
 }
 
 template <typename TIteratorType, typename TMaskIteratorType>
-const bool&
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::HasMask() const
+const bool& MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::HasMask() const
 {
   return m_UseMask;
 }
 
 // Compute begin iterator position taking into account the mask
 template <typename TIteratorType, typename TMaskIteratorType>
-void
-MaskedIteratorDecorator<TIteratorType,TMaskIteratorType>
-::ComputeMaskedBegin()
+void MaskedIteratorDecorator<TIteratorType, TMaskIteratorType>::ComputeMaskedBegin()
 {
   // We must search for the first index where the image is not masked
   // Start searching at the beginning

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,13 +27,12 @@ namespace otb
 {
 
 template <class TInputVectorData, class TSpatialisation, class TSimulationStep1, class TSimulationStep2, class TFTM, class TOutputImage>
-ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>
-::ImageSimulationMethod()
+ImageSimulationMethod<TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>::ImageSimulationMethod()
 {
-  //instantiation
-  m_Spatialisation = SpatialisationType::New();
+  // instantiation
+  m_Spatialisation                 = SpatialisationType::New();
   m_LabelMapToSimulatedImageFilter = LabelMapToSimulatedImageFilterType::New();
-  m_LabelMapToLabelImageFilter = LabelMapToLabelImageFilterType::New();
+  m_LabelMapToLabelImageFilter     = LabelMapToLabelImageFilterType::New();
 
   //    this->SetNumberOfRequiredOutputs(2);
   //    this->SetNthOutput(0, OutputImageType::New());
@@ -44,19 +43,19 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
   //    m_FTMFilter = FTMFilterType::New();
   //    m_Interpolator = InterpolatorType::New();
   //    m_MultiToMonoChannelFilter = MultiToMonoChannelFilterType::New();
-  m_ImageList = ImageListType::New();
+  m_ImageList                    = ImageListType::New();
   m_ImageListToVectorImageFilter = ImageListToVectorImageFilterType::New();
 
-  //default value
+  // default value
   m_NumberOfComponentsPerPixel = 3;
-  m_Radius = 3;
-  m_SatRSRFilename = "";
-  m_PathRoot = "";
-  m_Mean = 0.0;
-  m_Variance = 1e-8;
+  m_Radius                     = 3;
+  m_SatRSRFilename             = "";
+  m_PathRoot                   = "";
+  m_Mean                       = 0.0;
+  m_Variance                   = 1e-8;
 }
 
-//The 3 commented methods are needed for a true composite filters.
+// The 3 commented methods are needed for a true composite filters.
 
 // template <class TInputVectorData, class TSpatialisation, class TSimulationStep1, class TSimulationStep2, class TFTM, class TOutputImage>
 // void
@@ -104,47 +103,41 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
 
 /** Get output reflectance image */
 template <class TInputVectorData, class TSpatialisation, class TSimulationStep1, class TSimulationStep2, class TFTM, class TOutputImage>
-typename ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>::OutputImageType *
-ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>
-::GetOutputReflectanceImage()
+typename ImageSimulationMethod<TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>::OutputImageType*
+ImageSimulationMethod<TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>::GetOutputReflectanceImage()
 {
-   return m_ImageListToVectorImageFilter->GetOutput();
+  return m_ImageListToVectorImageFilter->GetOutput();
 }
 
 /** Get output label image */
 template <class TInputVectorData, class TSpatialisation, class TSimulationStep1, class TSimulationStep2, class TFTM, class TOutputImage>
-typename ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>::OutputLabelImageType *
-ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>
-::GetOutputLabelImage()
+typename ImageSimulationMethod<TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>::OutputLabelImageType*
+ImageSimulationMethod<TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>::GetOutputLabelImage()
 {
-   return m_LabelMapToLabelImageFilter->GetOutput();
+  return m_LabelMapToLabelImageFilter->GetOutput();
 }
 
 template <class TInputVectorData, class TSpatialisation, class TSimulationStep1, class TSimulationStep2, class TFTM, class TOutputImage>
-void
-ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>
-::GenerateOutputInformation()
+void ImageSimulationMethod<TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>::GenerateOutputInformation()
 {
-   Superclass::GenerateOutputInformation();
+  Superclass::GenerateOutputInformation();
 
-   OutputImageType * outputReflImage = this->GetOutputReflectanceImage();
+  OutputImageType* outputReflImage = this->GetOutputReflectanceImage();
 
-//    m_Spatialisation->SetInput(m_InputVectorData);
-   m_Spatialisation->UpdateOutputInformation();
+  //    m_Spatialisation->SetInput(m_InputVectorData);
+  m_Spatialisation->UpdateOutputInformation();
 
-   outputReflImage->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
-   outputReflImage->SetLargestPossibleRegion(m_Spatialisation->GetOutput()->GetLargestPossibleRegion());
-   outputReflImage->SetOrigin(m_Spatialisation->GetOutput()->GetOrigin());
+  outputReflImage->SetNumberOfComponentsPerPixel(m_NumberOfComponentsPerPixel);
+  outputReflImage->SetLargestPossibleRegion(m_Spatialisation->GetOutput()->GetLargestPossibleRegion());
+  outputReflImage->SetOrigin(m_Spatialisation->GetOutput()->GetOrigin());
 
-   OutputLabelImageType * outputLabelImage = this->GetOutputLabelImage();
-   outputLabelImage->SetLargestPossibleRegion(m_Spatialisation->GetOutput()->GetLargestPossibleRegion());
-   outputLabelImage->SetOrigin(m_Spatialisation->GetOutput()->GetOrigin());
+  OutputLabelImageType* outputLabelImage = this->GetOutputLabelImage();
+  outputLabelImage->SetLargestPossibleRegion(m_Spatialisation->GetOutput()->GetLargestPossibleRegion());
+  outputLabelImage->SetOrigin(m_Spatialisation->GetOutput()->GetOrigin());
 }
 
 template <class TInputVectorData, class TSpatialisation, class TSimulationStep1, class TSimulationStep2, class TFTM, class TOutputImage>
-void
-ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>
-::UpdateData()
+void ImageSimulationMethod<TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>::UpdateData()
 {
 
   //    m_Spatialisation->SetInput(m_InputVectorData);
@@ -164,18 +157,17 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
   m_LabelMapToSimulatedImageFilter->UpdateOutputInformation();
 
   for (unsigned int i = 0; i < m_NumberOfComponentsPerPixel; ++i)
-    {
+  {
 
     MultiToMonoChannelFilterPointer multiToMonoChannelFilter = MultiToMonoChannelFilterType::New();
-    InterpolatorPointer interpolator = InterpolatorType::New();
-    FTMFilterPointer FTMFilter = FTMFilterType::New();
+    InterpolatorPointer             interpolator             = InterpolatorType::New();
+    FTMFilterPointer                FTMFilter                = FTMFilterType::New();
 
     multiToMonoChannelFilter->SetInput(m_LabelMapToSimulatedImageFilter->GetOutput());
     multiToMonoChannelFilter->SetChannel(i + 1);
-    multiToMonoChannelFilter->SetExtractionRegion(
-                                                  m_LabelMapToSimulatedImageFilter->GetOutput()->GetLargestPossibleRegion());
+    multiToMonoChannelFilter->SetExtractionRegion(m_LabelMapToSimulatedImageFilter->GetOutput()->GetLargestPossibleRegion());
 
-    //TODO comment changer interpolateur !
+    // TODO comment changer interpolateur !
     interpolator->SetInputImage(multiToMonoChannelFilter->GetOutput());
     interpolator->SetRadius(m_Radius);
     interpolator->Initialize();
@@ -191,12 +183,11 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
     FTMFilter->Update();
 
     m_ImageList->PushBack(FTMFilter->GetOutput());
-    }
+  }
   m_ImageListToVectorImageFilter->SetInput(m_ImageList);
-
 }
 
-//In case of a true composite filter
+// In case of a true composite filter
 // template <class TInputVectorData, class TSpatialisation, class TSimulationStep1, class TSimulationStep2, class TFTM, class TOutputImage>
 // void
 // ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>
@@ -263,15 +254,12 @@ ImageSimulationMethod< TInputVectorData, TSpatialisation, TSimulationStep1, TSim
 
 
 template <class TInputVectorData, class TSpatialisation, class TSimulationStep1, class TSimulationStep2, class TFTM, class TOutputImage>
-void
-ImageSimulationMethod< TInputVectorData,  TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ImageSimulationMethod<TInputVectorData, TSpatialisation, TSimulationStep1, TSimulationStep2, TFTM, TOutputImage>::PrintSelf(std::ostream& os,
+                                                                                                                                 itk::Indent indent) const
 {
-   Superclass::PrintSelf(os, indent);
-
+  Superclass::PrintSelf(os, indent);
 }
 
-} //end namespace otb
+} // end namespace otb
 
 #endif
-

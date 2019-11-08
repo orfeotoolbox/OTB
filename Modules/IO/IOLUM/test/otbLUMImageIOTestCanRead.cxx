@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbLUMImageIO.h"
 #include "itkMacro.h"
 #include <iostream>
@@ -28,12 +26,12 @@
 int otbLUMImageIOTestCanRead(int itkNotUsed(argc), char* argv[])
 {
   otb::LUMImageIO::Pointer lLUMImageIO = otb::LUMImageIO::New();
-  bool                     lCanRead = lLUMImageIO->CanReadFile(argv[1]);
+  bool                     lCanRead    = lLUMImageIO->CanReadFile(argv[1]);
   if (lCanRead == false)
-    {
+  {
     std::cerr << "Erreur otb::LUMImageIO : impossible d'ouvrir l'image LUM " << argv[1] << "." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

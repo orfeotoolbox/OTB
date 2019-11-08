@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,26 +38,23 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT AbstractParameterList :
-    public Parameter,
-    public StringListInterface
+class OTBApplicationEngine_EXPORT AbstractParameterList : public Parameter, public StringListInterface
 {
-//
-// Public types.
+  //
+  // Public types.
 public:
   /** Standard class typedef */
   typedef AbstractParameterList Self;
-  typedef Parameter Superclass;
+  typedef Parameter             Superclass;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** RTTI support */
-  itkTypeMacro( AbstractParameterList, Parameter );
+  itkTypeMacro(AbstractParameterList, Parameter);
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
   /** Constructor */
   AbstractParameterList();
@@ -65,20 +62,18 @@ protected:
   /** Destructor */
   ~AbstractParameterList() override;
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-  AbstractParameterList( const Parameter & ) = delete;
-  void operator = ( const Parameter & ) = delete;
+  AbstractParameterList(const Parameter&) = delete;
+  void operator=(const Parameter&) = delete;
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
 }; // End class InputImage Parameter
 
 } // End namespace Wrapper

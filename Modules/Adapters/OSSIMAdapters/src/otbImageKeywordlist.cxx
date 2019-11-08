@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,6 +19,7 @@
  */
 
 #include "otbImageKeywordlist.h"
+#include "otbConfigurationManager.h"
 
 #include <cassert>
 
@@ -38,6 +39,7 @@
 #include "ossim/ossimTileMapModel.h"
 #include "ossim/projection/ossimProjectionFactoryRegistry.h"
 #include "ossim/projection/ossimRpcModel.h"
+#include "ossim/base/ossimNotify.h"
 #pragma GCC diagnostic pop
 #else
 #include "ossim/base/ossimKeywordlist.h"
@@ -47,6 +49,7 @@
 #include "ossim/ossimTileMapModel.h"
 #include "ossim/projection/ossimProjectionFactoryRegistry.h"
 #include "ossim/projection/ossimRpcModel.h"
+#include "ossim/base/ossimNotify.h"
 #endif
 
 #include "otbSensorModelAdapter.h"
@@ -56,150 +59,125 @@
 namespace otb
 {
 
-ImageKeywordlist
-::ImageKeywordlist()
+ImageKeywordlist::ImageKeywordlist()
 {
 }
 
-ImageKeywordlist
-::ImageKeywordlist(const Self& p) : m_Keywordlist(p.m_Keywordlist)
+ImageKeywordlist::ImageKeywordlist(const Self& p) : m_Keywordlist(p.m_Keywordlist)
 {
 }
 
-ImageKeywordlist
-::~ImageKeywordlist()
+ImageKeywordlist::~ImageKeywordlist()
 {
 }
 
-void
-ImageKeywordlist::
-operator =(const Self& p)
+void ImageKeywordlist::operator=(const Self& p)
 {
   m_Keywordlist = p.m_Keywordlist;
 }
 
-bool
-ImageKeywordlist
-::operator ==(const Self& p) const
+bool ImageKeywordlist::operator==(const Self& p) const
 {
   return m_Keywordlist == p.m_Keywordlist;
 }
 
-void
-ImageKeywordlist::
-SetKeywordlist(const ossimKeywordlist& kwl)
+void ImageKeywordlist::SetKeywordlist(const ossimKeywordlist& kwl)
 {
   m_Keywordlist = kwl.getMap();
 }
 
-const std::string&
-ImageKeywordlist::
-GetMetadataByKey(const std::string& key) const
+const std::string& ImageKeywordlist::GetMetadataByKey(const std::string& key) const
 {
   // Search for the key in the output map
   KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
 
   // If the key can not be found, throw an exception
   if (it == m_Keywordlist.end())
-    {
+  {
     itkGenericExceptionMacro(<< "Keywordlist has no output with key " << key);
-    }
+  }
 
   // Then if everything is ok, return the ossimString
   return it->second;
 }
 
-bool
-ImageKeywordlist::
-HasKey(const std::string& key) const
+bool ImageKeywordlist::HasKey(const std::string& key) const
 {
   KeywordlistMap::const_iterator it = m_Keywordlist.find(key);
 
   return (it != m_Keywordlist.end());
 }
 
-void
-ImageKeywordlist::
-ClearMetadataByKey(const std::string& key)
+void ImageKeywordlist::ClearMetadataByKey(const std::string& key)
 {
   m_Keywordlist[key] = "";
 }
 
-void
-ImageKeywordlist::
-AddKey(const std::string& key, const std::string& value)
+void ImageKeywordlist::AddKey(const std::string& key, const std::string& value)
 {
   m_Keywordlist[key] = value;
 }
 
-void
-ImageKeywordlist::
-convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const
+void ImageKeywordlist::convertToOSSIMKeywordlist(ossimKeywordlist& kwl) const
 {
   kwl.getMap() = m_Keywordlist;
 }
 
-bool
-ImageKeywordlist::
-convertToGDALRPC(GDALRPCInfo &rpc) const
+bool ImageKeywordlist::convertToGDALRPC(GDALRPCInfo& rpc) const
 {
-   /* ossimRpcModel::loadState() actually expects certain keyword values to be
-    * present in the keywordlist. So We check a single keyword value
-    * (polynomial_format) first.  Even though it is not enough to ensure a valid
-    * ossimRpcModel by checking for presence of one single key but atleast we
-    * are sure about not to create an ossimRpcModel.
-    *
-    * The current mechanism creates ossimRpcModel instance, calls loadState()
-    * and fails. The below check for 'polynomial_format' save us from creating
-    * an ossimRpcModel which will be invalid if the 'polynomial_format' is not
-    * present.
-    */
-   if( m_Keywordlist.find("polynomial_format") != m_Keywordlist.end() )
-   {
-      ossimKeywordlist geom_kwl;
-      this->convertToOSSIMKeywordlist(geom_kwl);
+  /* ossimRpcModel::loadState() actually expects certain keyword values to be
+   * present in the keywordlist. So We check a single keyword value
+   * (polynomial_format) first.  Even though it is not enough to ensure a valid
+   * ossimRpcModel by checking for presence of one single key but atleast we
+   * are sure about not to create an ossimRpcModel.
+   *
+   * The current mechanism creates ossimRpcModel instance, calls loadState()
+   * and fails. The below check for 'polynomial_format' save us from creating
+   * an ossimRpcModel which will be invalid if the 'polynomial_format' is not
+   * present.
+   */
+  if (m_Keywordlist.find("polynomial_format") != m_Keywordlist.end())
+  {
+    ossimKeywordlist geom_kwl;
+    this->convertToOSSIMKeywordlist(geom_kwl);
 
-      ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
-      if (rpcModel->loadState(geom_kwl))
+    ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
+    if (rpcModel->loadState(geom_kwl))
+    {
+      ossimRpcModel::rpcModelStruct ossimRpcStruct;
+      rpcModel->getRpcParameters(ossimRpcStruct);
+
+      if (ossimRpcStruct.type == 'B')
       {
-         ossimRpcModel::rpcModelStruct ossimRpcStruct;
-         rpcModel->getRpcParameters(ossimRpcStruct);
+        rpc.dfSAMP_OFF     = ossimRpcStruct.sampOffset;
+        rpc.dfLINE_OFF     = ossimRpcStruct.lineOffset;
+        rpc.dfSAMP_SCALE   = ossimRpcStruct.sampScale;
+        rpc.dfLINE_SCALE   = ossimRpcStruct.lineScale;
+        rpc.dfLAT_OFF      = ossimRpcStruct.latOffset;
+        rpc.dfLONG_OFF     = ossimRpcStruct.lonOffset;
+        rpc.dfHEIGHT_OFF   = ossimRpcStruct.hgtOffset;
+        rpc.dfLAT_SCALE    = ossimRpcStruct.latScale;
+        rpc.dfLONG_SCALE   = ossimRpcStruct.lonScale;
+        rpc.dfHEIGHT_SCALE = ossimRpcStruct.hgtScale;
 
-         if (ossimRpcStruct.type == 'B')
-         {
-            rpc.dfSAMP_OFF = ossimRpcStruct.sampOffset;
-            rpc.dfLINE_OFF = ossimRpcStruct.lineOffset;
-            rpc.dfSAMP_SCALE = ossimRpcStruct.sampScale;
-            rpc.dfLINE_SCALE = ossimRpcStruct.lineScale;
-            rpc.dfLAT_OFF = ossimRpcStruct.latOffset;
-            rpc.dfLONG_OFF = ossimRpcStruct.lonOffset;
-            rpc.dfHEIGHT_OFF = ossimRpcStruct.hgtOffset;
-            rpc.dfLAT_SCALE = ossimRpcStruct.latScale;
-            rpc.dfLONG_SCALE = ossimRpcStruct.lonScale;
-            rpc.dfHEIGHT_SCALE = ossimRpcStruct.hgtScale;
+        memcpy(rpc.adfLINE_NUM_COEFF, ossimRpcStruct.lineNumCoef, sizeof(double) * 20);
+        memcpy(rpc.adfLINE_DEN_COEFF, ossimRpcStruct.lineDenCoef, sizeof(double) * 20);
+        memcpy(rpc.adfSAMP_NUM_COEFF, ossimRpcStruct.sampNumCoef, sizeof(double) * 20);
+        memcpy(rpc.adfSAMP_DEN_COEFF, ossimRpcStruct.sampDenCoef, sizeof(double) * 20);
 
-            memcpy(rpc.adfLINE_NUM_COEFF, ossimRpcStruct.lineNumCoef, sizeof(double) * 20);
-            memcpy(rpc.adfLINE_DEN_COEFF, ossimRpcStruct.lineDenCoef, sizeof(double) * 20);
-            memcpy(rpc.adfSAMP_NUM_COEFF, ossimRpcStruct.sampNumCoef, sizeof(double) * 20);
-            memcpy(rpc.adfSAMP_DEN_COEFF, ossimRpcStruct.sampDenCoef, sizeof(double) * 20);
-
-            return true;
-         }
+        return true;
       }
-   }
-   return false;
+    }
+  }
+  return false;
 }
 
-void
-ImageKeywordlist::
-Print(std::ostream& os, itk::Indent indent) const
+void ImageKeywordlist::Print(std::ostream& os, itk::Indent indent) const
 {
   this->PrintSelf(os, indent.GetNextIndent());
 }
 
-void
-ImageKeywordlist::
-PrintSelf(std::ostream& os, itk::Indent indent) const
+void ImageKeywordlist::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   ossimKeywordlist kwl;
   convertToOSSIMKeywordlist(kwl);
@@ -207,42 +185,47 @@ PrintSelf(std::ostream& os, itk::Indent indent) const
   os << indent << kwl;
 }
 
-std::ostream &
-operator <<(std::ostream& os, const ImageKeywordlist& kwl)
+std::ostream& operator<<(std::ostream& os, const ImageKeywordlist& kwl)
 {
   kwl.Print(os);
   return os;
 }
 
-ImageKeywordlist
-ReadGeometry(const std::string& filename)
+ImageKeywordlist ReadGeometry(const std::string& filename)
 {
   return ReadGeometryFromImage(filename);
 }
 
-ImageKeywordlist
-ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
+ImageKeywordlist ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
 {
   // Trying to read ossim MetaData
   bool             hasMetaData = false;
   ossimKeywordlist geom_kwl; // = new ossimKeywordlist();
   ImageKeywordlist otb_kwl;
 
+  // Save Ossim notify flags
+  ossimPushNotifyFlags();
+
+  // Except for DEBUG logger level, only fatal errors of OSSIM should be seen
+  if (otb::ConfigurationManager::GetLoggerLevel() < itk::LoggerBase::DEBUG)
+  {
+    ossimSetNotifyFlag(ossimNotifyFlags_FATAL);
+  }
+
   /****************************************************/
   /* First try : test the OSSIM plugins factory       */
   /****************************************************/
   {
-  /** Before, the pluginfactory was tested if the ossim one returned false.
-    But in the case TSX, the images tif were considered as ossimQuickbirdTiffTileSource
-    thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory
-    because the default include factory contains ossimQuickbirdTiffTileSource. */
-  boost::scoped_ptr<ossimProjection> projection(ossimplugins::ossimPluginProjectionFactory::instance()
-        ->createProjection(ossimFilename(filename.c_str()), 0));
+    /** Before, the pluginfactory was tested if the ossim one returned false.
+      But in the case TSX, the images tif were considered as ossimQuickbirdTiffTileSource
+      thus a TSX tif image wasn't read with TSX Model. We don't use the ossimRegisteryFactory
+      because the default include factory contains ossimQuickbirdTiffTileSource. */
+    boost::scoped_ptr<ossimProjection> projection(ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(ossimFilename(filename.c_str()), 0));
 
-  if (projection)
+    if (projection)
     {
-    hasMetaData = projection->saveState(geom_kwl);
-    otb_kwl.SetKeywordlist(geom_kwl);
+      hasMetaData = projection->saveState(geom_kwl);
+      otb_kwl.SetKeywordlist(geom_kwl);
     }
   }
 
@@ -250,51 +233,50 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
   /* Second try : the OSSIM projection factory   */
   /***********************************************/
   if (!hasMetaData)
-    {
-    boost::scoped_ptr<ossimImageHandler> handler(ossimImageHandlerRegistry::instance()
-                                 ->open(ossimFilename(filename.c_str())));
+  {
+    boost::scoped_ptr<ossimImageHandler> handler(ossimImageHandlerRegistry::instance()->open(ossimFilename(filename.c_str())));
     if (handler)
-      {
+    {
 
       // Add ossimPlugins model
       ossimProjectionFactoryRegistry::instance()->registerFactory(ossimplugins::ossimPluginProjectionFactory::instance());
 
       ossimRefPtr<ossimImageGeometry> geom = handler->getImageGeometry();
       if (geom.valid())
-        {
+      {
         ossimProjection const* projection = geom->getProjection();
         if (projection)
-          {
+        {
           hasMetaData = projection->saveState(geom_kwl);
 
           // if the handler has found a sensor model, copy the tags found
           if (hasMetaData && dynamic_cast<ossimSensorModel const*>(projection))
-            {
+          {
             otb_kwl.SetKeywordlist(geom_kwl);
             // geom_kwl.print(std::cout);
-            }
+          }
           else
-            {
+          {
             hasMetaData = false;
-            }
-          } // projection
-        } // geom.valid
-      } // handler
-    }
+          }
+        } // projection
+      }   // geom.valid
+    }     // handler
+  }
 
   /**********************************************************/
   /* Third try : look for RPC tags   */
   /**********************************************************/
   if (!hasMetaData && checkRpcTag)
-    {
+  {
     // check any RPC tags
     otb_kwl = ReadGeometryFromRPCTag(filename);
 
     if (!otb_kwl.Empty())
-      {
+    {
       hasMetaData = true;
-      }
     }
+  }
 
   // In some corner cases, ossim is unable to create a ossimImageHandler
   // instance for the provided file.
@@ -313,46 +295,47 @@ ReadGeometryFromImage(const std::string& filename, bool checkRpcTag)
   // which uses ossimSensorModelFactory and ossimPluginProjectionFactory internally,
   // thus by-passing the need for a valid ossimImageHandler.
 
+  // Restore Ossim notify flags
+  ossimPopNotifyFlags();
+
   return otb_kwl;
 }
 
-ImageKeywordlist
-ReadGeometryFromGEOMFile(const std::string& filename)
+ImageKeywordlist ReadGeometryFromGEOMFile(const std::string& filename)
 {
   ossimKeywordlist geom_kwl;
   ImageKeywordlist otb_kwl;
-  ossimFilename ossimGeomFile = ossimFilename(filename);
+  ossimFilename    ossimGeomFile = ossimFilename(filename);
 
   if (ossimGeomFile.exists() && ossimGeomFile.isFile())
-    {
+  {
     // Interpret the geom file as a KWL
     ossimKeywordlist kwl(ossimGeomFile);
 
     // Check that the geom file results in a valid ossimKeywordlist
     if (kwl.getErrorStatus() == ossimErrorCodes::OSSIM_OK)
-      {
-//       // Be sure there is a corresponding instance of ossimSensorModel
-//       // which understands this kwl
-//       SensorModelAdapter::Pointer sensorModel = SensorModelAdapter::New();
-//       ImageKeywordlist otbkwl;
-//       otbkwl.SetKeywordlist(kwl);
-//       sensorModel->CreateProjection(otbkwl);
-//
-//       if (sensorModel->IsValidSensorModel())
-//         {
-//         geom_kwl = kwl;
-//         }
+    {
+      //       // Be sure there is a corresponding instance of ossimSensorModel
+      //       // which understands this kwl
+      //       SensorModelAdapter::Pointer sensorModel = SensorModelAdapter::New();
+      //       ImageKeywordlist otbkwl;
+      //       otbkwl.SetKeywordlist(kwl);
+      //       sensorModel->CreateProjection(otbkwl);
+      //
+      //       if (sensorModel->IsValidSensorModel())
+      //         {
+      //         geom_kwl = kwl;
+      //         }
       geom_kwl = kwl;
-      }
     }
+  }
 
   otb_kwl.SetKeywordlist(geom_kwl);
 
   return otb_kwl;
 }
 
-ImageKeywordlist
-ReadGeometryFromRPCTag(const std::string& filename)
+ImageKeywordlist ReadGeometryFromRPCTag(const std::string& filename)
 {
   ossimKeywordlist geom_kwl;
   ImageKeywordlist otb_kwl;
@@ -360,58 +343,44 @@ ReadGeometryFromRPCTag(const std::string& filename)
   //  try to use GeoTiff RPC tag if present.
   // Warning : RPC in subdatasets are not supported
   GDALDriverH identifyDriverH = GDALIdentifyDriver(filename.c_str(), nullptr);
-  if(identifyDriverH == nullptr)
-    {
+  if (identifyDriverH == nullptr)
+  {
     // If no driver has identified the dataset, don't try to open it and exit
     return otb_kwl;
-    }
+  }
 
   GDALDatasetH datasetH = GDALOpen(filename.c_str(), GA_ReadOnly);
   if (datasetH != nullptr)
-    {
+  {
     GDALDataset* dataset = static_cast<GDALDataset*>(datasetH);
-    GDALRPCInfo rpcStruct;
-    if (GDALExtractRPCInfo(dataset->GetMetadata("RPC"),&rpcStruct))
-      {
-      otbMsgDevMacro(<<"RPC Coeff found");
+    GDALRPCInfo  rpcStruct;
+    if (GDALExtractRPCInfo(dataset->GetMetadata("RPC"), &rpcStruct))
+    {
+      otbMsgDevMacro(<< "RPC Coeff found");
       std::vector<double> lineNumCoefs;
       std::vector<double> lineDenCoefs;
       std::vector<double> sampNumCoefs;
       std::vector<double> sampDenCoefs;
 
-      for (unsigned int k=0; k<20; ++k)
-        {
+      for (unsigned int k = 0; k < 20; ++k)
+      {
         lineNumCoefs.push_back(rpcStruct.adfLINE_NUM_COEFF[k]);
         lineDenCoefs.push_back(rpcStruct.adfLINE_DEN_COEFF[k]);
         sampNumCoefs.push_back(rpcStruct.adfSAMP_NUM_COEFF[k]);
         sampDenCoefs.push_back(rpcStruct.adfSAMP_DEN_COEFF[k]);
-        }
+      }
 
       ossimRefPtr<ossimRpcModel> rpcModel = new ossimRpcModel;
-      rpcModel->setAttributes( rpcStruct.dfSAMP_OFF,
-                              rpcStruct.dfLINE_OFF,
-                              rpcStruct.dfSAMP_SCALE,
-                              rpcStruct.dfLINE_SCALE,
-                              rpcStruct.dfLAT_OFF,
-                              rpcStruct.dfLONG_OFF,
-                              rpcStruct.dfHEIGHT_OFF,
-                              rpcStruct.dfLAT_SCALE,
-                              rpcStruct.dfLONG_SCALE,
-                              rpcStruct.dfHEIGHT_SCALE,
-                              sampNumCoefs,
-                              sampDenCoefs,
-                              lineNumCoefs,
-                              lineDenCoefs);
+      rpcModel->setAttributes(rpcStruct.dfSAMP_OFF, rpcStruct.dfLINE_OFF, rpcStruct.dfSAMP_SCALE, rpcStruct.dfLINE_SCALE, rpcStruct.dfLAT_OFF,
+                              rpcStruct.dfLONG_OFF, rpcStruct.dfHEIGHT_OFF, rpcStruct.dfLAT_SCALE, rpcStruct.dfLONG_SCALE, rpcStruct.dfHEIGHT_SCALE,
+                              sampNumCoefs, sampDenCoefs, lineNumCoefs, lineDenCoefs);
 
       double errorBias = 0.0;
       double errorRand = 0.0;
 
       // setup other metadata
-      rpcModel->setPositionError(errorBias,errorRand,true);
-      ossimDrect rectangle(0.0,
-                          0.0,
-                          static_cast<double>(dataset->GetRasterXSize()-1),
-                          static_cast<double>(dataset->GetRasterYSize()-1));
+      rpcModel->setPositionError(errorBias, errorRand, true);
+      ossimDrect rectangle(0.0, 0.0, static_cast<double>(dataset->GetRasterXSize() - 1), static_cast<double>(dataset->GetRasterYSize() - 1));
       rpcModel->setImageRect(rectangle);
 
       ossimDpt size;
@@ -421,7 +390,7 @@ ReadGeometryFromRPCTag(const std::string& filename)
 
       // Compute 4 corners and reference point
       rpcModel->updateModel();
-      double heightOffset = rpcStruct.dfHEIGHT_OFF;
+      double   heightOffset = rpcStruct.dfHEIGHT_OFF;
       ossimGpt ulGpt, urGpt, lrGpt, llGpt;
       ossimGpt refGndPt;
 
@@ -429,47 +398,46 @@ ReadGeometryFromRPCTag(const std::string& filename)
       rpcModel->lineSampleHeightToWorld(rectangle.ur(), heightOffset, urGpt);
       rpcModel->lineSampleHeightToWorld(rectangle.lr(), heightOffset, lrGpt);
       rpcModel->lineSampleHeightToWorld(rectangle.ll(), heightOffset, llGpt);
-      rpcModel->setGroundRect(ulGpt,urGpt,lrGpt,llGpt);
+      rpcModel->setGroundRect(ulGpt, urGpt, lrGpt, llGpt);
 
       rpcModel->lineSampleHeightToWorld(rectangle.midPoint(), heightOffset, refGndPt);
       rpcModel->setRefGndPt(refGndPt);
 
       // compute ground sampling distance
       try
-        {
+      {
         // Method can throw ossimException.
         rpcModel->computeGsd();
-        }
+      }
       catch (const ossimException& itkNotUsed(e))
-        {
+      {
         otbMsgDevMacro(<< "OSSIM Compute ground sampling distance FAILED ! ");
-        }
+      }
 
       if (rpcModel->saveState(geom_kwl))
-        {
+      {
         otb_kwl.SetKeywordlist(geom_kwl);
-        }
       }
-    GDALClose(datasetH);
     }
+    GDALClose(datasetH);
+  }
 
   return otb_kwl;
 }
 
-void
-WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename)
+void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename)
 {
   // Write the image keyword list if any
   ossimKeywordlist geom_kwl;
   otb_kwl.convertToOSSIMKeywordlist(geom_kwl);
 
   if (geom_kwl.getSize() > 0)
-    {
+  {
     ossimFilename geomFileName(filename);
     geomFileName.setExtension(".geom");
     geom_kwl.write(geomFileName.chars());
-    }
+  }
 }
 
 
-} //namespace otb
+} // namespace otb

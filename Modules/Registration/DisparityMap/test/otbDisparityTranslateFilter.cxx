@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,46 +24,34 @@
 #include "otbVectorImageToImageListFilter.h"
 #include "otbImageListToVectorImageFilter.h"
 
-typedef otb::Image<float, 2>                    FloatImageType;
+typedef otb::Image<float, 2> FloatImageType;
 
-typedef otb::VectorImage<float, 2>              FloatVectorImageType;
+typedef otb::VectorImage<float, 2> FloatVectorImageType;
 
-typedef otb::ImageFileReader<FloatImageType>    ReaderType;
+typedef otb::ImageFileReader<FloatImageType> ReaderType;
 
-typedef otb::ImageFileReader
-  <FloatVectorImageType>                        ReaderVectorType;
+typedef otb::ImageFileReader<FloatVectorImageType> ReaderVectorType;
 
-typedef otb::ImageFileWriter
-  <FloatVectorImageType>                        WriterType;
+typedef otb::ImageFileWriter<FloatVectorImageType> WriterType;
 
-typedef otb::ImageFileWriter
-  <FloatImageType>                              WriterScalarType;
+typedef otb::ImageFileWriter<FloatImageType> WriterScalarType;
 
-typedef otb::ImageList<FloatImageType>          ImageListType;
+typedef otb::ImageList<FloatImageType> ImageListType;
 
-typedef otb::VectorImageToImageListFilter
-  <FloatVectorImageType,
-    ImageListType>                               VectorToListFilterType;
+typedef otb::VectorImageToImageListFilter<FloatVectorImageType, ImageListType> VectorToListFilterType;
 
-typedef otb::ImageListToVectorImageFilter
-  <ImageListType,
-    FloatVectorImageType>                        ListToVectorFilterType;
+typedef otb::ImageListToVectorImageFilter<ImageListType, FloatVectorImageType> ListToVectorFilterType;
 
-typedef otb::DisparityTranslateFilter
-  <FloatImageType,
-    FloatVectorImageType,
-    FloatImageType,
-    FloatImageType>                              TranslateFilter;
-
+typedef otb::DisparityTranslateFilter<FloatImageType, FloatVectorImageType, FloatImageType, FloatImageType> TranslateFilter;
 
 
 int otbDisparityTranslateFilter(int argc, char* argv[])
 {
   if (argc < 6)
-    {
-    std::cout << "Usage: "<<argv[0]<<" dispMap_epi leftInvGrid rightDirectGrid left_sensor dispMap_sensor" << std::endl;
+  {
+    std::cout << "Usage: " << argv[0] << " dispMap_epi leftInvGrid rightDirectGrid left_sensor dispMap_sensor" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   ReaderVectorType::Pointer dispReader = ReaderVectorType::New();
   dispReader->SetFileName(argv[1]);

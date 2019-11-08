@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -57,6 +57,8 @@ function(check_c_compiler_warning_flags c_flag_var)
   set(local_c_flags "")
   set(flag_list "${ARGN}")
   foreach(flag IN LISTS flag_list)
+# This could be replaced by a simple check_c_compiler_flag(<flag> <var>)
+# https://cmake.org/cmake/help/v3.10/module/CheckCCompilerFlag.html?highlight=flags
     OTB_CHECK_C_COMPILER_FLAG(${flag} C_HAS_WARNING${flag})
     if(${C_HAS_WARNING${flag}})
       set(local_c_flags "${local_c_flags} ${flag}")
@@ -70,6 +72,8 @@ function(check_cxx_compiler_warning_flags cxx_flag_var)
   set(local_cxx_flags "")
   set(flag_list "${ARGN}")
   foreach(flag IN LISTS flag_list)
+# This could be replaced by a simple check_cxx_compiler_flag(<flag> <var>)
+# https://cmake.org/cmake/help/v3.10/module/CheckCXXCompilerFlag.html?highlight=checkcxxcompilerflag
     OTB_CHECK_CXX_COMPILER_FLAG(${flag} CXX_HAS_WARNING${flag})
     if(${CXX_HAS_WARNING${flag}})
       set(local_cxx_flags "${local_cxx_flags} ${flag}")
@@ -215,6 +219,8 @@ macro(check_compiler_platform_flags)
       # BUILD_SHARED_LIBS works as it would on other systems
       if(NOT CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS)
         if(BUILD_SHARED_LIBS)
+        # TODO:
+        # OTB_LIBRARY_BUILD_TYPE is never used!
           set(OTB_LIBRARY_BUILD_TYPE "SHARED")
         else()
           set(OTB_LIBRARY_BUILD_TYPE "STATIC")
@@ -295,6 +301,8 @@ macro(check_compiler_platform_flags)
   if(OTB_USE_SSE_FLAGS)
     message(STATUS "SIMD extensions requested with OTB_USE_SSE_FLAGS=${OTB_USE_SSE_FLAGS}")
     include(OTBCheckSSEFeatures)
+# This should be deleted as it can be done with cmake_host_system_information
+# https://cmake.org/cmake/help/v3.10/command/cmake_host_system_information.html?highlight=sse
     check_sse_features(OTB_SSE_FLAGS)
     if(OTB_SSE_FLAGS)
       message(STATUS "Adding '${OTB_SSE_FLAGS}' to OTB_REQUIRED_CXX_FLAGS")

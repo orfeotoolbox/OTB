@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,17 +38,13 @@ namespace otb
  * \ingroup OTBCommon
  */
 template <class TImage>
-class ITK_EXPORT VectorImageToASImageAdaptor : public
-  itk::ImageAdaptor<TImage, otb::Accessor::VectorImageToASPixelAccessor<
-          typename TImage::PixelType::ValueType> >
+class ITK_EXPORT VectorImageToASImageAdaptor
+    : public itk::ImageAdaptor<TImage, otb::Accessor::VectorImageToASPixelAccessor<typename TImage::PixelType::ValueType>>
 {
 public:
   /** Standard class typedefs. */
   typedef VectorImageToASImageAdaptor Self;
-  typedef itk::ImageAdaptor<TImage,
-      otb::Accessor::VectorImageToASPixelAccessor<
-          typename TImage::PixelType::ValueType
-          > > Superclass;
+  typedef itk::ImageAdaptor<TImage, otb::Accessor::VectorImageToASPixelAccessor<typename TImage::PixelType::ValueType>> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -65,13 +61,16 @@ public:
   typedef typename Superclass::PixelContainerConstPointer PixelContainerConstPointer;
 
 protected:
-  VectorImageToASImageAdaptor() {}
-  ~VectorImageToASImageAdaptor() override {}
+  VectorImageToASImageAdaptor()
+  {
+  }
+  ~VectorImageToASImageAdaptor() override
+  {
+  }
 
 private:
-  VectorImageToASImageAdaptor(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  VectorImageToASImageAdaptor(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -59,7 +59,7 @@ function(install_share_dirs)
   ####################### Install copyrights ##########################
   #install license for packages
   install_without_message("${PKG_SHARE_SOURCE_DIR}/copyright" "share" )
-  install(FILES ${PKG_SHARE_SOURCE_DIR}/copyright/LICENSE
+  install(FILES ${OTBPackaging_SOURCE_DIR}/LICENSE
     DESTINATION ${PKG_STAGE_DIR})
 
   ####################### install share/otb ###########################

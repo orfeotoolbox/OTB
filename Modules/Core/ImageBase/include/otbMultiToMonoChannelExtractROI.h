@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,6 +24,7 @@
 #include "otbExtractROIBase.h"
 #include "otbImage.h"
 #include "otbVectorImage.h"
+#include "OTBImageBaseExport.h"
 
 #include "itkMacro.h"
 
@@ -42,17 +43,17 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TInputPixelType, class TOutputPixelType>
-class ITK_EXPORT MultiToMonoChannelExtractROI :
-//    public ExtractROIBase< itk::VectorImage<TInputPixelType, 2> , itk::Image<TOutputPixelType, 2> >
-  public ExtractROIBase<VectorImage<TInputPixelType, 2>, Image<TOutputPixelType, 2> >
+class OTBImageBase_EXPORT_TEMPLATE MultiToMonoChannelExtractROI :
+    //    public ExtractROIBase< itk::VectorImage<TInputPixelType, 2> , itk::Image<TOutputPixelType, 2> >
+    public ExtractROIBase<VectorImage<TInputPixelType, 2>, Image<TOutputPixelType, 2>>
 {
 public:
   /** Standard class typedefs. */
   typedef MultiToMonoChannelExtractROI Self;
-//  typedef ExtractROIBase< itk::VectorImage<TInputPixelType, 2> , itk::Image<TOutputPixelType, 2> > Superclass;
-  typedef ExtractROIBase<VectorImage<TInputPixelType, 2>, Image<TOutputPixelType, 2> > Superclass;
-  typedef itk::SmartPointer<Self>                                                      Pointer;
-  typedef itk::SmartPointer<const Self>                                                ConstPointer;
+  //  typedef ExtractROIBase< itk::VectorImage<TInputPixelType, 2> , itk::Image<TOutputPixelType, 2> > Superclass;
+  typedef ExtractROIBase<VectorImage<TInputPixelType, 2>, Image<TOutputPixelType, 2>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -86,14 +87,14 @@ public:
   itkGetConstMacro(Channel, unsigned int);
 
   /** ImageDimension enumeration */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      OutputImageType::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, InputImageType::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, OutputImageType::ImageDimension);
 
 protected:
   MultiToMonoChannelExtractROI();
-  ~MultiToMonoChannelExtractROI() override {}
+  ~MultiToMonoChannelExtractROI() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** ExtractImageFilter can produce an image which is a different
@@ -109,12 +110,11 @@ protected:
   /** ExtractImageFilter can be implemented as a multithreaded filter.
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  MultiToMonoChannelExtractROI(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  MultiToMonoChannelExtractROI(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Channel to process [1...] */
   unsigned int m_Channel;

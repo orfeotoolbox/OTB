@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,6 +24,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImageFileWriter.h"
+#include "OTBImageIOExport.h"
 
 namespace otb
 {
@@ -38,13 +39,12 @@ namespace otb
  * \ingroup OTBImageIO
  */
 
-template <class TBufferType, class TOutputPixelType=TBufferType>
-class ITK_EXPORT ScalarBufferToImageFileWriter : public itk::ProcessObject
+template <class TBufferType, class TOutputPixelType = TBufferType>
+class OTBImageIO_EXPORT_TEMPLATE ScalarBufferToImageFileWriter : public itk::ProcessObject
 {
 public:
-
-  typedef ScalarBufferToImageFileWriter    Self;
-  typedef itk::ProcessObject    Superclass;
+  typedef ScalarBufferToImageFileWriter Self;
+  typedef itk::ProcessObject            Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -55,19 +55,19 @@ public:
   itkTypeMacro(ScalarBufferToImageFileWriter, itk::ProcessObject);
 
   /** INput typedefs */
-  typedef TBufferType BufferType;
+  typedef TBufferType      BufferType;
   typedef TOutputPixelType OutputPixelType;
 
   /** Output image type */
   typedef otb::VectorImage<OutputPixelType, 2> ImageType;
-  typedef typename ImageType::PixelType PixelType;
-  typedef typename ImageType::RegionType       RegionType;
-  typedef typename ImageType::SizeType         SizeType;
-  typedef typename ImageType::IndexType         IndexType;
+  typedef typename ImageType::PixelType  PixelType;
+  typedef typename ImageType::RegionType RegionType;
+  typedef typename ImageType::SizeType   SizeType;
+  typedef typename ImageType::IndexType  IndexType;
 
   /** Writer Type*/
   typedef otb::ImageFileWriter<ImageType> WriterType;
-  typedef typename WriterType::Pointer WriterPointer;
+  typedef typename WriterType::Pointer    WriterPointer;
 
   /** Filename accessor */
   otbGetObjectMemberMacro(Writer, FileName, std::string);
@@ -86,34 +86,35 @@ public:
   itkSetMacro(InverseXSpacing, bool);
 
   /** Buffer accessors */
-  void SetBuffer( BufferType * pBuff )
+  void SetBuffer(BufferType* pBuff)
   {
-       m_Buffer = pBuff;
+    m_Buffer = pBuff;
   }
 
-   void GenerateData() override;
+  void GenerateData() override;
 
-   void Update() override
-   {
-     this->GenerateData();
-   }
+  void Update() override
+  {
+    this->GenerateData();
+  }
 
 protected:
   ScalarBufferToImageFileWriter();
-  ~ScalarBufferToImageFileWriter() override { /* don't call ClearBuffer, user's care */}
+  ~ScalarBufferToImageFileWriter() override
+  { /* don't call ClearBuffer, user's care */
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-
-  ScalarBufferToImageFileWriter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ScalarBufferToImageFileWriter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 
   /** Writer */
   WriterPointer m_Writer;
 
   /** Scalar tab buffer to writer */
-  BufferType * m_Buffer;
+  BufferType* m_Buffer;
 
   /**Output image number of channels */
   unsigned int m_NumberOfChannels;
@@ -127,7 +128,7 @@ private:
 
 } // end namespace otb
 
-#ifndef  OTB_MANUAL_INSTANTIATION
+#ifndef OTB_MANUAL_INSTANTIATION
 #include "otbScalarBufferToImageFileWriter.hxx"
 #endif
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,17 +38,15 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage, class TEdgeDetection>
-class ITK_EXPORT EdgeDetectorImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT EdgeDetectorImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 
 public:
-
   /** Standard class typedefs. */
-  typedef EdgeDetectorImageFilter                            Self;
+  typedef EdgeDetectorImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -72,7 +70,7 @@ public:
 
   /** Thresholder filter : Otsu */
   typedef itk::BinaryThresholdImageFilter<InputImageType, InputImageType> BinaryFilterType;
-  typedef typename BinaryFilterType::Pointer                              BinaryFilterPointerType;
+  typedef typename BinaryFilterType::Pointer BinaryFilterPointerType;
 
   /**Set/Get detector */
   itkSetObjectMacro(Detector, DetectionType);
@@ -81,7 +79,7 @@ public:
   /**Set/Get binary filter */
   itkSetObjectMacro(BinaryFilter, BinaryFilterType);
   itkGetObjectMacro(BinaryFilter, BinaryFilterType);
-  //itkGetObjectMacro(DetectorImageFilter, DetectorImageType);
+  // itkGetObjectMacro(DetectorImageFilter, DetectorImageType);
 
   /** Set lower threshold value. */
   void SetLowerThreshold(InputImagePixelType val)
@@ -107,17 +105,16 @@ public:
     m_BinaryFilter->SetOutsideValue(val);
     this->Modified();
   }
-protected:
 
+protected:
   EdgeDetectorImageFilter();
   ~EdgeDetectorImageFilter() override;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   void GenerateData() override;
 
 private:
-
-  EdgeDetectorImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  EdgeDetectorImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   DetectionPointerType    m_Detector;
   BinaryFilterPointerType m_BinaryFilter;

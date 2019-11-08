@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,10 +36,10 @@
 
 int mvdMonteverdiApplicationTest(int argc, char* argv[])
 {
-  QApplication qtApp( argc, argv );
+  QApplication qtApp(argc, argv);
 
-  mvd::Application application( &qtApp );
-  mvd::MainWindow main_window;
+  mvd::Application application(&qtApp);
+  mvd::MainWindow  main_window;
 
   main_window.show();
 

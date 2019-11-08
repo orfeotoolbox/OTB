@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,31 +25,32 @@
 
 #include "otbMacro.h"
 
-int otbCompareAsciiTestsEpsilon3_WhiteSpace(int itkNotUsed(argc), char * argv[])
+int otbCompareAsciiTestsEpsilon3_WhiteSpace(int itkNotUsed(argc), char* argv[])
 {
   std::cout << "ASCII COMPARISON TEST: it will use directly the baseline and input files in OTB-Data "
-      "to avoid problem with otb-bot." << std::endl;
+               "to avoid problem with otb-bot."
+            << std::endl;
 
   // Open input file
   std::ifstream fileTestInput;
   fileTestInput.open(argv[1]);
 
   // Transfer to temporary object
-  std::string strFileTest;
+  std::string              strFileTest;
   std::vector<std::string> listLineFileTest;
   while (std::getline(fileTestInput, strFileTest))
-    {
+  {
     listLineFileTest.push_back(strFileTest);
-    }
+  }
   fileTestInput.close();
 
   // Write temporary object without modification
   std::ofstream fileTestOutput;
   fileTestOutput.open(argv[2]);
-  for (unsigned int i=0; i < listLineFileTest.size(); ++i)
-    {
+  for (unsigned int i = 0; i < listLineFileTest.size(); ++i)
+  {
     fileTestOutput << listLineFileTest[i];
-    }
+  }
   fileTestOutput.close();
 
   return EXIT_SUCCESS;

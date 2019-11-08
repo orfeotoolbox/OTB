@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,23 +40,23 @@ namespace otb
  */
 namespace Utils
 {
-  /** Check that the values for lon, lat are reasonable */
-  bool OTBCommon_EXPORT IsLonLatValid(double lon, double lat);
+/** Check that the values for lon, lat are reasonable */
+bool OTBCommon_EXPORT IsLonLatValid(double lon, double lat);
 
-  template <class T>
-    inline std::string ConvertToString (const T& v)
-  {
-    std::stringstream s;
-    s << v;
-    return s.str();
-  }
+template <class T>
+inline std::string ConvertToString(const T& v)
+{
+  std::stringstream s;
+  s << v;
+  return s.str();
+}
 
-  /** Function that prints nothing (useful to disable libsvm logs)*/
-  void OTBCommon_EXPORT PrintNothing(const char *s);
+/** Function that prints nothing (useful to disable libsvm logs)*/
+void OTBCommon_EXPORT PrintNothing(const char* s);
 
-  extern OTBCommon_EXPORT bool const TrueConstant;
+extern OTBCommon_EXPORT bool const TrueConstant;
 
-  extern OTBCommon_EXPORT bool const FalseConstant;
+extern OTBCommon_EXPORT bool const FalseConstant;
 }
 
 } // namespace otb

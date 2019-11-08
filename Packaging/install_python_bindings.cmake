@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -24,13 +24,14 @@ function(install_python_bindings)
       PATTERN "*.pyc" EXCLUDE
       PATTERN "__pycache__" EXCLUDE
       )
-  endif()
-  if(HAVE_PYTHON3)
-    install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/lib/otb/python3
-      DESTINATION ${PKG_STAGE_DIR}/lib
-      PATTERN "*.pyc" EXCLUDE
-      PATTERN "__pycache__" EXCLUDE
+    install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/share/otb/swig
+      DESTINATION ${PKG_STAGE_DIR}/share/otb
       )
+    install(FILES Files/build_wrapping.cmake
+            DESTINATION ${PKG_STAGE_DIR}/share/otb/swig)
+    install(FILES Files/build_wrapping.md
+            DESTINATION ${PKG_STAGE_DIR}/share/otb/swig
+            RENAME README.md)
   endif()
   # Handle GDAL python bindings
   file(GLOB gdal_python_scripts "${SUPERBUILD_INSTALL_DIR}/bin/gdal*.py")
@@ -38,7 +39,9 @@ function(install_python_bindings)
     install(PROGRAMS ${_script}
       DESTINATION ${PKG_STAGE_DIR}/bin)
   endforeach()
-  file(GLOB gdal_python_wrappings "${SUPERBUILD_INSTALL_DIR}/lib/python[2|3]*")
+  # file(GLOB gdal_python_wrappings "${SUPERBUILD_INSTALL_DIR}/lib/python[2|3]*")
+  # Do we need to get rid of gdal python 2 bindings too?
+  file(GLOB gdal_python_wrappings "${SUPERBUILD_INSTALL_DIR}/lib/python*")
   foreach(_wrap ${gdal_python_wrappings})
     if (IS_DIRECTORY "${_wrap}")
       install(DIRECTORY ${_wrap}

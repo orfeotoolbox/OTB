@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -42,7 +42,7 @@ public:
   QtWidgetListViewParameter(ListViewParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetListViewParameter() override;
 
-  std::vector<int>  GetSelectedItems()
+  std::vector<int> GetSelectedItems()
   {
     return m_SelectedItems;
   }
@@ -60,15 +60,14 @@ private:
 
   ListViewParameter::Pointer m_ListViewParam;
 
-  QListWidget*               m_ListView;
+  QListWidget* m_ListView;
 
-  QHBoxLayout*               m_VLayout;
+  QHBoxLayout* m_VLayout;
 
-  std::vector<int>           m_SelectedItems;
+  std::vector<int> m_SelectedItems;
 
-  int                        m_LineHeight;
+  int m_LineHeight;
 };
-
 }
 }
 

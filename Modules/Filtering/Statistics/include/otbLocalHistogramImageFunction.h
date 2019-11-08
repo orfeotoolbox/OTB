@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -51,20 +51,16 @@ namespace otb
  * \ingroup OTBStatistics
  */
 
-template <class TInputImage, class TCoordRep = double >
-class ITK_EXPORT LocalHistogramImageFunction :
-  public itk::ImageFunction< TInputImage,
-                typename itk::Statistics::Histogram<typename TInputImage::PixelType>::Pointer,
-                TCoordRep >
+template <class TInputImage, class TCoordRep = double>
+class ITK_EXPORT LocalHistogramImageFunction
+    : public itk::ImageFunction<TInputImage, typename itk::Statistics::Histogram<typename TInputImage::PixelType>::Pointer, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef LocalHistogramImageFunction                                     Self;
-  typedef itk::ImageFunction< TInputImage,
-                  typename itk::Statistics::Histogram<typename TInputImage::PixelType>::Pointer,
-                  TCoordRep >                                             Superclass;
-  typedef itk::SmartPointer<Self>                                         Pointer;
-  typedef itk::SmartPointer<const Self>                                   ConstPointer;
+  typedef LocalHistogramImageFunction Self;
+  typedef itk::ImageFunction<TInputImage, typename itk::Statistics::Histogram<typename TInputImage::PixelType>::Pointer, TCoordRep> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(LocalHistogramImageFunction, ImageFunction);
@@ -78,18 +74,17 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::PointType           PointType;
 
-  typedef typename Superclass::OutputType          OutputType;
+  typedef typename Superclass::OutputType                             OutputType;
   typedef itk::Statistics::Histogram<typename TInputImage::PixelType> HistogramType;
-  typedef typename HistogramType::Pointer                    HistogramPointer;
+  typedef typename HistogramType::Pointer                             HistogramPointer;
 
-  typedef TCoordRep                                CoordRepType;
+  typedef TCoordRep CoordRepType;
 
   /** Dimension of the underlying image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
-  OutputType  EvaluateAtIndex(const IndexType& index) const override;
+  OutputType EvaluateAtIndex(const IndexType& index) const override;
 
   /** Evaluate the function at non-integer positions */
   OutputType Evaluate(const PointType& point) const override
@@ -98,8 +93,7 @@ public:
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const override
+  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -109,18 +103,18 @@ public:
   /** Get/Set the radius of the neighborhood over which the
    *  statistics are evaluated
    */
-  itkSetMacro( NeighborhoodRadius, unsigned int );
-  itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
+  itkSetMacro(NeighborhoodRadius, unsigned int);
+  itkGetConstReferenceMacro(NeighborhoodRadius, unsigned int);
 
   /** Set/Get the number of histogram bins. Default is 128. */
-  itkSetClampMacro( NumberOfHistogramBins, unsigned long, 1, itk::NumericTraits<unsigned long>::max() );
-  itkGetConstMacro( NumberOfHistogramBins, unsigned long );
+  itkSetClampMacro(NumberOfHistogramBins, unsigned long, 1, itk::NumericTraits<unsigned long>::max());
+  itkGetConstMacro(NumberOfHistogramBins, unsigned long);
 
-  itkSetMacro( HistogramMin, double );
-  itkGetConstReferenceMacro( HistogramMin, double );
+  itkSetMacro(HistogramMin, double);
+  itkGetConstReferenceMacro(HistogramMin, double);
 
-  itkSetMacro( HistogramMax, double );
-  itkGetConstReferenceMacro( HistogramMax, double );
+  itkSetMacro(HistogramMax, double);
+  itkGetConstReferenceMacro(HistogramMax, double);
 
   itkSetMacro(GaussianSmoothing, bool);
   itkGetConstReferenceMacro(GaussianSmoothing, bool);
@@ -128,18 +122,20 @@ public:
 
 protected:
   LocalHistogramImageFunction();
-  ~LocalHistogramImageFunction() override {}
+  ~LocalHistogramImageFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LocalHistogramImageFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  LocalHistogramImageFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  unsigned int     m_NeighborhoodRadius;
-  unsigned long    m_NumberOfHistogramBins;
-  double           m_HistogramMin;
-  double           m_HistogramMax;
-  bool             m_GaussianSmoothing;
+  unsigned int  m_NeighborhoodRadius;
+  unsigned long m_NumberOfHistogramBins;
+  double        m_HistogramMin;
+  double        m_HistogramMax;
+  bool          m_GaussianSmoothing;
 };
 
 } // namespace otb
@@ -149,4 +145,3 @@ private:
 #endif
 
 #endif
-

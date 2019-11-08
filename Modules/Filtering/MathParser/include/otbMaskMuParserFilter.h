@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -69,38 +69,37 @@ namespace otb
  * \ingroup OTBMathParser
  */
 
-template<class TInputImage, class TOutputImage, class TFunction = Functor::MaskMuParserFunctor<
-    typename TInputImage::PixelType> >
-class ITK_EXPORT MaskMuParserFilter: public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TFunction = Functor::MaskMuParserFunctor<typename TInputImage::PixelType>>
+class ITK_EXPORT MaskMuParserFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
   typedef MaskMuParserFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self)
-;
+  itkNewMacro(Self);
+  ;
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(MaskMuParserFilter, itk::ImageToImageFilter)
-;
+  itkTypeMacro(MaskMuParserFilter, itk::ImageToImageFilter);
+  ;
 
   /** Some convenient typedefs. */
-  typedef TInputImage InputImageType;
-  typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename InputImageType::PixelType PixelType;
-  typedef typename InputImageType::IndexType IndexType;
-  typedef typename InputImageType::Pointer InputImagePointer;
+  typedef TInputImage                           InputImageType;
+  typedef typename InputImageType::RegionType   InputImageRegionType;
+  typedef typename InputImageType::PixelType    PixelType;
+  typedef typename InputImageType::IndexType    IndexType;
+  typedef typename InputImageType::Pointer      InputImagePointer;
   typedef typename InputImageType::ConstPointer InputImageConstPointer;
-  typedef TOutputImage OutputImageType;
-  typedef typename OutputImageType::RegionType OutputImageRegionType;
+  typedef TOutputImage                          OutputImageType;
+  typedef typename OutputImageType::RegionType  OutputImageRegionType;
 
   typedef typename OutputImageType::Pointer OutputImagePointer;
-  typedef TFunction FunctorType;
-  typedef typename FunctorType::Pointer FunctorPointer;
+  typedef TFunction                         FunctorType;
+  typedef typename FunctorType::Pointer     FunctorPointer;
 
   typedef MaskMuParserFilter<InputImageType, OutputImageType, FunctorType> MaskMuParserFilterType;
 
@@ -123,7 +122,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void BeforeThreadedGenerateData() override;
-  void ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread, itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
   void AfterThreadedGenerateData() override;
 
 private:
@@ -131,14 +130,14 @@ private:
   void operator=(const Self&) = delete;
 
   std::vector<FunctorPointer> m_VFunctor;
-  std::string m_Expression;
-  long m_UnderflowCount;
-  long m_OverflowCount;
-  itk::Array<long> m_ThreadUnderflow;
-  itk::Array<long> m_ThreadOverflow;
+  std::string                 m_Expression;
+  long                        m_UnderflowCount;
+  long                        m_OverflowCount;
+  itk::Array<long>            m_ThreadUnderflow;
+  itk::Array<long>            m_ThreadOverflow;
 };
 
-}//end namespace otb
+} // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbMaskMuParserFilter.hxx"

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,17 +39,14 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT SarBrightnessToImageFilter :
-  public FunctionToImageFilter<TInputImage, TOutputImage,
-                 SarBrightnessFunction<TInputImage> >
+class ITK_EXPORT SarBrightnessToImageFilter : public FunctionToImageFilter<TInputImage, TOutputImage, SarBrightnessFunction<TInputImage>>
 {
 public:
   /** Standard class typedefs. */
-  typedef SarBrightnessToImageFilter                         Self;
-  typedef FunctionToImageFilter<TInputImage, TOutputImage,
-                     SarBrightnessFunction<TInputImage> >    Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef SarBrightnessToImageFilter Self;
+  typedef FunctionToImageFilter<TInputImage, TOutputImage, SarBrightnessFunction<TInputImage>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -59,14 +56,14 @@ public:
 
   /** Some typedefs. */
   /** Image size typedef. */
-  typedef typename Superclass::InputImageType           InputImageType;
-  typedef typename Superclass::InputImagePointer        InputImagePointer;
-  typedef typename Superclass::InputImageRegionType     InputImageRegionType;
-  typedef typename Superclass::InputImagePixelType      InputImagePixelType;
-  typedef typename Superclass::OutputImageType          OutputImageType;
-  typedef typename Superclass::OutputImagePointer       OutputImagePointer;
-  typedef typename Superclass::OutputImageRegionType    OutputImageRegionType;
-  typedef typename Superclass::OutputImagePixelType     OutputImagePixelType;
+  typedef typename Superclass::InputImageType        InputImageType;
+  typedef typename Superclass::InputImagePointer     InputImagePointer;
+  typedef typename Superclass::InputImageRegionType  InputImageRegionType;
+  typedef typename Superclass::InputImagePixelType   InputImagePixelType;
+  typedef typename Superclass::OutputImageType       OutputImageType;
+  typedef typename Superclass::OutputImagePointer    OutputImagePointer;
+  typedef typename Superclass::OutputImageRegionType OutputImageRegionType;
+  typedef typename Superclass::OutputImagePixelType  OutputImagePixelType;
   /** Type of function. */
 
   typedef typename Superclass::FunctionType                     FunctionType;
@@ -84,16 +81,18 @@ public:
 
 protected:
   SarBrightnessToImageFilter();
-  ~SarBrightnessToImageFilter() override {}
+  ~SarBrightnessToImageFilter() override
+  {
+  }
 
   /** Update the function list and input parameters*/
   void BeforeThreadedGenerateData() override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
-private:
-  SarBrightnessToImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
 
+private:
+  SarBrightnessToImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

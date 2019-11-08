@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -36,7 +36,7 @@ add_executable(otbOGRTestsIO otbOGRDataSourceWrapperIO.cxx)
 target_link_libraries(otbOGRTestsIO ${OTBGdalAdapters-Test_LIBRARIES})
 
 otb_add_test(NAME coTuOGRDataSourceWrapperIO
-         COMMAND otbOGRTestsIO ${INPUTDATA}/ToulousePoints-examples.shp )
+         COMMAND otbOGRTestsIO ${INPUTDATA}/toulousepoints_examples.shp )
 
 set(OTBOGRTests
 otbOGRTestDriver.cxx
@@ -54,30 +54,46 @@ otb_add_test(NAME TvOGRExtendedFilename
          ${BASELINE}/TvOGRExtendedFilename.txt
          ${TEMP}/TvOGRExtendedFilenameTest.txt
          otbOGRExtendedFileName
-         test.shp?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024&gdal:lco:layeroption=OPTION&gdal:oo:openoption=OPTION
+         ${TEMP}/test.shp?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024&gdal:lco:layeroption=OPTION&gdal:oo:openoption=OPTION
          ${TEMP}/TvOGRExtendedFilenameTest.txt     )
 
 #Problem with error thrown by GDAL : unable to catch it with "CPLGetLastErrorMsg"
 # otb_add_test(NAME TvOGRExtendedFilenameGDALOpen
 #          COMMAND otbOGRTestDriver
 #          otbOGRExtendedFileNameGDALOpen
-#          ${INPUTDATA}/ToulousePoints-examples.shp?&gdal:oo:openOption=OPTION
+#          ${INPUTDATA}/toulousepoints_examples.shp?&gdal:oo:openOption=OPTION
 #           )
 
 otb_add_test(NAME TvOGRExtendedFilenameGDALCreate
          COMMAND otbOGRTestDriver
          otbOGRExtendedFileNameGDALCreate
-         test_OGRExtendedFilenameGDALCreate.shp?gdal:co:creationOption=OPTION
+         ${TEMP}/test_OGRExtendedFilenameGDALCreate.shp?gdal:co:creationOption=OPTION
           )
 
 otb_add_test(NAME TvOGRExtendedFilenameGDALLayer
          COMMAND otbOGRTestDriver
          otbOGRExtendedFileNameGDALLayer
-         test_OGRExtendedFilenameGDALLayer.shp?&gdal:lco:layeroption=OPTION
+         ${TEMP}/test_OGRExtendedFilenameGDALLayer.shp?&gdal:lco:layeroption=OPTION
           )
 
 otb_add_test(NAME TvOGRExtendedFilenameGDALLayerOption
          COMMAND otbOGRTestDriver
          otbOGRExtendedFileNameGDALLayerOption
-         test_OGRExtendedFilenameGDALLayerOption.shp
-          )
+         ${TEMP}/test_OGRExtendedFilenameGDALLayerOption.shp
+         )
+       
+add_executable(otbGdalAdaptersTestDriver
+               otbGdalAdaptersTestDriver.cxx
+               otbSpatialReferenceTest.cxx
+               otbCoordinateTransformationTest.cxx
+               )
+
+target_link_libraries(otbGdalAdaptersTestDriver ${OTBGdalAdapters-Test_LIBRARIES})
+             
+otb_module_target_label(otbGdalAdaptersTestDriver)
+
+otb_add_test(NAME TuSpatialReferenceTest
+            COMMAND otbGdalAdaptersTestDriver otbSpatialReferenceTest)
+  
+otb_add_test(NAME TuOCoordinateTransformationTest
+            COMMAND otbGdalAdaptersTestDriver otbCoordinateTransformationTest)

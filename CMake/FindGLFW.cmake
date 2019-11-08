@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -78,6 +78,6 @@ IF(GLFW_INCLUDE_DIR AND EXISTS "${GLFW_INCLUDE_DIR}/GLFW/glfw3.h")
 ENDIF()
 
 INCLUDE(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(GLFW
-                                  REQUIRED_VARS GLFW_LIBRARY GLFW_INCLUDE_DIR
-                                  VERSION_VAR GLFW_VERSION_STRING)
+find_package_handle_standard_args(GLFW
+  REQUIRED_VARS GLFW_LIBRARY GLFW_INCLUDE_DIR
+  VERSION_VAR GLFW_VERSION_STRING)

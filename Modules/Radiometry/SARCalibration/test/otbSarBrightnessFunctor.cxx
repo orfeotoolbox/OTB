@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,42 +22,42 @@
 #include "otbSarBrightnessFunctor.h"
 #include "otbMath.h"
 
-int otbSarBrightnessFunctor(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbSarBrightnessFunctor(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  typedef double                   ScalarType;
+  typedef double ScalarType;
 
   typedef otb::Functor::SarBrightnessFunctor<ScalarType, ScalarType> FunctorType;
 
   FunctorType funct;
 
-  funct.SetNoise( 10.0);
-  if( std::abs(funct.GetNoise() -10.0) > 0.0)
+  funct.SetNoise(10.0);
+  if (std::abs(funct.GetNoise() - 10.0) > 0.0)
   {
     return false;
   }
-  funct.SetScale( 10.0);
-  if( std::abs(funct.GetScale() -10.0) > 0.0)
+  funct.SetScale(10.0);
+  if (std::abs(funct.GetScale() - 10.0) > 0.0)
   {
     return false;
   }
-  funct.SetAntennaPatternNewGain( 10.0);
-  if( std::abs(funct.GetAntennaPatternNewGain() -10.0) > 0.0)
+  funct.SetAntennaPatternNewGain(10.0);
+  if (std::abs(funct.GetAntennaPatternNewGain() - 10.0) > 0.0)
   {
     return false;
   }
-  funct.SetAntennaPatternOldGain( 10.0);
-  if( std::abs(funct.GetAntennaPatternOldGain() -10.0) > 0.0)
+  funct.SetAntennaPatternOldGain(10.0);
+  if (std::abs(funct.GetAntennaPatternOldGain() - 10.0) > 0.0)
   {
     return false;
   }
 
-  funct.SetRangeSpreadLoss( 10.0);
-  if( std::abs(funct.GetRangeSpreadLoss() -10.0) > 0.0)
+  funct.SetRangeSpreadLoss(10.0);
+  if (std::abs(funct.GetRangeSpreadLoss() - 10.0) > 0.0)
   {
     return false;
   }
-  std::cout << "First  BetaNaught : " << funct.operator ()( 0.) << std::endl;
-  std::cout << "Second BetaNaught : " << funct.operator ()( 1.) << std::endl;
+  std::cout << "First  BetaNaught : " << funct.operator()(0.) << std::endl;
+  std::cout << "Second BetaNaught : " << funct.operator()(1.) << std::endl;
 
 
   return EXIT_SUCCESS;

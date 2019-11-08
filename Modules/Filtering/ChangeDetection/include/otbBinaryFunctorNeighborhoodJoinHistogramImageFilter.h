@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,17 +40,15 @@ namespace otb
  *
  * \ingroup OTBChangeDetection
  */
-template <class TInputImage1, class TInputImage2,
-    class TOutputImage, class TFunction>
-class ITK_EXPORT BinaryFunctorNeighborhoodJoinHistogramImageFilter : public itk::ImageToImageFilter<TInputImage1,
-      TOutputImage>
+template <class TInputImage1, class TInputImage2, class TOutputImage, class TFunction>
+class ITK_EXPORT BinaryFunctorNeighborhoodJoinHistogramImageFilter : public itk::ImageToImageFilter<TInputImage1, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef BinaryFunctorNeighborhoodJoinHistogramImageFilter   Self;
+  typedef BinaryFunctorNeighborhoodJoinHistogramImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage1, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                             Pointer;
-  typedef itk::SmartPointer<const Self>                       ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -77,10 +75,8 @@ public:
 
   typedef itk::ProcessObject ProcessObjectType;
 
-  typedef itk::ConstNeighborhoodIterator<TInputImage1>
-  NeighborhoodIteratorType1;
-  typedef itk::ConstNeighborhoodIterator<TInputImage2>
-  NeighborhoodIteratorType2;
+  typedef itk::ConstNeighborhoodIterator<TInputImage1> NeighborhoodIteratorType1;
+  typedef itk::ConstNeighborhoodIterator<TInputImage2> NeighborhoodIteratorType2;
 
   typedef typename NeighborhoodIteratorType1::RadiusType RadiusType1;
   typedef typename NeighborhoodIteratorType2::RadiusType RadiusType2;
@@ -90,20 +86,19 @@ public:
   /** Typedefs for histogram. This should have been defined as
       Histogram<RealType, 2> but a bug in VC++7 produced an internal compiler
       error with such declaration. */
-  typedef typename itk::Statistics::Histogram<double,
-             itk::Statistics::DenseFrequencyContainer2 > HistogramType;
-  typedef typename HistogramType::MeasurementVectorType  MeasurementVectorType;
-  typedef typename HistogramType::SizeType               HistogramSizeType;
+  typedef typename itk::Statistics::Histogram<double, itk::Statistics::DenseFrequencyContainer2> HistogramType;
+  typedef typename HistogramType::MeasurementVectorType MeasurementVectorType;
+  typedef typename HistogramType::SizeType              HistogramSizeType;
 
   /** Connect one of the operands for pixel-wise addition */
-  void SetInput1(const TInputImage1 * image1);
+  void SetInput1(const TInputImage1* image1);
 
   /** Connect one of the operands for pixel-wise addition */
-  void SetInput2(const TInputImage2 * image2);
+  void SetInput2(const TInputImage2* image2);
 
   /** Get the inputs */
-  const TInputImage1 * GetInput1();
-  const TInputImage2 * GetInput2();
+  const TInputImage1* GetInput1();
+  const TInputImage2* GetInput2();
 
   /** Get the functor object.  The functor is returned by reference.
    * (Functors do not have to derive from itk::LightObject, so they do
@@ -148,7 +143,9 @@ public:
 
 protected:
   BinaryFunctorNeighborhoodJoinHistogramImageFilter();
-  ~BinaryFunctorNeighborhoodJoinHistogramImageFilter() override {}
+  ~BinaryFunctorNeighborhoodJoinHistogramImageFilter() override
+  {
+  }
 
   void BeforeThreadedGenerateData() override;
 
@@ -162,8 +159,7 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                                    itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /**
    * Pad the inputs requested regions by radius
@@ -175,8 +171,8 @@ protected:
   HistogramType::Pointer m_Histogram;
 
 private:
-  BinaryFunctorNeighborhoodJoinHistogramImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  BinaryFunctorNeighborhoodJoinHistogramImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   void ComputeHistogram();
 
@@ -189,7 +185,7 @@ private:
       padding value should be ignored when calculating the similarity
       measure. */
   bool m_UsePaddingValue;
-  
+
   /** The increase in the upper bound. */
   double m_UpperBoundIncreaseFactor;
 };

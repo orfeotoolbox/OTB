@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,7 +38,7 @@ class ITK_EXPORT AutoencoderModelFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef AutoencoderModelFactory   Self;
+  typedef AutoencoderModelFactory       Self;
   typedef itk::ObjectFactoryBase        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -65,11 +65,11 @@ protected:
   ~AutoencoderModelFactory() override;
 
 private:
-  AutoencoderModelFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  AutoencoderModelFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
-} //namespace otb
+} // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbAutoencoderModelFactory.hxx"

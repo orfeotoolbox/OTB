@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,37 +36,34 @@
 namespace otb
 {
 template <class TInputImage, class TOutputImage>
-MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
-::MaximumAutocorrelationFactorImageFilter()
+MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>::MaximumAutocorrelationFactorImageFilter()
 {
-  m_CovarianceEstimator = CovarianceEstimatorType::New();
+  m_CovarianceEstimator  = CovarianceEstimatorType::New();
   m_CovarianceEstimatorH = CovarianceEstimatorType::New();
   m_CovarianceEstimatorV = CovarianceEstimatorType::New();
 }
 
 template <class TInputImage, class TOutputImage>
-void
-MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
-::GenerateOutputInformation()
+void MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation()
 {
   // Call superclass implementation
   Superclass::GenerateOutputInformation();
 
   // Retrieve input images pointers
-  TInputImage * inputPtr = const_cast<TInputImage *>(this->GetInput());
-  //TOutputImage * outputPtr = this->GetOutput();
+  TInputImage* inputPtr = const_cast<TInputImage*>(this->GetInput());
+  // TOutputImage * outputPtr = this->GetOutput();
 
   // TODO: set the number of output components
   unsigned int nbComp = inputPtr->GetNumberOfComponentsPerPixel();
 
   // Compute Dh and Dv
   typedef otb::MultiChannelExtractROI<typename InputImageType::InternalPixelType, RealType> ExtractFilterType;
-  typedef itk::SubtractImageFilter<InternalImageType, InternalImageType, InternalImageType>  DifferenceFilterType;
+  typedef itk::SubtractImageFilter<InternalImageType, InternalImageType, InternalImageType> DifferenceFilterType;
   typedef itk::ChangeInformationImageFilter<InternalImageType> ChangeInformationImageFilter;
 
   InputImageRegionType largestInputRegion = inputPtr->GetLargestPossibleRegion();
   InputImageRegionType referenceRegion;
-  InputImageSizeType size = largestInputRegion.GetSize();
+  InputImageSizeType   size = largestInputRegion.GetSize();
   size[0] -= 1;
   size[1] -= 1;
   referenceRegion.SetSize(size);
@@ -120,7 +117,7 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
   diffv->SetInput1(referenceExtract->GetOutput());
   diffv->SetInput2(dvExtractShift->GetOutput());
 
-  //Compute pooled sigma (using sigmadh and sigmadv)
+  // Compute pooled sigma (using sigmadh and sigmadv)
   m_CovarianceEstimatorH->SetInput(diffh->GetOutput());
   m_CovarianceEstimatorH->Update();
   VnlMatrixType sigmadh = m_CovarianceEstimatorH->GetCovariance().GetVnlMatrix();
@@ -130,7 +127,7 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
   VnlMatrixType sigmadv = m_CovarianceEstimatorV->GetCovariance().GetVnlMatrix();
 
   // Simple pool
-  VnlMatrixType sigmad = 0.5*(sigmadh+sigmadv);
+  VnlMatrixType sigmad = 0.5 * (sigmadh + sigmadv);
 
   // Compute the original image covariance
   referenceExtract->SetExtractionRegion(inputPtr->GetLargestPossibleRegion());
@@ -140,17 +137,17 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
 
   m_Mean = VnlVectorType(nbComp, 0);
 
-  for(unsigned int i = 0; i<nbComp; ++i)
-    {
+  for (unsigned int i = 0; i < nbComp; ++i)
+  {
     m_Mean[i] = m_CovarianceEstimator->GetMean()[i];
-    }
+  }
 
   vnl_generalized_eigensystem ges(sigmad, sigma);
-  VnlMatrixType d = ges.D;
-  m_V = ges.V;
+  VnlMatrixType               d = ges.D;
+  m_V                           = ges.V;
 
   m_AutoCorrelation = VnlVectorType(nbComp, 1.);
-  m_AutoCorrelation -= 0.5 *d.get_diagonal();
+  m_AutoCorrelation -= 0.5 * d.get_diagonal();
 
   VnlMatrixType invstderr = VnlMatrixType(nbComp, nbComp, 0);
   invstderr.set_diagonal(sigma.get_diagonal());
@@ -168,10 +165,10 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
 
   VnlVectorType aux2 = VnlVectorType(nbComp, 0);
 
-  for(unsigned int i = 0; i < nbComp; ++i)
-    {
-    aux2=aux2 + aux1.get_row(i);
-    }
+  for (unsigned int i = 0; i < nbComp; ++i)
+  {
+    aux2 = aux2 + aux1.get_row(i);
+  }
 
   sign.set_diagonal(aux2);
   sign = sign.apply(&SignOfValue);
@@ -182,19 +179,18 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
 }
 
 template <class TInputImage, class TOutputImage>
-void
-MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                                                                              itk::ThreadIdType threadId)
 {
   // Retrieve input images pointers
-  const TInputImage * inputPtr = this->GetInput();
-  TOutputImage * outputPtr = this->GetOutput();
+  const TInputImage* inputPtr  = this->GetInput();
+  TOutputImage*      outputPtr = this->GetOutput();
 
 
-  typedef itk::ImageRegionConstIterator<InputImageType>  ConstIteratorType;
-  typedef itk::ImageRegionIterator<OutputImageType>      IteratorType;
+  typedef itk::ImageRegionConstIterator<InputImageType> ConstIteratorType;
+  typedef itk::ImageRegionIterator<OutputImageType>     IteratorType;
 
-  IteratorType outIt(outputPtr, outputRegionForThread);
+  IteratorType      outIt(outputPtr, outputRegionForThread);
   ConstIteratorType inIt(inputPtr, outputRegionForThread);
 
   inIt.GoToBegin();
@@ -204,33 +200,33 @@ MaximumAutocorrelationFactorImageFilter<TInputImage, TOutputImage>
   unsigned int outNbComp = outputPtr->GetNumberOfComponentsPerPixel();
 
 
-   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
+  itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
-  while(!inIt.IsAtEnd() && !outIt.IsAtEnd())
-    {
+  while (!inIt.IsAtEnd() && !outIt.IsAtEnd())
+  {
     VnlVectorType x(outNbComp, 0);
     VnlVectorType maf(outNbComp, 0);
 
-    for(unsigned int i = 0; i < outNbComp; ++i)
-      {
+    for (unsigned int i = 0; i < outNbComp; ++i)
+    {
       x[i] = inIt.Get()[i];
-      }
+    }
 
-    maf = (x-m_Mean)*m_V;
+    maf = (x - m_Mean) * m_V;
 
     typename OutputImageType::PixelType outPixel(outNbComp);
 
-    for(unsigned int i = 0; i<outNbComp; ++i)
-      {
-      outPixel[i]=maf[i];
-      }
+    for (unsigned int i = 0; i < outNbComp; ++i)
+    {
+      outPixel[i] = maf[i];
+    }
 
     outIt.Set(outPixel);
 
     ++inIt;
     ++outIt;
     progress.CompletedPixel();
-    }
+  }
 }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -59,20 +59,20 @@ public:
 
   /** Some convenient typedefs. */
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
-  typedef itk::DataObject::Pointer                        DataObjectPointer;
-  typedef TOutputPointSet                                 OutputPointSetType;
-  typedef typename OutputPointSetType::Pointer            OutputPointSetPointer;
-  typedef typename OutputPointSetType::PointsContainer    PointsContainerType;
-  typedef typename OutputPointSetType::PointDataContainer PointDataContainerType;
+  typedef itk::DataObject::Pointer                           DataObjectPointer;
+  typedef TOutputPointSet                                    OutputPointSetType;
+  typedef typename OutputPointSetType::Pointer               OutputPointSetPointer;
+  typedef typename OutputPointSetType::PointsContainer       PointsContainerType;
+  typedef typename OutputPointSetType::PointDataContainer    PointDataContainerType;
 
   /** Get the point set output of this process object.  */
-  OutputPointSetType * GetOutput(void);
-  OutputPointSetType * GetOutput(DataObjectPointerArraySizeType idx);
+  OutputPointSetType* GetOutput(void);
+  OutputPointSetType* GetOutput(DataObjectPointerArraySizeType idx);
 
   /** Set the point set output of this process object. This call is slated
    * to be removed from ITK. You should GraftOutput() and possible
    * DataObject::DisconnectPipeline() to properly change the output. */
-  void SetOutput(OutputPointSetType *output);
+  void SetOutput(OutputPointSetType* output);
   using Superclass::SetOutput;
 
   /** Graft the specified DataObject onto this ProcessObject's output.
@@ -109,8 +109,8 @@ public:
    * how the mini-pipeline will execute (in other words, the outer
    * filter's pipeline mechanism must be consistent with what the
    * mini-pipeline will do). */
-  virtual void GraftOutput(itk::DataObject *output);
-  virtual void GraftNthOutput(DataObjectPointerArraySizeType idx, itk::DataObject *output);
+  virtual void GraftOutput(itk::DataObject* output);
+  virtual void GraftNthOutput(DataObjectPointerArraySizeType idx, itk::DataObject* output);
 
   /** Make a DataObject of the correct type to used as the specified
    * output.  Every ProcessObject subclass must be able to create a
@@ -130,7 +130,9 @@ public:
 
 protected:
   PointSetSource();
-  ~PointSetSource() override {}
+  ~PointSetSource() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Requested region of Point Set is specified as i of N unstructured regions.
@@ -139,8 +141,8 @@ protected:
   void GenerateInputRequestedRegion() override;
 
 private:
-  PointSetSource(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PointSetSource(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Used by streaming: The requested region of the output being processed
    * by the execute method. Set in the GenerateInputRequestedRegion method. */

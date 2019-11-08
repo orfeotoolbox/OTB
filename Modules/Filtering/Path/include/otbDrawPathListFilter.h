@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -51,10 +51,10 @@ class ITK_EXPORT DrawPathListFilter : public itk::ImageToImageFilter<TInputImage
 {
 public:
   /** Standard class typedefs. */
-  typedef DrawPathListFilter                                 Self;
+  typedef DrawPathListFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -63,7 +63,7 @@ public:
   itkTypeMacro(DrawPathListFilter, ImageToImageFilter);
 
   /** Some convenient typedefs. */
-  typedef          TInputImage                  InputImageType;
+  typedef TInputImage                           InputImageType;
   typedef typename InputImageType::Pointer      InputImagePointerType;
   typedef typename InputImageType::ConstPointer InputImageConstPointerType;
   typedef typename InputImageType::RegionType   InputImageRegionType;
@@ -71,13 +71,13 @@ public:
   typedef typename InputImageType::SizeType     InputImageSizeType;
   typedef typename InputImageType::ValueType    InputImageValueType;
 
-  typedef          TInputPath                      InputPathType;
+  typedef TInputPath                               InputPathType;
   typedef typename InputPathType::Pointer          InputPathPointerType;
   typedef otb::ObjectList<InputPathType>           InputPathListType;
   typedef typename InputPathListType::ConstPointer InputPathListConstPointerType;
   typedef typename InputPathListType::Pointer      InputPathListPointerType;
 
-  typedef          TOutputImage                  OutputImageType;
+  typedef TOutputImage                           OutputImageType;
   typedef typename OutputImageType::Pointer      OutputImagePointerType;
   typedef typename OutputImageType::ConstPointer OutputImageConstPointerType;
   typedef typename OutputImageType::RegionType   OutputImageRegionType;
@@ -100,26 +100,27 @@ public:
   itkGetMacro(PathValue, OutputImagePixelType);
 
   /** ImageDimension constants */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
 
   /** Set/Get the path input of this process object. */
-  virtual void SetInputPath(InputPathListType *path);
-  const InputPathListType * GetInputPath(void);
+  virtual void SetInputPath(InputPathListType* path);
+  const InputPathListType* GetInputPath(void);
 
 protected:
   /** Constructor */
   DrawPathListFilter();
   /** Desctructor */
-  ~DrawPathListFilter() override {}
+  ~DrawPathListFilter() override
+  {
+  }
   /** Printself method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Main computation method */
   void GenerateData() override;
 
 private:
-  DrawPathListFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  DrawPathListFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Default value to draw */
   OutputImagePixelType m_PathValue;

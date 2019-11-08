@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,35 +31,31 @@ namespace otb
  * Constructor.
  */
 template <class TScalarType>
-LogPolarTransform<TScalarType>
-::LogPolarTransform()
-  : Superclass(4)
+LogPolarTransform<TScalarType>::LogPolarTransform() : Superclass(4)
 {
   m_Center[0] = 0.0;
   m_Center[1] = 0.0;
-  m_Scale[0] = 1.0;
-  m_Scale[1] = 1.0;
+  m_Scale[0]  = 1.0;
+  m_Scale[1]  = 1.0;
 }
 /**
  * Destructor.
  */
 template <class TScalarType>
-LogPolarTransform<TScalarType>
-::~LogPolarTransform()
-{}
+LogPolarTransform<TScalarType>::~LogPolarTransform()
+{
+}
 /**
  * Set the transform parameters through the standard interface.
  * \param parameters The parameters of the transform.
   */
 template <class TScalarType>
-void
-LogPolarTransform<TScalarType>
-::SetParameters(const ParametersType& parameters)
+void LogPolarTransform<TScalarType>::SetParameters(const ParametersType& parameters)
 {
   m_Center[0] = parameters[0];
   m_Center[1] = parameters[1];
-  m_Scale[0] = parameters[2];
-  m_Scale[1] = parameters[3];
+  m_Scale[0]  = parameters[2];
+  m_Scale[1]  = parameters[3];
   otbMsgDebugMacro(<< "Call To SetParameters: Center=" << m_Center << ", Scale=" << m_Scale);
   this->m_Parameters = parameters;
   this->Modified();
@@ -69,10 +65,7 @@ LogPolarTransform<TScalarType>
  * \return The parameters of the transform.
  */
 template <class TScalarType>
-typename LogPolarTransform<TScalarType>
-::ParametersType&
-LogPolarTransform<TScalarType>
-::GetParameters(void) const
+typename LogPolarTransform<TScalarType>::ParametersType& LogPolarTransform<TScalarType>::GetParameters(void) const
 {
   // Filling parameters vector
   this->m_Parameters[0] = m_Center[0];
@@ -88,16 +81,13 @@ LogPolarTransform<TScalarType>
  * \return The transformed point.
  */
 template <class TScalarType>
-typename LogPolarTransform<TScalarType>
-::OutputPointType
-LogPolarTransform<TScalarType>
-::TransformPoint(const InputPointType& point) const
+typename LogPolarTransform<TScalarType>::OutputPointType LogPolarTransform<TScalarType>::TransformPoint(const InputPointType& point) const
 {
   OutputPointType result;
-  double          theta = point[0] * m_Scale[0] * CONST_PI_180;
-  double          logRho   = point[1] * m_Scale[1];
-  result[0] = m_Center[0];
-  result[1] = m_Center[1];
+  double          theta  = point[0] * m_Scale[0] * CONST_PI_180;
+  double          logRho = point[1] * m_Scale[1];
+  result[0]              = m_Center[0];
+  result[1]              = m_Center[1];
   result[0] += std::exp(logRho) * std::cos(theta);
   result[1] += std::exp(logRho) * std::sin(theta);
   return result;
@@ -108,16 +98,13 @@ LogPolarTransform<TScalarType>
  * \return The transformed point.
  */
 template <class TScalarType>
-typename LogPolarTransform<TScalarType>
-::OutputVectorType
-LogPolarTransform<TScalarType>
-::TransformVector(const InputVectorType& vector) const
+typename LogPolarTransform<TScalarType>::OutputVectorType LogPolarTransform<TScalarType>::TransformVector(const InputVectorType& vector) const
 {
   OutputVectorType result;
-  double           theta = vector[0] * m_Scale[0] * CONST_PI_180;
-  double           logRho   = vector[1] * m_Scale[1];
-  result[0] = 0.;
-  result[1] = 0.;
+  double           theta  = vector[0] * m_Scale[0] * CONST_PI_180;
+  double           logRho = vector[1] * m_Scale[1];
+  result[0]               = 0.;
+  result[1]               = 0.;
   result[0] += std::exp(logRho) * std::cos(theta);
   result[1] += std::exp(logRho) * std::sin(theta);
 
@@ -129,16 +116,13 @@ LogPolarTransform<TScalarType>
  * \return The transformed point.
  */
 template <class TScalarType>
-typename LogPolarTransform<TScalarType>
-::OutputVnlVectorType
-LogPolarTransform<TScalarType>
-::TransformVector(const InputVnlVectorType& vector) const
+typename LogPolarTransform<TScalarType>::OutputVnlVectorType LogPolarTransform<TScalarType>::TransformVector(const InputVnlVectorType& vector) const
 {
   OutputVnlVectorType result;
-  double              theta = vector[0] * m_Scale[0] * CONST_PI_180;
-  double              logRho   = vector[1] * m_Scale[1];
-  result[0] = 0.;
-  result[1] = 0.;
+  double              theta  = vector[0] * m_Scale[0] * CONST_PI_180;
+  double              logRho = vector[1] * m_Scale[1];
+  result[0]                  = 0.;
+  result[1]                  = 0.;
   result[0] += std::exp(logRho) * std::cos(theta);
   result[1] += std::exp(logRho) * std::sin(theta);
 
@@ -148,9 +132,7 @@ LogPolarTransform<TScalarType>
  * PrintSelf method.
  */
 template <class TScalarType>
-void
-LogPolarTransform<TScalarType>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void LogPolarTransform<TScalarType>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Center: " << m_Center << std::endl;

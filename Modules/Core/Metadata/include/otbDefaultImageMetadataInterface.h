@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,7 +38,6 @@ namespace otb
 class OTBMetadata_EXPORT DefaultImageMetadataInterface : public ImageMetadataInterfaceBase
 {
 public:
-
   typedef DefaultImageMetadataInterface Self;
   typedef ImageMetadataInterfaceBase    Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -168,38 +167,37 @@ public:
    */
   std::vector<unsigned int> GetDefaultDisplay() const override
   {
-    unsigned int i = 0;
+    unsigned int              i = 0;
     std::vector<unsigned int> rgb(3);
 
     if (this->GetNumberOfBands() == 0)
-      {
+    {
       rgb[0] = 0;
       rgb[1] = 1;
       rgb[2] = 2;
-      }
+    }
     else
-      {
+    {
       unsigned int min;
-      min = std::min(this->GetNumberOfBands(), static_cast<unsigned int> (3));
+      min = std::min(this->GetNumberOfBands(), static_cast<unsigned int>(3));
       while (i < min)
-        {
+      {
         rgb[i] = i;
         ++i;
-        }
-
       }
+    }
     return rgb;
   }
 
 protected:
   DefaultImageMetadataInterface(){};
-  ~DefaultImageMetadataInterface() override {}
+  ~DefaultImageMetadataInterface() override
+  {
+  }
 
 private:
-
-  DefaultImageMetadataInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  DefaultImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,7 +38,7 @@ class OTBQtWidget_EXPORT QtWidgetLineEdit : public QLineEdit
   Q_OBJECT
 
 public:
-  QtWidgetLineEdit( QWidget *parent = nullptr );
+  QtWidgetLineEdit(QWidget* parent = nullptr);
 
   // Show, hide or get state of the clear button
   void EnableClearButton();
@@ -51,9 +51,8 @@ signals:
   void Cleared();
 
 private:
-
-  QIcon m_ClearIcon;
-  QAction *m_ClearAction = nullptr;
+  QIcon    m_ClearIcon;
+  QAction* m_ClearAction = nullptr;
 };
 
 // A QSpinBox with QtWidgetLineEdit as a custom LineEdit
@@ -62,10 +61,10 @@ class OTBQtWidget_EXPORT QtWidgetSpinBox : public QSpinBox
   Q_OBJECT
 
 public:
-  explicit QtWidgetSpinBox( QWidget* parent = nullptr);
+  explicit QtWidgetSpinBox(QWidget* parent = nullptr);
 
-  int valueFromText(const QString &text) const override;
-  QValidator::State validate( QString &input, int &pos ) const override;
+  int valueFromText(const QString& text) const override;
+  QValidator::State validate(QString& input, int& pos) const override;
 
   // Show, hide or get state of the clear button
   void EnableClearButton();
@@ -89,11 +88,11 @@ class OTBQtWidget_EXPORT QtWidgetDoubleSpinBox : public QDoubleSpinBox
   Q_OBJECT
 
 public:
-  explicit QtWidgetDoubleSpinBox( QWidget* parent = nullptr);
+  explicit QtWidgetDoubleSpinBox(QWidget* parent = nullptr);
 
-  double valueFromText(const QString &text) const override;
+  double valueFromText(const QString& text) const override;
   QString textFromValue(double value) const override;
-  QValidator::State validate( QString &input, int &pos ) const override;
+  QValidator::State validate(QString& input, int& pos) const override;
 
   // Show, hide or get state of the clear button
   void EnableClearButton();
@@ -109,7 +108,6 @@ signals:
 private:
   QtWidgetLineEdit* m_LineEdit;
 };
-
 }
 }
 

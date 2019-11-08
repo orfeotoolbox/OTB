@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -64,8 +64,7 @@ class ColorSetupWidget;
  *
  * \ingroup OTBMonteverdiGUI
  */
-class OTBMonteverdiGUI_EXPORT ColorSetupWidget :
-    public QWidget
+class OTBMonteverdiGUI_EXPORT ColorSetupWidget : public QWidget
 {
   Q_OBJECT;
 
@@ -73,20 +72,16 @@ class OTBMonteverdiGUI_EXPORT ColorSetupWidget :
    * \brief The list of (user) component names.
    * \sa ColorSetupWidget::m_Components member.
    */
-  Q_PROPERTY( QStringList components
-	      READ GetComponents
-	      WRITE SetComponents );
+  Q_PROPERTY(QStringList components READ GetComponents WRITE SetComponents);
 
-//
-// Public types.
+  //
+  // Public types.
 public:
-
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  ColorSetupWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
+  ColorSetupWidget(QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** \brief Destructor. */
   ~ColorSetupWidget() override;
@@ -109,7 +104,7 @@ public:
    *
    * \param component component-name list.
    */
-  void SetComponents( const QStringList& component );
+  void SetComponents(const QStringList& component);
 
   /**
    * \brief Get the component-name list.
@@ -120,9 +115,7 @@ public:
    *
    * \return the component-name list.
    */
-  inline
-    QStringList
-    GetComponents() const
+  inline QStringList GetComponents() const
   {
     return m_Components;
   }
@@ -141,27 +134,27 @@ public:
    * list has been set, index 1 set "1: Green" as the current select
    * combo-box item.
    */
-  void SetCurrentRgbIndex( RgbwChannel channel, int index );
+  void SetCurrentRgbIndex(RgbwChannel channel, int index);
 
   /**
    * \return the current (selected) index of a RGB video-channel in
    * the component-name list.
    */
-  int GetCurrentRgbIndex( RgbwChannel channel ) const;
+  int GetCurrentRgbIndex(RgbwChannel channel) const;
 
   /**
    * \brief Enable/disable the grayscale-mode check-box.
    *
    * \param enabled true to enable the grayscale-mode check-box.
    */
-  void SetGrayscaleEnabled( bool enabled );
+  void SetGrayscaleEnabled(bool enabled);
 
   /**
    * \brief Activate/deactivate the gray-scale mode.
    *
    * \param activated true to enable the grayscale-model.
    */
-  void SetGrayscaleActivated( bool activated );
+  void SetGrayscaleActivated(bool activated);
 
   /**
    * \brief Set the current (selected) index of the white (gray)
@@ -172,7 +165,7 @@ public:
    *
    * \param index The index in the component-name list.
    */
-  void SetCurrentGrayIndex( int index );
+  void SetCurrentGrayIndex(int index);
 
   /**
    * \return the current (selected) index of the white (gray) channel
@@ -182,14 +175,14 @@ public:
 
   /**
    */
-  void SetAlpha( double );
+  void SetAlpha(double);
 
   /**
    */
   double GetAlpha() const;
 
-//
-// SIGNALS.
+  //
+  // SIGNALS.
 signals:
   /**
    * \brief Signal emitted when the current-index of a RGB
@@ -198,7 +191,7 @@ signals:
    * \param channel The RGB video-channel which has been modified.
    * \param index The curren-index in the component-list.
    */
-  void CurrentRgbIndexChanged( RgbwChannel channel, int index );
+  void CurrentRgbIndexChanged(RgbwChannel channel, int index);
 
   /**
    * \brief Signal emitted when the current-index of the white (gray)
@@ -206,7 +199,7 @@ signals:
    *
    * \param index The curren-index in the component-list.
    */
-  void CurrentGrayIndexChanged( int index );
+  void CurrentGrayIndexChanged(int index);
 
   /**
    * \brief Signal emitted when the activation-state of the
@@ -214,33 +207,31 @@ signals:
    *
    * \param activated The new activation-state.
    */
-  void GrayscaleActivated( bool activated );
+  void GrayscaleActivated(bool activated);
 
   /**
    */
-  void AlphaValueChanged( double );
+  void AlphaValueChanged(double);
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
-  double ToAlpha( int ) const;
+  double ToAlpha(int) const;
 
   /**
    */
-  int FromAlpha( double ) const;
+  int FromAlpha(double) const;
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    * \brief uic generated.
@@ -253,8 +244,8 @@ private:
    */
   QStringList m_Components;
 
-//
-// SLOTS.
+  //
+  // SLOTS.
 private slots:
   /**
    * \brief Slot called when the current-index of the red
@@ -262,11 +253,9 @@ private slots:
    *
    * \param index The new current-index of the red combo-box.
    */
-  inline
-    void
-    on_rComboBox_currentIndexChanged( int index )
+  inline void on_rComboBox_currentIndexChanged(int index)
   {
-    emit CurrentRgbIndexChanged( RGBW_CHANNEL_RED, index );
+    emit CurrentRgbIndexChanged(RGBW_CHANNEL_RED, index);
   }
 
   /**
@@ -275,11 +264,9 @@ private slots:
    *
    * \param index The new current-index of the green combo-box.
    */
-  inline
-    void
-    on_gComboBox_currentIndexChanged( int index )
+  inline void on_gComboBox_currentIndexChanged(int index)
   {
-    emit CurrentRgbIndexChanged( RGBW_CHANNEL_GREEN, index );
+    emit CurrentRgbIndexChanged(RGBW_CHANNEL_GREEN, index);
   }
 
   /**
@@ -288,11 +275,9 @@ private slots:
    *
    * \param index The new current-index of the blue combo-box.
    */
-  inline
-    void
-    on_bComboBox_currentIndexChanged( int index )
+  inline void on_bComboBox_currentIndexChanged(int index)
   {
-    emit CurrentRgbIndexChanged( RGBW_CHANNEL_BLUE, index );
+    emit CurrentRgbIndexChanged(RGBW_CHANNEL_BLUE, index);
   }
 
   /**
@@ -301,11 +286,9 @@ private slots:
    *
    * \param index The new current-index of the white (gray) combo-box.
    */
-  inline
-    void
-    on_wComboBox_currentIndexChanged( int index )
+  inline void on_wComboBox_currentIndexChanged(int index)
   {
-    emit CurrentGrayIndexChanged( index );
+    emit CurrentGrayIndexChanged(index);
   }
 
   /**
@@ -313,16 +296,14 @@ private slots:
    *
    * \param activated The new activation-state of the grayscale-mode.
    */
-  inline
-    void
-    on_wCheckBox_toggled( bool activated )
+  inline void on_wCheckBox_toggled(bool activated)
   {
-    emit GrayscaleActivated( activated );
+    emit GrayscaleActivated(activated);
   }
 
   /**
    */
-  void on_alphaSlider_valueChanged( int );
+  void on_alphaSlider_valueChanged(int);
 };
 
 } // end namespace 'mvd'

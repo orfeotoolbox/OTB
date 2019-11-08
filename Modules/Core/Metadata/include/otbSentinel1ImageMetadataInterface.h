@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,11 +37,10 @@ namespace otb
 class OTBMetadata_EXPORT Sentinel1ImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
-
-  typedef Sentinel1ImageMetadataInterface    Self;
-  typedef SarImageMetadataInterface         Superclass;
+  typedef Sentinel1ImageMetadataInterface Self;
+  typedef SarImageMetadataInterface       Superclass;
   typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -55,8 +54,8 @@ public:
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
-  typedef Superclass::RealType                  RealType;
-  typedef Superclass::LookupDataPointerType LookupDataPointerType;
+  typedef Superclass::RealType                 RealType;
+  typedef Superclass::LookupDataPointerType    LookupDataPointerType;
 
   /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
   int GetProductionDay() const override;
@@ -95,24 +94,24 @@ public:
   void CreateCalibrationLookupData(const short type) override;
 
 protected:
-
   /* class ctor */
   Sentinel1ImageMetadataInterface();
 
   /* class dtor */
-  ~Sentinel1ImageMetadataInterface() override {}
+  ~Sentinel1ImageMetadataInterface() override
+  {
+  }
 
 private:
+  Sentinel1ImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  Sentinel1ImageMetadataInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
-/* Helper function to parse date and time into a std::vector<std::string>
- * using boost::split() expect date time in yyyy-mm-ddThh:mm:ss.ms
- * the date-time string is to be found in keywordlist with key 'key'
- * fills argument dateFields of type std::vector<std::string> which is mutable!
- * TODO: move this method into base class
- */
+  /* Helper function to parse date and time into a std::vector<std::string>
+   * using boost::split() expect date time in yyyy-mm-ddThh:mm:ss.ms
+   * the date-time string is to be found in keywordlist with key 'key'
+   * fills argument dateFields of type std::vector<std::string> which is mutable!
+   * TODO: move this method into base class
+   */
   void ParseDateTime(const char* key, std::vector<int>& dateFields) const;
 
   mutable std::vector<int> m_ProductionDateFields;
@@ -120,27 +119,25 @@ private:
 };
 
 
-
 struct Sentinel1CalibrationStruct
 {
 public:
-  double timeMJD;
-  double deltaMJD; // time difference to previous MJD in the list
-  int line;
-  std::vector<int> pixels;
+  double              timeMJD;
+  double              deltaMJD; // time difference to previous MJD in the list
+  int                 line;
+  std::vector<int>    pixels;
   std::vector<double> deltaPixels;
-  std::vector<float> vect;
+  std::vector<float>  vect;
 };
 
 class Sentinel1CalibrationLookupData : public SarCalibrationLookupData
 {
 public:
-
   /** Standard typedefs */
-  typedef Sentinel1CalibrationLookupData   Self;
-  typedef SarCalibrationLookupData         Superclass;
-  typedef itk::SmartPointer<Self>          Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef Sentinel1CalibrationLookupData Self;
+  typedef SarCalibrationLookupData       Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** Creation through the object factory */
   itkNewMacro(Self);
@@ -150,12 +147,7 @@ public:
 
   typedef itk::IndexValueType IndexValueType;
 
-  Sentinel1CalibrationLookupData()
-    : firstLineTime(0.)
-    , lastLineTime(0.)
-    , numOfLines(0)
-    , count(0)
-    , lineTimeInterval(0.)
+  Sentinel1CalibrationLookupData() : firstLineTime(0.), lastLineTime(0.), numOfLines(0), count(0), lineTimeInterval(0.)
   {
   }
 
@@ -163,14 +155,12 @@ public:
   {
   }
 
-  void InitParameters(short type, double ft, double lt,
-                      int lines, int c,
-                      std::vector<Sentinel1CalibrationStruct> const& vlist)
+  void InitParameters(short type, double ft, double lt, int lines, int c, std::vector<Sentinel1CalibrationStruct> const& vlist)
   {
-    firstLineTime = ft;
-    lastLineTime = lt;
-    numOfLines = lines;
-    count = c;
+    firstLineTime         = ft;
+    lastLineTime          = lt;
+    numOfLines            = lines;
+    count                 = c;
     calibrationVectorList = vlist;
     this->SetType(type);
     lineTimeInterval = (lt - ft) / ((lines - 1) * 1.0);
@@ -179,50 +169,48 @@ public:
   double GetValue(const IndexValueType x, const IndexValueType y) const override
   {
     const int calVecIdx = GetVectorIndex(y);
-    assert(calVecIdx>=0 && calVecIdx < count-1);
-    const Sentinel1CalibrationStruct & vec0 = calibrationVectorList[calVecIdx];
-    const Sentinel1CalibrationStruct & vec1 = calibrationVectorList[calVecIdx + 1];
-    const double azTime = firstLineTime + y * lineTimeInterval;
-    const double muY = (azTime - vec0.timeMJD) / vec1.deltaMJD;
-    const int pixelIdx = GetPixelIndex(x, calibrationVectorList[calVecIdx]);
-    const double muX = (x - vec0.pixels[pixelIdx]) / vec0.deltaPixels[pixelIdx + 1];
-    const double lutVal
-        = (1 - muY) * ((1 - muX) * vec0.vect[pixelIdx] + muX * vec0.vect[pixelIdx + 1])
-        +       muY * ((1 - muX) * vec1.vect[pixelIdx] + muX * vec1.vect[pixelIdx + 1]);
+    assert(calVecIdx >= 0 && calVecIdx < count - 1);
+    const Sentinel1CalibrationStruct& vec0     = calibrationVectorList[calVecIdx];
+    const Sentinel1CalibrationStruct& vec1     = calibrationVectorList[calVecIdx + 1];
+    const double                      azTime   = firstLineTime + y * lineTimeInterval;
+    const double                      muY      = (azTime - vec0.timeMJD) / vec1.deltaMJD;
+    const int                         pixelIdx = GetPixelIndex(x, calibrationVectorList[calVecIdx]);
+    const double                      muX      = (x - vec0.pixels[pixelIdx]) / vec0.deltaPixels[pixelIdx + 1];
+    const double                      lutVal =
+        (1 - muY) * ((1 - muX) * vec0.vect[pixelIdx] + muX * vec0.vect[pixelIdx + 1]) + muY * ((1 - muX) * vec1.vect[pixelIdx] + muX * vec1.vect[pixelIdx + 1]);
     return lutVal;
   }
 
   int GetVectorIndex(int y) const
   {
     for (int i = 1; i < count; i++)
-      {
+    {
       if (y < calibrationVectorList[i].line)
-        {
+      {
         return i - 1;
-        }
       }
+    }
     return -1;
   }
 
   int GetPixelIndex(int x, const Sentinel1CalibrationStruct& calVec) const
   {
-      const int size = calVec.pixels.size();
-      std::vector<int>::const_iterator wh = std::upper_bound(calVec.pixels.begin(), calVec.pixels.end(), x);
-      return wh == calVec.pixels.end() ? size - 2 : std::distance(calVec.pixels.begin(),wh)-1;
+    const int                        size = calVec.pixels.size();
+    std::vector<int>::const_iterator wh   = std::upper_bound(calVec.pixels.begin(), calVec.pixels.end(), x);
+    return wh == calVec.pixels.end() ? size - 2 : std::distance(calVec.pixels.begin(), wh) - 1;
   }
 
 private:
-
   Sentinel1CalibrationLookupData(const Self&) = delete;
 
-  void operator =(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  double firstLineTime;
-  double lastLineTime;
-  int numOfLines;
-  int count;
+  double                                  firstLineTime;
+  double                                  lastLineTime;
+  int                                     numOfLines;
+  int                                     count;
   std::vector<Sentinel1CalibrationStruct> calibrationVectorList;
-  double lineTimeInterval;
+  double                                  lineTimeInterval;
 };
 
 

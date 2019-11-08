@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,15 +26,15 @@
 
 int otbInverseLogPolarTransform(int itkNotUsed(argc), char* argv[])
 {
-  double       radialStep = atof(argv[1]);
+  double       radialStep  = atof(argv[1]);
   double       angularStep = atof(argv[2]);
-  const char * outputFilename(argv[3]);
+  const char*  outputFilename(argv[3]);
   unsigned int nbPoints = atoi(argv[4]);
 
   typedef double                                       PrecisionType;
   typedef otb::InverseLogPolarTransform<PrecisionType> InverseLogPolarTransformType;
-  typedef itk::Point<PrecisionType, 2>                 PointType;
-  typedef std::vector<PointType>                       PointsVectorType;
+  typedef itk::Point<PrecisionType, 2> PointType;
+  typedef std::vector<PointType> PointsVectorType;
 
   std::ofstream file;
   file.open(outputFilename);
@@ -42,13 +42,13 @@ int otbInverseLogPolarTransform(int itkNotUsed(argc), char* argv[])
   // input points retrieval
   PointsVectorType vect;
   for (unsigned int i = 0; i < nbPoints; ++i)
-    {
+  {
     PointType p;
     p[0] = atof(argv[5 + 2 * i]);
     p[1] = atof(argv[6 + 2 * i]);
     file << "Adding point " << p << "." << std::endl;
     vect.push_back(p);
-    }
+  }
   // Instantiation
   InverseLogPolarTransformType::Pointer        transform = InverseLogPolarTransformType::New();
   InverseLogPolarTransformType::ParametersType params(4);
@@ -61,32 +61,32 @@ int otbInverseLogPolarTransform(int itkNotUsed(argc), char* argv[])
   file << "Transform calculation ... :" << std::endl;
 
   for (PointsVectorType::iterator it = vect.begin(); it != vect.end(); ++it)
-    {
+  {
     PointType p = transform->TransformPoint(*it);
     PointType pprime;
     double    rho = std::sqrt((*it)[0] * (*it)[0] + (*it)[1] * (*it)[1]);
 
     if (rho > 0)
-      {
+    {
       pprime[0] = (1. / angularStep) * std::asin((*it)[1] / rho);
       pprime[0] = pprime[0] * (180. / otb::CONST_PI);
       // Deplacing the range to [0, 90], [270, 360]
       pprime[0] = pprime[0] > 0. ? pprime[0] : pprime[0] + 360.;
       // Avoiding asin indetermination
       if (p[0] >= 0)
-        {
-        pprime[0] = pprime[0] < 90. ? pprime[0] + 90. : pprime[0] - 90.;
-        }
-      pprime[1] = (1. / radialStep) * std::log(rho);
-      }
-    else
       {
+        pprime[0] = pprime[0] < 90. ? pprime[0] + 90. : pprime[0] - 90.;
+      }
+      pprime[1] = (1. / radialStep) * std::log(rho);
+    }
+    else
+    {
       pprime[0] = 400.;
       pprime[1] = 0.;
-      }
+    }
 
     file << "Original Point: " << (*it) << ", Reference point: " << pprime << ", Transformed point: " << p << std::endl;
-    }
+  }
   file.close();
 
   return EXIT_SUCCESS;

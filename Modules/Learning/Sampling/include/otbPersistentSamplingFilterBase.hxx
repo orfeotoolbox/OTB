@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,141 +32,121 @@
 namespace otb
 {
 
-template<class TInputImage, class TMaskImage>
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::PersistentSamplingFilterBase()
-  : m_FieldName(std::string("class"))
-  , m_FieldIndex(0)
-  , m_LayerIndex(0)
-  , m_OutLayerName(std::string("output"))
-  , m_OGRLayerCreationOptions()
-  , m_AdditionalFields()
-  , m_InMemoryInputs()
-  , m_InMemoryOutputs()
+template <class TInputImage, class TMaskImage>
+PersistentSamplingFilterBase<TInputImage, TMaskImage>::PersistentSamplingFilterBase()
+  : m_FieldName(std::string("class")),
+    m_FieldIndex(0),
+    m_LayerIndex(0),
+    m_OutLayerName(std::string("output")),
+    m_OGRLayerCreationOptions(),
+    m_AdditionalFields(),
+    m_InMemoryInputs(),
+    m_InMemoryOutputs()
 {
-  this->SetNthOutput(0,TInputImage::New());
+  this->SetNthOutput(0, TInputImage::New());
 }
 
 
-template<class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::SetOGRData(const otb::ogr::DataSource* vector)
+template <class TInputImage, class TMaskImage>
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::SetOGRData(const otb::ogr::DataSource* vector)
 {
-  this->SetNthInput(1, const_cast<otb::ogr::DataSource *>( vector ));
+  this->SetNthInput(1, const_cast<otb::ogr::DataSource*>(vector));
 }
 
-template<class TInputImage, class TMaskImage>
-const otb::ogr::DataSource*
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::GetOGRData()
+template <class TInputImage, class TMaskImage>
+const otb::ogr::DataSource* PersistentSamplingFilterBase<TInputImage, TMaskImage>::GetOGRData()
 {
-  if (this->GetNumberOfInputs()<2)
-    {
+  if (this->GetNumberOfInputs() < 2)
+  {
     return 0;
-    }
-  return static_cast<const otb::ogr::DataSource *>(this->itk::ProcessObject::GetInput(1));
+  }
+  return static_cast<const otb::ogr::DataSource*>(this->itk::ProcessObject::GetInput(1));
 }
 
-template<class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::SetMask(const TMaskImage* mask)
+template <class TInputImage, class TMaskImage>
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::SetMask(const TMaskImage* mask)
 {
-  this->SetNthInput(2, const_cast<TMaskImage *>( mask ));
+  this->SetNthInput(2, const_cast<TMaskImage*>(mask));
 }
 
-template<class TInputImage, class TMaskImage>
-const TMaskImage*
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::GetMask()
+template <class TInputImage, class TMaskImage>
+const TMaskImage* PersistentSamplingFilterBase<TInputImage, TMaskImage>::GetMask()
 {
-  if (this->GetNumberOfInputs()<3)
-    {
+  if (this->GetNumberOfInputs() < 3)
+  {
     return 0;
-    }
-  return static_cast<const TMaskImage *>(this->itk::ProcessObject::GetInput(2));
+  }
+  return static_cast<const TMaskImage*>(this->itk::ProcessObject::GetInput(2));
 }
 
-template<class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::SetOGRLayerCreationOptions(const std::vector<std::string> & options)
+template <class TInputImage, class TMaskImage>
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::SetOGRLayerCreationOptions(const std::vector<std::string>& options)
 {
   m_OGRLayerCreationOptions.clear();
   m_OGRLayerCreationOptions = options;
 }
 
-template<class TInputImage, class TMaskImage>
-const std::vector<std::string>&
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::GetOGRLayerCreationOptions()
+template <class TInputImage, class TMaskImage>
+const std::vector<std::string>& PersistentSamplingFilterBase<TInputImage, TMaskImage>::GetOGRLayerCreationOptions()
 {
   return m_OGRLayerCreationOptions;
 }
 
-template<class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::GenerateOutputInformation()
+template <class TInputImage, class TMaskImage>
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
 
   // Get OGR field index
-  const otb::ogr::DataSource* vectors = this->GetOGRData();
-  otb::ogr::Layer::const_iterator featIt = vectors->GetLayer(m_LayerIndex).begin();
-  int fieldIndex = featIt->ogr().GetFieldIndex(this->m_FieldName.c_str());
+  const otb::ogr::DataSource*     vectors    = this->GetOGRData();
+  otb::ogr::Layer::const_iterator featIt     = vectors->GetLayer(m_LayerIndex).begin();
+  int                             fieldIndex = featIt->ogr().GetFieldIndex(this->m_FieldName.c_str());
   if (fieldIndex < 0)
-    {
-    itkGenericExceptionMacro("Field named "<<this->m_FieldName<<" not found!");
-    }
+  {
+    itkGenericExceptionMacro("Field named " << this->m_FieldName << " not found!");
+  }
   this->m_FieldIndex = fieldIndex;
 
-  const MaskImageType *mask = this->GetMask();
+  const MaskImageType* mask = this->GetMask();
   if (mask)
+  {
+    const InputImageType* input = this->GetInput();
+    if (mask->GetLargestPossibleRegion() != input->GetLargestPossibleRegion())
     {
-    const InputImageType *input = this->GetInput();
-    if (mask->GetLargestPossibleRegion() !=
-        input->GetLargestPossibleRegion() )
-      {
       itkGenericExceptionMacro("Mask and input image have a different size!");
-      }
-    if (mask->GetOrigin() != input->GetOrigin())
-      {
-      itkGenericExceptionMacro("Mask and input image have a different origin!");
-      }
-    if (mask->GetSignedSpacing() != input->GetSignedSpacing())
-      {
-      itkGenericExceptionMacro("Mask and input image have a different spacing!");
-      }
     }
+    if (mask->GetOrigin() != input->GetOrigin())
+    {
+      itkGenericExceptionMacro("Mask and input image have a different origin!");
+    }
+    if (mask->GetSignedSpacing() != input->GetSignedSpacing())
+    {
+      itkGenericExceptionMacro("Mask and input image have a different spacing!");
+    }
+  }
 }
 
-template<class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::GenerateInputRequestedRegion()
+template <class TInputImage, class TMaskImage>
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::GenerateInputRequestedRegion()
 {
-  InputImageType *input = const_cast<InputImageType*>(this->GetInput());
-  MaskImageType *mask = const_cast<MaskImageType*>(this->GetMask());
+  InputImageType* input = const_cast<InputImageType*>(this->GetInput());
+  MaskImageType*  mask  = const_cast<MaskImageType*>(this->GetMask());
 
-  RegionType requested = this->GetOutput()->GetRequestedRegion();
+  RegionType requested   = this->GetOutput()->GetRequestedRegion();
   RegionType emptyRegion = input->GetLargestPossibleRegion();
-  emptyRegion.SetSize(0,0);
-  emptyRegion.SetSize(1,0);
+  emptyRegion.SetSize(0, 0);
+  emptyRegion.SetSize(1, 0);
 
   input->SetRequestedRegion(emptyRegion);
 
   if (mask)
-    {
+  {
     mask->SetRequestedRegion(requested);
-    }
+  }
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::GenerateData(void)
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::GenerateData(void)
 {
   this->AllocateOutputs();
   this->BeforeThreadedGenerateData();
@@ -179,9 +159,9 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   str.Filter = this;
 
   // Get the output pointer
-  //const InputImageType *outputPtr = this->GetOutput();
+  // const InputImageType *outputPtr = this->GetOutput();
 
-  this->GetMultiThreader()->SetNumberOfThreads( this->GetNumberOfThreads() );
+  this->GetMultiThreader()->SetNumberOfThreads(this->GetNumberOfThreads());
   this->GetMultiThreader()->SetSingleMethod(this->VectorThreaderCallback, &str);
 
   // multithread the execution
@@ -194,106 +174,94 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::AllocateOutputs(void)
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::AllocateOutputs(void)
 {
   Superclass::AllocateOutputs();
 
   ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetOGRData());
-  ogr::Layer inLayer = vectors->GetLayer(m_LayerIndex);
+  ogr::Layer       inLayer = vectors->GetLayer(m_LayerIndex);
 
   unsigned int numberOfThreads = this->GetNumberOfThreads();
 
   // Prepare temporary input
   this->m_InMemoryInputs.clear();
   this->m_InMemoryInputs.reserve(numberOfThreads);
-  std::string tmpLayerName("thread");
-  OGRSpatialReference * oSRS = nullptr;
+  std::string          tmpLayerName("thread");
+  OGRSpatialReference* oSRS = nullptr;
   if (inLayer.GetSpatialRef())
-    {
+  {
     oSRS = inLayer.GetSpatialRef()->Clone();
-    }
-  OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
-  //std::vector<ogr::Layer> tmpLayers;
-  for (unsigned int i=0 ; i < numberOfThreads ; i++)
-    {
+  }
+  OGRFeatureDefn& layerDefn = inLayer.GetLayerDefn();
+  // std::vector<ogr::Layer> tmpLayers;
+  for (unsigned int i = 0; i < numberOfThreads; i++)
+  {
     ogr::DataSource::Pointer tmpOgrDS = ogr::DataSource::New();
-    ogr::Layer tmpLayer = tmpOgrDS->CreateLayer(
-      tmpLayerName,
-      oSRS,
-      inLayer.GetGeomType());
+    ogr::Layer               tmpLayer = tmpOgrDS->CreateLayer(tmpLayerName, oSRS, inLayer.GetGeomType());
     // add field definitions
-    for (int k=0 ; k < layerDefn.GetFieldCount() ; k++)
-      {
-      OGRFieldDefn originDefn(layerDefn.GetFieldDefn(k));
+    for (int k = 0; k < layerDefn.GetFieldCount(); k++)
+    {
+      OGRFieldDefn   originDefn(layerDefn.GetFieldDefn(k));
       ogr::FieldDefn fieldDefn(originDefn);
       tmpLayer.CreateField(fieldDefn);
-      }
-    this->m_InMemoryInputs.push_back(tmpOgrDS);
     }
+    this->m_InMemoryInputs.push_back(tmpOgrDS);
+  }
 
   // Prepare in-memory outputs
   this->m_InMemoryOutputs.clear();
   this->m_InMemoryOutputs.reserve(numberOfThreads);
   tmpLayerName = std::string("threadOut");
-  for (unsigned int i=0 ; i < numberOfThreads ; i++)
-    {
+  for (unsigned int i = 0; i < numberOfThreads; i++)
+  {
     std::vector<OGRDataPointer> tmpContainer;
     // iterate over outputs, only process ogr::DataSource
-    for (unsigned int k=0 ; k < this->GetNumberOfOutputs() ; k++)
-      {
-      ogr::DataSource* realOutput = dynamic_cast<ogr::DataSource *>(
-        this->itk::ProcessObject::GetOutput(k));
+    for (unsigned int k = 0; k < this->GetNumberOfOutputs(); k++)
+    {
+      ogr::DataSource* realOutput = dynamic_cast<ogr::DataSource*>(this->itk::ProcessObject::GetOutput(k));
       if (realOutput)
-        {
-        ogr::Layer realLayer = realOutput->GetLayersCount() == 1
-                               ? realOutput->GetLayer(0)
-                               : realOutput->GetLayer(m_OutLayerName);
-        OGRFeatureDefn &outLayerDefn = realLayer.GetLayerDefn();
-        ogr::DataSource::Pointer tmpOutput = ogr::DataSource::New();
-        ogr::Layer tmpLayer = tmpOutput->CreateLayer(
-          tmpLayerName, oSRS,  realLayer.GetGeomType());
+      {
+        ogr::Layer               realLayer    = realOutput->GetLayersCount() == 1 ? realOutput->GetLayer(0) : realOutput->GetLayer(m_OutLayerName);
+        OGRFeatureDefn&          outLayerDefn = realLayer.GetLayerDefn();
+        ogr::DataSource::Pointer tmpOutput    = ogr::DataSource::New();
+        ogr::Layer               tmpLayer     = tmpOutput->CreateLayer(tmpLayerName, oSRS, realLayer.GetGeomType());
         // add field definitions
-        for (int f=0 ; f < outLayerDefn.GetFieldCount() ; f++)
-          {
+        for (int f = 0; f < outLayerDefn.GetFieldCount(); f++)
+        {
           OGRFieldDefn originDefn(outLayerDefn.GetFieldDefn(f));
           tmpLayer.CreateField(originDefn);
-          }
-        tmpContainer.push_back(tmpOutput);
         }
+        tmpContainer.push_back(tmpOutput);
       }
-    this->m_InMemoryOutputs.push_back(tmpContainer);
     }
+    this->m_InMemoryOutputs.push_back(tmpContainer);
+  }
 
   if (oSRS)
-    {
+  {
     oSRS->Release();
-    }
+  }
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::GatherOutputVectors(void)
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::GatherOutputVectors(void)
 {
   // clean temporary inputs
   this->m_InMemoryInputs.clear();
 
   // gather temporary outputs and write to output
   const otb::ogr::DataSource* vectors = this->GetOGRData();
-  otb::Stopwatch chrono = otb::Stopwatch::StartNew();
-  unsigned int count = 0;
-  for (unsigned int k=0 ; k < this->GetNumberOfOutputs() ; k++)
-    {
-    ogr::DataSource* realOutput = dynamic_cast<ogr::DataSource *>(
-        this->itk::ProcessObject::GetOutput(k));
+  otb::Stopwatch              chrono  = otb::Stopwatch::StartNew();
+  unsigned int                count   = 0;
+  for (unsigned int k = 0; k < this->GetNumberOfOutputs(); k++)
+  {
+    ogr::DataSource* realOutput = dynamic_cast<ogr::DataSource*>(this->itk::ProcessObject::GetOutput(k));
     if (realOutput)
-      {
+    {
       this->FillOneOutput(count, realOutput, bool(vectors == realOutput));
       count++;
-      }
     }
+  }
 
   chrono.Stop();
   otbMsgDebugMacro(<< "Writing OGR points took " << chrono.GetElapsedMilliseconds() << " ms");
@@ -301,365 +269,315 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::FillOneOutput(unsigned int outIdx, ogr::DataSource* outDS, bool update)
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::FillOneOutput(unsigned int outIdx, ogr::DataSource* outDS, bool update)
 {
-  ogr::Layer outLayer = outDS->GetLayersCount() == 1
-                        ? outDS->GetLayer(0)
-                        : outDS->GetLayer(m_OutLayerName);
+  ogr::Layer outLayer = outDS->GetLayersCount() == 1 ? outDS->GetLayer(0) : outDS->GetLayer(m_OutLayerName);
 
   OGRErr err = outLayer.ogr().StartTransaction();
   if (err != OGRERR_NONE)
-    {
+  {
     itkExceptionMacro(<< "Unable to start transaction for OGR layer " << outLayer.ogr().GetName() << ".");
-    }
+  }
 
   unsigned int numberOfThreads = this->GetNumberOfThreads();
-  for (unsigned int thread=0 ; thread < numberOfThreads ; thread++)
-    {
+  for (unsigned int thread = 0; thread < numberOfThreads; thread++)
+  {
     ogr::Layer inLayer = this->m_InMemoryOutputs[thread][outIdx]->GetLayerChecked(0);
     if (!inLayer)
-      {
+    {
       continue;
-      }
+    }
 
     ogr::Layer::const_iterator tmpIt = inLayer.begin();
     // This test only uses 1 input, not compatible with multiple OGRData inputs
     if (update)
-      {
+    {
       // Update mode
-      for(; tmpIt!=inLayer.end(); ++tmpIt)
-        {
-        outLayer.SetFeature( *tmpIt );
-        }
-      }
-    else
+      for (; tmpIt != inLayer.end(); ++tmpIt)
       {
-      // Copy mode
-      for(; tmpIt!=inLayer.end(); ++tmpIt)
-        {
-        ogr::Feature dstFeature(outLayer.GetLayerDefn());
-        dstFeature.SetFrom( *tmpIt, TRUE );
-        outLayer.CreateFeature( dstFeature );
-        }
+        outLayer.SetFeature(*tmpIt);
       }
     }
+    else
+    {
+      // Copy mode
+      for (; tmpIt != inLayer.end(); ++tmpIt)
+      {
+        ogr::Feature dstFeature(outLayer.GetLayerDefn());
+        dstFeature.SetFrom(*tmpIt, TRUE);
+        outLayer.CreateFeature(dstFeature);
+      }
+    }
+  }
 
   err = outLayer.ogr().CommitTransaction();
   if (err != OGRERR_NONE)
-    {
+  {
     itkExceptionMacro(<< "Unable to commit transaction for OGR layer " << outLayer.ogr().GetName() << ".");
-    }
+  }
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid)
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid)
 {
   // Retrieve inputs
-  TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
-  TInputImage* outputImage = this->GetOutput();
-  RegionType requestedRegion = outputImage->GetRequestedRegion();
+  TInputImage* inputImage      = const_cast<TInputImage*>(this->GetInput());
+  TInputImage* outputImage     = this->GetOutput();
+  RegionType   requestedRegion = outputImage->GetRequestedRegion();
 
-  itk::ProgressReporter progress( this, threadid, layerForThread.GetFeatureCount(true) );
+  itk::ProgressReporter progress(this, threadid, layerForThread.GetFeatureCount(true));
 
   // Loop across the features in the layer (filtered by requested region in BeforeTGD already)
   ogr::Layer::const_iterator featIt = layerForThread.begin();
-  for(; featIt!=layerForThread.end(); ++featIt)
-    {
+  for (; featIt != layerForThread.end(); ++featIt)
+  {
     // Compute the intersection of thread region and polygon bounding region, called "considered region"
     // This need not be done in ThreadedGenerateData and could be pre-processed and cached before filter execution if needed
     RegionType consideredRegion = FeatureBoundingRegion(inputImage, featIt);
-    bool regionNotEmpty = consideredRegion.Crop(requestedRegion);
+    bool       regionNotEmpty   = consideredRegion.Crop(requestedRegion);
     if (regionNotEmpty)
-      {
-      this->PrepareFeature(*featIt,threadid);
-      this->ExploreGeometry(*featIt, featIt->ogr().GetGeometryRef(),consideredRegion,threadid);
-      }
-    progress.CompletedPixel();
+    {
+      this->PrepareFeature(*featIt, threadid);
+      this->ExploreGeometry(*featIt, featIt->ogr().GetGeometryRef(), consideredRegion, threadid);
     }
+    progress.CompletedPixel();
+  }
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::ExploreGeometry(const ogr::Feature& feature,
-                  OGRGeometry* geom,
-                  RegionType& region,
-                  itk::ThreadIdType& threadid)
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::ExploreGeometry(const ogr::Feature& feature, OGRGeometry* geom, RegionType& region,
+                                                                            itk::ThreadIdType& threadid)
 {
   typename TInputImage::PointType imgPoint;
   typename TInputImage::IndexType imgIndex;
 
   switch (geom->getGeometryType())
+  {
+  case wkbPoint:
+  case wkbPoint25D:
+  {
+    OGRPoint* castPoint = dynamic_cast<OGRPoint*>(geom);
+    if (castPoint == nullptr)
+      break;
+
+    imgPoint[0]             = castPoint->getX();
+    imgPoint[1]             = castPoint->getY();
+    const TInputImage* img  = this->GetInput();
+    const TMaskImage*  mask = this->GetMask();
+    img->TransformPhysicalPointToIndex(imgPoint, imgIndex);
+    if ((mask == nullptr) || mask->GetPixel(imgIndex))
     {
-    case wkbPoint:
-    case wkbPoint25D:
-      {
-      OGRPoint* castPoint = dynamic_cast<OGRPoint*>(geom);
-      if (castPoint == nullptr) break;
+      this->ProcessSample(feature, imgIndex, imgPoint, threadid);
+    }
+    break;
+  }
+  case wkbLineString:
+  case wkbLineString25D:
+  {
+    OGRLineString* castLineString = dynamic_cast<OGRLineString*>(geom);
 
-      imgPoint[0] = castPoint->getX();
-      imgPoint[1] = castPoint->getY();
-      const TInputImage* img = this->GetInput();
-      const TMaskImage* mask = this->GetMask();
-      img->TransformPhysicalPointToIndex(imgPoint,imgIndex);
-      if ((mask == nullptr) || mask->GetPixel(imgIndex))
-        {
-        this->ProcessSample(feature, imgIndex, imgPoint, threadid);
-        }
+    if (castLineString == nullptr)
       break;
-      }
-    case wkbLineString:
-    case wkbLineString25D:
+    this->ProcessLine(feature, castLineString, region, threadid);
+    break;
+  }
+  case wkbPolygon:
+  case wkbPolygon25D:
+  {
+    OGRPolygon* castPolygon = dynamic_cast<OGRPolygon*>(geom);
+    if (castPolygon == nullptr)
+      break;
+    this->ProcessPolygon(feature, castPolygon, region, threadid);
+    break;
+  }
+  case wkbMultiPoint:
+  case wkbMultiPoint25D:
+  case wkbMultiLineString:
+  case wkbMultiLineString25D:
+  case wkbMultiPolygon:
+  case wkbMultiPolygon25D:
+  case wkbGeometryCollection:
+  case wkbGeometryCollection25D:
+  {
+    OGRGeometryCollection* geomCollection = dynamic_cast<OGRGeometryCollection*>(geom);
+    if (geomCollection)
+    {
+      unsigned int nbGeom = geomCollection->getNumGeometries();
+      for (unsigned int i = 0; i < nbGeom; ++i)
       {
-      OGRLineString* castLineString = dynamic_cast<OGRLineString*>(geom);
-
-      if (castLineString == nullptr) break;
-      this->ProcessLine(feature,castLineString,region,threadid);
-      break;
-      }
-    case wkbPolygon:
-    case wkbPolygon25D:
-      {
-      OGRPolygon* castPolygon = dynamic_cast<OGRPolygon*>(geom);
-      if (castPolygon == nullptr) break;
-      this->ProcessPolygon(feature,castPolygon,region,threadid);
-      break;
-      }
-    case wkbMultiPoint:
-    case wkbMultiPoint25D:
-    case wkbMultiLineString:
-    case wkbMultiLineString25D:
-    case wkbMultiPolygon:
-    case wkbMultiPolygon25D:
-    case wkbGeometryCollection:
-    case wkbGeometryCollection25D:
-      {
-      OGRGeometryCollection *geomCollection = dynamic_cast<OGRGeometryCollection*>(geom);
-      if (geomCollection)
-        {
-        unsigned int nbGeom =  geomCollection->getNumGeometries();
-        for (unsigned int i=0 ; i < nbGeom ; ++i)
-          {
-          this->ExploreGeometry(feature,
-                                geomCollection->getGeometryRef(i),
-                                region,
-                                threadid);
-          }
-        }
-      else
-        {
-        otbWarningMacro("Geometry not recognized as a collection : " << geom->getGeometryName());
-        }
-      break;
-      }
-    default:
-      {
-      otbWarningMacro("Geometry not handled: " << geom->getGeometryName());
-      break;
+        this->ExploreGeometry(feature, geomCollection->getGeometryRef(i), region, threadid);
       }
     }
+    else
+    {
+      otbWarningMacro("Geometry not recognized as a collection : " << geom->getGeometryName());
+    }
+    break;
+  }
+  default:
+  {
+    otbWarningMacro("Geometry not handled: " << geom->getGeometryName());
+    break;
+  }
+  }
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::ProcessLine(const ogr::Feature& feature,
-              OGRLineString* line,
-              RegionType& region,
-              itk::ThreadIdType& threadid)
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::ProcessLine(const ogr::Feature& feature, OGRLineString* line, RegionType& region,
+                                                                        itk::ThreadIdType& threadid)
 {
-  OGRPolygon tmpPolygon;
+  OGRPolygon    tmpPolygon;
   OGRLinearRing ring;
-  ring.addPoint(0.0,0.0,0.0);
-  ring.addPoint(1.0,0.0,0.0);
-  ring.addPoint(1.0,1.0,0.0);
-  ring.addPoint(0.0,1.0,0.0);
-  ring.addPoint(0.0,0.0,0.0);
+  ring.addPoint(0.0, 0.0, 0.0);
+  ring.addPoint(1.0, 0.0, 0.0);
+  ring.addPoint(1.0, 1.0, 0.0);
+  ring.addPoint(0.0, 1.0, 0.0);
+  ring.addPoint(0.0, 0.0, 0.0);
   tmpPolygon.addRing(&ring);
-  const TInputImage* img = this->GetInput();
-  TMaskImage* mask = const_cast<TMaskImage*>(this->GetMask());
-  typename TInputImage::IndexType imgIndex;
-  typename TInputImage::PointType imgPoint;
+  const TInputImage*                img  = this->GetInput();
+  TMaskImage*                       mask = const_cast<TMaskImage*>(this->GetMask());
+  typename TInputImage::IndexType   imgIndex;
+  typename TInputImage::PointType   imgPoint;
   typename TInputImage::SpacingType imgAbsSpacing = img->GetSignedSpacing();
-  if (imgAbsSpacing[0] < 0) imgAbsSpacing[0] = -imgAbsSpacing[0];
-  if (imgAbsSpacing[1] < 0) imgAbsSpacing[1] = -imgAbsSpacing[1];
+  if (imgAbsSpacing[0] < 0)
+    imgAbsSpacing[0] = -imgAbsSpacing[0];
+  if (imgAbsSpacing[1] < 0)
+    imgAbsSpacing[1] = -imgAbsSpacing[1];
 
   if (mask)
-    {
+  {
     // For pixels in consideredRegion and not masked
-    typedef MaskedIteratorDecorator<
-      itk::ImageRegionConstIterator<TMaskImage>,
-      itk::ImageRegionConstIterator<TMaskImage> > MaskedIteratorType;
+    typedef MaskedIteratorDecorator<itk::ImageRegionConstIterator<TMaskImage>, itk::ImageRegionConstIterator<TMaskImage>> MaskedIteratorType;
     MaskedIteratorType it(mask, mask, region);
     it.GoToBegin();
     while (!it.IsAtEnd())
-      {
-      imgIndex = it.GetIndex();
-      img->TransformIndexToPhysicalPoint(imgIndex,imgPoint);
-      bool isInside = this->IsSampleOnLine(line,imgPoint,imgAbsSpacing,tmpPolygon);
-      if (isInside)
-        {
-        this->ProcessSample(feature,imgIndex, imgPoint, threadid);
-        }
-      ++it;
-      }
-    }
-  else
     {
+      imgIndex = it.GetIndex();
+      img->TransformIndexToPhysicalPoint(imgIndex, imgPoint);
+      bool isInside = this->IsSampleOnLine(line, imgPoint, imgAbsSpacing, tmpPolygon);
+      if (isInside)
+      {
+        this->ProcessSample(feature, imgIndex, imgPoint, threadid);
+      }
+      ++it;
+    }
+  }
+  else
+  {
     typedef itk::ImageRegionConstIteratorWithOnlyIndex<TInputImage> NoValueIteratorType;
-    NoValueIteratorType it(img,region);
+    NoValueIteratorType                                             it(img, region);
     it.GoToBegin();
     while (!it.IsAtEnd())
-      {
+    {
       imgIndex = it.GetIndex();
-      img->TransformIndexToPhysicalPoint(imgIndex,imgPoint);
-      bool isInside = this->IsSampleOnLine(line,imgPoint,imgAbsSpacing,tmpPolygon);
+      img->TransformIndexToPhysicalPoint(imgIndex, imgPoint);
+      bool isInside = this->IsSampleOnLine(line, imgPoint, imgAbsSpacing, tmpPolygon);
       if (isInside)
-        {
-        this->ProcessSample(feature,imgIndex, imgPoint, threadid);
-        }
-      ++it;
+      {
+        this->ProcessSample(feature, imgIndex, imgPoint, threadid);
       }
+      ++it;
     }
+  }
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::ProcessPolygon(const ogr::Feature& feature,
-                 OGRPolygon* polygon,
-                 RegionType& region,
-                 itk::ThreadIdType& threadid)
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::ProcessPolygon(const ogr::Feature& feature, OGRPolygon* polygon, RegionType& region,
+                                                                           itk::ThreadIdType& threadid)
 {
-  const TInputImage* img = this->GetInput();
-  TMaskImage* mask = const_cast<TMaskImage*>(this->GetMask());
+  const TInputImage*              img  = this->GetInput();
+  TMaskImage*                     mask = const_cast<TMaskImage*>(this->GetMask());
   typename TInputImage::IndexType imgIndex;
   typename TInputImage::PointType imgPoint;
-  OGRPoint tmpPoint;
+  OGRPoint                        tmpPoint;
 
   if (mask)
-    {
+  {
     // For pixels in consideredRegion and not masked
-    typedef MaskedIteratorDecorator<
-      itk::ImageRegionConstIterator<TMaskImage>,
-      itk::ImageRegionConstIterator<TMaskImage> > MaskedIteratorType;
+    typedef MaskedIteratorDecorator<itk::ImageRegionConstIterator<TMaskImage>, itk::ImageRegionConstIterator<TMaskImage>> MaskedIteratorType;
     MaskedIteratorType it(mask, mask, region);
     it.GoToBegin();
     while (!it.IsAtEnd())
-      {
+    {
       imgIndex = it.GetIndex();
-      img->TransformIndexToPhysicalPoint(imgIndex,imgPoint);
+      img->TransformIndexToPhysicalPoint(imgIndex, imgPoint);
       tmpPoint.setX(imgPoint[0]);
       tmpPoint.setY(imgPoint[1]);
-      bool isInside = this->IsSampleInsidePolygon(polygon,&tmpPoint);
+      bool isInside = this->IsSampleInsidePolygon(polygon, &tmpPoint);
       if (isInside)
-        {
-        this->ProcessSample(feature,imgIndex, imgPoint, threadid);
-        }
-      ++it;
+      {
+        this->ProcessSample(feature, imgIndex, imgPoint, threadid);
       }
+      ++it;
     }
+  }
   else
-    {
+  {
     typedef itk::ImageRegionConstIteratorWithOnlyIndex<TInputImage> NoValueIteratorType;
-    NoValueIteratorType it(img,region);
+    NoValueIteratorType                                             it(img, region);
     it.GoToBegin();
     while (!it.IsAtEnd())
-      {
+    {
       imgIndex = it.GetIndex();
-      img->TransformIndexToPhysicalPoint(imgIndex,imgPoint);
+      img->TransformIndexToPhysicalPoint(imgIndex, imgPoint);
       tmpPoint.setX(imgPoint[0]);
       tmpPoint.setY(imgPoint[1]);
-      bool isInside = this->IsSampleInsidePolygon(polygon,&tmpPoint);
+      bool isInside = this->IsSampleInsidePolygon(polygon, &tmpPoint);
       if (isInside)
-        {
-        this->ProcessSample(feature,imgIndex, imgPoint, threadid);
-        }
-      ++it;
+      {
+        this->ProcessSample(feature, imgIndex, imgPoint, threadid);
       }
+      ++it;
     }
+  }
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::ProcessSample(const ogr::Feature& ,
-                typename TInputImage::IndexType& ,
-                typename TInputImage::PointType& ,
-                itk::ThreadIdType& )
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::ProcessSample(const ogr::Feature&, typename TInputImage::IndexType&,
+                                                                          typename TInputImage::PointType&, itk::ThreadIdType&)
 {
   itkExceptionMacro("Method ProcessSample not implemented !");
 }
 
 template <class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::PrepareFeature(const ogr::Feature&,
-                 itk::ThreadIdType&)
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::PrepareFeature(const ogr::Feature&, itk::ThreadIdType&)
 {
   // Nothing to do here
 }
 
 template <class TInputImage, class TMaskImage>
-inline bool
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::IsSampleInsidePolygon(OGRPolygon* poly,
-                        OGRPoint* tmpPoint)
+inline bool PersistentSamplingFilterBase<TInputImage, TMaskImage>::IsSampleInsidePolygon(OGRPolygon* poly, OGRPoint* tmpPoint)
 {
   bool ret = poly->getExteriorRing()->isPointInRing(tmpPoint);
   if (ret)
+  {
+    for (int k = 0; k < poly->getNumInteriorRings(); k++)
     {
-    for (int k=0 ; k<poly->getNumInteriorRings() ; k++)
-      {
       if (poly->getInteriorRing(k)->isPointInRing(tmpPoint))
-        {
+      {
         ret = false;
         break;
-        }
       }
     }
+  }
   return ret;
 }
 
 template <class TInputImage, class TMaskImage>
-inline bool
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::IsSampleOnLine(OGRLineString* line,
-                 typename TInputImage::PointType& position,
-                 typename TInputImage::SpacingType& absSpacing,
-                 OGRPolygon& tmpPolygon)
+inline bool PersistentSamplingFilterBase<TInputImage, TMaskImage>::IsSampleOnLine(OGRLineString* line, typename TInputImage::PointType& position,
+                                                                                  typename TInputImage::SpacingType& absSpacing, OGRPolygon& tmpPolygon)
 {
-  tmpPolygon.getExteriorRing()->setPoint(0
-    ,position[0]-0.5*absSpacing[0]
-    ,position[1]-0.5*absSpacing[1]
-    ,0.0);
-  tmpPolygon.getExteriorRing()->setPoint(1
-    ,position[0]+0.5*absSpacing[0]
-    ,position[1]-0.5*absSpacing[1]
-    ,0.0);
-  tmpPolygon.getExteriorRing()->setPoint(2
-    ,position[0]+0.5*absSpacing[0]
-    ,position[1]+0.5*absSpacing[1]
-    ,0.0);
-  tmpPolygon.getExteriorRing()->setPoint(3
-    ,position[0]-0.5*absSpacing[0]
-    ,position[1]+0.5*absSpacing[1]
-    ,0.0);
-  tmpPolygon.getExteriorRing()->setPoint(4
-    ,position[0]-0.5*absSpacing[0]
-    ,position[1]-0.5*absSpacing[1]
-    ,0.0);
+  tmpPolygon.getExteriorRing()->setPoint(0, position[0] - 0.5 * absSpacing[0], position[1] - 0.5 * absSpacing[1], 0.0);
+  tmpPolygon.getExteriorRing()->setPoint(1, position[0] + 0.5 * absSpacing[0], position[1] - 0.5 * absSpacing[1], 0.0);
+  tmpPolygon.getExteriorRing()->setPoint(2, position[0] + 0.5 * absSpacing[0], position[1] + 0.5 * absSpacing[1], 0.0);
+  tmpPolygon.getExteriorRing()->setPoint(3, position[0] - 0.5 * absSpacing[0], position[1] + 0.5 * absSpacing[1], 0.0);
+  tmpPolygon.getExteriorRing()->setPoint(4, position[0] - 0.5 * absSpacing[0], position[1] - 0.5 * absSpacing[1], 0.0);
   return line->Intersects(&tmpPolygon);
 }
 
-template<class TInputImage, class TMaskImage>
-typename PersistentSamplingFilterBase<TInputImage,TMaskImage>::RegionType
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const
+template <class TInputImage, class TMaskImage>
+typename PersistentSamplingFilterBase<TInputImage, TMaskImage>::RegionType
+PersistentSamplingFilterBase<TInputImage, TMaskImage>::FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const
 {
   // otb::ogr wrapper is incomplete and leaky abstraction is inevitable here
   OGREnvelope envelope;
@@ -678,17 +596,17 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
 
   // swap coordinate to keep lowerIndex as start index
   if (lowerIndex[0] > upperIndex[0])
-    {
-    int tmp = lowerIndex[0];
+  {
+    int tmp       = lowerIndex[0];
     lowerIndex[0] = upperIndex[0];
     upperIndex[0] = tmp;
-    }
+  }
   if (lowerIndex[1] > upperIndex[1])
-    {
-    int tmp = lowerIndex[1];
+  {
+    int tmp       = lowerIndex[1];
     lowerIndex[1] = upperIndex[1];
     upperIndex[1] = tmp;
-    }
+  }
 
   RegionType region;
   region.SetIndex(lowerIndex);
@@ -697,16 +615,14 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   return region;
 }
 
-template<class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::DispatchInputVectors()
+template <class TInputImage, class TMaskImage>
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::DispatchInputVectors()
 {
-  TInputImage* outputImage = this->GetOutput();
-  ogr::DataSource* vectors = const_cast<ogr::DataSource*>(this->GetOGRData());
-  ogr::Layer inLayer = vectors->GetLayer(m_LayerIndex);
+  TInputImage*     outputImage = this->GetOutput();
+  ogr::DataSource* vectors     = const_cast<ogr::DataSource*>(this->GetOGRData());
+  ogr::Layer       inLayer     = vectors->GetLayer(m_LayerIndex);
 
-  const RegionType& requestedRegion = outputImage->GetRequestedRegion();
+  const RegionType&            requestedRegion = outputImage->GetRequestedRegion();
   itk::ContinuousIndex<double> startIndex(requestedRegion.GetIndex());
   itk::ContinuousIndex<double> endIndex(requestedRegion.GetUpperIndex());
   startIndex[0] += -0.5;
@@ -719,209 +635,187 @@ PersistentSamplingFilterBase<TInputImage,TMaskImage>
   outputImage->TransformContinuousIndexToPhysicalPoint(endIndex, endPoint);
 
   // create geometric extent
-  OGRPolygon tmpPolygon;
+  OGRPolygon    tmpPolygon;
   OGRLinearRing ring;
-  ring.addPoint(startPoint[0],startPoint[1],0.0);
-  ring.addPoint(startPoint[0],endPoint[1]  ,0.0);
-  ring.addPoint(endPoint[0]  ,endPoint[1]  ,0.0);
-  ring.addPoint(endPoint[0]  ,startPoint[1],0.0);
-  ring.addPoint(startPoint[0],startPoint[1],0.0);
+  ring.addPoint(startPoint[0], startPoint[1], 0.0);
+  ring.addPoint(startPoint[0], endPoint[1], 0.0);
+  ring.addPoint(endPoint[0], endPoint[1], 0.0);
+  ring.addPoint(endPoint[0], startPoint[1], 0.0);
+  ring.addPoint(startPoint[0], startPoint[1], 0.0);
   tmpPolygon.addRing(&ring);
 
   inLayer.SetSpatialFilter(&tmpPolygon);
 
-  unsigned int numberOfThreads = this->GetNumberOfThreads();
+  unsigned int            numberOfThreads = this->GetNumberOfThreads();
   std::vector<ogr::Layer> tmpLayers;
   tmpLayers.reserve(numberOfThreads);
-  for (unsigned int i=0 ; i<numberOfThreads ; i++)
-    {
+  for (unsigned int i = 0; i < numberOfThreads; i++)
+  {
     tmpLayers.push_back(this->GetInMemoryInput(i));
-    }
+  }
 
-  const unsigned int nbFeatThread = std::ceil(inLayer.GetFeatureCount(true) / (float) numberOfThreads);
-  //assert(nbFeatThread > 0);
+  const unsigned int nbFeatThread = std::ceil(inLayer.GetFeatureCount(true) / (float)numberOfThreads);
+  // assert(nbFeatThread > 0);
 
-  OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
-  ogr::Layer::const_iterator featIt = inLayer.begin();
-  unsigned int counter=0;
-  unsigned int cptFeat = 0;
-  for(; featIt!=inLayer.end(); ++featIt)
-    {
+  OGRFeatureDefn&            layerDefn = inLayer.GetLayerDefn();
+  ogr::Layer::const_iterator featIt    = inLayer.begin();
+  unsigned int               counter   = 0;
+  unsigned int               cptFeat   = 0;
+  for (; featIt != inLayer.end(); ++featIt)
+  {
     ogr::Feature dstFeature(layerDefn);
-    dstFeature.SetFrom( *featIt, TRUE );
+    dstFeature.SetFrom(*featIt, TRUE);
     dstFeature.SetFID(featIt->GetFID());
-    tmpLayers[counter].CreateFeature( dstFeature );
+    tmpLayers[counter].CreateFeature(dstFeature);
     cptFeat++;
     if (cptFeat > nbFeatThread && (counter + 1) < numberOfThreads)
-      {
+    {
       counter++;
-      cptFeat=0;
-      }
+      cptFeat = 0;
     }
+  }
 
   inLayer.SetSpatialFilter(nullptr);
 }
 
-template<class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::InitializeOutputDataSource(ogr::DataSource* inputDS, ogr::DataSource* outputDS)
+template <class TInputImage, class TMaskImage>
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::InitializeOutputDataSource(ogr::DataSource* inputDS, ogr::DataSource* outputDS)
 {
-  TInputImage *inputImage = const_cast<TInputImage*>(this->GetInput());
+  TInputImage* inputImage = const_cast<TInputImage*>(this->GetInput());
   inputImage->UpdateOutputInformation();
 
   ogr::Layer inLayer = inputDS->GetLayer(this->GetLayerIndex());
 
   bool updateMode = false;
   if (inputDS == outputDS)
-    {
+  {
     updateMode = true;
     // Check m_OutLayerName is same as input layer name
     m_OutLayerName = inLayer.GetName();
-    }
+  }
 
   // First get list of current fields
-  OGRFeatureDefn &layerDefn = inLayer.GetLayerDefn();
+  OGRFeatureDefn& layerDefn = inLayer.GetLayerDefn();
   std::map<std::string, OGRFieldType> currentFields;
-  for (int k=0 ; k<layerDefn.GetFieldCount() ; k++)
-    {
+  for (int k = 0; k < layerDefn.GetFieldCount(); k++)
+  {
     OGRFieldDefn fieldDefn(layerDefn.GetFieldDefn(k));
-    std::string currentName(fieldDefn.GetNameRef());
+    std::string  currentName(fieldDefn.GetNameRef());
     currentFields[currentName] = fieldDefn.GetType();
-    }
+  }
 
   ogr::Layer outLayer = inLayer;
   if (!updateMode)
+  {
+    std::string          projectionRefWkt               = this->GetInput()->GetProjectionRef();
+    bool                 projectionInformationAvailable = !projectionRefWkt.empty();
+    OGRSpatialReference* oSRS                           = nullptr;
+    if (projectionInformationAvailable)
     {
-    std::string projectionRefWkt = this->GetInput()->GetProjectionRef();
-    bool projectionInformationAvailable = !projectionRefWkt.empty();
-    OGRSpatialReference * oSRS = nullptr;
-    if(projectionInformationAvailable)
-      {
-      oSRS = static_cast<OGRSpatialReference *>(OSRNewSpatialReference(projectionRefWkt.c_str()));
-      }
+      oSRS = static_cast<OGRSpatialReference*>(OSRNewSpatialReference(projectionRefWkt.c_str()));
+    }
     // Create layer
-    outLayer = outputDS->CreateLayer(
-      this->GetOutLayerName(),
-      oSRS,
-      wkbPoint,
-      this->GetOGRLayerCreationOptions());
+    outLayer = outputDS->CreateLayer(this->GetOutLayerName(), oSRS, wkbPoint, this->GetOGRLayerCreationOptions());
     // Copy existing fields
-    for (int k=0 ; k<layerDefn.GetFieldCount() ; k++)
-      {
+    for (int k = 0; k < layerDefn.GetFieldCount(); k++)
+    {
       OGRFieldDefn fieldDefn(layerDefn.GetFieldDefn(k));
       outLayer.CreateField(fieldDefn);
-      }
-
-    if (oSRS)
-      {
-      oSRS->Release();
-      }
     }
 
-  // Add new fields
-  for (unsigned int k=0 ; k<m_AdditionalFields.size() ; k++)
+    if (oSRS)
     {
-    OGRFieldDefn ogrFieldDefinition(m_AdditionalFields[k].Name.c_str(),m_AdditionalFields[k].Type);
-    ogrFieldDefinition.SetWidth( m_AdditionalFields[k].Width );
-    ogrFieldDefinition.SetPrecision( m_AdditionalFields[k].Precision );
+      oSRS->Release();
+    }
+  }
+
+  // Add new fields
+  for (unsigned int k = 0; k < m_AdditionalFields.size(); k++)
+  {
+    OGRFieldDefn ogrFieldDefinition(m_AdditionalFields[k].Name.c_str(), m_AdditionalFields[k].Type);
+    ogrFieldDefinition.SetWidth(m_AdditionalFields[k].Width);
+    ogrFieldDefinition.SetPrecision(m_AdditionalFields[k].Precision);
     ogr::FieldDefn fieldDef(ogrFieldDefinition);
     // test if field is already present
     if (currentFields.count(fieldDef.GetName()))
-      {
+    {
       // test the field type
       if (currentFields[fieldDef.GetName()] != fieldDef.GetType())
-        {
-        itkExceptionMacro("Field name "<< fieldDef.GetName() << " already exists with a different type!");
-        }
-      }
-    else
       {
-      outLayer.CreateField(fieldDef);
+        itkExceptionMacro("Field name " << fieldDef.GetName() << " already exists with a different type!");
       }
     }
+    else
+    {
+      outLayer.CreateField(fieldDef);
+    }
+  }
 }
 
 
-template<class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::ClearAdditionalFields()
+template <class TInputImage, class TMaskImage>
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::ClearAdditionalFields()
 {
   this->m_AdditionalFields.clear();
 }
 
-template<class TInputImage, class TMaskImage>
-void
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::CreateAdditionalField(std::string name,
-                        OGRFieldType type,
-                        int width,
-                        int precision)
+template <class TInputImage, class TMaskImage>
+void PersistentSamplingFilterBase<TInputImage, TMaskImage>::CreateAdditionalField(std::string name, OGRFieldType type, int width, int precision)
 {
   SimpleFieldDefn defn;
-  defn.Name = name;
-  defn.Type = type;
-  defn.Width = width;
+  defn.Name      = name;
+  defn.Type      = type;
+  defn.Width     = width;
   defn.Precision = precision;
   this->m_AdditionalFields.push_back(defn);
 }
 
-template<class TInputImage, class TMaskImage>
-const std::vector<
-  typename PersistentSamplingFilterBase<TInputImage,TMaskImage>
-    ::SimpleFieldDefn>&
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::GetAdditionalFields()
+template <class TInputImage, class TMaskImage>
+const std::vector<typename PersistentSamplingFilterBase<TInputImage, TMaskImage>::SimpleFieldDefn>&
+PersistentSamplingFilterBase<TInputImage, TMaskImage>::GetAdditionalFields()
 {
   return this->m_AdditionalFields;
 }
 
-template<class TInputImage, class TMaskImage>
-ITK_THREAD_RETURN_TYPE
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::VectorThreaderCallback(void *arg)
+template <class TInputImage, class TMaskImage>
+ITK_THREAD_RETURN_TYPE PersistentSamplingFilterBase<TInputImage, TMaskImage>::VectorThreaderCallback(void* arg)
 {
-  VectorThreadStruct *str = (VectorThreadStruct*)(((itk::MultiThreader::ThreadInfoStruct *)(arg))->UserData);
+  VectorThreadStruct* str = (VectorThreadStruct*)(((itk::MultiThreader::ThreadInfoStruct*)(arg))->UserData);
 
-  int threadId = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->ThreadID;
-  int threadCount = ((itk::MultiThreader::ThreadInfoStruct *)(arg))->NumberOfThreads;
+  int threadId    = ((itk::MultiThreader::ThreadInfoStruct*)(arg))->ThreadID;
+  int threadCount = ((itk::MultiThreader::ThreadInfoStruct*)(arg))->NumberOfThreads;
 
   ogr::Layer layer = str->Filter->GetInMemoryInput(threadId);
 
   if (threadId < threadCount)
-    {
-    str->Filter->ThreadedGenerateVectorData(layer,threadId);
-    }
+  {
+    str->Filter->ThreadedGenerateVectorData(layer, threadId);
+  }
 
   return ITK_THREAD_RETURN_VALUE;
 }
 
-template<class TInputImage, class TMaskImage>
-ogr::Layer
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::GetInMemoryInput(unsigned int threadId)
+template <class TInputImage, class TMaskImage>
+ogr::Layer PersistentSamplingFilterBase<TInputImage, TMaskImage>::GetInMemoryInput(unsigned int threadId)
 {
   if (threadId >= m_InMemoryInputs.size())
-    {
-    itkExceptionMacro(<< "Requested in-memory input layer not available " << threadId << " (total size : "<< m_InMemoryInputs.size() <<").");
-    }
+  {
+    itkExceptionMacro(<< "Requested in-memory input layer not available " << threadId << " (total size : " << m_InMemoryInputs.size() << ").");
+  }
   return m_InMemoryInputs[threadId]->GetLayerChecked(0);
 }
 
-template<class TInputImage, class TMaskImage>
-ogr::Layer
-PersistentSamplingFilterBase<TInputImage,TMaskImage>
-::GetInMemoryOutput(unsigned int threadId, unsigned int index)
+template <class TInputImage, class TMaskImage>
+ogr::Layer PersistentSamplingFilterBase<TInputImage, TMaskImage>::GetInMemoryOutput(unsigned int threadId, unsigned int index)
 {
   if (threadId >= m_InMemoryOutputs.size())
-    {
-    itkExceptionMacro(<< "Requested in-memory output layer not available " << threadId << " (total size : "<< m_InMemoryOutputs.size() <<").");
-    }
+  {
+    itkExceptionMacro(<< "Requested in-memory output layer not available " << threadId << " (total size : " << m_InMemoryOutputs.size() << ").");
+  }
   if (index >= m_InMemoryOutputs[threadId].size())
-    {
-    itkExceptionMacro(<< "Requested output dataset not available " << index << " (available : "<< m_InMemoryOutputs[threadId].size() <<").");
-    }
+  {
+    itkExceptionMacro(<< "Requested output dataset not available " << index << " (available : " << m_InMemoryOutputs[threadId].size() << ").");
+  }
   return m_InMemoryOutputs[threadId][index]->GetLayerChecked(0);
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,8 +31,7 @@ namespace otb
  * Constructor.
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
-::ConcatenateVectorImageFilter()
+ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::ConcatenateVectorImageFilter()
 {
   this->SetNumberOfRequiredInputs(2);
 }
@@ -40,60 +39,50 @@ ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
  * Destructor.
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
-::~ConcatenateVectorImageFilter()
-{}
+ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::~ConcatenateVectorImageFilter()
+{
+}
 /**
  * Set The first input image.
  * \param image The first input image.
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-void
-ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
-::SetInput1(const TInputImage1 * image)
+void ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::SetInput1(const TInputImage1* image)
 {
-  this->SetNthInput(0, const_cast<TInputImage1 *>(image));
+  this->SetNthInput(0, const_cast<TInputImage1*>(image));
 }
 /**
  * Set The second input image.
  * \param image The second input image.
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-void
-ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
-::SetInput2(const TInputImage2 * image)
+void ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::SetInput2(const TInputImage2* image)
 {
-  this->SetNthInput(1, const_cast<TInputImage2 *>(image));
+  this->SetNthInput(1, const_cast<TInputImage2*>(image));
 }
 /**
  * Get the first input image.
  * \return The first input image.
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-typename ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
-::InputImage1Type *
-ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
-::GetInput1(void)
+typename ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::InputImage1Type*
+ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::GetInput1(void)
 {
-  return const_cast<InputImage1Type *>(this->GetInput(0));
+  return const_cast<InputImage1Type*>(this->GetInput(0));
 }
 /**
  * Get the second input image.
  * \return The second input image.
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-typename ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
-::InputImage2Type *
-ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
-::GetInput2(void)
+typename ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::InputImage2Type*
+ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::GetInput2(void)
 {
-  return const_cast<InputImage2Type *>(this->GetInput(1));
+  return const_cast<InputImage2Type*>(this->GetInput(1));
 }
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-void
-ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
-::GenerateOutputInformation()
+void ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::GenerateOutputInformation()
 {
   // Call to the superclass implementation
   Superclass::GenerateOutputInformation();
@@ -102,17 +91,14 @@ ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
   typename Superclass::InputImageConstPointer inputPtr2 = this->GetInput2();
   typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
 
-  unsigned int nbComponentsPerPixel = inputPtr1->GetNumberOfComponentsPerPixel() +
-                                      inputPtr2->GetNumberOfComponentsPerPixel();
+  unsigned int nbComponentsPerPixel = inputPtr1->GetNumberOfComponentsPerPixel() + inputPtr2->GetNumberOfComponentsPerPixel();
 
   // initialize the number of channels of the output image
   outputPtr->SetNumberOfComponentsPerPixel(nbComponentsPerPixel);
 }
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-void
-ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
-::BeforeThreadedGenerateData()
+void ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::BeforeThreadedGenerateData()
 {
   Superclass::BeforeThreadedGenerateData();
 
@@ -121,19 +107,17 @@ ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
   typename Superclass::OutputImagePointer     outputPtr = this->GetOutput();
 
   if (inputPtr1->GetLargestPossibleRegion() != inputPtr2->GetLargestPossibleRegion())
-    {
+  {
     itkExceptionMacro(<< "InputImage1 and InputImage2 have different requested regions.");
-    }
+  }
 }
 
 /**
  * Main computation method.
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-void
-ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                       itk::ThreadIdType threadId)
+void ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                                                                                  itk::ThreadIdType threadId)
 {
   // retrieves inputs and output pointer
   InputImage1PointerType input1 = this->GetInput1();
@@ -167,7 +151,7 @@ ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
 
   // Iterate through the pixel
   while (!outputIt.IsAtEnd())
-    {
+  {
 
     // Check the size of each input pixel
     assert(l1 == input1It.Get().GetSize());
@@ -180,32 +164,29 @@ ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
 
     // Loop through each band of the first image
     for (unsigned int i = 0; i < l1; ++i)
-      {
+    {
       // Fill the output pixel
       outputPix[i] = static_cast<typename OutputImageType::InternalPixelType>(pix1[i]);
-      }
+    }
     // Loop though each band of the second image
     for (unsigned int i = 0; i < l2; ++i)
-      {
+    {
       // Fill the output pixel
       outputPix[i + l1] = static_cast<typename OutputImageType::InternalPixelType>(pix2[i]);
-      }
+    }
     // Set the output pixel
     outputIt.Set(outputPix);
     // Increment the iterator
     ++input1It;
     ++input2It;
     ++outputIt;
-    }
-
+  }
 }
 /**
  * PrintSelf method.
  */
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-void
-ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ConcatenateVectorImageFilter<TInputImage1, TInputImage2, TOutputImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

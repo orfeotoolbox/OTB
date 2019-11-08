@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,61 +28,50 @@ namespace otb
 {
 
 template <class TOutputLabelMap>
-LabelMapSource<TOutputLabelMap>
-::LabelMapSource()
+LabelMapSource<TOutputLabelMap>::LabelMapSource()
 {
   this->Superclass::SetNumberOfRequiredOutputs(1);
   this->Superclass::SetNthOutput(0, OutputLabelMapType::New().GetPointer());
 }
 
 template <class TOutputLabelMap>
-LabelMapSource<TOutputLabelMap>
-::~LabelMapSource()
+LabelMapSource<TOutputLabelMap>::~LabelMapSource()
 {
 }
 
 template <class TOutputLabelMap>
-void
-LabelMapSource<TOutputLabelMap>
-::AllocateOutputs()
+void LabelMapSource<TOutputLabelMap>::AllocateOutputs()
 {
   OutputLabelMapPointer outputPtr;
 
   // Allocate the output memory
   for (unsigned int i = 0; i < this->GetNumberOfOutputs(); ++i)
-    {
+  {
     outputPtr = this->GetOutput(i);
 
-    //TODO Need to implement the Clear Method in the class itk::LabelMap
-    //outputPtr->Clear();
-    }
+    // TODO Need to implement the Clear Method in the class itk::LabelMap
+    // outputPtr->Clear();
+  }
 }
 
 template <class TOutputLabelMap>
-typename LabelMapSource<TOutputLabelMap>::OutputLabelMapType *
-LabelMapSource<TOutputLabelMap>
-::GetOutput(void)
+typename LabelMapSource<TOutputLabelMap>::OutputLabelMapType* LabelMapSource<TOutputLabelMap>::GetOutput(void)
 {
   if (this->GetNumberOfOutputs() < 1)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<OutputLabelMapType *> (this->ProcessObject::GetOutput(0));
+  }
+  return static_cast<OutputLabelMapType*>(this->ProcessObject::GetOutput(0));
 }
 
 template <class TOutputLabelMap>
-typename LabelMapSource<TOutputLabelMap>::OutputLabelMapType *
-LabelMapSource<TOutputLabelMap>
-::GetOutput(DataObjectPointerArraySizeType idx)
+typename LabelMapSource<TOutputLabelMap>::OutputLabelMapType* LabelMapSource<TOutputLabelMap>::GetOutput(DataObjectPointerArraySizeType idx)
 {
-  return static_cast<OutputLabelMapType*>
-           (this->Superclass::GetOutput(idx));
+  return static_cast<OutputLabelMapType*>(this->Superclass::GetOutput(idx));
 }
 
-template<class TOutputLabelMap>
-void
-LabelMapSource<TOutputLabelMap>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TOutputLabelMap>
+void LabelMapSource<TOutputLabelMap>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

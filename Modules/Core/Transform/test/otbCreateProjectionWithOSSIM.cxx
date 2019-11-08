@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -17,7 +17,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 /*!
@@ -47,6 +46,8 @@
 
 #include "otbInverseSensorModel.h"
 
+#include "otb_ossim.h"
+
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -67,17 +68,17 @@
 int otbCreateProjectionWithOSSIM(int argc, char* argv[])
 {
   if (argc != 2)
-    {
+  {
     std::cout << argv[0] << " <input filename> " << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   otbGenericMsgDebugMacro(<< "Creating handler...");
-  ossimImageHandler *handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(argv[1]));
+  ossimImageHandler* handler = ossimImageHandlerRegistry::instance()->open(ossimFilename(argv[1]));
   if (!handler)
-    {
+  {
     itkGenericExceptionMacro(<< "Unable to open input image " << argv[1]);
-    }
+  }
 
   ossimKeywordlist geom;
   otbGenericMsgDebugMacro(<< "Read ossim Keywordlist...");
@@ -85,20 +86,19 @@ int otbCreateProjectionWithOSSIM(int argc, char* argv[])
   ossimGpt ossimGPoint(0, 0);
   ossimDpt ossimDPoint;
   otbGenericMsgDebugMacro(<< "Creating projection...");
-  ossimProjection * model = nullptr;
-  model = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
+  ossimProjection* model = nullptr;
+  model                  = ossimProjectionFactoryRegistry::instance()->createProjection(geom);
   if (model == nullptr)
-    {
+  {
     itkGenericExceptionMacro(<< "Invalid Model * == NULL !");
-    }
+  }
 
   otbGenericMsgDebugMacro(<< "Creating RefPtr of projection...");
   ossimRefPtr<ossimProjection> ptrmodel = model;
   if (ptrmodel.valid() == false)
-    {
+  {
     itkGenericExceptionMacro(<< "Invalid Model pointer .valid() == false !");
-    }
+  }
 
   return EXIT_SUCCESS;
-
 }

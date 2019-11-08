@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,8 +29,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage, class TFilter>
-LabelizeImageFilterBase<TInputImage, TOutputImage, TFilter>
-::LabelizeImageFilterBase()
+LabelizeImageFilterBase<TInputImage, TOutputImage, TFilter>::LabelizeImageFilterBase()
 {
   m_LowerThreshold = itk::NumericTraits<InputPixelType>::NonpositiveMin();
   m_UpperThreshold = itk::NumericTraits<InputPixelType>::max();
@@ -47,9 +46,7 @@ LabelizeImageFilterBase<TInputImage, TOutputImage, TFilter>
  *
  */
 template <class TInputImage, class TOutputImage, class TFilter>
-void
-LabelizeImageFilterBase<TInputImage, TOutputImage, TFilter>
-::GenerateData()
+void LabelizeImageFilterBase<TInputImage, TOutputImage, TFilter>::GenerateData()
 {
   // set input for region growing filter
   m_RegionGrowingFilter->SetInput(this->GetInput());
@@ -63,27 +60,26 @@ LabelizeImageFilterBase<TInputImage, TOutputImage, TFilter>
   m_ThresholdPointSetFilter->SetLowerThreshold(m_LowerThreshold);
   m_ThresholdPointSetFilter->SetUpperThreshold(m_UpperThreshold);
   m_ThresholdPointSetFilter->Update();
-  m_PointSet = m_ThresholdPointSetFilter->GetOutput();
+  m_PointSet    = m_ThresholdPointSetFilter->GetOutput();
   m_ObjectCount = 0;
 
   // Iterate Point set
   typedef typename PointSetType::PointsContainer ContainerType;
-  ContainerType* pointsContainer = m_PointSet->GetPoints();
-  typedef typename ContainerType::Iterator IteratorType;
-  IteratorType itList = pointsContainer->Begin();
+  ContainerType*                                 pointsContainer = m_PointSet->GetPoints();
+  typedef typename ContainerType::Iterator       IteratorType;
+  IteratorType                                   itList = pointsContainer->Begin();
 
   typename OutputImageType::Pointer outputImage = m_MultiplyFilter->GetOutput();
 
   while (itList != pointsContainer->End())
-    {
+  {
     typename PointSetType::PointType   pCoordinate = (itList.Value());
     typename InputImageType::IndexType index;
 
-    index[0] = static_cast <int> (pCoordinate[0]);
-    index[1] = static_cast <int> (pCoordinate[1]);
-    if (outputImage->GetPixel(index) ==
-        itk::NumericTraits<OutputPixelType>::ZeroValue())
-      {
+    index[0] = static_cast<int>(pCoordinate[0]);
+    index[1] = static_cast<int>(pCoordinate[1]);
+    if (outputImage->GetPixel(index) == itk::NumericTraits<OutputPixelType>::ZeroValue())
+    {
       this->RegionGrowing(index);
 
       AddImageFilterPointerType addImage = AddImageFilterType::New();
@@ -92,9 +88,9 @@ LabelizeImageFilterBase<TInputImage, TOutputImage, TFilter>
       addImage->Update();
       outputImage = addImage->GetOutput();
       ++m_ObjectCount;
-      }
-    ++itList;
     }
+    ++itList;
+  }
 
   this->GraftOutput(outputImage);
 }
@@ -103,15 +99,13 @@ LabelizeImageFilterBase<TInputImage, TOutputImage, TFilter>
  *
  */
 template <class TInputImage, class TOutputImage, class TFilter>
-void
-LabelizeImageFilterBase<TInputImage, TOutputImage, TFilter>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void LabelizeImageFilterBase<TInputImage, TOutputImage, TFilter>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
   os << indent << "Seeds lower threshold: " << m_LowerThreshold << std::endl;
   os << indent << "Seeds upper threshold: " << m_UpperThreshold << std::endl;
-  os << indent << "ObjectCount: "  << m_ObjectCount << std::endl;
+  os << indent << "ObjectCount: " << m_ObjectCount << std::endl;
   os << indent << m_RegionGrowingFilter << std::endl;
 }
 } // end namespace otb

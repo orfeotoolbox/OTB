@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -43,24 +43,23 @@ namespace otb
   */
 
 template <class TInputVectorData, class TInputImage>
-class ITK_EXPORT VectorDataIntoImageProjectionFilter :
-  public otb::VectorDataToVectorDataFilter<TInputVectorData, TInputVectorData>
+class ITK_EXPORT VectorDataIntoImageProjectionFilter : public otb::VectorDataToVectorDataFilter<TInputVectorData, TInputVectorData>
 {
 
 public:
   /** Standard class typedefs. */
-  typedef VectorDataIntoImageProjectionFilter                                           Self;
-  typedef otb::VectorDataToVectorDataFilter<TInputVectorData, TInputVectorData>  Superclass;
-  typedef itk::SmartPointer<Self>                                                Pointer;
-  typedef itk::SmartPointer<const Self>                                          ConstPointer;
+  typedef VectorDataIntoImageProjectionFilter Self;
+  typedef otb::VectorDataToVectorDataFilter<TInputVectorData, TInputVectorData> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** VectorData typedefs. */
   typedef TInputVectorData                        InputVectorDataType;
   typedef typename TInputVectorData::ConstPointer InputVectorDataPointer;
 
   /** Image typedefs. */
-  typedef TInputImage                                          ImageType;
-  typedef typename TInputImage::Pointer                        ImagePointerType;
+  typedef TInputImage                   ImageType;
+  typedef typename TInputImage::Pointer ImagePointerType;
 
   typedef itk::Vector<double, 2> SpacingType;
   typedef itk::Point<double, 2>  OriginType;
@@ -105,19 +104,20 @@ public:
 protected:
   VectorDataIntoImageProjectionFilter();
 
-  ~VectorDataIntoImageProjectionFilter() override {}
+  ~VectorDataIntoImageProjectionFilter() override
+  {
+  }
 
   void GenerateData(void) override;
 
   // Projection filter
-  typedef VectorDataProjectionFilter<InputVectorDataType, InputVectorDataType>
-                                                                VectorDataProjectionFilterType;
-  typedef VectorDataExtractROI<InputVectorDataType>             VectorDataExtractROIType;
-  typedef typename VectorDataExtractROIType::RegionType         RemoteSensingRegionType;
+  typedef VectorDataProjectionFilter<InputVectorDataType, InputVectorDataType> VectorDataProjectionFilterType;
+  typedef VectorDataExtractROI<InputVectorDataType>     VectorDataExtractROIType;
+  typedef typename VectorDataExtractROIType::RegionType RemoteSensingRegionType;
 
 private:
-  VectorDataIntoImageProjectionFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  VectorDataIntoImageProjectionFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   ImagePointerType m_InputImage;
 
@@ -128,7 +128,6 @@ private:
   OriginType  m_OutputOrigin;
 
   bool m_UseOutputSpacingAndOriginFromImage;
-
 };
 
 } // end namespace otb

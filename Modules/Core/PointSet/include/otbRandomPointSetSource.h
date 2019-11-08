@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,8 +44,7 @@ namespace otb
  */
 
 template <class TOutputPointSet>
-class ITK_EXPORT RandomPointSetSource
-  : public PointSetSource<TOutputPointSet>
+class ITK_EXPORT RandomPointSetSource : public PointSetSource<TOutputPointSet>
 {
 
 public:
@@ -56,29 +55,29 @@ public:
   typedef itk::SmartPointer<const Self>   ConstPointer;
 
   /** Method for creation through the object factory. */
-  itkNewMacro(Self)
+  itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RandomPointSetSource, PointSetSource)
+  itkTypeMacro(RandomPointSetSource, PointSetSource);
 
   /** Some convenient typedefs. */
-  typedef itk::DataObject::Pointer                     DataObjectPointer;
-  typedef TOutputPointSet                              OutputPointSetType;
-  typedef typename OutputPointSetType::Pointer         OutputPointSetPointer;
-  typedef typename OutputPointSetType::PointsContainer PointsContainerType;
-  typedef typename PointsContainerType::Pointer        PointsContainerPointer;
-  typedef typename OutputPointSetType::PointType       PointType;
+  typedef itk::DataObject::Pointer                               DataObjectPointer;
+  typedef TOutputPointSet                                        OutputPointSetType;
+  typedef typename OutputPointSetType::Pointer                   OutputPointSetPointer;
+  typedef typename OutputPointSetType::PointsContainer           PointsContainerType;
+  typedef typename PointsContainerType::Pointer                  PointsContainerPointer;
+  typedef typename OutputPointSetType::PointType                 PointType;
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator GeneratorType;
   typedef GeneratorType::Pointer                                 GeneratorPointerType;
   typedef GeneratorType::IntegerType                             SeedType;
 
-  itkSetMacro(NumberOfPoints, unsigned int)
-  itkGetMacro(NumberOfPoints, unsigned int)
+  itkSetMacro(NumberOfPoints, unsigned int);
+  itkGetMacro(NumberOfPoints, unsigned int);
 
-  itkSetMacro(MinPoint, PointType)
-  itkGetMacro(MinPoint, PointType)
-  itkSetMacro(MaxPoint, PointType)
-  itkGetMacro(MaxPoint, PointType)
+  itkSetMacro(MinPoint, PointType);
+  itkGetMacro(MinPoint, PointType);
+  itkSetMacro(MaxPoint, PointType);
+  itkGetMacro(MaxPoint, PointType);
 
   void SetSeed(SeedType seed)
   {
@@ -87,13 +86,15 @@ public:
 
 protected:
   RandomPointSetSource();
-  ~RandomPointSetSource() override {}
+  ~RandomPointSetSource() override
+  {
+  }
 
   void GenerateData(void) override;
 
 private:
-  RandomPointSetSource(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  RandomPointSetSource(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   unsigned int m_NumberOfPoints;
 
@@ -101,9 +102,7 @@ private:
 
   PointType m_MinPoint;
   PointType m_MaxPoint;
-
 };
-
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION

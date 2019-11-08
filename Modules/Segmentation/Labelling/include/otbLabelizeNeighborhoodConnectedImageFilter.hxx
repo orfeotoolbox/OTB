@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,9 +28,8 @@ namespace otb
 /**
  * Constructor
  */
-template  <class TInputImage, class TOutputImage>
-LabelizeNeighborhoodConnectedImageFilter<TInputImage, TOutputImage>
-::LabelizeNeighborhoodConnectedImageFilter()
+template <class TInputImage, class TOutputImage>
+LabelizeNeighborhoodConnectedImageFilter<TInputImage, TOutputImage>::LabelizeNeighborhoodConnectedImageFilter()
 {
   m_LowerThresholdDelta = itk::NumericTraits<InputPixelType>::NonpositiveMin();
   m_UpperThresholdDelta = itk::NumericTraits<InputPixelType>::max();
@@ -42,9 +41,7 @@ LabelizeNeighborhoodConnectedImageFilter<TInputImage, TOutputImage>
  *
  */
 template <class TInputImage, class TOutputImage>
-void
-LabelizeNeighborhoodConnectedImageFilter<TInputImage, TOutputImage>
-::RegionGrowing(const IndexType indexSeed)
+void LabelizeNeighborhoodConnectedImageFilter<TInputImage, TOutputImage>::RegionGrowing(const IndexType indexSeed)
 {
   InputPixelType threshold = this->GetInput()->GetPixel(indexSeed);
 
@@ -60,9 +57,7 @@ LabelizeNeighborhoodConnectedImageFilter<TInputImage, TOutputImage>
  *
  */
 template <class TInputImage, class TOutputImage>
-void
-LabelizeNeighborhoodConnectedImageFilter<TInputImage, TOutputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void LabelizeNeighborhoodConnectedImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "LowerThresholdDelta: " << m_LowerThresholdDelta << std::endl;

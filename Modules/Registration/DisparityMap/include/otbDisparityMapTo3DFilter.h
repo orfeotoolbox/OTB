@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -48,18 +48,16 @@ namespace otb
  *
  * \ingroup OTBDisparityMap
  */
-template <class TDisparityImage, class TOutputImage =  otb::VectorImage<float,2>,
-          class TEpipolarGridImage = otb::VectorImage<float,2> , class TMaskImage = otb::Image<unsigned char> >
-class ITK_EXPORT DisparityMapTo3DFilter :
-    public itk::ImageToImageFilter<TDisparityImage,TOutputImage>
+template <class TDisparityImage, class TOutputImage = otb::VectorImage<float, 2>, class TEpipolarGridImage = otb::VectorImage<float, 2>,
+          class TMaskImage = otb::Image<unsigned char>>
+class ITK_EXPORT DisparityMapTo3DFilter : public itk::ImageToImageFilter<TDisparityImage, TOutputImage>
 {
 public:
   /** Standard class typedef */
-  typedef DisparityMapTo3DFilter                            Self;
-  typedef itk::ImageToImageFilter<TDisparityImage,
-                                  TOutputImage>             Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef DisparityMapTo3DFilter Self;
+  typedef itk::ImageToImageFilter<TDisparityImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -68,76 +66,76 @@ public:
   itkTypeMacro(DisparityMapTo3DFilter, ImageToImageFilter);
 
   /** Useful typedefs */
-  typedef TDisparityImage         DisparityMapType;
-  typedef TOutputImage            OutputImageType;
-  typedef TEpipolarGridImage      GridImageType;
-  typedef TMaskImage              MaskImageType;
+  typedef TDisparityImage    DisparityMapType;
+  typedef TOutputImage       OutputImageType;
+  typedef TEpipolarGridImage GridImageType;
+  typedef TMaskImage         MaskImageType;
 
-  typedef typename OutputImageType::RegionType         RegionType;
-  typedef typename OutputImageType::PixelType          DEMPixelType;
+  typedef typename OutputImageType::RegionType RegionType;
+  typedef typename OutputImageType::PixelType  DEMPixelType;
 
   // 3D RS transform
   // TODO: Allow tuning precision (i.e. double or float)
-  typedef double                                      PrecisionType;
-  typedef otb::GenericRSTransform<PrecisionType,3,3>  RSTransformType;
+  typedef double PrecisionType;
+  typedef otb::GenericRSTransform<PrecisionType, 3, 3> RSTransformType;
 
   // 3D points
-  typedef typename RSTransformType::InputPointType  TDPointType;
+  typedef typename RSTransformType::InputPointType TDPointType;
 
   typedef otb::LineOfSightOptimizer<PrecisionType>  OptimizerType;
   typedef typename OptimizerType::PointSetType      PointSetType;
   typedef typename PointSetType::PointsContainer    PointsContainer;
   typedef typename PointSetType::PointDataContainer LabelContainer;
 
-  typedef otb::ImageKeywordlist                     ImageKeywordListType;
+  typedef otb::ImageKeywordlist ImageKeywordListType;
 
   /** Set horizontal disparity map input */
-  void SetHorizontalDisparityMapInput( const TDisparityImage * hmap);
+  void SetHorizontalDisparityMapInput(const TDisparityImage* hmap);
 
   /** Set vertical disparity map input */
-  void SetVerticalDisparityMapInput( const TDisparityImage * vmap);
+  void SetVerticalDisparityMapInput(const TDisparityImage* vmap);
 
   /** Set left epipolar grid (deformation grid from sensor image to epipolar space, regular in epipolar space)*/
-  void SetLeftEpipolarGridInput( const TEpipolarGridImage * grid);
+  void SetLeftEpipolarGridInput(const TEpipolarGridImage* grid);
 
   /** Set right epipolar grid (deformation grid from sensor image to epipolar space, regular in epipolar space)*/
-  void SetRightEpipolarGridInput( const TEpipolarGridImage * grid);
+  void SetRightEpipolarGridInput(const TEpipolarGridImage* grid);
 
   /** Set mask associated to disparity maps (optional, pixels with a null mask value are ignored) */
-  void SetDisparityMaskInput( const TMaskImage * mask);
+  void SetDisparityMaskInput(const TMaskImage* mask);
 
   /** Get the inputs */
-  const TDisparityImage * GetHorizontalDisparityMapInput() const;
-  const TDisparityImage * GetVerticalDisparityMapInput() const;
-  const TEpipolarGridImage * GetLeftEpipolarGridInput() const;
-  const TEpipolarGridImage * GetRightEpipolarGridInput() const;
-  const TMaskImage  * GetDisparityMaskInput() const;
+  const TDisparityImage*    GetHorizontalDisparityMapInput() const;
+  const TDisparityImage*    GetVerticalDisparityMapInput() const;
+  const TEpipolarGridImage* GetLeftEpipolarGridInput() const;
+  const TEpipolarGridImage* GetRightEpipolarGridInput() const;
+  const TMaskImage*         GetDisparityMaskInput() const;
 
   /** Set left keywordlist */
   void SetLeftKeywordList(const ImageKeywordListType kwl)
-    {
+  {
     this->m_LeftKeywordList = kwl;
     this->Modified();
-    }
+  }
 
   /** Get left keywordlist */
-  const ImageKeywordListType & GetLeftKeywordList() const
-    {
+  const ImageKeywordListType& GetLeftKeywordList() const
+  {
     return this->m_LeftKeywordList;
-    }
+  }
 
-   /** Set right keywordlist */
+  /** Set right keywordlist */
   void SetRightKeywordList(const ImageKeywordListType kwl)
-    {
+  {
     this->m_RightKeywordList = kwl;
     this->Modified();
-    }
+  }
 
   /** Get right keywordlist */
-  const ImageKeywordListType & GetRightKeywordList() const
-    {
+  const ImageKeywordListType& GetRightKeywordList() const
+  {
     return this->m_RightKeywordList;
-    }
+  }
 
 protected:
   /** Constructor */
@@ -156,14 +154,16 @@ protected:
   void BeforeThreadedGenerateData() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** Override VerifyInputInformation() since this filter's inputs do
     * not need to occupy the same physical space.
     *
     * \sa ProcessObject::VerifyInputInformation
     */
-  void VerifyInputInformation() override {}
+  void VerifyInputInformation() override
+  {
+  }
 
 
 private:

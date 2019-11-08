@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,9 +30,8 @@ namespace otb
 /**
  * Constructor
  */
-template  <class TInputImage, class TOutputImage>
-LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>
-::LabelizeConfidenceConnectedImageFilter()
+template <class TInputImage, class TOutputImage>
+LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>::LabelizeConfidenceConnectedImageFilter()
 {
   m_ReplaceValue = itk::NumericTraits<OutputPixelType>::One;
 }
@@ -41,9 +40,7 @@ LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>
  *
  */
 template <class TInputImage, class TOutputImage>
-void
-LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>
-::RegionGrowing(const IndexType indexSeed)
+void LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>::RegionGrowing(const IndexType indexSeed)
 {
   this->m_RegionGrowingFilter->SetReplaceValue(m_ReplaceValue);
   this->m_RegionGrowingFilter->SetSeed(indexSeed);
@@ -54,9 +51,7 @@ LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>
  *
  */
 template <class TInputImage, class TOutputImage>
-void
-LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void LabelizeConfidenceConnectedImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "ReplaceValue: " << m_ReplaceValue << std::endl;

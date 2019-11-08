@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -63,7 +63,7 @@ namespace otb
  */
 
 template <unsigned int VImageDimension>
-class ITK_EXPORT ImageRegionNonUniformMultidimensionalSplitter : public itk::ImageRegionSplitter<VImageDimension>
+class ITK_EXPORT       ImageRegionNonUniformMultidimensionalSplitter : public itk::ImageRegionSplitter<VImageDimension>
 {
 public:
   /** Standard class typedefs. */
@@ -96,41 +96,46 @@ public:
    * a certain dimensions, then some splits will not be possible. This
    * method returns a number less than or equal to the requested number
    * of pieces.  */
-  unsigned int GetNumberOfSplits(const RegionType& region,
-                                         unsigned int requestedNumber) override;
+  unsigned int GetNumberOfSplits(const RegionType& region, unsigned int requestedNumber) override;
 
   /** Get a region definition that represents the ith piece a specified region.
    * The "numberOfPieces" specified should be less than or equal to what
    * GetNumberOfSplits() returns. */
-  RegionType GetSplit(unsigned int i, unsigned int numberOfPieces,
-                              const RegionType& region) override;
+  RegionType GetSplit(unsigned int i, unsigned int numberOfPieces, const RegionType& region) override;
 
 protected:
-  ImageRegionNonUniformMultidimensionalSplitter() {}
-  ~ImageRegionNonUniformMultidimensionalSplitter() override {}
+  ImageRegionNonUniformMultidimensionalSplitter()
+  {
+  }
+  ~ImageRegionNonUniformMultidimensionalSplitter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageRegionNonUniformMultidimensionalSplitter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  ImageRegionNonUniformMultidimensionalSplitter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb
 
 // Define instantiation macro for this template.
-#define ITK_TEMPLATE_ImageRegionNonUniformMultidimensionalSplitter(_, EXPORT, x, y) namespace otb { \
-  _(1 (class EXPORT ImageRegionNonUniformMultidimensionalSplitter<ITK_TEMPLATE_1 x>)) \
-  namespace Templates { typedef ImageRegionNonUniformMultidimensionalSplitter<ITK_TEMPLATE_1 x> \
-                        ImageRegionNonUniformMultidimensionalSplitter ## y; } \
+#define ITK_TEMPLATE_ImageRegionNonUniformMultidimensionalSplitter(_, EXPORT, x, y)                                         \
+  namespace otb                                                                                                             \
+  {                                                                                                                         \
+  _(1(class EXPORT ImageRegionNonUniformMultidimensionalSplitter<ITK_TEMPLATE_1 x>))                                        \
+  namespace Templates                                                                                                       \
+  {                                                                                                                         \
+  typedef ImageRegionNonUniformMultidimensionalSplitter<ITK_TEMPLATE_1 x> ImageRegionNonUniformMultidimensionalSplitter##y; \
+  }                                                                                                                         \
   }
 
 #if ITK_TEMPLATE_EXPLICIT
-# include "Templates/otbImageRegionNonUniformMultidimensionalSplitter+-.h"
+#include "Templates/otbImageRegionNonUniformMultidimensionalSplitter+-.h"
 #endif
 
 #ifndef ITK_MANUAL_INSTANTIATION
-# include "otbImageRegionNonUniformMultidimensionalSplitter.hxx"
+#include "otbImageRegionNonUniformMultidimensionalSplitter.hxx"
 #endif
 
 #endif

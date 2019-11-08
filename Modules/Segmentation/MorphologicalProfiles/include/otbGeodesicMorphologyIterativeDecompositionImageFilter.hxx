@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,8 +32,7 @@ namespace otb
  * Constructor
  */
 template <class TImage, class TStructuringElement>
-GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
-::GeodesicMorphologyIterativeDecompositionImageFilter()
+GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>::GeodesicMorphologyIterativeDecompositionImageFilter()
 {
   // Create a process accumulator for tracking the progress of minipipeline
   m_Progress = itk::ProgressAccumulator::New();
@@ -41,9 +40,9 @@ GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
 
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(3);
-  m_NumberOfIterations  = 2;
-  m_InitialValue = 1;
-  m_Step = 1;
+  m_NumberOfIterations                = 2;
+  m_InitialValue                      = 1;
+  m_Step                              = 1;
   OutputImageListPointerType convList = OutputImageListType::New();
   this->SetNthOutput(0, convList.GetPointer());
   OutputImageListPointerType concList = OutputImageListType::New();
@@ -53,117 +52,107 @@ GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
 }
 
 template <class TImage, class TStructuringElement>
-typename GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
-::OutputImageListType*
-GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
-::GetOutput(void)
+typename GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>::OutputImageListType*
+GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>::GetOutput(void)
 {
   return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(2));
 }
 
 template <class TImage, class TStructuringElement>
-typename GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
-::OutputImageListType*
-GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
-::GetConvexOutput(void)
+typename GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>::OutputImageListType*
+GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>::GetConvexOutput(void)
 {
   return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(0));
 }
 
 template <class TImage, class TStructuringElement>
-typename GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
-::OutputImageListType*
-GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
-::GetConcaveOutput(void)
+typename GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>::OutputImageListType*
+GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>::GetConcaveOutput(void)
 {
   return dynamic_cast<OutputImageListType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
 template <class TImage, class TStructuringElement>
-void
-GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
-::GenerateOutputInformation(void)
+void GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>::GenerateOutputInformation(void)
 {
   // Retrieving input/output pointers
-  InputImagePointerType      inputPtr = this->GetInput();
-  OutputImageListPointerType outputPtr = this->GetOutput();
+  InputImagePointerType      inputPtr      = this->GetInput();
+  OutputImageListPointerType outputPtr     = this->GetOutput();
   OutputImageListPointerType convOutputPtr = this->GetConvexOutput();
   OutputImageListPointerType concOutputPtr = this->GetConcaveOutput();
   if (outputPtr)
-    {
+  {
     if (outputPtr->Size() != m_NumberOfIterations)
-      {
+    {
       // in this case, clear the list
       outputPtr->Clear();
       for (unsigned int i = 0; i < m_NumberOfIterations; ++i)
-        {
-        //Create the output image
+      {
+        // Create the output image
         outputPtr->PushBack(OutputImageType::New());
-        }
       }
+    }
     // For each output image
     typename OutputImageListType::Iterator outputListIt = outputPtr->Begin();
     while (outputListIt != outputPtr->End())
-      {
-      //Set the image information
+    {
+      // Set the image information
       outputListIt.Get()->CopyInformation(this->GetInput());
       outputListIt.Get()->SetRequestedRegion(this->GetInput()->GetLargestPossibleRegion());
       ++outputListIt;
-      }
     }
+  }
   if (convOutputPtr)
-    {
+  {
     if (convOutputPtr->Size() != m_NumberOfIterations)
-      {
+    {
       // in this case, clear the list
       convOutputPtr->Clear();
       for (unsigned int i = 0; i < m_NumberOfIterations; ++i)
-        {
-        //Create the output image
+      {
+        // Create the output image
         convOutputPtr->PushBack(OutputImageType::New());
-        }
       }
+    }
     // For each output image
     typename OutputImageListType::Iterator outputListIt = convOutputPtr->Begin();
     while (outputListIt != convOutputPtr->End())
-      {
-      //Set the image information
+    {
+      // Set the image information
       outputListIt.Get()->CopyInformation(this->GetInput());
       outputListIt.Get()->SetRequestedRegion(this->GetInput()->GetLargestPossibleRegion());
       ++outputListIt;
-      }
     }
+  }
   if (concOutputPtr)
-    {
+  {
     if (concOutputPtr->Size() != m_NumberOfIterations)
-      {
+    {
       // in this case, clear the list
       concOutputPtr->Clear();
       for (unsigned int i = 0; i < m_NumberOfIterations; ++i)
-        {
-        //Create the output image
+      {
+        // Create the output image
         concOutputPtr->PushBack(OutputImageType::New());
-        }
       }
+    }
     // For each output image
     typename OutputImageListType::Iterator outputListIt = concOutputPtr->Begin();
     while (outputListIt != concOutputPtr->End())
-      {
-      //Set the image information
+    {
+      // Set the image information
       outputListIt.Get()->CopyInformation(this->GetInput());
       outputListIt.Get()->SetRequestedRegion(this->GetInput()->GetLargestPossibleRegion());
       ++outputListIt;
-      }
     }
+  }
 }
 
 template <class TImage, class TStructuringElement>
-void
-GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
-::GenerateInputRequestedRegion(void)
+void GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>::GenerateInputRequestedRegion(void)
 {
   // Retrieving input/output pointers
-  InputImagePointerType      inputPtr = this->GetInput();
+  InputImagePointerType      inputPtr  = this->GetInput();
   OutputImageListPointerType outputPtr = this->GetOutput();
 
   // For each output image
@@ -175,13 +164,11 @@ GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
  * Main computation method
  */
 template <class TImage, class TStructuringElement>
-void
-GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
-::GenerateData(void)
+void GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>::GenerateData(void)
 {
-  //Input image pointer
-  InputImagePointerType      current = this->GetInput();
-  OutputImageListPointerType outputPtr = this->GetOutput();
+  // Input image pointer
+  InputImagePointerType      current       = this->GetInput();
+  OutputImageListPointerType outputPtr     = this->GetOutput();
   OutputImageListPointerType convOutputPtr = this->GetConvexOutput();
   OutputImageListPointerType concOutputPtr = this->GetConcaveOutput();
 
@@ -190,11 +177,11 @@ GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
   DecompositionFilterPointerType filter;
 
   while (i < m_NumberOfIterations)
-    {
+  {
     filter = DecompositionFilterType::New();
 
     // Register Internal Filter for progress
-    m_Progress->RegisterInternalFilter(filter, 1./m_NumberOfIterations);
+    m_Progress->RegisterInternalFilter(filter, 1. / m_NumberOfIterations);
 
     typename StructuringElementType::RadiusType radius;
     radius.Fill(m_InitialValue + i * m_Step);
@@ -212,16 +199,13 @@ GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
     current = filter->GetOutput();
 
     ++i;
-    }
-
+  }
 }
 /**
  * PrintSelf method
  */
 template <class TImage, class TStructuringElement>
-void
-GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void GeodesicMorphologyIterativeDecompositionImageFilter<TImage, TStructuringElement>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "NumberOfIterations: " << m_NumberOfIterations << std::endl;

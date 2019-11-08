@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,7 +35,6 @@ namespace otb
 class OTBMetadata_EXPORT IkonosImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
-
   typedef IkonosImageMetadataInterface  Self;
   typedef ImageMetadataInterfaceBase    Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
@@ -109,17 +108,17 @@ public:
 
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
      * There values a computed by 6S. */
-  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const override;
+  WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
 protected:
   IkonosImageMetadataInterface();
-  ~IkonosImageMetadataInterface() override {}
+  ~IkonosImageMetadataInterface() override
+  {
+  }
 
 private:
-
-  IkonosImageMetadataInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  IkonosImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

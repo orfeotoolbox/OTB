@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -51,7 +51,7 @@ function(install_rule src_file)
       # like MosiacHeaderTest1.exe. This ideally should be
       # fixed in remote modules like OTBMosiacHeaderTest1.exe
       if(PKG_DEBUG)
-	message("SKIP INSTALL for ${sfile_NAME_LOWER}")
+        message("SKIP INSTALL for ${sfile_NAME_LOWER}")
       endif()
       continue()
     elseif(("${sfile_ABS_LOWER}" MATCHES "(\\${LIB_EXT})$") AND (src_file_GNAME STREQUAL "plugins"))
@@ -109,11 +109,11 @@ function(install_rule src_file)
     # This check comes outside the first if-elseif ladder
     # because no matter what extension of file type, otbapp_* must go
     # into lib/otb/applications
-  if("${sfile_NAME_LOWER}" MATCHES "^otbapp_")
-    install_otbapp_wrapper_scripts(${sfile_NAME})
-    set(install_dir "lib/otb/applications")
-    set(install_type PROGRAMS)
-  endif()
+    if("${sfile_NAME_LOWER}" MATCHES "^otbapp_")
+      install_otbapp_wrapper_scripts(${sfile_NAME})
+      set(install_dir "lib/otb/applications")
+      set(install_type PROGRAMS)
+    endif()
   
     if(NOT install_type OR NOT install_dir)
       #throw fatal error and return

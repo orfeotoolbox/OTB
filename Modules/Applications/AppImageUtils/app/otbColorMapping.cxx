@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,7 +39,7 @@
 #include "itkVariableLengthVector.h"
 
 #include "itkImageRegionConstIterator.h"
-#include "otbUnaryFunctorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 #include "itkBinaryFunctorImageFilter.h"
 
 #include "itkCastImageFilter.h"
@@ -60,8 +60,8 @@ class VectorLexicographicCompare
 public:
   bool operator()(const TInput& l, const TInput& r) const
   {
-    unsigned int size = ( l.Size() < r.Size() ? l.Size() : r.Size());
-    for (unsigned int i=0; i < size; ++i)
+    unsigned int size = (l.Size() < r.Size() ? l.Size() : r.Size());
+    for (unsigned int i = 0; i < size; ++i)
     {
       if (l[i] < r[i])
       {
@@ -77,37 +77,29 @@ public:
 };
 
 // Functor to map vectors
-template<class TInput, class TOutput>
+template <class TInput, class TOutput>
 class VectorMapping
 {
 public:
   typedef typename TOutput::ValueType ValueType;
 
-  VectorMapping() : m_OutputSize(0) {}
-  virtual ~VectorMapping() {}
+  VectorMapping() : m_OutputSize(0)
+  {
+  }
+  virtual ~VectorMapping() = default;
 
-  typedef std::map<TInput, TOutput, VectorLexicographicCompare<TInput> > ChangeMapType;
+  typedef std::map<TInput, TOutput, VectorLexicographicCompare<TInput>> ChangeMapType;
 
   void SetOutputSize(unsigned int nb)
   {
     m_OutputSize = nb;
   }
-  unsigned int GetOutputSize()
+
+  size_t OutputSize(const std::array<size_t, 1>&) const
   {
     return m_OutputSize;
   }
-  bool operator !=(const VectorMapping& other) const
-  {
-    if (m_ChangeMap != other.m_ChangeMap)
-      {
-      return true;
-      }
-    return false;
-  }
-  bool operator ==(const VectorMapping& other) const
-  {
-    return !(*this != other);
-  }
+
   TOutput GetChange(const TInput& original)
   {
     return m_ChangeMap[original];
@@ -138,25 +130,25 @@ public:
     return m_NotFoundValue;
   }
 
-  inline TOutput operator ()(const TInput& A)
+  inline TOutput operator()(const TInput& A)
   {
     TOutput out;
     out.SetSize(m_OutputSize);
 
     if (m_ChangeMap.find(A) != m_ChangeMap.end())
-      {
+    {
       out = m_ChangeMap[A];
-      }
+    }
     else
-      {
+    {
       out = m_NotFoundValue;
-      }
+    }
     return out;
   }
 
 private:
   ChangeMapType m_ChangeMap;
-  unsigned int  m_OutputSize;   // number of components in output image
+  unsigned int  m_OutputSize; // number of components in output image
   TOutput       m_NotFoundValue;
 };
 }
@@ -164,11 +156,11 @@ private:
 namespace Wrapper
 {
 
-class ColorMapping: public Application
+class ColorMapping : public Application
 {
 public:
-/** Standard class typedefs. */
-  typedef ColorMapping      Self;
+  /** Standard class typedefs. */
+  typedef ColorMapping                  Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -178,211 +170,207 @@ public:
 
   itkTypeMacro(ColorMapping, otb::Application);
 
-  typedef FloatImageType::PixelType   PixelType;
-  typedef UInt32ImageType             LabelImageType;
-  typedef LabelImageType::PixelType   LabelType;
-  typedef UInt8VectorImageType        VectorImageType;
-  typedef VectorImageType::PixelType  VectorPixelType;
-  typedef UInt8RGBImageType           RGBImageType;
-  typedef RGBImageType::PixelType     RGBPixelType;
+  typedef FloatImageType::PixelType  PixelType;
+  typedef UInt32ImageType            LabelImageType;
+  typedef LabelImageType::PixelType  LabelType;
+  typedef UInt8VectorImageType       VectorImageType;
+  typedef VectorImageType::PixelType VectorPixelType;
+  typedef UInt8RGBImageType          RGBImageType;
+  typedef RGBImageType::PixelType    RGBPixelType;
 
-  typedef UInt32VectorImageType                       LabelVectorImageType;
-  typedef LabelVectorImageType::PixelType             LabelVectorType;
+  typedef UInt32VectorImageType           LabelVectorImageType;
+  typedef LabelVectorImageType::PixelType LabelVectorType;
 
-  typedef itk::NumericTraits
-    <FloatVectorImageType::PixelType>::ValueType      ScalarType;
-  typedef itk::VariableLengthVector<ScalarType>       SampleType;
-  typedef itk::Statistics::ListSample<SampleType>     ListSampleType;
+  typedef itk::NumericTraits<FloatVectorImageType::PixelType>::ValueType ScalarType;
+  typedef itk::VariableLengthVector<ScalarType>                          SampleType;
+  typedef itk::Statistics::ListSample<SampleType>                        ListSampleType;
 
-  typedef itk::ImageRegionConstIterator
-    <FloatVectorImageType>                            IteratorType;
-  typedef itk::ImageRegionConstIterator
-    <LabelImageType>                                 LabelIteratorType;
+  typedef itk::ImageRegionConstIterator<FloatVectorImageType> IteratorType;
+  typedef itk::ImageRegionConstIterator<LabelImageType>       LabelIteratorType;
 
   // Manual label LUT
-  typedef otb::ChangeLabelImageFilter
-    <LabelImageType, VectorImageType>                 ChangeLabelFilterType;
+  typedef otb::ChangeLabelImageFilter<LabelImageType, VectorImageType> ChangeLabelFilterType;
 
   // Segmentation contrast maximisation LUT
-  typedef itk::LabelToRGBImageFilter
-    <LabelImageType, RGBImageType>                    LabelToRGBFilterType;
+  typedef itk::LabelToRGBImageFilter<LabelImageType, RGBImageType> LabelToRGBFilterType;
 
   // Continuous LUT mapping
-  typedef itk::ScalarToRGBColormapImageFilter
-    <FloatImageType, RGBImageType>                    ColorMapFilterType;
-  typedef otb::Functor::ReliefColormapFunctor
-    <PixelType, RGBPixelType>                         ReliefColorMapFunctorType;
+  typedef itk::ScalarToRGBColormapImageFilter<FloatImageType, RGBImageType> ColorMapFilterType;
+  typedef otb::Functor::ReliefColormapFunctor<PixelType, RGBPixelType>      ReliefColorMapFunctorType;
 
   // Image support LUT
-  typedef RAMDrivenAdaptativeStreamingManager
-    <FloatVectorImageType>                            RAMDrivenAdaptativeStreamingManagerType;
-  typedef otb::StreamingShrinkImageFilter
-    <FloatVectorImageType, FloatVectorImageType>       ImageSamplingFilterType;
-  typedef itk::Statistics::DenseFrequencyContainer2    DFContainerType;
+  typedef RAMDrivenAdaptativeStreamingManager<FloatVectorImageType> RAMDrivenAdaptativeStreamingManagerType;
+  typedef otb::StreamingShrinkImageFilter<FloatVectorImageType, FloatVectorImageType> ImageSamplingFilterType;
+  typedef itk::Statistics::DenseFrequencyContainer2 DFContainerType;
 
-  typedef itk::NumericTraits<PixelType>::RealType     RealScalarType;
-  typedef itk::VariableLengthVector<RealScalarType>   InternalPixelType;
-  typedef otb::ListSampleToHistogramListGenerator
-    <ListSampleType, ScalarType, DFContainerType>     HistogramFilterType;
-  //typedef itk::Statistics::Histogram
+  typedef itk::NumericTraits<PixelType>::RealType   RealScalarType;
+  typedef itk::VariableLengthVector<RealScalarType> InternalPixelType;
+  typedef otb::ListSampleToHistogramListGenerator<ListSampleType, ScalarType, DFContainerType> HistogramFilterType;
+  // typedef itk::Statistics::Histogram
   //<RealScalarType, DFContainerType>                 HistogramType;
-  typedef HistogramFilterType::HistogramType          HistogramType;
-  typedef HistogramFilterType::HistogramListType      HistogramListType;
-  typedef HistogramType::Pointer                      HistogramPointerType;
-  typedef otb::ImageMetadataInterfaceBase             ImageMetadataInterfaceType;
-  typedef otb::StreamingStatisticsMapFromLabelImageFilter<FloatVectorImageType, LabelImageType>
-    StreamingStatisticsMapFromLabelImageFilterType;
+  typedef HistogramFilterType::HistogramType     HistogramType;
+  typedef HistogramFilterType::HistogramListType HistogramListType;
+  typedef HistogramType::Pointer                 HistogramPointerType;
+  typedef otb::ImageMetadataInterfaceBase        ImageMetadataInterfaceType;
+  typedef otb::StreamingStatisticsMapFromLabelImageFilter<FloatVectorImageType, LabelImageType> StreamingStatisticsMapFromLabelImageFilterType;
 
   // Inverse mapper for color->label operation
-  typedef otb::UnaryFunctorImageFilter
-    <RGBImageType, LabelVectorImageType,
-     Functor::VectorMapping
-      <RGBPixelType, LabelVectorType> >               ColorToLabelFilterType;
+  typedef otb::FunctorImageFilter<Functor::VectorMapping<RGBPixelType, LabelVectorType>> ColorToLabelFilterType;
 
   // Streaming the input image for color->label operation
   typedef RGBImageType::RegionType                    RegionType;
   typedef itk::ImageRegionConstIterator<RGBImageType> RGBImageIteratorType;
 
   // Caster to convert a FloatImageType to LabelImageType
-  typedef itk::CastImageFilter
-    <FloatImageType, LabelImageType>                   CasterToLabelImageType;
+  typedef itk::CastImageFilter<FloatImageType, LabelImageType> CasterToLabelImageType;
 
 private:
   void DoInit() override
   {
     SetName("ColorMapping");
-    SetDescription("Maps an input label image to 8-bits RGB using look-up tables.");
+    SetDescription("Map a label image to 8-bits RGB using look-up tables.");
 
-    SetDocName("Color Mapping");
-    SetDocLongDescription("This application allows one to map a label image to a 8-bits RGB image (in both ways) using different methods.\n"
-                          " -The custom method allows one to use a custom look-up table. The look-up table is loaded "
-                          "from a text file where each line describes an entry. The typical use of this method is to colorise a "
-                          "classification map.\n -The continuous method allows mapping a range of values in a scalar input image "
-                          "to a colored image using continuous look-up table, in order to enhance image interpretation. Several "
-                          "look-up tables can been chosen with different color ranges.\n-The optimal method computes an optimal "
-                          "look-up table. When processing a segmentation label image (label to color), the color difference between"
-                          " adjacent segmented regions is maximized. When processing an unknown color image (color to label), all "
-                          "the present colors are mapped to a continuous label list.\n - The support image method uses a color support "
-                          "image to associate an average color to each region.");
-    SetDocLimitations("The segmentation optimal method does not support streaming, and thus large images. The operation color to label "
-                      "is not implemented for the methods continuous LUT and support image LUT.\n ColorMapping using support image is not threaded.");
+    SetDocLongDescription(
+        "Map a label image to a 8-bits RGB image (both ways) using different methods:\n\n"
+
+        "* **Custom**: use a custom look-up table. The look-up table is loaded "
+        "from a text file where each line describes an entry. The typical use of this method is to colorise a "
+        "classification map.\n"
+        "* **Continuous**: Map a range of values in a scalar input image "
+        "to a colored image using continuous look-up table, in order to enhance image interpretation. Several "
+        "look-up tables can been chosen with different color ranges.\n"
+        "* **Optimal**: Compute an optimal "
+        "look-up table. When processing a segmentation label image (label to color), the color difference between"
+        " adjacent segmented regions is maximized. When processing an unknown color image (color to label), all "
+        "the present colors are mapped to a continuous label list.\n"
+        "* **Support image**: Use a color support image to associate an average color to each region.");
+
+    SetDocLimitations(
+        "The segmentation optimal method does not support streaming, and thus large images. The operation color to label "
+        "is not implemented for the methods continuous LUT and support image LUT.\n\nColorMapping using support image is not threaded.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("ImageSVMClassifier");
 
     AddDocTag(Tags::Manip);
     AddDocTag(Tags::Meta);
     AddDocTag(Tags::Learning);
-	AddDocTag("Utilities");
+    AddDocTag("Utilities");
 
     // Build lut map
 
-    m_LutMap["Red"]=ColorMapFilterType::Red;
-    m_LutMap["Green"]=ColorMapFilterType::Green;
-    m_LutMap["Blue"]=ColorMapFilterType::Blue;
-    m_LutMap["Grey"]=ColorMapFilterType::Grey;
-    m_LutMap["Hot"]=ColorMapFilterType::Hot;
-    m_LutMap["Cool"]=ColorMapFilterType::Cool;
-    m_LutMap["Spring"]=ColorMapFilterType::Spring;
-    m_LutMap["Summer"]=ColorMapFilterType::Summer;
-    m_LutMap["Autumn"]=ColorMapFilterType::Autumn;
-    m_LutMap["Winter"]=ColorMapFilterType::Winter;
-    m_LutMap["Copper"]=ColorMapFilterType::Copper;
-    m_LutMap["Jet"]=ColorMapFilterType::Jet;
-    m_LutMap["HSV"]=ColorMapFilterType::HSV;
-    m_LutMap["OverUnder"]=ColorMapFilterType::OverUnder;
+    m_LutMap["Red"]       = ColorMapFilterType::Red;
+    m_LutMap["Green"]     = ColorMapFilterType::Green;
+    m_LutMap["Blue"]      = ColorMapFilterType::Blue;
+    m_LutMap["Grey"]      = ColorMapFilterType::Grey;
+    m_LutMap["Hot"]       = ColorMapFilterType::Hot;
+    m_LutMap["Cool"]      = ColorMapFilterType::Cool;
+    m_LutMap["Spring"]    = ColorMapFilterType::Spring;
+    m_LutMap["Summer"]    = ColorMapFilterType::Summer;
+    m_LutMap["Autumn"]    = ColorMapFilterType::Autumn;
+    m_LutMap["Winter"]    = ColorMapFilterType::Winter;
+    m_LutMap["Copper"]    = ColorMapFilterType::Copper;
+    m_LutMap["Jet"]       = ColorMapFilterType::Jet;
+    m_LutMap["HSV"]       = ColorMapFilterType::HSV;
+    m_LutMap["OverUnder"] = ColorMapFilterType::OverUnder;
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "Input image filename");
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
-    SetParameterDescription("out","Output image filename");
-    SetDefaultOutputPixelType("out",ImagePixelType_uint8);
+    SetParameterDescription("out", "Output image filename");
+    SetDefaultOutputPixelType("out", ImagePixelType_uint8);
 
     // --- OPERATION --- : Label to color / Color to label
     AddParameter(ParameterType_Choice, "op", "Operation");
-    SetParameterDescription("op","Selection of the operation to execute (default is : label to color).");
+    SetParameterDescription("op", "Selection of the operation to execute (default is: label to color).");
 
-    AddChoice("op.labeltocolor","Label to color");
+    AddChoice("op.labeltocolor", "Label to color");
 
-    AddChoice("op.colortolabel","Color to label");
-    AddParameter(ParameterType_Int, "op.colortolabel.notfound","Not Found Label");
-    SetParameterDescription("op.colortolabel.notfound","Label to use for unknown colors.");
+    AddChoice("op.colortolabel", "Color to label");
+    AddParameter(ParameterType_Int, "op.colortolabel.notfound", "Not Found Label");
+    SetParameterDescription("op.colortolabel.notfound", "Label to use for unknown colors.");
     SetDefaultParameterInt("op.colortolabel.notfound", 404);
     MandatoryOff("op.colortolabel.notfound");
 
     // --- MAPPING METHOD ---
     AddParameter(ParameterType_Choice, "method", "Color mapping method");
-    SetParameterDescription("method","Selection of color mapping methods and their parameters.");
+    SetParameterDescription("method", "Selection of color mapping methods and their parameters.");
 
     // Custom LUT
-    AddChoice("method.custom","Color mapping with custom labeled look-up table");
-    SetParameterDescription("method.custom","Apply a user-defined look-up table to a labeled image. Look-up table is loaded from a text file.");
+    AddChoice("method.custom", "Color mapping with custom labeled look-up table");
+    SetParameterDescription("method.custom", "Apply a user-defined look-up table to a labeled image. Look-up table is loaded from a text file.");
     AddParameter(ParameterType_InputFilename, "method.custom.lut", "Look-up table file");
-    SetParameterDescription("method.custom.lut",  "An ASCII file containing the look-up table\n"
+    SetParameterDescription("method.custom.lut",
+                            "An ASCII file containing the look-up table\n"
                             "with one color per line\n"
                             "(for instance the line '1 255 0 0' means that all pixels with label 1 will be replaced by RGB color 255 0 0)\n"
                             "Lines beginning with a # are ignored");
 
     // Continuous LUT
-    AddChoice("method.continuous","Color mapping with continuous look-up table");
-    SetParameterDescription("method.continuous","Apply a continuous look-up table to a range of input values.");
-    AddParameter(ParameterType_Choice,"method.continuous.lut","Look-up tables");
-    SetParameterDescription("method.continuous.lut","Available look-up tables.");
+    AddChoice("method.continuous", "Color mapping with continuous look-up table");
+    SetParameterDescription("method.continuous", "Apply a continuous look-up table to a range of input values.");
+    AddParameter(ParameterType_Choice, "method.continuous.lut", "Look-up tables");
+    SetParameterDescription("method.continuous.lut", "Available look-up tables.");
 
-    AddChoice("method.continuous.lut.red","Red");
-    AddChoice("method.continuous.lut.green","Green");
-    AddChoice("method.continuous.lut.blue","Blue");
-    AddChoice("method.continuous.lut.grey","Grey");
-    AddChoice("method.continuous.lut.hot","Hot");
-    AddChoice("method.continuous.lut.cool","Cool");
-    AddChoice("method.continuous.lut.spring","Spring");
-    AddChoice("method.continuous.lut.summer","Summer");
-    AddChoice("method.continuous.lut.autumn","Autumn");
-    AddChoice("method.continuous.lut.winter","Winter");
-    AddChoice("method.continuous.lut.copper","Copper");
-    AddChoice("method.continuous.lut.jet","Jet");
-    AddChoice("method.continuous.lut.hsv","HSV");
-    AddChoice("method.continuous.lut.overunder","OverUnder");
-    AddChoice("method.continuous.lut.relief","Relief");
+    AddChoice("method.continuous.lut.red", "Red");
+    AddChoice("method.continuous.lut.green", "Green");
+    AddChoice("method.continuous.lut.blue", "Blue");
+    AddChoice("method.continuous.lut.grey", "Grey");
+    AddChoice("method.continuous.lut.hot", "Hot");
+    AddChoice("method.continuous.lut.cool", "Cool");
+    AddChoice("method.continuous.lut.spring", "Spring");
+    AddChoice("method.continuous.lut.summer", "Summer");
+    AddChoice("method.continuous.lut.autumn", "Autumn");
+    AddChoice("method.continuous.lut.winter", "Winter");
+    AddChoice("method.continuous.lut.copper", "Copper");
+    AddChoice("method.continuous.lut.jet", "Jet");
+    AddChoice("method.continuous.lut.hsv", "HSV");
+    AddChoice("method.continuous.lut.overunder", "OverUnder");
+    AddChoice("method.continuous.lut.relief", "Relief");
 
-    AddParameter(ParameterType_Float,"method.continuous.min","Mapping range lower value");
-    SetParameterDescription("method.continuous.min","Set the lower input value of the mapping range.");
-    SetParameterFloat("method.continuous.min",0.);
+    AddParameter(ParameterType_Float, "method.continuous.min", "Mapping range lower value");
+    SetParameterDescription("method.continuous.min", "Set the lower input value of the mapping range.");
+    SetParameterFloat("method.continuous.min", 0.);
 
-    AddParameter(ParameterType_Float,"method.continuous.max","Mapping range higher value");
-    SetParameterDescription("method.continuous.max","Set the higher input value of the mapping range.");
-    SetParameterFloat("method.continuous.max",255.);
+    AddParameter(ParameterType_Float, "method.continuous.max", "Mapping range higher value");
+    SetParameterDescription("method.continuous.max", "Set the higher input value of the mapping range.");
+    SetParameterFloat("method.continuous.max", 255.);
 
     // Optimal LUT
-    AddChoice("method.optimal","Compute an optimized look-up table");
-    SetParameterDescription("method.optimal","[label to color] Compute an optimal look-up table such that neighboring labels"
+    AddChoice("method.optimal", "Compute an optimized look-up table");
+    SetParameterDescription("method.optimal",
+                            "[label to color] Compute an optimal look-up table such that neighboring labels"
                             " in a segmentation are mapped to highly contrasted colors. "
                             "[color to label] Searching all the colors present in the image to compute a continuous label list");
-    AddParameter(ParameterType_Int,"method.optimal.background", "Background label");
-    SetParameterDescription("method.optimal.background","Value of the background label");
-    SetParameterInt("method.optimal.background",0);
+    AddParameter(ParameterType_Int, "method.optimal.background", "Background label");
+    SetParameterDescription("method.optimal.background", "Value of the background label");
+    SetParameterInt("method.optimal.background", 0);
     SetMinimumParameterIntValue("method.optimal.background", 0);
     SetMaximumParameterIntValue("method.optimal.background", 255);
 
     // Support image LUT
-    AddChoice("method.image","Color mapping with look-up table calculated on support image");
+    AddChoice("method.image", "Color mapping with look-up table calculated on support image");
     AddParameter(ParameterType_InputImage, "method.image.in", "Support Image");
-    SetParameterDescription("method.image.in", "Support image filename. For each label, the LUT is calculated from the mean pixel value in the support image, over the corresponding labeled areas."
-                            " First of all, the support image is normalized with extrema rejection");
+    SetParameterDescription(
+        "method.image.in",
+        "Support image filename. For each label, the LUT is calculated from the mean pixel value in the support image, over the corresponding labeled areas."
+        " First of all, the support image is normalized with extrema rejection");
     AddParameter(ParameterType_Float, "method.image.nodatavalue", "NoData value");
-    SetParameterDescription("method.image.nodatavalue","NoData value for each channel of the support image, which will not be handled in the LUT estimation. If NOT checked, ALL the pixel values of the support image will be handled in the LUT estimation.");
+    SetParameterDescription("method.image.nodatavalue",
+                            "NoData value for each channel of the support image, which will not be handled in the LUT estimation. If NOT checked, ALL the "
+                            "pixel values of the support image will be handled in the LUT estimation.");
     MandatoryOff("method.image.nodatavalue");
-    SetParameterFloat("method.image.nodatavalue",0);
+    SetParameterFloat("method.image.nodatavalue", 0);
     DisableParameter("method.image.nodatavalue");
     AddParameter(ParameterType_Int, "method.image.low", "lower quantile");
-    SetParameterDescription("method.image.low","lower quantile for image normalization");
+    SetParameterDescription("method.image.low", "lower quantile for image normalization");
     MandatoryOff("method.image.low");
-    SetParameterInt("method.image.low",2);
+    SetParameterInt("method.image.low", 2);
     SetMinimumParameterIntValue("method.image.low", 0);
     SetMaximumParameterIntValue("method.image.low", 100);
     AddParameter(ParameterType_Int, "method.image.up", "upper quantile");
-    SetParameterDescription("method.image.up","upper quantile for image normalization");
+    SetParameterDescription("method.image.up", "upper quantile for image normalization");
     MandatoryOff("method.image.up");
-    SetParameterInt("method.image.up",2);
+    SetParameterInt("method.image.up", 2);
     SetMinimumParameterIntValue("method.image.up", 0);
     SetMaximumParameterIntValue("method.image.up", 100);
 
@@ -395,29 +383,29 @@ private:
     SetDocExampleParameterValue("out", "Colorized_ROI_QB_MUL_1_SVN_CLASS_MULTI.tif");
 
     SetOfficialDocLink();
- }
+  }
 
   void DoUpdateParameters() override
   {
     // Make sure the operation color->label is not called with methods continuous or image.
     // These methods are not implemented for this operation yet.
-    if (GetParameterInt("op")==1)
+    if (GetParameterInt("op") == 1)
+    {
+      if (GetParameterInt("method") == 1 || GetParameterInt("method") == 3)
       {
-      if (GetParameterInt("method")==1 || GetParameterInt("method")==3)
-        {
         otbAppLogWARNING("Override method : use optimal");
-        SetParameterInt("method",2);
-        }
+        SetParameterInt("method", 2);
       }
+    }
   }
 
   void DoExecute() override
   {
-    if(GetParameterInt("op")==0)
+    if (GetParameterInt("op") == 0)
     {
       ComputeLabelToColor();
     }
-    else if(GetParameterInt("op")==1)
+    else if (GetParameterInt("op") == 1)
     {
       ComputeColorToLabel();
     }
@@ -426,7 +414,7 @@ private:
   void ComputeLabelToColor()
   {
     if (GetParameterInt("method") == 0)
-      {
+    {
       otbAppLogINFO("Color mapping with custom labeled look-up table");
 
       m_CasterToLabelImage = CasterToLabelImageType::New();
@@ -440,9 +428,9 @@ private:
       ReadLutFromFile(true);
 
       SetParameterOutputImage("out", m_CustomMapper->GetOutput());
-      }
+    }
     else if (GetParameterInt("method") == 1)
-      {
+    {
       otbAppLogINFO("Color mapping with continuous look-up table");
 
       m_ContinuousColorMapper = ColorMapFilterType::New();
@@ -453,30 +441,30 @@ private:
       m_ContinuousColorMapper->UseInputImageExtremaForScalingOff();
 
       // Set the lut
-      std::string lutTmp = GetParameterString("method.continuous.lut");
-      std::string lutNameParam =  "method.continuous.lut." + lutTmp;
-      std::string lut = GetParameterName(lutNameParam);
+      std::string lutTmp       = GetParameterString("method.continuous.lut");
+      std::string lutNameParam = "method.continuous.lut." + lutTmp;
+      std::string lut          = GetParameterName(lutNameParam);
 
-      otbAppLogINFO("LUT: "<<lut<<std::endl);
+      otbAppLogINFO("LUT: " << lut << std::endl);
 
       if (lut == "Relief")
-        {
+      {
         ReliefColorMapFunctorType::Pointer reliefFunctor = ReliefColorMapFunctorType::New();
         m_ContinuousColorMapper->SetColormap(reliefFunctor);
-        }
+      }
       else
-        {
-        m_ContinuousColorMapper->SetColormap((ColorMapFilterType::ColormapEnumType) m_LutMap[lut]);
-        }
+      {
+        m_ContinuousColorMapper->SetColormap((ColorMapFilterType::ColormapEnumType)m_LutMap[lut]);
+      }
 
 
       m_ContinuousColorMapper->GetColormap()->SetMinimumInputValue(GetParameterFloat("method.continuous.min"));
       m_ContinuousColorMapper->GetColormap()->SetMaximumInputValue(GetParameterFloat("method.continuous.max"));
 
       SetParameterOutputImage("out", m_ContinuousColorMapper->GetOutput());
-      }
+    }
     else if (GetParameterInt("method") == 2)
-      {
+    {
       otbAppLogINFO("Color mapping with an optimized look-up table");
 
       m_CasterToLabelImage = CasterToLabelImageType::New();
@@ -487,30 +475,29 @@ private:
       m_SegmentationColorMapper->SetInput(m_CasterToLabelImage->GetOutput());
       m_SegmentationColorMapper->SetBackgroundValue(GetParameterInt("method.optimal.background"));
       SetParameterOutputImage("out", m_SegmentationColorMapper->GetOutput());
-      }
+    }
     else if (GetParameterInt("method") == 3)
-      {
+    {
       otbAppLogINFO("Color mapping with a look-up table computed on support image ");
 
       // image normalisation of the sampling
       FloatVectorImageType::Pointer supportImage = this->GetParameterImage("method.image.in");
-      //supportImage->UpdateOutputInformation();
+      // supportImage->UpdateOutputInformation();
 
-      //normalisation
-      //first of all resampling
+      // normalisation
+      // first of all resampling
 
-      //calculate split number
-      RAMDrivenAdaptativeStreamingManagerType::Pointer
-          streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
-      int availableRAM = GetParameterInt("ram");
+      // calculate split number
+      RAMDrivenAdaptativeStreamingManagerType::Pointer streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
+      int                                              availableRAM     = GetParameterInt("ram");
       streamingManager->SetAvailableRAMInMB(availableRAM);
       float bias = 2.0; // empiric value;
       streamingManager->SetBias(bias);
-      FloatVectorImageType::RegionType largestRegion = supportImage->GetLargestPossibleRegion();
-      FloatVectorImageType::SizeType largestRegionSize = largestRegion.GetSize();
+      FloatVectorImageType::RegionType largestRegion     = supportImage->GetLargestPossibleRegion();
+      FloatVectorImageType::SizeType   largestRegionSize = largestRegion.GetSize();
       streamingManager->PrepareStreaming(supportImage, largestRegion);
 
-      unsigned long nbDivisions = streamingManager->GetNumberOfSplits();
+      unsigned long nbDivisions  = streamingManager->GetNumberOfSplits();
       unsigned long largestPixNb = largestRegionSize[0] * largestRegionSize[1];
 
       unsigned long maxPixNb = largestPixNb / nbDivisions;
@@ -521,18 +508,16 @@ private:
       double theoricNBSamplesForKMeans = maxPixNb;
 
       const double upperThresholdNBSamplesForKMeans = 1000 * 1000;
-      const double actualNBSamplesForKMeans = std::min(theoricNBSamplesForKMeans,
-                                                        upperThresholdNBSamplesForKMeans);
+      const double actualNBSamplesForKMeans         = std::min(theoricNBSamplesForKMeans, upperThresholdNBSamplesForKMeans);
 
-      const double shrinkFactor = std::floor(
-                                            std::sqrt(
-                                                      supportImage->GetLargestPossibleRegion().GetNumberOfPixels()
-                                                          / actualNBSamplesForKMeans));
+      const double shrinkFactor = std::floor(std::sqrt(supportImage->GetLargestPossibleRegion().GetNumberOfPixels() / actualNBSamplesForKMeans));
       imageSampler->SetShrinkFactor(shrinkFactor);
       imageSampler->Update();
 
-      otbAppLogINFO(<<imageSampler->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()<<""
-          " sample will be used to estimate extrema value for outliers rejection."<<std::endl);
+      otbAppLogINFO(<< imageSampler->GetOutput()->GetLargestPossibleRegion().GetNumberOfPixels()
+                    << ""
+                       " sample will be used to estimate extrema value for outliers rejection."
+                    << std::endl);
 
       // use histogram to compute quantile value
       FloatVectorImageType::Pointer histogramSource;
@@ -540,25 +525,24 @@ private:
       histogramSource->SetRequestedRegion(imageSampler->GetOutput()->GetLargestPossibleRegion());
 
       // Iterate on the image
-      itk::ImageRegionConstIterator<FloatVectorImageType> it(histogramSource,
-                                                              histogramSource->GetBufferedRegion());
+      itk::ImageRegionConstIterator<FloatVectorImageType> it(histogramSource, histogramSource->GetBufferedRegion());
 
       // declare a list to store the samples
       ListSampleType::Pointer listSample = ListSampleType::New();
       listSample->Clear();
 
-      //unsigned int sampleSize = VisualizationPixelTraits::PixelSize(it.Get());
+      // unsigned int sampleSize = VisualizationPixelTraits::PixelSize(it.Get());
       unsigned int sampleSize = itk::NumericTraits<SampleType>::GetLength(it.Get());
 
       listSample->SetMeasurementVectorSize(sampleSize);
 
       // Fill the samples list
       for (it.GoToBegin(); !it.IsAtEnd(); ++it)
-        {
+      {
         SampleType sample(sampleSize);
-        //VisualizationPixelTraits::Convert(it.Get(), sample);
+        // VisualizationPixelTraits::Convert(it.Get(), sample);
         listSample->PushBack(it.Get());
-        }
+      }
 
       // assign listSample
 
@@ -567,36 +551,36 @@ private:
       histogramFilter->SetNumberOfBins(255);
 
       if (this->IsParameterEnabled("method.image.nodatavalue") == true)
-        {
+      {
         // NoData value extraction for the support image
         float noDataValue = this->GetParameterFloat("method.image.nodatavalue");
-        otbAppLogINFO(" The NoData value: "<<noDataValue<<" will be rejected from the support image in the LUT estimation."<<std::endl);
+        otbAppLogINFO(" The NoData value: " << noDataValue << " will be rejected from the support image in the LUT estimation." << std::endl);
         histogramFilter->SetNoDataValue(noDataValue);
         histogramFilter->NoDataFlagOn();
-        }
+      }
       else
-        {
-        otbAppLogINFO(" The NoData value of the support image is disabled. Thus, all the values will be handled in the LUT estimation."<<std::endl);
+      {
+        otbAppLogINFO(" The NoData value of the support image is disabled. Thus, all the values will be handled in the LUT estimation." << std::endl);
         histogramFilter->NoDataFlagOff();
-        }
+      }
 
       // Generate
       histogramFilter->Update();
-      const HistogramListType * histogramList = histogramFilter->GetOutput();
+      const HistogramListType* histogramList = histogramFilter->GetOutput();
 
-      ImageMetadataInterfaceType::Pointer
-          metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(supportImage->GetMetaDataDictionary());
+      ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(supportImage->GetMetaDataDictionary());
 
       std::vector<unsigned int> RGBIndex;
 
       if (supportImage->GetNumberOfComponentsPerPixel() < 3)
-        {
+      {
         RGBIndex.push_back(0);
         RGBIndex.push_back(0);
         RGBIndex.push_back(0);
-        }
-      else RGBIndex = metadataInterface->GetDefaultDisplay();
-      otbAppLogINFO(" RGB index are "<<RGBIndex[0]<<" "<<RGBIndex[1]<<" "<<RGBIndex[2]<<std::endl);
+      }
+      else
+        RGBIndex = metadataInterface->GetDefaultDisplay();
+      otbAppLogINFO(" RGB index are " << RGBIndex[0] << " " << RGBIndex[1] << " " << RGBIndex[2] << std::endl);
 
       FloatVectorImageType::PixelType minVal;
       FloatVectorImageType::PixelType maxVal;
@@ -604,10 +588,12 @@ private:
       maxVal.SetSize(supportImage->GetNumberOfComponentsPerPixel());
 
       for (unsigned int index = 0; index < supportImage->GetNumberOfComponentsPerPixel(); index++)
-        {
-        minVal.SetElement(index, static_cast<FloatVectorImageType::PixelType::ValueType> (histogramList->GetNthElement(index)->Quantile(0, static_cast<float> (this->GetParameterInt("method.image.low"))/ 100.0)));
-        maxVal.SetElement(index, static_cast<FloatVectorImageType::PixelType::ValueType> (histogramList->GetNthElement(index)->Quantile(0, (100.0- static_cast<float> (this->GetParameterInt("method.image.up")))/ 100.0)));
-        }
+      {
+        minVal.SetElement(index, static_cast<FloatVectorImageType::PixelType::ValueType>(
+                                     histogramList->GetNthElement(index)->Quantile(0, static_cast<float>(this->GetParameterInt("method.image.low")) / 100.0)));
+        maxVal.SetElement(index, static_cast<FloatVectorImageType::PixelType::ValueType>(histogramList->GetNthElement(index)->Quantile(
+                                     0, (100.0 - static_cast<float>(this->GetParameterInt("method.image.up"))) / 100.0)));
+      }
 
       m_CasterToLabelImage = CasterToLabelImageType::New();
       m_CasterToLabelImage->SetInput(GetParameterFloatImage("in"));
@@ -620,100 +606,94 @@ private:
       AddProcess(m_StatisticsMapFromLabelImageFilter->GetStreamer(), "Computing statistics on labels...");
       m_StatisticsMapFromLabelImageFilter->Update();
 
-      StreamingStatisticsMapFromLabelImageFilterType::PixelValueMapType
-          labelToMeanIntensityMap = m_StatisticsMapFromLabelImageFilter->GetMeanValueMap();
+      StreamingStatisticsMapFromLabelImageFilterType::PixelValueMapType labelToMeanIntensityMap = m_StatisticsMapFromLabelImageFilter->GetMeanValueMap();
 
       m_RBGFromImageMapper = ChangeLabelFilterType::New();
       m_RBGFromImageMapper->SetInput(m_CasterToLabelImage->GetOutput());
       m_RBGFromImageMapper->SetNumberOfComponentsPerPixel(3);
 
-      StreamingStatisticsMapFromLabelImageFilterType::PixelValueMapType::const_iterator
-          mapIt = labelToMeanIntensityMap.begin();
-      FloatVectorImageType::PixelType meanValue;
+      StreamingStatisticsMapFromLabelImageFilterType::PixelValueMapType::const_iterator mapIt = labelToMeanIntensityMap.begin();
+      FloatVectorImageType::PixelType                                                   meanValue;
 
-      otbAppLogINFO("The map contains :"<<labelToMeanIntensityMap.size()<<" labels."<<std::endl);
+      otbAppLogINFO("The map contains :" << labelToMeanIntensityMap.size() << " labels." << std::endl);
       VectorPixelType color(3);
 
-      for (mapIt = labelToMeanIntensityMap.begin();
-           mapIt != labelToMeanIntensityMap.end();
-           ++mapIt)
-        {
+      for (mapIt = labelToMeanIntensityMap.begin(); mapIt != labelToMeanIntensityMap.end(); ++mapIt)
+      {
         LabelType clabel = mapIt->first;
-        meanValue = mapIt->second; //meanValue.Size() is null if label is not present in label image
+        meanValue        = mapIt->second; // meanValue.Size() is null if label is not present in label image
         if (meanValue.Size() != supportImage->GetNumberOfComponentsPerPixel())
-          {
+        {
           color.Fill(0.0);
-          }
+        }
         else
-          {
+        {
           for (int RGB = 0; RGB < 3; RGB++)
-            {
+          {
             unsigned int dispIndex = RGBIndex[RGB];
 
             // Convert the radiometric value to [0, 255]
             // using the clamping from histogram cut
             // Since an UInt8 output value is expected, the rounding instruction is used (floor(x+0.5) as rounding method)
-            double val = std::floor((255 * (meanValue[dispIndex] - minVal[dispIndex])
-                                   / (maxVal[dispIndex] - minVal[dispIndex])) + 0.5);
+            double val = std::floor((255 * (meanValue[dispIndex] - minVal[dispIndex]) / (maxVal[dispIndex] - minVal[dispIndex])) + 0.5);
 
-            val = val < 0.0 ? 0.0 : ( val > 255.0 ? 255.0 : val );
+            val = val < 0.0 ? 0.0 : (val > 255.0 ? 255.0 : val);
 
             color[RGB] = static_cast<VectorPixelType::ValueType>(val);
-            }
           }
-        otbMsgDevMacro(<<"Adding color mapping " << clabel << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]");
-        m_RBGFromImageMapper->SetChange(clabel, color);
         }
+        otbMsgDevMacro(<< "Adding color mapping " << clabel << " -> [" << (int)color[0] << " " << (int)color[1] << " " << (int)color[2] << " ]");
+        m_RBGFromImageMapper->SetChange(clabel, color);
+      }
 
       SetParameterOutputImage("out", m_RBGFromImageMapper->GetOutput());
-      }
+    }
   }
 
   void ComputeColorToLabel()
   {
-    if (GetParameterInt("method")==1 || GetParameterInt("method")==3)
-      {
+    if (GetParameterInt("method") == 1 || GetParameterInt("method") == 3)
+    {
       otbAppLogWARNING("Case not implemented");
       return;
-      }
+    }
 
     RGBImageType::Pointer input = GetParameterUInt8RGBImage("in");
-    m_InverseMapper = ColorToLabelFilterType::New();
+    m_InverseMapper             = ColorToLabelFilterType::New();
     m_InverseMapper->SetInput(input);
-    m_InverseMapper->GetFunctor().SetOutputSize(1);
+    m_InverseMapper->GetModifiableFunctor().SetOutputSize(1);
     LabelVectorType notFoundValue(1);
     notFoundValue[0] = GetParameterInt("op.colortolabel.notfound");
-    m_InverseMapper->GetFunctor().SetNotFoundValue(notFoundValue);
+    m_InverseMapper->GetModifiableFunctor().SetNotFoundValue(notFoundValue);
 
-    if(GetParameterInt("method")==0)
-      {
+    if (GetParameterInt("method") == 0)
+    {
       otbAppLogINFO("Color mapping with custom labeled look-up table");
       ReadLutFromFile(false);
 
       SetParameterOutputImage<LabelVectorImageType>("out", m_InverseMapper->GetOutput());
-      }
-    else if(GetParameterInt("method")==2)
-      {
+    }
+    else if (GetParameterInt("method") == 2)
+    {
       otbAppLogINFO("Color mapping with an optimized look-up table");
 
       // Safe mode : the LUT is computed with the colors found in the image
-      std::set<RGBPixelType, Functor::VectorLexicographicCompare<RGBPixelType> > colorList;
+      std::set<RGBPixelType, Functor::VectorLexicographicCompare<RGBPixelType>> colorList;
       RGBPixelType background;
-      background.Fill(0); //we assume the background will be black
+      background.Fill(0); // we assume the background will be black
       LabelType currentLabel;
       currentLabel = GetParameterInt("method.optimal.background");
       colorList.insert(background);
       LabelVectorType currentVectorLabel(1);
       currentVectorLabel[0] = currentLabel;
-      m_InverseMapper->GetFunctor().SetChange(background, currentVectorLabel);
+      m_InverseMapper->GetModifiableFunctor().SetChange(background, currentVectorLabel);
       ++currentLabel;
 
       // Setting up local streaming capabilities
       RegionType largestRegion = input->GetLargestPossibleRegion();
 
-      RAMDrivenAdaptativeStreamingManagerType::Pointer
-        streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
-      int availableRAM = GetParameterInt("ram");
+      RAMDrivenAdaptativeStreamingManagerType::Pointer streamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
+      int                                              availableRAM     = GetParameterInt("ram");
       streamingManager->SetAvailableRAMInMB(availableRAM);
       float bias = 2.0; // empiric value;
       streamingManager->SetBias(bias);
@@ -722,12 +702,12 @@ private:
 
       unsigned long numberOfStreamDivisions = streamingManager->GetNumberOfSplits();
 
-      otbAppLogINFO("Number of divisions : "<<numberOfStreamDivisions);
+      otbAppLogINFO("Number of divisions : " << numberOfStreamDivisions);
 
       // iteration over stream divisions
       RegionType streamingRegion;
-      for (unsigned int index = 0; index<numberOfStreamDivisions; index++)
-        {
+      for (unsigned int index = 0; index < numberOfStreamDivisions; index++)
+      {
         streamingRegion = streamingManager->GetSplit(index);
         input->SetRequestedRegion(streamingRegion);
         input->PropagateRequestedRegion();
@@ -735,22 +715,22 @@ private:
 
         RGBImageIteratorType it(input, streamingRegion);
         it.GoToBegin();
-        while ( !it.IsAtEnd())
-          {
+        while (!it.IsAtEnd())
+        {
           // if the color isn't registered, it is added to the color map
-          if (colorList.find(it.Get())==colorList.end())
-            {
+          if (colorList.find(it.Get()) == colorList.end())
+          {
             colorList.insert(it.Get());
             currentVectorLabel[0] = currentLabel;
-            m_InverseMapper->GetFunctor().SetChange(it.Get(), currentVectorLabel);
+            m_InverseMapper->GetModifiableFunctor().SetChange(it.Get(), currentVectorLabel);
             ++currentLabel;
-            }
-          ++it;
           }
+          ++it;
         }
+      }
 
       SetParameterOutputImage<LabelVectorImageType>("out", m_InverseMapper->GetOutput());
-      }
+    }
   }
 
   void ReadLutFromFile(bool putLabelBeforeColor)
@@ -760,9 +740,9 @@ private:
     ifs.open(GetParameterString("method.custom.lut"));
 
     if (!ifs)
-      {
+    {
       itkExceptionMacro("Can not read file " << GetParameterString("method.custom.lut") << std::endl);
-      }
+    }
 
     otbAppLogINFO("Parsing color map file " << GetParameterString("method.custom.lut") << "." << std::endl);
 
@@ -770,13 +750,13 @@ private:
     LabelVectorType cvlabel(1);
 
     while (!ifs.eof())
-      {
+    {
       std::string line;
       std::getline(ifs, line);
 
       // Avoid commented lines or too short ones
       if (!line.empty() && line[0] != '#')
-        {
+      {
         // retrieve the label
         std::string::size_type length;
         std::string::size_type pos = line.find_first_not_of(" \t;,", 0);
@@ -785,44 +765,44 @@ private:
         std::string::size_type nextpos = line.find_first_of(" \t;,", pos);
         if (nextpos == std::string::npos)
           continue;
-        length = nextpos - pos;
+        length           = nextpos - pos;
         LabelType clabel = boost::lexical_cast<LabelType>(line.substr(pos, length).c_str());
         // Retrieve the color
         VectorPixelType color(3);
         color.Fill(0);
         unsigned int i;
         for (i = 0; i < 3; ++i)
-          {
+        {
           if (nextpos == std::string::npos)
             break;
           pos = line.find_first_not_of(" \t;,", nextpos);
           if (pos == std::string::npos)
             break;
-          nextpos = line.find_first_of(" \t;,", pos);
-          length = ( nextpos == std::string::npos ? std::string::npos : nextpos - pos );
+          nextpos   = line.find_first_of(" \t;,", pos);
+          length    = (nextpos == std::string::npos ? std::string::npos : nextpos - pos);
           int value = atoi(line.substr(pos, length).c_str());
           if (value < 0 || value > 255)
             otbAppLogWARNING("WARNING: color value outside 8-bits range (<0 or >255). Value will be clamped." << std::endl);
-          color[i] = static_cast<PixelType> (value);
-          }
+          color[i] = static_cast<PixelType>(value);
+        }
         // test if 3 values have been parsed
         if (i < 3)
           continue;
-        otbAppLogINFO("Adding color mapping " << clabel << " -> [" << (int) color[0] << " " << (int) color[1] << " "<< (int) color[2] << " ]" << std::endl);
-        if(putLabelBeforeColor)
-          {
+        otbAppLogINFO("Adding color mapping " << clabel << " -> [" << (int)color[0] << " " << (int)color[1] << " " << (int)color[2] << " ]" << std::endl);
+        if (putLabelBeforeColor)
+        {
           m_CustomMapper->SetChange(clabel, color);
-          }
+        }
         else
-          {
-          cvlabel[0] = clabel;
+        {
+          cvlabel[0]  = clabel;
           rgbcolor[0] = static_cast<int>(color[0]);
           rgbcolor[1] = static_cast<int>(color[1]);
           rgbcolor[2] = static_cast<int>(color[2]);
-          m_InverseMapper->GetFunctor().SetChange(rgbcolor, cvlabel);
-          }
+          m_InverseMapper->GetModifiableFunctor().SetChange(rgbcolor, cvlabel);
         }
       }
+    }
     ifs.close();
   }
 
@@ -831,13 +811,12 @@ private:
   ColorMapFilterType::Pointer    m_ContinuousColorMapper;
   LabelToRGBFilterType::Pointer  m_SegmentationColorMapper;
   std::map<std::string, unsigned int> m_LutMap;
-  ChangeLabelFilterType::Pointer m_RBGFromImageMapper;
+  ChangeLabelFilterType::Pointer                          m_RBGFromImageMapper;
   StreamingStatisticsMapFromLabelImageFilterType::Pointer m_StatisticsMapFromLabelImageFilter;
 
   ColorToLabelFilterType::Pointer m_InverseMapper;
 
   CasterToLabelImageType::Pointer m_CasterToLabelImage;
-
 };
 }
 }

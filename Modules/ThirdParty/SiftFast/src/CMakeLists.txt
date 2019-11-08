@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -33,7 +33,7 @@ if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
     set(IS_SIFTFAST_COMPILE 0)
     try_compile(IS_SIFTFAST_COMPILE
               ${CMAKE_CURRENT_BINARY_DIR}
-              ${CMAKE_CURRENT_SOURCE_DIR}/test_try_compile_libsiftfast.cpp
+              ${CMAKE_CURRENT_SOURCE_DIR}/otbsiftfast/test_try_compile_libsiftfast.cpp
               OUTPUT_VARIABLE OUTPUT)
     if(IS_SIFTFAST_COMPILE)
         message(STATUS "Try to compile libsiftfast.cpp -- yes.")
@@ -41,7 +41,7 @@ if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
         message(STATUS "Try to compile libsiftfast.cpp -- no. OUTPUT_VARIABLE has ${OUTPUT}")
         try_compile(IS_SIFTFAST_COMPILE2
               ${CMAKE_CURRENT_BINARY_DIR}
-              ${CMAKE_CURRENT_SOURCE_DIR}/test_try_compile_libsiftfast.cpp
+              ${CMAKE_CURRENT_SOURCE_DIR}/otbsiftfast/test_try_compile_libsiftfast.cpp
               COMPILE_DEFINITIONS -DOTB_DISABLE_FAST_FUNCTIONS
               OUTPUT_VARIABLE OUTPUT)
         if(IS_SIFTFAST_COMPILE2)
@@ -75,7 +75,7 @@ endif()
 #set(CMAKE_CXX_FLAGS_RELEASE "-O3 -g")
 #add_xxdefinitions(" -Wall -fPIC ")
 
-add_library(otbsiftfast libsiftfast.cpp)
+add_library(otbsiftfast otbsiftfast/libsiftfast.cpp)
 if( CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX )
   #  target_link_libraries(otbsiftfast m stdc++)
   target_link_libraries(otbsiftfast m)
@@ -97,7 +97,7 @@ endif()
 #set_target_properties(otbsiftfast PROPERTIES OUTPUT_NAME  siftfast CLEAN_DIRECT_OUTPUT 1)
 
 # compile without depending on libsiftfast
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/otbsiftfast)
 #set_target_properties(siftfast PROPERTIES COMPILE_FLAGS "-DDVPROFILE")
 #target_link_libraries(siftfast libsiftfast)
 
@@ -113,7 +113,7 @@ install(TARGETS otbsiftfast
   ARCHIVE DESTINATION ${OTB3P_INSTALL_ARCHIVE_DIR} COMPONENT Development
   )
   
-install(FILES siftfast.h
+install(FILES otbsiftfast/siftfast.h
   DESTINATION ${OTB3P_INSTALL_INCLUDE_DIR}/otbsiftfast
   COMPONENT Development
   )

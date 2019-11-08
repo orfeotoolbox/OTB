@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,26 +25,26 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbSFSTexturesImageFilterTest(int itkNotUsed(argc), char * argv[])
+int otbSFSTexturesImageFilterTest(int itkNotUsed(argc), char* argv[])
 {
-  typedef double PixelType;
+  typedef double     PixelType;
   const unsigned int Dimension = 2;
 
-  std::string  inName            = argv[1];
-  std::string  outNameLength     = argv[2];
-  std::string  outNameWidth      = argv[3];
-  std::string  outNameWMean      = argv[4];
-  std::string  outNameRatio      = argv[5];
-  std::string  outNameSD         = argv[6];
-  PixelType    spectThresh         = atof(argv[7]);
+  std::string  inName           = argv[1];
+  std::string  outNameLength    = argv[2];
+  std::string  outNameWidth     = argv[3];
+  std::string  outNameWMean     = argv[4];
+  std::string  outNameRatio     = argv[5];
+  std::string  outNameSD        = argv[6];
+  PixelType    spectThresh      = atof(argv[7]);
   unsigned int spatialThresh    = atoi(argv[8]);
   unsigned int dirNb            = atoi(argv[9]);
   unsigned int maxConsideration = atoi(argv[10]);
-  double       alpha                  = atof(argv[11]);
+  double       alpha            = atof(argv[11]);
 
-  typedef otb::Image<PixelType, Dimension>                  ImageType;
-  typedef otb::ImageFileReader<ImageType>                   ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                   WriterType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef otb::SFSTexturesImageFilter<ImageType, ImageType> FilterType;
 
   FilterType::Pointer filter       = FilterType::New();

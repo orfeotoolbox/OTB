@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -95,7 +95,7 @@ public:
    * Writes a template of geom keywords processed by loadState and saveState
    * to output stream.
    */
-  static void writeGeomTemplate(ostream& os);
+  static void writeGeomTemplate(std::ostream& os);
 
   //***
   // Overrides base class pure virtual.

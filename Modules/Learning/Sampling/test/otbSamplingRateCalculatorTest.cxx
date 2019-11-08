@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,7 +29,7 @@ int otbSamplingRateCalculator(int itkNotUsed(argc), char* argv[])
 {
   std::string outputRatesTxt(argv[1]);
 
-  typedef otb::SamplingRateCalculator::ClassCountMapType     ClassCountMapType;
+  typedef otb::SamplingRateCalculator::ClassCountMapType ClassCountMapType;
 
   ClassCountMapType classCount;
   classCount[std::string("1")] = 104;
@@ -39,20 +39,20 @@ int otbSamplingRateCalculator(int itkNotUsed(argc), char* argv[])
   unsigned int nbSamples = 83;
 
   typedef otb::SamplingRateCalculator RateCalculatorype;
-  RateCalculatorype::Pointer rateCalculator = RateCalculatorype::New();
+  RateCalculatorype::Pointer          rateCalculator = RateCalculatorype::New();
   rateCalculator->SetClassCount(classCount);
   rateCalculator->SetNbOfSamplesAllClasses(nbSamples);
   rateCalculator->Write(outputRatesTxt);
   rateCalculator->Print(std::cout);
-  
+
   // Read back
   RateCalculatorype::Pointer rateCalculatorCheck = RateCalculatorype::New();
   rateCalculatorCheck->Read(outputRatesTxt);
-  if ( rateCalculator->GetRatesByClass() != rateCalculatorCheck->GetRatesByClass() )
-    {
+  if (rateCalculator->GetRatesByClass() != rateCalculatorCheck->GetRatesByClass())
+  {
     std::cout << "Imported rates by class are different from exported ones!" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

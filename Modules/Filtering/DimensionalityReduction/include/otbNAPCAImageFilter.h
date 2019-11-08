@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,7 +23,8 @@
 
 #include "otbMNFImageFilter.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class NAPCAImageFilter
  * \brief Performs a Noise Adjusted PCA analysis of a vector image.
@@ -45,18 +46,14 @@ namespace otb {
  *
  * \ingroup OTBDimensionalityReduction
  */
-template <class TInputImage, class TOutputImage,
-            class TNoiseImageFilter,
-            Transform::TransformDirection TDirectionOfTransformation >
-class ITK_EXPORT NAPCAImageFilter
-  : public MNFImageFilter< TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation >
+template <class TInputImage, class TOutputImage, class TNoiseImageFilter, Transform::TransformDirection TDirectionOfTransformation>
+class ITK_EXPORT NAPCAImageFilter : public MNFImageFilter<TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation>
 {
 public:
   typedef NAPCAImageFilter Self;
-  typedef MNFImageFilter< TInputImage, TOutputImage,
-            TNoiseImageFilter, TDirectionOfTransformation > Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef MNFImageFilter<TInputImage, TOutputImage, TNoiseImageFilter, TDirectionOfTransformation> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -65,31 +62,35 @@ public:
   itkTypeMacro(NAPCAImageFilter, MNFImageFilter);
 
   /** Template parameters typedefs */
-  typedef typename Superclass::InputImageType InputImageType;
+  typedef typename Superclass::InputImageType  InputImageType;
   typedef typename Superclass::OutputImageType OutputImageType;
 
-  typedef typename Superclass::CovarianceEstimatorFilterType CovarianceEstimatorFilterType;
+  typedef typename Superclass::CovarianceEstimatorFilterType        CovarianceEstimatorFilterType;
   typedef typename Superclass::CovarianceEstimatorFilterPointerType CovarianceEstimatorFilterPointerType;
 
-  typedef typename Superclass::RealType RealType;
-  typedef typename Superclass::VectorType VectorType;
-  typedef typename Superclass::MatrixObjectType MatrixObjectType;
-  typedef typename Superclass::MatrixType MatrixType;
+  typedef typename Superclass::RealType           RealType;
+  typedef typename Superclass::VectorType         VectorType;
+  typedef typename Superclass::MatrixObjectType   MatrixObjectType;
+  typedef typename Superclass::MatrixType         MatrixType;
   typedef typename Superclass::InternalMatrixType InternalMatrixType;
-  typedef typename Superclass::MatrixElementType MatrixElementType;
+  typedef typename Superclass::MatrixElementType  MatrixElementType;
 
-  typedef typename Superclass::TransformFilterType TransformFilterType;
+  typedef typename Superclass::TransformFilterType        TransformFilterType;
   typedef typename Superclass::TransformFilterPointerType TransformFilterPointerType;
 
-  typedef typename Superclass::NoiseImageFilterType NoiseImageFilterType;
+  typedef typename Superclass::NoiseImageFilterType        NoiseImageFilterType;
   typedef typename Superclass::NoiseImageFilterPointerType NoiseImageFilterPointerType;
 
-  typedef typename Superclass::NormalizeFilterType NormalizeFilterType;
+  typedef typename Superclass::NormalizeFilterType        NormalizeFilterType;
   typedef typename Superclass::NormalizeFilterPointerType NormalizeFilterPointerType;
 
 protected:
-  NAPCAImageFilter() { }
-  ~NAPCAImageFilter () override { }
+  NAPCAImageFilter()
+  {
+  }
+  ~NAPCAImageFilter() override
+  {
+  }
 
   /** Specific functionality of NAPCA */
   void GenerateTransformationMatrix() override;
@@ -102,4 +103,3 @@ protected:
 #endif
 
 #endif
-

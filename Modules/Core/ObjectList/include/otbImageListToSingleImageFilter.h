@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,22 +40,20 @@ namespace otb
  */
 
 template <class TInputImageType>
-class ITK_EXPORT ImageListToSingleImageFilter
-  : public ImageListToImageFilter<TInputImageType, TInputImageType>
+class ITK_EXPORT ImageListToSingleImageFilter : public ImageListToImageFilter<TInputImageType, TInputImageType>
 {
 public:
   /** Standard typedefs */
-  typedef ImageListToSingleImageFilter              Self;
-  typedef ImageListToImageFilter
-      <TInputImageType, TInputImageType>            Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
+  typedef ImageListToSingleImageFilter Self;
+  typedef ImageListToImageFilter<TInputImageType, TInputImageType> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef TInputImageType                           InputImageType;
-  typedef typename InputImageType::Pointer          InputImagePointerType;
-  typedef ImageList<InputImageType>                 InputImageListType;
-  typedef TInputImageType                           OutputImageType;
-  typedef typename OutputImageType::Pointer         OutputImagePointerType;
+  typedef TInputImageType                   InputImageType;
+  typedef typename InputImageType::Pointer  InputImagePointerType;
+  typedef ImageList<InputImageType>         InputImageListType;
+  typedef TInputImageType                   OutputImageType;
+  typedef typename OutputImageType::Pointer OutputImagePointerType;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -73,7 +71,9 @@ protected:
   /** Constructor */
   ImageListToSingleImageFilter();
   /** Destructor */
-  ~ImageListToSingleImageFilter() override {}
+  ~ImageListToSingleImageFilter() override
+  {
+  }
 
   /** Main computation method */
   void GenerateData() override;
@@ -83,8 +83,8 @@ protected:
 
 
 private:
-  ImageListToSingleImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ImageListToSingleImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   unsigned int m_ExtractedImagePosition;
 

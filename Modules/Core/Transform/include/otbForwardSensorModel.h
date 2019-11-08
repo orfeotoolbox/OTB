@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,20 +44,14 @@ namespace otb
  * \ingroup OTBTransform
  */
 
-template <class TScalarType,
-    unsigned int NInputDimensions = 2,
-    unsigned int NOutputDimensions = 2>
-class ITK_EXPORT ForwardSensorModel : public SensorModelBase<TScalarType,
-      NInputDimensions,
-      NOutputDimensions>
+template <class TScalarType, unsigned int NInputDimensions = 2, unsigned int NOutputDimensions = 2>
+class ITK_EXPORT ForwardSensorModel : public SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 {
 
 public:
   /** Standard class typedefs. */
   typedef ForwardSensorModel Self;
-  typedef SensorModelBase<TScalarType,
-      NInputDimensions,
-      NOutputDimensions>         Superclass;
+  typedef SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -84,10 +78,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-
-  ForwardSensorModel(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  ForwardSensorModel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // namespace otb

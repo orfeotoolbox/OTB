@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,12 +36,13 @@ namespace otb
 
 namespace CellFusionMode
 {
-enum CellFusionMode {
-  MIN = 0,
-  MAX = 1,
+enum CellFusionMode
+{
+  MIN  = 0,
+  MAX  = 1,
   MEAN = 2,
-  ACC = 3 //return accumulator for debug purpose
-  };
+  ACC  = 3 // return accumulator for debug purpose
+};
 }
 
 
@@ -78,18 +79,15 @@ enum CellFusionMode {
  *
  * \ingroup OTBStereo
  */
-template <class T3DImage =  otb::VectorImage<double,2>,
-          class TMaskImage = otb::Image<unsigned char>, class TOutputDEMImage = otb::Image<double> >
-class ITK_EXPORT Multi3DMapToDEMFilter :
-    public itk::ImageToImageFilter<T3DImage,TOutputDEMImage>
+template <class T3DImage = otb::VectorImage<double, 2>, class TMaskImage = otb::Image<unsigned char>, class TOutputDEMImage = otb::Image<double>>
+class ITK_EXPORT Multi3DMapToDEMFilter : public itk::ImageToImageFilter<T3DImage, TOutputDEMImage>
 {
 public:
   /** Standard class typedef */
-  typedef Multi3DMapToDEMFilter                       Self;
-  typedef itk::ImageToImageFilter<T3DImage,
-                                  TOutputDEMImage>             Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef Multi3DMapToDEMFilter Self;
+  typedef itk::ImageToImageFilter<T3DImage, TOutputDEMImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -98,52 +96,47 @@ public:
   itkTypeMacro(Multi3DMapToDEMFilter, ImageToImageFilter);
 
   /** Useful typedefs */
-  typedef T3DImage                InputMapType;
-  typedef TOutputDEMImage         OutputImageType;
-  typedef TMaskImage              MaskImageType;
-  typedef otb::Image<unsigned int>                   AccumulatorImageType;
+  typedef T3DImage                 InputMapType;
+  typedef TOutputDEMImage          OutputImageType;
+  typedef TMaskImage               MaskImageType;
+  typedef otb::Image<unsigned int> AccumulatorImageType;
 
-  typedef typename OutputImageType::RegionType         RegionType;
-  typedef typename OutputImageType::PixelType          DEMPixelType;
-  typedef typename OutputImageType::PointType          OriginType;
-  typedef typename OutputImageType::SpacingType        SpacingType;
-  typedef typename OutputImageType::SizeType           SizeType;
-  typedef typename OutputImageType::IndexType          IndexType;
+  typedef typename OutputImageType::RegionType  RegionType;
+  typedef typename OutputImageType::PixelType   DEMPixelType;
+  typedef typename OutputImageType::PointType   OriginType;
+  typedef typename OutputImageType::SpacingType SpacingType;
+  typedef typename OutputImageType::SizeType    SizeType;
+  typedef typename OutputImageType::IndexType   IndexType;
 
-  typedef typename AccumulatorImageType::PixelType     AccumulatorPixelType;
+  typedef typename AccumulatorImageType::PixelType AccumulatorPixelType;
 
-  typedef typename InputMapType::PixelType             MapPixelType;
-  typedef typename InputMapType::InternalPixelType   InputInternalPixelType;
+  typedef typename InputMapType::PixelType         MapPixelType;
+  typedef typename InputMapType::InternalPixelType InputInternalPixelType;
   // 3D RS transform
   // TODO: Allow tuning precision (i.e. double or float)
-  typedef double                  PrecisionType;
-  typedef otb::GenericRSTransform
-    <PrecisionType,3,3>           RSTransformType;
+  typedef double PrecisionType;
+  typedef otb::GenericRSTransform<PrecisionType, 3, 3> RSTransformType;
 
   typedef otb::ImageToGenericRSOutputParameters<OutputImageType> OutputParametersEstimatorType;
 
   // 3D points
-  typedef typename RSTransformType::InputPointType  TDPointType;
+  typedef typename RSTransformType::InputPointType TDPointType;
 
   // 2D Transform
-  typedef otb::GenericRSTransform<>                 RSTransform2DType;
+  typedef otb::GenericRSTransform<> RSTransform2DType;
 
-  typedef otb::ImageKeywordlist                     ImageKeywordListType;
+  typedef otb::ImageKeywordlist ImageKeywordListType;
 
-  typedef std::map
-    <unsigned int,
-     itk::ImageRegionConstIterator<InputMapType> >   MapIteratorList;
+  typedef std::map<unsigned int, itk::ImageRegionConstIterator<InputMapType>> MapIteratorList;
 
-  typedef std::map
-    <unsigned int,
-     itk::ImageRegionConstIterator<MaskImageType> >      MaskIteratorList;
+  typedef std::map<unsigned int, itk::ImageRegionConstIterator<MaskImageType>> MaskIteratorList;
 
 
-  typedef double ValueType;
+  typedef double                               ValueType;
   typedef itk::VariableLengthVector<ValueType> MeasurementType;
 
   typedef itk::ImageRegionSplitter<2>   SplitterType;
-  typedef otb::ObjectList<SplitterType>      SplitterListType;
+  typedef otb::ObjectList<SplitterType> SplitterListType;
 
   /** Set the number of 3D images (referred earlier as N) */
   void SetNumberOf3DMaps(unsigned int nb);
@@ -152,80 +145,80 @@ public:
   unsigned int GetNumberOf3DMaps();
 
   /** Set 3D map input at  corresponding 'index' */
-  void Set3DMapInput(unsigned int index, const T3DImage * hmap);
+  void Set3DMapInput(unsigned int index, const T3DImage* hmap);
 
   /** Set mask associated to 3D maps  'index'
    * (optional, pixels with a null mask value are ignored)
    */
-  void SetMaskInput(unsigned int index, const TMaskImage * mask);
+  void SetMaskInput(unsigned int index, const TMaskImage* mask);
 
   /** Get the inputs */
-  const T3DImage * Get3DMapInput(unsigned int index) const;
-  const TMaskImage  * GetMaskInput(unsigned int index) const;
+  const T3DImage* Get3DMapInput(unsigned int index) const;
+  const TMaskImage* GetMaskInput(unsigned int index) const;
 
   /** Get DEM output*/
-   const TOutputDEMImage * GetDEMOutput() const;
-   TOutputDEMImage * GetDEMOutput();
+  const TOutputDEMImage* GetDEMOutput() const;
+  TOutputDEMImage*       GetDEMOutput();
 
-   /** Set/Get macro for DEM grid step */
-   itkSetMacro(DEMGridStep, double);
-   itkGetConstReferenceMacro(DEMGridStep, double);
+  /** Set/Get macro for DEM grid step */
+  itkSetMacro(DEMGridStep, double);
+  itkGetConstReferenceMacro(DEMGridStep, double);
 
-   /** Set/Get macro for CellFusionMode */
-   itkSetMacro(CellFusionMode, int);
-   itkGetConstReferenceMacro(CellFusionMode, int);
+  /** Set/Get macro for CellFusionMode */
+  itkSetMacro(CellFusionMode, int);
+  itkGetConstReferenceMacro(CellFusionMode, int);
 
-   /** Set/Get macro for NoDataValue */
-   itkSetMacro(NoDataValue, DEMPixelType);
-   itkGetConstReferenceMacro(NoDataValue, DEMPixelType);
+  /** Set/Get macro for NoDataValue */
+  itkSetMacro(NoDataValue, DEMPixelType);
+  itkGetConstReferenceMacro(NoDataValue, DEMPixelType);
 
-   /** compute
-    *  Set DEM extent using 3DMap 'index' , if index =-1 union of all input Map extent is done
-     */
-    void SetOutputParametersFrom3DMap(int index=-1)
+  /** compute
+   *  Set DEM extent using 3DMap 'index' , if index =-1 union of all input Map extent is done
+    */
+  void SetOutputParametersFrom3DMap(int index = -1)
+  {
+    if (static_cast<unsigned int>((2 * (index + 1))) > this->GetNumberOfInputs())
     {
-      if (static_cast<unsigned int>((2 * (index + 1))) > this->GetNumberOfInputs())
-          {
-           itkExceptionMacro(<< "input at position "<<index<<" is unavailable");
-          }
-      m_OutputParametersFrom3DMap=index;
+      itkExceptionMacro(<< "input at position " << index << " is unavailable");
     }
+    m_OutputParametersFrom3DMap = index;
+  }
 
 
-    itkSetMacro(OutputOrigin, OriginType);
-    itkGetConstReferenceMacro(OutputOrigin, OriginType);
+  itkSetMacro(OutputOrigin, OriginType);
+  itkGetConstReferenceMacro(OutputOrigin, OriginType);
 
-    /** Output Start index */
-    itkSetMacro(OutputStartIndex, IndexType);
-    itkGetConstReferenceMacro(OutputStartIndex, IndexType);
+  /** Output Start index */
+  itkSetMacro(OutputStartIndex, IndexType);
+  itkGetConstReferenceMacro(OutputStartIndex, IndexType);
 
-    /** Output Size */
-    itkSetMacro(OutputSize, SizeType);
-    itkGetConstReferenceMacro(OutputSize, SizeType);
+  /** Output Size */
+  itkSetMacro(OutputSize, SizeType);
+  itkGetConstReferenceMacro(OutputSize, SizeType);
 
-    /** Output Spacing */
-    itkSetMacro(OutputSpacing, SpacingType);
-    itkGetConstReferenceMacro(OutputSpacing, SpacingType);
+  /** Output Spacing */
+  itkSetMacro(OutputSpacing, SpacingType);
+  itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
-    /** Projection REf */
-    itkSetMacro(ProjectionRef, std::string);
-    itkGetConstReferenceMacro(ProjectionRef, std::string);
+  /** Projection REf */
+  itkSetMacro(ProjectionRef, std::string);
+  itkGetConstReferenceMacro(ProjectionRef, std::string);
 
-    itkGetConstReferenceMacro(OutputParametersFrom3DMap, int);
-
-
-    /** Set/Get macro for minimum elevation */
-    itkSetMacro(ElevationMin, double);
-    itkGetConstReferenceMacro(ElevationMin, double);
-
-    /** Set/Get macro for maximum elevation */
-   itkSetMacro(ElevationMax, double);
-   itkGetConstReferenceMacro(ElevationMax, double);
+  itkGetConstReferenceMacro(OutputParametersFrom3DMap, int);
 
 
-     /** margin for input requested region size  */
-    itkSetMacro(Margin, SizeType);
-    itkGetConstReferenceMacro(Margin, SizeType);
+  /** Set/Get macro for minimum elevation */
+  itkSetMacro(ElevationMin, double);
+  itkGetConstReferenceMacro(ElevationMin, double);
+
+  /** Set/Get macro for maximum elevation */
+  itkSetMacro(ElevationMax, double);
+  itkGetConstReferenceMacro(ElevationMax, double);
+
+
+  /** margin for input requested region size  */
+  itkSetMacro(Margin, SizeType);
+  itkGetConstReferenceMacro(Margin, SizeType);
 
 
 protected:
@@ -245,7 +238,7 @@ protected:
   void BeforeThreadedGenerateData() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** After threaded generate data */
   void AfterThreadedGenerateData() override;
@@ -255,18 +248,19 @@ protected:
     *
     * \sa ProcessObject::VerifyInputInformation
     */
-  void VerifyInputInformation() override {}
+  void VerifyInputInformation() override
+  {
+  }
 
 
 private:
-
   void SetOutputParametersFromImage();
 
   Multi3DMapToDEMFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
   /** Keywordlist of each map */
- // std::vector<ImageKeywordListType> m_MapKeywordLists;
+  // std::vector<ImageKeywordListType> m_MapKeywordLists;
 
 
   /** Reference sensor image transform */
@@ -281,9 +275,9 @@ private:
   double m_DEMGridStep;
 
   /** Temporary DEMs for multithreading */
-   std::vector<typename OutputImageType::Pointer>      m_TempDEMRegions;
-   /** Temporary accumulator for multithreading and mean calculus*/
-   std::vector<typename AccumulatorImageType::Pointer> m_TempDEMAccumulatorRegions;
+  std::vector<typename OutputImageType::Pointer> m_TempDEMRegions;
+  /** Temporary accumulator for multithreading and mean calculus*/
+  std::vector<typename AccumulatorImageType::Pointer> m_TempDEMAccumulatorRegions;
 
 
   std::vector<unsigned int> m_NumberOfSplit; // number of split for each map
@@ -291,30 +285,29 @@ private:
   /** Region splitter for input disparity maps */
   SplitterListType::Pointer m_MapSplitterList;
 
-  DEMPixelType              m_NoDataValue;
-  int                       m_CellFusionMode;
-  std::string               m_ProjectionRef;
+  DEMPixelType m_NoDataValue;
+  int          m_CellFusionMode;
+  std::string  m_ProjectionRef;
 
   /** Minimum elevation of the DEM in meters */
-   double m_ElevationMin;
+  double m_ElevationMin;
 
-   /** Maximum elevation of the DEM in meters */
-   double m_ElevationMax;
+  /** Maximum elevation of the DEM in meters */
+  double m_ElevationMax;
 
 
-  SizeType      m_OutputSize;
-  IndexType     m_OutputStartIndex;
-  SpacingType   m_OutputSpacing;
-  OriginType    m_OutputOrigin;
+  SizeType    m_OutputSize;
+  IndexType   m_OutputStartIndex;
+  SpacingType m_OutputSpacing;
+  OriginType  m_OutputOrigin;
 
-  SizeType      m_Margin;
+  SizeType m_Margin;
 
-  int           m_OutputParametersFrom3DMap;
-  bool          m_IsGeographic;
-  
+  int  m_OutputParametersFrom3DMap;
+  bool m_IsGeographic;
+
   /** internal transform between WGS84 and user's ProjRef */
   RSTransform2DType::Pointer m_GroundTransform;
-
 };
 } // end namespace otb
 

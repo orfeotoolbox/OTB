@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,23 +22,23 @@
 #include <fstream>
 #include "otbVectorData.h"
 
-int otbVectorData(int argc, char * argv[])
+int otbVectorData(int argc, char* argv[])
 {
 
-  typedef otb::VectorData<double, 2>   VectorDataType;
+  typedef otb::VectorData<double, 2> VectorDataType;
   typedef VectorDataType::DataNodeType DataNodeType;
   typedef DataNodeType::PointType      PointType;
   typedef DataNodeType::LineType       LineType;
   typedef DataNodeType::PolygonType    PolygonType;
 
-  //Instantiation
+  // Instantiation
   VectorDataType::Pointer data = VectorDataType::New();
 
   DataNodeType::Pointer document = DataNodeType::New();
-  DataNodeType::Pointer folder = DataNodeType::New();
-  DataNodeType::Pointer point = DataNodeType::New();
-  DataNodeType::Pointer line = DataNodeType::New();
-  DataNodeType::Pointer polygon = DataNodeType::New();
+  DataNodeType::Pointer folder   = DataNodeType::New();
+  DataNodeType::Pointer point    = DataNodeType::New();
+  DataNodeType::Pointer line     = DataNodeType::New();
+  DataNodeType::Pointer polygon  = DataNodeType::New();
 
   document->SetNodeType(otb::DOCUMENT);
   folder->SetNodeType(otb::FOLDER);
@@ -72,19 +72,18 @@ int otbVectorData(int argc, char * argv[])
   data->GetDataTree()->Add(polygon, folder);
 
   if (argc < 2)
-    {
+  {
     std::cout << data << std::endl;
-    }
+  }
   else
-    {
-    const char *  outfile = argv[1];
+  {
+    const char*   outfile = argv[1];
     std::ofstream file;
     file.open(outfile);
 
     file << data << std::endl;
     file.close();
-
-    }
+  }
 
   return EXIT_SUCCESS;
 }

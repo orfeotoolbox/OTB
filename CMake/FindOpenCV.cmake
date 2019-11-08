@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -28,11 +28,11 @@ if(OpenCV_DIR)
   if(OPENCV_SEARCH_PATH)
     find_path(
       opencv_INCLUDE_DIR
-      opencv/cv.h
+      opencv2/opencv.hpp
       PATHS "${OPENCV_SEARCH_PATH}"
       #no additional paths are added to the search if OpenCV_DIR
       NO_DEFAULT_PATH
-      PATH_SUFFIXES "include"
+      PATH_SUFFIXES "include" "include/opencv4"
       DOC "The directory where opencv/cv.h is installed")
   endif()
 endif()
@@ -40,15 +40,10 @@ endif()
 if(NOT opencv_INCLUDE_DIR)
   find_path(
     opencv_INCLUDE_DIR
-    opencv/cv.h
+    opencv2/opencv.hpp
     PATHS "${OpenCV_DIR}"
-    PATH_SUFFIXES "include"
+    PATH_SUFFIXES "include" "include/opencv4"
     DOC "The directory where opencv/cv.h is installed")
-endif()
-
-if(NOT EXISTS ${opencv_INCLUDE_DIR}/opencv2/opencv.hpp)
-  message(FATAL_ERROR "${opencv_INCLUDE_DIR}/opencv2/opencv.hpp does not exists. "
-    "Make sure you have opencv 2.3 or higher. We had searched in ${OPENCV_SEARCH_PATHS}")
 endif()
 
 set(opencv_core_NAMES opencv_core)
@@ -61,7 +56,7 @@ if (opencv_INCLUDE_DIR)
   if(NOT OpenCV_VERSION)
     file(READ "${opencv_INCLUDE_DIR}/opencv2/core/version.hpp" _header_content)
 
-    # detect the type of version file (2.3.x , 2.4.x or 3.x)
+    # detect the type of version file (2.3.x , 2.4.x, 3.x or 4.x)
     string(REGEX MATCH  ".*# *define +CV_VERSION_EPOCH +([0-9]+).*" has_epoch ${_header_content})
     string(REGEX MATCH  ".*# *define +CV_MAJOR_VERSION +([0-9]+).*" has_old_major ${_header_content})
     string(REGEX MATCH  ".*# *define +CV_MINOR_VERSION +([0-9]+).*" has_old_minor ${_header_content})
@@ -109,6 +104,10 @@ endif()
 
 if(NOT OPENCV_SEARCH_PATH)
   get_filename_component(OPENCV_SEARCH_PATH "${opencv_INCLUDE_DIR}" PATH)
+  # include dir is include/opencv4 in v4 UNIX
+  if(UNIX AND OpenCV_VERSION_MAJOR EQUAL 4)
+    get_filename_component(OPENCV_SEARCH_PATH "${OPENCV_SEARCH_PATH}" PATH)
+  endif()
 endif()
 
 # Prefer the static library.
@@ -139,6 +138,6 @@ if( OPENCV_INCLUDE_DIRS AND OPENCV_LIBRARIES )
 endif()
 
 include(${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(OpenCV
+find_package_handle_standard_args(OpenCV
   REQUIRED_VARS OPENCV_core_LIBRARY OPENCV_INCLUDE_DIRS
   VERSION_VAR OpenCV_VERSION)

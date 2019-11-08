@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,21 +38,21 @@ namespace Wrapper
  *
  * \ingroup AppSARUtils
  */
-class ComputeModulusAndPhase: public Application
+class ComputeModulusAndPhase : public Application
 {
 public:
   // Class declaration is followed by ITK public types for the class, the superclass and smart pointers.
-  typedef ComputeModulusAndPhase Self;
-  typedef Application Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef ComputeModulusAndPhase        Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
-  itkNewMacro (Self);
+  itkNewMacro(Self);
   itkTypeMacro(ComputeModulusAndPhase, otb::Wrapper::Application);
 
-  //typedefs for the application
-  typedef itk::ComplexToModulusImageFilter<ComplexFloatImageType, FloatImageType>   ModulusFilterType;
+  // typedefs for the application
+  typedef itk::ComplexToModulusImageFilter<ComplexFloatImageType, FloatImageType> ModulusFilterType;
   typedef itk::ComplexToPhaseImageFilter<ComplexFloatImageType, FloatImageType>   PhaseFilterType;
 
 private:
@@ -61,12 +61,10 @@ private:
     SetName("ComputeModulusAndPhase");
     SetDescription("This application computes the modulus and the phase of a complex SAR image or an image with 2 components (real and imaginary parts).");
 
-    SetDocName("Compute Modulus and Phase");
     SetDocLongDescription(
-      "This application computes the modulus and the phase of a "
-      "complex SAR image. The input should be a single band image with "
-      "complex pixels or a 2 bands image (real and imaginary components in separate bands)."
-    );
+        "This application computes the modulus and the phase of a "
+        "complex SAR image. The input should be a single band image with "
+        "complex pixels or a 2 bands image (real and imaginary components in separate bands).");
     SetDocLimitations("The application takes as input single band image with complex pixels or a 2 bands image (real and imaginary part in separate bands).");
     SetDocAuthors("Alexia Mondot (alexia.mondot@c-s.fr) and Mickael Savinaud (mickael.savinaud@c-s.fr)");
     SetDocSeeAlso("Despeckle, SARPolarMatrixConvert, SARPolarSynth");
@@ -75,18 +73,20 @@ private:
     AddDocTag(Tags::Manip);
     // Input images
     AddParameter(ParameterType_InputImage, "in", "Input Image");
-    SetParameterDescription("in","Input image (complex single band or 2 bands (real/imaginary parts))");
+    SetParameterDescription("in", "Input image (complex single band or 2 bands (real/imaginary parts))");
 
     // Outputs
     AddParameter(ParameterType_OutputImage, "modulus", "Modulus");
-    SetParameterDescription("modulus", "Modulus of the input image computes with the\n"
+    SetParameterDescription("modulus",
+                            "Modulus of the input image computes with the\n"
                             "following formula: :math:`\\sqrt{real*real + imag*imag}` where real and imag \n"
                             "are respectively the real and the imaginary part of the input complex image.\n");
 
     AddParameter(ParameterType_OutputImage, "phase", "Phase");
-    SetParameterDescription("phase", "Phase of the input image computes with the following formula:\n"
-    ":math:`\\tan^{-1}(\\frac{imag}{real})` where real and imag are respectively the real and\n"
-    "the imaginary part of the input complex image.");
+    SetParameterDescription("phase",
+                            "Phase of the input image computes with the following formula:\n"
+                            ":math:`\\tan^{-1}(\\frac{imag}{real})` where real and imag are respectively the real and\n"
+                            "the imaginary part of the input complex image.");
 
     AddRAMParameter();
 
@@ -113,7 +113,7 @@ private:
     ComplexFloatImageType::Pointer inImage = GetParameterComplexFloatImage("in");
 
     ModulusFilterType::Pointer modulus = ModulusFilterType::New();
-    PhaseFilterType::Pointer   phase = PhaseFilterType::New();
+    PhaseFilterType::Pointer   phase   = PhaseFilterType::New();
 
     // Compute modulus and phase
     modulus->SetInput(inImage);

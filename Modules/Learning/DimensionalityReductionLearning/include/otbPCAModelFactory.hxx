@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,32 +30,27 @@ namespace otb
 {
 
 template <class TInputValue, class TOutputValue>
-PCAModelFactory<TInputValue,TOutputValue>::PCAModelFactory()
+PCAModelFactory<TInputValue, TOutputValue>::PCAModelFactory()
 {
   std::string classOverride = std::string("DimensionalityReductionModel");
-  std::string subclass = std::string("PCAModel");
+  std::string subclass      = std::string("PCAModel");
 
-  this->RegisterOverride(
-    classOverride.c_str(),
-    subclass.c_str(),
-    "Shark PCA ML Model",
-    1,
-    itk::CreateObjectFunction<PCAModel<TInputValue>>::New());
+  this->RegisterOverride(classOverride.c_str(), subclass.c_str(), "Shark PCA ML Model", 1, itk::CreateObjectFunction<PCAModel<TInputValue>>::New());
 }
 
 template <class TInputValue, class TOutputValue>
-PCAModelFactory<TInputValue,TOutputValue>::~PCAModelFactory()
+PCAModelFactory<TInputValue, TOutputValue>::~PCAModelFactory()
 {
 }
 
 template <class TInputValue, class TOutputValue>
-const char* PCAModelFactory<TInputValue,TOutputValue>::GetITKSourceVersion(void) const
+const char* PCAModelFactory<TInputValue, TOutputValue>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
 template <class TInputValue, class TOutputValue>
-const char* PCAModelFactory<TInputValue,TOutputValue>::GetDescription() const
+const char* PCAModelFactory<TInputValue, TOutputValue>::GetDescription() const
 {
   return "PCA model factory";
 }

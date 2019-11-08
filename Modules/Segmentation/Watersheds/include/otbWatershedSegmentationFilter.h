@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,7 +26,8 @@
 #include "itkCastImageFilter.h"
 #include "itkWatershedImageFilter.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class WatershedSegmentationFilter
 *   \brief Watershed composite filter allowing to set output type
@@ -44,26 +45,24 @@ namespace otb {
  *
  * \ingroup OTBWatersheds
 */
-template <class TInputImage,  class TOutputLabelImage >
-class WatershedSegmentationFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputLabelImage>
+template <class TInputImage, class TOutputLabelImage>
+class WatershedSegmentationFilter : public itk::ImageToImageFilter<TInputImage, TOutputLabelImage>
 {
 public:
   /** Standard Self typedef */
-  typedef WatershedSegmentationFilter                             Self;
+  typedef WatershedSegmentationFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputLabelImage> Superclass;
-  typedef itk::SmartPointer<Self>                                 Pointer;
-  typedef itk::SmartPointer<const Self>                           ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TInputImage                                             InputImageType;
-  typedef TOutputLabelImage                                       OutputLabelImageType;
+  typedef TInputImage       InputImageType;
+  typedef TOutputLabelImage OutputLabelImageType;
 
-  typedef itk::WatershedImageFilter<TInputImage>                  WatershedFilterType;
-  typedef typename WatershedFilterType::OutputImageType           InternalOutputImageType;
+  typedef itk::WatershedImageFilter<TInputImage>        WatershedFilterType;
+  typedef typename WatershedFilterType::OutputImageType InternalOutputImageType;
 
-  typedef itk::CastImageFilter<InternalOutputImageType,
-                               OutputLabelImageType>              CastImageFilterType;
+  typedef itk::CastImageFilter<InternalOutputImageType, OutputLabelImageType> CastImageFilterType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -74,11 +73,11 @@ public:
   /** ImageDimension constants */
   itkStaticConstMacro(ImageDimension, unsigned int, TInputImage::ImageDimension);
 
-  otbSetObjectMemberMacro(WatershedFilter,Level,float);
-  otbGetObjectMemberMacro(WatershedFilter,Level,float);
+  otbSetObjectMemberMacro(WatershedFilter, Level, float);
+  otbGetObjectMemberMacro(WatershedFilter, Level, float);
 
-  otbSetObjectMemberMacro(WatershedFilter,Threshold,float);
-  otbGetObjectMemberMacro(WatershedFilter,Threshold,float);
+  otbSetObjectMemberMacro(WatershedFilter, Threshold, float);
+  otbGetObjectMemberMacro(WatershedFilter, Threshold, float);
 
 
 protected:

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,9 +28,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetOutputVectorDataParameter::QtWidgetOutputVectorDataParameter(OutputVectorDataParameter* param, QtWidgetModel* m, QWidget * parent)
-: QtWidgetParameterBase(param, m, parent),
-  m_OutputVectorDataParam(param)
+QtWidgetOutputVectorDataParameter::QtWidgetOutputVectorDataParameter(OutputVectorDataParameter* param, QtWidgetModel* m, QWidget* parent)
+  : QtWidgetParameterBase(param, m, parent), m_OutputVectorDataParam(param)
 {
 }
 
@@ -38,24 +37,20 @@ QtWidgetOutputVectorDataParameter::~QtWidgetOutputVectorDataParameter()
 {
 }
 
-const QLineEdit*
-QtWidgetOutputVectorDataParameter
-::GetInput() const
+const QLineEdit* QtWidgetOutputVectorDataParameter::GetInput() const
 {
   return m_Input;
 }
 
-QLineEdit*
-QtWidgetOutputVectorDataParameter
-::GetInput()
+QLineEdit* QtWidgetOutputVectorDataParameter::GetInput()
 {
   return m_Input;
 }
 
 void QtWidgetOutputVectorDataParameter::DoUpdateGUI()
 {
-  //update lineedit
-  QString text( m_OutputVectorDataParam->GetFileName() );
+  // update lineedit
+  QString text(m_OutputVectorDataParam->GetFileName());
   if (text != m_Input->text())
     m_Input->setText(text);
 }
@@ -67,59 +62,45 @@ void QtWidgetOutputVectorDataParameter::DoCreateWidget()
   m_HLayout->setContentsMargins(0, 0, 0, 0);
 
   m_Input = new QLineEdit(this);
-  m_Input->setToolTip(
-    QString::fromStdString( m_OutputVectorDataParam->GetDescription() )
-  );
-  connect( m_Input, &QLineEdit::textChanged, this, &QtWidgetOutputVectorDataParameter::SetFileName );
-  connect( m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate );
+  m_Input->setToolTip(QString::fromStdString(m_OutputVectorDataParam->GetDescription()));
+  connect(m_Input, &QLineEdit::textChanged, this, &QtWidgetOutputVectorDataParameter::SetFileName);
+  connect(m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate);
   m_HLayout->addWidget(m_Input);
 
   m_Button = new QPushButton(this);
   m_Button->setText("...");
   m_Button->setToolTip("Select output filename...");
   m_Button->setMaximumWidth(m_Button->width());
-  connect( m_Button, &QPushButton::clicked, this, &QtWidgetOutputVectorDataParameter::SelectFile );
+  connect(m_Button, &QPushButton::clicked, this, &QtWidgetOutputVectorDataParameter::SelectFile);
   m_HLayout->addWidget(m_Button);
 
   this->setLayout(m_HLayout);
 }
 
 
-void
-QtWidgetOutputVectorDataParameter
-::SelectFile()
+void QtWidgetOutputVectorDataParameter::SelectFile()
 {
-  assert( m_Input!=NULL );
+  assert(m_Input != NULL);
 
-  QString filename(
-    otb::GetSaveFilename(
-      this,
-      QString(),
-      m_Input->text(),
-      tr( "Vector data files (*)" ),
-      NULL
-    )
-  );
+  QString filename(otb::GetSaveFilename(this, QString(), m_Input->text(), tr("Vector data files (*)"), NULL));
 
-  if( filename.isEmpty() )
+  if (filename.isEmpty())
     return;
 
-  m_Input->setText( filename );
+  m_Input->setText(filename);
 }
 
 
 void QtWidgetOutputVectorDataParameter::SetFileName(const QString& value)
 {
   // save value
-  m_FileName = QFile::encodeName( value ).constData();
+  m_FileName = QFile::encodeName(value).constData();
 
   m_OutputVectorDataParam->SetFileName(m_FileName);
 
   // notify of value change
-  QString key( m_OutputVectorDataParam->GetKey() );
-  emit ParameterChanged(key);
+  QString key(m_OutputVectorDataParam->GetKey());
+  emit    ParameterChanged(key);
 }
-
-
 }
 }

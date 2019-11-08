@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -70,12 +70,12 @@ otb_add_test(NAME bfTvConnectedComponentMuParserFunctorTestMask COMMAND otbCCOBI
 
 otb_add_test(NAME obTuMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter COMMAND otbCCOBIATestDriver
   otbMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter
-  ${INPUTDATA}/ROI_QB_MUL_4.tif
+  ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
   ${TEMP}/obTuMeanShiftStreamingConnectedComponentSegmentationOBIAToVectorDataFilter.shp
-  9
-  10
-  0.001
-  "distance<10"
+  6
+  50
+  0.1
+  "distance<20"
   20
   "SHAPE_Elongation>10"
   5)

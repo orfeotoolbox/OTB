@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,33 +22,33 @@
 #include "otbSharkUtils.h"
 
 
-int otbSharkNormalizeLabels(int itkNotUsed(argc), char* itkNotUsed(argv) [])
+int otbSharkNormalizeLabels(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  std::vector<unsigned int> inLabels = {2, 2, 3, 20, 1};
-  std::vector<unsigned int> expectedDictionary = {2, 3, 20, 1};
-  std::vector<unsigned int> expectedLabels = {0, 0, 1, 2, 3};
+  std::vector<unsigned int> inLabels           = {2, 2, 3, 20, 1};
+  std::vector<unsigned int> expectedDictionary = {1, 2, 3, 20};
+  std::vector<unsigned int> expectedLabels     = {1, 1, 2, 3, 0};
 
-  auto newLabels = inLabels;
+  auto                      newLabels = inLabels;
   std::vector<unsigned int> labelDict;
   otb::Shark::NormalizeLabelsAndGetDictionary(newLabels, labelDict);
 
-  if(newLabels != expectedLabels)
-    {
+  if (newLabels != expectedLabels)
+  {
     std::cout << "Wrong new labels\n";
-    for(size_t i = 0; i<newLabels.size(); ++i)
+    for (size_t i = 0; i < newLabels.size(); ++i)
       std::cout << "Got " << newLabels[i] << " expected " << expectedLabels[i] << '\n';
 
     return EXIT_FAILURE;
-    }
+  }
 
-  if(labelDict != expectedDictionary)
-    {
+  if (labelDict != expectedDictionary)
+  {
     std::cout << "Wrong dictionary\n";
-    for(size_t i = 0; i<labelDict.size(); ++i)
+    for (size_t i = 0; i < labelDict.size(); ++i)
       std::cout << "Got " << labelDict[i] << " expected " << expectedDictionary[i] << '\n';
 
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

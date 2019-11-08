@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -51,15 +51,15 @@ public:
   typedef typename TOutputMetricImage::ValueType      MetricValueType;
 
   // Implement the SSD operator
-  inline MetricValueType operator()(ConstNeighborhoodIteratorType & a, ConstNeighborhoodIteratorType & b) const
+  inline MetricValueType operator()(ConstNeighborhoodIteratorType& a, ConstNeighborhoodIteratorType& b) const
   {
     MetricValueType ssd = 0;
 
     // For some reason, iterators do not work on neighborhoods
-    for(unsigned int i = 0; i<a.Size(); ++i)
-      {
-      ssd += (a.GetPixel(i)-b.GetPixel(i))*(a.GetPixel(i)-b.GetPixel(i));
-      }
+    for (unsigned int i = 0; i < a.Size(); ++i)
+    {
+      ssd += (a.GetPixel(i) - b.GetPixel(i)) * (a.GetPixel(i) - b.GetPixel(i));
+    }
 
     return ssd;
   }
@@ -85,26 +85,25 @@ public:
   typedef typename TOutputMetricImage::ValueType      MetricValueType;
 
   // Implement the SSD DivMean operator
-  inline MetricValueType operator()(ConstNeighborhoodIteratorType & a, ConstNeighborhoodIteratorType & b) const
+  inline MetricValueType operator()(ConstNeighborhoodIteratorType& a, ConstNeighborhoodIteratorType& b) const
   {
-    MetricValueType ssd = 0;
+    MetricValueType ssd   = 0;
     MetricValueType meana = 0;
     MetricValueType meanb = 0;
 
-    for(unsigned int i = 0; i<a.Size(); ++i)
-      {
-      meana+=a.GetPixel(i);
-      meanb+=b.GetPixel(i);
-      }
-    meana/=a.Size();
-    meanb/=b.Size();
+    for (unsigned int i = 0; i < a.Size(); ++i)
+    {
+      meana += a.GetPixel(i);
+      meanb += b.GetPixel(i);
+    }
+    meana /= a.Size();
+    meanb /= b.Size();
 
     // For some reason, iterators do not work on neighborhoods
-    for(unsigned int i = 0; i<a.Size(); ++i)
-      {
-      ssd += (a.GetPixel(i)/meana-b.GetPixel(i)/meanb)*(a.GetPixel(i)/meana-b.GetPixel(i)/meanb);
-
-      }
+    for (unsigned int i = 0; i < a.Size(); ++i)
+    {
+      ssd += (a.GetPixel(i) / meana - b.GetPixel(i) / meanb) * (a.GetPixel(i) / meana - b.GetPixel(i) / meanb);
+    }
 
     return ssd;
   }
@@ -130,52 +129,52 @@ public:
   typedef typename TOutputMetricImage::ValueType      MetricValueType;
 
   // Implement the NCC operator
-  inline MetricValueType operator()(ConstNeighborhoodIteratorType & a, ConstNeighborhoodIteratorType & b) const
+  inline MetricValueType operator()(ConstNeighborhoodIteratorType& a, ConstNeighborhoodIteratorType& b) const
   {
-    //MetricValueType meanA(0),meanB(0), sigmaA(0), sigmaB(0), cov(0), ncc(0);
-    double  meanA=0.0;
-    double  meanB=0.0;
-    double  sigmaA=0.0;
-    double  sigmaB=0.0;
-    double  cov=0.0;
-    double  ncc=0.0;
-    double  valueA;
-    double  valueB;
-    double size=a.Size();
+    // MetricValueType meanA(0),meanB(0), sigmaA(0), sigmaB(0), cov(0), ncc(0);
+    double meanA  = 0.0;
+    double meanB  = 0.0;
+    double sigmaA = 0.0;
+    double sigmaB = 0.0;
+    double cov    = 0.0;
+    double ncc    = 0.0;
+    double valueA;
+    double valueB;
+    double size = a.Size();
     // For some reason, iterators do not work on neighborhoods
-    for(unsigned int i = 0; i<size; ++i)
-      {
-      meanA+=static_cast<double>(a.GetPixel(i));
-      meanB+=static_cast<double>(b.GetPixel(i));
-      }
+    for (unsigned int i = 0; i < size; ++i)
+    {
+      meanA += static_cast<double>(a.GetPixel(i));
+      meanB += static_cast<double>(b.GetPixel(i));
+    }
 
     // Compute mean
-    meanA/=size;
-    meanB/=size;
+    meanA /= size;
+    meanB /= size;
 
-    for(unsigned int i = 0; i<size; ++i)
-      {
-      valueA=static_cast<double>(a.GetPixel(i));
-      valueB=static_cast<double>(b.GetPixel(i));
-      cov+=(valueA-meanA)*(valueB-meanB);
-      sigmaA+=(valueA-meanA)*(valueA-meanA);
-      sigmaB+=(valueB-meanB)*(valueB-meanB);
-      }
+    for (unsigned int i = 0; i < size; ++i)
+    {
+      valueA = static_cast<double>(a.GetPixel(i));
+      valueB = static_cast<double>(b.GetPixel(i));
+      cov += (valueA - meanA) * (valueB - meanB);
+      sigmaA += (valueA - meanA) * (valueA - meanA);
+      sigmaB += (valueB - meanB) * (valueB - meanB);
+    }
 
-    cov/=size-1;
-    sigmaA/=size-1;
-    sigmaB/=size-1;
+    cov /= size - 1;
+    sigmaA /= size - 1;
+    sigmaB /= size - 1;
     sigmaA = std::sqrt(sigmaA);
     sigmaB = std::sqrt(sigmaB);
 
-    if(sigmaA > 1e-20 && sigmaB > 1e-20)
-      {
-      ncc = std::abs(cov)/(sigmaA*sigmaB);
-      }
+    if (sigmaA > 1e-20 && sigmaB > 1e-20)
+    {
+      ncc = std::abs(cov) / (sigmaA * sigmaB);
+    }
     else
-      {
+    {
       ncc = 0;
-      }
+    }
 
     return static_cast<MetricValueType>(ncc);
   }
@@ -199,38 +198,37 @@ public:
   typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
   typedef typename TOutputMetricImage::ValueType      MetricValueType;
 
-  LPBlockMatching(): m_P(1)
-    {
-    }
+  LPBlockMatching() : m_P(1)
+  {
+  }
 
   void SetP(double p)
-    {
+  {
     if (p > 0.0)
-      {
+    {
       m_P = p;
-      }
-    else
-      {
-      m_P = 1.0;
-      }
     }
+    else
+    {
+      m_P = 1.0;
+    }
+  }
 
   // Implement the Lp metric
-  inline MetricValueType operator()(ConstNeighborhoodIteratorType & a, ConstNeighborhoodIteratorType & b) const
+  inline MetricValueType operator()(ConstNeighborhoodIteratorType& a, ConstNeighborhoodIteratorType& b) const
   {
     MetricValueType score(0);
 
     // For some reason, iterators do not work on neighborhoods
-    for(unsigned int i = 0; i<a.Size(); ++i)
-      {
-      score += std::pow( std::abs(static_cast<double>(a.GetPixel(i)-b.GetPixel(i))) , m_P);
-      }
+    for (unsigned int i = 0; i < a.Size(); ++i)
+    {
+      score += std::pow(std::abs(static_cast<double>(a.GetPixel(i) - b.GetPixel(i))), m_P);
+    }
 
     return score;
   }
 
 private:
-
   double m_P;
 };
 
@@ -296,17 +294,15 @@ private:
  */
 
 template <class TInputImage, class TOutputMetricImage, class TOutputDisparityImage = TOutputMetricImage, class TMaskImage = otb::Image<unsigned char>,
-          class TBlockMatchingFunctor = Functor::SSDBlockMatching<TInputImage,TOutputMetricImage> >
-class ITK_EXPORT PixelWiseBlockMatchingImageFilter :
-    public itk::ImageToImageFilter<TInputImage,TOutputDisparityImage>
+          class TBlockMatchingFunctor = Functor::SSDBlockMatching<TInputImage, TOutputMetricImage>>
+class ITK_EXPORT PixelWiseBlockMatchingImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputDisparityImage>
 {
 public:
   /** Standard class typedef */
-  typedef PixelWiseBlockMatchingImageFilter       Self;
-  typedef itk::ImageToImageFilter<TInputImage,
-                                  TOutputDisparityImage>    Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef PixelWiseBlockMatchingImageFilter Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputDisparityImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -315,53 +311,53 @@ public:
   itkTypeMacro(PixelWiseBlockMatchingImageFilter, ImageToImageFilter);
 
   /** Useful typedefs */
-  typedef TInputImage                                       InputImageType;
-  typedef TOutputMetricImage                                OutputMetricImageType;
-  typedef TOutputDisparityImage                             OutputDisparityImageType;
-  typedef TMaskImage                                        InputMaskImageType;
-  typedef TBlockMatchingFunctor                             BlockMatchingFunctorType;
+  typedef TInputImage           InputImageType;
+  typedef TOutputMetricImage    OutputMetricImageType;
+  typedef TOutputDisparityImage OutputDisparityImageType;
+  typedef TMaskImage            InputMaskImageType;
+  typedef TBlockMatchingFunctor BlockMatchingFunctorType;
 
-  typedef typename InputImageType::SizeType                 SizeType;
-  typedef typename InputImageType::IndexType                IndexType;
-  typedef typename InputImageType::RegionType               RegionType;
-  typedef typename InputImageType::SpacingType              SpacingType;
-  typedef typename InputImageType::PointType                PointType;
+  typedef typename InputImageType::SizeType    SizeType;
+  typedef typename InputImageType::IndexType   IndexType;
+  typedef typename InputImageType::RegionType  RegionType;
+  typedef typename InputImageType::SpacingType SpacingType;
+  typedef typename InputImageType::PointType   PointType;
 
-  typedef typename TOutputMetricImage::ValueType            MetricValueType;
+  typedef typename TOutputMetricImage::ValueType MetricValueType;
 
-  typedef typename OutputDisparityImageType::PixelType      DisparityPixelType;
+  typedef typename OutputDisparityImageType::PixelType DisparityPixelType;
 
-  typedef itk::ConstNeighborhoodIterator<TInputImage>       ConstNeighborhoodIteratorType;
+  typedef itk::ConstNeighborhoodIterator<TInputImage> ConstNeighborhoodIteratorType;
 
   /** Set left input */
-  void SetLeftInput( const TInputImage * image);
+  void SetLeftInput(const TInputImage* image);
 
   /** Set right input */
-  void SetRightInput( const TInputImage * image);
+  void SetRightInput(const TInputImage* image);
 
   /** Set mask input (optional) */
-  void SetLeftMaskInput(const TMaskImage * image);
+  void SetLeftMaskInput(const TMaskImage* image);
 
   /** Set right mask input (optional) */
-  void SetRightMaskInput(const TMaskImage * image);
+  void SetRightMaskInput(const TMaskImage* image);
 
   /** Get the inputs */
-  const TInputImage * GetLeftInput() const;
-  const TInputImage * GetRightInput() const;
-  const TMaskImage  * GetLeftMaskInput() const;
-  const TMaskImage  * GetRightMaskInput() const;
+  const TInputImage* GetLeftInput() const;
+  const TInputImage* GetRightInput() const;
+  const TMaskImage*  GetLeftMaskInput() const;
+  const TMaskImage*  GetRightMaskInput() const;
 
   /** Get the metric output */
-  const TOutputMetricImage * GetMetricOutput() const;
-  TOutputMetricImage * GetMetricOutput();
+  const TOutputMetricImage* GetMetricOutput() const;
+  TOutputMetricImage*       GetMetricOutput();
 
   /** Get the disparity output */
-  const TOutputDisparityImage * GetHorizontalDisparityOutput() const;
-  TOutputDisparityImage * GetHorizontalDisparityOutput();
+  const TOutputDisparityImage* GetHorizontalDisparityOutput() const;
+  TOutputDisparityImage*       GetHorizontalDisparityOutput();
 
   /** Get the disparity output */
-  const TOutputDisparityImage * GetVerticalDisparityOutput() const;
-  TOutputDisparityImage * GetVerticalDisparityOutput();
+  const TOutputDisparityImage* GetVerticalDisparityOutput() const;
+  TOutputDisparityImage*       GetVerticalDisparityOutput();
 
 
   /** Set unsigned int radius */
@@ -375,23 +371,23 @@ public:
   itkGetConstReferenceMacro(Radius, SizeType);
 
   /*** Set/Get the minimum disparity to explore */
-  itkSetMacro(MinimumHorizontalDisparity,int);
-  itkGetConstReferenceMacro(MinimumHorizontalDisparity,int);
+  itkSetMacro(MinimumHorizontalDisparity, int);
+  itkGetConstReferenceMacro(MinimumHorizontalDisparity, int);
 
   /*** Set/Get the maximum disparity to explore */
-  itkSetMacro(MaximumHorizontalDisparity,int);
-  itkGetConstReferenceMacro(MaximumHorizontalDisparity,int);
+  itkSetMacro(MaximumHorizontalDisparity, int);
+  itkGetConstReferenceMacro(MaximumHorizontalDisparity, int);
 
   /*** Set/Get the minimum disparity to explore */
-  itkSetMacro(MinimumVerticalDisparity,int);
-  itkGetConstReferenceMacro(MinimumVerticalDisparity,int);
+  itkSetMacro(MinimumVerticalDisparity, int);
+  itkGetConstReferenceMacro(MinimumVerticalDisparity, int);
 
   /*** Set/Get the maximum disparity to explore */
-  itkSetMacro(MaximumVerticalDisparity,int);
-  itkGetConstReferenceMacro(MaximumVerticalDisparity,int);
+  itkSetMacro(MaximumVerticalDisparity, int);
+  itkGetConstReferenceMacro(MaximumVerticalDisparity, int);
 
   itkSetMacro(Minimize, bool);
-  itkGetConstReferenceMacro(Minimize,bool);
+  itkGetConstReferenceMacro(Minimize, bool);
   itkBooleanMacro(Minimize);
 
   /** Set/Get the exploration radius in the disparity space */
@@ -399,34 +395,34 @@ public:
   itkGetConstReferenceMacro(ExplorationRadius, SizeType);
 
   /** Set/Get the initial horizontal disparity */
-  itkSetMacro(InitHorizontalDisparity,int);
-  itkGetConstReferenceMacro(InitHorizontalDisparity,int);
+  itkSetMacro(InitHorizontalDisparity, int);
+  itkGetConstReferenceMacro(InitHorizontalDisparity, int);
 
   /** Set/Get the initial vertical disparity */
-  itkSetMacro(InitVerticalDisparity,int);
-  itkGetConstReferenceMacro(InitVerticalDisparity,int);
+  itkSetMacro(InitVerticalDisparity, int);
+  itkGetConstReferenceMacro(InitVerticalDisparity, int);
 
   /** Get the functor for parameters setting */
-  BlockMatchingFunctorType &  GetFunctor()
+  BlockMatchingFunctorType& GetFunctor()
   {
     return m_Functor;
   }
 
   /** Get the functor (const version) */
-  const BlockMatchingFunctorType &  GetFunctor() const
+  const BlockMatchingFunctorType& GetFunctor() const
   {
     return m_Functor;
   }
 
   /** Set initial horizontal disparity field (optional, override m_InitHorizontalDisparity) */
-  void SetHorizontalDisparityInput( const TOutputDisparityImage * hfield);
+  void SetHorizontalDisparityInput(const TOutputDisparityImage* hfield);
 
   /** Set initial vertical disparity field (optional, override m_InitVerticalDisparity) */
-  void SetVerticalDisparityInput( const TOutputDisparityImage * vfield);
+  void SetVerticalDisparityInput(const TOutputDisparityImage* vfield);
 
   /** Get the initial disparity fields */
-  const TOutputDisparityImage * GetHorizontalDisparityInput() const;
-  const TOutputDisparityImage * GetVerticalDisparityInput() const;
+  const TOutputDisparityImage* GetHorizontalDisparityInput() const;
+  const TOutputDisparityImage* GetVerticalDisparityInput() const;
 
   /** Set/Get macro for the subsampling step */
   itkSetMacro(Step, unsigned int);
@@ -459,52 +455,51 @@ protected:
   void BeforeThreadedGenerateData() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const RegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
   PixelWiseBlockMatchingImageFilter(const Self&) = delete;
-  void operator=(const Self&); //purposely not implemeFnted
+  void operator                                  =(const Self&); // purposely not implemeFnted
 
   /** The radius of the blocks */
-  SizeType                      m_Radius;
+  SizeType m_Radius;
 
   /** The min disparity to explore */
-  int                           m_MinimumHorizontalDisparity;
+  int m_MinimumHorizontalDisparity;
 
   /** The max disparity to explore */
-  int                           m_MaximumHorizontalDisparity;
+  int m_MaximumHorizontalDisparity;
 
-   /** The min disparity to explore */
-  int                           m_MinimumVerticalDisparity;
+  /** The min disparity to explore */
+  int m_MinimumVerticalDisparity;
 
   /** The max disparity to explore */
-  int                           m_MaximumVerticalDisparity;
+  int m_MaximumVerticalDisparity;
 
   /** Should we minimize or maximize ? */
-  bool                          m_Minimize;
+  bool m_Minimize;
 
   /** The exploration radius for disparities (used if non null) */
-  SizeType                      m_ExplorationRadius;
+  SizeType m_ExplorationRadius;
 
   /** Block-matching functor */
-  BlockMatchingFunctorType      m_Functor;
+  BlockMatchingFunctorType m_Functor;
 
   /** Initial horizontal disparity (0 by default, used if an exploration radius is set and if no input horizontal
     disparity map is given) */
-  int                           m_InitHorizontalDisparity;
+  int m_InitHorizontalDisparity;
 
   /** Initial vertical disparity (0 by default, used if an exploration radius is set and if no input vertical
     disparity map is given) */
-  int                           m_InitVerticalDisparity;
+  int m_InitVerticalDisparity;
 
   /** Computation step : disparities are computed on locations of a subsampled grid */
-  unsigned int                  m_Step;
+  unsigned int m_Step;
 
   /** Starting index for the subsampled grid. The index is measured with respect to the input image grid
    *  Each coordinate shall lie in [0, m_Step-1]
    */
-  IndexType                     m_GridIndex;
-
+  IndexType m_GridIndex;
 };
 } // end namespace otb
 

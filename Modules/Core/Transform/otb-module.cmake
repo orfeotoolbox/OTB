@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -24,7 +24,6 @@ itk -see itk::Transform-). this mainly concerns transformations of coordinates
 from any map projection or sensor model to any map projection or sensor model.")
 
 otb_module(OTBTransform
-ENABLE_SHARED
   DEPENDS
     OTBBoost
     OTBCommon
@@ -32,7 +31,7 @@ ENABLE_SHARED
     OTBITK
     OTBInterpolation
     OTBOSSIMAdapters
-
+    OTBGdalAdapters
   TEST_DEPENDS
     OTBImageBase
     OTBImageIO

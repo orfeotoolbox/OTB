@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -34,16 +32,14 @@
 typedef unsigned short ShortPixelType;
 const unsigned int     Dimension = 2;
 
-typedef otb::Image<ShortPixelType,  Dimension>                                  InputImageType;
-typedef otb::ImageFileReader<InputImageType>                                    ReaderType;
-typedef itk::GradientImageFilter<InputImageType>                                GradientFilterType;
-typedef GradientFilterType::OutputImageType                                     CovariantImageType;
+typedef otb::Image<ShortPixelType, Dimension> InputImageType;
+typedef otb::ImageFileReader<InputImageType>                                       ReaderType;
+typedef itk::GradientImageFilter<InputImageType>                                   GradientFilterType;
+typedef GradientFilterType::OutputImageType                                        CovariantImageType;
 typedef otb::HistogramOfOrientedGradientCovariantImageFunction<CovariantImageType> FunctionType;
 
 
-
-
-int otbHistogramOfOrientedGradientCovariantImageFunction(int itkNotUsed(argc), char * argv[])
+int otbHistogramOfOrientedGradientCovariantImageFunction(int itkNotUsed(argc), char* argv[])
 {
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
@@ -55,14 +51,14 @@ int otbHistogramOfOrientedGradientCovariantImageFunction(int itkNotUsed(argc), c
   gradient->Update();
 
   // Instantiating object
-  FunctionType::Pointer function       = FunctionType::New();
+  FunctionType::Pointer function = FunctionType::New();
   function->SetInputImage(gradient->GetOutput());
 
   InputImageType::IndexType index;
 
   unsigned int radius = atoi(argv[3]);
-  index[0] = atoi(argv[4]);
-  index[1] = atoi(argv[5]);
+  index[0]            = atoi(argv[4]);
+  index[1]            = atoi(argv[5]);
 
   function->SetNeighborhoodRadius(radius);
 
@@ -70,14 +66,14 @@ int otbHistogramOfOrientedGradientCovariantImageFunction(int itkNotUsed(argc), c
 
   std::ofstream ofs(argv[2]);
 
-  for(unsigned i = 0; i < 5; ++i)
+  for (unsigned i = 0; i < 5; ++i)
+  {
+    for (unsigned j = 0; j < function->GetNumberOfOrientationBins(); ++j)
     {
-    for(unsigned j = 0; j<function->GetNumberOfOrientationBins(); ++j)
-      {
-      ofs<<value[i][j]<<"\t";
-      }
-    ofs<<std::endl;
+      ofs << value[i][j] << "\t";
     }
+    ofs << std::endl;
+  }
 
   ofs.close();
 

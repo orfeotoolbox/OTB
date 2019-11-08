@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,49 +22,22 @@ otb_module_test()
 
 set(OTBDimensionalityReductionLearningTests
 otbDimensionalityReductionLearningTestDriver.cxx
-otbAutoencoderModelTest.cxx
-otbPCAModelTest.cxx
 otbSOMModelTest.cxx
 )
 
-add_executable(otbDimensionalityReductionLearningTestDriver ${OTBDimensionalityReductionLearningTests})
-target_link_libraries(otbDimensionalityReductionLearningTestDriver ${OTBDimensionalityReductionLearning-Test_LIBRARIES})
-otb_module_target_label(otbDimensionalityReductionLearningTestDriver)
 
 # Tests Declaration
-# --------------- Autoencoder --------------------------------
 
-otb_add_test(NAME leTvAutoencoderModelTrain COMMAND
-  otbDimensionalityReductionLearningTestDriver
-  otbAutoencoderModeTrain
-  ${INPUTDATA}/letter_light.scale
-  ${TEMP}/model.ae
-  )
+# Tests for classes using Shark
 
-otb_add_test(NAME leTvAutoencoderModelCanRead COMMAND
-  otbDimensionalityReductionLearningTestDriver
-  otbAutoencoderModelCanRead
-  ${TEMP}/model.ae
-  )
+if(OTB_USE_SHARK)
+set(OTBDimensionalityReductionLearningTests ${OTBDimensionalityReductionLearningTests} 
+    otbPCAModelTest.cxx
+    otbAutoencoderModelTest.cxx
+)
+include(tests-shark.cmake)
+endif()
 
-set_property(TEST leTvAutoencoderModelCanRead APPEND PROPERTY DEPENDS leTvAutoencoderModelTrain)
-
-# --------------- PCA --------------------------------
-
-otb_add_test(NAME leTvPCAModelTrain COMMAND
-  otbDimensionalityReductionLearningTestDriver
-  otbPCAModeTrain
-  ${INPUTDATA}/letter_light.scale
-  ${TEMP}/model.pca
-  )
-
-otb_add_test(NAME leTvPCAModelCanRead COMMAND
-  otbDimensionalityReductionLearningTestDriver
-  otbPCAModelCanRead
-  ${TEMP}/model.pca
-  )
-
-set_property(TEST leTvPCAModelCanRead APPEND PROPERTY DEPENDS leTvPCAModelTrain)
 
 # --------------- SOM --------------------------------
 
@@ -88,3 +61,7 @@ otb_add_test(NAME leTvSOMModelCanRead COMMAND
   )
 
 set_property(TEST leTvSOMModelCanRead APPEND PROPERTY DEPENDS leTvSOMModelTrain)
+
+add_executable(otbDimensionalityReductionLearningTestDriver ${OTBDimensionalityReductionLearningTests})
+target_link_libraries(otbDimensionalityReductionLearningTestDriver ${OTBDimensionalityReductionLearning-Test_LIBRARIES})
+otb_module_target_label(otbDimensionalityReductionLearningTestDriver)

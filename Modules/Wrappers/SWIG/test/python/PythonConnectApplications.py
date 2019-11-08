@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,27 +22,39 @@
 # -*- coding: utf-8 -*-
 
 #
-#  Example on the use of the Rescale
+#  Example on the use of application connections
 #
 
 def test(otb, argv):
-	app1 = otb.Registry.CreateApplication("Smoothing")
-	app2 = otb.Registry.CreateApplication("Smoothing")
-	app3 = otb.Registry.CreateApplication("Smoothing")
-	app4 = otb.Registry.CreateApplication("ConcatenateImages")
+  #---------------------------------------------------------------------------
+  # First run with in-memory connections by default
+  app1 = otb.Registry.CreateApplication("Smoothing")
+  app2 = otb.Registry.CreateApplication("Smoothing")
+  app3 = otb.Registry.CreateApplication("Smoothing")
+  app4 = otb.Registry.CreateApplication("ConcatenateImages")
 
-	app1.IN = argv[1]
-	app1.Execute()
+  app1.IN = argv[1]
+  app1.TYPE = "mean"
 
-	app2.SetParameterInputImage("in",app1.GetParameterOutputImage("out"))
-	app2.Execute()
+  app2.ConnectImage("in",app1, "out")
+  app2.TYPE = "anidif"
 
-	app3.IN = argv[1]
-	app3.Execute()
+  app3.ConnectImage("in",app1, "out")
+  app3.TYPE = "gaussian"
 
-	app4.AddImageToParameterInputImageList("il",app2.GetParameterOutputImage("out"));
-	app4.AddImageToParameterInputImageList("il",app3.GetParameterOutputImage("out"));
-	app4.AddParameterStringList("il",argv[1])
+  app4.ConnectImage("il", app2, "out")
+  app4.ConnectImage("il", app3, "out")
+  app4.AddParameterStringList("il",argv[1])
 
-	app4.OUT = argv[2]
-	app4.ExecuteAndWriteOutput()
+  app4.OUT = argv[2]
+  app4.ExecuteAndWriteOutput()
+
+  #---------------------------------------------------------------------------
+  # Second run with on-disk connections
+  app1.OUT = argv[2]+"_tmp1.tif"
+  app3.OUT = argv[2]+"_tmp3.tif"
+
+  # app2.OUT is left empty and should fallback to memory connection
+
+  app4.PropagateConnectMode(False)
+  app4.ExecuteAndWriteOutput()

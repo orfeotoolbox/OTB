@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -74,20 +74,19 @@ namespace mvd
  *
  * \brief WIP.
  */
-class OTBMonteverdiCore_EXPORT VectorImageSettings :
-    public ImageSettings
+class OTBMonteverdiCore_EXPORT VectorImageSettings : public ImageSettings
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
-//
-// Public types and attributes.
+  //
+  // Public types and attributes.
 public:
   /**
    */
   typedef UIntVector ChannelVector;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
   /**
    * \brief Constructor.
@@ -101,18 +100,18 @@ public:
    *
    * Copy settings POD content without the modified flag.
    */
-  VectorImageSettings( const VectorImageSettings & other );
+  VectorImageSettings(const VectorImageSettings& other);
 
   /**
    * \brief Destructor.
    */
   ~VectorImageSettings() override;
 
-  /**
-   * \brief Assignment operator.
-   *
-   * \param other
-   */
+/**
+ * \brief Assignment operator.
+ *
+ * \param other
+ */
 #if 0
   VectorImageSettings & operator = ( const VectorImageSettings & other );
 #endif
@@ -123,7 +122,7 @@ public:
 
   /**
    */
-  inline void SetRgbChannels( const ChannelVector& rgb );
+  inline void SetRgbChannels(const ChannelVector& rgb);
 
   /**
    */
@@ -131,35 +130,29 @@ public:
 
   /**
    */
-  inline
-    void SetRgbChannel( ChannelVector::size_type i,
-			const ChannelVector::value_type& channel );
+  inline void SetRgbChannel(ChannelVector::size_type i, const ChannelVector::value_type& channel);
 
   /**
    */
-  inline
-    const ChannelVector::value_type&
-    GetRgbChannel( ChannelVector::size_type i ) const;
+  inline const ChannelVector::value_type& GetRgbChannel(ChannelVector::size_type i) const;
 
   /**
    * \return the band-index for the given component taking the
    * grayscale-mode activation state flag into account.
    */
-  inline
-    ChannelVector::value_type
-    GetSmartChannel( RgbwChannel channel ) const;
+  inline ChannelVector::value_type GetSmartChannel(RgbwChannel channel) const;
 
   /**
    * \return the band-index for the given component not taking the
    * grayscale-mode activation state flag into account.
    */
-  ChannelVector::value_type GetRgbwChannel( RgbwChannel channel ) const;
+  ChannelVector::value_type GetRgbwChannel(RgbwChannel channel) const;
 
   /**
    * \return the channels band-index vector taking the
    * grayscale-mode activation state flag into account.
    */
-  inline void GetSmartChannels( ChannelVector& channels ) const;
+  inline void GetSmartChannels(ChannelVector& channels) const;
 
   //
   // COLOR DYNAMICS.
@@ -167,7 +160,7 @@ public:
 
   /**
    */
-  inline void SetRgbDynamicsParams( const ParametersType& params );
+  inline void SetRgbDynamicsParams(const ParametersType& params);
 
   /**
    */
@@ -185,12 +178,11 @@ public:
    * \param channel The RGB/W channel to set low-intensity dynamics for.
    * \param intensity low-intensity value.
    */
-  void SetLowIntensity( RgbwChannel channel,
-                        ParametersType::ValueType intensity );
+  void SetLowIntensity(RgbwChannel channel, ParametersType::ValueType intensity);
 
   /**
    */
-  ParametersType::ValueType GetLowIntensity( RgbwChannel channel ) const;
+  ParametersType::ValueType GetLowIntensity(RgbwChannel channel) const;
 
   /**
    * Set high-intensity dynamics parameter for given channel. If
@@ -200,12 +192,11 @@ public:
    * \param channel The RGB/W channel to set high-intensity dynamics for.
    * \param intensity high-intensity value.
    */
-  void SetHighIntensity( RgbwChannel channel,
-                         ParametersType::ValueType intensity );
+  void SetHighIntensity(RgbwChannel channel, ParametersType::ValueType intensity);
 
   /**
    */
-  ParametersType::ValueType GetHighIntensity( RgbwChannel channel ) const;
+  ParametersType::ValueType GetHighIntensity(RgbwChannel channel) const;
 
   //
   // GRAYSCALE MODE.
@@ -214,7 +205,7 @@ public:
   /**
    * \brief Set/clear grayscale-mode activation-state flag for image.
    */
-  inline void SetGrayscaleActivated( bool activated );
+  inline void SetGrayscaleActivated(bool activated);
 
   /**
    * \return Grayscale-mode activation state flag.
@@ -226,7 +217,7 @@ public:
    *
    * \param index The new index of white (gray) channel.
    */
-  inline void SetGrayChannel( unsigned int );
+  inline void SetGrayChannel(unsigned int);
 
   /**
    * \return White (gray) channel index.
@@ -235,7 +226,7 @@ public:
 
   /**
    */
-  inline void SetGrayDynamicsParams( const ParametersType& params );
+  inline void SetGrayDynamicsParams(const ParametersType& params);
 
   /**
    */
@@ -243,7 +234,7 @@ public:
 
   /**
    */
-  inline void SetGamma( double gamma );
+  inline void SetGamma(double gamma);
 
   /**
    */
@@ -252,45 +243,36 @@ public:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
+  /**
+   */
+  inline const ParametersType::ValueType& GetRgbDynamicsParam(CountType i) const;
 
   /**
    */
-  inline
-    const ParametersType::ValueType& GetRgbDynamicsParam( CountType i ) const;
+  inline void SetRgbDynamicsParam(CountType i, const ParametersType::ValueType& param);
 
   /**
    */
-  inline
-    void SetRgbDynamicsParam( CountType i,
-			      const ParametersType::ValueType& param );
+  inline const ParametersType::ValueType& GetGrayDynamicsParam(bool high) const;
 
   /**
    */
-  inline
-    const ParametersType::ValueType& GetGrayDynamicsParam( bool high ) const;
-
-  /**
-   */
-  inline
-    void SetGrayDynamicsParam( bool high,
-			       const ParametersType::ValueType& param );
+  inline void SetGrayDynamicsParam(bool high, const ParametersType::ValueType& param);
 
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    * \brief Color-composition setup (file-component to video
@@ -373,17 +355,13 @@ VectorImageSettings
 #endif
 
 /*****************************************************************************/
-inline
-void
-VectorImageSettings
-::SetRgbChannels( const ChannelVector& rgb )
+inline void VectorImageSettings::SetRgbChannels(const ChannelVector& rgb)
 {
   // qDebug() << "setRgbChannels()";
 
-  assert( m_RgbChannels.empty() || m_RgbChannels.size()==rgb.size() );
+  assert(m_RgbChannels.empty() || m_RgbChannels.size() == rgb.size());
 
-  if( !m_RgbChannels.empty() &&
-      std::equal( m_RgbChannels.begin(), m_RgbChannels.end(), rgb.begin() ) )
+  if (!m_RgbChannels.empty() && std::equal(m_RgbChannels.begin(), m_RgbChannels.end(), rgb.begin()))
     return;
 
   m_RgbChannels = rgb;
@@ -392,68 +370,48 @@ VectorImageSettings
 }
 
 /*****************************************************************************/
-inline
-const VectorImageSettings::ChannelVector&
-VectorImageSettings
-::GetRgbChannels() const
+inline const VectorImageSettings::ChannelVector& VectorImageSettings::GetRgbChannels() const
 {
   return m_RgbChannels;
 }
 
 /*****************************************************************************/
-inline
-void
-VectorImageSettings
-::GetSmartChannels( VectorImageSettings::ChannelVector& channels ) const
+inline void VectorImageSettings::GetSmartChannels(VectorImageSettings::ChannelVector& channels) const
 {
-  if( IsGrayscaleActivated() )
-    {
-    channels.resize( m_RgbChannels.size() );
-    std::fill( channels.begin(), channels.end(), m_GrayChannel );
-    }
+  if (IsGrayscaleActivated())
+  {
+    channels.resize(m_RgbChannels.size());
+    std::fill(channels.begin(), channels.end(), m_GrayChannel);
+  }
   else
-    {
+  {
     channels = m_RgbChannels;
-    }
+  }
 }
 
 /*****************************************************************************/
-inline
-void
-VectorImageSettings
-::SetRgbChannel( ChannelVector::size_type i,
-		 const ChannelVector::value_type& channel )
+inline void VectorImageSettings::SetRgbChannel(ChannelVector::size_type i, const ChannelVector::value_type& channel)
 {
   // qDebug() << "SetRgbChannel()";
 
-  if( m_RgbChannels[ i ]==channel )
+  if (m_RgbChannels[i] == channel)
     return;
 
   SetModified();
 
-  m_RgbChannels[ i ] = channel;
+  m_RgbChannels[i] = channel;
 }
 
 /*****************************************************************************/
-inline
-const VectorImageSettings::ChannelVector::value_type&
-VectorImageSettings
-::GetRgbChannel( ChannelVector::size_type i ) const
+inline const VectorImageSettings::ChannelVector::value_type& VectorImageSettings::GetRgbChannel(ChannelVector::size_type i) const
 {
-  return m_RgbChannels[ i ];
+  return m_RgbChannels[i];
 }
 
 /*****************************************************************************/
-inline
-VectorImageSettings::ChannelVector::value_type
-VectorImageSettings
-::GetSmartChannel( RgbwChannel channel ) const
+inline VectorImageSettings::ChannelVector::value_type VectorImageSettings::GetSmartChannel(RgbwChannel channel) const
 {
-  return GetRgbwChannel(
-    m_IsGrayscaleActivated
-    ? RGBW_CHANNEL_WHITE
-    : channel
-  );
+  return GetRgbwChannel(m_IsGrayscaleActivated ? RGBW_CHANNEL_WHITE : channel);
 
   /*
   if( m_IsGrayscaleActivated )
@@ -468,18 +426,13 @@ VectorImageSettings
 }
 
 /*****************************************************************************/
-inline
-void
-VectorImageSettings
-::SetRgbDynamicsParams( const ParametersType& params )
+inline void VectorImageSettings::SetRgbDynamicsParams(const ParametersType& params)
 {
   // qDebug() << "SetDynamicsParams()";
 
-  assert( m_RgbDynamicsParams.size()==params.size() );
+  assert(m_RgbDynamicsParams.size() == params.size());
 
-  if( std::equal( m_RgbDynamicsParams.begin(),
-		  m_RgbDynamicsParams.end(),
-		  params.begin() ) )
+  if (std::equal(m_RgbDynamicsParams.begin(), m_RgbDynamicsParams.end(), params.begin()))
     return;
 
   m_RgbDynamicsParams = params;
@@ -488,95 +441,69 @@ VectorImageSettings
 }
 
 /*****************************************************************************/
-inline
-const ParametersType&
-VectorImageSettings
-::GetRgbDynamicsParams() const
+inline const ParametersType& VectorImageSettings::GetRgbDynamicsParams() const
 {
   return m_RgbDynamicsParams;
 }
 
 /*****************************************************************************/
-inline
-ParametersType
-VectorImageSettings
-::GetSmartDynamicsParams() const
+inline ParametersType VectorImageSettings::GetSmartDynamicsParams() const
 {
   return m_IsGrayscaleActivated ? m_GrayDynamicsParams : m_RgbDynamicsParams;
 }
 
 /*****************************************************************************/
-inline
-const ParametersType::ValueType&
-VectorImageSettings
-::GetRgbDynamicsParam( CountType i ) const
+inline const ParametersType::ValueType& VectorImageSettings::GetRgbDynamicsParam(CountType i) const
 {
-  return m_RgbDynamicsParams[ i ];
+  return m_RgbDynamicsParams[i];
 }
 
 /*****************************************************************************/
-inline
-void
-VectorImageSettings
-::SetRgbDynamicsParam( CountType i,
-		       const ParametersType::ValueType& param )
+inline void VectorImageSettings::SetRgbDynamicsParam(CountType i, const ParametersType::ValueType& param)
 {
   // qDebug() << "SetDynamicsParam()";
 
-  if( m_RgbDynamicsParams[ i ]==param )
+  if (m_RgbDynamicsParams[i] == param)
     return;
 
   SetModified();
 
-  m_RgbDynamicsParams[ i ] = param;
+  m_RgbDynamicsParams[i] = param;
 }
 
 /*****************************************************************************/
-inline
-bool
-VectorImageSettings
-::IsGrayscaleActivated() const
+inline bool VectorImageSettings::IsGrayscaleActivated() const
 {
   return m_IsGrayscaleActivated;
 }
 
 /*****************************************************************************/
-inline
-void
-VectorImageSettings
-::SetGrayscaleActivated( bool activated )
+inline void VectorImageSettings::SetGrayscaleActivated(bool activated)
 {
   m_IsGrayscaleActivated = activated;
 
   Effect effect = GetEffect();
 
-  if(activated
-     && effect == EFFECT_SPECTRAL_ANGLE)
-    {
+  if (activated && effect == EFFECT_SPECTRAL_ANGLE)
+  {
     SetEffect(EFFECT_NORMAL);
-    }
-  else if(!activated && effect >= EFFECT_LUT_LOCAL_JET)
-    {
+  }
+  else if (!activated && effect >= EFFECT_LUT_LOCAL_JET)
+  {
     SetEffect(EFFECT_NORMAL);
-    }
-  
+  }
+
   SetModified();
 }
 
 /*****************************************************************************/
-inline
-unsigned int
-VectorImageSettings
-::GetGrayChannel() const
+inline unsigned int VectorImageSettings::GetGrayChannel() const
 {
   return m_GrayChannel;
 }
 
 /*****************************************************************************/
-inline
-void
-VectorImageSettings
-::SetGrayChannel( unsigned int index )
+inline void VectorImageSettings::SetGrayChannel(unsigned int index)
 {
   m_GrayChannel = index;
 
@@ -584,18 +511,13 @@ VectorImageSettings
 }
 
 /*****************************************************************************/
-inline
-void
-VectorImageSettings
-::SetGrayDynamicsParams( const ParametersType& params )
+inline void VectorImageSettings::SetGrayDynamicsParams(const ParametersType& params)
 {
   // qDebug() << "SetDynamicsParams()";
 
-  assert( m_GrayDynamicsParams.size()==params.size() );
+  assert(m_GrayDynamicsParams.size() == params.size());
 
-  if( std::equal( m_GrayDynamicsParams.begin(),
-		  m_GrayDynamicsParams.end(),
-		  params.begin() ) )
+  if (std::equal(m_GrayDynamicsParams.begin(), m_GrayDynamicsParams.end(), params.begin()))
     return;
 
   m_GrayDynamicsParams = params;
@@ -604,51 +526,38 @@ VectorImageSettings
 }
 
 /*****************************************************************************/
-inline
-const ParametersType&
-VectorImageSettings
-::GetGrayDynamicsParams() const
+inline const ParametersType& VectorImageSettings::GetGrayDynamicsParams() const
 {
   return m_GrayDynamicsParams;
 }
 
 /*****************************************************************************/
-inline
-const ParametersType::ValueType&
-VectorImageSettings
-::GetGrayDynamicsParam( bool high ) const
+inline const ParametersType::ValueType& VectorImageSettings::GetGrayDynamicsParam(bool high) const
 {
-  return m_GrayDynamicsParams[ high ? 1 : 0 ];
+  return m_GrayDynamicsParams[high ? 1 : 0];
 }
 
 /*****************************************************************************/
-inline
-void
-VectorImageSettings
-::SetGrayDynamicsParam( bool high,
-			const ParametersType::ValueType& param )
+inline void VectorImageSettings::SetGrayDynamicsParam(bool high, const ParametersType::ValueType& param)
 {
   // qDebug() << "SetDynamicsParam()";
 
   CountType ofs = high ? 1 : 0;
 
-  if( m_GrayDynamicsParams[ 0 * 2 + ofs ]==param )
+  if (m_GrayDynamicsParams[0 * 2 + ofs] == param)
     return;
 
   SetModified();
 
   // Indices are detailed for better readability since the compiler
   // will optimize constants.
-  m_GrayDynamicsParams[ 0 * 2 + ofs ] = param;
-  m_GrayDynamicsParams[ 1 * 2 + ofs ] = param;
-  m_GrayDynamicsParams[ 2 * 2 + ofs ] = param;
+  m_GrayDynamicsParams[0 * 2 + ofs] = param;
+  m_GrayDynamicsParams[1 * 2 + ofs] = param;
+  m_GrayDynamicsParams[2 * 2 + ofs] = param;
 }
 
 /*****************************************************************************/
-inline
-void
-VectorImageSettings
-::SetGamma( double value )
+inline void VectorImageSettings::SetGamma(double value)
 {
   m_Gamma = value;
 
@@ -656,10 +565,7 @@ VectorImageSettings
 }
 
 /*****************************************************************************/
-inline
-double
-VectorImageSettings
-::GetGamma() const
+inline double VectorImageSettings::GetGamma() const
 {
   return m_Gamma;
 }

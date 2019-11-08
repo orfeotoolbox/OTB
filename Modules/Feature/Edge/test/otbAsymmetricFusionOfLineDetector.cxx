@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "itkMacro.h"
 #include <iostream>
 
@@ -29,21 +27,21 @@
 #include "otbImageFileWriter.h"
 #include "otbAsymmetricFusionOfLineDetectorImageFilter.h"
 
-int otbAsymmetricFusionOfLineDetector(int itkNotUsed(argc), char * argv[])
+int otbAsymmetricFusionOfLineDetector(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   // Width of the linear feature = 2*WidthLine+1
-  unsigned int WidthLine((unsigned int) ::atoi(argv[3]));
+  unsigned int WidthLine((unsigned int)::atoi(argv[3]));
   // Length of the linear feature = 2*LengthLine+1
-  unsigned int LengthLine((unsigned int) ::atoi(argv[4]));
+  unsigned int LengthLine((unsigned int)::atoi(argv[4]));
 
   typedef unsigned char InputPixelType;
   typedef double        OutputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageDirectionType;
 
@@ -52,8 +50,7 @@ int otbAsymmetricFusionOfLineDetector(int itkNotUsed(argc), char * argv[])
 
   typedef itk::LinearInterpolateImageFunction<InputImageType, double> InterpolatorType;
 
-  typedef otb::AsymmetricFusionOfLineDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType,
-      InterpolatorType> FilterType;
+  typedef otb::AsymmetricFusionOfLineDetectorImageFilter<InputImageType, OutputImageType, OutputImageDirectionType, InterpolatorType> FilterType;
 
   FilterType::Pointer FilterAssSymSum = FilterType::New();
 

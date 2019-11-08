@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,7 +28,8 @@
 #include "itkStatisticsAlgorithm.h"
 #include "otbObjectList.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class ListSampleToHistogramListGenerator
  *  \brief Generates a list of 1D  Histograms from a ListSample
@@ -41,11 +42,8 @@ namespace otb {
  *
  * \ingroup OTBStatistics
  */
-template<class TListSample,
-    class THistogramMeasurement,
-         class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer2>
-class ITK_EXPORT ListSampleToHistogramListGenerator :
-  public itk::ProcessObject
+template <class TListSample, class THistogramMeasurement, class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer2>
+class ITK_EXPORT ListSampleToHistogramListGenerator : public itk::ProcessObject
 {
 public:
   /** Standard typedefs */
@@ -61,13 +59,11 @@ public:
   itkNewMacro(Self);
 
   /** typedef the input ListSample type */
-  typedef  TListSample                                ListSampleType;
+  typedef TListSample ListSampleType;
 
   /** Type needed for defining the limits of the histogram bins */
-  typedef typename itk::NumericTraits
-  <THistogramMeasurement>::RealType                   HistogramMeasurementRealType;
-  typedef itk::Statistics::Histogram<HistogramMeasurementRealType,
-      TFrequencyContainer>                            HistogramType;
+  typedef typename itk::NumericTraits<THistogramMeasurement>::RealType HistogramMeasurementRealType;
+  typedef itk::Statistics::Histogram<HistogramMeasurementRealType, TFrequencyContainer> HistogramType;
   typedef typename HistogramType::SizeType            HistogramSizeType;
   typedef typename TListSample::MeasurementVectorType MeasurementVectorType;
   typedef ObjectList<HistogramType>                   HistogramListType;
@@ -76,7 +72,7 @@ public:
   typedef typename TListSample::ConstPointer ListSampleConstPointerType;
 
   /** DataObject typedef*/
-  typedef typename Superclass::DataObjectPointer        DataObjectPointer;
+  typedef typename Superclass::DataObjectPointer             DataObjectPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   // Set/Get the input list sample
@@ -84,14 +80,14 @@ public:
   const ListSampleType* GetListSample() const;
 
   // Get the output histogram
-  const HistogramListType*  GetOutput();
+  const HistogramListType* GetOutput();
 
 
-//   /** plug in the ListSample object */
-//   void SetListSample(const TListSample* list)
-//   {
-//     m_List = list;
-//   }
+  //   /** plug in the ListSample object */
+  //   void SetListSample(const TListSample* list)
+  //   {
+  //     m_List = list;
+  //   }
 
   /** Set the no data value. These value are ignored in histogram
    *  computation if NoDataFlag is On
@@ -120,15 +116,17 @@ public:
 
 
   void SetMarginalScale(float scale)
-  { m_MarginalScale = scale; }
+  {
+    m_MarginalScale = scale;
+  }
 
   void SetNumberOfBins(unsigned int size)
   {
     m_Size[0] = size;
   }
 
-//   HistogramListPointerType GetOutput() const
-//   { return m_HistogramList; }
+  //   HistogramListPointerType GetOutput() const
+  //   { return m_HistogramList; }
 
   itkSetMacro(AutoMinMax, bool);
   itkGetConstReferenceMacro(AutoMinMax, bool);
@@ -136,18 +134,20 @@ public:
   void SetHistogramMin(const MeasurementVectorType& histogramMin)
   {
     m_HistogramMin = histogramMin;
-    m_AutoMinMax = false;
+    m_AutoMinMax   = false;
   }
 
   void SetHistogramMax(const MeasurementVectorType& histogramMax)
   {
     m_HistogramMax = histogramMax;
-    m_AutoMinMax = false;
+    m_AutoMinMax   = false;
   }
 
 protected:
   ListSampleToHistogramListGenerator();
-  ~ListSampleToHistogramListGenerator() override {}
+  ~ListSampleToHistogramListGenerator() override
+  {
+  }
 
   void GenerateData() override;
 
@@ -157,15 +157,15 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  //ListSampleConstPointerType m_List;
-  HistogramSizeType          m_Size;
-  float                      m_MarginalScale;
-  MeasurementVectorType      m_HistogramMin;
-  MeasurementVectorType      m_HistogramMax;
-  bool                       m_AutoMinMax;
-  //HistogramListPointerType   m_HistogramList;
-  bool                       m_NoDataFlag;
-  THistogramMeasurement      m_NoDataValue;
+  // ListSampleConstPointerType m_List;
+  HistogramSizeType     m_Size;
+  float                 m_MarginalScale;
+  MeasurementVectorType m_HistogramMin;
+  MeasurementVectorType m_HistogramMax;
+  bool                  m_AutoMinMax;
+  // HistogramListPointerType   m_HistogramList;
+  bool                  m_NoDataFlag;
+  THistogramMeasurement m_NoDataValue;
 
 }; // end of class
 

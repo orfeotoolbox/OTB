@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,104 +34,99 @@ namespace Wrapper
 class LocalStatisticExtraction : public Application
 {
 public:
-/** Standard class typedefs. */
-typedef LocalStatisticExtraction     Self;
-typedef Application                   Superclass;
-typedef itk::SmartPointer<Self>       Pointer;
-typedef itk::SmartPointer<const Self> ConstPointer;
+  /** Standard class typedefs. */
+  typedef LocalStatisticExtraction      Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType,FloatVectorImageType::InternalPixelType>
-ExtractorFilterType;
+  typedef MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType> ExtractorFilterType;
 
-typedef RadiometricMomentsImageFilter<FloatImageType, FloatVectorImageType>
-FilterType;
+  typedef RadiometricMomentsImageFilter<FloatImageType, FloatVectorImageType> FilterType;
 
-/** Standard macro */
-itkNewMacro(Self);
+  /** Standard macro */
+  itkNewMacro(Self);
 
-itkTypeMacro(LocalStatisticExtraction, otb::Application);
+  itkTypeMacro(LocalStatisticExtraction, otb::Application);
 
 private:
+  void DoInit() override
+  {
+    SetName("LocalStatisticExtraction");
+    SetDescription("Computes local statistical moments on every pixel in the selected channel of the input image");
 
-void DoInit() override
-{
-SetName("LocalStatisticExtraction");
-SetDescription("Computes local statistical moments on every pixel in the selected channel of the input image");
+    // Documentation
+    SetDocLongDescription(
+        "This application computes the 4 local statistical moments on every pixel in the "
+        "selected channel of the input image, over a specified neighborhood. The output image is multi band "
+        "with one statistical moment (feature) per band. Thus, the 4 output features are the Mean, the "
+        "Variance, the Skewness and the Kurtosis. They are provided in this exact order in the output image.");
+    SetDocLimitations("None");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso("otbRadiometricMomentsImageFunction class");
 
-// Documentation
-SetDocName("Local Statistic Extraction");
-SetDocLongDescription("This application computes the 4 local statistical moments on every pixel in the selected channel of the input image, over a specified neighborhood. The output image is multi band with one statistical moment (feature) per band. Thus, the 4 output features are the Mean, the Variance, the Skewness and the Kurtosis. They are provided in this exact order in the output image.");
-SetDocLimitations("None");
-SetDocAuthors("OTB-Team");
-SetDocSeeAlso("otbRadiometricMomentsImageFunction class");
+    AddDocTag(Tags::FeatureExtraction);
+    AddDocTag("Statistics");
 
-AddDocTag(Tags::FeatureExtraction);
-AddDocTag("Statistics");
+    AddParameter(ParameterType_InputImage, "in", "Input Image");
+    SetParameterDescription("in", "The input image to compute the features on.");
 
-AddParameter(ParameterType_InputImage, "in",  "Input Image");
-SetParameterDescription("in", "The input image to compute the features on.");
+    AddParameter(ParameterType_OutputImage, "out", "Feature Output Image");
+    SetParameterDescription("out", "Output image containing the local statistical moments.");
 
-AddParameter(ParameterType_Int,  "channel",  "Selected Channel");
-SetParameterDescription("channel", "The selected channel index");
-SetDefaultParameterInt("channel", 1);
-SetMinimumParameterIntValue("channel", 1);
+    AddParameter(ParameterType_Int, "channel", "Selected Channel");
+    SetParameterDescription("channel", "The selected channel index (1 based)");
+    SetDefaultParameterInt("channel", 1);
+    SetMinimumParameterIntValue("channel", 1);
 
-AddRAMParameter();
+    AddParameter(ParameterType_Int, "radius", "Neighborhood radius");
+    SetParameterDescription("radius", "The computational window radius.");
+    SetMinimumParameterIntValue("radius", 1);
+    SetDefaultParameterInt("radius", 3);
 
-AddParameter(ParameterType_Int, "radius", "Neighborhood radius");
-SetParameterDescription("radius", "The computational window radius.");
-SetMinimumParameterIntValue("radius",1);
-SetDefaultParameterInt("radius",3);
+    AddRAMParameter();
 
-AddParameter(ParameterType_OutputImage, "out", "Feature Output Image");
-SetParameterDescription("out", "Output image containing the local statistical moments.");
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
+    SetDocExampleParameterValue("channel", "1");
+    SetDocExampleParameterValue("radius", "3");
+    SetDocExampleParameterValue("out", "Statistics.tif");
 
-// Doc example parameter settings
-SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
-SetDocExampleParameterValue("channel", "1");
-SetDocExampleParameterValue("radius", "3");
-SetDocExampleParameterValue("out", "Statistics.tif");
+    SetOfficialDocLink();
+  }
 
-SetOfficialDocLink();
-}
+  void DoUpdateParameters() override
+  {
+    // Nothing to do here : all parameters are independent
+  }
 
-void DoUpdateParameters() override
-{
-  // Nothing to do here : all parameters are independent
-}
+  void DoExecute() override
+  {
+    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+    int                           nbChan  = inImage->GetNumberOfComponentsPerPixel();
 
-void DoExecute() override
-{
-  FloatVectorImageType::Pointer inImage = GetParameterImage("in");
-  inImage->UpdateOutputInformation();
-  int nbChan = inImage->GetNumberOfComponentsPerPixel();
-
-  if( GetParameterInt("channel") > nbChan )
+    if (GetParameterInt("channel") > nbChan)
     {
-    otbAppLogCRITICAL("Selected band is not available...");
-    return;
+      otbAppLogCRITICAL("Selected band is not available...");
+      return;
     }
 
-  m_ExtractorFilter = ExtractorFilterType::New();
-  m_ExtractorFilter->SetInput(inImage);
-  m_ExtractorFilter->SetStartX(inImage->GetLargestPossibleRegion().GetIndex(0));
-  m_ExtractorFilter->SetStartY(inImage->GetLargestPossibleRegion().GetIndex(1));
-  m_ExtractorFilter->SetSizeX(inImage->GetLargestPossibleRegion().GetSize(0));
-  m_ExtractorFilter->SetSizeY(inImage->GetLargestPossibleRegion().GetSize(1));
-  m_ExtractorFilter->SetChannel(GetParameterInt("channel"));
-  m_ExtractorFilter->UpdateOutputInformation();
+    m_ExtractorFilter = ExtractorFilterType::New();
+    m_ExtractorFilter->SetInput(inImage);
+    m_ExtractorFilter->SetStartX(inImage->GetLargestPossibleRegion().GetIndex(0));
+    m_ExtractorFilter->SetStartY(inImage->GetLargestPossibleRegion().GetIndex(1));
+    m_ExtractorFilter->SetSizeX(inImage->GetLargestPossibleRegion().GetSize(0));
+    m_ExtractorFilter->SetSizeY(inImage->GetLargestPossibleRegion().GetSize(1));
+    m_ExtractorFilter->SetChannel(GetParameterInt("channel"));
 
-  m_Filter = FilterType::New();
-  m_Filter->SetInput(m_ExtractorFilter->GetOutput());
-  m_Filter->SetRadius(GetParameterInt("radius"));
-  m_Filter->UpdateOutputInformation();
+    m_Filter = FilterType::New();
+    m_Filter->SetInput(m_ExtractorFilter->GetOutput());
+    m_Filter->SetRadius(GetParameterInt("radius"));
 
-  SetParameterOutputImage("out", m_Filter->GetOutput());
-
-}
-ExtractorFilterType::Pointer m_ExtractorFilter;
-FilterType::Pointer          m_Filter;
-
+    SetParameterOutputImage("out", m_Filter->GetOutput());
+  }
+  ExtractorFilterType::Pointer m_ExtractorFilter;
+  FilterType::Pointer          m_Filter;
 };
 }
 }

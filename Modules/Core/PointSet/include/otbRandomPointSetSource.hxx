@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,24 +27,21 @@
 namespace otb
 {
 
-template<class TOutputPointSet>
-RandomPointSetSource<TOutputPointSet>
-::RandomPointSetSource()
+template <class TOutputPointSet>
+RandomPointSetSource<TOutputPointSet>::RandomPointSetSource()
 {
   m_NumberOfPoints = 1;
-  m_Generator = GeneratorType::New();
+  m_Generator      = GeneratorType::New();
   m_Generator->Initialize();
 
   m_MinPoint.Fill(0.0);
   m_MaxPoint.Fill(1.0);
 }
 
-//init seed
+// init seed
 
-template<class TOutputPointSet>
-void
-RandomPointSetSource<TOutputPointSet>
-::GenerateData(void)
+template <class TOutputPointSet>
+void RandomPointSetSource<TOutputPointSet>::GenerateData(void)
 {
   OutputPointSetPointer outputPointSet = this->GetOutput();
   outputPointSet->Initialize();
@@ -54,19 +51,17 @@ RandomPointSetSource<TOutputPointSet>
 
   typename PointsContainerType::Iterator outputPoint = outPoints->Begin();
   while (outputPoint != outPoints->End())
-    {
+  {
     PointType point;
     for (unsigned int i = 0; i < OutputPointSetType::PointDimension; ++i)
-      {
+    {
       double v = m_Generator->GetVariateWithClosedRange(1.0);
       point[i] = (1.0 - v) * m_MinPoint[i] + v * m_MaxPoint[i];
-      }
+    }
     outputPoint.Value() = point;
     ++outputPoint;
-
-    }
+  }
 }
-
 }
 
 #endif

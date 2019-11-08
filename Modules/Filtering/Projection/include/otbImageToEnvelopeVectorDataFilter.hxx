@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,8 +30,7 @@ namespace otb
    * Constructor
  */
 template <class TInputImage, class TOutputVectorData>
-ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
-::ImageToEnvelopeVectorDataFilter() : m_SamplingRate(0)
+ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>::ImageToEnvelopeVectorDataFilter() : m_SamplingRate(0)
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
@@ -42,31 +41,24 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
 }
 
 template <class TInputImage, class TOutputVectorData>
-void
-ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
-::SetInput(const InputImageType *input)
+void ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>::SetInput(const InputImageType* input)
 {
   // process object is not const-correct, the const_cast
   // is required here.
-  this->itk::ProcessObject::SetNthInput(0,
-                                       const_cast<InputImageType *>(input));
+  this->itk::ProcessObject::SetNthInput(0, const_cast<InputImageType*>(input));
 }
 
 template <class TInputImage, class TOutputVectorData>
-const TInputImage *
-ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
-::GetInput(void)
+const TInputImage* ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>::GetInput(void)
 {
-  if (this->GetNumberOfInputs() < 1) return nullptr;
+  if (this->GetNumberOfInputs() < 1)
+    return nullptr;
 
-  return dynamic_cast<const InputImageType*>
-           (this->itk::ProcessObject::GetInput(0));
+  return dynamic_cast<const InputImageType*>(this->itk::ProcessObject::GetInput(0));
 }
 
 template <class TInputImage, class TOutputVectorData>
-void
-ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
-::GenerateOutputInformation(void)
+void ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>::GenerateOutputInformation(void)
 {
   // Call superclass implementation
   Superclass::GenerateOutputInformation();
@@ -76,27 +68,25 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
 
   // Add projection info to output
   OutputVectorDataPointer  output = this->GetOutput();
-  itk::MetaDataDictionary& dict = output->GetMetaDataDictionary();
+  itk::MetaDataDictionary& dict   = output->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, m_Transform->GetOutputProjectionRef());
 }
 
 template <class TInputImage, class TOutputVectorData>
-void
-ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
-::GenerateInputRequestedRegion(void)
+void ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>::GenerateInputRequestedRegion(void)
 {
   // Call superclass implementation
   Superclass::GenerateInputRequestedRegion();
 
   // Retrieve input image pointer
-  typename InputImageType::Pointer inputPtr = const_cast<TInputImage *>(this->GetInput());
+  typename InputImageType::Pointer inputPtr = const_cast<TInputImage*>(this->GetInput());
 
   typename InputImageType::RegionType requestedRegion = inputPtr->GetRequestedRegion();
-  typename InputImageType::SizeType   size = requestedRegion.GetSize();
+  typename InputImageType::SizeType   size            = requestedRegion.GetSize();
   size.Fill(0);
   requestedRegion.SetSize(size);
 
-  typename InputImageType::IndexType   index = requestedRegion.GetIndex();
+  typename InputImageType::IndexType index = requestedRegion.GetIndex();
   index.Fill(0);
   requestedRegion.SetIndex(index);
 
@@ -104,13 +94,11 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
 }
 
 template <class TInputImage, class TOutputVectorData>
-void
-ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
-::InstantiateTransform(void)
+void ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>::InstantiateTransform(void)
 {
   // Project into output projection
   typename InputImageType::ConstPointer inputPtr = this->GetInput();
-  m_Transform = InternalTransformType::New();
+  m_Transform                                    = InternalTransformType::New();
   m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
   m_Transform->SetInputProjectionRef(inputPtr->GetProjectionRef());
   m_Transform->SetInputKeywordList(inputPtr->GetImageKeywordlist());
@@ -119,30 +107,27 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
 
 
 template <class TInputImage, class TOutputVectorData>
-void
-ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
-::GenerateData(void)
+void ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>::GenerateData(void)
 {
   // Retrieve input and output pointers
-  typename InputImageType::ConstPointer inputPtr = this->GetInput();
-  OutputVectorDataPointer outputPtr = this->GetOutput();
+  typename InputImageType::ConstPointer inputPtr  = this->GetInput();
+  OutputVectorDataPointer               outputPtr = this->GetOutput();
 
   // Compute corners as index
-  itk::ContinuousIndex<double,2> ul(
-    inputPtr->GetLargestPossibleRegion().GetIndex());
+  itk::ContinuousIndex<double, 2> ul(inputPtr->GetLargestPossibleRegion().GetIndex());
   // move 'ul' to the corner of the first pixel
   ul[0] += -0.5;
   ul[1] += -0.5;
 
-  itk::ContinuousIndex<double,2> ur(ul);
-  itk::ContinuousIndex<double,2> lr(ul);
-  itk::ContinuousIndex<double,2> ll(ul);
+  itk::ContinuousIndex<double, 2> ur(ul);
+  itk::ContinuousIndex<double, 2> lr(ul);
+  itk::ContinuousIndex<double, 2> ll(ul);
 
   typename InputImageType::SizeType size = inputPtr->GetLargestPossibleRegion().GetSize();
-  ur[0]+=size[0];
-  ll[1]+=size[1];
-  lr[0]+=size[0];
-  lr[1]+=size[1];
+  ur[0] += size[0];
+  ll[1] += size[1];
+  lr[0] += size[0];
+  lr[1] += size[1];
 
   // Get corners as physical points
   typename InputImageType::PointType ulp, urp, lrp, llp, current;
@@ -153,91 +138,91 @@ ImageToEnvelopeVectorDataFilter<TInputImage, TOutputVectorData>
 
   this->InstantiateTransform();
 
-  itk::ContinuousIndex<double,2> edgeIndex;
+  itk::ContinuousIndex<double, 2> edgeIndex;
   typename InputImageType::PointType edgePoint;
 
   // Build envelope polygon
-  typename PolygonType::Pointer envelope = PolygonType::New();
+  typename PolygonType::Pointer    envelope = PolygonType::New();
   typename PolygonType::VertexType vertex;
-  current = m_Transform->TransformPoint(ulp);
+  current   = m_Transform->TransformPoint(ulp);
   vertex[0] = current[0];
   vertex[1] = current[1];
   envelope->AddVertex(vertex);
 
-  if (m_SamplingRate>0)
-    {
+  if (m_SamplingRate > 0)
+  {
     edgeIndex = ul;
-    edgeIndex[0]+=m_SamplingRate;
-    while (edgeIndex[0]<ur[0])
-      {
+    edgeIndex[0] += m_SamplingRate;
+    while (edgeIndex[0] < ur[0])
+    {
       inputPtr->TransformContinuousIndexToPhysicalPoint(edgeIndex, edgePoint);
-      current = m_Transform->TransformPoint(edgePoint);
+      current   = m_Transform->TransformPoint(edgePoint);
       vertex[0] = current[0];
       vertex[1] = current[1];
       envelope->AddVertex(vertex);
-      edgeIndex[0]+=m_SamplingRate;
-      }
+      edgeIndex[0] += m_SamplingRate;
     }
+  }
 
-  current = m_Transform->TransformPoint(urp);
+  current   = m_Transform->TransformPoint(urp);
   vertex[0] = current[0];
   vertex[1] = current[1];
   envelope->AddVertex(vertex);
 
-  if (m_SamplingRate>0)
-    {
+  if (m_SamplingRate > 0)
+  {
     edgeIndex = ur;
-    edgeIndex[1]+=m_SamplingRate;
-    while (edgeIndex[1]<lr[1])
-      {
+    edgeIndex[1] += m_SamplingRate;
+    while (edgeIndex[1] < lr[1])
+    {
       inputPtr->TransformContinuousIndexToPhysicalPoint(edgeIndex, edgePoint);
-      current = m_Transform->TransformPoint(edgePoint);
+      current   = m_Transform->TransformPoint(edgePoint);
       vertex[0] = current[0];
       vertex[1] = current[1];
       envelope->AddVertex(vertex);
-      edgeIndex[1]+=m_SamplingRate;
-      }
+      edgeIndex[1] += m_SamplingRate;
     }
+  }
 
-  current = m_Transform->TransformPoint(lrp);
+  current   = m_Transform->TransformPoint(lrp);
   vertex[0] = current[0];
   vertex[1] = current[1];
   envelope->AddVertex(vertex);
 
-  if (m_SamplingRate>0)
-    {
+  if (m_SamplingRate > 0)
+  {
     edgeIndex = lr;
-    edgeIndex[0]-=m_SamplingRate;
-    while (edgeIndex[0]>ll[0])
-      {
+    edgeIndex[0] -= m_SamplingRate;
+    while (edgeIndex[0] > ll[0])
+    {
       inputPtr->TransformContinuousIndexToPhysicalPoint(edgeIndex, edgePoint);
-      current = m_Transform->TransformPoint(edgePoint);
+      current   = m_Transform->TransformPoint(edgePoint);
       vertex[0] = current[0];
       vertex[1] = current[1];
       envelope->AddVertex(vertex);
-      edgeIndex[0]-=m_SamplingRate;
-      }
+      edgeIndex[0] -= m_SamplingRate;
     }
+  }
 
-  current = m_Transform->TransformPoint(llp);
+  current   = m_Transform->TransformPoint(llp);
   vertex[0] = current[0];
   vertex[1] = current[1];
   envelope->AddVertex(vertex);
 
-  if (m_SamplingRate>0)
-    {
+  if (m_SamplingRate > 0)
+  {
     edgeIndex = ll;
-    edgeIndex[1]-=m_SamplingRate;
-    while (edgeIndex[1]>ul[1])
-      {
+    edgeIndex[1] -= m_SamplingRate;
+    while (edgeIndex[1] > ul[1])
+    {
       inputPtr->TransformContinuousIndexToPhysicalPoint(edgeIndex, edgePoint);
-      current = m_Transform->TransformPoint(edgePoint);
+      current   = m_Transform->TransformPoint(edgePoint);
       vertex[0] = current[0];
       vertex[1] = current[1];
       envelope->AddVertex(vertex);
-      edgeIndex[1]-=m_SamplingRate;
-      }
+      edgeIndex[1] -= m_SamplingRate;
     }
+  }
 
   // Add polygon to the VectorData tree
   OutputDataTreePointerType tree = outputPtr->GetDataTree();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,18 +28,18 @@
 const unsigned int Dimension = 2;
 typedef double     PixelType;
 
-template<class TInterpolatorType>
+template <class TInterpolatorType>
 void TestInstantiate()
 {
   typename TInterpolatorType::Pointer instance = TInterpolatorType::New();
   std::cout << instance << std::endl;
 }
 
-int otbStreamingTraitsImage(int itkNotUsed(argc), char* itkNotUsed(argv) [])
+int otbStreamingTraitsImage(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   // Images definition
-  typedef otb::Image<PixelType, Dimension>      ImageType;
-  typedef otb::StreamingTraits<ImageType>       StreamingTraits;
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef otb::StreamingTraits<ImageType> StreamingTraits;
 
   // Check that all internal types can be instantiated
   TestInstantiate<StreamingTraits::NearestNeighborInterpolationType>();
@@ -57,11 +57,11 @@ int otbStreamingTraitsImage(int itkNotUsed(argc), char* itkNotUsed(argv) [])
   return EXIT_SUCCESS;
 }
 
-int otbStreamingTraitsVectorImage(int itkNotUsed(argc), char * itkNotUsed(argv) [])
+int otbStreamingTraitsVectorImage(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   // Images definition
-  typedef otb::VectorImage<PixelType, Dimension>      ImageType;
-  typedef otb::StreamingTraits<ImageType>             StreamingTraits;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
+  typedef otb::StreamingTraits<ImageType> StreamingTraits;
 
   // Check that all internal types can be instantiated
   TestInstantiate<StreamingTraits::NearestNeighborInterpolationType>();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -47,16 +47,14 @@ namespace otb
  *
  * \ingroup OTBDescriptors
  */
-template <class TPointSet, class TDistance = itk::Statistics::EuclideanDistanceMetric<typename TPointSet::PixelType> >
+template <class TPointSet, class TDistance = itk::Statistics::EuclideanDistanceMetric<typename TPointSet::PixelType>>
 class ITK_EXPORT KeyPointSetsMatchingFilter
-  : public ObjectListSource<ObjectList<Landmark<typename TPointSet::PointType, typename TPointSet::PixelType, double> > >
+    : public ObjectListSource<ObjectList<Landmark<typename TPointSet::PointType, typename TPointSet::PixelType, double>>>
 {
 public:
   /// standard class typedefs
   typedef KeyPointSetsMatchingFilter Self;
-  typedef ObjectListSource<ObjectList<
-          Landmark<typename TPointSet::PointType,
-              typename TPointSet::PixelType, double> > >      Superclass;
+  typedef ObjectListSource<ObjectList<Landmark<typename TPointSet::PointType, typename TPointSet::PixelType, double>>> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -71,12 +69,11 @@ public:
   typedef typename PointDataContainerType::ConstIterator PointDataIteratorType;
   typedef TDistance                                      DistanceType;
   typedef typename DistanceType::Pointer                 DistancePointerType;
-  typedef Landmark<typename TPointSet::PointType,
-      typename TPointSet::PixelType, double>                  LandmarkType;
+  typedef Landmark<typename TPointSet::PointType, typename TPointSet::PixelType, double> LandmarkType;
   typedef typename LandmarkType::Pointer     LandmarkPointerType;
   typedef ObjectList<LandmarkType>           LandmarkListType;
   typedef typename LandmarkListType::Pointer LandmarkListPointerType;
-  typedef std::pair<unsigned int, double>    NeighborSearchResultType;
+  typedef std::pair<unsigned int, double> NeighborSearchResultType;
 
   /// standard macros
   itkNewMacro(Self);
@@ -90,19 +87,21 @@ public:
   itkGetMacro(DistanceThreshold, double);
 
   /// Set the first pointset
-  void SetInput1(const PointSetType * pointset);
+  void SetInput1(const PointSetType* pointset);
   /// Get the first pointset
-  const PointSetType * GetInput1();
+  const PointSetType* GetInput1();
   /// Set the second pointset
-  void SetInput2(const PointSetType * pointset);
+  void SetInput2(const PointSetType* pointset);
   /// Get the second pointset
-  const PointSetType * GetInput2();
+  const PointSetType* GetInput2();
 
 protected:
   /// Constructor
   KeyPointSetsMatchingFilter();
   /// Destructor
-  ~KeyPointSetsMatchingFilter() override {}
+  ~KeyPointSetsMatchingFilter() override
+  {
+  }
   /// PrintSelf method
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
@@ -113,11 +112,11 @@ protected:
    * Find the nearest neighbor of data1 in pointset.
    * \return a pair of (index, distance).
    */
-  NeighborSearchResultType NearestNeighbor(const PointDataType& data1, const PointSetType * pointset);
+  NeighborSearchResultType NearestNeighbor(const PointDataType& data1, const PointSetType* pointset);
 
 private:
-  KeyPointSetsMatchingFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  KeyPointSetsMatchingFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   // Find back matches from 2 to 1 to validate them
   bool m_UseBackMatching;

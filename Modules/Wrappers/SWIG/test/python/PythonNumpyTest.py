@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2005-2017 CS Systemes d'Information (CS SI)
+# Copyright (C) 2005-2019 CS Systemes d'Information (CS SI)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -65,16 +65,16 @@ def test(otbApplication, argv):
 	RescaleOut = Rescale.GetVectorImageAsNumpyArray("out", 'float')
 	# misc.imsave('RescaleOut.jpg', RescaleOut)
 
-	Convert = otbApplication.Registry.CreateApplication("Convert")
-	# take numpy output from Rescale application and feed into Convert
-	Convert.SetVectorImageFromNumpyArray("in", RescaleOut)
-	Convert.SetParameterString("out", "ConvertOut.png")
-	Convert.ExecuteAndWriteOutput()
-	ConvertOut = Convert.GetVectorImageAsNumpyArray("out", 'float')
+	DynamicConvert = otbApplication.Registry.CreateApplication("DynamicConvert")
+	# take numpy output from Rescale application and feed into DynamicConvert
+	DynamicConvert.SetVectorImageFromNumpyArray("in", RescaleOut)
+	DynamicConvert.SetParameterString("out", "ConvertOut.png")
+	DynamicConvert.ExecuteAndWriteOutput()
+	DynamicConvertOut = DynamicConvert.GetVectorImageAsNumpyArray("out", 'float')
 
 	Smoothing = otbApplication.Registry.CreateApplication("Smoothing")
 	# take numpy output from Convert application and feed into Smoothing
-	Smoothing.SetVectorImageFromNumpyArray("in", ConvertOut)
+	Smoothing.SetVectorImageFromNumpyArray("in", DynamicConvertOut)
 	Smoothing.SetParameterString("type", 'anidif')
 	Smoothing.SetParameterString("out", outFile)
 	Smoothing.ExecuteAndWriteOutput()

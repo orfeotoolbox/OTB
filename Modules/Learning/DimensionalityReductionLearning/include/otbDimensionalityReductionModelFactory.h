@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,7 +21,7 @@
 #define otbDimensionalityReductionModelFactory_h
 
 #include "otbMachineLearningModelFactoryBase.h"
-#include "otbMachineLearningModel.h" 
+#include "otbMachineLearningModel.h"
 
 namespace otb
 {
@@ -35,10 +35,10 @@ class DimensionalityReductionModelFactory : public MachineLearningModelFactoryBa
 {
 public:
   /** Standard class typedefs. */
-  typedef DimensionalityReductionModelFactory                Self;
-  typedef itk::Object           Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef DimensionalityReductionModelFactory Self;
+  typedef itk::Object                         Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   /** Class Methods used to interface with the registered factories */
 
@@ -46,9 +46,7 @@ public:
   itkTypeMacro(DimensionalityReductionModelFactory, itk::Object);
 
   /** Convenient typedefs. */
-  typedef otb::MachineLearningModel<
-    itk::VariableLengthVector< TInputValue >,
-    itk::VariableLengthVector< TOutputValue> >  DimensionalityReductionModelType;
+  typedef otb::MachineLearningModel<itk::VariableLengthVector<TInputValue>, itk::VariableLengthVector<TOutputValue>> DimensionalityReductionModelType;
   typedef typename DimensionalityReductionModelType::Pointer DimensionalityReductionModelTypePointer;
 
   /** Mode in which the files is intended to be used */
@@ -64,15 +62,15 @@ protected:
   ~DimensionalityReductionModelFactory() override;
 
 private:
-  DimensionalityReductionModelFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  DimensionalityReductionModelFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Register Built-in factories */
   static void RegisterBuiltInFactories();
 
   /** Register a single factory, ensuring it has not been registered
     * twice */
-  static void RegisterFactory(itk::ObjectFactoryBase * factory);
+  static void RegisterFactory(itk::ObjectFactoryBase* factory);
 };
 
 } // end namespace otb

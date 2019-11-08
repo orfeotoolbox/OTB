@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,18 +19,17 @@
  */
 
 
-
 #include <cstdlib>
 #include "otbCompacityPathFunction.h"
 #include "itkPolyLineParametricPath.h"
 #include "itkMacro.h"
 #include "otbMath.h"
 
-int otbCompacityPathCircle(int itkNotUsed(argc), char * argv[])
+int otbCompacityPathCircle(int itkNotUsed(argc), char* argv[])
 {
-  unsigned int NbOfPoints((unsigned int) ::atoi(argv[1]));
+  unsigned int NbOfPoints((unsigned int)::atoi(argv[1]));
 
-  const unsigned int Dimension = 2;
+  const unsigned int                             Dimension = 2;
   typedef itk::PolyLineParametricPath<Dimension> PathType;
   typedef otb::CompacityPathFunction<PathType>   FunctionType;
   typedef FunctionType::RealType                 RealType;
@@ -39,10 +38,10 @@ int otbCompacityPathCircle(int itkNotUsed(argc), char * argv[])
   PathType::Pointer             pathElt = PathType::New();
 
   if (NbOfPoints < 2)
-    {
+  {
     std::cout << "NbOfPoints must be greater than 2 !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   RealType deltaTheta;
   RealType Rho = 100.0;
@@ -52,13 +51,13 @@ int otbCompacityPathCircle(int itkNotUsed(argc), char * argv[])
   pathElt->Initialize();
 
   for (unsigned int noTheta = 0; noTheta < NbOfPoints; noTheta++)
-    {
+  {
     RealType Theta = deltaTheta * static_cast<RealType>(noTheta);
 
     cindex[0] = (Rho * std::cos(Theta));
     cindex[1] = (Rho * std::sin(Theta));
     pathElt->AddVertex(cindex);
-    }
+  }
 
   FunctionType::Pointer function = FunctionType::New();
   function->SetInputPath(pathElt);
@@ -70,10 +69,10 @@ int otbCompacityPathCircle(int itkNotUsed(argc), char * argv[])
   Error = std::abs(Result - static_cast<RealType>(1.0));
 
   if (Error > 1.E-5)
-    {
+  {
     std::cout << "Error in estimation !" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

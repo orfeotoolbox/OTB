@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -51,7 +51,6 @@ otbVectorRescaleIntensityImageFilter.cxx
 otbLog10ThresholdedImageFilterTest.cxx
 otbExtractROIResample.cxx
 otbLocalGradientVectorImageFilter.cxx
-otbBinaryImageMinimalBoundingRegionCalculator.cxx
 otbPerBandVectorImageFilterWithSobelFilter.cxx
 otbBinaryImageDensityFunction.cxx
 otbThresholdVectorImageFilter.cxx
@@ -101,7 +100,7 @@ otb_add_test(NAME coTvImageToVectorImageCastFilter COMMAND otbImageManipulationT
   ${BASELINE}/coImageToVectorImageCastFilterOutput.tif
   ${TEMP}/coImageToVectorImageCastFilterOutput.tif
   otbImageToVectorImageCastFilter
-  ${INPUTDATA}/poupees.hdr
+  ${INPUTDATA}/poupees.raw.hdr
   ${TEMP}/coImageToVectorImageCastFilterOutput.tif
   )
 
@@ -127,21 +126,21 @@ otb_add_test(NAME feTvSqrtSpectralAngleImageFilter COMMAND otbImageManipulationT
 
 otb_add_test(NAME bfTvStreamingShrinkImageFilterQBPAN COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
-  ${BASELINE}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
-  ${TEMP}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
+  ${BASELINE}/bfTvStreamingShrinkImageFilterQBPANOutput.tif
+  ${TEMP}/bfTvStreamingShrinkImageFilterQBPANOutput.tif
   otbStreamingShrinkImageFilter
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  ${TEMP}/bfTvStreamingShrinkImageFilterQBPANOutput.hdr
+  ${TEMP}/bfTvStreamingShrinkImageFilterQBPANOutput.tif
   50
   )
 
 otb_add_test(NAME bfTvStreamingShrinkImageFilterQBMUL COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
-  ${BASELINE}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
-  ${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
+  ${BASELINE}/bfTvStreamingShrinkImageFilterQBMULOutput.tif
+  ${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.tif
   otbStreamingShrinkImageFilter
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}
-  ${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.hdr
+  ${TEMP}/bfTvStreamingShrinkImageFilterQBMULOutput.tif
   20
   )
 
@@ -448,29 +447,17 @@ otb_add_test(NAME bfTvLocalGradientVectorImageFilter COMMAND otbImageManipulatio
   ${BASELINE}/bfTvLocalGradientVectorImageFilter.tif
   ${TEMP}/bfTvLocalGradientVectorImageFilter.tif
   otbLocalGradientVectorImageFilterTest
-  -in ${INPUTDATA}/cupriteSubHsi.tif
-  -out ${TEMP}/bfTvLocalGradientVectorImageFilter.tif)
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvLocalGradientVectorImageFilter.tif)
 
-otb_add_test(NAME bfTvBoundingRegionCalculator COMMAND otbImageManipulationTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE_FILES}/bfBoundingRegionCalculatorOutput.txt
-  ${TEMP}/bfBoundingRegionCalculatorOutput.txt
-  otbBinaryImageMinimalBoundingRegionCalculator
-  4
-  ${TEMP}/bfBoundingRegionCalculatorOutput.txt
-  ${INPUTDATA}/rcc8_mire1.png
-  ${INPUTDATA}/rcc8_mire2.png
-  ${INPUTDATA}/rcc8_mire3.png
-  ${INPUTDATA}/rcc8_mire4.png
-  )
 
 otb_add_test(NAME bfTvPerBandVectorImageFilterWithSobelFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_7}
-  ${BASELINE}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.hdr
-  ${TEMP}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.hdr
+  ${BASELINE}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.tif
+  ${TEMP}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.tif
   otbPerBandVectorImageFilterWithSobelFilter
   ${INPUTDATA}/poupees.png
-  ${TEMP}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.hdr
+  ${TEMP}/bfTvPerBandVectorImageFilterWithSobelFilterOutput.tif
   )
 
 
@@ -495,11 +482,11 @@ otb_add_test(NAME bfTvThresholdVectorImageFilterTest COMMAND otbImageManipulatio
 
 otb_add_test(NAME bfTvPerBandVectorImageFilterWithMeanFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_7}
-  ${BASELINE}/bfTvPerBandVectorImageFilterWithMeanFilterOutput.hdr
-  ${TEMP}/bfTvPerBandVectorImageFilterWithMeanFilterOutput.hdr
+  ${BASELINE}/bfTvPerBandVectorImageFilterWithMeanFilterOutput.tif
+  ${TEMP}/bfTvPerBandVectorImageFilterWithMeanFilterOutput.tif
   otbPerBandVectorImageFilterWithMeanFilter
   ${INPUTDATA}/poupees.png
-  ${TEMP}/bfTvPerBandVectorImageFilterWithMeanFilterOutput.hdr
+  ${TEMP}/bfTvPerBandVectorImageFilterWithMeanFilterOutput.tif
   )
 
 otb_add_test(NAME bfTvAmplitudeFunctorTest COMMAND otbImageManipulationTestDriver
@@ -526,12 +513,12 @@ otb_add_test(NAME bfTvClampImageFilterConversionTest COMMAND otbImageManipulatio
 
 otb_add_test(NAME coTvConcatenateVectorImageFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
-  ${BASELINE}/coConcatenateVectorImageFilterOutput1.hdr
-  ${TEMP}/coConcatenateVectorImageFilterOutput1.hdr
+  ${BASELINE}/coConcatenateVectorImageFilterOutput1.tif
+  ${TEMP}/coConcatenateVectorImageFilterOutput1.tif
   otbConcatenateVectorImageFilter
   ${INPUTDATA}/poupees.png
   ${INPUTDATA}/poupees.png
-  ${TEMP}/coConcatenateVectorImageFilterOutput1.hdr
+  ${TEMP}/coConcatenateVectorImageFilterOutput1.tif
   )
 
 otb_add_test(NAME bfTvBinaryImageToDensityImageFilter COMMAND otbImageManipulationTestDriver
@@ -547,18 +534,18 @@ otb_add_test(NAME bfTvBinaryImageToDensityImageFilter COMMAND otbImageManipulati
 
 otb_add_test(NAME bfTvSpectralAngleDistanceImageFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${EPSILON_7}
-  ${BASELINE}/bfTvSpectralAngleDistanceOutput.hdr
-  ${TEMP}/bfTvSpectralAngleDistanceOutput.hdr
+  ${BASELINE}/bfTvSpectralAngleDistanceOutput.tif
+  ${TEMP}/bfTvSpectralAngleDistanceOutput.tif
   otbSpectralAngleDistanceImageFilter
   ${INPUTDATA}/qb_RoadExtract.img.hdr
-  ${TEMP}/bfTvSpectralAngleDistanceOutput.hdr
+  ${TEMP}/bfTvSpectralAngleDistanceOutput.tif
   337 557 432 859
   )
 
 otb_add_test(NAME bfTvSpectralAngleDistanceImageFilterOneChannel COMMAND otbImageManipulationTestDriver
   otbSpectralAngleDistanceImageFilter
   ${INPUTDATA}/DeuxCercles.hdr
-  ${TEMP}/bfTvSpectralAngleDistanceOneChannelOutput.hdr
+  ${TEMP}/bfTvSpectralAngleDistanceOneChannelOutput.tif
   100
   )
 set_property(TEST bfTvSpectralAngleDistanceImageFilterOneChannel PROPERTY WILL_FAIL true)

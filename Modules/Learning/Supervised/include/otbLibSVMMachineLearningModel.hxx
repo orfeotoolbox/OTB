@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,13 +32,12 @@ namespace otb
 {
 
 template <class TInputValue, class TOutputValue>
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::LibSVMMachineLearningModel()
+LibSVMMachineLearningModel<TInputValue, TOutputValue>::LibSVMMachineLearningModel()
 {
   this->SetSVMType(C_SVC);
   this->SetKernelType(LINEAR);
   this->SetPolynomialKernelDegree(3);
-  this->SetKernelGamma(1.);  // 1/k
+  this->SetKernelGamma(1.); // 1/k
   this->SetKernelCoef0(1.);
   this->SetNu(0.5);
   this->SetC(1.0);
@@ -50,30 +49,28 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   this->m_ParameterOptimization = false;
   this->m_IsRegressionSupported = true;
   this->SetCVFolders(5);
-  this->m_InitialCrossValidationAccuracy = 0.;
-  this->m_FinalCrossValidationAccuracy = 0.;
+  this->m_InitialCrossValidationAccuracy  = 0.;
+  this->m_FinalCrossValidationAccuracy    = 0.;
   this->m_CoarseOptimizationNumberOfSteps = 5;
-  this->m_FineOptimizationNumberOfSteps = 5;
-  this->m_ConfidenceMode =
-    LibSVMMachineLearningModel<TInputValue,TOutputValue>::CM_INDEX;
+  this->m_FineOptimizationNumberOfSteps   = 5;
+  this->m_ConfidenceMode                  = LibSVMMachineLearningModel<TInputValue, TOutputValue>::CM_INDEX;
 
-  this->m_Parameters.nr_weight = 0;
+  this->m_Parameters.nr_weight    = 0;
   this->m_Parameters.weight_label = nullptr;
-  this->m_Parameters.weight = nullptr;
+  this->m_Parameters.weight       = nullptr;
 
   this->m_Model = nullptr;
 
   this->m_Problem.l = 0;
   this->m_Problem.y = nullptr;
   this->m_Problem.x = nullptr;
-#ifndef NDEBUG
+#ifdef NDEBUG
   svm_set_print_string_function(&otb::Utils::PrintNothing);
 #endif
 }
 
 template <class TInputValue, class TOutputValue>
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::~LibSVMMachineLearningModel()
+LibSVMMachineLearningModel<TInputValue, TOutputValue>::~LibSVMMachineLearningModel()
 {
   this->DeleteModel();
   this->DeleteProblem();
@@ -81,9 +78,7 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 
 /** Train the machine learning model */
 template <class TInputValue, class TOutputValue>
-void
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::Train()
+void LibSVMMachineLearningModel<TInputValue, TOutputValue>::Train()
 {
   this->DeleteProblem();
   this->DeleteModel();
@@ -104,10 +99,8 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-typename LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::TargetSampleType
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::DoPredict(const InputSampleType & input, ConfidenceValueType *quality) const
+typename LibSVMMachineLearningModel<TInputValue, TOutputValue>::TargetSampleType
+LibSVMMachineLearningModel<TInputValue, TOutputValue>::DoPredict(const InputSampleType& input, ConfidenceValueType* quality, ProbaSampleType* proba) const
 {
   TargetSampleType target;
   target.Fill(0);
@@ -117,86 +110,88 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 
   // Allocate nodes (/TODO if performances problems are related to too
   // many allocations, a cache approach can be set)
-  struct svm_node * x = new struct svm_node[input.Size() + 1];
+  struct svm_node* x = new struct svm_node[input.Size() + 1];
 
   // Fill the node
-  for (unsigned int i = 0 ; i < input.Size() ; i++)
-    {
+  for (unsigned int i = 0; i < input.Size(); i++)
+  {
     x[i].index = i + 1;
     x[i].value = input[i];
-    }
+  }
 
   // terminate node
   x[input.Size()].index = -1;
   x[input.Size()].value = 0;
+  if (proba != nullptr && !this->m_ProbaIndex)
+    itkExceptionMacro("Probability per class not available for this classifier !");
 
   if (quality != nullptr)
-    {
+  {
     if (!this->m_ConfidenceIndex)
-      {
+    {
       itkExceptionMacro("Confidence index not available for this classifier !");
-      }
+    }
     if (this->m_ConfidenceMode == CM_INDEX)
-      {
+    {
       if (svm_type == C_SVC || svm_type == NU_SVC)
-        {
+      {
         // Eventually allocate space for probabilities
-        unsigned int nr_class = svm_get_nr_class(m_Model);
-        double *prob_estimates = new double[nr_class];
+        unsigned int nr_class       = svm_get_nr_class(m_Model);
+        double*      prob_estimates = new double[nr_class];
         // predict
-        target[0] = static_cast<TargetValueType>(svm_predict_probability(m_Model, x, prob_estimates));
+        target[0]      = static_cast<TargetValueType>(svm_predict_probability(m_Model, x, prob_estimates));
         double maxProb = 0.0;
         double secProb = 0.0;
-        for (unsigned int i=0 ; i< nr_class ; ++i)
-          {
+        for (unsigned int i = 0; i < nr_class; ++i)
+        {
           if (maxProb < prob_estimates[i])
-            {
+          {
             secProb = maxProb;
             maxProb = prob_estimates[i];
-            }
-          else if (secProb < prob_estimates[i])
-            {
-            secProb = prob_estimates[i];
-            }
           }
+          else if (secProb < prob_estimates[i])
+          {
+            secProb = prob_estimates[i];
+          }
+        }
         (*quality) = static_cast<ConfidenceValueType>(maxProb - secProb);
 
         delete[] prob_estimates;
-        }
+      }
       else
-        {
+      {
         target[0] = static_cast<TargetValueType>(svm_predict(m_Model, x));
         // Prob. model for test data: target value = predicted value + z
         // z: Laplace distribution e^(-|z|/sigma)/(2sigma)
         // sigma is output as confidence index
         (*quality) = svm_get_svr_probability(m_Model);
-        }
-      }
-    else if (this->m_ConfidenceMode == CM_PROBA)
-      {
-      target[0] = static_cast<TargetValueType>(svm_predict_probability(m_Model, x, quality));
-      }
-    else if (this->m_ConfidenceMode == CM_HYPER)
-      {
-      target[0] = static_cast<TargetValueType>(svm_predict_values(m_Model, x, quality));
       }
     }
-  else
+    else if (this->m_ConfidenceMode == CM_PROBA)
     {
+      target[0] = static_cast<TargetValueType>(svm_predict_probability(m_Model, x, quality));
+    }
+    else if (this->m_ConfidenceMode == CM_HYPER)
+    {
+      target[0] = static_cast<TargetValueType>(svm_predict_values(m_Model, x, quality));
+    }
+  }
+  else
+  {
     // default case : if the model has probabilities, we call svm_predict_probabilities()
     // which gives different results than svm_predict()
     if (svm_check_probability_model(m_Model))
-      {
-      unsigned int nr_class = svm_get_nr_class(m_Model);
-      double *prob_estimates = new double[nr_class];
-      target[0] = static_cast<TargetValueType>(svm_predict_probability(m_Model, x, prob_estimates));
+    {
+      unsigned int nr_class       = svm_get_nr_class(m_Model);
+      double*      prob_estimates = new double[nr_class];
+      target[0]                   = static_cast<TargetValueType>(svm_predict_probability(m_Model, x, prob_estimates));
       delete[] prob_estimates;
-      }
-    else
-      {
-      target[0] = static_cast<TargetValueType>(svm_predict(m_Model, x));
-      }
     }
+    else
+    {
+      target[0] = static_cast<TargetValueType>(svm_predict(m_Model, x));
+    }
+  }
 
   // Free allocated memory
   delete[] x;
@@ -205,113 +200,98 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::Save(const std::string & filename, const std::string & itkNotUsed(name))
+void LibSVMMachineLearningModel<TInputValue, TOutputValue>::Save(const std::string& filename, const std::string& itkNotUsed(name))
 {
   if (svm_save_model(filename.c_str(), m_Model) != 0)
-    {
+  {
     itkExceptionMacro(<< "Problem while saving SVM model " << filename);
-    }
+  }
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::Load(const std::string & filename, const std::string & itkNotUsed(name))
+void LibSVMMachineLearningModel<TInputValue, TOutputValue>::Load(const std::string& filename, const std::string& itkNotUsed(name))
 {
   this->DeleteModel();
   m_Model = svm_load_model(filename.c_str());
   if (m_Model == nullptr)
-    {
+  {
     itkExceptionMacro(<< "Problem while loading SVM model " << filename);
-    }
+  }
   m_Parameters = m_Model->param;
 
   this->m_ConfidenceIndex = this->HasProbabilities();
 }
 
 template <class TInputValue, class TOutputValue>
-bool
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::CanReadFile(const std::string & file)
+bool LibSVMMachineLearningModel<TInputValue, TOutputValue>::CanReadFile(const std::string& file)
 {
-  //TODO: Rework.
+  // TODO: Rework.
   std::ifstream ifs;
   ifs.open(file);
 
-  if(!ifs)
-    {
-    std::cerr<<"Could not read file "<<file<<std::endl;
+  if (!ifs)
+  {
+    std::cerr << "Could not read file " << file << std::endl;
     return false;
-    }
+  }
 
-  //Read only the first line.
+  // Read only the first line.
   std::string line;
   std::getline(ifs, line);
 
-  //if (line.find(m_SVMModel->getName()) != std::string::npos)
+  // if (line.find(m_SVMModel->getName()) != std::string::npos)
   if (line.find("svm_type") != std::string::npos)
-    {
-    //std::cout<<"Reading a libSVM model"<<std::endl;
+  {
+    // std::cout<<"Reading a libSVM model"<<std::endl;
     return true;
-    }
+  }
   ifs.close();
   return false;
 }
 
 template <class TInputValue, class TOutputValue>
-bool
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::CanWriteFile(const std::string & itkNotUsed(file))
+bool LibSVMMachineLearningModel<TInputValue, TOutputValue>::CanWriteFile(const std::string& itkNotUsed(file))
 {
   return false;
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void LibSVMMachineLearningModel<TInputValue, TOutputValue>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf(os,indent);
+  Superclass::PrintSelf(os, indent);
 }
 
 template <class TInputValue, class TOutputValue>
-bool
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::HasProbabilities(void) const
+bool LibSVMMachineLearningModel<TInputValue, TOutputValue>::HasProbabilities(void) const
 {
   bool modelHasProba = static_cast<bool>(svm_check_probability_model(m_Model));
-  int type = svm_get_svm_type(m_Model);
-  int cmMode = this->m_ConfidenceMode;
-  bool ret = false;
+  int  type          = svm_get_svm_type(m_Model);
+  int  cmMode        = this->m_ConfidenceMode;
+  bool ret           = false;
   if (type == EPSILON_SVR || type == NU_SVR)
-    {
+  {
     ret = (modelHasProba && cmMode == CM_INDEX);
-    }
+  }
   else if (type == C_SVC || type == NU_SVC)
-    {
-    ret = (modelHasProba && (cmMode == CM_INDEX || cmMode == CM_PROBA)) ||
-      (cmMode == CM_HYPER);
-    }
+  {
+    ret = (modelHasProba && (cmMode == CM_INDEX || cmMode == CM_PROBA)) || (cmMode == CM_HYPER);
+  }
   return ret;
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::BuildProblem()
+void LibSVMMachineLearningModel<TInputValue, TOutputValue>::BuildProblem()
 {
   // Get number of samples
-  typename InputListSampleType::Pointer samples = this->GetInputListSample();
-  typename TargetListSampleType::Pointer target = this->GetTargetListSample();
-  int probl = samples->Size();
+  typename InputListSampleType::Pointer  samples = this->GetInputListSample();
+  typename TargetListSampleType::Pointer target  = this->GetTargetListSample();
+  int                                    probl   = samples->Size();
 
   if (probl < 1)
-    {
+  {
     itkExceptionMacro(<< "No samples, can not build SVM problem.");
-    }
+  }
   otbMsgDebugMacro(<< "Building problem ...");
 
   // Get the size of the samples
@@ -322,25 +302,25 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   m_Problem.y = new double[probl];
   m_Problem.x = new struct svm_node*[probl];
   for (int i = 0; i < probl; ++i)
-    {
-    m_Problem.x[i] = new struct svm_node[elements+1];
-    }
+  {
+    m_Problem.x[i] = new struct svm_node[elements + 1];
+  }
 
   // Iterate on the samples
-  typename InputListSampleType::ConstIterator sIt = samples->Begin();
-  typename TargetListSampleType::ConstIterator tIt = target->Begin();
-  int sampleIndex = 0;
+  typename InputListSampleType::ConstIterator  sIt         = samples->Begin();
+  typename TargetListSampleType::ConstIterator tIt         = target->Begin();
+  int                                          sampleIndex = 0;
 
   while (sIt != samples->End() && tIt != target->End())
-    {
+  {
     // Set the label
-    m_Problem.y[sampleIndex] = tIt.GetMeasurementVector()[0];
-    const InputSampleType &sample = sIt.GetMeasurementVector();
-    for (int k = 0 ; k < elements ; ++k)
-      {
+    m_Problem.y[sampleIndex]      = tIt.GetMeasurementVector()[0];
+    const InputSampleType& sample = sIt.GetMeasurementVector();
+    for (int k = 0; k < elements; ++k)
+    {
       m_Problem.x[sampleIndex][k].index = k + 1;
       m_Problem.x[sampleIndex][k].value = sample[k];
-      }
+    }
     // terminate node
     m_Problem.x[sampleIndex][elements].index = -1;
     m_Problem.x[sampleIndex][elements].value = 0;
@@ -348,116 +328,106 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
     ++sampleIndex;
     ++sIt;
     ++tIt;
-    }
+  }
 
   // Compute the kernel gamma from number of elements if necessary
   if (this->GetKernelGamma() == 0)
-    {
+  {
     this->SetKernelGamma(1.0 / static_cast<double>(elements));
-    }
+  }
 
   // allocate buffer for cross validation
   m_TmpTarget.resize(m_Problem.l);
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::ConsistencyCheck()
+void LibSVMMachineLearningModel<TInputValue, TOutputValue>::ConsistencyCheck()
 {
   if (this->GetSVMType() == ONE_CLASS && this->GetDoProbabilityEstimates())
-    {
+  {
     otbMsgDebugMacro(<< "Disabling SVM probability estimates for ONE_CLASS SVM type.");
     this->SetDoProbabilityEstimates(false);
-    }
+  }
 
   const char* error_msg = svm_check_parameter(&m_Problem, &m_Parameters);
 
   if (error_msg)
-    {
+  {
     std::string err(error_msg);
     itkExceptionMacro("SVM parameter check failed : " << err);
-    }
+  }
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::DeleteProblem()
+void LibSVMMachineLearningModel<TInputValue, TOutputValue>::DeleteProblem()
 {
   if (m_Problem.y)
-    {
+  {
     delete[] m_Problem.y;
     m_Problem.y = nullptr;
-    }
+  }
   if (m_Problem.x)
-    {
+  {
     for (int i = 0; i < m_Problem.l; ++i)
-      {
+    {
       if (m_Problem.x[i])
-        {
+      {
         delete[] m_Problem.x[i];
-        }
       }
+    }
     delete[] m_Problem.x;
     m_Problem.x = nullptr;
-    }
+  }
   m_Problem.l = 0;
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::DeleteModel(void)
+void LibSVMMachineLearningModel<TInputValue, TOutputValue>::DeleteModel(void)
 {
-  if(m_Model)
-    {
+  if (m_Model)
+  {
     svm_free_and_destroy_model(&m_Model);
-    }
+  }
   m_Model = nullptr;
 }
 
 template <class TInputValue, class TOutputValue>
-unsigned int
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::GetNumberOfKernelParameters()
+unsigned int LibSVMMachineLearningModel<TInputValue, TOutputValue>::GetNumberOfKernelParameters()
 {
   unsigned int nb = 1;
-  switch(this->GetKernelType())
-    {
-    case LINEAR:
-      // C
-      nb = 1;
-      break;
-    case POLY:
-      // C, gamma and coef0
-      nb = 3;
-      break;
-    case RBF:
-      // C and gamma
-      nb = 2;
-      break;
-    case SIGMOID:
-      // C, gamma and coef0
-      nb = 3;
-      break;
-    default:
-      // C
-      nb = 1;
-      break;
-    }
+  switch (this->GetKernelType())
+  {
+  case LINEAR:
+    // C
+    nb = 1;
+    break;
+  case POLY:
+    // C, gamma and coef0
+    nb = 3;
+    break;
+  case RBF:
+    // C and gamma
+    nb = 2;
+    break;
+  case SIGMOID:
+    // C, gamma and coef0
+    nb = 3;
+    break;
+  default:
+    // C
+    nb = 1;
+    break;
+  }
   return nb;
 }
 
 template <class TInputValue, class TOutputValue>
-double
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::CrossValidation(void)
+double LibSVMMachineLearningModel<TInputValue, TOutputValue>::CrossValidation(void)
 {
   double accuracy = 0.0;
   // Get the length of the problem
   unsigned int length = m_Problem.l;
-  if (length == 0 || m_TmpTarget.size() < length )
+  if (length == 0 || m_TmpTarget.size() < length)
     return accuracy;
 
   // Do cross validation
@@ -466,12 +436,12 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   // Evaluate accuracy
   double total_correct = 0.;
   for (unsigned int i = 0; i < length; ++i)
-    {
+  {
     if (m_TmpTarget[i] == m_Problem.y[i])
-      {
+    {
       ++total_correct;
-      }
     }
+  }
   accuracy = total_correct / length;
 
   // return accuracy value
@@ -479,11 +449,9 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LibSVMMachineLearningModel<TInputValue,TOutputValue>
-::OptimizeParameters()
+void LibSVMMachineLearningModel<TInputValue, TOutputValue>::OptimizeParameters()
 {
-  typedef SVMCrossValidationCostFunction<LibSVMMachineLearningModel<TInputValue,TOutputValue> > CrossValidationFunctionType;
+  typedef SVMCrossValidationCostFunction<LibSVMMachineLearningModel<TInputValue, TOutputValue>> CrossValidationFunctionType;
   typename CrossValidationFunctionType::Pointer crossValidationFunction = CrossValidationFunctionType::New();
   crossValidationFunction->SetModel(this);
 
@@ -492,19 +460,20 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
   unsigned int nbParams = this->GetNumberOfKernelParameters();
   initialParameters.SetSize(nbParams);
   initialParameters[0] = this->GetC();
-  if (nbParams > 1) initialParameters[1] = this->GetKernelGamma();
-  if (nbParams > 2) initialParameters[2] = this->GetKernelCoef0();
+  if (nbParams > 1)
+    initialParameters[1] = this->GetKernelGamma();
+  if (nbParams > 2)
+    initialParameters[2] = this->GetKernelCoef0();
 
   m_InitialCrossValidationAccuracy = crossValidationFunction->GetValue(initialParameters);
-  m_FinalCrossValidationAccuracy = m_InitialCrossValidationAccuracy;
+  m_FinalCrossValidationAccuracy   = m_InitialCrossValidationAccuracy;
 
-  otbMsgDebugMacro(<< "Initial accuracy : " << m_InitialCrossValidationAccuracy
-                   << ", Parameters Optimization" << m_ParameterOptimization);
+  otbMsgDebugMacro(<< "Initial accuracy : " << m_InitialCrossValidationAccuracy << ", Parameters Optimization" << m_ParameterOptimization);
 
   if (m_ParameterOptimization)
-    {
+  {
     otbMsgDebugMacro(<< "Model parameters optimization");
-    typename ExhaustiveExponentialOptimizer::Pointer coarseOptimizer = ExhaustiveExponentialOptimizer::New();
+    typename ExhaustiveExponentialOptimizer::Pointer   coarseOptimizer = ExhaustiveExponentialOptimizer::New();
     typename ExhaustiveExponentialOptimizer::StepsType coarseNbSteps(initialParameters.Size());
     coarseNbSteps.Fill(m_CoarseOptimizationNumberOfSteps);
 
@@ -515,12 +484,10 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
 
     coarseBestParameters = coarseOptimizer->GetMaximumMetricValuePosition();
 
-    otbMsgDevMacro( << "Coarse minimum accuracy: " << coarseOptimizer->GetMinimumMetricValue() << " " <<
-      coarseOptimizer->GetMinimumMetricValuePosition() );
-    otbMsgDevMacro( << "Coarse maximum accuracy: " << coarseOptimizer->GetMaximumMetricValue() << " " <<
-      coarseOptimizer->GetMaximumMetricValuePosition() );
+    otbMsgDevMacro(<< "Coarse minimum accuracy: " << coarseOptimizer->GetMinimumMetricValue() << " " << coarseOptimizer->GetMinimumMetricValuePosition());
+    otbMsgDevMacro(<< "Coarse maximum accuracy: " << coarseOptimizer->GetMaximumMetricValue() << " " << coarseOptimizer->GetMaximumMetricValuePosition());
 
-    typename ExhaustiveExponentialOptimizer::Pointer fineOptimizer = ExhaustiveExponentialOptimizer::New();
+    typename ExhaustiveExponentialOptimizer::Pointer   fineOptimizer = ExhaustiveExponentialOptimizer::New();
     typename ExhaustiveExponentialOptimizer::StepsType fineNbSteps(initialParameters.Size());
     fineNbSteps.Fill(m_FineOptimizationNumberOfSteps);
 
@@ -532,21 +499,21 @@ LibSVMMachineLearningModel<TInputValue,TOutputValue>
     fineOptimizer->SetInitialPosition(coarseBestParameters);
     fineOptimizer->StartOptimization();
 
-    otbMsgDevMacro(<< "Fine minimum accuracy: " << fineOptimizer->GetMinimumMetricValue() << " " <<
-      fineOptimizer->GetMinimumMetricValuePosition() );
-    otbMsgDevMacro(<< "Fine maximum accuracy: " << fineOptimizer->GetMaximumMetricValue() << " " <<
-      fineOptimizer->GetMaximumMetricValuePosition() );
+    otbMsgDevMacro(<< "Fine minimum accuracy: " << fineOptimizer->GetMinimumMetricValue() << " " << fineOptimizer->GetMinimumMetricValuePosition());
+    otbMsgDevMacro(<< "Fine maximum accuracy: " << fineOptimizer->GetMaximumMetricValue() << " " << fineOptimizer->GetMaximumMetricValuePosition());
 
     fineBestParameters = fineOptimizer->GetMaximumMetricValuePosition();
 
     m_FinalCrossValidationAccuracy = fineOptimizer->GetMaximumMetricValue();
 
     this->SetC(fineBestParameters[0]);
-    if (nbParams > 1) this->SetKernelGamma(fineBestParameters[1]);
-    if (nbParams > 2) this->SetKernelCoef0(fineBestParameters[2]);
-    }
+    if (nbParams > 1)
+      this->SetKernelGamma(fineBestParameters[1]);
+    if (nbParams > 2)
+      this->SetKernelCoef0(fineBestParameters[2]);
+  }
 }
 
-} //end namespace otb
+} // end namespace otb
 
 #endif

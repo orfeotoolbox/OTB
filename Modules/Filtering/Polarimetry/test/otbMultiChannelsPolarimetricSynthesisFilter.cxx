@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include "itkMacro.h"
 #include <iostream>
 
@@ -29,26 +28,26 @@
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelsPolarimetricSynthesisFilter.h"
 
-int otbMultiChannelsPolarimetricSynthesisFilter(int itkNotUsed(argc), char * argv[])
+int otbMultiChannelsPolarimetricSynthesisFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename1  = argv[1];
-  const char * inputFilename2  = argv[2];
-  const char * inputFilename3  = argv[3];
+  const char* inputFilename1 = argv[1];
+  const char* inputFilename2 = argv[2];
+  const char* inputFilename3 = argv[3];
 
-  const char * outputFilename = argv[4];
+  const char* outputFilename = argv[4];
 
   double PsiI = strtod(argv[5], nullptr);
   double KhiI = strtod(argv[6], nullptr);
   double PsiR = strtod(argv[7], nullptr);
   double KhiR = strtod(argv[8], nullptr);
 
-  typedef std::complex <double> InputPixelType;
-  typedef double                OutputPixelType;
-  const unsigned int Dimension = 2;
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef std::complex<double> InputPixelType;
+  typedef double               OutputPixelType;
+  const unsigned int           Dimension = 2;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::VectorImage<InputPixelType,  Dimension> InputVectorImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputVectorImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
@@ -65,7 +64,7 @@ int otbMultiChannelsPolarimetricSynthesisFilter(int itkNotUsed(argc), char * arg
   ReaderType::Pointer reader1 = ReaderType::New();
   ReaderType::Pointer reader2 = ReaderType::New();
   ReaderType::Pointer reader3 = ReaderType::New();
-  WriterType::Pointer writer = WriterType::New();
+  WriterType::Pointer writer  = WriterType::New();
 
   reader1->SetFileName(inputFilename1);
   reader2->SetFileName(inputFilename2);
@@ -100,12 +99,9 @@ int otbMultiChannelsPolarimetricSynthesisFilter(int itkNotUsed(argc), char * arg
   InputVectorImageType::Pointer vectorImage = InputVectorImageType::New();
 
   // Copy of the pictures in a vector
-  itk::ImageRegionConstIterator<InputImageType> inputIt1(reader1->GetOutput(),
-                                                         reader1->GetOutput()->GetLargestPossibleRegion());
-  itk::ImageRegionConstIterator<InputImageType> inputIt2(reader2->GetOutput(),
-                                                         reader2->GetOutput()->GetLargestPossibleRegion());
-  itk::ImageRegionConstIterator<InputImageType> inputIt3(reader3->GetOutput(),
-                                                         reader3->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionConstIterator<InputImageType>  inputIt1(reader1->GetOutput(), reader1->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionConstIterator<InputImageType>  inputIt2(reader2->GetOutput(), reader2->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionConstIterator<InputImageType>  inputIt3(reader3->GetOutput(), reader3->GetOutput()->GetLargestPossibleRegion());
   itk::ImageRegionIterator<InputVectorImageType> outputIt(outputPtr, outputPtr->GetLargestPossibleRegion());
 
   inputIt1.GoToBegin();
@@ -114,7 +110,7 @@ int otbMultiChannelsPolarimetricSynthesisFilter(int itkNotUsed(argc), char * arg
   outputIt.GoToBegin();
 
   while (!inputIt1.IsAtEnd())
-    {
+  {
     InputVectorImageType::PixelType pix;
     pix.SetSize(4);
     pix[0] = inputIt1.Get();
@@ -126,7 +122,7 @@ int otbMultiChannelsPolarimetricSynthesisFilter(int itkNotUsed(argc), char * arg
     ++inputIt2;
     ++inputIt3;
     ++outputIt;
-    }
+  }
 
   polarimetricSynthesis->SetInput(outputPtr);
   writer->SetInput(polarimetricSynthesis->GetOutput());

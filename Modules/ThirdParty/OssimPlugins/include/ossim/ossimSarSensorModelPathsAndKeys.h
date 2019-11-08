@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 by Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 by Centre National d'Etudes Spatiales (CNES)
  *
  * This file is licensed under MIT license:
  *
@@ -61,8 +61,11 @@ namespace ossimplugins {
    extern const std::string keyVelZ             ;
    extern const std::string keyStartLine        ;
    extern const std::string keyEndLine          ;
+   extern const std::string keyStartSample      ;
+   extern const std::string keyEndSample        ;
    extern const std::string keyAzimuthStartTime ;
    extern const std::string keyAzimuthStopTime  ;
+   extern const std::string keyAzimuthAnxTime   ;
 } // ossimplugins namespace
 
 

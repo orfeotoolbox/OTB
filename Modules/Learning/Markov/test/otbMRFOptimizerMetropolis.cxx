@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,14 +19,13 @@
  */
 
 
-
 #include "otbMRFOptimizerMetropolis.h"
 #include <fstream>
 #include <cstdlib>
 
-int otbMRFOptimizerMetropolis(int itkNotUsed(argc), char * argv[])
+int otbMRFOptimizerMetropolis(int itkNotUsed(argc), char* argv[])
 {
-  const char * outputFile = argv[1];
+  const char* outputFile = argv[1];
 
   typedef otb::MRFOptimizerMetropolis MRFOptimizerType;
 

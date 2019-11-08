@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,15 +41,14 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT VectorImageTo3DScalarImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT VectorImageTo3DScalarImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef VectorImageTo3DScalarImageFilter                   Self;
+  typedef VectorImageTo3DScalarImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -72,7 +71,6 @@ public:
   typedef typename OutputImageType::PixelType   OutputPixelType;
 
 protected:
-
   /** Generate output information */
   void GenerateOutputInformation(void) override;
 
@@ -80,19 +78,20 @@ protected:
   void GenerateInputRequestedRegion(void) override;
 
   /** Threaded Generate data */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
   /** Constructor */
   VectorImageTo3DScalarImageFilter();
   /** Destructor */
-  ~VectorImageTo3DScalarImageFilter() override {}
+  ~VectorImageTo3DScalarImageFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  VectorImageTo3DScalarImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  VectorImageTo3DScalarImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

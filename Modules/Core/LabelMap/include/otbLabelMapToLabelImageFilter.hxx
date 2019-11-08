@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,21 +27,19 @@
 #include "itkProgressReporter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 
-namespace otb {
+namespace otb
+{
 
 template <class TInputImage, class TOutputImage>
-LabelMapToLabelImageFilter<TInputImage, TOutputImage>
-::LabelMapToLabelImageFilter()
+LabelMapToLabelImageFilter<TInputImage, TOutputImage>::LabelMapToLabelImageFilter()
 {
 }
 
-template<class TInputImage, class TOutputImage>
-void
-LabelMapToLabelImageFilter<TInputImage, TOutputImage>
-::GenerateInputRequestedRegion()
+template <class TInputImage, class TOutputImage>
+void LabelMapToLabelImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 {
   itk::ImageToImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion();
 }
 
-}// end namespace otb
+} // end namespace otb
 #endif

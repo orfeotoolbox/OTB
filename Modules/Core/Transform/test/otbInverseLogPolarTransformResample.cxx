@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,17 +27,17 @@
 
 int otbInverseLogPolarTransformResample(int itkNotUsed(argc), char* argv[])
 {
-  char * inputFileName = argv[1];
-  char * outputFileName = argv[2];
+  char* inputFileName  = argv[1];
+  char* outputFileName = argv[2];
 
-  const unsigned int Dimension = 2;
-  typedef double                                                        PrecisionType;
-  typedef unsigned char                                                 PixelType;
-  typedef otb::Image<PixelType, Dimension>                              ImageType;
-  typedef otb::InverseLogPolarTransform<PrecisionType>                  InverseLogPolarTransformType;
+  const unsigned int    Dimension = 2;
+  typedef double        PrecisionType;
+  typedef unsigned char PixelType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef otb::InverseLogPolarTransform<PrecisionType> InverseLogPolarTransformType;
   typedef itk::LinearInterpolateImageFunction<ImageType, PrecisionType> InterpolatorType;
-  typedef otb::ImageFileReader<ImageType>                               ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                               WriterType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef itk::ResampleImageFilter<ImageType, ImageType, PrecisionType> ResampleFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -59,9 +59,8 @@ int otbInverseLogPolarTransformResample(int itkNotUsed(argc), char* argv[])
   params[0] = 0.5 * static_cast<double>(size[0]);
   params[1] = 0.5 * static_cast<double>(size[1]);
   params[2] = 360. / reader->GetOutput()->GetLargestPossibleRegion().GetSize()[0];
-  params[3] = std::log(std::sqrt(std::pow(static_cast<double>(size[0]), 2.)
-                               + std::pow(static_cast<double>(size[1]),
-                                         2.)) / 2) / reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
+  params[3] = std::log(std::sqrt(std::pow(static_cast<double>(size[0]), 2.) + std::pow(static_cast<double>(size[1]), 2.)) / 2) /
+              reader->GetOutput()->GetLargestPossibleRegion().GetSize()[1];
   transform->SetParameters(params);
 
   // ImageType::SpacingType spacing;

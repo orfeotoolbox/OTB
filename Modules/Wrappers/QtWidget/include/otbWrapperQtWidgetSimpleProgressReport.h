@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,44 +39,35 @@ namespace Wrapper
  *
  * \ingroup OTBQtWidget
  */
-class OTBQtWidget_EXPORT QtWidgetSimpleProgressReport : public QWidget
+class OTBQtWidget_EXPORT QtWidgetSimpleProgressReport : public itk::QtProgressBar
 {
   Q_OBJECT
 public:
-  QtWidgetSimpleProgressReport(QtWidgetModel * model, QWidget * parent);
+  QtWidgetSimpleProgressReport(QWidget* parent);
   ~QtWidgetSimpleProgressReport() override;
 
-  void SetApplication(Application::Pointer app);
+  void SetModel(QtWidgetModel* model);
 
-  typedef itk::MemberCommand< QtWidgetSimpleProgressReport >  AddProcessCommandType;
+  typedef itk::MemberCommand<QtWidgetSimpleProgressReport> AddProcessCommandType;
 
-  void ProcessEvent( itk::Object * caller, const itk::EventObject & event );
+  void ProcessEvent(itk::Object* caller, const itk::EventObject& event);
 
 public slots:
   void Init();
   void ReportProcess();
 
-  signals:
+signals:
   void AddNewProcessToReport();
+  void SetText(QString);
 
 private:
   QtWidgetSimpleProgressReport(const QtWidgetSimpleProgressReport&) = delete;
-  void operator=(const QtWidgetSimpleProgressReport&); //purposely not
-                                                       //implemented
+  void operator=(const QtWidgetSimpleProgressReport&) = delete;
 
-  Application::Pointer              m_Application;
-  QtWidgetModel *                   m_Model;
-  QVBoxLayout *                     m_Layout;
-
-  AddProcessCommandType::Pointer    m_AddProcessCommand;
-  itk::ProcessObject*               m_CurrentProcess;
-  std::string                       m_CurrentDescription;
-
-  itk::QtProgressBar * m_Bar;
-  QLabel * m_Label;
-
+  AddProcessCommandType::Pointer m_AddProcessCommand;
+  itk::ProcessObject*            m_CurrentProcess;
+  std::string                    m_CurrentDescription;
 };
-
 }
 }
 

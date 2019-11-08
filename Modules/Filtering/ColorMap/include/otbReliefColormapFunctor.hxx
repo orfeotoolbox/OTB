@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,20 +23,20 @@
 
 #include "otbReliefColormapFunctor.h"
 
-namespace otb {
-
-namespace Functor {
-
-template <class TScalar, class TRGBPixel>
-typename ReliefColormapFunctor<TScalar, TRGBPixel>::RGBPixelType
-ReliefColormapFunctor<TScalar, TRGBPixel>
-::operator() (const TScalar &v) const
+namespace otb
 {
 
-  float m_Borders[]     = {0.0f,  0.00001f, 0.2f,  0.43f, 0.71f, 1.0f};
-  float m_RedValues[]   = {0.75f, 0.64f,    0.47f, 0.89f, 0.58f, 1.0f};
-  float m_GreenValues[] = {0.91f, 0.84f,    0.76f, 0.90f, 0.32f, 1.0f};
-  float m_BlueValues[]  = {0.96f, 0.59f,    0.40f, 0.57f, 0.00f, 1.0f};
+namespace Functor
+{
+
+template <class TScalar, class TRGBPixel>
+typename ReliefColormapFunctor<TScalar, TRGBPixel>::RGBPixelType ReliefColormapFunctor<TScalar, TRGBPixel>::operator()(const TScalar& v) const
+{
+
+  float m_Borders[]     = {0.0f, 0.00001f, 0.2f, 0.43f, 0.71f, 1.0f};
+  float m_RedValues[]   = {0.75f, 0.64f, 0.47f, 0.89f, 0.58f, 1.0f};
+  float m_GreenValues[] = {0.91f, 0.84f, 0.76f, 0.90f, 0.32f, 1.0f};
+  float m_BlueValues[]  = {0.96f, 0.59f, 0.40f, 0.57f, 0.00f, 1.0f};
 
   // Map the input scalar between [0, 1].
   RealType value = this->RescaleInputValue(v);

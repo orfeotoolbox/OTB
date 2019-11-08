@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,21 +26,20 @@
 namespace otb
 {
 
-template <class TInputImage,  class TOutputImage, class TInternalPrecision, class TStructuringElement>
-MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecision,TStructuringElement>
-::MorphologicalProfilesSegmentationFilter()
+template <class TInputImage, class TOutputImage, class TInternalPrecision, class TStructuringElement>
+MorphologicalProfilesSegmentationFilter<TInputImage, TOutputImage, TInternalPrecision, TStructuringElement>::MorphologicalProfilesSegmentationFilter()
 {
-  m_ProfileSize = 5;
+  m_ProfileSize  = 5;
   m_ProfileStart = 1;
-  m_ProfileStep = 1;
-  m_Sigma = 0.0;
+  m_ProfileStep  = 1;
+  m_Sigma        = 0.0;
 
-  m_ClassificationFilter = MultiScaleClassificationFilterType::New();
-  m_ConnectedComponentsFilter = ConnectedComponentsFilterType::New();
-  m_OpeningProfile = OpeningProfileFilterType::New();
-  m_ClosingProfile = ClosingProfileFilterType::New();
-  m_OpeningDerivativeProfile = DerivativeFilterType::New();
-  m_ClosingDerivativeProfile = DerivativeFilterType::New();
+  m_ClassificationFilter         = MultiScaleClassificationFilterType::New();
+  m_ConnectedComponentsFilter    = ConnectedComponentsFilterType::New();
+  m_OpeningProfile               = OpeningProfileFilterType::New();
+  m_ClosingProfile               = ClosingProfileFilterType::New();
+  m_OpeningDerivativeProfile     = DerivativeFilterType::New();
+  m_ClosingDerivativeProfile     = DerivativeFilterType::New();
   m_OpeningCharacteristicsFilter = MultiScaleCharacteristicsFilterType::New();
   m_ClosingCharacteristicsFilter = MultiScaleCharacteristicsFilterType::New();
   // Wire pipeline
@@ -49,24 +48,24 @@ MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecis
   m_OpeningCharacteristicsFilter->SetInput(m_OpeningDerivativeProfile->GetOutput());
   m_ClosingCharacteristicsFilter->SetInput(m_ClosingDerivativeProfile->GetOutput());
 
-  m_ClassificationFilter->SetOpeningProfileDerivativeMaxima(m_OpeningCharacteristicsFilter->GetOutput());
-  m_ClassificationFilter->SetOpeningProfileCharacteristics(m_OpeningCharacteristicsFilter->GetOutputCharacteristics());
-  m_ClassificationFilter->SetClosingProfileDerivativeMaxima(m_ClosingCharacteristicsFilter->GetOutput());
-  m_ClassificationFilter->SetClosingProfileCharacteristics(m_ClosingCharacteristicsFilter->GetOutputCharacteristics());
+  using namespace Functor::MultiScaleConvexOrConcaveDecisionRule_tags;
+  // Template keyword mandatory to avoid parsing error when using
+  // template methods within template code
+  m_ClassificationFilter->template SetInput<max_opening_profile_derivative>(m_OpeningCharacteristicsFilter->GetOutput());
+  m_ClassificationFilter->template SetInput<opening_profile_characteristics>(m_OpeningCharacteristicsFilter->GetOutputCharacteristics());
+  m_ClassificationFilter->template SetInput<max_closing_profile_derivative>(m_ClosingCharacteristicsFilter->GetOutput());
+  m_ClassificationFilter->template SetInput<closing_profile_characteristics>(m_ClosingCharacteristicsFilter->GetOutputCharacteristics());
 
   m_ConnectedComponentsFilter->SetInput(m_ClassificationFilter->GetOutput());
-
 }
 
-template <class TInputImage,  class TOutputImage, class TInternalPrecision, class TStructuringElement>
-MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecision,TStructuringElement>
-::~MorphologicalProfilesSegmentationFilter()
-{}
+template <class TInputImage, class TOutputImage, class TInternalPrecision, class TStructuringElement>
+MorphologicalProfilesSegmentationFilter<TInputImage, TOutputImage, TInternalPrecision, TStructuringElement>::~MorphologicalProfilesSegmentationFilter()
+{
+}
 
-template <class TInputImage,  class TOutputImage, class TInternalPrecision, class TStructuringElement>
-void
-MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecision,TStructuringElement>
-::GenerateData()
+template <class TInputImage, class TOutputImage, class TInternalPrecision, class TStructuringElement>
+void MorphologicalProfilesSegmentationFilter<TInputImage, TOutputImage, TInternalPrecision, TStructuringElement>::GenerateData()
 {
   m_OpeningProfile->SetInput(this->GetInput());
   m_ClosingProfile->SetInput(this->GetInput());
@@ -85,13 +84,12 @@ MorphologicalProfilesSegmentationFilter<TInputImage,TOutputImage,TInternalPrecis
   m_ClosingCharacteristicsFilter->SetInitialValue(m_ProfileStart);
   m_ClosingCharacteristicsFilter->SetStep(m_ProfileStep);
 
-  m_ClassificationFilter->SetSigma(m_Sigma);
-  m_ClassificationFilter->SetLabelSeparator(m_ProfileStart + m_ProfileSize * m_ProfileStep);
+  m_ClassificationFilter->GetModifiableFunctor().SetSigma(m_Sigma);
+  m_ClassificationFilter->GetModifiableFunctor().SetLabelSeparator(m_ProfileStart + m_ProfileSize * m_ProfileStep);
 
   m_ConnectedComponentsFilter->GraftOutput(this->GetOutput());
   m_ConnectedComponentsFilter->Update();
   this->GraftOutput(m_ConnectedComponentsFilter->GetOutput());
 }
-
 }
 #endif

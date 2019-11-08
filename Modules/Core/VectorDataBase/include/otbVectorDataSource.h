@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -42,7 +42,6 @@ template <class TOutputVectorData>
 class ITK_ABI_EXPORT VectorDataSource : public itk::ProcessObject
 {
 public:
-
   /** Standard class typedefs. */
   typedef VectorDataSource              Self;
   typedef itk::ProcessObject            Superclass;
@@ -56,8 +55,8 @@ public:
   itkTypeMacro(VectorDataSource, itk::ProcessObject);
 
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
-  typedef TOutputVectorData                   OutputVectorDataType;
-  typedef typename TOutputVectorData::Pointer OutputVectorDataPointer;
+  typedef TOutputVectorData                                  OutputVectorDataType;
+  typedef typename TOutputVectorData::Pointer                OutputVectorDataPointer;
 
   /** Graft the specified DataObject onto this ProcessObject's output.
    * This method grabs a handle to the specified DataObject's bulk
@@ -67,7 +66,7 @@ public:
    * a process object is implemented using a mini-pipeline which is
    * defined in its GenerateData() method.
    *  */
-  virtual void GraftOutput(itk::DataObject *output);
+  virtual void GraftOutput(itk::DataObject* output);
 
   /** Graft the specified data object onto this ProcessObject's idx'th
    * output. This is similar to the GraftOutput method except it
@@ -75,7 +74,7 @@ public:
    * must be a valid output number (less than
    * ProcessObject::GetNumberOfOutputs()). See the GraftOutput for
    * general usage information. */
-  virtual void GraftNthOutput(unsigned int idx, itk::DataObject *output);
+  virtual void GraftNthOutput(unsigned int idx, itk::DataObject* output);
 
   /** Overriding GetOutput() method */
   virtual OutputVectorDataType* GetOutput(void);
@@ -88,12 +87,11 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Ensure that the output vector data are cleared before processing */
-  virtual void  AllocateOutputs();
+  virtual void AllocateOutputs();
 
 private:
-  VectorDataSource(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  VectorDataSource(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

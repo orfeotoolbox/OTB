@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -18,9 +18,6 @@
  * limitations under the License.
  */
 
-
-#include "otbCommandLineArgumentParser.h"
-
 #include "otbImageToOSMVectorDataGenerator.h"
 
 #include "otbVectorDataFileWriter.h"
@@ -28,99 +25,67 @@
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"
 
+typedef otb::VectorImage<unsigned int, 2> ImageType;
 
-typedef otb::VectorImage<unsigned int, 2>               ImageType;
+typedef otb::ImageToOSMVectorDataGenerator<ImageType> FilterType;
+typedef FilterType::VectorDataType                    VectorDataType;
 
-typedef otb::ImageToOSMVectorDataGenerator<ImageType>  FilterType;
-typedef FilterType::VectorDataType                     VectorDataType;
+typedef otb::ImageFileReader<ImageType>           ReaderType;
+typedef otb::VectorDataFileWriter<VectorDataType> VectorDataFileWriterType;
 
-typedef otb::ImageFileReader<ImageType>             ReaderType;
-typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataFileWriterType;
-
-
-
-
-int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
+int otbImageToOSMVectorDataGenerator(int argc, char* argv[])
 {
-  // Parse command line parameters
-  typedef otb::CommandLineArgumentParser ParserType;
-  ParserType::Pointer parser = ParserType::New();
-  parser->AddInputImage();
-  parser->AddOption("--OutputVectorData","Output VectorData","-out", true);
-  parser->AddOption("--Key","Key to search in the XML OSM file","-key", 1, false);
-  parser->AddOption("--OSM","OSM XML file to be parsed","-osm", 1, false);
-
-  typedef otb::CommandLineArgumentParseResult ParserResultType;
-  ParserResultType::Pointer  parseResult = ParserResultType::New();
-
-  try
-    {
-    parser->ParseCommandLine(argc, argv, parseResult);
-    }
-  catch ( itk::ExceptionObject & )
-    {
+  if (argc != 5)
+  {
+    std::cerr << "Usage: otbImageToOSMVectorDataGenerator input osm_xml_file "
+                 "output key_name\n";
     return EXIT_FAILURE;
-    }
+  }
 
   // convenient typedefs to store keys and their value
-  typedef std::pair<std::string, std::string>      KeyValueType;
-  typedef std::vector<KeyValueType>                KeyValueListType;
+  typedef std::pair<std::string, std::string> KeyValueType;
+  typedef std::vector<KeyValueType> KeyValueListType;
 
   // Instantiate the image reader
-  ReaderType::Pointer      reader = ReaderType::New();
-  reader->SetFileName(parseResult->GetInputImage());
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
 
   // VectorData generator instantiation
   FilterType::Pointer vdgenerator = FilterType::New();
   vdgenerator->SetInput(reader->GetOutput());
-  if(parseResult->IsOptionPresent("--OSM"))
-    {
-    vdgenerator->SetUseUrl(false);
-    vdgenerator->SetFileName(parseResult->GetParameterString("--OSM"));
-    }
+  vdgenerator->SetUseUrl(false);
+  vdgenerator->SetFileName(argv[2]);
   vdgenerator->Update();
 
   // Split the classes to get classes and values
   KeyValueListType keyvalueList;
   for (unsigned int idClass = 0; idClass < 1; idClass++)
-    {
-    std::string key;
-    KeyValueType   currentkeyvalue;
-    std::string str = parseResult->GetParameterString("--Key");
+  {
+    std::string  key;
+    KeyValueType currentkeyvalue;
+    std::string  str = argv[4];
 
     // find the position of the separator ,
-    size_t  pos = str.find(",");
+    size_t pos = str.find(",");
 
     // split the string
-    currentkeyvalue.first = str.substr (0, pos);
-    if(pos != std::string::npos)
-      currentkeyvalue.second = str.substr (pos+1);
+    currentkeyvalue.first = str.substr(0, pos);
+    if (pos != std::string::npos)
+      currentkeyvalue.second = str.substr(pos + 1);
 
     keyvalueList.push_back(currentkeyvalue);
-    }
+  }
 
-  std::cout <<"Searching for class "<<keyvalueList[0].first
-            << " and subclass "<< keyvalueList[0].second  << std::endl;
+  std::cout << "Searching for class " << keyvalueList[0].first << " and subclass " << keyvalueList[0].second << std::endl;
 
 
   // Write the generated vector data
   VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
-  writer->SetFileName(parseResult->GetParameterString("--OutputVectorData"));
+  writer->SetFileName(argv[3]);
 
-  if(parseResult->IsOptionPresent("--Key"))
-    {
-    const VectorDataType *vd  =
-      vdgenerator->GetVectorDataByName(keyvalueList[0].first,
-                                       keyvalueList[0].second);
-    writer->SetInput(vd);
-    }
-  else
-    {
-    const VectorDataType *vd  =
-      vdgenerator->GetVectorDataByName("highway");
-    writer->SetInput(vd);
-    }
+  const VectorDataType* vd = vdgenerator->GetVectorDataByName(keyvalueList[0].first, keyvalueList[0].second);
+  writer->SetInput(vd);
 
   // trigger the execution
   writer->Update();

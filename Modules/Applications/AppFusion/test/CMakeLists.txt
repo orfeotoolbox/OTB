@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -26,7 +26,7 @@ otb_test_application(NAME apTvPrBundleToPerfectSensor
                              -inxs ${INPUTDATA}/QB_Toulouse_Ortho_XS_ROI_170x230.tif
                              -elev.dem ${INPUTDATA}/DEM/srtm_directory
                              -out ${TEMP}/apTvPrBundleToPerfectSensor.tif int16
-                     VALID  --compare-image ${EPSILON_7}
+                     VALID  --compare-image ${EPSILON_2}
                         ${BASELINE}/apTvPrBundleToPerfectSensor.tif
                         ${TEMP}/apTvPrBundleToPerfectSensor.tif)
                       
@@ -35,7 +35,7 @@ otb_test_application(NAME apTvPrBundleToPerfectSensor_phr
                      OPTIONS -inp  ${INPUTDATA}/phr_pan.tif
                              -inxs ${INPUTDATA}/phr_xs.tif
                              -out ${TEMP}/apTvPrBundleToPerfectSensorPHR.tif int16
-                     VALID  --compare-image ${EPSILON_7}
+                     VALID  --compare-image ${EPSILON_2}
                         ${BASELINE}/apTvPrBundleToPerfectSensorPHR.tif
                         ${TEMP}/apTvPrBundleToPerfectSensorPHR.tif)
 

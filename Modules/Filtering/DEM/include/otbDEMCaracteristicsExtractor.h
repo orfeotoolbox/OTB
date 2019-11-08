@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -54,8 +54,7 @@ namespace otb
  * \ingroup OTBDEM
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT DEMCaracteristicsExtractor :
-  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT DEMCaracteristicsExtractor : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Extract input and output images dimensions.*/
@@ -67,10 +66,10 @@ public:
   typedef TOutputImage OutputImageType;
 
   /** "typedef" for standard classes. */
-  typedef DEMCaracteristicsExtractor                            Self;
+  typedef DEMCaracteristicsExtractor Self;
   typedef itk::ImageToImageFilter<TInputImage, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>                               Pointer;
-  typedef itk::SmartPointer<const Self>                         ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** object factory method. */
   itkNewMacro(Self);
@@ -79,31 +78,29 @@ public:
   itkTypeMacro(DEMCaracteristicsExtractor, ImageToImageFilter);
 
   /** Supported images definition. */
-  typedef typename InputImageType::PixelType              InputPixelType;
-  typedef typename InputImageType::InternalPixelType      InputInternalPixelType;
-  typedef typename OutputImageType::PixelType             OutputPixelType;
-  typedef typename OutputImageType::InternalPixelType     OutputInternalPixelType;
+  typedef typename InputImageType::PixelType          InputPixelType;
+  typedef typename InputImageType::InternalPixelType  InputInternalPixelType;
+  typedef typename OutputImageType::PixelType         OutputPixelType;
+  typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
   typedef itk::CovariantVector<InputInternalPixelType, 2> VectorPixelType;
   typedef Image<VectorPixelType, 2>                       VectorGradientImageType;
 
   /** Filter definition */
-  typedef itk::GradientMagnitudeImageFilter<InputImageType,
-      OutputImageType>                 GradientMagnitudeFilterType;
-  typedef itk::GradientImageFilter<InputImageType, InputInternalPixelType,
-      InputInternalPixelType>                   GradientRecursiveGaussianImageFilterType;
+  typedef itk::GradientMagnitudeImageFilter<InputImageType, OutputImageType> GradientMagnitudeFilterType;
+  typedef itk::GradientImageFilter<InputImageType, InputInternalPixelType, InputInternalPixelType> GradientRecursiveGaussianImageFilterType;
   typedef typename GradientRecursiveGaussianImageFilterType::OutputImageType tutuType;
-  typedef itk::NthElementImageAdaptor<tutuType, InputInternalPixelType>      AdaptorType;
-  typedef itk::Atan2ImageFilter<AdaptorType, AdaptorType, OutputImageType>   Atan2FilterType;
-  typedef itk::AtanImageFilter<OutputImageType, OutputImageType>             AtanFilterType;
+  typedef itk::NthElementImageAdaptor<tutuType, InputInternalPixelType> AdaptorType;
+  typedef itk::Atan2ImageFilter<AdaptorType, AdaptorType, OutputImageType> Atan2FilterType;
+  typedef itk::AtanImageFilter<OutputImageType, OutputImageType> AtanFilterType;
 
   /** Operation Filters*/
-  typedef MultiplyByScalarImageFilter<OutputImageType, OutputImageType>               MultiplyByScalarImageFilterType;
+  typedef MultiplyByScalarImageFilter<OutputImageType, OutputImageType> MultiplyByScalarImageFilterType;
   typedef itk::MultiplyImageFilter<OutputImageType, OutputImageType, OutputImageType> MultiplyImageFilterType;
-  typedef itk::AcosImageFilter<OutputImageType, OutputImageType>                      AcosImageFilterType;
-  typedef itk::CosImageFilter<OutputImageType, OutputImageType>                       CosImageFilterType;
-  typedef itk::SinImageFilter<OutputImageType, OutputImageType>                       SinImageFilterType;
-  typedef itk::ShiftScaleImageFilter<OutputImageType, OutputImageType>                ShiftScaleImageFilterType;
-  typedef itk::AddImageFilter<OutputImageType, OutputImageType, OutputImageType>      AddImageFilterType;
+  typedef itk::AcosImageFilter<OutputImageType, OutputImageType>       AcosImageFilterType;
+  typedef itk::CosImageFilter<OutputImageType, OutputImageType>        CosImageFilterType;
+  typedef itk::SinImageFilter<OutputImageType, OutputImageType>        SinImageFilterType;
+  typedef itk::ShiftScaleImageFilter<OutputImageType, OutputImageType> ShiftScaleImageFilterType;
+  typedef itk::AddImageFilter<OutputImageType, OutputImageType, OutputImageType> AddImageFilterType;
 
   /** Get the slop output image */
   OutputImageType* GetSlopOutput()

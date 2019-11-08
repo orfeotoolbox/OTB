@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,18 +36,17 @@ namespace otb
  *
  * \ingroup OTBImageManipulation
  */
-template <typename TIteratorType,typename TMaskIteratorType = TIteratorType>
+template <typename TIteratorType, typename TMaskIteratorType = TIteratorType>
 class MaskedIteratorDecorator
 {
 public:
-  typedef MaskedIteratorDecorator
-    <TIteratorType,TMaskIteratorType>            Self;
-  typedef typename TMaskIteratorType::ImageType  MaskType;
-  typedef typename TIteratorType::ImageType      ImageType;
-  typedef typename ImageType::IndexType          IndexType;
-  typedef typename ImageType::RegionType         RegionType;
-  typedef typename ImageType::PixelType          PixelType;
-  typedef typename MaskType::PixelType           MaskPixelType;
+  typedef MaskedIteratorDecorator<TIteratorType, TMaskIteratorType> Self;
+  typedef typename TMaskIteratorType::ImageType MaskType;
+  typedef typename TIteratorType::ImageType     ImageType;
+  typedef typename ImageType::IndexType         IndexType;
+  typedef typename ImageType::RegionType        RegionType;
+  typedef typename ImageType::PixelType         PixelType;
+  typedef typename MaskType::PixelType          MaskPixelType;
 
   // Run-time type information
   itkTypeMacroNoParent(MaskedIteratorDecorator);
@@ -55,10 +54,8 @@ public:
   /** Constructors forward arguments to both iterators
    * Beware that the iterator is in a undefinite state after construction
    * GoToBegin() or GoToEnd() should be called */
-  MaskedIteratorDecorator(MaskType* mask, 
-                          ImageType* image,
-                          const RegionType& region);
-  
+  MaskedIteratorDecorator(MaskType* mask, ImageType* image, const RegionType& region);
+
   /** Current iterator index. Wraps the underlying iterator GetIndex() */
   IndexType GetIndex() const;
 
@@ -82,10 +79,10 @@ public:
 
   /** Move to the previous valid iteration position. That is the previous non
    * masked position of the image iterator */
-  Self & operator--();
+  Self& operator--();
 
   /** Set the image pixel value */
-  //void Set(const PixelType& value) const;
+  // void Set(const PixelType& value) const;
 
   /** Get the image pixel value */
   const PixelType& Value(void) const;
@@ -94,17 +91,17 @@ public:
   // So provide access to inner iterators:
 
   /** Underlying mask iterator accessor */
-  TMaskIteratorType&       GetMaskIterator();
+  TMaskIteratorType& GetMaskIterator();
 
   /** Underlying mask iterator const accessor */
   const TMaskIteratorType& GetMaskIterator() const;
 
   /** Underlying image iterator accessor */
-  TIteratorType&       GetImageIterator();
+  TIteratorType& GetImageIterator();
 
   /** Underlying image iterator const accessor */
   const TIteratorType& GetImageIterator() const;
-  
+
   const bool& HasMask() const;
 
 private:
@@ -115,16 +112,15 @@ private:
 private:
   // Inner iterators on the image and mask
   TMaskIteratorType m_ItMask;
-  TIteratorType m_ItImage;
-  
+  TIteratorType     m_ItImage;
+
   // flag to check if mask is present
   bool m_UseMask;
 
   // Unmasked bounds
   TMaskIteratorType m_StartMask;
-  TIteratorType m_StartImage;
+  TIteratorType     m_StartImage;
 };
-
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION

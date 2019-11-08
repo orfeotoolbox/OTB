@@ -13,8 +13,7 @@ Other binaries can be available as packages (OSGeo packages,
 Debian/Ubuntu packages, OpenSuse packages), however be advised that they
 may not be up-to-date nor delivered with full features. If you want to
 build from source or if we don’t provide packages for your system,
-information is available in the `Software Guide <http://orfeo-toolbox.org/SoftwareGuide/>`_,
-in the section "Building from Source".
+information is available in the :ref:`compilingfromsource` section.
 
 You can get latest binary packages from our `Download page <https://www.orfeo-toolbox.org/download>`__.
 
@@ -24,7 +23,7 @@ Windows
 .. include:: Installation_Windows.rst
 
 Linux
-------------
+-----
 
 .. include:: Installation_Linux.rst
 
@@ -153,3 +152,15 @@ following repositories with these command-lines:
     http://download.opensuse.org/repositories/home:/tzotsos/openSUSE_Tumbleweed/ tzotsos
 
 and then add the OTB packages as shown above.
+
+
+Archlinux
+~~~~~~~~~~
+
+Package is in AUR (Arch User Repository).
+You will then need to run (if you use yaourt, you could use trizen instead):
+
+::
+
+    yaourt -S orfeo-toolbox
+

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -68,19 +68,17 @@ namespace mvd
 
 /**
  */
-QMimeData*
-EncodeMimeData( QMimeData* mimeData, const QList< QTreeWidgetItem* >& items );
+QMimeData* EncodeMimeData(QMimeData* mimeData, const QList<QTreeWidgetItem*>& items);
 
 /**
  */
-int
-DecodeMimeData( QList< QTreeWidgetItem* >& items, const QMimeData* mimeData );
+int DecodeMimeData(QList<QTreeWidgetItem*>& items, const QMimeData* mimeData);
 
 //
 // Internal classes pre-declaration.
 namespace Ui
 {
-//class TreeWidget;
+// class TreeWidget;
 };
 
 
@@ -95,8 +93,7 @@ namespace Ui
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class OTBMonteverdiGUI_EXPORT TreeWidget :
-    public QTreeWidget
+class OTBMonteverdiGUI_EXPORT TreeWidget : public QTreeWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -105,8 +102,8 @@ class OTBMonteverdiGUI_EXPORT TreeWidget :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types and constants.
+  //
+  // Public types and constants.
 public:
   /**
    */
@@ -114,72 +111,68 @@ public:
 
   /**
    */
-  typedef QList< QTreeWidgetItem* > QTreeWidgetItemList;
+  typedef QList<QTreeWidgetItem*> QTreeWidgetItemList;
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  TreeWidget( QWidget* p =NULL );
+  TreeWidget(QWidget* p = NULL);
 
   /** \brief Destructor. */
   ~TreeWidget() override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /**
    */
-  void ItemMoved( QTreeWidgetItem * item, QTreeWidgetItem * target );
+  void ItemMoved(QTreeWidgetItem* item, QTreeWidgetItem* target);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   //
   // QTreeWidget overloads.
 
   QStringList mimeTypes() const override;
 
-  QMimeData* mimeData( const QList< QTreeWidgetItem* > items ) const override;
+  QMimeData* mimeData(const QList<QTreeWidgetItem*> items) const override;
 
-  void dragEnterEvent( QDragEnterEvent* event ) override;
-  void dragMoveEvent( QDragMoveEvent* event ) override;
-  void dragLeaveEvent( QDragLeaveEvent* event ) override;
-  void dropEvent( QDropEvent* event ) override;
+  void dragEnterEvent(QDragEnterEvent* event) override;
+  void dragMoveEvent(QDragMoveEvent* event) override;
+  void dragLeaveEvent(QDragLeaveEvent* event) override;
+  void dropEvent(QDropEvent* event) override;
 
   Qt::DropActions supportedDropActions() const override;
-  void startDrag( Qt::DropActions supportedActions ) override;
+  void startDrag(Qt::DropActions supportedActions) override;
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 
@@ -194,7 +187,7 @@ private slots:
 //
 // Declare Qt tree-widget item pointer types so they can be wrapped by
 // QVariant.
-Q_DECLARE_METATYPE( QTreeWidgetItem* );
+Q_DECLARE_METATYPE(QTreeWidgetItem*);
 
 
 #define TREE_WIDGET_ITEM_USE_STREAM_OPERATORS 1
@@ -203,13 +196,11 @@ Q_DECLARE_METATYPE( QTreeWidgetItem* );
 
 /**
  */
-QDataStream&
-operator << ( QDataStream& out, QTreeWidgetItem const * item );
+QDataStream& operator<<(QDataStream& out, QTreeWidgetItem const* item);
 
 /**
  */
-QDataStream&
-operator >>( QDataStream& in, QTreeWidgetItem * & item );
+QDataStream& operator>>(QDataStream& in, QTreeWidgetItem*& item);
 
 #endif // !DATASTREAM_USE_TEMPLATE_OPERATORS
 

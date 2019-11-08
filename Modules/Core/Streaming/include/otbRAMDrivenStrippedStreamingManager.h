@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,7 +40,7 @@ namespace otb
  *
  * \ingroup OTBStreaming
  */
-template<class TImage>
+template <class TImage>
 class ITK_EXPORT RAMDrivenStrippedStreamingManager : public StreamingManager<TImage>
 {
 public:
@@ -78,7 +78,7 @@ public:
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
-  void PrepareStreaming(itk::DataObject * input, const RegionType &region) override;
+  void PrepareStreaming(itk::DataObject* input, const RegionType& region) override;
 
 protected:
   RAMDrivenStrippedStreamingManager();
@@ -94,8 +94,8 @@ protected:
   double m_Bias;
 
 private:
-  RAMDrivenStrippedStreamingManager(const RAMDrivenStrippedStreamingManager &);
-  void operator =(const RAMDrivenStrippedStreamingManager&);
+  RAMDrivenStrippedStreamingManager(const RAMDrivenStrippedStreamingManager&);
+  void operator=(const RAMDrivenStrippedStreamingManager&);
 };
 
 } // End namespace otb
@@ -105,4 +105,3 @@ private:
 #endif
 
 #endif
-

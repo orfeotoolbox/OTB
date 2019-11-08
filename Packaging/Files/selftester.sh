@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -81,9 +81,9 @@ for name in $OTB_SO_LIBRARIES $OTB_DY_LIBRARIES $OTB_EXE; do
       echo_and_report "$LDD_ERRORS"
     fi
   elif echo "$F_OUTPUT" | grep -q -i -e ': Mach-O .*shared library' -e ': Mach-O .*bundle' -e ': Mach-O .*executable'; then
-    DL_ERRORS=$(dltest "$name" | grep -i 'ERROR')
+    DL_ERRORS=$(./tools/otb_loader "$name")
     if [ -n "$DL_ERRORS" ]; then
-      echo_and_report "dltest $name"
+      echo_and_report "otb_loader $name"
       echo_and_report "$DL_ERRORS"
     fi
   elif echo "$F_OUTPUT" | grep -q ': symbolic link'; then
@@ -114,7 +114,7 @@ for app in $OTB_APPS; do
       
   else
     CLI_OUTPUT=$("bin/otbcli_$app" -help 2>&1)
-    CLI_FILTER=$(echo "${CLI_OUTPUT}"| tr '\n' ' ' | grep -E "This is the*.*$app*.*application, version .* Parameters: .* Examples:.*")
+    CLI_FILTER=$(echo "${CLI_OUTPUT}"| tr '\n' ' ' | grep -E "This is the $app application, version .* Parameters: .* Examples:.*")
     CLI_FILTER2=$(echo "$CLI_FILTER" | grep -v 'FATAL')
     if [ -z "$CLI_FILTER2" ]; then
       echo_and_report "ERROR: bin/otbcli_$app\n$CLI_OUTPUT"
@@ -159,7 +159,7 @@ for app in $OTB_APPS; do
 done
 
 # test python wrapping
-PY_OUTPUT=$(python -c 'import otbApplication' 2>&1)
+PY_OUTPUT=$(python3 -c 'import otbApplication' 2>&1)
 if [ -n "$PY_OUTPUT" ]; then
   echo_and_report "ERROR: python wrapping test failed :"
   echo_and_report "$PY_OUTPUT"

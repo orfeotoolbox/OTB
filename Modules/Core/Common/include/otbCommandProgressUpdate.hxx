@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,36 +27,35 @@ namespace otb
 {
 
 template <class TFilter>
-void CommandProgressUpdate<TFilter>::Execute(itk::Object *caller, const itk::EventObject& event)
+void CommandProgressUpdate<TFilter>::Execute(itk::Object* caller, const itk::EventObject& event)
 {
-  Execute((const itk::Object *) caller, event);
+  Execute((const itk::Object*)caller, event);
 }
 
 template <class TFilter>
-void CommandProgressUpdate<TFilter>::Execute(const itk::Object * object, const itk::EventObject& event)
+void CommandProgressUpdate<TFilter>::Execute(const itk::Object* object, const itk::EventObject& event)
 {
-  FilterPointer filter =
-    dynamic_cast<FilterPointer>(object);
+  FilterPointer filter = dynamic_cast<FilterPointer>(object);
   if (typeid(event) != typeid(itk::ProgressEvent))
-    {
+  {
     return;
-    }
+  }
 
   int factor = 160;
 
   int val = int(filter->GetProgress() * factor);
 
   if ((val % 2) == 0)
-    {
+  {
     std::cout << "|";
     std::cout.flush();
-    }
+  }
 
   if (val == factor)
-    {
+  {
     std::cout << ">";
     std::cout.flush();
-    }
+  }
 }
 
 } // end namespace otb

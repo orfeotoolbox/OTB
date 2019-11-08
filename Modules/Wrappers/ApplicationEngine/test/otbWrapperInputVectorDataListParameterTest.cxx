@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,20 +19,19 @@
  */
 
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 #include "otbWrapperInputVectorDataListParameter.h"
 
 
-
 int otbWrapperInputVectorDataListParameterTest1(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::Wrapper::InputVectorDataListParameter ParameterType;
-  ParameterType::Pointer param = ParameterType::New();
+  ParameterType::Pointer                             param = ParameterType::New();
 
   const std::string inputFilename1 = argv[1];
-  const std::string inputFilename2  = argv[2];
+  const std::string inputFilename2 = argv[2];
 
   param->AddFromFileName(inputFilename1);
   param->AddFromFileName(inputFilename2);

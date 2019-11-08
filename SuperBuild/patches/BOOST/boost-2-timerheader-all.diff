@@ -1,0 +1,29 @@
+--- boost_1_69_0.orig/libs/test/build/Jamfile.v2
++++ boost_1_69_0/libs/test/build/Jamfile.v2
+@@ -7,7 +7,7 @@
+ import os ;
+ 
+ import ../../predef/check/predef
+-    : check 
++    : check
+     : predef-check ;
+ 
+ project boost/test
+@@ -25,17 +25,10 @@ project boost/test
+                    <warnings>all
+                    # <warnings-as-errors>on
+ 
+-                   # adding a dependency on boost/timer as the header are needed, and the junction needs
+-                   # to be there in order to build the library.
+-                   <library>/boost/timer//boost_timer
+     : usage-requirements
+                    <define>BOOST_TEST_NO_AUTO_LINK=1
+                    # Disable Warning about boost::noncopyable not being exported
+                    <link>shared,<toolset>msvc:<cxxflags>-wd4275
+-
+-                   # Adding a dependency on boost/timer as the headers need to be there in case of the
+-                   # header-only usage variant
+-                   <use>/boost/timer//boost_timer
+     ;
+ 
+ PRG_EXEC_MON_SOURCES =

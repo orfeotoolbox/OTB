@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,9 +32,8 @@
 namespace otb
 {
 
-template<class TInputImage>
-PersistentInnerProductVectorImageFilter<TInputImage>
-::PersistentInnerProductVectorImageFilter()
+template <class TInputImage>
+PersistentInnerProductVectorImageFilter<TInputImage>::PersistentInnerProductVectorImageFilter()
 {
   // first output is a copy of the image, DataObject created by
   // superclass
@@ -52,86 +51,75 @@ PersistentInnerProductVectorImageFilter<TInputImage>
   m_CenterData = true;
 }
 
-template<class TInputImage>
-itk::DataObject::Pointer
-PersistentInnerProductVectorImageFilter<TInputImage>
-::MakeOutput(DataObjectPointerArraySizeType output)
+template <class TInputImage>
+itk::DataObject::Pointer PersistentInnerProductVectorImageFilter<TInputImage>::MakeOutput(DataObjectPointerArraySizeType output)
 {
   switch (output)
-    {
-    case 0:
-      return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-      break;
-    case 1:
-      return static_cast<itk::DataObject*>(MatrixObjectType::New().GetPointer());
-      break;
-    default:
-      // might as well make an image
-      return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
-      break;
-    }
+  {
+  case 0:
+    return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+    break;
+  case 1:
+    return static_cast<itk::DataObject*>(MatrixObjectType::New().GetPointer());
+    break;
+  default:
+    // might as well make an image
+    return static_cast<itk::DataObject*>(TInputImage::New().GetPointer());
+    break;
+  }
 }
 
-template<class TInputImage>
-typename PersistentInnerProductVectorImageFilter<TInputImage>::MatrixObjectType*
-PersistentInnerProductVectorImageFilter<TInputImage>
-::GetInnerProductOutput()
+template <class TInputImage>
+typename PersistentInnerProductVectorImageFilter<TInputImage>::MatrixObjectType* PersistentInnerProductVectorImageFilter<TInputImage>::GetInnerProductOutput()
 {
   return static_cast<MatrixObjectType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
-template<class TInputImage>
+template <class TInputImage>
 const typename PersistentInnerProductVectorImageFilter<TInputImage>::MatrixObjectType*
-PersistentInnerProductVectorImageFilter<TInputImage>
-::GetInnerProductOutput() const
+PersistentInnerProductVectorImageFilter<TInputImage>::GetInnerProductOutput() const
 {
   return static_cast<const MatrixObjectType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
-template<class TInputImage>
-void
-PersistentInnerProductVectorImageFilter<TInputImage>
-::GenerateOutputInformation()
+template <class TInputImage>
+void PersistentInnerProductVectorImageFilter<TInputImage>::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
   if (this->GetInput())
-    {
+  {
     this->GetOutput()->CopyInformation(this->GetInput());
     this->GetOutput()->SetLargestPossibleRegion(this->GetInput()->GetLargestPossibleRegion());
 
     if (this->GetOutput()->GetRequestedRegion().GetNumberOfPixels() == 0)
-      {
+    {
       this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
-      }
     }
+  }
 }
 
-template<class TInputImage>
-void
-PersistentInnerProductVectorImageFilter<TInputImage>
-::AllocateOutputs()
+template <class TInputImage>
+void PersistentInnerProductVectorImageFilter<TInputImage>::AllocateOutputs()
 {
   // This is commented to prevent the streaming of the whole image for the first stream strip
   // It shall not cause any problem because the output image of this filter is not intended to be used.
-  //InputImagePointer image = const_cast< TInputImage * >( this->GetInput() );
-  //this->GraftOutput( image );
+  // InputImagePointer image = const_cast< TInputImage * >( this->GetInput() );
+  // this->GraftOutput( image );
   // Nothing that needs to be allocated for the remaining outputs
 }
 
-template<class TInputImage>
-void
-PersistentInnerProductVectorImageFilter<TInputImage>
-::Reset()
+template <class TInputImage>
+void PersistentInnerProductVectorImageFilter<TInputImage>::Reset()
 {
-  TInputImage * inputPtr = const_cast<TInputImage *>(this->GetInput());
+  TInputImage* inputPtr = const_cast<TInputImage*>(this->GetInput());
   inputPtr->UpdateOutputInformation();
 
   if (this->GetOutput()->GetRequestedRegion().GetNumberOfPixels() == 0)
-    {
+  {
     this->GetOutput()->SetRequestedRegion(this->GetOutput()->GetLargestPossibleRegion());
-    }
+  }
 
-  unsigned int numberOfThreads = this->GetNumberOfThreads();
+  unsigned int numberOfThreads        = this->GetNumberOfThreads();
   unsigned int numberOfTrainingImages = inputPtr->GetNumberOfComponentsPerPixel();
   // Set the number of training image
   MatrixType tempMatrix;
@@ -143,124 +131,115 @@ PersistentInnerProductVectorImageFilter<TInputImage>
   initMatrix.set_size(numberOfTrainingImages, numberOfTrainingImages);
   initMatrix.fill(0);
   this->GetInnerProductOutput()->Set(initMatrix);
-
 }
 
-template<class TInputImage>
-void
-PersistentInnerProductVectorImageFilter<TInputImage>
-::Synthetize()
+template <class TInputImage>
+void PersistentInnerProductVectorImageFilter<TInputImage>::Synthetize()
 {
   // Compute Inner product Matrix
-  TInputImage * inputPtr = const_cast<TInputImage *>(this->GetInput());
-  unsigned int  numberOfTrainingImages = inputPtr->GetNumberOfComponentsPerPixel();
-  unsigned int  numberOfThreads = this->GetNumberOfThreads();
-  MatrixType    innerProduct;
+  TInputImage* inputPtr               = const_cast<TInputImage*>(this->GetInput());
+  unsigned int numberOfTrainingImages = inputPtr->GetNumberOfComponentsPerPixel();
+  unsigned int numberOfThreads        = this->GetNumberOfThreads();
+  MatrixType   innerProduct;
   innerProduct.set_size(numberOfTrainingImages, numberOfTrainingImages);
   innerProduct.fill(0);
 
   // Concatenate threaded matrix
   for (unsigned int thread = 0; thread < numberOfThreads; thread++)
-    {
+  {
     innerProduct += m_ThreadInnerProduct[thread];
-    }
+  }
 
   //---------------------------------------------------------------------
   // Fill the rest of the inner product matrix and make it symmetric
   //---------------------------------------------------------------------
   for (unsigned int band_x = 0; band_x < (numberOfTrainingImages - 1); ++band_x)
-    {
+  {
     for (unsigned int band_y = band_x + 1; band_y < numberOfTrainingImages; ++band_y)
-      {
+    {
       innerProduct[band_x][band_y] = innerProduct[band_y][band_x];
-      }  // end band_y loop
-    } // end band_x loop
+    } // end band_y loop
+  }   // end band_x loop
 
   if ((numberOfTrainingImages - 1) != 0)
-    {
+  {
     innerProduct /= (numberOfTrainingImages - 1);
-    }
+  }
   else
-    {
+  {
     innerProduct.fill(0);
-    }
+  }
 
   // Set the output
   this->GetInnerProductOutput()->Set(innerProduct);
 }
 
-template<class TInputImage>
-void
-PersistentInnerProductVectorImageFilter<TInputImage>
-::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
+template <class TInputImage>
+void PersistentInnerProductVectorImageFilter<TInputImage>::ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId)
 {
   /**
    * Grab the input
    */
-  InputImagePointer inputPtr = const_cast<TInputImage *>(this->GetInput());
+  InputImagePointer inputPtr = const_cast<TInputImage*>(this->GetInput());
   // support progress methods/callbacks
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
-  unsigned int numberOfTrainingImages = inputPtr->GetNumberOfComponentsPerPixel();
+  unsigned int          numberOfTrainingImages = inputPtr->GetNumberOfComponentsPerPixel();
 
   itk::ImageRegionConstIterator<TInputImage> it(inputPtr, outputRegionForThread);
   if (m_CenterData == true)
-    {
+  {
     it.GoToBegin();
     // do the work
     while (!it.IsAtEnd())
-      {
+    {
       PixelType vectorValue = it.Get();
-      double mean(0.);
+      double    mean(0.);
       for (unsigned int i = 0; i < vectorValue.GetSize(); ++i)
-        {
+      {
         mean += static_cast<double>(vectorValue[i]);
-        }
+      }
       mean /= static_cast<double>(vectorValue.GetSize());
 
       // Matrix iteration
       for (unsigned int band_x = 0; band_x < numberOfTrainingImages; ++band_x)
-        {
+      {
         for (unsigned int band_y = 0; band_y <= band_x; ++band_y)
-          {
+        {
           m_ThreadInnerProduct[threadId][band_x][band_y] +=
-            (static_cast<double>(vectorValue[band_x]) - mean) * (static_cast<double>(vectorValue[band_y]) - mean);
-          }   // end: band_y loop
-        } // end: band_x loop
+              (static_cast<double>(vectorValue[band_x]) - mean) * (static_cast<double>(vectorValue[band_y]) - mean);
+        } // end: band_y loop
+      }   // end: band_x loop
       ++it;
       progress.CompletedPixel();
-      } // end: looping through the image
-    }
+    } // end: looping through the image
+  }
   else
-    {
+  {
     it.GoToBegin();
     // do the work
     while (!it.IsAtEnd())
-      {
+    {
       PixelType vectorValue = it.Get();
       // Matrix iteration
       for (unsigned int band_x = 0; band_x < numberOfTrainingImages; ++band_x)
-        {
+      {
         for (unsigned int band_y = 0; band_y <= band_x; ++band_y)
-          {
-          m_ThreadInnerProduct[threadId][band_x][band_y] +=
-            (static_cast<double>(vectorValue[band_x])) * (static_cast<double>(vectorValue[band_y]));
-          }   // end: band_y loop
-        } // end: band_x loop
+        {
+          m_ThreadInnerProduct[threadId][band_x][band_y] += (static_cast<double>(vectorValue[band_x])) * (static_cast<double>(vectorValue[band_y]));
+        } // end: band_y loop
+      }   // end: band_x loop
       ++it;
       progress.CompletedPixel();
-      } // end: looping through the image
-    }
+    } // end: looping through the image
+  }
 }
 
 template <class TImage>
-void
-PersistentInnerProductVectorImageFilter<TImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void PersistentInnerProductVectorImageFilter<TImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "m_CenterData: " << m_CenterData << std::endl;
   os << indent << "InnerProduct: " << this->GetInnerProductOutput()->Get() << std::endl;
-
 }
 
 } // end namespace otb

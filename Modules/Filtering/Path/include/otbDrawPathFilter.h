@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -47,10 +47,10 @@ class ITK_EXPORT DrawPathFilter : public itk::ImageAndPathToImageFilter<TInputIm
 {
 public:
   /** Standard class typedefs. */
-  typedef DrawPathFilter                                                        Self;
+  typedef DrawPathFilter Self;
   typedef itk::ImageAndPathToImageFilter<TInputImage, TInputPath, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                                               Pointer;
-  typedef itk::SmartPointer<const Self>                                         ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -59,19 +59,19 @@ public:
   itkTypeMacro(DrawPathFilter, itk::ImageAndPathToImageFilter);
 
   /** Some convenient typedefs. */
-  typedef          TInputImage                   InputImageType;
+  typedef TInputImage                            InputImageType;
   typedef typename InputImageType::Pointer       InputImagePointer;
   typedef typename InputImageType::ConstPointer  InputImageConstPointer;
   typedef typename InputImageType::RegionType    InputImageRegionType;
   typedef typename InputImageType::PixelType     InputImagePixelType;
-  typedef          TInputPath                    InputPathType;
+  typedef TInputPath                             InputPathType;
   typedef typename InputPathType::Pointer        InputPathPointer;
   typedef typename InputPathType::ConstPointer   InputPathConstPointer;
   typedef typename InputPathType::InputType      InputPathInputType;
   typedef typename InputPathType::OutputType     InputPathOutputType;
   typedef typename InputPathType::IndexType      InputPathIndexType;
   typedef typename InputPathType::OffsetType     InputPathOffsetType;
-  typedef          TOutputImage                  OutputImageType;
+  typedef TOutputImage                           OutputImageType;
   typedef typename OutputImageType::Pointer      OutputImagePointer;
   typedef typename OutputImageType::ConstPointer OutputImageConstPointer;
 
@@ -84,20 +84,22 @@ public:
 
   /** Set/Get the path input of this process object.
    Note: these methods are adding to get the proper name */
-  void SetInputPath(const TInputPath * path);
+  void SetInputPath(const TInputPath* path);
 
-  const TInputPath * GetInputPath(void);
+  const TInputPath* GetInputPath(void);
 
 protected:
   DrawPathFilter();
-  ~DrawPathFilter() override {}
+  ~DrawPathFilter() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   void GenerateData() override;
 
 private:
-  DrawPathFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  DrawPathFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   OutputImagePixelType m_Value;
 };

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,7 +26,6 @@
 // gets integrated into the main directories.
 #include "itkConfigure.h"
 
-#include "itkUnaryFunctorImageFilter.h"
 #include "itkMorphologyImageFilter.h"
 #include "itkBinaryBallStructuringElement.h"
 
@@ -63,35 +62,29 @@ namespace otb
  *
  * \ingroup OTBMajorityVoting
  */
-template<
-         class TInputImage,
-         class TOutputImage=TInputImage,
-         class TKernel=typename itk::BinaryBallStructuringElement<typename TInputImage::PixelType, TInputImage::ImageDimension>
-         >
-class ITK_EXPORT NeighborhoodMajorityVotingImageFilter :
-    public itk::MorphologyImageFilter<TInputImage, TOutputImage, TKernel>
+template <class TInputImage, class TOutputImage = TInputImage,
+          class TKernel = typename itk::BinaryBallStructuringElement<typename TInputImage::PixelType, TInputImage::ImageDimension>>
+class ITK_EXPORT NeighborhoodMajorityVotingImageFilter : public itk::MorphologyImageFilter<TInputImage, TOutputImage, TKernel>
 {
 public:
   /** Standard class typedefs. */
   typedef NeighborhoodMajorityVotingImageFilter Self;
-  typedef itk::MorphologyImageFilter<TInputImage, TOutputImage, TKernel>
-                                     Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef itk::MorphologyImageFilter<TInputImage, TOutputImage, TKernel> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard New method. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(NeighborhoodMajorityVotingImageFilter,
-      itk::MorphologyImageFilter);
+  itkTypeMacro(NeighborhoodMajorityVotingImageFilter, itk::MorphologyImageFilter);
 
   /** Declaration of pixel type. */
   typedef typename Superclass::PixelType PixelType;
 
 
   /** Kernel (structuring element) iterator. */
-  typedef typename Superclass::KernelIteratorType  KernelIteratorType;
+  typedef typename Superclass::KernelIteratorType KernelIteratorType;
 
   /** Neighborhood iterator type. */
   typedef typename Superclass::NeighborhoodIteratorType NeighborhoodIteratorType;
@@ -104,62 +97,54 @@ public:
   typedef typename Superclass::DefaultBoundaryConditionType DefaultBoundaryConditionType;
 
   /** ImageDimension constants */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
-  itkStaticConstMacro(KernelDimension, unsigned int,
-                      TKernel::NeighborhoodDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
+  itkStaticConstMacro(KernelDimension, unsigned int, TKernel::NeighborhoodDimension);
 
 
   /** Type of the pixels in the Kernel. */
-  typedef typename TKernel::PixelType            KernelPixelType;
+  typedef typename TKernel::PixelType KernelPixelType;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */
-  itkConceptMacro(InputConvertibleToOutputCheck,
-    (itk::Concept::Convertible<PixelType, typename TOutputImage::PixelType>));
-  itkConceptMacro(SameDimensionCheck1,
-     (itk::Concept::SameDimension<InputImageDimension, OutputImageDimension>));
-  itkConceptMacro(SameDimensionCheck2,
-    (itk::Concept::SameDimension<InputImageDimension, KernelDimension>));
-  itkConceptMacro(InputGreaterThanComparableCheck,
-    (itk::Concept::GreaterThanComparable<PixelType>));
-  itkConceptMacro(KernelGreaterThanComparableCheck,
-    (itk::Concept::GreaterThanComparable<KernelPixelType>));
-  /** End concept checking */
+  itkConceptMacro(InputConvertibleToOutputCheck, (itk::Concept::Convertible<PixelType, typename TOutputImage::PixelType>));
+  itkConceptMacro(SameDimensionCheck1, (itk::Concept::SameDimension<InputImageDimension, OutputImageDimension>));
+  itkConceptMacro(SameDimensionCheck2, (itk::Concept::SameDimension<InputImageDimension, KernelDimension>));
+  itkConceptMacro(InputGreaterThanComparableCheck, (itk::Concept::GreaterThanComparable<PixelType>));
+  itkConceptMacro(KernelGreaterThanComparableCheck, (itk::Concept::GreaterThanComparable<KernelPixelType>));
+/** End concept checking */
 #endif
 
 
-  //Creates a SetLabelForNoDataPixels method
+  // Creates a SetLabelForNoDataPixels method
   virtual void SetLabelForNoDataPixels(const PixelType _arg)
   {
-   itkDebugMacro("setting LabelForNoDataPixels to " << _arg);
-   if (this->m_LabelForNoDataPixels != _arg)
-   {
-     this->m_LabelForNoDataPixels = _arg;
+    itkDebugMacro("setting LabelForNoDataPixels to " << _arg);
+    if (this->m_LabelForNoDataPixels != _arg)
+    {
+      this->m_LabelForNoDataPixels = _arg;
 
-     m_MajorityVotingBoundaryCondition.SetConstant(m_LabelForNoDataPixels);
-     this->OverrideBoundaryCondition(&m_MajorityVotingBoundaryCondition);
+      m_MajorityVotingBoundaryCondition.SetConstant(m_LabelForNoDataPixels);
+      this->OverrideBoundaryCondition(&m_MajorityVotingBoundaryCondition);
 
-     this->Modified();
-   }
+      this->Modified();
+    }
   }
 
-  //Creates a SetLabelForUndecidedPixels method
+  // Creates a SetLabelForUndecidedPixels method
   itkSetMacro(LabelForUndecidedPixels, PixelType);
 
-  //Creates a SetKeepOriginalLabelBool method
+  // Creates a SetKeepOriginalLabelBool method
   itkSetMacro(KeepOriginalLabelBool, bool);
 
-  //Process only isolated pixels
+  // Process only isolated pixels
   itkSetMacro(OnlyIsolatedPixels, bool);
   itkSetMacro(IsolatedThreshold, unsigned int);
 
 
 protected:
   NeighborhoodMajorityVotingImageFilter();
-  ~NeighborhoodMajorityVotingImageFilter() override {};
+  ~NeighborhoodMajorityVotingImageFilter() override{};
 
   /** Evaluate image neighborhood with kernel to find the new value
    * for the center pixel value
@@ -167,19 +152,17 @@ protected:
    * It will return the more representative label value of the labeled image pixels whose corresponding
    * element in the structuring element is positive. This version of
    * Evaluate is used for non-boundary pixels. */
-  PixelType Evaluate(const NeighborhoodIteratorType &nit,
-                     const KernelIteratorType kernelBegin,
-                     const KernelIteratorType kernelEnd) override;
+  PixelType Evaluate(const NeighborhoodIteratorType& nit, const KernelIteratorType kernelBegin, const KernelIteratorType kernelEnd) override;
 
   void GenerateOutputInformation() override;
 
 
-  //Type to store the useful information from the label histogram  
+  // Type to store the useful information from the label histogram
   struct HistoSummary
   {
     unsigned int freqCenterLabel;
-    PixelType majorityLabel;
-    bool majorityUnique;
+    PixelType    majorityLabel;
+    bool         majorityUnique;
   };
 
   struct CompareHistoFequencies
@@ -191,11 +174,10 @@ protected:
     }
   };
 
-  //Get a histogram of frequencies of labels with the 2 highest
+  // Get a histogram of frequencies of labels with the 2 highest
   // frequencies sorted in decreasing order and return the frequency
   // of the label of the center pixel
-  const HistoSummary ComputeNeighborhoodHistogramSummary(const NeighborhoodIteratorType &nit,
-                                                         const KernelIteratorType kernelBegin,
+  const HistoSummary ComputeNeighborhoodHistogramSummary(const NeighborhoodIteratorType& nit, const KernelIteratorType kernelBegin,
                                                          const KernelIteratorType kernelEnd) const;
 
 private:
@@ -207,12 +189,12 @@ private:
 
   PixelType m_LabelForNoDataPixels;
   PixelType m_LabelForUndecidedPixels;
-  bool m_KeepOriginalLabelBool;
+  bool      m_KeepOriginalLabelBool;
 
-  //Choose to filter only isolated pixels
+  // Choose to filter only isolated pixels
   bool m_OnlyIsolatedPixels;
-  //The center pixel is isolated if there are fewer neighbours than
-  //this threshold with the same label
+  // The center pixel is isolated if there are fewer neighbours than
+  // this threshold with the same label
   unsigned int m_IsolatedThreshold;
 
 }; // end of class

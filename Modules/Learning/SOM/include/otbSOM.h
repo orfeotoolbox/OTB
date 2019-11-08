@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -55,11 +55,9 @@ namespace otb
  *
  * \ingroup OTBSOM
  */
-template <class TListSample, class TMap,
-    class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
-    class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
-class ITK_EXPORT SOM
-  : public itk::ImageSource<TMap>
+template <class TListSample, class TMap, class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
+          class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
+class ITK_EXPORT SOM : public itk::ImageSource<TMap>
 {
 public:
   /** Standard typedefs */
@@ -147,8 +145,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SOM(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SOM(const Self&) = delete;
+  void operator=(const Self&) = delete;
   /** Size of the neurons map */
   SizeType m_MapSize;
   /** Number of iterations */
@@ -173,7 +171,6 @@ private:
   SOMLearningBehaviorFunctorType m_BetaFunctor;
   /** Behavior of the Neighborhood extent */
   SOMNeighborhoodBehaviorFunctorType m_NeighborhoodSizeFunctor;
-
 };
 } // end namespace otb
 

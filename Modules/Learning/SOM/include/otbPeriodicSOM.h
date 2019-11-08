@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -56,18 +56,14 @@ namespace otb
  *
  * \ingroup OTBSOM
  */
-template <class TListSample, class TMap,
-    class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
-    class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
-class ITK_EXPORT PeriodicSOM
-  : public SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
+template <class TListSample, class TMap, class TSOMLearningBehaviorFunctor = Functor::CzihoSOMLearningBehaviorFunctor,
+          class TSOMNeighborhoodBehaviorFunctor = Functor::CzihoSOMNeighborhoodBehaviorFunctor>
+class ITK_EXPORT PeriodicSOM : public SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor>
 {
 public:
   /** Standard typedefs */
   typedef PeriodicSOM Self;
-  typedef SOM<TListSample, TMap,
-      TSOMLearningBehaviorFunctor,
-      TSOMNeighborhoodBehaviorFunctor> Superclass;
+  typedef SOM<TListSample, TMap, TSOMLearningBehaviorFunctor, TSOMNeighborhoodBehaviorFunctor> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -89,13 +85,17 @@ public:
 
 protected:
   /** Constructor */
-  PeriodicSOM() {}
+  PeriodicSOM()
+  {
+  }
   /** Destructor */
-  ~PeriodicSOM() override {}
+  ~PeriodicSOM() override
+  {
+  }
   /** Output information redefinition */
   void GenerateOutputInformation() override
   {
-    Superclass::GenerateOutputInformation ();
+    Superclass::GenerateOutputInformation();
   }
   /** Output allocation redefinition */
   void AllocateOutputs() override
@@ -128,8 +128,8 @@ protected:
   }
 
 private:
-  PeriodicSOM(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PeriodicSOM(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 }; // end of class
 

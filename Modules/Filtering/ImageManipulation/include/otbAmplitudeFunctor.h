@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -70,17 +70,21 @@ public:
   }
 
   /** Destructor */
-  ~AmplitudeFunctor() override {}
+  ~AmplitudeFunctor() override
+  {
+  }
 
-  const char *GetDescription() const
-  {return "Amplitude"; }
+  const char* GetDescription() const
+  {
+    return "Amplitude";
+  }
 
   unsigned int GetOutputSize() const override
   {
     return 1;
   }
 
-  OutputPixelType operator ()(const VectorPixelType& inPixel) const override
+  OutputPixelType operator()(const VectorPixelType& inPixel) const override
   {
     OutputPixelType outPixel;
     outPixel.SetSize(1);
@@ -91,13 +95,13 @@ public:
     return outPixel;
   }
 
-  OutputPixelType operator ()(ScalarType) const override
+  OutputPixelType operator()(ScalarType) const override
   {
-    //FIXME we don't handle the std::complex<> yet
+    // FIXME we don't handle the std::complex<> yet
     itkExceptionMacro(<< "Can't compute amplitude from a scalar value");
   }
 
-  OutputPixelType operator ()(const RGBPixelType& inPixel) const override
+  OutputPixelType operator()(const RGBPixelType& inPixel) const override
   {
     OutputPixelType outPixel;
     outPixel.SetSize(1);
@@ -110,7 +114,7 @@ public:
     return outPixel;
   }
 
-  OutputPixelType operator ()(const RGBAPixelType& inPixel) const override
+  OutputPixelType operator()(const RGBAPixelType& inPixel) const override
   {
     OutputPixelType outPixel;
     outPixel.SetSize(1);
@@ -128,7 +132,6 @@ private:
   {
     return std::sqrt(a * a + b * b);
   }
-
 };
 }
 }

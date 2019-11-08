@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -48,13 +48,13 @@ class TrainImagesBase : public CompositeApplication
 {
 public:
   /** Standard class typedefs. */
-  typedef TrainImagesBase Self;
-  typedef CompositeApplication Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef TrainImagesBase               Self;
+  typedef CompositeApplication          Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
-  itkTypeMacro( TrainImagesBase, Superclass )
+  itkTypeMacro(TrainImagesBase, Superclass);
 
   /** filters typedefs*/
   typedef otb::OGRDataToSamplePositionFilter<FloatVectorImageType, UInt8ImageType, otb::PeriodicSampler> PeriodicSamplerType;
@@ -62,11 +62,7 @@ public:
   typedef otb::SamplingRateCalculator::MapRateType MapRateType;
 
 protected:
-
-  typedef enum
-  {
-    CLASS, GEOMETRIC
-  } SamplingStrategy;
+  typedef enum { CLASS, GEOMETRIC } SamplingStrategy;
   struct SamplingRates;
   class TrainFileNamesHandler;
 
@@ -92,8 +88,8 @@ protected:
    * \param vectorFileNames list of input vector file names
    * \param statisticsFileNames list of out
    */
-  void ComputePolygonStatistics(FloatVectorImageListType *imageList, const std::vector<std::string> &vectorFileNames,
-                                const std::vector<std::string> &statisticsFileNames);
+  void ComputePolygonStatistics(FloatVectorImageListType* imageList, const std::vector<std::string>& vectorFileNames,
+                                const std::vector<std::string>& statisticsFileNames);
 
   /**
    * Compute final maximum training and validation
@@ -110,17 +106,15 @@ protected:
    * \param maximum final maximum value computed by ComputeFinalMaximumSamplingRates
    * \sa ComputeFinalMaximumSamplingRates
    */
-  void ComputeSamplingRate(const std::vector<std::string> &statisticsFileNames,
-                           const std::string &ratesFileName,
-                           long maximum);
+  void ComputeSamplingRate(const std::vector<std::string>& statisticsFileNames, const std::string& ratesFileName, long maximum);
   /**
    * Train the model with training and optional validation data samples
    * \param imageList list of input images
    * \param sampleTrainFileNames files names of the training samples
    * \param sampleValidationFileNames file names of the validation sample
    */
-  void TrainModel(FloatVectorImageListType *imageList, const std::vector<std::string> &sampleTrainFileNames,
-                  const std::vector<std::string> &sampleValidationFileNames);
+  void TrainModel(FloatVectorImageListType* imageList, const std::vector<std::string>& sampleTrainFileNames,
+                  const std::vector<std::string>& sampleValidationFileNames);
 
   /**
    * Select samples by class or by geographic strategy
@@ -131,9 +125,8 @@ protected:
    * \param ratesFileName
    * \param strategy
    */
-  void SelectAndExtractSamples(FloatVectorImageType *image, std::string vectorFileName, std::string sampleFileName,
-                               std::string statisticsFileName, std::string ratesFileName, SamplingStrategy strategy,
-                               std::string selectedField = "");
+  void SelectAndExtractSamples(FloatVectorImageType* image, std::string vectorFileName, std::string sampleFileName, std::string statisticsFileName,
+                               std::string ratesFileName, SamplingStrategy strategy, std::string selectedField = "");
   /**
    * Select and extract samples with the SampleSelection and SampleExtraction application.
    * \param fileNames
@@ -142,9 +135,8 @@ protected:
    * \param strategy the strategy used for selection (by class or with geometry)
    * \param selectedFieldName
    */
-  void SelectAndExtractTrainSamples(const TrainFileNamesHandler &fileNames, FloatVectorImageListType *imageList,
-                                    std::vector<std::string> vectorFileNames, SamplingStrategy strategy,
-                                    std::string selectedFieldName = "");
+  void SelectAndExtractTrainSamples(const TrainFileNamesHandler& fileNames, FloatVectorImageListType* imageList, std::vector<std::string> vectorFileNames,
+                                    SamplingStrategy strategy, std::string selectedFieldName = "");
 
 
   /**
@@ -156,8 +148,8 @@ protected:
    * \param imageList
    * \param validationVectorFileList optional validation vector file for each images
    */
-  void SelectAndExtractValidationSamples(const TrainFileNamesHandler &fileNames, FloatVectorImageListType *imageList,
-                                         const std::vector<std::string> &validationVectorFileList = std::vector<std::string>());
+  void SelectAndExtractValidationSamples(const TrainFileNamesHandler& fileNames, FloatVectorImageListType* imageList,
+                                         const std::vector<std::string>& validationVectorFileList = std::vector<std::string>());
 
   /**
    * Function used to split all training samples from all images in a set of training and validation.
@@ -165,10 +157,9 @@ protected:
    * \param imageList
    * \sa SplitTrainingAndValidationSamples
    */
-  void SplitTrainingToValidationSamples(const TrainFileNamesHandler &fileNames, FloatVectorImageListType *imageList);
+  void SplitTrainingToValidationSamples(const TrainFileNamesHandler& fileNames, FloatVectorImageListType* imageList);
 
 private:
-
   /**
    * Function used to split training samples in set of training and validation.
    * \param image input image
@@ -177,13 +168,11 @@ private:
    * \param sampleValidFileName the input validation file name
    * \param ratesTrainFileName the rates file name
    */
-  void SplitTrainingAndValidationSamples(FloatVectorImageType *image, std::string sampleFileName,
-                                         std::string sampleTrainFileName, std::string sampleValidFileName,
-                                         std::string ratesTrainFileName);
+  void SplitTrainingAndValidationSamples(FloatVectorImageType* image, std::string sampleFileName, std::string sampleTrainFileName,
+                                         std::string sampleValidFileName, std::string ratesTrainFileName);
 
 
 protected:
-
   struct SamplingRates
   {
     long int fmt;
@@ -198,63 +187,62 @@ protected:
    */
   class TrainFileNamesHandler
   {
-  public :
+  public:
     void CreateTemporaryFileNames(std::string outModel, size_t nbInputs, bool dedicatedValidation)
     {
 
-      if( dedicatedValidation )
-        {
+      if (dedicatedValidation)
+      {
         rateTrainOut = outModel + "_ratesTrain.csv";
-        }
+      }
       else
-        {
+      {
         rateTrainOut = outModel + "_rates.csv";
-        }
+      }
 
       rateValidOut = outModel + "_ratesValid.csv";
-      for( unsigned int i = 0; i < nbInputs; i++ )
-        {
+      for (unsigned int i = 0; i < nbInputs; i++)
+      {
         std::ostringstream oss;
         oss << i + 1;
-        std::string strIndex( oss.str() );
-        if( dedicatedValidation )
-          {
-          polyStatTrainOutputs.push_back( outModel + "_statsTrain_" + strIndex + ".xml" );
-          polyStatValidOutputs.push_back( outModel + "_statsValid_" + strIndex + ".xml" );
-          ratesTrainOutputs.push_back( outModel + "_ratesTrain_" + strIndex + ".csv" );
-          ratesValidOutputs.push_back( outModel + "_ratesValid_" + strIndex + ".csv" );
-          sampleOutputs.push_back( outModel + "_samplesTrain_" + strIndex + ".shp" );
-          }
-        else
-          {
-          polyStatTrainOutputs.push_back( outModel + "_stats_" + strIndex + ".xml" );
-          ratesTrainOutputs.push_back( outModel + "_rates_" + strIndex + ".csv" );
-          sampleOutputs.push_back( outModel + "_samples_" + strIndex + ".shp" );
-          }
-        sampleTrainOutputs.push_back( outModel + "_samplesTrain_" + strIndex + ".shp" );
-        sampleValidOutputs.push_back( outModel + "_samplesValid_" + strIndex + ".shp" );
+        std::string strIndex(oss.str());
+        if (dedicatedValidation)
+        {
+          polyStatTrainOutputs.push_back(outModel + "_statsTrain_" + strIndex + ".xml");
+          polyStatValidOutputs.push_back(outModel + "_statsValid_" + strIndex + ".xml");
+          ratesTrainOutputs.push_back(outModel + "_ratesTrain_" + strIndex + ".csv");
+          ratesValidOutputs.push_back(outModel + "_ratesValid_" + strIndex + ".csv");
+          sampleOutputs.push_back(outModel + "_samplesTrain_" + strIndex + ".shp");
         }
-
+        else
+        {
+          polyStatTrainOutputs.push_back(outModel + "_stats_" + strIndex + ".xml");
+          ratesTrainOutputs.push_back(outModel + "_rates_" + strIndex + ".csv");
+          sampleOutputs.push_back(outModel + "_samples_" + strIndex + ".shp");
+        }
+        sampleTrainOutputs.push_back(outModel + "_samplesTrain_" + strIndex + ".shp");
+        sampleValidOutputs.push_back(outModel + "_samplesValid_" + strIndex + ".shp");
+      }
     }
 
     void clear()
     {
-      for( unsigned int i = 0; i < polyStatTrainOutputs.size(); i++ )
-        RemoveFile( polyStatTrainOutputs[i] );
-      for( unsigned int i = 0; i < polyStatValidOutputs.size(); i++ )
-        RemoveFile( polyStatValidOutputs[i] );
-      for( unsigned int i = 0; i < ratesTrainOutputs.size(); i++ )
-        RemoveFile( ratesTrainOutputs[i] );
-      for( unsigned int i = 0; i < ratesValidOutputs.size(); i++ )
-        RemoveFile( ratesValidOutputs[i] );
-      for( unsigned int i = 0; i < sampleOutputs.size(); i++ )
-        RemoveFile( sampleOutputs[i] );
-      for( unsigned int i = 0; i < sampleTrainOutputs.size(); i++ )
-        RemoveFile( sampleTrainOutputs[i] );
-      for( unsigned int i = 0; i < sampleValidOutputs.size(); i++ )
-        RemoveFile( sampleValidOutputs[i] );
-      for( unsigned int i = 0; i < tmpVectorFileList.size(); i++ )
-        RemoveFile( tmpVectorFileList[i] );
+      for (unsigned int i = 0; i < polyStatTrainOutputs.size(); i++)
+        RemoveFile(polyStatTrainOutputs[i]);
+      for (unsigned int i = 0; i < polyStatValidOutputs.size(); i++)
+        RemoveFile(polyStatValidOutputs[i]);
+      for (unsigned int i = 0; i < ratesTrainOutputs.size(); i++)
+        RemoveFile(ratesTrainOutputs[i]);
+      for (unsigned int i = 0; i < ratesValidOutputs.size(); i++)
+        RemoveFile(ratesValidOutputs[i]);
+      for (unsigned int i = 0; i < sampleOutputs.size(); i++)
+        RemoveFile(sampleOutputs[i]);
+      for (unsigned int i = 0; i < sampleTrainOutputs.size(); i++)
+        RemoveFile(sampleTrainOutputs[i]);
+      for (unsigned int i = 0; i < sampleValidOutputs.size(); i++)
+        RemoveFile(sampleValidOutputs[i]);
+      for (unsigned int i = 0; i < tmpVectorFileList.size(); i++)
+        RemoveFile(tmpVectorFileList[i]);
     }
 
   public:
@@ -266,35 +254,34 @@ protected:
     std::vector<std::string> sampleTrainOutputs;
     std::vector<std::string> sampleValidOutputs;
     std::vector<std::string> tmpVectorFileList;
-    std::string rateValidOut;
-    std::string rateTrainOut;
+    std::string              rateValidOut;
+    std::string              rateTrainOut;
 
   private:
-    bool RemoveFile(std::string &filePath)
+    bool RemoveFile(std::string& filePath)
     {
       bool res = true;
-      if( itksys::SystemTools::FileExists( filePath ) )
+      if (itksys::SystemTools::FileExists(filePath))
+      {
+        size_t posExt = filePath.rfind('.');
+        if (posExt != std::string::npos && filePath.compare(posExt, std::string::npos, ".shp") == 0)
         {
-        size_t posExt = filePath.rfind( '.' );
-        if( posExt != std::string::npos && filePath.compare( posExt, std::string::npos, ".shp" ) == 0 )
-          {
-          std::string shxPath = filePath.substr( 0, posExt ) + std::string( ".shx" );
-          std::string dbfPath = filePath.substr( 0, posExt ) + std::string( ".dbf" );
-          std::string prjPath = filePath.substr( 0, posExt ) + std::string( ".prj" );
-          RemoveFile( shxPath );
-          RemoveFile( dbfPath );
-          RemoveFile( prjPath );
-          }
-        res = itksys::SystemTools::RemoveFile( filePath );
-        if( !res )
-          {
-          //otbAppLogINFO( <<"Unable to remove file  "<<filePath );
-          }
+          std::string shxPath = filePath.substr(0, posExt) + std::string(".shx");
+          std::string dbfPath = filePath.substr(0, posExt) + std::string(".dbf");
+          std::string prjPath = filePath.substr(0, posExt) + std::string(".prj");
+          RemoveFile(shxPath);
+          RemoveFile(dbfPath);
+          RemoveFile(prjPath);
         }
+        res = itksys::SystemTools::RemoveFile(filePath);
+        if (!res)
+        {
+          // otbAppLogINFO( <<"Unable to remove file  "<<filePath );
+        }
+      }
       return res;
     }
   };
-
 };
 
 } // end namespace Wrapper
@@ -304,4 +291,4 @@ protected:
 #include "otbTrainImagesBase.hxx"
 #endif
 
-#endif //otbTrainImagesBase_h
+#endif // otbTrainImagesBase_h

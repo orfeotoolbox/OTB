@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,7 +33,7 @@ namespace otb
  */
 namespace Functor
 {
-template<class TInput, class TOutputValue>
+template <class TInput, class TOutputValue>
 class SpectralAngleFunctor
 {
 public:
@@ -43,9 +43,11 @@ public:
     m_ReferencePixel.Fill(1);
   }
 
-  virtual ~SpectralAngleFunctor() {}
+  virtual ~SpectralAngleFunctor()
+  {
+  }
   // Binary operator
-  inline TOutputValue operator ()(const TInput& inPix) const
+  inline TOutputValue operator()(const TInput& inPix) const
   {
     return this->Evaluate(inPix);
   }
@@ -53,11 +55,11 @@ public:
   void SetReferencePixel(TInput ref)
   {
     m_ReferencePixel = ref;
-    m_RefNorm = 0.0;
+    m_RefNorm        = 0.0;
     for (unsigned int i = 0; i < ref.Size(); ++i)
-      {
+    {
       m_RefNorm += ref[i] * ref[i];
-      }
+    }
     m_RefNorm = std::sqrt(static_cast<double>(m_RefNorm));
   }
   TInput GetReferencePixel() const
@@ -72,26 +74,26 @@ protected:
   {
     TOutputValue out;
 
-    double dist = 0.0;
-    double scalarProd = 0.0;
-    double normProd = 0.0;
-    double normProd1 = 0.0;
+    double dist         = 0.0;
+    double scalarProd   = 0.0;
+    double normProd     = 0.0;
+    double normProd1    = 0.0;
     double sqrtNormProd = 0.0;
     for (unsigned int i = 0; i < std::min(inPix.Size(), m_ReferencePixel.Size()); ++i)
-      {
+    {
       scalarProd += inPix[i] * m_ReferencePixel[i];
       normProd1 += inPix[i] * inPix[i];
-      }
-    normProd = normProd1 * m_RefNorm * m_RefNorm;
+    }
+    normProd     = normProd1 * m_RefNorm * m_RefNorm;
     sqrtNormProd = std::sqrt(normProd);
     if ((sqrtNormProd == 0.0) || (scalarProd / sqrtNormProd > 1))
-      {
+    {
       dist = 0.0;
-      }
+    }
     else
-      {
+    {
       dist = std::acos(scalarProd / sqrtNormProd);
-      }
+    }
 
     out = static_cast<TOutputValue>(dist);
     return out;

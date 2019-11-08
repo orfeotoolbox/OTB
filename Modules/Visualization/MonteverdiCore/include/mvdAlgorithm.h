@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -88,10 +88,8 @@ namespace otb
  * N.B.: Caller must ensure to that size N of itk::FixedArray< T1, N >
  * to match the variable size of the itk::VariableLengthVector< T1 >.
  */
-template< typename T2, unsigned int N, typename T1 >
-inline
-itk::FixedArray< T2, N >
-ToFixedArray( const itk::VariableLengthVector< T1 >& v );
+template <typename T2, unsigned int N, typename T1>
+inline itk::FixedArray<T2, N> ToFixedArray(const itk::VariableLengthVector<T1>& v);
 
 /**
  * Convert an itk::VariableLengthVector< T2 > into a
@@ -105,11 +103,8 @@ ToFixedArray( const itk::VariableLengthVector< T1 >& v );
  * N.B.: Caller must ensure to that size N of itk::FixedArray< T1, N >
  * to match the variable size of the itk::VariableLengthVector< T1 >.
  */
-template< typename T2, unsigned int N, typename T1 >
-inline
-itk::FixedArray< T2, N >&
-ToFixedArray( itk::FixedArray< T2, N >& a,
-	      const itk::VariableLengthVector< T1 >& v );
+template <typename T2, unsigned int N, typename T1>
+inline itk::FixedArray<T2, N>& ToFixedArray(itk::FixedArray<T2, N>& a, const itk::VariableLengthVector<T1>& v);
 
 /**
  * Convert an itk::FixedArray< T2, N > into a
@@ -120,10 +115,8 @@ ToFixedArray( itk::FixedArray< T2, N >& a,
  * An itk::RangeError exception instance is thrown if lengths/sizes of
  * both the containers are not equal.
  */
-template< typename T2, typename T1, unsigned int N >
-inline
-itk::VariableLengthVector< T2 >
-ToVariableLengthVector( const itk::FixedArray< T1, N >& a );
+template <typename T2, typename T1, unsigned int N>
+inline itk::VariableLengthVector<T2> ToVariableLengthVector(const itk::FixedArray<T1, N>& a);
 
 /**
  * Convert an itk::FixedArray< T2, N > into a
@@ -134,11 +127,8 @@ ToVariableLengthVector( const itk::FixedArray< T1, N >& a );
  * An itk::RangeError exception instance is thrown if lengths/sizes of
  * both the containers are not equal.
  */
-template< typename T2, typename T1, unsigned int N >
-inline
-itk::VariableLengthVector< T2 >&
-ToVariableLengthVector( itk::FixedArray< T1, N >& a,
-			const itk::VariableLengthVector< T1 >& v );
+template <typename T2, typename T1, unsigned int N>
+inline itk::VariableLengthVector<T2>& ToVariableLengthVector(itk::FixedArray<T1, N>& a, const itk::VariableLengthVector<T1>& v);
 } // end namespace 'otb'
 
 /*****************************************************************************/
@@ -153,11 +143,8 @@ namespace mvd
  *
  * \return stream instance.
  */
-template< typename T >
-inline
-QTextStream&
-operator << ( QTextStream& stream,
-	      const itk::VariableLengthVector< T >& vector );
+template <typename T>
+inline QTextStream& operator<<(QTextStream& stream, const itk::VariableLengthVector<T>& vector);
 
 /**
  * \brief Write an itk::VariableLengthVector< T > into a QTextStream.
@@ -167,11 +154,8 @@ operator << ( QTextStream& stream,
  *
  * \return stream instance.
  */
-template< typename T >
-inline
-QTextStream&
-operator >> ( QTextStream& stream,
-	      itk::VariableLengthVector< T >& vector );
+template <typename T>
+inline QTextStream& operator>>(QTextStream& stream, itk::VariableLengthVector<T>& vector);
 /**
  * \brief Write an itk::VariableLengthVector< T > into a QDataStream.
  *
@@ -180,11 +164,8 @@ operator >> ( QTextStream& stream,
  *
  * \return stream instance.
  */
-template< typename T >
-inline
-QDataStream&
-operator << ( QDataStream& stream,
-	      const itk::VariableLengthVector< T >& vector );
+template <typename T>
+inline QDataStream& operator<<(QDataStream& stream, const itk::VariableLengthVector<T>& vector);
 
 /**
  * \brief Write an itk::VariableLengthVector< T > into a QDataStream.
@@ -194,11 +175,8 @@ operator << ( QDataStream& stream,
  *
  * \return stream instance.
  */
-template< typename T >
-inline
-QDataStream&
-operator >> ( QDataStream& stream,
-	      itk::VariableLengthVector< T >& vector );
+template <typename T>
+inline QDataStream& operator>>(QDataStream& stream, itk::VariableLengthVector<T>& vector);
 
 /**
  * \brief Convert a StringVector object to a QStringList object.
@@ -206,9 +184,7 @@ operator >> ( QDataStream& stream,
  * Because Qt uses a shallow mechanism to copy containers, the returned
  * QStringList is shallow-copied.
  */
-inline
-QStringList
-ToQStringList( const StringVector& sv );
+inline QStringList ToQStringList(const StringVector& sv);
 
 /**
  * \brief Append the content of a StringVector object to the content
@@ -217,10 +193,7 @@ ToQStringList( const StringVector& sv );
  * Because Qt uses a shallow mechanism to copy containers, the returned
  * QStringList is shallow-copied.
  */
-inline
-QStringList&
-AppendToQStringList( QStringList& qsl,
-		     const StringVector& sv );
+inline QStringList& AppendToQStringList(QStringList& qsl, const StringVector& sv);
 
 /**
  * \brief Convert and copy an STL std::string to a QString.
@@ -233,21 +206,15 @@ AppendToQStringList( QStringList& qsl,
  * \return The Unicode converted QString.
  */
 
-inline
-QString
-FromStdString( const std::string& str );
+inline QString FromStdString(const std::string& str);
 
 /**
  */
-inline
-std::string
-ToLocalStdString( const QString & );
+inline std::string ToLocalStdString(const QString&);
 
 /**
  */
-inline
-const char *
-ToLocalString( const QString & );
+inline const char* ToLocalString(const QString&);
 
 /**
  * \brief Convert and copy a QString to a STL std::string.
@@ -259,66 +226,45 @@ ToLocalString( const QString & );
  *
  * \return The 8-bit converted STL std::string.
  */
-inline
-std::string
-ToStdString( const QString& str );
+inline std::string ToStdString(const QString& str);
 
 /**
  */
-inline
-const char*
-ToString( const QString& str );
+inline const char* ToString(const QString& str);
 
 
 /**
  * \return a std::string form various types.
  */
-inline
-std::string
-ToStdString( unsigned int val );
+inline std::string ToStdString(unsigned int val);
 
-inline
-std::string
-ToStdString( const SpacingType & spacing);
+inline std::string ToStdString(const SpacingType& spacing);
 
-inline
-std::string
-ToStdString( const SizeType & size);
+inline std::string ToStdString(const SizeType& size);
 
-inline
-std::string
-ToStdString( const PointType & point);
+inline std::string ToStdString(const PointType& point);
 
-template< typename T>
-std::string
-ToStdString( const std::vector<T> & vec);
+template <typename T>
+std::string ToStdString(const std::vector<T>& vec);
 
 /**
  */
-template< typename T >
-inline
-QString
-ToQString( const T& val );
+template <typename T>
+inline QString ToQString(const T& val);
 
 /**
  */
-template<>
-inline
-QString
-ToQString< float >( const float& );
+template <>
+inline QString ToQString<float>(const float&);
 
 /**
  */
-template<>
-inline
-QString
-ToQString< double >( const double& );
+template <>
+inline QString ToQString<double>(const double&);
 
 /**
  */
-inline
-QString
-ToHumanReadableSize( qint64 fize, bool isInBits =true );
+inline QString ToHumanReadableSize(qint64 fize, bool isInBits = true);
 
 } // end namespace 'mvd'.
 
@@ -336,10 +282,8 @@ namespace mvd
  * \return true if predicate is true on all elements in the range
  * [first, last[ or if range is empty.
  */
-template< typename TInputIterator, typename TUnaryPredicate >
-inline
-bool
-AllOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred );
+template <typename TInputIterator, typename TUnaryPredicate>
+inline bool AllOf(TInputIterator first, TInputIterator last, TUnaryPredicate pred);
 
 /**
  * \brief Test if any of element in range fulfills condition.
@@ -351,10 +295,8 @@ AllOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred );
  * \return true if predicated is true for, at least, one element in range
  * [first, last[. If range is empty, this function returns false.
  */
-template< typename TInputIterator, typename TUnaryPredicate >
-inline
-bool
-AnyOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred );
+template <typename TInputIterator, typename TUnaryPredicate>
+inline bool AnyOf(TInputIterator first, TInputIterator last, TUnaryPredicate pred);
 
 /**
  * \brief Test if no element in range fulfills condition.
@@ -365,10 +307,8 @@ AnyOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred );
  *
  * \return true if predicated is false for all elements in range [first, last[. If range is empty, this function returns true.
  */
-template< typename TInputIterator, typename TUnaryPredicate >
-inline
-bool
-NoneOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred );
+template <typename TInputIterator, typename TUnaryPredicate>
+inline bool NoneOf(TInputIterator first, TInputIterator last, TUnaryPredicate pred);
 
 } // end namespace 'mvd'.
 
@@ -378,75 +318,65 @@ NoneOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred );
 namespace otb
 {
 /*******************************************************************************/
-template< typename T2, unsigned int N, typename T1 >
-inline
-itk::FixedArray< T2, N >
-ToFixedArray( const itk::VariableLengthVector< T1 >& v )
+template <typename T2, unsigned int N, typename T1>
+inline itk::FixedArray<T2, N> ToFixedArray(const itk::VariableLengthVector<T1>& v)
 {
-  assert( v.Size()==N );
+  assert(v.Size() == N);
 
-  throw itk::RangeError( __FILE__, __LINE__ );
+  throw itk::RangeError(__FILE__, __LINE__);
 
-  itk::FixedArray< T2, N > a;
+  itk::FixedArray<T2, N> a;
 
-  for( unsigned int i=0; i<N; ++i )
-    a[ i ] = static_cast< T2 >( v[ i ] );
+  for (unsigned int i = 0; i < N; ++i)
+    a[i]              = static_cast<T2>(v[i]);
 
   return a;
 }
 
 /*******************************************************************************/
-template< typename T2, unsigned int N, typename T1 >
-inline
-itk::FixedArray< T2, N >&
-ToFixedArray( itk::FixedArray< T2, N >& a,
-	      const itk::VariableLengthVector< T1 >& v )
+template <typename T2, unsigned int N, typename T1>
+inline itk::FixedArray<T2, N>& ToFixedArray(itk::FixedArray<T2, N>& a, const itk::VariableLengthVector<T1>& v)
 {
-  assert( v.Size()==N && v.Size()==a.Size() );
+  assert(v.Size() == N && v.Size() == a.Size());
 
-  throw itk::RangeError( __FILE__, __LINE__ );
+  throw itk::RangeError(__FILE__, __LINE__);
 
-  for( unsigned int i=0; i<N; ++i )
-    a[ i ] = static_cast< T2>( v[ i ] );
+  for (unsigned int i = 0; i < N; ++i)
+    a[i]              = static_cast<T2>(v[i]);
 
   return a;
 }
 
 /*******************************************************************************/
-template< typename T2, typename T1, unsigned int N >
-inline
-itk::VariableLengthVector< T2 >
-ToVariableLengthVector( const itk::FixedArray< T1, N >& a )
+template <typename T2, typename T1, unsigned int N>
+inline itk::VariableLengthVector<T2> ToVariableLengthVector(const itk::FixedArray<T1, N>& a)
 {
-  assert( a.Size()==N );
+  assert(a.Size() == N);
 
-  throw itk::RangeError( __FILE__, __LINE__ );
+  throw itk::RangeError(__FILE__, __LINE__);
 
-  itk::VariableLengthVector< T2 > v;
+  itk::VariableLengthVector<T2> v;
 
-  v.Reserve( N );
+  v.Reserve(N);
 
-  for( unsigned int i=0; i<N; ++i )
-    v[ i ] = static_cast< T2 >( a[ i ] );
+  for (unsigned int i = 0; i < N; ++i)
+    v[i]              = static_cast<T2>(a[i]);
 
   return v;
 }
 
 /*******************************************************************************/
-template< typename T2, typename T1, unsigned int N >
-inline
-itk::VariableLengthVector< T2 >&
-ToVariableLengthVector( itk::VariableLengthVector< T2 >& v,
-			const itk::FixedArray< T1, N >& a )
+template <typename T2, typename T1, unsigned int N>
+inline itk::VariableLengthVector<T2>& ToVariableLengthVector(itk::VariableLengthVector<T2>& v, const itk::FixedArray<T1, N>& a)
 {
-  assert( a.Size()==N );
+  assert(a.Size() == N);
 
-  throw itk::RangeError( __FILE__, __LINE__ );
+  throw itk::RangeError(__FILE__, __LINE__);
 
-  v.Reserve( N );
+  v.Reserve(N);
 
-  for( unsigned int i=0; i<N; ++i )
-    v[ i ] = static_cast< T2 >( a[ i ] );
+  for (unsigned int i = 0; i < N; ++i)
+    v[i]              = static_cast<T2>(a[i]);
 
   return v;
 }
@@ -457,73 +387,55 @@ namespace mvd
 {
 
 /*******************************************************************************/
-inline
-QStringList
-ToQStringList( const StringVector& sv )
+inline QStringList ToQStringList(const StringVector& sv)
 {
   QStringList qsl;
-  return AppendToQStringList( qsl, sv );
+  return AppendToQStringList(qsl, sv);
 }
 
 /*******************************************************************************/
-inline
-QStringList&
-AppendToQStringList( QStringList& qsl, const StringVector& sv )
+inline QStringList& AppendToQStringList(QStringList& qsl, const StringVector& sv)
 {
-  for( StringVector::const_iterator it( sv.begin() );
-       it!=sv.end();
-       ++ it )
-    {
-    qsl.append( QString(it->c_str()) );
-    }
+  for (StringVector::const_iterator it(sv.begin()); it != sv.end(); ++it)
+  {
+    qsl.append(QString(it->c_str()));
+  }
 
   return qsl;
 }
 
 /*******************************************************************************/
-inline
-std::string
-ToLocalStdString( const QString & str )
+inline std::string ToLocalStdString(const QString& str)
 {
-  return std::string( str.toLocal8Bit().constData() );
+  return std::string(str.toLocal8Bit().constData());
 }
 
 /*******************************************************************************/
-inline
-const char *
-ToLocalString( const QString & str )
+inline const char* ToLocalString(const QString& str)
 {
   return str.toLocal8Bit().constData();
 }
 
 /*******************************************************************************/
-inline
-QString
-FromStdString( const std::string& str )
+inline QString FromStdString(const std::string& str)
 {
-  return QString( str.c_str() );
+  return QString(str.c_str());
 }
 
 /*******************************************************************************/
-inline
-std::string
-ToStdString( const QString& str )
+inline std::string ToStdString(const QString& str)
 {
-  return std::string( str.toLatin1().constData() );
+  return std::string(str.toLatin1().constData());
 }
 
 /*******************************************************************************/
-inline
-const char*
-ToString( const QString& str )
+inline const char* ToString(const QString& str)
 {
   return str.toLatin1().constData();
 }
 
 /*******************************************************************************/
-inline
-std::string
-ToStdString( unsigned int val )
+inline std::string ToStdString(unsigned int val)
 {
   std::ostringstream oss;
   oss << val;
@@ -531,9 +443,7 @@ ToStdString( unsigned int val )
 }
 
 /*******************************************************************************/
-inline
-std::string
-ToStdString( const SpacingType & spacing)
+inline std::string ToStdString(const SpacingType& spacing)
 {
   std::ostringstream oss;
   oss << spacing[0] << " , " << spacing[1];
@@ -541,9 +451,7 @@ ToStdString( const SpacingType & spacing)
 }
 
 /*******************************************************************************/
-inline
-std::string
-ToStdString( const SizeType & size)
+inline std::string ToStdString(const SizeType& size)
 {
   std::ostringstream oss;
   oss << size[0] << " , " << size[1];
@@ -551,9 +459,7 @@ ToStdString( const SizeType & size)
 }
 
 /*******************************************************************************/
-inline
-std::string
-ToStdString( const PointType & point)
+inline std::string ToStdString(const PointType& point)
 {
   std::ostringstream oss;
   oss << point[0] << " , " << point[1];
@@ -561,44 +467,38 @@ ToStdString( const PointType & point)
 }
 
 /*******************************************************************************/
-template< typename T>
-inline
-std::string
-ToStdString( const std::vector<T> & vec)
+template <typename T>
+inline std::string ToStdString(const std::vector<T>& vec)
 {
-  std::ostringstream oss;
+  std::ostringstream                      oss;
   typename std::vector<T>::const_iterator it = vec.begin();
-  while( it != vec.end() )
-    {
-    oss<<*it<< " ";
+  while (it != vec.end())
+  {
+    oss << *it << " ";
     ++it;
-    }
+  }
 
   return oss.str();
 }
 
 /*******************************************************************************/
-template< typename T >
-inline
-QString
-ToQString( const T& val )
+template <typename T>
+inline QString ToQString(const T& val)
 {
-  return QString( "%1" ).arg( val );
+  return QString("%1").arg(val);
 }
 
 /*****************************************************************************/
-template<>
-inline
-QString
-ToQString< float >( const float& val )
+template <>
+inline QString ToQString<float>(const float& val)
 {
-  assert( !std::isnan( val ) );
+  assert(!std::isnan(val));
 
   QString valf;
 
   // See IEEE-754
   // Ref. http://en.wikipedia.org/wiki/Single-precision_floating-point_format
-  valf.sprintf( "%.9g", val );
+  valf.sprintf("%.9g", val);
 
 #if 0
   std::cout
@@ -609,33 +509,24 @@ ToQString< float >( const float& val )
     << std::endl;
 #endif
 
-  if( valf.toFloat()!=val )
+  if (valf.toFloat() != val)
     throw std::runtime_error(
-      ToStdString(
-	QCoreApplication::translate(
-	  "mvd::DatasetDescritor",
-	  "Accuracy loss when converting float (%1) to string."
-	)
-	.arg( valf )
-      )
-    );
+        ToStdString(QCoreApplication::translate("mvd::DatasetDescritor", "Accuracy loss when converting float (%1) to string.").arg(valf)));
 
   return valf;
 }
 
 /*****************************************************************************/
-template<>
-inline
-QString
-ToQString< double >( const double& val )
+template <>
+inline QString ToQString<double>(const double& val)
 {
-  assert( !std::isnan( val ) );
+  assert(!std::isnan(val));
 
   QString vald;
 
   // See IEEE-754
   // Ref. http://en.wikipedia.org/wiki/Double_precision
-  vald.sprintf( "%.17g", val );
+  vald.sprintf("%.17g", val);
 
 #if 0
   std::cout
@@ -646,16 +537,9 @@ ToQString< double >( const double& val )
     << std::endl;
 #endif
 
-  if( vald.toDouble()!=val )
+  if (vald.toDouble() != val)
     throw std::runtime_error(
-      ToStdString(
-	QCoreApplication::translate(
-	  "mvd::DatasetDescriptor",
-	  "Accuracy loss when converting double (%1) to string."
-	)
-	.arg( vald )
-      )
-    );
+        ToStdString(QCoreApplication::translate("mvd::DatasetDescriptor", "Accuracy loss when converting double (%1) to string.").arg(vald)));
 
   return vald;
 }
@@ -666,87 +550,78 @@ namespace mvd
 {
 
 /*******************************************************************************/
-template< typename TInputIterator, typename TUnaryPredicate >
-inline
-bool
-AllOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred )
+template <typename TInputIterator, typename TUnaryPredicate>
+inline bool AllOf(TInputIterator first, TInputIterator last, TUnaryPredicate pred)
 {
-  while( first!=last )
-    {
-    if( !pred( *first ) )
+  while (first != last)
+  {
+    if (!pred(*first))
       return false;
 
     ++first;
-    }
+  }
 
   return true;
 }
 
 /*******************************************************************************/
-template< typename TInputIterator, typename TUnaryPredicate >
-inline
-bool
-AnyOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred )
+template <typename TInputIterator, typename TUnaryPredicate>
+inline bool AnyOf(TInputIterator first, TInputIterator last, TUnaryPredicate pred)
 {
-  while( first!=last )
-    {
-    if( pred( *first ) )
+  while (first != last)
+  {
+    if (pred(*first))
       return true;
 
     ++first;
-    }
+  }
 
   return false;
 }
 
 /*******************************************************************************/
-template< typename TInputIterator, typename TUnaryPredicate >
-inline
-bool
-NoneOf( TInputIterator first, TInputIterator last, TUnaryPredicate pred )
+template <typename TInputIterator, typename TUnaryPredicate>
+inline bool NoneOf(TInputIterator first, TInputIterator last, TUnaryPredicate pred)
 {
-  while( first!=last )
-    {
-    if( pred( *first ) )
+  while (first != last)
+  {
+    if (pred(*first))
       return false;
 
     ++first;
-    }
+  }
 
   return true;
 }
 
 /*******************************************************************************/
-inline
-QString
-ToHumanReadableSize( qint64 size, bool isInBits )
+inline QString ToHumanReadableSize(qint64 size, bool isInBits)
 {
-  double thousand =
-    isInBits ? 1024.0 : 1000.0;
+  double thousand = isInBits ? 1024.0 : 1000.0;
 
-  double remainder = static_cast< double >( size );
+  double remainder = static_cast<double>(size);
 
-  if( size < thousand )
-    return QString::number( size );
-
-  remainder /= thousand;
-
-  if( remainder < thousand )
-    return QString("%1 KiB" ).arg( QString::number( remainder, 'g', 3 ) );
+  if (size < thousand)
+    return QString::number(size);
 
   remainder /= thousand;
 
-  if( remainder < thousand )
-    return QString("%1 MiB" ).arg( QString::number( remainder, 'g', 3 ) );
+  if (remainder < thousand)
+    return QString("%1 KiB").arg(QString::number(remainder, 'g', 3));
 
   remainder /= thousand;
 
-  if( remainder < thousand )
-    return QString("%1 GiB" ).arg( QString::number( remainder, 'g', 3 ) );
+  if (remainder < thousand)
+    return QString("%1 MiB").arg(QString::number(remainder, 'g', 3));
 
   remainder /= thousand;
 
-  return QString("%1 TiB" ).arg( QString::number( remainder, 'g', 3 ) );
+  if (remainder < thousand)
+    return QString("%1 GiB").arg(QString::number(remainder, 'g', 3));
+
+  remainder /= thousand;
+
+  return QString("%1 TiB").arg(QString::number(remainder, 'g', 3));
 }
 
 } // end namespace 'mvd'

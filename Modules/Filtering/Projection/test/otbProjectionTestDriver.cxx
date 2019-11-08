@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,10 +24,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbSensorModel);
   REGISTER_TEST(otbVectorDataProjectionFilterFromGeoToMap);
-  REGISTER_TEST(otbOrthoRectificationFilter);
-  REGISTER_TEST(otbMapProjection);
   REGISTER_TEST(otbGenericRSResampleImageFilter);
-  REGISTER_TEST(otbGenericRSResampleImageFilterFromMap);
   REGISTER_TEST(otbGeometriesProjectionFilter);
   REGISTER_TEST(otbGenericRSTransformGenericTest);
   REGISTER_TEST(otbVectorDataTransformFilter);
@@ -36,7 +33,6 @@ void RegisterTests()
   REGISTER_TEST(otbRationalTransform);
   REGISTER_TEST(otbGeometriesProjectionFilterFromMapToSensor);
   REGISTER_TEST(otbImageToEnvelopeVectorDataFilter);
-  REGISTER_TEST(otbMapProjectionAccessorsTest);
   REGISTER_TEST(otbImageToGenericRSOutputParameters);
   REGISTER_TEST(otbGeometriesProjectionFilterFromMapToGeo);
   REGISTER_TEST(otbROIdataConversion);
@@ -48,7 +44,6 @@ void RegisterTests()
   REGISTER_TEST(otbGenericRSTransformImageAndMNTToWGS84ConversionChecking);
   REGISTER_TEST(otbCompositeTransform);
   REGISTER_TEST(otbLeastSquareAffineTransformEstimator);
-  REGISTER_TEST(otbSpectralAngleDataNodeFeatureFunction);
   REGISTER_TEST(otbGCPsToRPCSensorModelImageFilterCheckRpcModel);
   REGISTER_TEST(otbGeographicalDistance);
   REGISTER_TEST(otbTileImageFilterRSTransformTest);
@@ -59,7 +54,6 @@ void RegisterTests()
   REGISTER_TEST(otbGeometriesProjectionFilterFromMapToImage);
   REGISTER_TEST(otbGeometriesProjectionFilterFromMapToEPSG);
   REGISTER_TEST(otbVectorDataProjectionFilter);
-  REGISTER_TEST(otbUtmMapProjection);
   REGISTER_TEST(otbTileMapTransform);
   REGISTER_TEST(otbImportGeoInformationImageFilter);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,18 +31,14 @@ namespace Functor
 {
 
 template <class TScalar, class TRGBPixel>
-ScalarToRainbowRGBPixelFunctor<TScalar, TRGBPixel>
-::ScalarToRainbowRGBPixelFunctor()
+ScalarToRainbowRGBPixelFunctor<TScalar, TRGBPixel>::ScalarToRainbowRGBPixelFunctor()
 {
-//  m_Minimum = 0;
-//  m_Maximum = itk::NumericTraits<ScalarType>::max();
-
+  //  m_Minimum = 0;
+  //  m_Maximum = itk::NumericTraits<ScalarType>::max();
 }
 
 template <class TScalar, class TRGBPixel>
-typename ScalarToRainbowRGBPixelFunctor<TScalar, TRGBPixel>::RGBPixelType
-ScalarToRainbowRGBPixelFunctor<TScalar, TRGBPixel>
-::operator() (const TScalar &v) const
+typename ScalarToRainbowRGBPixelFunctor<TScalar, TRGBPixel>::RGBPixelType ScalarToRainbowRGBPixelFunctor<TScalar, TRGBPixel>::operator()(const TScalar& v) const
 {
 
   double hinc, sinc, vinc;
@@ -54,13 +50,13 @@ ScalarToRainbowRGBPixelFunctor<TScalar, TRGBPixel>
 
   hue = 0.6 - (v - this->GetMinimumInputValue()) * hinc;
   if (v < this->GetMinimumInputValue())
-    {
+  {
     hue = 0.6;
-    }
+  }
   if (v > this->GetMaximumInputValue())
-    {
+  {
     hue = 0.0;
-    }
+  }
   sat = 0.99 + v * sinc;
   val = itk::NumericTraits<RGBComponentType>::max() + v * vinc;
 

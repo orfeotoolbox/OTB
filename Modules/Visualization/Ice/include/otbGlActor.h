@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,13 +24,14 @@
 #include <itkObject.h>
 
 #include "otbViewSettings.h"
+#include "otbShader.h"
 #include "OTBIceExport.h"
 #include <string>
 
 namespace otb
 {
 
-class OTBIce_EXPORT GlActor 
+class OTBIce_EXPORT GlActor
   : public itk::Object
 {
 public:
@@ -42,7 +43,7 @@ public:
   itkSetObjectMacro(Settings,ViewSettings);
   itkGetObjectMacro(Settings,ViewSettings);
   itkGetConstObjectMacro(Settings,ViewSettings);
-  
+
   itkSetMacro(Visible,bool);
   itkGetMacro(Visible,bool);
   itkBooleanMacro(Visible);
@@ -58,6 +59,9 @@ public:
   itkGetMacro( Overlay, bool );
   itkBooleanMacro( Overlay );
 
+  itkGetObjectMacro( Shader, Shader );
+  itkSetObjectMacro( Shader, Shader );
+
   // Retrieve the full extent of the actor
   virtual void GetExtent(double & ulx, double & uly, double & lrx, double & lry) const = 0;
 
@@ -70,15 +74,20 @@ public:
   // Gl rendering of current state
   virtual void Render() = 0;
 
+  /** create the shader (no shader created by default) */
+  virtual void CreateShader();
+
 protected:
   GlActor();
 
   ~GlActor() override;
 
+  Shader::Pointer m_Shader;
+
 private:
   // prevent implementation
-  GlActor(const Self&);
-  void operator=(const Self&);
+  GlActor( const Self & ) = delete;
+  void operator=( const Self & ) = delete;
 
   ViewSettings::Pointer m_Settings;
 

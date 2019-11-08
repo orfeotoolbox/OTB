@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -74,46 +74,39 @@ namespace mvd
  *
  * \brief WIP.
  */
-class OTBMonteverdiCore_EXPORT SystemError :
-    public std::runtime_error
+class OTBMonteverdiCore_EXPORT SystemError : public std::runtime_error
 {
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  SystemError( const std::string& message =std::string() ) :
-    std::runtime_error( itksys::SystemTools::GetLastSystemError()
-        + ": " + message) {};
+  SystemError(const std::string& message = std::string()) : std::runtime_error(itksys::SystemTools::GetLastSystemError() + ": " + message){};
 
   /** \brief Destructor. */
-  ~SystemError() throw() override {};
+  ~SystemError() noexcept override{};
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
 };
 
 } // end namespace 'mvd'.

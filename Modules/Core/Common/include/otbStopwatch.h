@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -42,10 +42,10 @@ class OTBCommon_EXPORT Stopwatch final
 {
 public:
   /** Standard class typedefs. */
-  typedef Stopwatch  Self;
+  typedef Stopwatch Self;
 
   /** Represents a duration measured in milliseconds */
-  typedef uint64_t   DurationType;
+  typedef uint64_t DurationType;
 
   /** Constructs a timer instance */
   Stopwatch();
@@ -67,10 +67,10 @@ public:
 
   /** Get the total duration in human readable format (ostream
     * version) */
-  void GetElapsedHumanReadableTime(std::ostream & oss) const;
+  void GetElapsedHumanReadableTime(std::ostream& oss) const;
 
   /** Get the total duration in human readable format */
-  std::string  GetElapsedHumanReadableTime() const;
+  std::string GetElapsedHumanReadableTime() const;
 
   /** Returns whether the stopwatch is running */
   bool IsRunning() const;
@@ -79,14 +79,14 @@ public:
   static Stopwatch StartNew();
 
 private:
-  typedef uint64_t   TimepointType;
+  typedef uint64_t TimepointType;
 
   TimepointType GetTimestamp() const;
-  DurationType GetRunningElapsedTime() const;
+  DurationType  GetRunningElapsedTime() const;
 
   TimepointType m_StartTime;
-  DurationType m_ElapsedMilliseconds;
-  bool m_IsRunning;
+  DurationType  m_ElapsedMilliseconds;
+  bool          m_IsRunning;
 };
 
 } // namespace otb

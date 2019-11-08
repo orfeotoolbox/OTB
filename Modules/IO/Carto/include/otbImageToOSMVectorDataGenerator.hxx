@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,15 +22,15 @@
 #define otbImageToOSMVectorDataGenerator_hxx
 
 #include "otbImageToOSMVectorDataGenerator.h"
-#include "otbGeoInformationConversion.h"
+#include "otbSpatialReference.h"
 #include "otbGenericRSTransform.h"
 
-namespace otb {
+namespace otb
+{
 
 // constructor
-template < class TImage >
-ImageToOSMVectorDataGenerator<TImage>
-::ImageToOSMVectorDataGenerator()
+template <class TImage>
+ImageToOSMVectorDataGenerator<TImage>::ImageToOSMVectorDataGenerator()
 {
   this->SetNumberOfRequiredInputs(1);
   this->SetNumberOfRequiredOutputs(1);
@@ -41,37 +41,28 @@ ImageToOSMVectorDataGenerator<TImage>
   m_ImageExtent.maxY = 0;
 }
 
-template < class TImage >
-void
-ImageToOSMVectorDataGenerator<TImage>
-::SetInput( const ImageType * input  )
+template <class TImage>
+void ImageToOSMVectorDataGenerator<TImage>::SetInput(const ImageType* input)
 {
   // Process object is not const-correct so the const_cast is required here
-  this->itk::ProcessObject::SetNthInput(0,
-                                   const_cast< ImageType* >( input  ) );
+  this->itk::ProcessObject::SetNthInput(0, const_cast<ImageType*>(input));
 }
 
 // Method to get the SampleList as DataObject
-template < class TImage>
-const typename ImageToOSMVectorDataGenerator<TImage>
-::ImageType *
-ImageToOSMVectorDataGenerator<TImage>
-::GetInput() const
+template <class TImage>
+const typename ImageToOSMVectorDataGenerator<TImage>::ImageType* ImageToOSMVectorDataGenerator<TImage>::GetInput() const
 {
   if (this->GetNumberOfInputs() < 1)
-    {
+  {
     return nullptr;
-    }
+  }
 
-  return static_cast<const  ImageType* >
-    (this->itk::ProcessObject::GetInput(0) );
+  return static_cast<const ImageType*>(this->itk::ProcessObject::GetInput(0));
 }
 
 
-template < class TImage>
-void
-ImageToOSMVectorDataGenerator<TImage>
-::GenerateData()
+template <class TImage>
+void ImageToOSMVectorDataGenerator<TImage>::GenerateData()
 {
   // Get the extent of the image
   this->EstimateImageExtent();
@@ -84,24 +75,22 @@ ImageToOSMVectorDataGenerator<TImage>
   Superclass::GenerateData();
 }
 
-template < class TImage>
-void
-ImageToOSMVectorDataGenerator<TImage>
-::EstimateImageExtent()
+template <class TImage>
+void ImageToOSMVectorDataGenerator<TImage>::EstimateImageExtent()
 {
   // Get the input image
   typename ImageType::ConstPointer input = this->GetInput();
 
   // Local generic RS Transform to project the 4 corners to WGS84
-  typedef otb::GenericRSTransform<>           TransformType;
-  typename TransformType::Pointer transform = TransformType::New();
+  typedef otb::GenericRSTransform<> TransformType;
+  typename TransformType::Pointer   transform = TransformType::New();
   transform->SetInputKeywordList(input->GetImageKeywordlist());
   transform->SetInputProjectionRef(input->GetProjectionRef());
-  transform->SetOutputProjectionRef(otb::GeoInformationConversion::ToWKT(4326));
+  transform->SetOutputProjectionRef(otb::SpatialReference::FromWGS84().ToWkt());
   transform->InstantiateTransform();
 
   // Compute the 4 corners in the cartographic coordinate system
-  std::vector< IndexType> vindex;
+  std::vector<IndexType> vindex;
   std::vector<PointType> voutput;
 
   IndexType index1, index2, index3, index4;
@@ -127,13 +116,12 @@ ImageToOSMVectorDataGenerator<TImage>
   vindex.push_back(index4);
 
   for (unsigned int i = 0; i < vindex.size(); ++i)
-    {
+  {
     PointType physicalPoint;
     input->TransformIndexToPhysicalPoint(vindex[i], physicalPoint);
-    otbMsgDevMacro( << " physical point "<<  physicalPoint << " --> Transform "
-                    << transform->TransformPoint(physicalPoint));
+    otbMsgDevMacro(<< " physical point " << physicalPoint << " --> Transform " << transform->TransformPoint(physicalPoint));
     voutput.push_back(transform->TransformPoint(physicalPoint));
-    }
+  }
 
   // Compute the boundaries
   double minX = voutput[0][0];
@@ -142,7 +130,7 @@ ImageToOSMVectorDataGenerator<TImage>
   double maxY = voutput[0][1];
 
   for (unsigned int i = 0; i < voutput.size(); ++i)
-    {
+  {
     // Origins
     if (minX > voutput[i][0])
       minX = voutput[i][0];
@@ -155,13 +143,13 @@ ImageToOSMVectorDataGenerator<TImage>
 
     if (maxY < voutput[i][1])
       maxY = voutput[i][1];
-    }
+  }
 
   // Edit the output image extent type
-  m_ImageExtent.maxX =  maxX;
-  m_ImageExtent.minX =  minX;
-  m_ImageExtent.maxY =  maxY;
-  m_ImageExtent.minY =  minY;
+  m_ImageExtent.maxX = maxX;
+  m_ImageExtent.minX = minX;
+  m_ImageExtent.maxY = maxY;
+  m_ImageExtent.minY = minY;
 }
 
 

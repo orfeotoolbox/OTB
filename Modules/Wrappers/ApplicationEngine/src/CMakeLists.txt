@@ -1,5 +1,6 @@
+
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -19,13 +20,11 @@
 #
 
 set( OTBApplicationEngine_SRC
-  otbWrapperApplicationHtmlDocGenerator.cxx
-  otbWrapperComplexOutputImageParameter.cxx
   otbWrapperInputVectorDataListParameter.cxx
   otbWrapperListViewParameter.cxx
-  otbWrapperComplexInputImageParameter.cxx
   otbWrapperParameterGroup.cxx
-  otbWrapperOutputProcessXMLParameter.cxx
+  otbWrapperInputXML.cxx
+  otbWrapperOutputXML.cxx
   otbWrapperInputImageListParameter.cxx
   otbWrapperElevationParametersHandler.cxx
   otbWrapperInputFilenameListParameter.cxx
@@ -46,7 +45,6 @@ set( OTBApplicationEngine_SRC
   otbWrapperDocExampleStructure.cxx
   otbWrapperInputVectorDataParameter.cxx
   otbWrapperOutputVectorDataParameter.cxx
-  otbWrapperInputProcessXMLParameter.cxx
   otbWrapperMapProjectionParametersHandler.cxx
   otbWrapperApplication.cxx
   otbWrapperChoiceParameter.cxx
@@ -60,6 +58,8 @@ set( OTBApplicationEngine_SRC
   otbWrapperBoolParameter.cxx
   otbWrapperMetaDataHelper.cxx
   otbWrapperParameter.cxx
+  otbWrapperCastImage.cxx
+  otbWrapperTypes.cxx
   )
 
 add_library(OTBApplicationEngine ${OTBApplicationEngine_SRC})

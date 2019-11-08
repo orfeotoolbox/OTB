@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -45,7 +45,10 @@ public:
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
-  static ONERAImageIOFactory * FactoryNew() { return new ONERAImageIOFactory; }
+  static ONERAImageIOFactory* FactoryNew()
+  {
+    return new ONERAImageIOFactory;
+  }
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ONERAImageIOFactory, itk::ObjectFactoryBase);
@@ -62,9 +65,8 @@ protected:
   ~ONERAImageIOFactory() override;
 
 private:
-  ONERAImageIOFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  ONERAImageIOFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

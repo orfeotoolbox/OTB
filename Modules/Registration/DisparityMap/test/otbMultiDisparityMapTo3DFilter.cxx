@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,41 +24,32 @@
 #include "otbImageFileWriter.h"
 #include "otbVectorImageToImageListFilter.h"
 
-typedef otb::Image<float, 2>                    FloatImageType;
+typedef otb::Image<float, 2> FloatImageType;
 
-typedef otb::VectorImage<float, 2>              FloatVectorImageType;
+typedef otb::VectorImage<float, 2> FloatVectorImageType;
 
-typedef otb::MultiDisparityMapTo3DFilter
-  <FloatImageType,
-    FloatVectorImageType,
-    FloatImageType>                              Multi3DFilterType;
-
+typedef otb::MultiDisparityMapTo3DFilter<FloatImageType, FloatVectorImageType, FloatImageType> Multi3DFilterType;
 
 
 int otbMultiDisparityMapTo3DFilter(int argc, char* argv[])
 {
-  typedef otb::ImageFileReader<FloatImageType>    ReaderType;
+  typedef otb::ImageFileReader<FloatImageType> ReaderType;
 
-  typedef otb::ImageFileReader
-    <FloatVectorImageType>                        ReaderVectorType;
+  typedef otb::ImageFileReader<FloatVectorImageType> ReaderVectorType;
 
-  typedef otb::ImageFileWriter
-    <FloatVectorImageType>                        WriterType;
+  typedef otb::ImageFileWriter<FloatVectorImageType> WriterType;
 
-  typedef otb::ImageFileWriter
-    <FloatImageType>                              WriterScalarType;
+  typedef otb::ImageFileWriter<FloatImageType> WriterScalarType;
 
-  typedef otb::ImageList<FloatImageType>          ImageListType;
+  typedef otb::ImageList<FloatImageType> ImageListType;
 
-  typedef otb::VectorImageToImageListFilter
-    <FloatVectorImageType,
-     ImageListType>                               VectorToListFilterType;
+  typedef otb::VectorImageToImageListFilter<FloatVectorImageType, ImageListType> VectorToListFilterType;
 
   if (argc < 10)
-    {
-    std::cout << "Usage: "<<argv[0]<<" masterImage slaveImage1 slaveImage2 dispMap1 dispMap2 mask1 mask2 output residue" << std::endl;
+  {
+    std::cout << "Usage: " << argv[0] << " masterImage slaveImage1 slaveImage2 dispMap1 dispMap2 mask1 mask2 output residue" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   ReaderType::Pointer masterReader = ReaderType::New();
   masterReader->SetFileName(argv[1]);
@@ -97,15 +88,15 @@ int otbMultiDisparityMapTo3DFilter(int argc, char* argv[])
 
   multiFilter->SetNumberOfMovingImages(2);
 
-  multiFilter->SetHorizontalDisparityMapInput(0,vectorToListFilter1->GetOutput()->GetNthElement(0));
-  multiFilter->SetVerticalDisparityMapInput(0,vectorToListFilter1->GetOutput()->GetNthElement(1));
-  multiFilter->SetDisparityMaskInput(0,mask1Reader->GetOutput());
-  multiFilter->SetMovingKeywordList(0,slave1Reader->GetOutput()->GetImageKeywordlist());
+  multiFilter->SetHorizontalDisparityMapInput(0, vectorToListFilter1->GetOutput()->GetNthElement(0));
+  multiFilter->SetVerticalDisparityMapInput(0, vectorToListFilter1->GetOutput()->GetNthElement(1));
+  multiFilter->SetDisparityMaskInput(0, mask1Reader->GetOutput());
+  multiFilter->SetMovingKeywordList(0, slave1Reader->GetOutput()->GetImageKeywordlist());
 
-  multiFilter->SetHorizontalDisparityMapInput(1,vectorToListFilter2->GetOutput()->GetNthElement(0));
-  multiFilter->SetVerticalDisparityMapInput(1,vectorToListFilter2->GetOutput()->GetNthElement(1));
-  multiFilter->SetDisparityMaskInput(1,mask2Reader->GetOutput());
-  multiFilter->SetMovingKeywordList(1,slave2Reader->GetOutput()->GetImageKeywordlist());
+  multiFilter->SetHorizontalDisparityMapInput(1, vectorToListFilter2->GetOutput()->GetNthElement(0));
+  multiFilter->SetVerticalDisparityMapInput(1, vectorToListFilter2->GetOutput()->GetNthElement(1));
+  multiFilter->SetDisparityMaskInput(1, mask2Reader->GetOutput());
+  multiFilter->SetMovingKeywordList(1, slave2Reader->GetOutput()->GetImageKeywordlist());
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(multiFilter->GetOutput());

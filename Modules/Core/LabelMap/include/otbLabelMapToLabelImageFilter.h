@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,7 +24,8 @@
 
 #include "itkLabelMapToLabelImageFilter.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class LabelMapToLabelImageFilter
  * \brief Converts a LabelMap to a labeled image.
@@ -43,16 +44,15 @@ namespace otb {
  *
  * \ingroup OTBLabelMap
  */
-template<class TInputImage, class TOutputImage>
-class ITK_EXPORT LabelMapToLabelImageFilter :
-    public itk::LabelMapToLabelImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage>
+class ITK_EXPORT LabelMapToLabelImageFilter : public itk::LabelMapToLabelImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef LabelMapToLabelImageFilter                Self;
+  typedef LabelMapToLabelImageFilter Self;
   typedef itk::LabelMapToLabelImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                        Pointer;
-  typedef itk::SmartPointer<const Self>                  ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Some convenient typedefs. */
   typedef TInputImage                              InputImageType;
@@ -63,11 +63,11 @@ public:
   typedef typename InputImageType::PixelType       InputImagePixelType;
   typedef typename InputImageType::LabelObjectType LabelObjectType;
 
-  typedef typename OutputImageType::Pointer        OutputImagePointer;
-  typedef typename OutputImageType::ConstPointer   OutputImageConstPointer;
-  typedef typename OutputImageType::RegionType     OutputImageRegionType;
-  typedef typename OutputImageType::PixelType      OutputImagePixelType;
-  typedef typename OutputImageType::IndexType      IndexType;
+  typedef typename OutputImageType::Pointer      OutputImagePointer;
+  typedef typename OutputImageType::ConstPointer OutputImageConstPointer;
+  typedef typename OutputImageType::RegionType   OutputImageRegionType;
+  typedef typename OutputImageType::PixelType    OutputImagePixelType;
+  typedef typename OutputImageType::IndexType    IndexType;
 
   /** ImageDimension constants */
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
@@ -81,11 +81,11 @@ public:
 
 protected:
   LabelMapToLabelImageFilter();
-  ~LabelMapToLabelImageFilter() {};
+  ~LabelMapToLabelImageFilter(){};
 
   void GenerateInputRequestedRegion();
 
-  void EnlargeOutputRequestedRegion(itk::DataObject *){};
+  void EnlargeOutputRequestedRegion(itk::DataObject*){};
 
 private:
   LabelMapToLabelImageFilter(const Self&) = delete;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -55,20 +55,22 @@ namespace otb
 
 namespace Functor
 {
-template<class TIter, class TOutputValue>
+template <class TIter, class TOutputValue>
 class SFSTexturesFunctor
 {
 public:
   SFSTexturesFunctor()
   {
-    m_SpatialThreshold = 100;
-    m_SpectralThreshold = 50;
+    m_SpatialThreshold            = 100;
+    m_SpectralThreshold           = 50;
     m_RatioMaxConsiderationNumber = 5;
-    m_Alpha = 1;
+    m_Alpha                       = 1;
     this->SetNumberOfDirections(20); // set the step too
     m_SelectedTextures = std::vector<bool>(6, 1);
   }
-  virtual ~SFSTexturesFunctor() {}
+  virtual ~SFSTexturesFunctor()
+  {
+  }
 
   typedef typename TIter::InternalPixelType InternalPixelType;
   typedef typename TIter::SizeType          SizeType;
@@ -77,43 +79,64 @@ public:
   typedef TOutputValue                      OutputValueType;
   typedef std::vector<OutputValueType>      OutputType;
 
-  void SetSpatialThreshold(unsigned int thresh){ m_SpatialThreshold = thresh; }
-  void SetSpectralThreshold(InternalPixelType thresh){ m_SpectralThreshold = thresh; }
-  void SetRatioMaxConsiderationNumber(unsigned int value){ m_RatioMaxConsiderationNumber = value; }
-  void SetAlpha(double alpha){ m_Alpha = alpha; }
+  void SetSpatialThreshold(unsigned int thresh)
+  {
+    m_SpatialThreshold = thresh;
+  }
+  void SetSpectralThreshold(InternalPixelType thresh)
+  {
+    m_SpectralThreshold = thresh;
+  }
+  void SetRatioMaxConsiderationNumber(unsigned int value)
+  {
+    m_RatioMaxConsiderationNumber = value;
+  }
+  void SetAlpha(double alpha)
+  {
+    m_Alpha = alpha;
+  }
   void SetNumberOfDirections(unsigned int D)
   {
     m_NumberOfDirections = D;
-    m_DirectionStep = CONST_PI / static_cast<double>(D);
+    m_DirectionStep      = CONST_PI / static_cast<double>(D);
   }
-  void SetDirectionStep(double step){ m_DirectionStep = step; }
+  void SetDirectionStep(double step)
+  {
+    m_DirectionStep = step;
+  }
   void SetSelectedTextures(std::vector<bool> vect)
   {
     m_SelectedTextures.clear();
     m_SelectedTextures = vect;
   }
-  void SetTextureStatus(unsigned int id, bool isSelected){ m_SelectedTextures[id] = isSelected; }
+  void SetTextureStatus(unsigned int id, bool isSelected)
+  {
+    m_SelectedTextures[id] = isSelected;
+  }
 
   // Define some getters using itkGetMacro
-  itkGetMacro(SpatialThreshold,unsigned int);
-  itkGetMacro(SpectralThreshold,InternalPixelType);
-  itkGetMacro(RatioMaxConsiderationNumber,unsigned int);
-  itkGetMacro(Alpha,double);
-  itkGetMacro(NumberOfDirections,unsigned int);
-  
-  std::vector<bool> GetTexturesStatus(){ return m_SelectedTextures; }
+  itkGetMacro(SpatialThreshold, unsigned int);
+  itkGetMacro(SpectralThreshold, InternalPixelType);
+  itkGetMacro(RatioMaxConsiderationNumber, unsigned int);
+  itkGetMacro(Alpha, double);
+  itkGetMacro(NumberOfDirections, unsigned int);
 
-  inline OutputType operator ()(const TIter& it)
+  std::vector<bool> GetTexturesStatus()
   {
-    double                    length = itk::NumericTraits<double>::NonpositiveMin();
-    double                    width = itk::NumericTraits<double>::max();
-    double                    SpatialThresholdDouble = static_cast<double>(m_SpatialThreshold);
+    return m_SelectedTextures;
+  }
+
+  inline OutputType operator()(const TIter& it)
+  {
+    double                    length                   = itk::NumericTraits<double>::NonpositiveMin();
+    double                    width                    = itk::NumericTraits<double>::max();
+    double                    SpatialThresholdDouble   = static_cast<double>(m_SpatialThreshold);
     double                    NumberOfDirectionsDouble = static_cast<double>(m_NumberOfDirections);
-    double                    dist     = 0.;
-    double                    angle    = 0.;
-    double                    sdiVal   = 0.;
-    double                    sumWMean = 0.;
-    double                    sum      = 0.;
+    double                    dist                     = 0.;
+    double                    angle                    = 0.;
+    double                    sdiVal                   = 0.;
+    double                    sumWMean                 = 0.;
+    double                    sum                      = 0.;
     std::vector<double>       di(m_NumberOfDirections, 0.);
     std::vector<double>       minSorted(m_RatioMaxConsiderationNumber, width);
     std::vector<double>       maxSorted(m_RatioMaxConsiderationNumber, length);
@@ -127,7 +150,7 @@ public:
     off.Fill(0);
 
     for (unsigned int d = 0; d < m_NumberOfDirections; d++)
-      {
+    {
       // Current angle direction
       angle = m_DirectionStep * static_cast<double>(d);
 
@@ -143,91 +166,104 @@ public:
       OffsetType offStart = this->FindLastOffset(it, off);
 
       // computes distance = dist between the 2 segment point.
-      dist = std::sqrt(std::pow(static_cast<double>(offEnd[0]-offStart[0]), 2) + std::pow(static_cast<double>(offEnd[1]-offStart[1]), 2));
+      dist = std::sqrt(std::pow(static_cast<double>(offEnd[0] - offStart[0]), 2) + std::pow(static_cast<double>(offEnd[1] - offStart[1]), 2));
 
       // for length computation
-      if (m_SelectedTextures[0] == true) if (dist > length) length = dist;
+      if (m_SelectedTextures[0] == true)
+        if (dist > length)
+          length = dist;
 
       // for width computation
-      if (m_SelectedTextures[1] == true) if (dist < width) width = dist;
+      if (m_SelectedTextures[1] == true)
+        if (dist < width)
+          width = dist;
 
       // for PSI computation
-      if (m_SelectedTextures[2] == true || m_SelectedTextures[5] == true) sum += dist;
+      if (m_SelectedTextures[2] == true || m_SelectedTextures[5] == true)
+        sum += dist;
 
       // for w-mean computation
-      if (m_SelectedTextures[3] == true) sdiVal = this->ComputeSDi(it, offEnd);
+      if (m_SelectedTextures[3] == true)
+        sdiVal = this->ComputeSDi(it, offEnd);
 
       // for Ratio computation
       if (m_SelectedTextures[4] == true)
-        {
+      {
         bool doo = false;
         itVector = maxSorted.begin();
         while (itVector != maxSorted.end() && doo == false)
-          {
+        {
           if (dist > (*itVector))
-            {
+          {
             itVector = maxSorted.insert(itVector, dist);
             maxSorted.pop_back();
             doo = true;
-            }
-          ++itVector;
           }
-        doo = false;
+          ++itVector;
+        }
+        doo      = false;
         itVector = minSorted.begin();
         while (itVector != minSorted.end() && doo == false)
-          {
+        {
           if (dist < (*itVector))
-            {
+          {
             itVector = minSorted.insert(itVector, dist);
             minSorted.pop_back();
             doo = true;
-            }
-          ++itVector;
           }
+          ++itVector;
         }
+      }
 
       di[d] = dist;
       if (m_SelectedTextures[3] == true)
-        {
-        lengthLine[d] = static_cast<unsigned int>(dist);    //static_cast<unsigned int>( std::sqrt(std::pow(static_cast<double>(offEnd[0]), 2) + std::pow(static_cast<double>(offEnd[1]), 2)) );
+      {
+        lengthLine[d] = static_cast<unsigned int>(
+            dist); // static_cast<unsigned int>( std::sqrt(std::pow(static_cast<double>(offEnd[0]), 2) + std::pow(static_cast<double>(offEnd[1]), 2)) );
         sti[d] = sdiVal;
-        if (sdiVal != 0.) sumWMean += (m_Alpha * (dist - 1) * dist /*lengthLine[n]*di[n]*/) / sdiVal;
-        }
+        if (sdiVal != 0.)
+          sumWMean += (m_Alpha * (dist - 1) * dist /*lengthLine[n]*di[n]*/) / sdiVal;
       }
+    }
 
     /////// FILL OUTPUT
     // length
-    if (m_SelectedTextures[0] == true) out[0] = static_cast<OutputValueType>(length);
+    if (m_SelectedTextures[0] == true)
+      out[0] = static_cast<OutputValueType>(length);
     // width
-    if (m_SelectedTextures[1] == true) out[1] = static_cast<OutputValueType>(width);
+    if (m_SelectedTextures[1] == true)
+      out[1] = static_cast<OutputValueType>(width);
     // PSI
-    if (m_SelectedTextures[2] == true) out[2] = static_cast<OutputValueType>(sum / NumberOfDirectionsDouble);
+    if (m_SelectedTextures[2] == true)
+      out[2] = static_cast<OutputValueType>(sum / NumberOfDirectionsDouble);
     // w-mean
-    if (m_SelectedTextures[3] == true) out[3] = static_cast<OutputValueType>(sumWMean / NumberOfDirectionsDouble);
+    if (m_SelectedTextures[3] == true)
+      out[3] = static_cast<OutputValueType>(sumWMean / NumberOfDirectionsDouble);
     // ratio
     if (m_SelectedTextures[4] == true)
-      {
+    {
       double sumMin = 0;
       double sumMax = 0;
       for (unsigned int t = 0; t < m_RatioMaxConsiderationNumber; t++)
-        {
+      {
         sumMin += minSorted[t];
         sumMax += maxSorted[t];
-        }
-      if (sumMax != 0.) out[4] = static_cast<OutputValueType>(std::atan(sumMin / sumMax));
-      else if (sumMax == 0. && sumMin == 0.) out[4] = static_cast<OutputValueType>(1.);
       }
+      if (sumMax != 0.)
+        out[4] = static_cast<OutputValueType>(std::atan(sumMin / sumMax));
+      else if (sumMax == 0. && sumMin == 0.)
+        out[4] = static_cast<OutputValueType>(1.);
+    }
     // SD
     if (m_SelectedTextures[5] == true)
-      {
+    {
       double sumPSI = 0;
       for (unsigned int n = 0; n < di.size(); ++n)
         sumPSI += std::pow(di[n] - sumWMean / NumberOfDirectionsDouble, 2);
       out[5] = static_cast<OutputValueType>(std::sqrt(sumPSI) / (NumberOfDirectionsDouble - 1.));
-      }
+    }
 
     return out;
-
   }
 
   /** Checks spectral threshold condition
@@ -236,7 +272,7 @@ public:
    */
   OffsetType FindLastOffset(const TIter& it, const OffsetType& stopOffset)
   {
-    bool res = true;
+    bool res   = true;
     int  signX = this->ComputeStep(stopOffset[0]);
     int  signY = this->ComputeStep(stopOffset[1]);
 
@@ -245,21 +281,23 @@ public:
     currentOff[0] = signX;
 
     double slop = 0.;
-    if (stopOffset[0] != 0) slop = static_cast<double>(stopOffset[1] / static_cast<double>(stopOffset[0]));
+    if (stopOffset[0] != 0)
+      slop = static_cast<double>(stopOffset[1] / static_cast<double>(stopOffset[0]));
 
     bool isInside = true;
     while (isInside == true && res == true)
-      {
+    {
       this->ComputePointLine(currentOff, slop, signY, stopOffset[0]);
 
       if (std::abs(it.GetPixel(currentOff) - it.GetCenterPixel()) > m_SpectralThreshold)
-        {
+      {
         res = false;
-        }
-      else currentOff[0] += signX;
+      }
+      else
+        currentOff[0] += signX;
 
       isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
-      }
+    }
 
     return currentOff;
   }
@@ -272,7 +310,8 @@ public:
     double       SDi   = 0.;
     double       mean  = 0.;
     double       slop  = 0.;
-    if (stopOffset[0] != 0) slop = static_cast<double>(stopOffset[1] / static_cast<double>(stopOffset[0]));
+    if (stopOffset[0] != 0)
+      slop = static_cast<double>(stopOffset[1] / static_cast<double>(stopOffset[0]));
 
     int signX = this->ComputeStep(stopOffset[0]);
     int signY = this->ComputeStep(stopOffset[1]);
@@ -284,34 +323,37 @@ public:
     bool isInside = true;
     // First compute mean
     while (isInside == true && canGo == true)
-      {
+    {
       this->ComputePointLine(currentOff, slop, signY, stopOffset[0]);
 
       mean += static_cast<double>(it.GetPixel(currentOff));
       nbElt++;
 
-      if (std::abs(it.GetPixel(currentOff) - it.GetCenterPixel()) >= m_SpectralThreshold) canGo = false;
-      else currentOff[0] += signX;
+      if (std::abs(it.GetPixel(currentOff) - it.GetCenterPixel()) >= m_SpectralThreshold)
+        canGo = false;
+      else
+        currentOff[0] += signX;
 
       isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
-      }
+    }
 
     mean /= static_cast<double>(nbElt);
     currentOff[0] = signX;
     currentOff[1] = 0;
-    isInside = true;
+    isInside      = true;
 
     while (isInside == true && canGo == true)
-      {
+    {
       this->ComputePointLine(currentOff, slop, signY, stopOffset[0]);
 
       SDi += std::pow((static_cast<double>(it.GetPixel(currentOff)) - mean), 2);
-      if (std::abs(it.GetPixel(currentOff) - it.GetCenterPixel()) >= m_SpectralThreshold) canGo = false;
-      else currentOff[0] += signX;
+      if (std::abs(it.GetPixel(currentOff) - it.GetCenterPixel()) >= m_SpectralThreshold)
+        canGo = false;
+      else
+        currentOff[0] += signX;
 
       isInside = this->CheckIsInside(signX, signY, currentOff, stopOffset);
-
-      }
+    }
     return std::sqrt(SDi);
   }
 
@@ -319,8 +361,10 @@ public:
   bool CheckIsInside(const int& signX, const int& signY, const OffsetType& currentOff, const OffsetType& stopOffset)
   {
     bool isInside = true;
-    if (signX * currentOff[0] >= signX * stopOffset[0] && stopOffset[0] != 0) isInside = false;
-    else if (signY * currentOff[1] >= signY * stopOffset[1] && stopOffset[1] != 0) isInside = false;
+    if (signX * currentOff[0] >= signX * stopOffset[0] && stopOffset[0] != 0)
+      isInside = false;
+    else if (signY * currentOff[1] >= signY * stopOffset[1] && stopOffset[1] != 0)
+      isInside = false;
 
     return isInside;
   }
@@ -331,8 +375,10 @@ public:
    */
   void ComputePointLine(OffsetType& currentOff, const double& slop, const int& signY, const int& stopOffsetX)
   {
-    if (stopOffsetX != 0) currentOff[1] = static_cast<int>(std::floor(slop * static_cast<double>(currentOff[0]) + 0.5));
-    else currentOff[1] += signY;
+    if (stopOffsetX != 0)
+      currentOff[1] = static_cast<int>(std::floor(slop * static_cast<double>(currentOff[0]) + 0.5));
+    else
+      currentOff[1] += signY;
   }
 
   /** Compute the to give at x for line computation.
@@ -341,7 +387,8 @@ public:
   int ComputeStep(const int& stopOffset)
   {
     int sign = 1;
-    if (stopOffset < 0) sign = -1;
+    if (stopOffset < 0)
+      sign = -1;
 
     return sign;
   }

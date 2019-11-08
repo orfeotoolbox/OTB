@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,36 +28,36 @@
 #include <vector>
 #include <algorithm>
 
-int otbLandsatTMVegetationTest(int itkNotUsed(argc), char * argv[])
+int otbLandsatTMVegetationTest(int itkNotUsed(argc), char* argv[])
 {
 
-  typedef double InputPixelType;
+  typedef double        InputPixelType;
   typedef unsigned char OutputPixelType;
 
-  typedef otb::VectorImage< InputPixelType, 2 > InputImageType;
-  typedef otb::Image< OutputPixelType, 2 > OutputImageType;
+  typedef otb::VectorImage<InputPixelType, 2> InputImageType;
+  typedef otb::Image<OutputPixelType, 2>      OutputImageType;
 
-  typedef otb::ImageFileReader< InputImageType > ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType > WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
 
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
 
   typedef otb::Functor::LandsatTM::VegetationSpectralRule<InputImageType::PixelType, OutputPixelType> R1FunctorType;
   R1FunctorType r1Funct = R1FunctorType();
   r1Funct.SetDegree(otb::Functor::LandsatTM::HundredsKelvin);
   r1Funct.SetReflectance(otb::Functor::LandsatTM::Thousands);
 
-  typedef itk::UnaryFunctorImageFilter< InputImageType, OutputImageType, R1FunctorType > FilterType;
+  typedef itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, R1FunctorType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
 
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
 
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput(filter->GetOutput());
 
   writer->Update();
 

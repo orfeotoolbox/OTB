@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -24,8 +24,6 @@ set(OTBProjectionTests
 otbSensorModel.cxx
 otbProjectionTestDriver.cxx
 otbVectorDataProjectionFilterFromGeoToMap.cxx
-otbOrthoRectificationFilter.cxx
-otbMapProjection.cxx
 otbGenericRSResampleImageFilter.cxx
 otbGeometriesProjectionFilter.cxx
 otbGenericRSTransformGenericTest.cxx
@@ -45,10 +43,10 @@ otbVectorDataProjectionFilterFromMapToImage.cxx
 otbGenericRSTransformFromImage.cxx
 otbCompositeTransform.cxx
 otbLeastSquareAffineTransformEstimator.cxx
-otbSpectralAngleDataNodeFeatureFunction.cxx
 otbGCPsToRPCSensorModelImageFilterCheckRpcModel.cxx
 otbGeographicalDistance.cxx
 otbTileImageFilterRSTransformTest.cxx
+otbTileMapTransform.cxx
 otbGCPsToRPCSensorModelImageFilterAndOrtho.cxx
 otbVectorDataIntoImageProjectionFilterTest.cxx
 otbVectorDataExtractROIandProjection.cxx
@@ -56,8 +54,6 @@ otbGCPsToRPCSensorModelImageFilterWithoutDEM.cxx
 otbGeometriesProjectionFilterFromMapToImage.cxx
 otbGeometriesProjectionFilterFromMapToEPSG.cxx
 otbVectorDataProjectionFilter.cxx
-otbUtmMapProjection.cxx
-otbTileMapTransform.cxx
 otbImportGeoInformationImageFilter.cxx
 )
 
@@ -114,7 +110,6 @@ foreach( file ${GEOMGCP} )
     1 # imgTol
     ${current_geotol} # geoTol
     0 # create baseline (argv[7])
-    1 # mode verbose
     1 # 0 : no keyword check  1 : check needed keywords
   )
 endforeach()
@@ -159,7 +154,6 @@ foreach( file ${GEOMGCP} )
     1 # imgTol
     1 # geoTol
     0 # create baseline (argv[7])
-    1 # mode verbose
     0 # 0 : no keyword check  1 : check needed keywords
   )
 endforeach()
@@ -190,6 +184,16 @@ QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P
 IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif
 RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
 SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff
+)
+
+set(TOLERANCE_RATIO
+0
+0
+0
+0
+0
+0
+0.0002
 )
 
 set(IMG_TYPE
@@ -243,13 +247,13 @@ set(UTMZONES
 )
 
 set(HEMIS
-N
-N
-N
-N
-N
-S
-N
+1
+1
+1
+1
+1
+0
+1
 )
 
 set(RESOL
@@ -307,6 +311,8 @@ foreach(current_img ${IMG_TEST_ORTHO})
 	list(GET RESOL ${IMGNB} current_resol         )
 	list(GET GRIDSPACING ${IMGNB} current_grid_spacing)
 	list(GET ISCOMPLEX ${IMGNB} current_is_compex)
+  list(GET TOLERANCE_RATIO ${IMGNB} current_tolerance_ratio)
+
 	math(EXPR IMGNB "${IMGNB} + 1")
 
 	set( MODENB 0)
@@ -317,7 +323,8 @@ foreach(current_img ${IMG_TEST_ORTHO})
 	  otb_add_test(NAME prTvOrthoRectification_${current_imgtype}_${current_mode} COMMAND otbProjectionTestDriver
 		  --compare-image ${EPSILON_4}  ${BASELINE}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
 		  ${TEMP}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
-		  otbOrthoRectificationFilter
+                  --tolerance-ratio ${current_tolerance_ratio}
+		  otbGenericRSResampleImageFilter
 		  LARGEINPUT{${current_img}?&geom=${INPUTDATA}/${current_geomgcp}.geom}
 		  ${TEMP}/prTvOrthoRectification_${current_imgtype}_${current_mode}.tif
 		  ${current_originx}
@@ -340,29 +347,8 @@ endforeach()
 #----------------- OrthoRectification tests (end) -----------------------
 #------------------------------------------------------------------------
 
-
-otb_add_test(NAME prTvMapProjection COMMAND otbProjectionTestDriver
-  --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvMapProjection.txt
-  ${TEMP}/prTvMapProjection.txt
-  otbMapProjection
-  ${TEMP}/prTvMapProjection.txt
-  )
-
-otb_add_test(NAME prTvotbGenericRSResampleImageFilter COMMAND otbProjectionTestDriver
-  --compare-image ${EPSILON_4}
-  ${BASELINE}/prTvotbGenericRSResampleImageFilterOutput.tif
-  ${TEMP}/prTvotbGenericRSResampleImageFilterOutput.tif
-  otbGenericRSResampleImageFilter
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  1000
-  15
-  0
-  1
-  ${TEMP}/prTvotbGenericRSResampleImageFilterOutput.tif
-  )
-
 otb_add_test(NAME prTvGeometriesProjectionFilterLines COMMAND otbProjectionTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shp
   ${TEMP}/prTvGeometriesProjectionFilterLines.shp
   otbGeometriesProjectionFilter
@@ -371,17 +357,17 @@ otb_add_test(NAME prTvGeometriesProjectionFilterLines COMMAND otbProjectionTestD
   )
 
 otb_add_test(NAME prTvGeometriesProjectionFilterPoints COMMAND otbProjectionTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shp
   ${TEMP}/prTvGeometriesProjectionFilterPoints.shp
   otbGeometriesProjectionFilter
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${TEMP}/prTvGeometriesProjectionFilterPoints.shp
   )
 
 otb_add_test(NAME prTvGeometriesProjectionFilterPolygons COMMAND otbProjectionTestDriver
-  --compare-ogr  ${NOTOL}
-  ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.shp
+  --compare-ogr  ${EPSILON_3}
+  ${BASELINE_FILES}/prTvGeometriesProjectionFilterPolygons.shp
   ${TEMP}/prTvGeometriesProjectionFilterPolygons.shp
   otbGeometriesProjectionFilter
   ${INPUTDATA}/Capitole-Shadows.shp
@@ -412,19 +398,19 @@ otb_add_test(NAME prTvVectorDataTransformFilter COMMAND otbProjectionTestDriver
   )
 
 otb_add_test(NAME prTvRationalTransformToDisplacementFieldSourceTest COMMAND otbProjectionTestDriver
-  --compare-image ${EPSILON_9}  ${BASELINE}/prTvRationalTransformToDisplacementFieldSourceTest.hdr
-  ${TEMP}/prTvRationalTransformToDisplacementFieldSourceTest.hdr
+  --compare-image ${EPSILON_9}  ${BASELINE}/prTvRationalTransformToDisplacementFieldSourceTest.tif
+  ${TEMP}/prTvRationalTransformToDisplacementFieldSourceTest.tif
   otbRationalTransformToDisplacementFieldSourceTest
-  ${TEMP}/prTvRationalTransformToDisplacementFieldSourceTest.hdr
+  ${TEMP}/prTvRationalTransformToDisplacementFieldSourceTest.tif
   )
 
 otb_add_test(NAME prTvVectorDataProjectionFilterFromMapToSensor COMMAND otbProjectionTestDriver
-  --compare-ogr  ${NOTOL}
+  --compare-ogr  ${EPSILON_9}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
   ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
   otbVectorDataProjectionFilterFromMapToSensor
-  ${INPUTDATA}/ToulousePoints-examples.shp
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  ${INPUTDATA}/toulousepoints_examples.shp
+  ${INPUTDATA}/QB_PAN_ROI_1000_100.tif
   ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
   )
 
@@ -441,12 +427,12 @@ otb_add_test(NAME prTvRationalTransform COMMAND otbProjectionTestDriver
   )
 
 otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToSensor COMMAND otbProjectionTestDriver
-  --compare-ogr  ${NOTOL}
+  --compare-ogr  ${EPSILON_9}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToSensor.shp
   otbGeometriesProjectionFilterFromMapToSensor
-  ${INPUTDATA}/ToulousePoints-examples.shp
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  ${INPUTDATA}/toulousepoints_examples.shp
+  ${INPUTDATA}/QB_PAN_ROI_1000_100.tif
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToSensor.shp
   )
 
@@ -455,15 +441,8 @@ otb_add_test(NAME prTvImageToEnvelopeVectorDataFilter COMMAND otbProjectionTestD
   ${BASELINE_FILES}/prTvImageToEnvelopeVectorDataFilterOutput.kml
   ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
   otbImageToEnvelopeVectorDataFilter
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
   ${TEMP}/prTvImageToEnvelopeVectorDataFilterOutput.kml
-  )
-
-otb_add_test(NAME prTvMapProjectionsTest COMMAND otbProjectionTestDriver
-  --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvMapProjectionsTest.txt
-  ${TEMP}/prTvMapProjectionsTest.txt
-  otbMapProjectionAccessorsTest
-  ${TEMP}/prTvMapProjectionsTest.txt
   )
 
 otb_add_test(NAME prTvImageToGenericRSOutputParameters COMMAND otbProjectionTestDriver
@@ -476,11 +455,11 @@ otb_add_test(NAME prTvImageToGenericRSOutputParameters COMMAND otbProjectionTest
   )
 
 otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToGeo COMMAND otbProjectionTestDriver
-  --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+  --compare-ogr ${EPSILON_9}
+  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.shp
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.shp
   otbGeometriesProjectionFilterFromMapToGeo
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.shp
   )
 
@@ -495,12 +474,12 @@ otb_add_test(NAME leTvROIdataConversion COMMAND otbProjectionTestDriver
   )
 
 otb_add_test(NAME prTvVectorDataProjectionFilterFromMapToGeo COMMAND otbProjectionTestDriver
-  --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
-  ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+  --compare-ogr ${EPSILON_9}
+  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.shp
+  ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.shp
   otbVectorDataProjectionFilterFromMapToGeo
-  ${INPUTDATA}/ToulousePoints-examples.shp
-  ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+  ${INPUTDATA}/toulousepoints_examples.shp
+  ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.shp
   )
 
 otb_add_test(NAME prTvPhysicalToRPCSensorModelImageFilter COMMAND otbProjectionTestDriver
@@ -518,11 +497,11 @@ otb_add_test(NAME prTuGeometriesProjectionFilterFromGeoToMap COMMAND otbProjecti
   )
 
 otb_add_test(NAME prTvVectorDataProjectionFilterFromMapToImage COMMAND otbProjectionTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_3}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
   ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.shp
   otbVectorDataProjectionFilterFromMapToImage
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
   ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.shp
   )
@@ -602,34 +581,14 @@ otb_add_test(NAME prTvLeastSquareAffineTransformEstimator COMMAND otbProjectionT
   352 807 919 10023 12102 14181
   )
 
-otb_add_test(NAME bfTvSpectralAngleDataNodeFeatureFunction_Polygon COMMAND otbProjectionTestDriver
-  --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
-  ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
-  otbSpectralAngleDataNodeFeatureFunction
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_BUILDINGS.shp
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-  ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Polygon.shp
-  0 )
-
-otb_add_test(NAME bfTvSpectralAngleDataNodeFeatureFunction_Line COMMAND otbProjectionTestDriver
-  --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
-  ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
-  otbSpectralAngleDataNodeFeatureFunction
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE_ROADS.shp
-  ${INPUTDATA}/Dempster-Shafer/ROI_QB_TOULOUSE.TIF
-  ${INPUTDATA}/DEM/srtm_directory
-  ${TEMP}/bfTvSpectralAngleDataNodeFeatureFunctionOutput_Line.shp
-  0
-  )
-
+set(VALID_CONDITION err=12)
+if(OTB_OSSIM_VERSION LESS 20200)
+set(VALID_CONDITION err=10)
+endif()
 otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithDEM COMMAND otbProjectionTestDriver
   otbGCPsToRPCSensorModelImageFilterCheckRpcModel
-  -in ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
-  -dem ${INPUTDATA}/DEM/srtm_directory
-  -gcp
+  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
+  ${INPUTDATA}/DEM/srtm_directory
   2000 2000 1.4181 43.6147 135.084
   2000 2050 1.41811 43.6135 134.185
   2000 2100 1.41812 43.6123 135.728
@@ -730,13 +689,17 @@ otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_Wit
   2450 2350 1.43238 43.6063 144.66
   2450 2400 1.43239 43.6051 144.932
   2450 2450 1.43239 43.6038 136.794
-  -err 10 # Tolerance in meters, the first goal of this test
+  ${VALID_CONDITION} # Tolerance in meters, the first goal of this test
   )
 
+set(VALID_CONDITION err=20)
+if(OTB_OSSIM_VERSION LESS 20200)
+set(VALID_CONDITION err=10)
+endif()
 otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithoutDEM COMMAND otbProjectionTestDriver
   otbGCPsToRPCSensorModelImageFilterCheckRpcModel
-  -in ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
-  -gcp
+  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
+  no_output
   2000 2000 1.41809 43.6143 0
   2000 2050 1.4181 43.6131 0
   2000 2100 1.4181 43.6119 0
@@ -837,7 +800,7 @@ otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_Wit
   2450 2350 1.43238 43.6059 0
   2450 2400 1.43238 43.6047 0
   2450 2450 1.43239 43.6034 0
-  -err 10 # Tolerance in meters, the first goal of this test
+  ${VALID_CONDITION} # Tolerance in meters, the first goal of this test
   )
 
 otb_add_test(NAME prTvGeographicalDistance COMMAND otbProjectionTestDriver
@@ -864,10 +827,15 @@ otb_add_test(NAME prTvTileImageFilterGenericRSTransformTest_LASVEGAS_DIMAPv1 COM
   LARGEINPUT{PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R3C1.JP2}
   )
 
-otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterAndOrtho COMMAND otbProjectionTestDriver
+set(VALID_CONDITION)
+if(OTB_OSSIM_VERSION LESS 20200)
+set(VALID_CONDITION
   --compare-image ${EPSILON_4}
   ${BASELINE}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
-  ${TEMP}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
+  ${TEMP}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif)
+endif()
+otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterAndOrtho COMMAND otbProjectionTestDriver
+  ${VALID_CONDITION}
   otbGCPsToRPCSensorModelImageFilterAndOrtho
   ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
   ${TEMP}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
@@ -986,10 +954,15 @@ otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterAndOrtho COMMAND otbProject
   #LARGEINPUT{VECTOR/MidiPyrenees/roads.shp}
   #)
 
-otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterWithoutDEM COMMAND otbProjectionTestDriver
+set(VALID_CONDITION)
+if(OTB_OSSIM_VERSION LESS 20200)
+set(VALID_CONDITION
   --compare-ascii ${EPSILON_4}
   ${BASELINE_FILES}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
-  ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
+  ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt)
+endif()
+otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterWithoutDEM COMMAND otbProjectionTestDriver
+  ${VALID_CONDITION}
   otbGCPsToRPCSensorModelImageFilterWithoutDEM
   ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
   ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
@@ -1096,17 +1069,17 @@ otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterWithoutDEM COMMAND otbProje
   )
 
 otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToImage COMMAND otbProjectionTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_3}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToImage.shp
   otbGeometriesProjectionFilterFromMapToImage
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToImage.shp
   )
 
 otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToEPSG_UTM COMMAND otbProjectionTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shp
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_UTM.shp
   otbGeometriesProjectionFilterFromMapToEPSG
@@ -1115,25 +1088,25 @@ otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToEPSG_UTM COMMAND otbPro
   32631 )
 
 otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToEPSG_WGS84 COMMAND otbProjectionTestDriver
-  --compare-ogr ${NOTOL}
-  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.kml
+  --compare-ogr ${EPSILON_9}
+  ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.shp
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.shp
   otbGeometriesProjectionFilterFromMapToEPSG
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.shp
   4326 )
 
 otb_add_test(NAME prTvVectorDataProjectionFilterPoints COMMAND otbProjectionTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shp
   ${TEMP}/prTvVectorDataProjectionFilterPoints.shp
   otbVectorDataProjectionFilter
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${TEMP}/prTvVectorDataProjectionFilterPoints.shp
   )
 
 otb_add_test(NAME prTvVectorDataProjectionFilterLines COMMAND otbProjectionTestDriver
-  --compare-ogr ${NOTOL}
+  --compare-ogr ${EPSILON_9}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterLines.shp
   ${TEMP}/prTvVectorDataProjectionFilterLines.shp
   otbVectorDataProjectionFilter
@@ -1142,19 +1115,12 @@ otb_add_test(NAME prTvVectorDataProjectionFilterLines COMMAND otbProjectionTestD
   )
 
 otb_add_test(NAME prTvVectorDataProjectionFilterPolygons COMMAND otbProjectionTestDriver
-  --compare-ogr  ${NOTOL}
+  --compare-ogr  ${EPSILON_3}
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterPolygons.shp
   ${TEMP}/prTvVectorDataProjectionFilterPolygons.shp
   otbVectorDataProjectionFilter
   ${INPUTDATA}/Capitole-Shadows.shp
   ${TEMP}/prTvVectorDataProjectionFilterPolygons.shp
-  )
-
-otb_add_test(NAME prTvUtmMapProjection COMMAND otbProjectionTestDriver
-  --compare-ascii ${EPSILON_4} ${BASELINE_FILES}/prTvUtmMapProjection.txt
-  ${TEMP}/prTvUtmMapProjection.txt
-  otbUtmMapProjection
-  ${TEMP}/prTvUtmMapProjection.txt
   )
 
 otb_add_test(NAME prTvTileMapTransform COMMAND otbProjectionTestDriver
@@ -1218,28 +1184,3 @@ set(GenericConversionChecking_INPUTS
       #${INPUTDATA}/DEM/srtm_directory
       #3 )
   #endforeach()
-
-
-
-  set(SENSOR_TYPES
-    "QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF"
-    "GEOEYE/LES_ROCHES/po_350134_bgrn_0000000.tif"
-    "WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF"
-    )
-
-  foreach( file ${SENSOR_TYPES})
-    # Get the sensor name
-    set(sharp_regexp "([0-9A-Za-z_]*)[ ]*/[ ]*(.*)")
-    string(REGEX REPLACE "${sharp_regexp}" "\\1" sensor_name "${file}")
-    # Tests
-    otb_add_test(NAME prTvotbGenericRSResampleImageFilterFromMap_${sensor_name} COMMAND otbProjectionTestDriver
-      --compare-image ${EPSILON_4}
-      ${BASELINE}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
-      ${TEMP}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
-      otbGenericRSResampleImageFilterFromMap
-      LARGEINPUT{${file}}
-      15
-      0
-      ${TEMP}/prTvotbGenericRSResampleImageFilterOutputFromMap_${sensor_name}.tif
-      )
-  endforeach()

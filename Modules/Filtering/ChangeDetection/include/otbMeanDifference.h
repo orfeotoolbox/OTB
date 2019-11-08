@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,26 +27,28 @@ namespace otb
 namespace Functor
 {
 
-template<class TInput1, class TInput2, class TOutput>
+template <class TInput1, class TInput2, class TOutput>
 class MeanDifference
 {
 public:
-  MeanDifference() {}
-  virtual ~MeanDifference() {}
-  inline TOutput operator ()(const TInput1& itA,
-                             const TInput2& itB)
+  MeanDifference()
+  {
+  }
+  virtual ~MeanDifference()
+  {
+  }
+  inline TOutput operator()(const TInput1& itA, const TInput2& itB)
   {
 
     TOutput meanA = 0.0;
     TOutput meanB = 0.0;
 
     for (unsigned long pos = 0; pos < itA.Size(); ++pos)
-      {
+    {
 
       meanA += static_cast<TOutput>(itA.GetPixel(pos));
       meanB += static_cast<TOutput>(itB.GetPixel(pos));
-
-      }
+    }
     return static_cast<TOutput>((meanA - meanB) / itA.Size());
   }
 };

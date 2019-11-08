@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,17 +19,16 @@
  */
 
 #if defined(_MSC_VER)
-#pragma warning ( disable : 4786 )
+#pragma warning(disable : 4786)
 #endif
 
 #include "otbWrapperStringParameter.h"
 
 
-
 int otbWrapperStringParameterTest1(int itkNotUsed(argc), char* argv[])
 {
   typedef otb::Wrapper::StringParameter StringParameterType;
-  StringParameterType::Pointer numParam = StringParameterType::New();
+  StringParameterType::Pointer          numParam = StringParameterType::New();
 
   const std::string value = argv[1];
   const std::string key   = argv[2];

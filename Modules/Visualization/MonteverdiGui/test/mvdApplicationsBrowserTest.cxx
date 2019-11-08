@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,21 +34,21 @@
 #include "mvdApplicationsBrowser.h"
 
 int mvdApplicationsBrowserTest(int argc, char* argv[])
-{ 
+{
   //
   // instantiate applications browser
-  mvd::ApplicationsBrowser *  browser = new mvd::ApplicationsBrowser();
+  mvd::ApplicationsBrowser* browser = new mvd::ApplicationsBrowser();
 
   //
-  // is search path set 
+  // is search path set
   if (argc > 1)
-    {
+  {
     browser->SetAutoLoadPath(argv[1]);
-    }
+  }
 
   //
   // print available applications or exit with failure
-  if ( browser->GetAvailableApplications().size() == 0 )
+  if (browser->GetAvailableApplications().size() == 0)
     return EXIT_FAILURE;
 
   // return ok

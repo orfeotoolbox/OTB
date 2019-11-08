@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,7 +25,6 @@
 #include "otbConfusionMatrixMeasurements.h"
 
 
-
 typedef unsigned long                                   ConfusionMatrixEltType;
 typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;
 typedef unsigned char                                   ClassLabelType;
@@ -33,121 +32,117 @@ typedef int                                             LabelPixelType;
 
 // filter type
 typedef otb::ConfusionMatrixMeasurements<ConfusionMatrixType, ClassLabelType> ConfusionMatrixMeasurementsType;
-typedef ConfusionMatrixMeasurementsType::MapOfClassesType                     MapOfClassesType;
-typedef ConfusionMatrixMeasurementsType::MapOfIndicesType                     MapOfIndicesType;
-typedef ConfusionMatrixMeasurementsType::MeasurementType                      MeasurementType;
+typedef ConfusionMatrixMeasurementsType::MapOfClassesType MapOfClassesType;
+typedef ConfusionMatrixMeasurementsType::MapOfIndicesType MapOfIndicesType;
+typedef ConfusionMatrixMeasurementsType::MeasurementType  MeasurementType;
 
-int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType &mapOfClassesRefClX, ConfusionMatrixType &confusionMatrixClX)
+int CSVConfusionMatrixFileReader(const std::string fileName, MapOfClassesType& mapOfClassesRefClX, ConfusionMatrixType& confusionMatrixClX)
+{
+  std::ifstream inFile;
+  inFile.open(fileName);
+
+  if (!inFile)
   {
-    std::ifstream inFile;
-    inFile.open(fileName);
+    std::cerr << "Confusion Matrix File opening problem with file:" << std::endl;
+    std::cerr << fileName << std::endl;
+    return EXIT_FAILURE;
+  }
+  else
+  {
+    LabelPixelType labelRef = 0, labelProd = 0;
+    std::string    currentLine, refLabelsLine, prodLabelsLine, currentValue;
+    const char     endCommentChar = ':';
+    const char     separatorChar  = ',';
+    const char     eolChar        = '\n';
+    std::getline(inFile, refLabelsLine, endCommentChar);  // Skips the comments
+    std::getline(inFile, refLabelsLine, eolChar);         // Gets the first line after the comment char until the End Of Line char
+    std::getline(inFile, prodLabelsLine, endCommentChar); // Skips the comments
+    std::getline(inFile, prodLabelsLine, eolChar);        // Gets the second line after the comment char until the End Of Line char
 
-    if (!inFile)
+    std::istringstream issRefLabelsLine(refLabelsLine);
+    std::istringstream issProdLabelsLine(prodLabelsLine);
+
+    MapOfClassesType mapOfClassesProdClX;
+
+    mapOfClassesRefClX.clear();
+    mapOfClassesProdClX.clear();
+    int itLab = 0;
+    while (issRefLabelsLine.good())
+    {
+      std::getline(issRefLabelsLine, currentValue, separatorChar);
+      labelRef                     = static_cast<LabelPixelType>(std::atoi(currentValue.c_str()));
+      mapOfClassesRefClX[labelRef] = itLab;
+      ++itLab;
+    }
+
+    itLab = 0;
+    while (issProdLabelsLine.good())
+    {
+      std::getline(issProdLabelsLine, currentValue, separatorChar);
+      labelProd                      = static_cast<LabelPixelType>(std::atoi(currentValue.c_str()));
+      mapOfClassesProdClX[labelProd] = itLab;
+      ++itLab;
+    }
+
+    unsigned int        nbRefLabelsClk  = mapOfClassesRefClX.size();
+    unsigned int        nbProdLabelsClk = mapOfClassesProdClX.size();
+    ConfusionMatrixType confusionMatrixClXTemp;
+    confusionMatrixClXTemp = ConfusionMatrixType(nbRefLabelsClk, nbProdLabelsClk);
+    confusionMatrixClXTemp.Fill(0);
+
+    // Reading the confusion matrix confusionMatrixClXTemp from the file
+    for (unsigned int itRow = 0; itRow < nbRefLabelsClk; ++itRow)
+    {
+      // Gets the itRow^th line after the header lines with the labels
+      std::getline(inFile, currentLine, eolChar);
+      std::istringstream issCurrentLine(currentLine);
+      unsigned int       itCol = 0;
+      while (issCurrentLine.good())
       {
-      std::cerr << "Confusion Matrix File opening problem with file:" << std::endl;
-      std::cerr << fileName << std::endl;
-      return EXIT_FAILURE;
+        std::getline(issCurrentLine, currentValue, separatorChar);
+        confusionMatrixClXTemp(itRow, itCol) = static_cast<ConfusionMatrixEltType>(std::atoi(currentValue.c_str()));
+        ++itCol;
       }
-    else
+    }
+
+    MapOfClassesType::iterator itMapOfClassesRef, itMapOfClassesProd;
+
+    // Formatting confusionMatrixClX from confusionMatrixClXTemp in order to make confusionMatrixClX a square matrix
+    // from the reference labels in mapOfClassesRefClX
+    int indiceLabelRef = 0, indiceLabelProd = 0;
+    int indiceLabelRefTemp = 0, indiceLabelProdTemp = 0;
+    // Initialization of confusionMatrixClX
+    confusionMatrixClX = ConfusionMatrixType(nbRefLabelsClk, nbRefLabelsClk);
+    confusionMatrixClX.Fill(0);
+    for (itMapOfClassesRef = mapOfClassesRefClX.begin(); itMapOfClassesRef != mapOfClassesRefClX.end(); ++itMapOfClassesRef)
+    {
+      // labels labelRef of mapOfClassesRefClX are already sorted
+      labelRef           = itMapOfClassesRef->first;
+      indiceLabelRefTemp = itMapOfClassesRef->second;
+
+      for (itMapOfClassesProd = mapOfClassesProdClX.begin(); itMapOfClassesProd != mapOfClassesProdClX.end(); ++itMapOfClassesProd)
       {
-      LabelPixelType labelRef = 0, labelProd = 0;
-      std::string currentLine, refLabelsLine, prodLabelsLine, currentValue;
-      const char endCommentChar = ':';
-      const char separatorChar = ',';
-      const char eolChar = '\n';
-      std::getline(inFile, refLabelsLine, endCommentChar); // Skips the comments
-      std::getline(inFile, refLabelsLine, eolChar); // Gets the first line after the comment char until the End Of Line char
-      std::getline(inFile, prodLabelsLine, endCommentChar); // Skips the comments
-      std::getline(inFile, prodLabelsLine, eolChar); // Gets the second line after the comment char until the End Of Line char
+        // labels labelProd of mapOfClassesProdClX are already sorted
+        labelProd           = itMapOfClassesProd->first;
+        indiceLabelProdTemp = itMapOfClassesProd->second;
 
-      std::istringstream issRefLabelsLine(refLabelsLine);
-      std::istringstream issProdLabelsLine(prodLabelsLine);
-
-      MapOfClassesType mapOfClassesProdClX;
-
-      mapOfClassesRefClX.clear();
-      mapOfClassesProdClX.clear();
-      int itLab = 0;
-      while (issRefLabelsLine.good())
+        // If labelProd is present in mapOfClassesRefClX
+        if (mapOfClassesRefClX.count(labelProd) != 0)
         {
-        std::getline(issRefLabelsLine, currentValue, separatorChar);
-        labelRef = static_cast<LabelPixelType> (std::atoi(currentValue.c_str()));
-        mapOfClassesRefClX[labelRef] = itLab;
-        ++itLab;
-        }
-
-      itLab = 0;
-      while (issProdLabelsLine.good())
-        {
-        std::getline(issProdLabelsLine, currentValue, separatorChar);
-        labelProd = static_cast<LabelPixelType> (std::atoi(currentValue.c_str()));
-        mapOfClassesProdClX[labelProd] = itLab;
-        ++itLab;
-        }
-
-      unsigned int nbRefLabelsClk = mapOfClassesRefClX.size();
-      unsigned int nbProdLabelsClk = mapOfClassesProdClX.size();
-      ConfusionMatrixType confusionMatrixClXTemp;
-      confusionMatrixClXTemp = ConfusionMatrixType(nbRefLabelsClk, nbProdLabelsClk);
-      confusionMatrixClXTemp.Fill(0);
-
-      // Reading the confusion matrix confusionMatrixClXTemp from the file
-      for (unsigned int itRow = 0; itRow < nbRefLabelsClk; ++itRow)
-        {
-        //Gets the itRow^th line after the header lines with the labels
-        std::getline(inFile, currentLine, eolChar);
-        std::istringstream issCurrentLine(currentLine);
-        unsigned int itCol = 0;
-        while (issCurrentLine.good())
-          {
-          std::getline(issCurrentLine, currentValue, separatorChar);
-          confusionMatrixClXTemp(itRow, itCol) = static_cast<ConfusionMatrixEltType> (std::atoi(currentValue.c_str()));
-          ++itCol;
-          }
-        }
-
-      MapOfClassesType::iterator  itMapOfClassesRef, itMapOfClassesProd;
-
-      // Formatting confusionMatrixClX from confusionMatrixClXTemp in order to make confusionMatrixClX a square matrix
-      // from the reference labels in mapOfClassesRefClX
-      int indiceLabelRef = 0, indiceLabelProd = 0;
-      int indiceLabelRefTemp = 0, indiceLabelProdTemp = 0;
-      // Initialization of confusionMatrixClX
-      confusionMatrixClX = ConfusionMatrixType(nbRefLabelsClk, nbRefLabelsClk);
-      confusionMatrixClX.Fill(0);
-      for (itMapOfClassesRef = mapOfClassesRefClX.begin(); itMapOfClassesRef != mapOfClassesRefClX.end(); ++itMapOfClassesRef)
-        {
-        // labels labelRef of mapOfClassesRefClX are already sorted
-        labelRef = itMapOfClassesRef->first;
-        indiceLabelRefTemp = itMapOfClassesRef->second;
-
-        for (itMapOfClassesProd = mapOfClassesProdClX.begin(); itMapOfClassesProd != mapOfClassesProdClX.end(); ++itMapOfClassesProd)
-          {
-          // labels labelProd of mapOfClassesProdClX are already sorted
-          labelProd = itMapOfClassesProd->first;
-          indiceLabelProdTemp = itMapOfClassesProd->second;
-
-          // If labelProd is present in mapOfClassesRefClX
-          if (mapOfClassesRefClX.count(labelProd) != 0)
-            {
-            // Indice of labelProd in mapOfClassesRefClX; itMapOfClassesRef->second elements are already SORTED
-            indiceLabelProd = mapOfClassesRefClX[labelProd];
-            confusionMatrixClX(indiceLabelRef, indiceLabelProd) = confusionMatrixClXTemp(indiceLabelRefTemp, indiceLabelProdTemp);
-            }
-          }
-        ++indiceLabelRef;
+          // Indice of labelProd in mapOfClassesRefClX; itMapOfClassesRef->second elements are already SORTED
+          indiceLabelProd = mapOfClassesRefClX[labelProd];
+          confusionMatrixClX(indiceLabelRef, indiceLabelProd) = confusionMatrixClXTemp(indiceLabelRefTemp, indiceLabelProdTemp);
         }
       }
-    inFile.close();
-    return EXIT_SUCCESS;
-  } // END CSVConfusionMatrixFileReader
+      ++indiceLabelRef;
+    }
+  }
+  inFile.close();
+  return EXIT_SUCCESS;
+} // END CSVConfusionMatrixFileReader
 
 
-
-
-
-
-int otbConfusionMatrixMeasurementsTest(int itkNotUsed(argc), char* itkNotUsed(argv) [])
+int otbConfusionMatrixMeasurementsTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   /*typedef unsigned long                                   ConfusionMatrixEltType;
   typedef itk::VariableSizeMatrix<ConfusionMatrixEltType> ConfusionMatrixType;
@@ -166,8 +161,8 @@ int otbConfusionMatrixMeasurementsTest(int itkNotUsed(argc), char* itkNotUsed(ar
   mapOfClasses['c'] = 2;
   mapOfClasses['d'] = 3;
 
-  unsigned int nbClasses = mapOfClasses.size();
-  ConfusionMatrixType confMat = ConfusionMatrixType(nbClasses, nbClasses);
+  unsigned int        nbClasses = mapOfClasses.size();
+  ConfusionMatrixType confMat   = ConfusionMatrixType(nbClasses, nbClasses);
   confMat(0, 0) = 1, confMat(0, 1) = 0, confMat(0, 2) = 0, confMat(0, 3) = 2;
   confMat(1, 0) = 0, confMat(1, 1) = 1, confMat(1, 2) = 1, confMat(1, 3) = 1;
   confMat(2, 0) = 0, confMat(2, 1) = 0, confMat(2, 2) = 2, confMat(2, 3) = 1;
@@ -182,34 +177,28 @@ int otbConfusionMatrixMeasurementsTest(int itkNotUsed(argc), char* itkNotUsed(ar
   confMatMeasurements->Compute();
 
   // mapOfIndices[index] = label associated to the rows/columns of the confusion matrix
-  MapOfIndicesType mapOfIndices;
+  MapOfIndicesType           mapOfIndices;
   MapOfIndicesType::iterator itMapOfIndices;
   mapOfIndices = confMatMeasurements->GetMapOfIndices();
 
   for (itMapOfIndices = mapOfIndices.begin(); itMapOfIndices != mapOfIndices.end(); ++itMapOfIndices)
-    {
-    unsigned int itClasses = itMapOfIndices->first;
-    ClassLabelType label = itMapOfIndices->second;
+  {
+    unsigned int   itClasses = itMapOfIndices->first;
+    ClassLabelType label     = itMapOfIndices->second;
 
-    std::cout << "Number of True Positives of class [" << label << "] = "
-        << confMatMeasurements->GetTruePositiveValues()[itClasses] << std::endl;
-    std::cout << "Number of False Negatives of class [" << label << "] = "
-            << confMatMeasurements->GetFalseNegativeValues()[itClasses] << std::endl;
-    std::cout << "Number of False Positives of class [" << label << "] = "
-            << confMatMeasurements->GetFalsePositiveValues()[itClasses] << std::endl;
-    std::cout << "Number of True Negatives of class [" << label << "] = "
-            << confMatMeasurements->GetTrueNegativeValues()[itClasses] << std::endl;
+    std::cout << "Number of True Positives of class [" << label << "] = " << confMatMeasurements->GetTruePositiveValues()[itClasses] << std::endl;
+    std::cout << "Number of False Negatives of class [" << label << "] = " << confMatMeasurements->GetFalseNegativeValues()[itClasses] << std::endl;
+    std::cout << "Number of False Positives of class [" << label << "] = " << confMatMeasurements->GetFalsePositiveValues()[itClasses] << std::endl;
+    std::cout << "Number of True Negatives of class [" << label << "] = " << confMatMeasurements->GetTrueNegativeValues()[itClasses] << std::endl;
 
-    std::cout << "Precision of class [" << label << "] vs all: " << confMatMeasurements->GetPrecisions()[itClasses]
-        << std::endl;
+    std::cout << "Precision of class [" << label << "] vs all: " << confMatMeasurements->GetPrecisions()[itClasses] << std::endl;
     std::cout << "Recall of class [" << label << "] vs all: " << confMatMeasurements->GetRecalls()[itClasses] << std::endl;
-    std::cout << "F-score of class [" << label << "] vs all: " << confMatMeasurements->GetFScores()[itClasses] << "\n"
-        << std::endl;
-    }
-  std::cout << "Number of True Positives of the different classes: "<< confMatMeasurements->GetTruePositiveValues()<< std::endl;
-  std::cout << "Number of False Negatives of the different classes: "<< confMatMeasurements->GetFalseNegativeValues()<< std::endl;
-  std::cout << "Number of False Positives of the different classes: "<< confMatMeasurements->GetFalsePositiveValues()<< std::endl;
-  std::cout << "Number of True Negatives of the different classes: "<< confMatMeasurements->GetTrueNegativeValues()<< std::endl;
+    std::cout << "F-score of class [" << label << "] vs all: " << confMatMeasurements->GetFScores()[itClasses] << "\n" << std::endl;
+  }
+  std::cout << "Number of True Positives of the different classes: " << confMatMeasurements->GetTruePositiveValues() << std::endl;
+  std::cout << "Number of False Negatives of the different classes: " << confMatMeasurements->GetFalseNegativeValues() << std::endl;
+  std::cout << "Number of False Positives of the different classes: " << confMatMeasurements->GetFalsePositiveValues() << std::endl;
+  std::cout << "Number of True Negatives of the different classes: " << confMatMeasurements->GetTrueNegativeValues() << std::endl;
   std::cout << "Precision of the different classes: " << confMatMeasurements->GetPrecisions() << std::endl;
   std::cout << "Recall of the different classes: " << confMatMeasurements->GetRecalls() << std::endl;
   std::cout << "F-score of the different classes: " << confMatMeasurements->GetFScores() << std::endl;
@@ -265,94 +254,93 @@ int otbConfusionMatrixMeasurementsTest(int itkNotUsed(argc), char* itkNotUsed(ar
   blRecalls.SetSize(nbClasses);
   blFScores.SetSize(nbClasses);
   for (unsigned int itC = 0; itC < nbClasses; itC++)
-    {
+  {
     blPrecisions[itC] = blTP[itC] / (blTP[itC] + blFP[itC]);
-    blRecalls[itC] = blTP[itC] / (blTP[itC] + blFN[itC]);
-    blFScores[itC] = 2 * blPrecisions[itC] * blRecalls[itC] / (blPrecisions[itC] + blRecalls[itC]);
-    }
+    blRecalls[itC]    = blTP[itC] / (blTP[itC] + blFN[itC]);
+    blFScores[itC]    = 2 * blPrecisions[itC] * blRecalls[itC] / (blPrecisions[itC] + blRecalls[itC]);
+  }
 
 
   if (confMatMeasurements->GetTruePositiveValues() != blTP)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in True Positive Values" << std::endl;
     std::cout << "baseline TPs = " << blTP << std::endl;
     std::cout << "calculated TPs = " << confMatMeasurements->GetTruePositiveValues();
     return EXIT_FAILURE;
-    }
+  }
 
   if (confMatMeasurements->GetFalseNegativeValues() != blFN)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in False Negative Values" << std::endl;
     std::cout << "baseline FNs = " << blFN << std::endl;
     std::cout << "calculated FNs = " << confMatMeasurements->GetFalseNegativeValues();
     return EXIT_FAILURE;
-    }
+  }
 
   if (confMatMeasurements->GetFalsePositiveValues() != blFP)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in False Positive Values" << std::endl;
     std::cout << "baseline FPs = " << blFP << std::endl;
     std::cout << "calculated FPs = " << confMatMeasurements->GetFalsePositiveValues();
     return EXIT_FAILURE;
-    }
+  }
 
   if (confMatMeasurements->GetTrueNegativeValues() != blTN)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in True Negative Values" << std::endl;
     std::cout << "baseline TNs = " << blTN << std::endl;
     std::cout << "calculated TNs = " << confMatMeasurements->GetTrueNegativeValues();
     return EXIT_FAILURE;
-    }
+  }
 
   if (confMatMeasurements->GetPrecisions() != blPrecisions)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in Precisions" << std::endl;
     std::cout << "baseline Precisions = " << blPrecisions << std::endl;
     std::cout << "calculated Precisions = " << confMatMeasurements->GetPrecisions();
     return EXIT_FAILURE;
-    }
+  }
 
   if (confMatMeasurements->GetRecalls() != blRecalls)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in Recalls" << std::endl;
     std::cout << "baseline Recalls = " << blRecalls << std::endl;
     std::cout << "calculated Recalls = " << confMatMeasurements->GetRecalls();
     return EXIT_FAILURE;
-    }
+  }
 
   if (confMatMeasurements->GetFScores() != blFScores)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in FScores" << std::endl;
     std::cout << "baseline FScores = " << blFScores << std::endl;
     std::cout << "calculated FScores = " << confMatMeasurements->GetFScores();
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }
-
 
 
 int otbConfusionMatrixConcatenateTest(int argc, char* argv[])
 {
   unsigned nbClassifiers = argc - 1;
 
-  MapOfClassesType mapOfClasses;
-  MapOfIndicesType mapOfIndices;
+  MapOfClassesType           mapOfClasses;
+  MapOfIndicesType           mapOfIndices;
   MapOfIndicesType::iterator itMapOfIndices;
-  ConfusionMatrixType addConfusionMatrix;
-  unsigned int nbClasses = 0;
+  ConfusionMatrixType        addConfusionMatrix;
+  unsigned int               nbClasses = 0;
   for (unsigned itClk = 0; itClk < nbClassifiers; ++itClk)
-    {
-    std::string fileNameCMClk= argv[itClk + 1];
-    MapOfClassesType mapOfClassesClk;
+  {
+    std::string         fileNameCMClk = argv[itClk + 1];
+    MapOfClassesType    mapOfClassesClk;
     ConfusionMatrixType confusionMatrixClk;
 
     CSVConfusionMatrixFileReader(fileNameCMClk, mapOfClassesClk, confusionMatrixClk);
@@ -362,20 +350,20 @@ int otbConfusionMatrixConcatenateTest(int argc, char* argv[])
 
     nbClasses = confusionMatrixClk.Rows();
     if (itClk == 0)
-      {
-      mapOfClasses = mapOfClassesClk;
+    {
+      mapOfClasses       = mapOfClassesClk;
       addConfusionMatrix = ConfusionMatrixType(nbClasses, nbClasses);
       addConfusionMatrix.Fill(0);
-      }
+    }
 
     for (unsigned itRow = 0; itRow < nbClasses; ++itRow)
-      {
+    {
       for (unsigned itCol = 0; itCol < nbClasses; ++itCol)
-        {
+      {
         addConfusionMatrix(itRow, itCol) += confusionMatrixClk(itRow, itCol);
-        }
       }
     }
+  }
 
   std::cout << std::endl;
   std::cout << "*****************************************************" << std::endl;
@@ -391,29 +379,23 @@ int otbConfusionMatrixConcatenateTest(int argc, char* argv[])
   mapOfIndices = confMatMeasurements->GetMapOfIndices();
 
   for (itMapOfIndices = mapOfIndices.begin(); itMapOfIndices != mapOfIndices.end(); ++itMapOfIndices)
-    {
-    unsigned int itClasses = itMapOfIndices->first;
-    LabelPixelType label = itMapOfIndices->second;
+  {
+    unsigned int   itClasses = itMapOfIndices->first;
+    LabelPixelType label     = itMapOfIndices->second;
 
-    std::cout << "Number of True Positives of class [" << label << "] = "
-        << confMatMeasurements->GetTruePositiveValues()[itClasses] << std::endl;
-    std::cout << "Number of False Negatives of class [" << label << "] = "
-            << confMatMeasurements->GetFalseNegativeValues()[itClasses] << std::endl;
-    std::cout << "Number of False Positives of class [" << label << "] = "
-            << confMatMeasurements->GetFalsePositiveValues()[itClasses] << std::endl;
-    std::cout << "Number of True Negatives of class [" << label << "] = "
-            << confMatMeasurements->GetTrueNegativeValues()[itClasses] << std::endl;
+    std::cout << "Number of True Positives of class [" << label << "] = " << confMatMeasurements->GetTruePositiveValues()[itClasses] << std::endl;
+    std::cout << "Number of False Negatives of class [" << label << "] = " << confMatMeasurements->GetFalseNegativeValues()[itClasses] << std::endl;
+    std::cout << "Number of False Positives of class [" << label << "] = " << confMatMeasurements->GetFalsePositiveValues()[itClasses] << std::endl;
+    std::cout << "Number of True Negatives of class [" << label << "] = " << confMatMeasurements->GetTrueNegativeValues()[itClasses] << std::endl;
 
-    std::cout << "Precision of class [" << label << "] vs all: " << confMatMeasurements->GetPrecisions()[itClasses]
-        << std::endl;
+    std::cout << "Precision of class [" << label << "] vs all: " << confMatMeasurements->GetPrecisions()[itClasses] << std::endl;
     std::cout << "Recall of class [" << label << "] vs all: " << confMatMeasurements->GetRecalls()[itClasses] << std::endl;
-    std::cout << "F-score of class [" << label << "] vs all: " << confMatMeasurements->GetFScores()[itClasses] << "\n"
-        << std::endl;
-    }
-  std::cout << "Number of True Positives of the different classes: "<< confMatMeasurements->GetTruePositiveValues()<< std::endl;
-  std::cout << "Number of False Negatives of the different classes: "<< confMatMeasurements->GetFalseNegativeValues()<< std::endl;
-  std::cout << "Number of False Positives of the different classes: "<< confMatMeasurements->GetFalsePositiveValues()<< std::endl;
-  std::cout << "Number of True Negatives of the different classes: "<< confMatMeasurements->GetTrueNegativeValues()<< std::endl;
+    std::cout << "F-score of class [" << label << "] vs all: " << confMatMeasurements->GetFScores()[itClasses] << "\n" << std::endl;
+  }
+  std::cout << "Number of True Positives of the different classes: " << confMatMeasurements->GetTruePositiveValues() << std::endl;
+  std::cout << "Number of False Negatives of the different classes: " << confMatMeasurements->GetFalseNegativeValues() << std::endl;
+  std::cout << "Number of False Positives of the different classes: " << confMatMeasurements->GetFalsePositiveValues() << std::endl;
+  std::cout << "Number of True Negatives of the different classes: " << confMatMeasurements->GetTrueNegativeValues() << std::endl;
   std::cout << "Precision of the different classes: " << confMatMeasurements->GetPrecisions() << std::endl;
   std::cout << "Recall of the different classes: " << confMatMeasurements->GetRecalls() << std::endl;
   std::cout << "F-score of the different classes: " << confMatMeasurements->GetFScores() << std::endl;
@@ -428,7 +410,7 @@ int otbConfusionMatrixConcatenateTest(int argc, char* argv[])
 
   MeasurementType blTP, blFN, blFP, blTN, blPrecisions, blRecalls, blFScores;
 
-  ConfusionMatrixType  addConfusionMatrixBL = ConfusionMatrixType(nbClasses, nbClasses);
+  ConfusionMatrixType addConfusionMatrixBL = ConfusionMatrixType(nbClasses, nbClasses);
   addConfusionMatrixBL.Fill(0);
 
   addConfusionMatrixBL(0, 0) = 16162 + 20710 + 19343 + 20774 + 19283 + 19859;
@@ -474,85 +456,85 @@ int otbConfusionMatrixConcatenateTest(int argc, char* argv[])
   blRecalls.SetSize(nbClasses);
   blFScores.SetSize(nbClasses);
   for (unsigned int itC = 0; itC < nbClasses; itC++)
-    {
+  {
     blPrecisions[itC] = blTP[itC] / (blTP[itC] + blFP[itC]);
-    blRecalls[itC] = blTP[itC] / (blTP[itC] + blFN[itC]);
-    blFScores[itC] = 2 * blPrecisions[itC] * blRecalls[itC] / (blPrecisions[itC] + blRecalls[itC]);
-    }
+    blRecalls[itC]    = blTP[itC] / (blTP[itC] + blFN[itC]);
+    blFScores[itC]    = 2 * blPrecisions[itC] * blRecalls[itC] / (blPrecisions[itC] + blRecalls[itC]);
+  }
 
 
   if (addConfusionMatrix != addConfusionMatrixBL)
-      {
-      std::cout << std::endl;
-      std::cout << "ERROR in addConfusionMatrix" << std::endl;
-      std::cout << "baseline addConfusionMatrixBL = " << std::endl << addConfusionMatrixBL << std::endl;
-      std::cout << "calculated addConfusionMatrix = " << std::endl << addConfusionMatrix;
-      return EXIT_FAILURE;
-      }
+  {
+    std::cout << std::endl;
+    std::cout << "ERROR in addConfusionMatrix" << std::endl;
+    std::cout << "baseline addConfusionMatrixBL = " << std::endl << addConfusionMatrixBL << std::endl;
+    std::cout << "calculated addConfusionMatrix = " << std::endl << addConfusionMatrix;
+    return EXIT_FAILURE;
+  }
 
 
   if (confMatMeasurements->GetTruePositiveValues() != blTP)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in True Positive Values" << std::endl;
     std::cout << "baseline TPs = " << blTP << std::endl;
     std::cout << "calculated TPs = " << confMatMeasurements->GetTruePositiveValues();
     return EXIT_FAILURE;
-    }
+  }
 
   if (confMatMeasurements->GetFalseNegativeValues() != blFN)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in False Negative Values" << std::endl;
     std::cout << "baseline FNs = " << blFN << std::endl;
     std::cout << "calculated FNs = " << confMatMeasurements->GetFalseNegativeValues();
     return EXIT_FAILURE;
-    }
+  }
 
   if (confMatMeasurements->GetFalsePositiveValues() != blFP)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in False Positive Values" << std::endl;
     std::cout << "baseline FPs = " << blFP << std::endl;
     std::cout << "calculated FPs = " << confMatMeasurements->GetFalsePositiveValues();
     return EXIT_FAILURE;
-    }
+  }
 
   if (confMatMeasurements->GetTrueNegativeValues() != blTN)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in True Negative Values" << std::endl;
     std::cout << "baseline TNs = " << blTN << std::endl;
     std::cout << "calculated TNs = " << confMatMeasurements->GetTrueNegativeValues();
     return EXIT_FAILURE;
-    }
+  }
 
   if (confMatMeasurements->GetPrecisions() != blPrecisions)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in Precisions" << std::endl;
     std::cout << "baseline Precisions = " << blPrecisions << std::endl;
     std::cout << "calculated Precisions = " << confMatMeasurements->GetPrecisions();
     return EXIT_FAILURE;
-    }
+  }
 
   if (confMatMeasurements->GetRecalls() != blRecalls)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in Recalls" << std::endl;
     std::cout << "baseline Recalls = " << blRecalls << std::endl;
     std::cout << "calculated Recalls = " << confMatMeasurements->GetRecalls();
     return EXIT_FAILURE;
-    }
+  }
 
   if (confMatMeasurements->GetFScores() != blFScores)
-    {
+  {
     std::cout << std::endl;
     std::cout << "ERROR in FScores" << std::endl;
     std::cout << "baseline FScores = " << blFScores << std::endl;
     std::cout << "calculated FScores = " << confMatMeasurements->GetFScores();
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

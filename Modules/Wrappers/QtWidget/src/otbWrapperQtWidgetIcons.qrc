@@ -2,5 +2,6 @@
 <qresource>
     <file>../../../../Utilities/Data/Icons/mIconClearText.png</file>
     <file>../../../../Utilities/Data/Icons/mIconClearTextHover.png</file>
+    <file>../../../../Utilities/Data/Icons/monteverdi-48x48.png</file>
 </qresource>
 </RCC>

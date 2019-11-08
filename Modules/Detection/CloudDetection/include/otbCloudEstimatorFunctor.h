@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,7 +37,7 @@ namespace Functor
  * \ingroup OTBCloudDetection
  */
 
-template<class TInput, class TOutputValue>
+template <class TInput, class TOutputValue>
 class CloudEstimatorFunctor
 {
 public:
@@ -47,34 +47,35 @@ public:
   {
     m_ReferencePixel.SetSize(4);
     m_ReferencePixel.Fill(1);
-    m_RefNorm = 2.0;
+    m_RefNorm  = 2.0;
     m_Variance = 1.0;
-    m_Denom = 1.0;
+    m_Denom    = 1.0;
   }
 
-  virtual ~CloudEstimatorFunctor() {}
-  inline TOutputValue operator ()(const TInput& inPix) const
+  virtual ~CloudEstimatorFunctor()
+  {
+  }
+  inline TOutputValue operator()(const TInput& inPix) const
   {
 
     TOutputValue lOut;
-    double       lRes = 0.0;
-    double       lCurPixNorm = 0.0;
+    double       lRes          = 0.0;
+    double       lCurPixNorm   = 0.0;
     double       lGaussianCoef = 1.0;
 
     // Compute the Gaussian Coef
     for (unsigned int i = 0; i < std::min(inPix.Size(), m_ReferencePixel.Size()); ++i)
-      {
+    {
       lCurPixNorm += inPix[i] * inPix[i];
-      }
-    lCurPixNorm = std::sqrt(static_cast<double>(lCurPixNorm));
+    }
+    lCurPixNorm   = std::sqrt(static_cast<double>(lCurPixNorm));
     lGaussianCoef = std::exp(-std::pow((lCurPixNorm - m_RefNorm), 2) / m_Denom);
 
     // Reverse the SpectralAngle values and set them between [0; 1]
-    lRes =  lGaussianCoef * ((CONST_PI - m_SpectralAngleFunctor(inPix)) / CONST_PI);
+    lRes = lGaussianCoef * ((CONST_PI - m_SpectralAngleFunctor(inPix)) / CONST_PI);
 
     lOut = static_cast<TOutputValue>(lRes);
     return lOut;
-
   }
 
   void SetReferencePixel(TInput ref)
@@ -83,9 +84,9 @@ public:
     m_SpectralAngleFunctor.SetReferencePixel(ref);
     m_RefNorm = 0.0;
     for (unsigned int i = 0; i < ref.Size(); ++i)
-      {
+    {
       m_RefNorm += ref[i] * ref[i];
-      }
+    }
     m_RefNorm = std::sqrt(static_cast<double>(m_RefNorm));
     SetVariance(m_Variance);
   }
@@ -93,7 +94,7 @@ public:
   void SetVariance(double variance)
   {
     m_Variance = variance;
-    m_Denom = 2 * variance * variance * m_RefNorm * m_RefNorm;
+    m_Denom    = 2 * variance * variance * m_RefNorm * m_RefNorm;
   }
 
   TInput GetReferencePixel() const
@@ -111,7 +112,6 @@ protected:
   double                   m_RefNorm;
   double                   m_Variance;
   double                   m_Denom;
-
 };
 
 } // end namespace functor

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -52,15 +52,14 @@ namespace otb
  */
 
 template <class TInputImage, class TOutputImage, class TFunction>
-class ITK_EXPORT FunctionToImageFilter :
-  public itk::InPlaceImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT FunctionToImageFilter : public itk::InPlaceImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef FunctionToImageFilter                              Self;
+  typedef FunctionToImageFilter Self;
   typedef itk::InPlaceImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -101,14 +100,14 @@ public:
 
 
   /** Image dimensions */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension, unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
 protected:
   FunctionToImageFilter();
-  ~FunctionToImageFilter() override {}
+  ~FunctionToImageFilter() override
+  {
+  }
 
   /** Validate the presence of all three inputs. If one or more inputs
    * are missing, throw an exception. */
@@ -124,12 +123,11 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData()  */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  FunctionToImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  FunctionToImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The function that will be evaluated over the image */
   FunctionPointer m_PixelFunction;

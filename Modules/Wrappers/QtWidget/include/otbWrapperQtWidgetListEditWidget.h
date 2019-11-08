@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -47,28 +47,24 @@ class ListEditWidget;
  *
  * \brief
  */
-class OTBQtWidget_EXPORT ListEditWidget :
-    public QWidget
+class OTBQtWidget_EXPORT ListEditWidget : public QWidget
 {
 
   Q_OBJECT;
 
 public:
-
   /** \brief Constructor. */
-  ListEditWidget( StringListInterface *,
-		  QWidget * p =NULL,
-		  Qt::WindowFlags flags =0 );
+  ListEditWidget(StringListInterface*, QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** \brief Destructor. */
   virtual ~ListEditWidget();
 
-  const ListEditItemModel * GetItemModel() const;
+  const ListEditItemModel* GetItemModel() const;
 
-  ListEditItemModel * GetItemModel();
+  ListEditItemModel* GetItemModel();
 
 public slots:
-  void OnFilenameDropped(const QString &);
+  void OnFilenameDropped(const QString&);
 
 signals:
   void Updated();
@@ -78,23 +74,23 @@ signals:
 private:
   enum SwapSelection
   {
-    LEFT = -1,
-    NONE = 0,
+    LEFT  = -1,
+    NONE  = 0,
     RIGHT = +1,
   };
 
 private:
-  void Swap( int, int, SwapSelection = NONE );
+  void Swap(int, int, SwapSelection = NONE);
 
-  QStringList browseFilenames( bool multi = false, const QString & filename = QString());
+  QStringList browseFilenames(bool multi = false, const QString& filename = QString());
 
-  QString browseFilename( const QModelIndex & );
+  QString browseFilename(const QModelIndex&);
 
 private:
   /**
    * \brief uic generated.
    */
-  Ui::ListEditWidget * m_UI;
+  Ui::ListEditWidget* m_UI;
 
 private slots:
   void on_addButton_clicked();
@@ -104,11 +100,11 @@ private slots:
   void on_removeAllButton_clicked();
   void on_upButton_clicked();
 
-  void OnDataChanged( const QModelIndex &, const QModelIndex & );
+  void OnDataChanged(const QModelIndex&, const QModelIndex&);
   void OnModelReset();
-  void OnRowsInserted( const QModelIndex &, int, int );
-  void OnRowsRemoved( const QModelIndex &, int, int );
-  void OnSelectionChanged( const QItemSelection &, const QItemSelection & );
+  void OnRowsInserted(const QModelIndex&, int, int);
+  void OnRowsRemoved(const QModelIndex&, int, int);
+  void OnSelectionChanged(const QItemSelection&, const QItemSelection&);
 };
 
 } // end namespace 'Wrapper'

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -68,15 +68,12 @@ namespace
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
-ImageSettingsInterface
-::ImageSettingsInterface() :
-  m_Settings( NULL )
+ImageSettingsInterface::ImageSettingsInterface() : m_Settings(NULL)
 {
 }
 
 /*****************************************************************************/
-ImageSettingsInterface
-::~ImageSettingsInterface()
+ImageSettingsInterface::~ImageSettingsInterface()
 {
 #if 0
   delete m_Settings;
@@ -85,9 +82,7 @@ ImageSettingsInterface
 }
 
 /*****************************************************************************/
-void
-ImageSettingsInterface
-::SetSettings( ImageSettings * settings )
+void ImageSettingsInterface::SetSettings(ImageSettings* settings)
 {
 #if 0
   delete m_Settings;
@@ -95,30 +90,24 @@ ImageSettingsInterface
 
   m_Settings = settings;
 
-  virtual_SetSettings( settings );
+  virtual_SetSettings(settings);
 }
 
 /*****************************************************************************/
-void
-ImageSettingsInterface
-::UpdateSettings()
+void ImageSettingsInterface::UpdateSettings()
 {
   virtual_UpdateSettings();
 }
 
 /*****************************************************************************/
-void
-ImageSettingsInterface
-::virtual_SetSettings( ImageSettings * )
+void ImageSettingsInterface::virtual_SetSettings(ImageSettings*)
 {
 }
 
 /*****************************************************************************/
-void
-ImageSettingsInterface
-::virtual_UpdateSettings()
+void ImageSettingsInterface::virtual_UpdateSettings()
 {
-  virtual_SetSettings( m_Settings );
+  virtual_SetSettings(m_Settings);
 }
 
 /*****************************************************************************/

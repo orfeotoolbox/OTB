@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,6 +34,7 @@
 #include "itkRGBAPixel.h"
 
 #include "otbGeoInterface.h"
+#include "otbGlVersionChecker.h"
 #include "otbImage.h"
 #include "otbImageFileWriter.h"
 #include "otbImportImageFilter.h"
@@ -42,43 +43,118 @@
 namespace otb
 {
 
-GlView::GlView()
-  : m_Settings(ViewSettings::New()),
-    m_Actors(),
-    m_RenderingOrder()
+GlView::GlView() :
+  m_Settings( ViewSettings::New() ),
+  m_Actors(),
+  m_RenderingOrder(),
+  m_ProjMatrix{
+    1.0, 0.0, 0.0, 0.0,
+    0.0, 1.0, 0.0, 0.0,
+    0.0, 0.0, 1.0, 0.0,
+    0.0, 0.0, 0.0, 1.0 },
+  m_ModelViewMatrix{
+    1.0, 0.0, 0.0, 0.0,
+    0.0, 1.0, 0.0, 0.0,
+    0.0, 0.0, 1.0, 0.0,
+    0.0, 0.0, 0.0, 1.0 },
+  m_IsGLSLAvailable( false ),
+  m_IsGLSLEnabled( false )
 {}
+
 
 GlView::~GlView()
 {}
 
-void GlView::Initialize(unsigned int sx, unsigned int sy)
+
+std::size_t
+GlView
+::CheckGLCapabilities( char const * & glVersion,
+		       char const * & glslVersion )
+{
+  m_IsGLSLEnabled = m_IsGLSLAvailable =
+    GlVersionChecker::CheckGLCapabilities( glVersion, glslVersion );
+
+  if( !m_IsGLSLAvailable )
+    return 0;
+
+  assert( glVersion );
+  assert( glslVersion );
+
+  int major = 0;
+  int minor = 0;
+  int release = 0;
+
+  GlVersionChecker::SplitVersion( glslVersion, major, minor, release );
+
+  assert( major>0 );
+  assert( minor>0 );
+  assert( release>=0 );
+
+  return 100 * major + minor;
+}
+
+
+void
+GlView
+::Initialize( unsigned int sx, unsigned int sy ) noexcept
 {
   m_Settings = ViewSettings::New();
- 
-  this->ClearActors();
 
-  this->Resize(sx,sy);
+  ClearActors();
+
+  Resize( sx,sy );
 }
 
-void GlView::Resize(unsigned int sx, unsigned int sy)
+
+void
+GlView
+::SetGLSLEnabled( bool isEnabled )
 {
- ViewSettings::SizeType size;
-  size[0] = sx;
-  size[1] = sy;
-  m_Settings->SetViewportSize(size);
+  assert( m_Actors.empty() );
+
+  if( !m_Actors.empty() )
+    throw std::runtime_error(
+      "Failed to change GLSL activation state (view must be cleared before)."
+      );
+
+  m_IsGLSLEnabled = isEnabled;
 }
 
-void GlView::BeforeRendering()
+
+void
+GlView
+::Resize( unsigned int sx, unsigned int sy ) noexcept
+{
+  ViewSettings::SizeType size;
+
+  size[ 0 ] = sx;
+  size[ 1 ] = sy;
+
+  m_Settings->SetViewportSize( size );
+}
+
+
+void
+GlView
+::BeforeRendering()
 {
   // First, get all actors informed of new settings
   for(ActorMapType::iterator it = m_Actors.begin();
       it!=m_Actors.end();++it)
-    {
+  {
     if(it->second->GetVisible())
-      {
+    {
       it->second->ProcessViewSettings();
+
+      Shader* shader = it->second->GetShader();
+
+      if( shader )
+      {
+        shader->m_ProjMatrix = m_ProjMatrix;
+        shader->m_ModelViewMatrix = m_ModelViewMatrix;
       }
     }
+  }
 
   // Second, get opengl ready
 
@@ -88,36 +164,106 @@ void GlView::BeforeRendering()
   // Clear back-buffer(s) before rendering
   glClear( GL_COLOR_BUFFER_BIT );
 
-  // Setup projection according to view settings
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  
   double ulx = -1.0;
   double uly = -1.0;
   double lrx = 1.0;
   double lry = 1.0;
-  
+
+  assert( !m_Settings.IsNull() );
+
   m_Settings->GetViewportExtent(ulx,uly,lrx,lry);
 
-  glOrtho(ulx, lrx, lry, uly, -1, 1);
+  if( m_IsGLSLAvailable && m_IsGLSLEnabled )
+  {
+    // TODO: Use GLM [1] for OpenGL linear algebra.
+    // [1]: https://glm.g-truc.net/0.9.9/index.html
 
-  // std::cout
-  //   << "glOrtho( "
-  //   << ulx << ", " << lrx << ", "
-  //   << lry << ", " << uly
-  //   << ", -1, 1 )"
-  //   << std::endl;
+    m_ProjMatrix[0] = 2.0/(lrx-ulx);
+    m_ProjMatrix[1] = 0.0;
+    m_ProjMatrix[2] = 0.0;
+    m_ProjMatrix[3] = 0.0;
+    m_ProjMatrix[4] = 0.0;
+    m_ProjMatrix[5] = 2.0/(uly-lry);
+    m_ProjMatrix[6] = 0.0;
+    m_ProjMatrix[7] = 0.0;
+    m_ProjMatrix[8] = 0.0;
+    m_ProjMatrix[9] = 0.0;
+    m_ProjMatrix[10] = -1.0;
+    m_ProjMatrix[11] = 0.0;
+    m_ProjMatrix[12] = -(lrx+ulx)/(lrx-ulx);
+    m_ProjMatrix[13] = -(uly+lry)/(uly-lry);
+    m_ProjMatrix[14] = 0.0;
+    m_ProjMatrix[15] = 1.0;
 
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
+    double ra = -m_Settings->GetRotationAngle();
+    if(ra == 0.0)
+    {
+      m_ModelViewMatrix[0] = 1.0;
+      m_ModelViewMatrix[1] = 0.0;
+      m_ModelViewMatrix[2] = 0.0;
+      m_ModelViewMatrix[3] = 0.0;
+      m_ModelViewMatrix[4] = 0.0;
+      m_ModelViewMatrix[5] = 1.0;
+      m_ModelViewMatrix[6] = 0.0;
+      m_ModelViewMatrix[7] = 0.0;
+      m_ModelViewMatrix[8] = 0.0;
+      m_ModelViewMatrix[9] = 0.0;
+      m_ModelViewMatrix[10] = 1.0;
+      m_ModelViewMatrix[11] = 0.0;
+      m_ModelViewMatrix[12] = 0.0;
+      m_ModelViewMatrix[13] = 0.0;
+      m_ModelViewMatrix[14] = 0.0;
+      m_ModelViewMatrix[15] = 1.0;
+    }
+    else
+    {
+      double rcx = m_Settings->GetRotationCenter()[0];
+      double rcy = m_Settings->GetRotationCenter()[1];
+      double cos_a = cos(ra);
+      double sin_a = sin(ra);
+      m_ModelViewMatrix[0] = cos_a;
+      m_ModelViewMatrix[1] = sin_a;
+      m_ModelViewMatrix[2] = 0.0;
+      m_ModelViewMatrix[3] = 0.0;
+      m_ModelViewMatrix[4] = -sin_a;
+      m_ModelViewMatrix[5] = cos_a;
+      m_ModelViewMatrix[6] = 0.0;
+      m_ModelViewMatrix[7] = 0.0;
+      m_ModelViewMatrix[8] = 0.0;
+      m_ModelViewMatrix[9] = 0.0;
+      m_ModelViewMatrix[10] = 1.0;
+      m_ModelViewMatrix[11] = 0.0;
+      m_ModelViewMatrix[12] = rcx * (1.0 - cos_a) + rcy * sin_a;
+      m_ModelViewMatrix[13] = -rcx * sin_a + rcy * (1.0 - cos_a);
+      m_ModelViewMatrix[14] = 0.0;
+      m_ModelViewMatrix[15] = 1.0;
+    }
+  }
+  else
+  {
+    // Setup projection according to view settings
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
 
-  glPushMatrix();
-  
-  glTranslatef(m_Settings->GetRotationCenter()[0],m_Settings->GetRotationCenter()[1],0);
-  glRotatef(-m_Settings->GetRotationAngle()*180/M_PI,0,0,1);
-  glTranslatef(-m_Settings->GetRotationCenter()[0],-m_Settings->GetRotationCenter()[1],0);
+    glOrtho(ulx, lrx, lry, uly, -1, 1);
 
-  // glScalef(m_Settings->GetSpacing()[0],m_Settings->GetSpacing()[1],1);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    // glPushMatrix();
+
+    glTranslatef(
+      m_Settings->GetRotationCenter()[ 0 ],
+      m_Settings->GetRotationCenter()[ 1 ], 0
+      );
+
+    glRotatef( -m_Settings->GetRotationAngle() * 180.0 / M_PI, 0, 0, 1 );
+
+    glTranslatef(
+      -m_Settings->GetRotationCenter()[ 0 ],
+      -m_Settings->GetRotationCenter()[ 1 ],
+      0);
+  }
 }
 
 void GlView::AfterRendering()
@@ -125,7 +271,8 @@ void GlView::AfterRendering()
   // std::cout << "geometry-changed: FALSE" << std::endl;
 
   m_Settings->SetGeometryChanged(false);
-  glPopMatrix();
+
+  // glPopMatrix();
 }
 
 std::string GlView::AddActor(ActorType * actor, const std::string& key)
@@ -169,7 +316,9 @@ bool GlView::RemoveActor(const std::string & key)
   return true;
 }
 
-void GlView::ClearActors()
+void
+GlView
+::ClearActors() noexcept
 {
   m_Actors.clear();
   m_RenderingOrder.clear();
@@ -363,7 +512,7 @@ GlView
     front
     ? m_RenderingOrder.end()
     : m_RenderingOrder.begin(),
-    thisKeys.begin(), 
+    thisKeys.begin(),
     thisKeys.end()
   );
 }
@@ -403,11 +552,11 @@ GlView
   if( glGetError()!=GL_NO_ERROR )
     throw std::runtime_error(
       std::string(
-	reinterpret_cast< const char * >(
-	  gluErrorString(
-	    glGetError()
-	  )
-	)
+        reinterpret_cast< const char * >(
+          gluErrorString(
+            glGetError()
+          )
+        )
       )
     );
 
@@ -418,14 +567,14 @@ GlView
   assert( RgbPixel::Length==3 );
   assert( sizeof( GLubyte )==1 );
 
-  RgbPixel::ValueType * glBuffer = new RgbPixel::ValueType[ RgbPixel::Length  * count ];
+  auto glBuffer = std::make_unique< RgbPixel::ValueType[] >( RgbPixel::Length  * count );
   assert( glBuffer!=NULL );
 
-  glReadPixels( 
+  glReadPixels(
     0, 0,
     size[ 0 ], size[ 1 ],
     GL_RGB, GL_UNSIGNED_BYTE,
-    glBuffer
+    glBuffer.get()
   );
 
   //
@@ -435,17 +584,17 @@ GlView
   if( glGetError()!=GL_NO_ERROR )
     throw std::runtime_error(
       std::string(
-	reinterpret_cast< const char * >(
-	  gluErrorString(
-	    glGetError()
-	  )
-	)
+        reinterpret_cast< const char * >(
+          gluErrorString(
+            glGetError()
+          )
+        )
       )
     );
 
   //
   // Copy & flip OpenGL pixel buffer into itk::RGBAPixel<> buffer.
-  RgbPixel * itkBuffer = new RgbPixel[ count ];
+  auto itkBuffer = std::make_unique< RgbPixel[] >( count );
   assert( itkBuffer );
 
   for( unsigned long j=0; j<size[ 1 ]; ++j )
@@ -462,9 +611,6 @@ GlView
       itkBuffer[ itkOffset ][ 2 ] = glBuffer[ glOffset + 2 ];
       }
 
-  delete[] glBuffer;
-  glBuffer = nullptr;
-
   //
   // Setup import RGBA-image filter.
   ImportRgbImageFilter::Pointer filter( ImportRgbImageFilter::New() );
@@ -478,7 +624,7 @@ GlView
   // Pass ownership of allocated buffer to ImportRgbImageFilter. So,
   // it will be deleted automatically in case an exception is thrown.
   filter->SetImportPointer(
-    itkBuffer,
+    itkBuffer.release(),
     count,
     true
   );

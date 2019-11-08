@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -112,45 +112,46 @@ public:
 
   /** Provide hist about the output container to deal with complex pixel
    *  type (Not used here) */
-  void SetOutputImagePixelType( bool itkNotUsed(isComplexInternalPixelType),
-                                        bool itkNotUsed(isVectorImage)) override{}
+  void SetOutputImagePixelType(bool itkNotUsed(isComplexInternalPixelType), bool itkNotUsed(isVectorImage)) override
+  {
+  }
 
 private:
-  MSTARImageIO(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  MSTARImageIO(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Methode permettant de recuperer le format et le nom de l'image a partir du
   nom d'un fichier image. */
-  float          byteswap_SR_IR(unsigned char *pointer);
-  unsigned short byteswap_SUS_IUS(unsigned char *pointer);
-  int            CheckByteOrder(void);
+  float byteswap_SR_IR(unsigned char* pointer);
+  unsigned short byteswap_SUS_IUS(unsigned char* pointer);
+  int CheckByteOrder(void);
 
-  FILE *MSTARfp;        /* Input FILE ptr to MSTAR image file     */
-  FILE *RAWfp;          /* Output FILE ptr to MSTAR RAW data file */
-  FILE *HDRfp;          /* Output FILE ptr to MSTAR header file   */
+  FILE* MSTARfp; /* Input FILE ptr to MSTAR image file     */
+  FILE* RAWfp;   /* Output FILE ptr to MSTAR RAW data file */
+  FILE* HDRfp;   /* Output FILE ptr to MSTAR header file   */
 
   int i, j, rv, n, numrows, numcols, numgot;
 
-  const char *MSTARname;      /* Input MSTAR filename           */
-  char        RAWname[80];   /* Output MSTAR RAW filename      */
+  const char* MSTARname;   /* Input MSTAR filename           */
+  char        RAWname[80]; /* Output MSTAR RAW filename      */
 
-  int  outOpt;               /* ALL data, or MAG ONLY...    */
+  int  outOpt; /* ALL data, or MAG ONLY...    */
   int  phlen, nhlen, mstartype;
   long magloc, bytesPerImage, nchunks, totchunks;
 
-  char *tptr;           /* Temp buffer ptr */
-  char *phdr;           /* Ptr to buffer to hold Phoenix header */
+  char* tptr; /* Temp buffer ptr */
+  char* phdr; /* Ptr to buffer to hold Phoenix header */
   char  tbuff[1024];
 
-  unsigned short *FSCENEdata; /* Ptr to Fullscene data buffer */
-  float *         CHIPdata;   /* Ptr to CHIp data buffer      */
+  unsigned short* FSCENEdata; /* Ptr to Fullscene data buffer */
+  float*          CHIPdata;   /* Ptr to CHIp data buffer      */
 
   /* Byte Order Variables */
   int            byteorder;
-  unsigned char  bigfloatbuf[4];   /* BigEndian float buffer... */
-  float          littlefloatval;   /* LittleEndian float value  */
-  unsigned char  bigushortbuf[2];  /* BigEndian ushort buffer...*/
-  unsigned short littleushortval;  /* LittleEndian ushort value.*/
+  unsigned char  bigfloatbuf[4];  /* BigEndian float buffer... */
+  float          littlefloatval;  /* LittleEndian float value  */
+  unsigned char  bigushortbuf[2]; /* BigEndian ushort buffer...*/
+  unsigned short littleushortval; /* LittleEndian ushort value.*/
 
   int m_BytePerPixel;
 };

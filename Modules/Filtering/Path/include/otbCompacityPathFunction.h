@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,17 +41,15 @@ namespace otb
  * \ingroup OTBPath
  */
 
-template <class TInputPath,
-    class TOutput      = double>
-class ITK_EXPORT CompacityPathFunction :
-  public PathFunction<TInputPath, TOutput>
+template <class TInputPath, class TOutput = double>
+class ITK_EXPORT CompacityPathFunction : public PathFunction<TInputPath, TOutput>
 {
 public:
   /** Standard class typedefs. */
-  typedef CompacityPathFunction             Self;
+  typedef CompacityPathFunction Self;
   typedef PathFunction<TInputPath, TOutput> Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(CompacityPathFunction, PathFunction);
@@ -64,8 +62,8 @@ public:
   typedef typename Superclass::InputPathConstPointer PathConstPointer;
   typedef typename PathType::ContinuousIndexType     VertexType;
   typedef itk::VectorContainer<unsigned, VertexType> VertexListType;
-  typedef typename VertexListType::ConstPointer      VertexListPointer;
-  typedef TOutput                                    OutputType;
+  typedef typename VertexListType::ConstPointer VertexListPointer;
+  typedef TOutput                               OutputType;
 
   typedef double RealType;
 
@@ -74,14 +72,15 @@ public:
   virtual OutputType Evaluate() const;
 
 protected:
-  CompacityPathFunction() {};
-  ~CompacityPathFunction() override {}
+  CompacityPathFunction(){};
+  ~CompacityPathFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  CompacityPathFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  CompacityPathFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // namespace otb

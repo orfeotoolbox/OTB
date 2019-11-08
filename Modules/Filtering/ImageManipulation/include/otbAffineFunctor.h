@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,16 +39,19 @@ namespace Functor
  *
  * \ingroup OTBImageManipulation
  */
-template<class TInput, class TOutput, class TScale=double>
+template <class TInput, class TOutput, class TScale = double>
 class AffineFunctor
 {
 public:
   /// Constructor
-  AffineFunctor()
-    :m_A(0.), m_B(0.) {}
+  AffineFunctor() : m_A(0.), m_B(0.)
+  {
+  }
 
   /// Constructor
-  virtual ~AffineFunctor() {}
+  virtual ~AffineFunctor()
+  {
+  }
 
   /// Accessors
   void SetA(TScale value)
@@ -68,7 +71,7 @@ public:
     return m_B;
   }
 
-  bool operator !=(const AffineFunctor& other) const
+  bool operator!=(const AffineFunctor& other) const
   {
     return ((m_A != other.GetA()) || (m_B != other.GetB()));
   }
@@ -79,9 +82,9 @@ public:
   }
 
   // main computation method
-  inline TOutput operator()(const TInput & x) const
+  inline TOutput operator()(const TInput& x) const
   {
-    return (m_B + static_cast<TOutput>(m_A*x));
+    return (m_B + static_cast<TOutput>(m_A * x));
   }
 
 private:

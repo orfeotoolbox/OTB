@@ -1,5 +1,5 @@
 /*
- * Copyright (C) CS SI
+ * Copyright (C) 2017-2019 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,30 +29,21 @@ namespace otb
 {
 
 template <class TImage>
-MultiImageFileWriter::Sink<TImage>
-::Sink(typename TImage::ConstPointer inputImage,
-       const std::string & fileName):
-  SinkBase(dynamic_cast<const ImageBaseType*>(inputImage.GetPointer())),
-  m_Writer(otb::ImageFileWriter<TImage>::New()),
-  m_ImageIO(NULL)
+MultiImageFileWriter::Sink<TImage>::Sink(typename TImage::ConstPointer inputImage, const std::string& fileName)
+  : SinkBase(dynamic_cast<const ImageBaseType*>(inputImage.GetPointer())), m_Writer(otb::ImageFileWriter<TImage>::New()), m_ImageIO(NULL)
 {
   m_Writer->SetFileName(fileName);
   m_Writer->SetInput(inputImage);
 }
 
 template <class TImage>
-MultiImageFileWriter::Sink<TImage>
-::Sink(typename otb::ImageFileWriter<TImage>::ConstPointer writer):
-  SinkBase(dynamic_cast<const ImageBaseType*>(writer->GetInput()->GetPointer())),
-  m_Writer(writer),
-  m_ImageIO(NULL)
+MultiImageFileWriter::Sink<TImage>::Sink(typename otb::ImageFileWriter<TImage>::ConstPointer writer)
+  : SinkBase(dynamic_cast<const ImageBaseType*>(writer->GetInput()->GetPointer())), m_Writer(writer), m_ImageIO(NULL)
 {
 }
 
 template <class TImage>
-bool
-MultiImageFileWriter::Sink<TImage>
-::CanStreamWrite()
+bool MultiImageFileWriter::Sink<TImage>::CanStreamWrite()
 {
   if (m_ImageIO.IsNull())
     return false;
@@ -60,26 +51,22 @@ MultiImageFileWriter::Sink<TImage>
 }
 
 template <class TImage>
-void
-MultiImageFileWriter::Sink<TImage>
-::WriteImageInformation()
+void MultiImageFileWriter::Sink<TImage>::WriteImageInformation()
 {
   m_Writer->UpdateOutputInformation();
   m_ImageIO = m_Writer->GetImageIO();
 }
 
 template <class TImage>
-void
-MultiImageFileWriter::Sink<TImage>
-::Write(const RegionType & streamRegion)
+void MultiImageFileWriter::Sink<TImage>::Write(const RegionType& streamRegion)
 {
   // Write the image stream
   itk::ImageIORegion ioRegion(TImage::ImageDimension);
   for (unsigned int i = 0; i < TImage::ImageDimension; ++i)
-    {
+  {
     ioRegion.SetSize(i, streamRegion.GetSize(i));
     ioRegion.SetIndex(i, streamRegion.GetIndex(i));
-    }
+  }
   m_ImageIO->SetIORegion(ioRegion);
   m_Writer->UpdateOutputData(nullptr);
 }

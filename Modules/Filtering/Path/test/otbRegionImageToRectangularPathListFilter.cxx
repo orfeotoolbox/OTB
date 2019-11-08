@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,29 +27,27 @@
 #include <stdio.h>
 #include <iostream>
 
-int otbRegionImageToRectangularPathListFilter(int itkNotUsed(argc), char * argv[])
+int otbRegionImageToRectangularPathListFilter(int itkNotUsed(argc), char* argv[])
 {
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   typedef unsigned short InputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int     Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
-  typedef otb::ImageFileReader<InputImageType>   ReaderType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
 
   reader->Update();
 
-  typedef otb::PolyLineParametricPathWithValue<double, Dimension> PathType;
-  typedef otb::RegionImageToRectangularPathListFilter<InputImageType, PathType>
-  RectangleListFilterType;
+  typedef otb::PolyLineParametricPathWithValue<double, Dimension>               PathType;
+  typedef otb::RegionImageToRectangularPathListFilter<InputImageType, PathType> RectangleListFilterType;
 
-  RectangleListFilterType::Pointer rectangleFilter =
-    RectangleListFilterType::New();
+  RectangleListFilterType::Pointer rectangleFilter = RectangleListFilterType::New();
 
   rectangleFilter->SetInput(reader->GetOutput());
 
@@ -64,30 +62,28 @@ int otbRegionImageToRectangularPathListFilter(int itkNotUsed(argc), char * argv[
 
   ListType::Iterator listIt = pathList->Begin();
 
-  FILE *file = fopen(outputFilename, "w");
+  FILE* file = fopen(outputFilename, "w");
   if (file == nullptr)
-    {
+  {
     fprintf(stderr, "Error, can't open file");
     exit(-1);
-    }
+  }
 
   while (listIt != pathList->End())
-    {
+  {
 
-    for (PathType::VertexListType::ConstIterator vit  = listIt.Get()->GetVertexList()->Begin();
-         vit != listIt.Get()->GetVertexList()->End(); ++vit)
-      {
+    for (PathType::VertexListType::ConstIterator vit = listIt.Get()->GetVertexList()->Begin(); vit != listIt.Get()->GetVertexList()->End(); ++vit)
+    {
       double x = vit.Value()[0];
       double y = vit.Value()[1];
       fprintf(file, "%8.3f %8.3f\n", x, y);
-
-      }
+    }
 
     double score = listIt.Get()->GetValue();
     fprintf(file, "%8.3f\n", score);
 
     ++listIt;
-    }
+  }
 
   fclose(file);
 

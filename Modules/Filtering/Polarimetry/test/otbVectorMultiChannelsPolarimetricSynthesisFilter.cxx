@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,7 +19,6 @@
  */
 
 
-
 #include "itkMacro.h"
 #include <iostream>
 
@@ -29,23 +28,23 @@
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelsPolarimetricSynthesisFilter.h"
 
-int otbVectorMultiChannelsPolarimetricSynthesisFilter(int itkNotUsed(argc), char * argv[])
+int otbVectorMultiChannelsPolarimetricSynthesisFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   double PsiI = strtod(argv[3], nullptr);
   double KhiI = strtod(argv[4], nullptr);
   double PsiR = strtod(argv[5], nullptr);
   double KhiR = strtod(argv[6], nullptr);
 
-  typedef std::complex <double> InputPixelType;
-  typedef double                OutputPixelType;
-  const unsigned int Dimension = 2;
-  typedef otb::VectorImage<InputPixelType,  Dimension>                                   InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension>                                         OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>                                           ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                                          WriterType;
+  typedef std::complex<double> InputPixelType;
+  typedef double               OutputPixelType;
+  const unsigned int           Dimension = 2;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension>      OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::MultiChannelsPolarimetricSynthesisFilter<InputImageType, OutputImageType> FilterType;
 
   FilterType::Pointer polarimetricSynthesis = FilterType::New();

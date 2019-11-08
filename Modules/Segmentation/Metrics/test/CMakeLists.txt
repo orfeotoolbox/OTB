@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -47,8 +47,8 @@ otb_add_test(NAME obTvHooverMatrixFilter COMMAND otbMetricsTestDriver
   ${BASELINE_FILES}/obTvHooverMatrixFilter.txt
   ${TEMP}/obTvHooverMatrixFilter.txt
   otbHooverMatrixFilter
-  ${INPUTDATA}/Seg1InputForRCC8Graph.tif
-  ${INPUTDATA}/Seg2InputForRCC8Graph.tif
+  ${INPUTDATA}/labelImage_UnsignedChar.tif
+  ${INPUTDATA}/labelImage_UnsignedChar.tif
   ${TEMP}/obTvHooverMatrixFilter.txt
   )
 

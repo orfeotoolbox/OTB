@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,41 +39,44 @@ template <class TNeighIter, class TPrecision = float>
 class RadiometricMomentsFunctor
 {
 public:
+  typedef RadiometricMomentsFunctor                 Self;
+  typedef TNeighIter                                IteratorType;
+  typedef typename IteratorType::PixelType          PixelType;
+  typedef TPrecision                                ScalarRealType;
+  typedef itk::VariableLengthVector<ScalarRealType> OutputType;
 
-  typedef RadiometricMomentsFunctor                    Self;
-  typedef TNeighIter                                   IteratorType;
-  typedef typename IteratorType::PixelType             PixelType;
-  typedef TPrecision                                   ScalarRealType;
-  typedef itk::VariableLengthVector< ScalarRealType  > OutputType;
+  RadiometricMomentsFunctor()
+  {
+  }
+  ~RadiometricMomentsFunctor()
+  {
+  }
 
-  RadiometricMomentsFunctor() {}
-  ~RadiometricMomentsFunctor() {}
-
-  inline OutputType operator ()(TNeighIter& it) const
+  inline OutputType operator()(TNeighIter& it) const
   {
     OutputType moments;
     moments.SetSize(4);
-    moments.Fill( itk::NumericTraits< ScalarRealType >::Zero );
+    moments.Fill(itk::NumericTraits<ScalarRealType>::Zero);
 
     ScalarRealType sum1, sum2, sum3, sum4;
-    sum1 = itk::NumericTraits< ScalarRealType >::Zero;
-    sum2 = itk::NumericTraits< ScalarRealType >::Zero;
-    sum3 = itk::NumericTraits< ScalarRealType >::Zero;
-    sum4 = itk::NumericTraits< ScalarRealType >::Zero;
+    sum1 = itk::NumericTraits<ScalarRealType>::Zero;
+    sum2 = itk::NumericTraits<ScalarRealType>::Zero;
+    sum3 = itk::NumericTraits<ScalarRealType>::Zero;
+    sum4 = itk::NumericTraits<ScalarRealType>::Zero;
 
-    //it.GoToBegin();
+    // it.GoToBegin();
     const unsigned int size = it.Size();
     for (unsigned int i = 0; i < size; ++i)
-      {
-      ScalarRealType value = static_cast<ScalarRealType>(it.GetPixel(i));
+    {
+      ScalarRealType value  = static_cast<ScalarRealType>(it.GetPixel(i));
       ScalarRealType value2 = value * value;
 
-     // Update cumulants
+      // Update cumulants
       sum1 += value;
       sum2 += value2;
       sum3 += value * value2;
       sum4 += value2 * value2;
-      }
+    }
 
     // final computations
     // Mean
@@ -81,24 +84,21 @@ public:
     // Variance
     moments[1] = (sum2 - (sum1 * moments[0])) / (size - 1);
 
-    ScalarRealType sigma      = std::sqrt(moments[1]);
-    ScalarRealType mean2      = moments[0] * moments[0];
+    ScalarRealType sigma = std::sqrt(moments[1]);
+    ScalarRealType mean2 = moments[0] * moments[0];
 
     const double epsilon = 1E-10;
     if (std::abs(moments[1]) > epsilon)
-      {
+    {
       // Skewness
       moments[2] = ((sum3 - 3.0 * moments[0] * sum2) / size + 2.0 * moments[0] * mean2) / (moments[1] * sigma);
       // Kurtosis
-      moments[3] = ((sum4 - 4.0 * moments[0] * sum3 + 6.0 * mean2 * sum2) / size - 3.0 * mean2 * mean2)
-              / (moments[1] * moments[1]) - 3.0;
-      }
+      moments[3] = ((sum4 - 4.0 * moments[0] * sum3 + 6.0 * mean2 * sum2) / size - 3.0 * mean2 * mean2) / (moments[1] * moments[1]) - 3.0;
+    }
 
     return moments;
   }
-
 };
-
 }
 }
 

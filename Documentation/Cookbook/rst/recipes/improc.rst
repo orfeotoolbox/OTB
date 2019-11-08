@@ -1,29 +1,5 @@
-Image processing and information extraction
-===========================================
-
-Simple calculus with channels
------------------------------
-
-The *BandMath* application provides a simple and efficient way to
-perform band operations. The command line application and the
-corresponding Monteverdi module (shown in the section [Band:sub:`m`\ ath
-module]) are based on the same standards. It computes a band wise
-operation according to a user defined mathematical expression. The
-following code computes the absolute difference between first bands of
-two images.
-
-::
-
-    otbcli_BandMath -il input_image_1 input_image_2
-                    -exp "abs(im1b1 - im2b1)"
-                    -out output_image
-
-The naming convention “im[x]b[y]” designates the yth band of the xth
-input image.
-
-The *BandMath* application embeds built-in operators and functions
-listed in `muparser documentation <http://muparser.sourceforge.net/mup_features.html#idDef2>`_ thus
-allowing a vast choice of possible operations.
+Image processing
+================
 
 Images with no-data values
 --------------------------
@@ -70,7 +46,7 @@ input image to the default value for DEM (which is -32768):
 
 The third mode “apply” can be useful if you apply a formula to the
 entire image. This will likely change the values of pixels flagged as
-no-data, but the no-data value in the image metadata doesn’t change. If
+no-data, but the no-data value in the image metadata does not change. If
 you want to fix all no-data pixels to their original value, you can
 extract the mask of the original image and apply it on the output image.
 For instance:
@@ -91,8 +67,8 @@ For instance:
                         -mode.apply.mask mask.tif
 
 You can also use this “apply” mode with an additional parameter
-“mode.apply.ndval”. This parameter allow to set the output nodata value
-applying according to your input mask.
+“mode.apply.ndval”. This parameter sets the output nodata value
+of the input mask.
 
 Segmentation
 ------------
@@ -274,7 +250,7 @@ all the previous steps:
 
 Most of the settings from the previous applications are also exposed in this
 composite application. The range and spatial radius used for the segmentation
-step are half the values used for Mean-Shift smooting, which are obtained from
+step are half the values used for Mean-Shift smoothing, which are obtained from
 LargeScaleMeanShift parameters. There are two output modes: vector (default)
 and raster. When the raster output is chosen, last step (vectorization) is
 skipped.
@@ -289,128 +265,3 @@ skipped.
 
 There is a cleanup option that can be disabled in order to check intermediate
 outputs of this composite application.
-
-Dempster Shafer based Classifier Fusion
----------------------------------------
-
-This framework is dedicated to perform cartographic validation starting
-from the result of a detection (for example a road extraction), enhance
-the results fiability by using a classifier fusion algorithm. Using a
-set of descriptor, the processing chain validates or invalidates the
-input geometrical features.
-
-Fuzzy Model (requisite)
-~~~~~~~~~~~~~~~~~~~~~~~
-
-The *DSFuzzyModelEstimation* application performs the fuzzy model
-estimation (once by use case: descriptor set / Belief support /
-Plausibility support). It has the following input parameters:
-
--  ``-psin`` a vector data of positive samples enriched according to the
-   “Compute Descriptors” part
-
--  ``-nsin`` a vector data of negative samples enriched according to the
-   “Compute Descriptors” part
-
--  ``-belsup`` a support for the Belief computation
-
--  ``-plasup`` a support for the Plausibility computation
-
--  ``-desclist`` an initialization model (xml file) or a descriptor name
-   list (listing the descriptors to be included in the model)
-
-The application can be used like this:
-
-::
-
-    otbcli_DSFuzzyModelEstimation -psin     PosSamples.shp
-                                  -nsin     NegSamples.shp
-                                  -belsup   "ROADSA"
-                                  -plasup   "NONDVI" "ROADSA" "NOBUIL"
-                                  -desclist "NONDVI" "ROADSA" "NOBUIL"
-                                  -out      FuzzyModel.xml
-
-The output file ``FuzzyModel.xml`` contains the optimal model to perform
-information fusion.
-
-First Step: Compute Descriptors
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The first step in the classifier fusion based validation is to compute,
-for each studied polyline, the chosen descriptors. In this context, the
-*ComputePolylineFeatureFromImage* application can be used for a large
-range of descriptors. It has the following inputs:
-
--  ``-in`` an image (of the sudied scene) corresponding to the chosen
-   descriptor (NDVI, building Mask…)
-
--  ``-vd`` a vector data containing polyline of interest
-
--  ``-expr`` a formula (“b1 >0.4”, “b1 == 0”) where b1 is the standard
-   name of input image first band
-
--  ``-field`` a field name corresponding to the descriptor codename
-   (NONDVI, ROADSA...)
-
-The output is a vector data containing polylines with a new field
-containing the descriptor value. In order to add the “NONDVI” descriptor
-to an input vector data (“inVD.shp”) corresponding to the percentage of
-pixels along a polyline that verifies the formula “NDVI >0.4”:
-
-::
-
-    otbcli_ComputePolylineFeatureFromImage -in   NDVI.TIF
-                                           -vd  inVD.shp
-                                           -expr  "b1 > 0.4"
-                                           -field "NONDVI"
-                                           -out   VD_NONDVI.shp
-
-``NDVI.TIF`` is the NDVI mono band image of the studied scene. This step
-must be repeated for each chosen descriptor:
-
-::
-
-    otbcli_ComputePolylineFeatureFromImage -in   roadSpectralAngle.TIF
-                                           -vd  VD_NONDVI.shp
-                                           -expr  "b1 > 0.24"
-                                           -field "ROADSA"
-                                           -out   VD_NONDVI_ROADSA.shp
-
-::
-
-    otbcli_ComputePolylineFeatureFromImage -in   Buildings.TIF
-                                           -vd  VD_NONDVI_ROADSA.shp
-                                           -expr  "b1 == 0"
-                                           -field "NOBUILDING"
-                                           -out   VD_NONDVI_ROADSA_NOBUIL.shp
-
-Both ``NDVI.TIF`` and ``roadSpectralAngle.TIF`` can be produced using
-**Monteverdi** feature extraction capabilities, and ``Buildings.TIF``
-can be generated using **Monteverdi** rasterization module. From now on,
-``VD_NONDVI_ROADSA_NOBUIL.shp`` contains three descriptor fields. It
-will be used in the following part.
-
-Second Step: Feature Validation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-The final application (*VectorDataDSValidation* ) will validate or
-unvalidate the studied samples using `the Dempster-Shafer
-theory <http://en.wikipedia.org/wiki/Dempster%E2%80%93Shafer_theory>`_ 
-. Its inputs are:
-
--  ``-in`` an enriched vector data “VD\_NONDVI\_ROADSA\_NOBUIL.shp”
-
--  ``-belsup`` a support for the Belief computation
-
--  ``-plasup`` a support for the Plausibility computation
-
--  ``-descmod`` a fuzzy model FuzzyModel.xml
-
-The output is a vector data containing only the validated samples.
-
-::
-
-    otbcli_VectorDataDSValidation -in      extractedRoads_enriched.shp
-                                  -descmod FuzzyModel.xml
-                                  -out     validatedSamples.shp
-

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -28,13 +26,13 @@
 #include "itkUnaryFunctorImageFilter.h"
 #include "otbScalarToRainbowRGBPixelFunctor.h"
 
-int otbScalarToRainbowRGBPixelFunctor(int itkNotUsed(argc), char * argv[])
+int otbScalarToRainbowRGBPixelFunctor(int itkNotUsed(argc), char* argv[])
 {
-  typedef unsigned char                               PixelType;
-  typedef itk::RGBPixel<PixelType>                    RGBPixelType;
-  typedef otb::Image<PixelType, 2>                    ImageType;
-  typedef otb::Image<RGBPixelType, 2>                 RGBImageType;
-  typedef otb::ImageFileReader<ImageType>             ReaderType;
+  typedef unsigned char            PixelType;
+  typedef itk::RGBPixel<PixelType> RGBPixelType;
+  typedef otb::Image<PixelType, 2>    ImageType;
+  typedef otb::Image<RGBPixelType, 2> RGBImageType;
+  typedef otb::ImageFileReader<ImageType>    ReaderType;
   typedef otb::ImageFileWriter<RGBImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -42,10 +40,8 @@ int otbScalarToRainbowRGBPixelFunctor(int itkNotUsed(argc), char * argv[])
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
 
-  typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType>
-  ColorMapFunctorType;
-  typedef itk::UnaryFunctorImageFilter<ImageType,
-      RGBImageType, ColorMapFunctorType> ColorMapFilterType;
+  typedef otb::Functor::ScalarToRainbowRGBPixelFunctor<PixelType> ColorMapFunctorType;
+  typedef itk::UnaryFunctorImageFilter<ImageType, RGBImageType, ColorMapFunctorType> ColorMapFilterType;
   ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
   colormapper->GetFunctor().SetMaximumInputValue(150);
   colormapper->GetFunctor().SetMinimumInputValue(70);

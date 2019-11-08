@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,7 +26,8 @@
 #include "itkHistogram.h"
 #include "itkStatisticsAlgorithm.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class ListSampleToVariableDimensionHistogramGenerator
  *  \brief Generates a VariableDimensionHistogram from a ListSample
@@ -45,11 +46,8 @@ namespace otb {
  *
  * \ingroup OTBStatistics
  */
-template<class TListSample,
-    class THistogramMeasurement,
-         class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer2>
-class ITK_EXPORT ListSampleToVariableDimensionHistogramGenerator :
-  public itk::ProcessObject
+template <class TListSample, class THistogramMeasurement, class TFrequencyContainer = itk::Statistics::DenseFrequencyContainer2>
+class ITK_EXPORT ListSampleToVariableDimensionHistogramGenerator : public itk::ProcessObject
 {
 public:
   /** Standard typedefs */
@@ -65,20 +63,18 @@ public:
   itkNewMacro(Self);
 
   /** typedef the ListSampleType */
-  typedef TListSample                                  ListSampleType;
+  typedef TListSample ListSampleType;
 
   /** Type needed for defining the limits of the histogram bins */
-  typedef typename itk::NumericTraits<THistogramMeasurement>::RealType
-  HistogramMeasurementRealType;
+  typedef typename itk::NumericTraits<THistogramMeasurement>::RealType HistogramMeasurementRealType;
 
-  typedef itk::Statistics::Histogram<HistogramMeasurementRealType,
-      TFrequencyContainer>                             HistogramType;
+  typedef itk::Statistics::Histogram<HistogramMeasurementRealType, TFrequencyContainer> HistogramType;
 
   typedef typename HistogramType::SizeType              HistogramSizeType;
   typedef typename HistogramType::MeasurementVectorType MeasurementVectorType;
 
   /** DataObject typedef*/
-  typedef typename Superclass::DataObjectPointer        DataObjectPointer;
+  typedef typename Superclass::DataObjectPointer             DataObjectPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   // Set/Get the input list sample
@@ -89,10 +85,14 @@ public:
   const HistogramType* GetOutput();
 
   void SetMarginalScale(float scale)
-  { m_MarginalScale = scale; }
+  {
+    m_MarginalScale = scale;
+  }
 
   void SetNumberOfBins(HistogramSizeType sizes)
-  { m_Sizes = sizes; }
+  {
+    m_Sizes = sizes;
+  }
 
   itkSetMacro(AutoMinMax, bool);
   itkGetConstReferenceMacro(AutoMinMax, bool);
@@ -100,18 +100,20 @@ public:
   void SetHistogramMin(const MeasurementVectorType& histogramMin)
   {
     m_HistogramMin = histogramMin;
-    m_AutoMinMax = false;
+    m_AutoMinMax   = false;
   }
 
   void SetHistogramMax(const MeasurementVectorType& histogramMax)
   {
     m_HistogramMax = histogramMax;
-    m_AutoMinMax = false;
+    m_AutoMinMax   = false;
   }
 
 protected:
   ListSampleToVariableDimensionHistogramGenerator();
-  ~ListSampleToVariableDimensionHistogramGenerator() override {}
+  ~ListSampleToVariableDimensionHistogramGenerator() override
+  {
+  }
   void GenerateData() override;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;

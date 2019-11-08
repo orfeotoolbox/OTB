@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -55,17 +55,15 @@ namespace otb
  * \ingroup OTBImageManipulation
  **/
 
-template <class TInputImage, class TOutputImage,
-          class TInterpolatorPrecisionType = double>
-class ITK_EXPORT StreamingResampleImageFilter :
-    public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType = double>
+class ITK_EXPORT StreamingResampleImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef StreamingResampleImageFilter                                Self;
-  typedef itk::ImageToImageFilter<TInputImage, TOutputImage>    Superclass;
-  typedef itk::SmartPointer<Self>                               Pointer;
-  typedef itk::SmartPointer<const Self>                         ConstPointer;
+  typedef StreamingResampleImageFilter Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -74,22 +72,18 @@ public:
   itkTypeMacro(StreamingResampleImageFilter, itk::ImageToImageFilter);
 
   /** Typedef parameters*/
-  typedef TInputImage                InputImageType;
-  typedef TOutputImage               OutputImageType;
+  typedef TInputImage  InputImageType;
+  typedef TOutputImage OutputImageType;
 
   /** Displacement field used to warp the image*/
-  typedef itk::Vector<double,
-                      TOutputImage::ImageDimension>              DisplacementType;
-  typedef otb::Image<DisplacementType>                           DisplacementFieldType;
+  typedef itk::Vector<double, TOutputImage::ImageDimension> DisplacementType;
+  typedef otb::Image<DisplacementType> DisplacementFieldType;
 
   /** filter warping input image using displacement field */
-  typedef StreamingWarpImageFilter<InputImageType,
-                                   OutputImageType,
-                                   DisplacementFieldType>        WarpImageFilterType;
+  typedef StreamingWarpImageFilter<InputImageType, OutputImageType, DisplacementFieldType> WarpImageFilterType;
 
   /** Internal filters typedefs*/
-  typedef itk::TransformToDisplacementFieldSource<DisplacementFieldType,
-                                                 double>        DisplacementFieldGeneratorType;
+  typedef itk::TransformToDisplacementFieldSource<DisplacementFieldType, double> DisplacementFieldGeneratorType;
   typedef typename DisplacementFieldGeneratorType::TransformType TransformType;
   typedef typename DisplacementFieldGeneratorType::SizeType      SizeType;
   typedef typename DisplacementFieldGeneratorType::SpacingType   SpacingType;
@@ -98,18 +92,16 @@ public:
   typedef typename DisplacementFieldGeneratorType::RegionType    RegionType;
 
   /** Interpolator type */
-  typedef itk::InterpolateImageFunction<InputImageType,
-                                        TInterpolatorPrecisionType>       InterpolatorType;
-  typedef typename InterpolatorType::Pointer                              InterpolatorPointerType;
-  typedef itk::LinearInterpolateImageFunction<InputImageType,
-                                              TInterpolatorPrecisionType> DefaultInterpolatorType;
+  typedef itk::InterpolateImageFunction<InputImageType, TInterpolatorPrecisionType> InterpolatorType;
+  typedef typename InterpolatorType::Pointer InterpolatorPointerType;
+  typedef itk::LinearInterpolateImageFunction<InputImageType, TInterpolatorPrecisionType> DefaultInterpolatorType;
 
   /** ImageBase typedef */
-  typedef itk::ImageBase<OutputImageType::ImageDimension>     ImageBaseType;
+  typedef itk::ImageBase<OutputImageType::ImageDimension> ImageBaseType;
 
 
   /** Accessors to internal filters parameters */
-  void SetTransform(TransformType * transform)
+  void SetTransform(TransformType* transform)
   {
     m_DisplacementFilter->SetTransform(transform);
     this->Modified();
@@ -117,16 +109,16 @@ public:
   otbGetObjectMemberConstMacro(DisplacementFilter, Transform, const TransformType*);
 
   /** The Displacement field spacing & size */
-  void SetDisplacementFieldSpacing( SpacingType spacing);
+  void SetDisplacementFieldSpacing(SpacingType spacing);
 
-  const SpacingType & GetDisplacementFieldSpacing() const
+  const SpacingType& GetDisplacementFieldSpacing() const
   {
     return m_SignedOutputSpacing;
   };
 
   /** The resampled image parameters */
   // Output Origin
-  void SetOutputOrigin(const OriginType & origin)
+  void SetOutputOrigin(const OriginType& origin)
   {
     m_DisplacementFilter->SetOutputOrigin(origin);
     m_WarpFilter->SetOutputOrigin(origin);
@@ -147,23 +139,19 @@ public:
   otbGetObjectMemberConstReferenceMacro(WarpFilter, OutputSpacing, SpacingType);
 
   /** Methods to Set/Get the interpolator */
-  void SetInterpolator(InterpolatorType * interpolator)
+  void SetInterpolator(InterpolatorType* interpolator)
   {
     m_WarpFilter->SetInterpolator(interpolator);
     this->Modified();
   }
-  otbGetObjectMemberConstMacro(WarpFilter, Interpolator, const InterpolatorType *);
+  otbGetObjectMemberConstMacro(WarpFilter, Interpolator, const InterpolatorType*);
 
   /** Default Edgepadding value */
-  otbSetObjectMemberMacro(WarpFilter,
-                          EdgePaddingValue,
-                          typename OutputImageType::PixelType);
-  otbGetObjectMemberMacro(WarpFilter,
-                                        EdgePaddingValue,
-                                        typename OutputImageType::PixelType);
+  otbSetObjectMemberMacro(WarpFilter, EdgePaddingValue, typename OutputImageType::PixelType);
+  otbGetObjectMemberMacro(WarpFilter, EdgePaddingValue, typename OutputImageType::PixelType);
 
   /** Import output parameters from a given image */
-  void SetOutputParametersFromImage(const ImageBaseType * image);
+  void SetOutputParametersFromImage(const ImageBaseType* image);
 
   /* Set number of threads for Deformation field generator*/
   void SetDisplacementFilterNumberOfThreads(unsigned int nbThread)
@@ -172,13 +160,13 @@ public:
   }
 
   /** Override itk::ProcessObject method to let the internal filter do the propagation */
-  void PropagateRequestedRegion(itk::DataObject *output) override;
+  void PropagateRequestedRegion(itk::DataObject* output) override;
 
 protected:
   StreamingResampleImageFilter();
 
   /** Destructor */
-  ~StreamingResampleImageFilter() override {};
+  ~StreamingResampleImageFilter() override{};
 
   void GenerateData() override;
 
@@ -187,15 +175,15 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  StreamingResampleImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  StreamingResampleImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  //We need this to respect ConstRef macro and to be compliant with itk positive 
-  //spacing
+  // We need this to respect ConstRef macro and to be compliant with itk positive
+  // spacing
   SpacingType m_SignedOutputSpacing;
 
-  typename DisplacementFieldGeneratorType::Pointer   m_DisplacementFilter;
-  typename WarpImageFilterType::Pointer             m_WarpFilter;
+  typename DisplacementFieldGeneratorType::Pointer m_DisplacementFilter;
+  typename WarpImageFilterType::Pointer            m_WarpFilter;
 };
 
 } // namespace otb

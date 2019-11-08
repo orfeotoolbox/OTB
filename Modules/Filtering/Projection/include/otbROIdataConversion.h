@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,14 +38,13 @@ namespace otb
  * \ingroup OTBProjection
  */
 template <class TInputImage, class TInputROIImage>
-class ROIdataConversion
-  : public itk::ImageToImageFilter<TInputImage, otb::Image<typename TInputImage::PixelType, 1> >
+class ROIdataConversion : public itk::ImageToImageFilter<TInputImage, otb::Image<typename TInputImage::PixelType, 1>>
 {
 public:
-  typedef ROIdataConversion                                                                     Self;
-  typedef itk::ImageToImageFilter<TInputImage, otb::Image<typename TInputImage::PixelType, 1> > Superclass;
-  typedef itk::SmartPointer<Self>                                                               Pointer;
-  typedef itk::SmartPointer<const Self>                                                         ConstPointer;
+  typedef ROIdataConversion Self;
+  typedef itk::ImageToImageFilter<TInputImage, otb::Image<typename TInputImage::PixelType, 1>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkNewMacro(Self);
   itkTypeMacro(ROIdataConversion, itk::ImageToImageFilter);
@@ -61,28 +60,30 @@ public:
   typedef typename OutputImageType::SizeType::SizeValueType SizeValueType;
 
   /** Gets/Sets the input image */
-  const InputImageType * GetInputImage()
+  const InputImageType* GetInputImage()
   {
     return this->Superclass::GetInput();
   }
-  void SetInputImage(const InputImageType * img)
+  void SetInputImage(const InputImageType* img)
   {
     this->Superclass::SetInput(img);
   }
 
   /** Gets/Sets the ROI image */
-  InputROIImageType * GetROIImage()
+  InputROIImageType* GetROIImage()
   {
-    return static_cast<InputROIImageType *> (this->itk::ProcessObject::GetInput(1));
+    return static_cast<InputROIImageType*>(this->itk::ProcessObject::GetInput(1));
   }
-  void SetROIImage(const InputROIImageType * img)
+  void SetROIImage(const InputROIImageType* img)
   {
-    this->itk::ProcessObject::SetNthInput(1, const_cast<InputROIImageType *>(img));
+    this->itk::ProcessObject::SetNthInput(1, const_cast<InputROIImageType*>(img));
   }
 
 protected:
   ROIdataConversion();
-  ~ROIdataConversion() override {}
+  ~ROIdataConversion() override
+  {
+  }
   void GenerateOutputInformation() override;
   void GenerateInputRequestedRegion() override;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override

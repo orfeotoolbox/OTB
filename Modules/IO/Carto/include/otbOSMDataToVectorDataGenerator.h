@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,7 +32,8 @@
 
 #include "otbCurlHelper.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class OSMDataToVectorDataGenerator
  *
@@ -74,36 +75,35 @@ namespace otb {
  *
  * \ingroup OTBCarto
  */
-class OTBCarto_EXPORT OSMDataToVectorDataGenerator :
-    public VectorDataSource< otb::VectorData<> >
+class OTBCarto_EXPORT OSMDataToVectorDataGenerator : public VectorDataSource<otb::VectorData<>>
 {
 public:
   /** Standard class typedefs */
-  typedef OSMDataToVectorDataGenerator             Self;
-  typedef VectorDataSource< otb::VectorData<> >    Superclass;
-  typedef itk::SmartPointer< Self >                Pointer;
-  typedef itk::SmartPointer<const Self>            ConstPointer;
+  typedef OSMDataToVectorDataGenerator        Self;
+  typedef VectorDataSource<otb::VectorData<>> Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
-  typedef Superclass::OutputVectorDataType         VectorDataType;
-  typedef VectorDataType::DataNodeType             DataNodeType;
-  typedef DataNodeType::LineType                   LineType;
-  typedef DataNodeType::PolygonType                PolygonType;
-  typedef LineType::VertexType                     VertexType;
+  typedef Superclass::OutputVectorDataType VectorDataType;
+  typedef VectorDataType::DataNodeType     DataNodeType;
+  typedef DataNodeType::LineType           LineType;
+  typedef DataNodeType::PolygonType        PolygonType;
+  typedef LineType::VertexType             VertexType;
 
   // typedefs for objects to store results
-  typedef std::map<int, VertexType>                ContainerType;
+  typedef std::map<int, VertexType> ContainerType;
 
   // Vector to store <Key, value>
-  typedef std::pair <std::string, std::string>     ElementPairType;
+  typedef std::pair<std::string, std::string> ElementPairType;
 
   // Coordinates of the nodes
-  typedef std::vector<VertexType >                    PointTypeList;
-  typedef std::pair<ElementPairType, PointTypeList>   VectorDataElementType;
-  typedef std::vector<VectorDataElementType>          VectorDataElementListType;
+  typedef std::vector<VertexType> PointTypeList;
+  typedef std::pair<ElementPairType, PointTypeList> VectorDataElementType;
+  typedef std::vector<VectorDataElementType> VectorDataElementListType;
 
   // Map to store all the keys found and their relative types
-  typedef std::vector<std::string>                    StringVectorType;
-  typedef std::map<std::string, StringVectorType>     KeyMapType;
+  typedef std::vector<std::string> StringVectorType;
+  typedef std::map<std::string, StringVectorType> KeyMapType;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(OSMDataToVectorDataGenerator, VectorDataSource);
@@ -141,7 +141,7 @@ public:
   /** Add a key to search into the list */
   void AddKey(const std::string& key)
   {
-    if(!this->IsKeyPresent(key))
+    if (!this->IsKeyPresent(key))
       m_KeyList.push_back(key);
   }
 
@@ -195,35 +195,35 @@ private:
   void AddKeyTypeToMap(const std::string& key, const std::string& value);
 
   // Extent of the region to get from OSM
-  double                      m_North;
-  double                      m_South;
-  double                      m_East;
-  double                      m_West;
+  double m_North;
+  double m_South;
+  double m_East;
+  double m_West;
 
   /** the url in OSM API format */
-  std::string                 m_Url;
-  bool                        m_UseUrl;
+  std::string m_Url;
+  bool        m_UseUrl;
 
   /** List to store keys to search */
-  std::vector<std::string >   m_KeyList;
+  std::vector<std::string> m_KeyList;
 
   /** Variable used in to store the result of the parsing  */
-  std::string                 m_FileName;
-  ContainerType               m_GeoPointContainer;
-  VectorDataElementListType   m_VectorDataElementList;
+  std::string               m_FileName;
+  ContainerType             m_GeoPointContainer;
+  VectorDataElementListType m_VectorDataElementList;
 
   /** Curl object to get the XML file */
-  CurlHelper::Pointer         m_Curl;
+  CurlHelper::Pointer m_Curl;
 
   /** Output VectorData requested with the method GetVectorDataByName */
-  VectorDataType::Pointer     m_OutputVectorData;
+  VectorDataType::Pointer m_OutputVectorData;
 
   /** container to store the keys and their types found */
-  KeyMapType                  m_KeysMap;
+  KeyMapType m_KeysMap;
 
   /** Class key and its value */
-  std::string                 m_ClassKey;
-  int                         m_ClassKeyValue;
+  std::string m_ClassKey;
+  int         m_ClassKeyValue;
 
 }; // end of class
 

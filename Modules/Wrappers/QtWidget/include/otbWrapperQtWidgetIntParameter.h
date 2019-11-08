@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -57,15 +57,11 @@ private:
   void DoCreateWidget() override;
   void DoUpdateGUI() override;
 
-  bool eventFilter( QObject * o, QEvent * e ) override;
-
-  QHBoxLayout *         m_QHBoxLayout;
+  QHBoxLayout*     m_QHBoxLayout;
   QtWidgetSpinBox* m_QSpinBox;
 
   IntParameter::Pointer m_IntParam;
 };
-
-
 }
 }
 

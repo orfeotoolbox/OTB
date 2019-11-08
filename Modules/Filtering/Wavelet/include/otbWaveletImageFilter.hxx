@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,20 +28,18 @@ namespace otb
 {
 /** Constructor */
 template <class TInputImage, class TOutputImage, Wavelet::Wavelet TMotherWaveletOperator>
-WaveletImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
-::WaveletImageFilter() : m_NumberOfDecompositions(2)
+WaveletImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>::WaveletImageFilter() : m_NumberOfDecompositions(2)
 {
-  m_WaveletTransform                   = WaveletTransformFilterType::New();
+  m_WaveletTransform = WaveletTransformFilterType::New();
   m_WaveletTransform->SetSubsampleImageFactor(2);
 
   m_WaveletBandsListToWaveletsSynopsis = WaveletBandsListToWaveletsSynopsisImageFilterType::New();
-  m_WaveletBandsListToWaveletsSynopsis->SetInput( m_WaveletTransform->GetOutput() );
+  m_WaveletBandsListToWaveletsSynopsis->SetInput(m_WaveletTransform->GetOutput());
 }
 
 /** Destructor */
 template <class TInputImage, class TOutputImage, Wavelet::Wavelet TMotherWaveletOperator>
-WaveletImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
-::~WaveletImageFilter()
+WaveletImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>::~WaveletImageFilter()
 {
 }
 
@@ -49,21 +47,18 @@ WaveletImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
  * GenerateInputRequestedRegion
  */
 template <class TInputImage, class TOutputImage, Wavelet::Wavelet TMotherWaveletOperator>
-void
-WaveletImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
-::GenerateInputRequestedRegion(void)
+void WaveletImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>::GenerateInputRequestedRegion(void)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
   // get pointers to the inputs
-  typename InputImageType::Pointer input  =
-    const_cast<InputImageType *> (this->GetInput());
+  typename InputImageType::Pointer input = const_cast<InputImageType*>(this->GetInput());
 
-  if ( !input )
-    {
+  if (!input)
+  {
     return;
-    }
+  }
 
   input->SetRequestedRegionToLargestPossibleRegion();
 }
@@ -72,28 +67,23 @@ WaveletImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
  * Main computation method
  */
 template <class TInputImage, class TOutputImage, Wavelet::Wavelet TMotherWaveletOperator>
-void
-WaveletImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
-::GenerateData()
+void WaveletImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>::GenerateData()
 {
-  m_WaveletTransform->SetInput( this->GetInput() );
-  m_WaveletTransform->SetNumberOfDecompositions( m_NumberOfDecompositions );
-  m_WaveletBandsListToWaveletsSynopsis->GraftOutput( this->GetOutput() );
+  m_WaveletTransform->SetInput(this->GetInput());
+  m_WaveletTransform->SetNumberOfDecompositions(m_NumberOfDecompositions);
+  m_WaveletBandsListToWaveletsSynopsis->GraftOutput(this->GetOutput());
   m_WaveletBandsListToWaveletsSynopsis->Update();
-  this->GraftOutput( m_WaveletBandsListToWaveletsSynopsis->GetOutput() );
+  this->GraftOutput(m_WaveletBandsListToWaveletsSynopsis->GetOutput());
 }
 
 /**
  * PrintSelf Method
  */
 template <class TInputImage, class TOutputImage, Wavelet::Wavelet TMotherWaveletOperator>
-void
-WaveletImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void WaveletImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
-
 }
 
 #endif

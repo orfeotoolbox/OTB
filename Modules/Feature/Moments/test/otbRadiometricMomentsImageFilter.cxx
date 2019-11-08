@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,15 +26,15 @@
 #include "otbRadiometricMomentsImageFilter.h"
 
 
-int otbRadiometricMomentsImageFilter(int itkNotUsed(argc), char * argv[])
+int otbRadiometricMomentsImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  typedef float InputPixelType;
+  typedef float      InputPixelType;
   const unsigned int Dimension = 2;
 
   // Typedefs
-  typedef otb::Image<InputPixelType,  Dimension>         ImageType;
-  typedef otb::ImageFileReader<ImageType>                ReaderType;
-  typedef otb::VectorImage<InputPixelType,  Dimension>   VectorImageType;
+  typedef otb::Image<InputPixelType, Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::VectorImage<InputPixelType, Dimension> VectorImageType;
   typedef otb::ImageFileWriter<VectorImageType> WriterType;
   typedef otb::RadiometricMomentsImageFilter<ImageType, VectorImageType> FilterType;
 

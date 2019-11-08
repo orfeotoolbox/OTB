@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,50 +29,44 @@ namespace otb
 {
 
 template <class TInputImage, class TVectorInputImage, class TOutputImage>
-ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
-::ImageAndVectorImageOperationFilter()
+ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>::ImageAndVectorImageOperationFilter()
 {
   this->UseAddition();
 }
 
 template <class TInputImage, class TVectorInputImage, class TOutputImage>
-ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
-::~ImageAndVectorImageOperationFilter()
+ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>::~ImageAndVectorImageOperationFilter()
 {
 }
 
 template <class TInputImage, class TVectorInputImage, class TOutputImage>
-void
-ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
-::SetInput(const InputImageType *input)
+void ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>::SetInput(const InputImageType* input)
 {
-  this->SetNthInput(0, const_cast<InputImageType *>(input));
+  this->SetNthInput(0, const_cast<InputImageType*>(input));
 }
 
 template <class TInputImage, class TVectorInputImage, class TOutputImage>
-void
-ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
-::SetVectorInput(const VectorInputImageType *input)
+void ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>::SetVectorInput(const VectorInputImageType* input)
 {
-  this->SetNthInput(1, const_cast<VectorInputImageType *>(input));
+  this->SetNthInput(1, const_cast<VectorInputImageType*>(input));
 }
 
 template <class TInputImage, class TVectorInputImage, class TOutputImage>
-const typename ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>::InputImageType *
-ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
-::GetInput()
+const typename ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>::InputImageType*
+ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>::GetInput()
 {
-  if (this->GetNumberOfInputs() < 1) return 0;
+  if (this->GetNumberOfInputs() < 1)
+    return 0;
 
   return dynamic_cast<const InputImageType*>(this->GetInput(0));
 }
 
 template <class TInputImage, class TVectorInputImage, class TOutputImage>
-const typename ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>::VectorInputImageType *
-ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
-::GetVectorInput()
+const typename ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>::VectorInputImageType*
+ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>::GetVectorInput()
 {
-  if (this->GetNumberOfInputs() < 2) return nullptr;
+  if (this->GetNumberOfInputs() < 2)
+    return nullptr;
 
   return dynamic_cast<const VectorInputImageType*>(this->itk::ProcessObject::GetInput(1));
 }
@@ -80,9 +74,7 @@ ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
  *
  */
 template <class TInputImage, class TVectorInputImage, class TOutputImage>
-void
-ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>
-::GenerateOutputInformation()
+void ImageAndVectorImageOperationFilter<TInputImage, TVectorInputImage, TOutputImage>::GenerateOutputInformation()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateOutputInformation();

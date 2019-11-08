@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,9 +29,7 @@ namespace otb
 {
 
 template <class TImage>
-RAMDrivenTiledStreamingManager<TImage>::RAMDrivenTiledStreamingManager()
-  : m_AvailableRAMInMB(0),
-    m_Bias(1.0)
+RAMDrivenTiledStreamingManager<TImage>::RAMDrivenTiledStreamingManager() : m_AvailableRAMInMB(0), m_Bias(1.0)
 {
 }
 
@@ -41,19 +39,15 @@ RAMDrivenTiledStreamingManager<TImage>::~RAMDrivenTiledStreamingManager()
 }
 
 template <class TImage>
-void
-RAMDrivenTiledStreamingManager<TImage>::PrepareStreaming( itk::DataObject * input, const RegionType &region )
+void RAMDrivenTiledStreamingManager<TImage>::PrepareStreaming(itk::DataObject* input, const RegionType& region)
 {
-  unsigned long nbDivisions =
-      this->EstimateOptimalNumberOfDivisions(input, region, m_AvailableRAMInMB, m_Bias);
+  unsigned long nbDivisions = this->EstimateOptimalNumberOfDivisions(input, region, m_AvailableRAMInMB, m_Bias);
 
-  this->m_Splitter = otb::ImageRegionSquareTileSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
+  this->m_Splitter               = otb::ImageRegionSquareTileSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
   this->m_ComputedNumberOfSplits = this->m_Splitter->GetNumberOfSplits(region, nbDivisions);
-  otbMsgDevMacro(<< "Number of split : " << this->m_ComputedNumberOfSplits)
-  this->m_Region = region;
+  otbMsgDevMacro(<< "Number of split : " << this->m_ComputedNumberOfSplits) this->m_Region = region;
 }
 
 } // End namespace otb
 
 #endif
-

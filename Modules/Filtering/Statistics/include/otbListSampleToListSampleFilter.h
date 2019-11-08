@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,8 +23,10 @@
 
 #include "otbListSampleSource.h"
 
-namespace otb {
-namespace Statistics {
+namespace otb
+{
+namespace Statistics
+{
 
 /** \class ListSampleToListSampleFilter
  *  \brief This class is a base class for filters using ListSample as
@@ -37,16 +39,15 @@ namespace Statistics {
  *
  * \ingroup OTBStatistics
  */
-template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
-class ITK_EXPORT ListSampleToListSampleFilter :
-  public ListSampleSource<TOutputSampleList>
+template <class TInputSampleList, class TOutputSampleList = TInputSampleList>
+class ITK_EXPORT ListSampleToListSampleFilter : public ListSampleSource<TOutputSampleList>
 {
 public:
   /** Standard class typedefs */
-  typedef ListSampleToListSampleFilter               Self;
-  typedef ListSampleSource<TOutputSampleList>        Superclass;
-  typedef itk::SmartPointer< Self >                  Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef ListSampleToListSampleFilter        Self;
+  typedef ListSampleSource<TOutputSampleList> Superclass;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ListSampleToListSampleFilter, ListSampleSource);
@@ -62,33 +63,34 @@ public:
   typedef typename InputMeasurementVectorType::ValueType      InputValueType;
 
   /** OutputSampleList typedefs */
-  typedef typename Superclass::OutputSampleListType            OutputSampleListType;
-  typedef typename Superclass::OutputSampleListPointer         OutputSampleListPointer;
-  typedef typename Superclass::OutputSampleListConstPointer    OutputSampleListConstPointer;
-  typedef typename Superclass::OutputMeasurementVectorType     OutputMeasurementVectorType;
-  typedef typename Superclass::OutputValueType                 OutputValueType;
+  typedef typename Superclass::OutputSampleListType         OutputSampleListType;
+  typedef typename Superclass::OutputSampleListPointer      OutputSampleListPointer;
+  typedef typename Superclass::OutputSampleListConstPointer OutputSampleListConstPointer;
+  typedef typename Superclass::OutputMeasurementVectorType  OutputMeasurementVectorType;
+  typedef typename Superclass::OutputValueType              OutputValueType;
 
   /** ListSample is not a DataObject, we need to decorate it to push it down
    * a ProcessObject's pipeline */
-  typedef itk::DataObject::Pointer                             DataObjectPointer;
-  //typedef itk::DataObjectDecorator< InputSampleListType >      InputSampleListObjectType;
-  //typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
+  typedef itk::DataObject::Pointer DataObjectPointer;
+  // typedef itk::DataObjectDecorator< InputSampleListType >      InputSampleListObjectType;
+  // typedef typename Superclass::OutputSampleListObjectType      OutputSampleListObjectType;
 
   /** Method to set/get the input list sample */
   using Superclass::SetInput;
-  void SetInput( const InputSampleListType * inputPtr );
-  //void SetInput( const InputSampleListObjectType * inputPtr );
+  void SetInput(const InputSampleListType* inputPtr);
+  // void SetInput( const InputSampleListObjectType * inputPtr );
 
   /** Returns the input sample list */
-  //const InputSampleListType * GetInputSampleList() const;
+  // const InputSampleListType * GetInputSampleList() const;
 
   /** Returns the input sample list as a data object */
-  const InputSampleListType * GetInput() const;
+  const InputSampleListType* GetInput() const;
 
 protected:
-
   ListSampleToListSampleFilter();
-  ~ListSampleToListSampleFilter() override {}
+  ~ListSampleToListSampleFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:

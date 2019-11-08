@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,32 +29,26 @@
 namespace otb
 {
 
-template<class TInputImage, class TOutputPath>
-PersistentVectorizationImageFilter<TInputImage, TOutputPath>
-::PersistentVectorizationImageFilter()
+template <class TInputImage, class TOutputPath>
+PersistentVectorizationImageFilter<TInputImage, TOutputPath>::PersistentVectorizationImageFilter()
 {
   m_MinMaxFilter = MinMaxFilterType::New();
-  m_PathList = PathListType::New();
+  m_PathList     = PathListType::New();
 }
 
-template<class TInputImage, class TOutputPath>
-void
-PersistentVectorizationImageFilter<TInputImage, TOutputPath>
-::Reset()
+template <class TInputImage, class TOutputPath>
+void PersistentVectorizationImageFilter<TInputImage, TOutputPath>::Reset()
 {
   m_PathList->Clear();
 }
 
-template<class TInputImage, class TOutputPath>
-void
-PersistentVectorizationImageFilter<TInputImage, TOutputPath>
-::Synthetize()
-{}
+template <class TInputImage, class TOutputPath>
+void PersistentVectorizationImageFilter<TInputImage, TOutputPath>::Synthetize()
+{
+}
 
-template<class TInputImage, class TOutputPath>
-void
-PersistentVectorizationImageFilter<TInputImage, TOutputPath>
-::GenerateData()
+template <class TInputImage, class TOutputPath>
+void PersistentVectorizationImageFilter<TInputImage, TOutputPath>::GenerateData()
 {
   // Compute the min max and handle mini-pipeline
   m_MinMaxFilter->SetInput(this->GetInput());
@@ -63,19 +57,17 @@ PersistentVectorizationImageFilter<TInputImage, TOutputPath>
   this->GraftOutput(m_MinMaxFilter->GetOutput());
 
   for (PixelType label = m_MinMaxFilter->GetMinimum() + 1; label <= m_MinMaxFilter->GetMaximum(); ++label)
-    {
+  {
     ImageToEdgePathFilterPointerType edgeFilter = ImageToEdgePathFilterType::New();
     edgeFilter->SetInput(m_MinMaxFilter->GetOutput());
     edgeFilter->SetForegroundValue(label);
     edgeFilter->Update();
     m_PathList->PushBack(edgeFilter->GetOutput());
-    }
+  }
 }
 
-template<class TInputImage, class TOutputPath>
-void
-PersistentVectorizationImageFilter<TInputImage, TOutputPath>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TInputImage, class TOutputPath>
+void PersistentVectorizationImageFilter<TInputImage, TOutputPath>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,7 +23,7 @@
 #include "ogr_api.h"
 
 /*static*/
-otb::ogr::Drivers & otb::ogr::Drivers::Init()
+otb::ogr::Drivers& otb::ogr::Drivers::Init()
 {
   static Drivers theInstance;
   return theInstance;
@@ -38,4 +38,3 @@ otb::ogr::Drivers::~Drivers()
 {
   OGRCleanupAll();
 }
-

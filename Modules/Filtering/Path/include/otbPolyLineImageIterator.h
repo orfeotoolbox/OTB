@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,16 +41,14 @@ namespace otb
  * \ingroup OTBPath
  */
 template <class TImage, class TPath>
-class ITK_EXPORT PolyLineImageIterator
-  : public PolyLineImageConstIterator<TImage, TPath>
+class ITK_EXPORT PolyLineImageIterator : public PolyLineImageConstIterator<TImage, TPath>
 {
 public:
   /** Standard typedefs */
-  typedef PolyLineImageIterator                     Self;
+  typedef PolyLineImageIterator Self;
   typedef PolyLineImageConstIterator<TImage, TPath> Superclass;
 
-  itkStaticConstMacro(ImageIteratorDimension, unsigned int,
-                      TImage::ImageDimension);
+  itkStaticConstMacro(ImageIteratorDimension, unsigned int, TImage::ImageDimension);
 
   typedef typename TImage::IndexType             IndexType;
   typedef typename TImage::IndexValueType        IndexValueType;
@@ -85,17 +83,18 @@ public:
   {
     return this->m_InternalImageIterator.Value();
   }
-  Self & operator =(const Self& it)
+  Self& operator=(const Self& it)
   {
-    this->Superclass::operator =(it);
+    this->Superclass::operator=(it);
     return *this;
   }
 
   /** Constructor establishes an iterator to walk along a line */
-  PolyLineImageIterator(ImageType * imagePtr, PathType * pathPtr)
-    : Superclass(imagePtr, pathPtr) {};
+  PolyLineImageIterator(ImageType* imagePtr, PathType* pathPtr) : Superclass(imagePtr, pathPtr){};
   /** Default Destructor. */
-  ~PolyLineImageIterator() override {}
+  ~PolyLineImageIterator() override
+  {
+  }
 };
 } // End namespace otb
 

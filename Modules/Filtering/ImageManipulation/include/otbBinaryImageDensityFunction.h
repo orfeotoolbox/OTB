@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -45,15 +45,13 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TCoordRep = float>
-class ITK_EXPORT BinaryImageDensityFunction :
-  public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
-      TCoordRep>
+class ITK_EXPORT BinaryImageDensityFunction
+    : public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef BinaryImageDensityFunction Self;
-  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType,
-      TCoordRep>                                          Superclass;
+  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::RealType, TCoordRep> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -74,8 +72,7 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Datatype used for the density */
-  typedef typename itk::NumericTraits<typename InputImageType::PixelType>::RealType
-  RealType;
+  typedef typename itk::NumericTraits<typename InputImageType::PixelType>::RealType RealType;
 
   /** Evalulate the function at specified index */
   RealType EvaluateAtIndex(const IndexType& index) const override;
@@ -87,8 +84,7 @@ public:
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  RealType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const override
+  RealType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -107,21 +103,22 @@ public:
 
 protected:
   BinaryImageDensityFunction();
-  ~BinaryImageDensityFunction() override{}
+  ~BinaryImageDensityFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  BinaryImageDensityFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  BinaryImageDensityFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   RadiusType m_NeighborhoodRadius;
-
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbBinaryImageDensityFunction.hxx"
+#include "otbBinaryImageDensityFunction.hxx"
 #endif
 
 #endif

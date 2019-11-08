@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,7 +25,8 @@
 #include <utility>
 #include <string>
 
-namespace otb {
+namespace otb
+{
 
 /** \class StatisticsXMLFileWriter
  *  \brief Write in a xml file the values stored in a MeasurementVector set as
@@ -39,16 +40,15 @@ namespace otb {
  *
  * \ingroup OTBIOXML
  */
-template < class TMeasurementVector>
-class  StatisticsXMLFileWriter :
-    public itk::Object
+template <class TMeasurementVector>
+class StatisticsXMLFileWriter : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef StatisticsXMLFileWriter          Self;
-  typedef itk::Object                      Superclass;
-  typedef itk::SmartPointer< Self >        Pointer;
-  typedef itk::SmartPointer<const Self>    ConstPointer;
+  typedef StatisticsXMLFileWriter       Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(StatisticsXMLFileWriter, itk::Object);
@@ -57,22 +57,22 @@ public:
   itkNewMacro(Self);
 
   /** InputSampleList typedefs */
-  typedef TMeasurementVector                             MeasurementVectorType;
-  typedef typename MeasurementVectorType::ValueType      InputValueType;
+  typedef TMeasurementVector                        MeasurementVectorType;
+  typedef typename MeasurementVectorType::ValueType InputValueType;
 
   /** Convenient typedef */
-  typedef std::pair<std::string , MeasurementVectorType>  InputDataType;
-  typedef std::vector< InputDataType >                   MeasurementVectorContainer;
-  
-  typedef std::map<std::string , std::string>           GenericMapType;
-  typedef std::map<std::string , GenericMapType>        GenericMapContainer;
+  typedef std::pair<std::string, MeasurementVectorType> InputDataType;
+  typedef std::vector<InputDataType> MeasurementVectorContainer;
+
+  typedef std::map<std::string, std::string>    GenericMapType;
+  typedef std::map<std::string, GenericMapType> GenericMapContainer;
 
   /** Method to set/get the input list sample */
-  void AddInput(const char * name,  const MeasurementVectorType& inputVector );
-  
+  void AddInput(const char* name, const MeasurementVectorType& inputVector);
+
   /** Method to add a map statistic with a given type */
   template <typename MapType>
-  void AddInputMap(const char * name, const MapType& map );
+  void AddInputMap(const char* name, const MapType& map);
 
   /** Remove previously added inputs (vectors and maps) */
   void CleanInputs();
@@ -88,20 +88,21 @@ public:
   itkGetStringMacro(FileName);
 
 protected:
-
   virtual void GenerateData();
 
   StatisticsXMLFileWriter();
-  ~StatisticsXMLFileWriter() override {}
+  ~StatisticsXMLFileWriter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
   StatisticsXMLFileWriter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  std::string                 m_FileName;
-  MeasurementVectorContainer  m_MeasurementVectorContainer;
-  GenericMapContainer         m_GenericMapContainer;
+  std::string                m_FileName;
+  MeasurementVectorContainer m_MeasurementVectorContainer;
+  GenericMapContainer        m_GenericMapContainer;
 
 }; // end of class StatisticsXMLFileWriter
 

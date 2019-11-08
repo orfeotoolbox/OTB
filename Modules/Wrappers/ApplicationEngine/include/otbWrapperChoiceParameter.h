@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,8 +37,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT ChoiceParameter
-  : public Parameter
+class OTBApplicationEngine_EXPORT ChoiceParameter : public Parameter
 {
 public:
   /** Standard class typedef */
@@ -54,31 +53,31 @@ public:
   itkTypeMacro(ChoiceParameter, Parameter);
 
   /** Add a value to the choice */
-  void AddChoice( std::string choicekey, std::string choiceName );
+  void AddChoice(std::string choicekey, std::string choiceName);
 
   /** Get the key of a specific choice value */
-  std::string GetChoiceKey( int i );
+  std::string GetChoiceKey(int i) const;
 
   /** Get the list of the different choice keys */
   std::vector<std::string> GetChoiceKeys();
 
   /** Get the long name of a specific choice value */
-  std::string GetChoiceName( int i );
+  std::string GetChoiceName(int i);
 
   /** Get the list of the different choice keys */
   std::vector<std::string> GetChoiceNames();
 
   /** Get the ParameterGroup associated to a choice value */
-  ParameterGroup::Pointer GetChoiceParameterGroupByIndex( int i );
+  ParameterGroup::Pointer GetChoiceParameterGroupByIndex(int i);
 
   /** Get the ParameterGroup associated to a choice value */
-  ParameterGroup::Pointer GetChoiceParameterGroupByKey( std::string choiceKey );
+  ParameterGroup::Pointer GetChoiceParameterGroupByKey(std::string choiceKey);
 
   /** Get all parameters that are child of this choice parameter */
   std::vector<std::string> GetParametersKeys();
 
   /** Get the number of available choice */
-  unsigned int GetNbChoices( void );
+  unsigned int GetNbChoices(void);
 
   /** Set choice value */
   virtual void SetValue(unsigned int v);
@@ -87,19 +86,18 @@ public:
   virtual void SetValue(std::string choiceKey);
 
   /** Return any value */
-  virtual unsigned int GetValue();
+  virtual unsigned int GetValue() const;
 
-  bool HasValue() const override
-  {
-    return !m_ChoiceList.empty();
-  }
+  bool HasValue() const override;
+  void ClearValue() override;
 
-  void ClearValue() override
-  {
-    // Same as constructor init value
-    // Note that this may be invalid if HasValue() == false
-    m_CurrentChoice = 0;
-  }
+  ParameterType GetType() const override;
+
+  int  ToInt() const override;
+  void FromInt(int value) override;
+
+  std::string ToString() const override;
+  void FromString(const std::string& value) override;
 
 protected:
   /** Constructor */
@@ -110,7 +108,9 @@ protected:
 
   struct Choice
   {
-    Choice() {}
+    Choice()
+    {
+    }
 
     std::string             m_Key;
     std::string             m_Name;
@@ -118,13 +118,13 @@ protected:
   };
 
   typedef std::vector<Choice> ChoiceList;
-  ChoiceList m_ChoiceList;
+  ChoiceList                  m_ChoiceList;
 
   unsigned int m_CurrentChoice;
 
 private:
-  ChoiceParameter(const ChoiceParameter &) = delete;
-  void operator =(const ChoiceParameter&) = delete;
+  ChoiceParameter(const ChoiceParameter&) = delete;
+  void operator=(const ChoiceParameter&) = delete;
 
 }; // End class Parameter
 

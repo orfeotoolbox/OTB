@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -61,9 +61,8 @@ protected:
   ~KMLVectorDataIOFactory() override;
 
 private:
-  KMLVectorDataIOFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  KMLVectorDataIOFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

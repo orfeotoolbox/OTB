@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,8 +34,12 @@
 
 class OGRGeometry;
 
-namespace otb { namespace ogr {
-namespace internal {
+namespace otb
+{
+namespace ogr
+{
+namespace internal
+{
 /**\ingroup GeometryInternals
  * Deleter dedicated to \c OGRGeometry.
  * \internal
@@ -47,9 +51,9 @@ namespace internal {
  * otb::ogr::internal.
  */
 struct OTBGdalAdapters_EXPORT GeometryDeleter
-  {
+{
   void operator()(OGRGeometry* p);
-  };
+};
 } // internal namespace
 
 
@@ -103,35 +107,35 @@ struct OTBGdalAdapters_EXPORT GeometryDeleter
  * use the correct type.
  */
 typedef boost::interprocess::unique_ptr<OGRGeometry, internal::GeometryDeleter> UniqueGeometryPtr;
-///Do these features intersect?
-OTBGdalAdapters_EXPORT bool Intersects (OGRGeometry const& lhs, OGRGeometry const& rhs);
+/// Do these features intersect?
+OTBGdalAdapters_EXPORT bool Intersects(OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Returns wheither if two geometries are equivalent.
-OTBGdalAdapters_EXPORT bool Equals (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Equals(OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Tests for disjointness.
-OTBGdalAdapters_EXPORT bool Disjoint (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Disjoint(OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Tests for touching.
-OTBGdalAdapters_EXPORT bool Touches (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Touches(OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Tests for crossing.
-OTBGdalAdapters_EXPORT bool Crosses (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Crosses(OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Tests for containment.
-OTBGdalAdapters_EXPORT bool Within (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Within(OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Tests for containment.
-OTBGdalAdapters_EXPORT bool Contains (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Contains(OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Tests for overlap.
-OTBGdalAdapters_EXPORT bool Overlaps (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT bool Overlaps(OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Computes distance between two geometries.
-OTBGdalAdapters_EXPORT double Distance (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT double Distance(OGRGeometry const& lhs, OGRGeometry const& rhs);
 
 /// Computes intersection.
-OTBGdalAdapters_EXPORT UniqueGeometryPtr Intersection (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT UniqueGeometryPtr Intersection(OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Computes union.
-OTBGdalAdapters_EXPORT UniqueGeometryPtr Union (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT UniqueGeometryPtr Union(OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Computes union using cascading.
-OTBGdalAdapters_EXPORT UniqueGeometryPtr UnionCascaded (OGRGeometry const& this_);
+OTBGdalAdapters_EXPORT UniqueGeometryPtr UnionCascaded(OGRGeometry const& this_);
 /// Computes difference.
-OTBGdalAdapters_EXPORT UniqueGeometryPtr Difference (OGRGeometry const& lhs, OGRGeometry const& rhs);
+OTBGdalAdapters_EXPORT UniqueGeometryPtr Difference(OGRGeometry const& lhs, OGRGeometry const& rhs);
 /// Computes symmetric difference.
-OTBGdalAdapters_EXPORT UniqueGeometryPtr SymDifference (OGRGeometry const& lhs, OGRGeometry const& rhs); // -1.8
+OTBGdalAdapters_EXPORT UniqueGeometryPtr SymDifference(OGRGeometry const& lhs, OGRGeometry const& rhs); // -1.8
 
 /** Simplifies Geometry.
  * This function tries to uses the best simplication algorithm available in the
@@ -157,8 +161,8 @@ OTBGdalAdapters_EXPORT UniqueGeometryPtr SimplifyDontPreserveTopology(OGRGeometr
 OTBGdalAdapters_EXPORT UniqueGeometryPtr SimplifyPreserveTopology(OGRGeometry const& g, double tolerance);
 
 /** @} */
-
-} } // end namespace otb::ogr
+}
+} // end namespace otb::ogr
 
 #ifndef OTB_MANUAL_INSTANTIATION
 // #include "otbOGRGeometryWrapper.hxx"

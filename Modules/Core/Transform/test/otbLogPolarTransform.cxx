@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,15 +27,15 @@
 
 int otbLogPolarTransform(int itkNotUsed(argc), char* argv[])
 {
-  double       radialStep = atof(argv[1]);
+  double       radialStep  = atof(argv[1]);
   double       angularStep = atof(argv[2]);
-  const char * outputFilename(argv[3]);
+  const char*  outputFilename(argv[3]);
   unsigned int nbPoints = atoi(argv[4]);
 
   typedef double                                PrecisionType;
   typedef otb::LogPolarTransform<PrecisionType> LogPolarTransformType;
-  typedef itk::Point<PrecisionType, 2>          PointType;
-  typedef std::vector<PointType>                PointsVectorType;
+  typedef itk::Point<PrecisionType, 2> PointType;
+  typedef std::vector<PointType> PointsVectorType;
 
   std::ofstream file;
   file.open(outputFilename);
@@ -43,13 +43,13 @@ int otbLogPolarTransform(int itkNotUsed(argc), char* argv[])
   // input points retrieval
   PointsVectorType vect;
   for (unsigned int i = 0; i < nbPoints; ++i)
-    {
+  {
     PointType p;
     p[0] = atof(argv[5 + 2 * i]);
     p[1] = atof(argv[6 + 2 * i]);
     file << "Adding point " << p << "." << std::endl;
     vect.push_back(p);
-    }
+  }
 
   // Instantiation
   LogPolarTransformType::Pointer        transform = LogPolarTransformType::New();
@@ -62,21 +62,20 @@ int otbLogPolarTransform(int itkNotUsed(argc), char* argv[])
 
   file << "Transform calculation ... :" << std::endl;
   for (PointsVectorType::iterator it = vect.begin(); it != vect.end(); ++it)
-    {
+  {
     PointType p = transform->TransformPoint(*it);
 
     PointType pprime;
 
-    double theta = (*it)[0] * angularStep * otb::CONST_PI / 180.0;
-    double logRho   = (*it)[1] * radialStep;
+    double theta  = (*it)[0] * angularStep * otb::CONST_PI / 180.0;
+    double logRho = (*it)[1] * radialStep;
 
     file << "Rho: " << logRho << ", Theta: " << theta << std::endl;
     pprime[0] = std::exp(logRho) * std::cos(theta);
     pprime[1] = std::exp(logRho) * std::sin(theta);
 
-    file << "Original Point: " << (*it) << ", Reference point: " << pprime << ", Transformed point: " << p <<
-    std::endl << std::endl;
-    }
+    file << "Original Point: " << (*it) << ", Reference point: " << pprime << ", Transformed point: " << p << std::endl << std::endl;
+  }
 
   file.close();
 

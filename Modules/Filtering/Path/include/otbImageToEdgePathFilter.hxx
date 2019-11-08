@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,8 +33,7 @@ namespace otb
  * Constructor.
  */
 template <class TInputImage, class TOutputPath>
-ImageToEdgePathFilter<TInputImage, TOutputPath>
-::ImageToEdgePathFilter()
+ImageToEdgePathFilter<TInputImage, TOutputPath>::ImageToEdgePathFilter()
 {
   m_ForegroundValue = PixelType(255);
 }
@@ -42,33 +41,31 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
  * Main computation method.
  */
 template <class TInputImage, class TOutputPath>
-void
-ImageToEdgePathFilter<TInputImage, TOutputPath>
-::GenerateData(void)
+void ImageToEdgePathFilter<TInputImage, TOutputPath>::GenerateData(void)
 {
 
-  const InputImageType * inputImage = this->GetInput();
-  OutputPathType *       outputPath       = this->GetOutput();
+  const InputImageType* inputImage = this->GetInput();
+  OutputPathType*       outputPath = this->GetOutput();
 
   otbMsgDebugMacro(<< "Foreground value : " << m_ForegroundValue);
 
   PixelType initPadConstant(0);
   if (initPadConstant == m_ForegroundValue)
-    {
+  {
     initPadConstant = 1;
-    }
+  }
 
   typedef itk::ConstantPadImageFilter<InputImageType, InputImageType> PadFilterType;
-  typedef itk::ConstShapedNeighborhoodIterator<InputImageType>        IteratorType;
-  typedef itk::ImageRegionConstIteratorWithIndex<InputImageType>      LinearIteratorType;
+  typedef itk::ConstShapedNeighborhoodIterator<InputImageType>   IteratorType;
+  typedef itk::ImageRegionConstIteratorWithIndex<InputImageType> LinearIteratorType;
 
   // Padding to deal with near the border objects.
   typename PadFilterType::Pointer pad = PadFilterType::New();
   pad->SetInput(inputImage);
   pad->SetConstant(initPadConstant);
   SizeType padSize;
-  padSize[ 0 ] = 1;
-  padSize[ 1 ] = 1;
+  padSize[0] = 1;
+  padSize[1] = 1;
   pad->SetPadUpperBound(padSize);
   pad->SetPadLowerBound(padSize);
   pad->Update();
@@ -77,32 +74,32 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   linIter.GoToBegin();
   bool flag = true;
   while (flag && !linIter.IsAtEnd())
-    {
+  {
     if (linIter.Get() == m_ForegroundValue)
-      {
+    {
       flag = false;
-      }
-    else
-      {
-      ++linIter;
-      }
     }
+    else
+    {
+      ++linIter;
+    }
+  }
   typename InputImageType::IndexType start = linIter.GetIndex();
-//  outputPath->AddVertex(start);
+  //  outputPath->AddVertex(start);
 
   // Neighborhood definition
   typename IteratorType::RadiusType radius;
   radius.Fill(1);
-  IteratorType it(radius, pad->GetOutput(), pad->GetOutput()->GetLargestPossibleRegion());
-  const typename IteratorType::OffsetType LEFT   = {{-1, 0}};
-  const typename IteratorType::OffsetType RIGHT  = {{1, 0}};
-  const typename IteratorType::OffsetType UP     = {{0, -1}};
-  const typename IteratorType::OffsetType DOWN   = {{0, 1}};
-  const typename IteratorType::OffsetType LEFTUP   = {{-1, -1}};
+  IteratorType                            it(radius, pad->GetOutput(), pad->GetOutput()->GetLargestPossibleRegion());
+  const typename IteratorType::OffsetType LEFT      = {{-1, 0}};
+  const typename IteratorType::OffsetType RIGHT     = {{1, 0}};
+  const typename IteratorType::OffsetType UP        = {{0, -1}};
+  const typename IteratorType::OffsetType DOWN      = {{0, 1}};
+  const typename IteratorType::OffsetType LEFTUP    = {{-1, -1}};
   const typename IteratorType::OffsetType RIGHTDOWN = {{1, 1}};
-  const typename IteratorType::OffsetType RIGHTUP  = {{1, -1}};
-  const typename IteratorType::OffsetType LEFTDOWN = {{-1, 1}};
-  const typename IteratorType::OffsetType CENTER = {{0, 0}};
+  const typename IteratorType::OffsetType RIGHTUP   = {{1, -1}};
+  const typename IteratorType::OffsetType LEFTDOWN  = {{-1, 1}};
+  const typename IteratorType::OffsetType CENTER    = {{0, 0}};
   it.ClearActiveList();
   it.ActivateOffset(LEFT);
   it.ActivateOffset(RIGHT);
@@ -127,21 +124,25 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
   it.SetLocation(start);
 
   ContinuousIndexType newVertex = it.GetIndex(CENTER);
-  if (it.GetPixel(RIGHT) == m_ForegroundValue) newVertex[0] -= 0.5;
-  if (it.GetPixel(LEFT) == m_ForegroundValue) newVertex[0] += 0.5;
-  if (it.GetPixel(UP) == m_ForegroundValue) newVertex[1] += 0.5;
-  if (it.GetPixel(DOWN) == m_ForegroundValue) newVertex[1] -= 0.5;
+  if (it.GetPixel(RIGHT) == m_ForegroundValue)
+    newVertex[0] -= 0.5;
+  if (it.GetPixel(LEFT) == m_ForegroundValue)
+    newVertex[0] += 0.5;
+  if (it.GetPixel(UP) == m_ForegroundValue)
+    newVertex[1] += 0.5;
+  if (it.GetPixel(DOWN) == m_ForegroundValue)
+    newVertex[1] -= 0.5;
   outputPath->AddVertex(newVertex);
 
   otbMsgDebugMacro(<< "START: " << start);
   // stopping flag
-  flag = true;
+  flag       = true;
   int nbMove = 0;
   // nexstart gives a clue of where to begin searching in next step of the search
   int nextStart = 0;
   // While the search has not eended
   while (flag)
-    {
+  {
     // move is used to walk the neighnorhood clock-wise
     int move = nextStart;
     // edgeFound indicate that the edge has been found.
@@ -150,66 +151,68 @@ ImageToEdgePathFilter<TInputImage, TOutputPath>
     bool LastWasPositive(false);
     // While unexplored pixels remain and no edge was found
     while ((move < nextStart + 8) && (!EdgeFound))
-      {
-      //otbMsgDevMacro(<<"SEARCH: "<<move%8<<" "<<it.GetPixel(rotation[move%8])<<" LAST: "<<LastWasPositive);
+    {
+      // otbMsgDevMacro(<<"SEARCH: "<<move%8<<" "<<it.GetPixel(rotation[move%8])<<" LAST: "<<LastWasPositive);
       // If last pixel was not in the object and the current is, we have found the edge
       if ((!LastWasPositive) && (it.GetPixel(rotation[move % 8]) == m_ForegroundValue))
-        {
+      {
         EdgeFound = true;
-        }
+      }
       else
-        {
+      {
         //  Else goes on
         LastWasPositive = (it.GetPixel(rotation[move % 8]) == m_ForegroundValue);
         move++;
-        }
       }
+    }
     // Once the search has been completed, if an edge pixel was found
     if (EdgeFound)
-      {
+    {
       // Update the output path
       it += rotation[move % 8];
       nextStart = (move + 5) % 8;
       newVertex = it.GetIndex(CENTER);
-      if (it.GetPixel(RIGHT) == m_ForegroundValue) newVertex[0] -= 0.5;
-      if (it.GetPixel(LEFT) == m_ForegroundValue) newVertex[0] += 0.5;
-      if (it.GetPixel(UP) == m_ForegroundValue) newVertex[1] += 0.5;
-      if (it.GetPixel(DOWN) == m_ForegroundValue) newVertex[1] -= 0.5;
+      if (it.GetPixel(RIGHT) == m_ForegroundValue)
+        newVertex[0] -= 0.5;
+      if (it.GetPixel(LEFT) == m_ForegroundValue)
+        newVertex[0] += 0.5;
+      if (it.GetPixel(UP) == m_ForegroundValue)
+        newVertex[1] += 0.5;
+      if (it.GetPixel(DOWN) == m_ForegroundValue)
+        newVertex[1] -= 0.5;
       outputPath->AddVertex(newVertex);
       otbMsgDebugMacro(<< newVertex);
       // If we came back to our start point after a sufficient number of moves
       if ((it.GetIndex(CENTER) == start) && (nbMove >= 2))
-        {
+      {
         // search end
         flag = false;
-        }
+      }
       else
-        {
+      {
         // else
         for (int i = 0; i < 8; ++i)
-          {
+        {
           // If we came back near our starting pointer after a sufficient number of moves
           if ((it.GetIndex(rotation[i]) == start) && (nbMove >= 2))
-            {
+          {
             // search end
             flag = false;
-            }
           }
         }
       }
+    }
     // else
     else
-      {
+    {
       // search ended, no pixel can be added to the edge path.
       flag = false;
-      }
-    nbMove++;
     }
+    nbMove++;
+  }
 }
 template <class TInputImage, class TOutputPath>
-void
-ImageToEdgePathFilter<TInputImage, TOutputPath>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ImageToEdgePathFilter<TInputImage, TOutputPath>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << "Foreground value : " << m_ForegroundValue << std::endl;

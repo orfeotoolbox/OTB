@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,32 +32,31 @@ namespace otb
 
 /**
  * \class PersistentImageSampleExtractorFilter
- * 
+ *
  * \brief Persistent filter to extract sample values from an image
- * 
+ *
  * \ingroup OTBSampling
  */
-template<class TInputImage>
-class ITK_EXPORT PersistentImageSampleExtractorFilter :
-  public PersistentSamplingFilterBase<TInputImage>
+template <class TInputImage>
+class ITK_EXPORT PersistentImageSampleExtractorFilter : public PersistentSamplingFilterBase<TInputImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentImageSampleExtractorFilter            Self;
-  typedef PersistentSamplingFilterBase<TInputImage>     Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef PersistentImageSampleExtractorFilter      Self;
+  typedef PersistentSamplingFilterBase<TInputImage> Superclass;
+  typedef itk::SmartPointer<Self>                   Pointer;
+  typedef itk::SmartPointer<const Self>             ConstPointer;
 
-  typedef TInputImage                                     InputImageType;
-  typedef typename InputImageType::Pointer                InputImagePointer;
-  typedef typename InputImageType::RegionType             RegionType;
-  typedef typename InputImageType::PointType              PointType;
-  typedef typename InputImageType::IndexType              IndexType;
-  typedef typename InputImageType::PixelType              PixelType;
-  typedef typename InputImageType::InternalPixelType      InternalPixelType;
+  typedef TInputImage                                InputImageType;
+  typedef typename InputImageType::Pointer           InputImagePointer;
+  typedef typename InputImageType::RegionType        RegionType;
+  typedef typename InputImageType::PointType         PointType;
+  typedef typename InputImageType::IndexType         IndexType;
+  typedef typename InputImageType::PixelType         PixelType;
+  typedef typename InputImageType::InternalPixelType InternalPixelType;
 
-  typedef ogr::DataSource                                 OGRDataType;
-  typedef ogr::DataSource::Pointer                        OGRDataPointer;
+  typedef ogr::DataSource          OGRDataType;
+  typedef ogr::DataSource::Pointer OGRDataPointer;
 
   typedef itk::DataObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
@@ -74,25 +73,29 @@ public:
   /** Get the output samples OGR container */
   ogr::DataSource* GetOutputSamples();
 
-  void Synthetize(void) override{}
+  void Synthetize(void) override
+  {
+  }
 
   /** Reset method called before starting the streaming*/
   void Reset(void) override;
-  
+
   itkSetMacro(SampleFieldPrefix, std::string);
   itkGetMacro(SampleFieldPrefix, std::string);
 
   /** Directly set the output field names (the prefix won't be used) */
-  void SetSampleFieldNames(std::vector<std::string> &names);
+  void SetSampleFieldNames(std::vector<std::string>& names);
 
   /** Get the sample names */
-  const std::vector<std::string> & GetSampleFieldNames();
+  const std::vector<std::string>& GetSampleFieldNames();
 
 protected:
   /** Constructor */
   PersistentImageSampleExtractorFilter();
   /** Destructor */
-  ~PersistentImageSampleExtractorFilter() override {}
+  ~PersistentImageSampleExtractorFilter() override
+  {
+  }
 
   void GenerateOutputInformation() override;
 
@@ -102,8 +105,8 @@ protected:
   void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid) override;
 
 private:
-  PersistentImageSampleExtractorFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PersistentImageSampleExtractorFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Initialize fields to store extracted values (Real type) */
   void InitializeFields();
@@ -118,30 +121,27 @@ private:
 
 /**
  * \class ImageSampleExtractorFilter
- * 
+ *
  * \brief Extract sample values from an image into an OGRDataSource using a persistent filter
- * 
+ *
  * \sa PersistentImageSampleExtractorFilter
  *
  * \ingroup OTBSampling
  */
-template<class TInputImage>
-class ITK_EXPORT ImageSampleExtractorFilter :
-  public PersistentFilterStreamingDecorator<PersistentImageSampleExtractorFilter<TInputImage> >
+template <class TInputImage>
+class ITK_EXPORT ImageSampleExtractorFilter : public PersistentFilterStreamingDecorator<PersistentImageSampleExtractorFilter<TInputImage>>
 {
 public:
   /** Standard Self typedef */
-  typedef ImageSampleExtractorFilter      Self;
-  typedef PersistentFilterStreamingDecorator
-    <PersistentImageSampleExtractorFilter
-      <TInputImage> >                     Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef ImageSampleExtractorFilter                                                            Self;
+  typedef PersistentFilterStreamingDecorator<PersistentImageSampleExtractorFilter<TInputImage>> Superclass;
+  typedef itk::SmartPointer<Self>                                                               Pointer;
+  typedef itk::SmartPointer<const Self>                                                         ConstPointer;
 
-  typedef TInputImage                     InputImageType;
-  typedef otb::ogr::DataSource            OGRDataType;
-  
-  typedef typename Superclass::FilterType             FilterType;
+  typedef TInputImage          InputImageType;
+  typedef otb::ogr::DataSource OGRDataType;
+
+  typedef typename Superclass::FilterType FilterType;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -156,34 +156,38 @@ public:
 
   void SetSamplePositions(const otb::ogr::DataSource* data);
   const otb::ogr::DataSource* GetSamplePositions();
-  
+
   void SetOutputSamples(OGRDataType::Pointer data);
   const otb::ogr::DataSource* GetOutputSamples();
 
-  void SetOutputFieldPrefix(const std::string &key);
+  void SetOutputFieldPrefix(const std::string& key);
   std::string GetOutputFieldPrefix();
 
   /** Set the output field names */
-  void SetOutputFieldNames(std::vector<std::string> &names);
+  void SetOutputFieldNames(std::vector<std::string>& names);
 
   /** Get the output field names */
-  const std::vector<std::string> & GetOutputFieldNames();
-  
+  const std::vector<std::string>& GetOutputFieldNames();
+
   void SetLayerIndex(int index);
   int GetLayerIndex();
 
-  void SetClassFieldName(const std::string &name);
+  void SetClassFieldName(const std::string& name);
   std::string GetClassFieldName(void);
 
 protected:
   /** Constructor */
-  ImageSampleExtractorFilter() {}
+  ImageSampleExtractorFilter()
+  {
+  }
   /** Destructor */
-  ~ImageSampleExtractorFilter() override {}
+  ~ImageSampleExtractorFilter() override
+  {
+  }
 
 private:
-  ImageSampleExtractorFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ImageSampleExtractorFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end of namespace otb

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,12 +30,11 @@ namespace otb
  * Constructor
  ----------------------------------------------------------*/
 template <class TInputImage, class TOutputImage, class TDetector>
-KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>
-::KeyPointDensityImageFilter()
+KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>::KeyPointDensityImageFilter()
 {
   this->SetNumberOfRequiredInputs(1);
-  m_NeighborhoodRadius = 1;
-  m_Detector =  DetectorType::New();
+  m_NeighborhoodRadius           = 1;
+  m_Detector                     = DetectorType::New();
   m_PointSetToDensityImageFilter = PointSetToDensityImageType::New();
 }
 
@@ -43,9 +42,9 @@ KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>
  * Destructor.c
  ----------------------------------------------------------*/
 template <class TInputImage, class TOutputImage, class TDetector>
-KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>
-::~KeyPointDensityImageFilter()
-{}
+KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>::~KeyPointDensityImageFilter()
+{
+}
 
 /**
  * threaded Generate Data
@@ -55,14 +54,13 @@ KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>
 * GenerateData Performs the pixel-wise addition
 */
 template <class TInputImage, class TOutputImage, class TDetector>
-void
-KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>
-::GenerateData()
+void KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>::GenerateData()
 //::GenerateData( const OutputImageRegionType &outputRegionForThread, itk::ThreadIdType threadId )
 {
   typename Superclass::OutputImagePointer outputImage = this->GetOutput();
-  InputImagePointerType                   ptr = const_cast<InputImageType *>(this->GetInput());
-  if (!ptr) return;
+  InputImagePointerType                   ptr         = const_cast<InputImageType*>(this->GetInput());
+  if (!ptr)
+    return;
 
   /** Detector*/
   m_Detector->SetInput(ptr);
@@ -83,9 +81,7 @@ KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>
  * Set Detector
  */
 template <class TInputImage, class TOutputImage, class TDetector>
-void
-KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>
-::SetDetector(DetectorType* detector)
+void KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>::SetDetector(DetectorType* detector)
 {
   m_Detector = detector;
 }
@@ -94,10 +90,8 @@ KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>
  * Get Detector
  */
 template <class TInputImage, class TOutputImage, class TDetector>
-typename KeyPointDensityImageFilter<TInputImage,  TOutputImage, TDetector>
-::DetectorType *
-KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>
-::GetDetector()
+typename KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>::DetectorType*
+KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>::GetDetector()
 {
   return m_Detector;
 }
@@ -106,12 +100,10 @@ KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>
   PrintSelf
   -----------------------------------------------------------------*/
 template <class TInputImage, class TOutputImage, class TDetector>
-void
-KeyPointDensityImageFilter<TInputImage,  TOutputImage, TDetector>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void KeyPointDensityImageFilter<TInputImage, TOutputImage, TDetector>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Neighborhood Radius " << m_NeighborhoodRadius   << std::endl;
+  os << indent << "Neighborhood Radius " << m_NeighborhoodRadius << std::endl;
 }
 
 } /** end namesapce otb*/

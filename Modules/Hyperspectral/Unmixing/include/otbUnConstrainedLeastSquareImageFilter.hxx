@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,24 +25,46 @@
 
 namespace otb
 {
-
-/**
- *
- */
-template <class TInputImage, class TOutputImage, class TPrecision>
-UnConstrainedLeastSquareImageFilter<TInputImage, TOutputImage, TPrecision>
-::UnConstrainedLeastSquareImageFilter()
+namespace Functor
 {
+
+template <class TInput, class TOutput, class TPrecision>
+size_t UnConstrainedLeastSquareFunctor<TInput, TOutput, TPrecision>::OutputSize(const std::array<size_t, 1>&) const
+{
+  return m_OutputSize;
 }
 
-template <class TInputImage, class TOutputImage, class TPrecision>
-void
-UnConstrainedLeastSquareImageFilter<TInputImage, TOutputImage, TPrecision>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TInput, class TOutput, class TPrecision>
+void UnConstrainedLeastSquareFunctor<TInput, TOutput, TPrecision>::SetMatrix(const MatrixType& m)
 {
-  Superclass::PrintSelf(os, indent);
+  m_Svd.reset(new SVDType(m));
+  m_Inv        = m_Svd->inverse();
+  m_OutputSize = m.cols();
 }
 
-} // end namespace
+template <class TInput, class TOutput, class TPrecision>
+typename UnConstrainedLeastSquareFunctor<TInput, TOutput, TPrecision>::OutputType UnConstrainedLeastSquareFunctor<TInput, TOutput, TPrecision>::
+operator()(const InputType& in) const
+{
+  VectorType inVector(in.Size());
+  for (unsigned int i = 0; i < in.GetSize(); ++i)
+  {
+    inVector[i] = in[i];
+  }
+
+  VectorType outVector = m_Inv * inVector;
+
+  OutputType out(outVector.size());
+  for (unsigned int i = 0; i < out.GetSize(); ++i)
+  {
+    out[i] = outVector[i];
+  }
+
+  return out;
+}
+
+
+} // end namespace Functor
+} // end namespace otb
 
 #endif

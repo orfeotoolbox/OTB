@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,17 +37,20 @@ namespace Function
  *
  * \ingroup OTBInterpolation
  */
-template<class TInput = double, class TOutput = double>
+template <class TInput = double, class TOutput = double>
 class BlackmanWindowFunction
 {
 public:
+  BlackmanWindowFunction() : m_Radius(1), m_Factor1(CONST_PI), m_Factor2(2.0 * CONST_PI)
+  {
+  } // default radius is 1 at construction
   void SetRadius(unsigned int radius)
   {
-    m_Radius = radius;
+    m_Radius  = radius;
     m_Factor1 = CONST_PI / static_cast<double>(radius);
     m_Factor2 = 2.0 * CONST_PI / static_cast<double>(radius);
   }
-  unsigned int  GetRadius() const
+  unsigned int GetRadius() const
   {
     return m_Radius;
   }
@@ -60,13 +63,14 @@ public:
     return m_Factor2;
   }
 
-  inline TOutput operator ()(const TInput& A) const
+  inline TOutput operator()(const TInput& A) const
   {
-    double x = static_cast<double>(A);
-    double px = CONST_PI * x;
+    double x    = static_cast<double>(A);
+    double px   = CONST_PI * x;
     double temp = 0.42 + 0.5 * std::cos(x * m_Factor1) + 0.08 * std::cos(x * m_Factor2);
     return (x == 0.0) ? static_cast<TOutput>(temp) : static_cast<TOutput>(temp * std::sin(px) / px);
   }
+
 private:
   unsigned int m_Radius;
   // Equal to \f$ \frac{\pi}{m} \f$
@@ -74,7 +78,7 @@ private:
   // Equal to \f$ \frac{2 \pi}{m} \f$
   double m_Factor2;
 };
-} //namespace Function
+} // namespace Function
 
 /**
  * \class WindowedSincInterpolateImageBlackmanFunction
@@ -91,24 +95,18 @@ private:
  *
  * \ingroup OTBInterpolation
  */
-template<class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep =
-      double, class TInputInterpolator = double, class TOutputInterpolator = double>
-class ITK_EXPORT WindowedSincInterpolateImageBlackmanFunction :
-  public WindowedSincInterpolateImageFunctionBase<TInputImage,
-      typename Function::BlackmanWindowFunction<TInputInterpolator,
-          TOutputInterpolator>,
-      TBoundaryCondition,
-      TCoordRep>
+template <class TInputImage, class TBoundaryCondition = itk::ConstantBoundaryCondition<TInputImage>, class TCoordRep = double,
+          class TInputInterpolator = double, class TOutputInterpolator = double>
+class ITK_EXPORT WindowedSincInterpolateImageBlackmanFunction
+    : public WindowedSincInterpolateImageFunctionBase<TInputImage, typename Function::BlackmanWindowFunction<TInputInterpolator, TOutputInterpolator>,
+                                                      TBoundaryCondition, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef WindowedSincInterpolateImageBlackmanFunction Self;
-  typedef WindowedSincInterpolateImageFunctionBase<TInputImage,
-      typename Function::BlackmanWindowFunction<TInputInterpolator,
-          TOutputInterpolator>,
-      TBoundaryCondition,
-      TCoordRep>
-  Superclass;
+  typedef WindowedSincInterpolateImageFunctionBase<TInputImage, typename Function::BlackmanWindowFunction<TInputInterpolator, TOutputInterpolator>,
+                                                   TBoundaryCondition, TCoordRep>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -133,16 +131,18 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
 
 protected:
-  WindowedSincInterpolateImageBlackmanFunction() {};
-  ~WindowedSincInterpolateImageBlackmanFunction() override {}
+  WindowedSincInterpolateImageBlackmanFunction(){};
+  ~WindowedSincInterpolateImageBlackmanFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
   }
 
 private:
-  WindowedSincInterpolateImageBlackmanFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  WindowedSincInterpolateImageBlackmanFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

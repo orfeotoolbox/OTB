@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -20,73 +20,51 @@
 
 
 #include <cassert>
+#include <chrono>
 #include <iostream>
 #include <cstdlib>
-
-#if 0
-#include <unistd.h>
-
-#include "itkTimeProbe.h"
-#endif
+#include <thread>
 
 #include "itkMacro.h"
+
 #include "otbStopwatch.h"
 
-int otbStopwatchTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+using namespace std::chrono_literals;
+
+int otbStopwatchTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   otb::Stopwatch sw;
 
-  assert( !sw.IsRunning() );
-  assert( sw.GetElapsedMilliseconds() == 0 );
+  assert(!sw.IsRunning());
+  assert(sw.GetElapsedMilliseconds() == 0);
 
   sw.Start();
-  assert( sw.IsRunning() );
+  assert(sw.IsRunning());
   sw.Stop();
 
   sw.Reset();
-  assert( !sw.IsRunning() );
-  assert( sw.GetElapsedMilliseconds() == 0 );
+  assert(!sw.IsRunning());
+  assert(sw.GetElapsedMilliseconds() == 0);
 
   sw = otb::Stopwatch::StartNew();
-  assert( sw.IsRunning() );
+  assert(sw.IsRunning());
   sw.Stop();
 
-#if 0
   // We have no portable sleep() and otbThreads is not linked here
   sw.Start();
-  usleep(500 * 1000);
+  std::this_thread::sleep_for(500ms);
   sw.Stop();
-  assert( sw.GetElapsedMilliseconds() > 450 && sw.GetElapsedMilliseconds() < 550 );
+  assert(sw.GetElapsedMilliseconds() > 450 && sw.GetElapsedMilliseconds() < 550);
 
   sw.Start();
-  usleep(500 * 1000);
+  std::this_thread::sleep_for(500ms);
   sw.Stop();
-  assert( sw.GetElapsedMilliseconds() > 900 && sw.GetElapsedMilliseconds() < 1100 );
+  assert(sw.GetElapsedMilliseconds() > 900 && sw.GetElapsedMilliseconds() < 1100);
 
   sw.Restart();
-  usleep(500 * 1000);
+  std::this_thread::sleep_for(500ms);
   sw.Stop();
-  assert( sw.GetElapsedMilliseconds() > 450 && sw.GetElapsedMilliseconds() < 550 );
-
-  const int iterations = 100000;
-  sw.Restart();
-  for (int i = 0; i < iterations; i++)
-    {
-    itk::TimeProbe chrono;
-    chrono.Start();
-    chrono.Stop();
-    }
-  std::cerr << "itk::TimeProbe time: " << sw.GetElapsedMilliseconds() << std::endl;
-
-  sw.Restart();
-  for (int i = 0; i < iterations; i++)
-    {
-    auto chrono = otb::Stopwatch::StartNew();
-    chrono.Stop();
-    }
-  std::cerr << "otb::Stopwatch time: " << sw.GetElapsedMilliseconds() << std::endl;
-
-  #endif
+  assert(sw.GetElapsedMilliseconds() > 450 && sw.GetElapsedMilliseconds() < 550);
 
   return EXIT_SUCCESS;
 }

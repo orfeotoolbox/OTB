@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,28 +25,25 @@
 #include "otbImageFileWriter.h"
 #include "otbImage.h"
 
-int otbGeodesicMorphologyIterativeDecompositionImageFilter(int itkNotUsed(argc), char * argv[])
+int otbGeodesicMorphologyIterativeDecompositionImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char *       inputFilename = argv[1];
-  const char *       outputFilenamePrefix = argv[2];
-  const char *       outputFilenameSuffix = argv[3];
-  const unsigned int numberOfLevels = atoi(argv[4]);
-  const unsigned int step = atoi(argv[5]);
-  const unsigned int initValue = atoi(argv[6]);
+  const char*        inputFilename        = argv[1];
+  const char*        outputFilenamePrefix = argv[2];
+  const char*        outputFilenameSuffix = argv[3];
+  const unsigned int numberOfLevels       = atoi(argv[4]);
+  const unsigned int step                 = atoi(argv[5]);
+  const unsigned int initValue            = atoi(argv[6]);
 
   const unsigned int Dimension = 2;
-  typedef double InputPixelType;
+  typedef double     InputPixelType;
 
   typedef otb::Image<InputPixelType, Dimension> InputImageType;
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<InputImageType>  WriterType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<InputImageType> WriterType;
 
-  typedef itk::BinaryBallStructuringElement<InputPixelType,
-      Dimension>                                     StructuringElementType;
-  typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<InputImageType,
-      StructuringElementType> DecompositionImageFilterType;
-  typedef DecompositionImageFilterType::OutputImageListType::Iterator
-  ImageListIterator;
+  typedef itk::BinaryBallStructuringElement<InputPixelType, Dimension>                                     StructuringElementType;
+  typedef otb::GeodesicMorphologyIterativeDecompositionImageFilter<InputImageType, StructuringElementType> DecompositionImageFilterType;
+  typedef DecompositionImageFilterType::OutputImageListType::Iterator ImageListIterator;
 
   // Reading input image
   ReaderType::Pointer reader = ReaderType::New();
@@ -61,8 +58,8 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilter(int itkNotUsed(argc),
   decomposition->Update();
 
   // Retrieving iterators on the results images
-  ImageListIterator itAnalyse = decomposition->GetOutput()->Begin();
-  ImageListIterator itConvexMap = decomposition->GetConvexOutput()->Begin();
+  ImageListIterator itAnalyse    = decomposition->GetOutput()->Begin();
+  ImageListIterator itConvexMap  = decomposition->GetConvexOutput()->Begin();
   ImageListIterator itConcaveMap = decomposition->GetConcaveOutput()->Begin();
 
   WriterType::Pointer writer;
@@ -70,25 +67,23 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilter(int itkNotUsed(argc),
   int                i = 1;
   std::ostringstream oss;
   // Writing the results images
-  while ((itAnalyse != decomposition->GetOutput()->End())
-         && (itConvexMap != decomposition->GetConvexOutput()->End())
-         && (itConcaveMap != decomposition->GetConcaveOutput()->End())
-         )
-    {
+  while ((itAnalyse != decomposition->GetOutput()->End()) && (itConvexMap != decomposition->GetConvexOutput()->End()) &&
+         (itConcaveMap != decomposition->GetConcaveOutput()->End()))
+  {
     oss << outputFilenamePrefix << "_leveling_" << i << "." << outputFilenameSuffix;
-    writer =  WriterType::New();
+    writer = WriterType::New();
     writer->SetInput(itAnalyse.Get());
     writer->SetFileName(oss.str());
     writer->Update();
     oss.str("");
     oss << outputFilenamePrefix << "_convMap_" << i << "." << outputFilenameSuffix;
-    writer =  WriterType::New();
+    writer = WriterType::New();
     writer->SetInput(itConvexMap.Get());
     writer->SetFileName(oss.str());
     writer->Update();
     oss.str("");
     oss << outputFilenamePrefix << "_concMap_" << i << "." << outputFilenameSuffix;
-    writer =  WriterType::New();
+    writer = WriterType::New();
     writer->SetInput(itConcaveMap.Get());
     writer->SetFileName(oss.str());
     writer->Update();
@@ -97,6 +92,6 @@ int otbGeodesicMorphologyIterativeDecompositionImageFilter(int itkNotUsed(argc),
     ++itConvexMap;
     ++itConcaveMap;
     ++i;
-    }
+  }
   return EXIT_SUCCESS;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,8 +28,7 @@ namespace otb
 {
 
 template <class TImage>
-NumberOfDivisionsStrippedStreamingManager<TImage>::NumberOfDivisionsStrippedStreamingManager()
-  : m_NumberOfDivisions(0)
+NumberOfDivisionsStrippedStreamingManager<TImage>::NumberOfDivisionsStrippedStreamingManager() : m_NumberOfDivisions(0)
 {
 }
 
@@ -39,24 +38,20 @@ NumberOfDivisionsStrippedStreamingManager<TImage>::~NumberOfDivisionsStrippedStr
 }
 
 template <class TImage>
-void
-NumberOfDivisionsStrippedStreamingManager<TImage>::PrepareStreaming( itk::DataObject * /*input*/, const RegionType &region )
+void NumberOfDivisionsStrippedStreamingManager<TImage>::PrepareStreaming(itk::DataObject* /*input*/, const RegionType& region)
 {
-  otbMsgDevMacro(<< "Activating NumberOfDivisionsStrippedStreamingManager streaming mode")
-  if (m_NumberOfDivisions < 1)
-    {
-    itkWarningMacro(<< "NumberOfDivisions set to 0 : streaming disabled")
-    m_NumberOfDivisions = 1;
-    }
+  otbMsgDevMacro(<< "Activating NumberOfDivisionsStrippedStreamingManager streaming mode") if (m_NumberOfDivisions < 1)
+  {
+    itkWarningMacro(<< "NumberOfDivisions set to 0 : streaming disabled") m_NumberOfDivisions = 1;
+  }
 
-  this->m_Splitter = itk::ImageRegionSplitterSlowDimension::New();
+  this->m_Splitter               = itk::ImageRegionSplitterSlowDimension::New();
   this->m_ComputedNumberOfSplits = this->m_Splitter->GetNumberOfSplits(region, m_NumberOfDivisions);
   otbMsgDevMacro(<< "Computed number of split : " << this->m_ComputedNumberOfSplits)
-  // Save the region to generate the splits later
-  this->m_Region = region;
+      // Save the region to generate the splits later
+      this->m_Region = region;
 }
 
 } // End namespace otb
 
 #endif
-

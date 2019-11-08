@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -42,10 +42,10 @@ class ITK_EXPORT JointMassOfBeliefFilter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */
-  typedef JointMassOfBeliefFilter                                 Self;
-  typedef itk::ProcessObject                           Superclass;
-  typedef itk::SmartPointer<Self>                      Pointer;
-  typedef itk::SmartPointer<const Self>                ConstPointer;
+  typedef JointMassOfBeliefFilter       Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -63,11 +63,11 @@ public:
 
   /** Add an input to the end */
   using Superclass::PushBackInput;
-  virtual void PushBackInput(const MassFunctionType * input);
+  virtual void PushBackInput(const MassFunctionType* input);
 
   /** Add an input to the front */
   using Superclass::PushFrontInput;
-  virtual void PushFrontInput(const MassFunctionType * input);
+  virtual void PushFrontInput(const MassFunctionType* input);
 
   /** Remove the last input */
   using Superclass::PopBackInput;
@@ -78,17 +78,19 @@ public:
   void PopFrontInput() override;
 
   /** Get the idx th input */
-  const MassFunctionType * GetInput(unsigned int idx);
+  const MassFunctionType* GetInput(unsigned int idx);
 
   /** Get the output joint mass */
-  MassFunctionType * GetOutput();
+  MassFunctionType* GetOutput();
 
 protected:
   /** Constructor */
   JointMassOfBeliefFilter();
 
   /** Destructor */
-  ~JointMassOfBeliefFilter() override {}
+  ~JointMassOfBeliefFilter() override
+  {
+  }
 
   /** GenerateData */
   void GenerateData() override;
@@ -101,7 +103,7 @@ private:
   void operator=(const Self&) = delete;
 
   /** Combine masses from input and output into output */
-  void CombineMasses(const MassFunctionType * input, MassFunctionType * output);
+  void CombineMasses(const MassFunctionType* input, MassFunctionType* output);
 };
 
 } // end namespace otb

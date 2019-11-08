@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,30 +28,25 @@ namespace otb
 {
 /** Constructor */
 template <class TInputImage, class TOutputImage, Wavelet::Wavelet TMotherWaveletOperator>
-WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
-::WaveletInverseImageFilter() : m_NumberOfDecompositions(2)
+WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>::WaveletInverseImageFilter() : m_NumberOfDecompositions(2)
 {
   m_SynopsisImageToWaveletsBandsList = WaveletsSynopsisImageToWaveletsBandsListFilterType::New();
   m_SynopsisImageToWaveletsBandsList->SetDecimationRatio(2);
 
   m_WaveletTransform = WaveletInverseTransformFilterType::New();
   m_WaveletTransform->SetSubsampleImageFactor(2);
-  m_WaveletTransform->SetInput( m_SynopsisImageToWaveletsBandsList->GetOutput() );
-
+  m_WaveletTransform->SetInput(m_SynopsisImageToWaveletsBandsList->GetOutput());
 }
 
 /** Destructor */
 template <class TInputImage, class TOutputImage, Wavelet::Wavelet TMotherWaveletOperator>
-WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
-::~WaveletInverseImageFilter()
+WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>::~WaveletInverseImageFilter()
 {
 }
 
 /** Destructor */
 template <class TInputImage, class TOutputImage, Wavelet::Wavelet TMotherWaveletOperator>
-void
-WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
-::Modified() const
+void WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>::Modified() const
 {
   Superclass::Modified();
   m_SynopsisImageToWaveletsBandsList->Modified();
@@ -62,21 +57,18 @@ WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
  * GenerateInputRequestedRegion
  */
 template <class TInputImage, class TOutputImage, Wavelet::Wavelet TMotherWaveletOperator>
-void
-WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
-::GenerateInputRequestedRegion(void)
+void WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>::GenerateInputRequestedRegion(void)
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();
 
   // get pointers to the inputs
-  typename InputImageType::Pointer input  =
-    const_cast<InputImageType *> (this->GetInput());
+  typename InputImageType::Pointer input = const_cast<InputImageType*>(this->GetInput());
 
-  if ( !input )
-    {
+  if (!input)
+  {
     return;
-    }
+  }
 
   input->SetRequestedRegionToLargestPossibleRegion();
 }
@@ -85,29 +77,24 @@ WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
  * Main computation method
  */
 template <class TInputImage, class TOutputImage, Wavelet::Wavelet TMotherWaveletOperator>
-void
-WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
-::GenerateData()
+void WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>::GenerateData()
 {
-  m_SynopsisImageToWaveletsBandsList->SetInput( this->GetInput() );
-  m_SynopsisImageToWaveletsBandsList->SetNumberOfLevels( m_NumberOfDecompositions );
+  m_SynopsisImageToWaveletsBandsList->SetInput(this->GetInput());
+  m_SynopsisImageToWaveletsBandsList->SetNumberOfLevels(m_NumberOfDecompositions);
 
-  m_WaveletTransform->GraftOutput( this->GetOutput() );
+  m_WaveletTransform->GraftOutput(this->GetOutput());
   m_WaveletTransform->Update();
-  this->GraftOutput( m_WaveletTransform->GetOutput() );
+  this->GraftOutput(m_WaveletTransform->GetOutput());
 }
 
 /**
  * PrintSelf Method
  */
 template <class TInputImage, class TOutputImage, Wavelet::Wavelet TMotherWaveletOperator>
-void
-WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void WaveletInverseImageFilter<TInputImage, TOutputImage, TMotherWaveletOperator>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
-
 }
 
 #endif

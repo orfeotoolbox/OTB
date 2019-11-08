@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,55 +19,50 @@
  */
 
 
-
 #include <iostream>
 #include <iomanip>
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-
+#include "otbGenericMapProjection.h"
+#include "otbSpatialReference.h"
 #include "otbCompositeTransform.h"
-#include "otbMapProjections.h"
 #include "otbInverseSensorModel.h"
 
 int otbCompositeTransform(int argc, char* argv[])
 {
 
   if (argc != 3)
-    {
-    std::cout << argv[0] << " <input filename> <output filename>"
-              << std::endl;
+  {
+    std::cout << argv[0] << " <input filename> <output filename>" << std::endl;
 
     return EXIT_FAILURE;
-    }
+  }
 
-  char * filename = argv[1];
-  char * outFilename = argv[2];
+  char* filename    = argv[1];
+  char* outFilename = argv[2];
 
-  typedef otb::Image<double, 2>           ImageType;
+  typedef otb::Image<double, 2> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                     reader = ReaderType::New();
   reader->SetFileName(filename);
   reader->UpdateOutputInformation();
 
-  typedef otb::UtmInverseProjection MapProjectionType;
-
-  int  utmZone = 31;
-  char utmHemisphere = 'N';
+  typedef otb::GenericMapProjection<otb::TransformDirection::INVERSE> MapProjectionType;
 
   MapProjectionType::Pointer mapProjection = MapProjectionType::New();
-  mapProjection->SetZone(utmZone);
-  mapProjection->SetHemisphere(utmHemisphere);
+  // UTM31N
+  mapProjection->SetWkt(otb::SpatialReference::FromEPSG(32631).ToWkt());
 
   typedef otb::InverseSensorModel<double> SensorModelType;
-  SensorModelType::Pointer sensorModel = SensorModelType::New();
+  SensorModelType::Pointer                sensorModel = SensorModelType::New();
   sensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
 
-  if( sensorModel->IsValidSensorModel() == false )
-   {
-     std::cout<<"Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!"<<std::endl;
-     return EXIT_FAILURE;
-   }
+  if (sensorModel->IsValidSensorModel() == false)
+  {
+    std::cout << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!" << std::endl;
+    return EXIT_FAILURE;
+  }
 
   typedef otb::CompositeTransform<MapProjectionType, SensorModelType> CompositeTransformType;
   CompositeTransformType::Pointer compositeTransform = CompositeTransformType::New();

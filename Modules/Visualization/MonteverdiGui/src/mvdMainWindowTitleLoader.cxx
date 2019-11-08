@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,19 +41,15 @@
 namespace mvd
 {
 
-MainWindowTitleLoader
-::MainWindowTitleLoader(VectorImageModel* model):
-  m_Model(model)
+MainWindowTitleLoader::MainWindowTitleLoader(VectorImageModel* model) : m_Model(model)
 {
 }
 
-void
-MainWindowTitleLoader
-::LoadTitle()
+void MainWindowTitleLoader::LoadTitle()
 {
   // This method is executed in a separate thread
 
-  assert( m_Model!=NULL );
+  assert(m_Model != NULL);
 
 #if 0
   std::ostringstream oss;
@@ -73,22 +69,20 @@ MainWindowTitleLoader
     }
 
 #else
-  SizeType size( m_Model->GetNativeLargestRegion().GetSize() );
+  SizeType size(m_Model->GetNativeLargestRegion().GetSize());
 
-  QString placename( FromStdString( m_Model->GetCenterPixelPlaceName() ) );
+  QString placename(FromStdString(m_Model->GetCenterPixelPlaceName()));
 
-  QString title(
-    tr( PROJECT_NAME " - %1 (%2 bands, %3x%4 pixels)%5" )
-    .arg( QFileInfo( m_Model->GetFilename() ).fileName() )
-    .arg( m_Model->GetNbComponents() )
-    .arg( size[ 0 ] )
-    .arg( size[ 1 ] )
-    .arg( placename.isEmpty() ? "" : placename.prepend( " " ) )
-  );
+  QString title(tr(PROJECT_NAME " - %1 (%2 bands, %3x%4 pixels)%5")
+                    .arg(QFileInfo(m_Model->GetFilename()).fileName())
+                    .arg(m_Model->GetNbComponents())
+                    .arg(size[0])
+                    .arg(size[1])
+                    .arg(placename.isEmpty() ? "" : placename.prepend(" ")));
 
   qDebug() << "Title:" << title;
 
-  emit TitleLoaded( title );
+  emit TitleLoaded(title);
 
 #endif
 

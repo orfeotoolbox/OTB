@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -52,11 +52,13 @@ class ReflectanceToSurfaceReflectanceImageFunctor
 public:
   ReflectanceToSurfaceReflectanceImageFunctor()
   {
-    m_Coefficient = 1.;
-    m_Residu = 1.;
+    m_Coefficient     = 1.;
+    m_Residu          = 1.;
     m_SphericalAlbedo = 1.;
   }
-  virtual ~ReflectanceToSurfaceReflectanceImageFunctor() {}
+  virtual ~ReflectanceToSurfaceReflectanceImageFunctor()
+  {
+  }
 
   /**
    * Set/Get the spherical albedo of the atmosphere.
@@ -94,12 +96,12 @@ public:
     return m_Residu;
   }
 
-  inline TOutput operator ()(const TInput& inPixel)
+  inline TOutput operator()(const TInput& inPixel)
   {
     TOutput outPixel;
     double  temp, temp2;
-    temp = (static_cast<double>(inPixel) + m_Residu)* m_Coefficient;
-    temp2 =  temp / (1. + m_SphericalAlbedo *  temp);
+    temp  = (static_cast<double>(inPixel) + m_Residu) * m_Coefficient;
+    temp2 = temp / (1. + m_SphericalAlbedo * temp);
 
     outPixel = static_cast<TOutput>(temp2);
 
@@ -130,13 +132,10 @@ private:
  * \ingroup OTBOpticalCalibration
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ReflectanceToSurfaceReflectanceImageFilter :
-  public UnaryImageFunctorWithVectorImageFilter<TInputImage,
-      TOutputImage,
-      typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<
-          typename TInputImage::InternalPixelType,
-          typename
-          TOutputImage::InternalPixelType> >
+class ITK_EXPORT ReflectanceToSurfaceReflectanceImageFilter
+    : public UnaryImageFunctorWithVectorImageFilter<
+          TInputImage, TOutputImage,
+          typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<typename TInputImage::InternalPixelType, typename TOutputImage::InternalPixelType>>
 {
 public:
   /** Extract input and output images dimensions.*/
@@ -147,14 +146,13 @@ public:
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
-  typedef typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<typename InputImageType::InternalPixelType,
-      typename OutputImageType::InternalPixelType>
-  FunctorType;
+  typedef typename Functor::ReflectanceToSurfaceReflectanceImageFunctor<typename InputImageType::InternalPixelType, typename OutputImageType::InternalPixelType>
+      FunctorType;
   /** "typedef" for standard classes. */
-  typedef ReflectanceToSurfaceReflectanceImageFilter                                           Self;
+  typedef ReflectanceToSurfaceReflectanceImageFilter Self;
   typedef UnaryImageFunctorWithVectorImageFilter<InputImageType, OutputImageType, FunctorType> Superclass;
-  typedef itk::SmartPointer<Self>                                                              Pointer;
-  typedef itk::SmartPointer<const Self>                                                        ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** object factory method. */
   itkNewMacro(Self);
@@ -171,23 +169,23 @@ public:
   typedef typename OutputImageType::RegionType        OutputImageRegionType;
 
 
-  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms     CorrectionParametersToRadiativeTermsType;
+  typedef otb::RadiometryCorrectionParametersToAtmosphericRadiativeTerms CorrectionParametersToRadiativeTermsType;
 
-  typedef otb::AtmosphericCorrectionParameters                               AtmoCorrectionParametersType;
-  typedef typename AtmoCorrectionParametersType::Pointer                    AtmoCorrectionParametersPointerType;
+  typedef otb::AtmosphericCorrectionParameters           AtmoCorrectionParametersType;
+  typedef typename AtmoCorrectionParametersType::Pointer AtmoCorrectionParametersPointerType;
 
-  typedef otb::ImageMetadataCorrectionParameters                             AcquiCorrectionParametersType;
-  typedef typename AcquiCorrectionParametersType::Pointer                   AcquiCorrectionParametersPointerType;
+  typedef otb::ImageMetadataCorrectionParameters          AcquiCorrectionParametersType;
+  typedef typename AcquiCorrectionParametersType::Pointer AcquiCorrectionParametersPointerType;
 
-  typedef otb::AtmosphericRadiativeTerms                                     AtmosphericRadiativeTermsType;
-  typedef typename AtmosphericRadiativeTermsType::Pointer                   AtmosphericRadiativeTermsPointerType;
+  typedef otb::AtmosphericRadiativeTerms                  AtmosphericRadiativeTermsType;
+  typedef typename AtmosphericRadiativeTermsType::Pointer AtmosphericRadiativeTermsPointerType;
 
 
-  typedef otb::FilterFunctionValues                                     FilterFunctionValuesType;
-  typedef FilterFunctionValuesType::WavelengthSpectralBandType          ValueType;                //float
-  typedef FilterFunctionValuesType::ValuesVectorType                    ValuesVectorType;         //std::vector<float>
+  typedef otb::FilterFunctionValues                            FilterFunctionValuesType;
+  typedef FilterFunctionValuesType::WavelengthSpectralBandType ValueType;        // float
+  typedef FilterFunctionValuesType::ValuesVectorType           ValuesVectorType; // std::vector<float>
 
-  typedef typename AcquiCorrectionParametersType::WavelengthSpectralBandVectorType        WavelengthSpectralBandVectorType;
+  typedef typename AcquiCorrectionParametersType::WavelengthSpectralBandVectorType WavelengthSpectralBandVectorType;
 
 
   typedef itk::MetaDataDictionary MetaDataDictionaryType;
@@ -240,7 +238,9 @@ protected:
   /** Constructor */
   ReflectanceToSurfaceReflectanceImageFilter();
   /** Destructor */
-  ~ReflectanceToSurfaceReflectanceImageFilter() override {}
+  ~ReflectanceToSurfaceReflectanceImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Initialize the parameters of the functor before the threads run. */
@@ -254,7 +254,6 @@ protected:
   void Modified() const override;
 
 private:
-
   bool m_IsSetAtmosphericRadiativeTerms;
   bool m_IsSetAtmoCorrectionParameters;
   bool m_IsSetAcquiCorrectionParameters;
@@ -267,11 +266,9 @@ private:
   /** True if the functor parameters have been generated */
   mutable bool m_FunctorParametersHaveBeenComputed;
 
-  AtmosphericRadiativeTermsPointerType     m_AtmosphericRadiativeTerms;
-  AtmoCorrectionParametersPointerType      m_AtmoCorrectionParameters;
-  AcquiCorrectionParametersPointerType     m_AcquiCorrectionParameters;
-
-
+  AtmosphericRadiativeTermsPointerType m_AtmosphericRadiativeTerms;
+  AtmoCorrectionParametersPointerType  m_AtmoCorrectionParameters;
+  AcquiCorrectionParametersPointerType m_AcquiCorrectionParameters;
 };
 
 } // end namespace otb

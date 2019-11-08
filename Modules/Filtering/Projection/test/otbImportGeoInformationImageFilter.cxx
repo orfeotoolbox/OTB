@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,16 +25,16 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbImportGeoInformationImageFilter(int itkNotUsed(argc), char * argv[])
+int otbImportGeoInformationImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
-  const unsigned int Dimension = 2;
-  typedef unsigned int                                               PixelType;
-  typedef otb::Image<PixelType, Dimension>                           ImageType;
-  typedef otb::ImageFileReader<ImageType>                            ReaderType;
-  typedef otb::ImageFileWriter<ImageType>                            WriterType;
+  const unsigned int   Dimension = 2;
+  typedef unsigned int PixelType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef otb::ImportGeoInformationImageFilter<ImageType, ImageType> ImportGeoInformationImageFilterType;
 
   // Instantiating objects

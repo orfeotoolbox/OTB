@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -25,25 +25,25 @@
 #include "otbImageFileWriter.h"
 #include "otbMachineLearningModelFactory.h"
 
-const unsigned int Dimension = 2;
-typedef double PixelType;
+const unsigned int     Dimension = 2;
+typedef double         PixelType;
 typedef unsigned short LabeledPixelType;
 
-typedef otb::VectorImage<PixelType, Dimension> ImageType;
-typedef otb::Image<LabeledPixelType, Dimension> LabeledImageType;
+typedef otb::VectorImage<PixelType, Dimension>                      ImageType;
+typedef otb::Image<LabeledPixelType, Dimension>                     LabeledImageType;
 typedef otb::ImageClassificationFilter<ImageType, LabeledImageType> ClassificationFilterType;
 typedef ClassificationFilterType::ModelType ModelType;
 typedef ClassificationFilterType::ValueType ValueType;
 typedef ClassificationFilterType::LabelType LabelType;
 typedef otb::MachineLearningModelFactory<ValueType, LabelType> MachineLearningModelFactoryType;
-typedef otb::ImageFileReader<ImageType> ReaderType;
+typedef otb::ImageFileReader<ImageType>        ReaderType;
 typedef otb::ImageFileWriter<LabeledImageType> WriterType;
 
 
-int otbImageClassificationFilterLoadModel(int itkNotUsed(argc), char * argv[])
+int otbImageClassificationFilterLoadModel(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname = argv[1];
-  const char * modelfname = argv[2];
+  const char* infname    = argv[1];
+  const char* modelfname = argv[2];
 
   // Instantiating object
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
@@ -53,24 +53,23 @@ int otbImageClassificationFilterLoadModel(int itkNotUsed(argc), char * argv[])
 
   ModelType::Pointer model;
 
-  model = MachineLearningModelFactoryType::CreateMachineLearningModel(modelfname,
-                                                                      MachineLearningModelFactoryType::ReadMode);
+  model = MachineLearningModelFactoryType::CreateMachineLearningModel(modelfname, MachineLearningModelFactoryType::ReadMode);
 
   if (model.IsNull())
-    {
+  {
     std::cerr << "Unable to create a model from " << modelfname << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   model->Load(modelfname);
   return EXIT_SUCCESS;
 }
 
-int otbImageClassificationFilter(int itkNotUsed(argc), char * argv[])
+int otbImageClassificationFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname = argv[1];
-  const char * modelfname = argv[2];
-  const char * outfname = argv[3];
+  const char* infname    = argv[1];
+  const char* modelfname = argv[2];
+  const char* outfname   = argv[3];
 
   // Instantiating object
   ClassificationFilterType::Pointer filter = ClassificationFilterType::New();
@@ -80,8 +79,7 @@ int otbImageClassificationFilter(int itkNotUsed(argc), char * argv[])
 
   ModelType::Pointer model;
 
-  model = MachineLearningModelFactoryType::CreateMachineLearningModel(modelfname,
-                                                                      MachineLearningModelFactoryType::ReadMode);
+  model = MachineLearningModelFactoryType::CreateMachineLearningModel(modelfname, MachineLearningModelFactoryType::ReadMode);
 
   if (model.IsNull())
   {

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2017 CS Systemes d'Information (CS SI)
+# Copyright (C) 2005-2019 CS Systemes d'Information (CS SI)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -18,28 +18,10 @@
 # limitations under the License.
 #
 
-if ( OTB_WRAP_PYTHON OR OTB_WRAP_JAVA OR OTB_WRAP_PYTHON3)
-  include ( UseSWIGLocal )
-  list(APPEND SWIG_EXTRA_DEPS
-       otbWrapperSWIGIncludes.h
-       itkBase.includes
-       ${CMAKE_CURRENT_SOURCE_DIR}/itkBase.i
-       ${CMAKE_CURRENT_SOURCE_DIR}/itkMacro.i
-       )
-  include_directories ( ${CMAKE_CURRENT_SOURCE_DIR} )
-endif()
+include(UseSWIG)
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 # Python SWIG configuration
 if ( OTB_WRAP_PYTHON )
   add_subdirectory(python)
-endif()
-
-# Python 3 SWIG configuration
-if ( OTB_WRAP_PYTHON3 )
-  add_subdirectory(python3)
-endif()
-
-# JAVA SWIG configuration
-if ( OTB_WRAP_JAVA )
-  add_subdirectory(java)
 endif()

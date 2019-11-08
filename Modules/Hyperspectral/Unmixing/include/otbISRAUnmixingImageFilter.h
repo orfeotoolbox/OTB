@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -22,23 +22,25 @@
 #define otbISRAUnmixingImageFilter_h
 
 #include "itkNumericTraits.h"
-#include "otbUnaryFunctorImageFilter.h"
+#include "otbFunctorImageFilter.h"
 #include "vnl/algo/vnl_svd.h"
 #include <boost/shared_ptr.hpp>
 
 namespace otb
 {
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class ISRAUnmixingFunctor
  *
- * \brief TODO
+ * \brief Perform fully constrained least squares on a pixel
  *
+ * \sa ISRAUnmixingImageFilter
  *
  * \ingroup OTBUnmixing
  */
-template<class TInput, class TOutput, class TPrecision>
+template <class TInput, class TOutput, class TPrecision>
 class ISRAUnmixingFunctor
 {
 public:
@@ -52,13 +54,9 @@ public:
   typedef vnl_matrix<PrecisionType> MatrixType;
 
   ISRAUnmixingFunctor();
-  virtual ~ISRAUnmixingFunctor();
+  virtual ~ISRAUnmixingFunctor() = default;
 
-  unsigned int GetOutputSize() const;
-
-  bool operator !=(const ISRAUnmixingFunctor& other) const;
-
-  bool operator ==(const ISRAUnmixingFunctor& other) const;
+  size_t OutputSize(const std::array<size_t, 1>& nbBands) const;
 
   void SetEndmembersMatrix(const MatrixType& U);
   const MatrixType& GetEndmembersMatrix(void) const;
@@ -73,10 +71,9 @@ public:
     return m_MaxIteration;
   }
 
-  OutputType operator ()(const InputType& in) const;
+  OutputType operator()(const InputType& in) const;
 
 private:
-
   static bool IsNonNegative(PrecisionType val)
   {
     return val >= 0;
@@ -92,7 +89,7 @@ private:
 };
 }
 
-/** \class ISRAUnmixingImageFilter
+/** \typedef ISRAUnmixingImageFilter
  *
  * \brief Performs fully constrained least squares on each pixel of a VectorImage
  *
@@ -118,68 +115,8 @@ private:
  *
  * \ingroup OTBUnmixing
  */
-template <class TInputImage, class TOutputImage, class TPrecision>
-class ITK_EXPORT ISRAUnmixingImageFilter :
-  public otb::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-      Functor::ISRAUnmixingFunctor<typename TInputImage::PixelType,
-          typename TOutputImage::PixelType, TPrecision> >
-{
-public:
-  /** Standard class typedefs. */
-  typedef ISRAUnmixingImageFilter Self;
-  typedef otb::UnaryFunctorImageFilter
-     <TInputImage,
-      TOutputImage,
-      Functor::ISRAUnmixingFunctor<
-          typename TInputImage::PixelType,
-          typename TOutputImage::PixelType,
-          TPrecision>
-     >                                 Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-
-  typedef Functor::ISRAUnmixingFunctor<
-      typename TInputImage::PixelType,
-      typename TOutputImage::PixelType,
-      TPrecision> FunctorType;
-  typedef typename FunctorType::MatrixType MatrixType;
-
-  /** Method for creation through the object factory. */
-  itkNewMacro(Self);
-
-  /** Run-time type information (and related methods). */
-  itkTypeMacro(ISRAUnmixingImageFilter, otb::UnaryFunctorImageFilter);
-
-  /** Pixel types. */
-  typedef typename TInputImage::PixelType  InputPixelType;
-  typedef typename TOutputImage::PixelType OutputPixelType;
-
-  void SetEndmembersMatrix(const MatrixType& m);
-  const MatrixType& GetEndmembersMatrix() const;
-
-  void SetMaxIteration( unsigned int val )
-  {
-    this->GetFunctor().SetMaxIteration(val);
-    this->Modified();
-  }
-
-  unsigned int GetMaxIteration() const
-  {
-    return this->GetFunctor().GetMaxIteration();
-  }
-
-protected:
-  ISRAUnmixingImageFilter();
-
-  ~ISRAUnmixingImageFilter() override;
-
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
-
-private:
-  ISRAUnmixingImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
-};
+template <typename TInputImage, typename TOutputImage, typename TPrecision>
+using ISRAUnmixingImageFilter = FunctorImageFilter<Functor::ISRAUnmixingFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType, TPrecision>>;
 
 } // end namespace otb
 
@@ -188,4 +125,3 @@ private:
 #endif
 
 #endif
-

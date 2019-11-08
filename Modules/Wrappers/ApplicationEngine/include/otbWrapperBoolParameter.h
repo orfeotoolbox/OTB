@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,12 +33,9 @@ namespace Wrapper
 /** \class BoolParameter
  *  \brief This class represent a boolean parameter for the wrapper framework
  *
- *  It is intended to replace the deprecated EmptyParameter
- * 
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT BoolParameter
-  : public Parameter
+class OTBApplicationEngine_EXPORT BoolParameter : public Parameter
 {
 public:
   /** Standard class typedef */
@@ -47,7 +44,7 @@ public:
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-    /** Defining ::New() static method */
+  /** Defining ::New() static method */
   itkNewMacro(Self);
 
   /** RTTI support */
@@ -59,13 +56,20 @@ public:
     return true;
   }
 
-  bool GetValue() const;
-
+  bool        GetValue() const;
   std::string GetValueAsString() const;
 
   void SetValue(bool state);
+  void SetValue(const std::string& str);
 
-  void SetValue(const std::string & str);
+  ParameterType GetType() const override;
+
+  int         ToInt() const override;
+  std::string ToString() const override;
+
+  void FromString(const std::string& value) override;
+  void FromInt(int value) override;
+  ;
 
 protected:
   /** Constructor */
@@ -73,11 +77,12 @@ protected:
 
   /** Destructor */
   ~BoolParameter() override
-  {}
+  {
+  }
 
 private:
-  BoolParameter(const BoolParameter &) = delete;
-  void operator =(const BoolParameter&) = delete;
+  BoolParameter(const BoolParameter&) = delete;
+  void operator=(const BoolParameter&) = delete;
 
   bool m_Value;
 };

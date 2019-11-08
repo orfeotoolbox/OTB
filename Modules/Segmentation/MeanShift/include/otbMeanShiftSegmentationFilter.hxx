@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,65 +23,57 @@
 
 #include "otbMeanShiftSegmentationFilter.h"
 
-namespace otb {
-
-template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
-MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
-::MeanShiftSegmentationFilter()
+namespace otb
 {
-   m_MeanShiftFilter = MeanShiftFilterType::New();
-   m_RegionMergingFilter = RegionMergingFilterType::New();
-   m_RegionPruningFilter = RegionPruningFilterType::New();
-   m_RelabelFilter = RelabelComponentFilterType::New();
-   this->SetMinRegionSize(100);
-   this->SetNumberOfRequiredOutputs(2);
-   this->SetNthOutput(0,TOutputLabelImage::New());
-   this->SetNthOutput(1,TOutputClusteredImage::New());
-   // default set MeanShiftFilter mode search to true because Merging and Pruning use LabelOutput
-   m_MeanShiftFilter->SetModeSearch(true);
+
+template <class TInputImage, class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
+MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>::MeanShiftSegmentationFilter()
+{
+  m_MeanShiftFilter     = MeanShiftFilterType::New();
+  m_RegionMergingFilter = RegionMergingFilterType::New();
+  m_RegionPruningFilter = RegionPruningFilterType::New();
+  m_RelabelFilter       = RelabelComponentFilterType::New();
+  this->SetMinRegionSize(100);
+  this->SetNumberOfRequiredOutputs(2);
+  this->SetNthOutput(0, TOutputLabelImage::New());
+  this->SetNthOutput(1, TOutputClusteredImage::New());
+  // default set MeanShiftFilter mode search to true because Merging and Pruning use LabelOutput
+  m_MeanShiftFilter->SetModeSearch(true);
 }
 
-template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
-MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
-::~MeanShiftSegmentationFilter()
-{}
-
-template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
-TOutputLabelImage *
-MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
-::GetLabelOutput()
+template <class TInputImage, class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
+MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>::~MeanShiftSegmentationFilter()
 {
-  return static_cast<OutputLabelImageType *>(this->itk::ProcessObject::GetOutput(0));
 }
 
-template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
-const TOutputLabelImage *
-MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
-::GetLabelOutput() const
+template <class TInputImage, class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
+TOutputLabelImage* MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>::GetLabelOutput()
 {
-  return static_cast<OutputLabelImageType *>(this->itk::ProcessObject::GetOutput(0));
+  return static_cast<OutputLabelImageType*>(this->itk::ProcessObject::GetOutput(0));
 }
 
-template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
-typename MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>::OutputClusteredImageType *
-MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
-::GetClusteredOutput()
+template <class TInputImage, class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
+const TOutputLabelImage* MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>::GetLabelOutput() const
 {
-  return static_cast<OutputClusteredImageType *>(this->itk::ProcessObject::GetOutput(1));
+  return static_cast<OutputLabelImageType*>(this->itk::ProcessObject::GetOutput(0));
 }
 
-template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
-const typename MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>::OutputClusteredImageType *
-MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
-::GetClusteredOutput() const
+template <class TInputImage, class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
+typename MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>::OutputClusteredImageType*
+MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>::GetClusteredOutput()
 {
-  return static_cast<OutputClusteredImageType *>(this->itk::ProcessObject::GetOutput(1));
+  return static_cast<OutputClusteredImageType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
-template <class TInputImage,  class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
-void
-MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>
-::GenerateData()
+template <class TInputImage, class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
+const typename MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>::OutputClusteredImageType*
+MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>::GetClusteredOutput() const
+{
+  return static_cast<OutputClusteredImageType*>(this->itk::ProcessObject::GetOutput(1));
+}
+
+template <class TInputImage, class TOutputLabelImage, class TOutputClusteredImage, class TKernel>
+void MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImage, TKernel>::GenerateData()
 {
   this->m_MeanShiftFilter->SetInput(this->GetInput());
 
@@ -93,16 +85,16 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
   this->m_RegionMergingFilter->SetInputSpectralImage(this->m_MeanShiftFilter->GetRangeOutput());
   this->m_RegionMergingFilter->SetRangeBandwidth(this->GetRangeBandwidth());
   if (this->GetMinRegionSize() == 0)
-    {
+  {
 
     m_RegionMergingFilter->GraftNthOutput(0, this->GetLabelOutput());
     m_RegionMergingFilter->GraftNthOutput(1, this->GetClusteredOutput());
     this->m_RegionMergingFilter->Update();
     this->GraftNthOutput(0, m_RegionMergingFilter->GetLabelOutput());
     this->GraftNthOutput(1, m_RegionMergingFilter->GetClusteredOutput());
-    }
+  }
   else
-    {
+  {
 
     this->m_RegionPruningFilter->SetInputLabelImage(this->m_RegionMergingFilter->GetLabelOutput());
     this->m_RegionPruningFilter->SetInputSpectralImage(this->m_RegionMergingFilter->GetClusteredOutput());
@@ -112,7 +104,7 @@ MeanShiftSegmentationFilter<TInputImage, TOutputLabelImage, TOutputClusteredImag
     this->m_RegionPruningFilter->Update();
     this->GraftNthOutput(0, m_RegionPruningFilter->GetLabelOutput());
     this->GraftNthOutput(1, m_RegionPruningFilter->GetClusteredOutput());
-    }
+  }
 }
 
 } // end namespace otb

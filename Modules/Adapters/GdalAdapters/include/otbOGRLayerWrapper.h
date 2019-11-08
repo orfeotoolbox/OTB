@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -36,7 +36,6 @@
 #endif
 // #include "itkIndent.h", included from field
 #include "otbOGRFeatureWrapper.h"
-#include "otbOGRVersionProxy.h"
 #include <string>
 
 // #include "ogr_core.h" // OGRwkbGeometryType, included from feature -> field
@@ -45,7 +44,10 @@ class OGRLayer;
 class OGRGeometry;
 class OGRFeatureDefn;
 
-namespace otb { namespace ogr {
+namespace otb
+{
+namespace ogr
+{
 class DataSource;
 class Layer;
 
@@ -53,8 +55,7 @@ class Layer;
  * Compares layers identities.
  * \return whether the two layers are in fact the same.
  */
- OTBGdalAdapters_EXPORT
-bool operator==(Layer const& lhs, Layer const& rhs);
+OTBGdalAdapters_EXPORT bool operator==(Layer const& lhs, Layer const& rhs);
 
 /**\ingroup gGeometry
  * \class Layer
@@ -78,13 +79,16 @@ bool operator==(Layer const& lhs, Layer const& rhs);
  * \ingroup OTBGdalAdapters
  */
 class OTBGdalAdapters_EXPORT Layer
-  {
+{
 public:
   /**\name ITK standard definitions */
   //@{
-  typedef Layer                         Self;
-  const char *GetNameOfClass() const {return "Layer"; }
-  //@}
+  typedef Layer Self;
+  const char*   GetNameOfClass() const
+  {
+    return "Layer";
+  }
+//@}
 
 #if 0
   typedef itk::SmartPointer<DataSource> DataSourcePtr;
@@ -119,7 +123,7 @@ public:
    * OGRDataSource::ExecuteSQL(). It's actually the constructor called by \c
    * DataSource::ExecuteSQL().
    */
-    Layer(OGRLayer* layer, otb::ogr::version_proxy::GDALDatasetType& sourceInChargeOfLifeTime, bool modifiable);
+  Layer(OGRLayer* layer, GDALDataset& sourceInChargeOfLifeTime, bool modifiable);
   //@}
 
   /**\name Features collection */
@@ -218,7 +222,7 @@ public:
    *  force the driver to walk all geometries to compute the extent.
    *  \throw itk::ExceptionObject if the extent can not be retrieved.
   */
-  void GetExtent(double & ulx, double & uly, double & lrx, double & lry, bool force = false) const;
+  void GetExtent(double& ulx, double& uly, double& lrx, double& lry, bool force = false) const;
 
   /** Prints self into stream. */
   void PrintSelf(std::ostream& os, itk::Indent indent) const;
@@ -226,17 +230,20 @@ public:
 
   /**\copydoc operator int boolean ::* () const
   */
-  struct boolean{ int i; };
+  struct boolean
+  {
+    int i;
+  };
   /** Can the layer be used (ie not null).
    *
    * Hack to provide a boolean operator that is convertible only to a
    * boolean expression to be used in \c if tests.
    * @see <em>Imperfect C++</em>, Matthew Wilson, Addisson-Welsey, par 24.6
    */
-  operator int boolean ::* () const
-    {
+  operator int boolean::*() const
+  {
     return m_Layer ? &boolean::i : nullptr;
-    }
+  }
 
   /** Access to raw \c OGRLayer.
    * This function provides an abstraction leak in case deeper control on the
@@ -246,7 +253,7 @@ public:
    * \warning You must under no circumstance try to delete the \c OGRLayer
    * obtained this way.
    */
-  OGRLayer & ogr();
+  OGRLayer& ogr();
 
   /**\name Spatial filter property
    * \todo We'll see later if a Geometry capsule is defined, or a
@@ -331,42 +338,54 @@ public:
  *
  * \ingroup OTBGdalAdapters
    */
-  template <class Value> class feature_iter
-    : public boost::iterator_facade<feature_iter<Value>, Value, boost::single_pass_traversal_tag>
+  template <class Value>
+  class feature_iter : public boost::iterator_facade<feature_iter<Value>, Value, boost::single_pass_traversal_tag>
+  {
+    struct enabler
     {
-    struct enabler {};
-  public:
-    feature_iter()
-      : m_Layer(nullptr), m_Crt(nullptr) {}
-    explicit feature_iter(otb::ogr::Layer & layer)
-      : m_Layer(&layer), m_Crt(layer.GetNextFeature()) {}
-    template <class OtherValue> feature_iter(
-      feature_iter<OtherValue> const& other,
-      typename boost::enable_if<boost::is_convertible<OtherValue*,Value*> >::type* = nullptr
-    )
-      : m_Layer(other.m_Layer), m_Crt(other.m_Crt)
-      {}
-  private:
-    friend class boost::iterator_core_access;
-    template <class> friend class feature_iter;
-
-    template <class OtherValue> bool equal(feature_iter<OtherValue> const& other) const
-      { return other.m_Crt == m_Crt; }
-    void increment()
-      {
-      assert(m_Layer && "cannot increment end()");
-      m_Crt = m_Layer->GetNextFeature();
-      }
-    Value & dereference() const
-      { return m_Crt; }
-
-    otb::ogr::Layer         * m_Layer;
-    otb::ogr::Feature mutable m_Crt;
     };
 
-  template <class> friend class feature_iter;
+  public:
+    feature_iter() : m_Layer(nullptr), m_Crt(nullptr)
+    {
+    }
+    explicit feature_iter(otb::ogr::Layer& layer) : m_Layer(&layer), m_Crt(layer.GetNextFeature())
+    {
+    }
+    template <class OtherValue>
+    feature_iter(feature_iter<OtherValue> const& other, typename boost::enable_if<boost::is_convertible<OtherValue*, Value*>>::type* = nullptr)
+      : m_Layer(other.m_Layer), m_Crt(other.m_Crt)
+    {
+    }
+
+  private:
+    friend class boost::iterator_core_access;
+    template <class>
+    friend class feature_iter;
+
+    template <class OtherValue>
+    bool equal(feature_iter<OtherValue> const& other) const
+    {
+      return other.m_Crt == m_Crt;
+    }
+    void increment()
+    {
+      assert(m_Layer && "cannot increment end()");
+      m_Crt = m_Layer->GetNextFeature();
+    }
+    Value& dereference() const
+    {
+      return m_Crt;
+    }
+
+    otb::ogr::Layer* m_Layer;
+    otb::ogr::Feature mutable m_Crt;
+  };
+
+  template <class>
+  friend class feature_iter;
   /// Features %iterator.
-  typedef feature_iter<Feature      > iterator;
+  typedef feature_iter<Feature> iterator;
   /// Features const %iterator.
   typedef feature_iter<Feature const> const_iterator;
 
@@ -376,15 +395,27 @@ public:
   const_iterator cbegin() const;
   /** Returns the %end %iterator of the sequence.
    */
-  const_iterator cend  () const { return iterator(); }
+  const_iterator cend() const
+  {
+    return iterator();
+  }
   /**\copydoc cbegin */
-  const_iterator begin () const { return cbegin(); }
+  const_iterator begin() const
+  {
+    return cbegin();
+  }
   /**\copydoc cend */
-  const_iterator end   () const { return cend  (); }
+  const_iterator end() const
+  {
+    return cend();
+  }
   /**\copydoc cbegin */
-  iterator       begin ();
+  iterator begin();
   /**\copydoc cend */
-  iterator       end   () { return iterator(); }
+  iterator end()
+  {
+    return iterator();
+  }
 
   /** Returns a <em>single-pass</em> %iterator to the i-th \c Feature of the
    * sequence.
@@ -393,9 +424,12 @@ public:
    */
   const_iterator cstart_at(GIntBig index) const;
   /** \copydoc cstart_at */
-  const_iterator start_at (GIntBig index) const { return cstart_at(index); }
+  const_iterator start_at(GIntBig index) const
+  {
+    return cstart_at(index);
+  }
   /** \copydoc cstart_at */
-  iterator       start_at (GIntBig index);
+  iterator start_at(GIntBig index);
   //@}
 
   /**\name Features definition
@@ -411,7 +445,7 @@ public:
    * is not const-correct.
    * \sa \c OGRLayer::GetLayerDefn()
    */
-  OGRFeatureDefn & GetLayerDefn() const;
+  OGRFeatureDefn& GetLayerDefn() const;
 
   /**
    * Adds a new field given its definition.
@@ -486,7 +520,7 @@ public:
    * \pre To be available, this function requires OTB to be compiled against OGR
    * v1.9.0 at least.
    */
-  void ReorderFields(int *map);
+  void ReorderFields(int* map);
 
   /**
    * Sets which fields can be omitted when retrieving features from the layer.
@@ -544,14 +578,14 @@ private:
    */
   DataSourcePtr m_DataSource;
 #endif
-  };
+};
 
 inline bool operator!=(Layer const& lhs, Layer const& rhs)
-  {
-  return ! (lhs == rhs);
-  }
-
-} } // end namespace otb::ogr
+{
+  return !(lhs == rhs);
+}
+}
+} // end namespace otb::ogr
 
 #ifndef OTB_MANUAL_INSTANTIATION
 // #include "otbLayerWrapper.hxx"

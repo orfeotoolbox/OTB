@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "itkMacro.h"
 #include <iostream>
 
@@ -31,16 +29,16 @@
 
 int otbAssociativeSymmetricalSum(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename1  = argv[1];
-  const char * inputFilename2  = argv[2];
-  const char * outputFilename = argv[3];
+  const char* inputFilename1 = argv[1];
+  const char* inputFilename2 = argv[2];
+  const char* outputFilename = argv[3];
 
-  typedef double InputPixelType;
-  typedef double OutputPixelType;
+  typedef double     InputPixelType;
+  typedef double     OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType1;
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType2;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType1;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType2;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType1> ReaderType1;
@@ -53,7 +51,7 @@ int otbAssociativeSymmetricalSum(int itkNotUsed(argc), char* argv[])
 
   ReaderType1::Pointer reader1 = ReaderType1::New();
   ReaderType2::Pointer reader2 = ReaderType2::New();
-  WriterType::Pointer  writer = WriterType::New();
+  WriterType::Pointer  writer  = WriterType::New();
 
   reader1->SetFileName(inputFilename1);
   reader2->SetFileName(inputFilename2);

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -51,8 +51,7 @@ namespace otb
  * \ingroup OTBStatistics
  */
 template <class TImage, class TVectorData>
-class ITK_EXPORT ListSampleGenerator :
-  public itk::ProcessObject
+class ITK_EXPORT ListSampleGenerator : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs */
@@ -67,12 +66,12 @@ public:
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
-  typedef TImage                           ImageType;
-  typedef typename ImageType::Pointer      ImagePointerType;
-  typedef typename ImageType::IndexType    ImageIndexType;
-  typedef typename ImageType::RegionType   ImageRegionType;
-  typedef TVectorData                      VectorDataType;
-  typedef typename VectorDataType::Pointer VectorDataPointerType;
+  typedef TImage                                             ImageType;
+  typedef typename ImageType::Pointer                        ImagePointerType;
+  typedef typename ImageType::IndexType                      ImageIndexType;
+  typedef typename ImageType::RegionType                     ImageRegionType;
+  typedef TVectorData                                        VectorDataType;
+  typedef typename VectorDataType::Pointer                   VectorDataPointerType;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** List to store the pixel values */
@@ -81,28 +80,28 @@ public:
   typedef typename ListSampleType::Pointer        ListSamplePointerType;
 
   /** List to store the corresponding labels */
-  typedef int                                    ClassLabelType;
-  typedef itk::FixedArray<ClassLabelType, 1>     LabelType;  //note could be templated by an std:::string
+  typedef int ClassLabelType;
+  typedef itk::FixedArray<ClassLabelType, 1> LabelType; // note could be templated by an std:::string
   typedef itk::Statistics::ListSample<LabelType> ListLabelType;
   typedef typename ListLabelType::Pointer        ListLabelPointerType;
 
   /** Connects the input image for which the sample list is going to be extracted */
   using Superclass::SetInput;
-  void SetInput(const ImageType *);
-  const ImageType * GetInput() const;
+  void             SetInput(const ImageType*);
+  const ImageType* GetInput() const;
 
   /** Connects the vector data for which the sample list is going to be extracted
    * if this is the only input vector data, both the training and validation samples
    * come from it */
-  void SetInputVectorData(const VectorDataType *);
-  const VectorDataType * GetInputVectorData() const;
+  void                  SetInputVectorData(const VectorDataType*);
+  const VectorDataType* GetInputVectorData() const;
 
   // Build the outputs
   typedef itk::DataObject::Pointer DataObjectPointer;
   DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
-  //virtual void Update();
+  // virtual void Update();
 
   /** Accessors */
   itkGetConstMacro(MaxTrainingSize, long int);
@@ -134,16 +133,16 @@ public:
   itkGetConstMacro(ClassMinSize, double);
 
   /** Returns the Training ListSample as a data object */
-  ListSampleType * GetTrainingListSample();
+  ListSampleType* GetTrainingListSample();
 
   /** Returns the Trainingn label ListSample as a data object */
-  ListLabelType * GetTrainingListLabel();
+  ListLabelType* GetTrainingListLabel();
 
   /** Returns the label sample list as a data object */
-  ListSampleType * GetValidationListSample();
+  ListSampleType* GetValidationListSample();
 
   /** Returns the label sample list as a data object */
-  ListLabelType * GetValidationListLabel();
+  ListLabelType* GetValidationListLabel();
 
   // Get the map size
   std::map<ClassLabelType, double> GetClassesSize() const
@@ -153,7 +152,9 @@ public:
 
 protected:
   ListSampleGenerator();
-  ~ListSampleGenerator() override {}
+  ~ListSampleGenerator() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Triggers the Computation of the sample list */
@@ -165,14 +166,14 @@ protected:
   void GenerateClassStatistics();
 
 private:
-  ListSampleGenerator(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ListSampleGenerator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  typedef typename VectorDataType::DataNodeType         DataNodeType;
-  typedef typename DataNodeType::PolygonType            PolygonType;
-  typedef typename DataNodeType::PolygonPointerType     PolygonPointerType;
-  typedef typename DataNodeType::PolygonListType        PolygonListType;
-  typedef typename DataNodeType::PolygonListPointerType PolygonListPointerType;
+  typedef typename VectorDataType::DataNodeType                            DataNodeType;
+  typedef typename DataNodeType::PolygonType                               PolygonType;
+  typedef typename DataNodeType::PolygonPointerType                        PolygonPointerType;
+  typedef typename DataNodeType::PolygonListType                           PolygonListType;
+  typedef typename DataNodeType::PolygonListPointerType                    PolygonListPointerType;
   typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
 
   void ComputeClassSelectionProbability();
@@ -182,15 +183,15 @@ private:
   // This does not handle interior rings
   double GetPolygonAreaInPixelsUnits(DataNodeType* polygonDataNode, ImageType* image);
 
-  long int m_MaxTrainingSize; // number of training samples (-1 = no limit)
-  long int m_MaxValidationSize; // number of validation samples (-1 = no limit)
+  long int m_MaxTrainingSize;              // number of training samples (-1 = no limit)
+  long int m_MaxValidationSize;            // number of validation samples (-1 = no limit)
   double   m_ValidationTrainingProportion; // proportion of training vs validation
                                            // (0.0 = all training, 1.0 = all validation)
 
-  bool m_BoundByMin; //Bound the number of samples by the class having the fewer
-  bool           m_PolygonEdgeInclusion; // if true take into consideration pixel which are on polygon edge
-                                           //  useful, when dealing with small polygon area (1 or two pixels)
-                                           // false by default
+  bool m_BoundByMin;           // Bound the number of samples by the class having the fewer
+  bool m_PolygonEdgeInclusion; // if true take into consideration pixel which are on polygon edge
+                               //  useful, when dealing with small polygon area (1 or two pixels)
+                               // false by default
   unsigned short m_NumberOfClasses;
   std::string    m_ClassKey;
   double         m_ClassMinSize;
@@ -199,11 +200,11 @@ private:
   std::map<ClassLabelType, double> m_ClassesProbTraining;
   std::map<ClassLabelType, double> m_ClassesProbValidation;
 
-  std::map<ClassLabelType, int> m_ClassesSamplesNumberTraining; //Just a counter
-  std::map<ClassLabelType, int> m_ClassesSamplesNumberValidation; //Just a counter
+  std::map<ClassLabelType, int> m_ClassesSamplesNumberTraining;   // Just a counter
+  std::map<ClassLabelType, int> m_ClassesSamplesNumberValidation; // Just a counter
 
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator RandomGeneratorType;
-  RandomGeneratorType::Pointer m_RandomGenerator;
+  RandomGeneratorType::Pointer                                   m_RandomGenerator;
 };
 } // end of namespace otb
 

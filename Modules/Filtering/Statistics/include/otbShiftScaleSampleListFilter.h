@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,8 +24,10 @@
 #include "otbListSampleToListSampleFilter.h"
 
 
-namespace otb {
-namespace Statistics {
+namespace otb
+{
+namespace Statistics
+{
 
 /** \class ShiftScaleSampleListFilter
  *  \brief This class generate a shifted and scaled version of the input sample list
@@ -45,17 +47,15 @@ namespace Statistics {
  *
  * \ingroup OTBStatistics
  */
-template < class TInputSampleList, class TOutputSampleList = TInputSampleList >
-class ITK_EXPORT ShiftScaleSampleListFilter :
-  public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
+template <class TInputSampleList, class TOutputSampleList = TInputSampleList>
+class ITK_EXPORT ShiftScaleSampleListFilter : public otb::Statistics::ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList>
 {
 public:
   /** Standard class typedefs */
-  typedef ShiftScaleSampleListFilter                 Self;
-  typedef otb::Statistics::ListSampleToListSampleFilter
-  <TInputSampleList, TOutputSampleList>               Superclass;
-  typedef itk::SmartPointer< Self >                  Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef ShiftScaleSampleListFilter Self;
+  typedef otb::Statistics::ListSampleToListSampleFilter<TInputSampleList, TOutputSampleList> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ShiftScaleSampleListFilter, otb::Statistics::ListSampleToListSampleFilter);
@@ -87,10 +87,12 @@ public:
 
 protected:
   /** This method causes the filter to generate its output. */
-   void GenerateData() override;
+  void GenerateData() override;
 
   ShiftScaleSampleListFilter();
-  ~ShiftScaleSampleListFilter() override {}
+  ~ShiftScaleSampleListFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
