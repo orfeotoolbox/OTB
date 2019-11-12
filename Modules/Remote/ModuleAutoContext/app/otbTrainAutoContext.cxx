@@ -80,6 +80,16 @@ namespace otb
       typedef FloatVectorImageType::RegionType                                          RegionType;
       typedef otb::ObjectList<FloatVectorImageType> FloaVectorImageListType;
 
+      using ValueType = float;
+      using LabelSampleType     = itk::FixedArray<LabelType, 1>;
+      using MachineLearningModelType        = otb::MachineLearningModel<ValueType, LabelType>;
+      using InputSampleType      = itk::VariableLengthVector<ValueType>;
+      using ListSampleType       = itk::Statistics::ListSample<InputSampleType>;
+      using MeasurementType  = itk::VariableLengthVector<ValueType>;
+      using ModelPointerType                = typename MachineLearningModelType::Pointer;
+      using MachineLearningModelFactoryType = otb::MachineLearningModelFactory<ValueType, LabelType>;
+      using LabelListSampleType = itk::Statistics::ListSample<LabelSampleType>;
+      
       itkNewMacro(Self);
       itkTypeMacro(Merging, otb::CompositeApplication);
 
@@ -176,25 +186,117 @@ namespace otb
         return labels;
     }
 
-    void predict_superpixels(std::string model_path,
-                             const std::vector<std::string> & in_vec_list,
-                             const std::string PREDICTED_FIELD_NAME,
-                             const std::vector<std::string> & features_list)
+
+ListSampleType::Pointer ReadInputListSample(ogr::DataSource::Pointer source,
+                                            const std::vector<std::string> & field_list,
+                                            const std::string field_super_pixel,
+                                            std::vector<int> & super_pixel_labels)
+{
+  auto layer  = source->GetLayer(0);
+  typename ListSampleType::Pointer input = ListSampleType::New();
+
+  const unsigned int nbFeatures = field_list.size();
+  input->SetMeasurementVectorSize(nbFeatures);
+
+  ogr::Feature             feature = layer.ogr().GetNextFeature();
+  std::vector<int> featureFieldIndex(nbFeatures, -1);
+  for (unsigned int i = 0; i < nbFeatures; i++)
+  {
+    featureFieldIndex[i] = feature.ogr().GetFieldIndex(field_list[i].c_str());
+    if (featureFieldIndex[i] < 0)
+      otbAppLogFATAL("The field name for feature " << field_list[i].c_str() << " has not been found" << std::endl);
+  }
+  int super_pixel_field_index = feature.ogr().GetFieldIndex(field_super_pixel.c_str());
+  layer.ogr().ResetReading();
+  int nb_samples = layer.ogr().GetFeatureCount(true);
+  super_pixel_labels.reserve(nb_samples);
+  
+  for (auto const& feature : layer)
+  {
+    MeasurementType mv(nbFeatures);
+    for (unsigned int idx = 0; idx < nbFeatures; ++idx)
     {
-        //~ TODO : add confidence map ?
-        for(auto in_vec : in_vec_list)
+      auto field = feature[featureFieldIndex[idx]];
+      switch (field.GetType())
+      {
+      case OFTInteger:
+      case OFTInteger64:
+        mv[idx] = static_cast<ValueType>(field.template GetValue<int>());
+        break;
+      case OFTReal:
+        mv[idx] = static_cast<ValueType>(field.template GetValue<double>());
+        break;
+      default:
+        itkExceptionMacro(<< "incorrect field type: " << field.GetType() << ".");
+      }
+    }
+    input->PushBack(mv);
+    super_pixel_labels.push_back(feature[super_pixel_field_index].template GetValue<int>());
+  }
+  return input;
+}
+
+    void compute_autoContext(std::string model_path,
+                             const std::vector<std::string> & in_seg_list,
+                             const std::string PREDICTED_FIELD_NAME,
+                             const std::string SUPERPIX_FIELD_NAME,
+                             const std::vector<std::string> & features_list,
+                             const std::vector<std::string> & in_ref_list, 
+                             const std::vector<std::string> &  histo_names)
+    {
+        ModelPointerType model = MachineLearningModelFactoryType::CreateMachineLearningModel(model_path, MachineLearningModelFactoryType::ReadMode);
+        model->SetRegressionMode(false);
+        model->Load(model_path);
+        
+        for(unsigned int i = 0; i < in_seg_list.size(); i++)
         {
-            otbAppLogINFO("Classify : " + in_vec);
-            auto classify_vec = GetInternalApplication("classifier");
-            classify_vec->SetParameterString("in", in_vec);
-            UpdateInternalParameters("classifier");
-            classify_vec->SetParameterString("model", model_path);
-            classify_vec->SetParameterString("cfield", PREDICTED_FIELD_NAME);
-            classify_vec->SetParameterStringList("feat", features_list);
-            classify_vec->ExecuteAndWriteOutput();
+            std::string in_seg = in_seg_list[i];
+            std::string in_ref = in_ref_list[i];
+            auto source = otb::ogr::DataSource::New(in_seg, otb::ogr::DataSource::Modes::Read);
+            auto layer  = source->GetLayer(0);
+            std::vector<int> super_pixel_labels;
+            auto input = ReadInputListSample(source, features_list,
+                                             SUPERPIX_FIELD_NAME,
+                                             super_pixel_labels);
+            typename LabelListSampleType::Pointer target;
+            otbAppLogINFO("Start prediction of " + in_seg);
+            target = model->PredictBatch(input);
+            otbAppLogINFO("Prediction done");
+            otbAppLogINFO("Compute histograms");
+            compute_histograms(target, super_pixel_labels, in_ref, SUPERPIX_FIELD_NAME);            
         }
     }
 
+void compute_histograms(const typename LabelListSampleType::Pointer predicted_labels,
+                        std::vector<int> super_pixel_labels, 
+                        std::string data_ref,
+                        std::string SUPERPIX_FIELD_NAME)
+    {
+        LabeledVectorMapType histos;
+        LabeledIntMapType counts;
+
+        for (int i=0; i<super_pixel_labels.size(); i++)
+        {
+            const int predicted_label = predicted_labels->GetMeasurementVector(i)[0];
+            const int sp_label = super_pixel_labels[i];
+            auto histo_it = histos.find(sp_label);
+            if (histo_it != histos.end())
+            {
+                //Add to exisiting histogram
+                histo_it->second[std::find(m_labelList.begin(),m_labelList.end(), predicted_label) - m_labelList.begin()]++;
+                counts.find(sp_label)->second++;
+            }
+            else
+            {
+                //Create new histogram
+                histos.insert(std::pair<int,std::vector<double> >(sp_label, std::vector<double>(m_labelList.size(),0.0)));
+                counts.insert(std::pair<LabelType,unsigned int>(sp_label, 0));
+            }
+        }
+            otbAppLogINFO("Add histograms to : " + data_ref);
+            writeHistograms(data_ref, m_labelList, histos, counts, SUPERPIX_FIELD_NAME, true);
+            otbAppLogINFO("Add histograms to : " + data_ref + "done");
+    }
     void writeHistograms(std::string classifiedPoints_path,
                          std::vector<LabelType> labelList,
                          LabeledVectorMapType & histos,
@@ -237,44 +339,6 @@ namespace otb
         classifiedPoints->SyncToDisk();
       }
 
-    void compute_histograms(const std::vector<std::string> & in_ref_list,
-                            const std::vector<std::string> & histo_names,
-                            const std::vector<std::string> & in_seg_list,
-                            std::string PREDICTED_FIELD_NAME,
-                            std::string SUPERPIX_FIELD_NAME)
-    {
-        for (size_t index = 0; index < in_ref_list.size(); ++index)
-        {
-            LabeledVectorMapType histos;
-            LabeledIntMapType counts;
-
-            otbAppLogINFO("Compute histograms from : " + in_seg_list[index]);
-            otb::ogr::DataSource::Pointer predicted_ds = otb::ogr::DataSource::New(in_seg_list[index],
-                                                                                   otb::ogr::DataSource::Modes::Read);
-            auto predicted_layer = predicted_ds->GetLayerChecked(0);
-            otb::ogr::Layer::feature_iter<otb::ogr::Feature> predicted_it;
-            for (predicted_it=predicted_layer.begin(); predicted_it!=predicted_layer.end(); predicted_it++)
-            {
-                const int predicted_label=(*predicted_it)[PREDICTED_FIELD_NAME].GetValue<int>();
-                const int sp_label=(*predicted_it)[SUPERPIX_FIELD_NAME].GetValue<int>();
-                auto histo_it = histos.find(sp_label);
-                if (histo_it != histos.end())
-                {
-                    //Add to exisiting histogram
-                    histo_it->second[std::find(m_labelList.begin(),m_labelList.end(), predicted_label) - m_labelList.begin()]++;
-                    counts.find(sp_label)->second++;
-                }
-                else
-                {
-                    //Create new histogram
-                    histos.insert(std::pair<int,std::vector<double> >(sp_label, std::vector<double>(m_labelList.size(),0.0)));
-                    counts.insert(std::pair<LabelType,unsigned int>(sp_label, 0));
-                }
-            }
-            otbAppLogINFO("Add histograms to : " + in_ref_list[index]);
-            writeHistograms(in_ref_list[index], m_labelList, histos, counts, SUPERPIX_FIELD_NAME, true);
-        }
-    }
 
     void train_model(const std::vector<std::string> & in_ref_list,
                      std::string REF_FIELD_NAME,
@@ -333,8 +397,7 @@ namespace otb
         for (int it=1; it <= this->GetParameterInt("nit"); it++)
         {
             otbAppLogINFO("predict superpixels labels thanks to : " + modelName);
-            predict_superpixels(modelName, in_seg_list, PREDICTED_FIELD_NAME, pixel_features_list);
-            compute_histograms(in_ref_list, histo_names, in_seg_list, PREDICTED_FIELD_NAME, seg_field);
+            compute_autoContext(modelName, in_seg_list, PREDICTED_FIELD_NAME, seg_field, pixel_features_list, in_ref_list, histo_names);
             std::string iteration_str = std::to_string(it);
             std::string model_iteration = GetParameterString("out") + "/" + "model_it_" + iteration_str + ".rf";
             otbAppLogINFO("Compute model : " + model_iteration);
