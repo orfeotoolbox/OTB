@@ -190,7 +190,7 @@ namespace otb
 ListSampleType::Pointer ReadInputListSample(ogr::DataSource::Pointer source,
                                             const std::vector<std::string> & field_list,
                                             const std::string field_super_pixel,
-                                            std::vector<int> & super_pixel_labels)
+                                            std::vector<long long> & super_pixel_labels)
 {
   auto layer  = source->GetLayer(0);
   typename ListSampleType::Pointer input = ListSampleType::New();
@@ -231,7 +231,7 @@ ListSampleType::Pointer ReadInputListSample(ogr::DataSource::Pointer source,
       }
     }
     input->PushBack(mv);
-    super_pixel_labels.push_back(feature[super_pixel_field_index].template GetValue<int>());
+    super_pixel_labels.push_back(feature[super_pixel_field_index].template GetValue<long long>());
   }
   return input;
 }
@@ -254,7 +254,7 @@ ListSampleType::Pointer ReadInputListSample(ogr::DataSource::Pointer source,
             std::string in_ref = in_ref_list[i];
             auto source = otb::ogr::DataSource::New(in_seg, otb::ogr::DataSource::Modes::Read);
             auto layer  = source->GetLayer(0);
-            std::vector<int> super_pixel_labels;
+            std::vector<long long> super_pixel_labels;
             auto input = ReadInputListSample(source, features_list,
                                              SUPERPIX_FIELD_NAME,
                                              super_pixel_labels);
@@ -268,7 +268,7 @@ ListSampleType::Pointer ReadInputListSample(ogr::DataSource::Pointer source,
     }
 
 void compute_histograms(const typename LabelListSampleType::Pointer predicted_labels,
-                        std::vector<int> super_pixel_labels, 
+                        std::vector<long long> super_pixel_labels, 
                         std::string data_ref,
                         std::string SUPERPIX_FIELD_NAME)
     {
@@ -278,7 +278,7 @@ void compute_histograms(const typename LabelListSampleType::Pointer predicted_la
         for (int i=0; i<super_pixel_labels.size(); i++)
         {
             const int predicted_label = predicted_labels->GetMeasurementVector(i)[0];
-            const int sp_label = super_pixel_labels[i];
+            const long long sp_label = super_pixel_labels[i];
             auto histo_it = histos.find(sp_label);
             if (histo_it != histos.end())
             {
@@ -289,8 +289,8 @@ void compute_histograms(const typename LabelListSampleType::Pointer predicted_la
             else
             {
                 //Create new histogram
-                histos.insert(std::pair<int,std::vector<double> >(sp_label, std::vector<double>(m_labelList.size(),0.0)));
-                counts.insert(std::pair<LabelType,unsigned int>(sp_label, 0));
+                histos.insert(std::pair<long long, std::vector<double> >(sp_label, std::vector<double>(m_labelList.size(),0.0)));
+                counts.insert(std::pair<long long, unsigned int>(sp_label, 0));
             }
         }
             otbAppLogINFO("Add histograms to : " + data_ref);
