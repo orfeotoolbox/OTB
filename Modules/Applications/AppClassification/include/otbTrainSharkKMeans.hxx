@@ -107,7 +107,7 @@ void LearningApplicationBase<TInputValue, TOutputValue>::TrainSharkKMeans(typena
       for (unsigned int i = 0; i < meanMeasurementVector.Size(); ++i)
       {
         scaleRV[i] = 1 / stddevMeasurementVector[i];
-        // Substract the normalized mean
+        // Subtract the normalized mean
         offsetRV[i] = -meanMeasurementVector[i] / stddevMeasurementVector[i];
       }
 
