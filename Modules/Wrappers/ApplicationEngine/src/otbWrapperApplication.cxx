@@ -1465,6 +1465,13 @@ std::vector<std::pair<std::string, std::string>> Application::GetOutputParameter
           oss << GetParameterFloat(*it);
           keyVal.second = oss.str();
         }
+        else if (type == ParameterType_Double)
+        {
+          std::ostringstream oss;
+          oss << std::setprecision(19);
+          oss << GetParameterDouble(*it);
+          keyVal.second = oss.str();
+        }
         else
         {
           keyVal.second = GetParameterAsString(*it);
