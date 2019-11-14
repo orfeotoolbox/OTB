@@ -464,9 +464,13 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       throw e;
     }
 
-    typename itk::ImageRegion<2>::IndexType start {boxVector[0], boxVector[1]};
-    typename itk::ImageRegion<2>::SizeType size {boxVector[2], boxVector[3]};
-    
+    typename InputImageRegionType::IndexType start;
+    typename InputImageRegionType::SizeType  size;
+    start[0] = boxVector[0]; // first index on X
+    start[1] = boxVector[1]; // first index on Y
+    size[0]  = boxVector[2]; // size along X
+    size[1]  = boxVector[3]; // size along Y
+
     inputRegion.SetSize(size);
     inputRegion.SetIndex(start);
 
