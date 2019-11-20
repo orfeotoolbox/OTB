@@ -82,11 +82,11 @@ public:
   itkGetMacro(MultiWriter, otb::MultiImageFileWriter::Pointer);
   
   /** Set/Get MultiWriting  */
-  itkSetMacro(MultiWriting, bool);
-  itkGetMacro(MultiWriting, bool);
+  itkSetMacro(IsMultiWritingRequested, bool);
+  itkGetMacro(IsMultiWritingRequested, bool);
 
   /** Get MultiWritingEnabled  */
-  itkGetMacro(MultiWritingEnabled, bool);
+  itkGetMacro(IsMultiWritingEnabled, bool);
 
   /** Implement the reset method (replace pixel type by default type) */
   void Reset() override
@@ -168,9 +168,12 @@ private:
 
   unsigned int m_RAMValue;
 
-  // TODO document, multiwriter parameters;
-  bool m_MultiWriting;
-  bool m_MultiWritingEnabled;
+  // Should the outputImageParameter try to register its writer (m_Writer) to the multiwriter (m_MultiWriter)
+  bool m_IsMultiWritingRequested;
+  
+  // Is the writer (m_Writer) registered to the multiWriter ?
+  bool m_IsMultiWritingEnabled;
+
   otb::MultiImageFileWriter::Pointer m_MultiWriter;
 }; // End class OutputImage Parameter
 

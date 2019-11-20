@@ -308,7 +308,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       {
         if (sizevalue == 0)
         {
-          otbLogMacro(Warning, << "Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting "
+          otbLogMacro(Warning, << "Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
                                   "the sizevalue by using &streaming:sizevalue=x.");
         }
         this->SetNumberOfDivisionsTiledStreaming(sizevalue);
@@ -317,7 +317,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       {
         if (sizevalue == 0)
         {
-          otbLogMacro(Warning, << "Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting "
+          otbLogMacro(Warning, << "Streaming sizemode is set to height but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
                                   "the sizevalue by using &streaming:sizevalue=x.");
         }
 
@@ -340,7 +340,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       {
         if (sizevalue == 0)
         {
-          otbLogMacro(Warning, << "Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting "
+          otbLogMacro(Warning, << "Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
                                   "the sizevalue by using &streaming:sizevalue=x.");
         }
         this->SetNumberOfDivisionsStrippedStreaming(sizevalue);
@@ -349,7 +349,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       {
         if (sizevalue == 0)
         {
-          otbLogMacro(Warning, << "Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting "
+          otbLogMacro(Warning, << "Streaming sizemode is set to height but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
                                   "the sizevalue by using &streaming:sizevalue=x.");
         }
         this->SetNumberOfLinesStrippedStreaming(sizevalue);

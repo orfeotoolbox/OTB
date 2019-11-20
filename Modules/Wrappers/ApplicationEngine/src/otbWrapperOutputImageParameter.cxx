@@ -63,7 +63,7 @@ template <>
 void OutputImageParameter::SwitchInput(UInt8RGBImageType*);
 
 
-OutputImageParameter::OutputImageParameter() : m_PixelType(ImagePixelType_float), m_DefaultPixelType(ImagePixelType_float), m_RAMValue(0), m_MultiWriting(false), m_MultiWritingEnabled(false)
+OutputImageParameter::OutputImageParameter() : m_PixelType(ImagePixelType_float), m_DefaultPixelType(ImagePixelType_float), m_RAMValue(0), m_IsMultiWritingRequested(false), m_IsMultiWritingEnabled(false)
 {
   SetName("Output Image");
   SetKey("out");
@@ -309,10 +309,10 @@ void OutputImageParameter::ClampAndWriteVectorImage(TInputImage* in)
 template <class TWriter>
 void OutputImageParameter::addWriterToMultiWriter(typename TWriter::Pointer writer)
 {
-  if (writer->GetFilenameHelper()->GetMultiWrite() && m_MultiWriting && m_MultiWriter)
+  if (writer->GetFilenameHelper()->GetMultiWrite() && m_IsMultiWritingRequested && m_MultiWriter)
   {
     m_MultiWriter->AddInputWriter<TWriter>(writer);
-    m_MultiWritingEnabled = true;
+    m_IsMultiWritingEnabled = true;
     
   }
 }

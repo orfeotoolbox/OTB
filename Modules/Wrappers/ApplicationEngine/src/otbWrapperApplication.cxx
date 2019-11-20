@@ -886,12 +886,12 @@ void Application::WriteOutput()
           outputParam->SetRAMValue(ram);
         }
 
-        outputParam->SetMultiWriting(m_MultiWriting);
+        outputParam->SetIsMultiWritingRequested(m_MultiWriting);
         outputParam->SetMultiWriter(multiWriter);
         outputParam->InitializeWriters();
         std::ostringstream progressId;
         
-        if (!outputParam->GetMultiWritingEnabled())
+        if (!outputParam->GetIsMultiWritingEnabled())
         {
           progressId << "Writing " << outputParam->GetFileName() << "...";
           AddProcess(outputParam->GetWriter(), progressId.str());

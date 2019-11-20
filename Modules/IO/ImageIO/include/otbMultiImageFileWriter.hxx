@@ -43,7 +43,7 @@ MultiImageFileWriter::Sink<TImage>::Sink(typename otb::ImageFileWriter<TImage>::
 }
 
 template <class TImage>
-bool MultiImageFileWriter::Sink<TImage>::CanStreamWrite()
+bool MultiImageFileWriter::Sink<TImage>::CanStreamWrite() const
 {
   if (m_ImageIO.IsNull())
     return false;
@@ -73,7 +73,7 @@ void MultiImageFileWriter::Sink<TImage>::Write(const RegionType& streamRegion)
 
 template <class TImage>
 itk::ImageRegion<2>
-MultiImageFileWriter::Sink<TImage>::GetRegionToWrite()
+MultiImageFileWriter::Sink<TImage>::GetRegionToWrite() const
 {
   auto fnameHelper = m_Writer->GetFilenameHelper();
   if (fnameHelper->BoxIsSet())
@@ -101,6 +101,147 @@ MultiImageFileWriter::Sink<TImage>::GetRegionToWrite()
   {
     return m_InputImage->GetLargestPossibleRegion();
   }
+}
+
+template <class TWriter>
+void MultiImageFileWriter::AddInputWriter(typename TWriter::Pointer writer)
+{
+  Sink<typename TWriter::InputImageType>* sink = new Sink<typename TWriter::InputImageType>(writer);
+  m_SinkList.push_back(SinkBase::Pointer(sink));
+  unsigned int size = m_SinkList.size();
+  this->SetNthInput(size - 1, const_cast<itk::DataObject*>(dynamic_cast<const itk::DataObject*>(writer->GetInput())));
+      /** Parse streaming modes */
+  
+  auto filenameHelper = writer->GetFilenameHelper();
+  if (filenameHelper->StreamingTypeIsSet())
+  {
+    otbLogMacro(
+        Warning,
+        << "Streaming configuration through extended filename is used. Any previous streaming configuration (ram value, streaming mode ...) will be ignored.");
+
+    std::string type = filenameHelper->GetStreamingType();
+
+    std::string sizemode = "auto";
+
+    if (filenameHelper->StreamingSizeModeIsSet())
+    {
+      sizemode = filenameHelper->GetStreamingSizeMode();
+    }
+  
+    unsigned int sizevalue = 0;
+    // Save the DefaultRAM value for later
+    unsigned int oldDefaultRAM = m_StreamingManager->GetDefaultRAM();
+    if (sizemode == "auto")
+    {
+      sizevalue = oldDefaultRAM;
+    }
+
+    if (filenameHelper->StreamingSizeValueIsSet())
+    {
+      sizevalue = static_cast<unsigned int>(filenameHelper->GetStreamingSizeValue());
+    }
+
+    if (type == "auto")
+    {
+      if (sizemode != "auto")
+      {
+        otbLogMacro(Warning, << "In auto streaming type, the sizemode option will be ignored.");
+      }
+      if (sizevalue == 0)
+      {
+        otbLogMacro(Warning, << "sizemode is auto but sizevalue is 0. Value will be fetched from the OTB_MAX_RAM_HINT environment variable if set, or else use "
+                                "the default value");
+      }
+      this->SetAutomaticAdaptativeStreaming(sizevalue);
+    }
+    else if (type == "tiled")
+    {
+      if (sizemode == "auto")
+      {
+        if (sizevalue == 0)
+        {
+          otbLogMacro(Warning, << "sizemode is auto but sizevalue is 0. Value will be fetched from the OTB_MAX_RAM_HINT environment variable if set, or else "
+                                  "use the default value");
+        }
+        this->SetAutomaticTiledStreaming(sizevalue);
+      }
+      else if (sizemode == "nbsplits")
+      {
+        if (sizevalue == 0)
+        {
+          otbLogMacro(Warning, << "Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
+                                  "the sizevalue by using &streaming:sizevalue=x.");
+        }
+        this->SetNumberOfDivisionsTiledStreaming(sizevalue);
+      }
+      else if (sizemode == "height")
+      {
+        if (sizevalue == 0)
+        {
+          otbLogMacro(Warning, << "Streaming sizemode is set to height but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
+                                  "the sizevalue by using &streaming:sizevalue=x.");
+        }
+
+        this->SetTileDimensionTiledStreaming(sizevalue);
+      }
+    }
+    else if (type == "stripped")
+    {
+      if (sizemode == "auto")
+      {
+        if (sizevalue == 0)
+        {
+          otbLogMacro(
+              Warning, << "sizemode is auto but sizevalue is 0. Value will be fetched from configuration file if any, or from cmake configuration otherwise.");
+        }
+
+        this->SetAutomaticStrippedStreaming(sizevalue);
+      }
+      else if (sizemode == "nbsplits")
+      {
+        if (sizevalue == 0)
+        {
+          otbLogMacro(Warning, << "Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
+                                  "the sizevalue by using &streaming:sizevalue=x.");
+        }
+        this->SetNumberOfDivisionsStrippedStreaming(sizevalue);
+      }
+      else if (sizemode == "height")
+      {
+        if (sizevalue == 0)
+        {
+          otbLogMacro(Warning, << "Streaming sizemode is set to height but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
+                                  "the sizevalue by using &streaming:sizevalue=x.");
+        }
+        this->SetNumberOfLinesStrippedStreaming(sizevalue);
+      }
+    }
+    else if (type == "none")
+    {
+      if (sizemode != "" || sizevalue != 0)
+      {
+        otbLogMacro(Warning, << "Streaming is explicitly disabled, sizemode and sizevalue will be ignored.");
+      }
+      this->SetNumberOfDivisionsTiledStreaming(0);
+    }
+    m_StreamingManager->SetDefaultRAM(oldDefaultRAM);
+  }
+  else
+  {
+    if (filenameHelper->StreamingSizeValueIsSet() || filenameHelper->StreamingSizeModeIsSet())
+    {
+      otbLogMacro(Warning, << "No streaming type is set, streaming sizemode and sizevalue will be ignored.");
+    }
+  }
+}
+
+template <class TImage>
+void MultiImageFileWriter::AddInputImage(const TImage* inputPtr, const std::string& fileName)
+{
+  Sink<TImage>* sink = new Sink<TImage>(inputPtr, fileName);
+  m_SinkList.push_back(SinkBase::Pointer(sink));
+  unsigned int size = m_SinkList.size();
+  this->SetNthInput(size - 1, const_cast<itk::DataObject*>(dynamic_cast<const itk::DataObject*>(inputPtr)));
 }
 
 } // end of namespace otb
