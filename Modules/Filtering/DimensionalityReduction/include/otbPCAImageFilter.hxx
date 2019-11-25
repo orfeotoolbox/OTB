@@ -354,7 +354,15 @@ void PCAImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>::Gene
       throw itk::ExceptionObject(__FILE__, __LINE__, "Null Eigen value !!", ITK_LOCATION);
     }
   }
-  transf = valP * transf.transpose();
+  if (m_Whitening)
+  {
+    transf = valP * transf.transpose();
+  }
+  else
+  {
+    transf = transf.transpose();
+  }
+  
   transf.flipud();
 
   if (m_NumberOfPrincipalComponentsRequired != this->GetInput()->GetNumberOfComponentsPerPixel())
