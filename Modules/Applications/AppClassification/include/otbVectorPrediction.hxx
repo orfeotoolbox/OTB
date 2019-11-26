@@ -147,8 +147,8 @@ typename VectorPrediction<RegressionMode>::ListSampleType::Pointer VectorPredict
 
 
 template <bool                RegressionMode>
-otb::ogr::DataSource::Pointer VectorPrediction<RegressionMode>::UpdateOutputDataSource(otb::ogr::DataSource::Pointer source, otb::ogr::Layer& layer,
-                                                                                       ogr::DataSource::Pointer buffer)
+otb::ogr::DataSource::Pointer VectorPrediction<RegressionMode>::ReopenDataSourceInUpdateMode(ogr::DataSource::Pointer source, ogr::Layer& layer,
+                                                                                             ogr::DataSource::Pointer buffer)
 {
   ogr::DataSource::Pointer output;
   // Update mode
@@ -164,7 +164,7 @@ otb::ogr::DataSource::Pointer VectorPrediction<RegressionMode>::UpdateOutputData
 }
 
 template <bool                RegressionMode>
-otb::ogr::DataSource::Pointer VectorPrediction<RegressionMode>::CreateOutputDataSource(otb::ogr::DataSource::Pointer source, otb::ogr::Layer& layer)
+otb::ogr::DataSource::Pointer VectorPrediction<RegressionMode>::CreateOutputDataSource(ogr::DataSource::Pointer source, ogr::Layer& layer)
 {
   ogr::DataSource::Pointer output;
   // Create new OGRDataSource
@@ -305,12 +305,14 @@ void           VectorPrediction<RegressionMode>::DoExecute()
   const bool updateMode = !(IsParameterEnabled("out") && HasValue("out"));
 
   ogr::DataSource::Pointer buffer;
-  otb::ogr::DataSource::Pointer output;
+  ogr::DataSource::Pointer output;
 
   if (updateMode)
   {
+    // in update mode, output is added to input data source.
+    // buffer needs to be allocated here, as its life-cycle is bound to "layer"
     buffer = ogr::DataSource::New();
-    output = UpdateOutputDataSource(source, layer, buffer);
+    output = ReopenDataSourceInUpdateMode(source, layer, buffer);
   }
   else
   {

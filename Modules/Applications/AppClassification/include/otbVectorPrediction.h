@@ -105,10 +105,11 @@ private:
   typename ListSampleType::Pointer NormalizeListSample(ListSampleType::Pointer input);
 
   /** Update the output DataSource : the input layer is buffered and the input data source is re opened in update mode. */
-  otb::ogr::DataSource::Pointer UpdateOutputDataSource(otb::ogr::DataSource::Pointer source, otb::ogr::Layer& layer, otb::ogr::DataSource::Pointer buffer);
+  otb::ogr::DataSource::Pointer ReopenDataSourceInUpdateMode(ogr::DataSource::Pointer source, ogr::Layer& layer,
+                                                             ogr::DataSource::Pointer buffer);
 
   /** Create the output DataSource. */
-  otb::ogr::DataSource::Pointer CreateOutputDataSource(otb::ogr::DataSource::Pointer source, otb::ogr::Layer& layer);
+  otb::ogr::DataSource::Pointer CreateOutputDataSource(ogr::DataSource::Pointer source, ogr::Layer& layer);
 
   /** Add a prediction field in the output layer if it does not exist.
    * If computeConfidenceMap evaluates to true a confidence field will be
