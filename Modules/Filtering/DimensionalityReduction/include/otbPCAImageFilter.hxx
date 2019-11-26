@@ -325,44 +325,30 @@ void PCAImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>::Gene
   vnl_vector<double> vectValP;
   vnl_symmetric_eigensystem_compute(m_CovarianceMatrix.GetVnlMatrix(), transf, vectValP);
 
-  InternalMatrixType valP(vectValP.size(), vectValP.size(), vnl_matrix_null);
-  for (unsigned int i = 0; i < vectValP.size(); ++i)
-    valP(i, i) = vectValP[i];
 
   m_EigenValues.SetSize(m_NumberOfPrincipalComponentsRequired);
   for (unsigned int i                                            = 0; i < m_NumberOfPrincipalComponentsRequired; ++i)
     m_EigenValues[m_NumberOfPrincipalComponentsRequired - 1 - i] = static_cast<RealType>(vectValP[i]);
 
-  /* We used normalized PCA */
-  for (unsigned int i = 0; i < valP.rows(); ++i)
-  {
-    if (valP(i, i) > 0.)
-    {
-      if (m_Whitening)
-        valP(i, i) = 1. / std::sqrt(valP(i, i));
-    }
-    else if (valP(i, i) < 0.)
-    {
-      otbMsgDebugMacro(<< "ValP(" << i << ") neg : " << valP(i, i) << " taking abs value");
-      if (m_Whitening)
-        valP(i, i) = 1. / std::sqrt(std::abs(valP(i, i)));
-      else
-        valP(i, i) = std::abs(valP(i, i));
-    }
-    else
-    {
-      throw itk::ExceptionObject(__FILE__, __LINE__, "Null Eigen value !!", ITK_LOCATION);
-    }
-  }
   if (m_Whitening)
   {
+    InternalMatrixType valP(vectValP.size(), vectValP.size(), vnl_matrix_null);
+    for (unsigned int i = 0; i < vectValP.size(); ++i)
+    valP(i, i) = vectValP[i];
+
+    for (unsigned int i = 0; i < valP.rows(); ++i)
+    {
+      if (valP(i,i) != 0.0)
+        valP(i,i) = 1.0 / std::sqrt(std::abs(valP(i,i)));
+      else
+        throw itk::ExceptionObject(__FILE__, __LINE__, "Null Eigen value !!", ITK_LOCATION);
+    }
     transf = valP * transf.transpose();
   }
-  else
-  {
-    transf = transf.transpose();
+  else {
+      transf = transf.transpose();
   }
-  
+
   transf.flipud();
 
   if (m_NumberOfPrincipalComponentsRequired != this->GetInput()->GetNumberOfComponentsPerPixel())
