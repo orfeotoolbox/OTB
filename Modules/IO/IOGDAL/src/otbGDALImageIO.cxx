@@ -743,14 +743,18 @@ void GDALImageIO::InternalReadImageInformation()
   /* -------------------------------------------------------------------- */
   /* Get the projection coordinate system of the image : ProjectionRef  */
   /* -------------------------------------------------------------------- */
-  if (dataset->GetProjectionRef() != nullptr && !std::string(dataset->GetProjectionRef()).empty())
+  const char* pszProjection = dataset->GetProjectionRef();
+  if (pszProjection != nullptr && !std::string(pszProjection).empty())
   {
     OGRSpatialReferenceH pSR = OSRNewSpatialReference(nullptr);
-
-    const char* pszProjection = nullptr;
-    pszProjection             = dataset->GetProjectionRef();
-
-    if (OSRImportFromWkt(pSR, (char**)(&pszProjection)) == OGRERR_NONE)
+    if (strncmp(pszProjection, "LOCAL_CS",8) == 0)
+      {
+      // skip local coordinate system as they will cause crashed later
+      // In GDAL 3, they begin to do special processing for Transmercator local
+      // coordinate system
+      otbLogMacro(Debug, << "Skipping LOCAL_CS projection")
+      }
+    else if (OSRImportFromWkt(pSR, (char**)(&pszProjection)) == OGRERR_NONE)
     {
       char* pszPrettyWkt = nullptr;
       OSRExportToPrettyWkt(pSR, &pszPrettyWkt, FALSE);
@@ -761,7 +765,7 @@ void GDALImageIO::InternalReadImageInformation()
     }
     else
     {
-      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, static_cast<std::string>(dataset->GetProjectionRef()));
+      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, static_cast<std::string>(pszProjection));
     }
 
     if (pSR != nullptr)
