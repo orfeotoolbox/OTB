@@ -1425,18 +1425,14 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
   geoTransform[2] = 0.;
   geoTransform[4] = 0.;
-  bool isGeotransformIdentity =
-    std::abs(geoTransform[0]) < Epsilon &&
-    std::abs(geoTransform[1] - 1.0) < Epsilon &&
-    std::abs(geoTransform[2]) < Epsilon &&
-    std::abs(geoTransform[3]) < Epsilon &&
-    std::abs(geoTransform[4]) < Epsilon &&
-    std::abs(geoTransform[5] - 1.0) < Epsilon;
-  // Error if writing to a ENVI file with a positive Y spacing
-  if (!isGeotransformIdentity && driverShortName == "ENVI" && geoTransform[5] > 0.)
-    {
-    itkExceptionMacro(<< "Can not write to ENVI file format with a positive Y spacing (" << m_FileName << ")");
-    }
+  // only write geotransform if it has non-default values
+  bool writeGeotransform =
+    std::abs(geoTransform[0]) > Epsilon ||
+    std::abs(geoTransform[1] - 1.0) > Epsilon ||
+    std::abs(geoTransform[2]) > Epsilon ||
+    std::abs(geoTransform[3]) > Epsilon ||
+    std::abs(geoTransform[4]) > Epsilon ||
+    std::abs(geoTransform[5] - 1.0) > Epsilon;
 
   /* -------------------------------------------------------------------- */
   /* Case 1: Set the projection coordinate system of the image            */
@@ -1444,20 +1440,12 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   if (!projectionRef.empty())
     {
     dataset->SetProjection(projectionRef.c_str());
-    if (!isGeotransformIdentity)
-      {
-      dataset->SetGeoTransform(geoTransform);
-      }
     }
   /* -------------------------------------------------------------------- */
   /* Case 2: Sensor keywordlist                                           */
   /* -------------------------------------------------------------------- */
   else if (otb_kwl.GetSize())
     {
-    if (!isGeotransformIdentity)
-      {
-      dataset->SetGeoTransform(geoTransform);
-      }
     /* -------------------------------------------------------------------- */
     /* Set the RPC coeffs (since GDAL 1.10.0)                               */
     /* -------------------------------------------------------------------- */
@@ -1481,7 +1469,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     otbLogMacro(Debug, << "Saving GCPs to file (" << m_FileName << ")")
     GDAL_GCP* gdalGcps = new GDAL_GCP[gcpCount];
     for (unsigned int gcpIndex = 0; gcpIndex < gcpCount; ++gcpIndex)
-    {
+      {
       // Build the GCP string in the form of GCP_n
       std::ostringstream lStream;
       lStream << MetaDataKey::GCPParametersKey << gcpIndex;
@@ -1498,21 +1486,37 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       gdalGcps[gcpIndex].dfGCPY     = gcp.m_GCPY;
       gdalGcps[gcpIndex].dfGCPZ     = gcp.m_GCPZ;
 
-      if (!isGeotransformIdentity)
+      if (writeGeotransform)
         {
         // we need to transform GCP col and row accordingly
         // WARNING: assume no rotation is there
         gdalGcps[gcpIndex].dfGCPPixel = (gcp.m_GCPCol - geoTransform[0]) / geoTransform[1];
         gdalGcps[gcpIndex].dfGCPLine  = (gcp.m_GCPRow - geoTransform[3]) / geoTransform[5];
         }
-    }
+      }
 
     std::string gcpProjectionRef;
     itk::ExposeMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionRef);
 
     dataset->SetGCPs(gcpCount, gdalGcps, gcpProjectionRef.c_str());
 
+    // disable geotransform with GCP
+    writeGeotransform = false;
+
     delete[] gdalGcps;
+    }
+
+  /* -------------------------------------------------------------------- */
+  /*  Save geotransform if needed.                                        */
+  /* -------------------------------------------------------------------- */
+  if (writeGeotransform)
+    {
+    if ( driverShortName == "ENVI" && geoTransform[5] > 0.)
+      {
+      // Error if writing to a ENVI file with a positive Y spacing
+      itkExceptionMacro(<< "Can not write to ENVI file format with a positive Y spacing (" << m_FileName << ")");
+      }
+    dataset->SetGeoTransform(geoTransform);
     }
 
   /* -------------------------------------------------------------------- */
