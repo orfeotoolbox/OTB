@@ -1467,7 +1467,8 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   else if (gcpCount)
     {
     otbLogMacro(Debug, << "Saving GCPs to file (" << m_FileName << ")")
-    GDAL_GCP* gdalGcps = new GDAL_GCP[gcpCount];
+    std::vector<GDAL_GCP> gdalGcps(gcpCount);
+    std::vector<OTB_GCP> otbGcps(gcpCount);
     for (unsigned int gcpIndex = 0; gcpIndex < gcpCount; ++gcpIndex)
       {
       // Build the GCP string in the form of GCP_n
@@ -1475,7 +1476,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       lStream << MetaDataKey::GCPParametersKey << gcpIndex;
       std::string key = lStream.str();
 
-      OTB_GCP gcp;
+      OTB_GCP &gcp = otbGcps[gcpIndex];
       itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
 
       gdalGcps[gcpIndex].pszId      = const_cast<char*>(gcp.m_Id.c_str());
@@ -1498,12 +1499,10 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     std::string gcpProjectionRef;
     itk::ExposeMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionRef);
 
-    dataset->SetGCPs(gcpCount, gdalGcps, gcpProjectionRef.c_str());
+    dataset->SetGCPs(gcpCount, gdalGcps.data(), gcpProjectionRef.c_str());
 
     // disable geotransform with GCP
     writeGeotransform = false;
-
-    delete[] gdalGcps;
     }
 
   /* -------------------------------------------------------------------- */
