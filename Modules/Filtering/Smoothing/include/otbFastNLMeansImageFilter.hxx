@@ -24,6 +24,7 @@
 #include "otbFastNLMeansImageFilter.h"
 #include "itkImageRegionIterator.h"
 #include "itkImageRegionConstIterator.h"
+#include "itkNumericTraits.h"
 #include <vector>
 
 namespace otb
@@ -279,6 +280,7 @@ namespace otb
 	  dataInput[offsetShift[m_ROW]][col+offsetShift[m_COL]];
 	double distance = diff * diff - m_Var;
 	imIntegral[0][col] = distance + imIntegral[0][col-1];
+	assert(imIntegral[0][col] < itk::NumericTraits<double>::max());
       }
     // Compute first column of integral image
     for (unsigned int row=1; row<sizeIn[m_ROW]; row++)
@@ -287,6 +289,7 @@ namespace otb
 	  dataInput[row+offsetShift[m_ROW]][offsetShift[m_COL]];
 	double distance = diff * diff - m_Var;
 	imIntegral[row][0] = distance + imIntegral[row-1][0];
+	assert(imIntegral[row][0] < itk::NumericTraits<double>::max());
       }
     // All initializations have been done previously
     // Remaining coefficients can be computed
@@ -298,6 +301,7 @@ namespace otb
 	  double distance = diff*diff - m_Var;
 	  imIntegral[row][col] = distance + imIntegral[row][col-1] 
 	    + imIntegral[row-1][col] - imIntegral[row-1][col-1];
+	  assert(imIntegral[row][col] < itk::NumericTraits<double>::max());
 	}
     
   }
@@ -313,9 +317,9 @@ namespace otb
     // Thus, (row, col) corresponds, in integral image, to the upper left corner of the local window
     double distance_patch = 
       imIntegral[row+2*m_HalfPatchSize[m_ROW]][col+2*m_HalfPatchSize[m_COL]] 
-      + imIntegral[row][col]
       - imIntegral[row][col+2*m_HalfPatchSize[m_COL]]
-      - imIntegral[row+2*m_HalfPatchSize[m_ROW]][col];
+      - imIntegral[row+2*m_HalfPatchSize[m_ROW]][col]
+      + imIntegral[row][col];
 
     distance_patch = std::max(distance_patch, 0.0) / (m_NormalizeDistance);
     return static_cast<OutPixelType>(distance_patch);
