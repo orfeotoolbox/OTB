@@ -91,8 +91,8 @@ MultiImageFileWriter::Sink<TImage>::GetRegionToWrite() const
       throw e;
     }
     
-    typename itk::ImageRegion<2>::IndexType start {boxVector[0], boxVector[1]};
-    typename itk::ImageRegion<2>::SizeType size {boxVector[2], boxVector[3]};
+    typename itk::ImageRegion<2>::IndexType start {{boxVector[0], boxVector[1]}};
+    typename itk::ImageRegion<2>::SizeType size {{boxVector[2], boxVector[3]}};
     itk::ImageRegion<2> regionToWrite {start , size};
     regionToWrite.Crop(m_InputImage->GetLargestPossibleRegion());
     return regionToWrite;
