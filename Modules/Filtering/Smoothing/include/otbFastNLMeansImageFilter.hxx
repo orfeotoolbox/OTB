@@ -26,6 +26,7 @@
 #include "itkImageRegionConstIterator.h"
 #include "itkNumericTraits.h"
 #include <vector>
+#include <tuple>
 
 namespace otb
 {
@@ -43,11 +44,10 @@ namespace otb
   }
 
   template<class TInputImage, class TOutputImage> 
-  typename NLMeansFilter<TInputImage, TOutputImage>::InRegionType
+  std::tuple< typename NLMeansFilter<TInputImage, TOutputImage>::InRegionType,
+	      int, int, int, int, bool> 
   NLMeansFilter<TInputImage, TOutputImage>::OutputRegionToInputRegion
-  (const OutRegionType& outputRegion, int& mirrorFirstRow, 
-   int& mirrorFirstCol, int& mirrorLastRow, int& mirrorLastCol, 
-   bool& needMirrorPadding) const
+  (const OutRegionType& outputRegion) const
   {
     InImageConstPointerType inputPtr = this->GetInput();
     auto const& inputSize = inputPtr->GetLargestPossibleRegion().GetSize();
@@ -65,6 +65,12 @@ namespace otb
     InIndexType inIndex = outIndex - halfMargin;
     InSizeType requestedSize = outSize + fullMargin;
 
+    // Initialize parameters for mirror padding
+    bool needMirrorPadding = false;
+    int mirrorFirstRow = 0;
+    int mirrorFirstCol = 0;
+    int mirrorLastRow = 0;
+    int mirrorLastCol = 0;
     // Check that the requested region is inside image boundaries
     // If not, store number of missing data and update region
     if (inIndex[m_COL] < 0){
@@ -93,7 +99,8 @@ namespace otb
     }
 
     InRegionType inRequestedRegion(inIndex, requestedSize);
-    return inRequestedRegion;
+    return std::make_tuple(inRequestedRegion, mirrorFirstRow, mirrorFirstCol, 
+			   mirrorLastRow, mirrorLastCol, needMirrorPadding);
   }
 
   template <class TInputImage, class TOutputImage>
@@ -104,10 +111,8 @@ namespace otb
     Superclass::GenerateInputRequestedRegion();
 
     auto const& outputRequestedRegion = this->GetOutput()->GetRequestedRegion();
-    int fr, fc, lr, lc;
-    bool needMirror;
-    InRegionType inRequestedRegion = this->OutputRegionToInputRegion
-      (outputRequestedRegion, fr, fc, lr, lc, needMirror);
+    auto regionAndMirror = this->OutputRegionToInputRegion(outputRequestedRegion);
+    InRegionType inRequestedRegion = std::get<0>(regionAndMirror);
 
     InImageType * inputPtr = const_cast<InImageType * >(this->GetInput());
     inputPtr->SetRequestedRegion(inRequestedRegion);
@@ -119,18 +124,15 @@ namespace otb
   (const OutRegionType& outputRegionForThread, 
    itk::ThreadIdType itkNotUsed(threadId))
   {
-    int mirrorFirstRow=0, mirrorFirstCol=0;
-    int mirrorLastRow=0, mirrorLastCol=0;
-    bool needMirror=false;
-
     InImageConstPointerType inputPtr = this->GetInput();
-    InRegionType inputRegionForThread = OutputRegionToInputRegion
-      (outputRegionForThread, 
-       mirrorFirstRow, 
-       mirrorFirstCol, 
-       mirrorLastRow, 
-       mirrorLastCol,
-       needMirror);
+    auto regionAndMirror = OutputRegionToInputRegion(outputRegionForThread);
+    // Unpack all values returned
+    InRegionType inputRegionForThread = std::get<0>(regionAndMirror);
+    int mirrorFirstRow = std::get<1>(regionAndMirror);
+    int mirrorFirstCol = std::get<2>(regionAndMirror);
+    int mirrorLastRow = std::get<3>(regionAndMirror);
+    int mirrorLastCol = std::get<4>(regionAndMirror);
+    bool needMirror = std::get<5>(regionAndMirror);
 
     // initialize and allocate vector to store temporary output values 
     // It makes it easier to store them in vectors to access various non-contiguous locations

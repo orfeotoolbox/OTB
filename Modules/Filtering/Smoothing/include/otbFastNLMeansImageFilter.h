@@ -112,13 +112,8 @@ namespace otb{
 
     void GenerateInputRequestedRegion() override;
 
-    InRegionType OutputRegionToInputRegion
-      (const OutRegionType& outputRegion, 
-       int& mirrorFirstRow, 
-       int& mirrorFirstCol, 
-       int& mirrorLastRow, 
-       int& mirrorLastCol,
-       bool& needMirror) const;
+    std::tuple<InRegionType, int, int, int, int, bool> OutputRegionToInputRegion
+      (const OutRegionType& outputRegion) const;
 
     /** PrintSelf method */
     void PrintSelf(std::ostream& os, itk::Indent indent) const override;
