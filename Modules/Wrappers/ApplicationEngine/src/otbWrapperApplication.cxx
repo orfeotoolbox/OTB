@@ -864,8 +864,12 @@ void Application::WriteOutput()
     }
   }
   
-  auto multiWriter = otb::MultiImageFileWriter::New();
-  multiWriter->SetAutomaticStrippedStreaming(ram);
+  otb::MultiImageFileWriter::Pointer multiWriter;
+  if (m_MultiWriting)
+    {
+    multiWriter = otb::MultiImageFileWriter::New();
+    multiWriter->SetAutomaticStrippedStreaming(ram);
+    }
   
   for (auto const & key : paramList)
   {
@@ -886,12 +890,10 @@ void Application::WriteOutput()
           outputParam->SetRAMValue(ram);
         }
 
-        outputParam->SetIsMultiWritingRequested(m_MultiWriting);
-        outputParam->SetMultiWriter(multiWriter);
-        outputParam->InitializeWriters();
+        outputParam->InitializeWriters(multiWriter);
         std::ostringstream progressId;
         
-        if (!outputParam->GetIsMultiWritingEnabled())
+        if (!outputParam->IsMultiWritingEnabled())
         {
           progressId << "Writing " << outputParam->GetFileName() << "...";
           AddProcess(outputParam->GetWriter(), progressId.str());
@@ -914,10 +916,10 @@ void Application::WriteOutput()
     }
   }
   
-  if (multiWriter->GetNumberOfInputs() > 0)
+  if (multiWriter && multiWriter->GetNumberOfInputs() > 0)
   {
     std::ostringstream progressId;
-    progressId << "Update the MultiWriter with " << multiWriter->GetNumberOfInputs() << " inputs ...";
+    progressId << "Writing " << multiWriter->GetNumberOfInputs() << " output images ...";
     AddProcess(multiWriter, progressId.str());
     multiWriter->Update();
   }

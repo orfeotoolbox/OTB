@@ -77,16 +77,8 @@ public:
   itkSetMacro(RAMValue, unsigned int);
   itkGetMacro(RAMValue, unsigned int);
 
-  /** Set/Get MultiWriter  */
-  itkSetMacro(MultiWriter, otb::MultiImageFileWriter::Pointer);
-  itkGetMacro(MultiWriter, otb::MultiImageFileWriter::Pointer);
-  
-  /** Set/Get MultiWriting  */
-  itkSetMacro(IsMultiWritingRequested, bool);
-  itkGetMacro(IsMultiWritingRequested, bool);
-
-  /** Get MultiWritingEnabled  */
-  itkGetMacro(IsMultiWritingEnabled, bool);
+  /** Check if multi-writing is enabled (several output images written together)*/
+  bool IsMultiWritingEnabled();
 
   /** Implement the reset method (replace pixel type by default type) */
   void Reset() override
@@ -113,7 +105,8 @@ public:
 
   itk::ProcessObject* GetWriter();
 
-  void InitializeWriters();
+  /** Initialize internal writers, plus the multi-writer  */
+  void InitializeWriters(otb::MultiImageFileWriter::Pointer multi = otb::MultiImageFileWriter::Pointer() );
 
   std::string CheckFileName(bool fixMissingExtension = false);
 
@@ -150,9 +143,6 @@ private:
   template <typename TOutputImage, typename TInputImage>
   void ClampAndWriteVectorImage(TInputImage*);
 
-  template <class TWriter>
-  void addWriterToMultiWriter(typename TWriter::Pointer);
-
   // FloatVectorImageType::Pointer m_Image;
   ImageBaseType::Pointer m_Image;
 
@@ -168,12 +158,7 @@ private:
 
   unsigned int m_RAMValue;
 
-  // Should the outputImageParameter try to register its writer (m_Writer) to the multiwriter (m_MultiWriter)
-  bool m_IsMultiWritingRequested;
-  
-  // Is the writer (m_Writer) registered to the multiWriter ?
-  bool m_IsMultiWritingEnabled;
-
+  /** Multi-writer, used in case several OutputImageParameter are written at once */
   otb::MultiImageFileWriter::Pointer m_MultiWriter;
 }; // End class OutputImage Parameter
 
