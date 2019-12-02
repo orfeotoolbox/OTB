@@ -1806,5 +1806,11 @@ bool Application::IsExecuteDone()
 {
   return m_ExecuteDone;
 }
+
+bool Application::IsMultiWritingEnabled()
+{
+  return m_MultiWriting;
+}
+
 }
 }

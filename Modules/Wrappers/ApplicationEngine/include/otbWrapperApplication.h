@@ -780,7 +780,7 @@ public:
   bool IsExecuteDone();
 
   /** Is multiWriting enabled for this application ? */
-  itkGetConstReferenceMacro(MultiWriting, bool);
+  bool IsMultiWritingEnabled();
 
 protected:
   /** Constructor */

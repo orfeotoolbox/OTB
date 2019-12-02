@@ -360,7 +360,7 @@ public:
   void AddDocTag( const std::string & tag );
   std::vector<std::string> GetDocTags();
 
-  bool GetMultiWriting();
+  bool IsMultiWritingEnabled();
 
   otb::Wrapper::ParameterGroup* GetParameterList();
 
