@@ -135,26 +135,27 @@ namespace otb
     // initialize and allocate vector to store temporary output values 
     // It makes it easier to store them in vectors to access various non-contiguous locations
     auto const& outSize = outputRegionForThread.GetSize();
-    std::vector<std::vector<double> > outTemp(outSize[m_ROW], std::vector<double>(outSize[m_COL]));
+    std::vector<double> outTemp(outSize[m_ROW]*outSize[m_COL]);
     // initialize and allocate buffer to store all weights
-    std::vector<std::vector<double> > weights(outSize[m_ROW], std::vector<double>(outSize[m_COL]));
+    std::vector<double> weights(outSize[m_ROW]*outSize[m_COL]);
 
     typedef itk::ImageRegionConstIterator<InImageType> InIteratorType;
     InIteratorType inIt(inputPtr, inputRegionForThread);
     auto const& inputSize = inputRegionForThread.GetSize();
 
-    InSizeType mirrorSize;
-    mirrorSize[m_COL] = inputSize[m_COL] + mirrorFirstCol + mirrorLastCol;
-    mirrorSize[m_ROW] = inputSize[m_ROW] + mirrorFirstRow + mirrorLastRow;
-    std::vector< std::vector<double> > dataInput 
-      (mirrorSize[m_ROW], std::vector<double>(mirrorSize[m_COL]));
+    auto mirrorCol = inputSize[m_COL] + mirrorFirstCol + mirrorLastCol;
+    auto mirrorRow = inputSize[m_ROW] + mirrorFirstRow + mirrorLastRow;
+    InSizeType const& mirrorSize = {{mirrorCol, mirrorRow}};
+
+    std::vector<double> dataInput(mirrorSize[m_ROW]*mirrorSize[m_COL]);
     inIt.GoToBegin();
     for (unsigned int row=static_cast<unsigned int>(mirrorFirstRow); 
 	 row<static_cast<unsigned int>(mirrorFirstRow)+inputSize[m_ROW]; row++)
       for (unsigned int col=static_cast<unsigned int>(mirrorFirstCol); 
 	   col<static_cast<unsigned int>(mirrorFirstCol)+inputSize[m_COL]; col++)
 	{
-	  dataInput[row][col] = static_cast<double>(inIt.Get());
+	  auto index = row * mirrorSize[m_COL] + col;
+	  dataInput[index] = static_cast<double>(inIt.Get());
 	  ++inIt;
 	}
 
@@ -163,27 +164,27 @@ namespace otb
 	// Perform mirror on upper lines
 	for (int row=0; row<mirrorFirstRow; row++)
 	  {
-	    int lineToCopy = 2*mirrorFirstRow - row;
-	    std::copy(dataInput[lineToCopy].begin(),
-		      dataInput[lineToCopy].end(),
-		      dataInput[row].begin());
+	    int lineToCopy = (2*mirrorFirstRow - row)*mirrorSize[m_COL];
+	    std::copy(dataInput.begin() + lineToCopy,
+		      dataInput.begin() + lineToCopy + mirrorSize[m_COL],
+		      dataInput.begin() + row*mirrorSize[m_COL] );
 	  }
 	// Perform mirror on lower lines
 	int lastRowRead = mirrorFirstRow+inputSize[m_ROW];
 	for (int row=0; row<mirrorLastRow; row++)
 	  {
-	    int lineToCopy = lastRowRead - row -2;
-	    std::copy(dataInput[lineToCopy].begin(),
-		      dataInput[lineToCopy].end(),
-		      dataInput[lastRowRead + row].begin());
+	    int lineToCopy = (lastRowRead - row -2)*mirrorSize[m_COL];
+	    std::copy(dataInput.begin() + lineToCopy,
+		      dataInput.begin() + lineToCopy + mirrorSize[m_COL],
+		      dataInput.begin() + (lastRowRead + row)*mirrorSize[m_COL]);
 	  }
 	// Perform mirror on left-hand columns
 	if (mirrorFirstCol > 0) {
 	  for (unsigned int row=0; row<mirrorSize[m_ROW]; row++)
 	    {
-	      std::reverse_copy(dataInput[row].begin()+mirrorFirstCol+1,
-				dataInput[row].begin()+2*mirrorFirstCol+1,
-				dataInput[row].begin());
+	      std::reverse_copy(dataInput.begin() + row*mirrorSize[m_COL] + mirrorFirstCol+1,
+				dataInput.begin() + row*mirrorSize[m_COL] +2*mirrorFirstCol+1,
+				dataInput.begin() + row*mirrorSize[m_COL]);
 	    }
 		
 	}
@@ -191,9 +192,9 @@ namespace otb
 	if (mirrorLastCol > 0){
 	  for (unsigned int row=0; row<mirrorSize[m_ROW]; row++)
 	    {
-	      std::reverse_copy(dataInput[row].end()-2*mirrorLastCol-1,
-				dataInput[row].end()-mirrorLastCol-1,
-				dataInput[row].end()-mirrorLastCol);
+	      std::reverse_copy(dataInput.begin() + (row+1)*mirrorSize[m_COL] - 2*mirrorLastCol-1,
+				dataInput.begin() + (row+1)*mirrorSize[m_COL] - mirrorLastCol-1,
+				dataInput.begin() + (row+1)*mirrorSize[m_COL] - mirrorLastCol);
 	    }
 	}
       }
@@ -206,26 +207,27 @@ namespace otb
     // Allocate integral image
     const InSizeType sizeTwo = {{2,2}};
     auto const& inSize = outSize + sizeTwo * m_HalfPatchSize;
-    std::vector<std::vector<double> > imIntegral
-      (inSize[m_ROW], std::vector<double>(inSize[m_COL]));
+    
+    std::vector<double> imIntegral(inSize[m_ROW]*inSize[m_COL]);
     for (int drow=-searchSizeRow; drow < searchSizeRow+1; drow++)
       for (int dcol=-searchSizeCol; dcol < searchSizeCol+1; dcol++)
 	{
 	  // Compute integral image for current shift (drow, dcol)
 	  OutIndexType shift = {{dcol, drow}};
-	  ComputeIntegralImage(dataInput, imIntegral, shift, inSize);
+	  ComputeIntegralImage(dataInput, imIntegral, shift, inSize, mirrorSize);
 
 	  for(unsigned int row=0; row<outSize[m_ROW]; row++)
 	    for (unsigned int col=0; col<outSize[m_COL]; col++)
 	      {
 		// Compute distance from integral image for patch centered at 
 		// (row, col) + (m_HalfPatchSize, m_HalfPatchSize)
-		OutPixelType distance = ComputeDistance(row, col, imIntegral);
+		OutPixelType distance = ComputeDistance(row, col, imIntegral, inSize[m_COL]);
 		if (distance < 5.0)
 		  {
 		    double weight = exp(static_cast<double>(-distance));
-		    outTemp[row][col] += weight*dataInput[row+drow+fullMarginRow][col+dcol+fullMarginCol];
-		    weights[row][col] += weight;
+		    outTemp[row*outSize[m_COL] + col] += weight*dataInput[(row+drow+fullMarginRow)*mirrorSize[m_COL] 
+									  + col+dcol+fullMarginCol];
+		    weights[row*outSize[m_COL] + col] += weight;
 		  }
 	      }
 	}
@@ -235,20 +237,19 @@ namespace otb
     OutImagePointerType outputPtr = this->GetOutput();
     OutputIteratorType outIt(outputPtr, outputRegionForThread);
     outIt.GoToBegin();
-    for(unsigned int row=0; row<outSize[m_ROW]; row++)
-      for (unsigned int col=0; col<outSize[m_COL]; col++)
-	{
-	  outIt.Set(static_cast<OutPixelType>(outTemp[row][col]/weights[row][col]));
-	  ++outIt;
-	}
+    for(unsigned int index=0; index<outSize[m_ROW]*outSize[m_COL]; index++)
+      {
+	outIt.Set(static_cast<OutPixelType>(outTemp[index]/weights[index]));
+	++outIt;
+      }
   }
 
   template<class TInputImage, class TOutputImage>
   void 
   NLMeansFilter<TInputImage, TOutputImage>::ComputeIntegralImage
-  (const std::vector<std::vector<double> > & dataInput, 
-   std::vector<std::vector<double> > &imIntegral, 
-   const OutIndexType shift, const InSizeType sizeIn)
+  (const std::vector<double> & dataInput, 
+   std::vector<double> &imIntegral, 
+   const OutIndexType shift, const InSizeType sizeIntegral, const InSizeType sizeInput)
   {
     // dataInput has a margin of m_HalfSearchSize+m_HalfPatchSize to allow
     // computation of all shifts (computation of all integral images)
@@ -256,44 +257,46 @@ namespace otb
     // to compute patches differences for a given shift
     // hence, the first point used in computation for the non-shifted image
     // is located at m_HalfSearchSize
-    InSizeType offsetRef = m_HalfSearchSize;
-    InSizeType offsetShift;
-    offsetShift[m_COL] = offsetRef[m_COL] + shift[m_COL];
-    offsetShift[m_ROW] = offsetRef[m_ROW] + shift[m_ROW];
+    auto const& offsetRef = m_HalfSearchSize;
+    OutSizeType const& offsetShift = {{offsetRef[0] + shift[0], offsetRef[1] + shift[1]}};
 
     // Initialize integral image (compute position (0,0))
-    double diff = dataInput[offsetRef[m_ROW]][offsetRef[m_COL]] - 
-      dataInput[offsetShift[m_ROW]][offsetShift[m_COL]];
-    imIntegral[0][0] = (diff * diff) - m_Var;
+    auto indexInput = offsetRef[m_ROW]*sizeInput[m_COL] + offsetRef[m_COL];
+    auto indexShift = offsetShift[m_ROW]*sizeInput[m_COL] + offsetShift[m_COL];
+    double diff = dataInput[indexInput] - dataInput[indexShift];
+    imIntegral[0] = (diff * diff) - m_Var;
     // Compute first line of integral image
-    for (unsigned int col=1; col<sizeIn[m_COL]; col++)
+    for (unsigned int col=1; col<sizeIntegral[m_COL]; col++)
       {
-	diff = dataInput[offsetRef[m_ROW]][col+offsetRef[m_COL]] - 
-	  dataInput[offsetShift[m_ROW]][col+offsetShift[m_COL]];
+	auto indexInputCol = indexInput + col;
+	auto indexShiftCol = indexShift + col;
+	diff = dataInput[indexInputCol] - dataInput[indexShiftCol];
 	double distance = diff * diff - m_Var;
-	imIntegral[0][col] = distance + imIntegral[0][col-1];
-	assert(imIntegral[0][col] < itk::NumericTraits<double>::max());
+	imIntegral[col] = distance + imIntegral[col-1];
+	assert(imIntegral[col] < itk::NumericTraits<double>::max());
       }
     // Compute first column of integral image
-    for (unsigned int row=1; row<sizeIn[m_ROW]; row++)
+    for (unsigned int row=1; row<sizeIntegral[m_ROW]; row++)
       {
-	diff = dataInput[row+offsetRef[m_ROW]][offsetRef[m_COL]] - 
-	  dataInput[row+offsetShift[m_ROW]][offsetShift[m_COL]];
+	auto indexInputRow = indexInput + row*sizeInput[m_COL];
+	auto indexShiftRow = indexShift + row*sizeInput[m_COL];
+	diff = dataInput[indexInputRow] - dataInput[indexShiftRow];
 	double distance = diff * diff - m_Var;
-	imIntegral[row][0] = distance + imIntegral[row-1][0];
-	assert(imIntegral[row][0] < itk::NumericTraits<double>::max());
+	imIntegral[row*sizeIntegral[m_COL]] = distance + imIntegral[(row-1)*sizeIntegral[m_COL]];
+	assert(imIntegral[row*sizeIntegral[m_COL]] < itk::NumericTraits<double>::max());
       }
     // All initializations have been done previously
     // Remaining coefficients can be computed
-    for (unsigned int row=1; row<sizeIn[m_ROW]; row++)
-      for (unsigned int col=1; col<sizeIn[m_COL]; col++)
+    for (unsigned int row=1; row<sizeIntegral[m_ROW]; row++)
+      for (unsigned int col=1; col<sizeIntegral[m_COL]; col++)
 	{
-	  diff = dataInput[row+offsetRef[m_ROW]][col+offsetRef[m_COL]] - 
-	    dataInput[row+offsetShift[m_ROW]][col+offsetShift[m_COL]];
+	  indexInput = (offsetRef[m_ROW]+row)*sizeInput[m_COL] + offsetRef[m_COL]+col;
+	  indexShift = (offsetShift[m_ROW]+row)*sizeInput[m_COL] + offsetShift[m_COL]+col;
+	  diff = dataInput[indexInput] - dataInput[indexShift];
 	  double distance = diff*diff - m_Var;
-	  imIntegral[row][col] = distance + imIntegral[row][col-1] 
-	    + imIntegral[row-1][col] - imIntegral[row-1][col-1];
-	  assert(imIntegral[row][col] < itk::NumericTraits<double>::max());
+	  imIntegral[row*sizeIntegral[m_COL] + col] = distance + imIntegral[row*sizeIntegral[m_COL] + col-1] 
+	    + imIntegral[(row-1)*sizeIntegral[m_COL] + col] - imIntegral[(row-1)*sizeIntegral[m_COL] + col-1];
+	  assert(imIntegral[row*sizeIntegral[m_COL] + col] < itk::NumericTraits<double>::max());
 	}
     
   }
@@ -302,16 +305,16 @@ namespace otb
   typename NLMeansFilter<TInputImage, TOutputImage>::OutPixelType 
   NLMeansFilter<TInputImage, TOutputImage>::ComputeDistance
   (const unsigned int row, const unsigned int col, 
-   const std::vector<std::vector<double> >& imIntegral)
+   const std::vector<double>& imIntegral, const unsigned int nbCols)
   {
     // (row, col) is the central position of the local window in the output image
     // however, integral image is shifted by (m_HalfPatchSize, m_HalfPatchSize) compared to output image
     // Thus, (row, col) corresponds, in integral image, to the upper left corner of the local window
     double distance_patch = 
-      imIntegral[row+2*m_HalfPatchSize[m_ROW]][col+2*m_HalfPatchSize[m_COL]] 
-      - imIntegral[row][col+2*m_HalfPatchSize[m_COL]]
-      - imIntegral[row+2*m_HalfPatchSize[m_ROW]][col]
-      + imIntegral[row][col];
+      imIntegral[(row+2*m_HalfPatchSize[m_ROW])*nbCols + col+2*m_HalfPatchSize[m_COL]] 
+      - imIntegral[row*nbCols + col+2*m_HalfPatchSize[m_COL]]
+      - imIntegral[(row+2*m_HalfPatchSize[m_ROW])*nbCols + col]
+      + imIntegral[row*nbCols + col];
 
     distance_patch = std::max(distance_patch, 0.0) / (m_NormalizeDistance);
     return static_cast<OutPixelType>(distance_patch);

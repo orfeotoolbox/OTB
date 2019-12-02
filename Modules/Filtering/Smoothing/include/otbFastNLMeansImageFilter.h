@@ -128,13 +128,15 @@ namespace otb{
     NLMeansFilter& operator=(const Self&) = delete; //purposely not implemented
 
     void ComputeIntegralImage(
-       const std::vector<std::vector<double> > & dataInput, 
-       std::vector<std::vector<double> > &imIntegral, 
-       const OutIndexType shift, const InSizeType sizeIn);
+       const std::vector<double> & dataInput, 
+       std::vector<double> &imIntegral, 
+       const OutIndexType shift, const InSizeType sizeIntegral, 
+       const InSizeType sizeInput);
 
     OutPixelType ComputeDistance(const unsigned int row, 
 				 const unsigned int col, 
-				 const std::vector<std::vector<double> >& imIntegral);
+				 const std::vector<double>& imIntegral, 
+				 const unsigned int nbCols);
 
     // Define class attributes
     InSizeType m_HalfSearchSize;
