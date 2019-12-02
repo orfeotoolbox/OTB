@@ -44,7 +44,7 @@ void ImageList<TImage>::UpdateOutputData()
 }
 
 template <class TImage>
-void ImageList<TImage>::PropagateRequestedRegion() throw(itk::InvalidRequestedRegionError)
+void ImageList<TImage>::PropagateRequestedRegion()
 {
   Superclass::PropagateRequestedRegion();
 

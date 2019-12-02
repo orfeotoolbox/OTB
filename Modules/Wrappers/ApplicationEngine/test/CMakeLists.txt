@@ -98,7 +98,7 @@ otb_add_test(NAME owTvInputImageListParameter COMMAND otbApplicationEngineTestDr
 
 otb_add_test(NAME owTvInputVectorDataListParameter COMMAND otbApplicationEngineTestDriver
   otbWrapperInputVectorDataListParameterTest1
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${INPUTDATA}/ToulouseRoads-examples.shp
   "mykey"
   "my description"

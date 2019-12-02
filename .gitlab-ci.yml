@@ -136,9 +136,13 @@ legal-check:
 #------------------------- prepare & build jobs --------------------------------
 debian-build:
   extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:unstable
+  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:testing
+  allow_failure: true
   script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-unstable-gcc
+    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-testing-gcc
+  after_script:
+    - export CI_ALLOW_FAILURE=ON
+    - python3 -u CI/cdash_handler.py
   dependencies: []
 
 ## Ubuntu superbuild
@@ -325,6 +329,7 @@ ubuntu-xdk-report:
     - sonar-scanner -Dproject.settings=sonar-project.properties
                     -Dsonar.host.url=https://sonar.orfeo-toolbox.org
                     -Dsonar.login=$SONAR_OTB_TOKEN
+                    -Dsonar.projectKey=$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME
                     `test -z "$CI_COMMIT_TAG" || echo "-Dsonar.projectVersion=$CI_COMMIT_TAG"`
                     -Dsonar.branch.name=$CI_COMMIT_REF_NAME
 

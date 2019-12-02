@@ -42,9 +42,8 @@ set(OTB_MIN_MSVC_VER 19)
 set(OTB_MIN_Clang_VER 3.4)
 if(DEFINED OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER)
   if(CMAKE_CXX_COMPILER_VERSION AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER})
-    message(STATUS "WARNING: the version of your ${CMAKE_CXX_COMPILER_ID} "
-      "compiler is not supported by Orfeo ToolBox (C++14 support might be "
-      "incomplete). Please consider updating your compiler to version "
+    message(FATAL_ERROR "The version of your ${CMAKE_CXX_COMPILER_ID} "
+      "compiler is not supported by Orfeo ToolBox. Please consider updating your compiler to version "
       "${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER} or later.")
   endif()
 endif()
@@ -212,11 +211,6 @@ endmacro()
 # TODO : handle shared libs on windows
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 mark_as_advanced(BUILD_SHARED_LIBS)
-
-# The following variable can be deleted and replace by BUILD_SHARED_LIBS
-# in otbConfigure.h.in
-set(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
-
 
 if(MSVC)
   option(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "Build OTB with shared libraries." ON)
