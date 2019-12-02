@@ -98,7 +98,7 @@ private:
   /** Method returning whether the confidence map should be computed, depending on the regression mode and input parameters */
   bool shouldComputeConfidenceMap() const;
 
-  /** Method returning the input list sample from the input layer */
+  /** Method returning the input list sample from the input DataSource */
   typename ListSampleType::Pointer ReadInputListSample(ogr::DataSource::Pointer source);
 
   /** Normalize a list sample using the statistic file given  */

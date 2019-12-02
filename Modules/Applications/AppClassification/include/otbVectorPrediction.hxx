@@ -78,7 +78,7 @@ typename VectorPrediction<RegressionMode>::ListSampleType::Pointer VectorPredict
   auto layer  = source->GetLayer(0);
   typename ListSampleType::Pointer input = ListSampleType::New();
 
-  const unsigned int nbFeatures = GetSelectedItems("feat").size();
+  const auto nbFeatures = GetSelectedItems("feat").size();
   input->SetMeasurementVectorSize(nbFeatures);
 
   ogr::Feature             feature = layer.ogr().GetNextFeature();
