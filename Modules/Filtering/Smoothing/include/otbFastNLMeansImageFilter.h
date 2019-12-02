@@ -105,12 +105,12 @@ namespace otb{
     /** Constructor */
     NLMeansFilter();
     /** Destructor */
-    virtual ~NLMeansFilter() {}
+    ~NLMeansFilter() override = default;
 
     void ThreadedGenerateData(const OutRegionType& outputRegionForThread, 
 			      itk::ThreadIdType itkNotUsed(threadId)) override;
 
-    virtual void GenerateInputRequestedRegion(void) override;
+    void GenerateInputRequestedRegion() override;
 
     InRegionType OutputRegionToInputRegion
       (const OutRegionType& outputRegion, 
@@ -124,8 +124,8 @@ namespace otb{
     void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   private:
-    NLMeansFilter(const Self&); //purposely not implemented
-    void operator=(const Self&); //purposely not implemented
+    NLMeansFilter(const Self&) = delete; //purposely not implemented
+    NLMeansFilter& operator=(const Self&) = delete; //purposely not implemented
 
     void ComputeIntegralImage(
        const std::vector<std::vector<double> > & dataInput, 

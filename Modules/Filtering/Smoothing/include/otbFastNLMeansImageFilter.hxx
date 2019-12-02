@@ -50,25 +50,20 @@ namespace otb
    bool& needMirrorPadding) const
   {
     InImageConstPointerType inputPtr = this->GetInput();
-    InSizeType inputSize = inputPtr->GetLargestPossibleRegion().GetSize();
+    auto const& inputSize = inputPtr->GetLargestPossibleRegion().GetSize();
 
     // Get output region specification
-    OutIndexType outIndex = outputRegion.GetIndex();
-    OutSizeType outSize = outputRegion.GetSize();
+    auto const& outIndex = outputRegion.GetIndex();
+    auto const& outSize = outputRegion.GetSize();
 
     // Define margin for processing
-    InSizeType halfMargin;
-    halfMargin = m_HalfSearchSize + m_HalfPatchSize;
-    InSizeType fullMargin;
-    fullMargin[m_COL] = 2*halfMargin[m_COL];
-    fullMargin[m_ROW] = 2*halfMargin[m_ROW];
+    const InSizeType halfMargin = m_HalfSearchSize + m_HalfPatchSize;
+    const InSizeType sizeTwo = {{2,2}};
+    const InSizeType fullMargin = sizeTwo*halfMargin;
 
     // Define region to read
-    InIndexType inIndex; 
-    inIndex = outIndex - halfMargin;
-
-    InSizeType requestedSize;
-    requestedSize = outSize + fullMargin;
+    InIndexType inIndex = outIndex - halfMargin;
+    InSizeType requestedSize = outSize + fullMargin;
 
     // Check that the requested region is inside image boundaries
     // If not, store number of missing data and update region
@@ -108,7 +103,7 @@ namespace otb
     // Call the superclass' implementation of this method
     Superclass::GenerateInputRequestedRegion();
 
-    OutRegionType outputRequestedRegion = this->GetOutput()->GetRequestedRegion();
+    auto const& outputRequestedRegion = this->GetOutput()->GetRequestedRegion();
     int fr, fc, lr, lc;
     bool needMirror;
     InRegionType inRequestedRegion = this->OutputRegionToInputRegion
@@ -139,14 +134,14 @@ namespace otb
 
     // initialize and allocate vector to store temporary output values 
     // It makes it easier to store them in vectors to access various non-contiguous locations
-    OutSizeType outSize = outputRegionForThread.GetSize();
+    auto const& outSize = outputRegionForThread.GetSize();
     std::vector<std::vector<double> > outTemp(outSize[m_ROW], std::vector<double>(outSize[m_COL]));
     // initialize and allocate buffer to store all weights
     std::vector<std::vector<double> > weights(outSize[m_ROW], std::vector<double>(outSize[m_COL]));
 
     typedef itk::ImageRegionConstIterator<InImageType> InIteratorType;
     InIteratorType inIt(inputPtr, inputRegionForThread);
-    InSizeType inputSize = inputRegionForThread.GetSize();
+    auto const& inputSize = inputRegionForThread.GetSize();
 
     InSizeType mirrorSize;
     mirrorSize[m_COL] = inputSize[m_COL] + mirrorFirstCol + mirrorLastCol;
@@ -208,19 +203,16 @@ namespace otb
     int fullMarginCol = static_cast<int>(m_HalfSearchSize[m_COL]+m_HalfPatchSize[m_COL]);
     int searchSizeRow = static_cast<int>(m_HalfSearchSize[m_ROW]);
     int searchSizeCol = static_cast<int>(m_HalfSearchSize[m_COL]);
+    // Allocate integral image
+    const InSizeType sizeTwo = {{2,2}};
+    auto const& inSize = outSize + sizeTwo * m_HalfPatchSize;
+    std::vector<std::vector<double> > imIntegral
+      (inSize[m_ROW], std::vector<double>(inSize[m_COL]));
     for (int drow=-searchSizeRow; drow < searchSizeRow+1; drow++)
       for (int dcol=-searchSizeCol; dcol < searchSizeCol+1; dcol++)
 	{
-	  // Allocate integral image
-	  InSizeType inSize;
-	  inSize[m_COL] = outSize[m_COL] + 2*m_HalfPatchSize[m_COL];
-	  inSize[m_ROW] = outSize[m_ROW] + 2*m_HalfPatchSize[m_ROW];
-	  std::vector<std::vector<double> > imIntegral
-	    (inSize[m_ROW], std::vector<double>(inSize[m_COL]));
 	  // Compute integral image for current shift (drow, dcol)
-	  OutIndexType shift;
-	  shift[m_COL] = dcol;
-	  shift[m_ROW] = drow; 
+	  OutIndexType shift = {{dcol, drow}};
 	  ComputeIntegralImage(dataInput, imIntegral, shift, inSize);
 
 	  for(unsigned int row=0; row<outSize[m_ROW]; row++)
