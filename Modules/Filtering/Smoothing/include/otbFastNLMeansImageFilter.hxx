@@ -251,7 +251,7 @@ namespace otb
   NLMeansFilter<TInputImage, TOutputImage>::ComputeIntegralImage
   (const std::vector<double> & dataInput, 
    std::vector<double> &imIntegral, 
-   const OutIndexType shift, const InSizeType sizeIntegral, const InSizeType sizeInput)
+   const OutIndexType shift, const InSizeType sizeIntegral, const InSizeType sizeInput) const
   {
     // dataInput has a margin of m_HalfSearchSize+m_HalfPatchSize to allow
     // computation of all shifts (computation of all integral images)
@@ -307,7 +307,7 @@ namespace otb
   typename NLMeansFilter<TInputImage, TOutputImage>::OutPixelType 
   NLMeansFilter<TInputImage, TOutputImage>::ComputeDistance
   (const unsigned int row, const unsigned int col, 
-   const std::vector<double>& imIntegral, const unsigned int nbCols)
+   const std::vector<double>& imIntegral, const unsigned int nbCols) const
   {
     // (row, col) is the central position of the local window in the output image
     // however, integral image is shifted by (m_HalfPatchSize, m_HalfPatchSize) compared to output image

@@ -112,6 +112,13 @@ namespace otb{
 
     void GenerateInputRequestedRegion() override;
 
+    /** Compute the requested input region, given an output region. 
+     * If the input requested region is outside the largest input region, a mirror padding
+     * is necessary. The returned tuple is composed of the following paramters : 
+     *  * input requested region (always lie inside the largest input region)
+     *  * top rows, left cols, bottom rows, right cols : numbers of rows/cols to add with a mirror padding
+     *  * boolean : if true, a mirror padding (in at least one direction) has to be computed
+     */
     std::tuple<InRegionType, int, int, int, int, bool> OutputRegionToInputRegion
       (const OutRegionType& outputRegion) const;
 
@@ -122,16 +129,27 @@ namespace otb{
     NLMeansFilter(const Self&) = delete; //purposely not implemented
     NLMeansFilter& operator=(const Self&) = delete; //purposely not implemented
 
+    /** For a given shift in rows and cols, this function computes
+     * the squared difference between the image and its shifted version. 
+     * Results are added to form an integral image.
+     */
     void ComputeIntegralImage(
-       const std::vector<double> & dataInput, 
-       std::vector<double> &imIntegral, 
-       const OutIndexType shift, const InSizeType sizeIntegral, 
-       const InSizeType sizeInput);
+			      const std::vector<double> & dataInput, /**< input data stored in a vector */
+			      std::vector<double> &imIntegral, /**< output parameter. Contains the integral image of squared difference */
+			      const OutIndexType shift, /**< Shift (dcol, drow) to apply to compute the difference */
+			      const InSizeType sizeIntegral, /**< Integral image size */
+			      const InSizeType sizeInput /**< input data image size */
+			      ) const;
 
-    OutPixelType ComputeDistance(const unsigned int row, 
-				 const unsigned int col, 
-				 const std::vector<double>& imIntegral, 
-				 const unsigned int nbCols);
+    /** This function computes the squared euclidean distance 
+     * between a patch and its shifted version. 
+     * Computation relies on the integral image obtained before. 
+     */
+    OutPixelType ComputeDistance(const unsigned int row, /**< Upper left corner row coordinate of patch*/
+				 const unsigned int col, /**< Upper left corner col coordinate of patch*/
+				 const std::vector<double>& imIntegral, /**< Integral image of squared difference*/
+				 const unsigned int nbCols /**< Integral image number of columns */
+				 ) const;
 
     // Define class attributes
     InSizeType m_HalfSearchSize;
