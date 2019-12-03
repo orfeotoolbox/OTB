@@ -108,8 +108,8 @@ otb_test_application(NAME  nlMeansTest_base
                      APP  FastNLMeans
                      OPTIONS -in ${INPUTDATA}/GomaAvant.tif
                              -out ${TEMP}/GomaAvant_NLMeans.tif
-                             -patchsize 2
-                             -searchsize 11
+                             -patchradius 2
+                             -searchradius 11
                              -thresh 30
                      VALID   --compare-image ${EPSILON_7}
                              ${BASELINE}/GomaAvant_NLMeans.tif

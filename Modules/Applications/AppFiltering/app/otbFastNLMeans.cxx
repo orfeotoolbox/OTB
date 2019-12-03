@@ -68,17 +68,17 @@ namespace Wrapper
       AddParameter(ParameterType_OutputImage, "out", "Output Image");
       SetParameterDescription("out","Output image.");
 
-      AddParameter(ParameterType_Int, "patchsize", "Half patch size (patch is a square)");
-      SetParameterDescription("patchsize", "Full patch will have a size of 2*patchsize +1.");
-      SetDefaultParameterInt("patchsize", 2);
-      SetMinimumParameterIntValue("patchsize", 0);
-      MandatoryOff("patchsize");
+      AddParameter(ParameterType_Int, "patchradius", "Patch radius (patch is a square)");
+      SetParameterDescription("patchradius", "Full patch will have a size of 2*patchradius +1.");
+      SetDefaultParameterInt("patchradius", 2);
+      SetMinimumParameterIntValue("patchradius", 0);
+      MandatoryOff("patchradius");
 
-      AddParameter(ParameterType_Int, "searchsize", "Half search window size");
-      SetParameterDescription("searchsize", "Search window is used to find similar patches. Its size will be 2*searchsize+1. It is a squared window.");
-      SetDefaultParameterInt("searchsize", 7);
-      SetMinimumParameterIntValue("searchsize", 0);
-      MandatoryOff("searchsize");
+      AddParameter(ParameterType_Int, "searchradius", "Search window radius (search window is a square)");
+      SetParameterDescription("searchradius", "Search window is used to find similar patches. Its size will be 2*searchradius+1.");
+      SetDefaultParameterInt("searchradius", 7);
+      SetMinimumParameterIntValue("searchradius", 0);
+      MandatoryOff("searchradius");
 
       AddParameter(ParameterType_Float, "sig", "Standard deviation in image");
       SetParameterDescription("sig", "Noise standard deviation estimated in image. This parameter is used to correct for the expected difference between two patches. This filter works fine without using this tuning.");
@@ -109,8 +109,8 @@ namespace Wrapper
       ImageType::Pointer imIn = this->GetParameterFloatImage("in");
       float sigma = this->GetParameterFloat("sig");
       float cutoffDistance = this->GetParameterFloat("thresh");
-      int halfPatchSize = this->GetParameterInt("patchsize");
-      int halfSearchSize = this->GetParameterInt("searchsize");
+      int halfPatchSize = this->GetParameterInt("patchradius");
+      int halfSearchSize = this->GetParameterInt("searchradius");
       NLMeansFilterType::Pointer nlMeansFilter = NLMeansFilterType::New();
       nlMeansFilter->SetInput(imIn);
       nlMeansFilter->SetSigma(sigma);
