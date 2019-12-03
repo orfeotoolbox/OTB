@@ -269,6 +269,12 @@ int Read(const std::string& filename, Application::Pointer this_)
       std::stringstream(value) >> floatValue;
       this_->SetParameterFloat(key, floatValue);
     }
+    else if (type == ParameterType_Double)
+    {
+      double doubleValue;
+      std::stringstream(value) >> doubleValue;
+      this_->SetParameterDouble(key, doubleValue);
+    }
     else if (type == ParameterType_StringList || type == ParameterType_ListView)
     {
       this_->SetParameterStringList(key, values);
