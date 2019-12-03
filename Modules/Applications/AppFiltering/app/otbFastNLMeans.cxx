@@ -28,105 +28,110 @@ namespace otb
 namespace Wrapper
 {
 
-  class FastNLMeans : public Application
+class FastNLMeans : public Application
+{
+public:
+  typedef FastNLMeans                   Self;
+  typedef Application                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  itkNewMacro(Self);
+  itkTypeMacro(FastNLMeans, otb::Wrapper::Application);
+
+  // Define image types
+  typedef float          PixelType;
+  typedef FloatImageType ImageType;
+
+  // Define filter
+  typedef NLMeansFilter<ImageType, ImageType> NLMeansFilterType;
+
+private:
+  void DoInit() override
   {
-  public:
-    typedef FastNLMeans                       Self;
-    typedef Application                   Superclass;
-    typedef itk::SmartPointer<Self>       Pointer;
-    typedef itk::SmartPointer<const Self> ConstPointer;
+    SetName("FastNLMeans");
+    SetDescription("Apply NL Means filter to an image.");
 
-    itkNewMacro(Self);
-    itkTypeMacro(FastNLMeans, otb::Wrapper::Application);
+    SetDocLongDescription("Implementation is an approximation of NL Means, which is faster.");
 
-    // Define image types
-    typedef float                PixelType;
-    typedef FloatImageType       ImageType;
+    // Optional descriptors
+    SetDocLimitations(
+        "This filter relies on integral images. Overflow may happen though the risk is limited "
+        " by OTB mechanism which process data by chunks.");
+    SetDocAuthors("OTB-Team");
+    SetDocSeeAlso(" ");
+    AddDocTag(Tags::Filter);
 
-    // Define filter
-    typedef NLMeansFilter<ImageType, ImageType>   NLMeansFilterType;
+    // Parameter declarations
+    AddParameter(ParameterType_InputImage, "in", "Input image");
+    SetParameterDescription("in", "Input image to denoise");
 
-  private:
-    void DoInit() override
-    {
-      SetName("FastNLMeans");
-      SetDescription("Apply NL Means filter to an image.");
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
+    SetParameterDescription("out", "Output image.");
 
-      SetDocLongDescription("Implementation is an approximation of NL Means, which is faster.");
+    AddParameter(ParameterType_Int, "patchradius", "Patch radius (patch is a square)");
+    SetParameterDescription("patchradius", "Full patch will have a size of 2*patchradius +1.");
+    SetDefaultParameterInt("patchradius", 2);
+    SetMinimumParameterIntValue("patchradius", 0);
+    MandatoryOff("patchradius");
 
-      //Optional descriptors
-      SetDocLimitations("This filter relies on integral images. Overflow may happen though the risk is limited "
-			" by OTB mechanism which process data by chunks.");
-      SetDocAuthors("OTB-Team"); 
-      SetDocSeeAlso(" ");
-      AddDocTag(Tags::Filter);
+    AddParameter(ParameterType_Int, "searchradius", "Search window radius (search window is a square)");
+    SetParameterDescription("searchradius", "Search window is used to find similar patches. Its size will be 2*searchradius+1.");
+    SetDefaultParameterInt("searchradius", 7);
+    SetMinimumParameterIntValue("searchradius", 0);
+    MandatoryOff("searchradius");
 
-      //Parameter declarations
-      AddParameter(ParameterType_InputImage,  "in",   "Input image");
-      SetParameterDescription("in", "Input image to denoise");
+    AddParameter(ParameterType_Float, "sig", "Standard deviation in image");
+    SetParameterDescription("sig",
+                            "Noise standard deviation estimated in image. This parameter is used to correct for the expected difference between two patches. "
+                            "This filter works fine without using this tuning.");
+    SetDefaultParameterFloat("sig", 0);
+    SetMinimumParameterFloatValue("sig", 0);
+    MandatoryOff("sig");
 
-      AddParameter(ParameterType_OutputImage, "out", "Output Image");
-      SetParameterDescription("out","Output image.");
+    AddParameter(ParameterType_Float, "thresh", "Similarity threshold");
+    SetParameterDescription("thresh",
+                            "Factor influencing similarity score of two patches. The higher the threshold, the more permissive the filter. It is common to set "
+                            "this threshold slightly below the standard deviation (for Gaussian noise), at about 0.8*sigma.");
+    SetDefaultParameterFloat("thresh", 1.0);
+    SetMinimumParameterFloatValue("thresh", 0.);
+    MandatoryOff("thresh");
 
-      AddParameter(ParameterType_Int, "patchradius", "Patch radius (patch is a square)");
-      SetParameterDescription("patchradius", "Full patch will have a size of 2*patchradius +1.");
-      SetDefaultParameterInt("patchradius", 2);
-      SetMinimumParameterIntValue("patchradius", 0);
-      MandatoryOff("patchradius");
+    AddRAMParameter();
 
-      AddParameter(ParameterType_Int, "searchradius", "Search window radius (search window is a square)");
-      SetParameterDescription("searchradius", "Search window is used to find similar patches. Its size will be 2*searchradius+1.");
-      SetDefaultParameterInt("searchradius", 7);
-      SetMinimumParameterIntValue("searchradius", 0);
-      MandatoryOff("searchradius");
+    SetDocExampleParameterValue("in", "GomaAvant.tif");
+    SetDocExampleParameterValue("out", "denoisedImage_NLMeans.tif");
+  }
 
-      AddParameter(ParameterType_Float, "sig", "Standard deviation in image");
-      SetParameterDescription("sig", "Noise standard deviation estimated in image. This parameter is used to correct for the expected difference between two patches. This filter works fine without using this tuning.");
-      SetDefaultParameterFloat("sig", 0);
-      SetMinimumParameterFloatValue("sig", 0);
-      MandatoryOff("sig");
+  void DoUpdateParameters() override
+  {
+    // Nothing to do here : all parameters are independent
+  }
 
-      AddParameter(ParameterType_Float, "thresh", "Similarity threshold");
-      SetParameterDescription("thresh", "Factor influencing similarity score of two patches. The higher the threshold, the more permissive the filter. It is common to set this threshold slightly below the standard deviation (for Gaussian noise), at about 0.8*sigma.");
-      SetDefaultParameterFloat("thresh", 1.0);
-      SetMinimumParameterFloatValue("thresh", 0.);
-      MandatoryOff("thresh");
+  void DoExecute() override
+  {
+    // Get the input image
+    ImageType::Pointer         imIn           = this->GetParameterFloatImage("in");
+    float                      sigma          = this->GetParameterFloat("sig");
+    float                      cutoffDistance = this->GetParameterFloat("thresh");
+    int                        halfPatchSize  = this->GetParameterInt("patchradius");
+    int                        halfSearchSize = this->GetParameterInt("searchradius");
+    NLMeansFilterType::Pointer nlMeansFilter  = NLMeansFilterType::New();
+    nlMeansFilter->SetInput(imIn);
+    nlMeansFilter->SetSigma(sigma);
+    nlMeansFilter->SetHalfWindowSize(halfPatchSize);
+    nlMeansFilter->SetHalfSearchSize(halfSearchSize);
+    nlMeansFilter->SetCutOffDistance(cutoffDistance);
 
-      AddRAMParameter();
+    m_FilterRef = nlMeansFilter;
+    SetParameterOutputImage("out", nlMeansFilter->GetOutput());
+    RegisterPipeline();
+  }
 
-      SetDocExampleParameterValue("in", "GomaAvant.tif");
-      SetDocExampleParameterValue("out","denoisedImage_NLMeans.tif");
-    }
+  itk::LightObject::Pointer m_FilterRef;
+}; // end class
 
-    void DoUpdateParameters() override
-    {
-      // Nothing to do here : all parameters are independent
-    }
-	
-    void DoExecute() override
-    {
-      // Get the input image
-      ImageType::Pointer imIn = this->GetParameterFloatImage("in");
-      float sigma = this->GetParameterFloat("sig");
-      float cutoffDistance = this->GetParameterFloat("thresh");
-      int halfPatchSize = this->GetParameterInt("patchradius");
-      int halfSearchSize = this->GetParameterInt("searchradius");
-      NLMeansFilterType::Pointer nlMeansFilter = NLMeansFilterType::New();
-      nlMeansFilter->SetInput(imIn);
-      nlMeansFilter->SetSigma(sigma);
-      nlMeansFilter->SetHalfWindowSize(halfPatchSize);
-      nlMeansFilter->SetHalfSearchSize(halfSearchSize);
-      nlMeansFilter->SetCutOffDistance(cutoffDistance);
-
-      m_FilterRef = nlMeansFilter;
-      SetParameterOutputImage("out", nlMeansFilter->GetOutput());
-      RegisterPipeline();
-    }
-
-    itk::LightObject::Pointer m_FilterRef;
-  }; // end class
-
-}
-}
+} // namespace Wrapper
+} // namespace otb
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::FastNLMeans)

@@ -32,12 +32,12 @@ int otbFastNLMeansImageFilter(int itkNotUsed(argc), char* argv[])
   const char* inputFilename  = argv[1];
   const char* outputFilename = argv[2];
 
-  int HalfPatchSize = atoi(argv[3]);
-  int HalfSearchSize = atoi(argv[4]);
-  float Thresh = atof(argv[5]);
-  
-  typedef float     InputPixelType;
-  typedef float     OutputPixelType;
+  int   HalfPatchSize  = atoi(argv[3]);
+  int   HalfSearchSize = atoi(argv[4]);
+  float Thresh         = atof(argv[5]);
+
+  typedef float InputPixelType;
+  typedef float OutputPixelType;
 
   typedef otb::Image<InputPixelType>  InputImageType;
   typedef otb::Image<OutputPixelType> OutputImageType;
