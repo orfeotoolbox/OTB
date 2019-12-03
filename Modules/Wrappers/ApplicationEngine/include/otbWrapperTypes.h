@@ -37,6 +37,7 @@ namespace Wrapper
 typedef enum {
   ParameterType_Int,
   ParameterType_Float,
+  ParameterType_Double,
   ParameterType_String,
   ParameterType_StringList,
   ParameterType_InputFilename,
@@ -64,6 +65,7 @@ namespace
 {
 constexpr char const* parameterTypesStrings[] = {"Int",
                                                  "Float",
+                                                 "Double",
                                                  "String",
                                                  "StringList",
                                                  "InputFilename",
