@@ -203,6 +203,20 @@ otb_test_application(NAME apTvUtQuicklookROI1Channel
                              ${TEMP}/apTvUtQuicklookROI1Channel.tif
                      )
 
+otb_test_application(NAME apTvUtQuicklookWithGCP
+                     APP Quicklook
+                     OPTIONS -in ${INPUTDATA}/spot5SubWithGcps.tif
+                             -out ${TEMP}/apTvUtQuicklookWithGCP.tif uint8
+                             -sr 4
+                             -rox 100
+                             -roy 100
+                             -rsx 200
+                             -rsy 200
+                     VALID   --compare-metadata ${NOTOL}
+                             ${BASELINE}/apTvUtQuicklookWithGCP.tif
+                             ${TEMP}/apTvUtQuicklookWithGCP.tif
+                     )
+
 otb_test_application(NAME apTvUtQuicklookSpot5
                      APP Quicklook
                      OPTIONS -in LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}

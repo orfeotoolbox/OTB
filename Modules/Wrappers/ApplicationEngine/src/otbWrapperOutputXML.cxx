@@ -250,6 +250,13 @@ void ParseGroup(Application::Pointer app, TiXmlElement* n_App, const std::string
           oss << app->GetParameterFloat(key);
           value = oss.str();
         }
+        else if (type == ParameterType_Double)
+        {
+          std::ostringstream oss;
+          oss << std::setprecision(std::numeric_limits<double>::digits10 + 1);
+          oss << app->GetParameterDouble(key);
+          value = oss.str();
+        }
         else if (type == ParameterType_String || type == ParameterType_InputFilename || type == ParameterType_Directory || type == ParameterType_InputImage ||
                  type == ParameterType_InputVectorData || type == ParameterType_Choice || type == ParameterType_OutputVectorData ||
                  type == ParameterType_OutputFilename || type == ParameterType_Bool)

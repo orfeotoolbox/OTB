@@ -147,40 +147,38 @@ typename VectorPrediction<RegressionMode>::ListSampleType::Pointer VectorPredict
 
 
 template <bool                RegressionMode>
-otb::ogr::DataSource::Pointer VectorPrediction<RegressionMode>::CreateOutputDataSource(otb::ogr::DataSource::Pointer source, otb::ogr::Layer& layer,
-                                                                                       bool updateMode)
+otb::ogr::DataSource::Pointer VectorPrediction<RegressionMode>::ReopenDataSourceInUpdateMode(ogr::DataSource::Pointer source, ogr::Layer& layer,
+                                                                                             ogr::DataSource::Pointer buffer)
 {
   ogr::DataSource::Pointer output;
-  ogr::DataSource::Pointer buffer = ogr::DataSource::New();
-  if (updateMode)
-  {
-    // Update mode
-    otbAppLogINFO("Update input vector data.");
-    // fill temporary buffer for the transfer
-    otb::ogr::Layer inputLayer = layer;
-    layer                      = buffer->CopyLayer(inputLayer, std::string("Buffer"));
-    // close input data source
-    source->Clear();
-    // Re-open input data source in update mode
-    output = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Update_LayerUpdate);
-  }
-  else
-  {
-    // Create new OGRDataSource
-    output                   = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Overwrite);
-    otb::ogr::Layer newLayer = output->CreateLayer(GetParameterString("out"), const_cast<OGRSpatialReference*>(layer.GetSpatialRef()), layer.GetGeomType());
-    // Copy existing fields
-    OGRFeatureDefn& inLayerDefn = layer.GetLayerDefn();
-    for (int k = 0; k < inLayerDefn.GetFieldCount(); k++)
-    {
-      OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
-      newLayer.CreateField(fieldDefn);
-    }
-  }
-
+  // Update mode
+  otbAppLogINFO("Update input vector data.");
+  // fill temporary buffer for the transfer
+  otb::ogr::Layer inputLayer = layer;
+  layer                      = buffer->CopyLayer(inputLayer, std::string("Buffer"));
+  // close input data source
+  source->Clear();
+  // Re-open input data source in update mode
+  output = otb::ogr::DataSource::New(GetParameterString("in"), otb::ogr::DataSource::Modes::Update_LayerUpdate);
   return output;
 }
 
+template <bool                RegressionMode>
+otb::ogr::DataSource::Pointer VectorPrediction<RegressionMode>::CreateOutputDataSource(ogr::DataSource::Pointer source, ogr::Layer& layer)
+{
+  ogr::DataSource::Pointer output;
+  // Create new OGRDataSource
+  output                   = ogr::DataSource::New(GetParameterString("out"), ogr::DataSource::Modes::Overwrite);
+  otb::ogr::Layer newLayer = output->CreateLayer(GetParameterString("out"), const_cast<OGRSpatialReference*>(layer.GetSpatialRef()), layer.GetGeomType());
+  // Copy existing fields
+  OGRFeatureDefn& inLayerDefn = layer.GetLayerDefn();
+  for (int k = 0; k < inLayerDefn.GetFieldCount(); k++)
+  {
+    OGRFieldDefn fieldDefn(inLayerDefn.GetFieldDefn(k));
+    newLayer.CreateField(fieldDefn);
+  }
+  return output;
+}
 
 template <bool RegressionMode>
 void VectorPrediction<RegressionMode>::AddPredictionField(otb::ogr::Layer& outLayer, otb::ogr::Layer const& layer, bool computeConfidenceMap)
@@ -306,7 +304,21 @@ void           VectorPrediction<RegressionMode>::DoExecute()
 
   const bool updateMode = !(IsParameterEnabled("out") && HasValue("out"));
 
-  auto            output   = CreateOutputDataSource(source, layer, updateMode);
+  ogr::DataSource::Pointer buffer;
+  ogr::DataSource::Pointer output;
+
+  if (updateMode)
+  {
+    // in update mode, output is added to input data source.
+    // buffer needs to be allocated here, as its life-cycle is bound to "layer"
+    buffer = ogr::DataSource::New();
+    output = ReopenDataSourceInUpdateMode(source, layer, buffer);
+  }
+  else
+  {
+    output = CreateOutputDataSource(source, layer);
+  }
+
   otb::ogr::Layer outLayer = output->GetLayer(0);
 
   OGRErr errStart = outLayer.ogr().StartTransaction();

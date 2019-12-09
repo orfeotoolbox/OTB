@@ -132,6 +132,8 @@ void InputImageListParameter::SetNthImage(std::size_t i, ImageBaseType* image)
   assert(image != nullptr);
 
   // Check input availability
+  if (image == nullptr)
+    itkExceptionMacro("Image number " << i << " is null. Please check the upstream source.");
   image->UpdateOutputInformation();
 
   // Build parameter.
@@ -142,6 +144,12 @@ void InputImageListParameter::SetNthImage(std::size_t i, ImageBaseType* image)
 /*****************************************************************************/
 void InputImageListParameter::AddImage(ImageBaseType* image)
 {
+
+  // Check input availability
+  if (image == nullptr)
+    itkExceptionMacro("Image is null. Please check the upstream source.");
+  image->UpdateOutputInformation();
+
   AddData(image, [this](auto i) -> auto { return this->FromImage(i); });
 }
 
