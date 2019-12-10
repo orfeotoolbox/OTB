@@ -23,23 +23,17 @@
 namespace otb
 {
 
-void
-StandardOutputPrintCallback
-::Call(std::string const& content)
+void StandardOutputPrintCallback::Call(std::string const& content)
 {
   std::cout << content;
 }
 
-void
-StandardOutputPrintCallback
-::Flush()
+void StandardOutputPrintCallback::Flush()
 {
   std::cout << std::flush;
 }
 
-bool
-StandardOutputPrintCallback
-::IsInteractive()
+bool StandardOutputPrintCallback::IsInteractive()
 {
   return m_IsInteractive;
 }

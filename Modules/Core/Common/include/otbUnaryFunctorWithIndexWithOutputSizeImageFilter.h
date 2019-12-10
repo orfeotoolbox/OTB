@@ -39,15 +39,14 @@ namespace otb
  * \ingroup OTBCommon
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-class ITK_EXPORT UnaryFunctorWithIndexWithOutputSizeImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT UnaryFunctorWithIndexWithOutputSizeImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef UnaryFunctorWithIndexWithOutputSizeImageFilter                   Self;
+  typedef UnaryFunctorWithIndexWithOutputSizeImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -111,7 +110,9 @@ protected:
   /**
    * Destructor
    */
-  ~UnaryFunctorWithIndexWithOutputSizeImageFilter() override {}
+  ~UnaryFunctorWithIndexWithOutputSizeImageFilter() override
+  {
+  }
 
   /** UnaryFunctorWithIndexWithOutputSizeImageFilter can be implemented as a multithreaded filter.
    * Therefore, this implementation provides a ThreadedGenerateData() routine
@@ -143,12 +144,12 @@ protected:
     Superclass::GenerateOutputInformation();
     typename Superclass::OutputImagePointer outputPtr = this->GetOutput();
     outputPtr->SetNumberOfComponentsPerPixel( // propagate vector length info
-      this->GetFunctor().GetOutputSize());
+        this->GetFunctor().GetOutputSize());
   }
 
 private:
-  UnaryFunctorWithIndexWithOutputSizeImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  UnaryFunctorWithIndexWithOutputSizeImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   FunctorType m_Functor;
 };

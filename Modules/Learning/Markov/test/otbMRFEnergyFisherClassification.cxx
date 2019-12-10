@@ -19,18 +19,17 @@
  */
 
 
-
 #include "otbMRFEnergyFisherClassification.h"
 #include "otbImage.h"
 #include <fstream>
 
 
-int otbMRFEnergyFisherClassification(int itkNotUsed(argc), char * argv[])
+int otbMRFEnergyFisherClassification(int itkNotUsed(argc), char* argv[])
 {
-  const char * outputFile = argv[1];
+  const char* outputFile = argv[1];
 
-  typedef double                        PixelTypeInput;
-  typedef int                           PixelTypeLabel;
+  typedef double PixelTypeInput;
+  typedef int    PixelTypeLabel;
   typedef otb::Image<PixelTypeInput, 2> ImageType;
   typedef otb::Image<PixelTypeLabel, 2> LabelType;
 

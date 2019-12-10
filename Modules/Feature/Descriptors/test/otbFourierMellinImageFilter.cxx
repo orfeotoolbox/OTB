@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbForwardFourierMellinTransformImageFilter.h"
@@ -34,33 +32,31 @@
 
 int otbFourierMellinImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputRealFilename = argv[2];
-  const char * outputImaginaryFilename = argv[3];
-  typedef double               InputPixelType;
+  const char*        inputFilename           = argv[1];
+  const char*        outputRealFilename      = argv[2];
+  const char*        outputImaginaryFilename = argv[3];
+  typedef double     InputPixelType;
   const unsigned int Dimension = 2;
 
   typedef otb::Image<InputPixelType, Dimension> InputImageType;
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileWriter<InputImageType>  WriterType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<InputImageType> WriterType;
 
   typedef itk::LinearInterpolateImageFunction<InputImageType, double> InterpolatorType;
-  typedef otb::ForwardFourierMellinTransformImageFilter<InputPixelType, InterpolatorType,
-      Dimension> FourierMellinTransformType;
-  typedef FourierMellinTransformType::OutputImageType                    OutputImageType;
-  typedef itk::ComplexToRealImageFilter<OutputImageType, InputImageType> RealFilterType;
-  typedef itk::ComplexToImaginaryImageFilter<OutputImageType,
-      InputImageType>                        ImaginaryFilterType;
-  typedef itk::RescaleIntensityImageFilter<InputImageType, InputImageType> RescalerType;
+  typedef otb::ForwardFourierMellinTransformImageFilter<InputPixelType, InterpolatorType, Dimension> FourierMellinTransformType;
+  typedef FourierMellinTransformType::OutputImageType OutputImageType;
+  typedef itk::ComplexToRealImageFilter<OutputImageType, InputImageType>      RealFilterType;
+  typedef itk::ComplexToImaginaryImageFilter<OutputImageType, InputImageType> ImaginaryFilterType;
+  typedef itk::RescaleIntensityImageFilter<InputImageType, InputImageType>    RescalerType;
 
   FourierMellinTransformType::Pointer FourierMellinTransform = FourierMellinTransformType::New();
-  RealFilterType::Pointer             real = RealFilterType::New();
-  ImaginaryFilterType::Pointer        imaginary = ImaginaryFilterType::New();
-  RescalerType::Pointer               realRescaler = RescalerType::New();
-  RescalerType::Pointer               imaginaryRescaler = RescalerType::New();
+  RealFilterType::Pointer             real                   = RealFilterType::New();
+  ImaginaryFilterType::Pointer        imaginary              = ImaginaryFilterType::New();
+  RescalerType::Pointer               realRescaler           = RescalerType::New();
+  RescalerType::Pointer               imaginaryRescaler      = RescalerType::New();
 
-  ReaderType::Pointer reader = ReaderType::New();
-  WriterType::Pointer realWriter = WriterType::New();
+  ReaderType::Pointer reader          = ReaderType::New();
+  WriterType::Pointer realWriter      = WriterType::New();
   WriterType::Pointer imaginaryWriter = WriterType::New();
 
   reader->SetFileName(inputFilename);
@@ -89,9 +85,9 @@ int otbFourierMellinImageFilter(int itkNotUsed(argc), char* argv[])
 
   imaginaryWriter->SetInput(imaginaryRescaler->GetOutput());
   imaginaryWriter->Update();
-  // Hugly hack for cleaning fftw threads
-  #if defined( ITK_USE_FFTWF ) || defined( ITK_USE_FFTWD )
+// Hugly hack for cleaning fftw threads
+#if defined(ITK_USE_FFTWF) || defined(ITK_USE_FFTWD)
   fftw_cleanup_threads();
-  #endif
+#endif
   return EXIT_SUCCESS;
 }

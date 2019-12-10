@@ -66,10 +66,10 @@ class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageFileWriter                                   Self;
-  typedef itk::ProcessObject                                Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef ImageFileWriter               Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -90,11 +90,10 @@ public:
   typedef typename Superclass::DataObjectPointer DataObjectPointer;
 
   /** The Filename Helper. */
-  typedef ExtendedFilenameToWriterOptions            FNameHelperType;
+  typedef ExtendedFilenameToWriterOptions FNameHelperType;
 
   /** Dimension of input image. */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Streaming manager base class pointer */
   typedef StreamingManager<InputImageType>       StreamingManagerType;
@@ -103,16 +102,16 @@ public:
   /**  Return the StreamingManager object responsible for dividing
    *   the region to write */
   StreamingManagerType* GetStreamingManager(void)
-    {
+  {
     return m_StreamingManager;
-    }
+  }
 
   /**  Set a user-specified implementation of StreamingManager
    *   used to divide the largest possible region in several divisions */
   void SetStreamingManager(StreamingManagerType* streamingManager)
-    {
+  {
     m_StreamingManager = streamingManager;
-    }
+  }
 
   /**  Set the streaming mode to 'stripped' and configure the number of strips
    *   which will be used to stream the image */
@@ -164,7 +163,7 @@ public:
 
   /** Set the only input of the writer */
   using Superclass::SetInput;
-  virtual void SetInput(const InputImageType *input);
+  virtual void SetInput(const InputImageType* input);
 
   /** Get writer only input */
   const InputImageType* GetInput();
@@ -175,7 +174,7 @@ public:
 
   virtual void SetFileName(const std::string& extendedFileName);
 
-  virtual const char* GetFileName () const;
+  virtual const char* GetFileName() const;
 
   /** Specify the region to write. If left NULL, then the whole image
    * is written. */
@@ -202,7 +201,7 @@ public:
   itkGetConstObjectMacro(ImageIO, otb::ImageIOBase);
 
   /** This override doesn't return a const ref on the actual boolean */
-  const bool & GetAbortGenerateData() const override;
+  const bool& GetAbortGenerateData() const override;
 
   void SetAbortGenerateData(const bool val) override;
 
@@ -218,58 +217,58 @@ protected:
   void GenerateOutputInformation(void) override;
 
 private:
-  ImageFileWriter(const ImageFileWriter &) = delete;
-  void operator =(const ImageFileWriter&) = delete;
+  ImageFileWriter(const ImageFileWriter&) = delete;
+  void operator=(const ImageFileWriter&) = delete;
 
-  void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject & event )
+  void ObserveSourceFilterProgress(itk::Object* object, const itk::EventObject& event)
   {
     if (typeid(event) != typeid(itk::ProgressEvent))
-      {
+    {
       return;
-      }
+    }
 
     itk::ProcessObject* processObject = dynamic_cast<itk::ProcessObject*>(object);
     if (processObject)
-      {
+    {
       m_DivisionProgress = processObject->GetProgress();
-      }
+    }
 
     this->UpdateFilterProgress();
   }
 
   void UpdateFilterProgress()
   {
-    this->UpdateProgress( (m_DivisionProgress + m_CurrentDivision) / m_NumberOfDivisions );
+    this->UpdateProgress((m_DivisionProgress + m_CurrentDivision) / m_NumberOfDivisions);
   }
 
   unsigned int m_NumberOfDivisions;
   unsigned int m_CurrentDivision;
-  float m_DivisionProgress;
+  float        m_DivisionProgress;
 
   /** ImageFileWriter Parameters */
   std::string m_FileName;
 
   otb::ImageIOBase::Pointer m_ImageIO;
 
-  bool m_UserSpecifiedImageIO; //track whether the ImageIO is user specified
+  bool m_UserSpecifiedImageIO; // track whether the ImageIO is user specified
 
   itk::ImageIORegion m_IORegion;
-  bool               m_UserSpecifiedIORegion; // track whether the region is user specified
-  bool m_FactorySpecifiedImageIO; //track whether the factory mechanism set the ImageIO
-  bool m_UseCompression;
-  bool m_UseInputMetaDataDictionary; // whether to use the
-                                     // MetaDataDictionary from the
-                                     // input or not.
+  bool               m_UserSpecifiedIORegion;   // track whether the region is user specified
+  bool               m_FactorySpecifiedImageIO; // track whether the factory mechanism set the ImageIO
+  bool               m_UseCompression;
+  bool               m_UseInputMetaDataDictionary; // whether to use the
+                                                   // MetaDataDictionary from the
+                                                   // input or not.
 
-  bool m_WriteGeomFile;              // Write a geom file to store the
-                                     // kwl
+  bool m_WriteGeomFile; // Write a geom file to store the
+                        // kwl
 
   FNameHelperType::Pointer m_FilenameHelper;
 
   StreamingManagerPointerType m_StreamingManager;
 
-  bool          m_IsObserving;
-  unsigned long m_ObserverID;
+  bool           m_IsObserving;
+  unsigned long  m_ObserverID;
   InputIndexType m_ShiftOutputIndex;
 
   /** Mapping between origin components and output components (before any
@@ -295,9 +294,10 @@ private:
 #include "otbVectorImage.h"
 #include <complex>
 
-namespace otb {
+namespace otb
+{
 
-// Prevent implicit instanciation of common types to improve build performance
+// Prevent implicit instantiation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<unsigned int, 2>>;
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<int, 2>>;
@@ -323,7 +323,6 @@ extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<std
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<std::complex<short>, 2>>;
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<std::complex<float>, 2>>;
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<VectorImage<std::complex<double>, 2>>;
-
 }
 
 #endif

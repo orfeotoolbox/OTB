@@ -24,22 +24,22 @@
 #include "otbImageFileWriter.h"
 #include "otbMultiChannelExtractROI.h"
 
-int otbImageToReflectanceImageFilterAuto(int itkNotUsed(argc), char * argv[])
+int otbImageToReflectanceImageFilterAuto(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFileName  = argv[1];
-  const char * outputFileName = argv[2];
+  const char* inputFileName  = argv[1];
+  const char* outputFileName = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef double                                                              PixelType;
-  typedef otb::VectorImage<PixelType, Dimension>                              InputImageType;
-  typedef otb::VectorImage<PixelType, Dimension>                              OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>                                ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                               WriterType;
+  typedef double     PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
+  typedef otb::VectorImage<PixelType, Dimension> OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::ImageToReflectanceImageFilter<InputImageType, OutputImageType> ImageToReflectanceImageFilterType;
 
-  typedef otb::MultiChannelExtractROI<PixelType, PixelType>                   RoiFilterType;
+  typedef otb::MultiChannelExtractROI<PixelType, PixelType> RoiFilterType;
 
-  ReaderType::Pointer reader  = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);

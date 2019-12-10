@@ -27,39 +27,33 @@
 namespace otb
 {
 
-template<class TImage, class TOutputVectorData>
-PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
-::PersistentImageToVectorDataFilter()
+template <class TImage, class TOutputVectorData>
+PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::PersistentImageToVectorDataFilter()
 {
-  m_ExtractFilter = ExtractImageFilterType::New();
+  m_ExtractFilter    = ExtractImageFilterType::New();
   m_OutputVectorData = OutputVectorDataType::New();
 
   m_VectorDataIO = OGRVectorDataIOType::New();
 }
 
-template<class TImage, class TOutputVectorData>
-typename PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::OutputVectorDataType *
-PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
-::GetOutputVectorData() const
+template <class TImage, class TOutputVectorData>
+typename PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::OutputVectorDataType*
+PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::GetOutputVectorData() const
 {
   return m_OutputVectorData;
 }
 
-template<class TImage, class TOutputVectorData>
-void
-PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
-::AllocateOutputs()
+template <class TImage, class TOutputVectorData>
+void PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::AllocateOutputs()
 {
   // Nothing that needs to be allocated for the outputs : the output is not meant to be used
 }
 
-template<class TImage, class TOutputVectorData>
-void
-PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
-::Reset()
+template <class TImage, class TOutputVectorData>
+void PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::Reset()
 {
   typedef typename OutputVectorDataType::DataNodeType DataNodeType;
-  typedef typename DataNodeType::Pointer DataNodePointerType;
+  typedef typename DataNodeType::Pointer              DataNodePointerType;
 
   this->GetOutputVectorData()->Clear();
   DataNodePointerType root = DataNodeType::New();
@@ -73,21 +67,16 @@ PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
   document->SetNodeType(otb::DOCUMENT);
 
   this->GetOutputVectorData()->GetDataTree()->Add(document, this->GetOutputVectorData()->GetDataTree()->GetRoot()->Get());
-  this->GetOutputVectorData()->GetDataTree()->Add(folder , document);
+  this->GetOutputVectorData()->GetDataTree()->Add(folder, document);
 }
 
-template<class TImage, class TOutputVectorData>
-void
-PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
-::Synthetize()
+template <class TImage, class TOutputVectorData>
+void PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::Synthetize()
 {
-
 }
 
-template<class TImage, class TOutputVectorData>
-void
-PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
-::GenerateData()
+template <class TImage, class TOutputVectorData>
+void PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::GenerateData()
 {
   // call the processing function for this tile
   OutputVectorDataPointerType currentTileVD = this->ProcessTile();
@@ -104,13 +93,11 @@ PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
   concatenate->GetOutput()->SetMetaDataDictionary(currentTileVD->GetMetaDataDictionary());
 
   // copy metadata and reference the same data tree
-  output->Graft( concatenate->GetOutput() );
+  output->Graft(concatenate->GetOutput());
 }
 
-template<class TImage, class TOutputVectorData>
-void
-PersistentImageToVectorDataFilter<TImage, TOutputVectorData>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TImage, class TOutputVectorData>
+void PersistentImageToVectorDataFilter<TImage, TOutputVectorData>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

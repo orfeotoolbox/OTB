@@ -32,33 +32,29 @@ namespace otb
  * \brief Anti-speckle image filter
  *
  * This class implements Gamma MAP filter for despeckleing of SAR
- * images. 
+ * images.
  *
  * (http://www.isprs.org/proceedings/XXXV/congress/comm2/papers/110.pdf)
- * 
+ *
  * \ingroup OTBImageNoise
  */
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT GammaMAPImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT GammaMAPImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**   Extract input and output image dimension */
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension,
-                      unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
   /** standard class typedefs */
-  typedef GammaMAPImageFilter                                           Self;
+  typedef GammaMAPImageFilter Self;
   typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Object factory management */
   itkNewMacro(Self);
@@ -90,23 +86,23 @@ public:
    * in order to inform the pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion()
-    throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
 protected:
   GammaMAPImageFilter();
-  ~GammaMAPImageFilter() override {}
+  ~GammaMAPImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** GammaMAPImageFilter can be multithreaded.
    */
-  
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  GammaMAPImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  GammaMAPImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Radius of the filter */
   SizeType m_Radius;

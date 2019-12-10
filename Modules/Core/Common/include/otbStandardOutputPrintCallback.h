@@ -29,10 +29,10 @@ namespace otb
 /** \class StandardOutputPrintCallback
  *  \brief Class with printing callback methods using the standard output
  *
- *  This class defines the Call method, used to write a string the standard 
- *  output, the Flush method, used to flush it, and the IsInteractive 
+ *  This class defines the Call method, used to write a string the standard
+ *  output, the Flush method, used to flush it, and the IsInteractive
  *  method used to determine if the output is the console.
- *  
+ *
  *  \see otb::StandardOneLineFilterWatcher
  *
  * \ingroup OTBCommon
@@ -42,7 +42,7 @@ class OTBCommon_EXPORT StandardOutputPrintCallback
 {
 public:
   /** Constructor */
-  StandardOutputPrintCallback() :m_IsInteractive( System::IsInteractive(1)) {};
+  StandardOutputPrintCallback() : m_IsInteractive(System::IsInteractive(1)){};
 
   /** Destructor */
   virtual ~StandardOutputPrintCallback() = default;
@@ -55,7 +55,7 @@ public:
 
   /** Determine if the output is interactive */
   bool IsInteractive();
-  
+
 private:
   /** flag determining if the output is interactive */
   bool m_IsInteractive;

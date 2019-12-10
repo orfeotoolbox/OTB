@@ -42,16 +42,15 @@ namespace otb
  * \ingroup OTBConversion
  */
 template <class TInputLabelImage, class TInputSpectralImage, class TOutputLabelImage = TInputLabelImage, class TOutputClusteredImage = TInputSpectralImage>
-class ITK_EXPORT LabelImageRegionMergingFilter
-  : public itk::ImageToImageFilter<TInputLabelImage, TOutputLabelImage>
+class ITK_EXPORT LabelImageRegionMergingFilter : public itk::ImageToImageFilter<TInputLabelImage, TOutputLabelImage>
 {
 public:
   /** Standard class typedef */
-  typedef LabelImageRegionMergingFilter                                Self;
+  typedef LabelImageRegionMergingFilter Self;
   typedef itk::ImageToImageFilter<TInputLabelImage, TOutputLabelImage> Superclass;
-  typedef itk::SmartPointer<Self>                                      Pointer;
-  typedef itk::SmartPointer<const Self>                                ConstPointer;
-  typedef double                                                       RealType;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef double                        RealType;
 
   /** Type macro */
   itkTypeMacro(LabelImageRegionMergingFilter, ImageToImageFilter);
@@ -77,18 +76,18 @@ public:
   typedef TOutputLabelImage                        OutputLabelImageType;
   typedef typename OutputLabelImageType::PixelType OutputLabelType;
 
-  typedef TOutputLabelImage                     OutputImageType;
-  typedef typename OutputImageType::Pointer     OutputImagePointerType;
-  typedef typename OutputImageType::PixelType   OutputPixelType;
-  typedef typename OutputImageType::RegionType  OutputRegionType;
+  typedef TOutputLabelImage                    OutputImageType;
+  typedef typename OutputImageType::Pointer    OutputImagePointerType;
+  typedef typename OutputImageType::PixelType  OutputPixelType;
+  typedef typename OutputImageType::RegionType OutputRegionType;
 
-  typedef TOutputClusteredImage                   OutputClusteredImageType;
+  typedef TOutputClusteredImage OutputClusteredImageType;
 
   itkStaticConstMacro(ImageDimension, unsigned int, InputLabelImageType::ImageDimension);
 
   /** Typedefs for region adjacency map */
-  typedef InputLabelType      LabelType;
-  typedef std::set<LabelType> AdjacentLabelsContainerType;
+  typedef InputLabelType                           LabelType;
+  typedef std::set<LabelType>                      AdjacentLabelsContainerType;
   typedef std::vector<AdjacentLabelsContainerType> RegionAdjacencyMapType;
 
 
@@ -97,29 +96,29 @@ public:
   itkGetMacro(RangeBandwidth, RealType);
 
   /** Returns the const image of region labels */
-  const OutputLabelImageType * GetLabelOutput() const;
+  const OutputLabelImageType* GetLabelOutput() const;
   /** Returns the image of region labels */
-  OutputLabelImageType * GetLabelOutput();
+  OutputLabelImageType* GetLabelOutput();
   /** Returns the const clustered output image, with one spectral value per region  */
-  const OutputClusteredImageType * GetClusteredOutput() const;
+  const OutputClusteredImageType* GetClusteredOutput() const;
   /** Returns the clustered output image, with one spectral value per region  */
-  OutputClusteredImageType * GetClusteredOutput();
+  OutputClusteredImageType* GetClusteredOutput();
 
   /** Sets the input image where the value of a pixel is the region id */
-  void SetInputLabelImage( const InputLabelImageType * labelImage);
+  void SetInputLabelImage(const InputLabelImageType* labelImage);
   /** Sets the input image representing spectral values */
-  void SetInputSpectralImage( const InputSpectralImageType * spectralImage);
+  void SetInputSpectralImage(const InputSpectralImageType* spectralImage);
   /** Returns input label image */
-  InputLabelImageType * GetInputLabelImage();
+  InputLabelImageType* GetInputLabelImage();
   /** Returns input spectral image */
-  InputSpectralImageType * GetInputSpectralImage();
+  InputSpectralImageType* GetInputSpectralImage();
 
 protected:
-  void EnlargeOutputRequestedRegion( itk::DataObject *output ) override;
+  void EnlargeOutputRequestedRegion(itk::DataObject* output) override;
 
-   void GenerateOutputInformation(void) override;
+  void GenerateOutputInformation(void) override;
 
-   void GenerateData() override;
+  void GenerateData() override;
 
   /** Constructor */
   LabelImageRegionMergingFilter();
@@ -134,19 +133,19 @@ protected:
   RegionAdjacencyMapType LabelImageToRegionAdjacencyMap(typename OutputLabelImageType::Pointer inputLabelImage);
 
 private:
-  LabelImageRegionMergingFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  LabelImageRegionMergingFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Range bandwidth */
-  RealType                       m_RangeBandwidth;
+  RealType m_RangeBandwidth;
   /** Number of components per pixel in the input image */
-  unsigned int                   m_NumberOfComponentsPerPixel;
+  unsigned int m_NumberOfComponentsPerPixel;
   /** This contains the label to which each label will be merged */
-  std::vector<LabelType>         m_CanonicalLabels;
+  std::vector<LabelType> m_CanonicalLabels;
   /** Contains the spectral value for each region */
   std::vector<SpectralPixelType> m_Modes;
   /** Number of points in each region */
-  std::vector<unsigned int>      m_PointCounts;
+  std::vector<unsigned int> m_PointCounts;
 };
 
 } // end namespace otb

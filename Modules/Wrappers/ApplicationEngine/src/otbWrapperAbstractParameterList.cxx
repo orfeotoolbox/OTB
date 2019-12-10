@@ -30,14 +30,12 @@ namespace Wrapper
 
 
 /*****************************************************************************/
-AbstractParameterList
-::AbstractParameterList()
+AbstractParameterList::AbstractParameterList()
 {
 }
 
 /*****************************************************************************/
-AbstractParameterList
-::~AbstractParameterList()
+AbstractParameterList::~AbstractParameterList()
 {
 }
 

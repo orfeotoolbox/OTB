@@ -119,14 +119,14 @@ namespace ossimplugins
       // Capture stream flags since we are going to mess with them.
       std::ios_base::fmtflags f = out.flags();
 
-      out << "\nDump of ossimCosmoSkymedModel at address " << hex << this
-          << dec
+      out << "\nDump of ossimCosmoSkymedModel at address " << std::hex << this
+          << std::dec
           << "\n------------------------------------------------"
           << "\n  theImageID            = " << theImageID
           << "\n  theImageSize          = " << theImageSize
 
           << "\n------------------------------------------------"
-          << "\n  " << endl;
+          << "\n  " << std::endl;
 
       // Set the flags back.
       out.flags(f);
@@ -268,10 +268,10 @@ namespace ossimplugins
 	  }
       }
 
-    int nbRasterCout = dataset->GetRasterCount();
+    int nbRasterCount = dataset->GetRasterCount();
 
     // Metadata for each Band
-    for (int iBand = 0; iBand < dataset->GetRasterCount(); iBand++)
+    for (int iBand = 0; iBand < nbRasterCount; iBand++)
       {
 	std::map<std::string, std::string> mapCurrentBand;
 
@@ -475,6 +475,8 @@ namespace ossimplugins
 				       ossimplugins::time::toModifiedJulianDate(first_line_time));
     burstRecord.azimuthStopTime  = add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  
 				       ossimplugins::time::toModifiedJulianDate(last_line_time));
+
+    burstRecord.azimuthAnxTime = add(theProductKwl, BURST_PREFIX, "[0].azimuth_anx_time", 0);
 
     theBurstRecords.push_back(burstRecord);
     

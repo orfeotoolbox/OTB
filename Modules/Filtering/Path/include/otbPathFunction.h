@@ -44,18 +44,15 @@ namespace otb
  *
  * \ingroup OTBPath
  */
-template <class TInputPath,
-    class TOutput>
-class ITK_EXPORT PathFunction :
-  public itk::FunctionBase<TInputPath, TOutput>
+template <class TInputPath, class TOutput>
+class ITK_EXPORT PathFunction : public itk::FunctionBase<TInputPath, TOutput>
 {
 public:
-
   /** Standard class typedefs. */
-  typedef PathFunction                           Self;
+  typedef PathFunction Self;
   typedef itk::FunctionBase<TInputPath, TOutput> Superclass;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PathFunction, itk::FunctionBase);
@@ -70,25 +67,26 @@ public:
   typedef typename Superclass::OutputType OutputType;
 
   /** Set the input path. */
-  virtual void SetInputPath(const InputPathType * ptr);
+  virtual void SetInputPath(const InputPathType* ptr);
 
   /** Get the input path. */
-  const InputPathType * GetInputPath() const
+  const InputPathType* GetInputPath() const
   {
     return m_Path.GetPointer();
   }
 
 protected:
   PathFunction();
-  ~PathFunction() override {}
+  ~PathFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   InputPathConstPointer m_Path;
 
 private:
-  PathFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  PathFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // namespace otb

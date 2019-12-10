@@ -56,13 +56,11 @@ private:
   void DoCreateWidget() override;
   void DoUpdateGUI() override;
 
-  QHBoxLayout *           m_QHBoxLayout;
-  QtWidgetDoubleSpinBox *    m_QDoubleSpinBox;
+  QHBoxLayout*           m_QHBoxLayout;
+  QtWidgetDoubleSpinBox* m_QDoubleSpinBox;
 
   FloatParameter::Pointer m_FloatParam;
 };
-
-
 }
 }
 

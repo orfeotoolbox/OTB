@@ -25,9 +25,10 @@
 #include "otbFunctorImageFilter.h"
 
 namespace otb
- {
+{
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class ReciprocalCovarianceToCoherencyDegreeFunctor
  * \brief Evaluate the Coherency Degree coefficient from from the MLC image
@@ -48,13 +49,13 @@ namespace Functor {
  * \ingroup OTBPolarimetry
  */
 
-template< class TInput, class TOutput>
+template <class TInput, class TOutput>
 class ReciprocalCovarianceToCoherencyDegreeFunctor
 {
 public:
-  typedef double                                   RealType;
-  typedef typename std::complex <double>           ComplexType;
-  typedef typename TOutput::ValueType              OutputValueType;
+  typedef double                        RealType;
+  typedef typename std::complex<double> ComplexType;
+  typedef typename TOutput::ValueType   OutputValueType;
 
   inline void operator()(TOutput& result, const TInput& Covariance) const
   {
@@ -66,37 +67,37 @@ public:
      * \f$ C_{23} = S_{hv}*S_{vv}^* \f$
      * \f$ C_{33} = S_{vv}*S_{vv}^* \f$
      */
-    const RealType    C11 =  static_cast<RealType>(Covariance[0].real());
-    const ComplexType C12 =  static_cast<ComplexType>(Covariance[1]);
-    const ComplexType C13 =  static_cast<ComplexType>(Covariance[2]);
-    const RealType    C22 =  static_cast<RealType>(Covariance[3].real());
-    const ComplexType C23 =  static_cast<ComplexType>(Covariance[4]);
-    const RealType    C33 =  static_cast<RealType>(Covariance[5].real());
+    const RealType    C11 = static_cast<RealType>(Covariance[0].real());
+    const ComplexType C12 = static_cast<ComplexType>(Covariance[1]);
+    const ComplexType C13 = static_cast<ComplexType>(Covariance[2]);
+    const RealType    C22 = static_cast<RealType>(Covariance[3].real());
+    const ComplexType C23 = static_cast<ComplexType>(Covariance[4]);
+    const RealType    C33 = static_cast<RealType>(Covariance[5].real());
 
-    if ((C11 >m_Epsilon) && (C33 > m_Epsilon))
-      {
+    if ((C11 > m_Epsilon) && (C33 > m_Epsilon))
+    {
       result[0] = std::abs(C13) / std::sqrt(C11 * C33); // |<hh.vv*|/sqrt(<hh.hh*><vv.vv*>)
-      }
+    }
 
     if ((C22 > m_Epsilon) && (C33 > m_Epsilon))
-      {
-      result[1] = std::abs(C23) / std::sqrt(C22 * C33);  // |<hv.vv*|/sqrt(<hv.hv*><vv.vv*>)
-      }
-
-    if ((C11 > m_Epsilon) && (C22 > m_Epsilon) )
-      {
-      result[2] = std::abs(C12) / std::sqrt(C11 * C22);  // |<hh.hv*|/sqrt(<hh.hh*><hv.hv*>)
-      }
-    }
-
-    constexpr size_t OutputSize(...) const
     {
-      // Size of the result
-      return 3;
+      result[1] = std::abs(C23) / std::sqrt(C22 * C33); // |<hv.vv*|/sqrt(<hv.hv*><vv.vv*>)
     }
 
-  private:
-    static constexpr double m_Epsilon = 1e-6;
+    if ((C11 > m_Epsilon) && (C22 > m_Epsilon))
+    {
+      result[2] = std::abs(C12) / std::sqrt(C11 * C22); // |<hh.hv*|/sqrt(<hh.hh*><hv.hv*>)
+    }
+  }
+
+  constexpr size_t OutputSize(...) const
+  {
+    // Size of the result
+    return 3;
+  }
+
+private:
+  static constexpr double m_Epsilon = 1e-6;
 };
 } // namespace Functor
 

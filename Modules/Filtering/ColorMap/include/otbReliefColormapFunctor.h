@@ -23,9 +23,11 @@
 
 #include "itkColormapFunction.h"
 
-namespace otb {
+namespace otb
+{
 
-namespace Functor {
+namespace Functor
+{
 
 /**
  * \class ReliefColormapFunctor
@@ -40,16 +42,14 @@ namespace Functor {
  *
  * \ingroup OTBColorMap
  */
-template<class TScalar, class TRGBPixel>
-class ITK_EXPORT ReliefColormapFunctor
-  : public itk::Function::ColormapFunction<TScalar, TRGBPixel>
+template <class TScalar, class TRGBPixel>
+class ITK_EXPORT ReliefColormapFunctor : public itk::Function::ColormapFunction<TScalar, TRGBPixel>
 {
 public:
-
-  typedef ReliefColormapFunctor                             Self;
+  typedef ReliefColormapFunctor Self;
   typedef itk::Function::ColormapFunction<TScalar, TRGBPixel> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -58,15 +58,17 @@ public:
   typedef typename Superclass::ScalarType   ScalarType;
   typedef typename Superclass::RealType     RealType;
 
-  RGBPixelType operator ()(const TScalar&) const override;
+  RGBPixelType operator()(const TScalar&) const override;
 
 protected:
   ReliefColormapFunctor(){};
-  ~ReliefColormapFunctor() override {}
+  ~ReliefColormapFunctor() override
+  {
+  }
 
 private:
-  ReliefColormapFunctor(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ReliefColormapFunctor(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace functor

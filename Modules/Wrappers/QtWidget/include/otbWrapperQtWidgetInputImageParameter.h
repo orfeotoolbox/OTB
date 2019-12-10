@@ -44,7 +44,7 @@ public:
   ~QtWidgetInputImageParameter() override;
 
   const QLineEdit* GetInput() const;
-  QLineEdit* GetInput();
+  QLineEdit*       GetInput();
 
 signals:
   void FileNameIsSet();
@@ -67,9 +67,9 @@ private:
 
   InputImageParameter::Pointer m_InputImageParam;
 
-  QHBoxLayout * m_HLayout;
-  QLineEdit*    m_Input;
-  QPushButton * m_Button;
+  QHBoxLayout* m_HLayout;
+  QLineEdit*   m_Input;
+  QPushButton* m_Button;
 };
 
 

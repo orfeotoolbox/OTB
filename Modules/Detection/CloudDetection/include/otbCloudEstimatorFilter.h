@@ -37,15 +37,14 @@ namespace otb
  *
  * \ingroup OTBCloudDetection
  */
-template <class TInputImage, class TOutputImage, class TFunction = Functor::SpectralAngleFunctor<
-        typename TInputImage::PixelType, typename TOutputImage::PixelType> >
+template <class TInputImage, class TOutputImage,
+          class TFunction = Functor::SpectralAngleFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
 class ITK_EXPORT CloudEstimatorFilter : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction>
 {
 public:
   /** Standard class typedefs. */
   typedef CloudEstimatorFilter Self;
-  typedef typename itk::UnaryFunctorImageFilter <TInputImage, TOutputImage, TFunction>
-  Superclass;
+  typedef typename itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, TFunction> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -56,10 +55,10 @@ public:
   itkTypeMacro(CloudEstimatorFilter, UnaryFunctorImageFilter);
 
   /** Some convenient typedefs. */
-  typedef          TInputImage                 InputImageType;
+  typedef TInputImage                          InputImageType;
   typedef typename InputImageType::Pointer     InputImagePointer;
   typedef typename InputImageType::PixelType   InputPixelType;
-  typedef          TOutputImage                OutputImageType;
+  typedef TOutputImage                         OutputImageType;
   typedef typename OutputImageType::Pointer    OutputImagePointer;
   typedef typename OutputImageType::RegionType OutputImageRegionType;
   typedef typename OutputImageType::PixelType  OutputPixelType;
@@ -73,16 +72,17 @@ public:
 protected:
   CloudEstimatorFilter();
 
-  ~CloudEstimatorFilter() override {}
+  ~CloudEstimatorFilter() override
+  {
+  }
 
   void BeforeThreadedGenerateData() override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  CloudEstimatorFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  CloudEstimatorFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

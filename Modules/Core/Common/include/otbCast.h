@@ -35,17 +35,10 @@ namespace otb
  *     itk::DynamicCast< DerivedClass >( smartPointerToBaseClass )
  *   );
  */
-template< typename T2, typename T1 >
-inline
-itk::SmartPointer< T2 >
-DynamicCast( const itk::SmartPointer< T1 > & p1 )
+template <typename T2, typename T1>
+inline itk::SmartPointer<T2> DynamicCast(const itk::SmartPointer<T1>& p1)
 {
-  return
-    typename itk::SmartPointer< T2 >(
-      dynamic_cast< typename itk::SmartPointer< T2 >::ObjectType * >(
-	p1.GetPointer()
-      )
-    );
+  return typename itk::SmartPointer<T2>(dynamic_cast<typename itk::SmartPointer<T2>::ObjectType*>(p1.GetPointer()));
 }
 
 /**
@@ -57,17 +50,10 @@ DynamicCast( const itk::SmartPointer< T1 > & p1 )
  *     itk::ConstCast< DerivedClass >( smartPointerToConstInstance )
  *   );
  */
-template< typename T2, typename T1 >
-inline
-itk::SmartPointer< const T2 >
-ConstCast( const itk::SmartPointer< T1 > & p1 )
+template <typename T2, typename T1>
+inline itk::SmartPointer<const T2> ConstCast(const itk::SmartPointer<T1>& p1)
 {
-  return
-    typename itk::SmartPointer< const T2 >(
-      const_cast< typename itk::SmartPointer< const T2 >::ObjectType * >(
-	p1.GetPointer()
-      )
-    );
+  return typename itk::SmartPointer<const T2>(const_cast<typename itk::SmartPointer<const T2>::ObjectType*>(p1.GetPointer()));
 }
 
 /**
@@ -81,17 +67,10 @@ ConstCast( const itk::SmartPointer< T1 > & p1 )
  *     )
  *   );
  */
-template< typename T2, typename T1 >
-inline
-itk::SmartPointer< T2 >
-ConstCast( const itk::SmartPointer< const T1 > & p1 )
+template <typename T2, typename T1>
+inline itk::SmartPointer<T2> ConstCast(const itk::SmartPointer<const T1>& p1)
 {
-  return
-    typename itk::SmartPointer< T2 >(
-      const_cast< typename itk::SmartPointer< T2 >::ObjectType * >(
-	p1.GetPointer()
-      )
-    );
+  return typename itk::SmartPointer<T2>(const_cast<typename itk::SmartPointer<T2>::ObjectType*>(p1.GetPointer()));
 }
 
 } // end namespace otb.

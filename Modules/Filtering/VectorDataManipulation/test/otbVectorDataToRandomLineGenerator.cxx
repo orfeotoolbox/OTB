@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
 #include "otbVectorDataToRandomLineGenerator.h"
@@ -27,18 +26,18 @@
 
 int otbVectorDataToRandomLineGenerator(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputVD  = argv[1];
-  const char * outputVD  = argv[2];
+  const char* inputVD  = argv[1];
+  const char* outputVD = argv[2];
 
-  typedef otb::VectorData<>                                        VectorDataType;
-  typedef otb::VectorDataFileReader<VectorDataType>                VectorDataReaderType;
-  typedef otb::VectorDataFileWriter<VectorDataType>                VectorDataWriterType;
-  typedef otb::VectorDataToRandomLineGenerator<VectorDataType>     GeneratorType;
+  typedef otb::VectorData<>                                    VectorDataType;
+  typedef otb::VectorDataFileReader<VectorDataType>            VectorDataReaderType;
+  typedef otb::VectorDataFileWriter<VectorDataType>            VectorDataWriterType;
+  typedef otb::VectorDataToRandomLineGenerator<VectorDataType> GeneratorType;
 
   // instantiation
-  VectorDataReaderType::Pointer  reader     = VectorDataReaderType::New();
-  VectorDataWriterType::Pointer  writer     = VectorDataWriterType::New();
-  GeneratorType::Pointer         generator  = GeneratorType::New();
+  VectorDataReaderType::Pointer reader    = VectorDataReaderType::New();
+  VectorDataWriterType::Pointer writer    = VectorDataWriterType::New();
+  GeneratorType::Pointer        generator = GeneratorType::New();
 
   reader->SetFileName(inputVD);
   reader->Update();

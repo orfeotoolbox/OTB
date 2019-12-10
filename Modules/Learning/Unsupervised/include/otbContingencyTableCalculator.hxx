@@ -31,85 +31,76 @@
 
 namespace otb
 {
-template<class TClassLabel>
-ContingencyTableCalculator<TClassLabel>::ContingencyTableCalculator()
-        : m_NumberOfRefClasses(0), m_NumberOfProdClasses(0), m_NumberOfSamples(0)
-{}
-
-template<class TClassLabel>
-void
-ContingencyTableCalculator<TClassLabel>
-::Clear()
+template <class TClassLabel>
+ContingencyTableCalculator<TClassLabel>::ContingencyTableCalculator() : m_NumberOfRefClasses(0), m_NumberOfProdClasses(0), m_NumberOfSamples(0)
 {
-  m_LabelCount.clear();
-  m_NumberOfRefClasses = 0;
-  m_NumberOfProdClasses = 0;
-  m_NumberOfSamples = 0;
 }
 
-template<class TClassLabel>
-template<class TRefIterator, class TProdIterator>
-void
-ContingencyTableCalculator<TClassLabel>
-::Compute(TRefIterator refBegin, TRefIterator refEnd, TProdIterator prodBegin, TProdIterator prodEnd)
+template <class TClassLabel>
+void ContingencyTableCalculator<TClassLabel>::Clear()
 {
-  while( refBegin != refEnd && prodBegin != prodEnd )
-    {
+  m_LabelCount.clear();
+  m_NumberOfRefClasses  = 0;
+  m_NumberOfProdClasses = 0;
+  m_NumberOfSamples     = 0;
+}
+
+template <class TClassLabel>
+template <class TRefIterator, class TProdIterator>
+void ContingencyTableCalculator<TClassLabel>::Compute(TRefIterator refBegin, TRefIterator refEnd, TProdIterator prodBegin, TProdIterator prodEnd)
+{
+  while (refBegin != refEnd && prodBegin != prodEnd)
+  {
     ++m_LabelCount[refBegin.GetMeasurementVector()[0]][prodBegin.GetMeasurementVector()[0]];
     ++refBegin;
     ++prodBegin;
     ++m_NumberOfSamples;
-    }
+  }
 
-  if( refBegin != refEnd || prodBegin != prodEnd )
+  if (refBegin != refEnd || prodBegin != prodEnd)
     itkExceptionMacro(<< "The references and produced labels did not end simultaneously.");
 }
 
-template<class TClassLabel>
-template<class TRefIterator, class TProdIterator>
-void
-ContingencyTableCalculator<TClassLabel>
-::Compute(TRefIterator itRef, TProdIterator itProd, bool refHasNoData, typename TRefIterator::InternalPixelType refNoData,
-          bool prodHasNoData, typename TProdIterator::InternalPixelType prodNoData)
+template <class TClassLabel>
+template <class TRefIterator, class TProdIterator>
+void ContingencyTableCalculator<TClassLabel>::Compute(TRefIterator itRef, TProdIterator itProd, bool refHasNoData,
+                                                      typename TRefIterator::InternalPixelType refNoData, bool prodHasNoData,
+                                                      typename TProdIterator::InternalPixelType prodNoData)
 {
-  while( !itRef.IsAtEnd() && !itProd.IsAtEnd() )
+  while (!itRef.IsAtEnd() && !itProd.IsAtEnd())
+  {
+    if ((!prodHasNoData || itProd.Get() != prodNoData) && (!refHasNoData || itRef.Get() != refNoData))
     {
-    if((!prodHasNoData || itProd.Get()!=prodNoData)
-       &&(!refHasNoData || itRef.Get()!=refNoData))
-      {
       ++m_LabelCount[itRef.Get()][itProd.Get()];
       ++m_NumberOfSamples;
-      }
+    }
     ++itRef;
     ++itProd;
-    }
+  }
 
-  if( !itRef.IsAtEnd() || !itProd.IsAtEnd() )
+  if (!itRef.IsAtEnd() || !itProd.IsAtEnd())
     itkExceptionMacro(<< "The references and produced labels did not end simultaneously.");
-
 }
 
 
-template<class TClassLabel>
-typename ContingencyTableCalculator<TClassLabel>::ContingencyTablePointerType
-ContingencyTableCalculator<TClassLabel>
-::BuildContingencyTable()
+template <class TClassLabel>
+typename ContingencyTableCalculator<TClassLabel>::ContingencyTablePointerType ContingencyTableCalculator<TClassLabel>::BuildContingencyTable()
 {
   std::set<TClassLabel> refLabels;
   std::set<TClassLabel> prodLabels;
 
   // Retrieve all labels needed to iterate over all labelCount
-  for(typename MapOfClassesType::const_iterator refIt = m_LabelCount.begin(); refIt != m_LabelCount.end(); ++refIt)
-    {
+  for (typename MapOfClassesType::const_iterator refIt = m_LabelCount.begin(); refIt != m_LabelCount.end(); ++refIt)
+  {
     refLabels.insert(refIt->first);
     CountMapType cmt = refIt->second;
-    for(typename CountMapType::const_iterator prodIt = cmt.begin(); prodIt != cmt.end(); ++prodIt)
-      {
+    for (typename CountMapType::const_iterator prodIt = cmt.begin(); prodIt != cmt.end(); ++prodIt)
+    {
       prodLabels.insert(prodIt->first);
-      }
     }
+  }
 
-  m_NumberOfRefClasses = refLabels.size();
+  m_NumberOfRefClasses  = refLabels.size();
   m_NumberOfProdClasses = prodLabels.size();
 
   unsigned int rows = static_cast<unsigned int>(m_NumberOfRefClasses);
@@ -121,14 +112,13 @@ ContingencyTableCalculator<TClassLabel>
   ContingencyTablePointerType contingencyTable = ContingencyTableType::New();
   contingencyTable->SetLabels(referenceLabels, producedLabels);
 
-  for( unsigned int i = 0; i < rows; ++i )
-    for( unsigned int j = 0; j < cols; ++j )
-      contingencyTable->matrix(i,j) = m_LabelCount[referenceLabels[i]][producedLabels[j]];
+  for (unsigned int i = 0; i < rows; ++i)
+    for (unsigned int j = 0; j < cols; ++j)
+      contingencyTable->matrix(i, j) = m_LabelCount[referenceLabels[i]][producedLabels[j]];
 
 
   return contingencyTable;
 }
-
 }
 
 #endif

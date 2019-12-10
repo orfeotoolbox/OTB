@@ -136,20 +136,15 @@ namespace otb
  *
  * \ingroup OTBInterpolation
  */
-template<class TInputImage, class TWindowFunction, class TBoundaryCondition =
-      itk::ZeroFluxNeumannBoundaryCondition<TInputImage>, class TCoordRep = double>
-class ITK_EXPORT WindowedSincInterpolateImageFunctionBase :
-  public GenericInterpolateImageFunction<TInputImage,
-      TWindowFunction,
-      TBoundaryCondition,
-      TCoordRep>
+template <class TInputImage, class TWindowFunction, class TBoundaryCondition = itk::ZeroFluxNeumannBoundaryCondition<TInputImage>, class TCoordRep = double>
+class ITK_EXPORT WindowedSincInterpolateImageFunctionBase : public GenericInterpolateImageFunction<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef WindowedSincInterpolateImageFunctionBase                                                     Self;
+  typedef WindowedSincInterpolateImageFunctionBase Self;
   typedef GenericInterpolateImageFunction<TInputImage, TWindowFunction, TBoundaryCondition, TCoordRep> Superclass;
-  typedef itk::SmartPointer<Self>                                                                      Pointer;
-  typedef itk::SmartPointer<const Self>                                                                ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(WindowedSincInterpolateImageFunctionBase, GenericInterpolateImageFunction);
@@ -170,12 +165,12 @@ public:
   typedef typename Superclass::RealType            RealType;
   typedef typename Superclass::IteratorType        IteratorType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
-  //typedef typename TWindowFunction                                                   FunctionType;
+  // typedef typename TWindowFunction                                                   FunctionType;
   typedef typename Superclass::FunctionType FunctionType;
   typedef typename std::vector<double>      VectorType;
 
   /** Compute a resampled profil according to the window size.*/
-//   virtual void ComputeResampledWindowedSincProfil();
+  //   virtual void ComputeResampledWindowedSincProfil();
 
 protected:
   WindowedSincInterpolateImageFunctionBase();
@@ -183,8 +178,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  WindowedSincInterpolateImageFunctionBase(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  WindowedSincInterpolateImageFunctionBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace itk

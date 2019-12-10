@@ -45,16 +45,14 @@ namespace otb
  */
 
 template <class TVectorData>
-class ITK_EXPORT VectorDataToRightAngleVectorDataFilter
-  : public otb::VectorDataToVectorDataFilter<TVectorData, TVectorData>
+class ITK_EXPORT VectorDataToRightAngleVectorDataFilter : public otb::VectorDataToVectorDataFilter<TVectorData, TVectorData>
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorDataToRightAngleVectorDataFilter  Self;
-  typedef VectorDataToVectorDataFilter
-    <TVectorData, TVectorData>                    Superclass;
-  typedef itk::SmartPointer<Self>                 Pointer;
-  typedef itk::SmartPointer<const Self>           ConstPointer;
+  typedef VectorDataToRightAngleVectorDataFilter Self;
+  typedef VectorDataToVectorDataFilter<TVectorData, TVectorData> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -66,15 +64,14 @@ public:
   typedef itk::ProcessObject ProcessObjectType;
 
   /** Typdedef support for the VectroData*/
-  typedef TVectorData                            VectorDataType;
-  typedef typename VectorDataType::DataNodeType  DataNodeType;
-  typedef typename VectorDataType::LineType      LineType;
-  typedef typename VectorDataType::PointType     PointType;
-  typedef typename LineType::VertexType          VertexType;
-  typedef typename LineType::VertexListType      VertexListType;
+  typedef TVectorData                           VectorDataType;
+  typedef typename VectorDataType::DataNodeType DataNodeType;
+  typedef typename VectorDataType::LineType     LineType;
+  typedef typename VectorDataType::PointType    PointType;
+  typedef typename LineType::VertexType         VertexType;
+  typedef typename LineType::VertexListType     VertexListType;
 
-  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType>
-                                                 TreeIteratorType;
+  typedef itk::PreOrderTreeIterator<typename VectorDataType::DataTreeType> TreeIteratorType;
 
   /** Set/Get the thresholds*/
   itkGetMacro(DistanceThreshold, double);
@@ -87,23 +84,25 @@ protected:
   /** Constructor.*/
   VectorDataToRightAngleVectorDataFilter();
   /**Destructor.*/
-  ~VectorDataToRightAngleVectorDataFilter() override{}
+  ~VectorDataToRightAngleVectorDataFilter() override
+  {
+  }
   /** Standard PrintSelf method.*/
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /**Main computation method.*/
-  void  GenerateData() override;
+  void GenerateData() override;
   /**Angle computation.*/
-  virtual double ComputeAngleFormedBySegments(LineType * lineDst, LineType * lineSrc);
+  virtual double ComputeAngleFormedBySegments(LineType* lineDst, LineType* lineSrc);
   /** When we find a right angle, one compute the coordinate of the segments intersection.*/
-  virtual PointType ComputeRightAngleCoordinate(LineType * lineDst, LineType * lineSrc);
+  virtual PointType ComputeRightAngleCoordinate(LineType* lineDst, LineType* lineSrc);
   /**Compute the orientation of a segment*/
-  virtual double ComputeOrientation(LineType * line);
+  virtual double ComputeOrientation(LineType* line);
   /**Distance From a point rAngle to a segment line.*/
-  virtual double ComputeDistanceFromPointToSegment(PointType rAngle, LineType * line);
+  virtual double ComputeDistanceFromPointToSegment(PointType rAngle, LineType* line);
 
 private:
-  VectorDataToRightAngleVectorDataFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  VectorDataToRightAngleVectorDataFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   double m_DistanceThreshold;
   double m_AngleThreshold;

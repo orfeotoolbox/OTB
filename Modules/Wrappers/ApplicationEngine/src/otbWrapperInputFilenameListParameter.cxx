@@ -30,33 +30,28 @@ namespace Wrapper
 
 
 const std::string FILENAME_FILTER(
-  "All files (*);;"
-  "CSV files (.csv);;"
-  "Text files (.txt);;"
-  "XML files (.xml)"
-);
+    "All files (*);;"
+    "CSV files (.csv);;"
+    "Text files (.txt);;"
+    "XML files (.xml)");
 
 
 /*****************************************************************************/
-InputFilenameListParameter
-::InputFilenameListParameter()
+InputFilenameListParameter::InputFilenameListParameter()
 {
-  SetName( "Input Filename List" );
-  SetKey( "inList" );
+  SetName("Input Filename List");
+  SetKey("inList");
 }
 
 
 /*****************************************************************************/
-InputFilenameListParameter
-::~InputFilenameListParameter()
+InputFilenameListParameter::~InputFilenameListParameter()
 {
 }
 
 
 /*****************************************************************************/
-Role
-InputFilenameListParameter
-::GetDirection( std::size_t ) const
+Role InputFilenameListParameter::GetDirection(std::size_t) const
 {
 #if 0
   assert( i<m_FilenameList->Size() );
@@ -74,27 +69,21 @@ InputFilenameListParameter
 
 
 /*****************************************************************************/
-Role
-InputFilenameListParameter
-::GetDirection() const
+Role InputFilenameListParameter::GetDirection() const
 {
   return Role_Input;
 }
 
 
 /*****************************************************************************/
-const std::string &
-InputFilenameListParameter
-::GetFilenameFilter( std::size_t ) const
+const std::string& InputFilenameListParameter::GetFilenameFilter(std::size_t) const
 {
   return GetFilenameFilter();
 }
 
 
 /*****************************************************************************/
-const std::string &
-InputFilenameListParameter
-::GetFilenameFilter() const
+const std::string& InputFilenameListParameter::GetFilenameFilter() const
 {
   return FILENAME_FILTER;
 }
@@ -104,5 +93,4 @@ ParameterType InputFilenameListParameter::GetType() const
   return ParameterType_InputFilenameList;
 }
 }
-
 }

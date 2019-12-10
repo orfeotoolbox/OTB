@@ -28,7 +28,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wc++11-extensions"
 
-#if defined(__apple_build_version__) &&  __apple_build_version__ < 7000053
+#if defined(__apple_build_version__) && __apple_build_version__ < 7000053
 /* Apple's 3.6.0 based clang doesn't support -Winconsistent-missing-override */
 #else
 #pragma clang diagnostic ignored "-Winconsistent-missing-override"
@@ -60,10 +60,10 @@ class ITK_EXPORT ParserX : public itk::LightObject
 {
 public:
   /** Standard class typedefs. */
-  typedef ParserX                                   Self;
-  typedef itk::LightObject                         Superclass;
-  typedef itk::SmartPointer<Self>                  Pointer;
-  typedef itk::SmartPointer<const Self>            ConstPointer;
+  typedef ParserX                       Self;
+  typedef itk::LightObject              Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** New macro for creation of through a Smart Pointer */
   itkNewMacro(Self);
@@ -72,24 +72,24 @@ public:
   itkTypeMacro(ParserX, itk::LightObject);
 
   /** Convenient type definitions */
-  typedef ParserX                                   ParserXType;
-  typedef mup::Value                                ValueType;
-  typedef mup::IValue                               IValueType;
+  typedef ParserX     ParserXType;
+  typedef mup::Value  ValueType;
+  typedef mup::IValue IValueType;
 
   /** Set the expression to be parsed */
-  virtual void SetExpr(const std::string & Expression);
+  virtual void SetExpr(const std::string& Expression);
 
   /** Trigger the parsing */
   ValueType Eval();
 
   /** Trigger the parsing but return a const ref */
-  const IValueType & EvalRef();
+  const IValueType& EvalRef();
 
   /** Define a variable */
-  void DefineVar(const std::string &sName, ValueType *fVar);
+  void DefineVar(const std::string& sName, ValueType* fVar);
 
   /** Define a constant */
-  //void DefineConst(const std::string &sName, ValueType *fVar);
+  // void DefineConst(const std::string &sName, ValueType *fVar);
 
   /** Clear all the defined variables */
   void ClearVar();
@@ -113,13 +113,13 @@ protected:
 
 
 private:
-  ParserX(const Self &) = delete;
-  void operator =(const Self &) = delete;
+  ParserX(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   typedef itk::SmartPointer<ParserXImpl> ParserXImplPtr;
-  ParserXImplPtr m_InternalParserX;
+  ParserXImplPtr                         m_InternalParserX;
 }; // end class
 
-}//end namespace otb
+} // end namespace otb
 
 #endif

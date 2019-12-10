@@ -149,7 +149,7 @@ bool Noise::loadState(const ossimKeywordlist& kwl, const char* prefix)
 
 std::ostream& Noise::print(std::ostream& out) const
 {
-   out << setprecision(15) << setiosflags(ios::fixed)
+   out << std::setprecision(15) << std::setiosflags(std::ios::fixed)
        << "\n Noise class data members:\n";
 
    const char* prefix = 0;

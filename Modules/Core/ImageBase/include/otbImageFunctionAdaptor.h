@@ -45,21 +45,19 @@ namespace otb
  * \ingroup OTBImageBase
  */
 
-template< class TInternalImageFunctionType, class TOutputPrecision = double >
-class OTBImageBase_EXPORT_TEMPLATE ImageFunctionAdaptor :
-    public itk::ImageFunction< typename TInternalImageFunctionType::InputImageType,
-                               itk::VariableLengthVector<TOutputPrecision>,
-                               typename TInternalImageFunctionType::CoordRepType >
+template <class TInternalImageFunctionType, class TOutputPrecision = double>
+class OTBImageBase_EXPORT_TEMPLATE ImageFunctionAdaptor
+    : public itk::ImageFunction<typename TInternalImageFunctionType::InputImageType, itk::VariableLengthVector<TOutputPrecision>,
+                                typename TInternalImageFunctionType::CoordRepType>
 {
-  public:
+public:
   // Standard class typedefs. //
-  typedef ImageFunctionAdaptor                                          Self;
-  typedef itk::ImageFunction< typename TInternalImageFunctionType::InputImageType,
-                              itk::VariableLengthVector<TOutputPrecision>,
-                              typename TInternalImageFunctionType::CoordRepType >
-                                                                        Superclass;
-  typedef itk::SmartPointer<Self>                                       Pointer;
-  typedef itk::SmartPointer<const Self>                                 ConstPointer;
+  typedef ImageFunctionAdaptor Self;
+  typedef itk::ImageFunction<typename TInternalImageFunctionType::InputImageType, itk::VariableLengthVector<TOutputPrecision>,
+                             typename TInternalImageFunctionType::CoordRepType>
+                                        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   // Run-time type information (and related methods). //
   itkTypeMacro(ImageFunctionAdaptor, ImageFunction);
@@ -68,17 +66,17 @@ class OTBImageBase_EXPORT_TEMPLATE ImageFunctionAdaptor :
   itkNewMacro(Self);
 
   // InputImageType typedef support. //
-  typedef typename TInternalImageFunctionType::InputImageType  InputImageType;
-  typedef typename TInternalImageFunctionType::CoordRepType    CoordRepType;
-  typedef typename Superclass::IndexType                       IndexType;
-  typedef typename Superclass::ContinuousIndexType             ContinuousIndexType;
-  typedef typename Superclass::PointType                       PointType;
-  typedef typename Superclass::OutputType                      OutputType;
-  typedef typename OutputType::ValueType                       OutputValueType;
+  typedef typename TInternalImageFunctionType::InputImageType InputImageType;
+  typedef typename TInternalImageFunctionType::CoordRepType   CoordRepType;
+  typedef typename Superclass::IndexType                      IndexType;
+  typedef typename Superclass::ContinuousIndexType            ContinuousIndexType;
+  typedef typename Superclass::PointType                      PointType;
+  typedef typename Superclass::OutputType                     OutputType;
+  typedef typename OutputType::ValueType                      OutputValueType;
 
   // InternalImageFunction related typedefs //
-  typedef TInternalImageFunctionType                        InternalImageFunctionType;
-  typedef typename InternalImageFunctionType::OutputType    InternalImageFunctionOutputType;
+  typedef TInternalImageFunctionType                     InternalImageFunctionType;
+  typedef typename InternalImageFunctionType::OutputType InternalImageFunctionOutputType;
 
   // Converter related typedefs //
   typedef VariableLengthVectorConverter<InternalImageFunctionOutputType, TOutputPrecision> ConverterType;
@@ -97,8 +95,7 @@ class OTBImageBase_EXPORT_TEMPLATE ImageFunctionAdaptor :
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const override
+  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -111,17 +108,19 @@ class OTBImageBase_EXPORT_TEMPLATE ImageFunctionAdaptor :
 
 protected:
   ImageFunctionAdaptor();
-  ~ImageFunctionAdaptor() override {}
+  ~ImageFunctionAdaptor() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageFunctionAdaptor(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ImageFunctionAdaptor(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   // Internal Image Function //
-  typename InternalImageFunctionType::Pointer    m_InternalImageFunction;
+  typename InternalImageFunctionType::Pointer m_InternalImageFunction;
   // Converter //
-  typename ConverterType::Pointer                m_Converter;
+  typename ConverterType::Pointer m_Converter;
 };
 
 } // end namespace otb

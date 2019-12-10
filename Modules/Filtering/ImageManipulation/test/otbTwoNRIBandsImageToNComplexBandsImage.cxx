@@ -27,32 +27,31 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbTwoNRIBandsImageToNComplexBandsImage(int itkNotUsed(argc), char * argv[])
+int otbTwoNRIBandsImageToNComplexBandsImage(int itkNotUsed(argc), char* argv[])
 {
 
   typedef double PixelType;
-  typedef otb::VectorImage<PixelType,  2> InputImageType;
-    
+  typedef otb::VectorImage<PixelType, 2> InputImageType;
+
   typedef std::complex<double> OutputPixelType;
   typedef otb::VectorImage<OutputPixelType, 2> OutputImageType;
- 
- 
+
+
   typedef otb::TwoNRIBandsImageToNComplexBandsImage<InputImageType, OutputImageType> FilterType;
-  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   FilterType::Pointer filter = FilterType::New();
   WriterType::Pointer writer = WriterType::New();
-  
-  
+
+
   reader->SetFileName(argv[1]);
   writer->SetFileName(argv[2]);
 
-  filter->SetInput(0,reader->GetOutput());
+  filter->SetInput(0, reader->GetOutput());
   writer->SetInput(filter->GetOutput());
   writer->Update();
-
 
 
   return EXIT_SUCCESS;

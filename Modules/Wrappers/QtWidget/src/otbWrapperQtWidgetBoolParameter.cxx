@@ -25,8 +25,7 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetBoolParameter::QtWidgetBoolParameter(BoolParameter* boolParam, QtWidgetModel* m, QWidget * parent)
-  : QtWidgetParameterBase(boolParam, m, parent)
+QtWidgetBoolParameter::QtWidgetBoolParameter(BoolParameter* boolParam, QtWidgetModel* m, QWidget* parent) : QtWidgetParameterBase(boolParam, m, parent)
 {
 }
 
@@ -34,17 +33,17 @@ QtWidgetBoolParameter::~QtWidgetBoolParameter()
 {
 }
 
-void QtWidgetBoolParameter::SetValue( bool value )
+void QtWidgetBoolParameter::SetValue(bool value)
 {
   BoolParameter* paramDown = dynamic_cast<BoolParameter*>(this->GetParam());
   assert(paramDown && "Not a BoolParameter");
   if (paramDown->GetValue() != value)
-    {
+  {
     paramDown->SetValue(value);
 
-    QString key( paramDown->GetKey() );
-    emit ParameterChanged(key);
-    }
+    QString key(paramDown->GetKey());
+    emit    ParameterChanged(key);
+  }
 }
 
 void QtWidgetBoolParameter::DoUpdateGUI()
@@ -52,19 +51,19 @@ void QtWidgetBoolParameter::DoUpdateGUI()
   BoolParameter* paramDown = dynamic_cast<BoolParameter*>(this->GetParam());
   assert(paramDown && "Not a BoolParameter");
   if (paramDown->GetValue() != m_Button->isChecked())
-    {
+  {
     m_Button->setChecked(paramDown->GetValue());
-    }
-  QString buttonText(paramDown->GetValue()?"On":"Off");
+  }
+  QString buttonText(paramDown->GetValue() ? "On" : "Off");
   if (m_Button->text() != buttonText)
-    {
+  {
     m_Button->setText(buttonText);
-    }
+  }
 }
 
 void QtWidgetBoolParameter::DoCreateWidget()
 {
-  QHBoxLayout *hLayout = new QHBoxLayout;
+  QHBoxLayout* hLayout = new QHBoxLayout;
   hLayout->setSpacing(0);
   hLayout->setContentsMargins(0, 0, 0, 0);
 
@@ -73,26 +72,25 @@ void QtWidgetBoolParameter::DoCreateWidget()
   BoolParameter* paramDown = dynamic_cast<BoolParameter*>(this->GetParam());
   assert(paramDown && "Not a BoolParameter");
   if (paramDown->GetValue())
-    {
+  {
     m_Button->setText("On");
     m_Button->setChecked(true);
-    }
+  }
   else
-    {
+  {
     m_Button->setText("Off");
-    }
+  }
 
-  //Set the tool tip associated to the parameter
-  m_Button->setToolTip(QString::fromStdString( paramDown->GetDescription() ));
+  // Set the tool tip associated to the parameter
+  m_Button->setToolTip(QString::fromStdString(paramDown->GetDescription()));
 
-  connect( m_Button, &QToolButton::toggled, this, &QtWidgetBoolParameter::SetValue );
-  connect( m_Button, &QToolButton::toggled, GetModel(), &QtWidgetModel::NotifyUpdate );
+  connect(m_Button, &QToolButton::toggled, this, &QtWidgetBoolParameter::SetValue);
+  connect(m_Button, &QToolButton::toggled, GetModel(), &QtWidgetModel::NotifyUpdate);
 
   hLayout->addWidget(m_Button);
   hLayout->addStretch();
 
   this->setLayout(hLayout);
 }
-
 }
 }

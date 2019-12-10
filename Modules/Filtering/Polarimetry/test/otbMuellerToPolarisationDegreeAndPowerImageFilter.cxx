@@ -19,7 +19,6 @@
  */
 
 
-
 #include "itkMacro.h"
 
 #include "otbImage.h"
@@ -28,10 +27,10 @@
 #include "otbImageFileWriter.h"
 #include "otbMuellerToPolarisationDegreeAndPowerImageFilter.h"
 
-int otbMuellerToPolarisationDegreeAndPowerImageFilter(int itkNotUsed(argc), char * argv[])
+int otbMuellerToPolarisationDegreeAndPowerImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   typedef double                      PixelType;
   typedef otb::VectorImage<PixelType> RealImageType;
@@ -39,7 +38,7 @@ int otbMuellerToPolarisationDegreeAndPowerImageFilter(int itkNotUsed(argc), char
   typedef otb::MuellerToPolarisationDegreeAndPowerImageFilter<RealImageType, RealImageType> FilterType;
 
 
-  typedef otb::ImageFileReader<RealImageType>  ReaderType;
+  typedef otb::ImageFileReader<RealImageType> ReaderType;
   typedef otb::ImageFileWriter<RealImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();

@@ -30,153 +30,133 @@
 namespace otb
 {
 
-template < class TInputImage, class TOutputImage >
-ComputeGainLutFilter < TInputImage , TOutputImage >
-::ComputeGainLutFilter()
+template <class TInputImage, class TOutputImage>
+ComputeGainLutFilter<TInputImage, TOutputImage>::ComputeGainLutFilter()
 {
-  m_NbBin = 256;
+  m_NbBin   = 256;
   m_NbPixel = 0;
-  m_Min = std::numeric_limits< double >::quiet_NaN();
-  m_Max = std::numeric_limits< double >::quiet_NaN();
-  m_Step = -1;
+  m_Min     = std::numeric_limits<double>::quiet_NaN();
+  m_Max     = std::numeric_limits<double>::quiet_NaN();
+  m_Step    = -1;
 }
 
-template <class TInputImage , class TOutputImage >
-void ComputeGainLutFilter <TInputImage , TOutputImage >
-::BeforeThreadedGenerateData()
+template <class TInputImage, class TOutputImage>
+void ComputeGainLutFilter<TInputImage, TOutputImage>::BeforeThreadedGenerateData()
 {
   m_NbBin = this->GetInput()->GetNumberOfComponentsPerPixel();
-  m_Step = static_cast<double>( m_Max - m_Min ) \
-                / static_cast<double>( m_NbBin -1 );
+  m_Step  = static_cast<double>(m_Max - m_Min) / static_cast<double>(m_NbBin - 1);
 }
 
-template <class TInputImage , class TOutputImage >
-void ComputeGainLutFilter <TInputImage , TOutputImage >
-::ThreadedGenerateData(const OutputImageRegionType & outputRegionForThread,
-                       itk::ThreadIdType itkNotUsed(threadId) )
+template <class TInputImage, class TOutputImage>
+void ComputeGainLutFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                                                           itk::ThreadIdType itkNotUsed(threadId))
 {
-  assert( m_Step > 0 );
-  assert( m_NbBin > 0 );
+  assert(m_Step > 0);
+  assert(m_NbBin > 0);
   // TODO error
-  // itk::ProgressReporter progress(this , threadId , 
+  // itk::ProgressReporter progress(this , threadId ,
   //               outputRegionForThread.GetNumberOfPixels() );
 
-  typename InputImageType::ConstPointer input ( this->GetInput() );
-  typename OutputImageType::Pointer output ( this->GetOutput() );
+  typename InputImageType::ConstPointer input(this->GetInput());
+  typename OutputImageType::Pointer     output(this->GetOutput());
 
-  itk::ImageRegionConstIterator < InputImageType > it ( input , 
-                                                        outputRegionForThread );
+  itk::ImageRegionConstIterator<InputImageType> it(input, outputRegionForThread);
 
-  itk::ImageRegionIterator <OutputImageType > oit ( output ,
-                                                    outputRegionForThread );
+  itk::ImageRegionIterator<OutputImageType> oit(output, outputRegionForThread);
 
   HistoType target;
-  target.SetSize( m_NbBin );
+  target.SetSize(m_NbBin);
 
   HistoType currentHisto;
 
   LutType lut;
-  lut.SetSize( m_NbBin );
+  lut.SetSize(m_NbBin);
 
-  for (it.GoToBegin() , oit.GoToBegin() ; !oit.IsAtEnd() || !it.IsAtEnd() ;
-       ++oit , ++it )
-    {
+  for (it.GoToBegin(), oit.GoToBegin(); !oit.IsAtEnd() || !it.IsAtEnd(); ++oit, ++it)
+  {
     currentHisto = it.Get();
     target.Fill(0);
     lut.Fill(-1);
-    if ( IsValid( currentHisto ) )
-      {
-      CreateTarget( currentHisto , target );
-      Equalized( currentHisto , target , lut ); 
-      }
-    oit.Set( lut );
+    if (IsValid(currentHisto))
+    {
+      CreateTarget(currentHisto, target);
+      Equalized(currentHisto, target, lut);
     }
-  assert ( oit.IsAtEnd() && it.IsAtEnd() );
+    oit.Set(lut);
+  }
+  assert(oit.IsAtEnd() && it.IsAtEnd());
 }
 
-template <class TInputImage, class TOutputImage >
-typename TOutputImage::InternalPixelType 
-  ComputeGainLutFilter < TInputImage , TOutputImage >
-::PostProcess( unsigned int countValue ,
-               unsigned int countMapValue )
-{ 
-  double denum ( countValue * m_Step + m_Min );
-  if ( denum == 0 )
-    return 0;
-  return static_cast< OutputPixelType > ( (countMapValue * m_Step + m_Min)
-          / denum );
-}
-
-template <class TInputImage, class TOutputImage >
-void ComputeGainLutFilter < TInputImage , TOutputImage >
-::Equalized( const HistoType & inputHisto ,
-             HistoType & targetHisto ,
-             LutType & lut)
+template <class TInputImage, class TOutputImage>
+typename TOutputImage::InternalPixelType ComputeGainLutFilter<TInputImage, TOutputImage>::PostProcess(unsigned int countValue, unsigned int countMapValue)
 {
-  unsigned int countValue(0) , countMapValue(0) ;
+  double denum(countValue * m_Step + m_Min);
+  if (denum == 0)
+    return 0;
+  return static_cast<OutputPixelType>((countMapValue * m_Step + m_Min) / denum);
+}
+
+template <class TInputImage, class TOutputImage>
+void ComputeGainLutFilter<TInputImage, TOutputImage>::Equalized(const HistoType& inputHisto, HistoType& targetHisto, LutType& lut)
+{
+  unsigned int countValue(0), countMapValue(0);
   lut[countValue] = 1; // Black stays black
   ++countValue;
-  unsigned int countInput ( inputHisto[ 0 ] + inputHisto[ countValue ] );
-  lut[m_NbBin - 1 ] = 1 ; // White stays white
-  unsigned int countTarget ( targetHisto[ countMapValue ] );
+  unsigned int countInput(inputHisto[0] + inputHisto[countValue]);
+  lut[m_NbBin - 1] = 1; // White stays white
+  unsigned int countTarget(targetHisto[countMapValue]);
 
-  while ( ( countMapValue <  m_NbBin ) && countValue < ( m_NbBin - 1 ) )
+  while ((countMapValue < m_NbBin) && countValue < (m_NbBin - 1))
+  {
+    if (countInput > countTarget)
     {
-    if ( countInput > countTarget )
-      {
       ++countMapValue;
-      countTarget += targetHisto[ countMapValue ];
-      }
+      countTarget += targetHisto[countMapValue];
+    }
     else
-      { 
-      lut[countValue] =  PostProcess( countValue , countMapValue );
-      ++countValue;
-      countInput  += inputHisto[ countValue ];
-      }
-    }
-  for (unsigned int i = 0 ; i < m_NbBin ; i++)
     {
-    if (lut[i] == -1)
-      {
-      lut[i] = 1;
-      } 
+      lut[countValue] = PostProcess(countValue, countMapValue);
+      ++countValue;
+      countInput += inputHisto[countValue];
     }
+  }
+  for (unsigned int i = 0; i < m_NbBin; i++)
+  {
+    if (lut[i] == -1)
+    {
+      lut[i] = 1;
+    }
+  }
 }
 
-template <class TInputImage, class TOutputImage >
-void ComputeGainLutFilter < TInputImage , TOutputImage >
-::CreateTarget( const HistoType & inputHisto ,
-                HistoType & targetHisto )
+template <class TInputImage, class TOutputImage>
+void ComputeGainLutFilter<TInputImage, TOutputImage>::CreateTarget(const HistoType& inputHisto, HistoType& targetHisto)
 {
   unsigned int nbPixel(0);
-  for ( unsigned int i = 0 ; i < m_NbBin ; i++ )
-    {
+  for (unsigned int i = 0; i < m_NbBin; i++)
+  {
     nbPixel += inputHisto[i];
-    }
-  unsigned int rest ( nbPixel % m_NbBin ) , height ( nbPixel / m_NbBin );
+  }
+  unsigned int rest(nbPixel % m_NbBin), height(nbPixel / m_NbBin);
   targetHisto.Fill(height);
-  for ( unsigned int i = 0 ; i < rest ; i++ )
-    {
-    ++targetHisto[ ( m_NbBin - rest ) / 2 + i ];
-    }  
+  for (unsigned int i = 0; i < rest; i++)
+  {
+    ++targetHisto[(m_NbBin - rest) / 2 + i];
+  }
 }
 
-template <class TInputImage, class TOutputImage >
-bool ComputeGainLutFilter < TInputImage , TOutputImage >
-::IsValid( const HistoType & inputHisto )
+template <class TInputImage, class TOutputImage>
+bool ComputeGainLutFilter<TInputImage, TOutputImage>::IsValid(const HistoType& inputHisto)
 {
-  long acc = std::accumulate( &inputHisto[0] , 
-                              &inputHisto[ m_NbBin - 1 ] ,
-                              0);
+  long acc = std::accumulate(&inputHisto[0], &inputHisto[m_NbBin - 1], 0);
   return acc >= (0.5 * m_NbPixel);
 }
 
 /**
  * Standard "PrintSelf" method
  */
-template <class TInputImage , class TOutputImage >
-void ComputeGainLutFilter < TInputImage , TOutputImage >
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TInputImage, class TOutputImage>
+void ComputeGainLutFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Minimum: " << m_Min << std::endl;

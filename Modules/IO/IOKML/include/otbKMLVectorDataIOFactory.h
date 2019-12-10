@@ -61,9 +61,8 @@ protected:
   ~KMLVectorDataIOFactory() override;
 
 private:
-  KMLVectorDataIOFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  KMLVectorDataIOFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

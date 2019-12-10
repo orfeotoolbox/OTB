@@ -30,57 +30,48 @@
 namespace otb
 {
 
-template<class TPrecision>
-VirtualDimensionality<TPrecision>
-::VirtualDimensionality()
- : m_NumberOfPixels(0),
-   m_NumberOfEndmembers(0),
-   m_FAR(1.0E-3)
+template <class TPrecision>
+VirtualDimensionality<TPrecision>::VirtualDimensionality() : m_NumberOfPixels(0), m_NumberOfEndmembers(0), m_FAR(1.0E-3)
 {
 }
 
-template<class TInputImage>
-void
-VirtualDimensionality<TInputImage>
-::Compute()
+template <class TInputImage>
+void VirtualDimensionality<TInputImage>::Compute()
 {
   // TODO check size
   const unsigned int nbBands = m_Covariance.rows();
 
   // Compute diagonalisation of sample covariance and correlation matrices
   vnl_symmetric_eigensystem<PrecisionType> eigenK(m_Covariance);
-  VectorType eigenCovariance = eigenK.D.diagonal();
+  VectorType                               eigenCovariance = eigenK.D.diagonal();
   std::sort(eigenCovariance.begin(), eigenCovariance.end());
   eigenCovariance.flip();
 
   vnl_symmetric_eigensystem<PrecisionType> eigenR(m_Correlation);
-  VectorType eigenCorrelation = eigenR.D.diagonal();
+  VectorType                               eigenCorrelation = eigenR.D.diagonal();
   std::sort(eigenCorrelation.begin(), eigenCorrelation.end());
   eigenCorrelation.flip();
 
   m_NumberOfEndmembers = 0;
-  for(unsigned int i = 0; i < nbBands; ++i)
+  for (unsigned int i = 0; i < nbBands; ++i)
   {
-    if (eigenCovariance[i] > 0 && eigenCorrelation[i]>0)
+    if (eigenCovariance[i] > 0 && eigenCorrelation[i] > 0)
     {
-      double sigma = std::sqrt( 2.0 / m_NumberOfPixels * 
-            (eigenCovariance[i]*eigenCovariance[i] + eigenCorrelation[i]*eigenCorrelation[i]));
+      double              sigma = std::sqrt(2.0 / m_NumberOfPixels * (eigenCovariance[i] * eigenCovariance[i] + eigenCorrelation[i] * eigenCorrelation[i]));
       boost::math::normal normalDist(0, sigma);
-      double tau = -boost::math::quantile(normalDist, m_FAR);
-      if (eigenCorrelation[i] - eigenCovariance[i] > tau )
+      double              tau = -boost::math::quantile(normalDist, m_FAR);
+      if (eigenCorrelation[i] - eigenCovariance[i] > tau)
         m_NumberOfEndmembers++;
     }
   }
 }
 
 template <class TImage>
-void
-VirtualDimensionality<TImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void VirtualDimensionality<TImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
-  os << indent << "Covariance:         " << m_Covariance  << std::endl;
+  os << indent << "Covariance:         " << m_Covariance << std::endl;
   os << indent << "Correlation:        " << m_Correlation << std::endl;
   os << indent << "NumberOfEndmembers: " << m_NumberOfEndmembers << std::endl;
 }

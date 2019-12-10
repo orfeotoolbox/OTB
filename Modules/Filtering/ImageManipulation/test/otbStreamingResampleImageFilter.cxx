@@ -24,27 +24,26 @@
 #include "otbImageFileWriter.h"
 #include "itkTranslationTransform.h"
 
-int otbStreamingResampleImageFilter(int itkNotUsed(argc), char * argv[])
+int otbStreamingResampleImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char* inputFilename = argv[1];
+  const char* inputFilename  = argv[1];
   const char* outputFilename = argv[2];
 
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
   typedef double        InputPixelType;
   typedef unsigned char OutputPixelType;
   typedef double        InterpolatorPrecisionType;
 
-  typedef otb::Image<InputPixelType, Dimension>                InputImageType;
-  typedef otb::Image<OutputPixelType, Dimension>               OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>                 ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>       WriterType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef itk::TranslationTransform<InputPixelType, Dimension> TransformType;
-  typedef otb::StreamingResampleImageFilter<InputImageType, OutputImageType,
-      InterpolatorPrecisionType> StreamingResampleImageFilterType;
+  typedef otb::StreamingResampleImageFilter<InputImageType, OutputImageType, InterpolatorPrecisionType> StreamingResampleImageFilterType;
 
   // Instantiating object
-  ReaderType::Pointer                       reader = ReaderType::New();
-  WriterType::Pointer                       writer = WriterType::New();
+  ReaderType::Pointer                       reader    = ReaderType::New();
+  WriterType::Pointer                       writer    = WriterType::New();
   StreamingResampleImageFilterType::Pointer resampler = StreamingResampleImageFilterType::New();
   TransformType::Pointer                    transform = TransformType::New();
 

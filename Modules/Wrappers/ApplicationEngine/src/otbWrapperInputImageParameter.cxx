@@ -35,9 +35,9 @@ InputImageParameter::InputImageParameter()
 {
   this->SetName("Input Image");
   this->SetKey("in");
-  m_FileName="";
-  m_PreviousFileName="";
-  m_UseFilename = true;
+  m_FileName         = "";
+  m_PreviousFileName = "";
+  m_UseFilename      = true;
   this->ClearValue();
 }
 
@@ -45,8 +45,7 @@ InputImageParameter::~InputImageParameter()
 {
 }
 
-bool
-InputImageParameter::SetFromFileName(const std::string& filename)
+bool InputImageParameter::SetFromFileName(const std::string& filename)
 {
   // First clear previous file chosen
   this->ClearValue();
@@ -55,29 +54,28 @@ InputImageParameter::SetFromFileName(const std::string& filename)
   //  - Done in the reader
   //  - allow appending additional information to the filename
   // myfile.tif:2 for example, or myfile.tif:nocarto
-  m_FileName = filename;
+  m_FileName    = filename;
   m_UseFilename = true;
-  SetActive( true );
+  SetActive(true);
 
   return true;
 }
 
 
-ImageBaseType* InputImageParameter ::GetImage()
+ImageBaseType* InputImageParameter::GetImage()
 {
   return m_Image.GetPointer();
 }
 
 
-ImageBaseType const* InputImageParameter ::GetImage() const
+ImageBaseType const* InputImageParameter::GetImage() const
 {
   return m_Image.GetPointer();
 }
 
 
 template <>
-ImageBaseType*
-InputImageParameter::GetImage<ImageBaseType>()
+ImageBaseType* InputImageParameter::GetImage<ImageBaseType>()
 {
   if (m_Image.IsNull())
     return this->GetImage<FloatVectorImageType>();
@@ -89,30 +87,27 @@ otbGetImageMacro(UInt8RGBImage);
 otbGetImageMacro(UInt8RGBAImage);
 
 
-void InputImageParameter ::SetImage(ImageBaseType* image)
+void InputImageParameter::SetImage(ImageBaseType* image)
 {
   m_UseFilename = false;
   m_Image       = image;
 }
 
 
-bool
-InputImageParameter::HasValue() const
+bool InputImageParameter::HasValue() const
 {
   return !m_FileName.empty() || !m_Image.IsNull();
 }
 
-void
-InputImageParameter
-::ClearValue()
+void InputImageParameter::ClearValue()
 {
-  m_Image  = nullptr;
-  m_Reader = nullptr;
-  m_InputCaster     = nullptr;
-  m_OutputCaster    = nullptr;
-  m_FileName = "";
-  m_PreviousFileName="";
-  m_UseFilename = true;
+  m_Image            = nullptr;
+  m_Reader           = nullptr;
+  m_InputCaster      = nullptr;
+  m_OutputCaster     = nullptr;
+  m_FileName         = "";
+  m_PreviousFileName = "";
+  m_UseFilename      = true;
 }
 
 ParameterType InputImageParameter::GetType() const

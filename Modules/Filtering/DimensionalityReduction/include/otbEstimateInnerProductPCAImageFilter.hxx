@@ -33,8 +33,8 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage>
-EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
-::EstimateInnerProductPCAImageFilter(): m_NumberOfPrincipalComponentsRequired(1), m_CenterData(true)
+EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>::EstimateInnerProductPCAImageFilter()
+  : m_NumberOfPrincipalComponentsRequired(1), m_CenterData(true)
 {
 }
 
@@ -42,9 +42,7 @@ EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
  * Printself
  */
 template <class TInputImage, class TOutputImage>
-void
-EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
 }
@@ -52,10 +50,8 @@ EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
 /**
  * GenerateOutputInformation
  */
-template<class TInputImage, class TOutputImage>
-void
-EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
-::GenerateOutputInformation(void)
+template <class TInputImage, class TOutputImage>
+void EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation(void)
 {
   Superclass::GenerateOutputInformation();
   this->GetOutput()->SetNumberOfComponentsPerPixel(m_NumberOfPrincipalComponentsRequired);
@@ -65,9 +61,7 @@ EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
  * BeforeThreadedGenerateData
  */
 template <class TInputImage, class TOutputImage>
-void
-EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
-::BeforeThreadedGenerateData()
+void EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>::BeforeThreadedGenerateData()
 {
   // Instantiation object
   StreamingInnerProductPointer streamingInnerProduct = StreamingInnerProductType::New();
@@ -80,13 +74,11 @@ EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
   identityMatrix.set_identity();
   vnl_generalized_eigensystem eigenVectors_eigenValues(m_InnerProduct, identityMatrix);
   m_EigenVectorsOfInnerProductMatrix = eigenVectors_eigenValues.V;
-
 }
 
 template <class TInputImage, class TOutputImage>
-void
-EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
-::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+void EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
+                                                                                         itk::ThreadIdType threadId)
 {
   typename InputImageType::ConstPointer inputPtr  = this->GetInput();
   typename OutputImageType::Pointer     outputPtr = this->GetOutput();
@@ -100,8 +92,8 @@ EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
   this->CallCopyOutputRegionToInputRegion(inputRegionForThread, outputRegionForThread);
 
   // Define the iterators
-  itk::ImageRegionConstIterator<TInputImage>  inputIt(inputPtr, inputRegionForThread);
-  itk::ImageRegionIterator<TOutputImage> outputIt(outputPtr, outputRegionForThread);
+  itk::ImageRegionConstIterator<TInputImage> inputIt(inputPtr, inputRegionForThread);
+  itk::ImageRegionIterator<TOutputImage>     outputIt(outputPtr, outputRegionForThread);
 
   itk::ProgressReporter progress(this, threadId, outputRegionForThread.GetNumberOfPixels());
 
@@ -109,34 +101,27 @@ EstimateInnerProductPCAImageFilter<TInputImage, TOutputImage>
   outputIt.GoToBegin();
 
   while (!inputIt.IsAtEnd())
-    {
+  {
     InputPixelType  inputPixel = inputIt.Get();
     OutputPixelType outputPixel;
     outputPixel.SetSize(m_NumberOfPrincipalComponentsRequired);
     outputPixel.Fill(0);
 
     for (unsigned int img_number = 0; img_number < numberOfTrainingImages; ++img_number)
-      {
+    {
       unsigned int indexNumberOfTrainingImages = numberOfTrainingImages - 1;
-      for (unsigned int vec_number = 0;
-           vec_number < m_NumberOfPrincipalComponentsRequired;
-           ++vec_number, indexNumberOfTrainingImages--)
-        {
-        outputPixel[vec_number] += static_cast<OutputInternalPixelType>(static_cast<double>(
-                                                                          inputPixel[img_number]) *
-                                                                        static_cast<double>(
-                                                                          m_EigenVectorsOfInnerProductMatrix[img_number
-                                                                          ][indexNumberOfTrainingImages]));
-        }
+      for (unsigned int vec_number = 0; vec_number < m_NumberOfPrincipalComponentsRequired; ++vec_number, indexNumberOfTrainingImages--)
+      {
+        outputPixel[vec_number] += static_cast<OutputInternalPixelType>(
+            static_cast<double>(inputPixel[img_number]) * static_cast<double>(m_EigenVectorsOfInnerProductMatrix[img_number][indexNumberOfTrainingImages]));
       }
+    }
     outputIt.Set(outputPixel);
     ++inputIt;
     ++outputIt;
-    progress.CompletedPixel();  // potential exception thrown here
-    }
-
+    progress.CompletedPixel(); // potential exception thrown here
+  }
 }
-
 }
 
 #endif

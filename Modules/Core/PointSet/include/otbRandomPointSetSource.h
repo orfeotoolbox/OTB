@@ -44,8 +44,7 @@ namespace otb
  */
 
 template <class TOutputPointSet>
-class ITK_EXPORT RandomPointSetSource
-  : public PointSetSource<TOutputPointSet>
+class ITK_EXPORT RandomPointSetSource : public PointSetSource<TOutputPointSet>
 {
 
 public:
@@ -62,12 +61,12 @@ public:
   itkTypeMacro(RandomPointSetSource, PointSetSource);
 
   /** Some convenient typedefs. */
-  typedef itk::DataObject::Pointer                     DataObjectPointer;
-  typedef TOutputPointSet                              OutputPointSetType;
-  typedef typename OutputPointSetType::Pointer         OutputPointSetPointer;
-  typedef typename OutputPointSetType::PointsContainer PointsContainerType;
-  typedef typename PointsContainerType::Pointer        PointsContainerPointer;
-  typedef typename OutputPointSetType::PointType       PointType;
+  typedef itk::DataObject::Pointer                               DataObjectPointer;
+  typedef TOutputPointSet                                        OutputPointSetType;
+  typedef typename OutputPointSetType::Pointer                   OutputPointSetPointer;
+  typedef typename OutputPointSetType::PointsContainer           PointsContainerType;
+  typedef typename PointsContainerType::Pointer                  PointsContainerPointer;
+  typedef typename OutputPointSetType::PointType                 PointType;
   typedef itk::Statistics::MersenneTwisterRandomVariateGenerator GeneratorType;
   typedef GeneratorType::Pointer                                 GeneratorPointerType;
   typedef GeneratorType::IntegerType                             SeedType;
@@ -87,13 +86,15 @@ public:
 
 protected:
   RandomPointSetSource();
-  ~RandomPointSetSource() override {}
+  ~RandomPointSetSource() override
+  {
+  }
 
   void GenerateData(void) override;
 
 private:
-  RandomPointSetSource(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  RandomPointSetSource(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   unsigned int m_NumberOfPoints;
 
@@ -101,9 +102,7 @@ private:
 
   PointType m_MinPoint;
   PointType m_MaxPoint;
-
 };
-
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION

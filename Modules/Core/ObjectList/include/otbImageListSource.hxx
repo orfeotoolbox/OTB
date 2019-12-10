@@ -29,8 +29,7 @@ namespace otb
  *   Constructor
  */
 template <class TOutputImage>
-ImageListSource<TOutputImage>
-::ImageListSource()
+ImageListSource<TOutputImage>::ImageListSource()
 {
   this->Superclass::SetNumberOfRequiredOutputs(1);
   this->Superclass::SetNthOutput(0, ImageList<TOutputImage>::New().GetPointer());
@@ -40,23 +39,19 @@ ImageListSource<TOutputImage>
  * \return The image list produced.
  */
 template <class TOutputImage>
-typename ImageListSource<TOutputImage>::OutputImageListType *
-ImageListSource<TOutputImage>
-::GetOutput(void)
+typename ImageListSource<TOutputImage>::OutputImageListType* ImageListSource<TOutputImage>::GetOutput(void)
 {
   if (this->GetNumberOfOutputs() < 1)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<OutputImageListType *> (this->ProcessObject::GetOutput(0));
+  }
+  return static_cast<OutputImageListType*>(this->ProcessObject::GetOutput(0));
 }
 /**
  * PrintSelf Method
  */
-template<class TOutputImage>
-void
-ImageListSource<TOutputImage>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TOutputImage>
+void ImageListSource<TOutputImage>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

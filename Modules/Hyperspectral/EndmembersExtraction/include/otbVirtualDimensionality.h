@@ -55,16 +55,15 @@ namespace otb
  *
  * \ingroup OTBEndmembersExtraction
  */
-template<class TPrecision>
-class ITK_EXPORT VirtualDimensionality :
-  public itk::LightObject
+template <class TPrecision>
+class ITK_EXPORT VirtualDimensionality : public itk::LightObject
 {
 public:
   /** Standard Self typedef */
-  typedef VirtualDimensionality           Self;
-  typedef itk::LightObject                           Superclass;
-  typedef itk::SmartPointer<Self>                    Pointer;
-  typedef itk::SmartPointer<const Self>              ConstPointer;
+  typedef VirtualDimensionality         Self;
+  typedef itk::LightObject              Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -75,8 +74,8 @@ public:
   /** Types to use for computations. */
   typedef TPrecision PrecisionType;
 
-  typedef vnl_vector<PrecisionType>   VectorType;
-  typedef vnl_matrix<PrecisionType>   MatrixType;
+  typedef vnl_vector<PrecisionType> VectorType;
+  typedef vnl_matrix<PrecisionType> MatrixType;
 
   void SetCovariance(const MatrixType& m)
   {
@@ -118,22 +117,22 @@ public:
 
 protected:
   VirtualDimensionality();
-  ~VirtualDimensionality() override {}
+  ~VirtualDimensionality() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  VirtualDimensionality(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  VirtualDimensionality(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   MatrixType m_Covariance;
   MatrixType m_Correlation;
 
   unsigned int m_NumberOfPixels;
   unsigned int m_NumberOfEndmembers;
-  double m_FAR;
-
+  double       m_FAR;
 };
-
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION

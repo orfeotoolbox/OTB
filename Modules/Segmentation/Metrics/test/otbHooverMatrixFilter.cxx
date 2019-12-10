@@ -27,21 +27,20 @@
 
 int otbHooverMatrixFilter(int argc, char* argv[])
 {
-  typedef itk::LabelObject<unsigned int, 2>          LabelObjectType;
-  typedef itk::LabelMap<LabelObjectType>            LabelMapType;
-  typedef otb::HooverMatrixFilter<LabelMapType>  HooverMatrixFilterType;
-  typedef otb::Image<unsigned int, 2>               ImageType;
-  typedef itk::LabelImageToLabelMapFilter
-    <ImageType, LabelMapType>                       ImageToLabelMapFilterType;
-  typedef otb::ImageFileReader<ImageType>           ImageReaderType;
-  typedef HooverMatrixFilterType::MatrixType     MatrixType;
+  typedef itk::LabelObject<unsigned int, 2> LabelObjectType;
+  typedef itk::LabelMap<LabelObjectType>        LabelMapType;
+  typedef otb::HooverMatrixFilter<LabelMapType> HooverMatrixFilterType;
+  typedef otb::Image<unsigned int, 2>                              ImageType;
+  typedef itk::LabelImageToLabelMapFilter<ImageType, LabelMapType> ImageToLabelMapFilterType;
+  typedef otb::ImageFileReader<ImageType>    ImageReaderType;
+  typedef HooverMatrixFilterType::MatrixType MatrixType;
 
-  if(argc != 4)
-    {
+  if (argc != 4)
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " segmentationGT segmentationMS HooverMatrix.txt" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   ImageReaderType::Pointer gt_reader = ImageReaderType::New();
   gt_reader->SetFileName(argv[1]);
@@ -66,23 +65,23 @@ int otbHooverMatrixFilter(int argc, char* argv[])
   std::ofstream outputFile;
   outputFile.open(argv[3]);
 
-  MatrixType &mat = hooverFilter->GetHooverConfusionMatrix();
+  MatrixType&  mat = hooverFilter->GetHooverConfusionMatrix();
   unsigned int n = mat.Rows(), p = mat.Cols();
-  for (unsigned int i=0; i<n; i++)
+  for (unsigned int i = 0; i < n; i++)
+  {
+    for (unsigned int j = 0; j < p; j++)
     {
-    for (unsigned int j=0; j<p; j++)
-      {
       outputFile << mat(i, j);
-      if ((j+1) == p)
-        {
+      if ((j + 1) == p)
+      {
         outputFile << "\n";
-        }
+      }
       else
-        {
+      {
         outputFile << "\t";
-        }
       }
     }
+  }
 
   return EXIT_SUCCESS;
 }

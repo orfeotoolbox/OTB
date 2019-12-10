@@ -82,7 +82,7 @@ namespace ossimplugins
          //---
          // Convenient method to print important image info:
          //---
-         void  printInfo (ostream& os) const;
+         void  printInfo (std::ostream& os) const;
 
          /**
           * Method to save the state of the object to a keyword list.

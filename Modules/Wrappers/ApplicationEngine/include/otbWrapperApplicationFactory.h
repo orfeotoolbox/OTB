@@ -30,7 +30,7 @@ namespace otb
 namespace Wrapper
 {
 
-template < class TApplication >
+template <class TApplication>
 class ITK_ABI_EXPORT ApplicationFactory : public ApplicationFactoryBase
 {
 public:
@@ -42,51 +42,49 @@ public:
 
   /** Class methods used to interface with the registered factories. */
   const char* GetITKSourceVersion(void) const override
-    {
+  {
     return ITK_SOURCE_VERSION;
-    }
+  }
 
   const char* GetDescription(void) const override
-    {
+  {
     return "ApplicationFactory";
-    }
+  }
 
   /** Method for class instantiation. */
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(ApplicationFactory, ApplicationFactoryBase);
-  
+
   void SetClassName(const char* name)
   {
     // remove namespace, only keep class name
-    std::string tmpName(name);
+    std::string            tmpName(name);
     std::string::size_type pos = tmpName.rfind("::");
     if (pos != std::string::npos)
-      {
-      tmpName = tmpName.substr(pos+2);
-      }
+    {
+      tmpName = tmpName.substr(pos + 2);
+    }
     m_ClassName.assign(tmpName);
   }
 
 protected:
   ApplicationFactory()
   {
-
   }
 
   ~ApplicationFactory() override
   {
-
   }
 
   /** This method is provided by sub-classes of ObjectFactoryBase.
    * It should create the named itk object or return 0 if that object
    * is not supported by the factory implementation. */
-  LightObject::Pointer CreateObject(const char* itkclassname ) override
+  LightObject::Pointer CreateObject(const char* itkclassname) override
   {
     LightObject::Pointer ret;
-    if ( m_ClassName == itkclassname)
+    if (m_ClassName == itkclassname)
       ret = TApplication::New().GetPointer();
 
     return ret;
@@ -95,45 +93,42 @@ protected:
   /** This method creates all the objects with the new class of
    * itkclass name, which are provide by this object
    */
-  std::list<LightObject::Pointer>
-  CreateAllObject(const char* itkclassname) override
+  std::list<LightObject::Pointer> CreateAllObject(const char* itkclassname) override
   {
-    const std::string applicationClass("otbWrapperApplication");
+    const std::string               applicationClass("otbWrapperApplication");
     std::list<LightObject::Pointer> list;
-    if ( m_ClassName == itkclassname ||
-         applicationClass == itkclassname )
+    if (m_ClassName == itkclassname || applicationClass == itkclassname)
       list.push_back(TApplication::New().GetPointer());
 
     return list;
   }
 
 private:
-  ApplicationFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-  
+  ApplicationFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
+
   std::string m_ClassName;
 };
 
 } // end namespace Wrapper
-} //end namespace otb
+} // end namespace otb
 
 #if (defined(WIN32) || defined(_WIN32))
-#  define OTB_APP_EXPORT __declspec(dllexport)
+#define OTB_APP_EXPORT __declspec(dllexport)
 #else
-#  define OTB_APP_EXPORT
+#define OTB_APP_EXPORT
 #endif
 
-#define OTB_APPLICATION_EXPORT( ApplicationType )                                      \
-  typedef otb::Wrapper::ApplicationFactory<ApplicationType> ApplicationFactoryType;    \
-  static ApplicationFactoryType::Pointer staticFactory;                                \
-  extern "C"                                                                           \
-  {                                                                                    \
-    OTB_APP_EXPORT itk::ObjectFactoryBase* itkLoad()                                   \
-    {                                                                                  \
-      staticFactory = ApplicationFactoryType::New();                                   \
-      staticFactory->SetClassName(#ApplicationType);                                   \
-      return staticFactory;                                                            \
-    }                                                                                  \
+#define OTB_APPLICATION_EXPORT(ApplicationType)                                     \
+  typedef otb::Wrapper::ApplicationFactory<ApplicationType> ApplicationFactoryType; \
+  static ApplicationFactoryType::Pointer                    staticFactory;          \
+  extern "C" {                                                                      \
+  OTB_APP_EXPORT itk::ObjectFactoryBase* itkLoad()                                  \
+  {                                                                                 \
+    staticFactory = ApplicationFactoryType::New();                                  \
+    staticFactory->SetClassName(#ApplicationType);                                  \
+    return staticFactory;                                                           \
+  }                                                                                 \
   }
 
 

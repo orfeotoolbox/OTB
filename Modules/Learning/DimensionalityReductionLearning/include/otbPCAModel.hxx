@@ -31,11 +31,11 @@
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #endif
 #include "otbSharkUtils.h"
-//include train function
+// include train function
 #include <shark/ObjectiveFunctions/ErrorFunction.h>
-#include <shark/Algorithms/GradientDescent/Rprop.h>// the RProp optimization algorithm
+#include <shark/Algorithms/GradientDescent/Rprop.h>    // the RProp optimization algorithm
 #include <shark/ObjectiveFunctions/Loss/SquaredLoss.h> // squared loss used for regression
-#include <shark/ObjectiveFunctions/Regularizer.h> //L2 regulariziation
+#include <shark/ObjectiveFunctions/Regularizer.h>      //L2 regulariziation
 #include <shark/ObjectiveFunctions/ErrorFunction.h>
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic pop
@@ -48,7 +48,7 @@ template <class TInputValue>
 PCAModel<TInputValue>::PCAModel()
 {
   this->m_IsDoPredictBatchMultiThreaded = true;
-  this->m_Dimension = 0;
+  this->m_Dimension                     = 0;
 }
 
 template <class TInputValue>
@@ -57,54 +57,51 @@ PCAModel<TInputValue>::~PCAModel()
 }
 
 template <class TInputValue>
-void
-PCAModel<TInputValue>::Train()
+void PCAModel<TInputValue>::Train()
 {
   std::vector<shark::RealVector> features;
 
   Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
 
-  shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
+  shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange(features);
   m_PCA.setData(inputSamples);
   m_PCA.encoder(m_Encoder, this->m_Dimension);
   m_PCA.decoder(m_Decoder, this->m_Dimension);
 }
 
 template <class TInputValue>
-bool
-PCAModel<TInputValue>::CanReadFile(const std::string & filename)
+bool PCAModel<TInputValue>::CanReadFile(const std::string& filename)
 {
   try
   {
     this->Load(filename);
     m_Encoder.name();
   }
-  catch(...)
+  catch (...)
   {
-  return false;
+    return false;
   }
   return true;
 }
 
 template <class TInputValue>
-bool PCAModel<TInputValue>::CanWriteFile(const std::string & /*filename*/)
+bool PCAModel<TInputValue>::CanWriteFile(const std::string& /*filename*/)
 {
   return true;
 }
 
 template <class TInputValue>
-void
-PCAModel<TInputValue>::Save(const std::string & filename, const std::string & /*name*/)
+void PCAModel<TInputValue>::Save(const std::string& filename, const std::string& /*name*/)
 {
   std::ofstream ofs(filename);
-  ofs << "pca" << std::endl; //first line
+  ofs << "pca" << std::endl; // first line
   shark::TextOutArchive oa(ofs);
   m_Encoder.write(oa);
   ofs.close();
 
-  if (this->m_WriteEigenvectors == true)     // output the map vectors in a txt file
-    {
-    std::ofstream otxt(filename+".txt");
+  if (this->m_WriteEigenvectors == true) // output the map vectors in a txt file
+  {
+    std::ofstream otxt(filename + ".txt");
 
     otxt << "Eigenvectors : " << m_PCA.eigenvectors() << std::endl;
     otxt << "Eigenvalues : " << m_PCA.eigenvalues() << std::endl;
@@ -113,84 +110,84 @@ PCAModel<TInputValue>::Save(const std::string & filename, const std::string & /*
 
     shark::SquaredLoss<shark::RealVector> loss;
     Shark::ListSampleToSharkVector(this->GetInputListSample(), features);
-    shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
-    otxt << "Reconstruction error : " <<
-      loss.eval(inputSamples,m_Decoder(m_Encoder(inputSamples))) << std::endl;
+    shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange(features);
+    otxt << "Reconstruction error : " << loss.eval(inputSamples, m_Decoder(m_Encoder(inputSamples))) << std::endl;
     otxt.close();
-    }
+  }
 }
 
 template <class TInputValue>
-void
-PCAModel<TInputValue>::Load(const std::string & filename, const std::string & /*name*/)
+void PCAModel<TInputValue>::Load(const std::string& filename, const std::string& /*name*/)
 {
   std::ifstream ifs(filename);
-  char encoder[256];
-  ifs.getline(encoder,256); 
+  char          encoder[256];
+  ifs.getline(encoder, 256);
   std::string encoderstr(encoder);
 
-  if (encoderstr != "pca"){
-    itkExceptionMacro(<< "Error opening " << filename.c_str() );
-    }
+  if (encoderstr != "pca")
+  {
+    itkExceptionMacro(<< "Error opening " << filename.c_str());
+  }
   shark::TextInArchive ia(ifs);
   m_Encoder.read(ia);
   ifs.close();
-  if (this->m_Dimension ==0)
+  if (this->m_Dimension == 0)
   {
     this->m_Dimension = m_Encoder.outputShape()[0];
   }
 
   auto eigenvectors = m_Encoder.matrix();
-  eigenvectors.resize(this->m_Dimension,m_Encoder.inputShape()[0]);
+  eigenvectors.resize(this->m_Dimension, m_Encoder.inputShape()[0]);
 
-  m_Encoder.setStructure(eigenvectors, m_Encoder.offset() );
+  m_Encoder.setStructure(eigenvectors, m_Encoder.offset());
 }
 
 template <class TInputValue>
-typename PCAModel<TInputValue>::TargetSampleType
-PCAModel<TInputValue>::DoPredict(const InputSampleType & value, ConfidenceValueType * /*quality*/, ProbaSampleType * /*proba*/) const
-{  
+typename PCAModel<TInputValue>::TargetSampleType PCAModel<TInputValue>::DoPredict(const InputSampleType& value, ConfidenceValueType* /*quality*/,
+                                                                                  ProbaSampleType* /*proba*/) const
+{
   shark::RealVector samples(value.Size());
-  for(size_t i = 0; i < value.Size();i++)
-    {
-    samples[i]=value[i];
-    }
-    
-    std::vector<shark::RealVector> features;
-    features.push_back(samples);
-   
-    shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
-     
+  for (size_t i = 0; i < value.Size(); i++)
+  {
+    samples[i] = value[i];
+  }
+
+  std::vector<shark::RealVector> features;
+  features.push_back(samples);
+
+  shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
+
   data = m_Encoder(data);
   TargetSampleType target;
   target.SetSize(this->m_Dimension);
-  
-  for(unsigned int a = 0; a < this->m_Dimension; ++a){
-    target[a]=data.element(0)[a];
+
+  for (unsigned int a = 0; a < this->m_Dimension; ++a)
+  {
+    target[a] = data.element(0)[a];
   }
   return target;
 }
 
 template <class TInputValue>
-void PCAModel<TInputValue>
-::DoPredictBatch(const InputListSampleType *input, const unsigned int & startIndex, const unsigned int & size, TargetListSampleType * targets, ConfidenceListSampleType * /*quality*/,ProbaListSampleType * /*proba*/) const
+void PCAModel<TInputValue>::DoPredictBatch(const InputListSampleType* input, const unsigned int& startIndex, const unsigned int& size,
+                                           TargetListSampleType* targets, ConfidenceListSampleType* /*quality*/, ProbaListSampleType* /*proba*/) const
 {
   std::vector<shark::RealVector> features;
-  Shark::ListSampleRangeToSharkVector(input, features,startIndex,size);
+  Shark::ListSampleRangeToSharkVector(input, features, startIndex, size);
   shark::Data<shark::RealVector> data = shark::createDataFromRange(features);
-  TargetSampleType target;
-  data = m_Encoder(data);
+  TargetSampleType               target;
+  data            = m_Encoder(data);
   unsigned int id = startIndex;
   target.SetSize(this->m_Dimension);
-  for(const auto& p : data.elements())
+  for (const auto& p : data.elements())
+  {
+    for (unsigned int a = 0; a < this->m_Dimension; ++a)
     {
-    for(unsigned int a = 0; a < this->m_Dimension; ++a)
-      {
-      target[a]=p[a];
-      }
-    targets->SetMeasurementVector(id,target);
-    ++id;
+      target[a] = p[a];
     }
+    targets->SetMeasurementVector(id, target);
+    ++id;
+  }
 }
 
 } // namespace otb

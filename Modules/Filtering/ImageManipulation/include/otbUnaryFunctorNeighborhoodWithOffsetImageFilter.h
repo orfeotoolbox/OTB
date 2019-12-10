@@ -40,15 +40,14 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage, class TOutputImage, class TFunction>
-class ITK_EXPORT UnaryFunctorNeighborhoodWithOffsetImageFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT UnaryFunctorNeighborhoodWithOffsetImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef UnaryFunctorNeighborhoodWithOffsetImageFilter      Self;
+  typedef UnaryFunctorNeighborhoodWithOffsetImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -133,7 +132,9 @@ protected:
   /**
    * Destructor
    */
-  ~UnaryFunctorNeighborhoodWithOffsetImageFilter() override {}
+  ~UnaryFunctorNeighborhoodWithOffsetImageFilter() override
+  {
+  }
 
   void BeforeThreadedGenerateData() override;
 
@@ -152,12 +153,12 @@ protected:
   /**
    * Pad the input requested region by radius
    */
-  void GenerateInputRequestedRegion(void) override;
+  void                     GenerateInputRequestedRegion(void) override;
   std::vector<FunctorType> m_FunctorList;
 
 private:
-  UnaryFunctorNeighborhoodWithOffsetImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  UnaryFunctorNeighborhoodWithOffsetImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InputImageSizeType m_Radius;
 

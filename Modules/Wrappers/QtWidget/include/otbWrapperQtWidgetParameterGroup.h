@@ -45,7 +45,7 @@ public:
   ~QtWidgetParameterGroup() override;
 
 public slots:
-  void SetActivationState( bool value ) override;
+  void SetActivationState(bool value) override;
 
 private:
   QtWidgetParameterGroup(const QtWidgetParameterGroup&) = delete;
@@ -60,12 +60,9 @@ private:
   ParameterGroup::Pointer m_ParamList;
 
   typedef std::vector<QtWidgetParameterBase*> WidgetListType;
-  typedef WidgetListType::iterator WidgetListIteratorType;
-  WidgetListType m_WidgetList;
-
+  typedef WidgetListType::iterator            WidgetListIteratorType;
+  WidgetListType                              m_WidgetList;
 };
-
-
 }
 }
 

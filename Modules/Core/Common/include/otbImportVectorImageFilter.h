@@ -42,8 +42,7 @@ namespace otb
  */
 
 template <typename TOutputImageType>
-class ITK_EXPORT ImportVectorImageFilter :
-  public itk::ImageSource<TOutputImageType>
+class ITK_EXPORT ImportVectorImageFilter : public itk::ImageSource<TOutputImageType>
 {
 public:
   /** Typedef for the output image.   */
@@ -79,7 +78,7 @@ public:
   typedef typename TOutputPixel::ValueType    TPixel;
 
   /** Get the pointer from which the image data is imported. */
-  TPixel *GetImportPointer();
+  TPixel* GetImportPointer();
 
   /** Set the pointer from which the image data is imported.  "num" is
    * the number of pixels in the block of memory. If
@@ -88,8 +87,7 @@ public:
    * buffer retains the responsibility of freeing the memory for this image
    * data.  If "LetFilterManageMemory" is true, then this class
    * will free the memory when this object is destroyed. */
-  virtual void SetImportPointer(TPixel *ptr, unsigned long num,
-                                bool LetFilterManageMemory);
+  virtual void SetImportPointer(TPixel* ptr, unsigned long num, bool LetFilterManageMemory);
 
   /** Set the region object that defines the size and starting index
    * for the imported image. This will serve as the LargestPossibleRegion,
@@ -98,10 +96,10 @@ public:
   void SetRegion(const RegionType& region)
   {
     if (m_Region != region)
-      {
+    {
       m_Region = region;
       this->Modified();
-      }
+    }
   }
 
   /** Get the region object that defines the size and starting index
@@ -152,12 +150,12 @@ protected:
 
   /** This filter does not actually "produce" any data, rather it "wraps"
    * the user supplied data into an itk::Image.  */
-   void GenerateData() override;
+  void GenerateData() override;
 
   /** This is a source, so it must set the spacing, size, and largest possible
    * region for the output image that it will produce.
    * \sa ProcessObject::GenerateOutputInformation() */
-   void GenerateOutputInformation() override;
+  void GenerateOutputInformation() override;
 
   /** This filter can only produce the amount of data that it is given,
    * so we must override ProcessObject::EnlargeOutputRequestedRegion()
@@ -166,11 +164,11 @@ protected:
    * given.)
    *
    * \sa ProcessObject::EnlargeOutputRequestedRegion() */
-   void EnlargeOutputRequestedRegion(itk::DataObject *output) override;
+  void EnlargeOutputRequestedRegion(itk::DataObject* output) override;
 
 private:
-  ImportVectorImageFilter(const ImportVectorImageFilter &) = delete;
-  void operator =(const ImportVectorImageFilter&) = delete;
+  ImportVectorImageFilter(const ImportVectorImageFilter&) = delete;
+  void operator=(const ImportVectorImageFilter&) = delete;
 
   RegionType    m_Region;
   double        m_Spacing[OutputImageType::ImageDimension];

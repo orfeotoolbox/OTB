@@ -44,15 +44,13 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = float>
-class ITK_EXPORT SarRadiometricCalibrationFunction :
-  public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::AbsType,
-      TCoordRep>
+class ITK_EXPORT SarRadiometricCalibrationFunction
+    : public itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::AbsType, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
   typedef SarRadiometricCalibrationFunction Self;
-  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::AbsType,
-      TCoordRep>                        Superclass;
+  typedef itk::ImageFunction<TInputImage, typename itk::NumericTraits<typename TInputImage::PixelType>::AbsType, TCoordRep> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -73,13 +71,13 @@ public:
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Datatype used for the evaluation */
-  typedef double                                                 RealType;
-//  typedef otb::Functor::SarRadiometricCalibrationFunctor<RealType, RealType>           FunctorType;
-//  typedef typename FunctorType::RealType                        FunctorRealType;
+  typedef double RealType;
+  //  typedef otb::Functor::SarRadiometricCalibrationFunctor<RealType, RealType>           FunctorType;
+  //  typedef typename FunctorType::RealType                        FunctorRealType;
 
-  typedef otb::SarParametricMapFunction<InputImageType>               ParametricFunctionType;
-  typedef typename ParametricFunctionType::Pointer                    ParametricFunctionPointer;
-  typedef typename ParametricFunctionType::ConstPointer               ParametricFunctionConstPointer;
+  typedef otb::SarParametricMapFunction<InputImageType> ParametricFunctionType;
+  typedef typename ParametricFunctionType::Pointer      ParametricFunctionPointer;
+  typedef typename ParametricFunctionType::ConstPointer ParametricFunctionConstPointer;
 
   /** Evalulate the function at specified index */
   OutputType EvaluateAtIndex(const IndexType& index) const override;
@@ -103,7 +101,7 @@ public:
    * \warning this method caches BufferedRegion information.
    * If the BufferedRegion has changed, user must call
    * SetInputImage again to update cached values. */
-  void SetInputImage( const InputImageType * ptr ) override;
+  void SetInputImage(const InputImageType* ptr) override;
 
 
   /** Get/Set the Scale value */
@@ -158,7 +156,7 @@ public:
   itkSetMacro(ApplyRescalingFactor, bool);
   itkGetMacro(ApplyRescalingFactor, bool);
 
-    typedef SarCalibrationLookupData::Pointer LookupDataPointer;
+  typedef SarCalibrationLookupData::Pointer LookupDataPointer;
 
   /** Set SetCalibrationLookupData instance */
   void SetCalibrationLookupData(LookupDataPointer lut)
@@ -167,12 +165,13 @@ public:
   }
 
 protected:
-
   /** ctor */
   SarRadiometricCalibrationFunction();
 
   /** default, empty, virtual dtor */
-  ~SarRadiometricCalibrationFunction() override{}
+  ~SarRadiometricCalibrationFunction() override
+  {
+  }
 
   /** print method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
@@ -180,31 +179,29 @@ protected:
   /** Flags to indicate if these values needs to be applied in calibration*/
 
 private:
-  SarRadiometricCalibrationFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SarRadiometricCalibrationFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  RealType             m_Scale;
-  bool                        m_EnableNoise;
-  RealType             m_RescalingFactor;
-  bool                        m_ApplyAntennaPatternGain;
-  bool                        m_ApplyIncidenceAngleCorrection;
-  bool                        m_ApplyRangeSpreadLossCorrection;
-  bool                        m_ApplyLookupDataCorrection;
-  bool                        m_ApplyRescalingFactor;
-  ParametricFunctionPointer   m_Noise;
-  ParametricFunctionPointer   m_AntennaPatternNewGain;
-  ParametricFunctionPointer   m_AntennaPatternOldGain;
-  ParametricFunctionPointer   m_IncidenceAngle;
-  ParametricFunctionPointer   m_RangeSpreadLoss;
-  LookupDataPointer   m_Lut;
-
-
+  RealType                  m_Scale;
+  bool                      m_EnableNoise;
+  RealType                  m_RescalingFactor;
+  bool                      m_ApplyAntennaPatternGain;
+  bool                      m_ApplyIncidenceAngleCorrection;
+  bool                      m_ApplyRangeSpreadLossCorrection;
+  bool                      m_ApplyLookupDataCorrection;
+  bool                      m_ApplyRescalingFactor;
+  ParametricFunctionPointer m_Noise;
+  ParametricFunctionPointer m_AntennaPatternNewGain;
+  ParametricFunctionPointer m_AntennaPatternOldGain;
+  ParametricFunctionPointer m_IncidenceAngle;
+  ParametricFunctionPointer m_RangeSpreadLoss;
+  LookupDataPointer         m_Lut;
 };
 
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
-# include "otbSarRadiometricCalibrationFunction.hxx"
+#include "otbSarRadiometricCalibrationFunction.hxx"
 #endif
 
 #endif

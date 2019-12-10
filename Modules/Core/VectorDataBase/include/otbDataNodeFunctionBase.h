@@ -46,35 +46,34 @@ namespace otb
  */
 
 template <class TDataNode, class TOutput>
-class ITK_EXPORT DataNodeFunctionBase :
-    public itk::FunctionBase<TDataNode, TOutput>
+class ITK_EXPORT DataNodeFunctionBase : public itk::FunctionBase<TDataNode, TOutput>
 {
 public:
   /** Standard class typedefs. */
-  typedef DataNodeFunctionBase                  Self;
+  typedef DataNodeFunctionBase Self;
   typedef itk::FunctionBase<TDataNode, TOutput> Superclass;
-  typedef itk::SmartPointer<Self>               Pointer;
-  typedef itk::SmartPointer<const Self>         ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(otb::DataNodeFunctionBase, itk::FunctionBase);
 
   /** Input type */
-  typedef TDataNode  DataNodeType;
+  typedef TDataNode DataNodeType;
 
   /** Output type */
-  typedef TOutput    OutputType;
+  typedef TOutput OutputType;
 
   /** Evaluate at the specified input position */
-  OutputType Evaluate( const DataNodeType& node ) const override = 0;
+  OutputType Evaluate(const DataNodeType& node) const override = 0;
 
 protected:
   DataNodeFunctionBase(){};
   ~DataNodeFunctionBase() override{};
 
 private:
-  DataNodeFunctionBase(const Self& ) = delete;
-  void operator=(const Self& ) = delete;
+  DataNodeFunctionBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

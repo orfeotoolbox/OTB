@@ -126,6 +126,8 @@ otb_add_test(NAME dmTvStreamingWarpImageFilter COMMAND otbTransformTestDriver
   5
   )
 
+otb_add_test(NAME dmTvStreamingWarpImageFilterEmtpyRegion COMMAND otbTransformTestDriver
+                  otbStreamingWarpImageFilterEmptyRegion)
 
 # Forward / Backward projection consistency checking
 set(FWDBWDChecking_INPUTS

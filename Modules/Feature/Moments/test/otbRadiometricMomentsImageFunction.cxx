@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -31,22 +29,21 @@
 #include "otbRadiometricMomentsImageFunction.h"
 
 
-
-int otbRadiometricMomentsImageFunction(int itkNotUsed(argc), char * argv[])
+int otbRadiometricMomentsImageFunction(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename  = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
   typedef unsigned char InputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
-  typedef otb::ImageFileReader<InputImageType>                    ReaderType;
-  typedef otb::RadiometricMomentsImageFunction<InputImageType>    FunctionType;
-  typedef FunctionType::OutputType                                OutputType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType>                 ReaderType;
+  typedef otb::RadiometricMomentsImageFunction<InputImageType> FunctionType;
+  typedef FunctionType::OutputType                             OutputType;
 
-  ReaderType::Pointer   reader         = ReaderType::New();
-  FunctionType::Pointer function       = FunctionType::New();
+  ReaderType::Pointer   reader   = ReaderType::New();
+  FunctionType::Pointer function = FunctionType::New();
 
   reader->SetFileName(inputFilename);
   reader->Update();
@@ -64,9 +61,9 @@ int otbRadiometricMomentsImageFunction(int itkNotUsed(argc), char * argv[])
   outputStream << std::setprecision(10) << "Radiometric moments: [10]" << std::endl;
 
   for (unsigned int j = 1; j < 5; ++j)
-    {
-    outputStream << "Radiometric Moment(" << j << ") = " << Result[j-1] << std::endl;
-    }
+  {
+    outputStream << "Radiometric Moment(" << j << ") = " << Result[j - 1] << std::endl;
+  }
 
   outputStream.close();
 

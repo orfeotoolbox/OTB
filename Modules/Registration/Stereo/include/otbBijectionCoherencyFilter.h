@@ -45,17 +45,15 @@ namespace otb
  *
  * \ingroup OTBStereo
  */
-template <class TDisparityImage, class TOutputImage = otb::Image<unsigned char> >
-class ITK_EXPORT BijectionCoherencyFilter :
-    public itk::ImageToImageFilter<TDisparityImage,TOutputImage>
+template <class TDisparityImage, class TOutputImage = otb::Image<unsigned char>>
+class ITK_EXPORT BijectionCoherencyFilter : public itk::ImageToImageFilter<TDisparityImage, TOutputImage>
 {
 public:
   /** Standard class typedef */
-  typedef BijectionCoherencyFilter                            Self;
-  typedef itk::ImageToImageFilter<TDisparityImage,
-                                  TOutputImage>             Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  typedef BijectionCoherencyFilter Self;
+  typedef itk::ImageToImageFilter<TDisparityImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -64,50 +62,50 @@ public:
   itkTypeMacro(BijectionCoherencyFilter, ImageToImageFilter);
 
   /** Useful typedefs */
-  typedef TDisparityImage  DispMapType;
-  typedef TOutputImage     MaskType;
+  typedef TDisparityImage DispMapType;
+  typedef TOutputImage    MaskType;
 
-  typedef typename MaskType::RegionType      OutputRegionType;
-  typedef typename DispMapType::RegionType   InputRegionType;
-  typedef typename DispMapType::SizeType     SizeType;
-  typedef typename DispMapType::IndexType    IndexType;
+  typedef typename MaskType::RegionType    OutputRegionType;
+  typedef typename DispMapType::RegionType InputRegionType;
+  typedef typename DispMapType::SizeType   SizeType;
+  typedef typename DispMapType::IndexType  IndexType;
 
   /** Set the direct horizontal disparity map */
-  void SetDirectHorizontalDisparityMapInput( const TDisparityImage * hmap );
+  void SetDirectHorizontalDisparityMapInput(const TDisparityImage* hmap);
 
   /** Set the direct vertical disparity map */
-  void SetDirectVerticalDisparityMapInput( const TDisparityImage * vmap );
+  void SetDirectVerticalDisparityMapInput(const TDisparityImage* vmap);
 
   /** Set the reverse horizontal disparity map */
-  void SetReverseHorizontalDisparityMapInput( const TDisparityImage * hmap );
+  void SetReverseHorizontalDisparityMapInput(const TDisparityImage* hmap);
 
   /** Set the reverse vertical disparity map */
-  void SetReverseVerticalDisparityMapInput( const TDisparityImage * vmap );
+  void SetReverseVerticalDisparityMapInput(const TDisparityImage* vmap);
 
   /** Get the inputs */
-  const TDisparityImage * GetDirectHorizontalDisparityMapInput() const;
-  const TDisparityImage * GetDirectVerticalDisparityMapInput() const;
-  const TDisparityImage * GetReverseHorizontalDisparityMapInput() const;
-  const TDisparityImage * GetReverseVerticalDisparityMapInput() const;
+  const TDisparityImage* GetDirectHorizontalDisparityMapInput() const;
+  const TDisparityImage* GetDirectVerticalDisparityMapInput() const;
+  const TDisparityImage* GetReverseHorizontalDisparityMapInput() const;
+  const TDisparityImage* GetReverseVerticalDisparityMapInput() const;
 
   /** Set the tolerance radius */
-  itkSetMacro(Tolerance,double);
+  itkSetMacro(Tolerance, double);
 
   /** Get the tolerance radius */
-  itkGetMacro(Tolerance,double);
+  itkGetMacro(Tolerance, double);
 
   /** Set/Get macro for exploration area */
-  itkSetMacro(MinHDisp,int);
-  itkGetMacro(MinHDisp,int);
+  itkSetMacro(MinHDisp, int);
+  itkGetMacro(MinHDisp, int);
 
-  itkSetMacro(MaxHDisp,int);
-  itkGetMacro(MaxHDisp,int);
+  itkSetMacro(MaxHDisp, int);
+  itkGetMacro(MaxHDisp, int);
 
-  itkSetMacro(MinVDisp,int);
-  itkGetMacro(MinVDisp,int);
+  itkSetMacro(MinVDisp, int);
+  itkGetMacro(MinVDisp, int);
 
-  itkSetMacro(MaxVDisp,int);
-  itkGetMacro(MaxVDisp,int);
+  itkSetMacro(MaxVDisp, int);
+  itkGetMacro(MaxVDisp, int);
 
 protected:
   /** Constructor */
@@ -123,7 +121,7 @@ protected:
   void GenerateInputRequestedRegion() override;
 
   /** Threaded generate data */
-  void ThreadedGenerateData(const OutputRegionType & outputRegionForThread, itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
   BijectionCoherencyFilter(const Self&) = delete;

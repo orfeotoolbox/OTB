@@ -62,8 +62,7 @@ namespace otb
  */
 
 template <class TInputImage>
-class ITK_EXPORT ContinuousMinimumMaximumImageCalculator :
-  public itk::Object
+class ITK_EXPORT ContinuousMinimumMaximumImageCalculator : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -137,7 +136,9 @@ public:
 
 protected:
   ContinuousMinimumMaximumImageCalculator();
-  ~ContinuousMinimumMaximumImageCalculator() override {}
+  ~ContinuousMinimumMaximumImageCalculator() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   PixelType         m_Minimum;
@@ -154,9 +155,8 @@ protected:
   bool       m_RegionSetByUser;
 
 private:
-  ContinuousMinimumMaximumImageCalculator(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  ContinuousMinimumMaximumImageCalculator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

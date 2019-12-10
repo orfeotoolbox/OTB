@@ -48,17 +48,17 @@ class SOMLearningBehaviorFunctor
 {
 public:
   /** Empty constructor / descructor */
-  SOMLearningBehaviorFunctor () {}
-  virtual ~SOMLearningBehaviorFunctor() {}
+  SOMLearningBehaviorFunctor()
+  {
+  }
+  virtual ~SOMLearningBehaviorFunctor()
+  {
+  }
 
   /** Functor */
-  virtual double operator ()(unsigned int currentIteration,
-                             unsigned int numberOfIterations,
-                             double betaInit, double betaEnd) const
+  virtual double operator()(unsigned int currentIteration, unsigned int numberOfIterations, double betaInit, double betaEnd) const
   {
-    return betaInit + (betaEnd - betaInit)
-           * static_cast<double>(currentIteration)
-           / static_cast<double>(numberOfIterations);
+    return betaInit + (betaEnd - betaInit) * static_cast<double>(currentIteration) / static_cast<double>(numberOfIterations);
   }
 
 }; // end of class SOMLearningBehaviorFunctor

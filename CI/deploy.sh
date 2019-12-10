@@ -1,5 +1,23 @@
 #!/bin/bash
-# This script aims at pushing on otb5-VM2 sources, packages, documentation
+#
+# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+#
+# This file is part of Orfeo Toolbox
+#
+#     https://www.orfeo-toolbox.org/
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
 
 # Configure git for tar.xz
 git config tar.tar.xz.command "xz -c"
@@ -37,9 +55,7 @@ echo "Pushing binary packages"
 scp OTB-*.{run,zip} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
 # Push doc
 echo "Pushing documentation"
-scp {CookBook-*-html.tar.gz,\
-CookBook-*.pdf,\
-OTB-Doxygen-*.tar.bz2} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
+scp {CookBook-*-html.tar.gz,OTB-Doxygen-*.tar.bz2} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
 
 # Create zip, tar.gz and tar.xy source
 echo "Creating source tarball and zip"

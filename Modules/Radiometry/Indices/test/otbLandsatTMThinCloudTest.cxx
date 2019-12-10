@@ -28,36 +28,36 @@
 #include <vector>
 #include <algorithm>
 
-int otbLandsatTMThinCloudTest(int itkNotUsed(argc), char * argv[])
+int otbLandsatTMThinCloudTest(int itkNotUsed(argc), char* argv[])
 {
 
   typedef double InputPixelType;
   typedef double OutputPixelType;
 
-  typedef otb::VectorImage< InputPixelType, 2 > InputImageType;
-  typedef otb::Image< OutputPixelType, 2 > OutputImageType;
+  typedef otb::VectorImage<InputPixelType, 2> InputImageType;
+  typedef otb::Image<OutputPixelType, 2>      OutputImageType;
 
-  typedef otb::ImageFileReader< InputImageType > ReaderType;
-  typedef otb::ImageFileWriter< OutputImageType > WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( argv[1] );
+  reader->SetFileName(argv[1]);
 
   WriterType::Pointer writer = WriterType::New();
-  writer->SetFileName( argv[2] );
+  writer->SetFileName(argv[2]);
 
   typedef otb::Functor::LandsatTM::ThinCloudsSpectralRule<InputImageType::PixelType, OutputPixelType> R1FunctorType;
 
-    typedef itk::UnaryFunctorImageFilter< InputImageType, OutputImageType, R1FunctorType > FilterType;
+  typedef itk::UnaryFunctorImageFilter<InputImageType, OutputImageType, R1FunctorType> FilterType;
 
   FilterType::Pointer filter = FilterType::New();
   (filter->GetFunctor()).SetDegree(otb::Functor::LandsatTM::HundredsKelvin);
   (filter->GetFunctor()).SetReflectance(otb::Functor::LandsatTM::Thousands);
   (filter->GetFunctor()).SetSAT(otb::Functor::LandsatTM::L5);
 
-  filter->SetInput( reader->GetOutput() );
+  filter->SetInput(reader->GetOutput());
 
-  writer->SetInput( filter->GetOutput() );
+  writer->SetInput(filter->GetOutput());
 
   writer->Update();
 

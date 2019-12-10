@@ -62,7 +62,6 @@ struct DataSpec
 };
 
 extern const DataSpec DataSpecP5B[2101];
-
 }
 
 #endif /* otbDataSpecP5B_h */

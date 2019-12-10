@@ -33,7 +33,7 @@
 
 #include "otb_boost_string_header.h"
 
-typedef otb::MachineLearningModel<float,short>         MachineLearningModelType;
+typedef otb::MachineLearningModel<float, short> MachineLearningModelType;
 typedef MachineLearningModelType::InputValueType       InputValueType;
 typedef MachineLearningModelType::InputSampleType      InputSampleType;
 typedef MachineLearningModelType::InputListSampleType  InputListSampleType;
@@ -41,7 +41,7 @@ typedef MachineLearningModelType::TargetValueType      TargetValueType;
 typedef MachineLearningModelType::TargetSampleType     TargetSampleType;
 typedef MachineLearningModelType::TargetListSampleType TargetListSampleType;
 
-typedef otb::MachineLearningModel<float,float>                   MachineLearningModelRegressionType;
+typedef otb::MachineLearningModel<float, float> MachineLearningModelRegressionType;
 typedef MachineLearningModelRegressionType::InputValueType       InputValueRegressionType;
 typedef MachineLearningModelRegressionType::InputSampleType      InputSampleRegressionType;
 typedef MachineLearningModelRegressionType::InputListSampleType  InputListSampleRegressionType;
@@ -59,7 +59,7 @@ float GetConfusionMatrixResults(TargetListSampleType::Pointer predicted, TargetL
   cmCalculator->Compute();
 
   otbLogMacro(Debug, << "Confusion matrix:\n" << cmCalculator->GetConfusionMatrix());
-  otbLogMacro(Info, << "Kappa: "<< cmCalculator->GetKappaIndex());
+  otbLogMacro(Info, << "Kappa: " << cmCalculator->GetKappaIndex());
   otbLogMacro(Debug, << "Overall Accuracy: " << cmCalculator->GetOverallAccuracy());
 
   return cmCalculator->GetKappaIndex();
@@ -72,21 +72,21 @@ void SetupModel(TModel* /*model*/)
 }
 
 template <class TModel>
-int otbGenericMachineLearningModel(int argc, char * argv[])
+int otbGenericMachineLearningModel(int argc, char* argv[])
 {
   if (argc != 3)
-    {
-      std::cout<<"Wrong number of arguments "<<std::endl;
-      std::cout<<"Usage : sample file, output file "<<std::endl;
-      return EXIT_FAILURE;
-    }
-  InputListSampleType::Pointer samples = InputListSampleType::New();
-  TargetListSampleType::Pointer labels = TargetListSampleType::New();
+  {
+    std::cout << "Wrong number of arguments " << std::endl;
+    std::cout << "Usage : sample file, output file " << std::endl;
+    return EXIT_FAILURE;
+  }
+  InputListSampleType::Pointer  samples = InputListSampleType::New();
+  TargetListSampleType::Pointer labels  = TargetListSampleType::New();
   if (!otb::ReadDataFile(argv[1], samples, labels))
-    {
+  {
     std::cout << "Failed to read samples file " << argv[1] << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   typename TModel::Pointer classifier = TModel::New();
   classifier->SetInputListSample(samples);
@@ -95,17 +95,16 @@ int otbGenericMachineLearningModel(int argc, char * argv[])
   classifier->Train();
   classifier->Save(argv[2]);
   TargetListSampleType::Pointer predicted = classifier->PredictBatch(samples, NULL);
-  const float kappa = GetConfusionMatrixResults(predicted, labels);
+  const float                   kappa     = GetConfusionMatrixResults(predicted, labels);
 
   typename TModel::Pointer classifierLoad = TModel::New();
   classifierLoad->Load(argv[2]);
   auto start = std::chrono::system_clock::now();
   otbLogMacro(Debug, << "Predict loaded");
   TargetListSampleType::Pointer predictedLoad = classifierLoad->PredictBatch(samples, NULL);
-  using TimeT = std::chrono::milliseconds;
-  auto duration = std::chrono::duration_cast< TimeT>
-    (std::chrono::system_clock::now() - start);
-  auto elapsed = duration.count();
+  using TimeT                                 = std::chrono::milliseconds;
+  auto duration                               = std::chrono::duration_cast<TimeT>(std::chrono::system_clock::now() - start);
+  auto elapsed                                = duration.count();
   otbLogMacro(Debug, << "PredictBatch took " << elapsed << " ms");
   const float kappaLoad = GetConfusionMatrixResults(predictedLoad, labels);
 
@@ -117,9 +116,9 @@ int otbGenericMachineLearningModel(int argc, char * argv[])
 #include "otbLibSVMMachineLearningModel.h"
 
 using LibSVMType = otb::LibSVMMachineLearningModel<InputValueType, TargetValueType>;
-int otbLibSVMMachineLearningModel(int argc, char * argv[])
+int otbLibSVMMachineLearningModel(int argc, char* argv[])
 {
-  return otbGenericMachineLearningModel<LibSVMType>(argc,argv);
+  return otbGenericMachineLearningModel<LibSVMType>(argc, argv);
 }
 #endif
 
@@ -135,34 +134,34 @@ int otbLibSVMMachineLearningModel(int argc, char * argv[])
 #include "otbKNearestNeighborsMachineLearningModel.h"
 
 using SVMType = otb::SVMMachineLearningModel<InputValueType, TargetValueType>;
-int otbSVMMachineLearningModel(int argc, char * argv[])
+int otbSVMMachineLearningModel(int argc, char* argv[])
 {
-  return otbGenericMachineLearningModel<SVMType>(argc,argv);
+  return otbGenericMachineLearningModel<SVMType>(argc, argv);
 }
 
-int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
+int otbSVMMachineLearningRegressionModel(int argc, char* argv[])
 {
-  if (argc != 3 )
-    {
-      std::cout<<"Wrong number of arguments "<<std::endl;
-      std::cout<<"Usage : sample file, output file "<<std::endl;
-      return EXIT_FAILURE;
-    }
+  if (argc != 3)
+  {
+    std::cout << "Wrong number of arguments " << std::endl;
+    std::cout << "Usage : sample file, output file " << std::endl;
+    return EXIT_FAILURE;
+  }
 
   typedef otb::SVMMachineLearningModel<InputValueRegressionType, TargetValueRegressionType> SVMType;
 
-  InputListSampleRegressionType::Pointer samples = InputListSampleRegressionType::New();
-  TargetListSampleRegressionType::Pointer labels = TargetListSampleRegressionType::New();
+  InputListSampleRegressionType::Pointer  samples = InputListSampleRegressionType::New();
+  TargetListSampleRegressionType::Pointer labels  = TargetListSampleRegressionType::New();
 
-  if(!otb::ReadDataFile(argv[1],samples,labels))
-    {
-    std::cout<<"Failed to read samples file "<<argv[1]<<std::endl;
+  if (!otb::ReadDataFile(argv[1], samples, labels))
+  {
+    std::cout << "Failed to read samples file " << argv[1] << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   SVMType::Pointer classifier = SVMType::New();
 
-  //Init SVM type in regression mode
+  // Init SVM type in regression mode
   classifier->SetRegressionMode(1);
   classifier->SetSVMType(CvSVM::EPS_SVR);
   classifier->SetP(10);
@@ -173,13 +172,13 @@ int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
   classifier->SetTargetListSample(labels);
   classifier->Train();
 
-  //Predict age using first line of abalone dataset
-  //1:-1 2:0.027027 3:0.0420168 4:-0.831858 5:-0.63733 6:-0.699395 7:-0.735352
-  //8:-0.704036
+  // Predict age using first line of abalone dataset
+  // 1:-1 2:0.027027 3:0.0420168 4:-0.831858 5:-0.63733 6:-0.699395 7:-0.735352
+  // 8:-0.704036
   // Input value is 15.
   InputListSampleRegressionType::Pointer samplesT = InputListSampleRegressionType::New();
 
-  //Init sample list to 8 (size of abalone dataset)
+  // Init sample list to 8 (size of abalone dataset)
   InputSampleRegressionType sample(8);
   sample.Fill(0);
   sample[0] = -1;
@@ -198,61 +197,61 @@ int otbSVMMachineLearningRegressionModel(int argc, char * argv[])
 
   const float age = 15;
 
-  if ( std::abs(age - predicted->GetMeasurementVector(0)[0]) <= 0.3 )
-    {
+  if (std::abs(age - predicted->GetMeasurementVector(0)[0]) <= 0.3)
+  {
     return EXIT_SUCCESS;
-    }
+  }
   else
-    {
+  {
     std::cout << age << "\t" << predicted->GetMeasurementVector(0)[0] << "\n";
     return EXIT_FAILURE;
-    }
+  }
 }
 
-using KNearestNeighborsType = otb::KNearestNeighborsMachineLearningModel<InputValueType,TargetValueType>;
-int otbKNearestNeighborsMachineLearningModel(int argc, char * argv[])
+using KNearestNeighborsType = otb::KNearestNeighborsMachineLearningModel<InputValueType, TargetValueType>;
+int otbKNearestNeighborsMachineLearningModel(int argc, char* argv[])
 {
-  return otbGenericMachineLearningModel<KNearestNeighborsType>(argc,argv);
+  return otbGenericMachineLearningModel<KNearestNeighborsType>(argc, argv);
 }
 
-using RandomForestType = otb::RandomForestsMachineLearningModel<InputValueType,TargetValueType>;
-int otbRandomForestsMachineLearningModel(int argc, char * argv[])
+using RandomForestType = otb::RandomForestsMachineLearningModel<InputValueType, TargetValueType>;
+int otbRandomForestsMachineLearningModel(int argc, char* argv[])
 {
-  return otbGenericMachineLearningModel<RandomForestType>(argc,argv);
+  return otbGenericMachineLearningModel<RandomForestType>(argc, argv);
 }
 
 template <>
 void SetupModel(RandomForestType* model)
 {
-  std::vector<float> priors(26,1.);
+  std::vector<float> priors(26, 1.);
   model->SetPriors(priors);
 }
 
 using BoostType = otb::BoostMachineLearningModel<InputValueType, TargetValueType>;
-int otbBoostMachineLearningModel(int argc, char * argv[])
+int otbBoostMachineLearningModel(int argc, char* argv[])
 {
-  return otbGenericMachineLearningModel<BoostType>(argc,argv);
+  return otbGenericMachineLearningModel<BoostType>(argc, argv);
 }
 
 template <>
-void SetupModel(BoostType *model)
+void SetupModel(BoostType* model)
 {
   // Since otb::BoostMachineLearningModel ONLY handles 2-class classifications, then the
   // labels are split into 2 subsets: even (label = 1) and odd (label = 3) labels
   TargetListSampleType::Pointer labels = model->GetTargetListSample();
-  TargetSampleType currentLabel;
+  TargetSampleType              currentLabel;
   for (unsigned itLabel = 0; itLabel < labels->Size(); ++itLabel)
-    {
+  {
     currentLabel = labels->GetMeasurementVector(itLabel);
     labels->SetMeasurementVector(itLabel, (2 * (currentLabel[0] % 2)) + 1);
-    }
+  }
   model->SetTargetListSample(labels);
 }
 
 using ANNType = otb::NeuralNetworkMachineLearningModel<InputValueType, TargetValueType>;
-int otbANNMachineLearningModel(int argc, char * argv[])
+int otbANNMachineLearningModel(int argc, char* argv[])
 {
-  return otbGenericMachineLearningModel<ANNType>(argc,argv);
+  return otbGenericMachineLearningModel<ANNType>(argc, argv);
 }
 
 template <>
@@ -267,15 +266,15 @@ void SetupModel(ANNType* model)
 }
 
 using NormalBayesType = otb::NormalBayesMachineLearningModel<InputValueType, TargetValueType>;
-int otbNormalBayesMachineLearningModel(int argc, char * argv[])
+int otbNormalBayesMachineLearningModel(int argc, char* argv[])
 {
-  return otbGenericMachineLearningModel<NormalBayesType>(argc,argv);
+  return otbGenericMachineLearningModel<NormalBayesType>(argc, argv);
 }
 
 using DecisionTreeType = otb::DecisionTreeMachineLearningModel<InputValueType, TargetValueType>;
-int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
+int otbDecisionTreeMachineLearningModel(int argc, char* argv[])
 {
-  return otbGenericMachineLearningModel<DecisionTreeType>(argc,argv);
+  return otbGenericMachineLearningModel<DecisionTreeType>(argc, argv);
 }
 #endif
 
@@ -283,10 +282,10 @@ int otbDecisionTreeMachineLearningModel(int argc, char * argv[])
 #ifdef OTB_USE_SHARK
 #include "otbSharkRandomForestsMachineLearningModel.h"
 
-using SharkRandomForestType = otb::SharkRandomForestsMachineLearningModel<InputValueType,TargetValueType>;
-int otbSharkRFMachineLearningModel(int argc, char * argv[])
+using SharkRandomForestType = otb::SharkRandomForestsMachineLearningModel<InputValueType, TargetValueType>;
+int otbSharkRFMachineLearningModel(int argc, char* argv[])
 {
-  return otbGenericMachineLearningModel<SharkRandomForestType>(argc,argv);
+  return otbGenericMachineLearningModel<SharkRandomForestType>(argc, argv);
 }
 
 template <>

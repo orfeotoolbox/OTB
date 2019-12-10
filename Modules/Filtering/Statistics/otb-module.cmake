@@ -33,6 +33,7 @@ otb_module(OTBStatistics
     OTBObjectList
     OTBProjection
     OTBStreaming
+    OTBMosaic
 
   TEST_DEPENDS
     OTBImageIO

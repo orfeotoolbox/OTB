@@ -19,29 +19,27 @@
  */
 
 
-
-
 #include <iomanip>
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbLocalHistogramImageFunction.h"
 
-int otbLocalHistogramImageFunctionTest(int itkNotUsed(argc), char * argv[])
+int otbLocalHistogramImageFunctionTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename  = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  typedef float InputPixelType;
+  typedef float      InputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension>                  InputImageType;
-  typedef otb::ImageFileReader<InputImageType>                    ReaderType;
-  typedef otb::LocalHistogramImageFunction<InputImageType>        FunctionType;
+  typedef otb::Image<InputPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType>             ReaderType;
+  typedef otb::LocalHistogramImageFunction<InputImageType> FunctionType;
 
 
-  ReaderType::Pointer reader         = ReaderType::New();
-  FunctionType::Pointer function     = FunctionType::New();
+  ReaderType::Pointer   reader   = ReaderType::New();
+  FunctionType::Pointer function = FunctionType::New();
 
   reader->SetFileName(inputFilename);
   reader->Update();
@@ -66,10 +64,10 @@ int otbLocalHistogramImageFunctionTest(int itkNotUsed(argc), char * argv[])
   outputStream << "Index: " << index << std::endl;
 
   for (unsigned int i = 0; i < function->GetNumberOfHistogramBins(); ++i)
-    {
-    outputStream << "Bin[" << i << "] = " << "[" << Result->GetBinMin(0, i) << ", " << Result->GetBinMax(0, i)
-        << "[ -> " << Result->GetFrequency(i, 0) << std::endl;
-    }
+  {
+    outputStream << "Bin[" << i << "] = "
+                 << "[" << Result->GetBinMin(0, i) << ", " << Result->GetBinMax(0, i) << "[ -> " << Result->GetFrequency(i, 0) << std::endl;
+  }
 
   outputStream.close();
 

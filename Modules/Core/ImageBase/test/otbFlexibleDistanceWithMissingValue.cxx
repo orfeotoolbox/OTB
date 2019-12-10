@@ -26,7 +26,7 @@
 #include "itkVariableLengthVector.h"
 #include "otbFlexibleDistanceWithMissingValue.h"
 
-int otbFlexibleDistanceWithMissingValue(int itkNotUsed(argc), char * argv[])
+int otbFlexibleDistanceWithMissingValue(int itkNotUsed(argc), char* argv[])
 {
 
   typedef itk::VariableLengthVector<double>                             VectorType;
@@ -34,8 +34,8 @@ int otbFlexibleDistanceWithMissingValue(int itkNotUsed(argc), char * argv[])
 
   const double epsilon(atof(argv[1]));
 
-  float        a = 2.0;
-  float        b = 0.5;
+  float        a   = 2.0;
+  float        b   = 0.5;
   unsigned int dim = 3;
   DistanceType::SetAlphaBeta(a, b);
 
@@ -45,15 +45,17 @@ int otbFlexibleDistanceWithMissingValue(int itkNotUsed(argc), char * argv[])
   VectorType y(dim);
   y.Fill(2.);
 
-  DistanceType::Pointer dist = DistanceType::New();
+  DistanceType::Pointer dist          = DistanceType::New();
   double                distanceValue = dist->Evaluate(x, y);
   std::cout << std::setprecision(20) << std::endl;
   std::cout << "dim, a, b          : " << dim << "," << a << "," << b << std::endl;
-  std::cout << "dim*std::pow(3, b) : " << dim*std::pow(3, b) << std::endl;
+  std::cout << "dim*std::pow(3, b) : " << dim * std::pow(3, b) << std::endl;
   std::cout << "Distance         : " << distanceValue << std::endl;
   std::cout << "Epsilon          : " << epsilon << std::endl;
   std::cout << "-> Tests diff    : " << std::abs(distanceValue - dim * std::pow(3, b)) << std::endl;
 
-  if (std::abs(distanceValue - dim * std::pow(3, b)) < epsilon) return EXIT_SUCCESS;
-  else return EXIT_FAILURE;
+  if (std::abs(distanceValue - dim * std::pow(3, b)) < epsilon)
+    return EXIT_SUCCESS;
+  else
+    return EXIT_FAILURE;
 }

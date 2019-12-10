@@ -26,52 +26,48 @@
 #include "itkProgressReporter.h"
 #include "itkImageRegionConstIteratorWithIndex.h"
 
-namespace otb {
+namespace otb
+{
 
 template <class TInputImage, class TOutputImage>
-LabelMapWithClassLabelToClassLabelImageFilter<TInputImage, TOutputImage>
-::LabelMapWithClassLabelToClassLabelImageFilter()
+LabelMapWithClassLabelToClassLabelImageFilter<TInputImage, TOutputImage>::LabelMapWithClassLabelToClassLabelImageFilter()
 {
 }
 
 
-template<class TInputImage, class TOutputImage>
-void
-LabelMapWithClassLabelToClassLabelImageFilter<TInputImage, TOutputImage>
-::BeforeThreadedGenerateData()
+template <class TInputImage, class TOutputImage>
+void LabelMapWithClassLabelToClassLabelImageFilter<TInputImage, TOutputImage>::BeforeThreadedGenerateData()
 {
-  OutputImageType * output = this->GetOutput();
-  const InputImageType * input = this->GetInput();
-  output->FillBuffer( input->GetBackgroundValue() );
+  OutputImageType*      output = this->GetOutput();
+  const InputImageType* input  = this->GetInput();
+  output->FillBuffer(input->GetBackgroundValue());
   Superclass::BeforeThreadedGenerateData();
 }
 
 
-template<class TInputImage, class TOutputImage>
-void
-LabelMapWithClassLabelToClassLabelImageFilter<TInputImage, TOutputImage>
-::ThreadedProcessLabelObject( LabelObjectType * labelObject )
+template <class TInputImage, class TOutputImage>
+void LabelMapWithClassLabelToClassLabelImageFilter<TInputImage, TOutputImage>::ThreadedProcessLabelObject(LabelObjectType* labelObject)
 {
   typename LabelObjectType::ClassLabelType label = itk::NumericTraits<typename LabelObjectType::ClassLabelType>::max();
-  if(labelObject->HasClassLabel())
-    {
-     label = labelObject->GetClassLabel();
-    }
+  if (labelObject->HasClassLabel())
+  {
+    label = labelObject->GetClassLabel();
+  }
 
-  ConstLineIteratorType lit = ConstLineIteratorType (labelObject);
+  ConstLineIteratorType lit = ConstLineIteratorType(labelObject);
 
-  while( !lit.IsAtEnd() )
-    {
-    IndexType idx = lit.GetLine().GetIndex();
+  while (!lit.IsAtEnd())
+  {
+    IndexType     idx    = lit.GetLine().GetIndex();
     unsigned long length = lit.GetLine().GetLength();
-    for( unsigned int i=0; i<length; ++i)
-      {
-      this->GetOutput()->SetPixel( idx, label );
+    for (unsigned int i = 0; i < length; ++i)
+    {
+      this->GetOutput()->SetPixel(idx, label);
       idx[0]++;
-      }
-    ++lit;
     }
+    ++lit;
+  }
 }
 
-}// end namespace otb
+} // end namespace otb
 #endif

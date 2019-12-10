@@ -63,9 +63,8 @@ protected:
   ~ImageIOFactory() override;
 
 private:
-  ImageIOFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  ImageIOFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -47,7 +47,7 @@ public:
   itkTypeMacro(OSMDownloader, otb::Application);
 
   /** Filter typedef */
-  typedef otb::OSMDataToVectorDataGenerator  VectorDataProviderType;
+  typedef otb::OSMDataToVectorDataGenerator VectorDataProviderType;
 
 private:
   void DoInit() override
@@ -55,21 +55,23 @@ private:
     SetName("OSMDownloader");
     SetDescription("Download vector data from OSM and store it to file");
     // Documentation
-    SetDocLongDescription("The application connects to Open Street Map server"
-      ", downloads the data corresponding to the spatial extent of the support"
-      " image, and filters the geometries based on OSM tags to produce a vector"
-      " data file.\n\n"
-      "This application can be used to download reference data to perform the "
-      "training of a machine learning model (see for instance [1]).\n\n"
-      "By default, the entire layer is downloaded. The application has a "
-      "special mode to provide the list of available classes in the layers. "
-      "The downloaded features are filtered by giving an OSM tag 'key'. In "
-      "addition, the user can also choose what 'value' this key should have. "
-      "More information about the OSM project at [2].");
+    SetDocLongDescription(
+        "The application connects to Open Street Map server"
+        ", downloads the data corresponding to the spatial extent of the support"
+        " image, and filters the geometries based on OSM tags to produce a vector"
+        " data file.\n\n"
+        "This application can be used to download reference data to perform the "
+        "training of a machine learning model (see for instance [1]).\n\n"
+        "By default, the entire layer is downloaded. The application has a "
+        "special mode to provide the list of available classes in the layers. "
+        "The downloaded features are filtered by giving an OSM tag 'key'. In "
+        "addition, the user can also choose what 'value' this key should have. "
+        "More information about the OSM project at [2].");
     SetDocLimitations("This application requires an Internet access.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("[1] TrainImagesClassifier \n"
-      "[2] http://www.openstreetmap.fr/");
+    SetDocSeeAlso(
+        "[1] TrainImagesClassifier \n"
+        "[2] http://www.openstreetmap.fr/");
 
     AddDocTag(Tags::Vector);
 
@@ -77,28 +79,32 @@ private:
     SetParameterDescription("out", "Vector data file to store downloaded features");
 
     AddParameter(ParameterType_InputImage, "support", "Support image");
-    SetParameterDescription("support", "Image used to derive the spatial extent"
-      " to be requested from OSM server (the bounding box of the extent is "
-      "used). Be aware that a request with a large extent may be rejected by "
-      "the server.");
+    SetParameterDescription("support",
+                            "Image used to derive the spatial extent"
+                            " to be requested from OSM server (the bounding box of the extent is "
+                            "used). Be aware that a request with a large extent may be rejected by "
+                            "the server.");
 
-    AddParameter(ParameterType_String, "key",  "OSM tag key");
-    SetParameterDescription("key", "OSM tag key to extract (highway, building"
-     "...). It defines a category to select features.");
+    AddParameter(ParameterType_String, "key", "OSM tag key");
+    SetParameterDescription("key",
+                            "OSM tag key to extract (highway, building"
+                            "...). It defines a category to select features.");
     MandatoryOff("key");
 
-    AddParameter(ParameterType_String, "value",  "OSM tag value");
-    SetParameterDescription("value", "OSM tag value to extract (motorway, "
-      "footway...). It defines the type of feature to select inside a category.");
+    AddParameter(ParameterType_String, "value", "OSM tag value");
+    SetParameterDescription("value",
+                            "OSM tag value to extract (motorway, "
+                            "footway...). It defines the type of feature to select inside a category.");
     MandatoryOff("value");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
 
     AddParameter(ParameterType_Bool, "printclasses", "Displays available key/value classes");
-    SetParameterDescription("printclasses","Print the key/value classes "
-      "available for the selected support image. If enabled, the OSM tag Key "
-      "(-key) and the output (-out) become optional" );
+    SetParameterDescription("printclasses",
+                            "Print the key/value classes "
+                            "available for the selected support image. If enabled, the OSM tag Key "
+                            "(-key) and the output (-out) become optional");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("support", "qb_RoadExtract.tif");
@@ -114,109 +120,104 @@ private:
     // CASE:  when the -print option is not required and the User
     // does not set the option OSMKey or the option Output or does not
     // set both of them
-    if ( GetParameterInt("printclasses") )
-      {
+    if (GetParameterInt("printclasses"))
+    {
       MandatoryOff("out");
       MandatoryOff("key");
-      }
+    }
     else
-      {
+    {
       MandatoryOn("out");
       MandatoryOn("key");
-      }
+    }
   }
 
- void DoExecute() override
+  void DoExecute() override
   {
-    typedef otb::ImageToEnvelopeVectorDataFilter<FloatVectorImageType, VectorDataType>
-      EnvelopeFilterType;
-    typedef otb::VectorDataProperties<VectorDataType>   VectorDataPropertiesType;
+    typedef otb::ImageToEnvelopeVectorDataFilter<FloatVectorImageType, VectorDataType> EnvelopeFilterType;
+    typedef otb::VectorDataProperties<VectorDataType> VectorDataPropertiesType;
 
-  //Instantiate
-  EnvelopeFilterType::Pointer       envelopeFilter = EnvelopeFilterType::New();
-  VectorDataPropertiesType::Pointer vdProperties = VectorDataPropertiesType::New();
-  m_VdOSMGenerator = VectorDataProviderType::New();
+    // Instantiate
+    EnvelopeFilterType::Pointer       envelopeFilter = EnvelopeFilterType::New();
+    VectorDataPropertiesType::Pointer vdProperties   = VectorDataPropertiesType::New();
+    m_VdOSMGenerator                                 = VectorDataProviderType::New();
 
-  // Get the support image
-  envelopeFilter->SetInput( this->GetParameterImage("support") ); //->Output in WGS84
+    // Get the support image
+    envelopeFilter->SetInput(this->GetParameterImage("support")); //->Output in WGS84
 
-  // Setup the DEM Handler
-  otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this,"elev");
+    // Setup the DEM Handler
+    otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
 
-  envelopeFilter->Update();
+    envelopeFilter->Update();
 
-  vdProperties->SetVectorDataObject(envelopeFilter->GetOutput());
-  vdProperties->ComputeBoundingRegion();
+    vdProperties->SetVectorDataObject(envelopeFilter->GetOutput());
+    vdProperties->ComputeBoundingRegion();
 
-  double north, south, east, west;
-  north = vdProperties->GetBoundingRegion().GetIndex()[1]
-           + vdProperties->GetBoundingRegion().GetSize()[1];
-  south = vdProperties->GetBoundingRegion().GetIndex()[1];
-  east  = vdProperties->GetBoundingRegion().GetIndex()[0]
-           + vdProperties->GetBoundingRegion().GetSize()[0];
-  west  = vdProperties->GetBoundingRegion().GetIndex()[0];
+    double north, south, east, west;
+    north = vdProperties->GetBoundingRegion().GetIndex()[1] + vdProperties->GetBoundingRegion().GetSize()[1];
+    south = vdProperties->GetBoundingRegion().GetIndex()[1];
+    east  = vdProperties->GetBoundingRegion().GetIndex()[0] + vdProperties->GetBoundingRegion().GetSize()[0];
+    west  = vdProperties->GetBoundingRegion().GetIndex()[0];
 
-  m_VdOSMGenerator->SetNorth(north);
-  m_VdOSMGenerator->SetSouth(south);
-  m_VdOSMGenerator->SetEast(east);
-  m_VdOSMGenerator->SetWest(west);
+    m_VdOSMGenerator->SetNorth(north);
+    m_VdOSMGenerator->SetSouth(south);
+    m_VdOSMGenerator->SetEast(east);
+    m_VdOSMGenerator->SetWest(west);
 
-  try
-  {
-    m_VdOSMGenerator->Update();
-  }
-  catch ( itk::ExceptionObject & err )
-  {
-  otbAppLogCRITICAL("Exception itk::ExceptionObject raised !");
-  otbAppLogCRITICAL( << err );
-  return;
-  }
-
-  // If the user wants to print the Key/Values present in the XML file
-  // downloaded  :
-  if ( GetParameterInt("printclasses"))
+    try
     {
-    // Print the classes
-    VectorDataProviderType::KeyMapType  keymap = m_VdOSMGenerator->GetKeysMap();
+      m_VdOSMGenerator->Update();
+    }
+    catch (itk::ExceptionObject& err)
+    {
+      otbAppLogCRITICAL("Exception itk::ExceptionObject raised !");
+      otbAppLogCRITICAL(<< err);
+      return;
+    }
 
-    VectorDataProviderType::KeyMapType::iterator  it = keymap.begin();
+    // If the user wants to print the Key/Values present in the XML file
+    // downloaded  :
+    if (GetParameterInt("printclasses"))
+    {
+      // Print the classes
+      VectorDataProviderType::KeyMapType keymap = m_VdOSMGenerator->GetKeysMap();
 
-    while(it != keymap.end())
+      VectorDataProviderType::KeyMapType::iterator it = keymap.begin();
+
+      while (it != keymap.end())
       {
-      otbAppLogINFO(" Key : "<< (*it).first<< " value : ");
-      std::ostringstream oss;
-      for(unsigned int i = 0; i < (*it).second.size(); i++)
+        otbAppLogINFO(" Key : " << (*it).first << " value : ");
+        std::ostringstream oss;
+        for (unsigned int i = 0; i < (*it).second.size(); i++)
         {
-        oss.str();
-        oss << ((*it).second[i]) << " ";
+          oss.str();
+          oss << ((*it).second[i]) << " ";
         }
-      otbAppLogINFO( << oss.str() );
-      ++it;
+        otbAppLogINFO(<< oss.str());
+        ++it;
       }
-    return;
+      return;
     }
 
-  // Get the VectorData By name
-  if ( this->HasValue("value") )
+    // Get the VectorData By name
+    if (this->HasValue("value"))
     {
-    SetParameterOutputVectorData("out", const_cast<VectorDataType*>(m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"),
-                                                                                                          this->GetParameterString("value"))));
+      SetParameterOutputVectorData(
+          "out", const_cast<VectorDataType*>(m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"), this->GetParameterString("value"))));
 
 
-    otbAppLogINFO( << m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"), this->GetParameterString("value"))->Size()-3
-                   << " elements retrieved");
+      otbAppLogINFO(<< m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"), this->GetParameterString("value"))->Size() - 3
+                    << " elements retrieved");
     }
-  else
+    else
     {
-    SetParameterOutputVectorData("out", const_cast<VectorDataType*>(m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"))));
+      SetParameterOutputVectorData("out", const_cast<VectorDataType*>(m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"))));
 
-    otbAppLogINFO( << m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"))->Size()-3
-                   << " elements retrieved");
+      otbAppLogINFO(<< m_VdOSMGenerator->GetVectorDataByName(this->GetParameterString("key"))->Size() - 3 << " elements retrieved");
     }
   }
   VectorDataProviderType::Pointer m_VdOSMGenerator;
 };
-
 }
 }
 

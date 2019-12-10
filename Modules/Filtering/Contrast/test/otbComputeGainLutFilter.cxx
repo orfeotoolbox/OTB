@@ -25,45 +25,45 @@
 #include "otbComputeGainLutFilter.h"
 #include "otbMacro.h"
 
-int otbComputeGainLutFilter(int itkNotUsed(argc), char * argv [])
+int otbComputeGainLutFilter(int itkNotUsed(argc), char* argv[])
 {
-  typedef int InputPixelType;
-  typedef double OutputPixelType;
+  typedef int        InputPixelType;
+  typedef double     OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage< InputPixelType , Dimension > HistoImageType;
-  typedef otb::Image< InputPixelType , Dimension > InputImageType;
-  typedef otb::VectorImage< OutputPixelType , Dimension > LutImageType;
-  typedef otb::ComputeGainLutFilter< HistoImageType , LutImageType > FilterType;
+  typedef otb::VectorImage<InputPixelType, Dimension>             HistoImageType;
+  typedef otb::Image<InputPixelType, Dimension>                   InputImageType;
+  typedef otb::VectorImage<OutputPixelType, Dimension>            LutImageType;
+  typedef otb::ComputeGainLutFilter<HistoImageType, LutImageType> FilterType;
 
-  typedef otb::ImageFileReader< InputImageType > ReaderImageType; 
-  typedef otb::ImageFileReader< HistoImageType > ReaderType; 
-  typedef otb::ImageFileWriter< LutImageType > WriterType;
-  ReaderImageType::Pointer readerImage( ReaderImageType::New() );
-  ReaderType::Pointer reader( ReaderType::New() );
-  WriterType::Pointer writer ( WriterType::New() );
-  readerImage->SetFileName( argv[1] );
-  reader->SetFileName( argv[2] );
-  writer->SetFileName( argv[3] );
+  typedef otb::ImageFileReader<InputImageType> ReaderImageType;
+  typedef otb::ImageFileReader<HistoImageType> ReaderType;
+  typedef otb::ImageFileWriter<LutImageType>   WriterType;
+  ReaderImageType::Pointer                     readerImage(ReaderImageType::New());
+  ReaderType::Pointer                          reader(ReaderType::New());
+  WriterType::Pointer                          writer(WriterType::New());
+  readerImage->SetFileName(argv[1]);
+  reader->SetFileName(argv[2]);
+  writer->SetFileName(argv[3]);
   reader->UpdateOutputInformation();
   readerImage->UpdateOutputInformation();
 
-  FilterType::Pointer computeGainLut ( FilterType::New() );
+  FilterType::Pointer computeGainLut(FilterType::New());
 
-  computeGainLut->SetInput( reader->GetOutput() );
+  computeGainLut->SetInput(reader->GetOutput());
   computeGainLut->SetMin(0);
   computeGainLut->SetMax(255);
   auto size = readerImage->GetOutput()->GetLargestPossibleRegion().GetSize();
   size[0] /= 4;
   size[1] /= 4;
-  auto nbPix = size[0]*size[1] ;
-  computeGainLut->SetNbPixel( nbPix );
+  auto nbPix = size[0] * size[1];
+  computeGainLut->SetNbPixel(nbPix);
 
-  writer->SetInput( computeGainLut->GetOutput() );
+  writer->SetInput(computeGainLut->GetOutput());
   writer->Update();
 
   auto index = computeGainLut->GetOutput()->GetLargestPossibleRegion().GetIndex();
-  otbLogMacro(Debug, <<computeGainLut->GetOutput()->GetPixel( index ));
+  otbLogMacro(Debug, << computeGainLut->GetOutput()->GetPixel(index));
 
   return EXIT_SUCCESS;
 }

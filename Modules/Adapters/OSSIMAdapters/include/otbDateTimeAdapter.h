@@ -26,8 +26,8 @@
 #include "OTBOSSIMAdaptersExport.h"
 
 class ossimLocalTm;
-//class ossimDate;
-//class ossimTime;
+// class ossimDate;
+// class ossimTime;
 
 namespace otb
 {
@@ -76,10 +76,10 @@ public:
   /** Set the date and time from an Iso8601 string
    *  Return true if the date is valid
    */
-  bool SetFromIso8601(const std::string &date);
+  bool SetFromIso8601(const std::string& date);
 
   /** Return the delta with an other date, expressed in seconds */
-  double GetDeltaInSeconds(const DateTimeAdapter *pastDate);
+  double GetDeltaInSeconds(const DateTimeAdapter* pastDate);
 
   // TODO : add print self function
 
@@ -88,11 +88,10 @@ protected:
   ~DateTimeAdapter() override;
 
 private:
-  DateTimeAdapter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  DateTimeAdapter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  ossimLocalTm *m_LocalTm;
-
+  ossimLocalTm* m_LocalTm;
 };
 
 // TODO add extern '<<' function

@@ -64,16 +64,14 @@ namespace otb
  *
  * \ingroup OTBImageIO
  */
-template <class TOutputImage,
-          class ConvertPixelTraits=DefaultConvertPixelTraits<
-                   typename TOutputImage::IOPixelType > >
+template <class TOutputImage, class ConvertPixelTraits = DefaultConvertPixelTraits<typename TOutputImage::IOPixelType>>
 class OTBImageIO_EXPORT_TEMPLATE ImageFileReader : public itk::ImageSource<TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ImageFileReader                    Self;
-  typedef itk::ImageSource<TOutputImage>     Superclass;
-  typedef itk::SmartPointer<Self>            Pointer;
+  typedef ImageFileReader                Self;
+  typedef itk::ImageSource<TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -82,19 +80,19 @@ public:
   itkTypeMacro(ImageFileReader, ImageSource);
 
   /** The size of the output image. */
-  typedef typename TOutputImage::SizeType  SizeType;
+  typedef typename TOutputImage::SizeType SizeType;
 
   /** The size of the output image. */
-  typedef typename TOutputImage::IndexType  IndexType;
+  typedef typename TOutputImage::IndexType IndexType;
 
   /** The region of the output image. */
-  typedef typename TOutputImage::RegionType  ImageRegionType;
+  typedef typename TOutputImage::RegionType ImageRegionType;
 
   /** The pixel type of the output image. */
   typedef typename TOutputImage::InternalPixelType OutputImagePixelType;
 
   /** The Filename Helper. */
-  typedef ExtendedFilenameToReaderOptions            FNameHelperType;
+  typedef ExtendedFilenameToReaderOptions FNameHelperType;
 
   /** Prepare image allocation at the first call of the pipeline processing */
   void GenerateOutputInformation(void) override;
@@ -107,7 +105,7 @@ public:
    * currently read a portion of an image (since the ImageIO objects
    * cannot read a portion of an image), so the ImageFileReader must
    * enlarge the RequestedRegion to the size of the image on disk. */
-  void EnlargeOutputRequestedRegion(itk::DataObject *output) override;
+  void EnlargeOutputRequestedRegion(itk::DataObject* output) override;
 
   /** Set/Get the ImageIO helper class. Often this is created via the object
    * factory mechanism that determines whether a particular ImageIO can
@@ -115,12 +113,12 @@ public:
    * instance that is created. Or you can directly specify the ImageIO
    * to use to read a particular file in case the factory mechanism will
    * not work properly (e.g., unknown or unusual extension). */
-  void  SetImageIO( otb::ImageIOBase * imageIO );
-  itkGetObjectMacro(ImageIO,otb::ImageIOBase);
+  void SetImageIO(otb::ImageIOBase* imageIO);
+  itkGetObjectMacro(ImageIO, otb::ImageIOBase);
 
   virtual void SetFileName(const std::string& extendedFileName);
 
-  virtual const char* GetFileName () const;
+  virtual const char* GetFileName() const;
 
   /** Get the number of overviews available into the file specified
    * Returns: overview count, zero if none. */
@@ -152,13 +150,13 @@ private:
 
   // Retrieve the real source file name if derived dataset */
   std::string GetDerivedDatasetSourceFileName(const std::string& filename) const;
-  
-  ImageFileReader(const Self &) = delete;
-  void operator =(const Self&) = delete;
+
+  ImageFileReader(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   otb::ImageIOBase::Pointer m_ImageIO;
-  bool                 m_UserSpecifiedImageIO; // keep track whether the
-                                               // ImageIO is user specified
+  bool                      m_UserSpecifiedImageIO; // keep track whether the
+                                                    // ImageIO is user specified
 
   std::string m_FileName; // The file to be read
 
@@ -184,7 +182,7 @@ private:
   unsigned int m_IOComponents;
 };
 
-} //namespace otb
+} // namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbImageFileReader.hxx"
@@ -194,9 +192,10 @@ private:
 #include "otbVectorImage.h"
 #include <complex>
 
-namespace otb {
+namespace otb
+{
 
-// Prevent implicit instanciation of common types to improve build performance
+// Prevent implicit instantiation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<Image<unsigned int, 2>>;
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<Image<int, 2>>;
@@ -222,7 +221,6 @@ extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<VectorImage<std
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<VectorImage<std::complex<short>, 2>>;
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<VectorImage<std::complex<float>, 2>>;
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileReader<VectorImage<std::complex<double>, 2>>;
-
 }
 
 #endif // otbImageFileReader_h

@@ -27,7 +27,7 @@
 #include <string>
 
 #if defined(_MSC_VER)
-#pragma warning ( disable: 4251 )
+#pragma warning(disable : 4251)
 // Disable following warning :
 // warning C4251: 'otb::SpatialReference::m_SR':
 // class 'std::unique_ptr<OGRSpatialReference,OGRSpatialReferenceDeleter>' needs
@@ -42,59 +42,58 @@ namespace otb
 namespace internal
 {
 struct OTBGdalAdapters_EXPORT OGRSpatialReferenceDeleter
-  {
-  public:
-    void operator()(OGRSpatialReference * del) const;
-  };
+{
+public:
+  void operator()(OGRSpatialReference* del) const;
+};
 }
 
 // Forward declaration needed for the operators declared bellow.
 class SpatialReference;
 
 /// Equal operator (based on OGRSpatialReference::IsSame())
-OTBGdalAdapters_EXPORT bool operator==(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
-  
+OTBGdalAdapters_EXPORT bool operator==(const SpatialReference& sr1, const SpatialReference& sr2) noexcept;
+
 /// Different operator (based on OGRSpatialReference::IsSame())
-OTBGdalAdapters_EXPORT bool operator!=(const SpatialReference& sr1,const SpatialReference& sr2) noexcept;
+OTBGdalAdapters_EXPORT bool operator!=(const SpatialReference& sr1, const SpatialReference& sr2) noexcept;
 
 /**
  * \class SpatialReference
  * \brief This class is a wrapper around OGRSpatialReference
- * 
+ *
  * This class is a wrapper around OGRSpatialReference. It aims at
  * manipulating spatial reference within OTB,  in a safe and easy way.
  * The class provides several constructors that all enforce the RAII:
  * either they fail or they provide a definitive, valid object.
- * 
+ *
  * Building a SpatialReference requires to call one of the From*()
- * method. There are no public constructors (appart from copy and
+ * method. There are no public constructors (apart from copy and
  * assignment)
- * 
+ *
  * \ingroup OTBGdalAdapters
  */
 
 class OTBGdalAdapters_EXPORT SpatialReference
 {
-friend class CoordinateTransformation;
-OTBGdalAdapters_EXPORT friend bool operator==(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
-OTBGdalAdapters_EXPORT friend bool operator!=(const SpatialReference& sr1, const SpatialReference & sr2) noexcept;
+  friend class CoordinateTransformation;
+  OTBGdalAdapters_EXPORT friend bool operator==(const SpatialReference& sr1, const SpatialReference& sr2) noexcept;
+  OTBGdalAdapters_EXPORT friend bool operator!=(const SpatialReference& sr1, const SpatialReference& sr2) noexcept;
 
 public:
-  typedef std::unique_ptr< OGRSpatialReference , 
-          internal::OGRSpatialReferenceDeleter > OGRSpatialReferencePtr;
- /**
-  * Build a SpatialRereference from a description string. The description string is
-  * passed to OGRSpatialReference:SetFromUserInput()
-  * from GDAL. Currently, supported syntax is:
-  * - Well Known Text definition
-  * - "EPSG:n" and "EPSGA:n" form EPSG codes
-  * - PROJ definitions
-  * - WMS auto projections ...
-  * \param description a string containing the description of the
-  * spatial reference to parse
-  * \throws InvalidSRDescriptionException in case of failure of SetFromUserInput()
-  */
-  static SpatialReference FromDescription(const std::string & sr_description);
+  typedef std::unique_ptr<OGRSpatialReference, internal::OGRSpatialReferenceDeleter> OGRSpatialReferencePtr;
+  /**
+   * Build a SpatialRereference from a description string. The description string is
+   * passed to OGRSpatialReference:SetFromUserInput()
+   * from GDAL. Currently, supported syntax is:
+   * - Well Known Text definition
+   * - "EPSG:n" and "EPSGA:n" form EPSG codes
+   * - PROJ definitions
+   * - WMS auto projections ...
+   * \param description a string containing the description of the
+   * spatial reference to parse
+   * \throws InvalidSRDescriptionException in case of failure of SetFromUserInput()
+   */
+  static SpatialReference FromDescription(const std::string& sr_description);
 
   /**
    * Build a SpatialRereference for wgs84
@@ -112,7 +111,7 @@ public:
    * importFromEPSGA()
    */
   static SpatialReference FromEPSG(unsigned int epsg);
-  
+
   /**
    * Build a SpatialReference from a UTM zone passed to
    * OGRSpatialReference::SetUTM() from GDAL
@@ -122,16 +121,20 @@ public:
    * \throws InvalidSRDescriptionException in case of failure of
    * setUTM()
    */
-  enum class hemisphere {north, south};
-  
+  enum class hemisphere
+  {
+    north,
+    south
+  };
+
   static SpatialReference FromUTM(unsigned int zone, hemisphere hem);
 
   /// Copy constructor
   SpatialReference(const SpatialReference& other) noexcept;
 
   /// Asignment operator
-  SpatialReference & operator=(const SpatialReference& other) noexcept;
-  
+  SpatialReference& operator=(const SpatialReference& other) noexcept;
+
   /**
    * Export the spatial reference to a Well Known Text string
    * \return A string containing the Well Known Text description
@@ -145,7 +148,7 @@ public:
    */
   bool NormalizeESRI();
 
-  /** 
+  /**
    * Convert the spatial reference to an EPSG code
    * \returns If no EPSG code was found or the EPSG code
    */
@@ -164,15 +167,15 @@ public:
    * \pre -180<=lon<=180
    * \pre -90<=lat<=90
    * \param lon Point longitude
-   * \param lat Point lattitude
+   * \param lat Point latitude
    * \param zone Output UTM zone
    * \param hem output hemisphere
-   */ 
-  static void UTMFromGeoPoint(double lon, double lat, unsigned int & zone, hemisphere & hem);
+   */
+  static void UTMFromGeoPoint(double lon, double lat, unsigned int& zone, hemisphere& hem);
 
 private:
   /// Constructor from wrapped type. ref will be cloned.
-  SpatialReference(const OGRSpatialReference * ref);
+  SpatialReference(const OGRSpatialReference* ref);
 
   /// Constructor from unique_ptr to wrapped type. On success (no
   /// throw) the passed unique_ptr will be cleared, and ownership transferred
@@ -183,9 +186,9 @@ private:
 };
 
 /// Stream operator for hemisphere
-OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const SpatialReference::hemisphere & hem);
+OTBGdalAdapters_EXPORT std::ostream& operator<<(std::ostream& o, const SpatialReference::hemisphere& hem);
 
 /// Stream operator for SpatialReference
-OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const SpatialReference & i);
+OTBGdalAdapters_EXPORT std::ostream& operator<<(std::ostream& o, const SpatialReference& i);
 }
 #endif

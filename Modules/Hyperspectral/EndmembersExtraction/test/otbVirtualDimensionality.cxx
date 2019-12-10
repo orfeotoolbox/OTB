@@ -25,18 +25,18 @@
 #include "otbStreamingStatisticsVectorImageFilter.h"
 
 const unsigned int Dimension = 2;
-typedef double PixelType;
+typedef double     PixelType;
 
 typedef otb::VectorImage<PixelType, Dimension> ImageType;
-typedef otb::ImageFileReader<ImageType> ReaderType;
+typedef otb::ImageFileReader<ImageType>                      ReaderType;
 typedef otb::StreamingStatisticsVectorImageFilter<ImageType> StreamingStatisticsVectorImageFilterType;
 
 typedef otb::VirtualDimensionality<double> VDType;
 
-int otbVirtualDimensionalityTest(int itkNotUsed(argc), char * argv[])
+int otbVirtualDimensionalityTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   StreamingStatisticsVectorImageFilterType::Pointer stats = StreamingStatisticsVectorImageFilterType::New();
 
@@ -56,14 +56,14 @@ int otbVirtualDimensionalityTest(int itkNotUsed(argc), char * argv[])
   file.precision(5);
 
   for (int i = 2; i < 10; ++i)
-    {
+  {
     double falseAlarmRate = std::pow(static_cast<double>(10), static_cast<double>(-i));
     vd->SetFAR(falseAlarmRate);
     vd->Compute();
 
     std::cout << "FAR : 1E-" << i << " -> Nb Endmembers: " << vd->GetNumberOfEndmembers() << std::endl;
     file << "FAR : 1E-" << i << " -> Nb Endmembers: " << vd->GetNumberOfEndmembers() << std::endl;
-    }
+  }
 
   file.close();
 

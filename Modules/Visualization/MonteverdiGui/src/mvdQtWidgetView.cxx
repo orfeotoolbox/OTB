@@ -57,95 +57,70 @@ namespace Wrapper
 /*****************************************************************************/
 /* INTERNAL TYPES                                                            */
 
-class KeyLayerAccumulator :
-    public std::unary_function< StackedLayerModel::ConstIterator::value_type,
-				void >
+class KeyLayerAccumulator : public std::unary_function<StackedLayerModel::ConstIterator::value_type, void>
 {
 public:
-  typedef
-  std::unary_function< StackedLayerModel::ConstIterator::value_type, void >
-    SuperType;
+  typedef std::unary_function<StackedLayerModel::ConstIterator::value_type, void> SuperType;
 
-  typedef std::list< SuperType::argument_type > KeyLayerPairList;
+  typedef std::list<SuperType::argument_type> KeyLayerPairList;
 
-  KeyLayerAccumulator( const std::string & filename,
-		       KeyLayerPairList & klp ) :
-    m_KeyLayerPairs( klp ),
-    m_Filename( FromStdString( filename ) ),
-    m_Count( 0 )
+  KeyLayerAccumulator(const std::string& filename, KeyLayerPairList& klp) : m_KeyLayerPairs(klp), m_Filename(FromStdString(filename)), m_Count(0)
   {
   }
 
-  void
-  operator () ( const SuperType::argument_type & pair )
+  void operator()(const SuperType::argument_type& pair)
   {
-    const FilenameInterface * interface =
-      dynamic_cast< const FilenameInterface * >( pair.second );
+    const FilenameInterface* interface = dynamic_cast<const FilenameInterface*>(pair.second);
 
-    if( interface!=NULL &&
-	m_Filename.compare( interface->GetFilename() )==0 )
-      {
+    if (interface != NULL && m_Filename.compare(interface->GetFilename()) == 0)
+    {
       qDebug() << m_Filename << "==" << interface->GetFilename();
 
-      m_KeyLayerPairs.push_back( pair );
+      m_KeyLayerPairs.push_back(pair);
 
-      ++ m_Count;
-      }
+      ++m_Count;
+    }
   }
 
-  std::size_t
-  GetCount() const
+  std::size_t GetCount() const
   {
     return m_Count;
   }
 
 
 public:
-  KeyLayerPairList & m_KeyLayerPairs;
+  KeyLayerPairList& m_KeyLayerPairs;
 
 
 private:
-  QString m_Filename;
+  QString     m_Filename;
   std::size_t m_Count;
 };
 
 /*****************************************************************************/
 /* CONSTANTS                                                                 */
 
-char const * const
-QtWidgetView
-::OBJECT_NAME = "mvd::Wrapper::QtWidgetView";
+char const* const QtWidgetView::OBJECT_NAME = "mvd::Wrapper::QtWidgetView";
 
-QtWidgetView
-::QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-		QWidget* p,
-		Qt::WindowFlags flags ) :
-  otb::Wrapper::QtWidgetView( otbApp, p, flags )
+QtWidgetView::QtWidgetView(const otb::Wrapper::Application::Pointer& otbApp, QWidget* p, Qt::WindowFlags flags) : otb::Wrapper::QtWidgetView(otbApp, p, flags)
 {
-  setObjectName( QtWidgetView::OBJECT_NAME );
+  setObjectName(QtWidgetView::OBJECT_NAME);
 
   // need to be connected to the end of a process
-  QObject::connect(
-    GetModel(),
-    SIGNAL( SetProgressReportDone( int ) ),
-    // to:
-    this,
-    SLOT ( OnApplicationExecutionDone( int ) )
-    );
+  QObject::connect(GetModel(), SIGNAL(SetProgressReportDone(int)),
+                   // to:
+                   this, SLOT(OnApplicationExecutionDone(int)));
 }
 
 /*******************************************************************************/
-QtWidgetView
-::~QtWidgetView()
+QtWidgetView::~QtWidgetView()
 {
 }
 
 /*******************************************************************************/
-QWidget*
-QtWidgetView
-::CreateInputWidgets()
+QWidget* QtWidgetView::CreateInputWidgets()
 {
-  QWidget * widget = otb::Wrapper::QtWidgetView::CreateInputWidgets();
+  QWidget* widget = otb::Wrapper::QtWidgetView::CreateInputWidgets();
 
   SetupParameterWidgets(widget);
 
@@ -153,46 +128,37 @@ QtWidgetView
 }
 
 /*******************************************************************************/
-void
-QtWidgetView
-::SetupParameterWidgets( QWidget * widget )
+void QtWidgetView::SetupParameterWidgets(QWidget* widget)
 {
-  assert( widget!=NULL );
+  assert(widget != NULL);
 
-  SetupWidget( widget, InputFilenameInitializer() );
-  //SetupWidget( widget, InputFilenameListInitializer() );
-  SetupWidget( widget, InputImageInitializer() );
-  //SetupWidget( widget, InputImageListInitializer() );
-  SetupWidget( widget, InputVectorDataInitializer() );
-  //SetupWidget( widget, InputVectorDataListInitializer() );
-  SetupWidget( widget, ParameterListInitializer() );
-#if defined( OTB_DEBUG )
-  SetupWidget( widget, ToolTipInitializer() );
+  SetupWidget(widget, InputFilenameInitializer());
+  // SetupWidget( widget, InputFilenameListInitializer() );
+  SetupWidget(widget, InputImageInitializer());
+  // SetupWidget( widget, InputImageListInitializer() );
+  SetupWidget(widget, InputVectorDataInitializer());
+  // SetupWidget( widget, InputVectorDataListInitializer() );
+  SetupWidget(widget, ParameterListInitializer());
+#if defined(OTB_DEBUG)
+  SetupWidget(widget, ToolTipInitializer());
 #endif
 
-  SetupWidget( widget, OutputFilenameInitializer() );
+  SetupWidget(widget, OutputFilenameInitializer());
 
-  SetupWidget(
-    widget,
-    OutputImageInitializer( GetModel()->GetApplication()->GetName() )
-  );
+  SetupWidget(widget, OutputImageInitializer(GetModel()->GetApplication()->GetName()));
 
-  SetupWidget( widget, OutputVectorDataInitializer() );
+  SetupWidget(widget, OutputVectorDataInitializer());
 }
 
 /*******************************************************************************/
-void
-QtWidgetView
-::SetupFileSelectionWidget( QWidget * widget )
+void QtWidgetView::SetupFileSelectionWidget(QWidget* widget)
 {
-  assert( widget!=NULL );
-  assert(
-    qobject_cast< FileSelectionInitializer::argument_type >( widget )!=NULL
-  );
+  assert(widget != NULL);
+  assert(qobject_cast<FileSelectionInitializer::argument_type>(widget) != NULL);
 
   FileSelectionInitializer initialize;
 
-  initialize( qobject_cast< FileSelectionInitializer::argument_type >( widget ) );
+  initialize(qobject_cast<FileSelectionInitializer::argument_type>(widget));
 }
 
 bool QtWidgetView::BeforeExecuteButtonClicked()
@@ -282,86 +248,70 @@ bool QtWidgetView::BeforeExecuteButtonClicked()
 }
 
 /*******************************************************************************/
-void
-QtWidgetView
-::OnApplicationExecutionDone( int status )
+void QtWidgetView::OnApplicationExecutionDone(int status)
 {
-  otb::Wrapper::Application::Pointer otbApp( GetModel()->GetApplication() );
+  otb::Wrapper::Application::Pointer otbApp(GetModel()->GetApplication());
 
-  if( status!=0 )
-    {
-    QMessageBox::information(
-      this,
-      PROJECT_NAME,
-      tr( "'%1' has failed with return status %2.\n"
-	  "Please refer to '%1' documentation and check log tab."
-      )
-      .arg( otbApp->GetName() )
-      .arg( status ),
-      QMessageBox::Ok
-    );
+  if (status != 0)
+  {
+    QMessageBox::information(this, PROJECT_NAME, tr("'%1' has failed with return status %2.\n"
+                                                    "Please refer to '%1' documentation and check log tab.")
+                                                     .arg(otbApp->GetName())
+                                                     .arg(status),
+                             QMessageBox::Ok);
 
-    emit ExecutionDone( status );
+    emit ExecutionDone(status);
 
     return;
-    }
+  }
 
   CountType count = 0;
 
   //
   // detect if this application has outputImageParameter. emit
   // the output filenames if any
-  StringVector paramList( otbApp->GetParametersKeys( true ) );
+  StringVector paramList(otbApp->GetParametersKeys(true));
 
   // iterate on the application parameters
-  for ( StringVector::const_iterator it( paramList.begin() );
-	it!=paramList.end();
-	++it )
-    {
+  for (StringVector::const_iterator it(paramList.begin()); it != paramList.end(); ++it)
+  {
     // parameter key
     const std::string& key = *it;
 
     // get a valid outputParameter
-    if( otbApp->GetParameterType( key )
-	==otb::Wrapper::ParameterType_OutputImage && 
-	otbApp->IsParameterEnabled( key, true ) &&
-	otbApp->HasValue( key ) )
-      {
+    if (otbApp->GetParameterType(key) == otb::Wrapper::ParameterType_OutputImage && otbApp->IsParameterEnabled(key, true) && otbApp->HasValue(key))
+    {
       // get the parameter
-      otb::Wrapper::Parameter* param = otbApp->GetParameterByKey( key );
+      otb::Wrapper::Parameter* param = otbApp->GetParameterByKey(key);
 
-      // try to cast it 
-      otb::Wrapper::OutputImageParameter* outputParam = 
-	dynamic_cast< otb::Wrapper::OutputImageParameter* >( param );
+      // try to cast it
+      otb::Wrapper::OutputImageParameter* outputParam = dynamic_cast<otb::Wrapper::OutputImageParameter*>(param);
 
       // emit the output image filename selected
-      if( outputParam!=NULL )
-	{
-	QFileInfo fileInfo( outputParam->GetFileName() );
+      if (outputParam != NULL)
+      {
+        QFileInfo fileInfo(outputParam->GetFileName());
 
-	/* U N S A F E
-	// BUGFIX: Mantis-750
-	//
-	// If output image-exists, it's sure that it has been output
-	// from the OTB-application process because overwritten
-	// files are first deleted (see OnExecButtonClicked()).
-	if( fileInfo.exists() )
-	{
-	*/
-	++ count;
+        /* U N S A F E
+        // BUGFIX: Mantis-750
+        //
+        // If output image-exists, it's sure that it has been output
+        // from the OTB-application process because overwritten
+        // files are first deleted (see OnExecButtonClicked()).
+        if( fileInfo.exists() )
+        {
+        */
+        ++count;
 
-	emit OTBApplicationOutputImageChanged(
-	  QString( otbApp->GetName() ),
-	  QFile::decodeName( outputParam->GetFileName() )
-	);
-	/*
-	}
-	*/
-	}
+        emit OTBApplicationOutputImageChanged(QString(otbApp->GetName()), QFile::decodeName(outputParam->GetFileName()));
+        /*
+        }
+        */
       }
     }
+  }
 
-  emit ExecutionDone( status );
+  emit ExecutionDone(status);
 }
 
 } // end of namespace Wrapper

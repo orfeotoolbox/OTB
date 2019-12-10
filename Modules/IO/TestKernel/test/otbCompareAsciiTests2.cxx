@@ -24,14 +24,14 @@
 
 #include "otbMacro.h"
 
-int otbCompareAsciiTests2(int argc, char * argv[])
+int otbCompareAsciiTests2(int argc, char* argv[])
 {
   if (argc != 3)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " referenceFile testFile" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   std::ofstream fileRef;
   fileRef.open(argv[1]);

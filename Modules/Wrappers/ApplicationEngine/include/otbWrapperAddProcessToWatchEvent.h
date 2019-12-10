@@ -38,23 +38,26 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT AddProcessToWatchEvent: public itk::EventObject
+class OTBApplicationEngine_EXPORT AddProcessToWatchEvent : public itk::EventObject
 {
 public:
-
   typedef AddProcessToWatchEvent Self;
   typedef itk::EventObject       Superclass;
 
-  AddProcessToWatchEvent(){}
-  AddProcessToWatchEvent(const Self& s) :itk::EventObject(s){};
-  ~AddProcessToWatchEvent() override {}
+  AddProcessToWatchEvent()
+  {
+  }
+  AddProcessToWatchEvent(const Self& s) : itk::EventObject(s){};
+  ~AddProcessToWatchEvent() override
+  {
+  }
 
   /** Set/Get the process to watch */
-  virtual void SetProcess(itk::ProcessObject * process)
+  virtual void SetProcess(itk::ProcessObject* process)
   {
     m_Process = process;
   }
-  virtual itk::ProcessObject * GetProcess() const
+  virtual itk::ProcessObject* GetProcess() const
   {
     return m_Process;
   }
@@ -65,7 +68,7 @@ public:
     m_ProcessDescription = desc;
   }
 
-  virtual  std::string GetProcessDescription() const
+  virtual std::string GetProcessDescription() const
   {
     return m_ProcessDescription;
   }
@@ -89,7 +92,6 @@ private:
   itk::ProcessObject::Pointer m_Process;
   std::string                 m_ProcessDescription;
 };
-
 }
 }
 

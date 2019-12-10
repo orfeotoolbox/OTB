@@ -24,34 +24,33 @@
 #include "otbVectorImage.h"
 #include "otbApplyGainFilter.h"
 
-int otbApplyGainFilter(int itkNotUsed(argc), char * argv [])
+int otbApplyGainFilter(int itkNotUsed(argc), char* argv[])
 {
-  typedef int InputPixelType;
-  typedef double LutPixelType;
+  typedef int        InputPixelType;
+  typedef double     LutPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType ,  Dimension > InputImageType;
-  typedef otb::VectorImage< LutPixelType , Dimension > LutImageType;
-  typedef otb::ApplyGainFilter
-      < InputImageType , LutImageType , InputImageType > FilterType;
+  typedef otb::Image<InputPixelType, Dimension>     InputImageType;
+  typedef otb::VectorImage<LutPixelType, Dimension> LutImageType;
+  typedef otb::ApplyGainFilter<InputImageType, LutImageType, InputImageType> FilterType;
 
-  
-  typedef otb::ImageFileReader< InputImageType > ReaderType; 
-  typedef otb::ImageFileReader< LutImageType > ReaderLutType;
-  typedef otb::ImageFileWriter< InputImageType > WriterType;
-  ReaderType::Pointer reader ( ReaderType::New() );
-  ReaderLutType::Pointer readerLut ( ReaderLutType::New() );
-  WriterType::Pointer writer ( WriterType::New() );
-  reader->SetFileName( argv[1] );
-  readerLut->SetFileName( argv[2] );
-  writer->SetFileName( argv[3] );
+
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileReader<LutImageType>   ReaderLutType;
+  typedef otb::ImageFileWriter<InputImageType> WriterType;
+  ReaderType::Pointer                          reader(ReaderType::New());
+  ReaderLutType::Pointer                       readerLut(ReaderLutType::New());
+  WriterType::Pointer                          writer(WriterType::New());
+  reader->SetFileName(argv[1]);
+  readerLut->SetFileName(argv[2]);
+  writer->SetFileName(argv[3]);
   reader->UpdateOutputInformation();
   readerLut->UpdateOutputInformation();
 
-  FilterType::Pointer appGain ( FilterType::New() );
+  FilterType::Pointer appGain(FilterType::New());
 
-  appGain->SetInputLut( readerLut->GetOutput() );
-  appGain->SetInputImage( reader->GetOutput() );
+  appGain->SetInputLut(readerLut->GetOutput());
+  appGain->SetInputImage(reader->GetOutput());
   appGain->SetMin(0);
   appGain->SetMax(255);
   appGain->ThumbSizeFromSpacingOn();
@@ -59,7 +58,7 @@ int otbApplyGainFilter(int itkNotUsed(argc), char * argv [])
   auto size = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
   appGain->SetThumbSize(size);
 
-  writer->SetInput( appGain->GetOutput() );
+  writer->SetInput(appGain->GetOutput());
   writer->Update();
 
   return EXIT_SUCCESS;

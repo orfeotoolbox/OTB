@@ -33,19 +33,19 @@
 
 #include "itkImagePCAShapeModelEstimator.h"
 
-//Data definitions
-#define   IMGWIDTH            2
-#define   IMGHEIGHT           2
-#define   NDIMENSION          2
-#define   NUMTRAINIMAGES      3
-#define   NUMLARGESTPC        3
+// Data definitions
+#define IMGWIDTH 2
+#define IMGHEIGHT 2
+#define NDIMENSION 2
+#define NUMTRAINIMAGES 3
+#define NUMLARGESTPC 3
 
 // class to support progress feeback
 
 class ShowProgressObject
 {
 public:
-  ShowProgressObject(itk::LightProcessObject * o)
+  ShowProgressObject(itk::LightProcessObject* o)
   {
     m_Process = o;
   }
@@ -77,7 +77,7 @@ int otbImagePCAShapeModelEstimatorTest(int itkNotUsed(argc), char* argv[])
   itk::OutputWindow::SetInstance(itk::TextOutput::New().GetPointer());
 
   //------------------------------------------------------
-  //Create 3 simple test images with
+  // Create 3 simple test images with
   //------------------------------------------------------
   typedef otb::Image<double, NDIMENSION> InputImageType;
   typedef otb::Image<double, NDIMENSION> OutputImageType;
@@ -109,16 +109,14 @@ int otbImagePCAShapeModelEstimatorTest(int itkNotUsed(argc), char* argv[])
   //----------------------------------------------------------------------
 
   //----------------------------------------------------------------------
-  //Set the image model estimator
+  // Set the image model estimator
   //----------------------------------------------------------------------
-  typedef itk::ImagePCAShapeModelEstimator<InputImageType, OutputImageType>
-  ImagePCAShapeModelEstimatorType;
+  typedef itk::ImagePCAShapeModelEstimator<InputImageType, OutputImageType> ImagePCAShapeModelEstimatorType;
 
-  ImagePCAShapeModelEstimatorType::Pointer
-    applyPCAShapeEstimator = ImagePCAShapeModelEstimatorType::New();
+  ImagePCAShapeModelEstimatorType::Pointer applyPCAShapeEstimator = ImagePCAShapeModelEstimatorType::New();
 
   //----------------------------------------------------------------------
-  //Set the parameters of the clusterer
+  // Set the parameters of the clusterer
   //----------------------------------------------------------------------
   applyPCAShapeEstimator->SetNumberOfTrainingImages(NUMTRAINIMAGES);
   applyPCAShapeEstimator->SetNumberOfPrincipalComponentsRequired(NUMLARGESTPC + 1);
@@ -138,67 +136,62 @@ int otbImagePCAShapeModelEstimatorTest(int itkNotUsed(argc), char* argv[])
   writer4->SetInput(applyPCAShapeEstimator->GetOutput(3));
   writer4->Update();
 
-  //Test the printself function to increase coverage
+  // Test the printself function to increase coverage
   applyPCAShapeEstimator->Print(std::cout);
 
-  //Exercise TypeMacro in superclass
+  // Exercise TypeMacro in superclass
   typedef ImagePCAShapeModelEstimatorType::Superclass GenericEstimatorType;
   std::cout << applyPCAShapeEstimator->GenericEstimatorType::GetNameOfClass() << std::endl;
 
-  //Print out the number of training images and the number of principal
-  //components
-  std::cout << "The number of training images are: " <<
-  applyPCAShapeEstimator->GetNumberOfTrainingImages() << std::endl;
+  // Print out the number of training images and the number of principal
+  // components
+  std::cout << "The number of training images are: " << applyPCAShapeEstimator->GetNumberOfTrainingImages() << std::endl;
 
-  std::cout << "The number of principal components desired are: " <<
-  applyPCAShapeEstimator->GetNumberOfPrincipalComponentsRequired() << std::endl;
+  std::cout << "The number of principal components desired are: " << applyPCAShapeEstimator->GetNumberOfPrincipalComponentsRequired() << std::endl;
 
-  //Print the eigen vectors
-  vnl_vector<double> eigenValues =
-    applyPCAShapeEstimator->GetEigenValues();
-  unsigned int numEigVal =  eigenValues.size();
+  // Print the eigen vectors
+  vnl_vector<double> eigenValues = applyPCAShapeEstimator->GetEigenValues();
+  unsigned int       numEigVal   = eigenValues.size();
   std::cout << "Number of returned eign-values: " << numEigVal << std::endl;
 
-  std::cout << "The " <<
-  applyPCAShapeEstimator->GetNumberOfPrincipalComponentsRequired() <<
-  " largest eigen values are:" << std::endl;
+  std::cout << "The " << applyPCAShapeEstimator->GetNumberOfPrincipalComponentsRequired() << " largest eigen values are:" << std::endl;
 
-  for (unsigned int i = 0; i < vnl_math_min(numEigVal, (unsigned int) NUMLARGESTPC); ++i)
-    {
+  for (unsigned int i = 0; i < vnl_math_min(numEigVal, (unsigned int)NUMLARGESTPC); ++i)
+  {
     std::cout << eigenValues[i] << std::endl;
-    }
-
-  //Print the MeanImage
-/*
-  OutputImageType::Pointer outImage = applyPCAShapeEstimator->GetOutput( 0 );
-  OutputImageIterator outImageIt( outImage, outImage->GetBufferedRegion() );
-  outImageIt.GoToBegin();
-
-  std::cout << "The mean image is:" << std::endl;
-  while (!outImageIt.IsAtEnd() )
-  {
-    std::cout << (double)(outImageIt.Get()) << ";"  << std::endl;
-    ++outImageIt;
   }
-  std::cout << "  " << std::endl;
-  //Print the largest two eigen vectors
-  for (unsigned int j=1; j< NUMLARGESTPC + 1; ++j )
-  {
-    OutputImageType::Pointer outImage2 = applyPCAShapeEstimator->GetOutput( j );
-    OutputImageIterator outImage2It( outImage2, outImage2->GetBufferedRegion() );
-    outImage2It.GoToBegin();
 
-    std::cout << "" << std::endl;
-    std::cout << "The eigen vector number: " << j << " is:" << std::endl;
-    while (!outImage2It.IsAtEnd() )
+  // Print the MeanImage
+  /*
+    OutputImageType::Pointer outImage = applyPCAShapeEstimator->GetOutput( 0 );
+    OutputImageIterator outImageIt( outImage, outImage->GetBufferedRegion() );
+    outImageIt.GoToBegin();
+
+    std::cout << "The mean image is:" << std::endl;
+    while (!outImageIt.IsAtEnd() )
     {
-      std::cout << (double) (outImage2It.Get()) << ";"  << std::endl;
-      ++outImage2It;
+      std::cout << (double)(outImageIt.Get()) << ";"  << std::endl;
+      ++outImageIt;
     }
     std::cout << "  " << std::endl;
+    //Print the largest two eigen vectors
+    for (unsigned int j=1; j< NUMLARGESTPC + 1; ++j )
+    {
+      OutputImageType::Pointer outImage2 = applyPCAShapeEstimator->GetOutput( j );
+      OutputImageIterator outImage2It( outImage2, outImage2->GetBufferedRegion() );
+      outImage2It.GoToBegin();
 
-  }
-*/
+      std::cout << "" << std::endl;
+      std::cout << "The eigen vector number: " << j << " is:" << std::endl;
+      while (!outImage2It.IsAtEnd() )
+      {
+        std::cout << (double) (outImage2It.Get()) << ";"  << std::endl;
+        ++outImage2It;
+      }
+      std::cout << "  " << std::endl;
+
+    }
+  */
 
   return EXIT_SUCCESS;
 }

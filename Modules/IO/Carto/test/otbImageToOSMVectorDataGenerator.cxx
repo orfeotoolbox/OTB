@@ -25,29 +25,29 @@
 #include "otbImageFileReader.h"
 #include "otbVectorDataFileWriter.h"
 
-typedef otb::VectorImage<unsigned int, 2>               ImageType;
+typedef otb::VectorImage<unsigned int, 2> ImageType;
 
-typedef otb::ImageToOSMVectorDataGenerator<ImageType>  FilterType;
-typedef FilterType::VectorDataType                     VectorDataType;
+typedef otb::ImageToOSMVectorDataGenerator<ImageType> FilterType;
+typedef FilterType::VectorDataType                    VectorDataType;
 
-typedef otb::ImageFileReader<ImageType>             ReaderType;
-typedef otb::VectorDataFileWriter<VectorDataType>   VectorDataFileWriterType;
+typedef otb::ImageFileReader<ImageType>           ReaderType;
+typedef otb::VectorDataFileWriter<VectorDataType> VectorDataFileWriterType;
 
-int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
+int otbImageToOSMVectorDataGenerator(int argc, char* argv[])
 {
   if (argc != 5)
-    {
+  {
     std::cerr << "Usage: otbImageToOSMVectorDataGenerator input osm_xml_file "
-    "output key_name\n";
+                 "output key_name\n";
     return EXIT_FAILURE;
-    }
+  }
 
   // convenient typedefs to store keys and their value
-  typedef std::pair<std::string, std::string>      KeyValueType;
-  typedef std::vector<KeyValueType>                KeyValueListType;
+  typedef std::pair<std::string, std::string> KeyValueType;
+  typedef std::vector<KeyValueType> KeyValueListType;
 
   // Instantiate the image reader
-  ReaderType::Pointer      reader = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
 
@@ -61,33 +61,30 @@ int otbImageToOSMVectorDataGenerator(int argc, char * argv[])
   // Split the classes to get classes and values
   KeyValueListType keyvalueList;
   for (unsigned int idClass = 0; idClass < 1; idClass++)
-    {
-    std::string key;
-    KeyValueType   currentkeyvalue;
-    std::string str = argv[4];
+  {
+    std::string  key;
+    KeyValueType currentkeyvalue;
+    std::string  str = argv[4];
 
     // find the position of the separator ,
-    size_t  pos = str.find(",");
+    size_t pos = str.find(",");
 
     // split the string
-    currentkeyvalue.first = str.substr (0, pos);
-    if(pos != std::string::npos)
-      currentkeyvalue.second = str.substr (pos+1);
+    currentkeyvalue.first = str.substr(0, pos);
+    if (pos != std::string::npos)
+      currentkeyvalue.second = str.substr(pos + 1);
 
     keyvalueList.push_back(currentkeyvalue);
-    }
+  }
 
-  std::cout <<"Searching for class "<<keyvalueList[0].first
-            << " and subclass "<< keyvalueList[0].second  << std::endl;
+  std::cout << "Searching for class " << keyvalueList[0].first << " and subclass " << keyvalueList[0].second << std::endl;
 
 
   // Write the generated vector data
   VectorDataFileWriterType::Pointer writer = VectorDataFileWriterType::New();
   writer->SetFileName(argv[3]);
 
-  const VectorDataType *vd  =
-    vdgenerator->GetVectorDataByName(keyvalueList[0].first,
-                                       keyvalueList[0].second);
+  const VectorDataType* vd = vdgenerator->GetVectorDataByName(keyvalueList[0].first, keyvalueList[0].second);
   writer->SetInput(vd);
 
   // trigger the execution

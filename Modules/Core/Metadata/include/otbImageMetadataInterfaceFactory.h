@@ -64,9 +64,8 @@ protected:
   ~ImageMetadataInterfaceFactory() override;
 
 private:
-  ImageMetadataInterfaceFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  ImageMetadataInterfaceFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -42,10 +42,10 @@ std::vector<std::string> GetAvailableDriversAsStringVector()
 
   int nbDrivers = GetGDALDriverManager()->GetDriverCount();
 
-  for(int i = 0; i < nbDrivers;++i)
-    {
+  for (int i = 0; i < nbDrivers; ++i)
+  {
     ret.push_back(GDALGetDriverShortName(GetGDALDriverManager()->GetDriver(i)));
-    }
+  }
   return ret;
 }
 
@@ -56,53 +56,52 @@ namespace raii
 class CharPPCapsule
 {
 public:
-  CharPPCapsule(char ** in)
-    : m_P(in)
-  {}
-
-  const char ** P() const
+  CharPPCapsule(char** in) : m_P(in)
   {
-    return const_cast<const char **>(m_P);
+  }
+
+  const char** P() const
+  {
+    return const_cast<const char**>(m_P);
   }
 
   ~CharPPCapsule()
   {
-    if(m_P)
+    if (m_P)
       CSLDestroy(m_P);
   }
 
 private:
-  char ** m_P;
+  char** m_P;
 };
 }
 
-std::vector<std::string> GetFileListAsStringVector(GDALDataset * dataset)
+std::vector<std::string> GetFileListAsStringVector(GDALDataset* dataset)
 {
   std::vector<std::string> ret;
-  raii::CharPPCapsule capsule(dataset->GetFileList());
-  std::string files_str="";
+  raii::CharPPCapsule      capsule(dataset->GetFileList());
+  std::string              files_str = "";
 
-  if(capsule.P())
-    {
+  if (capsule.P())
+  {
     unsigned int i = 0;
-    while(capsule.P()[i]!=NULL)
-      {
+    while (capsule.P()[i] != NULL)
+    {
       ret.push_back(std::string(capsule.P()[i]));
       ++i;
-      }
     }
+  }
   return ret;
 }
 
 /*----------------------[GDAL 2.2 change on IsFieldSet()]---------------------*/
-bool IsFieldSetAndNotNull(OGRFeature *feat, int index)
+bool IsFieldSetAndNotNull(OGRFeature* feat, int index)
 {
-#if GDAL_VERSION_NUM<2020000
+#if GDAL_VERSION_NUM < 2020000
   return feat->IsFieldSet(index);
 #else
   return feat->IsFieldSetAndNotNull(index);
 #endif
 }
-
 }
 } // end namespaces

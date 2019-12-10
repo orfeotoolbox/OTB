@@ -54,26 +54,27 @@ private:
     SetName("Rescale");
     SetDescription("Rescale the image between two given values.");
 
-    SetDocLongDescription("This application scales the given image pixel intensity between two given values.\n"
-                                  "By default min (resp. max) value is set to 0 (resp. 255).\n"
-                                  "Input minimum and maximum values is automatically computed for all image bands.");
+    SetDocLongDescription(
+        "This application scales the given image pixel intensity between two given values.\n"
+        "By default min (resp. max) value is set to 0 (resp. 255).\n"
+        "Input minimum and maximum values is automatically computed for all image bands.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("DynamicConvert");
 
     AddDocTag(Tags::Deprecated);
     AddDocTag(Tags::Manip);
-    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
-    SetParameterDescription( "in", "The image to scale." );
-    AddParameter(ParameterType_OutputImage, "out",  "Output Image");
-    SetParameterDescription( "out" , "The rescaled image filename." );
+    AddParameter(ParameterType_InputImage, "in", "Input Image");
+    SetParameterDescription("in", "The image to scale.");
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
+    SetParameterDescription("out", "The rescaled image filename.");
 
-    AddParameter(ParameterType_Float,      "outmin", "Output min value");
-    AddParameter(ParameterType_Float,      "outmax", "Output max value");
+    AddParameter(ParameterType_Float, "outmin", "Output min value");
+    AddParameter(ParameterType_Float, "outmax", "Output max value");
     SetDefaultParameterFloat("outmin", 0.0);
-    SetParameterDescription( "outmin", "Minimum value of the output image." );
+    SetParameterDescription("outmin", "Minimum value of the output image.");
     SetDefaultParameterFloat("outmax", 255.0);
-    SetParameterDescription( "outmax", "Maximum value of the output image." );
+    SetParameterDescription("outmax", "Maximum value of the output image.");
 
     MandatoryOff("outmin");
     MandatoryOff("outmax");
@@ -98,42 +99,40 @@ private:
   {
     FloatVectorImageType::Pointer inImage = GetParameterImage("in");
 
-    otbAppLogDEBUG( << "Starting Min/Max computation" )
-  
-    MinMaxFilterType::Pointer minMaxFilter = MinMaxFilterType::New();
-    minMaxFilter->SetInput( inImage );
+    otbAppLogDEBUG(<< "Starting Min/Max computation")
+
+        MinMaxFilterType::Pointer minMaxFilter = MinMaxFilterType::New();
+    minMaxFilter->SetInput(inImage);
     minMaxFilter->GetStreamer()->SetAutomaticAdaptativeStreaming(GetParameterInt("ram"));
 
     AddProcess(minMaxFilter->GetStreamer(), "Min/Max computing");
     minMaxFilter->Update();
 
-    otbAppLogDEBUG( << "Min/Max computation done : min=" << minMaxFilter->GetMinimum()
-                    << " max=" << minMaxFilter->GetMaximum() )
+    otbAppLogDEBUG(<< "Min/Max computation done : min=" << minMaxFilter->GetMinimum() << " max=" << minMaxFilter->GetMaximum())
 
-    FloatVectorImageType::PixelType inMin, inMax;
+        FloatVectorImageType::PixelType inMin,
+        inMax;
 
-    RescaleImageFilterType::Pointer rescaleFilter = 
-      RescaleImageFilterType::New();
-    rescaleFilter->SetInput( inImage );
+    RescaleImageFilterType::Pointer rescaleFilter = RescaleImageFilterType::New();
+    rescaleFilter->SetInput(inImage);
     rescaleFilter->SetAutomaticInputMinMaxComputation(false);
-    rescaleFilter->SetInputMinimum( minMaxFilter->GetMinimum() );
-    rescaleFilter->SetInputMaximum( minMaxFilter->GetMaximum() );
+    rescaleFilter->SetInputMinimum(minMaxFilter->GetMinimum());
+    rescaleFilter->SetInputMaximum(minMaxFilter->GetMaximum());
 
     FloatVectorImageType::PixelType outMin, outMax;
-    outMin.SetSize( inImage->GetNumberOfComponentsPerPixel() );
-    outMax.SetSize( inImage->GetNumberOfComponentsPerPixel() );
-    outMin.Fill( GetParameterFloat("outmin") );
-    outMax.Fill( GetParameterFloat("outmax") );
+    outMin.SetSize(inImage->GetNumberOfComponentsPerPixel());
+    outMax.SetSize(inImage->GetNumberOfComponentsPerPixel());
+    outMin.Fill(GetParameterFloat("outmin"));
+    outMax.Fill(GetParameterFloat("outmax"));
 
-    rescaleFilter->SetOutputMinimum( outMin );
-    rescaleFilter->SetOutputMaximum( outMax );
+    rescaleFilter->SetOutputMinimum(outMin);
+    rescaleFilter->SetOutputMaximum(outMax);
     rescaleFilter->UpdateOutputInformation();
 
     SetParameterOutputImage("out", rescaleFilter->GetOutput());
     RegisterPipeline();
   }
 };
-
 }
 }
 

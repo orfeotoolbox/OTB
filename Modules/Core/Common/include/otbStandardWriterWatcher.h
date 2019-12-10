@@ -56,27 +56,22 @@ namespace otb
 class OTBCommon_EXPORT StandardWriterWatcher : public WriterWatcherBase
 {
 public:
-
   /** Constructor. Takes a ProcessObject to monitor and an optional
    * comment string that is prepended to each event message. */
-  StandardWriterWatcher(itk::ProcessObject* process,
-                        const char *comment = "");
-  StandardWriterWatcher(itk::ProcessObject* process, itk::ProcessObject * source,
-                        const char *comment = "");
+  StandardWriterWatcher(itk::ProcessObject* process, const char* comment = "");
+  StandardWriterWatcher(itk::ProcessObject* process, itk::ProcessObject* source, const char* comment = "");
 
-  StandardWriterWatcher(itk::ProcessObject* process,
-                        const std::string& comment = "");
-  StandardWriterWatcher(itk::ProcessObject* process, itk::ProcessObject * source,
-                        const std::string& comment = "");
+  StandardWriterWatcher(itk::ProcessObject* process, const std::string& comment = "");
+  StandardWriterWatcher(itk::ProcessObject* process, itk::ProcessObject* source, const std::string& comment = "");
 
   /** Default constructor */
-  StandardWriterWatcher() : m_StarsCount(0) {};
+  StandardWriterWatcher() : m_StarsCount(0){};
 
   /** Copy constructor */
   StandardWriterWatcher(const StandardWriterWatcher&);
 
   /** operator=  */
-  void operator =(const StandardWriterWatcher&);
+  void operator=(const StandardWriterWatcher&);
 
   /** Get/Set number of stars */
   void SetStars(int count)
@@ -89,7 +84,6 @@ public:
   }
 
 protected:
-
   /** Callback method to show the ProgressEvent */
   void ShowWriterProgress() override;
 
@@ -103,16 +97,19 @@ protected:
   void ShowFilterProgress() override;
 
   /** Callback method to show the StartEvent */
-  void StartFilter() override {}
+  void StartFilter() override
+  {
+  }
 
   /** Callback method to show the EndEvent */
-  void EndFilter() override {}
+  void EndFilter() override
+  {
+  }
 
   /** This is the method invoked by ShowFilterProgress() and ShowWriterProgress() */
   virtual void ShowProgress();
 
 private:
-
   /** Stars coutning */
   unsigned int m_StarsCount;
 

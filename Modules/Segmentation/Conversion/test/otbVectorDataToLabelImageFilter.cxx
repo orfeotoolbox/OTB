@@ -28,18 +28,16 @@
 #include "otbVectorDataToLabelImageFilter.h"
 #include "otbStandardOneLineFilterWatcher.h"
 
-typedef otb::Image<unsigned int, 2>                           ImageType;
-typedef otb::VectorData<>                                     VectorDataType;
-typedef otb::ImageFileReader<ImageType>                       ReaderType;
-typedef otb::VectorDataFileReader<VectorDataType>             VDReaderType;
-typedef otb::VectorDataProjectionFilter<VectorDataType,
-                                        VectorDataType>       VDProjectionType;
-typedef otb::ImageFileWriter<ImageType>              WriterType;
-typedef otb::VectorDataToLabelImageFilter<VectorDataType,
-                                          ImageType>          RasterizationFilterType;
+typedef otb::Image<unsigned int, 2> ImageType;
+typedef otb::VectorData<>                         VectorDataType;
+typedef otb::ImageFileReader<ImageType>           ReaderType;
+typedef otb::VectorDataFileReader<VectorDataType> VDReaderType;
+typedef otb::VectorDataProjectionFilter<VectorDataType, VectorDataType> VDProjectionType;
+typedef otb::ImageFileWriter<ImageType> WriterType;
+typedef otb::VectorDataToLabelImageFilter<VectorDataType, ImageType> RasterizationFilterType;
 
 
-int otbVectorDataToLabelImageFilter(int itkNotUsed(argc), char * argv[])
+int otbVectorDataToLabelImageFilter(int itkNotUsed(argc), char* argv[])
 {
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -57,15 +55,15 @@ int otbVectorDataToLabelImageFilter(int itkNotUsed(argc), char * argv[])
   vdproj->Update();
 
   // rasterize
-  RasterizationFilterType::Pointer  rasterization = RasterizationFilterType::New();
+  RasterizationFilterType::Pointer rasterization = RasterizationFilterType::New();
   rasterization->AddVectorData(vdproj->GetOutput());
   rasterization->SetOutputParametersFromImage(reader->GetOutput());
   rasterization->SetBurnAttribute("DN");
 
-  WriterType::Pointer writer  = WriterType::New();
+  WriterType::Pointer writer = WriterType::New();
   writer->SetFileName(argv[3]);
   writer->SetInput(rasterization->GetOutput());
   writer->Update();
 
-return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }

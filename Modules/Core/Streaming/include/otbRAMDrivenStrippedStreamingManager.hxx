@@ -28,9 +28,7 @@ namespace otb
 {
 
 template <class TImage>
-RAMDrivenStrippedStreamingManager<TImage>::RAMDrivenStrippedStreamingManager()
-  : m_AvailableRAMInMB(0),
-    m_Bias(1.0)
+RAMDrivenStrippedStreamingManager<TImage>::RAMDrivenStrippedStreamingManager() : m_AvailableRAMInMB(0), m_Bias(1.0)
 {
 }
 
@@ -40,18 +38,15 @@ RAMDrivenStrippedStreamingManager<TImage>::~RAMDrivenStrippedStreamingManager()
 }
 
 template <class TImage>
-void
-RAMDrivenStrippedStreamingManager<TImage>::PrepareStreaming( itk::DataObject * input, const RegionType &region )
+void RAMDrivenStrippedStreamingManager<TImage>::PrepareStreaming(itk::DataObject* input, const RegionType& region)
 {
-  unsigned long nbDivisions =
-      this->EstimateOptimalNumberOfDivisions(input, region, m_AvailableRAMInMB, m_Bias);
+  unsigned long nbDivisions = this->EstimateOptimalNumberOfDivisions(input, region, m_AvailableRAMInMB, m_Bias);
 
-  this->m_Splitter = itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
+  this->m_Splitter               = itk::ImageRegionSplitter<itkGetStaticConstMacro(ImageDimension)>::New();
   this->m_ComputedNumberOfSplits = this->m_Splitter->GetNumberOfSplits(region, nbDivisions);
-  this->m_Region = region;
+  this->m_Region                 = region;
 }
 
 } // End namespace otb
 
 #endif
-

@@ -48,10 +48,10 @@ class ITK_EXPORT UnaryImageFunctorWithVectorImageFilter : public itk::InPlaceIma
 {
 public:
   /** Standard class typedefs. */
-  typedef UnaryImageFunctorWithVectorImageFilter             Self;
+  typedef UnaryImageFunctorWithVectorImageFilter Self;
   typedef itk::InPlaceImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -89,7 +89,9 @@ public:
 
 protected:
   UnaryImageFunctorWithVectorImageFilter();
-  ~UnaryImageFunctorWithVectorImageFilter() override {}
+  ~UnaryImageFunctorWithVectorImageFilter() override
+  {
+  }
 
   /** UnaryImageFunctorWithVectorImageFilter can produce an image which is a different
    * resolution than its input image.  As such, UnaryImageFunctorWithVectorImageFilter
@@ -118,7 +120,6 @@ protected:
 private:
   /** Ponderation declaration*/
   FunctorVectorType m_FunctorVector;
-
 };
 
 } // end namespace otb

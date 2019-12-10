@@ -62,9 +62,8 @@ protected:
   ~QuickBirdImageMetadataInterfaceFactory() override;
 
 private:
-  QuickBirdImageMetadataInterfaceFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  QuickBirdImageMetadataInterfaceFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

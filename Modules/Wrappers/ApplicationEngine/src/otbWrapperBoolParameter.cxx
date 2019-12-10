@@ -25,56 +25,52 @@ namespace otb
 namespace Wrapper
 {
 
-BoolParameter::BoolParameter()
-  : m_Value(false)
-{}
+BoolParameter::BoolParameter() : m_Value(false)
+{
+}
 
-bool
-BoolParameter::GetValue() const
+bool BoolParameter::GetValue() const
 {
   return m_Value;
 }
 
-std::string
-BoolParameter::GetValueAsString() const
+std::string BoolParameter::GetValueAsString() const
 {
-  return std::string(m_Value?"true":"false");
+  return std::string(m_Value ? "true" : "false");
 }
 
-void
-BoolParameter::SetValue(bool state)
+void BoolParameter::SetValue(bool state)
 {
   if (m_Value != state)
-    {
+  {
     m_Value = state;
     this->Modified();
-    }
+  }
   this->SetActive(true);
 }
 
-void
-BoolParameter::SetValue(const std::string & str)
+void BoolParameter::SetValue(const std::string& str)
 {
   std::string lowerStr;
   // only strings less than 8 characters expected
   lowerStr.reserve(8);
-  for (unsigned int i=0 ; i < std::min(8U,(unsigned int) str.size()) ; i++ )
-    {
+  for (unsigned int i = 0; i < std::min(8U, (unsigned int)str.size()); i++)
+  {
     lowerStr.push_back(tolower(str[i]));
-    }
+  }
   if (lowerStr == "1" || lowerStr == "on" || lowerStr == "true" || lowerStr == "yes")
-    {
+  {
     this->SetValue(true);
-    }
+  }
   else if (lowerStr == "0" || lowerStr == "off" || lowerStr == "false" || lowerStr == "no")
-    {
+  {
     this->SetValue(false);
-    }
+  }
   else
-    {
+  {
     itkGenericExceptionMacro(<< "Wrong value for BoolParameter (" << str << "),"
-      " accepts: 0, 1, on, off, true, false, yes, no");
-    }
+                                                                            " accepts: 0, 1, on, off, true, false, yes, no");
+  }
 }
 
 ParameterType BoolParameter::GetType() const

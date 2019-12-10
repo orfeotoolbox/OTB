@@ -29,29 +29,25 @@ namespace otb
 /**
  *
  */
-template<class TOutputPointSet>
-PointSetSource<TOutputPointSet>
-::PointSetSource()
+template <class TOutputPointSet>
+PointSetSource<TOutputPointSet>::PointSetSource()
 {
   // Create the output. We use static_cast<> here because we know the default
   // output must be of type TOutputPointSet
-  OutputPointSetPointer output
-    = static_cast<TOutputPointSet*>(this->MakeOutput(0).GetPointer());
+  OutputPointSetPointer output = static_cast<TOutputPointSet*>(this->MakeOutput(0).GetPointer());
 
   this->ProcessObject::SetNumberOfRequiredOutputs(1);
   this->ProcessObject::SetNthOutput(0, output.GetPointer());
 
-  m_GenerateDataRegion = 0;
+  m_GenerateDataRegion          = 0;
   m_GenerateDataNumberOfRegions = 0;
 }
 
 /**
  *
  */
-template<class TOutputPointSet>
-typename PointSetSource<TOutputPointSet>::DataObjectPointer
-PointSetSource<TOutputPointSet>
-::MakeOutput(DataObjectPointerArraySizeType)
+template <class TOutputPointSet>
+typename PointSetSource<TOutputPointSet>::DataObjectPointer PointSetSource<TOutputPointSet>::MakeOutput(DataObjectPointerArraySizeType)
 {
   return static_cast<itk::DataObject*>(TOutputPointSet::New().GetPointer());
 }
@@ -59,53 +55,42 @@ PointSetSource<TOutputPointSet>
 /**
  *
  */
-template<class TOutputPointSet>
-typename PointSetSource<TOutputPointSet>::OutputPointSetType *
-PointSetSource<TOutputPointSet>
-::GetOutput(void)
+template <class TOutputPointSet>
+typename PointSetSource<TOutputPointSet>::OutputPointSetType* PointSetSource<TOutputPointSet>::GetOutput(void)
 {
   if (this->GetNumberOfOutputs() < 1)
-    {
+  {
     return nullptr;
-    }
+  }
 
-  return static_cast<TOutputPointSet*>
-           (this->ProcessObject::GetOutput(0));
+  return static_cast<TOutputPointSet*>(this->ProcessObject::GetOutput(0));
 }
 
 /**
  *
  */
-template<class TOutputPointSet>
-typename PointSetSource<TOutputPointSet>::OutputPointSetType *
-PointSetSource<TOutputPointSet>
-::GetOutput(DataObjectPointerArraySizeType idx)
+template <class TOutputPointSet>
+typename PointSetSource<TOutputPointSet>::OutputPointSetType* PointSetSource<TOutputPointSet>::GetOutput(DataObjectPointerArraySizeType idx)
 {
-  return static_cast<TOutputPointSet*>
-           (this->ProcessObject::GetOutput(idx));
+  return static_cast<TOutputPointSet*>(this->ProcessObject::GetOutput(idx));
 }
 
 /**
  *
  */
-template<class TOutputPointSet>
-void
-PointSetSource<TOutputPointSet>
-::SetOutput(OutputPointSetType *output)
+template <class TOutputPointSet>
+void PointSetSource<TOutputPointSet>::SetOutput(OutputPointSetType* output)
 {
   itkWarningMacro(
-    <<
-    "SetOutput(): This method is slated to be removed from ITK.  Please use GraftOutput() in possible combination with DisconnectPipeline() instead.");
+      << "SetOutput(): This method is slated to be removed from ITK.  Please use GraftOutput() in possible combination with DisconnectPipeline() instead.");
   this->ProcessObject::SetNthOutput(0, output);
 }
 
 /**
  *
  */
-template<class TOutputPointSet>
-void
-PointSetSource<TOutputPointSet>
-::GenerateInputRequestedRegion()
+template <class TOutputPointSet>
+void PointSetSource<TOutputPointSet>::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
 }
@@ -113,10 +98,8 @@ PointSetSource<TOutputPointSet>
 /**
  *
  */
-template<class TOutputPointSet>
-void
-PointSetSource<TOutputPointSet>
-::GraftOutput(itk::DataObject *graft)
+template <class TOutputPointSet>
+void PointSetSource<TOutputPointSet>::GraftOutput(itk::DataObject* graft)
 {
   this->GraftNthOutput(0, graft);
 }
@@ -124,23 +107,20 @@ PointSetSource<TOutputPointSet>
 /**
  *
  */
-template<class TOutputPointSet>
-void
-PointSetSource<TOutputPointSet>
-::GraftNthOutput(DataObjectPointerArraySizeType idx, itk::DataObject *graft)
+template <class TOutputPointSet>
+void PointSetSource<TOutputPointSet>::GraftNthOutput(DataObjectPointerArraySizeType idx, itk::DataObject* graft)
 {
   if (idx >= this->GetNumberOfOutputs())
-    {
-    itkExceptionMacro(<< "Requested to graft output " << idx <<
-                      " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
-    }
+  {
+    itkExceptionMacro(<< "Requested to graft output " << idx << " but this filter only has " << this->GetNumberOfOutputs() << " Outputs.");
+  }
 
   if (!graft)
-    {
+  {
     itkExceptionMacro(<< "Requested to graft output that is a NULL pointer");
-    }
+  }
 
-  itk::DataObject * output = this->GetOutput(idx);
+  itk::DataObject* output = this->GetOutput(idx);
 
   // Call Graft on the PointSet in order to copy meta-information, and containers.
   output->Graft(graft);
@@ -149,10 +129,8 @@ PointSetSource<TOutputPointSet>
 /**
  *
  */
-template<class TOutputPointSet>
-void
-PointSetSource<TOutputPointSet>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TOutputPointSet>
+void PointSetSource<TOutputPointSet>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

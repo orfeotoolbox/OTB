@@ -195,7 +195,7 @@ namespace ossimplugins
             /*
              * Leader file data reading
              */
-            std::ifstream leaderFile(leaFilename.c_str(), ios::in | ios::binary);
+            std::ifstream leaderFile(leaFilename.c_str(), std::ios::in | std::ios::binary);
             leaderFile >> *theErsSarleader;
             leaderFile.close();
 
@@ -613,8 +613,8 @@ namespace ossimplugins
       ossimString filename(kwl.find("filename"));
       filename.upcase();
       //std::transform(filename.begin(), filename.end(), filename.begin(), toupper);
-      string::size_type loc = filename.find("PRI");
-      if (loc != string::npos)
+      std::string::size_type loc = filename.find("PRI");
+      if (loc != std::string::npos)
       {
          _isProductGeoreferenced = true;
       }
@@ -646,7 +646,7 @@ namespace ossimplugins
 
    bool ossimErsSarModel::isErsLeader(const ossimFilename& file) const
    {
-      std::ifstream candidate(file.c_str(), ios::in | ios::binary);
+      std::ifstream candidate(file.c_str(), std::ios::in | std::ios::binary);
       char ersFileName[16];
 
       candidate.seekg(48);

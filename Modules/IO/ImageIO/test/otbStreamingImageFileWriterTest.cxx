@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "itkMacro.h"
 #include <iostream>
 
@@ -32,34 +30,34 @@
 int otbStreamingImageFileWriterTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
-  int          NumberOfStreamDivisions(::atoi(argv[3]));
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
+  int         NumberOfStreamDivisions(::atoi(argv[3]));
 
   typedef unsigned char InputPixelType;
   typedef unsigned char OutputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
-  typedef otb::ImageFileReader<InputImageType>           ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>          WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(inputFilename);
-    std::cout << "Writing test" << std::endl;
-    WriterType::Pointer writer = WriterType::New();
-    if (NumberOfStreamDivisions > 1)
-      {
-      std::cout << "Streaming testing of otb::ImageFileWriter " << std::endl;
-      std::cout << "NumberOfStreamDivisions: " << NumberOfStreamDivisions << std::endl;
-      writer->SetNumberOfDivisionsStrippedStreaming(NumberOfStreamDivisions);
-      }
+  std::cout << "Writing test" << std::endl;
+  WriterType::Pointer writer = WriterType::New();
+  if (NumberOfStreamDivisions > 1)
+  {
+    std::cout << "Streaming testing of otb::ImageFileWriter " << std::endl;
+    std::cout << "NumberOfStreamDivisions: " << NumberOfStreamDivisions << std::endl;
+    writer->SetNumberOfDivisionsStrippedStreaming(NumberOfStreamDivisions);
+  }
 
-    writer->SetFileName(outputFilename);
-    writer->SetInput(reader->GetOutput());
-    writer->Update();
+  writer->SetFileName(outputFilename);
+  writer->SetInput(reader->GetOutput());
+  writer->Update();
 
   return EXIT_SUCCESS;
 }

@@ -31,52 +31,22 @@
 namespace otb
 {
 
-template<class TFirstTransform,
-    class TSecondTransform,
-    class TScalarType,
-    unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
-CompositeTransform<TFirstTransform,
-    TSecondTransform,
-    TScalarType,
-    NInputDimensions,
-    NOutputDimensions>
-::CompositeTransform() : Superclass(ParametersDimension)
+template <class TFirstTransform, class TSecondTransform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>::CompositeTransform() : Superclass(ParametersDimension)
 {
-  m_FirstTransform = nullptr;
+  m_FirstTransform  = nullptr;
   m_SecondTransform = nullptr;
 }
 
-template<class TFirstTransform,
-    class TSecondTransform,
-    class TScalarType,
-    unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
-CompositeTransform<TFirstTransform,
-    TSecondTransform,
-    TScalarType,
-    NInputDimensions,
-    NOutputDimensions>
-::~CompositeTransform()
+template <class TFirstTransform, class TSecondTransform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>::~CompositeTransform()
 {
 }
 
-template<class TFirstTransform,
-    class TSecondTransform,
-    class TScalarType,
-    unsigned int NInputDimensions,
-    unsigned int NOutputDimensions>
-typename CompositeTransform<TFirstTransform,
-    TSecondTransform,
-    TScalarType,
-    NInputDimensions,
-    NOutputDimensions>::SecondTransformOutputPointType
-CompositeTransform<TFirstTransform,
-    TSecondTransform,
-    TScalarType,
-    NInputDimensions,
-    NOutputDimensions>
-::TransformPoint(const FirstTransformInputPointType& point1) const
+template <class TFirstTransform, class TSecondTransform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+typename CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>::SecondTransformOutputPointType
+CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>::TransformPoint(
+    const FirstTransformInputPointType& point1) const
 {
   FirstTransformOutputPointType geoPoint;
   geoPoint = m_FirstTransform->TransformPoint(point1);
@@ -84,7 +54,7 @@ CompositeTransform<TFirstTransform,
   SecondTransformOutputPointType outputPoint;
   outputPoint = m_SecondTransform->TransformPoint(geoPoint);
 
-//  otbMsgDevMacro(<< std::setprecision(15) << "Converting: " << point1 << " -> " <<  geoPoint<< " -> " << outputPoint);
+  //  otbMsgDevMacro(<< std::setprecision(15) << "Converting: " << point1 << " -> " <<  geoPoint<< " -> " << outputPoint);
 
   return outputPoint;
 }

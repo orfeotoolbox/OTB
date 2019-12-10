@@ -25,9 +25,11 @@
 
 #include "otbEuclideanDistanceMetricWithMissingValuePow2.h"
 
-namespace otb {
+namespace otb
+{
 
-namespace Statistics {
+namespace Statistics
+{
 
 /** \class FlexibleDistanceWithMissingValue
  * \brief Non-Euclidean distance function facing missing value.
@@ -50,16 +52,15 @@ namespace Statistics {
  *
  * \ingroup OTBImageManipulation
  */
-template<class TVector>
-class ITK_EXPORT FlexibleDistanceWithMissingValue :
-  public otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector>
+template <class TVector>
+class ITK_EXPORT FlexibleDistanceWithMissingValue : public otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector>
 {
 public:
   /** Standard "Self" typedef. */
-  typedef FlexibleDistanceWithMissingValue                                Self;
+  typedef FlexibleDistanceWithMissingValue                                      Self;
   typedef otb::Statistics::EuclideanDistanceMetricWithMissingValuePow2<TVector> Superclass;
-  typedef itk::SmartPointer<Self>                                         Pointer;
-  typedef itk::SmartPointer<const Self>                                   ConstPointer;
+  typedef itk::SmartPointer<Self>                                               Pointer;
+  typedef itk::SmartPointer<const Self>                                         ConstPointer;
 
   typedef typename Superclass::MeasurementVectorSizeType MeasurementVectorSizeType;
 
@@ -100,15 +101,19 @@ public:
   static bool IsEuclidean();
 
 protected:
-  FlexibleDistanceWithMissingValue() {}
-  ~FlexibleDistanceWithMissingValue() override {}
-};  // end of class
+  FlexibleDistanceWithMissingValue()
+  {
+  }
+  ~FlexibleDistanceWithMissingValue() override
+  {
+  }
+}; // end of class
 
 /** Static variable instantiation */
-template<class TVector>
+template <class TVector>
 double FlexibleDistanceWithMissingValue<TVector>::Alpha = 1.0;
 
-template<class TVector>
+template <class TVector>
 double FlexibleDistanceWithMissingValue<TVector>::Beta = 2.0;
 
 } // end namespace statistics
