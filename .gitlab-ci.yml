@@ -371,7 +371,7 @@ deploy:
 #   when: manual
 #   script:
 #     - ./CI/deploy-prod.sh
-    
+
 release-container:
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
   stage: deploy
