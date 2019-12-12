@@ -25,8 +25,6 @@
 
 #cmakedefine OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
 
-#cmakedefine OTB_BUILD_SHARED_LIBS
-
 #cmakedefine OTB_USE_OPENMP
 
 #cmakedefine OTB_USE_SSE_FLAGS

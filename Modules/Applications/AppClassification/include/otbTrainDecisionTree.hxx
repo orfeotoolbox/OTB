@@ -29,85 +29,76 @@ namespace Wrapper
 {
 
 template <class TInputValue, class TOutputValue>
-void
-LearningApplicationBase<TInputValue,TOutputValue>
-::InitDecisionTreeParams()
+void LearningApplicationBase<TInputValue, TOutputValue>::InitDecisionTreeParams()
 {
   AddChoice("classifier.dt", "Decision Tree classifier");
-  SetParameterDescription("classifier.dt",
-    "http://docs.opencv.org/modules/ml/doc/decision_trees.html");
-  //MaxDepth
+  SetParameterDescription("classifier.dt", "http://docs.opencv.org/modules/ml/doc/decision_trees.html");
+  // MaxDepth
   AddParameter(ParameterType_Int, "classifier.dt.max", "Maximum depth of the tree");
 #ifdef OTB_OPENCV_3
-  SetParameterInt("classifier.dt.max",10);
+  SetParameterInt("classifier.dt.max", 10);
 #else
-  SetParameterInt("classifier.dt.max",65535);
+  SetParameterInt("classifier.dt.max", 65535);
 #endif
   SetParameterDescription("classifier.dt.max",
-   "The training algorithm attempts to split each node while its depth is smaller "
-   "than the maximum possible depth of the tree. The actual depth may be smaller "
-   "if the other termination criteria are met, and/or if the tree is pruned.");
+                          "The training algorithm attempts to split each node while its depth is smaller "
+                          "than the maximum possible depth of the tree. The actual depth may be smaller "
+                          "if the other termination criteria are met, and/or if the tree is pruned.");
 
-  //MinSampleCount
+  // MinSampleCount
   AddParameter(ParameterType_Int, "classifier.dt.min", "Minimum number of samples in each node");
-  SetParameterInt("classifier.dt.min",10);
+  SetParameterInt("classifier.dt.min", 10);
   SetParameterDescription("classifier.dt.min",
-    "If the number of samples in a node is smaller "
-    "than this parameter, then this node will not be split.");
+                          "If the number of samples in a node is smaller "
+                          "than this parameter, then this node will not be split.");
 
-  //RegressionAccuracy
+  // RegressionAccuracy
   AddParameter(ParameterType_Float, "classifier.dt.ra", "Termination criteria for regression tree");
-  SetParameterFloat("classifier.dt.ra",0.01);
+  SetParameterFloat("classifier.dt.ra", 0.01);
   SetParameterDescription("classifier.dt.ra",
-    "If all absolute differences between an estimated value in a node "
-    "and the values of the train samples in this node are smaller than this "
-    "regression accuracy parameter, then the node will not be split further.");
+                          "If all absolute differences between an estimated value in a node "
+                          "and the values of the train samples in this node are smaller than this "
+                          "regression accuracy parameter, then the node will not be split further.");
 
-  //UseSurrogates : don't need to be exposed !
-  //SetParameterDescription("classifier.dt.sur","These splits allow working with missing data and compute variable importance correctly.");
+  // UseSurrogates : don't need to be exposed !
+  // SetParameterDescription("classifier.dt.sur","These splits allow working with missing data and compute variable importance correctly.");
 
-  //MaxCategories
+  // MaxCategories
   AddParameter(ParameterType_Int, "classifier.dt.cat",
-    "Cluster possible values of a categorical variable into K <= cat clusters to find a "
-    "suboptimal split");
-  SetParameterInt("classifier.dt.cat",10);
+               "Cluster possible values of a categorical variable into K <= cat clusters to find a "
+               "suboptimal split");
+  SetParameterInt("classifier.dt.cat", 10);
   SetParameterDescription("classifier.dt.cat",
-      "Cluster possible values of a categorical variable into K <= cat clusters to find a "
-      "suboptimal split.");
+                          "Cluster possible values of a categorical variable into K <= cat clusters to find a "
+                          "suboptimal split.");
 
-  //CVFolds
+
+// CVFolds: only exposed for OPENCV 2 because it crashes in OpenCV 3
+#ifndef OTB_OPENCV_3
   AddParameter(ParameterType_Int, "classifier.dt.f", "K-fold cross-validations");
-#ifdef OTB_OPENCV_3
-  // disable cross validation by default (crash in opencv 3.2)
-  SetParameterInt("classifier.dt.f",0);
-#else
-  SetParameterInt("classifier.dt.f",10);
-#endif
+  SetParameterInt("classifier.dt.f", 10);
   SetParameterDescription("classifier.dt.f",
-    "If cv_folds > 1, then it prunes a tree with K-fold cross-validation where K "
-    "is equal to cv_folds.");
+                          "If cv_folds > 1, then it prunes a tree with K-fold cross-validation where K "
+                          "is equal to cv_folds.");
+#endif
 
-  //Use1seRule
+  // Use1seRule
   AddParameter(ParameterType_Bool, "classifier.dt.r", "Set Use1seRule flag to false");
   SetParameterDescription("classifier.dt.r",
-      "If true, then a pruning will be harsher. This will make a tree more compact and more "
-      "resistant to the training data noise but a bit less accurate.");
+                          "If true, then a pruning will be harsher. This will make a tree more compact and more "
+                          "resistant to the training data noise but a bit less accurate.");
 
-  //TruncatePrunedTree
+  // TruncatePrunedTree
   AddParameter(ParameterType_Bool, "classifier.dt.t", "Set TruncatePrunedTree flag to false");
-  SetParameterDescription("classifier.dt.t",
-    "If true, then pruned branches are physically removed from the tree.");
+  SetParameterDescription("classifier.dt.t", "If true, then pruned branches are physically removed from the tree.");
 
-  //Priors are not exposed.
-
+  // Priors are not exposed.
 }
 
 template <class TInputValue, class TOutputValue>
-void
-LearningApplicationBase<TInputValue,TOutputValue>
-::TrainDecisionTree(typename ListSampleType::Pointer trainingListSample,
-                    typename TargetListSampleType::Pointer trainingLabeledListSample,
-                    std::string modelPath)
+void LearningApplicationBase<TInputValue, TOutputValue>::TrainDecisionTree(typename ListSampleType::Pointer trainingListSample,
+                                                                           typename TargetListSampleType::Pointer trainingLabeledListSample,
+                                                                           std::string                            modelPath)
 {
   typedef otb::DecisionTreeMachineLearningModel<InputValueType, OutputValueType> DecisionTreeType;
   typename DecisionTreeType::Pointer classifier = DecisionTreeType::New();
@@ -118,20 +109,23 @@ LearningApplicationBase<TInputValue,TOutputValue>
   classifier->SetMinSampleCount(GetParameterInt("classifier.dt.min"));
   classifier->SetRegressionAccuracy(GetParameterFloat("classifier.dt.ra"));
   classifier->SetMaxCategories(GetParameterInt("classifier.dt.cat"));
+// CVFolds is only exposed for OPENCV 2 because it crashes in OpenCV 3
+#ifndef OTB_OPENCV_3
   classifier->SetCVFolds(GetParameterInt("classifier.dt.f"));
+#endif
   if (GetParameterInt("classifier.dt.r"))
-    {
+  {
     classifier->SetUse1seRule(false);
-    }
+  }
   if (GetParameterInt("classifier.dt.t"))
-    {
+  {
     classifier->SetTruncatePrunedTree(false);
-    }
+  }
   classifier->Train();
   classifier->Save(modelPath);
 }
 
-} //end namespace wrapper
-} //end namespace otb
+} // end namespace wrapper
+} // end namespace otb
 
 #endif

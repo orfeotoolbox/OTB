@@ -169,7 +169,9 @@ public:
 
 protected:
   DEMHandler();
-  ~DEMHandler() override {}
+  ~DEMHandler() override
+  {
+  }
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
@@ -182,7 +184,6 @@ protected:
   double m_DefaultHeightAboveEllipsoid;
 
   static Pointer m_Singleton;
-
 };
 
 } // namespace otb

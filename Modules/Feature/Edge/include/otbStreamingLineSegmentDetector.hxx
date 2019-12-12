@@ -30,28 +30,24 @@
 namespace otb
 {
 
-template<class TInputImage>
-PersistentStreamingLineSegmentDetector<TInputImage>
-::PersistentStreamingLineSegmentDetector()
+template <class TInputImage>
+PersistentStreamingLineSegmentDetector<TInputImage>::PersistentStreamingLineSegmentDetector()
 {
 }
 
-template<class TInputImage>
-PersistentStreamingLineSegmentDetector<TInputImage>
-::~PersistentStreamingLineSegmentDetector()
+template <class TInputImage>
+PersistentStreamingLineSegmentDetector<TInputImage>::~PersistentStreamingLineSegmentDetector()
 {
 }
 
-template<class TInputImage>
-void
-PersistentStreamingLineSegmentDetector<TInputImage>
-::GenerateInputRequestedRegion()
+template <class TInputImage>
+void PersistentStreamingLineSegmentDetector<TInputImage>::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
 
   if (this->GetInput())
-    {
-    InputImagePointerType input = const_cast<InputImageType *> (this->GetInput());
+  {
+    InputImagePointerType input = const_cast<InputImageType*>(this->GetInput());
 
     typename InputImageType::RegionType region = this->GetOutput()->GetRequestedRegion();
 
@@ -59,18 +55,16 @@ PersistentStreamingLineSegmentDetector<TInputImage>
     region.Crop(input->GetLargestPossibleRegion());
 
     input->SetRequestedRegion(region);
-    }
+  }
 }
 
-template<class TInputImage>
-typename PersistentStreamingLineSegmentDetector<TInputImage>::OutputVectorDataPointerType
-PersistentStreamingLineSegmentDetector<TInputImage>
-::ProcessTile()
+template <class TInputImage>
+typename PersistentStreamingLineSegmentDetector<TInputImage>::OutputVectorDataPointerType PersistentStreamingLineSegmentDetector<TInputImage>::ProcessTile()
 {
   // Apply an ExtractImageFilter to avoid problems with filters asking for the LargestPossibleRegion
   typename ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
-  extract->SetInput( this->GetInput() );
-  extract->SetExtractionRegion( this->GetInput()->GetBufferedRegion() );
+  extract->SetInput(this->GetInput());
+  extract->SetExtractionRegion(this->GetInput()->GetBufferedRegion());
   extract->Update();
 
   // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionary

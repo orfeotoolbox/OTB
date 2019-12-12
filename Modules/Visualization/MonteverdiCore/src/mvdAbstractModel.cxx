@@ -56,45 +56,34 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-AbstractModel
-::AbstractModel( QObject* p ) :
-  QObject( p )
+AbstractModel::AbstractModel(QObject* p) : QObject(p)
 {
 }
 
 /*******************************************************************************/
-AbstractModel
-::~AbstractModel()
+AbstractModel::~AbstractModel()
 {
 }
 
 /*******************************************************************************/
-bool
-AbstractModel
-::IsModified() const
+bool AbstractModel::IsModified() const
 {
   return false;
 }
 
 /*******************************************************************************/
-void
-AbstractModel
-::ClearModified()
+void AbstractModel::ClearModified()
 {
 }
 
 /*******************************************************************************/
-void
-AbstractModel
-::virtual_Save()
+void AbstractModel::virtual_Save()
 {
   qDebug() << this << "::Save()";
 }
 
 /*******************************************************************************/
-void
-AbstractModel
-::virtual_BuildModel( void * model )
+void AbstractModel::virtual_BuildModel(void* model)
 {
   qDebug() << this << "::virtual_BuildModel(" << model << ")";
 }

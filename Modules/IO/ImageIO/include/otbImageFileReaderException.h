@@ -37,12 +37,10 @@ class OTBImageIO_EXPORT ImageFileReaderException : public itk::ExceptionObject
 {
 public:
   /** Run-time information. */
-  itkTypeMacro( ImageFileReaderException, ExceptionObject );
+  itkTypeMacro(ImageFileReaderException, ExceptionObject);
 
   /** Constructor. */
-  ImageFileReaderException(const char *file, unsigned int line,
-                           const std::string& desc = "",
-                           const std::string& filename = "");
+  ImageFileReaderException(const char* file, unsigned int line, const std::string& desc = "", const std::string& filename = "");
 
   /** Destructor. */
   ~ImageFileReaderException();

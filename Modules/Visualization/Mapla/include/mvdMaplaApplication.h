@@ -74,8 +74,7 @@ class OTBApplicationsModel;
  * \ingroup OTBMapla
  *
  */
-class OTBMapla_EXPORT MaplaApplication
-  : public I18nApplication
+class OTBMapla_EXPORT MaplaApplication : public I18nApplication
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -84,20 +83,18 @@ class OTBMapla_EXPORT MaplaApplication
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public constants/types.
+  //
+  // Public constants/types.
 public:
-
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /**
    * \brief Constructor.
    *
    * \param qtApp The parent Qt application (\see I18nApplication).
    */
-  MaplaApplication( QApplication* qtApp );
+  MaplaApplication(QApplication* qtApp);
 
   /** \brief Destructor. */
   ~MaplaApplication() override;
@@ -109,15 +106,13 @@ public:
    * \brief Access the const instance of application singleton.
    * \return The const instance to the singleton MaplaApplication.
    */
-  inline
-    static const MaplaApplication* ConstInstance();
+  inline static const MaplaApplication* ConstInstance();
 
   /**
    * \brief Access the non-const instance of application singleton.
    * \return The non-const instance to the singleton MaplaApplication.
    */
-  inline
-    static MaplaApplication* Instance();
+  inline static MaplaApplication* Instance();
 
   /**
    */
@@ -129,36 +124,32 @@ public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   void virtual_InitializeCore() override;
 
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots
+  //
+  // Slots
 private slots:
 };
 
@@ -171,21 +162,15 @@ namespace mvd
 {
 
 /*****************************************************************************/
-inline
-const MaplaApplication*
-MaplaApplication
-::ConstInstance()
+inline const MaplaApplication* MaplaApplication::ConstInstance()
 {
-  return I18nCoreApplication::ConstInstance< MaplaApplication >();
+  return I18nCoreApplication::ConstInstance<MaplaApplication>();
 }
 
 /*****************************************************************************/
-inline
-MaplaApplication*
-MaplaApplication
-::Instance()
+inline MaplaApplication* MaplaApplication::Instance()
 {
-  return I18nCoreApplication::Instance< MaplaApplication >();
+  return I18nCoreApplication::Instance<MaplaApplication>();
 }
 
 } // end namespace 'mvd'

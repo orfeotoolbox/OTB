@@ -25,23 +25,20 @@
 namespace otb
 {
 /***********************      WavelengthSpectralBands **************************/
-WavelengthSpectralBands
-::WavelengthSpectralBands()
+WavelengthSpectralBands::WavelengthSpectralBands()
 {
   m_WavelengthSpectralBandsList = InternalWavelengthSpectralBandListType::New();
-  m_NbBands = 0;
+  m_NbBands                     = 0;
 }
 
 /**PrintSelf method */
-void
-WavelengthSpectralBands
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void WavelengthSpectralBands::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   for (unsigned int i = 0; i < m_NbBands; ++i)
-    {
+  {
     os << indent << "Filter function values " << i << ":" << std::endl;
     os << indent << m_WavelengthSpectralBandsList->GetNthElement(i) << std::endl;
-    }
+  }
 }
 
 } // end namespace otb

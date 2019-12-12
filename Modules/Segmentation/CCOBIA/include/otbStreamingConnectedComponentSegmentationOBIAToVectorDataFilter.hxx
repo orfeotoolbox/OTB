@@ -25,44 +25,47 @@
 #include "otbVectorDataTransformFilter.h"
 #include "itkAffineTransform.h"
 
-namespace otb {
+namespace otb
+{
 
-template<class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
-PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>
-::PersistentConnectedComponentSegmentationOBIAToVectorDataFilter()
- : m_MinimumObjectSize(2), m_ShapeReducedSetOfAttributes(false), m_StatsReducedSetOfAttributes(false),
-m_ComputeFlusser(false), m_ComputePolygon(false), m_ComputeFeretDiameter(false), m_ComputePerimeter(false)
+template <class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
+PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage,
+                                                               TOutputVectorData>::PersistentConnectedComponentSegmentationOBIAToVectorDataFilter()
+  : m_MinimumObjectSize(2),
+    m_ShapeReducedSetOfAttributes(false),
+    m_StatsReducedSetOfAttributes(false),
+    m_ComputeFlusser(false),
+    m_ComputePolygon(false),
+    m_ComputeFeretDiameter(false),
+    m_ComputePerimeter(false)
 {
 }
 
-template<class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
-PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>
-::~PersistentConnectedComponentSegmentationOBIAToVectorDataFilter()
+template <class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
+PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage,
+                                                               TOutputVectorData>::~PersistentConnectedComponentSegmentationOBIAToVectorDataFilter()
 {
 }
 
-template<class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
-void
-PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>
-::GenerateInputRequestedRegion()
+template <class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
+void PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
 }
 
-template<class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
+template <class TVImage, class TLabelImage, class TMaskImage, class TOutputVectorData>
 typename PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>::VectorDataPointerType
-PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>
-::ProcessTile()
+PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelImage, TMaskImage, TOutputVectorData>::ProcessTile()
 {
   // Apply an ExtractImageFilter to avoid problems with filters asking for the LargestPossibleRegion
   typename ExtractImageFilterType::Pointer extract = ExtractImageFilterType::New();
-  extract->SetInput( this->GetInput() );
-  extract->SetExtractionRegion( this->GetOutput()->GetRequestedRegion() );
+  extract->SetInput(this->GetInput());
+  extract->SetExtractionRegion(this->GetOutput()->GetRequestedRegion());
   // WARNING: itk::ExtractImageFilter does not copy the MetadataDictionary
 
   typename MaskImageType::Pointer mask;
   if (!m_MaskExpression.empty())
-    {
+  {
     // Compute the mask
     typename MaskMuParserFilterType::Pointer maskFilter;
     maskFilter = MaskMuParserFilterType::New();
@@ -70,7 +73,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
     maskFilter->SetExpression(m_MaskExpression);
     maskFilter->Update();
     mask = maskFilter->GetOutput();
-    }
+  }
 
   // Perform connected components segmentation
   typename ConnectedComponentFilterType::Pointer connected = ConnectedComponentFilterType::New();
@@ -87,7 +90,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
   relabel->SetMinimumObjectSize(m_MinimumObjectSize);
   relabel->Update();
 
-  //Attributes computation
+  // Attributes computation
   // LabelImage to Label Map transformation
   typename LabelImageToLabelMapFilterType::Pointer labelImageToLabelMap = LabelImageToLabelMapFilterType::New();
   labelImageToLabelMap->SetInput(relabel->GetOutput());
@@ -97,7 +100,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
   typename AttributesLabelMapType::Pointer labelMap = labelImageToLabelMap->GetOutput();
 
   if (!m_OBIAExpression.empty())
-    {
+  {
     // shape attributes computation
     typename ShapeLabelMapFilterType::Pointer shapeLabelMapFilter = ShapeLabelMapFilterType::New();
     shapeLabelMapFilter->SetInput(labelImageToLabelMap->GetOutput());
@@ -120,7 +123,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
     opening->Update();
 
     labelMap = opening->GetOutput();
-    }
+  }
 
   // Transformation to VectorData
   typename LabelMapToVectorDataFilterType::Pointer labelMapToVectorDataFilter = LabelMapToVectorDataFilterType::New();
@@ -133,7 +136,7 @@ PersistentConnectedComponentSegmentationOBIAToVectorDataFilter<TVImage, TLabelIm
   // and arbitrarily set the ProjectionRef to the input image ProjectionRef
 
   typedef itk::AffineTransform<typename VectorDataType::PrecisionType, 2> TransformType;
-  typedef VectorDataTransformFilter<VectorDataType, VectorDataType> VDTransformType;
+  typedef VectorDataTransformFilter<VectorDataType, VectorDataType>       VDTransformType;
 
   typename TransformType::ParametersType params;
   params.SetSize(6);

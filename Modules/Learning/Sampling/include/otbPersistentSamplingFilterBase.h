@@ -38,23 +38,22 @@ namespace otb
  *
  * \ingroup OTBSampling
  */
-template <class TInputImage, class TMaskImage = otb::Image<unsigned char,2> >
-class ITK_EXPORT PersistentSamplingFilterBase
-  : public otb::PersistentImageFilter<TInputImage, TInputImage>
+template <class TInputImage, class TMaskImage = otb::Image<unsigned char, 2>>
+class ITK_EXPORT PersistentSamplingFilterBase : public otb::PersistentImageFilter<TInputImage, TInputImage>
 {
 public:
   /** Standard typedefs */
-  typedef PersistentSamplingFilterBase                       Self;
-  typedef PersistentImageFilter<TInputImage, TInputImage>   Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef PersistentSamplingFilterBase Self;
+  typedef PersistentImageFilter<TInputImage, TInputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkTypeMacro(PersistentSamplingFilterBase, PersistentImageFilter);
 
   /** Template parameters typedefs */
-  typedef TInputImage  InputImageType;
-  typedef TMaskImage   MaskImageType;
+  typedef TInputImage InputImageType;
+  typedef TMaskImage  MaskImageType;
 
   typedef typename TInputImage::RegionType RegionType;
 
@@ -73,7 +72,7 @@ public:
   const TMaskImage* GetMask();
 
   /** Set the OGR layer creation options */
-  void SetOGRLayerCreationOptions(const std::vector<std::string> & options);
+  void SetOGRLayerCreationOptions(const std::vector<std::string>& options);
 
   /** Get the OGR layer creation options */
   const std::vector<std::string>& GetOGRLayerCreationOptions();
@@ -98,7 +97,9 @@ protected:
   /** Constructor */
   PersistentSamplingFilterBase();
   /** Destructor */
-  ~PersistentSamplingFilterBase() override {}
+  ~PersistentSamplingFilterBase() override
+  {
+  }
 
   /** Use the same output information as input image, check the field index
    *  and the mask footprint */
@@ -118,42 +119,26 @@ protected:
   virtual void ThreadedGenerateVectorData(const ogr::Layer& layerForThread, itk::ThreadIdType threadid);
 
   /** Process a geometry, recursive method when the geometry is a collection */
-  void ExploreGeometry(const ogr::Feature& feature,
-                       OGRGeometry* geom,
-                       RegionType& region,
-                       itk::ThreadIdType& threadid);
+  void ExploreGeometry(const ogr::Feature& feature, OGRGeometry* geom, RegionType& region, itk::ThreadIdType& threadid);
 
   /** Process a line string : use pixels that cross the line */
-  virtual void ProcessLine(const ogr::Feature& feature,
-                           OGRLineString* line,
-                           RegionType& region,
-                           itk::ThreadIdType& threadid);
+  virtual void ProcessLine(const ogr::Feature& feature, OGRLineString* line, RegionType& region, itk::ThreadIdType& threadid);
 
   /** Process a polygon : use pixels inside the polygon */
-  virtual void ProcessPolygon(const ogr::Feature& feature,
-                              OGRPolygon* polygon,
-                              RegionType& region,
-                              itk::ThreadIdType& threadid);
+  virtual void ProcessPolygon(const ogr::Feature& feature, OGRPolygon* polygon, RegionType& region, itk::ThreadIdType& threadid);
 
   /** Generic method called for each matching pixel position (NOT IMPLEMENTED)*/
-  virtual void ProcessSample(const ogr::Feature& feature,
-                             typename TInputImage::IndexType& imgIndex,
-                             typename TInputImage::PointType& imgPoint,
+  virtual void ProcessSample(const ogr::Feature& feature, typename TInputImage::IndexType& imgIndex, typename TInputImage::PointType& imgPoint,
                              itk::ThreadIdType& threadid);
 
   /** Generic method called once before processing each feature */
-  virtual void PrepareFeature(const ogr::Feature& feature,
-                              itk::ThreadIdType& threadid);
+  virtual void PrepareFeature(const ogr::Feature& feature, itk::ThreadIdType& threadid);
 
   /** Common function to test if a point is inside a polygon */
-  bool IsSampleInsidePolygon(OGRPolygon* poly,
-                             OGRPoint* tmpPoint);
+  bool IsSampleInsidePolygon(OGRPolygon* poly, OGRPoint* tmpPoint);
 
   /** Common function to test if a pixel crosses the line */
-  bool IsSampleOnLine(OGRLineString* line,
-                      typename TInputImage::PointType& position,
-                      typename TInputImage::SpacingType& absSpacing,
-                      OGRPolygon& tmpPolygon);
+  bool IsSampleOnLine(OGRLineString* line, typename TInputImage::PointType& position, typename TInputImage::SpacingType& absSpacing, OGRPolygon& tmpPolygon);
 
   /** Get the region bounding a set of features */
   RegionType FeatureBoundingRegion(const TInputImage* image, otb::ogr::Layer::const_iterator& featIt) const;
@@ -172,43 +157,41 @@ protected:
   /** Utility method to add new fields on an output layer */
   virtual void InitializeOutputDataSource(ogr::DataSource* inputDS, ogr::DataSource* outputDS);
 
-  typedef struct {
-    std::string Name;
+  typedef struct
+  {
+    std::string  Name;
     OGRFieldType Type;
-    int Width;
-    int Precision;
-    } SimpleFieldDefn;
+    int          Width;
+    int          Precision;
+  } SimpleFieldDefn;
 
   /** Clear current additional fields */
   void ClearAdditionalFields();
 
   /** Create a new additional field */
-  void CreateAdditionalField(std::string name,
-                             OGRFieldType type,
-                             int width=0,
-                             int precision=0);
+  void CreateAdditionalField(std::string name, OGRFieldType type, int width = 0, int precision = 0);
 
   /** Get a reference over the additional fields */
   const std::vector<SimpleFieldDefn>& GetAdditionalFields();
 
   /** Callback function to launch VectorThreadedGenerateData in each thread */
-  static ITK_THREAD_RETURN_TYPE VectorThreaderCallback(void *arg);
+  static ITK_THREAD_RETURN_TYPE VectorThreaderCallback(void* arg);
 
   /** basically the same struct as itk::ImageSource::ThreadStruct */
   struct VectorThreadStruct
-    {
-      Pointer Filter;
-    };
+  {
+    Pointer Filter;
+  };
 
   /** Give access to in-memory input layers */
   ogr::Layer GetInMemoryInput(unsigned int threadId);
 
   /** Give access to in-memory output layers */
-  ogr::Layer GetInMemoryOutput(unsigned int threadId, unsigned int index=0);
+  ogr::Layer GetInMemoryOutput(unsigned int threadId, unsigned int index = 0);
 
 private:
-  PersistentSamplingFilterBase(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PersistentSamplingFilterBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Field name containing the class name*/
   std::string m_FieldName;
@@ -232,8 +215,7 @@ private:
   std::vector<OGRDataPointer> m_InMemoryInputs;
 
   /** In-memory containers storing position during iteration loop*/
-  std::vector<std::vector<OGRDataPointer> > m_InMemoryOutputs;
-
+  std::vector<std::vector<OGRDataPointer>> m_InMemoryOutputs;
 };
 } // End namespace otb
 

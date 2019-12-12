@@ -32,16 +32,15 @@ class KMeansApplicationBase : public CompositeApplication
 {
 public:
   /** Standard class typedefs. */
-  typedef KMeansApplicationBase Self;
-  typedef CompositeApplication Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef KMeansApplicationBase         Self;
+  typedef CompositeApplication          Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
-  itkTypeMacro( KMeansApplicationBase, Superclass )
+  itkTypeMacro(KMeansApplicationBase, Superclass)
 
-protected:
-  void InitKMParams()
+      protected : void InitKMParams()
   {
     AddApplication("ImageEnvelope", "imgenvelop", "mean shift smoothing");
     AddApplication("PolygonClassStatistics", "polystats", "Polygon Class Statistics");
@@ -59,9 +58,8 @@ protected:
     InitKMClassification();
 
     // init at the end cleanup
-    AddParameter( ParameterType_Bool, "cleanup", "Clean-up of temporary files" );
-    SetParameterDescription( "cleanup",
-                           "If activated, the application will try to clean all temporary files it created" );
+    AddParameter(ParameterType_Bool, "cleanup", "Clean-up of temporary files");
+    SetParameterDescription("cleanup", "If activated, the application will try to clean all temporary files it created");
     SetParameterInt("cleanup", 1);
   }
 
@@ -109,18 +107,17 @@ protected:
     ShareParameter("ram", "polystats.ram");
     ShareParameter("sampler", "select.sampler");
     ShareParameter("centroids.out", "training.classifier.sharkkm.centroids.out");
-    ShareParameter("vm", "polystats.mask", "Validity Mask",
-      "Validity mask, only non-zero pixels will be used to estimate KMeans modes.");
+    ShareParameter("vm", "polystats.mask", "Validity Mask", "Validity mask, only non-zero pixels will be used to estimate KMeans modes.");
   }
 
   void ShareKMClassificationParams()
   {
     ShareParameter("nodatalabel", "classif.nodatalabel", "Label mask value",
-      "By default, hidden pixels will have the assigned label 0 in the output image. "
-      "It's possible to define the label mask by another value, "
-      "but be careful to not take a label from another class. "
-      "This application initializes the labels from 0 to N-1, "
-      "N is the number of class (defined by 'nc' parameter).");
+                   "By default, hidden pixels will have the assigned label 0 in the output image. "
+                   "It's possible to define the label mask by another value, "
+                   "but be careful to not take a label from another class. "
+                   "This application initializes the labels from 0 to N-1, "
+                   "N is the number of class (defined by 'nc' parameter).");
   }
 
   void ConnectKMSamplingParams()
@@ -140,7 +137,7 @@ protected:
   void ConnectKMClassificationParams()
   {
     Connect("training.cfield", "extraction.field");
-    Connect("training.io.stats","imgstats.out");
+    Connect("training.io.stats", "imgstats.out");
 
     Connect("classif.in", "imgenvelop.in");
     Connect("classif.model", "training.io.out");
@@ -155,18 +152,17 @@ protected:
     Connect("classif.mask", "select.mask");
   }
 
-  void ComputeImageEnvelope(const std::string &vectorFileName)
+  void ComputeImageEnvelope(const std::string& vectorFileName)
   {
     GetInternalApplication("imgenvelop")->SetParameterString("out", vectorFileName);
     GetInternalApplication("imgenvelop")->ExecuteAndWriteOutput();
   }
 
-  void ComputeAddField(const std::string &vectorFileName,
-                       const std::string &fieldName)
+  void ComputeAddField(const std::string& vectorFileName, const std::string& fieldName)
   {
     otbAppLogINFO("add field in the layer ...");
     otb::ogr::DataSource::Pointer ogrDS;
-    ogrDS = otb::ogr::DataSource::New(vectorFileName, otb::ogr::DataSource::Modes::Update_LayerUpdate);
+    ogrDS                 = otb::ogr::DataSource::New(vectorFileName, otb::ogr::DataSource::Modes::Update_LayerUpdate);
     otb::ogr::Layer layer = ogrDS->GetLayer(0);
 
     OGRFieldDefn classField(fieldName.c_str(), OFTInteger);
@@ -175,12 +171,12 @@ protected:
     ogr::FieldDefn classFieldDefn(classField);
     layer.CreateField(classFieldDefn);
 
-    otb::ogr::Layer::const_iterator it = layer.cbegin();
+    otb::ogr::Layer::const_iterator it    = layer.cbegin();
     otb::ogr::Layer::const_iterator itEnd = layer.cend();
-    for( ; it!=itEnd ; ++it)
+    for (; it != itEnd; ++it)
     {
       ogr::Feature dstFeature(layer.GetLayerDefn());
-      dstFeature.SetFrom( *it, TRUE);
+      dstFeature.SetFrom(*it, TRUE);
       dstFeature.SetFID(it->GetFID());
       dstFeature[fieldName].SetValue<int>(0);
       layer.SetFeature(dstFeature);
@@ -191,8 +187,7 @@ protected:
     ogrDS->SyncToDisk();
   }
 
-  void ComputePolygonStatistics(const std::string &statisticsFileName,
-                                const std::string &fieldName)
+  void ComputePolygonStatistics(const std::string& statisticsFileName, const std::string& fieldName)
   {
     std::vector<std::string> fieldList = {fieldName};
 
@@ -202,10 +197,7 @@ protected:
     ExecuteInternal("polystats");
   }
 
-  void SelectAndExtractSamples(const std::string &statisticsFileName,
-                               const std::string &fieldName,
-                               const std::string &sampleFileName,
-                               int NBSamples)
+  void SelectAndExtractSamples(const std::string& statisticsFileName, const std::string& fieldName, const std::string& sampleFileName, int NBSamples)
   {
     /* SampleSelection */
     GetInternalApplication("select")->SetParameterString("out", sampleFileName);
@@ -217,7 +209,7 @@ protected:
     GetInternalApplication("select")->SetParameterString("strategy", "constant");
     GetInternalApplication("select")->SetParameterInt("strategy.constant.nb", NBSamples);
 
-    if( IsParameterEnabled("rand"))
+    if (IsParameterEnabled("rand"))
       GetInternalApplication("select")->SetParameterInt("rand", GetParameterInt("rand"));
 
     // select sample positions
@@ -233,31 +225,27 @@ protected:
     GetInternalApplication("extraction")->ExecuteAndWriteOutput();
   }
 
-  void TrainKMModel(FloatVectorImageType *image,
-                    const std::string &sampleTrainFileName,
-                    const std::string &modelFileName)
+  void TrainKMModel(FloatVectorImageType* image, const std::string& sampleTrainFileName, const std::string& modelFileName)
   {
     std::vector<std::string> extractOutputList = {sampleTrainFileName};
     GetInternalApplication("training")->SetParameterStringList("io.vd", extractOutputList);
     UpdateInternalParameters("training");
 
     // set field names
-    std::string selectPrefix = GetInternalApplication("extraction")->GetParameterString("outfield.prefix.name");
-    unsigned int nbBands = image->GetNumberOfComponentsPerPixel();
+    std::string              selectPrefix = GetInternalApplication("extraction")->GetParameterString("outfield.prefix.name");
+    unsigned int             nbBands      = image->GetNumberOfComponentsPerPixel();
     std::vector<std::string> selectedNames;
-    for( unsigned int i = 0; i < nbBands; i++ )
-      {
+    for (unsigned int i = 0; i < nbBands; i++)
+    {
       std::ostringstream oss;
       oss << i;
-      selectedNames.push_back( selectPrefix + oss.str() );
-      }
+      selectedNames.push_back(selectPrefix + oss.str());
+    }
     GetInternalApplication("training")->SetParameterStringList("feat", selectedNames);
 
     GetInternalApplication("training")->SetParameterString("classifier", "sharkkm");
-    GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.maxiter",
-                                                        GetParameterInt("maxit"));
-    GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.k",
-                                                        GetParameterInt("nc"));
+    GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.maxiter", GetParameterInt("maxit"));
+    GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.k", GetParameterInt("nc"));
     if (IsParameterEnabled("centroids.in") && HasValue("centroids.in"))
     {
       GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroids.in", GetParameterString("centroids.in"));
@@ -267,97 +255,94 @@ protected:
     }
 
 
-    if( IsParameterEnabled("rand"))
+    if (IsParameterEnabled("rand"))
       GetInternalApplication("training")->SetParameterInt("rand", GetParameterInt("rand"));
     GetInternalApplication("training")->GetParameterByKey("v")->SetActive(false);
 
     GetInternalApplication("training")->SetParameterString("io.out", modelFileName);
 
-    ExecuteInternal( "training" );
+    ExecuteInternal("training");
     otbAppLogINFO("output model: " << GetInternalApplication("training")->GetParameterString("io.out"));
   }
 
-  void ComputeImageStatistics( ImageBaseType * img,
-                                               const std::string &imagesStatsFileName)
+  void ComputeImageStatistics(ImageBaseType* img, const std::string& imagesStatsFileName)
   {
     // std::vector<std::string> imageFileNameList = {imageFileName};
     GetInternalApplication("imgstats")->SetParameterImageBase("il", img);
     GetInternalApplication("imgstats")->SetParameterString("out", imagesStatsFileName);
 
-    ExecuteInternal( "imgstats" );
+    ExecuteInternal("imgstats");
     otbAppLogINFO("image statistics file: " << GetInternalApplication("imgstats")->GetParameterString("out"));
   }
 
 
   void KMeansClassif()
   {
-    ExecuteInternal( "classif" );
+    ExecuteInternal("classif");
   }
 
   class KMeansFileNamesHandler
+  {
+  public:
+    KMeansFileNamesHandler(const std::string& outPath)
     {
-    public:
-      KMeansFileNamesHandler(const std::string &outPath)
+      tmpVectorFile  = outPath + "_imgEnvelope.shp";
+      polyStatOutput = outPath + "_polyStats.xml";
+      sampleOutput   = outPath + "_sampleSelect.shp";
+      modelFile      = outPath + "_model.txt";
+      imgStatOutput  = outPath + "_imgstats.xml";
+    }
+
+    void clear()
+    {
+      RemoveFile(tmpVectorFile);
+      RemoveFile(polyStatOutput);
+      RemoveFile(sampleOutput);
+      RemoveFile(modelFile);
+      RemoveFile(imgStatOutput);
+    }
+
+    std::string tmpVectorFile;
+    std::string polyStatOutput;
+    std::string sampleOutput;
+    std::string modelFile;
+    std::string imgStatOutput;
+
+  private:
+    bool RemoveFile(const std::string& filePath)
+    {
+      bool res = true;
+      if (itksys::SystemTools::FileExists(filePath))
       {
-        tmpVectorFile = outPath + "_imgEnvelope.shp";
-        polyStatOutput = outPath + "_polyStats.xml";
-        sampleOutput = outPath + "_sampleSelect.shp";
-        modelFile = outPath + "_model.txt";
-        imgStatOutput = outPath + "_imgstats.xml";
+        size_t posExt = filePath.rfind('.');
+        if (posExt != std::string::npos && filePath.compare(posExt, std::string::npos, ".shp") == 0)
+        {
+          std::string shxPath = filePath.substr(0, posExt) + std::string(".shx");
+          std::string dbfPath = filePath.substr(0, posExt) + std::string(".dbf");
+          std::string prjPath = filePath.substr(0, posExt) + std::string(".prj");
+          RemoveFile(shxPath);
+          RemoveFile(dbfPath);
+          RemoveFile(prjPath);
+        }
+        res = itksys::SystemTools::RemoveFile(filePath);
+        if (!res)
+        {
+          // otbAppLogINFO( <<"Unable to remove file  "<<filePath );
+        }
       }
-
-      void clear()
-      {
-        RemoveFile(tmpVectorFile);
-        RemoveFile(polyStatOutput);
-        RemoveFile(sampleOutput);
-        RemoveFile(modelFile);
-        RemoveFile(imgStatOutput);
-      }
-
-      std::string tmpVectorFile;
-      std::string polyStatOutput;
-      std::string sampleOutput;
-      std::string modelFile;
-      std::string imgStatOutput;
-
-    private:
-      bool RemoveFile(const std::string &filePath)
-      {
-        bool res = true;
-        if( itksys::SystemTools::FileExists( filePath ) )
-          {
-          size_t posExt = filePath.rfind( '.' );
-          if( posExt != std::string::npos && filePath.compare( posExt, std::string::npos, ".shp" ) == 0 )
-            {
-            std::string shxPath = filePath.substr( 0, posExt ) + std::string( ".shx" );
-            std::string dbfPath = filePath.substr( 0, posExt ) + std::string( ".dbf" );
-            std::string prjPath = filePath.substr( 0, posExt ) + std::string( ".prj" );
-            RemoveFile( shxPath );
-            RemoveFile( dbfPath );
-            RemoveFile( prjPath );
-            }
-          res = itksys::SystemTools::RemoveFile( filePath );
-          if( !res )
-            {
-            //otbAppLogINFO( <<"Unable to remove file  "<<filePath );
-            }
-          }
-        return res;
-      }
-
-    };
-
+      return res;
+    }
+  };
 };
 
 
-class KMeansClassification: public KMeansApplicationBase
+class KMeansClassification : public KMeansApplicationBase
 {
 public:
   /** Standard class typedefs. */
-  typedef KMeansClassification Self;
-  typedef KMeansApplicationBase Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef KMeansClassification          Self;
+  typedef KMeansApplicationBase         Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Standard macro */
@@ -371,22 +356,23 @@ private:
     SetName("KMeansClassification");
     SetDescription("Unsupervised KMeans image classification");
 
-    SetDocLongDescription("Unsupervised KMeans image classification. "
-      "This is a composite application, using existing training and classification applications. "
-      "The SharkKMeans model is used.\n\n"
-      "This application is only available if OTB is compiled with Shark support"
-      "(CMake option :code:`OTB_USE_SHARK=ON`).\n\n"
+    SetDocLongDescription(
+        "Unsupervised KMeans image classification. "
+        "This is a composite application, using existing training and classification applications. "
+        "The SharkKMeans model is used.\n\n"
+        "This application is only available if OTB is compiled with Shark support"
+        "(CMake option :code:`OTB_USE_SHARK=ON`).\n\n"
 
-      "The steps of this composite application:\n\n"
+        "The steps of this composite application:\n\n"
         "1) ImageEnvelope: create a shapefile (1 polygon),\n"
         "2) PolygonClassStatistics: compute the statistics,\n"
         "3) SampleSelection: select the samples by constant strategy in the shapefile "
-            "(1000000 samples max),\n"
+        "(1000000 samples max),\n"
         "4) SampleExtraction: extract the samples descriptors (update of SampleSelection output file),\n"
         "5) ComputeImagesStatistics: compute images second order statistics,\n"
         "6) TrainVectorClassifier: train the SharkKMeans model,\n"
         "7) ImageClassifier: perform the classification of the input image "
-            "according to a model file.\n\n"
+        "according to a model file.\n\n"
         "It is possible to choose random/periodic modes of the SampleSelection application.\n"
         "If you do not want to keep the temporary files (sample selected, model file, ...), "
         "initialize cleanup parameter.\n"
@@ -394,9 +380,10 @@ private:
 
     SetDocLimitations("The application does not support NaN in the input image");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("ImageEnvelope, PolygonClassStatistics, SampleSelection, SampleExtraction, "
-      "PolygonClassStatistics, TrainVectorClassifier, ImageClassifier.\n\n"
-      "[1] http://image.diku.dk/shark/sphinx_pages/build/html/rest_sources/tutorials/algorithms/kmeans.html");
+    SetDocSeeAlso(
+        "ImageEnvelope, PolygonClassStatistics, SampleSelection, SampleExtraction, "
+        "PolygonClassStatistics, TrainVectorClassifier, ImageClassifier.\n\n"
+        "[1] http://image.diku.dk/shark/sphinx_pages/build/html/rest_sources/tutorials/algorithms/kmeans.html");
 
     AddDocTag(Tags::Learning);
     AddDocTag(Tags::Segmentation);
@@ -425,7 +412,8 @@ private:
 
   void DoExecute() override
   {
-    if (IsParameterEnabled("vm") && HasValue("vm")) Superclass::ConnectKMClassificationMask();
+    if (IsParameterEnabled("vm") && HasValue("vm"))
+      Superclass::ConnectKMClassificationMask();
 
     KMeansFileNamesHandler fileNames(GetParameterString("out"));
 
@@ -441,46 +429,38 @@ private:
     Superclass::ComputePolygonStatistics(fileNames.polyStatOutput, fieldName);
 
     // Compute number of sample max for KMeans
-    const int theoricNBSamplesForKMeans = GetParameterInt("ts");
+    const int theoricNBSamplesForKMeans        = GetParameterInt("ts");
     const int upperThresholdNBSamplesForKMeans = 1000 * 1000;
-    const int actualNBSamplesForKMeans = std::min(theoricNBSamplesForKMeans,
-                                                  upperThresholdNBSamplesForKMeans);
-    otbAppLogINFO(<< actualNBSamplesForKMeans << " is the maximum sample size that will be used." \
-                  << std::endl);
+    const int actualNBSamplesForKMeans         = std::min(theoricNBSamplesForKMeans, upperThresholdNBSamplesForKMeans);
+    otbAppLogINFO(<< actualNBSamplesForKMeans << " is the maximum sample size that will be used." << std::endl);
 
     // Compute SampleSelection and SampleExtraction app
-    Superclass::SelectAndExtractSamples(fileNames.polyStatOutput, fieldName,
-                                        fileNames.sampleOutput,
-                                        actualNBSamplesForKMeans);
+    Superclass::SelectAndExtractSamples(fileNames.polyStatOutput, fieldName, fileNames.sampleOutput, actualNBSamplesForKMeans);
 
     // Compute Images second order statistics
     Superclass::ComputeImageStatistics(GetParameterImageBase("in"), fileNames.imgStatOutput);
 
     // Compute a train model with TrainVectorClassifier app
-    Superclass::TrainKMModel(GetParameterImage("in"), fileNames.sampleOutput,
-                             fileNames.modelFile);
+    Superclass::TrainKMModel(GetParameterImage("in"), fileNames.sampleOutput, fileNames.modelFile);
 
     // Compute a classification of the input image according to a model file
     Superclass::KMeansClassif();
 
     // Remove all tempory files
-    if( GetParameterInt( "cleanup" ) )
-      {
-      otbAppLogINFO( <<"Final clean-up ..." );
+    if (GetParameterInt("cleanup"))
+    {
+      otbAppLogINFO(<< "Final clean-up ...");
       fileNames.clear();
-      }
+    }
   }
 
-  void UpdateKMPolygonClassStatisticsParameters(const std::string &vectorFileName)
+  void UpdateKMPolygonClassStatisticsParameters(const std::string& vectorFileName)
   {
-    GetInternalApplication( "polystats" )->SetParameterString( "vec", vectorFileName);
-    UpdateInternalParameters( "polystats" );
+    GetInternalApplication("polystats")->SetParameterString("vec", vectorFileName);
+    UpdateInternalParameters("polystats");
   }
-
 };
-
 }
 }
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::KMeansClassification)
-

@@ -44,13 +44,12 @@ template <class TPixel, unsigned int VImageDimension = 2>
 class OTBImageBase_EXPORT_TEMPLATE VectorImage : public itk::VectorImage<TPixel, VImageDimension>
 {
 public:
-
   /** Standard class typedefs. */
-  typedef VectorImage                               Self;
+  typedef VectorImage Self;
   typedef itk::VectorImage<TPixel, VImageDimension> Superclass;
-  typedef itk::SmartPointer<Self>                   Pointer;
-  typedef itk::SmartPointer<const Self>             ConstPointer;
-  typedef itk::WeakPointer<const Self>              ConstWeakPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::WeakPointer<const Self>  ConstWeakPointer;
 
   typedef ImageMetadataInterfaceBase::VectorType           VectorType;
   typedef ImageMetadataInterfaceBase::ImageKeywordlistType ImageKeywordlistType;
@@ -79,15 +78,14 @@ public:
 
   /** Accessor type that convert data between internal and external
   *  representations.  */
-  //typedef itk::DefaultVectorPixelAccessor< InternalPixelType > AccessorType;
+  // typedef itk::DefaultVectorPixelAccessor< InternalPixelType > AccessorType;
 
   /** Functor to provide a common API between DefaultPixelAccessor and
    * DefaultVectorPixelAccessor */
   typedef itk::DefaultVectorPixelAccessorFunctor<Self> AccessorFunctorType;
 
   /** Tyepdef for the functor used to access a neighborhood of pixel pointers.*/
-  typedef itk::VectorImageNeighborhoodAccessorFunctor<
-      Self>              NeighborhoodAccessorFunctorType;
+  typedef itk::VectorImageNeighborhoodAccessorFunctor<Self> NeighborhoodAccessorFunctorType;
 
   /** Dimension of the image.  This constant is used by functions that are
    * templated over image type (as opposed to being templated over pixel type
@@ -145,12 +143,12 @@ public:
   /** Get the six coefficients of affine geoTtransform. */
   virtual VectorType GetGeoTransform(void) const;
 
-    /** Get signed spacing */
+  /** Get signed spacing */
   SpacingType GetSignedSpacing() const;
 
   /** Set signed spacing */
-  virtual void SetSignedSpacing( SpacingType spacing );
-  virtual void SetSignedSpacing( double spacing[ VImageDimension ] );
+  virtual void SetSignedSpacing(SpacingType spacing);
+  virtual void SetSignedSpacing(double spacing[VImageDimension]);
 
   /** Get image corners. */
   virtual VectorType GetUpperLeftCorner(void) const;
@@ -159,27 +157,27 @@ public:
   virtual VectorType GetLowerRightCorner(void) const;
 
   /** Get image keyword list */
-  virtual ImageKeywordlistType GetImageKeywordlist(void);
+  virtual ImageKeywordlistType       GetImageKeywordlist(void);
   virtual const ImageKeywordlistType GetImageKeywordlist(void) const;
 
   virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
 
   /// Copy metadata from a DataObject
-  void CopyInformation(const itk::DataObject *) override;
+  void CopyInformation(const itk::DataObject*) override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Return the Pixel Accessor object */
-//   AccessorType GetPixelAccessor( void )
-//   {
-//     return AccessorType( this->GetNumberOfComponentsPerPixel() );
-//   }
+  //   AccessorType GetPixelAccessor( void )
+  //   {
+  //     return AccessorType( this->GetNumberOfComponentsPerPixel() );
+  //   }
 
-//   /** Return the Pixel Accesor object */
-//   const AccessorType GetPixelAccessor( void ) const
-//   {
-//     return AccessorType( this->GetNumberOfComponentsPerPixel() );
-//   }
+  //   /** Return the Pixel Accesor object */
+  //   const AccessorType GetPixelAccessor( void ) const
+  //   {
+  //     return AccessorType( this->GetNumberOfComponentsPerPixel() );
+  //   }
 
   /** Return the NeighborhoodAccessor functor */
   NeighborhoodAccessorFunctorType GetNeighborhoodAccessor()
@@ -195,11 +193,13 @@ public:
 
 protected:
   VectorImage();
-  ~VectorImage() override {}
+  ~VectorImage() override
+  {
+  }
 
 private:
-  VectorImage(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  VectorImage(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Return the ImageMetadataInterfacePointer associated to the data
    *  and creates it on first call
@@ -218,9 +218,10 @@ private:
 
 #include <complex>
 
-namespace otb {
+namespace otb
+{
 
-// Prevent implicit instanciation of common types to improve build performance
+// Prevent implicit instantiation of common types to improve build performance
 // Explicit instanciations are provided in the .cxx
 extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<unsigned int, 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<int, 2>;
@@ -230,11 +231,10 @@ extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<unsigned short, 2
 extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<short, 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<float, 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<double, 2>;
-extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<int> , 2>;
-extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<short> , 2>;
-extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<float> , 2>;
-extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<double> , 2>;
-
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<int>, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<short>, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<float>, 2>;
+extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<std::complex<double>, 2>;
 }
 
 #endif

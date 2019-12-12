@@ -23,7 +23,7 @@
 
 #include <QtWidgets>
 
-#  include "otbWrapperQtWidgetParameterList.h"
+#include "otbWrapperQtWidgetParameterList.h"
 
 namespace otb
 {
@@ -38,25 +38,22 @@ class InputFilenameListParameter;
  *
  * \ingroup OTBQtWidget
  */
-class OTBQtWidget_EXPORT QtWidgetInputFilenameListParameter :
-    public QtWidgetParameterList
+class OTBQtWidget_EXPORT QtWidgetInputFilenameListParameter : public QtWidgetParameterList
 {
   Q_OBJECT
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-  QtWidgetInputFilenameListParameter( InputFilenameListParameter *, QtWidgetModel * , QWidget *);
+  QtWidgetInputFilenameListParameter(InputFilenameListParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetInputFilenameListParameter() override;
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-  QtWidgetInputFilenameListParameter( const QtWidgetInputFilenameListParameter & ) = delete;
-  void operator = ( const QtWidgetInputFilenameListParameter & ) = delete;
+  QtWidgetInputFilenameListParameter(const QtWidgetInputFilenameListParameter&) = delete;
+  void operator=(const QtWidgetInputFilenameListParameter&) = delete;
 };
-
-
 }
 }
 

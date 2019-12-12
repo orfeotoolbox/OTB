@@ -34,38 +34,34 @@ namespace Wrapper
 
 
 template <class TImageType>
-TImageType*
-Application
-::GetParameterImage(std::string parameter)
+TImageType* Application::GetParameterImage(std::string const& parameter)
 
 {
   typename TImageType::Pointer ret;
-  Parameter* param = GetParameterByKey(parameter);
-  InputImageParameter* paramDown = dynamic_cast<InputImageParameter*>(param);
+  Parameter*                   param     = GetParameterByKey(parameter);
+  InputImageParameter*         paramDown = dynamic_cast<InputImageParameter*>(param);
   if (paramDown)
-    {
+  {
     return paramDown->GetImage<TImageType>();
-    }
+  }
   else
-    {
-    itkExceptionMacro(<<parameter << " parameter can't be casted to ImageType");
+  {
+    itkExceptionMacro(<< parameter << " parameter can't be casted to ImageType");
     return nullptr;
-    }
+  }
 }
 
 
 template <class TImageType>
-void
-Application
-::SetParameterOutputImage(std::string parameter, TImageType* value)
+void Application::SetParameterOutputImage(std::string const& parameter, TImageType* value)
 {
   Parameter* param = GetParameterByKey(parameter);
 
   if (dynamic_cast<OutputImageParameter*>(param))
-    {
+  {
     OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
     paramDown->SetValue(value);
-    }
+  }
 }
 
 

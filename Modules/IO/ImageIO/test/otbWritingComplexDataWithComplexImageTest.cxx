@@ -25,13 +25,13 @@
 #include "otbExtractROI.h"
 #include "otbMacro.h"
 
-int otbWritingComplexDataWithComplexImageTest(int itkNotUsed(argc), char * argv[])
+int otbWritingComplexDataWithComplexImageTest(int itkNotUsed(argc), char* argv[])
 {
-  typedef double                                RealType;
-  typedef std::complex<RealType>                PixelType;
-  typedef otb::Image<PixelType, 2>              ImageType;
-  typedef otb::ImageFileReader<ImageType>       ReaderType;
-  typedef otb::ImageFileWriter<ImageType>       WriterType;
+  typedef double                 RealType;
+  typedef std::complex<RealType> PixelType;
+  typedef otb::Image<PixelType, 2> ImageType;
+  typedef otb::ImageFileReader<ImageType> ReaderType;
+  typedef otb::ImageFileWriter<ImageType> WriterType;
   typedef otb::ExtractROI<PixelType, PixelType> ExtractROIFilterType;
 
   ReaderType::Pointer reader = ReaderType::New();

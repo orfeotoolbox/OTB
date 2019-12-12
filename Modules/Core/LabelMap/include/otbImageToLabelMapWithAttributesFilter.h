@@ -44,17 +44,16 @@ namespace otb
  *
  * \ingroup OTBLabelMap
  */
-template <class TInputImage, class TLabeledImage, class TLabel, class TLabelObject >
-class ITK_EXPORT ImageToLabelMapWithAttributesFilter
-  : public itk::ImageToImageFilter< TInputImage, LabelMapWithAdjacency<TLabelObject> >
+template <class TInputImage, class TLabeledImage, class TLabel, class TLabelObject>
+class ITK_EXPORT ImageToLabelMapWithAttributesFilter : public itk::ImageToImageFilter<TInputImage, LabelMapWithAdjacency<TLabelObject>>
 {
 
 public:
   /** Standard class typedefs */
-  typedef ImageToLabelMapWithAttributesFilter      Self;
-  typedef itk::SmartPointer<Self>                  Pointer;
-  typedef itk::SmartPointer<const Self>            ConstPointer;
-  typedef itk::ImageToImageFilter< TInputImage, LabelMapWithAdjacency<TLabelObject> > Superclass;
+  typedef ImageToLabelMapWithAttributesFilter Self;
+  typedef itk::SmartPointer<Self>             Pointer;
+  typedef itk::SmartPointer<const Self>       ConstPointer;
+  typedef itk::ImageToImageFilter<TInputImage, LabelMapWithAdjacency<TLabelObject>> Superclass;
 
   /** Standard type macro */
   itkTypeMacro(ImageToLabelMapWithAttributesFilter, itk::ImageToImageFilter);
@@ -62,24 +61,24 @@ public:
   /** New macro*/
   itkNewMacro(Self);
 
-  typedef TInputImage                 InputImageType;
-  typedef TLabeledImage               LabeledImageType;
-  typedef TLabelObject                LabelObjectType;
+  typedef TInputImage   InputImageType;
+  typedef TLabeledImage LabeledImageType;
+  typedef TLabelObject  LabelObjectType;
 
-  typedef typename LabelObjectType::LabelType                                  LabelType;
-  typedef LabelMapWithAdjacency<LabelObjectType>                               LabelMapType;
-  typedef typename LabelMapType::AdjacentLabelsContainerType                   AdjacentLabelsContainerType;
+  typedef typename LabelObjectType::LabelType                LabelType;
+  typedef LabelMapWithAdjacency<LabelObjectType>             LabelMapType;
+  typedef typename LabelMapType::AdjacentLabelsContainerType AdjacentLabelsContainerType;
 
   typedef LabelImageToLabelMapWithAdjacencyFilter<LabeledImageType, LabelMapType> LabelMapFilterType;
-  typedef ShapeAttributesLabelMapFilter<LabelMapType>                             ShapeLabelMapFilterType;
-  typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType, InputImageType>   BandStatisticsLabelMapFilterType;
+  typedef ShapeAttributesLabelMapFilter<LabelMapType> ShapeLabelMapFilterType;
+  typedef BandsStatisticsAttributesLabelMapFilter<LabelMapType, InputImageType> BandStatisticsLabelMapFilterType;
 
   using Superclass::SetInput;
-  void SetInput( const InputImageType *image) override;
-  virtual void SetLabeledImage( const LabeledImageType * image);
-  const InputImageType * GetInput(void);
-  const LabeledImageType * GetLabeledImage();
-  virtual LabelMapType* GetOutput();
+  void SetInput(const InputImageType* image) override;
+  virtual void SetLabeledImage(const LabeledImageType* image);
+  const InputImageType*   GetInput(void);
+  const LabeledImageType* GetLabeledImage();
+  virtual LabelMapType*   GetOutput();
 
   void GenerateData() override;
 
@@ -96,8 +95,7 @@ private:
   ImageToLabelMapWithAttributesFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  typename LabelMapType::Pointer   m_Output;
-
+  typename LabelMapType::Pointer m_Output;
 };
 }
 
@@ -105,4 +103,3 @@ private:
 #include "otbImageToLabelMapWithAttributesFilter.hxx"
 #endif
 #endif
-

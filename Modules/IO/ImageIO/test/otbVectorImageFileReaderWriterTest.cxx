@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbVectorImage.h"
 #include "itkMacro.h"
 #include <iostream>
@@ -32,14 +30,14 @@ int otbVectorImageFileReaderWriterTest(int itkNotUsed(argc), char* argv[])
 {
 
   // Verify the number of parameters in the command line
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  typedef double InputPixelType;
-  typedef double OutputPixelType;
+  typedef double     InputPixelType;
+  typedef double     OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage<InputPixelType,  Dimension> InputImageType;
+  typedef otb::VectorImage<InputPixelType, Dimension>  InputImageType;
   typedef otb::VectorImage<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;

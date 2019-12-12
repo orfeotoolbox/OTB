@@ -25,13 +25,13 @@
 
 #include "otbSystem.h"
 
-int otbTestMultiExtractMultiUpdate(int itkNotUsed(argc), char * argv[])
+int otbTestMultiExtractMultiUpdate(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double                                                        InternPixelType;
-  typedef otb::VectorImage<InternPixelType, Dimension>                  InputImageType;
-  typedef otb::ImageFileReader<InputImageType>                          ReaderType;
-  typedef otb::ImageFileWriter<InputImageType>                          WriterType;
+  typedef double     InternPixelType;
+  typedef otb::VectorImage<InternPixelType, Dimension> InputImageType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<InputImageType> WriterType;
   typedef otb::MultiChannelExtractROI<InternPixelType, InternPixelType> ExtractInternVectorType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -40,7 +40,7 @@ int otbTestMultiExtractMultiUpdate(int itkNotUsed(argc), char * argv[])
   writer->SetFileName(argv[2]);
 
   ExtractInternVectorType::Pointer extractInternVector = ExtractInternVectorType::New();
-  //readerMS->UpdateOutputInformation();
+  // readerMS->UpdateOutputInformation();
 
   extractInternVector->SetInput(reader->GetOutput());
   extractInternVector->SetStartX(atoi(argv[3]));

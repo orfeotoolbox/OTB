@@ -39,6 +39,7 @@ otb_module(OTBAppImageUtils
     OTBStreaming
     OTBTransform
     OTBFunctor
+    OTBMosaic
 
   TEST_DEPENDS
     OTBCommandLine

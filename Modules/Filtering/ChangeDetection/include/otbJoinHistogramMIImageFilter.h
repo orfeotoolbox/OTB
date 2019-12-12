@@ -55,24 +55,20 @@ namespace otb
  */
 
 template <class TInputImage1, class TInputImage2, class TOutputImage>
-class ITK_EXPORT JoinHistogramMIImageFilter :
-  public BinaryFunctorNeighborhoodJoinHistogramImageFilter<
-      TInputImage1, TInputImage2, TOutputImage,
-      Functor::JoinHistogramMI<
-          typename itk::ConstNeighborhoodIterator<TInputImage1>,
-          typename itk::ConstNeighborhoodIterator<TInputImage2>,
-          typename TOutputImage::PixelType> >
+class ITK_EXPORT JoinHistogramMIImageFilter
+    : public BinaryFunctorNeighborhoodJoinHistogramImageFilter<
+          TInputImage1, TInputImage2, TOutputImage,
+          Functor::JoinHistogramMI<typename itk::ConstNeighborhoodIterator<TInputImage1>, typename itk::ConstNeighborhoodIterator<TInputImage2>,
+                                   typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs. */
   typedef JoinHistogramMIImageFilter Self;
   typedef BinaryFunctorNeighborhoodJoinHistogramImageFilter<
       TInputImage1, TInputImage2, TOutputImage,
-      Functor::JoinHistogramMI<
-          typename itk::ConstNeighborhoodIterator<TInputImage1>,
-          typename itk::ConstNeighborhoodIterator<TInputImage2>,
-          typename TOutputImage::PixelType>
-      >  Superclass;
+      Functor::JoinHistogramMI<typename itk::ConstNeighborhoodIterator<TInputImage1>, typename itk::ConstNeighborhoodIterator<TInputImage2>,
+                               typename TOutputImage::PixelType>>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -83,13 +79,16 @@ public:
   itkTypeMacro(JoinHistogramMIImageFilter, SuperClass);
 
 protected:
-  JoinHistogramMIImageFilter() {}
-  ~JoinHistogramMIImageFilter() override {}
+  JoinHistogramMIImageFilter()
+  {
+  }
+  ~JoinHistogramMIImageFilter() override
+  {
+  }
 
 private:
-  JoinHistogramMIImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  JoinHistogramMIImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

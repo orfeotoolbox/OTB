@@ -32,79 +32,68 @@ namespace otb
 {
 
 template <class TInputImage, class TOutputImage>
-FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
-::FastICAInternalOptimizerVectorImageFilter()
+FastICAInternalOptimizerVectorImageFilter<TInputImage, TOutputImage>::FastICAInternalOptimizerVectorImageFilter()
 {
   this->SetNumberOfRequiredInputs(2);
 
   m_CurrentBandForLoop = 0;
-  m_Beta = 0.;
-  m_Den = 0.;
+  m_Beta               = 0.;
+  m_Den                = 0.;
 
-  m_NonLinearity = [](double x) {return std::tanh(x);};
-  m_NonLinearityDerivative = [](double x) {return 1-std::pow( std::tanh(x), 2. );};
+  m_NonLinearity           = [](double x) { return std::tanh(x); };
+  m_NonLinearityDerivative = [](double x) { return 1 - std::pow(std::tanh(x), 2.); };
 
   m_TransformFilter = TransformFilterType::New();
 }
 
 template <class TInputImage, class TOutputImage>
-void
-FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
-::GenerateOutputInformation()
+void FastICAInternalOptimizerVectorImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation()
 {
   Superclass::GenerateOutputInformation();
 
-  this->GetOutput()->SetNumberOfComponentsPerPixel(
-    this->GetInput(0)->GetNumberOfComponentsPerPixel() );
+  this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput(0)->GetNumberOfComponentsPerPixel());
 }
 
 template <class TInputImage, class TOutputImage>
-void
-FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
-::Reset()
-{ 
-  if ( m_W.empty() )
+void FastICAInternalOptimizerVectorImageFilter<TInputImage, TOutputImage>::Reset()
+{
+  if (m_W.empty())
   {
-    throw itk::ExceptionObject( __FILE__, __LINE__,
-      "Give the initial W matrix", ITK_LOCATION );
+    throw itk::ExceptionObject(__FILE__, __LINE__, "Give the initial W matrix", ITK_LOCATION);
   }
-  
-  m_BetaVector.resize( this->GetNumberOfThreads() );
-  m_DenVector.resize( this->GetNumberOfThreads() );
-  m_NbSamples.resize( this->GetNumberOfThreads() );
-  
+
+  m_BetaVector.resize(this->GetNumberOfThreads());
+  m_DenVector.resize(this->GetNumberOfThreads());
+  m_NbSamples.resize(this->GetNumberOfThreads());
+
   std::fill(m_BetaVector.begin(), m_BetaVector.end(), 0.);
   std::fill(m_DenVector.begin(), m_DenVector.end(), 0.);
   std::fill(m_NbSamples.begin(), m_NbSamples.end(), 0.);
 }
 
 template <class TInputImage, class TOutputImage>
-void
-FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
-::ThreadedGenerateData ( const OutputRegionType & outputRegionForThread, itk::ThreadIdType threadId )
+void FastICAInternalOptimizerVectorImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(const OutputRegionType& outputRegionForThread,
+                                                                                                itk::ThreadIdType threadId)
 {
   InputRegionType inputRegion;
-  this->CallCopyOutputRegionToInputRegion( inputRegion, outputRegionForThread );
+  this->CallCopyOutputRegionToInputRegion(inputRegion, outputRegionForThread);
 
-  itk::ImageRegionConstIterator< InputImageType > input0It
-    ( this->GetInput(0), inputRegion );
-  itk::ImageRegionConstIterator< InputImageType > input1It
-    ( this->GetInput(1), inputRegion );
-  itk::ImageRegionIterator< OutputImageType > outputIt
-    ( this->GetOutput(), outputRegionForThread );
+  itk::ImageRegionConstIterator<InputImageType> input0It(this->GetInput(0), inputRegion);
+  itk::ImageRegionConstIterator<InputImageType> input1It(this->GetInput(1), inputRegion);
+  itk::ImageRegionIterator<OutputImageType>     outputIt(this->GetOutput(), outputRegionForThread);
 
   unsigned int nbBands = this->GetInput(0)->GetNumberOfComponentsPerPixel();
   input0It.GoToBegin();
   input1It.GoToBegin();
   outputIt.GoToBegin();
 
-  double beta = 0.;
-  double den = 0.;
+  double beta     = 0.;
+  double den      = 0.;
   double nbSample = 0.;
 
-  while ( !input0It.IsAtEnd() && !input1It.IsAtEnd() && !outputIt.IsAtEnd() )
+  while (!input0It.IsAtEnd() && !input1It.IsAtEnd() && !outputIt.IsAtEnd())
   {
-    double x = static_cast<double>( input1It.Get()[GetCurrentBandForLoop()] );
+    double x   = static_cast<double>(input1It.Get()[GetCurrentBandForLoop()]);
     double g_x = m_NonLinearity(x);
 
     double x_g_x = x * g_x;
@@ -115,9 +104,9 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
 
     nbSample += 1.;
 
-    typename OutputImageType::PixelType z ( nbBands );
-    for ( unsigned int bd = 0; bd < nbBands; bd++ )
-      z[bd] = g_x * input0It.Get()[bd];
+    typename OutputImageType::PixelType z(nbBands);
+    for (unsigned int bd = 0; bd < nbBands; bd++)
+      z[bd]              = g_x * input0It.Get()[bd];
     outputIt.Set(z);
 
     ++input0It;
@@ -131,15 +120,13 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
 }
 
 template <class TInputImage, class TOutputImage>
-void
-FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
-::Synthetize()
+void FastICAInternalOptimizerVectorImageFilter<TInputImage, TOutputImage>::Synthetize()
 {
-  double beta = 0;
-  double den = 0.;
+  double beta     = 0;
+  double den      = 0.;
   double nbSample = 0;
 
-  for ( itk::ThreadIdType i = 0; i < this->GetNumberOfThreads(); ++i )
+  for (itk::ThreadIdType i = 0; i < this->GetNumberOfThreads(); ++i)
   {
     beta += m_BetaVector[i];
     den += m_DenVector[i];
@@ -147,11 +134,9 @@ FastICAInternalOptimizerVectorImageFilter< TInputImage, TOutputImage >
   }
 
   m_Beta = beta / nbSample;
-  m_Den = den / nbSample - m_Beta;
+  m_Den  = den / nbSample - m_Beta;
 }
 
 } // end of namespace otb
 
 #endif
-
-

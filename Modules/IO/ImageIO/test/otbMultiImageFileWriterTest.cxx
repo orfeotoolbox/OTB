@@ -1,5 +1,5 @@
 /*
- * Copyright (C) CS SI
+ * Copyright (C) 2017-2019 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,27 +35,27 @@ int otbMultiImageFileWriterTest(int argc, char* argv[])
   typedef otb::MultiImageFileWriter WriterType;
 
   if (argc < 6)
-    {
+  {
     std::cout << "Usage: " << argv[0] << " inputImageFileName1 inputImageFileName2 outputImageFileName1 outputImageFileName2 numberOfLinesPerStrip\n";
     return EXIT_FAILURE;
-    }
+  }
 
-  const char * inputImageFileName1 = argv[1];
-  const char * inputImageFileName2 = argv[2];
-  const std::string outputImageFileName1 = argv[3];
-  const std::string outputImageFileName2 = argv[4];
-  const int numberOfLinesPerStrip = atoi(argv[5]);
+  const char*       inputImageFileName1   = argv[1];
+  const char*       inputImageFileName2   = argv[2];
+  const std::string outputImageFileName1  = argv[3];
+  const std::string outputImageFileName2  = argv[4];
+  const int         numberOfLinesPerStrip = atoi(argv[5]);
 
   ReaderType1::Pointer reader1 = ReaderType1::New();
-  reader1->SetFileName( inputImageFileName1 );
+  reader1->SetFileName(inputImageFileName1);
 
   ReaderType2::Pointer reader2 = ReaderType2::New();
-  reader2->SetFileName( inputImageFileName2 );
+  reader2->SetFileName(inputImageFileName2);
 
   WriterType::Pointer writer = WriterType::New();
-  writer->AddInputImage( reader1->GetOutput(), outputImageFileName1);
-  writer->AddInputImage( reader2->GetOutput(), outputImageFileName2);
-  writer->SetNumberOfLinesStrippedStreaming( numberOfLinesPerStrip );
+  writer->AddInputImage(reader1->GetOutput(), outputImageFileName1);
+  writer->AddInputImage(reader2->GetOutput(), outputImageFileName2);
+  writer->SetNumberOfLinesStrippedStreaming(numberOfLinesPerStrip);
 
   writer->Update();
 

@@ -36,14 +36,13 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT ParameterGroup
-  : public Parameter
+class OTBApplicationEngine_EXPORT ParameterGroup : public Parameter
 {
 public:
-  typedef ParameterGroup                       Self;
-  typedef Parameter                            Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef ParameterGroup                Self;
+  typedef Parameter                     Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkNewMacro(Self);
 
@@ -51,9 +50,9 @@ public:
 
   void AddParameter(Parameter::Pointer p);
 
-  /** Method to substitute a parameter in a group. 
+  /** Method to substitute a parameter in a group.
    *  The function returns true on success, false on failure */
-  bool ReplaceParameter(std::string &key, Parameter::Pointer p);
+  bool ReplaceParameter(std::string& key, Parameter::Pointer p);
 
   /** Add a new choice value to an existing choice parameter */
   void AddChoice(std::string paramKey, std::string paramName);
@@ -69,9 +68,9 @@ public:
    * or the path to a choice value */
   void AddParameter(ParameterType type, std::string paramKey, std::string paramName);
 
-  Parameter::Pointer GetParameterByIndex(unsigned int i, bool follow=true);
+  Parameter::Pointer GetParameterByIndex(unsigned int i, bool follow = true);
 
-  Parameter::Pointer GetParameterByKey(std::string name, bool follow=true);
+  Parameter::Pointer GetParameterByKey(std::string name, bool follow = true);
 
   void Clear()
   {
@@ -98,7 +97,7 @@ public:
 
   /** Resolve potential proxy parameters by following their targets until
    *  a non-proxy parameter. It will detect cycles and report an error */
-  static Parameter* ResolveParameter(Parameter *param);
+  static Parameter* ResolveParameter(Parameter* param);
 
   ParameterType GetType() const override
   {
@@ -110,14 +109,12 @@ protected:
   ~ParameterGroup() override;
 
   typedef std::vector<Parameter::Pointer> ParameterListType;
-  ParameterListType m_ParameterList;
+  ParameterListType                       m_ParameterList;
 
 private:
-  ParameterGroup(const ParameterGroup &) = delete;
-  void operator =(const ParameterGroup&) = delete;
-
+  ParameterGroup(const ParameterGroup&) = delete;
+  void operator=(const ParameterGroup&) = delete;
 };
-
 }
 }
 

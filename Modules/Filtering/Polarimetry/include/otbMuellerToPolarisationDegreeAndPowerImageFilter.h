@@ -30,9 +30,10 @@
 #include "otbFunctorImageFilter.h"
 
 namespace otb
- {
+{
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class MuellerToPolarisationDegreeAndPowerFunctor
  * \brief Evaluate the  min and max polarisation degree and min and max power
@@ -79,20 +80,20 @@ namespace Functor {
  *
  * \ingroup OTBPolarimetry
  */
-template< class TInput, class TOutput>
+template <class TInput, class TOutput>
 class MuellerToPolarisationDegreeAndPowerFunctor
 {
 public:
-  typedef typename TOutput::ValueType               OutputValueType;
-  typedef itk::Matrix<double, 4, 4>                 MuellerMatrixType;
-  typedef itk::Vector<double, 4>                   StokesVectorType;
+  typedef typename TOutput::ValueType OutputValueType;
+  typedef itk::Matrix<double, 4, 4> MuellerMatrixType;
+  typedef itk::Vector<double, 4> StokesVectorType;
 
   inline void operator()(TOutput& result, const TInput& Mueller) const
   {
-    double P;
-    double deg_pol;
-    double tau;
-    double psi;
+    double           P;
+    double           deg_pol;
+    double           tau;
+    double           psi;
     StokesVectorType Si;
     StokesVectorType Sr;
 
@@ -121,64 +122,65 @@ public:
 
     tau = -45.0;
     while (tau < 46.0)
+    {
+      psi = -90.0;
+      while (psi < 91.0)
       {
-        psi = -90.0;
-        while (psi < 91.0)
-          {
-            // Define the incident Stokes vector
-            Si[0] = 1.0;
-            Si[1] = cos(psi * m_PI_90) * cos(tau * m_PI_90);
-            Si[2] = sin(psi * m_PI_90) * cos(tau * m_PI_90);
-            Si[3] = sin(tau * m_PI_90);
+        // Define the incident Stokes vector
+        Si[0] = 1.0;
+        Si[1] = cos(psi * m_PI_90) * cos(tau * m_PI_90);
+        Si[2] = sin(psi * m_PI_90) * cos(tau * m_PI_90);
+        Si[3] = sin(tau * m_PI_90);
 
-            // Evaluate the received Stokes vector
-            Sr = muellerMatrix * Si;
+        // Evaluate the received Stokes vector
+        Sr = muellerMatrix * Si;
 
-            //Evaluate Power and Polarisation degree
-            P = Sr[0];
+        // Evaluate Power and Polarisation degree
+        P = Sr[0];
 
-            if (P < m_Epsilon)
-              {
-                deg_pol = 0.;
-              }
-            else
-              {
-                deg_pol = std::sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
-              }
+        if (P < m_Epsilon)
+        {
+          deg_pol = 0.;
+        }
+        else
+        {
+          deg_pol = std::sqrt(Sr[1] * Sr[1] + Sr[2] * Sr[2] + Sr[3] * Sr[3]) / Sr[0];
+        }
 
-            if (P > l_PowerMax)
-              {
-                l_PowerMax = P;
-              }
-            else
-              {
-                l_PowerMin = P;
-              }
+        if (P > l_PowerMax)
+        {
+          l_PowerMax = P;
+        }
+        else
+        {
+          l_PowerMin = P;
+        }
 
-            if (deg_pol > l_PolarisationDegreeMax)
-              {
-                l_PolarisationDegreeMax = deg_pol;
-              }
-            else
-              {
-                l_PolarisationDegreeMin = deg_pol;
-              }
-            psi += 5.0;
-          }
-        tau += 5.0;
+        if (deg_pol > l_PolarisationDegreeMax)
+        {
+          l_PolarisationDegreeMax = deg_pol;
+        }
+        else
+        {
+          l_PolarisationDegreeMin = deg_pol;
+        }
+        psi += 5.0;
       }
+      tau += 5.0;
+    }
 
     result[0] = l_PowerMin;
     result[1] = l_PowerMax;
     result[2] = l_PolarisationDegreeMin;
     result[3] = l_PolarisationDegreeMax;
-    }
-
-    constexpr size_t OutputSize(...) const
-    {
-      // Size of the result
-      return 4;
   }
+
+  constexpr size_t OutputSize(...) const
+  {
+    // Size of the result
+    return 4;
+  }
+
 private:
   static constexpr double m_Epsilon = 1e-6;
   static constexpr double m_PI_90   = 2 * CONST_PI_180;

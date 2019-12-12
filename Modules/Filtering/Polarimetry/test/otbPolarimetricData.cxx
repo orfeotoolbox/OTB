@@ -19,17 +19,14 @@
  */
 
 
-
 #include <iostream>
 
 #include "otbPolarimetricData.h"
 
 
-
-
-int otbPolarimetricDataTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbPolarimetricDataTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  otb::PolarimetricData::Pointer  data = otb::PolarimetricData::New();
+  otb::PolarimetricData::Pointer data = otb::PolarimetricData::New();
 
   data->SetArchitectureType(static_cast<otb::ArchitectureType>(5));
 

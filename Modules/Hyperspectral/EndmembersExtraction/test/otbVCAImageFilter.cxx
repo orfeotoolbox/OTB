@@ -25,10 +25,10 @@
 #include "otbImageFileWriter.h"
 
 const unsigned int Dimension = 2;
-typedef double PixelType;
-typedef double PrecisionType;
+typedef double     PixelType;
+typedef double     PrecisionType;
 
-typedef otb::Image<PixelType, Dimension> ImageType;
+typedef otb::Image<PixelType, Dimension>       ImageType;
 typedef otb::VectorImage<PixelType, Dimension> VectorImageType;
 typedef otb::VCAImageFilter<VectorImageType> VCAFilterType;
 
@@ -36,10 +36,10 @@ typedef otb::ImageFileReader<VectorImageType> ReaderType;
 typedef otb::ImageFileWriter<VectorImageType> WriterType;
 
 
-int otbVCAImageFilterTestHighSNR(int itkNotUsed(argc), char * argv[])
+int otbVCAImageFilterTestHighSNR(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputImage = argv[1];
-  const char * outputImage = argv[2];
+  const char*        inputImage   = argv[1];
+  const char*        outputImage  = argv[2];
   const unsigned int nbEndmembers = atoi(argv[3]);
 
   ReaderType::Pointer readerImage = ReaderType::New();

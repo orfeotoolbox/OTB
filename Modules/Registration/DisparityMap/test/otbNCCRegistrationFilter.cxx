@@ -29,49 +29,43 @@ int otbNCCRegistrationFilter(int argc, char* argv[])
 {
 
   if (argc != 7)
-    {
+  {
     std::cerr << "Usage: " << argv[0];
     std::cerr << " fixedFileName movingFileName fieldOutName";
     std::cerr << "explorationSize bluringSigma nbIterations ";
 
     return EXIT_FAILURE;
-    }
+  }
 
   const unsigned int ImageDimension = 2;
 
-  typedef double                                      PixelType;
-  typedef itk::Vector<double, ImageDimension>         DisplacementPixelType;
-  typedef otb::Image<PixelType, ImageDimension>       MovingImageType;
-  typedef otb::Image<PixelType, ImageDimension>       FixedImageType;
-  typedef otb::Image<DisplacementPixelType,
-      ImageDimension>       DisplacementFieldType;
+  typedef double PixelType;
+  typedef itk::Vector<double, ImageDimension>               DisplacementPixelType;
+  typedef otb::Image<PixelType, ImageDimension>             MovingImageType;
+  typedef otb::Image<PixelType, ImageDimension>             FixedImageType;
+  typedef otb::Image<DisplacementPixelType, ImageDimension> DisplacementFieldType;
 
   typedef otb::ImageFileReader<FixedImageType> FixedReaderType;
-  FixedReaderType::Pointer fReader = FixedReaderType::New();
+  FixedReaderType::Pointer                     fReader = FixedReaderType::New();
   fReader->SetFileName(argv[1]);
 
   typedef otb::ImageFileReader<MovingImageType> MovingReaderType;
-  MovingReaderType::Pointer mReader = MovingReaderType::New();
+  MovingReaderType::Pointer                     mReader = MovingReaderType::New();
   mReader->SetFileName(argv[2]);
 
-  typedef itk::RecursiveGaussianImageFilter<FixedImageType,
-      FixedImageType> FixedBlurType;
+  typedef itk::RecursiveGaussianImageFilter<FixedImageType, FixedImageType> FixedBlurType;
 
   FixedBlurType::Pointer fBlur = FixedBlurType::New();
   fBlur->SetInput(fReader->GetOutput());
   fBlur->SetSigma(atof(argv[5]));
 
-  typedef itk::RecursiveGaussianImageFilter<MovingImageType,
-      MovingImageType> MovingBlurType;
+  typedef itk::RecursiveGaussianImageFilter<MovingImageType, MovingImageType> MovingBlurType;
 
   MovingBlurType::Pointer mBlur = MovingBlurType::New();
   mBlur->SetInput(mReader->GetOutput());
   mBlur->SetSigma(atof(argv[5]));
 
-  typedef otb::NCCRegistrationFilter<FixedImageType,
-      MovingImageType,
-      DisplacementFieldType>
-  RegistrationFilterType;
+  typedef otb::NCCRegistrationFilter<FixedImageType, MovingImageType, DisplacementFieldType> RegistrationFilterType;
 
   RegistrationFilterType::Pointer registrator = RegistrationFilterType::New();
 
@@ -90,11 +84,10 @@ int otbNCCRegistrationFilter(int argc, char* argv[])
   registrator->SetNumberOfIterations(atoi(argv[6]));
 
   typedef otb::ImageFileWriter<DisplacementFieldType> DFWriterType;
-  DFWriterType::Pointer dfWriter = DFWriterType::New();
+  DFWriterType::Pointer                               dfWriter = DFWriterType::New();
   dfWriter->SetFileName(argv[3]);
   dfWriter->SetInput(registrator->GetOutput());
   dfWriter->Update();
 
   return EXIT_SUCCESS;
-
 }

@@ -67,14 +67,12 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-ProgressInterface
-::ProgressInterface()
+ProgressInterface::ProgressInterface()
 {
 }
 
 /*******************************************************************************/
-ProgressInterface
-::~ProgressInterface()
+ProgressInterface::~ProgressInterface()
 {
 }
 

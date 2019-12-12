@@ -18,16 +18,8 @@
 # limitations under the License.
 #
 
-if ( OTB_WRAP_PYTHON )
-  include ( UseSWIGLocal )
-  list(APPEND SWIG_EXTRA_DEPS
-       otbWrapperSWIGIncludes.h
-       itkBase.includes
-       ${CMAKE_CURRENT_SOURCE_DIR}/itkBase.i
-       ${CMAKE_CURRENT_SOURCE_DIR}/itkMacro.i
-       )
-  include_directories ( ${CMAKE_CURRENT_SOURCE_DIR} )
-endif()
+include(UseSWIG)
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR} )
 
 # Python SWIG configuration
 if ( OTB_WRAP_PYTHON )

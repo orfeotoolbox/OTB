@@ -57,9 +57,9 @@ int main(int argc, char* argv[])
   // the types of the two input images and the type of the generated change
   // image (which is now of multi-components), in a similar way as the
   // KullbackLeiblerDistanceImageFilter.
-  using ImageType       = otb::Image<PixelType, Dimension>;
-  using VectorImageType = otb::VectorImage<PixelType, Dimension>;
-  using FilterType      = otb::KullbackLeiblerProfileImageFilter<ImageType, ImageType, VectorImageType>;
+  using ImageType           = otb::Image<PixelType, Dimension>;
+  using VectorImageType     = otb::VectorImage<PixelType, Dimension>;
+  using FilterType          = otb::KullbackLeiblerProfileImageFilter<ImageType, ImageType, VectorImageType>;
   using OutVectorImageType  = otb::VectorImage<OutPixelType, Dimension>;
   using ReaderType          = otb::ImageFileReader<ImageType>;
   using WriterType          = otb::ImageFileWriter<OutVectorImageType>;

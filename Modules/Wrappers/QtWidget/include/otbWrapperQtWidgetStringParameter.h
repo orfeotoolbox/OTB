@@ -43,7 +43,7 @@ public:
   ~QtWidgetStringParameter() override;
 
 protected slots:
-  void SetValue( const QString& value );
+  void SetValue(const QString& value);
 
 private:
   QtWidgetStringParameter(const QtWidgetStringParameter&) = delete;
@@ -54,11 +54,9 @@ private:
   void DoUpdateGUI() override;
 
   StringParameter::Pointer m_StringParam;
-  QHBoxLayout *            m_HLayout;
+  QHBoxLayout*             m_HLayout;
   QLineEdit*               m_Input;
 };
-
-
 }
 }
 

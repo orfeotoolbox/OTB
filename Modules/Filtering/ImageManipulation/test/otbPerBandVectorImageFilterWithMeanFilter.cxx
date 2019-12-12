@@ -27,19 +27,18 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbPerBandVectorImageFilterWithMeanFilter(int itkNotUsed(argc), char * argv[])
+int otbPerBandVectorImageFilterWithMeanFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
   const unsigned int Dimension = 2;
-  typedef double                                     PixelType;
+  typedef double     PixelType;
   typedef otb::Image<PixelType, Dimension>           ImageType;
   typedef otb::VectorImage<PixelType, Dimension>     VectorImageType;
   typedef itk::MeanImageFilter<ImageType, ImageType> MeanFilterType;
 
-  typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, MeanFilterType>
-  PerBandVectorImageFilterType;
+  typedef otb::PerBandVectorImageFilter<VectorImageType, VectorImageType, MeanFilterType> PerBandVectorImageFilterType;
 
   typedef otb::ImageFileReader<VectorImageType> ReaderType;
   typedef otb::ImageFileWriter<VectorImageType> WriterType;

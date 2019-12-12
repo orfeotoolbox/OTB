@@ -34,8 +34,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT InputFilenameParameter
-  : public Parameter
+class OTBApplicationEngine_EXPORT InputFilenameParameter : public Parameter
 {
 public:
   /** Standard class typedef */
@@ -61,12 +60,12 @@ public:
 
   // Set Value
   virtual void SetValue(const std::string value)
-    {
+  {
     itkDebugMacro("setting member m_StringParam to " << value);
     this->m_StringParam->SetValue(value);
     SetActive(true);
     this->Modified();
-    }
+  }
 
   // Clear Value
   void ClearValue() override
@@ -94,17 +93,16 @@ protected:
   InputFilenameParameter()
   {
     // Initialize the String Parameter
-    m_StringParam= StringParameter::New();
-
-
+    m_StringParam = StringParameter::New();
   }
 
   /** Destructor */
   ~InputFilenameParameter() override
-  {}
+  {
+  }
 
 private:
-  InputFilenameParameter(const InputFilenameParameter &) = delete;
+  InputFilenameParameter(const InputFilenameParameter&) = delete;
   void operator=(const InputFilenameParameter&) = delete;
 
   StringParameter::Pointer m_StringParam;

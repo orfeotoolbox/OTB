@@ -23,28 +23,26 @@
 
 #include "otbWatershedSegmentationFilter.h"
 
-namespace otb {
-
-template <class TInputImage,  class TOutputLabelImage>
-WatershedSegmentationFilter<TInputImage, TOutputLabelImage>
-::WatershedSegmentationFilter()
+namespace otb
 {
-   m_WatershedFilter = WatershedFilterType::New();
-   m_CastFilter      = CastImageFilterType::New();
-   m_CastFilter->SetInput(m_WatershedFilter->GetOutput());
-   this->SetNthOutput(0,TOutputLabelImage::New());
+
+template <class TInputImage, class TOutputLabelImage>
+WatershedSegmentationFilter<TInputImage, TOutputLabelImage>::WatershedSegmentationFilter()
+{
+  m_WatershedFilter = WatershedFilterType::New();
+  m_CastFilter      = CastImageFilterType::New();
+  m_CastFilter->SetInput(m_WatershedFilter->GetOutput());
+  this->SetNthOutput(0, TOutputLabelImage::New());
 }
 
-template <class TInputImage,  class TOutputLabelImage>
-WatershedSegmentationFilter<TInputImage, TOutputLabelImage>
-::~WatershedSegmentationFilter()
-{}
+template <class TInputImage, class TOutputLabelImage>
+WatershedSegmentationFilter<TInputImage, TOutputLabelImage>::~WatershedSegmentationFilter()
+{
+}
 
 
-template <class TInputImage,  class TOutputLabelImage>
-void
-WatershedSegmentationFilter<TInputImage, TOutputLabelImage>
-::GenerateData()
+template <class TInputImage, class TOutputLabelImage>
+void WatershedSegmentationFilter<TInputImage, TOutputLabelImage>::GenerateData()
 {
   this->m_WatershedFilter->SetInput(this->GetInput());
   m_CastFilter->GraftOutput(this->GetOutput());
@@ -54,7 +52,7 @@ WatershedSegmentationFilter<TInputImage, TOutputLabelImage>
   // Since WatershedFilterType outputs an itk::Image,
   // we loose the additional metadata of OTB like ProjectionRef.
   // Import them before exiting
-  this->GetOutput()->CopyInformation( this->GetInput() );
+  this->GetOutput()->CopyInformation(this->GetInput());
 }
 
 } // end namespace otb

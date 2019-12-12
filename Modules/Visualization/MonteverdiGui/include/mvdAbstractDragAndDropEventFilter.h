@@ -75,8 +75,7 @@ namespace mvd
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class OTBMonteverdiGUI_EXPORT AbstractDragAndDropEventFilter :
-    public QObject
+class OTBMonteverdiGUI_EXPORT AbstractDragAndDropEventFilter : public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -85,10 +84,9 @@ class OTBMonteverdiGUI_EXPORT AbstractDragAndDropEventFilter :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Destructor. */
   ~AbstractDragAndDropEventFilter() override;
 
@@ -98,67 +96,63 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qobject.html#eventFilter
    */
-  bool eventFilter( QObject* watched, QEvent* event ) override;
+  bool eventFilter(QObject* watched, QEvent* event) override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** \brief Constructor. */
-  AbstractDragAndDropEventFilter( QObject* p =NULL );
+  AbstractDragAndDropEventFilter(QObject* p = NULL);
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragEnterEvent
    */
-  virtual bool DragEnterEvent( QObject* object, QDragEnterEvent* event ) =0;
+  virtual bool DragEnterEvent(QObject* object, QDragEnterEvent* event) = 0;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragLeaveEvent
    */
-  virtual bool DragLeaveEvent( QObject* object, QDragLeaveEvent* event ) =0;
+  virtual bool DragLeaveEvent(QObject* object, QDragLeaveEvent* event) = 0;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dragMoveEvent
    */
-  virtual bool DragMoveEvent( QObject* object, QDragMoveEvent* event ) =0;
+  virtual bool DragMoveEvent(QObject* object, QDragMoveEvent* event) = 0;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qwidget.html#dropEvent
    */
-  virtual bool DropEvent( QObject* object, QDropEvent* event ) =0;
+  virtual bool DropEvent(QObject* object, QDropEvent* event) = 0;
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 

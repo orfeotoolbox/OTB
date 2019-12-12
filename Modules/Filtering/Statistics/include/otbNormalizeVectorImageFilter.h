@@ -36,35 +36,37 @@ namespace Functor
 /** \brief NormalizeVectorImageFunctor
  * \brief this functor performs affine transformation on VariableLengthVectors
  */
-template < class TInput, class TOutput >
+template <class TInput, class TOutput>
 class NormalizeVectorImageFunctor
 {
 public:
-  NormalizeVectorImageFunctor() { }
-  virtual ~NormalizeVectorImageFunctor () { }
+  NormalizeVectorImageFunctor()
+  {
+  }
+  virtual ~NormalizeVectorImageFunctor()
+  {
+  }
 
-  typedef typename itk::NumericTraits< TInput >::RealType RealVectorType;
-  typedef typename  itk::NumericTraits< typename RealVectorType::ValueType >::RealType RealType;
+  typedef typename itk::NumericTraits<TInput>::RealType                             RealVectorType;
+  typedef typename itk::NumericTraits<typename RealVectorType::ValueType>::RealType RealType;
 
-  TOutput operator() ( const TInput & input )
+  TOutput operator()(const TInput& input)
   {
     unsigned int length = input.Size();
-    TOutput output ( length );
-    for ( unsigned int i = 0; i < length; ++i )
+    TOutput      output(length);
+    for (unsigned int i = 0; i < length; ++i)
     {
-      output[i] = static_cast<typename TOutput::ValueType>(
-                    ( static_cast< RealType >( input[i] ) - m_Mean[i] )
-                      / m_StdDev[i] );
+      output[i] = static_cast<typename TOutput::ValueType>((static_cast<RealType>(input[i]) - m_Mean[i]) / m_StdDev[i]);
     }
     return output;
   }
 
-  template < class T >
-  void SetMean ( const itk::VariableLengthVector<T> & m )
+  template <class T>
+  void SetMean(const itk::VariableLengthVector<T>& m)
   {
-    m_Mean.SetSize( m.Size() );
-    for ( unsigned int i = 0; i < m_Mean.Size(); ++i )
-      m_Mean[i] = static_cast< RealType >( m[i] );
+    m_Mean.SetSize(m.Size());
+    for (unsigned int i = 0; i < m_Mean.Size(); ++i)
+      m_Mean[i]         = static_cast<RealType>(m[i]);
   }
 
   RealVectorType GetMean() const
@@ -72,32 +74,30 @@ public:
     return this->m_Mean;
   }
 
-  template < class T>
-  void SetStdDev ( const itk::VariableLengthVector<T> & sigma )
+  template <class T>
+  void SetStdDev(const itk::VariableLengthVector<T>& sigma)
   {
-    m_StdDev.SetSize( sigma.Size() );
-    for ( unsigned int i = 0; i < m_StdDev.Size(); ++i )
+    m_StdDev.SetSize(sigma.Size());
+    for (unsigned int i = 0; i < m_StdDev.Size(); ++i)
     {
-      m_StdDev[i] = static_cast< RealType >( sigma[i] );
-      if ( m_StdDev[i] == itk::NumericTraits< RealType >::Zero )
+      m_StdDev[i] = static_cast<RealType>(sigma[i]);
+      if (m_StdDev[i] == itk::NumericTraits<RealType>::Zero)
       {
-        throw itk::ExceptionObject(__FILE__, __LINE__,
-                "Cannot divide by zero !", ITK_LOCATION);
+        throw itk::ExceptionObject(__FILE__, __LINE__, "Cannot divide by zero !", ITK_LOCATION);
       }
     }
   }
 
-  template < class T >
-  void SetVariance ( const itk::VariableLengthVector<T> & var )
+  template <class T>
+  void SetVariance(const itk::VariableLengthVector<T>& var)
   {
-    m_StdDev.SetSize( var.Size() );
-    for ( unsigned int i = 0; i < m_StdDev.Size(); ++i )
+    m_StdDev.SetSize(var.Size());
+    for (unsigned int i = 0; i < m_StdDev.Size(); ++i)
     {
-      m_StdDev[i] = std::sqrt( static_cast< RealType >( var[i] ) );
-      if ( m_StdDev[i] == itk::NumericTraits< RealType >::Zero )
+      m_StdDev[i] = std::sqrt(static_cast<RealType>(var[i]));
+      if (m_StdDev[i] == itk::NumericTraits<RealType>::Zero)
       {
-        throw itk::ExceptionObject(__FILE__, __LINE__,
-                "Cannot divide by zero !", ITK_LOCATION);
+        throw itk::ExceptionObject(__FILE__, __LINE__, "Cannot divide by zero !", ITK_LOCATION);
       }
     }
   }
@@ -108,7 +108,6 @@ public:
   }
 
 protected:
-
   RealVectorType m_Mean;
   RealVectorType m_StdDev;
 }; // end of class NormalizeVectorImageFunctor
@@ -129,21 +128,18 @@ protected:
  *
  * \ingroup OTBStatistics
  */
-template < class TInputImage, class TOutputImage >
+template <class TInputImage, class TOutputImage>
 class ITK_EXPORT NormalizeVectorImageFilter
-  : public UnaryFunctorVectorImageFilter< TInputImage, TOutputImage,
-            Functor::NormalizeVectorImageFunctor<
-              typename TInputImage::PixelType,
-              typename TOutputImage::PixelType > >
+    : public UnaryFunctorVectorImageFilter<TInputImage, TOutputImage,
+                                           Functor::NormalizeVectorImageFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs */
   typedef NormalizeVectorImageFilter Self;
-  typedef UnaryFunctorVectorImageFilter< TInputImage, TOutputImage,
-            Functor::NormalizeVectorImageFunctor<
-              typename TInputImage::PixelType,
-              typename TOutputImage::PixelType > > Superclass;
-  typedef itk::SmartPointer<Self> Pointer;
+  typedef UnaryFunctorVectorImageFilter<TInputImage, TOutputImage,
+                                        Functor::NormalizeVectorImageFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
+                                        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
@@ -152,41 +148,41 @@ public:
   /** Creation through object factory macro */
   itkTypeMacro(NormalizeVectorImageFilter, ImageToImageFilter);
 
-  typedef TInputImage InputImageType;
+  typedef TInputImage  InputImageType;
   typedef TOutputImage OutputImageType;
 
-  typedef typename itk::NumericTraits< typename TInputImage::PixelType >::RealType RealVectorType;
-  typedef typename  itk::NumericTraits< typename RealVectorType::ValueType >::RealType RealType;
+  typedef typename itk::NumericTraits<typename TInputImage::PixelType>::RealType    RealVectorType;
+  typedef typename itk::NumericTraits<typename RealVectorType::ValueType>::RealType RealType;
 
-  typedef StreamingStatisticsVectorImageFilter< InputImageType > CovarianceEstimatorFilterType;
-  typedef typename CovarianceEstimatorFilterType::Pointer CovarianceEstimatorFilterPointerType;
+  typedef StreamingStatisticsVectorImageFilter<InputImageType> CovarianceEstimatorFilterType;
+  typedef typename CovarianceEstimatorFilterType::Pointer      CovarianceEstimatorFilterPointerType;
 
   itkGetConstMacro(CovarianceEstimator, CovarianceEstimatorFilterType*);
 
-  template < class T >
-  void SetMean ( const itk::VariableLengthVector<T> & m )
+  template <class T>
+  void SetMean(const itk::VariableLengthVector<T>& m)
   {
-    this->GetFunctor().SetMean( m );
+    this->GetFunctor().SetMean(m);
     m_IsGivenMean = true;
-    m_UseMean = true;
+    m_UseMean     = true;
     this->Modified();
   }
 
-  template < class T >
-  void SetStdDev ( const itk::VariableLengthVector<T> & sigma )
+  template <class T>
+  void SetStdDev(const itk::VariableLengthVector<T>& sigma)
   {
-    this->GetFunctor().SetStdDev( sigma );
+    this->GetFunctor().SetStdDev(sigma);
     m_IsGivenStdDev = true;
-    m_UseStdDev = true;
+    m_UseStdDev     = true;
     this->Modified();
   }
 
-  template < class T >
-  void SetVariance ( const itk::VariableLengthVector<T> & var )
+  template <class T>
+  void SetVariance(const itk::VariableLengthVector<T>& var)
   {
-    this->GetFunctor().SetVariance( var );
+    this->GetFunctor().SetVariance(var);
     m_IsGivenStdDev = true;
-    m_UseStdDev = true;
+    m_UseStdDev     = true;
     this->Modified();
   }
 
@@ -195,15 +191,17 @@ public:
   itkSetMacro(UseStdDev, bool);
 
 protected:
-  NormalizeVectorImageFilter ();
-  ~NormalizeVectorImageFilter() override { }
+  NormalizeVectorImageFilter();
+  ~NormalizeVectorImageFilter() override
+  {
+  }
 
   void GenerateOutputInformation() override;
 
 
 private:
-  NormalizeVectorImageFilter ( const Self & );
-  void operator=( const Self & );
+  NormalizeVectorImageFilter(const Self&);
+  void operator=(const Self&);
 
   bool m_IsGivenMean;
   bool m_IsGivenStdDev;
@@ -222,4 +220,3 @@ private:
 #endif
 
 #endif // otbNormalizeVectorImageFilter_h
-

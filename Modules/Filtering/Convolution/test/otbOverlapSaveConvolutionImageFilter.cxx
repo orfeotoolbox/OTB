@@ -19,25 +19,24 @@
  */
 
 
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbOverlapSaveConvolutionImageFilter.h"
 
-int otbOverlapSaveConvolutionImageFilter(int itkNotUsed(argc), char * argv[])
+int otbOverlapSaveConvolutionImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFileName = argv[1];
-  const char * outputFileName = argv[2];
+  const char* inputFileName  = argv[1];
+  const char* outputFileName = argv[2];
 
-  typedef double InputPixelType;
-  typedef double OutputPixelType;
+  typedef double     InputPixelType;
+  typedef double     OutputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension>                                    PanchroImageType;
-  typedef otb::Image<OutputPixelType, Dimension>                                    OutputImageType;
-  typedef otb::ImageFileReader<PanchroImageType>                                    ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                                     WriterType;
+  typedef otb::Image<InputPixelType, Dimension>  PanchroImageType;
+  typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
+  typedef otb::ImageFileReader<PanchroImageType> ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType>  WriterType;
   typedef otb::OverlapSaveConvolutionImageFilter<PanchroImageType, OutputImageType> ConvFilterType;
 
   ReaderType::Pointer     reader     = ReaderType::New();

@@ -36,15 +36,14 @@ namespace otb
  * \ingroup OTBLabelling
  */
 template <class TInputImage, class TOutputImage, class TFilter>
-class ITK_EXPORT LabelizeImageFilterBase
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT LabelizeImageFilterBase : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** typedef for standard classes. */
-  typedef LabelizeImageFilterBase                            Self;
+  typedef LabelizeImageFilterBase Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** typedef to simplify variables definition and declaration. */
   typedef TInputImage  InputImageType;
@@ -56,7 +55,7 @@ public:
   typedef typename TInputImage::IndexType IndexType;
 
   typedef itk::PointSet<InputPixelType, 2> PointSetType;
-  typedef typename PointSetType::Pointer   PointSetPointerType;
+  typedef typename PointSetType::Pointer PointSetPointerType;
 
   typedef TFilter                   RegionGrowingFilterType;
   typedef typename TFilter::Pointer RegionGrowingFilterPointerType;
@@ -81,29 +80,33 @@ public:
 
   /** Get Object count*/
   // only set after completion
-//       itkGetConstReferenceMacro(ObjectCount, unsigned long);
+  //       itkGetConstReferenceMacro(ObjectCount, unsigned long);
   itkGetMacro(ObjectCount, unsigned long);
 
   /** Internal */
   typedef otb::ThresholdImageToPointSetFilter<InputImageType, PointSetType> ThresholdFilterType;
-  typedef typename ThresholdFilterType::Pointer                             ThresholdFilterPointerType;
+  typedef typename ThresholdFilterType::Pointer ThresholdFilterPointerType;
 
   typedef otb::MultiplyByScalarImageFilter<InputImageType, OutputImageType> MultiplyFilterType;
-  typedef typename MultiplyFilterType::Pointer                              MultiplyFilterPointerType;
+  typedef typename MultiplyFilterType::Pointer MultiplyFilterPointerType;
 
   typedef itk::AddImageFilter<OutputImageType, OutputImageType, OutputImageType> AddImageFilterType;
-  typedef typename AddImageFilterType::Pointer                                   AddImageFilterPointerType;
+  typedef typename AddImageFilterType::Pointer AddImageFilterPointerType;
 
 protected:
   LabelizeImageFilterBase();
-  ~LabelizeImageFilterBase() override {}
+  ~LabelizeImageFilterBase() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Main computation method */
   void GenerateData() override;
 
   /** Region growing */
-  virtual void RegionGrowing(const IndexType itkNotUsed(indexSeed)) {}
+  virtual void RegionGrowing(const IndexType itkNotUsed(indexSeed))
+  {
+  }
 
   /** Instance region growing filter*/
   RegionGrowingFilterPointerType m_RegionGrowingFilter;
@@ -127,8 +130,8 @@ protected:
   unsigned long m_ObjectCount;
 
 private:
-  LabelizeImageFilterBase(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  LabelizeImageFilterBase(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
 }; // end class LabelizeImageFilterBase
 

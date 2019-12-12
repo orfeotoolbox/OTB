@@ -53,86 +53,85 @@ namespace Functor
  *
  * \ingroup OTBTimeSeries
  */
-template <unsigned int Radius, class TSeries, class TDates, class TWeight = TSeries, unsigned int Degree=2>
+template <unsigned int Radius, class TSeries, class TDates, class TWeight = TSeries, unsigned int Degree = 2>
 class SavitzkyGolayInterpolationFunctor
 {
 public:
-
   typedef typename TSeries::ValueType ValueType;
-  typedef typename TDates::ValueType DateType;
+  typedef typename TDates::ValueType  DateType;
   typedef typename TWeight::ValueType WeightType;
-  typedef double CoefficientPrecisionType;
-  typedef otb::PolynomialTimeSeries< Degree, CoefficientPrecisionType > TSFunctionType;
-  static const unsigned int nbDates = TSeries::Dimension;
-  static const unsigned int InterpolatedLength = 2*Radius+1;
+  typedef double                      CoefficientPrecisionType;
+  typedef otb::PolynomialTimeSeries<Degree, CoefficientPrecisionType> TSFunctionType;
+  static const unsigned int nbDates            = TSeries::Dimension;
+  static const unsigned int InterpolatedLength = 2 * Radius + 1;
 
-  typedef itk::FixedArray< ValueType, InterpolatedLength> InterpolatedSeriesType;
-  typedef itk::FixedArray< DateType, InterpolatedLength> InterpolatedDatesType;
-  typedef itk::FixedArray< WeightType, InterpolatedLength> InterpolatedWeightType;
+  typedef itk::FixedArray<ValueType, InterpolatedLength>  InterpolatedSeriesType;
+  typedef itk::FixedArray<DateType, InterpolatedLength>   InterpolatedDatesType;
+  typedef itk::FixedArray<WeightType, InterpolatedLength> InterpolatedWeightType;
 
-  typedef otb::Functor::TimeSeriesLeastSquareFittingFunctor<InterpolatedSeriesType,
-            TSFunctionType, InterpolatedDatesType, InterpolatedWeightType> TLSFunctorType;
+  typedef otb::Functor::TimeSeriesLeastSquareFittingFunctor<InterpolatedSeriesType, TSFunctionType, InterpolatedDatesType, InterpolatedWeightType>
+      TLSFunctorType;
 
   /// Constructor
   SavitzkyGolayInterpolationFunctor()
   {
   }
   /// Destructor
-  virtual ~SavitzkyGolayInterpolationFunctor() {}
+  virtual ~SavitzkyGolayInterpolationFunctor()
+  {
+  }
 
   inline void SetWeights(const TWeight weights)
   {
-    for(unsigned int i = 0; i < m_WeightSeries.Size(); ++i)
+    for (unsigned int i = 0; i < m_WeightSeries.Size(); ++i)
       m_WeightSeries[i] = weights[i];
   }
 
   inline void SetDates(const TDates doy)
   {
-    for(unsigned int i = 0; i < m_DoySeries.Size(); ++i)
-      m_DoySeries[i] = doy[i];
+    for (unsigned int i = 0; i < m_DoySeries.Size(); ++i)
+      m_DoySeries[i]    = doy[i];
   }
 
-  inline TSeries operator ()(const TSeries& series) const
+  inline TSeries operator()(const TSeries& series) const
   {
     TSeries outSeries;
 
     unsigned int firstSample = Radius;
-    unsigned int lastSample = nbDates - Radius - 1;
+    unsigned int lastSample  = nbDates - Radius - 1;
 
-    for(unsigned int i = 0; i<firstSample; ++i)
-      outSeries[i] = series[i];
-    for(unsigned int i = lastSample+1; i<nbDates; ++i)
-      outSeries[i] = series[i];
+    for (unsigned int i = 0; i < firstSample; ++i)
+      outSeries[i]      = series[i];
+    for (unsigned int i = lastSample + 1; i < nbDates; ++i)
+      outSeries[i]      = series[i];
 
-    for(unsigned int i = firstSample; i <= lastSample; ++i)
-      {
+    for (unsigned int i = firstSample; i <= lastSample; ++i)
+    {
       InterpolatedSeriesType tmpInSeries;
-      InterpolatedDatesType tmpDates;
+      InterpolatedDatesType  tmpDates;
       InterpolatedWeightType tmpWeights;
 
-      for(unsigned int j = 0; j <= 2*Radius; ++j)
-        {
-        tmpInSeries[j] = series[i+j-Radius];
-        tmpDates[j] = m_DoySeries[i+j-Radius];
-        tmpWeights[j] = m_WeightSeries[i+j-Radius];
-        }
+      for (unsigned int j = 0; j <= 2 * Radius; ++j)
+      {
+        tmpInSeries[j] = series[i + j - Radius];
+        tmpDates[j]    = m_DoySeries[i + j - Radius];
+        tmpWeights[j]  = m_WeightSeries[i + j - Radius];
+      }
 
       TLSFunctorType f;
-      f.SetDates( tmpDates );
-      f.SetWeights( tmpWeights);
+      f.SetDates(tmpDates);
+      f.SetWeights(tmpWeights);
       InterpolatedSeriesType tmpOutSeries = f(tmpInSeries);
-      outSeries[i] = tmpOutSeries[Radius];
-      }
+      outSeries[i]                        = tmpOutSeries[Radius];
+    }
 
     return outSeries;
   }
 
 private:
-
   TWeight m_WeightSeries;
-  TDates m_DoySeries;
-
+  TDates  m_DoySeries;
 };
 }
-} //namespace otb
+} // namespace otb
 #endif

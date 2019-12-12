@@ -19,7 +19,6 @@
  */
 
 
-
 #include "itkMutexLock.h"
 #include "itkMutexLockHolder.h"
 
@@ -36,19 +35,16 @@
 namespace otb
 {
 
-otb::ImageIOBase::Pointer
-ImageIOFactory::CreateImageIO(const char* path, FileModeType mode)
+otb::ImageIOBase::Pointer ImageIOFactory::CreateImageIO(const char* path, FileModeType mode)
 {
   RegisterBuiltInFactories();
 
   std::list<otb::ImageIOBase::Pointer> possibleImageIO;
-  std::list<itk::LightObject::Pointer> allobjects =
-    itk::ObjectFactoryBase::CreateAllInstance("otbImageIOBase");
-  for(std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin();
-      i != allobjects.end(); ++i)
+  std::list<itk::LightObject::Pointer> allobjects = itk::ObjectFactoryBase::CreateAllInstance("otbImageIOBase");
+  for (std::list<itk::LightObject::Pointer>::iterator i = allobjects.begin(); i != allobjects.end(); ++i)
   {
     otb::ImageIOBase* io = dynamic_cast<otb::ImageIOBase*>(i->GetPointer());
-    if(io)
+    if (io)
     {
       possibleImageIO.push_back(io);
     }
@@ -58,18 +54,18 @@ ImageIOFactory::CreateImageIO(const char* path, FileModeType mode)
     }
   }
 
-  for(std::list<otb::ImageIOBase::Pointer>::iterator k = possibleImageIO.begin(); k != possibleImageIO.end(); ++k)
+  for (std::list<otb::ImageIOBase::Pointer>::iterator k = possibleImageIO.begin(); k != possibleImageIO.end(); ++k)
   {
-    if( mode == ReadMode )
+    if (mode == ReadMode)
     {
-      if((*k)->CanReadFile(path))
+      if ((*k)->CanReadFile(path))
       {
         return *k;
       }
     }
-    else if( mode == WriteMode )
+    else if (mode == WriteMode)
     {
-      if((*k)->CanWriteFile(path))
+      if ((*k)->CanWriteFile(path))
       {
         return *k;
       }
@@ -78,18 +74,17 @@ ImageIOFactory::CreateImageIO(const char* path, FileModeType mode)
   return nullptr;
 }
 
-void
-ImageIOFactory::RegisterBuiltInFactories()
+void ImageIOFactory::RegisterBuiltInFactories()
 {
   static bool firstTime = true;
 
   static itk::SimpleMutexLock mutex;
-    {
+  {
     // This helper class makes sure the Mutex is unlocked
     // in the event an exception is thrown.
     itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
     if (firstTime)
-      {
+    {
       itk::ObjectFactoryBase::RegisterFactory(RADImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(BSQImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(LUMImageIOFactory::New());
@@ -97,8 +92,8 @@ ImageIOFactory::RegisterBuiltInFactories()
       itk::ObjectFactoryBase::RegisterFactory(ONERAImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(MSTARImageIOFactory::New());
       firstTime = false;
-      }
     }
+  }
 }
 
 } // end namespace otb

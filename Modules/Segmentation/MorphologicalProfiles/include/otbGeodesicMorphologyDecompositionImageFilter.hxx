@@ -29,8 +29,7 @@ namespace otb
  * Constructor
  */
 template <class TInputImage, class TOutputImage, class TStructuringElement>
-GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuringElement>
-::GeodesicMorphologyDecompositionImageFilter()
+GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuringElement>::GeodesicMorphologyDecompositionImageFilter()
 {
   this->SetNumberOfRequiredOutputs(3);
   this->SetNthOutput(0, OutputImageType::New());
@@ -57,16 +56,14 @@ GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuri
   m_Progress->RegisterInternalFilter(m_ConcaveFilter, 0.2);
 
 
-  m_FullyConnected = true;
+  m_FullyConnected      = true;
   m_PreserveIntensities = true;
 }
 /**
  * Main computation method
  */
 template <class TInputImage, class TOutputImage, class TStructuringElement>
-void
-GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuringElement>
-::GenerateData()
+void GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuringElement>::GenerateData()
 {
   StructuringElementType se;
   se.SetRadius(m_Radius);
@@ -112,41 +109,33 @@ GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuri
  * Get the convex map
  */
 template <class TInputImage, class TOutputImage, class TStructuringElement>
-TOutputImage *
-GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuringElement>
-::GetConvexMap()
+TOutputImage* GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuringElement>::GetConvexMap()
 {
   if (this->GetNumberOfOutputs() < 2)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<OutputImageType *>
-           (this->itk::ProcessObject::GetOutput(1));
+  }
+  return static_cast<OutputImageType*>(this->itk::ProcessObject::GetOutput(1));
 }
 
 /**
  * Get the concave map
  */
 template <class TInputImage, class TOutputImage, class TStructuringElement>
-TOutputImage *
-GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuringElement>
-::GetConcaveMap()
+TOutputImage* GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuringElement>::GetConcaveMap()
 {
   if (this->GetNumberOfOutputs() < 3)
-    {
+  {
     return nullptr;
-    }
-  return static_cast<OutputImageType *>
-           (this->itk::ProcessObject::GetOutput(2));
+  }
+  return static_cast<OutputImageType*>(this->itk::ProcessObject::GetOutput(2));
 }
 
 /**
  * PrintSelf Method
  */
 template <class TInputImage, class TOutputImage, class TStructuringElement>
-void
-GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuringElement>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void GeodesicMorphologyDecompositionImageFilter<TInputImage, TOutputImage, TStructuringElement>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

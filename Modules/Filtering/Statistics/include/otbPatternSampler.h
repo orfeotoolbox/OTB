@@ -31,7 +31,7 @@ namespace otb
  * \class PatternSampler
  *
  * \brief Periodic sampler for iteration loops
- * 
+ *
  * This class allows doing periodic sampling during an iteration loop.
  *
  * \ingroup OTBStatistics
@@ -39,16 +39,16 @@ namespace otb
 class ITK_EXPORT PatternSampler : public SamplerBase
 {
 public:
-  typedef PatternSampler  Self;
-  typedef SamplerBase      Superclass;
+  typedef PatternSampler                Self;
+  typedef SamplerBase                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
-  /** Internal parameters, only contains an offset to shift the periodic 
+  /** Internal parameters, only contains an offset to shift the periodic
    * sampling
    */
   typedef struct Parameter
-    {
+  {
     /** Maximum size of the internal patterns */
     unsigned long MaxPatternSize = 0;
 
@@ -62,30 +62,30 @@ public:
     /** Seed used to randomly generate patterns (used only if greater than 0) */
     unsigned int Seed = 0;
 
-    bool operator!=(const struct Parameter  & param) const;
-    } ParameterType; 
+    bool operator!=(const struct Parameter& param) const;
+  } ParameterType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(PatternSampler,SamplerBase);
+  itkTypeMacro(PatternSampler, SamplerBase);
 
   /** Setter for internal parameters */
-  void SetParameters(const ParameterType &param)
-    {
+  void SetParameters(const ParameterType& param)
+  {
     if (m_Parameters != param)
-      {
+    {
       this->Modified();
       m_Parameters = param;
-      }
     }
+  }
 
   /** Getter for internal parameters */
   ParameterType GetParameters()
-    {
+  {
     return m_Parameters;
-    }
+  }
 
   /**
    * Method that resets the internal state of the sampler
@@ -102,24 +102,22 @@ public:
    *  Two patterns may be given, separated by a slash
    *  Beware, the second pattern may be empty
    */
-  static void ImportPatterns(
-    const std::string &data,
-    ParameterType &param);
+  static void ImportPatterns(const std::string& data, ParameterType& param);
 
   /** Export the sampling patterns in the input parameter to
    *  an output string. If the second pattern is not empty, it will be
    *  concatenated to the output string, separated by a slash
    */
-  static void ExportPatterns(
-    const ParameterType &param,
-    std::string &data);
+  static void ExportPatterns(const ParameterType& param, std::string& data);
 
 protected:
   /** Constructor */
   PatternSampler();
 
   /** Destructor */
-  ~PatternSampler() override {}
+  ~PatternSampler() override
+  {
+  }
 
 private:
   // Not implemented
@@ -127,7 +125,7 @@ private:
   void operator=(const Self&);
 
   /** Generate a random array of booleans */
-  std::vector<bool> RandArray(unsigned long N,unsigned long T);
+  std::vector<bool> RandArray(unsigned long N, unsigned long T);
 
   /** Find a suitable size for internal patterns */
   unsigned long FindBestSize(unsigned long tot);
@@ -145,7 +143,7 @@ private:
    *  Caracters converted into true : '1' 'X' 'y' 'Y' '|' '+'
    *  Caracters converted into false : '0' '_' 'n' 'N' '.' '-'
    *  Other caracters will return a 2 */
-  static unsigned int ParseSymbol(const char &s);
+  static unsigned int ParseSymbol(const char& s);
 };
 
 } // namespace otb

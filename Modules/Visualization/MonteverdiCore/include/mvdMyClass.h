@@ -74,8 +74,7 @@ namespace mvd
  *
  * \brief WIP.
  */
-class OTBMonteverdiCore_EXPORT MyClass :
-    public QObject
+class OTBMonteverdiCore_EXPORT MyClass : public QObject
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -84,53 +83,47 @@ class OTBMonteverdiCore_EXPORT MyClass :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  MyClass( QObject* p =NULL );
+  MyClass(QObject* p = NULL);
 
   /** \brief Destructor. */
   ~MyClass() override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
 };
 

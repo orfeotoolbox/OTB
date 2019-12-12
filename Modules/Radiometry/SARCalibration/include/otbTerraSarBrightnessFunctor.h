@@ -53,7 +53,9 @@ class TerraSarBrightnessFunctor
 {
 public:
   TerraSarBrightnessFunctor();
-  virtual ~TerraSarBrightnessFunctor() {}
+  virtual ~TerraSarBrightnessFunctor()
+  {
+  }
 
   /** Accessors */
   void SetCalibrationFactor(double val)
@@ -91,9 +93,9 @@ public:
   }
 
   /** We assume that the input pixel is a scalar -> modulus image */
-  inline TOutput operator ()(const TInput& inPix);
+  inline TOutput operator()(const TInput& inPix);
   /** We assume that the input pixel is a complex -> complex image */
-  inline std::complex<TOutput> operator ()(const std::complex<TInput>& inPix);
+  inline std::complex<TOutput> operator()(const std::complex<TInput>& inPix);
 
 private:
   /** Calibration Factor */

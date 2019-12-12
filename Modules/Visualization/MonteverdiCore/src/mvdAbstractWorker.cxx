@@ -67,57 +67,51 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-AbstractWorker
-::AbstractWorker( QObject* p ) :
-  QObject( p )
+AbstractWorker::AbstractWorker(QObject* p) : QObject(p)
 {
 }
 
 /*******************************************************************************/
-AbstractWorker
-::~AbstractWorker()
+AbstractWorker::~AbstractWorker()
 {
 }
 
 /*****************************************************************************/
-void
-AbstractWorker
-::Do() throw()
+void AbstractWorker::Do() noexcept
 {
   QObject* result = NULL;
 
   try
-    {
+  {
     // Just do it and get resulting QObject.
     result = virtual_Do();
 
     // Access application.
     const QCoreApplication* app = QCoreApplication::instance();
-    assert( app!=NULL );
+    assert(app != NULL);
 
     // Move object into application's main thread.
     //
     // We can only push to another thread,
     // so thread affinity must be set here,
     // and not in the slot that receives the object.
-    if( result!=NULL &&
-	result->thread()!=app->thread() )
-      result->moveToThread( app->thread() );
+    if (result != NULL && result->thread() != app->thread())
+      result->moveToThread(app->thread());
 
     // Emit task/job has correctly been done giving resulting object
     // to main thread.
-    emit Done( result );
-    }
-  catch( std::exception& exc )
-    {
+    emit Done(result);
+  }
+  catch (std::exception& exc)
+  {
     // Delete allocated object.
     delete result;
     result = NULL;
 
     // Emit task/job has incorrectly been done giving clone of
     // exception to main thread.
-    emit ExceptionRaised( FromStdString( exc.what() ) );
-    }
+    emit ExceptionRaised(FromStdString(exc.what()));
+  }
 
   // Emit task/job has finished (thread can be signal to quit()).
   emit Finished();

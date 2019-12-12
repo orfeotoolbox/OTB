@@ -56,7 +56,7 @@ OTB_USE_SIFTFAST:BOOL=ON
 OTB_USE_SPTW:BOOL=ON
 OTB_USE_SSE_FLAGS:BOOL=ON")
 
-# Usefull if MPI is ON : OTB_MPIEXEC_OPT:STRING=--allow-run-as-root
+# Useful if MPI is ON : OTB_MPIEXEC_OPT:STRING=--allow-run-as-root
 
 set (otb_wrap_option
 "OTB_WRAP_PYTHON:BOOL=ON")
@@ -70,7 +70,7 @@ if(XDK_PATH)
 set(cmake_configure_option
 "${cmake_configure_option}
 CMAKE_PREFIX_PATH=${XDK_PATH}")
-foreach(remote_module OTBTemporalGapFilling Mosaic SertitObject DiapOTBModule)#otbGRM
+foreach(remote_module OTBTemporalGapFilling SertitObject otbGRM DiapOTBModule)
   set(cmake_configure_option
 "${cmake_configure_option}
 Module_${remote_module}:BOOL=ON")

@@ -26,7 +26,8 @@
 #include "itkImageToImageFilter.h"
 
 
-namespace otb {
+namespace otb
+{
 /** \class AngularProjectionBinaryImageFilter
  * \brief Performs \f$ y_i = \cos \theta_i x_1 + \sin \theta_i x_2\f$
  *
@@ -36,16 +37,15 @@ namespace otb {
  *
  * \ingroup OTBDimensionalityReduction
  */
-template < class TInputImage, class TOutputImage, class TPrecision >
-class ITK_EXPORT AngularProjectionBinaryImageFilter
-  : public itk::ImageToImageFilter< TInputImage, TOutputImage >
+template <class TInputImage, class TOutputImage, class TPrecision>
+class ITK_EXPORT AngularProjectionBinaryImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef AngularProjectionBinaryImageFilter                 Self;
+  typedef AngularProjectionBinaryImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -79,24 +79,26 @@ public:
   {
     return m_AngleSet;
   }
-  void SetAngleSet ( std::vector<PrecisionType> & angle );
+  void SetAngleSet(std::vector<PrecisionType>& angle);
 
-  void SetInput1 ( const InputImageType * );
-  const InputImageType * GetInput1 () const;
+  void                  SetInput1(const InputImageType*);
+  const InputImageType* GetInput1() const;
 
-  void SetInput2 ( const InputImageType * );
-  const InputImageType * GetInput2 () const;
+  void                  SetInput2(const InputImageType*);
+  const InputImageType* GetInput2() const;
 
 protected:
   AngularProjectionBinaryImageFilter();
-  ~AngularProjectionBinaryImageFilter() override { }
+  ~AngularProjectionBinaryImageFilter() override
+  {
+  }
 
   void GenerateOutputInformation() override;
-  void ThreadedGenerateData( const OutputImageRegionType & outputRegionForThread, itk::ThreadIdType threadID ) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadID) override;
 
 private:
   AngularProjectionBinaryImageFilter(const Self&); // not implemented
-  void operator=(const Self&); // not implemented
+  void operator=(const Self&);                     // not implemented
 
   std::vector<PrecisionType> m_AngleSet;
 
@@ -110,4 +112,3 @@ private:
 
 
 #endif
-

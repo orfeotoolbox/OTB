@@ -36,7 +36,7 @@ namespace otb
  * \ingroup OTBGdalAdapters
  */
 class OTBGdalAdapters_EXPORT GeometriesSet : public itk::DataObject
-  {
+{
 public:
   /**\name Standard ITK typedefs */
   //@{
@@ -73,35 +73,34 @@ public:
    */
   //@{
   template <typename Visitor>
-    typename Visitor::result_type
-    /**
-     * Unary visiting function to apply a visitor on any kind of geometies set.
-     *
-     * As a \c GeometriesSet contains either a \c otb::ogr::DataSource, or a \c
-     * otb::ogr::Layer, one needs to apply a function on either kind of data.
-     * This can be done thanks to a specialization of \c boost::static_visitor<>
-     * that has a const \c operator() that takes either one (or two in case of
-     * binary visitors) \c otb::DataSource or \c otb::Layer as parameter(s).
-     *
-     * \throw Whatever is thrown by the actual visitor.
-     * \tparam Visitor type of the visitor functor.
-     * \param[in] visitor  Functor visitor that shal derive from \c
-     * boost::static_visitor.
-     */
-    apply(Visitor const& visitor)
-      {
-      return boost::apply_visitor(visitor, m_GeometriesSet);
-      }
+  typename Visitor::result_type
+      /**
+       * Unary visiting function to apply a visitor on any kind of geometies set.
+       *
+       * As a \c GeometriesSet contains either a \c otb::ogr::DataSource, or a \c
+       * otb::ogr::Layer, one needs to apply a function on either kind of data.
+       * This can be done thanks to a specialization of \c boost::static_visitor<>
+       * that has a const \c operator() that takes either one (or two in case of
+       * binary visitors) \c otb::DataSource or \c otb::Layer as parameter(s).
+       *
+       * \throw Whatever is thrown by the actual visitor.
+       * \tparam Visitor type of the visitor functor.
+       * \param[in] visitor  Functor visitor that shal derive from \c
+       * boost::static_visitor.
+       */
+      apply(Visitor const& visitor)
+  {
+    return boost::apply_visitor(visitor, m_GeometriesSet);
+  }
 
   /**
    * \copydoc apply(Visitor const& visitor)
    */
   template <typename Visitor>
-    typename Visitor::result_type
-    apply(Visitor const& visitor) const
-      {
-      return boost::apply_visitor(visitor, m_GeometriesSet);
-      }
+  typename Visitor::result_type apply(Visitor const& visitor) const
+  {
+    return boost::apply_visitor(visitor, m_GeometriesSet);
+  }
 
   /**
    * Binary visiting function to apply a visitor on any kind of geometies set.
@@ -110,21 +109,19 @@ public:
    * current geometries set instance.
    */
   template <typename Visitor>
-    typename Visitor::result_type
-    apply(Visitor const& visitor, Self & visitable)
-      {
-      return boost::apply_visitor(visitor, m_GeometriesSet, visitable.m_GeometriesSet);
-      }
+  typename Visitor::result_type apply(Visitor const& visitor, Self& visitable)
+  {
+    return boost::apply_visitor(visitor, m_GeometriesSet, visitable.m_GeometriesSet);
+  }
 
   /**
    * \copydoc apply(Visitor const& visitor, Self& visitable)
    */
   template <typename Visitor>
-    typename Visitor::result_type
-    apply(Visitor const& visitor, Self /*const*/& visitable) const
-      {
-      return boost::apply_visitor(visitor, m_GeometriesSet, visitable.m_GeometriesSet);
-      }
+  typename Visitor::result_type apply(Visitor const& visitor, Self /*const*/& visitable) const
+  {
+    return boost::apply_visitor(visitor, m_GeometriesSet, visitable.m_GeometriesSet);
+  }
   //@}
 
 
@@ -134,13 +131,17 @@ public:
 
   /**\name Image reference (spacing + origin) */
   //@{
-  typedef ogr::ImageReference<double>                            ImageReference;
+  typedef ogr::ImageReference<double> ImageReference;
   /** \em ImageReference setter. */
   void SetImageReference(ImageReference const& imageReference)
-    { m_ImageReference = imageReference; }
+  {
+    m_ImageReference = imageReference;
+  }
   /** \em ImageReference getter. */
   ImageReference const& GetImageReference() const
-    { return m_ImageReference; }
+  {
+    return m_ImageReference;
+  }
   //@}
 
 protected:
@@ -163,11 +164,12 @@ protected:
 
   /** Prints self to stream. */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+
 private:
   typedef boost::variant<ogr::DataSource::Pointer, ogr::Layer> AnyGeometriesSetType;
   AnyGeometriesSetType m_GeometriesSet;
   ImageReference       m_ImageReference;
-  };
+};
 
 } // end namespace otb
 

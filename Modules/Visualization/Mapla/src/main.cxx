@@ -53,9 +53,9 @@
 
 enum ERROR_CODE
 {
-  ERROR_CODE_I18N = -1,
-  ERROR_CODE_CACHE_DIR = -2,
-  ERROR_CODE_DATABASE = -3,
+  ERROR_CODE_I18N       = -1,
+  ERROR_CODE_CACHE_DIR  = -2,
+  ERROR_CODE_DATABASE   = -3,
   ERROR_CODE_GL_VERSION = -4,
 };
 
@@ -66,20 +66,19 @@ enum ERROR_CODE
 /*****************************************************************************/
 /* MAIN                                                                      */
 
-int
-main( int argc, char* argv[] )
+int main(int argc, char* argv[])
 {
-  QApplication qtApp( argc, argv );
+  QApplication qtApp(argc, argv);
 
   otb::ConfigurationManager::InitOpenMPThreads();
 
-  //
-  // 0. Splash-screen.
-#if !defined( OTB_DEBUG )
-  QPixmap pixmap(QLatin1String( ":/images/application_splash" ));
+//
+// 0. Splash-screen.
+#if !defined(OTB_DEBUG)
+  QPixmap       pixmap(QLatin1String(":/images/application_splash"));
   QSplashScreen splash(pixmap);
   splash.show();
-  qtApp.processEvents();//This is used to accept a click on the screen so that user can cancel the screen
+  qtApp.processEvents(); // This is used to accept a click on the screen so that user can cancel the screen
 #endif
 
   //
@@ -87,38 +86,29 @@ main( int argc, char* argv[] )
   //
   // Coverity-14835
   // {
-  mvd::MaplaApplication * application = NULL;
+  mvd::MaplaApplication* application = NULL;
 
   try
-    {
-    application = new mvd::MaplaApplication( &qtApp );
-    assert( application!=NULL );
+  {
+    application = new mvd::MaplaApplication(&qtApp);
+    assert(application != NULL);
 
     application->Initialize();
-    }
-  catch( std::exception & exc )
-    {
+  }
+  catch (std::exception& exc)
+  {
     QMessageBox::StandardButton button =
-      QMessageBox::question(
-	NULL,
-	QCoreApplication::translate(
-	  "Mapla",
-	  "Question!"
-	),
-	QCoreApplication::translate(
-	  "Mapla",
-	  "The following exception has been caught while initializing the software:\n\n"
-	  "%1\n\n"
-	  "The application may not function as expected. Do you want to continue?"
-	)
-	.arg( exc.what() ),
-	QMessageBox::Yes | QMessageBox::No,
-	QMessageBox::Yes
-      );
+        QMessageBox::question(NULL, QCoreApplication::translate("Mapla", "Question!"),
+                              QCoreApplication::translate("Mapla",
+                                                          "The following exception has been caught while initializing the software:\n\n"
+                                                          "%1\n\n"
+                                                          "The application may not function as expected. Do you want to continue?")
+                                  .arg(exc.what()),
+                              QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
-    if( button==QMessageBox::No )
+    if (button == QMessageBox::No)
       return ERROR_CODE_I18N;
-    }
+  }
   // }
   // Coverity-14835
 
@@ -129,20 +119,20 @@ main( int argc, char* argv[] )
 
   application->Foo();
 
-  //
-  // 3. Initialize cache directory.
-  //
-  // N/A
+//
+// 3. Initialize cache directory.
+//
+// N/A
 
-  //
-  // 4. Initialize database.
-  //
-  // N.A.
+//
+// 4. Initialize database.
+//
+// N.A.
 
-  //
-  // 5. Show window.
-#if defined( OTB_DEBUG )
-#else // OTB_DEBUG
+//
+// 5. Show window.
+#if defined(OTB_DEBUG)
+#else  // OTB_DEBUG
   splash.finish(&mainWindow);
 #endif // OTB_DEBUG
 

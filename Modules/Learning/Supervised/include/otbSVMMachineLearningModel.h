@@ -34,33 +34,32 @@ class CvSVM;
 
 namespace otb
 {
-/** 
+/**
 * \brief OpenCV implementation of SVM algorithm.
-* 
+*
 * This machine learning model uses the OpenCV implementation of the
 * SVM algorithm. Since this implementation is buggy in the linear
 * case, we recommend users to use the LibSVM implementation instead,
 * through the otb::LibSVMMachineLearningModel.
-*/ 
+*/
 template <class TInputValue, class TTargetValue>
-class ITK_EXPORT SVMMachineLearningModel
-  : public MachineLearningModel <TInputValue, TTargetValue>
+class ITK_EXPORT SVMMachineLearningModel : public MachineLearningModel<TInputValue, TTargetValue>
 {
 public:
   /** Standard class typedefs. */
-  typedef SVMMachineLearningModel           Self;
+  typedef SVMMachineLearningModel Self;
   typedef MachineLearningModel<TInputValue, TTargetValue> Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef typename Superclass::InputValueType             InputValueType;
-  typedef typename Superclass::InputSampleType            InputSampleType;
-  typedef typename Superclass::InputListSampleType        InputListSampleType;
-  typedef typename Superclass::TargetValueType            TargetValueType;
-  typedef typename Superclass::TargetSampleType           TargetSampleType;
-  typedef typename Superclass::TargetListSampleType       TargetListSampleType;
-  typedef typename Superclass::ConfidenceValueType        ConfidenceValueType;
-  typedef typename Superclass::ProbaSampleType            ProbaSampleType;
+  typedef typename Superclass::InputValueType       InputValueType;
+  typedef typename Superclass::InputSampleType      InputSampleType;
+  typedef typename Superclass::InputListSampleType  InputListSampleType;
+  typedef typename Superclass::TargetValueType      TargetValueType;
+  typedef typename Superclass::TargetSampleType     TargetSampleType;
+  typedef typename Superclass::TargetListSampleType TargetListSampleType;
+  typedef typename Superclass::ConfidenceValueType  ConfidenceValueType;
+  typedef typename Superclass::ProbaSampleType      ProbaSampleType;
   /** Run-time type information (and related methods). */
   itkNewMacro(Self);
   itkTypeMacro(SVMMachineLearningModel, MachineLearningModel);
@@ -69,28 +68,28 @@ public:
   void Train() override;
 
   /** Save the model to file */
-  void Save(const std::string & filename, const std::string & name="") override;
+  void Save(const std::string& filename, const std::string& name = "") override;
 
   /** Load the model from file */
-  void Load(const std::string & filename, const std::string & name="") override;
+  void Load(const std::string& filename, const std::string& name = "") override;
 
   /**\name Classification model file compatibility tests */
   //@{
   /** Is the input model file readable and compatible with the corresponding classifier ? */
-  bool CanReadFile(const std::string &) override;
+  bool CanReadFile(const std::string&) override;
 
   /** Is the input model file writable and compatible with the corresponding classifier ? */
-  bool CanWriteFile(const std::string &) override;
+  bool CanWriteFile(const std::string&) override;
   //@}
 
-  //Setters/Getters to SVM model
+  // Setters/Getters to SVM model
   itkGetMacro(SVMType, int);
   itkSetMacro(SVMType, int);
 
   itkGetMacro(KernelType, int);
   itkSetMacro(KernelType, int);
 
-  //CV_TERMCRIT_ITER or CV_TERMCRIT_EPS
+  // CV_TERMCRIT_ITER or CV_TERMCRIT_EPS
   itkGetMacro(TermCriteriaType, int);
   itkSetMacro(TermCriteriaType, int);
 
@@ -141,32 +140,32 @@ protected:
   ~SVMMachineLearningModel() override;
 
   /** Predict values using the model */
-  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType *quality=nullptr, ProbaSampleType *proba=nullptr) const override;
-  
+  TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
+
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SVMMachineLearningModel(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SVMMachineLearningModel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 #ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::SVM> m_SVMModel;
 #else
-  CvSVM * m_SVMModel;
+  CvSVM* m_SVMModel;
 #endif
-  int m_SVMType;
-  int m_KernelType;
+  int    m_SVMType;
+  int    m_KernelType;
   double m_Degree;
   double m_Gamma;
   double m_Coef0;
   double m_C;
   double m_Nu;
   double m_P;
-  int m_TermCriteriaType;
-  int m_MaxIter;
+  int    m_TermCriteriaType;
+  int    m_MaxIter;
   double m_Epsilon;
-  bool m_ParameterOptimization;
-  //Output parameters
+  bool   m_ParameterOptimization;
+  // Output parameters
   double m_OutputDegree;
   double m_OutputGamma;
   double m_OutputCoef0;

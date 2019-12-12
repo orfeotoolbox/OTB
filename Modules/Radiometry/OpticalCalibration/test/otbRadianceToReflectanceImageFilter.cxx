@@ -26,42 +26,42 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-int otbRadianceToReflectanceImageFilter(int itkNotUsed(argc), char * argv[])
+int otbRadianceToReflectanceImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFileName  = argv[1];
-  const char * outputFileName = argv[2];
-  const double angle = static_cast<double>(atof(argv[3]));
-  double       flux = 0.;
-  int          day = 1;
-  int          month = 1;
-  double       solarDistance = 1.;
-  char fluxMode[] = "0";
-  char solarDistMode[] = "1";
-  
+  const char*  inputFileName   = argv[1];
+  const char*  outputFileName  = argv[2];
+  const double angle           = static_cast<double>(atof(argv[3]));
+  double       flux            = 0.;
+  int          day             = 1;
+  int          month           = 1;
+  double       solarDistance   = 1.;
+  char         fluxMode[]      = "0";
+  char         solarDistMode[] = "1";
+
   if (strcmp(argv[8], fluxMode) == 0)
-    {
+  {
     flux = static_cast<double>(atof(argv[9]));
-    }
+  }
   else if (strcmp(argv[8], solarDistMode) == 0)
-    {
+  {
     solarDistance = static_cast<double>(atof(argv[9]));
-    }
+  }
   else
-    {
-    day = atoi(argv[9]);
+  {
+    day   = atoi(argv[9]);
     month = atoi(argv[10]);
-    }
+  }
 
   const unsigned int Dimension = 2;
-  typedef double                                                                  PixelType;
-  typedef otb::VectorImage<PixelType, Dimension>                                  InputImageType;
-  typedef otb::VectorImage<PixelType, Dimension>                                  OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>                                    ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                                   WriterType;
+  typedef double     PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
+  typedef otb::VectorImage<PixelType, Dimension> OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::RadianceToReflectanceImageFilter<InputImageType, OutputImageType> RadianceToReflectanceImageFilterType;
-  typedef RadianceToReflectanceImageFilterType::VectorType                       VectorType;
+  typedef RadianceToReflectanceImageFilterType::VectorType VectorType;
 
-  ReaderType::Pointer reader  = ReaderType::New();
+  ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   reader->SetFileName(inputFileName);
   writer->SetFileName(outputFileName);
@@ -83,18 +83,18 @@ int otbRadianceToReflectanceImageFilter(int itkNotUsed(argc), char * argv[])
   filter->SetSolarIllumination(solarIllumination);
   filter->SetUseClamp(false);
   if (strcmp(argv[8], fluxMode) == 0)
-    {
+  {
     filter->SetFluxNormalizationCoefficient(flux);
-    }
+  }
   else if (strcmp(argv[8], solarDistMode) == 0)
-    {
+  {
     filter->SetSolarDistance(solarDistance);
-    }
+  }
   else
-    {
+  {
     filter->SetDay(day);
     filter->SetMonth(month);
-    }
+  }
 
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());

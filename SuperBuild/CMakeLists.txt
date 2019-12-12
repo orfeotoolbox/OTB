@@ -54,9 +54,8 @@ mark_as_advanced(BUILD_GEOS_STATIC_LIBS)
 option(BUILD_ALWAYS "Always build or install OTB." ON)
 option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
 option(OTB_USE_OPENMP "use openmp" OFF)
-set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with "
-  "the syntax (semi-colon used as a separator): "
-  "-D<var>:<type>=<value>;-D<var>:<type>=<value>")
+set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with the syntax (semi-colon used as a separator): -D<var>:<type>=<value>;-D<var>:<type>=<value>")
+
 
 if(APPLE)
   set(CMAKE_MACOSX_RPATH TRUE)
@@ -385,7 +384,7 @@ set ( Python_ADDITIONAL_VERSIONS "3;2" )
 set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
 set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
 find_package( PythonInterp )
-if ( OTB_WRAP_PYTHON AND ( ${PYTHON_VERSION_MAJOR} EQUAL 2 ) )
+if ( OTB_WRAP_PYTHON AND ( "x${PYTHON_VERSION_MAJOR}" STREQUAL "x2" ) )
     message (WARNING "Python3 not found. There is no longer support of \
     wrapping in python2 in OTB, but it can still be used.")
 endif()

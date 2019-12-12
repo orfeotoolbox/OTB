@@ -42,7 +42,6 @@ namespace otb
 class ITK_EXPORT ONERAImageIO : public otb::ImageIOBase
 {
 public:
-
   typedef unsigned char InputPixelType;
 
   /** Standard class typedefs. */
@@ -97,7 +96,7 @@ public:
    * that the IORegion has been set properly. */
   void Write(const void* buffer) override;
   // JULIEN: NOT USED, NOT IMPLEMENTED
-  //void SampleImage(void* buffer, int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
+  // void SampleImage(void* buffer, int XBegin, int YBegin, int SizeXRead, int SizeYRead, int XSample, int YSample);
 
   /** Get the number of overviews available into the file specified
    *  This imageIO didn't support overviews */
@@ -107,19 +106,20 @@ public:
     // resolution overview.
     return 1;
   }
-  
+
   /** Get information about overviews available into the file specified
-   * This imageIO didn't support overviews */ 
+   * This imageIO didn't support overviews */
   std::vector<std::string> GetOverviewsInfo() override
   {
     std::vector<std::string> desc;
     return desc;
   }
-  
+
   /** Provide hist about the output container to deal with complex pixel
-   *  type (Not used here) */ 
-  void SetOutputImagePixelType( bool itkNotUsed(isComplexInternalPixelType), 
-                                        bool itkNotUsed(isVectorImage)) override{}
+   *  type (Not used here) */
+  void SetOutputImagePixelType(bool itkNotUsed(isComplexInternalPixelType), bool itkNotUsed(isVectorImage)) override
+  {
+  }
 
 protected:
   /** Constructor.*/
@@ -145,48 +145,47 @@ protected:
   /** Number of bands of the image*/
   int m_NbBands;
   /** Buffer*/
-  //float **pafimas;
+  // float **pafimas;
   std::fstream m_Datafile;
   std::fstream m_Headerfile;
 
 private:
-  ONERAImageIO(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ONERAImageIO(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Analyze the input file name : if it's a directory, check
     * that a header file exists (ENT...) and set OneraFileName to it
     * else OneraFileName is set to filename
     */
-  void GetOneraImageFileName(const char * filename, std::string& OneraFileName);
+  void GetOneraImageFileName(const char* filename, std::string& OneraFileName);
 
-#define otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \
-    { \
-    typedef itk::ByteSwapper<StrongType> InternalByteSwapperType; \
-    if (m_ByteOrder != m_FileByteOrder) \
-      { \
-      if (m_ByteOrder == LittleEndian) \
-        { \
-        InternalByteSwapperType::SwapRangeFromSystemToBigEndian((StrongType *) buffer, buffer_size); \
-        } \
-      else if (m_ByteOrder == BigEndian) \
-        { \
-        InternalByteSwapperType::SwapRangeFromSystemToLittleEndian((StrongType *) buffer, buffer_size); \
-        } \
-      } \
-    }
+#define otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size)                          \
+  {                                                                                                   \
+    typedef itk::ByteSwapper<StrongType> InternalByteSwapperType;                                     \
+    if (m_ByteOrder != m_FileByteOrder)                                                               \
+    {                                                                                                 \
+      if (m_ByteOrder == LittleEndian)                                                                \
+      {                                                                                               \
+        InternalByteSwapperType::SwapRangeFromSystemToBigEndian((StrongType*)buffer, buffer_size);    \
+      }                                                                                               \
+      else if (m_ByteOrder == BigEndian)                                                              \
+      {                                                                                               \
+        InternalByteSwapperType::SwapRangeFromSystemToLittleEndian((StrongType*)buffer, buffer_size); \
+      }                                                                                               \
+    }                                                                                                 \
+  }
 
 #define otbSwappFileToSystemMacro(StrongType, WeakType, buffer, buffer_size) \
-  else if (this->GetComponentType() == WeakType) \
-    { \
-    otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size) \
-    }
+  else if (this->GetComponentType() == WeakType)                             \
+  {                                                                          \
+    otbSwappFileOrderToSystemOrderMacro(StrongType, buffer, buffer_size)     \
+  }
 
   /** Nombre d'octets par pixel */
   int  m_BytePerPixel;
   bool m_FlagWriteImageInformation;
   /** File byte order */
   otb::ImageIOBase::ByteOrder m_FileByteOrder;
-
 };
 
 } // end namespace otb

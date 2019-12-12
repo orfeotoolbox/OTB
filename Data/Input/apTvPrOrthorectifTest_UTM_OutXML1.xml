@@ -5,7 +5,7 @@
     <platform>Linux</platform>
     <application>
         <name>OrthoRectification</name>
-        <descr>This application allows to ortho-rectify optical images from supported sensors.&#x0A;</descr>
+        <descr>This application allows ortho-rectifying optical images from supported sensors.&#x0A;</descr>
         <doc>
             <name>Ortho-rectification</name>
             <longdescr>An inverse sensor model is built from the input image metadata to convert geographical to raw geometry coordinates. This inverse sensor model is then combined with the chosen map projection to build a global coordinate mapping grid. Last, this grid is used to resample using the chosen interpolation algorithm. A Digital Elevation Model can be specified to account for terrain deformations. &#x0A;In case of SPOT5 images, the sensor model can be approximated by an RPC model in order to speed-up computation.</longdescr>

@@ -36,11 +36,10 @@ namespace otb
 class OTBMetadata_EXPORT FormosatImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
-
-  typedef FormosatImageMetadataInterface    Self;
-  typedef ImageMetadataInterfaceBase    Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef FormosatImageMetadataInterface Self;
+  typedef ImageMetadataInterfaceBase     Superclass;
+  typedef itk::SmartPointer<Self>        Pointer;
+  typedef itk::SmartPointer<const Self>  ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -125,17 +124,17 @@ public:
 
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
    * There values a computed by 6S. */
-  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const override;
+  WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
 protected:
   FormosatImageMetadataInterface();
-  ~FormosatImageMetadataInterface() override {}
+  ~FormosatImageMetadataInterface() override
+  {
+  }
 
 private:
-
-  FormosatImageMetadataInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  FormosatImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

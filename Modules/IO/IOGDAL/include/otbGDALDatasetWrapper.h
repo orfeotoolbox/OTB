@@ -52,8 +52,8 @@ public:
 
   /** Easy access to the internal GDALDataset object.
    *  Don't close it, it will be automatic */
-  const GDALDataset * GetDataSet() const;
-  GDALDataset * GetDataSet();
+  const GDALDataset* GetDataSet() const;
+  GDALDataset*       GetDataSet();
 
   /** Test if the dataset corresponds to a Jpeg2000 file format
    *  Return true if the dataset exists and has a JPEG2000 driver
@@ -76,14 +76,14 @@ public:
    */
   size_t GetPixelBytes() const;
 
-protected :
+protected:
   GDALDatasetWrapper();
 
   ~GDALDatasetWrapper() override;
 
 
 private:
-  GDALDataset * m_Dataset;
+  GDALDataset* m_Dataset;
 }; // end of GDALDatasetWrapper
 
 

@@ -44,24 +44,22 @@ namespace otb
  * This filter supports streaming and multithreading.
  *
  * \ingroup OTBPanSharpening
- * 
+ *
  * \example Fusion/PanSharpeningExample.cxx
  *
  */
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision = float>
-class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter :
-  public itk::ImageToImageFilter<TXsImageType, TOutputImageType>
+class ITK_EXPORT SimpleRcsPanSharpeningFusionImageFilter : public itk::ImageToImageFilter<TXsImageType, TOutputImageType>
 {
 public:
   /** Standard class typedefs */
-  typedef SimpleRcsPanSharpeningFusionImageFilter                 Self;
+  typedef SimpleRcsPanSharpeningFusionImageFilter Self;
   typedef itk::ImageToImageFilter<TXsImageType, TOutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>                                 Pointer;
-  typedef itk::SmartPointer<const Self>                           ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Internal image type used as the smoothing filter output */
-  typedef otb::Image<TInternalPrecision,
-    TPanImageType::ImageDimension>                InternalImageType;
+  typedef otb::Image<TInternalPrecision, TPanImageType::ImageDimension> InternalImageType;
 
   /** Typedef for the radius of the smoothing filter */
   typedef typename itk::Array<TInternalPrecision> ArrayType;
@@ -70,8 +68,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information */
-  itkTypeMacro(SimpleRcsPanSharpeningFusionImageFilter,
-               itk::ImageToImageFilter);
+  itkTypeMacro(SimpleRcsPanSharpeningFusionImageFilter, itk::ImageToImageFilter);
 
   /** Define the radius type for the smoothing operation */
   typedef typename InternalImageType::SizeType RadiusType;
@@ -84,18 +81,18 @@ public:
   itkSetMacro(Filter, ArrayType);
   itkGetConstReferenceMacro(Filter, ArrayType);
 
-  virtual void SetPanInput(const TPanImageType * image);
-  const TPanImageType * GetPanInput(void) const;
+  virtual void SetPanInput(const TPanImageType* image);
+  const TPanImageType* GetPanInput(void) const;
 
-  virtual void SetXsInput(const TXsImageType * path);
-  const TXsImageType * GetXsInput(void) const;
+  virtual void SetXsInput(const TXsImageType* path);
+  const TXsImageType* GetXsInput(void) const;
 
 protected:
   /** Constructor */
   SimpleRcsPanSharpeningFusionImageFilter();
 
   /** Destructor */
-  ~SimpleRcsPanSharpeningFusionImageFilter() override {};
+  ~SimpleRcsPanSharpeningFusionImageFilter() override{};
 
   /** Call to generate data, wiring composite internal minipipeline */
   void GenerateData() override;
@@ -104,8 +101,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SimpleRcsPanSharpeningFusionImageFilter(Self &);   // intentionally not implemented
-  void operator =(const Self&);          // intentionally not implemented
+  SimpleRcsPanSharpeningFusionImageFilter(Self&); // intentionally not implemented
+  void operator=(const Self&);                    // intentionally not implemented
 
   /** \class FusionFunctor
    * This functor applies the
@@ -118,27 +115,24 @@ private:
   {
   public:
     // Implement the fusion as a three arguments operator
-    void operator()(typename TOutputImageType::PixelType & output,
-                                                    const typename TXsImageType::PixelType& xsPixel,
-                                                    const TInternalPrecision& smoothPanchroPixel,
-                                                    const typename TPanImageType::PixelType& sharpPanchroPixel) const
+    void operator()(typename TOutputImageType::PixelType& output, const typename TXsImageType::PixelType& xsPixel, const TInternalPrecision& smoothPanchroPixel,
+                    const typename TPanImageType::PixelType& sharpPanchroPixel) const
     {
       TInternalPrecision scale = 1.;
 
-      if(std::abs(smoothPanchroPixel) > 1e-10)
-        {
-        scale = sharpPanchroPixel/smoothPanchroPixel;
-        }
+      if (std::abs(smoothPanchroPixel) > 1e-10)
+      {
+        scale = sharpPanchroPixel / smoothPanchroPixel;
+      }
 
       // Perform fusion for each band with appropriate casting
-      for(unsigned int i = 0; i < xsPixel.Size(); ++i)
-        {
-        output[i] = static_cast<typename TOutputImageType::InternalPixelType>(
-          xsPixel[i] * scale);
-        }
+      for (unsigned int i = 0; i < xsPixel.Size(); ++i)
+      {
+        output[i] = static_cast<typename TOutputImageType::InternalPixelType>(xsPixel[i] * scale);
+      }
     }
 
-    constexpr size_t OutputSize(const std::array<size_t, 3> & inputsNbBands) const
+    constexpr size_t OutputSize(const std::array<size_t, 3>& inputsNbBands) const
     {
       return inputsNbBands[0];
     }
@@ -156,50 +150,52 @@ private:
   {
   public:
     // Implement the fusion as a three arguments operator
-    void operator()(typename TOutputImageType::PixelType & output,
-                    const typename TXsImageType::PixelType& xsPixel,
-                    const TInternalPrecision& smoothPanchroPixel,
+    void operator()(typename TOutputImageType::PixelType& output, const typename TXsImageType::PixelType& xsPixel, const TInternalPrecision& smoothPanchroPixel,
                     const typename TPanImageType::PixelType& sharpPanchroPixel) const
     {
       // Check for no data Pan value
-      if( m_NoDataValuePanAvailable && sharpPanchroPixel == m_NoDataValuePan )
+      if (m_NoDataValuePanAvailable && sharpPanchroPixel == m_NoDataValuePan)
+      {
+        for (unsigned int i = 0; i < xsPixel.Size(); ++i)
         {
-        for ( unsigned int i = 0; i < xsPixel.Size(); ++i )
-          {
-          output[i] = static_cast<typename TOutputImageType::InternalPixelType>( m_NoDataValuesXs[i] );
-          }
-        return;
+          output[i] = static_cast<typename TOutputImageType::InternalPixelType>(m_NoDataValuesXs[i]);
         }
+        return;
+      }
 
       TInternalPrecision scale = 1.;
 
-      if(std::abs(smoothPanchroPixel) > 1e-10)
-        {
-        scale = sharpPanchroPixel/smoothPanchroPixel;
-        }
+      if (std::abs(smoothPanchroPixel) > 1e-10)
+      {
+        scale = sharpPanchroPixel / smoothPanchroPixel;
+      }
 
       // Perform fusion for each band with appropriate casting
-      for(unsigned int i = 0; i < xsPixel.Size(); ++i)
-        {
-        output[i] = ( m_NoDataValuesXsAvailable[i] && (xsPixel[i] == m_NoDataValuesXs[i]) ) ?
-                    static_cast<typename TOutputImageType::InternalPixelType>( xsPixel[i] ) :
-                    static_cast<typename TOutputImageType::InternalPixelType>( xsPixel[i] * scale );
-        }
+      for (unsigned int i = 0; i < xsPixel.Size(); ++i)
+      {
+        output[i] = (m_NoDataValuesXsAvailable[i] && (xsPixel[i] == m_NoDataValuesXs[i]))
+                        ? static_cast<typename TOutputImageType::InternalPixelType>(xsPixel[i])
+                        : static_cast<typename TOutputImageType::InternalPixelType>(xsPixel[i] * scale);
+      }
     }
 
-    void SetNoDataValuePanAvailable(bool noDataAvailable) {
+    void SetNoDataValuePanAvailable(bool noDataAvailable)
+    {
       m_NoDataValuePanAvailable = noDataAvailable;
     }
 
-    void SetNoDataValuePan(typename TPanImageType::PixelType  noDataValue) {
+    void SetNoDataValuePan(typename TPanImageType::PixelType noDataValue)
+    {
       m_NoDataValuePan = noDataValue;
     }
 
-    void SetNoDataValuesXsAvailable(std::vector<bool> noDataValuesAvailable) {
+    void SetNoDataValuesXsAvailable(std::vector<bool> noDataValuesAvailable)
+    {
       m_NoDataValuesXsAvailable = noDataValuesAvailable;
     }
 
-    void SetNoDataValuesXs(std::vector<typename TXsImageType::InternalPixelType> noDataValues) {
+    void SetNoDataValuesXs(std::vector<typename TXsImageType::InternalPixelType> noDataValues)
+    {
       m_NoDataValuesXs = noDataValues;
     }
 
@@ -208,18 +204,18 @@ private:
       return inputsNbBands[0];
     }
 
-    NoDataFusionFunctor() : m_NoDataValuePanAvailable(false), m_NoDataValuePan(0),m_NoDataValuesXsAvailable(false), m_NoDataValuesXs() {}
+    NoDataFusionFunctor() : m_NoDataValuePanAvailable(false), m_NoDataValuePan(0), m_NoDataValuesXsAvailable(false), m_NoDataValuesXs()
+    {
+    }
 
   private:
     /** No data flags and values for APN image */
-    bool m_NoDataValuePanAvailable;
+    bool                                      m_NoDataValuePanAvailable;
     typename TPanImageType::InternalPixelType m_NoDataValuePan;
 
     /** No data flags and values for XS image */
-    std::vector<bool> m_NoDataValuesXsAvailable;
+    std::vector<bool>                                     m_NoDataValuesXsAvailable;
     std::vector<typename TXsImageType::InternalPixelType> m_NoDataValuesXs;
-
-
   };
 
 
@@ -236,17 +232,14 @@ private:
   typedef FunctorImageFilter<NoDataFusionFunctor> NoDataFusionFilterType;
 
   /** Typedef of the convolution filter performing smoothing */
-  typedef otb::ConvolutionImageFilter
-      <TPanImageType,
-       InternalImageType,
-       itk::ZeroFluxNeumannBoundaryCondition<TPanImageType>,
-       TInternalPrecision>                                  ConvolutionFilterType;
+  typedef otb::ConvolutionImageFilter<TPanImageType, InternalImageType, itk::ZeroFluxNeumannBoundaryCondition<TPanImageType>, TInternalPrecision>
+      ConvolutionFilterType;
 
   /** Pointer to the internal convolution filter */
-  typename ConvolutionFilterType::Pointer  m_ConvolutionFilter;
+  typename ConvolutionFilterType::Pointer m_ConvolutionFilter;
 
   /** Pointer to the fusion filter */
-  typename FusionFilterType::Pointer       m_FusionFilter;
+  typename FusionFilterType::Pointer m_FusionFilter;
 
   /** Pointer to the fusion filter */
   typename NoDataFusionFilterType::Pointer m_NoDataFusionFilter;
@@ -258,7 +251,7 @@ private:
   RadiusType m_Radius;
 
   /** Kernel used for the smoothing filter */
-  ArrayType  m_Filter;
+  ArrayType m_Filter;
 
   /** The internal progress accumulator */
   typename itk::ProgressAccumulator::Pointer m_ProgressAccumulator;

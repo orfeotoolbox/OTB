@@ -26,19 +26,17 @@
 
 #include <fstream>
 
-typedef unsigned short                              LabelType;
-typedef otb::Image<LabelType>                       LabelImageType;
-typedef otb::ImageFileReader<LabelImageType>        LabelReaderType;
-typedef itk::LabelObject<LabelType, 2>              LabelObjectType;
+typedef unsigned short                       LabelType;
+typedef otb::Image<LabelType>                LabelImageType;
+typedef otb::ImageFileReader<LabelImageType> LabelReaderType;
+typedef itk::LabelObject<LabelType, 2> LabelObjectType;
 typedef otb::LabelMapWithAdjacency<LabelObjectType> LabelMapType;
-typedef LabelMapType::ConstIterator        ConstIteratorType;
-typedef LabelObjectType::ConstLineIterator ConstLineIteratorType;
-typedef otb::LabelImageToLabelMapWithAdjacencyFilter
-< LabelImageType, LabelMapType>                     FilterType;
+typedef LabelMapType::ConstIterator                 ConstIteratorType;
+typedef LabelObjectType::ConstLineIterator          ConstLineIteratorType;
+typedef otb::LabelImageToLabelMapWithAdjacencyFilter<LabelImageType, LabelMapType> FilterType;
 
 
-
-int otbLabelImageToLabelMapWithAdjacencyFilter(int itkNotUsed(argc), char * argv[])
+int otbLabelImageToLabelMapWithAdjacencyFilter(int itkNotUsed(argc), char* argv[])
 {
   LabelReaderType::Pointer reader = LabelReaderType::New();
   reader->SetFileName(argv[1]);
@@ -51,47 +49,47 @@ int otbLabelImageToLabelMapWithAdjacencyFilter(int itkNotUsed(argc), char * argv
   std::ofstream ofs(argv[2]);
 
   // Retrieve the label map
-  ConstIteratorType  lIt = ConstIteratorType( filter->GetOutput() );
+  ConstIteratorType lIt = ConstIteratorType(filter->GetOutput());
 
-  ofs<<"Label map: "<<std::endl;
+  ofs << "Label map: " << std::endl;
 
-  while ( !lIt.IsAtEnd() )
-    {
+  while (!lIt.IsAtEnd())
+  {
     // Retrieve the label object
-    const LabelObjectType * lo = lIt.GetLabelObject();
+    const LabelObjectType* lo = lIt.GetLabelObject();
 
     // Retrieve the line container
-    ConstLineIteratorType lineIt = ConstLineIteratorType( lo );
+    ConstLineIteratorType lineIt = ConstLineIteratorType(lo);
 
-    ofs<<"Label: "<<lo->GetLabel()<<", lines: ";
+    ofs << "Label: " << lo->GetLabel() << ", lines: ";
 
-    while ( !lineIt.IsAtEnd() )
-      {
-      ofs<<" { "<<lineIt.GetLine().GetIndex()<<", "<<lineIt.GetLine().GetLength()<<"}";
+    while (!lineIt.IsAtEnd())
+    {
+      ofs << " { " << lineIt.GetLine().GetIndex() << ", " << lineIt.GetLine().GetLength() << "}";
       ++lineIt;
-      }
-    ofs<<std::endl;
-    ++lIt;
     }
+    ofs << std::endl;
+    ++lIt;
+  }
 
-  ofs<<"Adjacency map: "<<std::endl;
+  ofs << "Adjacency map: " << std::endl;
 
   // Retrieve the adjacency map
   LabelMapType::AdjacencyMapType adjMap = filter->GetOutput()->GetAdjacencyMap();
 
-  for(LabelMapType::AdjacencyMapType::const_iterator it = adjMap.begin(); it!=adjMap.end(); ++it)
-    {
-    ofs<<"Label:\t"<<it->first<<" adjacent with labels";
+  for (LabelMapType::AdjacencyMapType::const_iterator it = adjMap.begin(); it != adjMap.end(); ++it)
+  {
+    ofs << "Label:\t" << it->first << " adjacent with labels";
 
     LabelMapType::AdjacentLabelsContainerType::const_iterator lit = it->second.begin();
 
-    for(; lit!=it->second.end(); ++lit)
-      {
+    for (; lit != it->second.end(); ++lit)
+    {
 
-      ofs<<"\t"<<(*lit);
-      }
-    ofs<<std::endl;
+      ofs << "\t" << (*lit);
     }
+    ofs << std::endl;
+  }
 
   ofs.close();
 

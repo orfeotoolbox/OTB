@@ -48,18 +48,16 @@ namespace otb
  *
  * \ingroup OTBSOM
  */
-template <class TNeuron = itk::VariableLengthVector<double>,
-          class TDistance = itk::Statistics::EuclideanDistanceMetric<TNeuron>,
-    unsigned int VMapDimension = 2>
-class ITK_EXPORT SOMMap
-  : public otb::VectorImage<typename TNeuron::ComponentType, VMapDimension>
+template <class TNeuron = itk::VariableLengthVector<double>, class TDistance = itk::Statistics::EuclideanDistanceMetric<TNeuron>,
+          unsigned int VMapDimension = 2>
+class ITK_EXPORT       SOMMap : public otb::VectorImage<typename TNeuron::ComponentType, VMapDimension>
 {
 public:
   /** Standard typedefs */
-  typedef SOMMap                                                           Self;
+  typedef SOMMap Self;
   typedef otb::VectorImage<typename TNeuron::ComponentType, VMapDimension> Superclass;
-  typedef itk::SmartPointer<Self>                                          Pointer;
-  typedef itk::SmartPointer<const Self>                                    ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Creation through object factory macro */
   itkNewMacro(Self);
@@ -97,8 +95,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  SOMMap(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  SOMMap(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // end namespace otb
 

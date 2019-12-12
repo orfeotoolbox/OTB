@@ -28,35 +28,33 @@
 #include "itkResampleImageFilter.h"
 
 
-int otbStreamingResampleImageFilterCompareWithITK(int itkNotUsed(argc), char * argv[])
+int otbStreamingResampleImageFilterCompareWithITK(int itkNotUsed(argc), char* argv[])
 {
-  const char*  inputFilename = argv[1];
-  unsigned int sizeXOutputImage = atoi(argv[2]);
-  unsigned int sizeYOutputImage = atoi(argv[3]);
+  const char*  inputFilename     = argv[1];
+  unsigned int sizeXOutputImage  = atoi(argv[2]);
+  unsigned int sizeYOutputImage  = atoi(argv[3]);
   const char*  outputITKFilename = argv[4];
   const char*  outputOTBFilename = argv[5];
 
   const unsigned int Dimension = 2;
-  typedef double InputPixelType;
-  typedef double OutputPixelType;
-  typedef double InterpolatorPrecisionType;
+  typedef double     InputPixelType;
+  typedef double     OutputPixelType;
+  typedef double     InterpolatorPrecisionType;
 
   typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
   //      typedef otb::VectorImage<OutputPixelType, Dimension> InputVectorImageType;
-  typedef otb::ImageFileReader<InputImageType>                                                    ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                                                   WriterType;
-  typedef otb::ImageFileWriter<OutputImageType>                                          StreamingWriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileWriter<OutputImageType> StreamingWriterType;
   typedef itk::TranslationTransform<InputPixelType, Dimension>                                    TransformType;
   typedef itk::NearestNeighborInterpolateImageFunction<InputImageType, InterpolatorPrecisionType> NNInterpolatorType;
 
-  typedef itk::ResampleImageFilter<InputImageType, OutputImageType,
-      InterpolatorPrecisionType>          ITKResampleImageFilterType;
-  typedef otb::StreamingResampleImageFilter<InputImageType, OutputImageType,
-      InterpolatorPrecisionType> OTBResampleImageFilterType;
+  typedef itk::ResampleImageFilter<InputImageType, OutputImageType, InterpolatorPrecisionType>          ITKResampleImageFilterType;
+  typedef otb::StreamingResampleImageFilter<InputImageType, OutputImageType, InterpolatorPrecisionType> OTBResampleImageFilterType;
 
   // Instantiating object
-  ReaderType::Pointer          reader = ReaderType::New();
+  ReaderType::Pointer          reader          = ReaderType::New();
   WriterType::Pointer          writerITKFilter = WriterType::New();
   StreamingWriterType::Pointer writerOTBFilter = StreamingWriterType::New();
 

@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
@@ -30,19 +28,19 @@
 #include "itkComplexToPhaseImageFilter.h"
 #include "itkShiftScaleImageFilter.h"
 
-int otbAmplitudePhaseToRGBFunctor(int itkNotUsed(argc), char * argv[])
+int otbAmplitudePhaseToRGBFunctor(int itkNotUsed(argc), char* argv[])
 {
-  typedef float                    PixelType;
+  typedef float PixelType;
   typedef otb::Image<PixelType, 2> ImageType;
 
-  typedef std::complex<PixelType>         ComplexPixelType;
+  typedef std::complex<PixelType> ComplexPixelType;
   typedef otb::Image<ComplexPixelType, 2> ComplexImageType;
 
   typedef itk::RGBPixel<unsigned char> RGBPixelType;
-  typedef otb::Image<RGBPixelType, 2>  RGBImageType;
+  typedef otb::Image<RGBPixelType, 2> RGBImageType;
 
-  typedef otb::ImageFileReader<ComplexImageType>      ReaderType;
-  typedef otb::ImageFileWriter<RGBImageType> WriterType;
+  typedef otb::ImageFileReader<ComplexImageType> ReaderType;
+  typedef otb::ImageFileWriter<RGBImageType>     WriterType;
 
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
@@ -62,10 +60,9 @@ int otbAmplitudePhaseToRGBFunctor(int itkNotUsed(argc), char * argv[])
   constFilter->SetScale(0.0);
   constFilter->SetInput(modulusFilter->GetOutput());
 
-  typedef otb::Functor::AmplitudePhaseToRGBFunctor
-  <PixelType, PixelType, PixelType, RGBPixelType> ColorMapFunctorType;
+  typedef otb::Functor::AmplitudePhaseToRGBFunctor<PixelType, PixelType, PixelType, RGBPixelType> ColorMapFunctorType;
   typedef otb::FunctorImageFilter<ColorMapFunctorType> ColorMapFilterType;
-  ColorMapFilterType::Pointer colormapper = ColorMapFilterType::New();
+  ColorMapFilterType::Pointer                          colormapper = ColorMapFilterType::New();
   colormapper->GetModifiableFunctor().SetMaximum(4000);
   colormapper->GetModifiableFunctor().SetMinimum(0);
 

@@ -31,7 +31,8 @@
 #include "otbWaveletLowPassOperator.h"
 #include "otbWaveletHighPassOperator.h"
 
-namespace otb {
+namespace otb
+{
 
 /**
  * \class WaveletOperator
@@ -50,10 +51,8 @@ namespace otb {
  *
  * \ingroup OTBWavelet
  */
-template <Wavelet::Wavelet TMotherWaveletOperator,
-    Wavelet::WaveletDirection TDirectionOfTransformation,
-    class TPixel, unsigned int VDimension,
-    class TAllocator = itk::NeighborhoodAllocator<TPixel> >
+template <Wavelet::Wavelet TMotherWaveletOperator, Wavelet::WaveletDirection TDirectionOfTransformation, class TPixel, unsigned int VDimension,
+          class TAllocator = itk::NeighborhoodAllocator<TPixel>>
 class ITK_EXPORT WaveletOperator
 {
 public:
@@ -61,22 +60,16 @@ public:
   typedef WaveletOperator Self;
 
   /** Typedefs redirections */
-  typedef WaveletLowPassOperator<
-      TMotherWaveletOperator, TDirectionOfTransformation,
-      TPixel, VDimension, TAllocator>
-  LowPassOperator;
-  typedef WaveletHighPassOperator<
-      TMotherWaveletOperator, TDirectionOfTransformation,
-      TPixel, VDimension, TAllocator>
-  HighPassOperator;
+  typedef WaveletLowPassOperator<TMotherWaveletOperator, TDirectionOfTransformation, TPixel, VDimension, TAllocator>  LowPassOperator;
+  typedef WaveletHighPassOperator<TMotherWaveletOperator, TDirectionOfTransformation, TPixel, VDimension, TAllocator> HighPassOperator;
 
 private:
   /**
    * This class may not be instantiated
    * Intentionally not implemented
    */
-  WaveletOperator ();
-  WaveletOperator (const Self &);
+  WaveletOperator();
+  WaveletOperator(const Self&);
   ~WaveletOperator();
 };
 

@@ -36,11 +36,10 @@ namespace otb
 template <class TFilter>
 class LabeledOutputAccessor
 {
-   public:
-      typedef typename TFilter::OutputImageType    LabelImageType;
-      itkStaticConstMacro(LabeledOutputIndex, unsigned int, 0);
+public:
+  typedef typename TFilter::OutputImageType LabelImageType;
+  itkStaticConstMacro(LabeledOutputIndex, unsigned int, 0);
 };
-
 }
 
 #endif

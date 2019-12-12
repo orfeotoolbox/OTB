@@ -71,10 +71,10 @@ class ITK_EXPORT MapFileProductWriter : public itk::ProcessObject
 {
 public:
   /** Standard class typedefs. */
-  typedef MapFileProductWriter              Self;
-  typedef itk::ProcessObject                Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef MapFileProductWriter          Self;
+  typedef itk::ProcessObject            Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -83,43 +83,40 @@ public:
   itkTypeMacro(MapFileProductWriter, itk::ProcessObject);
 
   /** Some convenient typedefs. */
-  typedef TInputImage                                  InputImageType;
-  typedef typename InputImageType::InternalPixelType   InternalPixelType;
-  typedef typename InputImageType::SizeType            SizeType;
-  typedef typename InputImageType::IndexType           IndexType;
-  typedef typename InputImageType::Pointer             InputImagePointer;
-  typedef typename InputImageType::RegionType          InputImageRegionType;
-  typedef typename InputImageType::PixelType           InputImagePixelType;
+  typedef TInputImage                                InputImageType;
+  typedef typename InputImageType::InternalPixelType InternalPixelType;
+  typedef typename InputImageType::SizeType          SizeType;
+  typedef typename InputImageType::IndexType         IndexType;
+  typedef typename InputImageType::Pointer           InputImagePointer;
+  typedef typename InputImageType::RegionType        InputImageRegionType;
+  typedef typename InputImageType::PixelType         InputImagePixelType;
 
-  typedef unsigned char                                OutputPixelType;
-  typedef VectorImage<OutputPixelType>                 OutputImageType;
+  typedef unsigned char                OutputPixelType;
+  typedef VectorImage<OutputPixelType> OutputImageType;
 
-  typedef VectorData<double, 2>                         VectorDataType;
-  typedef typename VectorDataType::DataNodeType        DataNodeType;
-  typedef typename DataNodeType::PolygonType           PolygonType;
-  typedef typename PolygonType::VertexType             VertexType;
+  typedef VectorData<double, 2> VectorDataType;
+  typedef typename VectorDataType::DataNodeType DataNodeType;
+  typedef typename DataNodeType::PolygonType    PolygonType;
+  typedef typename PolygonType::VertexType      VertexType;
 
-  typedef VectorDataFileWriter<VectorDataType>         VectorDataFileWriterType;
+  typedef VectorDataFileWriter<VectorDataType> VectorDataFileWriterType;
 
 
   /// Multi channels Extract ROI filter
-  typedef MultiChannelExtractROI
-  <InternalPixelType, OutputPixelType>                 VectorImageExtractROIFilterType;
+  typedef MultiChannelExtractROI<InternalPixelType, OutputPixelType> VectorImageExtractROIFilterType;
 
   // Writer
-  typedef ImageFileWriter<OutputImageType>            VectorWriterType;
+  typedef ImageFileWriter<OutputImageType> VectorWriterType;
 
   // Resampler
-  typedef StreamingShrinkImageFilter
-  <InputImageType, InputImageType >        StreamingShrinkImageFilterType;
+  typedef StreamingShrinkImageFilter<InputImageType, InputImageType> StreamingShrinkImageFilterType;
 
   // Intensity Rescale
-  typedef VectorRescaleIntensityImageFilter
-  <InputImageType, InputImageType>          VectorRescaleIntensityImageFilterType;
+  typedef VectorRescaleIntensityImageFilter<InputImageType, InputImageType> VectorRescaleIntensityImageFilterType;
 
   // Project filter
-  typedef GenericRSResampleImageFilter<InputImageType, InputImageType>  GenericRSResamplerType;
-  typedef typename GenericRSResamplerType::Pointer                   GenericRSResamplerPointerType;
+  typedef GenericRSResampleImageFilter<InputImageType, InputImageType> GenericRSResamplerType;
+  typedef typename GenericRSResamplerType::Pointer GenericRSResamplerPointerType;
 
   // Transformer
   typedef GenericRSTransform<>           TransformType;
@@ -127,14 +124,13 @@ public:
   typedef TransformType::OutputPointType OutputPointType;
 
   /** Dimension of input image. */
-  itkStaticConstMacro(InputImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, InputImageType::ImageDimension);
 
   using Superclass::SetInput;
-  virtual void SetInput( const InputImageType *image);
-  virtual void SetInput( unsigned int, const TInputImage * image);
-  const InputImageType * GetInput(void);
-  const InputImageType * GetInput(unsigned int idx);
+  virtual void SetInput(const InputImageType* image);
+  virtual void SetInput(unsigned int, const TInputImage* image);
+  const InputImageType* GetInput(void);
+  const InputImageType* GetInput(unsigned int idx);
 
   /** Method to set the filename of the mapfile generated */
   itkSetStringMacro(FileName);
@@ -173,18 +169,15 @@ protected:
   virtual void Write();
 
 private:
-  MapFileProductWriter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  MapFileProductWriter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-   /** Mehtod to initialize the variables*/
-   virtual void Initialize();
+  /** Mehtod to initialize the variables*/
+  virtual void Initialize();
 
   /**MapFile  IndexTule build*/
-  virtual void AddBBoxToIndexTile(OutputPointType lowerLeftCorner,
-          OutputPointType lowerRightCorner,
-          OutputPointType upperRightCorner,
-          OutputPointType upperLeftCorner,
-                                  unsigned int x, unsigned int y);
+  virtual void AddBBoxToIndexTile(OutputPointType lowerLeftCorner, OutputPointType lowerRightCorner, OutputPointType upperRightCorner,
+                                  OutputPointType upperLeftCorner, unsigned int x, unsigned int y);
 
   /** Method To Generate the mapFile*/
   virtual void GenerateMapFile();
@@ -195,45 +188,44 @@ private:
   /** Initialize vd*/
   void InitializeVectorData();
 
-  InputImagePointer    m_VectorImage;
-  InputImagePointer    m_ResampleVectorImage;
+  InputImagePointer m_VectorImage;
+  InputImagePointer m_ResampleVectorImage;
 
-    // Extract ROI
+  // Extract ROI
   typename VectorImageExtractROIFilterType::Pointer m_VectorImageExtractROIFilter;
 
   // Writer
-  typename VectorWriterType::Pointer                m_VectorWriter;
+  typename VectorWriterType::Pointer m_VectorWriter;
 
   // Resampler
-  typename StreamingShrinkImageFilterType::Pointer  m_StreamingShrinkImageFilter;
+  typename StreamingShrinkImageFilterType::Pointer m_StreamingShrinkImageFilter;
 
   // Rescale intensity
   typename VectorRescaleIntensityImageFilterType::Pointer m_VectorRescaleIntensityImageFilter;
 
   // Transformer
-  typename TransformType::Pointer                  m_Transform;
+  typename TransformType::Pointer m_Transform;
 
   // VectorData Pointer Type for tileindex shapefile
-  typename VectorDataType::Pointer                 m_VectorDataIndexTile;
-  typename DataNodeType::Pointer                   m_Polygon;
-  typename DataNodeType::Pointer                   m_Folder;
+  typename VectorDataType::Pointer m_VectorDataIndexTile;
+  typename DataNodeType::Pointer   m_Polygon;
+  typename DataNodeType::Pointer   m_Folder;
 
   // Projection Filter
-  GenericRSResamplerPointerType                    m_GenericRSResampler;
+  GenericRSResamplerPointerType m_GenericRSResampler;
 
   // Tile size
-  unsigned int                 m_TileSize;
-  unsigned int                 m_CurrentDepth;
+  unsigned int m_TileSize;
+  unsigned int m_CurrentDepth;
 
   // File and path name
-  std::string                  m_FileName;
-  std::string                  m_IndexShapeFileName;
-  std::string                  m_CGIPath;
-  std::string                  m_ShapeIndexPath;
+  std::string m_FileName;
+  std::string m_IndexShapeFileName;
+  std::string m_CGIPath;
+  std::string m_ShapeIndexPath;
 
-  std::ofstream                m_File;
-  int                          m_SRID;
-
+  std::ofstream m_File;
+  int           m_SRID;
 };
 
 } // end namespace otb

@@ -38,13 +38,13 @@ namespace otb
  * Reads no data flag from the MetaDataDictionary dict to flags and values
  * vectors. Returns true upon success.
  */
-bool OTBMetadata_EXPORT ReadNoDataFlags(const itk::MetaDataDictionary& dict, std::vector<bool> & flags, std::vector<double> & values);
+bool OTBMetadata_EXPORT ReadNoDataFlags(const itk::MetaDataDictionary& dict, std::vector<bool>& flags, std::vector<double>& values);
 
 /**
  * Write no data flags to the MetaDataDictionary dict from flags and values
  * vectors. Returns true upon success.
  */
-void OTBMetadata_EXPORT WriteNoDataFlags(const std::vector<bool> & flags, const std::vector<double> & values, itk::MetaDataDictionary& dict);
+void OTBMetadata_EXPORT WriteNoDataFlags(const std::vector<bool>& flags, const std::vector<double>& values, itk::MetaDataDictionary& dict);
 
 /**
 * Test if the pixel corresponds to a no data pixel according to a
@@ -56,10 +56,11 @@ void OTBMetadata_EXPORT WriteNoDataFlags(const std::vector<bool> & flags, const 
 * value for each band. If flag is 0, the value will be ignored.
 * \param nanIsNoData If true, NaN values will be reported as no-data.
 */
-template<typename T> bool IsNoData(const T & pixel, const
-                                   std::vector<bool> & flags, const std::vector<double> & values, bool nanIsNoData = false) {
-  assert(flags.size()>0);
-  assert(values.size()>0);
+template <typename T>
+bool IsNoData(const T& pixel, const std::vector<bool>& flags, const std::vector<double>& values, bool nanIsNoData = false)
+{
+  assert(flags.size() > 0);
+  assert(values.size() > 0);
 
   return ((nanIsNoData && vnl_math_isnan(pixel)) || (flags[0] && (pixel == values[0])));
 }
@@ -80,24 +81,23 @@ template<typename T> bool IsNoData(const T & pixel, const
 * and changed as well.
 *
 */
-template<typename T> T ChangeNoData(const T & pixel, const
-                                    std::vector<bool> & flags,
-                                    const std::vector<double> & values,
-                                    const std::vector<double> & newValues,
-                                    bool nanIsNoData = false) {
-  assert(flags.size()>0);
-  assert(values.size()>0);
-  assert(newValues.size()>0);
+template <typename T>
+T ChangeNoData(const T& pixel, const std::vector<bool>& flags, const std::vector<double>& values, const std::vector<double>& newValues,
+               bool nanIsNoData = false)
+{
+  assert(flags.size() > 0);
+  assert(values.size() > 0);
+  assert(newValues.size() > 0);
 
-  if(nanIsNoData && vnl_math_isnan(pixel))
-    {
+  if (nanIsNoData && vnl_math_isnan(pixel))
+  {
     return static_cast<T>(newValues[0]);
-    }
+  }
 
-  if(flags[0] && pixel == values[0])
-    {
+  if (flags[0] && pixel == values[0])
+  {
     return static_cast<T>(newValues[0]);
-    }
+  }
   return pixel;
 }
 
@@ -105,18 +105,19 @@ template<typename T> T ChangeNoData(const T & pixel, const
 /**
  * Specialization of IsNoData function to handle itk::VariableLengthVector
  */
-template <typename T> bool IsNoData(const itk::VariableLengthVector<T> & pixel, const std::vector<bool> & flags, const std::vector<double> & values, bool nanIsNoData = false)
+template <typename T>
+bool IsNoData(const itk::VariableLengthVector<T>& pixel, const std::vector<bool>& flags, const std::vector<double>& values, bool nanIsNoData = false)
 {
-  assert(flags.size()>=pixel.Size());
-  assert(values.size()>=pixel.Size());
+  assert(flags.size() >= pixel.Size());
+  assert(values.size() >= pixel.Size());
 
-  for(unsigned int i = 0; i < pixel.Size();++i)
+  for (unsigned int i = 0; i < pixel.Size(); ++i)
+  {
+    if ((nanIsNoData && vnl_math_isnan(pixel[i])) || (flags[i] && (pixel[i] == values[i])))
     {
-    if((nanIsNoData && vnl_math_isnan(pixel[i])) || (flags[i] && (pixel[i] == values[i])))
-      {
       return true;
-      }
     }
+  }
   return false;
 }
 
@@ -124,29 +125,27 @@ template <typename T> bool IsNoData(const itk::VariableLengthVector<T> & pixel, 
 /**
  * Specialization of ChangeNoData function to handle itk::VariableLengthVector
  */
-template <typename T> itk::VariableLengthVector<T> ChangeNoData(const itk::VariableLengthVector<T> & pixel,
-                                                                const std::vector<bool> & flags,
-                                                                const std::vector<double> & values,
-                                                                const std::vector<double> & newValues,
-                                                                bool nanIsNoData = false)
+template <typename T>
+itk::VariableLengthVector<T> ChangeNoData(const itk::VariableLengthVector<T>& pixel, const std::vector<bool>& flags, const std::vector<double>& values,
+                                          const std::vector<double>& newValues, bool nanIsNoData = false)
 {
-  assert(flags.size()>=pixel.Size());
-  assert(values.size()>=pixel.Size());
-  assert(newValues.size()>=pixel.Size());
+  assert(flags.size() >= pixel.Size());
+  assert(values.size() >= pixel.Size());
+  assert(newValues.size() >= pixel.Size());
 
   itk::VariableLengthVector<T> outPixel(pixel.Size());
 
-  for(unsigned int i = 0; i < pixel.Size();++i)
+  for (unsigned int i = 0; i < pixel.Size(); ++i)
+  {
+    if ((nanIsNoData && vnl_math_isnan(pixel[i])) || (flags[i] && (pixel[i] == values[i])))
     {
-    if((nanIsNoData && vnl_math_isnan(pixel[i])) || (flags[i] && (pixel[i] == values[i])))
-      {
       outPixel[i] = newValues[i];
-      }
-    else
-      {
-      outPixel[i] = pixel[i];
-      }
     }
+    else
+    {
+      outPixel[i] = pixel[i];
+    }
+  }
 
   return outPixel;
 }

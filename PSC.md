@@ -212,6 +212,7 @@ establishing a fully functioning PSC. PSC has now 4 members.
 
 **Name**                    | **Affiliation**  | **Email**                        | **Role**                                   |
 ----------------------------|------------------|----------------------------------|--------------------------------------------|
+Agustin Lobo                | ICTJA-CSIC       | Agustin DOT Lobo AT ictja.csic.es| User perspective, documentation            |
 Julien Radoux               | UCLouvain        | jradoux AT hotmail DOT com       | User perpsective, documentation            |
 Rémi Cresson                | IRSTEA           | cresson.r AT gmail DOT com       | Release Manager for release 5.2            |
 Guillaume Pasero            | CS-SI            | guillaume.pasero AT c-s DOT fr   | release planner                            |

@@ -25,22 +25,22 @@
 #include "otbImageFileReader.h"
 #include <fstream>
 
-int otbBSplineInterpolateImageFunction(int argc, char * argv[])
+int otbBSplineInterpolateImageFunction(int argc, char* argv[])
 {
-  const char * infname = argv[1];
-  const char * outfname = argv[2];
+  const char* infname  = argv[1];
+  const char* outfname = argv[2];
 
-  typedef otb::Image<double, 2>                                           ImageType;
+  typedef otb::Image<double, 2> ImageType;
   typedef otb::BSplineInterpolateImageFunction<ImageType, double, double> InterpolatorType;
-  typedef InterpolatorType::ContinuousIndexType                           ContinuousIndexType;
-  typedef otb::ImageFileReader<ImageType>                                 ReaderType;
+  typedef InterpolatorType::ContinuousIndexType ContinuousIndexType;
+  typedef otb::ImageFileReader<ImageType>       ReaderType;
 
   int i = 3;
 
   std::vector<ContinuousIndexType> indicesList;
 
   while (i < argc && (i + 1) < argc)
-    {
+  {
     ContinuousIndexType idx;
 
     idx[0] = atof(argv[i]);
@@ -49,7 +49,7 @@ int otbBSplineInterpolateImageFunction(int argc, char * argv[])
     indicesList.push_back(idx);
 
     i += 2;
-    }
+  }
 
   // Instantiating object
   InterpolatorType::Pointer interpolator = InterpolatorType::New();
@@ -64,9 +64,9 @@ int otbBSplineInterpolateImageFunction(int argc, char * argv[])
   file.open(outfname);
 
   for (std::vector<ContinuousIndexType>::iterator it = indicesList.begin(); it != indicesList.end(); ++it)
-    {
+  {
     file << (*it) << " -> " << interpolator->EvaluateAtContinuousIndex((*it)) << std::endl;
-    }
+  }
 
   file.close();
 

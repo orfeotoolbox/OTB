@@ -86,7 +86,7 @@ private:
 
     typedef VectorDataType::DataTreeType            DataTreeType;
     typedef itk::PreOrderTreeIterator<DataTreeType> TreeIteratorType;
-    TreeIteratorType it(m_InputData->GetDataTree());
+    TreeIteratorType                                it(m_InputData->GetDataTree());
 
     for (it.GoToBegin(); !it.IsAtEnd(); ++it)
     {
@@ -94,12 +94,10 @@ private:
     }
 
     SetParameterOutputVectorData("out", m_InputData);
-
   }
 
   VectorDataType::Pointer m_InputData;
 };
-
 }
 }
 

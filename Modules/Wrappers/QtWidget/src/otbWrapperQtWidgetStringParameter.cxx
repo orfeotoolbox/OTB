@@ -25,9 +25,8 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetStringParameter::QtWidgetStringParameter(StringParameter* param, QtWidgetModel* m, QWidget * parent)
-: QtWidgetParameterBase(param, m, parent),
-  m_StringParam(param)
+QtWidgetStringParameter::QtWidgetStringParameter(StringParameter* param, QtWidgetModel* m, QWidget* parent)
+  : QtWidgetParameterBase(param, m, parent), m_StringParam(param)
 {
 }
 
@@ -37,16 +36,14 @@ QtWidgetStringParameter::~QtWidgetStringParameter()
 
 void QtWidgetStringParameter::DoUpdateGUI()
 {
-  m_Input->setToolTip(
-    QString::fromStdString( m_StringParam->GetDescription() )
-  );
+  m_Input->setToolTip(QString::fromStdString(m_StringParam->GetDescription()));
 
   // Update the lineEdit only if there is a change and that's not empty or whitespaces
-  QString text( m_StringParam->GetValue().c_str() );
+  QString text(m_StringParam->GetValue().c_str());
   if (!text.trimmed().isEmpty() && text != m_Input->text())
-    {
+  {
     m_Input->setText(text);
-    }
+  }
 }
 
 void QtWidgetStringParameter::DoCreateWidget()
@@ -57,29 +54,26 @@ void QtWidgetStringParameter::DoCreateWidget()
   m_HLayout->setContentsMargins(0, 0, 0, 0);
 
   m_Input = new QLineEdit(this);
-  m_Input->setToolTip(
-    QString::fromStdString( m_StringParam->GetDescription() )
-  );
+  m_Input->setToolTip(QString::fromStdString(m_StringParam->GetDescription()));
   m_HLayout->addWidget(m_Input);
 
-  connect( m_Input, &QLineEdit::textChanged, this, &QtWidgetStringParameter::SetValue );
-  connect( m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate );
+  connect(m_Input, &QLineEdit::textChanged, this, &QtWidgetStringParameter::SetValue);
+  connect(m_Input, &QLineEdit::textChanged, GetModel(), &QtWidgetModel::NotifyUpdate);
 
   this->setLayout(m_HLayout);
 
   if (m_StringParam->GetRole() == Role_Output)
-    {
-    m_Input->setEnabled( false );
-    }
+  {
+    m_Input->setEnabled(false);
+  }
 }
 
 void QtWidgetStringParameter::SetValue(const QString& value)
 {
   m_StringParam->SetValue(value.toLatin1().constData());
   // notify of value change
-  QString key( m_StringParam->GetKey() );
-  emit ParameterChanged(key);
+  QString key(m_StringParam->GetKey());
+  emit    ParameterChanged(key);
 }
-
 }
 }

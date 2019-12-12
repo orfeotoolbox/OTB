@@ -38,10 +38,10 @@ class ITK_EXPORT RandomForestsMachineLearningModelFactory : public itk::ObjectFa
 {
 public:
   /** Standard class typedefs. */
-  typedef RandomForestsMachineLearningModelFactory             Self;
-  typedef itk::ObjectFactoryBase        Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef RandomForestsMachineLearningModelFactory Self;
+  typedef itk::ObjectFactoryBase                   Superclass;
+  typedef itk::SmartPointer<Self>                  Pointer;
+  typedef itk::SmartPointer<const Self>            ConstPointer;
 
   /** Class methods used to interface with the registered factories. */
   const char* GetITKSourceVersion(void) const override;
@@ -65,9 +65,8 @@ protected:
   ~RandomForestsMachineLearningModelFactory() override;
 
 private:
-  RandomForestsMachineLearningModelFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  RandomForestsMachineLearningModelFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

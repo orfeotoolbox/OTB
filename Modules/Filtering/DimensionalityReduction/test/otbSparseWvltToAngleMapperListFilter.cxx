@@ -30,14 +30,14 @@
 
 #include "otbSparseWvltToAngleMapperListFilter.h"
 
-int otbSparseWvltToAngleMapperListFilterTest ( int , char * []  )
+int otbSparseWvltToAngleMapperListFilterTest(int, char* [])
 {
   // number of images to consider
-  const unsigned int Dimension = 2;
+  const unsigned int Dimension     = 2;
   const unsigned int nbInputImages = 2;
 
-  std::string inputImageName [ nbInputImages ];
-  for ( unsigned int i = 0; i < nbInputImages; i++ )
+  std::string inputImageName[nbInputImages];
+  for (unsigned int i = 0; i < nbInputImages; i++)
     inputImageName[i] = "";
   // Parameter (to be changed if necessary)
   const double threshold = 10.;
@@ -46,44 +46,43 @@ int otbSparseWvltToAngleMapperListFilterTest ( int , char * []  )
   typedef float  PixelType;
   typedef double PrecisionType;
 
-  typedef itk::FixedArray< PrecisionType, nbInputImages-1 > AngleType;
-  typedef itk::Statistics::ListSample< AngleType >          AngleListType;
+  typedef itk::FixedArray<PrecisionType, nbInputImages - 1> AngleType;
+  typedef itk::Statistics::ListSample<AngleType> AngleListType;
 
-  typedef otb::Image< PixelType, Dimension >  ImageType;
-  typedef otb::ImageList< ImageType >         ImageListType;
+  typedef otb::Image<PixelType, Dimension> ImageType;
+  typedef otb::ImageList<ImageType> ImageListType;
 
   // Reading input images
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::ObjectList< ReaderType > ReaderListType;
-  ReaderListType::Pointer reader = ReaderListType::New();
-  reader->Resize( nbInputImages );
+  typedef otb::ObjectList<ReaderType>     ReaderListType;
+  ReaderListType::Pointer                 reader = ReaderListType::New();
+  reader->Resize(nbInputImages);
 
-  typedef otb::ObjectList< ImageListType > ListOfImageListType;
-  ListOfImageListType::Pointer listOfInputImages = ListOfImageListType::New();
-  listOfInputImages->Resize( nbInputImages );
+  typedef otb::ObjectList<ImageListType> ListOfImageListType;
+  ListOfImageListType::Pointer           listOfInputImages = ListOfImageListType::New();
+  listOfInputImages->Resize(nbInputImages);
 
-  for ( unsigned int i = 0; i < nbInputImages; i++ )
+  for (unsigned int i = 0; i < nbInputImages; i++)
   {
     reader->SetNthElement(i, ReaderType::New());
-    reader->GetNthElement(i)->SetFileName( inputImageName[i] );
+    reader->GetNthElement(i)->SetFileName(inputImageName[i]);
     reader->GetNthElement(i)->Update();
 
     // Here, we will have 'nbInputImages' image lists of one image each only
 
-    listOfInputImages->SetNthElement(i, ImageListType::New() );
-    listOfInputImages->GetNthElement(i)->PushBack( reader->GetNthElement(i)->GetOutput() );
+    listOfInputImages->SetNthElement(i, ImageListType::New());
+    listOfInputImages->GetNthElement(i)->PushBack(reader->GetNthElement(i)->GetOutput());
   }
 
   // Filter
-  typedef otb::SparseWvltToAngleMapperListFilter<
-    ImageListType, AngleListType, nbInputImages > AngleListFilterType;
+  typedef otb::SparseWvltToAngleMapperListFilter<ImageListType, AngleListType, nbInputImages> AngleListFilterType;
 
   AngleListFilterType::Pointer filter = AngleListFilterType::New();
-  for ( unsigned int i = 0; i < nbInputImages; i++ )
+  for (unsigned int i = 0; i < nbInputImages; i++)
   {
-    filter->SetInput( i, listOfInputImages->GetNthElement(i) );
+    filter->SetInput(i, listOfInputImages->GetNthElement(i));
   }
-  filter->SetThresholdValue( threshold );
+  filter->SetThresholdValue(threshold);
 
   filter->Update();
 

@@ -46,8 +46,8 @@ class PolarimetricSynthesisFunctor
 {
 public:
   /** Some typedefs. */
-  typedef typename     std::complex <double>           ComplexType;
-  typedef typename     itk::FixedArray<ComplexType, 2> ComplexArrayType;
+  typedef typename std::complex<double> ComplexType;
+  typedef typename itk::FixedArray<ComplexType, 2> ComplexArrayType;
 
   /** Set the ElectroMagneticField Incident */
   void SetEi(ComplexArrayType ei)
@@ -68,14 +68,16 @@ public:
     m_Er.Fill(1);
   }
   /** Destructor */
-  virtual ~PolarimetricSynthesisFunctor() {}
-  inline TOutput operator ()(const TInput1& Shh, const TInput2& Shv, const TInput3& Svh, const TInput4& Svv)
+  virtual ~PolarimetricSynthesisFunctor()
+  {
+  }
+  inline TOutput operator()(const TInput1& Shh, const TInput2& Shv, const TInput3& Svh, const TInput4& Svv)
   {
     ComplexType tmp;
     double      scalar;
 
-    tmp =   std::conj(m_Er[0]) * (m_Ei[0] * static_cast<ComplexType>(Shh) + m_Ei[1] * static_cast<ComplexType>(Shv))
-          + std::conj(m_Er[1]) * (m_Ei[0] * static_cast<ComplexType>(Svh) + m_Ei[1] * static_cast<ComplexType>(Svv));
+    tmp = std::conj(m_Er[0]) * (m_Ei[0] * static_cast<ComplexType>(Shh) + m_Ei[1] * static_cast<ComplexType>(Shv)) +
+          std::conj(m_Er[1]) * (m_Ei[0] * static_cast<ComplexType>(Svh) + m_Ei[1] * static_cast<ComplexType>(Svv));
 
     scalar = static_cast<double>(std::abs(tmp)) * static_cast<double>(std::abs(tmp));
 
@@ -87,7 +89,6 @@ private:
   ComplexArrayType m_Ei;
   /** Electromagnetic Field Reflected */
   ComplexArrayType m_Er;
-
 };
 
 } // namespace Functor

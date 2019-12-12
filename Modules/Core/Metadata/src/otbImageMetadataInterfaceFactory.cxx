@@ -19,7 +19,6 @@
  */
 
 
-
 #include "otbImageMetadataInterfaceFactory.h"
 
 #include "otbDefaultImageMetadataInterface.h"
@@ -48,66 +47,57 @@
 
 namespace otb
 {
-ImageMetadataInterfaceFactory::ImageMetadataInterfaceBasePointerType
-ImageMetadataInterfaceFactory
-::CreateIMI(const MetaDataDictionaryType& dict)
+ImageMetadataInterfaceFactory::ImageMetadataInterfaceBasePointerType ImageMetadataInterfaceFactory::CreateIMI(const MetaDataDictionaryType& dict)
 {
   RegisterBuiltInFactories();
 
   std::list<ImageMetadataInterfaceBasePointerType> possibleIMI;
-  std::list<itk::LightObject::Pointer>             allOpticalObjects =
-    itk::ObjectFactoryBase::CreateAllInstance("OpticalImageMetadataInterface");
-  std::list<itk::LightObject::Pointer>             allSarObjects =
-    itk::ObjectFactoryBase::CreateAllInstance("SarImageMetadataInterface");
+  std::list<itk::LightObject::Pointer>             allOpticalObjects = itk::ObjectFactoryBase::CreateAllInstance("OpticalImageMetadataInterface");
+  std::list<itk::LightObject::Pointer>             allSarObjects     = itk::ObjectFactoryBase::CreateAllInstance("SarImageMetadataInterface");
   std::list<itk::LightObject::Pointer>             allObjects;
 
-  std::copy(allOpticalObjects.begin(), allOpticalObjects.end(), std::back_inserter(allObjects) );
-  std::copy(allSarObjects.begin(), allSarObjects.end(), std::back_inserter(allObjects) );
+  std::copy(allOpticalObjects.begin(), allOpticalObjects.end(), std::back_inserter(allObjects));
+  std::copy(allSarObjects.begin(), allSarObjects.end(), std::back_inserter(allObjects));
 
 
-  for (std::list<itk::LightObject::Pointer>::iterator i = allObjects.begin();
-       i != allObjects.end(); ++i)
-    {
-    ImageMetadataInterfaceBase * io = dynamic_cast<ImageMetadataInterfaceBase*>(i->GetPointer());
+  for (std::list<itk::LightObject::Pointer>::iterator i = allObjects.begin(); i != allObjects.end(); ++i)
+  {
+    ImageMetadataInterfaceBase* io = dynamic_cast<ImageMetadataInterfaceBase*>(i->GetPointer());
     if (io)
-      {
-      possibleIMI.push_back(io);
-      }
-    else
-      {
-      itkGenericExceptionMacro(<< "Error ImageMetadataInterface factory did not return an ImageMetadataInterfaceBase: "
-                               << (*i)->GetNameOfClass());
-      }
-    }
-
-  for (std::list<ImageMetadataInterfaceBasePointerType>::iterator k = possibleIMI.begin();
-       k != possibleIMI.end(); ++k)
     {
+      possibleIMI.push_back(io);
+    }
+    else
+    {
+      itkGenericExceptionMacro(<< "Error ImageMetadataInterface factory did not return an ImageMetadataInterfaceBase: " << (*i)->GetNameOfClass());
+    }
+  }
+
+  for (std::list<ImageMetadataInterfaceBasePointerType>::iterator k = possibleIMI.begin(); k != possibleIMI.end(); ++k)
+  {
     (*k)->SetMetaDataDictionary(dict);
     if ((*k)->CanRead())
-      {
+    {
       return *k;
-      }
     }
+  }
 
   DefaultImageMetadataInterface::Pointer defaultIMI = DefaultImageMetadataInterface::New();
   defaultIMI->SetMetaDataDictionary(dict);
   return dynamic_cast<ImageMetadataInterfaceBase*>(static_cast<DefaultImageMetadataInterface*>(defaultIMI));
 }
 
-void
-ImageMetadataInterfaceFactory
-::RegisterBuiltInFactories()
+void ImageMetadataInterfaceFactory::RegisterBuiltInFactories()
 {
   static bool firstTime = true;
 
   static itk::SimpleMutexLock mutex;
-    {
+  {
     // This helper class makes sure the Mutex is unlocked
     // in the event an exception is thrown.
     itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
     if (firstTime)
-      {
+    {
       itk::ObjectFactoryBase::RegisterFactory(IkonosImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(SpotImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(PleiadesImageMetadataInterfaceFactory::New());
@@ -120,8 +110,8 @@ ImageMetadataInterfaceFactory
       itk::ObjectFactoryBase::RegisterFactory(CosmoImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(Radarsat2ImageMetadataInterfaceFactory::New());
       firstTime = false;
-      }
     }
+  }
 }
 
 } // end namespace otb

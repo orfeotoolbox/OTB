@@ -31,7 +31,8 @@
 #include <string>
 #include <sstream>
 
-namespace otb {
+namespace otb
+{
 
 /** \class LabelMapToVectorDataFilter
    * \brief This class vectorizes a LabelObject to a VectorData.
@@ -53,23 +54,20 @@ namespace otb {
  *
  * \ingroup OTBConversion
  */
-template<class TLabelMap, class TVectorData,
-         class TFieldsFunctor = Functor::LabelObjectFieldsFunctor<typename TLabelMap::LabelObjectType> >
-class ITK_EXPORT LabelMapToVectorDataFilter :
-  public VectorDataSource<TVectorData>
+template <class TLabelMap, class TVectorData, class TFieldsFunctor = Functor::LabelObjectFieldsFunctor<typename TLabelMap::LabelObjectType>>
+class ITK_EXPORT LabelMapToVectorDataFilter : public VectorDataSource<TVectorData>
 {
 public:
   /** Standard class typedefs. */
-  typedef LabelMapToVectorDataFilter Self;
-  typedef VectorDataSource<TVectorData>
-  Superclass;
+  typedef LabelMapToVectorDataFilter    Self;
+  typedef VectorDataSource<TVectorData> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Some convenient typedefs. */
-  typedef TLabelMap                                   InputLabelMapType;
-  typedef TVectorData                                 OutputVectorDataType;
-  typedef TFieldsFunctor                              FieldsFunctorType;
+  typedef TLabelMap      InputLabelMapType;
+  typedef TVectorData    OutputVectorDataType;
+  typedef TFieldsFunctor FieldsFunctorType;
 
   typedef typename OutputVectorDataType::Pointer      OutputVectorDataPointer;
   typedef typename OutputVectorDataType::ConstPointer OutputVectorDataConstPointer;
@@ -84,21 +82,20 @@ public:
 
   /** Some typedefs specific to functors*/
   typedef otb::Functor::LabelObjectToPolygonFunctor<LabelObjectType, PolygonType> FunctorType;
-  typedef otb::CorrectPolygonFunctor<PolygonType>                                 CorrectFunctorType;
+  typedef otb::CorrectPolygonFunctor<PolygonType> CorrectFunctorType;
 
   /** Standard New method. */
   itkNewMacro(Self);
 
   /** Runtime information support. */
-  itkTypeMacro(LabelMapToVectorDataFilter,
-               VectorDataSource);
+  itkTypeMacro(LabelMapToVectorDataFilter, VectorDataSource);
 
   /** Set/Get the LabelMap input of this process object.  */
   using Superclass::SetInput;
-  virtual void SetInput(const InputLabelMapType *input);
-  virtual void SetInput(unsigned int idx, const InputLabelMapType *input);
-  const InputLabelMapType * GetInput(void);
-  const InputLabelMapType * GetInput(unsigned int idx);
+  virtual void SetInput(const InputLabelMapType* input);
+  virtual void SetInput(unsigned int idx, const InputLabelMapType* input);
+  const InputLabelMapType* GetInput(void);
+  const InputLabelMapType* GetInput(unsigned int idx);
 
   /* Set the functor used to provide additional OGR fields */
   void SetFieldsFunctor(const FieldsFunctorType& functor)
@@ -115,13 +112,15 @@ public:
 
 protected:
   LabelMapToVectorDataFilter();
-  ~LabelMapToVectorDataFilter() override {}
+  ~LabelMapToVectorDataFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   void GenerateData() override;
 
 private:
-  LabelMapToVectorDataFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  LabelMapToVectorDataFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   FieldsFunctorType m_FieldsFunctor;
 }; // end of class

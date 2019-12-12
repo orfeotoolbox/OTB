@@ -64,46 +64,41 @@ namespace mvd
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*****************************************************************************/
-AbstractDragAndDropEventFilter
-::AbstractDragAndDropEventFilter( QObject* p  ) :
-  QObject( p )
+AbstractDragAndDropEventFilter::AbstractDragAndDropEventFilter(QObject* p) : QObject(p)
 {
 }
 
 /*****************************************************************************/
-AbstractDragAndDropEventFilter
-::~AbstractDragAndDropEventFilter()
+AbstractDragAndDropEventFilter::~AbstractDragAndDropEventFilter()
 {
 }
 
 /*****************************************************************************/
-bool
-AbstractDragAndDropEventFilter
-::eventFilter( QObject* object, QEvent* e )
+bool AbstractDragAndDropEventFilter::eventFilter(QObject* object, QEvent* e)
 {
-  switch( e->type() )
-    {
-    case QEvent::DragEnter:
-      return DragEnterEvent( object, dynamic_cast< QDragEnterEvent* >( e ) );
-      break;
+  switch (e->type())
+  {
+  case QEvent::DragEnter:
+    return DragEnterEvent(object, dynamic_cast<QDragEnterEvent*>(e));
+    break;
 
-    case QEvent::DragMove:
-      return DragMoveEvent( object, dynamic_cast< QDragMoveEvent* >( e ) );
-      break;
+  case QEvent::DragMove:
+    return DragMoveEvent(object, dynamic_cast<QDragMoveEvent*>(e));
+    break;
 
-    case QEvent::DragLeave:
-      return DragLeaveEvent( object, dynamic_cast< QDragLeaveEvent* >( e ) );
-      break;
+  case QEvent::DragLeave:
+    return DragLeaveEvent(object, dynamic_cast<QDragLeaveEvent*>(e));
+    break;
 
-    case QEvent::Drop:
-      return DropEvent( object, dynamic_cast< QDropEvent* >( e ) );
-      break;
+  case QEvent::Drop:
+    return DropEvent(object, dynamic_cast<QDropEvent*>(e));
+    break;
 
-    default:
-      break;
-    }
+  default:
+    break;
+  }
 
-  return QObject::eventFilter( object, e );
+  return QObject::eventFilter(object, e);
 }
 
 /*****************************************************************************/

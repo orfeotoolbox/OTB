@@ -39,7 +39,7 @@ namespace otb
  *
  * \ingroup OTBStreaming
  */
-template<class TImage>
+template <class TImage>
 class ITK_EXPORT RAMDrivenTiledStreamingManager : public StreamingManager<TImage>
 {
 public:
@@ -77,7 +77,7 @@ public:
 
   /** Actually computes the stream divisions, according to the specified streaming mode,
    * eventually using the input parameter to estimate memory consumption */
-  void PrepareStreaming(itk::DataObject * input, const RegionType &region) override;
+  void PrepareStreaming(itk::DataObject* input, const RegionType& region) override;
 
 protected:
   RAMDrivenTiledStreamingManager();
@@ -90,8 +90,8 @@ protected:
   double m_Bias;
 
 private:
-  RAMDrivenTiledStreamingManager(const RAMDrivenTiledStreamingManager &);
-  void operator =(const RAMDrivenTiledStreamingManager&);
+  RAMDrivenTiledStreamingManager(const RAMDrivenTiledStreamingManager&);
+  void operator=(const RAMDrivenTiledStreamingManager&);
 };
 
 } // End namespace otb
@@ -101,4 +101,3 @@ private:
 #endif
 
 #endif
-

@@ -81,8 +81,7 @@ class LayerStackWidget;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class OTBMonteverdiGUI_EXPORT LayerStackWidget :
-    public QWidget
+class OTBMonteverdiGUI_EXPORT LayerStackWidget : public QWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -91,53 +90,52 @@ class OTBMonteverdiGUI_EXPORT LayerStackWidget :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  LayerStackWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
+  LayerStackWidget(QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** \brief Destructor. */
   ~LayerStackWidget() override;
 
   /**
    */
-  const LayerStackItemModel * GetItemModel() const;
+  const LayerStackItemModel* GetItemModel() const;
 
   /**
    */
-  LayerStackItemModel * GetItemModel();
+  LayerStackItemModel* GetItemModel();
 
   /**
    */
-  void SetCurrent( int );
+  void SetCurrent(int);
 
   /**
    */
-  void SetApplyEnabled( bool );
+  void SetApplyEnabled(bool);
 
   /**
    */
-  void SetDeleteEnabled( bool );
+  void SetDeleteEnabled(bool);
 
   /**
    */
-  void SetMoveEnabled( bool );
+  void SetMoveEnabled(bool);
 
   /**
    */
-  void SetProjectionEnabled( bool );
+  void SetProjectionEnabled(bool);
 
   /**
    */
-  void SetReloadEnabled( bool );
+  void SetReloadEnabled(bool);
 
-  void SetResetEffectsEnabled( bool );
+  void SetResetEffectsEnabled(bool);
 
   /**
    */
-  void InstallEventFilter( QObject * filter );
+  void InstallEventFilter(QObject* filter);
 
   //
   // QObject overloads.
@@ -146,29 +144,29 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qobject.html#eventFilter
    */
-  bool eventFilter( QObject * watched, QEvent * event ) override;
+  bool eventFilter(QObject* watched, QEvent* event) override;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   /**
   */
-  //bugFix for layer deletion
-  void LayerDeletingWidget( unsigned int index );
+  // bugFix for layer deletion
+  void LayerDeletingWidget(unsigned int index);
   /**
    */
-  void CurrentChanged( int );
+  void CurrentChanged(int);
   /**
    */
-  void SelectionChanged( int );
+  void SelectionChanged(int);
   /**
    */
   void TopButtonClicked();
@@ -189,7 +187,7 @@ signals:
   void DeleteAllLayersRequested();
   /**
    */
-  void RotateLayersRequested( int );
+  void RotateLayersRequested(int);
   /**
    */
   void ProjectionButtonClicked();
@@ -201,51 +199,48 @@ signals:
   void ResetEffectsButtonClicked();
   /**
    */
-  void CopyLayerRequested( const AbstractLayerModel * );
+  void CopyLayerRequested(const AbstractLayerModel*);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemview.html#dropEvent
    */
   // virtual void dopEvent( QDropEvent * event );
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    * \brief uic generated.
    */
-  Ui::LayerStackWidget * m_UI;
+  Ui::LayerStackWidget* m_UI;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qitemselectionmodel.html#currentRowChanged
    */
-  void OnCurrentRowChanged( const QModelIndex &, const QModelIndex & );
+  void OnCurrentRowChanged(const QModelIndex&, const QModelIndex&);
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qitemselectionmodel.html#selectionChanged
    */
-  void OnSelectionChanged( const QItemSelection & selected,
-                           const QItemSelection & deselected );
+  void OnSelectionChanged(const QItemSelection& selected, const QItemSelection& deselected);
 };
 
 } // end namespace 'mvd'

@@ -58,7 +58,7 @@ otb_test_application(NAME apTvUtVectorDataExtractROI
 #----------- VectorDataSetField TESTS ----------------
 otb_test_application(NAME apTvUtVectorDataSetField
                      APP VectorDataSetField
-                     OPTIONS -in ${INPUTDATA}/ToulousePoints-examples.shp
+                     OPTIONS -in ${INPUTDATA}/toulousepoints_examples.shp
                              -out ${TEMP}/apTvUtVectorDataSetFieldTest.shp
                              -fn MyField
                              -fv MyValue

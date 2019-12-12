@@ -91,9 +91,7 @@ class ProgressReporterManager: public itkObject
 {
 public:
   /** Default constructor */
-  
   static ProgressReporterManager_Pointer New();
-  virtual void Delete();
   void DeleteWatcherList();
   void SetLogOutputCallback(otb::SwigPrintCallback* callback);
   itkCommand* GetAddProcessCommand();
@@ -109,14 +107,10 @@ DECLARE_REF_COUNT_CLASS( ProgressReporterManager )
 %pythoncode {
   _libraryLogOutput = PythonLogOutput_New()
   _libraryLogCallback = PythonPrintCallback()
-  _libraryProgressReportManager = ProgressReporterManager_New()
-  
+
   Logger.Instance().ResetOutputs()
   _libraryLogOutput.SetCallback(_libraryLogCallback)
   Logger.Instance().AddLogOutput(_libraryLogOutput.GetPointer())
-  
-  _libraryProgressReportManager.SetLogOutputCallback(_libraryLogCallback)
-
 }
 
 #endif

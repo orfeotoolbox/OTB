@@ -27,17 +27,17 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbShiftScaleImageAdaptor.h"
 
-int otbShiftScaleImageAdaptor(int itkNotUsed(argc), char * argv[])
+int otbShiftScaleImageAdaptor(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  typedef double                                                        PixelType;
-  typedef unsigned char                                                 OutputPixelType;
-  typedef otb::Image<PixelType, 2>                                      InputImageType;
-  typedef otb::Image<OutputPixelType, 2>                                OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>                          ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                         WriterType;
+  typedef double        PixelType;
+  typedef unsigned char OutputPixelType;
+  typedef otb::Image<PixelType, 2>       InputImageType;
+  typedef otb::Image<OutputPixelType, 2> OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::ShiftScaleImageAdaptor<InputImageType, PixelType>        FilterType;
   typedef itk::RescaleIntensityImageFilter<FilterType, OutputImageType> RescalerType;
 
@@ -62,5 +62,4 @@ int otbShiftScaleImageAdaptor(int itkNotUsed(argc), char * argv[])
   writer->Update();
 
   return EXIT_SUCCESS;
-
 }

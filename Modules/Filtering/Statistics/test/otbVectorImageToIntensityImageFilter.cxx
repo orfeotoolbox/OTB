@@ -25,14 +25,14 @@
 #include "otbImageFileWriter.h"
 #include "otbVectorImageToIntensityImageFilter.h"
 
-int otbVectorImageToIntensityImageFilter(int itkNotUsed(argc), char * argv[])
+int otbVectorImageToIntensityImageFilter(int itkNotUsed(argc), char* argv[])
 {
   const unsigned int Dimension = 2;
-  typedef double                                                                  PixelType;
-  typedef otb::VectorImage<PixelType, Dimension>                                  InputImageType;
-  typedef otb::Image<PixelType, Dimension>                                        OutputImageType;
-  typedef otb::ImageFileReader<InputImageType>                                    ReaderType;
-  typedef otb::ImageFileWriter<OutputImageType>                                   WriterType;
+  typedef double     PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> InputImageType;
+  typedef otb::Image<PixelType, Dimension>       OutputImageType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
   typedef otb::VectorImageToIntensityImageFilter<InputImageType, OutputImageType> FilterType;
 
   // Instantiating object

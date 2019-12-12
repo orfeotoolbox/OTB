@@ -28,7 +28,7 @@
 #include <tuple>
 
 #if defined(_MSC_VER)
-#pragma warning ( disable: 4251 )
+#pragma warning(disable : 4251)
 // Disable following warning :
 // warning C4251: 'otb::CoordinateTransformation::m_Transform':
 // class 'std::unique_ptr<OGRCoordinateTransformation,std::default_delete<_Ty>>'
@@ -46,10 +46,10 @@ namespace otb
 namespace internal
 {
 struct OTBGdalAdapters_EXPORT OGRCoordinateTransformationDeleter
-  {
-  public:
-    void operator()(OGRCoordinateTransformation * del) const;
-  };
+{
+public:
+  void operator()(OGRCoordinateTransformation* del) const;
+};
 }
 
 // Forward declaration needed for the operators declared bellow.
@@ -59,30 +59,29 @@ class CoordinateTransformation;
 OTBGdalAdapters_EXPORT bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept;
 
 /// different operator
-OTBGdalAdapters_EXPORT bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept;
+OTBGdalAdapters_EXPORT bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept;
 
 /**
  * \class CoordinateTransformation
  * \brief This class is a wrapper around OGRCoordinateTransformation
- * 
+ *
  * This class is a wrapper around OGRCoordinateTransformation. It aims
  * at manipulating coordinate transformations between spatial
  * reference systems within OTB, in a safe and easy way. The class
  * constructors enforce RAII: either they fail or they provide a
  * definitive, valid object.
  *
- * \ingroup OTBGdalAdapters 
+ * \ingroup OTBGdalAdapters
  */
 
 class OTBGdalAdapters_EXPORT CoordinateTransformation
 {
-OTBGdalAdapters_EXPORT friend bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept;
-OTBGdalAdapters_EXPORT friend bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation & ct2) noexcept;
+  OTBGdalAdapters_EXPORT friend bool operator==(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept;
+  OTBGdalAdapters_EXPORT friend bool operator!=(const CoordinateTransformation& ct1, const CoordinateTransformation& ct2) noexcept;
 
 public:
-  typedef std::unique_ptr<OGRCoordinateTransformation ,
-          internal::OGRCoordinateTransformationDeleter> CoordinateTransformationPtr;
-  /** 
+  typedef std::unique_ptr<OGRCoordinateTransformation, internal::OGRCoordinateTransformationDeleter> CoordinateTransformationPtr;
+  /**
    * Builds a coordinate transformation out of source and target
    * spatial reference systems.
    * \param source The source spatial reference
@@ -90,13 +89,13 @@ public:
    *
    * \throws InvalidCoordinateTransfromationException in case of failure
    */
-  CoordinateTransformation(const SpatialReference & source, const SpatialReference & destination);
+  CoordinateTransformation(const SpatialReference& source, const SpatialReference& destination);
 
   /// Copy constructor
   CoordinateTransformation(const CoordinateTransformation& other);
 
   /// Asignment operator
-  CoordinateTransformation & operator=(const CoordinateTransformation& other) noexcept;
+  CoordinateTransformation& operator=(const CoordinateTransformation& other) noexcept;
 
   /// \return The source spatial reference
   SpatialReference GetSourceSpatialReference() const;
@@ -110,7 +109,7 @@ public:
    * \return output coords as a 3 double tuple
    * \throws TransformFailureException if transform failed
    */
-  std::tuple<double,double,double> Transform(const std::tuple<double,double,double> & in) const;
+  std::tuple<double, double, double> Transform(const std::tuple<double, double, double>& in) const;
 
   /**
    * Transform a 2D point from source to target spatial reference
@@ -118,16 +117,16 @@ public:
    * \return output coords as a 2 double tuple
    * \throws TransformFailureException if transform failed
    */
-  std::tuple<double,double> Transform(const std::tuple<double,double> & in) const;
+  std::tuple<double, double> Transform(const std::tuple<double, double>& in) const;
 
-  
+
 private:
   // unique ptr to the internal OGRCoordinateTransformation
   CoordinateTransformationPtr m_Transform;
 };
 
 /// Stream operator for CoordinateTransformation
-OTBGdalAdapters_EXPORT std::ostream & operator << (std::ostream& o, const CoordinateTransformation & i);
+OTBGdalAdapters_EXPORT std::ostream& operator<<(std::ostream& o, const CoordinateTransformation& i);
 }
 
 #endif

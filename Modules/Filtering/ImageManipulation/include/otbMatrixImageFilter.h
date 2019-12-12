@@ -46,17 +46,13 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 
-template <class TInputImage, class TOutputImage, class TMatrix = vnl_matrix<typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType> >
-class ITK_EXPORT MatrixImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TMatrix = vnl_matrix<typename itk::NumericTraits<typename TInputImage::InternalPixelType>::RealType>>
+class ITK_EXPORT MatrixImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Extract input and output images sizes. */
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension,
-                      unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** typedef to simplify variables definition and declaration. */
   typedef TInputImage InputImageType;
@@ -64,10 +60,10 @@ public:
   typedef TOutputImage OutputImageType;
 
   /** typedef for standard classes. */
-  typedef MatrixImageFilter                                         Self;
+  typedef MatrixImageFilter Self;
   typedef itk::ImageToImageFilter<InputImageType, OutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>                                  Pointer;
-  typedef itk::SmartPointer<const Self>                            ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** "object factory" management method. */
   itkNewMacro(Self);
@@ -76,16 +72,16 @@ public:
   itkTypeMacro(MatrixImageFilter, ImageToImageFilter);
 
   /** Supported images definition. */
-  typedef typename InputImageType::PixelType  InputPixelType;
-  typedef typename OutputImageType::PixelType OutputPixelType;
+  typedef typename InputImageType::PixelType          InputPixelType;
+  typedef typename OutputImageType::PixelType         OutputPixelType;
   typedef typename InputImageType::InternalPixelType  InputInternalPixelType;
   typedef typename OutputImageType::InternalPixelType OutputInternalPixelType;
 
   /** MatrixType definition */
   // To support complexe...
   typedef typename itk::NumericTraits<InputInternalPixelType>::RealType InputRealType;
-  typedef TMatrix MatrixType;
-  typedef vnl_vector<InputRealType> VectorType;
+  typedef TMatrix                                                       MatrixType;
+  typedef vnl_vector<InputRealType>                                     VectorType;
 
   /** "typedef" to define a real. */
   typedef typename OutputImageType::RegionType OutputImageRegionType;
@@ -95,23 +91,25 @@ public:
 
 
   /** Transition matrix accessors. */
-  void SetMatrix( MatrixType mat)
-    {
-      m_Matrix = mat;
-      this->Modified();
-    }
+  void SetMatrix(MatrixType mat)
+  {
+    m_Matrix = mat;
+    this->Modified();
+  }
   MatrixType GetMatrix()
-    {
-     return  m_Matrix;
-    }
+  {
+    return m_Matrix;
+  }
 
-  itkGetConstMacro( MatrixByVector, bool );
-  itkSetMacro( MatrixByVector, bool );
-  itkBooleanMacro( MatrixByVector );
+  itkGetConstMacro(MatrixByVector, bool);
+  itkSetMacro(MatrixByVector, bool);
+  itkBooleanMacro(MatrixByVector);
 
 protected:
   MatrixImageFilter();
-  ~MatrixImageFilter() override {}
+  ~MatrixImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /**
@@ -127,12 +125,11 @@ protected:
    *
    * \sa ImageToImageFilter::ThreadedGenerateData(),
    *     ImageToImageFilter::GenerateData() */
-  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread,
-                            itk::ThreadIdType threadId) override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
-  MatrixImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  MatrixImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Matrix declaration */
   MatrixType m_Matrix;

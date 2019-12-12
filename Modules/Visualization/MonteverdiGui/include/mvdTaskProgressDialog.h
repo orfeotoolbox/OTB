@@ -75,8 +75,7 @@ class BackgroundTask;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class OTBMonteverdiGUI_EXPORT TaskProgressDialog :
-    public QProgressDialog
+class OTBMonteverdiGUI_EXPORT TaskProgressDialog : public QProgressDialog
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -85,16 +84,13 @@ class OTBMonteverdiGUI_EXPORT TaskProgressDialog :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /**
    * \brief Constructor.
    */
-  TaskProgressDialog( BackgroundTask* task,
-		      QWidget* p =NULL,
-		      Qt::WindowFlags flags =0 );
+  TaskProgressDialog(BackgroundTask* task, QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /**
    * \brief Destructor.
@@ -107,47 +103,44 @@ public:
 
   /**
    */
-  inline QObject * GetObject() const;
+  inline QObject* GetObject() const;
 
   /**
    */
-  template< typename T >
-    inline
-    T* GetObject() const;
+  template <typename T>
+  inline T* GetObject() const;
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   // Mask Qt native dialogue exec to be replaced by custom Exec()
   // method. Reason: QDialog::exec() is not virtual.
   using QProgressDialog::exec;
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
@@ -161,18 +154,18 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /**
    */
-  void OnDone( QObject* result );
+  void OnDone(QObject* result);
   /**
    */
-  void OnExceptionRaised( QString what );
+  void OnExceptionRaised(QString what);
   /**
    */
-  void OnObjectDestroyed( QObject* object );
+  void OnObjectDestroyed(QObject* object);
 };
 
 } // end namespace 'mvd'
@@ -183,22 +176,16 @@ private slots:
 namespace mvd
 {
 /*****************************************************************************/
-inline
-QObject *
-TaskProgressDialog
-::GetObject() const
+inline QObject* TaskProgressDialog::GetObject() const
 {
   return m_Object;
 }
 
 /*****************************************************************************/
-template< typename T >
-inline
-T*
-TaskProgressDialog
-::GetObject() const
+template <typename T>
+inline T* TaskProgressDialog::GetObject() const
 {
-  return qobject_cast< T* >( m_Object );
+  return qobject_cast<T*>(m_Object);
 }
 
 } // end namespace 'mvd'

@@ -31,56 +31,39 @@ namespace otb
    * Constructor
  */
 template <class TInputList, class TOutputList>
-ObjectListToObjectListFilter<TInputList, TOutputList>
-::ObjectListToObjectListFilter()
+ObjectListToObjectListFilter<TInputList, TOutputList>::ObjectListToObjectListFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 }
 
 template <class TInputList, class TOutputList>
-void
-ObjectListToObjectListFilter<TInputList, TOutputList>
-::SetInput(const InputListType *input)
+void ObjectListToObjectListFilter<TInputList, TOutputList>::SetInput(const InputListType* input)
 {
-// Process object is not const-correct so the const_cast is required here
-  this->itk::ProcessObject::SetNthInput(0,
-                                        const_cast<InputListType *>(input));
+  // Process object is not const-correct so the const_cast is required here
+  this->itk::ProcessObject::SetNthInput(0, const_cast<InputListType*>(input));
 }
 
 template <class TInputList, class TOutputList>
-const typename ObjectListToObjectListFilter<TInputList, TOutputList>::InputListType *
-ObjectListToObjectListFilter<TInputList, TOutputList>
-::GetInput(void)
+const typename ObjectListToObjectListFilter<TInputList, TOutputList>::InputListType* ObjectListToObjectListFilter<TInputList, TOutputList>::GetInput(void)
 {
   if (this->GetNumberOfInputs() < 1)
-    {
+  {
     return nullptr;
-    }
+  }
 
-  return static_cast<const TInputList *>
-           (this->itk::ProcessObject::GetInput(0));
+  return static_cast<const TInputList*>(this->itk::ProcessObject::GetInput(0));
 }
 
 template <class TInputList, class TOutputList>
-int
-ObjectListToObjectListFilter<TInputList, TOutputList>
-::SplitRequestedRegion(itk::ThreadIdType threadId,
-                       int threadCount,
-                       unsigned int requestedElements,
-                       unsigned int& startIndex,
-                       unsigned int& stopIndex)
+int ObjectListToObjectListFilter<TInputList, TOutputList>::SplitRequestedRegion(itk::ThreadIdType threadId, int threadCount, unsigned int requestedElements,
+                                                                                unsigned int& startIndex, unsigned int& stopIndex)
 {
-  startIndex = static_cast<unsigned int>(std::floor(
-                                           requestedElements * static_cast<double>(threadId) /
-                                           static_cast<double>(threadCount) + 0.5
-                                           ));
-  stopIndex = static_cast<unsigned int>(std::floor(
-                                          requestedElements *
-                                          static_cast<double>(threadId + 1) / static_cast<double>(threadCount) + 0.5
-                                          ));
-  if (stopIndex > requestedElements) stopIndex = requestedElements;
+  startIndex = static_cast<unsigned int>(std::floor(requestedElements * static_cast<double>(threadId) / static_cast<double>(threadCount) + 0.5));
+  stopIndex  = static_cast<unsigned int>(std::floor(requestedElements * static_cast<double>(threadId + 1) / static_cast<double>(threadCount) + 0.5));
+  if (stopIndex > requestedElements)
+    stopIndex = requestedElements;
 
-  //Note: check the itkImageSource.hxx for the compuration done there.
+  // Note: check the itkImageSource.hxx for the compuration done there.
   // for now, there is no requested region for ObjectListFilter, so we don't
   // compute anything here.
   return threadCount;
@@ -90,9 +73,7 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
  * GenerateData
  */
 template <class TInputList, class TOutputList>
-void
-ObjectListToObjectListFilter<TInputList, TOutputList>
-::GenerateData(void)
+void ObjectListToObjectListFilter<TInputList, TOutputList>::GenerateData(void)
 {
   // Call a method that can be overridden by a subclass to perform
   // some calculations prior to splitting the main computations into
@@ -117,61 +98,54 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
   // Call a method that can be overridden by a subclass to perform
   // some calculations after all the threads have completed
   this->AfterThreadedGenerateData();
-
 }
 
 template <class TInputList, class TOutputList>
-void
-ObjectListToObjectListFilter<TInputList, TOutputList>
-::BeforeThreadedGenerateData(void)
+void ObjectListToObjectListFilter<TInputList, TOutputList>::BeforeThreadedGenerateData(void)
 {
   this->AllocateOutputs();
 }
 
 template <class TInputList, class TOutputList>
-void
-ObjectListToObjectListFilter<TInputList, TOutputList>
-::ThreadedGenerateData(unsigned int /*startIndex*/, unsigned int /*stopIndex*/, itk::ThreadIdType /*threadId*/)
+void ObjectListToObjectListFilter<TInputList, TOutputList>::ThreadedGenerateData(unsigned int /*startIndex*/, unsigned int /*stopIndex*/,
+                                                                                 itk::ThreadIdType /*threadId*/)
 {
   // The following code is equivalent to:
   // itkExceptionMacro("subclass should override this method!!!");
   // The ExceptionMacro is not used because gcc warns that a
   // 'noreturn' function does return
   std::ostringstream message;
-  message << "itk::ERROR: " << this->GetNameOfClass()
-          << "(" << this << "): " << "Subclass should override this method!!!";
+  message << "itk::ERROR: " << this->GetNameOfClass() << "(" << this << "): "
+          << "Subclass should override this method!!!";
   itk::ExceptionObject e_(__FILE__, __LINE__, message.str(), ITK_LOCATION);
   throw e_;
-
 }
 
 template <class TInputList, class TOutputList>
-ITK_THREAD_RETURN_TYPE
-ObjectListToObjectListFilter<TInputList, TOutputList>
-::ThreaderCallback(void *arg)
+ITK_THREAD_RETURN_TYPE ObjectListToObjectListFilter<TInputList, TOutputList>::ThreaderCallback(void* arg)
 {
-  ThreadStruct *str;
+  ThreadStruct*     str;
   itk::ThreadIdType threadId, threadCount;
-  unsigned int  total, start, stop;
-  unsigned int  requestedElements;
+  unsigned int      total, start, stop;
+  unsigned int      requestedElements;
 
-  threadId = ((itk::MultiThreader::ThreadInfoStruct *) (arg))->ThreadID;
-  threadCount = ((itk::MultiThreader::ThreadInfoStruct *) (arg))->NumberOfThreads;
-  str = (ThreadStruct *) (((itk::MultiThreader::ThreadInfoStruct *) (arg))->UserData);
+  threadId    = ((itk::MultiThreader::ThreadInfoStruct*)(arg))->ThreadID;
+  threadCount = ((itk::MultiThreader::ThreadInfoStruct*)(arg))->NumberOfThreads;
+  str         = (ThreadStruct*)(((itk::MultiThreader::ThreadInfoStruct*)(arg))->UserData);
 
   requestedElements = str->Filter->GetInput()->Size();
-  total = str->Filter->SplitRequestedRegion(threadId, threadCount, requestedElements, start, stop);
+  total             = str->Filter->SplitRequestedRegion(threadId, threadCount, requestedElements, start, stop);
 
   if (threadId < static_cast<itk::ThreadIdType>(total))
-    {
+  {
 
     // For very small list it might occur that start = stop. In this
     // case the vertex at that index will be processed in the next strip.
     if (start != stop)
-      {
+    {
       str->Filter->ThreadedGenerateData(start, stop, threadId);
-      }
     }
+  }
   // else
   //   {
   //   otherwise don't use this thread. Sometimes the threads don't
@@ -186,9 +160,7 @@ ObjectListToObjectListFilter<TInputList, TOutputList>
    * PrintSelf Method
  */
 template <class TInputList, class TOutputList>
-void
-ObjectListToObjectListFilter<TInputList, TOutputList>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void ObjectListToObjectListFilter<TInputList, TOutputList>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

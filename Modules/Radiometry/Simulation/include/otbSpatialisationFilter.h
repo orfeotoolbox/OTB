@@ -50,91 +50,91 @@ namespace otb
  */
 
 template <class TLabelMap>
-class ITK_EXPORT SpatialisationFilter :
-  public LabelMapSource<TLabelMap>
+class ITK_EXPORT SpatialisationFilter : public LabelMapSource<TLabelMap>
 
 {
 public:
-   /**
-   * Standard "Self" & Superclass typedef.
-   */
-   typedef SpatialisationFilter Self;
-   typedef LabelMapSource<TLabelMap>     Superclass;
-   typedef itk::SmartPointer<Self>       Pointer;
-   typedef itk::SmartPointer<const Self> ConstPointer;
+  /**
+  * Standard "Self" & Superclass typedef.
+  */
+  typedef SpatialisationFilter          Self;
+  typedef LabelMapSource<TLabelMap>     Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-   /** Some convenient typedefs. */
-   typedef TLabelMap                                 OutputLabelMapType;
-   typedef typename OutputLabelMapType::Pointer      OutputLabelMapPointer;
-   typedef typename OutputLabelMapType::ConstPointer OutputLabelMapConstPointer;
-   typedef typename OutputLabelMapType::IndexType    IndexType;
-   typedef typename OutputLabelMapType::RegionType   RegionType;
-   typedef typename OutputLabelMapType::LabelObjectType::LabelType  LabelType;
-   typedef typename OutputLabelMapType::LabelObjectType  LabelObjectType;
-   typedef typename LabelObjectType::AttributesValueType  AttributesValueType;
+  /** Some convenient typedefs. */
+  typedef TLabelMap                                               OutputLabelMapType;
+  typedef typename OutputLabelMapType::Pointer                    OutputLabelMapPointer;
+  typedef typename OutputLabelMapType::ConstPointer               OutputLabelMapConstPointer;
+  typedef typename OutputLabelMapType::IndexType                  IndexType;
+  typedef typename OutputLabelMapType::RegionType                 RegionType;
+  typedef typename OutputLabelMapType::LabelObjectType::LabelType LabelType;
+  typedef typename OutputLabelMapType::LabelObjectType            LabelObjectType;
+  typedef typename LabelObjectType::AttributesValueType           AttributesValueType;
 
-   typedef itk::Size<2>              SizeType;
-   typedef std::vector<AttributesValueType>  VectorType;
-   typedef std::vector<LabelType>    LabelVectorType;
+  typedef itk::Size<2>                     SizeType;
+  typedef std::vector<AttributesValueType> VectorType;
+  typedef std::vector<LabelType>           LabelVectorType;
 
 
-   /** Standard Macro*/
-   itkTypeMacro(SpatialisationFilter, LabelMapSource);
-   itkNewMacro(Self);
+  /** Standard Macro*/
+  itkTypeMacro(SpatialisationFilter, LabelMapSource);
+  itkNewMacro(Self);
 
-   /**Set input vector data*/
-   itkSetMacro(ObjectSize, SizeType);
-   itkGetMacro(ObjectSize, SizeType);
+  /**Set input vector data*/
+  itkSetMacro(ObjectSize, SizeType);
+  itkGetMacro(ObjectSize, SizeType);
 
-   itkSetMacro(NumberOfObjects, SizeType);
-   itkGetMacro(NumberOfObjects, SizeType);
+  itkSetMacro(NumberOfObjects, SizeType);
+  itkGetMacro(NumberOfObjects, SizeType);
 
-//    itkSetMacro(PathVector, VectorType);
-//    itkGetMacro(PathVector, VectorType);
-//
-//    itkSetMacro(AreaVector, VectorType);
-//    itkGetMacro(AreaVector, VectorType);
-   void SetPathVector(VectorType & v)
-   {
-      m_PathVector=v;
-   }
+  //    itkSetMacro(PathVector, VectorType);
+  //    itkGetMacro(PathVector, VectorType);
+  //
+  //    itkSetMacro(AreaVector, VectorType);
+  //    itkGetMacro(AreaVector, VectorType);
+  void SetPathVector(VectorType& v)
+  {
+    m_PathVector = v;
+  }
 
-   void SetAreaVector(VectorType & v)
-   {
-      m_AreaVector=v;
-   }
+  void SetAreaVector(VectorType& v)
+  {
+    m_AreaVector = v;
+  }
 
-   void SetLabels(LabelVectorType & v)
-   {
-      m_Labels=v;
-   }
+  void SetLabels(LabelVectorType& v)
+  {
+    m_Labels = v;
+  }
 
 
 protected:
-   SpatialisationFilter();
-   ~SpatialisationFilter() override {}
-   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+  SpatialisationFilter();
+  ~SpatialisationFilter() override
+  {
+  }
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-   void GenerateData() override;
-   virtual void ProcessObject(unsigned int obj);
+  void         GenerateData() override;
+  virtual void ProcessObject(unsigned int obj);
   void GenerateOutputInformation() override;
 
 private:
-   SpatialisationFilter(const Self &) = delete;
-   void operator =(const Self&) = delete;
+  SpatialisationFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-   /** Common size for all objects in number of pixels (number of rows, number of columns).*/
-   SizeType m_ObjectSize;
-   /** Number of objects contained in the image (number of objects by line, number of objects by column).*/
-   SizeType m_NumberOfObjects;
-   /**Vector containing the path for spectra files (if any) for each object. */
-   /** If no path is given (empty path: "") spectrum is simulated from default parameters.*/
-   VectorType m_PathVector; //vector containing the spectrum path (if any) for each object
-   /** Vector containing the spectral type of each object.*/
-   VectorType m_AreaVector; //vector containing the the type of each object
-   /** Vector containing the label of each object (ex.: 1, 2, 25, etc.).*/
-   LabelVectorType m_Labels; //vector containing the label of each object.
-
+  /** Common size for all objects in number of pixels (number of rows, number of columns).*/
+  SizeType m_ObjectSize;
+  /** Number of objects contained in the image (number of objects by line, number of objects by column).*/
+  SizeType m_NumberOfObjects;
+  /**Vector containing the path for spectra files (if any) for each object. */
+  /** If no path is given (empty path: "") spectrum is simulated from default parameters.*/
+  VectorType m_PathVector; // vector containing the spectrum path (if any) for each object
+  /** Vector containing the spectral type of each object.*/
+  VectorType m_AreaVector; // vector containing the the type of each object
+  /** Vector containing the label of each object (ex.: 1, 2, 25, etc.).*/
+  LabelVectorType m_Labels; // vector containing the label of each object.
 };
 
 } // end namespace itk

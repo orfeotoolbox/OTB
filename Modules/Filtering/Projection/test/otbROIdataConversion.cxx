@@ -27,19 +27,19 @@
 
 int otbROIdataConversion(int itkNotUsed(argc), char* argv[])
 {
-  typedef double PixelType;
+  typedef double     PixelType;
   const unsigned int Dimension = 2;
-  typedef otb::Image<PixelType,  Dimension>                      InputImageType;
-  typedef otb::Image<PixelType,  Dimension>                      ROIImageType;
+  typedef otb::Image<PixelType, Dimension>                     InputImageType;
+  typedef otb::Image<PixelType, Dimension>                     ROIImageType;
   typedef otb::ROIdataConversion<InputImageType, ROIImageType> ConverterType;
-  typedef ConverterType::OutputImageType                         OutputImageType;
+  typedef ConverterType::OutputImageType OutputImageType;
 
-  typedef otb::ImageFileReader<InputImageType>  ReaderType;
-  typedef otb::ImageFileReader<ROIImageType>    ROIReaderType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileReader<ROIImageType>   ROIReaderType;
 
   ConverterType::Pointer converter = ConverterType::New();
-  ReaderType::Pointer    readerIm = ReaderType::New();
-  ReaderType::Pointer    readerTr = ROIReaderType::New();
+  ReaderType::Pointer    readerIm  = ReaderType::New();
+  ReaderType::Pointer    readerTr  = ROIReaderType::New();
 
   readerIm->SetFileName(argv[1]);
   readerTr->SetFileName(argv[2]);
@@ -52,15 +52,14 @@ int otbROIdataConversion(int itkNotUsed(argc), char* argv[])
 
   std::ofstream file;
   file.open(argv[3]);
-  itk::ImageRegionIterator<OutputImageType> outputIter(converter->GetOutput(),
-                                                       converter->GetOutput()->GetLargestPossibleRegion());
+  itk::ImageRegionIterator<OutputImageType> outputIter(converter->GetOutput(), converter->GetOutput()->GetLargestPossibleRegion());
   outputIter.GoToBegin();
 
   while (!outputIter.IsAtEnd())
-    {
+  {
     file << outputIter.Get() << "  ";
     ++outputIter;
-    }
+  }
   file << std::endl;
   file.close();
 

@@ -37,15 +37,15 @@ namespace Functor
  *
  * \ingroup OTBLabelMap
  */
-template<class TLabelObject>
+template <class TLabelObject>
 class ITK_EXPORT LabelObjectFieldsFunctor
 {
 public:
   // The Label Object typedef
-  typedef TLabelObject                                  LabelObjectType;
-  typedef std::map<std::string, std::string>            FieldsMapType;
+  typedef TLabelObject LabelObjectType;
+  typedef std::map<std::string, std::string> FieldsMapType;
 
-  FieldsMapType operator ()(LabelObjectType * itkNotUsed(labelObject)) const
+  FieldsMapType operator()(LabelObjectType* itkNotUsed(labelObject)) const
   {
     // don't return anything for standard LabelObject (label is already handled by LabelmapToVectorData)
     return FieldsMapType();

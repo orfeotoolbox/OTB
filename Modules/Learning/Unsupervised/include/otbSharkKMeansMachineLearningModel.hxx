@@ -45,218 +45,194 @@
 #endif
 
 
-
 namespace otb
 {
-template<class TInputValue, class TOutputValue>
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::SharkKMeansMachineLearningModel() :
-        m_K(2), m_MaximumNumberOfIterations( 10 )
+template <class TInputValue, class TOutputValue>
+SharkKMeansMachineLearningModel<TInputValue, TOutputValue>::SharkKMeansMachineLearningModel() : m_K(2), m_MaximumNumberOfIterations(10)
 {
   // Default set HardClusteringModel
   this->m_ConfidenceIndex = true;
-  m_ClusteringModel = boost::make_shared<ClusteringModelType>( &m_Centroids );
+  m_ClusteringModel       = boost::make_shared<ClusteringModelType>(&m_Centroids);
 }
 
 
-template<class TInputValue, class TOutputValue>
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::~SharkKMeansMachineLearningModel()
+template <class TInputValue, class TOutputValue>
+SharkKMeansMachineLearningModel<TInputValue, TOutputValue>::~SharkKMeansMachineLearningModel()
 {
 }
 
 /** Train the machine learning model */
-template<class TInputValue, class TOutputValue>
-void
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::Train()
+template <class TInputValue, class TOutputValue>
+void SharkKMeansMachineLearningModel<TInputValue, TOutputValue>::Train()
 {
   // Parse input data and convert to Shark Data
   std::vector<shark::RealVector> vector_data;
-  otb::Shark::ListSampleToSharkVector( this->GetInputListSample(), vector_data );
-  shark::Data<shark::RealVector> data = shark::createDataFromRange( vector_data );
+  otb::Shark::ListSampleToSharkVector(this->GetInputListSample(), vector_data);
+  shark::Data<shark::RealVector> data = shark::createDataFromRange(vector_data);
 
   // Use a Hard Clustering Model for classification
-  shark::kMeans( data, m_K, m_Centroids, m_MaximumNumberOfIterations );
-  m_ClusteringModel = boost::make_shared<ClusteringModelType>( &m_Centroids );
+  shark::kMeans(data, m_K, m_Centroids, m_MaximumNumberOfIterations);
+  m_ClusteringModel = boost::make_shared<ClusteringModelType>(&m_Centroids);
 }
 
-template<class TInputValue, class TOutputValue>
-typename SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::TargetSampleType
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::DoPredict(const InputSampleType &value, ConfidenceValueType *quality, ProbaSampleType *proba) const
+template <class TInputValue, class TOutputValue>
+typename SharkKMeansMachineLearningModel<TInputValue, TOutputValue>::TargetSampleType
+SharkKMeansMachineLearningModel<TInputValue, TOutputValue>::DoPredict(const InputSampleType& value, ConfidenceValueType* quality, ProbaSampleType* proba) const
 {
-  shark::RealVector data( value.Size());
-  for( size_t i = 0; i < value.Size(); i++ )
-    {
-    data.push_back( value[i] );
-    }
+  shark::RealVector data(value.Size());
+  for (size_t i = 0; i < value.Size(); i++)
+  {
+    data.push_back(value[i]);
+  }
 
   // Change quality measurement only if SoftClustering or other clustering method is used.
-  if( quality != nullptr )
-    {
-    //unsigned int probas = (*m_ClusteringModel)( data );
-    ( *quality ) = ConfidenceValueType( 1.);
-    }
+  if (quality != nullptr)
+  {
+    // unsigned int probas = (*m_ClusteringModel)( data );
+    (*quality) = ConfidenceValueType(1.);
+  }
 
   if (proba != nullptr)
-    {
+  {
     if (!this->m_ProbaIndex)
-      {
+    {
       itkExceptionMacro("Probability per class not available for this classifier !");
-      }
     }
-  TargetSampleType target;
-  ClusteringOutputType predictedValue = (*m_ClusteringModel)( data );
-  target[0] = static_cast<TOutputValue>(predictedValue);
+  }
+  TargetSampleType     target;
+  ClusteringOutputType predictedValue = (*m_ClusteringModel)(data);
+  target[0]                           = static_cast<TOutputValue>(predictedValue);
   return target;
 }
 
-template<class TInputValue, class TOutputValue>
-void
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::DoPredictBatch(const InputListSampleType *input,
-                 const unsigned int &startIndex,
-                 const unsigned int &size,
-                 TargetListSampleType *targets,
-                 ConfidenceListSampleType *quality,
-		 ProbaListSampleType * proba) const
+template <class TInputValue, class TOutputValue>
+void SharkKMeansMachineLearningModel<TInputValue, TOutputValue>::DoPredictBatch(const InputListSampleType* input, const unsigned int& startIndex,
+                                                                                const unsigned int& size, TargetListSampleType* targets,
+                                                                                ConfidenceListSampleType* quality, ProbaListSampleType* proba) const
 {
 
   // Perform check on input values
-  assert( input != nullptr );
-  assert( targets != nullptr );
+  assert(input != nullptr);
+  assert(targets != nullptr);
 
   // input list sample and target list sample should be initialized and without
-  assert( input->Size() == targets->Size() && "Input sample list and target label list do not have the same size." );
-  assert( ( ( quality == nullptr ) || ( quality->Size() == input->Size() ) ) &&
-          "Quality samples list is not null and does not have the same size as input samples list" );
-  if( startIndex + size > input->Size() )
-    {
-    itkExceptionMacro(
-            <<"requested range ["<<startIndex<<", "<<startIndex+size<<"[ partially outside input sample list range.[0,"<<input->Size()<<"[" );
-    }
+  assert(input->Size() == targets->Size() && "Input sample list and target label list do not have the same size.");
+  assert(((quality == nullptr) || (quality->Size() == input->Size())) &&
+         "Quality samples list is not null and does not have the same size as input samples list");
+  if (startIndex + size > input->Size())
+  {
+    itkExceptionMacro(<< "requested range [" << startIndex << ", " << startIndex + size << "[ partially outside input sample list range.[0," << input->Size()
+                      << "[");
+  }
 
   // Convert input list of features to shark data format
   std::vector<shark::RealVector> features;
-  otb::Shark::ListSampleRangeToSharkVector( input, features, startIndex, size );
-  shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange( features );
+  otb::Shark::ListSampleRangeToSharkVector(input, features, startIndex, size);
+  shark::Data<shark::RealVector> inputSamples = shark::createDataFromRange(features);
 
   shark::Data<ClusteringOutputType> clusters;
   try
-    {
-    clusters = ( *m_ClusteringModel )( inputSamples );
-    }
-  catch( ... )
-    {
-    itkExceptionMacro( "Failed to run clustering classification. "
-                               "The number of features of input samples and the model could differ.");
-    }
+  {
+    clusters = (*m_ClusteringModel)(inputSamples);
+  }
+  catch (...)
+  {
+    itkExceptionMacro(
+        "Failed to run clustering classification. "
+        "The number of features of input samples and the model could differ.");
+  }
 
   unsigned int id = startIndex;
-  for( const auto &p : clusters.elements() )
-    {
+  for (const auto& p : clusters.elements())
+  {
     TargetSampleType target;
     target[0] = static_cast<TOutputValue>(p);
-    targets->SetMeasurementVector( id, target );
+    targets->SetMeasurementVector(id, target);
     ++id;
-    }
+  }
 
   // Change quality measurement only if SoftClustering or other clustering method is used.
-  if( quality != nullptr )
+  if (quality != nullptr)
+  {
+    for (unsigned int qid = startIndex; qid < startIndex + size; ++qid)
     {
-    for( unsigned int qid = startIndex; qid < startIndex+size; ++qid )
-      {
-      quality->SetMeasurementVector( qid, static_cast<ConfidenceValueType>(1.) );
-      }
+      quality->SetMeasurementVector(qid, static_cast<ConfidenceValueType>(1.));
     }
-  if (proba !=nullptr && !this->m_ProbaIndex)
-    {
-      itkExceptionMacro("Probability per class not available for this classifier !");
-    }
+  }
+  if (proba != nullptr && !this->m_ProbaIndex)
+  {
+    itkExceptionMacro("Probability per class not available for this classifier !");
+  }
 }
 
 
-template<class TInputValue, class TOutputValue>
-void
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::Save(const std::string &filename, const std::string & itkNotUsed( name ))
+template <class TInputValue, class TOutputValue>
+void SharkKMeansMachineLearningModel<TInputValue, TOutputValue>::Save(const std::string& filename, const std::string& itkNotUsed(name))
 {
-  std::ofstream ofs( filename);
-  if( !ofs )
-    {
-    itkExceptionMacro( << "Error opening " << filename.c_str());
-    }
+  std::ofstream ofs(filename);
+  if (!ofs)
+  {
+    itkExceptionMacro(<< "Error opening " << filename.c_str());
+  }
   ofs << "#" << m_ClusteringModel->name() << std::endl;
-  shark::TextOutArchive oa( ofs );
-  m_ClusteringModel->save( oa, 1 );
+  shark::TextOutArchive oa(ofs);
+  m_ClusteringModel->save(oa, 1);
 }
 
-template<class TInputValue, class TOutputValue>
-void
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::Load(const std::string &filename, const std::string & itkNotUsed( name ))
+template <class TInputValue, class TOutputValue>
+void SharkKMeansMachineLearningModel<TInputValue, TOutputValue>::Load(const std::string& filename, const std::string& itkNotUsed(name))
 {
   m_CanRead = false;
-  std::ifstream ifs( filename);
-  if(ifs.good())
-    {
+  std::ifstream ifs(filename);
+  if (ifs.good())
+  {
     // Check if first line contains model name
     std::string line;
     std::getline(ifs, line);
     m_CanRead = line.find(m_ClusteringModel->name()) != std::string::npos;
-    }
+  }
 
-  if(!m_CanRead)
+  if (!m_CanRead)
     return;
 
-  shark::TextInArchive ia( ifs );
-  m_ClusteringModel->load( ia, 0 );
+  shark::TextInArchive ia(ifs);
+  m_ClusteringModel->load(ia, 0);
   ifs.close();
 }
 
-template<class TInputValue, class TOutputValue>
-bool
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::CanReadFile(const std::string &file)
+template <class TInputValue, class TOutputValue>
+bool SharkKMeansMachineLearningModel<TInputValue, TOutputValue>::CanReadFile(const std::string& file)
 {
   try
-    {
+  {
     m_CanRead = true;
-    this->Load( file );
-    }
-  catch( ... )
-    {
+    this->Load(file);
+  }
+  catch (...)
+  {
     return false;
-    }
+  }
   return m_CanRead;
 }
 
-template<class TInputValue, class TOutputValue>
-bool
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::CanWriteFile(const std::string & itkNotUsed( file ))
+template <class TInputValue, class TOutputValue>
+bool SharkKMeansMachineLearningModel<TInputValue, TOutputValue>::CanWriteFile(const std::string& itkNotUsed(file))
 {
   return true;
 }
 
-template<class TInputValue, class TOutputValue>
-void
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::ExportCentroids(const std::string & filename)
+template <class TInputValue, class TOutputValue>
+void SharkKMeansMachineLearningModel<TInputValue, TOutputValue>::ExportCentroids(const std::string& filename)
 {
   shark::exportCSV(m_Centroids.centroids(), filename, ' ');
 }
 
-template<class TInputValue, class TOutputValue>
-void
-SharkKMeansMachineLearningModel<TInputValue, TOutputValue>
-::PrintSelf(std::ostream &os, itk::Indent indent) const
+template <class TInputValue, class TOutputValue>
+void SharkKMeansMachineLearningModel<TInputValue, TOutputValue>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   // Call superclass implementation
-  Superclass::PrintSelf( os, indent );
+  Superclass::PrintSelf(os, indent);
 }
-} //end namespace otb
+} // end namespace otb
 
 #endif

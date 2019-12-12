@@ -19,34 +19,32 @@
  */
 
 
-
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 #include "otbExtractROI.h"
 #include "itkRGBPixel.h"
 
-int otbExtractROI_RGB(int itkNotUsed(argc), char * argv[])
+int otbExtractROI_RGB(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  unsigned int startX((unsigned int) ::atoi(argv[3]));
-  unsigned int startY((unsigned int) ::atoi(argv[4]));
-  unsigned int sizeX((unsigned int) ::atoi(argv[5]));
-  unsigned int sizeY((unsigned int) ::atoi(argv[6]));
+  unsigned int startX((unsigned int)::atoi(argv[3]));
+  unsigned int startY((unsigned int)::atoi(argv[4]));
+  unsigned int sizeX((unsigned int)::atoi(argv[5]));
+  unsigned int sizeY((unsigned int)::atoi(argv[6]));
 
   typedef itk::RGBPixel<unsigned char> InputPixelType;
   typedef itk::RGBPixel<unsigned char> OutputPixelType;
 
-  typedef otb::ExtractROI<InputPixelType,
-      OutputPixelType>   FilterType;
+  typedef otb::ExtractROI<InputPixelType, OutputPixelType> FilterType;
 
   typedef FilterType::InputImageType  InputImageType;
   typedef FilterType::OutputImageType OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;
   typedef otb::ImageFileWriter<OutputImageType> WriterType;
-  FilterType::Pointer filter = FilterType::New();
+  FilterType::Pointer                           filter = FilterType::New();
 
   filter->SetStartX(startX);
   filter->SetStartY(startY);

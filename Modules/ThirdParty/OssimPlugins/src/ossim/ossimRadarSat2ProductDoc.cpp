@@ -711,10 +711,10 @@ RPCModel ossimRadarSat2ProductDoc::getRpcData(const ossimXmlDocument* xdoc) cons
    double longitudeScale = 0;
    double heightScale = 0;
 
-   vector<double> lineNumeratorCoefficients = vector<double>(20,0);
-   vector<double> lineDenominatorCoefficients = vector<double>(20,0);
-   vector<double> pixelNumeratorCoefficients = vector<double>(20,0);
-   vector<double> pixelDenominatorCoefficients = vector<double>(20,0);
+   std::vector<double> lineNumeratorCoefficients = std::vector<double>(20,0);
+   std::vector<double> lineDenominatorCoefficients = std::vector<double>(20,0);
+   std::vector<double> pixelNumeratorCoefficients = std::vector<double>(20,0);
+   std::vector<double> pixelDenominatorCoefficients = std::vector<double>(20,0);
 
    //the final string outputs to the text file
 
@@ -724,66 +724,66 @@ RPCModel ossimRadarSat2ProductDoc::getRpcData(const ossimXmlDocument* xdoc) cons
    if (rs2Check)
    {
       if (!ossim::getPath(searchbiasError, xdoc, biasErrorStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
       biasError = biasErrorStr.toDouble();
 
       if (!ossim::getPath(searchrandomError, xdoc, randomErrorStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
       randomError = randomErrorStr.toDouble();
 
       if (!ossim::getPath(searchlineFitQuality, xdoc, lineFitQualityStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
       lineFitQuality = lineFitQualityStr.toDouble();
 
       if (!ossim::getPath(searchpixelFitQuality, xdoc, pixelFitQualityStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
       pixelFitQuality = pixelFitQualityStr.toDouble();
 
       if (!ossim::getPath(searchlineOffset, xdoc, lineOffsetStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
       lineOffset = lineOffsetStr.toDouble();
 
       if (!ossim::getPath(searchpixelOffset, xdoc, pixelOffsetStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
       pixelOffset = pixelOffsetStr.toDouble();
 
       if (!ossim::getPath(searchlatitudeOffset, xdoc, latitudeOffsetStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
       latitudeOffset = latitudeOffsetStr.toDouble();
 
       if (!ossim::getPath(searchlongitudeOffset, xdoc, longitudeOffsetStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
       longitudeOffset = longitudeOffsetStr.toDouble();
 
       if (!ossim::getPath(searchheightOffset, xdoc, heightOffsetStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
       heightOffset = heightOffsetStr.toDouble();
 
       // --------------
 
       if (!ossim::getPath(searchlineScale, xdoc, lineScaleStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
       lineScale = lineScaleStr.toDouble();
 
 
       if (!ossim::getPath(searchpixelScale, xdoc, pixelScaleStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
       pixelScale = pixelScaleStr.toDouble();
 
 
       if (!ossim::getPath(searchlatitudeScale, xdoc, latitudeScaleStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
       latitudeScale = latitudeScaleStr.toDouble();
 
       // -----------------------
 
       if (!ossim::getPath(searchlongitudeScale, xdoc, longitudeScaleStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
       longitudeScale = longitudeScaleStr.toDouble();
 
 
       if (!ossim::getPath(searchheightScale, xdoc, heightScaleStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
       heightScale = heightScaleStr.toDouble();
 
       // ---- parameters for reading in coeefs ------------
@@ -794,7 +794,7 @@ RPCModel ossimRadarSat2ProductDoc::getRpcData(const ossimXmlDocument* xdoc) cons
 
 
       if (!ossim::getPath(searchlineNumeratorCoefficients, xdoc, lineNumeratorCoefficientsStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
 
 
       string lineNumeratorCoefficientsStr_N = lineNumeratorCoefficientsStr[0];
@@ -810,7 +810,7 @@ RPCModel ossimRadarSat2ProductDoc::getRpcData(const ossimXmlDocument* xdoc) cons
       // ------------------
 
       if (!ossim::getPath(searchlineDenominatorCoefficients, xdoc, lineDenominatorCoefficientsStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
 
 
       string lineDenominatorCoefficientsStr_N = lineDenominatorCoefficientsStr[0];
@@ -827,7 +827,7 @@ RPCModel ossimRadarSat2ProductDoc::getRpcData(const ossimXmlDocument* xdoc) cons
       // ------------------
 
       if (!ossim::getPath(searchpixelNumeratorCoefficients, xdoc, pixelNumeratorCoefficientsStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
 
       string pixelNumeratorCoefficientsStr_N = pixelNumeratorCoefficientsStr[0];
 
@@ -843,7 +843,7 @@ RPCModel ossimRadarSat2ProductDoc::getRpcData(const ossimXmlDocument* xdoc) cons
       // ------------------
 
       if (!ossim::getPath(searchpixelDenominatorCoefficients, xdoc, pixelDenominatorCoefficientsStr))
-         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << endl;
+         ossimNotify(ossimNotifyLevel_WARN) << "ERROR: UNABLE TO FIND RS2 RPC COEFFICIENT INFORMATION" << std::endl;
 
       string pixelDenominatorCoefficientsStr_N = pixelDenominatorCoefficientsStr[0];
 

@@ -48,9 +48,9 @@ public:
 
   void SetModel(QtWidgetModel* model);
 
-  typedef itk::MemberCommand< QtWidgetSimpleProgressReport >  AddProcessCommandType;
+  typedef itk::MemberCommand<QtWidgetSimpleProgressReport> AddProcessCommandType;
 
-  void ProcessEvent( itk::Object * caller, const itk::EventObject & event );
+  void ProcessEvent(itk::Object* caller, const itk::EventObject& event);
 
 public slots:
   void Init();
@@ -64,11 +64,10 @@ private:
   QtWidgetSimpleProgressReport(const QtWidgetSimpleProgressReport&) = delete;
   void operator=(const QtWidgetSimpleProgressReport&) = delete;
 
-  AddProcessCommandType::Pointer    m_AddProcessCommand;
-  itk::ProcessObject*               m_CurrentProcess;
-  std::string                       m_CurrentDescription;
+  AddProcessCommandType::Pointer m_AddProcessCommand;
+  itk::ProcessObject*            m_CurrentProcess;
+  std::string                    m_CurrentDescription;
 };
-
 }
 }
 

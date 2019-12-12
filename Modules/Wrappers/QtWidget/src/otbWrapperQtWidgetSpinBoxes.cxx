@@ -30,38 +30,36 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetLineEdit::QtWidgetLineEdit( QWidget *parent )
-  : QLineEdit( parent )
+QtWidgetLineEdit::QtWidgetLineEdit(QWidget* parent) : QLineEdit(parent)
 {
   // Setup the clear button icon
-  m_ClearIcon.addPixmap( QIcon(":/Utilities/Data/Icons/mIconClearText.png").pixmap( QSize( CLEAR_ICON_SIZE, CLEAR_ICON_SIZE)), QIcon::Normal, QIcon::On );
-  m_ClearIcon.addPixmap( QIcon(":/Utilities/Data/Icons/mIconClearTextHover.png").pixmap( QSize( CLEAR_ICON_SIZE, CLEAR_ICON_SIZE)) , QIcon::Selected, QIcon::On );
+  m_ClearIcon.addPixmap(QIcon(":/Utilities/Data/Icons/mIconClearText.png").pixmap(QSize(CLEAR_ICON_SIZE, CLEAR_ICON_SIZE)), QIcon::Normal, QIcon::On);
+  m_ClearIcon.addPixmap(QIcon(":/Utilities/Data/Icons/mIconClearTextHover.png").pixmap(QSize(CLEAR_ICON_SIZE, CLEAR_ICON_SIZE)), QIcon::Selected, QIcon::On);
 }
 
 void QtWidgetLineEdit::EnableClearButton()
 {
-  if ( m_ClearAction == nullptr )
+  if (m_ClearAction == nullptr)
   {
-    m_ClearAction = new QAction(m_ClearIcon, QString("Reset"), this );
-    m_ClearAction->setCheckable( false );
-    this->addAction( m_ClearAction, QLineEdit::TrailingPosition );
+    m_ClearAction = new QAction(m_ClearIcon, QString("Reset"), this);
+    m_ClearAction->setCheckable(false);
+    this->addAction(m_ClearAction, QLineEdit::TrailingPosition);
 
     // Forward the trigger signal
-    connect( m_ClearAction, &QAction::triggered, this, &QtWidgetLineEdit::Cleared );
+    connect(m_ClearAction, &QAction::triggered, this, &QtWidgetLineEdit::Cleared);
   }
 }
 
 void QtWidgetLineEdit::DisableClearButton()
 {
-  if ( m_ClearAction != nullptr )
+  if (m_ClearAction != nullptr)
   {
     m_ClearAction->deleteLater();
     m_ClearAction = nullptr;
   }
 }
 
-QtWidgetSpinBox::QtWidgetSpinBox( QWidget* parent )
-  : QSpinBox( parent )
+QtWidgetSpinBox::QtWidgetSpinBox(QWidget* parent) : QSpinBox(parent)
 {
   // Use a custom LineEdit a forward its Cleared signal
   m_LineEdit = new QtWidgetLineEdit(this);
@@ -69,14 +67,11 @@ QtWidgetSpinBox::QtWidgetSpinBox( QWidget* parent )
   connect(m_LineEdit, &QtWidgetLineEdit::Cleared, this, &QtWidgetSpinBox::Cleared);
 
   // Small Qt hack to prevent highlighting the text after it has changed (to improve UX a bit)
-  connect(this, static_cast<void (QtWidgetSpinBox::*)(int)>(&QtWidgetSpinBox::valueChanged), this, [&](int) {
-    m_LineEdit->deselect();
-  }, Qt::QueuedConnection);
+  connect(this, static_cast<void (QtWidgetSpinBox::*)(int)>(&QtWidgetSpinBox::valueChanged), this, [&](int) { m_LineEdit->deselect(); }, Qt::QueuedConnection);
 
   // Add icon size and a 10px margin to minimum size hint
   QSize msize = minimumSizeHint();
-  setMinimumSize( msize.width() + QtWidgetLineEdit::CLEAR_ICON_SIZE + 10,
-                  std::max( msize.height(), QtWidgetLineEdit::CLEAR_ICON_SIZE + 10 ) );
+  setMinimumSize(msize.width() + QtWidgetLineEdit::CLEAR_ICON_SIZE + 10, std::max(msize.height(), QtWidgetLineEdit::CLEAR_ICON_SIZE + 10));
 }
 
 void QtWidgetSpinBox::EnableClearButton()
@@ -100,7 +95,7 @@ void QtWidgetSpinBox::SetValueNoSignal(int value)
 // We use a custom valueFromText to allow more flexible input than QSpinBox default behavior:
 // - all inputs are allowed in our custom QtWidgetSpinBox::validate()
 // - this method parses the text to int, if it fails keep the previous value
-int QtWidgetSpinBox::valueFromText(const QString &text) const
+int QtWidgetSpinBox::valueFromText(const QString& text) const
 {
   bool ok;
   // Force C locale because OTB gui is not i18n
@@ -115,13 +110,12 @@ int QtWidgetSpinBox::valueFromText(const QString &text) const
   }
 }
 
-QValidator::State QtWidgetSpinBox::validate( QString &, int & ) const
+QValidator::State QtWidgetSpinBox::validate(QString&, int&) const
 {
   return QValidator::Acceptable;
 }
 
-QtWidgetDoubleSpinBox::QtWidgetDoubleSpinBox( QWidget* parent )
-  : QDoubleSpinBox( parent )
+QtWidgetDoubleSpinBox::QtWidgetDoubleSpinBox(QWidget* parent) : QDoubleSpinBox(parent)
 {
   // Use a custom LineEdit and forward its Cleared signal
   m_LineEdit = new QtWidgetLineEdit(this);
@@ -129,14 +123,12 @@ QtWidgetDoubleSpinBox::QtWidgetDoubleSpinBox( QWidget* parent )
   connect(m_LineEdit, &QtWidgetLineEdit::Cleared, this, &QtWidgetDoubleSpinBox::Cleared);
 
   // Small Qt hack to prevent highlighting the text after it has changed (to improve UX a bit)
-  connect(this, static_cast<void (QtWidgetDoubleSpinBox::*)(double)>(&QtWidgetDoubleSpinBox::valueChanged), this, [&](double) {
-    m_LineEdit->deselect();
-  }, Qt::QueuedConnection);
+  connect(this, static_cast<void (QtWidgetDoubleSpinBox::*)(double)>(&QtWidgetDoubleSpinBox::valueChanged), this, [&](double) { m_LineEdit->deselect(); },
+          Qt::QueuedConnection);
 
   // Add icon size and a 10px margin to minimum size hint
   QSize msize = minimumSizeHint();
-  setMinimumSize( msize.width() + QtWidgetLineEdit::CLEAR_ICON_SIZE + 10,
-                  std::max( msize.height(), QtWidgetLineEdit::CLEAR_ICON_SIZE + 10 ) );
+  setMinimumSize(msize.width() + QtWidgetLineEdit::CLEAR_ICON_SIZE + 10, std::max(msize.height(), QtWidgetLineEdit::CLEAR_ICON_SIZE + 10));
 }
 
 void QtWidgetDoubleSpinBox::EnableClearButton()
@@ -160,7 +152,7 @@ void QtWidgetDoubleSpinBox::SetValueNoSignal(double value)
 // We use a custom valueFromText to allow more flexible input than QDoubleSpinBox default behavior:
 // - all inputs are allowed in our custom QtWidgetDoubleSpinBox::validate()
 // - this method parses the text to double, if it fails keep the previous value
-double QtWidgetDoubleSpinBox::valueFromText(const QString &text) const
+double QtWidgetDoubleSpinBox::valueFromText(const QString& text) const
 {
   bool ok;
   // Force C locale because OTB gui is not i18n
@@ -198,16 +190,15 @@ QString QtWidgetDoubleSpinBox::textFromValue(double value) const
   const char dot = std::use_facet<std::numpunct<char>>(std::locale::classic()).decimal_point();
   if (oss.str().find(dot) == std::string::npos)
   {
-      oss << dot;
+    oss << dot;
   }
 
   return QString::fromStdString(oss.str());
 }
 
-QValidator::State QtWidgetDoubleSpinBox::validate( QString &, int & ) const
+QValidator::State QtWidgetDoubleSpinBox::validate(QString&, int&) const
 {
   return QValidator::Acceptable;
 }
-
 }
 }

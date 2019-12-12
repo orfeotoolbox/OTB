@@ -26,19 +26,19 @@
 #include "otbStandardWriterWatcher.h"
 
 const unsigned int Dimension = 2;
-typedef double PixelType;
+typedef double     PixelType;
 
 typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
 typedef otb::UnConstrainedLeastSquareImageFilter<ImageType, ImageType, PixelType> UnConstrainedLeastSquareSolverType;
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
-typedef otb::ImageFileWriter<ImageType> WriterType;
+typedef otb::ImageFileWriter<ImageType>                WriterType;
 
-int otbUnConstrainedLeastSquareImageFilterTest(int itkNotUsed(argc), char * argv[])
+int otbUnConstrainedLeastSquareImageFilterTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputImage = argv[1];
-  const char * inputEndmembers = argv[2];
-  const char * outputImage = argv[3];
+  const char* inputImage      = argv[1];
+  const char* inputEndmembers = argv[2];
+  const char* outputImage     = argv[3];
 
   ReaderType::Pointer readerImage = ReaderType::New();
   readerImage->SetFileName(inputImage);
@@ -51,10 +51,9 @@ int otbUnConstrainedLeastSquareImageFilterTest(int itkNotUsed(argc), char * argv
   endMember2Matrix->Update();
 
   typedef VectorImageToMatrixImageFilterType::MatrixType MatrixType;
-  MatrixType endMembers = endMember2Matrix->GetMatrix();
+  MatrixType                                             endMembers = endMember2Matrix->GetMatrix();
 
-  UnConstrainedLeastSquareSolverType::Pointer unmixer = \
-      UnConstrainedLeastSquareSolverType::New();
+  UnConstrainedLeastSquareSolverType::Pointer unmixer = UnConstrainedLeastSquareSolverType::New();
 
   unmixer->SetInput(readerImage->GetOutput());
   unmixer->GetModifiableFunctor().SetMatrix(endMember2Matrix->GetMatrix());
@@ -63,7 +62,7 @@ int otbUnConstrainedLeastSquareImageFilterTest(int itkNotUsed(argc), char * argv
   writer->SetFileName(outputImage);
   writer->SetInput(unmixer->GetOutput());
 
-  otb::StandardWriterWatcher w4(writer, unmixer,"UnConstrainedLeastSquareImageFilter");
+  otb::StandardWriterWatcher w4(writer, unmixer, "UnConstrainedLeastSquareImageFilter");
   writer->Update();
 
   return EXIT_SUCCESS;

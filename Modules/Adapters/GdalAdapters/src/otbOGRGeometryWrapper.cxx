@@ -27,15 +27,16 @@
 
 #ifdef _MSC_VER
 // warning conversion int -> bool
-#pragma warning ( disable : 4800 )
+#pragma warning(disable : 4800)
 #endif
 /*===========================================================================*/
 /*================================[ Deleter ]================================*/
 /*===========================================================================*/
 void otb::ogr::internal::GeometryDeleter::operator()(OGRGeometry* p)
 {
-  if (p) { // OGR refuses delete 0...
-    OGRGeometryFactory::destroyGeometry (p);
+  if (p)
+  { // OGR refuses delete 0...
+    OGRGeometryFactory::destroyGeometry(p);
   }
 }
 
@@ -45,13 +46,13 @@ void otb::ogr::internal::GeometryDeleter::operator()(OGRGeometry* p)
 bool otb::ogr::Intersects(OGRGeometry const& lhs, OGRGeometry const& rhs)
 {
   // OGRGeometry::Intersects is not const-correct ...
-  return lhs.Intersects(const_cast <OGRGeometry*>(&rhs));
+  return lhs.Intersects(const_cast<OGRGeometry*>(&rhs));
 }
 
 bool otb::ogr::Equals(OGRGeometry const& lhs, OGRGeometry const& rhs)
 {
   // OGRGeometry::Equals is not const-correct ...
-  return lhs.Equals(const_cast <OGRGeometry*>(&rhs));
+  return lhs.Equals(const_cast<OGRGeometry*>(&rhs));
 }
 
 bool otb::ogr::Disjoint(OGRGeometry const& lhs, OGRGeometry const& rhs)

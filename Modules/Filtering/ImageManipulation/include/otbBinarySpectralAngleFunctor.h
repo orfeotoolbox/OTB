@@ -36,7 +36,7 @@ namespace otb
  */
 namespace Functor
 {
-template<class TInput1, class TInput2, class TOutputValue>
+template <class TInput1, class TInput2, class TOutputValue>
 class BinarySpectralAngleFunctor
 {
 public:
@@ -44,32 +44,34 @@ public:
   {
   }
 
-  virtual ~BinarySpectralAngleFunctor() {}
+  virtual ~BinarySpectralAngleFunctor()
+  {
+  }
 
   // Binary operator
-  inline TOutputValue operator ()(const TInput1& a, const TInput2& b) const
+  inline TOutputValue operator()(const TInput1& a, const TInput2& b) const
   {
-    const double Epsilon = 1E-10;
-    double dist = 0.0;
-    double scalarProd = 0.0;
-    double norma = 0.0;
-    double normb = 0.0;
-    double sqrtNormProd = 0.0;
+    const double Epsilon      = 1E-10;
+    double       dist         = 0.0;
+    double       scalarProd   = 0.0;
+    double       norma        = 0.0;
+    double       normb        = 0.0;
+    double       sqrtNormProd = 0.0;
     for (unsigned int i = 0; i < std::min(a.Size(), b.Size()); ++i)
-      {
+    {
       scalarProd += a[i] * b[i];
       norma += a[i] * a[i];
       normb += b[i] * b[i];
-      }
+    }
     sqrtNormProd = std::sqrt(norma * normb);
-    if ( std::abs(sqrtNormProd) < Epsilon || scalarProd / sqrtNormProd > 1 )
-      {
+    if (std::abs(sqrtNormProd) < Epsilon || scalarProd / sqrtNormProd > 1)
+    {
       dist = 0.0;
-      }
+    }
     else
-      {
+    {
       dist = std::acos(scalarProd / sqrtNormProd);
-      }
+    }
 
     return static_cast<TOutputValue>(dist);
   }

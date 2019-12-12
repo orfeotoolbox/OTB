@@ -27,7 +27,8 @@
 namespace otb
 {
 
-namespace Functor {
+namespace Functor
+{
 
 /** \class ProjectiveProjectionFunctor
  *
@@ -37,7 +38,7 @@ namespace Functor {
  *
  * \ingroup OTBProjection
  */
-template<class TInput, class TOutput, class TPrecision>
+template <class TInput, class TOutput, class TPrecision>
 class ProjectiveProjectionFunctor
 {
 public:
@@ -45,8 +46,12 @@ public:
   typedef TOutput    OutputType;
   typedef TPrecision PrecisionType;
 
-  ProjectiveProjectionFunctor() : m_OutputSize(0) {}
-  virtual ~ProjectiveProjectionFunctor() {}
+  ProjectiveProjectionFunctor() : m_OutputSize(0)
+  {
+  }
+  virtual ~ProjectiveProjectionFunctor()
+  {
+  }
 
   size_t OutputSize(const std::array<size_t, 1>& nbBands) const;
 
@@ -57,8 +62,8 @@ public:
   OutputType operator()(const InputType& in);
 
 private:
-  unsigned int   m_OutputSize;
-  InputType      m_ProjectionDirection;
+  unsigned int m_OutputSize;
+  InputType    m_ProjectionDirection;
 };
 }
 
@@ -82,4 +87,3 @@ using ProjectiveProjectionImageFilter =
 #endif
 
 #endif
-
