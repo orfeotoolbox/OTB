@@ -26,9 +26,9 @@
 
 namespace otb
 {
-/** \class SarDeburstImageFilter 
+/** \class SarDeburstImageFilter
  * \brief Performs a deburst operation by removing redundant lines
- * 
+ *
  * This filter performs a deburst operation by removing redundant
  * lines between burst. This operation is useful when dealing with
  * Sentinel1 IW SLC products, where each subswath is composed of
@@ -39,41 +39,41 @@ namespace otb
  * accordingly. This deburst filter is the perfect preprocessing step
  * to orthorectify S1 IW SLC product with OTB without suffering from
  * artifacts caused by bursts separation.
- * 
+ *
  * Note that currently only Sentinel1 IW SLC products are supported.
- * 
+ *
  * \ingroup OTBSARCalibration
  */
 
-template <class TImage> class ITK_EXPORT SarDeburstImageFilter :
-    public itk::ImageToImageFilter<TImage,TImage>
+template <class TImage>
+class ITK_EXPORT SarDeburstImageFilter : public itk::ImageToImageFilter<TImage, TImage>
 {
 public:
   // Standard class typedefs
-  typedef SarDeburstImageFilter                  Self;
-  typedef itk::ImageToImageFilter<TImage,TImage> Superclass;
-  typedef itk::SmartPointer<Self>                Pointer;
-  typedef itk::SmartPointer<const Self>          ConstPointer;
+  typedef SarDeburstImageFilter Self;
+  typedef itk::ImageToImageFilter<TImage, TImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkNewMacro(Self);
-  itkTypeMacro(SarDeburstImageFilter,ImageToImageFilter);
+  itkTypeMacro(SarDeburstImageFilter, ImageToImageFilter);
 
-  typedef TImage                                 ImageType;
-  typedef typename ImageType::RegionType         RegionType;
-  typedef typename ImageType::PointType          PointType;
+  typedef TImage                         ImageType;
+  typedef typename ImageType::RegionType RegionType;
+  typedef typename ImageType::PointType  PointType;
 
   typedef std::pair<unsigned long, unsigned long> RecordType;
-  typedef std::vector<RecordType>                 LinesRecordVectorType;
-	
+  typedef std::vector<RecordType> LinesRecordVectorType;
+
   // Setter
   itkSetMacro(OnlyValidSample, bool);
-  
+
 protected:
   // Constructor
   SarDeburstImageFilter();
 
   // Destructor
-  virtual ~SarDeburstImageFilter() override {};
+  virtual ~SarDeburstImageFilter() override{};
 
   // Needs to be re-implemented since size of output is modified
   virtual void GenerateOutputInformation() override;
@@ -88,10 +88,10 @@ protected:
   void ThreadedGenerateDataWithOnlyValidSamples(const RegionType& outputRegionForThread, itk::ThreadIdType threadId);
 
   RegionType OutputRegionToInputRegion(const RegionType& outputRegion) const;
-  
+
 private:
   SarDeburstImageFilter(const Self&) = delete;
-  void operator=(const Self &) = delete;
+  void operator=(const Self&) = delete;
 
   // Vector of line records
   LinesRecordVectorType m_LinesRecord;
@@ -100,7 +100,6 @@ private:
   RecordType m_SamplesRecord;
 
   bool m_OnlyValidSample;
- 
 };
 
 } // End namespace otb
@@ -108,7 +107,6 @@ private:
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbSarDeburstImageFilter.hxx"
 #endif
-
 
 
 #endif

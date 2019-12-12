@@ -44,20 +44,14 @@ namespace otb
  *
  * \ingroup OTBTransform
  */
-template <class TScalarType,
-    unsigned int NInputDimensions = 2,
-    unsigned int NOutputDimensions = 2>
-class ITK_EXPORT InverseSensorModel : public SensorModelBase<TScalarType,
-      NInputDimensions,
-      NOutputDimensions>
+template <class TScalarType, unsigned int NInputDimensions = 2, unsigned int NOutputDimensions = 2>
+class ITK_EXPORT InverseSensorModel : public SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 {
 
 public:
   /** Standard class typedefs. */
   typedef InverseSensorModel Self;
-  typedef SensorModelBase<TScalarType,
-      NInputDimensions,
-      NOutputDimensions>         Superclass;
+  typedef SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -70,7 +64,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(InverseSensorModel, SensorModelBase);
 
-  itkStaticConstMacro(InputSpaceDimension,  unsigned int, NInputDimensions);
+  itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
 
   // Transform of geographic point in image sensor index
@@ -86,10 +80,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-
-  InverseSensorModel(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  InverseSensorModel(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // namespace otb

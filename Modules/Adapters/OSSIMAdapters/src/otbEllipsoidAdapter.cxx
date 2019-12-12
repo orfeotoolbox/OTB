@@ -33,7 +33,6 @@
 #endif
 
 
-
 namespace otb
 {
 
@@ -45,22 +44,18 @@ EllipsoidAdapter::EllipsoidAdapter()
 EllipsoidAdapter::~EllipsoidAdapter()
 {
   if (m_Ellipsoid != nullptr)
-    {
+  {
     delete m_Ellipsoid;
-    }
+  }
 }
 
-void
-EllipsoidAdapter::XYZToLonLatHeight(double x, double y, double z,
-                                    double& lon, double& lat, double& h) const
+void EllipsoidAdapter::XYZToLonLatHeight(double x, double y, double z, double& lon, double& lat, double& h) const
 {
-   // Note the lat/lon convension for ossim vs lon/lat for OTB
+  // Note the lat/lon convension for ossim vs lon/lat for OTB
   m_Ellipsoid->XYZToLatLonHeight(x, y, z, lat, lon, h);
 }
 
-void
-EllipsoidAdapter::LonLatHeightToXYZ(double lon, double lat, double h,
-                                    double& x, double& y, double& z) const
+void EllipsoidAdapter::LonLatHeightToXYZ(double lon, double lat, double h, double& x, double& y, double& z) const
 {
   // Note the lat/lon convension for ossim vs lon/lat for OTB
   m_Ellipsoid->latLonHeightToXYZ(lat, lon, h, x, y, z);

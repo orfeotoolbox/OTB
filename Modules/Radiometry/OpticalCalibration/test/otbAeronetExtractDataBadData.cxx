@@ -22,7 +22,7 @@
 #include "otbAeronetFileReader.h"
 #include "otbSystem.h"
 
-int otbAeronetExtractDataBadData(int itkNotUsed(argc), char * argv[])
+int otbAeronetExtractDataBadData(int itkNotUsed(argc), char* argv[])
 {
   otb::AeronetFileReader::Pointer reader = otb::AeronetFileReader::New();
 
@@ -35,12 +35,12 @@ int otbAeronetExtractDataBadData(int itkNotUsed(argc), char * argv[])
   reader->SetEpsilon(atof(argv[7]));
 
   try
-    {
+  {
     reader->Update();
-    }
-  catch ( itk::ExceptionObject & )
-    {
+  }
+  catch (itk::ExceptionObject&)
+  {
     return EXIT_SUCCESS;
-    }
+  }
   return EXIT_FAILURE;
 }

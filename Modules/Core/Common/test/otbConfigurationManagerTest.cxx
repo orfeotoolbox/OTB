@@ -22,53 +22,53 @@
 #include <cstdlib>
 #include "otbConfigurationManager.h"
 
-int otbConfigurationManagerTest(int argc, char * argv[])
+int otbConfigurationManagerTest(int argc, char* argv[])
 {
-  if(argc<1)
-    {
-    std::cerr<<"Usage: "<<argv[0]<<" refMaxRAMHint [refDEMDir refGeoidFile]"<<std::endl;
+  if (argc < 1)
+  {
+    std::cerr << "Usage: " << argv[0] << " refMaxRAMHint [refDEMDir refGeoidFile]" << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   bool failed = false;
 
   otb::ConfigurationManager::RAMValueType refMaxRAMHint = atoi(argv[1]);
 
-  std::string refDEMDir = (argc>2)?argv[2]:"";
-  std::string refGeoidFile = (argc>3)?argv[3]:"";
+  std::string refDEMDir    = (argc > 2) ? argv[2] : "";
+  std::string refGeoidFile = (argc > 3) ? argv[3] : "";
 
   otb::ConfigurationManager::RAMValueType maxRam = otb::ConfigurationManager::GetMaxRAMHint();
 
-  std::cout<<"GetMaxRAMHint(): "<<maxRam<<std::endl;
+  std::cout << "GetMaxRAMHint(): " << maxRam << std::endl;
 
-  if(maxRam != refMaxRAMHint)
-    {
+  if (maxRam != refMaxRAMHint)
+  {
     failed = true;
-    std::cerr<<"GetMaxRAMHint(): Value differs from expected value ("<<refMaxRAMHint<<")"<<std::endl;
-    }
+    std::cerr << "GetMaxRAMHint(): Value differs from expected value (" << refMaxRAMHint << ")" << std::endl;
+  }
 
   std::string demDir = otb::ConfigurationManager::GetDEMDirectory();
 
-  std::cout<<"GetDEMDirectory(): "<<demDir<<std::endl;
+  std::cout << "GetDEMDirectory(): " << demDir << std::endl;
 
-  if(demDir != refDEMDir)
-    {
+  if (demDir != refDEMDir)
+  {
     failed = true;
-    std::cerr<<"GetDEMDirectory(): Value differs from expected value ("<<refDEMDir<<")"<<std::endl;
-    }
+    std::cerr << "GetDEMDirectory(): Value differs from expected value (" << refDEMDir << ")" << std::endl;
+  }
 
 
   std::string geoidFile = otb::ConfigurationManager::GetGeoidFile();
 
-  std::cout<<"GetGeoidFile(): "<< geoidFile<<std::endl;
+  std::cout << "GetGeoidFile(): " << geoidFile << std::endl;
 
-  if(geoidFile != refGeoidFile)
-    {
+  if (geoidFile != refGeoidFile)
+  {
     failed = true;
-    std::cerr<<"GetGeoidFile(): Value differs from expected value ("<<refGeoidFile<<")"<<std::endl;
-    }
+    std::cerr << "GetGeoidFile(): Value differs from expected value (" << refGeoidFile << ")" << std::endl;
+  }
 
-  if(failed)
+  if (failed)
     return EXIT_FAILURE;
 
   return EXIT_SUCCESS;

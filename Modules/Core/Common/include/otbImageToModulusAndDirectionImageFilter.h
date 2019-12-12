@@ -38,25 +38,19 @@ namespace otb
  *
  * \ingroup OTBCommon
  */
-template <class TInputImage,
-    class TOutputImage,
-    class TOutputImageDirection = TOutputImage>
-class ITK_EXPORT ImageToModulusAndDirectionImageFilter :  public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TOutputImageDirection = TOutputImage>
+class ITK_EXPORT ImageToModulusAndDirectionImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /**   Extract dimensions as well of the images of entry of exit. */
-  itkStaticConstMacro(InputImageDimension,
-                      unsigned int,
-                      TInputImage::ImageDimension);
-  itkStaticConstMacro(OutputImageDimension,
-                      unsigned int,
-                      TOutputImage::ImageDimension);
+  itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
+  itkStaticConstMacro(OutputImageDimension, unsigned int, TOutputImage::ImageDimension);
 
   /** typedef for the classes standards. */
-  typedef ImageToModulusAndDirectionImageFilter              Self;
+  typedef ImageToModulusAndDirectionImageFilter Self;
   typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
-  typedef itk::SmartPointer<Self>                            Pointer;
-  typedef itk::SmartPointer<const Self>                      ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for management of the object factory. */
   itkNewMacro(Self);
@@ -76,27 +70,28 @@ public:
   typedef typename OutputImageType::RegionType   OutputImageRegionType;
 
   /** Return the const output image modulus */
-  const OutputImageType * GetOutput() const;
+  const OutputImageType* GetOutput() const;
 
   /** Return the output image modulus */
-  OutputImageType * GetOutput();
+  OutputImageType* GetOutput();
 
   /** Return the const output image direction */
-  const OutputImageDirectionType * GetOutputDirection() const;
+  const OutputImageDirectionType* GetOutputDirection() const;
   /** Return the output image direction */
-  OutputImageDirectionType * GetOutputDirection();
+  OutputImageDirectionType* GetOutputDirection();
 
   void GenerateInputRequestedRegion() override;
 
 protected:
   ImageToModulusAndDirectionImageFilter();
-  ~ImageToModulusAndDirectionImageFilter() override {}
+  ~ImageToModulusAndDirectionImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageToModulusAndDirectionImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  ImageToModulusAndDirectionImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // end namespace otb
 

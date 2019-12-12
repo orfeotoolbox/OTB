@@ -23,35 +23,34 @@
 #include "otbImage.h"
 #include "otbCLHistogramEqualizationFilter.h"
 
-int otbCLHistogramEqualizationFilter(int itkNotUsed(argc), char * argv [])
+int otbCLHistogramEqualizationFilter(int itkNotUsed(argc), char* argv[])
 {
-  typedef int InputPixelType;
+  typedef int        InputPixelType;
   const unsigned int Dimension = 2;
 
-  typedef otb::Image< InputPixelType ,  Dimension > InputImageType;
-  typedef otb::CLHistogramEqualizationFilter< InputImageType , InputImageType > 
-    FilterType;
-  typedef otb::ImageFileReader< InputImageType > ReaderType; 
-  typedef otb::ImageFileWriter< InputImageType > WriterType;
+  typedef otb::Image<InputPixelType, Dimension>                              InputImageType;
+  typedef otb::CLHistogramEqualizationFilter<InputImageType, InputImageType> FilterType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<InputImageType> WriterType;
 
-  ReaderType::Pointer reader ( ReaderType::New() );
-  WriterType::Pointer writer ( WriterType::New() );
-  reader->SetFileName( argv[1] );
-  writer->SetFileName( argv[2] );
+  ReaderType::Pointer reader(ReaderType::New());
+  WriterType::Pointer writer(WriterType::New());
+  reader->SetFileName(argv[1]);
+  writer->SetFileName(argv[2]);
   reader->UpdateOutputInformation();
 
-  FilterType::Pointer histoEqualize ( FilterType::New() );
+  FilterType::Pointer histoEqualize(FilterType::New());
 
-  histoEqualize->SetInput( reader->GetOutput() );
+  histoEqualize->SetInput(reader->GetOutput());
   histoEqualize->SetMin(0);
   histoEqualize->SetMax(255);
   histoEqualize->SetNbBin(256);
   auto size = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
   size[0] /= 4;
   size[1] /= 4;
-  histoEqualize->SetThumbSize( size );
+  histoEqualize->SetThumbSize(size);
 
-  writer->SetInput( histoEqualize->GetOutput() );
+  writer->SetInput(histoEqualize->GetOutput());
   writer->Update();
   return EXIT_SUCCESS;
 }

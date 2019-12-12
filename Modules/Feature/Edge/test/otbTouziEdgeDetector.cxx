@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include "itkMacro.h"
 #include <iostream>
 
@@ -30,16 +28,16 @@
 
 int otbTouziEdgeDetector(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
 
-  unsigned int RadiusX((unsigned int) ::atoi(argv[3]));
+  unsigned int RadiusX((unsigned int)::atoi(argv[3]));
 
   typedef unsigned char InputPixelType;
   typedef double        OutputPixelType;
-  const unsigned int Dimension = 2;
+  const unsigned int    Dimension = 2;
 
-  typedef otb::Image<InputPixelType,  Dimension> InputImageType;
+  typedef otb::Image<InputPixelType, Dimension>  InputImageType;
   typedef otb::Image<OutputPixelType, Dimension> OutputImageType;
 
   typedef otb::ImageFileReader<InputImageType>  ReaderType;

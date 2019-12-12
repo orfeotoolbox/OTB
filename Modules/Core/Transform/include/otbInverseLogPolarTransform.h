@@ -45,15 +45,14 @@ namespace otb
  */
 
 template <class TScalarType>
-class ITK_EXPORT InverseLogPolarTransform
-  : public Transform<TScalarType, 2, 2>
+class ITK_EXPORT InverseLogPolarTransform : public Transform<TScalarType, 2, 2>
 {
 public:
   /** Standard typedef */
-  typedef InverseLogPolarTransform          Self;
+  typedef InverseLogPolarTransform Self;
   typedef Transform<TScalarType, 2, 2> Superclass;
-  typedef itk::SmartPointer<Self>           Pointer;
-  typedef itk::SmartPointer<const Self>     ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
   /** Creation through object factory */
   itkNewMacro(Self);
   /** Runtime information */
@@ -70,7 +69,7 @@ public:
   typedef typename Superclass::InputVnlVectorType  InputVnlVectorType;
   typedef typename Superclass::OutputVnlVectorType OutputVnlVectorType;
   typedef typename Superclass::ParametersType      ParametersType;
-  typedef itk::FixedArray<TScalarType, 2>          ScaleType;
+  typedef itk::FixedArray<TScalarType, 2> ScaleType;
 
   /** Set/Get the origin */
   itkSetMacro(Center, InputPointType);
@@ -89,24 +88,29 @@ public:
    * \return The parameters of the transform.
    */
   ParametersType& GetParameters(void) const override;
-    /**
-   * Set the Fixed Parameters
-   * \param param The fixed parameters of the transform.
-   */
-  void SetFixedParameters( const ParametersType & param) override
-    { this->m_FixedParameters = param; }
+  /**
+ * Set the Fixed Parameters
+ * \param param The fixed parameters of the transform.
+ */
+  void SetFixedParameters(const ParametersType& param) override
+  {
+    this->m_FixedParameters = param;
+  }
   /**
    * Get the Fixed Parameters
    * \return The Fixed parameters of the transform.
    */
-  const ParametersType& GetFixedParameters(void) const override{return this->m_FixedParameters; }
+  const ParametersType& GetFixedParameters(void) const override
+  {
+    return this->m_FixedParameters;
+  }
   /**
    * Transform a point.
    * \param point The point to transform.
    * \return The transformed point.
    */
-   using Superclass::TransformVector;
-   OutputPointType TransformPoint(const InputPointType& point) const override;
+  using Superclass::TransformVector;
+  OutputPointType TransformPoint(const InputPointType& point) const override;
   /**
    * Transform a vector representing a point.
    * \param vector The point to transform.
@@ -129,8 +133,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  InverseLogPolarTransform(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  InverseLogPolarTransform(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   InputPointType m_Center;
   ScaleType      m_Scale;

@@ -22,12 +22,12 @@
 #include "otbSOMMap.h"
 #include "itkRGBPixel.h"
 
-int otbSOMMap(int itkNotUsed(argc), char* itkNotUsed(argv) [])
+int otbSOMMap(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
-  const unsigned int Dimension = 2;
-  typedef float                                           InternalPixelType;
-  typedef itk::VariableLengthVector<InternalPixelType>    PixelType;
-  typedef itk::Statistics::EuclideanDistanceMetric<PixelType>   DistanceType;
+  const unsigned int                                          Dimension = 2;
+  typedef float                                               InternalPixelType;
+  typedef itk::VariableLengthVector<InternalPixelType>        PixelType;
+  typedef itk::Statistics::EuclideanDistanceMetric<PixelType> DistanceType;
   typedef otb::SOMMap<PixelType, DistanceType, Dimension> SOMMapType;
 
   // Instantiation
@@ -61,10 +61,10 @@ int otbSOMMap(int itkNotUsed(argc), char* itkNotUsed(argv) [])
   // Test of the GetWinner method
   SOMMapType::IndexType winnerIndex = somMap->GetWinner(winner);
   if (winnerIndex != index)
-    {
+  {
     std::cout << "Bad GetWinner function return." << std::endl;
     return EXIT_FAILURE;
-    }
+  }
 
   return EXIT_SUCCESS;
 }

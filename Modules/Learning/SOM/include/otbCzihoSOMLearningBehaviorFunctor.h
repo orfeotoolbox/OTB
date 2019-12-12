@@ -66,11 +66,13 @@ class CzihoSOMLearningBehaviorFunctor
 {
 public:
   /** Empty constructor / descructor */
-  CzihoSOMLearningBehaviorFunctor ()
+  CzihoSOMLearningBehaviorFunctor()
   {
     m_IterationThreshold = 0;
   }
-  virtual ~CzihoSOMLearningBehaviorFunctor() {}
+  virtual ~CzihoSOMLearningBehaviorFunctor()
+  {
+  }
 
   /** Accessors */
   unsigned int GetIterationThreshold()
@@ -83,31 +85,25 @@ public:
   {
     double V0 = static_cast<double>(sizeInit[0]);
     for (unsigned int i = 1; i < VDimension; ++i)
-      {
-      if (V0 < static_cast<double>(sizeInit[i])) V0 = static_cast<double>(sizeInit[i]);
-      }
+    {
+      if (V0 < static_cast<double>(sizeInit[i]))
+        V0 = static_cast<double>(sizeInit[i]);
+    }
 
-    m_IterationThreshold = static_cast<unsigned int>(
-      static_cast<double>(iterMax) * (1.0 - 1.0 / ::std::sqrt(V0)));
+    m_IterationThreshold = static_cast<unsigned int>(static_cast<double>(iterMax) * (1.0 - 1.0 / ::std::sqrt(V0)));
   }
 
   /** Functor */
-  virtual double operator ()(unsigned int currentIteration,
-                             unsigned int numberOfIterations,
-                             double betaInit, double betaEnd) const
+  virtual double operator()(unsigned int currentIteration, unsigned int numberOfIterations, double betaInit, double betaEnd) const
   {
     if (currentIteration < m_IterationThreshold)
-      {
-      return betaInit * (1.0
-                         - static_cast<double>(currentIteration)
-                         / static_cast<double>(numberOfIterations));
-      }
+    {
+      return betaInit * (1.0 - static_cast<double>(currentIteration) / static_cast<double>(numberOfIterations));
+    }
     else
-      {
-      return betaEnd * (1.0
-                        - static_cast<double>(currentIteration - m_IterationThreshold)
-                        / static_cast<double>(numberOfIterations - m_IterationThreshold));
-      }
+    {
+      return betaEnd * (1.0 - static_cast<double>(currentIteration - m_IterationThreshold) / static_cast<double>(numberOfIterations - m_IterationThreshold));
+    }
   }
 
 private:

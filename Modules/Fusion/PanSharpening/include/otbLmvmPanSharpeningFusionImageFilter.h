@@ -54,28 +54,24 @@ namespace otb
  **/
 
 template <class TPanImageType, class TXsImageType, class TOutputImageType, class TInternalPrecision = float>
-class ITK_EXPORT LmvmPanSharpeningFusionImageFilter :
-  public itk::ImageToImageFilter<TXsImageType, TOutputImageType>
+class ITK_EXPORT LmvmPanSharpeningFusionImageFilter : public itk::ImageToImageFilter<TXsImageType, TOutputImageType>
 {
 public:
   /** Standard class typedefs */
-  typedef LmvmPanSharpeningFusionImageFilter                       Self;
+  typedef LmvmPanSharpeningFusionImageFilter Self;
   typedef itk::ImageToImageFilter<TXsImageType, TOutputImageType> Superclass;
-  typedef itk::SmartPointer<Self>                                 Pointer;
-  typedef itk::SmartPointer<const Self>                           ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Internal image type used as Pan smoothing and local standard deviation filter output */
-  typedef otb::Image<TInternalPrecision,
-    TPanImageType::ImageDimension>                InternalImageType;
+  typedef otb::Image<TInternalPrecision, TPanImageType::ImageDimension> InternalImageType;
 
   /** Single band Xs image type */
-  typedef typename TXsImageType::InternalPixelType  XsPixelType;
-  typedef otb::Image<XsPixelType,
-    TXsImageType::ImageDimension>                XsBandImageType;
+  typedef typename TXsImageType::InternalPixelType XsPixelType;
+  typedef otb::Image<XsPixelType, TXsImageType::ImageDimension> XsBandImageType;
 
   /** Internal image type used as Xs smoothing and local standard deviation filter output */
-  typedef otb::VectorImage<TInternalPrecision,
-    TXsImageType::ImageDimension>                InternalVectorImageType;
+  typedef otb::VectorImage<TInternalPrecision, TXsImageType::ImageDimension> InternalVectorImageType;
 
   /** Typedef for the radius of the smoothing and local standard deviation filter */
   typedef typename itk::Array<TInternalPrecision> ArrayType;
@@ -84,8 +80,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information */
-  itkTypeMacro(LmvmPanSharpeningFusionImageFilter,
-               itk::ImageToImageFilter);
+  itkTypeMacro(LmvmPanSharpeningFusionImageFilter, itk::ImageToImageFilter);
 
   /** Define the radius type for the smoothing and local standard deviation operation */
   typedef typename InternalImageType::SizeType RadiusType;
@@ -98,18 +93,18 @@ public:
   itkSetMacro(Filter, ArrayType);
   itkGetConstReferenceMacro(Filter, ArrayType);
 
-  virtual void SetPanInput(const TPanImageType * image);
-  const TPanImageType * GetPanInput(void) const;
+  virtual void SetPanInput(const TPanImageType* image);
+  const TPanImageType* GetPanInput(void) const;
 
-  virtual void SetXsInput(const TXsImageType * path);
-  const TXsImageType * GetXsInput(void) const;
+  virtual void SetXsInput(const TXsImageType* path);
+  const TXsImageType* GetXsInput(void) const;
 
 protected:
   /** Constructor */
   LmvmPanSharpeningFusionImageFilter();
 
   /** Destructor */
-  ~LmvmPanSharpeningFusionImageFilter() override {};
+  ~LmvmPanSharpeningFusionImageFilter() override{};
 
   /** Call to generate data, wiring composite internal minipipeline */
   void GenerateData() override;
@@ -118,8 +113,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  LmvmPanSharpeningFusionImageFilter(Self &);   // intentionally not implemented
-  void operator =(const Self&);                 // intentionally not implemented
+  LmvmPanSharpeningFusionImageFilter(Self&); // intentionally not implemented
+  void operator=(const Self&);               // intentionally not implemented
 
   /** \class FusionFunctor1
    * This functor applies the LMVM
@@ -131,47 +126,40 @@ private:
   {
   public:
     // Implement the fusion as a six arguments operator
-    void operator()(typename TOutputImageType::PixelType& output,
-                    const typename InternalVectorImageType::PixelType& stdXsPixel,
-                    const TInternalPrecision& smoothPanchroPixel,
-                    const typename TPanImageType::PixelType& sharpPanchroPixel) const
+    void operator()(typename TOutputImageType::PixelType& output, const typename InternalVectorImageType::PixelType& stdXsPixel,
+                    const TInternalPrecision& smoothPanchroPixel, const typename TPanImageType::PixelType& sharpPanchroPixel) const
     {
       // Perform fusion for each band with appropriate casting
-      for(unsigned int i = 0; i < stdXsPixel.Size(); ++i)
-        {
-        output[i] = static_cast<typename TOutputImageType::InternalPixelType>(
-          ((sharpPanchroPixel - smoothPanchroPixel) * stdXsPixel[i]));
-        }
+      for (unsigned int i = 0; i < stdXsPixel.Size(); ++i)
+      {
+        output[i] = static_cast<typename TOutputImageType::InternalPixelType>(((sharpPanchroPixel - smoothPanchroPixel) * stdXsPixel[i]));
+      }
     }
     constexpr size_t OutputSize(const std::array<size_t, 3> inputsNbBands) const
     {
       return inputsNbBands[0];
     }
-
   };
 
   class FusionFunctor2
   {
   public:
     // Implement the fusion as a six arguments operator
-    void operator()(typename TOutputImageType::PixelType & output,
-                    const typename TOutputImageType::PixelType& functor1Pixel,
-                    const typename InternalVectorImageType::PixelType& smoothXsPixel,
-                    const TInternalPrecision& stdPanchroPixel) const
+    void operator()(typename TOutputImageType::PixelType& output, const typename TOutputImageType::PixelType& functor1Pixel,
+                    const typename InternalVectorImageType::PixelType& smoothXsPixel, const TInternalPrecision& stdPanchroPixel) const
     {
       TInternalPrecision scale = 1.;
 
-      if(std::abs(stdPanchroPixel) > 1e-10)
+      if (std::abs(stdPanchroPixel) > 1e-10)
       {
-        scale = 1.0/stdPanchroPixel;
+        scale = 1.0 / stdPanchroPixel;
       }
 
       // Perform fusion for each band with appropriate casting
-      for(unsigned int i = 0; i < smoothXsPixel.Size(); ++i)
-        {
-        output[i] = static_cast<typename TOutputImageType::InternalPixelType>(
-          ((functor1Pixel[i] * scale) + smoothXsPixel[i]));
-        }
+      for (unsigned int i = 0; i < smoothXsPixel.Size(); ++i)
+      {
+        output[i] = static_cast<typename TOutputImageType::InternalPixelType>(((functor1Pixel[i] * scale) + smoothXsPixel[i]));
+      }
     }
 
     constexpr size_t OutputSize(const std::array<size_t, 3> inputsNbBands) const
@@ -197,49 +185,39 @@ private:
 
 
   /** Typedef of the convolution filter performing Pan smoothing */
-  typedef otb::ConvolutionImageFilter
-      <TPanImageType,
-       InternalImageType,
-       itk::ZeroFluxNeumannBoundaryCondition<TPanImageType>,
-       TInternalPrecision>                                  PanConvolutionFilterType;
+  typedef otb::ConvolutionImageFilter<TPanImageType, InternalImageType, itk::ZeroFluxNeumannBoundaryCondition<TPanImageType>, TInternalPrecision>
+      PanConvolutionFilterType;
 
   /** Pointer to the internal Pan convolution filter */
   typename PanConvolutionFilterType::Pointer m_PanConvolutionFilter;
 
   /** Typedef of the convolution filter performing Xs smoothing */
-  typedef otb::ConvolutionImageFilter
-      <XsBandImageType,
-       InternalImageType,
-       itk::ZeroFluxNeumannBoundaryCondition<TPanImageType>,
-       TInternalPrecision>                                  XsConvolutionFilterType;
+  typedef otb::ConvolutionImageFilter<XsBandImageType, InternalImageType, itk::ZeroFluxNeumannBoundaryCondition<TPanImageType>, TInternalPrecision>
+      XsConvolutionFilterType;
 
   /** Pointer to the internal Xs convolution filter */
   typename XsConvolutionFilterType::Pointer m_XsConvolutionFilter;
 
   /** Typedef of the Pan local standard deviation filter*/
-  typedef itk::NoiseImageFilter
-      <TPanImageType, InternalImageType>               PanNoiseFilterType;
+  typedef itk::NoiseImageFilter<TPanImageType, InternalImageType> PanNoiseFilterType;
 
   /** Pointer to the Pan local standard deviation filter */
   typename PanNoiseFilterType::Pointer m_PanNoiseFilter;
 
   /** Typedef of the Xs local standard deviation filter*/
-  typedef itk::NoiseImageFilter
-      <XsBandImageType, InternalImageType>               XsNoiseFilterType;
+  typedef itk::NoiseImageFilter<XsBandImageType, InternalImageType> XsNoiseFilterType;
 
   /** Pointer to the Xs local standard deviation filter */
   typename XsNoiseFilterType::Pointer m_XsNoiseFilter;
 
   /** Typedef of a helper filter to apply to a vector image*/
-  typedef otb::PerBandVectorImageFilter
-      < TXsImageType, InternalVectorImageType, XsConvolutionFilterType> XsVectorConvolutionFilterType;
+  typedef otb::PerBandVectorImageFilter<TXsImageType, InternalVectorImageType, XsConvolutionFilterType> XsVectorConvolutionFilterType;
 
   /** Pointer to the helper vector image filter */
   typename XsVectorConvolutionFilterType::Pointer m_XsVectorConvolutionFilter;
 
   /** Typedef of a helper filter to apply to a vector image*/
-  typedef otb::PerBandVectorImageFilter
-      < TXsImageType, InternalVectorImageType, XsNoiseFilterType> XsVectorNoiseFilterType;
+  typedef otb::PerBandVectorImageFilter<TXsImageType, InternalVectorImageType, XsNoiseFilterType> XsVectorNoiseFilterType;
 
   /** Pointer to the helper vector image filter */
   typename XsVectorNoiseFilterType::Pointer m_XsVectorNoiseFilter;
@@ -248,7 +226,7 @@ private:
   RadiusType m_Radius;
 
   /** Kernel used for the smoothing filter */
-  ArrayType  m_Filter;
+  ArrayType m_Filter;
 
   /** The internal progress accumulator */
   typename itk::ProgressAccumulator::Pointer m_ProgressAccumulator;

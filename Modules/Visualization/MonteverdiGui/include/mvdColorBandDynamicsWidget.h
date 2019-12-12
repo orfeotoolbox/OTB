@@ -77,8 +77,7 @@ class ColorBandDynamicsWidget;
  *
  * \ingroup OTBMonteverdiGUI
  */
-class OTBMonteverdiGUI_EXPORT ColorBandDynamicsWidget :
-    public QWidget
+class OTBMonteverdiGUI_EXPORT ColorBandDynamicsWidget : public QWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -86,60 +85,43 @@ class OTBMonteverdiGUI_EXPORT ColorBandDynamicsWidget :
   Q_OBJECT;
 
   /** */
-  Q_PROPERTY( RgbwChannel channelLabel
-	      READ GetChannelLabel
-	      WRITE SetChannelLabel );
+  Q_PROPERTY(RgbwChannel channelLabel READ GetChannelLabel WRITE SetChannelLabel);
 
   /**
    */
-  Q_PROPERTY( double minIntensity
-	      READ GetMinIntensity
-	      WRITE SetMinIntensity );
+  Q_PROPERTY(double minIntensity READ GetMinIntensity WRITE SetMinIntensity);
 
   /**
    */
-  Q_PROPERTY( double maxIntensity
-	      READ GetMaxIntensity
-	      WRITE SetMaxIntensity );
+  Q_PROPERTY(double maxIntensity READ GetMaxIntensity WRITE SetMaxIntensity);
 
   /**
    */
-  Q_PROPERTY( double lowIntensity
-	      READ GetLowIntensity
-	      WRITE SetLowIntensity );
+  Q_PROPERTY(double lowIntensity READ GetLowIntensity WRITE SetLowIntensity);
 
   /**
    */
-  Q_PROPERTY( double highIntensity
-	      READ GetHighIntensity
-	      WRITE SetHighIntensity );
+  Q_PROPERTY(double highIntensity READ GetHighIntensity WRITE SetHighIntensity);
 
   /**
    */
-  Q_PROPERTY( double lowQuantile
-	      READ GetLowQuantile
-	      WRITE SetLowQuantile );
+  Q_PROPERTY(double lowQuantile READ GetLowQuantile WRITE SetLowQuantile);
 
   /**
    */
-  Q_PROPERTY( double highQuantile
-	      READ GetHighQuantile
-	      WRITE SetHighQuantile );
+  Q_PROPERTY(double highQuantile READ GetHighQuantile WRITE SetHighQuantile);
 
   /**
    */
-  Q_PROPERTY( bool isBounded
-	      READ IsBounded()
-	      WRITE SetBounded() );
+  Q_PROPERTY(bool isBounded READ IsBounded() WRITE SetBounded());
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** Constructor */
-  ColorBandDynamicsWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
+  ColorBandDynamicsWidget(QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** Destructor */
   ~ColorBandDynamicsWidget() override;
@@ -148,95 +130,92 @@ public:
   RgbwChannel GetChannelLabel() const;
 
   /** */
-  void SetChannelLabel( RgbwChannel );
+  void SetChannelLabel(RgbwChannel);
 
   /** */
   double GetMinIntensity() const;
   /** */
-  void SetMinIntensity( double );
+  void SetMinIntensity(double);
 
   /** */
   double GetMaxIntensity() const;
   /** */
-  void SetMaxIntensity( double );
+  void SetMaxIntensity(double);
 
   /** */
   double GetLowIntensity() const;
   /** */
-  void SetLowIntensity( double );
+  void SetLowIntensity(double);
 
   /** */
   double GetHighIntensity() const;
   /** */
-  void SetHighIntensity( double );
+  void SetHighIntensity(double);
 
   /** */
   double GetLowQuantile() const;
   /** */
-  void SetLowQuantile( double );
+  void SetLowQuantile(double);
 
   /** */
   double GetHighQuantile() const;
   /** */
-  void SetHighQuantile( double );
+  void SetHighQuantile(double);
 
   /**
    */
   bool IsBounded() const;
   /**
    */
-  void SetBounded( bool enabled );
+  void SetBounded(bool enabled);
   /**
    */
-  void SetLinkButtonEnabled( bool );
+  void SetLinkButtonEnabled(bool);
   /**
    */
-  void SetDefaultsButtonEnabled( bool );
+  void SetDefaultsButtonEnabled(bool);
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   /** */
-  void LowQuantileChanged( RgbwChannel, double );
+  void LowQuantileChanged(RgbwChannel, double);
   /** */
-  void HighQuantileChanged( RgbwChannel, double );
+  void HighQuantileChanged(RgbwChannel, double);
   /** */
-  void LowIntensityChanged( RgbwChannel, double );
+  void LowIntensityChanged(RgbwChannel, double);
   /** */
-  void HighIntensityChanged( RgbwChannel, double );
+  void HighIntensityChanged(RgbwChannel, double);
 
   /** */
-  void ResetIntensityClicked( RgbwChannel );
+  void ResetIntensityClicked(RgbwChannel);
   /** */
-  void ResetQuantileClicked( RgbwChannel );
+  void ResetQuantileClicked(RgbwChannel);
   /** */
-  void ApplyAllClicked( RgbwChannel, double, double);
+  void ApplyAllClicked(RgbwChannel, double, double);
 
   /**
    */
-  void LinkToggled( RgbwChannel, bool );
+  void LinkToggled(RgbwChannel, bool);
 
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    * uic generated.
@@ -256,20 +235,20 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   void on_lowIntensityLineEdit_editingFinished();
   void on_highIntensityLineEdit_editingFinished();
 
-  void on_lowQuantileSpinBox_valueChanged( double );
-  void on_highQuantileSpinBox_valueChanged( double );
+  void on_lowQuantileSpinBox_valueChanged(double);
+  void on_highQuantileSpinBox_valueChanged(double);
 
   void on_minMaxButton_clicked();
   void on_defaultsButton_clicked();
   void on_applyAllButton_clicked();
 
-  void on_linkButton_toggled( bool );
+  void on_linkButton_toggled(bool);
 };
 
 } // end namespace 'mvd'.

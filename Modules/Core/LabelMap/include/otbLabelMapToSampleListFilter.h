@@ -41,8 +41,8 @@ namespace otb
  */
 
 template <class TInputLabelMap, class TOutputSampleList,
-    class TMeasurementFunctor = Functor::AttributesMapMeasurementFunctor
-    <typename TInputLabelMap::LabelObjectType, typename TOutputSampleList::MeasurementVectorType > >
+          class TMeasurementFunctor =
+              Functor::AttributesMapMeasurementFunctor<typename TInputLabelMap::LabelObjectType, typename TOutputSampleList::MeasurementVectorType>>
 class ITK_EXPORT LabelMapToSampleListFilter : public itk::ProcessObject
 {
 public:
@@ -63,21 +63,20 @@ public:
   typedef typename InputLabelMapType::ConstPointer    InputLabelMapConstPointerType;
   typedef typename InputLabelMapType::LabelObjectType LabelObjectType;
 
-  typedef typename InputLabelMapType::ConstIterator   ConstIteratorType;
+  typedef typename InputLabelMapType::ConstIterator ConstIteratorType;
 
-  typedef TOutputSampleList                           OutputSampleListType;
-  typedef typename OutputSampleListType::Pointer      OutputSampleListPointerType;
-  typedef typename OutputSampleListType
-  ::MeasurementVectorType                             MeasurementVectorType;
+  typedef TOutputSampleList                                    OutputSampleListType;
+  typedef typename OutputSampleListType::Pointer               OutputSampleListPointerType;
+  typedef typename OutputSampleListType::MeasurementVectorType MeasurementVectorType;
 
-  typedef TMeasurementFunctor                         MeasurementFunctorType;
+  typedef TMeasurementFunctor MeasurementFunctorType;
 
   /** DataObject typedef*/
-  typedef typename Superclass::DataObjectPointer      DataObjectPointerType;
+  typedef typename Superclass::DataObjectPointer             DataObjectPointerType;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Set/Get the input label map */
-  void SetInputLabelMap(const InputLabelMapType * inputLabelMap);
+  void SetInputLabelMap(const InputLabelMapType* inputLabelMap);
   const InputLabelMapType* GetInputLabelMap() const;
 
   /** Get the output SampleList*/
@@ -89,7 +88,7 @@ public:
     m_MeasurementFunctor = functor;
   }
 
-  MeasurementFunctorType & GetMeasurementFunctor()
+  MeasurementFunctorType& GetMeasurementFunctor()
   {
     return m_MeasurementFunctor;
   }
@@ -111,7 +110,7 @@ private:
   void operator=(const Self&) = delete;
 
   /** The functor used to build the measurement vector */
-  MeasurementFunctorType        m_MeasurementFunctor;
+  MeasurementFunctorType m_MeasurementFunctor;
 };
 
 } // end namespace otb

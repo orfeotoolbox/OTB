@@ -25,7 +25,8 @@
 #include "itkMacro.h"
 #include "itkUnaryFunctorImageFilter.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class BoxAndWhiskerImageFilter
  * \brief This class performs the detection of outlier with the Box and Whisker technique
@@ -46,8 +47,7 @@ namespace otb {
  * \ingroup OTBImageManipulation
  */
 template <class TInputImage>
-class ITK_EXPORT BoxAndWhiskerImageFilter
-  : public itk::InPlaceImageFilter<TInputImage>
+class ITK_EXPORT BoxAndWhiskerImageFilter : public itk::InPlaceImageFilter<TInputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -74,10 +74,10 @@ public:
   typedef typename Superclass::InputImageRegionType   InputImageRegionType;
   typedef typename Superclass::InputImagePixelType    InputImagePixelType;
 
-  typedef typename InputImageType::PixelType  PixelType;
-  typedef typename InputImageType::InternalPixelType   ValueType;
-  typedef typename InputImageType::SizeType   SizeType;
-  typedef typename InputImageType::RegionType RegionType;
+  typedef typename InputImageType::PixelType         PixelType;
+  typedef typename InputImageType::InternalPixelType ValueType;
+  typedef typename InputImageType::SizeType          SizeType;
+  typedef typename InputImageType::RegionType        RegionType;
 
   /** Dimension */
   itkStaticConstMacro(InputImageDimension, unsigned int, InputImageType::ImageDimension);
@@ -93,8 +93,10 @@ public:
   itkGetConstMacro(NumberFound, unsigned int);
 
 protected:
-  BoxAndWhiskerImageFilter ();
-  ~BoxAndWhiskerImageFilter () override {}
+  BoxAndWhiskerImageFilter();
+  ~BoxAndWhiskerImageFilter() override
+  {
+  }
 
   /** Main computation method implemented as a multithreaded filter */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
@@ -105,8 +107,8 @@ protected:
   PixelType PerformBoxAndWhiskerDetection(const PixelType& pixel);
 
 private:
-  BoxAndWhiskerImageFilter (const Self &);
-  void operator =(const Self&);    // not implemented
+  BoxAndWhiskerImageFilter(const Self&);
+  void operator=(const Self&); // not implemented
 
   SizeType m_Radius;
   double   m_Beta;

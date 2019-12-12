@@ -61,11 +61,9 @@ namespace Wrapper
 namespace
 {
 
-const char * const
-HEADERS[ ListEditItemModel::COLUMN_COUNT ] =
-{
-  QT_TRANSLATE_NOOP( "otb::Wrapper::ListEditItemModel", "Name" ),
-  // QT_TRANSLATE_NOOP( "otb::Wrapper::ListEditItemModel", "Browse" ),
+const char* const HEADERS[ListEditItemModel::COLUMN_COUNT] = {
+    QT_TRANSLATE_NOOP("otb::Wrapper::ListEditItemModel", "Name"),
+    // QT_TRANSLATE_NOOP( "otb::Wrapper::ListEditItemModel", "Browse" ),
 };
 
 } // end of anonymous namespace.
@@ -79,27 +77,20 @@ HEADERS[ ListEditItemModel::COLUMN_COUNT ] =
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-ListEditItemModel
-::ListEditItemModel( StringListInterface * sli,
-		     QObject * p ) :
-  QAbstractItemModel( p ),
-  m_StringList( sli )
+ListEditItemModel::ListEditItemModel(StringListInterface* sli, QObject* p) : QAbstractItemModel(p), m_StringList(sli)
 {
-  assert( sli!=nullptr );
+  assert(sli != nullptr);
 }
 
 /*******************************************************************************/
-ListEditItemModel
-::~ListEditItemModel()
+ListEditItemModel::~ListEditItemModel()
 {
 }
 
 /*****************************************************************************/
 /* QAbstractItemModel overloads                                              */
 /*****************************************************************************/
-int
-ListEditItemModel
-::columnCount( const QModelIndex & ) const
+int ListEditItemModel::columnCount(const QModelIndex&) const
 {
   // qDebug() << this << "::columnCount(" << parent << ")";
 
@@ -107,28 +98,25 @@ ListEditItemModel
 }
 
 /*****************************************************************************/
-QVariant
-ListEditItemModel
-::data( const QModelIndex & idx, int role ) const
+QVariant ListEditItemModel::data(const QModelIndex& idx, int role) const
 {
   // qDebug() << this << "::data(" << idx << "," << role << ")";
 
   // Get layer.
-  assert( m_StringList!=NULL );
+  assert(m_StringList != NULL);
 
-  assert( idx.isValid() );
-  assert( !idx.parent().isValid() );
-  assert( idx.internalPointer()!=NULL );
+  assert(idx.isValid());
+  assert(!idx.parent().isValid());
+  assert(idx.internalPointer() != NULL);
 
-  const StringListInterface * stringList =
-    static_cast< const StringListInterface * >( idx.internalPointer() );
+  const StringListInterface* stringList = static_cast<const StringListInterface*>(idx.internalPointer());
 
-  assert( stringList!=nullptr );
+  assert(stringList != nullptr);
 
   // Return data given role.
-  switch( role )
-    {
-    case Qt::CheckStateRole:
+  switch (role)
+  {
+  case Qt::CheckStateRole:
 #if 0
       if( idx.column()!=COLUMN_NAME )
         return QVariant();
@@ -138,103 +126,87 @@ ListEditItemModel
 	return stringList->IsActive( idx.row() );
 	}
 #endif
-      break;
+    break;
 
-    case Qt::EditRole:
-    case Qt::DisplayRole:
-      switch( idx.column() )
-        {
-        case COLUMN_NAME:
-	  {
-	  assert( idx.row() >= 0 );
+  case Qt::EditRole:
+  case Qt::DisplayRole:
+    switch (idx.column())
+    {
+    case COLUMN_NAME:
+    {
+      assert(idx.row() >= 0);
 
-	  std::string filename(
-	    stringList->GetNthFileName( idx.row() )
-	  );
+      std::string filename(stringList->GetNthFileName(idx.row()));
 
-	  // qDebug() << "Filename:" << QString( "%1" ).arg( filename.c_str() );
+      // qDebug() << "Filename:" << QString( "%1" ).arg( filename.c_str() );
 
-	  return
-	    filename.empty()
-	    ? ( role==Qt::EditRole ? QString() : "EMPTY" )
-	    : QFile::decodeName( filename.c_str()
-	    );
-	  }
-          break;
-
-	default:
-	  break;
-        }
-      break;
-
-    case Qt::FontRole:
-      break;
-
-    case Qt::ToolTipRole:
-      switch( idx.column() )
-	{
-	case COLUMN_NAME:
-	  assert( idx.row() >= 0 );
-	  return QString::fromStdString( stringList->GetToolTip( idx.row() ) );
-	  break;
-	}
-      break;
-
-    case USER_ROLE_DIRECTION:
-      assert( idx.row()>=0 );
-      return stringList->GetDirection( idx.row() );
-      break;
-
-    case USER_ROLE_FILTER:
-      assert( idx.row()>=0 );
-      return QString::fromStdString( stringList->GetFilenameFilter( idx.row() ) );
-      break;
+      return filename.empty() ? (role == Qt::EditRole ? QString() : "EMPTY") : QFile::decodeName(filename.c_str());
+    }
+    break;
 
     default:
       break;
     }
+    break;
+
+  case Qt::FontRole:
+    break;
+
+  case Qt::ToolTipRole:
+    switch (idx.column())
+    {
+    case COLUMN_NAME:
+      assert(idx.row() >= 0);
+      return QString::fromStdString(stringList->GetToolTip(idx.row()));
+      break;
+    }
+    break;
+
+  case USER_ROLE_DIRECTION:
+    assert(idx.row() >= 0);
+    return stringList->GetDirection(idx.row());
+    break;
+
+  case USER_ROLE_FILTER:
+    assert(idx.row() >= 0);
+    return QString::fromStdString(stringList->GetFilenameFilter(idx.row()));
+    break;
+
+  default:
+    break;
+  }
 
   return QVariant();
 }
 
 /*****************************************************************************/
-Qt::ItemFlags
-ListEditItemModel
-::flags( const QModelIndex & idx ) const
+Qt::ItemFlags ListEditItemModel::flags(const QModelIndex& idx) const
 {
-  if( !idx.isValid() )
-    return QAbstractItemModel::flags( idx );
+  if (!idx.isValid())
+    return QAbstractItemModel::flags(idx);
 
-  Qt::ItemFlags iflags =
-    QAbstractItemModel::flags( idx )
-    // | Qt::ItemIsDragEnabled
-    // | Qt::ItemIsDropEnabled
-    ;
-
-  if( idx.column()==COLUMN_NAME )
-    iflags |=
-      Qt::ItemIsEditable
-      // | Qt::ItemIsUserCheckable
+  Qt::ItemFlags iflags = QAbstractItemModel::flags(idx)
       // | Qt::ItemIsDragEnabled
+      // | Qt::ItemIsDropEnabled
       ;
+
+  if (idx.column() == COLUMN_NAME)
+    iflags |= Qt::ItemIsEditable
+        // | Qt::ItemIsUserCheckable
+        // | Qt::ItemIsDragEnabled
+        ;
 
   return iflags;
 }
 
 /*****************************************************************************/
-bool
-ListEditItemModel
-::hasChildren( const QModelIndex & idx ) const
+bool ListEditItemModel::hasChildren(const QModelIndex& idx) const
 {
   return !idx.isValid();
 }
 
 /*****************************************************************************/
-QVariant
-ListEditItemModel
-::headerData( int section,
-              Qt::Orientation /**orientation*/,
-              int role ) const
+QVariant ListEditItemModel::headerData(int section, Qt::Orientation /**orientation*/, int role) const
 {
   // qDebug()
   //   << this << "::headerData("
@@ -243,37 +215,33 @@ ListEditItemModel
 
   // assert( orientation==Qt::Horizontal );
 
-  switch( role )
-    {
-    case Qt::DisplayRole:
-      assert( section>=0 && section<COLUMN_COUNT );
-      return tr( HEADERS[ section ] );
-      break;
+  switch (role)
+  {
+  case Qt::DisplayRole:
+    assert(section >= 0 && section < COLUMN_COUNT);
+    return tr(HEADERS[section]);
+    break;
 
-    default:
-      break;
-    }
+  default:
+    break;
+  }
 
   return QVariant();
 }
 
 /*****************************************************************************/
-QModelIndex
-ListEditItemModel
-::index( int row,
-         int column,
-         const QModelIndex & p ) const
+QModelIndex ListEditItemModel::index(int row, int column, const QModelIndex& p) const
 {
   // qDebug()
   //   << this << "::index(" << row << "," << column << "," << parent << ")";
 
-  if( m_StringList == nullptr )
+  if (m_StringList == nullptr)
     return QModelIndex();
 
   // qDebug()
   //   << "index:" << row << "," << column << "," << m_StringList->At( row );
 
-  assert( row>=0 && column>=0 );
+  assert(row >= 0 && column >= 0);
 
 #if 0
   AbstractLayerModel * layer = m_StringList->At( row );
@@ -282,37 +250,26 @@ ListEditItemModel
     return QModelIndex();
 #endif
 
-  return
-    createIndex(
-      row,
-      column,
-      p.isValid()
-      ? NULL
-      : m_StringList
-    );
+  return createIndex(row, column, p.isValid() ? NULL : m_StringList);
 }
 
 /*****************************************************************************/
-bool
-ListEditItemModel
-::insertRow( int row, const QModelIndex & idxParent )
+bool ListEditItemModel::insertRow(int row, const QModelIndex& idxParent)
 {
-  return insertRows( row, 1, idxParent );
+  return insertRows(row, 1, idxParent);
 }
 
 /*****************************************************************************/
-bool
-ListEditItemModel
-::insertRows( int row, int count, const QModelIndex & idxParent )
+bool ListEditItemModel::insertRows(int row, int count, const QModelIndex& idxParent)
 {
   // qDebug() << this << "::insertRows(" << row << "," << count << "," << idxParent << ")";
 
-  assert( m_StringList!=nullptr );
+  assert(m_StringList != nullptr);
 
-  beginInsertRows( idxParent, row, count );
+  beginInsertRows(idxParent, row, count);
   {
-    for( int r=row; r<row+count; ++r )
-      m_StringList->Insert( "", r );
+    for (int r = row; r < row + count; ++r)
+      m_StringList->Insert("", r);
   }
   endInsertRows();
 
@@ -320,9 +277,7 @@ ListEditItemModel
 }
 
 /*****************************************************************************/
-QModelIndex
-ListEditItemModel
-::parent( const QModelIndex & ) const
+QModelIndex ListEditItemModel::parent(const QModelIndex&) const
 {
   // qDebug() << this << "::parent(" << index << ")";
 
@@ -330,21 +285,19 @@ ListEditItemModel
 }
 
 /*****************************************************************************/
-bool
-ListEditItemModel
-::removeRows( int row, int count, const QModelIndex & p )
+bool ListEditItemModel::removeRows(int row, int count, const QModelIndex& p)
 {
-  assert( !p.isValid() );
-  assert( count>=1 );
+  assert(!p.isValid());
+  assert(count >= 1);
 
-  if( p.isValid() || count<1 )
+  if (p.isValid() || count < 1)
     return false;
 
-  assert( m_StringList!=nullptr );
+  assert(m_StringList != nullptr);
 
-  beginRemoveRows( p, row, row + count - 1 );
+  beginRemoveRows(p, row, row + count - 1);
   {
-    m_StringList->Erase( row, count );
+    m_StringList->Erase(row, count);
   }
   endRemoveRows();
 
@@ -352,9 +305,7 @@ ListEditItemModel
 }
 
 /*****************************************************************************/
-int
-ListEditItemModel
-::rowCount( const QModelIndex & p ) const
+int ListEditItemModel::rowCount(const QModelIndex& p) const
 {
   // qDebug() << this << "::rowCount(" << p << ")";
 
@@ -364,80 +315,67 @@ ListEditItemModel
   //     : m_StringList->GetCount()
   //   );
 
-  return
-    ( m_StringList==nullptr || p.isValid() )
-    ? 0
-    : m_StringList->Size();
+  return (m_StringList == nullptr || p.isValid()) ? 0 : m_StringList->Size();
 }
 
 /*****************************************************************************/
-bool
-ListEditItemModel
-::setData( const QModelIndex & idx,
-           const QVariant & value,
-           int role )
+bool ListEditItemModel::setData(const QModelIndex& idx, const QVariant& value, int role)
 {
   // qDebug()
   //   << this << "::setData(" << idx << "," << value << "," << role
   //   << ");";
 
-  assert( !idx.parent().isValid() );
-  assert( idx.row()>=0 );
-  assert( idx.internalPointer()!=nullptr );
+  assert(!idx.parent().isValid());
+  assert(idx.row() >= 0);
+  assert(idx.internalPointer() != nullptr);
 
-  StringListInterface * stringList =
-    static_cast< StringListInterface * >( idx.internalPointer() );
+  StringListInterface* stringList = static_cast<StringListInterface*>(idx.internalPointer());
 
-  switch( idx.column() )
+  switch (idx.column())
+  {
+  case COLUMN_NAME:
+    switch (role)
     {
-    case COLUMN_NAME:
-      switch( role )
-	{
-	case Qt::EditRole:
-	  stringList->SetNthFileName(
-	    idx.row(),
-	    QFile::encodeName( value.toString() ).data()
-	  );
-	  emit dataChanged( idx, idx );
-	  return true;
-	  break;
+    case Qt::EditRole:
+      stringList->SetNthFileName(idx.row(), QFile::encodeName(value.toString()).data());
+      emit dataChanged(idx, idx);
+      return true;
+      break;
 
-	case Qt::CheckStateRole:
-	  break;
+    case Qt::CheckStateRole:
+      break;
 
-	case USER_ROLE_DIRECTION:
-	  break;
-
-	default:
-	  break;
-	}
+    case USER_ROLE_DIRECTION:
       break;
 
     default:
       break;
     }
+    break;
+
+  default:
+    break;
+  }
 
   return false;
 }
 
 /*******************************************************************************/
-bool
-ListEditItemModel
-::Swap( int row1, int row2 )
+bool ListEditItemModel::Swap(int row1, int row2)
 {
-  assert( m_StringList!=nullptr );
+  assert(m_StringList != nullptr);
 
-  assert( row1>=0 );
-  assert( static_cast< unsigned int >( row1 )<m_StringList->Size() );
+  assert(row1 >= 0);
+  assert(static_cast<unsigned int>(row1) < m_StringList->Size());
 
-  assert( row2>=0 );
-  assert( static_cast< unsigned int >( row2 )<m_StringList->Size() );
+  assert(row2 >= 0);
+  assert(static_cast<unsigned int>(row2) < m_StringList->Size());
 
-  assert( row1!=row2 );
+  assert(row1 != row2);
 
   emit layoutAboutToBeChanged();
 
-  m_StringList->Swap( row1, row2 );
+  m_StringList->Swap(row1, row2);
 
   emit layoutChanged();
 
@@ -445,33 +383,27 @@ ListEditItemModel
 }
 
 /*******************************************************************************/
-bool
-ListEditItemModel
-::IsInput() const
+bool ListEditItemModel::IsInput() const
 {
-  assert( m_StringList!=nullptr );
+  assert(m_StringList != nullptr);
 
-  return m_StringList->GetDirection()==Role_Input;
+  return m_StringList->GetDirection() == Role_Input;
 }
 
 /*******************************************************************************/
-bool
-ListEditItemModel
-::IsBrowsable() const
+bool ListEditItemModel::IsBrowsable() const
 {
-  assert( m_StringList!=nullptr );
+  assert(m_StringList != nullptr);
 
   return m_StringList->IsFilename();
 }
 
 /*******************************************************************************/
-QString
-ListEditItemModel
-::GetFilter() const
+QString ListEditItemModel::GetFilter() const
 {
-  assert( m_StringList!=nullptr );
+  assert(m_StringList != nullptr);
 
-  return QString::fromStdString( m_StringList->GetFilenameFilter() );
+  return QString::fromStdString(m_StringList->GetFilenameFilter());
 }
 
 /*******************************************************************************/

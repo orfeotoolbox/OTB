@@ -37,10 +37,9 @@ namespace otb
 class OTBMetadata_EXPORT CosmoImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
-
-  typedef CosmoImageMetadataInterface    Self;
-  typedef SarImageMetadataInterface         Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
+  typedef CosmoImageMetadataInterface   Self;
+  typedef SarImageMetadataInterface     Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
@@ -55,8 +54,8 @@ public:
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
-  typedef Superclass::RealType                  RealType;
-  typedef Superclass::LookupDataPointerType LookupDataPointerType;
+  typedef Superclass::RealType                 RealType;
+  typedef Superclass::LookupDataPointerType    LookupDataPointerType;
 
   /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
   int GetProductionDay() const override;
@@ -92,7 +91,6 @@ public:
   double GetCenterIncidenceAngle() const override;
 
 protected:
-
   /* class ctor */
   CosmoImageMetadataInterface() = default;
 
@@ -100,22 +98,20 @@ protected:
   ~CosmoImageMetadataInterface() = default;
 
 private:
+  CosmoImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  CosmoImageMetadataInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
-/* Helper function to parse date and time into a std::vector<std::string>
- * using boost::split() expect date time in yyyy-mm-ddThh:mm:ss.ms
- * the date-time string is to be found in keywordlist with key 'key'
- * fills argument dateFields of type std::vector<std::string> which is mutable!
- * TODO: move this method into base class
- */
+  /* Helper function to parse date and time into a std::vector<std::string>
+   * using boost::split() expect date time in yyyy-mm-ddThh:mm:ss.ms
+   * the date-time string is to be found in keywordlist with key 'key'
+   * fills argument dateFields of type std::vector<std::string> which is mutable!
+   * TODO: move this method into base class
+   */
   void ParseDateTime(std::string key, std::vector<int>& dateFields) const;
 
   mutable std::vector<int> m_ProductionDateFields;
   mutable std::vector<int> m_AcquisitionDateFields;
 };
-
 
 
 } // end namespace otb

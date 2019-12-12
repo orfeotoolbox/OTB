@@ -69,9 +69,9 @@ class SinclairToReciprocalCircularCovarianceMatrixFunctor
 {
 public:
   /** Some typedefs. */
-  typedef double                                   RealType;
-  typedef std::complex <RealType>                  ComplexType;
-  typedef typename TOutput::ValueType              OutputValueType;
+  typedef double                      RealType;
+  typedef std::complex<RealType>      ComplexType;
+  typedef typename TOutput::ValueType OutputValueType;
   typedef SinclairToReciprocalCovarianceMatrixFunctor<ComplexType, ComplexType, ComplexType, TOutput> SinclairToReciprocalCovarianceFunctorType;
 
   inline void operator()(TOutput& result, const TInput1& Shh, const TInput2& Shv, const TInput3& Svv) const
@@ -83,13 +83,13 @@ public:
     const ComplexType coef(0.5);
 
     const ComplexType j2S_hv = S_hv * ComplexType(0.0, 2.0);
-    const ComplexType jS_hh = S_hh * ComplexType(0.0, 1.0);
-    const ComplexType jS_vv = S_vv * ComplexType(0.0, 1.0);
+    const ComplexType jS_hh  = S_hh * ComplexType(0.0, 1.0);
+    const ComplexType jS_vv  = S_vv * ComplexType(0.0, 1.0);
 
 
-    const ComplexType Sll = coef * ( S_hh+j2S_hv-S_vv );
-    const ComplexType Slr = coef * ( jS_hh + jS_vv );
-    const ComplexType Srr = coef * ( -S_hh+j2S_hv+S_vv );
+    const ComplexType Sll = coef * (S_hh + j2S_hv - S_vv);
+    const ComplexType Slr = coef * (jS_hh + jS_vv);
+    const ComplexType Srr = coef * (-S_hh + j2S_hv + S_vv);
 
 
     SinclairToReciprocalCovarianceFunctorType funct;
@@ -104,22 +104,22 @@ public:
 };
 
 } // namespace Functor
-/**
- * \typedef SinclairToReciprocalCircularCovarianceMatrixImageFilter
- * \brief Applies otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor
- * \sa otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor
- *
- * Set inputs with:
- * \code
- *
- * SetInput<polarimetry_tags::hh>(inputPtr);
- * SetInput<polarimetry_tags::hv_or_vh>(inputPtr);
- * SetInput<polarimetry_tags::vv>(inputPtr);
- *
- * \endcode
- *
- * \ingroup OTBPolarimetry
- */
+  /**
+   * \typedef SinclairToReciprocalCircularCovarianceMatrixImageFilter
+   * \brief Applies otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor
+   * \sa otb::Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor
+   *
+   * Set inputs with:
+   * \code
+   *
+   * SetInput<polarimetry_tags::hh>(inputPtr);
+   * SetInput<polarimetry_tags::hv_or_vh>(inputPtr);
+   * SetInput<polarimetry_tags::vv>(inputPtr);
+   *
+   * \endcode
+   *
+   * \ingroup OTBPolarimetry
+   */
 template <typename TInputImage, typename TOutputImage>
 using SinclairToReciprocalCircularCovarianceMatrixImageFilter =
     FunctorImageFilter<Functor::SinclairToReciprocalCircularCovarianceMatrixFunctor<typename TInputImage::PixelType, typename TInputImage::PixelType,

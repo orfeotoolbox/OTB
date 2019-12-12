@@ -24,52 +24,51 @@
 #include "itkRescaleIntensityImageFilter.h"
 #include "otbFunctorImageFilter.h"
 
-int LocalRXDetectorTest(int itkNotUsed(argc), char * argv[])
+int LocalRXDetectorTest(int itkNotUsed(argc), char* argv[])
 {
-    typedef double PixelType;
-    typedef otb::VectorImage<PixelType, 2> VectorImageType;
-    typedef otb::Image<PixelType, 2> ImageType;
-    typedef otb::Functor::LocalRxDetectionFunctor<PixelType> LocalRxDetectorFunctorType;
+  typedef double PixelType;
+  typedef otb::VectorImage<PixelType, 2> VectorImageType;
+  typedef otb::Image<PixelType, 2>       ImageType;
+  typedef otb::Functor::LocalRxDetectionFunctor<PixelType> LocalRxDetectorFunctorType;
 
-    typedef otb::ImageFileReader<VectorImageType> ReaderType;
+  typedef otb::ImageFileReader<VectorImageType> ReaderType;
 
-    typedef unsigned char WritePixelType;
-    typedef otb::Image<WritePixelType> WriteImageType;
-    typedef otb::ImageFileWriter<WriteImageType> WriterType;
-    typedef itk::RescaleIntensityImageFilter<ImageType, WriteImageType> RescalerType;
+  typedef unsigned char                        WritePixelType;
+  typedef otb::Image<WritePixelType>           WriteImageType;
+  typedef otb::ImageFileWriter<WriteImageType> WriterType;
+  typedef itk::RescaleIntensityImageFilter<ImageType, WriteImageType> RescalerType;
 
-    /////////// PARAMETERS ///////////
+  /////////// PARAMETERS ///////////
 
-    const char * filename = argv[1];
-    const char * outputFilename = argv[2];
-    const unsigned int externalRadius = atoi(argv[3]);
-    const unsigned int internalRadius = atoi(argv[4]);
+  const char*        filename       = argv[1];
+  const char*        outputFilename = argv[2];
+  const unsigned int externalRadius = atoi(argv[3]);
+  const unsigned int internalRadius = atoi(argv[4]);
 
-    //////// RX Filtering /////////
+  //////// RX Filtering /////////
 
-    ReaderType::Pointer reader = ReaderType::New();
-    reader->SetFileName(filename);
+  ReaderType::Pointer reader = ReaderType::New();
+  reader->SetFileName(filename);
 
-    LocalRxDetectorFunctorType detectorFunctor;
-    
-    detectorFunctor.SetInternalRadius(internalRadius, internalRadius);
+  LocalRxDetectorFunctorType detectorFunctor;
 
-    auto rxDetector = otb::NewFunctorFilter
-        (detectorFunctor ,{{externalRadius,externalRadius}});
+  detectorFunctor.SetInternalRadius(internalRadius, internalRadius);
 
-    rxDetector->SetInputs(reader->GetOutput());
+  auto rxDetector = otb::NewFunctorFilter(detectorFunctor, {{externalRadius, externalRadius}});
 
-    //////// Rescaling /////////
+  rxDetector->SetInputs(reader->GetOutput());
 
-    RescalerType::Pointer rescaler = RescalerType::New();
-    rescaler->SetOutputMinimum(0);
-    rescaler->SetOutputMaximum(255);
-    rescaler->SetInput(rxDetector->GetOutput());
+  //////// Rescaling /////////
 
-    WriterType::Pointer writer = WriterType::New();
-    writer->SetFileName(outputFilename);
-    writer->SetInput(rescaler->GetOutput());
-    writer->Update();
+  RescalerType::Pointer rescaler = RescalerType::New();
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
+  rescaler->SetInput(rxDetector->GetOutput());
 
-    return EXIT_SUCCESS;
+  WriterType::Pointer writer = WriterType::New();
+  writer->SetFileName(outputFilename);
+  writer->SetInput(rescaler->GetOutput());
+  writer->Update();
+
+  return EXIT_SUCCESS;
 }

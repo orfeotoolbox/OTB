@@ -33,7 +33,7 @@ namespace otb
 
 /**
  * \class PersistentOGRDataToSamplePositionFilter
- * 
+ *
  * \brief Persistent filter to extract sample position from an image
  *
  * This filter uses an input image (to define the sampling grid), an optional
@@ -42,44 +42,40 @@ namespace otb
  *
  * The filter has a set of samplers (one for each class), they define what
  * sampling rate and strategy should be performed.
- * 
+ *
  * Several levels of output are supported. For instance, with two outputs :
  * when the sampler from level 1 discards a sample, the sampler from level 2 is
  * called.
  *
  * \ingroup OTBSampling
  */
-template<class TInputImage, class TMaskImage, class TSampler>
-class ITK_EXPORT PersistentOGRDataToSamplePositionFilter :
-  public PersistentSamplingFilterBase<TInputImage, TMaskImage>
+template <class TInputImage, class TMaskImage, class TSampler>
+class ITK_EXPORT PersistentOGRDataToSamplePositionFilter : public PersistentSamplingFilterBase<TInputImage, TMaskImage>
 {
 public:
   /** Standard Self typedef */
-  typedef PersistentOGRDataToSamplePositionFilter         Self;
-  typedef PersistentSamplingFilterBase<
-    TInputImage,
-    TMaskImage>                                           Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  typedef PersistentOGRDataToSamplePositionFilter Self;
+  typedef PersistentSamplingFilterBase<TInputImage, TMaskImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef TInputImage                                     InputImageType;
-  typedef typename InputImageType::Pointer                InputImagePointer;
-  typedef typename InputImageType::RegionType             RegionType;
-  typedef typename InputImageType::PointType              PointType;
+  typedef TInputImage                         InputImageType;
+  typedef typename InputImageType::Pointer    InputImagePointer;
+  typedef typename InputImageType::RegionType RegionType;
+  typedef typename InputImageType::PointType  PointType;
 
-  typedef TMaskImage                                      MaskImageType;
-  typedef typename MaskImageType::Pointer                 MaskImagePointer;
+  typedef TMaskImage                      MaskImageType;
+  typedef typename MaskImageType::Pointer MaskImagePointer;
 
-  typedef ogr::DataSource                                 OGRDataType;
-  typedef ogr::DataSource::Pointer                        OGRDataPointer;
+  typedef ogr::DataSource          OGRDataType;
+  typedef ogr::DataSource::Pointer OGRDataPointer;
 
-  typedef TSampler                                        SamplerType;
-  typedef typename SamplerType::Pointer                   SamplerPointerType;
-  typedef typename SamplerType::ParameterType             SamplerParameterType;
-  typedef typename std::map
-    <std::string, SamplerPointerType>                     SamplerMapType;
+  typedef TSampler                            SamplerType;
+  typedef typename SamplerType::Pointer       SamplerPointerType;
+  typedef typename SamplerType::ParameterType SamplerParameterType;
+  typedef typename std::map<std::string, SamplerPointerType> SamplerMapType;
 
-  typedef std::map<std::string, unsigned int>             ClassPartitionType;
+  typedef std::map<std::string, unsigned int> ClassPartitionType;
 
   typedef itk::DataObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
@@ -89,7 +85,9 @@ public:
   /** Runtime information support. */
   itkTypeMacro(PersistentOGRDataToSamplePositionFilter, PersistentSamplingFilterBase);
 
-  void Synthetize(void) override{}
+  void Synthetize(void) override
+  {
+  }
 
   /** Reset method called before starting the streaming*/
   void Reset(void) override;
@@ -99,10 +97,7 @@ public:
 
   /** Set an output container for sample position associated
    * with corresponding rates, for a given level.*/
-  void SetOutputPositionContainerAndRates(
-    otb::ogr::DataSource* data,
-    const SamplingRateCalculator::MapRateType& map,
-    unsigned int level);
+  void SetOutputPositionContainerAndRates(otb::ogr::DataSource* data, const SamplingRateCalculator::MapRateType& map, unsigned int level);
 
   /** Get the output position container of a given level */
   const otb::ogr::DataSource* GetOutputPositionContainer(unsigned int level) const;
@@ -127,13 +122,13 @@ protected:
   /** Constructor */
   PersistentOGRDataToSamplePositionFilter();
   /** Destructor */
-  ~PersistentOGRDataToSamplePositionFilter() override {}
+  ~PersistentOGRDataToSamplePositionFilter() override
+  {
+  }
 
   /** Call samplers on a current position, for a given class */
-  void ProcessSample(const ogr::Feature& feature,
-                             typename TInputImage::IndexType& imgIndex,
-                             typename TInputImage::PointType& imgPoint,
-                             itk::ThreadIdType& threadid) override;
+  void ProcessSample(const ogr::Feature& feature, typename TInputImage::IndexType& imgIndex, typename TInputImage::PointType& imgPoint,
+                     itk::ThreadIdType& threadid) override;
 
   /** Method to split the input OGRDataSource
    *  according to the class partition
@@ -144,8 +139,8 @@ protected:
   void FillOneOutput(unsigned int outIdx, ogr::DataSource* outDS, bool update) override;
 
 private:
-  PersistentOGRDataToSamplePositionFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PersistentOGRDataToSamplePositionFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   void ComputeClassPartition(void);
 
@@ -165,37 +160,34 @@ private:
 
 /**
  * \class OGRDataToSamplePositionFilter
- * 
+ *
  * \brief Extracts sample position from an image using a persistent filter
- * 
+ *
  * \sa PersistentOGRDataToSamplePositionFilter
  *
  * \ingroup OTBSampling
  */
-template<class TInputImage, class TMaskImage = otb::Image<unsigned char> , class TSampler = otb::PeriodicSampler >
-class ITK_EXPORT OGRDataToSamplePositionFilter :
-  public PersistentFilterStreamingDecorator<PersistentOGRDataToSamplePositionFilter<TInputImage,TMaskImage,TSampler> >
+template <class TInputImage, class TMaskImage = otb::Image<unsigned char>, class TSampler = otb::PeriodicSampler>
+class ITK_EXPORT OGRDataToSamplePositionFilter
+    : public PersistentFilterStreamingDecorator<PersistentOGRDataToSamplePositionFilter<TInputImage, TMaskImage, TSampler>>
 {
 public:
   /** Standard Self typedef */
-  typedef OGRDataToSamplePositionFilter  Self;
-  typedef PersistentFilterStreamingDecorator
-    <PersistentOGRDataToSamplePositionFilter
-      <TInputImage,TMaskImage,TSampler> >          Superclass;
-  typedef itk::SmartPointer<Self>         Pointer;
-  typedef itk::SmartPointer<const Self>   ConstPointer;
+  typedef OGRDataToSamplePositionFilter Self;
+  typedef PersistentFilterStreamingDecorator<PersistentOGRDataToSamplePositionFilter<TInputImage, TMaskImage, TSampler>> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-  typedef TInputImage                     InputImageType;
-  typedef TMaskImage                      MaskImageType;
-  typedef otb::ogr::DataSource            OGRDataType;
-  
-  typedef typename Superclass::FilterType             FilterType;
+  typedef TInputImage          InputImageType;
+  typedef TMaskImage           MaskImageType;
+  typedef otb::ogr::DataSource OGRDataType;
 
-  typedef TSampler                                        SamplerType;
-  typedef typename SamplerType::Pointer                   SamplerPointerType;
-  typedef typename SamplerType::ParameterType             SamplerParameterType;
-  typedef typename std::map
-    <std::string, SamplerPointerType>                     SamplerMapType;
+  typedef typename Superclass::FilterType FilterType;
+
+  typedef TSampler                            SamplerType;
+  typedef typename SamplerType::Pointer       SamplerPointerType;
+  typedef typename SamplerType::ParameterType SamplerParameterType;
+  typedef typename std::map<std::string, SamplerPointerType> SamplerMapType;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -236,19 +228,16 @@ public:
   int GetLayerIndex();
 
   /** Set the sampling parameters for all classes at a given level.*/
-  void SetSamplerParameters(SamplerParameterType param, unsigned int level=0);
+  void SetSamplerParameters(SamplerParameterType param, unsigned int level = 0);
 
   /** Get a reference to the internal sampler map at a given level.*/
-  SamplerMapType& GetSamplers(unsigned int level=0);
+  SamplerMapType& GetSamplers(unsigned int level = 0);
 
   /** Set the output container with the associated rates at a given level.*/
-  void SetOutputPositionContainerAndRates(
-    otb::ogr::DataSource* data,
-    const SamplingRateCalculator::MapRateType& map,
-    unsigned int level=0);
+  void SetOutputPositionContainerAndRates(otb::ogr::DataSource* data, const SamplingRateCalculator::MapRateType& map, unsigned int level = 0);
 
   /** Get the output position container at a given level.*/
-  otb::ogr::DataSource* GetOutputPositionContainer(unsigned int level=0);
+  otb::ogr::DataSource* GetOutputPositionContainer(unsigned int level = 0);
 
   /** Set the field name storing the original FID of each sample*/
   void SetOriginFieldName(std::string key);
@@ -258,13 +247,17 @@ public:
 
 protected:
   /** Constructor */
-  OGRDataToSamplePositionFilter() {}
+  OGRDataToSamplePositionFilter()
+  {
+  }
   /** Destructor */
-  ~OGRDataToSamplePositionFilter() override {}
+  ~OGRDataToSamplePositionFilter() override
+  {
+  }
 
 private:
-  OGRDataToSamplePositionFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  OGRDataToSamplePositionFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end of namespace otb

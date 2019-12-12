@@ -21,6 +21,14 @@
 include_directories ( ${PYTHON_INCLUDE_DIR} )
 include_directories ( ${CMAKE_CURRENT_SOURCE_DIR})
 set_source_files_properties ( ../otbApplication.i PROPERTIES CPLUSPLUS ON )
+# Get target name
+set(extension_target _otbApplication)
+if(POLICY CMP0078)
+  cmake_policy(GET CMP0078 swig_target_name_policy)
+  if (swig_target_name_policy STREQUAL "NEW")
+    set(extension_target otbApplication)
+  endif()
+endif()
 # Run swig
 set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_GLOBAL_FLAGS})
 if(NUMPY_FOUND)
@@ -36,34 +44,35 @@ set(SWIG_MODULE_otbApplication_EXTRA_DEPS
      otbPythonLogOutput.h
      otbProgressReporterManager.h
      OTBApplicationEngine)
-SWIG_add_module( otbApplication python ../otbApplication.i 
-                                        otbApplicationPYTHON_wrap.cxx 
-                                        itkPyCommand.cxx
-                                        ../python/otbPythonLogOutput.cxx
-                                        ../python/otbProgressReporterManager.cxx)
-SWIG_link_libraries( otbApplication ${PYTHON_LIBRARIES} OTBApplicationEngine )
-set_target_properties(_otbApplication PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SWIG_OUTDIR})
+swig_add_library( otbApplication
+    LANGUAGE python
+    SOURCES ../otbApplication.i
+            itkPyCommand.cxx
+            otbPythonLogOutput.cxx
+            otbProgressReporterManager.cxx)
+swig_link_libraries( otbApplication ${PYTHON_LIBRARIES} OTBApplicationEngine )
+set_target_properties(${extension_target} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SWIG_OUTDIR})
 
 if(MSVC)
-  set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "/wd4005" )
+  set_source_files_properties( ${CMAKE_SWIG_OUTDIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "/wd4005" )
 else()
-  set_source_files_properties( ${CMAKE_CURRENT_BINARY_DIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "-w" )
+  set_source_files_properties( ${CMAKE_SWIG_OUTDIR}/otbApplicationPYTHON_wrap.cxx COMPILE_FLAGS "-w" )
 endif()
 
 # byte-compile the resulting python file
 add_custom_command(
-    TARGET _otbApplication
+    TARGET ${extension_target}
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E echo "Byte-compiling otbApplication.py"
     COMMAND ${PYTHON_EXECUTABLE}
     ${CMAKE_SOURCE_DIR}/CMake/PythonCompile.py
     ${CMAKE_SWIG_OUTDIR}/otbApplication.py
-    DEPENDS _otbApplication
+    DEPENDS ${extension_target}
   )
 
-otb_module_target_label( _otbApplication )
+otb_module_target_label( ${extension_target} )
 
-install( TARGETS _otbApplication
+install( TARGETS ${extension_target}
          DESTINATION ${OTB_INSTALL_PYTHON_DIR}
          COMPONENT RuntimeLibraries )
 
@@ -78,3 +87,20 @@ if(PYTHON_VERSION_STRING VERSION_LESS "3.2.0")
 else()
   # TODO : pyc file is in a subfolder.
 endif()
+
+configure_file(StandaloneWrapper.in CMakeLists.txt @ONLY)
+
+install( FILES ${CMAKE_SWIG_OUTDIR}/otbApplicationPYTHON_wrap.cxx
+               ${CMAKE_SWIG_OUTDIR}/otbApplicationPYTHON_wrap.h
+               itkPyCommand.cxx
+               itkPyCommand.h
+               otbPythonLogOutput.cxx
+               otbPythonLogOutput.h
+               otbSwigPrintCallback.h
+               otbProgressReporterManager.cxx
+               otbProgressReporterManager.h
+               ../itkBase.includes
+               ../otbWrapperSWIGIncludes.h
+               ${CMAKE_CURRENT_BINARY_DIR}/CMakeLists.txt
+         DESTINATION ${OTB_INSTALL_DATA_DIR}/swig
+         COMPONENT Resources )

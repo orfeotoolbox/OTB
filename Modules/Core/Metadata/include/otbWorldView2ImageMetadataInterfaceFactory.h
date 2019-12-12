@@ -53,8 +53,7 @@ public:
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    WorldView2ImageMetadataInterfaceFactory::Pointer worldView2IMIFactory =
-      WorldView2ImageMetadataInterfaceFactory::New();
+    WorldView2ImageMetadataInterfaceFactory::Pointer worldView2IMIFactory = WorldView2ImageMetadataInterfaceFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(worldView2IMIFactory);
   }
 
@@ -63,9 +62,8 @@ protected:
   ~WorldView2ImageMetadataInterfaceFactory() override;
 
 private:
-  WorldView2ImageMetadataInterfaceFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  WorldView2ImageMetadataInterfaceFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

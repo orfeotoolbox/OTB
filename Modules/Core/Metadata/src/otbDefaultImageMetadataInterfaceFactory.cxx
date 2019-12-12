@@ -19,7 +19,6 @@
  */
 
 
-
 #include <typeinfo>
 #include <cassert>
 
@@ -32,29 +31,22 @@
 namespace otb
 {
 
-DefaultImageMetadataInterfaceFactory
-::DefaultImageMetadataInterfaceFactory()
+DefaultImageMetadataInterfaceFactory::DefaultImageMetadataInterfaceFactory()
 {
-  this->RegisterOverride("ImageMetadataInterfaceBase",
-                         "otbDefaultImageMetadataInterface",
-                         "Default Metadata Interface",
-                         1,
+  this->RegisterOverride("ImageMetadataInterfaceBase", "otbDefaultImageMetadataInterface", "Default Metadata Interface", 1,
                          itk::CreateObjectFunction<DefaultImageMetadataInterface>::New());
 }
 
-DefaultImageMetadataInterfaceFactory
-::~DefaultImageMetadataInterfaceFactory()
+DefaultImageMetadataInterfaceFactory::~DefaultImageMetadataInterfaceFactory()
 {
 }
 
-const char*
-DefaultImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
+const char* DefaultImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;
 }
 
-const char*
-DefaultImageMetadataInterfaceFactory::GetDescription() const
+const char* DefaultImageMetadataInterfaceFactory::GetDescription() const
 {
   return "Default Metadata Interface Factory, handle Default metadata in OTB";
 }

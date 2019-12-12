@@ -24,19 +24,20 @@
 #include "otbImageFileWriter.h"
 #include "otbStandardWriterWatcher.h"
 
-typedef otb::Image<unsigned short>                    ImageType;
-typedef otb::Image<float>                             FloatImageType;
-typedef otb::ImageFileReader<ImageType>               ReaderType;
+typedef otb::Image<unsigned short>           ImageType;
+typedef otb::Image<float>                    FloatImageType;
+typedef otb::ImageFileReader<ImageType>      ReaderType;
 typedef otb::ImageFileWriter<FloatImageType> FloatWriterType;
 
-typedef otb::PixelWiseBlockMatchingImageFilter<ImageType,FloatImageType,FloatImageType,ImageType> PixelWiseBlockMatchingImageFilterType;
+typedef otb::PixelWiseBlockMatchingImageFilter<ImageType, FloatImageType, FloatImageType, ImageType> PixelWiseBlockMatchingImageFilterType;
 
-typedef otb::Functor::NCCBlockMatching<ImageType,FloatImageType> NCCBlockMatchingFunctorType;
+typedef otb::Functor::NCCBlockMatching<ImageType, FloatImageType> NCCBlockMatchingFunctorType;
 
-typedef otb::PixelWiseBlockMatchingImageFilter<ImageType,FloatImageType,FloatImageType,ImageType, NCCBlockMatchingFunctorType> PixelWiseNCCBlockMatchingImageFilterType;
+typedef otb::PixelWiseBlockMatchingImageFilter<ImageType, FloatImageType, FloatImageType, ImageType, NCCBlockMatchingFunctorType>
+    PixelWiseNCCBlockMatchingImageFilterType;
 
 
-int otbPixelWiseBlockMatchingImageFilter(int argc, char * argv[])
+int otbPixelWiseBlockMatchingImageFilter(int argc, char* argv[])
 {
   ReaderType::Pointer leftReader = ReaderType::New();
   leftReader->SetFileName(argv[1]);
@@ -52,17 +53,17 @@ int otbPixelWiseBlockMatchingImageFilter(int argc, char * argv[])
   bmFilter->SetMaximumHorizontalDisparity(atoi(argv[7]));
 
   ReaderType::Pointer maskReader = ReaderType::New();
-  if(argc > 8)
-    {
+  if (argc > 8)
+  {
     maskReader->SetFileName(argv[8]);
     bmFilter->SetLeftMaskInput(maskReader->GetOutput());
-    }
+  }
 
   FloatWriterType::Pointer dispWriter = FloatWriterType::New();
   dispWriter->SetInput(bmFilter->GetHorizontalDisparityOutput());
   dispWriter->SetFileName(argv[3]);
 
-  otb::StandardWriterWatcher watcher1(dispWriter,bmFilter,"Computing disparity map");
+  otb::StandardWriterWatcher watcher1(dispWriter, bmFilter, "Computing disparity map");
 
   dispWriter->Update();
 
@@ -70,14 +71,14 @@ int otbPixelWiseBlockMatchingImageFilter(int argc, char * argv[])
   metricWriter->SetInput(bmFilter->GetMetricOutput());
   metricWriter->SetFileName(argv[4]);
 
-  otb::StandardWriterWatcher watcher2(metricWriter,bmFilter,"Computing metric map");
+  otb::StandardWriterWatcher watcher2(metricWriter, bmFilter, "Computing metric map");
 
   metricWriter->Update();
 
   return EXIT_SUCCESS;
 }
 
-int otbPixelWiseBlockMatchingImageFilterNCC(int argc, char * argv[])
+int otbPixelWiseBlockMatchingImageFilterNCC(int argc, char* argv[])
 {
   ReaderType::Pointer leftReader = ReaderType::New();
   leftReader->SetFileName(argv[1]);
@@ -94,17 +95,17 @@ int otbPixelWiseBlockMatchingImageFilterNCC(int argc, char * argv[])
   bmFilter->MinimizeOff();
 
   ReaderType::Pointer maskReader = ReaderType::New();
-  if(argc > 8)
-    {
+  if (argc > 8)
+  {
     maskReader->SetFileName(argv[8]);
     bmFilter->SetLeftMaskInput(maskReader->GetOutput());
-    }
+  }
 
   FloatWriterType::Pointer dispWriter = FloatWriterType::New();
   dispWriter->SetInput(bmFilter->GetHorizontalDisparityOutput());
   dispWriter->SetFileName(argv[3]);
 
-  otb::StandardWriterWatcher watcher1(dispWriter,bmFilter,"Computing disparity map");
+  otb::StandardWriterWatcher watcher1(dispWriter, bmFilter, "Computing disparity map");
 
   dispWriter->Update();
 
@@ -112,7 +113,7 @@ int otbPixelWiseBlockMatchingImageFilterNCC(int argc, char * argv[])
   metricWriter->SetInput(bmFilter->GetMetricOutput());
   metricWriter->SetFileName(argv[4]);
 
-  otb::StandardWriterWatcher watcher2(metricWriter,bmFilter,"Computing metric map");
+  otb::StandardWriterWatcher watcher2(metricWriter, bmFilter, "Computing metric map");
 
   metricWriter->Update();
 

@@ -77,42 +77,38 @@ class OTBMonteverdiCore_EXPORT ModifiableInterface
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** Destructor */
   virtual ~ModifiableInterface();
 
   /**
    */
-  virtual bool IsModified() const =0;
+  virtual bool IsModified() const = 0;
 
   /**
    */
-  virtual void ClearModified() =0;
+  virtual void ClearModified() = 0;
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
   /** Constructor */
   ModifiableInterface();
 
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
 };
 

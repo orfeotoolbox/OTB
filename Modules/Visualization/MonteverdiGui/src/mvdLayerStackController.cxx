@@ -72,461 +72,305 @@ namespace
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-LayerStackController
-::LayerStackController( LayerStackWidget * widget, QObject * p ) :
-  AbstractModelController( widget, p )
+LayerStackController::LayerStackController(LayerStackWidget* widget, QObject* p) : AbstractModelController(widget, p)
 {
 }
 
 /*******************************************************************************/
-LayerStackController
-::~LayerStackController()
+LayerStackController::~LayerStackController()
 {
 }
 
 /*******************************************************************************/
-void
-LayerStackController
-::ClearWidget()
+void LayerStackController::ClearWidget()
 {
 }
 
 /*******************************************************************************/
-void
-LayerStackController
-::Connect( AbstractModel * model )
+void LayerStackController::Connect(AbstractModel* model)
 {
-  assert( model==qobject_cast< StackedLayerModel * >( model ) );
+  assert(model == qobject_cast<StackedLayerModel*>(model));
 
 
-  QObject::connect(
-    model,
-    SIGNAL( CurrentChanged( size_t ) ),
-    // to:
-    this,
-    SLOT( OnStackedLayerCurrentChanged( size_t ) )
-  );
+  QObject::connect(model, SIGNAL(CurrentChanged(size_t)),
+                   // to:
+                   this, SLOT(OnStackedLayerCurrentChanged(size_t)));
 
-  QObject::connect(
-    model,
-    SIGNAL( ContentChanged() ),
-    // to:
-    this,
-    SLOT( OnStackedLayerContentChanged() )
-  );
+  QObject::connect(model, SIGNAL(ContentChanged()),
+                   // to:
+                   this, SLOT(OnStackedLayerContentChanged()));
 
-  QObject::connect(
-    model,
-    SIGNAL( ContentReset() ),
-    // to:
-    this,
-    SLOT( OnStackedLayerContentReset() )
-  );
+  QObject::connect(model, SIGNAL(ContentReset()),
+                   // to:
+                   this, SLOT(OnStackedLayerContentReset()));
 
 
-  LayerStackWidget * widget = GetWidget< LayerStackWidget >();
-  assert( widget!=NULL );
+  LayerStackWidget* widget = GetWidget<LayerStackWidget>();
+  assert(widget != NULL);
 
-  assert( widget->GetItemModel()!=NULL );
+  assert(widget->GetItemModel() != NULL);
 
-  widget->GetItemModel()->SetStack(
-    qobject_cast< StackedLayerModel * >( model )
-  );
+  widget->GetItemModel()->SetStack(qobject_cast<StackedLayerModel*>(model));
 
 
-  QObject::connect(
-    widget,
-    SIGNAL( SelectionChanged( int ) ),
-    // to:
-    this,
-    SLOT( OnSelectionChanged( int ) )
-  );
+  QObject::connect(widget, SIGNAL(SelectionChanged(int)),
+                   // to:
+                   this, SLOT(OnSelectionChanged(int)));
 
-  QObject::connect(
-    widget,
-    SIGNAL( ProjectionButtonClicked() ),
-    // to:
-    this,
-    SLOT( OnProjectionButtonClicked() )
-  );  
+  QObject::connect(widget, SIGNAL(ProjectionButtonClicked()),
+                   // to:
+                   this, SLOT(OnProjectionButtonClicked()));
 
-//bugfix for layer deletion
-  QObject::connect(
-    widget,
-    SIGNAL( LayerDeletingWidget( unsigned int ) ),
-    // to:
-    model,
-    SLOT( Deleting( unsigned int ) )
-  );
+  // bugfix for layer deletion
+  QObject::connect(widget, SIGNAL(LayerDeletingWidget(unsigned int)),
+                   // to:
+                   model, SLOT(Deleting(unsigned int)));
 
-  QObject::connect(
-    widget,
-    SIGNAL( TopButtonClicked() ),
-    // to:
-    model,
-    SLOT( MoveCurrentToTop() )
-  );
+  QObject::connect(widget, SIGNAL(TopButtonClicked()),
+                   // to:
+                   model, SLOT(MoveCurrentToTop()));
 
-  QObject::connect(
-    widget,
-    SIGNAL( BottomButtonClicked() ),
-    // to:
-    model,
-    SLOT( MoveCurrentToBottom() )
-  );
+  QObject::connect(widget, SIGNAL(BottomButtonClicked()),
+                   // to:
+                   model, SLOT(MoveCurrentToBottom()));
 
-  QObject::connect(
-    widget,
-    SIGNAL( UpButtonClicked() ),
-    // to:
-    model,
-    SLOT( RaiseCurrent() )
-  );
+  QObject::connect(widget, SIGNAL(UpButtonClicked()),
+                   // to:
+                   model, SLOT(RaiseCurrent()));
 
-  QObject::connect(
-    widget,
-    SIGNAL( DownButtonClicked() ),
-    // to:
-    model,
-    SLOT( LowerCurrent() )
-  );
+  QObject::connect(widget, SIGNAL(DownButtonClicked()),
+                   // to:
+                   model, SLOT(LowerCurrent()));
 
-  QObject::connect(
-    widget,
-    SIGNAL( DeleteLayerRequested() ),
-    // to:
-    model,
-    SLOT( DeleteCurrent() )
-  );
+  QObject::connect(widget, SIGNAL(DeleteLayerRequested()),
+                   // to:
+                   model, SLOT(DeleteCurrent()));
 
-  QObject::connect(
-    widget,
-    SIGNAL( DeleteAllLayersRequested() ),
-    // to:
-    model,
-    SLOT( Clear() )
-  );
+  QObject::connect(widget, SIGNAL(DeleteAllLayersRequested()),
+                   // to:
+                   model, SLOT(Clear()));
 
-  QObject::connect(
-    widget,
-    SIGNAL( CopyLayerRequested( const AbstractLayerModel * ) ),
-    // to:
-    this,
-    SLOT( OnCopyLayerRequested( const AbstractLayerModel * ) )
-  );
+  QObject::connect(widget, SIGNAL(CopyLayerRequested(const AbstractLayerModel*)),
+                   // to:
+                   this, SLOT(OnCopyLayerRequested(const AbstractLayerModel*)));
 
-  QObject::connect(
-    widget,
-    SIGNAL( RotateLayersRequested( int ) ),
-    // to:
-    model,
-    SLOT( RotateLayers( int ) )
-  );
+  QObject::connect(widget, SIGNAL(RotateLayersRequested(int)),
+                   // to:
+                   model, SLOT(RotateLayers(int)));
 
-  QObject::connect(
-    widget,
-    SIGNAL( ApplyButtonClicked() ),
-    // to:
-    this,
-    SIGNAL( ApplyAllRequested() )
-  );
+  QObject::connect(widget, SIGNAL(ApplyButtonClicked()),
+                   // to:
+                   this, SIGNAL(ApplyAllRequested()));
 
-  QObject::connect(
-    widget,
-    SIGNAL( ResetEffectsButtonClicked() ),
-    // to:
-    this,
-    SIGNAL( ResetEffectsRequested() )
-  );
+  QObject::connect(widget, SIGNAL(ResetEffectsButtonClicked()),
+                   // to:
+                   this, SIGNAL(ResetEffectsRequested()));
 }
 
 /*******************************************************************************/
-void
-LayerStackController
-::Disconnect( AbstractModel * model )
+void LayerStackController::Disconnect(AbstractModel* model)
 {
   // assert( model==qobject_cast< StackedLayerModel * >( model ) );
 
 
-  QObject::disconnect(
-    model,
-    SIGNAL( CurrentChanged( size_t ) ),
-    // from:deletin
-    this,
-    SLOT( OnStackedLayerCurrentChanged( size_t ) )
-  );
+  QObject::disconnect(model, SIGNAL(CurrentChanged(size_t)),
+                      // from:deletin
+                      this, SLOT(OnStackedLayerCurrentChanged(size_t)));
 
-  QObject::disconnect(
-    model,
-    SIGNAL( ContentChanged() ),
-    // from:
-    this,
-    SLOT( OnStackedLayerContentChanged() )
-  );
+  QObject::disconnect(model, SIGNAL(ContentChanged()),
+                      // from:
+                      this, SLOT(OnStackedLayerContentChanged()));
 
-  QObject::disconnect(
-    model,
-    SIGNAL( ContentReset() ),
-    // from:
-    this,
-    SLOT( OnStackedLayerContentReset() )
-  );
+  QObject::disconnect(model, SIGNAL(ContentReset()),
+                      // from:
+                      this, SLOT(OnStackedLayerContentReset()));
 
 
-  LayerStackWidget * widget = GetWidget< LayerStackWidget >();
-  assert( widget!=NULL );
+  LayerStackWidget* widget = GetWidget<LayerStackWidget>();
+  assert(widget != NULL);
 
-  assert( widget->GetItemModel()!=NULL );
+  assert(widget->GetItemModel() != NULL);
 
-  widget->GetItemModel()->SetStack( NULL );
+  widget->GetItemModel()->SetStack(NULL);
 
 
-  QObject::disconnect(
-    widget,
-    SIGNAL( SelectionChanged( int ) ),
-    // from:
-    this,
-    SLOT( OnSelectionChanged( int ) )
-  );
+  QObject::disconnect(widget, SIGNAL(SelectionChanged(int)),
+                      // from:
+                      this, SLOT(OnSelectionChanged(int)));
 
-  QObject::disconnect(
-    widget,
-    SIGNAL( ProjectionButtonClicked() ),
-    // from:
-    this,
-    SLOT( OnProjectionButtonClicked() )
-  );  
+  QObject::disconnect(widget, SIGNAL(ProjectionButtonClicked()),
+                      // from:
+                      this, SLOT(OnProjectionButtonClicked()));
 
-  //Bugfix for layer deletion
-  QObject::disconnect(
-    widget,
-    SIGNAL( LayerDeletingWidget( unsigned int ) ),
-    // to:
-    model,
-    SLOT( Deleting( unsigned int ) )
-  );
+  // Bugfix for layer deletion
+  QObject::disconnect(widget, SIGNAL(LayerDeletingWidget(unsigned int)),
+                      // to:
+                      model, SLOT(Deleting(unsigned int)));
 
-  QObject::disconnect(
-    widget,
-    SIGNAL( TopButtonClicked() ),
-    // from:
-    model,
-    SLOT( MoveCurrentToTop() )
-  );
+  QObject::disconnect(widget, SIGNAL(TopButtonClicked()),
+                      // from:
+                      model, SLOT(MoveCurrentToTop()));
 
-  QObject::disconnect(
-    widget,
-    SIGNAL( BottomButtonClicked() ),
-    // from:
-    model,
-    SLOT( MoveCurrentToBottom() )
-  );
+  QObject::disconnect(widget, SIGNAL(BottomButtonClicked()),
+                      // from:
+                      model, SLOT(MoveCurrentToBottom()));
 
-  QObject::disconnect(
-    widget,
-    SIGNAL( UpButtonClicked() ),
-    // from:
-    model,
-    SLOT( RaiseCurrent() )
-  );
+  QObject::disconnect(widget, SIGNAL(UpButtonClicked()),
+                      // from:
+                      model, SLOT(RaiseCurrent()));
 
-  QObject::disconnect(
-    widget,
-    SIGNAL( DownButtonClicked() ),
-    // from:
-    model,
-    SLOT( LowerCurrent() )
-  );
+  QObject::disconnect(widget, SIGNAL(DownButtonClicked()),
+                      // from:
+                      model, SLOT(LowerCurrent()));
 
-  QObject::disconnect(
-    widget,
-    SIGNAL( DeleteLayerRequested() ),
-    // from:
-    model,
-    SLOT( DeleteCurrent() )
-  );
+  QObject::disconnect(widget, SIGNAL(DeleteLayerRequested()),
+                      // from:
+                      model, SLOT(DeleteCurrent()));
 
-  QObject::disconnect(
-    widget,
-    SIGNAL( DeleteAllLayersRequested() ),
-    // from:
-    model,
-    SLOT( Clear() )
-  );
+  QObject::disconnect(widget, SIGNAL(DeleteAllLayersRequested()),
+                      // from:
+                      model, SLOT(Clear()));
 
-  QObject::disconnect(
-    widget,
-    SIGNAL( CopyLayerRequested( const AbstractLayerModel * ) ),
-    // from:
-    this,
-    SLOT( OnCopyLayerRequested( const AbstractLayerModel * ) )
-  );
+  QObject::disconnect(widget, SIGNAL(CopyLayerRequested(const AbstractLayerModel*)),
+                      // from:
+                      this, SLOT(OnCopyLayerRequested(const AbstractLayerModel*)));
 
-  QObject::disconnect(
-    widget,
-    SIGNAL( RotateLayersRequested( int ) ),
-    // from:
-    model,
-    SLOT( RotateLayers( int ) )
-  );
+  QObject::disconnect(widget, SIGNAL(RotateLayersRequested(int)),
+                      // from:
+                      model, SLOT(RotateLayers(int)));
 
-  QObject::disconnect(
-    widget,
-    SIGNAL( ApplyButtonClicked() ),
-    // to:
-    this,
-    SIGNAL( ApplyAllRequested() )
-  );
+  QObject::disconnect(widget, SIGNAL(ApplyButtonClicked()),
+                      // to:
+                      this, SIGNAL(ApplyAllRequested()));
 
-  QObject::disconnect(
-    widget,
-    SIGNAL( ResetEffectsButtonClicked() ),
-    // to:
-    this,
-    SIGNAL( ResetEffectsRequested() )
-  );
+  QObject::disconnect(widget, SIGNAL(ResetEffectsButtonClicked()),
+                      // to:
+                      this, SIGNAL(ResetEffectsRequested()));
 }
 
 /*******************************************************************************/
-void
-LayerStackController
-::virtual_ResetWidget( bool )
+void LayerStackController::virtual_ResetWidget(bool)
 {
 }
 
 /*******************************************************************************/
-void
-LayerStackController
-::UpdateButtonsState()
+void LayerStackController::UpdateButtonsState()
 {
-  assert( GetModel()==GetModel< StackedLayerModel >() );
-  StackedLayerModel * model = GetModel< StackedLayerModel >();
-  assert( model!=NULL );
+  assert(GetModel() == GetModel<StackedLayerModel>());
+  StackedLayerModel* model = GetModel<StackedLayerModel>();
+  assert(model != NULL);
 
-  assert( GetWidget()==GetWidget< LayerStackWidget >() );
-  LayerStackWidget * widget = GetWidget< LayerStackWidget >();
-  assert( widget!=NULL );
+  assert(GetWidget() == GetWidget<LayerStackWidget>());
+  LayerStackWidget* widget = GetWidget<LayerStackWidget>();
+  assert(widget != NULL);
 
   {
-  size_t unk = 0;
-  size_t gcs = 0;
+    size_t unk = 0;
+    size_t gcs = 0;
 
-  model->CountSRT( unk, gcs, gcs, gcs );
-    
-  widget->SetProjectionEnabled( unk==0 && !model->IsEmpty() );
+    model->CountSRT(unk, gcs, gcs, gcs);
+
+    widget->SetProjectionEnabled(unk == 0 && !model->IsEmpty());
   }
 
-  widget->SetDeleteEnabled( !model->IsEmpty() );
+  widget->SetDeleteEnabled(!model->IsEmpty());
 
-  widget->SetReloadEnabled( !model->IsEmpty() );
+  widget->SetReloadEnabled(!model->IsEmpty());
 
-  widget->SetMoveEnabled( model->GetCount()>1 );
+  widget->SetMoveEnabled(model->GetCount() > 1);
 
-  widget->SetApplyEnabled( model->GetCount()>1 );
+  widget->SetApplyEnabled(model->GetCount() > 1);
 
-  widget->SetResetEffectsEnabled( !model->IsEmpty() );
+  widget->SetResetEffectsEnabled(!model->IsEmpty());
 }
 
 /*******************************************************************************/
 /* SLOTS                                                                       */
 /*******************************************************************************/
-void
-LayerStackController
-::OnCopyLayerRequested( const AbstractLayerModel * layer )
+void LayerStackController::OnCopyLayerRequested(const AbstractLayerModel* layer)
 {
   // qDebug() << this << "::OnCopyLayerRequested(" << layer << ")";
 
-  assert( layer!=NULL );
+  assert(layer != NULL);
 
-  const FilenameInterface * interface =
-    dynamic_cast< const FilenameInterface * >( layer );
+  const FilenameInterface* interface = dynamic_cast<const FilenameInterface*>(layer);
 
-  if( interface==NULL )
+  if (interface == NULL)
     return;
 
-  assert( qApp!=NULL );
-  assert( qApp->clipboard()!=NULL );
-  assert( qApp->clipboard()->mimeData()!=NULL );
+  assert(qApp != NULL);
+  assert(qApp->clipboard() != NULL);
+  assert(qApp->clipboard()->mimeData() != NULL);
 
-  QList< QUrl > urls;
-  
-  urls << QUrl::fromLocalFile( interface->GetFilename() );
+  QList<QUrl> urls;
+
+  urls << QUrl::fromLocalFile(interface->GetFilename());
 
   qDebug() << "URLs:" << urls;
 
-  QMimeData * mimeData = new QMimeData();
+  QMimeData* mimeData = new QMimeData();
 
-  mimeData->setUrls( urls );
-  mimeData->setText( interface->GetFilename() );
+  mimeData->setUrls(urls);
+  mimeData->setText(interface->GetFilename());
 
-  qApp->clipboard()->setMimeData( mimeData );
+  qApp->clipboard()->setMimeData(mimeData);
 }
 
 /*******************************************************************************/
-void
-LayerStackController
-::OnCurrentChanged( int index )
+void LayerStackController::OnCurrentChanged(int index)
 {
   // qDebug() << this << "::OnCurrentChanged(" << index << ")";
 
-  assert( GetModel()==GetModel< StackedLayerModel >() );
-  StackedLayerModel * model = GetModel< StackedLayerModel >();
-  assert( model!=NULL );
+  assert(GetModel() == GetModel<StackedLayerModel>());
+  StackedLayerModel* model = GetModel<StackedLayerModel>();
+  assert(model != NULL);
 
-  model->SetCurrent( index );
+  model->SetCurrent(index);
 }
 
 /*******************************************************************************/
-void
-LayerStackController
-::OnProjectionButtonClicked()
+void LayerStackController::OnProjectionButtonClicked()
 {
   // qDebug() << this << "::OnProjectionButtonClicked()";
 
-  assert( GetModel()==GetModel< StackedLayerModel >() );
-  StackedLayerModel * model = GetModel< StackedLayerModel >();
-  assert( model!=NULL );
+  assert(GetModel() == GetModel<StackedLayerModel>());
+  StackedLayerModel* model = GetModel<StackedLayerModel>();
+  assert(model != NULL);
 
-  model->SetReference( model->GetCurrentIndex() );
+  model->SetReference(model->GetCurrentIndex());
 }
 
 /*******************************************************************************/
-void
-LayerStackController
-::OnSelectionChanged( int index )
+void LayerStackController::OnSelectionChanged(int index)
 {
   // qDebug() << this << "::OnSelectionChanged(" << index << ")";
 
-  assert( GetModel()==GetModel< StackedLayerModel >() );
-  StackedLayerModel * model = GetModel< StackedLayerModel >();
-  assert( model!=NULL );
+  assert(GetModel() == GetModel<StackedLayerModel>());
+  StackedLayerModel* model = GetModel<StackedLayerModel>();
+  assert(model != NULL);
 
-  model->SetCurrent( index );
+  model->SetCurrent(index);
 }
 
 /*******************************************************************************/
-void
-LayerStackController
-::OnStackedLayerCurrentChanged( size_t index )
+void LayerStackController::OnStackedLayerCurrentChanged(size_t index)
 {
   // qDebug() << this << "::OnStackedLayerCurrentChanged(" << index << ")";
 
-  LayerStackWidget * widget = GetWidget< LayerStackWidget >();
-  assert( widget!=NULL );
+  LayerStackWidget* widget = GetWidget<LayerStackWidget>();
+  assert(widget != NULL);
 
-  assert( widget->GetItemModel()!=NULL );
+  assert(widget->GetItemModel() != NULL);
 
-  bool prevSignalsBlocked = widget->blockSignals( true );
+  bool prevSignalsBlocked = widget->blockSignals(true);
   {
-  widget->SetCurrent( index );
+    widget->SetCurrent(index);
   }
-  widget->blockSignals( prevSignalsBlocked );
+  widget->blockSignals(prevSignalsBlocked);
 }
 
 /*******************************************************************************/
-void
-LayerStackController
-::OnStackedLayerContentChanged()
+void LayerStackController::OnStackedLayerContentChanged()
 {
   // qDebug() << this << "::OnStackedLayerContentChanged()";
 
@@ -534,9 +378,7 @@ LayerStackController
 }
 
 /*******************************************************************************/
-void
-LayerStackController
-::OnStackedLayerContentReset()
+void LayerStackController::OnStackedLayerContentReset()
 {
   // qDebug() << this << "::OnStackedLayerContentChanged()";
 

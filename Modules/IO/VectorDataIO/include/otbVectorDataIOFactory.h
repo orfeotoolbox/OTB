@@ -65,9 +65,8 @@ protected:
   ~VectorDataIOFactory() override;
 
 private:
-  VectorDataIOFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  VectorDataIOFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -23,6 +23,8 @@
 # OTB before including OTBModuleMacros. This is the preferred way to build an
 # OTB module outside of the OTB source tree.
 
+include(GenerateExportHeaderCustom)
+
 macro(otb_module_test)
   include(../otb-module.cmake) # Load module meta-data
   set(${otb-module-test}_LIBRARIES "")

@@ -44,7 +44,7 @@ public:
   itkTypeMacro(ConcatenateVectorData, otb::Application);
 
   /** VectorData Concatenate filter*/
-  typedef otb::ConcatenateVectorDataFilter<VectorDataType>  ConcatenateFilterType;
+  typedef otb::ConcatenateVectorDataFilter<VectorDataType> ConcatenateFilterType;
 
 private:
   void DoInit() override
@@ -52,15 +52,17 @@ private:
     SetName("ConcatenateVectorData");
     SetDescription("Concatenate vector data files");
 
-    SetDocLongDescription("This application concatenates a list of vector data "
-      "files to produce a unique vector data output file.\n\n"
-      "This application will gather all the geometries from the input files and"
-      " write them into an output vector data file. Any format supported by OGR"
-      " can be used. Ideally, all inputs should have the same set of fields and"
-      " the same spatial reference system.");
-    SetDocLimitations("The vector data must be contain the same type of "
-      "geometries (point / lines / polygons). The fields present in the output "
-      "file are the ones from the first input.");
+    SetDocLongDescription(
+        "This application concatenates a list of vector data "
+        "files to produce a unique vector data output file.\n\n"
+        "This application will gather all the geometries from the input files and"
+        " write them into an output vector data file. Any format supported by OGR"
+        " can be used. Ideally, all inputs should have the same set of fields and"
+        " the same spatial reference system.");
+    SetDocLimitations(
+        "The vector data must be contain the same type of "
+        "geometries (point / lines / polygons). The fields present in the output "
+        "file are the ones from the first input.");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
@@ -73,7 +75,7 @@ private:
     SetParameterDescription("out", "Output conctenated vector data file.");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("vd", "ToulousePoints-examples.shp ToulouseRoad-examples.shp");
+    SetDocExampleParameterValue("vd", "toulousepoints_examples.shp ToulouseRoad-examples.shp");
     SetDocExampleParameterValue("out", "ConcatenatedVectorData.shp");
 
     SetOfficialDocLink();
@@ -94,17 +96,16 @@ private:
     m_ConcatenateFilter = ConcatenateFilterType::New();
 
     for (unsigned int idx = 0; idx < vectorDataList->Size(); idx++)
-      {
+    {
       m_ConcatenateFilter->AddInput(vectorDataList->GetNthElement(idx));
-      }
+    }
 
     // Set the output
     SetParameterOutputVectorData("out", m_ConcatenateFilter->GetOutput());
   }
 
   ConcatenateFilterType::Pointer m_ConcatenateFilter;
-  };
-
+};
 }
 }
 OTB_APPLICATION_EXPORT(otb::Wrapper::ConcatenateVectorData)

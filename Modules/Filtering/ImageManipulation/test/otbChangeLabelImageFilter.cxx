@@ -27,22 +27,22 @@
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 
-int otbChangeLabelImageFilter(int itkNotUsed(argc), char * argv[])
+int otbChangeLabelImageFilter(int itkNotUsed(argc), char* argv[])
 {
-  const unsigned int ImageDimension = 2;
-  const char *       inputFilename(argv[1]);
-  const char *       outFilename(argv[2]);
-  typedef unsigned short                                               PixelType;
-  typedef otb::Image<PixelType, ImageDimension>                        InputImageType;
-  typedef otb::VectorImage<PixelType, ImageDimension>                  OutputImageType;
-  typedef InputImageType::PixelType                                    InputPixelType;
-  typedef OutputImageType::PixelType                                   OutputPixelType;
+  const unsigned int     ImageDimension = 2;
+  const char*            inputFilename(argv[1]);
+  const char*            outFilename(argv[2]);
+  typedef unsigned short PixelType;
+  typedef otb::Image<PixelType, ImageDimension>       InputImageType;
+  typedef otb::VectorImage<PixelType, ImageDimension> OutputImageType;
+  typedef InputImageType::PixelType  InputPixelType;
+  typedef OutputImageType::PixelType OutputPixelType;
   typedef otb::ChangeLabelImageFilter<InputImageType, OutputImageType> FilterType;
-  typedef otb::ImageFileWriter<OutputImageType>                        WriterType;
-  typedef otb::ImageFileReader<InputImageType>                         ReaderType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::ImageFileReader<InputImageType>  ReaderType;
 
-  FilterType::Pointer     filter = FilterType::New();
-  InputImageType::Pointer vectImage  = InputImageType::New();
+  FilterType::Pointer     filter    = FilterType::New();
+  InputImageType::Pointer vectImage = InputImageType::New();
 
   WriterType::Pointer writer = WriterType::New();
   ReaderType::Pointer reader = ReaderType::New();
@@ -62,9 +62,9 @@ int otbChangeLabelImageFilter(int itkNotUsed(argc), char * argv[])
   OutputPixelType zero = itk::NumericTraits<OutputPixelType>::ZeroValue(background);
   filter->SetChange(0, zero);
   for (InputPixelType i = lower; i <= upper; ++i)
-    {
+  {
     filter->SetChange(i, background);
-    }
+  }
 
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());

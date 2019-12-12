@@ -27,20 +27,20 @@
 #include "otbStandardWriterWatcher.h"
 
 const unsigned int Dimension = 2;
-typedef double PixelType;
+typedef double     PixelType;
 
 typedef otb::VectorImage<PixelType, Dimension> ImageType;
 typedef otb::ImageFileReader<ImageType> ReaderType;
 typedef otb::ISRAUnmixingImageFilter<ImageType, ImageType, PixelType> UnmixingImageFilterType;
 typedef otb::VectorImageToMatrixImageFilter<ImageType> VectorImageToMatrixImageFilterType;
-typedef otb::ImageFileWriter<ImageType> WriterType;
+typedef otb::ImageFileWriter<ImageType>                WriterType;
 
-int otbISRAUnmixingImageFilterTest(int itkNotUsed(argc), char * argv[])
+int otbISRAUnmixingImageFilterTest(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputImage = argv[1];
-  const char * inputEndmembers = argv[2];
-  const char * outputImage = argv[3];
-  int maxIter = atoi(argv[4]);
+  const char* inputImage      = argv[1];
+  const char* inputEndmembers = argv[2];
+  const char* outputImage     = argv[3];
+  int         maxIter         = atoi(argv[4]);
 
   ReaderType::Pointer readerImage = ReaderType::New();
   readerImage->SetFileName(inputImage);
@@ -53,14 +53,14 @@ int otbISRAUnmixingImageFilterTest(int itkNotUsed(argc), char * argv[])
   endMember2Matrix->Update();
 
   typedef VectorImageToMatrixImageFilterType::MatrixType MatrixType;
-  MatrixType endMembers = endMember2Matrix->GetMatrix();
-  MatrixType pinv = vnl_matrix_inverse<PixelType>(endMembers);
+  MatrixType                                             endMembers = endMember2Matrix->GetMatrix();
+  MatrixType                                             pinv       = vnl_matrix_inverse<PixelType>(endMembers);
 
   UnmixingImageFilterType::Pointer unmixer = UnmixingImageFilterType::New();
 
   unmixer->SetInput(readerImage->GetOutput());
   unmixer->GetModifiableFunctor().SetMaxIteration(maxIter);
-  //unmixer->SetNumberOfThreads(1);
+  // unmixer->SetNumberOfThreads(1);
   unmixer->GetModifiableFunctor().SetEndmembersMatrix(endMember2Matrix->GetMatrix());
 
   WriterType::Pointer writer = WriterType::New();
@@ -68,7 +68,7 @@ int otbISRAUnmixingImageFilterTest(int itkNotUsed(argc), char * argv[])
   writer->SetInput(unmixer->GetOutput());
   writer->SetNumberOfDivisionsStrippedStreaming(10);
 
-  otb::StandardWriterWatcher w4(writer, unmixer,"ISRAUnmixingImageFilter");
+  otb::StandardWriterWatcher w4(writer, unmixer, "ISRAUnmixingImageFilter");
 
   writer->Update();
 

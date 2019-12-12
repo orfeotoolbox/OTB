@@ -64,18 +64,12 @@ namespace
  *
  * It is defined (statically) as a constant for translation purposes.
  */
-char const * const
-ENHANCED_BAND_NAMES[ 10 ] = {
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Red" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Green" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Blue" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Yellow" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "RedEdge" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "Coastal" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "NIR" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "NIR1" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "NIR2" ),
-  QT_TRANSLATE_NOOP( "mvd::AbstractImageModel", "PAN" ),
+char const* const ENHANCED_BAND_NAMES[10] = {
+    QT_TRANSLATE_NOOP("mvd::AbstractImageModel", "Red"),     QT_TRANSLATE_NOOP("mvd::AbstractImageModel", "Green"),
+    QT_TRANSLATE_NOOP("mvd::AbstractImageModel", "Blue"),    QT_TRANSLATE_NOOP("mvd::AbstractImageModel", "Yellow"),
+    QT_TRANSLATE_NOOP("mvd::AbstractImageModel", "RedEdge"), QT_TRANSLATE_NOOP("mvd::AbstractImageModel", "Coastal"),
+    QT_TRANSLATE_NOOP("mvd::AbstractImageModel", "NIR"),     QT_TRANSLATE_NOOP("mvd::AbstractImageModel", "NIR1"),
+    QT_TRANSLATE_NOOP("mvd::AbstractImageModel", "NIR2"),    QT_TRANSLATE_NOOP("mvd::AbstractImageModel", "PAN"),
 };
 
 } // end of anonymous namespace.
@@ -97,146 +91,118 @@ void fix_unused_variable_warning()
   // strings from the .qm files loaded at runtime.
   (void)ENHANCED_BAND_NAMES;
 }
-
 };
 
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 
 /*******************************************************************************/
-AbstractImageModel
-::AbstractImageModel( QObject* p ) :
-  AbstractLayerModel( p ),
-  m_NativeLargestRegion(),
-  m_Id( -1 ),
-  m_CurrentLod( 0 ),
-  m_Properties( NULL )
+AbstractImageModel::AbstractImageModel(QObject* p) : AbstractLayerModel(p), m_NativeLargestRegion(), m_Id(-1), m_CurrentLod(0), m_Properties(NULL)
 {
 }
 
 /*******************************************************************************/
-AbstractImageModel
-::~AbstractImageModel()
+AbstractImageModel::~AbstractImageModel()
 {
-  SetProperties( NULL );
+  SetProperties(NULL);
 }
 
 /*****************************************************************************/
-const QuicklookModel*
-AbstractImageModel
-::GetQuicklookModel() const
+const QuicklookModel* AbstractImageModel::GetQuicklookModel() const
 {
-  return findChild< const QuicklookModel* >();
+  return findChild<const QuicklookModel*>();
 }
 
 /*****************************************************************************/
-QuicklookModel*
-AbstractImageModel
-::GetQuicklookModel()
+QuicklookModel* AbstractImageModel::GetQuicklookModel()
 {
-  return findChild< QuicklookModel* >();
+  return findChild<QuicklookModel*>();
 }
 
 /*******************************************************************************/
-QStringList
-AbstractImageModel
-::GetBandNames( bool enhanced ) const
+QStringList AbstractImageModel::GetBandNames(bool enhanced) const
 {
-  ImageBaseType::ConstPointer output( ToImageBase() );
+  ImageBaseType::ConstPointer output(ToImageBase());
 
-  otb::ImageMetadataInterfaceBase::ConstPointer metaDataInterface(
-    GetMetaDataInterface()
-    );
+  otb::ImageMetadataInterfaceBase::ConstPointer metaDataInterface(GetMetaDataInterface());
 
   //
   // Basic band names.
-  StringVector stdBandNames1( metaDataInterface->GetBandName() );
+  StringVector stdBandNames1(metaDataInterface->GetBandName());
 
   // output band name list
-  QStringList qBandNames1( QString("") );
+  QStringList qBandNames1(QString(""));
 
   //
   // PS: need to handle images with extracted channels and a geom file
   // storing the original image band names.
-  if (stdBandNames1.empty() ||
-      stdBandNames1.size()!=output->GetNumberOfComponentsPerPixel())
-    {
+  if (stdBandNames1.empty() || stdBandNames1.size() != output->GetNumberOfComponentsPerPixel())
+  {
     // output stringVector
     StringVector outputBandNames;
 
     //
     // Fill the output std::vector with default values
-    for( unsigned int count = 0;
-         count < output->GetNumberOfComponentsPerPixel(); 
-         count++)
-      {
+    for (unsigned int count = 0; count < output->GetNumberOfComponentsPerPixel(); count++)
+    {
       std::ostringstream oss;
-      oss <<ToStdString( tr("BAND ") )<< count + 1;
+      oss << ToStdString(tr("BAND ")) << count + 1;
       outputBandNames.push_back(oss.str());
-      }
+    }
 
     // set the output QStringList
-    qBandNames1 = ToQStringList( outputBandNames );
-    }
+    qBandNames1 = ToQStringList(outputBandNames);
+  }
   else
-    {
+  {
     // useless
-    assert( !stdBandNames1.empty() ||
-            stdBandNames1.size()==output->GetNumberOfComponentsPerPixel() );
+    assert(!stdBandNames1.empty() || stdBandNames1.size() == output->GetNumberOfComponentsPerPixel());
 
-    if( stdBandNames1.size()!=output->GetNumberOfComponentsPerPixel() )
-      {
-      stdBandNames1.resize( output->GetNumberOfComponentsPerPixel() );
-      }
+    if (stdBandNames1.size() != output->GetNumberOfComponentsPerPixel())
+    {
+      stdBandNames1.resize(output->GetNumberOfComponentsPerPixel());
+    }
 
     //
     // Enhanced band names.
     StringVector stdBandNames2;
-    if( enhanced )
-      {
+    if (enhanced)
+    {
       try
-        {
-        stdBandNames2 = metaDataInterface->GetEnhancedBandNames();
-        }
-      catch( std::exception& exc )
-        {
-	qWarning() << exc.what();
-	}
-      }
-
-    assert( stdBandNames2.empty() ||
-            stdBandNames2.size()==output->GetNumberOfComponentsPerPixel() );
-
-    if( stdBandNames2.size()!=output->GetNumberOfComponentsPerPixel() )
       {
-      stdBandNames2.resize( output->GetNumberOfComponentsPerPixel() );
+        stdBandNames2 = metaDataInterface->GetEnhancedBandNames();
       }
+      catch (std::exception& exc)
+      {
+        qWarning() << exc.what();
+      }
+    }
+
+    assert(stdBandNames2.empty() || stdBandNames2.size() == output->GetNumberOfComponentsPerPixel());
+
+    if (stdBandNames2.size() != output->GetNumberOfComponentsPerPixel())
+    {
+      stdBandNames2.resize(output->GetNumberOfComponentsPerPixel());
+    }
 
     //
     // Join basic and enhanced band-name lists.
-    assert( stdBandNames1.size()==stdBandNames2.size() );
+    assert(stdBandNames1.size() == stdBandNames2.size());
 
-    qBandNames1 =  ToQStringList( stdBandNames1 );
-    QStringList qBandNames2( ToQStringList( stdBandNames2 ) );
+    qBandNames1 = ToQStringList(stdBandNames1);
+    QStringList qBandNames2(ToQStringList(stdBandNames2));
 
-    assert( qApp!=NULL );
+    assert(qApp != NULL);
 
-    QStringList::iterator it1( qBandNames1.begin() );
-    QStringList::const_iterator it2( qBandNames2.begin() );
+    QStringList::iterator       it1(qBandNames1.begin());
+    QStringList::const_iterator it2(qBandNames2.begin());
 
-    for( ; it1!=qBandNames1.end(); ++it1, ++it2 )
-      {
-      if( !it2->isEmpty() )
-        it1->append(
-	  " (" +
-	  qApp->translate(
-	    "mvd::AbstractImageModel",
-	    it2->toLatin1().constData()
-	  )
-	  + ")"
-	);
-      }
+    for (; it1 != qBandNames1.end(); ++it1, ++it2)
+    {
+      if (!it2->isEmpty())
+        it1->append(" (" + qApp->translate("mvd::AbstractImageModel", it2->toLatin1().constData()) + ")");
     }
+  }
 
   //
   // Return joined band-name list.
@@ -244,9 +210,7 @@ AbstractImageModel
 }
 
 /*******************************************************************************/
-void
-AbstractImageModel
-::RefreshHistogram( void* const context )
+void AbstractImageModel::RefreshHistogram(void* const context)
 {
   // qDebug() << this << "::RefreshHistogram(" << context << ")";
 
@@ -263,7 +227,7 @@ AbstractImageModel
 #endif
 
   // Create new child histogram providing build-context.
-  newChildModel< HistogramModel >( context );
+  newChildModel<HistogramModel>(context);
 
   // Delete (and remove) previous child histogram.
   delete currentHistogramModel;
@@ -271,14 +235,12 @@ AbstractImageModel
 }
 
 /*******************************************************************************/
-void
-AbstractImageModel
-::virtual_BuildModel( void* context )
+void AbstractImageModel::virtual_BuildModel(void* context)
 {
   //
   // Retrieve proper build-context.
-  assert( context!=NULL );
-  BuildContext* buildContext = static_cast< BuildContext* >( context );
+  assert(context != NULL);
+  BuildContext* buildContext = static_cast<BuildContext*>(context);
 
   //
   // ID.
@@ -289,22 +251,19 @@ AbstractImageModel
   //
   // Build quicklook before histogram because histogram calculation is
   // based on quicklook image.
-  newChildModel< QuicklookModel >( context );
+  newChildModel<QuicklookModel>(context);
 
   //
   // HISTOGRAM.
-  if( buildContext->m_Histogram.isEmpty() )
-    newChildModel< HistogramModel >();
+  if (buildContext->m_Histogram.isEmpty())
+    newChildModel<HistogramModel>();
 
   else
-    {
-    HistogramModel::BuildContext histogramContext(
-      buildContext->IsBeingStored(),
-      buildContext->m_Histogram
-    );
+  {
+    HistogramModel::BuildContext histogramContext(buildContext->IsBeingStored(), buildContext->m_Histogram);
 
-    newChildModel< HistogramModel >( &histogramContext );
-    }
+    newChildModel<HistogramModel>(&histogramContext);
+  }
 }
 
 /*******************************************************************************/

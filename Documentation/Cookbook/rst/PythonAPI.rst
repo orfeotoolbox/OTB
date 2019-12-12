@@ -224,7 +224,7 @@ Mixed in-memory / on-disk connection
 As an extension to the connection of OTB Applications (described in previous
 section), a mixed mode is also available to easily switch between:
 
-- **in-memory**: if you want to avoid unecessary I/O between applications
+- **in-memory**: if you want to avoid unnecessary I/O between applications
 - **on-disk**: if you want intermediate outputs on disk
 
 This mixed mode is based on the ``Application::ConnectImage()`` function. This

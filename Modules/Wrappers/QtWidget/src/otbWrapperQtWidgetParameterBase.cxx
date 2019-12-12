@@ -25,13 +25,9 @@ namespace otb
 namespace Wrapper
 {
 
-QtWidgetParameterBase::QtWidgetParameterBase(Parameter * param, QtWidgetModel* m, QWidget * parent)
-  : QWidget(parent)
-  , m_Model(m)
-  , m_Param(param)
-  , m_IsChecked( false )
+QtWidgetParameterBase::QtWidgetParameterBase(Parameter* param, QtWidgetModel* m, QWidget* parent)
+  : QWidget(parent), m_Model(m), m_Param(param), m_IsChecked(false)
 {
-
 }
 
 QtWidgetParameterBase::~QtWidgetParameterBase()
@@ -42,7 +38,7 @@ QtWidgetParameterBase::~QtWidgetParameterBase()
 void QtWidgetParameterBase::CreateWidget()
 {
   // Connect the model update gui signal to this widget update gui slot
-  connect( GetModel(), &QtWidgetModel::UpdateGui, this, &QtWidgetParameterBase::UpdateGUI );
+  connect(GetModel(), &QtWidgetModel::UpdateGui, this, &QtWidgetParameterBase::UpdateGUI);
 
   this->DoCreateWidget();
 }
@@ -54,19 +50,19 @@ void QtWidgetParameterBase::UpdateGUI()
 
   // Emit State of the Parameter to update this parameter checkbox
   if (!m_Param->GetMandatory())
-    {
+  {
     bool state = m_Param->GetActive();
     emit ParameterActiveStatus(state);
-   }
+  }
   else
-    {
+  {
     // Activate the Mandatory param and the Mandatory subparam in an
     // activated Group
-   if (m_Param->GetRoot()->GetActive())
-     {
-     emit ParameterActiveStatus(true);
-     }
+    if (m_Param->GetRoot()->GetActive())
+    {
+      emit ParameterActiveStatus(true);
     }
+  }
 }
 
 void QtWidgetParameterBase::ParameterChanged(const QString& itkNotUsed(key))
@@ -81,23 +77,19 @@ QtWidgetModel* QtWidgetParameterBase::GetModel()
 
 // Slot connected to the signal emitted the checkBox relative to
 // current widget
-void QtWidgetParameterBase::SetActivationState( bool value )
+void QtWidgetParameterBase::SetActivationState(bool value)
 {
   this->setEnabled(value);
   this->SetChecked(value);
   m_Param->SetActive(value);
 }
 
-const Parameter *
-QtWidgetParameterBase
-::GetParam() const
+const Parameter* QtWidgetParameterBase::GetParam() const
 {
   return m_Param;
 }
 
-Parameter *
-QtWidgetParameterBase
-::GetParam()
+Parameter* QtWidgetParameterBase::GetParam()
 {
   return m_Param;
 }
@@ -112,8 +104,5 @@ bool QtWidgetParameterBase::eventFilter(QObject* o, QEvent* e)
   }
   return QWidget::eventFilter(o, e);
 }
-
-
 }
-
 }

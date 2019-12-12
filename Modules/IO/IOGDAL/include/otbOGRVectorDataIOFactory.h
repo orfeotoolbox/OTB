@@ -62,9 +62,8 @@ protected:
   ~OGRVectorDataIOFactory() override;
 
 private:
-  OGRVectorDataIOFactory(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  OGRVectorDataIOFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

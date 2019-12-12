@@ -27,7 +27,8 @@
 #include "itkLogger.h"
 #include "OTBCommonExport.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class Logger
  *  \brief An ITK logger specialized for OTB
@@ -39,10 +40,10 @@ namespace otb {
 class OTBCommon_EXPORT Logger : public itk::Logger
 {
 public:
-  typedef Logger                          Self;
-  typedef itk::Logger                     Superclass;
-  typedef itk::SmartPointer< Self >       Pointer;
-  typedef itk::SmartPointer< const Self > ConstPointer;
+  typedef Logger                        Self;
+  typedef itk::Logger                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   itkTypeMacro(Logger, itk::Logger);
 
@@ -54,16 +55,15 @@ public:
    *
    * See https://stackoverflow.com/questions/335369/finding-c-static-initialization-order-problems#335746
    */
-  static Logger * Instance();
+  static Logger* Instance();
 
   void ResetOutputs();
 
   static Pointer New();
-  itkCreateAnotherMacro( Logger )
-  itkCloneMacro( Logger )
+  itkCreateAnotherMacro(Logger) itkCloneMacro(Logger)
 
-  /** Output logs about the RAM, caching and multi-threading settings */
-  void LogSetupInformation();
+      /** Output logs about the RAM, caching and multi-threading settings */
+      void LogSetupInformation();
 
   /** Return true if the LogSetupInformation has already been called*/
   bool IsLogSetupInformationDone();
@@ -79,10 +79,10 @@ protected:
   virtual ~Logger() override = default;
 
 private:
-  Logger(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  Logger(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
-  static Logger * CreateInstance();
+  static Logger* CreateInstance();
 
 
   bool m_LogSetupInfoDone;

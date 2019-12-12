@@ -57,73 +57,69 @@ namespace otb
  *
  * \ingroup OTBMorphologicalProfiles
 */
-template <class TInputImage,  class TOutputImage, class TInternalPrecision = float, class TStructuringElement = itk::BinaryBallStructuringElement<typename TInputImage::PixelType, TInputImage::ImageDimension> >
-class ITK_EXPORT MorphologicalProfilesSegmentationFilter
-  : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+template <class TInputImage, class TOutputImage, class TInternalPrecision = float,
+          class TStructuringElement = itk::BinaryBallStructuringElement<typename TInputImage::PixelType, TInputImage::ImageDimension>>
+class ITK_EXPORT MorphologicalProfilesSegmentationFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
-/** Standard Self typedef */
-typedef MorphologicalProfilesSegmentationFilter Self;
-typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  /** Standard Self typedef */
+  typedef MorphologicalProfilesSegmentationFilter Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
 
-typedef itk::SmartPointer<Self>       Pointer;
-typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
-/** Some convenient typedefs. */
-typedef TInputImage                        InputImageType;
-typedef typename InputImageType::PixelType InputPixelType;
-typedef TOutputImage                       OutputImageType;
-typedef otb::Image<TInternalPrecision>     InternalImageType;
+  /** Some convenient typedefs. */
+  typedef TInputImage                        InputImageType;
+  typedef typename InputImageType::PixelType InputPixelType;
+  typedef TOutputImage                       OutputImageType;
+  typedef otb::Image<TInternalPrecision>     InternalImageType;
 
-typedef TStructuringElement                StructuringElementType;
+  typedef TStructuringElement StructuringElementType;
 
-typedef otb::MorphologicalOpeningProfileFilter<InputImageType, InternalImageType, StructuringElementType>
-OpeningProfileFilterType;
-typedef otb::MorphologicalClosingProfileFilter<InputImageType, InternalImageType, StructuringElementType>
-ClosingProfileFilterType;
-typedef otb::ProfileToProfileDerivativeFilter<InternalImageType, InternalImageType> DerivativeFilterType;
-typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InternalImageType, InternalImageType, OutputImageType>
-MultiScaleCharacteristicsFilterType;
-typedef otb::MultiScaleConvexOrConcaveClassificationFilter<InternalImageType,
-                                                           OutputImageType> MultiScaleClassificationFilterType;
-typedef itk::ScalarConnectedComponentImageFilter<OutputImageType,OutputImageType> ConnectedComponentsFilterType;
+  typedef otb::MorphologicalOpeningProfileFilter<InputImageType, InternalImageType, StructuringElementType> OpeningProfileFilterType;
+  typedef otb::MorphologicalClosingProfileFilter<InputImageType, InternalImageType, StructuringElementType> ClosingProfileFilterType;
+  typedef otb::ProfileToProfileDerivativeFilter<InternalImageType, InternalImageType> DerivativeFilterType;
+  typedef otb::ProfileDerivativeToMultiScaleCharacteristicsFilter<InternalImageType, InternalImageType, OutputImageType> MultiScaleCharacteristicsFilterType;
+  typedef otb::MultiScaleConvexOrConcaveClassificationFilter<InternalImageType, OutputImageType> MultiScaleClassificationFilterType;
+  typedef itk::ScalarConnectedComponentImageFilter<OutputImageType, OutputImageType>             ConnectedComponentsFilterType;
 
-/** Method for creation through the object factory. */
-itkNewMacro(Self);
+  /** Method for creation through the object factory. */
+  itkNewMacro(Self);
 
-/** Runtime information support. */
-itkTypeMacro(MorphologicalProfilesSegmentationFilter, itk::ImageToImageFilter);
+  /** Runtime information support. */
+  itkTypeMacro(MorphologicalProfilesSegmentationFilter, itk::ImageToImageFilter);
 
-itkSetMacro(ProfileSize,unsigned int);
-itkGetConstReferenceMacro(ProfileSize,unsigned int);
-itkSetMacro(ProfileStart,unsigned int);
-itkGetConstReferenceMacro(ProfileStart,unsigned int);
-itkSetMacro(ProfileStep,unsigned int);
-itkGetConstReferenceMacro(ProfileStep,unsigned int);
-itkSetMacro(Sigma,double);
-itkGetConstReferenceMacro(Sigma,double);
+  itkSetMacro(ProfileSize, unsigned int);
+  itkGetConstReferenceMacro(ProfileSize, unsigned int);
+  itkSetMacro(ProfileStart, unsigned int);
+  itkGetConstReferenceMacro(ProfileStart, unsigned int);
+  itkSetMacro(ProfileStep, unsigned int);
+  itkGetConstReferenceMacro(ProfileStep, unsigned int);
+  itkSetMacro(Sigma, double);
+  itkGetConstReferenceMacro(Sigma, double);
 
 protected:
-MorphologicalProfilesSegmentationFilter();
+  MorphologicalProfilesSegmentationFilter();
 
-~MorphologicalProfilesSegmentationFilter() override;
+  ~MorphologicalProfilesSegmentationFilter() override;
 
-void GenerateData() override;
+  void GenerateData() override;
 
 private:
-typename OpeningProfileFilterType::Pointer m_OpeningProfile;
-typename ClosingProfileFilterType::Pointer m_ClosingProfile;
-typename DerivativeFilterType::Pointer m_OpeningDerivativeProfile;
-typename DerivativeFilterType::Pointer m_ClosingDerivativeProfile;
-typename MultiScaleCharacteristicsFilterType::Pointer m_OpeningCharacteristicsFilter;
-typename MultiScaleCharacteristicsFilterType::Pointer m_ClosingCharacteristicsFilter;
-typename MultiScaleClassificationFilterType::Pointer m_ClassificationFilter;
-typename ConnectedComponentsFilterType::Pointer m_ConnectedComponentsFilter;
+  typename OpeningProfileFilterType::Pointer            m_OpeningProfile;
+  typename ClosingProfileFilterType::Pointer            m_ClosingProfile;
+  typename DerivativeFilterType::Pointer                m_OpeningDerivativeProfile;
+  typename DerivativeFilterType::Pointer                m_ClosingDerivativeProfile;
+  typename MultiScaleCharacteristicsFilterType::Pointer m_OpeningCharacteristicsFilter;
+  typename MultiScaleCharacteristicsFilterType::Pointer m_ClosingCharacteristicsFilter;
+  typename MultiScaleClassificationFilterType::Pointer  m_ClassificationFilter;
+  typename ConnectedComponentsFilterType::Pointer       m_ConnectedComponentsFilter;
 
-unsigned int m_ProfileSize;
-unsigned int m_ProfileStart;
-unsigned int m_ProfileStep;
-double       m_Sigma;
+  unsigned int m_ProfileSize;
+  unsigned int m_ProfileStart;
+  unsigned int m_ProfileStep;
+  double       m_Sigma;
 };
 
 
@@ -134,5 +130,3 @@ double       m_Sigma;
 #endif
 
 #endif
-
-

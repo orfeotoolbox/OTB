@@ -28,22 +28,22 @@ int otbPhysicalToRPCSensorModelImageFilter(int argc, char* argv[])
 {
   // Images definition
   const unsigned int Dimension = 2;
-  typedef double                                      PixelType;
-  typedef otb::VectorImage<PixelType, Dimension>      ImageType;
+  typedef double     PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
   typedef otb::PhysicalToRPCSensorModelImageFilter<ImageType> PhysicalToSensorModelType;
 
   // Object instantiation
   PhysicalToSensorModelType::Pointer estimator = PhysicalToSensorModelType::New();
 
-  if(argc == 4)
-    {
-    const char * infname  = argv[1];
+  if (argc == 4)
+  {
+    const char*  infname  = argv[1];
     unsigned int gridSize = atoi(argv[2]);
-    const char * outfname  = argv[3];
+    const char*  outfname = argv[3];
 
     // Reader
-    typedef otb::ImageFileReader<ImageType>             ReaderType;
-    ReaderType::Pointer                reader    = ReaderType::New();
+    typedef otb::ImageFileReader<ImageType> ReaderType;
+    ReaderType::Pointer                     reader = ReaderType::New();
 
     // Set the fileName
     reader->SetFileName(infname);
@@ -54,17 +54,17 @@ int otbPhysicalToRPCSensorModelImageFilter(int argc, char* argv[])
     estimator->SetGridSize(gridSize);
 
     // Write the resampled image
-    typedef otb::ImageFileWriter<ImageType>    WriterType;
-    WriterType::Pointer writer= WriterType::New();
+    typedef otb::ImageFileWriter<ImageType> WriterType;
+    WriterType::Pointer                     writer = WriterType::New();
     writer->SetAutomaticTiledStreaming();
     writer->SetFileName(outfname);
     writer->SetInput(estimator->GetOutput());
     writer->Update();
-    }
+  }
   else
-    {
-    std::cout <<"Unit Test" << std::endl;
-    }
+  {
+    std::cout << "Unit Test" << std::endl;
+  }
 
   return 0;
 }

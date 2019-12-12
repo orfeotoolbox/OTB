@@ -82,6 +82,8 @@ public:
   // Gl rendering of current state
   void Render() override;
 
+  void CreateShader() override;
+
   PointType ViewportToVectorTransform(const PointType & point) const;
 
   itkSetMacro(Color,ColorType);

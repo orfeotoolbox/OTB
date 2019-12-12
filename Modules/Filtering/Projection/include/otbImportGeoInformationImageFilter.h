@@ -43,15 +43,14 @@ namespace otb
  * \ingroup OTBProjection
  */
 template <class TImage, class TSourceImage>
-class ITK_EXPORT ImportGeoInformationImageFilter
-  : public itk::CastImageFilter<TImage, TImage>
+class ITK_EXPORT ImportGeoInformationImageFilter : public itk::CastImageFilter<TImage, TImage>
 {
 public:
   /** Standard typedefs */
-  typedef ImportGeoInformationImageFilter      Self;
+  typedef ImportGeoInformationImageFilter Self;
   typedef itk::CastImageFilter<TImage, TImage> Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -70,18 +69,20 @@ public:
    * Set the source for geo information.
    * \param source The source image.
    */
-  void SetSource(const TSourceImage * source);
+  void SetSource(const TSourceImage* source);
   /**
    * Get the source for geo information.
    * \return The source image.
    */
-  const TSourceImage * GetSource(void);
+  const TSourceImage* GetSource(void);
 
 protected:
   /** Constructor */
   ImportGeoInformationImageFilter();
   /** Destructor */
-  ~ImportGeoInformationImageFilter() override {}
+  ~ImportGeoInformationImageFilter() override
+  {
+  }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Generate input requested region */
@@ -94,11 +95,13 @@ protected:
    *
    * \sa ProcessObject::VerifyInputInformation
    */
-  void VerifyInputInformation() override {}
+  void VerifyInputInformation() override
+  {
+  }
 
 private:
-  ImportGeoInformationImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ImportGeoInformationImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION

@@ -29,30 +29,28 @@
 
 #include "otbMaskMuParserFilter.h"
 
-int otbMaskMuParserFilterTest(int argc, char * argv[])
+int otbMaskMuParserFilterTest(int argc, char* argv[])
 {
 
   if (argc != 4)
-     {
-     std::cerr << "Usage: " << argv[0] <<
-     " infname outframe MuParserexpression"
-               << std::endl;
-     return EXIT_FAILURE;
-     }
+  {
+    std::cerr << "Usage: " << argv[0] << " infname outframe MuParserexpression" << std::endl;
+    return EXIT_FAILURE;
+  }
 
-  const char * inputFilename  = argv[1];
-  const char * outputFilename = argv[2];
-  const char * expression =     argv[3];
+  const char* inputFilename  = argv[1];
+  const char* outputFilename = argv[2];
+  const char* expression     = argv[3];
 
 
-  typedef float InputPixelType;
-  const unsigned int     Dimension = 2;
+  typedef float      InputPixelType;
+  const unsigned int Dimension = 2;
 
-  typedef otb::VectorImage<InputPixelType,  Dimension>      InputVectorImageType;
-  typedef otb::ImageFileReader<InputVectorImageType>        ReaderType;
-  typedef otb::Image<unsigned int, Dimension>                OutputImageType;
-  typedef otb::ImageFileWriter<OutputImageType>             WriterType;
-  typedef otb::MaskMuParserFilter<InputVectorImageType, OutputImageType>  FilterType;
+  typedef otb::VectorImage<InputPixelType, Dimension> InputVectorImageType;
+  typedef otb::ImageFileReader<InputVectorImageType> ReaderType;
+  typedef otb::Image<unsigned int, Dimension> OutputImageType;
+  typedef otb::ImageFileWriter<OutputImageType> WriterType;
+  typedef otb::MaskMuParserFilter<InputVectorImageType, OutputImageType> FilterType;
 
 
   ReaderType::Pointer reader = ReaderType::New();

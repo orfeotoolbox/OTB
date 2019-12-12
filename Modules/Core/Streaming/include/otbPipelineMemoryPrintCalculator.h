@@ -70,27 +70,26 @@ namespace otb
  *
  * \ingroup OTBStreaming
  */
-class OTBStreaming_EXPORT PipelineMemoryPrintCalculator :
-  public itk::Object
+class OTBStreaming_EXPORT PipelineMemoryPrintCalculator : public itk::Object
 {
 public:
   /** Standard class typedefs */
-  typedef PipelineMemoryPrintCalculator       Self;
-  typedef itk::Object                         Superclass;
-  typedef itk::SmartPointer<Self>             Pointer;
-  typedef itk::SmartPointer<const Self>       ConstPointer;
+  typedef PipelineMemoryPrintCalculator Self;
+  typedef itk::Object                   Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Useful typedefs */
-  typedef itk::ProcessObject                  ProcessObjectType;
-  typedef ProcessObjectType::Pointer          ProcessObjectPointerType;
-  typedef itk::DataObject                     DataObjectType;
-  typedef DataObjectType::Pointer             DataObjectPointerType;
+  typedef itk::ProcessObject         ProcessObjectType;
+  typedef ProcessObjectType::Pointer ProcessObjectPointerType;
+  typedef itk::DataObject            DataObjectType;
+  typedef DataObjectType::Pointer    DataObjectPointerType;
 #if ITK_VERSION_MAJOR < 4 || (ITK_VERSION_MAJOR == 4 && ITK_VERSION_MINOR <= 8)
-  typedef ::itksysFundamentalType_UInt64      MemoryPrintType;
+  typedef ::itksysFundamentalType_UInt64 MemoryPrintType;
 #else
-  typedef KWIML_INT_uint64_t                  MemoryPrintType;
+  typedef KWIML_INT_uint64_t MemoryPrintType;
 #endif
-  typedef std::set<const ProcessObjectType *> ProcessObjectPointerSetType;
+  typedef std::set<const ProcessObjectType*> ProcessObjectPointerSetType;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(PipelineMemoryPrintCalculator, itk::Object);
@@ -108,21 +107,20 @@ public:
   itkGetMacro(BiasCorrectionFactor, double);
 
   /** Get the optimal number of stream division */
-  static unsigned long EstimateOptimalNumberOfStreamDivisions(
-      MemoryPrintType memoryPrint, MemoryPrintType availableMemory);
+  static unsigned long EstimateOptimalNumberOfStreamDivisions(MemoryPrintType memoryPrint, MemoryPrintType availableMemory);
 
   /** Set last pipeline filter */
   itkSetObjectMacro(DataToWrite, DataObjectType);
 
   /** Compute pipeline memory print */
-  void Compute(bool propagate=true);
+  void Compute(bool propagate = true);
 
   /** Const conversion factor */
   static const double ByteToMegabyte;
   static const double MegabyteToByte;
 
   /** Evaluate the print (in bytes) of a single data object */
-  MemoryPrintType EvaluateDataObjectPrint(DataObjectType * data);
+  MemoryPrintType EvaluateDataObjectPrint(DataObjectType* data);
 
 protected:
   /** Constructor */
@@ -135,14 +133,14 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Recursive method to evaluate memory print in bytes */
-  MemoryPrintType EvaluateProcessObjectPrintRecursive(ProcessObjectType * process);
+  MemoryPrintType EvaluateProcessObjectPrintRecursive(ProcessObjectType* process);
 
 private:
-  PipelineMemoryPrintCalculator(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PipelineMemoryPrintCalculator(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The total memory print of the pipeline */
-  MemoryPrintType       m_MemoryPrint;
+  MemoryPrintType m_MemoryPrint;
 
   /** Pointer to the last pipeline filter */
   DataObjectPointerType m_DataToWrite;
@@ -152,7 +150,6 @@ private:
 
   /** Visited ProcessObject set */
   ProcessObjectPointerSetType m_VisitedProcessObjects;
-
 };
 } // end of namespace otb
 

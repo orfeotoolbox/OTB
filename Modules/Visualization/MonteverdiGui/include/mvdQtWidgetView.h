@@ -61,19 +61,15 @@ namespace Wrapper
  * \brief WIP.
  */
 
-class OTBMonteverdiGUI_EXPORT QtWidgetView :
-    public otb::Wrapper::QtWidgetView
+class OTBMonteverdiGUI_EXPORT QtWidgetView : public otb::Wrapper::QtWidgetView
 {
   Q_OBJECT
 
 public:
-
-  static char const * const OBJECT_NAME;
+  static char const* const OBJECT_NAME;
 
   /** \brief Constructor. */
-  QtWidgetView( const otb::Wrapper::Application::Pointer & otbApp,
-		QWidget* p = nullptr,
-		Qt::WindowFlags flags =0 );
+  QtWidgetView(const otb::Wrapper::Application::Pointer& otbApp, QWidget* p = nullptr, Qt::WindowFlags flags = 0);
 
   /** \brief Destructor. */
   ~QtWidgetView() override;
@@ -84,24 +80,23 @@ protected:
   QWidget* CreateInputWidgets() override;
 
 private:
-
   QtWidgetView(const QtWidgetView&) = delete;
   void operator=(const QtWidgetView&) = delete;
 
-  void SetupParameterWidgets( QWidget* widget );
+  void SetupParameterWidgets(QWidget* widget);
 
-  void SetupFileSelectionWidget( QWidget * );
+  void SetupFileSelectionWidget(QWidget*);
 
 private slots:
 
   // slot in charge of emitting a signal to the catalogue mainWindow.
   // when received, the main application need to get the output
   // image filename{s} set by the user in this OTB application (if any).
-  void OnApplicationExecutionDone( int );
+  void OnApplicationExecutionDone(int);
 
-  inline void OnFileSelectionWidgetAdded0( QWidget * );
+  inline void OnFileSelectionWidgetAdded0(QWidget*);
 
-  inline void OnFileSelectionWidgetAdded1( QWidget * );
+  inline void OnFileSelectionWidgetAdded1(QWidget*);
 };
 
 } // end namespace 'Wrapper'
@@ -114,20 +109,14 @@ namespace mvd
 namespace Wrapper
 {
 
-inline
-void
-QtWidgetView
-::OnFileSelectionWidgetAdded0( QWidget * widget )
+inline void QtWidgetView::OnFileSelectionWidgetAdded0(QWidget* widget)
 {
-  SetupFileSelectionWidget( widget );
+  SetupFileSelectionWidget(widget);
 }
 
-inline
-void
-QtWidgetView
-::OnFileSelectionWidgetAdded1( QWidget * widget )
+inline void QtWidgetView::OnFileSelectionWidgetAdded1(QWidget* widget)
 {
-  SetupFileSelectionWidget( widget );
+  SetupFileSelectionWidget(widget);
 }
 
 } // end namespace 'Wrapper'

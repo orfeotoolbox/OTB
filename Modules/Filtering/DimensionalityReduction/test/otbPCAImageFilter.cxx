@@ -26,59 +26,64 @@
 
 #include "otbPCAImageFilter.h"
 
-int otbPCAImageFilterTest ( int, char* argv[] )
+int otbPCAImageFilterTest(int, char* argv[])
 {
   const unsigned int nbComponents = atoi(argv[5]);
 
-  bool normalization = false ;
-  if ( std::string( argv[4] ).compare("true") == 0 )
+  bool normalization = false;
+  if (std::string(argv[4]).compare("true") == 0)
     normalization = true;
+  
+  bool whitening = false;
+  if (std::string(argv[6]).compare("true") == 0)
+    whitening = true;
 
   // Main type definition
   const unsigned int Dimension = 2;
-  typedef double PixelType;
-  typedef otb::VectorImage< PixelType, Dimension > ImageType;
+  typedef double     PixelType;
+  typedef otb::VectorImage<PixelType, Dimension> ImageType;
 
   // Reading input images
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  ReaderType::Pointer reader = ReaderType::New();
+  ReaderType::Pointer                     reader = ReaderType::New();
   reader->SetFileName(argv[1]);
 
   // Image filtering
-  typedef otb::PCAImageFilter< ImageType, ImageType, otb::Transform::FORWARD > FilterType;
+  typedef otb::PCAImageFilter<ImageType, ImageType, otb::Transform::FORWARD> FilterType;
   FilterType::Pointer filter = FilterType::New();
-  filter->SetInput( reader->GetOutput() );
-  filter->SetNumberOfPrincipalComponentsRequired( nbComponents );
-  filter->SetUseNormalization( normalization );
+  filter->SetInput(reader->GetOutput());
+  filter->SetNumberOfPrincipalComponentsRequired(nbComponents);
+  filter->SetUseNormalization(normalization);
+  filter->SetWhitening(whitening);
 
-  typedef otb::CommandProgressUpdate< FilterType > CommandType;
-  CommandType::Pointer observer = CommandType::New();
-  filter->AddObserver( itk::ProgressEvent(), observer );
+  typedef otb::CommandProgressUpdate<FilterType> CommandType;
+  CommandType::Pointer                           observer = CommandType::New();
+  filter->AddObserver(itk::ProgressEvent(), observer);
 
   // Writing
-  typedef otb::ImageFileWriter< ImageType > ImageWriterType;
-  ImageWriterType::Pointer writer = ImageWriterType::New();
-  writer->SetFileName( argv[2] );
-  writer->SetInput( filter->GetOutput() );
+  typedef otb::ImageFileWriter<ImageType> ImageWriterType;
+  ImageWriterType::Pointer                writer = ImageWriterType::New();
+  writer->SetFileName(argv[2]);
+  writer->SetInput(filter->GetOutput());
   writer->Update();
 
-  typedef otb::PCAImageFilter< ImageType, ImageType, otb::Transform::INVERSE > InvFilterType;
+  typedef otb::PCAImageFilter<ImageType, ImageType, otb::Transform::INVERSE> InvFilterType;
   InvFilterType::Pointer invFilter = InvFilterType::New();
-  invFilter->SetInput( filter->GetOutput() );
-  if ( normalization )
+  invFilter->SetInput(filter->GetOutput());
+  if (normalization)
   {
-    invFilter->SetMeanValues( filter->GetMeanValues() );
-    invFilter->SetStdDevValues( filter->GetStdDevValues() );
+    invFilter->SetMeanValues(filter->GetMeanValues());
+    invFilter->SetStdDevValues(filter->GetStdDevValues());
   }
-  invFilter->SetTransformationMatrix( filter->GetTransformationMatrix() );
+  invFilter->SetTransformationMatrix(filter->GetTransformationMatrix());
 
-  typedef otb::CommandProgressUpdate< InvFilterType > CommandType2;
-  CommandType2::Pointer invObserver = CommandType2::New();
-  invFilter->AddObserver( itk::ProgressEvent(), invObserver );
+  typedef otb::CommandProgressUpdate<InvFilterType> CommandType2;
+  CommandType2::Pointer                             invObserver = CommandType2::New();
+  invFilter->AddObserver(itk::ProgressEvent(), invObserver);
 
   ImageWriterType::Pointer invWriter = ImageWriterType::New();
-  invWriter->SetFileName( argv[3] );
-  invWriter->SetInput( invFilter->GetOutput() );
+  invWriter->SetFileName(argv[3]);
+  invWriter->SetInput(invFilter->GetOutput());
   invWriter->Update();
 
 

@@ -49,20 +49,16 @@ namespace mvd
 */
 
 /*******************************************************************************/
-AboutDialog
-::AboutDialog( QWidget* p, Qt::WindowFlags flags ) :
-  QDialog( p, flags ),
-  m_UI( new mvd::Ui::AboutDialog() )
+AboutDialog::AboutDialog(QWidget* p, Qt::WindowFlags flags) : QDialog(p, flags), m_UI(new mvd::Ui::AboutDialog())
 {
-  m_UI->setupUi( this );
+  m_UI->setupUi(this);
 
-  m_UI->m_ProjectLabel->setText( qApp->applicationName() );
-  m_UI->m_VersionLabel->setText( qApp->applicationVersion() );
+  m_UI->m_ProjectLabel->setText(qApp->applicationName());
+  m_UI->m_VersionLabel->setText(qApp->applicationVersion());
 }
 
 /*******************************************************************************/
-AboutDialog
-::~AboutDialog()
+AboutDialog::~AboutDialog()
 {
   delete m_UI;
   m_UI = NULL;

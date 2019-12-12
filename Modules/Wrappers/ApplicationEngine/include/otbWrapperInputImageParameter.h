@@ -56,30 +56,30 @@ public:
   itkTypeMacro(InputImageParameter, Parameter);
 
   typedef struct
-    {
+  {
     itk::Object::Pointer app;
-    std::string key;
-    bool isMem;
-    } Connector;
+    std::string          key;
+    bool                 isMem;
+  } Connector;
 
   /** Set value from filename */
-  bool SetFromFileName( const std::string & filename );
-  itkGetConstReferenceMacro( FileName, std::string );
+  bool SetFromFileName(const std::string& filename);
+  itkGetConstReferenceMacro(FileName, std::string);
 
   void SetConnection(Connector c)
-    {
+  {
     m_Connection = c;
-    }
+  }
 
-  const Connector & GetConnection() const
-    {
+  const Connector& GetConnection() const
+  {
     return m_Connection;
-    }
+  }
 
   void SetConnectionMode(bool isMem)
-    {
+  {
     m_Connection.isMem = isMem;
-    }
+  }
 
   /** Get input-image as ImageBaseType. */
   ImageBaseType const* GetImage() const;
@@ -118,7 +118,7 @@ public:
 
   /** Get the input image as templated image type. */
   template <class TImageType>
-    TImageType* GetImage();
+  TImageType* GetImage();
 
   /** Set a templated image.*/
   void SetImage(ImageBaseType* image);
@@ -126,14 +126,14 @@ public:
 
   /** Generic cast method that will be specified for each image type. */
   template <class TInputImage, class TOutputImage>
-  TOutputImage*  CastImage();
+  TOutputImage* CastImage();
 
   bool HasValue() const override;
   void ClearValue() override;
 
   ParameterType GetType() const override;
   std::string   ToString() const override;
-  void          FromString(const std::string& value) override;
+  void FromString(const std::string& value) override;
 
 protected:
   /** Constructor */

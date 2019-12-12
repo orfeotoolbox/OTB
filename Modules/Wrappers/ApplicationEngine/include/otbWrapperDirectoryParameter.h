@@ -36,8 +36,7 @@ namespace Wrapper
  *
  * \ingroup OTBApplicationEngine
  */
-class OTBApplicationEngine_EXPORT DirectoryParameter
-  : public Parameter
+class OTBApplicationEngine_EXPORT DirectoryParameter : public Parameter
 {
 public:
   /** Standard class typedef */
@@ -58,7 +57,7 @@ public:
   }
 
   // Set/Get Value
-  otbSetObjectMemberMacro(StringParam, Value , std::string);
+  otbSetObjectMemberMacro(StringParam, Value, std::string);
   otbGetObjectMemberConstMacro(StringParam, Value, std::string);
 
   // Clear Value
@@ -68,10 +67,10 @@ public:
   }
 
   // Reimplement the SetActive method
-  void SetActive( bool value ) override
+  void SetActive(bool value) override
   {
-    Superclass::SetActive( value );
-    m_StringParam->SetActive( value );
+    Superclass::SetActive(value);
+    m_StringParam->SetActive(value);
   }
 
   // GetActive method
@@ -101,14 +100,15 @@ protected:
 
   /** Destructor */
   ~DirectoryParameter() override
-  {}
+  {
+  }
 
 private:
-  DirectoryParameter(const DirectoryParameter &) = delete;
-  void operator =(const DirectoryParameter&); //purposely not
-                                              //implemented
+  DirectoryParameter(const DirectoryParameter&) = delete;
+  void operator                                 =(const DirectoryParameter&); // purposely not
+  // implemented
 
-  StringParameter::Pointer   m_StringParam;
+  StringParameter::Pointer m_StringParam;
 
 }; // End class Parameter
 

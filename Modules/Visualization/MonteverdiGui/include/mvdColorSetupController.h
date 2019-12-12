@@ -75,8 +75,7 @@ class ColorSetupWidget;
  *
  * \brief Color-setup widget controller for VectorImageModel objects.
  */
-class OTBMonteverdiGUI_EXPORT ColorSetupController :
-    public AbstractModelController
+class OTBMonteverdiGUI_EXPORT ColorSetupController : public AbstractModelController
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -85,17 +84,16 @@ class OTBMonteverdiGUI_EXPORT ColorSetupController :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /**
    * \brief Constructor.
    *
    * \param widget Controlled widget.
    * \param parent Parent QObject of this QObject.
    */
-  ColorSetupController( ColorSetupWidget* widget, QObject* p =NULL );
+  ColorSetupController(ColorSetupWidget* widget, QObject* p = NULL);
 
   /**
    * \brief Destructor.
@@ -105,8 +103,8 @@ public:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
   /**
    * \brief Signal emitted when the band-index of a RGB channel has
@@ -116,7 +114,7 @@ signals:
    * \param channel The RGB channel for which the band-index has changed.
    * \param band The new band-index of the RGB channel.
    */
-  void RgbChannelIndexChanged( RgbwChannel channel, int band );
+  void RgbChannelIndexChanged(RgbwChannel channel, int band);
 
   /**
    * \brief Signal emitted when the band-index of a white (gray)
@@ -125,7 +123,7 @@ signals:
    *
    * \param band The new band-index of the white (gray) channel.
    */
-  void GrayChannelIndexChanged( int band );
+  void GrayChannelIndexChanged(int band);
 
   /**
    * \brief Signal emitted when the grayscale-mode activation-state
@@ -134,24 +132,21 @@ signals:
    *
    * \param activated The new grayscale-mode activation-state.
    */
-  void GrayscaleActivated( bool activated );
+  void GrayscaleActivated(bool activated);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
   /**
    * \brief Reset current band-index to default values for given RGB
    * channels.
@@ -159,7 +154,7 @@ private:
    * \param channels Given channels for which to reset current-band
    * index. \see RgbBound() for valid values.
    */
-  void ResetIndices( RgbwChannel channels );
+  void ResetIndices(RgbwChannel channels);
 
   /**
    */
@@ -168,22 +163,21 @@ private:
   //
   // AbstractModelController methods.
 
-  void Connect( AbstractModel* ) override;
+  void Connect(AbstractModel*) override;
 
   void ClearWidget() override;
 
-  void virtual_ResetWidget( bool ) override;
+  void virtual_ResetWidget(bool) override;
 
-  void Disconnect( AbstractModel* ) override;
+  void Disconnect(AbstractModel*) override;
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
-
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /**
    * \brief Slot called when the current index of a RGB channel of the
@@ -194,7 +188,7 @@ private slots:
    *
    * \param index The new band-index of the RGB video-channel.
    */
-  void OnCurrentRgbIndexChanged( RgbwChannel channel, int index );
+  void OnCurrentRgbIndexChanged(RgbwChannel channel, int index);
 
   /**
    * \brief Slot called when the current index of the white (gray)
@@ -203,7 +197,7 @@ private slots:
    * \param index The new band-index of the white (gray)
    * video-channel.
    */
-  void OnCurrentGrayIndexChanged( int index );
+  void OnCurrentGrayIndexChanged(int index);
 
   /**
    * \brief Slot called when the grayscale-mode has been
@@ -211,12 +205,11 @@ private slots:
    *
    * \param activated The new activation state.
    */
-  void OnGrayscaleActivated( bool activated );
+  void OnGrayscaleActivated(bool activated);
 
   /**
    */
-  void OnAlphaValueChanged( double );
-
+  void OnAlphaValueChanged(double);
 };
 
 } // end namespace 'mvd'.

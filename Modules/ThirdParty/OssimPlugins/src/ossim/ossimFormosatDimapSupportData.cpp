@@ -326,7 +326,7 @@ bool ossimFormosatDimapSupportData::loadXmlFile(const ossimFilename& file)
    //---
    // Check that it is a FORMOSAT DIMAP file format
    //---
-   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
    xml_nodes.clear();
    ossimString xpath = "/Dimap_Document/Dataset_Sources/Source_Information/Scene_Source/MISSION";
    xmlDocument->findNodes(xpath, xml_nodes);
@@ -803,7 +803,7 @@ void ossimFormosatDimapSupportData::getGeoPosPoint (ossim_uint32 point,
    }
 }
 
-void ossimFormosatDimapSupportData::printInfo(ostream& os) const
+void ossimFormosatDimapSupportData::printInfo(std::ostream& os) const
 {
    ossimString corr_att = "NO";
    if (theStarTrackerUsed)
@@ -1522,7 +1522,7 @@ bool ossimFormosatDimapSupportData::parsePart1(
    static const char MODULE[] = "ossimFormosatDimapSupportData::parsePart1";
 
    ossimString xpath;
-   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
    //---
    // Fetch the ImageSize:
@@ -2351,7 +2351,7 @@ bool ossimFormosatDimapSupportData::initMetadataVersion(ossimRefPtr<ossimXmlDocu
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "DEBUG:\nCould not find: " << xpath
-            << endl;
+            << std::endl;
       }
       return false;
    }
@@ -2386,7 +2386,7 @@ bool ossimFormosatDimapSupportData::initImageId(
    ossimRefPtr<ossimXmlDocument> xmlDocument)
 {
    ossimString xpath;
-   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
    //---
    // Fetch the Image ID:
@@ -2400,7 +2400,7 @@ bool ossimFormosatDimapSupportData::initImageId(
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
             << "DEBUG:\nCould not find: " << xpath
-            << endl;
+            << std::endl;
       }
       return false;
    }
@@ -2412,7 +2412,7 @@ bool ossimFormosatDimapSupportData::initSceneSource(
    ossimRefPtr<ossimXmlDocument> xmlDocument)
 {
    ossimString xpath;
-   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
   //---
   // Fetch the mission index (Formosat 1 or 2):
@@ -2591,7 +2591,7 @@ bool ossimFormosatDimapSupportData::initFramePoints(
    ossimRefPtr<ossimXmlDocument> xmlDocument)
 {
    ossimString xpath;
-   vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
+   std::vector<ossimRefPtr<ossimXmlNode> > xml_nodes;
 
    //---
    // Corner points:

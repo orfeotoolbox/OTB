@@ -44,10 +44,10 @@ public:
   ~QtWidgetInputFilenameParameter() override;
 
   const QLineEdit* GetInput() const;
-  QLineEdit* GetInput();
+  QLineEdit*       GetInput();
 
 protected slots:
-  void SetFileName( const QString& value );
+  void SetFileName(const QString& value);
   void SelectFile();
 
 private:
@@ -61,9 +61,9 @@ private:
 
   InputFilenameParameter::Pointer m_FilenameParam;
 
-  QHBoxLayout * m_HLayout;
-  QLineEdit*    m_Input;
-  QPushButton * m_Button;
+  QHBoxLayout* m_HLayout;
+  QLineEdit*   m_Input;
+  QPushButton* m_Button;
 };
 
 } // Wrapper

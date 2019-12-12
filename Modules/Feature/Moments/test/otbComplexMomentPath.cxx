@@ -19,8 +19,6 @@
  */
 
 
-
-
 #include <iostream>
 #include <iomanip>
 #include <fstream>
@@ -29,11 +27,11 @@
 #include "itkMacro.h"
 #include "itkPolyLineParametricPath.h"
 
-int otbComplexMomentPath(int itkNotUsed(argc), char * argv[])
+int otbComplexMomentPath(int itkNotUsed(argc), char* argv[])
 {
-  unsigned int p((unsigned int) ::atoi(argv[1]));
-  unsigned int q((unsigned int) ::atoi(argv[2]));
-  const char * outputFilename  = argv[3];
+  unsigned int p((unsigned int)::atoi(argv[1]));
+  unsigned int q((unsigned int)::atoi(argv[2]));
+  const char*  outputFilename = argv[3];
 
   const unsigned int Dimension = 2;
 

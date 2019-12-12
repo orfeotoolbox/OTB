@@ -32,16 +32,13 @@ namespace otb
 {
 
 template <class TInputImage, class TOutputImage>
-RelabelComponentImageFilter<TInputImage, TOutputImage>
-::RelabelComponentImageFilter()
+RelabelComponentImageFilter<TInputImage, TOutputImage>::RelabelComponentImageFilter()
 {
 }
 
 
-template< class TInputImage, class TOutputImage >
-void
-RelabelComponentImageFilter< TInputImage, TOutputImage >
-::GenerateInputRequestedRegion()
+template <class TInputImage, class TOutputImage>
+void RelabelComponentImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 {
   itk::ImageToImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion();
 }

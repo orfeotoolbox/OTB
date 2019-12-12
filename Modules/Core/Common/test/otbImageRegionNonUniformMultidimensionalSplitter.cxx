@@ -21,9 +21,9 @@
 #include "otbImageRegionNonUniformMultidimensionalSplitter.h"
 #include <fstream>
 
-int otbImageRegionNonUniformMultidimensionalSplitter(int itkNotUsed(argc), char * argv[])
+int otbImageRegionNonUniformMultidimensionalSplitter(int itkNotUsed(argc), char* argv[])
 {
-  const int Dimension = 2;
+  const int                                                             Dimension = 2;
   typedef otb::ImageRegionNonUniformMultidimensionalSplitter<Dimension> FilterType;
   typedef FilterType::IndexType                                         IndexType;
   typedef FilterType::SizeType                                          SizeType;
@@ -37,7 +37,7 @@ int otbImageRegionNonUniformMultidimensionalSplitter(int itkNotUsed(argc), char 
   size[1] = atoi(argv[4]);
   unsigned int nbSplitTheoric(atoi(argv[5]));
   unsigned int nbAsked(atoi(argv[6]));
-  const char * outfname(argv[7]);
+  const char*  outfname(argv[7]);
 
   RegionType region;
 

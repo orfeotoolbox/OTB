@@ -68,133 +68,102 @@ namespace mvd
 /*****************************************************************************/
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
 
-QuicklookViewManipulator
-::QuicklookViewManipulator( const otb::ViewSettings::Pointer& viewSettings,
-                            QObject* p ) :
-  ImageViewManipulator( viewSettings, p ),
-  m_RoiOrigin(),
-  m_RoiSpacing(),
-  m_RoiSize()
+QuicklookViewManipulator::QuicklookViewManipulator(const otb::ViewSettings::Pointer& viewSettings, QObject* p)
+  : ImageViewManipulator(viewSettings, p), m_RoiOrigin(), m_RoiSpacing(), m_RoiSize()
 {
-  m_RoiOrigin.Fill( 0 );
-  m_RoiSpacing.Fill( 0 );
-  m_RoiSize.Fill( 0 );
+  m_RoiOrigin.Fill(0);
+  m_RoiSpacing.Fill(0);
+  m_RoiSize.Fill(0);
 }
 
 #else // USE_VIEW_SETTINGS_SIDE_EFFECT
 
-QuicklookViewManipulator
-::QuicklookViewManipulator( QObject* p ) :
-  ImageViewManipulator( p ),
-  m_RoiOrigin(),
-  m_RoiSpacing(),
-  m_RoiSize()
+QuicklookViewManipulator::QuicklookViewManipulator(QObject* p) : ImageViewManipulator(p), m_RoiOrigin(), m_RoiSpacing(), m_RoiSize()
 {
-  m_RoiOrigin.Fill( 0 );
-  m_RoiSpacing.Fill( 0 );
-  m_RoiSize.Fill( 0 );
+  m_RoiOrigin.Fill(0);
+  m_RoiSpacing.Fill(0);
+  m_RoiSize.Fill(0);
 }
 
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 
 /*****************************************************************************/
-QuicklookViewManipulator
-::~QuicklookViewManipulator()
+QuicklookViewManipulator::~QuicklookViewManipulator()
 {
 }
 
 /******************************************************************************/
-void
-QuicklookViewManipulator
-::SetupRenderingContext(
-  AbstractImageViewRenderer::RenderingContext * const c ) const
+void QuicklookViewManipulator::SetupRenderingContext(AbstractImageViewRenderer::RenderingContext* const c) const
 {
-  assert(
-    c==dynamic_cast< QuicklookViewRenderer::RenderingContext const * >( c )
-  );
+  assert(c == dynamic_cast<QuicklookViewRenderer::RenderingContext const*>(c));
 
-  QuicklookViewRenderer::RenderingContext * const context =
-    dynamic_cast< QuicklookViewRenderer::RenderingContext * const >( c );
+  QuicklookViewRenderer::RenderingContext* const context = dynamic_cast<QuicklookViewRenderer::RenderingContext* const>(c);
 
   // Coverity-19843.
   // {
-  assert( context!=NULL );
+  assert(context != NULL);
   // }
 
   context->m_RoiOrigin = m_RoiOrigin;
   context->m_RoiExtent = m_RoiOrigin;
 
-  context->m_RoiExtent[ 0 ] +=
-    static_cast< double >( m_RoiSize[ 0 ] ) * m_RoiSpacing[ 0 ];
-  context->m_RoiExtent[ 1 ] +=
-    static_cast< double >( m_RoiSize[ 1 ] ) * m_RoiSpacing[ 1 ];
+  context->m_RoiExtent[0] += static_cast<double>(m_RoiSize[0]) * m_RoiSpacing[0];
+  context->m_RoiExtent[1] += static_cast<double>(m_RoiSize[1]) * m_RoiSpacing[1];
 
 #if USE_VIEW_SETTINGS_SIDE_EFFECT
-#else // USE_VIEW_SETTINGS_SIDE_EFFECT
+#else  // USE_VIEW_SETTINGS_SIDE_EFFECT
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT
 }
 
 /******************************************************************************/
-void
-QuicklookViewManipulator
-::MousePressEvent( QMouseEvent* e )
+void QuicklookViewManipulator::MousePressEvent(QMouseEvent* e)
 {
-  ImageViewManipulator::MousePressEvent( e );
+  ImageViewManipulator::MousePressEvent(e);
 
-  assert( e!=NULL );
+  assert(e != NULL);
 
   // qDebug() << this << ":" << e;
 
 
-  Qt::MouseButtons buttons = e->buttons();
+  Qt::MouseButtons      buttons   = e->buttons();
   Qt::KeyboardModifiers modifiers = e->modifiers();
 
-  if( buttons==Qt::LeftButton && modifiers==Qt::NoModifier )
-    {
-    assert( !m_ViewSettings.IsNull() );
+  if (buttons == Qt::LeftButton && modifiers == Qt::NoModifier)
+  {
+    assert(!m_ViewSettings.IsNull());
 
     PointType center;
 
-    m_ViewSettings->ScreenToViewPortTransform(
-      static_cast< double >( m_MousePressPosition.x() ),
-      static_cast< double >( m_MousePressPosition.y() ),
-      center[ 0 ],
-      center[ 1 ]
-    );
+    m_ViewSettings->ScreenToViewPortTransform(static_cast<double>(m_MousePressPosition.x()), static_cast<double>(m_MousePressPosition.y()), center[0],
+                                              center[1]);
 
-    emit CenterRoiRequested( center );
-    }
+    emit CenterRoiRequested(center);
+  }
 }
 
 /******************************************************************************/
-void
-QuicklookViewManipulator
-::MouseMoveEvent( QMouseEvent* e)
+void QuicklookViewManipulator::MouseMoveEvent(QMouseEvent* e)
 {
-  assert( e!=NULL );
+  assert(e != NULL);
 
   // qDebug() << this << ":" << e;
 
-  Qt::MouseButtons buttons = e->buttons();
+  Qt::MouseButtons      buttons   = e->buttons();
   Qt::KeyboardModifiers modifiers = e->modifiers();
 
-  if( buttons==Qt::LeftButton && modifiers==Qt::NoModifier )
-    {
-    assert( !m_ViewSettings.IsNull() );
+  if (buttons == Qt::LeftButton && modifiers == Qt::NoModifier)
+  {
+    assert(!m_ViewSettings.IsNull());
 
     PointType center;
 
-    m_ViewSettings->ScreenToViewPortTransform(
-      static_cast< double >( m_MousePressPosition.x() ),
-      static_cast< double >( m_MousePressPosition.y() ),
-      center[ 0 ],
-      center[ 1 ]
-    );
+    m_ViewSettings->ScreenToViewPortTransform(static_cast<double>(m_MousePressPosition.x()), static_cast<double>(m_MousePressPosition.y()), center[0],
+                                              center[1]);
 
     m_MousePressPosition = e->pos();
 
-    emit CenterRoiRequested( center );
-    }
+    emit CenterRoiRequested(center);
+  }
 }
 
 /******************************************************************************/
@@ -210,40 +179,30 @@ QuicklookViewManipulator
 */
 
 /******************************************************************************/
-void
-QuicklookViewManipulator
-::ResizeEvent( QResizeEvent* e )
+void QuicklookViewManipulator::ResizeEvent(QResizeEvent* e)
 {
-  ImageViewManipulator::ResizeEvent( e );
+  ImageViewManipulator::ResizeEvent(e);
 
   emit ZoomToExtentRequested();
 }
 
 /******************************************************************************/
-void
-QuicklookViewManipulator
-::WheelEvent( QWheelEvent * )
+void QuicklookViewManipulator::WheelEvent(QWheelEvent*)
 {
 }
 
 /******************************************************************************/
-void
-QuicklookViewManipulator
-::KeyPressEvent( QKeyEvent * )
+void QuicklookViewManipulator::KeyPressEvent(QKeyEvent*)
 {
 }
 
 /******************************************************************************/
-void
-QuicklookViewManipulator
-::KeyReleaseEvent( QKeyEvent * )
+void QuicklookViewManipulator::KeyReleaseEvent(QKeyEvent*)
 {
 }
 
 /*****************************************************************************/
-ZoomType
-QuicklookViewManipulator
-::GetFixedZoomType() const
+ZoomType QuicklookViewManipulator::GetFixedZoomType() const
 {
   return ZOOM_TYPE_EXTENT;
 }
@@ -251,12 +210,7 @@ QuicklookViewManipulator
 /*****************************************************************************/
 /* SLOTS                                                                     */
 /*****************************************************************************/
-void
-QuicklookViewManipulator
-::OnRoiChanged( const PointType & origin,
-                const SizeType & size,
-                const SpacingType & spacing,
-                const PointType & )
+void QuicklookViewManipulator::OnRoiChanged(const PointType& origin, const SizeType& size, const SpacingType& spacing, const PointType&)
 {
   /*
   qDebug() << this << ":OnRoiChanged()";
@@ -265,10 +219,10 @@ QuicklookViewManipulator
   qDebug() << "spacing:" << spacing[ 0 ] << "," << spacing[ 1 ];
   */
 
-  m_RoiOrigin = origin;
-  m_RoiSize = size;
+  m_RoiOrigin  = origin;
+  m_RoiSize    = size;
   m_RoiSpacing = spacing;
- 
+
   emit RefreshViewRequested();
 }
 

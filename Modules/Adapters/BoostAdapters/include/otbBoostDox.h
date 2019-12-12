@@ -27,7 +27,9 @@
  * \see http://www.boost.org/
  * @{
  */
-namespace boost { }
+namespace boost
+{
+}
 //@}
 
 #endif // otbBoostDox_h

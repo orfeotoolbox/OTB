@@ -40,16 +40,21 @@ namespace otb
  * \ingroup OTBImageManipulation
  */
 
-namespace Functor {
+namespace Functor
+{
 
-template<class TInput, class TOutput>
+template <class TInput, class TOutput>
 class VectorChangeLabel
 {
 public:
   typedef typename TOutput::ValueType ValueType;
 
-  VectorChangeLabel() {}
-  virtual ~VectorChangeLabel() {}
+  VectorChangeLabel()
+  {
+  }
+  virtual ~VectorChangeLabel()
+  {
+  }
 
   typedef std::map<TInput, TOutput> ChangeMapType;
 
@@ -61,15 +66,15 @@ public:
   {
     return m_NumberOfComponentsPerPixel;
   }
-  bool operator !=(const VectorChangeLabel& other) const
+  bool operator!=(const VectorChangeLabel& other) const
   {
     if (m_ChangeMap != other.m_ChangeMap)
-      {
+    {
       return true;
-      }
+    }
     return false;
   }
-  bool operator ==(const VectorChangeLabel& other) const
+  bool operator==(const VectorChangeLabel& other) const
   {
     return !(*this != other);
   }
@@ -93,19 +98,19 @@ public:
     m_ChangeMap.clear();
   }
 
-  inline TOutput operator ()(const TInput& A)
+  inline TOutput operator()(const TInput& A)
   {
     TOutput out;
     out.SetSize(m_NumberOfComponentsPerPixel);
 
     if (m_ChangeMap.find(A) != m_ChangeMap.end())
-      {
+    {
       out = m_ChangeMap[A];
-      }
+    }
     else
-      {
+    {
       out.Fill(static_cast<ValueType>(A));
-      }
+    }
     return out;
   }
 
@@ -116,19 +121,15 @@ private:
 }
 
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ChangeLabelImageFilter :
-  public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-      Functor::VectorChangeLabel<typename TInputImage::PixelType,
-          typename TOutputImage::PixelType> >
+class ITK_EXPORT ChangeLabelImageFilter
+    : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
+                                          Functor::VectorChangeLabel<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
 {
 public:
   /** Standard class typedefs. */
   typedef ChangeLabelImageFilter Self;
-  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-      Functor::VectorChangeLabel<
-          typename TInputImage::PixelType,
-          typename TOutputImage::PixelType>
-      >                                Superclass;
+  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage, Functor::VectorChangeLabel<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
+                                        Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
@@ -165,15 +166,17 @@ public:
 
 protected:
   ChangeLabelImageFilter();
-  ~ChangeLabelImageFilter() override {}
+  ~ChangeLabelImageFilter() override
+  {
+  }
   /** Generate the output information missing */
   void GenerateOutputInformation() override;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ChangeLabelImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  ChangeLabelImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /// Number of components per pixel
   unsigned int m_NumberOfComponentsPerPixel;

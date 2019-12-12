@@ -92,8 +92,7 @@ class HistogramWidget;
  * \brief Widget template skeleton to copy-paste when adding a new
  * widget class.
  */
-class OTBMonteverdiGUI_EXPORT HistogramWidget :
-    public QWidget
+class OTBMonteverdiGUI_EXPORT HistogramWidget : public QWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -102,15 +101,14 @@ class OTBMonteverdiGUI_EXPORT HistogramWidget :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public constants
+  //
+  // Public constants
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  HistogramWidget( QWidget* p =NULL, Qt::WindowFlags flags =0 );
+  HistogramWidget(QWidget* p = NULL, Qt::WindowFlags flags = 0);
 
   /** \brief Destructor. */
   ~HistogramWidget() override;
@@ -118,32 +116,25 @@ public:
   /**
    * \brief
    */
-  void SetBounds( RgbwChannel channel,
-		  double xMin, double xMax,
-		  double yMin, double yMax );
+  void SetBounds(RgbwChannel channel, double xMin, double xMax, double yMin, double yMax);
 
   /**
    * \brief
    */
-  void SetData( RgbwChannel channel,
-		double * const x,
-		double * const y,
-		size_t size,
-		double xMin, double yMin,
-		double xMax, double yMax );
+  void SetData(RgbwChannel channel, double* const x, double* const y, size_t size, double xMin, double yMin, double xMax, double yMax);
 
   /**
    */
-  void SetLowMarker( RgbwChannel channel, double low );
+  void SetLowMarker(RgbwChannel channel, double low);
 
   /**
    */
-  void SetHighMarker( RgbwChannel channel, double high );
+  void SetHighMarker(RgbwChannel channel, double high);
 
   /**
    * \brief
    */
-  void SetGrayscaleActivated( bool activated );
+  void SetGrayscaleActivated(bool activated);
 
   /**
    * \brief
@@ -153,7 +144,7 @@ public:
   /**
    * \brief
    */
-  void RefreshScale( bool iqr );
+  void RefreshScale(bool iqr);
 
   /**
    */
@@ -161,7 +152,7 @@ public:
 
   /**
    */
-  void SetPrecision( double );
+  void SetPrecision(double);
 
   /**
    */
@@ -169,8 +160,8 @@ public:
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
   /**
    * \brief
@@ -179,36 +170,27 @@ public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private types.
+  //
+  // Private types.
 private:
   struct Bounds
   {
-    Bounds( double xMin =0.0, double xMax =1.0,
-	    double yMin =0.0, double yMax =1.0,
-	    double qMin =0.0, double qMax =1.0 ) :
-      m_XMin( xMin ),
-      m_XMax( xMax ),
-      m_YMin( yMin ),
-      m_YMax( yMax ),
-      m_QMin( qMin ),
-      m_QMax( qMax )
+    Bounds(double xMin = 0.0, double xMax = 1.0, double yMin = 0.0, double yMax = 1.0, double qMin = 0.0, double qMax = 1.0)
+      : m_XMin(xMin), m_XMax(xMax), m_YMin(yMin), m_YMax(yMax), m_QMin(qMin), m_QMax(qMax)
     {
     }
 
@@ -222,15 +204,15 @@ private:
     double m_QMax;
   };
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
   /**
    */
-  void UpdateCurvesVisibility( CountType index );
+  void UpdateCurvesVisibility(CountType index);
 
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    * \brief
@@ -239,23 +221,23 @@ private:
 
   /**
    */
-  static const char* CURVE_NAMES[ HistogramWidget::CURVE_COUNT ];
+  static const char* CURVE_NAMES[HistogramWidget::CURVE_COUNT];
 
   /**
    */
-  static const QColor CURVE_COLORS[ HistogramWidget::CURVE_COUNT ];
+  static const QColor CURVE_COLORS[HistogramWidget::CURVE_COUNT];
 
   /**
    */
-  static const QColor BAR_COLORS[ HistogramWidget::CURVE_COUNT ];
+  static const QColor BAR_COLORS[HistogramWidget::CURVE_COUNT];
 
   /**
    */
-  static const QColor MARKER_COLORS[ HistogramWidget::CURVE_COUNT ];
+  static const QColor MARKER_COLORS[HistogramWidget::CURVE_COUNT];
 
   /**
    */
-  static const QColor RUBBER_BAND_COLORS[ HistogramWidget::CURVE_COUNT ];
+  static const QColor RUBBER_BAND_COLORS[HistogramWidget::CURVE_COUNT];
 
   /**
    * \brief uic generated.
@@ -285,19 +267,19 @@ private:
   /**
    * \brief
    */
-  QwtPlotCurve* m_PlotCurves[ CURVE_COUNT ];
+  QwtPlotCurve* m_PlotCurves[CURVE_COUNT];
 
   /**
    */
-  QwtPlotMarker* m_LowPlotMarkers[ CURVE_COUNT ];
+  QwtPlotMarker* m_LowPlotMarkers[CURVE_COUNT];
 
   /**
    */
-  QwtPlotMarker* m_HighPlotMarkers[ CURVE_COUNT ];
+  QwtPlotMarker* m_HighPlotMarkers[CURVE_COUNT];
 
   /**
    */
-  Bounds m_Bounds[ CURVE_COUNT ];
+  Bounds m_Bounds[CURVE_COUNT];
 
   /**
    */
@@ -309,8 +291,8 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /**
    */
@@ -322,22 +304,22 @@ private slots:
 
   /**
    */
-  void on_channelComboBox_currentIndexChanged( int index );
+  void on_channelComboBox_currentIndexChanged(int index);
 
   /**
    */
-  void OnAppended( const QPointF & );
-  void OnAppended( const QPoint & );
+  void OnAppended(const QPointF&);
+  void OnAppended(const QPoint&);
 
-  void OnChanged( const QPolygon & );
+  void OnChanged(const QPolygon&);
 
-  void OnMoved( const QPointF & );
-  void OnMoved( const QPoint & );
+  void OnMoved(const QPointF&);
+  void OnMoved(const QPoint&);
 
-  void OnSelected( const QPointF & );
-  void OnSelected( const QRectF & );
-  void OnSelected( const QPolygon & );
-  void OnSelected( const QVector< QPointF > & );
+  void OnSelected(const QPointF&);
+  void OnSelected(const QRectF&);
+  void OnSelected(const QPolygon&);
+  void OnSelected(const QVector<QPointF>&);
 };
 
 } // end namespace 'mvd'

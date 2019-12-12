@@ -60,49 +60,41 @@ namespace mvd
 
 namespace
 {
-char const * const STR_SENSOR = QT_TRANSLATE_NOOP( "mvd::AbstractLayerModel", "Sensor" );
-char const * const STR_UNKNOWN = QT_TRANSLATE_NOOP( "mvd::AbstractLayerModel", "Unknown" );
-char const * const STR_NOEPSG = QT_TRANSLATE_NOOP( "mvd::AbstractLayerModel", "No EPSG" );
+char const* const STR_SENSOR  = QT_TRANSLATE_NOOP("mvd::AbstractLayerModel", "Sensor");
+char const* const STR_UNKNOWN = QT_TRANSLATE_NOOP("mvd::AbstractLayerModel", "Unknown");
+char const* const STR_NOEPSG  = QT_TRANSLATE_NOOP("mvd::AbstractLayerModel", "No EPSG");
 } // end of anonymous namespace.
 
 
 /*****************************************************************************/
 /* STATIC IMPLEMENTATION SECTION                                             */
 /*****************************************************************************/
-SpatialReferenceType
-GetSpatialReferenceType( const std::string & filename )
+SpatialReferenceType GetSpatialReferenceType(const std::string& filename)
 {
-  DefaultImageFileReaderType::Pointer reader( DefaultImageFileReaderType::New() );
-  assert( !reader.IsNull() );
+  DefaultImageFileReaderType::Pointer reader(DefaultImageFileReaderType::New());
+  assert(!reader.IsNull());
 
-  reader->SetFileName( filename );
+  reader->SetFileName(filename);
   reader->UpdateOutputInformation();
 
-  DefaultImageType * image = reader->GetOutput();
-  assert( image!=NULL );
+  DefaultImageType* image = reader->GetOutput();
+  assert(image != NULL);
 
-  return GetSpatialReferenceType(
-    image->GetProjectionRef(),
-    image->GetImageKeywordlist().GetSize()>0
-  );
+  return GetSpatialReferenceType(image->GetProjectionRef(), image->GetImageKeywordlist().GetSize() > 0);
 }
 
 /*****************************************************************************/
-SpatialReferenceType
-GetSpatialReferenceType( const std::string & wkt, bool hasKwl )
+SpatialReferenceType GetSpatialReferenceType(const std::string& wkt, bool hasKwl)
 {
-  if( wkt.empty() )
-    return
-      hasKwl
-      ? SRT_SENSOR
-      : SRT_UNKNOWN;
+  if (wkt.empty())
+    return hasKwl ? SRT_SENSOR : SRT_UNKNOWN;
 
-  OGRSpatialReference ogr_sr( wkt.c_str() );
+  OGRSpatialReference ogr_sr(wkt.c_str());
 
-  if(ogr_sr.IsGeographic())
+  if (ogr_sr.IsGeographic())
     return SRT_GEO;
 
-  if(ogr_sr.IsProjected())
+  if (ogr_sr.IsProjected())
     return SRT_CARTO;
 
   return SRT_UNKNOWN;
@@ -111,111 +103,83 @@ GetSpatialReferenceType( const std::string & wkt, bool hasKwl )
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*****************************************************************************/
-AbstractLayerModel
-::AbstractLayerModel( QObject* p ) :
-  AbstractModel( p ),
-  VisibleInterface(),
-  m_Name(QString())
+AbstractLayerModel::AbstractLayerModel(QObject* p) : AbstractModel(p), VisibleInterface(), m_Name(QString())
 {
 }
 
 /*******************************************************************************/
-AbstractLayerModel
-::~AbstractLayerModel()
+AbstractLayerModel::~AbstractLayerModel()
 {
 }
 
 /*******************************************************************************/
-SpatialReferenceType
-AbstractLayerModel
-::GetSpatialReferenceType() const
+SpatialReferenceType AbstractLayerModel::GetSpatialReferenceType() const
 {
-  return mvd::GetSpatialReferenceType( GetWkt(), HasKwl() );
+  return mvd::GetSpatialReferenceType(GetWkt(), HasKwl());
 }
 
 /*******************************************************************************/
-std::string
-AbstractLayerModel
-::GetWkt() const
+std::string AbstractLayerModel::GetWkt() const
 {
   return virtual_GetWkt();
 }
 
 /*******************************************************************************/
-std::string
-AbstractLayerModel
-::GetAuthorityCode( bool isEnhanced ) const
+std::string AbstractLayerModel::GetAuthorityCode(bool isEnhanced) const
 {
-  std::string wkt( GetWkt() );
+  std::string wkt(GetWkt());
 
-  if( wkt.empty() )
-    return
-      !isEnhanced
-      ? std::string()
-      : ( HasKwl()
-	  ? ToStdString( tr( STR_SENSOR ) )
-	  : ToStdString( tr( STR_UNKNOWN ) ) );
+  if (wkt.empty())
+    return !isEnhanced ? std::string() : (HasKwl() ? ToStdString(tr(STR_SENSOR)) : ToStdString(tr(STR_UNKNOWN)));
 
   int code = otb::SpatialReference::FromDescription(wkt).ToEPSG();
-  if(code < 0)
-    return ToStdString( tr( STR_UNKNOWN ) );
-  else if(code == 0)
-    return ToStdString( tr( STR_NOEPSG ) );
+  if (code < 0)
+    return ToStdString(tr(STR_UNKNOWN));
+  else if (code == 0)
+    return ToStdString(tr(STR_NOEPSG));
 
   return boost::lexical_cast<std::string>(code);
 }
 
 /*******************************************************************************/
-bool
-AbstractLayerModel
-::HasKwl() const
+bool AbstractLayerModel::HasKwl() const
 {
   return virtual_HasKwl();
 }
 
 /*****************************************************************************/
-void
-AbstractLayerModel
-::ToWgs84( const PointType & p, PointType & wgs84, double & alt) const
+void AbstractLayerModel::ToWgs84(const PointType& p, PointType& wgs84, double& alt) const
 {
-  virtual_ToWgs84( p, wgs84, alt );
+  virtual_ToWgs84(p, wgs84, alt);
 }
 
 /*****************************************************************************/
-void
-AbstractLayerModel
-::SetName(const QString & name)
+void AbstractLayerModel::SetName(const QString& name)
 {
   if (name != m_Name)
-    {
+  {
     m_Name = name;
     emit NameChanged();
-    }
+  }
 }
 
 /*****************************************************************************/
-const QString &
-AbstractLayerModel
-::GetName() const
+const QString& AbstractLayerModel::GetName() const
 {
   return m_Name;
 }
 
 /*******************************************************************************/
-bool
-AbstractLayerModel
-::virtual_HasKwl() const
+bool AbstractLayerModel::virtual_HasKwl() const
 {
   return false;
 }
 
 /*******************************************************************************/
-void
-AbstractLayerModel
-::virtual_SignalVisibilityChanged( bool isVisible )
+void AbstractLayerModel::virtual_SignalVisibilityChanged(bool isVisible)
 {
-  emit VisibilityChanged( isVisible );
-  emit VisibilityChanged( this, isVisible );
+  emit VisibilityChanged(isVisible);
+  emit VisibilityChanged(this, isVisible);
 }
 
 /*******************************************************************************/

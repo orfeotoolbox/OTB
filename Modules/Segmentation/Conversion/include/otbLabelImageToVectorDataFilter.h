@@ -41,16 +41,14 @@ namespace otb
  */
 
 template <class TInputImage, class TPrecision = double>
-class ITK_EXPORT LabelImageToVectorDataFilter :
-    public VectorDataSource< otb::VectorData<TPrecision> >
+class ITK_EXPORT LabelImageToVectorDataFilter : public VectorDataSource<otb::VectorData<TPrecision>>
 {
 public:
-
-   /** typedef for the classes standards. */
-  typedef LabelImageToVectorDataFilter                    Self;
-  typedef VectorDataSource< VectorData<TPrecision> >      Superclass;
-  typedef itk::SmartPointer<Self>                         Pointer;
-  typedef itk::SmartPointer<const Self>                   ConstPointer;
+  /** typedef for the classes standards. */
+  typedef LabelImageToVectorDataFilter             Self;
+  typedef VectorDataSource<VectorData<TPrecision>> Superclass;
+  typedef itk::SmartPointer<Self>                  Pointer;
+  typedef itk::SmartPointer<const Self>            ConstPointer;
 
   /** Method for management of the object factory. */
   itkNewMacro(Self);
@@ -59,43 +57,43 @@ public:
   itkTypeMacro(LabelImageToVectorDataFilter, VectorDataSource);
 
   /** Definition of the input image */
-  typedef TInputImage                           InputImageType;
-  typedef typename InputImageType::PixelType    InputPixelType;
-  typedef typename InputImageType::IndexType    InputIndexType;
-  typedef typename InputImageType::SizeType     SizeType;
-  typedef typename InputImageType::RegionType   RegionType;
-  typedef typename InputImageType::SpacingType  SpacingType;
-  typedef typename InputImageType::PointType    OriginType;
-  typedef typename InputImageType::IndexType    IndexType;
+  typedef TInputImage                          InputImageType;
+  typedef typename InputImageType::PixelType   InputPixelType;
+  typedef typename InputImageType::IndexType   InputIndexType;
+  typedef typename InputImageType::SizeType    SizeType;
+  typedef typename InputImageType::RegionType  RegionType;
+  typedef typename InputImageType::SpacingType SpacingType;
+  typedef typename InputImageType::PointType   OriginType;
+  typedef typename InputImageType::IndexType   IndexType;
 
   /** Definition of the output vector data. */
-  typedef VectorData<TPrecision>                 VectorDataType;
-  typedef typename VectorDataType::Pointer       VectorDataPointerType;
-  typedef typename VectorDataType::DataTreeType  DataTreeType;
-  typedef typename DataTreeType::Pointer         DataTreePointerType;
-  typedef typename DataTreeType::TreeNodeType    InternalTreeNodeType;
-  typedef typename VectorDataType::DataNodeType  DataNodeType;
-  typedef typename DataNodeType::Pointer         DataNodePointerType;
-  typedef typename VectorDataType::LineType      LineType;
-  typedef typename VectorDataType::PointType     PointType;
-  typedef typename LineType::VertexType          VertexType;
+  typedef VectorData<TPrecision>                VectorDataType;
+  typedef typename VectorDataType::Pointer      VectorDataPointerType;
+  typedef typename VectorDataType::DataTreeType DataTreeType;
+  typedef typename DataTreeType::Pointer        DataTreePointerType;
+  typedef typename DataTreeType::TreeNodeType   InternalTreeNodeType;
+  typedef typename VectorDataType::DataNodeType DataNodeType;
+  typedef typename DataNodeType::Pointer        DataNodePointerType;
+  typedef typename VectorDataType::LineType     LineType;
+  typedef typename VectorDataType::PointType    PointType;
+  typedef typename LineType::VertexType         VertexType;
 
-  typedef ogr::DataSource                            OGRDataSourceType;
-  typedef typename OGRDataSourceType::Pointer        OGRDataSourcePointerType;
-  typedef ogr::Layer                                 OGRLayerType;
+  typedef ogr::DataSource                     OGRDataSourceType;
+  typedef typename OGRDataSourceType::Pointer OGRDataSourcePointerType;
+  typedef ogr::Layer                          OGRLayerType;
 
 
   /** Set/Get the input image of this process object.  */
   using Superclass::SetInput;
-  virtual void SetInput(const InputImageType *input);
-  virtual const InputImageType * GetInput(void);
+  virtual void SetInput(const InputImageType* input);
+  virtual const InputImageType* GetInput(void);
 
   /** Set the input mask image.
    * All pixels in the mask with a value of 0 will not be considered
    * suitable for vectorization.
    */
-  virtual void SetInputMask(const InputImageType *input);
-  virtual const InputImageType * GetInputMask(void);
+  virtual void SetInputMask(const InputImageType* input);
+  virtual const InputImageType* GetInputMask(void);
 
   itkSetMacro(FieldName, std::string);
   itkGetMacro(FieldName, std::string);
@@ -105,7 +103,9 @@ public:
 
 protected:
   LabelImageToVectorDataFilter();
-  ~LabelImageToVectorDataFilter() override {}
+  ~LabelImageToVectorDataFilter() override
+  {
+  }
 
   void GenerateInputRequestedRegion() override;
 
@@ -113,12 +113,11 @@ protected:
   void GenerateData() override;
 
 private:
-  LabelImageToVectorDataFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  LabelImageToVectorDataFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   std::string m_FieldName;
-  bool m_Use8Connected;
-
+  bool        m_Use8Connected;
 };
 
 

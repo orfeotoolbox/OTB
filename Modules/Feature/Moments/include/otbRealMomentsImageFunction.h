@@ -39,23 +39,16 @@ namespace otb
  */
 
 template <class TInputImage, class TCoordRep = double>
-class ITK_EXPORT RealMomentsImageFunction :
-    public itk::ImageFunction<TInputImage,
-                              std::vector< std::vector<
-                              typename itk::NumericTraits<
-                              typename TInputImage::PixelType>::RealType > >,
-                              TCoordRep>
+class ITK_EXPORT RealMomentsImageFunction
+    : public itk::ImageFunction<TInputImage, std::vector<std::vector<typename itk::NumericTraits<typename TInputImage::PixelType>::RealType>>, TCoordRep>
 {
 public:
   /** Standard class typedefs. */
-  typedef RealMomentsImageFunction                                             Self;
-  typedef itk::ImageFunction<TInputImage,
-                             std::vector< std::vector<
-                             typename itk::NumericTraits<
-                             typename TInputImage::PixelType>::RealType > >,
-                             TCoordRep>                                        Superclass;
-  typedef itk::SmartPointer<Self>                                              Pointer;
-  typedef itk::SmartPointer<const Self>                                        ConstPointer;
+  typedef RealMomentsImageFunction Self;
+  typedef itk::ImageFunction<TInputImage, std::vector<std::vector<typename itk::NumericTraits<typename TInputImage::PixelType>::RealType>>, TCoordRep>
+                                        Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(RealMomentsImageFunction, ImageFunction);
@@ -69,14 +62,13 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef typename Superclass::PointType           PointType;
 
-  typedef typename Superclass::OutputType          OutputType;
-  typedef float                                    ScalarRealType;
+  typedef typename Superclass::OutputType OutputType;
+  typedef float                           ScalarRealType;
 
-  typedef TCoordRep                                CoordRepType;
+  typedef TCoordRep CoordRepType;
 
   /** Dimension of the underlying image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      InputImageType::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
 
   /** Evalulate the function at specified index */
   OutputType EvaluateAtIndex(const IndexType& index) const override;
@@ -88,8 +80,7 @@ public:
     this->ConvertPointToNearestIndex(point, index);
     return this->EvaluateAtIndex(index);
   }
-  OutputType EvaluateAtContinuousIndex(
-    const ContinuousIndexType& cindex) const override
+  OutputType EvaluateAtContinuousIndex(const ContinuousIndexType& cindex) const override
   {
     IndexType index;
     this->ConvertContinuousIndexToNearestIndex(cindex, index);
@@ -99,8 +90,8 @@ public:
   /** Get/Set the radius of the neighborhood over which the
    *  statistics are evaluated
    */
-  itkSetMacro( NeighborhoodRadius, unsigned int );
-  itkGetConstReferenceMacro( NeighborhoodRadius, unsigned int );
+  itkSetMacro(NeighborhoodRadius, unsigned int);
+  itkGetConstReferenceMacro(NeighborhoodRadius, unsigned int);
 
   itkSetMacro(Pmax, unsigned int);
   itkGetConstReferenceMacro(Pmax, unsigned int);
@@ -109,12 +100,14 @@ public:
 
 protected:
   RealMomentsImageFunction();
-  ~RealMomentsImageFunction() override {}
+  ~RealMomentsImageFunction() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  RealMomentsImageFunction(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  RealMomentsImageFunction(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   unsigned int m_Pmax;
   unsigned int m_Qmax;

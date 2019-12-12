@@ -29,10 +29,18 @@ namespace Functor
 {
 namespace MultiScaleConvexOrConcaveDecisionRule_tags
 {
-struct max_opening_profile_derivative  {};
-struct max_closing_profile_derivative  {};
-struct opening_profile_characteristics {};
-struct closing_profile_characteristics {};
+struct max_opening_profile_derivative
+{
+};
+struct max_closing_profile_derivative
+{
+};
+struct opening_profile_characteristics
+{
+};
+struct closing_profile_characteristics
+{
+};
 
 } // End namespace MultiScaleConvexOrConcaveDecisionRule_tags
 
@@ -69,7 +77,7 @@ struct closing_profile_characteristics {};
  *
  * \ingroup OTBMorphologicalProfiles
  */
-template<class TInput, class TLabeled>
+template <class TInput, class TLabeled>
 class MultiScaleConvexOrConcaveDecisionRule
 {
 
@@ -79,13 +87,15 @@ public:
    */
   MultiScaleConvexOrConcaveDecisionRule()
   {
-    m_Sigma = 0.0;
+    m_Sigma          = 0.0;
     m_LabelSeparator = 10;
   }
   /**
    * Destructor
    */
-  virtual ~MultiScaleConvexOrConcaveDecisionRule() {}
+  virtual ~MultiScaleConvexOrConcaveDecisionRule()
+  {
+  }
   /**
    * Label the pixel to convex, concave or flat
    * \return The label of the pixel
@@ -94,21 +104,18 @@ public:
    * \param opDeChar The characteristic of the opening profile
    * \param cloDeChar The characteristic of the closing profile
    */
-  TLabeled operator ()(const TInput& opDeMax,
-                       const TInput& cloDeMax,
-                       const TLabeled& opDeChar,
-                       const TLabeled& cloDeChar) const
+  TLabeled operator()(const TInput& opDeMax, const TInput& cloDeMax, const TLabeled& opDeChar, const TLabeled& cloDeChar) const
   {
     TLabeled resp = 0;
 
     if (opDeMax > cloDeMax && static_cast<double>(opDeMax) > m_Sigma)
-      {
+    {
       resp = m_LabelSeparator + opDeChar;
-      }
+    }
     else if (cloDeMax > opDeMax && static_cast<double>(cloDeMax) > m_Sigma)
-      {
+    {
       resp = cloDeChar;
-      }
+    }
     return resp;
   }
   /**
@@ -149,9 +156,8 @@ private:
   double m_Sigma;
   /** Separate between convex and concave labels */
   TLabeled m_LabelSeparator;
-
 };
-} //end namespace Functor
+} // end namespace Functor
 
 /** \typedef MultiScaleConvexOrConcaveClassificationFilter
  *  \brief Apply the otb::Functor::MultiScaleConvexOrConcaveDecisionRule to whole images.
@@ -160,22 +166,22 @@ private:
  *
  * Set inputs with:
  * \code
- * 
+ *
  * SetInput<MultiScaleConvexOrConcaveDecisionRule_tags::max_opening_profile_derivative>(in1);
  * SetInput<MultiScaleConvexOrConcaveDecisionRule_tags::max_closing_profile_derivative>(in2);
  * SetInput<MultiScaleConvexOrConcaveDecisionRule_tags::opening_profile_characteristics>(in3);
- * SetInput<MultiScaleConvexOrConcaveDecisionRule_tags::closing_profile_characteristics>(in4); 
+ * SetInput<MultiScaleConvexOrConcaveDecisionRule_tags::closing_profile_characteristics>(in4);
  *
  * \endcode
- * 
+ *
  * \ingroup OTBMorphologicalProfiles
  */
 template <class TInputImage, class TOutputImage>
-using MultiScaleConvexOrConcaveClassificationFilter
-= FunctorImageFilter<Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType, typename TOutputImage::PixelType>,
-                     std::tuple<Functor::MultiScaleConvexOrConcaveDecisionRule_tags::max_opening_profile_derivative,
-                                Functor::MultiScaleConvexOrConcaveDecisionRule_tags::max_closing_profile_derivative,
-                                Functor::MultiScaleConvexOrConcaveDecisionRule_tags::opening_profile_characteristics,
-                                Functor::MultiScaleConvexOrConcaveDecisionRule_tags::closing_profile_characteristics> >;
+using MultiScaleConvexOrConcaveClassificationFilter =
+    FunctorImageFilter<Functor::MultiScaleConvexOrConcaveDecisionRule<typename TInputImage::PixelType, typename TOutputImage::PixelType>,
+                       std::tuple<Functor::MultiScaleConvexOrConcaveDecisionRule_tags::max_opening_profile_derivative,
+                                  Functor::MultiScaleConvexOrConcaveDecisionRule_tags::max_closing_profile_derivative,
+                                  Functor::MultiScaleConvexOrConcaveDecisionRule_tags::opening_profile_characteristics,
+                                  Functor::MultiScaleConvexOrConcaveDecisionRule_tags::closing_profile_characteristics>>;
 } // End namespace otb
 #endif

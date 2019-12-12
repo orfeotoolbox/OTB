@@ -29,12 +29,11 @@ namespace otb
 {
 
 template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
-StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
-::StreamingResampleImageFilter()
+StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>::StreamingResampleImageFilter()
 {
   // internal filters instantiation
-  m_DisplacementFilter = DisplacementFieldGeneratorType::New();
-  m_WarpFilter        = WarpImageFilterType::New();
+  m_DisplacementFilter  = DisplacementFieldGeneratorType::New();
+  m_WarpFilter          = WarpImageFilterType::New();
   m_SignedOutputSpacing = m_DisplacementFilter->GetOutputSpacing();
   // Initialize the displacement field spacing to zero : inconsistent
   // value
@@ -45,9 +44,7 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
 }
 
 template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
-void
-StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
-::GenerateData()
+void StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>::GenerateData()
 {
   // Set up progress reporting
   typename itk::ProgressAccumulator::Pointer progress = itk::ProgressAccumulator::New();
@@ -63,35 +60,31 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
  *
  */
 template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
-void
-StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
-::GenerateOutputInformation()
+void StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>::GenerateOutputInformation()
 {
   // check the output spacing of the displacement field
-  if(this->GetDisplacementFieldSpacing()== itk::NumericTraits<SpacingType>::ZeroValue())
-    {
-    this->SetDisplacementFieldSpacing(2.*this->GetOutputSpacing());
-    }
+  if (this->GetDisplacementFieldSpacing() == itk::NumericTraits<SpacingType>::ZeroValue())
+  {
+    this->SetDisplacementFieldSpacing(2. * this->GetOutputSpacing());
+  }
 
   // Retrieve output largest region
-  SizeType largestSize       = this->GetOutputSize();
+  SizeType largestSize = this->GetOutputSize();
 
   // Set up displacement field filter
   SizeType displacementFieldLargestSize;
 
-  for(unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
-    {
+  for (unsigned int dim = 0; dim < InputImageType::ImageDimension; ++dim)
+  {
     // std::ceil to avoid numerical problems due to division of
     // spacings
     // + 1 :  We need to enlarge the displacement field size cause
     // itk::WarpImageFilter::EvaluateDisplacementAtPhysicalPoint needs
     // 4 neighbors and in the edges we can need 1 neighbor pixel
     // outside the field
-    displacementFieldLargestSize[dim] = static_cast<unsigned int>(
-      std::ceil( largestSize[dim]*
-                std::abs(this->GetOutputSpacing()[dim] /
-                        this->GetDisplacementFieldSpacing()[dim]))) + 1;
-    }
+    displacementFieldLargestSize[dim] =
+        static_cast<unsigned int>(std::ceil(largestSize[dim] * std::abs(this->GetOutputSpacing()[dim] / this->GetDisplacementFieldSpacing()[dim]))) + 1;
+  }
   m_DisplacementFilter->SetOutputSize(displacementFieldLargestSize);
   m_DisplacementFilter->SetOutputIndex(this->GetOutputStartIndex());
 
@@ -102,11 +95,10 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
 }
 
 template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
-void
-StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
-::PropagateRequestedRegion(itk::DataObject *output)
+void StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>::PropagateRequestedRegion(itk::DataObject* output)
 {
-  if (this->m_Updating) return;
+  if (this->m_Updating)
+    return;
 
   m_WarpFilter->GetOutput()->SetRequestedRegion(output);
   m_WarpFilter->GetOutput()->PropagateRequestedRegion();
@@ -117,46 +109,40 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
  *
  */
 template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
-void
-StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
-::SetOutputParametersFromImage(const ImageBaseType * image)
+void StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>::SetOutputParametersFromImage(const ImageBaseType* image)
 {
-  this->SetOutputOrigin ( image->GetOrigin() );
-  this->SetOutputSpacing ( internal::GetSignedSpacing( image ) );
-  this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
-  this->SetOutputSize ( image->GetLargestPossibleRegion().GetSize() );
+  this->SetOutputOrigin(image->GetOrigin());
+  this->SetOutputSpacing(internal::GetSignedSpacing(image));
+  this->SetOutputStartIndex(image->GetLargestPossibleRegion().GetIndex());
+  this->SetOutputSize(image->GetLargestPossibleRegion().GetSize());
 }
 
 template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
-void
-StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
-::SetDisplacementFieldSpacing( SpacingType outputSpacing )
+void StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>::SetDisplacementFieldSpacing(SpacingType outputSpacing)
 {
-  m_SignedOutputSpacing = outputSpacing;
+  m_SignedOutputSpacing                         = outputSpacing;
   typename TInputImage::DirectionType direction = this->m_DisplacementFilter->GetOutputDirection();
-  for(unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
+  for (unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
+  {
+    if (outputSpacing[i] < 0)
     {
-    if ( outputSpacing[i] < 0 )
+      if (direction[i][i] > 0)
       {
-      if ( direction[i][i] > 0 )
+        for (unsigned int j = 0; j < TInputImage::ImageDimension; ++j)
         {
-        for(unsigned int j = 0; j < TInputImage::ImageDimension; ++j)
-          {
-          direction[j][i] = - direction[j][i];
-          }
+          direction[j][i] = -direction[j][i];
         }
-      outputSpacing[i] = - outputSpacing[i];
       }
+      outputSpacing[i] = -outputSpacing[i];
     }
-  this->m_DisplacementFilter->SetOutputSpacing( outputSpacing );
-  this->m_DisplacementFilter->SetOutputDirection( direction );
+  }
+  this->m_DisplacementFilter->SetOutputSpacing(outputSpacing);
+  this->m_DisplacementFilter->SetOutputDirection(direction);
   this->Modified();
 }
 
 template <class TInputImage, class TOutputImage, class TInterpolatorPrecisionType>
-void
-StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionType>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "OutputOrigin: " << this->GetOutputOrigin() << std::endl;
@@ -164,7 +150,5 @@ StreamingResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecisionTy
   os << indent << "OutputStartIndex: " << this->GetOutputStartIndex() << std::endl;
   os << indent << "OutputSize: " << this->GetOutputSize() << std::endl;
 }
-
-
 }
 #endif

@@ -29,12 +29,11 @@ namespace otb
  * Constructor
  ----------------------------------------------------------*/
 template <class TInputImage, class TOutputImage, class TEdgeDetection>
-EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>
-::EdgeDetectorImageFilter()
+EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>::EdgeDetectorImageFilter()
 {
   this->SetNumberOfRequiredInputs(1);
 
-  m_Detector =  DetectionType::New();
+  m_Detector     = DetectionType::New();
   m_BinaryFilter = BinaryFilterType::New();
   m_BinaryFilter->SetInsideValue(static_cast<OutputImagePixelType>(0.));
   m_BinaryFilter->SetOutsideValue(static_cast<OutputImagePixelType>(1.));
@@ -46,17 +45,15 @@ EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>
  * Destructor.c
  ----------------------------------------------------------*/
 template <class TInputImage, class TOutputImage, class TEdgeDetection>
-EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>
-::~EdgeDetectorImageFilter()
-{}
+EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>::~EdgeDetectorImageFilter()
+{
+}
 
 /**
  * threaded Generate Data
  */
 template <class TInputImage, class TOutputImage, class TEdgeDetection>
-void
-EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>
-::GenerateData()
+void EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>::GenerateData()
 {
   m_Detector->SetInput(this->GetInput());
   m_Detector->Update();
@@ -71,9 +68,7 @@ EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>
   PrintSelf
   -----------------------------------------------------------------*/
 template <class TInputImage, class TOutputImage, class TEdgeDetection>
-void
-EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>
-::PrintSelf(std::ostream& os, itk::Indent indent) const
+void EdgeDetectorImageFilter<TInputImage, TOutputImage, TEdgeDetection>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }

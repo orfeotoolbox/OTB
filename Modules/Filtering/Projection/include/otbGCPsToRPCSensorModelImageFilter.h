@@ -27,7 +27,8 @@
 
 #include "otbImageKeywordlist.h"
 
-namespace otb {
+namespace otb
+{
 
 /** \class GCPsToRPCSensorModelImageFilter
  * \brief This filter estimates a RPC sensor models from GCPs.
@@ -76,24 +77,23 @@ namespace otb {
  * \ingroup OTBProjection
  */
 template <class TImage>
-class ITK_EXPORT GCPsToRPCSensorModelImageFilter :
-  public itk::CastImageFilter<TImage, TImage>
+class ITK_EXPORT GCPsToRPCSensorModelImageFilter : public itk::CastImageFilter<TImage, TImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef GCPsToRPCSensorModelImageFilter      Self;
+  typedef GCPsToRPCSensorModelImageFilter Self;
   typedef itk::CastImageFilter<TImage, TImage> Superclass;
-  typedef itk::SmartPointer<Self>              Pointer;
-  typedef itk::SmartPointer<const Self>        ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** GCPs typedefs */
   typedef itk::Point<double, 2>               Point2DType;
   typedef itk::Point<double, 3>               Point3DType;
   typedef std::pair<Point2DType, Point3DType> GCPType;
-  typedef std::vector<GCPType>                GCPsContainerType;
-  typedef std::vector<double>                 ErrorsContainerType;
+  typedef std::vector<GCPType> GCPsContainerType;
+  typedef std::vector<double>  ErrorsContainerType;
 
-  typedef itk::ContinuousIndex<>          ContinuousIndexType;
+  typedef itk::ContinuousIndex<> ContinuousIndexType;
   typedef itk::ContinuousIndex<double, 3> Continuous3DIndexType;
 
   /** DEM typedef */
@@ -107,13 +107,12 @@ public:
   itkTypeMacro(GCPsToRPCSensorModelImageFilter, CastImageFilter);
 
   /** Extract dimension from input and output image. */
-  itkStaticConstMacro(ImageDimension, unsigned int,
-                      TImage::ImageDimension);
+  itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
 
   /** Set/Get/toogle the UseImageGCPs flag */
-//  itkSetMacro(UseImageGCPs, bool);
-// itkGetMacro(UseImageGCPs, bool);
-//  itkBooleanMacro(UseImageGCPs);
+  //  itkSetMacro(UseImageGCPs, bool);
+  // itkGetMacro(UseImageGCPs, bool);
+  //  itkBooleanMacro(UseImageGCPs);
   void SetUseImageGCPs(bool use);
   void LoadImageGCPs();
 
@@ -183,8 +182,8 @@ protected:
   void Modified() const override;
 
 private:
-  GCPsToRPCSensorModelImageFilter (const Self &) = delete;
-  void operator =(const Self&) = delete;
+  GCPsToRPCSensorModelImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** Transform all GCPs and compute the error and mean error */
   void ComputeErrors();

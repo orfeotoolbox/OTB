@@ -58,9 +58,9 @@ public:
     if (std::abs(nir + mir) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       return 0.;
-      }
+    }
 
-      return (nir - mir) / (nir + mir);
+    return (nir - mir) / (nir + mir);
   }
 };
 
@@ -90,9 +90,9 @@ public:
     if (std::abs(nir + green) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       return 0.;
-      }
+    }
 
-      return (green - nir) / (green + nir);
+    return (green - nir) / (green + nir);
   }
 };
 
@@ -126,9 +126,9 @@ public:
     if (std::abs(mir + green) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       return 0.;
-      }
+    }
 
-      return (green - mir) / (green + mir);
+    return (green - mir) / (green + mir);
   }
 };
 
@@ -158,9 +158,9 @@ public:
     if (std::abs(red + green) < RadiometricIndex<TInput, TOutput>::Epsilon)
     {
       return 0.;
-      }
+    }
 
-      return (red - green) / (green + red);
+    return (red - green) / (green + red);
   }
 };
 

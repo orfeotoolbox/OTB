@@ -31,40 +31,40 @@
 
 using namespace std::chrono_literals;
 
-int otbStopwatchTest(int itkNotUsed(argc), char * itkNotUsed(argv)[])
+int otbStopwatchTest(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 {
   otb::Stopwatch sw;
 
-  assert( !sw.IsRunning() );
-  assert( sw.GetElapsedMilliseconds() == 0 );
+  assert(!sw.IsRunning());
+  assert(sw.GetElapsedMilliseconds() == 0);
 
   sw.Start();
-  assert( sw.IsRunning() );
+  assert(sw.IsRunning());
   sw.Stop();
 
   sw.Reset();
-  assert( !sw.IsRunning() );
-  assert( sw.GetElapsedMilliseconds() == 0 );
+  assert(!sw.IsRunning());
+  assert(sw.GetElapsedMilliseconds() == 0);
 
   sw = otb::Stopwatch::StartNew();
-  assert( sw.IsRunning() );
+  assert(sw.IsRunning());
   sw.Stop();
 
   // We have no portable sleep() and otbThreads is not linked here
   sw.Start();
   std::this_thread::sleep_for(500ms);
   sw.Stop();
-  assert( sw.GetElapsedMilliseconds() > 450 && sw.GetElapsedMilliseconds() < 550 );
+  assert(sw.GetElapsedMilliseconds() > 450 && sw.GetElapsedMilliseconds() < 550);
 
   sw.Start();
   std::this_thread::sleep_for(500ms);
   sw.Stop();
-  assert( sw.GetElapsedMilliseconds() > 900 && sw.GetElapsedMilliseconds() < 1100 );
+  assert(sw.GetElapsedMilliseconds() > 900 && sw.GetElapsedMilliseconds() < 1100);
 
   sw.Restart();
   std::this_thread::sleep_for(500ms);
   sw.Stop();
-  assert( sw.GetElapsedMilliseconds() > 450 && sw.GetElapsedMilliseconds() < 550 );
+  assert(sw.GetElapsedMilliseconds() > 450 && sw.GetElapsedMilliseconds() < 550);
 
   return EXIT_SUCCESS;
 }

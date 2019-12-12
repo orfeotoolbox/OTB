@@ -114,37 +114,37 @@ double VectorImage<TPixel, VImageDimension>::GetGCPZ(unsigned int GCPnum) const
   return (this->GetMetaDataInterface()->GetGCPZ(GCPnum));
 }
 
-template <class TPixel, unsigned int VImageDimension>
+template <class TPixel, unsigned int                      VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetGeoTransform(void) const
 {
   return (this->GetMetaDataInterface()->GetGeoTransform());
 }
 
-template <class TPixel, unsigned int VImageDimension>
+template <class TPixel, unsigned int                      VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetUpperLeftCorner(void) const
 {
   return (this->GetMetaDataInterface()->GetUpperLeftCorner());
 }
 
-template <class TPixel, unsigned int VImageDimension>
+template <class TPixel, unsigned int                      VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetUpperRightCorner(void) const
 {
   return (this->GetMetaDataInterface()->GetUpperRightCorner());
 }
 
-template <class TPixel, unsigned int VImageDimension>
+template <class TPixel, unsigned int                      VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetLowerLeftCorner(void) const
 {
   return (this->GetMetaDataInterface()->GetLowerLeftCorner());
 }
 
-template <class TPixel, unsigned int VImageDimension>
+template <class TPixel, unsigned int                      VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetLowerRightCorner(void) const
 {
   return (this->GetMetaDataInterface()->GetLowerRightCorner());
 }
 
-template <class TPixel, unsigned int VImageDimension>
+template <class TPixel, unsigned int                       VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::SpacingType VectorImage<TPixel, VImageDimension>::GetSignedSpacing() const
 {
   auto spacing = this->GetSpacing();
@@ -186,7 +186,7 @@ void VectorImage<TPixel, VImageDimension>::SetSignedSpacing(double spacing[VImag
   this->SetSignedSpacing(s);
 }
 
-template <class TPixel, unsigned int VImageDimension>
+template <class TPixel, unsigned int                                VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::ImageKeywordlistType VectorImage<TPixel, VImageDimension>::GetImageKeywordlist(void)
 {
   ImageKeywordlist kwl;
@@ -195,7 +195,7 @@ typename VectorImage<TPixel, VImageDimension>::ImageKeywordlistType VectorImage<
   return kwl;
 }
 
-template <class TPixel, unsigned int VImageDimension>
+template <class TPixel, unsigned int                                      VImageDimension>
 const typename VectorImage<TPixel, VImageDimension>::ImageKeywordlistType VectorImage<TPixel, VImageDimension>::GetImageKeywordlist(void) const
 {
   ImageKeywordlist kwl;
@@ -218,7 +218,7 @@ void VectorImage<TPixel, VImageDimension>::CopyInformation(const itk::DataObject
   this->itk::Object::SetMetaDataDictionary(data->GetMetaDataDictionary());
 }
 
-template <class TPixel, unsigned int VImageDimension>
+template <class TPixel, unsigned int                                             VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::ImageMetadataInterfacePointerType VectorImage<TPixel, VImageDimension>::GetMetaDataInterface() const
 {
   if (m_ImageMetadataInterface.IsNull())

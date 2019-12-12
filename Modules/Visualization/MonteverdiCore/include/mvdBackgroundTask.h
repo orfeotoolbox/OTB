@@ -74,8 +74,7 @@ class AbstractWorker;
  *
  * \brief WIP.
  */
-class OTBMonteverdiCore_EXPORT BackgroundTask :
-    public QThread
+class OTBMonteverdiCore_EXPORT BackgroundTask : public QThread
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -84,16 +83,13 @@ class OTBMonteverdiCore_EXPORT BackgroundTask :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /**
    * \brief Constructor.
    */
-  BackgroundTask( AbstractWorker* worker,
-		  bool autoDestroy =true,
-		  QObject* p =NULL );
+  BackgroundTask(AbstractWorker* worker, bool autoDestroy = true, QObject* p = NULL);
 
   /**
    * \brief Destructor.
@@ -106,35 +102,31 @@ public:
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
+  //
+  // Private methods.
 private:
-
-
-//
-// Private attributes.
+  //
+  // Private attributes.
 private:
   /**
    */
@@ -142,12 +134,12 @@ private:
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /**
    */
-  void OnObjectDestroyed( QObject* object );
+  void OnObjectDestroyed(QObject* object);
 };
 
 } // end namespace 'mvd'.
@@ -174,9 +166,7 @@ private slots:
 namespace mvd
 {
 /*****************************************************************************/
-inline
-const AbstractWorker*
-BackgroundTask::GetWorker() const
+inline const AbstractWorker* BackgroundTask::GetWorker() const
 {
   return m_Worker;
 }

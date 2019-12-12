@@ -25,7 +25,8 @@
 #include "otbGenericRSTransform.h"
 
 
-namespace otb {
+namespace otb
+{
 
 /** \class PhysicalToRPCSensorModelImageFilter
  * \brief This filter estimates a RPC sensor models from a physical model.
@@ -58,15 +59,14 @@ namespace otb {
  * \ingroup OTBProjection
  */
 template <class TImage>
-class ITK_EXPORT PhysicalToRPCSensorModelImageFilter :
-  public itk::CastImageFilter<TImage, TImage>
+class ITK_EXPORT PhysicalToRPCSensorModelImageFilter : public itk::CastImageFilter<TImage, TImage>
 {
 public:
   /** Standard class typedefs. */
   typedef PhysicalToRPCSensorModelImageFilter Self;
   typedef itk::CastImageFilter<TImage, TImage> Superclass;
-  typedef itk::SmartPointer<Self>             Pointer;
-  typedef itk::SmartPointer<const Self>       ConstPointer;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -75,9 +75,9 @@ public:
   itkTypeMacro(PhysicalToRPCSensorModelImageFilter, CastImageFilter);
 
   /** template parameters typedef */
-  typedef TImage                          ImageType;
-  typedef typename ImageType::PointType   PointType;
-  typedef typename ImageType::SizeType    SizeType;
+  typedef TImage                        ImageType;
+  typedef typename ImageType::PointType PointType;
+  typedef typename ImageType::SizeType  SizeType;
 
   /** GCPsToSensor model filter */
   typedef GCPsToRPCSensorModelImageFilter<ImageType>          GCPsToSensorModelType;
@@ -89,8 +89,8 @@ public:
   typedef typename GCPsToSensorModelType::ErrorsContainerType ErrorsContainerType;
 
   /** Remote Sensing Transform */
-  typedef GenericRSTransform<>                                RSTransformType;
-  typedef typename RSTransformType::Pointer                   RSTransformPointerType;
+  typedef GenericRSTransform<>              RSTransformType;
+  typedef typename RSTransformType::Pointer RSTransformPointerType;
 
   /** Set/Get the grid size*/
   itkSetMacro(GridSize, SizeType);
@@ -102,11 +102,11 @@ public:
     SizeType iSize;
     iSize.Fill(inSize);
 
-    if(m_GridSize != iSize)
-      {
+    if (m_GridSize != iSize)
+    {
       m_GridSize = iSize;
       this->Modified();
-      }
+    }
   }
 
   /** Reimplement the method Modified() */
@@ -125,15 +125,14 @@ protected:
   void GenerateOutputInformation() override;
 
 private:
-  PhysicalToRPCSensorModelImageFilter(const Self &) = delete;
-  void operator =(const Self&) = delete;
+  PhysicalToRPCSensorModelImageFilter(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** The rpc model estimator */
-  GCPsToSensorModelPointerType       m_GCPsToSensorModelFilter;
+  GCPsToSensorModelPointerType m_GCPsToSensorModelFilter;
 
-  SizeType                           m_GridSize;
-  mutable bool                       m_OutputInformationGenerated;
-
+  SizeType     m_GridSize;
+  mutable bool m_OutputInformationGenerated;
 };
 } // end of namespace otb
 

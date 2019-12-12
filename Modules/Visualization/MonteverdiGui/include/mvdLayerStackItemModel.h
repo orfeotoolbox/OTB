@@ -76,8 +76,7 @@ class StackedLayerModel;
  *
  * \brief WIP.
  */
-class OTBMonteverdiGUI_EXPORT LayerStackItemModel :
-    public QAbstractItemModel
+class OTBMonteverdiGUI_EXPORT LayerStackItemModel : public QAbstractItemModel
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -86,10 +85,9 @@ class OTBMonteverdiGUI_EXPORT LayerStackItemModel :
 
   /*-[ PUBLIC SECTION ]------------------------------------------------------*/
 
-//
-// Public types.
+  //
+  // Public types.
 public:
-
   enum Columns
   {
     COLUMN_NONE = -1,
@@ -128,23 +126,22 @@ public:
   };
   */
 
-//
-// Public methods.
+  //
+  // Public methods.
 public:
-
   /** \brief Constructor. */
-  LayerStackItemModel( QObject* p =NULL );
+  LayerStackItemModel(QObject* p = NULL);
 
   /** \brief Destructor. */
   ~LayerStackItemModel() override;
 
   /**
    */
-  static const AbstractLayerModel * GetLayer( const QModelIndex & );
+  static const AbstractLayerModel* GetLayer(const QModelIndex&);
 
   /**
    */
-  void SetStack( StackedLayerModel * );
+  void SetStack(StackedLayerModel*);
 
   //
   // QAbstractItemModel overloads.
@@ -152,61 +149,47 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#columnCount
    */
-  int columnCount( const QModelIndex & p = QModelIndex() ) const override;
+  int columnCount(const QModelIndex& p = QModelIndex()) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#data
    */
-  QVariant
-    data( const QModelIndex & index, int role = Qt::DisplayRole ) const override;
+  QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#dropMimeData
    */
-  bool
-    dropMimeData( const QMimeData * data,
-                  Qt::DropAction action,
-                  int row,
-                  int column,
-                  const QModelIndex & p ) override;
+  bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& p) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#flags
    */
-  Qt::ItemFlags flags( const QModelIndex & index ) const override;
+  Qt::ItemFlags flags(const QModelIndex& index) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#hasChildren
    */
-  bool hasChildren( const QModelIndex & p = QModelIndex() ) const override;
+  bool hasChildren(const QModelIndex& p = QModelIndex()) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#headerData
    */
-  QVariant headerData( int section,
-                               Qt::Orientation orientation,
-                               int role = Qt::DisplayRole ) const override;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#index
    */
-  QModelIndex
-    index( int row,
-           int column,
-           const QModelIndex & p = QModelIndex() ) const override;
+  QModelIndex index(int row, int column, const QModelIndex& p = QModelIndex()) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#insertRows
    */
-  bool
-    insertRows( int row,
-                int count,
-                const QModelIndex & p = QModelIndex() ) override;
+  bool insertRows(int row, int count, const QModelIndex& p = QModelIndex()) override;
 
   /**
    * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#mimeData
    */
-  QMimeData * mimeData( const QModelIndexList & indexes ) const override;
+  QMimeData* mimeData(const QModelIndexList& indexes) const override;
 
   /**
    * \see http://doc.qt.io/qt-4.8/qabstractitemmodel.html#mimeTypes
@@ -216,28 +199,22 @@ public:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#parent
    */
-  QModelIndex parent( const QModelIndex & index ) const override;
+  QModelIndex parent(const QModelIndex& index) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#removeRows
    */
-  bool
-    removeRows( int row,
-                int count,
-                const QModelIndex & p = QModelIndex() ) override;
+  bool removeRows(int row, int count, const QModelIndex& p = QModelIndex()) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#rowCount
    */
-  int rowCount( const QModelIndex & p = QModelIndex() ) const override;
+  int rowCount(const QModelIndex& p = QModelIndex()) const override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#setData
    */
-  bool
-    setData( const QModelIndex & index,
-             const QVariant & value,
-             int role = Qt::EditRole ) override;
+  bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole) override;
 
   /**
    * \see http://qt-project.org/doc/qt-4.8/qabstractitemmodel.html#supportedDropActions
@@ -246,55 +223,52 @@ public:
 
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
-//
-// Public SLOTS.
+  //
+  // Public SLOTS.
 public slots:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
-//
-// Signals.
+  //
+  // Signals.
 signals:
-  
-  //Bugfix for layer deletion
-  void LayerDeletingModel( unsigned int index);
+
+  // Bugfix for layer deletion
+  void LayerDeletingModel(unsigned int index);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
-//
-// Protected methods.
+  //
+  // Protected methods.
 protected:
-
-//
-// Protected attributes.
+  //
+  // Protected attributes.
 protected:
-
   /*-[ PRIVATE SECTION ]-----------------------------------------------------*/
 
-//
-// Private methods.
-private:
-
-  /**
-   */
-  void Connect( AbstractLayerModel * );
-
-  /**
-   */
-  void Disconnect( AbstractLayerModel * );
-
-
-//
-// Private attributes.
+  //
+  // Private methods.
 private:
   /**
    */
-  StackedLayerModel * m_StackedLayerModel;
+  void Connect(AbstractLayerModel*);
+
+  /**
+   */
+  void Disconnect(AbstractLayerModel*);
+
+
+  //
+  // Private attributes.
+private:
+  /**
+   */
+  StackedLayerModel* m_StackedLayerModel;
 
   /*-[ PRIVATE SLOTS SECTION ]-----------------------------------------------*/
 
-//
-// Slots.
+  //
+  // Slots.
 private slots:
   /**
    */
@@ -302,14 +276,14 @@ private slots:
   // void OnContentChanged();
   // void OnModelAboutToBeReset();
   // void OnModelReset();
-  void OnLayerAboutToBeDeleted( size_t );
-  void OnLayerAdded( size_t );
-  void OnLayerDeleted( size_t );
-  void OnLayerVisibilityChanged( AbstractLayerModel *, bool );
-  void OnReferenceChanged( size_t );
-  void OnPixelInfoChanged( const QPoint &, const PointType &, const PixelInfo::Vector & );
-  void OnImageSettingsUpdated( AbstractImageModel * );
-  void OnResolutionsChanged( const PixelInfo::Vector & );
+  void OnLayerAboutToBeDeleted(size_t);
+  void OnLayerAdded(size_t);
+  void OnLayerDeleted(size_t);
+  void OnLayerVisibilityChanged(AbstractLayerModel*, bool);
+  void OnReferenceChanged(size_t);
+  void OnPixelInfoChanged(const QPoint&, const PointType&, const PixelInfo::Vector&);
+  void OnImageSettingsUpdated(AbstractImageModel*);
+  void OnResolutionsChanged(const PixelInfo::Vector&);
 };
 
 } // end namespace 'mvd'.

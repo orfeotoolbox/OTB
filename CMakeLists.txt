@@ -22,6 +22,8 @@ cmake_minimum_required(VERSION 3.10.2)
 
 foreach(p
     CMP0072 # CMake 3.11
+    CMP0078 # CMake 3.13
+    CMP0086 # CMake 3.14
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
@@ -40,9 +42,8 @@ set(OTB_MIN_MSVC_VER 19)
 set(OTB_MIN_Clang_VER 3.4)
 if(DEFINED OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER)
   if(CMAKE_CXX_COMPILER_VERSION AND CMAKE_CXX_COMPILER_VERSION VERSION_LESS ${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER})
-    message(STATUS "WARNING: the version of your ${CMAKE_CXX_COMPILER_ID} "
-      "compiler is not supported by Orfeo ToolBox (C++14 support might be "
-      "incomplete). Please consider updating your compiler to version "
+    message(FATAL_ERROR "The version of your ${CMAKE_CXX_COMPILER_ID} "
+      "compiler is not supported by Orfeo ToolBox. Please consider updating your compiler to version "
       "${OTB_MIN_${CMAKE_CXX_COMPILER_ID}_VER} or later.")
   endif()
 endif()
@@ -100,12 +101,12 @@ reset_qt_i18n_sources()
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
 # Find python stuff
-# Version 3 is prefered before 2
+# Version 3 is preferred before 2
 set ( Python_ADDITIONAL_VERSIONS "3;2" )
 set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
 set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
 find_package( PythonInterp )
-if ( OTB_WRAP_PYTHON AND ( ${PYTHON_VERSION_MAJOR} EQUAL 2 ) )
+if ( OTB_WRAP_PYTHON AND ( "x${PYTHON_VERSION_MAJOR}" STREQUAL "x2" ) )
     message (WARNING "Python3 not found. There is no longer support of \
     wrapping in python2 in OTB, but it can still be used.")
 endif()
@@ -130,8 +131,8 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 
 #-----------------------------------------------------------------------------
 # OTB version number.
-set(OTB_VERSION_MAJOR "6")
-set(OTB_VERSION_MINOR "7")
+set(OTB_VERSION_MAJOR "7")
+set(OTB_VERSION_MINOR "0")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
@@ -210,11 +211,6 @@ endmacro()
 # TODO : handle shared libs on windows
 option(BUILD_SHARED_LIBS "Build OTB with shared libraries." ON)
 mark_as_advanced(BUILD_SHARED_LIBS)
-
-# The following variable can be deleted and replace by BUILD_SHARED_LIBS
-# in otbConfigure.h.in
-set(OTB_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
-
 
 if(MSVC)
   option(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS "Build OTB with shared libraries." ON)
@@ -399,6 +395,9 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               CMake/OTBStandaloneModuleMacros.cmake
               CMake/OTBModuleExternal.cmake
               CMake/UseOTB.cmake
+              CMake/GenerateExportHeaderCustom.cmake
+              CMake/exportheader.cmake.in
+              CMake/NamespaceHandler.cmake
   DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
   COMPONENT Development)
 get_property(OTBTargets_MODULES GLOBAL PROPERTY OTBTargets_MODULES)

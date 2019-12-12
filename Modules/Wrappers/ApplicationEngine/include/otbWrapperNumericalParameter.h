@@ -54,19 +54,18 @@ public:
   }
 
   /** Set the value */
-  void SetValue( ScalarType value)
+  void SetValue(ScalarType value)
   {
-    m_Value = ( value < m_MinimumValue ) ? m_MinimumValue :
-              ( value < m_MaximumValue ) ? value : m_MaximumValue ;
+    m_Value = (value < m_MinimumValue) ? m_MinimumValue : (value < m_MaximumValue) ? value : m_MaximumValue;
 
     // Set Active only if the parameter is not automatically set
     if (!GetAutomaticValue())
-      {
+    {
       SetActive(true);
-      }
+    }
   }
 
-  void SetValue( const std::string & valueStr )
+  void SetValue(const std::string& valueStr)
   {
     ScalarType value = static_cast<ScalarType>(atof(valueStr.c_str()));
     SetValue(value);
@@ -128,6 +127,15 @@ public:
     return static_cast<float>(*m_Value);
   }
 
+  double ToDouble() const override
+  {
+    if (!HasValue())
+    {
+      itkExceptionMacro("Cannot convert parameter " << GetKey() << " to double (no value).");
+    }
+    return static_cast<double>(*m_Value);
+  }
+
   void FromInt(int value) override
   {
     SetValue(value);
@@ -148,14 +156,14 @@ public:
 protected:
   /** Constructor */
   NumericalParameter()
-    : m_DefaultValue(itk::NumericTraits<T>::Zero),
-      m_MinimumValue(itk::NumericTraits<T>::NonpositiveMin()),
-      m_MaximumValue(itk::NumericTraits<T>::max())
-  {}
+    : m_DefaultValue(itk::NumericTraits<T>::Zero), m_MinimumValue(itk::NumericTraits<T>::NonpositiveMin()), m_MaximumValue(itk::NumericTraits<T>::max())
+  {
+  }
 
   /** Destructor */
   ~NumericalParameter() override
-  {}
+  {
+  }
 
   /** Value */
   boost::optional<T> m_Value;
@@ -170,8 +178,8 @@ protected:
   ScalarType m_MaximumValue;
 
 private:
-  NumericalParameter(const Parameter &) = delete;
-  void operator =(const Parameter&) = delete;
+  NumericalParameter(const Parameter&) = delete;
+  void operator=(const Parameter&) = delete;
 
 }; // End class Numerical Parameter
 
@@ -186,12 +194,34 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_Float;
   }
 
   void FromFloat(float value) override
+  {
+    SetValue(value);
+  }
+};
+
+class OTBApplicationEngine_EXPORT DoubleParameter : public NumericalParameter<double>
+{
+public:
+  /** Standard class typedef */
+  typedef DoubleParameter                Self;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  itkNewMacro(Self);
+  itkTypeMacro(NumericalParameter, Parameter);
+
+  ParameterType GetType() const override
+  {
+    return ParameterType_Double;
+  }
+
+  void FromDouble(double value) override
   {
     SetValue(value);
   }
@@ -208,7 +238,7 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_Int;
   }
@@ -229,7 +259,7 @@ public:
   /** RTTI support */
   itkTypeMacro(RAMParameter, Parameter);
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_RAM;
   }
@@ -261,7 +291,7 @@ public:
     return true;
   }
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_Radius;
   }

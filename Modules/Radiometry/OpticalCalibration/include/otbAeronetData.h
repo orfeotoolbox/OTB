@@ -38,7 +38,7 @@ namespace otb
  *
  * \ingroup OTBOpticalCalibration
  */
-class OTBOpticalCalibration_EXPORT AeronetData :  public itk::DataObject
+class OTBOpticalCalibration_EXPORT AeronetData : public itk::DataObject
 {
 public:
   /** Standard class typedefs. */
@@ -88,7 +88,9 @@ protected:
   /** Constructor */
   AeronetData();
   /** Destructor */
-  ~AeronetData() override {}
+  ~AeronetData() override
+  {
+  }
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
@@ -114,7 +116,6 @@ private:
   double m_EpsilonDate;
   /** Number of date used */
   unsigned int m_NumberOfDateUsed;
-
 };
 
 } // end namespace otb

@@ -37,7 +37,7 @@ class ConvertCartoToGeoPoint : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef ConvertCartoToGeoPoint                    Self;
+  typedef ConvertCartoToGeoPoint        Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -47,7 +47,7 @@ public:
 
   itkTypeMacro(ConvertCartoToGeoPoint, otb::Application);
 
-  typedef otb::GenericRSTransform<>        TransformType;
+  typedef otb::GenericRSTransform<> TransformType;
 
 private:
   void DoInit() override
@@ -56,13 +56,15 @@ private:
     SetDescription("Convert cartographic coordinates to geographic ones.");
 
     // Documentation
-    SetDocLongDescription("This application computes the geographic coordinates from cartographic ones. User has to give the X and Y coordinate and the cartographic projection (see mapproj parameter for details).");
+    SetDocLongDescription(
+        "This application computes the geographic coordinates from cartographic ones. User has to give the X and Y coordinate and the cartographic projection "
+        "(see mapproj parameter for details).");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso(" ");
 
     AddDocTag(Tags::Geometry);
-	AddDocTag(Tags::Coordinates);
+    AddDocTag(Tags::Coordinates);
 
     AddParameter(ParameterType_Group, "carto", "Input cartographic coordinates");
     AddParameter(ParameterType_Float, "carto.x", "X cartographic coordinates");
@@ -104,29 +106,28 @@ private:
     // Instantiate a GenericRSTransform
     // Input : coordiante system picked up by the user
     // Output : WGS84 corresponding to epsg code 4326
-    TransformType::Pointer  transform = TransformType::New();
+    TransformType::Pointer transform = TransformType::New();
     transform->SetInputProjectionRef(inputProjRef);
     // Default to wgs84
     transform->SetOutputProjectionRef(otb::SpatialReference::FromWGS84().ToWkt());
     transform->InstantiateTransform();
 
-    TransformType::InputPointType   cartoPoint;
-    TransformType::OutputPointType  geoPoint;
+    TransformType::InputPointType  cartoPoint;
+    TransformType::OutputPointType geoPoint;
 
     cartoPoint[0] = GetParameterFloat("carto.x");
     cartoPoint[1] = GetParameterFloat("carto.y");
 
     geoPoint = transform->TransformPoint(cartoPoint);
 
-    otbAppLogINFO( << std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << ", " << cartoPoint[1] << ")" );
-    otbAppLogINFO( << std::setprecision(10) << "Geographic   Point (Long, Lat) : (" << geoPoint[0] << ", " <<  geoPoint[1] << ")" );
+    otbAppLogINFO(<< std::setprecision(10) << "Cartographic Point  (x , y)  : (" << cartoPoint[0] << ", " << cartoPoint[1] << ")");
+    otbAppLogINFO(<< std::setprecision(10) << "Geographic   Point (Long, Lat) : (" << geoPoint[0] << ", " << geoPoint[1] << ")");
 
 
-    SetParameterFloat( "long",geoPoint[0]);
-    SetParameterFloat( "lat",geoPoint[1]);
+    SetParameterFloat("long", geoPoint[0]);
+    SetParameterFloat("lat", geoPoint[1]);
   }
 };
-
 }
 }
 

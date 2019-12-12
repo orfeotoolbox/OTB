@@ -19,33 +19,31 @@
  */
 
 
-
 #include <fstream>
 
 #include "otbAtmosphericRadiativeTerms.h"
 #include <cstdlib>
 
 
-
 std::ostream& operator<<(std::ostream& os, const otb::AtmosphericRadiativeTerms::DataVectorType& values)
 {
   os << "[";
   if (values.size() > 0)
-    {
+  {
     os << values[0];
-    }
+  }
   for (unsigned int i = 1; i < values.size(); ++i)
-    {
+  {
     os << ", ";
     os << values[i];
-    }
+  }
   os << "]\n";
   return os;
 }
 
-int otbAtmosphericRadiativeTermsTest(int itkNotUsed(argc), char * argv[])
+int otbAtmosphericRadiativeTermsTest(int itkNotUsed(argc), char* argv[])
 {
-  char * filename = argv[1];
+  char*         filename = argv[1];
   std::ofstream file;
   file.open(filename);
 

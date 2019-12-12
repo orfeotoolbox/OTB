@@ -125,16 +125,14 @@ namespace otb
  * \ingroup OTBUnmixing
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT MDMDNMFImageFilter:
-    public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT MDMDNMFImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
-
   /** Standard class typedefs. */
-  typedef MDMDNMFImageFilter                                    Self;
-  typedef itk::ImageToImageFilter< TInputImage, TOutputImage >  Superclass;
-  typedef itk::SmartPointer<Self>                               Pointer;
-  typedef itk::SmartPointer<const Self>                         ConstPointer;
+  typedef MDMDNMFImageFilter Self;
+  typedef itk::ImageToImageFilter<TInputImage, TOutputImage> Superclass;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
 
   /** Type macro */
   itkNewMacro(Self);
@@ -143,20 +141,20 @@ public:
   itkTypeMacro(MDMDNMFImageFilter, ImageToImageFilter);
 
   /** typedef related to input and output images */
-  typedef          TInputImage                   InputImageType;
-  typedef typename InputImageType::Pointer       InputPointerType;
-  typedef typename InputImageType::ConstPointer  InputConstPointerType;
-  typedef typename InputImageType::IndexType     InputIndexType;
-  typedef typename InputImageType::SizeType      InputSizeType;
-  typedef typename InputImageType::PixelType     InputPixelType;
+  typedef TInputImage                           InputImageType;
+  typedef typename InputImageType::Pointer      InputPointerType;
+  typedef typename InputImageType::ConstPointer InputConstPointerType;
+  typedef typename InputImageType::IndexType    InputIndexType;
+  typedef typename InputImageType::SizeType     InputSizeType;
+  typedef typename InputImageType::PixelType    InputPixelType;
 
-  typedef          TOutputImage                  OutputImageType;
-  typedef typename OutputImageType::Pointer      OutputPointerType;
-  typedef typename OutputImageType::IndexType    OutputIndexType;
-  typedef typename OutputImageType::OffsetType   OutputOffsetType;
-  typedef typename OutputImageType::SizeType     OutputSizeType;
-  typedef typename OutputImageType::RegionType   OutputImageRegionType;
-  typedef typename OutputImageType::PixelType    OutputPixelType;
+  typedef TOutputImage                         OutputImageType;
+  typedef typename OutputImageType::Pointer    OutputPointerType;
+  typedef typename OutputImageType::IndexType  OutputIndexType;
+  typedef typename OutputImageType::OffsetType OutputOffsetType;
+  typedef typename OutputImageType::SizeType   OutputSizeType;
+  typedef typename OutputImageType::RegionType OutputImageRegionType;
+  typedef typename OutputImageType::PixelType  OutputPixelType;
 
   /* Matrix type */
   typedef double                                                       PrecisionType;
@@ -193,7 +191,9 @@ public:
 
 protected:
   MDMDNMFImageFilter();
-  ~MDMDNMFImageFilter() override {}
+  ~MDMDNMFImageFilter() override
+  {
+  }
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void GenerateInputRequestedRegion() override;
@@ -211,61 +211,29 @@ private:
   MDMDNMFImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  static void AddOneRowOfOnes(const MatrixType & m, MatrixType & M);
+  static void AddOneRowOfOnes(const MatrixType& m, MatrixType& M);
 
-  static double Criterion(const MatrixType & X,
-                   const MatrixType & A,
-                   const MatrixType & S,
-                   const double &delt,
-                   const double &lambdS,
-                   const double &lambdD);
+  static double Criterion(const MatrixType& X, const MatrixType& A, const MatrixType& S, const double& delt, const double& lambdS, const double& lambdD);
 
-  static void EvalGradS(const MatrixType &X,
-                 const MatrixType &A,
-                 const MatrixType &S,
-                 const double &delt,
-                 const double &lambdS,
-                 MatrixType & gradS);
+  static void EvalGradS(const MatrixType& X, const MatrixType& A, const MatrixType& S, const double& delt, const double& lambdS, MatrixType& gradS);
 
-  static void EvalGradA(const MatrixType &X,
-                 const MatrixType &A,
-                 const MatrixType &S,
-                 const double &delt,
-                 const double &lambdD,
-                 MatrixType &gradA);
+  static void EvalGradA(const MatrixType& X, const MatrixType& A, const MatrixType& S, const double& delt, const double& lambdD, MatrixType& gradA);
 
-  static double Call(const MatrixType & variMat,
-              const MatrixType & fixedMat,
-              const MatrixType & X,
-              const double & delt,
-              const double & lambdS,
-              const double & lambdD, const bool isDirectEvalDirection);
+  static double Call(const MatrixType& variMat, const MatrixType& fixedMat, const MatrixType& X, const double& delt, const double& lambdS, const double& lambdD,
+                     const bool isDirectEvalDirection);
 
-  static void ProjGradOneStep(
-    const MatrixType & X,
-    const MatrixType & fixedMat,
-    const MatrixType & gradVariMat,
-    const double & sig,
-    const double & betinit,
-    const double & delt,
-    const double & lambdS,
-    const double & lambdD,
-    MatrixType & variMat,
-    double & alph, const bool isDirectEvalDirection );
+  static void ProjGradOneStep(const MatrixType& X, const MatrixType& fixedMat, const MatrixType& gradVariMat, const double& sig, const double& betinit,
+                              const double& delt, const double& lambdS, const double& lambdD, MatrixType& variMat, double& alph,
+                              const bool isDirectEvalDirection);
 
-  static void SetNegativeCoefficientsToZero(MatrixType & M);
+  static void SetNegativeCoefficientsToZero(MatrixType& M);
 
-  static MatrixType TermByTermMatrixProduct(const MatrixType & M1, const MatrixType & M2);
+  static MatrixType TermByTermMatrixProduct(const MatrixType& M1, const MatrixType& M2);
 
-  static double SumMatrixElements(const MatrixType & M);
+  static double SumMatrixElements(const MatrixType& M);
 
-  static bool ArmijoTest(const double & sig,
-                  const MatrixType variMat,
-                  const MatrixType & newVariMat,
-                  const double & evalf,
-                  const double & newEvalf,
-                  const MatrixType & gradVariMat,
-                  const double & alph);
+  static bool ArmijoTest(const double& sig, const MatrixType variMat, const MatrixType& newVariMat, const double& evalf, const double& newEvalf,
+                         const MatrixType& gradVariMat, const double& alph);
 
   // attributes
   MatrixType   m_Endmembers;

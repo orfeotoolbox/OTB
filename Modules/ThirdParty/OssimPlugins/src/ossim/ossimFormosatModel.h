@@ -94,7 +94,7 @@ public:
     * Writes a template of geom keywords processed by loadState and saveState
     * to output stream.
     */
-   static void writeGeomTemplate(ostream& os);
+   static void writeGeomTemplate(std::ostream& os);
 
    /*!
     * Given an image point and height, initializes worldPoint.

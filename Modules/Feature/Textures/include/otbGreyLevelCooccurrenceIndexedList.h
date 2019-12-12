@@ -66,7 +66,6 @@ template <class TPixel>
 class ITK_EXPORT GreyLevelCooccurrenceIndexedList : public itk::LightObject
 {
 public:
-
   /** Standard typedefs */
   typedef GreyLevelCooccurrenceIndexedList Self;
   typedef itk::LightObject                 Superclass;
@@ -83,21 +82,21 @@ public:
 
   itkStaticConstMacro(PixelPairSize, unsigned int, 2);
 
-  typedef itk::Index<PixelPairSize>  IndexType;
-  typedef itk::Size<PixelPairSize>   SizeType;
-  typedef typename itk::IndexValueType    IndexValueType;
+  typedef itk::Index<PixelPairSize>    IndexType;
+  typedef itk::Size<PixelPairSize>     SizeType;
+  typedef typename itk::IndexValueType IndexValueType;
 
-  typedef typename itk::IdentifierType InstanceIdentifier;
-  typedef InstanceIdentifier FrequencyType;
-  typedef typename itk::NumericTraits< FrequencyType >::RealType RelativeFrequencyType;
-  typedef typename itk::NumericTraits< FrequencyType >::AccumulateType TotalFrequencyType;
+  typedef typename itk::IdentifierType                               InstanceIdentifier;
+  typedef InstanceIdentifier                                         FrequencyType;
+  typedef typename itk::NumericTraits<FrequencyType>::RealType       RelativeFrequencyType;
+  typedef typename itk::NumericTraits<FrequencyType>::AccumulateType TotalFrequencyType;
 
-  typedef typename itk::NumericTraits< PixelType >::RealType PixelValueType;
+  typedef typename itk::NumericTraits<PixelType>::RealType PixelValueType;
   typedef itk::FixedArray<PixelValueType, PixelPairSize> PixelPairType;
   // lower bound of each bin
-  std::vector< std::vector< PixelValueType > > m_Min;
+  std::vector<std::vector<PixelValueType>> m_Min;
   // upper bound of each bin
-  std::vector< std::vector< PixelValueType > > m_Max;
+  std::vector<std::vector<PixelValueType>> m_Max;
 
   /* std::pair to hold pixel pair and its frequency count */
   typedef std::pair<IndexType, FrequencyType> CooccurrencePairType;
@@ -122,11 +121,10 @@ public:
 
   /** Initialize the lowerbound and upper bound vecotor, Fill m_LookupArray with
     * -1 and set m_TotalFrequency to zero */
-  void Initialize(const unsigned int nbins, const PixelValueType min,
-                  const PixelValueType max, const bool symmetry = true);
+  void Initialize(const unsigned int nbins, const PixelValueType min, const PixelValueType max, const bool symmetry = true);
 
-  //check if both pixel values fall between m_InputImageMinimum and
-  //m_InputImageMaximum. If so add to m_Vector via AddPairToVector method */
+  // check if both pixel values fall between m_InputImageMinimum and
+  // m_InputImageMaximum. If so add to m_Vector via AddPairToVector method */
   void AddPixelPair(const PixelValueType& pixelvalue1, const PixelValueType& pixelvalue2);
 
   /* Get the frequency value from Vector with index =[j,i] */
@@ -138,7 +136,9 @@ public:
 
 protected:
   GreyLevelCooccurrenceIndexedList();
-  ~GreyLevelCooccurrenceIndexedList() override { }
+  ~GreyLevelCooccurrenceIndexedList() override
+  {
+  }
 
   /** create a cooccurrence pair with given index and frequency = 1
     * value. Next occurrence of same index is checked via m_LookupArray and the
@@ -146,21 +146,18 @@ protected:
     * co-occurrence pair is added again with index values swapped */
   void AddPairToVector(IndexType index);
 
-  void SetBinMin(const unsigned int dimension, const InstanceIdentifier nbin,
-                 PixelValueType min);
+  void SetBinMin(const unsigned int dimension, const InstanceIdentifier nbin, PixelValueType min);
 
-  void SetBinMax(const unsigned int dimension, const InstanceIdentifier nbin,
-                 PixelValueType max);
+  void SetBinMax(const unsigned int dimension, const InstanceIdentifier nbin, PixelValueType max);
 
   /** Get index of the pixelPair combination and save the result in index **/
-  bool GetIndex(const PixelPairType & pixelPair, IndexType & index) const;
+  bool GetIndex(const PixelPairType& pixelPair, IndexType& index) const;
 
-  void PrintSelf(std::ostream & os, itk::Indent indent) const override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-
   GreyLevelCooccurrenceIndexedList(const Self&) = delete;
-  void operator =(const Self&) = delete;
+  void operator=(const Self&) = delete;
 
   /** LookupArray instance */
   LookupArrayType m_LookupArray;

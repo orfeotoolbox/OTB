@@ -24,28 +24,28 @@
 #include "otbImageFileWriter.h"
 #include "otbImageFileReader.h"
 
-int otbDEMCaracteristicsExtractor(int itkNotUsed(argc), char * argv[])
+int otbDEMCaracteristicsExtractor(int itkNotUsed(argc), char* argv[])
 {
-  const char * inputFileName  = argv[1];
-  const char * outputSlotFileName = argv[6];
-  const char * outputAspectFileName = argv[7];
-  const char * outputIncidenceFileName = argv[8];
-  const char * outputExitanceFileName = argv[9];
+  const char* inputFileName           = argv[1];
+  const char* outputSlotFileName      = argv[6];
+  const char* outputAspectFileName    = argv[7];
+  const char* outputIncidenceFileName = argv[8];
+  const char* outputExitanceFileName  = argv[9];
 
   const unsigned int Dimension = 2;
-  typedef double                           PixelType;
+  typedef double     PixelType;
   typedef otb::Image<PixelType, Dimension> InputImageType;
 
   typedef otb::DEMCaracteristicsExtractor<InputImageType, InputImageType> DEMCaracteristicsExtractorType;
-  typedef otb::ImageFileReader<InputImageType>                            ReaderType;
-  typedef otb::ImageFileWriter<InputImageType>                   WriterType;
+  typedef otb::ImageFileReader<InputImageType> ReaderType;
+  typedef otb::ImageFileWriter<InputImageType> WriterType;
 
-  ReaderType::Pointer                     input = ReaderType::New();
-  WriterType::Pointer                     slotWriter = WriterType::New();
-  WriterType::Pointer                     aspectWriter = WriterType::New();
+  ReaderType::Pointer                     input           = ReaderType::New();
+  WriterType::Pointer                     slotWriter      = WriterType::New();
+  WriterType::Pointer                     aspectWriter    = WriterType::New();
   WriterType::Pointer                     incidenceWriter = WriterType::New();
-  WriterType::Pointer                     exitanceWriter = WriterType::New();
-  DEMCaracteristicsExtractorType::Pointer filter = DEMCaracteristicsExtractorType::New();
+  WriterType::Pointer                     exitanceWriter  = WriterType::New();
+  DEMCaracteristicsExtractorType::Pointer filter          = DEMCaracteristicsExtractorType::New();
 
   slotWriter->SetNumberOfDivisionsStrippedStreaming(1);
   aspectWriter->SetNumberOfDivisionsStrippedStreaming(1);

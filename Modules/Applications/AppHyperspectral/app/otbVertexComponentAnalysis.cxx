@@ -36,7 +36,7 @@ class VertexComponentAnalysis : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef VertexComponentAnalysis         Self;
+  typedef VertexComponentAnalysis       Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -50,37 +50,41 @@ private:
   void DoInit() override
   {
     SetName("VertexComponentAnalysis");
-    SetDescription("Given a set of mixed spectral vectors, estimate "
-    "reference substances also known as endmembers using the Vertex "
-    "Component Analysis algorithm.");
+    SetDescription(
+        "Given a set of mixed spectral vectors, estimate "
+        "reference substances also known as endmembers using the Vertex "
+        "Component Analysis algorithm.");
 
     // Documentation
-    SetDocLongDescription("Apply the Vertex Component Analysis [1] to "
-    "an hyperspectral image to extract endmembers. Given a set of mixed "
-    "spectral vectors (multispectral or hyperspectral), the application "
-    "estimates the spectral signature of reference substances also known "
-    "as endmembers.");
+    SetDocLongDescription(
+        "Apply the Vertex Component Analysis [1] to "
+        "an hyperspectral image to extract endmembers. Given a set of mixed "
+        "spectral vectors (multispectral or hyperspectral), the application "
+        "estimates the spectral signature of reference substances also known "
+        "as endmembers.");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso("[1] J. M. P. Nascimento and J. M. B. Dias, Vertex "
-    "component analysis: a fast algorithm to unmix hyperspectral data, "
-    "in IEEE Transactions on Geoscience and Remote Sensing, vol. 43, "
-    "no. 4, pp. 898-910, April 2005.J. M. P. Nascimento and "
-    "J. M. B. Dias, Vertex component analysis: a fast algorithm to "
-    "unmix hyperspectral data, in IEEE Transactions on Geoscience and "
-    "Remote Sensing, vol. 43, no. 4, pp. 898-910, April 2005.");
+    SetDocSeeAlso(
+        "[1] J. M. P. Nascimento and J. M. B. Dias, Vertex "
+        "component analysis: a fast algorithm to unmix hyperspectral data, "
+        "in IEEE Transactions on Geoscience and Remote Sensing, vol. 43, "
+        "no. 4, pp. 898-910, April 2005.J. M. P. Nascimento and "
+        "J. M. B. Dias, Vertex component analysis: a fast algorithm to "
+        "unmix hyperspectral data, in IEEE Transactions on Geoscience and "
+        "Remote Sensing, vol. 43, no. 4, pp. 898-910, April 2005.");
 
     AddDocTag(Tags::Hyperspectral);
     AddDocTag(Tags::DimensionReduction);
 
-    AddParameter(ParameterType_InputImage,  "in",   "Input Image");
-    SetParameterDescription("in","Input hyperspectral data cube");
+    AddParameter(ParameterType_InputImage, "in", "Input Image");
+    SetParameterDescription("in", "Input hyperspectral data cube");
 
     AddParameter(ParameterType_OutputImage, "outendm", "Output Endmembers");
-    SetParameterDescription("outendm","Endmembers, stored in a "
-    "one-line multi-spectral image.Each pixel corresponds to one "
-    "endmembers and each band values corresponds to the spectral "
-    "signature of the corresponding endmember.");
+    SetParameterDescription("outendm",
+                            "Endmembers, stored in a "
+                            "one-line multi-spectral image.Each pixel corresponds to one "
+                            "endmembers and each band values corresponds to the spectral "
+                            "signature of the corresponding endmember.");
     MandatoryOn("outendm");
 
     AddParameter(ParameterType_Int, "ne", "Number of endmembers");
@@ -107,20 +111,19 @@ private:
     DoubleVectorImageType::Pointer inputImage = GetParameterDoubleVectorImage("in");
     DoubleVectorImageType::Pointer endmembersImage;
 
-    const unsigned int nbEndmembers = GetParameterInt("ne");
-    VCAFilterType::Pointer vca = VCAFilterType::New();
+    const unsigned int     nbEndmembers = GetParameterInt("ne");
+    VCAFilterType::Pointer vca          = VCAFilterType::New();
     vca->SetNumberOfEndmembers(nbEndmembers);
     vca->SetInput(inputImage);
 
     endmembersImage = vca->GetOutput();
-    m_Ref = vca.GetPointer();
+    m_Ref           = vca.GetPointer();
 
     SetParameterOutputImage<DoubleVectorImageType>("outendm", endmembersImage);
   }
 
   itk::LightObject::Pointer m_Ref;
 };
-
 }
 }
 

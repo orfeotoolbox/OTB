@@ -35,7 +35,6 @@ namespace otb
 class OTBMetadata_EXPORT QuickBirdImageMetadataInterface : public OpticalImageMetadataInterface
 {
 public:
-
   typedef QuickBirdImageMetadataInterface Self;
   typedef ImageMetadataInterfaceBase      Superclass;
   typedef itk::SmartPointer<Self>         Pointer;
@@ -109,16 +108,17 @@ public:
 
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
      * There values a computed by 6S. */
-  WavelengthSpectralBandVectorType GetSpectralSensitivity()  const override;
+  WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
+
 protected:
   QuickBirdImageMetadataInterface();
-  ~QuickBirdImageMetadataInterface() override {}
+  ~QuickBirdImageMetadataInterface() override
+  {
+  }
 
 private:
-
-  QuickBirdImageMetadataInterface(const Self &) = delete;
-  void operator =(const Self&) = delete;
-
+  QuickBirdImageMetadataInterface(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 
 } // end namespace otb

@@ -87,3 +87,8 @@ otb_create_application(
   NAME           DynamicConvert
   SOURCES        otbDynamicConvert.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+OTB_CREATE_APPLICATION(
+  NAME           Mosaic
+  SOURCES        otbMosaic.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})

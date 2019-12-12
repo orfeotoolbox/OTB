@@ -42,8 +42,9 @@ class OTBQtWidget_EXPORT QtWidgetParameterBase : public QWidget
 {
   Q_OBJECT
   friend class QtWidgetParameterGroup;
+
 public:
-  QtWidgetParameterBase( Parameter *, QtWidgetModel * , QWidget * parent);
+  QtWidgetParameterBase(Parameter*, QtWidgetModel*, QWidget* parent);
   ~QtWidgetParameterBase() override;
 
   void CreateWidget();
@@ -62,8 +63,8 @@ public:
   }
 
 public slots:
-  void UpdateGUI();
-  virtual void SetActivationState( bool value );
+  void         UpdateGUI();
+  virtual void SetActivationState(bool value);
 
 protected slots:
   void ParameterChanged(const QString& key);
@@ -74,9 +75,9 @@ signals:
 protected:
   QtWidgetModel* GetModel();
 
-  const Parameter * GetParam() const;
+  const Parameter* GetParam() const;
 
-  Parameter * GetParam();
+  Parameter* GetParam();
 
   bool eventFilter(QObject* o, QEvent* e) override;
 
@@ -89,15 +90,13 @@ private:
   virtual void DoCreateWidget() = 0;
 
 private:
-  QtWidgetModel * m_Model;
+  QtWidgetModel* m_Model;
 
-  Parameter * m_Param;
+  Parameter* m_Param;
 
   /** Store the status of the checkbox */
   bool m_IsChecked;
 };
-
-
 }
 }
 
