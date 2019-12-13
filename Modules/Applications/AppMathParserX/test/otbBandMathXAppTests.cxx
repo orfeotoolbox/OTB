@@ -86,7 +86,7 @@ int main(int, char* argv[])
   auto output = app->GetParameterImageBase("out");
   output->Update();
   float im_val = 0;
-  // We need to be carefull as we are taking the direct output of the underlying
+  // We need to be careful as we are taking the direct output of the underlying
   // filter in the application
   otb::VectorImage<float>* output_int = nullptr;
   dyn_cast(output, output_int) im_val = output_int->GetPixel(index).GetElement(0);
@@ -128,7 +128,7 @@ int main(int, char* argv[])
   app->Execute();
   output = app->GetParameterImageBase("out");
   output->Update();
-  // We need to be carefull as we are taking the direct output of the underlying
+  // We need to be careful as we are taking the direct output of the underlying
   // filter in the application
   dyn_cast(output, output_int) im_val = output_int->GetPixel(index).GetElement(0);
   if (im_val != 0)
@@ -156,7 +156,7 @@ int main(int, char* argv[])
   app->Execute();
   output = app->GetParameterImageBase("out");
   output->Update();
-  // We need to be carefull as we are taking the direct output of the underlying
+  // We need to be careful as we are taking the direct output of the underlying
   // filter in the application
   dyn_cast(output, output_int) im_val = output_int->GetPixel(index).GetElement(0);
   if (im_val != 5)

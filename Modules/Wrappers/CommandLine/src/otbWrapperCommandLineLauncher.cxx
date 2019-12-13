@@ -431,7 +431,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
           // Multiple values parameters
           m_Application->SetParameterStringList(paramKey, values);
         }
-        else if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Int || type == ParameterType_Radius ||
+        else if (type == ParameterType_Choice || type == ParameterType_Float || type == ParameterType_Double || type == ParameterType_Int || type == ParameterType_Radius ||
                  type == ParameterType_Directory || type == ParameterType_String || type == ParameterType_InputFilename ||
                  type == ParameterType_OutputFilename || type == ParameterType_InputImage || type == ParameterType_OutputImage ||
                  type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData || type == ParameterType_RAM || type == ParameterType_Bool)
@@ -707,6 +707,10 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer& 
   else if (type == ParameterType_Float)
   {
     oss << "<float>         ";
+  }
+  else if (type == ParameterType_Double)
+  {
+    oss << "<double>         ";
   }
   else if (type == ParameterType_InputFilename || type == ParameterType_OutputFilename || type == ParameterType_Directory || type == ParameterType_InputImage ||
            type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData || type == ParameterType_String || type == ParameterType_Choice ||

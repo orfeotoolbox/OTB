@@ -155,11 +155,21 @@ public:
    */
   bool IsPickingEnabled() const;
 
+  /**
+   */
+  bool CheckGLCapabilities( int * );
+
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
   //
   // Public SLOTS.
 public slots:
+  /**
+   */
+  bool SetGLSLEnabled( bool ) noexcept;
+  /**
+   */
+  void ClearScene( bool );
   /**
    */
   void UpdateScene();

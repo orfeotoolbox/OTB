@@ -56,6 +56,10 @@ otb_add_test(NAME owTvFloatParameter COMMAND otbApplicationEngineTestDriver
   otbWrapperFloatParameterTest
   )
 
+otb_add_test(NAME owTvDoubleParameter COMMAND otbApplicationEngineTestDriver
+  otbWrapperDoubleParameterTest
+  )
+
 otb_add_test(NAME owTvIntParameter COMMAND otbApplicationEngineTestDriver
   otbWrapperIntParameterTest
   )
@@ -98,7 +102,7 @@ otb_add_test(NAME owTvInputImageListParameter COMMAND otbApplicationEngineTestDr
 
 otb_add_test(NAME owTvInputVectorDataListParameter COMMAND otbApplicationEngineTestDriver
   otbWrapperInputVectorDataListParameterTest1
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${INPUTDATA}/ToulouseRoads-examples.shp
   "mykey"
   "my description"

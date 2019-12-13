@@ -48,7 +48,7 @@ public:
         "The training vector data must contain polygons with a positive integer field "
         "representing the class label. The name of this field can be set using the *Class label field* parameter.\n\n"
 
-        "Training and validation sample lists are built such that each class is equally represented in both lists. One parameter controlls the ratio "
+        "Training and validation sample lists are built such that each class is equally represented in both lists. One parameter controls the ratio "
         "between the number of samples in training and validation sets. Two parameters manage the size of the training and "
         "validation sets per class and per image.\n\n"
 

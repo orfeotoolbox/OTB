@@ -116,7 +116,7 @@ Alternative prototype for performance
 Automatic type deduction will also work with the following signature:
 ``void (const R&, T1 t1, T2 t2 ..., TN tn)``
 
-This will be more efficient when ``R`` is of type ``itk::VariableLengthVector<T>`` and should be prefered in this case.
+This will be more efficient when ``R`` is of type ``itk::VariableLengthVector<T>`` and should be preferred in this case.
 
 Automatic type deduction examples
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -125,7 +125,7 @@ Consider the following free function:
 
 .. code-block:: cpp
 
-    itk::VariableLenghtVector<double> myFreeFunction(unsigned char a,
+    itk::VariableLengthVector<double> myFreeFunction(unsigned char a,
                                                      const std::complex<float>& b,
                                                      const itk::VariableLengthVector<short>& c,
                                                      const itk::ConstNeighborhoodIterator<otb::Image<double>>& d) {...}

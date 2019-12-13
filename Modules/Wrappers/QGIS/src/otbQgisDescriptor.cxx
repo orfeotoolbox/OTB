@@ -57,6 +57,7 @@ int main(int argc, char* argv[])
   parameterTypeToString[ParameterType_Bool]                = "QgsProcessingParameterBoolean";
   parameterTypeToString[ParameterType_Int]                 = "QgsProcessingParameterNumber";
   parameterTypeToString[ParameterType_Float]               = "QgsProcessingParameterNumber";
+  parameterTypeToString[ParameterType_Double]              = "QgsProcessingParameterNumber";
   parameterTypeToString[ParameterType_RAM]                 = "QgsProcessingParameterNumber";
   parameterTypeToString[ParameterType_Radius]              = "QgsProcessingParameterNumber";
   parameterTypeToString[ParameterType_Choice]              = "OTBParameterChoice";
@@ -201,7 +202,7 @@ int main(int argc, char* argv[])
         default_value = param->HasValue() ? appli->GetParameterAsString(name) : "0";
       }
     }
-    else if (type == ParameterType_Float)
+    else if (type == ParameterType_Float || type == ParameterType_Double)
     {
       dFile << "|QgsProcessingParameterNumber.Double";
       default_value = param->HasValue() ? appli->GetParameterAsString(name) : "0";

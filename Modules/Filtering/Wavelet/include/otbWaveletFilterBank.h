@@ -230,7 +230,7 @@ protected:
    * pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
   /** BeforeThreadedGenerateData.
    * It allocates also internal images
@@ -412,7 +412,7 @@ protected:
    * pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
   /** BeforeThreadedGenerateData
    * If SubsampleImageFactor neq 1, it is necessary to up sample input images in the Wavelet::INVERSE mode

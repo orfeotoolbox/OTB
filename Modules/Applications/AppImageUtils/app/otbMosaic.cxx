@@ -276,11 +276,11 @@ private:
     SetMinimumParameterFloatValue("comp.feather.slim.exponent", 0);
     MandatoryOff("comp.feather.slim.exponent");
 
-    // comp.feather.slim.lenght (i.e. blending lenght)
-    AddParameter(ParameterType_Float, "comp.feather.slim.lenght", "Transition length (In cartographic units)");
-    MandatoryOn("comp.feather.slim.lenght");
-    SetMinimumParameterFloatValue("comp.feather.slim.lenght", 0);
-    MandatoryOff("comp.feather.slim.lenght");
+    // comp.feather.slim.length (i.e. blending length)
+    AddParameter(ParameterType_Float, "comp.feather.slim.length", "Transition length (In cartographic units)");
+    MandatoryOn("comp.feather.slim.length");
+    SetMinimumParameterFloatValue("comp.feather.slim.length", 0);
+    MandatoryOff("comp.feather.slim.length");
 
     // harmo (harmonization)
     AddParameter(ParameterType_Group, "harmo", "Spectral bands harmonization mode");
@@ -315,7 +315,7 @@ private:
 
     // Interpolators
     AddParameter(ParameterType_Choice, "interpolator", "Interpolation");
-    SetParameterDescription("interpolator", "This group of parameters allows to define how the input image will be interpolated during resampling.");
+    SetParameterDescription("interpolator", "This group of parameters allows defining how the input image will be interpolated during resampling.");
     MandatoryOff("interpolator");
 
     // NN
@@ -969,7 +969,7 @@ private:
       ComputeDistanceOffset<SlimFeatherMosaicFilterType>(m_SlimFeatherMosaicFilter);
 
       // Set transition length and smoothness
-      m_SlimFeatherMosaicFilter->SetFeatheringTransitionDistance(GetParameterFloat("comp.feather.slim.lenght"));
+      m_SlimFeatherMosaicFilter->SetFeatheringTransitionDistance(GetParameterFloat("comp.feather.slim.length"));
       m_SlimFeatherMosaicFilter->SetFeatheringSmoothness(GetParameterFloat("comp.feather.slim.exponent"));
 
       mosaicFilter = static_cast<MosaicFilterType*>(m_SlimFeatherMosaicFilter);

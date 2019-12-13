@@ -309,7 +309,7 @@ protected:
   /** Connect the pipeline and propagate the required parameters. This
   * is automatically called in GenerateData().
   */
-  void Initialize() throw(itk::ExceptionObject);
+  void Initialize();
 
   virtual void ApplyMarkovRandomFieldFilter();
 

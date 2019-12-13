@@ -95,7 +95,7 @@ public:
    * a treatment input area larger than the output one.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
 protected:
   TouziEdgeDetectorImageFilter();

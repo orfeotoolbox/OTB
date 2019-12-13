@@ -66,7 +66,7 @@ assert_NaN( T val )
   ((void)val);
 }
 
-/** 
+/**
  * The GlView class acts like an OpenGl scene where actors deriving
  * from the GlActor class can be rendered. The GlView class contains the
  * OpenGl viewport and manages:
@@ -75,11 +75,11 @@ assert_NaN( T val )
  * all actors and all OpenGl specific stuff needed before and after
  * the actors update,
  * - The actors stack (order in which actors are rendered).
- * 
+ *
  * All parameters related to scene description (origin, spacing, angle
  * ...) are stored and managed by the ViewSettings class.
  */
-class OTBIce_EXPORT GlView 
+class OTBIce_EXPORT GlView
   : public itk::Object
 {
 public:
@@ -100,19 +100,31 @@ public:
   itkNewMacro(Self);
 
   /**
+   * @return Same value as GLSL <code>#version</code>, or 0 if minimum
+   * requirements are not met.
+   */
+  std::size_t CheckGLCapabilities( char const * & glVersion,
+				   char const * & glslVersion );
+
+  /**
    * The Initialize method will reset the OpenGl viewport to the given
    * size, clear view settings and remove any existing actor.
    * \param sx Width of the viewport
    * \param sy Height of the viewport
-   */ 
-  void Initialize(unsigned int sx, unsigned int sy);
+   */
+  void Initialize( unsigned int sx, unsigned int sy ) noexcept;
+
+  /**
+   * @return <code>true</code> there is no actor in view.
+   */
+  bool IsEmpty() const noexcept { return m_Actors.empty(); }
 
   /**
    * This method allows adding a new actor (deriving from GlActor) to
    * the GlView. The actor can be identified by an optional key. If
    * not provided, and the default value is used, the method will
    * generate a key to identify the actor. In both case, the key is
-   * returned by the method.  
+   * returned by the method.
    * \param actor The actor to be added
    * \param key The key to be used to identify the actor (default to
    * empty string)
@@ -121,7 +133,7 @@ public:
    */
   std::string AddActor(ActorType * actor, const std::string & key = "");
 
-  /** 
+  /**
    * This method will try to remove the actor identified by the given
    * key.
    * \param key The key identifying the actor to remove
@@ -133,7 +145,7 @@ public:
   /**
    * This method will remove all existing actors at once.
    */
-  void ClearActors();
+  void ClearActors() noexcept;
 
   /**
    * This method allows retrieving a pointer to the actor identified
@@ -141,7 +153,7 @@ public:
    * \param key The key identifying the actor to retrieve
    * \return A pointer to the retrieved actor. This pointer will be
    * null if no actor could be found with this key.
-   */  
+   */
   ActorType::Pointer GetActor(const std::string & key) const;
 
   /**
@@ -157,7 +169,7 @@ public:
    * This method will return a vector containing the keys of all
    * actors.
    * \return A vector of string containing the keys of all actors.
-   */ 
+   */
   std::vector<std::string> GetActorsKeys() const;
 
   /**
@@ -189,11 +201,22 @@ public:
   void HeavyRender();
 
   // Resize viewport
-  void Resize(unsigned int sx, unsigned int sy);
+  void Resize( unsigned int sx, unsigned int sy ) noexcept;
 
   itkSetObjectMacro(Settings,ViewSettings);
   itkGetObjectMacro(Settings,ViewSettings);
   itkGetConstObjectMacro(Settings,ViewSettings);
+
+  /** @return <code>true</code> OpenGL driver has required GLSL capability. */
+  bool IsGLSLAvailable() const noexcept { return m_IsGLSLAvailable; }
+
+  /**
+   * Enable/Disable GLSL-mode.
+   */
+  void SetGLSLEnabled( bool );
+
+  /** @return <code>true</code> if GLSL-mode is enabled. */
+  bool IsGLSLEnabled() const noexcept { return m_IsGLSLEnabled; }
 
   //comment this macro (not compiling with OTB 3.X)
   // Get Rendering order
@@ -294,6 +317,12 @@ private:
 
   StringVectorType      m_RenderingOrder;
 
+  float m_ProjMatrix[16];
+
+  float m_ModelViewMatrix[16];
+
+  bool m_IsGLSLAvailable : 1;
+  bool m_IsGLSLEnabled : 1;
 }; // End class GlView
 
 
@@ -332,7 +361,7 @@ GlView
     return false;
 
   const otb::GeoInterface::Spacing2 nativeReferenceSpacing = geo->GetSpacing();
-  
+
   //
   // Compute transform origin.
   if( !geo->TransformFromViewport( center, vcenter, true ) )
@@ -342,7 +371,7 @@ GlView
   // Compute transformed X-axis extremity.
   GeoInterface::Point2d x( vcenter );
 
-  x[ 0 ] += norm * vspacing[ 0 ]; 
+  x[ 0 ] += norm * vspacing[ 0 ];
 
   // std::cout << "X {" << std::endl;
 
@@ -365,7 +394,7 @@ GlView
   // std::cout << "Y {" << std::endl;
 
   if( !geo->TransformFromViewport( y, y, true ) )
-    return false; 
+    return false;
 
   // std::cout << "y: " << y[ 0 ] << ", " << y[ 1 ] << std::endl;
 
@@ -395,7 +424,7 @@ GlView
   spacing[ 1 ] = std::sqrt( y[ 0 ] * y[ 0 ] + y[ 1 ] * y[ 1 ] ) / norm;
 
   // New spacing signs should match signs of the reference image spacing
-  
+
   if( nativeReferenceSpacing[0]<0.0 )
     spacing[ 0 ] = -spacing[ 0 ];
 

@@ -743,14 +743,18 @@ void GDALImageIO::InternalReadImageInformation()
   /* -------------------------------------------------------------------- */
   /* Get the projection coordinate system of the image : ProjectionRef  */
   /* -------------------------------------------------------------------- */
-  if (dataset->GetProjectionRef() != nullptr && !std::string(dataset->GetProjectionRef()).empty())
+  const char* pszProjection = dataset->GetProjectionRef();
+  if (pszProjection != nullptr && !std::string(pszProjection).empty())
   {
     OGRSpatialReferenceH pSR = OSRNewSpatialReference(nullptr);
-
-    const char* pszProjection = nullptr;
-    pszProjection             = dataset->GetProjectionRef();
-
-    if (OSRImportFromWkt(pSR, (char**)(&pszProjection)) == OGRERR_NONE)
+    if (strncmp(pszProjection, "LOCAL_CS",8) == 0)
+      {
+      // skip local coordinate system as they will cause crashed later
+      // In GDAL 3, they begin to do special processing for Transmercator local
+      // coordinate system
+      otbLogMacro(Debug, << "Skipping LOCAL_CS projection")
+      }
+    else if (OSRImportFromWkt(pSR, (char**)(&pszProjection)) == OGRERR_NONE)
     {
       char* pszPrettyWkt = nullptr;
       OSRExportToPrettyWkt(pSR, &pszPrettyWkt, FALSE);
@@ -761,7 +765,7 @@ void GDALImageIO::InternalReadImageInformation()
     }
     else
     {
-      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, static_cast<std::string>(dataset->GetProjectionRef()));
+      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, static_cast<std::string>(pszProjection));
     }
 
     if (pSR != nullptr)
@@ -1399,111 +1403,120 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
   std::string projectionRef;
   itk::ExposeMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, projectionRef);
+  ImageKeywordlist otb_kwl;
+  itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+  unsigned int gcpCount = 0;
+  itk::ExposeMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey, gcpCount);
+
+  // In OTB we can have simultaneously projection ref, sensor keywordlist, GCPs
+  // but GDAL can't handle both geotransform and GCP (see issue #303). Here is the priority
+  // order we will be using in OTB:
+  // [ProjRef+geotransform] > [SensorKeywordlist+geotransform] > [GCPs]
 
   /* -------------------------------------------------------------------- */
-  /* Set the GCPs                                                          */
+  /* Pre-compute geotransform                                             */
   /* -------------------------------------------------------------------- */
   const double Epsilon = 1E-10;
-  if (projectionRef.empty() && (std::abs(m_Origin[0] - 0.5) > Epsilon || std::abs(m_Origin[1] - 0.5) > Epsilon ||
-                                std::abs(m_Spacing[0] * m_Direction[0][0] - 1.0) > Epsilon || std::abs(m_Spacing[1] * m_Direction[1][1] - 1.0) > Epsilon))
-  {
-    // See issue #303 :
-    // If there is no ProjectionRef, and the GeoTransform is not the identity,
-    // then saving also GCPs is undefined behavior for GDAL, and a WGS84 projection crs
-    // is assigned arbitrarily
-    otbLogMacro(Warning, << "Skipping GCPs saving to prevent GDAL from assigning a WGS84 projref to file (" << m_FileName << ")")
-  }
-  else
-  {
-    unsigned int gcpCount = 0;
-    itk::ExposeMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey, gcpCount);
-
-    if (gcpCount > 0)
-    {
-
-      GDAL_GCP* gdalGcps = new GDAL_GCP[gcpCount];
-
-      for (unsigned int gcpIndex = 0; gcpIndex < gcpCount; ++gcpIndex)
-      {
-        // Build the GCP string in the form of GCP_n
-        std::ostringstream lStream;
-        lStream << MetaDataKey::GCPParametersKey << gcpIndex;
-        std::string key = lStream.str();
-
-        OTB_GCP gcp;
-        itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
-
-        gdalGcps[gcpIndex].pszId      = const_cast<char*>(gcp.m_Id.c_str());
-        gdalGcps[gcpIndex].pszInfo    = const_cast<char*>(gcp.m_Info.c_str());
-        gdalGcps[gcpIndex].dfGCPPixel = gcp.m_GCPCol;
-        gdalGcps[gcpIndex].dfGCPLine  = gcp.m_GCPRow;
-        gdalGcps[gcpIndex].dfGCPX     = gcp.m_GCPX;
-        gdalGcps[gcpIndex].dfGCPY     = gcp.m_GCPY;
-        gdalGcps[gcpIndex].dfGCPZ     = gcp.m_GCPZ;
-      }
-
-      std::string gcpProjectionRef;
-      itk::ExposeMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionRef);
-
-      dataset->SetGCPs(gcpCount, gdalGcps, gcpProjectionRef.c_str());
-
-      delete[] gdalGcps;
-    }
-  }
+  double geoTransform[6];
+  geoTransform[0] = m_Origin[0] - 0.5 * m_Spacing[0] * m_Direction[0][0];
+  geoTransform[3] = m_Origin[1] - 0.5 * m_Spacing[1] * m_Direction[1][1];
+  geoTransform[1] = m_Spacing[0] * m_Direction[0][0];
+  geoTransform[5] = m_Spacing[1] * m_Direction[1][1];
+  // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
+  geoTransform[2] = 0.;
+  geoTransform[4] = 0.;
+  // only write geotransform if it has non-default values
+  bool writeGeotransform =
+    std::abs(geoTransform[0]) > Epsilon ||
+    std::abs(geoTransform[1] - 1.0) > Epsilon ||
+    std::abs(geoTransform[2]) > Epsilon ||
+    std::abs(geoTransform[3]) > Epsilon ||
+    std::abs(geoTransform[4]) > Epsilon ||
+    std::abs(geoTransform[5] - 1.0) > Epsilon;
 
   /* -------------------------------------------------------------------- */
-  /* Set the projection coordinate system of the image : ProjectionRef    */
+  /* Case 1: Set the projection coordinate system of the image            */
   /* -------------------------------------------------------------------- */
   if (!projectionRef.empty())
-  {
-    dataset->SetProjection(projectionRef.c_str());
-  }
-  else
-  {
-    /* -------------------------------------------------------------------- */
-    /* Set the RPC coeffs if no projection available (since GDAL 1.10.0)    */
-    /* -------------------------------------------------------------------- */
-    ImageKeywordlist otb_kwl;
-    itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-    if (m_WriteRPCTags && otb_kwl.GetSize() != 0)
     {
+    dataset->SetProjection(projectionRef.c_str());
+    }
+  /* -------------------------------------------------------------------- */
+  /* Case 2: Sensor keywordlist                                           */
+  /* -------------------------------------------------------------------- */
+  else if (otb_kwl.GetSize())
+    {
+    /* -------------------------------------------------------------------- */
+    /* Set the RPC coeffs (since GDAL 1.10.0)                               */
+    /* -------------------------------------------------------------------- */
+    if (m_WriteRPCTags)
+      {
       GDALRPCInfo gdalRpcStruct;
       if (otb_kwl.convertToGDALRPC(gdalRpcStruct))
-      {
+        {
+        otbLogMacro(Debug, << "Saving RPC to file (" << m_FileName << ")")
         char** rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
         dataset->SetMetadata(rpcMetadata, "RPC");
         CSLDestroy(rpcMetadata);
+        }
       }
     }
-  }
-
   /* -------------------------------------------------------------------- */
-  /*  Set the six coefficients of affine geoTransform                     */
+  /* Case 3: Set the GCPs                                                 */
   /* -------------------------------------------------------------------- */
-  if (std::abs(m_Origin[0] - 0.5) > Epsilon || std::abs(m_Origin[1] - 0.5) > Epsilon || std::abs(m_Spacing[0] * m_Direction[0][0] - 1.0) > Epsilon ||
-      std::abs(m_Spacing[1] * m_Direction[1][1] - 1.0) > Epsilon)
-  {
-    // Only set the geotransform if it is not identity (it may erase GCP)
-    itk::VariableLengthVector<double> geoTransform(6);
-    /// Reporting origin and spacing
-    // Beware : GDAL origin is at the corner of the top-left pixel
-    // whereas OTB/ITK origin is at the centre of the top-left pixel
-    geoTransform[0] = m_Origin[0] - 0.5 * m_Spacing[0] * m_Direction[0][0];
-    geoTransform[3] = m_Origin[1] - 0.5 * m_Spacing[1] * m_Direction[1][1];
-    geoTransform[1] = m_Spacing[0] * m_Direction[0][0];
-    geoTransform[5] = m_Spacing[1] * m_Direction[1][1];
-
-    // FIXME: Here component 1 and 4 should be replaced by the orientation parameters
-    geoTransform[2] = 0.;
-    geoTransform[4] = 0.;
-    dataset->SetGeoTransform(const_cast<double*>(geoTransform.GetDataPointer()));
-
-    // Error if writing to a ENVI file with a positive Y spacing
-    if (driverShortName == "ENVI" && geoTransform[5] > 0.)
+  else if (gcpCount)
     {
-      itkExceptionMacro(<< "Can not write to ENVI file format with a positive Y spacing (" << m_FileName << ")");
+    otbLogMacro(Debug, << "Saving GCPs to file (" << m_FileName << ")")
+    std::vector<GDAL_GCP> gdalGcps(gcpCount);
+    std::vector<OTB_GCP> otbGcps(gcpCount);
+    for (unsigned int gcpIndex = 0; gcpIndex < gcpCount; ++gcpIndex)
+      {
+      // Build the GCP string in the form of GCP_n
+      std::ostringstream lStream;
+      lStream << MetaDataKey::GCPParametersKey << gcpIndex;
+      std::string key = lStream.str();
+
+      OTB_GCP &gcp = otbGcps[gcpIndex];
+      itk::ExposeMetaData<OTB_GCP>(dict, key, gcp);
+
+      gdalGcps[gcpIndex].pszId      = const_cast<char*>(gcp.m_Id.c_str());
+      gdalGcps[gcpIndex].pszInfo    = const_cast<char*>(gcp.m_Info.c_str());
+      gdalGcps[gcpIndex].dfGCPPixel = gcp.m_GCPCol;
+      gdalGcps[gcpIndex].dfGCPLine  = gcp.m_GCPRow;
+      gdalGcps[gcpIndex].dfGCPX     = gcp.m_GCPX;
+      gdalGcps[gcpIndex].dfGCPY     = gcp.m_GCPY;
+      gdalGcps[gcpIndex].dfGCPZ     = gcp.m_GCPZ;
+
+      if (writeGeotransform)
+        {
+        // we need to transform GCP col and row accordingly
+        // WARNING: assume no rotation is there
+        gdalGcps[gcpIndex].dfGCPPixel = (gcp.m_GCPCol - geoTransform[0]) / geoTransform[1];
+        gdalGcps[gcpIndex].dfGCPLine  = (gcp.m_GCPRow - geoTransform[3]) / geoTransform[5];
+        }
+      }
+
+    std::string gcpProjectionRef;
+    itk::ExposeMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionRef);
+
+    dataset->SetGCPs(gcpCount, gdalGcps.data(), gcpProjectionRef.c_str());
+
+    // disable geotransform with GCP
+    writeGeotransform = false;
     }
-  }
+
+  /* -------------------------------------------------------------------- */
+  /*  Save geotransform if needed.                                        */
+  /* -------------------------------------------------------------------- */
+  if (writeGeotransform)
+    {
+    if ( driverShortName == "ENVI" && geoTransform[5] > 0.)
+      {
+      // Error if writing to a ENVI file with a positive Y spacing
+      itkExceptionMacro(<< "Can not write to ENVI file format with a positive Y spacing (" << m_FileName << ")");
+      }
+    dataset->SetGeoTransform(geoTransform);
+    }
 
   /* -------------------------------------------------------------------- */
   /*      Report metadata.                                                */

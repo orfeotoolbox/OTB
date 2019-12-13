@@ -452,15 +452,30 @@ public:
     RemoveNoDataEntry();
     // Generate output
     if (GetParameterAsString("out") == "xml")
+    {
+      DisableParameter("out.vector.filename");
+      DisableParameter("out.raster.filename");
+      EnableParameter("out.xml.filename");
       WriteXMLStatsFile();
+    }
     else // vector or raster
     {
       if (m_FromLabelImage)
         GenerateVectorDataFromLabelImage();
       if (GetParameterAsString("out") == "vector")
+      {
+        EnableParameter("out.vector.filename");
+        DisableParameter("out.raster.filename");
+        DisableParameter("out.xml.filename");
         WriteVectorData();
+      }
       else if (GetParameterAsString("out") == "raster")
+      {
+        DisableParameter("out.vector.filename");
+        EnableParameter("out.raster.filename");
+        DisableParameter("out.xml.filename");
         WriteRasterData();
+      }
       else
         otbAppLogFATAL("Unknown output mode");
     }

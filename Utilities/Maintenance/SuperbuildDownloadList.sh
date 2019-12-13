@@ -79,6 +79,6 @@ ARCHIVE_NAME="SuperBuild-archives-$VERSION"
 echo "Creating archive ${OUTPUT_DIR}/$ARCHIVE_NAME.tar.bz2"
 cd "${OUTPUT_DIR}" || echo "cannot cd to OUTPUT_DIR"
 touch "${DOWNLOAD_DIR}/OTBSuperBuild.readme"
-tar -cjf "$ARCHIVE_NAME.tar.bz2" -C "${DOWNLOAD_DIR}" ${DOWNLOAD_NAMES} OTBSuperBuild.readme
+tar -cjf "$ARCHIVE_NAME.tar.bz2" -C "${DOWNLOAD_DIR}" "${DOWNLOAD_NAMES}" OTBSuperBuild.readme
 echo "Saving md5sum to ${OUTPUT_DIR}/$ARCHIVE_NAME.md5"
 md5sum "$ARCHIVE_NAME.tar.bz2" > "$ARCHIVE_NAME.md5"

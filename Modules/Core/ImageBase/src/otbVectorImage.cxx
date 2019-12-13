@@ -23,7 +23,7 @@
 namespace otb
 {
 
-// Explicit instanciation of common types
+// Explicit instantiation of common types
 template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE VectorImage<unsigned int, 2>;
 template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE VectorImage<int, 2>;
 template class OTBImageBase_EXPORT_EXPLICIT_TEMPLATE VectorImage<unsigned char, 2>;

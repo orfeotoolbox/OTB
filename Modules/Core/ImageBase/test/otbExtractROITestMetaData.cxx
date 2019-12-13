@@ -30,8 +30,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "otb_boost_string_header.h"
-
 int otbExtractROITestMetaData(int itkNotUsed(argc), char* argv[])
 {
   typedef float PixelType;
@@ -100,17 +98,20 @@ int otbExtractROITestMetaData(int itkNotUsed(argc), char* argv[])
   reader00->SetFileName(argv[2]);
   reader00->GenerateOutputInformation();
 
-  if (reader00->GetOutput()->GetProjectionRef() != "" || boost::algorithm::istarts_with(reader00->GetOutput()->GetProjectionRef(), "LOCAL_CS"))
+  // The input image should have a sensor model and GCP, but the output images
+  // should only have the sensor model (priority over GCP). This behaviour
+  // must be consistent regardless of the ROI.
+
+  if (reader00->GetOutput()->GetProjectionRef().size())
   {
     std::cout << "The read generated extract from index (0, 0) must NOT contain a ProjectionReference." << std::endl;
     std::cout << "Found ProjectionReference: " << reader00->GetOutput()->GetProjectionRef() << std::endl;
-
     return EXIT_FAILURE;
   }
 
-  if (reader00->GetOutput()->GetGCPCount() == 0)
+  if (reader00->GetOutput()->GetGCPCount())
   {
-    std::cout << "The read generated extract from index (0, 0) must contain a list a GCPs.." << std::endl;
+    std::cout << "The read generated extract from index (0, 0) must NOT contain a list a GCPs.." << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -118,14 +119,14 @@ int otbExtractROITestMetaData(int itkNotUsed(argc), char* argv[])
   reader57->SetFileName(argv[3]);
   reader57->GenerateOutputInformation();
 
-  if (reader57->GetOutput()->GetProjectionRef() != "" || boost::algorithm::istarts_with(reader57->GetOutput()->GetProjectionRef(), "LOCAL_CS"))
+  if (reader57->GetOutput()->GetProjectionRef().size())
   {
     std::cout << "The read generated extract from index (x, y) must NOT contain a ProjectionReference." << std::endl;
     std::cout << "Found ProjectionReference: " << reader57->GetOutput()->GetProjectionRef() << std::endl;
     return EXIT_FAILURE;
   }
 
-  if (reader57->GetOutput()->GetGCPCount() != 0)
+  if (reader57->GetOutput()->GetGCPCount())
   {
     std::cout << "The read generated extract from index (x, y) must NOT contain a list a GCPs.." << std::endl;
     return EXIT_FAILURE;

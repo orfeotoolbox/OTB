@@ -45,7 +45,7 @@ TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::
 }
 
 template <class TInputImage, class TOutputImage, class TOutputImageDirection>
-void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError)
+void TouziEdgeDetectorImageFilter<TInputImage, TOutputImage, TOutputImageDirection>::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();

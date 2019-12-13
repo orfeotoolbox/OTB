@@ -205,7 +205,7 @@ otb_test_application(NAME  apTuPrVectorDataReprojectionFromImageToMap
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap
                      APP  VectorDataReprojection
-                     OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
+                     OPTIONS -in.vd  ${INPUTDATA}/toulousepoints_examples.shp
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.sqlite
                              -out.proj user
                              -out.proj.user.map  lambert93
@@ -215,7 +215,7 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToImage
                      APP  VectorDataReprojection
-                     OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
+                     OPTIONS -in.vd  ${INPUTDATA}/toulousepoints_examples.shp
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToImage.shp
                              -out.proj image
                              -out.proj.image.in  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
@@ -225,7 +225,7 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToImage
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToSensor
                      APP  VectorDataReprojection
-                     OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
+                     OPTIONS -in.vd  ${INPUTDATA}/toulousepoints_examples.shp
                  			 -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp
                              -out.proj image
                              -out.proj.image.in ${INPUTDATA}/QB_PAN_ROI_1000_100.tif
@@ -247,7 +247,7 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap2
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToGeo
                      APP  VectorDataReprojection
-                     OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
+                     OPTIONS -in.vd  ${INPUTDATA}/toulousepoints_examples.shp
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToGeo.shp
                              -out.proj user
                              -out.proj.user.map  wgs

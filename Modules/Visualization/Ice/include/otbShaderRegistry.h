@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otb_FragmentShaderRegistry_h
-#define otb_FragmentShaderRegistry_h
+#ifndef otb_ShaderRegistry_h
+#define otb_ShaderRegistry_h
 
 #include "itkObject.h"
 #include "itkObjectFactory.h"
@@ -27,18 +27,18 @@
 namespace otb
 {
 
-class FragmentShaderRegistry 
+class ShaderRegistry 
   : public itk::Object
 {
 public:
-  typedef FragmentShaderRegistry                          Self;
+  typedef ShaderRegistry                          Self;
   typedef itk::Object                                     Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   static Pointer Instance();
 
-  void RegisterShader(const std::string& name, const std::string& source);
+  void RegisterShader(const std::string& name, const std::string& vSource, const std::string& fSource);
 
   bool UnregisterShader(const std::string& name);
 
@@ -53,24 +53,26 @@ public:
   unsigned int GetShaderProgram(const std::string& name);
 
 protected:
-  FragmentShaderRegistry();
+  ShaderRegistry();
 
-  ~FragmentShaderRegistry() override;
+  ~ShaderRegistry() override;
 
 private:
-  typedef std::map<std::string, std::pair<unsigned int, unsigned int> > ShaderMapType;
+  typedef std::map<std::string, unsigned int > ShaderMapType;
 
   itkNewMacro(Self);
 
   // prevent implementation
-  FragmentShaderRegistry(const Self&);
+  ShaderRegistry(const Self&);
   void operator=(const Self&);
+
+  unsigned int CompileShader(int stype, const std::string& name, const std::string& src);
 
   static Pointer m_Instance;
 
   ShaderMapType m_ShaderMap;
 
-}; // End class FragmentShaderRegistry
+}; // End class ShaderRegistry
 
 } // End namespace otb
 
