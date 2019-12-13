@@ -109,39 +109,26 @@ private:
     AddChoice("structype.ball", "Ball");
     AddChoice("structype.cross", "Cross");
 
+    SetParameterDescription("foreval", "Set the foreground value, default is 1.0.");
+    SetDefaultParameterFloat("foreval", 1.0);
+    AddParameter(ParameterType_Float, "backval", "Background value");
+    SetParameterDescription("backval", "Set the background value, default is 0.0.");
+    SetDefaultParameterFloat("backval", 0.0);
+
     AddParameter(ParameterType_Choice, "filter", "Morphological Operation");
     SetParameterDescription("filter", "Choice of the morphological operation");
+
     // Dilate
     AddChoice("filter.dilate", "Dilate");
-    AddParameter(ParameterType_Float, "filter.dilate.foreval", "Foreground value");
-    SetParameterDescription("filter.dilate.foreval", "Set the foreground value, default is 1.0.");
-    SetDefaultParameterFloat("filter.dilate.foreval", 1.0);
-    AddParameter(ParameterType_Float, "filter.dilate.backval", "Background value");
-    SetParameterDescription("filter.dilate.backval", "Set the background value, default is 0.0.");
-    SetDefaultParameterFloat("filter.dilate.backval", 0.0);
 
     // Erode
     AddChoice("filter.erode", "Erode");
-    AddParameter(ParameterType_Float, "filter.erode.foreval", "Foreground value");
-    SetParameterDescription("filter.erode.foreval", "Set the foreground value, default is 1.0.");
-    SetDefaultParameterFloat("filter.erode.foreval", 1.0);
-    AddParameter(ParameterType_Float, "filter.erode.backval", "Background value");
-    SetParameterDescription("filter.erode.backval", "Set the background value, default is 0.0.");
-    SetDefaultParameterFloat("filter.erode.backval", 0.0);
 
     // Opening
     AddChoice("filter.opening", "Opening");
-    AddParameter(ParameterType_Float, "filter.opening.foreval", "Foreground value");
-    SetParameterDescription("filter.opening.foreval", "Set the foreground value, default is 1.0.");
-    SetDefaultParameterFloat("filter.opening.foreval", 1.0);
-    AddParameter(ParameterType_Float, "filter.opening.backval", "Background value");
-    SetParameterDescription("filter.opening.backval", "Set the background value, default is 0.0.");
-    SetDefaultParameterFloat("filter.opening.backval", 0.0);
+
     // Closing
     AddChoice("filter.closing", "Closing");
-    AddParameter(ParameterType_Float, "filter.closing.foreval", "Foreground value");
-    SetParameterDescription("filter.closing.foreval", "Set the foreground value, default is 1.0.");
-    SetDefaultParameterFloat("filter.closing.foreval", 1.0);
 
     AddRAMParameter();
 
@@ -204,8 +191,8 @@ private:
       m_DilFilter = DilateFilterType::New();
       m_DilFilter->SetKernel(se);
       m_DilFilter->SetInput(m_ExtractorFilter->GetOutput());
-      m_DilFilter->SetForegroundValue(GetParameterFloat("filter.dilate.foreval"));
-      m_DilFilter->SetBackgroundValue(GetParameterFloat("filter.dilate.backval"));
+      m_DilFilter->SetForegroundValue(GetParameterFloat("foreval"));
+      m_DilFilter->SetBackgroundValue(GetParameterFloat("backval"));
       SetParameterOutputImage("out", m_DilFilter->GetOutput());
     }
     else if (GetParameterString("filter") == "erode")
@@ -213,8 +200,8 @@ private:
       m_EroFilter = ErodeFilterType::New();
       m_EroFilter->SetKernel(se);
       m_EroFilter->SetInput(m_ExtractorFilter->GetOutput());
-      m_EroFilter->SetForegroundValue(GetParameterFloat("filter.erode.foreval"));
-      m_EroFilter->SetBackgroundValue(GetParameterFloat("filter.erode.backval"));
+      m_EroFilter->SetForegroundValue(GetParameterFloat("foreval"));
+      m_EroFilter->SetBackgroundValue(GetParameterFloat("backval"));
       SetParameterOutputImage("out", m_EroFilter->GetOutput());
     }
     else if (GetParameterString("filter") == "opening")
@@ -222,8 +209,8 @@ private:
       m_OpeFilter = OpeningFilterType::New();
       m_OpeFilter->SetKernel(se);
       m_OpeFilter->SetInput(m_ExtractorFilter->GetOutput());
-      m_OpeFilter->SetForegroundValue(GetParameterFloat("filter.opening.foreval"));
-      m_OpeFilter->SetBackgroundValue(GetParameterFloat("filter.opening.backval"));
+      m_OpeFilter->SetForegroundValue(GetParameterFloat("foreval"));
+      m_OpeFilter->SetBackgroundValue(GetParameterFloat("backval"));
       SetParameterOutputImage("out", m_OpeFilter->GetOutput());
     }
     else if (GetParameterString("filter") == "closing")
@@ -231,7 +218,7 @@ private:
       m_CloFilter = ClosingFilterType::New();
       m_CloFilter->SetKernel(se);
       m_CloFilter->SetInput(m_ExtractorFilter->GetOutput());
-      m_CloFilter->SetForegroundValue(GetParameterFloat("filter.closing.foreval"));
+      m_CloFilter->SetForegroundValue(GetParameterFloat("foreval"));
       SetParameterOutputImage("out", m_CloFilter->GetOutput());
     }
   }
