@@ -96,8 +96,14 @@ private:
     SetDefaultParameterInt("channel", 1);
     SetMinimumParameterIntValue("channel", 1);
 
+    // Structuring element type
     AddParameter(ParameterType_Choice, "structype", "Type of structuring element");
     SetParameterDescription("structype", "Choice of the structuring element type");
+    AddChoice("structype.box", "Box");
+    AddChoice("structype.ball", "Ball");
+    AddChoice("structype.cross", "Cross");
+
+    // Radius
     AddParameter(ParameterType_Int, "xradius", "Structuring element X radius");
     SetParameterDescription("xradius", "The structuring element radius along the X axis.");
     SetDefaultParameterInt("xradius", 5);
@@ -105,29 +111,20 @@ private:
     SetParameterDescription("yradius", "The structuring element radius along the Y axis.");
     SetDefaultParameterInt("yradius", 5);
 
-    AddChoice("structype.box", "Box");
-    AddChoice("structype.ball", "Ball");
-    AddChoice("structype.cross", "Cross");
-
+    // Foreground and background values
+    AddParameter(ParameterType_Float, "foreval", "Foreground value");
     SetParameterDescription("foreval", "Set the foreground value, default is 1.0.");
     SetDefaultParameterFloat("foreval", 1.0);
     AddParameter(ParameterType_Float, "backval", "Background value");
     SetParameterDescription("backval", "Set the background value, default is 0.0.");
     SetDefaultParameterFloat("backval", 0.0);
 
+    // Morphological operations
     AddParameter(ParameterType_Choice, "filter", "Morphological Operation");
     SetParameterDescription("filter", "Choice of the morphological operation");
-
-    // Dilate
     AddChoice("filter.dilate", "Dilate");
-
-    // Erode
     AddChoice("filter.erode", "Erode");
-
-    // Opening
     AddChoice("filter.opening", "Opening");
-
-    // Closing
     AddChoice("filter.closing", "Closing");
 
     AddRAMParameter();
