@@ -145,7 +145,7 @@ public:
   /* Decorrelated color space <--> RGB functors typedefs */
   typedef otb::Functor::LAB2RGB<FloatVectorImageType::PixelType, FloatVectorImageType::PixelType> LAB2RGBFunctor;
   typedef otb::Functor::RGB2LAB<FloatVectorImageType::PixelType, FloatVectorImageType::PixelType> RGB2LABFunctor;
-  typedef itk::UnaryFunctorImageFilter<FloatVectorImageType, FloatVectorImageType, RGB2LABFunctor> RGB2LABFilterType;
+  typedef otb::FunctorImageFilter<RGB2LABFunctor> RGB2LABFilterType;
   typedef otb::FunctorImageFilter<LAB2RGBFunctor> LAB2RGBFilterType;
 
   /** Interpolators typedefs */
