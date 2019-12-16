@@ -67,6 +67,7 @@ set(OTBMetadata_SRC
 
   otbNoDataHelper.cxx
   otbFilterFunctionValues.cxx
+  otbMetaDataKey.cxx
   )
 
 add_library(OTBMetadata ${OTBMetadata_SRC})
