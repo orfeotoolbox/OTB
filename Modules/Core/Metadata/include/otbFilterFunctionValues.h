@@ -27,7 +27,7 @@
 #include "itkObjectFactory.h"
 #include "itkMacro.h"
 
-#include "OTBOSSIMAdaptersExport.h"
+#include "OTBMetadataExport.h"
 
 namespace otb
 {
@@ -39,9 +39,9 @@ namespace otb
  *
  * \ingroup IO
  *
- * \ingroup OTBOSSIMAdapters
+ * \ingroup OTBMetadata
  */
-class OTBOSSIMAdapters_EXPORT FilterFunctionValues : public itk::DataObject
+class OTBMetadata_EXPORT FilterFunctionValues : public itk::DataObject
 {
 public:
   /** Standard typedefs */
