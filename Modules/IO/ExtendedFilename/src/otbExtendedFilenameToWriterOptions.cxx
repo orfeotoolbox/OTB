@@ -52,7 +52,8 @@ ExtendedFilenameToWriterOptions::ExtendedFilenameToWriterOptions() : ExtendedFil
   m_Options.bandRange.first  = false;
   m_Options.bandRange.second = "";
 
-  m_Options.optionList = {"writegeom", "writerpctags", "multiwrite", "streaming:type", "streaming:sizemode", "streaming:sizevalue", "nodata", "box", "bands"};
+  m_Options.optionList = {"writegeom", "writerpctags", "multiwrite", "streaming:type",
+    "streaming:sizemode", "streaming:sizevalue", "nodata", "box", "bands"};
 }
 
 void ExtendedFilenameToWriterOptions::SetExtendedFileName(const char* extFname)
@@ -91,8 +92,8 @@ void ExtendedFilenameToWriterOptions::SetExtendedFileName(const std::string& ext
   if (!map["writegeom"].empty())
   {
     m_Options.writeGEOMFile.first = true;
-    if (map["writegeom"] == "Off" || map["writegeom"] == "off" || map["writegeom"] == "OFF" || map["writegeom"] == "false" || map["writegeom"] == "False" ||
-        map["writegeom"] == "0")
+    if (map["writegeom"] == "Off" || map["writegeom"] == "off" || map["writegeom"] == "OFF" ||
+        map["writegeom"] == "false" || map["writegeom"] == "False" || map["writegeom"] == "0")
     {
       m_Options.writeGEOMFile.second = false;
     }
@@ -130,8 +131,8 @@ void ExtendedFilenameToWriterOptions::SetExtendedFileName(const std::string& ext
   if (!map["writerpctags"].empty())
   {
     m_Options.writeRPCTags.first = true;
-    if (map["writerpctags"] == "On" || map["writerpctags"] == "on" || map["writerpctags"] == "ON" || map["writerpctags"] == "true" ||
-        map["writerpctags"] == "True" || map["writerpctags"] == "1")
+    if (map["writerpctags"] == "On" || map["writerpctags"] == "on" || map["writerpctags"] == "ON" ||
+        map["writerpctags"] == "true" || map["writerpctags"] == "True" || map["writerpctags"] == "1")
     {
       m_Options.writeRPCTags.second = true;
     }
@@ -140,8 +141,8 @@ void ExtendedFilenameToWriterOptions::SetExtendedFileName(const std::string& ext
   if (!map["multiwrite"].empty())
   {
     m_Options.multiWrite.first = true;
-    if (map["multiwrite"] == "Off" || map["multiwrite"] == "off" || map["multiwrite"] == "OFF" || map["multiwrite"] == "false" || map["multiwrite"] == "False" ||
-        map["multiwrite"] == "0")
+    if (map["multiwrite"] == "Off" || map["multiwrite"] == "off" || map["multiwrite"] == "OFF" ||
+        map["multiwrite"] == "false" || map["multiwrite"] == "False" || map["multiwrite"] == "0")
     {
       m_Options.multiWrite.second = false;
     }
@@ -149,7 +150,8 @@ void ExtendedFilenameToWriterOptions::SetExtendedFileName(const std::string& ext
 
   if (!map["streaming:type"].empty())
   {
-    if (map["streaming:type"] == "auto" || map["streaming:type"] == "tiled" || map["streaming:type"] == "stripped" || map["streaming:type"] == "none")
+    if (map["streaming:type"] == "auto" || map["streaming:type"] == "tiled" ||
+        map["streaming:type"] == "stripped" || map["streaming:type"] == "none")
     {
       m_Options.streamingType.first  = true;
       m_Options.streamingType.second = map["streaming:type"];
