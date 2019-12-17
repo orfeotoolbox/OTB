@@ -101,6 +101,19 @@ otb_test_application(NAME  apTvUtContrastTest_lum
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvUtContrastTest_lum.tif
                              ${TEMP}/apTvUtContrastTest_lum.tif)
+                             
+#----------- NL Means TESTS ----------------
+
+otb_test_application(NAME  nlMeansTest_base
+                     APP  FastNLMeans
+                     OPTIONS -in ${INPUTDATA}/GomaAvant.tif
+                             -out ${TEMP}/GomaAvant_NLMeans.tif
+                             -patchradius 2
+                             -searchradius 11
+                             -thresh 30
+                     VALID   --compare-image ${EPSILON_7}
+                             ${BASELINE}/GomaAvant_NLMeans.tif
+                             ${TEMP}/GomaAvant_NLMeans.tif)
 
 
                              
