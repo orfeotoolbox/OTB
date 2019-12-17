@@ -27,3 +27,8 @@ otb_create_application(
   NAME           ContrastEnhancement
   SOURCES        otbContrastEnhancement.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           FastNLMeans
+  SOURCES        otbFastNLMeans.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
