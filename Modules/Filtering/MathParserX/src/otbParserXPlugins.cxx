@@ -31,7 +31,7 @@ namespace otb
 {
 
 
-void bands::Eval(mup::ptr_val_type& ret, const mup::ptr_val_type* a_pArg, int a_iArgc)
+void bands::Eval(mup::ptr_val_type& ret, const mup::ptr_val_type* a_pArg, int otbUseInDebug(a_iArgc) )
 {
 
   assert (a_iArgc == 2);

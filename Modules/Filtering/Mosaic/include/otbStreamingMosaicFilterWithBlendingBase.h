@@ -100,11 +100,11 @@ protected:
   }
 
   /* Overrided methods */
-  virtual void AddUsedInputImageIndex(unsigned int inputImageIndex);
+  void AddUsedInputImageIndex(unsigned int inputImageIndex) override;
 
-  virtual unsigned int GetNumberOfInputImages();
+  unsigned int GetNumberOfInputImages() override;
 
-  virtual unsigned int GetUsedInputImageIndice(unsigned int i)
+  unsigned int GetUsedInputImageIndice(unsigned int i) override
   {
     return 0.5 * Superclass::GetUsedInputImageIndice(i);
   }
