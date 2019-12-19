@@ -410,7 +410,15 @@ public:
 protected:
 #if defined(__clang__)
 #pragma clang diagnostic push
+
+#if defined(__apple_build_version__)
+/* Apple's 3.6.0 based clang doesn't support -Winconsistent-missing-override */
+#if __apple_build_version__ >= 7000053
 #pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
+#elif __clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 7)
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
    TYPE_DATA
 #pragma clang diagnostic pop
 #else
