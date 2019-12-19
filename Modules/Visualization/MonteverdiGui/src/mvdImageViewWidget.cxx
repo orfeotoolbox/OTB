@@ -71,7 +71,7 @@ namespace mvd
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*******************************************************************************/
-ImageViewWidget::ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, QWidget* p, const QOpenGLWidget* shareWidget,
+ImageViewWidget::ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, QWidget* p,
                                  Qt::WindowFlags flags)
   : QOpenGLWidget(p, flags),
     m_IsPickingEnabled(true),

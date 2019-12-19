@@ -610,7 +610,7 @@ void MainWindow::InitializeDockWidgets()
   // Quicklook-view dock-widget
   assert(m_QuicklookViewDock == NULL);
   assert(m_ImageView != NULL);
-  m_QuicklookViewDock = AddWidgetToDock(CreateQuicklookViewWidget(m_ImageView), "QUICKLOOK_VIEW", tr("Quicklook view"), Qt::RightDockWidgetArea);
+  m_QuicklookViewDock = AddWidgetToDock(CreateQuicklookViewWidget(), "QUICKLOOK_VIEW", tr("Quicklook view"), Qt::RightDockWidgetArea);
 
   // Histogram-view.
   assert(m_HistogramDock == NULL);
@@ -722,7 +722,7 @@ void MainWindow::InitializeStatusBarWidgets()
 }
 
 /*****************************************************************************/
-ImageViewWidget* MainWindow::CreateImageViewWidget(QOpenGLWidget* sharedGlWidget)
+ImageViewWidget* MainWindow::CreateImageViewWidget()
 {
   ImageViewRenderer* renderer = new ImageViewRenderer(this);
 
@@ -734,7 +734,7 @@ ImageViewWidget* MainWindow::CreateImageViewWidget(QOpenGLWidget* sharedGlWidget
 
   ImageViewWidget* imageView = new ImageViewWidget(manipulator, // (will be reparented.)
                                                    renderer,    // (will be reparented.)
-                                                   this, sharedGlWidget);
+                                                   this);
 
   imageView->setMinimumWidth(256);
 
@@ -742,7 +742,7 @@ ImageViewWidget* MainWindow::CreateImageViewWidget(QOpenGLWidget* sharedGlWidget
 }
 
 /*****************************************************************************/
-ImageViewWidget* MainWindow::CreateQuicklookViewWidget(QOpenGLWidget* sharedGlWidget)
+ImageViewWidget* MainWindow::CreateQuicklookViewWidget()
 {
   QuicklookViewRenderer* renderer = new QuicklookViewRenderer(this);
 
@@ -754,7 +754,7 @@ ImageViewWidget* MainWindow::CreateQuicklookViewWidget(QOpenGLWidget* sharedGlWi
 
   ImageViewWidget* quicklookView = new ImageViewWidget(manipulator, // (will be reparented.)
                                                        renderer,    // (will be reparented.)
-                                                       this, sharedGlWidget);
+                                                       this);
 
   quicklookView->SetPickingEnabled(false);
   quicklookView->SetPickingDefaultStatus(false);

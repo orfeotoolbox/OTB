@@ -92,7 +92,7 @@ public:
   // Public methods.
 public:
   /** \brief Constructor. */
-  ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, QWidget* p = NULL, const QOpenGLWidget* shareWidget = NULL,
+  ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, QWidget* p = NULL,
                   Qt::WindowFlags f = 0);
 
   /** \brief Destructor. */
