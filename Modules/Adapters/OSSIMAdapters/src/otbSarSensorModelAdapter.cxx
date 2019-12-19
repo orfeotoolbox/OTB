@@ -31,6 +31,10 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Waddress"
+#if defined(__GNUC__) && (__GNUC__ > 5)
+#pragma GCC diagnostic ignored "-Wnonnull-compare"
+#endif
 #include "ossim/ossimSarSensorModel.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 #pragma GCC diagnostic pop

@@ -36,6 +36,10 @@
 #   pragma GCC diagnostic ignored "-Wunused-parameter"
 #   pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #   pragma GCC diagnostic ignored "-Wshadow"
+#   pragma GCC diagnostic ignored "-Waddress"
+#if defined(__GNUC__) && (__GNUC__ > 5)
+#pragma GCC diagnostic ignored "-Wnonnull-compare"
+#endif
 #   include <ossim/projection/ossimSensorModel.h>
 #   include <ossim/elevation/ossimHgtRef.h>
 #   include "ossim/ossimTimeUtilities.h"
