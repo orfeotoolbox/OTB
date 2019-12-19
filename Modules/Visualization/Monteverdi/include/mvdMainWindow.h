@@ -236,11 +236,11 @@ private:
 private:
   /**
    */
-  ImageViewWidget* CreateImageViewWidget(QGLWidget* sharedGlWidget = NULL);
+  ImageViewWidget* CreateImageViewWidget(QOpenGLWidget* sharedGlWidget = NULL);
 
   /**
    */
-  ImageViewWidget* CreateQuicklookViewWidget(QGLWidget* sharedGlWidget = NULL);
+  ImageViewWidget* CreateQuicklookViewWidget(QOpenGLWidget* sharedGlWidget = NULL);
 
   /**
    */

@@ -258,8 +258,8 @@ void MainWindow::SetGLSLEnabled(bool enabled)
   // Paint
   // if( mustRefresh )
   //   {
-  //   m_ImageView->updateGL();
-  //   quicklookView->updateGL();
+  //   m_ImageView->update();
+  //   quicklookView->update();
   //   }
 }
 
@@ -405,7 +405,7 @@ void MainWindow::ConnectImageViews()
   //   SIGNAL( RefreshViewRequested() ),
   //   // to:
   //   m_ImageView,
-  //   SLOT( updateGL() )
+  //   SLOT( update() )
   // );
 
   //
@@ -722,7 +722,7 @@ void MainWindow::InitializeStatusBarWidgets()
 }
 
 /*****************************************************************************/
-ImageViewWidget* MainWindow::CreateImageViewWidget(QGLWidget* sharedGlWidget)
+ImageViewWidget* MainWindow::CreateImageViewWidget(QOpenGLWidget* sharedGlWidget)
 {
   ImageViewRenderer* renderer = new ImageViewRenderer(this);
 
@@ -742,7 +742,7 @@ ImageViewWidget* MainWindow::CreateImageViewWidget(QGLWidget* sharedGlWidget)
 }
 
 /*****************************************************************************/
-ImageViewWidget* MainWindow::CreateQuicklookViewWidget(QGLWidget* sharedGlWidget)
+ImageViewWidget* MainWindow::CreateQuicklookViewWidget(QOpenGLWidget* sharedGlWidget)
 {
   QuicklookViewRenderer* renderer = new QuicklookViewRenderer(this);
 
@@ -979,12 +979,12 @@ void MainWindow::ImportImages(const QStringList& filenames, bool enableOverviews
   }
 
   assert(m_ImageView != NULL);
-  m_ImageView->updateGL();
+  m_ImageView->update();
 
   ImageViewWidget* quicklookView = GetQuicklookView();
   assert(quicklookView != NULL);
 
-  quicklookView->updateGL();
+  quicklookView->update();
 }
 
 /*****************************************************************************/
@@ -1595,7 +1595,7 @@ void MainWindow::OnOTBApplicationOutputImageChanged(const QString&, const QStrin
 
   // import the result image into the database
   ImportImage(outfname, false);
-  m_ImageView->updateGL();
+  m_ImageView->update();
 }
 
 /*****************************************************************************/
@@ -1694,14 +1694,14 @@ void MainWindow::OnSettingsUpdated()
 
   assert(m_ImageView != NULL);
 
-  m_ImageView->updateGL();
+  m_ImageView->update();
 
   //
 
   ImageViewWidget* quicklookView = GetQuicklookView();
   assert(quicklookView != NULL);
 
-  quicklookView->updateGL();
+  quicklookView->update();
 }
 
 /****************************************************************************/
