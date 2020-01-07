@@ -97,10 +97,10 @@ otb_test_application(NAME apTvDmStereoRectificationGridGeneratorTestAvgDEM
 
                      OPTIONS -io.inleft ${INPUTDATA}/sensor_stereo_left.tif
                              -io.inright ${INPUTDATA}/sensor_stereo_right.tif
-                             -io.outleft ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTest.tif
-                             -io.outright ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTest.tif
-                             -inverse.outleft  ${TEMP}/apTvDmStereoRectificationGridGeneratorInverseLeftTest.tif
-                             -inverse.outright ${TEMP}/apTvDmStereoRectificationGridGeneratorInverseRightTest.tif
+                             -io.outleft ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTestAvgDEM.tif
+                             -io.outright ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTestAvgDEM.tif
+                             -inverse.outleft  ${TEMP}/apTvDmStereoRectificationGridGeneratorInverseLeftTestAvgDEM.tif
+                             -inverse.outright ${TEMP}/apTvDmStereoRectificationGridGeneratorInverseRightTestAvgDEM.tif
                              -epi.elevation.dem ${INPUTDATA}/DEM/srtm_directory
                              -epi.elevation.geoid ${INPUTDATA}/DEM/egm96.grd
                              -epi.elevation.avgdem.step 10
