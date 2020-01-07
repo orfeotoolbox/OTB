@@ -31,7 +31,7 @@
 
 //
 // Qt includes (sorted by alphabetic order)
-#include <QGLWidget>
+#include <QOpenGLWidget>
 // #include <QtOpenGL>
 
 //
@@ -76,7 +76,7 @@ class AbstractImageViewManipulator;
  * \ingroup OTBMonteverdiGUI
  *
  */
-class OTBMonteverdiGUI_EXPORT ImageViewWidget : public QGLWidget
+class OTBMonteverdiGUI_EXPORT ImageViewWidget : public QOpenGLWidget
 {
 
   /*-[ QOBJECT SECTION ]-----------------------------------------------------*/
@@ -92,16 +92,8 @@ public:
   // Public methods.
 public:
   /** \brief Constructor. */
-  ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, QWidget* p = NULL, const QGLWidget* shareWidget = NULL,
+  ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, QWidget* p = NULL,
                   Qt::WindowFlags f = 0);
-
-  /** \brief Constructor. */
-  ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, QGLContext* context, QWidget* p = NULL,
-                  const QGLWidget* shareWidget = NULL, Qt::WindowFlags f = 0);
-
-  /** \brief Constructor. */
-  ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, const QGLFormat& format, QWidget* p = NULL,
-                  const QGLWidget* shareWidget = NULL, Qt::WindowFlags f = 0);
 
   /** \brief Destructor. */
   ~ImageViewWidget() override;
