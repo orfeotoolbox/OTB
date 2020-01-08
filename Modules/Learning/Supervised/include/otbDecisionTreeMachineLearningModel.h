@@ -27,11 +27,7 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 
-#ifdef OTB_OPENCV_3
 #include "otbOpenCVUtils.h"
-#else
-class CvDTree;
-#endif
 
 namespace otb
 {
@@ -187,11 +183,7 @@ private:
   DecisionTreeMachineLearningModel(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-#ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::DTrees> m_DTreeModel;
-#else
-  CvDTree* m_DTreeModel;
-#endif
 
   int                m_MaxDepth;
   int                m_MinSampleCount;

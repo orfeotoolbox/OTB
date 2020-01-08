@@ -27,9 +27,7 @@ namespace otb
 
 CvRTreesWrapper::CvRTreesWrapper()
 {
-#ifdef OTB_OPENCV_3
   m_Impl = cv::ml::RTrees::create();
-#endif
 }
 
 CvRTreesWrapper::~CvRTreesWrapper()
@@ -38,7 +36,6 @@ CvRTreesWrapper::~CvRTreesWrapper()
 
 void CvRTreesWrapper::get_votes(const cv::Mat& sample, const cv::Mat& missing, CvRTreesWrapper::VotesVectorType& vote_count) const
 {
-#ifdef OTB_OPENCV_3
   // missing samples not implemented yet
   (void)missing;
 
@@ -86,23 +83,12 @@ void CvRTreesWrapper::get_votes(const cv::Mat& sample, const cv::Mat& missing, C
     // give at least 2 classes
     vote_count.push_back(0);
   }
-#else
-  vote_count.resize(nclasses);
-  for (int k = 0; k < ntrees; k++)
-  {
-    CvDTreeNode* predicted_node = trees[k]->predict(sample, missing);
-    int          class_idx      = predicted_node->class_idx;
-    CV_Assert(0 <= class_idx && class_idx < nclasses);
-    ++vote_count[class_idx];
-  }
-#endif
 }
 
 float CvRTreesWrapper::predict_margin(const cv::Mat& sample, const cv::Mat& missing) const
 {
-#ifdef OTB_OPENCV_3
   int ntrees = m_Impl->getRoots().size();
-#endif
+
   // Sanity check (division by ntrees later on)
   if (ntrees == 0)
   {
@@ -118,9 +104,8 @@ float CvRTreesWrapper::predict_margin(const cv::Mat& sample, const cv::Mat& miss
 
 float CvRTreesWrapper::predict_confidence(const cv::Mat& sample, const cv::Mat& missing) const
 {
-#ifdef OTB_OPENCV_3
   int ntrees = m_Impl->getRoots().size();
-#endif
+
   // Sanity check (division by ntrees later on)
   if (ntrees == 0)
   {
@@ -133,7 +118,6 @@ float CvRTreesWrapper::predict_confidence(const cv::Mat& sample, const cv::Mat& 
   return confidence;
 }
 
-#ifdef OTB_OPENCV_3
 #define OTB_CV_WRAP_IMPL(type, name)        \
   type CvRTreesWrapper::get##name() const   \
   {                                         \
@@ -250,5 +234,4 @@ cv::Ptr<CvRTreesWrapper> CvRTreesWrapper::create()
 #undef OTB_CV_WRAP_IMPL
 #undef OTB_CV_WRAP_IMPL_REF
 #undef OTB_CV_WRAP_IMPL_CSTREF_GET
-#endif
 }
