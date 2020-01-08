@@ -216,20 +216,20 @@ parameters:
 -``-structype`` the choice of the structuring element type
    (ball/cross) (default value is ball)
 
--``(-structype.ball.xradius)`` the ball structuring element X Radius
-   (only if structype==ball) (default value is 5 pixels)
+-``(-xradius)`` the ball structuring element X Radius
+   (default value is 5 pixels)
 
--``(-structype.ball.yradius)`` the ball structuring element Y Radius
-   (only if structype==ball) (default value is 5 pixels)
+-``(-yradius)`` the ball structuring element Y Radius
+   (default value is 5 pixels)
 
 -``-filter`` the choice of the morphological operation
    (dilate/erode/opening/closing) (default value is dilate)
 
--``(-filter.dilate.foreval)`` the foreground value for the dilation
-   (idem for filter.erode/opening/closing) (default value is 1)
+-``(-foreval)`` the foreground value
+   (Used for dilate/erode/opening/closing morphological operations) (default value is 1)
 
--``(-filter.dilate.backval)`` the background value for the dilation
-   (idem for filter.erode/opening/closing) (default value is 0)
+-``(-backval)`` the background value
+   (Used for dilate/erode/opening morphological operations) (default value is 0)
 
 -``-out`` the output filtered image
 
@@ -243,8 +243,8 @@ The application can be used as follows:
                                          -structype.ball.xradius 10
                                          -structype.ball.yradius 5
                                          -filter                 opening
-                                         -filter.opening.foreval 1.0
-                                         -filter.opening.backval 0.0
+                                         -foreval                1.0
+                                         -backval                0.0
                                          -out                    OutputImage
 
 Gray scale morphological operations
