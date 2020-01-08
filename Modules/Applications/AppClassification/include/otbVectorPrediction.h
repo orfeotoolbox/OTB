@@ -109,7 +109,7 @@ private:
                                                              ogr::DataSource::Pointer buffer);
 
   /** Create the output DataSource. */
-  otb::ogr::DataSource::Pointer CreateOutputDataSource(ogr::DataSource::Pointer source, ogr::Layer& layer);
+  otb::ogr::DataSource::Pointer CreateOutputDataSource(ogr::Layer& layer);
 
   /** Add a prediction field in the output layer if it does not exist.
    * If computeConfidenceMap evaluates to true a confidence field will be

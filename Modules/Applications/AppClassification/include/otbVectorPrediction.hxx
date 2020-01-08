@@ -164,7 +164,7 @@ otb::ogr::DataSource::Pointer VectorPrediction<RegressionMode>::ReopenDataSource
 }
 
 template <bool                RegressionMode>
-otb::ogr::DataSource::Pointer VectorPrediction<RegressionMode>::CreateOutputDataSource(ogr::DataSource::Pointer source, ogr::Layer& layer)
+otb::ogr::DataSource::Pointer VectorPrediction<RegressionMode>::CreateOutputDataSource(ogr::Layer& layer)
 {
   ogr::DataSource::Pointer output;
   // Create new OGRDataSource
@@ -316,7 +316,7 @@ void           VectorPrediction<RegressionMode>::DoExecute()
   }
   else
   {
-    output = CreateOutputDataSource(source, layer);
+    output = CreateOutputDataSource(layer);
   }
 
   otb::ogr::Layer outLayer = output->GetLayer(0);

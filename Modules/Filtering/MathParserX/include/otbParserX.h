@@ -28,9 +28,12 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wc++11-extensions"
 
-#if defined(__apple_build_version__) && __apple_build_version__ < 7000053
+#if defined(__apple_build_version__)
 /* Apple's 3.6.0 based clang doesn't support -Winconsistent-missing-override */
-#else
+#if __apple_build_version__ >= 7000053
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
+#elif __clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 7)
 #pragma clang diagnostic ignored "-Winconsistent-missing-override"
 #endif
 

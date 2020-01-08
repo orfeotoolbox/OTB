@@ -32,7 +32,16 @@
 #pragma GCC diagnostic ignored "-Wunused-local-typedefs"
 #if defined(__clang__)
 #pragma clang diagnostic ignored "-Wheader-guard"
+
+#if defined(__apple_build_version__)
+/* Need AppleClang >= 9.0.0 to support -Wexpansion-to-defined */
+#if __apple_build_version__ >= 9000000
 #pragma clang diagnostic ignored "-Wexpansion-to-defined"
+#endif
+#elif __clang_major__ > 3
+#pragma clang diagnostic ignored "-Wexpansion-to-defined"
+#endif
+
 #else
 #pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
 #endif

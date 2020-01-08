@@ -167,13 +167,13 @@ protected:
   /**
    * Methods
    */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) override;
 
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) override;
 
-  virtual void AfterThreadedGenerateData();
+  void AfterThreadedGenerateData() override;
 
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() override;
 
   /** Image extent computing */
   virtual void ImageToExtent(InputImageType* image, InputImagePointType& extentInf, InputImagePointType& extentSup);

@@ -49,7 +49,7 @@ MakeTexturedQuad( Id_t xy, Id_t uv )
   mesh.VertexAttribPointer( xy, 2, 0 );
   mesh.VertexAttribPointer( uv, 2, 8 );
 
-  return std::move( mesh );
+  return mesh;
 }
 
 
@@ -75,7 +75,7 @@ MakeInterleavedTexturedQuad( Id_t xy, Id_t uv )
   mesh.VertexAttribPointer( xy, 2, 0 );
   mesh.VertexAttribPointer( uv, 2, 2 );
 
-  return std::move( mesh );
+  return mesh;
 }
 
 Mesh
@@ -99,7 +99,7 @@ MakeQuad( Id_t xy)
 
   mesh.VertexAttribPointer( xy, 2, 0 );
 
-  return std::move( mesh );
+  return mesh;
 }
 
 void
