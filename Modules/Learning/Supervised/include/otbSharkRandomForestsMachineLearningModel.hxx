@@ -54,12 +54,6 @@ SharkRandomForestsMachineLearningModel<TInputValue, TOutputValue>::SharkRandomFo
   this->m_ComputeMargin                 = false;
 }
 
-
-template <class TInputValue, class TOutputValue>
-SharkRandomForestsMachineLearningModel<TInputValue, TOutputValue>::~SharkRandomForestsMachineLearningModel()
-{
-}
-
 /** Train the machine learning model */
 template <class TInputValue, class TOutputValue>
 void SharkRandomForestsMachineLearningModel<TInputValue, TOutputValue>::Train()

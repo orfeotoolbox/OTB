@@ -62,7 +62,7 @@ public:
 
 protected:
   BoostMachineLearningModelFactory();
-  ~BoostMachineLearningModelFactory() override;
+  ~BoostMachineLearningModelFactory() override = default;
 
 private:
   BoostMachineLearningModelFactory(const Self&) = delete;

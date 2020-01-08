@@ -42,11 +42,6 @@ NormalBayesMachineLearningModelFactory<TInputValue, TOutputValue>::NormalBayesMa
 }
 
 template <class TInputValue, class TOutputValue>
-NormalBayesMachineLearningModelFactory<TInputValue, TOutputValue>::~NormalBayesMachineLearningModelFactory()
-{
-}
-
-template <class TInputValue, class TOutputValue>
 const char* NormalBayesMachineLearningModelFactory<TInputValue, TOutputValue>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;

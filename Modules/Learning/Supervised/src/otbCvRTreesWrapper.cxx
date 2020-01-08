@@ -30,10 +30,6 @@ CvRTreesWrapper::CvRTreesWrapper()
   m_Impl = cv::ml::RTrees::create();
 }
 
-CvRTreesWrapper::~CvRTreesWrapper()
-{
-}
-
 void CvRTreesWrapper::get_votes(const cv::Mat& sample, const cv::Mat& missing, CvRTreesWrapper::VotesVectorType& vote_count) const
 {
   // missing samples not implemented yet

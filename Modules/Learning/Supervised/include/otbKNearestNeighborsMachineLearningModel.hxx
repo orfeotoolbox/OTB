@@ -43,12 +43,6 @@ KNearestNeighborsMachineLearningModel<TInputValue, TTargetValue>::KNearestNeighb
   this->m_IsRegressionSupported = true;
 }
 
-
-template <class TInputValue, class TTargetValue>
-KNearestNeighborsMachineLearningModel<TInputValue, TTargetValue>::~KNearestNeighborsMachineLearningModel()
-{
-}
-
 /** Train the machine learning model */
 template <class TInputValue, class TTargetValue>
 void KNearestNeighborsMachineLearningModel<TInputValue, TTargetValue>::Train()

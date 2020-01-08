@@ -42,11 +42,6 @@ RandomForestsMachineLearningModelFactory<TInputValue, TOutputValue>::RandomFores
 }
 
 template <class TInputValue, class TOutputValue>
-RandomForestsMachineLearningModelFactory<TInputValue, TOutputValue>::~RandomForestsMachineLearningModelFactory()
-{
-}
-
-template <class TInputValue, class TOutputValue>
 const char* RandomForestsMachineLearningModelFactory<TInputValue, TOutputValue>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;

@@ -62,7 +62,7 @@ public:
 
 protected:
   DecisionTreeMachineLearningModelFactory();
-  ~DecisionTreeMachineLearningModelFactory() override;
+  ~DecisionTreeMachineLearningModelFactory() override = default;
 
 private:
   DecisionTreeMachineLearningModelFactory(const Self&) = delete;

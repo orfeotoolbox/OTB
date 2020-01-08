@@ -41,10 +41,6 @@ SVMMachineLearningModelFactory<TInputValue, TOutputValue>::SVMMachineLearningMod
                          itk::CreateObjectFunction<SVMMachineLearningModel<TInputValue, TOutputValue>>::New());
 }
 
-template <class TInputValue, class TOutputValue>
-SVMMachineLearningModelFactory<TInputValue, TOutputValue>::~SVMMachineLearningModelFactory()
-{
-}
 
 template <class TInputValue, class TOutputValue>
 const char* SVMMachineLearningModelFactory<TInputValue, TOutputValue>::GetITKSourceVersion(void) const

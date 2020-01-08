@@ -101,7 +101,7 @@ protected:
   KNearestNeighborsMachineLearningModel();
 
   /** Destructor */
-  ~KNearestNeighborsMachineLearningModel() override;
+  ~KNearestNeighborsMachineLearningModel() override = default;
 
   /** Predict values using the model */
   TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;

@@ -171,7 +171,7 @@ protected:
   DecisionTreeMachineLearningModel();
 
   /** Destructor */
-  ~DecisionTreeMachineLearningModel() override;
+  ~DecisionTreeMachineLearningModel() override = default;
 
   /** Predict values using the model */
   TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;

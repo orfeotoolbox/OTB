@@ -38,7 +38,7 @@ class OTBSupervised_EXPORT CvRTreesWrapper
 public:
   typedef std::vector<unsigned int> VotesVectorType;
   CvRTreesWrapper();
-  ~CvRTreesWrapper() override;
+  ~CvRTreesWrapper() override = default;
 
   /** Compute the number of votes for each class. */
   void get_votes(const cv::Mat& sample, const cv::Mat& missing, VotesVectorType& vote_count) const;

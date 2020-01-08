@@ -46,11 +46,6 @@ DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::DecisionTreeMachine
   this->m_IsRegressionSupported = true;
 }
 
-template <class TInputValue, class TOutputValue>
-DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::~DecisionTreeMachineLearningModel()
-{
-}
-
 /** Train the machine learning model */
 template <class TInputValue, class TOutputValue>
 void DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::Train()

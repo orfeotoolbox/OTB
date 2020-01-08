@@ -105,9 +105,7 @@ protected:
   /** Constructor */
   KMeansImageClassificationFilter();
   /** Destructor */
-  ~KMeansImageClassificationFilter() override
-  {
-  }
+  ~KMeansImageClassificationFilter() override = default;
 
   /** Threaded generate data */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
