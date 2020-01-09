@@ -296,7 +296,7 @@ int otbBandMathXImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   }
 
   // Sub-test 6
-  PixelType result = output6->GetPixel( {0, 0} );
+  PixelType result = output6->GetPixel( {{0, 0}} );
   if (result[0] != 10 || std::abs(result[1] - 3.14) > 1e-12) {
     itkGenericExceptionMacro(<< std::endl
                              << " Expected = [10, 3.14]"
