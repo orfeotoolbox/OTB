@@ -27,6 +27,7 @@ otb_module(OTBKMZWriter
     OTBImageBase
     OTBImageIO
     OTBImageManipulation
+    OTBMetadata
     OTBOSSIMAdapters
     OTBTransform
     OTBVectorDataBase

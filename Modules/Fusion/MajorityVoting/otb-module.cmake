@@ -26,6 +26,7 @@ otb_module(OTBMajorityVoting
   DEPENDS
     OTBITK
     OTBOSSIMAdapters
+    OTBMetadata
 
   TEST_DEPENDS
     OTBTestKernel

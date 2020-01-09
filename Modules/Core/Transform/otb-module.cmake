@@ -31,6 +31,7 @@ otb_module(OTBTransform
     OTBITK
     OTBInterpolation
     OTBOSSIMAdapters
+    OTBMetadata
     OTBGdalAdapters
   TEST_DEPENDS
     OTBImageBase

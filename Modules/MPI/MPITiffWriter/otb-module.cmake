@@ -33,6 +33,7 @@ otb_module(OTBMPITiffWriter
     OTBOSSIMAdapters
     OTBSPTW
     OTBStreaming
+    OTBMetadata
     OTBMPI
     OTBMPIConfig
   TEST_DEPENDS
