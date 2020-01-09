@@ -72,24 +72,30 @@ void           VectorPrediction<RegressionMode>::DoUpdateParameters()
   }
 }
 
-template <bool                                                     RegressionMode>
-typename VectorPrediction<RegressionMode>::ListSampleType::Pointer VectorPrediction<RegressionMode>::ReadInputListSample(ogr::DataSource::Pointer source)
+template <bool RegressionMode>
+typename VectorPrediction<RegressionMode>::ListSampleType::Pointer
+VectorPrediction<RegressionMode>
+::ReadInputListSample(otb::ogr::Layer const& layer)
 {
-  auto layer  = source->GetLayer(0);
   typename ListSampleType::Pointer input = ListSampleType::New();
 
   const auto nbFeatures = GetSelectedItems("feat").size();
   input->SetMeasurementVectorSize(nbFeatures);
-
-  ogr::Feature             feature = layer.ogr().GetNextFeature();
   std::vector<int> featureFieldIndex(nbFeatures, -1);
+
+  ogr::Layer::const_iterator it_feat = layer.cbegin();
   for (unsigned int i = 0; i < nbFeatures; i++)
   {
-    featureFieldIndex[i] = feature.ogr().GetFieldIndex(GetChoiceNames("feat")[GetSelectedItems("feat")[i]].c_str());
-    if (featureFieldIndex[i] < 0)
-      otbAppLogFATAL("The field name for feature " << GetChoiceNames("feat")[GetSelectedItems("feat")[i]].c_str() << " has not been found" << std::endl);
+    try
+    {
+    featureFieldIndex[i] = (*it_feat).GetFieldIndex(GetChoiceNames("feat")[GetSelectedItems("feat")[i]]);
+    }
+    catch(...)
+    {
+    otbAppLogFATAL("The field name for feature " << GetChoiceNames("feat")[GetSelectedItems("feat")[i]] << " has not been found" << std::endl);
+    }
   }
-  layer.ogr().ResetReading();
+
   for (auto const& feature : layer)
   {
     MeasurementType mv(nbFeatures);
@@ -289,7 +295,7 @@ void           VectorPrediction<RegressionMode>::DoExecute()
 
   ogr::DataSource::Pointer source  = ogr::DataSource::New(shapefileName, ogr::DataSource::Modes::Read);
   auto layer  = source->GetLayer(0);
-  auto input = ReadInputListSample(source);
+  auto input = ReadInputListSample(layer);
 
   ListSampleType::Pointer listSample = NormalizeListSample(input);
   typename LabelListSampleType::Pointer target;
