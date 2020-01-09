@@ -411,6 +411,12 @@ void Application::SetParameterFloat(std::string const& key, float value, bool ha
   this->SetParameterUserValue(key, hasUserValueFlag);
 }
 
+void Application::SetParameterDouble(std::string const& key, double value, bool hasUserValueFlag)
+{
+  GetParameterByKey(key)->FromDouble(value);
+  this->SetParameterUserValue(key, hasUserValueFlag);
+}
+
 void Application::SetParameterString(std::string const& parameter, std::string value, bool hasUserValueFlag)
 {
   GetParameterByKey(parameter)->FromString(value);
@@ -1111,6 +1117,13 @@ void Application::SetDefaultParameterInt(std::string const& parameter, int value
     if (!hasUserValue)
       paramFloat->SetValue(static_cast<float>(value));
   }
+  else if (dynamic_cast<DoubleParameter*>(param))
+  {
+    DoubleParameter* paramDouble = dynamic_cast<DoubleParameter*>(param);
+    paramDouble->SetDefaultValue(static_cast<double>(value));
+    if (!hasUserValue)
+      paramDouble->SetValue(static_cast<double>(value));
+  }
   else if (dynamic_cast<RAMParameter*>(param))
   {
     RAMParameter* paramRAM = dynamic_cast<RAMParameter*>(param);
@@ -1139,6 +1152,11 @@ int Application::GetDefaultParameterInt(std::string const& parameter)
     FloatParameter* paramFloat = dynamic_cast<FloatParameter*>(param);
     ret                        = paramFloat->GetDefaultValue();
   }
+  else if (dynamic_cast<DoubleParameter*>(param))
+  {
+    DoubleParameter* paramDouble = dynamic_cast<DoubleParameter*>(param);
+    ret                        = paramDouble->GetDefaultValue();
+  }
   else if (dynamic_cast<RAMParameter*>(param))
   {
     RAMParameter* paramRAM = dynamic_cast<RAMParameter*>(param);
@@ -1165,6 +1183,23 @@ void Application::SetDefaultParameterFloat(std::string const& key, float value)
 float Application::GetDefaultParameterFloat(std::string const& key)
 {
   auto param = downcast_check<FloatParameter>(GetParameterByKey(key));
+  return param->GetDefaultValue();
+}
+
+void Application::SetDefaultParameterDouble(std::string const& key, double value)
+{
+  auto param = downcast_check<DoubleParameter>(GetParameterByKey(key));
+  param->SetDefaultValue(value);
+
+  if (!param->HasUserValue())
+  {
+    param->SetValue(value);
+  }
+}
+
+double Application::GetDefaultParameterDouble(std::string const& key)
+{
+  auto param = downcast_check<DoubleParameter>(GetParameterByKey(key));
   return param->GetDefaultValue();
 }
 
@@ -1196,6 +1231,18 @@ void Application::SetMinimumParameterFloatValue(std::string const& key, float va
 void Application::SetMaximumParameterFloatValue(std::string const& key, float value)
 {
   auto param = downcast_check<FloatParameter>(GetParameterByKey(key));
+  param->SetMaximumValue(value);
+}
+
+void Application::SetMinimumParameterDoubleValue(std::string const& key, double value)
+{
+  auto param = downcast_check<DoubleParameter>(GetParameterByKey(key));
+  param->SetMinimumValue(value);
+}
+
+void Application::SetMaximumParameterDoubleValue(std::string const& key, double value)
+{
+  auto param = downcast_check<DoubleParameter>(GetParameterByKey(key));
   param->SetMaximumValue(value);
 }
 
@@ -1258,6 +1305,11 @@ int Application::GetParameterInt(std::string const& key) const
 float Application::GetParameterFloat(std::string const& key) const
 {
   return GetParameterByKey(key)->ToFloat();
+}
+
+double Application::GetParameterDouble(std::string const& key) const
+{
+  return GetParameterByKey(key)->ToDouble();
 }
 
 std::string Application::GetParameterString(std::string const& key) const
@@ -1425,6 +1477,13 @@ std::vector<std::pair<std::string, std::string>> Application::GetOutputParameter
           std::ostringstream oss;
           oss << std::setprecision(10);
           oss << GetParameterFloat(key);
+          keyVal.second = oss.str();
+        }
+        else if (type == ParameterType_Double)
+        {
+          std::ostringstream oss;
+          oss << std::setprecision(19);
+          oss << GetParameterDouble(*it);
           keyVal.second = oss.str();
         }
         else

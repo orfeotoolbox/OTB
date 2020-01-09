@@ -258,8 +258,8 @@ void MainWindow::SetGLSLEnabled(bool enabled)
   // Paint
   // if( mustRefresh )
   //   {
-  //   m_ImageView->updateGL();
-  //   quicklookView->updateGL();
+  //   m_ImageView->update();
+  //   quicklookView->update();
   //   }
 }
 
@@ -405,7 +405,7 @@ void MainWindow::ConnectImageViews()
   //   SIGNAL( RefreshViewRequested() ),
   //   // to:
   //   m_ImageView,
-  //   SLOT( updateGL() )
+  //   SLOT( update() )
   // );
 
   //
@@ -610,7 +610,7 @@ void MainWindow::InitializeDockWidgets()
   // Quicklook-view dock-widget
   assert(m_QuicklookViewDock == NULL);
   assert(m_ImageView != NULL);
-  m_QuicklookViewDock = AddWidgetToDock(CreateQuicklookViewWidget(m_ImageView), "QUICKLOOK_VIEW", tr("Quicklook view"), Qt::RightDockWidgetArea);
+  m_QuicklookViewDock = AddWidgetToDock(CreateQuicklookViewWidget(), "QUICKLOOK_VIEW", tr("Quicklook view"), Qt::RightDockWidgetArea);
 
   // Histogram-view.
   assert(m_HistogramDock == NULL);
@@ -722,7 +722,7 @@ void MainWindow::InitializeStatusBarWidgets()
 }
 
 /*****************************************************************************/
-ImageViewWidget* MainWindow::CreateImageViewWidget(QGLWidget* sharedGlWidget)
+ImageViewWidget* MainWindow::CreateImageViewWidget()
 {
   ImageViewRenderer* renderer = new ImageViewRenderer(this);
 
@@ -734,7 +734,7 @@ ImageViewWidget* MainWindow::CreateImageViewWidget(QGLWidget* sharedGlWidget)
 
   ImageViewWidget* imageView = new ImageViewWidget(manipulator, // (will be reparented.)
                                                    renderer,    // (will be reparented.)
-                                                   this, sharedGlWidget);
+                                                   this);
 
   imageView->setMinimumWidth(256);
 
@@ -742,7 +742,7 @@ ImageViewWidget* MainWindow::CreateImageViewWidget(QGLWidget* sharedGlWidget)
 }
 
 /*****************************************************************************/
-ImageViewWidget* MainWindow::CreateQuicklookViewWidget(QGLWidget* sharedGlWidget)
+ImageViewWidget* MainWindow::CreateQuicklookViewWidget()
 {
   QuicklookViewRenderer* renderer = new QuicklookViewRenderer(this);
 
@@ -754,7 +754,7 @@ ImageViewWidget* MainWindow::CreateQuicklookViewWidget(QGLWidget* sharedGlWidget
 
   ImageViewWidget* quicklookView = new ImageViewWidget(manipulator, // (will be reparented.)
                                                        renderer,    // (will be reparented.)
-                                                       this, sharedGlWidget);
+                                                       this);
 
   quicklookView->SetPickingEnabled(false);
   quicklookView->SetPickingDefaultStatus(false);
@@ -979,12 +979,12 @@ void MainWindow::ImportImages(const QStringList& filenames, bool enableOverviews
   }
 
   assert(m_ImageView != NULL);
-  m_ImageView->updateGL();
+  m_ImageView->update();
 
   ImageViewWidget* quicklookView = GetQuicklookView();
   assert(quicklookView != NULL);
 
-  quicklookView->updateGL();
+  quicklookView->update();
 }
 
 /*****************************************************************************/
@@ -1595,7 +1595,7 @@ void MainWindow::OnOTBApplicationOutputImageChanged(const QString&, const QStrin
 
   // import the result image into the database
   ImportImage(outfname, false);
-  m_ImageView->updateGL();
+  m_ImageView->update();
 }
 
 /*****************************************************************************/
@@ -1694,14 +1694,14 @@ void MainWindow::OnSettingsUpdated()
 
   assert(m_ImageView != NULL);
 
-  m_ImageView->updateGL();
+  m_ImageView->update();
 
   //
 
   ImageViewWidget* quicklookView = GetQuicklookView();
   assert(quicklookView != NULL);
 
-  quicklookView->updateGL();
+  quicklookView->update();
 }
 
 /****************************************************************************/

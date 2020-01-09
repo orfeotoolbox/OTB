@@ -143,7 +143,7 @@ otb_test_application(NAME apTvUtTileFusion
                              -rows 2
                              -out ${TEMP}/apTvUtTileFusion.png uint8
                      VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/Scene.png
+                             ${INPUTDATA}/scene.png
                            ${TEMP}/apTvUtTileFusion.png)
 
 
@@ -201,6 +201,20 @@ otb_test_application(NAME apTvUtQuicklookROI1Channel
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvUtQuicklookROI1Channel.tif
                              ${TEMP}/apTvUtQuicklookROI1Channel.tif
+                     )
+
+otb_test_application(NAME apTvUtQuicklookWithGCP
+                     APP Quicklook
+                     OPTIONS -in ${INPUTDATA}/spot5SubWithGcps.tif
+                             -out ${TEMP}/apTvUtQuicklookWithGCP.tif uint8
+                             -sr 4
+                             -rox 100
+                             -roy 100
+                             -rsx 200
+                             -rsy 200
+                     VALID   --compare-metadata ${NOTOL}
+                             ${BASELINE}/apTvUtQuicklookWithGCP.tif
+                             ${TEMP}/apTvUtQuicklookWithGCP.tif
                      )
 
 otb_test_application(NAME apTvUtQuicklookSpot5

@@ -25,6 +25,7 @@ otbSmoothingTestDriver.cxx
 otbMeanShiftSmoothingImageFilter.cxx
 otbMeanShiftSmoothingImageFilterSpatialStability.cxx
 otbMeanShiftSmoothingImageFilterThreading.cxx
+otbFastNLMeansImageFilter.cxx
 )
 
 add_executable(otbSmoothingTestDriver ${OTBSmoothingTests})
@@ -147,4 +148,11 @@ otb_add_test(NAME bfTvMeanShiftSmoothingImageFilterThreadingNonOpt COMMAND otbSm
   ${TEMP}/bfMeanShiftSmoothingImageFilterSingleThread.tif
   ${TEMP}/bfMeanShiftSmoothingImageFilterMultiThread.tif
   4 50 0
+  )
+
+otb_add_test(NAME fastNLMeansImageFilter COMMAND otbSmoothingTestDriver
+  otbFastNLMeansImageFilter
+  ${INPUTDATA}/GomaAvant.tif
+  ${TEMP}/GomaAvant_FastNLMeansFilter.tif
+  2 11 30
   )
