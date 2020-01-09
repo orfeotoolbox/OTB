@@ -66,6 +66,8 @@ set(OTBMetadata_SRC
   otbRadarsat2ImageMetadataInterface.cxx
 
   otbNoDataHelper.cxx
+  otbFilterFunctionValues.cxx
+  otbMetaDataKey.cxx
   )
 
 add_library(OTBMetadata ${OTBMetadata_SRC})

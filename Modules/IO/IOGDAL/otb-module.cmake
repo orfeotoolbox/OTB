@@ -32,6 +32,7 @@ ENABLE_SHARED
     OTBTinyXML
     OTBGDAL
     OTBBoostAdapters
+    OTBMetadata
     OTBOSSIMAdapters
 
   TEST_DEPENDS

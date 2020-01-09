@@ -37,6 +37,7 @@ ENABLE_SHARED
     OTBBoostAdapters
     OTBOSSIMAdapters
     OTBITK
+    OTBMetadata
 
     OPTIONAL_DEPENDS
     OTBMPIVrtWriter

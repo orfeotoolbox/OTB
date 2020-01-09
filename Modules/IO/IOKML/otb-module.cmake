@@ -29,6 +29,7 @@ otb_module(OTBIOKML
     OTBGDAL
     OTBCommon
     OTBOSSIMAdapters
+    OTBMetadata
     OTBITK
 
   TEST_DEPENDS
