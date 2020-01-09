@@ -1483,7 +1483,7 @@ std::vector<std::pair<std::string, std::string>> Application::GetOutputParameter
         {
           std::ostringstream oss;
           oss << std::setprecision(19);
-          oss << GetParameterDouble(*it);
+          oss << GetParameterDouble(key);
           keyVal.second = oss.str();
         }
         else
