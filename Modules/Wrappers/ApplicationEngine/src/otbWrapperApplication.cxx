@@ -1852,5 +1852,17 @@ bool Application::IsExecuteDone()
 {
   return m_ExecuteDone;
 }
+
+void Application::EnableInPrivateDo()
+{
+  m_IsInPrivateDo = true;
+
+}
+
+void Application::DisableInPrivateDo()
+{
+  m_IsInPrivateDo = false;
+}
+
 }
 }
