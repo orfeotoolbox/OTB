@@ -365,7 +365,7 @@ def render_deprecation_string(app):
         return ""
 
 def render_multiwriting_string(app):
-    if app.GetMultiWriting():
+    if app.IsMultiWritingEnabled():
         return ("This application has several output images and supports \"multi-writing\". Instead of computing and writing each "
           "image independently, the streamed image blocks are written in a synchronous way for each output. The output images will "
           "be computed strip by strip, using the available RAM to compute the strip size, and a user defined streaming mode can be specified "
