@@ -261,6 +261,8 @@ private:
     SetDocExampleParameterValue("io.outleft", "wv2_xs_left_epi_field.tif");
     SetDocExampleParameterValue("io.outright", "wv2_xs_right_epi_field.tif");
     SetDocExampleParameterValue("epi.elevation.default", "400");
+    
+    SetMultiWriting(true);
 
     SetOfficialDocLink();
   }

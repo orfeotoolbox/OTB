@@ -700,9 +700,8 @@ int Application::Execute()
   std::vector<std::string>         paramList = GetParametersKeys(true);
   int                              status    = 0;
   std::unordered_set<Application*> targetApps;
-  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+  for (auto const & key : paramList)
   {
-    std::string          key      = *it;
     Parameter*           param    = GetParameterByKey(key);
     InputImageParameter* imgParam = dynamic_cast<InputImageParameter*>(param);
 
@@ -735,9 +734,8 @@ int Application::Execute()
     // Call target Execute()
     status = status | app->Execute();
   }
-  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+  for (auto const & key : paramList)
   {
-    std::string          key      = *it;
     Parameter*           param    = GetParameterByKey(key);
     InputImageParameter* imgParam = dynamic_cast<InputImageParameter*>(param);
     if (imgParam)
@@ -808,9 +806,8 @@ int Application::Execute()
 
   bool UseSpecificSeed = false;
 
-  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+  for (auto const & key : paramList)
   {
-    std::string key = *it;
     if ((key.compare(0, 4, "rand") == 0) && HasValue("rand"))
     {
       UseSpecificSeed         = true;
@@ -834,14 +831,14 @@ int Application::Execute()
   m_ExecuteDone   = true;
 
   // Ensure that all output image parameter have called UpdateOutputInformation()
-  for (auto it = paramList.begin(); it != paramList.end(); ++it)
+  for (auto const & key : paramList)
   {
-    OutputImageParameter* outImgParamPtr = dynamic_cast<OutputImageParameter*>(GetParameterByKey(*it));
+    OutputImageParameter* outImgParamPtr = dynamic_cast<OutputImageParameter*>(GetParameterByKey(key));
     // If this is an OutputImageParameter
     if (outImgParamPtr != nullptr)
     {
       // If the parameter is enabled
-      if (IsParameterEnabled(*it))
+      if (IsParameterEnabled(key))
       {
         // Call UpdateOutputInformation()
         outImgParamPtr->GetValue()->UpdateOutputInformation();
@@ -859,10 +856,8 @@ void Application::WriteOutput()
   // writer if a RAMParameter is set
   bool         useRAM = false;
   unsigned int ram    = 0;
-  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+  for (auto const & key : paramList)
   {
-    std::string key = *it;
-
     if (GetParameterType(key) == ParameterType_RAM && IsParameterEnabled(key))
     {
       Parameter*    param    = GetParameterByKey(key);
@@ -874,10 +869,16 @@ void Application::WriteOutput()
       }
     }
   }
-
-  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+  
+  otb::MultiImageFileWriter::Pointer multiWriter;
+  if (m_MultiWriting)
+    {
+    multiWriter = otb::MultiImageFileWriter::New();
+    multiWriter->SetAutomaticStrippedStreaming(ram);
+    }
+  
+  for (auto const & key : paramList)
   {
-    std::string key = *it;
     if (GetParameterType(key) == ParameterType_OutputImage && IsParameterEnabled(key) && HasValue(key))
     {
       Parameter*            param       = GetParameterByKey(key);
@@ -894,11 +895,16 @@ void Application::WriteOutput()
         {
           outputParam->SetRAMValue(ram);
         }
-        outputParam->InitializeWriters();
+
+        outputParam->InitializeWriters(multiWriter);
         std::ostringstream progressId;
-        progressId << "Writing " << outputParam->GetFileName() << "...";
-        AddProcess(outputParam->GetWriter(), progressId.str());
-        outputParam->Write();
+        
+        if (!outputParam->IsMultiWritingEnabled())
+        {
+          progressId << "Writing " << outputParam->GetFileName() << "...";
+          AddProcess(outputParam->GetWriter(), progressId.str());
+          outputParam->Write();
+        }
       }
     }
     else if (GetParameterType(key) == ParameterType_OutputVectorData && IsParameterEnabled(key) && HasValue(key))
@@ -914,6 +920,14 @@ void Application::WriteOutput()
         outputParam->Write();
       }
     }
+  }
+  
+  if (multiWriter && multiWriter->GetNumberOfInputs() > 0)
+  {
+    std::ostringstream progressId;
+    progressId << "Writing " << multiWriter->GetNumberOfInputs() << " output images ...";
+    AddProcess(multiWriter, progressId.str());
+    multiWriter->Update();
   }
 }
 
@@ -1447,34 +1461,34 @@ std::vector<std::pair<std::string, std::string>> Application::GetOutputParameter
 {
   std::vector<std::pair<std::string, std::string>> res;
   std::vector<std::string> paramList = GetParametersKeys(true);
-  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+  for (auto const & key : paramList)
   {
-    Parameter*    param = GetParameterByKey(*it);
-    ParameterType type  = GetParameterType(*it);
+    Parameter*    param = GetParameterByKey(key);
+    ParameterType type  = GetParameterType(key);
 
     if (type != ParameterType_Group)
     {
-      if (param->GetRole() == Role_Output && IsParameterEnabled(*it))
+      if (param->GetRole() == Role_Output && IsParameterEnabled(key))
       {
         std::pair<std::string, std::string> keyVal;
-        keyVal.first = (*it);
+        keyVal.first = (key);
         if (type == ParameterType_Float)
         {
           std::ostringstream oss;
           oss << std::setprecision(10);
-          oss << GetParameterFloat(*it);
+          oss << GetParameterFloat(key);
           keyVal.second = oss.str();
         }
         else if (type == ParameterType_Double)
         {
           std::ostringstream oss;
           oss << std::setprecision(19);
-          oss << GetParameterDouble(*it);
+          oss << GetParameterDouble(key);
           keyVal.second = oss.str();
         }
         else
         {
-          keyVal.second = GetParameterAsString(*it);
+          keyVal.second = GetParameterAsString(key);
         }
         res.push_back(keyVal);
       }
@@ -1489,10 +1503,10 @@ bool Application::IsApplicationReady()
   bool ready = true;
 
   std::vector<std::string> paramList = GetParametersKeys(true);
-  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+  for (auto const & key : paramList)
   {
     // Check all parameters
-    if (IsParameterMissing(*it))
+    if (IsParameterMissing(key))
     {
       ready = false;
       break;
@@ -1810,9 +1824,8 @@ void Application::PropagateConnectMode(bool isMem)
   m_ExecuteDone                              = false;
   std::vector<std::string>         paramList = GetParametersKeys(true);
   std::unordered_set<Application*> targetApps;
-  for (std::vector<std::string>::const_iterator it = paramList.begin(); it != paramList.end(); ++it)
+  for (auto const & key : paramList)
   {
-    std::string          key      = *it;
     Parameter*           param    = GetParameterByKey(key);
     InputImageParameter* imgParam = dynamic_cast<InputImageParameter*>(param);
 
@@ -1852,5 +1865,11 @@ bool Application::IsExecuteDone()
 {
   return m_ExecuteDone;
 }
+
+bool Application::IsMultiWritingEnabled()
+{
+  return m_MultiWriting;
+}
+
 }
 }

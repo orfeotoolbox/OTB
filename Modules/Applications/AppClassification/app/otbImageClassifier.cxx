@@ -148,7 +148,10 @@ private:
                             "This is only implemented for the Shark Random Forest classifier at this point.");
     SetDefaultOutputPixelType("probamap", ImagePixelType_uint16);
     MandatoryOff("probamap");
+
     AddRAMParameter();
+
+    SetMultiWriting(true);
 
     AddParameter(ParameterType_Int, "nbclasses", "Number of classes in the model");
     SetDefaultParameterInt("nbclasses", 20);
