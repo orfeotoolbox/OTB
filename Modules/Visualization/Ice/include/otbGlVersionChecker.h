@@ -48,7 +48,7 @@ public:
    * std::runtime_error() is thrown when glGetError() is different
    * than GL_NO_ERROR.
    */
-  static const char * GLVersion() noexcept;
+  static const char * GLVersion();
 
   /**
    * \return The OpenGL Shading-Language version used at runtime. The
@@ -59,7 +59,7 @@ public:
    * 2.0. (@see
    * http://www.opengl.org/sdk/docs/man2/xhtml/glGetString.xml).
    */
-  static const char * GLSLVersion() noexcept;
+  static const char * GLSLVersion();
 
   /**
    * \brief Check that OpenGL required capabilities have been reached.
@@ -67,7 +67,7 @@ public:
    * \return true if OpengGL capabilities of running platform meets
    * the needs of the library.
    */
-  static bool CheckGLCapabilities() noexcept;
+  static bool CheckGLCapabilities();
 
   /**
    * \brief Check that OpenGL required capabilities have been reached.
@@ -82,7 +82,7 @@ public:
    * the needs of the library.
    */
   static bool CheckGLCapabilities( const char * & glVersion,
-                                   const char * & glslVersion ) noexcept;
+                                   const char * & glslVersion );
 
   /**
    * \brief Compares to version-strings on the model of strcmp().
@@ -98,7 +98,7 @@ public:
    * \return <code>-1</code> if version<required; <code>0</code> if
    * version==required; <code>+1</code> if version>=required.
    */
-  static int VerCmp( const char * version, const char * required ) noexcept;
+  static int VerCmp( const char * version, const char * required );
 
   /**
    * \brief Split version string into Major.minor.release triplet.

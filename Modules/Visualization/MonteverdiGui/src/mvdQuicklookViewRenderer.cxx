@@ -27,7 +27,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QGLWidget>
+#include <QOpenGLWidget>
 // #include <QtOpenGL>
 
 //

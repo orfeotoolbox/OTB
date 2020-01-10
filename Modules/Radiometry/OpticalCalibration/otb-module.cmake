@@ -33,7 +33,6 @@ ENABLE_SHARED
     OTBImageBase
     OTBImageManipulation
     OTBMetadata
-    OTBOSSIMAdapters
     OTBObjectList
 
   TEST_DEPENDS

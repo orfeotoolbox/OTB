@@ -143,7 +143,7 @@ otb_test_application(NAME apTvUtTileFusion
                              -rows 2
                              -out ${TEMP}/apTvUtTileFusion.png uint8
                      VALID   --compare-image ${NOTOL}
-                             ${INPUTDATA}/Scene.png
+                             ${INPUTDATA}/scene.png
                            ${TEMP}/apTvUtTileFusion.png)
 
 

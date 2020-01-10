@@ -39,7 +39,7 @@ Error
 
       oss << "OpenGL error #" << code << ": '" << gluErrorString( code ) << "'";
 
-      return std::move( oss.str() );
+      return oss.str();
     }()
   )
 {

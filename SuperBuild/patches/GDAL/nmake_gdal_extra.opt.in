@@ -1,4 +1,3 @@
-
 # Comment out the following to disable BSB support.
 BSB_SUPPORTED = 1
 
@@ -62,8 +61,8 @@ GEOS_LIB     = $(GEOS_DIR)\lib\geos.lib $(GEOS_DIR)\lib\geos_c.lib
 
 # Uncomment for OpenJpeg support
 OPENJPEG_ENABLED = YES
-OPENJPEG_VERSION = 20200
-OPENJPEG_CFLAGS = -I@SB_INSTALL_PREFIX_NATIVE@\include\openjpeg-2.2
+OPENJPEG_VERSION = 20300
+OPENJPEG_CFLAGS = -I@SB_INSTALL_PREFIX_NATIVE@\include\openjpeg-2.3
 OPENJPEG_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\openjp2.lib
 
 
