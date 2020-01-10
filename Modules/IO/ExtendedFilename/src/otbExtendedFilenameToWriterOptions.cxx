@@ -36,6 +36,9 @@ ExtendedFilenameToWriterOptions::ExtendedFilenameToWriterOptions() : ExtendedFil
   m_Options.writeGEOMFile.first  = false;
   m_Options.writeGEOMFile.second = true;
 
+  m_Options.multiWrite.first  = false;
+  m_Options.multiWrite.second = true;
+
   m_Options.writeRPCTags.first  = false;
   m_Options.writeRPCTags.second = false;
 
@@ -49,7 +52,7 @@ ExtendedFilenameToWriterOptions::ExtendedFilenameToWriterOptions() : ExtendedFil
   m_Options.bandRange.first  = false;
   m_Options.bandRange.second = "";
 
-  m_Options.optionList = {"writegeom", "writerpctags", "streaming:type", "streaming:sizemode", "streaming:sizevalue", "nodata", "box", "bands"};
+  m_Options.optionList = {"writegeom", "writerpctags", "multiwrite", "streaming:type", "streaming:sizemode", "streaming:sizevalue", "nodata", "box", "bands"};
 }
 
 void ExtendedFilenameToWriterOptions::SetExtendedFileName(const char* extFname)
@@ -131,6 +134,16 @@ void ExtendedFilenameToWriterOptions::SetExtendedFileName(const std::string& ext
         map["writerpctags"] == "True" || map["writerpctags"] == "1")
     {
       m_Options.writeRPCTags.second = true;
+    }
+  }
+
+  if (!map["multiwrite"].empty())
+  {
+    m_Options.multiWrite.first = true;
+    if (map["multiwrite"] == "Off" || map["multiwrite"] == "off" || map["multiwrite"] == "OFF" || map["multiwrite"] == "false" || map["multiwrite"] == "False" ||
+        map["multiwrite"] == "0")
+    {
+      m_Options.multiWrite.second = false;
     }
   }
 
@@ -250,6 +263,11 @@ bool ExtendedFilenameToWriterOptions::WriteRPCTagsIsSet() const
 bool ExtendedFilenameToWriterOptions::GetWriteGEOMFile() const
 {
   return m_Options.writeGEOMFile.second;
+}
+
+bool ExtendedFilenameToWriterOptions::GetMultiWrite() const
+{
+  return m_Options.multiWrite.second;
 }
 
 bool ExtendedFilenameToWriterOptions::GetWriteRPCTags() const

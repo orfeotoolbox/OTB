@@ -367,6 +367,8 @@ public:
   void AddDocTag( const std::string & tag );
   std::vector<std::string> GetDocTags();
 
+  bool GetMultiWriting();
+
   otb::Wrapper::ParameterGroup* GetParameterList();
 
   unsigned int GetNumberOfExamples();
