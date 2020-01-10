@@ -253,6 +253,8 @@ private:
     SetDefaultParameterInt("inverse.ssrate", 16);
     SetMinimumParameterIntValue("inverse.ssrate", 1);
 
+    AddRAMParameter();
+
     // Doc example
     SetDocExampleParameterValue("io.inleft", "wv2_xs_left.tif");
     SetDocExampleParameterValue("io.inright", "wv2_xs_left.tif");
