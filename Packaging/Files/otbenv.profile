@@ -59,9 +59,6 @@ GDAL_DATA=OUT_DIR/share/gdal
 
 export GDAL_DRIVER_PATH=disable
 
-# set GEOTIFF_CSV variable used by otb application
-GEOTIFF_CSV=OUT_DIR/share/epsg_csv
-
 # export variables
 export LC_NUMERIC
 export GDAL_DATA
