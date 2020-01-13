@@ -39,7 +39,6 @@ if(WIN32)
   set(ENV{PATH} "${XDK_PATH_NATIVE}\\bin;$ENV{PATH}" )
   set(ENV{PATH} "$ENV{PATH};${XDK_PATH_NATIVE}\\lib" )
   set(ENV{GDAL_DATA} "${XDK_PATH_NATIVE}\\data" )
-  set(ENV{GEOTIFF_CSV} "${XDK_PATH_NATIVE}\\share\\epsg_csv" )
   set(ENV{PROJ_LIB} "${XDK_PATH_NATIVE}\\share" )
   # needed to load Qt plugins for testing, not for binary packages where we use a qt.conf file
   set(ENV{QT_PLUGIN_PATH} "${XDK_PATH_NATIVE}\\plugins")
@@ -52,7 +51,6 @@ PROJ_LIB=$ENV{PROJ_LIB}
 else()
   set(ENV{PATH} "${XDK_PATH}/lib:${XDK_PATH}/bin:$ENV{PATH}" )
   set( GDAL_DATA "${XDK_PATH}/share/gdal" )
-  set( GEOTIFF_CSV "${XDK_PATH}/share/epsg_csv" )
   set( PROJ_LIB "${XDK_PATH}/share" )
   set( CTEST_ENVIRONMENT
 "PATH=$ENV{PATH}
