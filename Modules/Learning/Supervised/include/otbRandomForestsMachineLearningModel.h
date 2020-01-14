@@ -132,9 +132,6 @@ protected:
   /** Constructor */
   RandomForestsMachineLearningModel();
 
-  /** Destructor */
-  ~RandomForestsMachineLearningModel() override;
-
   /** Predict values using the model */
   TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
 
@@ -151,11 +148,7 @@ private:
   RandomForestsMachineLearningModel(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-#ifdef OTB_OPENCV_3
   cv::Ptr<CvRTreesWrapper> m_RFModel;
-#else
-  CvRTreesWrapper* m_RFModel;
-#endif
   /** The depth of the tree. A low value will likely underfit and conversely a
    * high value will likely overfit. The optimal value can be obtained using cross
    * validation or other suitable methods. */

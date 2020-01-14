@@ -26,11 +26,7 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 
-#ifdef OTB_OPENCV_3
 #include "otbOpenCVUtils.h"
-#else
-class CvSVM;
-#endif
 
 namespace otb
 {
@@ -136,9 +132,6 @@ protected:
   /** Constructor */
   SVMMachineLearningModel();
 
-  /** Destructor */
-  ~SVMMachineLearningModel() override;
-
   /** Predict values using the model */
   TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
 
@@ -148,11 +141,7 @@ protected:
 private:
   SVMMachineLearningModel(const Self&) = delete;
   void operator=(const Self&) = delete;
-#ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::SVM> m_SVMModel;
-#else
-  CvSVM* m_SVMModel;
-#endif
   int    m_SVMType;
   int    m_KernelType;
   double m_Degree;
