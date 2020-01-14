@@ -27,7 +27,7 @@
 //
 // Qt includes (sorted by alphabetic order)
 //// Must be included before system/custom includes.
-#include <QGLWidget>
+#include <QOpenGLWidget>
 // #include <QtOpenGL>
 
 //
@@ -147,7 +147,12 @@ void QuicklookViewRenderer::virtual_FinishScene()
   return;
 #endif
 
-  std::string key(m_GlView->AddActor(m_GlRoiActor, "ROI"));
+  if( IsGLSLEnabled() )
+    {
+    m_GlRoiActor->CreateShader();
+    }
+
+  std::string key( m_GlView->AddActor( m_GlRoiActor, "ROI" ) );
 
   m_GlRoiActor->SetVisible(true);
   m_GlRoiActor->SetOverlay(true);

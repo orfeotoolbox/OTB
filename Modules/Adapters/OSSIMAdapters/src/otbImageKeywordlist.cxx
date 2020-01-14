@@ -32,6 +32,10 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Waddress"
+#if defined(__GNUC__) && (__GNUC__ > 5)
+#pragma GCC diagnostic ignored "-Wnonnull-compare"
+#endif
 #include "ossim/base/ossimKeywordlist.h"
 #include "ossim/base/ossimString.h"
 #include "ossim/ossimPluginProjectionFactory.h"

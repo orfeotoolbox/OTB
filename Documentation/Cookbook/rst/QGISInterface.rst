@@ -8,12 +8,12 @@ With QGIS < 3.8 you will need to manually install the plugin.
 You can follow the instruction here: https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin#otb-provider-for-qgis-processing
 
 
-With QGIS > 3.8, the plugin is in the QGIS core. So you just need install OTB and set the plugin up.
+With QGIS > 3.8, the plugin is already in the QGIS core. So you just need to install OTB and activate the plugin: https://www.orfeo-toolbox.org/CookBook/QGISInterface.html#open-processing-settings
 
 Download and Install OTB
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-OTB is not distributed with qgis-otb-plugin. It is a seperate project and has its own git repository.
+OTB is not distributed with qgis-otb-plugin. It is a separate project and has its own git repository.
 Download latest OTB version: https://www.orfeo-toolbox.org/download/.
 
 Configure plugin in QGIS

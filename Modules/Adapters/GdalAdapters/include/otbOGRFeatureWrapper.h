@@ -247,6 +247,11 @@ public:
    * \sa \c OGRFeature::GetFieldDefnRef()
    */
   FieldDefn GetFieldDefn(std::string const& name) const;
+  /** Searches the index of a field given a name.
+   * \invariant <tt>m_Feature != 0</tt>
+   * \throw itk::ExceptionObject if no field named \c name exists.
+   */
+  int GetFieldIndex(std::string const& name) const;
   //@}
 
   /**\name Geometries
@@ -350,12 +355,6 @@ private:
   OGRGeometry const* UncheckedGetGeometry() const;
   void UncheckedSetGeometry(OGRGeometry const* geometry);
   //@}
-
-  /** Searches the index of a field given a name.
-   * \invariant <tt>m_Feature != 0</tt>
-   * \throw itk::ExceptionObject if no field named \c name exists.
-   */
-  int GetFieldIndex(std::string const& name) const;
 
   /**
    * Checks whether the internal \c OGRFeature is non null.

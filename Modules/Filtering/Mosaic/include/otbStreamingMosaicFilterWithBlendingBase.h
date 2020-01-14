@@ -38,7 +38,7 @@ namespace otb
  * Two parameters can be set:
  * -Distance image interpolator: explicit
  * -Distance image offset: this value is added to the interpolated distance image
- *                         value, which allows to create a margin around the edges
+ *                         value, which allows creating a margin around the edges
  *                         of the image (i.e. around the 0-value distance image contour)
  *
  * Support streaming
@@ -100,11 +100,11 @@ protected:
   }
 
   /* Overrided methods */
-  virtual void AddUsedInputImageIndex(unsigned int inputImageIndex);
+  void AddUsedInputImageIndex(unsigned int inputImageIndex) override;
 
-  virtual unsigned int GetNumberOfInputImages();
+  unsigned int GetNumberOfInputImages() override;
 
-  virtual unsigned int GetUsedInputImageIndice(unsigned int i)
+  unsigned int GetUsedInputImageIndice(unsigned int i) override
   {
     return 0.5 * Superclass::GetUsedInputImageIndice(i);
   }

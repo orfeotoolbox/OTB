@@ -78,6 +78,7 @@ namespace Wrapper
   {
     ParameterType_Int,
     ParameterType_Float,
+    ParameterType_Double,
     ParameterType_String,
     ParameterType_StringList,
     ParameterType_InputFilename,
@@ -217,6 +218,10 @@ public:
     self.UpdateParameters()
 %}
 
+%pythonappend Application::SetParameterDouble %{
+    self.UpdateParameters()
+%}
+
 %pythonappend Application::SetParameterString %{
     self.UpdateParameters()
 %}
@@ -307,6 +312,7 @@ public:
 
   void SetParameterInt(std::string parameter, int value, bool hasUserValueFlag = true);
   void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag = true);
+  void SetParameterDouble(std::string parameter, double value, bool hasUserValueFlag = true);
   void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag = true);
   void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag = true);
 
@@ -316,6 +322,7 @@ public:
 
   int GetParameterInt(std::string parameter);
   float GetParameterFloat(std::string parameter);
+  double GetParameterDouble(std::string parameter);
   std::string GetParameterString(std::string parameter);
   std::vector<std::string> GetParameterStringList(std::string parameter);
   std::string GetParameterAsString(std::string paramKey);
@@ -625,6 +632,7 @@ class ApplicationProxy(object):
         ParameterType_Int : 'ParameterType_Int',
         ParameterType_Radius : 'ParameterType_Radius',
         ParameterType_RAM : 'ParameterType_RAM',
+        ParameterType_Double : 'ParameterType_Double',
         ParameterType_Float : 'ParameterType_Float',
         ParameterType_Choice : 'ParameterType_Choice',
         ParameterType_Group : 'ParameterType_Group',
@@ -658,6 +666,8 @@ class ApplicationProxy(object):
         return self.SetParameterInt(paramKey, value)
       elif paramType in [ParameterType_Float]:
         return self.SetParameterFloat(paramKey, value)
+      elif paramType in [ParameterType_Double]:
+        return self.SetParameterDouble(paramKey, value)
       elif paramType in [ParameterType_Bool]:
         return self.SetParameterString(paramKey, str(value) )
       elif paramType in [ParameterType_Group]:
@@ -692,6 +702,8 @@ class ApplicationProxy(object):
         return self.GetParameterInt(paramKey)
       elif paramType in [ParameterType_Float]:
         return self.GetParameterFloat(paramKey)
+      elif paramType in [ParameterType_Double]:
+        return self.GetParameterDouble(paramKey)
       elif paramType in [ParameterType_Bool]:
         return bool(self.GetParameterInt(paramKey))
       elif paramType in [ParameterType_Group, ParameterType_Choice]:

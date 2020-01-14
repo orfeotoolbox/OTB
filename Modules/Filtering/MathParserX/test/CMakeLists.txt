@@ -38,6 +38,8 @@ otb_add_test(NAME bfTvBandMathXImageFilterConv COMMAND otbMathParserXTestDriver
   )
 otb_add_test(NAME bfTvBandMathXImageFilter COMMAND otbMathParserXTestDriver
   otbBandMathXImageFilter)
+otb_add_test(NAME bfTvBandMathXImageFilterBandsFailures COMMAND otbMathParserXTestDriver
+  otbBandMathXImageFilterBandsFailures)
 otb_add_test(NAME bfTvBandMathXImageFilterWithIdx COMMAND otbMathParserXTestDriver
   otbBandMathXImageFilterWithIdx
   ${TEMP}/bfTvBandMathImageFilterWithIdx1.tif

@@ -102,7 +102,7 @@ public:
 
 protected:
   /** The input requested region should be padded by a radius of 1 to use the
-   * neigbourhood iterator */
+   * neighbourhood iterator */
   void GenerateInputRequestedRegion() override;
 
   /** Threaded Generate Data : find the neighbours of each segments of size
@@ -136,7 +136,7 @@ private:
   /** Map containing at key i the mean of element of the segment labelled i */
   LabelStatisticType m_LabelStatistic;
 
-  /** Neigbours maps for each thread */
+  /** Neighbours maps for each thread */
   std::vector<NeigboursMapType> m_NeighboursMapsTmp;
 
   /** LUT giving correspondance between labels in the original segmentation

@@ -219,6 +219,7 @@ public:
    * \li ParameterType_Int
    * \li ParameterType_Bool
    * \li ParameterType_Float
+   * \li ParameterType_Double
    * \li ParameterType_Radius
    * \li ParameterType_Choice
    */
@@ -228,8 +229,17 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_Float
+   * \li ParameterType_Double
    */
   void SetParameterFloat(std::string const& parameter, float value, bool hasUserValueFlag = true);
+
+  /* Set a double precision floating value
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   * \li ParameterType_Double
+   */
+  void SetParameterDouble(std::string const& parameter, double value, bool hasUserValueFlag = true);
 
   /* Set a string value
    *
@@ -253,6 +263,7 @@ public:
    * \li ParameterType_Directory
    * \li ParameterType_Choice
    * \li ParameterType_Float
+   * \li ParameterType_Double
    * \li ParameterType_Int
    * \li ParameterType_Radius
    * \li ParameterType_InputImageParameter
@@ -285,6 +296,7 @@ public:
    * Can be called for types :
    * \li ParameterType_Int
    * \li ParameterType_Float
+   * \li ParameterType_Double
    * \li ParameterType_Radius
    * \li ParameterType_Choice
    */
@@ -295,6 +307,7 @@ public:
    * Can be called for types :
    * \li ParameterType_Int
    * \li ParameterType_Float
+   * \li ParameterType_Double
    * \li ParameterType_Radius
    * \li ParameterType_Choice
    */
@@ -306,6 +319,7 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_Float
+   * \li ParameterType_Double
    */
   void SetDefaultParameterFloat(std::string const& parameter, float value);
 
@@ -313,8 +327,27 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_Float
+   * \li ParameterType_Double
    */
   float GetDefaultParameterFloat(std::string const& parameter);
+
+  /* Set a default double precision floating value, must be used in the
+   * DoInit when setting a value by default
+   * for the parameter
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   * \li ParameterType_Double
+   */
+  void SetDefaultParameterDouble(std::string const& parameter, double value);
+
+  /* Get the default double precision floating value of a parameter
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   * \li ParameterType_Double
+   */
+  double GetDefaultParameterDouble(std::string const& parameter);
 
   /** Set a default pixel type for an output image parameter
    *
@@ -348,7 +381,7 @@ public:
    */
   void SetMaximumParameterIntValue(std::string const& parameter, int value);
 
-  /* Set a minimum int value, must used in the
+  /* Set a minimum float value, must used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -357,7 +390,7 @@ public:
    */
   void SetMinimumParameterFloatValue(std::string const& parameter, float value);
 
-  /* Set a maximum int value, must used in the
+  /* Set a maximum float value, must used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -365,6 +398,26 @@ public:
    * \li ParameterType_Float
    */
   void SetMaximumParameterFloatValue(std::string const& parameter, float value);
+
+  /* Set a minimum double precision float value, must used in the
+   * DoInit when setting a value by default
+   * for the parameter
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   * \li ParameterType_Double
+   */
+  void SetMinimumParameterDoubleValue(std::string const& parameter, double value);
+
+  /* Set a maximum double precision value, must used in the
+   * DoInit when setting a value by default
+   * for the parameter
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   * \li ParameterType_Double
+   */
+  void SetMaximumParameterDoubleValue(std::string const& parameter, double value);
 
 
   /**
@@ -411,6 +464,7 @@ public:
    * \li ParameterType_Int
    * \li ParameterType_Bool
    * \li ParameterType_Float
+   * \li ParameterType_Double
    * \li ParameterType_Radius
    * \li ParameterType_Choice
    */
@@ -420,8 +474,17 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_Float
+   * \li ParameterType_Double
    */
   float GetParameterFloat(std::string const& parameter) const;
+
+  /* Get a double precision floating parameter value
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   * \li ParameterType_Double
+   */
+  double GetParameterDouble(std::string const& parameter) const;
 
   /* Get a string parameter value
    *
@@ -609,6 +672,7 @@ public:
     *
     * Can be called for types :
     * \li ParameterType_Float
+    * \li ParameterType_Double
     * \li ParameterType_Int
     * \li ParameterType_Choice
     * \li ParameterType_Radius
@@ -696,16 +760,16 @@ public:
    * to select the image in an InputImageList. */
   ImageBaseType::PointType GetImageOrigin(const std::string& key, unsigned int idx = 0);
 
-  /** Get the spacing of the image parameter 'key'. The optional 'idx' allows to
-   *  select the image in an InputImageList. We use the signed spacing convention. */
+  /** Get the spacing of the image parameter 'key'. The optional 'idx' allows
+   *  selecting the image in an InputImageList. We use the signed spacing convention. */
   ImageBaseType::SpacingType GetImageSpacing(const std::string& key, unsigned int idx = 0);
 
-  /** Get the size of the image parameter 'key'. The optional 'idx' allows to
-   * select the image in an InputImageList. It corresponds to the size of LargestPossibleRegion*/
+  /** Get the size of the image parameter 'key'. The optional 'idx' allows
+   * selecting the image in an InputImageList. It corresponds to the size of LargestPossibleRegion*/
   ImageBaseType::SizeType GetImageSize(const std::string& key, unsigned int idx = 0);
 
   /** Get the number of bands in the image parameter 'key'. The optional 'idx'
-   * allows to select the image in an InputImageList.*/
+   * allows selecting the image in an InputImageList.*/
   unsigned int GetImageNbBands(const std::string& key, unsigned int idx = 0);
 
   /** Get the projection of the image parameter 'key'. The optional 'idx' allows
@@ -713,18 +777,18 @@ public:
   std::string GetImageProjection(const std::string& key, unsigned int idx = 0);
 
   /** Get the keywordlist of the image parameter 'key'. The optional 'idx'
-   * allows to select the image in an InputImageList.*/
+   * allows selecting the image in an InputImageList.*/
   otb::ImageKeywordlist GetImageKeywordlist(const std::string& key, unsigned int idx = 0);
 
   /** Set the requested region on the image parameter 'key' and propagate it.
    *  The returned value is an estimate of the RAM usage (in Bytes) to process
    *  this region. It should be assumed that the index of the largest possible
-   *  region starts at (0,0). The optional 'idx' allows to select the image in
+   *  region starts at (0,0). The optional 'idx' allows selecting the image in
    *  an InputImageList*/
   unsigned long PropagateRequestedRegion(const std::string& key, ImageBaseType::RegionType region, unsigned int idx = 0);
 
   /** Get the requested region of the image parameter 'key'. The optional 'idx'
-   * allows to select the image in an InputImageList. It should be assumed that
+   * allows selecting the image in an InputImageList. It should be assumed that
    * the index of the largest possible region starts at (0,0).*/
   ImageBaseType::RegionType GetImageRequestedRegion(const std::string& key, unsigned int idx = 0);
 
@@ -733,12 +797,12 @@ public:
 
   /** Find out what is the pixel type from an image parameter
    *  This function assumes that the underlying object is either an otb::Image
-   *  or an otb::VectorImage. The optional 'idx' allows to access InputImageList.
+   *  or an otb::VectorImage. The optional 'idx' allows accessing InputImageList.
    */
   ImagePixelType GetImageBasePixelType(const std::string& key, unsigned int idx = 0);
 
   /** Return the image from parameter 'key' as a base type. The optional 'idx'
-   *  allows to access InputImageList.
+   *  allows accessing InputImageList.
    *
    *  Works on parameters:
    *  \li ParameterType_InputImage
@@ -748,7 +812,7 @@ public:
   ImageBaseType* GetParameterImageBase(const std::string& key, unsigned int idx = 0);
 
   /** Set the image in parameter 'key' as a base type. The optional 'idx'
-   *  allows to access InputImageList.
+   *  allows accessing InputImageList.
    *
    *  Works on parameters:
    *  \li ParameterType_InputImage

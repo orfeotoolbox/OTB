@@ -124,7 +124,7 @@ public:
   /** Get the numbero of drections for line detection. */
   itkGetConstReferenceMacro(NumberOfDirections, unsigned int);
 
-  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
 protected:
   LineDetectorImageFilterBase();

@@ -55,7 +55,8 @@ IceViewer::IceViewer()
     m_DisplayHud(true),
     m_DisplayHelp(false),
     m_ColorMap(),
-    m_ColorMapIterator()
+    m_ColorMapIterator(),
+    m_UseGLSL(false)
 {
   // Fill color map
   // Sources for some colors value: http://prideout.net/archive/colors.php"
@@ -91,10 +92,7 @@ void IceViewer::AddImage(const std::string& fname, const std::string& key, const
 
   otb::GlImageActor::Pointer actor = otb::GlImageActor::New();
 
-  const char* glVersion   = nullptr;
-  const char* glslVersion = nullptr;
-
-  if (GlVersionChecker::CheckGLCapabilities(glVersion, glslVersion))
+  if( m_UseGLSL)
     actor->CreateShader();
 
   actor->Initialize(fname);
@@ -171,7 +169,9 @@ void IceViewer::AddVector(const std::string& fname, const std::string& key, cons
     m_ColorMapIterator = m_ColorMap.begin();
   }
 
-  m_View->AddActor(actor, key);
+  actor->CreateShader();
+
+  m_View->AddActor(actor,key);
 
   // Add other layers if the dataset contains some
   std::vector<std::string> layers = actor->GetAvailableLayers();
@@ -253,7 +253,11 @@ void IceViewer::Initialize(unsigned int w, unsigned int h, const std::string& na
 
   // Create view
   m_View = GlView::New();
-  m_View->Initialize(w, h);
+  m_View->Initialize(w,h);
+  
+  const char * glVersion = nullptr;
+  const char * glslVersion = nullptr;
+  m_UseGLSL = m_View->CheckGLCapabilities(glVersion, glslVersion);
 }
 
 void IceViewer::Refresh()
@@ -1197,12 +1201,15 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
       roiActor->SetFill(true);
       roiActor->SetAlpha(0.2);
 
-      m_View->AddActor(roiActor, tmpKey);
-      m_View->MoveActorToEndOfRenderingOrder(tmpKey, true);
-    }
-
-    else if (action == GLFW_RELEASE)
-    {
+      if (m_UseGLSL)
+        roiActor->CreateShader();
+       
+      m_View->AddActor(roiActor,tmpKey);
+      m_View->MoveActorToEndOfRenderingOrder(tmpKey,true);
+      }
+     
+    else if(action == GLFW_RELEASE)
+      {
       m_View->RemoveActor(tmpKey);
     }
   }

@@ -35,8 +35,8 @@
 namespace otb
 {
 
-const char * GlVersionChecker::REQUIRED_GL_VERSION = "2.0.0";
-const char * GlVersionChecker::REQUIRED_GLSL_VERSION = "1.20";
+const char * GlVersionChecker::REQUIRED_GL_VERSION = "3.0.0";
+const char * GlVersionChecker::REQUIRED_GLSL_VERSION = "1.30";
 
 const char *
 GlVersionChecker
@@ -82,6 +82,17 @@ GlVersionChecker
 
 bool
 GlVersionChecker
+::CheckGLCapabilities()
+{
+  char const * glVersion = nullptr;
+  char const * glslVersion = nullptr;
+
+  return GlVersionChecker::CheckGLCapabilities( glVersion, glslVersion );
+}
+
+
+bool
+GlVersionChecker
 ::CheckGLCapabilities( const char * & glVersion, const char * & glslVersion )
 {
   // Get OpenGL version.
@@ -114,7 +125,7 @@ GlVersionChecker
 ::SplitVersion( const char * version,
                 int& major,
                 int& minor,
-                int& release )
+                int& release ) noexcept
 {
   //
   // Special case: empty strings returns 0.0.0 and true.
@@ -231,4 +242,3 @@ GlVersionChecker
 
 
 } // End namespace otb
-

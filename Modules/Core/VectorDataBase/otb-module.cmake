@@ -28,7 +28,7 @@ ENABLE_SHARED
     OTBGDAL
     OTBITK
     OTBImageBase
-    OTBOSSIMAdapters
+    OTBMetadata
     OTBObjectList
 
   TEST_DEPENDS

@@ -179,7 +179,7 @@ struct RetrieveOperator
 *
 * Provides the following:
 * - OutputImageType : type of the output image
-* - FilterType : correct instanciation of VariadicInputsImageFilter from
+* - FilterType : correct instantiation of VariadicInputsImageFilter from
 * - the operator() prototype
 * - InputHasNeighborhood a tuple of N false_type or true_type to denote
 * - if Ith arg of operator() expects a neighborhood.
@@ -440,10 +440,10 @@ auto NewFunctorFilter(Functor f, itk::Size<2> radius)
 
 /**
  * \struct NumberOfOutputBandsDecorator
- * \brief This struct allows to forward the operator of template
+ * \brief This struct allows forwarding the operator of template
  *        parameter, while adding number of ouptut components service.
  *
- * Its purpose is to enable the use of lambda or functor witht
+ * Its purpose is to enable the use of lambda or functor with
  * Outputsize() method with FunctorImageFilter.
  *
  * It is used internally in NewFunctorFilter version with

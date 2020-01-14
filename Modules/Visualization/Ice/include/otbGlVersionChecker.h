@@ -64,6 +64,14 @@ public:
   /**
    * \brief Check that OpenGL required capabilities have been reached.
    *
+   * \return true if OpengGL capabilities of running platform meets
+   * the needs of the library.
+   */
+  static bool CheckGLCapabilities();
+
+  /**
+   * \brief Check that OpenGL required capabilities have been reached.
+   *
    * \param glVersion The returned OpenGL version or <code>NULL</code>
    * if its query has failed.
    *
@@ -92,13 +100,6 @@ public:
    */
   static int VerCmp( const char * version, const char * required );
 
-private:
-  // Prevent instantiation
-  GlVersionChecker();
-  ~GlVersionChecker();
-  GlVersionChecker(const GlVersionChecker&);
-  void operator=(const GlVersionChecker&);
-
   /**
    * \brief Split version string into Major.minor.release triplet.
    *
@@ -114,7 +115,14 @@ private:
   static bool SplitVersion( const char * version,
                             int& major,
                             int& minor,
-                            int& release );
+                            int& release ) noexcept;
+
+private:
+  // Prevent instantiation
+  GlVersionChecker() = delete;
+  ~GlVersionChecker() = delete;
+  GlVersionChecker( const GlVersionChecker & ) = delete;
+  void operator = ( const GlVersionChecker & ) = delete;
 };
 
 } // End namespace otb
