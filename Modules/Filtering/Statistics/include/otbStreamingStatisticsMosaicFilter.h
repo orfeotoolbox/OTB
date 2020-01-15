@@ -96,13 +96,13 @@ public:
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
   /** Overrided methods */
-  virtual void AllocateOutputs();
-  virtual void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId);
-  virtual void Reset();
-  virtual void Synthetize();
+  void AllocateOutputs() override;
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+  void Reset() override;
+  void Synthetize() override;
 
   /** Make a DataObject of the correct type to be used as the specified output. */
-  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) ITK_OVERRIDE;
+  DataObjectPointer MakeOutput(DataObjectPointerArraySizeType idx) override;
   using Superclass::MakeOutput;
 
   /** Return the computed Mean. */
@@ -432,7 +432,7 @@ protected:
   /** Constructor */
   StreamingStatisticsMosaicFilter(){};
   /** Destructor */
-  ~StreamingStatisticsMosaicFilter() ITK_OVERRIDE
+  ~StreamingStatisticsMosaicFilter() override
   {
   }
 

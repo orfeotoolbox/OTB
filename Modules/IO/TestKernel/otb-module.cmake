@@ -33,6 +33,7 @@ otb_module(OTBTestKernel
     OTBImageBase
     OTBCommon
     OTBGDAL
+    OTBMetadata
     OTBOSSIMAdapters
     OTBImageManipulation
 

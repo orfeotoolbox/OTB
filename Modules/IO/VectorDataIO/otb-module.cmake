@@ -29,6 +29,7 @@ otb_module(OTBVectorDataIO
     OTBITK
     OTBVectorDataManipulation
     OTBCommon
+    OTBMetadata
 
   OPTIONAL_DEPENDS
     OTBIOKML
