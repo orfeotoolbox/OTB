@@ -35,11 +35,7 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitDecisionTreeParams(
   SetParameterDescription("classifier.dt", "http://docs.opencv.org/modules/ml/doc/decision_trees.html");
   // MaxDepth
   AddParameter(ParameterType_Int, "classifier.dt.max", "Maximum depth of the tree");
-#ifdef OTB_OPENCV_3
   SetParameterInt("classifier.dt.max", 10);
-#else
-  SetParameterInt("classifier.dt.max", 65535);
-#endif
   SetParameterDescription("classifier.dt.max",
                           "The training algorithm attempts to split each node while its depth is smaller "
                           "than the maximum possible depth of the tree. The actual depth may be smaller "
@@ -73,7 +69,7 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitDecisionTreeParams(
                           "suboptimal split.");
 
 
-// CVFolds: only exposed for OPENCV 2 because it crashes in OpenCV 3
+// TODO: CVFolds: only exposed for OPENCV 2 because it crashes in OpenCV 3
 #ifndef OTB_OPENCV_3
   AddParameter(ParameterType_Int, "classifier.dt.f", "K-fold cross-validations");
   SetParameterInt("classifier.dt.f", 10);
@@ -109,7 +105,7 @@ void LearningApplicationBase<TInputValue, TOutputValue>::TrainDecisionTree(typen
   classifier->SetMinSampleCount(GetParameterInt("classifier.dt.min"));
   classifier->SetRegressionAccuracy(GetParameterFloat("classifier.dt.ra"));
   classifier->SetMaxCategories(GetParameterInt("classifier.dt.cat"));
-// CVFolds is only exposed for OPENCV 2 because it crashes in OpenCV 3
+// TODO: CVFolds is only exposed for OPENCV 2 because it crashes in OpenCV 3
 #ifndef OTB_OPENCV_3
   classifier->SetCVFolds(GetParameterInt("classifier.dt.f"));
 #endif

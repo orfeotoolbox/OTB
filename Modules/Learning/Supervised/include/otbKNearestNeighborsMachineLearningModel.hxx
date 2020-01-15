@@ -35,11 +35,7 @@ namespace otb
 template <class TInputValue, class TTargetValue>
 KNearestNeighborsMachineLearningModel<TInputValue, TTargetValue>::KNearestNeighborsMachineLearningModel()
   :
-#ifdef OTB_OPENCV_3
     m_KNearestModel(cv::ml::KNearest::create()),
-#else
-    m_KNearestModel(new CvKNearest),
-#endif
     m_K(32),
     m_DecisionRule(KNN_VOTING)
 {
@@ -47,14 +43,6 @@ KNearestNeighborsMachineLearningModel<TInputValue, TTargetValue>::KNearestNeighb
   this->m_IsRegressionSupported = true;
 }
 
-
-template <class TInputValue, class TTargetValue>
-KNearestNeighborsMachineLearningModel<TInputValue, TTargetValue>::~KNearestNeighborsMachineLearningModel()
-{
-#ifndef OTB_OPENCV_3
-  delete m_KNearestModel;
-#endif
-}
 
 /** Train the machine learning model */
 template <class TInputValue, class TTargetValue>
@@ -83,17 +71,12 @@ void KNearestNeighborsMachineLearningModel<TInputValue, TTargetValue>::Train()
     }
   }
 
-#ifdef OTB_OPENCV_3
   m_KNearestModel->setDefaultK(m_K);
   // would be nice to expose KDTree mode ( maybe in a different classifier)
   m_KNearestModel->setAlgorithmType(cv::ml::KNearest::BRUTE_FORCE);
   m_KNearestModel->setIsClassifier(!this->m_RegressionMode);
   // setEmax() ?
   m_KNearestModel->train(cv::ml::TrainData::create(samples, cv::ml::ROW_SAMPLE, labels));
-#else
-  // train the KNN model
-  m_KNearestModel->train(samples, labels, cv::Mat(), this->m_RegressionMode, m_K, false);
-#endif
 }
 
 template <class TInputValue, class TTargetValue>
@@ -109,11 +92,7 @@ KNearestNeighborsMachineLearningModel<TInputValue, TTargetValue>::DoPredict(cons
 
   float   result;
   cv::Mat nearest(1, m_K, CV_32FC1);
-#ifdef OTB_OPENCV_3
   result = m_KNearestModel->findNearest(sample, m_K, cv::noArray(), nearest, cv::noArray());
-#else
-  result = m_KNearestModel->find_nearest(sample, m_K, nullptr, nullptr, &nearest, nullptr);
-#endif
   // compute quality if asked (only happens in classification mode)
   if (quality != nullptr)
   {
@@ -157,47 +136,12 @@ KNearestNeighborsMachineLearningModel<TInputValue, TTargetValue>::DoPredict(cons
 template <class TInputValue, class TTargetValue>
 void KNearestNeighborsMachineLearningModel<TInputValue, TTargetValue>::Save(const std::string& filename, const std::string& name)
 {
-#ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::WRITE);
   fs << (name.empty() ? m_KNearestModel->getDefaultName() : cv::String(name)) << "{";
   m_KNearestModel->write(fs);
   fs << "DecisionRule" << m_DecisionRule;
   fs << "}";
   fs.release();
-#else
-  (void)name;
-  // there is no m_KNearestModel->save(filename.c_str(), name.c_str()).
-  // We need to save the K parameter, IsRegression flag, DecisionRule and the samples.
-
-  std::ofstream ofs(filename);
-  // Save K parameter and IsRegression flag.
-  ofs << "K=" << m_K << "\n";
-  ofs << "IsRegression=" << this->m_RegressionMode << "\n";
-  // Save the DecisionRule if regression
-  if (this->m_RegressionMode)
-  {
-    ofs << "DecisionRule=" << m_DecisionRule << "\n";
-  }
-
-  // Save the samples. First column is the Label and other columns are the sample data.
-  typename InputListSampleType::ConstIterator  sampleIt   = this->GetInputListSample()->Begin();
-  typename TargetListSampleType::ConstIterator labelIt    = this->GetTargetListSample()->Begin();
-  const unsigned int                           sampleSize = this->GetInputListSample()->GetMeasurementVectorSize();
-  for (; sampleIt != this->GetInputListSample()->End(); ++sampleIt, ++labelIt)
-  {
-    // Retrieve sample
-    typename InputListSampleType::MeasurementVectorType sample = sampleIt.GetMeasurementVector();
-    ofs << labelIt.GetMeasurementVector()[0];
-
-    // Loop on sample size
-    for (unsigned int i = 0; i < sampleSize; ++i)
-    {
-      ofs << " " << sample[i];
-    }
-    ofs << "\n";
-  }
-  ofs.close();
-#endif
 }
 
 template <class TInputValue, class TTargetValue>
@@ -208,7 +152,6 @@ void KNearestNeighborsMachineLearningModel<TInputValue, TTargetValue>::Load(cons
   {
     itkExceptionMacro(<< "Could not read file " << filename);
   }
-#ifdef OTB_OPENCV_3
   // try to load with the 3.x syntax
   bool isKNNv3 = false;
   while (!ifs.eof())
@@ -230,7 +173,7 @@ void KNearestNeighborsMachineLearningModel<TInputValue, TTargetValue>::Load(cons
     return;
   }
   ifs.open(filename);
-#endif
+
   // there is no m_KNearestModel->load(filename.c_str(), name.c_str());
 
   // first line is the K parameter of this algorithm.

@@ -47,7 +47,6 @@
 
 #include "itkListSample.h"
 
-#ifdef OTB_OPENCV_3
 #define CV_TYPE_NAME_ML_SVM "opencv-ml-svm"
 #define CV_TYPE_NAME_ML_RTREES "opencv-ml-random-trees"
 #define CV_TYPE_NAME_ML_BOOSTING "opencv-ml-boost-tree"
@@ -62,7 +61,6 @@
 
 #define CV_VAR_NUMERICAL cv::ml::VAR_NUMERICAL
 #define CV_VAR_CATEGORICAL cv::ml::VAR_CATEGORICAL
-#endif
 
 namespace otb
 {

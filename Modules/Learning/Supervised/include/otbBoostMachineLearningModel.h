@@ -27,11 +27,7 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 
-#ifdef OTB_OPENCV_3
 #include "otbOpenCVUtils.h"
-#else
-class CvBoost;
-#endif
 
 namespace otb
 {
@@ -119,9 +115,6 @@ protected:
   /** Constructor */
   BoostMachineLearningModel();
 
-  /** Destructor */
-  ~BoostMachineLearningModel() override;
-
   /** Predict values using the model */
   TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
 
@@ -132,11 +125,7 @@ private:
   BoostMachineLearningModel(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-#ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::Boost> m_BoostModel;
-#else
-  CvBoost* m_BoostModel;
-#endif
   int    m_BoostType;
   int    m_WeakCount;
   double m_WeightTrimRate;
