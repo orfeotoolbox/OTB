@@ -11,6 +11,8 @@ Description
 
 {longdescription}
 
+{multiwriting_string}
+
 Parameters
 ----------
 

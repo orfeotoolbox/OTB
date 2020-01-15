@@ -195,7 +195,42 @@ int Execute(int, char* argv[])
   itksysProcess_SetPipeShared(process, itksysProcess_Pipe_STDERR, true);
   itksysProcess_Execute(process);
   itksysProcess_WaitForExit(process, nullptr);
-  int retCode = itksysProcess_GetExitValue(process);
+  int state = itksysProcess_GetState(process);
+  int retCode = EXIT_FAILURE;
+  switch(state)
+    {
+    case itksysProcess_State_Exited:
+      {
+      retCode = itksysProcess_GetExitValue(process);
+      std::cout << "Program exited normally with code "<<retCode<<"\n";
+      break;
+      }
+    case itksysProcess_State_Exception:
+      {
+      std::cerr << "Program exited abnormally with exception type "
+        << itksysProcess_GetExitException(process) << " : "
+        << itksysProcess_GetExceptionString(process) << "\n";
+      break;
+      }
+    case itksysProcess_State_Error:
+      {
+      std::cerr << "Error running the program : "
+        << itksysProcess_GetErrorString(process) << "\n";
+      break;
+      }
+    case itksysProcess_State_Expired:
+      {
+      std::cerr << "Program couldn't finish within allocated time!\n";
+      break;
+      }
+    case itksysProcess_State_Killed:
+      {
+      std::cerr << "Program terminated by Kill method!\n";
+      break;
+      }
+    default:
+      break;
+    }
   itksysProcess_Delete(process);
   return retCode;
 }

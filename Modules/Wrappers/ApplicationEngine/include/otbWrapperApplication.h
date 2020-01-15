@@ -843,6 +843,9 @@ public:
 
   bool IsExecuteDone();
 
+  /** Is multiWriting enabled for this application ? */
+  bool IsMultiWritingEnabled();
+
 protected:
   /** Constructor */
   Application();
@@ -914,6 +917,9 @@ protected:
   template <class TImageType>
   void SetParameterOutputImage(std::string const& parameter, TImageType* value);
 
+  /** Enable/Disable multiWriting */
+  itkSetMacro(MultiWriting, bool);
+
 private:
   /* Implement this method to add parameters */
   virtual void DoInit() = 0;
@@ -967,6 +973,9 @@ private:
 
   /** Flag to check if Execute has already been called */
   bool m_ExecuteDone;
+
+  /** Flag that determine if a multiWriter should be used to write output images */
+  bool m_MultiWriting;
 
   /**
     * Declare the class

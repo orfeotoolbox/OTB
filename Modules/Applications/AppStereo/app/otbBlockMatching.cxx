@@ -419,9 +419,10 @@ private:
     SetDefaultParameterInt("bm.initdisp.maps.vrad", 0);
     DisableParameter("bm.initdisp.maps.vrad");
 
-    // this->DebugOn();
 
     AddRAMParameter();
+
+    SetMultiWriting(true);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("io.inleft", "StereoFixed.png");
