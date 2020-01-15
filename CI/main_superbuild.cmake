@@ -39,7 +39,7 @@ if(WIN32)
   set(ENV{PATH} "${XDK_PATH_NATIVE}\\bin;$ENV{PATH}" )
   set(ENV{PATH} "$ENV{PATH};${XDK_PATH_NATIVE}\\lib" )
   set(ENV{GDAL_DATA} "${XDK_PATH_NATIVE}\\data" )
-  set(ENV{PROJ_LIB} "${XDK_PATH_NATIVE}\\share" )
+  set(ENV{PROJ_LIB} "${XDK_PATH_NATIVE}\\share\\proj" )
   # needed to load Qt plugins for testing, not for binary packages where we use a qt.conf file
   set(ENV{QT_PLUGIN_PATH} "${XDK_PATH_NATIVE}\\plugins")
   set( CTEST_ENVIRONMENT
