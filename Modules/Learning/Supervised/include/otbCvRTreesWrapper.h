@@ -79,8 +79,6 @@ public:
   OTB_CV_WRAP_PROPERTY(int, MinSampleCount)
   OTB_CV_WRAP_PROPERTY(bool, UseSurrogates)
   
-  // warning: CV fold crash in openCV 3
-  OTB_CV_WRAP_PROPERTY(int, CVFolds)
   OTB_CV_WRAP_PROPERTY(bool, Use1SERule)
   OTB_CV_WRAP_PROPERTY(bool, TruncatePrunedTree)
   OTB_CV_WRAP_PROPERTY(float, RegressionAccuracy)

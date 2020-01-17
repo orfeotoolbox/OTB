@@ -39,7 +39,6 @@ DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::DecisionTreeMachine
     m_RegressionAccuracy(0.01),
     m_UseSurrogates(false),
     m_MaxCategories(10),
-    m_CVFolds(0),
     m_Use1seRule(true),
     m_TruncatePrunedTree(true)
 {
@@ -68,7 +67,6 @@ void DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::Train()
   m_DTreeModel->setRegressionAccuracy(m_RegressionAccuracy);
   m_DTreeModel->setUseSurrogates(m_UseSurrogates);
   m_DTreeModel->setMaxCategories(m_MaxCategories);
-  m_DTreeModel->setCVFolds(m_CVFolds);
   m_DTreeModel->setUse1SERule(m_Use1seRule);
   m_DTreeModel->setTruncatePrunedTree(m_TruncatePrunedTree);
   m_DTreeModel->setPriors(cv::Mat(m_Priors));
