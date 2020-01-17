@@ -191,6 +191,8 @@ private:
 
     AddRAMParameter();
 
+    SetMultiWriting(true);
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "cupriteSubHsi.tif");
     SetDocExampleParameterValue("out", "FilterOutput.tif");
