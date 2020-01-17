@@ -66,6 +66,8 @@ void DecisionTreeMachineLearningModel<TInputValue, TOutputValue>::Train()
   m_DTreeModel->setMinSampleCount(m_MinSampleCount);
   m_DTreeModel->setRegressionAccuracy(m_RegressionAccuracy);
   m_DTreeModel->setUseSurrogates(m_UseSurrogates);
+  // CvFold is not exposed because it crashes in OpenCV 3 and 4
+  m_DTreeModel->setCVFolds(0);
   m_DTreeModel->setMaxCategories(m_MaxCategories);
   m_DTreeModel->setUse1SERule(m_Use1seRule);
   m_DTreeModel->setTruncatePrunedTree(m_TruncatePrunedTree);
