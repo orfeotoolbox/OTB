@@ -737,7 +737,6 @@ private:
   void PrepareMosaicFilter(typename TMosaicFilterType::Pointer& filter)
   {
     SetInterpolator<TMosaicFilterType>(filter);
-    SetCorrectionModel<TMosaicFilterType>(filter);
     SetSpacing<TMosaicFilterType>(filter);
     SetNoDataValue<TMosaicFilterType>(filter);
     SetCorrectionModel<TMosaicFilterType>(filter);
