@@ -58,7 +58,6 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitBoostParams()
                           "rather than exact optimization at each step.");
   SetParameterString("classifier.boost.t", "real");
   SetParameterDescription("classifier.boost.t", "Type of Boosting algorithm.");
-  // Do not expose SplitCriteria
   // WeakCount
   AddParameter(ParameterType_Int, "classifier.boost.w", "Weak count");
   SetParameterInt("classifier.boost.w", 100);

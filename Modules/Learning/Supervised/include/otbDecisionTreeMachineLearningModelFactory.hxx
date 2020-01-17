@@ -42,11 +42,6 @@ DecisionTreeMachineLearningModelFactory<TInputValue, TOutputValue>::DecisionTree
 }
 
 template <class TInputValue, class TOutputValue>
-DecisionTreeMachineLearningModelFactory<TInputValue, TOutputValue>::~DecisionTreeMachineLearningModelFactory()
-{
-}
-
-template <class TInputValue, class TOutputValue>
 const char* DecisionTreeMachineLearningModelFactory<TInputValue, TOutputValue>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;

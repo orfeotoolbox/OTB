@@ -27,11 +27,7 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 
-#ifdef OTB_OPENCV_3
 #include "otbOpenCVUtils.h"
-#else
-class CvNormalBayesClassifier;
-#endif
 
 namespace otb
 {
@@ -80,7 +76,7 @@ protected:
   NormalBayesMachineLearningModel();
 
   /** Destructor */
-  ~NormalBayesMachineLearningModel() override;
+  ~NormalBayesMachineLearningModel() override = default;
 
   /** Predict values using the model */
   TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
@@ -91,11 +87,7 @@ protected:
 private:
   NormalBayesMachineLearningModel(const Self&) = delete;
   void operator=(const Self&) = delete;
-#ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::NormalBayesClassifier> m_NormalBayesModel;
-#else
-  CvNormalBayesClassifier* m_NormalBayesModel;
-#endif
 };
 } // end namespace otb
 
