@@ -42,11 +42,6 @@ BoostMachineLearningModelFactory<TInputValue, TOutputValue>::BoostMachineLearnin
 }
 
 template <class TInputValue, class TOutputValue>
-BoostMachineLearningModelFactory<TInputValue, TOutputValue>::~BoostMachineLearningModelFactory()
-{
-}
-
-template <class TInputValue, class TOutputValue>
 const char* BoostMachineLearningModelFactory<TInputValue, TOutputValue>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;

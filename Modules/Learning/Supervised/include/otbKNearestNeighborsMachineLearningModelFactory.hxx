@@ -42,11 +42,6 @@ KNearestNeighborsMachineLearningModelFactory<TInputValue, TOutputValue>::KNeares
 }
 
 template <class TInputValue, class TOutputValue>
-KNearestNeighborsMachineLearningModelFactory<TInputValue, TOutputValue>::~KNearestNeighborsMachineLearningModelFactory()
-{
-}
-
-template <class TInputValue, class TOutputValue>
 const char* KNearestNeighborsMachineLearningModelFactory<TInputValue, TOutputValue>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;

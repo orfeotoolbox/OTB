@@ -32,32 +32,13 @@ namespace otb
 
 template <class TInputValue, class TOutputValue>
 BoostMachineLearningModel<TInputValue, TOutputValue>::BoostMachineLearningModel()
-  :
-#ifdef OTB_OPENCV_3
-    m_BoostModel(cv::ml::Boost::create()),
-#else
-    m_BoostModel(new CvBoost),
-#endif
+  : m_BoostModel(cv::ml::Boost::create()),
     m_BoostType(CvBoost::REAL),
     m_WeakCount(100),
     m_WeightTrimRate(0.95),
-#ifdef OTB_OPENCV_3
-    m_SplitCrit(0), // not used in OpenCV 3.x
-#else
-    m_SplitCrit(CvBoost::DEFAULT),
-#endif
     m_MaxDepth(1)
 {
   this->m_ConfidenceIndex = true;
-}
-
-
-template <class TInputValue, class TOutputValue>
-BoostMachineLearningModel<TInputValue, TOutputValue>::~BoostMachineLearningModel()
-{
-#ifndef OTB_OPENCV_3
-  delete m_BoostModel;
-#endif
 }
 
 /** Train the machine learning model */
@@ -75,7 +56,6 @@ void BoostMachineLearningModel<TInputValue, TOutputValue>::Train()
   var_type.setTo(cv::Scalar(CV_VAR_NUMERICAL)); // all inputs are numerical
   var_type.at<uchar>(this->GetInputListSample()->GetMeasurementVectorSize(), 0) = CV_VAR_CATEGORICAL;
 
-#ifdef OTB_OPENCV_3
   m_BoostModel->setBoostType(m_BoostType);
   m_BoostModel->setWeakCount(m_WeakCount);
   m_BoostModel->setWeightTrimRate(m_WeightTrimRate);
@@ -83,11 +63,6 @@ void BoostMachineLearningModel<TInputValue, TOutputValue>::Train()
   m_BoostModel->setUseSurrogates(false);
   m_BoostModel->setPriors(cv::Mat());
   m_BoostModel->train(cv::ml::TrainData::create(samples, cv::ml::ROW_SAMPLE, labels, cv::noArray(), cv::noArray(), cv::noArray(), var_type));
-#else
-  CvBoostParams params  = CvBoostParams(m_BoostType, m_WeakCount, m_WeightTrimRate, m_MaxDepth, false, nullptr);
-  params.split_criteria = m_SplitCrit;
-  m_BoostModel->train(samples, CV_ROW_SAMPLE, labels, cv::Mat(), cv::Mat(), var_type, cv::Mat(), params);
-#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -102,23 +77,11 @@ BoostMachineLearningModel<TInputValue, TOutputValue>::DoPredict(const InputSampl
   otb::SampleToMat<InputSampleType>(input, sample);
   double result = 0.;
 
-#ifdef OTB_OPENCV_3
   result = m_BoostModel->predict(sample);
-#else
-  cv::Mat missing = cv::Mat(1, input.Size(), CV_8U);
-  missing.setTo(0);
-  result = m_BoostModel->predict(sample, missing);
-#endif
 
   if (quality != nullptr)
   {
-    (*quality) = static_cast<ConfidenceValueType>(
-#ifdef OTB_OPENCV_3
-        m_BoostModel->predict(sample, cv::noArray(), cv::ml::StatModel::RAW_OUTPUT)
-#else
-        m_BoostModel->predict(sample, missing, cv::Range::all(), false, true)
-#endif
-            );
+    (*quality) = static_cast<ConfidenceValueType>(m_BoostModel->predict(sample, cv::noArray(), cv::ml::StatModel::RAW_OUTPUT));
   }
   if (proba != nullptr && !this->m_ProbaIndex)
     itkExceptionMacro("Probability per class not available for this classifier !");
@@ -130,32 +93,18 @@ BoostMachineLearningModel<TInputValue, TOutputValue>::DoPredict(const InputSampl
 template <class TInputValue, class TOutputValue>
 void BoostMachineLearningModel<TInputValue, TOutputValue>::Save(const std::string& filename, const std::string& name)
 {
-#ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::WRITE);
   fs << (name.empty() ? m_BoostModel->getDefaultName() : cv::String(name)) << "{";
   m_BoostModel->write(fs);
   fs << "}";
   fs.release();
-#else
-  if (name == "")
-    m_BoostModel->save(filename.c_str(), nullptr);
-  else
-    m_BoostModel->save(filename.c_str(), name.c_str());
-#endif
 }
 
 template <class TInputValue, class TOutputValue>
 void BoostMachineLearningModel<TInputValue, TOutputValue>::Load(const std::string& filename, const std::string& name)
 {
-#ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::READ);
   m_BoostModel->read(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
-#else
-  if (name == "")
-    m_BoostModel->load(filename.c_str(), nullptr);
-  else
-    m_BoostModel->load(filename.c_str(), name.c_str());
-#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -176,11 +125,7 @@ bool BoostMachineLearningModel<TInputValue, TOutputValue>::CanReadFile(const std
     std::getline(ifs, line);
 
     // if (line.find(m_SVMModel->getName()) != std::string::npos)
-    if (line.find(CV_TYPE_NAME_ML_BOOSTING) != std::string::npos
-#ifdef OTB_OPENCV_3
-        || line.find(m_BoostModel->getDefaultName()) != std::string::npos
-#endif
-        )
+    if (line.find(CV_TYPE_NAME_ML_BOOSTING) != std::string::npos || line.find(m_BoostModel->getDefaultName()) != std::string::npos)
     {
       // std::cout<<"Reading a "<<CV_TYPE_NAME_ML_BOOSTING<<" model"<<std::endl;
       return true;
