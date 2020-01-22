@@ -145,13 +145,13 @@ private:
   template <class Tuple, size_t... Is>
   auto SetInputsImpl(Tuple& t, std::index_sequence<Is...>)
   {
-    return std::initializer_list<int>{(this->SetInput<Is>(std::get<Is>(t)), 0)...};
+    return std::initializer_list<int>{(this->template SetInput<Is>(std::get<Is>(t)), 0)...};
   }
 
   template <size_t... Is>
   auto GetInputsImpl(std::index_sequence<Is...>)
   {
-    return std::make_tuple(this->GetInput<Is>()...);
+    return std::make_tuple(this->template GetInput<Is>()...);
   }
 
   VariadicInputsImageFilter(const Self&) = delete;
