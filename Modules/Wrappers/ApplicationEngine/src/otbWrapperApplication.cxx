@@ -1871,5 +1871,16 @@ bool Application::IsMultiWritingEnabled()
   return m_MultiWriting;
 }
 
+void Application::EnableInPrivateDo()
+{
+  m_IsInPrivateDo = true;
+
+}
+
+void Application::DisableInPrivateDo()
+{
+  m_IsInPrivateDo = false;
+}
+
 }
 }
