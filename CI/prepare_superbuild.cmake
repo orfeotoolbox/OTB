@@ -20,7 +20,7 @@
 # This script is for the superbuild build on the CI platform
 
 include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
-set ( DEBUG "1" )
+
 set (ENV{LANG} "C") # Only ascii output
 get_filename_component(OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY)
 
