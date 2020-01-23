@@ -26,7 +26,7 @@
 #include "otbWrapperParameter.h"
 #include "otbImageFileWriter.h"
 #include <string>
-
+#include "otbMultiImageFileWriter.h"
 
 namespace otb
 {
@@ -77,6 +77,9 @@ public:
   itkSetMacro(RAMValue, unsigned int);
   itkGetMacro(RAMValue, unsigned int);
 
+  /** Check if multi-writing is enabled (several output images written together)*/
+  bool IsMultiWritingEnabled();
+
   /** Implement the reset method (replace pixel type by default type) */
   void Reset() override
   {
@@ -102,7 +105,8 @@ public:
 
   itk::ProcessObject* GetWriter();
 
-  void InitializeWriters();
+  /** Initialize internal writers, plus the multi-writer  */
+  void InitializeWriters(otb::MultiImageFileWriter::Pointer multi = otb::MultiImageFileWriter::Pointer() );
 
   std::string CheckFileName(bool fixMissingExtension = false);
 
@@ -154,6 +158,8 @@ private:
 
   unsigned int m_RAMValue;
 
+  /** Multi-writer, used in case several OutputImageParameter are written at once */
+  otb::MultiImageFileWriter::Pointer m_MultiWriter;
 }; // End class OutputImage Parameter
 
 } // End namespace Wrapper

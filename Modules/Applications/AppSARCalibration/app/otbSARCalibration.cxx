@@ -77,10 +77,10 @@ private:
         "lut", "Lookup table values are not available with all SAR products. Products that provide lookup table with metadata are: Sentinel1, Radarsat2.");
     AddChoice("lut.sigma", "Use sigma nought lookup");
     SetParameterDescription("lut.sigma", "Use Sigma nought lookup value from product metadata");
-    AddChoice("lut.gamma", "Use gamma nought lookup");
-    SetParameterDescription("lut.gamma", "Use Gamma nought lookup value from product metadata");
     AddChoice("lut.beta", "Use beta nought lookup");
     SetParameterDescription("lut.beta", "Use Beta nought lookup value from product metadata");
+    AddChoice("lut.gamma", "Use gamma nought lookup");
+    SetParameterDescription("lut.gamma", "Use Gamma nought lookup value from product metadata");
     AddChoice("lut.dn", "Use DN value lookup");
     SetParameterDescription("lut.dn", "Use DN value lookup value from product metadata");
     SetDefaultParameterInt("lut", 0);

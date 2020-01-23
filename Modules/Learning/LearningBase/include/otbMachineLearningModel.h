@@ -191,7 +191,7 @@ protected:
   MachineLearningModel();
 
   /** Destructor */
-  ~MachineLearningModel() override;
+  ~MachineLearningModel() override = default;
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;

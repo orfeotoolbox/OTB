@@ -206,7 +206,7 @@ private:
     return outputFile;
   }
 
-  void DoInit()
+  void DoInit() override
   {
     SetName("Mosaic");
     SetDescription("Perform a mosaic of input images");
@@ -382,7 +382,7 @@ private:
     SetDocExampleParameterValue("out", "mosaicImage.tif");
   }
 
-  void DoUpdateParameters()
+  void DoUpdateParameters() override
   {
     // TODO: update parameters
   }
@@ -737,7 +737,6 @@ private:
   void PrepareMosaicFilter(typename TMosaicFilterType::Pointer& filter)
   {
     SetInterpolator<TMosaicFilterType>(filter);
-    SetCorrectionModel<TMosaicFilterType>(filter);
     SetSpacing<TMosaicFilterType>(filter);
     SetNoDataValue<TMosaicFilterType>(filter);
     SetCorrectionModel<TMosaicFilterType>(filter);
@@ -1028,7 +1027,7 @@ private:
     }
   }
 
-  void DoExecute()
+  void DoExecute() override
   {
     GDALAllRegister();
     m_TemporaryFiles.clear();
@@ -1055,7 +1054,7 @@ private:
 
   } // DoExecute()
 
-  void AfterExecuteAndWriteOutputs()
+  void AfterExecuteAndWriteOutputs() override
   {
     if (m_TemporaryFiles.size() > 0)
     {

@@ -62,7 +62,7 @@ public:
 
 protected:
   KNearestNeighborsMachineLearningModelFactory();
-  ~KNearestNeighborsMachineLearningModelFactory() override;
+  ~KNearestNeighborsMachineLearningModelFactory() override = default;
 
 private:
   KNearestNeighborsMachineLearningModelFactory(const Self&) = delete;

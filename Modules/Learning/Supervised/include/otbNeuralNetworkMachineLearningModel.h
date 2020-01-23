@@ -174,7 +174,7 @@ protected:
   NeuralNetworkMachineLearningModel();
 
   /** Destructor */
-  ~NeuralNetworkMachineLearningModel() override;
+  ~NeuralNetworkMachineLearningModel() override = default;
 
   /** Predict values using the model */
   TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
@@ -190,12 +190,7 @@ private:
 
   void CreateNetwork();
   void SetupNetworkAndTrain(cv::Mat& labels);
-#ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::ANN_MLP> m_ANNModel;
-#else
-  CvANN_MLP_TrainParams SetNetworkParameters();
-  CvANN_MLP*            m_ANNModel;
-#endif
   int                       m_TrainMethod;
   int                       m_ActivateFunction;
   std::vector<unsigned int> m_LayerSizes;

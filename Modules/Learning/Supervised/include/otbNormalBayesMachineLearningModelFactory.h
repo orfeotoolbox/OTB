@@ -62,7 +62,7 @@ public:
 
 protected:
   NormalBayesMachineLearningModelFactory();
-  ~NormalBayesMachineLearningModelFactory() override;
+  ~NormalBayesMachineLearningModelFactory() override = default;
 
 private:
   NormalBayesMachineLearningModelFactory(const Self&) = delete;

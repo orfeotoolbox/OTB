@@ -24,8 +24,6 @@ set(OTBOSSIMAdapters_SRC
   otbSensorModelAdapter.cxx
   otbRPCSolverAdapter.cxx
   otbDateTimeAdapter.cxx
-  otbFilterFunctionValues.cxx
-  otbMetaDataKey.cxx
   otbEllipsoidAdapter.cxx
   otbSarSensorModelAdapter.cxx
   )

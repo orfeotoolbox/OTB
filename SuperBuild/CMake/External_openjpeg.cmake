@@ -34,12 +34,12 @@ ADD_SUPERBUILD_CMAKE_VAR(OPENJPEG PNG_PNG_INCLUDE_DIR)
 ADD_SUPERBUILD_CMAKE_VAR(OPENJPEG PNG_LIBRARY)
 
 #GIT_REPOSITORY "https://github.com/uclouvain/openjpeg.git"
-#GIT_TAG d0babeb6f6cdd1887308137df37bb2b4724a6592
+#GIT_TAG 081de4b15f54cb4482035b7bf5e3fb443e4bc84b
 
 ExternalProject_Add(OPENJPEG
   PREFIX OPENJPEG
-  URL "https://github.com/uclouvain/openjpeg/archive/v2.2.0.tar.gz"
-  URL_MD5 269bb0b175476f3addcc0d03bd9a97b6
+  URL "https://github.com/uclouvain/openjpeg/archive/v2.3.0.tar.gz"
+  URL_MD5 6a1f8aaa1fe55d2088e3a9c942e0f698
   BINARY_DIR ${OPENJPEG_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

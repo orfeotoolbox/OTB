@@ -71,42 +71,14 @@ namespace mvd
 /*****************************************************************************/
 /* CLASS IMPLEMENTATION SECTION                                              */
 /*******************************************************************************/
-ImageViewWidget::ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, QWidget* p, const QGLWidget* shareWidget,
+ImageViewWidget::ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, QWidget* p,
                                  Qt::WindowFlags flags)
-  : QGLWidget(p, shareWidget, flags),
+  : QOpenGLWidget(p, flags),
     m_IsPickingEnabled(true),
     m_PickingDefaultStatus(true),
     m_Manipulator(NULL),
     m_Renderer(NULL)
 #if USE_XP_REGION_OPTIM
-    ,
-    m_Position()
-#endif // USE_XP_REGION_OPTION
-{
-  Initialize(manipulator, renderer);
-}
-
-/*******************************************************************************/
-ImageViewWidget::ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, QGLContext* glcontext, QWidget* p,
-                                 const QGLWidget* shareWidget, Qt::WindowFlags flags)
-  : QGLWidget(glcontext, p, shareWidget, flags),
-    m_Manipulator(NULL),
-    m_Renderer(NULL)
-#if USE_XP_REGION_OPTION
-    ,
-    m_Position()
-#endif // USE_XP_REGION_OPTION
-{
-  Initialize(manipulator, renderer);
-}
-
-/*******************************************************************************/
-ImageViewWidget::ImageViewWidget(AbstractImageViewManipulator* manipulator, AbstractImageViewRenderer* renderer, const QGLFormat& glformat, QWidget* p,
-                                 const QGLWidget* shareWidget, Qt::WindowFlags flags)
-  : QGLWidget(glformat, p, shareWidget, flags),
-    m_Manipulator(NULL),
-    m_Renderer(NULL)
-#if USE_XP_REGION_OPTION
     ,
     m_Position()
 #endif // USE_XP_REGION_OPTION
@@ -164,7 +136,7 @@ void ImageViewWidget::SetLayerStack(StackedLayerModel* stackedLayerModel)
 
       QObject::disconnect(model, SIGNAL(OrderChanged()),
                           // from:
-                          this, SLOT(updateGL()));
+                          this, SLOT(update()));
 
       //
       // Disconnect layer-stack model from this widget manipulator.
@@ -223,7 +195,7 @@ void ImageViewWidget::SetLayerStack(StackedLayerModel* stackedLayerModel)
 
   QObject::connect(stackedLayerModel, SIGNAL(OrderChanged()),
                    // to:
-                   this, SLOT(updateGL()));
+                   this, SLOT(update()));
 
   QObject::connect(stackedLayerModel, SIGNAL(ContentChanged()),
                    // to:
@@ -425,7 +397,7 @@ void ImageViewWidget::initializeGL()
 /*******************************************************************************/
 void ImageViewWidget::resizeGL(int w, int h)
 {
-  QGLWidget::resizeGL(w, h);
+  QOpenGLWidget::resizeGL(w, h);
 
   assert(m_Renderer != NULL);
 
@@ -435,7 +407,7 @@ void ImageViewWidget::resizeGL(int w, int h)
 /*******************************************************************************/
 void ImageViewWidget::paintGL()
 {
-  QGLWidget::paintGL();
+  QOpenGLWidget::paintGL();
 
   // qDebug() << this << "::paintGL()";
 
@@ -485,7 +457,7 @@ void ImageViewWidget::mousePressEvent(QMouseEvent* e)
 {
   assert(e != NULL);
 
-  QGLWidget::mousePressEvent(e);
+  QOpenGLWidget::mousePressEvent(e);
 
   m_Manipulator->MousePressEvent(e);
 
@@ -501,7 +473,7 @@ void ImageViewWidget::mouseMoveEvent(QMouseEvent* e)
   // qDebug() << this << "::mouseMove(" << event << ")";
 
   // Superclass default behaviour.
-  QGLWidget::mouseMoveEvent(e);
+  QOpenGLWidget::mouseMoveEvent(e);
 
   //
   // Get layer-stack.
@@ -551,7 +523,7 @@ void ImageViewWidget::mouseMoveEvent(QMouseEvent* e)
 
 #endif // USE_XP_REGION_OPTIM
 
-            // qDebug() << "updateGL(" << in[ 0 ] << "," << in[ 1 ] << ")";
+            // qDebug() << "update(" << in[ 0 ] << "," << in[ 1 ] << ")";
 
             isAnyEffectActive = true;
 
@@ -639,7 +611,7 @@ void ImageViewWidget::mouseMoveEvent(QMouseEvent* e)
   }
 
   if (isAnyEffectActive)
-    updateGL();
+    update();
 }
 
 /*******************************************************************************/
@@ -647,7 +619,7 @@ void ImageViewWidget::mouseReleaseEvent(QMouseEvent* e)
 {
   assert(e != NULL);
 
-  QGLWidget::mouseReleaseEvent(e);
+  QOpenGLWidget::mouseReleaseEvent(e);
 
   m_Manipulator->MouseReleaseEvent(e);
 
@@ -660,7 +632,7 @@ void ImageViewWidget::mouseDoubleClickEvent(QMouseEvent* e)
 {
   assert(e != NULL);
 
-  QGLWidget::mouseDoubleClickEvent(e);
+  QOpenGLWidget::mouseDoubleClickEvent(e);
 
   m_Manipulator->MouseDoubleClickEvent(e);
 }
@@ -670,7 +642,7 @@ void ImageViewWidget::wheelEvent(QWheelEvent* e)
 {
   assert(e != NULL);
 
-  QGLWidget::wheelEvent(e);
+  QOpenGLWidget::wheelEvent(e);
 
   m_Manipulator->WheelEvent(e);
 }
@@ -683,7 +655,7 @@ void ImageViewWidget::resizeEvent(QResizeEvent* e)
   // qDebug() << this << "::resizeEvent(" << e << ")";
 
   // First, call superclass implementation
-  QGLWidget::resizeEvent(e);
+  QOpenGLWidget::resizeEvent(e);
 
   m_Manipulator->ResizeEvent(e);
 }
@@ -693,7 +665,7 @@ void ImageViewWidget::keyPressEvent(QKeyEvent* e)
 {
   assert(e != NULL);
 
-  QGLWidget::keyPressEvent(e);
+  QOpenGLWidget::keyPressEvent(e);
 
   m_Manipulator->KeyPressEvent(e);
 }
@@ -703,7 +675,7 @@ void ImageViewWidget::keyReleaseEvent(QKeyEvent* e)
 {
   assert(e != NULL);
 
-  QGLWidget::keyReleaseEvent(e);
+  QOpenGLWidget::keyReleaseEvent(e);
 
   m_Manipulator->KeyReleaseEvent(e);
 }
@@ -868,7 +840,7 @@ void ImageViewWidget::Connect(AbstractLayerModel* layer)
 
   QObject::connect(layer, SIGNAL(VisibilityChanged()),
                    // to:
-                   this, SLOT(updateGL()));
+                   this, SLOT(update()));
 
   QObject::connect(this, SIGNAL(ModelUpdated()),
                    // to:
@@ -882,7 +854,7 @@ void ImageViewWidget::Disconnect(AbstractLayerModel* layer)
 
   QObject::disconnect(layer, SIGNAL(VisibilityChanged()),
                       // from:
-                      this, SLOT(updateGL()));
+                      this, SLOT(update()));
 
   QObject::disconnect(this, SIGNAL(ModelUpdated()),
                       // from:
@@ -1110,7 +1082,7 @@ void ImageViewWidget::OnClearProjectionRequired()
   ZoomToExtent();
 
   // Done in ::ZoomToExtent().
-  // updateGL();
+  // update();
 }
 
 /******************************************************************************/
@@ -1123,7 +1095,7 @@ void ImageViewWidget::OnContentChanged()
   UpdateScene();
 
   if (!ApplyFixedZoomType())
-    updateGL();
+    update();
 }
 
 /******************************************************************************/
@@ -1136,7 +1108,7 @@ void ImageViewWidget::OnContentReset()
   UpdateScene();
 
   if (!ApplyFixedZoomType())
-    updateGL();
+    update();
 }
 
 /******************************************************************************/
@@ -1216,7 +1188,7 @@ void ImageViewWidget::OnReferenceChanged(size_t)
 
   m_Renderer->RefreshScene();
 
-  updateGL();
+  update();
 }
 
 /******************************************************************************/
@@ -1224,7 +1196,7 @@ void ImageViewWidget::OnRefreshViewRequested()
 {
   // qDebug() << this << "::OnRefreshViewRequested()";
 
-  updateGL();
+  update();
 }
 
 /******************************************************************************/
@@ -1409,10 +1381,10 @@ void ImageViewWidget::OnRoiChanged(const PointType&, const SizeType&, const Spac
   // qDebug() << "sx:" << sx << "; sy:" << sy;
   // qDebug() << "rsx:" << rsx << "; rsy:" << rsy;
 
-  // qDebug() << this << "::updateGL()";
+  // qDebug() << this << "::update()";
 
   // Refresh view.
-  updateGL();
+  update();
 
   // Emit absolute scale.
   emit ScaleChanged(rsx, rsy);
@@ -1525,7 +1497,7 @@ void ImageViewWidget::OnSelectFirstLayerRequested()
 
   stackedLayerModel->SelectFirst();
 
-  updateGL();
+  update();
 }
 
 /******************************************************************************/
@@ -1540,7 +1512,7 @@ void ImageViewWidget::OnSelectLastLayerRequested()
 
   stackedLayerModel->SelectLast();
 
-  updateGL();
+  update();
 }
 
 /******************************************************************************/
@@ -1555,7 +1527,7 @@ void ImageViewWidget::OnSelectPreviousLayerRequested()
 
   stackedLayerModel->SelectPrevious();
 
-  updateGL();
+  update();
 }
 
 /******************************************************************************/
@@ -1570,7 +1542,7 @@ void ImageViewWidget::OnSelectNextLayerRequested()
 
   stackedLayerModel->SelectNext();
 
-  updateGL();
+  update();
 }
 
 /******************************************************************************/
@@ -2001,7 +1973,7 @@ ImageViewWidget
 
   UpdateScene();
 
-  updateGL();
+  update();
 
   return glslEnabled;
 }
@@ -2038,7 +2010,7 @@ void ImageViewWidget::ZoomToExtent()
   Center(ZOOM_TYPE_EXTENT);
 
   // Refresh view.
-  updateGL();
+  update();
 }
 
 /******************************************************************************/
@@ -2050,7 +2022,7 @@ void ImageViewWidget::ZoomToLayerExtent()
   Center(ZOOM_TYPE_LAYER);
 
   // Refresh view.
-  updateGL();
+  update();
 }
 
 /******************************************************************************/
@@ -2065,7 +2037,7 @@ void ImageViewWidget::ZoomToFullResolution()
   Center(ZOOM_TYPE_FULL);
 
   // Refresh view.
-  updateGL();
+  update();
 }
 
 /******************************************************************************/
@@ -2076,7 +2048,7 @@ void ImageViewWidget::ZoomIn()
   m_Manipulator->ZoomIn();
 
   // Refresh view.
-  updateGL();
+  update();
 }
 
 /******************************************************************************/
@@ -2087,6 +2059,6 @@ void ImageViewWidget::ZoomOut()
   m_Manipulator->ZoomOut();
 
   // Refresh view.
-  updateGL();
+  update();
 }
 }

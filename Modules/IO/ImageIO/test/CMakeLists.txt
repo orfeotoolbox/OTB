@@ -1347,6 +1347,20 @@ otb_add_test(NAME ioTvMultiImageFileWriter_DiffSize
   ${TEMP}/ioTvMultiImageFileWriter_DiffSize2.tif
   25)
 
+otb_add_test(NAME ioTvMultiImageFileWriter_BoxExtendedFilename
+  COMMAND otbImageIOTestDriver
+  --compare-n-images ${EPSILON_9} 2
+  ${BASELINE}/ioTvMultiImageFileWriter_ExtendedFilename1.tif
+  ${TEMP}/ioTvMultiImageFileWriter_ExtendedFilename1.tif
+  ${BASELINE}/ioTvMultiImageFileWriter_ExtendedFilename2.tif
+  ${TEMP}/ioTvMultiImageFileWriter_ExtendedFilename2.tif
+  otbMultiImageFileWriterTest
+  ${INPUTDATA}/GomaAvant.png
+  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+  ${TEMP}/ioTvMultiImageFileWriter_ExtendedFilename1.tif?&box=40:30:5:10
+  ${TEMP}/ioTvMultiImageFileWriter_ExtendedFilename2.tif?&box=10:10:15:15
+  50)
+
 otb_add_test(NAME ioTvCompoundMetadataReaderTest
   COMMAND otbImageIOTestDriver
   --compare-ascii ${EPSILON_9}

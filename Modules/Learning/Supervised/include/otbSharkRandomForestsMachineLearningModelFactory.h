@@ -60,7 +60,7 @@ public:
 
 protected:
   SharkRandomForestsMachineLearningModelFactory();
-  virtual ~SharkRandomForestsMachineLearningModelFactory();
+  ~SharkRandomForestsMachineLearningModelFactory() override = default;
 
 private:
   SharkRandomForestsMachineLearningModelFactory(const Self&) = delete;

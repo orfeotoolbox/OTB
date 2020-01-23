@@ -86,7 +86,7 @@ public:
 
 protected:
   LabelMapClassifier();
-  ~LabelMapClassifier() override{};
+  ~LabelMapClassifier() override = default;
 
   void ThreadedProcessLabelObject(LabelObjectType* labelObject) override;
 

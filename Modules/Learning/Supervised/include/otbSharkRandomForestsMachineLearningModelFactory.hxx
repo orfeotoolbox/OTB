@@ -43,11 +43,6 @@ SharkRandomForestsMachineLearningModelFactory<TInputValue, TOutputValue>::SharkR
 }
 
 template <class TInputValue, class TOutputValue>
-SharkRandomForestsMachineLearningModelFactory<TInputValue, TOutputValue>::~SharkRandomForestsMachineLearningModelFactory()
-{
-}
-
-template <class TInputValue, class TOutputValue>
 const char* SharkRandomForestsMachineLearningModelFactory<TInputValue, TOutputValue>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;

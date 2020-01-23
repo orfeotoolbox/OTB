@@ -27,11 +27,7 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 
-#ifdef OTB_OPENCV_3
 #include "otbOpenCVUtils.h"
-#else
-class CvDTree;
-#endif
 
 namespace otb
 {
@@ -107,13 +103,6 @@ public:
   itkGetMacro(MaxCategories, int);
   itkSetMacro(MaxCategories, int);
 
-  /** If cv_folds > 1 then prune a tree with K-fold cross-validation where K is equal to cv_folds.
-   * Default is 10
-   * \see http://docs.opencv.org/modules/ml/doc/decision_trees.html#CvDTreeParams::CvDTreeParams%28%29
-   */
-  itkGetMacro(CVFolds, int);
-  itkSetMacro(CVFolds, int);
-
   /** If true then a pruning will be harsher. This will make a tree more compact and
    * more resistant to the training data noise but a bit less accurate.
    * Default is true
@@ -175,7 +164,7 @@ protected:
   DecisionTreeMachineLearningModel();
 
   /** Destructor */
-  ~DecisionTreeMachineLearningModel() override;
+  ~DecisionTreeMachineLearningModel() override = default;
 
   /** Predict values using the model */
   TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
@@ -187,18 +176,13 @@ private:
   DecisionTreeMachineLearningModel(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-#ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::DTrees> m_DTreeModel;
-#else
-  CvDTree* m_DTreeModel;
-#endif
 
   int                m_MaxDepth;
   int                m_MinSampleCount;
   double             m_RegressionAccuracy;
   bool               m_UseSurrogates;
   int                m_MaxCategories;
-  int                m_CVFolds;
   bool               m_Use1seRule;
   bool               m_TruncatePrunedTree;
   std::vector<float> m_Priors;

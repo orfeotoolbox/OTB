@@ -34,6 +34,7 @@ otb_module(OTBDempsterShafer
     OTBCommon
     OTBFuzzy
     OTBMathParser
+    OTBMetadata
 
   TEST_DEPENDS
     OTBVectorDataIO
