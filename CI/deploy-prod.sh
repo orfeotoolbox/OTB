@@ -23,7 +23,6 @@
 # staging area to production area
 
 staging_area=/home/otbpush/test/staging
-prod_area=/home/otbpush/test/prod
 #check if we are dealing with the right packages
 
 pack_suffix=-$(echo "$CI_COMMIT_TAG" | grep -o "rc[0-9]*") # this retrieve the rc number
