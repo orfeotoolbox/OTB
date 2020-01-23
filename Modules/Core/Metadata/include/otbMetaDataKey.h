@@ -155,6 +155,92 @@ public:
   void Print(std::ostream& os) const;
 };
 
+namespace MetaData
+{
+
+enum class NumericKeyType
+{
+// optical section
+  PhysicalGain,
+  PhysicalBias,
+  SolarIrradiance,
+  SunElevation,
+  SunAzimuth,
+  SatElevation,
+  SatAzimuth,
+  FirstWavelength,
+  LastWavelength,
+  SpectralStep,
+  SpectralMin,
+  SpectralMax,
+// SAR section
+  CalScale,
+  PRF,
+  RSF,
+  RadarFrequency,
+  CenterIndicenceAngle,
+  RescalingFactor,
+  AntennaPatternNewGainPolyDegX,
+  AntennaPatternNewGainPolyDegY,
+  AntennaPatternOldGainPolyDegX,
+  AntennaPatternOldGainPolyDegY,
+  IncidenceAnglePolyDegX,
+  IncidenceAnglePolyDegY,
+  RangeSpreadLossPolyDegX,
+  RangeSpreadLossPolyDegY,
+  NoisePolyDegX,
+  NoisePolyDegY
+};
+
+enum class StringKeyType
+{
+  Instrument,
+  ProductType,
+  Polarization
+  // ...
+};
+
+enum class LUT1DKeyType
+{
+  SpectralSensitivity
+};
+
+enum class LUT2DKeyType
+{
+  // Sar calibration lut ...
+};
+
+struct Time : tm
+{
+  double frac_sec;
+};
+
+struct LUTAxis
+{
+  /** number of measurements on this axis */
+  int Size;
+  /** start value on the axis */
+  double Origin;
+  /** spacing between measurements (if regular sampling) */
+  double Spacing;
+  /** list of measurements (if irregular sampling) */
+  std::vector<double> Values;
+};
+
+template <unsigned int VDim> class LUT
+{
+public:
+  LUTAxis Axes[VDim];
+  
+  std::vector<double> Array;
+};
+
+typedef LUT<1> LUT1D;
+
+typedef LUT<2> LUT2D;
+
+} // end namespace MetaData
+
 } // end namespace otb
 
 #endif

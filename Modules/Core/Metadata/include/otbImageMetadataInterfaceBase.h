@@ -27,6 +27,7 @@
 #include "itkMetaDataDictionary.h"
 #include "otbMetaDataKey.h"
 #include "itkImageBase.h"
+#include "otbImageMetadata.h"
 
 #include "OTBMetadataExport.h"
 
@@ -78,6 +79,16 @@ public:
   {
     return m_MetaDataDictionary;
   }
+
+  void SetImageMetadata(const ImageMetadata& imd)
+    {
+    m_ImageMetadata = imd;
+    }
+
+  const ImageMetadata& GetImageMetadata() const
+    {
+    return m_ImageMetadata;
+    }
 
   /** Get the projection coordinate system of the image. */
   std::string GetProjectionRef() const;
@@ -209,6 +220,9 @@ public:
 
   virtual bool CanRead() const = 0;
 
+  // TODO : find the correct interface ...
+  virtual bool Parse() const = 0;
+
   static void PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict);
 
 protected:
@@ -220,6 +234,8 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   MetaDataDictionaryType m_MetaDataDictionary;
+
+  ImageMetadata m_ImageMetadata;
 
 private:
   ImageMetadataInterfaceBase(const Self&) = delete;

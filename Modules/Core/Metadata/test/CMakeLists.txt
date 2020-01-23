@@ -31,6 +31,7 @@ otbDefaultImageMetadataInterface.cxx
 otbImageMetadataInterfaceTest2.cxx
 otbNoDataHelperTest.cxx
 otbSarCalibrationLookupDataTest.cxx
+otbImageMetadataTest.cxx
 )
 
 add_executable(otbMetadataTestDriver ${OTBMetadataTests})
@@ -356,3 +357,6 @@ otb_add_test(NAME ioTvSarCalibrationLookupDataTest_RADARSAT2 COMMAND otbMetadata
   ${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.tif?&geom=${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.geom
   ${TEMP}/ioTvSarCalibrationLookupDataTest_RADARSAT2.txt
   )
+
+otb_add_test(NAME coreImageMetadataTest
+  COMMAND otbMetadataTestDriver otbImageMetadataTest)
