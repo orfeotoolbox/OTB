@@ -19,9 +19,6 @@
 # limitations under the License.
 #
 
-# Configure git for tar.xz
-git config tar.tar.xz.command "xz -c"
-
 if [ "$CI_COMMIT_REF_NAME" = "develop" ] # check if the branch name is develop or not
 then # we are on develop
   jobs_directory=/home/otbpush/test/$(date +%F)
