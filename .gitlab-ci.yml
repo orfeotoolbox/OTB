@@ -353,13 +353,24 @@ deploy:
     - git lfs fetch origin $CI_COMMIT_SHA
     - git checkout -f -q $CI_COMMIT_SHA
   script:
-    - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
+    - ./CI/deploy.sh
   dependencies:
     - ubuntu-xdk-build-doc
     - centos-xdk-build
     - macos-xdk-build
     - windows-8-build
     - windows-10-build
+
+# deploy-prod:
+#   tags:
+#     - deploy
+#   only:
+#     - tag
+#   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+#   stage: deploy
+#   when: manual
+#   script:
+#     - ./CI/deploy-prod.sh
 
 release-container:
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
