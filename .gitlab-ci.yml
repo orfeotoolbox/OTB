@@ -348,6 +348,20 @@ ubuntu-xdk-report:
     - job: ubuntu-xdk-qa-static-analysis
       artifacts: true
 
+#------------------------- Conda packages jobs ---------------------------------
+conda-linux-build:
+  extends: .common
+  stage: build
+  only:
+    - develop@orfeotoolbox/otb
+    - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
+  image: $BUILD_IMAGE_REGISTRY/otb-conda-build:latest
+  allow_failure: true
+  script:
+    - export otb_tag=${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
+    - ./CI/conda_build.sh
+  dependencies: []
+
 #---------------------------- Deploy job ---------------------------------------
 deploy:
   tags:
