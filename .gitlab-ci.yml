@@ -67,7 +67,6 @@ stages:
     - merge_requests
     - develop
     - /^release-[0-9]+\.[0-9]+$/
-    - out-of-order-job-execution
   stage: build
   artifacts:
     when: always
@@ -91,7 +90,6 @@ stages:
     - merge_requests
     - develop
     - /^release-[0-9]+\.[0-9]+$/
-    - out-of-order-job-execution
   stage: prepare
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
@@ -127,7 +125,6 @@ legal-check:
     - merge_requests
     - develop
     - /^release-[0-9]+\.[0-9]+$/
-    - out-of-order-job-execution
   stage: precheck
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
   variables:
@@ -283,7 +280,6 @@ ubuntu-xdk-qa-code-coverage:
       - merge_requests
       - develop
       - /^release-[0-9]+\.[0-9]+$/
-      - out-of-order-job-execution
     variables:
       - $SONAR_OTB_TOKEN
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
@@ -307,7 +303,6 @@ ubuntu-xdk-qa-static-analysis:
       - merge_requests
       - develop
       - /^release-[0-9]+\.[0-9]+$/
-      - out-of-order-job-execution
     variables:
       - $SONAR_OTB_TOKEN
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
@@ -336,7 +331,6 @@ ubuntu-xdk-report:
       - merge_requests
       - develop
       - /^release-[0-9]+\.[0-9]+$/
-      - out-of-order-job-execution
     variables:
       - $SONAR_OTB_TOKEN
   script:
