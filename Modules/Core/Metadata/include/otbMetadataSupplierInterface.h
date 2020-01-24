@@ -18,47 +18,39 @@
  * limitations under the License.
  */
 
-#ifndef otbBandMetadata_h
-#define otbBandMetadata_h
+#ifndef otbMetadataSupplierInterface_h
+#define otbMetadataSupplierInterface_h
 
-#include <string>
-#include <vector>
 #include "OTBMetadataExport.h"
-#include "otbMetaDataKey.h"
+#include <vector>
+#include <string>
+#include "otbStringUtilities.h"
 
 namespace otb
 {
-/** \class BandMetadata
+/** \class MetadataSupplierInterface
  *
- * \brief Generic structure containing channel specific metadatas
+ * \brief Base class to access metadata information in files/images
  *
  * \ingroup OTBMetadata
  */
-struct OTBMetadata_EXPORT BandMetadata
+class OTBMetadata_EXPORT MetadataSupplierInterface
 {
-// ----------- static part -------------------------
+public:
+  virtual std::vector<std::string> GetResourceFiles() = 0;
 
-  std::string Name;
+  virtual bool HasValue(const char * path) = 0;
 
-  std::string EnhancedName;
+  virtual otb::string_view GetValue(const char * path) = 0;
+
+  // probably not needed
+  //~ virtual std::vector<std::string> GetValuesList(const std::string& path) = 0;
+
+// TODO:  use string_view instead ?
   
-  bool NoDataFlag = false;
-
-  double NoDataValue = 0.0;
-
-// --------- dynamic part ----------------------------
-
-  std::map<MetaData::NumericKeyType, double> NumericKeys;
-
-  std::map<MetaData::StringKeyType, std::string> StringKeys;
-
-  std::map<MetaData::LUT1DKeyType, MetaData::LUT1D > LUT1DKeys;
-
-  std::map<MetaData::LUT2DKeyType, MetaData::LUT2D > LUT2DKeys;
 };
 
 } // end namespace otb
 
-extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::BandMetadata& bmd);
-
 #endif
+

@@ -28,6 +28,7 @@
 #include "otbMetaDataKey.h"
 #include "itkImageBase.h"
 #include "otbImageMetadata.h"
+#include "otbMetadataSupplierInterface.h"
 
 #include "OTBMetadataExport.h"
 
@@ -220,8 +221,10 @@ public:
 
   virtual bool CanRead() const = 0;
 
-  // TODO : find the correct interface ...
-  virtual bool Parse() const = 0;
+  virtual bool Parse(const MetadataSupplierInterface *) const
+    {
+    return false;
+    }
 
   static void PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict);
 

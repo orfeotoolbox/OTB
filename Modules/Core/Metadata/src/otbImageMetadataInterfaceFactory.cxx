@@ -87,6 +87,40 @@ ImageMetadataInterfaceFactory::ImageMetadataInterfaceBasePointerType ImageMetada
   return dynamic_cast<ImageMetadataInterfaceBase*>(static_cast<DefaultImageMetadataInterface*>(defaultIMI));
 }
 
+ImageMetadataInterfaceFactory::ImageMetadataInterfaceBasePointerType
+ImageMetadataInterfaceFactory
+::CreateIMI(const MetadataSupplierInterface *mds)
+{
+  RegisterBuiltInFactories();
+
+  std::list<itk::LightObject::Pointer>             allOpticalObjects = itk::ObjectFactoryBase::CreateAllInstance("OpticalImageMetadataInterface");
+  std::list<itk::LightObject::Pointer>             allSarObjects     = itk::ObjectFactoryBase::CreateAllInstance("SarImageMetadataInterface");
+  std::list<itk::LightObject::Pointer>             allObjects;
+
+  std::copy(allOpticalObjects.begin(), allOpticalObjects.end(), std::back_inserter(allObjects));
+  std::copy(allSarObjects.begin(), allSarObjects.end(), std::back_inserter(allObjects));
+
+  for (std::list<itk::LightObject::Pointer>::iterator i = allObjects.begin(); i != allObjects.end(); ++i)
+  {
+    ImageMetadataInterfaceBase* io = dynamic_cast<ImageMetadataInterfaceBase*>(i->GetPointer());
+    if (io)
+    {
+      if (io->Parse(mds))
+      {
+        return io;
+      }
+    }
+    else
+    {
+      itkGenericExceptionMacro(<< "Error ImageMetadataInterface factory did not return an ImageMetadataInterfaceBase: " << (*i)->GetNameOfClass());
+    }
+  }
+
+  DefaultImageMetadataInterface::Pointer defaultIMI = DefaultImageMetadataInterface::New();
+  //~ defaultIMI->SetMetaDataDictionary(dict);
+  return dynamic_cast<ImageMetadataInterfaceBase*>(static_cast<DefaultImageMetadataInterface*>(defaultIMI));
+}
+
 void ImageMetadataInterfaceFactory::RegisterBuiltInFactories()
 {
   static bool firstTime = true;

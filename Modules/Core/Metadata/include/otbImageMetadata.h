@@ -93,33 +93,6 @@ struct OTBMetadata_EXPORT ImageMetadata
 
 } // end namespace otb
 
-std::ostream& operator<<(std::ostream& os, const otb::ImageMetadata& imd)
-{
-  os << "ImageMetadata [";
-  os << "SensorID:'" << imd.SensorID << "';";
-  os << "ProjectionRef:'"<<imd.ProjectionRef<<"';";
-  os << "GCPProjection:'"<<imd.GCPProjection<<"';";
-  os << "GCPs[";
-  for (auto &gcp : imd.GCPs)
-    {
-    gcp.Print(os);
-    }
-  os << "];";
-  os << "GeoTransform: ["
-      << imd.GeoTransform[0] << ","
-      << imd.GeoTransform[1] << ","
-      << imd.GeoTransform[2] << ","
-      << imd.GeoTransform[3] << ","
-      << imd.GeoTransform[4] << ","
-      << imd.GeoTransform[5] << "]";
-  os << "Bands[";
-  for (auto &band : imd.Bands)
-    {
-    os << band << ",";
-    }
-  os << "]";
-  // TODO : finish printing other fields
-  return os;
-}
+extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::ImageMetadata& imd);
 
 #endif
