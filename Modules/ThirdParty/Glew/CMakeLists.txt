@@ -22,6 +22,7 @@ project(OTBGlew)
 set(OTBGlew_THIRD_PARTY 1)
 
 set(OTBGlew_SYSTEM_INCLUDE_DIRS ${GLEW_INCLUDE_DIR})
-set(OTBGlew_LIBRARIES ${GLEW_LIBRARY})
+
+set(OTBGlew_LIBRARIES GLEW::GLEW)
 
 otb_module_impl()
