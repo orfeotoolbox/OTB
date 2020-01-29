@@ -30,6 +30,7 @@
 #include "itkVectorImage.h"
 #endif
 #include "otbImageMetadataInterfaceBase.h"
+#include "otbImageCommons.h"
 #include "OTBImageBaseExport.h"
 
 namespace otb
@@ -41,7 +42,9 @@ namespace otb
  * \ingroup OTBImageBase
  */
 template <class TPixel, unsigned int VImageDimension = 2>
-class OTBImageBase_EXPORT_TEMPLATE VectorImage : public itk::VectorImage<TPixel, VImageDimension>
+class OTBImageBase_EXPORT_TEMPLATE VectorImage
+  : public itk::VectorImage<TPixel, VImageDimension>
+  , public ImageCommons
 {
 public:
   /** Standard class typedefs. */
