@@ -37,6 +37,9 @@
 #include "otbConvertPixelBuffer.h"
 #include "otbImageIOFactory.h"
 #include "otbMetaDataKey.h"
+#include "otbImageMetadata.h"
+#include "otbImageMetadataInterfaceFactory.h"
+#include "otbImageCommons.h"
 
 #include "otbMacro.h"
 
@@ -385,6 +388,13 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   output->SetDirection(direction); // Set the image direction cosines
   output->SetSpacing(spacing);     // Set the image spacing
 
+  // detect Image supporting new ImageMetadata
+  ImageCommons* img_common = dynamic_cast<ImageCommons*>(this->GetOutput());
+  
+  // Initialize ImageMetadata from ImageIO
+  ImageMetadata imd;
+  itk::ExposeMetaData<ImageMetadata>(dict, MetaDataKey::ImageMetadataKey, imd);
+
   if (!m_KeywordListUpToDate && !m_FilenameHelper->GetSkipGeom())
   {
 
@@ -434,6 +444,13 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
           otbLogMacro(Debug, << "No kwl metadata found in file " << lFileNameOssimKeywordlist);
         }
       }
+      MetadataSupplierInterface* mds = dynamic_cast<MetadataSupplierInterface*>(m_ImageIO.GetPointer());
+      if (mds)
+        {
+        ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(imd, mds);
+        // update 'imd' with the parsed metadata
+        imd = imi->GetImageMetadata();
+        }
     }
 
     // Don't add an empty ossim keyword list
@@ -492,28 +509,42 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
   }
 
+  if (m_KeywordListUpToDate)
+    {
+    // Read back from existing dictionary
+    if (img_common != nullptr)
+      {
+      imd = img_common->GetImageMetadata();
+      }
+    }
+
 
   // If Skip ProjectionRef is activated, remove ProjRef from dict
   if (m_FilenameHelper->GetSkipCarto())
   {
     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, "");
+    imd.ProjectionRef = "";
   }
 
   // Copy MetaDataDictionary from instantiated reader to output image.
-  if (!m_FilenameHelper->GetSkipGeom())
-  {
-    output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
-    this->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
-  }
-  else
-  {
-    itk::MetaDataDictionary dictLight;
-    std::string             projRef;
-    itk::ExposeMetaData(dict, MetaDataKey::ProjectionRefKey, projRef);
-    itk::EncapsulateMetaData<std::string>(dictLight, MetaDataKey::ProjectionRefKey, projRef);
-    output->SetMetaDataDictionary(dictLight);
-    this->SetMetaDataDictionary(dictLight);
-  }
+  //~ if (!m_FilenameHelper->GetSkipGeom())
+  //~ {
+    //~ output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
+    //~ this->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
+  //~ }
+  //~ else
+  //~ {
+    //~ itk::MetaDataDictionary dictLight;
+    //~ std::string             projRef;
+    //~ itk::ExposeMetaData(dict, MetaDataKey::ProjectionRefKey, projRef);
+    //~ itk::EncapsulateMetaData<std::string>(dictLight, MetaDataKey::ProjectionRefKey, projRef);
+    //~ output->SetMetaDataDictionary(dictLight);
+    //~ this->SetMetaDataDictionary(dictLight);
+  //~ }
+  if (img_common != nullptr)
+    {
+    img_common->SetImageMetadata(imd);
+    }
 
   IndexType start;
   start.Fill(0);
