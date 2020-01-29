@@ -24,7 +24,7 @@
 #include "OTBMetadataExport.h"
 #include <vector>
 #include <string>
-#include "otbStringUtilities.h"
+//#include "otbStringUtilities.h"
 
 namespace otb
 {
@@ -37,16 +37,20 @@ namespace otb
 class OTBMetadata_EXPORT MetadataSupplierInterface
 {
 public:
-  virtual std::vector<std::string> GetResourceFiles() = 0;
 
-  virtual bool HasValue(const char * path) = 0;
+  virtual std::string GetResourceFile() = 0;
 
-  virtual otb::string_view GetValue(const char * path) = 0;
+  // Maybe not needed
+//  virtual std::vector<std::string> GetResourceFiles() = 0;
+
+  //~ virtual bool HasValue(const char * path) = 0;
+
+  /** Get the metadata value corresponding to a given path (meaning of this path
+   * depends on the specific implementation. Returns NULL when path is not found */
+  virtual const char * GetMetadataValue(const char * path) const = 0;
 
   // probably not needed
   //~ virtual std::vector<std::string> GetValuesList(const std::string& path) = 0;
-
-// TODO:  use string_view instead ?
   
 };
 

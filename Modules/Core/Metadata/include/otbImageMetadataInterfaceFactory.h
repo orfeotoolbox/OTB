@@ -24,6 +24,7 @@
 #include "itkObject.h"
 #include "otbImageMetadataInterfaceBase.h"
 #include "otbMetadataSupplierInterface.h"
+#include "otbImageMetadata.h"
 
 namespace otb
 {
@@ -58,7 +59,7 @@ public:
   static ImageMetadataInterfaceBasePointerType CreateIMI(const MetaDataDictionaryType& dict);
 
   /** Create the appropriate IMI based on a MetadataSupplier */
-  static ImageMetadataInterfaceBasePointerType CreateIMI(const MetadataSupplierInterface *mds);
+  static ImageMetadataInterfaceBasePointerType CreateIMI(const ImageMetadata & imd, const MetadataSupplierInterface *mds);
 
   /** Register Built-in factories */
   static void RegisterBuiltInFactories();

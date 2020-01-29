@@ -221,7 +221,7 @@ public:
 
   virtual bool CanRead() const = 0;
 
-  virtual bool Parse(const MetadataSupplierInterface *) const
+  virtual bool Parse(const MetadataSupplierInterface *)
     {
     return false;
     }

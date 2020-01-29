@@ -516,6 +516,14 @@ void ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent ind
       kwl.Print(os);
       break;
     }
+    case MetaDataKey::TIMAGEMETADATA:
+    {
+      ImageMetadata imd;
+      itk::ExposeMetaData<ImageMetadata>(dict2, keys[itkey], imd);
+      os << indent << "---> " << keys[itkey] << " = " << std::endl;
+      os << imd;
+      break;
+    }
     //      case MetaDataKey::TVECTORDATAKEYWORDLIST:
     //        itk::ExposeMetaData<VectorDataKeywordlist>(dict2, keys[itkey], vectorDataKeywordlistValue);
     //

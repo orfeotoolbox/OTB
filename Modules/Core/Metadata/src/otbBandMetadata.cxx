@@ -20,6 +20,9 @@
 
 #include "otbBandMetadata.h"
 
+namespace otb
+{
+
 std::ostream& operator<<(std::ostream& os, const otb::BandMetadata& bmd)
 {
   os << "[Name:"<< bmd.Name
@@ -30,3 +33,4 @@ std::ostream& operator<<(std::ostream& os, const otb::BandMetadata& bmd)
   return os;
 }
 
+}

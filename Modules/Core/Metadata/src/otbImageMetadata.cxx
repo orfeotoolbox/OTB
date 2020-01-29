@@ -19,6 +19,8 @@
  */
 
 #include "otbImageMetadata.h"
+namespace otb
+{
 
 std::ostream& operator<<(std::ostream& os, const otb::ImageMetadata& imd)
 {
@@ -47,4 +49,6 @@ std::ostream& operator<<(std::ostream& os, const otb::ImageMetadata& imd)
   os << "]";
   // TODO : finish printing other fields
   return os;
+}
+
 }

@@ -89,7 +89,7 @@ ImageMetadataInterfaceFactory::ImageMetadataInterfaceBasePointerType ImageMetada
 
 ImageMetadataInterfaceFactory::ImageMetadataInterfaceBasePointerType
 ImageMetadataInterfaceFactory
-::CreateIMI(const MetadataSupplierInterface *mds)
+::CreateIMI(const ImageMetadata & imd, const MetadataSupplierInterface *mds)
 {
   RegisterBuiltInFactories();
 
@@ -105,6 +105,8 @@ ImageMetadataInterfaceFactory
     ImageMetadataInterfaceBase* io = dynamic_cast<ImageMetadataInterfaceBase*>(i->GetPointer());
     if (io)
     {
+      // the static part of ImageMetadata is already filled
+      io->SetImageMetadata(imd);
       if (io->Parse(mds))
       {
         return io;
@@ -117,7 +119,7 @@ ImageMetadataInterfaceFactory
   }
 
   DefaultImageMetadataInterface::Pointer defaultIMI = DefaultImageMetadataInterface::New();
-  //~ defaultIMI->SetMetaDataDictionary(dict);
+  defaultIMI->SetImageMetadata(imd);
   return dynamic_cast<ImageMetadataInterfaceBase*>(static_cast<DefaultImageMetadataInterface*>(defaultIMI));
 }
 

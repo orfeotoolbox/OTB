@@ -76,6 +76,8 @@ extern OTBMetadata_EXPORT char const* NoDataValue;
 
 extern OTBMetadata_EXPORT char const* DataType;
 
+extern OTBMetadata_EXPORT char const* ImageMetadataKey;
+
 
 enum KeyType
 {
@@ -86,7 +88,8 @@ enum KeyType
   TVECTOR,
   TOSSIMKEYWORDLIST,
   TVECTORDATAKEYWORDLIST,
-  TBOOLVECTOR
+  TBOOLVECTOR,
+  TIMAGEMETADATA
 };
 /*
 typedef struct
@@ -194,9 +197,13 @@ enum class NumericKeyType
 
 enum class StringKeyType
 {
+  Mission,
   Instrument,
   ProductType,
-  Polarization
+  Polarization,
+  // Saved as string for now, but could be stored with dedicated Time structure
+  AcquisitionDate,
+  ProductionDate
   // ...
 };
 

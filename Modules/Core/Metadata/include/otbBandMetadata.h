@@ -57,8 +57,8 @@ struct OTBMetadata_EXPORT BandMetadata
   std::map<MetaData::LUT2DKeyType, MetaData::LUT2D > LUT2DKeys;
 };
 
-} // end namespace otb
-
 extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::BandMetadata& bmd);
+
+} // end namespace otb
 
 #endif

@@ -58,10 +58,10 @@ struct OTBMetadata_EXPORT ImageMetadata
   double PixelSizeY = 0.0;
 
   /** Acquisition date */
-  struct tm AcquisitionDate;
+  //~ struct tm AcquisitionDate;
 
   /** Production date */
-  struct tm ProductionDate;
+  //~ struct tm ProductionDate;
   
   /** Corners coordinate */
   double ULX = 0.0;
@@ -72,10 +72,17 @@ struct OTBMetadata_EXPORT ImageMetadata
   double LLY = 0.0;
   double LRX = 0.0;
   double LRY = 0.0;
+
+  /** Tile Hint */
+  unsigned int TileHintX = 0;
+  unsigned int TileHintY = 0;
+
+  int DataType = 0;
   
   /** Band-specific metadatas */
   std::vector<BandMetadata> Bands;
 
+  // TODO: check the concept, maybe use boost/type_erasure with properties ostreamable, ...
   /** Sensor model geometry */
   boost::any SensorGeometry;
 
@@ -91,8 +98,10 @@ struct OTBMetadata_EXPORT ImageMetadata
   
 };
 
-} // end namespace otb
+
 
 extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::ImageMetadata& imd);
+
+} // end namespace otb
 
 #endif
