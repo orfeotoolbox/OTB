@@ -1757,4 +1757,25 @@ PleiadesImageMetadataInterface::WavelengthSpectralBandVectorType PleiadesImageMe
   return wavelengthSpectralBand;
 }
 
+bool PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+{
+  assert(mds);
+  const char *sensor = mds->GetMetadataValue("IMD/Dataset_Sources.Source_Identification.Strip_Source.MISSION");
+  if (sensor != nullptr && strncmp(sensor, "PHR", 3))
+    {
+    m_ImageMetadata.SensorID = std::string(sensor);
+    m_ImageMetadata.StringKeys[MetaData::StringKeyType::Mission] = "Pléiades";
+    }
+  else
+    {
+    return false;
+    }
+
+  // get radiometric metadata
+
+  // fill RPC model
+  
+  return true;
+}
+
 } // end namespace otb

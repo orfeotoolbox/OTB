@@ -124,6 +124,8 @@ public:
      * There values a computed by 6S. */
   WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
+  bool Parse(const MetadataSupplierInterface *) override;
+
 protected:
   PleiadesImageMetadataInterface();
   ~PleiadesImageMetadataInterface() override
