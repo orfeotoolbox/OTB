@@ -28,6 +28,7 @@
 
 /* ITK Libraries */
 #include "otbImageIOBase.h"
+#include "otbMetadataSupplierInterface.h"
 
 #include "OTBIOGDALExport.h"
 
@@ -69,7 +70,7 @@ class GDALDataTypeWrapper;
  *
  * \ingroup OTBIOGDAL
  */
-class OTBIOGDAL_EXPORT GDALImageIO : public otb::ImageIOBase
+class OTBIOGDAL_EXPORT GDALImageIO : public otb::ImageIOBase, public otb::MetadataSupplierInterface
 {
 public:
   typedef unsigned char InputPixelType;
@@ -196,6 +197,14 @@ public:
   std::string GetGdalPixelTypeAsString() const;
 
   itkGetMacro(NbBands, int);
+
+  // MetadataSupplierInterface overrides
+
+  /** Get main image file */
+  std::string GetResourceFile() override;
+
+  /** Get metadata item in GDALDataset, domain can specified as "domain/key" */
+  const char * GetMetadataValue(const char * path) const override;
 
 protected:
   /**

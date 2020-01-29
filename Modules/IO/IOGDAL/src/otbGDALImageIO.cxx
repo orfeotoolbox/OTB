@@ -668,6 +668,9 @@ void GDALImageIO::InternalReadImageInformation()
   // Now initialize the itk dictionary
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
 
+  // Initialize the ImageMetadata structure
+  ImageMetadata imd;
+
   // Report the typical block size if possible
   if (dataset->GetRasterCount() > 0)
   {
@@ -692,6 +695,9 @@ void GDALImageIO::InternalReadImageInformation()
 
       itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, blockSizeX);
       itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, blockSizeY);
+
+      imd.TileHintX = blockSizeX;
+      imd.TileHintY = blockSizeY;
     }
   }
 
@@ -700,6 +706,8 @@ void GDALImageIO::InternalReadImageInformation()
   /* -------------------------------------------------------------------- */
 
   itk::EncapsulateMetaData<IOComponentType>(dict, MetaDataKey::DataType, this->GetComponentType());
+
+  imd.DataType = this->GetComponentType();
 
   /* -------------------------------------------------------------------- */
   /*  Get Spacing                                                         */
@@ -761,11 +769,14 @@ void GDALImageIO::InternalReadImageInformation()
 
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, static_cast<std::string>(pszPrettyWkt));
 
+      imd.ProjectionRef = std::string(pszPrettyWkt);
+
       CPLFree(pszPrettyWkt);
     }
     else
     {
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, static_cast<std::string>(pszProjection));
+      imd.ProjectionRef = std::string(pszProjection);
     }
 
     if (pSR != nullptr)
@@ -804,6 +815,7 @@ void GDALImageIO::InternalReadImageInformation()
     }
 
     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionKey);
+    imd.GCPProjection = gcpProjectionKey;
 
     if (gcpProjectionKey.empty())
     {
@@ -836,6 +848,7 @@ void GDALImageIO::InternalReadImageInformation()
       key = lStream.str();
 
       itk::EncapsulateMetaData<OTB_GCP>(dict, key, pOtbGCP);
+      imd.GCPs.push_back(pOtbGCP);
     }
   }
 
@@ -849,7 +862,10 @@ void GDALImageIO::InternalReadImageInformation()
   if (dataset->GetGeoTransform(adfGeoTransform) == CE_None)
   {
     for (int cpt = 0; cpt < 6; ++cpt)
+      {
       VadfGeoTransform.push_back(adfGeoTransform[cpt]);
+      imd.GeoTransform[cpt] = adfGeoTransform[cpt];
+      }
 
     itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, VadfGeoTransform);
 
@@ -970,6 +986,8 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoY);
 
   itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::UpperLeftCornerKey, VGeo);
+  imd.ULX = GeoX;
+  imd.ULY = GeoY;
 
   VGeo.clear();
 
@@ -978,6 +996,8 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoY);
 
   itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::UpperRightCornerKey, VGeo);
+  imd.URX = GeoX;
+  imd.URY = GeoY;
 
   VGeo.clear();
 
@@ -986,6 +1006,8 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoY);
 
   itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::LowerLeftCornerKey, VGeo);
+  imd.LLX = GeoX;
+  imd.LLY = GeoY;
 
   VGeo.clear();
 
@@ -994,6 +1016,8 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoY);
 
   itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::LowerRightCornerKey, VGeo);
+  imd.LRX = GeoX;
+  imd.LRY = GeoY;
 
   VGeo.clear();
 
@@ -1062,6 +1086,7 @@ void GDALImageIO::InternalReadImageInformation()
   std::vector<double> noDataValues(dataset->GetRasterCount(), 0);
 
   bool noDataFound = false;
+  BandMetadata bmd;
 
   for (int iBand = 0; iBand < dataset->GetRasterCount(); iBand++)
   {
@@ -1076,7 +1101,15 @@ void GDALImageIO::InternalReadImageInformation()
       noDataFound              = true;
       isNoDataAvailable[iBand] = true;
       noDataValues[iBand]      = ndv;
+      bmd.NoDataFlag = true;
+      bmd.NoDataValue = ndv;
     }
+    else
+    {
+      bmd.NoDataFlag = false;
+      bmd.NoDataValue = 0.0;
+    }
+    imd.Bands.push_back(bmd);
   }
 
   if (noDataFound)
@@ -1084,6 +1117,9 @@ void GDALImageIO::InternalReadImageInformation()
     itk::EncapsulateMetaData<MetaDataKey::BoolVectorType>(dict, MetaDataKey::NoDataValueAvailable, isNoDataAvailable);
     itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::NoDataValue, noDataValues);
   }
+
+  // give the ImageMetadata to ImageFileReader
+  itk::EncapsulateMetaData<ImageMetadata>(dict, MetaDataKey::ImageMetadataKey, imd);
 }
 
 bool GDALImageIO::CanWriteFile(const char* name)
@@ -1736,5 +1772,30 @@ std::string GDALImageIO::GetGdalPixelTypeAsString() const
 
   return name;
 }
+
+
+std::string GDALImageIO::GetResourceFile()
+{
+  return m_FileName;
+}
+
+
+const char * GDALImageIO::GetMetadataValue(const char * path) const
+{
+  // detect namespace if any
+  const char *slash = strchr(path,'/');
+  std::string domain("");
+  const char *domain_c = nullptr;
+  std::string key(path);
+  if (slash)
+    {
+    domain = std::string(path, (slash-path));
+    domain_c = domain.c_str();
+    key = std::string(slash+1);
+    }
+  const char * ret = m_Dataset->GetDataSet()->GetMetadataItem(key.c_str(), domain_c);
+  return ret;
+}
+
 
 } // end namespace otb
