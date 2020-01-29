@@ -28,6 +28,9 @@ int otbImageMetadataTest(int, char*[])
   ImageMetadata md;
   md.SensorID = "PHR";
   md.ProjectionRef = "UTM projRef";
+  md.GeoTransform[0] = 10.0;
+  md.GeoTransform[3] = 20.0;
+  md.GeoTransform[5] = -1.0;
 
   BandMetadata bmd;
   bmd.Name = "B3";
@@ -52,6 +55,7 @@ int otbImageMetadataTest(int, char*[])
   md2 = md;
 
   md.ProjectionRef = "Lambert projRef";
+  md.GeoTransform[5] = 1.0;
 
   std::cout << "md2: "<< md2 << "\n";
   
