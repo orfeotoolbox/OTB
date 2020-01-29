@@ -756,9 +756,11 @@ class ApplicationProxy(object):
       if (name == "progressReportManager"):
         super().__setattr__(name, value)
         return
-      method = Application.__swig_setmethods__.get(name, None)
-      if method:
-        return method(self, value)
+      
+      if hasattr(Application, "__swig_setmethods__"):
+        method = Application.__swig_setmethods__.get(name, None)
+        if method:
+          return method(self, value)
       key_list = [k.upper() for k in self.GetParametersKeys(True)]
       if name in key_list:
         self.SetParameterValue(name.lower(), value)
