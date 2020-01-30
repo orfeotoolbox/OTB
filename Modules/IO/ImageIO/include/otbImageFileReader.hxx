@@ -507,17 +507,21 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     itk::ExposeMetaData<ImageKeywordlist>(this->GetOutput()->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
     // And add to new one
     itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-  }
 
-  if (m_KeywordListUpToDate)
-    {
-    // Read back from existing dictionary
-    if (img_common != nullptr)
+    if (m_KeywordListUpToDate)
       {
-      imd = img_common->GetImageMetadata();
+      // Read back from existing dictionary
+      if (img_common != nullptr)
+        {
+        imd = img_common->GetImageMetadata();
+        }
       }
-    }
-
+    if (m_FilenameHelper->GetSkipGeom())
+      {
+      // Make sure the SensorGeometry is empty
+      imd.SensorGeometry = boost::any();
+      }
+  }
 
   // If Skip ProjectionRef is activated, remove ProjRef from dict
   if (m_FilenameHelper->GetSkipCarto())
