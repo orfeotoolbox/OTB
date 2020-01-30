@@ -34,113 +34,6 @@ Image<TPixel, VImageDimension>::Image()
 {
 }
 
-template <class TPixel, unsigned int VImageDimension>
-std::string Image<TPixel, VImageDimension>::GetProjectionRef(void) const
-{
-  return (this->GetMetaDataInterface()->GetProjectionRef());
-}
-
-template <class TPixel, unsigned int VImageDimension>
-void Image<TPixel, VImageDimension>::SetProjectionRef(const std::string& kwl)
-{
-  itk::EncapsulateMetaData<std::string>(this->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey, kwl);
-}
-
-template <class TPixel, unsigned int VImageDimension>
-std::string Image<TPixel, VImageDimension>::GetGCPProjection(void) const
-{
-  return (this->GetMetaDataInterface()->GetGCPProjection());
-}
-
-template <class TPixel, unsigned int VImageDimension>
-unsigned int Image<TPixel, VImageDimension>::GetGCPCount(void) const
-{
-  return (this->GetMetaDataInterface()->GetGCPCount());
-}
-
-template <class TPixel, unsigned int VImageDimension>
-OTB_GCP& Image<TPixel, VImageDimension>::GetGCPs(unsigned int GCPnum)
-{
-  return (this->GetMetaDataInterface()->GetGCPs(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-const OTB_GCP& Image<TPixel, VImageDimension>::GetGCPs(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPs(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-std::string Image<TPixel, VImageDimension>::GetGCPId(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPId(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-std::string Image<TPixel, VImageDimension>::GetGCPInfo(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPInfo(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-double Image<TPixel, VImageDimension>::GetGCPRow(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPRow(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-double Image<TPixel, VImageDimension>::GetGCPCol(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPCol(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-double Image<TPixel, VImageDimension>::GetGCPX(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPX(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-double Image<TPixel, VImageDimension>::GetGCPY(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPY(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-double Image<TPixel, VImageDimension>::GetGCPZ(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPZ(GCPnum));
-}
-
-template <class TPixel, unsigned int                VImageDimension>
-typename Image<TPixel, VImageDimension>::VectorType Image<TPixel, VImageDimension>::GetGeoTransform(void) const
-{
-  return (this->GetMetaDataInterface()->GetGeoTransform());
-}
-
-template <class TPixel, unsigned int                VImageDimension>
-typename Image<TPixel, VImageDimension>::VectorType Image<TPixel, VImageDimension>::GetUpperLeftCorner(void) const
-{
-  return (this->GetMetaDataInterface()->GetUpperLeftCorner());
-}
-
-template <class TPixel, unsigned int                VImageDimension>
-typename Image<TPixel, VImageDimension>::VectorType Image<TPixel, VImageDimension>::GetUpperRightCorner(void) const
-{
-  return (this->GetMetaDataInterface()->GetUpperRightCorner());
-}
-
-template <class TPixel, unsigned int                VImageDimension>
-typename Image<TPixel, VImageDimension>::VectorType Image<TPixel, VImageDimension>::GetLowerLeftCorner(void) const
-{
-  return (this->GetMetaDataInterface()->GetLowerLeftCorner());
-}
-
-template <class TPixel, unsigned int                VImageDimension>
-typename Image<TPixel, VImageDimension>::VectorType Image<TPixel, VImageDimension>::GetLowerRightCorner(void) const
-{
-  return (this->GetMetaDataInterface()->GetLowerRightCorner());
-}
 
 template <class TPixel, unsigned int                 VImageDimension>
 typename Image<TPixel, VImageDimension>::SpacingType Image<TPixel, VImageDimension>::GetSignedSpacing() const
@@ -214,6 +107,11 @@ void Image<TPixel, VImageDimension>::CopyInformation(const itk::DataObject* data
 {
   Superclass::CopyInformation(data);
   this->itk::Object::SetMetaDataDictionary(data->GetMetaDataDictionary());
+  const ImageCommons* imc = dynamic_cast<const ImageCommons*>(data);
+  if (imc != nullptr)
+    {
+    SetImageMetadata(imc->GetImageMetadata());
+    }
 }
 
 template <class TPixel, unsigned int                                       VImageDimension>

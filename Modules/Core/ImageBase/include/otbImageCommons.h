@@ -22,11 +22,13 @@
 #define otbImageCommons_h
 
 #include "otbImageMetadata.h"
+#include "otbImageMetadataInterfaceBase.h"
+#include "OTBImageBaseExport.h"
 
 namespace otb
 {
 
-class ImageCommons
+class OTBImageBase_EXPORT ImageCommons
 {
 public:
   void SetImageMetadata(const ImageMetadata & imd)
@@ -38,8 +40,42 @@ public:
     return m_Imd;
     }
 
-private:
+  // boilerplate code...
 
+  /** Get the projection coordinate system of the image. */
+  std::string GetProjectionRef(void) const;
+
+  void SetProjectionRef(const std::string& wkt);
+
+  /** Get the GCP projection coordinates of the image. */
+  std::string GetGCPProjection(void) const;
+
+  unsigned int GetGCPCount(void) const;
+
+  OTB_GCP& GetGCPs(unsigned int GCPnum);
+  const OTB_GCP& GetGCPs(unsigned int GCPnum) const;
+
+  std::string GetGCPId(unsigned int GCPnum) const;
+  std::string GetGCPInfo(unsigned int GCPnum) const;
+  double GetGCPRow(unsigned int GCPnum) const;
+  double GetGCPCol(unsigned int GCPnum) const;
+  double GetGCPX(unsigned int GCPnum) const;
+  double GetGCPY(unsigned int GCPnum) const;
+  double GetGCPZ(unsigned int GCPnum) const;
+
+  /** Get the six coefficients of affine geoTtransform. */
+  ImageMetadataInterfaceBase::VectorType GetGeoTransform(void) const;
+
+  /** Get image corners. */
+  ImageMetadataInterfaceBase::VectorType GetUpperLeftCorner(void) const;
+  ImageMetadataInterfaceBase::VectorType GetUpperRightCorner(void) const;
+  ImageMetadataInterfaceBase::VectorType GetLowerLeftCorner(void) const;
+  ImageMetadataInterfaceBase::VectorType GetLowerRightCorner(void) const;
+
+  /** Returns true if a sensor geometric model is present */
+  bool HasSensorGeometry() const;
+
+protected:
   ImageMetadata m_Imd;
 };
 
