@@ -920,6 +920,12 @@ protected:
   /** Enable/Disable multiWriting */
   itkSetMacro(MultiWriting, bool);
 
+  /* Enable in-application prevention of modifications to m_UserValue (default behaviour) */
+  void EnableInPrivateDo();
+
+  /* Disable in-application prevention of modifications to m_UserValue */
+  void DisableInPrivateDo();
+
 private:
   /* Implement this method to add parameters */
   virtual void DoInit() = 0;
