@@ -34,20 +34,20 @@ int otbImageMetadataTest(int, char*[])
 
   BandMetadata bmd;
   bmd.Name = "B3";
-  bmd.NumericKeys[MetaData::NumericKeyType::PhysicalGain] = 2.0;
-  bmd.NumericKeys[MetaData::NumericKeyType::PhysicalBias] = 1.0;
+  bmd.NumericKeys[MDNum::PhysicalGain] = 2.0;
+  bmd.NumericKeys[MDNum::PhysicalBias] = 1.0;
   md.Bands.push_back(bmd);
 
   bmd.Name = "B2";
-  bmd.NumericKeys[MetaData::NumericKeyType::PhysicalGain] = 3.0;
-  bmd.NumericKeys[MetaData::NumericKeyType::PhysicalBias] = 2.0;
+  bmd.NumericKeys[MDNum::PhysicalGain] = 3.0;
+  bmd.NumericKeys[MDNum::PhysicalBias] = 2.0;
   md.Bands.push_back(bmd);
 
   bmd.Name = "B1";
   bmd.NoDataFlag = true;
   bmd.NoDataValue = -10000.0;
-  bmd.NumericKeys[MetaData::NumericKeyType::PhysicalGain] = 4.0;
-  bmd.NumericKeys[MetaData::NumericKeyType::PhysicalBias] = 3.0;
+  bmd.NumericKeys[MDNum::PhysicalGain] = 4.0;
+  bmd.NumericKeys[MDNum::PhysicalBias] = 3.0;
   md.Bands.push_back(bmd);
 
   ImageMetadata md2;

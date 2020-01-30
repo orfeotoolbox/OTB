@@ -158,10 +158,8 @@ public:
   void Print(std::ostream& os) const;
 };
 
-namespace MetaData
-{
-
-enum class NumericKeyType
+/** Metadata as double*/
+enum class MDNum
 {
 // optical section
   PhysicalGain,
@@ -195,27 +193,39 @@ enum class NumericKeyType
   NoisePolyDegY
 };
 
-enum class StringKeyType
+/** Metadata as std::string */
+enum class MDStr
 {
   Mission,
   Instrument,
   ProductType,
-  Polarization,
-  // Saved as string for now, but could be stored with dedicated Time structure
-  AcquisitionDate,
-  ProductionDate
+  GeometricLevel,
+  RadiometricLevel,
+  Polarization
   // ...
 };
 
-enum class LUT1DKeyType
+/** Metadata as LUT 1D */
+enum class MDL1D
 {
   SpectralSensitivity
 };
 
-enum class LUT2DKeyType
+/** Metadata as LUT 2D */
+enum class MDL2D
 {
   // Sar calibration lut ...
 };
+
+/** Metadata as Time */
+enum class MDTime
+{
+  AcquisitionDate,
+  ProductionDate
+};
+
+namespace MetaData
+{
 
 struct Time : tm
 {

@@ -88,14 +88,15 @@ struct OTBMetadata_EXPORT ImageMetadata
 
 // ------------------------------ dynamic part ---------------------------------
 
-  std::map<MetaData::NumericKeyType, double> NumericKeys;
+  std::map<MDNum, double> NumericKeys;
 
-  std::map<MetaData::StringKeyType, std::string> StringKeys;
+  std::map<MDStr, std::string> StringKeys;
 
-  std::map<MetaData::LUT1DKeyType, MetaData::LUT1D > LUT1DKeys;
+  std::map<MDL1D, MetaData::LUT1D > LUT1DKeys;
 
-  std::map<MetaData::LUT2DKeyType, MetaData::LUT2D > LUT2DKeys;
-  
+  std::map<MDL2D, MetaData::LUT2D > LUT2DKeys;
+
+  std::map<MDTime, MetaData::Time> TimeKeys;
 };
 
 
