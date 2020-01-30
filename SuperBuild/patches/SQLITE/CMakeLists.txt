@@ -29,11 +29,24 @@ add_definitions(-DSQLITE_ENABLE_COLUMN_METADATA=1)
 add_definitions(-DSQLITE_ENABLE_RTREE=1)
 add_definitions(-DSQLITE_OMIT_LOAD_EXTENSION=1)
 add_definitions(-DSQLITE_THREADSAFE=1)
+
 add_library(sqlite3 sqlite3_win.c)
+
+add_executable(sqlite3-bin shell.c)
+target_link_libraries(sqlite3-bin sqlite3)
+
+set_target_properties(sqlite3-bin PROPERTIES OUTPUT_NAME sqlite3)
+set_target_properties(sqlite3-bin sqlite3
+    PROPERTIES
+    ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)
+
 if(UNIX)
   set(CMAKE_C_FLAGS "-pthread")
 endif()  
-install(TARGETS sqlite3
+install(TARGETS sqlite3 sqlite3-bin 
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib)

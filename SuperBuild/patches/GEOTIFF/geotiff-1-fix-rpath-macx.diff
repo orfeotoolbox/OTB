@@ -1,7 +1,7 @@
-diff -burN libgeotiff-1.4.2.orig/CMakeLists.txt libgeotiff-1.4.2/CMakeLists.txt
---- libgeotiff-1.4.2.orig/CMakeLists.txt	Tue Jul 25 17:16:02 2017
-+++ libgeotiff-1.4.2/CMakeLists.txt	Tue Jul 25 17:16:40 2017
-@@ -451,12 +451,12 @@
+diff -burN libgeotiff-1.5.1.orig/CMakeLists.txt libgeotiff-1.5.1/CMakeLists.txt
+--- libgeotiff-1.5.1.orig/CMakeLists.txt	2019-03-29 21:09:12.000000000 +0100
++++ libgeotiff-1.5.1/CMakeLists.txt	2019-11-08 11:17:08.520146442 +0100
+@@ -345,12 +345,12 @@
        VERSION ${LINK_VERSION}
        SOVERSION ${LINK_SOVERSION}
        CLEAN_DIRECT_OUTPUT 1 )

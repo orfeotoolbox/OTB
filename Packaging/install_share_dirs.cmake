@@ -45,9 +45,6 @@ function(install_share_dirs)
   endif()
   install_without_message("${GDAL_DATA_DIR}" "share" )
 
-  ####################### install GeoTIFF data ########################
-  install_without_message("${PKG_SHARE_SOURCE_DIR}/epsg_csv" "share" )
-
   ####################### install OSSIM data ##########################
   install_without_message("${PKG_SHARE_SOURCE_DIR}/ossim" "share" )
 
