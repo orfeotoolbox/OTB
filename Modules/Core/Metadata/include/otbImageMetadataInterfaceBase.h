@@ -228,6 +228,8 @@ public:
 
   static void PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict);
 
+  bool ParseStringKey(const MetadataSupplierInterface * mds, const char *path, MDStr key, int band=-1);
+
 protected:
   ImageMetadataInterfaceBase();
   ~ImageMetadataInterfaceBase() override

@@ -595,5 +595,27 @@ void ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent)
   }
 }
 
+bool ImageMetadataInterfaceBase::ParseStringKey(
+  const MetadataSupplierInterface * mds,
+  const char *path,
+  MDStr key,
+  int band)
+{
+    const char *res = mds->GetMetadataValue(path);
+    if (res != nullptr)
+      {
+      if (band < 0)
+        {
+        m_ImageMetadata.StringKeys[key] = std::string(res);
+        }
+      else
+        {
+        assert(band < m_ImageMetadata.Bands.size());
+        m_ImageMetadata.Bands[band].StringKeys[key] = std::string(res);
+        }
+      return true;
+      }
+    return false;
+}
 
 } // end namespace otb

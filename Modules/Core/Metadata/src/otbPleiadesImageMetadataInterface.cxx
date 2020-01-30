@@ -24,6 +24,7 @@
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
+#include "otbGeometryMetadata.h"
 #include "otbStringUtils.h"
 
 // useful constants
@@ -1764,9 +1765,14 @@ bool PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   if (sensor != nullptr && strncmp(sensor, "PHR", 3))
     {
     m_ImageMetadata.SensorID = std::string(sensor);
-    m_ImageMetadata.StringKeys[MetaData::StringKeyType::Mission] = "Pléiades";
+    m_ImageMetadata.StringKeys[MDStr::Mission] = "Pléiades";
     }
   else
+    {
+    return false;
+    }
+
+  if (!ParseStringKey(mds,"IMD/Geoposition.Raster_CRS.RASTER_GEOMETRY", MDStr::GeometricLevel))
     {
     return false;
     }
@@ -1774,6 +1780,11 @@ bool PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   // get radiometric metadata
 
   // fill RPC model
+  if (m_ImageMetadata.StringKeys[MDStr::GeometricLevel] == "SENSOR")
+    {
+    // check we have a RPC model
+    boost::any_cast<Projection::RPCParam>(m_ImageMetadata.SensorGeometry);
+    }
   
   return true;
 }
