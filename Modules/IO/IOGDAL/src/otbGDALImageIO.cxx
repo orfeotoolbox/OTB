@@ -50,8 +50,6 @@
 
 #include "stdint.h" //needed for uintptr_t
 
-#include "otbSpatialReference.h"
-
 inline unsigned int uint_ceildivpow2(unsigned int a, unsigned int b)
 {
   return (a + (1 << b) - 1) >> b;
@@ -778,8 +776,6 @@ void GDALImageIO::InternalReadImageInformation()
   }
   else
   {
-    // Create a dummy spatial reference to initialize gdal proj context holder (we need to do this to avoid possible crashes in gdalDestroy)
-    SpatialReference::FromWGS84();
     // Special case for Jpeg2000 files : try to read the origin in the GML box
     if (m_Dataset->IsJPEG2000())
     {
