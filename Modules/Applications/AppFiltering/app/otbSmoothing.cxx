@@ -86,10 +86,9 @@ private:
 
     AddChoice("type.gaussian", "Gaussian");
 
-    AddParameter(ParameterType_Float, "type.gaussian.radius", "Radius");
-    SetParameterDescription("type.gaussian.radius", "Standard deviation of the gaussian kernel used to filter the image");
-    SetDefaultParameterFloat("type.gaussian.radius", 2.0);
-    // TODO rename this parameter
+    AddParameter(ParameterType_Float, "type.gaussian.stdev", "Standard deviation");
+    SetParameterDescription("type.gaussian.stdev", "Standard deviation of the gaussian kernel used to filter the image");
+    SetDefaultParameterFloat("type.gaussian.stdev", 2.0);
 
     AddChoice("type.anidif", "Anisotropic Diffusion");
 
@@ -174,8 +173,8 @@ private:
       PerBandDiscreteGaussianFilterType::Pointer perBand = PerBandDiscreteGaussianFilterType::New();
       perBand->SetInput(inImage);
 
-      double radius   = GetParameterFloat("type.gaussian.radius");
-      double variance = radius * radius;
+      const double stdev = GetParameterFloat("type.gaussian.stdev");
+      double variance = stdev * stdev;
       perBand->GetFilter()->SetVariance(variance);
       perBand->GetFilter()->SetUseImageSpacing(false);
       perBand->UpdateOutputInformation();
