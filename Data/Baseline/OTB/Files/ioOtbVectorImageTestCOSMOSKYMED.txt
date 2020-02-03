@@ -17,7 +17,11 @@ Projection REF PROJCS["Transverse_Mercator",
     PARAMETER["central_meridian",3],
     PARAMETER["scale_factor",0.9996],
     PARAMETER["false_easting",500000],
-    PARAMETER["false_northing",0]]
+    PARAMETER["false_northing",0],
+    UNIT["metre",1,
+        AUTHORITY["EPSG","9001"]],
+    AXIS["Easting",EAST],
+    AXIS["Northing",NORTH]]
 GCP Projection 
 GCP Count 0
 Geo Transform 
