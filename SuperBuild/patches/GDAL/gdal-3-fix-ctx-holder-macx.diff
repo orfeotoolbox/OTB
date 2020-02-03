@@ -1,0 +1,13 @@
+diff -burN gdal-3.0.2_orig/ogr/ogr_proj_p.cpp gdal-3.0.2/ogr/ogr_proj_p.cpp
+--- gdal-3.0.2_orig/ogr/ogr_proj_p.cpp	2020-01-31 16:40:41.908287799 +0100
++++ gdal-3.0.2/ogr/ogr_proj_p.cpp	2020-01-31 16:42:52.020291025 +0100
+@@ -99,7 +99,7 @@
+     context = nullptr;
+ }
+ 
+-#ifdef WIN32
++#if defined(WIN32) || defined(__APPLE__)
+ // Currently thread_local and C++ objects don't work well with DLL on Windows
+ static void FreeProjTLSContextHolder( void* pData )
+ {
+
