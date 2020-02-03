@@ -90,8 +90,17 @@ private:
     SetParameterDescription("type.gaussian.stdev", "Standard deviation of the gaussian kernel used to filter the image");
     SetDefaultParameterFloat("type.gaussian.stdev", 2.0);
 
-    AddChoice("type.anidif", "Anisotropic Diffusion");
+    AddParameter(ParameterType_Float, "type.gaussian.maxerror", "Maximum error");
+    SetParameterDescription("type.gaussian.stdev", "The algorithm will size the discrete kernel so that the error "
+                            "resulting from truncation of the kernel is no greater than maxerror.");
+    SetDefaultParameterFloat("type.gaussian.maxerror", 0.01);
 
+    AddParameter(ParameterType_Int, "type.gaussian.maxwidth", "Maximum kernel width");
+    SetParameterDescription("type.gaussian.maxwidth", "Set the kernel to be no wider than maxwidth pixels, "
+                             "even if type.gaussian.maxerror demands it.");
+    SetDefaultParameterInt("type.gaussian.maxwidth", 32);
+
+    AddChoice("type.anidif", "Anisotropic Diffusion");
 
     AddParameter(ParameterType_Float, "type.anidif.timestep", "Time Step");
     SetParameterDescription("type.anidif.timestep", "Time step that will be used to discretize the diffusion equation");
@@ -175,8 +184,12 @@ private:
 
       const double stdev = GetParameterFloat("type.gaussian.stdev");
       double variance = stdev * stdev;
+      
       perBand->GetFilter()->SetVariance(variance);
       perBand->GetFilter()->SetUseImageSpacing(false);
+      perBand->GetFilter()->SetMaximumError(GetParameterFloat("type.gaussian.maxerror"));
+      perBand->GetFilter()->SetMaximumKernelWidth(GetParameterInt("type.gaussian.maxwidth"));
+      
       perBand->UpdateOutputInformation();
       m_FilterRef = perBand;
       SetParameterOutputImage("out", perBand->GetOutput());
