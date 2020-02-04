@@ -1761,21 +1761,17 @@ PleiadesImageMetadataInterface::WavelengthSpectralBandVectorType PleiadesImageMe
 bool PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 {
   assert(mds);
-  const char *sensor = mds->GetMetadataValue("IMD/Dataset_Sources.Source_Identification.Strip_Source.MISSION");
-  if (sensor != nullptr && strncmp(sensor, "PHR", 3))
+  m_ImageMetadata.SensorID = mds->GetAs<std::string>("IMD/Dataset_Sources.Source_Identification.Strip_Source.MISSION");
+  if (strncmp(m_ImageMetadata.SensorID.c_str(), "PHR", 3))
     {
-    m_ImageMetadata.SensorID = std::string(sensor);
     m_ImageMetadata.StringKeys[MDStr::Mission] = "Pléiades";
     }
   else
     {
-    return false;
+    otbGenericExceptionMacro(MissingMetadataException,<<"Sensor ID doesn't start with PHR : '"<<m_ImageMetadata.SensorID<<"'")
     }
 
-  if (!ParseStringKey(mds,"IMD/Geoposition.Raster_CRS.RASTER_GEOMETRY", MDStr::GeometricLevel))
-    {
-    return false;
-    }
+  Fetch(mds, "IMD/Geoposition.Raster_CRS.RASTER_GEOMETRY", MDStr::GeometricLevel);
 
   // get radiometric metadata
 
@@ -1783,7 +1779,18 @@ bool PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   if (m_ImageMetadata.StringKeys[MDStr::GeometricLevel] == "SENSOR")
     {
     // check we have a RPC model
-    boost::any_cast<Projection::RPCParam>(m_ImageMetadata.SensorGeometry);
+    if (m_ImageMetadata.SensorGeometry.empty())
+      {
+      otbGenericExceptionMacro(MissingMetadataException,<<"No geometric model found")
+      }
+    try
+      {
+      boost::any_cast<Projection::RPCParam>(m_ImageMetadata.SensorGeometry[0]);
+      }
+    catch(boost::bad_any_cast&)
+      {
+      otbGenericExceptionMacro(MissingMetadataException,<<"Not a RPCParam")
+      }
     }
   
   return true;

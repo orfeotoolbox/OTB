@@ -107,10 +107,16 @@ ImageMetadataInterfaceFactory
     {
       // the static part of ImageMetadata is already filled
       io->SetImageMetadata(imd);
-      if (io->Parse(mds))
-      {
+      try
+        {
+        io->Parse(mds);
         return io;
-      }
+        }
+      catch(MissingMetadataException&)
+        {
+        // silent catch of MissingMetadataException
+        // just means that this IMI can't parse the file
+        }
     }
     else
     {

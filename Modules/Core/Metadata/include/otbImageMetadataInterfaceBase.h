@@ -230,6 +230,10 @@ public:
 
   bool ParseStringKey(const MetadataSupplierInterface * mds, const char *path, MDStr key, int band=-1);
 
+  std::string& Fetch(const MetadataSupplierInterface * mds, const char *path, MDStr key, int band=-1);
+
+  double& Fetch(const MetadataSupplierInterface * mds, const char *path, MDNum key, int band=-1);
+
 protected:
   ImageMetadataInterfaceBase();
   ~ImageMetadataInterfaceBase() override

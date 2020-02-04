@@ -618,4 +618,40 @@ bool ImageMetadataInterfaceBase::ParseStringKey(
     return false;
 }
 
+std::string&
+ImageMetadataInterfaceBase::Fetch(
+  const MetadataSupplierInterface * mds,
+  const char *path,
+  MDStr key,
+  int band)
+{
+  if (band >= 0)
+    {
+    assert(band < m_ImageMetadata.Bands.size());
+    m_ImageMetadata.Bands[band].StringKeys[key] = mds->GetAs<std::string>(path);
+    return m_ImageMetadata.Bands[band].StringKeys[key];
+    }
+  m_ImageMetadata.StringKeys[key] = mds->GetAs<std::string>(path);
+  return m_ImageMetadata.StringKeys[key];
+}
+
+double&
+ImageMetadataInterfaceBase::Fetch(
+  const MetadataSupplierInterface * mds,
+  const char *path,
+  MDNum key,
+  int band)
+{
+  if (band >= 0)
+    {
+    assert(band < m_ImageMetadata.Bands.size());
+    m_ImageMetadata.Bands[band].NumericKeys[key] = mds->GetAs<double>(path);
+    return m_ImageMetadata.Bands[band].NumericKeys[key];
+    }
+  m_ImageMetadata.NumericKeys[key] = mds->GetAs<double>(path);
+  return m_ImageMetadata.NumericKeys[key];
+}
+
+// TODO: replace by template with Traits on metadata key
+
 } // end namespace otb

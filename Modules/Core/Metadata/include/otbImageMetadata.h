@@ -84,7 +84,7 @@ struct OTBMetadata_EXPORT ImageMetadata
 
   // TODO: check the concept, maybe use boost/type_erasure with properties ostreamable, ...
   /** Sensor model geometry */
-  boost::any SensorGeometry;
+  std::vector<boost::any> SensorGeometry;
 
 // ------------------------------ dynamic part ---------------------------------
 

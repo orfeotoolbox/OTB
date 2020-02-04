@@ -22,12 +22,41 @@
 #define otbMetadataSupplierInterface_h
 
 #include "OTBMetadataExport.h"
+#include "itkExceptionObject.h"
 #include <vector>
 #include <string>
+#include "otbStringUtils.h"
+#include "otbMacro.h"
 //#include "otbStringUtilities.h"
 
 namespace otb
 {
+
+
+class MissingMetadataException : public itk::ExceptionObject
+{
+public:
+  /** Run-time information. */
+  itkTypeMacro(MissingMetadataException, itk::ExceptionObject);
+
+  /** Constructor. */
+  MissingMetadataException(const char* file, unsigned int line, const char* message = "Missing metadata", const char* loc = "Unknown")
+    : itk::ExceptionObject(file, line, message, loc)
+  {
+  }
+
+  /** Constructor. */
+  MissingMetadataException(const std::string& file, unsigned int line, const char* message = "Missing metadata", const char* loc = "Unknown")
+    : itk::ExceptionObject(file, line, message, loc)
+  {
+  }
+
+  MissingMetadataException(const std::string& file, unsigned int line, const std::string& message = "Missing metadata", const char* loc = "Unknown")
+    : itk::ExceptionObject(file, line, message, loc)
+  {
+  }
+};
+
 /** \class MetadataSupplierInterface
  *
  * \brief Base class to access metadata information in files/images
@@ -51,8 +80,29 @@ public:
 
   // probably not needed
   //~ virtual std::vector<std::string> GetValuesList(const std::string& path) = 0;
-  
+
+  // utility functions
+  template <typename T> T GetAs(const char *path) const
+    {
+    const char * ret = GetMetadataValue(path);
+    if (ret == nullptr)
+      {
+      otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata '"<<path<<"'")
+      }
+    try
+      {
+      return boost::lexical_cast<T>(ret);
+      }
+    catch (boost::bad_lexical_cast&)
+      {
+      otbGenericExceptionMacro(MissingMetadataException,<<"Bad metadata value for '"<<path<<"', got :"<<ret)
+      }
+    }
+
 };
+
+// Specialization of GetAs
+// TODO : for complex types ...
 
 } // end namespace otb
 
