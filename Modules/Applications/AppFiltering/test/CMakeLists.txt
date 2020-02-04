@@ -20,24 +20,6 @@
 
 otb_module_test()
 #----------- Smoothing TESTS ----------------
-otb_test_application(NAME  apTvUtSmoothingTest_InXML
-                     APP  Smoothing
-                     OPTIONS -inxml ${INPUTDATA}/apTvUtSmoothingTest_OutXML.xml
-               	             -in ${INPUTDATA}/poupees.tif
-               	             -out ${TEMP}/apTvUtSmoothingTest_InXML.tif
-                             -type mean
-                     VALID   --compare-image ${NOTOL}
-                             ${BASELINE}/apTvUtSmoothingTest.tif
-                             ${TEMP}/apTvUtSmoothingTest_InXML.tif)
-
-otb_test_application(NAME  apTvUtSmoothingTest
-                     APP  Smoothing
-                     OPTIONS -in ${INPUTDATA}/poupees.tif
-               	             -out ${TEMP}/apTvUtSmoothingTest.tif
-                             -type mean
-                     VALID   --compare-image ${NOTOL}
-                             ${BASELINE}/apTvUtSmoothingTest.tif
-                             ${TEMP}/apTvUtSmoothingTest.tif)
 
 otb_test_application(NAME  apTvUtSmoothingTest_OutXML
                      APP  Smoothing
@@ -48,6 +30,43 @@ otb_test_application(NAME  apTvUtSmoothingTest_OutXML
                      VALID   --compare-image ${NOTOL}
                              ${BASELINE}/apTvUtSmoothingTest.tif
                              ${TEMP}/apTvUtSmoothingTest_OutXML.tif)
+
+otb_test_application(NAME  apTvUtSmoothingTest_InXML
+                     APP  Smoothing
+                     OPTIONS -inxml ${TEMP}/apTvUtSmoothingTest_OutXML.xml
+               	             -in ${INPUTDATA}/poupees.tif
+               	             -out ${TEMP}/apTvUtSmoothingTest_InXML.tif
+                             -type mean
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtSmoothingTest.tif
+                             ${TEMP}/apTvUtSmoothingTest_InXML.tif)
+
+set_tests_properties( apTvUtSmoothingTest_InXML
+    PROPERTIES DEPENDS apTvUtSmoothingTest_OutXML)
+
+otb_test_application(NAME  apTvUtSmoothingTestGaussian
+                     APP  Smoothing
+                     OPTIONS -in ${INPUTDATA}/poupees.tif
+               	             -out ${TEMP}/apTvUtSmoothingTestGaussian.tif
+                             -type gaussian
+                             -type.gaussian.stdev 2.0
+                             -type.gaussian.maxerror 0.1
+                             -type.gaussian.maxwidth 64
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtSmoothingTestGaussian.tif
+                             ${TEMP}/apTvUtSmoothingTestGaussian.tif)
+
+otb_test_application(NAME  apTvUtSmoothingTestAnisotropic
+                     APP  Smoothing
+                     OPTIONS -in ${INPUTDATA}/poupees.tif
+               	             -out ${TEMP}/apTvUtSmoothingTestAnisotropic.tif
+                             -type anidif
+                             -type.anidif.timestep 0.125
+                             -type.anidif.nbiter 10
+                             -type.anidif.conductance 1.
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtSmoothingTestAnisotropic.tif
+                             ${TEMP}/apTvUtSmoothingTestAnisotropic.tif)
 
 #----------- Contrast TESTS ----------------
 
@@ -114,8 +133,4 @@ otb_test_application(NAME  nlMeansTest_base
                      VALID   --compare-image ${EPSILON_7}
                              ${BASELINE}/GomaAvant_NLMeans.tif
                              ${TEMP}/GomaAvant_NLMeans.tif)
-
-
-                             
-                             
 
