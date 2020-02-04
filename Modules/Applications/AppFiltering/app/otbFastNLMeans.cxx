@@ -110,25 +110,25 @@ private:
 
   void DoExecute() override
   {
-    // Get the input image
-    ImageType::Pointer         imIn           = this->GetParameterFloatImage("in");
-    float                      sigma          = this->GetParameterFloat("sig");
-    float                      cutoffDistance = this->GetParameterFloat("thresh");
-    int                        halfPatchSize  = this->GetParameterInt("patchradius");
-    int                        halfSearchSize = this->GetParameterInt("searchradius");
-    NLMeansFilterType::Pointer nlMeansFilter  = NLMeansFilterType::New();
+    // Get the input parameters
+    const auto imIn = this->GetParameterFloatImage("in");
+    const auto sigma = this->GetParameterFloat("sig");
+    const auto cutoffDistance = this->GetParameterFloat("thresh");
+    const auto halfPatchSize  = this->GetParameterInt("patchradius");
+    const auto halfSearchSize = this->GetParameterInt("searchradius");
+    
+    auto nlMeansFilter = NLMeansFilterType::New();
+    
     nlMeansFilter->SetInput(imIn);
     nlMeansFilter->SetSigma(sigma);
     nlMeansFilter->SetHalfWindowSize(halfPatchSize);
     nlMeansFilter->SetHalfSearchSize(halfSearchSize);
     nlMeansFilter->SetCutOffDistance(cutoffDistance);
 
-    m_FilterRef = nlMeansFilter;
     SetParameterOutputImage("out", nlMeansFilter->GetOutput());
     RegisterPipeline();
   }
 
-  itk::LightObject::Pointer m_FilterRef;
 }; // end class
 
 } // namespace Wrapper

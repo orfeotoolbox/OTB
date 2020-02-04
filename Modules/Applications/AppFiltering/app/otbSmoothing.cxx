@@ -147,83 +147,79 @@ private:
 
   void DoExecute() override
   {
-    GetLogger()->Debug("Entering DoExecute\n");
-
-
-    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+    const auto inImage = GetParameterImage("in");
 
     switch (GetParameterInt("type"))
     {
     case Smoothing_Mean:
     {
-      GetLogger()->Debug("Using mean");
+      otbAppLogINFO("Using mean smoothing");
 
       typedef itk::MeanImageFilter<ImageType, ImageType> MeanFilterType;
       typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, MeanFilterType> PerBandMeanFilterType;
 
-      PerBandMeanFilterType::Pointer perBand = PerBandMeanFilterType::New();
+      auto perBand = PerBandMeanFilterType::New();
       perBand->SetInput(inImage);
 
       MeanFilterType::InputSizeType radius;
       radius.Fill(GetParameterInt("type.mean.radius"));
       perBand->GetFilter()->SetRadius(radius);
-      perBand->UpdateOutputInformation();
-      m_FilterRef = perBand;
+
       SetParameterOutputImage("out", perBand->GetOutput());
+      
+      RegisterPipeline();
     }
     break;
     case Smoothing_Gaussian:
     {
-      GetLogger()->Debug("Using gaussian");
+      otbAppLogINFO("Using gaussian smoothing");
 
       typedef itk::DiscreteGaussianImageFilter<ImageType, ImageType> DiscreteGaussianFilterType;
       typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, DiscreteGaussianFilterType> PerBandDiscreteGaussianFilterType;
 
-      PerBandDiscreteGaussianFilterType::Pointer perBand = PerBandDiscreteGaussianFilterType::New();
+      auto perBand = PerBandDiscreteGaussianFilterType::New();
       perBand->SetInput(inImage);
 
-      const double stdev = GetParameterFloat("type.gaussian.stdev");
-      double variance = stdev * stdev;
+      const auto stdev = GetParameterFloat("type.gaussian.stdev");
+      const auto variance = stdev * stdev;
       
       perBand->GetFilter()->SetVariance(variance);
       perBand->GetFilter()->SetUseImageSpacing(false);
       perBand->GetFilter()->SetMaximumError(GetParameterFloat("type.gaussian.maxerror"));
       perBand->GetFilter()->SetMaximumKernelWidth(GetParameterInt("type.gaussian.maxwidth"));
       
-      perBand->UpdateOutputInformation();
-      m_FilterRef = perBand;
       SetParameterOutputImage("out", perBand->GetOutput());
+      
+      RegisterPipeline();
     }
     break;
     case Smoothing_Anisotropic:
     {
-      GetLogger()->Debug("Using anisotropic diffusion");
+      otbAppLogINFO("Using anisotropic diffusion smoothing");
 
       typedef itk::GradientAnisotropicDiffusionImageFilter<ImageType, ImageType> GradientAnisotropicDiffusionFilterType;
       typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, GradientAnisotropicDiffusionFilterType>
           PerBandGradientAnisotropicDiffusionFilterType;
 
-      PerBandGradientAnisotropicDiffusionFilterType::Pointer perBand = PerBandGradientAnisotropicDiffusionFilterType::New();
+      auto perBand = PerBandGradientAnisotropicDiffusionFilterType::New();
       perBand->SetInput(inImage);
 
-      const int aniDifNbIter = GetParameterInt("type.anidif.nbiter");
+      const auto aniDifNbIter = GetParameterInt("type.anidif.nbiter");
       perBand->GetFilter()->SetNumberOfIterations(static_cast<unsigned int>(aniDifNbIter));
 
-      const float aniDifTimeStep = GetParameterFloat("type.anidif.timestep");
+      const auto aniDifTimeStep = GetParameterFloat("type.anidif.timestep");
       perBand->GetFilter()->SetTimeStep(static_cast<double>(aniDifTimeStep));
 
       perBand->GetFilter()->SetConductanceParameter(GetParameterFloat("type.anidif.conductance"));
       perBand->GetFilter()->SetUseImageSpacing(false);
-      perBand->UpdateOutputInformation();
 
-      m_FilterRef = perBand;
       SetParameterOutputImage("out", perBand->GetOutput());
+      
+      RegisterPipeline();
     }
     break;
     }
   }
-
-  itk::LightObject::Pointer m_FilterRef;
 };
 }
 }
