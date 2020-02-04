@@ -519,7 +519,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     if (m_FilenameHelper->GetSkipGeom())
       {
       // Make sure the SensorGeometry is empty
-      imd.SensorGeometry = boost::any();
+      imd.SensorGeometry.clear();
       }
   }
 
@@ -531,20 +531,22 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   }
 
   // Copy MetaDataDictionary from instantiated reader to output image.
-  //~ if (!m_FilenameHelper->GetSkipGeom())
-  //~ {
-    //~ output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
-    //~ this->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
-  //~ }
-  //~ else
-  //~ {
-    //~ itk::MetaDataDictionary dictLight;
-    //~ std::string             projRef;
-    //~ itk::ExposeMetaData(dict, MetaDataKey::ProjectionRefKey, projRef);
-    //~ itk::EncapsulateMetaData<std::string>(dictLight, MetaDataKey::ProjectionRefKey, projRef);
-    //~ output->SetMetaDataDictionary(dictLight);
-    //~ this->SetMetaDataDictionary(dictLight);
-  //~ }
+  // TODO: disable when Ossim removed
+  if (!m_FilenameHelper->GetSkipGeom())
+  {
+    output->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
+    this->SetMetaDataDictionary(this->m_ImageIO->GetMetaDataDictionary());
+  }
+  else
+  {
+    itk::MetaDataDictionary dictLight;
+    std::string             projRef;
+    itk::ExposeMetaData(dict, MetaDataKey::ProjectionRefKey, projRef);
+    itk::EncapsulateMetaData<std::string>(dictLight, MetaDataKey::ProjectionRefKey, projRef);
+    output->SetMetaDataDictionary(dictLight);
+    this->SetMetaDataDictionary(dictLight);
+  }
+  
   if (img_common != nullptr)
     {
     img_common->SetImageMetadata(imd);
