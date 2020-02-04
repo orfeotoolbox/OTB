@@ -1289,4 +1289,9 @@ void ImageIOBase::PrintSelf(std::ostream& os, itk::Indent indent) const
   }
 }
 
+const ImageMetadata & ImageIOBase::GetImageMetadata()
+{
+  return m_Imd;
+}
+
 } // namespace itk

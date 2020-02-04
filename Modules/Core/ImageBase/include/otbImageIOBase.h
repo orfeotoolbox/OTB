@@ -22,6 +22,7 @@
 #ifndef otbImageIOBase_h
 #define otbImageIOBase_h
 
+#include "otbImageMetadata.h"
 #include "itkLightProcessObject.h"
 #include "itkIndent.h"
 #include "itkImageIORegion.h"
@@ -442,6 +443,8 @@ public:
   /** Returns a const ref to the list of attached files*/
   itkGetConstReferenceMacro(AttachedFileNames, std::vector<std::string>);
 
+  const ImageMetadata & GetImageMetadata();
+
 protected:
   ImageIOBase();
   ~ImageIOBase() override;
@@ -558,6 +561,9 @@ protected:
 
   /** List of files part of the same dataset as the input filename */
   std::vector<std::string> m_AttachedFileNames;
+
+  /** Image metadata pre-parsed by the ImageIO */
+  ImageMetadata m_Imd;
 
 private:
   ImageIOBase(const Self&) = delete;
