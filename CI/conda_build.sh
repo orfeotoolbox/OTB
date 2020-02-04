@@ -26,13 +26,15 @@ source /build/anaconda3/bin/activate
 
 cd /build/staged-recipes/recipes/
 
+ANACONDA_ORGANIZATION="orfeotoolbox"
+
 conda config --set anaconda_upload yes
 anaconda login --username ${ANACONDA_LOGIN} --password ${ANACONDA_PASSWORD} --hostname ${CI_JOB_ID}
 
-conda build ${CONDA_BUILD_OPTIONS} muparserx
-conda build ${CONDA_BUILD_OPTIONS} openthreads
-conda build ${CONDA_BUILD_OPTIONS} ossim
-conda build ${CONDA_BUILD_OPTIONS} shark
-conda build ${CONDA_BUILD_OPTIONS} tinyxml
-conda build ${CONDA_BUILD_OPTIONS} libitk
-conda build ${CONDA_BUILD_OPTIONS} otb
+conda build --user ${ANACONDA_ORGANIZATION} ${CONDA_BUILD_OPTIONS} muparserx
+conda build --user ${ANACONDA_ORGANIZATION} ${CONDA_BUILD_OPTIONS} openthreads
+conda build --user ${ANACONDA_ORGANIZATION} ${CONDA_BUILD_OPTIONS} ossim
+conda build --user ${ANACONDA_ORGANIZATION} ${CONDA_BUILD_OPTIONS} shark
+conda build --user ${ANACONDA_ORGANIZATION} ${CONDA_BUILD_OPTIONS} tinyxml
+conda build --user ${ANACONDA_ORGANIZATION} ${CONDA_BUILD_OPTIONS} libitk
+conda build --user ${ANACONDA_ORGANIZATION} ${CONDA_BUILD_OPTIONS} otb
