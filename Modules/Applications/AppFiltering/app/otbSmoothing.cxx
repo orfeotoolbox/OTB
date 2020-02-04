@@ -91,7 +91,7 @@ private:
     SetDefaultParameterFloat("type.gaussian.stdev", 2.0);
 
     AddParameter(ParameterType_Float, "type.gaussian.maxerror", "Maximum error");
-    SetParameterDescription("type.gaussian.stdev", "The algorithm will size the discrete kernel so that the error "
+    SetParameterDescription("type.gaussian.maxerror", "The algorithm will size the discrete kernel so that the error "
                             "resulting from truncation of the kernel is no greater than maxerror.");
     SetDefaultParameterFloat("type.gaussian.maxerror", 0.01);
 
