@@ -355,19 +355,18 @@ conda-linux-build:
   extends: .common
   stage: build
   only:
+    - merge_requests
     - develop
     - /^release-[0-9]+\.[0-9]+$/
-  #  - develop@orfeotoolbox/otb
-  #  - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
   image: $BUILD_IMAGE_REGISTRY/otb-conda-build:latest
   allow_failure: true
-  before_script:
-    - export CI_SKIP_CDASH=1
   script:
     - export otb_tag=${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
     - ./CI/conda_build.sh
+  after_script: []
   needs:
     - job: fast-build
+      artifacts: false
 
 #---------------------------- Deploy job ---------------------------------------
 deploy:
