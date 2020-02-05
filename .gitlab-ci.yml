@@ -145,6 +145,8 @@ debian-build:
   after_script:
     - export CI_ALLOW_FAILURE=ON
     - python3 -u CI/cdash_handler.py
+  needs:
+    - job: fast-build
 
 ## Ubuntu superbuild
 ubuntu-xdk-prepare:
@@ -364,7 +366,8 @@ conda-linux-build:
   script:
     - export otb_tag=${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
     - ./CI/conda_build.sh
-  dependencies: []
+  needs:
+    - job: fast-build
 
 #---------------------------- Deploy job ---------------------------------------
 deploy:
