@@ -28,6 +28,7 @@
 #include "itkProgressReporter.h"
 #include "otbMacro.h"
 #include <cmath>
+#include <utility>
 
 namespace otb
 {
@@ -168,6 +169,8 @@ void PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLa
     // Mean & stdev
     RealVectorPixelType mean(sum);
     RealVectorPixelType std(sqSum);
+    RealVectorPixelType min(it.second.GetMin());
+    RealVectorPixelType max(it.second.GetMax());
     for (unsigned int band = 0; band < mean.GetSize(); band++)
     {
       // Number of valid pixels in band
@@ -178,13 +181,20 @@ void PersistentStreamingStatisticsMapFromLabelImageFilter<TInputVectorImage, TLa
       // Unbiased standard deviation (not sure unbiased is useful here)
       const double variance = (sqSum[band] - (sum[band] * mean[band])) / (count - 1);
       std[band]             = std::sqrt(variance);
+
+      // Use the no data value when no valid pixels were found
+      if (this->GetUseNoDataValue() && count == 0)
+      {
+        min[band] = this->GetNoDataValue();
+        max[band] = this->GetNoDataValue();
+      }
     }
-    m_MeanRadiometricValue[label]  = mean;
-    m_StDevRadiometricValue[label] = std;
+    m_MeanRadiometricValue.emplace(label, std::move(mean));
+    m_StDevRadiometricValue.emplace(label, std::move(std));
 
     // Min & max
-    m_MinRadiometricValue[label] = it.second.GetMin();
-    m_MaxRadiometricValue[label] = it.second.GetMax();
+    m_MinRadiometricValue.emplace(label, std::move(min));
+    m_MaxRadiometricValue.emplace(label, std::move(max));
   }
 }
 
