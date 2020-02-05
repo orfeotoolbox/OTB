@@ -64,7 +64,7 @@ otb_test_application(NAME  apTvUtSmoothingTestAnisotropic
                              -type.anidif.timestep 0.125
                              -type.anidif.nbiter 10
                              -type.anidif.conductance 1.
-                     VALID   --compare-image ${NOTOL}
+                     VALID   --compare-image ${EPSILON_6}
                              ${BASELINE}/apTvUtSmoothingTestAnisotropic.tif
                              ${TEMP}/apTvUtSmoothingTestAnisotropic.tif)
 
