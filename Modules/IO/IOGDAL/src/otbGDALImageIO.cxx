@@ -670,6 +670,7 @@ void GDALImageIO::InternalReadImageInformation()
 
   // Initialize the ImageMetadata structure
   ImageMetadata imd;
+  m_Imd = imd;
 
   // Report the typical block size if possible
   if (dataset->GetRasterCount() > 0)
@@ -696,8 +697,8 @@ void GDALImageIO::InternalReadImageInformation()
       itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, blockSizeX);
       itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, blockSizeY);
 
-      imd.TileHintX = blockSizeX;
-      imd.TileHintY = blockSizeY;
+      m_Imd.TileHintX = blockSizeX;
+      m_Imd.TileHintY = blockSizeY;
     }
   }
 
@@ -707,7 +708,7 @@ void GDALImageIO::InternalReadImageInformation()
 
   itk::EncapsulateMetaData<IOComponentType>(dict, MetaDataKey::DataType, this->GetComponentType());
 
-  imd.DataType = this->GetComponentType();
+  m_Imd.DataType = this->GetComponentType();
 
   /* -------------------------------------------------------------------- */
   /*  Get Spacing                                                         */
@@ -769,14 +770,14 @@ void GDALImageIO::InternalReadImageInformation()
 
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, static_cast<std::string>(pszPrettyWkt));
 
-      imd.ProjectionRef = std::string(pszPrettyWkt);
+      m_Imd.ProjectionRef = std::string(pszPrettyWkt);
 
       CPLFree(pszPrettyWkt);
     }
     else
     {
       itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, static_cast<std::string>(pszProjection));
-      imd.ProjectionRef = std::string(pszProjection);
+      m_Imd.ProjectionRef = std::string(pszProjection);
     }
 
     if (pSR != nullptr)
@@ -815,7 +816,7 @@ void GDALImageIO::InternalReadImageInformation()
     }
 
     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::GCPProjectionKey, gcpProjectionKey);
-    imd.GCPProjection = gcpProjectionKey;
+    m_Imd.GCPProjection = gcpProjectionKey;
 
     if (gcpProjectionKey.empty())
     {
@@ -848,7 +849,7 @@ void GDALImageIO::InternalReadImageInformation()
       key = lStream.str();
 
       itk::EncapsulateMetaData<OTB_GCP>(dict, key, pOtbGCP);
-      imd.GCPs.push_back(pOtbGCP);
+      m_Imd.GCPs.push_back(pOtbGCP);
     }
   }
 
@@ -864,7 +865,7 @@ void GDALImageIO::InternalReadImageInformation()
     for (int cpt = 0; cpt < 6; ++cpt)
       {
       VadfGeoTransform.push_back(adfGeoTransform[cpt]);
-      imd.GeoTransform[cpt] = adfGeoTransform[cpt];
+      m_Imd.GeoTransform[cpt] = adfGeoTransform[cpt];
       }
 
     itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, VadfGeoTransform);
@@ -986,8 +987,8 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoY);
 
   itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::UpperLeftCornerKey, VGeo);
-  imd.ULX = GeoX;
-  imd.ULY = GeoY;
+  m_Imd.ULX = GeoX;
+  m_Imd.ULY = GeoY;
 
   VGeo.clear();
 
@@ -996,8 +997,8 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoY);
 
   itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::UpperRightCornerKey, VGeo);
-  imd.URX = GeoX;
-  imd.URY = GeoY;
+  m_Imd.URX = GeoX;
+  m_Imd.URY = GeoY;
 
   VGeo.clear();
 
@@ -1006,8 +1007,8 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoY);
 
   itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::LowerLeftCornerKey, VGeo);
-  imd.LLX = GeoX;
-  imd.LLY = GeoY;
+  m_Imd.LLX = GeoX;
+  m_Imd.LLY = GeoY;
 
   VGeo.clear();
 
@@ -1016,8 +1017,8 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoY);
 
   itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::LowerRightCornerKey, VGeo);
-  imd.LRX = GeoX;
-  imd.LRY = GeoY;
+  m_Imd.LRX = GeoX;
+  m_Imd.LRY = GeoY;
 
   VGeo.clear();
 
@@ -1109,7 +1110,7 @@ void GDALImageIO::InternalReadImageInformation()
       bmd.NoDataFlag = false;
       bmd.NoDataValue = 0.0;
     }
-    imd.Bands.push_back(bmd);
+    m_Imd.Bands.push_back(bmd);
   }
 
   if (noDataFound)
@@ -1117,9 +1118,6 @@ void GDALImageIO::InternalReadImageInformation()
     itk::EncapsulateMetaData<MetaDataKey::BoolVectorType>(dict, MetaDataKey::NoDataValueAvailable, isNoDataAvailable);
     itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::NoDataValue, noDataValues);
   }
-
-  // give the ImageMetadata to ImageFileReader
-  itk::EncapsulateMetaData<ImageMetadata>(dict, MetaDataKey::ImageMetadataKey, imd);
 }
 
 bool GDALImageIO::CanWriteFile(const char* name)

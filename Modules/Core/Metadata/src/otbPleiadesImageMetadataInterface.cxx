@@ -1778,21 +1778,8 @@ bool PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   // fill RPC model
   if (m_ImageMetadata.StringKeys[MDStr::GeometricLevel] == "SENSOR")
     {
-    // check we have a RPC model
-    if (m_ImageMetadata.SensorGeometry.empty())
-      {
-      otbGenericExceptionMacro(MissingMetadataException,<<"No geometric model found")
-      }
-    try
-      {
-      boost::any_cast<Projection::RPCParam>(m_ImageMetadata.SensorGeometry[0]);
-      }
-    catch(boost::bad_any_cast&)
-      {
-      otbGenericExceptionMacro(MissingMetadataException,<<"Not a RPCParam")
-      }
+    FetchRPC(mds);
     }
-  
   return true;
 }
 

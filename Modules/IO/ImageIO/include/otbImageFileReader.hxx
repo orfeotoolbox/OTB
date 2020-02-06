@@ -391,9 +391,8 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   // detect Image supporting new ImageMetadata
   ImageCommons* img_common = dynamic_cast<ImageCommons*>(this->GetOutput());
   
-  // Initialize ImageMetadata from ImageIO
-  ImageMetadata imd;
-  itk::ExposeMetaData<ImageMetadata>(dict, MetaDataKey::ImageMetadataKey, imd);
+  // Get ImageMetadata from ImageIO
+  ImageMetadata imd = m_ImageIO->GetImageMetadata();
 
   if (!m_KeywordListUpToDate && !m_FilenameHelper->GetSkipGeom())
   {

@@ -22,6 +22,7 @@
 #include "otbImageMetadataInterfaceBase.h"
 
 #include "otbNoDataHelper.h"
+#include "otbGeometryMetadata.h"
 #include "itkMetaDataObject.h"
 #include "itksys/SystemTools.hxx"
 
@@ -516,14 +517,6 @@ void ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent ind
       kwl.Print(os);
       break;
     }
-    case MetaDataKey::TIMAGEMETADATA:
-    {
-      ImageMetadata imd;
-      itk::ExposeMetaData<ImageMetadata>(dict2, keys[itkey], imd);
-      os << indent << "---> " << keys[itkey] << " = " << std::endl;
-      os << imd;
-      break;
-    }
     //      case MetaDataKey::TVECTORDATAKEYWORDLIST:
     //        itk::ExposeMetaData<VectorDataKeywordlist>(dict2, keys[itkey], vectorDataKeywordlistValue);
     //
@@ -650,6 +643,40 @@ ImageMetadataInterfaceBase::Fetch(
     }
   m_ImageMetadata.NumericKeys[key] = mds->GetAs<double>(path);
   return m_ImageMetadata.NumericKeys[key];
+}
+
+boost::any& ImageMetadataInterfaceBase::FetchRPC(
+  const MetadataSupplierInterface * mds)
+{
+  Projection::RPCParam rpcStruct;
+  rpcStruct.LineOffset    = mds->GetAs<double>("RPC/LINE_OFF");
+  rpcStruct.SampleOffset  = mds->GetAs<double>("RPC/SAMP_OFF");
+  rpcStruct.LatOffset     = mds->GetAs<double>("RPC/LAT_OFF");
+  rpcStruct.LonOffset     = mds->GetAs<double>("RPC/LONG_OFF");
+  rpcStruct.HeightOffset  = mds->GetAs<double>("RPC/HEIGHT_OFF");
+
+  rpcStruct.LineScale    = mds->GetAs<double>("RPC/LINE_SCALE");
+  rpcStruct.SampleScale  = mds->GetAs<double>("RPC/SAMP_SCALE");
+  rpcStruct.LatScale     = mds->GetAs<double>("RPC/LAT_SCALE");
+  rpcStruct.LonScale     = mds->GetAs<double>("RPC/LONG_SCALE");
+  rpcStruct.HeightScale  = mds->GetAs<double>("RPC/HEIGHT_SCALE");
+
+  std::vector<double> coeffs(20);
+
+  coeffs = mds->GetAsVector<double>("RPC/LINE_NUM_COEFF",' ',20);
+  std::copy(coeffs.begin(), coeffs.end(), rpcStruct.LineNum);
+
+  coeffs = mds->GetAsVector<double>("RPC/LINE_DEN_COEFF",' ',20);
+  std::copy(coeffs.begin(), coeffs.end(), rpcStruct.LineDen);
+
+  coeffs = mds->GetAsVector<double>("RPC/SAMP_NUM_COEFF",' ',20);
+  std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleNum);
+
+  coeffs = mds->GetAsVector<double>("RPC/SAMP_DEN_COEFF",' ',20);
+  std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleDen);
+
+  m_ImageMetadata.SensorGeometry.push_back(rpcStruct);
+  return m_ImageMetadata.SensorGeometry.back();
 }
 
 // TODO: replace by template with Traits on metadata key

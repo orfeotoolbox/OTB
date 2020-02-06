@@ -27,7 +27,7 @@
 #include <string>
 #include "otbStringUtils.h"
 #include "otbMacro.h"
-//#include "otbStringUtilities.h"
+#include "otbStringUtilities.h"
 
 namespace otb
 {
@@ -99,9 +99,43 @@ public:
       }
     }
 
+  /** Parse a metadata value to a std::vector,
+   *  If size>=0, then the final std::vector size is checked and an exception
+   *  is raised if it doesn't match the given size.*/
+  template < typename T> std::vector<T> GetAsVector(const char *path, const char sep=' ', int size=-1) const
+    {
+    const char * ret = GetMetadataValue(path);
+    if (ret == nullptr)
+      {
+      otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata '"<<path<<"'")
+      }
+    string_view value(ret);
+    string_view filt_value = rstrip(lstrip(value,"[ "), "] ");
+    std::vector<T> output;
+    typedef part_range<splitter_on_delim> range_type;
+    const range_type parts = split_on(filt_value, sep);
+    for (auto const& part : parts)
+      {
+      // TODO: check if we can use lexical_cast on a string_view
+      std::string strPart = to<std::string>(part, "casting string_view to std::string");
+      try
+        {
+        output.push_back(boost::lexical_cast<T>(strPart));
+        }
+      catch (boost::bad_lexical_cast&)
+        {
+        otbGenericExceptionMacro(MissingMetadataException,<<"Bad metadata vector element in '"<<path<<"', got :"<<part)
+        }
+      }
+    if ((size >= 0) and (output.size() != (size_t)size))
+      {
+      otbGenericExceptionMacro(MissingMetadataException,<<"Bad number of elements in vector '"<<path<<"', expected "<<size<< ", got "<<output.size())
+      }
+    return output;
+    }
+
 };
 
-// Specialization of GetAs
 // TODO : for complex types ...
 
 } // end namespace otb

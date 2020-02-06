@@ -234,6 +234,8 @@ public:
 
   double& Fetch(const MetadataSupplierInterface * mds, const char *path, MDNum key, int band=-1);
 
+  boost::any& FetchRPC(const MetadataSupplierInterface * mds);
+
 protected:
   ImageMetadataInterfaceBase();
   ~ImageMetadataInterfaceBase() override
