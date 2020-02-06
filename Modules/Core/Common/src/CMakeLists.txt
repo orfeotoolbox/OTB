@@ -28,6 +28,7 @@ set(OTBCommon_SRC
   otbWriterWatcherBase.cxx
   otbStopwatch.cxx
   otbStringToHTML.cxx
+  otbStringUtilities.cxx
   otbExtendedFilenameHelper.cxx
   otbLogger.cxx
   otbStandardOutputPrintCallback.cxx

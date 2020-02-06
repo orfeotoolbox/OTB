@@ -797,18 +797,34 @@ template <typename T> inline T const& to_with_default(T const& v, T const& /* de
 // { return details::to_float<double>(v); }
 //@}
 
-OTBCommon_EXPORT int s_printf(char *str, std::size_t size, const char *format, ...);
-OTBCommon_EXPORT int vs_printf(char *str, std::size_t size, const char *format, std::va_list ap);
+//~ OTBCommon_EXPORT int s_printf(char *str, std::size_t size, const char *format, ...);
+//~ OTBCommon_EXPORT int vs_printf(char *str, std::size_t size, const char *format, std::va_list ap);
+//~ 
+//~ template <std::size_t size>
+//~ inline
+//~ int s_printf(char (&str)[size], const char *format, ...) {
+    //~ std::va_list ap;
+    //~ va_start(ap, format);
+    //~ const int res = vs_printf(str, size, format, ap);
+    //~ va_end(ap);
+    //~ return res;
+//~ }
 
-template <std::size_t size>
-inline
-int s_printf(char (&str)[size], const char *format, ...) {
-    std::va_list ap;
-    va_start(ap, format);
-    const int res = vs_printf(str, size, format, ap);
-    va_end(ap);
-    return res;
-}
+/** Strip left side of a string
+ * @brief returns a string_view with the leading characters removed
+ * @param[in] v string to be stripped
+ * @param[in] c string with characters to strip.
+ * @return the stripped string_view 
+ */
+OTBCommon_EXPORT string_view lstrip(string_view const& v, string_view const& c );
+
+/** Strip right side of a string
+ * @brief returns a string_view with the ending characters removed
+ * @param[in] v string to be stripped
+ * @param[in] c string with characters to strip.
+ * @return the stripped string_view 
+ */
+OTBCommon_EXPORT string_view rstrip(string_view const& v, string_view const& c );
 
 
 } // otb namespace
