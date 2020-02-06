@@ -76,8 +76,6 @@ extern OTBMetadata_EXPORT char const* NoDataValue;
 
 extern OTBMetadata_EXPORT char const* DataType;
 
-extern OTBMetadata_EXPORT char const* ImageMetadataKey;
-
 
 enum KeyType
 {
@@ -88,8 +86,7 @@ enum KeyType
   TVECTOR,
   TOSSIMKEYWORDLIST,
   TVECTORDATAKEYWORDLIST,
-  TBOOLVECTOR,
-  TIMAGEMETADATA
+  TBOOLVECTOR
 };
 /*
 typedef struct

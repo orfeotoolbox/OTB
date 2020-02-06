@@ -66,7 +66,6 @@ char const* NoDataValue          = "NoDataValue";
 
 char const* DataType = "DataType";
 
-char const* ImageMetadataKey = "ImageMetadataKey";
 }
 
 const MetaDataKey::KeyTypeDef Types[] = {
@@ -98,7 +97,6 @@ const MetaDataKey::KeyTypeDef Types[] = {
     MetaDataKey::KeyTypeDef(MetaDataKey::NoDataValueAvailable, MetaDataKey::TVECTOR),
     MetaDataKey::KeyTypeDef(MetaDataKey::NoDataValue, MetaDataKey::TVECTOR),
     MetaDataKey::KeyTypeDef(MetaDataKey::DataType, MetaDataKey::TENTIER),
-    MetaDataKey::KeyTypeDef(MetaDataKey::ImageMetadataKey, MetaDataKey::TIMAGEMETADATA),
 };
 
 MetaDataKey::KeyType MetaDataKey::GetKeyType(const std::string& name)
