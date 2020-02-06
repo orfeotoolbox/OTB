@@ -52,7 +52,7 @@ GDALDriverManagerWrapper::~GDALDriverManagerWrapper()
   // GDALDestroyDriverManager();
   // Since gdal 2.4 we need to explicitely call GDALDestroy
   // GDALDestroyDriverManager is called inside
-  GDALDestroy(); // gdaldllmain.cpp line 74
+  // GDALDestroy(); // gdaldllmain.cpp line 74
 }
 
 // Open the file for reading and returns a smart dataset pointer
