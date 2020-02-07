@@ -24,15 +24,7 @@
 
 source /build/anaconda3/bin/activate
 
-cd /build/staged-recipes/recipes/
+ANACONDA_ORGANIZATION="orfeotoolbox"
 
-conda build ${CONDA_BUILD_OPTIONS} muparserx
-conda build ${CONDA_BUILD_OPTIONS} openthreads
-conda build ${CONDA_BUILD_OPTIONS} ossim
-conda build ${CONDA_BUILD_OPTIONS} shark
-conda build ${CONDA_BUILD_OPTIONS} tinyxml
-conda build ${CONDA_BUILD_OPTIONS} libitk
-conda build ${CONDA_BUILD_OPTIONS} otb
-
-mkdir ${CI_PROJECT_DIR}/conda-bld
-mv /build/anaconda3/conda-bld/linux-64/*.tar.bz2 ${CI_PROJECT_DIR}/conda-bld
+anaconda login --username ${ANACONDA_LOGIN} --password ${ANACONDA_PASSWORD} --hostname ${CI_JOB_ID}
+anaconda upload --user ${ANACONDA_ORGANIZATION} conda-bld/*.tar.bz2
