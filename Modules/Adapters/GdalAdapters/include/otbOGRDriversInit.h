@@ -57,10 +57,8 @@ private:
    * Calls \c OGRRegisterAll().
    */
   Drivers();
-  /** Destructor.
-   * Calls \c OGRCleanupAll().
-   */
-  ~Drivers();
+  /** Destructor. */
+  ~Drivers() = default;
   //@}
 };
 }
