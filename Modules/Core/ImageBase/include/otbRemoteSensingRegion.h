@@ -73,7 +73,7 @@ public:
 
   /** Index typedef support. An index is used to access pixel values. */
   typedef itk::ContinuousIndex<Type> IndexType;
-  typedef itk::Point<Type, 2> PointType;
+  typedef itk::Point<Type, 2>        PointType;
 
   /** Size typedef support. A size is used to define region bounds. */
   typedef itk::ContinuousIndex<Type> SizeType;
@@ -97,19 +97,32 @@ public:
   }
 
   /** Constructor. RemoteSensingRegion is a lightweight object that is not reference
-    * counted, so the constructor is public.  Default dimension is 2. */
-  RemoteSensingRegion(const itk::ImageRegion<2>& region)
+   * counted, so the constructor is public.  Default dimension is 2. */
+  RemoteSensingRegion(const itk::ImageRegion<2>& region) : m_Index(region.m_Index), m_Size(region.m_Size)
+
   {
-    m_InputProjectionRef = "";
-    m_Size[0]            = region.GetSize()[0];
-    m_Size[1]            = region.GetSize()[1];
-    m_Index[0]           = region.GetIndex()[0];
-    m_Index[1]           = region.GetIndex()[1];
   }
 
   /** Destructor. RemoteSensingRegion is a lightweight object that is not reference
    * counted, so the destructor is public. */
   ~RemoteSensingRegion() override
+  {
+  }
+
+  /** Copy constructor. RemoteSensingRegion is a lightweight object that is not reference
+   * counted, so the constructor is public.  Default dimension is 2. */
+  RemoteSensingRegion(const Self& region)
+    : m_Index(region.m_Index), m_Size(region.m_Size), m_InputProjectionRef(region.m_InputProjectionRef), m_KeywordList(region.m_KeywordList)
+  {
+  }
+
+  /** Move constructor. RemoteSensingRegion is a lightweight object that is not reference
+   * counted, so the constructor is public.  Default dimension is 2. */
+  RemoteSensingRegion(Self&& region)
+    : m_Index(std::move(region.m_Index)),
+      m_Size(std::move(region.m_Size)),
+      m_InputProjectionRef(std::move(region.m_InputProjectionRef)),
+      m_KeywordList(std::move(region.m_KeywordList))
   {
   }
 
@@ -121,6 +134,16 @@ public:
     m_Size               = region.m_Size;
     m_InputProjectionRef = region.m_InputProjectionRef;
     m_KeywordList        = region.m_KeywordList;
+  }
+
+  /** moving operator=. RemoteSensingRegion is a lightweight object that is not reference
+   * counted, so operator= is public. */
+  void operator=(const Self&& region)
+  {
+    m_Index              = std::move(region.m_Index);
+    m_Size               = std::move(region.m_Size);
+    m_InputProjectionRef = std::move(region.m_InputProjectionRef);
+    m_KeywordList        = std::move(region.m_KeywordList);
   }
 
   /** This method provides explicit conversion to itk::ImageRegion<2>,
