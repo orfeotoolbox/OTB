@@ -60,12 +60,6 @@ GDALDatasetWrapper::Pointer GDALDriverManagerWrapper::Open(std::string filename)
 {
   GDALDatasetWrapper::Pointer datasetWrapper;
 
-  if (boost::algorithm::starts_with(filename, "http://") || boost::algorithm::starts_with(filename, "https://"))
-  {
-    // don't try to open it and exit
-    return datasetWrapper;
-  }
-
   // test if a driver can identify the dataset
   GDALDriverH identifyDriverH = GDALIdentifyDriver(filename.c_str(), nullptr);
   if (identifyDriverH == nullptr)
