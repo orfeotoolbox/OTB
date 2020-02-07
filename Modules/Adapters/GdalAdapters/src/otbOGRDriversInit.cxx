@@ -36,5 +36,5 @@ otb::ogr::Drivers::Drivers()
 
 otb::ogr::Drivers::~Drivers()
 {
-  OGRCleanupAll();
+  //OGRCleanupAll();
 }
