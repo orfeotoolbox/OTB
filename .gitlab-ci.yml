@@ -355,9 +355,8 @@ conda-linux-build:
   extends: .common
   stage: build
   only:
-    - merge_requests
-    - develop
-    - /^release-[0-9]+\.[0-9]+$/
+    - nightly
+    - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
   image: $BUILD_IMAGE_REGISTRY/otb-conda-build:latest
   allow_failure: true
   script:
@@ -367,6 +366,27 @@ conda-linux-build:
   needs:
     - job: fast-build
       artifacts: false
+  artifacts:
+    when: always
+    expire_in: 24 hrs
+    paths:
+      - conda-bld/*
+
+conda-linux-deploy:
+  extends: .general
+  stage: deploy
+  only:
+    - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
+  image: $BUILD_IMAGE_REGISTRY/otb-conda-build:latest
+  before_script:
+    # Provision efficiently the local LFS cache before checkout
+    - git lfs fetch origin $CI_COMMIT_SHA
+    - git checkout -f -q $CI_COMMIT_SHA
+  script:
+    - ./CI/conda_deploy.sh
+  needs:
+    - job: conda-linux-build
+      artifacts: yes
 
 #---------------------------- Deploy job ---------------------------------------
 deploy:
