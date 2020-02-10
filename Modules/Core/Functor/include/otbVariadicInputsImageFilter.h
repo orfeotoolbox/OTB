@@ -109,7 +109,7 @@ public:
 
 #undef DefineLegacySetInputMacro
 
-  template <std::size_t    I = 0>
+  template <std::size_t I = 0>
   const InputImageType<I>* GetInput()
   {
     static_assert(NumberOfInputs > I, "Template value I is out of range.");
@@ -143,9 +143,9 @@ protected:
 
 private:
   template <class Tuple, size_t... Is>
-  auto SetInputsImpl(Tuple& t, std::index_sequence<Is...>)
+  void SetInputsImpl(Tuple& t, std::index_sequence<Is...>)
   {
-    return std::initializer_list<int>{(this->template SetInput<Is>(std::get<Is>(t)), 0)...};
+    std::initializer_list<int>{(this->template SetInput<Is>(std::get<Is>(t)), 0)...};
   }
 
   template <size_t... Is>
@@ -157,6 +157,6 @@ private:
   VariadicInputsImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 };
-}
+} // namespace otb
 
 #endif
