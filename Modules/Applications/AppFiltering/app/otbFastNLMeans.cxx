@@ -59,7 +59,7 @@ private:
         "This filter relies on integral images. Overflow may happen though the risk is limited "
         " by OTB mechanism which process data by chunks.");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("Smoothing");
     AddDocTag(Tags::Filter);
 
     // Parameter declarations
