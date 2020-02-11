@@ -1323,7 +1323,7 @@ int TestHelper::RegressionTestImage(int cpt, const char* testImageFilename, cons
         itkGenericExceptionMacro(<< "Error during write of " << diffName.str());
       }
 
-      std::cout << "<DartMeasurementFile name=\"DifferenceImage " << cpt << "\" type=\"image/tif\">";
+      std::cout << "<DartMeasurementFile name=\"DifferenceImage " << cpt << "\" type=\"file\">";
       std::cout << diffName.str();
       std::cout << "</DartMeasurementFile>" << std::endl;
     }
@@ -1362,7 +1362,7 @@ int TestHelper::RegressionTestImage(int cpt, const char* testImageFilename, cons
         itkGenericExceptionMacro(<< "Error during write of " << baseName.str());
       }
 
-      std::cout << "<DartMeasurementFile name=\"BaselineImage " << cpt << "\" type=\"image/tif\">";
+      std::cout << "<DartMeasurementFile name=\"BaselineImage " << cpt << "\" type=\"file\">";
       std::cout << baseName.str();
       std::cout << "</DartMeasurementFile>" << std::endl;
     }
@@ -1401,7 +1401,7 @@ int TestHelper::RegressionTestImage(int cpt, const char* testImageFilename, cons
         itkGenericExceptionMacro(<< "Error during write of " << testName.str());
       }
 
-      std::cout << "<DartMeasurementFile name=\"TestImage " << cpt << "\" type=\"image/tif\">";
+      std::cout << "<DartMeasurementFile name=\"TestImage " << cpt << "\" type=\"file\">";
       std::cout << testName.str();
       std::cout << "</DartMeasurementFile>" << std::endl;
     }
