@@ -97,6 +97,8 @@ void DifferenceImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation
 template <class TInputImage, class TOutputImage>
 void DifferenceImageFilter<TInputImage, TOutputImage>::Reset()
 {
+  this->UpdateOutputInformation();
+
   int numberOfThreads = this->GetNumberOfThreads();
 
   itk::NumericTraits<RealType>::SetLength(m_MeanDifference, this->GetInput(0)->GetNumberOfComponentsPerPixel());
