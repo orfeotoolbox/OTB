@@ -62,11 +62,21 @@ private:
 
     SetDocLongDescription(
         "This application applies a smoothing filter to an "
-        "image. Three methods can be used: a gaussian filter , a mean filter "
-        ", or an anisotropic diffusion using the Perona-Malik algorithm.");
+        "image. Three methods can be used: a mean filter, a gaussian filter based on [1]"
+        ", or an anisotropic diffusion using the Perona-Malik algorithm [2].");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("FastNLMeans \n"
+                   "[1] Tony Lindeberg Discrete "
+                   "Scale-Space Theory and the Scale-Space Primal Sketch.  Dissertation. Royal "
+                   "Institute of Technology, Stockholm, Sweden. May 1991 \n"
+                   "[2] Pietro Perona and Jitendra Malik, "
+                   "Scale-space and edge detection using anisotropic diffusion, "
+                   "IEEE Transactions on Pattern Analysis Machine Intelligence, vol. 12, pp. 629-639, 1990. \n"
+                   "itk::MeanImageFilter (mean mode)\n"
+                   "itk::DiscreteGaussianImageFilter (gaussian mode)\n"
+                   "itk::GradientAnisotropicDiffusionImageFilter (anidif mode)."
+                   );
 
     AddDocTag(Tags::Filter);
 
