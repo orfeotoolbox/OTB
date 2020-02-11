@@ -1297,7 +1297,7 @@ int TestHelper::RegressionTestImage(int cpt, const char* testImageFilename, cons
     if (size[0] * size[1] <= m_MaxArea)
     {
       std::ostringstream diffName;
-      diffName << testImageFilename << ".diff.tif";
+      diffName << testImageFilename << ".diff.png";
       try
       {
         rescale->SetInput(diffFilter->GetOutput());
@@ -1323,7 +1323,7 @@ int TestHelper::RegressionTestImage(int cpt, const char* testImageFilename, cons
         itkGenericExceptionMacro(<< "Error during write of " << diffName.str());
       }
 
-      std::cout << "<DartMeasurementFile name=\"DifferenceImage " << cpt << "\" type=\"archive/zip\">";
+      std::cout << "<DartMeasurementFile name=\"DifferenceImage " << cpt << "\" type=\"image/png\">";
       std::cout << diffName.str();
       std::cout << "</DartMeasurementFile>" << std::endl;
     }
@@ -1342,7 +1342,7 @@ int TestHelper::RegressionTestImage(int cpt, const char* testImageFilename, cons
     if (size[0] * size[1] <= m_MaxArea)
     {
       std::ostringstream baseName;
-      baseName << testImageFilename << ".base.tif";
+      baseName << testImageFilename << ".base.png";
       try
       {
         rescale->SetInput(baselineReader->GetOutput());
@@ -1362,7 +1362,7 @@ int TestHelper::RegressionTestImage(int cpt, const char* testImageFilename, cons
         itkGenericExceptionMacro(<< "Error during write of " << baseName.str());
       }
 
-      std::cout << "<DartMeasurementFile name=\"BaselineImage " << cpt << "\" type=\"archive/zip\">";
+      std::cout << "<DartMeasurementFile name=\"BaselineImage " << cpt << "\" type=\"image/png\">";
       std::cout << baseName.str();
       std::cout << "</DartMeasurementFile>" << std::endl;
     }
@@ -1381,7 +1381,7 @@ int TestHelper::RegressionTestImage(int cpt, const char* testImageFilename, cons
     if (size[0] * size[1] <= m_MaxArea)
     {
       std::ostringstream testName;
-      testName << testImageFilename << ".test.tif";
+      testName << testImageFilename << ".test.png";
       try
       {
         rescale->SetInput(testReader->GetOutput());
@@ -1401,7 +1401,7 @@ int TestHelper::RegressionTestImage(int cpt, const char* testImageFilename, cons
         itkGenericExceptionMacro(<< "Error during write of " << testName.str());
       }
 
-      std::cout << "<DartMeasurementFile name=\"TestImage " << cpt << "\" type=\"archive/zip\">";
+      std::cout << "<DartMeasurementFile name=\"TestImage " << cpt << "\" type=\"image/png\">";
       std::cout << testName.str();
       std::cout << "</DartMeasurementFile>" << std::endl;
     }
