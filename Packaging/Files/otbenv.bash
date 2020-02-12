@@ -44,6 +44,7 @@ unset LD_LIBRARY_PATH
 
 PATH=$(cat_path "$CURRENT_DIR/bin" "$PATH")
 GDAL_DATA=$CURRENT_DIR/share/data
+PROJ_LIB=$CURRENT_DIR/share/proj
 PYTHONPATH=$(cat_path "$CURRENT_DIR/lib/python" "$PYTHONPATH")
 OTB_APPLICATION_PATH=$(cat_path "$CURRENT_DIR/lib/otb/applications" "$OTB_APPLICATION_PATH")
 GDAL_DRIVER_PATH="disable"
@@ -51,7 +52,7 @@ LC_NUMERIC=C
 
 export PATH
 export GDAL_DATA
-export GEOTIFF_CSV
+export PROJ_LIB
 export PYTHONPATH
 export OTB_APPLICATION_PATH
 export GDAL_DRIVER_PATH
