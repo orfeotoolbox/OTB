@@ -62,7 +62,6 @@ export GDAL_DRIVER_PATH=disable
 # export variables
 export LC_NUMERIC
 export GDAL_DATA
-export GEOTIFF_CSV
 export OTB_APPLICATION_PATH
 export PATH
 export PYTHONPATH
