@@ -253,6 +253,16 @@ typedef LUT<1> LUT1D;
 
 typedef LUT<2> LUT2D;
 
+extern OTBMetadata_EXPORT std::map<MDNum, std::string> MDNumNames;
+
+extern OTBMetadata_EXPORT std::map<MDStr, std::string> MDStrNames;
+
+extern OTBMetadata_EXPORT std::map<MDTime, std::string> MDTimeNames;
+
+extern OTBMetadata_EXPORT std::map<MDL1D, std::string> MDL1DNames;
+
+extern OTBMetadata_EXPORT std::map<MDL2D, std::string> MDL2DNames;
+
 } // end namespace MetaData
 
 } // end namespace otb

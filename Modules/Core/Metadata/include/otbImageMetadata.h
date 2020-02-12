@@ -57,12 +57,6 @@ struct OTBMetadata_EXPORT ImageMetadata
   double PixelSizeX = 0.0;
   double PixelSizeY = 0.0;
 
-  /** Acquisition date */
-  //~ struct tm AcquisitionDate;
-
-  /** Production date */
-  //~ struct tm ProductionDate;
-  
   /** Corners coordinate */
   double ULX = 0.0;
   double ULY = 0.0;
@@ -82,11 +76,11 @@ struct OTBMetadata_EXPORT ImageMetadata
   /** Band-specific metadatas */
   std::vector<BandMetadata> Bands;
 
+  // ------------------------------ dynamic part ---------------------------------
+  
   // TODO: check the concept, maybe use boost/type_erasure with properties ostreamable, ...
   /** Sensor model geometry */
   std::vector<boost::any> SensorGeometry;
-
-// ------------------------------ dynamic part ---------------------------------
 
   std::map<MDNum, double> NumericKeys;
 

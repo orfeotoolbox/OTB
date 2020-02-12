@@ -131,4 +131,60 @@ void OTB_GCP::Print(std::ostream& os) const
   os << "   GCP (X, Y, Z) = (" << this->m_GCPX << "," << this->m_GCPY << "," << this->m_GCPZ << ")" << std::endl;
 }
 
+namespace MetaData
+{
+
+std::map<MDNum, std::string> MDNumNames = {
+  {MDNum::PhysicalGain,"PhysicalGain"},
+  {MDNum::PhysicalBias,"PhysicalBias"},
+  {MDNum::SolarIrradiance,"SolarIrradiance"},
+  {MDNum::SunElevation,"SunElevation"},
+  {MDNum::SunAzimuth,"SunAzimuth"},
+  {MDNum::SatElevation,"SatElevation"},
+  {MDNum::SatAzimuth,"SatAzimuth"},
+  {MDNum::FirstWavelength,"FirstWavelength"},
+  {MDNum::LastWavelength,"LastWavelength"},
+  {MDNum::SpectralStep,"SpectralStep"},
+  {MDNum::SpectralMin,"SpectralMin"},
+  {MDNum::SpectralMax,"SpectralMax"},
+  {MDNum::CalScale,"CalScale"},
+  {MDNum::PRF,"PRF"},
+  {MDNum::RSF,"RSF"},
+  {MDNum::RadarFrequency,"RadarFrequency"},
+  {MDNum::CenterIndicenceAngle,"CenterIndicenceAngle"},
+  {MDNum::RescalingFactor,"RescalingFactor"},
+  {MDNum::AntennaPatternNewGainPolyDegX,"AntennaPatternNewGainPolyDegX"},
+  {MDNum::AntennaPatternNewGainPolyDegY,"AntennaPatternNewGainPolyDegY"},
+  {MDNum::AntennaPatternOldGainPolyDegX,"AntennaPatternOldGainPolyDegX"},
+  {MDNum::AntennaPatternOldGainPolyDegY,"AntennaPatternOldGainPolyDegY"},
+  {MDNum::IncidenceAnglePolyDegX,"IncidenceAnglePolyDegX"},
+  {MDNum::IncidenceAnglePolyDegY,"IncidenceAnglePolyDegY"},
+  {MDNum::RangeSpreadLossPolyDegX,"RangeSpreadLossPolyDegX"},
+  {MDNum::RangeSpreadLossPolyDegY,"RangeSpreadLossPolyDegY"},
+  {MDNum::NoisePolyDegX,"NoisePolyDegX"},
+  {MDNum::NoisePolyDegY,"NoisePolyDegY"},
+};
+
+std::map<MDStr, std::string> MDStrNames = {
+  {MDStr::Mission,"Mission"},
+  {MDStr::Instrument,"Instrument"},
+  {MDStr::ProductType,"ProductType"},
+  {MDStr::GeometricLevel,"GeometricLevel"},
+  {MDStr::RadiometricLevel,"RadiometricLevel"},
+  {MDStr::Polarization,"Polarization"},
+};
+
+std::map<MDTime, std::string> MDTimeNames = {
+  {MDTime::AcquisitionDate,"AcquisitionDate"},
+  {MDTime::ProductionDate,"ProductionDate"},
+};
+
+std::map<MDL1D, std::string> MDL1DNames = {
+  {MDL1D::SpectralSensitivity,"SpectralSensitivity"},
+};
+
+std::map<MDL2D, std::string> MDL2DNames = {};
+
+}
+
 } // end namespace otb

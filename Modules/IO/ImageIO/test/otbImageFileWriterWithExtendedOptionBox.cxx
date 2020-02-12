@@ -71,6 +71,8 @@ int otbImageFileWriterWithExtendedOptionBox(int itkNotUsed(argc), char* argv[])
   writer->Update();
   extractROIFilter->Update();
 
+  std::cout << "Sensor detected : "<< extractROIFilter->GetOutput()->GetImageMetadata().SensorID << "\n";
+
   ReaderType::Pointer reader2 = ReaderType::New();
   reader2->SetFileName(outputFilename);
 

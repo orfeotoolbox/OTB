@@ -599,12 +599,12 @@ bool ImageMetadataInterfaceBase::ParseStringKey(
       {
       if (band < 0)
         {
-        m_ImageMetadata.StringKeys[key] = std::string(res);
+        m_Imd.StringKeys[key] = std::string(res);
         }
       else
         {
-        assert(band < m_ImageMetadata.Bands.size());
-        m_ImageMetadata.Bands[band].StringKeys[key] = std::string(res);
+        assert( (size_t)(band) < m_Imd.Bands.size());
+        m_Imd.Bands[band].StringKeys[key] = std::string(res);
         }
       return true;
       }
@@ -620,12 +620,12 @@ ImageMetadataInterfaceBase::Fetch(
 {
   if (band >= 0)
     {
-    assert(band < m_ImageMetadata.Bands.size());
-    m_ImageMetadata.Bands[band].StringKeys[key] = mds->GetAs<std::string>(path);
-    return m_ImageMetadata.Bands[band].StringKeys[key];
+    assert( (size_t)(band) < m_Imd.Bands.size());
+    m_Imd.Bands[band].StringKeys[key] = mds->GetAs<std::string>(path);
+    return m_Imd.Bands[band].StringKeys[key];
     }
-  m_ImageMetadata.StringKeys[key] = mds->GetAs<std::string>(path);
-  return m_ImageMetadata.StringKeys[key];
+  m_Imd.StringKeys[key] = mds->GetAs<std::string>(path);
+  return m_Imd.StringKeys[key];
 }
 
 double&
@@ -637,12 +637,12 @@ ImageMetadataInterfaceBase::Fetch(
 {
   if (band >= 0)
     {
-    assert(band < m_ImageMetadata.Bands.size());
-    m_ImageMetadata.Bands[band].NumericKeys[key] = mds->GetAs<double>(path);
-    return m_ImageMetadata.Bands[band].NumericKeys[key];
+    assert( (size_t)(band) < m_Imd.Bands.size());
+    m_Imd.Bands[band].NumericKeys[key] = mds->GetAs<double>(path);
+    return m_Imd.Bands[band].NumericKeys[key];
     }
-  m_ImageMetadata.NumericKeys[key] = mds->GetAs<double>(path);
-  return m_ImageMetadata.NumericKeys[key];
+  m_Imd.NumericKeys[key] = mds->GetAs<double>(path);
+  return m_Imd.NumericKeys[key];
 }
 
 boost::any& ImageMetadataInterfaceBase::FetchRPC(
@@ -675,8 +675,8 @@ boost::any& ImageMetadataInterfaceBase::FetchRPC(
   coeffs = mds->GetAsVector<double>("RPC/SAMP_DEN_COEFF",' ',20);
   std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleDen);
 
-  m_ImageMetadata.SensorGeometry.push_back(rpcStruct);
-  return m_ImageMetadata.SensorGeometry.back();
+  m_Imd.SensorGeometry.push_back(rpcStruct);
+  return m_Imd.SensorGeometry.back();
 }
 
 // TODO: replace by template with Traits on metadata key

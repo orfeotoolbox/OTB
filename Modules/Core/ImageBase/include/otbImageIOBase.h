@@ -445,6 +445,8 @@ public:
 
   const ImageMetadata & GetImageMetadata();
 
+  void SetImageMetadata(const ImageMetadata &);
+
 protected:
   ImageIOBase();
   ~ImageIOBase() override;

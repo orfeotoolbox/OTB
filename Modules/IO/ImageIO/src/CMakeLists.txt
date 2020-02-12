@@ -24,6 +24,7 @@ set(OTBImageIO_SRC
   otbImageFileReader.cxx
   otbImageFileWriter.cxx
   otbImageFileReaderException.cxx
+  otbGDALImageMetadataInterface.cxx
   )
 
 add_library(OTBImageIO ${OTBImageIO_SRC})

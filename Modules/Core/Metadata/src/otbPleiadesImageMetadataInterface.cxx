@@ -1758,17 +1758,17 @@ PleiadesImageMetadataInterface::WavelengthSpectralBandVectorType PleiadesImageMe
   return wavelengthSpectralBand;
 }
 
-bool PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 {
   assert(mds);
-  m_ImageMetadata.SensorID = mds->GetAs<std::string>("IMD/Dataset_Sources.Source_Identification.Strip_Source.MISSION");
-  if (strncmp(m_ImageMetadata.SensorID.c_str(), "PHR", 3))
+  m_Imd.SensorID = mds->GetAs<std::string>("IMD/Dataset_Sources.Source_Identification.Strip_Source.MISSION");
+  if (strncmp(m_Imd.SensorID.c_str(), "PHR", 3) == 0)
     {
-    m_ImageMetadata.StringKeys[MDStr::Mission] = "Pléiades";
+    m_Imd.StringKeys[MDStr::Mission] = "Pléiades";
     }
   else
     {
-    otbGenericExceptionMacro(MissingMetadataException,<<"Sensor ID doesn't start with PHR : '"<<m_ImageMetadata.SensorID<<"'")
+    otbGenericExceptionMacro(MissingMetadataException,<<"Sensor ID doesn't start with PHR : '"<<m_Imd.SensorID<<"'")
     }
 
   Fetch(mds, "IMD/Geoposition.Raster_CRS.RASTER_GEOMETRY", MDStr::GeometricLevel);
@@ -1776,11 +1776,10 @@ bool PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   // get radiometric metadata
 
   // fill RPC model
-  if (m_ImageMetadata.StringKeys[MDStr::GeometricLevel] == "SENSOR")
+  if (m_Imd.StringKeys[MDStr::GeometricLevel] == "SENSOR")
     {
     FetchRPC(mds);
     }
-  return true;
 }
 
 } // end namespace otb

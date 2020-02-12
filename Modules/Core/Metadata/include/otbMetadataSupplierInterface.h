@@ -118,6 +118,10 @@ public:
       {
       // TODO: check if we can use lexical_cast on a string_view
       std::string strPart = to<std::string>(part, "casting string_view to std::string");
+      if (strPart.empty())
+        {
+        continue;
+        }
       try
         {
         output.push_back(boost::lexical_cast<T>(strPart));

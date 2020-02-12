@@ -1294,4 +1294,9 @@ const ImageMetadata & ImageIOBase::GetImageMetadata()
   return m_Imd;
 }
 
+void ImageIOBase::SetImageMetadata(const ImageMetadata & imd)
+{
+  m_Imd = imd;
+}
+
 } // namespace itk

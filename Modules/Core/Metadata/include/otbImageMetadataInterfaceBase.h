@@ -83,12 +83,12 @@ public:
 
   void SetImageMetadata(const ImageMetadata& imd)
     {
-    m_ImageMetadata = imd;
+    m_Imd = imd;
     }
 
   const ImageMetadata& GetImageMetadata() const
     {
-    return m_ImageMetadata;
+    return m_Imd;
     }
 
   /** Get the projection coordinate system of the image. */
@@ -181,49 +181,49 @@ public:
   // otbMetadataGetMacro(YPixelSpacing, double);
 
   /** Get the imaging acquisition day from the ossim metadata */
-  virtual int GetDay() const = 0;
+  virtual int GetDay() const {return -1;}
   //  otbMetadataGetMacro(Day, int);
 
   /** Get the imaging acquisition month from the ossim metadata */
-  virtual int GetMonth() const = 0;
+  virtual int GetMonth() const {return -1;}
   // otbMetadataGetMacro(Month, int);
 
   /** Get the imaging acquisition year from the ossim metadata */
-  virtual int GetYear() const = 0;
+  virtual int GetYear() const {return -1;}
   // otbMetadataGetMacro(Year, int);
 
   /** Get the imaging acquisition hour from the ossim metadata */
-  virtual int GetHour() const = 0;
+  virtual int GetHour() const {return -1;}
   // otbMetadataGetMacro(Hour, int);
 
   /** Get the imaging acquisition minute from the ossim metadata */
-  virtual int GetMinute() const = 0;
+  virtual int GetMinute() const {return -1;}
   // otbMetadataGetMacro(Minute, int);
 
   /** Get the imaging production day from the ossim metadata */
-  virtual int GetProductionDay() const = 0;
+  virtual int GetProductionDay() const {return -1;}
   // otbMetadataGetMacro(ProductionDay, int);
 
   /** Get the imaging production month from the ossim metadata */
-  virtual int GetProductionMonth() const = 0;
+  virtual int GetProductionMonth() const {return -1;}
   // otbMetadataGetMacro(ProductionMonth, int);
 
   /** Get the imaging production year from the ossim metadata */
-  virtual int GetProductionYear() const = 0;
+  virtual int GetProductionYear() const {return -1;}
   // otbMetadataGetMacro(ProductionYear, int);
 
   /** Convert the band names provided by ossim to the official band names  */
-  virtual StringVectorType GetEnhancedBandNames() const = 0;
+  virtual StringVectorType GetEnhancedBandNames() const {return StringVectorType();}
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
-  virtual UIntVectorType GetDefaultDisplay() const = 0;
+  virtual UIntVectorType GetDefaultDisplay() const {return {0,1,2}; }
 
-  virtual bool CanRead() const = 0;
+  virtual bool CanRead() const {return false;}
 
-  virtual bool Parse(const MetadataSupplierInterface *)
+  virtual void Parse(const MetadataSupplierInterface *)
     {
-    return false;
+    otbGenericExceptionMacro(MissingMetadataException,<<"Metadata parsing not implemented")
     }
 
   static void PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict);
@@ -246,7 +246,7 @@ protected:
 
   MetaDataDictionaryType m_MetaDataDictionary;
 
-  ImageMetadata m_ImageMetadata;
+  ImageMetadata m_Imd;
 
 private:
   ImageMetadataInterfaceBase(const Self&) = delete;

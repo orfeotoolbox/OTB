@@ -29,6 +29,7 @@
 /* ITK Libraries */
 #include "otbImageIOBase.h"
 #include "otbMetadataSupplierInterface.h"
+#include "otbMetadataStorageInterface.h"
 
 #include "OTBIOGDALExport.h"
 
@@ -70,7 +71,10 @@ class GDALDataTypeWrapper;
  *
  * \ingroup OTBIOGDAL
  */
-class OTBIOGDAL_EXPORT GDALImageIO : public otb::ImageIOBase, public otb::MetadataSupplierInterface
+class OTBIOGDAL_EXPORT GDALImageIO
+  : public otb::ImageIOBase
+  , public otb::MetadataSupplierInterface
+  , public otb::MetadataStorageInterface
 {
 public:
   typedef unsigned char InputPixelType;
@@ -206,6 +210,10 @@ public:
   /** Get metadata item in GDALDataset, domain can specified as "domain/key" */
   const char * GetMetadataValue(const char * path) const override;
 
+  /** Set metadata item in GDALDataset, domain can specified as prefix of the
+   *  path, like "domain/key"*/
+  void SetMetadataValue(const char * path, const char * value) override;
+
 protected:
   /**
    * Constructor.
@@ -251,6 +259,9 @@ private:
    *  \param partialOption The beginning of a creation option (for example "QUALITY=")
    */
   bool CreationOptionContains(std::string partialOption) const;
+
+  /** Dump the ImageMetadata content into GDAL metadata */
+  void ExportMetadata();
 
   /** GDAL parameters. */
   typedef itk::SmartPointer<GDALDatasetWrapper> GDALDatasetWrapperPointer;
