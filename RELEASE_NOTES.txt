@@ -260,7 +260,7 @@ Bugs fixed:
    * !168: Resolve "Generation of Qgis plugin descriptors fails with latest develop" by Julien Michel
    * !159: BUG: Improve Convert and DynamicConvert mask handling (fix #1647) by Victor Poughon
    * !157: Resolve "install qgis descriptors into <PREFIX>/share/ on all platforms" by Rashad Kanavath
-   * !156: BUG fix issue 1656 related to eratic behavior of cmake configuration by Manuel Grizonnet
+   * !156: BUG fix issue 1656 related to erratic behavior of cmake configuration by Manuel Grizonnet
    * !155: BUG: Be compliant with new cmake policy CMP0072 with cmake > 3.11 by Manuel Grizonnet
    * !142: BUG: fix issue #1639 Update UserValue flag in QtWidgetParameterList by Manuel Grizonnet
    * !126: BUG: Remove workaround for QT bug 22829 by Victor Poughon
