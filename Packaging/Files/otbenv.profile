@@ -57,11 +57,14 @@ LC_NUMERIC=C
 # set GDAL_DATA variable used by otb application
 GDAL_DATA=OUT_DIR/share/gdal
 
+PROJ_LIB=OUT_DIR/share/proj
+
 export GDAL_DRIVER_PATH=disable
 
 # export variables
 export LC_NUMERIC
 export GDAL_DATA
+export PROJ_LIB
 export OTB_APPLICATION_PATH
 export PATH
 export PYTHONPATH
