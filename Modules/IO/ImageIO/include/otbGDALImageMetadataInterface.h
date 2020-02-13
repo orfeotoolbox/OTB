@@ -50,8 +50,6 @@ public:
 
   void Parse(const MetadataSupplierInterface *) override;
 
-  void Export(MetadataStorageInterface *);
-
 protected:
   GDALImageMetadataInterface();
   ~GDALImageMetadataInterface() override

@@ -212,7 +212,7 @@ public:
 
   /** Set metadata item in GDALDataset, domain can specified as prefix of the
    *  path, like "domain/key"*/
-  void SetMetadataValue(const char * path, const char * value) override;
+  void SetMetadataValue(const char * path, const char * value, int band=-1) override;
 
 protected:
   /**

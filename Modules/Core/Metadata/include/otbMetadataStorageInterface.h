@@ -25,6 +25,7 @@
 #include "itkExceptionObject.h"
 #include <vector>
 #include <string>
+#include <sstream>
 #include "otbStringUtils.h"
 #include "otbMacro.h"
 #include "otbStringUtilities.h"
@@ -44,10 +45,20 @@ public:
 
   /** Set the metadata value corresponding to a given path (meaning of this path
    * depends on the specific implementation. Returns NULL when path is not found */
-  virtual void SetMetadataValue(const char * path, const char * value) = 0;
+  virtual void SetMetadataValue(const char * path, const char * value, int band=-1) = 0;
 
-  // TODO
-  // void SetAs<>
+  // TODO : check precision settings
+  void SetAs(const std::string & path, double value, int band=-1)
+    {
+    std::ostringstream oss;
+    oss << value;
+    SetMetadataValue(path.c_str(), oss.str().c_str(), band);
+    }
+
+  void SetAs(const std::string & path, const std::string & value, int band=-1)
+    {
+    SetMetadataValue(path.c_str(), value.c_str(), band);
+    }
 };
 
 

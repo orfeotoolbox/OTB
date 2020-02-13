@@ -1800,7 +1800,7 @@ const char * GDALImageIO::GetMetadataValue(const char * path) const
   return ret;
 }
 
-void GDALImageIO::SetMetadataValue(const char * path, const char * value)
+void GDALImageIO::SetMetadataValue(const char * path, const char * value, int band)
 {
   // detect namespace if any
   const char *slash = strchr(path,'/');
@@ -1813,19 +1813,45 @@ void GDALImageIO::SetMetadataValue(const char * path, const char * value)
     domain_c = domain.c_str();
     key = std::string(slash+1);
     }
-  m_Dataset->GetDataSet()->SetMetadataItem(key.c_str(), value, domain_c);
+  if (band >= 0)
+    {
+    m_Dataset->GetDataSet()->GetRasterBand(band+1)->SetMetadataItem(key.c_str(), value, domain_c);
+    }
+  else
+    {
+    m_Dataset->GetDataSet()->SetMetadataItem(key.c_str(), value, domain_c);
+    }
 }
 
 
 void GDALImageIO::ExportMetadata()
 {
-  if (!m_Imd.SensorID.empty())
-    {
-    SetMetadataValue("METADATATYPE", "OTB");
-    SetMetadataValue("OTB_VERSION", OTB_VERSION_STRING );
-    SetMetadataValue("SensorID", m_Imd.SensorID.c_str());
-    }
+  SetMetadataValue("METADATATYPE", "OTB");
+  SetMetadataValue("OTB_VERSION", OTB_VERSION_STRING );
+
   // TODO: finish implementation
+
+  for (const auto& kv : m_Imd.StringKeys)
+    {
+    SetAs(MetaData::MDStrNames[kv.first], kv.second);
+    }
+  for (const auto& kv : m_Imd.NumericKeys)
+    {
+    SetAs(MetaData::MDNumNames[kv.first], kv.second);
+    }
+  int bIdx = 0;
+  for (const auto& band : m_Imd.Bands)
+    {
+    for (const auto& kv : band.StringKeys)
+      {
+      SetAs(MetaData::MDStrNames[kv.first], kv.second, bIdx);
+      }
+    for (const auto& kv : band.NumericKeys)
+      {
+      SetAs(MetaData::MDNumNames[kv.first], kv.second, bIdx);
+      }
+    ++bIdx;
+    }
 }
 
 

@@ -28,18 +28,9 @@ GDALImageMetadataInterface::GDALImageMetadataInterface()
 }
 
 void
-GDALImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+GDALImageMetadataInterface::Parse(const MetadataSupplierInterface *)
 {
   otbGenericExceptionMacro(MissingMetadataException,<<"Metadata parsing not implemented")
-}
-
-void GDALImageMetadataInterface::Export(MetadataStorageInterface *mds)
-{
-  if (!m_Imd.SensorID.empty())
-    {
-    mds->SetMetadataValue("SensorID", m_Imd.SensorID.c_str() );
-    }
-  // TODO: finish implementation @@@@@@@
 }
 
 } // end namespace otb
