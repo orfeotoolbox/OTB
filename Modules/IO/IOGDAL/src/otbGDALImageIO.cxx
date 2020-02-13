@@ -48,6 +48,7 @@
 
 #include "otbOGRHelpers.h"
 #include "otbGeometryMetadata.h"
+#include "otbConfigure.h"
 
 #include "stdint.h" //needed for uintptr_t
 
@@ -1820,11 +1821,11 @@ void GDALImageIO::ExportMetadata()
 {
   if (!m_Imd.SensorID.empty())
     {
+    SetMetadataValue("METADATATYPE", "OTB");
+    SetMetadataValue("OTB_VERSION", OTB_VERSION_STRING );
     SetMetadataValue("SensorID", m_Imd.SensorID.c_str());
-    SetMetadataValue("IMD/Instrument", m_Imd.SensorID.c_str());
     }
   // TODO: finish implementation
-  
 }
 
 
