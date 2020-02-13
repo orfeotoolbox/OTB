@@ -83,7 +83,7 @@ void PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage>::Reset()
 template <class TInputLabelImage>
 void PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage>::Synthetize()
 {
-  NeigboursMapType neighboursMap;
+  NeighboursMapType neighboursMap;
 
   // Merge the neighbours maps from all threads
   for (unsigned int threadId = 0; threadId < this->GetNumberOfThreads(); threadId++)
