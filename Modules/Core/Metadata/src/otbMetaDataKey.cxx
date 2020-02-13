@@ -166,6 +166,7 @@ std::map<MDNum, std::string> MDNumNames = {
 };
 
 std::map<MDStr, std::string> MDStrNames = {
+  {MDStr::SensorID, "SensorID"},
   {MDStr::Mission,"Mission"},
   {MDStr::Instrument,"Instrument"},
   {MDStr::ProductType,"ProductType"},

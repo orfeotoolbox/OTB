@@ -25,7 +25,6 @@ namespace otb
 std::ostream& operator<<(std::ostream& os, const otb::ImageMetadata& imd)
 {
   os << "ImageMetadata [";
-  os << "SensorID:'" << imd.SensorID << "';";
   os << "ProjectionRef:'"<<imd.ProjectionRef<<"';";
   os << "GCPProjection:'"<<imd.GCPProjection<<"';";
   os << "GCPs[";
@@ -48,6 +47,15 @@ std::ostream& operator<<(std::ostream& os, const otb::ImageMetadata& imd)
     }
   os << "]";
   // TODO : finish printing other fields
+
+  for (const auto& kv : imd.StringKeys)
+    {
+    os << MetaData::MDStrNames[kv.first] << ":'"<< kv.second <<"';";
+    }
+  for (const auto& kv : imd.NumericKeys)
+    {
+    os << MetaData::MDNumNames[kv.first] << ":'"<< kv.second <<"';";
+    }
   return os;
 }
 

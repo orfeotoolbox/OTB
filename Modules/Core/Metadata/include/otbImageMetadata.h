@@ -50,13 +50,14 @@ struct OTBMetadata_EXPORT ImageMetadata
 
   std::vector<OTB_GCP> GCPs;
 
+  // TODO : remove if not used
   double GeoTransform[6] = {0.0, 1.0, 0.0, 0.0, 0.0, 1.0};
 
-  std::string SensorID;
-
+  // TODO : remove if not used
   double PixelSizeX = 0.0;
   double PixelSizeY = 0.0;
 
+  // TODO : remove if not used
   /** Corners coordinate */
   double ULX = 0.0;
   double ULY = 0.0;
@@ -91,6 +92,20 @@ struct OTBMetadata_EXPORT ImageMetadata
   std::map<MDL2D, MetaData::LUT2D > LUT2DKeys;
 
   std::map<MDTime, MetaData::Time> TimeKeys;
+
+  // ------------------------ access functions ---------------------------------
+  double & operator[](const MDNum& key)
+    {
+    return NumericKeys[key];
+    }
+
+  std::string & operator[](const MDStr& key)
+    {
+    return StringKeys[key];
+    }
+  // TODO: prefer using map.at ?
+
+  // TODO : add missing access functions
 };
 
 

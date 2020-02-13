@@ -193,6 +193,7 @@ enum class MDNum
 /** Metadata as std::string */
 enum class MDStr
 {
+  SensorID,
   Mission,
   Instrument,
   ProductType,

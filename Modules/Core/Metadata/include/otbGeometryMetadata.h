@@ -93,6 +93,8 @@ struct OTBMetadata_EXPORT RPCParam
 
 };
 
+// TODO : add SARParam to define a SAR sensor geometry
+
 } // end namespace Projection
 
 } // end namespace otb

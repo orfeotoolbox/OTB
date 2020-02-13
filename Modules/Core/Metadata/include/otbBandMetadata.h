@@ -57,6 +57,17 @@ struct OTBMetadata_EXPORT BandMetadata
   std::map<MDL2D, MetaData::LUT2D > LUT2DKeys;
 
   std::map<MDTime, MetaData::Time> TimeKeys;
+
+// ------------------------ access functions ---------------------------------
+  double & operator[](const MDNum& key)
+    {
+    return NumericKeys[key];
+    }
+
+  std::string & operator[](const MDStr& key)
+    {
+    return StringKeys[key];
+    }
 };
 
 extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::BandMetadata& bmd);
