@@ -1783,7 +1783,7 @@ std::string GDALImageIO::GetResourceFile()
 }
 
 
-const char * GDALImageIO::GetMetadataValue(const char * path) const
+const char * GDALImageIO::GetMetadataValue(const char * path, int band) const
 {
   // detect namespace if any
   const char *slash = strchr(path,'/');
@@ -1796,8 +1796,11 @@ const char * GDALImageIO::GetMetadataValue(const char * path) const
     domain_c = domain.c_str();
     key = std::string(slash+1);
     }
-  const char * ret = m_Dataset->GetDataSet()->GetMetadataItem(key.c_str(), domain_c);
-  return ret;
+  if (band >= 0)
+    {
+    return m_Dataset->GetDataSet()->GetRasterBand(band+1)->GetMetadataItem(key.c_str(), domain_c);
+    }
+  return m_Dataset->GetDataSet()->GetMetadataItem(key.c_str(), domain_c);
 }
 
 void GDALImageIO::SetMetadataValue(const char * path, const char * value, int band)
@@ -1852,6 +1855,11 @@ void GDALImageIO::ExportMetadata()
       }
     ++bIdx;
     }
+}
+
+void GDALImageIO::ImportMetadata()
+{
+  // TODO
 }
 
 

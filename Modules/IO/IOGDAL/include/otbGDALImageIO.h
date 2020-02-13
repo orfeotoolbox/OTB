@@ -208,7 +208,7 @@ public:
   std::string GetResourceFile() override;
 
   /** Get metadata item in GDALDataset, domain can specified as "domain/key" */
-  const char * GetMetadataValue(const char * path) const override;
+  const char * GetMetadataValue(const char * path, int band = -1) const override;
 
   /** Set metadata item in GDALDataset, domain can specified as prefix of the
    *  path, like "domain/key"*/
@@ -262,6 +262,9 @@ private:
 
   /** Dump the ImageMetadata content into GDAL metadata */
   void ExportMetadata();
+
+  /** Import the ImageMetadata content from GDAL metadata */
+  void ImportMetadata();
 
   /** GDAL parameters. */
   typedef itk::SmartPointer<GDALDatasetWrapper> GDALDatasetWrapperPointer;

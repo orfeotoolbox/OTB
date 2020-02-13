@@ -72,19 +72,25 @@ public:
   // Maybe not needed
 //  virtual std::vector<std::string> GetResourceFiles() = 0;
 
-  //~ virtual bool HasValue(const char * path) = 0;
-
   /** Get the metadata value corresponding to a given path (meaning of this path
-   * depends on the specific implementation. Returns NULL when path is not found */
-  virtual const char * GetMetadataValue(const char * path) const = 0;
+   * depends on the specific implementation. Returns NULL when path is not found
+   * If band >= 0, the metadata value is looked in the specified band*/
+  virtual const char * GetMetadataValue(const char * path, int band=-1) const = 0;
 
-  // probably not needed
-  //~ virtual std::vector<std::string> GetValuesList(const std::string& path) = 0;
-
-  // utility functions
-  template <typename T> T GetAs(const char *path) const
+  bool HasValue(const char * path, int band=-1)
     {
-    const char * ret = GetMetadataValue(path);
+    const char * ret = GetMetadataValue(path, band);
+    if (ret == nullptr)
+      {
+      return false;
+      }
+    return true;
+    }
+  
+  // utility functions
+  template <typename T> T GetAs(const char *path, int band=-1) const
+    {
+    const char * ret = GetMetadataValue(path, band);
     if (ret == nullptr)
       {
       otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata '"<<path<<"'")
@@ -102,9 +108,9 @@ public:
   /** Parse a metadata value to a std::vector,
    *  If size>=0, then the final std::vector size is checked and an exception
    *  is raised if it doesn't match the given size.*/
-  template < typename T> std::vector<T> GetAsVector(const char *path, const char sep=' ', int size=-1) const
+  template < typename T> std::vector<T> GetAsVector(const char *path, const char sep=' ', int size=-1, int band=-1) const
     {
-    const char * ret = GetMetadataValue(path);
+    const char * ret = GetMetadataValue(path, band);
     if (ret == nullptr)
       {
       otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata '"<<path<<"'")
