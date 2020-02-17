@@ -27,4 +27,4 @@ source /build/anaconda3/bin/activate
 ANACONDA_ORGANIZATION="orfeotoolbox"
 
 anaconda login --username ${ANACONDA_LOGIN} --password ${ANACONDA_PASSWORD} --hostname ${CI_JOB_ID}
-anaconda upload --force --user ${ANACONDA_ORGANIZATION} conda-bld/*.tar.bz2 || /bin/true
+anaconda upload --force --skip-existing --user ${ANACONDA_ORGANIZATION} conda-bld/*.tar.bz2 || /bin/true
