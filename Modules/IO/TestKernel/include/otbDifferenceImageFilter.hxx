@@ -51,6 +51,7 @@ DifferenceImageFilter<TInputImage, TOutputImage>::DifferenceImageFilter()
   m_MeanDifference                = itk::NumericTraits<RealType>::ZeroValue(m_MeanDifference);
   m_TotalDifference               = itk::NumericTraits<AccumulateType>::ZeroValue(m_TotalDifference);
   m_NumberOfPixelsWithDifferences = 0;
+  
 }
 
 //----------------------------------------------------------------------------
@@ -80,6 +81,7 @@ void DifferenceImageFilter<TInputImage, TOutputImage>::SetTestInput(const InputI
   // The test image should be input 1.
   this->SetInput(1, testImage);
 }
+
 template <class TInputImage, class TOutputImage>
 void DifferenceImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation()
 {
@@ -91,10 +93,12 @@ void DifferenceImageFilter<TInputImage, TOutputImage>::GenerateOutputInformation
   }
   this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput(0)->GetNumberOfComponentsPerPixel());
 }
-//----------------------------------------------------------------------------
+
 template <class TInputImage, class TOutputImage>
-void DifferenceImageFilter<TInputImage, TOutputImage>::BeforeThreadedGenerateData()
+void DifferenceImageFilter<TInputImage, TOutputImage>::Reset()
 {
+  this->UpdateOutputInformation();
+
   int numberOfThreads = this->GetNumberOfThreads();
 
   itk::NumericTraits<RealType>::SetLength(m_MeanDifference, this->GetInput(0)->GetNumberOfComponentsPerPixel());
@@ -251,12 +255,12 @@ void DifferenceImageFilter<TInputImage, TOutputImage>::ThreadedGenerateData(cons
   }
 
   // Update global difference image statistics.
-  m_ThreadDifferenceSum[threadId]  = threadDifferenceSum;
-  m_ThreadNumberOfPixels[threadId] = threadNumberOfPixels;
+  m_ThreadDifferenceSum[threadId]  += threadDifferenceSum;
+  m_ThreadNumberOfPixels[threadId] += threadNumberOfPixels;
 }
-//----------------------------------------------------------------------------
+
 template <class TInputImage, class TOutputImage>
-void DifferenceImageFilter<TInputImage, TOutputImage>::AfterThreadedGenerateData()
+void DifferenceImageFilter<TInputImage, TOutputImage>::Synthetize()
 {
   // Set statistics about difference image.
   int numberOfThreads = this->GetNumberOfThreads();
@@ -276,6 +280,8 @@ void DifferenceImageFilter<TInputImage, TOutputImage>::AfterThreadedGenerateData
   // Calculate the mean difference.
   m_MeanDifference = m_TotalDifference / numberOfPixels;
 }
+
+
 
 } // end namespace otb
 
