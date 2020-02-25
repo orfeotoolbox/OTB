@@ -701,15 +701,15 @@ void ImageViewWidget::ListGlVersions() const
 
   switch( format().profile() )
   {
-  case QGLFormat::NoProfile:
+  case QSurfaceFormat::NoProfile:
     qWarning() << "QGLFormat::NoProfile";
     break;
 
-  case QGLFormat::CoreProfile:
+  case QSurfaceFormat::CoreProfile:
     qWarning() << "QGLFormat::CoreProfile";
     break;
 
-  case QGLFormat::CompatibilityProfile:
+  case QSurfaceFormat::CompatibilityProfile:
     qWarning() << "QGLFormat::CompatibilityProfile";
     break;
 
