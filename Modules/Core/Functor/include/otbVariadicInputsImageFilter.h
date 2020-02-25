@@ -145,7 +145,9 @@ private:
   template <class Tuple, size_t... Is>
   void SetInputsImpl(Tuple& t, std::index_sequence<Is...>)
   {
-    std::initializer_list<int>{(this->template SetInput<Is>(std::get<Is>(t)), 0)...};
+    // Will be easier to write in c++17 with fold expressions 
+    // (this->template SetInput<Is>(std::get<Is>(t)),...);
+    (void) std::initializer_list<int>{(this->template SetInput<Is>(std::get<Is>(t)), 0)...};
   }
 
   template <size_t... Is>
