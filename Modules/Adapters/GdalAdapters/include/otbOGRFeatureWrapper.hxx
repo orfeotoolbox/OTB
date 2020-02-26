@@ -26,21 +26,7 @@
 /*===========================================================================*/
 #include "otbOGRFeatureWrapper.h"
 #include <cassert>
-#include <boost/version.hpp>
-#if BOOST_VERSION >= 104800
-#include <boost/move/move.hpp> // since 1.48
-#else
-#include <boost/interprocess/detail/move.hpp>
-#endif
-
-namespace otb
-{
-#if BOOST_VERSION >= 104800
-using boost::move;
-#else
-using boost::interprocess::move;
-#endif
-}
+#include <utility>
 
 /*===========================================================================*/
 /*================================[ Feature ]================================*/
@@ -141,7 +127,7 @@ inline void otb::ogr::Feature::SetGeometryDirectly(UniqueGeometryPtr geometry)
 #if !defined(NDEBUG)
   OGRGeometry* g = geometry.get();
 #endif
-  UncheckedSetGeometryDirectly(otb::move(geometry));
+  UncheckedSetGeometryDirectly(std::move(geometry));
   assert((m_Feature->GetGeometryRef() == g) && "The new geometry hasn't been set as expected");
   assert(!geometry && "UniqueGeometryPtr hasn't released its pointer");
 }
@@ -151,7 +137,7 @@ inline otb::ogr::UniqueGeometryPtr otb::ogr::Feature::StealGeometry()
   CheckInvariants();
   UniqueGeometryPtr res = UncheckedStealGeometry();
   itkAssertOrThrowMacro(!m_Feature->GetGeometryRef(), "Geometry hasn't been properly stolen");
-  return otb::move(res);
+  return res;
 }
 
 inline void otb::ogr::Feature::SetGeometry(OGRGeometry const* geometry)
