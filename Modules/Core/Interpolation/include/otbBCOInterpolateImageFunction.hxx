@@ -69,13 +69,10 @@ double BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>::GetAlpha() const
 }
 
 template <class TInputImage, class TCoordRep>
-typename BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>::CoefContainerType
-BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>::EvaluateCoef(const ContinuousIndexValueType& indexValue) const
+void BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>::EvaluateCoef(
+    const ContinuousIndexValueType& indexValue, typename BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>::CoefContainerType& bcoCoef) const
 {
-  // Init BCO coefficient container
-
-  CoefContainerType BCOCoef(m_WinSize, 0.);
-  double            offset, dist, position, step;
+  double offset, dist, position, step;
 
   offset = indexValue - itk::Math::Floor<IndexValueType>(indexValue + 0.5);
 
@@ -95,26 +92,24 @@ BCOInterpolateImageFunctionBase<TInputImage, TCoordRep>::EvaluateCoef(const Cont
     {
       if (dist <= 1.)
       {
-        BCOCoef[i] = (m_Alpha + 2.) * std::abs(dist * dist * dist) - (m_Alpha + 3.) * dist * dist + 1;
+        bcoCoef[i] = (m_Alpha + 2.) * std::abs(dist * dist * dist) - (m_Alpha + 3.) * dist * dist + 1;
       }
       else
       {
-        BCOCoef[i] = m_Alpha * std::abs(dist * dist * dist) - 5 * m_Alpha * dist * dist + 8 * m_Alpha * std::abs(dist) - 4 * m_Alpha;
+        bcoCoef[i] = m_Alpha * std::abs(dist * dist * dist) - 5 * m_Alpha * dist * dist + 8 * m_Alpha * std::abs(dist) - 4 * m_Alpha;
       }
     }
     else
     {
-      BCOCoef[i] = 0;
+      bcoCoef[i] = 0;
     }
 
-    sum += BCOCoef[i];
+    sum += bcoCoef[i];
     position += step;
   }
 
   for (unsigned int i = 0; i < m_WinSize; ++i)
-    BCOCoef[i]        = BCOCoef[i] / sum;
-
-  return BCOCoef;
+    bcoCoef[i] = bcoCoef[i] / sum;
 }
 
 template <class TInputImage, class TCoordRep>
@@ -127,7 +122,6 @@ template <class TInputImage, class TCoordRep>
 typename BCOInterpolateImageFunction<TInputImage, TCoordRep>::OutputType
 BCOInterpolateImageFunction<TInputImage, TCoordRep>::EvaluateAtContinuousIndex(const ContinuousIndexType& index) const
 {
-
   unsigned int dim;
 
   IndexType baseIndex;
@@ -135,8 +129,10 @@ BCOInterpolateImageFunction<TInputImage, TCoordRep>::EvaluateAtContinuousIndex(c
 
   RealType value = itk::NumericTraits<RealType>::Zero;
 
-  CoefContainerType BCOCoefX = this->EvaluateCoef(index[0]);
-  CoefContainerType BCOCoefY = this->EvaluateCoef(index[1]);
+  CoefContainerType BCOCoefX(this->m_WinSize);
+  this->EvaluateCoef(index[0], BCOCoefX);
+  CoefContainerType BCOCoefY(this->m_WinSize);
+  this->EvaluateCoef(index[1], BCOCoefY);
 
   // Compute base index = closet index
   for (dim = 0; dim < ImageDimension; dim++)
@@ -198,12 +194,19 @@ BCOInterpolateImageFunction<otb::VectorImage<TPixel, VImageDimension>, TCoordRep
   IndexType neighIndex;
 
 
+#if BOOST_VERSION >= 105800
+  boost::container::small_vector<ScalarRealType, 8> lineRes(componentNumber);
+#else
   std::vector<ScalarRealType> lineRes(componentNumber);
-  OutputType                  output(componentNumber);
+#endif
+
+  OutputType output(componentNumber);
   output.Fill(itk::NumericTraits<ScalarRealType>::Zero);
 
-  CoefContainerType BCOCoefX = this->EvaluateCoef(index[0]);
-  CoefContainerType BCOCoefY = this->EvaluateCoef(index[1]);
+  CoefContainerType BCOCoefX(this->m_WinSize);
+  this->EvaluateCoef(index[0], BCOCoefX);
+  CoefContainerType BCOCoefY(this->m_WinSize);
+  this->EvaluateCoef(index[1], BCOCoefY);
 
   // Compute base index = closet index
   for (dim = 0; dim < ImageDimension; dim++)
