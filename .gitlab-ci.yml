@@ -154,6 +154,8 @@ ubuntu-xdk-prepare:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm
+  needs:
+    - job: fast-build
 
 ubuntu-xdk-build-doc:
   extends: .common-build
@@ -175,6 +177,8 @@ centos-xdk-prepare:
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=centos-6.6-gcc
+  needs:
+    - job: fast-build
 
 centos-xdk-build:
   extends: .common-build
@@ -194,6 +198,8 @@ macos-xdk-prepare:
     - macos
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
+  needs:
+    - job: fast-build
 
 macos-xdk-build:
   tags:
@@ -232,6 +238,8 @@ windows-10-prepare:
     - clcache.exe -s
     - ctest -C Release -V -S CI/prepare_superbuild.cmake
     - clcache.exe -s
+  needs:
+    - job: fast-build
 
 windows-10-build:
   extends: .windows-build
@@ -258,6 +266,8 @@ windows-8-prepare:
     - clcache.exe -s
     - ctest -C Release -V -S CI/prepare_superbuild.cmake
     - clcache.exe -s
+  needs:
+    - job: fast-build
 
 windows-8-build:
   extends: .windows-build

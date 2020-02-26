@@ -37,6 +37,9 @@ namespace
 static bool is_logger_singleton_level_set;
 }
 
+
+Bug !
+
 Logger::Logger() : m_LogSetupInfoDone(false)
 {
   m_LevelForFlushing    = itk::LoggerBase::CRITICAL;
