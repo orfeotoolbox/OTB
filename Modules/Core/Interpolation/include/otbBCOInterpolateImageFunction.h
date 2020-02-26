@@ -21,8 +21,14 @@
 #ifndef otbBCOInterpolateImageFunction_h
 #define otbBCOInterpolateImageFunction_h
 
-#include "itkInterpolateImageFunction.h"
+#include <boost/version.hpp>
+#if BOOST_VERSION >= 105800
+#include <boost/container/small_vector.hpp>
+#else
 #include "vnl/vnl_vector.h"
+#endif
+
+#include "itkInterpolateImageFunction.h"
 #include "otbMath.h"
 
 #include "otbVectorImage.h"
@@ -57,7 +63,7 @@ class ITK_EXPORT BCOInterpolateImageFunctionBase : public itk::InterpolateImageF
 {
 public:
   /** Standard class typedefs. */
-  typedef BCOInterpolateImageFunctionBase Self;
+  typedef BCOInterpolateImageFunctionBase                       Self;
   typedef itk::InterpolateImageFunction<TInputImage, TCoordRep> Superclass;
 
   /** Run-time type information (and related methods). */
@@ -89,15 +95,21 @@ public:
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
   typedef TCoordRep                                ContinuousIndexValueType;
 
-  /** Coeficients container type.*/
+#if BOOST_VERSION >= 105800
+  // Faster path for small radii.
+  /** Coeficients container type. */
+  typedef boost::container::small_vector<double, 7> CoefContainerType;
+#else
+  /** Coeficients container type. */
   typedef vnl_vector<double> CoefContainerType;
+#endif
 
   /** Set/Get the window radius */
-  virtual void SetRadius(unsigned int radius);
+  virtual void         SetRadius(unsigned int radius);
   virtual unsigned int GetRadius() const;
 
   /** Set/Get the optimisation coefficient (Common values are -0.5, -0.75 or -1.0) */
-  virtual void SetAlpha(double alpha);
+  virtual void   SetAlpha(double alpha);
   virtual double GetAlpha() const;
 
   /** Evaluate the function at a ContinuousIndex position
@@ -115,7 +127,7 @@ protected:
   ~BCOInterpolateImageFunctionBase() override{};
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Compute the BCO coefficients. */
-  virtual CoefContainerType EvaluateCoef(const ContinuousIndexValueType& indexValue) const;
+  virtual void EvaluateCoef(const ContinuousIndexValueType& indexValue, CoefContainerType& bcoCoef) const;
 
   /** Used radius for the BCO */
   unsigned int m_Radius;
@@ -135,10 +147,10 @@ class ITK_EXPORT BCOInterpolateImageFunction : public otb::BCOInterpolateImageFu
 {
 public:
   /** Standard class typedefs. */
-  typedef BCOInterpolateImageFunction Self;
+  typedef BCOInterpolateImageFunction                             Self;
   typedef BCOInterpolateImageFunctionBase<TInputImage, TCoordRep> Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>                                 Pointer;
+  typedef itk::SmartPointer<const Self>                           ConstPointer;
 
   itkTypeMacro(BCOInterpolateImageFunction, BCOInterpolateImageFunctionBase);
   itkNewMacro(Self);
@@ -169,14 +181,14 @@ private:
 
 template <typename TPixel, unsigned int VImageDimension, class TCoordRep>
 class ITK_EXPORT BCOInterpolateImageFunction<otb::VectorImage<TPixel, VImageDimension>, TCoordRep>
-    : public otb::BCOInterpolateImageFunctionBase<otb::VectorImage<TPixel, VImageDimension>, TCoordRep>
+  : public otb::BCOInterpolateImageFunctionBase<otb::VectorImage<TPixel, VImageDimension>, TCoordRep>
 {
 public:
   /** Standard class typedefs.*/
-  typedef BCOInterpolateImageFunction Self;
+  typedef BCOInterpolateImageFunction                                                           Self;
   typedef BCOInterpolateImageFunctionBase<otb::VectorImage<TPixel, VImageDimension>, TCoordRep> Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>                                                               Pointer;
+  typedef itk::SmartPointer<const Self>                                                         ConstPointer;
 
   itkTypeMacro(BCOInterpolateImageFunction, BCOInterpolateImageFunctionBase);
   itkNewMacro(Self);
