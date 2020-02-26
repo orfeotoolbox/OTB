@@ -827,7 +827,7 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Geometries)
     BOOST_REQUIRE(p);
     BOOST_CHECK(!f.GetGeometry());
     BOOST_CHECK(ogr::Equals(*p, ref));
-    f.SetGeometryDirectly(otb::move(p));
+    f.SetGeometryDirectly(std::move(p));
     BOOST_CHECK(!p);
     ++u;
   }
