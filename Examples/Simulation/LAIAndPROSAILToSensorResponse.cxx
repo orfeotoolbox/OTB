@@ -168,8 +168,8 @@ public:
   using AcquistionParameterType = TAcquistionParameter;
   using SatRSRType              = TSatRSR;
   using SatRSRPointerType       = typename SatRSRType::Pointer;
-  using ProspectType            = typename otb::ProspectModel;
-  using SailType                = typename otb::SailModel;
+  using ProspectType            = otb::ProspectModel;
+  using SailType                = otb::SailModel;
 
   using PrecisionType                 = double;
   using PairType                      = std::pair<PrecisionType, PrecisionType>;
