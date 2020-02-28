@@ -158,6 +158,10 @@ public:
 /** Metadata as double*/
 enum class MDNum
 {
+// generic
+  TileHintX,
+  TileHintY,
+  DataType,
 // optical section
   PhysicalGain,
   PhysicalBias,
@@ -187,7 +191,8 @@ enum class MDNum
   RangeSpreadLossPolyDegX,
   RangeSpreadLossPolyDegY,
   NoisePolyDegX,
-  NoisePolyDegY
+  NoisePolyDegY,
+  END
 };
 
 /** Metadata as std::string */
@@ -199,27 +204,44 @@ enum class MDStr
   ProductType,
   GeometricLevel,
   RadiometricLevel,
-  Polarization
+  Polarization,
   // ...
+  END
 };
 
 /** Metadata as LUT 1D */
 enum class MDL1D
 {
-  SpectralSensitivity
+  SpectralSensitivity,
+  END
 };
 
 /** Metadata as LUT 2D */
 enum class MDL2D
 {
   // Sar calibration lut ...
+  END
 };
 
 /** Metadata as Time */
 enum class MDTime
 {
   AcquisitionDate,
-  ProductionDate
+  ProductionDate,
+  END
+};
+
+enum class MDGeom
+{
+  ProjectionWKT,  // -> string
+  ProjectionEPSG, // -> int
+  ProjectionProj, // -> string
+  RPC,            // -> RPCParam
+  SAR,            // -> SARParam
+  SensorGeometry, // -> boost::any
+  GCP,            // -> GCPParam
+  Adjustment,     // -> ?
+  END
 };
 
 namespace MetaData
@@ -253,6 +275,8 @@ public:
 typedef LUT<1> LUT1D;
 
 typedef LUT<2> LUT2D;
+
+extern OTBMetadata_EXPORT std::map<MDGeom, std::string> MDGeomNames;
 
 extern OTBMetadata_EXPORT std::map<MDNum, std::string> MDNumNames;
 

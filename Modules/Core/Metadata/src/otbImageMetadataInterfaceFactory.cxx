@@ -112,9 +112,9 @@ ImageMetadataInterfaceFactory
         io->Parse(mds);
         return io;
         }
-      catch(MissingMetadataException&)
+      catch(MissingMetadataException& e)
         {
-        // std::cout << io->GetNameOfClass() <<" : "<<  e.what() << "\n";
+        std::cout << io->GetNameOfClass() <<" : "<<  e.what() << "\n";
         // silent catch of MissingMetadataException
         // just means that this IMI can't parse the file
         }

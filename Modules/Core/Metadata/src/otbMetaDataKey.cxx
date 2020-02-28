@@ -133,8 +133,12 @@ void OTB_GCP::Print(std::ostream& os) const
 
 namespace MetaData
 {
-
+// array<pair<> >
+// boost::flat_map<> 
 std::map<MDNum, std::string> MDNumNames = {
+  {MDNum::TileHintX,"TileHintX"},
+  {MDNum::TileHintY,"TileHintY"},
+  {MDNum::DataType,"DataType"},
   {MDNum::PhysicalGain,"PhysicalGain"},
   {MDNum::PhysicalBias,"PhysicalBias"},
   {MDNum::SolarIrradiance,"SolarIrradiance"},
@@ -185,6 +189,17 @@ std::map<MDL1D, std::string> MDL1DNames = {
 };
 
 std::map<MDL2D, std::string> MDL2DNames = {};
+
+std::map<MDGeom, std::string> MDGeomNames = {
+  {MDGeom::ProjectionWKT,  "ProjectionWKT"},
+  {MDGeom::ProjectionEPSG, "ProjectionEPSG"},
+  {MDGeom::ProjectionProj, "ProjectionProj"},
+  {MDGeom::RPC,            "RPC"},
+  {MDGeom::SAR,            "SAR"},
+  {MDGeom::SensorGeometry, "SensorGeometry"},
+  {MDGeom::GCP,            "GCP"},
+  {MDGeom::Adjustment,     "Adjustment"}
+};
 
 }
 

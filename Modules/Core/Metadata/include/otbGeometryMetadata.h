@@ -29,6 +29,13 @@ namespace otb
 namespace Projection
 {
 
+struct OTBMetadata_EXPORT GCPParam
+{
+  std::string GCPProjection;
+
+  std::vector<OTB_GCP> GCPs;
+};
+
 /** \struct RPCParam
  *
  * \brief Coefficients for RPC model (quite similar to GDALRPCInfo)

@@ -228,11 +228,11 @@ public:
 
   static void PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict);
 
-  std::string& Fetch(const MetadataSupplierInterface * mds, const char *path, MDStr key, int band=-1);
+  const std::string& Fetch(MDStr key, const MetadataSupplierInterface * mds, const char *path, int band=-1);
 
-  double& Fetch(const MetadataSupplierInterface * mds, const char *path, MDNum key, int band=-1);
+  const double& Fetch(MDNum key, const MetadataSupplierInterface * mds, const char *path, int band=-1);
 
-  boost::any& FetchRPC(const MetadataSupplierInterface * mds);
+  const boost::any& FetchRPC(const MetadataSupplierInterface * mds);
 
 protected:
   ImageMetadataInterfaceBase();

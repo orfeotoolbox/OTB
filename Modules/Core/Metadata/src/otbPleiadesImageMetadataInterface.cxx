@@ -1761,17 +1761,17 @@ PleiadesImageMetadataInterface::WavelengthSpectralBandVectorType PleiadesImageMe
 void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 {
   assert(mds);
-  Fetch(mds, "IMD/Dataset_Sources.Source_Identification.Strip_Source.MISSION", MDStr::SensorID);
+  Fetch(MDStr::SensorID, mds, "IMD/Dataset_Sources.Source_Identification.Strip_Source.MISSION");
   if (strncmp(m_Imd[MDStr::SensorID].c_str(), "PHR", 3) == 0)
     {
-    m_Imd[MDStr::Mission] = "Pléiades";
+    m_Imd.Add(MDStr::Mission, "Pléiades");
     }
   else
     {
     otbGenericExceptionMacro(MissingMetadataException,<<"Sensor ID doesn't start with PHR : '"<<m_Imd[MDStr::SensorID]<<"'")
     }
 
-  Fetch(mds, "IMD/Geoposition.Raster_CRS.RASTER_GEOMETRY", MDStr::GeometricLevel);
+  Fetch(MDStr::GeometricLevel, mds, "IMD/Geoposition.Raster_CRS.RASTER_GEOMETRY");
 
   // get radiometric metadata
 

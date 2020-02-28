@@ -699,8 +699,8 @@ void GDALImageIO::InternalReadImageInformation()
       itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, blockSizeX);
       itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, blockSizeY);
 
-      m_Imd.TileHintX = blockSizeX;
-      m_Imd.TileHintY = blockSizeY;
+      m_Imd.NumericKeys[MDNum::TileHintX] = blockSizeX;
+      m_Imd.NumericKeys[MDNum::TileHintY] = blockSizeY;
     }
   }
 
@@ -710,7 +710,7 @@ void GDALImageIO::InternalReadImageInformation()
 
   itk::EncapsulateMetaData<IOComponentType>(dict, MetaDataKey::DataType, this->GetComponentType());
 
-  m_Imd.DataType = this->GetComponentType();
+  m_Imd.NumericKeys[MDNum::DataType] = this->GetComponentType();
 
   /* -------------------------------------------------------------------- */
   /*  Get Spacing                                                         */
@@ -867,7 +867,7 @@ void GDALImageIO::InternalReadImageInformation()
     for (int cpt = 0; cpt < 6; ++cpt)
       {
       VadfGeoTransform.push_back(adfGeoTransform[cpt]);
-      m_Imd.GeoTransform[cpt] = adfGeoTransform[cpt];
+      //~ m_Imd.GeoTransform[cpt] = adfGeoTransform[cpt];
       }
 
     itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, VadfGeoTransform);
@@ -989,8 +989,8 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoY);
 
   itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::UpperLeftCornerKey, VGeo);
-  m_Imd.ULX = GeoX;
-  m_Imd.ULY = GeoY;
+  //~ m_Imd.ULX = GeoX;
+  //~ m_Imd.ULY = GeoY;
 
   VGeo.clear();
 
@@ -999,8 +999,8 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoY);
 
   itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::UpperRightCornerKey, VGeo);
-  m_Imd.URX = GeoX;
-  m_Imd.URY = GeoY;
+  //~ m_Imd.URX = GeoX;
+  //~ m_Imd.URY = GeoY;
 
   VGeo.clear();
 
@@ -1009,8 +1009,8 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoY);
 
   itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::LowerLeftCornerKey, VGeo);
-  m_Imd.LLX = GeoX;
-  m_Imd.LLY = GeoY;
+  //~ m_Imd.LLX = GeoX;
+  //~ m_Imd.LLY = GeoY;
 
   VGeo.clear();
 
@@ -1019,8 +1019,8 @@ void GDALImageIO::InternalReadImageInformation()
   VGeo.push_back(GeoY);
 
   itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::LowerRightCornerKey, VGeo);
-  m_Imd.LRX = GeoX;
-  m_Imd.LRY = GeoY;
+  //~ m_Imd.LRX = GeoX;
+  //~ m_Imd.LRY = GeoY;
 
   VGeo.clear();
 
@@ -1859,6 +1859,7 @@ void GDALImageIO::ExportMetadata()
 
 void GDALImageIO::ImportMetadata()
 {
+  
   // TODO
 }
 

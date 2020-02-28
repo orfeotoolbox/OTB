@@ -590,39 +590,39 @@ void ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent)
 
 std::string&
 ImageMetadataInterfaceBase::Fetch(
+  MDStr key,
   const MetadataSupplierInterface * mds,
   const char *path,
-  MDStr key,
   int band)
 {
   if (band >= 0)
     {
     assert( (size_t)(band) < m_Imd.Bands.size());
-    m_Imd.Bands[band].StringKeys[key] = mds->GetAs<std::string>(path);
-    return m_Imd.Bands[band].StringKeys[key];
+    m_Imd.Bands[band].Add(key, mds->GetAs<std::string>(path));
+    return m_Imd.Bands[band][key];
     }
-  m_Imd.StringKeys[key] = mds->GetAs<std::string>(path);
-  return m_Imd.StringKeys[key];
+  m_Imd.Add(key, mds->GetAs<std::string>(path) );
+  return m_Imd[key];
 }
 
 double&
 ImageMetadataInterfaceBase::Fetch(
+  MDNum key,
   const MetadataSupplierInterface * mds,
   const char *path,
-  MDNum key,
   int band)
 {
   if (band >= 0)
     {
     assert( (size_t)(band) < m_Imd.Bands.size());
-    m_Imd.Bands[band].NumericKeys[key] = mds->GetAs<double>(path);
-    return m_Imd.Bands[band].NumericKeys[key];
+    m_Imd.Bands[band].Add(key, mds->GetAs<double>(path));
+    return m_Imd.Bands[band][key];
     }
-  m_Imd.NumericKeys[key] = mds->GetAs<double>(path);
-  return m_Imd.NumericKeys[key];
+  m_Imd.Add(key, mds->GetAs<double>(path));
+  return m_Imd[key];
 }
 
-boost::any& ImageMetadataInterfaceBase::FetchRPC(
+const boost::any& ImageMetadataInterfaceBase::FetchRPC(
   const MetadataSupplierInterface * mds)
 {
   Projection::RPCParam rpcStruct;
@@ -652,8 +652,8 @@ boost::any& ImageMetadataInterfaceBase::FetchRPC(
   coeffs = mds->GetAsVector<double>("RPC/SAMP_DEN_COEFF",' ',20);
   std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleDen);
 
-  m_Imd.SensorGeometry.push_back(rpcStruct);
-  return m_Imd.SensorGeometry.back();
+  m_Imd.Add(MDGeom::RPC, rpcStruct);
+  return m_Imd[MDGeom::RPC];
 }
 
 // TODO: replace by template with Traits on metadata key
