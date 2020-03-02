@@ -112,10 +112,10 @@ Mesh
 
   glVertexAttribPointer(
     id,
-    components,
+    static_cast<GLsizei>(components),
     m_VBO.GlType(),
     GL_FALSE,
-    m_VBO.Stride( components ),
+    m_VBO.Stride( static_cast<GLint>(components) ),
     reinterpret_cast< GLvoid const * >( first * m_VBO.Size() )
     );
 
