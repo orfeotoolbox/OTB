@@ -34,6 +34,8 @@
 #include <iostream>
 #include <stdexcept>
 
+#include <sstream>
+
 
 namespace otb { namespace gl {
 
@@ -44,7 +46,17 @@ struct OTBIce_EXPORT Error : public std::runtime_error
 {
   /** Construct an OpenGL exception related to the OpenGL error code.
    */
-  Error( GLenum code );
+  Error( GLenum code ):
+    std::runtime_error(
+      [ code ]()
+      {
+        std::ostringstream oss;
+
+        oss << "OpenGL error #" << code << ": '" << gluErrorString( code ) << "'";
+
+        return oss.str();
+      }()
+    ) {}
 
 }; // End class GlError
 

@@ -21,7 +21,6 @@
 set(OTBICE_SRCS
   otbGeoInterface.cxx
   otbGlActor.cxx
-  otbGlError.cxx
   otbGlImageActor.cxx
   otbGlMesh.cxx
   otbGlROIActor.cxx
