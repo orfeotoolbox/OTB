@@ -37,6 +37,8 @@
 #include "ogr_spatialref.h"
 #endif
 
+#include "itkMacro.h"
+
 // Class to store ProjRef, GEOTransform and GCP info
 class DatasetInfoGDAL
 {
