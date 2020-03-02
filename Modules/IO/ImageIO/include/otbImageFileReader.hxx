@@ -518,7 +518,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     if (m_FilenameHelper->GetSkipGeom())
       {
       // Make sure the SensorGeometry is empty
-      imd.SensorGeometry.clear();
+      imd.RemoveSensorGeometry();
       }
   }
 
@@ -526,7 +526,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   if (m_FilenameHelper->GetSkipCarto())
   {
     itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, "");
-    imd.ProjectionRef = "";
+    imd.RemoveProjectedGeometry();
   }
 
   // Copy MetaDataDictionary from instantiated reader to output image.

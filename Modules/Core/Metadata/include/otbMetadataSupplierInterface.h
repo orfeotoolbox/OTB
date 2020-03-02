@@ -28,6 +28,7 @@
 #include "otbStringUtils.h"
 #include "otbMacro.h"
 #include "otbStringUtilities.h"
+#include "otbStringUtils.h"
 
 namespace otb
 {

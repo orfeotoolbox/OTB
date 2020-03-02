@@ -23,6 +23,27 @@ namespace otb
 {
 // ---------------------- [ImageMetadataBase] ------------------------------
 
+
+bool ImageMetadataBase::HasSensorGeometry() const
+{
+  return Has(MDGeom::RPC) || Has(MDGeom::SAR) || Has(MDGeom::SensorGeometry);
+}
+
+bool ImageMetadataBase::HasProjectedGeometry() const
+{
+  return Has(MDGeom::ProjectionWKT) || Has(MDGeom::ProjectionEPSG) || Has(MDGeom::ProjectionProj);
+}
+
+size_t ImageMetadataBase::RemoveSensorGeometry()
+{
+  return Remove(MDGeom::RPC) + Remove(MDGeom::SAR) + Remove(MDGeom::SensorGeometry);
+}
+
+size_t ImageMetadataBase::RemoveProjectedGeometry()
+{
+  return Remove(MDGeom::ProjectionWKT) + Remove(MDGeom::ProjectionEPSG) + Remove(MDGeom::ProjectionProj);
+}
+
 // -------------------- Geom utility function ----------------------------
 const boost::any & ImageMetadataBase::operator[](const MDGeom& key) const
 {
@@ -176,7 +197,7 @@ bool ImageMetadataBase::Has(const std::string& key) const
   return (ExtraKeys.find(key) != ExtraKeys.end());
 }
 
-void ToKeywordlist(Keywordlist& kwl) const
+void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
 {
   kwl.clear();
   // TODO : Geometry
@@ -203,17 +224,20 @@ void ToKeywordlist(Keywordlist& kwl) const
     }
 }
 
-std::string ToJSON(bool multiline=false) const
+std::string ImageMetadataBase::ToJSON(bool multiline) const
 {
   Keywordlist kwl;
   ToKeywordlist(kwl);
   std::ostringstream oss;
-  std::string sep();
-  if (multiline) sep = "\n";
+  std::string sep;
+  if (multiline)
+    {
+    sep = "\n";
+    }
   oss << "{";
   for (const auto& kv : kwl)
     {
-    oss << "\"" kv.first << "\": \"" << kv.second << "\"," << sep
+    oss << "\""<< kv.first << "\": \"" << kv.second << "\"," << sep;
     }
   oss << "}";
   return oss.str();
@@ -222,7 +246,7 @@ std::string ToJSON(bool multiline=false) const
 // ----------------------- [ImageMetadata] ------------------------------
 
 
-ImageMetadataNG ImageMetadata::slice(int start, int end)
+ImageMetadata ImageMetadata::slice(int start, int end)
 {
   // TODO
   return ImageMetadata();
@@ -254,7 +278,7 @@ std::ostream& operator<<(std::ostream& os, const otb::ImageMetadata& imd)
   os << "Bands[";
   for (auto &band : imd.Bands)
     {
-    os << band << ",";
+    os << band.ToJSON(true) << ",";
     }
   os << "]\n";
   os << "}";

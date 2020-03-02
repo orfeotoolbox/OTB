@@ -26,79 +26,106 @@ namespace otb
 
 std::string ImageCommons::GetProjectionRef(void) const
 {
-  return m_Imd.ProjectionRef;
+  // TODO
+  //~ return m_Imd.ProjectionRef;
+  return "";
 }
 
 
 void ImageCommons::SetProjectionRef(const std::string& proj)
 {
-  m_Imd.ProjectionRef = proj;
+  // TODO
+  //~ m_Imd.ProjectionRef = proj;
 }
 
 
 std::string ImageCommons::GetGCPProjection(void) const
 {
-  return m_Imd.GCPProjection;
+  // TODO
+  //~ return m_Imd.GCPProjection;
+  return "";
 }
 
 
 unsigned int ImageCommons::GetGCPCount(void) const
 {
-  return m_Imd.GCPs.size();
+  // TODO
+  //return m_Imd.GCPs.size();
+  return 0;
 }
 
 
 OTB_GCP& ImageCommons::GetGCPs(unsigned int GCPnum)
 {
-  return m_Imd.GCPs[GCPnum];
+  // TODO
+  //~ return m_Imd.GCPs[GCPnum];
+  OTB_GCP gcp;
+  return gcp;
 }
 
 
 const OTB_GCP& ImageCommons::GetGCPs(unsigned int GCPnum) const
 {
-  return m_Imd.GCPs[GCPnum];
+  // TODO
+  //~ return m_Imd.GCPs[GCPnum];
+  OTB_GCP gcp;
+  return gcp;
 }
 
 
 std::string ImageCommons::GetGCPId(unsigned int GCPnum) const
 {
-  return m_Imd.GCPs[GCPnum].m_Id;
+  // TODO
+  //~ return m_Imd.GCPs[GCPnum].m_Id;
+  return "";
 }
 
 
 std::string ImageCommons::GetGCPInfo(unsigned int GCPnum) const
 {
-  return m_Imd.GCPs[GCPnum].m_Info;
+  // TODO
+  //~ return m_Imd.GCPs[GCPnum].m_Info;
+  return "";
 }
 
 
 double ImageCommons::GetGCPRow(unsigned int GCPnum) const
 {
-  return m_Imd.GCPs[GCPnum].m_GCPRow;
+  // TODO
+  //~ return m_Imd.GCPs[GCPnum].m_GCPRow;
+  return 0.0;
 }
 
 
 double ImageCommons::GetGCPCol(unsigned int GCPnum) const
 {
-  return m_Imd.GCPs[GCPnum].m_GCPCol;
+  // TODO
+  //~ return m_Imd.GCPs[GCPnum].m_GCPCol;
+  return 0.0;
 }
 
 
 double ImageCommons::GetGCPX(unsigned int GCPnum) const
 {
-  return m_Imd.GCPs[GCPnum].m_GCPX;
+  // TODO
+  //~ return m_Imd.GCPs[GCPnum].m_GCPX;
+  return 0.0;
 }
 
 
 double ImageCommons::GetGCPY(unsigned int GCPnum) const
 {
-  return m_Imd.GCPs[GCPnum].m_GCPY;
+  // TODO
+  //~ return m_Imd.GCPs[GCPnum].m_GCPY;
+  return 0.0;
 }
 
 
 double ImageCommons::GetGCPZ(unsigned int GCPnum) const
 {
-  return m_Imd.GCPs[GCPnum].m_GCPZ;
+  // TODO
+  //~ return m_Imd.GCPs[GCPnum].m_GCPZ;
+  return 0.0;
 }
 
 
@@ -140,7 +167,8 @@ ImageMetadataInterfaceBase::VectorType ImageCommons::GetLowerRightCorner(void) c
 
 bool ImageCommons::HasSensorGeometry() const
 {
-  return !m_Imd.SensorGeometry.empty();
+  // TODO
+  return m_Imd.HasSensorGeometry();
 }
 
 } // end namespace otb

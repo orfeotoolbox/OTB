@@ -30,6 +30,22 @@ int otbImageMetadataTest(int, char*[])
 {
   using namespace otb;
 
+  MetaData::Time mytime;
+  int year, month;
+  char buffer[] = "2009-12-10T10:30:18.142149Z";
+  int count = std::sscanf(buffer, "%4d-%2d-%2dT%2d:%2d:%2d%lfZ",
+    &year,
+    &month,
+    &mytime.tm_mday,
+    &mytime.tm_hour,
+    &mytime.tm_min,
+    &mytime.tm_sec,
+    &mytime.frac_sec);
+
+  std::cout << "sscanf result: "<< count << "\n";
+  std::cout << "Time = "<< year << " "<< month << " " << mytime.tm_mday << " " << mytime.tm_hour << " " << mytime.tm_min << " " << mytime.tm_sec << " " << mytime.frac_sec << "\n";
+  return 0;
+
   MDNum someKey;
   someKey = static_cast<MDNum>(3);
   if (someKey == MDNum::PhysicalGain)
@@ -121,35 +137,31 @@ int otbImageMetadataTest(int, char*[])
   std::cout << "Third try chrono : "<< chrono.GetElapsedMilliseconds() << "\n";
 
   ImageMetadata md;
-  md.StringKeys[MDStr::SensorID] = "PHR";
-  md.ProjectionRef = "UTM projRef";
-  //~ md.GeoTransform[0] = 10.0;
-  //~ md.GeoTransform[3] = 20.0;
-  //~ md.GeoTransform[5] = -1.0;
+  md.Add(MDStr::SensorID, "PHR");
+  md.Add(MDGeom::ProjectionWKT, std::string("UTM projRef"));
 
-  BandMetadata bmd;
-  bmd.Name = "B3";
-  bmd.NumericKeys[MDNum::PhysicalGain] = 2.0;
-  bmd.NumericKeys[MDNum::PhysicalBias] = 1.0;
+  ImageMetadataBase bmd;
+  bmd.Add(MDStr::BandName, "B3");
+  bmd.Add(MDNum::PhysicalGain , 2.0);
+  bmd.Add(MDNum::PhysicalBias,  1.0);
   md.Bands.push_back(bmd);
 
-  bmd.Name = "B2";
-  bmd.NumericKeys[MDNum::PhysicalGain] = 3.0;
-  bmd.NumericKeys[MDNum::PhysicalBias] = 2.0;
+  bmd.Add(MDStr::BandName, "B2");
+  bmd.Add(MDNum::PhysicalGain , 3.0);
+  bmd.Add(MDNum::PhysicalBias,  2.0);
   md.Bands.push_back(bmd);
 
-  bmd.Name = "B1";
-  bmd.NoDataFlag = true;
-  bmd.NoDataValue = -10000.0;
-  bmd.NumericKeys[MDNum::PhysicalGain] = 4.0;
-  bmd.NumericKeys[MDNum::PhysicalBias] = 3.0;
+  bmd.Add(MDStr::BandName, "B1");
+  bmd.Add(MDNum::NoData, -10000.0);
+  bmd.Add(MDNum::PhysicalGain , 4.0);
+  bmd.Add(MDNum::PhysicalBias,  3.0);
   md.Bands.push_back(bmd);
 
   ImageMetadata md2;
 
   md2 = md;
 
-  md.ProjectionRef = "Lambert projRef";
+  md.Add(MDGeom::ProjectionWKT, std::string("Lambert projRef"));
   //~ md.GeoTransform[5] = 1.0;
 
   std::cout << "md2: "<< md2 << "\n";

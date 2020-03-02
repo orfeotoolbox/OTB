@@ -232,6 +232,8 @@ public:
 
   const double& Fetch(MDNum key, const MetadataSupplierInterface * mds, const char *path, int band=-1);
 
+  const MetaData::Time& Fetch(MDTime key, const MetadataSupplierInterface * mds, const char *path, int band=-1);
+
   const boost::any& FetchRPC(const MetadataSupplierInterface * mds);
 
 protected:

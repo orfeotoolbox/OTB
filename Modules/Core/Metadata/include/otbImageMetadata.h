@@ -95,6 +95,14 @@ public:
 
   // TODO : iterators ?
 
+  bool HasSensorGeometry() const;
+
+  bool HasProjectedGeometry() const;
+
+  size_t RemoveSensorGeometry();
+
+  size_t RemoveProjectedGeometry();
+  
   // -------------------- Geom utility function ----------------------------
 
   /** Read-only accessor to geometric keys */
@@ -194,7 +202,7 @@ public:
   bool Has(const std::string& key) const;
 
   // printing
-  Keywordlist ToKeywordlist() const;
+  void ToKeywordlist(Keywordlist&) const;
   
   std::string ToJSON(bool multiline=false) const;
 };

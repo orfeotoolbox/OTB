@@ -588,7 +588,7 @@ void ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent)
   }
 }
 
-std::string&
+const std::string&
 ImageMetadataInterfaceBase::Fetch(
   MDStr key,
   const MetadataSupplierInterface * mds,
@@ -605,7 +605,7 @@ ImageMetadataInterfaceBase::Fetch(
   return m_Imd[key];
 }
 
-double&
+const double&
 ImageMetadataInterfaceBase::Fetch(
   MDNum key,
   const MetadataSupplierInterface * mds,
@@ -619,6 +619,23 @@ ImageMetadataInterfaceBase::Fetch(
     return m_Imd.Bands[band][key];
     }
   m_Imd.Add(key, mds->GetAs<double>(path));
+  return m_Imd[key];
+}
+
+const MetaData::Time&
+ImageMetadataInterfaceBase::Fetch(
+  MDTime key,
+  const MetadataSupplierInterface * mds,
+  const char *path,
+  int band)
+{
+  if (band >= 0)
+    {
+    assert( (size_t)(band) < m_Imd.Bands.size());
+    m_Imd.Bands[band].Add(key, mds->GetAs<MetaData::Time>(path));
+    return m_Imd.Bands[band][key];
+    }
+  m_Imd.Add(key, mds->GetAs<MetaData::Time>(path));
   return m_Imd[key];
 }
 

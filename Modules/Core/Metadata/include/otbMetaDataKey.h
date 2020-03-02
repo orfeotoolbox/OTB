@@ -23,10 +23,12 @@
 
 #include <string>
 #include <vector>
+#include <cstdio>
 
 #include "itkDataObject.h"
 #include "itkVariableLengthVector.h"
 #include "OTBMetadataExport.h"
+#include "otbStringUtils.h"
 
 namespace otb
 {
@@ -162,6 +164,7 @@ enum class MDNum
   TileHintX,
   TileHintY,
   DataType,
+  NoData,
 // optical section
   PhysicalGain,
   PhysicalBias,
@@ -201,6 +204,7 @@ enum class MDStr
   SensorID,
   Mission,
   Instrument,
+  BandName,
   ProductType,
   GeometricLevel,
   RadiometricLevel,
@@ -289,6 +293,34 @@ extern OTBMetadata_EXPORT std::map<MDL1D, std::string> MDL1DNames;
 extern OTBMetadata_EXPORT std::map<MDL2D, std::string> MDL2DNames;
 
 } // end namespace MetaData
+
+namespace Utils
+{
+template <>
+inline MetaData::Time LexicalCast(char* const& in, std::string const& kind)
+{
+  MetaData::Time output;
+  int count = std::sscanf(in, "%4d-%2d-%2dT%2d:%2d:%2d%lfZ",
+    &output.tm_year,
+    &output.tm_mon,
+    &output.tm_mday,
+    &output.tm_hour,
+    &output.tm_min,
+    &output.tm_sec,
+    &output.frac_sec);
+  output.tm_year -= 1900;
+  output.tm_mon -= 1;
+  if (count == 7)
+    {
+    return output;
+    }
+  std::ostringstream oss;
+  oss << "Cannot decode '" << in << "' as this is not a valid value for '" << kind << "'";
+  throw std::runtime_error(oss.str());
+  return output;
+}
+
+} // end namespace Utils
 
 } // end namespace otb
 
