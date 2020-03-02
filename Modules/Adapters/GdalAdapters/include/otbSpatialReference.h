@@ -21,7 +21,6 @@
 #define otbSpatialReference_h
 
 #include "OTBGdalAdaptersExport.h"
-#include "ogr_spatialref.h"
 
 #include <memory>
 #include <string>
@@ -34,6 +33,10 @@
 // to have dll-interface to be used by clients of class 'otb::SpatialReference'
 // As long as otb::SpatialReference::m_SR is private no need to export this type.
 #endif
+
+// causes warning C4251 on Windows
+#include "ogr_spatialref.h"
+
 class OGRSpatialReference;
 
 namespace otb
