@@ -148,7 +148,6 @@ void TrainImagesBase::ShareClassificationParams()
 
 void TrainImagesBase::ConnectClassificationParams()
 {
-  Connect("training.cfield", "polystat.field");
   Connect("select.rand", "training.rand");
 }
 
@@ -264,6 +263,12 @@ void TrainImagesBase::TrainModel(FloatVectorImageListType* imageList, const std:
     selectedNames.push_back("value_" + oss.str());
   }
   GetInternalApplication("training")->SetParameterStringList("feat", selectedNames);
+  
+  // cfield is not directly connected to sample.vfn (ListView parameter) because the associated vector
+  // data is not the same (the fields are not the same).
+  GetInternalApplication("training")->SetParameterStringList("cfield", 
+      {GetChoiceNames("sample.vfn")[GetSelectedItems("sample.vfn").front()]});
+  
   ExecuteInternal("training");
 }
 
