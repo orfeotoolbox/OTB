@@ -136,8 +136,7 @@ void otb::internal::ReprojectTransformationFunctor::do_transform(OGRGeometryColl
 otb::ogr::UniqueGeometryPtr otb::internal::ReprojectTransformationFunctor::operator()(OGRGeometry const* in) const
 // otb::internal::ReprojectTransformationFunctor::apply(OGRGeometry const* in) const
 {
-  otb::ogr::UniqueGeometryPtr res = ogr::apply<otb::ogr::UniqueGeometryPtr>(in, ByCopy(*this));
-  return otb::move(res);
+  return ogr::apply<otb::ogr::UniqueGeometryPtr>(in, ByCopy(*this));
 }
 
 void otb::internal::ReprojectTransformationFunctor::apply_inplace(OGRGeometry* inout) const
