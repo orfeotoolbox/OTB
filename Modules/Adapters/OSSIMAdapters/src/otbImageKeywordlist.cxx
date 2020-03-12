@@ -60,6 +60,7 @@
 #include "otbSensorModelAdapter.h"
 #include <memory>
 #include <boost/scoped_ptr.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 
 namespace otb
 {
@@ -351,7 +352,7 @@ ImageKeywordlist ReadGeometryFromRPCTag(const std::string& filename)
   // to the header file"
   // No driver can open hdr file anyway.
   std::string extension = itksys::SystemTools::GetFilenameLastExtension(filename);
-  if ((extension == ".HDR") || (extension == ".hdr"))
+  if (boost::iequals(extension, ".hdr"))
   {
     return otb_kwl;
   }
