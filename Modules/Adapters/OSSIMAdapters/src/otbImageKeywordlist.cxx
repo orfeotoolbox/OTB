@@ -22,6 +22,7 @@
 #include "otbConfigurationManager.h"
 
 #include <cassert>
+#include <itksys/SystemTools.hxx>
 
 #include "otbMacro.h"
 
@@ -59,6 +60,7 @@
 #include "otbSensorModelAdapter.h"
 #include <memory>
 #include <boost/scoped_ptr.hpp>
+#include <boost/algorithm/string/predicate.hpp>
 
 namespace otb
 {
@@ -343,6 +345,17 @@ ImageKeywordlist ReadGeometryFromRPCTag(const std::string& filename)
 {
   ossimKeywordlist geom_kwl;
   ImageKeywordlist otb_kwl;
+
+  // Don't call GDALIdentifyDriver on a hdr file because this makes the ENVI driver throw an error:
+  // "ERROR 1: The selected file is an ENVI header file, but to open ENVI datasets, the data file 
+  // should be selected instead of the .hdr file. Please try again selecting the data file corresponding 
+  // to the header file"
+  // No driver can open hdr file anyway.
+  std::string extension = itksys::SystemTools::GetFilenameLastExtension(filename);
+  if (boost::iequals(extension, ".hdr"))
+  {
+    return otb_kwl;
+  }
 
   //  try to use GeoTiff RPC tag if present.
   // Warning : RPC in subdatasets are not supported
