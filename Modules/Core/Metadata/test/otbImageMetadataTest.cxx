@@ -32,19 +32,31 @@ int otbImageMetadataTest(int, char*[])
 
   MetaData::Time mytime;
   int year, month;
-  char buffer[] = "2009-12-10T10:30:18.142149Z";
-  int count = std::sscanf(buffer, "%4d-%2d-%2dT%2d:%2d:%2d%lfZ",
-    &year,
-    &month,
-    &mytime.tm_mday,
-    &mytime.tm_hour,
-    &mytime.tm_min,
-    &mytime.tm_sec,
-    &mytime.frac_sec);
+  char buffer[] = "2009-08-10T10:30:08.142149Z";
 
-  std::cout << "sscanf result: "<< count << "\n";
-  std::cout << "Time = "<< year << " "<< month << " " << mytime.tm_mday << " " << mytime.tm_hour << " " << mytime.tm_min << " " << mytime.tm_sec << " " << mytime.frac_sec << "\n";
-  return 0;
+  std::string bufferStr("2009-08-10T10:30:08.142149Z");
+  
+  try
+    {
+    mytime = boost::lexical_cast<MetaData::Time>(buffer);
+    }
+  catch(boost::bad_lexical_cast&)
+    {
+    std::cout << "Bad cast into MetaData::Time\n";
+    }
+  std::cout << "mytime : "<< mytime << "\n";
+
+  try
+    {
+    mytime = Utils::LexicalCast<MetaData::Time,char*>(buffer, std::string("T"));
+    mytime = Utils::LexicalCast<MetaData::Time,std::string>(bufferStr, std::string("T"));
+    }
+  catch(std::runtime_error&)
+    {
+    std::cout << "Bad Utils::LexicalCast into MetaData::Time\n";
+    }
+
+  std::cout << "mytime : "<< mytime << "\n";
 
   MDNum someKey;
   someKey = static_cast<MDNum>(3);
