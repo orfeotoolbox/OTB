@@ -1,7 +1,8 @@
-OTB-v 7.1.0 - Changes since version 7.0.0 (February 29th, 2020)
+OTB-v 7.1.0 - Changes since version 7.0.0 (March 16th, 2020)
 ----------------------------------------------------------------
 
 Features added:
+
 
    * !681: ENH: allow HTTP GDAL datasets by Laurențiu Nicola
    * !673: Smoothing application enhancement by Cédric Traizet
@@ -13,6 +14,8 @@ Features added:
 
 Bugs fixed:
 
+   * !701: Error when opening ENVI datasets by Cédric Traizet
+   * !699: Fix listview parameter in TrainImagesClassifier
    * !679: COMP: Remove RemoteSensingRegion assignment operator by Laurențiu Nicola
    * !678: BUG: Fix warnings and possible UB in `VariadicInputsImageFilter::SetInputsImpl` by Laurențiu Nicola
    * !677: Fix debian build by Cédric Traizet
