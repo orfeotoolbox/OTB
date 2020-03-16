@@ -251,9 +251,14 @@ enum class MDGeom
 namespace MetaData
 {
 
-struct Time : tm
+struct OTBMetadata_EXPORT Time : tm
 {
   double frac_sec;
+
+  friend OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const Time& val);
+
+  friend OTBMetadata_EXPORT std::istream& operator>>(std::istream& is, Time& val);
+
 };
 
 struct LUTAxis
@@ -297,27 +302,24 @@ extern OTBMetadata_EXPORT std::map<MDL2D, std::string> MDL2DNames;
 namespace Utils
 {
 template <>
-inline MetaData::Time LexicalCast(char* const& in, std::string const& kind)
+inline MetaData::Time LexicalCast<MetaData::Time,char*>(char* const& in, std::string const& kind)
 {
   MetaData::Time output;
-  int count = std::sscanf(in, "%4d-%2d-%2dT%2d:%2d:%2d%lfZ",
-    &output.tm_year,
-    &output.tm_mon,
-    &output.tm_mday,
-    &output.tm_hour,
-    &output.tm_min,
-    &output.tm_sec,
-    &output.frac_sec);
-  output.tm_year -= 1900;
-  output.tm_mon -= 1;
-  if (count == 7)
+  std::istringstream iss(in);
+  iss >> output;
+  if (iss.fail())
     {
-    return output;
+    std::ostringstream oss;
+    oss << "Cannot decode '" << in << "' as this is not a valid value for '" << kind << "'";
+    throw std::runtime_error(oss.str());
     }
-  std::ostringstream oss;
-  oss << "Cannot decode '" << in << "' as this is not a valid value for '" << kind << "'";
-  throw std::runtime_error(oss.str());
   return output;
+}
+
+template <>
+inline MetaData::Time LexicalCast<MetaData::Time,std::string>(std::string const& in, std::string const& kind)
+{
+  return LexicalCast<MetaData::Time,char*>((char* const&) in.c_str() , kind);
 }
 
 } // end namespace Utils

@@ -20,6 +20,8 @@
 
 
 #include "otbMetaDataKey.h"
+#include <iomanip>
+#include <ios>
 
 namespace otb
 {
@@ -133,6 +135,74 @@ void OTB_GCP::Print(std::ostream& os) const
 
 namespace MetaData
 {
+
+std::ostream& operator<<(std::ostream& os, const Time& val)
+{
+  os << std::setfill('0') << std::setw(4) << val.tm_year + 1900 << '-';
+  os << std::setw(2) << val.tm_mon + 1 << '-' <<  std::setw(2) << val.tm_mday;
+  os << 'T' << std::setw(2) << val.tm_hour << ':';
+  os << std::setw(2) << val.tm_min << ':';
+  double sec = (double) val.tm_sec + val.frac_sec;
+  int prec = 8;
+  if (sec < 10.0)
+    {
+    os << '0';
+    prec = 7;
+    }
+  os << std::setprecision(prec) << sec << 'Z';
+  os << std::setfill(' ');
+  return os;
+}
+
+#define _OTB_ISTREAM_FAIL_IF(x)           \
+  if ( x )                                \
+    {                                     \
+    is.setstate( std::ios_base::failbit); \
+    return is;                            \
+    }
+
+std::istream& operator>>(std::istream& is, Time& val)
+{
+  // Year
+  is >> val.tm_year;
+  val.tm_year -= 1900;
+  _OTB_ISTREAM_FAIL_IF( is.fail() )
+  _OTB_ISTREAM_FAIL_IF( is.get() != '-' )
+  // Month
+  is >> val.tm_mon;
+  _OTB_ISTREAM_FAIL_IF( is.fail() )
+  _OTB_ISTREAM_FAIL_IF( val.tm_mon < 1 || val.tm_mon > 12 )
+  val.tm_mon -= 1;
+  _OTB_ISTREAM_FAIL_IF( is.get() != '-' )
+  // Day
+  is >> val.tm_mday;
+  _OTB_ISTREAM_FAIL_IF( is.fail() )
+  _OTB_ISTREAM_FAIL_IF( val.tm_mday < 1 || val.tm_mday > 31 )
+  _OTB_ISTREAM_FAIL_IF( is.get() != 'T' )
+  // Hour
+  is >> val.tm_hour;
+  _OTB_ISTREAM_FAIL_IF( is.fail() )
+  _OTB_ISTREAM_FAIL_IF( val.tm_hour < 0 || val.tm_hour > 23 )
+  _OTB_ISTREAM_FAIL_IF( is.get() != ':' )
+  // Minutes
+  is >> val.tm_min;
+  _OTB_ISTREAM_FAIL_IF( is.fail() )
+  _OTB_ISTREAM_FAIL_IF( val.tm_min < 0 || val.tm_min > 59 )
+  _OTB_ISTREAM_FAIL_IF( is.get() != ':' )
+  // Seconds
+  double sec = 0.0;
+  is >> sec;
+  _OTB_ISTREAM_FAIL_IF( is.fail() )
+  val.tm_sec = (int) sec;
+  val.frac_sec = sec - (double) val.tm_sec;
+  _OTB_ISTREAM_FAIL_IF( val.tm_sec < 0 || val.tm_sec > 60 )
+  _OTB_ISTREAM_FAIL_IF( val.frac_sec < 0.0 || val.frac_sec >= 1.0)
+  _OTB_ISTREAM_FAIL_IF( is.get() != 'Z' )
+  return is;
+}
+
+#undef _OTB_ISTREAM_EXPECT
+
 // array<pair<> >
 // boost::flat_map<> 
 std::map<MDNum, std::string> MDNumNames = {
@@ -201,6 +271,6 @@ std::map<MDGeom, std::string> MDGeomNames = {
   {MDGeom::Adjustment,     "Adjustment"}
 };
 
-}
+} // end namespace MetaData
 
 } // end namespace otb
