@@ -52,7 +52,7 @@ public:
 
   unsigned int GetGCPCount(void) const;
 
-  OTB_GCP& GetGCPs(unsigned int GCPnum);
+  //~ OTB_GCP& GetGCPs(unsigned int GCPnum);
   const OTB_GCP& GetGCPs(unsigned int GCPnum) const;
 
   std::string GetGCPId(unsigned int GCPnum) const;
