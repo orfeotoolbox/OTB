@@ -44,6 +44,16 @@ size_t ImageMetadataBase::RemoveProjectedGeometry()
   return Remove(MDGeom::ProjectionWKT) + Remove(MDGeom::ProjectionEPSG) + Remove(MDGeom::ProjectionProj);
 }
 
+const Projection::GCPParam & ImageMetadataBase::GetGCPParam() const
+{
+  return boost::any_cast<const Projection::GCPParam &>(GeometryKeys.at(MDGeom::GCP));
+}
+
+std::string ImageMetadataBase::GetProjectionWKT() const
+{
+  return boost::any_cast<std::string>(GeometryKeys.at(MDGeom::ProjectionWKT));
+}
+
 // -------------------- Geom utility function ----------------------------
 const boost::any & ImageMetadataBase::operator[](const MDGeom& key) const
 {

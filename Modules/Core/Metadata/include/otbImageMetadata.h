@@ -22,7 +22,7 @@
 #define otbImageMetadata_h
 
 #include "otbBandMetadata.h"
-//#include "otbGeometryMetadata.h"
+#include "otbGeometryMetadata.h"
 #include "otbMetaDataKey.h"
 #include "OTBMetadataExport.h"
 
@@ -102,6 +102,10 @@ public:
   size_t RemoveSensorGeometry();
 
   size_t RemoveProjectedGeometry();
+
+  const Projection::GCPParam & GetGCPParam() const;
+
+  std::string GetProjectionWKT() const;
   
   // -------------------- Geom utility function ----------------------------
 
