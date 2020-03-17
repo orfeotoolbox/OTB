@@ -1,3 +1,90 @@
+OTB-v 7.1.0 - Changes since version 7.0.0 (March 16th, 2020)
+----------------------------------------------------------------
+
+Features added:
+
+
+   * !681: ENH: allow HTTP GDAL datasets by Laurențiu Nicola
+   * !673: Smoothing application enhancement by Cédric Traizet
+   * !655: BUG: migrate to QOpenGLWidget by Victor Poughon
+   * !644: Fast nlmeans filter by Carole Amiot
+   * !642: Resolve ExtractROI: keep GCPs by Guillaume Pasero
+   * !628: Added 'double' application parameter type. by guillaume pernot
+   * !618: Integration of the multiImageFileWriter in the application engine by Cédric Traizet
+
+Bugs fixed:
+
+   * !701: Error when opening ENVI datasets by Cédric Traizet
+   * !699: Fix listview parameter in TrainImagesClassifier
+   * !679: COMP: Remove RemoteSensingRegion assignment operator by Laurențiu Nicola
+   * !678: BUG: Fix warnings and possible UB in `VariadicInputsImageFilter::SetInputsImpl` by Laurențiu Nicola
+   * !677: Fix debian build by Cédric Traizet
+   * !674: BUG: Fix nodata handling in StreamingStatisticsMapFromLabelImageFilter by Laurențiu Nicola
+   * !667: Short Integer overflow in tests by Cédric Traizet
+   * !662: Update netcdf version in Superbuild to 4.7.3 by Cédric Traizet
+   * !660: COMP: Fix Variadic Input Image Filters for g++8.2.0 by Luc Hermitte
+   * !658: Allow UserValue modification from within application's DoExecute by guillaume pernot
+   * !656: input centroid should not be mandatory in TrainVectorClassifier and TrainImagesClassifier by Cédric Traizet
+   * !655: BUG: migrate to QOpenGLWidget by Victor Poughon
+   * !654: Missing RAM parameter in StereoRectificationGridGenerator application by Julien Michel
+   * !653: Warning cleaning by Guillaume Pasero
+   * !649: Resolve \Mosaic do not work anymore with rgb mode\ by Rémi Cresson
+   * !647: Fixed lookup table stacking order by guillaume pernot
+   * !646: removed duplicate Scene.png by guillaume pernot
+   * !641: FIX PCA transformation matrix computation by Cédric Traizet
+   * !640: Fixed lost reference of \buffer\ in VectorPrediction update mode by guillaume pernot
+   * !637: BUG: better check for TIXML_USE_STL by Victor Poughon
+   * !636: Fix gcc8 compilation by guillaume pernot
+   * !634: COMP: Added gcc9 support for ITK by guillaume pernot
+   * !633: Added otb_opencv_api.h in packages by guillaume pernot
+   * !626: FIX: check that input image is not null by Rémi Cresson
+   * !624: Fix GEOS errors from self intersecting polygons in and fix OPENCV path in debian CI build by Cédric Traizet
+   * !617: TEST: Force ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=4 by guillaume pernot
+   * !616: TEST: rename ToulousePoints-examples.shp to toulousepoints_examples.shp by guillaume pernot
+   * !613: Additional tests for the ExtractROI application by Cédric Traizet
+   * !606: Check band index on each pixel by guillaume pernot
+
+Refactoring:
+
+   * !673: Smoothing application enhancement by Cédric Traizet
+   * !671: Update diapotb git tag by Cédric Traizet
+   * !667: Short Integer overflow in tests by Cédric Traizet
+   * !662: Update netcdf version in Superbuild to 4.7.3 by Cédric Traizet
+   * !657: Drop OpenCV 2 support by Cédric Traizet
+   * !652: Update openjpeg version in superbuild by David Youssefi
+   * !651: Resolve \Move FilterFunctionValues and MetadataKey to OTBMetadata\ by Guillaume Pasero
+   * !631: Upgrade PROJ GEOTIFF and GDAL in Superbuild by Cédric Traizet
+   * !619: Some work on BandMathX tests by guillaume pernot
+   * !614: Stop in cmake configure when the compiler is not supported by Cédric Traizet
+   * !613: Additional tests for the ExtractROI application by Cédric Traizet
+   * !607: CMake Code Cleaning (part 1) by Victor Poughon
+
+CI:
+
+   * !680: CI: Split conda-build and conda-deploy by guillaume pernot
+   * !676: Fixed conda-build by guillaume pernot
+   * !675: CI: Fixed debian-build and conda-build 'needs' by guillaume pernot
+   * !672: Fix CookBook deployment by Cédric Traizet
+   * !669: CI: Prelimenary conda build by guillaume pernot
+   * !666: Out-of-order jobs execution by Sébastien Dinot
+   * !665: Identify Arthur Vincent as contributor in .mailmap by Sébastien Dinot
+   * !664: test MacOS mojave on CI by Cédric Traizet
+   * !663: ENH: Update .mailmap file for Luc Hermitte by Luc Hermitte
+   * !638: Use proper cmake file for debian-testing CI by guillaume pernot
+   * !635: CI: debian-build uses debian/testing by guillaume pernot
+   * !630: CI: Added CI_ALLOW_FAILURE for cdash_handler.py by guillaume pernot
+   * !629: CI: Allow failure of debian/unstable build by guillaume pernot
+   * !615: CI: allow sonarqube to run on forked tree by guillaume pernot
+   * !610: CI: Fixed error computation in otbBandMathXImageFilter by guillaume pernot
+   * !574: Deploy cookbook by Antoine Regimbeau
+
+Documentation:
+
+   * !639: Update QGISInterface.rst to clarify plugin setup with QGIS > 3.8 by guillaume pernot
+   * !611: Update the  CompilingOTBFromSource Cookbook section by Cédric Traizet
+   * !604: Document matrix variable definition limitation in BandMathX by Cédric Traizet
+
+
 OTB-v.7.0.0 - Changes since version 6.6.0 (October 29th, 2019)
 ----------------------------------------------------------------
 
@@ -176,7 +263,7 @@ Bugs fixed:
    * !168: Resolve "Generation of Qgis plugin descriptors fails with latest develop" by Julien Michel
    * !159: BUG: Improve Convert and DynamicConvert mask handling (fix #1647) by Victor Poughon
    * !157: Resolve "install qgis descriptors into <PREFIX>/share/ on all platforms" by Rashad Kanavath
-   * !156: BUG fix issue 1656 related to eratic behavior of cmake configuration by Manuel Grizonnet
+   * !156: BUG fix issue 1656 related to erratic behavior of cmake configuration by Manuel Grizonnet
    * !155: BUG: Be compliant with new cmake policy CMP0072 with cmake > 3.11 by Manuel Grizonnet
    * !142: BUG: fix issue #1639 Update UserValue flag in QtWidgetParameterList by Manuel Grizonnet
    * !126: BUG: Remove workaround for QT bug 22829 by Victor Poughon
