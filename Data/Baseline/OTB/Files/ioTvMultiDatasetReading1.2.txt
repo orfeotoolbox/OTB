@@ -1,4 +1,4 @@
-VectorImage (0xb89b30)
+VectorImage (0x22abdc0)
   RTTI typeinfo:   otb::VectorImage<double, 2u>
   Reference Count: 3
   Modified Time: 91
@@ -6,7 +6,7 @@ VectorImage (0xb89b30)
   Object Name: 
   Observers: 
     none
-  Source: (0xb32850) 
+  Source: (0x22a5720) 
   Source output name: Primary
   Release Data: Off
   Data Released: False
@@ -26,19 +26,19 @@ VectorImage (0xb89b30)
     Dimension: 2
     Index: [0, 0]
     Size: [0, 0]
-  Spacing: [231.656358263749865500358282588, 231.656358263958253473902004771]
-  Origin: [-12231339.8881538677960634231567, 6671587.28982086759060621261597]
+  Spacing: [231.65635826375, 231.656358263958]
+  Origin: [-12231339.8881539, 6671587.28982087]
   Direction: 
 1 0
 0 -1
 
   IndexToPointMatrix: 
-231.656358263749865500358282588 0
-0 -231.656358263958253473902004771
+231.65635826375 0
+0 -231.656358263958
 
   PointToIndexMatrix: 
-0.00431673884323719152938947374309 0
-0 -0.00431673884323330835088849966041
+0.00431673884323719 0
+0 -0.00431673884323331
 
   Inverse Direction: 
 1 0
@@ -46,7 +46,7 @@ VectorImage (0xb89b30)
 
   VectorLength: 1
   PixelContainer: 
-    ImportImageContainer (0xb8b490)
+    ImportImageContainer (0x22a5650)
       RTTI typeinfo:   itk::ImportImageContainer<unsigned long, double>
       Reference Count: 1
       Modified Time: 11
@@ -61,16 +61,16 @@ VectorImage (0xb89b30)
   ---> DataType = 0
   ---> DriverLongName = HDF4 Dataset
   ---> DriverShortName = HDF4Image
-  ---> GeoTransform[0] = -12231455.71633299998939037323
-  ---> GeoTransform[1] = 231.656358263749865500358282588
+  ---> GeoTransform[0] = -12231455.716333
+  ---> GeoTransform[1] = 231.65635826375
   ---> GeoTransform[2] = 0
-  ---> GeoTransform[3] = 6671703.11799999978393316268921
+  ---> GeoTransform[3] = 6671703.118
   ---> GeoTransform[4] = 0
-  ---> GeoTransform[5] = -231.656358263958253473902004771
-  ---> LowerLeftCorner[0] = -12231455.71633299998939037323
-  ---> LowerLeftCorner[1] = 5559752.59833300020545721054077
-  ---> LowerRightCorner[0] = -11119505.1966670006513595581055
-  ---> LowerRightCorner[1] = 5559752.59833300020545721054077
+  ---> GeoTransform[5] = -231.656358263958
+  ---> LowerLeftCorner[0] = -12231455.716333
+  ---> LowerLeftCorner[1] = 5559752.598333
+  ---> LowerRightCorner[0] = -11119505.196667
+  ---> LowerRightCorner[1] = 5559752.598333
   ---> Metadata_0 = DAYNIGHTFLAG=D
   ---> Metadata_1 = EASTBOUNDINGCOORDINATE=-155.559418
   ---> Metadata_10 = PROCESSINGCENTER=MODAPS
@@ -116,7 +116,7 @@ VectorImage (0xb89b30)
   ---> SubDatasetIndex = 0
   ---> TileHintX = 4800
   ---> TileHintY = 4800
-  ---> UpperLeftCorner[0] = -12231455.71633299998939037323
-  ---> UpperLeftCorner[1] = 6671703.11799999978393316268921
-  ---> UpperRightCorner[0] = -11119505.1966670006513595581055
-  ---> UpperRightCorner[1] = 6671703.11799999978393316268921
+  ---> UpperLeftCorner[0] = -12231455.716333
+  ---> UpperLeftCorner[1] = 6671703.118
+  ---> UpperRightCorner[0] = -11119505.196667
+  ---> UpperRightCorner[1] = 6671703.118
