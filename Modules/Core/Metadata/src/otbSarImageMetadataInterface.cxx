@@ -218,5 +218,10 @@ void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) 
   }
 }
 
+bool SarImageMetadataInterface::ConvertImageKeywordlistToImageMetadata()
+{
+  // TODO
+  return false;
+}
 
 } // end namespace otb

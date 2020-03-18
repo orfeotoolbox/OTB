@@ -236,6 +236,11 @@ public:
 
   const boost::any& FetchRPC(const MetadataSupplierInterface * mds);
 
+  /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
+   * then translate it into ImageMetadata.
+   * Returns true if succeed. */
+  virtual bool ConvertImageKeywordlistToImageMetadata();
+
 protected:
   ImageMetadataInterfaceBase();
   ~ImageMetadataInterfaceBase() override

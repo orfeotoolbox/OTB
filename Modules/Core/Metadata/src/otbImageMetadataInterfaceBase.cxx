@@ -673,6 +673,10 @@ const boost::any& ImageMetadataInterfaceBase::FetchRPC(
   return m_Imd[MDGeom::RPC];
 }
 
-// TODO: replace by template with Traits on metadata key
+bool ImageMetadataInterfaceBase::ConvertImageKeywordlistToImageMetadata()
+{
+  // by default, no conversion
+  return false;
+}
 
 } // end namespace otb

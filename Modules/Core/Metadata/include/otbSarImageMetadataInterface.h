@@ -108,6 +108,11 @@ public:
     return nothing;
   }
 
+  /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
+   * then translate it into ImageMetadata. Handles most SAR sensors.
+   * Returns true if succeed. */
+  bool ConvertImageKeywordlistToImageMetadata() override;
+  
 protected:
   SarImageMetadataInterface();
   ~SarImageMetadataInterface() override

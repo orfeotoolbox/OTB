@@ -96,5 +96,10 @@ void OpticalImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent inde
   }
 }
 
+bool OpticalImageMetadataInterface::ConvertImageKeywordlistToImageMetadata()
+{
+  // TODO
+  return false;
+}
 
 } // end namespace otb
