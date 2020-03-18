@@ -225,7 +225,12 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
 
   // TODO : LUT2D
 
-  // TODO : Time
+  for (const auto& kv : TimeKeys)
+    {
+    std::ostringstream oss;
+    oss << kv.second;
+    kwl.emplace(MetaData::MDTimeNames[kv.first], oss.str());
+    }
   
   std::string prefix("Extra.");
   for (const auto& kv : ExtraKeys)
