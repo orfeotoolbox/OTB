@@ -138,6 +138,14 @@ public:
   bool        operator==(const Self&) const;
   inline bool operator!=(const Self&) const;
 
+  /** Read an ImageKeywordlist from a geom file
+   *  without calling ossim */
+  bool ReadGeometry(const std::string & path);
+
+  /** Write an ImageKeywordlist to a geom file
+   *  without calling ossim */
+  void WriteGeometry(const std::string& filename) const;
+
 protected:
   /** Methods invoked by Print() to print information about the object
    * Typically not called by the user (use Print()
@@ -163,6 +171,8 @@ OTBOSSIMAdapters_EXPORT ImageKeywordlist ReadGeometryFromGEOMFile(const std::str
 
 OTBOSSIMAdapters_EXPORT ImageKeywordlist ReadGeometryFromRPCTag(const std::string& filename);
 
+/** Write the content of the ImageKeywordlist into a geom file
+ * \deprecated : use ImageKeywordlist::WriteGeomtry instead */
 OTBOSSIMAdapters_EXPORT void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename);
 
 inline bool ImageKeywordlist::operator!=(const Self& p) const

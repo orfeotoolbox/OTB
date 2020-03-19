@@ -211,6 +211,8 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
 {
   kwl.clear();
   // TODO : Geometry
+  // The key MDGeom::SensorGeometry should be exported as "<typeinfo>" where
+  // typeinfo is boost::any::type().name()
   for (const auto& kv : StringKeys)
     {
     kwl.emplace(MetaData::MDStrNames[kv.first], kv.second);
@@ -256,6 +258,13 @@ std::string ImageMetadataBase::ToJSON(bool multiline) const
     }
   oss << "}";
   return oss.str();
+}
+
+bool ImageMetadataBase::FromKeywordlist(const Keywordlist&)
+{
+  // TODO
+  // skip MDGeom::SensorGeometry (they will be decoded by future SensorModelFactory)
+  return false;
 }
 
 // ----------------------- [ImageMetadata] ------------------------------

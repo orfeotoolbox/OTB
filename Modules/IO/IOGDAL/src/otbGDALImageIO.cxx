@@ -1468,7 +1468,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   /* -------------------------------------------------------------------- */
   if (m_Imd.Has(MDGeom::ProjectionWKT))
     {
-    std::string projectionRef( boost::any_cast<std::string>(m_Imd[MDGeom::ProjectionWKT]));
+    std::string projectionRef( m_Imd.GetProjectionWKT() );
     dataset->SetProjection(projectionRef.c_str());
     }
   /* -------------------------------------------------------------------- */
@@ -1809,7 +1809,11 @@ void GDALImageIO::ExportMetadata()
   SetMetadataValue("METADATATYPE", "OTB");
   SetMetadataValue("OTB_VERSION", OTB_VERSION_STRING );
 
-  // TODO: finish implementation
+  // TODO: finish implementation: filter the keys MDGeom::SensorGeometry that
+  // will be exported as '<typename>' (boost::any). The (future) SensorModelFactory should
+  // be used to detect and export properly the field MDGeom::SensorGeometry into a string
+  // keywordlist. Note that the keys generated for this sensor geometry should
+  // be prefixed by: MDGeomNames[MDGeom::SensorGeometry] + '.'
   ImageMetadataBase::Keywordlist kwl;
   m_Imd.ToKeywordlist(kwl);
   for (const auto& kv : kwl)
@@ -1836,8 +1840,11 @@ void GDALImageIO::ExportMetadata()
 
 void GDALImageIO::ImportMetadata()
 {
-  
   // TODO
+  // Check special value METADATATYPE=OTB before continue processing
+  // Keys Starting with: MDGeomNames[MDGeom::SensorGeometry] + '.' should
+  // be decoded by the (future) SensorModelFactory.
+  // Use ImageMetadataBase::FromKeywordlist to ingest the metadata
 }
 
 

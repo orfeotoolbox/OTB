@@ -443,5 +443,23 @@ void WriteGeometry(const ImageKeywordlist& otb_kwl, const std::string& filename)
   }
 }
 
+bool ImageKeywordlist::ReadGeometry(const std::string & path)
+{
+  // The geom files used in OTB are simpler than what OSSIM actually supports
+  // It is basically a list of 'key: value' lines
+  // if the value contains special character like \n, \r, or if it has whitespaces
+  // at the beginning or at the end, the value is enclosed in triple double-quotes
+  // ("""value""")
+  // TODO
+  return false;
+}
+
+void ImageKeywordlist::WriteGeometry(const std::string& filename) const
+{
+  // Write the image keyword list if any (without using ossimKeywordlist)
+  // values in the keywordlist matching the regex '\n|\r| $|^ ' must be
+  // encapsulated with triple double-quotes (""")
+  // TODO
+}
 
 } // namespace otb

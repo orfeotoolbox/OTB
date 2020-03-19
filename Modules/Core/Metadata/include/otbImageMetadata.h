@@ -209,6 +209,10 @@ public:
   void ToKeywordlist(Keywordlist&) const;
   
   std::string ToJSON(bool multiline=false) const;
+
+  /** Import metadata from a string keywordlist (will skip
+   *  MDGeom::SensorGeometry) */
+  bool FromKeywordlist(const Keywordlist&);
 };
 
 
