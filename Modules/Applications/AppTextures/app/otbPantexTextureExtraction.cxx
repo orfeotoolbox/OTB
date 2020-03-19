@@ -21,6 +21,10 @@
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
+#include "otbMultiToMonoChannelExtractROI.h"
+#include "otbScalarImageToPanTexTextureFilter.h"
+#include "otbStreamingMinMaxImageFilter.h"
+
 namespace otb
 {
 namespace Wrapper
@@ -30,7 +34,7 @@ class PantexTextureExtraction : public Application
 {
 public:
   /** Standard class typedefs. */
-  typedef PantexTextureExtraction     Self;
+  typedef PantexTextureExtraction       Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -40,27 +44,75 @@ public:
 
   itkTypeMacro(PantexTextureExtraction, otb::Application);
 
+  typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType> 
+            ExtractorFilterType;
+  typedef otb::ScalarImageToPanTexTextureFilter<FloatImageType, FloatImageType> PanTexTextureFilterType;
+  typedef otb::StreamingMinMaxImageFilter<FloatImageType> MinMaxImageFilterType;
+
 private:
   void DoInit() override
   {
     SetName("PantexTextureExtraction");
     SetDescription("Computes Pantex textural features on the selected channel of the input image");
 
-    // Documentation
     SetDocLongDescription(
-        " TODO"
+        "This application computes a texture-derived built-up presence index (PanTex) from textural"
+    "characteristics of scalar images. It is the min value of the contrast in 8 directions."
     );
 
-    SetDocLimitations(
-        " TODO ");
+    SetDocLimitations("None");
+
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(
-        " TODO");
+    SetDocSeeAlso(" Pesari, M., A. Gerhardinger, F. Kayitakire. 2008.  A robust built-up area precense"
+      " index by anisotropic rotation-invariant textural measure."
+      " IEEE Journal of selected topics in applied earth observations and remote sensing.Vol1, NO3.");
 
     AddDocTag(Tags::FeatureExtraction);
     AddDocTag("Textures");
     
+    AddParameter(ParameterType_InputImage, "in", "Input Image");
+    SetParameterDescription("in", "The input image to compute the features on.");
+
+    AddParameter(ParameterType_Int, "channel", "Selected Channel");
+    SetParameterDescription("channel", "The selected channel index");
+    SetDefaultParameterInt("channel", 1);
+    SetMinimumParameterIntValue("channel", 1);
+
+    AddParameter(ParameterType_OutputImage, "out", "Output Image");
+    SetParameterDescription("out", "Output image containing the selected texture features.");
+
+    AddParameter(ParameterType_Float, "min", "Image Minimum");
+    SetParameterDescription("min", "Image Minimum");
+    MandatoryOff("min");
+
+    AddParameter(ParameterType_Float, "max", "Image Maximum");
+    SetParameterDescription("max", "Image Maximum");
+    MandatoryOff("max");
+
+    AddParameter(ParameterType_Int, "sradx", "Window radius (x direction)");
+    SetParameterDescription("sradx", "Radius of the window on which textures are computed (x direction)");
+    SetMinimumParameterIntValue("sradx", 0);
+    SetDefaultParameterInt("sradx", 4);
+
+    AddParameter(ParameterType_Int, "srady", "Window radius (y direction)");
+    SetParameterDescription("srady", "Radius of the window on which textures are computed (y direction)");
+    SetMinimumParameterIntValue("srady", 0);
+    SetDefaultParameterInt("srady", 4);
+
+    AddParameter(ParameterType_Int, "nbin", "Number of bins per axis for histogram generation");
+    SetParameterDescription("nbin", "Number of bins per axis for histogram generation");
+    SetDefaultParameterInt("nbin", 8);
+
     AddRAMParameter();
+
+    // Doc example parameter settings
+    SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
+    SetDocExampleParameterValue("channel", "2");
+    SetDocExampleParameterValue("parameters.min", "0");
+    SetDocExampleParameterValue("parameters.max", "255");
+    SetDocExampleParameterValue("nbin", "8");
+    SetDocExampleParameterValue("srady", "4");
+    SetDocExampleParameterValue("sradx", "4");
 
     SetOfficialDocLink();
   }
@@ -73,7 +125,57 @@ private:
 
   void DoExecute() override
   {
+    auto inImage = GetParameterImage("in");
+    inImage->UpdateOutputInformation();
+
+    if ((unsigned int)GetParameterInt("channel") > inImage->GetNumberOfComponentsPerPixel())
+    {
+      itkExceptionMacro(<< "The specified channel index is invalid.");
+    }
+
+    auto extractorFilter = ExtractorFilterType::New();
+    extractorFilter->SetInput(inImage);
+    extractorFilter->SetStartX(inImage->GetLargestPossibleRegion().GetIndex(0));
+    extractorFilter->SetStartY(inImage->GetLargestPossibleRegion().GetIndex(1));
+    extractorFilter->SetSizeX(inImage->GetLargestPossibleRegion().GetSize(0));
+    extractorFilter->SetSizeY(inImage->GetLargestPossibleRegion().GetSize(1));
+    extractorFilter->SetChannel(GetParameterInt("channel"));
+
+    auto textureFilter = PanTexTextureFilterType::New();
+
+    textureFilter->SetNumberOfBinsPerAxis(GetParameterInt("nbin"));
+    textureFilter->SetRadius( {(unsigned int) GetParameterInt("sradx"),
+                               (unsigned int) GetParameterInt("srady")} );
+
+    // Compute min and max only if one the corresponding parameter has not been set
+    if (!HasValue("min") || !HasValue("max"))
+    {
+      auto minMaxFilter = MinMaxImageFilterType::New();
+      minMaxFilter->SetInput(extractorFilter->GetOutput());
+      minMaxFilter->Update();
+      
+      if (!HasValue("min"))
+        otbAppLogINFO(<< "Computed Minimum: " << minMaxFilter->GetMinimum());
+
+      if (!HasValue("max"))
+        otbAppLogINFO(<< "Computed Maximum: " << minMaxFilter->GetMaximum());
+
+      textureFilter->SetInputImageMinimum(HasValue("min") ? GetParameterFloat("min") 
+                                            : minMaxFilter->GetMinimum());
+      textureFilter->SetInputImageMaximum(HasValue("max") ? GetParameterFloat("max") 
+                                            : minMaxFilter->GetMaximum());
+
+    }
+    else
+    {
+      textureFilter->SetInputImageMinimum(GetParameterFloat("min"));
+      textureFilter->SetInputImageMaximum(GetParameterFloat("max"));
+    }
     
+    textureFilter->SetInput(extractorFilter->GetOutput());
+    SetParameterOutputImage("out", textureFilter->GetOutput());
+
+    RegisterPipeline();
   }
 };
 
