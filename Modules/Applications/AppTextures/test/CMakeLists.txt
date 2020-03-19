@@ -43,3 +43,17 @@ otb_test_application(NAME  apTvFESFSTextureExtraction
                    			 ${BASELINE}/apTvFESFSTextureExtraction.tif
                  		     ${TEMP}/apTvFESFSTextureExtraction.tif)
 
+
+#----------- PantexTextureExtraction TESTS ----------------
+otb_test_application(NAME  apTvFEPantexTextureExtraction
+                     APP  PantexTextureExtraction
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -channel 1
+                             -out ${TEMP}/apTvFEPantexTextureExtraction.tif
+                             -nbin 8
+                             -sradx 4
+                             -srady 4
+                     VALID   --compare-image ${NOTOL}
+                   			 ${BASELINE}/apTvFEPantexTextureExtraction.tif
+                 		     ${TEMP}/apTvFEPantexTextureExtraction.tif)
+
