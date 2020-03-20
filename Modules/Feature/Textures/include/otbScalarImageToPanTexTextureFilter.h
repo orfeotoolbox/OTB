@@ -113,7 +113,7 @@ protected:
   /** Constructor */
   ScalarImageToPanTexTextureFilter();
   /** Destructor */
-  ~ScalarImageToPanTexTextureFilter() override;
+  ~ScalarImageToPanTexTextureFilter() override = default;
   /** Generate the input requested region */
   void GenerateInputRequestedRegion() override;
   /** Parallel textures extraction */

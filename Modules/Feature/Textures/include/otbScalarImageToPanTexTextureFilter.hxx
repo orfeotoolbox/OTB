@@ -37,36 +37,9 @@ ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>::ScalarImageToPanTex
   // There are 1 output corresponding to the Pan Tex texture indice
   this->SetNumberOfRequiredOutputs(1);
 
-  // Fill the offset list for contrast computation
-  OffsetType off;
-  off[0] = 0;
-  off[1] = 1;
-  m_OffsetList.push_back(off); //(0, 1)
-  off[1] = 2;
-  m_OffsetList.push_back(off); //(0, 2)
-  off[0] = 1;
-  off[1] = -2;
-  m_OffsetList.push_back(off); //(1, -2)
-  off[1] = -1;
-  m_OffsetList.push_back(off); //(1, -1)
-  off[1] = 0;
-  m_OffsetList.push_back(off); //(1, 0)
-  off[1] = 1;
-  m_OffsetList.push_back(off); //(1, 1)
-  off[1] = 2;
-  m_OffsetList.push_back(off); //(1, 2)
-  off[0] = 2;
-  off[1] = -1;
-  m_OffsetList.push_back(off); //(2, -1)
-  off[1] = 0;
-  m_OffsetList.push_back(off); //(2, 0)
-  off[1] = 1;
-  m_OffsetList.push_back(off); //(2, 1)
-}
-
-template <class TInputImage, class TOutputImage>
-ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>::~ScalarImageToPanTexTextureFilter()
-{
+  // Ten offsets are selected for contrast computation (2 pixels displacement grid, and given that the
+  // co-occurance matrix is symmetric
+  m_OffsetList = { {0, 1}, {0, 2}, {1, -2}, {1, -1}, {1, 0}, {1, 1}, {1, 2}, {2, -1}, {2, 0}, {2, 1} };
 }
 
 template <class TInputImage, class TOutputImage>
@@ -93,9 +66,7 @@ void ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>::GenerateInputR
   InputRegionType inputRequestedRegion = outputRequestedRegion;
 
   // Apply the radius
-  SizeType maxOffsetSize;
-  maxOffsetSize[0] = 2;
-  maxOffsetSize[1] = 2;
+  SizeType maxOffsetSize = {2, 2};
   inputRequestedRegion.PadByRadius(m_Radius + maxOffsetSize);
 
   // Try to apply the requested region to the input image
@@ -123,8 +94,6 @@ void ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>::ThreadedGenera
   OutputImagePointerType outputPtr = this->GetOutput();
 
   itk::ImageRegionIteratorWithIndex<OutputImageType> outputIt(outputPtr, outputRegionForThread);
-
-  // Go to begin
   outputIt.GoToBegin();
 
   // Set-up progress reporting
@@ -154,12 +123,10 @@ void ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>::ThreadedGenera
         inputIndex[dim] = outputIt.GetIndex()[dim] - m_Radius[dim];
         inputSize[dim]  = 2 * m_Radius[dim] + 1;
       }
-      // Build the input  region
-      InputRegionType inputRegion;
-      inputRegion.SetIndex(inputIndex);
-      inputRegion.SetSize(inputSize);
+      
+      // Build the input region
+      InputRegionType inputRegion = {inputIndex, inputSize};
       inputRegion.Crop(inputPtr->GetRequestedRegion());
-
 
       SizeType neighborhoodRadius;
       /** calculate minimum offset and set it as neighborhood radius **/
@@ -178,8 +145,8 @@ void ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>::ThreadedGenera
       GLCIList->Initialize(m_NumberOfBinsPerAxis, m_InputImageMinimum, m_InputImageMaximum);
 
       typedef itk::ConstNeighborhoodIterator<InputImageType> NeighborhoodIteratorType;
-      NeighborhoodIteratorType                               neighborIt;
-      neighborIt = NeighborhoodIteratorType(neighborhoodRadius, inputPtr, inputRegion);
+      NeighborhoodIteratorType neighborIt = NeighborhoodIteratorType(neighborhoodRadius, inputPtr, inputRegion);
+
       for (neighborIt.GoToBegin(); !neighborIt.IsAtEnd(); ++neighborIt)
       {
         const InputPixelType centerPixelIntensity = neighborIt.GetCenterPixel();
@@ -201,8 +168,8 @@ void ScalarImageToPanTexTextureFilter<TInputImage, TOutputImage>::ThreadedGenera
       constVectorIt  = glcVector.begin();
       while (constVectorIt != glcVector.end())
       {
-        CooccurrenceIndexType index     = (*constVectorIt).first;
-        RelativeFrequencyType frequency = (*constVectorIt).second / totalFrequency;
+        CooccurrenceIndexType index     = constVectorIt->first;
+        RelativeFrequencyType frequency = constVectorIt->second / totalFrequency;
         inertia += (index[0] - index[1]) * (index[0] - index[1]) * frequency;
         ++constVectorIt;
       }
