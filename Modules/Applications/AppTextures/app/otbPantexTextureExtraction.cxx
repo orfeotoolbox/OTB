@@ -57,7 +57,7 @@ private:
 
     SetDocLongDescription(
         "This application computes a texture-derived built-up presence index (PanTex) from textural"
-    "characteristics of scalar images. This index is the min value of the contrast in 8 directions."
+    "characteristics of scalar images. This is a contrast textural measure based on co-occurance."
     );
 
     SetDocLimitations("None");
@@ -81,12 +81,14 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "Output image containing the selected texture features.");
 
-    AddParameter(ParameterType_Float, "min", "Image Minimum");
-    SetParameterDescription("min", "Image Minimum");
+    AddParameter(ParameterType_Float, "min", "Image minimum");
+    SetParameterDescription("min", "Input image minimum. If this parameter is not set, the application will compute "
+                            "the minumum of the image.");
     MandatoryOff("min");
 
-    AddParameter(ParameterType_Float, "max", "Image Maximum");
-    SetParameterDescription("max", "Image Maximum");
+    AddParameter(ParameterType_Float, "max", "Image maximum");
+    SetParameterDescription("max", "Input image maximum. If this parameter is not set, the application will compute "
+                            "the maximum of the image.");
     MandatoryOff("max");
 
     AddParameter(ParameterType_Int, "sradx", "Window radius (x direction)");
@@ -100,7 +102,8 @@ private:
     SetDefaultParameterInt("srady", 4);
 
     AddParameter(ParameterType_Int, "nbin", "Number of bins per axis for histogram generation");
-    SetParameterDescription("nbin", "Number of bins per axis for histogram generation");
+    SetParameterDescription("nbin", "Number of bins per axis for histogram generation "
+                                    "(number of gray levels considered in the computation of co-occurance).");
     SetDefaultParameterInt("nbin", 8);
 
     AddRAMParameter();
