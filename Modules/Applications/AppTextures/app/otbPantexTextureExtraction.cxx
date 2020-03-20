@@ -57,7 +57,7 @@ private:
 
     SetDocLongDescription(
         "This application computes a texture-derived built-up presence index (PanTex) from textural"
-    "characteristics of scalar images. It is the min value of the contrast in 8 directions."
+    "characteristics of scalar images. This index is the min value of the contrast in 8 directions."
     );
 
     SetDocLimitations("None");
