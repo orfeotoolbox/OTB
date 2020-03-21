@@ -269,7 +269,7 @@ private:
     typedef boost::shared_ptr<Sink> Pointer;
     
     /** Get the region that should be written. By default this is the largest possible region
-     * of the input image, but this might be overriden by the box extended filename parameter of 
+     * of the input image, but this might be overridden by the box extended filename parameter of 
      * the input writer */
     itk::ImageRegion<2> GetRegionToWrite() const override;
   
