@@ -28,6 +28,8 @@
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRandomNonRepeatingConstIteratorWithIndex.h"
 
+#include <ctime>
+
 namespace otb
 {
 namespace Wrapper
@@ -178,7 +180,9 @@ private:
 
   void DoUpdateParameters() override
   {
-    // Nothing to do
+    if (!HasUserValue("rand")) {
+      SetParameterInt("rand", std::time(0));
+    }
   }
 
   void DoExecute() override
