@@ -54,12 +54,6 @@ unsigned int ImageCommons::GetGCPCount(void) const
 }
 
 
-//~ OTB_GCP& ImageCommons::GetGCPs(unsigned int GCPnum)
-//~ {
-  //~ return m_Imd.GCPs[GCPnum];
-//~ }
-
-
 const OTB_GCP& ImageCommons::GetGCPs(unsigned int GCPnum) const
 {
   return m_Imd.GetGCPParam().GCPs[GCPnum];

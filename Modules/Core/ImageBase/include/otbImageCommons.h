@@ -52,7 +52,9 @@ public:
 
   unsigned int GetGCPCount(void) const;
 
+  // Removed non-const getter on GCPs
   //~ OTB_GCP& GetGCPs(unsigned int GCPnum);
+  
   const OTB_GCP& GetGCPs(unsigned int GCPnum) const;
 
   std::string GetGCPId(unsigned int GCPnum) const;
@@ -64,9 +66,13 @@ public:
   double GetGCPZ(unsigned int GCPnum) const;
 
   /** Get the six coefficients of affine geoTtransform. */
+  // TODO: move back to Image and VectorImage, compute geotransform with origin/spacing
   ImageMetadataInterfaceBase::VectorType GetGeoTransform(void) const;
 
   /** Get image corners. */
+  // TODO: move back to Image and VectorImage, compute corners in physical space,
+  // Then  a GenericRSTransform should be instanciated to translate from physical
+  // space to EPSG:4328 
   ImageMetadataInterfaceBase::VectorType GetUpperLeftCorner(void) const;
   ImageMetadataInterfaceBase::VectorType GetUpperRightCorner(void) const;
   ImageMetadataInterfaceBase::VectorType GetLowerLeftCorner(void) const;
