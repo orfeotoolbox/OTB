@@ -58,6 +58,9 @@ public:
   /** Create the appropriate ImageMetadataInterfaceFactory depending on the particulars of the file. */
   static ImageMetadataInterfaceBasePointerType CreateIMI(const MetaDataDictionaryType& dict);
 
+  // TODO: the input ImageMetadata is here to inject some metadatas parsed by
+  // GDALImageIO and initialize the correct number of bands. It should not be
+  // needed once we have a merge() function,
   /** Create the appropriate IMI based on a MetadataSupplier */
   static ImageMetadataInterfaceBasePointerType CreateIMI(const ImageMetadata & imd, const MetadataSupplierInterface *mds);
 
