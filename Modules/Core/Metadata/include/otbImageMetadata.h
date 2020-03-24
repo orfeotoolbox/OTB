@@ -21,7 +21,6 @@
 #ifndef otbImageMetadata_h
 #define otbImageMetadata_h
 
-#include "otbBandMetadata.h"
 #include "otbGeometryMetadata.h"
 #include "otbMetaDataKey.h"
 #include "OTBMetadataExport.h"
