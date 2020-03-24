@@ -37,10 +37,10 @@ public:
   /** @name Standard class typedefs
    * @{
    */
-  typedef PantexTextureExtraction       Self;
-  typedef Application                   Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self = PantexTextureExtraction;
+  using Superclass = Application;
+  using Pointer = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
   /** @} */
 
   /** @name Standard macro
@@ -50,10 +50,10 @@ public:
   itkTypeMacro(PantexTextureExtraction, otb::Application);
   /** @} */
 
-  typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType> 
-            ExtractorFilterType;
-  typedef otb::ScalarImageToPanTexTextureFilter<FloatImageType, FloatImageType> PanTexTextureFilterType;
-  typedef otb::StreamingMinMaxImageFilter<FloatImageType> MinMaxImageFilterType;
+  using ExtractorFilterType =
+    otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType>;
+  using PanTexTextureFilterType = otb::ScalarImageToPanTexTextureFilter<FloatImageType, FloatImageType>;
+  using MinMaxImageFilterType = otb::StreamingMinMaxImageFilter<FloatImageType>;
 
 private:
   void DoInit() override
