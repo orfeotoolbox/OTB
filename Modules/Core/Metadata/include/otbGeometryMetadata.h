@@ -23,8 +23,50 @@
 
 #include "OTBMetadataExport.h"
 
+
+#include <string>
+#include <vector>
+
 namespace otb
 {
+
+/** \class OTB_GCP
+ *
+ * \brief This OTB_GCP class is used to manage the GCP parameters
+ * in OTB.
+ *
+ *
+ * \ingroup OTBMetadata
+ */
+class OTBMetadata_EXPORT OTB_GCP
+{
+public:
+  /** Unique identifier, often numeric */
+  std::string m_Id;
+
+  /** Informational message or "" */
+  std::string m_Info;
+
+  /** Pixel (x) location of GCP on raster */
+  double m_GCPCol;
+
+  /** Line (y) location of GCP on raster */
+  double m_GCPRow;
+
+  /** X position of GCP in georeferenced space */
+  double m_GCPX;
+
+  /** Y position of GCP in georeferenced space */
+  double m_GCPY;
+
+  /** Elevation of GCP, or zero if not known */
+  double m_GCPZ;
+
+  OTB_GCP();
+  ~OTB_GCP();
+
+  void Print(std::ostream& os) const;
+};
 
 namespace Projection
 {

@@ -117,22 +117,6 @@ MetaDataKey::KeyType MetaDataKey::GetKeyType(const std::string& name)
   return MetaDataKey::KeyType(MetaDataKey::TSTRING);
 }
 
-OTB_GCP::OTB_GCP() : m_GCPCol(0), m_GCPRow(0), m_GCPX(0), m_GCPY(0), m_GCPZ(0)
-{
-}
-
-OTB_GCP::~OTB_GCP()
-{
-}
-
-void OTB_GCP::Print(std::ostream& os) const
-{
-  os << "   GCP Id = " << this->m_Id << std::endl;
-  os << "   GCP Info =  " << this->m_Info << std::endl;
-  os << "   GCP (Row, Col) = (" << this->m_GCPRow << "," << this->m_GCPCol << ")" << std::endl;
-  os << "   GCP (X, Y, Z) = (" << this->m_GCPX << "," << this->m_GCPY << "," << this->m_GCPZ << ")" << std::endl;
-}
-
 namespace MetaData
 {
 
