@@ -47,7 +47,8 @@ void ImageMetadataInterfaceBase::SetMetaDataDictionary(const MetaDataDictionaryT
 }
 
 
-const MetaDataDictionaryType& ImageMetadataInterfaceBase::GetMetaDataDictionary() const
+const ImageMetadataInterfaceBase::MetaDataDictionaryType&
+ImageMetadataInterfaceBase::GetMetaDataDictionary() const
 {
   return m_MetaDataDictionary;
 }
