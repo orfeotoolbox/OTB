@@ -23,6 +23,15 @@
 namespace otb
 {
 
+void ImageCommons::SetImageMetadata(ImageMetadata imd)
+{
+  m_Imd = std::move(imd);
+}
+
+const ImageMetadata & ImageCommons::GetImageMetadata() const
+{
+  return m_Imd;
+}
 
 std::string ImageCommons::GetProjectionRef(void) const
 {

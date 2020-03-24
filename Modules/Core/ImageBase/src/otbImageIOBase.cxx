@@ -1294,9 +1294,9 @@ const ImageMetadata & ImageIOBase::GetImageMetadata()
   return m_Imd;
 }
 
-void ImageIOBase::SetImageMetadata(const ImageMetadata & imd)
+void ImageIOBase::SetImageMetadata(ImageMetadata imd)
 {
-  m_Imd = imd;
+  m_Imd = std::move(imd);
 }
 
 } // namespace itk

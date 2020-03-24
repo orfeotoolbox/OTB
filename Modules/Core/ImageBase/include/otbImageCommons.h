@@ -31,14 +31,10 @@ namespace otb
 class OTBImageBase_EXPORT ImageCommons
 {
 public:
-  void SetImageMetadata(const ImageMetadata & imd)
-    {
-    m_Imd = imd;
-    }
-  const ImageMetadata & GetImageMetadata() const
-    {
-    return m_Imd;
-    }
+
+  void SetImageMetadata(ImageMetadata imd);
+
+  const ImageMetadata & GetImageMetadata() const;
 
   // boilerplate code...
 

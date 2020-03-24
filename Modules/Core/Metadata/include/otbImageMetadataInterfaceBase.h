@@ -64,32 +64,17 @@ public:
 
 
   /** Set the image used to get the metadata */
-  void SetImage(ImageType* image)
-  {
-    this->SetMetaDataDictionary(image->GetMetaDataDictionary());
-  }
+  void SetImage(ImageType* image);
 
   /** Set the MetadataDictionary  */
-  void SetMetaDataDictionary(const MetaDataDictionaryType& dict)
-  {
-    m_MetaDataDictionary = dict;
-  }
+  void SetMetaDataDictionary(const MetaDataDictionaryType& dict);
 
   /** Get the MetadataDictionary  */
-  const MetaDataDictionaryType& GetMetaDataDictionary() const
-  {
-    return m_MetaDataDictionary;
-  }
+  const MetaDataDictionaryType& GetMetaDataDictionary() const;
 
-  void SetImageMetadata(const ImageMetadata& imd)
-    {
-    m_Imd = imd;
-    }
+  void SetImageMetadata(ImageMetadata imd);
 
-  const ImageMetadata& GetImageMetadata() const
-    {
-    return m_Imd;
-    }
+  const ImageMetadata& GetImageMetadata() const;
 
   /** Get the projection coordinate system of the image. */
   std::string GetProjectionRef() const;

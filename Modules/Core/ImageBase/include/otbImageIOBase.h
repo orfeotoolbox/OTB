@@ -445,7 +445,7 @@ public:
 
   const ImageMetadata & GetImageMetadata();
 
-  void SetImageMetadata(const ImageMetadata &);
+  void SetImageMetadata(ImageMetadata);
 
 protected:
   ImageIOBase();

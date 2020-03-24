@@ -34,6 +34,37 @@ ImageMetadataInterfaceBase::ImageMetadataInterfaceBase()
 {
 }
 
+
+void ImageMetadataInterfaceBase::SetImage(ImageType* image)
+{
+  this->SetMetaDataDictionary(image->GetMetaDataDictionary());
+}
+
+
+void ImageMetadataInterfaceBase::SetMetaDataDictionary(const MetaDataDictionaryType& dict)
+{
+  m_MetaDataDictionary = dict;
+}
+
+
+const MetaDataDictionaryType& ImageMetadataInterfaceBase::GetMetaDataDictionary() const
+{
+  return m_MetaDataDictionary;
+}
+
+
+void ImageMetadataInterfaceBase::SetImageMetadata(ImageMetadata imd)
+{
+  m_Imd = std::move(imd);
+}
+
+
+const ImageMetadata& ImageMetadataInterfaceBase::GetImageMetadata() const
+{
+  return m_Imd;
+}
+
+
 std::string ImageMetadataInterfaceBase::GetProjectionRef() const
 {
   std::string                   metadata;
