@@ -33,16 +33,22 @@ namespace Wrapper
 class PantexTextureExtraction : public Application
 {
 public:
-  /** Standard class typedefs. */
+  
+  /** @name Standard class typedefs
+   * @{
+   */
   typedef PantexTextureExtraction       Self;
   typedef Application                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
+  /** @} */
 
-  /** Standard macro */
+  /** @name Standard macro
+   * @{
+   */
   itkNewMacro(Self);
-
   itkTypeMacro(PantexTextureExtraction, otb::Application);
+  /** @} */
 
   typedef otb::MultiToMonoChannelExtractROI<FloatVectorImageType::InternalPixelType, FloatVectorImageType::InternalPixelType> 
             ExtractorFilterType;
