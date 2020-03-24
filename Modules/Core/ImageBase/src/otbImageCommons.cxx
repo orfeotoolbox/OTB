@@ -49,6 +49,7 @@ void ImageCommons::SetProjectionRef(const std::string& proj)
 
 std::string ImageCommons::GetGCPProjection(void) const
 {
+  assert(m_Imd.Has(MDGeom::GCP));
   return m_Imd.GetGCPParam().GCPProjection;
 }
 
@@ -65,6 +66,7 @@ unsigned int ImageCommons::GetGCPCount(void) const
 
 const OTB_GCP& ImageCommons::GetGCPs(unsigned int GCPnum) const
 {
+  assert(GCPnum < GetGCPCount());
   return m_Imd.GetGCPParam().GCPs[GCPnum];
 }
 

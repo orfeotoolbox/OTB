@@ -77,7 +77,7 @@ public:
   /** Returns true if a sensor geometric model is present */
   bool HasSensorGeometry() const;
 
-protected:
+private:
   ImageMetadata m_Imd;
 };
 
