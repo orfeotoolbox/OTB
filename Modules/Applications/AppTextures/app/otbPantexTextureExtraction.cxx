@@ -117,8 +117,8 @@ private:
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "qb_RoadExtract.tif");
     SetDocExampleParameterValue("channel", "2");
-    SetDocExampleParameterValue("parameters.min", "0");
-    SetDocExampleParameterValue("parameters.max", "255");
+    SetDocExampleParameterValue("min", "0");
+    SetDocExampleParameterValue("max", "255");
     SetDocExampleParameterValue("nbin", "8");
     SetDocExampleParameterValue("srady", "4");
     SetDocExampleParameterValue("sradx", "4");
