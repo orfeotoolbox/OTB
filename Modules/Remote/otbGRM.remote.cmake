@@ -31,6 +31,6 @@ to see which format you must respect to add a new criterion.
 A more detailed description can be found on the project website:
 http://tully.ups-tlse.fr/lassallep/grm
 "
-  GIT_REPOSITORY https://github.com/orfeotoolbox/GRM
-  GIT_TAG d8baf51a70207e5e39adb74be1698a27784df10b
+  GIT_REPOSITORY https://github.com/ctraizet/GRM
+  GIT_TAG 526cfa38d7e08b7b0e8c7b9ec9cbe4a034522491
 )
