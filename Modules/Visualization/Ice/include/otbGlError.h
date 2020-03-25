@@ -37,6 +37,11 @@
 #include <sstream>
 
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4275) // warning C4275: non-DLL-interface std::runtime_error used as base for DLL-interface Error
+#endif
+
 namespace otb { namespace gl {
 
 /**
@@ -104,5 +109,9 @@ CheckError()
 
 } // End namespace otb.
 
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // otb_GlError_h
