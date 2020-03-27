@@ -32,5 +32,5 @@ A more detailed description can be found on the project website:
 http://tully.ups-tlse.fr/lassallep/grm
 "
   GIT_REPOSITORY https://github.com/orfeotoolbox/GRM
-  GIT_TAG d8baf51a70207e5e39adb74be1698a27784df10b
+  GIT_TAG 459943a6fde517cc0dd601dfaca3400e3f1788de
 )

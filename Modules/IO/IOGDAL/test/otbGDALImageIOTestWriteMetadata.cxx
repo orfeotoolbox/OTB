@@ -23,9 +23,20 @@
 #include <fstream>
 #include <sstream>
 
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4251)
 #include "gdal_priv.h"
 #include "cpl_string.h"
 #include "ogr_spatialref.h"
+#pragma warning(pop)
+#else
+#include "gdal_priv.h"
+#include "cpl_string.h"
+#include "ogr_spatialref.h"
+#endif
+
 #include "itkMacro.h"
 
 // Class to store ProjRef, GEOTransform and GCP info
