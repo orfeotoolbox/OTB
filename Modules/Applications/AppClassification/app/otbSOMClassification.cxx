@@ -28,6 +28,8 @@
 #include "itkImageRegionConstIterator.h"
 #include "itkImageRandomNonRepeatingConstIteratorWithIndex.h"
 
+#include <ctime>
+
 namespace otb
 {
 namespace Wrapper
@@ -178,7 +180,6 @@ private:
 
   void DoUpdateParameters() override
   {
-    // Nothing to do
   }
 
   void DoExecute() override
@@ -248,6 +249,11 @@ private:
     // create a random permutation to explore
     itk::RandomPermutation randPerm(numberOfStreamDivisions);
     unsigned int           index = 0;
+
+    // Randomize seed if not given
+    if (!HasUserValue("rand")) {
+      SetParameterInt("rand", std::time(0));
+    }
 
     // reset seed and step once (itk::RandomPermutation may have used it)
     randomGen->SetSeed(GetParameterInt("rand"));
