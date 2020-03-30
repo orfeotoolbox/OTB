@@ -23,7 +23,16 @@
 /*===============================[ Includes ]================================*/
 /*===========================================================================*/
 #include "otbOGRGeometryWrapper.h"
+
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4251)
 #include "ogr_geometry.h"
+#pragma warning(pop)
+#else
+#include "ogr_geometry.h"
+#endif
 
 #ifdef _MSC_VER
 // warning conversion int -> bool
