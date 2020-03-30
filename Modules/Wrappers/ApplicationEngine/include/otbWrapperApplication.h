@@ -870,11 +870,10 @@ protected:
   /** Add a parameterRAM method with parameter*/
   void AddRAMParameter(std::string const& paramKey, std::string const& paramName, unsigned int defaultValue);
 
-  /** Add a parameterRAND method with no parameter*/
+  /** Add a parameterRAND method with no parameter */
   void AddRANDParameter(std::string const& paramKey = "rand");
 
-  /** Add a parameterRAND method with parameter
-   * by default seed initialization is based on time value*/
+  /** Add a parameterRAND method with parameter */
   void AddRANDParameter(std::string const& paramKey, std::string const& paramName, unsigned int defaultValue);
 
   /** Remove the items added to the ListWidget */
