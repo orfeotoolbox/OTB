@@ -498,7 +498,8 @@ inline QString ToQString<float>(const float& val)
 
   // See IEEE-754
   // Ref. http://en.wikipedia.org/wiki/Single-precision_floating-point_format
-  valf.sprintf("%.9g", val);
+  
+  valf.asprintf("%.9g", val);
 
 #if 0
   std::cout
@@ -526,7 +527,7 @@ inline QString ToQString<double>(const double& val)
 
   // See IEEE-754
   // Ref. http://en.wikipedia.org/wiki/Double_precision
-  vald.sprintf("%.17g", val);
+  vald.asprintf("%.17g", val);
 
 #if 0
   std::cout
