@@ -96,9 +96,52 @@ private :
   double m_RefNorm;
 };
 
+template <class TInput, class TReference, class TOutput>
+class SpectralAngleMapperFunctor
+{
+public:
+  SpectralAngleMapperFunctor() = default;
+  virtual ~SpectralAngleMapperFunctor() = default;
+  
+  // Binary operator
+  inline TOutput operator()(const TInput& inPix) const
+  {
+    TOutput res;
+    res.SetSize(m_ReferencePixels.size());
+    
+    for (unsigned int i = 0; i< m_ReferencePixels.size(); i++)
+    {
+      res[i] = SpectralAngleDetails::ComputeSpectralAngle<TInput, TInput, typename TOutput::ValueType>
+                                      (inPix, m_ReferencePixels[i], m_ReferenceNorm[i]);
+    }
 
+    return res;
+  }
+
+  size_t OutputSize(...) const
+  {
+    return m_ReferencePixels.size();
+  }
+
+  void SetReferencePixels(std::vector<TReference> const & ref)
+  {
+    m_ReferencePixels = ref;
+    // Precompute the norm of reference pixels
+    for (auto const & pix : ref)
+    {
+      m_ReferenceNorm.push_back(pix.GetNorm());
+    }
+  }
   
-  
+  std::vector<TReference> GetReferencePixels() const
+  {
+    return m_ReferencePixels;
+  }
+
+private:
+  std::vector<TReference> m_ReferencePixels;
+  std::vector<double> m_ReferenceNorm;
+};
 
 } // end namespace functor
 } // end namespace otb
