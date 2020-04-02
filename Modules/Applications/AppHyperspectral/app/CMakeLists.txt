@@ -38,3 +38,8 @@ otb_create_application(
   SOURCES        otbEndmemberNumberEstimation.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
+otb_create_application(
+  NAME           SpectralAngleClassification
+  SOURCES        otbSpectralAngleClassification.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
