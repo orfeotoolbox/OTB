@@ -23,7 +23,7 @@
 
 #include "otbSpectralAngleFunctor.h"
 #include "otbFunctorImageFilter.h"
-
+#include "otbSpectralInformationDivergenceFunctor.h"
 
 namespace otb
 {
@@ -48,6 +48,7 @@ public:
   using ImageType = otb::VectorImage<ValueType>;
   using PixelType = ImageType::PixelType;
   using SAMFilterType = otb::FunctorImageFilter<otb::Functor::SpectralAngleMapperFunctor<PixelType, PixelType, PixelType>>;
+  using SIDFilterType = otb::FunctorImageFilter<otb::Functor::SpectralInformationDivergenceFunctor<PixelType, PixelType, PixelType>>;
 
 private:
   void DoInit() override
@@ -126,15 +127,33 @@ private:
       endmembers.push_back(it.Get());
     }
     
-    auto SAMFilter = SAMFilterType::New();
+    // Process objects to keep references on the actual filter instanciated below and its output
+    itk::LightObject::Pointer filter;
+    ImageType::Pointer filterOutput;
     
-    SAMFilter->GetModifiableFunctor().SetReferencePixels(endmembers);
-    SAMFilter->SetInput(GetParameterImage("in"));
-    
-    
+    auto mode = GetParameterString("mode");
+    if (mode == "sam")
+    {
+      auto SAMFilter = SAMFilterType::New();
+      
+      SAMFilter->GetModifiableFunctor().SetReferencePixels(endmembers);
+      SAMFilter->SetInput(GetParameterImage("in"));
+      filter = SAMFilter;
+      filterOutput = SAMFilter->GetOutput();
+    }
+    else if (mode == "sid")
+    {
+      auto SIDFilter = SIDFilterType::New();
+      
+      SIDFilter->GetModifiableFunctor().SetReferencePixels(endmembers);
+      SIDFilter->SetInput(GetParameterImage("in"));
+      filter = SIDFilter;
+      filterOutput = SIDFilter->GetOutput();
+    }
+
     if (HasValue("measure"))
     {
-      SetParameterOutputImage("measure", SAMFilter->GetOutput());
+      SetParameterOutputImage("measure", filterOutput);
     }
 
     if (HasValue("out"))
@@ -156,7 +175,7 @@ private:
       };
       
       auto classificationFilter = NewFunctorFilter(minIndexLambda);
-      classificationFilter->SetInput(SAMFilter->GetOutput());
+      classificationFilter->SetInput(filterOutput);
       
       SetParameterOutputImage("out", classificationFilter->GetOutput());
       RegisterPipeline();
