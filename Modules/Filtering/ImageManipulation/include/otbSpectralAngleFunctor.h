@@ -126,6 +126,7 @@ public:
   void SetReferencePixels(std::vector<TReference> const & ref)
   {
     m_ReferencePixels = ref;
+    m_ReferenceNorm.clear();
     // Precompute the norm of reference pixels
     for (auto const & pix : ref)
     {
