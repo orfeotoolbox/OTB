@@ -97,6 +97,20 @@ private:
     AddChoice("mode.sid", "Spectral information divergence");
     SetParameterDescription("mode.sid", "Spectral information divergence (SID) measure.");
 
+
+    AddParameter(ParameterType_Float, "threshold", "Classification threshold");
+    SetParameterDescription("threshold",
+                            "Pixel with a measurement greater than this threshold relatively to "
+                            "a reference pixel are not classified. The same threshold is used for all classes.");
+    MandatoryOff("threshold");
+
+    AddParameter(ParameterType_Int, "bv", "Background value");
+    SetParameterDescription("bv",
+                            "Value of unclassified pixels in the classification image "
+                            "(this parameter is only used if threshold is set).");
+    MandatoryOff("bv");
+    SetDefaultParameterInt("bv", -1);
+
     AddRAMParameter();
     SetMultiWriting(true);
 
@@ -158,11 +172,16 @@ private:
 
     if (HasValue("out"))
     {
-      // This lambda return the index of the minimum value in a pixel
-      auto minIndexLambda = [](PixelType const & pixel)
+      auto threshold = HasValue("threshold") ? GetParameterFloat("threshold") 
+                                              : std::numeric_limits<ValueType>::max();
+      auto bv = GetParameterInt("bv");
+      
+      // This lambda return the index of the minimum value in a pixel, values above threshold are not classified.
+      auto minIndexLambda = [threshold, bv](PixelType const & pixel)
       {
-        auto min = std::numeric_limits<ValueType>::max();
-        unsigned int res = 0;
+        auto min = threshold;
+        int res = bv;
+        
         for (unsigned int i = 0; i < pixel.Size(); i++)
         {
           if (pixel[i] < min)
