@@ -56,7 +56,7 @@ public:
   // Binary operator
   inline TOutputValue operator()(TInput const & inPix) const
   {
-    return std::sqrt(SpectralAngleDetails::ComputeSpectralAngle<TInput, TInput, TOutputValue>(inPix, m_ReferencePixel, m_RefNorm));
+    return std::sqrt(SpectralAngleDetails::ComputeSpectralAngle<TInput, TInput, TOutputValue>(inPix, inPix.GetNorm(), m_ReferencePixel, m_RefNorm));
   }
 
   void SetReferencePixel(TInput const & ref)

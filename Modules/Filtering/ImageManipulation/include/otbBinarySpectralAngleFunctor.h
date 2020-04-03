@@ -30,6 +30,9 @@ namespace otb
 /** \class BinarySpectralAngleFunctor
  *  \brief This functor computes the spectral angle between two pixels.
  *
+ *  If the pixels have different sizes, only the first components of the 
+ *  largest pixel will be considered.
+ *
  *  It can be used as a functor in a BinaryFunctorImageFilter to
  *  compute the pixel-by-pixel spectral angles.
  *
@@ -46,9 +49,18 @@ public:
   virtual ~BinarySpectralAngleFunctor() = default;
 
   // Binary operator
-  inline TOutputValue operator()(const TInput1& a, const TInput2& b) const
+  inline TOutputValue operator()(const TInput1& in1, const TInput2& in2) const
   {
-    return SpectralAngleDetails::ComputeSpectralAngle<TInput1, TInput2, TOutputValue>(a, b, b.GetNorm());
+    // Compute norms.
+    auto in1Norm = 0;
+    auto in2Norm = 0;
+    for (unsigned int i = 0; i < std::min(in1.Size(), in2.Size()); ++i)
+    {
+      in1Norm += in1[i] * in1[i];
+      in2Norm += in2[i] * in2[i];
+    }
+    
+    return SpectralAngleDetails::ComputeSpectralAngle<TInput1, TInput2, TOutputValue>(in1, in1Norm, in2, in2Norm);
   }
 };
 

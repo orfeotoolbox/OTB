@@ -33,18 +33,16 @@ namespace SpectralAngleDetails
 {
 
 template <class TInput, class TReference, class TOutput>
-TOutput ComputeSpectralAngle(TInput const & input, TReference const & reference, 
-                              typename TReference::ValueType refNorm)
+TOutput ComputeSpectralAngle(TInput const & input, typename TInput ::ValueType const & inputNorm, 
+                              TReference const & reference, typename TReference::ValueType refNorm)
 {
-  // Compute norm and scalar product.
+  // Compute scalar product.
   double scalarProduct   = 0.0;
-  double squaredNormInput  = 0.0;
   for (unsigned int i = 0; i < std::min(input.Size(), reference.Size()); ++i)
   {
     scalarProduct += input[i] * reference[i];
-    squaredNormInput += input[i] * input[i];
   }
-  auto normProd = std::sqrt(squaredNormInput) * refNorm;
+  auto normProd = inputNorm * refNorm;
   if ((normProd == 0.0) || (scalarProduct / normProd > 1))
   {
     return static_cast<TOutput>(0.0);
@@ -77,7 +75,7 @@ public:
   // Binary operator
   inline TOutputValue operator()(TInput const & inPix) const
   {
-    return SpectralAngleDetails::ComputeSpectralAngle<TInput, TInput, TOutputValue>(inPix, m_ReferencePixel, m_RefNorm);
+    return SpectralAngleDetails::ComputeSpectralAngle<TInput, TInput, TOutputValue>(inPix, inPix.GetNorm(), m_ReferencePixel, m_RefNorm);
   }
 
   void SetReferencePixel(TInput const & ref)
@@ -109,10 +107,12 @@ public:
     TOutput res;
     res.SetSize(m_ReferencePixels.size());
     
+    auto inputNorm = inPix.GetNorm();
+    
     for (unsigned int i = 0; i< m_ReferencePixels.size(); i++)
     {
       res[i] = SpectralAngleDetails::ComputeSpectralAngle<TInput, TInput, typename TOutput::ValueType>
-                                      (inPix, m_ReferencePixels[i], m_ReferenceNorm[i]);
+                                      (inPix, inputNorm, m_ReferencePixels[i], m_ReferenceNorm[i]);
     }
 
     return res;

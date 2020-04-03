@@ -82,9 +82,8 @@ public:
     pix[3] = this->Value(CommonBandNames::NIR, inPix);
 
     return std::sqrt(SpectralAngleDetails::ComputeSpectralAngle<PixelType, PixelType, TOutput>
-                                                                  (pix,
-                                                                    m_ReferencePixel, 
-                                                                    m_RefNorm));
+                                                                  (pix, pix.GetNorm(),
+                                                                   m_ReferencePixel, m_RefNorm));
   }
 
   /**@{*/ 
