@@ -33,6 +33,10 @@ namespace Functor
 namespace SpectralAngleDetails
 {
 
+/** \fn
+ * \brief This function computes spectral angle between a pixel and a reference, the norm of these inputs.
+ * should also be given as parameter of this function.
+ * */
 template <class TInput, class TReference, class TOutput>
 TOutput ComputeSpectralAngle(TInput const & input, typename TInput ::ValueType const & inputNorm, 
                               TReference const & reference, typename TReference::ValueType refNorm)
@@ -95,6 +99,11 @@ private :
   double m_RefNorm;
 };
 
+/** \class SpectralAngleMapperFunctor
+ *  \brief This functor computes the spectral angle according to a vector of reference pixel.
+ *
+ * \ingroup OTBImageManipulation
+ */
 template <class TInput, class TReference, class TOutput>
 class SpectralAngleMapperFunctor
 {

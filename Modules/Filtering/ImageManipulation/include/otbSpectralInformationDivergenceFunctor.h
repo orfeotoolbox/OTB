@@ -30,6 +30,15 @@ namespace otb
 namespace Functor
 {
 
+/** \class SpectralAngleFunctor
+ *  \brief This functor computes the spectral information divergence according to a reference pixel.
+ *
+ *  Du, Yingzi & Chang, Chein-I & Ren, Hsuan & Chang, Chein-Chi & Jensen, James & D'Amico, Francis. (2004). "
+      "New Hyperspectral Discrimination Measure for Spectral Characterization. Optical Engineering - OPT ENG. 43."
+      " 1777-1786. 10.1117/1.1766301.
+ * 
+ * \ingroup OTBImageManipulation
+ */
 template <class TInput, class TReference, class TOutput>
 class SpectralInformationDivergenceFunctor
 {
@@ -62,6 +71,8 @@ public:
 
   void SetReferencePixels(std::vector<TReference> const & ref)
   {
+    // We only store the probability mass function associated with the reference pixels, are the latter are not needed
+    // in the sid computation.
     m_ReferenceProbabilities.clear();
     for (auto const & pixel : ref)
     {
@@ -101,7 +112,7 @@ private:
     return sid;
   }
 
-  /** Probability mass function associated with the */ 
+  /** Probability mass function associated with the reference pixel */ 
   std::vector<TReference> m_ReferenceProbabilities;
 };
 

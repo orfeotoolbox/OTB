@@ -33,16 +33,21 @@ namespace Wrapper
 class SpectralAngleClassification : public Application
 {
 public:
-  /** Standard class typedefs. */
+  /** @name Standard class typedefs
+   * @{
+   */
   using Self = SpectralAngleClassification;
   using Superclass = Application;
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
+  /** @} */
 
-  /** Standard macro */
+  /** @name Standard macro
+   * @{
+   */
   itkNewMacro(Self);
-
   itkTypeMacro(SpectralAngleClassification, otb::Application);
+  /** @} */
 
   using ValueType = float;
   using ImageType = otb::VectorImage<ValueType>;
@@ -54,14 +59,23 @@ private:
   void DoInit() override
   {
     SetName("SpectralAngleClassification");
-    SetDescription("Classifies an image using a spectral angle measure.");
+    SetDescription("Classifies an image using a spectral measure.");
 
     // Documentation
-    SetDocLongDescription("TODO");
-    SetDocLimitations("None");
+    SetDocLongDescription("This application computes a spectral measure on a hyperspectral data cube using a set of "
+                            "reference pixels. The image is then classified by finding for each pixel the index of its closest endmember, "
+                            "i.e. the endmember corresponding to the lowest measurement value. The output classification is "
+                            "labeled from 1 to L, L being the nulber of endmembers. A threshold can be set for the "
+                            "classification step, only measurement values lower than this threshold will be considered, other "
+                            "will be classified as `background values` (default value of 0). \n\n"
+                            "Two measures are available : the spectral angle mapper and the spectral information divergence. See [1] for details");
+    
+    SetDocLimitations("In sid mode, the pixels of the input image and the input endmembers should be strictly positive. \n"
+                      "The endmember image is fully loaded in memory.");
+    
     SetDocAuthors("OTB-Team");
     SetDocSeeAlso("VertexComponentAnalysis \n"
-      "Du, Yingzi & Chang, Chein-I & Ren, Hsuan & Chang, Chein-Chi & Jensen, James & D'Amico, Francis. (2004). "
+      "[1] Du, Yingzi & Chang, Chein-I & Ren, Hsuan & Chang, Chein-Chi & Jensen, James & D'Amico, Francis. (2004). "
       "New Hyperspectral Discrimination Measure for Spectral Characterization. Optical Engineering - OPT ENG. 43."
       " 1777-1786. 10.1117/1.1766301. ");
 
@@ -83,7 +97,7 @@ private:
     
     AddParameter(ParameterType_OutputImage, "out", "Output classified image");
     SetParameterDescription("out",
-                            "Output classified image.");
+                            "Output classified image, classified pixels are labeled from 1 to L, L being the number of endmember in the image.");
 
     MandatoryOff("out");
     
@@ -95,7 +109,8 @@ private:
     SetParameterDescription("mode.sam", "Spectral angle mapper (SAM) measure.");
 
     AddChoice("mode.sid", "Spectral information divergence");
-    SetParameterDescription("mode.sid", "Spectral information divergence (SID) measure.");
+    SetParameterDescription("mode.sid", "Spectral information divergence (SID) measure. "
+                                          "Input pixel values should be strictly positive.");
 
 
     AddParameter(ParameterType_Float, "threshold", "Classification threshold");
@@ -107,9 +122,9 @@ private:
     AddParameter(ParameterType_Int, "bv", "Background value");
     SetParameterDescription("bv",
                             "Value of unclassified pixels in the classification image "
-                            "(this parameter is only used if threshold is set).");
+                            "(this parameter is only used if a threshold is set).");
     MandatoryOff("bv");
-    SetDefaultParameterInt("bv", -1);
+    SetDefaultParameterInt("bv", 0);
 
     AddRAMParameter();
     SetMultiWriting(true);
@@ -120,6 +135,7 @@ private:
     SetDocExampleParameterValue("out", "classification.tif");
     SetDocExampleParameterValue("measure", "measure.tif");
     SetDocExampleParameterValue("mode", "sam");
+    SetDocExampleParameterValue("threshold", "0.1");
 
     SetOfficialDocLink();
   }
@@ -187,7 +203,7 @@ private:
           if (pixel[i] < min)
           {
             min = pixel[i];
-            res = i;
+            res = i+1;
           }
         }
         return res;
