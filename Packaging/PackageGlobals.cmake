@@ -46,20 +46,21 @@ set(WINDOWS_SYSTEM_DLLS
   advapi32.dll
   comdlg32.dll
   crypt32.dll
+  d2d1.dll
+  d3d11.dll
+  d3d9.dll
   dnsapi.dll
   dwmapi.dll
   dwrite.dll
-  d2d1.dll
-  d3d9.dll
-  d3d11.dll
+  dxgi.dll
   gdi32.dll
   glu32.dll
   imm32.dll
   iphlpapi.dll
   kernel32.dll
+  mpr.dll
   netapi32.dll
   normaliz.dll
-  mpr.dll
   odbc32.dll
   ole32.dll
   oleaut32.dll
