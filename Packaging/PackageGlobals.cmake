@@ -43,6 +43,7 @@ elseif(APPLE)
 endif()
 
 set(WINDOWS_SYSTEM_DLLS
+  WTSAPI32.dll
   advapi32.dll
   comdlg32.dll
   crypt32.dll
