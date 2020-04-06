@@ -144,6 +144,7 @@ set(APPLE_SYSTEM_DLLS
   libgcc_s.*dylib
   libcups.*dylib
   libomp.dylib
+  libqcocoa.dylib
   )
 
 if(WIN32)
