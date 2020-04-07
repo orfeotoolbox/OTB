@@ -910,6 +910,13 @@ otb_add_test(NAME ioTvImageFileWriterPNG2BSQ COMMAND otbImageIOTestDriver
   otbImageFileWriterTest
   ${INPUTDATA}/cthead1.png
   ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr )
+  
+otb_add_test(NAME ioTvImageFileWriterTIF2TIF COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioTvImageFileWriterTIF2TIFOutput.tif
+  ${TEMP}/ioImageFileWriterTIF2TIF_QB_Toulouse_Ortho_PAN.tif
+  otbImageFileWriterTest
+  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+  ${TEMP}/ioImageFileWriterTIF2TIF_QB_Toulouse_Ortho_PAN.tif?epsg=4326 )
 
 otb_add_test(NAME ioTvCompareWritingComplexImage_TIF COMMAND otbImageIOTestDriver
   otbCompareWritingComplexImageTest

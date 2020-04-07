@@ -86,7 +86,7 @@ otb_add_test(NAME ioTvExtendedFilenameToWriterOptions_FullOptions COMMAND otbExt
   ${BASELINE}/ioTvExtendedFilenameToWriterOptions_FullOptions.txt
   ${TEMP}/ioTvExtendedFilenameToWriterOptions_FullOptions.txt
   otbExtendedFilenameToWriterOptions
-  /home/data/filename.tif?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024&nodata=-99999
+  /home/data/filename.tif?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024&nodata=-99999&epsg=4326
   ${TEMP}/ioTvExtendedFilenameToWriterOptions_FullOptions.txt
   )
 

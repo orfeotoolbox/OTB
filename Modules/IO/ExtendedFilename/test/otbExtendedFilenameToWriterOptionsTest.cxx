@@ -57,5 +57,9 @@ int otbExtendedFilenameToWriterOptions(int itkNotUsed(argc), char* argv[])
       file << helper->GetNoDataList()[i].first << " ; " << helper->GetNoDataList()[i].second << std::endl;
     }
 
+  file << helper->SrsValueIsSet() << std::endl;
+  if (helper->SrsValueIsSet())
+	  file << helper->GetSrsValue() << std::endl;
+
   return EXIT_SUCCESS;
 }

@@ -57,7 +57,7 @@ namespace otb
  * \sa ImageFileReader
  * \sa ImageSeriesReader
  * \sa ImageIOBase
- * \sa ExtendedFilenameToReaderOptions
+ * \sa ExtendedFilenameToWriterOptions
  *
  * \ingroup OTBImageIO
  */
