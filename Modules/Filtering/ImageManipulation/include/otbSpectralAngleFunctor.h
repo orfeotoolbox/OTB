@@ -24,6 +24,7 @@
 #include "otbMath.h"
 #include <algorithm>
 #include <vector>
+#include <numeric>
 
 namespace otb
 {
