@@ -100,7 +100,7 @@ otb_test_application(NAME  apTvHySpectralAngleClassification_sid
                              -measure ${TEMP}/apTvHySpectralAngleClassification_sid_measure.tif 
                              -threshold 0.1 
                              -bv -1
-                     VALID   --compare-n-images ${EPSILON_9} 2
+                     VALID   --compare-n-images ${EPSILON_6} 2
                               ${BASELINE}/apTvHySpectralAngleClassification_sid.tif
                               ${TEMP}/apTvHySpectralAngleClassification_sid.tif
                               ${BASELINE}/apTvHySpectralAngleClassification_sid_measure.tif
