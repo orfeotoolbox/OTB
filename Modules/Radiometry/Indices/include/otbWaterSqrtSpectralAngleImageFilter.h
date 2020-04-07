@@ -64,7 +64,7 @@ public:
    * */
   void SetReferenceWaterPixel(PixelType ref)
   {
-    assert(m_ReferencePixel.Size == 4);
+    assert(m_ReferencePixel.Size() == 4);
     m_ReferencePixel[0] = this->Value(CommonBandNames::BLUE, ref);
     m_ReferencePixel[1] = this->Value(CommonBandNames::GREEN, ref);
     m_ReferencePixel[2] = this->Value(CommonBandNames::RED, ref);
