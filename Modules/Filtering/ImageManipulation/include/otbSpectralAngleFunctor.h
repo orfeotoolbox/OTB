@@ -42,7 +42,8 @@ template <class TInput, class TReference, class TOutput>
 TOutput ComputeSpectralAngle(TInput const & input, typename TInput ::ValueType const & inputNorm, 
                               TReference const & reference, typename TReference::ValueType refNorm)
 {
-  double scalarProduct = std::inner_product(&input[0], &input[input.Size()], &reference[0], 0. );
+  auto minSize = std::min(input.Size(), reference.Size());
+  double scalarProduct = std::inner_product(&input[0], &input[minSize], &reference[0],0. );
   auto normProd = inputNorm * refNorm;
   if ((normProd == 0.0) || (scalarProduct / normProd > 1))
   {
