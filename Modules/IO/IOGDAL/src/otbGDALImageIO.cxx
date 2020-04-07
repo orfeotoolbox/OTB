@@ -116,6 +116,8 @@ GDALImageIO::GDALImageIO()
   m_ResolutionFactor  = 0;
   m_BytePerPixel      = 0;
   m_WriteRPCTags      = false;
+
+  m_epsgCode          = 0;
 }
 
 GDALImageIO::~GDALImageIO()
@@ -403,6 +405,11 @@ std::vector<std::string> GDALImageIO::GetOverviewsInfo()
   }
 
   return desc;
+}
+
+void GDALImageIO::SetEpsgCode(const unsigned int epsgCode)
+{
+  m_epsgCode = epsgCode;
 }
 
 void GDALImageIO::InternalReadImageInformation()
@@ -1163,6 +1170,13 @@ void GDALImageIO::Write(const void* buffer)
   {
     lFirstLine   = 0;
     lFirstColumn = 0;
+  }
+
+  // If needed, set the coordinate reference
+  if (m_epsgCode != 0)
+  {
+    auto spatialReference = SpatialReference::FromEPSG(m_epsgCode);
+    m_Dataset->GetDataSet()->SetSpatialRef(spatialReference.getOGRSpatialReference());
   }
 
   // Convert buffer from void * to unsigned char *
