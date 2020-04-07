@@ -41,12 +41,7 @@ template <class TInput, class TReference, class TOutput>
 TOutput ComputeSpectralAngle(TInput const & input, typename TInput ::ValueType const & inputNorm, 
                               TReference const & reference, typename TReference::ValueType refNorm)
 {
-  // Compute scalar product.
-  double scalarProduct   = 0.0;
-  for (unsigned int i = 0; i < std::min(input.Size(), reference.Size()); ++i)
-  {
-    scalarProduct += input[i] * reference[i];
-  }
+  double scalarProduct = std::inner_product(&input[0], &input[input.Size()], &reference[0], 0. );
   auto normProd = inputNorm * refNorm;
   if ((normProd == 0.0) || (scalarProduct / normProd > 1))
   {
@@ -75,7 +70,7 @@ public:
     m_ReferencePixel.Fill(1);
   }
 
-  virtual ~SpectralAngleFunctor() = default;
+  ~SpectralAngleFunctor() = default;
 
   // Binary operator
   inline TOutputValue operator()(TInput const & inPix) const
@@ -114,8 +109,7 @@ public:
   // Binary operator
   inline TOutput operator()(const TInput& inPix) const
   {
-    TOutput res;
-    res.SetSize(m_ReferencePixels.size());
+    TOutput res(m_ReferencePixels.size());
     
     auto inputNorm = inPix.GetNorm();
     
@@ -133,18 +127,18 @@ public:
     return m_ReferencePixels.size();
   }
 
-  void SetReferencePixels(std::vector<TReference> const & ref)
+  void SetReferencePixels(std::vector<TReference> ref)
   {
-    m_ReferencePixels = ref;
+    m_ReferencePixels = std::move(ref);
     m_ReferenceNorm.clear();
     // Precompute the norm of reference pixels
-    for (auto const & pix : ref)
+    for (auto const & pixel : m_ReferencePixels)
     {
-      m_ReferenceNorm.push_back(pix.GetNorm());
+      m_ReferenceNorm.push_back(pixel.GetNorm());
     }
   }
   
-  std::vector<TReference> GetReferencePixels() const
+  std::vector<TReference> const & GetReferencePixels() const
   {
     return m_ReferencePixels;
   }

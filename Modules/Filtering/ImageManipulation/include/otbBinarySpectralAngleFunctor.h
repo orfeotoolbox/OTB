@@ -49,12 +49,13 @@ public:
   virtual ~BinarySpectralAngleFunctor() = default;
 
   // Binary operator
-  inline TOutputValue operator()(const TInput1& in1, const TInput2& in2) const
+  TOutputValue operator()(const TInput1& in1, const TInput2& in2) const
   {
     // Compute norms.
     auto in1Norm = 0;
     auto in2Norm = 0;
-    for (unsigned int i = 0; i < std::min(in1.Size(), in2.Size()); ++i)
+    auto nbIter = std::min(in1.Size(), in2.Size());
+    for (unsigned int i = 0; i < nbIter; ++i)
     {
       in1Norm += in1[i] * in1[i];
       in2Norm += in2[i] * in2[i];

@@ -192,21 +192,11 @@ private:
                                               : std::numeric_limits<ValueType>::max();
       auto bv = GetParameterInt("bv");
       
-      // This lambda return the index of the minimum value in a pixel, values above threshold are not classified.
+      // This lambda return the index of the minimum value in a pixel, values above threshold are classified as background values.
       auto minIndexLambda = [threshold, bv](PixelType const & pixel)
       {
-        auto min = threshold;
-        int res = bv;
-        
-        for (unsigned int i = 0; i < pixel.Size(); i++)
-        {
-          if (pixel[i] < min)
-          {
-            min = pixel[i];
-            res = i+1;
-          }
-        }
-        return res;
+        auto minElem = std::min_element(&pixel[0], &pixel[pixel.Size()]);
+        return static_cast<int>(*minElem < threshold ? std::distance(&pixel[0], minElem) + 1 : bv);
       };
       
       auto classificationFilter = NewFunctorFilter(minIndexLambda);

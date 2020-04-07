@@ -89,7 +89,7 @@ private:
       // Input pixel should be non negative (e.g. reflectance, radiance)
       if (input[i] <= 0) 
       {
-        throw std::domain_error("Input pixel of the spectral information divergence algorithm should be strictly positive.");
+        throw std::runtime_error("Input pixels of the spectral information divergence algorithm should be strictly positive.");
       }
       sum += input[i];
     }
@@ -107,7 +107,8 @@ private:
     OutputValueType sid = 0.0;
     for (unsigned int i = 0; i < p.Size(); i++)
     {
-      sid += p[i] * std::log(p[i]/q[i]) + q[i] * std::log(q[i]/p[i]);
+      // Compute SID : p[i] * std::log(p[i]/q[i]) + q[i] * std::log(q[i]/p[i]);
+      sid += (p[i] - q[i]) * std::log(p[i]/q[i]);
     }
     return sid;
   }
