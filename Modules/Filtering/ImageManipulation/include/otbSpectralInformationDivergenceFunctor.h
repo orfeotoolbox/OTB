@@ -54,7 +54,7 @@ public:
     TOutput res;
     res.SetSize(m_ReferenceProbabilities.size());
     
-    TInput inputProbability = ComputeProbabilityMassFunction(input);
+    auto inputProbability = ComputeProbabilityMassFunction(input);
     
     for (unsigned int i = 0; i< m_ReferenceProbabilities.size(); i++)
     {
@@ -83,7 +83,6 @@ public:
 private:
   inline TInput ComputeProbabilityMassFunction(TInput const & input) const
   {
-    double sum = 0.0;
     for (unsigned int i = 0; i < input.Size(); i++)
     {
       // Input pixel should be non negative (e.g. reflectance, radiance)
@@ -91,14 +90,9 @@ private:
       {
         throw std::runtime_error("Input pixels of the spectral information divergence algorithm should be strictly positive.");
       }
-      sum += input[i];
     }
-    TInput res(input.Size());
-    for (unsigned int i = 0; i < input.Size(); i++)
-    {
-      res[i] = input[i] / sum;
-    }
-    return res;
+    
+    return input / std::accumulate(&input[0], &input[input.Size()], 0.0);
   }
 
   inline OutputValueType ComputeSpectralInformationDivergence(TInput const & p, TInput const & q) const
