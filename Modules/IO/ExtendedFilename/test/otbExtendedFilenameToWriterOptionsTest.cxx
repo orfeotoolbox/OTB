@@ -50,5 +50,12 @@ int otbExtendedFilenameToWriterOptions(int itkNotUsed(argc), char* argv[])
       file << helper->GetgdalCreationOptions()[i] << std::endl;
     }
 
+  file << helper->NoDataValueIsSet() << std::endl;
+  if (helper->NoDataValueIsSet())
+    for (unsigned int i = 0; i < helper->GetNoDataList().size(); i++)
+    {
+      file << helper->GetNoDataList()[i].first << " ; " << helper->GetNoDataList()[i].second << std::endl;
+    }
+
   return EXIT_SUCCESS;
 }
