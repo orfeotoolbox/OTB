@@ -20,7 +20,6 @@
 #ifndef otb_opencv_api_h
 #define otb_opencv_api_h
 
-#cmakedefine OTB_OPENCV_3
 #cmakedefine OTB_OPENCV_4
 
 #endif

@@ -39,13 +39,15 @@
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #include "ossim/projection/ossimProjection.h"
+#include "ossim/projection/ossimSensorModelFactory.h"
 #pragma GCC diagnostic pop
 #else
 #include "ossim/projection/ossimProjection.h"
+#include "ossim/projection/ossimSensorModelFactory.h"
 #endif
 
-#include "ossim/projection/ossimSensorModelFactory.h"
 #include "ossim/ossimPluginProjectionFactory.h"
 
 

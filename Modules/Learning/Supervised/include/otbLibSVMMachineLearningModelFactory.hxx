@@ -42,11 +42,6 @@ LibSVMMachineLearningModelFactory<TInputValue, TOutputValue>::LibSVMMachineLearn
 }
 
 template <class TInputValue, class TOutputValue>
-LibSVMMachineLearningModelFactory<TInputValue, TOutputValue>::~LibSVMMachineLearningModelFactory()
-{
-}
-
-template <class TInputValue, class TOutputValue>
 const char* LibSVMMachineLearningModelFactory<TInputValue, TOutputValue>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;

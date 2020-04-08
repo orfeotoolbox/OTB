@@ -309,7 +309,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       {
         if (sizevalue == 0)
         {
-          otbLogMacro(Warning, << "Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting "
+          otbLogMacro(Warning, << "Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
                                   "the sizevalue by using &streaming:sizevalue=x.");
         }
         this->SetNumberOfDivisionsTiledStreaming(sizevalue);
@@ -318,7 +318,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       {
         if (sizevalue == 0)
         {
-          otbLogMacro(Warning, << "Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting "
+          otbLogMacro(Warning, << "Streaming sizemode is set to height but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
                                   "the sizevalue by using &streaming:sizevalue=x.");
         }
 
@@ -341,7 +341,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       {
         if (sizevalue == 0)
         {
-          otbLogMacro(Warning, << "Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting "
+          otbLogMacro(Warning, << "Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
                                   "the sizevalue by using &streaming:sizevalue=x.");
         }
         this->SetNumberOfDivisionsStrippedStreaming(sizevalue);
@@ -350,7 +350,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       {
         if (sizevalue == 0)
         {
-          otbLogMacro(Warning, << "Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting "
+          otbLogMacro(Warning, << "Streaming sizemode is set to height but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
                                   "the sizevalue by using &streaming:sizevalue=x.");
         }
         this->SetNumberOfLinesStrippedStreaming(sizevalue);
@@ -452,16 +452,26 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
   /** Parse region size modes */
   if (m_FilenameHelper->BoxIsSet())
   {
-    std::vector<int> boxVector;
+    std::vector<unsigned int> boxVector;
     Utils::ConvertStringToVector(m_FilenameHelper->GetBox(), boxVector, "ExtendedFileName:box", ":");
+
+    if (boxVector.size() != 4)
+    {
+      itk::ImageFileWriterException e(__FILE__, __LINE__);
+      std::ostringstream            msg;
+      msg << "Invalid box option " << m_FilenameHelper->GetBox() << ". The box should contains four elements: startx:starty:sizex:sizey";
+      e.SetDescription(msg.str());
+      e.SetLocation(ITK_LOCATION);
+      throw e;
+    }
 
     typename InputImageRegionType::IndexType start;
     typename InputImageRegionType::SizeType  size;
-
     start[0] = boxVector[0]; // first index on X
     start[1] = boxVector[1]; // first index on Y
     size[0]  = boxVector[2]; // size along X
     size[1]  = boxVector[3]; // size along Y
+
     inputRegion.SetSize(size);
     inputRegion.SetIndex(start);
 

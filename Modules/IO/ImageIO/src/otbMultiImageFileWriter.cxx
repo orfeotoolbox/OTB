@@ -125,6 +125,9 @@ void MultiImageFileWriter::InitializeStreaming()
   {
     otbWarningMacro(<< "One of the selected ImageIO does not support streaming.");
     this->SetNumberOfDivisionsStrippedStreaming(m_NumberOfDivisions);
+    FakeOutputType* fakeOut = static_cast<FakeOutputType*>(this->itk::ProcessObject::GetOutput(0));
+    RegionType const& region  = fakeOut->GetLargestPossibleRegion();
+    m_StreamingManager->PrepareStreaming(fakeOut, region);
   }
 
   /** Compare the buffered region  with the inputRegion which is the largest
@@ -135,6 +138,9 @@ void MultiImageFileWriter::InitializeStreaming()
     otbMsgDevMacro(<< "Buffered region is the largest possible region, there is"
                       " no need for streaming.");
     this->SetNumberOfDivisionsStrippedStreaming(m_NumberOfDivisions);
+    FakeOutputType* fakeOut = static_cast<FakeOutputType*>(this->itk::ProcessObject::GetOutput(0));
+    RegionType      region  = fakeOut->GetLargestPossibleRegion();
+    m_StreamingManager->PrepareStreaming(fakeOut, region);
   }
   else
   {
@@ -148,28 +154,31 @@ void MultiImageFileWriter::InitializeStreaming()
     RegionType      region  = fakeOut->GetLargestPossibleRegion();
     m_StreamingManager->PrepareStreaming(fakeOut, region);
     m_NumberOfDivisions = m_StreamingManager->GetNumberOfSplits();
-    // Check this number of division is compatible with all inputs
-    bool nbDivValid = false;
-    while ((!nbDivValid) && 1 < m_NumberOfDivisions)
+    if (m_NumberOfDivisions > 1)
     {
-      unsigned int smallestNbDiv = m_NumberOfDivisions;
-      for (unsigned int i = 0; i < m_SinkList.size(); ++i)
+      // Check this number of division is compatible with all inputs
+      bool nbDivValid = false;
+      while ((!nbDivValid) && 1 < m_NumberOfDivisions)
       {
-        unsigned int div = m_StreamingManager->GetSplitter()->GetNumberOfSplits(m_SinkList[i]->GetInput()->GetLargestPossibleRegion(), m_NumberOfDivisions);
-        smallestNbDiv    = std::min(div, smallestNbDiv);
+        unsigned int smallestNbDiv = m_NumberOfDivisions;
+        for (unsigned int i = 0; i < m_SinkList.size(); ++i)
+        {
+          unsigned int div = m_StreamingManager->GetSplitter()->GetNumberOfSplits(m_SinkList[i]->GetRegionToWrite(), m_NumberOfDivisions);
+          smallestNbDiv    = std::min(div, smallestNbDiv);
+        }
+        if (smallestNbDiv == m_NumberOfDivisions)
+        {
+          nbDivValid = true;
+        }
+        else
+        {
+          m_NumberOfDivisions = smallestNbDiv;
+        }
       }
-      if (smallestNbDiv == m_NumberOfDivisions)
+      if (m_NumberOfDivisions == 1)
       {
-        nbDivValid = true;
+        otbWarningMacro("Can't find a common split scheme between all inputs, streaming disabled\n");
       }
-      else
-      {
-        m_NumberOfDivisions = smallestNbDiv;
-      }
-    }
-    if (m_NumberOfDivisions == 1)
-    {
-      otbWarningMacro("Can't find a common split scheme between all inputs, streaming disabled\n");
     }
     otbMsgDebugMacro(<< "Number Of Stream Divisions : " << m_NumberOfDivisions);
   }
@@ -251,8 +260,12 @@ void MultiImageFileWriter::UpdateOutputData(itk::DataObject* itkNotUsed(output))
     command->SetCallbackFunction(this, &Self::ObserveSourceFilterProgress);
 
     itk::ProcessObject* src = this->GetInput(0)->GetSource();
-    m_ObserverID            = src->AddObserver(itk::ProgressEvent(), command);
-    m_IsObserving           = true;
+    // The first input might not have a source (e.g. in memory image)
+    if (src)
+    {
+      m_ObserverID            = src->AddObserver(itk::ProgressEvent(), command);
+      m_IsObserving           = true;
+    }
   }
 
   for (m_CurrentDivision = 0; m_CurrentDivision < m_NumberOfDivisions && !this->GetAbortGenerateData();
@@ -359,8 +372,8 @@ void MultiImageFileWriter::GenerateInputRequestedRegion()
       SizeType   size   = region.GetSize();
       idx[0] += size[0] * (idxRequest[0] - idxLargest[0]) / sizeLargest[0];
       idx[1] += size[1] * (idxRequest[1] - idxLargest[1]) / sizeLargest[1];
-      size[0] *= sizeRequest[0] / sizeLargest[0];
-      size[1] *= sizeRequest[1] / sizeLargest[1];
+      size[0] *= (double) sizeRequest[0] / sizeLargest[0];
+      size[1] *= (double) sizeRequest[1] / sizeLargest[1];
       region.SetIndex(idx);
       region.SetSize(size);
       inputPtr->SetRequestedRegion(region);
@@ -373,14 +386,22 @@ void MultiImageFileWriter::GenerateData()
   int numInputs = m_SinkList.size();
   for (int inputIndex = 0; inputIndex < numInputs; ++inputIndex)
   {
-    m_SinkList[inputIndex]->Write(m_StreamRegionList[inputIndex]);
+    auto region = m_StreamRegionList[inputIndex];
+    
+    auto shiftIndex =  m_SinkList[inputIndex]->GetRegionToWrite().GetIndex();
+    auto index = region.GetIndex();
+    index[0] -= shiftIndex[0];
+    index[1] -= shiftIndex[1];
+    
+    region.SetIndex(index);
+    m_SinkList[inputIndex]->Write(region);
   }
 }
 
 MultiImageFileWriter::RegionType MultiImageFileWriter::GetStreamRegion(int inputIndex)
 {
   const SinkBase::Pointer sink   = m_SinkList[inputIndex];
-  RegionType              region = sink->GetInput()->GetLargestPossibleRegion();
+  RegionType              region = sink->GetRegionToWrite();
 
   m_StreamingManager->GetSplitter()->GetSplit(m_CurrentDivision, m_NumberOfDivisions, region);
   return region;

@@ -27,6 +27,7 @@
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #include <boost/test/unit_test.hpp>
 #pragma GCC diagnostic pop
 #else
@@ -827,7 +828,7 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Geometries)
     BOOST_REQUIRE(p);
     BOOST_CHECK(!f.GetGeometry());
     BOOST_CHECK(ogr::Equals(*p, ref));
-    f.SetGeometryDirectly(otb::move(p));
+    f.SetGeometryDirectly(std::move(p));
     BOOST_CHECK(!p);
     ++u;
   }

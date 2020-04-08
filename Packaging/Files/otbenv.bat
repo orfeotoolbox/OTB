@@ -26,7 +26,7 @@ call :prefix_path PYTHONPATH "%CURRENT_SCRIPT_DIR%lib\python"
 call :prefix_path OTB_APPLICATION_PATH "%CURRENT_SCRIPT_DIR%lib\otb\applications"
 
 set GDAL_DATA=%CURRENT_SCRIPT_DIR%share\data
-set GEOTIFF_CSV=%CURRENT_SCRIPT_DIR%share\epsg_csv
+set PROJ_LIB=%CURRENT_SCRIPT_DIR%share\proj
 set GDAL_DRIVER_PATH=disable
 :: Set numeric locale to C
 set LC_NUMERIC=C

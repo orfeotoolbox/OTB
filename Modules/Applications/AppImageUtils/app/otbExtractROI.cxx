@@ -364,10 +364,13 @@ private:
     inImage->UpdateOutputInformation();
     if (region.Crop(inImage->GetLargestPossibleRegion()))
     {
-      SetParameterInt("sizex", region.GetSize(0));
-      SetParameterInt("sizey", region.GetSize(1));
-      SetParameterInt("startx", region.GetIndex(0));
-      SetParameterInt("starty", region.GetIndex(1));
+      /* SetParameterInt() resets UserValue flag when called from DoExecute(). Disable this behaviour.*/
+      DisableInPrivateDo();
+      SetParameterInt("sizex", region.GetSize(0), IsParameterEnabled("sizex") && HasUserValue("sizex"));
+      SetParameterInt("sizey", region.GetSize(1), IsParameterEnabled("sizey") && HasUserValue("sizey"));
+      SetParameterInt("startx", region.GetIndex(0), IsParameterEnabled("startx") && HasUserValue("startx"));
+      SetParameterInt("starty", region.GetIndex(1), IsParameterEnabled("starty") && HasUserValue("starty"));
+      EnableInPrivateDo(); // Restore default
       return true;
     }
     return false;
@@ -803,7 +806,7 @@ private:
 
     if (!CropRegionOfInterest())
       otbAppLogWARNING(<< "Could not extract the ROI as it is out of the "
-                          "input image.");
+                       "input image.");
 
     ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
     extractROIFilter->SetInput(inImage);

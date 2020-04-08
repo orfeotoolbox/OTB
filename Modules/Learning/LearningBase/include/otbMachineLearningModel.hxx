@@ -43,12 +43,6 @@ MachineLearningModel<TInputValue, TOutputValue, TConfidenceValue>::MachineLearni
 {
 }
 
-
-template <class TInputValue, class TOutputValue, class TConfidenceValue>
-MachineLearningModel<TInputValue, TOutputValue, TConfidenceValue>::~MachineLearningModel()
-{
-}
-
 template <class TInputValue, class TOutputValue, class TConfidenceValue>
 void MachineLearningModel<TInputValue, TOutputValue, TConfidenceValue>::SetRegressionMode(bool flag)
 {

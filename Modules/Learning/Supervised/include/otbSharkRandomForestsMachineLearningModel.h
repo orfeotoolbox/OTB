@@ -152,7 +152,7 @@ protected:
   SharkRandomForestsMachineLearningModel();
 
   /** Destructor */
-  virtual ~SharkRandomForestsMachineLearningModel();
+  ~SharkRandomForestsMachineLearningModel() override = default;
 
   /** Predict values using the model */
   TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;

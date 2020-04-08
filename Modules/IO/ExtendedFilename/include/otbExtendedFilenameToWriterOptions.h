@@ -69,6 +69,7 @@ public:
     std::pair<bool, std::string> simpleFileName;
     std::pair<bool, bool>        writeGEOMFile;
     std::pair<bool, bool>        writeRPCTags;
+    std::pair<bool, bool>        multiWrite;
     std::pair<bool, GDALCOType>  gdalCreationOptions;
     std::pair<bool, std::string> streamingType;
     std::pair<bool, std::string> streamingSizeMode;
@@ -93,6 +94,7 @@ public:
   bool           NoDataValueIsSet() const;
   bool           WriteGEOMFileIsSet() const;
   bool           WriteRPCTagsIsSet() const;
+  bool           GetMultiWrite() const;
   NoDataListType GetNoDataList() const
   {
     return m_NoDataList;

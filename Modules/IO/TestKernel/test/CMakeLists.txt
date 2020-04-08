@@ -27,8 +27,9 @@ set(OTBTestKernelTests
   otbCompareAsciiTests6.cxx
   otbCompareAsciiTestScientificNotation.cxx
   otbCompareAsciiTests.cxx
+  otbCopyTest.cxx
   otbCompareAsciiTestsEpsilon3_WhiteSpace.cxx
-  otbTestKernelTestDriver.cxx  )
+  otbTestKernelTestDriver.cxx )
 
 add_executable(otbTestKernelTestDriver ${OTBTestKernelTests})
 target_link_libraries(otbTestKernelTestDriver ${OTBTestKernel-Test_LIBRARIES})
@@ -175,3 +176,32 @@ otb_add_test(NAME tsTvCompareAscii6 COMMAND otbTestKernelTestDriver
   ${TEMP}/tsTvCompareAscii6_ref.txt
   ${TEMP}/tsTvCompareAscii6_test.txt
   )
+
+otb_add_test(NAME tsTvCompareImages_SameImages COMMAND otbTestKernelTestDriver
+  --compare-image 0
+  ${INPUTDATA}/Spot5-Gloucester-before.tif
+  ${TEMP}/tsTvCompareImages_SameImages.tif
+  otbCopyTest
+  ${INPUTDATA}/Spot5-Gloucester-before.tif
+  ${TEMP}/tsTvCompareImages_SameImages.tif
+  )
+
+otb_add_test(NAME tsTvCompareImages_DifferentImages COMMAND otbTestKernelTestDriver
+  --compare-image 0
+  ${INPUTDATA}/Spot5-Gloucester-after.tif
+  ${TEMP}/tsTvCompareImages_DifferentImages.tif
+  otbCopyTest
+  ${INPUTDATA}/Spot5-Gloucester-before.tif
+  ${TEMP}/tsTvCompareImages_DifferentImages.tif
+  )
+set_property(TEST tsTvCompareImages_DifferentImages PROPERTY WILL_FAIL true)
+
+otb_add_test(NAME tsTvCompareImages_DifferentSizes COMMAND otbTestKernelTestDriver
+  --compare-image 0
+  ${INPUTDATA}/ROI_QB_MUL_1.tif
+  ${TEMP}/tsTvCompareImages_DifferentSizes.tif
+  otbCopyTest
+  ${INPUTDATA}/Spot5-Gloucester-before.tif
+  ${TEMP}/tsTvCompareImages_DifferentSizes.tif
+  )
+set_property(TEST tsTvCompareImages_DifferentSizes PROPERTY WILL_FAIL true)

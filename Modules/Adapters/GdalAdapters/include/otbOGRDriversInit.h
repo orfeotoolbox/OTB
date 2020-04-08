@@ -21,8 +21,6 @@
 #ifndef otbOGRDriversInit_h
 #define otbOGRDriversInit_h
 
-#include <boost/noncopyable.hpp>
-
 #include "OTBGdalAdaptersExport.h"
 
 namespace otb
@@ -45,7 +43,7 @@ namespace ogr
  * VC++)
  * - Non-copyable
  */
-class OTBGdalAdapters_EXPORT Drivers : private boost::noncopyable
+class OTBGdalAdapters_EXPORT Drivers
 {
   /** \name Singleton related functions */
   //@{
@@ -57,10 +55,13 @@ private:
    * Calls \c OGRRegisterAll().
    */
   Drivers();
-  /** Destructor.
-   * Calls \c OGRCleanupAll().
-   */
-  ~Drivers();
+  /** Destructor. */
+  ~Drivers() = default;
+  
+  /** Non copyable class */
+  Drivers(const Drivers&) = delete;
+  Drivers& operator=(const Drivers&) = delete;
+
   //@}
 };
 }

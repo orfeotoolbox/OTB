@@ -843,6 +843,9 @@ public:
 
   bool IsExecuteDone();
 
+  /** Is multiWriting enabled for this application ? */
+  bool IsMultiWritingEnabled();
+
 protected:
   /** Constructor */
   Application();
@@ -867,11 +870,10 @@ protected:
   /** Add a parameterRAM method with parameter*/
   void AddRAMParameter(std::string const& paramKey, std::string const& paramName, unsigned int defaultValue);
 
-  /** Add a parameterRAND method with no parameter*/
+  /** Add a parameterRAND method with no parameter */
   void AddRANDParameter(std::string const& paramKey = "rand");
 
-  /** Add a parameterRAND method with parameter
-   * by default seed initialization is based on time value*/
+  /** Add a parameterRAND method with parameter */
   void AddRANDParameter(std::string const& paramKey, std::string const& paramName, unsigned int defaultValue);
 
   /** Remove the items added to the ListWidget */
@@ -913,6 +915,15 @@ protected:
    */
   template <class TImageType>
   void SetParameterOutputImage(std::string const& parameter, TImageType* value);
+
+  /** Enable/Disable multiWriting */
+  itkSetMacro(MultiWriting, bool);
+
+  /* Enable in-application prevention of modifications to m_UserValue (default behaviour) */
+  void EnableInPrivateDo();
+
+  /* Disable in-application prevention of modifications to m_UserValue */
+  void DisableInPrivateDo();
 
 private:
   /* Implement this method to add parameters */
@@ -967,6 +978,9 @@ private:
 
   /** Flag to check if Execute has already been called */
   bool m_ExecuteDone;
+
+  /** Flag that determine if a multiWriter should be used to write output images */
+  bool m_MultiWriting;
 
   /**
     * Declare the class

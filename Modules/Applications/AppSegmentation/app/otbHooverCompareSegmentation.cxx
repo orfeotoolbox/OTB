@@ -198,6 +198,8 @@ private:
     SetDocExampleParameterValue("inms", "maur_labelled.tif");
     SetDocExampleParameterValue("outgt", "maur_colored_GT.tif uint8");
 
+    SetMultiWriting(true);
+
     SetOfficialDocLink();
   }
 

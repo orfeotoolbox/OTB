@@ -62,7 +62,7 @@ public:
 
 protected:
   NeuralNetworkMachineLearningModelFactory();
-  ~NeuralNetworkMachineLearningModelFactory() override;
+  ~NeuralNetworkMachineLearningModelFactory() override = default;
 
 private:
   NeuralNetworkMachineLearningModelFactory(const Self&) = delete;

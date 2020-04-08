@@ -110,7 +110,7 @@ protected:
 
   /** Compute the requested input region, given an output region.
    * If the input requested region is outside the largest input region, a mirror padding
-   * is necessary. The returned tuple is composed of the following paramters :
+   * is necessary. The returned tuple is composed of the following parameters :
    *  * input requested region (always lie inside the largest input region)
    *  * top rows, left cols, bottom rows, right cols : numbers of rows/cols to add with a mirror padding
    *  * boolean : if true, a mirror padding (in at least one direction) has to be computed

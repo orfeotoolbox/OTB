@@ -62,7 +62,7 @@ public:
 
 protected:
   RandomForestsMachineLearningModelFactory();
-  ~RandomForestsMachineLearningModelFactory() override;
+  ~RandomForestsMachineLearningModelFactory() override = default;
 
 private:
   RandomForestsMachineLearningModelFactory(const Self&) = delete;

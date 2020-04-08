@@ -20,7 +20,14 @@
 
 #include "otbCoordinateTransformation.h"
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4251)
 #include "ogr_spatialref.h"
+#pragma warning(pop)
+#else
+#include "ogr_spatialref.h"
+#endif
 
 #include <sstream>
 #include <stdexcept>

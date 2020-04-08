@@ -60,7 +60,7 @@ public:
 
 protected:
   LibSVMMachineLearningModelFactory();
-  ~LibSVMMachineLearningModelFactory() override;
+  ~LibSVMMachineLearningModelFactory() override = default;
 
 private:
   LibSVMMachineLearningModelFactory(const Self&) = delete;

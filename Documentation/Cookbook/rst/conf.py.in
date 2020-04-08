@@ -220,5 +220,5 @@ man_pages = [
 
 extlinks = {
     'doxygen': ("http://www.orfeo-toolbox.org/doxygen/classotb_1_1%s.html", "otb::"),
-    'doxygen-itk': ("http://www.itk.org/Doxygen/html/classitk_1_1%s.html", "itk::")
+    'doxygen-itk': ("http://www.itk.org/Doxygen413/html/classitk_1_1%s.html", "itk::")
 }

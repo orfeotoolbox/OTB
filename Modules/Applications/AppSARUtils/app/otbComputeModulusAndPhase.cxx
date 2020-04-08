@@ -89,6 +89,7 @@ private:
                             "the imaginary part of the input complex image.");
 
     AddRAMParameter();
+    SetMultiWriting(true);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "monobandComplexFloat.tif");

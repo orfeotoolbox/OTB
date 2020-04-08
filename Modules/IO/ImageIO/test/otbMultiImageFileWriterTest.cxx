@@ -31,8 +31,9 @@ int otbMultiImageFileWriterTest(int argc, char* argv[])
   typedef double PixelType2;
   typedef otb::Image<PixelType2, 2> ImageType2;
   typedef otb::ImageFileReader<ImageType2> ReaderType2;
+  typedef otb::ImageFileWriter<ImageType2> WriterType2;
 
-  typedef otb::MultiImageFileWriter WriterType;
+  typedef otb::MultiImageFileWriter MultiWriterType;
 
   if (argc < 6)
   {
@@ -52,9 +53,13 @@ int otbMultiImageFileWriterTest(int argc, char* argv[])
   ReaderType2::Pointer reader2 = ReaderType2::New();
   reader2->SetFileName(inputImageFileName2);
 
-  WriterType::Pointer writer = WriterType::New();
+  WriterType2::Pointer writer2 = WriterType2::New();
+  writer2->SetFileName(outputImageFileName2);
+  writer2->SetInput(reader2->GetOutput());
+
+  MultiWriterType::Pointer writer = MultiWriterType::New();
   writer->AddInputImage(reader1->GetOutput(), outputImageFileName1);
-  writer->AddInputImage(reader2->GetOutput(), outputImageFileName2);
+  writer->AddInputWriter<WriterType2>(writer2);
   writer->SetNumberOfLinesStrippedStreaming(numberOfLinesPerStrip);
 
   writer->Update();

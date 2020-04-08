@@ -42,11 +42,6 @@ NeuralNetworkMachineLearningModelFactory<TInputValue, TOutputValue>::NeuralNetwo
 }
 
 template <class TInputValue, class TOutputValue>
-NeuralNetworkMachineLearningModelFactory<TInputValue, TOutputValue>::~NeuralNetworkMachineLearningModelFactory()
-{
-}
-
-template <class TInputValue, class TOutputValue>
 const char* NeuralNetworkMachineLearningModelFactory<TInputValue, TOutputValue>::GetITKSourceVersion(void) const
 {
   return ITK_SOURCE_VERSION;

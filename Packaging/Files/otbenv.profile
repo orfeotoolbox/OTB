@@ -57,15 +57,14 @@ LC_NUMERIC=C
 # set GDAL_DATA variable used by otb application
 GDAL_DATA=OUT_DIR/share/gdal
 
-export GDAL_DRIVER_PATH=disable
+PROJ_LIB=OUT_DIR/share/proj
 
-# set GEOTIFF_CSV variable used by otb application
-GEOTIFF_CSV=OUT_DIR/share/epsg_csv
+export GDAL_DRIVER_PATH=disable
 
 # export variables
 export LC_NUMERIC
 export GDAL_DATA
-export GEOTIFF_CSV
+export PROJ_LIB
 export OTB_APPLICATION_PATH
 export PATH
 export PYTHONPATH
