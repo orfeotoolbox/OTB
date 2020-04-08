@@ -176,11 +176,6 @@ public:
    */
   static void UTMFromGeoPoint(double lon, double lat, unsigned int& zone, hemisphere& hem);
 
-  /**
-   * Returns the internal OGRSpatialReference
-   */
-  OGRSpatialReference* getOGRSpatialReference();
-
 private:
   /// Constructor from wrapped type. ref will be cloned.
   SpatialReference(const OGRSpatialReference* ref);

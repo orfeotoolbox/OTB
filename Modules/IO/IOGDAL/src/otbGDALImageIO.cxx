@@ -1176,7 +1176,7 @@ void GDALImageIO::Write(const void* buffer)
   if (m_epsgCode != 0)
   {
     auto spatialReference = SpatialReference::FromEPSG(m_epsgCode);
-    m_Dataset->GetDataSet()->SetSpatialRef(spatialReference.getOGRSpatialReference());
+    m_Dataset->GetDataSet()->SetProjection(spatialReference.ToWkt().c_str());
   }
 
   // Convert buffer from void * to unsigned char *

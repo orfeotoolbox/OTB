@@ -294,11 +294,6 @@ void SpatialReference::UTMFromGeoPoint(double lon, double lat, unsigned int& zon
   assert(zone <= 60);
 }
 
-OGRSpatialReference* SpatialReference::getOGRSpatialReference()
-{
-  return m_SR.get();
-}
-
 #if GDAL_VERSION_NUM >= 3000000
 void SpatialReference::SetAxisMappingStrategy(OSRAxisMappingStrategy strategy)
 {
