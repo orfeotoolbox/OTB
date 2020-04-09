@@ -52,9 +52,7 @@ public:
 
 protected:
   GDALImageMetadataInterface();
-  ~GDALImageMetadataInterface() override
-  {
-  }
+  ~GDALImageMetadataInterface() override = default;
 
 private:
   GDALImageMetadataInterface(const Self&) = delete;

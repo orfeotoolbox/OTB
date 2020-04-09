@@ -80,11 +80,7 @@ public:
   bool HasValue(const char * path, int band=-1)
     {
     const char * ret = GetMetadataValue(path, band);
-    if (ret == nullptr)
-      {
-      return false;
-      }
-    return true;
+    return ret;
     }
   
   // utility functions
