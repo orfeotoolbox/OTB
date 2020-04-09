@@ -22,7 +22,6 @@
 #define otbMetadataSupplierInterface_h
 
 #include "OTBMetadataExport.h"
-#include "itkExceptionObject.h"
 #include <vector>
 #include <string>
 #include "otbStringUtils.h"

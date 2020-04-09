@@ -24,6 +24,7 @@
 #include "otbMetaDataKey.h"
 #include "otbImageKeywordlist.h"
 #include "otbVectorDataKeywordlist.h"
+#include "otbGeometryMetadata.h"
 #include "itkMetaDataDictionary.h"
 #include "OTBApplicationEngineExport.h"
 
