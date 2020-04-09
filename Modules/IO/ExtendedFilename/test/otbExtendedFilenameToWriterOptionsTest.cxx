@@ -46,17 +46,21 @@ int otbExtendedFilenameToWriterOptions(int itkNotUsed(argc), char* argv[])
 
   file << helper->gdalCreationOptionsIsSet() << std::endl;
   if (helper->gdalCreationOptionsIsSet())
+  {
     for (unsigned int i = 0; i < helper->GetgdalCreationOptions().size(); i++)
     {
       file << helper->GetgdalCreationOptions()[i] << std::endl;
     }
+  }
 
   file << helper->NoDataValueIsSet() << std::endl;
   if (helper->NoDataValueIsSet())
-    for (unsigned int i = 0; i < helper->GetNoDataList().size(); i++)
+  {
+    for (auto const& nodata_kv : helper->GetNoDataList())
     {
-      file << helper->GetNoDataList()[i].first << " ; " << helper->GetNoDataList()[i].second << std::endl;
+      file << nodata_kv.first << " ; " << nodata_kv.second << "\n";
     }
+  }
 
   file << helper->SrsValueIsSet() << std::endl;
   if (helper->SrsValueIsSet())
