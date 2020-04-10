@@ -292,9 +292,18 @@ ImageMetadata ImageMetadata::slice(int start, int end)
 }
 
 /** concatenate with an other ImageMetadata */
-void ImageMetadata::append(const ImageMetadata& )
+void ImageMetadata::append(const ImageMetadata& imd)
 {
-  // TODO
+  // Copy the keys
+  this->GeometryKeys.insert(imd.GeometryKeys.begin(), imd.GeometryKeys.end());
+  this->NumericKeys.insert(imd.NumericKeys.begin(), imd.NumericKeys.end());
+  this->StringKeys.insert(imd.StringKeys.begin(), imd.StringKeys.end());
+  this->LUT1DKeys.insert(imd.LUT1DKeys.begin(), imd.LUT1DKeys.end());
+  this->LUT2DKeys.insert(imd.LUT2DKeys.begin(), imd.LUT2DKeys.end());
+  this->TimeKeys.insert(imd.TimeKeys.begin(), imd.TimeKeys.end());
+  this->ExtraKeys.insert(imd.ExtraKeys.begin(), imd.ExtraKeys.end());
+  // Copy the bands
+  this->Bands.insert(this->Bands.end(), imd.Bands.begin(), imd.Bands.end());
 }
 
 /** if all bands share the same value of a key, put it at top level */

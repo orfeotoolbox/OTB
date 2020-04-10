@@ -191,6 +191,15 @@ int otbImageMetadataTest(int argc, char* argv[])
   md3 = md2.slice(0, 1);
   outfile << "md3: "<< md3 << "\n";
 
+  ImageMetadata md4;
+  md4.Add(MDStr::SensorID, "PHR");
+  md4.Add(MDStr::ProductType, "Official");
+  md4.Add(std::string("Comment"), std::string("Test append"));
+  bmd.Add(MDStr::BandName, "B4");
+  md4.Bands.push_back(bmd);
+  md3.append(md4);
+  outfile << "md3_append: "<< md3 << "\n";
+
   outfile.close();
   return EXIT_SUCCESS;
 }

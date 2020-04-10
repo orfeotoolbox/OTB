@@ -232,7 +232,8 @@ public:
   /** Extract metadata from a subset of the bands */
   ImageMetadata slice(int start, int end);
 
-  /** concatenate with an other ImageMetadata */
+  /** concatenate with an other ImageMetadata
+   * If a key exists in bot ImageMetadata, keeps the value of this ImageMetadata.*/
   void append(const ImageMetadata& );
 
   /** if all bands share the same value of a key, put it at top level */
