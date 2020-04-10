@@ -272,8 +272,23 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist&)
 
 ImageMetadata ImageMetadata::slice(int start, int end)
 {
-  // TODO
-  return ImageMetadata();
+  assert(start <= end);
+
+  ImageMetadata imd;
+  // Copy the keys
+  imd.GeometryKeys = this->GeometryKeys;
+  imd.NumericKeys = this->NumericKeys;
+  imd.StringKeys = this->StringKeys;
+  imd.LUT1DKeys = this->LUT1DKeys;
+  imd.LUT2DKeys = this->LUT2DKeys;
+  imd.TimeKeys = this->TimeKeys;
+  imd.ExtraKeys = this->ExtraKeys;
+  // Copy the bands
+  auto first = this->Bands.cbegin() + start;
+  auto last = this->Bands.cbegin() + end + 1;
+  ImageMetadataBandsType vect(first, last);
+  imd.Bands = vect;
+  return imd;
 }
 
 /** concatenate with an other ImageMetadata */

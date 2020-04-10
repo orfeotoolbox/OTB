@@ -225,7 +225,8 @@ class OTBMetadata_EXPORT ImageMetadata: public ImageMetadataBase
 {
 public:
   /** Band-specific metadatas */
-  std::vector<ImageMetadataBase> Bands;
+  using ImageMetadataBandsType = std::vector<ImageMetadataBase>;
+  ImageMetadataBandsType Bands;
 
   // utility functions
   /** Extract metadata from a subset of the bands */

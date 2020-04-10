@@ -20,15 +20,26 @@
 
 #include "otbImageMetadata.h"
 #include <iostream>
+#include <fstream>
 #include "boost/optional.hpp"
 #include <bitset>
 #include <utility>
 #include <cstdlib>
 #include "otbStopwatch.h"
 
-int otbImageMetadataTest(int, char*[])
+int otbImageMetadataTest(int argc, char* argv[])
 {
+  if (argc < 2)
+  {
+    std::cerr << "Usage: otbImageMetadataTest /path/to/output/file  !" << std::endl;
+    return EXIT_FAILURE;
+  }
+
   using namespace otb;
+
+  const char*   outFileName = argv[1];
+  std::ofstream outfile;
+  outfile.open(outFileName);
 
   MetaData::Time mytime;
   int year, month;
@@ -42,9 +53,9 @@ int otbImageMetadataTest(int, char*[])
     }
   catch(boost::bad_lexical_cast&)
     {
-    std::cout << "Bad cast into MetaData::Time\n";
+    outfile << "Bad cast into MetaData::Time\n";
     }
-  std::cout << "mytime : "<< mytime << "\n";
+  outfile << "mytime : "<< mytime << "\n";
 
   try
     {
@@ -53,16 +64,16 @@ int otbImageMetadataTest(int, char*[])
     }
   catch(std::runtime_error&)
     {
-    std::cout << "Bad Utils::LexicalCast into MetaData::Time\n";
+    outfile << "Bad Utils::LexicalCast into MetaData::Time\n";
     }
 
-  std::cout << "mytime : "<< mytime << "\n";
+  outfile << "mytime : "<< mytime << "\n";
 
   MDNum someKey;
   someKey = static_cast<MDNum>(3);
   if (someKey == MDNum::PhysicalGain)
     {
-    std::cout << "Found physical gain\n";
+    outfile << "Found physical gain\n";
     }
   
   struct FirstTry
@@ -84,9 +95,9 @@ int otbImageMetadataTest(int, char*[])
       std::array<double, static_cast<int>(MDNum::END) > >NumKeys;
     };
 
-  std::cout << "First try size: "<<sizeof(FirstTry)<< "\n";
-  std::cout << "Second try size: "<<sizeof(SecondTry)<< "\n";
-  std::cout << "Third try size: "<<sizeof(ThirdTry)<< "\n";
+  outfile << "First try size: "<<sizeof(FirstTry)<< "\n";
+  outfile << "Second try size: "<<sizeof(SecondTry)<< "\n";
+  outfile << "Third try size: "<<sizeof(ThirdTry)<< "\n";
 
   FirstTry firstStruct;
   SecondTry secondStruct;
@@ -151,6 +162,8 @@ int otbImageMetadataTest(int, char*[])
   ImageMetadata md;
   md.Add(MDStr::SensorID, "PHR");
   md.Add(MDGeom::ProjectionWKT, std::string("UTM projRef"));
+  md.Add(MDTime::ProductionDate, mytime);
+  md.Add(std::string("Comment"), std::string("Test Extrakeys"));
 
   ImageMetadataBase bmd;
   bmd.Add(MDStr::BandName, "B3");
@@ -170,13 +183,14 @@ int otbImageMetadataTest(int, char*[])
   md.Bands.push_back(bmd);
 
   ImageMetadata md2;
-
   md2 = md;
-
   md.Add(MDGeom::ProjectionWKT, std::string("Lambert projRef"));
-  //~ md.GeoTransform[5] = 1.0;
-
-  std::cout << "md2: "<< md2 << "\n";
+  outfile << "md2: "<< md2 << "\n";
   
-  return 0;
+  ImageMetadata md3;
+  md3 = md2.slice(0, 1);
+  outfile << "md3: "<< md3 << "\n";
+
+  outfile.close();
+  return EXIT_SUCCESS;
 }

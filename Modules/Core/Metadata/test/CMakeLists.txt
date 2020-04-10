@@ -358,5 +358,10 @@ otb_add_test(NAME ioTvSarCalibrationLookupDataTest_RADARSAT2 COMMAND otbMetadata
   ${TEMP}/ioTvSarCalibrationLookupDataTest_RADARSAT2.txt
   )
 
-otb_add_test(NAME coreImageMetadataTest
-  COMMAND otbMetadataTestDriver otbImageMetadataTest)
+otb_add_test(NAME coreImageMetadataTest COMMAND otbMetadataTestDriver 
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvcoreImageMetadataTest.txt
+  ${TEMP}/ioTvcoreImageMetadataTest.txt
+  otbImageMetadataTest
+  ${TEMP}/ioTvcoreImageMetadataTest.txt
+  )
+  
