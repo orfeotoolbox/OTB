@@ -1,0 +1,52 @@
+mytime : 2009-08-10T10:30:08.142149Z
+mytime : 2009-08-10T10:30:08.142149Z
+First try size: 512
+Second try size: 264
+Third try size: 264
+md2: {{"Extra.Comment": "Test Extrakeys",
+"ProductionDate": "2009-08-10T10:30:08.142149Z",
+"ProjectionWKT": "UTM projRef",
+"SensorID": "PHR",
+}Bands[{"": "B3",
+"PhysicalBias": "1",
+"PhysicalGain": "2",
+},{"": "B2",
+"PhysicalBias": "2",
+"PhysicalGain": "3",
+},{"": "B1",
+"PhysicalBias": "3",
+"PhysicalGain": "4",
+},]
+}
+md3: {{"Extra.Comment": "Test Extrakeys",
+"ProductionDate": "2009-08-10T10:30:08.142149Z",
+"ProjectionWKT": "UTM projRef",
+"SensorID": "PHR",
+}Bands[{"": "B3",
+"PhysicalBias": "1",
+"PhysicalGain": "2",
+},{"": "B2",
+"PhysicalBias": "2",
+"PhysicalGain": "3",
+},]
+}
+md3_append: {{"Extra.Comment": "Test Extrakeys",
+"ProductType": "Official",
+"ProjectionEPSG": "4326",
+"ProjectionWKT": "UTM projRef",
+"ProjectionProj": "+proj=longlat +datum=WGS84 +no_defs ",
+"RPC": "{"LineOffset": "0", "SampleOffset": "0", "LatOffset": "0", "LonOffset": "0", "HeightOffset": "0", "LineScale": "0", "SampleScale": "0", "LatScale": "0", "LonScale": "0", "HeightScale": "0", "LineNum": [ "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0", ], "LineDen": [ "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0", ], "SampleNum": [ "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0", ], "SampleDen": [ "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0",  "0", ], }",
+"ProductionDate": "2009-08-10T10:30:08.142149Z",
+"GCP": "{"Projection": "", [{"GCP_Id": "", "GCP_Info": "", "GCP_Row": "0", "GCP_Col": "0", "GCP_X": "0", "GCP_Y": "0", "GCP_Z": "0", }, ]}",
+"SensorID": "PHR",
+}Bands[{"": "B3",
+"PhysicalBias": "1",
+"PhysicalGain": "2",
+},{"": "B2",
+"PhysicalBias": "2",
+"PhysicalGain": "3",
+},{"": "B4",
+"PhysicalBias": "3",
+"PhysicalGain": "4",
+},]
+}

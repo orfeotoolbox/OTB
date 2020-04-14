@@ -26,6 +26,7 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
 
 namespace otb
 {
@@ -66,6 +67,7 @@ public:
   ~OTB_GCP();
 
   void Print(std::ostream& os) const;
+  std::string ToJSON(bool multiline=false) const;
 };
 
 namespace Projection
@@ -76,6 +78,9 @@ struct OTBMetadata_EXPORT GCPParam
   std::string GCPProjection;
 
   std::vector<OTB_GCP> GCPs;
+
+  // JSON export
+  std::string ToJSON(bool multiline=false) const;
 };
 
 /** \struct RPCParam
@@ -139,6 +144,18 @@ struct OTBMetadata_EXPORT RPCParam
   double SampleDen[20] = {
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
     0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+
+  // JSON export
+  std::string ToJSON(bool multiline=false) const;
+  inline static std::string doubleArrayToString(const double* array)
+  {
+    std::ostringstream oss;
+    oss << "[";
+    for (int loop = 0 ; loop < 20  ; loop++)
+    	oss << " \"" << array[loop] << "\", ";
+    oss << "]";
+    return oss.str();
+  };
 
 };
 

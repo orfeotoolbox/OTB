@@ -210,35 +210,65 @@ bool ImageMetadataBase::Has(const std::string& key) const
 void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
 {
   kwl.clear();
-  // TODO : Geometry
-  // The key MDGeom::SensorGeometry should be exported as "<typeinfo>" where
-  // typeinfo is boost::any::type().name()
-  for (const auto& kv : StringKeys)
+  std::string cast_string;
+
+  // Converting the GeomKeys
+  for (const auto& kv : GeometryKeys)
+  {
+
+    if (kv.first == MDGeom::RPC)
     {
-    kwl.emplace(MetaData::MDStrNames[kv.first], kv.second);
+      Projection::RPCParam rpcStruct = boost::any_cast<Projection::RPCParam>(kv.second);
+      cast_string = rpcStruct.ToJSON();
     }
-  for (const auto& kv : NumericKeys)
+    else if (kv.first == MDGeom::ProjectionEPSG)
     {
+      cast_string = std::to_string(boost::any_cast<int>(kv.second));
+    }
+    else if (kv.first == MDGeom::GCP)
+    {
+      Projection::GCPParam gcpStruct = boost::any_cast<Projection::GCPParam>(kv.second);
+      cast_string = gcpStruct.ToJSON();
+    }
+    // TODO : MDGeom::SensorGeometry (should be exported as "<typeinfo>" where typeinfo is boost::any::type().name()
+    // TODO : MDGeom::SAR
+    // TODO : MDGeom::Adjustment
+    else
+    {
+      cast_string = boost::any_cast<std::string>(kv.second);
+    }
+    kwl.emplace(MetaData::MDGeomNames[kv.first], cast_string);
+
+  }
+  // Converting the StringKeys
+  for (const auto& kv : StringKeys)
+  {
+    kwl.emplace(MetaData::MDStrNames[kv.first], kv.second);
+  }
+  // Converting the NumericKeys
+  for (const auto& kv : NumericKeys)
+  {
     std::ostringstream oss;
     oss << kv.second;
     kwl.emplace(MetaData::MDNumNames[kv.first], oss.str());
-    }
+  }
+  // Converting the LUT1DKeys
   // TODO : LUT1D
-
+  // Convereting the LUT2DKeys
   // TODO : LUT2D
-
+  // Converting the TimeKeys
   for (const auto& kv : TimeKeys)
-    {
+  {
     std::ostringstream oss;
     oss << kv.second;
     kwl.emplace(MetaData::MDTimeNames[kv.first], oss.str());
-    }
-  
+  }
+  // Converting the ExtraKeys
   std::string prefix("Extra.");
   for (const auto& kv : ExtraKeys)
-    {
+  {
     kwl.emplace(prefix + kv.first, kv.second);
-    }
+  }
 }
 
 std::string ImageMetadataBase::ToJSON(bool multiline) const
@@ -286,8 +316,7 @@ ImageMetadata ImageMetadata::slice(int start, int end)
   // Copy the bands
   auto first = this->Bands.cbegin() + start;
   auto last = this->Bands.cbegin() + end + 1;
-  ImageMetadataBandsType vect(first, last);
-  imd.Bands = vect;
+  imd.Bands = ImageMetadataBandsType(first, last);
   return imd;
 }
 

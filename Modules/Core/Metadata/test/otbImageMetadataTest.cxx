@@ -38,8 +38,7 @@ int otbImageMetadataTest(int argc, char* argv[])
   using namespace otb;
 
   const char*   outFileName = argv[1];
-  std::ofstream outfile;
-  outfile.open(outFileName);
+  std::ofstream outfile(outFileName);
 
   MetaData::Time mytime;
   int year, month;
@@ -69,8 +68,7 @@ int otbImageMetadataTest(int argc, char* argv[])
 
   outfile << "mytime : "<< mytime << "\n";
 
-  MDNum someKey;
-  someKey = static_cast<MDNum>(3);
+  MDNum someKey = static_cast<MDNum>(3);
   if (someKey == MDNum::PhysicalGain)
     {
     outfile << "Found physical gain\n";
@@ -182,19 +180,24 @@ int otbImageMetadataTest(int argc, char* argv[])
   bmd.Add(MDNum::PhysicalBias,  3.0);
   md.Bands.push_back(bmd);
 
-  ImageMetadata md2;
-  md2 = md;
+  ImageMetadata md2 = md;
   md.Add(MDGeom::ProjectionWKT, std::string("Lambert projRef"));
   outfile << "md2: "<< md2 << "\n";
   
-  ImageMetadata md3;
-  md3 = md2.slice(0, 1);
+  ImageMetadata md3 = md2.slice(0, 1);
   outfile << "md3: "<< md3 << "\n";
 
   ImageMetadata md4;
   md4.Add(MDStr::SensorID, "PHR");
   md4.Add(MDStr::ProductType, "Official");
   md4.Add(std::string("Comment"), std::string("Test append"));
+  md4.Add(MDGeom::ProjectionEPSG, 4326);
+  md4.Add(MDGeom::ProjectionProj, std::string("+proj=longlat +datum=WGS84 +no_defs "));
+  Projection::RPCParam rpcStruct;
+  md4.Add(MDGeom::RPC, rpcStruct);
+  Projection::GCPParam gcpStruct;
+  gcpStruct.GCPs.push_back(OTB_GCP());
+  md4.Add(MDGeom::GCP, gcpStruct);
   bmd.Add(MDStr::BandName, "B4");
   md4.Bands.push_back(bmd);
   md3.append(md4);
