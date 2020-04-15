@@ -300,7 +300,7 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist&)
 // ----------------------- [ImageMetadata] ------------------------------
 
 
-ImageMetadata ImageMetadata::slice(int start, int end)
+ImageMetadata ImageMetadata::slice(int start, int end) const
 {
   assert(start <= end);
 

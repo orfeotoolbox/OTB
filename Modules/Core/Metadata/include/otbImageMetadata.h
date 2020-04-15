@@ -230,7 +230,7 @@ public:
 
   // utility functions
   /** Extract metadata from a subset of the bands */
-  ImageMetadata slice(int start, int end);
+  ImageMetadata slice(int start, int end) const;
 
   /** concatenate with an other ImageMetadata
    * If a key exists in bot ImageMetadata, keeps the value of this ImageMetadata.*/
