@@ -350,7 +350,8 @@ Application::Application()
     m_DocTags(),
     m_Doclink(""),
     m_IsInPrivateDo(false),
-    m_ExecuteDone(false)
+    m_ExecuteDone(false),
+    m_MultiWriting(false)
 {
   // Don't call Init from the constructor, since it calls a virtual method !
   m_Logger->SetName("Application.logger");
