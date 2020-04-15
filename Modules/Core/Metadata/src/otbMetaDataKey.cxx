@@ -187,6 +187,49 @@ std::istream& operator>>(std::istream& is, Time& val)
 
 #undef _OTB_ISTREAM_EXPECT
 
+std::string LUTAxis::ToJSON(bool multiline) const
+{
+  std::ostringstream oss;
+  std::string sep;
+  if (multiline)
+  {
+    sep = "\n";
+  }
+  oss << "{"
+      << "\"Size\": \"" << Size << "\", " << sep
+      << "\"Origin\": \"" << Origin << "\", " << sep
+      << "\"Spacing\": \"" << Spacing << "\", " << sep
+	  << "\"Values\": [";
+  for (const auto& value : Values)
+    oss << value << ", ";
+  oss << "]}";
+  return oss.str();
+}
+
+template <unsigned int VDim>
+std::string LUT<VDim>::ToJSON(bool multiline) const
+{
+  std::ostringstream oss;
+  std::string sep;
+  if (multiline)
+  {
+    sep = "\n";
+  }
+  oss << "{"
+      << "\"Axes\": [";
+  for (unsigned int loop = 0 ; loop < VDim  ; loop++)
+    oss << Axes[loop].ToJSON(multiline) << ", ";
+  oss << "], " << sep
+      << "\"Array\": [";
+  for (const auto& value : Array)
+    oss << value << ", ";
+  oss << "]}";
+  return oss.str();
+}
+
+template class LUT<1>;
+template class LUT<2>;
+
 // array<pair<> >
 // boost::flat_map<> 
 std::map<MDNum, std::string> MDNumNames = {

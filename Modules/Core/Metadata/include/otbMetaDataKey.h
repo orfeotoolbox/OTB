@@ -233,6 +233,8 @@ struct LUTAxis
   double Spacing;
   /** list of measurements (if irregular sampling) */
   std::vector<double> Values;
+  /** Export to JSON */
+  std::string ToJSON(bool multiline=false) const;
 };
 
 template <unsigned int VDim> class LUT
@@ -241,6 +243,8 @@ public:
   LUTAxis Axes[VDim];
   
   std::vector<double> Array;
+
+  std::string ToJSON(bool multiline=false) const;
 };
 
 typedef LUT<1> LUT1D;

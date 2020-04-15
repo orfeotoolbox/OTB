@@ -198,6 +198,13 @@ int otbImageMetadataTest(int argc, char* argv[])
   Projection::GCPParam gcpStruct;
   gcpStruct.GCPs.push_back(OTB_GCP());
   md4.Add(MDGeom::GCP, gcpStruct);
+  MetaData::LUT1D lut1d;
+  lut1d.Axes[0].Size = 3;
+  lut1d.Axes[0].Origin = 0;
+  lut1d.Axes[0].Spacing = 1;
+  std::vector<double>array({1.0, 2.0, 3.0});
+  lut1d.Array = array;
+  md4.Add(MDL1D::SpectralSensitivity, lut1d);
   bmd.Add(MDStr::BandName, "B4");
   md4.Bands.push_back(bmd);
   md3.append(md4);

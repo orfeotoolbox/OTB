@@ -253,9 +253,15 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
     kwl.emplace(MetaData::MDNumNames[kv.first], oss.str());
   }
   // Converting the LUT1DKeys
-  // TODO : LUT1D
+  for (const auto& kv : LUT1DKeys)
+  {
+    kwl.emplace(MetaData::MDL1DNames[kv.first], kv.second.ToJSON());
+  }
   // Convereting the LUT2DKeys
-  // TODO : LUT2D
+  for (const auto& kv : LUT2DKeys)
+  {
+    kwl.emplace(MetaData::MDL2DNames[kv.first], kv.second.ToJSON());
+  }
   // Converting the TimeKeys
   for (const auto& kv : TimeKeys)
   {
