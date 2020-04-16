@@ -1,0 +1,27 @@
+diff -burN qt-everywhere-src-5.14.1_orig/qtbase/src/gui/gui.pro  qt-everywhere-src-5.14.1/qtbase/src/gui/gui.pro  
+--- qt-everywhere-src-5.14.1_orig/qtbase/src/gui/gui.pro	2020-01-23 13:37:32.000000000 +0100
++++ qt-everywhere-src-5.14.1/qtbase/src/gui/gui.pro	2020-04-16 19:12:38.828564743 +0200
+@@ -53,6 +53,11 @@
+ 
+ QMAKE_LIBS += $$QMAKE_LIBS_GUI
+ 
++# load(qt_module) removes the sdk prefix on QMAKE_INCDIR_OPENGL 
++# (by including build//qtbase/src/gui/qtgui-config.pri)
++# We want to write the path with the sdk prefix in the cmake config file, 
++# to be able to find openGL headers in cmake.
++QMAKE_INCDIR_OPENGL_TMP = $${QMAKE_INCDIR_OPENGL}
+ load(qt_module)
+ load(cmake_functions)
+ 
+@@ -84,8 +89,8 @@
+         CMAKE_GL_HEADER_NAME = GLES2/gl2.h
+         CMAKE_QT_OPENGL_IMPLEMENTATION = GLESv2
+     } else: qtConfig(opengl) {
+-        !isEmpty(QMAKE_INCDIR_OPENGL): CMAKE_GL_INCDIRS = $$cmakeTargetPaths($$QMAKE_INCDIR_OPENGL)
+-        CMAKE_OPENGL_INCDIRS = $$cmakePortablePaths($$QMAKE_INCDIR_OPENGL)
++        !isEmpty(QMAKE_INCDIR_OPENGL_TMP): CMAKE_GL_INCDIRS = $$cmakeTargetPaths($$QMAKE_INCDIR_OPENGL_TMP)
++        CMAKE_OPENGL_INCDIRS = $$cmakePortablePaths($$QMAKE_INCDIR_OPENGL_TMP)
+         !qtConfig(dynamicgl): CMAKE_OPENGL_LIBS = $$cmakeProcessLibs($$QMAKE_LIBS_OPENGL)
+         !isEmpty(QMAKE_LIBDIR_OPENGL): CMAKE_OPENGL_LIBDIR = $$cmakePortablePaths($$QMAKE_LIBDIR_OPENGL)
+         CMAKE_GL_HEADER_NAME = GL/gl.h
+
