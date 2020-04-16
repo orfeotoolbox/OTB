@@ -494,11 +494,10 @@ inline QString ToQString<float>(const float& val)
 {
   assert(!std::isnan(val));
 
-  QString valf;
-
   // See IEEE-754
   // Ref. http://en.wikipedia.org/wiki/Single-precision_floating-point_format
-  valf.sprintf("%.9g", val);
+  
+  QString valf = QString("%1").arg(val, 0, 'g', 9);
 
 #if 0
   std::cout
@@ -522,11 +521,11 @@ inline QString ToQString<double>(const double& val)
 {
   assert(!std::isnan(val));
 
-  QString vald;
-
   // See IEEE-754
   // Ref. http://en.wikipedia.org/wiki/Double_precision
-  vald.sprintf("%.17g", val);
+
+  QString vald = QString("%1").arg(val, 0, 'g', 17);
+
 
 #if 0
   std::cout

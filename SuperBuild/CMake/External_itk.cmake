@@ -146,8 +146,8 @@ set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-${SB_ITK_VERSION_MAJOR}.${SB_
 
 ExternalProject_Add(ITK
   PREFIX ITK
-  URL "https://sourceforge.net/projects/itk/files/itk/4.13/InsightToolkit-4.13.1.tar.gz"
-  URL_MD5 c7e229802c4ee64e1b2a6d48b1df67e9
+  URL "https://sourceforge.net/projects/itk/files/itk/4.13/InsightToolkit-4.13.2.tar.gz"
+  URL_MD5 1b6ae17dbd605d6c36564cc3d2cc1ee8
   SOURCE_DIR ${ITK_SB_SRC}
   BINARY_DIR ${ITK_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
