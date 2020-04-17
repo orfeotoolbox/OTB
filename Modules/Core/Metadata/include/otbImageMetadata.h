@@ -51,7 +51,6 @@ class OTBMetadata_EXPORT ImageMetadataBase
 {
 public:
   /** type of dictionary used internally */
-
   template <class TKey, class TVal>
   using DictType = std::map<TKey, TVal>;
 
@@ -204,13 +203,17 @@ public:
   /** Test if a key is available */
   bool Has(const std::string& key) const;
 
-  // printing
+  // -------------------- Other --------------------------
+
+  /** Fill a KeywordList with the metadata */
   void ToKeywordlist(Keywordlist&) const;
   
+  /** Format the metadata to JSON */
   std::string ToJSON(bool multiline=false) const;
 
   /** Import metadata from a string keywordlist (will skip
-   *  MDGeom::SensorGeometry) */
+   *  MDGeom::SensorGeometry). Returns True if all keywords were
+   *  parsed correctly */
   bool FromKeywordlist(const Keywordlist&);
 };
 

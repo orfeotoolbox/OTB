@@ -1828,7 +1828,7 @@ void GDALImageIO::ExportMetadata()
     if (band.Has(MDNum::NoData))
       {
       // remove from kwl as it is already handled before
-      kwl.erase(MetaData::MDNumNames[MDNum::NoData]);
+      kwl.erase(MetaData::MDNumNames.left.at(MDNum::NoData));
       }
     for (const auto& kv : kwl)
       {

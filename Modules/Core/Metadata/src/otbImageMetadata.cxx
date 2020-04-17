@@ -243,14 +243,14 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
   // Converting the StringKeys
   for (const auto& kv : StringKeys)
   {
-    kwl.emplace(MetaData::MDStrNames[kv.first], kv.second);
+    kwl.emplace(MetaData::MDStrNames.left.at(kv.first), kv.second);
   }
   // Converting the NumericKeys
   for (const auto& kv : NumericKeys)
   {
     std::ostringstream oss;
     oss << kv.second;
-    kwl.emplace(MetaData::MDNumNames[kv.first], oss.str());
+    kwl.emplace(MetaData::MDNumNames.left.at(kv.first), oss.str());
   }
   // Converting the LUT1DKeys
   for (const auto& kv : LUT1DKeys)
@@ -267,7 +267,7 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
   {
     std::ostringstream oss;
     oss << kv.second;
-    kwl.emplace(MetaData::MDTimeNames[kv.first], oss.str());
+    kwl.emplace(MetaData::MDTimeNames.left.at(kv.first), oss.str());
   }
   // Converting the ExtraKeys
   std::string prefix("Extra.");
@@ -296,11 +296,49 @@ std::string ImageMetadataBase::ToJSON(bool multiline) const
   return oss.str();
 }
 
-bool ImageMetadataBase::FromKeywordlist(const Keywordlist&)
+bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
 {
-  // TODO
+  // Return value
+  bool all_parsed = true;
+  // search iterators
+  for (const auto& kv : kwl)
+  {
+  // TODO Converting the GeomKeys
   // skip MDGeom::SensorGeometry (they will be decoded by future SensorModelFactory)
-  return false;
+  // Converting the StringKeys
+    auto strKey = MetaData::MDStrNames.right.find(kv.first);
+    if (strKey != MetaData::MDStrNames.right.end())
+    {
+      this->Add(strKey->second, kv.second);
+      continue;
+    }
+  // Converting the NumericKeys
+    auto numKey = MetaData::MDNumNames.right.find(kv.first);
+    if (numKey != MetaData::MDNumNames.right.end())
+    {
+      this->Add(numKey->second, std::atof(kv.second.c_str()));
+      continue;
+    }
+  // TODO Converting the LUT1DKeys
+  // TODO Converting the LUT2DKeys
+  // Converting the TimeKeys
+    auto timeKey = MetaData::MDTimeNames.right.find(kv.first);
+    if (timeKey != MetaData::MDTimeNames.right.end())
+    {
+      MetaData::Time time;
+      std::istringstream (kv.second) >> time;
+      this->Add(timeKey->second, time);
+      continue;
+    }
+  // Converting the ExtraKeys
+    std::string prefix("Extra.");
+    if (kv.first.compare(0, prefix.size(), prefix))
+    {
+      this->Add(kv.first.substr(prefix.size()), kv.second);
+      continue;
+    }
+  }
+  return all_parsed;
 }
 
 // ----------------------- [ImageMetadata] ------------------------------

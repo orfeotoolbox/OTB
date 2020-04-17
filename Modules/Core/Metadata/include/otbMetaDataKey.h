@@ -25,6 +25,8 @@
 #include <vector>
 #include <cstdio>
 
+#include <boost/bimap.hpp>
+
 #include "itkDataObject.h"
 #include "itkVariableLengthVector.h"
 #include "OTBMetadataExport.h"
@@ -251,13 +253,25 @@ typedef LUT<1> LUT1D;
 
 typedef LUT<2> LUT2D;
 
+template <typename T>
+inline boost::bimap<T, std::string> bimapGenerator(std::map<T, std::string> inMap)
+{
+  boost::bimap<T, std::string> bm;
+  for (const auto& kv : inMap)
+    bm.insert(typename boost::bimap<T, std::string>::value_type(kv.first, kv.second));
+  return bm;
+}
+
 extern OTBMetadata_EXPORT std::map<MDGeom, std::string> MDGeomNames;
 
-extern OTBMetadata_EXPORT std::map<MDNum, std::string> MDNumNames;
+typedef boost::bimap<MDNum, std::string> MDNumBmType;
+extern OTBMetadata_EXPORT MDNumBmType MDNumNames;
 
-extern OTBMetadata_EXPORT std::map<MDStr, std::string> MDStrNames;
+typedef boost::bimap<MDStr, std::string> MDStrBmType;
+extern OTBMetadata_EXPORT MDStrBmType MDStrNames;
 
-extern OTBMetadata_EXPORT std::map<MDTime, std::string> MDTimeNames;
+typedef boost::bimap<MDTime, std::string> MDTimeBmType;
+extern OTBMetadata_EXPORT MDTimeBmType MDTimeNames;
 
 extern OTBMetadata_EXPORT std::map<MDL1D, std::string> MDL1DNames;
 

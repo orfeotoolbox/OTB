@@ -232,10 +232,11 @@ template class LUT<2>;
 
 // array<pair<> >
 // boost::flat_map<> 
-std::map<MDNum, std::string> MDNumNames = {
+MDNumBmType MDNumNames = bimapGenerator<MDNum>(std::map<MDNum, std::string> {
   {MDNum::TileHintX,"TileHintX"},
   {MDNum::TileHintY,"TileHintY"},
   {MDNum::DataType,"DataType"},
+  {MDNum::NoData, "NoData"},
   {MDNum::PhysicalGain,"PhysicalGain"},
   {MDNum::PhysicalBias,"PhysicalBias"},
   {MDNum::SolarIrradiance,"SolarIrradiance"},
@@ -264,22 +265,23 @@ std::map<MDNum, std::string> MDNumNames = {
   {MDNum::RangeSpreadLossPolyDegY,"RangeSpreadLossPolyDegY"},
   {MDNum::NoisePolyDegX,"NoisePolyDegX"},
   {MDNum::NoisePolyDegY,"NoisePolyDegY"},
-};
+});
 
-std::map<MDStr, std::string> MDStrNames = {
-  {MDStr::SensorID, "SensorID"},
+MDStrBmType MDStrNames = bimapGenerator<MDStr>(std::map<MDStr, std::string> {
+  {MDStr::SensorID,"SensorID"},
   {MDStr::Mission,"Mission"},
   {MDStr::Instrument,"Instrument"},
   {MDStr::ProductType,"ProductType"},
   {MDStr::GeometricLevel,"GeometricLevel"},
   {MDStr::RadiometricLevel,"RadiometricLevel"},
   {MDStr::Polarization,"Polarization"},
-};
+  {MDStr::BandName,"BandName"},
+});
 
-std::map<MDTime, std::string> MDTimeNames = {
+MDTimeBmType MDTimeNames = bimapGenerator<MDTime>(std::map<MDTime, std::string> {
   {MDTime::AcquisitionDate,"AcquisitionDate"},
   {MDTime::ProductionDate,"ProductionDate"},
-};
+});
 
 std::map<MDL1D, std::string> MDL1DNames = {
   {MDL1D::SpectralSensitivity,"SpectralSensitivity"},
