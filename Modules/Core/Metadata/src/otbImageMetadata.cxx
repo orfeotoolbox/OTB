@@ -218,8 +218,9 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
 
     if (kv.first == MDGeom::RPC)
     {
-      Projection::RPCParam rpcStruct = boost::any_cast<Projection::RPCParam>(kv.second);
-      cast_string = rpcStruct.ToJSON();
+//      Projection::RPCParam rpcStruct = boost::any_cast<Projection::RPCParam>(kv.second);
+//      cast_string = rpcStruct.ToJSON();
+      cast_string = std::string("<RPCParam>");
     }
     else if (kv.first == MDGeom::ProjectionEPSG)
     {
@@ -227,8 +228,9 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
     }
     else if (kv.first == MDGeom::GCP)
     {
-      Projection::GCPParam gcpStruct = boost::any_cast<Projection::GCPParam>(kv.second);
-      cast_string = gcpStruct.ToJSON();
+//      Projection::GCPParam gcpStruct = boost::any_cast<Projection::GCPParam>(kv.second);
+//      cast_string = gcpStruct.ToJSON();
+      cast_string = std::string("<GCPParam>");
     }
     // TODO : MDGeom::SensorGeometry (should be exported as "<typeinfo>" where typeinfo is boost::any::type().name()
     // TODO : MDGeom::SAR
@@ -255,12 +257,12 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
   // Converting the LUT1DKeys
   for (const auto& kv : LUT1DKeys)
   {
-    kwl.emplace(MetaData::MDL1DNames[kv.first], kv.second.ToJSON());
+    kwl.emplace(MetaData::MDL1DNames[kv.first], kv.second.ToString());
   }
   // Convereting the LUT2DKeys
   for (const auto& kv : LUT2DKeys)
   {
-    kwl.emplace(MetaData::MDL2DNames[kv.first], kv.second.ToJSON());
+    kwl.emplace(MetaData::MDL2DNames[kv.first], kv.second.ToString());
   }
   // Converting the TimeKeys
   for (const auto& kv : TimeKeys)

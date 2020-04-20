@@ -216,15 +216,98 @@ std::string LUT<VDim>::ToJSON(bool multiline) const
     sep = "\n";
   }
   oss << "{"
-      << "\"Axes\": [";
+      << "\"Axis\": [";
   for (unsigned int loop = 0 ; loop < VDim  ; loop++)
-    oss << Axes[loop].ToJSON(multiline) << ", ";
+    oss << Axis[loop].ToJSON(multiline) << ", ";
   oss << "], " << sep
       << "\"Array\": [";
   for (const auto& value : Array)
     oss << value << ", ";
   oss << "]}";
   return oss.str();
+}
+
+template <unsigned int VDim>
+std::string LUT<VDim>::ToString() const
+{
+  std::ostringstream oss;
+  for (unsigned int dim = 0 ; dim < VDim ; dim++)
+  {
+    oss << "LUT" << VDim << "D.DIM" << dim << ".SIZE = " << Axis[dim].Size << "\n";
+    if (Axis[dim].Values.size() > 0)
+    // Irregular sampling
+    {
+      oss << "LUT" << VDim << "D.DIM" << dim << ".VALUES = ";
+      for (const auto& value : Axis[dim].Values)
+        oss << value << " ";
+      oss << "\n";
+    }
+    else
+    {
+    // Regular sampling
+      oss << "LUT" << VDim << "D.DIM" << dim << ".ORIGIN = " << Axis[dim].Origin << "\n"
+          << "LUT" << VDim << "D.DIM" << dim << ".SPACING = " << Axis[dim].Spacing << "\n";
+    }
+  }
+  oss << "LUT" << VDim << "D.ARRAY = ";
+  for (const auto& value : Array)
+    oss << value << " ";
+  return oss.str();
+}
+
+template <unsigned int VDim>
+void LUT<VDim>::FromString(std::string str)
+{
+  std::vector<std::string> lines;
+  std::vector<std::string> parts;
+  boost::split(lines, str, [](char c){return c == '\n';});
+  for (std::string line : lines)
+  {
+    boost::split(parts, line, [](char c){return c == '=';});
+    if (std::stoi(parts[0].substr(3, 1)) != VDim)
+      throw std::invalid_argument("Wrong LUT dimension");
+    std::string element = parts[0].substr(6, 5);
+    if(parts[0].substr(6, 5) == "ARRAY")
+    // this->Array
+    {
+      std::vector<std::string> str_array;
+      boost::split(str_array, parts[1], [](char c){return c == ' ';});
+      Array.reserve(str_array.size());
+      std::transform(str_array.begin(), str_array.end(), back_inserter(Array),
+                      [](std::string const& val) {return std::stod(val);});
+    }
+    else
+    {
+      unsigned int dim = std::stoi(parts[0].substr(9, 1));
+      if (dim > VDim)
+        throw std::invalid_argument("LUT dimension higher than expected");
+      element = parts[0].substr(11);
+      if (element == "SIZE ")
+      // this->Axis[dim].Size
+      {
+        Axis[dim].Size = std::stoi(parts[1]);
+      }
+      else if (element == "VALUES ")
+      // this->Axis[dim].Values
+      {
+        std::vector<std::string> str_array;
+        boost::split(str_array, parts[1], [](char c){return c == ' ';});
+        Axis[dim].Values.reserve(str_array.size());
+        std::transform(str_array.begin(), str_array.end(), back_inserter(Axis[dim].Values),
+                        [](std::string const& val) {return std::stod(val);});
+      }
+      else if (element == "ORIGIN")
+      // this->Axis[dim].Origin
+      {
+        Axis[dim].Origin = std::stoi(parts[1]);
+      }
+      else if (element == "SPACING")
+      // this->Axis[dim].Spacing
+      {
+        Axis[dim].Spacing = std::stoi(parts[1]);
+      }
+    }
+  }
 }
 
 template class LUT<1>;

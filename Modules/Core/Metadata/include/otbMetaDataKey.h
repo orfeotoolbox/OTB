@@ -26,6 +26,7 @@
 #include <cstdio>
 
 #include <boost/bimap.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include "itkDataObject.h"
 #include "itkVariableLengthVector.h"
@@ -242,11 +243,15 @@ struct LUTAxis
 template <unsigned int VDim> class LUT
 {
 public:
-  LUTAxis Axes[VDim];
+  LUTAxis Axis[VDim];
   
   std::vector<double> Array;
 
-  std::string ToJSON(bool multiline=false) const;
+  std::string OTBMetadata_EXPORT ToJSON(bool multiline=false) const;
+
+  std::string OTBMetadata_EXPORT ToString() const;
+
+  void OTBMetadata_EXPORT FromString(std::string);
 };
 
 typedef LUT<1> LUT1D;
