@@ -23,6 +23,26 @@ namespace otb
 {
 // ---------------------- [ImageMetadataBase] ------------------------------
 
+ImageMetadataBase::ImageMetadataBase()
+{
+}
+
+ImageMetadataBase::ImageMetadataBase(DictType<MDGeom, boost::any> geometryKeys,
+                                     DictType<MDNum, double> numericKeys,
+                                     DictType<MDStr, std::string> stringKeys,
+                                     DictType<MDL1D, MetaData::LUT1D> lut1DKeys,
+                                     DictType<MDL2D, MetaData::LUT2D> lut2DKeys,
+                                     DictType<MDTime, MetaData::Time> timeKeys,
+                                     DictType<std::string, std::string> extraKeys)
+{
+  this->GeometryKeys = geometryKeys;
+  this->NumericKeys = numericKeys;
+  this->StringKeys = stringKeys;
+  this->LUT1DKeys = lut1DKeys;
+  this->LUT2DKeys = lut2DKeys;
+  this->TimeKeys = timeKeys;
+  this->ExtraKeys = extraKeys;
+}
 
 bool ImageMetadataBase::HasSensorGeometry() const
 {
@@ -210,36 +230,36 @@ bool ImageMetadataBase::Has(const std::string& key) const
 void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
 {
   kwl.clear();
-  std::string cast_string;
+  std::ostringstream oss;
 
   // Converting the GeomKeys
   for (const auto& kv : GeometryKeys)
   {
-
+    oss.str("");
     if (kv.first == MDGeom::RPC)
     {
 //      Projection::RPCParam rpcStruct = boost::any_cast<Projection::RPCParam>(kv.second);
 //      cast_string = rpcStruct.ToJSON();
-      cast_string = std::string("<RPCParam>");
+      oss << std::string("<RPCParam>");
     }
     else if (kv.first == MDGeom::ProjectionEPSG)
     {
-      cast_string = std::to_string(boost::any_cast<int>(kv.second));
+      oss << std::to_string(boost::any_cast<int>(kv.second));
     }
     else if (kv.first == MDGeom::GCP)
     {
 //      Projection::GCPParam gcpStruct = boost::any_cast<Projection::GCPParam>(kv.second);
 //      cast_string = gcpStruct.ToJSON();
-      cast_string = std::string("<GCPParam>");
+      oss << std::string("<GCPParam>");
     }
     // TODO : MDGeom::SensorGeometry (should be exported as "<typeinfo>" where typeinfo is boost::any::type().name()
     // TODO : MDGeom::SAR
     // TODO : MDGeom::Adjustment
     else
     {
-      cast_string = boost::any_cast<std::string>(kv.second);
+      oss << boost::any_cast<std::string>(kv.second);
     }
-    kwl.emplace(MetaData::MDGeomNames[kv.first], cast_string);
+    kwl.emplace(MetaData::MDGeomNames[kv.first], oss.str());
 
   }
   // Converting the StringKeys
@@ -250,7 +270,7 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
   // Converting the NumericKeys
   for (const auto& kv : NumericKeys)
   {
-    std::ostringstream oss;
+    oss.str("");
     oss << kv.second;
     kwl.emplace(MetaData::MDNumNames.left.at(kv.first), oss.str());
   }
@@ -267,7 +287,7 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
   // Converting the TimeKeys
   for (const auto& kv : TimeKeys)
   {
-    std::ostringstream oss;
+    oss.str("");
     oss << kv.second;
     kwl.emplace(MetaData::MDTimeNames.left.at(kv.first), oss.str());
   }
@@ -345,24 +365,31 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
 
 // ----------------------- [ImageMetadata] ------------------------------
 
+ImageMetadata::ImageMetadata()
+{
+}
+
+ImageMetadata::ImageMetadata(DictType<MDGeom, boost::any> geometryKeys,
+                             DictType<MDNum, double> numericKeys,
+                             DictType<MDStr, std::string> stringKeys,
+                             DictType<MDL1D, MetaData::LUT1D> lut1DKeys,
+                             DictType<MDL2D, MetaData::LUT2D> lut2DKeys,
+                             DictType<MDTime, MetaData::Time> timeKeys,
+                             DictType<std::string, std::string> extraKeys,
+                             ImageMetadataBandsType bands)
+  : ImageMetadataBase(geometryKeys, numericKeys, stringKeys, lut1DKeys, lut2DKeys, timeKeys, extraKeys)
+{
+  this->Bands = bands;
+}
 
 ImageMetadata ImageMetadata::slice(int start, int end) const
 {
   assert(start <= end);
 
-  ImageMetadata imd;
-  // Copy the keys
-  imd.GeometryKeys = this->GeometryKeys;
-  imd.NumericKeys = this->NumericKeys;
-  imd.StringKeys = this->StringKeys;
-  imd.LUT1DKeys = this->LUT1DKeys;
-  imd.LUT2DKeys = this->LUT2DKeys;
-  imd.TimeKeys = this->TimeKeys;
-  imd.ExtraKeys = this->ExtraKeys;
-  // Copy the bands
   auto first = this->Bands.cbegin() + start;
   auto last = this->Bands.cbegin() + end + 1;
-  imd.Bands = ImageMetadataBandsType(first, last);
+  ImageMetadata imd(this->GeometryKeys, this->NumericKeys, this->StringKeys, this->LUT1DKeys,
+                    this->LUT2DKeys, this->TimeKeys, this->ExtraKeys, ImageMetadataBandsType(first, last));
   return imd;
 }
 

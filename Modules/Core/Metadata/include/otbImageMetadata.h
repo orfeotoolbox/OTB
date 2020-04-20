@@ -91,6 +91,16 @@ public:
 
   DictType<std::string, std::string> ExtraKeys;
 
+  // Constructor
+  ImageMetadataBase();
+  ImageMetadataBase(DictType<MDGeom, boost::any> geometryKeys,
+                    DictType<MDNum, double> numericKeys,
+                    DictType<MDStr, std::string> stringKeys,
+                    DictType<MDL1D, MetaData::LUT1D> lut1DKeys,
+                    DictType<MDL2D, MetaData::LUT2D> lut2DKeys,
+                    DictType<MDTime, MetaData::Time> timeKeys,
+                    DictType<std::string, std::string> extraKeys);
+
   // TODO : iterators ?
 
   bool HasSensorGeometry() const;
@@ -230,6 +240,17 @@ public:
   /** Band-specific metadatas */
   using ImageMetadataBandsType = std::vector<ImageMetadataBase>;
   ImageMetadataBandsType Bands;
+
+  // Constructor
+  ImageMetadata();
+  ImageMetadata(DictType<MDGeom, boost::any> geometryKeys,
+                DictType<MDNum, double> numericKeys,
+                DictType<MDStr, std::string> stringKeys,
+                DictType<MDL1D, MetaData::LUT1D> lut1DKeys,
+                DictType<MDL2D, MetaData::LUT2D> lut2DKeys,
+                DictType<MDTime, MetaData::Time> timeKeys,
+                DictType<std::string, std::string> extraKeys,
+                ImageMetadataBandsType bands);
 
   // utility functions
   /** Extract metadata from a subset of the bands */
