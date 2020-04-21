@@ -234,12 +234,11 @@ std::string LUT<VDim>::ToString() const
   for (unsigned int dim = 0 ; dim < VDim ; dim++)
   {
     oss << "LUT" << VDim << "D.DIM" << dim << ".SIZE = " << Axis[dim].Size << "\n";
-    if (Axis[dim].Values.size() > 0)
+    if (! Axis[dim].Values.empty())
     // Irregular sampling
     {
       oss << "LUT" << VDim << "D.DIM" << dim << ".VALUES = ";
-      for (const auto& value : Axis[dim].Values)
-        oss << value << " ";
+      otb::Join(oss, Axis[dim].Values, " ");
       oss << "\n";
     }
     else
@@ -250,8 +249,7 @@ std::string LUT<VDim>::ToString() const
     }
   }
   oss << "LUT" << VDim << "D.ARRAY = ";
-  for (const auto& value : Array)
-    oss << value << " ";
+  otb::Join(oss, Array, " ");
   return oss.str();
 }
 
@@ -366,11 +364,11 @@ MDTimeBmType MDTimeNames = bimapGenerator<MDTime>(std::map<MDTime, std::string> 
   {MDTime::ProductionDate,"ProductionDate"},
 });
 
-std::map<MDL1D, std::string> MDL1DNames = {
+MDL1DBmType MDL1DNames = bimapGenerator<MDL1D>(std::map<MDL1D, std::string> {
   {MDL1D::SpectralSensitivity,"SpectralSensitivity"},
-};
+});
 
-std::map<MDL2D, std::string> MDL2DNames = {};
+MDL2DBmType MDL2DNames = bimapGenerator<MDL2D>(std::map<MDL2D, std::string> {});
 
 std::map<MDGeom, std::string> MDGeomNames = {
   {MDGeom::ProjectionWKT,  "ProjectionWKT"},

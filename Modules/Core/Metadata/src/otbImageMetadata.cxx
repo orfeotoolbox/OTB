@@ -34,15 +34,14 @@ ImageMetadataBase::ImageMetadataBase(DictType<MDGeom, boost::any> geometryKeys,
                                      DictType<MDL2D, MetaData::LUT2D> lut2DKeys,
                                      DictType<MDTime, MetaData::Time> timeKeys,
                                      DictType<std::string, std::string> extraKeys)
-{
-  this->GeometryKeys = geometryKeys;
-  this->NumericKeys = numericKeys;
-  this->StringKeys = stringKeys;
-  this->LUT1DKeys = lut1DKeys;
-  this->LUT2DKeys = lut2DKeys;
-  this->TimeKeys = timeKeys;
-  this->ExtraKeys = extraKeys;
-}
+  : GeometryKeys(std::move(geometryKeys)),
+    NumericKeys(std::move(numericKeys)),
+	StringKeys(std::move(stringKeys)),
+	LUT1DKeys(std::move(lut1DKeys)),
+	LUT2DKeys(std::move(lut2DKeys)),
+	TimeKeys(std::move(timeKeys)),
+	ExtraKeys(std::move(extraKeys))
+{}
 
 bool ImageMetadataBase::HasSensorGeometry() const
 {
@@ -277,12 +276,16 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
   // Converting the LUT1DKeys
   for (const auto& kv : LUT1DKeys)
   {
-    kwl.emplace(MetaData::MDL1DNames[kv.first], kv.second.ToString());
+    oss.str("");
+    oss << kv.second.ToString();
+    kwl.emplace(MetaData::MDL1DNames.left.at(kv.first), oss.str());
   }
-  // Convereting the LUT2DKeys
+  // Converting the LUT2DKeys
   for (const auto& kv : LUT2DKeys)
   {
-    kwl.emplace(MetaData::MDL2DNames[kv.first], kv.second.ToString());
+    oss.str("");
+    oss << kv.second.ToString();
+    kwl.emplace(MetaData::MDL2DNames.left.at(kv.first), oss.str());
   }
   // Converting the TimeKeys
   for (const auto& kv : TimeKeys)
@@ -338,11 +341,27 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
     auto numKey = MetaData::MDNumNames.right.find(kv.first);
     if (numKey != MetaData::MDNumNames.right.end())
     {
-      this->Add(numKey->second, std::atof(kv.second.c_str()));
+      this->Add(numKey->second, boost::lexical_cast<double>(kv.second.c_str()));
       continue;
     }
-  // TODO Converting the LUT1DKeys
-  // TODO Converting the LUT2DKeys
+  // Converting the LUT1DKeys
+    auto lut1dKey = MetaData::MDL1DNames.right.find(kv.first);
+    if (lut1dKey != MetaData::MDL1DNames.right.end())
+    {
+      MetaData::LUT1D lut;
+      lut.FromString(kv.second);
+      this->Add(lut1dKey->second, lut);
+      continue;
+    }
+  // Converting the LUT2DKeys
+    auto lut2dKey = MetaData::MDL2DNames.right.find(kv.first);
+    if (lut2dKey != MetaData::MDL2DNames.right.end())
+    {
+      MetaData::LUT2D lut;
+      lut.FromString(kv.second);
+      this->Add(lut2dKey->second, lut);
+      continue;
+    }
   // Converting the TimeKeys
     auto timeKey = MetaData::MDTimeNames.right.find(kv.first);
     if (timeKey != MetaData::MDTimeNames.right.end())
@@ -377,10 +396,9 @@ ImageMetadata::ImageMetadata(DictType<MDGeom, boost::any> geometryKeys,
                              DictType<MDTime, MetaData::Time> timeKeys,
                              DictType<std::string, std::string> extraKeys,
                              ImageMetadataBandsType bands)
-  : ImageMetadataBase(geometryKeys, numericKeys, stringKeys, lut1DKeys, lut2DKeys, timeKeys, extraKeys)
-{
-  this->Bands = bands;
-}
+  : ImageMetadataBase(geometryKeys, numericKeys, stringKeys, lut1DKeys, lut2DKeys, timeKeys, extraKeys),
+    Bands(std::move(bands))
+{}
 
 ImageMetadata ImageMetadata::slice(int start, int end) const
 {

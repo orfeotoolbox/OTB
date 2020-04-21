@@ -32,6 +32,7 @@
 #include "itkVariableLengthVector.h"
 #include "OTBMetadataExport.h"
 #include "otbStringUtils.h"
+#include "otbJoinContainer.h"
 
 namespace otb
 {
@@ -263,7 +264,8 @@ inline boost::bimap<T, std::string> bimapGenerator(std::map<T, std::string> inMa
 {
   boost::bimap<T, std::string> bm;
   for (const auto& kv : inMap)
-    bm.insert(typename boost::bimap<T, std::string>::value_type(kv.first, kv.second));
+    bm.insert({kv.first, kv.second});
+    //bm.insert(typename boost::bimap<T, std::string>::value_type(kv.first, kv.second));
   return bm;
 }
 
@@ -278,9 +280,11 @@ extern OTBMetadata_EXPORT MDStrBmType MDStrNames;
 typedef boost::bimap<MDTime, std::string> MDTimeBmType;
 extern OTBMetadata_EXPORT MDTimeBmType MDTimeNames;
 
-extern OTBMetadata_EXPORT std::map<MDL1D, std::string> MDL1DNames;
+typedef boost::bimap<MDL1D, std::string> MDL1DBmType;
+extern OTBMetadata_EXPORT MDL1DBmType MDL1DNames;
 
-extern OTBMetadata_EXPORT std::map<MDL2D, std::string> MDL2DNames;
+typedef boost::bimap<MDL2D, std::string> MDL2DBmType;
+extern OTBMetadata_EXPORT MDL2DBmType MDL2DNames;
 
 } // end namespace MetaData
 

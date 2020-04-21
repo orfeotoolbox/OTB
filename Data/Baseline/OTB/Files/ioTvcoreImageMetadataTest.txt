@@ -39,7 +39,7 @@ md3_append: {{"Extra.Comment": "Test Extrakeys",
 "SpectralSensitivity": "LUT1D.DIM0.SIZE = 3
 LUT1D.DIM0.ORIGIN = 0
 LUT1D.DIM0.SPACING = 1
-LUT1D.ARRAY = 1 2 3 "
+LUT1D.ARRAY = 1 2 3"
 "RPC": "<RPCParam>",
 "ProductionDate": "2009-08-10T10:30:08.142149Z",
 "GCP": "<GCPParam>",
