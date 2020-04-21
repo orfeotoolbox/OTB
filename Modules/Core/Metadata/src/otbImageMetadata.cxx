@@ -341,7 +341,7 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
     auto numKey = MetaData::MDNumNames.right.find(kv.first);
     if (numKey != MetaData::MDNumNames.right.end())
     {
-      this->Add(numKey->second, boost::lexical_cast<double>(kv.second.c_str()));
+      this->Add(numKey->second, Utils::LexicalCast<double>(kv.second.c_str(), "Keywordlist.second.c_str()"));
       continue;
     }
   // Converting the LUT1DKeys

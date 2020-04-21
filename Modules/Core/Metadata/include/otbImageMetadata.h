@@ -26,7 +26,6 @@
 #include "OTBMetadataExport.h"
 
 #include <boost/any.hpp>
-#include <boost/lexical_cast.hpp>
 #include <vector>
 #include <string>
 #include <ctime>
