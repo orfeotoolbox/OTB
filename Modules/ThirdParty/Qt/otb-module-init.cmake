@@ -26,3 +26,4 @@ find_package(Qt5LinguistTools)
 mark_as_advanced( QT_QMAKE_EXECUTABLE )
 
 set(QT_VERSION_STRING ${Qt5Core_VERSION})
+add_definitions(-DQT_NO_KEYWORDS)
