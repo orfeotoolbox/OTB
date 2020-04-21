@@ -25,6 +25,7 @@
 #include <vector>
 #include <cstdio>
 
+#undef foreach
 #include <boost/bimap.hpp>
 #include <boost/algorithm/string.hpp>
 
