@@ -429,7 +429,7 @@ void I18nCoreApplication::InitializeLocale()
 
     qDebug() << "Available codecs:";
 
-    foreach (const QByteArray& codec, codecs)
+    Q_FOREACH (const QByteArray& codec, codecs)
       qDebug() << "\t" << codec;
   }
 

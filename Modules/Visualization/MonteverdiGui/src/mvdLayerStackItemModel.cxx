@@ -552,7 +552,7 @@ QMimeData* LayerStackItemModel::mimeData(const QModelIndexList& indexes) const
 
   UrlList urls;
 
-  foreach (const QModelIndex& idx, indexes)
+  Q_FOREACH (const QModelIndex& idx, indexes)
     if (idx.isValid())
     {
       assert(idx.internalPointer() != NULL);
