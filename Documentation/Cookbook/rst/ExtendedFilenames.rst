@@ -325,6 +325,18 @@ The available syntax for boolean options are:
 
 ::
 
+    &epsg=<(int)value>
+
+-  To set the projection system of the output image.
+
+-  Provide the `EPSG code`_ of the desired projection.
+
+.. _EPSG code : https://en.wikipedia.org/wiki/EPSG_Geodetic_Parameter_Dataset
+
+-----------------------------------------------
+
+::
+
    &multiwrite==<(bool)false>
 
 -  To desactivate multi-writing. This option will only be used in application supporting multi-writing (applications with several output images). Instead of computing and writing each image independently, the streamed image blocks are written in a synchronous way for each output. In applications, the default streaming mode is to compute the images strip by strip, with a strip size automatically computed using the available RAM. The streaming mode can be modified using the streaming options (see above), but be aware that the auto and tiled based streaming using RAM might not work properly.

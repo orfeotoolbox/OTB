@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
- * Copyright (C) 2018 CS Systemes d'Information (CS SI)
+ * Copyright (C) 2018-2020 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -52,8 +52,10 @@ ExtendedFilenameToWriterOptions::ExtendedFilenameToWriterOptions() : ExtendedFil
   m_Options.bandRange.first  = false;
   m_Options.bandRange.second = "";
 
+  m_Options.srsValue.first = false;
+
   m_Options.optionList = {"writegeom", "writerpctags", "multiwrite", "streaming:type",
-    "streaming:sizemode", "streaming:sizevalue", "nodata", "box", "bands"};
+    "streaming:sizemode", "streaming:sizevalue", "nodata", "box", "bands", "epsg"};
 }
 
 void ExtendedFilenameToWriterOptions::SetExtendedFileName(const char* extFname)
@@ -216,6 +218,34 @@ void ExtendedFilenameToWriterOptions::SetExtendedFileName(const std::string& ext
     }
   }
 
+  if (!map["epsg"].empty())
+  {
+	int code;
+	try
+	{
+	  code = std::stoi(map["epsg"]);
+	}
+	catch(const std::invalid_argument& e)
+	{
+	  itkWarningMacro("Invalid value ("
+                      << map["epsg"]
+                      << ") for Geographic coordinate reference system. Must be integer.");
+      code = 0;
+	}
+	if (code < 0)
+	{
+      itkWarningMacro("Invalid value ("
+		               << map["epsg"]
+		               << ") for Geographic coordinate reference system. Must be positive.");
+      code = 0;
+	}
+    if (code > 0)
+    {
+        m_Options.srsValue.first  = true;
+        m_Options.srsValue.second = (unsigned int) code;
+    }
+  }
+
   // Option Checking
   for (it = map.begin(); it != map.end(); it++)
   {
@@ -334,6 +364,16 @@ bool ExtendedFilenameToWriterOptions::BandRangeIsSet() const
 std::string ExtendedFilenameToWriterOptions::GetBandRange() const
 {
   return m_Options.bandRange.second;
+}
+
+bool ExtendedFilenameToWriterOptions::SrsValueIsSet() const
+{
+	return m_Options.srsValue.first;
+}
+
+unsigned int ExtendedFilenameToWriterOptions::GetSrsValue() const
+{
+  return m_Options.srsValue.second;
 }
 
 } // end namespace otb

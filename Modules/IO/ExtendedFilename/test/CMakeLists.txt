@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2020 CS Systemes d'Information (CS SI)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -58,7 +59,7 @@ otb_add_test(NAME ioTvExtendedFilenameToReaderOptions_FullOptions COMMAND otbExt
   ${BASELINE}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
   ${TEMP}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
   otbExtendedFilenameToReaderOptions
-  /home/data/filename.tif?&geom=/home/dev/custom.geom&sdataidx=2&resol=4&skipcarto=On&bands=-23,:3,45:,-6:-6,234:-5&nodata=-99999
+  /home/data/filename.tif?&geom=/home/dev/custom.geom&sdataidx=2&resol=4&skipcarto=On&bands=-23,:3,45:,-6:-6,234:-5
   ${TEMP}/ioTvExtendedFilenameToReaderOptions_FullOptions.txt
   )
 
@@ -86,7 +87,7 @@ otb_add_test(NAME ioTvExtendedFilenameToWriterOptions_FullOptions COMMAND otbExt
   ${BASELINE}/ioTvExtendedFilenameToWriterOptions_FullOptions.txt
   ${TEMP}/ioTvExtendedFilenameToWriterOptions_FullOptions.txt
   otbExtendedFilenameToWriterOptions
-  /home/data/filename.tif?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024
+  /home/data/filename.tif?&writegeom=ON&gdal:co:QUALITY=75&gdal:co:TILED=YES&gdal:co:BLOCKYSIZE=1024&nodata=-99999&epsg=4326
   ${TEMP}/ioTvExtendedFilenameToWriterOptions_FullOptions.txt
   )
 

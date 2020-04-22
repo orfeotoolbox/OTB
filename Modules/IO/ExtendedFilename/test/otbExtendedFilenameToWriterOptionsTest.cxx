@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2020 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -45,10 +46,25 @@ int otbExtendedFilenameToWriterOptions(int itkNotUsed(argc), char* argv[])
 
   file << helper->gdalCreationOptionsIsSet() << std::endl;
   if (helper->gdalCreationOptionsIsSet())
+  {
     for (unsigned int i = 0; i < helper->GetgdalCreationOptions().size(); i++)
     {
       file << helper->GetgdalCreationOptions()[i] << std::endl;
     }
+  }
+
+  file << helper->NoDataValueIsSet() << std::endl;
+  if (helper->NoDataValueIsSet())
+  {
+    for (auto const& nodata_kv : helper->GetNoDataList())
+    {
+      file << nodata_kv.first << " ; " << nodata_kv.second << "\n";
+    }
+  }
+
+  file << helper->SrsValueIsSet() << std::endl;
+  if (helper->SrsValueIsSet())
+	  file << helper->GetSrsValue() << std::endl;
 
   return EXIT_SUCCESS;
 }
