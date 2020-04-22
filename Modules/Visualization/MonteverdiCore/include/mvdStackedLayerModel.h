@@ -201,7 +201,7 @@ public:
 
   //
   // Public SLOTS.
-public slots:
+public Q_SLOTS:
   void Clear();
   void Deleting(unsigned int index);
   inline void Delete(const KeyType&);
@@ -220,7 +220,7 @@ public slots:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   void AboutToChangeSelectedLayerModel(const StackedLayerModel::KeyType&);
   void SelectedLayerModelChanged(const StackedLayerModel::KeyType&);
 
@@ -308,7 +308,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
 };
 
 #if OTB_DEBUG

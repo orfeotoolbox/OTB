@@ -190,14 +190,14 @@ public:
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
   // public slots
-public slots:
+public Q_SLOTS:
   void UpdatePixelInfo(const QPoint& screen, const PointType& view, const PixelInfo::Vector& pixels) override;
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
   //
   // SIGNALS.
-signals:
+Q_SIGNALS:
   void ClearProjectionRequired();
   void SetProjectionRequired();
   void UpdateProjectionRequired();
@@ -275,7 +275,7 @@ private:
 
   //
   // SLOTS.
-private slots:
+private Q_SLOTS:
 };
 
 } // end namespace 'mvd'

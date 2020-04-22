@@ -43,7 +43,7 @@ public:
   QtWidgetDirectoryParameter(DirectoryParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetDirectoryParameter() override;
 
-protected slots:
+protected Q_SLOTS:
   void SetFileName(const QString& value);
   void SelectFile();
 

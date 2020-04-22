@@ -46,14 +46,14 @@ public:
   const QLineEdit* GetInput() const;
   QLineEdit*       GetInput();
 
-signals:
+Q_SIGNALS:
   void FileNameIsSet();
 
-protected slots:
+protected Q_SLOTS:
   bool SetFileName(const QString& value);
   void SelectFile();
 
-private slots:
+private Q_SLOTS:
   void OnEditingFinished();
 
 private:

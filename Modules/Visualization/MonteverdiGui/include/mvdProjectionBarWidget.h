@@ -82,7 +82,7 @@ public:
   /** \brief Destructor. */
   ~ProjectionBarWidget() override;
 
-public slots:
+public Q_SLOTS:
   void SetProjectionScale(double scale_x, double scale_y);
 
 private:
@@ -97,7 +97,7 @@ private:
    */
   void ChangeScale();
 
-private slots:
+private Q_SLOTS:
   /**
    * When user edit the projection scale line
    */
@@ -107,7 +107,7 @@ private slots:
    */
   void on_projectionScaleLineEdit_returnPressed();
 
-signals:
+Q_SIGNALS:
   /**
    */
   void ProjectionScaleChanged(double);

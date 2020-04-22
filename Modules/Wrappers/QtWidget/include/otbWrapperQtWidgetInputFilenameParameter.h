@@ -46,7 +46,7 @@ public:
   const QLineEdit* GetInput() const;
   QLineEdit*       GetInput();
 
-protected slots:
+protected Q_SLOTS:
   void SetFileName(const QString& value);
   void SelectFile();
 

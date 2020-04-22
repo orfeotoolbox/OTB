@@ -64,7 +64,7 @@ public:
   /** Write to a buffer */
   void Write(std::string const& content, double timestamp) override;
 
-signals:
+Q_SIGNALS:
   void NewContentLog(QString);
 
 protected:

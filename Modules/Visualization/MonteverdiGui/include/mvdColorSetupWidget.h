@@ -183,7 +183,7 @@ public:
 
   //
   // SIGNALS.
-signals:
+Q_SIGNALS:
   /**
    * \brief Signal emitted when the current-index of a RGB
    * video-channel has been modified.
@@ -246,7 +246,7 @@ private:
 
   //
   // SLOTS.
-private slots:
+private Q_SLOTS:
   /**
    * \brief Slot called when the current-index of the red
    * video-channel has been modified.

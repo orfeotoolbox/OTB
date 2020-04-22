@@ -80,10 +80,10 @@ public:
   void   SetIOMode(IOMode);
   IOMode GetIOMode() const;
 
-signals:
+Q_SIGNALS:
   void FilenameChanged();
 
-protected slots:
+protected Q_SLOTS:
   void SelectFile();
   void CallFilenameChanged();
   void SetFileName(const QString&);

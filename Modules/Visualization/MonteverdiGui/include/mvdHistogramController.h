@@ -106,7 +106,7 @@ public:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -144,7 +144,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
   /**
    * \brief Slot called when the band-index of a RGB channel has
    * changed.

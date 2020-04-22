@@ -42,7 +42,7 @@ public:
   QtWidgetChoiceParameter(ChoiceParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetChoiceParameter() override;
 
-protected slots:
+protected Q_SLOTS:
   void SetValue(int value);
 
 private:

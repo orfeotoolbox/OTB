@@ -96,7 +96,7 @@ public:
 
   //
   // SIGNALS.
-signals:
+Q_SIGNALS:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -126,7 +126,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
 
   /**
    * \brief Qt auto-connected slot which is called when datasetPathButton menu

@@ -225,13 +225,13 @@ public:
 
   //
   // Public SLOTS.
-public slots:
+public Q_SLOTS:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
 
   // Bugfix for layer deletion
   void LayerDeletingModel(unsigned int index);
@@ -269,7 +269,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
   /**
    */
   // void OnContentAboutToBeChanged();
