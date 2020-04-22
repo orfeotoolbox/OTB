@@ -82,7 +82,7 @@ public:
   /** \brief Destructor. */
   ~ProjectionBarWidget() override;
 
-public slots:
+public Q_SLOTS:
   void SetProjectionScale(double scale_x, double scale_y);
 
 private:
@@ -92,12 +92,12 @@ private:
   Ui::ProjectionBarWidget* m_UI;
 
   /**
-   * emit a signal to change the scale if projectionScaleLineEdit is changed
+   * Q_EMIT a signal to change the scale if projectionScaleLineEdit is changed
    * and if the input text is valid.
    */
   void ChangeScale();
 
-private slots:
+private Q_SLOTS:
   /**
    * When user edit the projection scale line
    */
@@ -107,7 +107,7 @@ private slots:
    */
   void on_projectionScaleLineEdit_returnPressed();
 
-signals:
+Q_SIGNALS:
   /**
    */
   void ProjectionScaleChanged(double);

@@ -45,7 +45,7 @@ public:
   QtWidgetIntParameter(IntParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetIntParameter() override;
 
-private slots:
+private Q_SLOTS:
   void OnCleared();
   void OnValueChanged(int);
   void OnEditingFinished();

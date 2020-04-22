@@ -327,13 +327,13 @@ public:
   static const char* DATASET_EXT;
 
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
-public slots:
+public Q_SLOTS:
   /**
    * \brief Accessor used to changed model which is managed by the
    * Application.
    *
    * This method emits the AboutToChangeModel() and ModelChanged()
-   * signals respectively, before and after, the model is changed.
+   * Q_SIGNALS respectively, before and after, the model is changed.
    *
    * \param model The newly managed model.
    */
@@ -345,7 +345,7 @@ public slots:
 
   //
   // SIGNALS.
-signals:
+Q_SIGNALS:
   /**
    * \brief Signal emitted when the AbstractModel of the MVC is about
    * to be changed.
@@ -481,7 +481,7 @@ private:
 
   //
   // SLOTS
-private slots:
+private Q_SLOTS:
 };
 
 } // end namespace 'mvd'

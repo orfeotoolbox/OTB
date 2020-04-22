@@ -293,7 +293,7 @@ void MultiResolutionPyramidWidget::on_baseSpinBox_valueChanged(int value)
 
   UpdateSize();
 
-  emit BaseValueChanged(value);
+  Q_EMIT BaseValueChanged(value);
 }
 
 /*****************************************************************************/
@@ -312,7 +312,7 @@ void MultiResolutionPyramidWidget::on_levelsSpinBox_valueChanged(int value)
 
   UpdateSize();
 
-  emit LevelsValueChanged(value);
+  Q_EMIT LevelsValueChanged(value);
 }
 
 /*****************************************************************************/
@@ -341,7 +341,7 @@ void MultiResolutionPyramidWidget::on_sizeSpinBox_valueChanged(int value)
 
   UpdateResolutions();
 
-  emit SizeValueChanged(value);
+  Q_EMIT SizeValueChanged(value);
 }
 
 } // end namespace 'mvd'

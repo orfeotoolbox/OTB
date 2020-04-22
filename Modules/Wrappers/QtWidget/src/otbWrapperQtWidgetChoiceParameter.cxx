@@ -104,7 +104,7 @@ void QtWidgetChoiceParameter::SetValue(int value)
   m_ChoiceParam->SetValue(value);
 
   QString key(m_ChoiceParam->GetKey());
-  emit    ParameterChanged(key);
+  Q_EMIT    ParameterChanged(key);
 }
 }
 }

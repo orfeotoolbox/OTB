@@ -124,7 +124,7 @@ public:
 
   //
   // Slots.
-public slots:
+public Q_SLOTS:
 
   /**
    */
@@ -134,7 +134,7 @@ public slots:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   /**
    */
   void AboutToDisconnectModel(AbstractModel*);
@@ -214,7 +214,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
   /**
    * Slot called before object is destroyed.
    * It is used to disconnect model from controller when controller is

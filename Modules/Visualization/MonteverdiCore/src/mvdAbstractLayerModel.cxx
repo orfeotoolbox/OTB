@@ -159,7 +159,7 @@ void AbstractLayerModel::SetName(const QString& name)
   if (name != m_Name)
   {
     m_Name = name;
-    emit NameChanged();
+    Q_EMIT NameChanged();
   }
 }
 
@@ -178,8 +178,8 @@ bool AbstractLayerModel::virtual_HasKwl() const
 /*******************************************************************************/
 void AbstractLayerModel::virtual_SignalVisibilityChanged(bool isVisible)
 {
-  emit VisibilityChanged(isVisible);
-  emit VisibilityChanged(this, isVisible);
+  Q_EMIT VisibilityChanged(isVisible);
+  Q_EMIT VisibilityChanged(this, isVisible);
 }
 
 /*******************************************************************************/

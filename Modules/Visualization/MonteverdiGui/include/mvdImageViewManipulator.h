@@ -188,7 +188,7 @@ public:
 
   //
   // Public SLOTS.
-public slots:
+public Q_SLOTS:
 
   //
   // AbstractImageViewManipulator overloads.
@@ -201,7 +201,7 @@ public slots:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   /**
    */
   void RaiseLayerRequested();
@@ -371,7 +371,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
   /**
    */
   void OnTimeout();

@@ -1250,31 +1250,31 @@ void MainWindow::on_action_SaveScreenshot_triggered()
 /*****************************************************************************/
 void MainWindow::on_action_ZoomIn_triggered()
 {
-  emit UserZoomIn();
+  Q_EMIT UserZoomIn();
 }
 
 /*****************************************************************************/
 void MainWindow::on_action_ZoomOut_triggered()
 {
-  emit UserZoomOut();
+  Q_EMIT UserZoomOut();
 }
 
 /*****************************************************************************/
 void MainWindow::on_action_ZoomExtent_triggered()
 {
-  emit UserZoomExtent();
+  Q_EMIT UserZoomExtent();
 }
 
 /*****************************************************************************/
 void MainWindow::on_action_ZoomFull_triggered()
 {
-  emit UserZoomFull();
+  Q_EMIT UserZoomFull();
 }
 
 /*****************************************************************************/
 void MainWindow::on_action_ZoomLayer_triggered()
 {
-  emit UserZoomLayer();
+  Q_EMIT UserZoomLayer();
 }
 
 /*****************************************************************************/

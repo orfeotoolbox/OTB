@@ -150,13 +150,13 @@ public:
 
   //
   // Public SLOTS.
-public slots:
+public Q_SLOTS:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   /**
   */
   // bugFix for layer deletion
@@ -231,7 +231,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
   /**
    * \see http://qt-project.org/doc/qt-4.8/qitemselectionmodel.html#currentRowChanged
    */

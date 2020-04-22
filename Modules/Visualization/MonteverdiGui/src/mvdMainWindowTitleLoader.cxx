@@ -58,14 +58,14 @@ void MainWindowTitleLoader::LoadTitle()
   oss<<m_Model->GetNativeLargestRegion().GetSize()[0];
   oss<<"x"<<m_Model->GetNativeLargestRegion().GetSize()[1]<<tr(" pixels)").toLatin1().constData();
   
-  emit TitleLoaded(FromStdString(oss.str()) );
+  Q_EMIT TitleLoaded(FromStdString(oss.str()) );
 
   // add the placename to the title if any
   std::string placename = m_Model->GetCenterPixelPlaceName();
   if (!placename.empty())
     {
     oss <<" - " <<ToStdString( tr("Location") )<< " : " << placename;
-    emit TitleLoaded(FromStdString(oss.str()) );
+    Q_EMIT TitleLoaded(FromStdString(oss.str()) );
     }
 
 #else
@@ -82,11 +82,11 @@ void MainWindowTitleLoader::LoadTitle()
 
   qDebug() << "Title:" << title;
 
-  emit TitleLoaded(title);
+  Q_EMIT TitleLoaded(title);
 
 #endif
 
-  emit Finished();
+  Q_EMIT Finished();
 }
 
 } // end namespace 'mvd'

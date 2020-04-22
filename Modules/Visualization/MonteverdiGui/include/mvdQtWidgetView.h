@@ -87,7 +87,7 @@ private:
 
   void SetupFileSelectionWidget(QWidget*);
 
-private slots:
+private Q_SLOTS:
 
   // slot in charge of emitting a signal to the catalogue mainWindow.
   // when received, the main application need to get the output

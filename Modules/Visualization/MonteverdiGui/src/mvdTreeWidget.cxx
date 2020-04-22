@@ -447,7 +447,7 @@ void TreeWidget::dropEvent(QDropEvent* e)
     switch( e->dropAction() )
       {
       case Qt::MoveAction:
-        emit ItemMoved( *it, itemAt( e->pos() ) );
+        Q_EMIT ItemMoved( *it, itemAt( e->pos() ) );
         break;
 
       default:
@@ -462,7 +462,7 @@ void TreeWidget::dropEvent(QDropEvent* e)
 
   if (e->source() == this)
     for (QTreeWidgetItemList::const_iterator it = itemList.begin(); it != itemList.end(); ++it)
-      emit ItemMoved(*it, target);
+      Q_EMIT ItemMoved(*it, target);
 }
 
 /*******************************************************************************/

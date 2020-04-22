@@ -93,14 +93,14 @@ void QtFileSelectionWidget::SelectFile()
 
 void QtFileSelectionWidget::CallFilenameChanged()
 {
-  emit FilenameChanged();
+  Q_EMIT FilenameChanged();
 }
 
 void QtFileSelectionWidget::SetFileName(const QString& filename)
 {
   m_Input->setText(filename);
 
-  emit FilenameChanged();
+  Q_EMIT FilenameChanged();
 }
 }
 }

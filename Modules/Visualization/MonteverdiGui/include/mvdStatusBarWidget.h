@@ -101,7 +101,7 @@ public:
 
   //
   // Public SLOTS.
-public slots:
+public Q_SLOTS:
 
   /**
    */
@@ -123,7 +123,7 @@ public slots:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   /**
    */
   void ScaleChanged(double);
@@ -165,7 +165,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
   /**
    */
   // void SetPixelIndexText( const QString& );

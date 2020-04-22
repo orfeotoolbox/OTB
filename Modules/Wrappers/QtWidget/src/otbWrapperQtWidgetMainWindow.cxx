@@ -134,7 +134,7 @@ void QtMainWindow::on_executeButton_clicked()
       gui->Disable();
       ui->statusBar->showMessage(tr("Running..."));
       ui->executeButton->setText(tr("Cancel"));
-      emit ExecuteAndWriteOutput();
+      Q_EMIT ExecuteAndWriteOutput();
     }
   }
 }

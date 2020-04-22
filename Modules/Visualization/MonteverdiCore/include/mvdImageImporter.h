@@ -115,13 +115,13 @@ public:
 
   //
   // Public SLOTS.
-public slots:
+public Q_SLOTS:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
 
   /**
    * \brief Signal emitted when job/task has correctly been done.
@@ -189,7 +189,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
 };
 
 } // end namespace 'mvd'.

@@ -224,7 +224,7 @@ void ApplicationsToolBox::LaunchApplication(const QString& appName)
 {
   assert(!appName.isEmpty());
 
-  emit ApplicationToLaunchSelected(appName);
+  Q_EMIT ApplicationToLaunchSelected(appName);
 }
 
 /*******************************************************************************/

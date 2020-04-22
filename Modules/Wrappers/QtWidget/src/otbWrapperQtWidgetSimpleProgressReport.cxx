@@ -63,7 +63,7 @@ void QtWidgetSimpleProgressReport::ProcessEvent(itk::Object* itkNotUsed(caller),
     {
       m_CurrentProcess     = eventToWatch->GetProcess();
       m_CurrentDescription = eventToWatch->GetProcessDescription();
-      emit AddNewProcessToReport();
+      Q_EMIT AddNewProcessToReport();
     }
   }
 }
@@ -71,13 +71,13 @@ void QtWidgetSimpleProgressReport::ProcessEvent(itk::Object* itkNotUsed(caller),
 void QtWidgetSimpleProgressReport::ReportProcess()
 {
   this->Observe(m_CurrentProcess);
-  emit SetText(QString::fromStdString(m_CurrentDescription));
+  Q_EMIT SetText(QString::fromStdString(m_CurrentDescription));
 }
 
 void QtWidgetSimpleProgressReport::Init()
 {
   this->setValue(0);
-  emit SetText(QString(""));
+  Q_EMIT SetText(QString(""));
 }
 }
 }

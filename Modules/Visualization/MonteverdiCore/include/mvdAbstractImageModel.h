@@ -246,7 +246,7 @@ public:
 
   //
   // Public SLOTS.
-public slots:
+public Q_SLOTS:
 
   /**
    * \brief Refresh histogram-model based on no-data properties.
@@ -257,7 +257,7 @@ public slots:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   /** */
   void SpacingChanged(const SpacingType&);
 
@@ -350,7 +350,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
 };
 
 } // end namespace 'mvd'
@@ -424,7 +424,7 @@ void AbstractImageModel::SetCurrentLod(CountType lod)
   m_CurrentLod = lod;
 
   // if everything ok emit the new spacing of the current lod
-  emit SpacingChanged(otb::internal::GetSignedSpacing(static_cast<ImageBaseType*>(ToImageBase())));
+  Q_EMIT SpacingChanged(otb::internal::GetSignedSpacing(static_cast<ImageBaseType*>(ToImageBase())));
 }
 
 /*****************************************************************************/

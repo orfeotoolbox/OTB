@@ -48,14 +48,14 @@ void QtLogOutput::Write(double timestamp)
 {
   std::ostringstream oss;
   oss << timestamp;
-  emit NewContentLog(QString(oss.str().c_str()));
+  Q_EMIT NewContentLog(QString(oss.str().c_str()));
 }
 
 
 /** Write to a buffer */
 void QtLogOutput::Write(std::string const& content)
 {
-  emit NewContentLog(QString(content.c_str()));
+  Q_EMIT NewContentLog(QString(content.c_str()));
 }
 
 
@@ -64,7 +64,7 @@ void QtLogOutput::Write(std::string const& content, double timestamp)
 {
   std::ostringstream oss;
   oss << timestamp << "  :  " << content;
-  emit NewContentLog(QString(oss.str().c_str()));
+  Q_EMIT NewContentLog(QString(oss.str().c_str()));
 }
 
 void QtLogOutput::PrintSelf(std::ostream& os, itk::Indent indent) const

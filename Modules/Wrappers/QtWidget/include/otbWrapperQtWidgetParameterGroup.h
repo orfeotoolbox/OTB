@@ -44,7 +44,7 @@ public:
   QtWidgetParameterGroup(ParameterGroup::Pointer, QtWidgetModel*, QWidget*);
   ~QtWidgetParameterGroup() override;
 
-public slots:
+public Q_SLOTS:
   void SetActivationState(bool value) override;
 
 private:

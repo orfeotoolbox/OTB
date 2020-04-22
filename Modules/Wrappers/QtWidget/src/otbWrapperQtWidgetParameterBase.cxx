@@ -52,7 +52,7 @@ void QtWidgetParameterBase::UpdateGUI()
   if (!m_Param->GetMandatory())
   {
     bool state = m_Param->GetActive();
-    emit ParameterActiveStatus(state);
+    Q_EMIT ParameterActiveStatus(state);
   }
   else
   {
@@ -60,7 +60,7 @@ void QtWidgetParameterBase::UpdateGUI()
     // activated Group
     if (m_Param->GetRoot()->GetActive())
     {
-      emit ParameterActiveStatus(true);
+      Q_EMIT ParameterActiveStatus(true);
     }
   }
 }

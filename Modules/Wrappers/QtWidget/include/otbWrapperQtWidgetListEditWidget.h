@@ -63,10 +63,10 @@ public:
 
   ListEditItemModel* GetItemModel();
 
-public slots:
+public Q_SLOTS:
   void OnFilenameDropped(const QString&);
 
-signals:
+Q_SIGNALS:
   void Updated();
 
   void ValueChanged();
@@ -92,7 +92,7 @@ private:
    */
   Ui::ListEditWidget* m_UI;
 
-private slots:
+private Q_SLOTS:
   void on_addButton_clicked();
   void on_browseButton_clicked();
   void on_downButton_clicked();

@@ -102,7 +102,7 @@ public:
 
   //
   // Slots.
-public slots:
+public Q_SLOTS:
   /**
    * \brief Slot called when the band-index of a RGB channel has
    * changed.
@@ -132,7 +132,7 @@ public slots:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   /**
    * \brief
    */
@@ -258,7 +258,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
   /**
    */
   void RefreshHistogram();

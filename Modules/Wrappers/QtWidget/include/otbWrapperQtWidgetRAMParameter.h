@@ -43,7 +43,7 @@ public:
   QtWidgetRAMParameter(RAMParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetRAMParameter() override;
 
-protected slots:
+protected Q_SLOTS:
   void SetValue(int value);
 
 private:

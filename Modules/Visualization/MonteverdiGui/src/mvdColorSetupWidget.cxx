@@ -198,7 +198,7 @@ void ColorSetupWidget::on_alphaSlider_valueChanged(int value)
 {
   // qDebug() << "on_alphaSlider_valueChanged(" << value << ")";
 
-  emit AlphaValueChanged(ToAlpha(value));
+  Q_EMIT AlphaValueChanged(ToAlpha(value));
 }
 
 /*******************************************************************************/

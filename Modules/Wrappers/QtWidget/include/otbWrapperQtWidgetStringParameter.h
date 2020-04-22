@@ -42,7 +42,7 @@ public:
   QtWidgetStringParameter(StringParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetStringParameter() override;
 
-protected slots:
+protected Q_SLOTS:
   void SetValue(const QString& value);
 
 private:
