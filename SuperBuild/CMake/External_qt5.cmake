@@ -130,8 +130,8 @@ configure_file( ${QT5_CONFIGURE_COMMAND_IN} ${QT5_CONFIGURE_COMMAND} @ONLY )
 
 ExternalProject_Add(QT5
   PREFIX QT5
-  URL "https://download.qt.io/archive/qt/5.10/5.10.1/single/qt-everywhere-src-5.10.1.tar.xz"
-  URL_MD5 7e167b9617e7bd64012daaacb85477af
+  URL "https://download.qt.io/archive/qt/5.14/5.14.1/single/qt-everywhere-src-5.14.1.tar.xz"
+  URL_MD5 781c3179410aff7ef84607214e1e91b4
   BINARY_DIR ${QT5_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
