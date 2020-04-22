@@ -424,7 +424,7 @@ void AbstractImageModel::SetCurrentLod(CountType lod)
   m_CurrentLod = lod;
 
   // if everything ok emit the new spacing of the current lod
-  emit SpacingChanged(otb::internal::GetSignedSpacing(static_cast<ImageBaseType*>(ToImageBase())));
+  Q_EMIT SpacingChanged(otb::internal::GetSignedSpacing(static_cast<ImageBaseType*>(ToImageBase())));
 }
 
 /*****************************************************************************/

@@ -92,7 +92,7 @@ private:
   Ui::ProjectionBarWidget* m_UI;
 
   /**
-   * emit a signal to change the scale if projectionScaleLineEdit is changed
+   * Q_EMIT a signal to change the scale if projectionScaleLineEdit is changed
    * and if the input text is valid.
    */
   void ChangeScale();

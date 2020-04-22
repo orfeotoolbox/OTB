@@ -91,6 +91,6 @@ void ProjectionBarWidget::ChangeScale()
   }
 
   // Emit scale changed.
-  emit ProjectionScaleChanged(numerator / denominator);
+  Q_EMIT ProjectionScaleChanged(numerator / denominator);
 }
 }

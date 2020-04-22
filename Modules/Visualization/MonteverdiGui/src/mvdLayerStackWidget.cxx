@@ -183,7 +183,7 @@ bool LayerStackWidget::eventFilter(QObject* object, QEvent* e)
     case Qt::Key_C:
       if (keyEvent->modifiers() == Qt::ControlModifier && m_UI->treeView->currentIndex().isValid())
       {
-        emit CopyLayerRequested(LayerStackItemModel::GetLayer(m_UI->treeView->currentIndex()));
+        Q_EMIT CopyLayerRequested(LayerStackItemModel::GetLayer(m_UI->treeView->currentIndex()));
 
         return true;
       }
@@ -192,13 +192,13 @@ bool LayerStackWidget::eventFilter(QObject* object, QEvent* e)
     case Qt::Key_Delete:
       if (keyEvent->modifiers() == Qt::NoModifier)
       {
-        emit DeleteLayerRequested();
+        Q_EMIT DeleteLayerRequested();
 
         return true;
       }
       else if (keyEvent->modifiers() == Qt::ShiftModifier)
       {
-        emit DeleteAllLayersRequested();
+        Q_EMIT DeleteAllLayersRequested();
 
         return true;
       }
@@ -215,7 +215,7 @@ bool LayerStackWidget::eventFilter(QObject* object, QEvent* e)
 
     if (wEvent->modifiers() == Qt::ControlModifier)
     {
-      emit RotateLayersRequested(wEvent->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES));
+      Q_EMIT RotateLayersRequested(wEvent->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES));
 
       return true;
     }
@@ -372,7 +372,7 @@ void LayerStackWidget::OnCurrentRowChanged(const QModelIndex& current, const QMo
   //   << this
   //   << "::OnCurrentRowChange(" << current.row() << "," << previous.row() << ")";
 
-  emit CurrentChanged(current.row());
+  Q_EMIT CurrentChanged(current.row());
 }
 
 /*******************************************************************************/
@@ -385,7 +385,7 @@ void LayerStackWidget::OnSelectionChanged(const QItemSelection& selected, const 
   QModelIndexList indexes(selected.indexes());
   // assert( indexes.empty() || indexes.size()==1 );
 
-  emit SelectionChanged(indexes.empty() ? -1 : indexes.front().row());
+  Q_EMIT SelectionChanged(indexes.empty() ? -1 : indexes.front().row());
 }
 
 } // end namespace 'mvd'

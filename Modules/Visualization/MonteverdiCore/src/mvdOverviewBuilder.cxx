@@ -94,20 +94,20 @@ void OverviewBuilder::SetProgress(double value)
   //   << value << "\t"
   //   << ( 100 * m_Index + static_cast< int >( 100.0 * value ) );
 
-  emit ProgressValueChanged(100 * m_Index + static_cast<int>(100.0 * value));
+  Q_EMIT ProgressValueChanged(100 * m_Index + static_cast<int>(100.0 * value));
 }
 
 /*******************************************************************************/
 QObject* OverviewBuilder::virtual_Do()
 {
   /*
-  emit ProgressTextChanged(
+  Q_EMIT ProgressTextChanged(
     tr( "Importing image '%1' as dataset into cache directory..." )
     .arg( QFileInfo( m_Filename ).fileName() )
   );
   */
 
-  // emit ProgressTextChanged( GetFirstProgressText() );
+  // Q_EMIT ProgressTextChanged( GetFirstProgressText() );
 
   //
   // Count elements to process.
@@ -117,7 +117,7 @@ QObject* OverviewBuilder::virtual_Do()
     if (!it->IsNull() && (*it)->GetNbResolutions() > 0)
       ++m_Count;
 
-  emit ProgressRangeChanged(0, 100 * m_Count);
+  Q_EMIT ProgressRangeChanged(0, 100 * m_Count);
 
   //
   // Process elements.
@@ -137,12 +137,12 @@ QObject* OverviewBuilder::virtual_Do()
 
         (*it)->RemoveObserver(id);
 
-        emit ProgressTextChanged(
+        Q_EMIT ProgressTextChanged(
             QString(tr("Generating overviews for file %1/%2 '%3'.")).arg(m_Index + 1).arg(m_Count).arg(QFile::decodeName((*it)->GetInputFileName().c_str())));
       }
   }
 
-  emit ProgressValueChanged(100 * m_Count);
+  Q_EMIT ProgressValueChanged(100 * m_Count);
 
   return NULL;
 }

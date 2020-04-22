@@ -255,7 +255,7 @@ private Q_SLOTS:
    */
   inline void on_rComboBox_currentIndexChanged(int index)
   {
-    emit CurrentRgbIndexChanged(RGBW_CHANNEL_RED, index);
+    Q_EMIT CurrentRgbIndexChanged(RGBW_CHANNEL_RED, index);
   }
 
   /**
@@ -266,7 +266,7 @@ private Q_SLOTS:
    */
   inline void on_gComboBox_currentIndexChanged(int index)
   {
-    emit CurrentRgbIndexChanged(RGBW_CHANNEL_GREEN, index);
+    Q_EMIT CurrentRgbIndexChanged(RGBW_CHANNEL_GREEN, index);
   }
 
   /**
@@ -277,7 +277,7 @@ private Q_SLOTS:
    */
   inline void on_bComboBox_currentIndexChanged(int index)
   {
-    emit CurrentRgbIndexChanged(RGBW_CHANNEL_BLUE, index);
+    Q_EMIT CurrentRgbIndexChanged(RGBW_CHANNEL_BLUE, index);
   }
 
   /**
@@ -288,7 +288,7 @@ private Q_SLOTS:
    */
   inline void on_wComboBox_currentIndexChanged(int index)
   {
-    emit CurrentGrayIndexChanged(index);
+    Q_EMIT CurrentGrayIndexChanged(index);
   }
 
   /**
@@ -298,7 +298,7 @@ private Q_SLOTS:
    */
   inline void on_wCheckBox_toggled(bool activated)
   {
-    emit GrayscaleActivated(activated);
+    Q_EMIT GrayscaleActivated(activated);
   }
 
   /**

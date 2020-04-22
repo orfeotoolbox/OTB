@@ -260,7 +260,7 @@ void QtWidgetView::OnApplicationExecutionDone(int status)
                                                      .arg(status),
                              QMessageBox::Ok);
 
-    emit ExecutionDone(status);
+    Q_EMIT ExecutionDone(status);
 
     return;
   }
@@ -287,7 +287,7 @@ void QtWidgetView::OnApplicationExecutionDone(int status)
       // try to cast it
       otb::Wrapper::OutputImageParameter* outputParam = dynamic_cast<otb::Wrapper::OutputImageParameter*>(param);
 
-      // emit the output image filename selected
+      // Q_EMIT the output image filename selected
       if (outputParam != NULL)
       {
         QFileInfo fileInfo(outputParam->GetFileName());
@@ -303,7 +303,7 @@ void QtWidgetView::OnApplicationExecutionDone(int status)
         */
         ++count;
 
-        emit OTBApplicationOutputImageChanged(QString(otbApp->GetName()), QFile::decodeName(outputParam->GetFileName()));
+        Q_EMIT OTBApplicationOutputImageChanged(QString(otbApp->GetName()), QFile::decodeName(outputParam->GetFileName()));
         /*
         }
         */
@@ -311,7 +311,7 @@ void QtWidgetView::OnApplicationExecutionDone(int status)
     }
   }
 
-  emit ExecutionDone(status);
+  Q_EMIT ExecutionDone(status);
 }
 
 } // end of namespace Wrapper

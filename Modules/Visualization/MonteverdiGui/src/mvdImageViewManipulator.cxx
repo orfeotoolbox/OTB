@@ -231,7 +231,7 @@ void ImageViewManipulator::CenterOn(const PointType& point)
 
   m_ViewSettings->Center(point);
 
-  emit RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), point);
+  Q_EMIT RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), point);
 }
 
 /******************************************************************************/
@@ -272,9 +272,9 @@ void ImageViewManipulator::ZoomTo(double scale)
   m_ViewSettings->Center(center);
 
   // Emit ROI changed.
-  emit RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), center);
+  Q_EMIT RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), center);
 
-  // emit RenderingContextChanged(center,GetSpacing()[0]);
+  // Q_EMIT RenderingContextChanged(center,GetSpacing()[0]);
 }
 
 /******************************************************************************/
@@ -286,7 +286,7 @@ void ImageViewManipulator::ZoomIn()
 
   Scale(QPoint(size[0] / 2, size[1] / 2), m_ZoomGranularity * MOUSE_WHEEL_STEP_DEGREES, &point);
 
-  emit RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), point);
+  Q_EMIT RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), point);
 }
 
 /******************************************************************************/
@@ -298,7 +298,7 @@ void ImageViewManipulator::ZoomOut()
 
   Scale(QPoint(size[0] / 2, size[1] / 2), -m_ZoomGranularity * MOUSE_WHEEL_STEP_DEGREES, &point);
 
-  emit RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), point);
+  Q_EMIT RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), point);
 }
 
 /******************************************************************************/
@@ -325,7 +325,7 @@ void ImageViewManipulator::ResetViewport()
   m_NativeSpacing.Fill(1.0);
   m_ZoomFactor = 1.0;
 
-  emit RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), m_ViewSettings->GetViewportCenter());
+  Q_EMIT RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), m_ViewSettings->GetViewportCenter());
 }
 
 /******************************************************************************/
@@ -348,7 +348,7 @@ void ImageViewManipulator::MousePressEvent(QMouseEvent* e)
     break;
 
   case Qt::RightButton:
-    emit ToggleLayerVisibilityRequested(false);
+    Q_EMIT ToggleLayerVisibilityRequested(false);
     break;
 
   case Qt::MidButton:
@@ -400,9 +400,9 @@ void ImageViewManipulator::MouseMoveEvent(QMouseEvent* e)
 
     m_MousePressPosition = e->pos();
 
-    emit RefreshViewRequested();
+    Q_EMIT RefreshViewRequested();
 
-    emit RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), m_ViewSettings->GetViewportCenter());
+    Q_EMIT RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), m_ViewSettings->GetViewportCenter());
   }
 }
 
@@ -433,11 +433,11 @@ void ImageViewManipulator::MouseReleaseEvent(QMouseEvent* e)
     m_MousePressOrigin   = PointType();
     m_IsMouseDragging    = false;
 
-    emit RefreshViewRequested();
+    Q_EMIT RefreshViewRequested();
     break;
 
   case Qt::RightButton:
-    emit ToggleLayerVisibilityRequested(true);
+    Q_EMIT ToggleLayerVisibilityRequested(true);
     break;
 
   case Qt::MidButton:
@@ -521,45 +521,45 @@ void ImageViewManipulator::WheelEvent(QWheelEvent* e)
   int degrees = e->delta() / MOUSE_WHEEL_STEP_FACTOR;
 
   if (modifiers == Qt::ControlModifier)
-    emit RotateLayersRequested(e->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES));
+    Q_EMIT RotateLayersRequested(e->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES));
   //
   else if (modifiers == Qt::MetaModifier)
   {
     // qDebug() << "META+Wheel" << e->delta();
 
-    emit ShiftAlphaRequested(static_cast<double>(m_AlphaGranularity * e->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES)) / 100.0);
+    Q_EMIT ShiftAlphaRequested(static_cast<double>(m_AlphaGranularity * e->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES)) / 100.0);
   }
   else if (modifiers == (Qt::MetaModifier | Qt::ShiftModifier))
   {
     // qDebug() << "META+SHIFT+Wheel" << e->delta();
 
-    emit UpdateGammaRequested(ImageViewManipulator::Factor(degrees, MOUSE_WHEEL_STEP_DEGREES));
+    Q_EMIT UpdateGammaRequested(ImageViewManipulator::Factor(degrees, MOUSE_WHEEL_STEP_DEGREES));
   }
   //
   else if (modifiers == Qt::AltModifier)
   {
     // qDebug() << "ALT+Wheel" << e->delta();
 
-    emit ResizeShaderRequested(ImageViewManipulator::Factor(degrees, MOUSE_WHEEL_STEP_DEGREES));
+    Q_EMIT ResizeShaderRequested(ImageViewManipulator::Factor(degrees, MOUSE_WHEEL_STEP_DEGREES));
   }
   else if (modifiers == (Qt::AltModifier | Qt::ShiftModifier))
   {
     // qDebug() << "ALT+SHIFT+Wheel" << e->delta();
 
-    emit ReparamShaderRequested(ImageViewManipulator::Factor(degrees, MOUSE_WHEEL_STEP_DEGREES));
+    Q_EMIT ReparamShaderRequested(ImageViewManipulator::Factor(degrees, MOUSE_WHEEL_STEP_DEGREES));
   }
   //
   else if (modifiers == (Qt::ControlModifier | Qt::AltModifier))
   {
     // qDebug() << "CTRL+ALT+Wheel" << e->delta();
 
-    emit ShiftDynamicsRequested(m_DynamicsShiftGranularity * static_cast<double>(e->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES)));
+    Q_EMIT ShiftDynamicsRequested(m_DynamicsShiftGranularity * static_cast<double>(e->delta() / (MOUSE_WHEEL_STEP_FACTOR * MOUSE_WHEEL_STEP_DEGREES)));
   }
   else if (modifiers == (Qt::ControlModifier | Qt::AltModifier | Qt::ShiftModifier))
   {
     // qDebug() << "CTRL+ALT+SHIFT+Wheel" << e->delta();
 
-    emit ScaleDynamicsRequested(ImageViewManipulator::Factor(degrees, MOUSE_WHEEL_STEP_DEGREES));
+    Q_EMIT ScaleDynamicsRequested(ImageViewManipulator::Factor(degrees, MOUSE_WHEEL_STEP_DEGREES));
   }
   //
   else if (modifiers == Qt::NoModifier)
@@ -581,9 +581,9 @@ void ImageViewManipulator::WheelEvent(QWheelEvent* e)
 
     Scale(e->pos(), degrees, &point);
 
-    emit RefreshViewRequested();
+    Q_EMIT RefreshViewRequested();
 
-    emit RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), point);
+    Q_EMIT RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), point);
   }
 }
 
@@ -628,96 +628,96 @@ void ImageViewManipulator::KeyPressEvent(QKeyEvent* e)
 
   case Qt::Key_PageUp:
     if (e->modifiers() == Qt::ShiftModifier)
-      emit LayerToTopRequested();
+      Q_EMIT LayerToTopRequested();
     else
-      emit RaiseLayerRequested();
+      Q_EMIT RaiseLayerRequested();
     break;
 
   case Qt::Key_PageDown:
     if (e->modifiers() == Qt::ShiftModifier)
-      emit LayerToBottomRequested();
+      Q_EMIT LayerToBottomRequested();
     else
-      emit LowerLayerRequested();
+      Q_EMIT LowerLayerRequested();
     break;
 
   case Qt::Key_Home:
     if (e->modifiers() == Qt::ShiftModifier)
-      emit SelectFirstLayerRequested();
+      Q_EMIT SelectFirstLayerRequested();
     else
-      emit SelectPreviousLayerRequested();
+      Q_EMIT SelectPreviousLayerRequested();
     break;
 
   case Qt::Key_End:
     if (e->modifiers() == Qt::ShiftModifier)
-      emit SelectLastLayerRequested();
+      Q_EMIT SelectLastLayerRequested();
     else
-      emit SelectNextLayerRequested();
+      Q_EMIT SelectNextLayerRequested();
     break;
 
   case Qt::Key_Delete:
     if (modifiers.testFlag(Qt::ShiftModifier))
-      emit DeleteAllRequested();
+      Q_EMIT DeleteAllRequested();
     else
-      emit DeleteSelectedRequested();
+      Q_EMIT DeleteSelectedRequested();
     break;
 
   case Qt::Key_1:
-    emit ZoomToFullResolutionRequested();
+    Q_EMIT ZoomToFullResolutionRequested();
     break;
 
   case Qt::Key_2:
-    emit ZoomToLayerExtentRequested();
+    Q_EMIT ZoomToLayerExtentRequested();
     break;
 
   case Qt::Key_3:
-    emit ZoomToFullExtentRequested();
+    Q_EMIT ZoomToFullExtentRequested();
     break;
 
   case Qt::Key_A:
-    emit ApplyAllRequested();
+    Q_EMIT ApplyAllRequested();
     break;
 
   case Qt::Key_C:
-    emit ShaderEffectRequested(EFFECT_CHESSBOARD);
+    Q_EMIT ShaderEffectRequested(EFFECT_CHESSBOARD);
     break;
 
   case Qt::Key_G:
-    emit ShaderEffectRequested(EFFECT_GRADIENT);
+    Q_EMIT ShaderEffectRequested(EFFECT_GRADIENT);
     break;
 
   case Qt::Key_D:
-    emit ShaderEffectRequested(EFFECT_LOCAL_CONTRAST);
+    Q_EMIT ShaderEffectRequested(EFFECT_LOCAL_CONTRAST);
     break;
 
   case Qt::Key_H:
-    emit ShaderEffectRequested(EFFECT_SWIPE_H);
+    Q_EMIT ShaderEffectRequested(EFFECT_SWIPE_H);
     break;
 
   case Qt::Key_N:
-    emit ShaderEffectRequested(EFFECT_NORMAL);
+    Q_EMIT ShaderEffectRequested(EFFECT_NORMAL);
     break;
 
   case Qt::Key_P:
     if (modifiers.testFlag(Qt::ControlModifier))
-      emit TakeScreenshotRequested(modifiers.testFlag(Qt::ShiftModifier));
+      Q_EMIT TakeScreenshotRequested(modifiers.testFlag(Qt::ShiftModifier));
     else
-      emit SetReferenceRequested();
+      Q_EMIT SetReferenceRequested();
     break;
 
   case Qt::Key_Q:
-    emit ResetQuantilesRequested(modifiers.testFlag(Qt::ShiftModifier));
+    Q_EMIT ResetQuantilesRequested(modifiers.testFlag(Qt::ShiftModifier));
     break;
 
   case Qt::Key_S:
-    emit ShaderEffectRequested(EFFECT_SPECTRAL_ANGLE);
+    Q_EMIT ShaderEffectRequested(EFFECT_SPECTRAL_ANGLE);
     break;
 
   case Qt::Key_T:
-    emit ShaderEffectRequested(EFFECT_LOCAL_TRANSLUCENCY);
+    Q_EMIT ShaderEffectRequested(EFFECT_LOCAL_TRANSLUCENCY);
     break;
 
   case Qt::Key_V:
-    emit ShaderEffectRequested(EFFECT_SWIPE_V);
+    Q_EMIT ShaderEffectRequested(EFFECT_SWIPE_V);
     break;
 
   default:
@@ -772,9 +772,9 @@ void ImageViewManipulator::KeyPressEvent(QKeyEvent* e)
   // Refresh
   if (needsRefresh)
   {
-    emit RefreshViewRequested();
+    Q_EMIT RefreshViewRequested();
 
-    emit RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), m_ViewSettings->GetViewportCenter());
+    Q_EMIT RoiChanged(GetOrigin(), GetViewportSize(), GetSpacing(), m_ViewSettings->GetViewportCenter());
   }
 }
 
@@ -869,7 +869,7 @@ void ImageViewManipulator::OnTimeout()
 
   SetFastRenderMode(false);
 
-  emit RefreshViewRequested();
+  Q_EMIT RefreshViewRequested();
 
   delete m_Timer;
   m_Timer = NULL;

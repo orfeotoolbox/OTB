@@ -103,33 +103,33 @@ void StackedLayerModel::Clear()
 
 
   if (emitSignal0)
-    emit ContentAboutToBeReset();
+    Q_EMIT ContentAboutToBeReset();
 
   //
   // Clear current.
   if (emitSignal1)
   {
-    emit CurrentAboutToBeChanged(StackedLayerModel::NIL_INDEX);
-    emit AboutToChangeSelectedLayerModel(KeyType());
+    Q_EMIT CurrentAboutToBeChanged(StackedLayerModel::NIL_INDEX);
+    Q_EMIT AboutToChangeSelectedLayerModel(KeyType());
   }
 
   m_Current = StackedLayerModel::NIL_INDEX;
 
   if (emitSignal1)
   {
-    emit CurrentChanged(m_Current);
-    emit SelectedLayerModelChanged(KeyType());
+    Q_EMIT CurrentChanged(m_Current);
+    Q_EMIT SelectedLayerModelChanged(KeyType());
   }
 
   //
   // Clear reference.
   if (emitSignal2)
-    emit ReferenceAboutToBeChanged(StackedLayerModel::NIL_INDEX);
+    Q_EMIT ReferenceAboutToBeChanged(StackedLayerModel::NIL_INDEX);
 
   m_Reference = StackedLayerModel::NIL_INDEX;
 
   if (emitSignal2)
-    emit ReferenceChanged(m_Reference);
+    Q_EMIT ReferenceChanged(m_Reference);
 
   //
   // Clear content.
@@ -150,7 +150,7 @@ void StackedLayerModel::Clear()
   m_Keys.clear();
 
   if (emitSignal0)
-    emit ContentReset();
+    Q_EMIT ContentReset();
 }
 
 /*****************************************************************************/
@@ -224,8 +224,8 @@ void StackedLayerModel::Deleting(unsigned int index)
 
   //
   // Emit signals.
-  emit ContentAboutToBeChanged();
-  emit LayerAboutToBeDeleted(index);
+  Q_EMIT ContentAboutToBeChanged();
+  Q_EMIT LayerAboutToBeDeleted(index);
 
   //
   // Clear satellite date.
@@ -270,8 +270,8 @@ void StackedLayerModel::Delete(SizeType index)
   // the work of deleting model is now done in the above function
   // Deleting(unsigned int index)
   // Emit signals.
-  emit LayerDeleted(index);
-  emit ContentChanged();
+  Q_EMIT LayerDeleted(index);
+  Q_EMIT ContentChanged();
 }
 
 /*****************************************************************************/
@@ -279,7 +279,7 @@ void StackedLayerModel::EndEditResolutions()
 {
   // qDebug() << this << "::EndEditResolutions()";
 
-  emit ResolutionsChanged(m_PixelInfos);
+  Q_EMIT ResolutionsChanged(m_PixelInfos);
 }
 
 /*******************************************************************************/
@@ -332,7 +332,7 @@ StackedLayerModel::KeyType StackedLayerModel::Insert(AbstractLayerModel* model, 
 
   //
   // Emit signals.
-  emit ContentAboutToBeChanged();
+  Q_EMIT ContentAboutToBeChanged();
 
   //
   // Clear satellite date.
@@ -360,8 +360,8 @@ StackedLayerModel::KeyType StackedLayerModel::Insert(AbstractLayerModel* model, 
 
   //
   // Emit signals.
-  emit LayerAdded(index);
-  emit ContentChanged();
+  Q_EMIT LayerAdded(index);
+  Q_EMIT ContentChanged();
 
   //
   // Return generated key.
@@ -376,20 +376,20 @@ void StackedLayerModel::LowerLayer(SizeType index)
 
   SizeType next = Next(index);
 
-  emit OrderAboutToBeChanged();
+  Q_EMIT OrderAboutToBeChanged();
   {
     ClearPixelInfos();
 
     std::swap(*(m_Keys.begin() + index), *(m_Keys.begin() + next));
   }
-  emit OrderChanged();
+  Q_EMIT OrderChanged();
 
   // WARNING: This may be buggy if index!=m_Current
-  emit CurrentAboutToBeChanged(next);
+  Q_EMIT CurrentAboutToBeChanged(next);
   {
     m_Current = next;
   }
-  emit CurrentChanged(next);
+  Q_EMIT CurrentChanged(next);
 
   // WARNING: This may be buggy if index!=m_Reference
   SetReference(m_Reference == next ? index : (m_Reference == index ? next : m_Reference));
@@ -407,7 +407,7 @@ void StackedLayerModel::MoveTo(SizeType index, SizeType position)
 
   //
   // Move element.
-  emit OrderAboutToBeChanged();
+  Q_EMIT OrderAboutToBeChanged();
   {
     ClearPixelInfos();
 
@@ -416,7 +416,7 @@ void StackedLayerModel::MoveTo(SizeType index, SizeType position)
     m_Keys.erase(m_Keys.begin() + index);
     m_Keys.insert(m_Keys.begin() + position, key);
   }
-  emit OrderChanged();
+  Q_EMIT OrderChanged();
 
   //
   // Compute new current element.
@@ -471,20 +471,20 @@ void StackedLayerModel::RaiseLayer(SizeType index)
 
   SizeType prev = Prev(index);
 
-  emit OrderAboutToBeChanged();
+  Q_EMIT OrderAboutToBeChanged();
   {
     ClearPixelInfos();
 
     std::swap(*(m_Keys.begin() + index), *(m_Keys.begin() + prev));
   }
-  emit OrderChanged();
+  Q_EMIT OrderChanged();
 
   // WARNING: This may be buggy if index!=m_Current.
-  emit CurrentAboutToBeChanged(prev);
+  Q_EMIT CurrentAboutToBeChanged(prev);
   {
     m_Current = prev;
   }
-  emit CurrentChanged(prev);
+  Q_EMIT CurrentChanged(prev);
 
   // WARNING: This may be buggy if index!=m_Reference.
   SetReference(m_Reference == prev ? index : (m_Reference == index ? prev : m_Reference));
@@ -502,13 +502,13 @@ void StackedLayerModel::RotateLayerUp(SizeType index)
   KeyType currentKey(GetKey(m_Current));
   KeyType referenceKey(GetKey(m_Reference));
 
-  emit OrderAboutToBeChanged();
+  Q_EMIT OrderAboutToBeChanged();
   {
     ClearPixelInfos();
 
     std::rotate(m_Keys.begin(), m_Keys.begin() + index, m_Keys.end());
   }
-  emit OrderChanged();
+  Q_EMIT OrderChanged();
 
   if (!currentKey.empty())
   {
@@ -516,11 +516,11 @@ void StackedLayerModel::RotateLayerUp(SizeType index)
 
     assert(current != StackedLayerModel::NIL_INDEX);
 
-    emit CurrentAboutToBeChanged(current);
+    Q_EMIT CurrentAboutToBeChanged(current);
     {
       m_Current = current;
     }
-    emit CurrentChanged(m_Current);
+    Q_EMIT CurrentChanged(m_Current);
   }
 
   if (!referenceKey.empty())
@@ -529,11 +529,11 @@ void StackedLayerModel::RotateLayerUp(SizeType index)
 
     assert(reference != StackedLayerModel::NIL_INDEX);
 
-    emit ReferenceAboutToBeChanged(reference);
+    Q_EMIT ReferenceAboutToBeChanged(reference);
     {
       m_Reference = reference;
     }
-    emit ReferenceChanged(m_Reference);
+    Q_EMIT ReferenceChanged(m_Reference);
   }
 
   // qDebug() << "current:" << index;
@@ -551,13 +551,13 @@ void StackedLayerModel::RotateLayerDown(SizeType index)
   KeyType currentKey(GetKey(m_Current));
   KeyType referenceKey(GetKey(m_Reference));
 
-  emit OrderAboutToBeChanged();
+  Q_EMIT OrderAboutToBeChanged();
   {
     ClearPixelInfos();
 
     std::rotate(m_Keys.rbegin(), m_Keys.rbegin() + index, m_Keys.rend());
   }
-  emit OrderChanged();
+  Q_EMIT OrderChanged();
 
   if (!currentKey.empty())
   {
@@ -565,11 +565,11 @@ void StackedLayerModel::RotateLayerDown(SizeType index)
 
     assert(current != StackedLayerModel::NIL_INDEX);
 
-    emit CurrentAboutToBeChanged(current);
+    Q_EMIT CurrentAboutToBeChanged(current);
     {
       m_Current = current;
     }
-    emit CurrentChanged(current);
+    Q_EMIT CurrentChanged(current);
   }
 
   if (!referenceKey.empty())
@@ -578,11 +578,11 @@ void StackedLayerModel::RotateLayerDown(SizeType index)
 
     assert(reference != StackedLayerModel::NIL_INDEX);
 
-    emit ReferenceAboutToBeChanged(reference);
+    Q_EMIT ReferenceAboutToBeChanged(reference);
     {
       m_Reference = reference;
     }
-    emit ReferenceChanged(reference);
+    Q_EMIT ReferenceChanged(reference);
   }
 
   // qDebug() << "current:" << index;

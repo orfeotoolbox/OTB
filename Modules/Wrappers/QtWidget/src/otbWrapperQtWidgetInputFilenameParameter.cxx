@@ -103,7 +103,7 @@ void QtWidgetInputFilenameParameter::SetFileName(const QString& value)
 
   // notify of value change
   QString key(m_FilenameParam->GetKey());
-  emit    ParameterChanged(key);
+  Q_EMIT    ParameterChanged(key);
 }
 }
 }

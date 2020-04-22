@@ -450,7 +450,7 @@ inline StackedLayerModel::ConstIterator StackedLayerModel::End() const
 /*****************************************************************************/
 inline void StackedLayerModel::EndEditPixelInfo(const QPoint& screen, const PointType& view)
 {
-  emit PixelInfoChanged(screen, view, m_PixelInfos);
+  Q_EMIT PixelInfoChanged(screen, view, m_PixelInfos);
 }
 
 /*****************************************************************************/
@@ -738,13 +738,13 @@ inline void StackedLayerModel::SetCurrent(SizeType index, bool force)
   //   << "->"
   //   << QString( "'%1'" ).arg( key.c_str() );
 
-  emit CurrentAboutToBeChanged(index);
-  emit AboutToChangeSelectedLayerModel(key);
+  Q_EMIT CurrentAboutToBeChanged(index);
+  Q_EMIT AboutToChangeSelectedLayerModel(key);
 
   m_Current = index;
 
-  emit CurrentChanged(index);
-  emit SelectedLayerModelChanged(key);
+  Q_EMIT CurrentChanged(index);
+  Q_EMIT SelectedLayerModelChanged(key);
 }
 
 /*****************************************************************************/
@@ -755,11 +755,11 @@ inline void StackedLayerModel::SetReference(SizeType index, bool force)
   if (index == m_Reference && !force)
     return;
 
-  emit ReferenceAboutToBeChanged(index);
+  Q_EMIT ReferenceAboutToBeChanged(index);
 
   m_Reference = index;
 
-  emit ReferenceChanged(index);
+  Q_EMIT ReferenceChanged(index);
 }
 
 /*****************************************************************************/

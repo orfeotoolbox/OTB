@@ -151,7 +151,7 @@ void LayerStackItemModel::Disconnect(AbstractLayerModel* layer)
 /*****************************************************************************/
 void LayerStackItemModel::SetStack(StackedLayerModel* model)
 {
-  // emit layoutAboutToBeChanged();
+  // Q_EMIT layoutAboutToBeChanged();
 
   if (m_StackedLayerModel != NULL)
   {
@@ -244,7 +244,7 @@ void LayerStackItemModel::SetStack(StackedLayerModel* model)
   for (StackedLayerModel::ConstIterator it(m_StackedLayerModel->Begin()); it != m_StackedLayerModel->End(); ++it)
     Connect(it->second);
 
-  // emit layoutChanged();
+  // Q_EMIT layoutChanged();
 }
 
 /*****************************************************************************/
@@ -537,7 +537,7 @@ bool LayerStackItemModel::insertRows(int row, int count, const QModelIndex& p)
   }
   endInsertRows();
 
-  // emit dataChanged( index( row, 0 ), index( last, columnCount() - 1 ) );
+  // Q_EMIT dataChanged( index( row, 0 ), index( last, columnCount() - 1 ) );
 
   return true;
 }
@@ -603,7 +603,7 @@ bool LayerStackItemModel::removeRows(int row, int count, const QModelIndex& p)
   beginRemoveRows(p, row, row + count - 1);
   {
     // StackedLayerModel need to be shortened now
-    emit LayerDeletingModel(row);
+    Q_EMIT LayerDeletingModel(row);
     // TODO: Release additional row data here.
   }
 
@@ -656,7 +656,7 @@ bool LayerStackItemModel::setData(const QModelIndex& idx, const QVariant& value,
       if (!strValue.isEmpty())
       {
         layer->SetName(strValue);
-        emit dataChanged(idx, idx);
+        Q_EMIT dataChanged(idx, idx);
         return true;
       }
     }
@@ -676,7 +676,7 @@ bool LayerStackItemModel::setData(const QModelIndex& idx, const QVariant& value,
         assert(false && "Unhandled Qt::CheckedState value.");
         break;
       }
-      emit dataChanged(idx, idx);
+      Q_EMIT dataChanged(idx, idx);
       return true;
       break;
 
@@ -705,7 +705,7 @@ Qt::DropActions LayerStackItemModel::supportedDropActions() const
 // {
 //   qDebug() << this << "::OnAboutContentChanged()";
 
-//   emit layoutAboutToBeChanged();
+//   Q_EMIT layoutAboutToBeChanged();
 // }
 
 /*****************************************************************************/
@@ -723,12 +723,12 @@ Qt::DropActions LayerStackItemModel::supportedDropActions() const
 //   // endResetModel();
 
 //   // if( m_StackedLayerModel->GetCount()>0 )
-//   //   emit dataChanged(
+//   //   Q_EMIT dataChanged(
 //   //     index( 0, 0 ),
 //   //     index( m_StackedLayerModel->GetCount() - 1, COLUMN_COUNT -1 )
 //   //   );
 
-//   emit layoutChanged();
+//   Q_EMIT layoutChanged();
 // }
 
 /*****************************************************************************/
@@ -742,7 +742,7 @@ void LayerStackItemModel::OnImageSettingsUpdated(AbstractImageModel* image)
 
   assert(row != StackedLayerModel::NIL_INDEX);
 
-  emit dataChanged(createIndex(row, LayerStackItemModel::COLUMN_EFFECT, image), createIndex(row, LayerStackItemModel::COLUMN_EFFECT, image));
+  Q_EMIT dataChanged(createIndex(row, LayerStackItemModel::COLUMN_EFFECT, image), createIndex(row, LayerStackItemModel::COLUMN_EFFECT, image));
 }
 
 /*****************************************************************************/
@@ -791,7 +791,7 @@ void LayerStackItemModel::OnLayerVisibilityChanged(AbstractLayerModel* layer, bo
 
   QModelIndex idx(createIndex(m_StackedLayerModel->IndexOf(layer), COLUMN_NAME, layer));
 
-  emit dataChanged(idx, idx);
+  Q_EMIT dataChanged(idx, idx);
 }
 
 /*****************************************************************************/
@@ -800,7 +800,7 @@ void LayerStackItemModel::OnPixelInfoChanged(const QPoint&, const PointType&, co
   if (pixels.empty())
     return;
 
-  emit dataChanged(index(0, COLUMN_I), index(pixels.size() - 1, COLUMN_COUNT - 1));
+  Q_EMIT dataChanged(index(0, COLUMN_I), index(pixels.size() - 1, COLUMN_COUNT - 1));
 }
 
 /*****************************************************************************/
@@ -830,7 +830,7 @@ void LayerStackItemModel::OnReferenceChanged(size_t idx)
 
   assert(LayerStackItemModel::COLUMN_COUNT > 0);
 
-  emit dataChanged(createIndex(idx, 0, layer), createIndex(idx, LayerStackItemModel::COLUMN_COUNT - 1, layer));
+  Q_EMIT dataChanged(createIndex(idx, 0, layer), createIndex(idx, LayerStackItemModel::COLUMN_COUNT - 1, layer));
 }
 
 /*****************************************************************************/
@@ -839,7 +839,7 @@ void LayerStackItemModel::OnResolutionsChanged(const PixelInfo::Vector& pixels)
   if (pixels.empty())
     return;
 
-  emit dataChanged(index(0, COLUMN_RESOLUTION), index(pixels.size() - 1, COLUMN_RESOLUTION));
+  Q_EMIT dataChanged(index(0, COLUMN_RESOLUTION), index(pixels.size() - 1, COLUMN_RESOLUTION));
 }
 
 /*****************************************************************************/
