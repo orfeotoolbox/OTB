@@ -269,7 +269,8 @@ inline boost::bimap<T, std::string> bimapGenerator(std::map<T, std::string> inMa
   return bm;
 }
 
-extern OTBMetadata_EXPORT std::map<MDGeom, std::string> MDGeomNames;
+typedef boost::bimap<MDGeom, std::string> MDGeomBmType;
+extern OTBMetadata_EXPORT MDGeomBmType MDGeomNames;
 
 typedef boost::bimap<MDNum, std::string> MDNumBmType;
 extern OTBMetadata_EXPORT MDNumBmType MDNumNames;

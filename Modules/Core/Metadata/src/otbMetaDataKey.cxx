@@ -262,9 +262,9 @@ void LUT<VDim>::FromString(std::string str)
   for (std::string line : lines)
   {
     boost::split(parts, line, [](char c){return c == '=';});
-    if (std::stoi(parts[0].substr(3, 1)) != VDim)
+    boost::trim(parts[1]);
+    if (Utils::LexicalCast<int>(parts[0].substr(3, 1), "VDim") != VDim)
       throw std::invalid_argument("Wrong LUT dimension");
-    std::string element = parts[0].substr(6, 5);
     if(parts[0].substr(6, 5) == "ARRAY")
     // this->Array
     {
@@ -276,14 +276,14 @@ void LUT<VDim>::FromString(std::string str)
     }
     else
     {
-      unsigned int dim = std::stoi(parts[0].substr(9, 1));
+      unsigned int dim = Utils::LexicalCast<int>(parts[0].substr(9, 1), "parts[0].substr(9, 1)");
       if (dim > VDim)
         throw std::invalid_argument("LUT dimension higher than expected");
-      element = parts[0].substr(11);
+      std::string element = parts[0].substr(11);
       if (element == "SIZE ")
       // this->Axis[dim].Size
       {
-        Axis[dim].Size = std::stoi(parts[1]);
+        Axis[dim].Size = Utils::LexicalCast<int>(parts[1], "Axis[dim].Size");
       }
       else if (element == "VALUES ")
       // this->Axis[dim].Values
@@ -294,15 +294,15 @@ void LUT<VDim>::FromString(std::string str)
         std::transform(str_array.begin(), str_array.end(), back_inserter(Axis[dim].Values),
                         [](std::string const& val) {return std::stod(val);});
       }
-      else if (element == "ORIGIN")
+      else if (element == "ORIGIN ")
       // this->Axis[dim].Origin
       {
-        Axis[dim].Origin = std::stoi(parts[1]);
+        Axis[dim].Origin = Utils::LexicalCast<double>(parts[1], "Axis[dim].Origin");
       }
-      else if (element == "SPACING")
+      else if (element == "SPACING ")
       // this->Axis[dim].Spacing
       {
-        Axis[dim].Spacing = std::stoi(parts[1]);
+        Axis[dim].Spacing = Utils::LexicalCast<double>(parts[1], "Axis[dim].Spacing");
       }
     }
   }
@@ -370,7 +370,7 @@ MDL1DBmType MDL1DNames = bimapGenerator<MDL1D>(std::map<MDL1D, std::string> {
 
 MDL2DBmType MDL2DNames = bimapGenerator<MDL2D>(std::map<MDL2D, std::string> {});
 
-std::map<MDGeom, std::string> MDGeomNames = {
+MDGeomBmType MDGeomNames = bimapGenerator<MDGeom>(std::map<MDGeom, std::string> {
   {MDGeom::ProjectionWKT,  "ProjectionWKT"},
   {MDGeom::ProjectionEPSG, "ProjectionEPSG"},
   {MDGeom::ProjectionProj, "ProjectionProj"},
@@ -379,7 +379,7 @@ std::map<MDGeom, std::string> MDGeomNames = {
   {MDGeom::SensorGeometry, "SensorGeometry"},
   {MDGeom::GCP,            "GCP"},
   {MDGeom::Adjustment,     "Adjustment"}
-};
+});
 
 } // end namespace MetaData
 

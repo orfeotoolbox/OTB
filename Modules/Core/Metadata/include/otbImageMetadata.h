@@ -24,6 +24,7 @@
 #include "otbGeometryMetadata.h"
 #include "otbMetaDataKey.h"
 #include "OTBMetadataExport.h"
+#include "otbMacro.h"
 
 #include <boost/any.hpp>
 #include <vector>
@@ -237,6 +238,9 @@ public:
 class OTBMetadata_EXPORT ImageMetadata: public ImageMetadataBase
 {
 public:
+  /** Metadata object as a vector of Keywordlist */
+  using KeywordlistVector = std::vector<ImageMetadata::Keywordlist>;
+
   /** Band-specific metadatas */
   using ImageMetadataBandsType = std::vector<ImageMetadataBase>;
   ImageMetadataBandsType Bands;
@@ -262,6 +266,25 @@ public:
 
   /** if all bands share the same value of a key, put it at top level */
   void compact();
+
+  /** Export the Metadata as a list of KeywordList
+   *  The first KeywordList contains the metadata common to all the bands.
+   *  The following KeywordList contain the metadata of the bands.
+   *    */
+  void ToKeywordlists(KeywordlistVector&) const;
+
+  /** Export the bands of the Metadata as a list of KeywordList
+   *  Each KeywordList contain the metadata of a band.
+   *    */
+  void ToBandKeywordlists(KeywordlistVector&) const;
+
+  /** Import metadata from a list of keywordlist (will skip
+   *  MDGeom::SensorGeometry).
+   *  The first KeywordList contains the metadata common to all the bands.
+   *  The following KeywordList contain the metadata of the bands.
+   *  Returns True if all keywords were
+   *  parsed correctly */
+  bool FromKeywordlists(const KeywordlistVector&);
 };
 
 extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::ImageMetadataBase& imd);

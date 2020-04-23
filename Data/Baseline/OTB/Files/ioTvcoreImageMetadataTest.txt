@@ -56,3 +56,28 @@ LUT1D.ARRAY = 1 2 3"
 "NoData": "-10000",
 },]
 }
+md5: {{"Extra.Comment": "Test Extrakeys",
+"ProductType": "Official",
+"ProjectionEPSG": "4326",
+"ProjectionWKT": "UTM projRef",
+"ProjectionProj": "+proj=longlat +datum=WGS84 +no_defs ",
+"SpectralSensitivity": "LUT1D.DIM0.SIZE = 3
+LUT1D.DIM0.ORIGIN = 0
+LUT1D.DIM0.SPACING = 1
+LUT1D.ARRAY = 1 2 3"
+"RPC": "<RPCParam>",
+"ProductionDate": "2009-08-10T10:30:08.142149Z",
+"GCP": "<GCPParam>",
+"SensorID": "PHR",
+}Bands[{"PhysicalBias": "1",
+"BandName": "B3",
+"PhysicalGain": "2",
+},{"PhysicalBias": "2",
+"BandName": "B2",
+"PhysicalGain": "3",
+},{"PhysicalBias": "3",
+"PhysicalGain": "4",
+"BandName": "B4",
+"NoData": "-10000",
+},]
+}

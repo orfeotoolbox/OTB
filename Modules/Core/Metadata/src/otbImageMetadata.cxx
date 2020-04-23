@@ -237,9 +237,10 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
     oss.str("");
     if (kv.first == MDGeom::RPC)
     {
-//      Projection::RPCParam rpcStruct = boost::any_cast<Projection::RPCParam>(kv.second);
-//      cast_string = rpcStruct.ToJSON();
       oss << std::string("<RPCParam>");
+      // TODO: replace this std::string by a correct serialization of the RPCParam when implemented
+      // Projection::RPCParam rpcStruct = boost::any_cast<Projection::RPCParam>(kv.second);
+      // cast_string << rpcStruct;
     }
     else if (kv.first == MDGeom::ProjectionEPSG)
     {
@@ -247,9 +248,10 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
     }
     else if (kv.first == MDGeom::GCP)
     {
-//      Projection::GCPParam gcpStruct = boost::any_cast<Projection::GCPParam>(kv.second);
-//      cast_string = gcpStruct.ToJSON();
       oss << std::string("<GCPParam>");
+      // TODO: replace this std::string by a correct serialization of the GCPParam when implemented
+      // Projection::GCPParam gcpStruct = boost::any_cast<Projection::GCPParam>(kv.second);
+      // cast_string << gcpStruct;
     }
     // TODO : MDGeom::SensorGeometry (should be exported as "<typeinfo>" where typeinfo is boost::any::type().name()
     // TODO : MDGeom::SAR
@@ -258,8 +260,7 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
     {
       oss << boost::any_cast<std::string>(kv.second);
     }
-    kwl.emplace(MetaData::MDGeomNames[kv.first], oss.str());
-
+    kwl.emplace(MetaData::MDGeomNames.left.at(kv.first), oss.str());
   }
   // Converting the StringKeys
   for (const auto& kv : StringKeys)
@@ -328,8 +329,37 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
   // search iterators
   for (const auto& kv : kwl)
   {
-  // TODO Converting the GeomKeys
-  // skip MDGeom::SensorGeometry (they will be decoded by future SensorModelFactory)
+  // Converting the GeomKeys
+    auto geomKey = MetaData::MDGeomNames.right.find(kv.first);
+    if (geomKey != MetaData::MDGeomNames.right.end())
+    {
+      if(geomKey->second == MDGeom::RPC)
+      {
+        Projection::RPCParam rpcParam;
+        // TODO: Uncomment when deserialization is implemented
+        //kv.second >> rpcParam;
+        this->Add(geomKey->second, rpcParam);
+      }
+      else if (geomKey->second ==  MDGeom::ProjectionEPSG)
+      {
+        this->Add(geomKey->second, Utils::LexicalCast<int>(kv.second.c_str(), "Keywordlist.second.c_str()"));
+      }
+      else if (geomKey->second ==  MDGeom::GCP)
+      {
+        Projection::GCPParam gcpParam;
+        // TODO: Uncomment when deserialization is implemented
+        //kv.second >> gcpParam;
+        this->Add(geomKey->second, gcpParam);
+      }
+      // TODO : MDGeom::SAR
+      // TODO : MDGeom::Adjustment
+      // skip MDGeom::SensorGeometry (they will be decoded by future SensorModelFactory)
+      else
+      {
+        this->Add(geomKey->second, kv.second);
+      }
+      continue;
+    }
   // Converting the StringKeys
     auto strKey = MetaData::MDStrNames.right.find(kv.first);
     if (strKey != MetaData::MDStrNames.right.end())
@@ -373,11 +403,13 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
     }
   // Converting the ExtraKeys
     std::string prefix("Extra.");
-    if (kv.first.compare(0, prefix.size(), prefix))
+    if (kv.first.compare(0, prefix.size(), prefix) == 0)
     {
       this->Add(kv.first.substr(prefix.size()), kv.second);
       continue;
     }
+    otbLogMacro(Warning, << "The metadata named '" << kv.first << "' with value '" << kv.second << "' was not parsed.")
+    all_parsed = false;
   }
   return all_parsed;
 }
@@ -430,6 +462,40 @@ void ImageMetadata::append(const ImageMetadata& imd)
 void ImageMetadata::compact()
 {
   // TODO
+}
+
+void ImageMetadata::ToKeywordlists(KeywordlistVector& kwlVect) const
+{
+  Keywordlist kwl;
+  this->ToKeywordlist(kwl);
+  kwlVect.push_back(kwl);
+  this->ToBandKeywordlists(kwlVect);
+}
+
+void ImageMetadata::ToBandKeywordlists(KeywordlistVector& kwlVect) const
+{
+  Keywordlist kwl;
+  for (const auto& band: this->Bands)
+  {
+    band.ToKeywordlist(kwl);
+    kwlVect.push_back(kwl);
+  }
+}
+
+bool ImageMetadata::FromKeywordlists(const KeywordlistVector& kwlVect)
+{
+  bool all_parsed = true;
+  auto kwlIt = kwlVect.cbegin();
+  all_parsed = this->FromKeywordlist(*kwlIt) && all_parsed;
+  ++kwlIt;
+  while (kwlIt != kwlVect.cend())
+  {
+    ImageMetadataBase imb;
+    all_parsed = imb.FromKeywordlist(*kwlIt) && all_parsed;
+    this->Bands.push_back(imb);
+    ++kwlIt;
+  }
+  return all_parsed;
 }
 
 // printing
