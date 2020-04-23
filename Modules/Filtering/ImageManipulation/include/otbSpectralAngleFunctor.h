@@ -45,7 +45,7 @@ TOutput ComputeSpectralAngle(TInput const & input, typename TInput ::ValueType c
   auto minSize = std::min(input.Size(), reference.Size());
   double scalarProduct = std::inner_product(&input[0], &input[minSize], &reference[0],0. );
   auto normProd = inputNorm * refNorm;
-  if ((normProd == 0.0) || (scalarProduct / normProd > 1))
+  if ((normProd < 1.e-12) || (scalarProduct / normProd > 1))
   {
     return static_cast<TOutput>(0.0);
   }
