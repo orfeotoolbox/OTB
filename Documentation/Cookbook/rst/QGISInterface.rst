@@ -41,22 +41,18 @@ Documentation of OTB settings available in QGIS Processing
 * **OTB application folder**: This is the location(s) of OTB applications. Multiple paths are allowed to use custom/proprietary OTB applications.
 
 * **Logger level** (optional): Level of logger to use by OTB applications. level of logging control amount of details printed during algorithm execution.
-Possible values for logger level are INFO, WARNING, CRITICAL, DEBUG. you can refer to otb::Logger documentation for more on this values
-This value is INFO by default. This is an advanced user configuration.
+Possible values for logger level are INFO, WARNING, CRITICAL, DEBUG. you can refer to otb::Logger documentation for more on this values. This value is INFO by default. This is an advanced user configuration.
 
 * **Maximum RAM to use** (optional): by default otb application use system RAM as available. you can however instruct otb to use specific amount of RAM from available using this option.
-A value of 128 is ignored by OTB processing provider.
-This is an advanced user configuration.
+A value of 128 is ignored by OTB processing provider. This is an advanced user configuration.
 
 * **Geoid file** (optional): Path to geoid file.Value of this options is set for elev.dem.geoid and elev.geoid parameters in OTB applications.
-Setting this value globally help users to share it across multiple processing algorithms.
-This value is empty by default.
+Setting this value globally help users to share it across multiple processing algorithms. This value is empty by default.
 
 * **SRTM tiles folder** (optional): Directory where SRTM tiles are available.
 SRTM data can be stored locally to avoid connecting to downloading of files during processing.
 Value of this options is set for elev.dem.path and elev.dem parameters in OTB applications.
-Setting this value globally help users to share it across multiple processing algorithms.
-This value is empty by default.
+Setting this value globally help users to share it across multiple processing algorithms. This value is empty by default.
 
 Compatibility between QGIS and OTB versions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
