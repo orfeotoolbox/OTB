@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
- * Copyright (C) 2018 CS Systemes d'Information (CS SI)
+ * Copyright (C) 2018-2020 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,6 +30,7 @@
 #include "otbImageIOBase.h"
 
 #include "OTBIOGDALExport.h"
+#include "otbSpatialReference.h"
 
 namespace otb
 {
@@ -197,6 +198,9 @@ public:
 
   itkGetMacro(NbBands, int);
 
+  /** Set the projection system from EPSG code */
+  void SetEpsgCode(const unsigned int wellKnownCRS);
+
 protected:
   /**
    * Constructor.
@@ -246,9 +250,10 @@ private:
   /** GDAL parameters. */
   typedef itk::SmartPointer<GDALDatasetWrapper> GDALDatasetWrapperPointer;
   GDALDatasetWrapperPointer                     m_Dataset;
+  unsigned int                                  m_epsgCode;
 
   GDALDataTypeWrapper* m_PxType;
-  /** Nombre d'octets par pixel */
+  /** Number of bytes per pixel */
   int m_BytePerPixel;
 
   bool GDALInfoReportCorner(const char* corner_name, double x, double y, double& dfGeoX, double& dfGeoY) const;
