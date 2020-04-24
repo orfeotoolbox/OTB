@@ -222,9 +222,10 @@ public:
   /** Format the metadata to JSON */
   std::string ToJSON(bool multiline=false) const;
 
-  /** Import metadata from a string keywordlist (will skip
-   *  MDGeom::SensorGeometry). Returns True if all keywords were
-   *  parsed correctly */
+  /** Import metadata from a string keywordlist.
+   * Will skip MDGeom::SensorGeometry).
+   * Returns True if all keywords were parsed correctly.
+   */
   bool FromKeywordlist(const Keywordlist&);
 };
 
@@ -267,23 +268,23 @@ public:
   /** if all bands share the same value of a key, put it at top level */
   void compact();
 
-  /** Export the Metadata as a list of KeywordList
+  /** Export the Metadata as a list of KeywordList.
    *  The first KeywordList contains the metadata common to all the bands.
-   *  The following KeywordList contain the metadata of the bands.
-   *    */
+   *  The following KeywordList contains the metadata of the bands.
+   */
   void ToKeywordlists(KeywordlistVector&) const;
 
-  /** Export the bands of the Metadata as a list of KeywordList
+  /** Export the bands of the Metadata as a list of KeywordList.
    *  Each KeywordList contain the metadata of a band.
-   *    */
+   */
   void ToBandKeywordlists(KeywordlistVector&) const;
 
-  /** Import metadata from a list of keywordlist (will skip
-   *  MDGeom::SensorGeometry).
+  /** Import metadata from a list of keywordlist.
    *  The first KeywordList contains the metadata common to all the bands.
-   *  The following KeywordList contain the metadata of the bands.
-   *  Returns True if all keywords were
-   *  parsed correctly */
+   *  The following KeywordList contains the metadata of the bands.
+   *  Will skip MDGeom::SensorGeometry.
+   *  Returns True if all keywords were parsed correctly.
+   */
   bool FromKeywordlists(const KeywordlistVector&);
 };
 
