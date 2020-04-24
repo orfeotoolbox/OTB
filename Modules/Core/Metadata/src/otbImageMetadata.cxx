@@ -253,7 +253,11 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
       // Projection::GCPParam gcpStruct = boost::any_cast<Projection::GCPParam>(kv.second);
       // cast_string << gcpStruct;
     }
-    // TODO : MDGeom::SensorGeometry (should be exported as "<typeinfo>" where typeinfo is boost::any::type().name()
+    else if (kv.first == MDGeom::SensorGeometry)
+    {
+    // MDGeom::SensorGeometry should be exported as "<typeinfo>" where typeinfo is boost::any::type().name()
+      oss << kv.second.type().name();
+    }
     // TODO : MDGeom::SAR
     // TODO : MDGeom::Adjustment
     else
