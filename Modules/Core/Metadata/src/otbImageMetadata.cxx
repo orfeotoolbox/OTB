@@ -464,15 +464,15 @@ void ImageMetadata::compact()
   // TODO
 }
 
-void ImageMetadata::ToKeywordlists(KeywordlistVector& kwlVect) const
+void ImageMetadata::AppendToKeywordlists(KeywordlistVector& kwlVect) const
 {
   Keywordlist kwl;
   this->ToKeywordlist(kwl);
   kwlVect.push_back(kwl);
-  this->ToBandKeywordlists(kwlVect);
+  this->AppendToBandKeywordlists(kwlVect);
 }
 
-void ImageMetadata::ToBandKeywordlists(KeywordlistVector& kwlVect) const
+void ImageMetadata::AppendToBandKeywordlists(KeywordlistVector& kwlVect) const
 {
   Keywordlist kwl;
   for (const auto& band: this->Bands)
@@ -488,12 +488,11 @@ bool ImageMetadata::FromKeywordlists(const KeywordlistVector& kwlVect)
   auto kwlIt = kwlVect.cbegin();
   all_parsed = this->FromKeywordlist(*kwlIt) && all_parsed;
   ++kwlIt;
-  while (kwlIt != kwlVect.cend())
+  for ( ; kwlIt != kwlVect.cend() ; ++kwlIt)
   {
     ImageMetadataBase imb;
     all_parsed = imb.FromKeywordlist(*kwlIt) && all_parsed;
     this->Bands.push_back(imb);
-    ++kwlIt;
   }
   return all_parsed;
 }

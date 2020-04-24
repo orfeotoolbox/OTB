@@ -211,7 +211,7 @@ int otbImageMetadataTest(int argc, char* argv[])
   outfile << "md3_append: "<< md3 << "\n";
 
   ImageMetadata::KeywordlistVector kwlVect;
-  md3.ToKeywordlists(kwlVect);
+  md3.AppendToKeywordlists(kwlVect);
   ImageMetadata md5;
   md5.FromKeywordlists(kwlVect);
   outfile << "md5: "<< md5 << "\n";

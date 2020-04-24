@@ -268,18 +268,18 @@ public:
   /** if all bands share the same value of a key, put it at top level */
   void compact();
 
-  /** Export the Metadata as a list of KeywordList.
+  /** Append the Metadata to a vector of KeywordList.
    *  The first KeywordList contains the metadata common to all the bands.
    *  The following KeywordList contains the metadata of the bands.
    */
-  void ToKeywordlists(KeywordlistVector&) const;
+  void AppendToKeywordlists(KeywordlistVector&) const;
 
-  /** Export the bands of the Metadata as a list of KeywordList.
+  /** Append the bands of the Metadata to a vector of KeywordList.
    *  Each KeywordList contain the metadata of a band.
    */
-  void ToBandKeywordlists(KeywordlistVector&) const;
+  void AppendToBandKeywordlists(KeywordlistVector&) const;
 
-  /** Import metadata from a list of keywordlist.
+  /** Import metadata from a vector of keywordlist.
    *  The first KeywordList contains the metadata common to all the bands.
    *  The following KeywordList contains the metadata of the bands.
    *  Will skip MDGeom::SensorGeometry.
