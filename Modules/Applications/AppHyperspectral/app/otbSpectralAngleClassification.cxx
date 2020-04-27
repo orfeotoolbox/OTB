@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -65,7 +65,7 @@ private:
     SetDocLongDescription("This application computes a spectral measure on a hyperspectral data cube using a set of "
                             "reference pixels. The image is then classified by finding for each pixel the index of its closest endmember, "
                             "i.e. the endmember corresponding to the lowest measurement value. The output classification is "
-                            "labeled from 1 to L, L being the nulber of endmembers. A threshold can be set for the "
+                            "labeled from 1 to L, L being the number of endmembers. A threshold can be set for the "
                             "classification step, only measurement values lower than this threshold will be considered, other "
                             "will be classified as `background values` (default value of 0). \n\n"
                             "Two measures are available : the spectral angle mapper and the spectral information divergence. See [1] for details");
