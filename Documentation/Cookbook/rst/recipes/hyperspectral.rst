@@ -106,6 +106,68 @@ image is shown below:
 
    Resulting unmixed image, here the first three bands are displayed.
 
+Classification
+--------------
+
+A common task in hyperspectral image processing is to classify a data cube. For example
+one might want to match pixels to reference endmembers. The Spectral Angle Mapper (SAM) algorithm
+[1] does that by computing a spectral measure between each pixel and the references.
+
+The spectral angle of a pixel `x` with a reference pixel `r` is defined by : 
+
+.. math::
+    
+    sam[x, r] = cos^{-1}(\frac{<x,r>}{\|x\| * \|r\|  } )
+
+
+where `<x,r>` denotes the scalar product between x and r. 
+This is also called the spectral angle between `x` and `r`. 
+In SAM classification the spectral angle is computed for each pixel with a set of reference pixels, 
+the class associated with the pixel is the index of the reference pixel that has the lowest spectral angle.
+
+
+::
+
+    otbcli_SpectralAngleClassification -in inputImage.tif
+                                       -ie endmembers.tif
+                                       -out classification.tif
+                                       -mode sam
+
+The result of the classification is shown below : 
+
+
+.. figure:: ../Art/HyperspectralImages/classification.png
+   :width: 70%
+   :align: center
+    
+   Resulting unmixed classified image.
+
+
+Another algorithm is available in this application based on spectral information divergence [1],
+if we define the probability mass function p of a pixel x by :
+
+.. math::
+    x = [x_1, x_2 ,..., x_L ]^T \\
+
+    p = [p_1, p_2 ,..., p_L ]^T \\
+
+    p_i = \frac{x_i}{\sum_{j=1}^L x_j}
+
+
+The spectral information divergence between a pixel `x` and a reference `r` is defined by :
+
+.. math::
+    sid[x, r] = \sum_{j=1}^{L}  p_j  *log(\frac{p_j}{q_j}) + \sum_{j=1}^{L}  q_j * log(\frac{q_j}{p_j}) 
+
+
+where p and q are respectively the probability mass function of x and r. As with the SAM algorithm,
+the class associated with the pixel is the index of the reference pixel that has the lowest spectral information
+divergence.
+
+
+Note that the framework described in the
+:ref:`classification recipe<classif>` can also be applied to hyperspectral data. 
+
 
 Anomaly detection
 -----------------
@@ -183,6 +245,10 @@ The value of the threshold depends on how sensitive the anomaly detector should 
    Left: Computed Rx score, right: detected anomalies (in red)
 
 
+*[1] Du, Yingzi & Chang, Chein-I & Ren, Hsuan & Chang, Chein-Chi & Jensen, James & D'Amico, Francis. (2004). 
+New Hyperspectral Discrimination Measure for Spectral Characterization. Optical Engineering - OPT ENG. 43.*
+
 .. _here: http://www.ehu.eus/ccwintco/index.php/Hyperspectral_Remote_Sensing_Scenes#Cuprite
 .. _AVIRIS: https://aviris.jpl.nasa.gov/
 .. _Pavia: http://www.ehu.eus/ccwintco/index.php/Hyperspectral_Remote_Sensing_Scenes#Pavia_University_scene
+
