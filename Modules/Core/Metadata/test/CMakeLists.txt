@@ -370,15 +370,23 @@ otb_add_test(NAME ioTuImageMetadataSliceTest COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataSliceTest.txt
   ${TEMP}/ioTuImageMetadataSliceTest.txt
   otbImageMetadataTest
-  otbImageMatadataSliceTest
+  otbImageMetadataSliceTest
   ${TEMP}/ioTuImageMetadataSliceTest.txt
+  )
+  
+otb_add_test(NAME ioTuImageMetadataCompactTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataCompactTest.txt
+  ${TEMP}/ioTuImageMetadataCompactTest.txt
+  otbImageMetadataTest
+  otbImageMetadataCompactTest
+  ${TEMP}/ioTuImageMetadataCompactTest.txt
   )
   
 otb_add_test(NAME ioTuImageMetadataAppendTest COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataAppendTest.txt
   ${TEMP}/ioTuImageMetadataAppendTest.txt
   otbImageMetadataTest
-  otbImageMatadataAppendTest
+  otbImageMetadataAppendTest
   ${TEMP}/ioTuImageMetadataAppendTest.txt
   )
   

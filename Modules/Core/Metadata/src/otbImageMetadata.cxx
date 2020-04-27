@@ -465,7 +465,40 @@ void ImageMetadata::append(const ImageMetadata& imd)
 /** if all bands share the same value of a key, put it at top level */
 void ImageMetadata::compact()
 {
-  // TODO
+  if (this->Bands.size() < 2)
+    return;
+  bool compactVal;
+  // TODO Compact the GeometryKeys when comparisons exists
+  // TODO Compact NumericKeys
+  for (const auto& kv : this->Bands.front().NumericKeys)
+  {
+    compactVal = true;
+    auto bandIt = this->Bands.cbegin();
+    ++bandIt;
+    for ( ; bandIt != this->Bands.cend() ; ++bandIt)
+    {
+      auto otherKey = bandIt->NumericKeys.find(kv.first);
+      if ((otherKey == bandIt->NumericKeys.end())
+       || !(std::fabs(otherKey->second != kv.second) <= std::numeric_limits<double>::epsilon()))
+      {
+        compactVal = false;
+        break;
+      }
+    }
+    if (compactVal)
+    {
+      this->Add(kv.first, kv.second);
+      for (auto& band : this->Bands)
+      {
+        band.NumericKeys.erase(kv.first);
+      }
+    }
+  }
+  // TODO Compact StringKeys
+  // TODO Compact LUT1DKeys when comparisons exists
+  // TODO Compact LUT2DKeys when comparisons exists
+  // TODO Compact TimeKeys
+  // TODO Compact ExtraKeys
 }
 
 void ImageMetadata::AppendToKeywordlists(KeywordlistVector& kwlVect) const

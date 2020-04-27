@@ -176,7 +176,7 @@ void otbMetadataKeyTest(char* argv[])
   outfile.close();
 }
 
-void otbImageMatadataSliceTest(char* argv[])
+void otbImageMetadataSliceTest(char* argv[])
 {
   using namespace otb;
 
@@ -191,7 +191,7 @@ void otbImageMatadataSliceTest(char* argv[])
   outfile.close();
 }
 
-void otbImageMatadataAppendTest(char* argv[])
+void otbImageMetadataAppendTest(char* argv[])
 {
   using namespace otb;
 
@@ -241,6 +241,22 @@ void otbImageMetadataToFromKeywordlistTest(char* argv[])
   outfile.close();
 }
 
+void otbImageMetadataCompactTest(char* argv[])
+{
+  using namespace otb;
+
+  const char*   outFileName = argv[2];
+  std::ofstream outfile(outFileName);
+
+  ImageMetadata md;
+  md.compact();
+  SetUpImageMetadata(md, 3);
+
+  md.compact();
+  outfile << md;
+  outfile.close();
+}
+
 int otbImageMetadataTest(int argc, char* argv[])
 {
   if (argc < 2)
@@ -249,12 +265,14 @@ int otbImageMetadataTest(int argc, char* argv[])
   std::string testName(argv[1]);
   if(testName == "otbMetadataKeyTest")
 	  otbMetadataKeyTest(argv);
-  else if (testName == "otbImageMatadataSliceTest")
-	  otbImageMatadataSliceTest(argv);
-  else if (testName == "otbImageMatadataAppendTest")
-	  otbImageMatadataAppendTest(argv);
+  else if (testName == "otbImageMetadataSliceTest")
+	  otbImageMetadataSliceTest(argv);
+  else if (testName == "otbImageMetadataAppendTest")
+	  otbImageMetadataAppendTest(argv);
   else if (testName == "otbImageMetadataToFromKeywordlistTest")
 	  otbImageMetadataToFromKeywordlistTest(argv);
+  else if (testName == "otbImageMetadataCompactTest")
+	  otbImageMetadataCompactTest(argv);
   else
   {
     std::cout << "Unknown test name " << testName;
