@@ -27,71 +27,88 @@
 #include <cstdlib>
 #include "otbStopwatch.h"
 
-int otbImageMetadataTest(int argc, char* argv[])
+void SetUpImageMetadata(otb::ImageMetadata& md, unsigned int nbBands)
 {
-  if (argc < 2)
-  {
-    std::cerr << "Usage: otbImageMetadataTest /path/to/output/file  !" << std::endl;
-    return EXIT_FAILURE;
-  }
-
   using namespace otb;
+  std::ostringstream oss;
 
-  const char*   outFileName = argv[1];
+  MetaData::Time mytime = Utils::LexicalCast<MetaData::Time,std::string>(std::string("2009-08-10T10:30:08.142149Z"), std::string("T"));
+
+  md.Add(MDStr::SensorID, "PHR");
+  md.Add(MDGeom::ProjectionWKT, std::string("UTM projRef"));
+  md.Add(MDTime::ProductionDate, mytime);
+  md.Add(std::string("Comment"), std::string("Test Extrakeys"));
+
+  for(unsigned int bandId = 0 ; bandId < nbBands ; bandId++)
+  {
+    ImageMetadataBase bmd;
+    oss.str("");
+    oss << "B" << bandId;
+    bmd.Add(MDStr::BandName, oss.str());
+    bmd.Add(MDNum::PhysicalGain , bandId + 2.0);
+    bmd.Add(MDNum::PhysicalBias,  bandId + 1.0);
+    bmd.Add(MDNum::NoData, -10000.0);
+    md.Bands.push_back(bmd);
+  }
+}
+
+void otbMetadataKeyTest(char* argv[])
+{
+  using namespace otb;
+  const char*   outFileName = argv[2];
   std::ofstream outfile(outFileName);
 
   MetaData::Time mytime;
-  int year, month;
   char buffer[] = "2009-08-10T10:30:08.142149Z";
 
   std::string bufferStr("2009-08-10T10:30:08.142149Z");
-  
+
   try
-    {
+  {
     mytime = boost::lexical_cast<MetaData::Time>(buffer);
-    }
+  }
   catch(boost::bad_lexical_cast&)
-    {
+  {
     outfile << "Bad cast into MetaData::Time\n";
-    }
+  }
   outfile << "mytime : "<< mytime << "\n";
 
   try
-    {
+  {
     mytime = Utils::LexicalCast<MetaData::Time,char*>(buffer, std::string("T"));
     mytime = Utils::LexicalCast<MetaData::Time,std::string>(bufferStr, std::string("T"));
-    }
+  }
   catch(std::runtime_error&)
-    {
+  {
     outfile << "Bad Utils::LexicalCast into MetaData::Time\n";
-    }
+  }
 
   outfile << "mytime : "<< mytime << "\n";
 
   MDNum someKey = static_cast<MDNum>(3);
   if (someKey == MDNum::PhysicalGain)
-    {
+  {
     outfile << "Found physical gain\n";
-    }
+  }
   
   struct FirstTry
-    {
+  {
     std::array< boost::optional<double>, static_cast<int>(MDNum::END) > NumKeys;
-    };
+  };
 
   struct SecondTry
-    {
-      std::bitset< static_cast<int>(MDNum::END) > NumFlag;
-      std::array<double, static_cast<int>(MDNum::END) > NumKeys;
-    };
+  {
+    std::bitset< static_cast<int>(MDNum::END) > NumFlag;
+    std::array<double, static_cast<int>(MDNum::END) > NumKeys;
+  };
 
   class ThirdTry
-    {
+  {
     public:
     std::pair<
       std::bitset< static_cast<int>(MDNum::END) >,
       std::array<double, static_cast<int>(MDNum::END) > >NumKeys;
-    };
+  };
 
   outfile << "First try size: "<<sizeof(FirstTry)<< "\n";
   outfile << "Second try size: "<<sizeof(SecondTry)<< "\n";
@@ -107,115 +124,141 @@ int otbImageMetadataTest(int argc, char* argv[])
   double val= 0.0;
   chrono.Start();
   for (int i=0 ; i< loops ; ++i)
-    {
+  {
     int pos = rand() % total;
     if (firstStruct.NumKeys[pos] == boost::none)
-      {
+    {
       firstStruct.NumKeys[pos] = val+1.0;
-      }
-    else
-      {
-      firstStruct.NumKeys[pos] = firstStruct.NumKeys[pos].get() + val;
-      }
     }
+    else
+    {
+      firstStruct.NumKeys[pos] = firstStruct.NumKeys[pos].get() + val;
+    }
+  }
   chrono.Stop();
   std::cout << "First try chrono : "<< chrono.GetElapsedMilliseconds() << "\n";
 
   val= 0.0;
   chrono.Restart();
   for (int i=0 ; i< loops ; ++i)
-    {
+  {
     int pos = rand() % total;
     if (secondStruct.NumFlag[pos] == false)
-      {
+    {
       secondStruct.NumKeys[pos] = val+1.0;
       secondStruct.NumFlag[pos] = true;
-      }
-    else
-      {
-      secondStruct.NumKeys[pos] = secondStruct.NumKeys[pos] + val;
-      }
     }
+    else
+    {
+      secondStruct.NumKeys[pos] = secondStruct.NumKeys[pos] + val;
+    }
+  }
   chrono.Stop();
   std::cout << "Second try chrono : "<< chrono.GetElapsedMilliseconds() << "\n";
 
   val= 0.0;
   chrono.Restart();
   for (int i=0 ; i< loops ; ++i)
-    {
+  {
     int pos = rand() % total;
     if (thirdStruct.NumKeys.first[pos] == false)
-      {
+    {
       thirdStruct.NumKeys.second[pos] = val+1.0;
       thirdStruct.NumKeys.first[pos] = true;
-      }
-    else
-      {
-      thirdStruct.NumKeys.second[pos] = thirdStruct.NumKeys.second[pos] + val;
-      }
     }
+    else
+    {
+      thirdStruct.NumKeys.second[pos] = thirdStruct.NumKeys.second[pos] + val;
+    }
+  }
   chrono.Stop();
-  std::cout << "Third try chrono : "<< chrono.GetElapsedMilliseconds() << "\n";
+  std::cout << "Third try chrono : "<< chrono.GetElapsedMilliseconds();
+  outfile.close();
+}
+
+void otbImageMatadataSliceTest(char* argv[])
+{
+  using namespace otb;
+
+  const char*   outFileName = argv[2];
+  std::ofstream outfile(outFileName);
 
   ImageMetadata md;
-  md.Add(MDStr::SensorID, "PHR");
-  md.Add(MDGeom::ProjectionWKT, std::string("UTM projRef"));
-  md.Add(MDTime::ProductionDate, mytime);
-  md.Add(std::string("Comment"), std::string("Test Extrakeys"));
+  SetUpImageMetadata(md, 3);
 
-  ImageMetadataBase bmd;
-  bmd.Add(MDStr::BandName, "B3");
-  bmd.Add(MDNum::PhysicalGain , 2.0);
-  bmd.Add(MDNum::PhysicalBias,  1.0);
-  md.Bands.push_back(bmd);
+  ImageMetadata md2 = md.slice(0, 1);
+  outfile << md2;
+  outfile.close();
+}
 
-  bmd.Add(MDStr::BandName, "B2");
-  bmd.Add(MDNum::PhysicalGain , 3.0);
-  bmd.Add(MDNum::PhysicalBias,  2.0);
-  md.Bands.push_back(bmd);
+void otbImageMatadataAppendTest(char* argv[])
+{
+  using namespace otb;
 
-  bmd.Add(MDStr::BandName, "B1");
-  bmd.Add(MDNum::NoData, -10000.0);
-  bmd.Add(MDNum::PhysicalGain , 4.0);
-  bmd.Add(MDNum::PhysicalBias,  3.0);
-  md.Bands.push_back(bmd);
+  const char*   outFileName = argv[2];
+  std::ofstream outfile(outFileName);
 
-  ImageMetadata md2 = md;
-  md.Add(MDGeom::ProjectionWKT, std::string("Lambert projRef"));
-  outfile << "md2: "<< md2 << "\n";
-  
-  ImageMetadata md3 = md2.slice(0, 1);
-  outfile << "md3: "<< md3 << "\n";
+  ImageMetadata md;
+  SetUpImageMetadata(md, 2);
 
-  ImageMetadata md4;
-  md4.Add(MDStr::SensorID, "PHR");
-  md4.Add(MDStr::ProductType, "Official");
-  md4.Add(std::string("Comment"), std::string("Test append"));
-  md4.Add(MDGeom::ProjectionEPSG, 4326);
-  md4.Add(MDGeom::ProjectionProj, std::string("+proj=longlat +datum=WGS84 +no_defs "));
+  ImageMetadata md2;
+  SetUpImageMetadata(md, 3);
+
+  md.append(md2);
+  outfile << md;
+  outfile.close();
+}
+
+void otbImageMetadataToFromKeywordlistTest(char* argv[])
+{
+  using namespace otb;
+
+  const char*   outFileName = argv[2];
+  std::ofstream outfile(outFileName);
+
+  ImageMetadata md;
+  SetUpImageMetadata(md, 3);
+  md.Add(MDGeom::ProjectionEPSG, 4326);
+  md.Add(MDGeom::ProjectionProj, std::string("+proj=longlat +datum=WGS84 +no_defs "));
   Projection::RPCParam rpcStruct;
-  md4.Add(MDGeom::RPC, rpcStruct);
+  md.Add(MDGeom::RPC, rpcStruct);
   Projection::GCPParam gcpStruct;
   gcpStruct.GCPs.push_back(OTB_GCP());
-  md4.Add(MDGeom::GCP, gcpStruct);
+  md.Add(MDGeom::GCP, gcpStruct);
   MetaData::LUT1D lut1d;
   lut1d.Axis[0].Size = 3;
   lut1d.Axis[0].Origin = 0.;
   lut1d.Axis[0].Spacing = 1.;
   std::vector<double>array({1.0, 2.0, 3.0});
   lut1d.Array = {1.0, 2.0, 3.0};
-  md4.Add(MDL1D::SpectralSensitivity, lut1d);
-  bmd.Add(MDStr::BandName, "B4");
-  md4.Bands.push_back(bmd);
-  md3.append(md4);
-  outfile << "md3_append: "<< md3 << "\n";
+  md.Add(MDL1D::SpectralSensitivity, lut1d);
 
   ImageMetadata::KeywordlistVector kwlVect;
-  md3.AppendToKeywordlists(kwlVect);
-  ImageMetadata md5;
-  md5.FromKeywordlists(kwlVect);
-  outfile << "md5: "<< md5 << "\n";
-
+  md.AppendToKeywordlists(kwlVect);
+  ImageMetadata md2;
+  md2.FromKeywordlists(kwlVect);
+  outfile << md2;
   outfile.close();
+}
+
+int otbImageMetadataTest(int argc, char* argv[])
+{
+  if (argc < 2)
+	  return EXIT_FAILURE;
+
+  std::string testName(argv[1]);
+  if(testName == "otbMetadataKeyTest")
+	  otbMetadataKeyTest(argv);
+  else if (testName == "otbImageMatadataSliceTest")
+	  otbImageMatadataSliceTest(argv);
+  else if (testName == "otbImageMatadataAppendTest")
+	  otbImageMatadataAppendTest(argv);
+  else if (testName == "otbImageMetadataToFromKeywordlistTest")
+	  otbImageMetadataToFromKeywordlistTest(argv);
+  else
+  {
+    std::cout << "Unknown test name " << testName;
+    return EXIT_FAILURE;
+  }
   return EXIT_SUCCESS;
 }

@@ -1,0 +1,14 @@
+{{"Extra.Comment": "Test Extrakeys",
+"ProductionDate": "2009-08-10T10:30:08.142149Z",
+"ProjectionWKT": "UTM projRef",
+"SensorID": "PHR",
+}Bands[{"PhysicalBias": "1",
+"PhysicalGain": "2",
+"BandName": "B0",
+"NoData": "-10000",
+},{"PhysicalBias": "2",
+"PhysicalGain": "3",
+"BandName": "B1",
+"NoData": "-10000",
+},]
+}

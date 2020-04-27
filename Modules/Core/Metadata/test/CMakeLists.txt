@@ -358,10 +358,35 @@ otb_add_test(NAME ioTvSarCalibrationLookupDataTest_RADARSAT2 COMMAND otbMetadata
   ${TEMP}/ioTvSarCalibrationLookupDataTest_RADARSAT2.txt
   )
 
-otb_add_test(NAME coreImageMetadataTest COMMAND otbMetadataTestDriver 
-  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvcoreImageMetadataTest.txt
-  ${TEMP}/ioTvcoreImageMetadataTest.txt
+otb_add_test(NAME ioTuMetaDataKeyTest COMMAND otbMetadataTestDriver 
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuMetaDataKeyTest.txt
+  ${TEMP}/ioTuMetaDataKeyTest.txt
   otbImageMetadataTest
-  ${TEMP}/ioTvcoreImageMetadataTest.txt
+  otbMetadataKeyTest
+  ${TEMP}/ioTuMetaDataKeyTest.txt
   )
   
+otb_add_test(NAME ioTuImageMetadataSliceTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataSliceTest.txt
+  ${TEMP}/ioTuImageMetadataSliceTest.txt
+  otbImageMetadataTest
+  otbImageMatadataSliceTest
+  ${TEMP}/ioTuImageMetadataSliceTest.txt
+  )
+  
+otb_add_test(NAME ioTuImageMetadataAppendTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataAppendTest.txt
+  ${TEMP}/ioTuImageMetadataAppendTest.txt
+  otbImageMetadataTest
+  otbImageMatadataAppendTest
+  ${TEMP}/ioTuImageMetadataAppendTest.txt
+  )
+  
+otb_add_test(NAME ioTuImageMetadataToFromKeywordlistTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataToFromKeywordlistTest.txt
+  ${TEMP}/ioTuImageMetadataToFromKeywordlistTest.txt
+  otbImageMetadataTest
+  otbImageMetadataToFromKeywordlistTest
+  ${TEMP}/ioTuImageMetadataToFromKeywordlistTest.txt
+  )
+ 
