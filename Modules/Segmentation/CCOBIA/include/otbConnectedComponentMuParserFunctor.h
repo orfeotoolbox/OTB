@@ -25,7 +25,7 @@
 
 #include "otbParser.h"
 #include "otbMacro.h"
-
+#include "otbBinarySpectralAngleFunctor.h"
 
 #include <vnl/algo/vnl_lsqr.h>
 #include <vnl/vnl_sparse_matrix_linear_system.h>
@@ -115,31 +115,9 @@ public:
     m_IntensityP2 = m_IntensityP2 / (static_cast<double>(m_NbOfBands));
 
     m_Distance = std::sqrt(m_Distance);
-
-    // compute spectralAngle
-    double scalarProd = 0.0;
-    double normProd   = 0.0;
-    double normProd1  = 0.0;
-    double normProd2  = 0.0;
-
-    for (unsigned int i = 0; i < p1.Size(); ++i)
-    {
-      scalarProd += p1[i] * p2[i];
-      normProd1 += p1[i] * p1[i];
-      normProd2 += p2[i] * p2[i];
-    }
-    normProd = normProd1 * normProd2;
-
-    if (normProd == 0.0)
-    {
-      m_SpectralAngle = 0.0;
-    }
-    else
-    {
-      m_SpectralAngle = std::acos(scalarProd / std::sqrt(normProd));
-    }
-
-    //
+    
+    BinarySpectralAngleFunctor<TInput, TInput, double> spectralAngleFunctor;
+    m_SpectralAngle = spectralAngleFunctor(p1, p2);
 
     value = m_Parser->Eval();
 

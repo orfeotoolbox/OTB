@@ -39,6 +39,7 @@ int otbWaterSqrtSpectralAngleImageFilter(int itkNotUsed(argc), char* argv[])
 
   // Instantiating objects
   WaterSqrtSpectralAngleImageFilterType::Pointer filter = WaterSqrtSpectralAngleImageFilterType::New();
+  
   ReaderType::Pointer                            reader = ReaderType::New();
   WriterType::Pointer                            writer = WriterType::New();
 
@@ -60,7 +61,7 @@ int otbWaterSqrtSpectralAngleImageFilter(int itkNotUsed(argc), char* argv[])
 
   filter->SetInput(reader->GetOutput());
   writer->SetInput(filter->GetOutput());
+  
   writer->Update();
-
   return EXIT_SUCCESS;
 }

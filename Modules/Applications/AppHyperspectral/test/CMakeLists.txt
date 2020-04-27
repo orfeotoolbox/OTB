@@ -75,3 +75,34 @@ otb_test_application(NAME  apTvHyLocalRxDetection
                               ${BASELINE}/apTvHyLocalRxDetection.tif
                               ${TEMP}/apTvHyLocalRxDetection.tif
 )
+
+
+#----------- SpectralAngleClassification TESTS ------------------------
+otb_test_application(NAME  apTvHySpectralAngleClassification_sam
+                     APP  SpectralAngleClassification
+                     OPTIONS -in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
+                             -ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
+                             -out ${TEMP}/apTvHySpectralAngleClassification_sam.tif 
+                             -mode sam
+                     VALID   --compare-image ${EPSILON_9}
+                              ${BASELINE}/apTvHySpectralAngleClassification_sam.tif
+                              ${TEMP}/apTvHySpectralAngleClassification_sam.tif
+)
+
+
+#----------- LocalRxDetection TESTS ------------------------
+otb_test_application(NAME  apTvHySpectralAngleClassification_sid
+                     APP  SpectralAngleClassification
+                     OPTIONS -in ${OTB_DATA_ROOT}/Input/Hyperspectral/synthetic/hsi_cube.tif
+                             -ie ${INPUTDATA}/Hyperspectral/synthetic/endmembers.tif
+                             -out ${TEMP}/apTvHySpectralAngleClassification_sid.tif 
+                             -mode sid
+                             -measure ${TEMP}/apTvHySpectralAngleClassification_sid_measure.tif 
+                             -threshold 0.1 
+                             -bv -1
+                     VALID   --compare-n-images ${EPSILON_6} 2
+                              ${BASELINE}/apTvHySpectralAngleClassification_sid.tif
+                              ${TEMP}/apTvHySpectralAngleClassification_sid.tif
+                              ${BASELINE}/apTvHySpectralAngleClassification_sid_measure.tif
+                              ${TEMP}/apTvHySpectralAngleClassification_sid_measure.tif
+)
