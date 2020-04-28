@@ -469,7 +469,7 @@ void ImageMetadata::compact()
     return;
   bool compactVal;
   // TODO Compact the GeometryKeys when comparisons exists
-  // TODO Compact NumericKeys
+  // Compact NumericKeys
   for (const auto& kv : this->Bands.front().NumericKeys)
   {
     compactVal = true;
@@ -494,11 +494,83 @@ void ImageMetadata::compact()
       }
     }
   }
-  // TODO Compact StringKeys
+  // Compact StringKeys
+  for (const auto& kv : this->Bands.front().StringKeys)
+  {
+    compactVal = true;
+    auto bandIt = this->Bands.cbegin();
+    ++bandIt;
+    for ( ; bandIt != this->Bands.cend() ; ++bandIt)
+    {
+      auto otherKey = bandIt->StringKeys.find(kv.first);
+      if ((otherKey == bandIt->StringKeys.end())
+       || !(otherKey->second == kv.second))
+      {
+        compactVal = false;
+        break;
+      }
+    }
+    if (compactVal)
+    {
+      this->Add(kv.first, kv.second);
+      for (auto& band : this->Bands)
+      {
+        band.StringKeys.erase(kv.first);
+      }
+    }
+  }
   // TODO Compact LUT1DKeys when comparisons exists
   // TODO Compact LUT2DKeys when comparisons exists
-  // TODO Compact TimeKeys
-  // TODO Compact ExtraKeys
+  // Compact TimeKeys
+  for (const auto& kv : this->Bands.front().TimeKeys)
+  {
+    compactVal = true;
+    auto bandIt = this->Bands.cbegin();
+    ++bandIt;
+    for ( ; bandIt != this->Bands.cend() ; ++bandIt)
+    {
+      auto otherKey = bandIt->TimeKeys.find(kv.first);
+      if ((otherKey == bandIt->TimeKeys.end())
+       || !(std::fabs(otherKey->second.frac_sec != kv.second.frac_sec) <= std::numeric_limits<double>::epsilon()))
+      {
+        compactVal = false;
+        break;
+      }
+    }
+    if (compactVal)
+    {
+      this->Add(kv.first, kv.second);
+      for (auto& band : this->Bands)
+      {
+        band.TimeKeys.erase(kv.first);
+      }
+    }
+  }
+  // Compact ExtraKeys
+  for (const auto& kv : this->Bands.front().ExtraKeys)
+  {
+    compactVal = true;
+    auto bandIt = this->Bands.cbegin();
+    ++bandIt;
+    for ( ; bandIt != this->Bands.cend() ; ++bandIt)
+    {
+      auto otherKey = bandIt->ExtraKeys.find(kv.first);
+      if ((otherKey == bandIt->ExtraKeys.end())
+       || !(otherKey->second == kv.second))
+      {
+        compactVal = false;
+        break;
+      }
+    }
+    if (compactVal)
+    {
+      this->Add(kv.first, kv.second);
+      for (auto& band : this->Bands)
+      {
+        band.ExtraKeys.erase(kv.first);
+      }
+    }
+  }
 }
 
 void ImageMetadata::AppendToKeywordlists(KeywordlistVector& kwlVect) const

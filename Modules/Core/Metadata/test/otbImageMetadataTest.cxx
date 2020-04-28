@@ -251,6 +251,13 @@ void otbImageMetadataCompactTest(char* argv[])
   ImageMetadata md;
   md.compact();
   SetUpImageMetadata(md, 3);
+  MetaData::Time mytime = Utils::LexicalCast<MetaData::Time,std::string>(std::string("2009-08-05T20:34:38.236478Z"), std::string("T"));
+  for (auto& band : md.Bands)
+  {
+    band.Add(MDStr::Polarization, "Polarization");
+    band.Add(std::string("Information"), std::string("Very important"));
+    band.Add(MDTime::AcquisitionDate, mytime);
+  }
 
   md.compact();
   outfile << md;
