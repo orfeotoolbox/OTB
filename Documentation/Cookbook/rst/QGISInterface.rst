@@ -36,7 +36,7 @@ Documentation of OTB settings available in QGIS Processing
 
 * **Activate**: This is a checkbox to activate or deactivate OTB provider. Any invalid settings in OTB folder will uncheck this when saved.
 
-* **OTB folder**: This is the directory where OTB is available. Valid values are list below.
+* **OTB folder**: This is the directory where OTB is available. Valid values are listed below.
 
 * **OTB application folder**: This is the location(s) of OTB applications. Multiple paths are allowed to use custom/proprietary OTB applications.
 
