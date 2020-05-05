@@ -60,7 +60,7 @@ Recompiling Python bindings
 +++++++++++++++++++++++++++
 
 If you are using another version of Python 3 than 3.7, but still want to use OTB Python bindings, it is possible
-to compile the python again with your version of Python. CMake is required (it is available in Brew or at [https://cmake.org/]). At the root of the OTB installation run :
+to compile the python bindings again with your version of Python. CMake is required (it is available in Brew or at [https://cmake.org/]). At the root of the OTB installation run :
 
 .. parsed-literal::
 
