@@ -40,7 +40,7 @@ Documentation of OTB settings available in QGIS Processing
 
 * **OTB application folder**: This is the location(s) of OTB applications. Multiple paths are allowed to use custom/proprietary OTB applications.
 
-* **Logger level** (optional): Level of logger to use by OTB applications. level of logging control amount of details printed during algorithm execution.
+* **Logger level** (optional): Level of logger to use by OTB applications. The level of logging controls the amount of details printed during algorithm execution.
 Possible values for logger level are INFO, WARNING, CRITICAL, DEBUG. you can refer to otb::Logger documentation for more on this values. This value is INFO by default. This is an advanced user configuration.
 
 * **Maximum RAM to use** (optional): by default otb application use system RAM as available. you can however instruct otb to use specific amount of RAM from available using this option.
