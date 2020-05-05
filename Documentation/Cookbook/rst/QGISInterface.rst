@@ -60,7 +60,7 @@ Compatibility between QGIS and OTB versions
 There are compatibility issues between the different versions of OTB and QGIS. In particular, OTB 7.0 
 is not compatible with QGIS 3.12 and less. It will be compatible with QGIS 3.14.
 
-The table below summarize which version of OTB can be used with which version of QGIS.
+The table below summarizes which version of OTB can be used with which version of QGIS.
 
 +---------------+-----------------+--------------------+
 |               | QGIS 3.8 - 3.12 | QGIS 3.14 and more |
