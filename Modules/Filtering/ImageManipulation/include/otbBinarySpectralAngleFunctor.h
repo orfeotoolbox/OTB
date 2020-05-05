@@ -23,11 +23,15 @@
 
 #include <algorithm>
 #include "otbMath.h"
+#include "otbSpectralAngleFunctor.h"
 
 namespace otb
 {
 /** \class BinarySpectralAngleFunctor
  *  \brief This functor computes the spectral angle between two pixels.
+ *
+ *  If the pixels have different sizes, only the first components of the 
+ *  largest pixel will be considered.
  *
  *  It can be used as a functor in a BinaryFunctorImageFilter to
  *  compute the pixel-by-pixel spectral angles.
@@ -40,40 +44,24 @@ template <class TInput1, class TInput2, class TOutputValue>
 class BinarySpectralAngleFunctor
 {
 public:
-  BinarySpectralAngleFunctor()
-  {
-  }
+  BinarySpectralAngleFunctor() = default;
 
-  virtual ~BinarySpectralAngleFunctor()
-  {
-  }
+  virtual ~BinarySpectralAngleFunctor() = default;
 
   // Binary operator
-  inline TOutputValue operator()(const TInput1& a, const TInput2& b) const
+  TOutputValue operator()(const TInput1& in1, const TInput2& in2) const
   {
-    const double Epsilon      = 1E-10;
-    double       dist         = 0.0;
-    double       scalarProd   = 0.0;
-    double       norma        = 0.0;
-    double       normb        = 0.0;
-    double       sqrtNormProd = 0.0;
-    for (unsigned int i = 0; i < std::min(a.Size(), b.Size()); ++i)
+    // Compute norms.
+    auto in1Norm = 0;
+    auto in2Norm = 0;
+    auto nbIter = std::min(in1.Size(), in2.Size());
+    for (unsigned int i = 0; i < nbIter; ++i)
     {
-      scalarProd += a[i] * b[i];
-      norma += a[i] * a[i];
-      normb += b[i] * b[i];
+      in1Norm += in1[i] * in1[i];
+      in2Norm += in2[i] * in2[i];
     }
-    sqrtNormProd = std::sqrt(norma * normb);
-    if (std::abs(sqrtNormProd) < Epsilon || scalarProd / sqrtNormProd > 1)
-    {
-      dist = 0.0;
-    }
-    else
-    {
-      dist = std::acos(scalarProd / sqrtNormProd);
-    }
-
-    return static_cast<TOutputValue>(dist);
+    
+    return SpectralAngleDetails::ComputeSpectralAngle<TInput1, TInput2, TOutputValue>(in1, in1Norm, in2, in2Norm);
   }
 };
 

@@ -26,6 +26,7 @@
 namespace otb
 {
 /** \class SpectralAngleDistanceImageFilter
+ *  \deprecated
  *  \brief This filter implements the computation of the spectral angle
  * distance with respect to a reference pixel.
  *
