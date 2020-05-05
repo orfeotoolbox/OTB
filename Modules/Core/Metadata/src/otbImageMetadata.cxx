@@ -479,7 +479,7 @@ void ImageMetadata::compact()
     {
       auto otherKey = bandIt->NumericKeys.find(kv.first);
       if ((otherKey == bandIt->NumericKeys.end())
-       || !(std::fabs(otherKey->second != kv.second) <= std::numeric_limits<double>::epsilon()))
+       || !itk::Math::AlmostEquals(otherKey->second, kv.second))
       {
         compactVal = false;
         break;
@@ -531,7 +531,7 @@ void ImageMetadata::compact()
     {
       auto otherKey = bandIt->TimeKeys.find(kv.first);
       if ((otherKey == bandIt->TimeKeys.end())
-       || !(std::fabs(otherKey->second.frac_sec != kv.second.frac_sec) <= std::numeric_limits<double>::epsilon()))
+       || !itk::Math::AlmostEquals(otherKey->second.frac_sec, kv.second.frac_sec))
       {
         compactVal = false;
         break;

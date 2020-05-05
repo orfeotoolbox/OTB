@@ -25,6 +25,7 @@
 #include "otbMetaDataKey.h"
 #include "OTBMetadataExport.h"
 #include "otbMacro.h"
+#include "itkMath.h"
 
 #include <boost/any.hpp>
 #include <vector>
