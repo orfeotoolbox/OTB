@@ -46,7 +46,7 @@ Possible values for logger level are INFO, WARNING, CRITICAL, DEBUG. You can ref
 * **Maximum RAM to use** (optional): by default OTB applications use system RAM as available. You can however instruct OTB to use a specific amount of RAM from available using this option.
 A value of 128 is ignored by OTB processing provider. This is an advanced user configuration.
 
-* **Geoid file** (optional): Path to geoid file.Value of this options is set for elev.dem.geoid and elev.geoid parameters in OTB applications.
+* **Geoid file** (optional): Path to geoid file. Value of this options is set for elev.dem.geoid and elev.geoid parameters in OTB applications.
 Setting this value globally help users to share it across multiple processing algorithms. This value is empty by default.
 
 * **SRTM tiles folder** (optional): Directory where SRTM tiles are available.
