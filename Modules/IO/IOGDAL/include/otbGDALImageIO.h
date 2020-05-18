@@ -228,6 +228,11 @@ protected:
   /** Destructor.*/
   ~GDALImageIO() override;
 
+  /** Set the metadata from a Keywordlist*/
+  void KeywordlistToMetadata(ImageMetadataBase::Keywordlist, int band=-1);
+  /** Parses a GDAL Metadata string list to fill a Keywordlist*/
+  void GDALMetadataToKeywordlist(const char* const* , ImageMetadataBase::Keywordlist &);
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Read all information on the image*/
   void InternalReadImageInformation();

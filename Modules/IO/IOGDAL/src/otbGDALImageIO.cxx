@@ -1830,26 +1830,15 @@ void GDALImageIO::ExportMetadata()
   // be prefixed by: MDGeomNames[MDGeom::SensorGeometry] + '.'
   ImageMetadataBase::Keywordlist kwl;
   m_Imd.ToKeywordlist(kwl);
-  for (const auto& kv : kwl)
-    {
-    SetAs(kv.first, kv.second);
-    }
+  KeywordlistToMetadata(kwl);
 
   int bIdx = 0;
   for (const auto& band : m_Imd.Bands)
-    {
+  {
     band.ToKeywordlist(kwl);
-    if (band.Has(MDNum::NoData))
-      {
-      // remove from kwl as it is already handled before
-      kwl.erase(MetaData::MDNumNames.left.at(MDNum::NoData));
-      }
-    for (const auto& kv : kwl)
-      {
-      SetAs(kv.first, kv.second, bIdx);
-      }
+    KeywordlistToMetadata(kwl, bIdx);
     ++bIdx;
-    }
+  }
 }
 
 void GDALImageIO::ImportMetadata()
@@ -1859,6 +1848,80 @@ void GDALImageIO::ImportMetadata()
   // Keys Starting with: MDGeomNames[MDGeom::SensorGeometry] + '.' should
   // be decoded by the (future) SensorModelFactory.
   // Use ImageMetadataBase::FromKeywordlist to ingest the metadata
+  if (std::string(GetMetadataValue("METADATATYPE")) != "OTB")
+    return;
+  ImageMetadataBase::Keywordlist kwl;
+  GDALMetadataToKeywordlist(m_Dataset->GetDataSet()->GetMetadata(), kwl);
+  m_Imd.FromKeywordlist(kwl);
+  for (int band = 0 ; band < m_NbBands ; ++band)
+  {
+    kwl.clear();
+    GDALMetadataToKeywordlist(m_Dataset->GetDataSet()->GetRasterBand(band+1)->GetMetadata(), kwl);
+    m_Imd.Bands[band].FromKeywordlist(kwl);
+  }
+}
+
+void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int band)
+{
+  for (const auto& kv : kwl)
+  {
+    if (kv.first == MetaData::MDGeomNames.left.at(MDGeom::SensorGeometry))
+    {
+      SetMetadataValue("MDGeomNames[MDGeom::SensorGeometry].", kv.second.c_str(), band);
+    }
+    SetMetadataValue(kv.first.c_str(), kv.second.c_str(), band);
+  }
+}
+
+void GDALImageIO::GDALMetadataToKeywordlist(const char* const* metadataList, ImageMetadataBase::Keywordlist &kwl)
+{
+  // The GDAL metadata string list is formatted as a “Name=value” list with the last pointer value being NULL.
+  for ( ; *metadataList != nullptr ; ++metadataList )
+    {
+      std::string metadataLine = std::string(*metadataList);
+      // The key and the value are separated by the '=' symbol
+      std::string::size_type pos = metadataLine.find('=');
+      std::string fieldName = metadataLine.substr(0, pos);
+      std::string fieldValue = metadataLine.substr(pos+1);
+      if((fieldName.size() > 36) && (fieldName.substr(0, 36) == "MDGeomNames[MDGeom::SensorGeometry]."))
+      {
+        // TODO: Keys Starting with: MDGeomNames[MDGeom::SensorGeometry] + '.' should
+        // be decoded by the (future) SensorModelFactory.
+      }
+      else if (fieldName == MetaData::MDGeomNames.left.at(MDGeom::RPC))
+      {
+        Projection::RPCParam rpcStruct;
+        rpcStruct.LineOffset    = this->GetAs<double>("RPC/LINE_OFF");
+        rpcStruct.SampleOffset  = this->GetAs<double>("RPC/SAMP_OFF");
+        rpcStruct.LatOffset     = this->GetAs<double>("RPC/LAT_OFF");
+        rpcStruct.LonOffset     = this->GetAs<double>("RPC/LONG_OFF");
+        rpcStruct.HeightOffset  = this->GetAs<double>("RPC/HEIGHT_OFF");
+
+        rpcStruct.LineScale    = this->GetAs<double>("RPC/LINE_SCALE");
+        rpcStruct.SampleScale  = this->GetAs<double>("RPC/SAMP_SCALE");
+        rpcStruct.LatScale     = this->GetAs<double>("RPC/LAT_SCALE");
+        rpcStruct.LonScale     = this->GetAs<double>("RPC/LONG_SCALE");
+        rpcStruct.HeightScale  = this->GetAs<double>("RPC/HEIGHT_SCALE");
+
+        std::vector<double> coeffs(20);
+
+        coeffs = this->GetAsVector<double>("RPC/LINE_NUM_COEFF",' ',20);
+        std::copy(coeffs.begin(), coeffs.end(), rpcStruct.LineNum);
+
+        coeffs = this->GetAsVector<double>("RPC/LINE_DEN_COEFF",' ',20);
+        std::copy(coeffs.begin(), coeffs.end(), rpcStruct.LineDen);
+
+        coeffs = this->GetAsVector<double>("RPC/SAMP_NUM_COEFF",' ',20);
+        std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleNum);
+
+        coeffs = this->GetAsVector<double>("RPC/SAMP_DEN_COEFF",' ',20);
+        std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleDen);
+
+        m_Imd.Add(MDGeom::RPC, rpcStruct);
+      }
+      else
+        kwl.emplace(fieldName, fieldValue);
+    }
 }
 
 
