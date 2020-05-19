@@ -64,6 +64,7 @@ public:
   double m_GCPZ;
 
   OTB_GCP();
+  OTB_GCP(std::string id, std::string info, double col, double row, double px, double py, double pz);
   ~OTB_GCP();
 
   void Print(std::ostream& os) const;

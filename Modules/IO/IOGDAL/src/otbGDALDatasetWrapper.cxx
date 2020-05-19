@@ -151,4 +151,21 @@ size_t GDALDatasetWrapper::GetPixelBytes() const
   return size;
 }
 
+Projection::GCPParam GDALDatasetWrapper::GetGCPParam() const
+{
+  Projection::GCPParam gcpParam;
+  gcpParam.GCPProjection = std::string(m_Dataset->GetGCPProjection());
+  for ( const GDAL_GCP *gcps = m_Dataset->GetGCPs() ; gcps != gcps + m_Dataset->GetGCPCount() ; ++gcps)
+  {
+    gcpParam.GCPs.push_back(OTB_GCP(std::string(gcps->pszId),
+       		                        std::string(gcps->pszInfo),
+  									gcps->dfGCPPixel,
+   									gcps->dfGCPLine,
+   									gcps->dfGCPX,
+   									gcps->dfGCPY,
+   									gcps->dfGCPZ));
+  }
+  return gcpParam;
+}
+
 } // end namespace otb

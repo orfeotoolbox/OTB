@@ -1853,6 +1853,9 @@ void GDALImageIO::ImportMetadata()
   ImageMetadataBase::Keywordlist kwl;
   GDALMetadataToKeywordlist(m_Dataset->GetDataSet()->GetMetadata(), kwl);
   m_Imd.FromKeywordlist(kwl);
+  // GCPs are imported directly in the ImageMetadata.
+  m_Imd.Add(MDGeom::GCP, m_Dataset->GetGCPParam());
+  // Parsing the bands
   for (int band = 0 ; band < m_NbBands ; ++band)
   {
     kwl.clear();
@@ -1883,13 +1886,16 @@ void GDALImageIO::GDALMetadataToKeywordlist(const char* const* metadataList, Ima
       std::string::size_type pos = metadataLine.find('=');
       std::string fieldName = metadataLine.substr(0, pos);
       std::string fieldValue = metadataLine.substr(pos+1);
+
       if((fieldName.size() > 36) && (fieldName.substr(0, 36) == "MDGeomNames[MDGeom::SensorGeometry]."))
       {
+        // Sensor Geometry is imported directly in the ImageMetadata.
         // TODO: Keys Starting with: MDGeomNames[MDGeom::SensorGeometry] + '.' should
         // be decoded by the (future) SensorModelFactory.
       }
       else if (fieldName == MetaData::MDGeomNames.left.at(MDGeom::RPC))
       {
+        // RPC Models are imported directly in the ImageMetadata.
         Projection::RPCParam rpcStruct;
         rpcStruct.LineOffset    = this->GetAs<double>("RPC/LINE_OFF");
         rpcStruct.SampleOffset  = this->GetAs<double>("RPC/SAMP_OFF");

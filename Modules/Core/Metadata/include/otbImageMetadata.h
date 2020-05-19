@@ -224,7 +224,7 @@ public:
   std::string ToJSON(bool multiline=false) const;
 
   /** Import metadata from a string keywordlist.
-   * Will skip MDGeom::SensorGeometry.
+   * Will skip MDGeom::SensorGeometry, MDGeom::RPC and MDGeom::GCP.
    * Returns True if all keywords were parsed correctly.
    */
   bool FromKeywordlist(const Keywordlist&);

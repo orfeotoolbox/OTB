@@ -337,31 +337,17 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
     auto geomKey = MetaData::MDGeomNames.right.find(kv.first);
     if (geomKey != MetaData::MDGeomNames.right.end())
     {
-      if(geomKey->second == MDGeom::RPC)
-      {
-        Projection::RPCParam rpcParam;
-        // TODO: Uncomment when deserialization is implemented
-        //kv.second >> rpcParam;
-        this->Add(geomKey->second, rpcParam);
-      }
-      else if (geomKey->second ==  MDGeom::ProjectionEPSG)
+      if (geomKey->second ==  MDGeom::ProjectionEPSG)
       {
         this->Add(geomKey->second, Utils::LexicalCast<int>(kv.second.c_str(), "Keywordlist.second.c_str()"));
       }
-      else if (geomKey->second ==  MDGeom::GCP)
-      {
-        Projection::GCPParam gcpParam;
-        // TODO: Uncomment when deserialization is implemented
-        //kv.second >> gcpParam;
-        this->Add(geomKey->second, gcpParam);
-      }
       // TODO : MDGeom::SAR
       // TODO : MDGeom::Adjustment
-      // skip MDGeom::SensorGeometry (they will be decoded by future SensorModelFactory)
-      else
+      else if (geomKey->second ==  MDGeom::ProjectionWKT ||geomKey->second ==  MDGeom:: ProjectionProj)
       {
         this->Add(geomKey->second, kv.second);
       }
+      // skip MDGeom::SensorGeometry, MDGeom::RPC and MDGeom::GCP
       continue;
     }
   // Converting the StringKeys
