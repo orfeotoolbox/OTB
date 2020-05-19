@@ -1754,7 +1754,7 @@ std::string GDALImageIO::GetGdalPixelTypeAsString() const
 }
 
 
-std::string GDALImageIO::GetResourceFile()
+std::string GDALImageIO::GetResourceFile() const
 {
   return m_FileName;
 }

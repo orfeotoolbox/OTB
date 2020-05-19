@@ -205,7 +205,7 @@ public:
   // MetadataSupplierInterface overrides
 
   /** Get main image file */
-  std::string GetResourceFile() override;
+  std::string GetResourceFile() const override;
 
   /** Get metadata item in GDALDataset, domain can specified as "domain/key" */
   const char * GetMetadataValue(const char * path, int band = -1) const override;
