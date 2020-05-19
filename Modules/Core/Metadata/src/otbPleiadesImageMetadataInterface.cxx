@@ -27,8 +27,16 @@
 #include "otbGeometryMetadata.h"
 #include "otbStringUtils.h"
 
+#include "otbDimapMetadataHelper.h"
+
 // useful constants
 #include <otbMath.h>
+
+#include "otbXMLMetadataSupplier.h"
+#include "itksys/SystemTools.hxx"
+
+#include "gdal.h"
+
 
 namespace otb
 {
@@ -37,6 +45,7 @@ using boost::bad_lexical_cast;
 
 PleiadesImageMetadataInterface::PleiadesImageMetadataInterface()
 {
+  auto a = RPCInfoToMD();
 }
 
 bool PleiadesImageMetadataInterface::CanRead() const
@@ -1761,6 +1770,38 @@ PleiadesImageMetadataInterface::WavelengthSpectralBandVectorType PleiadesImageMe
 void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 {
   assert(mds);
+  std::cout << "PleiadesImageMetadataInterface::Parse" << std::endl;
+  auto metadatatype = mds->GetMetadataValue("METADATATYPE");
+  auto dimapV1Filename = itksys::SystemTools::GetParentDirectory(mds->GetResourceFile()) + "/PHRDIMAP.XML";
+  
+  std::cout << (strcmp(metadatatype, "DIMAP") != 0) << std::endl;
+  
+  // DIMAP metadata has already been parsed by gdal
+  if (metadatatype && !strcmp(metadatatype, "DIMAP"))
+  {
+    DimapMetadataHelper helper(mds);
+    
+    helper.ParseRadiometry(m_Imd);
+  }
+#if 0
+  // Try to find a dimap V1 metadata file (TODO WIP)
+  else if (itksys::SystemTools::FileExists(dimapV1Filename))
+  {
+    XMLMetadataSupplier xmlMds(dimapV1Filename);
+    
+    DimapMetadataHelper helper(&xmlMds);
+    
+    //xmlMds.GetMetadataValue("Dimap_Document.Dataset_Sources.Source_Identification.Strip_Source.MISSION");
+    xmlMds.GetMetadataValue("PHR_Dimap_Document.Data_Strip.Geometric_Header_List.Located_Geometric_Header.Solar_Incidences.SUN_ELEVATION");
+  }
+#endif
+  // No Pleiades metadata has been found
+  else
+  {
+    otbGenericExceptionMacro(MissingMetadataException, << "No DIMAP metadata has been found")
+  }
+  
+  
   Fetch(MDStr::SensorID, mds, "IMD/Dataset_Sources.Source_Identification.Strip_Source.MISSION");
   if (strncmp(m_Imd[MDStr::SensorID].c_str(), "PHR", 3) == 0)
     {
@@ -1772,8 +1813,6 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
     }
 
   Fetch(MDStr::GeometricLevel, mds, "IMD/Geoposition.Raster_CRS.RASTER_GEOMETRY");
-
-  // get radiometric metadata
 
   // fill RPC model
   if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
