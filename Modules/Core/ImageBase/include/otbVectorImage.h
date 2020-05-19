@@ -122,6 +122,9 @@ public:
    * of the index (0, 0). */
   typedef typename Superclass::PointType PointType;
 
+  /** Get the six coefficients of affine geoTtransform. */
+  virtual VectorType GetGeoTransform(void) const;
+
   /** Get signed spacing */
   SpacingType GetSignedSpacing() const;
 

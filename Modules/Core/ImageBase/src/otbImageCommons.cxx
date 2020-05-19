@@ -113,15 +113,6 @@ double ImageCommons::GetGCPZ(unsigned int GCPnum) const
 }
 
 
-ImageMetadataInterfaceBase::VectorType ImageCommons::GetGeoTransform(void) const
-{
-  //~ return {m_Imd.GeoTransform[0], m_Imd.GeoTransform[1],
-          //~ m_Imd.GeoTransform[2], m_Imd.GeoTransform[3],
-          //~ m_Imd.GeoTransform[4], m_Imd.GeoTransform[5]};
-  return {};
-}
-
-
 ImageMetadataInterfaceBase::VectorType ImageCommons::GetUpperLeftCorner(void) const
 {
   //~ return {m_Imd.ULX, m_Imd.ULY};

@@ -195,6 +195,10 @@ public:
     return NeighborhoodAccessorFunctorType();
   }
 
+
+  /** Get the six coefficients of affine geoTtransform. */
+  virtual VectorType GetGeoTransform(void) const;
+
   /** Get signed spacing */
   SpacingType GetSignedSpacing() const;
 

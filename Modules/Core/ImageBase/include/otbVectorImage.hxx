@@ -115,6 +115,25 @@ void VectorImage<TPixel, VImageDimension>::CopyInformation(const itk::DataObject
     }
 }
 
+template <class TPixel, unsigned int                VImageDimension>
+typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetGeoTransform(void) const
+{
+  VectorImage<TPixel, VImageDimension>::VectorType geoTransform(6);
+  
+  auto origin = this->GetOrigin();
+  auto spacing = this->GetSpacing();
+  auto direction = this->GetDirection();
+  
+  // Note : OTB does not handle rotated geoTransform (see GDALImageIO)
+  geoTransform[0] = origin[0] - 0.5 * spacing[0] * direction[0][0];
+  geoTransform[3] = origin[1] - 0.5 * spacing[1] * direction[1][1];
+  geoTransform[1] = spacing[0] * direction[0][0];
+  geoTransform[5] = spacing[1] * direction[1][1];
+  geoTransform[2] = 0.;
+  geoTransform[4] = 0.;
+  return (geoTransform);
+}
+
 template <class TPixel, unsigned int                                             VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::ImageMetadataInterfacePointerType VectorImage<TPixel, VImageDimension>::GetMetaDataInterface() const
 {

@@ -61,10 +61,6 @@ public:
   double GetGCPY(unsigned int GCPnum) const;
   double GetGCPZ(unsigned int GCPnum) const;
 
-  /** Get the six coefficients of affine geoTtransform. */
-  // TODO: move back to Image and VectorImage, compute geotransform with origin/spacing
-  ImageMetadataInterfaceBase::VectorType GetGeoTransform(void) const;
-
   /** Get image corners. */
   // TODO: move back to Image and VectorImage, compute corners in physical space,
   // Then  a GenericRSTransform should be instanciated to translate from physical
