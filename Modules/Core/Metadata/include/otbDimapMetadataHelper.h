@@ -69,7 +69,33 @@ public:
     path = "IMD/Geometric_Data.Use_Area.Located_Geometric_Values_1.Solar_Incidences.SUN_AZIMUTH";
     imd.Add(MDNum::SunAzimuth, m_mds->GetAs<double>(path.c_str()));
     
+    // Band specific metadata
+    path = "IMD/Raster_Data.Raster_Dimensions.NBANDS";
+    auto nbBands = m_mds->GetAs<int>(path.c_str());
+    std::cout << "Number of bands :" << nbBands << std::endl;
     
+    const std::string bandPrefix = "IMD/Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.";
+    
+    for (int i = 0; i < nbBands; i++)
+    {
+      // Physical bias
+      path = bandPrefix + "Band_Radiance_" + std::to_string(i+1) +".BIAS"; 
+      imd.Bands[i].Add(MDNum::PhysicalBias, m_mds->GetAs<double>(path.c_str()));
+      
+      // Physical gain
+      path = bandPrefix + "Band_Radiance_" + std::to_string(i+1) +".GAIN"; 
+      imd.Bands[i].Add(MDNum::PhysicalGain, m_mds->GetAs<double>(path.c_str()));
+      
+      // Solar irradiance
+      path = bandPrefix + "Band_Solar_Irradiance_" + std::to_string(i+1) +".VALUE";
+      imd.Bands[i].Add(MDNum::SolarIrradiance, m_mds->GetAs<double>(path.c_str()));
+    }
+    
+    std::cout << imd << std::endl;
+    
+    // First wawelength
+    
+    // Last wawelength
     
     
   }

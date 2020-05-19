@@ -45,7 +45,6 @@ using boost::bad_lexical_cast;
 
 PleiadesImageMetadataInterface::PleiadesImageMetadataInterface()
 {
-  auto a = RPCInfoToMD();
 }
 
 bool PleiadesImageMetadataInterface::CanRead() const
