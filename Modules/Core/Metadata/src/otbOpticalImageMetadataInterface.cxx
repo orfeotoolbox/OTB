@@ -98,8 +98,80 @@ void OpticalImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent inde
 
 bool OpticalImageMetadataInterface::ConvertImageKeywordlistToImageMetadata()
 {
-  // TODO
-  return false;
+  bool result = true;
+  try
+  {
+    this->m_Imd.Add(MDNum::SunElevation, this->GetSunElevation());
+  }
+  catch (const itk::ExceptionObject)
+  {
+    result = false;
+  }
+  try
+  {
+	  this->m_Imd.Add(MDNum::SunAzimuth, this->GetSunAzimuth());
+  }
+  catch (const itk::ExceptionObject)
+  {
+    result = false;
+  }
+  try
+  {
+	  this->m_Imd.Add(MDNum::SatElevation, this->GetSatElevation());
+  }
+  catch (const itk::ExceptionObject)
+  {
+    result = false;
+  }
+  try
+  {
+	  this->m_Imd.Add(MDNum::SatAzimuth, this->GetSatAzimuth());
+  }
+  catch (const itk::ExceptionObject)
+  {
+    result = false;
+  }
+  try
+  {
+	  this->m_Imd.Add(MDNum::PhysicalBias, this->GetPhysicalBias());
+  }
+  catch (const itk::ExceptionObject)
+  {
+    result = false;
+  }
+  try
+  {
+	  this->m_Imd.Add(MDNum::PhysicalGain, this->GetPhysicalGain());
+  }
+  catch (const itk::ExceptionObject)
+  {
+    result = false;
+  }
+  try
+  {
+	  this->m_Imd.Add(MDNum::SolarIrradiance, this->GetSolarIrradiance());
+  }
+  catch (const itk::ExceptionObject)
+  {
+    result = false;
+  }
+  try
+  {
+	  this->m_Imd.Add(MDNum::FirstWavelength, this->GetFirstWavelengths());
+  }
+  catch (const itk::ExceptionObject)
+  {
+    result = false;
+  }
+  try
+  {
+	  this->m_Imd.Add(MDNum::LastWavelength,  this->GetLastWavelengths());
+  }
+  catch (const itk::ExceptionObject)
+  {
+    result = false;
+  }
+  return result;
 }
 
 } // end namespace otb
