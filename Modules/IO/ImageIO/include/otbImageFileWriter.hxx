@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
- * Copyright (C) 2018 CS Systemes d'Information (CS SI)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2018-2020 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -422,7 +422,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
 
   // Manage extended filename
   if ((strcmp(m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0) &&
-      (m_FilenameHelper->gdalCreationOptionsIsSet() || m_FilenameHelper->WriteRPCTagsIsSet() || m_FilenameHelper->NoDataValueIsSet()))
+      (m_FilenameHelper->gdalCreationOptionsIsSet() || m_FilenameHelper->WriteRPCTagsIsSet() || m_FilenameHelper->NoDataValueIsSet() || m_FilenameHelper->SrsValueIsSet()))
   {
     typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(m_ImageIO.GetPointer());
 
@@ -439,6 +439,8 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
     imageIO->SetWriteRPCTags(m_FilenameHelper->GetWriteRPCTags());
     if (m_FilenameHelper->NoDataValueIsSet())
       imageIO->SetNoDataList(m_FilenameHelper->GetNoDataList());
+    if  (m_FilenameHelper->SrsValueIsSet())
+	  imageIO->SetEpsgCode(m_FilenameHelper->GetSrsValue());
   }
 
 

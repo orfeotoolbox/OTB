@@ -224,7 +224,7 @@ public:
   std::string ToJSON(bool multiline=false) const;
 
   /** Import metadata from a string keywordlist.
-   * Will skip MDGeom::SensorGeometry).
+   * Will skip MDGeom::SensorGeometry.
    * Returns True if all keywords were parsed correctly.
    */
   bool FromKeywordlist(const Keywordlist&);
@@ -287,6 +287,10 @@ public:
    *  Returns True if all keywords were parsed correctly.
    */
   bool FromKeywordlists(const KeywordlistVector&);
+
+  /** Setter for numeric keys on each band*/
+  using ImageMetadataBase::Add;
+  void Add(const MDNum&, const MetaDataKey::VariableLengthVectorType);
 };
 
 extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::ImageMetadataBase& imd);

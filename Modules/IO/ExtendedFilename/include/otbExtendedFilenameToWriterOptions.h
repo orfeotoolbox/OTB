@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
- * Copyright (C) 2018 CS Systemes d'Information (CS SI)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2018-2020 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,7 +37,13 @@ namespace otb
  * - &gdal:co:<KEY>=<VALUE> : the gdal creation option <KEY>
  * - streaming modes
  * - box
- * See http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName
+ * - &bands=<BANDS_LIST> : to select a subset of bands from the output image
+ * - &nodata=<VALUE>/<VALUE:VALUE...> : to set specific nodata values
+ * - &multiwrite=<(bool)false> : to desactivate multi-writing
+ * - &epsg=<VALUE> : to set the spatial reference system
+ *
+ * See http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName for
+ * more information
  *
  *  \sa ImageFileWriter
  *
@@ -76,6 +82,7 @@ public:
     std::pair<bool, double>      streamingSizeValue;
     std::pair<bool, std::string> box;
     std::pair<bool, std::string> bandRange;
+    std::pair<bool, unsigned int> srsValue;
     std::vector<std::string> optionList;
   };
 
@@ -111,6 +118,8 @@ public:
   bool        StreamingSizeValueIsSet() const;
   double      GetStreamingSizeValue() const;
   std::string GetBandRange() const;
+  bool        SrsValueIsSet() const;
+  unsigned int GetSrsValue() const;
 
   bool        BoxIsSet() const;
   std::string GetBox() const;

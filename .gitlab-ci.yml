@@ -141,7 +141,7 @@ debian-build:
   image: $BUILD_IMAGE_REGISTRY/otb-debian-native:testing
   allow_failure: true
   script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-testing-gcc
+    - QT_QPA_PLATFORM=offscreen ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-testing-gcc
   after_script:
     - export CI_ALLOW_FAILURE=ON
     - python3 -u CI/cdash_handler.py
@@ -159,11 +159,12 @@ ubuntu-xdk-build-doc:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
+    - export QT_QPA_PLATFORM=offscreen
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk -DNAME_SUFFIX:string=-glibc-2.27
+    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk -DNAME_SUFFIX:string=-glibc-2.27
     - mv build_packages/OTB-*.run . || true
   needs:
     - job: ubuntu-xdk-prepare
@@ -180,8 +181,9 @@ centos-xdk-build:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=centos-6.6-gcc
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96" ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=centos-6.6-gcc
+    - export QT_QPA_PLATFORM=offscreen
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=centos-6.6-gcc
+    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=centos-6.6-gcc
     - mv build_packages/OTB-*.run . || true
   needs:
     - job: centos-xdk-prepare
@@ -286,8 +288,7 @@ ubuntu-xdk-qa-code-coverage:
       - $SONAR_OTB_TOKEN
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
   script:
-    - xvfb-run -a -n 1 -s "-screen 0 1024x768x24 -dpi 96"
-               ctest -V -S CI/main_qa.cmake
+    - QT_QPA_PLATFORM=offscreen ctest -V -S CI/main_qa.cmake
                      -DIMAGE_NAME:string=ubuntu-18.04-llvm-qa
                      -DQA:BOOL=ON
     - ./CI/otb_coverage.sh
