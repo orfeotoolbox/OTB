@@ -26,6 +26,8 @@
 #include "otbImageKeywordlist.h"
 #include "otbStringUtils.h"
 
+#include "otbDimapMetadataHelper.h"
+
 namespace otb
 {
 using boost::lexical_cast;
@@ -1250,6 +1252,24 @@ Spot6ImageMetadataInterface::WavelengthSpectralBandVectorType Spot6ImageMetadata
     ++j;
   }
   return wavelengthSpectralBand;
+}
+
+
+void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+{
+  assert(mds);
+  std::cout << "Spot6ImageMetadataInterface::Parse" << std::endl;
+  auto metadatatype = mds->GetMetadataValue("METADATATYPE");
+
+  std::cout << (strcmp(metadatatype, "DIMAP") != 0) << std::endl;
+  
+  // DIMAP metadata has already been parsed by gdal
+  if (metadatatype && !strcmp(metadatatype, "DIMAP"))
+  {
+    DimapMetadataHelper helper(mds);
+    
+    helper.ParseRadiometry(m_Imd);
+  }
 }
 
 } // end namespace otb
