@@ -59,6 +59,20 @@ public:
     {
     SetMetadataValue(path.c_str(), value.c_str(), band);
     }
+
+  /** Parse a std::vector to a metadata value */
+  template < typename T> void SetAsVector(const char *path, std::vector<T> value, const char sep=' ', int band=-1)
+  {
+    std::ostringstream oss;
+    oss << "[";
+    otb::Join(oss, value, std::string(&sep));
+    oss << "]";
+    SetMetadataValue(path, oss.str().c_str(), band);
+  }
+  template < typename T> void SetAsVector(const std::string& path, std::vector<T> value, const char sep=' ', int band=-1)
+  {
+    SetAsVector(path.c_str(), value, sep, band);
+  }
 };
 
 
