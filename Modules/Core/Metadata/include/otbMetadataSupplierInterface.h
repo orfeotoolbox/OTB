@@ -67,7 +67,7 @@ class OTBMetadata_EXPORT MetadataSupplierInterface
 {
 public:
 
-  virtual std::string GetResourceFile() = 0;
+  virtual std::string GetResourceFile() const = 0;
 
   // Maybe not needed
 //  virtual std::vector<std::string> GetResourceFiles() = 0;
