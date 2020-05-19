@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -43,23 +43,25 @@ elseif(APPLE)
 endif()
 
 set(WINDOWS_SYSTEM_DLLS
+  WTSAPI32.dll
   advapi32.dll
   comdlg32.dll
   crypt32.dll
+  d2d1.dll
+  d3d11.dll
+  d3d9.dll
   dnsapi.dll
   dwmapi.dll
   dwrite.dll
-  d2d1.dll
-  d3d9.dll
-  d3d11.dll
+  dxgi.dll
   gdi32.dll
   glu32.dll
   imm32.dll
   iphlpapi.dll
   kernel32.dll
+  mpr.dll
   netapi32.dll
   normaliz.dll
-  mpr.dll
   odbc32.dll
   ole32.dll
   oleaut32.dll
@@ -142,6 +144,7 @@ set(APPLE_SYSTEM_DLLS
   libgcc_s.*dylib
   libcups.*dylib
   libomp.dylib
+  libqcocoa.dylib
   )
 
 if(WIN32)

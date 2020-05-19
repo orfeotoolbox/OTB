@@ -39,17 +39,20 @@ void SetUpImageMetadata(otb::ImageMetadata& md, unsigned int nbBands)
   md.Add(MDTime::ProductionDate, mytime);
   md.Add(std::string("Comment"), std::string("Test Extrakeys"));
 
+  MetaDataKey::VariableLengthVectorType PhysicalGain(nbBands);
+
   for(unsigned int bandId = 0 ; bandId < nbBands ; bandId++)
   {
     ImageMetadataBase bmd;
     oss.str("");
     oss << "B" << bandId;
     bmd.Add(MDStr::BandName, oss.str());
-    bmd.Add(MDNum::PhysicalGain , bandId + 2.0);
     bmd.Add(MDNum::PhysicalBias,  bandId + 1.0);
     bmd.Add(MDNum::NoData, -10000.0);
     md.Bands.push_back(bmd);
+    PhysicalGain.SetElement(bandId, bandId + 2.0);
   }
+  md.Add(MDNum::PhysicalGain , PhysicalGain);
 }
 
 void otbMetadataKeyTest(char* argv[])
@@ -202,7 +205,7 @@ void otbImageMetadataAppendTest(char* argv[])
   SetUpImageMetadata(md, 2);
 
   ImageMetadata md2;
-  SetUpImageMetadata(md, 3);
+  SetUpImageMetadata(md2, 3);
 
   md.append(md2);
   outfile << md;

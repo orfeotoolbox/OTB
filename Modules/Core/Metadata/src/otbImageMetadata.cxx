@@ -606,6 +606,16 @@ bool ImageMetadata::FromKeywordlists(const KeywordlistVector& kwlVect)
   return all_parsed;
 }
 
+void ImageMetadata::Add(const MDNum& key, const MetaDataKey::VariableLengthVectorType vlv)
+{
+  assert(this->Bands.size() == vlv.Size());
+  const double* vlvIt = vlv.GetDataPointer();
+  for(auto band = this->Bands.begin() ; band != this->Bands.end() ; ++band, ++vlvIt)
+  {
+    band->Add(key, *vlvIt);
+  }
+}
+
 // printing
 std::ostream& operator<<(std::ostream& os, const otb::ImageMetadataBase& imd)
 {
