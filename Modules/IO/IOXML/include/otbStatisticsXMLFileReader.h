@@ -98,6 +98,7 @@ protected:
   ~StatisticsXMLFileReader() override
   {
   }
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
