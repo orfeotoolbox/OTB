@@ -1872,6 +1872,32 @@ void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int 
     {
       SetMetadataValue("MDGeomNames[MDGeom::SensorGeometry].", kv.second.c_str(), band);
     }
+    else if (kv.first == MetaData::MDGeomNames.left.at(MDGeom::RPC))
+    {
+      // RPC Models are exported directly from the ImageMetadata.
+      Projection::RPCParam rpcStruct = boost::any_cast<Projection::RPCParam>(m_Imd[MDGeom::RPC]);
+      this->SetAs("RPC/LINE_OFF",   rpcStruct.LineOffset);
+      this->SetAs("RPC/SAMP_OFF",   rpcStruct.SampleOffset);
+      this->SetAs("RPC/LAT_OFF",    rpcStruct.LatOffset);
+      this->SetAs("RPC/LONG_OFF",   rpcStruct.LonOffset);
+      this->SetAs("RPC/HEIGHT_OFF", rpcStruct.HeightOffset);
+
+      this->SetAs("RPC/LINE_SCALE",   rpcStruct.LineScale);
+      this->SetAs("RPC/SAMP_SCALE",   rpcStruct.SampleScale);
+      this->SetAs("RPC/LAT_SCALE",    rpcStruct.LatScale);
+      this->SetAs("RPC/LONG_SCALE",   rpcStruct.LonScale);
+      this->SetAs("RPC/HEIGHT_SCALE", rpcStruct.HeightScale);
+
+      this->SetAsVector("RPC/LINE_NUM_COEFF", std::vector<double> (rpcStruct.LineNum,   rpcStruct.LineNum   + 20 / sizeof(double)), ' ');
+      this->SetAsVector("RPC/LINE_DEN_COEFF", std::vector<double> (rpcStruct.LineDen,   rpcStruct.LineDen   + 20 / sizeof(double)), ' ');
+      this->SetAsVector("RPC/SAMP_NUM_COEFF", std::vector<double> (rpcStruct.SampleNum, rpcStruct.SampleNum + 20 / sizeof(double)), ' ');
+      this->SetAsVector("RPC/SAMP_DEN_COEFF", std::vector<double> (rpcStruct.SampleDen, rpcStruct.SampleDen + 20 / sizeof(double)), ' ');
+    }
+    else if (kv.first == MetaData::MDGeomNames.left.at(MDGeom::GCP))
+    {
+      // GCPs are exported directly from the ImageMetadata.
+      this->m_Dataset->SetGCPParam(boost::any_cast<Projection::GCPParam>(m_Imd[MDGeom::GCP]));
+    }
     SetMetadataValue(kv.first.c_str(), kv.second.c_str(), band);
   }
 }

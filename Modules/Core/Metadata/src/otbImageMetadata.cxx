@@ -237,10 +237,8 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
     oss.str("");
     if (kv.first == MDGeom::RPC)
     {
+      // To be completed by ImageIO
       oss << std::string("<RPCParam>");
-      // TODO: replace this std::string by a correct serialization of the RPCParam when implemented
-      // Projection::RPCParam rpcStruct = boost::any_cast<Projection::RPCParam>(kv.second);
-      // cast_string << rpcStruct;
     }
     else if (kv.first == MDGeom::ProjectionEPSG)
     {
@@ -248,10 +246,8 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
     }
     else if (kv.first == MDGeom::GCP)
     {
+      // To be completed by ImageIO
       oss << std::string("<GCPParam>");
-      // TODO: replace this std::string by a correct serialization of the GCPParam when implemented
-      // Projection::GCPParam gcpStruct = boost::any_cast<Projection::GCPParam>(kv.second);
-      // cast_string << gcpStruct;
     }
     else if (kv.first == MDGeom::SensorGeometry)
     {

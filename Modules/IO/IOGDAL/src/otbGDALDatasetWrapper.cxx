@@ -168,4 +168,24 @@ Projection::GCPParam GDALDatasetWrapper::GetGCPParam() const
   return gcpParam;
 }
 
+void GDALDatasetWrapper::SetGCPParam(Projection::GCPParam gcpParam)
+{
+  int nGCPCount = gcpParam.GCPs.size();
+  GDAL_GCP gcps[nGCPCount];
+  GDAL_GCP *gcpIt = gcps;
+  for (auto otbGcpIt = gcpParam.GCPs.cbegin() ; otbGcpIt != gcpParam.GCPs.cend() ; ++otbGcpIt, gcpIt++)
+  {
+    GDAL_GCP gdalGcp;
+    gdalGcp.pszId      = const_cast<char*>(otbGcpIt->m_Id.c_str());
+    gdalGcp.pszInfo    = const_cast<char*>(otbGcpIt->m_Info.c_str());
+    gdalGcp.dfGCPPixel = otbGcpIt->m_GCPCol;
+    gdalGcp.dfGCPLine  = otbGcpIt->m_GCPRow;
+    gdalGcp.dfGCPX     = otbGcpIt->m_GCPX;
+    gdalGcp.dfGCPY     = otbGcpIt->m_GCPY;
+    gdalGcp.dfGCPZ     = otbGcpIt->m_GCPZ;
+    *gcpIt = gdalGcp;
+  }
+  m_Dataset->SetGCPs(nGCPCount, gcps, gcpParam.GCPProjection.c_str());
+}
+
 } // end namespace otb
