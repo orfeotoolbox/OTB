@@ -124,6 +124,9 @@ public:
   itkGetMacro(CheckOutputBounds, bool);
   itkBooleanMacro(CheckOutputBounds);
 
+  itkSetMacro(InterpolationMargin, double);
+  itkGetMacro(InterpolationMargin, double);
+
   itkSetObjectMacro(Interpolator, InterpolatorType);
   itkGetObjectMacro(Interpolator, InterpolatorType);
 
@@ -189,6 +192,8 @@ private:
   SpacingType m_OutputSpacing;    // output image spacing
 
   OutputPixelType m_EdgePaddingValue; // Default pixel value
+
+  double m_InterpolationMargin;
 
   bool m_CheckOutputBounds; // Shall we check
                             // output bounds when
