@@ -109,6 +109,10 @@ NETCDF_INC_DIR = @SB_INSTALL_PREFIX_NATIVE@\include
 NETCDF_HAS_NC4 = YES
 NETCDF_HAS_HDF4 = YES
 
+# Needed to define H5_BUILT_AS_DYNAMIC_LIB for windows compilation 
+# scenarios where it is not exported on the target (non-CMake builds)
+HDF5_H5_IS_DLL = YES
+
 # Binding list. One or several in the following list
 # csharp, java, python
 BINDINGS=python
