@@ -109,9 +109,20 @@ void Image<TPixel, VImageDimension>::CopyInformation(const itk::DataObject* data
   this->itk::Object::SetMetaDataDictionary(data->GetMetaDataDictionary());
   const ImageCommons* imc = dynamic_cast<const ImageCommons*>(data);
   if (imc != nullptr)
+  {
+    const auto & imd = imc->GetImageMetadata();
+    
+    
+    if (imd.Bands.size() > 1)
     {
-    SetImageMetadata(imc->GetImageMetadata());
+      SetImageMetadata(ImageMetadata(imd.GeometryKeys, imd.NumericKeys, imd.StringKeys, imd.LUT1DKeys,
+            imd.LUT2DKeys, imd.TimeKeys, imd.ExtraKeys, ImageMetadata::ImageMetadataBandsType(1)));
     }
+    else
+    {
+      SetImageMetadata(imd);
+    }
+  }
 }
 
 template <class TPixel, unsigned int                                       VImageDimension>
