@@ -33,6 +33,8 @@ class OTBImageBase_EXPORT ImageCommons
 public:
 
   void SetImageMetadata(ImageMetadata imd);
+  
+  void SetBandImageMetadata(ImageMetadata::ImageMetadataBandsType imd);
 
   const ImageMetadata & GetImageMetadata() const;
 

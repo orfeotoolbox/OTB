@@ -28,6 +28,11 @@ void ImageCommons::SetImageMetadata(ImageMetadata imd)
   m_Imd = std::move(imd);
 }
 
+void ImageCommons::SetBandImageMetadata(ImageMetadata::ImageMetadataBandsType bands)
+{
+  m_Imd.Bands = std::move(bands);
+}
+
 const ImageMetadata & ImageCommons::GetImageMetadata() const
 {
   return m_Imd;
