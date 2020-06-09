@@ -1294,8 +1294,11 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   // char **     papszOptions = NULL;
   std::string driverShortName;
   m_NbBands = this->GetNumberOfComponents();
+std::cout << m_Imd << std::endl;
+std::cout << "m_NbBands " << (std::size_t)m_NbBands << std::endl;
+std::cout << "m_ImdBands size " << m_Imd.Bands.size() << std::endl;
 
-  if ( (std::size_t)m_NbBands != m_Imd.Bands.size())
+  if ( !m_Imd.Bands.empty() && (std::size_t)m_NbBands != m_Imd.Bands.size())
     {
     itkExceptionMacro(<< "Number of bands in metadata inconsistent with actual image.");
     }

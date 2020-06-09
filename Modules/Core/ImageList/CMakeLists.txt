@@ -18,19 +18,5 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module contains classes for wavelet analysis.")
-
-otb_module(OTBWavelet
-  DEPENDS
-    OTBCommon
-    OTBITK
-    OTBImageList
-
-  TEST_DEPENDS
-    OTBImageBase
-    OTBImageIO
-    OTBTestKernel
-
-  DESCRIPTION
-    "${DOCUMENTATION}"
-)
+project(OTBImageList)
+otb_module_impl()
