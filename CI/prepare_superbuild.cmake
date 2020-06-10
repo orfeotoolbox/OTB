@@ -19,6 +19,7 @@
 #
 # This script is for the superbuild build on the CI platform
 
+message("in prepare_superbuild.cmake")
 include( "${CMAKE_CURRENT_LIST_DIR}/macros.cmake" )
 
 set (ENV{LANG} "C") # Only ascii output

@@ -174,12 +174,16 @@ ubuntu-xdk-build-doc:
 centos-xdk-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+  variables:
+    CI_DEBUG_TRACE: "true"
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=centos-6.6-gcc
 
 centos-xdk-build:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+  variables:
+    CI_DEBUG_TRACE: "true"
   script:
     - export QT_QPA_PLATFORM=offscreen
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=centos-6.6-gcc
