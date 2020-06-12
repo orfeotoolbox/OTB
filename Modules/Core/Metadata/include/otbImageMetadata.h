@@ -228,6 +228,11 @@ public:
    * Returns True if all keywords were parsed correctly.
    */
   bool FromKeywordlist(const Keywordlist&);
+
+  /** Merge with another ImageMetadataBase
+   * If a key exists in both ImageMetadataBase, keeps the value of this ImageMetadataBase. */
+  void Fuse(const ImageMetadataBase& );
+
 };
 
 
@@ -263,12 +268,17 @@ public:
   ImageMetadata slice(int start, int end) const;
 
   /** concatenate with an other ImageMetadata
-   * If a key exists in bot ImageMetadata, keeps the value of this ImageMetadata.*/
+   * If a key exists in both ImageMetadata, keeps the value of this ImageMetadata.*/
   void append(const ImageMetadata& );
 
   /** if all bands share the same value of a key, put it at top level */
   void compact();
 
+  /** merge with another ImageMetadata
+   * If a key exists in both ImageMetadata, keeps the value of this ImageMetadata.
+   * */
+  void Merge(const ImageMetadata& );
+  
   /** Append the Metadata to a vector of KeywordList.
    *  The first KeywordList contains the metadata common to all the bands.
    *  The following KeywordList contains the metadata of the bands.

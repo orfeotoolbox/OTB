@@ -400,6 +400,20 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
   return all_parsed;
 }
 
+
+/** concatenate with an other ImageMetadata */
+void ImageMetadataBase::Fuse(const ImageMetadataBase& imd)
+{
+  // Copy the keys
+  this->GeometryKeys.insert(imd.GeometryKeys.begin(), imd.GeometryKeys.end());
+  this->NumericKeys.insert(imd.NumericKeys.begin(), imd.NumericKeys.end());
+  this->StringKeys.insert(imd.StringKeys.begin(), imd.StringKeys.end());
+  this->LUT1DKeys.insert(imd.LUT1DKeys.begin(), imd.LUT1DKeys.end());
+  this->LUT2DKeys.insert(imd.LUT2DKeys.begin(), imd.LUT2DKeys.end());
+  this->TimeKeys.insert(imd.TimeKeys.begin(), imd.TimeKeys.end());
+  this->ExtraKeys.insert(imd.ExtraKeys.begin(), imd.ExtraKeys.end());
+}
+
 // ----------------------- [ImageMetadata] ------------------------------
 
 ImageMetadata::ImageMetadata()
@@ -432,18 +446,21 @@ ImageMetadata ImageMetadata::slice(int start, int end) const
 /** concatenate with an other ImageMetadata */
 void ImageMetadata::append(const ImageMetadata& imd)
 {
-  // Copy the keys
-  this->GeometryKeys.insert(imd.GeometryKeys.begin(), imd.GeometryKeys.end());
-  this->NumericKeys.insert(imd.NumericKeys.begin(), imd.NumericKeys.end());
-  this->StringKeys.insert(imd.StringKeys.begin(), imd.StringKeys.end());
-  this->LUT1DKeys.insert(imd.LUT1DKeys.begin(), imd.LUT1DKeys.end());
-  this->LUT2DKeys.insert(imd.LUT2DKeys.begin(), imd.LUT2DKeys.end());
-  this->TimeKeys.insert(imd.TimeKeys.begin(), imd.TimeKeys.end());
-  this->ExtraKeys.insert(imd.ExtraKeys.begin(), imd.ExtraKeys.end());
+  ImageMetadataBase::Fuse(imd);
+  
   // Copy the bands
   this->Bands.insert(this->Bands.end(), imd.Bands.begin(), imd.Bands.end());
 }
 
+void ImageMetadata::Merge(const ImageMetadata& imd)
+{
+  ImageMetadataBase::Fuse(imd);
+  
+  for (unsigned int i = 0; i < std::min(Bands.size(), imd.Bands.size()); i++)
+  {
+    Bands[i].Fuse(imd.Bands[i]);
+  }
+}
 /** if all bands share the same value of a key, put it at top level */
 void ImageMetadata::compact()
 {
