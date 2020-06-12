@@ -1,0 +1,16 @@
+{{"ProductionDate": "2009-08-10T10:30:08.142149Z",
+"Polarization": "Polarization",
+"ProjectionWKT": "UTM projRef",
+"Extra.Comment": "Test Extrakeys",
+"SensorID": "SPOT",
+}Bands[{"PhysicalBias": "1",
+"PhysicalGain": "2",
+"BandName": "B0",
+"NoData": "-10000",
+},{"PhysicalBias": "2",
+"PhysicalGain": "3",
+"BandName": "B1",
+"SunAzimuth": "20",
+"NoData": "-10000",
+},]
+}

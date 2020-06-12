@@ -389,7 +389,15 @@ otb_add_test(NAME ioTuImageMetadataAppendTest COMMAND otbMetadataTestDriver
   otbImageMetadataAppendTest
   ${TEMP}/ioTuImageMetadataAppendTest.txt
   )
-  
+    
+otb_add_test(NAME ioTuImageMetadataMergeTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataMergeTest.txt
+  ${TEMP}/ioTuImageMetadataMergeTest.txt
+  otbImageMetadataTest
+  otbImageMetadataMergeTest
+  ${TEMP}/ioTuImageMetadataMergeTest.txt
+  )
+
 otb_add_test(NAME ioTuImageMetadataToFromKeywordlistTest COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataToFromKeywordlistTest.txt
   ${TEMP}/ioTuImageMetadataToFromKeywordlistTest.txt

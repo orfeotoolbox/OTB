@@ -212,6 +212,32 @@ void otbImageMetadataAppendTest(char* argv[])
   outfile.close();
 }
 
+void otbImageMetadataMergeTest(char* argv[])
+{
+  using namespace otb;
+
+  const char*   outFileName = argv[2];
+  std::ofstream outfile(outFileName);
+
+  ImageMetadata md;
+  SetUpImageMetadata(md, 2);
+
+  ImageMetadata md2;
+  SetUpImageMetadata(md2, 3);
+
+  // Modifies some fields to actually test something.
+  // The case where metadatas are identical is trivial in Merge()
+  
+  md.Add(MDStr::SensorID, "SPOT");
+  md2.Add(MDStr::Polarization, "Polarization");
+  md2.Bands[0].Add(MDNum::PhysicalBias, 3.1);
+  md2.Bands[1].Add(MDNum::SunAzimuth, 20);
+  
+  md.Merge(md2);
+  
+  outfile << md;
+  outfile.close();
+}
 void otbImageMetadataToFromKeywordlistTest(char* argv[])
 {
   using namespace otb;
@@ -270,19 +296,21 @@ void otbImageMetadataCompactTest(char* argv[])
 int otbImageMetadataTest(int argc, char* argv[])
 {
   if (argc < 2)
-	  return EXIT_FAILURE;
+    return EXIT_FAILURE;
 
   std::string testName(argv[1]);
   if(testName == "otbMetadataKeyTest")
-	  otbMetadataKeyTest(argv);
+    otbMetadataKeyTest(argv);
   else if (testName == "otbImageMetadataSliceTest")
-	  otbImageMetadataSliceTest(argv);
+    otbImageMetadataSliceTest(argv);
   else if (testName == "otbImageMetadataAppendTest")
-	  otbImageMetadataAppendTest(argv);
+    otbImageMetadataAppendTest(argv);
+  else if (testName == "otbImageMetadataMergeTest")
+    otbImageMetadataMergeTest(argv);
   else if (testName == "otbImageMetadataToFromKeywordlistTest")
-	  otbImageMetadataToFromKeywordlistTest(argv);
+    otbImageMetadataToFromKeywordlistTest(argv);
   else if (testName == "otbImageMetadataCompactTest")
-	  otbImageMetadataCompactTest(argv);
+    otbImageMetadataCompactTest(argv);
   else
   {
     std::cout << "Unknown test name " << testName;
