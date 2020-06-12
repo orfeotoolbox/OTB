@@ -41,7 +41,7 @@ namespace otb
  *
  * \ingroup Streamed
  *
- * \ingroup OTBObjectList
+ * \ingroup OTBImageList
  */
 template <class TInputImageList, class TOutputImageList, class TFilter>
 class ITK_EXPORT ImageListToImageListApplyFilter : public ImageListToImageListFilter<typename TInputImageList::ImageType, typename TOutputImageList::ImageType>
