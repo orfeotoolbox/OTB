@@ -70,7 +70,15 @@ const Projection::GCPParam & ImageMetadataBase::GetGCPParam() const
 
 std::string ImageMetadataBase::GetProjectionWKT() const
 {
-  return boost::any_cast<std::string>(GeometryKeys.at(MDGeom::ProjectionWKT));
+  auto projWKT = GeometryKeys.find(MDGeom::ProjectionWKT);
+  if (projWKT !=  GeometryKeys.end())
+  {
+    return boost::any_cast<std::string>(projWKT->second);
+  }
+  else
+  {
+    return "";
+  }
 }
 
 // -------------------- Geom utility function ----------------------------
