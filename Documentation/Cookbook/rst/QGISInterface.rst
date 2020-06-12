@@ -57,8 +57,9 @@ Setting this value globally help users to share it across multiple processing al
 Compatibility between QGIS and OTB versions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-There are compatibility issues between the different versions of OTB and QGIS. In particular, OTB 7.0 
-is not compatible with QGIS 3.12 and less. It will be compatible with QGIS 3.14.
+There are compatibility issues between the different versions of OTB and QGIS. Any version
+of OTB compiled with GDAL 3.X is not compatible with QGIS 3.12 or below. This is the case
+for the binary packages of OTB 7.1 and above. In this case QGIS 3.14 or more should be used.
 
 The table below summarizes which version of OTB can be used with which version of QGIS.
 
