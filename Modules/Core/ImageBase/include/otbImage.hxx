@@ -112,11 +112,10 @@ void Image<TPixel, VImageDimension>::CopyInformation(const itk::DataObject* data
   {
     const auto & imd = imc->GetImageMetadata();
     
-    
-    if (imd.Bands.size() > 1)
+    if (imd.Bands.size() > 0 && imd.Bands.size() != this->GetNumberOfComponentsPerPixel())
     {
       SetImageMetadata(ImageMetadata(imd.GeometryKeys, imd.NumericKeys, imd.StringKeys, imd.LUT1DKeys,
-            imd.LUT2DKeys, imd.TimeKeys, imd.ExtraKeys, ImageMetadata::ImageMetadataBandsType(1)));
+                    imd.LUT2DKeys, imd.TimeKeys, imd.ExtraKeys, ImageMetadata::ImageMetadataBandsType(this->GetNumberOfComponentsPerPixel())));
     }
     else
     {
