@@ -31,13 +31,6 @@ add_executable(otbImageListTestDriver ${OTBImageListTests})
 target_link_libraries(otbImageListTestDriver ${OTBImageList-Test_LIBRARIES})
 otb_module_target_label(otbImageListTestDriver)
 
-otb_add_test(NAME coTvObjectList COMMAND otbImageListTestDriver
-  otbObjectList
-  ${INPUTDATA}/couleurs.jpg
-  ${INPUTDATA}/poupees.png
-  ${INPUTDATA}/couleurs_extrait.png
-  )
-
 otb_add_test(NAME coTvImageList COMMAND otbImageListTestDriver
   --compare-image ${NOTOL}   ${INPUTDATA}/amst.png
   ${TEMP}/amst.png
