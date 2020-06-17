@@ -92,7 +92,7 @@ void PersistentImageToOGRLayerFilter<TImage>::Initialize()
 
 #if GDAL_VERSION_NUM >= 3000000 // importFromWkt is const-correct in GDAL 3
     // Use the same mapping strategy as the one in the datasource.
-    auto mappingStrategy =m_OGRLayer.GetSpatialRef()->GetAxisMappingStrategy ();
+    auto mappingStrategy = m_OGRLayer.GetSpatialRef()->GetAxisMappingStrategy();
     oSRS.SetAxisMappingStrategy(mappingStrategy);
     oSRSESRI.SetAxisMappingStrategy(mappingStrategy);
 #endif
