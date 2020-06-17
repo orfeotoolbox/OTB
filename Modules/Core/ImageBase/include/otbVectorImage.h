@@ -138,6 +138,8 @@ public:
 
   virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
 
+  virtual void SetNumberOfComponentsPerPixel(unsigned int n) override;
+
   /// Copy metadata from a DataObject
   void CopyInformation(const itk::DataObject*) override;
 

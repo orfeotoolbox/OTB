@@ -125,6 +125,19 @@ void VectorImage<TPixel, VImageDimension>::CopyInformation(const itk::DataObject
   }
 }
 
+
+template< typename TPixel, unsigned int VImageDimension >
+void
+VectorImage< TPixel, VImageDimension >::SetNumberOfComponentsPerPixel(unsigned int n)
+{
+  if (this->GetNumberOfComponentsPerPixel() != n)
+  {
+    SetBandImageMetadata(ImageMetadata::ImageMetadataBandsType(n));
+  }
+  
+  Superclass::SetNumberOfComponentsPerPixel(n);
+}
+
 template <class TPixel, unsigned int                VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetGeoTransform(void) const
 {
