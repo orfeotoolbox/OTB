@@ -29,8 +29,8 @@ int otbXMLMetadataSupplierTest(int itkNotUsed(argc), char* argv[])
 
   std::ofstream file;
   file.open(outputFilename);
-  file << mds.GetMetadataValue("calibration.adsHeader.swath") << "\n";
-  file << mds.GetMetadataValue("calibration.calibrationVectorList.calibrationVector_2.line") << "\n";
+  file << mds.GetMetadataValue("OTB.application.name") << "\n";
+  file << mds.GetMetadataValue("OTB.application.parameter_3.name") << "\n";
   file.close();
 
   return EXIT_SUCCESS;

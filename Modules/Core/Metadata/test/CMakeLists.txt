@@ -411,6 +411,6 @@ otb_add_test(NAME ioTuotbXMLMetadataSupplierTest COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuotbXMLMetadataSupplierTest.txt
   ${TEMP}/ioTuotbXMLMetadataSupplierTest.txt
   otbXMLMetadataSupplierTest
-  /home/julien/Bureau/S1Product/S1A_IW_GRDH_1SDV_20170819T001029_20170819T001054_017985_01E2E8_F302.SAFE/annotation/calibration/calibration-s1a-iw-grd-vh-20170819t001029-20170819t001054-017985-01e2e8-002.xml
+  ${INPUTDATA}/ioTuotbXMLMetadataSupplierTest.xml
   ${TEMP}/ioTuotbXMLMetadataSupplierTest.txt
   )

@@ -22,8 +22,8 @@
 #define otbXMLMetadataSupplier_h
 
 #include <gdal_mdreader.h>
+
 #include "OTBMetadataExport.h"
-//#include "otb_tinyxml.h"
 #include "otbMetadataSupplierInterface.h"
 #include "otbStringUtilities.h"
 

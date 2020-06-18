@@ -42,16 +42,7 @@ XMLMetadataSupplier::XMLMetadataSupplier(const std::string & fileName)
 
 const char * XMLMetadataSupplier::GetMetadataValue(const char * path, int band) const
 {
-  char** fetched;
-  fetched = CSLFetchNameValueMultiple(m_MetadataDic, path);
-  if (fetched == nullptr)
-    return nullptr;
-  std::ostringstream oss;
-  oss << *fetched;
-  ++fetched;
-  for ( ; *fetched != nullptr ; ++fetched )
-    oss << " " << *fetched;
-  return oss.str().c_str();
+  return CSLFetchNameValue(m_MetadataDic, path);
 }
 
 std::string XMLMetadataSupplier::GetResourceFile() const
