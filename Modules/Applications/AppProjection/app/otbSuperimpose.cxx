@@ -192,6 +192,7 @@ private:
       NNInterpolatorType::Pointer interpolator = NNInterpolatorType::New();
       m_Resampler->SetInterpolator(interpolator);
       m_BasicResampler->SetInterpolator(interpolator);
+      m_BasicResampler->SetInterpolationMargin(1e-9);
     }
     break;
     case Interpolator_BCO:

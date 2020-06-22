@@ -367,3 +367,13 @@ otb_test_application(NAME apTvPrSuperimpose_phr
                      VALID  --compare-image ${EPSILON_7}
                         ${BASELINE}/apTvPrSuperimposePHR.tif
                         ${TEMP}/apTvPrSuperimposePHR.tif)
+
+otb_test_application(NAME apTvPrSuperimpose_phr_nn
+                     APP Superimpose
+                     OPTIONS -inr  ${INPUTDATA}/phr_pan.tif
+                             -inm ${INPUTDATA}/phr_xs.tif
+                             -interpolator nn
+                             -out ${TEMP}/apTvPrSuperimposePHR_nn.tif int16
+                     VALID  --compare-image ${EPSILON_7}
+                        ${BASELINE}/apTvPrSuperimposePHR_nn.tif
+                        ${TEMP}/apTvPrSuperimposePHR_nn.tif)
