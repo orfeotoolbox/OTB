@@ -94,6 +94,7 @@ set(LINUX_SYSTEM_DLLS
   libidn.so
   libgomp.so*
   ld-linux-x86-64.so*
+  libgssapi_krb5.so*
   libX11.so*
   libXi.so*  #GLUT
   libXcursor.so* #GLFW
