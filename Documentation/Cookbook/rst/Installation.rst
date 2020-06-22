@@ -32,6 +32,18 @@ MacOS X
 
 .. include:: Installation_Macos.rst
 
+
+Conda package
+-------------
+
+A conda package is available for Orfeo Toolbox on Linux. It can be found at https://anaconda.org/orfeotoolbox/otb 
+and can be installed with the command
+
+::
+
+    conda install -c orfeotoolbox otb 
+
+
 Other packages
 --------------
 

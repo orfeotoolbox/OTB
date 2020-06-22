@@ -42,6 +42,7 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>::Grid
     m_OutputSpacing(),
     m_EdgePaddingValue(),
     m_CheckOutputBounds(true),
+    m_InterpolationMargin(0.0),
     m_Interpolator(),
     m_ReachableOutputRegion()
 {
@@ -227,7 +228,6 @@ void GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>:
 
   // Compute the padding due to the interpolator
 
-
   IndexType inUL = this->GetInput()->GetBufferedRegion().GetIndex();
   IndexType inLR = this->GetInput()->GetBufferedRegion().GetIndex() + this->GetInput()->GetBufferedRegion().GetSize();
   inLR[0] -= 1;
@@ -246,9 +246,9 @@ void GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>:
   this->GetInput()->TransformIndexToPhysicalPoint(inUL, inULp);
   this->GetInput()->TransformIndexToPhysicalPoint(inLR, inLRp);
 
-  inULp -= 0.5 * this->GetInput()->GetSignedSpacing();
-  inLRp += 0.5 * this->GetInput()->GetSignedSpacing();
-
+  inULp -= (0.5 - m_InterpolationMargin) * this->GetInput()->GetSignedSpacing();
+  inLRp += (0.5 - m_InterpolationMargin) * this->GetInput()->GetSignedSpacing();
+ 
   ContinuousInputIndexType outUL;
   ContinuousInputIndexType outLR;
   this->GetOutput()->TransformPhysicalPointToContinuousIndex(inULp, outUL);
@@ -265,6 +265,8 @@ void GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>:
 
   m_ReachableOutputRegion.SetIndex(outputIndex);
   m_ReachableOutputRegion.SetSize(outputSize);
+
+  otbMsgDevMacro(<< "ReachableOutputRegion: " << m_ReachableOutputRegion);
 }
 
 template <typename TInputImage, typename TOutputImage, typename TInterpolatorPrecision>

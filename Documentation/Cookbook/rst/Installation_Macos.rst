@@ -44,7 +44,7 @@ supplied script ``tools/uninstall_otb.sh``.
 Python bindings
 ~~~~~~~~~~~~~~~
 
-Since OTB 6.7.0 OTB bindings for Python 3.5 are distributed as a binary
+Since OTB 6.7.0 OTB bindings for Python 3.7 are distributed as a binary
 package.
 Please note that using a different Python version may not be compatible with
 OTB wrappings. If the installation completes
@@ -54,7 +54,20 @@ You must have Python numpy bindings installed in your system. They can be instal
 without admin rights as follows: "pip install --user numpy". This is to give users the option 
 to select their own existing Python installation rather than the one dibstributed by the OTB package.
 
-By default, bindings for Python 3.5 will be enabled with the ``otbenv`` script.
+By default, bindings for Python 3.7 will be enabled with the ``otbenv`` script.
+
+Recompiling Python bindings
++++++++++++++++++++++++++++
+
+If you are using another version of Python 3 than 3.7, but still want to use OTB Python bindings, it is possible
+to compile the python bindings again with your version of Python. CMake is required (it is available in Brew or at [https://cmake.org/]). At the root of the OTB installation run :
+
+.. parsed-literal::
+
+    source otbenv.profile 
+    ctest -S share/otb/swig/build_wrapping.cmake -VV
+
+You should now be able to import ``otbApplication`` through Python !
 
 Notes:
 ~~~~~~
