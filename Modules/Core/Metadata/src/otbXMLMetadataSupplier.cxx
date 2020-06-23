@@ -23,7 +23,7 @@
 namespace otb
 {
 XMLMetadataSupplier::XMLMetadataSupplier(const std::string & fileName)
-  : GDALMDReaderBase(nullptr, nullptr), m_FileName(fileName)
+  : m_FileName(fileName)
 {
   CPLXMLNode* psNode = CPLParseXMLFile(m_FileName.c_str());
   if(psNode != nullptr)
@@ -50,15 +50,110 @@ std::string XMLMetadataSupplier::GetResourceFile() const
   return m_FileName;
 }
 
-bool XMLMetadataSupplier::HasRequiredFiles() const
+// This method originates from a work by GDAL in the class GDALMDReaderBase.
+char** XMLMetadataSupplier::ReadXMLToList(CPLXMLNode* psNode, char** papszList,
+                                          const char* pszName)
 {
-  return false; // TODO
-}
+  if(nullptr == psNode)
+    return papszList;
 
-char** XMLMetadataSupplier::GetMetadataFiles() const
-{
-  char ** todo;
-  return todo; // TODO
+  if (psNode->eType == CXT_Text)
+  {
+    papszList = CSLAddNameValue(papszList, pszName, psNode->pszValue);
+  }
+
+  if (psNode->eType == CXT_Element)
+  {
+    int nAddIndex = 0;
+    bool bReset = false;
+    for(CPLXMLNode* psChildNode = psNode->psChild; nullptr != psChildNode;
+        psChildNode = psChildNode->psNext)
+    {
+      if (psChildNode->eType == CXT_Element)
+      {
+        // check name duplicates
+        if(nullptr != psChildNode->psNext)
+        {
+          if(bReset)
+          {
+            bReset = false;
+            nAddIndex = 0;
+          }
+
+          if(EQUAL(psChildNode->pszValue, psChildNode->psNext->pszValue))
+          {
+            nAddIndex++;
+          }
+          else
+          { // the name changed
+            if(nAddIndex > 0)
+            {
+              bReset = true;
+              nAddIndex++;
+            }
+          }
+        }
+        else
+        {
+          if(bReset)
+          {
+            bReset = false;
+            nAddIndex = 0;
+          }
+          if(nAddIndex > 0)
+          {
+            nAddIndex++;
+          }
+        }
+        char szName[512];
+        if(nAddIndex > 0)
+        {
+          CPLsnprintf( szName, 511, "%s_%d", psChildNode->pszValue,
+                       nAddIndex);
+        }
+        else
+        {
+          CPLStrlcpy(szName, psChildNode->pszValue, 511);
+        }
+        char szNameNew[512];
+        if(CPLStrnlen( pszName, 511 ) > 0) //if no prefix just set name to node name
+        {
+          CPLsnprintf( szNameNew, 511, "%s.%s", pszName, szName );
+        }
+        else
+        {
+          CPLsnprintf( szNameNew, 511, "%s.%s", psNode->pszValue, szName );
+        }
+        papszList = ReadXMLToList(psChildNode, papszList, szNameNew);
+      }
+      else if( psChildNode->eType == CXT_Attribute )
+      {
+        papszList = CSLAddNameValue(papszList,
+                                    CPLSPrintf("%s.%s", pszName, psChildNode->pszValue),
+                                    psChildNode->psChild->pszValue);
+      }
+      else
+      {
+        // Text nodes should always have name
+        if(EQUAL(pszName, ""))
+        {
+          papszList = ReadXMLToList(psChildNode, papszList, psNode->pszValue);
+        }
+        else
+        {
+          papszList = ReadXMLToList(psChildNode, papszList, pszName);
+        }
+      }
+    }
+  }
+
+  // proceed next only on top level
+  if(nullptr != psNode->psNext && EQUAL(pszName, ""))
+  {
+    papszList = ReadXMLToList(psNode->psNext, papszList, pszName);
+  }
+
+  return papszList;
 }
 
 

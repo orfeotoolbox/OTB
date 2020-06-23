@@ -21,7 +21,8 @@
 #ifndef otbXMLMetadataSupplier_h
 #define otbXMLMetadataSupplier_h
 
-#include <gdal_mdreader.h>
+#include "cpl_minixml.h"
+#include "cpl_string.h"
 
 #include "OTBMetadataExport.h"
 #include "otbMetadataSupplierInterface.h"
@@ -38,8 +39,7 @@ namespace otb
  * \ingroup OTBMetadata
  */
 class OTBMetadata_EXPORT XMLMetadataSupplier
-  : public MetadataSupplierInterface,
-	public GDALMDReaderBase
+  : public MetadataSupplierInterface
 {
 public:
   XMLMetadataSupplier(const std::string &);
@@ -52,18 +52,18 @@ public:
   std::string GetResourceFile() const override;
 
   /**
-  * @brief Determine whether the input parameter correspond to the particular
-  *        provider of remote sensing data completely
-  * @return True if all needed sources files found
+  * @brief ReadXMLToList Transform xml to list of NULL terminated name=value
+  *        strings
+  * @param psNode A xml node to process
+  * @param papszList A list to fill with name=value strings
+  * @param pszName A name of parent node. For root xml node should be empty.
+  *        If name is not empty, the sibling nodes will not proceed
+  * @return An input list filled with values
+  *
+  * This method originates from a work by GDAL in the class GDALMDReaderBase.
   */
-  bool HasRequiredFiles() const override;
-
-  /**
-  * @brief Get metadata file names. The caller become owner of returned list
-  *        and have to free it via CSLDestroy.
-  * @return A file name list
-  */
-  char** GetMetadataFiles() const override;
+  virtual char** ReadXMLToList(CPLXMLNode* psNode, char** papszList,
+                               const char* pszName = "");
 
 private:
   /** List of resource files */
