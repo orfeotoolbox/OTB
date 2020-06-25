@@ -133,7 +133,7 @@ public:
         otbGenericExceptionMacro(MissingMetadataException,<<"Bad metadata vector element in '"<<path<<"', got :"<<part)
         }
       }
-    if ((size >= 0) and (output.size() != (size_t)size))
+    if ((size >= 0) && (output.size() != (size_t)size))
       {
       otbGenericExceptionMacro(MissingMetadataException,<<"Bad number of elements in vector '"<<path<<"', expected "<<size<< ", got "<<output.size())
       }
