@@ -292,7 +292,7 @@ extern OTBMetadata_EXPORT MDL2DBmType MDL2DNames;
 namespace Utils
 {
 template <>
-inline MetaData::Time LexicalCast<MetaData::Time,char*>(char* const& in, std::string const& kind)
+inline MetaData::Time LexicalCast<MetaData::Time,std::string>(std::string const& in, std::string const& kind)
 {
   MetaData::Time output;
   std::istringstream iss(in);
@@ -304,12 +304,6 @@ inline MetaData::Time LexicalCast<MetaData::Time,char*>(char* const& in, std::st
     throw std::runtime_error(oss.str());
     }
   return output;
-}
-
-template <>
-inline MetaData::Time LexicalCast<MetaData::Time,std::string>(std::string const& in, std::string const& kind)
-{
-  return LexicalCast<MetaData::Time,char*>((char* const&) in.c_str() , kind);
 }
 
 } // end namespace Utils
