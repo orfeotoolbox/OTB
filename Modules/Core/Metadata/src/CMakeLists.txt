@@ -71,6 +71,9 @@ set(OTBMetadata_SRC
 
   otbImageMetadata.cxx
   otbGeometryMetadata.cxx
+  
+  otbMetadataStorageInterface.cxx
+  otbMetadataSupplierInterface.cxx
   )
 
 add_library(OTBMetadata ${OTBMetadata_SRC})

@@ -77,12 +77,8 @@ public:
    * If band >= 0, the metadata value is looked in the specified band*/
   virtual const char * GetMetadataValue(const char * path, int band=-1) const = 0;
 
-  bool HasValue(const char * path, int band=-1)
-    {
-    const char * ret = GetMetadataValue(path, band);
-    return ret;
-    }
-  
+  bool HasValue(const char * path, int band=-1);
+
   // utility functions
   template <typename T> T GetAs(const char *path, int band=-1) const
     {
