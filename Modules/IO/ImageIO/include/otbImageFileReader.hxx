@@ -546,11 +546,6 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     this->SetMetaDataDictionary(dictLight);
   }
   
-  if (img_common != nullptr)
-    {
-    img_common->SetImageMetadata(imd);
-    }
-
   IndexType start;
   start.Fill(0);
 
@@ -569,6 +564,13 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
       // invalid range
       itkGenericExceptionMacro("The given band range is either empty or invalid for a " << m_IOComponents << " bands input image!");
     }
+    // ImageIO returned the metadata from all bands of the input raster. It needs to be adapted to the layout of m_BandList
+    ImageMetadata::ImageMetadataBandsType bandRangeMetadata;
+    for (auto elem: m_BandList)
+    {
+      bandRangeMetadata.push_back(imd.Bands[elem]);
+    }
+    imd.Bands = bandRangeMetadata;
     m_IOComponents = m_BandList.size();
   }
 
@@ -580,6 +582,11 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     typedef typename TOutputImage::AccessorFunctorType AccessorFunctorType;
     AccessorFunctorType::SetVectorLength(output, m_IOComponents);
   }
+
+  if (img_common != nullptr)
+    {
+    img_common->SetImageMetadata(imd);
+    }
 
   output->SetLargestPossibleRegion(region);
 }
