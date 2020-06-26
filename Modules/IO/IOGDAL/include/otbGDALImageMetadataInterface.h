@@ -23,7 +23,7 @@
 
 #include "otbImageMetadataInterfaceBase.h"
 #include "otbMetadataStorageInterface.h"
-#include "OTBImageIOExport.h"
+#include "OTBIOGDALExport.h"
 
 namespace otb
 {
