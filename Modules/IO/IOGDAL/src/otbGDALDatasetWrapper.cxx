@@ -171,7 +171,7 @@ Projection::GCPParam GDALDatasetWrapper::GetGCPParam() const
 void GDALDatasetWrapper::SetGCPParam(Projection::GCPParam gcpParam)
 {
   int nGCPCount = gcpParam.GCPs.size();
-  GDAL_GCP gcps[nGCPCount];
+  auto gcps = new GDAL_GCP[nGCPCount];
   GDAL_GCP *gcpIt = gcps;
   for (auto otbGcpIt = gcpParam.GCPs.cbegin() ; otbGcpIt != gcpParam.GCPs.cend() ; ++otbGcpIt, gcpIt++)
   {
@@ -186,6 +186,8 @@ void GDALDatasetWrapper::SetGCPParam(Projection::GCPParam gcpParam)
     *gcpIt = gdalGcp;
   }
   m_Dataset->SetGCPs(nGCPCount, gcps, gcpParam.GCPProjection.c_str());
+  // The GCPs are copied in the dataset.
+  delete[] gcps;
 }
 
 } // end namespace otb
