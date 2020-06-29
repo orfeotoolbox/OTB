@@ -3,7 +3,8 @@ QGIS interface
 
 OTB Application are now fully integrated in QGIS since 3.8 QGIS version. 
 You can configure your OTB into QGIS according to 
-[QGIS Provider documentation](https://docs.qgis.org/3.10/en/docs/user_manual/processing/3rdParty.html).
+- [QGIS Provider documentation for latest LTR](https://docs.qgis.org/latest/en/docs/user_manual/processing/3rdParty.html).
+- [QGIS Provider documentation](https://docs.qgis.org/testing/en/docs/user_manual/processing/3rdParty.html).
 
 Compatibility between QGIS and OTB versions
 -------------------------------------------
@@ -23,9 +24,6 @@ The table below summarizes which version of OTB can be used with which version o
 +---------------+-----------------+--------------------+
 | OTB 7.1.0     | Not Compatible  | Compatible         |
 +---------------+-----------------+--------------------+
-
-Therefore, if you used the QGIS LTR version (currently 3.10), please don't
-use OTB 7.1.0 official binary paclages. 
 
 Use OTB in old QGIS version 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
