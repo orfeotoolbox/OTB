@@ -23,12 +23,12 @@
 
 #include "otbImageMetadataInterfaceBase.h"
 #include "otbMetadataStorageInterface.h"
-#include "OTBImageIOExport.h"
+#include "OTBIOGDALExport.h"
 
 namespace otb
 {
 
-class OTBImageIO_EXPORT GDALImageMetadataInterface : public ImageMetadataInterfaceBase
+class OTBIOGDAL_EXPORT GDALImageMetadataInterface : public ImageMetadataInterfaceBase
 {
 public:
   typedef GDALImageMetadataInterface Self;

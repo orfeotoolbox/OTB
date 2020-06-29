@@ -78,7 +78,6 @@ void otbMetadataKeyTest(char* argv[])
 
   try
   {
-    mytime = Utils::LexicalCast<MetaData::Time,char*>(buffer, std::string("T"));
     mytime = Utils::LexicalCast<MetaData::Time,std::string>(bufferStr, std::string("T"));
   }
   catch(std::runtime_error&)

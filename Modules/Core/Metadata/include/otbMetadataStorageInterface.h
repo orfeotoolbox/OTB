@@ -22,13 +22,14 @@
 #define otbMetadataStorageInterface_h
 
 #include "OTBMetadataExport.h"
-#include "itkExceptionObject.h"
+#include "itkMacro.h"
 #include <vector>
 #include <string>
 #include <sstream>
 #include "otbStringUtils.h"
 #include "otbMacro.h"
 #include "otbStringUtilities.h"
+#include "otbJoinContainer.h"
 
 namespace otb
 {
@@ -48,17 +49,9 @@ public:
   virtual void SetMetadataValue(const char * path, const char * value, int band=-1) = 0;
 
   // TODO : check precision settings
-  void SetAs(const std::string & path, double value, int band=-1)
-    {
-    std::ostringstream oss;
-    oss << value;
-    SetMetadataValue(path.c_str(), oss.str().c_str(), band);
-    }
+  void SetAs(const std::string & path, double value, int band=-1);
 
-  void SetAs(const std::string & path, const std::string & value, int band=-1)
-    {
-    SetMetadataValue(path.c_str(), value.c_str(), band);
-    }
+  void SetAs(const std::string & path, const std::string & value, int band=-1);
 
   /** Parse a std::vector to a metadata value */
   template < typename T> void SetAsVector(const char *path, std::vector<T> value, const char sep=' ', int band=-1)
