@@ -529,6 +529,34 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
   const typename TInputImage::SpacingType&   spacing   = inputPtr->GetSpacing();
   const typename TInputImage::DirectionType& direction = inputPtr->GetDirection();
   m_ImageIO->SetNumberOfDimensions(TInputImage::ImageDimension);
+
+  if (strcmp(inputPtr->GetNameOfClass(), "VectorImage") == 0)
+  {
+    typedef typename InputImageType::InternalPixelType VectorImagePixelType;
+    m_ImageIO->SetPixelTypeInfo(typeid(VectorImagePixelType));
+
+    typedef typename InputImageType::AccessorFunctorType AccessorFunctorType;
+    m_ImageIO->SetNumberOfComponents(AccessorFunctorType::GetVectorLength(inputPtr));
+
+    m_IOComponents = m_ImageIO->GetNumberOfComponents();
+    m_BandList.clear();
+    if (m_FilenameHelper->BandRangeIsSet())
+    {
+      // get band range
+      bool retBandRange = m_FilenameHelper->ResolveBandRange(m_FilenameHelper->GetBandRange(), m_IOComponents, m_BandList);
+      if (retBandRange == false || m_BandList.empty())
+      {
+        // invalid range
+        itkGenericExceptionMacro("The given band range is either empty or invalid for a " << m_IOComponents << " bands input image!");
+      }
+    }
+  }
+  else
+  {
+    // Set the pixel and component type; the number of components.
+    m_ImageIO->SetPixelTypeInfo(typeid(typename InputImageType::PixelType));
+  }
+
   int direction_sign(0);
   for (unsigned int i = 0; i < TInputImage::ImageDimension; ++i)
   {
@@ -689,37 +717,6 @@ void ImageFileWriter<TInputImage>::GenerateData(void)
 {
   const InputImageType* input = this->GetInput();
   InputImagePointer     cacheImage;
-
-  // Make sure that the image is the right type and no more than
-  // four components.
-  typedef typename InputImageType::PixelType ImagePixelType;
-
-  if (strcmp(input->GetNameOfClass(), "VectorImage") == 0)
-  {
-    typedef typename InputImageType::InternalPixelType VectorImagePixelType;
-    m_ImageIO->SetPixelTypeInfo(typeid(VectorImagePixelType));
-
-    typedef typename InputImageType::AccessorFunctorType AccessorFunctorType;
-    m_ImageIO->SetNumberOfComponents(AccessorFunctorType::GetVectorLength(input));
-
-    m_IOComponents = m_ImageIO->GetNumberOfComponents();
-    m_BandList.clear();
-    if (m_FilenameHelper->BandRangeIsSet())
-    {
-      // get band range
-      bool retBandRange = m_FilenameHelper->ResolveBandRange(m_FilenameHelper->GetBandRange(), m_IOComponents, m_BandList);
-      if (retBandRange == false || m_BandList.empty())
-      {
-        // invalid range
-        itkGenericExceptionMacro("The given band range is either empty or invalid for a " << m_IOComponents << " bands input image!");
-      }
-    }
-  }
-  else
-  {
-    // Set the pixel and component type; the number of components.
-    m_ImageIO->SetPixelTypeInfo(typeid(ImagePixelType));
-  }
 
   // Setup the image IO for writing.
   //
