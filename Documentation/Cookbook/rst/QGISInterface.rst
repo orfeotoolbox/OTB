@@ -37,7 +37,7 @@ additional plugin in order to use OTB applications. This plugin is available
 [here](https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin) 
 with specific installation instructions.
 
-Troubleshoot
+Troubleshooting
 ^^^^^^^^^^^^
 As of QGIS 3.8 the otb plugin is in the core. It might get messy if you 
 have a previously installed plugin. Try to remove the old plugin before 
