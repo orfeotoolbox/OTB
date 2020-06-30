@@ -28,7 +28,7 @@ The table below summarizes which version of OTB can be used with which version o
 Use OTB in old QGIS version 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-:warning: **Please consider upgrade your QGIS version**: since QGIS 3.8 
+:warning: **Please consider upgrading your QGIS version**: since QGIS 3.8 
 and with 3.10 LTR version, the configuration of OTB Application is 
 directly done in QGIS Provider (see above).
 
