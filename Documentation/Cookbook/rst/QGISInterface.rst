@@ -47,4 +47,4 @@ launching QGIS.
 Issue tracking
 ^^^^^^^^^^^^^^
 If you encounter issues with integration of OTB application into QGIS, 
-please fill an issue into the OTB issue tracker with `qgis` label.
+please [fill an issue](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/new?issue[assignee_id]=&issue[milestone_id]=) into the OTB issue tracker with `qgis` label.
