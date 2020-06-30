@@ -46,5 +46,5 @@ launching QGIS.
 
 Issue tracking
 ^^^^^^^^^^^^^^
-If you encounter issues with integration ot OTB application into QGIS, 
+If you encounter issues with integration of OTB application into QGIS, 
 please fill an issue into the OTB issue tracker with `qgis` label.
