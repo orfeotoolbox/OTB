@@ -32,7 +32,7 @@ Use OTB in old QGIS version
 and with 3.10 LTR version, the configuration of OTB Application is 
 directly done in QGIS Provider (see above).
 
-If you use older version of QGIS (from 3.2 to 3.6), you need to use an 
+If you use older version of QGIS (from 3.2 to 3.6), you need to install an 
 additional plugin to use OTB applications. This plugin is available 
 [here](https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin) 
 with specific installation instructions.
