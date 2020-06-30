@@ -1,7 +1,7 @@
 QGIS interface
 ==============
 
-OTB Application are now fully integrated in QGIS since 3.8 QGIS version. 
+OTB Applications are fully integrated in QGIS since QGIS 3.8. 
 You can configure your OTB into QGIS according to 
 - [QGIS Provider documentation for latest LTR](https://docs.qgis.org/latest/en/docs/user_manual/processing/3rdParty.html).
 - [QGIS Provider documentation](https://docs.qgis.org/testing/en/docs/user_manual/processing/3rdParty.html).
