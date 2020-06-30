@@ -39,7 +39,7 @@ with specific installation instructions.
 
 Troubleshooting
 ^^^^^^^^^^^^^^^
-As of QGIS 3.8 the otb plugin is in the core. It might get messy if you 
+As of QGIS 3.8 the OTB plugin is in the core. It might get messy if you 
 have a previously installed plugin. Try to remove the old plugin before 
 launching QGIS.
 
