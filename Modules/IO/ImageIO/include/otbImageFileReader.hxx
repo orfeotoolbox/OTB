@@ -574,6 +574,15 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     m_IOComponents = m_BandList.size();
   }
 
+  // Delete band metadata if the Conversion policy changed the number of bands, in the case of 
+  // grayscale to RGB for example. Because we cannot know how the metadata should be mapped.
+  // TODO: define proper behavior in this case.
+  using ConvertIOPixelTraits = otb::DefaultConvertPixelTraits<typename TOutputImage::IOPixelType>;
+  if (strcmp(output->GetNameOfClass(), "Image") == 0 && !(this->m_ImageIO->GetNumberOfComponents() == ConvertIOPixelTraits::GetNumberOfComponents()))
+  {
+    imd.Bands = ImageMetadata::ImageMetadataBandsType (ConvertIOPixelTraits::GetNumberOfComponents());
+  }
+
   // THOMAS : ajout
   // If a VectorImage, this requires us to set the
   // VectorLength before allocate
