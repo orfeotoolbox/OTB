@@ -26,6 +26,7 @@
 #include <utility>
 #include <cstdlib>
 #include "otbStopwatch.h"
+#include "otbTestTools.h"
 
 void SetUpImageMetadata(otb::ImageMetadata& md, unsigned int nbBands)
 {
@@ -189,7 +190,7 @@ void otbImageMetadataSliceTest(char* argv[])
   SetUpImageMetadata(md, 3);
 
   ImageMetadata md2 = md.slice(0, 1);
-  outfile << md2;
+  otb::testtools::PrintMetadata(md2, outfile);
   outfile.close();
 }
 
@@ -207,7 +208,7 @@ void otbImageMetadataAppendTest(char* argv[])
   SetUpImageMetadata(md2, 3);
 
   md.append(md2);
-  outfile << md;
+  otb::testtools::PrintMetadata(md, outfile);
   outfile.close();
 }
 
@@ -234,7 +235,7 @@ void otbImageMetadataMergeTest(char* argv[])
   
   md.Merge(md2);
   
-  outfile << md;
+  otb::testtools::PrintMetadata(md, outfile);
   outfile.close();
 }
 void otbImageMetadataToFromKeywordlistTest(char* argv[])
@@ -265,7 +266,7 @@ void otbImageMetadataToFromKeywordlistTest(char* argv[])
   md.AppendToKeywordlists(kwlVect);
   ImageMetadata md2;
   md2.FromKeywordlists(kwlVect);
-  outfile << md2;
+  otb::testtools::PrintMetadata(md2, outfile);
   outfile.close();
 }
 
@@ -288,7 +289,7 @@ void otbImageMetadataCompactTest(char* argv[])
   }
 
   md.compact();
-  outfile << md;
+  otb::testtools::PrintMetadata(md, outfile);
   outfile.close();
 }
 
