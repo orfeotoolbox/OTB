@@ -567,6 +567,11 @@ protected:
   /** Image metadata pre-parsed by the ImageIO */
   ImageMetadata m_Imd;
 
+  /** Mapping between origin components and output components. Note that the buffer is
+  already mapped after calling the DoMapBuffer method. This attribute is useful to write
+  band related metadatas. */
+  std::vector<unsigned int> m_BandList;
+
 private:
   ImageIOBase(const Self&) = delete;
   void operator=(const Self&) = delete;

@@ -1294,9 +1294,19 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   // char **     papszOptions = NULL;
   std::string driverShortName;
   m_NbBands = this->GetNumberOfComponents();
+  
+  // If the band mapping is different from the one of the input (e.g. because an extended filename
+  // has been set, the bands in the imageMetadata object needs to be reorganized.
+  if (!m_BandList.empty())
+  {
+    ImageMetadata::ImageMetadataBandsType bandRangeMetadata;
+    for (auto elem: m_BandList)
+    {
+      bandRangeMetadata.push_back(m_Imd.Bands[elem]);
+    }
+    m_Imd.Bands = bandRangeMetadata;
+  }
 std::cout << m_Imd << std::endl;
-std::cout << "m_NbBands " << (std::size_t)m_NbBands << std::endl;
-std::cout << "m_ImdBands size " << m_Imd.Bands.size() << std::endl;
 
   if ( !m_Imd.Bands.empty() && (std::size_t)m_NbBands != m_Imd.Bands.size())
     {
