@@ -47,7 +47,6 @@ int otbGDALImageIOImportExportMetadata(int itkNotUsed(argc), char* argv[])
 //  io2.CarWriteFile(outputFilename);
 //  io2->m_Imd = io->m_Imd;
 //  io2.ExportMetadata();
-  return 1;
 
   return EXIT_SUCCESS;
 }
