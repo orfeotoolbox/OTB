@@ -3,8 +3,9 @@ QGIS interface
 
 OTB Applications are fully integrated in QGIS since QGIS 3.8. 
 You can configure OTB for QGIS according to the: 
-- [QGIS Provider documentation for latest LTR](https://docs.qgis.org/latest/en/docs/user_manual/processing/3rdParty.html).
-- [QGIS Provider documentation](https://docs.qgis.org/testing/en/docs/user_manual/processing/3rdParty.html).
+
+- `QGIS Provider documentation for latest LTR <https://docs.qgis.org/latest/en/docs/user_manual/processing/3rdParty.html>`_.
+- `QGIS Provider documentation <https://docs.qgis.org/testing/en/docs/user_manual/processing/3rdParty.html>`_.
 
 Compatibility between QGIS and OTB versions
 -------------------------------------------
@@ -25,16 +26,17 @@ The table below summarizes which version of OTB can be used with which version o
 | OTB 7.1.0     | Not Compatible  | Compatible         |
 +---------------+-----------------+--------------------+
 
-Use OTB in old QGIS version 
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Use OTB in old QGIS version (3.6 and less)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-:warning: **Please consider upgrading your QGIS version**: since QGIS 3.8 
-and with 3.10 LTR version, the configuration of OTB Application is 
+.. warning:: Please consider upgrading your QGIS version.
+
+Since QGIS 3.8 and with 3.10 LTR version, the configuration of OTB Application is 
 directly done in QGIS Provider (see above).
 
 If you use older version of QGIS (from 3.2 to 3.6), you need to install an 
 additional plugin in order to use OTB applications. This plugin is available 
-[here](https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin) 
+`here <https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin>`_ 
 with specific installation instructions.
 
 Troubleshooting
@@ -47,4 +49,4 @@ launching QGIS.
 Issue tracking
 ^^^^^^^^^^^^^^
 If you encounter issues with integration of OTB application into QGIS, 
-please [fill an issue](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/new?issue[assignee_id]=&issue[milestone_id]=) into the OTB issue tracker with `qgis` label.
+please `fill an issue <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/new?issue[assignee_id]=&issue[milestone_id]=>`_ into the OTB issue tracker with `qgis` label.
