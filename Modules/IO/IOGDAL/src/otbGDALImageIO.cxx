@@ -1906,11 +1906,7 @@ void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int 
       this->SetAsVector("RPC/SAMP_NUM_COEFF", std::vector<double> (rpcStruct.SampleNum, rpcStruct.SampleNum + 20 / sizeof(double)), ' ');
       this->SetAsVector("RPC/SAMP_DEN_COEFF", std::vector<double> (rpcStruct.SampleDen, rpcStruct.SampleDen + 20 / sizeof(double)), ' ');
     }
-    else if (kv.first == MetaData::MDGeomNames.left.at(MDGeom::GCP))
-    {
-      // GCPs are exported directly from the ImageMetadata.
-      this->m_Dataset->SetGCPParam(boost::any_cast<Projection::GCPParam>(m_Imd[MDGeom::GCP]));
-    }
+    // Note that GCPs have already been exported
     SetMetadataValue(kv.first.c_str(), kv.second.c_str(), band);
   }
 }
