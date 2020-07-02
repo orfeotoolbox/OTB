@@ -29,63 +29,9 @@ namespace otb
 namespace testtools
 {
 
-void PrintMetadataBase(ImageMetadataBase imdb, std::ostream& oss)
-{
-  std::unordered_map<std::string, std::string> kwl;
-  imdb.ToKeywordlist(kwl);
-  for (auto It = otb::MetaData::MDStrNames.left.begin() ; It != otb::MetaData::MDStrNames.left.end() ; ++It)
-  {
-    auto Key = kwl.find(It->second);
-    if (Key != kwl.end())
-      oss << It->second << ' ' << Key->second << '\n';
-  }
+void PrintMetadataBase(ImageMetadataBase imdb, std::ostream& oss);
 
-  for (auto It = otb::MetaData::MDNumNames.left.begin() ; It != otb::MetaData::MDNumNames.left.end() ; ++It)
-  {
-    auto Key = kwl.find(It->second);
-    if (Key != kwl.end())
-      oss << It->second << ' ' << Key->second << '\n';
-  }
-
-  for (auto It = otb::MetaData::MDTimeNames.left.begin() ; It != otb::MetaData::MDTimeNames.left.end() ; ++It)
-  {
-    auto Key = kwl.find(It->second);
-    if (Key != kwl.end())
-      oss << It->second << ' ' << Key->second << '\n';
-  }
-
-  for (auto It = otb::MetaData::MDGeomNames.left.begin() ; It != otb::MetaData::MDGeomNames.left.end() ; ++It)
-  {
-    auto Key = kwl.find(It->second);
-    if (Key != kwl.end())
-      oss << It->second << ' ' << Key->second << '\n';
-  }
-
-  for (auto It = otb::MetaData::MDL1DNames.left.begin() ; It != otb::MetaData::MDL1DNames.left.end() ; ++It)
-  {
-    auto Key = kwl.find(It->second);
-    if (Key != kwl.end())
-      oss << It->second << ' ' << Key->second << '\n';
-  }
-
-  for (auto It = otb::MetaData::MDL2DNames.left.begin() ; It != otb::MetaData::MDL2DNames.left.end() ; ++It)
-  {
-    auto Key = kwl.find(It->second);
-    if (Key != kwl.end())
-      oss << It->second << ' ' << Key->second << '\n';
-  }
-
-  std::string prefix("Extra.");
-  for (const auto& kv : imdb.ExtraKeys)
-    oss << prefix + kv.first << ' ' << kv.second << '\n';
-}
-
-void PrintMetadata(ImageMetadata imd, std::ostream& oss)
-{
-  PrintMetadataBase(imd, oss);
-  for (ImageMetadataBase imdb : imd.Bands)
-    PrintMetadataBase(imdb, oss);
-}
+void PrintMetadata(ImageMetadata imd, std::ostream& oss);
 
 }
 }
