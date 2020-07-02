@@ -477,7 +477,8 @@ void ImageMetadata::compact()
   bool compactVal;
   // TODO Compact the GeometryKeys when comparisons exists
   // Compact NumericKeys
-  for (const auto& kv : this->Bands.front().NumericKeys)
+  auto numKeys = this->Bands.front().NumericKeys;
+  for (const auto& kv : numKeys)
   {
     compactVal = true;
     auto bandIt = this->Bands.cbegin();
@@ -502,7 +503,8 @@ void ImageMetadata::compact()
     }
   }
   // Compact StringKeys
-  for (const auto& kv : this->Bands.front().StringKeys)
+  auto strKeys = this->Bands.front().StringKeys;
+  for (const auto& kv : strKeys)
   {
     compactVal = true;
     auto bandIt = this->Bands.cbegin();
@@ -529,7 +531,8 @@ void ImageMetadata::compact()
   // TODO Compact LUT1DKeys when comparisons exists
   // TODO Compact LUT2DKeys when comparisons exists
   // Compact TimeKeys
-  for (const auto& kv : this->Bands.front().TimeKeys)
+  auto timeKeys = this->Bands.front().TimeKeys;
+  for (const auto& kv : timeKeys)
   {
     compactVal = true;
     auto bandIt = this->Bands.cbegin();
@@ -554,7 +557,8 @@ void ImageMetadata::compact()
     }
   }
   // Compact ExtraKeys
-  for (const auto& kv : this->Bands.front().ExtraKeys)
+  auto extraKeys = this->Bands.front().ExtraKeys;
+  for (const auto& kv : extraKeys)
   {
     compactVal = true;
     auto bandIt = this->Bands.cbegin();
