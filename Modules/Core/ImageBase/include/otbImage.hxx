@@ -153,6 +153,54 @@ typename Image<TPixel, VImageDimension>::VectorType Image<TPixel, VImageDimensio
 }
 
 
+template <class TPixel, unsigned int                VImageDimension>
+typename Image<TPixel, VImageDimension>::VectorType 
+Image<TPixel, VImageDimension>::GetUpperLeftCorner(void) const
+{
+  PointType physicalPoint;
+  itk::ContinuousIndex<double, VImageDimension> index;
+  index.Fill(-0.5);
+  this->TransformContinuousIndexToPhysicalPoint (index, physicalPoint) ;
+  return {physicalPoint[0],physicalPoint[1]};
+}
+
+template <class TPixel, unsigned int                VImageDimension>
+typename Image<TPixel, VImageDimension>::VectorType 
+Image<TPixel, VImageDimension>::GetUpperRightCorner(void) const
+{
+  PointType physicalPoint;
+  itk::ContinuousIndex<double, VImageDimension> index;
+  index.Fill(-0.5);
+  index[0] = -0.5 + this->GetLargestPossibleRegion().GetSize()[0];
+  this->TransformContinuousIndexToPhysicalPoint (index, physicalPoint) ;
+  return {physicalPoint[0],physicalPoint[1]};
+}
+
+template <class TPixel, unsigned int                VImageDimension>
+typename Image<TPixel, VImageDimension>::VectorType 
+Image<TPixel, VImageDimension>::GetLowerLeftCorner(void) const
+{
+  PointType physicalPoint;
+  itk::ContinuousIndex<double, VImageDimension> index;
+  index.Fill(-0.5);
+  index[1] = -0.5 + this->GetLargestPossibleRegion().GetSize()[1];
+  this->TransformContinuousIndexToPhysicalPoint (index, physicalPoint) ;
+  return {physicalPoint[0],physicalPoint[1]};
+}
+
+template <class TPixel, unsigned int                VImageDimension>
+typename Image<TPixel, VImageDimension>::VectorType 
+Image<TPixel, VImageDimension>::GetLowerRightCorner(void) const
+{
+  PointType physicalPoint;
+  itk::ContinuousIndex<double, VImageDimension> index;
+  index.Fill(-0.5);
+  index[0] = -0.5 + this->GetLargestPossibleRegion().GetSize()[0];
+  index[1] = -0.5 + this->GetLargestPossibleRegion().GetSize()[1];
+  this->TransformContinuousIndexToPhysicalPoint (index, physicalPoint) ;
+  return {physicalPoint[0],physicalPoint[1]};
+}
+
 template <class TPixel, unsigned int VImageDimension>
 void Image<TPixel, VImageDimension>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

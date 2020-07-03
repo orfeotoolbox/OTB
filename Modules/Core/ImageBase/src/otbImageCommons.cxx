@@ -121,13 +121,6 @@ double ImageCommons::GetGCPZ(unsigned int GCPnum) const
 }
 
 
-ImageMetadataInterfaceBase::VectorType ImageCommons::GetUpperLeftCorner(void) const
-{
-  //~ return {m_Imd.ULX, m_Imd.ULY};
-  return {};
-}
-
-
 ImageMetadataInterfaceBase::VectorType ImageCommons::GetUpperRightCorner(void) const
 {
   //~ return {m_Imd.URX, m_Imd.URY};

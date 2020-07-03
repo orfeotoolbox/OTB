@@ -125,6 +125,15 @@ public:
   /** Get the six coefficients of affine geoTtransform. */
   virtual VectorType GetGeoTransform(void) const;
 
+  /** Get image corners. */
+  // TODO: GenericRSTransform should be instanciated to translate from physical
+  // space to EPSG:4328 ?
+  VectorType GetUpperLeftCorner(void) const;
+  VectorType GetUpperRightCorner(void) const;
+  VectorType GetLowerLeftCorner(void) const;
+  VectorType GetLowerRightCorner(void) const;
+
+
   /** Get signed spacing */
   SpacingType GetSignedSpacing() const;
 
