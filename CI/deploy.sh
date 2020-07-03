@@ -90,6 +90,8 @@ then
     tar -xf ${jobs_directory}/OTB-Doxygen-*.tar.bz2 -C ${jobs_directory}/
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
     rm -rf /home/otbpush/test/Doxygen/*
+  # Too many args for mv
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-    mv ${jobs_directory}/html/* /home/otbpush/test/Doxygen/
+    "cd /home/otbpush/test/latest/html && find . -mindepth 1 \ 
+      -exec mv {} /home/otbpush/test/Doxygen \;"
 fi
