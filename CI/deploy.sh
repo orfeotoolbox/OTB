@@ -87,11 +87,8 @@ then
 
   # Doxygen
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-    tar -xf ${jobs_directory}/OTB-Doxygen-*.tar.bz2 -C ${jobs_directory}/
-  ssh otbpush@otb5-vm2.orfeo-toolbox.org \
     rm -rf /home/otbpush/test/Doxygen/*
-  # Too many args for mv
+  # Strip first component of the tar (Doxygen/html/...)
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-    "cd /home/otbpush/test/latest/html && find . -mindepth 1 \ 
-      -exec mv {} /home/otbpush/test/Doxygen \;"
+    tar -xf ${jobs_directory}/OTB-Doxygen-*.tar.bz2 -C /home/otbpush/test/Doxygen/ --strip-components=1
 fi
