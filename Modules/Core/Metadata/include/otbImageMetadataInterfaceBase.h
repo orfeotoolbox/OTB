@@ -219,6 +219,8 @@ public:
 
   const MetaData::Time& Fetch(MDTime key, const MetadataSupplierInterface * mds, const char *path, int band=-1);
 
+  const std::string& Fetch(std::string key, const MetadataSupplierInterface * mds, const char *path, int band=-1);
+
   const boost::any& FetchRPC(const MetadataSupplierInterface * mds);
 
   /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,

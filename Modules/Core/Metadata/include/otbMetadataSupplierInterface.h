@@ -66,75 +66,79 @@ public:
 class OTBMetadata_EXPORT MetadataSupplierInterface
 {
 public:
+  virtual std::string GetResourceFile(std::string="") const = 0;
+  virtual std::vector<std::string> GetResourceFiles() const
+  {
+    return std::vector<std::string>{this->GetResourceFile()};
+  }
 
-  virtual std::string GetResourceFile() const = 0;
-
-  // Maybe not needed
-//  virtual std::vector<std::string> GetResourceFiles() = 0;
 
   /** Get the metadata value corresponding to a given path (meaning of this path
-   * depends on the specific implementation. Returns NULL when path is not found
+   * depends on the specific implementation. Returns empty string when path is not found,
+   * and hasValue is set to False.
    * If band >= 0, the metadata value is looked in the specified band*/
-  virtual const char * GetMetadataValue(const char * path, int band=-1) const = 0;
+  virtual const std::string GetMetadataValue(const std::string path, bool& hasValue, int band=-1) const = 0;
 
-  bool HasValue(const char * path, int band=-1);
+  bool HasValue(std::string path, int band=-1);
 
   // utility functions
-  template <typename T> T GetAs(const char *path, int band=-1) const
+  template <typename T> T GetAs(std::string path, int band=-1) const
+  {
+    bool hasValue;
+    std::string ret = GetMetadataValue(path, hasValue, band);
+    if (!hasValue)
     {
-    const char * ret = GetMetadataValue(path, band);
-    if (ret == nullptr)
-      {
       otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata '"<<path<<"'")
-      }
-    try
-      {
-      return boost::lexical_cast<T>(ret);
-      }
-    catch (boost::bad_lexical_cast&)
-      {
-      otbGenericExceptionMacro(MissingMetadataException,<<"Bad metadata value for '"<<path<<"', got :"<<ret)
-      }
     }
+    try
+    {
+      return boost::lexical_cast<T>(ret);
+    }
+    catch (boost::bad_lexical_cast&)
+    {
+      otbGenericExceptionMacro(MissingMetadataException,<<"Bad metadata value for '"<<path<<"', got: "<<ret)
+    }
+  }
 
   /** Parse a metadata value to a std::vector,
    *  If size>=0, then the final std::vector size is checked and an exception
    *  is raised if it doesn't match the given size.*/
-  template < typename T> std::vector<T> GetAsVector(const char *path, const char sep=' ', int size=-1, int band=-1) const
+  template < typename T> std::vector<T> GetAsVector(std::string path, const char sep=' ', int size=-1, int band=-1) const
+  {
+    bool hasValue;
+    std::string ret = GetMetadataValue(path, hasValue, band);
+    if (!hasValue)
     {
-    const char * ret = GetMetadataValue(path, band);
-    if (ret == nullptr)
-      {
       otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata '"<<path<<"'")
-      }
+    }
     string_view value(ret);
     string_view filt_value = rstrip(lstrip(value,"[ "), "] ");
     std::vector<T> output;
     typedef part_range<splitter_on_delim> range_type;
     const range_type parts = split_on(filt_value, sep);
     for (auto const& part : parts)
-      {
+    {
       // TODO: check if we can use lexical_cast on a string_view
       std::string strPart = to<std::string>(part, "casting string_view to std::string");
       if (strPart.empty())
-        {
-        continue;
-        }
-      try
-        {
-        output.push_back(boost::lexical_cast<T>(strPart));
-        }
-      catch (boost::bad_lexical_cast&)
-        {
-        otbGenericExceptionMacro(MissingMetadataException,<<"Bad metadata vector element in '"<<path<<"', got :"<<part)
-        }
-      }
-    if ((size >= 0) && (output.size() != (size_t)size))
       {
-      otbGenericExceptionMacro(MissingMetadataException,<<"Bad number of elements in vector '"<<path<<"', expected "<<size<< ", got "<<output.size())
+        continue;
       }
-    return output;
+      try
+      {
+        output.push_back(boost::lexical_cast<T>(strPart));
+      }
+      catch (boost::bad_lexical_cast&)
+      {
+        otbGenericExceptionMacro(MissingMetadataException,<<"Bad metadata vector element in '"<<path<<"', got :"<<part)
+      }
     }
+    if ((size >= 0) && (output.size() != (size_t)size))
+    {
+      otbGenericExceptionMacro(MissingMetadataException,<<"Bad number of elements in vector '"<<path<<"', expected "<<size<< ", got "<<output.size())
+    }
+    return output;
+  }
 
 };
 

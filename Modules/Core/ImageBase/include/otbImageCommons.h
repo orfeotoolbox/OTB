@@ -63,15 +63,6 @@ public:
   double GetGCPY(unsigned int GCPnum) const;
   double GetGCPZ(unsigned int GCPnum) const;
 
-  /** Get image corners. */
-  // TODO: move back to Image and VectorImage, compute corners in physical space,
-  // Then  a GenericRSTransform should be instanciated to translate from physical
-  // space to EPSG:4328 
-  ImageMetadataInterfaceBase::VectorType GetUpperLeftCorner(void) const;
-  ImageMetadataInterfaceBase::VectorType GetUpperRightCorner(void) const;
-  ImageMetadataInterfaceBase::VectorType GetLowerLeftCorner(void) const;
-  ImageMetadataInterfaceBase::VectorType GetLowerRightCorner(void) const;
-
   /** Returns true if a sensor geometric model is present */
   bool HasSensorGeometry() const;
 

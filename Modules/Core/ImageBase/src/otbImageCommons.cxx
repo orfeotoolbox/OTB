@@ -120,34 +120,6 @@ double ImageCommons::GetGCPZ(unsigned int GCPnum) const
   return GetGCPs(GCPnum).m_GCPZ;
 }
 
-
-ImageMetadataInterfaceBase::VectorType ImageCommons::GetUpperLeftCorner(void) const
-{
-  //~ return {m_Imd.ULX, m_Imd.ULY};
-  return {};
-}
-
-
-ImageMetadataInterfaceBase::VectorType ImageCommons::GetUpperRightCorner(void) const
-{
-  //~ return {m_Imd.URX, m_Imd.URY};
-  return {};
-}
-
-
-ImageMetadataInterfaceBase::VectorType ImageCommons::GetLowerLeftCorner(void) const
-{
-  //~ return {m_Imd.LLX, m_Imd.LLY};
-  return {};
-}
-
-
-ImageMetadataInterfaceBase::VectorType ImageCommons::GetLowerRightCorner(void) const
-{
-  //~ return {m_Imd.LRX, m_Imd.LRY};
-  return {};
-}
-
 bool ImageCommons::HasSensorGeometry() const
 {
   return m_Imd.HasSensorGeometry();

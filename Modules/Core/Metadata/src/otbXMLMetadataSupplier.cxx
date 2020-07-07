@@ -36,16 +36,25 @@ XMLMetadataSupplier::XMLMetadataSupplier(const std::string & fileName)
   else
   {
     otbLogMacro(Warning, <<"Unable to parse XML file " << fileName);
+    m_MetadataDic = nullptr;
   }
   CPLDestroyXMLNode(psNode);
 }
 
-const char * XMLMetadataSupplier::GetMetadataValue(const char * path, int band) const
+const std::string XMLMetadataSupplier::GetMetadataValue(const std::string path, bool& hasValue, int band) const
 {
-  return CSLFetchNameValue(m_MetadataDic, path);
+  const char * ret = CSLFetchNameValue(m_MetadataDic, path);
+  if (ret)
+    hasValue = true;
+  else
+  {
+    hasValue = false;
+    ret = "";
+  }
+  return std::string(ret);
 }
 
-std::string XMLMetadataSupplier::GetResourceFile() const
+std::string XMLMetadataSupplier::GetResourceFile(std::string) const
 {
   return m_FileName;
 }
@@ -156,5 +165,13 @@ char** XMLMetadataSupplier::ReadXMLToList(CPLXMLNode* psNode, char** papszList,
   return papszList;
 }
 
+std::string XMLMetadataSupplier::PrintSelf()
+{
+  std::ostringstream oss;
+  oss << "XMLMetadataSupplier: " << this->m_FileName << '\n';
+  for (char ** string = this->m_MetadataDic; *string != nullptr ; ++string)
+    oss << *string << '\n';
+  return oss.str();
+}
 
 } // end namespace otb

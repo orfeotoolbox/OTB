@@ -42,6 +42,9 @@
 #include "ogr_spatialref.h"
 #include "ogr_srs_api.h"
 
+
+#include "itksys/RegularExpression.hxx"
+
 #include "otbGDALDriverManagerWrapper.h"
 
 #include "otb_boost_string_header.h"
@@ -1306,12 +1309,15 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     }
     m_Imd.Bands = bandRangeMetadata;
   }
-std::cout << m_Imd << std::endl;
 
-  if ( !m_Imd.Bands.empty() && (std::size_t)m_NbBands != m_Imd.Bands.size())
-    {
-    itkExceptionMacro(<< "Number of bands in metadata inconsistent with actual image.");
-    }
+  // TODO : this should be a warning instead of an exception
+  // For complex pixels the number of bands is twice the number of compnents (in GDAL sense)
+  if ( !m_Imd.Bands.empty() 
+    && static_cast<std::size_t>(m_NbBands) != m_Imd.Bands.size()
+    && !((m_Imd.Bands.size() == static_cast<std::size_t>(2 * m_NbBands)) && this->GetPixelType() == COMPLEX))
+  {
+      itkExceptionMacro(<< "Number of bands in metadata inconsistent with actual image.");
+  }
 
   if ((m_Dimensions[0] == 0) && (m_Dimensions[1] == 0))
   {
@@ -1490,6 +1496,10 @@ std::cout << m_Imd << std::endl;
     std::abs(geoTransform[4]) > Epsilon ||
     std::abs(geoTransform[5] - 1.0) > Epsilon;
 
+  itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
+  ImageKeywordlist otb_kwl;
+  itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
+
   /* -------------------------------------------------------------------- */
   /* Case 1: Set the projection coordinate system of the image            */
   /* -------------------------------------------------------------------- */
@@ -1531,6 +1541,25 @@ std::cout << m_Imd << std::endl;
       CSLDestroy(rpcMetadata);
       }
     }
+  // ToDo : remove this part. This case is here for compatibility for images
+  // that still use Ossim for managing the sensor model (with OSSIMKeywordList).
+  else if (otb_kwl.GetSize())
+    {
+    /* -------------------------------------------------------------------- */
+    /* Set the RPC coeffs (since GDAL 1.10.0)                               */
+    /* -------------------------------------------------------------------- */
+    if (m_WriteRPCTags)
+      {
+      GDALRPCInfo gdalRpcStruct;
+      if (otb_kwl.convertToGDALRPC(gdalRpcStruct))
+        {
+        otbLogMacro(Debug, << "Saving RPC to file (" << m_FileName << ")")
+        char** rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
+        dataset->SetMetadata(rpcMetadata, "RPC");
+        CSLDestroy(rpcMetadata);
+        }
+      }
+    }
   /* -------------------------------------------------------------------- */
   /* Case 3: Set the GCPs                                                 */
   /* -------------------------------------------------------------------- */
@@ -1562,7 +1591,6 @@ std::cout << m_Imd << std::endl;
       }
 
     const std::string & gcpProjectionRef = gcpPrm.GCPProjection;
-
     dataset->SetGCPs(gdalGcps.size(), gdalGcps.data(), gcpProjectionRef.c_str());
 
     // disable geotransform with GCP
@@ -1781,30 +1809,53 @@ std::string GDALImageIO::GetGdalPixelTypeAsString() const
 }
 
 
-std::string GDALImageIO::GetResourceFile() const
+std::string GDALImageIO::GetResourceFile(std::string str) const
 {
-  return m_FileName;
+  if (str.empty())
+    return m_FileName;
+
+  itksys::RegularExpression reg;
+  reg.compile(str);
+  for (auto & filename : GetResourceFiles())
+    if (reg.find(filename))
+      return filename;
+
+  return std::string("");
 }
 
+std::vector<std::string> GDALImageIO::GetResourceFiles() const
+{
+  std::vector<std::string> result;
+  for (char ** file = this->m_Dataset->GetDataSet()->GetFileList() ; *file != nullptr ; ++ file)
+    result.push_back(*file);
+  return result;
+}
 
-const char * GDALImageIO::GetMetadataValue(const char * path, int band) const
+const std::string GDALImageIO::GetMetadataValue(const std::string path, bool& hasValue, int band) const
 {
   // detect namespace if any
-  const char *slash = strchr(path,'/');
   std::string domain("");
-  const char *domain_c = nullptr;
   std::string key(path);
-  if (slash)
-    {
-    domain = std::string(path, (slash-path));
-    domain_c = domain.c_str();
-    key = std::string(slash+1);
-    }
+  std::size_t found = path.find_first_of("/");
+  if (found != std::string::npos)
+  {
+    domain = path.substr(0, found);
+    key = path.substr(found + 1);
+  }
+
+  const char* ret;
   if (band >= 0)
-    {
-    return m_Dataset->GetDataSet()->GetRasterBand(band+1)->GetMetadataItem(key.c_str(), domain_c);
-    }
-  return m_Dataset->GetDataSet()->GetMetadataItem(key.c_str(), domain_c);
+    ret = m_Dataset->GetDataSet()->GetRasterBand(band+1)->GetMetadataItem(key.c_str(), domain.c_str());
+  else
+    ret = m_Dataset->GetDataSet()->GetMetadataItem(key.c_str(), domain.c_str());
+  if (ret)
+    hasValue = true;
+  else
+  {
+    hasValue = false;
+    ret = "";
+  }
+  return std::string(ret);
 }
 
 void GDALImageIO::SetMetadataValue(const char * path, const char * value, int band)
@@ -1861,7 +1912,8 @@ void GDALImageIO::ImportMetadata()
   // Keys Starting with: MDGeomNames[MDGeom::SensorGeometry] + '.' should
   // be decoded by the (future) SensorModelFactory.
   // Use ImageMetadataBase::FromKeywordlist to ingest the metadata
-  if (std::string(GetMetadataValue("METADATATYPE")) != "OTB")
+  bool hasValue;
+  if (std::string(GetMetadataValue("METADATATYPE", hasValue)) != "OTB")
     return;
   ImageMetadataBase::Keywordlist kwl;
   GDALMetadataToKeywordlist(m_Dataset->GetDataSet()->GetMetadata(), kwl);
@@ -1906,11 +1958,7 @@ void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int 
       this->SetAsVector("RPC/SAMP_NUM_COEFF", std::vector<double> (rpcStruct.SampleNum, rpcStruct.SampleNum + 20 / sizeof(double)), ' ');
       this->SetAsVector("RPC/SAMP_DEN_COEFF", std::vector<double> (rpcStruct.SampleDen, rpcStruct.SampleDen + 20 / sizeof(double)), ' ');
     }
-    else if (kv.first == MetaData::MDGeomNames.left.at(MDGeom::GCP))
-    {
-      // GCPs are exported directly from the ImageMetadata.
-      this->m_Dataset->SetGCPParam(boost::any_cast<Projection::GCPParam>(m_Imd[MDGeom::GCP]));
-    }
+    // Note that GCPs have already been exported
     SetMetadataValue(kv.first.c_str(), kv.second.c_str(), band);
   }
 }

@@ -112,7 +112,7 @@ void VectorImage<TPixel, VImageDimension>::CopyInformation(const itk::DataObject
   if (imc != nullptr)
   {
     const auto & imd = imc->GetImageMetadata();
-    
+    std::cout << "hello " << this->GetNumberOfComponentsPerPixel() << std::endl;
     if (imd.Bands.size() > 0 && imd.Bands.size() != this->GetNumberOfComponentsPerPixel())
     {
       SetImageMetadata(ImageMetadata(imd.GeometryKeys, imd.NumericKeys, imd.StringKeys, imd.LUT1DKeys,
@@ -155,6 +155,55 @@ typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VI
   geoTransform[2] = 0.;
   geoTransform[4] = 0.;
   return (geoTransform);
+}
+
+
+template <class TPixel, unsigned int                VImageDimension>
+typename VectorImage<TPixel, VImageDimension>::VectorType 
+VectorImage<TPixel, VImageDimension>::GetUpperLeftCorner(void) const
+{
+  PointType physicalPoint;
+  itk::ContinuousIndex<double, VImageDimension> index;
+  index.Fill(-0.5);
+  this->TransformContinuousIndexToPhysicalPoint (index, physicalPoint) ;
+  return {physicalPoint[0],physicalPoint[1]};
+}
+
+template <class TPixel, unsigned int                VImageDimension>
+typename VectorImage<TPixel, VImageDimension>::VectorType 
+VectorImage<TPixel, VImageDimension>::GetUpperRightCorner(void) const
+{
+  PointType physicalPoint;
+  itk::ContinuousIndex<double, VImageDimension> index;
+  index.Fill(-0.5);
+  index[0] = -0.5 + this->GetLargestPossibleRegion().GetSize()[0];
+  this->TransformContinuousIndexToPhysicalPoint (index, physicalPoint) ;
+  return {physicalPoint[0],physicalPoint[1]};
+}
+
+template <class TPixel, unsigned int                VImageDimension>
+typename VectorImage<TPixel, VImageDimension>::VectorType 
+VectorImage<TPixel, VImageDimension>::GetLowerLeftCorner(void) const
+{
+  PointType physicalPoint;
+  itk::ContinuousIndex<double, VImageDimension> index;
+  index.Fill(-0.5);
+  index[1] = -0.5 + this->GetLargestPossibleRegion().GetSize()[1];
+  this->TransformContinuousIndexToPhysicalPoint (index, physicalPoint) ;
+  return {physicalPoint[0],physicalPoint[1]};
+}
+
+template <class TPixel, unsigned int                VImageDimension>
+typename VectorImage<TPixel, VImageDimension>::VectorType 
+VectorImage<TPixel, VImageDimension>::GetLowerRightCorner(void) const
+{
+  PointType physicalPoint;
+  itk::ContinuousIndex<double, VImageDimension> index;
+  index.Fill(-0.5);
+  index[0] = -0.5 + this->GetLargestPossibleRegion().GetSize()[0];
+  index[1] = -0.5 + this->GetLargestPossibleRegion().GetSize()[1];
+  this->TransformContinuousIndexToPhysicalPoint (index, physicalPoint) ;
+  return {physicalPoint[0],physicalPoint[1]};
 }
 
 template <class TPixel, unsigned int                                             VImageDimension>
