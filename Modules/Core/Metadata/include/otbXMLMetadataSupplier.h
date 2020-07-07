@@ -47,7 +47,7 @@ public:
   /** Get the metadata value corresponding to a given path
    * Returns NULL when path is not found
    * If band >= 0, the metadata value is looked in the specified band*/
-  const char * GetMetadataValue(const char * path, int band=1) const override;
+  const std::string GetMetadataValue(const std::string path, bool& hasValue, int band=1) const override;
 
   std::string GetResourceFile(std::string="") const override;
 
