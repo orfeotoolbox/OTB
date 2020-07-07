@@ -630,7 +630,7 @@ ImageMetadataInterfaceBase::Fetch(
   if (band >= 0)
     {
     assert( (size_t)(band) < m_Imd.Bands.size());
-    m_Imd.Bands[band].Add(key, mds->GetAs<std::string>(path));
+    m_Imd.Bands[band].Add(key, mds->GetAs<std::string>(path, band));
     return m_Imd.Bands[band][key];
     }
   m_Imd.Add(key, mds->GetAs<std::string>(path) );
@@ -647,7 +647,7 @@ ImageMetadataInterfaceBase::Fetch(
   if (band >= 0)
     {
     assert( (size_t)(band) < m_Imd.Bands.size());
-    m_Imd.Bands[band].Add(key, mds->GetAs<double>(path));
+    m_Imd.Bands[band].Add(key, mds->GetAs<double>(path, band));
     return m_Imd.Bands[band][key];
     }
   m_Imd.Add(key, mds->GetAs<double>(path));
@@ -664,10 +664,27 @@ ImageMetadataInterfaceBase::Fetch(
   if (band >= 0)
     {
     assert( (size_t)(band) < m_Imd.Bands.size());
-    m_Imd.Bands[band].Add(key, mds->GetAs<MetaData::Time>(path));
+    m_Imd.Bands[band].Add(key, mds->GetAs<MetaData::Time>(path, band));
     return m_Imd.Bands[band][key];
     }
   m_Imd.Add(key, mds->GetAs<MetaData::Time>(path));
+  return m_Imd[key];
+}
+
+const std::string&
+ImageMetadataInterfaceBase::Fetch(
+		std::string key,
+		const MetadataSupplierInterface * mds,
+		const char *path,
+		int band)
+{
+  if (band >= 0)
+    {
+    assert( (size_t)(band) < m_Imd.Bands.size());
+    m_Imd.Bands[band].Add(key, mds->GetAs<std::string>(path, band));
+    return m_Imd.Bands[band][key];
+    }
+  m_Imd.Add(key, mds->GetAs<std::string>(path) );
   return m_Imd[key];
 }
 
