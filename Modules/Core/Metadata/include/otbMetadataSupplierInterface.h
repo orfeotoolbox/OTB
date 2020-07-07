@@ -66,11 +66,12 @@ public:
 class OTBMetadata_EXPORT MetadataSupplierInterface
 {
 public:
+  virtual std::string GetResourceFile(std::string="") const = 0;
+  virtual std::vector<std::string> GetResourceFiles() const
+  {
+    return std::vector<std::string>{this->GetResourceFile()};
+  }
 
-  virtual std::string GetResourceFile() const = 0;
-
-  // Maybe not needed
-//  virtual std::vector<std::string> GetResourceFiles() = 0;
 
   /** Get the metadata value corresponding to a given path (meaning of this path
    * depends on the specific implementation. Returns NULL when path is not found
@@ -93,7 +94,7 @@ public:
       }
     catch (boost::bad_lexical_cast&)
       {
-      otbGenericExceptionMacro(MissingMetadataException,<<"Bad metadata value for '"<<path<<"', got :"<<ret)
+      otbGenericExceptionMacro(MissingMetadataException,<<"Bad metadata value for '"<<path<<"', got: "<<ret)
       }
     }
 

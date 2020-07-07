@@ -42,6 +42,9 @@
 #include "ogr_spatialref.h"
 #include "ogr_srs_api.h"
 
+
+#include "itksys/RegularExpression.hxx"
+
 #include "otbGDALDriverManagerWrapper.h"
 
 #include "otb_boost_string_header.h"
@@ -1803,11 +1806,27 @@ std::string GDALImageIO::GetGdalPixelTypeAsString() const
 }
 
 
-std::string GDALImageIO::GetResourceFile() const
+std::string GDALImageIO::GetResourceFile(std::string str) const
 {
-  return m_FileName;
+  if (str.empty())
+    return m_FileName;
+
+  itksys::RegularExpression reg;
+  reg.compile(str);
+  for (auto & filename : GetResourceFiles())
+    if (reg.find(filename))
+      return filename;
+
+  return std::string("");
 }
 
+std::vector<std::string> GDALImageIO::GetResourceFiles() const
+{
+  std::vector<std::string> result;
+  for (char ** file = this->m_Dataset->GetDataSet()->GetFileList() ; *file != nullptr ; ++ file)
+    result.push_back(*file);
+  return result;
+}
 
 const char * GDALImageIO::GetMetadataValue(const char * path, int band) const
 {
