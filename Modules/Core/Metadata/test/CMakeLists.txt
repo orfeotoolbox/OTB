@@ -28,6 +28,7 @@ otbSarDefaultImageMetadataInterface.cxx
 otbOpticalImageMetadataInterfaceTest.cxx
 otbOpticalDefaultImageMetadataInterface.cxx
 otbDefaultImageMetadataInterface.cxx
+otbImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceTest2.cxx
 otbNoDataHelperTest.cxx
 otbSarCalibrationLookupDataTest.cxx
@@ -80,6 +81,20 @@ otb_module_target_label(otbMetadataTestDriver)
   #LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos}
   #${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
   #)
+
+#otb_add_test(NAME ioTvSentinel1ImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
+#  otbSentinel1ImageMetadataInterfaceTest
+#  /home/julien/Bureau/S1Product/S1A_IW_GRDH_1SDV_20170819T001029_20170819T001054_017985_01E2E8_F302.SAFE
+#  ${TEMP}/ioTvSentinel1ImageMetadataInterfaceTest.txt
+#  )
+
+otb_add_test(NAME ioTvImageMetadataInterfaceTest_Sentinel1 COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_Sentinel1.txt
+  ${TEMP}/ioTvImageMetadataInterfaceTest_Sentinel1.txt
+  otbImageMetadataInterfaceTest
+  LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043}
+  ${TEMP}/ioTvImageMetadataInterfaceTest_Sentinel1.txt
+  )
 
 #otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_SENTINEL1 COMMAND otbMetadataTestDriver
   #--compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_SENTINEL1.txt

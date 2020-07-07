@@ -28,6 +28,7 @@ void RegisterTests()
   REGISTER_TEST(otbOpticalImageMetadataInterfaceTest);
   REGISTER_TEST(otbOpticalDefaultImageMetadataInterface);
   REGISTER_TEST(otbDefaultImageMetadataInterface);
+  REGISTER_TEST(otbImageMetadataInterfaceTest);
   REGISTER_TEST(otbImageMetadataInterfaceTest2);
   REGISTER_TEST(otbNoDataHelperTest);
   REGISTER_TEST(otbSarCalibrationLookupDataTest);

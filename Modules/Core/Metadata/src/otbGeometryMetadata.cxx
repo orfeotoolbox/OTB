@@ -80,7 +80,7 @@ std::string GCPParam::ToJSON(bool multiline) const
       << "\"Projection\": \"" << GCPProjection << "\", " << sep
       << "[";
   for (const auto& gcp : GCPs)
-    oss << gcp.ToJSON() << ", ";
+    oss << gcp.ToJSON() << ", " << sep;
   oss << "]}";
   return oss.str();
 }

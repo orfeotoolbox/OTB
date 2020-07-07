@@ -318,6 +318,7 @@ MDNumBmType MDNumNames = bimapGenerator<MDNum>(std::map<MDNum, std::string> {
   {MDNum::TileHintY,"TileHintY"},
   {MDNum::DataType,"DataType"},
   {MDNum::NoData, "NoData"},
+  {MDNum::OrbitNumber, "OrbitNumber"},
   {MDNum::PhysicalGain,"PhysicalGain"},
   {MDNum::PhysicalBias,"PhysicalBias"},
   {MDNum::SolarIrradiance,"SolarIrradiance"},
@@ -346,6 +347,8 @@ MDNumBmType MDNumNames = bimapGenerator<MDNum>(std::map<MDNum, std::string> {
   {MDNum::RangeSpreadLossPolyDegY,"RangeSpreadLossPolyDegY"},
   {MDNum::NoisePolyDegX,"NoisePolyDegX"},
   {MDNum::NoisePolyDegY,"NoisePolyDegY"},
+  {MDNum::LineSpacing,"LineSpacing"},
+  {MDNum::PixelSpacing,"PixelSpacing"},
 });
 
 MDStrBmType MDStrNames = bimapGenerator<MDStr>(std::map<MDStr, std::string> {
@@ -356,12 +359,19 @@ MDStrBmType MDStrNames = bimapGenerator<MDStr>(std::map<MDStr, std::string> {
   {MDStr::GeometricLevel,"GeometricLevel"},
   {MDStr::RadiometricLevel,"RadiometricLevel"},
   {MDStr::Polarization,"Polarization"},
+  {MDStr::Mode, "Mode"},
+  {MDStr::Swath, "Swath"},
+  {MDStr::OrbitDirection, "OrbitDirection"},
   {MDStr::BandName,"BandName"},
+  {MDStr::BeamMode, "BeamMode"},
+  {MDStr::BeamSwath, "BeamSwath"},
 });
 
 MDTimeBmType MDTimeNames = bimapGenerator<MDTime>(std::map<MDTime, std::string> {
   {MDTime::AcquisitionDate,"AcquisitionDate"},
   {MDTime::ProductionDate,"ProductionDate"},
+  {MDTime::AcquisitionStartTime,"AcquisitionStartTime"},
+  {MDTime::AcquisitionStopTime,"AcquisitionStopTime"},
 });
 
 MDL1DBmType MDL1DNames = bimapGenerator<MDL1D>(std::map<MDL1D, std::string> {

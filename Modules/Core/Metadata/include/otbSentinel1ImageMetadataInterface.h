@@ -22,7 +22,7 @@
 #define otbSentinel1ImageMetadataInterface_h
 
 #include "otbSarImageMetadataInterface.h"
-
+#include "otbXMLMetadataSupplier.h"
 
 namespace otb
 {
@@ -92,6 +92,12 @@ public:
 
   /*get lookup data for calculating backscatter */
   void CreateCalibrationLookupData(const short type) override;
+
+  std::vector<OTB_azimuthFmRate> GetAzimuthFmRate(XMLMetadataSupplier) const;
+
+  std::vector<OTB_calibrationVector> GetCalibrationVector(XMLMetadataSupplier) const;
+
+  void Parse(const MetadataSupplierInterface *) override;
 
 protected:
   /* class ctor */

@@ -25,6 +25,7 @@
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
+#include "otbXMLMetadataSupplier.h"
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -33,6 +34,7 @@
 #else
 #include "ossim/ossimTimeUtilities.h"
 #endif
+#include "itksys/SystemTools.hxx"
 
 // useful constants
 #include <otbMath.h>
@@ -348,6 +350,106 @@ double Sentinel1ImageMetadataInterface::GetRadarFrequency() const
 double Sentinel1ImageMetadataInterface::GetCenterIncidenceAngle() const
 {
   return 0;
+}
+
+std::vector<OTB_azimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate(XMLMetadataSupplier xmlMS) const
+{
+  std::vector<OTB_azimuthFmRate> azimuthFmRateVector;
+  int listCount = xmlMS.GetAs<double>("product.generalAnnotation.azimuthFmRateList.count");
+  std::ostringstream oss;
+  for (int listId = 1 ; listId <= listCount ; ++listId)
+  {
+    oss.str("");
+    oss << listId;
+    std::string path_root = "product.generalAnnotation.azimuthFmRateList.azimuthFmRate_" + oss.str();
+    OTB_azimuthFmRate afr;
+    std::istringstream(xmlMS.GetMetadataValue((path_root + ".azimuthTime").c_str())) >> afr.azimuthTime;
+    afr.t0 = xmlMS.GetAs<double>((path_root + ".t0").c_str());
+    afr.azimuthFmRatePolynomial = xmlMS.GetAsVector<double>((path_root + ".azimuthFmRatePolynomial").c_str(),
+    		' ', xmlMS.GetAs<int>((path_root + ".azimuthFmRatePolynomial.count").c_str()));
+    azimuthFmRateVector.push_back(afr);
+  }
+  return azimuthFmRateVector;
+}
+
+std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrationVector(XMLMetadataSupplier xmlMS) const
+{
+  std::vector<OTB_calibrationVector> calibrationVector;
+  int listCount = xmlMS.GetAs<double>("calibration.calibrationVectorList.count");
+  std::ostringstream oss;
+  for (int listId = 1 ; listId <= listCount ; ++listId)
+  {
+    oss.str("");
+    oss << listId;
+    std::string path_root = "calibration.calibrationVectorList.calibrationVector_" + oss.str();
+    OTB_calibrationVector calVect;
+    std::istringstream(xmlMS.GetMetadataValue((path_root + ".azimuthTime").c_str())) >> calVect.azimuthTime;
+    calVect.line = xmlMS.GetAs<int>((path_root + ".line").c_str());
+    calVect.pixel = xmlMS.GetAsVector<int>((path_root + ".pixel").c_str(),
+    		' ', xmlMS.GetAs<int>((path_root + ".pixel.count").c_str()));
+    calVect.sigmaNought = xmlMS.GetAsVector<double>((path_root + ".sigmaNought").c_str(),
+    		' ', xmlMS.GetAs<int>((path_root + ".sigmaNought.count").c_str()));
+    calVect.betaNought = xmlMS.GetAsVector<double>((path_root + ".betaNought").c_str(),
+    		' ', xmlMS.GetAs<int>((path_root + ".betaNought.count").c_str()));
+    calVect.gamma = xmlMS.GetAsVector<double>((path_root + ".gamma").c_str(),
+    		' ', xmlMS.GetAs<int>((path_root + ".gamma.count").c_str()));
+    calVect.dn = xmlMS.GetAsVector<double>((path_root + ".dn").c_str(),
+    		' ', xmlMS.GetAs<int>((path_root + ".dn.count").c_str()));
+    calibrationVector.push_back(calVect);
+  }
+  return calibrationVector;
+}
+
+void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+{
+  assert(mds);
+  assert(mds->GetNbBands() == this->m_Imd.GetNbBands());
+  // Metadata read by GDAL
+  //Fetch(MDTime::AcquisitionStartTime, mds, "ACQUISITION_START_TIME");
+  //Fetch(MDTime::AcquisitionStopTime, mds, "ACQUISITION_STOP_TIME");
+  Fetch(MDStr::BeamMode, mds, "BEAM_MODE");
+  Fetch(MDStr::BeamSwath, mds, "BEAM_SWATH");
+  Fetch("FACILITY_IDENTIFIER", mds, "FACILITY_IDENTIFIER");
+  Fetch(MDNum::LineSpacing, mds, "LINE_SPACING");
+  Fetch(MDStr::Mission, mds, "MISSION_ID");
+  Fetch(MDStr::Mode, mds, "MODE");
+  Fetch(MDStr::OrbitDirection, mds, "ORBIT_DIRECTION");
+  Fetch(MDNum::OrbitNumber, mds, "ORBIT_NUMBER");
+  Fetch(MDNum::PixelSpacing, mds, "PIXEL_SPACING");
+  Fetch(MDStr::ProductType, mds, "PRODUCT_TYPE");
+  Fetch(MDStr::Instrument, mds, "SATELLITE_IDENTIFIER");
+  Fetch(MDStr::SensorID, mds, "SENSOR_IDENTIFIER");
+  Fetch(MDStr::Swath, mds, "SWATH");
+
+  // Band metadata
+  for (int bandId = 0 ; bandId < mds->GetNbBands() ; ++bandId)
+  {
+    Projection::SARParam sarParam;
+    Fetch(MDStr::Polarization, mds, "POLARISATION", bandId);
+    std::string swath = Fetch(MDStr::Swath, mds, "SWATH", bandId);
+
+    // Annotation file
+    std::string AnnotationFilePath = mds->GetResourceFile(std::string("annotation[/\\\\]s1[ab].*-")
+                                                          + itksys::SystemTools::LowerCase(swath)
+                                                          + std::string("-.*\\.xml"));
+    if (!AnnotationFilePath.empty())
+    {
+      XMLMetadataSupplier xmlMS = XMLMetadataSupplier(AnnotationFilePath);
+
+      sarParam.azimuthFmRate = this->GetAzimuthFmRate(xmlMS);
+
+      // Calibration file
+      std::string CalibrationFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)
+                                        + "/calibration/calibration-"
+                                        + itksys::SystemTools::GetFilenameName(AnnotationFilePath);
+      xmlMS = XMLMetadataSupplier(CalibrationFilePath);
+      sarParam.absoluteCalibrationConstant = xmlMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant");
+      sarParam.calibrationVectors = this->GetCalibrationVector(xmlMS);
+      std::istringstream(xmlMS.GetMetadataValue("calibration.adsHeader.startTime")) >> sarParam.startTime;
+      std::istringstream(xmlMS.GetMetadataValue("calibration.adsHeader.stopTime")) >> sarParam.stopTime;
+    }
+    m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
+  }
 }
 
 } // end namespace otb

@@ -22,6 +22,7 @@
 #define otbGeometryMetadata_h
 
 #include "OTBMetadataExport.h"
+#include "otbMetaDataKey.h"
 
 
 #include <string>
@@ -69,6 +70,32 @@ public:
 
   void Print(std::ostream& os) const;
   std::string ToJSON(bool multiline=false) const;
+};
+
+struct OTBMetadata_EXPORT OTB_azimuthFmRate
+{
+  MetaData::Time azimuthTime;
+  double t0;
+  std::vector<double> azimuthFmRatePolynomial;
+};
+
+struct OTBMetadata_EXPORT OTB_calibrationVector
+{
+  MetaData::Time azimuthTime;
+  int line;
+  std::vector<int> pixel;
+  std::vector<double> sigmaNought;
+  std::vector<double> betaNought;
+  std::vector<double> gamma;
+  std::vector<double> dn;
+};
+
+struct OTBMetadata_EXPORT OTB_dopplerCentroid
+{
+  std::vector<double> dopCoef;
+  std::vector<double> geoDopCoef;
+  MetaData::Time geoDopCoefTime;
+  double slantRangeTime;
 };
 
 namespace Projection
@@ -160,7 +187,24 @@ struct OTBMetadata_EXPORT RPCParam
 
 };
 
-// TODO : add SARParam to define a SAR sensor geometry
+
+/** \struct SARParam
+ *
+ * \brief SAR sensors parameters
+ *
+ * \ingroup OTBMetadata
+ */
+struct OTBMetadata_EXPORT SARParam
+{
+  std::vector<OTB_azimuthFmRate> azimuthFmRate;
+
+  double absoluteCalibrationConstant;
+  std::vector<OTB_calibrationVector> calibrationVectors;
+  MetaData::Time startTime;
+  MetaData::Time stopTime;
+
+  std::vector<OTB_dopplerCentroid> dopplerCentroid;
+};
 
 } // end namespace Projection
 

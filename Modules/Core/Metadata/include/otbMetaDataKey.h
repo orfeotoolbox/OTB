@@ -131,6 +131,7 @@ enum class MDNum
   TileHintY,
   DataType,
   NoData,
+  OrbitNumber,
 // optical section
   PhysicalGain,
   PhysicalBias,
@@ -161,6 +162,8 @@ enum class MDNum
   RangeSpreadLossPolyDegY,
   NoisePolyDegX,
   NoisePolyDegY,
+  LineSpacing,
+  PixelSpacing,
   END
 };
 
@@ -175,6 +178,11 @@ enum class MDStr
   GeometricLevel,
   RadiometricLevel,
   Polarization,
+  Mode,
+  Swath,
+  OrbitDirection,
+  BeamMode,
+  BeamSwath,
   // ...
   END
 };
@@ -198,6 +206,8 @@ enum class MDTime
 {
   AcquisitionDate,
   ProductionDate,
+  AcquisitionStartTime,
+  AcquisitionStopTime,
   END
 };
 
