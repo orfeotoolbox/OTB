@@ -50,13 +50,23 @@ int otbChangeInformationImageFilter(int itkNotUsed(argc), char* argv[])
   filter->UpdateOutputInformation();
 
   ImageType::Pointer outImage = filter->GetOutput();
-  if (!outImage->GetProjectionRef().empty())
+
+  // TODO: RemoveOssim. ChangeInformationImageFilter should change the ImageMetadata object stored in 
+  // the image instead of modifying the itk metadata dictionary. GetProjectionRef() look for the 
+  // projection in ImageMetadata now, so we can't use this method in the test. The temporary solution
+  // is to look in the itk dictionary instead (this was the old behavior of GetProjectionRef). But
+  // when ChangeInformationImageFilter will be refactored, GetProjectionRef should be used again.. 
+
+  //if (!outImage->GetProjectionRef().empty())
+  if (outImage->GetMetaDataDictionary().HasKey(otb::MetaDataKey::ProjectionRefKey))
   {
     std::cout << "Projection is supposed to be removed but is still present !" << std::endl;
     return EXIT_FAILURE;
   }
 
+  
   itk::MetaDataDictionary& dict = outImage->GetMetaDataDictionary();
+
   if (!dict.HasKey(otb::MetaDataKey::NoDataValueAvailable) || !dict.HasKey(otb::MetaDataKey::NoDataValue))
   {
     std::cout << "Missing no data metadata !" << std::endl;
