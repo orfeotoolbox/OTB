@@ -262,7 +262,11 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
     // MDGeom::SensorGeometry should be exported as "<typeinfo>" where typeinfo is boost::any::type().name()
       oss << kv.second.type().name();
     }
-    // TODO : MDGeom::SAR
+    else if (kv.first == MDGeom::SAR)
+    {
+      // To be completed by ImageIO
+      oss << std::string("<SARParam>");
+    }
     // TODO : MDGeom::Adjustment
     else
     {
