@@ -1309,12 +1309,15 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     }
     m_Imd.Bands = bandRangeMetadata;
   }
-std::cout << m_Imd << std::endl;
 
-  if ( !m_Imd.Bands.empty() && (std::size_t)m_NbBands != m_Imd.Bands.size())
-    {
-    itkExceptionMacro(<< "Number of bands in metadata inconsistent with actual image.");
-    }
+  // TODO : this should be a warning instead of an exception
+  // For complex pixels the number of bands is twice the number of compnents (in GDAL sense)
+  if ( !m_Imd.Bands.empty() 
+    && static_cast<std::size_t>(m_NbBands) != m_Imd.Bands.size()
+    && !((m_Imd.Bands.size() == static_cast<std::size_t>(2 * m_NbBands)) && this->GetPixelType() == COMPLEX))
+  {
+      itkExceptionMacro(<< "Number of bands in metadata inconsistent with actual image.");
+  }
 
   if ((m_Dimensions[0] == 0) && (m_Dimensions[1] == 0))
   {
