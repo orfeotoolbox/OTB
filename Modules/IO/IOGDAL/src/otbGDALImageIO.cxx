@@ -1831,24 +1831,31 @@ std::vector<std::string> GDALImageIO::GetResourceFiles() const
   return result;
 }
 
-const char * GDALImageIO::GetMetadataValue(const char * path, int band) const
+const std::string GDALImageIO::GetMetadataValue(const std::string path, bool& hasValue, int band) const
 {
   // detect namespace if any
-  const char *slash = strchr(path,'/');
   std::string domain("");
-  const char *domain_c = nullptr;
   std::string key(path);
-  if (slash)
-    {
-    domain = std::string(path, (slash-path));
-    domain_c = domain.c_str();
-    key = std::string(slash+1);
-    }
+  std::size_t found = path.find_first_of("/");
+  if (found != std::string::npos)
+  {
+    domain = path.substr(0, found);
+    key = path.substr(found + 1);
+  }
+
+  const char* ret;
   if (band >= 0)
-    {
-    return m_Dataset->GetDataSet()->GetRasterBand(band+1)->GetMetadataItem(key.c_str(), domain_c);
-    }
-  return m_Dataset->GetDataSet()->GetMetadataItem(key.c_str(), domain_c);
+    ret = m_Dataset->GetDataSet()->GetRasterBand(band+1)->GetMetadataItem(key.c_str(), domain.c_str());
+  else
+    ret = m_Dataset->GetDataSet()->GetMetadataItem(key.c_str(), domain.c_str());
+  if (ret)
+    hasValue = true;
+  else
+  {
+    hasValue = false;
+    ret = "";
+  }
+  return std::string(ret);
 }
 
 void GDALImageIO::SetMetadataValue(const char * path, const char * value, int band)
@@ -1905,7 +1912,8 @@ void GDALImageIO::ImportMetadata()
   // Keys Starting with: MDGeomNames[MDGeom::SensorGeometry] + '.' should
   // be decoded by the (future) SensorModelFactory.
   // Use ImageMetadataBase::FromKeywordlist to ingest the metadata
-  if (std::string(GetMetadataValue("METADATATYPE")) != "OTB")
+  bool hasValue;
+  if (std::string(GetMetadataValue("METADATATYPE", hasValue)) != "OTB")
     return;
   ImageMetadataBase::Keywordlist kwl;
   GDALMetadataToKeywordlist(m_Dataset->GetDataSet()->GetMetadata(), kwl);
