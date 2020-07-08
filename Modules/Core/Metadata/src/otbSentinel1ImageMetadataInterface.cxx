@@ -405,8 +405,8 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
   assert(mds);
   assert(mds->GetNbBands() == this->m_Imd.Bands.size());
   // Metadata read by GDAL
-  //Fetch(MDTime::AcquisitionStartTime, mds, "ACQUISITION_START_TIME");
-  //Fetch(MDTime::AcquisitionStopTime, mds, "ACQUISITION_STOP_TIME");
+  Fetch(MDTime::AcquisitionStartTime, mds, "ACQUISITION_START_TIME");
+  Fetch(MDTime::AcquisitionStopTime, mds, "ACQUISITION_STOP_TIME");
   Fetch(MDStr::BeamMode, mds, "BEAM_MODE");
   Fetch(MDStr::BeamSwath, mds, "BEAM_SWATH");
   Fetch("FACILITY_IDENTIFIER", mds, "FACILITY_IDENTIFIER");
@@ -421,6 +421,16 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
   Fetch(MDStr::SensorID, mds, "SENSOR_IDENTIFIER");
   Fetch(MDStr::Swath, mds, "SWATH");
 
+  // Manifest file
+  std::string ManifestFilePath = mds->GetResourceFile(std::string("manifest\\.safe"));
+  if (!ManifestFilePath.empty())
+  {
+    XMLMetadataSupplier ManifestMS = XMLMetadataSupplier(ManifestFilePath);
+    m_Imd.Add(MDTime::ProductionDate,
+    		ManifestMS.GetFirstAs<MetaData::Time>(
+    				"xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.start"));
+  }
+
   // Band metadata
   for (int bandId = 0 ; bandId < mds->GetNbBands() ; ++bandId)
   {
@@ -434,19 +444,19 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
                                                           + std::string("-.*\\.xml"));
     if (!AnnotationFilePath.empty())
     {
-      XMLMetadataSupplier xmlMS = XMLMetadataSupplier(AnnotationFilePath);
+      XMLMetadataSupplier AnnotationMS = XMLMetadataSupplier(AnnotationFilePath);
 
-      sarParam.azimuthFmRate = this->GetAzimuthFmRate(xmlMS);
+      sarParam.azimuthFmRate = this->GetAzimuthFmRate(AnnotationMS);
 
       // Calibration file
       std::string CalibrationFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)
                                         + "/calibration/calibration-"
                                         + itksys::SystemTools::GetFilenameName(AnnotationFilePath);
-      xmlMS = XMLMetadataSupplier(CalibrationFilePath);
-      sarParam.absoluteCalibrationConstant = xmlMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant");
-      sarParam.calibrationVectors = this->GetCalibrationVector(xmlMS);
-      std::istringstream(xmlMS.GetAs<std::string>("calibration.adsHeader.startTime")) >> sarParam.startTime;
-      std::istringstream(xmlMS.GetAs<std::string>("calibration.adsHeader.stopTime")) >> sarParam.stopTime;
+      XMLMetadataSupplier CalibrationMS = XMLMetadataSupplier(CalibrationFilePath);
+      sarParam.absoluteCalibrationConstant = CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant");
+      sarParam.calibrationVectors = this->GetCalibrationVector(CalibrationMS);
+      std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.startTime")) >> sarParam.startTime;
+      std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.stopTime")) >> sarParam.stopTime;
     }
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }

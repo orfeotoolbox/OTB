@@ -13,6 +13,9 @@ DataType 11
 OrbitNumber 6447
 LineSpacing 4.08568
 PixelSpacing 3.19483
+ProductionDate 2015-06-20T01:51:06.838854Z
+AcquisitionStartTime 2015-06-19T19:50:43.223221Z
+AcquisitionStopTime 2015-06-19T19:51:01.921994Z
 GCP <GCPParam>
 Extra.FACILITY_IDENTIFIER UPA_
 Polarization VV
