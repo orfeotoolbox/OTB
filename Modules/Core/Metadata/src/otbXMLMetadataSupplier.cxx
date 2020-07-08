@@ -43,7 +43,7 @@ XMLMetadataSupplier::XMLMetadataSupplier(const std::string & fileName)
 
 const std::string XMLMetadataSupplier::GetMetadataValue(const std::string path, bool& hasValue, int band) const
 {
-  const char * ret = CSLFetchNameValue(m_MetadataDic, path);
+  const char * ret = CSLFetchNameValue(m_MetadataDic, path.c_str());
   if (ret)
     hasValue = true;
   else
@@ -163,6 +163,11 @@ char** XMLMetadataSupplier::ReadXMLToList(CPLXMLNode* psNode, char** papszList,
   }
 
   return papszList;
+}
+
+int XMLMetadataSupplier::GetNbBands() const
+{
+  return 0;
 }
 
 std::string XMLMetadataSupplier::PrintSelf()

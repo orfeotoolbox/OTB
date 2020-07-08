@@ -59,7 +59,5 @@ int otbImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
     file << boost::any_cast<otb::Projection::GCPParam>(imd2[otb::MDGeom::GCP]).ToJSON(true);
   file.close();
 
-  std::cout << mds2->printSomething() << std::endl;;
-
   return EXIT_SUCCESS;
 }

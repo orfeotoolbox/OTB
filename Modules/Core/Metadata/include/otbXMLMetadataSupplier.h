@@ -51,6 +51,8 @@ public:
 
   std::string GetResourceFile(std::string="") const override;
 
+  int GetNbBands() const override;
+
   std::string PrintSelf();
 
 protected:

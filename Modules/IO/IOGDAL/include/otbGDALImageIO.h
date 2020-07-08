@@ -201,7 +201,7 @@ public:
   /** Returns gdal pixel type as string */
   std::string GetGdalPixelTypeAsString() const;
 
-  itkGetMacro(NbBands, int);
+  int GetNbBands() const override;
 
   // MetadataSupplierInterface overrides
 

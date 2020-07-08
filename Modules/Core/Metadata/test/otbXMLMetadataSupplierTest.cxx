@@ -27,10 +27,11 @@ int otbXMLMetadataSupplierTest(int itkNotUsed(argc), char* argv[])
   const char* outputFilename = argv[2];
   otb::XMLMetadataSupplier mds(fileName);
 
+  bool hasValue;
   std::ofstream file;
   file.open(outputFilename);
-  file << mds.GetMetadataValue("OTB.application.name") << "\n";
-  file << mds.GetMetadataValue("OTB.application.parameter_3.name") << "\n";
+  file << mds.GetMetadataValue("OTB.application.name", hasValue) << "\n";
+  file << mds.GetMetadataValue("OTB.application.parameter_3.name", hasValue) << "\n";
   file.close();
 
   return EXIT_SUCCESS;

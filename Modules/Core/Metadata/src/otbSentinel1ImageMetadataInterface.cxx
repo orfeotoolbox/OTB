@@ -403,7 +403,7 @@ std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrati
 void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 {
   assert(mds);
-  assert(mds->GetNbBands() == this->m_Imd.GetNbBands());
+  assert(mds->GetNbBands() == this->m_Imd.Bands.size());
   // Metadata read by GDAL
   //Fetch(MDTime::AcquisitionStartTime, mds, "ACQUISITION_START_TIME");
   //Fetch(MDTime::AcquisitionStopTime, mds, "ACQUISITION_STOP_TIME");

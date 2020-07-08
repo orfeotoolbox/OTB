@@ -1808,6 +1808,10 @@ std::string GDALImageIO::GetGdalPixelTypeAsString() const
   return name;
 }
 
+int GDALImageIO::GetNbBands() const
+{
+  return m_Dataset->GetDataSet()->GetRasterCount();
+}
 
 std::string GDALImageIO::GetResourceFile(std::string str) const
 {

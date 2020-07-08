@@ -81,6 +81,8 @@ public:
 
   bool HasValue(std::string path, int band=-1);
 
+  virtual int GetNbBands() const = 0;
+
   // utility functions
   template <typename T> T GetAs(std::string path, int band=-1) const
   {
