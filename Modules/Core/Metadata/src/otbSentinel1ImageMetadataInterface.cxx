@@ -363,9 +363,9 @@ std::vector<OTB_azimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate
     oss << listId;
     std::string path_root = "product.generalAnnotation.azimuthFmRateList.azimuthFmRate_" + oss.str();
     OTB_azimuthFmRate afr;
-    std::istringstream(xmlMS.GetMetadataValue((path_root + ".azimuthTime").c_str())) >> afr.azimuthTime;
+    std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> afr.azimuthTime;
     afr.t0 = xmlMS.GetAs<double>((path_root + ".t0").c_str());
-    afr.azimuthFmRatePolynomial = xmlMS.GetAsVector<double>((path_root + ".azimuthFmRatePolynomial").c_str(),
+    afr.azimuthFmRatePolynomial = xmlMS.GetAsVector<double>(path_root + ".azimuthFmRatePolynomial",
     		' ', xmlMS.GetAs<int>((path_root + ".azimuthFmRatePolynomial.count").c_str()));
     azimuthFmRateVector.push_back(afr);
   }
@@ -383,7 +383,7 @@ std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrati
     oss << listId;
     std::string path_root = "calibration.calibrationVectorList.calibrationVector_" + oss.str();
     OTB_calibrationVector calVect;
-    std::istringstream(xmlMS.GetMetadataValue((path_root + ".azimuthTime").c_str())) >> calVect.azimuthTime;
+    std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> calVect.azimuthTime;
     calVect.line = xmlMS.GetAs<int>((path_root + ".line").c_str());
     calVect.pixel = xmlMS.GetAsVector<int>((path_root + ".pixel").c_str(),
     		' ', xmlMS.GetAs<int>((path_root + ".pixel.count").c_str()));
@@ -445,8 +445,8 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
       xmlMS = XMLMetadataSupplier(CalibrationFilePath);
       sarParam.absoluteCalibrationConstant = xmlMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant");
       sarParam.calibrationVectors = this->GetCalibrationVector(xmlMS);
-      std::istringstream(xmlMS.GetMetadataValue("calibration.adsHeader.startTime")) >> sarParam.startTime;
-      std::istringstream(xmlMS.GetMetadataValue("calibration.adsHeader.stopTime")) >> sarParam.stopTime;
+      std::istringstream(xmlMS.GetAs<std::string>("calibration.adsHeader.startTime")) >> sarParam.startTime;
+      std::istringstream(xmlMS.GetAs<std::string>("calibration.adsHeader.stopTime")) >> sarParam.stopTime;
     }
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
