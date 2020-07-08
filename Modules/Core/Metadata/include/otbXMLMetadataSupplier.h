@@ -49,6 +49,26 @@ public:
    * If band >= 0, the metadata value is looked in the specified band*/
   const std::string GetMetadataValue(const std::string path, bool& hasValue, int band=1) const override;
 
+  const std::string GetFirstMetadataValue(const std::string paths, bool& hasValue) const;
+
+  template <typename T> T GetFirstAs(std::string path) const
+  {
+    bool hasValue;
+    std::string ret = GetFirstMetadataValue(path, hasValue);
+    if (!hasValue)
+    {
+      otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata '"<<path<<"'")
+    }
+    try
+    {
+      return boost::lexical_cast<T>(ret);
+    }
+    catch (boost::bad_lexical_cast&)
+    {
+      otbGenericExceptionMacro(MissingMetadataException,<<"Bad metadata value for '"<<path<<"', got: "<<ret)
+    }
+  }
+
   std::string GetResourceFile(std::string="") const override;
 
   int GetNbBands() const override;
@@ -69,6 +89,8 @@ protected:
   */
   virtual char** ReadXMLToList(CPLXMLNode* psNode, char** papszList,
                                const char* pszName = "");
+
+  char **CSLFetchPartialNameValueMultiple(CSLConstList papszStrList, const char *pszName) const;
 
 private:
   /** List of resource files */

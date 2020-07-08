@@ -54,6 +54,34 @@ const std::string XMLMetadataSupplier::GetMetadataValue(const std::string path, 
   return std::string(ret);
 }
 
+const std::string XMLMetadataSupplier::GetFirstMetadataValue(const std::string path, bool& hasValue) const
+{
+  std::size_t found = path.find("_#");
+  char ** values = this->CSLFetchPartialNameValueMultiple(m_MetadataDic, path.substr(0, found).c_str());
+  std::size_t start = found + 2;
+  if (found != std::string::npos)
+    found = path.find("_#", found);
+
+  while(found != std::string::npos)
+  {
+    values = this->CSLFetchPartialNameValueMultiple(m_MetadataDic, path.substr(start, found).c_str());
+    start = found;
+    found = path.find("_#", found + 2);
+  }
+
+  if (values[0] != nullptr)
+  {
+    hasValue = true;
+    std::string ret = std::string(values[0]);
+    return ret.substr(ret.find('=') + 1);
+  }
+  else
+  {
+    hasValue = false;
+    return "";
+  }
+}
+
 std::string XMLMetadataSupplier::GetResourceFile(std::string) const
 {
   return m_FileName;
@@ -163,6 +191,18 @@ char** XMLMetadataSupplier::ReadXMLToList(CPLXMLNode* psNode, char** papszList,
   }
 
   return papszList;
+}
+
+char ** XMLMetadataSupplier::CSLFetchPartialNameValueMultiple(CSLConstList papszStrList, const char *pszName) const
+{
+  if( papszStrList == nullptr || pszName == nullptr )
+    return nullptr;
+
+  char **papszValues = nullptr;
+  for( ; *papszStrList != nullptr ; ++papszStrList )
+    if( strstr(*papszStrList, pszName) )
+        papszValues = CSLAddString(papszValues, *papszStrList);
+  return papszValues;
 }
 
 int XMLMetadataSupplier::GetNbBands() const
