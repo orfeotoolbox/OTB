@@ -134,6 +134,7 @@ enum class MDNum
   OrbitNumber,
   NumberOfLines,
   NumberOfColumns,
+  AverageSceneHeight,
 // optical section
   PhysicalGain,
   PhysicalBias,

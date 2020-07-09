@@ -104,6 +104,8 @@ public:
   /* fetch the noise LUTs */
   std::vector<OTB_SARNoise> GetNoiseVector(XMLMetadataSupplier) const;
 
+  double getBandTerrainHeight(XMLMetadataSupplier) const;
+
   void Parse(const MetadataSupplierInterface *) override;
 
 protected:

@@ -355,7 +355,7 @@ double Sentinel1ImageMetadataInterface::GetCenterIncidenceAngle() const
 std::vector<OTB_azimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate(XMLMetadataSupplier xmlMS) const
 {
   std::vector<OTB_azimuthFmRate> azimuthFmRateVector;
-  int listCount = xmlMS.GetAs<double>("product.generalAnnotation.azimuthFmRateList.count");
+  int listCount = xmlMS.GetAs<int>("product.generalAnnotation.azimuthFmRateList.count");
   std::ostringstream oss;
   for (int listId = 1 ; listId <= listCount ; ++listId)
   {
@@ -375,7 +375,7 @@ std::vector<OTB_azimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate
 std::vector<OTB_dopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCentroid(XMLMetadataSupplier xmlMS) const
 {
   std::vector<OTB_dopplerCentroid> dopplerCentroidVector;
-  int listCount = xmlMS.GetAs<double>("product.dopplerCentroid.dcEstimateList.count");
+  int listCount = xmlMS.GetAs<int>("product.dopplerCentroid.dcEstimateList.count");
   std::ostringstream oss;
   for (int listId = 1 ; listId <= listCount ; ++listId)
   {
@@ -397,7 +397,7 @@ std::vector<OTB_dopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCent
 std::vector<OTB_Orbit> Sentinel1ImageMetadataInterface::GetOrbits(XMLMetadataSupplier xmlMS) const
 {
   std::vector<OTB_Orbit> orbitVector;
-  int listCount = xmlMS.GetAs<double>("product.generalAnnotation.orbitList.count");
+  int listCount = xmlMS.GetAs<int>("product.generalAnnotation.orbitList.count");
   std::ostringstream oss;
   for (int listId = 1 ; listId <= listCount ; ++listId)
   {
@@ -406,12 +406,12 @@ std::vector<OTB_Orbit> Sentinel1ImageMetadataInterface::GetOrbits(XMLMetadataSup
     std::string path_root = "product.generalAnnotation.orbitList.orbit_" + oss.str();
     OTB_Orbit orbit;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".time")) >> orbit.time;
-    orbit.posX = xmlMS.GetAs<double>(path_root + "1.position.x");
-    orbit.posY = xmlMS.GetAs<double>(path_root + "1.position.y");
-    orbit.posZ = xmlMS.GetAs<double>(path_root + "1.position.z");
-    orbit.velX = xmlMS.GetAs<double>(path_root + "1.velocity.x");
-    orbit.velY = xmlMS.GetAs<double>(path_root + "1.velocity.y");
-    orbit.velZ = xmlMS.GetAs<double>(path_root + "1.velocity.z");
+    orbit.posX = xmlMS.GetAs<double>(path_root + ".position.x");
+    orbit.posY = xmlMS.GetAs<double>(path_root + ".position.y");
+    orbit.posZ = xmlMS.GetAs<double>(path_root + ".position.z");
+    orbit.velX = xmlMS.GetAs<double>(path_root + ".velocity.x");
+    orbit.velY = xmlMS.GetAs<double>(path_root + ".velocity.y");
+    orbit.velZ = xmlMS.GetAs<double>(path_root + ".velocity.z");
     orbitVector.push_back(orbit);
   }
   return orbitVector;
@@ -420,7 +420,7 @@ std::vector<OTB_Orbit> Sentinel1ImageMetadataInterface::GetOrbits(XMLMetadataSup
 std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrationVector(XMLMetadataSupplier xmlMS) const
 {
   std::vector<OTB_calibrationVector> calibrationVector;
-  int listCount = xmlMS.GetAs<double>("calibration.calibrationVectorList.count");
+  int listCount = xmlMS.GetAs<int>("calibration.calibrationVectorList.count");
   std::ostringstream oss;
   for (int listId = 1 ; listId <= listCount ; ++listId)
   {
@@ -469,7 +469,7 @@ std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrati
 std::vector<OTB_SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(XMLMetadataSupplier xmlMS) const
 {
   std::vector<OTB_SARNoise> noiseVector;
-  int listCount = xmlMS.GetAs<double>("noise.noiseVectorList.count");
+  int listCount = xmlMS.GetAs<int>("noise.noiseVectorList.count");
   std::ostringstream oss;
   for (int listId = 1 ; listId <= listCount ; ++listId)
   {
@@ -489,6 +489,21 @@ std::vector<OTB_SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(XMLMet
     noiseVector.push_back(noiseVect);
   }
   return noiseVector;
+}
+
+double Sentinel1ImageMetadataInterface::getBandTerrainHeight(XMLMetadataSupplier xmlMS) const
+{
+  double heightSum = 0.0;
+  int listCount = xmlMS.GetAs<int>("product.generalAnnotation.terrainHeightList.count");
+  std::ostringstream oss;
+  for (int listId = 1 ; listId <= listCount ; ++listId)
+  {
+    oss.str("");
+    oss << listId;
+    std::string path_root = "product.generalAnnotation.terrainHeightList.terrainHeight_" + oss.str();
+    heightSum += xmlMS.GetAs<double>((path_root + ".value").c_str());
+  }
+  return heightSum / listCount;
 }
 
 void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
@@ -543,6 +558,7 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
     sarParam.orbits = this->GetOrbits(AnnotationMS);
     m_Imd.Add(MDNum::NumberOfLines, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines"));
     m_Imd.Add(MDNum::NumberOfColumns, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfSamples"));
+    m_Imd.Add(MDNum::AverageSceneHeight, this->getBandTerrainHeight(AnnotationFilePath));
 
     // Calibration file
     std::string CalibrationFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)

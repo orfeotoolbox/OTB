@@ -11,6 +11,9 @@ TileHintX 17663
 TileHintY 1
 DataType 11
 OrbitNumber 6447
+NumberOfLines 31106
+NumberOfColumns 17663
+AverageSceneHeight 19
 LineSpacing 4.08568
 PixelSpacing 3.19483
 AcquisitionDate 2015-06-19T19:50:43.223221Z
