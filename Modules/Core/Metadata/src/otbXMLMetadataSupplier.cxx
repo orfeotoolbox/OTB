@@ -59,17 +59,15 @@ const std::string XMLMetadataSupplier::GetFirstMetadataValue(const std::string p
   std::size_t found = path.find("_#");
   char ** values = this->CSLFetchPartialNameValueMultiple(m_MetadataDic, path.substr(0, found).c_str());
   std::size_t start = found + 2;
-  if (found != std::string::npos)
-    found = path.find("_#", found);
 
   while(found != std::string::npos)
   {
-    values = this->CSLFetchPartialNameValueMultiple(m_MetadataDic, path.substr(start, found).c_str());
-    start = found;
     found = path.find("_#", found + 2);
+    values = this->CSLFetchPartialNameValueMultiple(values, path.substr(start, found).c_str());
+    start = found + 2;
   }
 
-  if (values[0] != nullptr)
+  if ((values != nullptr) && (values[0] != nullptr))
   {
     hasValue = true;
     std::string ret = std::string(values[0]);
