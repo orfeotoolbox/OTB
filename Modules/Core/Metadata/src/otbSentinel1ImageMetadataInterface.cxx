@@ -372,6 +372,51 @@ std::vector<OTB_azimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate
   return azimuthFmRateVector;
 }
 
+std::vector<OTB_dopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCentroid(XMLMetadataSupplier xmlMS) const
+{
+  std::vector<OTB_dopplerCentroid> dopplerCentroidVector;
+  int listCount = xmlMS.GetAs<double>("product.dopplerCentroid.dcEstimateList.count");
+  std::ostringstream oss;
+  for (int listId = 1 ; listId <= listCount ; ++listId)
+  {
+    oss.str("");
+    oss << listId;
+    std::string path_root = "product.dopplerCentroid.dcEstimateList.dcEstimate_" + oss.str();
+    OTB_dopplerCentroid dopplerCent;
+    std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> dopplerCent.azimuthTime;
+    dopplerCent.t0 = xmlMS.GetAs<double>(path_root + ".t0");
+    dopplerCent.dopCoef = xmlMS.GetAsVector<double>(path_root + ".dataDcPolynomial",
+    		' ', xmlMS.GetAs<int>((path_root + ".dataDcPolynomial.count").c_str()));
+	dopplerCent.geoDopCoef = xmlMS.GetAsVector<double>(path_root + ".geometryDcPolynomial",
+    		' ', xmlMS.GetAs<int>((path_root + ".geometryDcPolynomial.count").c_str()));
+	dopplerCentroidVector.push_back(dopplerCent);
+  }
+  return dopplerCentroidVector;
+}
+
+std::vector<OTB_Orbit> Sentinel1ImageMetadataInterface::GetOrbits(XMLMetadataSupplier xmlMS) const
+{
+  std::vector<OTB_Orbit> orbitVector;
+  int listCount = xmlMS.GetAs<double>("product.generalAnnotation.orbitList.count");
+  std::ostringstream oss;
+  for (int listId = 1 ; listId <= listCount ; ++listId)
+  {
+    oss.str("");
+    oss << listId;
+    std::string path_root = "product.generalAnnotation.orbitList.orbit_" + oss.str();
+    OTB_Orbit orbit;
+    std::istringstream(xmlMS.GetAs<std::string>(path_root + ".time")) >> orbit.time;
+    orbit.posX = xmlMS.GetAs<double>(path_root + "1.position.x");
+    orbit.posY = xmlMS.GetAs<double>(path_root + "1.position.y");
+    orbit.posZ = xmlMS.GetAs<double>(path_root + "1.position.z");
+    orbit.velX = xmlMS.GetAs<double>(path_root + "1.velocity.x");
+    orbit.velY = xmlMS.GetAs<double>(path_root + "1.velocity.y");
+    orbit.velZ = xmlMS.GetAs<double>(path_root + "1.velocity.z");
+    orbitVector.push_back(orbit);
+  }
+  return orbitVector;
+}
+
 std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrationVector(XMLMetadataSupplier xmlMS) const
 {
   std::vector<OTB_calibrationVector> calibrationVector;
@@ -489,29 +534,36 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
     std::string AnnotationFilePath = mds->GetResourceFile(std::string("annotation[/\\\\]s1[ab].*-")
                                                           + itksys::SystemTools::LowerCase(swath)
                                                           + std::string("-.*\\.xml"));
-    if (!AnnotationFilePath.empty())
-    {
-      XMLMetadataSupplier AnnotationMS = XMLMetadataSupplier(AnnotationFilePath);
+    if (AnnotationFilePath.empty())
+      otbGenericExceptionMacro(MissingMetadataException,<<"Missing Annotation file for band '"<<swath<<"'");
+    XMLMetadataSupplier AnnotationMS = XMLMetadataSupplier(AnnotationFilePath);
 
-      sarParam.azimuthFmRate = this->GetAzimuthFmRate(AnnotationMS);
+    sarParam.azimuthFmRate = this->GetAzimuthFmRate(AnnotationMS);
+    sarParam.dopplerCentroid = this->GetDopplerCentroid(AnnotationMS);
+    sarParam.orbits = this->GetOrbits(AnnotationMS);
+    m_Imd.Add(MDNum::NumberOfLines, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines"));
+    m_Imd.Add(MDNum::NumberOfColumns, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfSamples"));
 
-      // Calibration file
-      std::string CalibrationFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)
-                                        + "/calibration/calibration-"
-                                        + itksys::SystemTools::GetFilenameName(AnnotationFilePath);
-      XMLMetadataSupplier CalibrationMS = XMLMetadataSupplier(CalibrationFilePath);
-      sarParam.absoluteCalibrationConstant = CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant");
-      sarParam.calibrationVectors = this->GetCalibrationVector(CalibrationMS);
-      std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.startTime")) >> sarParam.startTime;
-      std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.stopTime")) >> sarParam.stopTime;
+    // Calibration file
+    std::string CalibrationFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)
+                                      + "/calibration/calibration-"
+                                      + itksys::SystemTools::GetFilenameName(AnnotationFilePath);
+    if (CalibrationFilePath.empty())
+          otbGenericExceptionMacro(MissingMetadataException,<<"Missing Calibration file for band '"<<swath<<"'");
+    XMLMetadataSupplier CalibrationMS = XMLMetadataSupplier(CalibrationFilePath);
+    sarParam.absoluteCalibrationConstant = CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant");
+    sarParam.calibrationVectors = this->GetCalibrationVector(CalibrationMS);
+    std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.startTime")) >> sarParam.startTime;
+    std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.stopTime")) >> sarParam.stopTime;
 
-      // Noise file
-      std::string NoiseFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)
-                                              + "/calibration/noise-"
-                                              + itksys::SystemTools::GetFilenameName(AnnotationFilePath);
-      XMLMetadataSupplier NoiseMS = XMLMetadataSupplier(NoiseFilePath);
-      sarParam.noiseVector = this->GetNoiseVector(NoiseMS);
-    }
+    // Noise file
+    std::string NoiseFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)
+                                            + "/calibration/noise-"
+                                            + itksys::SystemTools::GetFilenameName(AnnotationFilePath);
+    if (NoiseFilePath.empty())
+          otbGenericExceptionMacro(MissingMetadataException,<<"Missing Noise file for band '"<<swath<<"'");
+    XMLMetadataSupplier NoiseMS = XMLMetadataSupplier(NoiseFilePath);
+
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
 }

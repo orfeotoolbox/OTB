@@ -95,6 +95,10 @@ public:
 
   std::vector<OTB_azimuthFmRate> GetAzimuthFmRate(XMLMetadataSupplier) const;
 
+  std::vector<OTB_dopplerCentroid> GetDopplerCentroid(XMLMetadataSupplier) const;
+
+  std::vector<OTB_Orbit> GetOrbits(XMLMetadataSupplier) const;
+
   std::vector<OTB_calibrationVector> GetCalibrationVector(XMLMetadataSupplier) const;
 
   /* fetch the noise LUTs */

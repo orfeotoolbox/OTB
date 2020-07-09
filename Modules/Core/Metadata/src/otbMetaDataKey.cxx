@@ -318,6 +318,8 @@ MDNumBmType MDNumNames = bimapGenerator<MDNum>(std::map<MDNum, std::string> {
   {MDNum::TileHintY,"TileHintY"},
   {MDNum::DataType,"DataType"},
   {MDNum::NoData, "NoData"},
+  {MDNum::NumberOfLines,"NumberOfLines"},
+  {MDNum::NumberOfColumns,"NumberOfColumns"},
   {MDNum::OrbitNumber, "OrbitNumber"},
   {MDNum::PhysicalGain,"PhysicalGain"},
   {MDNum::PhysicalBias,"PhysicalBias"},

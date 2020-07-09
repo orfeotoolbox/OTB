@@ -132,6 +132,8 @@ enum class MDNum
   DataType,
   NoData,
   OrbitNumber,
+  NumberOfLines,
+  NumberOfColumns,
 // optical section
   PhysicalGain,
   PhysicalBias,
