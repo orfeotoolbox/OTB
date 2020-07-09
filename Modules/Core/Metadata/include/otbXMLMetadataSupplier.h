@@ -90,7 +90,7 @@ protected:
   virtual char** ReadXMLToList(CPLXMLNode* psNode, char** papszList,
                                const char* pszName = "");
 
-  char **CSLFetchPartialNameValueMultiple(CSLConstList papszStrList, const char *pszName) const;
+  char **CSLFetchPartialNameValueMultiple(char**  papszStrList, const char *pszName) const;
 
 private:
   /** List of resource files */

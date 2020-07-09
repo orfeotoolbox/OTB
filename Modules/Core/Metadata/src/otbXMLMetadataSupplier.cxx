@@ -191,7 +191,7 @@ char** XMLMetadataSupplier::ReadXMLToList(CPLXMLNode* psNode, char** papszList,
   return papszList;
 }
 
-char ** XMLMetadataSupplier::CSLFetchPartialNameValueMultiple(CSLConstList papszStrList, const char *pszName) const
+char ** XMLMetadataSupplier::CSLFetchPartialNameValueMultiple(char** papszStrList, const char *pszName) const
 {
   if( papszStrList == nullptr || pszName == nullptr )
     return nullptr;
