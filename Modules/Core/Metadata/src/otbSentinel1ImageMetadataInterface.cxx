@@ -382,22 +382,68 @@ std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrati
     oss.str("");
     oss << listId;
     std::string path_root = "calibration.calibrationVectorList.calibrationVector_" + oss.str();
+
     OTB_calibrationVector calVect;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> calVect.azimuthTime;
     calVect.line = xmlMS.GetAs<int>((path_root + ".line").c_str());
-    calVect.pixel = xmlMS.GetAsVector<int>((path_root + ".pixel").c_str(),
-    		' ', xmlMS.GetAs<int>((path_root + ".pixel.count").c_str()));
-    calVect.sigmaNought = xmlMS.GetAsVector<double>((path_root + ".sigmaNought").c_str(),
-    		' ', xmlMS.GetAs<int>((path_root + ".sigmaNought.count").c_str()));
-    calVect.betaNought = xmlMS.GetAsVector<double>((path_root + ".betaNought").c_str(),
-    		' ', xmlMS.GetAs<int>((path_root + ".betaNought.count").c_str()));
-    calVect.gamma = xmlMS.GetAsVector<double>((path_root + ".gamma").c_str(),
-    		' ', xmlMS.GetAs<int>((path_root + ".gamma.count").c_str()));
-    calVect.dn = xmlMS.GetAsVector<double>((path_root + ".dn").c_str(),
-    		' ', xmlMS.GetAs<int>((path_root + ".dn.count").c_str()));
+
+    // Same axe for all LUTs
+    MetaData::LUTAxis ax1;
+    ax1.Size = xmlMS.GetAs<int>((path_root + ".pixel.count").c_str());
+    ax1.Values = xmlMS.GetAsVector<double>((path_root + ".pixel").c_str(), ' ', ax1.Size);
+
+    MetaData::LUT1D sigmaNoughtLut;
+    sigmaNoughtLut.Axis[0] = ax1;
+    sigmaNoughtLut.Array = xmlMS.GetAsVector<double>((path_root + ".sigmaNought").c_str(),
+     		' ', xmlMS.GetAs<int>((path_root + ".sigmaNought.count").c_str()));
+    calVect.sigmaNought = sigmaNoughtLut;
+
+    MetaData::LUT1D betaNoughtLut;
+    betaNoughtLut.Axis[0] = ax1;
+    betaNoughtLut.Array = xmlMS.GetAsVector<double>((path_root + ".betaNought").c_str(),
+     		' ', xmlMS.GetAs<int>((path_root + ".betaNought.count").c_str()));
+    calVect.betaNought = betaNoughtLut;
+
+    MetaData::LUT1D gammaLut;
+    gammaLut.Axis[0] = ax1;
+    gammaLut.Array = xmlMS.GetAsVector<double>((path_root + ".gamma").c_str(),
+     		' ', xmlMS.GetAs<int>((path_root + ".gamma.count").c_str()));
+    calVect.gamma = gammaLut;
+
+    MetaData::LUT1D dnLut;
+    dnLut.Axis[0] = ax1;
+    dnLut.Array = xmlMS.GetAsVector<double>((path_root + ".dn").c_str(),
+     		' ', xmlMS.GetAs<int>((path_root + ".dn.count").c_str()));
+    calVect.dn = dnLut;
+
     calibrationVector.push_back(calVect);
   }
   return calibrationVector;
+}
+
+std::vector<OTB_SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(XMLMetadataSupplier xmlMS) const
+{
+  std::vector<OTB_SARNoise> noiseVector;
+  int listCount = xmlMS.GetAs<double>("noise.noiseVectorList.count");
+  std::ostringstream oss;
+  for (int listId = 1 ; listId <= listCount ; ++listId)
+  {
+    oss.str("");
+    oss << listId;
+    std::string path_root = "noise.noiseVectorList.noiseVector_" + oss.str();
+    OTB_SARNoise noiseVect;
+    std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> noiseVect.azimuthTime;
+    MetaData::LUT1D noiseLut;
+    MetaData::LUTAxis ax1;
+    ax1.Size = xmlMS.GetAs<int>((path_root + ".pixel.count").c_str());
+    ax1.Values = xmlMS.GetAsVector<double>((path_root + ".pixel").c_str(), ' ', ax1.Size);
+    noiseLut.Axis[0] = ax1;
+    noiseLut.Array = xmlMS.GetAsVector<double>((path_root + ".noiseLut").c_str(),
+    		' ', xmlMS.GetAs<int>((path_root + ".noiseLut.count").c_str()));
+    noiseVect.noiseLut = noiseLut;
+    noiseVector.push_back(noiseVect);
+  }
+  return noiseVector;
 }
 
 void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
@@ -427,8 +473,9 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
   {
     XMLMetadataSupplier ManifestMS = XMLMetadataSupplier(ManifestFilePath);
     m_Imd.Add(MDTime::ProductionDate,
-    		ManifestMS.GetFirstAs<MetaData::Time>(
-    				"xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.start"));
+    		ManifestMS.GetFirstAs<MetaData::Time>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.start"));
+    m_Imd.Add(MDTime::AcquisitionDate,
+    		ManifestMS.GetFirstAs<MetaData::Time>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:acquisitionPeriod.safe:startTime"));
   }
 
   // Band metadata
@@ -457,6 +504,13 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
       sarParam.calibrationVectors = this->GetCalibrationVector(CalibrationMS);
       std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.startTime")) >> sarParam.startTime;
       std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.stopTime")) >> sarParam.stopTime;
+
+      // Noise file
+      std::string NoiseFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)
+                                              + "/calibration/noise-"
+                                              + itksys::SystemTools::GetFilenameName(AnnotationFilePath);
+      XMLMetadataSupplier NoiseMS = XMLMetadataSupplier(NoiseFilePath);
+      sarParam.noiseVector = this->GetNoiseVector(NoiseMS);
     }
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }

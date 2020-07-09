@@ -97,6 +97,9 @@ public:
 
   std::vector<OTB_calibrationVector> GetCalibrationVector(XMLMetadataSupplier) const;
 
+  /* fetch the noise LUTs */
+  std::vector<OTB_SARNoise> GetNoiseVector(XMLMetadataSupplier) const;
+
   void Parse(const MetadataSupplierInterface *) override;
 
 protected:

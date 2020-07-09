@@ -81,13 +81,12 @@ struct OTBMetadata_EXPORT OTB_azimuthFmRate
 
 struct OTBMetadata_EXPORT OTB_calibrationVector
 {
-  MetaData::Time azimuthTime;
   int line;
-  std::vector<int> pixel;
-  std::vector<double> sigmaNought;
-  std::vector<double> betaNought;
-  std::vector<double> gamma;
-  std::vector<double> dn;
+  MetaData::Time azimuthTime;
+  MetaData::LUT1D sigmaNought;
+  MetaData::LUT1D betaNought;
+  MetaData::LUT1D gamma;
+  MetaData::LUT1D dn;
 };
 
 struct OTBMetadata_EXPORT OTB_dopplerCentroid
@@ -96,6 +95,13 @@ struct OTBMetadata_EXPORT OTB_dopplerCentroid
   std::vector<double> geoDopCoef;
   MetaData::Time geoDopCoefTime;
   double slantRangeTime;
+};
+
+struct OTBMetadata_EXPORT OTB_SARNoise
+{
+  int line;
+  MetaData::Time azimuthTime;
+  MetaData::LUT1D noiseLut;
 };
 
 namespace Projection
@@ -204,6 +210,8 @@ struct OTBMetadata_EXPORT SARParam
   MetaData::Time stopTime;
 
   std::vector<OTB_dopplerCentroid> dopplerCentroid;
+
+  std::vector<OTB_SARNoise> noiseVector;
 };
 
 } // end namespace Projection
