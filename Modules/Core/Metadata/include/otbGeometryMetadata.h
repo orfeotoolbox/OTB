@@ -215,10 +215,9 @@ struct OTBMetadata_EXPORT SARParam
 {
   std::vector<OTB_azimuthFmRate> azimuthFmRate;
 
-  double absoluteCalibrationConstant;
   std::vector<OTB_calibrationVector> calibrationVectors;
-  MetaData::Time startTime;
-  MetaData::Time stopTime;
+  MetaData::Time calibrationStartTime;
+  MetaData::Time calibrationStopTime;
 
   std::vector<OTB_dopplerCentroid> dopplerCentroid;
 

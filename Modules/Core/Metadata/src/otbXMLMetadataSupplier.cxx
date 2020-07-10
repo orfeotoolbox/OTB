@@ -27,12 +27,7 @@ XMLMetadataSupplier::XMLMetadataSupplier(const std::string & fileName)
 {
   CPLXMLNode* psNode = CPLParseXMLFile(m_FileName.c_str());
   if(psNode != nullptr)
-  {
-    //if(std::string(psNode->pszValue) == "?xml")
-//    if(EQUAL(psNode->pszValue, "?xml"))
-//      psNode = psNode->psNext;
     m_MetadataDic = ReadXMLToList(psNode, m_MetadataDic);
-  }
   else
   {
     otbLogMacro(Warning, <<"Unable to parse XML file " << fileName);
@@ -56,13 +51,19 @@ const std::string XMLMetadataSupplier::GetMetadataValue(const std::string path, 
 
 const std::string XMLMetadataSupplier::GetFirstMetadataValue(const std::string path, bool& hasValue) const
 {
+  // Search for the  first joker
   std::size_t found = path.find("_#");
+  // Looking for the keys corresponding to the part of the path before the first joker
   char ** values = this->CSLFetchPartialNameValueMultiple(m_MetadataDic, path.substr(0, found).c_str());
+  // Position of the beginning of the path after the joker
   std::size_t start = found + 2;
 
+  // While a joker is found
   while(found != std::string::npos)
   {
-    found = path.find("_#", found + 2);
+    // Look for the next joker
+    found = path.find("_#", start);
+    // Look for the keys corresponding to the part of the path between the two jokers
     values = this->CSLFetchPartialNameValueMultiple(values, path.substr(start, found).c_str());
     start = found + 2;
   }
@@ -71,6 +72,7 @@ const std::string XMLMetadataSupplier::GetFirstMetadataValue(const std::string p
   {
     hasValue = true;
     std::string ret = std::string(values[0]);
+    // Return the value part
     return ret.substr(ret.find('=') + 1);
   }
   else

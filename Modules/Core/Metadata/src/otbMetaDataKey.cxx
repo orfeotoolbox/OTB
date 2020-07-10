@@ -338,7 +338,7 @@ MDNumBmType MDNumNames = bimapGenerator<MDNum>(std::map<MDNum, std::string> {
   {MDNum::PRF,"PRF"},
   {MDNum::RSF,"RSF"},
   {MDNum::RadarFrequency,"RadarFrequency"},
-  {MDNum::CenterIndicenceAngle,"CenterIndicenceAngle"},
+  {MDNum::CenterIncidenceAngle,"CenterIncidenceAngle"},
   {MDNum::RescalingFactor,"RescalingFactor"},
   {MDNum::AntennaPatternNewGainPolyDegX,"AntennaPatternNewGainPolyDegX"},
   {MDNum::AntennaPatternNewGainPolyDegY,"AntennaPatternNewGainPolyDegY"},

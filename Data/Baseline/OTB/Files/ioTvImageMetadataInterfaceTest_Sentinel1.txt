@@ -14,6 +14,10 @@ OrbitNumber 6447
 NumberOfLines 31106
 NumberOfColumns 17663
 AverageSceneHeight 19
+CalScale 1
+PRF 1663.48
+RadarFrequency 5.405e+09
+CenterIncidenceAngle 44.7171
 LineSpacing 4.08568
 PixelSpacing 3.19483
 AcquisitionDate 2015-06-19T19:50:43.223221Z

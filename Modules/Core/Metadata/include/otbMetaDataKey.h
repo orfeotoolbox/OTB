@@ -153,7 +153,7 @@ enum class MDNum
   PRF,
   RSF,
   RadarFrequency,
-  CenterIndicenceAngle,
+  CenterIncidenceAngle,
   RescalingFactor,
   AntennaPatternNewGainPolyDegX,
   AntennaPatternNewGainPolyDegY,

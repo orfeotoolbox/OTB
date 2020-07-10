@@ -355,12 +355,15 @@ double Sentinel1ImageMetadataInterface::GetCenterIncidenceAngle() const
 std::vector<OTB_azimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate(XMLMetadataSupplier xmlMS) const
 {
   std::vector<OTB_azimuthFmRate> azimuthFmRateVector;
+  // Number of entries in the vector
   int listCount = xmlMS.GetAs<int>("product.generalAnnotation.azimuthFmRateList.count");
+  // This streams wild hold the iteration number
   std::ostringstream oss;
   for (int listId = 1 ; listId <= listCount ; ++listId)
   {
     oss.str("");
     oss << listId;
+    // Base path to the data, that depends on the iteration number
     std::string path_root = "product.generalAnnotation.azimuthFmRateList.azimuthFmRate_" + oss.str();
     OTB_azimuthFmRate afr;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> afr.azimuthTime;
@@ -375,12 +378,15 @@ std::vector<OTB_azimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate
 std::vector<OTB_dopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCentroid(XMLMetadataSupplier xmlMS) const
 {
   std::vector<OTB_dopplerCentroid> dopplerCentroidVector;
+  // Number of entries in the vector
   int listCount = xmlMS.GetAs<int>("product.dopplerCentroid.dcEstimateList.count");
+  // This streams wild hold the iteration number
   std::ostringstream oss;
   for (int listId = 1 ; listId <= listCount ; ++listId)
   {
     oss.str("");
     oss << listId;
+    // Base path to the data, that depends on the iteration number
     std::string path_root = "product.dopplerCentroid.dcEstimateList.dcEstimate_" + oss.str();
     OTB_dopplerCentroid dopplerCent;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> dopplerCent.azimuthTime;
@@ -397,12 +403,15 @@ std::vector<OTB_dopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCent
 std::vector<OTB_Orbit> Sentinel1ImageMetadataInterface::GetOrbits(XMLMetadataSupplier xmlMS) const
 {
   std::vector<OTB_Orbit> orbitVector;
+  // Number of entries in the vector
   int listCount = xmlMS.GetAs<int>("product.generalAnnotation.orbitList.count");
+  // This streams wild hold the iteration number
   std::ostringstream oss;
   for (int listId = 1 ; listId <= listCount ; ++listId)
   {
     oss.str("");
     oss << listId;
+    // Base path to the data, that depends on the iteration number
     std::string path_root = "product.generalAnnotation.orbitList.orbit_" + oss.str();
     OTB_Orbit orbit;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".time")) >> orbit.time;
@@ -420,12 +429,15 @@ std::vector<OTB_Orbit> Sentinel1ImageMetadataInterface::GetOrbits(XMLMetadataSup
 std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrationVector(XMLMetadataSupplier xmlMS) const
 {
   std::vector<OTB_calibrationVector> calibrationVector;
+  // Number of entries in the vector
   int listCount = xmlMS.GetAs<int>("calibration.calibrationVectorList.count");
+  // This streams wild hold the iteration number
   std::ostringstream oss;
   for (int listId = 1 ; listId <= listCount ; ++listId)
   {
     oss.str("");
     oss << listId;
+    // Base path to the data, that depends on the iteration number
     std::string path_root = "calibration.calibrationVectorList.calibrationVector_" + oss.str();
 
     OTB_calibrationVector calVect;
@@ -469,12 +481,15 @@ std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrati
 std::vector<OTB_SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(XMLMetadataSupplier xmlMS) const
 {
   std::vector<OTB_SARNoise> noiseVector;
+  // Number of entries in the vector
   int listCount = xmlMS.GetAs<int>("noise.noiseVectorList.count");
+  // This streams wild hold the iteration number
   std::ostringstream oss;
   for (int listId = 1 ; listId <= listCount ; ++listId)
   {
     oss.str("");
     oss << listId;
+    // Base path to the data, that depends on the iteration number
     std::string path_root = "noise.noiseVectorList.noiseVector_" + oss.str();
     OTB_SARNoise noiseVect;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> noiseVect.azimuthTime;
@@ -494,16 +509,19 @@ std::vector<OTB_SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(XMLMet
 double Sentinel1ImageMetadataInterface::getBandTerrainHeight(XMLMetadataSupplier xmlMS) const
 {
   double heightSum = 0.0;
+  // Number of entries in the vector
   int listCount = xmlMS.GetAs<int>("product.generalAnnotation.terrainHeightList.count");
+  // This streams wild hold the iteration number
   std::ostringstream oss;
   for (int listId = 1 ; listId <= listCount ; ++listId)
   {
     oss.str("");
     oss << listId;
+    // Base path to the data, that depends on the iteration number
     std::string path_root = "product.generalAnnotation.terrainHeightList.terrainHeight_" + oss.str();
     heightSum += xmlMS.GetAs<double>((path_root + ".value").c_str());
   }
-  return heightSum / listCount;
+  return heightSum / (double)listCount;
 }
 
 void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
@@ -559,6 +577,9 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
     m_Imd.Add(MDNum::NumberOfLines, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines"));
     m_Imd.Add(MDNum::NumberOfColumns, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfSamples"));
     m_Imd.Add(MDNum::AverageSceneHeight, this->getBandTerrainHeight(AnnotationFilePath));
+    m_Imd.Add(MDNum::RadarFrequency, AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.radarFrequency"));
+    m_Imd.Add(MDNum::PRF, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthFrequency"));
+    m_Imd.Add(MDNum::CenterIncidenceAngle, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.incidenceAngleMidSwath"));
 
     // Calibration file
     std::string CalibrationFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)
@@ -567,10 +588,10 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
     if (CalibrationFilePath.empty())
           otbGenericExceptionMacro(MissingMetadataException,<<"Missing Calibration file for band '"<<swath<<"'");
     XMLMetadataSupplier CalibrationMS = XMLMetadataSupplier(CalibrationFilePath);
-    sarParam.absoluteCalibrationConstant = CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant");
+    m_Imd.Add(MDNum::CalScale, CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant"));
     sarParam.calibrationVectors = this->GetCalibrationVector(CalibrationMS);
-    std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.startTime")) >> sarParam.startTime;
-    std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.stopTime")) >> sarParam.stopTime;
+    std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.startTime")) >> sarParam.calibrationStartTime;
+    std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.stopTime")) >> sarParam.calibrationStopTime;
 
     // Noise file
     std::string NoiseFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)

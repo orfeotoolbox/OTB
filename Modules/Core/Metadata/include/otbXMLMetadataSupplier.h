@@ -44,13 +44,40 @@ class OTBMetadata_EXPORT XMLMetadataSupplier
 public:
   XMLMetadataSupplier(const std::string &);
 
-  /** Get the metadata value corresponding to a given path
-   * Returns NULL when path is not found
-   * If band >= 0, the metadata value is looked in the specified band*/
+  /**
+   * @brief Get the metadata value corresponding to a given path
+   *
+   * @param path The path to look for
+   * @param hasValue True if path is found
+   * @param band not used
+   * @return The value corresponding to path. Empty string if not found.
+   */
   const std::string GetMetadataValue(const std::string path, bool& hasValue, int band=1) const override;
 
+  /**
+   * @brief Get the first metadata value corresponding to a given path
+   *
+   * @param path The path to look for
+   * @param hasValue True if path is found
+   * @return The value corresponding to path. Empty string if not found.
+   */
   const std::string GetFirstMetadataValue(const std::string paths, bool& hasValue) const;
 
+  /**
+   * @brief Get the metadata value corresponding to a given path
+   * converted to the given type
+   *
+   * This method can look for a value in a list, using the _# jocker. For exemple,
+   * looking for "value" in a dictionary like this :
+   * foo_1.bar=42
+   * foo_1.doo=99
+   * foo_2.value=8
+   * One can specify this path : foo_#.value, the method will then return 8.
+   *
+   * @param path The path to look for.
+   * @return The value corresponding to path.
+   * @raises otb::Error if path not found
+   */
   template <typename T> T GetFirstAs(std::string path) const
   {
     bool hasValue;
@@ -73,6 +100,11 @@ public:
 
   int GetNbBands() const override;
 
+  /**
+   * @brief Writes the content of the XML file into a string
+   *
+   * @return A std::string
+   */
   std::string PrintSelf();
 
 protected:
@@ -90,6 +122,15 @@ protected:
   virtual char** ReadXMLToList(CPLXMLNode* psNode, char** papszList,
                                const char* pszName = "");
 
+  /**
+   * @brief In a StringList of “Name=Value” pairs, look for the values
+   *        associated with a name containing the specified string
+   *
+   * @param papszStrList A StringList that will be searched
+   * @param pszName A string that will be looked for in the keys
+   * @return A StringList containing only the pairs from papszStrList whose key
+   *         contain pszName
+   */
   char **CSLFetchPartialNameValueMultiple(char**  papszStrList, const char *pszName) const;
 
 private:

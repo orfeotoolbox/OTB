@@ -93,19 +93,6 @@ public:
   /*get lookup data for calculating backscatter */
   void CreateCalibrationLookupData(const short type) override;
 
-  std::vector<OTB_azimuthFmRate> GetAzimuthFmRate(XMLMetadataSupplier) const;
-
-  std::vector<OTB_dopplerCentroid> GetDopplerCentroid(XMLMetadataSupplier) const;
-
-  std::vector<OTB_Orbit> GetOrbits(XMLMetadataSupplier) const;
-
-  std::vector<OTB_calibrationVector> GetCalibrationVector(XMLMetadataSupplier) const;
-
-  /* fetch the noise LUTs */
-  std::vector<OTB_SARNoise> GetNoiseVector(XMLMetadataSupplier) const;
-
-  double getBandTerrainHeight(XMLMetadataSupplier) const;
-
   void Parse(const MetadataSupplierInterface *) override;
 
 protected:
@@ -116,6 +103,24 @@ protected:
   ~Sentinel1ImageMetadataInterface() override
   {
   }
+
+  /* Fetch the AzimuthFmRate metadata */
+  std::vector<OTB_azimuthFmRate> GetAzimuthFmRate(XMLMetadataSupplier) const;
+
+  /* Fetch the DopplerCentroid metadata */
+  std::vector<OTB_dopplerCentroid> GetDopplerCentroid(XMLMetadataSupplier) const;
+
+  /* Fetch the Orbits metadata */
+  std::vector<OTB_Orbit> GetOrbits(XMLMetadataSupplier) const;
+
+  /* Fetch the Calibration metadata */
+  std::vector<OTB_calibrationVector> GetCalibrationVector(XMLMetadataSupplier) const;
+
+  /* Fetch the noise LUTs */
+  std::vector<OTB_SARNoise> GetNoiseVector(XMLMetadataSupplier) const;
+
+  /* Compute the mean terrain elevation */
+  double getBandTerrainHeight(XMLMetadataSupplier) const;
 
 private:
   Sentinel1ImageMetadataInterface(const Self&) = delete;
