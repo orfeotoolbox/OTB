@@ -63,19 +63,8 @@ void otbMetadataKeyTest(char* argv[])
   std::ofstream outfile(outFileName);
 
   MetaData::Time mytime;
-  char buffer[] = "2009-08-10T10:30:08.142149Z";
 
   std::string bufferStr("2009-08-10T10:30:08.142149Z");
-
-  try
-  {
-    mytime = boost::lexical_cast<MetaData::Time>(buffer);
-  }
-  catch(boost::bad_lexical_cast&)
-  {
-    outfile << "Bad cast into MetaData::Time\n";
-  }
-  outfile << "mytime : "<< mytime << "\n";
 
   try
   {
