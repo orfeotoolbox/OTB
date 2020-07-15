@@ -64,7 +64,10 @@ const std::string XMLMetadataSupplier::GetFirstMetadataValue(const std::string p
     // Look for the next joker
     found = path.find("_#", start);
     // Look for the keys corresponding to the part of the path between the two jokers
-    values = this->CSLFetchPartialNameValueMultiple(values, path.substr(start, found).c_str());
+    char ** new_values = this->CSLFetchPartialNameValueMultiple(values, path.substr(start, found).c_str());
+    CSLDestroy(values);
+    values = CSLDuplicate(new_values);
+    CSLDestroy(new_values);
     start = found + 2;
   }
 
