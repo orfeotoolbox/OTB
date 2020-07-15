@@ -54,7 +54,7 @@ std::string XMLMetadataSupplier::GetFirstMetadataValue(const std::string path, b
   // Search for the  first joker
   std::size_t found = path.find("_#");
   // Looking for the keys corresponding to the part of the path before the first joker
-  char ** values = this->CSLFetchPartialNameValueMultiple(m_MetadataDic, path.substr(0, found).c_str());
+  std::vector<std::string> values = this->FetchPartialNameValueMultiple(m_MetadataDic, path.substr(0, found).c_str());
   // Position of the beginning of the path after the joker
   std::size_t start = found + 2;
 
@@ -64,19 +64,15 @@ std::string XMLMetadataSupplier::GetFirstMetadataValue(const std::string path, b
     // Look for the next joker
     found = path.find("_#", start);
     // Look for the keys corresponding to the part of the path between the two jokers
-    char ** new_values = this->CSLFetchPartialNameValueMultiple(values, path.substr(start, found).c_str());
-    CSLDestroy(values);
-    values = CSLDuplicate(new_values);
-    CSLDestroy(new_values);
+    values = this->FetchPartialNameValueMultiple(values, path.substr(start, found));
     start = found + 2;
   }
 
-  if ((values != nullptr) && (values[0] != nullptr))
+  if ((values.size() != 0) && (!values[0].empty()))
   {
     hasValue = true;
     std::string ret = values[0];
     ret = ret.substr(ret.find('=') + 1);
-    CSLDestroy(values);
     // Return the value part
     return ret;
   }
@@ -198,16 +194,30 @@ char** XMLMetadataSupplier::ReadXMLToList(CPLXMLNode* psNode, char** papszList,
   return papszList;
 }
 
-char ** XMLMetadataSupplier::CSLFetchPartialNameValueMultiple(char** papszStrList, const char *pszName) const
+std::vector<std::string> XMLMetadataSupplier::FetchPartialNameValueMultiple(char** papszStrList,
+		                                                                    const char *pszName) const
 {
+  std::vector<std::string> retStringVector;
   if( papszStrList == nullptr || pszName == nullptr )
-    return nullptr;
+    return retStringVector;
 
-  char **papszValues = nullptr;
   for( ; *papszStrList != nullptr ; ++papszStrList )
     if( strstr(*papszStrList, pszName) )
-        papszValues = CSLAddString(papszValues, *papszStrList);
-  return papszValues;
+      retStringVector.push_back(*papszStrList);
+  return retStringVector;
+}
+
+std::vector<std::string> XMLMetadataSupplier::FetchPartialNameValueMultiple(const std::vector<std::string> &StringVector,
+		                                                                    const std::string &Name) const
+{
+  std::vector<std::string> retStringVector;
+  if( StringVector.size() == 0 || Name.empty() )
+    return retStringVector;
+
+  for( const auto& val : StringVector )
+    if( val.find(Name) != std::string::npos )
+      retStringVector.push_back(val);
+  return retStringVector;
 }
 
 int XMLMetadataSupplier::GetNbBands() const

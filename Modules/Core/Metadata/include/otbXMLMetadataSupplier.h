@@ -131,7 +131,19 @@ protected:
    * @return A StringList containing only the pairs from papszStrList whose key
    *         contain pszName
    */
-  char **CSLFetchPartialNameValueMultiple(char**  papszStrList, const char *pszName) const;
+  std::vector<std::string> FetchPartialNameValueMultiple(char** papszStrList, const char *pszName) const;
+
+  /**
+   * @brief In a StringList of “Name=Value” pairs, look for the values
+   *        associated with a name containing the specified string
+   *
+   * @param StringVector A std::vector of std::string that will be searched
+   * @param Name A std::string that will be looked for in the keys
+   * @return A std::vector of std::string containing only the pairs from StringVector whose key
+   *         contain Name
+   */
+  std::vector<std::string> FetchPartialNameValueMultiple(const std::vector<std::string> &StringVector,
+		                                                 const std::string &Name) const;
 
 private:
   /** List of resource files */
