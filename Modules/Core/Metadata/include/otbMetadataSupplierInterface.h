@@ -77,7 +77,7 @@ public:
    * depends on the specific implementation. Returns empty string when path is not found,
    * and hasValue is set to False.
    * If band >= 0, the metadata value is looked in the specified band*/
-  virtual const std::string GetMetadataValue(const std::string path, bool& hasValue, int band=-1) const = 0;
+  virtual std::string GetMetadataValue(const std::string path, bool& hasValue, int band=-1) const = 0;
 
   bool HasValue(std::string path, int band=-1);
 

@@ -52,7 +52,7 @@ public:
    * @param band not used
    * @return The value corresponding to path. Empty string if not found.
    */
-  const std::string GetMetadataValue(const std::string path, bool& hasValue, int band=1) const override;
+  std::string GetMetadataValue(const std::string path, bool& hasValue, int band=1) const override;
 
   /**
    * @brief Get the first metadata value corresponding to a given path
@@ -61,7 +61,7 @@ public:
    * @param hasValue True if path is found
    * @return The value corresponding to path. Empty string if not found.
    */
-  const std::string GetFirstMetadataValue(const std::string paths, bool& hasValue) const;
+  std::string GetFirstMetadataValue(const std::string paths, bool& hasValue) const;
 
   /**
    * @brief Get the metadata value corresponding to a given path

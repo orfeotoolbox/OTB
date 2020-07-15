@@ -1835,7 +1835,7 @@ std::vector<std::string> GDALImageIO::GetResourceFiles() const
   return result;
 }
 
-const std::string GDALImageIO::GetMetadataValue(const std::string path, bool& hasValue, int band) const
+std::string GDALImageIO::GetMetadataValue(const std::string path, bool& hasValue, int band) const
 {
   // detect namespace if any
   std::string domain("");
