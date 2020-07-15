@@ -78,7 +78,7 @@ public:
    * @return The value corresponding to path.
    * @raises otb::Error if path not found
    */
-  template <typename T> T GetFirstAs(std::string path) const
+  template <typename T> T GetFirstAs(const std::string &path) const
   {
     bool hasValue;
     std::string ret = GetFirstMetadataValue(path, hasValue);
