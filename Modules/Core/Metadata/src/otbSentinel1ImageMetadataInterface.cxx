@@ -367,9 +367,9 @@ std::vector<OTB_azimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate
     std::string path_root = "product.generalAnnotation.azimuthFmRateList.azimuthFmRate_" + oss.str();
     OTB_azimuthFmRate afr;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> afr.azimuthTime;
-    afr.t0 = xmlMS.GetAs<double>((path_root + ".t0").c_str());
+    afr.t0 = xmlMS.GetAs<double>(path_root + ".t0");
     afr.azimuthFmRatePolynomial = xmlMS.GetAsVector<double>(path_root + ".azimuthFmRatePolynomial",
-    		' ', xmlMS.GetAs<int>((path_root + ".azimuthFmRatePolynomial.count").c_str()));
+    		' ', xmlMS.GetAs<int>(path_root + ".azimuthFmRatePolynomial.count"));
     azimuthFmRateVector.push_back(afr);
   }
   return azimuthFmRateVector;
@@ -392,9 +392,9 @@ std::vector<OTB_dopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCent
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> dopplerCent.azimuthTime;
     dopplerCent.t0 = xmlMS.GetAs<double>(path_root + ".t0");
     dopplerCent.dopCoef = xmlMS.GetAsVector<double>(path_root + ".dataDcPolynomial",
-    		' ', xmlMS.GetAs<int>((path_root + ".dataDcPolynomial.count").c_str()));
+    		' ', xmlMS.GetAs<int>(path_root + ".dataDcPolynomial.count"));
 	dopplerCent.geoDopCoef = xmlMS.GetAsVector<double>(path_root + ".geometryDcPolynomial",
-    		' ', xmlMS.GetAs<int>((path_root + ".geometryDcPolynomial.count").c_str()));
+    		' ', xmlMS.GetAs<int>(path_root + ".geometryDcPolynomial.count"));
 	dopplerCentroidVector.push_back(dopplerCent);
   }
   return dopplerCentroidVector;
@@ -442,35 +442,35 @@ std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrati
 
     OTB_calibrationVector calVect;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> calVect.azimuthTime;
-    calVect.line = xmlMS.GetAs<int>((path_root + ".line").c_str());
+    calVect.line = xmlMS.GetAs<int>(path_root + ".line");
 
     // Same axe for all LUTs
     MetaData::LUTAxis ax1;
-    ax1.Size = xmlMS.GetAs<int>((path_root + ".pixel.count").c_str());
-    ax1.Values = xmlMS.GetAsVector<double>((path_root + ".pixel").c_str(), ' ', ax1.Size);
+    ax1.Size = xmlMS.GetAs<int>(path_root + ".pixel.count");
+    ax1.Values = xmlMS.GetAsVector<double>(path_root + ".pixel", ' ', ax1.Size);
 
     MetaData::LUT1D sigmaNoughtLut;
     sigmaNoughtLut.Axis[0] = ax1;
-    sigmaNoughtLut.Array = xmlMS.GetAsVector<double>((path_root + ".sigmaNought").c_str(),
-     		' ', xmlMS.GetAs<int>((path_root + ".sigmaNought.count").c_str()));
+    sigmaNoughtLut.Array = xmlMS.GetAsVector<double>(path_root + ".sigmaNought",
+     		' ', xmlMS.GetAs<int>(path_root + ".sigmaNought.count"));
     calVect.sigmaNought = sigmaNoughtLut;
 
     MetaData::LUT1D betaNoughtLut;
     betaNoughtLut.Axis[0] = ax1;
-    betaNoughtLut.Array = xmlMS.GetAsVector<double>((path_root + ".betaNought").c_str(),
-     		' ', xmlMS.GetAs<int>((path_root + ".betaNought.count").c_str()));
+    betaNoughtLut.Array = xmlMS.GetAsVector<double>(path_root + ".betaNought",
+     		' ', xmlMS.GetAs<int>(path_root + ".betaNought.count"));
     calVect.betaNought = betaNoughtLut;
 
     MetaData::LUT1D gammaLut;
     gammaLut.Axis[0] = ax1;
-    gammaLut.Array = xmlMS.GetAsVector<double>((path_root + ".gamma").c_str(),
-     		' ', xmlMS.GetAs<int>((path_root + ".gamma.count").c_str()));
+    gammaLut.Array = xmlMS.GetAsVector<double>(path_root + ".gamma",
+     		' ', xmlMS.GetAs<int>(path_root + ".gamma.count"));
     calVect.gamma = gammaLut;
 
     MetaData::LUT1D dnLut;
     dnLut.Axis[0] = ax1;
-    dnLut.Array = xmlMS.GetAsVector<double>((path_root + ".dn").c_str(),
-     		' ', xmlMS.GetAs<int>((path_root + ".dn.count").c_str()));
+    dnLut.Array = xmlMS.GetAsVector<double>(path_root + ".dn",
+     		' ', xmlMS.GetAs<int>(path_root + ".dn.count"));
     calVect.dn = dnLut;
 
     calibrationVector.push_back(calVect);
@@ -495,11 +495,11 @@ std::vector<OTB_SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(XMLMet
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> noiseVect.azimuthTime;
     MetaData::LUT1D noiseLut;
     MetaData::LUTAxis ax1;
-    ax1.Size = xmlMS.GetAs<int>((path_root + ".pixel.count").c_str());
-    ax1.Values = xmlMS.GetAsVector<double>((path_root + ".pixel").c_str(), ' ', ax1.Size);
+    ax1.Size = xmlMS.GetAs<int>(path_root + ".pixel.count");
+    ax1.Values = xmlMS.GetAsVector<double>(path_root + ".pixel", ' ', ax1.Size);
     noiseLut.Axis[0] = ax1;
-    noiseLut.Array = xmlMS.GetAsVector<double>((path_root + ".noiseLut").c_str(),
-    		' ', xmlMS.GetAs<int>((path_root + ".noiseLut.count").c_str()));
+    noiseLut.Array = xmlMS.GetAsVector<double>(path_root + ".noiseLut",
+    		' ', xmlMS.GetAs<int>(path_root + ".noiseLut.count"));
     noiseVect.noiseLut = noiseLut;
     noiseVector.push_back(noiseVect);
   }
@@ -519,7 +519,7 @@ double Sentinel1ImageMetadataInterface::getBandTerrainHeight(XMLMetadataSupplier
     oss << listId;
     // Base path to the data, that depends on the iteration number
     std::string path_root = "product.generalAnnotation.terrainHeightList.terrainHeight_" + oss.str();
-    heightSum += xmlMS.GetAs<double>((path_root + ".value").c_str());
+    heightSum += xmlMS.GetAs<double>(path_root + ".value");
   }
   return heightSum / (double)listCount;
 }
