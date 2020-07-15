@@ -352,7 +352,7 @@ double Sentinel1ImageMetadataInterface::GetCenterIncidenceAngle() const
   return 0;
 }
 
-std::vector<OTB_azimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate(XMLMetadataSupplier xmlMS) const
+std::vector<OTB_azimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate(const XMLMetadataSupplier &xmlMS) const
 {
   std::vector<OTB_azimuthFmRate> azimuthFmRateVector;
   // Number of entries in the vector
@@ -375,7 +375,7 @@ std::vector<OTB_azimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate
   return azimuthFmRateVector;
 }
 
-std::vector<OTB_dopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCentroid(XMLMetadataSupplier xmlMS) const
+std::vector<OTB_dopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCentroid(const XMLMetadataSupplier &xmlMS) const
 {
   std::vector<OTB_dopplerCentroid> dopplerCentroidVector;
   // Number of entries in the vector
@@ -400,7 +400,7 @@ std::vector<OTB_dopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCent
   return dopplerCentroidVector;
 }
 
-std::vector<OTB_Orbit> Sentinel1ImageMetadataInterface::GetOrbits(XMLMetadataSupplier xmlMS) const
+std::vector<OTB_Orbit> Sentinel1ImageMetadataInterface::GetOrbits(const XMLMetadataSupplier &xmlMS) const
 {
   std::vector<OTB_Orbit> orbitVector;
   // Number of entries in the vector
@@ -426,7 +426,7 @@ std::vector<OTB_Orbit> Sentinel1ImageMetadataInterface::GetOrbits(XMLMetadataSup
   return orbitVector;
 }
 
-std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrationVector(XMLMetadataSupplier xmlMS) const
+std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrationVector(const XMLMetadataSupplier &xmlMS) const
 {
   std::vector<OTB_calibrationVector> calibrationVector;
   // Number of entries in the vector
@@ -478,7 +478,7 @@ std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrati
   return calibrationVector;
 }
 
-std::vector<OTB_SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(XMLMetadataSupplier xmlMS) const
+std::vector<OTB_SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(const XMLMetadataSupplier &xmlMS) const
 {
   std::vector<OTB_SARNoise> noiseVector;
   // Number of entries in the vector
@@ -506,7 +506,7 @@ std::vector<OTB_SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(XMLMet
   return noiseVector;
 }
 
-double Sentinel1ImageMetadataInterface::getBandTerrainHeight(XMLMetadataSupplier xmlMS) const
+double Sentinel1ImageMetadataInterface::getBandTerrainHeight(const XMLMetadataSupplier &xmlMS) const
 {
   double heightSum = 0.0;
   // Number of entries in the vector
