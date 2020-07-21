@@ -19,7 +19,7 @@
 #
 
 set(OTBOSSIMAdapters_SRC
-  otbDEMHandler.cxx
+  otbOssimDEMHandler.cxx
   otbImageKeywordlist.cxx
   otbSensorModelAdapter.cxx
   otbRPCSolverAdapter.cxx

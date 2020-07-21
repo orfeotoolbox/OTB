@@ -29,6 +29,7 @@
 #include "otbGenericRSTransform.h"
 #include "otbOGRDataSourceWrapper.h"
 #include "ogrsf_frmts.h"
+#include "otbDEMHandler.h"
 
 namespace otb
 {

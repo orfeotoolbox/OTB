@@ -23,7 +23,7 @@
 
 #include <memory>
 
-#include "otbDEMHandler.h"
+#include "otbOssimDEMHandler.h"
 #include "itkPoint.h"
 
 namespace ossimplugins

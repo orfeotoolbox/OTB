@@ -21,7 +21,7 @@
 #ifndef otbSensorModelAdapter_h
 #define otbSensorModelAdapter_h
 
-#include "otbDEMHandler.h"
+#include "otbOssimDEMHandler.h"
 
 class ossimProjection;
 class ossimTieGptSet;
@@ -118,7 +118,7 @@ private:
   InternalTiePointsContainerPointer m_TiePoints;
 
   /** Object that read and use DEM */
-  DEMHandler::Pointer m_DEMHandler;
+  OssimDEMHandler::Pointer m_DEMHandler;
 };
 
 } // namespace otb

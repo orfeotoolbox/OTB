@@ -24,6 +24,7 @@
 #include "otbGeographicalDistance.h"
 #include "otbGenericRSTransform.h"
 #include <iomanip>
+#include "otbDEMHandler.h"
 
 typedef otb::Image<unsigned int>             ImageType;
 typedef otb::TileImageFilter<ImageType>      TileImageFilterType;

@@ -63,7 +63,7 @@ namespace otb
 
 SensorModelAdapter::SensorModelAdapter() : m_SensorModel(nullptr), m_TiePoints(nullptr) // FIXME keeping the original value but...
 {
-  m_DEMHandler = DEMHandler::Instance();
+  m_DEMHandler = OssimDEMHandler::Instance();
   m_TiePoints  = new ossimTieGptSet();
 }
 

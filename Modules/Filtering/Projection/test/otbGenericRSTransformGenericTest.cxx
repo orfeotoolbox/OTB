@@ -25,6 +25,7 @@
 #include "itkEuclideanDistanceMetric.h"
 #include "otbSpatialReference.h"
 #include "otbGeographicalDistance.h"
+#include "otbDEMHandler.h"
 
 typedef otb::Image<unsigned short>                          ImageType;
 typedef otb::ImageFileReader<ImageType>                     ReaderType;
