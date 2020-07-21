@@ -43,6 +43,8 @@ class OTBMetadata_EXPORT XMLMetadataSupplier
 {
 public:
   XMLMetadataSupplier(const std::string &);
+  XMLMetadataSupplier(const XMLMetadataSupplier &) = delete;
+  XMLMetadataSupplier& operator=(const XMLMetadataSupplier&) = delete;
 
   /**
    * @brief Get the metadata value corresponding to a given path

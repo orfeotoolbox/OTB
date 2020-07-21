@@ -549,7 +549,7 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
   std::string ManifestFilePath = mds->GetResourceFile(std::string("manifest\\.safe"));
   if (!ManifestFilePath.empty())
   {
-    XMLMetadataSupplier ManifestMS = XMLMetadataSupplier(ManifestFilePath);
+    XMLMetadataSupplier ManifestMS(ManifestFilePath);
     m_Imd.Add(MDTime::ProductionDate,
     		ManifestMS.GetFirstAs<MetaData::Time>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.start"));
     m_Imd.Add(MDTime::AcquisitionDate,
@@ -569,7 +569,7 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
                                                           + std::string("-.*\\.xml"));
     if (AnnotationFilePath.empty())
       otbGenericExceptionMacro(MissingMetadataException,<<"Missing Annotation file for band '"<<swath<<"'");
-    XMLMetadataSupplier AnnotationMS = XMLMetadataSupplier(AnnotationFilePath);
+    XMLMetadataSupplier AnnotationMS(AnnotationFilePath);
 
     sarParam.azimuthFmRate = this->GetAzimuthFmRate(AnnotationMS);
     sarParam.dopplerCentroid = this->GetDopplerCentroid(AnnotationMS);
@@ -587,7 +587,7 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
                                       + itksys::SystemTools::GetFilenameName(AnnotationFilePath);
     if (CalibrationFilePath.empty())
           otbGenericExceptionMacro(MissingMetadataException,<<"Missing Calibration file for band '"<<swath<<"'");
-    XMLMetadataSupplier CalibrationMS = XMLMetadataSupplier(CalibrationFilePath);
+    XMLMetadataSupplier CalibrationMS(CalibrationFilePath);
     m_Imd.Add(MDNum::CalScale, CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant"));
     sarParam.calibrationVectors = this->GetCalibrationVector(CalibrationMS);
     std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.startTime")) >> sarParam.calibrationStartTime;
@@ -599,7 +599,7 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
                                             + itksys::SystemTools::GetFilenameName(AnnotationFilePath);
     if (NoiseFilePath.empty())
           otbGenericExceptionMacro(MissingMetadataException,<<"Missing Noise file for band '"<<swath<<"'");
-    XMLMetadataSupplier NoiseMS = XMLMetadataSupplier(NoiseFilePath);
+    XMLMetadataSupplier NoiseMS(NoiseFilePath);
 
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
