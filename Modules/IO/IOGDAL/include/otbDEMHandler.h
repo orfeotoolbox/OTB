@@ -4,12 +4,35 @@
 #include "otbImage.h"
 #include "otbGDALDriverManagerWrapper.h"
 
-// C++ 17 : use std::optional instead
-#include <boost/optional.hpp>
-
 namespace otb
 {
-/**
+/** \class DEMHandler
+ *
+ * \brief Single access point for DEM data retrieval
+ *
+ * This class is the single configuration and access point for
+ * elevation handling in images projections and localization
+ * functions. Since this class is a singleton, there is no New() method. The
+ * DEMHandler::Instance() method should be used instead.
+ *
+ * Please be aware that a proper instantiation and parameter setting
+ * of this class is advised before any call to geometric filters or
+ * functionalities.
+ *
+ * The class allows configuring a directory containing DEM tiles
+ * (raster tiles will be opened by GDAL drivers) using the OpenDEMDirectory() 
+ * method. the OpenGeoidFile() method allows inputting a geoid file as well. 
+ * Last, a default height above ellipsoid can be set using the
+ * SetDefaultHeightAboveEllipsoid() method.
+ *
+ * The class allows retrieving either height above ellipsoid or
+ * height above Mean Sea Level (MSL).
+ *
+ * Here is the complete description of both methods output depending
+ * on the class configuration for the SRTM DEM (in the following, no
+ * SRTM means DEMDirectory not set, or no coverage for point, or
+ * srtm_value is no_data).
+ *
  * GetHeightAboveEllipsoid():
  * - SRTM and geoid both available: srtm_value + geoid_offset
  * - No SRTM but geoid available: geoid_offset
@@ -21,17 +44,20 @@ namespace otb
  * - No SRTM but geoid available: 0
  * - SRTM available, but no geoid: srtm_value
  * - No SRTM and no geoid available: 0
- * 
-*/
-
+ *
+ * \ingroup OTBIOGDAL
+ */
 class DEMHandler: public itk::Object
 {
 public:
-  /** Standard class typedefs. */
+  /** @name Standard class typedefs
+  * @{
+  */
   using Self =          DEMHandler;
   using Superclass =    itk::Object;
   using Pointer =       itk::SmartPointer<Self>;
   using ConstPointer =  itk::SmartPointer<const Self>;
+  /** @} */
 
   using PointType =     itk::Point<double, 2>;
 
@@ -41,51 +67,75 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(DEMHandler, Object);
 
-  /** Try to open the DEM directory. */
+  /** Try to open the DEM directory. 
+  * \param path input path
+  */
   void OpenDEMFile(const std::string & path);
 
-  /** Try to open the DEM directory. */
-  void OpenDEMDirectory(const char* DEMDirectory);
+  /** Try to open the DEM directory. 
+  * \param DEMDirectory input directory
+  */
   void OpenDEMDirectory(const std::string& DEMDirectory);
 
-  /** return true if the directory contain raster */
-  bool IsValidDEMDirectory(const char* DEMDirectory);
+  /** return true if the directory contain raster 
+  * \param DEMDirectory input directory
+  */
+  bool IsValidDEMDirectory(const std::string& DEMDirectory);
 
-  bool OpenGeoidFile(const char* geoidFile);
-
+  /** Try to open a geoid file 
+  * \param geoidFile input geoid path
+  */
   bool OpenGeoidFile(const std::string& geoidFile);
 
+  /** Return the height above the ellipsoid :
+   * - SRTM and geoid both available: srtm_value + geoid_offset
+   * - No SRTM but geoid available: geoid_offset
+   * - SRTM available, but no geoid: srtm_value
+   * - No SRTM and no geoid available: default height above ellipsoid
+   * \param lon input longitude
+   * \param lat input latitude
+   * \return height above ellipsoid
+  */
   double GetHeightAboveEllipsoid(double lon, double lat);
 
   double GetHeightAboveEllipsoid(const PointType& geoPoint);
-
+ 
+  /** Return the height above the mean sea level :
+   * - SRTM and geoid both available: srtm_value
+   * - No SRTM but geoid available: 0
+   * - SRTM available, but no geoid: srtm_value
+   * - No SRTM and no geoid available: 0
+   * \param lon input longitude
+   * \param lat input latitude
+   * \return height above mean sea level
+  */
   double GetHeightAboveMSL(double lon, double lat);
 
   double GetHeightAboveMSL(const PointType& geoPoint);
 
+  /** Return the number of DEM opened */
   unsigned int GetDEMCount() const;
   
   itkGetMacro(DefaultHeightAboveEllipsoid, double);
   itkSetMacro(DefaultHeightAboveEllipsoid, double);
 
-  /** Get DEM directory */
+  /** Get DEM directory 
+   * \param idx directory index
+   * \return the DEM directory corresponding to index idx
+   */
   std::string GetDEMDirectory(unsigned int idx = 0) const;
 
   /** Get Geoid file */
   std::string GetGeoidFile() const;
 
+  /** Clear the DEM list and close all DEM datasets */
   void ClearDEMs();
 
 protected: 
   DEMHandler(); 
 
-  ~DEMHandler() = default;
+  ~DEMHandler();
 
-  boost::optional<double> GetDEMValue(double lon, double lat, GDALDataset* ds);
-  
-  void CreateShiftedDataset();
-  
-private:
 
 private:
   DEMHandler(const Self&) = delete;
@@ -97,15 +147,9 @@ private:
   /** Pointer to the DEM dataset */
   GDALDataset * m_Dataset;
 
-  GDALDataset* m_shiftedDS;
-  
   /** Pointer to the geoid dataset */
   GDALDataset* m_GeoidDS;
   
-  bool m_ApplyVerticalDatum;
-  
-  GDALRasterIOExtraArg m_RasterIOArgs;
-
   static Pointer m_Singleton;
 
   /** Default height above elliposid, used when no DEM or geoid height is available. */

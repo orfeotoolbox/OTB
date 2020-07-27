@@ -4,8 +4,13 @@
 #include "boost/filesystem.hpp"
 #include "gdal_utils.h"
 
+//TODO C++ 17 : use std::optional instead
+#include <boost/optional.hpp>
 
 namespace otb {
+
+namespace DEMDetails {
+
 // Adapted from boost filesystem documentation : https://www.boost.org/doc/libs/1_53_0/libs/filesystem/doc/reference.html
 std::vector<std::string> GetFilesInDirectory(const std::string & directoryPath)
 {
@@ -37,6 +42,62 @@ std::vector<std::string> GetFilesInDirectory(const std::string & directoryPath)
   return fileList;
 }
 
+boost::optional<double> GetDEMValue(double lon, double lat, GDALDataset* ds)
+{
+  double geoTransform[6];
+  
+  ds->GetGeoTransform(geoTransform);
+
+  auto x = (lon - geoTransform[0]) / geoTransform[1] - 0.5;
+  auto y = (lat - geoTransform[3]) / geoTransform[5] - 0.5;
+
+  if (x < 0 || y < 0 || x > ds->GetRasterXSize() || y > ds->GetRasterYSize())
+  {
+    return boost::none;
+  }
+
+  auto x_int = static_cast<int>(x);
+  auto y_int = static_cast<int>(y);
+
+  auto deltaX = x - x_int;
+  auto deltaY = y - y_int;
+
+  if (x < 0 || y < 0 || x+1 > ds->GetRasterXSize() || y+1 > ds->GetRasterYSize())
+  {
+    return boost::none;
+  }
+  
+  // Bilinear interpolation.
+  double elevData[4];
+  
+  auto err = ds->GetRasterBand(1)->RasterIO( GF_Read, x_int, y_int, 2, 2,
+              elevData, 2, 2, GDT_Float64,
+              0, 0, nullptr);
+
+  if (err)
+  {
+    return boost::none;
+  }
+
+  // Test for no data. Don't return a value if one pixel 
+  // of the interpolation is no data.
+  for (int i =0; i<4; i++)
+  {
+    if (elevData[i] == ds->GetRasterBand(1)->GetNoDataValue())
+    {
+      return boost::none;
+    }
+  }
+
+  auto xBil1 = elevData[0] * (1-deltaX) + elevData[1] * deltaX;
+  auto xBil2 = elevData[2] * (1-deltaX) + elevData[3] * deltaX;
+
+  auto yBil = xBil1 * (1.0 - deltaY) + xBil2 * deltaY;
+  return yBil;
+}
+
+}  // namespace DEMDetails
+
 /** Initialize the singleton */
 DEMHandler::Pointer DEMHandler::m_Singleton = nullptr;
 
@@ -58,34 +119,28 @@ DEMHandler::Pointer DEMHandler::Instance()
 
 
 DEMHandler::DEMHandler() : m_Dataset(nullptr),
-                           m_shiftedDS(nullptr),
                            m_GeoidDS(nullptr),
-                           m_ApplyVerticalDatum(false), 
                            m_DefaultHeightAboveEllipsoid(0.0)
 {
   GDALAllRegister();
-  INIT_RASTERIO_EXTRA_ARG(m_RasterIOArgs);
-
-  //TODO : Setter for the resampling algorithm
-  // In OSSIM bilinear resampling is used
-  m_RasterIOArgs.eResampleAlg = GDALRIOResampleAlg::GRIORA_Bilinear;
 };
 
-void DEMHandler::OpenDEMFile(const std::string & path)
+DEMHandler::~DEMHandler()
+{
+  GDALClose(m_GeoidDS);
+  ClearDEMs();
+}
+
+void DEMHandler::OpenDEMFile(const std::string& path)
 {
   m_DatasetList.push_back(otb::GDALDriverManagerWrapper::GetInstance().Open(path));
   m_Dataset = m_DatasetList.back()->GetDataSet();
   m_DEMDirectories.push_back(path);
-  
-  if (m_GeoidDS)
-  {
-    CreateShiftedDataset();
-  }
 }
 
 void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
 {
-  auto demFiles = GetFilesInDirectory(DEMDirectory);
+  auto demFiles = DEMDetails::GetFilesInDirectory(DEMDirectory);
   for (const auto & file : demFiles)
   {
     auto ds = otb::GDALDriverManagerWrapper::GetInstance().Open(file);
@@ -125,173 +180,33 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
       delete[] vrtDatasetList;
     }
     
-    if (m_GeoidDS)
-    {
-      CreateShiftedDataset();
-    }
-  }
-}
-
-void DEMHandler::OpenDEMDirectory(const char* DEMDirectory)
-{
-  OpenDEMDirectory(std::string(DEMDirectory));
-}
-
-boost::optional<double> DEMHandler::GetDEMValue(double lon, double lat, GDALDataset* ds)
-{
-  double value= 0.;
-  GDALRasterIOExtraArg extraArgs = m_RasterIOArgs;
-  
-  extraArgs.nVersion = 1;
-  
-  double geoTransform[6];
-  
-  ds->GetGeoTransform(geoTransform);
-
-  auto x = (lon - geoTransform[0]) / geoTransform[1] - 0.5;
-  auto y = (lat - geoTransform[3]) / geoTransform[5] - 0.5;
-
-  if (x < 0 || y < 0 || x > ds->GetRasterXSize() || y > ds->GetRasterYSize())
-  {
-    //std::cout << "invalid coordinates" << std::endl;
-    return boost::none;
-  }
-
-#if 0
-extraArgs.eResampleAlg = GDALRIOResampleAlg::GRIORA_Bilinear;
-  extraArgs.bFloatingPointWindowValidity = TRUE;
-  extraArgs.dfXOff = x;
-  extraArgs.dfYOff = y;
-  extraArgs.dfXSize = 1;
-  extraArgs.dfYSize = 1;
-
-  //ds->GetRasterBand(1)->GetNoDataValue() << std::endl;
-/*
-  auto err = ds->GetRasterBand(1)->RasterIO( GF_Read, static_cast<int>(x), static_cast<int>(y), 1, 1,
-              &value, 1, 1, GDT_Float64,
-              0, 0, &extraArgs);
-  */
-  auto err = ds->RasterIO( GF_Read, static_cast<int>(x), static_cast<int>(y), 1, 1,
-              &value, 1, 1, GDT_Float64, 1, nullptr,
-              0, 0,0, &extraArgs);
-  
-  if (err || value == ds->GetRasterBand(1)->GetNoDataValue())
-  {
-    return boost::none;
-  }
-  
-  //std::cout << "value :" << value << std::endl;
-  return value;
-
-#else
-  auto x_int = static_cast<int>(x);
-  auto y_int = static_cast<int>(y);
-
-  auto deltaX = x - x_int;
-  auto deltaY = y - y_int;
-/*
-  std::cout <<"x="<< x << " y=" << y << std::endl;
-  std::cout <<"x_int="<< x_int << " y_int=" << y_int << std::endl;
-  std::cout <<"deltaX="<< deltaX << " deltaY=" << deltaY << std::endl;
-  */
-  if (x < 0 || y < 0 || x+1 > ds->GetRasterXSize() || y+1 > ds->GetRasterYSize())
-  {
-    //std::cout << "invalid coordinates" << std::endl;
-    return boost::none;
-  }
-  
-  // Bilinear interpolation.
-  double elevData[4];
-  
-  auto err = ds->GetRasterBand(1)->RasterIO( GF_Read, x_int, y_int, 2, 2,
-              elevData, 2, 2, GDT_Float64,
-              0, 0, &extraArgs);
-
-  // Test for no data. Don't return a value if one pixel 
-  // of the interpolation is no data.
-  for (int i =0; i<4; i++)
-  {
-    if (elevData[i] == ds->GetRasterBand(1)->GetNoDataValue())
-    {
-      return boost::none;
-    }
-  }
-
-  auto xBil1 = elevData[0] * (1-deltaX) + elevData[1] * deltaX;
-  auto xBil2 = elevData[2] * (1-deltaX) + elevData[3] * deltaX;
-
-  auto yBil = xBil1 * (1.0 - deltaY) + xBil2 * deltaY;
-  return yBil; 
-  
-#endif
-}
-
-bool DEMHandler::OpenGeoidFile(const char* geoidFile)
-{
-  int pbError;
-
-  m_GeoidDS = static_cast<GDALDataset*>(GDALOpenVerticalShiftGrid(geoidFile, &pbError));
-  m_GeoidFilename = geoidFile;
-
-  if (m_Dataset)
-  {
-    CreateShiftedDataset();
   }
 }
 
 bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
-{
-  OpenGeoidFile(geoidFile.c_str());
-}
+{  
+  if (m_GeoidDS)
+  {
+    GDALClose(m_GeoidDS);
+  }
 
-void DEMHandler::CreateShiftedDataset()
-{
-  char **papszOptions = nullptr;
-  // Geoid resampling is bilinear in OSSIM
-  papszOptions = CSLSetNameValue( papszOptions, "RESAMPLING", "BILINEAR" ); // RESAMPLING=NEAREST/BILINEAR/CUBIC
-  papszOptions = CSLSetNameValue( papszOptions, "MAX_ERROR", "0" ); //MAX_ERROR=val
-  papszOptions = CSLSetNameValue( papszOptions, "DATATYPE", "Float64" ); //DATATYPE=Byte/UInt16/Int16/Float32/Float64
-  // ERROR_ON_MISSING_VERT_SHIFT=YES/NO
-  // SRC_SRS=srs_def 
+  int pbError;
 
-  m_shiftedDS = static_cast<GDALDataset*>( GDALApplyVerticalShiftGrid( m_Dataset,
-                                            m_GeoidDS,
-                                           false,
-                                           1.0,
-                                           1.0,
-                                           papszOptions ));
+  m_GeoidDS = static_cast<GDALDataset*>(GDALOpenVerticalShiftGrid(geoidFile.c_str(), &pbError));
+  m_GeoidFilename = geoidFile;
 
-  m_ApplyVerticalDatum = true;
+  return pbError;
 }
 
 double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat)
 {
-#if 0
-  auto ds = m_Dataset && m_GeoidDS ? m_shiftedDS
-           : m_Dataset ? m_Dataset
-           : m_GeoidDS ? m_GeoidDS
-           : nullptr;
-
-  if (ds)
-  {
-    auto result = GetDEMValue(lon, lat, ds);
-    if (result)
-    {
-      return *result;
-    }
-  }
-
-  return m_DefaultHeightAboveEllipsoid;
-#else
   double result = 0.;
   boost::optional<double> DEMresult;
   boost::optional<double> geoidResult;
 
-
-
   if (m_Dataset)
   {
-    DEMresult = GetDEMValue(lon, lat, m_Dataset);
+    DEMresult = DEMDetails::GetDEMValue(lon, lat, m_Dataset);
     if (DEMresult)
     {
       result += *DEMresult;
@@ -301,7 +216,7 @@ double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat)
 
   if (m_GeoidDS)
   {
-    geoidResult = GetDEMValue(lon, lat, m_GeoidDS);
+    geoidResult = DEMDetails::GetDEMValue(lon, lat, m_GeoidDS);
     if (geoidResult)
     {
       result += *geoidResult;
@@ -312,7 +227,6 @@ double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat)
     return result;
   else
     return m_DefaultHeightAboveEllipsoid;
-#endif
 }
 
 double DEMHandler::GetHeightAboveEllipsoid(const PointType& geoPoint)
@@ -324,7 +238,7 @@ double DEMHandler::GetHeightAboveMSL(double lon, double lat)
 {
   if (m_Dataset)
   { 
-    auto result = GetDEMValue(lon, lat, m_Dataset);
+    auto result = DEMDetails::GetDEMValue(lon, lat, m_Dataset);
     
     if (result)
     {
@@ -345,9 +259,9 @@ unsigned int DEMHandler::GetDEMCount() const
   return m_DatasetList.size();
 }
 
-bool DEMHandler::IsValidDEMDirectory(const char* DEMDirectory)
+bool DEMHandler::IsValidDEMDirectory(const std::string& DEMDirectory)
 {
-  for (const auto & filename : GetFilesInDirectory(DEMDirectory))
+  for (const auto & filename : DEMDetails::GetFilesInDirectory(DEMDirectory))
   {
     // test if a driver can identify this dataset
     auto identifyDriverH = static_cast<GDALDriver *>(GDALIdentifyDriver(filename.c_str(), nullptr));
@@ -363,9 +277,13 @@ bool DEMHandler::IsValidDEMDirectory(const char* DEMDirectory)
 std::string DEMHandler::GetDEMDirectory(unsigned int idx) const
 {
   if (idx >= m_DEMDirectories.size())
+  {
     return "";
+  }
   else
+  {
     return m_DEMDirectories[idx];
+  }
 }
 
 std::string DEMHandler::GetGeoidFile() const
@@ -377,7 +295,6 @@ void DEMHandler::ClearDEMs()
 {
   m_DEMDirectories.clear();
 
-  GDALClose(m_shiftedDS);
   // This will call GDALClose on all datasets
   m_DatasetList.clear();
 }
