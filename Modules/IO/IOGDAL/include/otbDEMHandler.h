@@ -87,12 +87,19 @@ protected:
   
 private:
 
+private:
+  DEMHandler(const Self&) = delete;
+  void operator=(const Self&) = delete;
+
+  /** List of RAII capsules on all opened DEM datasets for memory management */
   std::vector<otb::GDALDatasetWrapper::Pointer> m_DatasetList;
   
+  /** Pointer to the DEM dataset */
   GDALDataset * m_Dataset;
 
   GDALDataset* m_shiftedDS;
   
+  /** Pointer to the geoid dataset */
   GDALDataset* m_GeoidDS;
   
   bool m_ApplyVerticalDatum;
@@ -101,10 +108,13 @@ private:
 
   static Pointer m_Singleton;
 
+  /** Default height above elliposid, used when no DEM or geoid height is available. */
   double m_DefaultHeightAboveEllipsoid;
 
+  /** List of the DEM directories currently opened */
   std::vector<std::string> m_DEMDirectories;
 
+  /** Filename of the current geoid */
   std::string m_GeoidFilename;
 
 };

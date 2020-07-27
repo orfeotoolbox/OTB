@@ -86,7 +86,6 @@ void DEMHandler::OpenDEMFile(const std::string & path)
 void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
 {
   auto demFiles = GetFilesInDirectory(DEMDirectory);
-  
   for (const auto & file : demFiles)
   {
     auto ds = otb::GDALDriverManagerWrapper::GetInstance().Open(file);
@@ -134,12 +133,12 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
 }
 
 void DEMHandler::OpenDEMDirectory(const char* DEMDirectory)
-{ 
-  OpenDEMDirectory(DEMDirectory);
+{
+  OpenDEMDirectory(std::string(DEMDirectory));
 }
 
 boost::optional<double> DEMHandler::GetDEMValue(double lon, double lat, GDALDataset* ds)
-{std::cout << "hey " << m_Dataset << " " << m_GeoidDS << " " << m_shiftedDS << " " << std::endl;
+{
   double value= 0.;
   GDALRasterIOExtraArg extraArgs = m_RasterIOArgs;
   
@@ -151,26 +150,80 @@ boost::optional<double> DEMHandler::GetDEMValue(double lon, double lat, GDALData
 
   auto x = (lon - geoTransform[0]) / geoTransform[1] - 0.5;
   auto y = (lat - geoTransform[3]) / geoTransform[5] - 0.5;
-  std::cout <<"x="<< x << " y=" << y << std::endl;
-  
+
   if (x < 0 || y < 0 || x > ds->GetRasterXSize() || y > ds->GetRasterYSize())
   {
-    std::cout << "invalid coordinates" << std::endl;
+    //std::cout << "invalid coordinates" << std::endl;
     return boost::none;
   }
 
+#if 0
+extraArgs.eResampleAlg = GDALRIOResampleAlg::GRIORA_Bilinear;
   extraArgs.bFloatingPointWindowValidity = TRUE;
   extraArgs.dfXOff = x;
   extraArgs.dfYOff = y;
   extraArgs.dfXSize = 1;
   extraArgs.dfYSize = 1;
 
+  //ds->GetRasterBand(1)->GetNoDataValue() << std::endl;
+/*
   auto err = ds->GetRasterBand(1)->RasterIO( GF_Read, static_cast<int>(x), static_cast<int>(y), 1, 1,
               &value, 1, 1, GDT_Float64,
               0, 0, &extraArgs);
+  */
+  auto err = ds->RasterIO( GF_Read, static_cast<int>(x), static_cast<int>(y), 1, 1,
+              &value, 1, 1, GDT_Float64, 1, nullptr,
+              0, 0,0, &extraArgs);
   
-  std::cout << "value :" << value << std::endl;
+  if (err || value == ds->GetRasterBand(1)->GetNoDataValue())
+  {
+    return boost::none;
+  }
+  
+  //std::cout << "value :" << value << std::endl;
   return value;
+
+#else
+  auto x_int = static_cast<int>(x);
+  auto y_int = static_cast<int>(y);
+
+  auto deltaX = x - x_int;
+  auto deltaY = y - y_int;
+/*
+  std::cout <<"x="<< x << " y=" << y << std::endl;
+  std::cout <<"x_int="<< x_int << " y_int=" << y_int << std::endl;
+  std::cout <<"deltaX="<< deltaX << " deltaY=" << deltaY << std::endl;
+  */
+  if (x < 0 || y < 0 || x+1 > ds->GetRasterXSize() || y+1 > ds->GetRasterYSize())
+  {
+    //std::cout << "invalid coordinates" << std::endl;
+    return boost::none;
+  }
+  
+  // Bilinear interpolation.
+  double elevData[4];
+  
+  auto err = ds->GetRasterBand(1)->RasterIO( GF_Read, x_int, y_int, 2, 2,
+              elevData, 2, 2, GDT_Float64,
+              0, 0, &extraArgs);
+
+  // Test for no data. Don't return a value if one pixel 
+  // of the interpolation is no data.
+  for (int i =0; i<4; i++)
+  {
+    if (elevData[i] == ds->GetRasterBand(1)->GetNoDataValue())
+    {
+      return boost::none;
+    }
+  }
+
+  auto xBil1 = elevData[0] * (1-deltaX) + elevData[1] * deltaX;
+  auto xBil2 = elevData[2] * (1-deltaX) + elevData[3] * deltaX;
+
+  auto yBil = xBil1 * (1.0 - deltaY) + xBil2 * deltaY;
+  return yBil; 
+  
+#endif
 }
 
 bool DEMHandler::OpenGeoidFile(const char* geoidFile)
@@ -213,6 +266,7 @@ void DEMHandler::CreateShiftedDataset()
 
 double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat)
 {
+#if 0
   auto ds = m_Dataset && m_GeoidDS ? m_shiftedDS
            : m_Dataset ? m_Dataset
            : m_GeoidDS ? m_GeoidDS
@@ -228,6 +282,37 @@ double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat)
   }
 
   return m_DefaultHeightAboveEllipsoid;
+#else
+  double result = 0.;
+  boost::optional<double> DEMresult;
+  boost::optional<double> geoidResult;
+
+
+
+  if (m_Dataset)
+  {
+    DEMresult = GetDEMValue(lon, lat, m_Dataset);
+    if (DEMresult)
+    {
+      result += *DEMresult;
+    }
+  }
+
+
+  if (m_GeoidDS)
+  {
+    geoidResult = GetDEMValue(lon, lat, m_GeoidDS);
+    if (geoidResult)
+    {
+      result += *geoidResult;
+    }
+  }
+
+  if (DEMresult || geoidResult)
+    return result;
+  else
+    return m_DefaultHeightAboveEllipsoid;
+#endif
 }
 
 double DEMHandler::GetHeightAboveEllipsoid(const PointType& geoPoint)
