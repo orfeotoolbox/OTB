@@ -177,12 +177,12 @@ otb_add_test(NAME bfTvStreamingResampleImageFilterWithAffineTransform COMMAND ot
   ${TEMP}/bfTvotbStreamingResampledImageWithAffineTransform.tif
   )
 
-otb_add_test(NAME uaTvSarSensorModelAdapter COMMAND otbOSSIMAdaptersTestDriver
+otb_add_test(NAME uaTvSarSensorModelAdapter COMMAND otbTransformTestDriver
   otbSarSensorModelAdapterTest
   ${INPUTDATA}/s1a-iw1-slc-vh-amp_xt.geom
   )
 
-otb_add_test(NAME uaTvSarSensorModelAdapter2 COMMAND otbOSSIMAdaptersTestDriver
+otb_add_test(NAME uaTvSarSensorModelAdapter2 COMMAND otbTransformTestDriver
   otbSarSensorModelAdapterTest
   ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.geom
   )
