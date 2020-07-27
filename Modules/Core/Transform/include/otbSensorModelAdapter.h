@@ -21,7 +21,7 @@
 #ifndef otbSensorModelAdapter_h
 #define otbSensorModelAdapter_h
 
-#include "otbOssimDEMHandler.h"
+#include "otbDEMHandler.h"
 
 class ossimProjection;
 class ossimTieGptSet;
@@ -44,10 +44,10 @@ class ImageKeywordlist;
  * \ingroup Projection
  *
  *
- * \ingroup OTBOSSIMAdapters
+ * \ingroup OTBTransform
  **/
 
-class OTBOSSIMAdapters_EXPORT SensorModelAdapter : public itk::Object
+class ITK_EXPORT SensorModelAdapter : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -118,7 +118,7 @@ private:
   InternalTiePointsContainerPointer m_TiePoints;
 
   /** Object that read and use DEM */
-  OssimDEMHandler::Pointer m_DEMHandler;
+  DEMHandler::Pointer m_DEMHandler;
 };
 
 } // namespace otb

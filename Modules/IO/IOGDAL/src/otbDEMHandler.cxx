@@ -26,6 +26,9 @@
 //TODO C++ 17 : use std::optional instead
 #include <boost/optional.hpp>
 
+// TODO : RemoveOSSIM
+#include <otbOssimDEMHandler.h>
+
 namespace otb {
 
 namespace DEMDetails {
@@ -158,7 +161,10 @@ void DEMHandler::OpenDEMFile(const std::string& path)
 }
 
 void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
-{
+{  
+  // TODO : RemoveOSSIM
+  OssimDEMHandler::Instance()->OpenDEMDirectory(DEMDirectory);
+
   auto demFiles = DEMDetails::GetFilesInDirectory(DEMDirectory);
   for (const auto & file : demFiles)
   {
@@ -204,6 +210,9 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
 
 bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
 {  
+  // TODO : RemoveOSSIM
+  OssimDEMHandler::Instance()->OpenGeoidFile(geoidFile);
+
   if (m_GeoidDS)
   {
     GDALClose(m_GeoidDS);
@@ -312,10 +321,21 @@ std::string DEMHandler::GetGeoidFile() const
 
 void DEMHandler::ClearDEMs()
 {
+  // TODO : RemoveOSSIM
+  // This should be call, but this causes a segfault ... OssimDEMHandler will
+  // be removed in a near future anyway
+  // OssimDEMHandler::Instance()->ClearDEMs();
   m_DEMDirectories.clear();
 
   // This will call GDALClose on all datasets
   m_DatasetList.clear();
 }
 
+void DEMHandler::SetDefaultHeightAboveEllipsoid(double height)
+{
+  OssimDEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(height);
+
+  m_DefaultHeightAboveEllipsoid = height;
 }
+
+} // namespace otb

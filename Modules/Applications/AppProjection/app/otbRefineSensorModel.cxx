@@ -166,7 +166,6 @@ private:
         lat                            = atof(line.substr(pos, nextpos).c_str());
 
         z = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(lon, lat);
-        std::cout << "diff " << z <<  " " << otb::OssimDEMHandler::Instance()->GetHeightAboveEllipsoid(lon, lat) << std::endl;;
 
         otbAppLogDEBUG("Adding tie point x=" << x << ", y=" << y << ", z=" << z << ", lon=" << lon << ", lat=" << lat);
 

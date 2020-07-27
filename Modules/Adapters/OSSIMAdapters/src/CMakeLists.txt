@@ -21,11 +21,9 @@
 set(OTBOSSIMAdapters_SRC
   otbOssimDEMHandler.cxx
   otbImageKeywordlist.cxx
-  otbSensorModelAdapter.cxx
   otbRPCSolverAdapter.cxx
   otbDateTimeAdapter.cxx
   otbEllipsoidAdapter.cxx
-  otbSarSensorModelAdapter.cxx
   )
 
 add_library(OTBOSSIMAdapters ${OTBOSSIMAdapters_SRC})

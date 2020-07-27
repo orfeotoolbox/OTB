@@ -57,7 +57,7 @@
 #include "ossim/base/ossimNotify.h"
 #endif
 
-#include "otbSensorModelAdapter.h"
+//#include "otbSensorModelAdapter.h"
 #include <memory>
 #include <boost/scoped_ptr.hpp>
 #include <boost/algorithm/string/predicate.hpp>

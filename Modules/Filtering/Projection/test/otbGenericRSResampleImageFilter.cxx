@@ -30,7 +30,6 @@
 #include "itkUnaryFunctorImageFilter.h"
 
 #include "otbDEMHandler.h"
-#include "otbOssimDEMHandler.h"
 
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "otbGenericRSResampleImageFilter.h"
@@ -130,12 +129,10 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
   if (atoi(argv[12]) == 1) // mode = no DEM
   {
     otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(135.8);
-    otb::OssimDEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(135.8);
   }
   else if ((atoi(argv[12]) == 2) || (atoi(argv[12]) == 3)) // mode = DEM SRTM || DEM GTIFF
   {
     otb::DEMHandler::Instance()->OpenDEMDirectory(argv[13]);
-    otb::OssimDEMHandler::Instance()->OpenDEMDirectory(argv[13]);
   }
 
   writer->SetInput(orthoRectifFilter->GetOutput());

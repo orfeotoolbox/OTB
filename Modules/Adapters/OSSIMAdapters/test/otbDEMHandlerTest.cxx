@@ -20,7 +20,7 @@
 
 
 #include "itkMacro.h"
-#include "otbOssimDEMHandler.h"
+#include "otbDEMHandler.h"
 
 int otbDEMHandlerTest(int argc, char* argv[])
 {
@@ -40,7 +40,7 @@ int otbDEMHandlerTest(int argc, char* argv[])
   double      target        = atof(argv[7]);
   double      tolerance     = atof(argv[8]);
 
-  otb::OssimDEMHandler::Pointer demHandler = otb::OssimDEMHandler::Instance();
+  otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
   demHandler->SetDefaultHeightAboveEllipsoid(defaultHeight);
 
   bool fail = false;
@@ -78,7 +78,7 @@ int otbDEMHandlerTest(int argc, char* argv[])
 
   std::cout << "PrintSelf: " << demHandler << std::endl;
 
-  otb::OssimDEMHandler::PointType point;
+  otb::DEMHandler::PointType point;
   point[0] = longitude;
   point[1] = latitude;
 

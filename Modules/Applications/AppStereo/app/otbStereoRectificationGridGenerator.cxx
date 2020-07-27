@@ -312,7 +312,6 @@ private:
       m_StatisticsFilter->Update();
 
       otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(m_StatisticsFilter->GetMean());
-      otb::OssimDEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(m_StatisticsFilter->GetMean());
 
       EnableParameter("epi.elevation.avgdem.value");
       SetParameterFloat("epi.elevation.avgdem.value", m_StatisticsFilter->GetMean());

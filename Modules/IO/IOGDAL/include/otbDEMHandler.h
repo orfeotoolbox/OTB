@@ -137,7 +137,8 @@ public:
   unsigned int GetDEMCount() const;
   
   itkGetMacro(DefaultHeightAboveEllipsoid, double);
-  itkSetMacro(DefaultHeightAboveEllipsoid, double);
+  
+  void SetDefaultHeightAboveEllipsoid(double height);
 
   /** Get DEM directory 
    * \param idx directory index

@@ -73,7 +73,6 @@ int produceGCP(char* outputgcpfilename, const otb::ImageKeywordlist& kwlist, boo
   }
 
   otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(z);
-  otb::OssimDEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(z);
 
   // ossim classes
   ossimKeywordlist ossimKwlist;
@@ -349,7 +348,6 @@ int otbSensorModel(int argc, char* argv[])
 
     double z = geo3dPoint[2];
     otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(z);
-    otb::OssimDEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(z);
 
     // otbForwardSensorModel and otbInverseSensorModel
     geoPoint           = forwardSensorModel->TransformPoint(imagePoint);

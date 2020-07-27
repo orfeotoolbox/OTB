@@ -20,7 +20,6 @@
 
 #include "otbWrapperElevationParametersHandler.h"
 #include "otbDEMHandler.h"
-#include "otbOssimDEMHandler.h"
 
 
 namespace otb
@@ -102,7 +101,6 @@ void ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(const Ap
 {
   // Set default elevation
   otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(GetDefaultElevation(app, key));
-  otb::OssimDEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(GetDefaultElevation(app, key));
 
 
   std::ostringstream oss;
@@ -116,7 +114,6 @@ void ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(const Ap
     oss.str("");
     oss << "Elevation management: using geoid file (" << GetGeoidFile(app, key) << ")" << std::endl;
     otb::DEMHandler::Instance()->OpenGeoidFile(GetGeoidFile(app, key));
-    otb::OssimDEMHandler::Instance()->OpenGeoidFile(GetGeoidFile(app, key));
     
     app->GetLogger()->Info(oss.str());
   }
@@ -130,7 +127,6 @@ void ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(const Ap
       oss.str("");
       oss << "Elevation management: using DEM directory (" << demDirectory << ")" << std::endl;
       otb::DEMHandler::Instance()->OpenDEMDirectory(demDirectory);
-      otb::OssimDEMHandler::Instance()->OpenDEMDirectory(demDirectory);
       app->GetLogger()->Info(oss.str());
     }
     else

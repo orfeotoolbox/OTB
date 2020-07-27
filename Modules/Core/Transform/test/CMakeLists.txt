@@ -34,9 +34,13 @@ otbStreamingWarpImageFilter.cxx
 otbInverseLogPolarTransform.cxx
 otbInverseLogPolarTransformResample.cxx
 otbStreamingResampleImageFilterWithAffineTransform.cxx
+otbSarSensorModelAdapterTest.cxx
 )
 
 add_executable(otbTransformTestDriver ${OTBTransformTests})
+
+message(yo)
+message(${OTBTransform-Test_LIBRARIES})
 target_link_libraries(otbTransformTestDriver ${OTBTransform-Test_LIBRARIES})
 otb_module_target_label(otbTransformTestDriver)
 
@@ -171,4 +175,14 @@ otb_add_test(NAME bfTvStreamingResampleImageFilterWithAffineTransform COMMAND ot
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   500
   ${TEMP}/bfTvotbStreamingResampledImageWithAffineTransform.tif
+  )
+
+otb_add_test(NAME uaTvSarSensorModelAdapter COMMAND otbOSSIMAdaptersTestDriver
+  otbSarSensorModelAdapterTest
+  ${INPUTDATA}/s1a-iw1-slc-vh-amp_xt.geom
+  )
+
+otb_add_test(NAME uaTvSarSensorModelAdapter2 COMMAND otbOSSIMAdaptersTestDriver
+  otbSarSensorModelAdapterTest
+  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.geom
   )

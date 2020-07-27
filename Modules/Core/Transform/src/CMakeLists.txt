@@ -18,29 +18,20 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module contains additional geometric transformations
-that are more suitable to remote sensing (compared to the ones already available in
-itk -see itk::Transform-). this mainly concerns transformations of coordinates
-from any map projection or sensor model to any map projection or sensor model.")
+set(OTBTransform_SRC
+  otbSensorModelAdapter.cxx
+  otbSarSensorModelAdapter.cxx
+  )
 
-otb_module(OTBTransform
-  DEPENDS
-    OTBBoost
-    OTBCommon
-    OTBGDAL
-    OTBITK
-    OTBInterpolation
-    OTBOSSIMAdapters
-    OTBMetadata
-    OTBGdalAdapters
-    OTBIOGDAL
-  TEST_DEPENDS
-    OTBImageBase
-    OTBImageIO
-    OTBImageManipulation
-    OTBOssim
-    OTBTestKernel
+add_library(OTBTransform ${OTBTransform_SRC})
+target_link_libraries(OTBTransform
+  ${OTBOSSIMAdapters_LIBRARIES}
+  ${OTBGDAL_LIBRARIES}
+  ${OTBCommon_LIBRARIES}
+  ${OTBOssim_LIBRARIES}
+  ${OTBOssimPlugins_LIBRARIES}
+  ${OTBOpenThreads_LIBRARIES}
+  ${OTBIOGDAL_LIBRARIES}
+  )
 
-  DESCRIPTION
-    "${DOCUMENTATION}"
-)
+otb_module_target(OTBTransform)
