@@ -125,5 +125,3 @@ ExternalProject_Add(OPENCV
   )
 
 SUPERBUILD_PATCH_SOURCE(OPENCV)
-
-set(_SB_OpenCV_DIR ${SB_INSTALL_PREFIX}/share/OpenCV)
