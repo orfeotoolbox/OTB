@@ -147,16 +147,22 @@ public:
   Please use bool GetSensorID(std::string& ) **/
   std::string const GetSensorID() const;
 
-  /** Get the sensor ID from the ossim metadata */
+  /** Get the sensor ID from the ossim metadata
+   * \deprecated
+   */
   bool GetSensorID(std::string& sensorId) const;
 
   // otbMetadataGetMacro(SensorID, std::string);
 
-  /** Get the number of bands from the ossim metadata */
+  /** Get the number of bands from the ossim metadata
+   * \deprecated
+   */
   UnsignedIntType GetNumberOfBands() const;
   // otbMetadataGetMacro(NumberOfBands, unsigned int);
 
-  /** Get the band name from the ossim metadata */
+  /** Get the band name from the ossim metadata
+   * \deprecated
+   */
   StringVectorType GetBandName() const;
   // otbMetadataGetMacro(BandName, std::vector<std::string>);
 
@@ -168,39 +174,57 @@ public:
   double GetYPixelSpacing() const;
   // otbMetadataGetMacro(YPixelSpacing, double);
 
-  /** Get the imaging acquisition day from the ossim metadata */
+  /** Get the imaging acquisition day from the ossim metadata
+   * \deprecated
+   */
   virtual int GetDay() const = 0;
   //  otbMetadataGetMacro(Day, int);
 
-  /** Get the imaging acquisition month from the ossim metadata */
+  /** Get the imaging acquisition month from the ossim metadata
+   * \deprecated
+   */
   virtual int GetMonth() const = 0;
   // otbMetadataGetMacro(Month, int);
 
-  /** Get the imaging acquisition year from the ossim metadata */
+  /** Get the imaging acquisition year from the ossim metadata
+   * \deprecated
+   */
   virtual int GetYear() const = 0;
   // otbMetadataGetMacro(Year, int);
 
-  /** Get the imaging acquisition hour from the ossim metadata */
+  /** Get the imaging acquisition hour from the ossim metadata
+   * \deprecated
+   */
   virtual int GetHour() const = 0;
   // otbMetadataGetMacro(Hour, int);
 
-  /** Get the imaging acquisition minute from the ossim metadata */
+  /** Get the imaging acquisition minute from the ossim metadata
+   * \deprecated
+   */
   virtual int GetMinute() const = 0;
   // otbMetadataGetMacro(Minute, int);
 
-  /** Get the imaging production day from the ossim metadata */
+  /** Get the imaging production day from the ossim metadata
+   * \deprecated
+   */
   virtual int GetProductionDay() const = 0;
   // otbMetadataGetMacro(ProductionDay, int);
 
-  /** Get the imaging production month from the ossim metadata */
+  /** Get the imaging production month from the ossim metadata
+   * \deprecated
+   */
   virtual int GetProductionMonth() const = 0;
   // otbMetadataGetMacro(ProductionMonth, int);
 
-  /** Get the imaging production year from the ossim metadata */
+  /** Get the imaging production year from the ossim metadata
+   * \deprecated
+   */
   virtual int GetProductionYear() const = 0;
   // otbMetadataGetMacro(ProductionYear, int);
 
-  /** Convert the band names provided by ossim to the official band names  */
+  /** Convert the band names provided by ossim to the official band names
+   * \deprecated
+   */
   virtual StringVectorType GetEnhancedBandNames() const = 0;
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
