@@ -363,7 +363,7 @@ bool I18nCoreApplication::ElevationSetup()
     {
       QString filename(I18nCoreApplication::RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_GEOID_PATH).toString());
 
-      geoidUpdated = demHandlerInstance->OpenGeoidFile(QFile::encodeName(filename));
+      geoidUpdated = demHandlerInstance->OpenGeoidFile(QFile::encodeName(filename).toStdString());
 
       // BUGFIX: When geoid file has not been updated by
       // otb::DEMHandler, the filename may be erroneous and unchecked
@@ -399,7 +399,7 @@ bool I18nCoreApplication::ElevationSetup()
     {
       demHandlerInstance->ClearDEMs();
 
-      demHandlerInstance->OpenDEMDirectory(QFile::encodeName(I18nCoreApplication::RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR).toString()));
+      demHandlerInstance->OpenDEMDirectory(QFile::encodeName(I18nCoreApplication::RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR).toString()).toStdString());
     }
     catch (const std::exception& err)
     {
