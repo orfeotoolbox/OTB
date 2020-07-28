@@ -114,7 +114,6 @@ ImageMetadataInterfaceFactory
         }
       catch(MissingMetadataException& e)
         {
-        std::cout << io->GetNameOfClass() <<" : "<<  e.what() << "\n";
         // silent catch of MissingMetadataException
         // just means that this IMI can't parse the file
         }

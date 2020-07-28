@@ -489,9 +489,6 @@ void GDALImageIO::InternalReadImageInformation()
     tempSize.first  = GDALGetRasterBandXSize(dataset->GetRasterBand(1)->GetOverview(iOverview));
     tempSize.second = GDALGetRasterBandYSize(dataset->GetRasterBand(1)->GetOverview(iOverview));
     m_OverviewsSize.push_back(tempSize);
-
-    /*std::cout << "Overviews size of input file" << m_FileName << ": "
-              <<  m_OverviewsSize.back().first << " x " << m_OverviewsSize.back().second <<   std::endl; */
   }
 
   this->SetNumberOfComponents(m_NbBands);
