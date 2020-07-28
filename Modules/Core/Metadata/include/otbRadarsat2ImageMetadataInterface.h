@@ -56,13 +56,19 @@ public:
   //  typedef Radarsat2CalibrationLookupData::Pointer          LookupDataPointerType;
 
   /*ImageMetadataInterfaceBase pure virtuals */
-  /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
+  /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable
+   * \deprecated
+   */
   int GetProductionDay() const override;
 
-  /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
+  /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable
+   * \deprecated
+   */
   int GetProductionMonth() const override;
 
-  /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
+  /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable
+   * \deprecated
+   */
   int GetProductionYear() const override;
 
   /** check sensor ID */
