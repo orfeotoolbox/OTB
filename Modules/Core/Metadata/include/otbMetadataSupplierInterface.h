@@ -40,21 +40,7 @@ public:
   itkTypeMacro(MissingMetadataException, itk::ExceptionObject);
 
   /** Constructor. */
-  MissingMetadataException(const char* file, unsigned int line, const char* message = "Missing metadata", const char* loc = "Unknown")
-    : itk::ExceptionObject(file, line, message, loc)
-  {
-  }
-
-  /** Constructor. */
-  MissingMetadataException(const std::string& file, unsigned int line, const char* message = "Missing metadata", const char* loc = "Unknown")
-    : itk::ExceptionObject(file, line, message, loc)
-  {
-  }
-
-  MissingMetadataException(const std::string& file, unsigned int line, const std::string& message = "Missing metadata", const char* loc = "Unknown")
-    : itk::ExceptionObject(file, line, message, loc)
-  {
-  }
+  using itk::ExceptionObject::ExceptionObject;
 };
 
 /** \class MetadataSupplierInterface
