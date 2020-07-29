@@ -41,7 +41,15 @@ find_path( MUPARSER_INCLUDE_DIR muParser.h
 
 if(EXISTS "${MUPARSER_INCLUDE_DIR}/muParserDef.h")
   file(READ "${MUPARSER_INCLUDE_DIR}/muParserDef.h" _muParserDef_h_CONTENTS)
-  string(REGEX REPLACE ".*# *define MUP_VERSION *_T\\(\"([0-9.]+)\"\\).*" "\\1" MUPARSER_VERSION "${_muParserDef_h_CONTENTS}")
+  
+  # Try to find the version for muparser < 2.3
+  string(REGEX REPLACE ".*# *define MUP_VERSION *_T\\(\"([0-9.]+)\"\\).*" "\\1" 
+    MUPARSER_VERSION_OLD_STYLE "${_muParserDef_h_CONTENTS}")
+
+  # Try to find the version for muparser >= 2.3
+  string(REGEX REPLACE ".*static *const *string_type *ParserVersion *= *string_type\\(_T\\(\"([0-9.]+)\"\\)\\);.*" 
+      "\\1" MUPARSER_VERSION "${MUPARSER_VERSION_OLD_STYLE}")
+  
   if(MUPARSER_VERSION MATCHES "^[0-9]+\$")
     set(MUPARSER_VERSION "${MUPARSER_VERSION}.0.0")
   endif()
