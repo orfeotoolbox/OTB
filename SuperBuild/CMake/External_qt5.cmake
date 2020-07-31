@@ -98,7 +98,7 @@ if(UNIX)
     set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-framework")
   else()
       #Linux
-      set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-glib -no-fontconfig")
+      set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -linker gold -no-glib -no-fontconfig")
   endif()
   #common for all unix
   set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-dbus -no-icu -v")
