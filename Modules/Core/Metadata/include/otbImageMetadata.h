@@ -238,7 +238,7 @@ public:
 
 /** \class ImageMetadata
  *
- * \brief Generic class containing image metadatas used in OTB (first try)
+ * \brief Generic class containing image metadata used in OTB
  *
  * \ingroup OTBMetadata
  */

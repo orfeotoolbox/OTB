@@ -72,44 +72,84 @@ public:
   std::string ToJSON(bool multiline=false) const;
 };
 
+/** \struct OTB_azimuthFmRate
+ *
+ * \brief This class is used to manage parameters
+ * related to the Azimuth Frequency Modulation rate
+ */
 struct OTBMetadata_EXPORT OTB_azimuthFmRate
 {
+  /** Zero Doppler azimuth time to which azimuth FM rate parameters apply */
   MetaData::Time azimuthTime;
+  /** Two way slant range time origin used for azimuth FM rate calculation */
   double t0;
+  /** Azimuth FM rate coefficients c0 c1 c2 */
   std::vector<double> azimuthFmRatePolynomial;
 };
 
+/** \struct OTB_calibrationVector
+ *
+ * \brief This class is used to handle calibration look up tables
+ */
 struct OTBMetadata_EXPORT OTB_calibrationVector
 {
+  /** Image line at which the calibration vector applies */
   int line;
+  /** Zero Doppler azimuth time at which calibration vector applies */
   MetaData::Time azimuthTime;
+  /** Sigma nought calibration vector */
   MetaData::LUT1D sigmaNought;
+  /* Beta nought calibration vector */
   MetaData::LUT1D betaNought;
+  /* Gamma calibration vector */
   MetaData::LUT1D gamma;
+  /* Digital number calibration vector */
   MetaData::LUT1D dn;
 };
 
+/** \struct OTB_dopplerCentroid
+ *
+ * \brief This class is used to handle Doppler centroid estimates
+ */
 struct OTBMetadata_EXPORT OTB_dopplerCentroid
 {
+  /** Zero Doppler azimuth time of this Doppler centroid estimate */
   MetaData::Time azimuthTime;
+  /* Two-way slant range time origin for Doppler centroid estimate */
   double t0;
+  /* Doppler centroid estimated from data */
   std::vector<double> dopCoef;
+  /* Doppler centroid estimated from orbit */
   std::vector<double> geoDopCoef;
 };
 
+/** \struct OTB_SARNoise
+ *
+ * \breif This class is used to handle Noise look up tables
+ */
 struct OTBMetadata_EXPORT OTB_SARNoise
 {
+  /** Image line at which the noise vector applies */
   int line;
+  /** Zero Doppler azimuth time at which noise vector applies */
   MetaData::Time azimuthTime;
+  /** Noise look up talbe */
   MetaData::LUT1D noiseLut;
 };
 
+/** \struct OTB_Orbit
+ *
+ * \breif This class is used to handle orbit information
+ */
 struct OTBMetadata_EXPORT OTB_Orbit
 {
+  /** Timestamp at which orbit state vectors apply */
   MetaData::Time time;
+  /** Position vector */
   double posX;
   double posY;
   double posZ;
+  /** Velocity vector */
   double velX;
   double velY;
   double velZ;
@@ -118,6 +158,10 @@ struct OTBMetadata_EXPORT OTB_Orbit
 namespace Projection
 {
 
+/** \struct GCPParam
+ *
+ * \brief This structure handles the list of the GCP parameters
+ */
 struct OTBMetadata_EXPORT GCPParam
 {
   std::string GCPProjection;
@@ -213,16 +257,24 @@ struct OTBMetadata_EXPORT RPCParam
  */
 struct OTBMetadata_EXPORT SARParam
 {
+  /** Azimuth Frequency Modulation (FM) rate list.
+   * contains an entry for each azimuth FM rate update made along azimuth.
+   */
   std::vector<OTB_azimuthFmRate> azimuthFmRate;
 
+  /** Calibration vector list */
   std::vector<OTB_calibrationVector> calibrationVectors;
+
   MetaData::Time calibrationStartTime;
   MetaData::Time calibrationStopTime;
 
+  /** Doppler centroid estimates */
   std::vector<OTB_dopplerCentroid> dopplerCentroid;
 
+  /** Noise look up tables */
   std::vector<OTB_SARNoise> noiseVector;
 
+  /** List of orbit information */
   std::vector<OTB_Orbit> orbits;
 };
 

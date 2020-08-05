@@ -125,25 +125,5 @@ int otbVectorImageToImageListFilterIterator(int itkNotUsed(argc), char* argv[])
     ++i;
   }
 
-  /*
-  while ((itOutput != filter->GetOutput()->End()) )
-    {
-    std::stringstream oss;
-    WriterType::Pointer writer = WriterType::New();
-
-    oss << outputFilenamePrefix << "Band" << i << "." << outputFilenameSuffix;
-
-    writer->SetInput(itOutput.Get());
-
-    writer->SetFileName(oss.str());
-
-    writer->Update();
-
-    ++itOutput;
-    ++i;
-    }
-    */
-
-
   return EXIT_SUCCESS;
 }
