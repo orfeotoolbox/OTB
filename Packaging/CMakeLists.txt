@@ -73,6 +73,11 @@ include(${SUPERBUILD_SOURCE_DIR}/CMake/SuperBuild_Macro.cmake)
 # https://cmake.org/cmake/help/v3.10/command/cmake_host_system_information.html?highlight=sse
 include(${PACKAGE_OTB_SRC_DIR}/CMake/OTBCheckTargetSystemArch.cmake)
 
+
+# Add number of commit to the name of the package , is OFF by default.
+option(MODIFY_PKG_NAME "Modify the name of OTB Package" OFF)
+message(STATUS "MODIFY_PKG_NAME : ${MODIFY_PKG_NAME}")
+
 # get itk version from External_itk.cmake if not on mingw
 # because mxe has different version
 get_version(
@@ -89,7 +94,17 @@ get_version(
   PREFIX PKG
   )
 
-set(PKG_OTB_VERSION_STRING ${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}.${PKG_OTB_VERSION_PATCH})
+
+if(MODIFY_PKG_NAME)
+  execute_process(
+        COMMAND git describe
+        OUTPUT_VARIABLE GIT_TAG OUTPUT_STRIP_TRAILING_WHITESPACE)
+  message(STATUS "GIT_TAG : ${GIT_TAG}")
+  set(PKG_OTB_VERSION_STRING ${GIT_TAG})
+else()
+  set(PKG_OTB_VERSION_STRING ${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}.${PKG_OTB_VERSION_PATCH})
+endif()
+
 
 set(PACKAGE_LONG_NAME OrfeoToolBox)
 set(NAME_SUFFIX "" CACHE STRING "extra suffix for package name")
@@ -109,6 +124,8 @@ endif()
 # This directory is important.
 # We stage/keep files that goes into final package in this directory
 set(PKG_STAGE_DIR ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH}${NAME_SUFFIX})
+
+
 
 set(PATCHELF_PROGRAM "${CMAKE_BINARY_DIR}/PATCHELF/src/patchelf/src/patchelf")
 include(External_patchelf)
