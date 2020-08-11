@@ -55,19 +55,6 @@ set ( CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install_packages" )
 set ( PROJECT_SOURCE_DIR "${CTEST_SOURCE_DIRECTORY}" )
 
 
-
-message(STATUS "===MODIFY_PKG_NAME : ${MODIFY_PKG_NAME}")
-message(STATUS "===CI_COMMIT_REF_NAME : ${CI_COMMIT_REF_NAME}")
-
-set(ci_ref_name "$ENV{CI_COMMIT_REF_NAME}")
-message(STATUS "===ci_ref_name : ${ci_ref_name}")
-
-if("${ci_ref_name}" STREQUAL "2076-develop-package-names")
-  set(MODIFY_PKG_NAME "ON")
-endif()
-
-
-
 # Copy back xdk for RUN_PATH reason
 # We might want to change the name of artifact in main_superbuild
 # file ( COPY "${OTB_SOURCE_DIR}/install/xdk" DESTINATION "${CI_ROOT_DIR}")
@@ -82,7 +69,6 @@ set ( CONFIGURE_OPTIONS
 -DOTB_BINARY_DIR=${OTB_SOURCE_DIR}/build;\
 -DSUPERBUILD_INSTALL_DIR=${OTB_SOURCE_DIR}/xdk;\
 -DSUPERBUILD_BINARY_DIR=${OTB_SOURCE_DIR}/build;\
--DMODIFY_PKG_NAME=${MODIFY_PKG_NAME};\
 -DNAME_SUFFIX=${NAME_SUFFIX};" )
 
 

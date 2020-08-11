@@ -40,6 +40,7 @@ set(SUPERBUILD_INSTALL_DIR "" CACHE PATH "path to superbuild install directory")
 set(DOWNLOAD_LOCATION "" CACHE PATH "path to superbuild download archives")
 
 #variables based on above user-defined variables
+
 if ( NOT OTB_BINARY_DIR )
   set(OTB_BINARY_DIR "${SUPERBUILD_BINARY_DIR}/OTB/build")
 endif()
@@ -74,10 +75,6 @@ include(${SUPERBUILD_SOURCE_DIR}/CMake/SuperBuild_Macro.cmake)
 include(${PACKAGE_OTB_SRC_DIR}/CMake/OTBCheckTargetSystemArch.cmake)
 
 
-# Add number of commit to the name of the package , is OFF by default.
-option(MODIFY_PKG_NAME "Modify the name of OTB Package" OFF)
-message(STATUS "MODIFY_PKG_NAME : ${MODIFY_PKG_NAME}")
-
 # get itk version from External_itk.cmake if not on mingw
 # because mxe has different version
 get_version(
@@ -94,13 +91,15 @@ get_version(
   PREFIX PKG
   )
 
+include(${PACKAGE_OTB_SRC_DIR}/CMake/SourceStatus.cmake)
+package_name(${CMAKE_BINARY_DIR}/.. OTB_LAST_COMMIT_ID OTB_MODIFY_PKG_NAME)
+message(STATUS "OTB_LAST_COMMIT_ID : ${OTB_LAST_COMMIT_ID}" )
+message(STATUS "OTB_MODIFY_PKG_NAME : ${OTB_MODIFY_PKG_NAME}" )
 
-if(MODIFY_PKG_NAME)
-  execute_process(
-        COMMAND git describe
-        OUTPUT_VARIABLE GIT_TAG OUTPUT_STRIP_TRAILING_WHITESPACE)
-  message(STATUS "GIT_TAG : ${GIT_TAG}")
-  set(PKG_OTB_VERSION_STRING ${GIT_TAG})
+
+if(OTB_MODIFY_PKG_NAME)
+  set(PKG_OTB_VERSION_STRING ${OTB_LAST_COMMIT_ID})
+  message(STATUS "PKG_OTB_VERSION_STRING === ${PKG_OTB_VERSION_STRING}")
 else()
   set(PKG_OTB_VERSION_STRING ${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}.${PKG_OTB_VERSION_PATCH})
 endif()
@@ -244,3 +243,4 @@ add_custom_target( PACKAGE-OTB
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
       COMMENT "PACKAGE-OTB"
       )
+

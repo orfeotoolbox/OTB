@@ -100,6 +100,11 @@ reset_qt_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
+package_name(${PROJECT_SOURCE_DIR} OTB_LAST_COMMIT_ID OTB_MODIFY_PKG_NAME)
+message(STATUS "OTB_LAST_COMMIT_ID : ${OTB_LAST_COMMIT_ID}" )
+message(STATUS "OTB_MODIFY_PKG_NAME : ${OTB_MODIFY_PKG_NAME}" )
+
+
 # Find python stuff
 # Version 3 is preferred before 2
 set ( Python_ADDITIONAL_VERSIONS "3;2" )
