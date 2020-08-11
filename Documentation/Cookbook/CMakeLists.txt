@@ -147,7 +147,19 @@ add_custom_target(CookBookHTML
   DEPENDS generate_examples_rst
   COMMENT "Building RST documentation in html")
 
-add_custom_target(CookBookArchive
+
+
+if(OTB_MODIFY_PKG_NAME)
+  add_custom_target(CookBookArchive
+  ALL
+  COMMAND ${TAR_COMMAND}
+  --transform "s/^html/CookBook-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}/"
+  -czf ${CMAKE_BINARY_DIR}/CookBook-${OTB_LAST_COMMIT_ID}-html.tar.gz html
+  WORKING_DIRECTORY ${RST_BUILD_DIR}
+  DEPENDS CookBookHTML
+  COMMENT "Creating archive for html CookBook")
+elseif()
+  add_custom_target(CookBookArchive
   ALL
   COMMAND ${TAR_COMMAND}
   --transform "s/^html/CookBook-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}/"
@@ -155,4 +167,8 @@ add_custom_target(CookBookArchive
   WORKING_DIRECTORY ${RST_BUILD_DIR}
   DEPENDS CookBookHTML
   COMMENT "Creating archive for html CookBook")
+endif()
+
+
+
 
