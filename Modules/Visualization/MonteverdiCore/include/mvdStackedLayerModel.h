@@ -295,6 +295,8 @@ private:
 
   LayerModelMap m_LayerModels;
   KeyVector     m_Keys;
+  SizeType      m_Current{0,0};
+  SizeType      m_Reference{0,0};
 
   // Usually, information is a singular term which denotes a
   // plural. Since there's a container of several pixel-infos and we
