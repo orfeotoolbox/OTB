@@ -116,7 +116,7 @@ fast-build:
     - git checkout -f -q $CI_COMMIT_SHA
     - python3 CI/check_twin_pipelines.py
   script:
-    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
+    - ctest -VV -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
     - ccache -s
 
 legal-check:
@@ -160,11 +160,11 @@ ubuntu-xdk-build-doc:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - export QT_QPA_PLATFORM=offscreen
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
+    - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk -DNAME_SUFFIX:string=-glibc-2.27
+    - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk -DNAME_SUFFIX:string=-glibc-2.27
     - mv build_packages/OTB-*.run . || true
   needs:
     - job: ubuntu-xdk-prepare
@@ -182,8 +182,8 @@ centos-xdk-build:
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
   script:
     - export QT_QPA_PLATFORM=offscreen
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=centos-6.6-gcc
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=centos-6.6-gcc
+    - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=centos-6.6-gcc
+    - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=centos-6.6-gcc
     - mv build_packages/OTB-*.run . || true
   needs:
     - job: centos-xdk-prepare
@@ -202,8 +202,8 @@ macos-xdk-build:
     - macos
   extends: .common-build
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
+    - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
+    - ctest -VV -S CI/main_packages.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
     - mv build_packages/OTB-*.run . || true
   needs:
     - job: macos-xdk-prepare

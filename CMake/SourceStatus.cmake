@@ -61,6 +61,7 @@ function(repository_status root_repo_dir result_var1)
   set(return_msg "${dir_name} repository info: \n")
   set(return_msg "${return_msg} git log -1 --oneline     = [${last_commit_id}] \n")
   set(return_msg "${return_msg} git symbolic-ref -q HEAD = ${branch_name}")
+  message(STATUS "CURRENT BRANCH is : ${branch_name}")
   set(${result_var1} ${return_msg} PARENT_SCOPE)
 
   #print other information inside function call

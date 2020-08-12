@@ -139,6 +139,7 @@ file ( WRITE "${OTB_SOURCE_DIR}/sb_branch.txt" "${IMAGE_NAME}/${SB_MD5}")
 message( "Checking out git for existence of archive")
 set ( REMOTE "https://gitlab.orfeo-toolbox.org/orfeotoolbox/superbuild-artifact/")
 set ( BRANCH_NAME "${IMAGE_NAME}/${SB_MD5}")
+message("BRANCH NAME: ${BRANCH_NAME}")
 
 execute_process(
   COMMAND ${GIT} "ls-remote" "${REMOTE}" "${BRANCH_NAME}"
