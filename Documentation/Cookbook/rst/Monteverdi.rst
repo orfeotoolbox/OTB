@@ -170,12 +170,12 @@ Examples
 
 With , it is also possible to interactively load otb-applications and
 use them to process images. For that purpose, the user just has to load
-otb-applications by clicking on the Main menu, File/Load
-OTB-Applications (or by simply using the shortcut CTRL+A). The figure
-below ( [fig:applications]) represents the otb-applications loading
+otb-applications by clicking on the Main menu, View/OTB-Applications browser 
+(or by simply using the shortcut CTRL+A). The figure
+below ( [fig:applications]) represents the otb-applications browser
 window. The applications are arranged in thematic functionalities; the
 user can also quickly find the wanted application by typing its name in
-the dedicated field at the top of the loading window.
+the dedicated field at the top of the browser window.
 
 .. figure:: Art/MonteverdiImages/applications.png
 
