@@ -54,14 +54,20 @@ function(repository_status root_repo_dir result_var1)
     OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
 
   set(branch_name)
+
+  message(STATUS "git_symbolic_ref_output : ${git_symbolic_ref_output}")
+
   if(git_symbolic_ref_output)
+    message(STATUS "git_symbolic_ref_output OK")
     get_filename_component(branch_name ${git_symbolic_ref_output} NAME)
+  else()
+    message(STATUS "git_symbolic_ref_output KO")
   endif()
 
   set(return_msg "${dir_name} repository info: \n")
   set(return_msg "${return_msg} git log -1 --oneline     = [${last_commit_id}] \n")
   set(return_msg "${return_msg} git symbolic-ref -q HEAD = ${branch_name}")
-  message(STATUS "CURRENT BRANCH is : ${branch_name}")
+  message(STATUS "CURRENT BRANCH is : ${branch_name} ")
   set(${result_var1} ${return_msg} PARENT_SCOPE)
 
   #print other information inside function call
