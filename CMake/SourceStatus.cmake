@@ -53,6 +53,17 @@ function(repository_status root_repo_dir result_var1)
     OUTPUT_VARIABLE git_symbolic_ref_output
     OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
 
+
+
+  execute_process(COMMAND ${GIT_EXECUTABLE} describe --contains --all HEAD
+    WORKING_DIRECTORY ${root_repo_dir}
+    OUTPUT_VARIABLE git_describe_contains
+    OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+
+  message(STATUS "git_describe_contains : ${git_describe_contains}")
+
+
+
   set(branch_name)
   if(git_symbolic_ref_output)
     get_filename_component(branch_name ${git_symbolic_ref_output} NAME)
