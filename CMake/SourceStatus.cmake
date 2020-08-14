@@ -59,7 +59,7 @@ function(repository_status root_repo_dir result_var1)
   message(STATUS "git_symbolic_ref_output : ${git_symbolic_ref_output}")
   message(STATUS "${ERROR_QUIET}")
 
-  execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref HEAD
+  execute_process(COMMAND ${GIT_EXECUTABLE} branch | awk '/\*/ { print $2; }'
     WORKING_DIRECTORY ${root_repo_dir}
     OUTPUT_VARIABLE new_git_symbolic_ref_output
     ERROR_QUIET)
