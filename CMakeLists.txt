@@ -89,6 +89,7 @@ mark_as_advanced(OTB_APPLICATIONS_NAME_LIST)
 set(OTB_CMAKE_DIR ${OTB_SOURCE_DIR}/CMake)
 set(CMAKE_MODULE_PATH ${OTB_CMAKE_DIR} ${CMAKE_MODULE_PATH})
 include(SourceStatus)
+include(GetVersionFromGitTag)
 include(PreventInSourceBuilds)
 include(PreventInBuildInstalls)
 include(OTBModuleMacros)
@@ -135,6 +136,12 @@ set(OTB_VERSION_MAJOR "7")
 set(OTB_VERSION_MINOR "1")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
+
+get_version(${OTB_SOURCE_DIR} "OTB" OTB_VERSION_STRING2 otb_version_string_full project_version project_version_major project_version_minor project_version_patch project_version_tweak project_version_git_sha)
+
+message(STATUS "## ${OTB_VERSION_STRING2} ##")
+
+exit()
 
 # Monteverdi version number (follows OTB)
 set( Monteverdi_VERSION_MAJOR ${OTB_VERSION_MAJOR} )
