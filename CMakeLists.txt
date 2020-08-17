@@ -100,6 +100,13 @@ reset_qt_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
+package_name(${PROJECT_SOURCE_DIR} OTB_LAST_COMMIT_ID OTB_MODIFY_PKG_NAME)
+set(OTB_LAST_COMMIT_ID "${OTB_LAST_COMMIT_ID}")
+set(OTB_MODIFY_PKG_NAME "${OTB_MODIFY_PKG_NAME}")
+message(STATUS "OTB_LAST_COMMIT_ID : ${OTB_LAST_COMMIT_ID}" )
+message(STATUS "OTB_MODIFY_PKG_NAME : ${OTB_MODIFY_PKG_NAME}" )
+
+
 # Find python stuff
 # Version 3 is preferred before 2
 set ( Python_ADDITIONAL_VERSIONS "3;2" )
@@ -135,6 +142,7 @@ set(OTB_VERSION_MAJOR "7")
 set(OTB_VERSION_MINOR "1")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
+
 
 # Monteverdi version number (follows OTB)
 set( Monteverdi_VERSION_MAJOR ${OTB_VERSION_MAJOR} )

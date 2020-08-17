@@ -54,6 +54,7 @@ set ( CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build_packages/" )
 set ( CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install_packages" )
 set ( PROJECT_SOURCE_DIR "${CTEST_SOURCE_DIRECTORY}" )
 
+
 # Copy back xdk for RUN_PATH reason
 # We might want to change the name of artifact in main_superbuild
 # file ( COPY "${OTB_SOURCE_DIR}/install/xdk" DESTINATION "${CI_ROOT_DIR}")
@@ -69,6 +70,10 @@ set ( CONFIGURE_OPTIONS
 -DSUPERBUILD_INSTALL_DIR=${OTB_SOURCE_DIR}/xdk;\
 -DSUPERBUILD_BINARY_DIR=${OTB_SOURCE_DIR}/build;\
 -DNAME_SUFFIX=${NAME_SUFFIX};" )
+
+
+
+
 
 # Look for a GIT command-line client.
 find_program(CTEST_GIT_COMMAND NAMES git git.cmd)

@@ -61,6 +61,7 @@ function(repository_status root_repo_dir result_var1)
   set(return_msg "${dir_name} repository info: \n")
   set(return_msg "${return_msg} git log -1 --oneline     = [${last_commit_id}] \n")
   set(return_msg "${return_msg} git symbolic-ref -q HEAD = ${branch_name}")
+  message(STATUS "CURRENT BRANCH is : ${branch_name}")
   set(${result_var1} ${return_msg} PARENT_SCOPE)
 
   #print other information inside function call
@@ -86,4 +87,50 @@ function(repository_status root_repo_dir result_var1)
     message(STATUS "  No files modified locally (${dir_name})")
   endif()
 
+
 endfunction()
+
+
+
+function(package_name root_repo_dir out_commit_id out_modify_pkg_name)
+  if(NOT EXISTS "${root_repo_dir}/.git")
+    return()
+  endif()
+
+  find_package(Git)
+  if(NOT GIT_FOUND)
+    message(STATUS "git not found. Make sure git can be found in your PATH. (source status will not be reported)")
+    set(${result_var1})
+    return()
+  endif()
+
+  execute_process(
+            COMMAND git describe
+            WORKING_DIRECTORY ${root_repo_dir}
+            OUTPUT_VARIABLE GIT_CURRENT_COMMIT_ID OUTPUT_STRIP_TRAILING_WHITESPACE)
+  set(${out_commit_id} ${GIT_CURRENT_COMMIT_ID} PARENT_SCOPE)
+
+  #git symbolic-ref --short -q HEAD does not work on older git version
+  #rather than checking for git version. it is better to not use that
+  #option and employ cmake stuff to do the work
+  execute_process(COMMAND ${GIT_EXECUTABLE} symbolic-ref -q HEAD
+    WORKING_DIRECTORY ${root_repo_dir}
+    OUTPUT_VARIABLE git_symbolic_ref_output
+    OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+
+  set(branch_name)
+  if(git_symbolic_ref_output)
+    get_filename_component(branch_name ${git_symbolic_ref_output} NAME)
+  endif()
+
+  message(STATUS "current_branch_name : ${branch_name}")
+
+  if("${branch_name}" STREQUAL "2076-develop-package-names")
+    set(${out_modify_pkg_name} "ON" PARENT_SCOPE)
+  elseif()
+    set(${out_modify_pkg_name} "OFF" PARENT_SCOPE)
+  endif()
+
+endfunction()
+
+

@@ -174,18 +174,32 @@ if (BUILD_DOCUMENTATION)
     WORKING_DIRECTORY ${OTB_BINARY_DIR}/Utilities/Doxygen
     )
   
-  add_custom_target(Documentation
-    COMMAND ${CMAKE_COMMAND} -E tar cjf
-      ${OTB_BINARY_DIR}/Documentation/Doxygen/OTB-Doxygen-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.tar.bz2
-      ${OTB_BINARY_DIR}/Documentation/Doxygen/html
-    DEPENDS Documentation-doxygen
-    WORKING_DIRECTORY ${OTB_BINARY_DIR}/Documentation/Doxygen
-    )
+
+
+
+  if(OTB_MODIFY_PKG_NAME)
+
+    add_custom_target(Documentation
+      COMMAND ${CMAKE_COMMAND} -E tar cjf
+        ${OTB_BINARY_DIR}/Documentation/Doxygen/OTB-Doxygen-${OTB_LAST_COMMIT_ID}.tar.bz2
+        ${OTB_BINARY_DIR}/Documentation/Doxygen/html
+      DEPENDS Documentation-doxygen
+      WORKING_DIRECTORY ${OTB_BINARY_DIR}/Documentation/Doxygen
+      )
+  elseif()
+    add_custom_target(Documentation
+      COMMAND ${CMAKE_COMMAND} -E tar cjf
+        ${OTB_BINARY_DIR}/Documentation/Doxygen/OTB-Doxygen-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.tar.bz2
+        ${OTB_BINARY_DIR}/Documentation/Doxygen/html
+      DEPENDS Documentation-doxygen
+      WORKING_DIRECTORY ${OTB_BINARY_DIR}/Documentation/Doxygen
+      )
+  endif()
+
 
   # Somehow the logo image is not copied into the html folder.
   # Here we ensure that the logo image ends up in the right directory
   # where html pages could find it.
-
 
 
   message( STATUS

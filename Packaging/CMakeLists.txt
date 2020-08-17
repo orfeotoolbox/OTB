@@ -40,6 +40,7 @@ set(SUPERBUILD_INSTALL_DIR "" CACHE PATH "path to superbuild install directory")
 set(DOWNLOAD_LOCATION "" CACHE PATH "path to superbuild download archives")
 
 #variables based on above user-defined variables
+
 if ( NOT OTB_BINARY_DIR )
   set(OTB_BINARY_DIR "${SUPERBUILD_BINARY_DIR}/OTB/build")
 endif()
@@ -73,6 +74,7 @@ include(${SUPERBUILD_SOURCE_DIR}/CMake/SuperBuild_Macro.cmake)
 # https://cmake.org/cmake/help/v3.10/command/cmake_host_system_information.html?highlight=sse
 include(${PACKAGE_OTB_SRC_DIR}/CMake/OTBCheckTargetSystemArch.cmake)
 
+
 # get itk version from External_itk.cmake if not on mingw
 # because mxe has different version
 get_version(
@@ -89,7 +91,18 @@ get_version(
   PREFIX PKG
   )
 
-set(PKG_OTB_VERSION_STRING ${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}.${PKG_OTB_VERSION_PATCH})
+include(${PACKAGE_OTB_SRC_DIR}/CMake/SourceStatus.cmake)
+package_name(${CMAKE_BINARY_DIR}/.. OTB_LAST_COMMIT_ID OTB_MODIFY_PKG_NAME)
+message(STATUS "OTB_LAST_COMMIT_ID : ${OTB_LAST_COMMIT_ID}" )
+message(STATUS "OTB_MODIFY_PKG_NAME : ${OTB_MODIFY_PKG_NAME}" )
+
+
+if(OTB_MODIFY_PKG_NAME)
+  set(PKG_OTB_VERSION_STRING ${OTB_LAST_COMMIT_ID})
+else()
+  set(PKG_OTB_VERSION_STRING ${PKG_OTB_VERSION_MAJOR}.${PKG_OTB_VERSION_MINOR}.${PKG_OTB_VERSION_PATCH})
+endif()
+
 
 set(PACKAGE_LONG_NAME OrfeoToolBox)
 set(NAME_SUFFIX "" CACHE STRING "extra suffix for package name")
@@ -109,6 +122,8 @@ endif()
 # This directory is important.
 # We stage/keep files that goes into final package in this directory
 set(PKG_STAGE_DIR ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH}${NAME_SUFFIX})
+
+
 
 set(PATCHELF_PROGRAM "${CMAKE_BINARY_DIR}/PATCHELF/src/patchelf/src/patchelf")
 include(External_patchelf)
@@ -227,3 +242,4 @@ add_custom_target( PACKAGE-OTB
       WORKING_DIRECTORY "${CMAKE_BINARY_DIR}"
       COMMENT "PACKAGE-OTB"
       )
+
