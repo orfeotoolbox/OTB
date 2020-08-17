@@ -97,7 +97,8 @@ function(get_version root_repo_dir project_name project_version_string project_v
 
 
     message(STATUS " otb version major : ${${PROJECT_NAME}_VERSION_MAJOR}")
-
+    message(STATUS " otb version minor : ${${PROJECT_NAME}_VERSION_MINOR}")
+    message(STATUS " otb version patch : ${${PROJECT_NAME}_VERSION_PATCH}")
 
     # Set the version numbers
     list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 0 ${${PROJECT_NAME}_VERSION_MAJOR})

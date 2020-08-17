@@ -362,7 +362,7 @@ else()
   endif()
   if(MINGW)
     exec_program(${CMAKE_CXX_COMPILER}
-      ARGS -dumpversion
+      ARGS -dumpfullversion
       OUTPUT_VARIABLE _boost_COMPILER_VERSION
       )
     string(REGEX REPLACE "([0-9])\\.([0-9])\\.[0-9]" "\\1\\2"
@@ -376,7 +376,7 @@ else()
     else()
       # Determine which version of GCC we have.
       exec_program(${CMAKE_CXX_COMPILER}
-        ARGS -dumpversion
+        ARGS -dumpfullversion
         OUTPUT_VARIABLE _boost_COMPILER_VERSION
         )
       string(REGEX REPLACE "([0-9])\\.([0-9])\\.[0-9]" "\\1\\2"
