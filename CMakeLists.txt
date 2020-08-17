@@ -141,7 +141,6 @@ get_version(${OTB_SOURCE_DIR} "OTB" OTB_VERSION_STRING2 otb_version_string_full 
 
 message(STATUS "## ${OTB_VERSION_STRING2} ##")
 
-exit()
 
 # Monteverdi version number (follows OTB)
 set( Monteverdi_VERSION_MAJOR ${OTB_VERSION_MAJOR} )
