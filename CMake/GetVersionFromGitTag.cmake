@@ -58,8 +58,14 @@ function(get_version root_repo_dir project_name project_version_string project_v
     message(STATUS ${${PROJECT_NAME}_VERSION_STRING_2})
     
     #output string format : <semver_tag>-<commit_distance>-<commit_hash> or <semver_tag> if the HEAD is a tag
-    
-    string(COMPARE EQUAL ${${PROJECT_NAME}_VERSION_STRING_2} ${${PROJECT_NAME}_VERSION_STRING} HEAD_IS_TAG)
+
+
+    if("${${PROJECT_NAME}_VERSION_STRING_2}" STREQUAL "${${PROJECT_NAME}_VERSION_STRING}")
+      set(HEAD_IS_TAG 1)
+    else()
+      set(HEAD_IS_TAG 0)
+    endif()
+
     
     if(NOT HEAD_IS_TAG)
     
