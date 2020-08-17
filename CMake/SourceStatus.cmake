@@ -55,14 +55,14 @@ function(repository_status root_repo_dir result_var1)
 
 
 
-  execute_process(COMMAND " ${GIT_EXECUTABLE} for-each-ref --format='%(objectname) %(refname:short)' refs/heads | awk "/^$(${GIT_EXECUTABLE} rev-parse HEAD)/ {print \$2}" "
+  execute_process(COMMAND ${GIT_EXECUTABLE} branch
     WORKING_DIRECTORY ${root_repo_dir}
     OUTPUT_VARIABLE git_describe_contains
     OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
 
-  message(STATUS "git for each : ${git_describe_contains}")
+  message(STATUS "git_describe_contains : ${git_describe_contains}")
+  message(STATUS "CI_COMMIT_REF_NAME : $CI_COMMIT_REF_NAME")
   message(STATUS "CI_COMMIT_REF_NAME : ${CI_COMMIT_REF_NAME}")
-  message(STATUS "GIT_BRANCH : ${GIT_BRANCH}")
 
 
 
