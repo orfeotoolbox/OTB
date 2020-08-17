@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
   char* demdir    = getenv("OTB_DEM_DIR");
   char* geoidfile = getenv("OTB_GEOID_FILE");
 
-  otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
+  auto& demHandler = otb::DEMHandler::GetInstance();
 
   if (demdir != nullptr)
   {
