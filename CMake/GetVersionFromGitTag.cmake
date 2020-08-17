@@ -93,8 +93,7 @@ function(get_version root_repo_dir project_name project_version_string project_v
 
 
     # Get partial versions into a list
-    string(REGEX MATCHALL "-.*$|[0-9]+" ${PROJECT_NAME}_PARTIAL_VERSION_LIST
-      ${${PROJECT_NAME}_VERSION_STRING})
+    string(REGEX MATCHALL "-.*$|[0-9]+" "${PROJECT_NAME}_PARTIAL_VERSION_LIST" "${${PROJECT_NAME}_VERSION_STRING}")
 
     # Set the version numbers
     list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 0 ${PROJECT_NAME}_VERSION_MAJOR)
