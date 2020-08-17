@@ -21,6 +21,7 @@
 #include "otbDEMHandler.h"
 #include "otbGDALDriverManagerWrapper.h"
 #include "boost/filesystem.hpp"
+#include <boost/range/iterator_range.hpp>
 #include "gdal_utils.h"
 
 //TODO C++ 17 : use std::optional instead
@@ -48,32 +49,33 @@ std::vector<std::string> GetFilesInDirectory(const std::string & directoryPath)
     return fileList;
   }
   
-  boost::filesystem::directory_iterator end_itr; // default construction yields past-the-end
-  for ( boost::filesystem::directory_iterator itr( directoryPath ); itr != end_itr; ++itr )
+  // End iterator : default construction yields past-the-end
+  for ( const auto & item : boost::make_iterator_range(boost::filesystem::directory_iterator(directoryPath), {}) )
   {
-    if ( boost::filesystem::is_directory(itr->status()) )
+    if ( boost::filesystem::is_directory(item.status()) )
     {
-      auto subDirList = GetFilesInDirectory(itr->path().string());
+      auto subDirList = GetFilesInDirectory(item.path().string());
       fileList.insert(fileList.end(), subDirList.begin(), subDirList.end());
     }
     else
     {
-      fileList.push_back(itr->path().string());
+      fileList.push_back(item.path().string());
     }
   }
+
   return fileList;
 }
 
-boost::optional<double> GetDEMValue(double lon, double lat, GDALDataset* ds)
+boost::optional<double> GetDEMValue(double lon, double lat, GDALDataset& ds)
 {
   double geoTransform[6];
   
-  ds->GetGeoTransform(geoTransform);
+  ds.GetGeoTransform(geoTransform);
 
   auto x = (lon - geoTransform[0]) / geoTransform[1] - 0.5;
   auto y = (lat - geoTransform[3]) / geoTransform[5] - 0.5;
 
-  if (x < 0 || y < 0 || x > ds->GetRasterXSize() || y > ds->GetRasterYSize())
+  if (x < 0 || y < 0 || x > ds.GetRasterXSize() || y > ds.GetRasterYSize())
   {
     return boost::none;
   }
@@ -84,7 +86,7 @@ boost::optional<double> GetDEMValue(double lon, double lat, GDALDataset* ds)
   auto deltaX = x - x_int;
   auto deltaY = y - y_int;
 
-  if (x < 0 || y < 0 || x+1 > ds->GetRasterXSize() || y+1 > ds->GetRasterYSize())
+  if (x < 0 || y < 0 || x+1 > ds.GetRasterXSize() || y+1 > ds.GetRasterYSize())
   {
     return boost::none;
   }
@@ -92,7 +94,7 @@ boost::optional<double> GetDEMValue(double lon, double lat, GDALDataset* ds)
   // Bilinear interpolation.
   double elevData[4];
   
-  auto err = ds->GetRasterBand(1)->RasterIO( GF_Read, x_int, y_int, 2, 2,
+  auto err = ds.GetRasterBand(1)->RasterIO( GF_Read, x_int, y_int, 2, 2,
               elevData, 2, 2, GDT_Float64,
               0, 0, nullptr);
 
@@ -105,7 +107,7 @@ boost::optional<double> GetDEMValue(double lon, double lat, GDALDataset* ds)
   // of the interpolation is no data.
   for (int i =0; i<4; i++)
   {
-    if (elevData[i] == ds->GetRasterBand(1)->GetNoDataValue())
+    if (elevData[i] == ds.GetRasterBand(1)->GetNoDataValue())
     {
       return boost::none;
     }
@@ -120,25 +122,12 @@ boost::optional<double> GetDEMValue(double lon, double lat, GDALDataset* ds)
 
 }  // namespace DEMDetails
 
-/** Initialize the singleton */
-DEMHandler::Pointer DEMHandler::m_Singleton = nullptr;
-
-DEMHandler::Pointer DEMHandler::Instance()
+// Meyer singleton design pattern
+DEMHandler & DEMHandler::GetInstance() 
 {
-  if (m_Singleton.GetPointer() == nullptr)
-  {
-    m_Singleton = itk::ObjectFactory<Self>::Create();
-
-    if (m_Singleton.GetPointer() == nullptr)
-    {
-      m_Singleton = new DEMHandler;
-    }
-    m_Singleton->UnRegister();
-  }
-
-  return m_Singleton;
+  static DEMHandler s_instance;
+  return s_instance;
 }
-
 
 DEMHandler::DEMHandler() : m_Dataset(nullptr),
                            m_GeoidDS(nullptr),
@@ -170,7 +159,7 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
   {
     auto ds = otb::GDALDriverManagerWrapper::GetInstance().Open(file);
     if (ds)
-    {  
+    {
       m_DatasetList.push_back(ds );
     }
   }
@@ -197,10 +186,8 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
         vrtDatasetList[i] = m_DatasetList[i]->GetDataSet();
       }
 
-      int error = 0;
-
       m_Dataset = (GDALDataset *) GDALBuildVRT(nullptr, vrtSize, vrtDatasetList, 
-                                                nullptr, nullptr, &error);
+                                                nullptr, nullptr, nullptr);
       m_DEMDirectories.push_back(DEMDirectory);
       delete[] vrtDatasetList;
     }
@@ -226,7 +213,7 @@ bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
   return pbError;
 }
 
-double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat)
+double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat) const
 {
   double result = 0.;
   boost::optional<double> DEMresult;
@@ -234,7 +221,7 @@ double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat)
 
   if (m_Dataset)
   {
-    DEMresult = DEMDetails::GetDEMValue(lon, lat, m_Dataset);
+    DEMresult = DEMDetails::GetDEMValue(lon, lat, *m_Dataset);
     if (DEMresult)
     {
       result += *DEMresult;
@@ -244,7 +231,7 @@ double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat)
 
   if (m_GeoidDS)
   {
-    geoidResult = DEMDetails::GetDEMValue(lon, lat, m_GeoidDS);
+    geoidResult = DEMDetails::GetDEMValue(lon, lat, *m_GeoidDS);
     if (geoidResult)
     {
       result += *geoidResult;
@@ -257,16 +244,16 @@ double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat)
     return m_DefaultHeightAboveEllipsoid;
 }
 
-double DEMHandler::GetHeightAboveEllipsoid(const PointType& geoPoint)
+double DEMHandler::GetHeightAboveEllipsoid(const PointType& geoPoint) const
 {
   return GetHeightAboveEllipsoid(geoPoint[0], geoPoint[1]);
 }
 
-double DEMHandler::GetHeightAboveMSL(double lon, double lat)
+double DEMHandler::GetHeightAboveMSL(double lon, double lat) const
 {
   if (m_Dataset)
   { 
-    auto result = DEMDetails::GetDEMValue(lon, lat, m_Dataset);
+    auto result = DEMDetails::GetDEMValue(lon, lat, *m_Dataset);
     
     if (result)
     {
@@ -277,7 +264,7 @@ double DEMHandler::GetHeightAboveMSL(double lon, double lat)
   return 0;
 }
 
-double DEMHandler::GetHeightAboveMSL(const PointType& geoPoint)
+double DEMHandler::GetHeightAboveMSL(const PointType& geoPoint) const
 {
   return GetHeightAboveMSL(geoPoint[0], geoPoint[1]);
 }
@@ -287,7 +274,7 @@ unsigned int DEMHandler::GetDEMCount() const
   return m_DatasetList.size();
 }
 
-bool DEMHandler::IsValidDEMDirectory(const std::string& DEMDirectory)
+bool DEMHandler::IsValidDEMDirectory(const std::string& DEMDirectory) const
 {
   for (const auto & filename : DEMDetails::GetFilesInDirectory(DEMDirectory))
   {
@@ -336,6 +323,11 @@ void DEMHandler::SetDefaultHeightAboveEllipsoid(double height)
   OssimDEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(height);
 
   m_DefaultHeightAboveEllipsoid = height;
+}
+
+double DEMHandler::GetDefaultHeightAboveEllipsoid() const
+{
+  return m_DefaultHeightAboveEllipsoid;
 }
 
 } // namespace otb

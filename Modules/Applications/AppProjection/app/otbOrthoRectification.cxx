@@ -255,7 +255,7 @@ private:
     {
 
       // Clear and reset the DEM Handler
-      otb::DEMHandler::Instance()->ClearDEMs();
+      otb::DEMHandler::GetInstance().ClearDEMs();
       otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
 
       // input image

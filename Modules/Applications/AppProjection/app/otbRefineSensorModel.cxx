@@ -165,7 +165,7 @@ private:
         nextpos                        = line.find_first_of("\t", pos);
         lat                            = atof(line.substr(pos, nextpos).c_str());
 
-        z = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(lon, lat);
+        z = otb::DEMHandler::GetInstance().GetHeightAboveEllipsoid(lon, lat);
 
         otbAppLogDEBUG("Adding tie point x=" << x << ", y=" << y << ", z=" << z << ", lon=" << lon << ", lat=" << lat);
 

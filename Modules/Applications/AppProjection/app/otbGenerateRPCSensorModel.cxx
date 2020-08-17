@@ -143,7 +143,7 @@ private:
       {
         std::istringstream iss(line);
         iss >> x >> y >> lon >> lat;
-        z = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(lon, lat);
+        z = otb::DEMHandler::GetInstance().GetHeightAboveEllipsoid(lon, lat);
 
         otbAppLogDEBUG("Adding tie point x=" << x << ", y=" << y << ", z=" << z << ", lon=" << lon << ", lat=" << lat);
 

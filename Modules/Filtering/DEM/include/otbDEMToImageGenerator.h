@@ -185,7 +185,6 @@ protected:
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
   void GenerateOutputInformation() override;
 
-  DEMHandlerType::Pointer m_DEMHandler;
   PointType               m_OutputOrigin;
   SpacingType             m_OutputSpacing;
   SizeType                m_OutputSize;

@@ -116,9 +116,6 @@ private:
   InternalMapProjectionPointer m_SensorModel;
 
   InternalTiePointsContainerPointer m_TiePoints;
-
-  /** Object that read and use DEM */
-  DEMHandler::Pointer m_DEMHandler;
 };
 
 } // namespace otb

@@ -128,11 +128,11 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
   // manage demHandler
   if (atoi(argv[12]) == 1) // mode = no DEM
   {
-    otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(135.8);
+    otb::DEMHandler::GetInstance().SetDefaultHeightAboveEllipsoid(135.8);
   }
   else if ((atoi(argv[12]) == 2) || (atoi(argv[12]) == 3)) // mode = DEM SRTM || DEM GTIFF
   {
-    otb::DEMHandler::Instance()->OpenDEMDirectory(argv[13]);
+    otb::DEMHandler::GetInstance().OpenDEMDirectory(argv[13]);
   }
 
   writer->SetInput(orthoRectifFilter->GetOutput());
