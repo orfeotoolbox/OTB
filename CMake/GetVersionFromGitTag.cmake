@@ -50,7 +50,7 @@ function(get_version root_repo_dir project_name project_version_string project_v
       
     message(STATUS ${${PROJECT_NAME}_VERSION_STRING})
     
-    execute_process(COMMAND ${GIT_EXECUTABLE} describe --tags
+    execute_process(COMMAND ${GIT_EXECUTABLE} describe
       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
       OUTPUT_VARIABLE ${PROJECT_NAME}_VERSION_STRING_2
       OUTPUT_STRIP_TRAILING_WHITESPACE)
