@@ -55,79 +55,105 @@ public:
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
-  /** Get the radiometric bias from the ossim metadata */
+  /** Get the radiometric bias from the ossim metadata
+   * \deprecated
+   */
   VariableLengthVectorType GetPhysicalBias() const override
   {
     itkExceptionMacro("GetPhysicalBias not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the radiometric gain from the ossim metadata */
+  /** Get the radiometric gain from the ossim metadata
+   * \deprecated
+   */
   VariableLengthVectorType GetPhysicalGain() const override
   {
     itkExceptionMacro("GetPhysicalGain not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the solar irradiance from the ossim metadata */
+  /** Get the solar irradiance from the ossim metadata
+   * \deprecated
+   */
   VariableLengthVectorType GetSolarIrradiance() const override
   {
     itkExceptionMacro("GetSolarIrradiance not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging acquisition day from the ossim metadata */
+  /** Get the imaging acquisition day from the ossim metadata
+   * \deprecated
+   */
   int GetDay() const override
   {
     itkExceptionMacro("GetDay not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging acquisition month from the ossim metadata */
+  /** Get the imaging acquisition month from the ossim metadata
+   * \deprecated
+   */
   int GetMonth() const override
   {
     itkExceptionMacro("GetMonth not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging acquisition year from the ossim metadata */
+  /** Get the imaging acquisition year from the ossim metadata
+   * \deprecated
+   */
   int GetYear() const override
   {
     itkExceptionMacro("GetYear not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging acquisition hour from the ossim metadata */
+  /** Get the imaging acquisition hour from the ossim metadata
+   * \deprecated
+   */
   int GetHour() const override
   {
     itkExceptionMacro("GetHour not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging acquisition minute from the ossim metadata */
+  /** Get the imaging acquisition minute from the ossim metadata
+   * \deprecated
+   */
   int GetMinute() const override
   {
     itkExceptionMacro("GetMinute not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging production day from the ossim metadata */
+  /** Get the imaging production day from the ossim metadata
+   * \deprecated
+   */
   int GetProductionDay() const override
   {
     itkExceptionMacro("GetProductionDay not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging production month from the ossim metadata */
+  /** Get the imaging production month from the ossim metadata
+   * \deprecated
+   */
   int GetProductionMonth() const override
   {
     itkExceptionMacro("GetProductionMonth not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging production year from the ossim metadata */
+  /** Get the imaging production year from the ossim metadata
+   * \deprecated
+   */
   int GetProductionYear() const override
   {
     itkExceptionMacro("GetProductionYear not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the sat elevation from the ossim metadata */
+  /** Get the sat elevation from the ossim metadata
+   * \deprecated
+   */
   double GetSatElevation() const override
   {
     itkExceptionMacro("GetSatElevation not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the sat azimuth from the ossim metadata */
+  /** Get the sat azimuth from the ossim metadata
+   * \deprecated
+   */
   double GetSatAzimuth() const override
   {
     itkExceptionMacro("GetSatElevation not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
