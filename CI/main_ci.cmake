@@ -108,12 +108,6 @@ ctest_configure(BUILD "${CTEST_BINARY_DIRECTORY}"
     RETURN_VALUE _configure_rv
     CAPTURE_CMAKE_ERROR _configure_error
     )
-
-message(STATUS "CTEST_BINARY_DIRECTORY : ${CTEST_BINARY_DIRECTORY}")
-message(STATUS "CONFIGURE_OPTIONS ${CONFIGURE_OPTIONS}")
-message(STATUS "_configure_rv : ${_configure_rv}")
-message(STATUS : "_configure_error : ${_configure_error}")
-
 # Configure log
 file ( WRITE 
   "${OTB_SOURCE_DIR}/log/configure_return_value_log.txt" "${_configure_rv}")
