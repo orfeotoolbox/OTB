@@ -86,6 +86,7 @@ add_executable(otbGdalAdaptersTestDriver
                otbGdalAdaptersTestDriver.cxx
                otbSpatialReferenceTest.cxx
                otbCoordinateTransformationTest.cxx
+               otbGDALRPCTransformerTest.cxx
                )
 
 target_link_libraries(otbGdalAdaptersTestDriver ${OTBGdalAdapters-Test_LIBRARIES})
@@ -97,3 +98,9 @@ otb_add_test(NAME TuSpatialReferenceTest
   
 otb_add_test(NAME TuOCoordinateTransformationTest
             COMMAND otbGdalAdaptersTestDriver otbCoordinateTransformationTest)
+        
+otb_add_test(NAME TuGDALRPCTransformerTest
+             COMMAND otbGdalAdaptersTestDriver 
+             otbGDALRPCTransformerTest
+             LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+             )
