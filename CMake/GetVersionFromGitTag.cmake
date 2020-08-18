@@ -95,14 +95,10 @@ function(get_version root_repo_dir project_name project_version_string project_v
     # Get partial versions into a list
     string(REGEX MATCHALL "-.*$|[0-9]+" "${PROJECT_NAME}_PARTIAL_VERSION_LIST" "${${PROJECT_NAME}_VERSION_STRING}")
 
-
-    message(STATUS " otb version major : ${${PROJECT_NAME}_VERSION_MAJOR}")
-
-
     # Set the version numbers
-    list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 0 ${${PROJECT_NAME}_VERSION_MAJOR})
-    list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 1 ${${PROJECT_NAME}_VERSION_MINOR})
-    list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 2 ${${PROJECT_NAME}_VERSION_PATCH})
+    list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 0 ${PROJECT_NAME}_VERSION_MAJOR)
+    list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 1 ${PROJECT_NAME}_VERSION_MINOR)
+    list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 2 ${PROJECT_NAME}_VERSION_PATCH)
 
     # The tweak part is optional, so check if the list contains it
     list(LENGTH ${PROJECT_NAME}_PARTIAL_VERSION_LIST ${PROJECT_NAME}_PARTIAL_VERSION_LIST_LEN)
