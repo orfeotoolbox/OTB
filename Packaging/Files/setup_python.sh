@@ -78,10 +78,11 @@ else # case wher user provides an OTB_PYTHON_EXE
 fi
 
 python_INSTSONAME=$($OTB_PYTHON_EXE -c "import sys; from distutils import sysconfig; print (sysconfig.get_config_var('INSTSONAME'));")
+python_LIBDIR=$($OTB_PYTHON_EXE -c "import sys; from distutils import sysconfig; print (sysconfig.get_config_var('LIBDIR'));")
 
-python_lib_dirs="$LD_LIBRARY_PATH /usr/lib /usr/lib64 /usr/lib/x86_64-linux-gnu"
+python_lib_dirs="$LD_LIBRARY_PATH $python_LIBDIR /usr/lib /usr/lib64 /usr/lib/x86_64-linux-gnu"
 if [ "$(uname)" = "Darwin" ]; then
-    python_lib_dirs="$DYLD_LIBRARY_PATH /usr/lib /Library/Frameworks /opt/local/lib /opt/local/Library/Frameworks"
+    python_lib_dirs="$DYLD_LIBRARY_PATH $python_LIBDIR /usr/lib /Library/Frameworks /opt/local/lib /opt/local/Library/Frameworks"
 fi;
 
 found_python_lib="0"
