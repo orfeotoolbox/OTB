@@ -1,7 +1,7 @@
 #
 # Copyright(C) 2005-2020 Centre National d'Etudes Spatiales(CNES)
 #
-# This file is part of S1Tiling remote module for Orfeo Toolbox
+# This file is part of Orfeo Toolbox
 #
 #     https: //www.orfeo-toolbox.org/
 #
