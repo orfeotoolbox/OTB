@@ -44,8 +44,11 @@ function(get_version root_repo_dir project_name project_version_string project_v
 
 
     message(STATUS "CI_COMMIT_TAG : ${CI_COMMIT_TAG}")
-    message(STATUS "CI_COMMIT_REF_NAME : $CI_COMMIT_REF_NAME")
+    message(STATUS "CI_COMMIT_REF_NAME : ${CI_COMMIT_REF_NAME}")
     message(STATUS "CI_COMMIT_SHORT_SHA : ${CI_COMMIT_SHORT_SHA}")
+
+
+    message(STATUS "ENV{CI_COMMIT_REF_NAME : $ENV{CI_COMMIT_REF_NAME}"
 
 
 
