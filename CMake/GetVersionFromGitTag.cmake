@@ -42,6 +42,21 @@ function(get_version root_repo_dir project_name project_version_string project_v
       return()
     endif()
 
+
+    message(STATUS "CI_COMMIT_TAG : ${CI_COMMIT_TAG}")
+    message(STATUS "CI_COMMIT_REF_NAME : $CI_COMMIT_REF_NAME")
+    message(STATUS "CI_COMMIT_SHORT_SHA : ${CI_COMMIT_SHORT_SHA}")
+
+
+
+    execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
+      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+      OUTPUT_VARIABLE ${PROJECT_NAME}_COMMIT_STRING
+      OUTPUT_STRIP_TRAILING_WHITESPACE)
+
+    message(STATUS "_COMMIT_STRING : ${${PROJECT_NAME}_COMMIT_STRING}")
+
+
     # Get last tag from git
     execute_process(COMMAND ${GIT_EXECUTABLE} describe --abbrev=0 --tags
       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
@@ -55,6 +70,7 @@ function(get_version root_repo_dir project_name project_version_string project_v
       OUTPUT_VARIABLE ${PROJECT_NAME}_VERSION_STRING_2
       OUTPUT_STRIP_TRAILING_WHITESPACE)
 
+    message(STATUS ${${PROJECT_NAME}_VERSION_STRING})
     message(STATUS ${${PROJECT_NAME}_VERSION_STRING_2})
     
     #output string format : <semver_tag>-<commit_distance>-<commit_hash> or <semver_tag> if the HEAD is a tag
