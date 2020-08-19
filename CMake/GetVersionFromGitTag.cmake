@@ -41,10 +41,9 @@ function(get_version root_repo_dir project_version_string)
       return()
     endif()
 
-    message(STATUS "CI_COMMIT_TAG : ${CI_COMMIT_TAG}")
-    message(STATUS "CI_COMMIT_REF_NAME : ${CI_COMMIT_REF_NAME}")
-    message(STATUS "CI_COMMIT_SHORT_SHA : ${CI_COMMIT_SHORT_SHA}")
+    message(STATUS "CI_COMMIT_SHORT_SHA : $ENV{CI_COMMIT_SHORT_SHA}")
     message(STATUS "ENV{CI_COMMIT_REF_NAME : $ENV{CI_COMMIT_REF_NAME}")
+
     message(STATUS "PROJECT_NAME: ${PROJECT_NAME}")
     message(STATUS "VERSION MINOR: ${${PROJECT_NAME}_VERSION_MAJOR}")
     message(STATUS "VERSION MAJOR: ${${PROJECT_NAME}_VERSION_MINOR}")
@@ -52,8 +51,10 @@ function(get_version root_repo_dir project_version_string)
 
 
     if(DEFINED $ENV{CI_COMMIT_REF_NAME})
-      set(branch_name $ENV{CI_COMMIT_REF_NAME})
+      message(STATUS "CI_COMMIT_REF_NAME defined")
+      set(branch_name ${$ENV{CI_COMMIT_REF_NAME}})
     else()
+      message(STATUS "CI_COMMIT_REF_NAME NOT defined")
       execute_process(COMMAND ${GIT_EXECUTABLE} symbolic-ref -q HEAD
         WORKING_DIRECTORY ${root_repo_dir}
         OUTPUT_VARIABLE git_symbolic_ref_output
@@ -72,8 +73,8 @@ function(get_version root_repo_dir project_version_string)
       set(${project_version_string} "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}" PARENT_SCOPE)
 
     else()
-      if(DEFINED $ENV{CI_COMMIT_SHORT_SHA})      
-        set(${project_version_string} "${PROJECT_NAME}-${branch_name}-$ENV{CI_COMMIT_SHORT_SHA}" PARENT_SCOPE)
+      if(DEFINED ${$ENV{CI_COMMIT_SHORT_SHA}})      
+        set(${project_version_string} "${PROJECT_NAME}-${branch_name}-${$ENV{CI_COMMIT_SHORT_SHA}}" PARENT_SCOPE)
       else()
         execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
           WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
