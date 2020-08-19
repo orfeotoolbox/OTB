@@ -478,6 +478,62 @@ double ImageMetadataInterfaceBase::GetYPixelSpacing() const
   return 0;
 }
 
+int ImageMetadataInterfaceBase::GetMinute() const
+{
+  if (!this->m_Imd.Has(MDTime::AcquisitionDate))
+    itkExceptionMacro(<< "Invalid minute");
+  return this->m_Imd[MDTime::AcquisitionDate].tm_min;
+}
+
+int ImageMetadataInterfaceBase::GetHour() const
+{
+  if (!this->m_Imd.Has(MDTime::AcquisitionDate))
+    itkExceptionMacro(<< "Invalid hour");
+  return this->m_Imd[MDTime::AcquisitionDate].tm_hour;
+}
+
+int ImageMetadataInterfaceBase::GetDay() const
+{
+  if (!this->m_Imd.Has(MDTime::AcquisitionDate))
+    itkExceptionMacro(<< "Invalid day");
+  return this->m_Imd[MDTime::AcquisitionDate].tm_mday;
+}
+
+int ImageMetadataInterfaceBase::GetMonth() const
+{
+  if (!this->m_Imd.Has(MDTime::AcquisitionDate))
+    itkExceptionMacro(<< "Invalid month");
+  return this->m_Imd[MDTime::AcquisitionDate].tm_mon;
+}
+
+int ImageMetadataInterfaceBase::GetYear() const
+{
+  if (!this->m_Imd.Has(MDTime::AcquisitionDate))
+    itkExceptionMacro(<< "Invalid year");
+  return this->m_Imd[MDTime::AcquisitionDate].tm_year;
+}
+
+int ImageMetadataInterfaceBase::GetProductionDay() const
+{
+  if (!this->m_Imd.Has(MDTime::ProductionDate))
+    itkExceptionMacro(<< "Invalid production day");
+  return this->m_Imd[MDTime::AcquisitionDate].tm_mday;
+}
+
+int ImageMetadataInterfaceBase::GetProductionMonth() const
+{
+  if (!this->m_Imd.Has(MDTime::ProductionDate))
+    itkExceptionMacro(<< "Invalid production month");
+  return this->m_Imd[MDTime::AcquisitionDate].tm_mon;
+}
+
+int ImageMetadataInterfaceBase::GetProductionYear() const
+{
+  if (!this->m_Imd.Has(MDTime::ProductionDate))
+    itkExceptionMacro(<< "Invalid production year");
+  return this->m_Imd[MDTime::AcquisitionDate].tm_year;
+}
+
 void ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict)
 {
 

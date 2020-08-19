@@ -65,46 +65,6 @@ public:
   typedef Superclass::PointSetPointer PointSetPointer;
   typedef double                      RealType;
 
-  /** Get the imaging start acquisition day from the ossim metadata
-   * \deprecated
-   */
-  int GetDay() const override;
-
-  /** Get the imaging start acquisition month from the ossim metadata
-   * \deprecated
-   */
-  int GetMonth() const override;
-
-  /** Get the imaging start acquisition year from the ossim metadata
-   * \deprecated
-   */
-  int GetYear() const override;
-
-  /** Get the imaging start acquisition hour from the ossim metadata
-   * \deprecated
-   */
-  int GetHour() const override;
-
-  /** Get the imaging start acquisition minute from the ossim metadata
-   * \deprecated
-   */
-  int GetMinute() const override;
-
-  /** Get the imaging production day from the ossim metadata : generationTime variable
-   * \deprecated
-   */
-  int GetProductionDay() const override;
-
-  /** Get the imaging production month from the ossim metadata : generationTime variable
-   * \deprecated
-   */
-  int GetProductionMonth() const override;
-
-  /** Get the imaging production year from the ossim metadata : generationTime variable
-   * \deprecated
-   */
-  int GetProductionYear() const override;
-
   /** Get the calibration.calFactor : generationTime variable
    * \deprecated
    */
