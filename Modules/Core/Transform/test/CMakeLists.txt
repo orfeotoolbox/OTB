@@ -39,8 +39,6 @@ otbSarSensorModelAdapterTest.cxx
 
 add_executable(otbTransformTestDriver ${OTBTransformTests})
 
-message(yo)
-message(${OTBTransform-Test_LIBRARIES})
 target_link_libraries(otbTransformTestDriver ${OTBTransform-Test_LIBRARIES})
 otb_module_target_label(otbTransformTestDriver)
 
