@@ -32,113 +32,57 @@
 # Author: Nuno Fachada
 
 
-function(get_version root_repo_dir project_name project_version_string project_version_string_full project_version project_version_major project_version_minor project_version_patch project_version_tweak project_version_git_sha)
+function(get_version root_repo_dir project_version_string)
   
-  if(EXISTS "${root_repo_dir}/.git")
-  
+  if(EXISTS "${root_repo_dir}/.git")  
     find_package(Git)
     if(NOT GIT_FOUND)
       message(ERROR "git not found. Make sure git can be found in your PATH")
       return()
     endif()
 
-
     message(STATUS "CI_COMMIT_TAG : ${CI_COMMIT_TAG}")
     message(STATUS "CI_COMMIT_REF_NAME : ${CI_COMMIT_REF_NAME}")
     message(STATUS "CI_COMMIT_SHORT_SHA : ${CI_COMMIT_SHORT_SHA}")
+    message(STATUS "ENV{CI_COMMIT_REF_NAME : $ENV{CI_COMMIT_REF_NAME}")
+    message(STATUS "PROJECT_NAME: ${PROJECT_NAME}")
+    message(STATUS "VERSION MINOR: ${${PROJECT_NAME}_VERSION_MAJOR}")
+    message(STATUS "VERSION MAJOR: ${${PROJECT_NAME}_VERSION_MINOR}")
+    message(STATUS "VERSION PATCH: ${${PROJECT_NAME}_VERSION_PATCH}")
 
 
-    message(STATUS "ENV{CI_COMMIT_REF_NAME : $ENV{CI_COMMIT_REF_NAME}"
-
-
-
-    execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
-      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-      OUTPUT_VARIABLE ${PROJECT_NAME}_COMMIT_STRING
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-    message(STATUS "_COMMIT_STRING : ${${PROJECT_NAME}_COMMIT_STRING}")
-
-
-    # Get last tag from git
-    execute_process(COMMAND ${GIT_EXECUTABLE} describe --abbrev=0 --tags
-      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-      OUTPUT_VARIABLE ${PROJECT_NAME}_VERSION_STRING
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
-      
-    message(STATUS ${${PROJECT_NAME}_VERSION_STRING})
-    
-    execute_process(COMMAND ${GIT_EXECUTABLE} describe
-      WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-      OUTPUT_VARIABLE ${PROJECT_NAME}_VERSION_STRING_2
-      OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-    message(STATUS ${${PROJECT_NAME}_VERSION_STRING})
-    message(STATUS ${${PROJECT_NAME}_VERSION_STRING_2})
-    
-    #output string format : <semver_tag>-<commit_distance>-<commit_hash> or <semver_tag> if the HEAD is a tag
-
-
-    if("${${PROJECT_NAME}_VERSION_STRING_2}" STREQUAL "${${PROJECT_NAME}_VERSION_STRING}")
-      set(HEAD_IS_TAG 1)
+    if(DEFINED $ENV{CI_COMMIT_REF_NAME})
+      set(branch_name $ENV{CI_COMMIT_REF_NAME})
     else()
-      set(HEAD_IS_TAG 0)
+      execute_process(COMMAND ${GIT_EXECUTABLE} symbolic-ref -q HEAD
+        WORKING_DIRECTORY ${root_repo_dir}
+        OUTPUT_VARIABLE git_symbolic_ref_output
+        OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+
+      set(branch_name)
+      if(git_symbolic_ref_output)
+        get_filename_component(branch_name ${git_symbolic_ref_output} NAME)
+      endif()
     endif()
 
-    
-    if(NOT HEAD_IS_TAG)
-    
-      string(FIND ${${PROJECT_NAME}_VERSION_STRING_2} "-" position REVERSE)
-      string(LENGTH ${${PROJECT_NAME}_VERSION_STRING_2} str_length)
-      message(STATUS ${position})
-      math(EXPR pos2 "${position} + 1" )
-      message(STATUS ${str_length})  
-      math(EXPR pos_sub_str "${str_length} - ${pos2}")
-      message(STATUS ${pos_sub_str})
-      string(SUBSTRING ${${PROJECT_NAME}_VERSION_STRING_2} ${pos2} ${pos_sub_str} project_version_git_sha)
-      message(STATUS ${project_version_git_sha})
+    message(STATUS "branch : ${branch_name}")
 
-      string(SUBSTRING ${${PROJECT_NAME}_VERSION_STRING_2} 0 ${position} SUB_STRING)
-      message(STATUS ${SUB_STRING})
-      string(FIND ${SUB_STRING} "-" position2 REVERSE)
-      string(LENGTH ${SUB_STRING} str2_length)
-      math(EXPR pos3 "${position2} + 1" )
-      message(STATUS ${str2_length})  
-      math(EXPR pos_sub_str2 "${str2_length} - ${pos3}")
-      message(STATUS ${pos_sub_str2})
-      string(SUBSTRING ${SUB_STRING} ${pos3} ${pos_sub_str2} ${PROJECT_NAME}_VERSION_AHEAD)
-      message(STATUS ${${PROJECT_NAME}_VERSION_AHEAD})
-    endif()
+    if("${branch_name}" MATCHES "^release-[0-9]+\\.[0-9]+\$")
 
+      set(${project_version_string} "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}" PARENT_SCOPE)
 
-    # Get partial versions into a list
-    string(REGEX MATCHALL "-.*$|[0-9]+" "${PROJECT_NAME}_PARTIAL_VERSION_LIST" "${${PROJECT_NAME}_VERSION_STRING}")
-
-    # Set the version numbers
-    list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 0 ${PROJECT_NAME}_VERSION_MAJOR)
-    list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 1 ${PROJECT_NAME}_VERSION_MINOR)
-    list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 2 ${PROJECT_NAME}_VERSION_PATCH)
-
-    # The tweak part is optional, so check if the list contains it
-    list(LENGTH ${PROJECT_NAME}_PARTIAL_VERSION_LIST ${PROJECT_NAME}_PARTIAL_VERSION_LIST_LEN)
-    if (${PROJECT_NAME}_PARTIAL_VERSION_LIST_LEN GREATER 3)
-      list(GET ${PROJECT_NAME}_PARTIAL_VERSION_LIST 3 ${PROJECT_NAME}_VERSION_TWEAK)
-      string(SUBSTRING ${${PROJECT_NAME}_VERSION_TWEAK} 1 -1 ${PROJECT_NAME}_VERSION_TWEAK)
-    endif()
-
-    # Unset the list
-    unset(${PROJECT_NAME}_PARTIAL_VERSION_LIST)
-
-    # Set full project version string
-    if (NOT HEAD_IS_TAG)
-      set(${PROJECT_NAME}_VERSION_STRING_FULL
-        ${${PROJECT_NAME}_VERSION_STRING}+${${PROJECT_NAME}_VERSION_AHEAD}.${${PROJECT_NAME}_VERSION_GIT_SHA})
     else()
-      set(${PROJECT_NAME}_VERSION_STRING_FULL
-        ${${PROJECT_NAME}_VERSION_STRING})
+      if(DEFINED $ENV{CI_COMMIT_SHORT_SHA})      
+        set(${project_version_string} "${PROJECT_NAME}-${branch_name}-$ENV{CI_COMMIT_SHORT_SHA}" PARENT_SCOPE)
+      else()
+        execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
+          WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+          OUTPUT_VARIABLE ${PROJECT_NAME}_COMMIT_SHA_STRING
+          OUTPUT_STRIP_TRAILING_WHITESPACE)
+        set(${project_version_string} "${PROJECT_NAME}-${branch_name}-${${PROJECT_NAME}_COMMIT_SHA_STRING}" PARENT_SCOPE)
+      endif()
+
     endif()
-     
-      set(${project_version_string} ${${PROJECT_NAME}_VERSION_STRING} PARENT_SCOPE)
 
   else()
 
@@ -159,15 +103,8 @@ function(get_version root_repo_dir project_name project_version_string project_v
     
     message(STATUS "M: ${_VERSION_MAJOR}, m: ${_VERSION_MINOR}, p: ${_VERSION_PATCH}")
 
-	  set(PROJECT_VERSION_STRING_FULL ${PROJECT_VERSION_STRING})
+	  set(${project_version_string} "${PROJECT_VERSION_STRING}" PARENT_SCOPE)
     
-  endif()
-
-
-  # Set project version (without the preceding 'v')
-  set(${PROJECT_NAME}_VERSION ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH})
-  if (${PROJECT_NAME}_VERSION_TWEAK)
-    set(${PROJECT_NAME}_VERSION ${${PROJECT_NAME}_VERSION}-${${PROJECT_NAME}_VERSION_TWEAK})
   endif()
 
 endfunction()

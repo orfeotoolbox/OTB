@@ -137,7 +137,7 @@ set(OTB_VERSION_MINOR "1")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
-get_version(${OTB_SOURCE_DIR} "OTB" OTB_VERSION_STRING2 otb_version_string_full project_version project_version_major project_version_minor project_version_patch project_version_tweak project_version_git_sha)
+get_version(${OTB_SOURCE_DIR} OTB_VERSION_STRING2)
 
 message(STATUS "## ${OTB_VERSION_STRING2} ##")
 
