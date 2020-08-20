@@ -120,7 +120,7 @@ protected:
   using Superclass::MakeOutput;
 
 private:
-  HistogramSizeType     m_Sizes;
+  HistogramSizeType     m_Sizes{0,0};
   float                 m_MarginalScale;
   MeasurementVectorType m_HistogramMin;
   MeasurementVectorType m_HistogramMax;

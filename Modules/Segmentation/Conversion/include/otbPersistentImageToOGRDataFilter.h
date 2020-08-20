@@ -152,7 +152,7 @@ private:
   std::string              m_FieldName;
   std::string              m_LayerName;
   OGRwkbGeometryType       m_GeometryType;
-  SizeType                 m_StreamSize;
+  SizeType                 m_StreamSize{0,0};
   std::vector<std::string> m_OGRLayerCreationOptions;
   OGRFieldType             m_FieldType;
 
