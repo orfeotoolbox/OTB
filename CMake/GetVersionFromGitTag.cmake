@@ -32,7 +32,7 @@
 # Author: Nuno Fachada
 
 
-function(get_version root_repo_dir project_version_string)
+function(get_package_name root_repo_dir project_version_string)
   
   if(EXISTS "${root_repo_dir}/.git")  
     find_package(Git)
@@ -40,10 +40,7 @@ function(get_version root_repo_dir project_version_string)
       message(ERROR "git not found. Make sure git can be found in your PATH")
       return()
     endif()
-
-    message(STATUS "CI_COMMIT_SHORT_SHA : $ENV{CI_COMMIT_SHORT_SHA}")
-    message(STATUS "ENV{CI_COMMIT_REF_NAME : $ENV{CI_COMMIT_REF_NAME}")
-
+    
     message(STATUS "PROJECT_NAME: ${PROJECT_NAME}")
     message(STATUS "VERSION MINOR: ${${PROJECT_NAME}_VERSION_MAJOR}")
     message(STATUS "VERSION MAJOR: ${${PROJECT_NAME}_VERSION_MINOR}")
@@ -51,10 +48,8 @@ function(get_version root_repo_dir project_version_string)
 
 
     if(DEFINED ENV{CI_COMMIT_REF_NAME})
-      message(STATUS "CI_COMMIT_REF_NAME defined")
       set(branch_name "$ENV{CI_COMMIT_REF_NAME}")
     else()
-      message(STATUS "CI_COMMIT_REF_NAME NOT defined")
       execute_process(COMMAND ${GIT_EXECUTABLE} symbolic-ref -q HEAD
         WORKING_DIRECTORY ${root_repo_dir}
         OUTPUT_VARIABLE git_symbolic_ref_output
@@ -66,25 +61,25 @@ function(get_version root_repo_dir project_version_string)
       endif()
     endif()
 
-    message(STATUS "branch : ${branch_name}")
+    message(STATUS "branch_name: ${branch_name}")
 
     if("${branch_name}" MATCHES "^release-[0-9]+\\.[0-9]+\$")
 
-      set(${project_version_string} "${PROJECT_NAME}-${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}" PARENT_SCOPE)
+      set(${project_version_string} "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}" PARENT_SCOPE)
 
     else()
       if(DEFINED ENV{CI_COMMIT_SHORT_SHA})
-        set(${project_version_string} "${PROJECT_NAME}-${branch_name}-$ENV{CI_COMMIT_SHORT_SHA}" PARENT_SCOPE)
+        set(${project_version_string} "${branch_name}-$ENV{CI_COMMIT_SHORT_SHA}" PARENT_SCOPE)
       else()
         execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
           WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
           OUTPUT_VARIABLE ${PROJECT_NAME}_COMMIT_SHA_STRING
           OUTPUT_STRIP_TRAILING_WHITESPACE)
-        set(${project_version_string} "${PROJECT_NAME}-${branch_name}-${${PROJECT_NAME}_COMMIT_SHA_STRING}" PARENT_SCOPE)
+        set(${project_version_string} "${branch_name}-${${PROJECT_NAME}_COMMIT_SHA_STRING}" PARENT_SCOPE)
       endif()
 
     endif()
-    
+
   else()
 
     # Standalone source directory, get version from RELEASE_NOTE file
