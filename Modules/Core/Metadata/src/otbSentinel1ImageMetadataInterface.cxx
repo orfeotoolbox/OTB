@@ -352,9 +352,9 @@ double Sentinel1ImageMetadataInterface::GetCenterIncidenceAngle() const
   return 0;
 }
 
-std::vector<OTB_azimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate(const XMLMetadataSupplier &xmlMS) const
+std::vector<AzimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate(const XMLMetadataSupplier &xmlMS) const
 {
-  std::vector<OTB_azimuthFmRate> azimuthFmRateVector;
+  std::vector<AzimuthFmRate> azimuthFmRateVector;
   // Number of entries in the vector
   int listCount = xmlMS.GetAs<int>("product.generalAnnotation.azimuthFmRateList.count");
   // This streams wild hold the iteration number
@@ -365,7 +365,7 @@ std::vector<OTB_azimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate
     oss << listId;
     // Base path to the data, that depends on the iteration number
     std::string path_root = "product.generalAnnotation.azimuthFmRateList.azimuthFmRate_" + oss.str();
-    OTB_azimuthFmRate afr;
+    AzimuthFmRate afr;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> afr.azimuthTime;
     afr.t0 = xmlMS.GetAs<double>(path_root + ".t0");
     afr.azimuthFmRatePolynomial = xmlMS.GetAsVector<double>(path_root + ".azimuthFmRatePolynomial",
@@ -375,9 +375,9 @@ std::vector<OTB_azimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate
   return azimuthFmRateVector;
 }
 
-std::vector<OTB_dopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCentroid(const XMLMetadataSupplier &xmlMS) const
+std::vector<DopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCentroid(const XMLMetadataSupplier &xmlMS) const
 {
-  std::vector<OTB_dopplerCentroid> dopplerCentroidVector;
+  std::vector<DopplerCentroid> dopplerCentroidVector;
   // Number of entries in the vector
   int listCount = xmlMS.GetAs<int>("product.dopplerCentroid.dcEstimateList.count");
   // This streams wild hold the iteration number
@@ -388,7 +388,7 @@ std::vector<OTB_dopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCent
     oss << listId;
     // Base path to the data, that depends on the iteration number
     std::string path_root = "product.dopplerCentroid.dcEstimateList.dcEstimate_" + oss.str();
-    OTB_dopplerCentroid dopplerCent;
+    DopplerCentroid dopplerCent;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> dopplerCent.azimuthTime;
     dopplerCent.t0 = xmlMS.GetAs<double>(path_root + ".t0");
     dopplerCent.dopCoef = xmlMS.GetAsVector<double>(path_root + ".dataDcPolynomial",
@@ -400,9 +400,9 @@ std::vector<OTB_dopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCent
   return dopplerCentroidVector;
 }
 
-std::vector<OTB_Orbit> Sentinel1ImageMetadataInterface::GetOrbits(const XMLMetadataSupplier &xmlMS) const
+std::vector<Orbit> Sentinel1ImageMetadataInterface::GetOrbits(const XMLMetadataSupplier &xmlMS) const
 {
-  std::vector<OTB_Orbit> orbitVector;
+  std::vector<Orbit> orbitVector;
   // Number of entries in the vector
   int listCount = xmlMS.GetAs<int>("product.generalAnnotation.orbitList.count");
   // This streams wild hold the iteration number
@@ -413,7 +413,7 @@ std::vector<OTB_Orbit> Sentinel1ImageMetadataInterface::GetOrbits(const XMLMetad
     oss << listId;
     // Base path to the data, that depends on the iteration number
     std::string path_root = "product.generalAnnotation.orbitList.orbit_" + oss.str();
-    OTB_Orbit orbit;
+    Orbit orbit;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".time")) >> orbit.time;
     orbit.posX = xmlMS.GetAs<double>(path_root + ".position.x");
     orbit.posY = xmlMS.GetAs<double>(path_root + ".position.y");
@@ -426,9 +426,9 @@ std::vector<OTB_Orbit> Sentinel1ImageMetadataInterface::GetOrbits(const XMLMetad
   return orbitVector;
 }
 
-std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrationVector(const XMLMetadataSupplier &xmlMS) const
+std::vector<CalibrationVector> Sentinel1ImageMetadataInterface::GetCalibrationVector(const XMLMetadataSupplier &xmlMS) const
 {
-  std::vector<OTB_calibrationVector> calibrationVector;
+  std::vector<CalibrationVector> calibrationVector;
   // Number of entries in the vector
   int listCount = xmlMS.GetAs<int>("calibration.calibrationVectorList.count");
   // This streams wild hold the iteration number
@@ -440,7 +440,7 @@ std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrati
     // Base path to the data, that depends on the iteration number
     std::string path_root = "calibration.calibrationVectorList.calibrationVector_" + oss.str();
 
-    OTB_calibrationVector calVect;
+    CalibrationVector calVect;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> calVect.azimuthTime;
     calVect.line = xmlMS.GetAs<int>(path_root + ".line");
 
@@ -478,9 +478,9 @@ std::vector<OTB_calibrationVector> Sentinel1ImageMetadataInterface::GetCalibrati
   return calibrationVector;
 }
 
-std::vector<OTB_SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(const XMLMetadataSupplier &xmlMS) const
+std::vector<SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(const XMLMetadataSupplier &xmlMS) const
 {
-  std::vector<OTB_SARNoise> noiseVector;
+  std::vector<SARNoise> noiseVector;
   // Number of entries in the vector
   int listCount = xmlMS.GetAs<int>("noise.noiseVectorList.count");
   // This streams wild hold the iteration number
@@ -491,7 +491,7 @@ std::vector<OTB_SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(const 
     oss << listId;
     // Base path to the data, that depends on the iteration number
     std::string path_root = "noise.noiseVectorList.noiseVector_" + oss.str();
-    OTB_SARNoise noiseVect;
+    SARNoise noiseVect;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> noiseVect.azimuthTime;
     MetaData::LUT1D noiseLut;
     MetaData::LUTAxis ax1;
@@ -529,21 +529,21 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
   assert(mds);
   assert(mds->GetNbBands() == this->m_Imd.Bands.size());
   // Metadata read by GDAL
-  Fetch(MDTime::AcquisitionStartTime, mds, "ACQUISITION_START_TIME");
-  Fetch(MDTime::AcquisitionStopTime, mds, "ACQUISITION_STOP_TIME");
-  Fetch(MDStr::BeamMode, mds, "BEAM_MODE");
-  Fetch(MDStr::BeamSwath, mds, "BEAM_SWATH");
-  Fetch("FACILITY_IDENTIFIER", mds, "FACILITY_IDENTIFIER");
-  Fetch(MDNum::LineSpacing, mds, "LINE_SPACING");
-  Fetch(MDStr::Mission, mds, "MISSION_ID");
-  Fetch(MDStr::Mode, mds, "MODE");
-  Fetch(MDStr::OrbitDirection, mds, "ORBIT_DIRECTION");
-  Fetch(MDNum::OrbitNumber, mds, "ORBIT_NUMBER");
-  Fetch(MDNum::PixelSpacing, mds, "PIXEL_SPACING");
-  Fetch(MDStr::ProductType, mds, "PRODUCT_TYPE");
-  Fetch(MDStr::Instrument, mds, "SATELLITE_IDENTIFIER");
-  Fetch(MDStr::SensorID, mds, "SENSOR_IDENTIFIER");
-  Fetch(MDStr::Swath, mds, "SWATH");
+  Fetch(MDTime::AcquisitionStartTime, *mds, "ACQUISITION_START_TIME");
+  Fetch(MDTime::AcquisitionStopTime, *mds, "ACQUISITION_STOP_TIME");
+  Fetch(MDStr::BeamMode, *mds, "BEAM_MODE");
+  Fetch(MDStr::BeamSwath, *mds, "BEAM_SWATH");
+  Fetch("FACILITY_IDENTIFIER", *mds, "FACILITY_IDENTIFIER");
+  Fetch(MDNum::LineSpacing, *mds, "LINE_SPACING");
+  Fetch(MDStr::Mission, *mds, "MISSION_ID");
+  Fetch(MDStr::Mode, *mds, "MODE");
+  Fetch(MDStr::OrbitDirection, *mds, "ORBIT_DIRECTION");
+  Fetch(MDNum::OrbitNumber, *mds, "ORBIT_NUMBER");
+  Fetch(MDNum::PixelSpacing, *mds, "PIXEL_SPACING");
+  Fetch(MDStr::ProductType, *mds, "PRODUCT_TYPE");
+  Fetch(MDStr::Instrument, *mds, "SATELLITE_IDENTIFIER");
+  Fetch(MDStr::SensorID, *mds, "SENSOR_IDENTIFIER");
+  Fetch(MDStr::Swath, *mds, "SWATH");
 
   // Manifest file
   std::string ManifestFilePath = mds->GetResourceFile(std::string("manifest\\.safe"));
@@ -560,8 +560,8 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
   for (int bandId = 0 ; bandId < mds->GetNbBands() ; ++bandId)
   {
     Projection::SARParam sarParam;
-    Fetch(MDStr::Polarization, mds, "POLARISATION", bandId);
-    std::string swath = Fetch(MDStr::Swath, mds, "SWATH", bandId);
+    Fetch(MDStr::Polarization, *mds, "POLARISATION", bandId);
+    std::string swath = Fetch(MDStr::Swath, *mds, "SWATH", bandId);
 
     // Annotation file
     std::string AnnotationFilePath = mds->GetResourceFile(std::string("annotation[/\\\\]s1[ab].*-")
@@ -571,8 +571,8 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
       otbGenericExceptionMacro(MissingMetadataException,<<"Missing Annotation file for band '"<<swath<<"'");
     XMLMetadataSupplier AnnotationMS(AnnotationFilePath);
 
-    sarParam.azimuthFmRate = this->GetAzimuthFmRate(AnnotationMS);
-    sarParam.dopplerCentroid = this->GetDopplerCentroid(AnnotationMS);
+    sarParam.azimuthFmRates = this->GetAzimuthFmRate(AnnotationMS);
+    sarParam.dopplerCentroids = this->GetDopplerCentroid(AnnotationMS);
     sarParam.orbits = this->GetOrbits(AnnotationMS);
     m_Imd.Add(MDNum::NumberOfLines, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines"));
     m_Imd.Add(MDNum::NumberOfColumns, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfSamples"));

@@ -72,7 +72,7 @@ unsigned int ImageCommons::GetGCPCount(void) const
 }
 
 
-const OTB_GCP& ImageCommons::GetGCPs(unsigned int GCPnum) const
+const GCP& ImageCommons::GetGCPs(unsigned int GCPnum) const
 {
   assert(GCPnum < GetGCPCount());
   return m_Imd.GetGCPParam().GCPs[GCPnum];

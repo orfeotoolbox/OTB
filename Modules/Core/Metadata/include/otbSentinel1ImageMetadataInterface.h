@@ -111,19 +111,19 @@ protected:
   }
 
   /* Fetch the AzimuthFmRate metadata */
-  std::vector<OTB_azimuthFmRate> GetAzimuthFmRate(const XMLMetadataSupplier&) const;
+  std::vector<AzimuthFmRate> GetAzimuthFmRate(const XMLMetadataSupplier&) const;
 
   /* Fetch the DopplerCentroid metadata */
-  std::vector<OTB_dopplerCentroid> GetDopplerCentroid(const XMLMetadataSupplier&) const;
+  std::vector<DopplerCentroid> GetDopplerCentroid(const XMLMetadataSupplier&) const;
 
   /* Fetch the Orbits metadata */
-  std::vector<OTB_Orbit> GetOrbits(const XMLMetadataSupplier&) const;
+  std::vector<Orbit> GetOrbits(const XMLMetadataSupplier&) const;
 
   /* Fetch the Calibration metadata */
-  std::vector<OTB_calibrationVector> GetCalibrationVector(const XMLMetadataSupplier&) const;
+  std::vector<CalibrationVector> GetCalibrationVector(const XMLMetadataSupplier&) const;
 
   /* Fetch the noise LUTs */
-  std::vector<OTB_SARNoise> GetNoiseVector(const XMLMetadataSupplier&) const;
+  std::vector<SARNoise> GetNoiseVector(const XMLMetadataSupplier&) const;
 
   /* Compute the mean terrain elevation */
   double getBandTerrainHeight(const XMLMetadataSupplier&) const;

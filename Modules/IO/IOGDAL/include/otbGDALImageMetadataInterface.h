@@ -31,10 +31,10 @@ namespace otb
 class OTBIOGDAL_EXPORT GDALImageMetadataInterface : public ImageMetadataInterfaceBase
 {
 public:
-  typedef GDALImageMetadataInterface Self;
-  typedef ImageMetadataInterfaceBase  Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
+  using Self         = GDALImageMetadataInterface;
+  using Superclass   = ImageMetadataInterfaceBase;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

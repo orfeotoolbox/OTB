@@ -36,10 +36,6 @@ namespace otb
 class MissingMetadataException : public itk::ExceptionObject
 {
 public:
-  /** Run-time information. */
-  itkTypeMacro(MissingMetadataException, itk::ExceptionObject);
-
-  /** Constructor. */
   using itk::ExceptionObject::ExceptionObject;
 };
 

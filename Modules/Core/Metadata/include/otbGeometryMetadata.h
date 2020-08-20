@@ -32,15 +32,15 @@
 namespace otb
 {
 
-/** \class OTB_GCP
+/** \class GCP
  *
- * \brief This OTB_GCP class is used to manage the GCP parameters
+ * \brief This GCP class is used to manage the GCP parameters
  * in OTB.
  *
  *
  * \ingroup OTBMetadata
  */
-class OTBMetadata_EXPORT OTB_GCP
+class OTBMetadata_EXPORT GCP
 {
 public:
   /** Unique identifier, often numeric */
@@ -64,20 +64,19 @@ public:
   /** Elevation of GCP, or zero if not known */
   double m_GCPZ;
 
-  OTB_GCP();
-  OTB_GCP(std::string id, std::string info, double col, double row, double px, double py, double pz);
-  ~OTB_GCP();
+  GCP() = default;
+  GCP(std::string id, std::string info, double col, double row, double px, double py, double pz);
 
   void Print(std::ostream& os) const;
   std::string ToJSON(bool multiline=false) const;
 };
 
-/** \struct OTB_azimuthFmRate
+/** \struct AzimuthFmRate
  *
- * \brief This class is used to manage parameters
+ * \brief This structure is used to manage parameters
  * related to the Azimuth Frequency Modulation rate
  */
-struct OTBMetadata_EXPORT OTB_azimuthFmRate
+struct OTBMetadata_EXPORT AzimuthFmRate
 {
   /** Zero Doppler azimuth time to which azimuth FM rate parameters apply */
   MetaData::Time azimuthTime;
@@ -87,11 +86,11 @@ struct OTBMetadata_EXPORT OTB_azimuthFmRate
   std::vector<double> azimuthFmRatePolynomial;
 };
 
-/** \struct OTB_calibrationVector
+/** \struct CalibrationVector
  *
- * \brief This class is used to handle calibration look up tables
+ * \brief This structure is used to handle calibration look up tables
  */
-struct OTBMetadata_EXPORT OTB_calibrationVector
+struct OTBMetadata_EXPORT CalibrationVector
 {
   /** Image line at which the calibration vector applies */
   int line;
@@ -107,11 +106,11 @@ struct OTBMetadata_EXPORT OTB_calibrationVector
   MetaData::LUT1D dn;
 };
 
-/** \struct OTB_dopplerCentroid
+/** \struct DopplerCentroid
  *
- * \brief This class is used to handle Doppler centroid estimates
+ * \brief This structure is used to handle Doppler centroid estimates
  */
-struct OTBMetadata_EXPORT OTB_dopplerCentroid
+struct OTBMetadata_EXPORT DopplerCentroid
 {
   /** Zero Doppler azimuth time of this Doppler centroid estimate */
   MetaData::Time azimuthTime;
@@ -123,11 +122,11 @@ struct OTBMetadata_EXPORT OTB_dopplerCentroid
   std::vector<double> geoDopCoef;
 };
 
-/** \struct OTB_SARNoise
+/** \struct SARNoise
  *
- * \breif This class is used to handle Noise look up tables
+ * \breif This structure is used to handle Noise look up tables
  */
-struct OTBMetadata_EXPORT OTB_SARNoise
+struct OTBMetadata_EXPORT SARNoise
 {
   /** Image line at which the noise vector applies */
   int line;
@@ -137,11 +136,11 @@ struct OTBMetadata_EXPORT OTB_SARNoise
   MetaData::LUT1D noiseLut;
 };
 
-/** \struct OTB_Orbit
+/** \struct Orbit
  *
- * \breif This class is used to handle orbit information
+ * \breif This structure is used to handle orbit information
  */
-struct OTBMetadata_EXPORT OTB_Orbit
+struct OTBMetadata_EXPORT Orbit
 {
   /** Timestamp at which orbit state vectors apply */
   MetaData::Time time;
@@ -166,7 +165,7 @@ struct OTBMetadata_EXPORT GCPParam
 {
   std::string GCPProjection;
 
-  std::vector<OTB_GCP> GCPs;
+  std::vector<GCP> GCPs;
 
   // JSON export
   std::string ToJSON(bool multiline=false) const;
@@ -260,22 +259,22 @@ struct OTBMetadata_EXPORT SARParam
   /** Azimuth Frequency Modulation (FM) rate list.
    * contains an entry for each azimuth FM rate update made along azimuth.
    */
-  std::vector<OTB_azimuthFmRate> azimuthFmRate;
+  std::vector<AzimuthFmRate> azimuthFmRates;
 
   /** Calibration vector list */
-  std::vector<OTB_calibrationVector> calibrationVectors;
+  std::vector<CalibrationVector> calibrationVectors;
 
   MetaData::Time calibrationStartTime;
   MetaData::Time calibrationStopTime;
 
   /** Doppler centroid estimates */
-  std::vector<OTB_dopplerCentroid> dopplerCentroid;
+  std::vector<DopplerCentroid> dopplerCentroids;
 
   /** Noise look up tables */
-  std::vector<OTB_SARNoise> noiseVector;
+  std::vector<SARNoise> noiseVector;
 
   /** List of orbit information */
-  std::vector<OTB_Orbit> orbits;
+  std::vector<Orbit> orbits;
 };
 
 } // end namespace Projection

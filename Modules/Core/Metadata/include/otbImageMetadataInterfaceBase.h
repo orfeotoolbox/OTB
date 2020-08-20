@@ -86,8 +86,8 @@ public:
   UnsignedIntType GetGCPCount() const;
   //  otbMetadataGetMacro(GCPCount, unsigned int);
 
-  OTB_GCP& GetGCPs(unsigned int GCPnum);
-  // otbMetadataGetGCPnumMacro(GCPs, OTB_GCP&, GCPnum, unsigned int);
+  GCP& GetGCPs(unsigned int GCPnum);
+  // otbMetadataGetGCPnumMacro(GCPs, GCP&, GCPnum, unsigned int);
 
   std::string GetGCPId(unsigned int GCPnum) const;
   //  otbMetadataGetGCPnumMacro(GCPId, std::string, GCPnum, unsigned int);
@@ -237,15 +237,15 @@ public:
 
   static void PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict);
 
-  const std::string& Fetch(MDStr key, const MetadataSupplierInterface * mds, const char *path, int band=-1);
+  const std::string& Fetch(MDStr key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
 
-  const double& Fetch(MDNum key, const MetadataSupplierInterface * mds, const char *path, int band=-1);
+  const double& Fetch(MDNum key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
 
-  const MetaData::Time& Fetch(MDTime key, const MetadataSupplierInterface * mds, const char *path, int band=-1);
+  const MetaData::Time& Fetch(MDTime key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
 
-  const std::string& Fetch(std::string key, const MetadataSupplierInterface * mds, const char *path, int band=-1);
+  const std::string& Fetch(std::string key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
 
-  const boost::any& FetchRPC(const MetadataSupplierInterface * mds);
+  const boost::any& FetchRPC(const MetadataSupplierInterface & mds);
 
   /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
    * then translate it into ImageMetadata.
@@ -268,7 +268,7 @@ private:
   ImageMetadataInterfaceBase(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  OTB_GCP m_GCP;
+  GCP m_GCP;
 };
 
 } // end namespace otb

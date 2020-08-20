@@ -157,13 +157,13 @@ Projection::GCPParam GDALDatasetWrapper::GetGCPParam() const
   gcpParam.GCPProjection = std::string(m_Dataset->GetGCPProjection());
   for ( const GDAL_GCP *gcps = m_Dataset->GetGCPs() ; gcps != gcps + m_Dataset->GetGCPCount() ; ++gcps)
   {
-    gcpParam.GCPs.push_back(OTB_GCP(std::string(gcps->pszId),
-       		                        std::string(gcps->pszInfo),
-  									gcps->dfGCPPixel,
-   									gcps->dfGCPLine,
-   									gcps->dfGCPX,
-   									gcps->dfGCPY,
-   									gcps->dfGCPZ));
+    gcpParam.GCPs.push_back(GCP(std::string(gcps->pszId),
+       		                    std::string(gcps->pszInfo),
+  								gcps->dfGCPPixel,
+   								gcps->dfGCPLine,
+   								gcps->dfGCPX,
+   								gcps->dfGCPY,
+   								gcps->dfGCPZ));
   }
   return gcpParam;
 }

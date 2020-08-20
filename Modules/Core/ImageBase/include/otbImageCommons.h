@@ -51,9 +51,9 @@ public:
   unsigned int GetGCPCount(void) const;
 
   // Removed non-const getter on GCPs
-  //~ OTB_GCP& GetGCPs(unsigned int GCPnum);
+  //~ GCP& GetGCPs(unsigned int GCPnum);
   
-  const OTB_GCP& GetGCPs(unsigned int GCPnum) const;
+  const GCP& GetGCPs(unsigned int GCPnum) const;
 
   std::string GetGCPId(unsigned int GCPnum) const;
   std::string GetGCPInfo(unsigned int GCPnum) const;

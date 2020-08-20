@@ -241,7 +241,7 @@ void otbImageMetadataToFromKeywordlistTest(char* argv[])
   Projection::RPCParam rpcStruct;
   md.Add(MDGeom::RPC, rpcStruct);
   Projection::GCPParam gcpStruct;
-  gcpStruct.GCPs.push_back(OTB_GCP());
+  gcpStruct.GCPs.push_back(GCP());
   md.Add(MDGeom::GCP, gcpStruct);
   MetaData::LUT1D lut1d;
   lut1d.Axis[0].Size = 3;
