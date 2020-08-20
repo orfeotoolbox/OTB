@@ -559,7 +559,7 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
   // Band metadata
   for (int bandId = 0 ; bandId < mds->GetNbBands() ; ++bandId)
   {
-    Projection::SARParam sarParam;
+    SARParam sarParam;
     Fetch(MDStr::Polarization, *mds, "POLARISATION", bandId);
     std::string swath = Fetch(MDStr::Swath, *mds, "SWATH", bandId);
 
