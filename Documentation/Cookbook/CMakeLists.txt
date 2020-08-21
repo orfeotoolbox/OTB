@@ -151,7 +151,7 @@ add_custom_target(CookBookArchive
   ALL
   COMMAND ${TAR_COMMAND}
   --transform "s/^html/CookBook-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}/"
-  -czf ${CMAKE_BINARY_DIR}/CookBook-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}-html.tar.gz html
+  -czf ${CMAKE_BINARY_DIR}/CookBook-${OTB_VERSION_STRING2}-html.tar.gz html
   WORKING_DIRECTORY ${RST_BUILD_DIR}
   DEPENDS CookBookHTML
   COMMENT "Creating archive for html CookBook")
