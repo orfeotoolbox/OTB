@@ -84,10 +84,10 @@ int otbGDALRPCTransformerTest(int itkNotUsed(argc), char* argv[])
     success = false;
   }
 
-  // Test BackwardTransform
+  // Test InverseTransform
     x = 147.1753248795781; y = -42.78881952208293; z = 0;
     exp_x = 20.01139515217801; exp_y = 9.984517889590279; exp_z = 0.0;
-    if(!transformer.BackwardTransform(&x, &y, &z))
+    if(!transformer.InverseTransform(&x, &y, &z))
     {
       std::cout << "ForwardTransform failed, returned False." << '\n';
       success = false;

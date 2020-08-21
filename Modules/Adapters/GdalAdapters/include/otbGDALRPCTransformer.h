@@ -155,7 +155,7 @@ public:
   bool ForwardTransform(double* x, double* y, double* z, int nPointCount=1);
 
   /**
-   * Compute a backward transformation
+   * Compute an inverse transformation
    *
    * This method performs a transformation from long/lat/height to column/row space.
    * It can work with an arbitrary number of points.
@@ -167,7 +167,7 @@ public:
    * \return true if all points were correctly transformed
    *
    */
-  bool BackwardTransform(double* x, double* y, double* z, int nPointCount=1);
+  bool InverseTransform(double* x, double* y, double* z, int nPointCount=1);
 
 protected:
   /**

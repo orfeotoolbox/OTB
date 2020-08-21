@@ -78,7 +78,7 @@ bool GDALRPCTransformer::ForwardTransform(double* x, double* y, double* z, int n
   return true;
 }
 
-bool GDALRPCTransformer::BackwardTransform(double* x, double* y, double* z, int nPointCount)
+bool GDALRPCTransformer::InverseTransform(double* x, double* y, double* z, int nPointCount)
 {
   if (this->m_Modified)
     this->Update();
