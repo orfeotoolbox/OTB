@@ -24,8 +24,6 @@
 #include "otbCompositeTransform.h"
 
 #include "otbGenericMapProjection.h"
-#include "otbForwardSensorModel.h"
-#include "otbInverseSensorModel.h"
 #include "itkIdentityTransform.h"
 
 namespace otb

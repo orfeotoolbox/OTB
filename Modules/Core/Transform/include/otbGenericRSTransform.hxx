@@ -25,6 +25,7 @@
 #include "otbMacro.h"
 #include "otbMetaDataKey.h"
 #include "itkMetaDataObject.h"
+#include "otbRPCForwardTransform.h"
 
 #include "otbSpatialReference.h"
 
@@ -123,10 +124,10 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
   // If not, try to make a sensor model
   if ((m_InputTransform.IsNull()) && (m_InputKeywordList.GetSize() > 0))
   {
-    typedef otb::ForwardSensorModel<double, InputSpaceDimension, InputSpaceDimension> ForwardSensorModelType;
+    typedef otb::RPCForwardTransform<double, InputSpaceDimension, InputSpaceDimension> ForwardSensorModelType;
     typename ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
 
-    sensorModel->SetImageGeometry(m_InputKeywordList);
+    sensorModel->SetMetadataModel(m_InputKeywordList);
 
     if (sensorModel->IsValidSensorModel())
     {

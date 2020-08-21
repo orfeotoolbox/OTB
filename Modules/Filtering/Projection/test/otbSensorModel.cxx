@@ -27,8 +27,8 @@
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
-#include "otbForwardSensorModel.h"
-#include "otbInverseSensorModel.h"
+#include "otbRPCForwardTransform.h"
+#include "otbRPCInverseTransform.h"
 #include "otbDEMHandler.h"
 #include <otbImageKeywordlist.h>
 #include "itkEuclideanDistanceMetric.h"
@@ -63,7 +63,7 @@ int produceGCP(char* outputgcpfilename, const otb::ImageKeywordlist& kwlist, boo
   itk::Point<double, 2> geoPoint;
 
   //  otbForwardSensorModel
-  typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
+  typedef otb::RPCForwardTransform<double> ForwardSensorModelType;
   ForwardSensorModelType::Pointer         forwardSensorModel = ForwardSensorModelType::New();
   forwardSensorModel->SetImageGeometry(kwlist);
   if (forwardSensorModel->IsValidSensorModel() == false)
@@ -208,7 +208,7 @@ int otbSensorModel(int argc, char* argv[])
   }
 
   // otbInverseSensorModel
-  typedef otb::InverseSensorModel<double> InverseSensorModelType;
+  typedef otb::RPCInverseTransform<double> InverseSensorModelType;
   InverseSensorModelType::Pointer         inverseSensorModel = InverseSensorModelType::New();
   if (!inverseSensorModel)
   {

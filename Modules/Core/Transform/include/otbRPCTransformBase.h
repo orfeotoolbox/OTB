@@ -18,22 +18,20 @@
  * limitations under the License.
  */
 
-#ifndef otbSensorModelBase_h
-#define otbSensorModelBase_h
+#ifndef otbRPCTransformBase_h
+#define otbRPCTransformBase_h
 
-#include "otbMacro.h"
-#include "otbImageMetadata.h"
-
-#include "otbTransform.h"
-#include "itkSmartPointer.h"
+#include "otbSensorModelBase.h"
+#include "otbGeometryMetadata.h"
+#include "otbGDALRPCTransformer.h"
 
 namespace otb
 {
-/** \class SensorModelBase
- *  \brief Base class for the sensor model projection classes.
+/** \class RPCTransformBase
+ *  \brief Base projection class based on the RPC method.
  *
- *  This is the base class for sensor model projection classes. Those
- *  classes allow:
+ *  This is a projection class, based on a RPC sensor model. This
+ *  class allows:
  *
  *  - Forward Transformation of a point in the sensor geometry (i, j)
  *  to a geographic point in (lat, long)
@@ -41,17 +39,15 @@ namespace otb
  *  - Inverse Transformation of a a geographic point in (lat, long) to
  *  a point in the sensor geometry (i, j).
  *
- * \ingroup Projection
  * \ingroup OTBTransform
  */
-template <class TScalarType, unsigned int NInputDimensions = 2, unsigned int NOutputDimensions = 3>
-class ITK_EXPORT SensorModelBase : public Transform<TScalarType, NInputDimensions, NOutputDimensions>
+template <class TScalarType, unsigned int NInputDimensions = 3, unsigned int NOutputDimensions = 2>
+class ITK_EXPORT RPCTransformBase : public SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 {
-
 public:
   /** Standard class typedefs. */
-  using Self         = SensorModelBase;
-  using Superclass   = Transform<TScalarType, NInputDimensions, NOutputDimensions>;
+  using Self         = RPCTransformBase;
+  using Superclass   = SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>;
   using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self> ;
 
@@ -70,20 +66,28 @@ public:
    * Used by the factory to find the correct class.
    * Return false if model not valid.
    */
-  virtual bool SetMetadataModel(boost::any imdModel) = 0;
+  bool SetMetadataModel(boost::any imdModel) override;
 
   /** Check model validity */
-  virtual bool IsValidSensorModel() = 0;
+  bool IsValidSensorModel() override;
 
 protected:
-  SensorModelBase() = default;
-  ~SensorModelBase() = default;
+  RPCTransformBase() = default;
+  ~RPCTransformBase() override;
+  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
+
+  Projection::RPCParam* m_RPCParam = nullptr;
+  GDALRPCTransformer* m_Transformer = nullptr;
 
 private:
-  SensorModelBase(const Self&) = delete;
+  RPCTransformBase(const Self&) = delete;
   void operator=(const Self&) = delete;
 };
 
-} // namespace otb
+}
+
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbRPCTransformBase.hxx"
+#endif
 
 #endif

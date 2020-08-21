@@ -25,7 +25,6 @@
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
-#include "otbInverseSensorModel.h"
 
 namespace otb
 {
