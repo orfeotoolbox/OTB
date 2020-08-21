@@ -25,20 +25,12 @@
 namespace otb
 {
 
-OTB_GCP::OTB_GCP() : m_GCPCol(0), m_GCPRow(0), m_GCPX(0), m_GCPY(0), m_GCPZ(0)
+GCP::GCP(std::string id, std::string info, double col, double row, double px, double py, double pz)
+  : m_Id(move(id)), m_Info(move(info)), m_GCPCol(col), m_GCPRow(row), m_GCPX(px), m_GCPY(py), m_GCPZ(pz)
 {
 }
 
-OTB_GCP::OTB_GCP(std::string id, std::string info, double col, double row, double px, double py, double pz)
-  : m_Id(id), m_Info(info), m_GCPCol(col), m_GCPRow(row), m_GCPX(px), m_GCPY(py), m_GCPZ(pz)
-{
-}
-
-OTB_GCP::~OTB_GCP()
-{
-}
-
-void OTB_GCP::Print(std::ostream& os) const
+void GCP::Print(std::ostream& os) const
 {
   os << "   GCP Id = " << this->m_Id << std::endl;
   os << "   GCP Info =  " << this->m_Info << std::endl;
@@ -46,7 +38,7 @@ void OTB_GCP::Print(std::ostream& os) const
   os << "   GCP (X, Y, Z) = (" << this->m_GCPX << "," << this->m_GCPY << "," << this->m_GCPZ << ")" << std::endl;
 }
 
-std::string OTB_GCP::ToJSON(bool multiline) const
+std::string GCP::ToJSON(bool multiline) const
 {
   std::ostringstream oss;
   std::string sep;

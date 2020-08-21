@@ -77,10 +77,18 @@ scp ref.sha otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/
 #Untar doc
 if [ "$CI_COMMIT_REF_NAME" = "develop" ]
 then
+  #Cookbook
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-  tar -xf ${jobs_directory}/CookBook-*-html.tar.gz -C ${jobs_directory}/
+    tar -xf ${jobs_directory}/CookBook-*-html.tar.gz -C ${jobs_directory}/
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-  rm -rf /home/otbpush/test/CookBook/*
+    rm -rf /home/otbpush/test/CookBook/*
   ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-  mv ${jobs_directory}/CookBook-*/* /home/otbpush/test/CookBook/.
+    mv ${jobs_directory}/CookBook-*/* /home/otbpush/test/CookBook/.
+
+  # Doxygen
+  ssh otbpush@otb5-vm2.orfeo-toolbox.org \
+    rm -rf /home/otbpush/test/Doxygen/*
+  # Strip first component of the tar (Doxygen/html/...)
+  ssh otbpush@otb5-vm2.orfeo-toolbox.org \
+    tar -xf ${jobs_directory}/OTB-Doxygen-*.tar.bz2 -C /home/otbpush/test/Doxygen/ --strip-components=1
 fi

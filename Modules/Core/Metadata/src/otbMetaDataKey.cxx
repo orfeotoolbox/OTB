@@ -75,7 +75,7 @@ const MetaDataKey::KeyTypeDef Types[] = {
     MetaDataKey::KeyTypeDef(MetaDataKey::DriverLongNameKey, MetaDataKey::TSTRING),
     MetaDataKey::KeyTypeDef(MetaDataKey::ProjectionRefKey, MetaDataKey::TSTRING),
     MetaDataKey::KeyTypeDef(MetaDataKey::GCPProjectionKey, MetaDataKey::TSTRING),
-    MetaDataKey::KeyTypeDef(MetaDataKey::GCPParametersKey, MetaDataKey::TOTB_GCP),
+    MetaDataKey::KeyTypeDef(MetaDataKey::GCPParametersKey, MetaDataKey::TGCP),
     MetaDataKey::KeyTypeDef(MetaDataKey::GCPCountKey, MetaDataKey::TENTIER),
     MetaDataKey::KeyTypeDef(MetaDataKey::GeoTransformKey, MetaDataKey::TVECTOR),
     MetaDataKey::KeyTypeDef(MetaDataKey::MetadataKey, MetaDataKey::TSTRING),

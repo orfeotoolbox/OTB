@@ -845,7 +845,7 @@ void GDALImageIO::InternalReadImageInformation()
       const GDAL_GCP* psGCP;
       psGCP = dataset->GetGCPs() + cpt;
 
-      OTB_GCP pOtbGCP;
+      GCP pOtbGCP;
       pOtbGCP.m_Id     = std::string(psGCP->pszId);
       pOtbGCP.m_Info   = std::string(psGCP->pszInfo);
       pOtbGCP.m_GCPRow = psGCP->dfGCPLine;
@@ -859,7 +859,7 @@ void GDALImageIO::InternalReadImageInformation()
       lStream << MetaDataKey::GCPParametersKey << cpt;
       key = lStream.str();
 
-      itk::EncapsulateMetaData<OTB_GCP>(dict, key, pOtbGCP);
+      itk::EncapsulateMetaData<GCP>(dict, key, pOtbGCP);
       gcps.GCPs.push_back(pOtbGCP);
     }
     m_Imd.Add(MDGeom::GCP, gcps);
@@ -1568,7 +1568,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     std::vector<GDAL_GCP> gdalGcps(gcpPrm.GCPs.size());
     for (unsigned int gcpIndex = 0; gcpIndex < gdalGcps.size(); ++gcpIndex)
       {
-      const OTB_GCP &gcp = gcpPrm.GCPs[gcpIndex];
+      const GCP &gcp = gcpPrm.GCPs[gcpIndex];
 
       gdalGcps[gcpIndex].pszId      = const_cast<char*>(gcp.m_Id.c_str());
       gdalGcps[gcpIndex].pszInfo    = const_cast<char*>(gcp.m_Info.c_str());
