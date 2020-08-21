@@ -158,7 +158,7 @@ private:
   void operator=(const ImageRegionAdaptativeSplitter&) = delete;
 
   // This reflects the input image tiling
-  SizeType m_TileHint;
+  SizeType m_TileHint{0,0};
 
   // This contains the ImageRegion that is currently being split
   RegionType m_ImageRegion;
