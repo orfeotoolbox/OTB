@@ -195,9 +195,9 @@ private:
   LabelType m_lab;
 
   // TODO donc need this attribute now compute with VectorDataProperties
-  SpacingType   m_Spacing;
-  OriginType    m_Origin;
-  SizeType      m_Size;
+  SpacingType   m_Spacing{0.0};
+  OriginType    m_Origin{0.0};
+  SizeType      m_Size{0,0};
   IndexType     m_StartIndex;
   DirectionType m_Direction;
 

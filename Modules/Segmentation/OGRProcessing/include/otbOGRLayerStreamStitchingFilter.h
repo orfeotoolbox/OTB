@@ -145,7 +145,7 @@ private:
   OGRLayerStreamStitchingFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  SizeType     m_StreamSize;
+  SizeType     m_StreamSize{0,0};
   unsigned int m_Radius;
   OGRLayerType m_OGRLayer;
 };
