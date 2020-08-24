@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
   WriterType::Pointer writer = WriterType::New();
 
   // The path to the DEM folder is given to the \doxygen{otb}{DEMHandler}.
-  otb::DEMHandler::Instance()->OpenDEMDirectory(folderPath);
+  otb::DEMHandler::GetInstance().OpenDEMDirectory(folderPath);
 
   // The origin (Longitude/Latitude) of the output image in the DEM is given to the filter.
   PointType origin;

@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
   using SpacingType = DEMToImageGeneratorType::SpacingType;
   using PointType   = DEMToImageGeneratorType::PointType;
 
-  otb::DEMHandler::Instance()->OpenDEMDirectory(argv[9]);
+  otb::DEMHandler::GetInstance().OpenDEMDirectory(argv[9]);
 
   PointType origin;
   origin[0] = ::atof(argv[3]);
