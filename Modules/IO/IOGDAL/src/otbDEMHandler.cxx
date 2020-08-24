@@ -138,7 +138,11 @@ DEMHandler::DEMHandler() : m_Dataset(nullptr),
 
 DEMHandler::~DEMHandler()
 {
-  GDALClose(m_GeoidDS);
+  if (m_GeoidDS)
+  {
+    GDALClose(m_GeoidDS);
+  }
+
   ClearDEMs();
 }
 
@@ -180,16 +184,15 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
     }
     else
     {
-      auto vrtDatasetList = new GDALDatasetH[vrtSize];
+      std::vector<GDALDatasetH> vrtDatasetList(vrtSize);
       for (int i = 0; i < vrtSize; i++)
       {
         vrtDatasetList[i] = m_DatasetList[i]->GetDataSet();
       }
 
-      m_Dataset = (GDALDataset *) GDALBuildVRT(nullptr, vrtSize, vrtDatasetList, 
-                                                nullptr, nullptr, nullptr);
+      m_Dataset = static_cast<GDALDataset *> (GDALBuildVRT(nullptr, vrtSize, vrtDatasetList.data(), 
+                                                nullptr, nullptr, nullptr));
       m_DEMDirectories.push_back(DEMDirectory);
-      delete[] vrtDatasetList;
     }
     
   }
