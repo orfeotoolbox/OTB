@@ -20,7 +20,7 @@
 
 
 /* Example usage:
-./DEMToImageGenerator Output/DEMToImageGenerator.tif Output/pretty_DEMToImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM_srtm
+./DEMToImageGenerator Output/DEMToImageGenerator.tif Output/pretty_DEMToImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM/srtm_directory
 */
 
 

@@ -20,7 +20,7 @@
 
 
 /* Example usage:
-./HillShadingExample Output/HillShadingExample.png Output/HillShadingColorExample.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM_srtm
+./HillShadingExample Output/HillShadingExample.png Output/HillShadingColorExample.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM/srtm_directory
 */
 
 

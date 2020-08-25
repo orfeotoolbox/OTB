@@ -20,17 +20,17 @@
 
 
 /* Example usage:
-./DEMToRainbowExample Output/DEMToRainbowImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM_srtm
+./DEMToRainbowExample Output/DEMToRainbowImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM/srtm_directory_srtm
 */
 
 
 /* Example usage:
-./DEMToRainbowExample Output/DEMToHotImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM_srtm hot
+./DEMToRainbowExample Output/DEMToHotImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM/srtm_directory hot
 */
 
 
 /* Example usage:
-./DEMToRainbowExample Output/DEMToReliefImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM_srtm relief
+./DEMToRainbowExample Output/DEMToReliefImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM/srtm_directory relief
 */
 
 #include "otbImageFileReader.h"
