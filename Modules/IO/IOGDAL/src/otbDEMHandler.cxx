@@ -71,7 +71,7 @@ std::vector<std::string> GetFilesInDirectory(const std::string & directoryPath)
 boost::optional<double> GetDEMValue(double lon, double lat, GDALDataset& ds)
 {
 #if GDAL_VERSION_NUM >= 3000000
-  auto srs = ds.GetSpatialRef()
+  auto srs = ds.GetSpatialRef();
 #else
   auto projRef = ds.GetProjectionRef();
   
