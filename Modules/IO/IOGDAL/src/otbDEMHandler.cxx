@@ -30,6 +30,8 @@
 // TODO : RemoveOSSIM
 #include <otbOssimDEMHandler.h>
 
+#include "ogr_spatialref.h"
+
 namespace otb {
 
 namespace DEMDetails {
@@ -68,6 +70,35 @@ std::vector<std::string> GetFilesInDirectory(const std::string & directoryPath)
 
 boost::optional<double> GetDEMValue(double lon, double lat, GDALDataset& ds)
 {
+#if GDAL_VERSION_NUM >= 3000000
+  auto srs = ds.GetSpatialRef()
+#else
+  auto projRef = ds.GetProjectionRef();
+  
+  std::unique_ptr<OGRSpatialReference> srsUniquePtr;
+  OGRSpatialReference* srs = nullptr;
+  // GetProjectionRef() returns an empty non null string if no projection is available
+  if (strlen(projRef) != 0 )
+  {
+    srsUniquePtr = std::make_unique<OGRSpatialReference>(ds.GetProjectionRef());
+    srs = srsUniquePtr.get();
+  }
+#endif
+
+  auto wgs84Srs = OGRSpatialReference::GetWGS84SRS();
+
+  // Convert input lon lat into the coordinates defined by the dataset if needed.
+  if (srs && !srs->IsSame(wgs84Srs))
+  {
+    auto poCT = std::unique_ptr<OGRCoordinateTransformation>
+                    (OGRCreateCoordinateTransformation(wgs84Srs, srs));
+
+    if (poCT && !poCT->Transform( 1, &lon, &lat ) )
+    {
+      return boost::none;
+    }
+  }
+
   double geoTransform[6];
   
   ds.GetGeoTransform(geoTransform);
