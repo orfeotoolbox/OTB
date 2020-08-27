@@ -332,7 +332,7 @@ void HistogramModel::virtual_Read(QIODevice* device)
 
   qDebug() << tr("%1: Reading histogram...").arg(QDateTime::currentDateTime().toString(Qt::ISODate));
 
-  QTime time;
+  QElapsedTimer time;
   time.start();
 
 
@@ -385,7 +385,7 @@ void HistogramModel::virtual_Write(QIODevice& device) const
 
   qDebug() << tr("%1: Writing histogram...").arg(QDateTime::currentDateTime().toString(Qt::ISODate));
 
-  QTime time;
+  QElapsedTimer time;
   time.start();
 
 #if 0
