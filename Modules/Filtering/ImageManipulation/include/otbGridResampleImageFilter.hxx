@@ -41,8 +41,8 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>::Grid
     m_OutputOrigin(),
     m_OutputSpacing(),
     m_EdgePaddingValue(),
-    m_CheckOutputBounds(true),
     m_InterpolationMargin(0.0),
+    m_CheckOutputBounds(true),
     m_Interpolator(),
     m_ReachableOutputRegion()
 {
