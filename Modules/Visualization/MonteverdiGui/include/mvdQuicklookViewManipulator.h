@@ -128,13 +128,13 @@ public:
 
   //
   // Public SLOTS.
-public slots:
+public Q_SLOTS:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -169,7 +169,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
   /**
    */
   void OnRoiChanged(const PointType& origin, const SizeType& size, const SpacingType& spacing, const PointType& center);

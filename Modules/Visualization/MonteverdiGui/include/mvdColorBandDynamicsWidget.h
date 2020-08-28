@@ -179,7 +179,7 @@ public:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   /** */
   void LowQuantileChanged(RgbwChannel, double);
   /** */
@@ -237,7 +237,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
   void on_lowIntensityLineEdit_editingFinished();
   void on_highIntensityLineEdit_editingFinished();
 

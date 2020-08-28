@@ -35,114 +35,6 @@ VectorImage<TPixel, VImageDimension>::VectorImage()
 {
 }
 
-template <class TPixel, unsigned int VImageDimension>
-std::string VectorImage<TPixel, VImageDimension>::GetProjectionRef(void) const
-{
-  return (this->GetMetaDataInterface()->GetProjectionRef());
-}
-
-template <class TPixel, unsigned int VImageDimension>
-void VectorImage<TPixel, VImageDimension>::SetProjectionRef(const std::string& kwl)
-{
-  itk::EncapsulateMetaData<std::string>(this->GetMetaDataDictionary(), MetaDataKey::ProjectionRefKey, kwl);
-}
-
-
-template <class TPixel, unsigned int VImageDimension>
-std::string VectorImage<TPixel, VImageDimension>::GetGCPProjection(void) const
-{
-  return (this->GetMetaDataInterface()->GetGCPProjection());
-}
-
-template <class TPixel, unsigned int VImageDimension>
-unsigned int VectorImage<TPixel, VImageDimension>::GetGCPCount(void) const
-{
-  return (this->GetMetaDataInterface()->GetGCPCount());
-}
-
-template <class TPixel, unsigned int VImageDimension>
-OTB_GCP& VectorImage<TPixel, VImageDimension>::GetGCPs(unsigned int GCPnum)
-{
-  return (this->GetMetaDataInterface()->GetGCPs(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-const OTB_GCP& VectorImage<TPixel, VImageDimension>::GetGCPs(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPs(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-std::string VectorImage<TPixel, VImageDimension>::GetGCPId(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPId(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-std::string VectorImage<TPixel, VImageDimension>::GetGCPInfo(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPInfo(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-double VectorImage<TPixel, VImageDimension>::GetGCPRow(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPRow(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-double VectorImage<TPixel, VImageDimension>::GetGCPCol(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPCol(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-double VectorImage<TPixel, VImageDimension>::GetGCPX(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPX(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-double VectorImage<TPixel, VImageDimension>::GetGCPY(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPY(GCPnum));
-}
-
-template <class TPixel, unsigned int VImageDimension>
-double VectorImage<TPixel, VImageDimension>::GetGCPZ(unsigned int GCPnum) const
-{
-  return (this->GetMetaDataInterface()->GetGCPZ(GCPnum));
-}
-
-template <class TPixel, unsigned int                      VImageDimension>
-typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetGeoTransform(void) const
-{
-  return (this->GetMetaDataInterface()->GetGeoTransform());
-}
-
-template <class TPixel, unsigned int                      VImageDimension>
-typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetUpperLeftCorner(void) const
-{
-  return (this->GetMetaDataInterface()->GetUpperLeftCorner());
-}
-
-template <class TPixel, unsigned int                      VImageDimension>
-typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetUpperRightCorner(void) const
-{
-  return (this->GetMetaDataInterface()->GetUpperRightCorner());
-}
-
-template <class TPixel, unsigned int                      VImageDimension>
-typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetLowerLeftCorner(void) const
-{
-  return (this->GetMetaDataInterface()->GetLowerLeftCorner());
-}
-
-template <class TPixel, unsigned int                      VImageDimension>
-typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetLowerRightCorner(void) const
-{
-  return (this->GetMetaDataInterface()->GetLowerRightCorner());
-}
 
 template <class TPixel, unsigned int                       VImageDimension>
 typename VectorImage<TPixel, VImageDimension>::SpacingType VectorImage<TPixel, VImageDimension>::GetSignedSpacing() const
@@ -216,6 +108,102 @@ void VectorImage<TPixel, VImageDimension>::CopyInformation(const itk::DataObject
 {
   Superclass::CopyInformation(data);
   this->itk::Object::SetMetaDataDictionary(data->GetMetaDataDictionary());
+  const ImageCommons* imc = dynamic_cast<const ImageCommons*>(data);
+  if (imc != nullptr)
+  {
+    const auto & imd = imc->GetImageMetadata();
+    std::cout << "hello " << this->GetNumberOfComponentsPerPixel() << std::endl;
+    if (imd.Bands.size() > 0 && imd.Bands.size() != this->GetNumberOfComponentsPerPixel())
+    {
+      SetImageMetadata(ImageMetadata(imd.GeometryKeys, imd.NumericKeys, imd.StringKeys, imd.LUT1DKeys,
+                    imd.LUT2DKeys, imd.TimeKeys, imd.ExtraKeys, ImageMetadata::ImageMetadataBandsType(this->GetNumberOfComponentsPerPixel())));
+    }
+    else
+    {
+      SetImageMetadata(imd);
+    }
+  }
+}
+
+
+template< typename TPixel, unsigned int VImageDimension >
+void
+VectorImage< TPixel, VImageDimension >::SetNumberOfComponentsPerPixel(unsigned int n)
+{
+  if (this->GetNumberOfComponentsPerPixel() != n)
+  {
+    SetBandImageMetadata(ImageMetadata::ImageMetadataBandsType(n));
+  }
+  
+  Superclass::SetNumberOfComponentsPerPixel(n);
+}
+
+template <class TPixel, unsigned int                VImageDimension>
+typename VectorImage<TPixel, VImageDimension>::VectorType VectorImage<TPixel, VImageDimension>::GetGeoTransform(void) const
+{
+  VectorImage<TPixel, VImageDimension>::VectorType geoTransform(6);
+  
+  auto origin = this->GetOrigin();
+  auto spacing = this->GetSpacing();
+  auto direction = this->GetDirection();
+  
+  // Note : OTB does not handle rotated geoTransform (see GDALImageIO)
+  geoTransform[0] = origin[0] - 0.5 * spacing[0] * direction[0][0];
+  geoTransform[3] = origin[1] - 0.5 * spacing[1] * direction[1][1];
+  geoTransform[1] = spacing[0] * direction[0][0];
+  geoTransform[5] = spacing[1] * direction[1][1];
+  geoTransform[2] = 0.;
+  geoTransform[4] = 0.;
+  return (geoTransform);
+}
+
+
+template <class TPixel, unsigned int                VImageDimension>
+typename VectorImage<TPixel, VImageDimension>::VectorType 
+VectorImage<TPixel, VImageDimension>::GetUpperLeftCorner(void) const
+{
+  PointType physicalPoint;
+  itk::ContinuousIndex<double, VImageDimension> index;
+  index.Fill(-0.5);
+  this->TransformContinuousIndexToPhysicalPoint (index, physicalPoint) ;
+  return {physicalPoint[0],physicalPoint[1]};
+}
+
+template <class TPixel, unsigned int                VImageDimension>
+typename VectorImage<TPixel, VImageDimension>::VectorType 
+VectorImage<TPixel, VImageDimension>::GetUpperRightCorner(void) const
+{
+  PointType physicalPoint;
+  itk::ContinuousIndex<double, VImageDimension> index;
+  index.Fill(-0.5);
+  index[0] = -0.5 + this->GetLargestPossibleRegion().GetSize()[0];
+  this->TransformContinuousIndexToPhysicalPoint (index, physicalPoint) ;
+  return {physicalPoint[0],physicalPoint[1]};
+}
+
+template <class TPixel, unsigned int                VImageDimension>
+typename VectorImage<TPixel, VImageDimension>::VectorType 
+VectorImage<TPixel, VImageDimension>::GetLowerLeftCorner(void) const
+{
+  PointType physicalPoint;
+  itk::ContinuousIndex<double, VImageDimension> index;
+  index.Fill(-0.5);
+  index[1] = -0.5 + this->GetLargestPossibleRegion().GetSize()[1];
+  this->TransformContinuousIndexToPhysicalPoint (index, physicalPoint) ;
+  return {physicalPoint[0],physicalPoint[1]};
+}
+
+template <class TPixel, unsigned int                VImageDimension>
+typename VectorImage<TPixel, VImageDimension>::VectorType 
+VectorImage<TPixel, VImageDimension>::GetLowerRightCorner(void) const
+{
+  PointType physicalPoint;
+  itk::ContinuousIndex<double, VImageDimension> index;
+  index.Fill(-0.5);
+  index[0] = -0.5 + this->GetLargestPossibleRegion().GetSize()[0];
+  index[1] = -0.5 + this->GetLargestPossibleRegion().GetSize()[1];
+  this->TransformContinuousIndexToPhysicalPoint (index, physicalPoint) ;
+  return {physicalPoint[0],physicalPoint[1]};
 }
 
 template <class TPixel, unsigned int                                             VImageDimension>

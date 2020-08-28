@@ -28,6 +28,8 @@
 
 /* ITK Libraries */
 #include "otbImageIOBase.h"
+#include "otbMetadataSupplierInterface.h"
+#include "otbMetadataStorageInterface.h"
 
 #include "OTBIOGDALExport.h"
 #include "otbSpatialReference.h"
@@ -70,7 +72,10 @@ class GDALDataTypeWrapper;
  *
  * \ingroup OTBIOGDAL
  */
-class OTBIOGDAL_EXPORT GDALImageIO : public otb::ImageIOBase
+class OTBIOGDAL_EXPORT GDALImageIO
+  : public otb::ImageIOBase
+  , public otb::MetadataSupplierInterface
+  , public otb::MetadataStorageInterface
 {
 public:
   typedef unsigned char InputPixelType;
@@ -196,7 +201,20 @@ public:
   /** Returns gdal pixel type as string */
   std::string GetGdalPixelTypeAsString() const;
 
-  itkGetMacro(NbBands, int);
+  int GetNbBands() const override;
+
+  // MetadataSupplierInterface overrides
+
+  /** Get main image file */
+  std::string GetResourceFile(std::string="") const override;
+  std::vector<std::string> GetResourceFiles() const override;
+
+  /** Get metadata item in GDALDataset, domain can specified as "domain/key" */
+  std::string GetMetadataValue(const std::string path, bool& hasValue, int band = -1) const override;
+
+  /** Set metadata item in GDALDataset, domain can specified as prefix of the
+   *  path, like "domain/key"*/
+  void SetMetadataValue(const char * path, const char * value, int band=-1) override;
 
   /** Set the projection system from EPSG code */
   void SetEpsgCode(const unsigned int wellKnownCRS);
@@ -210,6 +228,11 @@ protected:
   GDALImageIO();
   /** Destructor.*/
   ~GDALImageIO() override;
+
+  /** Set the metadata from a Keywordlist*/
+  void KeywordlistToMetadata(ImageMetadataBase::Keywordlist, int band=-1);
+  /** Parses a GDAL Metadata string list to fill a Keywordlist*/
+  void GDALMetadataToKeywordlist(const char* const* , ImageMetadataBase::Keywordlist &);
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Read all information on the image*/
@@ -246,6 +269,12 @@ private:
    *  \param partialOption The beginning of a creation option (for example "QUALITY=")
    */
   bool CreationOptionContains(std::string partialOption) const;
+
+  /** Dump the ImageMetadata content into GDAL metadata */
+  void ExportMetadata();
+
+  /** Import the ImageMetadata content from GDAL metadata */
+  void ImportMetadata();
 
   /** GDAL parameters. */
   typedef itk::SmartPointer<GDALDatasetWrapper> GDALDatasetWrapperPointer;

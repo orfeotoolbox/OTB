@@ -418,8 +418,8 @@ void ColorDynamicsController::ResetIntensities(RgbwChannel channels)
     }
     this->blockSignals(thisSignalsBlocks);
 
-    emit LowIntensityChanged(channel, min, false);
-    emit HighIntensityChanged(channel, max, false);
+    Q_EMIT LowIntensityChanged(channel, min, false);
+    Q_EMIT HighIntensityChanged(channel, max, false);
   }
 }
 
@@ -477,8 +477,8 @@ void ColorDynamicsController::SetIntensities(RgbwChannel channels)
     }
     this->blockSignals(thisSignalsBlocked);
 
-    emit LowIntensityChanged(channel, low, true);
-    emit HighIntensityChanged(channel, hi, true);
+    Q_EMIT LowIntensityChanged(channel, low, true);
+    Q_EMIT HighIntensityChanged(channel, hi, true);
   }
 }
 
@@ -715,10 +715,10 @@ void ColorDynamicsController::RefreshHistogram()
   }
 
   // Signal histogram has been refreshed.
-  emit HistogramRefreshed();
+  Q_EMIT HistogramRefreshed();
 
   // Signal model has been updated.
-  emit ModelUpdated();
+  Q_EMIT ModelUpdated();
 }
 
 /*****************************************************************************/
@@ -737,7 +737,7 @@ void ColorDynamicsController::OnRgbChannelIndexChanged(RgbwChannel channel, int)
   ResetQuantiles(channel);
 
   // Signal model has been updated.
-  emit ModelUpdated();
+  Q_EMIT ModelUpdated();
 }
 
 /*****************************************************************************/
@@ -752,7 +752,7 @@ void ColorDynamicsController::OnGrayChannelIndexChanged(int)
   ResetQuantiles(RGBW_CHANNEL_WHITE);
 
   // Signal model has been updated.
-  emit ModelUpdated();
+  Q_EMIT ModelUpdated();
 }
 
 /*******************************************************************************/
@@ -771,7 +771,7 @@ void ColorDynamicsController::OnGrayscaleActivated(bool activated)
   ResetQuantiles(activated ? RGBW_CHANNEL_WHITE : RGBW_CHANNEL_RGB);
 
   // Signal model has been updated.
-  emit ModelUpdated();
+  Q_EMIT ModelUpdated();
 }
 
 /*****************************************************************************/
@@ -834,11 +834,11 @@ void ColorDynamicsController::OnLowQuantileChanged(RgbwChannel channel, double v
     }
     colorBandDynWgt->blockSignals(widgetSignalsBlocked);
 
-    emit LowIntensityChanged(chan, intensity, true);
+    Q_EMIT LowIntensityChanged(chan, intensity, true);
   }
 
   // Signal model has been updated.
-  emit ModelUpdated();
+  Q_EMIT ModelUpdated();
 }
 
 /*****************************************************************************/
@@ -901,11 +901,11 @@ void ColorDynamicsController::OnHighQuantileChanged(RgbwChannel channel, double 
     }
     widgetSignalsBlocked = colorBandDynWgt->blockSignals(widgetSignalsBlocked);
 
-    emit HighIntensityChanged(chan, intensity, true);
+    Q_EMIT HighIntensityChanged(chan, intensity, true);
   }
 
   // Signal model has been updated.
-  emit ModelUpdated();
+  Q_EMIT ModelUpdated();
 }
 
 /*****************************************************************************/
@@ -959,11 +959,11 @@ void ColorDynamicsController::OnLowIntensityChanged(RgbwChannel channel, double 
       wgtSignalsBlocked = colorBandDynWgt->blockSignals(wgtSignalsBlocked);
     }
 
-    emit LowIntensityChanged(chan, value, true);
+    Q_EMIT LowIntensityChanged(chan, value, true);
   }
 
   // Signal model has been updated.
-  emit ModelUpdated();
+  Q_EMIT ModelUpdated();
 }
 
 /*****************************************************************************/
@@ -1018,11 +1018,11 @@ void ColorDynamicsController::OnHighIntensityChanged(RgbwChannel channel, double
       colorBandDynWgt->blockSignals(widgetSignalsBlocked);
     }
 
-    emit HighIntensityChanged(chan, value, true);
+    Q_EMIT HighIntensityChanged(chan, value, true);
   }
 
   // Signal model has been updated.
-  emit ModelUpdated();
+  Q_EMIT ModelUpdated();
 }
 
 /*****************************************************************************/
@@ -1035,10 +1035,10 @@ void ColorDynamicsController::OnResetIntensityClicked(RgbwChannel channel)
   ResetIntensities(channel);
 
   // Emit signal to force histogram refresh.
-  emit HistogramRefreshed();
+  Q_EMIT HistogramRefreshed();
 
-  // Now, emit this controller's signal to cause display refresh.
-  emit ModelUpdated();
+  // Now, Q_EMIT this controller's signal to cause display refresh.
+  Q_EMIT ModelUpdated();
 }
 
 /*****************************************************************************/
@@ -1051,10 +1051,10 @@ void ColorDynamicsController::OnResetQuantileClicked(RgbwChannel channel)
   ResetQuantiles(channel);
 
   // Emit signal to force histogram refresh.
-  emit HistogramRefreshed();
+  Q_EMIT HistogramRefreshed();
 
-  // Now, emit this controller's signal to cause display refresh.
-  emit ModelUpdated();
+  // Now, Q_EMIT this controller's signal to cause display refresh.
+  Q_EMIT ModelUpdated();
 }
 
 /*****************************************************************************/
@@ -1120,15 +1120,15 @@ void ColorDynamicsController::OnApplyAllClicked(RgbwChannel, double low, double 
     }
     colorBandDynWgt->blockSignals(widgetSignalsBlocked);
 
-    emit LowIntensityChanged(chan, lintensity, false);
-    emit HighIntensityChanged(chan, uintensity, false);
+    Q_EMIT LowIntensityChanged(chan, lintensity, false);
+    Q_EMIT HighIntensityChanged(chan, uintensity, false);
   }
 
   // Force histogram refresh.
-  emit HistogramRefreshed();
+  Q_EMIT HistogramRefreshed();
 
-  // Now, emit this controller's signal to cause display refresh.
-  emit ModelUpdated();
+  // Now, Q_EMIT this controller's signal to cause display refresh.
+  Q_EMIT ModelUpdated();
 }
 
 /*****************************************************************************/
@@ -1205,7 +1205,7 @@ void ColorDynamicsController::OnLinkToggled(RgbwChannel channel, bool checked)
   {
     RestoreQuantiles(channel);
 
-    emit ModelUpdated();
+    Q_EMIT ModelUpdated();
   }
 }
 
@@ -1233,7 +1233,7 @@ void ColorDynamicsController::OnGammaValueChanged(double value)
   imageModel->GetSettings().SetGamma(value);
 
   // Emit refresh signal.
-  emit ModelUpdated();
+  Q_EMIT ModelUpdated();
 }
 
 /*****************************************************************************/

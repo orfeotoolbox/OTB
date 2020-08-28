@@ -1,0 +1,24 @@
+SensorID PHR
+ProductionDate 2009-08-10T10:30:08.142149Z
+ProjectionWKT UTM projRef
+Extra.Comment Test Extrakeys
+BandName B0
+NoData -10000
+PhysicalGain 2
+PhysicalBias 1
+BandName B1
+NoData -10000
+PhysicalGain 3
+PhysicalBias 2
+BandName B0
+NoData -10000
+PhysicalGain 2
+PhysicalBias 1
+BandName B1
+NoData -10000
+PhysicalGain 3
+PhysicalBias 2
+BandName B2
+NoData -10000
+PhysicalGain 4
+PhysicalBias 3

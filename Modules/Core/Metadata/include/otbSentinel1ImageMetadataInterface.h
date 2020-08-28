@@ -22,7 +22,7 @@
 #define otbSentinel1ImageMetadataInterface_h
 
 #include "otbSarImageMetadataInterface.h"
-
+#include "otbXMLMetadataSupplier.h"
 
 namespace otb
 {
@@ -99,6 +99,8 @@ public:
   /*get lookup data for calculating backscatter */
   void CreateCalibrationLookupData(const short type) override;
 
+  void Parse(const MetadataSupplierInterface *) override;
+
 protected:
   /* class ctor */
   Sentinel1ImageMetadataInterface();
@@ -107,6 +109,24 @@ protected:
   ~Sentinel1ImageMetadataInterface() override
   {
   }
+
+  /* Fetch the AzimuthFmRate metadata */
+  std::vector<AzimuthFmRate> GetAzimuthFmRate(const XMLMetadataSupplier&) const;
+
+  /* Fetch the DopplerCentroid metadata */
+  std::vector<DopplerCentroid> GetDopplerCentroid(const XMLMetadataSupplier&) const;
+
+  /* Fetch the Orbits metadata */
+  std::vector<Orbit> GetOrbits(const XMLMetadataSupplier&) const;
+
+  /* Fetch the Calibration metadata */
+  std::vector<CalibrationVector> GetCalibrationVector(const XMLMetadataSupplier&) const;
+
+  /* Fetch the noise LUTs */
+  std::vector<SARNoise> GetNoiseVector(const XMLMetadataSupplier&) const;
+
+  /* Compute the mean terrain elevation */
+  double getBandTerrainHeight(const XMLMetadataSupplier&) const;
 
 private:
   Sentinel1ImageMetadataInterface(const Self&) = delete;

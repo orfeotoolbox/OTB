@@ -63,47 +63,47 @@ void QtWidgetModel::NotifyUpdate()
   {
     m_Application->GetLogger()->Debug("Caught otb::ApplicationException during application update:\n");
     m_Application->GetLogger()->Debug(string(err.what()) + "\n");
-    emit ExceptionRaised(err.what());
+    Q_EMIT ExceptionRaised(err.what());
   }
   catch (otb::ImageFileReaderException& err)
   {
     m_Application->GetLogger()->Debug("Caught otb::ImageFileReaderException during application update:\n");
     m_Application->GetLogger()->Debug(string(err.what()) + "\n");
     m_Application->GetLogger()->Fatal(err.GetDescription() + string("\n"));
-    emit ExceptionRaised(err.what());
+    Q_EMIT ExceptionRaised(err.what());
   }
   catch (itk::ExceptionObject& err)
   {
     m_Application->GetLogger()->Debug("Caught itk::ExceptionObject during application update:\n");
     m_Application->GetLogger()->Debug(string(err.what()) + "\n");
     m_Application->GetLogger()->Fatal(string(err.GetDescription()) + "\n");
-    emit ExceptionRaised(err.GetDescription());
+    Q_EMIT ExceptionRaised(err.GetDescription());
   }
   catch (std::exception& err)
   {
     m_Application->GetLogger()->Fatal(string("Caught std::exception during application update: ") + err.what() + "\n");
-    emit ExceptionRaised(err.what());
+    Q_EMIT ExceptionRaised(err.what());
   }
   catch (...)
   {
     m_Application->GetLogger()->Fatal("Caught unknown exception during application update.\n");
-    emit ExceptionRaised("Unknown exception");
+    Q_EMIT ExceptionRaised("Unknown exception");
   }
 
-  emit UpdateGui();
+  Q_EMIT UpdateGui();
 
   // Notify all
   if (!m_IsRunning)
   {
     bool applicationStatus = m_Application->IsApplicationReady();
-    emit SetApplicationReady(applicationStatus);
+    Q_EMIT SetApplicationReady(applicationStatus);
   }
 }
 
 void QtWidgetModel::ExecuteAndWriteOutputSlot()
 {
   // Deactivate the Execute button while processing
-  emit SetApplicationReady(false);
+  Q_EMIT SetApplicationReady(false);
   m_IsRunning = true;
 
   // launch the output image writing
@@ -115,12 +115,12 @@ void QtWidgetModel::ExecuteAndWriteOutputSlot()
   QObject::connect(m_taskAppli, &AppliThread::ApplicationExecutionDone, this, &QtWidgetModel::OnApplicationExecutionDone);
 
   // Tell the Progress Reporter to begin
-  emit SetProgressReportBegin();
+  Q_EMIT SetProgressReportBegin();
 
   // Run the application
   m_taskAppli->start();
 
-  emit SetApplicationReady(true);
+  Q_EMIT SetApplicationReady(true);
 }
 
 void QtWidgetModel::Stop()
@@ -139,7 +139,7 @@ void QtWidgetModel::OnApplicationExecutionDone(int status)
 
   // For the progressReport to close the Progress widget
   // and the GUI to update message
-  emit SetProgressReportDone(status);
+  Q_EMIT SetProgressReportDone(status);
 
   if (status >= 0)
   {
@@ -192,14 +192,14 @@ void AppliThread::run()
     // in debug.
     m_Application->GetLogger()->Debug("Caught otb::ApplicationException during application execution:\n");
     m_Application->GetLogger()->Debug(string(err.what()) + "\n");
-    emit ExceptionRaised(err.what());
+    Q_EMIT ExceptionRaised(err.what());
   }
   catch (otb::ImageFileReaderException& err)
   {
     m_Application->GetLogger()->Debug("Caught otb::ImageFileReaderException during application execution:\n");
     m_Application->GetLogger()->Debug(string(err.what()) + "\n");
     m_Application->GetLogger()->Fatal(err.GetDescription() + string("\n"));
-    emit ExceptionRaised(err.what());
+    Q_EMIT ExceptionRaised(err.what());
   }
   catch (itk::ProcessAborted& /*err*/)
   {
@@ -210,21 +210,21 @@ void AppliThread::run()
     m_Application->GetLogger()->Debug("Caught itk::ExceptionObject during application execution:\n");
     m_Application->GetLogger()->Debug(string(err.what()) + "\n");
     m_Application->GetLogger()->Fatal(string(err.GetDescription()) + "\n");
-    emit ExceptionRaised(err.what());
+    Q_EMIT ExceptionRaised(err.what());
   }
   catch (std::exception& err)
   {
     m_Application->GetLogger()->Fatal(string("Caught std::exception during application execution: ") + err.what() + "\n");
-    emit ExceptionRaised(err.what());
+    Q_EMIT ExceptionRaised(err.what());
   }
   catch (...)
   {
     m_Application->GetLogger()->Fatal("Caught unknown exception during application execution.\n");
-    emit ExceptionRaised("Unknown exception.");
+    Q_EMIT ExceptionRaised("Unknown exception.");
   }
 
   // Signal OTB-application has ended with result status.
-  emit ApplicationExecutionDone(result);
+  Q_EMIT ApplicationExecutionDone(result);
 }
 
 bool QtWidgetModel::IsRunning() const

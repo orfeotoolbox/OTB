@@ -134,7 +134,7 @@ bool TreeWidgetItemDragAndDropEventFilter::DropEvent(QObject*, QDropEvent* e)
 
   for (QTreeWidgetItemList::const_iterator it = items.begin(); it != items.end(); ++it)
   {
-    emit ItemDropped(*it);
+    Q_EMIT ItemDropped(*it);
   }
 
   //

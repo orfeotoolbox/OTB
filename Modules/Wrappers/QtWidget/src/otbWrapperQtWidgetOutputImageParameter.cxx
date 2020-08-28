@@ -125,7 +125,7 @@ void QtWidgetOutputImageParameter::SetFileName(const QString& value)
 
   // notify of value change
   QString key(m_OutputImageParam->GetKey());
-  emit    ParameterChanged(key);
+  Q_EMIT    ParameterChanged(key);
 }
 
 void QtWidgetOutputImageParameter::SetPixelType(int pixelType)

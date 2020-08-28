@@ -97,13 +97,13 @@ public:
 
   //
   // Public SLOTS.
-public slots:
+public Q_SLOTS:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   /**
    */
   void ApplyAllRequested();
@@ -153,7 +153,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
   /**
    */
   void OnCurrentChanged(int);

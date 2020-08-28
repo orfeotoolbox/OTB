@@ -191,7 +191,7 @@ public:
 
   //
   // Public SLOTS.
-public slots:
+public Q_SLOTS:
   /**
    */
   virtual void CenterOn(const PointType& point) = 0;
@@ -203,7 +203,7 @@ public slots:
 
   //
   // SIGNALS.
-signals:
+Q_SIGNALS:
   /**
    */
   void RefreshViewRequested();
@@ -277,7 +277,7 @@ private:
 
   //
   // SLOTS.
-private slots:
+private Q_SLOTS:
 };
 
 } // end namespace 'mvd'

@@ -105,13 +105,13 @@ void AbstractModelController::private_Connect(AbstractModel* model)
   if (model == NULL)
     return;
 
-  emit AboutToConnectModel(model);
+  Q_EMIT AboutToConnectModel(model);
 
   QObject::connect(model, SIGNAL(destroyed(QObject*)), this, SLOT(OnDestroyed(QObject*)));
 
   Connect(model);
 
-  emit ModelConnected(model);
+  Q_EMIT ModelConnected(model);
 }
 
 /*****************************************************************************/
@@ -120,13 +120,13 @@ void AbstractModelController::private_Disconnect(AbstractModel* model)
   if (model == NULL)
     return;
 
-  emit AboutToDisconnectModel(model);
+  Q_EMIT AboutToDisconnectModel(model);
 
   Disconnect(model);
 
   QObject::disconnect(model, SIGNAL(destroyed(QObject*)), this, SLOT(OnDestroyed(QObject*)));
 
-  emit ModelDisconnected(model);
+  Q_EMIT ModelDisconnected(model);
 }
 
 /*****************************************************************************/
@@ -146,7 +146,7 @@ void AbstractModelController::ResetWidget()
   // Signal model has been updated.
   // When resetting widget, data is read from model and set into
   // widget so, there's no need to signal back model update.
-  emit ModelUpdated();
+  Q_EMIT ModelUpdated();
 #endif
 }
 

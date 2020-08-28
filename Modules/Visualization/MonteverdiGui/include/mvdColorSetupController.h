@@ -105,7 +105,7 @@ public:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   /**
    * \brief Signal emitted when the band-index of a RGB channel has
    * been changed. This signal is used to forward events to other
@@ -178,7 +178,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
   /**
    * \brief Slot called when the current index of a RGB channel of the
    * controlled widget has changed.
