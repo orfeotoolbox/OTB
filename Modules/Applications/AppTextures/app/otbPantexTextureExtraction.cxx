@@ -89,7 +89,7 @@ private:
 
     AddParameter(ParameterType_Float, "min", "Image minimum");
     SetParameterDescription("min", "Input image minimum. If this parameter is not set, the application will compute "
-                            "the minumum of the image.");
+                            "the minimum of the image.");
     MandatoryOff("min");
 
     AddParameter(ParameterType_Float, "max", "Image maximum");
