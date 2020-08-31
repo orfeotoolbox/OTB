@@ -55,7 +55,7 @@
 # Author: Nuno Fachada
 
 
-function(get_package_name root_repo_dir project_version_string)
+function(get_package_name root_repo_dir project project_version_string)
   
   if(EXISTS "${root_repo_dir}/.git")  
     find_package(Git)
@@ -63,12 +63,6 @@ function(get_package_name root_repo_dir project_version_string)
       message(ERROR "git not found. Make sure git can be found in your PATH")
       return()
     endif()
-    
-    message(STATUS "PROJECT_NAME: ${PROJECT_NAME}")
-    message(STATUS "VERSION MINOR: ${${PROJECT_NAME}_VERSION_MAJOR}")
-    message(STATUS "VERSION MAJOR: ${${PROJECT_NAME}_VERSION_MINOR}")
-    message(STATUS "VERSION PATCH: ${${PROJECT_NAME}_VERSION_PATCH}")
-
 
     if(DEFINED ENV{CI_COMMIT_REF_NAME})
       set(branch_name "$ENV{CI_COMMIT_REF_NAME}")
@@ -88,7 +82,7 @@ function(get_package_name root_repo_dir project_version_string)
 
     if("${branch_name}" MATCHES "^release-[0-9]+\\.[0-9]+\$")
 
-      set(${project_version_string} "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_PATCH}" PARENT_SCOPE)
+      set(${project_version_string} "${${project}_VERSION_MAJOR}.${${project}_VERSION_MINOR}.${${project}_VERSION_PATCH}" PARENT_SCOPE)
 
     else()
       if(DEFINED ENV{CI_COMMIT_SHORT_SHA})
@@ -96,9 +90,9 @@ function(get_package_name root_repo_dir project_version_string)
       else()
         execute_process(COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
           WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-          OUTPUT_VARIABLE ${PROJECT_NAME}_COMMIT_SHA_STRING
+          OUTPUT_VARIABLE ${project}_COMMIT_SHA_STRING
           OUTPUT_STRIP_TRAILING_WHITESPACE)
-        set(${project_version_string} "${branch_name}-${${PROJECT_NAME}_COMMIT_SHA_STRING}" PARENT_SCOPE)
+        set(${project_version_string} "${branch_name}-${${project}_COMMIT_SHA_STRING}" PARENT_SCOPE)
       endif()
 
     endif()
