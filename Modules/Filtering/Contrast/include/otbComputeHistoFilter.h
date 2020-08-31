@@ -135,7 +135,7 @@ private:
   InputPixelType                                   m_Min;
   InputPixelType                                   m_Max;
   InputPixelType                                   m_NoData;
-  SizeType                                         m_ThumbSize;
+  SizeType                                         m_ThumbSize{0,0};
   bool                                             m_NoDataFlag;
   double                                           m_Step;
   float                                            m_Threshold;

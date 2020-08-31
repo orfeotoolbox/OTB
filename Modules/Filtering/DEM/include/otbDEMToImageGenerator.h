@@ -186,9 +186,9 @@ protected:
   void GenerateOutputInformation() override;
 
   DEMHandlerType::Pointer m_DEMHandler;
-  PointType               m_OutputOrigin;
-  SpacingType             m_OutputSpacing;
-  SizeType                m_OutputSize;
+  PointType               m_OutputOrigin{0.0};
+  SpacingType             m_OutputSpacing{0.0};
+  SizeType                m_OutputSize{0,0};
   PixelType               m_DefaultUnknownValue;
   bool                    m_AboveEllipsoid;
 

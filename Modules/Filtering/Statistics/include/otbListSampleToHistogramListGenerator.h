@@ -158,7 +158,7 @@ protected:
 
 private:
   // ListSampleConstPointerType m_List;
-  HistogramSizeType     m_Size;
+  HistogramSizeType     m_Size{0,0};
   float                 m_MarginalScale;
   MeasurementVectorType m_HistogramMin;
   MeasurementVectorType m_HistogramMax;
