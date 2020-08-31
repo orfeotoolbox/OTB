@@ -27,5 +27,5 @@ https://gitlab.orfeo-toolbox.org/s1-tiling/s1tilingsupportapplications
 "
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/s1-tiling/s1tilingsupportapplications
   # Commit on master branch
-  GIT_TAG master
+  GIT_TAG 2.0.0
 )
