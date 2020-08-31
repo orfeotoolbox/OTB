@@ -31,6 +31,7 @@
 #endif
 
 #include "otbImageMetadataInterfaceBase.h"
+#include "otbImageCommons.h"
 #include "OTBImageBaseExport.h"
 
 namespace otb
@@ -86,7 +87,9 @@ namespace otb
  */
 
 template <class TPixel, unsigned int VImageDimension = 2>
-class OTBImageBase_EXPORT_TEMPLATE Image : public itk::Image<TPixel, VImageDimension>
+class OTBImageBase_EXPORT_TEMPLATE Image
+  : public itk::Image<TPixel, VImageDimension>
+  , public ImageCommons
 {
 public:
   /** Standard class typedefs. */
@@ -192,30 +195,17 @@ public:
     return NeighborhoodAccessorFunctorType();
   }
 
-  /** Get the projection coordinate system of the image. */
-  virtual std::string GetProjectionRef(void) const;
-
-  virtual void SetProjectionRef(const std::string& wkt);
-
-
-  /** Get the GCP projection coordinates of the image. */
-  virtual std::string GetGCPProjection(void) const;
-
-  virtual unsigned int GetGCPCount(void) const;
-
-  virtual OTB_GCP& GetGCPs(unsigned int GCPnum);
-  virtual const OTB_GCP& GetGCPs(unsigned int GCPnum) const;
-
-  virtual std::string GetGCPId(unsigned int GCPnum) const;
-  virtual std::string GetGCPInfo(unsigned int GCPnum) const;
-  virtual double GetGCPRow(unsigned int GCPnum) const;
-  virtual double GetGCPCol(unsigned int GCPnum) const;
-  virtual double GetGCPX(unsigned int GCPnum) const;
-  virtual double GetGCPY(unsigned int GCPnum) const;
-  virtual double GetGCPZ(unsigned int GCPnum) const;
 
   /** Get the six coefficients of affine geoTtransform. */
   virtual VectorType GetGeoTransform(void) const;
+
+  /** Get image corners. */
+  // TODO: GenericRSTransform should be instanciated to translate from physical
+  // space to EPSG:4328 ?
+  VectorType GetUpperLeftCorner(void) const;
+  VectorType GetUpperRightCorner(void) const;
+  VectorType GetLowerLeftCorner(void) const;
+  VectorType GetLowerRightCorner(void) const;
 
   /** Get signed spacing */
   SpacingType GetSignedSpacing() const;
@@ -231,12 +221,6 @@ public:
   /** Set signed spacing */
   virtual void SetSignedSpacing(SpacingType spacing);
   virtual void SetSignedSpacing(double spacing[VImageDimension]);
-
-  /** Get image corners. */
-  virtual VectorType GetUpperLeftCorner(void) const;
-  virtual VectorType GetUpperRightCorner(void) const;
-  virtual VectorType GetLowerLeftCorner(void) const;
-  virtual VectorType GetLowerRightCorner(void) const;
 
   /** Get image keyword list */
   virtual ImageKeywordlistType GetImageKeywordlist(void);

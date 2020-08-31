@@ -122,8 +122,8 @@ bool QtWidgetInputImageParameter::SetFileName(const QString& value)
     // notify of value change
     QString key(m_InputImageParam->GetKey());
 
-    emit ParameterChanged(key);
-    emit FileNameIsSet();
+    Q_EMIT ParameterChanged(key);
+    Q_EMIT FileNameIsSet();
   }
   else
     res = false;

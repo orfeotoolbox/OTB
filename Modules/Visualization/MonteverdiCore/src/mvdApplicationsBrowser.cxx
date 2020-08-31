@@ -188,9 +188,9 @@ void ApplicationsBrowser::SearchAvailableApplicationsTags()
   }
 
   //
-  // emit a signal with the ApplicationsTagContainer as
+  // Q_EMIT a signal with the ApplicationsTagContainer as
   // parameter
-  emit AvailableApplicationsTagsChanged(outputContainer);
+  Q_EMIT AvailableApplicationsTagsChanged(outputContainer);
 }
 
 /*******************************************************************************/

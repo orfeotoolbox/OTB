@@ -133,10 +133,8 @@ void OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateOutputInformation()
   // Set spacing and origin
   outputPtr->SetSignedSpacing(m_OutputSpacing);
   outputPtr->SetOrigin(m_OutputOrigin);
-
-  itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, static_cast<std::string>(this->GetOutputProjectionRef()));
-
+  outputPtr->SetProjectionRef(this->GetOutputProjectionRef());
+ 
   // Generate the OGRLayers from the input OGRDataSource
   for (unsigned int idx = 0; idx < this->GetNumberOfInputs(); ++idx)
   {
@@ -155,6 +153,8 @@ void OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateOutputInformation()
   noDataValueAvailable.resize(nbBands, true);
   std::vector<double> noDataValue;
   noDataValue.resize(nbBands, static_cast<double>(m_BackgroundValue));
+
+  itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
   itk::EncapsulateMetaData<std::vector<bool>>(dict, MetaDataKey::NoDataValueAvailable, noDataValueAvailable);
   itk::EncapsulateMetaData<std::vector<double>>(dict, MetaDataKey::NoDataValue, noDataValue);
 }

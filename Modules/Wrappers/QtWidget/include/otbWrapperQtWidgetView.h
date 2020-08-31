@@ -66,7 +66,7 @@ public:
   void Disable();
   void Enable();
 
-signals:
+Q_SIGNALS:
   void ExecuteAndWriteOutput();
   void Stop();
   void OTBApplicationOutputImageChanged(const QString&, const QString&);
@@ -77,7 +77,7 @@ protected:
 
   virtual QWidget* CreateInputWidgets();
 
-protected slots:
+protected Q_SLOTS:
 
   virtual void OnExecButtonClicked()
   {

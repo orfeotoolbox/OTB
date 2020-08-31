@@ -233,7 +233,7 @@ void ColorBandDynamicsWidget::on_lowIntensityLineEdit_editingFinished()
 #endif
   }
 
-  emit LowIntensityChanged(m_Channel, value);
+  Q_EMIT LowIntensityChanged(m_Channel, value);
 }
 
 /*****************************************************************************/
@@ -258,37 +258,37 @@ void ColorBandDynamicsWidget::on_highIntensityLineEdit_editingFinished()
 #endif
   }
 
-  emit HighIntensityChanged(m_Channel, value);
+  Q_EMIT HighIntensityChanged(m_Channel, value);
 }
 
 /*****************************************************************************/
 void ColorBandDynamicsWidget::on_lowQuantileSpinBox_valueChanged(double value)
 {
-  emit LowQuantileChanged(m_Channel, value);
+  Q_EMIT LowQuantileChanged(m_Channel, value);
 }
 
 /*****************************************************************************/
 void ColorBandDynamicsWidget::on_highQuantileSpinBox_valueChanged(double value)
 {
-  emit HighQuantileChanged(m_Channel, value);
+  Q_EMIT HighQuantileChanged(m_Channel, value);
 }
 
 /*****************************************************************************/
 void ColorBandDynamicsWidget::on_minMaxButton_clicked()
 {
-  emit ResetIntensityClicked(m_Channel);
+  Q_EMIT ResetIntensityClicked(m_Channel);
 }
 
 /*****************************************************************************/
 void ColorBandDynamicsWidget::on_defaultsButton_clicked()
 {
-  emit ResetQuantileClicked(m_Channel);
+  Q_EMIT ResetQuantileClicked(m_Channel);
 }
 
 /*****************************************************************************/
 void ColorBandDynamicsWidget::on_applyAllButton_clicked()
 {
-  emit ApplyAllClicked(m_Channel, m_UI->lowQuantileSpinBox->value(), m_UI->highQuantileSpinBox->value());
+  Q_EMIT ApplyAllClicked(m_Channel, m_UI->lowQuantileSpinBox->value(), m_UI->highQuantileSpinBox->value());
 }
 
 /*****************************************************************************/
@@ -307,7 +307,7 @@ void ColorBandDynamicsWidget::on_linkButton_toggled(bool checked)
     }
   */
 
-  emit LinkToggled(m_Channel, checked);
+  Q_EMIT LinkToggled(m_Channel, checked);
 }
 
 } // end namespace 'mvd'

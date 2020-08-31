@@ -43,7 +43,7 @@ public:
   QtWidgetBoolParameter(BoolParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetBoolParameter() override;
 
-public slots:
+public Q_SLOTS:
   void SetValue(bool value);
 
 private:

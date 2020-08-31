@@ -137,7 +137,7 @@ void QuicklookViewManipulator::MousePressEvent(QMouseEvent* e)
     m_ViewSettings->ScreenToViewPortTransform(static_cast<double>(m_MousePressPosition.x()), static_cast<double>(m_MousePressPosition.y()), center[0],
                                               center[1]);
 
-    emit CenterRoiRequested(center);
+    Q_EMIT CenterRoiRequested(center);
   }
 }
 
@@ -162,7 +162,7 @@ void QuicklookViewManipulator::MouseMoveEvent(QMouseEvent* e)
 
     m_MousePressPosition = e->pos();
 
-    emit CenterRoiRequested(center);
+    Q_EMIT CenterRoiRequested(center);
   }
 }
 
@@ -183,7 +183,7 @@ void QuicklookViewManipulator::ResizeEvent(QResizeEvent* e)
 {
   ImageViewManipulator::ResizeEvent(e);
 
-  emit ZoomToExtentRequested();
+  Q_EMIT ZoomToExtentRequested();
 }
 
 /******************************************************************************/
@@ -223,7 +223,7 @@ void QuicklookViewManipulator::OnRoiChanged(const PointType& origin, const SizeT
   m_RoiSize    = size;
   m_RoiSpacing = spacing;
 
-  emit RefreshViewRequested();
+  Q_EMIT RefreshViewRequested();
 }
 
 } // end namespace 'mvd'

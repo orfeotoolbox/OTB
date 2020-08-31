@@ -134,14 +134,14 @@ public:
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
   //
-  // Public slots.
-public slots:
+  // Public Q_SLOTS.
+public Q_SLOTS:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   /**
    */
   void SettingsUpdated();
@@ -172,7 +172,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
 };
 
 } // end namespace 'mvd'

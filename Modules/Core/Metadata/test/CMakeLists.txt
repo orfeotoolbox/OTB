@@ -28,9 +28,12 @@ otbSarDefaultImageMetadataInterface.cxx
 otbOpticalImageMetadataInterfaceTest.cxx
 otbOpticalDefaultImageMetadataInterface.cxx
 otbDefaultImageMetadataInterface.cxx
+otbImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceTest2.cxx
 otbNoDataHelperTest.cxx
 otbSarCalibrationLookupDataTest.cxx
+otbImageMetadataTest.cxx
+otbXMLMetadataSupplierTest.cxx
 )
 
 add_executable(otbMetadataTestDriver ${OTBMetadataTests})
@@ -78,6 +81,20 @@ otb_module_target_label(otbMetadataTestDriver)
   #LARGEINPUT{TERRASARX/PANGKALANBUUN/IMAGEDATA/IMAGE_HH_SRA_stripFar_008.cos}
   #${TEMP}/ioTvSarImageMetadataInterface_TSX1PANGKALANBUUNUsingHHCosFile.txt
   #)
+
+#otb_add_test(NAME ioTvSentinel1ImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
+#  otbSentinel1ImageMetadataInterfaceTest
+#  /home/julien/Bureau/S1Product/S1A_IW_GRDH_1SDV_20170819T001029_20170819T001054_017985_01E2E8_F302.SAFE
+#  ${TEMP}/ioTvSentinel1ImageMetadataInterfaceTest.txt
+#  )
+
+otb_add_test(NAME ioTvImageMetadataInterfaceTest_Sentinel1 COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_Sentinel1.txt
+  ${TEMP}/ioTvImageMetadataInterfaceTest_Sentinel1.txt
+  otbImageMetadataInterfaceTest
+  LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043}
+  ${TEMP}/ioTvImageMetadataInterfaceTest_Sentinel1.txt
+  )
 
 #otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_SENTINEL1 COMMAND otbMetadataTestDriver
   #--compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_SENTINEL1.txt
@@ -355,4 +372,60 @@ otb_add_test(NAME ioTvSarCalibrationLookupDataTest_RADARSAT2 COMMAND otbMetadata
   otbSarCalibrationLookupDataTest
   ${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.tif?&geom=${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.geom
   ${TEMP}/ioTvSarCalibrationLookupDataTest_RADARSAT2.txt
+  )
+
+otb_add_test(NAME ioTuMetaDataKeyTest COMMAND otbMetadataTestDriver 
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuMetaDataKeyTest.txt
+  ${TEMP}/ioTuMetaDataKeyTest.txt
+  otbImageMetadataTest
+  otbMetadataKeyTest
+  ${TEMP}/ioTuMetaDataKeyTest.txt
+  )
+  
+otb_add_test(NAME ioTuImageMetadataSliceTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataSliceTest.txt
+  ${TEMP}/ioTuImageMetadataSliceTest.txt
+  otbImageMetadataTest
+  otbImageMetadataSliceTest
+  ${TEMP}/ioTuImageMetadataSliceTest.txt
+  )
+  
+otb_add_test(NAME ioTuImageMetadataCompactTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataCompactTest.txt
+  ${TEMP}/ioTuImageMetadataCompactTest.txt
+  otbImageMetadataTest
+  otbImageMetadataCompactTest
+  ${TEMP}/ioTuImageMetadataCompactTest.txt
+  )
+  
+otb_add_test(NAME ioTuImageMetadataAppendTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataAppendTest.txt
+  ${TEMP}/ioTuImageMetadataAppendTest.txt
+  otbImageMetadataTest
+  otbImageMetadataAppendTest
+  ${TEMP}/ioTuImageMetadataAppendTest.txt
+  )
+    
+otb_add_test(NAME ioTuImageMetadataMergeTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataMergeTest.txt
+  ${TEMP}/ioTuImageMetadataMergeTest.txt
+  otbImageMetadataTest
+  otbImageMetadataMergeTest
+  ${TEMP}/ioTuImageMetadataMergeTest.txt
+  )
+
+otb_add_test(NAME ioTuImageMetadataToFromKeywordlistTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataToFromKeywordlistTest.txt
+  ${TEMP}/ioTuImageMetadataToFromKeywordlistTest.txt
+  otbImageMetadataTest
+  otbImageMetadataToFromKeywordlistTest
+  ${TEMP}/ioTuImageMetadataToFromKeywordlistTest.txt
+  )
+  
+otb_add_test(NAME ioTuotbXMLMetadataSupplierTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuotbXMLMetadataSupplierTest.txt
+  ${TEMP}/ioTuotbXMLMetadataSupplierTest.txt
+  otbXMLMetadataSupplierTest
+  ${INPUTDATA}/ioTuotbXMLMetadataSupplierTest.xml
+  ${TEMP}/ioTuotbXMLMetadataSupplierTest.txt
   )

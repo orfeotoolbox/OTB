@@ -42,7 +42,7 @@ void QtWidgetBoolParameter::SetValue(bool value)
     paramDown->SetValue(value);
 
     QString key(paramDown->GetKey());
-    emit    ParameterChanged(key);
+    Q_EMIT    ParameterChanged(key);
   }
 }
 
