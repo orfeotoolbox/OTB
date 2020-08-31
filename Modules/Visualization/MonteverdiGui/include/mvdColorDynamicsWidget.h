@@ -182,7 +182,7 @@ public:
 
   //
   // Public slots.
-public slots:
+public Q_SLOTS:
 
   /**
    */
@@ -192,7 +192,7 @@ public slots:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   /**
    */
   void LowQuantileChanged(RgbwChannel, double);
@@ -290,7 +290,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
 
   /**
    */

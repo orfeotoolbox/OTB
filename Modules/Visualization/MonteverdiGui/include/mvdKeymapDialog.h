@@ -79,7 +79,7 @@ public:
 
   //
   // SIGNALS.
-signals:
+Q_SIGNALS:
 
   //
   // Protected methods.
@@ -99,7 +99,7 @@ private:
 
   //
   // SLOTS.
-private slots:
+private Q_SLOTS:
 };
 
 } // end namespace 'mvd'

@@ -117,7 +117,7 @@ bool QtWidgetInputVectorDataParameter::SetFileName(const QString& value)
   {
     // notify of value change
     QString key(m_InputVectorDataParam->GetKey());
-    emit    ParameterChanged(key);
+    Q_EMIT    ParameterChanged(key);
   }
   else
     res = false;

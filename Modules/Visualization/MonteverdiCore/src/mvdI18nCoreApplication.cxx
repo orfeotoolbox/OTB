@@ -333,7 +333,7 @@ void I18nCoreApplication::Initialize()
 /*******************************************************************************/
 void I18nCoreApplication::SetModel(AbstractModel* model)
 {
-  emit AboutToChangeModel(model);
+  Q_EMIT AboutToChangeModel(model);
 
   delete m_Model;
 
@@ -342,7 +342,7 @@ void I18nCoreApplication::SetModel(AbstractModel* model)
   if (model != NULL)
     m_Model->setParent(this);
 
-  emit ModelChanged(m_Model);
+  Q_EMIT ModelChanged(m_Model);
 }
 
 /*******************************************************************************/
@@ -427,7 +427,7 @@ void I18nCoreApplication::InitializeLocale()
 
     qDebug() << "Available codecs:";
 
-    foreach (const QByteArray& codec, codecs)
+    Q_FOREACH (const QByteArray& codec, codecs)
       qDebug() << "\t" << codec;
   }
 

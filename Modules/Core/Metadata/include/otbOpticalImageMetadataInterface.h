@@ -57,25 +57,39 @@ public:
   typedef otb::ObjectList<FilterFunctionValuesType>         InternalWavelengthSpectralBandVectorType;
   typedef InternalWavelengthSpectralBandVectorType::Pointer WavelengthSpectralBandVectorType;
 
-  /** Get the sun elevation from the ossim metadata */
+  /** Get the sun elevation from the ossim metadata
+   * \deprecated
+   */
   double GetSunElevation() const;
 
-  /** Get the sun azimuth from the ossim metadata */
+  /** Get the sun azimuth from the ossim metadata
+   * \deprecated
+   */
   double GetSunAzimuth() const;
 
-  /** Get the sat elevation from the ossim metadata */
+  /** Get the sat elevation from the ossim metadata
+   * \deprecated
+   */
   virtual double GetSatElevation() const = 0;
 
-  /** Get the sat azimuth from the ossim metadata */
+  /** Get the sat azimuth from the ossim metadata
+   * \deprecated
+   */
   virtual double GetSatAzimuth() const = 0;
 
-  /** Get the radiometric bias from the ossim metadata */
+  /** Get the radiometric bias from the ossim metadata
+   * \deprecated
+   */
   virtual VariableLengthVectorType GetPhysicalBias() const = 0;
 
-  /** Get the radiometric gain from the ossim metadata */
+  /** Get the radiometric gain from the ossim metadata
+   * \deprecated
+   */
   virtual VariableLengthVectorType GetPhysicalGain() const = 0;
 
-  /** Get the solar irradiance from the ossim metadata */
+  /** Get the solar irradiance from the ossim metadata
+   * \deprecated
+   */
   virtual VariableLengthVectorType GetSolarIrradiance() const = 0;
 
   /** Get the first wavelength for the spectral band definition */
@@ -96,6 +110,11 @@ public:
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
    * There values a computed by 6S. */
   virtual WavelengthSpectralBandVectorType GetSpectralSensitivity() const = 0;
+
+    /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
+   * then translate it into ImageMetadata. Handles most optical sensors.
+   * Returns true if succeed. */
+  bool ConvertImageKeywordlistToImageMetadata() override;
 
 protected:
   OpticalImageMetadataInterface();

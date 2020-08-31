@@ -127,8 +127,8 @@ private:
   bool                              m_NoDataFlag;
   bool                              m_ThumbSizeFromSpacing;
   double                            m_Step;
-  typename LutType::SizeType        m_LutSize;
-  typename InputImageType::SizeType m_ThumbSize;
+  typename LutType::SizeType        m_LutSize{0,0};
+  typename InputImageType::SizeType m_ThumbSize{0,0};
 };
 
 } // End namespace otb

@@ -180,9 +180,9 @@ private:
   void EstimateOutputOrigin();
 
   typename ImageType::ConstPointer m_Input;
-  PointType                        m_OutputOrigin;
-  SpacingType                      m_OutputSpacing;
-  SizeType                         m_OutputSize;
+  PointType                        m_OutputOrigin{0.0};
+  SpacingType                      m_OutputSpacing{0.0};
+  SizeType                         m_OutputSize{0,0};
   OutputImageExtentType            m_OutputExtent;
 
   GenericRSTransformPointerType m_Transform;

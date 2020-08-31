@@ -106,7 +106,7 @@ public:
 
   //
   // Public SLOTS.
-public slots:
+public Q_SLOTS:
   void OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer& appsTags);
   void OnSearchBoxChanged(const QString& search);
   void OnAlgorithmTreeDoubleClick(QTreeWidgetItem* item, int column);
@@ -115,7 +115,7 @@ public slots:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   void ApplicationToLaunchSelected(const QString&);
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
@@ -171,7 +171,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
 };
 
 /*****************************************************************************/

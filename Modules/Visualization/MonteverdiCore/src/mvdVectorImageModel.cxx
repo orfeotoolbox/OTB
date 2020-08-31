@@ -617,10 +617,10 @@ void VectorImageModel::OnModelUpdated()
   ApplySettings();
 
   // Emit settings update to notify display refresh.
-  emit SettingsUpdated(this);
+  Q_EMIT SettingsUpdated(this);
 
   // Emit properties update.
-  emit PropertiesUpdated(this);
+  Q_EMIT PropertiesUpdated(this);
 }
 
 /*****************************************************************************/
@@ -665,7 +665,7 @@ void VectorImageModel::OnPhysicalCursorPositionChanged(const QPoint&, const Poin
 
   bool isInsideNativeLargestRegion = GetNativeLargestRegion().IsInside(currentIndex);
 
-  emit CurrentIndexUpdated(currentIndex, isInsideNativeLargestRegion);
+  Q_EMIT CurrentIndexUpdated(currentIndex, isInsideNativeLargestRegion);
 
   //
   // Display the radiometry of the displayed channels
@@ -868,13 +868,13 @@ void VectorImageModel::OnPhysicalCursorPositionChanged(const QPoint&, const Poin
 #endif
 
   // update the status bar
-  emit CurrentPhysicalUpdated(cartoList);
-  emit CurrentGeographicUpdated(geoList);
-  emit CurrentRadioUpdated(ToQString(ossRadio.str().c_str()));
+  Q_EMIT CurrentPhysicalUpdated(cartoList);
+  Q_EMIT CurrentGeographicUpdated(geoList);
+  Q_EMIT CurrentRadioUpdated(ToQString(ossRadio.str().c_str()));
 #if USE_RGB_CHANNELS_LIMIT
-  emit CurrentPixelValueUpdated(pixel, stringList);
+  Q_EMIT CurrentPixelValueUpdated(pixel, stringList);
 #else
-  emit CurrentPixelValueUpdated(pixel, bandNames);
+  Q_EMIT CurrentPixelValueUpdated(pixel, bandNames);
 #endif
 }
 

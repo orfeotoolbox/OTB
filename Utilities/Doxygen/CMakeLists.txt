@@ -176,7 +176,7 @@ if (BUILD_DOCUMENTATION)
   
   add_custom_target(Documentation
     COMMAND ${CMAKE_COMMAND} -E tar cjf
-      ${OTB_BINARY_DIR}/Documentation/Doxygen/OTB-Doxygen-${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.tar.bz2
+      ${OTB_BINARY_DIR}/Documentation/Doxygen/OTB-Doxygen-${OTB_VERSION_STRING2}.tar.bz2
       ${OTB_BINARY_DIR}/Documentation/Doxygen/html
     DEPENDS Documentation-doxygen
     WORKING_DIRECTORY ${OTB_BINARY_DIR}/Documentation/Doxygen

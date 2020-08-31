@@ -28,6 +28,7 @@ set(OTBIOGDAL_SRC
   otbOGRVectorDataIO.cxx
   otbOGRVectorDataIOFactory.cxx
   otbDEMHandler.cxx
+  otbGDALImageMetadataInterface.cxx
   )
 
 add_library(OTBIOGDAL ${OTBIOGDAL_SRC})

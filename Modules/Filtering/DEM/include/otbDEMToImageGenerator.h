@@ -185,9 +185,9 @@ protected:
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
   void GenerateOutputInformation() override;
 
-  PointType               m_OutputOrigin;
-  SpacingType             m_OutputSpacing;
-  SizeType                m_OutputSize;
+  PointType               m_OutputOrigin{0.0};
+  SpacingType             m_OutputSpacing{0.0};
+  SizeType                m_OutputSize{0,0};
   PixelType               m_DefaultUnknownValue;
   bool                    m_AboveEllipsoid;
 

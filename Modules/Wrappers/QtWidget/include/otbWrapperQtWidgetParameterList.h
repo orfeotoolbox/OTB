@@ -51,7 +51,7 @@ public:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   void NotifyUpdate();
 
   //
@@ -69,7 +69,7 @@ private:
 private:
   //
   // Private slots.
-private slots:
+private Q_SLOTS:
 };
 
 } // Wrapper

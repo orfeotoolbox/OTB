@@ -47,7 +47,7 @@ public:
     return m_SelectedItems;
   }
 
-protected slots:
+protected Q_SLOTS:
   void SelectedItems();
 
 private:

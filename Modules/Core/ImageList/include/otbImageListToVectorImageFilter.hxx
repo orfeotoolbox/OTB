@@ -26,6 +26,7 @@
 #include <vector>
 #include "otbMacro.h"
 #include "itkProgressReporter.h"
+#include "otbImageMetadata.h"
 
 namespace otb
 {
@@ -42,6 +43,27 @@ void ImageListToVectorImageFilter<TImageList, TVectorImage>::GenerateOutputInfor
       this->GetOutput()->CopyInformation(this->GetInput()->GetNthElement(0));
       this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetInput()->Size());
       this->GetOutput()->SetLargestPossibleRegion(this->GetInput()->GetNthElement(0)->GetLargestPossibleRegion());
+    
+      // Copy band specific metadata from the inputs to the output
+      ImageMetadata::ImageMetadataBandsType bandsImd;
+      InputImageListPointerType                  inputPtr    = this->GetInput();
+      typename InputImageListType::ConstIterator inputListIt = inputPtr->Begin();
+      
+      while (inputListIt != inputPtr->End())
+      {
+        const auto & imd = inputListIt.Get()->GetImageMetadata();
+        if (imd.Bands.size())
+        {
+          bandsImd.push_back(imd.Bands[0]);
+        }
+        else
+        {
+          bandsImd.push_back({});
+        }
+        ++inputListIt;
+      }
+      
+      this->GetOutput()->SetBandImageMetadata(bandsImd);
     }
   }
 }

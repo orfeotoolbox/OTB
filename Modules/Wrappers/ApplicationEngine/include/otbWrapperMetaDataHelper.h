@@ -24,6 +24,7 @@
 #include "otbMetaDataKey.h"
 #include "otbImageKeywordlist.h"
 #include "otbVectorDataKeywordlist.h"
+#include "otbGeometryMetadata.h"
 #include "itkMetaDataDictionary.h"
 #include "OTBApplicationEngineExport.h"
 
@@ -67,8 +68,8 @@ OTBApplicationEngine_EXPORT void SetInt(itk::MetaDataDictionary& dict, const std
 OTBApplicationEngine_EXPORT double GetDouble(const itk::MetaDataDictionary& dict, const std::string& key);
 OTBApplicationEngine_EXPORT void SetDouble(itk::MetaDataDictionary& dict, const std::string& key, double val);
 
-OTBApplicationEngine_EXPORT otb::OTB_GCP GetGCP(const itk::MetaDataDictionary& dict, const std::string& key);
-OTBApplicationEngine_EXPORT void SetGCP(itk::MetaDataDictionary& dict, const std::string& key, const otb::OTB_GCP& val);
+OTBApplicationEngine_EXPORT otb::GCP GetGCP(const itk::MetaDataDictionary& dict, const std::string& key);
+OTBApplicationEngine_EXPORT void SetGCP(itk::MetaDataDictionary& dict, const std::string& key, const otb::GCP& val);
 
 OTBApplicationEngine_EXPORT otb::MetaDataKey::VectorType GetVector(const itk::MetaDataDictionary& dict, const std::string& key);
 OTBApplicationEngine_EXPORT void SetVector(itk::MetaDataDictionary& dict, const std::string& key, const otb::MetaDataKey::VectorType& val);

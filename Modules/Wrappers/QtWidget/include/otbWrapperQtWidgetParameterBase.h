@@ -62,14 +62,14 @@ public:
     m_IsChecked = value;
   }
 
-public slots:
+public Q_SLOTS:
   void         UpdateGUI();
   virtual void SetActivationState(bool value);
 
-protected slots:
+protected Q_SLOTS:
   void ParameterChanged(const QString& key);
 
-signals:
+Q_SIGNALS:
   void ParameterActiveStatus(bool value);
 
 protected:

@@ -53,43 +53,69 @@ public:
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
-  /** Get the radiometric bias from the ossim metadata */
+  /** Get the radiometric bias from the ossim metadata
+   * \deprecated
+   */
   VariableLengthVectorType GetPhysicalBias() const override;
 
-  /** Get the radiometric gain from the ossim metadata */
+  /** Get the radiometric gain from the ossim metadata
+   * \deprecated
+   */
   VariableLengthVectorType GetPhysicalGain() const override;
 
-  /** Get the solar irradiance from the ossim metadata */
+  /** Get the solar irradiance from the ossim metadata
+   * \deprecated
+   */
   VariableLengthVectorType GetSolarIrradiance() const override;
 
-  /** Get the imaging acquisition day from the ossim metadata : IMAGING_DATE metadata variable */
+  /** Get the imaging acquisition day from the ossim metadata : IMAGING_DATE metadata variable
+   * \deprecated
+   */
   int GetDay() const override;
 
-  /** Get the imaging acquisition month from the ossim metadata : IMAGING_DATE metadata variable */
+  /** Get the imaging acquisition month from the ossim metadata : IMAGING_DATE metadata variable
+   * \deprecated
+   */
   int GetMonth() const override;
 
-  /** Get the imaging acquisition year from the ossim metadata : IMAGING_DATE metadata variable */
+  /** Get the imaging acquisition year from the ossim metadata : IMAGING_DATE metadata variable
+   * \deprecated
+   */
   int GetYear() const override;
 
-  /** Get the imaging acquisition hour from the ossim metadata : IMAGING_DATE metadata variable */
+  /** Get the imaging acquisition hour from the ossim metadata : IMAGING_DATE metadata variable
+   * \deprecated
+   */
   int GetHour() const override;
 
-  /** Get the imaging acquisition year from the ossim metadata : IMAGING_DATE metadata variable */
+  /** Get the imaging acquisition year from the ossim metadata : IMAGING_DATE metadata variable
+   * \deprecated
+   */
   int GetMinute() const override;
 
-  /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
+  /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable
+   * \deprecated
+   */
   int GetProductionDay() const override;
 
-  /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
+  /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable
+   * \deprecated
+   */
   int GetProductionMonth() const override;
 
-  /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
+  /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable
+   * \deprecated
+   */
   int GetProductionYear() const override;
 
-  /** Get the sat elevation from the ossim metadata */
+  /** Get the sat elevation from the ossim metadata
+   * \deprecated
+   */
   double GetSatElevation() const override;
 
-  /** Get the sat azimuth from the ossim metadata */
+  /** Get the sat azimuth from the ossim metadata
+   * \deprecated
+   */
   double GetSatAzimuth() const override;
 
   /** Get the first wavelength for the spectral band definition */
@@ -123,6 +149,8 @@ public:
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
      * There values a computed by 6S. */
   WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
+
+  void Parse(const MetadataSupplierInterface *) override;
 
 protected:
   PleiadesImageMetadataInterface();

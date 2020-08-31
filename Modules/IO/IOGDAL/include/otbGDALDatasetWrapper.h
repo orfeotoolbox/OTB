@@ -25,6 +25,7 @@
 #include "itkObjectFactory.h"
 
 #include "otbConfigure.h"
+#include "otbGeometryMetadata.h"
 
 
 class GDALDataset;
@@ -75,6 +76,9 @@ public:
   /**
    */
   size_t GetPixelBytes() const;
+
+  Projection::GCPParam GetGCPParam() const;
+  void SetGCPParam(Projection::GCPParam gcpParam);
 
 protected:
   GDALDatasetWrapper();

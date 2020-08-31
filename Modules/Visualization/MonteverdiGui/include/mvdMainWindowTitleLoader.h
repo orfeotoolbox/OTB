@@ -78,11 +78,11 @@ public:
   /** \brief Constructor */
   MainWindowTitleLoader(VectorImageModel* model);
 
-public slots:
+public Q_SLOTS:
   /** \brief Trigger the dataset creation */
   void LoadTitle();
 
-signals:
+Q_SIGNALS:
   /** \brief Triggered after model is ready */
   void TitleLoaded(const QString&);
 

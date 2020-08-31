@@ -490,10 +490,10 @@ void ListEditWidget::OnDataChanged(const QModelIndex&, const QModelIndex&)
 
   // Notify the ParameterList that the parameter has been modified (UserValue)
   // ParameterList is not available in this class, transfer the signal to WidgetParameterList
-  emit ValueChanged();
+  Q_EMIT ValueChanged();
 
   // Then, trigger the update the application parameters
-  emit Updated();
+  Q_EMIT Updated();
 }
 
 /*****************************************************************************/
@@ -501,7 +501,7 @@ void ListEditWidget::OnModelReset()
 {
   // qDebug() << this << "::OnModelReset()";
 
-  emit Updated();
+  Q_EMIT Updated();
 }
 
 /*****************************************************************************/
@@ -509,7 +509,7 @@ void ListEditWidget::OnRowsInserted(const QModelIndex&, int, int)
 {
   // qDebug() << this << "::OnRowsInserted()";
 
-  emit Updated();
+  Q_EMIT Updated();
 }
 
 /*****************************************************************************/
@@ -517,7 +517,7 @@ void ListEditWidget::OnRowsRemoved(const QModelIndex&, int, int)
 {
   // qDebug() << this << "::OnRowsRemoved()";
 
-  emit Updated();
+  Q_EMIT Updated();
 }
 
 } // end namespace 'Wrapper'

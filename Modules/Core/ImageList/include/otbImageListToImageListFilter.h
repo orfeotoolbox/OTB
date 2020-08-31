@@ -18,71 +18,73 @@
  * limitations under the License.
  */
 
-#ifndef otbImageToImageListFilter_h
-#define otbImageToImageListFilter_h
+#ifndef otbImageListToImageListFilter_h
+#define otbImageListToImageListFilter_h
 
 #include "otbImageListSource.h"
 
 namespace otb
 {
-/** \class ImageToImageListFilter
- *
- *  \brief Base class for all the filters taking an image input to
- *  produce an image list.
- *
+/** \class ImageListToImageListFilter
+ *  \brief Base class for all the filters taking an image list as input
+ *  to produce an image list.
  * \ingroup Images
  * \ingroup Lists
  *
- * \ingroup OTBObjectList
+ * \ingroup OTBImageList
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT ImageToImageListFilter : public ImageListSource<TOutputImage>
+class ITK_EXPORT ImageListToImageListFilter : public ImageListSource<TOutputImage>
 {
 public:
   /** Standard typedefs */
-  typedef ImageToImageListFilter        Self;
+  typedef ImageListToImageListFilter    Self;
   typedef ImageListSource<TOutputImage> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
   /** Type macro */
   itkNewMacro(Self);
   /** Creation through object factory macro */
-  itkTypeMacro(ImageToImageListFilter, ImageListSource);
+  itkTypeMacro(ImageListToImageListFilter, ImageListSource);
   /** Template parameters typedefs */
-  typedef TInputImage                           InputImageType;
-  typedef typename InputImageType::ConstPointer InputImagePointer;
-  typedef typename InputImageType::RegionType   InputImageRegionType;
-  typedef typename InputImageType::PixelType    InputImagePixelType;
-  typedef typename InputImageType::SizeType     SizeType;
-  typedef typename InputImageType::ValueType    ValueType;
+  typedef TInputImage                               InputImageType;
+  typedef typename InputImageType::ConstPointer     InputImagePointer;
+  typedef typename InputImageType::RegionType       InputImageRegionType;
+  typedef typename InputImageType::PixelType        InputImagePixelType;
+  typedef typename InputImageType::SizeType         SizeType;
+  typedef typename InputImageType::ValueType        ValueType;
+  typedef ImageList<InputImageType>                 InputImageListType;
+  typedef typename InputImageListType::Pointer      InputImageListPointerType;
+  typedef typename InputImageListType::ConstPointer InputImageListConstPointer;
   /** Derived typedefs */
-  typedef typename Superclass::OutputImageType        OutputImageType;
-  typedef typename Superclass::OutputImageListType    OutputImageListType;
-  typedef typename Superclass::OutputImagePointerType OutputImagePointerType;
+  typedef typename Superclass::OutputImageType            OutputImageType;
+  typedef typename Superclass::OutputImageListType        OutputImageListType;
+  typedef typename Superclass::OutputImageListPointerType OutputImageListPointerType;
+  typedef typename Superclass::OutputImagePointerType     OutputImagePointer;
   /** InputImage dimension constant */
   itkStaticConstMacro(InputImageDimension, unsigned int, TInputImage::ImageDimension);
   /** Overriding the SetInput() and GetInput() methods */
   using Superclass::SetInput;
-  virtual void SetInput(const InputImageType* image);
-  InputImageType* GetInput(void);
+  virtual void SetInput(const InputImageListType* imageList);
+  virtual InputImageListType* GetInput(void);
 
 protected:
   /** Constructor */
-  ImageToImageListFilter();
+  ImageListToImageListFilter();
   /** Destructor */
-  ~ImageToImageListFilter() override
+  ~ImageListToImageListFilter() override
   {
   }
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
-  ImageToImageListFilter(const Self&) = delete;
+  ImageListToImageListFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 };
 } // End namespace otb
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbImageToImageListFilter.hxx"
+#include "otbImageListToImageListFilter.hxx"
 #endif
 
 #endif

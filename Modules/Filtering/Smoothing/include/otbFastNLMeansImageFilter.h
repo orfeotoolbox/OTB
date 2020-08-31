@@ -146,8 +146,8 @@ private:
                                ) const;
 
   // Define class attributes
-  InSizeType m_HalfSearchSize;
-  InSizeType m_HalfPatchSize;
+  InSizeType m_HalfSearchSize{0,0};
+  InSizeType m_HalfPatchSize{0,0};
   float      m_Var;
   float      m_CutoffDistance;
   float      m_NormalizeDistance; // cutoff**2 * windowSize**2
