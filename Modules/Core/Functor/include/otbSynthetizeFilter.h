@@ -149,7 +149,7 @@ protected:
       itk::ThreadIdType            threadId) override
   {
     using ImageScanlineConstIteratorType = itk::ImageScanlineConstIterator<InputImageType const>;
-    using OutImageScanlineConstIteratorType = itk::ImageScanlineIterator<OutputImageType>;
+    // using OutImageScanlineConstIteratorType = itk::ImageScanlineIterator<OutputImageType>;
     using OutputIterator  = itk::ImageScanlineIterator<OutputImageType>;
     using InputIterator   = ZipConstIterator<ImageScanlineConstIteratorType>;
 
