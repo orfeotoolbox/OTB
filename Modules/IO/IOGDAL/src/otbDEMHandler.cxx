@@ -234,15 +234,20 @@ bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
   // TODO : RemoveOSSIM
   OssimDEMHandler::Instance()->OpenGeoidFile(geoidFile);
 
-  if (m_GeoidDS)
-  {
-    GDALClose(m_GeoidDS);
-  }
 
   int pbError;
-
-  m_GeoidDS = static_cast<GDALDataset*>(GDALOpenVerticalShiftGrid(geoidFile.c_str(), &pbError));
-  m_GeoidFilename = geoidFile;
+  auto ds = GDALOpenVerticalShiftGrid(geoidFile.c_str(), &pbError);
+  
+  // pbError is set to TRUE if an error happens.
+  if (pbError == 0)
+  {
+    if (m_GeoidDS)
+    {
+      GDALClose(m_GeoidDS);
+    }
+    m_GeoidDS = static_cast<GDALDataset*>(ds);
+    m_GeoidFilename = geoidFile;
+  }
 
   return pbError;
 }
