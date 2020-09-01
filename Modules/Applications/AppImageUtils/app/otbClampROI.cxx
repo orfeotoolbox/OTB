@@ -53,7 +53,7 @@ private:
   {
     SetName("ClampROI");
 
-    SetDescription("This is the ClampROI application, version X.X.X");
+    SetDescription("This is the ClampROI application");
     SetDocLongDescription(
         "This application is similar to ExtractROI in the sense it extracts a Region of Interrest.\n"
         "However, the region outside of the ROI isn't trimmed, but set to 0.\n"
@@ -64,7 +64,7 @@ private:
     SetDocLimitations("This application only works on scalar (and complex) images.");
     SetDocAuthors("Luc Hermitte (CS Group)");
     SetDocSeeAlso("ManageNoData, ExtractROI");
-    AddDocTag("otb::Wrapper::Tags::Manip");
+    AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_InputImage,  "in",   "Input image");
     SetParameterDescription("in", "Scalar Input image");
@@ -88,7 +88,18 @@ private:
     SetParameterDescription("threshold.y.end", "Bottom line index threshold");
     SetDefaultParameterInt("threshold.y.end", 0);
 
+    SetMinimumParameterIntValue("threshold.x",       0);
+    SetMinimumParameterIntValue("threshold.y.start", 0);
+    SetMinimumParameterIntValue("threshold.y.end",   0);
+
     AddRAMParameter();
+
+    SetDocExampleParameterValue("in", "ClampROIInput100x100.tiff");
+    SetDocExampleParameterValue("threshold.x",       "10");
+    SetDocExampleParameterValue("threshold.y.start", "12");
+    SetDocExampleParameterValue("threshold.y.end",    "25");
+    SetDocExampleParameterValue("out", "ClampROI.tiff");
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() override

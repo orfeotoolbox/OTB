@@ -60,14 +60,14 @@ private:
   {
     SetName("Synthetize");
 
-    SetDescription("This is the Synthetize application, version X.X.X");
+    SetDescription("This is the Synthetize application");
     SetDocLongDescription("Concatenate a list of images of the same size into a single single-channel image.\n\
         It keeps the first non-null pixel value found in the input list.");
 
     SetDocLimitations("This application will break incoming pipelines.");
     SetDocAuthors("Luc Hermitte (CS Group)");
     SetDocSeeAlso("");
-    AddDocTag("otb::Wrapper::Tags::Manip");
+    AddDocTag(Tags::Manip);
 
     AddParameter(ParameterType_StringList,  "il",  "Input images list");
     SetParameterDescription("il", "Input image list");
@@ -76,6 +76,10 @@ private:
     SetParameterDescription("out","Output image.");
 
     AddRAMParameter();
+
+    SetDocExampleParameterValue("il", "s1a_33NWB_vv_DES_007_20200108t044150.tif s1a_33NWB_vv_DES_007_20200108t044215.tif");
+    SetDocExampleParameterValue("out", "s1a_33NWB_vv_DES_007_20200108txxxxxx.tif");
+    SetOfficialDocLink();
   }
 
   void DoUpdateParameters() override
