@@ -1114,11 +1114,12 @@ void GlImageActor::UpdateTransforms()
   //   << std::hex << this << std::dec
   //   << " WKT-changed: " << isEqualOrNot << std::endl;
 
+  //TODO OSSIM: Replace KeywordList by ImageMetadata in the settings object
     geometryChanged = geometryChanged
   || (m_ViewportToImageTransform.IsNotNull() && m_ViewportToImageTransform->GetInputProjectionRef() != settings->GetWkt())
   || (m_ImageToViewportTransform.IsNotNull() && m_ImageToViewportTransform->GetOutputProjectionRef() != settings->GetWkt())
-    || (m_ViewportToImageTransform.IsNotNull() && !(m_ViewportToImageTransform->GetInputKeywordList() == settings->GetKeywordList()))
-        || (m_ImageToViewportTransform.IsNotNull() && !(m_ImageToViewportTransform->GetOutputKeywordList() == settings->GetKeywordList()));
+    || (m_ViewportToImageTransform.IsNotNull() /*&& !(m_ViewportToImageTransform->GetInputKeywordList() == settings->GetKeywordList())*/)
+        || (m_ImageToViewportTransform.IsNotNull() /*&& !(m_ImageToViewportTransform->GetOutputKeywordList() == settings->GetKeywordList())*/);
 
   if(settings->GetUseProjection() && geometryChanged)
     {
@@ -1130,14 +1131,16 @@ void GlImageActor::UpdateTransforms()
     m_ImageToViewportTransform = RSTransformType::New();
 
     m_ViewportToImageTransform->SetInputProjectionRef(settings->GetWkt());
-    m_ViewportToImageTransform->SetInputKeywordList(settings->GetKeywordList());
+    //TODO OSSIM: Replace KeywordList by ImageMetadata in the settings object
+    //m_ViewportToImageTransform->SetInputKeywordList(settings->GetKeywordList());
     m_ViewportToImageTransform->SetOutputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
-    m_ViewportToImageTransform->SetOutputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
+    m_ViewportToImageTransform->SetOutputImageMetadata(m_FileReader->GetOutput()->GetImageMetadata());
 
     m_ImageToViewportTransform->SetOutputProjectionRef(settings->GetWkt());
-    m_ImageToViewportTransform->SetOutputKeywordList(settings->GetKeywordList());
+    //TODO OSSIM: Replace KeywordList by ImageMetadata in the settings object
+    //m_ImageToViewportTransform->SetOutputKeywordList(settings->GetKeywordList());
     m_ImageToViewportTransform->SetInputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
-    m_ImageToViewportTransform->SetInputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
+    m_ImageToViewportTransform->SetInputImageMetadata(m_FileReader->GetOutput()->GetImageMetadata());
 
     hasChanged = true;
     }
