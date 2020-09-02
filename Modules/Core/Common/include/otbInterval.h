@@ -47,7 +47,9 @@ public:
   constexpr Interval(IndexType l, IndexType u) noexcept
     : m_lower(l), m_upper(u)
     {
+#if defined(__cpp_constexpr) && __cpp_constexpr >= 201304
       assert(l <= u);
+#endif
     }
 
   /** Alternate factory function from a position and a length. */
@@ -76,10 +78,17 @@ public:
   friend constexpr Interval intersect(
       Interval const& lhs, Interval const& rhs) noexcept
   {
+#if defined(__cpp_constexpr) && __cpp_constexpr >= 201304
     auto const low = std::max(lhs.lower(), rhs.lower());
     auto const upp = std::min(lhs.upper(), rhs.upper());
 
     return low <= upp ? Interval{low, upp} : Interval{0,0};
+#else
+    // MSVC version supported is not C++14 compliant
+    return std::max(lhs.lower(), rhs.lower()) <= std::min(lhs.upper(), rhs.upper())
+      ? Interval{std::max(lhs.lower(), rhs.lower()), std::min(lhs.upper(), rhs.upper())}
+      : Interval{0,0};
+#endif
   }
 
   /** Stream inserter for intervals.
