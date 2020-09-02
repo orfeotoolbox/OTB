@@ -22,6 +22,7 @@
 #define otbInterval_h
 
 #include "itkIntTypes.h"
+#include <algorithm>
 #include <cassert>
 #include <ostream>
 
