@@ -21,6 +21,7 @@
 #define otbGDALRPCTransformer_h
 
 #include "OTBGdalAdaptersExport.h"
+#include "itkPoint.h"
 
 #include <memory>
 #include <string>
@@ -52,6 +53,9 @@ namespace otb
 class OTBGdalAdapters_EXPORT GDALRPCTransformer
 {
 public:
+
+  using PointType = itk::Point<double, 3>;
+
   /**
    * Build a GDALRPCTransformer
    *
@@ -121,11 +125,11 @@ public:
    * GEOS.</li>
    * </ul>
    *
-   * \param Name a string containing the name of the option
-   * \param Value a string containing the value of the option
+   * \param[in] Name a string containing the name of the option
+   * \param[in] Value a string containing the value of the option
    *
    */
-  void SetOption(std::string Name, std::string Value);
+  void SetOption(const std::string& Name, const std::string& Value);
 
   /**
    * Set the error (measured in pixels) allowed in the
@@ -134,7 +138,7 @@ public:
    * be set through the RPC_PIXEL_ERROR_THRESHOLD transformer option.
    * If a negative or null value is provided, then this defaults to 0.1 pixel.
    *
-   * \param PixErrThreshold the new value of the error
+   * \param[in] PixErrThreshold the new value of the error
    *
    */
   void SetPixErrThreshold(double PixErrThreshold);
@@ -145,14 +149,25 @@ public:
    * This method performs a transformation from column/row to long/lat/height space.
    * It can work with an arbitrary number of points.
    *
-   * \param x the X coordinate of the points to convert
-   * \param y the Y coordinate of the points to convert
-   * \param z the Z coordinate of the points to convert
-   * \param nPointCount the number of points to convert
+   * \param[in,out] x array of the X coordinate of the points to convert
+   * \param[in,out] y array of the Y coordinate of the points to convert
+   * \param[in,out] z array of the Z coordinate of the points to convert
+   * \param[in] nPointCount the number of points to convert
    * \return true if all points were correctly transformed
+   * \pre `x, y, z != nullptr`
    *
    */
   bool ForwardTransform(double* x, double* y, double* z, int nPointCount=1);
+
+  /**
+   * Compute an forward transformation
+   *
+   * This method performs a transformation from column/row to long/lat/height space.
+   * It works with only one point.
+   *
+   * \param[in] p coordinates of the point to convert
+   */
+  PointType ForwardTransform(PointType p);
 
   /**
    * Compute an inverse transformation
@@ -160,14 +175,25 @@ public:
    * This method performs a transformation from long/lat/height to column/row space.
    * It can work with an arbitrary number of points.
    *
-   * \param x the X coordinate of the points to convert
-   * \param y the Y coordinate of the points to convert
-   * \param z the Z coordinate of the points to convert
-   * \param nPointCount the number of points to convert
+   * \param[in,out] x array of the X coordinate of the points to convert
+   * \param[in,out] y array of the Y coordinate of the points to convert
+   * \param[in,out] z array of the Z coordinate of the points to convert
+   * \param[in] nPointCount the number of points to convert
    * \return true if all points were correctly transformed
+   * \pre `x, y, z != nullptr`
    *
    */
   bool InverseTransform(double* x, double* y, double* z, int nPointCount=1);
+
+  /**
+   * Compute an inverse transformation
+   *
+   * This method performs a transformation from long/lat/height to column/row space.
+   * It works with only one point.
+   *
+   * \param[in] p coordinates of the point to convert
+   */
+  PointType InverseTransform(PointType p);
 
 protected:
   /**

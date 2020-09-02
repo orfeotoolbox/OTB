@@ -19,6 +19,7 @@
  */
 
 #include "otbGDALRPCTransformer.h"
+#include <assert.h>
 
 namespace otb
 {
@@ -48,7 +49,7 @@ GDALRPCTransformer::GDALRPCTransformer(double LineOffset, double SampleOffset, d
   }
 }
 
-void GDALRPCTransformer::SetOption(std::string Name, std::string Value)
+void GDALRPCTransformer::SetOption(const std::string& Name, const std::string& Value)
 {
   this->m_Options = CSLSetNameValue(this->m_Options, Name.c_str(), Value.c_str());
   this->m_Modified = true;
@@ -68,25 +69,52 @@ void GDALRPCTransformer::Update()
 
 bool GDALRPCTransformer::ForwardTransform(double* x, double* y, double* z, int nPointCount)
 {
+  assert(x);
+  assert(y);
+  assert(z);
   if (this->m_Modified)
     this->Update();
-  int success[nPointCount];
+  int* success = new int[nPointCount];
   GDALRPCTransform(this->m_TransformArg, false, nPointCount, x, y, z, success);
-  for(int* it{success} ; it < (success + nPointCount) ; ++it)
-    if (! *it)
-      return false;
-  return true;
+  bool finalSuccess = std::all_of(success, success+nPointCount, [](int i){return i;});
+  delete[] success;
+  return finalSuccess;
 }
+
+GDALRPCTransformer::PointType GDALRPCTransformer::ForwardTransform(GDALRPCTransformer::PointType p)
+{
+  if (m_Modified)
+    this->Update();
+  int success;
+    GDALRPCTransform(this->m_TransformArg, false, 1, &p[0], &p[1], &p[2], &success);
+    if (!success)
+        throw std::runtime_error("GDALRPCTransform was not able to process the ForwardTransform.");
+    return p;
+}
+
 
 bool GDALRPCTransformer::InverseTransform(double* x, double* y, double* z, int nPointCount)
 {
+  assert(x);
+  assert(y);
+  assert(z);
   if (this->m_Modified)
     this->Update();
-  int success[nPointCount];
+  int* success = new int[nPointCount];
   GDALRPCTransform(this->m_TransformArg, true, nPointCount, x, y, z, success);
-  for(int* it{success} ; it < (success + nPointCount) ; ++it)
-    if (! *it)
-      return false;
-  return true;
+  bool finalSuccess = std::all_of(success, success+nPointCount, [](int i){return i;});
+  delete[] success;
+  return finalSuccess;
+}
+
+GDALRPCTransformer::PointType GDALRPCTransformer::InverseTransform(GDALRPCTransformer::PointType p)
+{
+  if (m_Modified)
+    this->Update();
+  int success;
+    GDALRPCTransform(this->m_TransformArg, true, 1, &p[0], &p[1], &p[2], &success);
+    if (!success)
+        throw std::runtime_error("GDALRPCTransform was not able to process the InverseTransform.");
+    return p;
 }
 }
