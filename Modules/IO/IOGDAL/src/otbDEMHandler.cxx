@@ -324,7 +324,7 @@ bool DEMHandler::IsValidDEMDirectory(const std::string& DEMDirectory) const
   for (const auto & filename : DEMDetails::GetFilesInDirectory(DEMDirectory))
   {
     // test if a driver can identify this dataset
-    auto identifyDriverH = static_cast<GDALDriver *>(GDALIdentifyDriver(filename.c_str(), nullptr));
+    auto identifyDriverH = GDALIdentifyDriver(filename.c_str(), nullptr);
     if (identifyDriverH)
     {
       return true;
@@ -338,12 +338,14 @@ std::string DEMHandler::GetDEMDirectory(unsigned int idx) const
 {
   if (idx >= m_DEMDirectories.size())
   {
-    return "";
+    std::ostringstream oss;
+    oss << "Requested DEM diectory " << idx
+        << ", but only "<< m_DEMDirectories.size() << "have been set.";
+    throw std::out_of_range (oss.str());
   }
-  else
-  {
-    return m_DEMDirectories[idx];
-  }
+  
+  return m_DEMDirectories[idx];
+  
 }
 
 std::string DEMHandler::GetGeoidFile() const
