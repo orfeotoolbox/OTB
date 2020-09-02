@@ -30,6 +30,8 @@
 // TODO : RemoveOSSIM
 #include <otbOssimDEMHandler.h>
 
+#include <mutex>
+
 #include "ogr_spatialref.h"
 
 namespace otb {
@@ -68,8 +70,12 @@ std::vector<std::string> GetFilesInDirectory(const std::string & directoryPath)
   return fileList;
 }
 
+std::mutex demMutex;
+
 boost::optional<double> GetDEMValue(double lon, double lat, GDALDataset& ds)
 {
+  const std::lock_guard<std::mutex> lock(demMutex);
+
 #if GDAL_VERSION_NUM >= 3000000
   auto srs = ds.GetSpatialRef();
 #else
