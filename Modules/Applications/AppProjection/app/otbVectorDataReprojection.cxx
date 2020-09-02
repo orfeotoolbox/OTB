@@ -147,7 +147,7 @@ private:
         m_OutputProjectionRef = outImage->GetProjectionRef(); // ~ wkt
         if (m_OutputProjectionRef.empty())
         {
-          m_GeometriesProjFilter->SetOutputKeywordList(outImage->GetImageKeywordlist()); // nec qd capteur
+          m_GeometriesProjFilter->SetOutputImageMetadata(outImage->GetImageMetadata());
         }
       }
       else

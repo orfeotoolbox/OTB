@@ -375,7 +375,7 @@ private:
       geometriesProjFilter->SetInput(inputGeomSet);
       if (imageProjectionRef.empty())
       {
-        geometriesProjFilter->SetOutputKeywordList(inputImg->GetImageKeywordlist()); // nec qd capteur
+        geometriesProjFilter->SetOutputImageMetadata(inputImg->GetImageMetadata());
       }
       geometriesProjFilter->SetOutputProjectionRef(imageProjectionRef);
       geometriesProjFilter->SetOutput(outputGeomSet);
