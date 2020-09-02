@@ -49,7 +49,8 @@ class ITK_EXPORT SensorModelBase : public Transform<TScalarType, NInputDimension
 {
 
 public:
-  /** Standard class typedefs. */
+  /** @name Standard class type definitions */
+  //@{
   using Self         = SensorModelBase;
   using Superclass   = Transform<TScalarType, NInputDimensions, NOutputDimensions>;
   using Pointer      = itk::SmartPointer<Self>;
@@ -58,6 +59,7 @@ public:
   using InputPointType  = itk::Point<TScalarType, NInputDimensions>;
   using OutputPointType = itk::Point<TScalarType, NOutputDimensions>;
   using PixelType =TScalarType;
+  //@}
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(Self, Superclass);
@@ -73,7 +75,7 @@ public:
   virtual bool SetMetadataModel(boost::any imdModel) = 0;
 
   /** Check model validity */
-  virtual bool IsValidSensorModel() = 0;
+  virtual bool IsValidSensorModel() const = 0;
 
 protected:
   SensorModelBase() = default;

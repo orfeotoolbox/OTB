@@ -22,7 +22,7 @@
 #define otbGenericRSTransform_h
 
 #include "otbCompositeTransform.h"
-#include "otbImageKeywordlist.h"
+#include "otbImageMetadata.h"
 #include <string>
 
 namespace otb
@@ -101,42 +101,38 @@ public:
   itkSetStringMacro(OutputProjectionRef);
   itkGetStringMacro(OutputProjectionRef);
 
-  /** Set/Get Dictionary*/
-  const itk::MetaDataDictionary& GetInputDictionary() const
+  /** Set/Get ImageMetadata*/
+  const ImageMetadata* GetInputImageMetadata() const
   {
-    return m_InputDictionary;
+    return m_InputImd;
   }
 
-  void SetInputDictionary(const itk::MetaDataDictionary& dictionary)
+  void SetInputImageMetadata(const ImageMetadata* imd)
   {
-    m_InputDictionary = dictionary;
+    m_InputImd = imd;
     this->Modified();
   }
 
-  const itk::MetaDataDictionary& GetOutputDictionary() const
+  void SetInputImageMetadata(const ImageMetadata imd)
   {
-    return m_OutputDictionary;
-  }
-
-  void SetOutputDictionary(const itk::MetaDataDictionary& dictionary)
-  {
-    m_OutputDictionary = dictionary;
+    m_InputImd = &imd;
     this->Modified();
   }
 
-  /** Set/Get Keywordlist*/
-
-  itkGetMacro(InputKeywordList, ImageKeywordlist);
-  void SetInputKeywordList(const ImageKeywordlist& kwl)
+  const ImageMetadata* GetOutputImageMetadata() const
   {
-    this->m_InputKeywordList = kwl;
+    return m_OutputImd;
+  }
+
+  void SetOutputImageMetadata(const ImageMetadata* imd)
+  {
+    m_OutputImd = imd;
     this->Modified();
   }
 
-  itkGetMacro(OutputKeywordList, ImageKeywordlist);
-  void SetOutputKeywordList(const ImageKeywordlist& kwl)
+  void SetOutputImageMetadata(const ImageMetadata imd)
   {
-    this->m_OutputKeywordList = kwl;
+    m_OutputImd = &imd;
     this->Modified();
   }
 
@@ -208,11 +204,8 @@ private:
   GenericRSTransform(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  ImageKeywordlist m_InputKeywordList;
-  ImageKeywordlist m_OutputKeywordList;
-
-  itk::MetaDataDictionary m_InputDictionary;
-  itk::MetaDataDictionary m_OutputDictionary;
+  const ImageMetadata* m_InputImd;
+  const ImageMetadata* m_OutputImd;
 
   std::string m_InputProjectionRef;
   std::string m_OutputProjectionRef;

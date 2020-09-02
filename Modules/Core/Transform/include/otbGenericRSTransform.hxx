@@ -24,8 +24,8 @@
 #include "otbGenericRSTransform.h"
 #include "otbMacro.h"
 #include "otbMetaDataKey.h"
-#include "itkMetaDataObject.h"
 #include "otbRPCForwardTransform.h"
+#include "otbRPCInverseTransform.h"
 
 #include "otbSpatialReference.h"
 
@@ -39,13 +39,13 @@ GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::GenericRST
 {
   m_InputProjectionRef.clear();
   m_OutputProjectionRef.clear();
-  m_InputKeywordList.Clear();
-  m_OutputKeywordList.Clear();
   m_InputSpacing.Fill(1);
   m_InputOrigin.Fill(0);
   m_OutputSpacing.Fill(1);
   m_OutputOrigin.Fill(0);
 
+  m_InputImd          = nullptr;
+  m_OutputImd         = nullptr;
   m_Transform         = nullptr;
   m_InputTransform    = nullptr;
   m_OutputTransform   = nullptr;
@@ -74,21 +74,12 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
 {
   m_Transform = TransformType::New();
 
-  if (m_InputKeywordList.GetSize() == 0)
-  {
-    itk::ExposeMetaData<ImageKeywordlist>(m_InputDictionary, MetaDataKey::OSSIMKeywordlistKey, m_InputKeywordList);
-  }
-  if (m_InputProjectionRef.empty())
-  {
-    itk::ExposeMetaData<std::string>(m_InputDictionary, MetaDataKey::ProjectionRefKey, m_InputProjectionRef);
-  }
-
   otbMsgDevMacro(<< "Information to instantiate transform: ");
   otbMsgDevMacro(<< " * Input Origin: " << m_InputOrigin);
   otbMsgDevMacro(<< " * Input Spacing: " << m_InputSpacing);
-  otbMsgDevMacro(<< " * Input keyword list: " << ((m_InputKeywordList.GetSize() == 0) ? "Empty" : "Full"));
+  otbMsgDevMacro(<< " * Input metadata: " << ((m_InputImd == nullptr) ? "Empty" : "Full"));
   otbMsgDevMacro(<< " * Input projection: " << m_InputProjectionRef);
-  otbMsgDevMacro(<< " * Output keyword list: " << ((m_OutputKeywordList.GetSize() == 0) ? "Empty" : "Full"));
+  otbMsgDevMacro(<< " * Output metadata: " << ((m_OutputImd == nullptr) ? "Empty" : "Full"));
   otbMsgDevMacro(<< " * Output projection: " << m_OutputProjectionRef);
   otbMsgDevMacro(<< " * Output Origin: " << m_OutputOrigin);
   otbMsgDevMacro(<< " * Output Spacing: " << m_OutputSpacing);
@@ -121,17 +112,17 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
     }
   }
 
-  // If not, try to make a sensor model
-  if ((m_InputTransform.IsNull()) && (m_InputKeywordList.GetSize() > 0))
+  // If not, try to make a RPC sensor model
+  if ((m_InputTransform.IsNull()) && (m_InputImd->Has(MDGeom::RPC)))
   {
-    typedef otb::RPCForwardTransform<double, InputSpaceDimension, InputSpaceDimension> ForwardSensorModelType;
-    typename ForwardSensorModelType::Pointer sensorModel = ForwardSensorModelType::New();
+    typedef otb::RPCForwardTransform<double, InputSpaceDimension, OutputSpaceDimension> RPCForwardTransformType;
+    typename RPCForwardTransformType::Pointer sensorModel = RPCForwardTransformType::New();
 
-    sensorModel->SetMetadataModel(m_InputKeywordList);
+    sensorModel->SetMetadataModel((*m_InputImd)[MDGeom::RPC]);
 
     if (sensorModel->IsValidSensorModel())
     {
-      m_InputTransform       = sensorModel.GetPointer();
+      //TODO: m_InputTransform       = sensorModel.GetPointer();
       inputTransformIsSensor = true;
       otbMsgDevMacro(<< "Input projection set to sensor model.");
     }
@@ -153,17 +144,17 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
     }
   }
 
-  // If not, try to make a sensor model
-  if ((m_OutputTransform.IsNull()) && (m_OutputKeywordList.GetSize() > 0))
+  // If not, try to make a RPC sensor model
+  if ((m_OutputTransform.IsNull()) && (m_OutputImd->Has(MDGeom::RPC)))
   {
-    typedef otb::InverseSensorModel<double, InputSpaceDimension, OutputSpaceDimension> InverseSensorModelType;
-    typename InverseSensorModelType::Pointer sensorModel = InverseSensorModelType::New();
+    typedef otb::RPCInverseTransform<double, InputSpaceDimension, OutputSpaceDimension> RPCInverseTransformType;
+    typename RPCInverseTransformType::Pointer sensorModel = RPCInverseTransformType::New();
 
-    sensorModel->SetImageGeometry(m_OutputKeywordList);
+    sensorModel->SetMetadataModel((*m_OutputImd)[MDGeom::RPC]);
 
     if (sensorModel->IsValidSensorModel())
     {
-      m_OutputTransform       = sensorModel.GetPointer();
+      //TODO: m_OutputTransform       = sensorModel.GetPointer();
       outputTransformIsSensor = true;
       otbMsgDevMacro(<< "Output projection set to sensor model");
     }
@@ -258,13 +249,9 @@ bool GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::GetIn
   inverseTransform->SetInputProjectionRef(m_OutputProjectionRef);
   inverseTransform->SetOutputProjectionRef(m_InputProjectionRef);
 
-  // Switch keywordlists
-  inverseTransform->SetInputKeywordList(m_OutputKeywordList);
-  inverseTransform->SetOutputKeywordList(m_InputKeywordList);
-
-  // Switch dictionnaries
-  inverseTransform->SetInputDictionary(m_OutputDictionary);
-  inverseTransform->SetOutputDictionary(m_InputDictionary);
+  // Switch ImageMetadatas
+  inverseTransform->SetInputImageMetadata(m_OutputImd);
+  inverseTransform->SetOutputImageMetadata(m_InputImd);
 
   // Switch spacings
   inverseTransform->SetInputSpacing(m_OutputSpacing);
