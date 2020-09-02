@@ -45,7 +45,8 @@ template <class TScalarType, unsigned int NInputDimensions = 3, unsigned int NOu
 class ITK_EXPORT RPCTransformBase : public SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
 {
 public:
-  /** Standard class typedefs. */
+  /** @name Standard class type definitions */
+  //@{
   using Self         = RPCTransformBase;
   using Superclass   = SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>;
   using Pointer      = itk::SmartPointer<Self>;
@@ -54,6 +55,7 @@ public:
   using InputPointType  = itk::Point<TScalarType, NInputDimensions>;
   using OutputPointType = itk::Point<TScalarType, NOutputDimensions>;
   using PixelType =TScalarType;
+  //@}
 
   /** Run-time type information (and related methods). */
   itkTypeMacro(Self, Superclass);
@@ -69,15 +71,15 @@ public:
   bool SetMetadataModel(boost::any imdModel) override;
 
   /** Check model validity */
-  bool IsValidSensorModel() override;
+  bool IsValidSensorModel() const override;
 
 protected:
   RPCTransformBase() = default;
-  ~RPCTransformBase() override;
+  ~RPCTransformBase() = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  Projection::RPCParam* m_RPCParam = nullptr;
-  GDALRPCTransformer* m_Transformer = nullptr;
+  std::unique_ptr<Projection::RPCParam> m_RPCParam;
+  std::unique_ptr<GDALRPCTransformer> m_Transformer;
 
 private:
   RPCTransformBase(const Self&) = delete;

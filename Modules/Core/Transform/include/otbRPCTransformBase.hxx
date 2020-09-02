@@ -27,40 +27,29 @@ namespace otb
 {
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::~RPCTransformBase()
-{
-  this->m_RPCParam = nullptr;
-  this->m_Transformer = nullptr;  // Memory leek ?
-}
-
-template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 bool RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::SetMetadataModel(boost::any imdModel)
 {
-  delete this->m_RPCParam;
-  delete this->m_Transformer;
   try
   {
-    Projection::RPCParam rpcParam = boost::any_cast<Projection::RPCParam>(imdModel);
-    this->m_RPCParam = &rpcParam;
+    Projection::RPCParam newParam = boost::any_cast<Projection::RPCParam>(imdModel);
+    this->m_RPCParam.reset(&newParam);
   }
   catch (boost::bad_any_cast)
   {
     return false;
   }
-  GDALRPCTransformer trans = GDALRPCTransformer(
+  GDALRPCTransformer newTrans = GDALRPCTransformer(
           m_RPCParam->LineOffset, m_RPCParam->SampleOffset, m_RPCParam->LatOffset, m_RPCParam->LonOffset, m_RPCParam->HeightOffset,
           m_RPCParam->LineScale, m_RPCParam->SampleScale, m_RPCParam->LatScale, m_RPCParam->LonScale, m_RPCParam->HeightScale,
           m_RPCParam->LineNum, m_RPCParam->LineDen, m_RPCParam->SampleNum, m_RPCParam->SampleDen);
-  this->m_Transformer = &trans;
+  this->m_Transformer.reset(&newTrans);
   return true;
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-bool RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::IsValidSensorModel()
+bool RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::IsValidSensorModel() const
 {
-  if (this->m_Transformer == nullptr)
-	  return false;
-  return true;
+  return m_Transformer != nullptr;
 }
 
 /**
@@ -70,7 +59,7 @@ template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutput
 void RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "RPC Model: " << this->m_RPCParam << std::endl;
+  os << indent << "RPC Model: " << this->m_RPCParam.get() << std::endl;
 }
 
 }

@@ -26,15 +26,18 @@
 namespace otb
 {
 
-template <class TScalarType>
-typename RPCInverseTransform<TScalarType>::OutputPointType
-RPCInverseTransform<TScalarType>::TransformPoint(const RPCInverseTransform<TScalarType>::InputPointType& point) const
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+typename RPCInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
+RPCInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::TransformPoint(const RPCInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::InputPointType& point) const
 {
   double x = static_cast<double>(point[0]);
   double y = static_cast<double>(point[1]);
-  double z = static_cast<double>(point[2]);
+  double z = 0;
+  if (NInputDimensions > 2)
+    z = static_cast<double>(point[2]);
 
-  this->m_Transformer->InverseTransform(&x, &y, &z);
+  if(!this->m_Transformer->InverseTransform(&x, &y, &z))
+    throw std::runtime_error("An error occurred while processing the InverseTransform.");
 
   OutputPointType pOut;
   pOut[0] = static_cast<TScalarType>(x);
@@ -45,8 +48,8 @@ RPCInverseTransform<TScalarType>::TransformPoint(const RPCInverseTransform<TScal
 /**
  * PrintSelf method
  */
-template <class TScalarType>
-void RPCInverseTransform<TScalarType>::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+void RPCInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Transformation direction: Inverse" << std::endl;

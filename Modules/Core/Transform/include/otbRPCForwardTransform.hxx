@@ -26,28 +26,30 @@
 namespace otb
 {
 
-template <class TScalarType>
-typename RPCForwardTransform<TScalarType>::OutputPointType
-RPCForwardTransform<TScalarType>::TransformPoint(const InputPointType& point) const
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+typename RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
+RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::TransformPoint(const RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::InputPointType& point) const
 {
   double x = static_cast<double>(point[0]);
   double y = static_cast<double>(point[1]);
   double z;
 
-  this->m_Transformer->ForwardTransform(&x, &y, &z);
+  if(!this->m_Transformer->ForwardTransform(&x, &y, &z))
+    throw std::runtime_error("An error occurred while processing the ForwardTransform.");
 
   OutputPointType pOut;
   pOut[0] = static_cast<TScalarType>(x);
   pOut[1] = static_cast<TScalarType>(y);
-  pOut[2] = static_cast<TScalarType>(z);
+  if (NOutputDimensions > 2)
+    pOut[2] = static_cast<TScalarType>(z);
   return pOut;
 }
 
 /**
  * PrintSelf method
  */
-template <class TScalarType>
-void RPCForwardTransform<TScalarType>::PrintSelf(std::ostream& os, itk::Indent indent) const
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+void RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
   os << indent << "Transformation direction: Forward" << std::endl;

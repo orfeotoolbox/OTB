@@ -34,19 +34,21 @@ namespace otb
  *
  * \ingroup OTBTransform
  */
-template <class TScalarType>
-class ITK_EXPORT RPCInverseTransform : public RPCTransformBase<TScalarType, 3, 2>
+template <class TScalarType, unsigned int NInputDimensions = 3, unsigned int NOutputDimensions = 2>
+class ITK_EXPORT RPCInverseTransform : public RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>
 {
 public:
-  /** Standard class typedefs. */
+  /** @name Standard class type definitions */
+  //@{
   using Self         = RPCInverseTransform;
-  using Superclass   = RPCTransformBase<TScalarType, 3, 2>;
+  using Superclass   = RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>;
   using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self> ;
 
-  using InputPointType  = itk::Point<TScalarType, 3>;
-  using OutputPointType = itk::Point<TScalarType, 2>;
+  using InputPointType  = itk::Point<TScalarType, NInputDimensions>;
+  using OutputPointType = itk::Point<TScalarType, NOutputDimensions>;
   using PixelType =TScalarType;
+  //@}
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -54,8 +56,8 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(Self, Superclass);
 
-  itkStaticConstMacro(InputSpaceDimension, unsigned int, 3);
-  itkStaticConstMacro(OutputSpaceDimension, unsigned int, 2);
+  itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
+  itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
 
   /**  Method to transform a point. */
   OutputPointType TransformPoint(const InputPointType& point) const override;
