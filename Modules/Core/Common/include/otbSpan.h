@@ -24,12 +24,25 @@
 
 #include <type_traits>
 #include <iterator>
+#include <limits>
 #include <cassert>
 
 namespace otb
 {
 
 /** Span class inspired by C++20 standard.
+ *
+ * \invariant `size() == 0 or data() != nullptr`
+ *
+ * \note Unlike C++20 `std::span` this implementation doesn't follow Lakos
+ * Rule but instead non-throwing functions are `noexcept` as suggested in
+ * https://wg21.link/p1656. Beware to not expect `operator[]` to always be
+ * `noexcept` as it won't be anymore once this class is deprecated in favour
+ * of `std::span` in a few years.
+ *
+ * \note This implementation only support spans with dynamic extents. Static
+ * extents are not supported (yet?)
+ *
  * \todo fix RW / RO interface
  * \author Luc Hermitte (CS Group)
  * \copyright CNES
@@ -75,7 +88,7 @@ template <typename T> struct Span
    * \pre The Container shall be contiguous
    * \warning The lifetime of the span shall not exceed the one of the container.
    * Be sure to not store the span locally, and initialize it from a rvalue.
-   * The use case where a span is initialize from a rvalue shall be restricted
+   * The use case where a span is initialized from a rvalue shall be restricted
    * to function parameters.
    * \code
    * std::vector<T> f();
@@ -88,10 +101,11 @@ template <typename T> struct Span
    * \todo static_assert the container is contiguous
    */
   template <class Container> constexpr Span(Container&& cont) noexcept
-    : Span(&cont[0], cont.size())
+    : Span(cont.data(), cont.size())
     {
       // We cannot use op[] which has an assertion sometimes.
       // assert(&const[size()] == (&cont[0] + size()));
+      // Beside, it's not noexcept.
     }
   template <class U> constexpr Span(const otb::Span<U>& s) noexcept
     : Span(s.data(), s.size())
@@ -153,6 +167,19 @@ template <typename T> struct Span
   { assert(n < size()); return Span(data(), n);}
   constexpr Span last(index_type n) const noexcept
   { assert(n < size()); return Span(data()-n, n);}
+
+  constexpr Span subspan(index_type offset, index_type count = std::numeric_limits<index_type>::max()) noexcept
+  {
+    assert(offset <= size());
+    if (count == std::numeric_limits<index_type>::max())
+    {
+      count = size() - offset;
+    }
+
+    assert(count <= (size() - offset));
+    return Span(data()+offset, count);
+
+  }
   //@}
 
 private:
