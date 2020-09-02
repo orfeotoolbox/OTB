@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
   // the image:
 
   // necessary for sensors
-  filter->SetOutputKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
+  filter->SetOutputImageMetadata(imageReader->GetOutput()->GetImageMetadata());
   // necessary for sensors
   filter->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
   // necessary for sensors
