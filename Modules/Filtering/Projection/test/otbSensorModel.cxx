@@ -27,6 +27,7 @@
 
 #include "otbVectorImage.h"
 #include "otbImageFileReader.h"
+#include "otbImageMetadata.h"
 #include "otbRPCForwardTransform.h"
 #include "otbRPCInverseTransform.h"
 #include "otbDEMHandler.h"
@@ -57,37 +58,37 @@ typedef otb::VectorImage<double, 2>      ImageType;
 typedef itk::Statistics::EuclideanDistanceMetric<ImageType::PointType> DistanceType;
 typedef otb::GeographicalDistance<ImageType::PointType>                GeographicalDistanceType;
 
-int produceGCP(char* outputgcpfilename, const otb::ImageKeywordlist& kwlist, bool useForwardSensorModel = true, double z = 16.19688987731934)
+int produceGCP(char* outputgcpfilename, const otb::ImageMetadata& imd, bool useForwardSensorModel = true, double z = 16.19688987731934)
 {
   itk::Point<double, 2> imagePoint;
   itk::Point<double, 2> geoPoint;
 
   //  otbForwardSensorModel
-  typedef otb::RPCForwardTransform<double> ForwardSensorModelType;
+  typedef otb::RPCForwardTransform<double, 2, 2> ForwardSensorModelType;
   ForwardSensorModelType::Pointer         forwardSensorModel = ForwardSensorModelType::New();
-  forwardSensorModel->SetImageGeometry(kwlist);
+  forwardSensorModel->SetMetadataModel(imd[otb::MDGeom::RPC]);
   if (forwardSensorModel->IsValidSensorModel() == false)
   {
-    otbLogMacro(Warning, << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!");
+    otbLogMacro(Warning, << "Invalid Model pointer m_Model == NULL!\n The metadata is invalid!");
     return EXIT_FAILURE;
   }
 
   otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(z);
 
   // ossim classes
-  ossimKeywordlist ossimKwlist;
-  kwlist.convertToOSSIMKeywordlist(ossimKwlist);
-
-  ossimProjection* ossimSensorModel = ossimSensorModelFactory::instance()->createProjection(ossimKwlist);
-  if (ossimSensorModel == nullptr)
-  {
-    ossimSensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(ossimKwlist);
-  }
-  if (ossimSensorModel == nullptr) // Model validity
-  {
-    std::cerr << "Invalid sensor model (ossimSensorModel is NULL)" << std::endl;
-    return EXIT_FAILURE;
-  }
+//  ossimKeywordlist ossimKwlist;
+//  kwlist.convertToOSSIMKeywordlist(ossimKwlist);
+//
+//  ossimProjection* ossimSensorModel = ossimSensorModelFactory::instance()->createProjection(ossimKwlist);
+//  if (ossimSensorModel == nullptr)
+//  {
+//    ossimSensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(ossimKwlist);
+//  }
+//  if (ossimSensorModel == nullptr) // Model validity
+//  {
+//    std::cerr << "Invalid sensor model (ossimSensorModel is NULL)" << std::endl;
+//    return EXIT_FAILURE;
+//  }
 
   std::ofstream file(outputgcpfilename, std::ios::out | std::ios::trunc);
   if (file)
@@ -101,15 +102,15 @@ int produceGCP(char* outputgcpfilename, const otb::ImageKeywordlist& kwlist, boo
         {
           geoPoint = forwardSensorModel->TransformPoint(imagePoint);
         }
-        else // ossim classes
-        {
-          ossimDpt ossimPoint(otb::internal::ConvertToOSSIMFrame(imagePoint[0]),  // x
-                              otb::internal::ConvertToOSSIMFrame(imagePoint[1])); // y
-          ossimGpt ossimGPoint;
-          ossimSensorModel->lineSampleHeightToWorld(ossimPoint, z, ossimGPoint);
-          geoPoint[0] = ossimGPoint.lon;
-          geoPoint[1] = ossimGPoint.lat;
-        }
+//        else // ossim classes
+//        {
+//          ossimDpt ossimPoint(otb::internal::ConvertToOSSIMFrame(imagePoint[0]),  // x
+//                              otb::internal::ConvertToOSSIMFrame(imagePoint[1])); // y
+//          ossimGpt ossimGPoint;
+//          ossimSensorModel->lineSampleHeightToWorld(ossimPoint, z, ossimGPoint);
+//          geoPoint[0] = ossimGPoint.lon;
+//          geoPoint[1] = ossimGPoint.lat;
+//        }
 
         file << std::setprecision(16) << x << " " << y << " " << geoPoint[0] << " " << geoPoint[1] << " " << z << std::endl;
       }
@@ -177,6 +178,7 @@ int otbSensorModel(int argc, char* argv[])
   // Some instantiations
   // -------------------
   otb::ImageKeywordlist kwlist = otb::ReadGeometryFromGEOMFile(geomfilename);
+  otb::ImageMetadata imd; // TODO: Read metadata from GEOMFile
 
   if (!(kwlist.GetSize() > 0))
   {
@@ -186,39 +188,39 @@ int otbSensorModel(int argc, char* argv[])
 
   if (writeBaseline)
   {
-    return produceGCP(outFilename, kwlist);
+    //TODO when reading geomfiles OK: return produceGCP(outFilename, kwlist);
   }
 
   typedef otb::ImageKeywordlist::KeywordlistMap KeywordlistMapType;
   KeywordlistMapType                            kwmap = kwlist.GetKeywordlist();
 
   //  otbForwardSensorModel
-  typedef otb::ForwardSensorModel<double> ForwardSensorModelType;
+  typedef otb::RPCForwardTransform<double, 2, 2> ForwardSensorModelType;
   ForwardSensorModelType::Pointer         forwardSensorModel = ForwardSensorModelType::New();
   if (!forwardSensorModel)
   {
     std::cerr << "Invalid sensor model (ForwardSensorModelType::Pointer is NULL)" << std::endl;
     return EXIT_FAILURE;
   }
-  forwardSensorModel->SetImageGeometry(kwlist);
+  forwardSensorModel->SetMetadataModel(imd[otb::MDGeom::RPC]);
   if (forwardSensorModel->IsValidSensorModel() == false)
   {
-    std::cerr << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!" << std::endl;
+    std::cerr << "Invalid Model pointer m_Model == NULL!\n The metadata is invalid!" << std::endl;
     return EXIT_FAILURE;
   }
 
   // otbInverseSensorModel
-  typedef otb::RPCInverseTransform<double> InverseSensorModelType;
+  typedef otb::RPCInverseTransform<double, 2, 2> InverseSensorModelType;
   InverseSensorModelType::Pointer         inverseSensorModel = InverseSensorModelType::New();
   if (!inverseSensorModel)
   {
     std::cerr << "Invalid sensor model (InverseSensorModelType::Pointer is NULL)" << std::endl;
     return EXIT_FAILURE;
   }
-  inverseSensorModel->SetImageGeometry(kwlist);
+  inverseSensorModel->SetMetadataModel(imd[otb::MDGeom::RPC]);
   if (inverseSensorModel->IsValidSensorModel() == false)
   {
-    std::cerr << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!" << std::endl;
+    std::cerr << "Invalid Model pointer m_Model == NULL!\n The metadata is invalid!" << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -240,7 +242,7 @@ int otbSensorModel(int argc, char* argv[])
   }
   img2wgs->SetInputProjectionRef("");
   img2wgs->SetOutputProjectionRef(wgsRef);
-  img2wgs->SetInputKeywordList(kwlist);
+  img2wgs->SetInputImageMetadata(&imd);
   img2wgs->InstantiateTransform();
 
 
@@ -253,7 +255,7 @@ int otbSensorModel(int argc, char* argv[])
   }
   wgs2img->SetInputProjectionRef(wgsRef);
   wgs2img->SetOutputProjectionRef("");
-  wgs2img->SetOutputKeywordList(kwlist);
+  wgs2img->SetOutputImageMetadata(&imd);
   wgs2img->InstantiateTransform();
 
   // ossim classes

@@ -27,7 +27,8 @@
 #include "otbGenericMapProjection.h"
 #include "otbSpatialReference.h"
 #include "otbCompositeTransform.h"
-#include "otbInverseSensorModel.h"
+#include "otbRPCInverseTransform.h"
+#include "otbMetaDataKey.h"
 
 int otbCompositeTransform(int argc, char* argv[])
 {
@@ -54,9 +55,9 @@ int otbCompositeTransform(int argc, char* argv[])
   // UTM31N
   mapProjection->SetWkt(otb::SpatialReference::FromEPSG(32631).ToWkt());
 
-  typedef otb::InverseSensorModel<double> SensorModelType;
+  typedef otb::RPCInverseTransform<double, 2, 2> SensorModelType;
   SensorModelType::Pointer                sensorModel = SensorModelType::New();
-  sensorModel->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  sensorModel->SetMetadataModel(reader->GetOutput()->GetImageMetadata()[otb::MDGeom::RPC]);
 
   if (sensorModel->IsValidSensorModel() == false)
   {

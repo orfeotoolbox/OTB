@@ -90,7 +90,8 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
   // geographical coordinates.
 
   GenericRSTransformType::Pointer grsTrasnform = GenericRSTransformType::New();
-  grsTrasnform->SetInputKeywordList(rpcEstimator->GetKeywordlist());
+  //TODO OSSIM:Update GCPsToRPCSensorModelImageFilter so it uses ImageMetdata instead of KeywordList
+  //grsTrasnform->SetInputKeywordList(rpcEstimator->GetKeywordlist());
   otbLogMacro(Debug, << rpcEstimator->GetKeywordlist());
   grsTrasnform->SetOutputProjectionRef("EPSG:4326");
 

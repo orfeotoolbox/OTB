@@ -137,27 +137,48 @@ public:
     return m_Transform->GetInputProjectionRef();
   }
 
-  /** Set/Get Input Keywordlist*/
+  /** Set/Get Input Keywordlist
+   * \deprecated
+   */
   void SetInputKeywordList(const ImageKeywordlist& kwl)
   {
-    m_Transform->SetOutputKeywordList(kwl);
-    this->Modified();
   }
   const ImageKeywordlist GetInputKeywordList()
   {
-    return m_Transform->GetOutputKeywordList();
   }
 
-  /** Set/Get output Keywordlist*/
+  /** Set/Get output Keywordlist
+   * \deprecated
+   */
   void SetOutputKeywordList(const ImageKeywordlist& kwl)
   {
-    m_Transform->SetInputKeywordList(kwl);
-    this->Modified();
   }
 
   const ImageKeywordlist GetOutputKeywordList()
   {
-    return m_Transform->GetInputKeywordList();
+  }
+
+  /** Set/Get ImageMetadata*/
+  const ImageMetadata* GetInputImageMetadata() const
+  {
+    return m_Transform->GetInputImageMetadata();
+  }
+
+  void SetInputImageMetadata(ImageMetadata* imd)
+  {
+    m_Transform->SetInputImageMetadata(imd);
+    this->Modified();
+  }
+
+  const ImageMetadata* GetOutputImageMetadata() const
+  {
+    return m_Transform->GetOutputImageMetadata();
+  }
+
+  void SetOutputImageMetadata(ImageMetadata* imd)
+  {
+    m_Transform->SetOutputImageMetadata(imd);
+    this->Modified();
   }
 
   /** Useful to set the output parameters from an existing image*/

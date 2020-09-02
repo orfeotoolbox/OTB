@@ -61,7 +61,7 @@ int otbRegionProjectionResampler(int argc, char* argv[])
   typedef otb::Image<double, 2>        ImageType;
   typedef otb::ImageFileReader<ImageType>  ReaderType;
   typedef otb::ImageFileWriter<ImageType>  WriterType;
-  typedef otb::RPCInverseTransform<double> ModelType;
+  typedef otb::RPCInverseTransform<double, 2, 2> ModelType;
   typedef itk::LinearInterpolateImageFunction<ImageType, double>     InterpolatorType;
   typedef itk::RescaleIntensityImageFilter<ImageType, CharImageType> RescalerType;
   typedef otb::StreamingResampleImageFilter<ImageType, ImageType>    ResamplerType;
@@ -90,7 +90,7 @@ int otbRegionProjectionResampler(int argc, char* argv[])
   reader->GenerateOutputInformation();
   ImageType::ConstPointer inputImage = reader->GetOutput();
 
-  model->SetImageGeometry(reader->GetOutput()->GetImageKeywordlist());
+  model->SetMetadataModel(reader->GetOutput()->GetImageMetadata()[otb::MDGeom::RPC]);
 
   if (model->IsValidSensorModel() == false)
   {

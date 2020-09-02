@@ -64,17 +64,9 @@ void DEMToImageGenerator<TDEMImage>::GenerateOutputInformation()
   output->SetSignedSpacing(m_OutputSpacing);
   output->SetOrigin(m_OutputOrigin);
 
-
-  // Get the Output MetaData Dictionary
-  itk::MetaDataDictionary& dict = output->GetMetaDataDictionary();
-
-  // Encapsulate the   metadata set by the user
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, m_Transform->GetInputProjectionRef());
-
-  if (this->GetOutputKeywordList().GetSize() > 0)
-  {
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, m_Transform->GetInputKeywordList());
-  }
+  // Add the metadata set by the user to the output
+  output->m_Imd.Add(MDGeom::ProjectionProj, m_Transform->GetInputProjectionRef());
+  output->m_Imd.Merge(*m_Transform->GetInputImageMetadata());
 }
 
 // InstantiateTransform method

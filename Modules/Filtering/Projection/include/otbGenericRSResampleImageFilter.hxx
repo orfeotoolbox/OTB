@@ -125,20 +125,16 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::EstimateOutputRpcM
   tempPtr->SetRegions(region);
 
   // Encapsulate the output metadata in the temp image
-  itk::MetaDataDictionary& tempDict = tempPtr->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<std::string>(tempDict, MetaDataKey::ProjectionRefKey, this->GetOutputProjectionRef());
-  itk::EncapsulateMetaData<ImageKeywordlist>(tempDict, MetaDataKey::OSSIMKeywordlistKey, this->GetOutputKeywordList());
+  tempPtr->m_Imd.Add(MDGeom::ProjectionProj, this->GetOutputProjectionRef());
+  ImageMetadata* imd = const_cast<ImageMetadata*>(this->GetOutputImageMetadata());
+  tempPtr->m_Imd.Merge(*imd);
 
   // Estimate the rpc model from the temp image
   m_OutputRpcEstimator->SetInput(tempPtr);
   m_OutputRpcEstimator->UpdateOutputInformation();
 
-  // Encapsulate the estimated rpc model in the output
-  if (m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist().GetSize() > 0)
-  {
-    // Fill the transform with the right kwl
-    m_Transform->SetInputKeywordList(m_OutputRpcEstimator->GetOutput()->GetImageKeywordlist());
-  }
+  // Fill the transform with the right metadata
+  m_Transform->SetInputImageMetadata(m_OutputRpcEstimator->GetOutput()->GetImageMetadata());
 }
 
 /**
@@ -150,9 +146,8 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::UpdateTransform()
 {
   if (!m_EstimateInputRpcModel)
   {
-    m_Transform->SetOutputDictionary(this->GetInput()->GetMetaDataDictionary());
+    m_Transform->SetOutputImageMetadata(this->GetInput()->GetImageMetadata());
     m_Transform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef());
-    m_Transform->SetOutputKeywordList(this->GetInput()->GetImageKeywordlist());
   }
   m_Transform->InstantiateTransform();
 }
@@ -187,10 +182,8 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::EstimateInputRpcMo
   m_InputRpcEstimator->SetInput(tempPtr);
   m_InputRpcEstimator->UpdateOutputInformation();
 
-  // No need to override the input kwl, just setup the
-  // transform with the kwl estimated
-  if (m_InputRpcEstimator->GetInput()->GetImageKeywordlist().GetSize() > 0)
-    m_Transform->SetOutputKeywordList(m_InputRpcEstimator->GetOutput()->GetImageKeywordlist());
+  // setup the transform with the estimated RPC model
+  m_Transform->SetOutputImageMetadata(m_InputRpcEstimator->GetOutput()->GetImageMetadata());
 
   // Update the flag for input rpcEstimation in order to not compute
   // the rpc model for each stream

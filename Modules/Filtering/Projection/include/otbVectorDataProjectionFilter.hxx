@@ -241,35 +241,19 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::ProcessPolygonL
 template <class TInputVectorData, class TOutputVectorData>
 void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::InstantiateTransform(void)
 {
-
-  //   otbMsgDevMacro(<< "Information to instantiate transform (VectorDataProjectionFilter): ");
-  //   otbMsgDevMacro(<< " * Input Origin: " << m_InputOrigin);
-  //   otbMsgDevMacro(<< " * Input Spacing: " << m_InputSpacing);
-  //   otbMsgDevMacro(<< " * Input keyword list: "
-  //       << ((m_InputKeywordList.GetSize() == 0)?"Empty":"Full"));
-  //   otbMsgDevMacro(<< " * Input projection: " << m_InputProjectionRef);
-  //   otbMsgDevMacro(<< " * Output keyword list: "
-  //       << ((m_OutputKeywordList.GetSize() == 0)?"Empty":"Full"));
-  //   otbMsgDevMacro(<< " * Output projection: " << m_OutputProjectionRef);
-  //   otbMsgDevMacro(<< " * Output Origin: " << m_OutputOrigin);
-  //   otbMsgDevMacro(<< " * Output Spacing: " << m_OutputSpacing);
-
   m_Transform = InternalTransformType::New();
 
-  InputVectorDataPointer         input     = this->GetInput();
-  const itk::MetaDataDictionary& inputDict = input->GetMetaDataDictionary();
+  InputVectorDataPointer input      = this->GetInput();
+  // TODO: ImageMetadata& inputImageMetadata = input->GetImageMetadata();
 
   OutputVectorDataPointer  output     = this->GetOutput();
   itk::MetaDataDictionary& outputDict = output->GetMetaDataDictionary();
 
-  //   m_Transform->SetInputDictionary(input->GetMetaDataDictionary());
-  m_Transform->SetInputDictionary(inputDict);
-  m_Transform->SetOutputDictionary(output->GetMetaDataDictionary());
+  // TODO: m_Transform->SetInputImageMetadata(&inputImageMetadata);
+  // TODO: m_Transform->SetOutputImageMetadata(&(output->GetImageMetadata()));
 
   m_Transform->SetInputProjectionRef(m_InputProjectionRef);
   m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
-  m_Transform->SetInputKeywordList(m_InputKeywordList);
-  m_Transform->SetOutputKeywordList(m_OutputKeywordList);
   m_Transform->SetInputSpacing(m_InputSpacing);
   m_Transform->SetInputOrigin(m_InputOrigin);
   m_Transform->SetOutputSpacing(m_OutputSpacing);
