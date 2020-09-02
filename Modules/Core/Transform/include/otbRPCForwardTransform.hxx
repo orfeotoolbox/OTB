@@ -30,18 +30,17 @@ template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutput
 typename RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
 RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::TransformPoint(const RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::InputPointType& point) const
 {
-  double x = static_cast<double>(point[0]);
-  double y = static_cast<double>(point[1]);
-  double z;
+  GDALRPCTransformer::PointType zePoint;
+  zePoint[0] = static_cast<double>(point[0]);
+  zePoint[1] = static_cast<double>(point[1]);
 
-  if(!this->m_Transformer->ForwardTransform(&x, &y, &z))
-    throw std::runtime_error("An error occurred while processing the ForwardTransform.");
+  this->m_Transformer->ForwardTransform(zePoint);
 
   OutputPointType pOut;
-  pOut[0] = static_cast<TScalarType>(x);
-  pOut[1] = static_cast<TScalarType>(y);
+  pOut[0] = static_cast<TScalarType>(zePoint[0]);
+  pOut[1] = static_cast<TScalarType>(zePoint[1]);
   if (NOutputDimensions > 2)
-    pOut[2] = static_cast<TScalarType>(z);
+    pOut[2] = static_cast<TScalarType>(zePoint[2]);
   return pOut;
 }
 

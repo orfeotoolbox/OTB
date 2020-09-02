@@ -157,7 +157,7 @@ public:
    * \pre `x, y, z != nullptr`
    *
    */
-  bool ForwardTransform(double* x, double* y, double* z, int nPointCount=1);
+  bool ForwardTransform(double* x, double* y, double* z, int nPointCount);
 
   /**
    * Compute an forward transformation
@@ -183,7 +183,7 @@ public:
    * \pre `x, y, z != nullptr`
    *
    */
-  bool InverseTransform(double* x, double* y, double* z, int nPointCount=1);
+  bool InverseTransform(double* x, double* y, double* z, int nPointCount);
 
   /**
    * Compute an inverse transformation
