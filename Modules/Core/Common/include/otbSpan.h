@@ -28,6 +28,16 @@
 
 namespace otb
 {
+#if defined(__cpp_constexpr) && __cpp_constexpr >= 201304
+  // In C++ (only; fixed in C++14), constexpr implies const on member
+  // functions, and OTB support VC++14 which is not C++14 compliant on this
+  // topic.
+  // Hence the workaround...
+  // TODO: get rid with this hack along VC++14
+#  define OTB_MB_CSTXPR constexpr
+#else
+#  define OTB_MB_CSTXPR
+#endif
 
 /** Span class inspired by C++20 standard.
  *
@@ -120,29 +130,29 @@ template <typename T> struct Span
 
   /**\name Iterators */
   //@{
-  constexpr iterator       begin ()       noexcept { return data(); }
-  constexpr iterator       end   ()       noexcept { return data()+size(); }
+  OTB_MB_CSTXPR iterator   begin ()       noexcept { return data(); }
+  OTB_MB_CSTXPR iterator   end   ()       noexcept { return data()+size(); }
   constexpr const_iterator begin () const noexcept { return data(); }
   constexpr const_iterator end   () const noexcept { return data()+size(); }
   constexpr const_iterator cbegin() const noexcept { return data(); }
   constexpr const_iterator cend  () const noexcept { return data()+size(); }
 
-  constexpr reverse_iterator       rbegin ()       noexcept { return reverse_iterator(end()); }
-  constexpr reverse_iterator       rend   ()       noexcept { return reverse_iterator(begin()); }
+  OTB_MB_CSTXPR reverse_iterator   rbegin ()       noexcept { return reverse_iterator(end()); }
+  OTB_MB_CSTXPR reverse_iterator   rend   ()       noexcept { return reverse_iterator(begin()); }
   constexpr const_reverse_iterator crbegin() const noexcept { return reverse_const_iterator(cend()); }
   constexpr const_reverse_iterator crend  () const noexcept { return reverse_const_iterator(cbegin()); }
   //@}
 
   /**\name Element access */
   //@{
-  constexpr pointer         data ()       noexcept { return m_buffer; }
+  OTB_MB_CSTXPR pointer     data ()       noexcept { return m_buffer; }
   constexpr const_pointer   data () const noexcept { return m_buffer; }
-  constexpr reference       front()       noexcept { assert(!empty()); return *data(); }
+  OTB_MB_CSTXPR reference   front()       noexcept { assert(!empty()); return *data(); }
   constexpr const_reference front() const noexcept { assert(!empty()); return *data(); }
-  constexpr reference       back ()       noexcept { assert(!empty()); return *data()+size()-1; }
+  OTB_MB_CSTXPR reference   back ()       noexcept { assert(!empty()); return *data()+size()-1; }
   constexpr const_reference back () const noexcept { assert(!empty()); return *data()+size()-1; }
 
-  constexpr reference       operator[](index_type p)       noexcept
+  OTB_MB_CSTXPR reference   operator[](index_type p)       noexcept
   {
     assert(p < size());
     return data()[p];
@@ -167,7 +177,7 @@ template <typename T> struct Span
   constexpr Span last(index_type n) const noexcept
   { assert(n < size()); return Span(data()-n, n);}
 
-  constexpr Span subspan(index_type offset, index_type count = std::numeric_limits<index_type>::max()) noexcept
+  constexpr Span subspan(index_type offset, index_type count = std::numeric_limits<index_type>::max()) const noexcept
   {
     assert(offset <= size());
     if (count == std::numeric_limits<index_type>::max())
