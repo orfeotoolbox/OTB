@@ -75,10 +75,10 @@ ClampROIFilter<TImage>
   auto const  startY    = index[1];
   itk::IndexValueType const  endX      = startX + sizeX;
   itk::IndexValueType const  endY      = startY + sizeY;
-  auto const  thrX1     = std::min(endX, m_thresholdX);
-  auto const  thrX2     = std::min(endX, imgEndX - m_thresholdX);
-  auto const  thrY1     = std::min(endY, m_thresholdYtop);
-  auto const  thrY2     = std::min(endY, imgEndY - m_thresholdYbot);
+  auto const  thrX1     = std::min<itk::IndexValueType>(endX, m_thresholdX);
+  auto const  thrX2     = std::min<itk::IndexValueType>(endX, imgEndX - m_thresholdX);
+  auto const  thrY1     = std::min<itk::IndexValueType>(endY, m_thresholdYtop);
+  auto const  thrY2     = std::min<itk::IndexValueType>(endY, imgEndY - m_thresholdYbot);
 
   assert(thrX1 <= endX && "Iterations shall stay within requested region");
   assert(thrX2 <= endX && "Iterations shall stay within requested region");
