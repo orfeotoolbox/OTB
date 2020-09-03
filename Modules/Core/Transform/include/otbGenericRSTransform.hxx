@@ -122,7 +122,7 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
 
     if (sensorModel->IsValidSensorModel())
     {
-      //TODO: m_InputTransform       = sensorModel.GetPointer();
+      m_InputTransform       = sensorModel.GetPointer();
       inputTransformIsSensor = true;
       otbMsgDevMacro(<< "Input projection set to sensor model.");
     }
@@ -154,7 +154,7 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
 
     if (sensorModel->IsValidSensorModel())
     {
-      //TODO: m_OutputTransform       = sensorModel.GetPointer();
+      m_OutputTransform       = sensorModel.GetPointer();
       outputTransformIsSensor = true;
       otbMsgDevMacro(<< "Output projection set to sensor model");
     }
