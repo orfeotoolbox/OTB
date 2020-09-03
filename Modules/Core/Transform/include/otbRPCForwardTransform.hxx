@@ -33,6 +33,7 @@ RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::Transform
   GDALRPCTransformer::PointType zePoint;
   zePoint[0] = static_cast<double>(point[0]);
   zePoint[1] = static_cast<double>(point[1]);
+  zePoint[2] = 0.0;
 
   this->m_Transformer->ForwardTransform(zePoint);
 
