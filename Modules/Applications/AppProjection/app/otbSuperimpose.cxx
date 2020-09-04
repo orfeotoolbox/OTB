@@ -242,11 +242,11 @@ private:
       }
       m_Resampler->SetDisplacementFieldSpacing(defSpacing);
 
-      // Setup transform through projRef and Keywordlist
-      m_Resampler->SetInputKeywordList(movingImage->GetImageKeywordlist());
+      // Setup transform through projRef and ImageMetadata
+      m_Resampler->SetInputImageMetadata(movingImage->GetImageMetadata());
       m_Resampler->SetInputProjectionRef(movingImage->GetProjectionRef());
 
-      m_Resampler->SetOutputKeywordList(refImage->GetImageKeywordlist());
+      m_Resampler->SetOutputImageMetadata(refImage->GetImageMetadata());
       m_Resampler->SetOutputProjectionRef(refImage->GetProjectionRef());
 
       m_Resampler->SetInput(movingImage);

@@ -100,13 +100,8 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::GenerateOutputInfo
   m_Resampler->UpdateOutputInformation();
   this->GraftOutput(m_Resampler->GetOutput());
 
-  // Encapsulate output projRef and keywordlist
-  itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, this->GetOutputProjectionRef());
-  if (this->GetOutputKeywordList().GetSize() > 0)
-  {
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, this->GetOutputKeywordList());
-  }
+  // Encapsulate output projRef
+  this->GetOutput()->m_Imd.Add(MDGeom::ProjectionProj, this->GetOutputProjectionRef());
 }
 
 /**
@@ -125,9 +120,8 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::EstimateOutputRpcM
   tempPtr->SetRegions(region);
 
   // Encapsulate the output metadata in the temp image
+  tempPtr->SetImageMetadata(*(this->GetOutputImageMetadata()));
   tempPtr->m_Imd.Add(MDGeom::ProjectionProj, this->GetOutputProjectionRef());
-  ImageMetadata* imd = const_cast<ImageMetadata*>(this->GetOutputImageMetadata());
-  tempPtr->m_Imd.Merge(*imd);
 
   // Estimate the rpc model from the temp image
   m_OutputRpcEstimator->SetInput(tempPtr);

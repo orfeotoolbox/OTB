@@ -167,30 +167,15 @@ public:
     return m_Transform->GetInputProjectionRef();
   }
 
-  /** Set/Get Input Keywordlist
-   * \depricated
-   */
-  void SetInputKeywordList(const ImageKeywordlist& kwl)
-  {
-  }
-  const ImageKeywordlist GetInputKeywordList()
-  {
-  }
-
-  /** Set/Get output Keywordlist
-   * \depricated
-   */
-  void SetOutputKeywordList(const ImageKeywordlist& kwl)
-  {
-  }
-
-  const ImageKeywordlist GetOutputKeywordList()
-  {
-  }
-
   /** Set/Get Input ImageMetadata
    */
   void SetInputImageMetadata(ImageMetadata* imd)
+  {
+    m_Transform->SetOutputImageMetadata(imd);
+    this->Modified();
+  }
+
+  void SetInputImageMetadata(ImageMetadata imd)
   {
     m_Transform->SetOutputImageMetadata(imd);
     this->Modified();
@@ -204,6 +189,12 @@ public:
   /** Set/Get Output ImageMetadata
    */
   void SetOutputImageMetadata(ImageMetadata* imd)
+  {
+    m_Transform->SetInputImageMetadata(imd);
+    this->Modified();
+  }
+
+  void SetOutputImageMetadata(ImageMetadata imd)
   {
     m_Transform->SetInputImageMetadata(imd);
     this->Modified();
