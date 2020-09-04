@@ -1,0 +1,90 @@
+diff -burN  qt-everywhere-src-5.14.1/qttools/src/assistant/assistant/assistant.pro qt-everywhere-src-5.14.1_orig/qttools/src/assistant/assistant/assistant.pro
+--- qt-everywhere-src-5.14.1/qttools/src/assistant/assistant/assistant.pro	2020-01-17 06:51:13.000000000 +0100
++++ qt-everywhere-src-5.14.1_orig/qttools/src/assistant/assistant/assistant.pro	2020-08-24 15:19:57.044203325 +0200
+@@ -45,6 +45,8 @@
+     openpagesmanager.h \
+     openpagesswitcher.h
+ 
++LIBS += -lpng
++
+ SOURCES += aboutdialog.cpp \
+     bookmarkdialog.cpp \
+     bookmarkfiltermodel.cpp \
+
+--- qt-everywhere-src-5.14.1/qttools/src/assistant/qhelpgenerator/qhelpgenerator.pro	2020-01-17 06:51:13.000000000 +0100
++++ qt-everywhere-src-5.14.1_orig/qttools/src/assistant/qhelpgenerator/qhelpgenerator.pro	2020-08-24 15:42:12.924236449 +0200
+@@ -15,5 +15,7 @@
+            qhelpprojectdata_p.h \
+            qhelpdatainterface_p.h
+ 
++LIBS += -lpng
++
+ QMAKE_TARGET_DESCRIPTION = "Qt Compressed Help File Generator"
+ load(qt_tool)
+
+--- qt-everywhere-src-5.14.1/qttools/src/designer/src/designer/designer.pro	2020-01-17 06:51:13.000000000 +0100
++++ qt-everywhere-src-5.14.1_orig/qttools/src/designer/src/designer/designer.pro	2020-08-24 15:44:13.892239448 +0200
+@@ -53,6 +53,8 @@
+     assistantclient.cpp \
+     mainwindow.cpp
+ 
++LIBS += -lpng
++
+ PRECOMPILED_HEADER=qdesigner_pch.h
+ 
+ FORMS += saveformastemplate.ui \
+
+--- qt-everywhere-src-5.14.1/qttools/src/pixeltool/pixeltool.pro	2020-01-17 06:51:13.000000000 +0100
++++ qt-everywhere-src-5.14.1_orig/qttools/src/pixeltool/pixeltool.pro	2020-08-24 15:45:42.572241647 +0200
+@@ -6,5 +6,6 @@
+ 
+ SOURCES += main.cpp qpixeltool.cpp
+ HEADERS += qpixeltool.h
++LIBS += -lpng
+ 
+ load(qt_app)
+
+--- qt-everywhere-src-5.14.1/qttools/src/linguist/linguist/linguist.pro	2020-01-17 06:51:13.000000000 +0100
++++ qt-everywhere-src-5.14.1_orig/qttools/src/linguist/linguist/linguist.pro	2020-08-24 15:59:27.476262101 +0200
+@@ -55,6 +55,8 @@
+     translationsettingsdialog.h \
+     ../shared/simtexth.h
+ 
++LIBS += -lpng
++
+ contains(QT_PRODUCT, OpenSource.*):DEFINES *= QT_OPENSOURCE
+ DEFINES += QT_KEYWORDS
+ TARGET = linguist
+
+--- qt-everywhere-src-5.14.1/qttools/src/qtdiag/qtdiag.pro	2020-01-17 06:51:13.000000000 +0100
++++ qt-everywhere-src-5.14.1_orig/qttools/src/qtdiag/qtdiag.pro	2020-08-24 15:52:35.732251892 +0200
+@@ -10,5 +10,6 @@
+ 
+ SOURCES += main.cpp qtdiag.cpp
+ HEADERS += qtdiag.h
++LIBS += -lpng
+ 
+ load(qt_app)
+
+--- qt-everywhere-src-5.11.3-orig/qttools/src/assistant/qcollectiongenerator/qcollectiongenerator.pro   2018-11-23 08:41:24.000000000 +0100
++++ qt-everywhere-src-5.11.3/qttools/src/assistant/qcollectiongenerator/qcollectiongenerator.pro    2020-09-04 15:42:48.968480227 +0200
+@@ -1,5 +1,8 @@
+ QT += network help-private
+ TARGET = qcollectiongenerator
++
++LIBS += -lpng
++
+ SOURCES += ../shared/helpgenerator.cpp \
+     main.cpp \
+     ../shared/collectionconfiguration.cpp
+
+--- qt-everywhere-src-5.11.3-orig/qttools/src/assistant/qhelpconverter/qhelpconverter.pro   2018-11-23 08:41:24.000000000 +0100
++++ qt-everywhere-src-5.11.3/qttools/src/assistant/qhelpconverter/qhelpconverter.pro    2020-09-04 15:48:05.003811338 +0200
+@@ -1,5 +1,7 @@
+ QT += help widgets
+ 
++LIBS += -lpng
++
+ SOURCES += conversionwizard.cpp \
+            inputpage.cpp \
+            generalpage.cpp \

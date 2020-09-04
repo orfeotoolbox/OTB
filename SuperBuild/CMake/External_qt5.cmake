@@ -98,7 +98,11 @@ if(UNIX)
     set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-framework")
   else()
       #Linux
-      set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-glib -no-fontconfig -qt-xcb")
+      # -no-use-gold-linker: https://bugreports.qt.io/browse/QTBUG-66571 
+      # Without this option the gold linker is forced if it is available
+      # In more recent versions the default linker is used instead, and this
+      # option has been removed.
+      set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-glib -no-fontconfig -no-use-gold-linker")
   endif()
   #common for all unix
   set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-dbus -no-icu -v")
