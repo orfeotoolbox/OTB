@@ -113,7 +113,7 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
   }
 
   // If not, try to make a RPC sensor model
-  if ((m_InputTransform.IsNull()) && (m_InputImd->Has(MDGeom::RPC)))
+  if ((m_InputTransform.IsNull()) && (m_InputImd != nullptr) && (m_InputImd->Has(MDGeom::RPC)))
   {
     typedef otb::RPCForwardTransform<double, InputSpaceDimension, OutputSpaceDimension> RPCForwardTransformType;
     typename RPCForwardTransformType::Pointer sensorModel = RPCForwardTransformType::New();
@@ -145,7 +145,7 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
   }
 
   // If not, try to make a RPC sensor model
-  if ((m_OutputTransform.IsNull()) && (m_OutputImd->Has(MDGeom::RPC)))
+  if ((m_OutputTransform.IsNull()) && (m_OutputImd != nullptr) && (m_OutputImd->Has(MDGeom::RPC)))
   {
     typedef otb::RPCInverseTransform<double, InputSpaceDimension, OutputSpaceDimension> RPCInverseTransformType;
     typename RPCInverseTransformType::Pointer sensorModel = RPCInverseTransformType::New();
