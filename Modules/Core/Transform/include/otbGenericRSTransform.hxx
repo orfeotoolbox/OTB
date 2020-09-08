@@ -74,6 +74,11 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
 {
   m_Transform = TransformType::New();
 
+  if (m_InputProjectionRef.empty() && m_InputImd->Has(MDGeom::ProjectionProj))
+  {
+    m_InputProjectionRef = boost::any_cast<std::string>(m_InputImd->operator[](MDGeom::ProjectionProj));
+  }
+
   otbMsgDevMacro(<< "Information to instantiate transform: ");
   otbMsgDevMacro(<< " * Input Origin: " << m_InputOrigin);
   otbMsgDevMacro(<< " * Input Spacing: " << m_InputSpacing);

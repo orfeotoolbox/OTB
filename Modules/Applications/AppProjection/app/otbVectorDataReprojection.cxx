@@ -134,7 +134,7 @@ private:
     if (HasValue("in.kwl"))
     {
       FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in.kwl");
-      m_GeometriesProjFilter->SetInputKeywordList(inImage->GetImageKeywordlist());
+      m_GeometriesProjFilter->SetInputImageMetadata(inImage->GetImageMetadata());
       // otbAppLogINFO(<<"kwl."<<std::endl);
     }
 
