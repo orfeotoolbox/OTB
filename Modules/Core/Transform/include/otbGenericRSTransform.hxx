@@ -74,7 +74,7 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
 {
   m_Transform = TransformType::New();
 
-  if (m_InputProjectionRef.empty() && m_InputImd->Has(MDGeom::ProjectionProj))
+  if (m_InputProjectionRef.empty() && m_InputImd != nullptr && m_InputImd->Has(MDGeom::ProjectionProj))
   {
     m_InputProjectionRef = boost::any_cast<std::string>(m_InputImd->operator[](MDGeom::ProjectionProj));
   }

@@ -149,18 +149,6 @@ public:
     return m_Transform->GetOutputProjectionRef();
   }
 
-  /** Set/Get Input Keywordlist
-   * \deprecated
-   * TODO: Remove before v8.0.0
-   */
-  void SetInputKeywordList(const ImageKeywordlist& kwl)
-  {
-  }
-
-  const ImageKeywordlist GetInputKeywordList()
-  {
-  }
-
   /** Set/Get Input ImageMetadata
    */
   void SetInputImageMetadata(ImageMetadata* imd)
