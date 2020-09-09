@@ -45,8 +45,8 @@ public:
   using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self> ;
 
-  using InputPointType  = itk::Point<TScalarType, NInputDimensions>;
-  using OutputPointType = itk::Point<TScalarType, NOutputDimensions>;
+  typedef itk::Point<TScalarType, NInputDimensions> InputPointType;
+  typedef itk::Point<TScalarType, NOutputDimensions> OutputPointType;
   using PixelType =TScalarType;
   //@}
 

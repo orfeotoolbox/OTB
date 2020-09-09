@@ -28,7 +28,7 @@ namespace otb
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename RPCInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
-RPCInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::TransformPoint(const RPCInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::InputPointType& point) const
+RPCInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::TransformPoint(const InputPointType& point) const
 {
   GDALRPCTransformer::PointType zePoint;
   zePoint[0] = static_cast<double>(point[0]);
