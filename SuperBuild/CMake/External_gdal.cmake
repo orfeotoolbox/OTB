@@ -148,8 +148,8 @@ endif()
 
 ExternalProject_Add(GDAL
   PREFIX GDAL
-  URL "http://download.osgeo.org/gdal/3.0.2/gdal-3.0.2.tar.gz"
-  URL_MD5 8a31507806b26f070858558aaad42277
+  URL "http://download.osgeo.org/gdal/3.0.4/gdal-3.0.4.tar.gz"
+  URL_MD5 c6bbb5caca06e96bd97a32918e0aa9aa
   SOURCE_DIR ${GDAL_SB_SRC}
   BINARY_DIR ${GDAL_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
