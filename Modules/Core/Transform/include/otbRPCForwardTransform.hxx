@@ -28,7 +28,7 @@ namespace otb
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
-RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::TransformPoint(const InputPointType& point) const
+RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::TransformPoint(const typename RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::InputPointType& point) const
 {
   GDALRPCTransformer::PointType zePoint;
   zePoint[0] = static_cast<double>(point[0]);
