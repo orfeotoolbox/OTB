@@ -98,7 +98,11 @@ if(UNIX)
     set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-framework")
   else()
       #Linux
-      set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-glib -no-fontconfig")
+      # -no-use-gold-linker: https://bugreports.qt.io/browse/QTBUG-66571 
+      # Without this option the gold linker is forced if it is available
+      # In more recent versions the default linker is used instead, and this
+      # option has been removed.
+      set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-glib -no-fontconfig -no-use-gold-linker")
   endif()
   #common for all unix
   set(QT5_SB_CONFIG "${QT5_SB_CONFIG} -no-dbus -no-icu -v")
@@ -130,7 +134,7 @@ configure_file( ${QT5_CONFIGURE_COMMAND_IN} ${QT5_CONFIGURE_COMMAND} @ONLY )
 
 ExternalProject_Add(QT5
   PREFIX QT5
-  URL "https://download.qt.io/archive/qt/5.10/5.10.1/single/qt-everywhere-src-5.10.1.tar.xz"
+  URL "https://download.qt.io/new_archive/qt/5.10/5.10.1/single/qt-everywhere-src-5.10.1.tar.xz"
   URL_MD5 7e167b9617e7bd64012daaacb85477af
   BINARY_DIR ${QT5_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
