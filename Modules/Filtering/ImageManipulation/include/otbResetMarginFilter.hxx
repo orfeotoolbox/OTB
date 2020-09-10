@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#ifndef otbClampROIFilter_hxx
-#define otbClampROIFilter_hxx
+#ifndef otbResetMarginFilter_hxx
+#define otbResetMarginFilter_hxx
 
-#include "otbClampROIFilter.h"
+#include "otbResetMarginFilter.h"
 #include "otbInterval.h"
 #include "otbMacro.h"
 #include "otbLogHelpers.h"
@@ -45,7 +45,7 @@ namespace otb
 
 template<typename TImage>
 void
-ClampROIFilter<TImage>
+ResetMarginFilter<TImage>
 ::ThreadedGenerateData(
     OutputImageRegionType const& outputRegionForThread,
     itk::ThreadIdType            threadId)
@@ -157,8 +157,8 @@ ClampROIFilter<TImage>
 }
 
 template<typename TImage>
-typename ClampROIFilter<TImage>::InputImageRegionType
-ClampROIFilter<TImage>
+typename ResetMarginFilter<TImage>::InputImageRegionType
+ResetMarginFilter<TImage>
 ::OutputRegionToInputRegion(OutputImageRegionType const& srcRegion)
 {
   auto const* output = this->GetOutput();
@@ -211,5 +211,5 @@ ClampROIFilter<TImage>
 
 } // otb namespace
 
-#endif  // otbClampROIFilter_hxx
+#endif  // otbResetMarginFilter_hxx
 

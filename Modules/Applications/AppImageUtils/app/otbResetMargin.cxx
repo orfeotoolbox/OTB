@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include "otbClampROIFilter.h"
+#include "otbResetMarginFilter.h"
 #include "otbWrapperApplication.h"
 #include "otbWrapperApplicationFactory.h"
 
@@ -39,21 +39,21 @@ namespace Wrapper
  * \author Luc Hermitte (CS Group)
  * \copyright CNES
  */
-class ClampROI : public Application
+class ResetMargin : public Application
 {
 public:
-  using Self    = ClampROI;
+  using Self    = ResetMargin;
   using Pointer = itk::SmartPointer<Self>;
 
   itkNewMacro(Self);
-  itkTypeMacro(ClampROI, otb::Wrapper::Application);
+  itkTypeMacro(ResetMargin, otb::Wrapper::Application);
 
 private:
   void DoInit() override
   {
-    SetName("ClampROI");
+    SetName("ResetMargin");
 
-    SetDescription("This is the ClampROI application");
+    SetDescription("This is the ResetMargin application");
     SetDocLongDescription(
         "This application is similar to ExtractROI in the sense it extracts a Region of Interrest.\n"
         "However, the region outside of the ROI isn't trimmed, but set to 0.\n"
@@ -94,11 +94,11 @@ private:
 
     AddRAMParameter();
 
-    SetDocExampleParameterValue("in", "ClampROIInput100x100.tiff");
+    SetDocExampleParameterValue("in", "ResetMarginInput100x100.tiff");
     SetDocExampleParameterValue("threshold.x",       "10");
     SetDocExampleParameterValue("threshold.y.start", "12");
     SetDocExampleParameterValue("threshold.y.end",    "25");
-    SetDocExampleParameterValue("out", "ClampROI.tiff");
+    SetDocExampleParameterValue("out", "ResetMargin.tiff");
     SetOfficialDocLink();
   }
 
@@ -117,9 +117,9 @@ private:
     if (thrYbot < 0)
       itkExceptionMacro("The bottom line threshold is expected to be positive");
     if (thrX == 0 && thrYtop == 0 && thrYbot == 0)
-      itkExceptionMacro("Don't use ClampROI to clamp nothing!");
+      itkExceptionMacro("Don't use ResetMargin to clamp nothing!");
 
-    auto filter = ClampROIFilter<FloatImageType>::New();
+    auto filter = ResetMarginFilter<FloatImageType>::New();
     assert(thrX >= 0);
     assert(thrYtop >= 0);
     assert(thrYbot >= 0);
@@ -137,4 +137,4 @@ private:
 } // otb::Wrapper namespace
 } // otb namespace
 
-OTB_APPLICATION_EXPORT(otb::Wrapper::ClampROI)
+OTB_APPLICATION_EXPORT(otb::Wrapper::ResetMargin)

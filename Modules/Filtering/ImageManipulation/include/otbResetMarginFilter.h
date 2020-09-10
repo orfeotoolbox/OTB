@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbClampROIFilter_h
-#define otbClampROIFilter_h
+#ifndef otbResetMarginFilter_h
+#define otbResetMarginFilter_h
 
 #include "itkImageToImageFilter.h"
 
@@ -40,7 +40,7 @@ namespace otb
  * \copyright CNES
  */
 template <typename TImage>
-class ClampROIFilter : public itk::ImageToImageFilter<TImage, TImage>
+class ResetMarginFilter : public itk::ImageToImageFilter<TImage, TImage>
 {
 public:
 
@@ -57,7 +57,7 @@ public:
   //@}
   /**\name Standard class typedefs */
   //@{
-  using Self            = ClampROIFilter;
+  using Self            = ResetMarginFilter;
   using Superclass      = itk::ImageToImageFilter<InputImageType, OutputImageType>;
   using Pointer         = itk::SmartPointer<Self>;
   using ConstPointer    = itk::SmartPointer<const Self>;
@@ -67,7 +67,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ClampROIFilter, unused);
+  itkTypeMacro(ResetMarginFilter, unused);
 
   /**\name Image typedef support */
   //@{
@@ -107,12 +107,12 @@ public:
 
 protected:
   /// Hidden constructor
-  ClampROIFilter() = default;
+  ResetMarginFilter() = default;
 
   InputImageType      * GetInputImage()       { return const_cast<InputImageType*>(this->GetInput()); }
   InputImageType const* GetInputImage() const { return this->GetInput(); }
 
-  /** otbClampROIFilter doesn't need an input requested region as large as the
+  /** otbResetMarginFilter doesn't need an input requested region as large as the
    * output requested region.
    * \sa ImageToImageFilter::GenerateInputRequestedRegion()
    */
@@ -147,7 +147,7 @@ private:
 } // otb namespace
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbClampROIFilter.hxx"
+#include "otbResetMarginFilter.hxx"
 #endif
 
-#endif  // otbClampROIFilter_h
+#endif  // otbResetMarginFilter_h

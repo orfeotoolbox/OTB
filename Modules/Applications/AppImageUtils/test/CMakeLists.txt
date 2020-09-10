@@ -121,16 +121,16 @@ otb_test_application(NAME apTvUtExtractROIExtentFitVect
                              ${TEMP}/apTvUtExtractROIExtentFitVect.tif)
 
 #----------- Clamp ROI tests  ----------------
-otb_test_application(NAME apTvUtClampROI
-                     APP  ClampROI
-                     OPTIONS -in ${INPUTDATA}/ClampROIInput100x100.tiff
-                             -out ${TEMP}/apTvUtClampROI.tif
+otb_test_application(NAME apTvUtResetMargin
+                     APP  ResetMargin
+                     OPTIONS -in ${INPUTDATA}/ResetMarginInput100x100.tiff
+                             -out ${TEMP}/apTvUtResetMargin.tif
                              -threshold.x       10
                              -threshold.y.start 12
                              -threshold.y.end   25
                      VALID   --compare-image ${NOTOL}
-                             ${OTBAPP_BASELINE}/ClampROIBaseline100x100.tiff
-                             ${TEMP}/apTvUtClampROI.tif)
+                             ${OTBAPP_BASELINE}/ResetMarginBaseline100x100.tiff
+                             ${TEMP}/apTvUtResetMargin.tif)
 
 #----------- Rescale TESTS ----------------
 otb_test_application(NAME  apTvUtRescaleTest

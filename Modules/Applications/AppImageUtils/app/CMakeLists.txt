@@ -94,8 +94,8 @@ OTB_CREATE_APPLICATION(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 OTB_CREATE_APPLICATION(
-  NAME           ClampROI
-  SOURCES        otbClampROI.cxx
+  NAME           ResetMargin
+  SOURCES        otbResetMargin.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 OTB_CREATE_APPLICATION(
