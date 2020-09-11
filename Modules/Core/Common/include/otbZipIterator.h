@@ -110,7 +110,7 @@ public:
   ZipIterator& operator=(ZipIterator const&) = default;
   ZipIterator& operator=(ZipIterator     &&) = default;
 
-  /** Convertion constructor.
+  /** Conversion constructor.
    * Converts from mutable to const iterator
    * \see https://quuxplusone.github.io/blog/2018/12/01/const-iterator-antipatterns/
    */
@@ -119,7 +119,7 @@ public:
     : m_iterators(rhs.m_iterators())
     {}
 
-  /** Convertion move constructor.
+  /** Conversion move constructor.
    * Move converts from mutable to const iterator
    * \see https://quuxplusone.github.io/blog/2018/12/01/const-iterator-antipatterns/
    */
