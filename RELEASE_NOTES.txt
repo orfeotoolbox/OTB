@@ -1,14 +1,16 @@
-OTB-v 7.2.0 - Changes since version 7.1.0 (August 28th, 2020)
+OTB-v 7.2.0 - Changes since version 7.1.0 (September 11th, 2020)
 ----------------------------------------------------------------
 
 Features added:
 
+   * !736: Integrate S1Tiling support apps as official remote module by Luc Hermitte
    * !709: Add \"epsg\" filename extension by Julien Osman
    * !708: Spectral angle classification by Cédric Traizet
    * !704: Pantex texture extraction application by Cédric Traizet
 
 Bugs fixed:
 
+   * !726: "Release the Python Global Interpreter Lock (GIL) during execution" by Luc Hermitte, Julien Osman and Cédric Traizet
    * !730: Freetype and libPNG detection in QT5 by Cédric Traizet
    * !727: FIX: StreamingMosaicFilter childs can have a different number of components per pixel at output by Rémi Cresson
    * !725: Fix superbuild with OpenCV4 by Cédric Traizet
