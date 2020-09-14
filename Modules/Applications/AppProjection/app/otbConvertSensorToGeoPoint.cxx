@@ -111,7 +111,7 @@ private:
 
     // Instantiate a ForwardSensor Model
     ModelType::Pointer model = ModelType::New();
-    model->SetMetadataModel(inImage->GetImageMetadata()[MDGeom::RPC]);
+    model->SetMetadata(inImage->GetImageMetadata());
     if (model->IsValidSensorModel() == false)
     {
       itkGenericExceptionMacro(<< "Unable to create a model");

@@ -123,13 +123,13 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
     typedef otb::RPCForwardTransform<double, InputSpaceDimension, OutputSpaceDimension> RPCForwardTransformType;
     typename RPCForwardTransformType::Pointer sensorModel = RPCForwardTransformType::New();
 
-    sensorModel->SetMetadataModel((*m_InputImd)[MDGeom::RPC]);
+    sensorModel->SetMetadata(*m_InputImd);
 
     if (sensorModel->IsValidSensorModel())
     {
       m_InputTransform       = sensorModel.GetPointer();
       inputTransformIsSensor = true;
-      otbMsgDevMacro(<< "Input projection set to sensor model.");
+      otbMsgDevMacro(<< "Input projection set to RPC model.");
     }
   }
 
@@ -155,13 +155,13 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
     typedef otb::RPCInverseTransform<double, InputSpaceDimension, OutputSpaceDimension> RPCInverseTransformType;
     typename RPCInverseTransformType::Pointer sensorModel = RPCInverseTransformType::New();
 
-    sensorModel->SetMetadataModel((*m_OutputImd)[MDGeom::RPC]);
+    sensorModel->SetMetadata(*m_OutputImd);
 
     if (sensorModel->IsValidSensorModel())
     {
       m_OutputTransform       = sensorModel.GetPointer();
       outputTransformIsSensor = true;
-      otbMsgDevMacro(<< "Output projection set to sensor model");
+      otbMsgDevMacro(<< "Output projection set to RPC model");
     }
   }
 
@@ -175,6 +175,7 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
     }
 
     m_InputTransform = itk::IdentityTransform<double, NInputDimensions>::New();
+    otbMsgDevMacro(<< "Input projection set to identity");
   }
 
 

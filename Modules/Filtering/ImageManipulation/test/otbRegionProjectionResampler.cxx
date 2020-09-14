@@ -90,7 +90,7 @@ int otbRegionProjectionResampler(int argc, char* argv[])
   reader->GenerateOutputInformation();
   ImageType::ConstPointer inputImage = reader->GetOutput();
 
-  model->SetMetadataModel(reader->GetOutput()->GetImageMetadata()[otb::MDGeom::RPC]);
+  model->SetMetadata(reader->GetOutput()->GetImageMetadata());
 
   if (model->IsValidSensorModel() == false)
   {

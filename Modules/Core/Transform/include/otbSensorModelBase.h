@@ -68,11 +68,10 @@ public:
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
 
   /*
-   * Set the model as it is defined in the ImageMetadata.
-   * Used by the factory to find the correct class.
+   * Provide the ImageMetadata in order to set the model.
    * Return false if model not valid.
    */
-  virtual bool SetMetadataModel(boost::any imdModel) = 0;
+  virtual bool SetMetadata(const ImageMetadata& imd) = 0;
 
   /** Check model validity */
   virtual bool IsValidSensorModel() const = 0;

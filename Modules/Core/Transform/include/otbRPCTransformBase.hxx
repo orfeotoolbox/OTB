@@ -27,11 +27,13 @@ namespace otb
 {
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-bool RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::SetMetadataModel(boost::any imdModel)
+bool RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::SetMetadata(const ImageMetadata& imd)
 {
+  if (!imd.Has(MDGeom::RPC))
+    return false;
   try
   {
-    Projection::RPCParam newParam = boost::any_cast<Projection::RPCParam>(imdModel);
+    Projection::RPCParam newParam = boost::any_cast<Projection::RPCParam>(imd[MDGeom::RPC]);
     this->m_RPCParam.reset(&newParam);
   }
   catch (boost::bad_any_cast)

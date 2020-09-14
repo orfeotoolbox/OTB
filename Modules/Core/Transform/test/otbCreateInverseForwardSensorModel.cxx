@@ -68,7 +68,7 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
   ImageType::Pointer inputImage = reader->GetOutput();
 
   otbGenericMsgDebugMacro(<< "Inverse model creation...");
-  if (inverse_rpc_model->SetMetadataModel(inputImage->GetImageMetadata()[otb::MDGeom::RPC]))
+  if (inverse_rpc_model->SetMetadata(inputImage->GetImageMetadata()))
   {
     std::cout << "Error while reading model. This is not a RPC model!" << std::endl;
     return EXIT_FAILURE;
@@ -80,7 +80,7 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
   }
 
   otbGenericMsgDebugMacro(<< "Forward model creation...");
-  if (forward_rpc_model->SetMetadataModel(inputImage->GetImageMetadata()[otb::MDGeom::RPC]))
+  if (forward_rpc_model->SetMetadata(inputImage->GetImageMetadata()))
   {
     std::cout << "Error while reading model. This is not a RPC model!" << std::endl;
     return EXIT_FAILURE;

@@ -57,7 +57,7 @@ int otbCompositeTransform(int argc, char* argv[])
 
   typedef otb::RPCInverseTransform<double, 2, 2> SensorModelType;
   SensorModelType::Pointer                sensorModel = SensorModelType::New();
-  sensorModel->SetMetadataModel(reader->GetOutput()->GetImageMetadata()[otb::MDGeom::RPC]);
+  sensorModel->SetMetadata(reader->GetOutput()->GetImageMetadata());
 
   if (sensorModel->IsValidSensorModel() == false)
   {

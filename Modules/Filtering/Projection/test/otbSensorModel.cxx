@@ -66,7 +66,7 @@ int produceGCP(char* outputgcpfilename, const otb::ImageMetadata& imd, bool useF
   //  otbForwardSensorModel
   typedef otb::RPCForwardTransform<double, 2, 2> ForwardSensorModelType;
   ForwardSensorModelType::Pointer         forwardSensorModel = ForwardSensorModelType::New();
-  forwardSensorModel->SetMetadataModel(imd[otb::MDGeom::RPC]);
+  forwardSensorModel->SetMetadata(imd);
   if (forwardSensorModel->IsValidSensorModel() == false)
   {
     otbLogMacro(Warning, << "Invalid Model pointer m_Model == NULL!\n The metadata is invalid!");
@@ -202,7 +202,7 @@ int otbSensorModel(int argc, char* argv[])
     std::cerr << "Invalid sensor model (ForwardSensorModelType::Pointer is NULL)" << std::endl;
     return EXIT_FAILURE;
   }
-  forwardSensorModel->SetMetadataModel(imd[otb::MDGeom::RPC]);
+  forwardSensorModel->SetMetadata(imd);
   if (forwardSensorModel->IsValidSensorModel() == false)
   {
     std::cerr << "Invalid Model pointer m_Model == NULL!\n The metadata is invalid!" << std::endl;
@@ -217,7 +217,7 @@ int otbSensorModel(int argc, char* argv[])
     std::cerr << "Invalid sensor model (InverseSensorModelType::Pointer is NULL)" << std::endl;
     return EXIT_FAILURE;
   }
-  inverseSensorModel->SetMetadataModel(imd[otb::MDGeom::RPC]);
+  inverseSensorModel->SetMetadata(imd);
   if (inverseSensorModel->IsValidSensorModel() == false)
   {
     std::cerr << "Invalid Model pointer m_Model == NULL!\n The metadata is invalid!" << std::endl;
