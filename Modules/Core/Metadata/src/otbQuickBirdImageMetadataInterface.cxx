@@ -954,4 +954,9 @@ QuickBirdImageMetadataInterface::WavelengthSpectralBandVectorType QuickBirdImage
   return wavelengthSpectralBand;
 }
 
+void QuickBirdImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+{
+  FetchRPC(*mds);
+}
+
 } // end namespace otb
