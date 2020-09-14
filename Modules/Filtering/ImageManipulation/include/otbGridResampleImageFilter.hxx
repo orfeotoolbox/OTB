@@ -41,8 +41,6 @@ GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>::Grid
     m_OutputOrigin(),
     m_OutputSpacing(),
     m_EdgePaddingValue(),
-    m_CheckOutputBounds(true),
-    m_InterpolationMargin(0.0),
     m_Interpolator(),
     m_ReachableOutputRegion()
 {
@@ -248,7 +246,7 @@ void GridResampleImageFilter<TInputImage, TOutputImage, TInterpolatorPrecision>:
 
   inULp -= (0.5 - m_InterpolationMargin) * this->GetInput()->GetSignedSpacing();
   inLRp += (0.5 - m_InterpolationMargin) * this->GetInput()->GetSignedSpacing();
- 
+
   ContinuousInputIndexType outUL;
   ContinuousInputIndexType outLR;
   this->GetOutput()->TransformPhysicalPointToContinuousIndex(inULp, outUL);

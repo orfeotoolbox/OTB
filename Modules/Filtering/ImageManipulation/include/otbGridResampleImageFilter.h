@@ -193,9 +193,9 @@ private:
 
   OutputPixelType m_EdgePaddingValue; // Default pixel value
 
-  double m_InterpolationMargin;
+  double m_InterpolationMargin = 0.0;
 
-  bool m_CheckOutputBounds; // Shall we check
+  bool m_CheckOutputBounds = true; // Shall we check
                             // output bounds when
                             // casting?
 
