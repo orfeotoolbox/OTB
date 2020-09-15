@@ -26,6 +26,8 @@
 #include "otbImageKeywordlist.h"
 #include "otbStringUtils.h"
 
+#include "otbDimapMetadataHelper.h"
+
 namespace otb
 {
 using boost::lexical_cast;
@@ -1251,5 +1253,37 @@ Spot6ImageMetadataInterface::WavelengthSpectralBandVectorType Spot6ImageMetadata
   }
   return wavelengthSpectralBand;
 }
+
+void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+{
+  assert(mds);
+
+  std::cout << "Spot6ImageMetadataInterface::Parse" << std::endl;
+/*
+  bool hasValue = false;
+  auto metadatatype = mds->GetMetadataValue("METADATATYPE", hasValue);
+
+  // DIMAP metadata has already been parsed by gdal
+  if (hasValue && metadatatype == "DIMAP")
+  {
+    DimapMetadataHelper helper(mds);
+    
+    helper.ParseRadiometry(m_Imd);
+  }
+*/
+
+  Fetch(MDStr::SensorID, *mds, "IMAGERY/SATELLITEID");
+  if (strncmp(m_Imd[MDStr::SensorID].c_str(), "SPOT 6", 6) == 0)
+    {
+    m_Imd.Add(MDStr::Mission, "SPOT 6");
+    }
+  else
+    {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Not a spot 6 product")
+    }
+
+  FetchRPC(*mds);
+}
+
 
 } // end namespace otb
