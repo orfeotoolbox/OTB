@@ -26,8 +26,6 @@
 #include "otbImageKeywordlist.h"
 #include "otbStringUtils.h"
 
-#include "otbDimapMetadataHelper.h"
-
 namespace otb
 {
 using boost::lexical_cast;
