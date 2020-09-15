@@ -955,7 +955,30 @@ QuickBirdImageMetadataInterface::WavelengthSpectralBandVectorType QuickBirdImage
 }
 
 void QuickBirdImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
-{
+{  
+  assert(mds);
+  // Check if there is DG metadatas
+  bool hasValue = false;
+  auto metadatatype = mds->GetMetadataValue("METADATATYPE", hasValue);
+  if (!hasValue || metadatatype != "DG")
+  {
+    otbGenericExceptionMacro(MissingMetadataException, 
+      << "No Digital Globe metadata has been found")
+  }
+
+  // Check if the sensor is WorldView 2
+  auto sensorID = mds->GetMetadataValue("IMD/IMAGE_1.satId", hasValue);
+
+  if (sensorID.find("QB02") != std::string::npos)
+  {
+    m_Imd.Add(MDStr::SensorID, "QB02");
+    m_Imd.Add(MDStr::Mission, "Quickbird");
+  }
+  else
+  {
+    otbGenericExceptionMacro(MissingMetadataException, << "Not a Quickbird image")
+  }
+
   FetchRPC(*mds);
 }
 
