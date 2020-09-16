@@ -77,6 +77,49 @@ std::string GCPParam::ToJSON(bool multiline) const
   return oss.str();
 }
 
+RPCParam::RPCParam( const RPCParam & other )
+  : LineOffset(other.LineOffset),
+	SampleOffset(other.SampleOffset),
+	LatOffset(other.LatOffset),
+	LonOffset(other.LonOffset),
+	HeightOffset(other.HeightOffset),
+	LineScale(other.LineScale),
+	SampleScale(other.SampleScale),
+	LatScale(other.LatScale),
+	LonScale(other.LonScale),
+	HeightScale(other.HeightScale)
+{
+  for(int i = 0 ; i < 20 ; ++i)
+  {
+    LineNum[i] = other.LineNum[i];
+    LineDen[i] = other.LineDen[i];
+    SampleNum[i] = other.SampleNum[i];
+    SampleDen[i] = other.SampleDen[i];
+  }
+}
+
+RPCParam& RPCParam::operator=(RPCParam other)
+{
+  LineOffset = other.LineOffset;
+  SampleOffset = other.SampleOffset;
+  LatOffset = other.LatOffset;
+  LonOffset = other.LonOffset;
+  HeightOffset = other.HeightOffset;
+  LineScale = other.LineScale;
+  SampleScale = other.SampleScale;
+  LatScale = other.LatScale;
+  LonScale = other.LonScale;
+  HeightScale = other.HeightScale;
+  for(int i = 0 ; i < 20 ; ++i)
+  {
+    LineNum[i] = other.LineNum[i];
+    LineDen[i] = other.LineDen[i];
+    SampleNum[i] = other.SampleNum[i];
+    SampleDen[i] = other.SampleDen[i];
+  }
+  return *this;
+}
+
 std::string RPCParam::ToJSON(bool multiline) const
 {
   std::ostringstream oss;

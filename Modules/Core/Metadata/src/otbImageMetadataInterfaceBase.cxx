@@ -718,7 +718,8 @@ const boost::any& ImageMetadataInterfaceBase::FetchRPC(
   coeffs = mds.GetAsVector<double>("RPC/SAMP_DEN_COEFF",' ',20);
   std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleDen);
 
-  m_Imd.Add(MDGeom::RPC, rpcStruct);
+  boost::any to_append = rpcStruct;
+  m_Imd.Add(MDGeom::RPC, to_append);
   return m_Imd[MDGeom::RPC];
 }
 

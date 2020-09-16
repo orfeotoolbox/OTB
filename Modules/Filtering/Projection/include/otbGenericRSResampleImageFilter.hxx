@@ -198,7 +198,7 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::SetOutputParameter
   this->SetOutputStartIndex(src->GetLargestPossibleRegion().GetIndex());
   this->SetOutputSize(src->GetLargestPossibleRegion().GetSize());
   this->SetOutputProjectionRef(src->GetProjectionRef());
-  this->SetOutputKeywordList(src->GetImageKeywordlist());
+  this->GetOutput()->SetImageMetadata(src->GetImageKeywordlist());
 }
 
 /**
@@ -214,7 +214,7 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::SetOutputParameter
   this->SetOutputStartIndex(image->GetLargestPossibleRegion().GetIndex());
   this->SetOutputSize(image->GetLargestPossibleRegion().GetSize());
   this->SetOutputProjectionRef(image->GetProjectionRef());
-  this->SetOutputKeywordList(image->GetImageKeywordlist());
+  this->GetOutput()->SetImageMetadata(image->GetImageKeywordlist());
 }
 
 /**

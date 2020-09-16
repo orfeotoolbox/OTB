@@ -33,6 +33,9 @@ bool RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::SetMeta
     return false;
   try
   {
+    const boost::any any_rpc = imd[MDGeom::RPC];  //TODO: Segfault here.
+    if (any_rpc.empty())
+      return false;
     Projection::RPCParam newParam = boost::any_cast<Projection::RPCParam>(imd[MDGeom::RPC]);
     this->m_RPCParam = std::make_unique<Projection::RPCParam>(newParam);
   }
