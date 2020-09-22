@@ -23,9 +23,11 @@
 
 #include <fstream>
 #include <boost/algorithm/string.hpp>
+#include <boost/any.hpp>
 
 #include "OTBMetadataExport.h"
 #include "otbMetadataSupplierInterface.h"
+#include "otbImageMetadata.h"
 
 
 namespace otb
@@ -60,6 +62,13 @@ public:
   std::string GetResourceFile(std::string="") const override;
 
   int GetNbBands() const override;
+
+  /**
+   * @brief Fill the ImageMetadata with the data from the geom file
+   *
+   * @param imd The ImageMetadata to fill
+   */
+  const boost::any& FetchRPC(ImageMetadata & imd);
 
   /**
    * @brief Writes the content of the Geom file into a string

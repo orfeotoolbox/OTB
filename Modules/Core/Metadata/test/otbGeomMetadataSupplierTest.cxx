@@ -58,6 +58,12 @@ int otbGeomMetadataSupplierTest(int itkNotUsed(argc), char* argv[])
     }
   }
 
+  file << '\n';
+
+  otb::ImageMetadata imd;
+  mds.FetchRPC(imd);
+  file << boost::any_cast<otb::Projection::RPCParam>(imd[otb::MDGeom::RPC]).ToJSON(true) << '\n';
+
   file.close();
   return EXIT_SUCCESS;
 }

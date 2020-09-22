@@ -18,7 +18,12 @@
  * limitations under the License.
  */
 
+#include <iomanip>
+#include <iostream>
+
 #include "otbGeomMetadataSupplier.h"
+#include "otbMetaDataKey.h"
+#include "otbGeometryMetadata.h"
 
 namespace otb
 {
@@ -48,6 +53,56 @@ std::string GeomMetadataSupplier::GetResourceFile(std::string) const
 int GeomMetadataSupplier::GetNbBands() const
 {
   return 0;
+}
+
+const boost::any& GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
+{
+  Projection::RPCParam rpcStruct;
+  rpcStruct.LineOffset    = this->GetAs<double>("line_off");
+  rpcStruct.SampleOffset  = this->GetAs<double>("samp_off");
+  rpcStruct.LatOffset     = this->GetAs<double>("lat_off");
+  rpcStruct.LonOffset     = this->GetAs<double>("long_off");
+  rpcStruct.HeightOffset  = this->GetAs<double>("height_off");
+
+  rpcStruct.LineScale    = this->GetAs<double>("line_scale");
+  rpcStruct.SampleScale  = this->GetAs<double>("samp_scale");
+  rpcStruct.LatScale     = this->GetAs<double>("lat_scale");
+  rpcStruct.LonScale     = this->GetAs<double>("long_scale");
+  rpcStruct.HeightScale  = this->GetAs<double>("height_scale");
+
+  std::vector<double> coeffs;
+  int loop = 0;
+  std::stringstream path;
+  for (auto & coeff : rpcStruct.LineNum)
+  {
+    path.str("");
+    path << "line_num_coeff_" << std::setfill('0') << std::setw(2) << loop++;
+    coeff = this->GetAs<double>(path.str());
+  }
+  loop = 0;
+  for (auto & coeff : rpcStruct.LineDen)
+  {
+    path.str("");
+    path << "line_den_coeff_" << std::setfill('0') << std::setw(2) << loop++;
+    coeff = this->GetAs<double>(path.str());
+  }
+  loop = 0;
+  for (auto & coeff : rpcStruct.SampleNum)
+  {
+    path.str("");
+    path << "samp_num_coeff_" << std::setfill('0') << std::setw(2) << loop++;
+    coeff = this->GetAs<double>(path.str());
+  }
+  loop = 0;
+  for (auto & coeff : rpcStruct.SampleDen)
+  {
+    path.str("");
+    path << "samp_den_coeff_" << std::setfill('0') << std::setw(2) << loop++;
+    coeff = this->GetAs<double>(path.str());
+  }
+
+  imd.Add(MDGeom::RPC, rpcStruct);
+  return imd[MDGeom::RPC];
 }
 
 std::string GeomMetadataSupplier::PrintSelf()
