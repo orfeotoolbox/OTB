@@ -119,7 +119,7 @@ void StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>::Gene
   m_RightImage->UpdateOutputInformation();
 
   // Setup the DEM handler if needed
-  typename DEMHandler::Pointer demHandler = DEMHandler::Instance();
+  auto & demHandler = DEMHandler::GetInstance();
 
   // Set-up a transform to use the DEMHandler
   typedef otb::GenericRSTransform<> RSTransform2DType;
@@ -156,12 +156,12 @@ void StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>::Gene
   outputSpacing[1] *= mean_spacing;
 
   // Then, we retrieve the origin of the left input image
-  double localElevation = otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid();
+  double localElevation = demHandler.GetDefaultHeightAboveEllipsoid();
 
   if (m_UseDEM)
   {
     RSTransform2DType::InputPointType tmpPoint;
-    localElevation = demHandler->GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(m_LeftImage->GetOrigin()));
+    localElevation = demHandler.GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(m_LeftImage->GetOrigin()));
   }
 
   TDPointType leftInputOrigin;
@@ -295,7 +295,7 @@ void StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>::Gene
   this->AllocateOutputs();
 
   // Setup the DEM handler if needed
-  typename DEMHandler::Pointer demHandler = DEMHandler::Instance();
+  auto & demHandler = DEMHandler::GetInstance();
 
   // Set-up a transform to use the DEMHandler
   typedef otb::GenericRSTransform<> RSTransform2DType;
@@ -313,7 +313,7 @@ void StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>::Gene
   TDPointType currentPoint1, currentPoint2, nextLineStart1, nextLineStart2, startLine1, endLine1, startLine2, endLine2, epiPoint1, epiPoint2;
 
   // Then, we retrieve the origin of the left input image
-  double localElevation = otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid();
+  double localElevation = demHandler.GetDefaultHeightAboveEllipsoid();
 
   // Use the mean spacing as before
   double mean_spacing = 0.5 * (std::abs(m_LeftImage->GetSignedSpacing()[0]) + std::abs(m_LeftImage->GetSignedSpacing()[1]));
@@ -325,7 +325,7 @@ void StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>::Gene
     RSTransform2DType::InputPointType tmpPoint;
     tmpPoint[0]    = currentPoint1[0];
     tmpPoint[1]    = currentPoint1[1];
-    localElevation = demHandler->GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(tmpPoint));
+    localElevation = demHandler.GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(tmpPoint));
   }
   currentPoint1[2] = localElevation;
   currentPoint2    = m_LeftToRightTransform->TransformPoint(currentPoint1);
@@ -463,7 +463,7 @@ void StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>::Gene
       RSTransform2DType::InputPointType tmpPoint;
       tmpPoint[0]    = currentPoint1[0];
       tmpPoint[1]    = currentPoint1[1];
-      localElevation = demHandler->GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(tmpPoint));
+      localElevation = demHandler.GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(tmpPoint));
     }
     currentPoint1[2] = localElevation;
 
@@ -489,7 +489,7 @@ void StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>::Gene
         RSTransform2DType::InputPointType tmpPoint;
         tmpPoint[0]       = nextLineStart1[0];
         tmpPoint[1]       = nextLineStart1[1];
-        nextLineStart1[2] = demHandler->GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(tmpPoint));
+        nextLineStart1[2] = demHandler.GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(tmpPoint));
       }
 
 

@@ -18,7 +18,7 @@
  * limitations under the License.
  */
 
-#include "otbDEMHandler.h"
+#include "otbOssimDEMHandler.h"
 #include "otbMacro.h"
 
 #include <cassert>
@@ -52,9 +52,9 @@
 namespace otb
 {
 /** Initialize the singleton */
-DEMHandler::Pointer DEMHandler::m_Singleton = nullptr;
+OssimDEMHandler::Pointer OssimDEMHandler::m_Singleton = nullptr;
 
-DEMHandler::Pointer DEMHandler::Instance()
+OssimDEMHandler::Pointer OssimDEMHandler::Instance()
 {
   if (m_Singleton.GetPointer() == nullptr)
   {
@@ -62,7 +62,7 @@ DEMHandler::Pointer DEMHandler::Instance()
 
     if (m_Singleton.GetPointer() == nullptr)
     {
-      m_Singleton = new DEMHandler;
+      m_Singleton = new OssimDEMHandler;
     }
     m_Singleton->UnRegister();
   }
@@ -70,7 +70,7 @@ DEMHandler::Pointer DEMHandler::Instance()
   return m_Singleton;
 }
 
-DEMHandler::DEMHandler() : m_GeoidFile(""), m_DefaultHeightAboveEllipsoid(0)
+OssimDEMHandler::OssimDEMHandler() : m_GeoidFile(""), m_DefaultHeightAboveEllipsoid(0)
 {
   assert(ossimElevManager::instance() != NULL);
 
@@ -79,7 +79,7 @@ DEMHandler::DEMHandler() : m_GeoidFile(""), m_DefaultHeightAboveEllipsoid(0)
   ossimElevManager::instance()->setUseGeoidIfNullFlag(true);
 }
 
-void DEMHandler::OpenDEMDirectory(const char* DEMDirectory)
+void OssimDEMHandler::OpenDEMDirectory(const char* DEMDirectory)
 {
   assert(ossimElevManager::instance() != NULL);
 
@@ -108,7 +108,7 @@ void DEMHandler::OpenDEMDirectory(const char* DEMDirectory)
 }
 
 
-void DEMHandler::ClearDEMs()
+void OssimDEMHandler::ClearDEMs()
 {
   assert(ossimElevManager::instance() != NULL);
 
@@ -116,12 +116,12 @@ void DEMHandler::ClearDEMs()
 }
 
 
-void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
+void OssimDEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
 {
   OpenDEMDirectory(DEMDirectory.c_str());
 }
 
-bool DEMHandler::IsValidDEMDirectory(const char* DEMDirectory)
+bool OssimDEMHandler::IsValidDEMDirectory(const char* DEMDirectory)
 {
   assert(ossimElevManager::instance() != NULL);
 
@@ -138,7 +138,7 @@ bool DEMHandler::IsValidDEMDirectory(const char* DEMDirectory)
   return result;
 }
 
-bool DEMHandler::OpenGeoidFile(const char* geoidFile)
+bool OssimDEMHandler::OpenGeoidFile(const char* geoidFile)
 {
   if ((ossimGeoidManager::instance()->findGeoidByShortName("geoid1996")) == nullptr)
   {
@@ -176,12 +176,12 @@ bool DEMHandler::OpenGeoidFile(const char* geoidFile)
   return false;
 }
 
-bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
+bool OssimDEMHandler::OpenGeoidFile(const std::string& geoidFile)
 {
   return OpenGeoidFile(geoidFile.c_str());
 }
 
-double DEMHandler::GetHeightAboveMSL(double lon, double lat) const
+double OssimDEMHandler::GetHeightAboveMSL(double lon, double lat) const
 {
   double   height;
   ossimGpt ossimWorldPoint;
@@ -196,12 +196,12 @@ double DEMHandler::GetHeightAboveMSL(double lon, double lat) const
   return height;
 }
 
-double DEMHandler::GetHeightAboveMSL(const PointType& geoPoint) const
+double OssimDEMHandler::GetHeightAboveMSL(const PointType& geoPoint) const
 {
   return GetHeightAboveMSL(geoPoint[0], geoPoint[1]);
 }
 
-double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat) const
+double OssimDEMHandler::GetHeightAboveEllipsoid(double lon, double lat) const
 {
   double   height;
   ossimGpt ossimWorldPoint;
@@ -216,12 +216,12 @@ double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat) const
   return height;
 }
 
-double DEMHandler::GetHeightAboveEllipsoid(const PointType& geoPoint) const
+double OssimDEMHandler::GetHeightAboveEllipsoid(const PointType& geoPoint) const
 {
   return GetHeightAboveEllipsoid(geoPoint[0], geoPoint[1]);
 }
 
-void DEMHandler::SetDefaultHeightAboveEllipsoid(double h)
+void OssimDEMHandler::SetDefaultHeightAboveEllipsoid(double h)
 {
   // Ossim does not allow retrieving the default height above
   // ellipsoid We therefore must keep it on our side
@@ -232,21 +232,21 @@ void DEMHandler::SetDefaultHeightAboveEllipsoid(double h)
   ossimElevManager::instance()->setDefaultHeightAboveEllipsoid(h);
 }
 
-double DEMHandler::GetDefaultHeightAboveEllipsoid() const
+double OssimDEMHandler::GetDefaultHeightAboveEllipsoid() const
 {
   // Ossim does not allow retrieving the default height above
   // ellipsoid We therefore must keep it on our side
   return m_DefaultHeightAboveEllipsoid;
 }
 
-unsigned int DEMHandler::GetDEMCount() const
+unsigned int OssimDEMHandler::GetDEMCount() const
 {
   assert(ossimElevManager::instance() != NULL);
 
   return ossimElevManager::instance()->getNumberOfElevationDatabases();
 }
 
-std::string DEMHandler::GetDEMDirectory(unsigned int idx) const
+std::string OssimDEMHandler::GetDEMDirectory(unsigned int idx) const
 {
   std::string demDir = "";
 
@@ -259,17 +259,17 @@ std::string DEMHandler::GetDEMDirectory(unsigned int idx) const
   return demDir;
 }
 
-std::string DEMHandler::GetGeoidFile() const
+std::string OssimDEMHandler::GetGeoidFile() const
 {
   // Ossim does not allow retrieving the geoid file path
   // We therefore must keep it on our side
   return m_GeoidFile;
 }
 
-void DEMHandler::PrintSelf(std::ostream& os, itk::Indent indent) const
+void OssimDEMHandler::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "DEMHandler" << std::endl;
+  os << indent << "OssimDEMHandler" << std::endl;
 }
 
 } // namespace otb

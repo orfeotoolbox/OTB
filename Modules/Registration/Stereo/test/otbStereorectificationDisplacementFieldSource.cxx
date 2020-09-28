@@ -55,7 +55,7 @@ int otbStereorectificationDisplacementFieldSource(int itkNotUsed(argc), char* ar
   dfSource->SetGridStep(gridStep);
   dfSource->SetScale(scale);
 
-  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(avgElev);
+  otb::DEMHandler::GetInstance().SetDefaultHeightAboveEllipsoid(avgElev);
 
   WriterType::Pointer writer1 = WriterType::New();
   writer1->SetInput(dfSource->GetLeftDisplacementFieldOutput());

@@ -31,7 +31,6 @@ namespace otb
 template <class TDEMImage>
 DEMToImageGenerator<TDEMImage>::DEMToImageGenerator()
 {
-  m_DEMHandler          = DEMHandlerType::Instance();
   m_OutputSpacing[0]    = 0.0001;
   m_OutputSpacing[1]    = -0.0001;
   m_OutputSize[0]       = 1;
@@ -117,12 +116,12 @@ void DEMToImageGenerator<TDEMImage>::ThreadedGenerateData(const OutputImageRegio
       geoPoint = m_Transform->TransformPoint(phyPoint);
       if (m_AboveEllipsoid)
       {
-        height = m_DEMHandler->GetHeightAboveEllipsoid(geoPoint); // Altitude
+        height = DEMHandler::GetInstance().GetHeightAboveEllipsoid(geoPoint); // Altitude
                                                                   // calculation
       }
       else
       {
-        height = m_DEMHandler->GetHeightAboveMSL(geoPoint); // Altitude
+        height = DEMHandler::GetInstance().GetHeightAboveMSL(geoPoint); // Altitude
                                                             // calculation
       }
     }
@@ -130,12 +129,12 @@ void DEMToImageGenerator<TDEMImage>::ThreadedGenerateData(const OutputImageRegio
     {
       if (m_AboveEllipsoid)
       {
-        height = m_DEMHandler->GetHeightAboveEllipsoid(phyPoint); // Altitude
+        height = DEMHandler::GetInstance().GetHeightAboveEllipsoid(phyPoint); // Altitude
                                                                   // calculation
       }
       else
       {
-        height = m_DEMHandler->GetHeightAboveMSL(phyPoint); // Altitude
+        height = DEMHandler::GetInstance().GetHeightAboveMSL(phyPoint); // Altitude
                                                             // calculation
       }
     }

@@ -21,6 +21,7 @@
 #include "otbWrapperElevationParametersHandler.h"
 #include "otbDEMHandler.h"
 
+
 namespace otb
 {
 namespace Wrapper
@@ -98,8 +99,11 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
 
 void ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(const Application::Pointer app, const std::string& key)
 {
+  auto & demHandler = otb::DEMHandler::GetInstance();
+
   // Set default elevation
-  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(GetDefaultElevation(app, key));
+  demHandler.SetDefaultHeightAboveEllipsoid(GetDefaultElevation(app, key));
+
 
   std::ostringstream oss;
   oss << "Elevation management: setting default height above ellipsoid to " << GetDefaultElevation(app, key) << " meters" << std::endl;
@@ -111,7 +115,8 @@ void ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(const Ap
   {
     oss.str("");
     oss << "Elevation management: using geoid file (" << GetGeoidFile(app, key) << ")" << std::endl;
-    otb::DEMHandler::Instance()->OpenGeoidFile(GetGeoidFile(app, key));
+    demHandler.OpenGeoidFile(GetGeoidFile(app, key));
+    
     app->GetLogger()->Info(oss.str());
   }
 
@@ -119,11 +124,11 @@ void ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(const Ap
   if (IsDEMUsed(app, key))
   {
     std::string demDirectory = GetDEMDirectory(app, key);
-    if (otb::DEMHandler::Instance()->IsValidDEMDirectory(demDirectory.c_str()))
+    if (demHandler.IsValidDEMDirectory(demDirectory.c_str()))
     {
       oss.str("");
       oss << "Elevation management: using DEM directory (" << demDirectory << ")" << std::endl;
-      otb::DEMHandler::Instance()->OpenDEMDirectory(demDirectory);
+      demHandler.OpenDEMDirectory(demDirectory);
       app->GetLogger()->Info(oss.str());
     }
     else

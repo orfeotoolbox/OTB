@@ -35,4 +35,5 @@ void RegisterTests()
   REGISTER_TEST(otbInverseLogPolarTransform);
   REGISTER_TEST(otbInverseLogPolarTransformResample);
   REGISTER_TEST(otbStreamingResampleImageFilterWithAffineTransform);
+  REGISTER_TEST(otbSarSensorModelAdapterTest);
 }

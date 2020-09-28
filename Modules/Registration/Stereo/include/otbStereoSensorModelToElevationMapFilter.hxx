@@ -259,7 +259,7 @@ void StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>::BeforeThrea
   this->GetCorrelationOutput()->FillBuffer(0.);
 
   // Initialize with average elevation
-  this->GetOutput()->FillBuffer(otb::DEMHandler::Instance()->GetDefaultHeightAboveEllipsoid());
+  this->GetOutput()->FillBuffer(otb::DEMHandler::GetInstance().GetDefaultHeightAboveEllipsoid());
 
   // Initialize with DEM elevation (not threadable because of some
   // mutex in ossim)
@@ -280,7 +280,7 @@ void StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>::BeforeThrea
 
     // Transform to geo point
     geoPoint = rsTransform->TransformPoint(outputPoint);
-    outputIt.Set(otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(geoPoint));
+    outputIt.Set(otb::DEMHandler::GetInstance().GetHeightAboveEllipsoid(geoPoint));
   }
 
   const InputImageType* masterPtr = this->GetMasterInput();

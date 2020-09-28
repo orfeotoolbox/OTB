@@ -27,6 +27,7 @@
 #include "otbVectorImageToImageListFilter.h"
 #include "otbDEMHandler.h"
 
+#include "otbDEMHandler.h"
 
 const unsigned int Dimension = 2;
 typedef float      PixelType;
@@ -85,7 +86,7 @@ int otbDisparityMapToDEMFilter(int argc, char* argv[])
   filter->SetElevationMax(atof(argv[8]));
   filter->SetDEMGridStep(atof(argv[10]));
 
-  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(atof(argv[9]));
+  otb::DEMHandler::GetInstance().SetDefaultHeightAboveEllipsoid(atof(argv[9]));
 
   MaskReaderType::Pointer maskReader;
   if (argc == 12)

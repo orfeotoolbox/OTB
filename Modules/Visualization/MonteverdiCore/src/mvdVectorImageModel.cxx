@@ -603,7 +603,7 @@ void VectorImageModel::virtual_ToWgs84(const PointType& physical, PointType& wgs
 
   wgs84 = m_ToWgs84->TransformPoint(physical);
 
-  alt = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(wgs84[0], wgs84[1]);
+  alt = otb::DEMHandler::GetInstance().GetHeightAboveEllipsoid(wgs84[0], wgs84[1]);
 }
 
 /*****************************************************************************/
@@ -735,7 +735,7 @@ void VectorImageModel::OnPhysicalCursorPositionChanged(const QPoint&, const Poin
         geoVector.push_back(ossGeographicLong.str());
         geoVector.push_back(ossGeographicLat.str());
 
-        double elev = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(wgs84[0], wgs84[1]);
+        double elev = otb::DEMHandler::GetInstance().GetHeightAboveEllipsoid(wgs84[0], wgs84[1]);
 
         if (elev > -32768)
         {
