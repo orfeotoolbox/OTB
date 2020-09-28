@@ -27,12 +27,12 @@
 #include "otbImageKeywordlist.h"
 #include "otbStringUtils.h"
 
+#include "otbDimapMetadataHelper.h"
+
+#include "otbXMLMetadataSupplier.h"
+
 namespace otb
 {
-
-FormosatImageMetadataInterface::FormosatImageMetadataInterface()
-{
-}
 
 bool FormosatImageMetadataInterface::CanRead() const
 {
@@ -112,6 +112,7 @@ FormosatImageMetadataInterface::VariableLengthVectorType FormosatImageMetadataIn
   {
     std::vector<std::string> outputValuesString;
     std::string              valueString = imageKeywordlist.GetMetadataByKey("support_data.solar_irradiance");
+
     boost::trim(valueString);
     boost::split(outputValuesString, valueString, boost::is_any_of(" "));
     for (unsigned int i = 0; i < outputValuesString.size(); ++i)
@@ -1154,5 +1155,69 @@ FormosatImageMetadataInterface::WavelengthSpectralBandVectorType FormosatImageMe
 
   return wavelengthSpectralBand;
 }
+
+
+
+void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+{
+  assert(mds);
+
+/*
+  bool hasValue = false;
+  auto metadatatype = mds->GetMetadataValue("METADATATYPE", hasValue);
+
+  // DIMAP metadata has already been parsed by gdal
+  if (hasValue && metadatatype == "DIMAP")
+  {
+    DimapMetadataHelper helper(mds);
+    
+    helper.ParseRadiometry(m_Imd);
+  }
+*/
+
+  Fetch(MDStr::SensorID, *mds, "IMAGERY/SATELLITEID");
+  if (m_Imd[MDStr::SensorID] == "FORMOSAT 2")
+    {
+    m_Imd.Add(MDStr::Mission, "Formasat 2");
+    }
+  else
+    {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Not a Formosat product")
+    }
+
+
+  //Find the METADATA.DIM file (Dimap V1 metadata file)
+  auto resourceFiles = mds->GetResourceFiles();
+  
+  std::string metadataFile;
+  for (const auto & file: resourceFiles)
+  {
+    if (file.find("METADATA.DIM")!=std::string::npos)
+    {
+      metadataFile = file;
+    }
+  }
+
+  if (metadataFile.empty())
+  {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Cannot find the METADATA.DIM file")
+  }
+
+  XMLMetadataSupplier xmlMds(metadataFile);
+
+  DimapMetadataHelper helper;
+    
+  helper.ParseDimapV1(xmlMds, "Dimap_Document.");
+  const auto & dimapData = helper.GetDimapData();
+  
+  m_Imd.Add(MDStr::GeometricLevel, dimapData.ProcessingLevel);
+
+  // fill RPC model
+  if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
+  {
+    FetchRPC(*mds);
+  }
+}
+
 
 } // end namespace otb

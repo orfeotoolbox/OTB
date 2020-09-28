@@ -26,6 +26,8 @@
 #include "otbImageKeywordlist.h"
 #include "otbStringUtils.h"
 
+#include "otbDimapMetadataHelper.h"
+
 namespace otb
 {
 using boost::lexical_cast;
@@ -1255,32 +1257,64 @@ Spot6ImageMetadataInterface::WavelengthSpectralBandVectorType Spot6ImageMetadata
 void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 {
   assert(mds);
-
-  std::cout << "Spot6ImageMetadataInterface::Parse" << std::endl;
-/*
-  bool hasValue = false;
-  auto metadatatype = mds->GetMetadataValue("METADATATYPE", hasValue);
-
-  // DIMAP metadata has already been parsed by gdal
-  if (hasValue && metadatatype == "DIMAP")
+  DimapMetadataHelper helper;
+  
+  helper.Parse(*mds);
+  const auto & dimapData = helper.GetDimapData();
+  
+  if (dimapData.mission == "SPOT")
   {
-    DimapMetadataHelper helper(mds);
-    
-    helper.ParseRadiometry(m_Imd);
+    m_Imd.Add(MDStr::SensorID, dimapData.mission + " " +dimapData.missionIndex);
+    m_Imd.Add(MDStr::Mission, "Spot");
   }
-*/
-
-  Fetch(MDStr::SensorID, *mds, "IMAGERY/SATELLITEID");
-  if (strncmp(m_Imd[MDStr::SensorID].c_str(), "SPOT 6", 6) == 0)
-    {
-    m_Imd.Add(MDStr::Mission, "SPOT 6");
-    }
   else
-    {
-    otbGenericExceptionMacro(MissingMetadataException,<<"Not a spot 6 product")
-    }
+  {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Sensor ID doesn't start with SPOT : '"<<dimapData.mission<<"'")
+  }
 
-  FetchRPC(*mds);
+  m_Imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
+  m_Imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
+  m_Imd.Add(MDNum::SatElevation, 90. - dimapData.IncidenceAngle[0]);
+  m_Imd.Add(MDNum::SatAzimuth, dimapData.SceneOrientation[0]);
+
+  m_Imd.Add(MDTime::ProductionDate, 
+    boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));
+  m_Imd.Add(MDTime::AcquisitionDate, 
+    boost::lexical_cast<MetaData::Time>(dimapData.AcquisitionDate));
+
+  auto nbBands = m_Imd.Bands.size();
+  if (dimapData.PhysicalBias.size() == nbBands
+    && dimapData.SolarIrradiance.size() == nbBands
+    && dimapData.PhysicalGain.size() == nbBands)
+  {
+    auto bias = dimapData.PhysicalBias.begin();
+    auto gain = dimapData.PhysicalGain.begin();
+    auto solarIrradiance = dimapData.SolarIrradiance.begin();
+    
+    for (auto & band: m_Imd.Bands)
+    {
+      band.Add(MDNum::SolarIrradiance, *solarIrradiance);
+      band.Add(MDNum::PhysicalGain, *gain);
+      band.Add(MDNum::PhysicalBias, *bias);
+      bias++;
+      solarIrradiance++;
+      gain++;
+    }
+  }
+  else
+  {
+    otbGenericExceptionMacro(MissingMetadataException,
+      << "The number of bands in image metadatas is incoherent with the DIMAP product")
+  }
+
+
+  m_Imd.Add(MDStr::GeometricLevel, dimapData.ProcessingLevel);
+
+  // fill RPC model
+  if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
+  {
+    FetchRPC(*mds);
+  }
 }
 
 

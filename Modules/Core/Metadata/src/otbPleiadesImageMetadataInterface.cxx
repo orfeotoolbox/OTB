@@ -27,8 +27,12 @@
 #include "otbGeometryMetadata.h"
 #include "otbStringUtils.h"
 
+#include "otbDimapMetadataHelper.h"
+
 // useful constants
 #include <otbMath.h>
+
+#include "itksys/SystemTools.hxx"
 
 namespace otb
 {
@@ -93,6 +97,7 @@ std::string PleiadesImageMetadataInterface::GetInstrumentIndex() const
 
   return ""; // Invalid value
 }
+
 
 PleiadesImageMetadataInterface::VariableLengthVectorType PleiadesImageMetadataInterface::GetSolarIrradiance() const
 {
@@ -644,6 +649,46 @@ PleiadesImageMetadataInterface::VariableLengthVectorType PleiadesImageMetadataIn
   return outputValuesVariableLengthVector;
 }
 
+
+void PleiadesImageMetadataInterface::FetchSatAngles(
+                    const std::vector<double> & incidenceAngles,
+                    const std::vector<double> & alongTrackIncidenceAngles,
+                    const std::vector<double> & acrossTrackIncidenceAngles,
+                    const std::vector<double> & sceneOrientation)
+{
+  if(incidenceAngles.size() != 3 ||  sceneOrientation.size() != 3)
+  {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Missing satellite angles in Dimap")
+  }
+
+  // Convention use in input of atmospheric correction parameters computation is
+  //"90 - satOrientation". Pleiades does not seem to follow this convention so
+  // inverse the formula here to be able to take the angle read in the metadata
+  // as input for 6S. The second value is used (center value)
+  m_Imd.Add(MDNum::SatElevation, 90. - incidenceAngles[1]);
+
+  if (alongTrackIncidenceAngles.size() != 3 ||
+      acrossTrackIncidenceAngles.size() != 3)
+  {
+    // Use only orientation if across/along track incidence are not available
+    m_Imd.Add(MDNum::SatAzimuth, sceneOrientation[1]);
+  }
+  else
+  {
+    // Use center values
+    auto cap = sceneOrientation[1];
+    auto along = alongTrackIncidenceAngles[1];
+    auto ortho = acrossTrackIncidenceAngles[1];
+  
+    auto satAzimuth =  (cap - std::atan2(std::tan(ortho * CONST_PI_180), 
+                                        std::tan(along * CONST_PI_180)) 
+                          * CONST_180_PI);
+
+    m_Imd.Add(MDNum::SatAzimuth, fmod(satAzimuth, 360));
+
+  }
+}
+
 double PleiadesImageMetadataInterface::GetSatElevation() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
@@ -709,7 +754,6 @@ double PleiadesImageMetadataInterface::GetSatAzimuth() const
 
     // Take the second value (Center value)
     double cap = vecCap[1];
-
     // return only orientation if across/along track incidence are not available
     return cap;
   }
@@ -726,7 +770,6 @@ double PleiadesImageMetadataInterface::GetSatAzimuth() const
 
     // Take the second value (Center value)
     double cap = vecCap[1];
-
     valueString = imageKeywordlist.GetMetadataByKey("support_data.along_track_incidence_angle");
     std::istringstream  isAlong(valueString);
     std::vector<double> vecAlong = std::vector<double>(std::istream_iterator<double>(isAlong), std::istream_iterator<double>());
@@ -1758,28 +1801,298 @@ PleiadesImageMetadataInterface::WavelengthSpectralBandVectorType PleiadesImageMe
   return wavelengthSpectralBand;
 }
 
+
+void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::Time & date)
+{
+  // We use here tabulate in flight values for physical gain of PHR. Those values evolve
+  // with time and are much more accurate. Values provided by CNES calibration
+  // team. Diference between metadata values and in flight gain can lead to
+  // difference of 10%.
+
+  // Values:
+  // Ak values for PHR1A are given in the following table :
+
+  // Dates                                       PA NTDI=13       B0           B1           B2           B3
+
+  // From 17/12/2011 to 01/08/2012               11.75     9.52       9.62       10.55     15.73
+  // From 01/08/2012 to 01/03/2013               11.73     9.45       9.48       10.51     15.71
+  // From 01/03/2013                             11.70     9.38       9.34       10.46     15.69
+
+  // For PHR1B in the following table :
+
+  // Dates                       PA NTDI=13       B0           B1           B2           B3
+  // From 01/12/2012             12.04     10.46     10.47     11.32     17.21
+
+  std::unordered_map<std::string, double> bandNameToPhysicalGain;
+  // TODO check band order here.
+  const auto &  sensorId = m_Imd[MDStr::SensorID];
+  if (sensorId == "PHR 1A")
+  {
+    // tm_year: years since 1900
+    if ((date.tm_year < 112) || 
+        (date.tm_year == 112 && date.tm_mon < 8))
+    {
+      bandNameToPhysicalGain = { {"P", 11.75},
+          {"B0", 9.52}, {"B1", 9.62}, {"B2", 10.55}, {"B3", 15.73}};
+    }
+    else if ((date.tm_year == 112 && date.tm_mon >= 8) || 
+             (date.tm_year == 113 && date.tm_mon < 3))
+    { 
+      bandNameToPhysicalGain = { {"P", 11.73},
+          {"B0", 9.45}, {"B1", 9.48}, {"B2", 10.51}, {"B3", 15.71}};
+    }
+    // After 01/03/2013
+    else 
+    {
+      bandNameToPhysicalGain = { {"P", 11.70},
+          {"B0", 9.38}, {"B1", 9.34}, {"B2", 10.46}, {"B3", 15.69}};
+
+    }
+  }
+  else if (sensorId == "PHR 1B")
+  {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 10.46}, {"B1", 10.47}, {"B2", 11.32}, {"B3", 17.21}};
+
+  }
+  else
+  {
+    itkExceptionMacro(<< "Invalid metadata, bad sensor id");
+  }
+
+  for (auto & band: m_Imd.Bands)
+  {
+    auto gain = bandNameToPhysicalGain.find(band[MDStr::BandName]);
+    if (gain ==  bandNameToPhysicalGain.end())
+    {
+      itkExceptionMacro(<< "Cannot find the physical gain associated with " << band[MDStr::BandName]);
+    }
+    else
+    {
+      band.Add(MDNum::PhysicalGain, gain->second);
+    }
+  }
+
+}
+
+
+void PleiadesImageMetadataInterface::FetchSolarIrradiance(const std::vector<double> & dimapSolarIrradiance)
+{
+  std::unordered_map<std::string, double> defaultSolarIrradiance;
+
+  const auto & sensorID = m_Imd[MDStr::SensorID];
+  if (sensorID == "PHR 1A")
+  {
+    defaultSolarIrradiance =  { {"P", 1548.71},
+          {"B0", 1915.01}, {"B1", 1830.57}, {"B2", 1594.06}, {"B3", 1060.01}};
+  }
+  else if (sensorID == "PHR 1B")
+  {
+    defaultSolarIrradiance =  { {"P", 1529.00384},
+          {"B0", 1926.51688}, {"B1", 1805.91412}, {"B2", 1533.60973}, {"B3", 1019.23037}};
+  }
+  else
+  {
+    itkExceptionMacro(<< "Invalid metadata, bad sensor id");
+  }
+
+
+  // Check that values read from metadata is not too far from the standard realistic values
+  // '999' are likely to be dummy values (see Mantis #601)
+  // These values were provided by the French Space Agency
+
+  // tolerance threshold
+  double tolerance = 0.05;
+
+  auto solarIrradianceIt = dimapSolarIrradiance.begin();
+  for (auto & band : m_Imd.Bands)
+  {
+    auto defaultValue = defaultSolarIrradiance.find(band[MDStr::BandName]);
+    if (defaultValue != defaultSolarIrradiance.end() &&
+         std::abs(*solarIrradianceIt - defaultValue->second) > (tolerance * defaultValue->second))
+    {
+      band.Add(MDNum::SolarIrradiance, defaultValue->second);
+    }
+    else
+    {
+      band.Add(MDNum::SolarIrradiance, *solarIrradianceIt);
+    }
+    solarIrradianceIt++;
+  }
+
+  /*
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  std::vector<double> outputValues;
+  if (imageKeywordlist.HasKey("support_data.solar_irradiance"))
+  {
+    std::vector<std::string> outputValuesString;
+    std::string              valueString = imageKeywordlist.GetMetadataByKey("support_data.solar_irradiance");
+    boost::trim(valueString);
+    boost::split(outputValuesString, valueString, boost::is_any_of(" "));
+    for (unsigned int i = 0; i < outputValuesString.size(); ++i)
+    {
+      outputValues.push_back(atof(outputValuesString[i].c_str()));
+    }
+  }
+
+  VariableLengthVectorType outputValuesVariableLengthVector;
+  outputValuesVariableLengthVector.SetSize(outputValues.size());
+  outputValuesVariableLengthVector.Fill(0);
+
+  // Check that values read from metadata is not too far from the standard realistic values
+  // '999' are likely to be dummy values (see Mantis #601)
+  // This values were provided by the French Space Agency
+  double defaultRadianceMS[4];
+  double defaultRadianceP;
+
+  const std::string sensorId = this->GetSensorID();
+  if (sensorId == "PHR 1A")
+  {
+    // MS, ordered as B0, B1, B2, B3
+    defaultRadianceMS[0] = 1915.01;
+    defaultRadianceMS[1] = 1830.57;
+    defaultRadianceMS[2] = 1594.06;
+    defaultRadianceMS[3] = 1060.01;
+
+    defaultRadianceP = 1548.71;
+  }
+  else if (sensorId == "PHR 1B")
+  {
+    // MS, ordered as B0, B1, B2, B3
+    defaultRadianceMS[0] = 1926.51688;
+    defaultRadianceMS[1] = 1805.91412;
+    defaultRadianceMS[2] = 1533.60973;
+    defaultRadianceMS[3] = 1019.23037;
+
+    defaultRadianceP = 1529.00384;
+  }
+  else
+  {
+    itkExceptionMacro(<< "Invalid sensor ID.");
+  }
+
+  // tolerance threshold
+  double tolerance = 0.05;
+
+  if (outputValues.size() == 1)
+  {
+    // Pan
+    if (std::abs(outputValues[0] - defaultRadianceP) > (tolerance * defaultRadianceP))
+    {
+      outputValuesVariableLengthVector[0] = defaultRadianceP;
+    }
+    else
+    {
+      outputValuesVariableLengthVector[0] = outputValues[0];
+    }
+  }
+  else
+  {
+    // MS
+    for (unsigned int i = 0; i < outputValues.size(); ++i)
+    {
+      int wavelenghPos = this->BandIndexToWavelengthPosition(i);
+      if (std::abs(outputValues[wavelenghPos] - defaultRadianceMS[wavelenghPos]) > (tolerance * defaultRadianceMS[wavelenghPos]))
+      {
+        outputValuesVariableLengthVector[i] = defaultRadianceMS[wavelenghPos];
+      }
+      else
+      {
+        outputValuesVariableLengthVector[i] = outputValues[wavelenghPos];
+      }
+    }
+  }
+*/
+}
+
+
 void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 {
   assert(mds);
-  Fetch(MDStr::SensorID, *mds, "IMD/Dataset_Sources.Source_Identification.Strip_Source.MISSION");
-  if (boost::starts_with(m_Imd[MDStr::SensorID], "PHR"))
-    {
+
+  bool hasValue = false;
+  auto metadatatype = mds->GetMetadataValue("METADATATYPE", hasValue);
+  auto dimapV1Filename = itksys::SystemTools::GetParentDirectory(mds->GetResourceFile()) + "/PHRDIMAP.XML";
+
+  DimapMetadataHelper helper;
+    
+  helper.Parse(*mds);
+  const auto & dimapData = helper.GetDimapData();
+
+  if (dimapData.mission == "PHR")
+  {
+    m_Imd.Add(MDStr::SensorID, dimapData.mission + " " +dimapData.missionIndex);
     m_Imd.Add(MDStr::Mission, "Pléiades");
-    }
+  }
   else
+  {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Sensor ID doesn't start with PHR : '"<<dimapData.mission<<"'")
+  }
+
+  if (dimapData.BandIDs.size() == m_Imd.Bands.size())
+  {
+    auto bandId = dimapData.BandIDs.begin();
+    for (auto & band: m_Imd.Bands)
     {
-    otbGenericExceptionMacro(MissingMetadataException,<<"Sensor ID doesn't start with PHR : '"<<m_Imd[MDStr::SensorID]<<"'")
+      band.Add(MDStr::BandName, *bandId);
+      bandId++;
     }
+  }
+  else
+  {
+    otbGenericExceptionMacro(MissingMetadataException,
+      << "The number of bands in image metadatas is incoherent with the DIMAP product")
+  }
 
-  Fetch(MDStr::GeometricLevel, *mds, "IMD/Geoposition.Raster_CRS.RASTER_GEOMETRY");
+  m_Imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
+  m_Imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
 
-  // get radiometric metadata
+  FetchSatAngles(dimapData.IncidenceAngle, dimapData.AlongTrackIncidenceAngle,
+                 dimapData.AcrossTrackIncidenceAngle, dimapData.SceneOrientation);
+
+  m_Imd.Add(MDTime::ProductionDate, 
+    boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));
+  m_Imd.Add(MDTime::AcquisitionDate, 
+    boost::lexical_cast<MetaData::Time>(dimapData.AcquisitionDate));
+
+  FetchSolarIrradiance(dimapData.SolarIrradiance);
+
+  FetchTabulatedPhysicalGain(m_Imd[MDTime::ProductionDate]);
+
+  if (dimapData.PhysicalBias.size() == m_Imd.Bands.size())
+  {
+    auto bias = dimapData.PhysicalBias.begin();
+    for (auto & band: m_Imd.Bands)
+    {
+      band.Add(MDNum::PhysicalBias, *bias);
+      bias++;
+    }
+  }
+  else
+  {
+    otbGenericExceptionMacro(MissingMetadataException,
+      << "The number of bands in image metadatas is incoherent with the DIMAP product")
+  }
+
+  m_Imd.Add(MDStr::GeometricLevel, dimapData.ProcessingLevel);
 
   // fill RPC model
   if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
-    {
+  {
     FetchRPC(*mds);
-    }
+  }
 }
 
 } // end namespace otb

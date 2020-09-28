@@ -26,6 +26,8 @@
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
 
+#include "otbDimapMetadataHelper.h"
+
 namespace otb
 {
 
@@ -1488,6 +1490,29 @@ SpotImageMetadataInterface::WavelengthSpectralBandVectorType SpotImageMetadataIn
   }
 
   return wavelengthSpectralBand;
+}
+
+void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+{
+  assert(mds);
+
+  Fetch(MDStr::SensorID, *mds, "IMAGERY/SATELLITEID");
+  if (strncmp(m_Imd[MDStr::SensorID].c_str(), "SPOT 5", 6) == 0)
+    {
+    m_Imd.Add(MDStr::Mission, "SPOT 5");
+    }
+  else
+    {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Not a spot 5 product")
+    }
+
+  DimapMetadataHelper helper;
+   
+  helper.ParseDimapV1(*mds, "IMD/");
+
+  const auto & dimapData = helper.GetDimapData();
+
+  FetchRPC(*mds);
 }
 
 } // end namespace otb
