@@ -83,25 +83,21 @@ set PATH=%PATH%;C:\tools\GL\%ARCH%\bin
 :: Setup compiler
 call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" %ARCH% %TARGET% -vcvars_ver=%VCVER%
 
-:: Setup Clcache
-set CLCACHE_DIR=C:\clcache\%PROJECT%-%ARCH%-%TARGET%-%VCVER%
-set CLCACHE_HARDLINK=1
-:: set CLCACHE_SERVER=1
-set CLCACHE_CL=
-for /F "delims=" %%a in ('where cl.exe') do @if defined CLCACHE_CL (break ) else (set CLCACHE_CL=%%a)
+:: Setup sccache
+set SCCACHE_DIR=C:\sccache\%PROJECT%-%ARCH%-%TARGET%-%VCVER%
+:: SCCACHE DEBUG SETTINGS
+::SCCACHE_LOG=debug
+::SCCACHE_START_SERVER=1
+::SCCACHE_NO_DAEMON=1
+:: SCCACHE DEBUG SETTINGS
+:: For the output of unhandled panics, since the server sets RUST_BACKTRACE=1.
 
-echo CL path: "%CLCACHE_CL%"
-
-:: install clcache.exe as cl.exe
-copy C:\tools\Python35-%ARCH%\Scripts\clcache.exe C:\clcache\cl.exe
-set PATH=C:\clcache;%PATH%
-
-:: we need to change cache max size: clcache -M <size-in-bytes>
+:: we need to change cache max size using SCCACHE_CACHE_SIZE
 if "%PROJECT%"=="xdk" (
-  call "clcache.exe" -M 3000000000
+  set SCCACHE_CACHE_SIZE=3000000000
 )
 if "%PROJECT%"=="otb" (
-  call "clcache.exe" -M 2000000000
+  set SCCACHE_CACHE_SIZE=2000000000
 )
 
 set IMAGE_NAME=windows-%SHORT_TARGET%-%ARCH%-vc%VCVER%
