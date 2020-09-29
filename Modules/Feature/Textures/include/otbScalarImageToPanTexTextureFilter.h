@@ -27,14 +27,14 @@
 namespace otb
 {
 /** \class ScalarImageToPanTexTextureFilter
- *  \brief This class computes a texture derived built-up precense index (PanTex)
+ *  \brief This class computes a texture derived built-up presence index (PanTex)
  *
  * This class computes a texture-derived built-up presence index (PanTex) from textural
  * characteristics of scalar images.It is the min value of the contrast in 8 directions.
  *
  * Print references:
  *
- * Pesari, M., A. Gerhardinger, F. Kayitakire. 2008.  A robust built-up area precense
+ * Pesari, M., A. Gerhardinger, F. Kayitakire. 2008.  A robust built-up area presence
  * index by anisotropic rotation-invariant textural measure.
  * IEEE Journal of selected topics in applied earth observations and remote sensing.
  * Vol1, NO3.
