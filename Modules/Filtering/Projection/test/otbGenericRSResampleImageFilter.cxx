@@ -113,10 +113,9 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
   origin[1] = strtod(argv[4], nullptr); // Origin northing
   orthoRectifFilter->SetOutputOrigin(origin);
 
-  std::string wkt =
-      otb::SpatialReference::FromUTM(atoi(argv[9]), atoi(argv[10]) ? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south)
-          .ToWkt();
-  orthoRectifFilter->SetOutputProjectionRef(wkt);
+  auto inputSpatialRef = otb::SpatialReference::FromUTM(atoi(argv[9]), atoi(argv[10]) ? otb::SpatialReference::hemisphere::north : otb::SpatialReference::hemisphere::south);
+
+  orthoRectifFilter->SetOutputProjectionRef(inputSpatialRef.ToWkt());
 
   // Displacement Field spacing
   VectorImageType::SpacingType gridSpacing;
@@ -138,5 +137,15 @@ int otbGenericRSResampleImageFilter(int argc, char* argv[])
   writer->SetNumberOfDivisionsTiledStreaming(4);
   writer->Update();
 
+  auto outputProjectionRef = orthoRectifFilter->GetOutput()->GetProjectionRef();
+  if (outputProjectionRef.empty() ||
+    otb::SpatialReference::FromDescription(outputProjectionRef) != inputSpatialRef)
+  {
+    std::cout << "Input and output projection don't match. "
+              << "The output projection is: "
+              << outputProjectionRef
+              << std::endl;
+    return EXIT_FAILURE;
+  }
   return EXIT_SUCCESS;
 }

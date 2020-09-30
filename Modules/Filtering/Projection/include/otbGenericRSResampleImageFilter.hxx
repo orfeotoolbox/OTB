@@ -107,6 +107,8 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::GenerateOutputInfo
   {
     itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, this->GetOutputKeywordList());
   }
+
+  this->GetOutput()->SetProjectionRef(this->GetOutputProjectionRef());
 }
 
 /**
