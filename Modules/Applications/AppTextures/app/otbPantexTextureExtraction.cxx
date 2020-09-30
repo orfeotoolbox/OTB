@@ -69,7 +69,7 @@ private:
     SetDocLimitations("None");
 
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" Pesari, M., A. Gerhardinger, F. Kayitakire. 2008.  A robust built-up area precense"
+    SetDocSeeAlso(" Pesari, M., A. Gerhardinger, F. Kayitakire. 2008.  A robust built-up area presence"
       " index by anisotropic rotation-invariant textural measure."
       " IEEE Journal of selected topics in applied earth observations and remote sensing.Vol1, NO3.");
 
