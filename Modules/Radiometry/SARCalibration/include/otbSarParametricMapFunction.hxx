@@ -73,8 +73,10 @@ template <class TInputImage, class TCoordRep>
 double SarParametricMapFunction<TInputImage, TCoordRep>::Horner(PointType point) const
 {
   // Implementation of a Horner scheme evaluation for bivariate polynomial
-  point[0] /= m_ProductWidth;
-  point[1] /= m_ProductHeight;
+
+  // let's avoid conversion between float and double!
+  const double p0 = point[0] / m_ProductWidth;
+  const double p1 = point[1] / m_ProductHeight;
 
   double result = 0;
   for (unsigned int ycoeff = m_Coeff.Rows(); ycoeff > 0; --ycoeff)
@@ -83,9 +85,10 @@ double SarParametricMapFunction<TInputImage, TCoordRep>::Horner(PointType point)
     for (unsigned int xcoeff = m_Coeff.Cols(); xcoeff > 0; --xcoeff)
     {
       // std::cout << "m_Coeff(" << ycoeff-1 << "," << xcoeff-1 << ") = " << m_Coeff(ycoeff-1, xcoeff-1) << std::endl;
-      intermediate = intermediate * point[0] + m_Coeff(ycoeff - 1, xcoeff - 1);
+      intermediate = intermediate * p0 + m_Coeff(ycoeff - 1, xcoeff - 1);
     }
-    result += std::pow(static_cast<double>(point[1]), static_cast<double>(ycoeff - 1)) * intermediate;
+    // result = result * p1 + intermediate;
+    result += std::pow(p1, static_cast<double>(ycoeff - 1)) * intermediate;
   }
 
   return result;
