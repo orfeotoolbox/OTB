@@ -87,8 +87,7 @@ double SarParametricMapFunction<TInputImage, TCoordRep>::Horner(PointType point)
       // std::cout << "m_Coeff(" << ycoeff-1 << "," << xcoeff-1 << ") = " << m_Coeff(ycoeff-1, xcoeff-1) << std::endl;
       intermediate = intermediate * p0 + m_Coeff(ycoeff - 1, xcoeff - 1);
     }
-    // result = result * p1 + intermediate;
-    result += std::pow(p1, static_cast<double>(ycoeff - 1)) * intermediate;
+    result = result * p1 + intermediate;
   }
 
   return result;
