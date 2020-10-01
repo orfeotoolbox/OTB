@@ -27,7 +27,6 @@ otbOssimJpegFileResourceLeakTest.cxx
 otbOssimElevManagerTest2.cxx
 otbOssimElevManagerTest4.cxx
 otbDEMHandlerTest.cxx
-otbSarSensorModelAdapterTest.cxx
 )
 
 add_executable(otbOSSIMAdaptersTestDriver ${OTBOSSIMAdaptersTests})
