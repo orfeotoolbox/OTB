@@ -96,7 +96,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
 
   // Set the DEM Directory
   if (std::string(argv[2]).compare("no_output") != 0)
-    otb::DEMHandler::Instance()->OpenDEMDirectory(argv[2]);
+    otb::DEMHandler::GetInstance().OpenDEMDirectory(argv[2]);
 
   grsTrasnform->InstantiateTransform();
 

@@ -131,7 +131,7 @@ int otbVectorDataIntoImageProjectionFilterCompareImplTest(int itkNotUsed(argc), 
 
   if (!demDirectory.empty())
   {
-    otb::DEMHandler::Instance()->OpenDEMDirectory(demDirectory);
+    otb::DEMHandler::GetInstance().OpenDEMDirectory(demDirectory);
   }
 
   // Read the image

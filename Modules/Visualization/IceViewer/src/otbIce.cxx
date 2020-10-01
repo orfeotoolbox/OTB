@@ -39,18 +39,18 @@ int main(int argc, char* argv[])
   char* demdir    = getenv("OTB_DEM_DIR");
   char* geoidfile = getenv("OTB_GEOID_FILE");
 
-  otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
+  auto& demHandler = otb::DEMHandler::GetInstance();
 
   if (demdir != nullptr)
   {
     std::cout << "Configuring DEM directory: " << demdir << std::endl;
-    demHandler->OpenDEMDirectory(demdir);
+    demHandler.OpenDEMDirectory(demdir);
   }
 
   if (geoidfile != nullptr)
   {
     std::cout << "Configuring geoid file: " << geoidfile << std::endl;
-    demHandler->OpenGeoidFile(geoidfile);
+    demHandler.OpenGeoidFile(geoidfile);
   }
 
   otb::IceViewer::Pointer viewer = otb::IceViewer::New();
