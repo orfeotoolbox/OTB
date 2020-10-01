@@ -25,6 +25,6 @@ otb_fetch_module(OTBTemporalGapFilling
 A more detailed description can be found on the project website:
 https://gitlab.orfeo-toolbox.org/jinglada/temporalgapfilling
 "
-  GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/ctraizet/temporalgapfilling.git
-  GIT_TAG cd0aa8b18369140a270ec64659543a53167ef641
+  GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/jinglada/temporalgapfilling.git
+  GIT_TAG master
 )
