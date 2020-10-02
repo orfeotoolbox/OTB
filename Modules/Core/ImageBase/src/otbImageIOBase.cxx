@@ -1194,6 +1194,8 @@ std::vector<double> ImageIOBase::GetDefaultDirection(unsigned int k) const
 
 void ImageIOBase::DoMapBuffer(void* buffer, size_t numberOfPixels, std::vector<unsigned int>& bandList)
 {
+  m_BandList = bandList;
+
   size_t componentSize = this->GetComponentSize();
   size_t inPixelSize   = componentSize * this->GetNumberOfComponents();
   size_t outPixelSize  = componentSize * bandList.size();
@@ -1287,6 +1289,16 @@ void ImageIOBase::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     os << indent << "UseStreamedWriting: Off" << std::endl;
   }
+}
+
+const ImageMetadata & ImageIOBase::GetImageMetadata()
+{
+  return m_Imd;
+}
+
+void ImageIOBase::SetImageMetadata(ImageMetadata imd)
+{
+  m_Imd = std::move(imd);
 }
 
 } // namespace itk

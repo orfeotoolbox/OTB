@@ -35,6 +35,7 @@
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
 #include "otbMetaDataKey.h"
+#include "otbImageCommons.h"
 
 #include "otbConfigure.h"
 
@@ -553,6 +554,12 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
 
   m_ImageIO->SetUseCompression(m_UseCompression);
   m_ImageIO->SetMetaDataDictionary(inputPtr->GetMetaDataDictionary());
+
+  const ImageCommons* img_common = dynamic_cast<const ImageCommons*>(inputPtr.GetPointer());
+  if (img_common != nullptr)
+    {
+    m_ImageIO->SetImageMetadata(img_common->GetImageMetadata());
+    }
 
   /** Create Image file */
   // Setup the image IO for writing.

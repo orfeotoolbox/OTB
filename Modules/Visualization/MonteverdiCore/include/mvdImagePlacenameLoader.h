@@ -78,11 +78,11 @@ public:
   /** \brief Constructor */
   ImagePlacenameLoader(VectorImageModel* model);
 
-public slots:
+public Q_SLOTS:
   /** \brief load the placename */
   void LoadPlacename();
 
-signals:
+Q_SIGNALS:
   /** \brief Triggered after a non empty placename was loaded */
   void PlacenameLoaded(const QString&);
 

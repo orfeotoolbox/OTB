@@ -44,7 +44,7 @@ public:
   QtWidgetFloatParameter(FloatParameter*, QtWidgetModel*, QWidget*);
   ~QtWidgetFloatParameter() override;
 
-private slots:
+private Q_SLOTS:
   void OnCleared();
   void OnValueChanged(double);
   void OnEditingFinished();

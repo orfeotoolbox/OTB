@@ -43,7 +43,7 @@ MDType GetType(const std::string& val)
   case otb::MetaDataKey::TDOUBLE:
     ret = MDType::Double;
     break;
-  case otb::MetaDataKey::TOTB_GCP:
+  case otb::MetaDataKey::TGCP:
     ret = MDType::GCP;
     break;
   case otb::MetaDataKey::TVECTOR:
@@ -100,16 +100,16 @@ void SetDouble(itk::MetaDataDictionary& dict, const std::string& key, double val
   itk::EncapsulateMetaData<double>(dict, key, val);
 }
 
-otb::OTB_GCP GetGCP(const itk::MetaDataDictionary& dict, const std::string& key)
+otb::GCP GetGCP(const itk::MetaDataDictionary& dict, const std::string& key)
 {
-  otb::OTB_GCP ret;
-  itk::ExposeMetaData<otb::OTB_GCP>(dict, key, ret);
+  otb::GCP ret;
+  itk::ExposeMetaData<otb::GCP>(dict, key, ret);
   return ret;
 }
 
-void SetGCP(itk::MetaDataDictionary& dict, const std::string& key, const otb::OTB_GCP& val)
+void SetGCP(itk::MetaDataDictionary& dict, const std::string& key, const otb::GCP& val)
 {
-  itk::EncapsulateMetaData<otb::OTB_GCP>(dict, key, val);
+  itk::EncapsulateMetaData<otb::GCP>(dict, key, val);
 }
 
 otb::MetaDataKey::VectorType GetVector(const itk::MetaDataDictionary& dict, const std::string& key)

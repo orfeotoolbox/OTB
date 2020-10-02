@@ -189,8 +189,8 @@ public:
   /*-[ PUBLIC SLOTS SECTION ]------------------------------------------------*/
 
   //
-  // Public slots.
-public slots:
+  // Public Q_SLOTS.
+public Q_SLOTS:
   /**
    */
   void OnPhysicalCursorPositionChanged(const QPoint&, const PointType&, const PointType&, const DefaultImageType::PixelType&);
@@ -199,7 +199,7 @@ public slots:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   /**
    */
   void SettingsUpdated(AbstractImageModel* imageModel = NULL);
@@ -303,7 +303,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
   /** */
   void OnModelUpdated();
 };

@@ -23,10 +23,16 @@
 
 #include <string>
 #include <vector>
+#include <cstdio>
+
+#include <boost/bimap.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include "itkDataObject.h"
 #include "itkVariableLengthVector.h"
 #include "OTBMetadataExport.h"
+#include "otbStringUtils.h"
+#include "otbJoinContainer.h"
 
 namespace otb
 {
@@ -82,7 +88,7 @@ enum KeyType
   TSTRING,
   TENTIER,
   TDOUBLE,
-  TOTB_GCP,
+  TGCP,
   TVECTOR,
   TOSSIMKEYWORDLIST,
   TVECTORDATAKEYWORDLIST,
@@ -117,43 +123,203 @@ typedef std::vector<bool>                 BoolVectorType;
 typedef itk::VariableLengthVector<double> VariableLengthVectorType;
 }
 
-/** \class OTB_GCP
- *
- * \brief This OTB_GCP class is used to manage the GCP parameters
- * in OTB.
- *
- *
- * \ingroup OTBMetadata
- */
-class OTBMetadata_EXPORT OTB_GCP
+/** Metadata as double*/
+enum class MDNum
+{
+// generic
+  TileHintX,
+  TileHintY,
+  DataType,
+  NoData,
+  OrbitNumber,
+  NumberOfLines,
+  NumberOfColumns,
+  AverageSceneHeight,
+// optical section
+  PhysicalGain,
+  PhysicalBias,
+  SolarIrradiance,
+  SunElevation,
+  SunAzimuth,
+  SatElevation,
+  SatAzimuth,
+  FirstWavelength,
+  LastWavelength,
+  SpectralStep,
+  SpectralMin,
+  SpectralMax,
+// SAR section
+  CalScale,
+  PRF,
+  RSF,
+  RadarFrequency,
+  CenterIncidenceAngle,
+  RescalingFactor,
+  AntennaPatternNewGainPolyDegX,
+  AntennaPatternNewGainPolyDegY,
+  AntennaPatternOldGainPolyDegX,
+  AntennaPatternOldGainPolyDegY,
+  IncidenceAnglePolyDegX,
+  IncidenceAnglePolyDegY,
+  RangeSpreadLossPolyDegX,
+  RangeSpreadLossPolyDegY,
+  NoisePolyDegX,
+  NoisePolyDegY,
+  LineSpacing,
+  PixelSpacing,
+  END
+};
+
+/** Metadata as std::string */
+enum class MDStr
+{
+  SensorID,
+  Mission,
+  Instrument,
+  BandName,
+  ProductType,
+  GeometricLevel,
+  RadiometricLevel,
+  Polarization,
+  Mode,
+  Swath,
+  OrbitDirection,
+  BeamMode,
+  BeamSwath,
+  // ...
+  END
+};
+
+/** Metadata as LUT 1D */
+enum class MDL1D
+{
+  SpectralSensitivity,
+  END
+};
+
+/** Metadata as LUT 2D */
+enum class MDL2D
+{
+  // Sar calibration lut ...
+  END
+};
+
+/** Metadata as Time */
+enum class MDTime
+{
+  AcquisitionDate,
+  ProductionDate,
+  AcquisitionStartTime,
+  AcquisitionStopTime,
+  END
+};
+
+enum class MDGeom
+{
+  ProjectionWKT,  // -> string
+  ProjectionEPSG, // -> int
+  ProjectionProj, // -> string
+  RPC,            // -> RPCParam
+  SAR,            // -> SARParam
+  SensorGeometry, // -> boost::any
+  GCP,            // -> GCPParam
+  Adjustment,     // -> ?
+  END
+};
+
+namespace MetaData
+{
+
+struct OTBMetadata_EXPORT Time : tm
+{
+  double frac_sec;
+
+  friend OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const Time& val);
+
+  friend OTBMetadata_EXPORT std::istream& operator>>(std::istream& is, Time& val);
+
+};
+
+struct LUTAxis
+{
+  /** number of measurements on this axis */
+  int Size;
+  /** start value on the axis */
+  double Origin;
+  /** spacing between measurements (if regular sampling) */
+  double Spacing;
+  /** list of measurements (if irregular sampling) */
+  std::vector<double> Values;
+  /** Export to JSON */
+  std::string ToJSON(bool multiline=false) const;
+};
+
+template <unsigned int VDim> class LUT
 {
 public:
-  /** Unique identifier, often numeric */
-  std::string m_Id;
+  LUTAxis Axis[VDim];
+  
+  std::vector<double> Array;
 
-  /** Informational message or "" */
-  std::string m_Info;
+  std::string OTBMetadata_EXPORT ToJSON(bool multiline=false) const;
 
-  /** Pixel (x) location of GCP on raster */
-  double m_GCPCol;
+  std::string OTBMetadata_EXPORT ToString() const;
 
-  /** Line (y) location of GCP on raster */
-  double m_GCPRow;
-
-  /** X position of GCP in georeferenced space */
-  double m_GCPX;
-
-  /** Y position of GCP in georeferenced space */
-  double m_GCPY;
-
-  /** Elevation of GCP, or zero if not known */
-  double m_GCPZ;
-
-  OTB_GCP();
-  ~OTB_GCP();
-
-  void Print(std::ostream& os) const;
+  void OTBMetadata_EXPORT FromString(std::string);
 };
+
+typedef LUT<1> LUT1D;
+
+typedef LUT<2> LUT2D;
+
+template <typename T>
+inline boost::bimap<T, std::string> bimapGenerator(std::map<T, std::string> inMap)
+{
+  boost::bimap<T, std::string> bm;
+  for (const auto& kv : inMap)
+    bm.insert({kv.first, kv.second});
+    //bm.insert(typename boost::bimap<T, std::string>::value_type(kv.first, kv.second));
+  return bm;
+}
+
+typedef boost::bimap<MDGeom, std::string> MDGeomBmType;
+extern OTBMetadata_EXPORT MDGeomBmType MDGeomNames;
+
+typedef boost::bimap<MDNum, std::string> MDNumBmType;
+extern OTBMetadata_EXPORT MDNumBmType MDNumNames;
+
+typedef boost::bimap<MDStr, std::string> MDStrBmType;
+extern OTBMetadata_EXPORT MDStrBmType MDStrNames;
+
+typedef boost::bimap<MDTime, std::string> MDTimeBmType;
+extern OTBMetadata_EXPORT MDTimeBmType MDTimeNames;
+
+typedef boost::bimap<MDL1D, std::string> MDL1DBmType;
+extern OTBMetadata_EXPORT MDL1DBmType MDL1DNames;
+
+typedef boost::bimap<MDL2D, std::string> MDL2DBmType;
+extern OTBMetadata_EXPORT MDL2DBmType MDL2DNames;
+
+} // end namespace MetaData
+
+namespace Utils
+{
+template <>
+inline MetaData::Time LexicalCast<MetaData::Time,std::string>(std::string const& in, std::string const& kind)
+{
+  MetaData::Time output;
+  std::istringstream iss(in);
+  iss >> output;
+  if (iss.fail())
+    {
+    std::ostringstream oss;
+    oss << "Cannot decode '" << in << "' as this is not a valid value for '" << kind << "'";
+    throw std::runtime_error(oss.str());
+    }
+  return output;
+}
+
+} // end namespace Utils
 
 } // end namespace otb
 

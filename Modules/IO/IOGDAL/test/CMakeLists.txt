@@ -31,6 +31,7 @@ otbGDALReadPxlComplex.cxx
 otbGDALImageIOTestCanRead.cxx
 otbMultiDatasetReadingInfo.cxx
 otbOGRVectorDataIOCanRead.cxx
+otbGDALImageIOImportExportMetadata.cxx
 )
 
 add_executable(otbIOGDALTestDriver ${OTBIOGDALTests})
@@ -128,6 +129,16 @@ otb_add_test(NAME ioTvGDALImageIOWriteMetadata COMMAND otbIOGDALTestDriver
   ${TEMP}/ioTvGDALImageIOWriteMetadata.hdr
   ${TEMP}/ioTvGDALImageIOWriteMetadata_Report.txt
   )
+  
+# TODO implement this test
+# otb_add_test(NAME ioTvGDALImageIOImportExportMetadata_JPEG_99 COMMAND otbIOGDALTestDriver
+#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALImageIOImportExportMetadata_JPEG_99.txt
+#  ${TEMP}/ioTvGDALImageIOImportExportMetadata_JPEG_99.txt
+#  otbGDALImageIOImportExportMetadata
+#  ${INPUTDATA}/maur_rgb_24bpp.tif
+#  ${TEMP}/ioTvGDALImageIOImportExportMetadata_JPEG_99.tif
+#  ${TEMP}/ioTvGDALImageIOImportExportMetadata_JPEG_99.txt
+#  )
 
 otb_add_test(NAME ioTvGDALOverviewsBuilder_TIFF COMMAND otbIOGDALTestDriver
   otbGDALOverviewsBuilder

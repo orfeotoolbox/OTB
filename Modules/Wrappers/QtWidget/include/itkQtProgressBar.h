@@ -54,7 +54,7 @@ public:
   /** Manage a Progress event */
   void Observe(itk::Object* caller);
 
-signals:
+Q_SIGNALS:
   void SetValueChanged(int);
 
 private:

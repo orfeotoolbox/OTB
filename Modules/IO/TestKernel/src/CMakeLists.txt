@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-add_library(OTBTestKernel otbTestHelper.cxx)
+add_library(OTBTestKernel otbTestHelper.cxx otbTestTools.cxx)
 target_link_libraries(OTBTestKernel 
   ${OTBGdalAdapters_LIBRARIES}
   ${OTBImageIO_LIBRARIES}

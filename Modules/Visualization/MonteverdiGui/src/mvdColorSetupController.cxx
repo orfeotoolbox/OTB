@@ -313,10 +313,10 @@ void ColorSetupController::OnCurrentRgbIndexChanged(RgbwChannel channel, int ind
 
   // Signal band-index of RGB channel has changed to other
   // controllers.
-  emit RgbChannelIndexChanged(channel, index);
+  Q_EMIT RgbChannelIndexChanged(channel, index);
 
   // Signal model has been updated.
-  emit ModelUpdated();
+  Q_EMIT ModelUpdated();
 }
 
 /*******************************************************************************/
@@ -333,10 +333,10 @@ void ColorSetupController::OnCurrentGrayIndexChanged(int index)
 
   // Signal band-index of gray channel has changed to other
   // controllers.
-  emit GrayChannelIndexChanged(index);
+  Q_EMIT GrayChannelIndexChanged(index);
 
   // Signal model has been updated.
-  emit ModelUpdated();
+  Q_EMIT ModelUpdated();
 }
 
 /*******************************************************************************/
@@ -353,10 +353,10 @@ void ColorSetupController::OnGrayscaleActivated(bool activated)
 
   // Signal grayscale-mode activation-state has changed to other
   // controllers.
-  emit GrayscaleActivated(activated);
+  Q_EMIT GrayscaleActivated(activated);
 
   // Signal model has been updated.
-  emit ModelUpdated();
+  Q_EMIT ModelUpdated();
 }
 
 /*******************************************************************************/
@@ -370,7 +370,7 @@ void ColorSetupController::OnAlphaValueChanged(double alpha)
   imageModel->GetSettings().SetAlpha(alpha);
 
   // Signal model has been updated.
-  emit ModelUpdated();
+  Q_EMIT ModelUpdated();
 }
 
 } // end namespace 'mvd'

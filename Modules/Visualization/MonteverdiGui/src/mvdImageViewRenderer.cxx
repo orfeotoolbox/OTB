@@ -803,7 +803,7 @@ void ImageViewRenderer::virtual_ClearScene(bool keepViewport)
   //
   // MANTIS-1244: image-view not reset when layer-stack is cleared.
   // {
-  emit ResetViewport();
+  Q_EMIT ResetViewport();
   // }
 }
 
@@ -932,7 +932,7 @@ void ImageViewRenderer::virtual_RefreshScene()
 
     // m_GlView->GetSettings()->SetUseProjection( false );
 
-    // emit ClearProjectionRequired();
+    // Q_EMIT ClearProjectionRequired();
 
     return;
   }
@@ -951,7 +951,7 @@ void ImageViewRenderer::virtual_RefreshScene()
 
     m_GlView->GetSettings()->SetUseProjection(false);
 
-    emit ClearProjectionRequired();
+    Q_EMIT ClearProjectionRequired();
 
     return;
   }
@@ -996,13 +996,13 @@ void ImageViewRenderer::virtual_RefreshScene()
     {
       virtual_SetProjection();
 
-      emit SetProjectionRequired();
+      Q_EMIT SetProjectionRequired();
     }
     else if (m_ReferencePair.first != referencePair.first)
     {
       virtual_UpdateProjection();
 
-      emit UpdateProjectionRequired();
+      Q_EMIT UpdateProjectionRequired();
     }
   }
 

@@ -34,7 +34,7 @@ namespace otb
  * \ingroup Images
  * \ingroup Lists
  *
- * \ingroup OTBObjectList
+ * \ingroup OTBImageList
  */
 template <class TInputImage, class TOutputImage>
 class ITK_EXPORT ImageListToImageFilter : public itk::ImageSource<TOutputImage>

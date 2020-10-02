@@ -84,9 +84,13 @@ int otbVectorImageLegacyTest(int argc, char* argv[])
   InputImageType::VectorType tab = image->GetGeoTransform();
 
   file << "Geo Transform " << std::endl;
-  for (unsigned int i = 0; i < tab.size(); ++i)
+  // Don't write the identity geotransform.
+  if (tab != InputImageType::VectorType({0,1,0,0,0,1}))
   {
-    file << " " << i << " -> " << tab[i] << std::endl;
+    for (unsigned int i = 0; i < tab.size(); ++i)
+    {
+      file << " " << i << " -> " << tab[i] << std::endl;
+    }
   }
   tab.clear();
 

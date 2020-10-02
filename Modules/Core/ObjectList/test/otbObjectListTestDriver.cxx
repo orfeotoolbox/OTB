@@ -23,11 +23,5 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbObjectList);
-  REGISTER_TEST(otbImageList);
-  REGISTER_TEST(otbImageListToImageListApplyFilter);
-  REGISTER_TEST(otbImageListToVectorImageFilter2);
-  REGISTER_TEST(otbImageListToVectorImageFilter);
   REGISTER_TEST(otbObjectList2);
-  REGISTER_TEST(otbVectorImageToImageListFilter);
-  REGISTER_TEST(otbVectorImageToImageListFilterIterator);
 }

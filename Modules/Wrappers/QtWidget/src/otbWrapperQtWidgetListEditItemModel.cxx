@@ -338,7 +338,7 @@ bool ListEditItemModel::setData(const QModelIndex& idx, const QVariant& value, i
     {
     case Qt::EditRole:
       stringList->SetNthFileName(idx.row(), QFile::encodeName(value.toString()).data());
-      emit dataChanged(idx, idx);
+      Q_EMIT dataChanged(idx, idx);
       return true;
       break;
 
@@ -373,11 +373,11 @@ bool ListEditItemModel::Swap(int row1, int row2)
 
   assert(row1 != row2);
 
-  emit layoutAboutToBeChanged();
+  Q_EMIT layoutAboutToBeChanged();
 
   m_StringList->Swap(row1, row2);
 
-  emit layoutChanged();
+  Q_EMIT layoutChanged();
 
   return true;
 }

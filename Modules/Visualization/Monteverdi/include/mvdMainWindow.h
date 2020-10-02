@@ -138,7 +138,7 @@ public:
 
   //
   // Public slots.
-public slots:
+public Q_SLOTS:
 
   /**
    */
@@ -152,7 +152,7 @@ public slots:
 
   //
   // SIGNALS.
-signals:
+Q_SIGNALS:
 
   void UserCoordinatesEditingFinished(const QString&);
 
@@ -187,7 +187,7 @@ protected:
 
   //
   // Protected slots.
-protected slots:
+protected Q_SLOTS:
 
   /**
    */
@@ -421,7 +421,7 @@ private:
 
   //
   // Private slots.
-private slots:
+private Q_SLOTS:
 
   /**
    */

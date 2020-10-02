@@ -95,7 +95,7 @@ void QtStringSelectionWidget::DoCreateWidget()
 void QtStringSelectionWidget::OnEditionFinished()
 {
   // used to propagate m_Input (QLineEdit type) editingFinished signal
-  emit InternalQLineEditEditionFinished();
+  Q_EMIT InternalQLineEditEditionFinished();
 }
 }
 }

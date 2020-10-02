@@ -27,6 +27,8 @@
 #include "itkMetaDataDictionary.h"
 #include "otbMetaDataKey.h"
 #include "itkImageBase.h"
+#include "otbImageMetadata.h"
+#include "otbMetadataSupplierInterface.h"
 
 #include "OTBMetadataExport.h"
 
@@ -62,22 +64,17 @@ public:
 
 
   /** Set the image used to get the metadata */
-  void SetImage(ImageType* image)
-  {
-    this->SetMetaDataDictionary(image->GetMetaDataDictionary());
-  }
+  void SetImage(ImageType* image);
 
   /** Set the MetadataDictionary  */
-  void SetMetaDataDictionary(const MetaDataDictionaryType& dict)
-  {
-    m_MetaDataDictionary = dict;
-  }
+  void SetMetaDataDictionary(const MetaDataDictionaryType& dict);
 
   /** Get the MetadataDictionary  */
-  const MetaDataDictionaryType& GetMetaDataDictionary() const
-  {
-    return m_MetaDataDictionary;
-  }
+  const MetaDataDictionaryType& GetMetaDataDictionary() const;
+
+  void SetImageMetadata(ImageMetadata imd);
+
+  const ImageMetadata& GetImageMetadata() const;
 
   /** Get the projection coordinate system of the image. */
   std::string GetProjectionRef() const;
@@ -89,8 +86,8 @@ public:
   UnsignedIntType GetGCPCount() const;
   //  otbMetadataGetMacro(GCPCount, unsigned int);
 
-  OTB_GCP& GetGCPs(unsigned int GCPnum);
-  // otbMetadataGetGCPnumMacro(GCPs, OTB_GCP&, GCPnum, unsigned int);
+  GCP& GetGCPs(unsigned int GCPnum);
+  // otbMetadataGetGCPnumMacro(GCPs, GCP&, GCPnum, unsigned int);
 
   std::string GetGCPId(unsigned int GCPnum) const;
   //  otbMetadataGetGCPnumMacro(GCPId, std::string, GCPnum, unsigned int);
@@ -174,66 +171,86 @@ public:
   double GetYPixelSpacing() const;
   // otbMetadataGetMacro(YPixelSpacing, double);
 
-  /** Get the imaging acquisition day from the ossim metadata
+  /** Get the imaging acquisition day from the ossim metadata 
    * \deprecated
    */
-  virtual int GetDay() const = 0;
+  virtual int GetDay() const {return -1;}
   //  otbMetadataGetMacro(Day, int);
 
-  /** Get the imaging acquisition month from the ossim metadata
+  /** Get the imaging acquisition month from the ossim metadata 
    * \deprecated
    */
-  virtual int GetMonth() const = 0;
+  virtual int GetMonth() const {return -1;}
   // otbMetadataGetMacro(Month, int);
 
-  /** Get the imaging acquisition year from the ossim metadata
+  /** Get the imaging acquisition year from the ossim metadata 
    * \deprecated
    */
-  virtual int GetYear() const = 0;
+  virtual int GetYear() const {return -1;}
   // otbMetadataGetMacro(Year, int);
 
-  /** Get the imaging acquisition hour from the ossim metadata
+  /** Get the imaging acquisition hour from the ossim metadata 
    * \deprecated
    */
-  virtual int GetHour() const = 0;
+  virtual int GetHour() const {return -1;}
   // otbMetadataGetMacro(Hour, int);
 
-  /** Get the imaging acquisition minute from the ossim metadata
+  /** Get the imaging acquisition minute from the ossim metadata 
    * \deprecated
    */
-  virtual int GetMinute() const = 0;
+  virtual int GetMinute() const {return -1;}
   // otbMetadataGetMacro(Minute, int);
 
-  /** Get the imaging production day from the ossim metadata
+  /** Get the imaging production day from the ossim metadata 
    * \deprecated
    */
-  virtual int GetProductionDay() const = 0;
+  virtual int GetProductionDay() const {return -1;}
   // otbMetadataGetMacro(ProductionDay, int);
 
-  /** Get the imaging production month from the ossim metadata
+  /** Get the imaging production month from the ossim metadata 
    * \deprecated
    */
-  virtual int GetProductionMonth() const = 0;
+  virtual int GetProductionMonth() const {return -1;}
   // otbMetadataGetMacro(ProductionMonth, int);
 
-  /** Get the imaging production year from the ossim metadata
+  /** Get the imaging production year from the ossim metadata 
    * \deprecated
    */
-  virtual int GetProductionYear() const = 0;
+  virtual int GetProductionYear() const {return -1;}
   // otbMetadataGetMacro(ProductionYear, int);
 
-  /** Convert the band names provided by ossim to the official band names
+  /** Convert the band names provided by ossim to the official band names  
    * \deprecated
    */
-  virtual StringVectorType GetEnhancedBandNames() const = 0;
+  virtual StringVectorType GetEnhancedBandNames() const {return StringVectorType();}
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
-  virtual UIntVectorType GetDefaultDisplay() const = 0;
+  virtual UIntVectorType GetDefaultDisplay() const {return {0,1,2}; }
 
-  virtual bool CanRead() const = 0;
+  virtual bool CanRead() const {return false;}
+
+  virtual void Parse(const MetadataSupplierInterface *)
+    {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Metadata parsing not implemented")
+    }
 
   static void PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict);
+
+  const std::string& Fetch(MDStr key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
+
+  const double& Fetch(MDNum key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
+
+  const MetaData::Time& Fetch(MDTime key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
+
+  const std::string& Fetch(std::string key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
+
+  const boost::any& FetchRPC(const MetadataSupplierInterface & mds);
+
+  /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
+   * then translate it into ImageMetadata.
+   * Returns true if succeed. */
+  virtual bool ConvertImageKeywordlistToImageMetadata();
 
 protected:
   ImageMetadataInterfaceBase();
@@ -245,11 +262,13 @@ protected:
 
   MetaDataDictionaryType m_MetaDataDictionary;
 
+  ImageMetadata m_Imd;
+
 private:
   ImageMetadataInterfaceBase(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  OTB_GCP m_GCP;
+  GCP m_GCP;
 };
 
 } // end namespace otb

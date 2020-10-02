@@ -24,6 +24,7 @@
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
+#include "otbGeometryMetadata.h"
 #include "otbStringUtils.h"
 
 // useful constants
@@ -1755,6 +1756,30 @@ PleiadesImageMetadataInterface::WavelengthSpectralBandVectorType PleiadesImageMe
     ++j;
   }
   return wavelengthSpectralBand;
+}
+
+void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+{
+  assert(mds);
+  Fetch(MDStr::SensorID, *mds, "IMD/Dataset_Sources.Source_Identification.Strip_Source.MISSION");
+  if (boost::starts_with(m_Imd[MDStr::SensorID], "PHR"))
+    {
+    m_Imd.Add(MDStr::Mission, "Pléiades");
+    }
+  else
+    {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Sensor ID doesn't start with PHR : '"<<m_Imd[MDStr::SensorID]<<"'")
+    }
+
+  Fetch(MDStr::GeometricLevel, *mds, "IMD/Geoposition.Raster_CRS.RASTER_GEOMETRY");
+
+  // get radiometric metadata
+
+  // fill RPC model
+  if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
+    {
+    FetchRPC(*mds);
+    }
 }
 
 } // end namespace otb

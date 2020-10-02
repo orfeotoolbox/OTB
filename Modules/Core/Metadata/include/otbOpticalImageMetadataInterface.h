@@ -111,6 +111,11 @@ public:
    * There values a computed by 6S. */
   virtual WavelengthSpectralBandVectorType GetSpectralSensitivity() const = 0;
 
+    /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
+   * then translate it into ImageMetadata. Handles most optical sensors.
+   * Returns true if succeed. */
+  bool ConvertImageKeywordlistToImageMetadata() override;
+
 protected:
   OpticalImageMetadataInterface();
   ~OpticalImageMetadataInterface() override

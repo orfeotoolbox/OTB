@@ -49,7 +49,7 @@ public:
     m_Application->Stop();
   }
 
-signals:
+Q_SIGNALS:
   /**
    * \brief Signal emitted when the OTB-application has finished.
    *
@@ -110,7 +110,7 @@ public:
   /** Logger debug message sender */
   void SendLogDEBUG(const std::string& mes);
 
-signals:
+Q_SIGNALS:
   void SetApplicationReady(bool);
 
   void SetProgressReportBegin();
@@ -133,7 +133,7 @@ signals:
 
   void UpdateGui();
 
-public slots:
+public Q_SLOTS:
   /**
    * \brief Slots called every time one of the widget needs to be
    * updated (e.g. by specialized parameter widgets).
@@ -147,7 +147,7 @@ public slots:
    */
   void ExecuteAndWriteOutputSlot();
 
-private slots:
+private Q_SLOTS:
   /**
    * \brief
    *

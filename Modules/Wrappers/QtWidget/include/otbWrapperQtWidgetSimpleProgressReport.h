@@ -52,11 +52,11 @@ public:
 
   void ProcessEvent(itk::Object* caller, const itk::EventObject& event);
 
-public slots:
+public Q_SLOTS:
   void Init();
   void ReportProcess();
 
-signals:
+Q_SIGNALS:
   void AddNewProcessToReport();
   void SetText(QString);
 

@@ -162,7 +162,7 @@ public:
 
   //
   // Public SLOTS.
-public slots:
+public Q_SLOTS:
   /**
    * \brief
    */
@@ -172,7 +172,7 @@ public slots:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -293,7 +293,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
   /**
    */
   void on_zoom1Button_clicked();
