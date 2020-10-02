@@ -1,4 +1,4 @@
-OTB-v 7.2.0 - Changes since version 7.1.0 (September 11th, 2020)
+OTB-v 7.2.0 - Changes since version 7.1.0 (October 02nd, 2020)
 ----------------------------------------------------------------
 
 Features added:
@@ -35,6 +35,7 @@ CI:
 
 Documentation:
 
+   * !754: Fix spelling errors by Bas Couwenberg
    * !738: Update PSC informations by Julien Osman
    * !735: Correct menu instructions to open application-browser in Monteverdi by Julien Osman
    * !728: DOC: Deprecate methods that will be removed in OTB 8.0.0 by Julien Osman
