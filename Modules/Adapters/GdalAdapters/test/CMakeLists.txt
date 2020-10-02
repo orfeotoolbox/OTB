@@ -102,5 +102,5 @@ otb_add_test(NAME TuOCoordinateTransformationTest
 otb_add_test(NAME TuGDALRPCTransformerTest
              COMMAND otbGdalAdaptersTestDriver 
              otbGDALRPCTransformerTest
-             LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+             ${INPUTDATA}/DEM/srtm_directory/
              )

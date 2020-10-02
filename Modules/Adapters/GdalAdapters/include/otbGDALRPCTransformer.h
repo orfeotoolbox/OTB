@@ -166,6 +166,7 @@ public:
    * It works with only one point.
    *
    * \param[in] p coordinates of the point to convert
+   * \return the coordinates of the converted point
    */
   PointType ForwardTransform(PointType p);
 
@@ -192,6 +193,7 @@ public:
    * It works with only one point.
    *
    * \param[in] p coordinates of the point to convert
+   * \return the coordinates of the converted point
    */
   PointType InverseTransform(PointType p);
 

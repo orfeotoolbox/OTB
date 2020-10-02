@@ -23,6 +23,9 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbImageMetadata.h"
+#include "gdal_utils.h"
+#include <gdal_priv.h>
+#include "otbDEMHandler.h"
 
 typedef otb::Image<double>                 ImageType;
 typedef otb::ImageFileReader<ImageType>    ReaderType;
@@ -67,31 +70,34 @@ int otbGDALRPCTransformerTest(int itkNotUsed(argc), char* argv[])
   double exp_x = 147.1753248795781;
   double exp_y = -42.78881952208293;
   double exp_z = 0.0;
+  std::cout << "Test ForwardTransform with double interface." << '\n';
   if(!transformer.ForwardTransform(x.data(), y.data(), z.data(), 2))
   {
     std::cout << "ForwardTransform failed, returned False." << '\n';
     success = false;
-  }
-  if (!itk::Math::FloatAlmostEqual(x[0], exp_x))
-  {
-    std::cout << "Bad value for latitude. Expected " << exp_x << " but computed " << x[0] << "\n";
-    success = false;
-  }
-  if (!itk::Math::FloatAlmostEqual(y[0], exp_y))
-  {
-    std::cout << "Bad value for longitude. Expected " << exp_y << " but computed " << y[0] << "\n";
-    success = false;
-  }
-  if (!itk::Math::FloatAlmostEqual(z[0], exp_z))
-  {
-    std::cout << "Bad value for height. Expected " << exp_z << " but computed " << z[0] << "\n";
-    success = false;
+  } else {
+    if (!itk::Math::FloatAlmostEqual(x[0], exp_x))
+    {
+      std::cout << "Bad value for latitude. Expected " << exp_x << " but computed " << x[0] << "\n";
+      success = false;
+    }
+    if (!itk::Math::FloatAlmostEqual(y[0], exp_y))
+    {
+      std::cout << "Bad value for longitude. Expected " << exp_y << " but computed " << y[0] << "\n";
+      success = false;
+    }
+    if (!itk::Math::FloatAlmostEqual(z[0], exp_z))
+    {
+      std::cout << "Bad value for height. Expected " << exp_z << " but computed " << z[0] << "\n";
+      success = false;
+    }
   }
   otb::GDALRPCTransformer::PointType zePoint;
   zePoint[0] = 20.0;
   zePoint[1] = 10.0;
   zePoint[2] = 0.0;
-  transformer.ForwardTransform(zePoint);
+  std::cout << "Test ForwardTransform with point interface." << '\n';
+  zePoint = transformer.ForwardTransform(zePoint);
   if (!itk::Math::FloatAlmostEqual(zePoint[0], exp_x))
   {
     std::cout << "Bad value for latitude. Expected " << exp_x << " but computed " << zePoint[0] << "\n";
@@ -113,44 +119,58 @@ int otbGDALRPCTransformerTest(int itkNotUsed(argc), char* argv[])
   y = {exp_y, exp_y};
   zePoint[0] = exp_x;
   zePoint[1] = exp_y;
+  zePoint[2] = 0.0;
   exp_x = 20.01139515217801;
   exp_y = 9.984517889590279;
+  std::cout << "Test InverseTransform with double interface." << '\n';
   if(!transformer.InverseTransform(x.data(), y.data(), z.data(), 2))
   {
-    std::cout << "ForwardTransform failed, returned False." << '\n';
+    std::cout << "InverseTransform failed, returned False." << '\n';
     success = false;
+  } else {
+    if (!itk::Math::FloatAlmostEqual(x[0], exp_x))
+    {
+      std::cout << "Bad value for latitude. Expected " << exp_x << " but computed " << x[0] << "\n";
+      success = false;
+    }
+    if (!itk::Math::FloatAlmostEqual(y[0], exp_y))
+    {
+      std::cout << "Bad value for longitude. Expected " << exp_y << " but computed " << y[0] << "\n";
+      success = false;
+    }
+    if (!itk::Math::FloatAlmostEqual(z[0], exp_z))
+    {
+      std::cout << "Bad value for height. Expected " << exp_z << " but computed " << z[0] << "\n";
+      success = false;
+    }
   }
-  if (!itk::Math::FloatAlmostEqual(x[0], exp_x))
-  {
-    std::cout << "Bad value for latitude. Expected " << exp_x << " but computed " << x[0] << "\n";
-    success = false;
-  }
-  if (!itk::Math::FloatAlmostEqual(y[0], exp_y))
-  {
-    std::cout << "Bad value for longitude. Expected " << exp_y << " but computed " << y[0] << "\n";
-    success = false;
-  }
-  if (!itk::Math::FloatAlmostEqual(z[0], exp_z))
-  {
-    std::cout << "Bad value for height. Expected " << exp_z << " but computed " << z[0] << "\n";
-    success = false;
-  }
-  transformer.ForwardTransform(zePoint);
+  std::cout << "Test InverseTransform with point interface." << '\n';
+  zePoint = transformer.InverseTransform(zePoint);
   if (!itk::Math::FloatAlmostEqual(zePoint[0], exp_x))
   {
     std::cout << "Bad value for latitude. Expected " << exp_x << " but computed " << zePoint[0] << "\n";
     success = false;
+  } else {
+    if (!itk::Math::FloatAlmostEqual(zePoint[1], exp_y))
+    {
+      std::cout << "Bad value for longitude. Expected " << exp_y << " but computed " << zePoint[1] << "\n";
+      success = false;
+    }
+    if (!itk::Math::FloatAlmostEqual(zePoint[2], exp_z))
+    {
+      std::cout << "Bad value for height. Expected " << exp_z << " but computed " << zePoint[2] << "\n";
+      success = false;
+    }
   }
-  if (!itk::Math::FloatAlmostEqual(zePoint[1], exp_y))
-  {
-    std::cout << "Bad value for longitude. Expected " << exp_y << " but computed " << zePoint[1] << "\n";
-    success = false;
-  }
-  if (!itk::Math::FloatAlmostEqual(zePoint[2], exp_z))
-  {
-    std::cout << "Bad value for height. Expected " << exp_z << " but computed " << zePoint[2] << "\n";
-    success = false;
-  }
+
+  // Test with a DEM
+  otb::DEMHandler& dem = otb::DEMHandler::GetInstance();
+  dem.OpenDEMDirectory(argv[1]);
+  zePoint[0] = 41.9051;
+  zePoint[1] = 2.3495;
+  transformer.SetOption("RPC_DEM", dem.DEM_DATASET_PATH);
+  zePoint = transformer.InverseTransform(zePoint);
+  std::cout << "POINT : " << zePoint << '\n';
 
   if (success)
     return EXIT_SUCCESS;
