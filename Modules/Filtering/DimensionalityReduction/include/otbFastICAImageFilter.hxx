@@ -82,7 +82,8 @@ void FastICAImageFilter<TInputImage, TOutputImage, TDirectionOfTransformation>::
     unsigned int theOutputDimension = 0;
     if (m_GivenTransformationMatrix)
     {
-      theOutputDimension = m_TransformationMatrix.Rows() >= m_TransformationMatrix.Cols() ? m_TransformationMatrix.Rows() : m_TransformationMatrix.Cols();
+      const auto & pcaMatrix = m_PCAFilter->GetTransformationMatrix();
+      theOutputDimension = pcaMatrix.Rows() >= pcaMatrix.Cols() ? pcaMatrix.Rows() : pcaMatrix.Cols();
     }
     else
     {

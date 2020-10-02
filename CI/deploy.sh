@@ -47,11 +47,29 @@ else # On release
   ssh otbpush@otb5-vm2.orfeo-toolbox.org rm -rf ${jobs_directory}/*
 fi
 
+
+
+
+# Remove old package and source file
+echo "Removing old package and sources"
+ssh otbpush@otb5-vm2.orfeo-toolbox.org \
+rm ${jobs_directory}/OTB-*.zip \
+${jobs_directory}/OTB-*.tar.*
 # Push package
-echo "Pushing binary packages"
+echo "Pushing new binary and sources packages"
 scp OTB-*.{run,zip} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
+
+
+echo "Removing old CookBook"
+ssh otbpush@otb5-vm2.orfeo-toolbox.org \
+rm ${jobs_directory}/CookBook-*-html.tar.gz 
+
+echo "Removing old Doxygen"
+ssh otbpush@otb5-vm2.orfeo-toolbox.org \
+rm ${jobs_directory}/OTB-Doxygen-*.tar.bz2
+
 # Push doc
-echo "Pushing documentation"
+echo "Pushing new documentation"
 scp {CookBook-*-html.tar.gz,OTB-Doxygen-*.tar.bz2} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
 
 # Create zip, tar.gz and tar.xy source
@@ -59,11 +77,12 @@ echo "Creating source tarball and zip"
 git archive --format=zip -o OTB-sources-"$CI_COMMIT_SHORT_SHA".zip HEAD
 git archive --format=tgz -o OTB-sources-"$CI_COMMIT_SHORT_SHA".tar.gz HEAD
 git archive --format=tar.xz -o OTB-sources-"$CI_COMMIT_SHORT_SHA".tar.xz HEAD
+
 # Remove old source file
-echo "Removing old sources"
-ssh otbpush@otb5-vm2.orfeo-toolbox.org \
-rm ${jobs_directory}/OTB-sources-*.zip \
-${jobs_directory}/OTB-sources-*.tar.*
+#echo "Removing old sources"
+#ssh otbpush@otb5-vm2.orfeo-toolbox.org \
+#rm ${jobs_directory}/OTB-sources-*.zip \
+#${jobs_directory}/OTB-sources-*.tar.*
 
 # Push new source file
 echo "Pushing new sources"

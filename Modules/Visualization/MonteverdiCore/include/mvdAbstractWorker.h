@@ -97,7 +97,7 @@ public:
 
   //
   // Public SLOTS.
-public slots:
+public Q_SLOTS:
 
   /**
    * \brief Call the implemented do job/task routine.
@@ -108,7 +108,7 @@ public slots:
 
   //
   // Signals.
-signals:
+Q_SIGNALS:
   /**
    * \brief Signal emitted when progress text has changed.
    *
@@ -189,7 +189,7 @@ private:
 
   //
   // Slots.
-private slots:
+private Q_SLOTS:
 };
 
 } // end namespace 'mvd'.

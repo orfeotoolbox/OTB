@@ -22,6 +22,7 @@
 #ifndef otbImageIOBase_h
 #define otbImageIOBase_h
 
+#include "otbImageMetadata.h"
 #include "itkLightProcessObject.h"
 #include "itkIndent.h"
 #include "itkImageIORegion.h"
@@ -442,6 +443,10 @@ public:
   /** Returns a const ref to the list of attached files*/
   itkGetConstReferenceMacro(AttachedFileNames, std::vector<std::string>);
 
+  const ImageMetadata & GetImageMetadata();
+
+  void SetImageMetadata(ImageMetadata);
+
 protected:
   ImageIOBase();
   ~ImageIOBase() override;
@@ -558,6 +563,14 @@ protected:
 
   /** List of files part of the same dataset as the input filename */
   std::vector<std::string> m_AttachedFileNames;
+
+  /** Image metadata pre-parsed by the ImageIO */
+  ImageMetadata m_Imd;
+
+  /** Mapping between origin components and output components. Note that the buffer is
+  already mapped after calling the DoMapBuffer method. This attribute is useful to write
+  band related metadatas. */
+  std::vector<unsigned int> m_BandList;
 
 private:
   ImageIOBase(const Self&) = delete;

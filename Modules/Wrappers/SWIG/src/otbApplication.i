@@ -161,7 +161,7 @@ public:
   // TODO : finish wrapping
 };
 
-class OTB_GCP
+class GCP
 {
 public:
   std::string m_Id;
@@ -171,8 +171,7 @@ public:
   double m_GCPX;
   double m_GCPY;
   double m_GCPZ;
-  OTB_GCP();
-  ~OTB_GCP();
+  GCP();
   void Print(std::ostream& os) const;
 };
 
@@ -1023,11 +1022,11 @@ public:
     otb::Wrapper::MetaDataHelper::SetDouble(* $self,key,val);
     }
 
-  otb::OTB_GCP GetGCP(const std::string &key)
+  otb::GCP GetGCP(const std::string &key)
     {
     return otb::Wrapper::MetaDataHelper::GetGCP(* $self,key);
     }
-  void SetGCP(const std::string &key, const otb::OTB_GCP &val)
+  void SetGCP(const std::string &key, const otb::GCP &val)
     {
     otb::Wrapper::MetaDataHelper::SetGCP(* $self,key,val);
     }

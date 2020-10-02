@@ -130,13 +130,13 @@ public:
 public:
   /*-[ PUBLIC SLOTS SECTION ]-----------------------------------------------**/
 
-public slots:
+public Q_SLOTS:
 
   /*-[ SIGNALS SECTION ]-----------------------------------------------------*/
 
   //
   // SIGNALS.
-signals:
+Q_SIGNALS:
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 
@@ -160,7 +160,7 @@ private:
 
   //
   // SLOTS
-private slots:
+private Q_SLOTS:
 };
 
 } // end namespace 'mvd'

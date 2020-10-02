@@ -116,7 +116,7 @@ function(get_package_name root_repo_dir project project_version_string)
     
     message(STATUS "M: ${_VERSION_MAJOR}, m: ${_VERSION_MINOR}, p: ${_VERSION_PATCH}")
 
-	  set(${project_version_string} "${PROJECT_VERSION_STRING}" PARENT_SCOPE)
+    set(${project_version_string} "${PROJECT_VERSION_STRING}" PARENT_SCOPE)
     
   endif()
 

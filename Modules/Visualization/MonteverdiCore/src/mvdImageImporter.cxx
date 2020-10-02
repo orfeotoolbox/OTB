@@ -83,17 +83,17 @@ ImageImporter::~ImageImporter()
 QObject* ImageImporter::virtual_Do()
 {
   /*
-  emit ProgressTextChanged(
+  Q_EMIT ProgressTextChanged(
     tr( "Importing image '%1' as dataset into cache directory..." )
     .arg( QFileInfo( m_Filename ).fileName() )
   );
   */
 
-  // emit ProgressTextChanged( GetFirstProgressText() );
+  // Q_EMIT ProgressTextChanged( GetFirstProgressText() );
 
-  emit ProgressValueChanged(-1);
+  Q_EMIT ProgressValueChanged(-1);
 
-  emit ProgressRangeChanged(0, 0);
+  Q_EMIT ProgressRangeChanged(0, 0);
 
   // Load model.
   switch (m_ModelType)

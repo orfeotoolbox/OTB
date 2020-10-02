@@ -32,7 +32,7 @@ namespace otb
  * object list with the appropriate formalism (iterators, accessors).
  * \sa ObjectList
  *
- * \ingroup OTBObjectList
+ * \ingroup OTBImageList
  */
 
 template <class TImage>

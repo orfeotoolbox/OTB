@@ -40,7 +40,7 @@ public:
 
   bool notify(QObject* object, QEvent* event) override;
 
-signals:
+Q_SIGNALS:
 
   void UnhandledException(QString message);
 };

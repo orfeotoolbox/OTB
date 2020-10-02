@@ -154,7 +154,7 @@ void ShaderWidget::virtual_SetSettings(ImageSettings* settings)
       QString comboBoxEffect = m_UI->effectComboBox->itemText(i);
       if (QString::compare(comboBoxEffect, tradEffect) == 0)
       {
-        // This change will emit currentIndexChanged SIGNAL
+        // This change will Q_EMIT currentIndexChanged SIGNAL
         // and then call on_effectComboBox_currentIndexChanged
         QString oldText = m_UI->effectComboBox->currentText();
         if (m_UI->effectComboBox->currentIndex() != i)
@@ -206,7 +206,7 @@ void ShaderWidget::on_effectComboBox_currentIndexChanged(const QString& text)
       m_UI->valueLineEdit->setVisible(textName != NULL);
       m_UI->valueLineEdit->setText(settings->HasValue() ? ToQString(settings->GetValue()) : QString());
 
-      emit SettingsChanged();
+      Q_EMIT SettingsChanged();
 
       break;
     }
@@ -220,7 +220,7 @@ void ShaderWidget::on_sizeSpinBox_valueChanged(int value)
 
   GetSettings()->SetSize(value);
 
-  emit SettingsChanged();
+  Q_EMIT SettingsChanged();
 }
 
 /*******************************************************************************/
@@ -241,7 +241,7 @@ void ShaderWidget::on_valueLineEdit_editingFinished()
   if (!isOk)
     return;
 
-  emit SettingsChanged();
+  Q_EMIT SettingsChanged();
 }
 
 

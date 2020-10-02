@@ -71,7 +71,7 @@ void QtWidgetParameterList::DoCreateWidget()
 
   //
   // Connections (Update UserValue flag).
-  QObject::connect(widget, &ListEditWidget::ValueChanged, this, [=]() { emit ParameterChanged(GetParam()->GetKey()); });
+  QObject::connect(widget, &ListEditWidget::ValueChanged, this, [=]() { Q_EMIT ParameterChanged(GetParam()->GetKey()); });
 
   // Connections (Update app parameters).
   QObject::connect(widget, &ListEditWidget::Updated, this, &QtWidgetParameterList::NotifyUpdate);

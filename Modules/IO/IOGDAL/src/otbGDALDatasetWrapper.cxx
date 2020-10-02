@@ -151,4 +151,42 @@ size_t GDALDatasetWrapper::GetPixelBytes() const
   return size;
 }
 
+Projection::GCPParam GDALDatasetWrapper::GetGCPParam() const
+{
+  Projection::GCPParam gcpParam;
+  gcpParam.GCPProjection = std::string(m_Dataset->GetGCPProjection());
+  for ( const GDAL_GCP *gcps = m_Dataset->GetGCPs() ; gcps != gcps + m_Dataset->GetGCPCount() ; ++gcps)
+  {
+    gcpParam.GCPs.push_back(GCP(std::string(gcps->pszId),
+       		                    std::string(gcps->pszInfo),
+  								gcps->dfGCPPixel,
+   								gcps->dfGCPLine,
+   								gcps->dfGCPX,
+   								gcps->dfGCPY,
+   								gcps->dfGCPZ));
+  }
+  return gcpParam;
+}
+
+void GDALDatasetWrapper::SetGCPParam(Projection::GCPParam gcpParam)
+{
+  int nGCPCount = gcpParam.GCPs.size();
+  auto gcps = std::vector<GDAL_GCP>(nGCPCount);
+
+  auto gcpIt = gcps.begin();
+  for (auto otbGcpIt = gcpParam.GCPs.cbegin() ; otbGcpIt != gcpParam.GCPs.cend() ; ++otbGcpIt, gcpIt++)
+  {
+    GDAL_GCP gdalGcp;
+    gdalGcp.pszId      = const_cast<char*>(otbGcpIt->m_Id.c_str());
+    gdalGcp.pszInfo    = const_cast<char*>(otbGcpIt->m_Info.c_str());
+    gdalGcp.dfGCPPixel = otbGcpIt->m_GCPCol;
+    gdalGcp.dfGCPLine  = otbGcpIt->m_GCPRow;
+    gdalGcp.dfGCPX     = otbGcpIt->m_GCPX;
+    gdalGcp.dfGCPY     = otbGcpIt->m_GCPY;
+    gdalGcp.dfGCPZ     = otbGcpIt->m_GCPZ;
+    *gcpIt = gdalGcp;
+  }
+  m_Dataset->SetGCPs(nGCPCount, gcps.data(), gcpParam.GCPProjection.c_str());
+}
+
 } // end namespace otb

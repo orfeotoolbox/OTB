@@ -46,7 +46,7 @@ public:
 
   static const int CLEAR_ICON_SIZE = 16;
 
-signals:
+Q_SIGNALS:
   // Triggered when the clear button is pressed
   void Cleared();
 
@@ -73,7 +73,7 @@ public:
 
   void SetValueNoSignal(int);
 
-signals:
+Q_SIGNALS:
   // Triggered when the clear button is pressed
   void Cleared();
 
@@ -101,7 +101,7 @@ public:
 
   void SetValueNoSignal(double);
 
-signals:
+Q_SIGNALS:
   // Triggered when the clear button is pressed
   void Cleared();
 

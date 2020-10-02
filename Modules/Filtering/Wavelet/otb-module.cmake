@@ -24,7 +24,7 @@ otb_module(OTBWavelet
   DEPENDS
     OTBCommon
     OTBITK
-    OTBObjectList
+    OTBImageList
 
   TEST_DEPENDS
     OTBImageBase

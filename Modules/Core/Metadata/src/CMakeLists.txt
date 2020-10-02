@@ -68,6 +68,14 @@ set(OTBMetadata_SRC
   otbNoDataHelper.cxx
   otbFilterFunctionValues.cxx
   otbMetaDataKey.cxx
+
+  otbImageMetadata.cxx
+  otbGeometryMetadata.cxx
+  
+  otbXMLMetadataSupplier.cxx
+
+  otbMetadataStorageInterface.cxx
+  otbMetadataSupplierInterface.cxx
   )
 
 add_library(OTBMetadata ${OTBMetadata_SRC})
