@@ -17,10 +17,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# Contact: Thierry Koleck  <thierry.koleck@cnes.fr>
 
-#Contact: Gaëlle USSEGLIO
-otb_fetch_module(DiapOTBModule
-  "OTB module for SAR processing in Diapason."
-  GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/remote_modules/diapotb.git
-  GIT_TAG 1.0.0
+
+otb_fetch_module(S1TilingSupportApplications
+  "Speckle filtering of a time-serie of SAR images using the multichanel Quegan-like filter
+A more detailed description can be found on the project website:
+https://gitlab.orfeo-toolbox.org/s1-tiling/s1tilingsupportapplications
+"
+  GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/s1-tiling/s1tilingsupportapplications
+  # Commit on master branch
+  GIT_TAG 2.0.0
 )
