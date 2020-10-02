@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,16 +33,12 @@ namespace otb
  * \ingroup OTBSupervised
  */
 class OTBSupervised_EXPORT CvRTreesWrapper
-#ifdef OTB_OPENCV_3
     : public cv::ml::RTrees
-#else
-    : public CvRTrees
-#endif
 {
 public:
   typedef std::vector<unsigned int> VotesVectorType;
   CvRTreesWrapper();
-  ~CvRTreesWrapper() override;
+  ~CvRTreesWrapper() override = default;
 
   /** Compute the number of votes for each class. */
   void get_votes(const cv::Mat& sample, const cv::Mat& missing, VotesVectorType& vote_count) const;
@@ -60,7 +56,6 @@ public:
   */
   float predict_margin(const cv::Mat& sample, const cv::Mat& missing = cv::Mat()) const;
 
-#ifdef OTB_OPENCV_3
 
 #define OTB_CV_WRAP_PROPERTY(type, name)   \
   virtual type get##name() const override; \
@@ -83,6 +78,8 @@ public:
   OTB_CV_WRAP_PROPERTY(int, MaxDepth)
   OTB_CV_WRAP_PROPERTY(int, MinSampleCount)
   OTB_CV_WRAP_PROPERTY(bool, UseSurrogates)
+  
+  // warning: CV fold crash in openCV 3
   OTB_CV_WRAP_PROPERTY(int, CVFolds)
   OTB_CV_WRAP_PROPERTY(bool, Use1SERule)
   OTB_CV_WRAP_PROPERTY(bool, TruncatePrunedTree)
@@ -125,7 +122,6 @@ public:
 
 private:
   cv::Ptr<cv::ml::RTrees> m_Impl;
-#endif // OTB_OPENCV_3
 };
 }
 

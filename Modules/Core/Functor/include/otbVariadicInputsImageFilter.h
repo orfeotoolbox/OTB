@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -109,7 +109,7 @@ public:
 
 #undef DefineLegacySetInputMacro
 
-  template <std::size_t    I = 0>
+  template <std::size_t I = 0>
   const InputImageType<I>* GetInput()
   {
     static_assert(NumberOfInputs > I, "Template value I is out of range.");
@@ -143,20 +143,22 @@ protected:
 
 private:
   template <class Tuple, size_t... Is>
-  auto SetInputsImpl(Tuple& t, std::index_sequence<Is...>)
+  void SetInputsImpl(Tuple& t, std::index_sequence<Is...>)
   {
-    return std::initializer_list<int>{(this->SetInput<Is>(std::get<Is>(t)), 0)...};
+    // Will be easier to write in c++17 with fold expressions 
+    // (this->template SetInput<Is>(std::get<Is>(t)),...);
+    (void) std::initializer_list<int>{(this->template SetInput<Is>(std::get<Is>(t)), 0)...};
   }
 
   template <size_t... Is>
   auto GetInputsImpl(std::index_sequence<Is...>)
   {
-    return std::make_tuple(this->GetInput<Is>()...);
+    return std::make_tuple(this->template GetInput<Is>()...);
   }
 
   VariadicInputsImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 };
-}
+} // namespace otb
 
 #endif

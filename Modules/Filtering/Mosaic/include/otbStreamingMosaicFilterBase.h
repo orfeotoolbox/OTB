@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2016-2019 IRSTEA
  *
  * This file is part of Orfeo Toolbox
@@ -167,13 +167,13 @@ protected:
   /**
    * Methods
    */
-  virtual void GenerateOutputInformation(void);
+  void GenerateOutputInformation(void) override;
 
-  virtual void GenerateInputRequestedRegion(void);
+  void GenerateInputRequestedRegion(void) override;
 
-  virtual void AfterThreadedGenerateData();
+  void AfterThreadedGenerateData() override;
 
-  virtual void BeforeThreadedGenerateData();
+  void BeforeThreadedGenerateData() override;
 
   /** Image extent computing */
   virtual void ImageToExtent(InputImageType* image, InputImagePointType& extentInf, InputImagePointType& extentSup);

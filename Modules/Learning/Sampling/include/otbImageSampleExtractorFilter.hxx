@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -117,6 +117,9 @@ void PersistentImageSampleExtractorFilter<TInputImage>::GenerateOutputInformatio
 #if GDAL_VERSION_NUM >= 3000000 // importFromWkt is const-correct in GDAL 3
     const char* projWktCstr = projectionRefWkt.c_str();
     OGRErr      err         = imgSRS.importFromWkt(&projWktCstr);
+    // Use the same mapping strategy as the one in the datasource.
+    imgSRS.SetAxisMappingStrategy(
+      this->GetOGRData()->GetLayer(this->GetLayerIndex()).GetSpatialRef()->GetAxisMappingStrategy ());
 #else
     const char* projWktCstr    = projectionRefWkt.c_str();
     char**      projWktPointer = const_cast<char**>(&projWktCstr);

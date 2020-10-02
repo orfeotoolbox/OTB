@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -32,5 +32,5 @@ A more detailed description can be found on the project website:
 http://tully.ups-tlse.fr/lassallep/grm
 "
   GIT_REPOSITORY https://github.com/orfeotoolbox/GRM
-  GIT_TAG 043c523df522dd31fb2dfc460ef292e6a679a81f
+  GIT_TAG 459943a6fde517cc0dd601dfaca3400e3f1788de
 )

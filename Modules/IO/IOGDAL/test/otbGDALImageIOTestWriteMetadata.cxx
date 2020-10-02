@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,9 +23,20 @@
 #include <fstream>
 #include <sstream>
 
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4251)
 #include "gdal_priv.h"
 #include "cpl_string.h"
 #include "ogr_spatialref.h"
+#pragma warning(pop)
+#else
+#include "gdal_priv.h"
+#include "cpl_string.h"
+#include "ogr_spatialref.h"
+#endif
+
 #include "itkMacro.h"
 
 // Class to store ProjRef, GEOTransform and GCP info

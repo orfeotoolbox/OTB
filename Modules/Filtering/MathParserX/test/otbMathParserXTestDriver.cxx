@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,4 +27,5 @@ void RegisterTests()
   REGISTER_TEST(otbBandMathXImageFilterConv);
   REGISTER_TEST(otbBandMathXImageFilterTxt);
   REGISTER_TEST(otbBandMathXImageFilterWithIdx);
+  REGISTER_TEST(otbBandMathXImageFilterBandsFailures);
 }

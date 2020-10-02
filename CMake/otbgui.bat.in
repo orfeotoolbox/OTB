@@ -1,5 +1,5 @@
 ::
-:: Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+:: Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 ::
 :: This file is part of Orfeo Toolbox
 ::
@@ -41,7 +41,7 @@ if exist %CURRENT_SCRIPT_DIR%../@OTB_INSTALL_APP_DIR@ (
 
 set LC_NUMERIC=C
 
-::set GDAL_DATA, EPSG_CSV and update PATH
+::set GDAL_DATA and update PATH
 if exist %CURRENT_SCRIPT_DIR%\..\otbenv.bat (
     call %CURRENT_SCRIPT_DIR%\..\otbenv.bat
 )

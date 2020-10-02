@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -192,6 +192,7 @@ private:
       NNInterpolatorType::Pointer interpolator = NNInterpolatorType::New();
       m_Resampler->SetInterpolator(interpolator);
       m_BasicResampler->SetInterpolator(interpolator);
+      m_BasicResampler->SetInterpolationMargin(1e-9);
     }
     break;
     case Interpolator_BCO:

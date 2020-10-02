@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -38,7 +38,7 @@ fi
 # avoid numerical issues caused by locale
 export LC_NUMERIC=C
 
-# Export GDAL_DATA, EPSG_CSV
+# Export GDAL_DATA
 if [ -f "$CURRENT_SCRIPT_DIR/../otbenv.profile" ]; then
     . "$CURRENT_SCRIPT_DIR/../otbenv.profile"
 else

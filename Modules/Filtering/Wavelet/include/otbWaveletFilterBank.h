@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -230,7 +230,7 @@ protected:
    * pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
   /** BeforeThreadedGenerateData.
    * It allocates also internal images
@@ -412,7 +412,7 @@ protected:
    * pipeline execution model.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
   /** BeforeThreadedGenerateData
    * If SubsampleImageFactor neq 1, it is necessary to up sample input images in the Wavelet::INVERSE mode

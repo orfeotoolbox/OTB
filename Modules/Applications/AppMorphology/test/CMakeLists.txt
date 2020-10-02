@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -27,8 +27,8 @@ otb_test_application(NAME  apTvFEBinaryMorphologicalOperation
                              -structype ball
                              -xradius 10
                              -filter opening
-                             -filter.opening.foreval 1.0
-                             -filter.opening.backval 0.0
+                             -foreval 1.0
+                             -backval 0.0
                              -out ${TEMP}/apTvFEBinaryMorphologicalOperation.tif
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/apTvFEBinaryMorphologicalOperation.tif

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -77,6 +77,7 @@ else(UNIX)
     ${SB_ENV_CONFIGURE_CMD}
     ${OPENSSL_SB_SRC}/config ${OPENSSL_BUILD_ARCH}
     "--prefix=${SB_INSTALL_PREFIX}"
+    "--libdir=lib"
     shared
     zlib
     zlib-dynamic

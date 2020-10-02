@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -364,10 +364,13 @@ private:
     inImage->UpdateOutputInformation();
     if (region.Crop(inImage->GetLargestPossibleRegion()))
     {
-      SetParameterInt("sizex", region.GetSize(0));
-      SetParameterInt("sizey", region.GetSize(1));
-      SetParameterInt("startx", region.GetIndex(0));
-      SetParameterInt("starty", region.GetIndex(1));
+      /* SetParameterInt() resets UserValue flag when called from DoExecute(). Disable this behaviour.*/
+      DisableInPrivateDo();
+      SetParameterInt("sizex", region.GetSize(0), IsParameterEnabled("sizex") && HasUserValue("sizex"));
+      SetParameterInt("sizey", region.GetSize(1), IsParameterEnabled("sizey") && HasUserValue("sizey"));
+      SetParameterInt("startx", region.GetIndex(0), IsParameterEnabled("startx") && HasUserValue("startx"));
+      SetParameterInt("starty", region.GetIndex(1), IsParameterEnabled("starty") && HasUserValue("starty"));
+      EnableInPrivateDo(); // Restore default
       return true;
     }
     return false;
@@ -411,7 +414,6 @@ private:
       lrp[1]                                  = GetParameterFloat("mode.extent.lry");
       m_IsExtentInverted                      = (lrp[0] < ulp[0] || lrp[1] < ulp[1]);
       ImageType*                      inImage = GetParameterImage("in");
-      FloatVectorImageType::IndexType raw_uli, raw_lri;
       inImage->TransformPhysicalPointToIndex(ulp, raw_uli);
       inImage->TransformPhysicalPointToIndex(lrp, raw_lri);
     }
@@ -572,8 +574,8 @@ private:
       }
       else if (GetParameterString("mode.radius.unitc") == "phy")
       {
-        centerp[0] = GetParameterInt("mode.radius.cx");
-        centerp[1] = GetParameterInt("mode.radius.cy");
+        centerp[0] = GetParameterFloat("mode.radius.cx");
+        centerp[1] = GetParameterFloat("mode.radius.cy");
       }
       else // if ( GetParameterString( "mode.radius.unitc" ) == "lon/lat" )
       {
@@ -714,13 +716,12 @@ private:
                               "using mod.fit");
           }
         }
-
         RSTransformType::Pointer rsTransform = RSTransformType::New();
         rsTransform->SetInputProjectionRef(inputProjectionRef);
         rsTransform->SetOutputKeywordList(inImage->GetImageKeywordlist());
         rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());
         rsTransform->InstantiateTransform();
-        itk::Point<float, 2> ulp_in, urp_in, llp_in, lrp_in, ulp_out, urp_out, llp_out, lrp_out;
+        itk::Point<float, 2> ulp_in, urp_in, llp_in, lrp_in;
         ulp_in[0] = ulx;
         ulp_in[1] = uly;
         urp_in[0] = ulx;
@@ -805,7 +806,7 @@ private:
 
     if (!CropRegionOfInterest())
       otbAppLogWARNING(<< "Could not extract the ROI as it is out of the "
-                          "input image.");
+                       "input image.");
 
     ExtractROIFilterType::Pointer extractROIFilter = ExtractROIFilterType::New();
     extractROIFilter->SetInput(inImage);

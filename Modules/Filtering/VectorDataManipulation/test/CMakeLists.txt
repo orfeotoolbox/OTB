@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -39,7 +39,7 @@ otb_add_test(NAME coTvVectorDataExtractROI COMMAND otbVectorDataManipulationTest
   ${BASELINE_FILES}/coVectorDataExtractROIOutput.shp
   ${TEMP}/coVectorDataExtractROIOutput.shp
   otbVectorDataExtractROI
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${TEMP}/coVectorDataExtractROIOutput.shp
   374369.48850211215904 4853951.786124914  # Origin of the RemoteSensingRegion
   1000.25 -25000.2                               # Size of the Cartoregion
@@ -50,7 +50,7 @@ otb_add_test(NAME coTvVectorDataExtractROI2 COMMAND otbVectorDataManipulationTes
   ${BASELINE_FILES}/coVectorDataExtractROIOutput2.shp
   ${TEMP}/coVectorDataExtractROIOutput2.shp
   otbVectorDataExtractROI
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${TEMP}/coVectorDataExtractROIOutput2.shp
   374369.48850211215904 4828951.58612491376698  # Origin of the RemoteSensingRegion
   1000.25 25000.2                               # Size of the Cartoregion

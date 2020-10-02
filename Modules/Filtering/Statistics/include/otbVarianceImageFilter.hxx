@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,7 +40,7 @@ VarianceImageFilter<TInputImage, TOutputImage>::VarianceImageFilter()
 }
 
 template <class TInputImage, class TOutputImage>
-void VarianceImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError)
+void VarianceImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();

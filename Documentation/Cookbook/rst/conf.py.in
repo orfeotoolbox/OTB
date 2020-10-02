@@ -204,7 +204,8 @@ html_show_copyright = True
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'OTBCookBookdoc'
 
-
+# Activate numbering figures
+numfig = True
 
 # -- Options for manual page output ---------------------------------------
 
@@ -220,5 +221,5 @@ man_pages = [
 
 extlinks = {
     'doxygen': ("http://www.orfeo-toolbox.org/doxygen/classotb_1_1%s.html", "otb::"),
-    'doxygen-itk': ("http://www.itk.org/Doxygen/html/classitk_1_1%s.html", "itk::")
+    'doxygen-itk': ("http://www.itk.org/Doxygen413/html/classitk_1_1%s.html", "itk::")
 }

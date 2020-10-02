@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -148,7 +148,9 @@ public:
     return m_Transform->GetOutputProjectionRef();
   }
 
-  /** Set/Get Input Keywordlist*/
+  /** Set/Get Input Keywordlist
+   * \deprecated
+   */
   void SetInputKeywordList(const ImageKeywordlist& kwl)
   {
     m_Transform->SetOutputKeywordList(kwl);
@@ -180,9 +182,9 @@ private:
   void EstimateOutputOrigin();
 
   typename ImageType::ConstPointer m_Input;
-  PointType                        m_OutputOrigin;
-  SpacingType                      m_OutputSpacing;
-  SizeType                         m_OutputSize;
+  PointType                        m_OutputOrigin{0.0};
+  SpacingType                      m_OutputSpacing{0.0};
+  SizeType                         m_OutputSize{0,0};
   OutputImageExtentType            m_OutputExtent;
 
   GenericRSTransformPointerType m_Transform;

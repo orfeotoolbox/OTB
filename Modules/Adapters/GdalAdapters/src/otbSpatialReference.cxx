@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2017 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -20,7 +20,7 @@
 
 #include "otbSpatialReference.h"
 
-#include "ogr_spatialref.h"
+
 #include "cpl_conv.h"
 #ifdef __clang__
 #pragma clang diagnostic ignored "-Wunused-local-typedefs"

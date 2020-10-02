@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -96,7 +96,7 @@ int otbOssimElevManagerTest4(int argc, char* argv[])
 
   std::ofstream file;
   std::cout << outfname << std::endl;
-  file.open(outfname, ios::binary | ios::out);
+  file.open(outfname, std::ios::binary | std::ios::out);
 
   file.write(reinterpret_cast<char*>(image), sizeof(double) * size[0] * size[1]);
   file.close();

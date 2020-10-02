@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,6 +33,10 @@ int otbPCAImageFilterTest(int, char* argv[])
   bool normalization = false;
   if (std::string(argv[4]).compare("true") == 0)
     normalization = true;
+  
+  bool whitening = false;
+  if (std::string(argv[6]).compare("true") == 0)
+    whitening = true;
 
   // Main type definition
   const unsigned int Dimension = 2;
@@ -50,6 +54,7 @@ int otbPCAImageFilterTest(int, char* argv[])
   filter->SetInput(reader->GetOutput());
   filter->SetNumberOfPrincipalComponentsRequired(nbComponents);
   filter->SetUseNormalization(normalization);
+  filter->SetWhitening(whitening);
 
   typedef otb::CommandProgressUpdate<FilterType> CommandType;
   CommandType::Pointer                           observer = CommandType::New();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -45,7 +45,7 @@ KuanImageFilter<TInputImage, TOutputImage>::KuanImageFilter()
 }
 
 template <class TInputImage, class TOutputImage>
-void KuanImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError)
+void KuanImageFilter<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,10 +22,14 @@ INCLUDE_ONCE_MACRO(PROJ)
 
 SETUP_SUPERBUILD(PROJ)
 
+# declare dependencies
+ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(PROJ SQLITE)
+
 ExternalProject_Add(PROJ
+  DEPENDS ${PROJ_DEPENDENCIES}
   PREFIX PROJ
-  URL "http://download.osgeo.org/proj/proj-4.9.3.tar.gz"
-  URL_MD5 d598336ca834742735137c5674b214a1
+  URL "http://download.osgeo.org/proj/proj-6.2.1.tar.gz"
+  URL_MD5 9f874e227d221daf95f7858dc55dfa3e
   BINARY_DIR ${PROJ_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

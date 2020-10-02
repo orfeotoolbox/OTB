@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -120,7 +120,7 @@ protected:
   using Superclass::MakeOutput;
 
 private:
-  HistogramSizeType     m_Sizes;
+  HistogramSizeType     m_Sizes{0,0};
   float                 m_MarginalScale;
   MeasurementVectorType m_HistogramMin;
   MeasurementVectorType m_HistogramMax;

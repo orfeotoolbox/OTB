@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -58,7 +58,7 @@ private:
     // Documentation
     SetDocLongDescription(
         "This application chains together the 4 steps of the "
-        "MeanShit framework, that is the MeanShiftSmoothing, the "
+        "MeanShift framework, that is the MeanShiftSmoothing, the "
         "LSMSSegmentation, the LSMSSmallRegionsMerging and the "
         "LSMSVectorization.\n\n"
         "This application can be a preliminary step for an object-based analysis.\n\n"

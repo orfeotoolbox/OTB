@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -137,7 +137,7 @@ public:
   /** Since this filter implements a neighborhood operation, it requests a largest input
    * region than the output region.
    */
-  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
 #ifdef ITK_USE_CONCEPT_CHECKING
   /** Begin concept checking */

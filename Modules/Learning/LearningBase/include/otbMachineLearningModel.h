@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -191,7 +191,7 @@ protected:
   MachineLearningModel();
 
   /** Destructor */
-  ~MachineLearningModel() override;
+  ~MachineLearningModel() override = default;
 
   /** PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;

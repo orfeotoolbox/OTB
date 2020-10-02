@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2016-2019 IRSTEA
  *
  * This file is part of Orfeo Toolbox
@@ -321,18 +321,21 @@ void StreamingMosaicFilterBase<TInputImage, TOutputImage, TInternalValueType>::G
   itk::EncapsulateMetaData<std::string>(mosaicMetaData, static_cast<std::string>(otb::MetaDataKey::ProjectionRefKey), projectionRef);
 
   // check no data pixels
-  if (m_NoDataOutputPixel.GetSize() != nbOfBands || m_NoDataInputPixel.GetSize() != nbOfBands)
+  if (m_NoDataInputPixel.GetSize() != nbOfBands)
   {
-    if (m_NoDataOutputPixel.GetSize() != 0)
-      itkWarningMacro(<< "Specified NoDataOutputPixel has not " << nbOfBands << " components. Using default (zeros)");
     if (m_NoDataInputPixel.GetSize() != 0)
       itkWarningMacro(<< "Specified NoDataInputPixel has not " << nbOfBands << " components. Using default (zeros)");
 
-    m_NoDataOutputPixel.SetSize(nbOfBands);
     m_NoDataInputPixel.SetSize(nbOfBands);
-    m_NoDataOutputPixel.Fill(itk::NumericTraits<OutputImageInternalPixelType>::Zero);
     m_NoDataInputPixel.Fill(itk::NumericTraits<InputImageInternalPixelType>::Zero);
   }
+  if (m_NoDataOutputPixel.GetSize() == 0)
+  {
+    itkWarningMacro(<< "NoDataOutputPixel not set. Using zeros");
+    m_NoDataOutputPixel.SetSize(nbOfBands);
+    m_NoDataOutputPixel.Fill(itk::NumericTraits<InputImageInternalPixelType>::Zero);
+  }
+
 
   // Write no data flags
   std::vector<bool>   noDataValueAvailable;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -105,9 +105,7 @@ protected:
   /** Constructor */
   KMeansImageClassificationFilter();
   /** Destructor */
-  ~KMeansImageClassificationFilter() override
-  {
-  }
+  ~KMeansImageClassificationFilter() override = default;
 
   /** Threaded generate data */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;

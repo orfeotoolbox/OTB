@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,6 +28,8 @@
 #include "itkIdentityTransform.h"
 #include "otbDifferenceImageFilter.h"
 #include "itkStreamingImageFilter.h"
+
+#include "otbPersistentFilterStreamingDecorator.h"
 
 #include "otbImageFileWriter.h"
 
@@ -114,7 +116,7 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   refFilter->SetOutputSpacing(uspacing);
   refFilter->SetOutputDirection(direction);
 
-  typedef otb::DifferenceImageFilter<ImageType, ImageType> ComparisonFilterType;
+  typedef otb::PersistentFilterStreamingDecorator< otb::DifferenceImageFilter<ImageType, ImageType> > ComparisonFilterType;
   typedef itk::StreamingImageFilter<ImageType, ImageType>  StreamingFilterType;
 
   StreamingFilterType::Pointer streamingRef = StreamingFilterType::New();
@@ -126,12 +128,12 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   streaming->SetNumberOfStreamDivisions(10);
 
   ComparisonFilterType::Pointer comparisonFilter = ComparisonFilterType::New();
-  comparisonFilter->SetValidInput(streamingRef->GetOutput());
-  comparisonFilter->SetTestInput(streaming->GetOutput());
-  comparisonFilter->SetDifferenceThreshold(1e-9);
+  comparisonFilter->GetFilter()->SetValidInput(streamingRef->GetOutput());
+  comparisonFilter->GetFilter()->SetTestInput(streaming->GetOutput());
+  comparisonFilter->GetFilter()->SetDifferenceThreshold(1e-9);
   comparisonFilter->Update();
 
-  unsigned int nbPixelsWithDiff = comparisonFilter->GetNumberOfPixelsWithDifferences();
+  unsigned int nbPixelsWithDiff = comparisonFilter->GetFilter()->GetNumberOfPixelsWithDifferences();
 
   std::cout << "Number of pixels with differences: " << nbPixelsWithDiff << std::endl;
 
@@ -141,7 +143,7 @@ int otbGridResampleImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 
     typedef otb::ImageFileWriter<ImageType> WriterType;
     WriterType::Pointer                     writer = WriterType::New();
-    writer->SetInput(comparisonFilter->GetOutput());
+    writer->SetInput(comparisonFilter->GetFilter()->GetOutput());
     writer->SetFileName("otbGridResampleImageFilterTestOutput.tif");
     writer->Update();
 

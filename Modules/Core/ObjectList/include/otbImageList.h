@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -63,7 +63,7 @@ public:
    * Update images in the list.
    */
   void UpdateOutputInformation(void) override;
-  void PropagateRequestedRegion(void) throw(itk::InvalidRequestedRegionError) override;
+  void PropagateRequestedRegion(void) override;
   void UpdateOutputData(void) override;
 
   void SetRequestedRegion(const itk::DataObject* source) override;

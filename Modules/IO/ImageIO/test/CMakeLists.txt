@@ -1,5 +1,6 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2020 CS Systemes d'Information (CS SI)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -910,6 +911,13 @@ otb_add_test(NAME ioTvImageFileWriterPNG2BSQ COMMAND otbImageIOTestDriver
   otbImageFileWriterTest
   ${INPUTDATA}/cthead1.png
   ${TEMP}/ioImageFileWriterPNG2BSQ_cthead1.hdr )
+  
+otb_add_test(NAME ioTvImageFileWriterTIF2TIF COMMAND otbImageIOTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioTvImageFileWriterTIF2TIFOutput.tif
+  ${TEMP}/ioImageFileWriterTIF2TIF_QB_Toulouse_Ortho_PAN.tif
+  otbImageFileWriterTest
+  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+  ${TEMP}/ioImageFileWriterTIF2TIF_QB_Toulouse_Ortho_PAN.tif?epsg=4326 )
 
 otb_add_test(NAME ioTvCompareWritingComplexImage_TIF COMMAND otbImageIOTestDriver
   otbCompareWritingComplexImageTest
@@ -1011,47 +1019,28 @@ foreach(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
       #          otbMultibandComplexToImageScalar${READING_PIXELTYPE}
       #          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
 
-      # Size: 100x100 is to large to store pixel values coded as short.
-      if( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+      # Use Size 50x50 because 100x100 is to large to store pixel values coded as short.
 
-        otb_add_test(NAME ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
-          COMMAND otbImageIOTestDriver
-          otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
-          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
-
-      else()
-
-        otb_add_test(NAME ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
-          COMMAND otbImageIOTestDriver
-          otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
-          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
-
-      endif()
+      otb_add_test(NAME ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageScalar${READING_PIXELTYPE}
+        COMMAND otbImageIOTestDriver
+        otbMultibandComplexToVectorImageScalar${READING_PIXELTYPE}
+        ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
 
       # Weird case : need specifications to write the test
       # [missing impl]
       # otb_add_test(NAME ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToImageComplex${READING_PIXELTYPE})
 
-      # Size: 100x100 is to large to store pixel values coded as short.
-      if( NOT ${INPUTFILE_PIXELTYPE} MATCHES "Short" )
+      # Use Size 50x50 because 100x100 is to large to store pixel values coded as short.
 
-        otb_add_test(NAME ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
-          COMMAND otbImageIOTestDriver
-          otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
-          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands.tif) #hdr)
-
-      else()
-
-        otb_add_test(NAME ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
-          COMMAND otbImageIOTestDriver
-          otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
-          ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
-
-      endif()
+      otb_add_test(NAME ioTvMultibandComplex${INPUTFILE_PIXELTYPE}${NBBANDS}BandsToVectorImageComplex${READING_PIXELTYPE}
+        COMMAND otbImageIOTestDriver
+        otbMultibandComplexToVectorImageComplex${READING_PIXELTYPE}
+        ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_${NBBANDS}bands_50x50.tif) #hdr)
 
     endforeach()
 
   endforeach()
+
 endforeach()
 
 
@@ -1083,55 +1072,29 @@ foreach(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
     )
 
   foreach(NBBANDS ${NBBANDS_LIST})
-    if( NOT ${DATA_PIXELTYPE} MATCHES "Short" )
 
-      otb_add_test(NAME ioTvWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
-        COMMAND otbImageIOTestDriver
-        --compare-image ${NOTOL}
-        ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-        ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-        otbVectorImageFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
-        ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-        100
-        ${NBBANDS}
-        )
+    otb_add_test(NAME ioTvWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
+      COMMAND otbImageIOTestDriver
+      --compare-image ${NOTOL}
+      ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+      ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+      otbVectorImageFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
+      ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+      50
+      ${NBBANDS}
+      )
 
-      otb_add_test(NAME ioTvWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
-        COMMAND otbImageIOTestDriver
-        --compare-image ${NOTOL}
-        ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-        ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-        otbVectorImageFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
-        ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-        100
-        ${NBBANDS}
-        )
+    otb_add_test(NAME ioTvWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
+      COMMAND otbImageIOTestDriver
+      --compare-image ${NOTOL}
+      ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+      ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+      otbVectorImageFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
+      ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+      50
+      ${NBBANDS}
+      )
 
-    else()
-
-      otb_add_test(NAME ioTvWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
-        COMMAND otbImageIOTestDriver
-        --compare-image ${NOTOL}
-        ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
-        ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
-        otbVectorImageFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
-        ${TEMP}/multibandOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
-        50
-        ${NBBANDS}
-        )
-
-      otb_add_test(NAME ioTvWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
-        COMMAND otbImageIOTestDriver
-        --compare-image ${NOTOL}
-        ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
-        ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
-        otbVectorImageFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
-        ${TEMP}/multibandComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
-        50
-        ${NBBANDS}
-        )
-
-    endif()
   endforeach()
 
   ############
@@ -1157,55 +1120,28 @@ foreach(DATA_PIXELTYPE ${DATA_PIXELTYPES_LIST})
     )
 
   foreach(NBBANDS ${NBBANDS_LIST})
-    if( NOT ${DATA_PIXELTYPE} MATCHES "Short" )
 
-      otb_add_test(NAME ioTvStreamingWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
-        COMMAND otbImageIOTestDriver
-        --compare-image ${NOTOL}
-        ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-        ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-        otbVectorImageStreamingFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
-        ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-        100
-        ${NBBANDS}
-        )
+    otb_add_test(NAME ioTvStreamingWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
+      COMMAND otbImageIOTestDriver
+      --compare-image ${NOTOL}
+      ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+      ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+      otbVectorImageStreamingFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
+      ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+      50
+      ${NBBANDS}
+      )
 
-      otb_add_test(NAME ioTvStreamingWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
-        COMMAND otbImageIOTestDriver
-        --compare-image ${NOTOL}
-        ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-        ${TEMP}/multibandStrComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-        otbVectorImageStreamingFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
-        ${TEMP}/multibandStrComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands.tif
-        100
-        ${NBBANDS}
-        )
-
-    else()
-
-      otb_add_test(NAME ioTvStreamingWriteVectorImageScalar${DATA_PIXELTYPE}${NBBANDS}Bands
-        COMMAND otbImageIOTestDriver
-        --compare-image ${NOTOL}
-        ${INPUTDATA}/multiband${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
-        ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
-        otbVectorImageStreamingFileWriterScalarTestWithoutInput${DATA_PIXELTYPE}
-        ${TEMP}/multibandStrOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
-        50
-        ${NBBANDS}
-        )
-
-      otb_add_test(NAME ioTvStreamingWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
-        COMMAND otbImageIOTestDriver
-        --compare-image ${NOTOL}
-        ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
-        ${TEMP}/multibandStrComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
-        otbVectorImageStreamingFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
-        ${TEMP}/multibandStrComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
-        50
-        ${NBBANDS}
-        )
-
-    endif()
+    otb_add_test(NAME ioTvStreamingWriteVectorImageComplex${DATA_PIXELTYPE}${NBBANDS}Bands
+      COMMAND otbImageIOTestDriver
+      --compare-image ${NOTOL}
+      ${INPUTDATA}/multibandComplex${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+      ${TEMP}/multibandStrComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+      otbVectorImageStreamingFileWriterComplexTestWithoutInput${DATA_PIXELTYPE}
+      ${TEMP}/multibandStrComplexOut${DATA_PIXELTYPE}_${NBBANDS}bands_50x50.tif
+      50
+      ${NBBANDS}
+      )
 
   endforeach()
 
@@ -1346,6 +1282,20 @@ otb_add_test(NAME ioTvMultiImageFileWriter_DiffSize
   ${TEMP}/ioTvMultiImageFileWriter_DiffSize1.tif
   ${TEMP}/ioTvMultiImageFileWriter_DiffSize2.tif
   25)
+
+otb_add_test(NAME ioTvMultiImageFileWriter_BoxExtendedFilename
+  COMMAND otbImageIOTestDriver
+  --compare-n-images ${EPSILON_9} 2
+  ${BASELINE}/ioTvMultiImageFileWriter_ExtendedFilename1.tif
+  ${TEMP}/ioTvMultiImageFileWriter_ExtendedFilename1.tif
+  ${BASELINE}/ioTvMultiImageFileWriter_ExtendedFilename2.tif
+  ${TEMP}/ioTvMultiImageFileWriter_ExtendedFilename2.tif
+  otbMultiImageFileWriterTest
+  ${INPUTDATA}/GomaAvant.png
+  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+  ${TEMP}/ioTvMultiImageFileWriter_ExtendedFilename1.tif?&box=40:30:5:10
+  ${TEMP}/ioTvMultiImageFileWriter_ExtendedFilename2.tif?&box=10:10:15:15
+  50)
 
 otb_add_test(NAME ioTvCompoundMetadataReaderTest
   COMMAND otbImageIOTestDriver

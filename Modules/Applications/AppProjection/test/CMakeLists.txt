@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -205,7 +205,7 @@ otb_test_application(NAME  apTuPrVectorDataReprojectionFromImageToMap
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap
                      APP  VectorDataReprojection
-                     OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
+                     OPTIONS -in.vd  ${INPUTDATA}/toulousepoints_examples.shp
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToMap.sqlite
                              -out.proj user
                              -out.proj.user.map  lambert93
@@ -215,7 +215,7 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToImage
                      APP  VectorDataReprojection
-                     OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
+                     OPTIONS -in.vd  ${INPUTDATA}/toulousepoints_examples.shp
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToImage.shp
                              -out.proj image
                              -out.proj.image.in  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
@@ -225,7 +225,7 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToImage
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToSensor
                      APP  VectorDataReprojection
-                     OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
+                     OPTIONS -in.vd  ${INPUTDATA}/toulousepoints_examples.shp
                  			 -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToSensor.shp
                              -out.proj image
                              -out.proj.image.in ${INPUTDATA}/QB_PAN_ROI_1000_100.tif
@@ -247,7 +247,7 @@ otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToMap2
 
 otb_test_application(NAME  apTvPrVectorDataReprojectionFromMapToGeo
                      APP  VectorDataReprojection
-                     OPTIONS -in.vd  ${INPUTDATA}/ToulousePoints-examples.shp
+                     OPTIONS -in.vd  ${INPUTDATA}/toulousepoints_examples.shp
                  			       -out.vd ${TEMP}/apTvPrVectorDataReprojectionFromMapToGeo.shp
                              -out.proj user
                              -out.proj.user.map  wgs
@@ -367,3 +367,13 @@ otb_test_application(NAME apTvPrSuperimpose_phr
                      VALID  --compare-image ${EPSILON_7}
                         ${BASELINE}/apTvPrSuperimposePHR.tif
                         ${TEMP}/apTvPrSuperimposePHR.tif)
+
+otb_test_application(NAME apTvPrSuperimpose_phr_nn
+                     APP Superimpose
+                     OPTIONS -inr  ${INPUTDATA}/phr_pan.tif
+                             -inm ${INPUTDATA}/phr_xs.tif
+                             -interpolator nn
+                             -out ${TEMP}/apTvPrSuperimposePHR_nn.tif int16
+                     VALID  --compare-image ${EPSILON_7}
+                        ${BASELINE}/apTvPrSuperimposePHR_nn.tif
+                        ${TEMP}/apTvPrSuperimposePHR_nn.tif)

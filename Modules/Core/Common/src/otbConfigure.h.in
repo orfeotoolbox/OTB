@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,8 +24,6 @@
 #define OTB_VERSION_STRING "@OTB_VERSION_STRING@"
 
 #cmakedefine OTB_CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS
-
-#cmakedefine OTB_BUILD_SHARED_LIBS
 
 #cmakedefine OTB_USE_OPENMP
 

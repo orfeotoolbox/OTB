@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -25,5 +25,6 @@ set(site_option
 OTB_USE_GLFW=OFF
 CMAKE_C_COMPILER_LAUNCHER:STRING=ccache
 CMAKE_CXX_COMPILER_LAUNCHER:STRING=ccache
+OPENGL_INCLUDE_DIR:STRING=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/OpenGL.framework/Headers
 OTB_DATA_USE_LARGEINPUT:BOOL=ON") 
 # Large input path are in an environment variable on macOS

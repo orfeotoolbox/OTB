@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -167,7 +167,7 @@ private:
   typename BufferFilter::Pointer         m_BufferFilter;
   InputPixelType                         m_Min, m_Max, m_NoData;
   unsigned long                          m_NbBin;
-  typename InputImageType::SizeType      m_ThumbSize;
+  typename InputImageType::SizeType      m_ThumbSize{0,0};
   double                                 m_Threshold;
   bool                                   m_NoDataFlag;
 };

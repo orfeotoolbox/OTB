@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -125,5 +125,3 @@ ExternalProject_Add(OPENCV
   )
 
 SUPERBUILD_PATCH_SOURCE(OPENCV)
-
-set(_SB_OpenCV_DIR ${SB_INSTALL_PREFIX}/share/OpenCV)

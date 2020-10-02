@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -185,9 +185,9 @@ private:
 
   // Output params
   std::string       m_OutputProjectionRef;
-  OutputSpacingType m_OutputSpacing;
-  OutputOriginType  m_OutputOrigin;
-  OutputSizeType    m_OutputSize;
+  OutputSpacingType m_OutputSpacing{0.0};
+  OutputOriginType  m_OutputOrigin{0.0};
+  OutputSizeType    m_OutputSize{0,0};
   OutputIndexType   m_OutputStartIndex;
 }; // end of class VectorDataToLabelImageFilter
 

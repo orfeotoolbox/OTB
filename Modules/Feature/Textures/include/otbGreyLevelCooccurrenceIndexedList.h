@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -41,7 +41,7 @@ namespace otb
 * iteration over the given input image. This class keep an internal itk::Array
 * as a lookup array with size as [nbbins x nbbins]. The lookup array stores
 * position CooccurrencePairType in the VectorType. It ensures us that all elements
-* in Vector are unqiue in terms of the index value in the pair. For any given
+* in Vector are unique in terms of the index value in the pair. For any given
 * pixel index, -1 value indicates zero existence of the index in the
 * VectorType. This avoid searching all elements in VectorType for each pixel
 * index added during neighborhood iterator. It is also used to decide wheather
@@ -136,9 +136,7 @@ public:
 
 protected:
   GreyLevelCooccurrenceIndexedList();
-  ~GreyLevelCooccurrenceIndexedList() override
-  {
-  }
+  ~GreyLevelCooccurrenceIndexedList() override = default;
 
   /** create a cooccurrence pair with given index and frequency = 1
     * value. Next occurrence of same index is checked via m_LookupArray and the

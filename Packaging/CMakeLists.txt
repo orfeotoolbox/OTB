@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -106,9 +106,12 @@ if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
 set(PACKAGE_ARCH "64")
 endif()
 
+include(${PACKAGE_OTB_SRC_DIR}/CMake/GetVersionFromGitTag.cmake)
+get_package_name(${PACKAGE_OTB_SRC_DIR} PKG_OTB OTB_VERSION_STRING2)
+
 # This directory is important.
 # We stage/keep files that goes into final package in this directory
-set(PKG_STAGE_DIR ${PACKAGE_NAME}-${PKG_OTB_VERSION_STRING}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH}${NAME_SUFFIX})
+set(PKG_STAGE_DIR ${PACKAGE_NAME}-${OTB_VERSION_STRING2}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH}${NAME_SUFFIX})
 
 set(PATCHELF_PROGRAM "${CMAKE_BINARY_DIR}/PATCHELF/src/patchelf/src/patchelf")
 include(External_patchelf)

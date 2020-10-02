@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -49,7 +49,7 @@ int SetInputRequestedRegion(const T* img, const itk::ImageRegion<2>& region, con
   // The ugly cast in all ITK filters
   T* nonConstImg = const_cast<T*>(img);
 
-  if (currentRegion.Crop(img->GetLargestPossibleRegion()))
+  if (currentRegion.GetNumberOfPixels()==0 || currentRegion.Crop(img->GetLargestPossibleRegion()))
   {
     nonConstImg->SetRequestedRegion(currentRegion);
     return 0;

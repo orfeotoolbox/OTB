@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -86,7 +86,7 @@ public:
   SystemError(const std::string& message = std::string()) : std::runtime_error(itksys::SystemTools::GetLastSystemError() + ": " + message){};
 
   /** \brief Destructor. */
-  ~SystemError() throw() override{};
+  ~SystemError() noexcept override{};
 
   /*-[ PROTECTED SECTION ]---------------------------------------------------*/
 

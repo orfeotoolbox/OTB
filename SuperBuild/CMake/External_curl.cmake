@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -32,11 +32,15 @@ if(NOT APPLE AND NOT WIN32)
   list(APPEND CURL_SB_CONFIG
     -DCMAKE_USE_OPENSSL:BOOL=ON
     -DCMAKE_C_FLAGS:STRING=-fPIC)
+# Set CURL_CA_PATH to none because openssl in not enabled and CMake generation will fail if 
+# a CA path is found in auto mode.
 elseif(APPLE)
   list(APPEND CURL_SB_CONFIG
     -DCMAKE_USE_DARWINSSL:BOOL=ON
     -DHAVE_LIBNETWORK:STRING=0
-    -DCMAKE_C_FLAGS:STRING=-fPIC)
+    -DCMAKE_C_FLAGS:STRING=-fPIC
+    -DCURL_CA_PATH:STRING=none)
+
 elseif(WIN32)
   list(APPEND CURL_SB_CONFIG
     -DCMAKE_USE_WINSSL:BOOL=ON

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,11 +40,6 @@ SharkRandomForestsMachineLearningModelFactory<TInputValue, TOutputValue>::SharkR
 
   this->RegisterOverride(classOverride.c_str(), subclass.c_str(), "Shark RF ML Model", 1,
                          itk::CreateObjectFunction<SharkRandomForestsMachineLearningModel<TInputValue, TOutputValue>>::New());
-}
-
-template <class TInputValue, class TOutputValue>
-SharkRandomForestsMachineLearningModelFactory<TInputValue, TOutputValue>::~SharkRandomForestsMachineLearningModelFactory()
-{
 }
 
 template <class TInputValue, class TOutputValue>

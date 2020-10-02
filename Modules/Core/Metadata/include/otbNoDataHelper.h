@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,12 +37,14 @@ namespace otb
 /**
  * Reads no data flag from the MetaDataDictionary dict to flags and values
  * vectors. Returns true upon success.
+ * \deprecated
  */
 bool OTBMetadata_EXPORT ReadNoDataFlags(const itk::MetaDataDictionary& dict, std::vector<bool>& flags, std::vector<double>& values);
 
 /**
  * Write no data flags to the MetaDataDictionary dict from flags and values
  * vectors. Returns true upon success.
+ * \deprecated
  */
 void OTBMetadata_EXPORT WriteNoDataFlags(const std::vector<bool>& flags, const std::vector<double>& values, itk::MetaDataDictionary& dict);
 

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -22,5 +22,5 @@
 otb_fetch_module(DiapOTBModule
   "OTB module for SAR processing in Diapason."
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/remote_modules/diapotb.git
-  GIT_TAG ec5970752f44dc0b2e7357d1b223f5825d1ec5ab
+  GIT_TAG 1.0.0
 )

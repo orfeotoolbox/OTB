@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -31,12 +31,7 @@ namespace otb
 template <class TInputValue, class TOutputValue>
 NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::NeuralNetworkMachineLearningModel()
   :
-#ifdef OTB_OPENCV_3
     m_ANNModel(cv::ml::ANN_MLP::create()),
-// TODO
-#else
-    m_ANNModel(new CvANN_MLP),
-#endif
     m_TrainMethod(CvANN_MLP_TrainParams::RPROP),
     m_ActivateFunction(CvANN_MLP::SIGMOID_SYM),
     m_Alpha(1.),
@@ -51,14 +46,6 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::NeuralNetworkMachi
 {
   this->m_ConfidenceIndex       = true;
   this->m_IsRegressionSupported = true;
-}
-
-template <class TInputValue, class TOutputValue>
-NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::~NeuralNetworkMachineLearningModel()
-{
-#ifndef OTB_OPENCV_3
-  delete m_ANNModel;
-#endif
 }
 
 /** Sets the topology of the NN */
@@ -148,29 +135,10 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CreateNetwork
     layers.row(i) = m_LayerSizes[i];
   }
 
-#ifdef OTB_OPENCV_3
   m_ANNModel->setLayerSizes(layers);
   m_ANNModel->setActivationFunction(m_ActivateFunction, m_Alpha, m_Beta);
-#else
-  m_ANNModel->create(layers, m_ActivateFunction, m_Alpha, m_Beta);
-#endif
 }
 
-#ifndef OTB_OPENCV_3
-template <class TInputValue, class TOutputValue>
-CvANN_MLP_TrainParams NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetNetworkParameters()
-{
-  CvANN_MLP_TrainParams params;
-  params.train_method      = m_TrainMethod;
-  params.bp_dw_scale       = m_BackPropDWScale;
-  params.bp_moment_scale   = m_BackPropMomentScale;
-  params.rp_dw0            = m_RegPropDW0;
-  params.rp_dw_min         = m_RegPropDWMin;
-  CvTermCriteria term_crit = cvTermCriteria(m_TermCriteriaType, m_MaxIter, m_Epsilon);
-  params.term_crit         = term_crit;
-  return params;
-}
-#endif
 
 template <class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetupNetworkAndTrain(cv::Mat& labels)
@@ -179,7 +147,6 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetupNetworkA
   cv::Mat samples;
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
   this->CreateNetwork();
-#ifdef OTB_OPENCV_3
   int flags = (this->m_RegressionMode ? 0 : cv::ml::ANN_MLP::NO_OUTPUT_SCALE);
   m_ANNModel->setTrainMethod(m_TrainMethod);
   m_ANNModel->setBackpropMomentumScale(m_BackPropMomentScale);
@@ -191,11 +158,6 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::SetupNetworkA
   // m_ANNModel->setRpropDWPlus( );
   m_ANNModel->setTermCriteria(cv::TermCriteria(m_TermCriteriaType, m_MaxIter, m_Epsilon));
   m_ANNModel->train(cv::ml::TrainData::create(samples, cv::ml::ROW_SAMPLE, labels), flags);
-#else
-  CvANN_MLP_TrainParams params = this->SetNetworkParameters();
-  // train the Neural network model
-  m_ANNModel->train(samples, labels, cv::Mat(), cv::Mat(), params);
-#endif
 }
 
 /** Train the machine learning model for classification*/
@@ -279,7 +241,6 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::DoPredict(const In
 template <class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const std::string& filename, const std::string& name)
 {
-#ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::WRITE);
   fs << (name.empty() ? m_ANNModel->getDefaultName() : cv::String(name)) << "{";
   m_ANNModel->write(fs);
@@ -290,65 +251,16 @@ void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Save(const st
   }
   fs << "}";
   fs.release();
-#else
-  const char* lname = "my_nn";
-  if (!name.empty())
-    lname = name.c_str();
-
-  CvFileStorage* fs = nullptr;
-  fs                = cvOpenFileStorage(filename.c_str(), nullptr, CV_STORAGE_WRITE);
-  if (!fs)
-  {
-    itkExceptionMacro("Could not open the file " << filename << " for writing");
-  }
-
-  m_ANNModel->write(fs, lname);
-  if (!m_MatrixOfLabels.empty())
-  {
-    // cvWrite can't write cv::Mat
-    auto tmpMat = CvMat(m_MatrixOfLabels);
-    cvWrite(fs, "class_labels", &tmpMat);
-  }
-  cvReleaseFileStorage(&fs);
-#endif
 }
 
 template <class TInputValue, class TOutputValue>
 void NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::Load(const std::string& filename, const std::string& name)
 {
-#ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::READ);
   cv::FileNode    model_node(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
   m_ANNModel->read(model_node);
   model_node["class_labels"] >> m_MatrixOfLabels;
   fs.release();
-#else
-  const char* lname = nullptr;
-  if (!name.empty())
-    lname = name.c_str();
-
-  cv::FileNode    model_node;
-  cv::FileStorage fs(filename, cv::FileStorage::READ);
-  if (!fs.isOpened())
-  {
-    itkExceptionMacro("Could not open the file " << filename << " for reading");
-  }
-
-  if (lname)
-    model_node = fs[lname];
-  else
-  {
-    cv::FileNode root = fs.root();
-    if (root.size() > 0)
-    {
-      model_node = *(root.begin());
-    }
-  }
-
-  m_ANNModel->read(*fs,*model_node);
-  model_node["class_labels"] >> m_MatrixOfLabels;
-  fs.release();
-#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -368,11 +280,7 @@ bool NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::CanReadFile(c
     std::string line;
     std::getline(ifs, line);
 
-    if (line.find(CV_TYPE_NAME_ML_ANN_MLP) != std::string::npos
-#ifdef OTB_OPENCV_3
-        || line.find(m_ANNModel->getDefaultName()) != std::string::npos
-#endif
-        )
+    if (line.find(CV_TYPE_NAME_ML_ANN_MLP) != std::string::npos || line.find(m_ANNModel->getDefaultName()) != std::string::npos)
     {
       return true;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -268,6 +268,12 @@ int Read(const std::string& filename, Application::Pointer this_)
       float floatValue;
       std::stringstream(value) >> floatValue;
       this_->SetParameterFloat(key, floatValue);
+    }
+    else if (type == ParameterType_Double)
+    {
+      double doubleValue;
+      std::stringstream(value) >> doubleValue;
+      this_->SetParameterDouble(key, doubleValue);
     }
     else if (type == ParameterType_StringList || type == ParameterType_ListView)
     {

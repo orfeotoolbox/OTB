@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -158,7 +158,7 @@ private:
   void operator=(const ImageRegionAdaptativeSplitter&) = delete;
 
   // This reflects the input image tiling
-  SizeType m_TileHint;
+  SizeType m_TileHint{0,0};
 
   // This contains the ImageRegion that is currently being split
   RegionType m_ImageRegion;

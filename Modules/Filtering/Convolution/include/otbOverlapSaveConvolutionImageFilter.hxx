@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -52,7 +52,7 @@ OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>
 }
 
 template <class TInputImage, class TOutputImage, class TBoundaryCondition>
-void OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>::GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError)
+void OverlapSaveConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition>::GenerateInputRequestedRegion()
 {
 #if defined ITK_USE_FFTWD
   // call the superclass' implementation of this method

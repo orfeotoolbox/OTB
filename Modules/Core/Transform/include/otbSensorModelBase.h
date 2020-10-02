@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -73,6 +73,7 @@ public:
   /*
    * Set the Imagekeywordlist and affect the ossim projection ( m_Model)
    * Return false if not model found.
+   * \deprecated
    */
   virtual void SetImageGeometry(const ImageKeywordlist& image_kwl);
 

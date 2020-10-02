@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -19,6 +19,11 @@
 #
 
 find_package(GLEW REQUIRED)
+
+# FIX: glew-config.cmake import GLEW::GLEW taget but does not necessarily set GLEW_LIBRARY
+if(NOT GLEW_LIBRARY)
+  get_target_property(GLEW_LIBRARY GLEW::GLEW IMPORTED_LOCATION_RELEASE)
+endif()
 
 mark_as_advanced(GLEW_INCLUDE_DIR)
 mark_as_advanced(GLEW_LIBRARY)

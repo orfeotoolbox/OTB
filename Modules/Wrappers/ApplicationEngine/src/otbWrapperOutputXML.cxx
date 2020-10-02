@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -248,6 +248,13 @@ void ParseGroup(Application::Pointer app, TiXmlElement* n_App, const std::string
           std::ostringstream oss;
           oss << std::setprecision(std::numeric_limits<float>::digits10 + 1);
           oss << app->GetParameterFloat(key);
+          value = oss.str();
+        }
+        else if (type == ParameterType_Double)
+        {
+          std::ostringstream oss;
+          oss << std::setprecision(std::numeric_limits<double>::digits10 + 1);
+          oss << app->GetParameterDouble(key);
           value = oss.str();
         }
         else if (type == ParameterType_String || type == ParameterType_InputFilename || type == ParameterType_Directory || type == ParameterType_InputImage ||

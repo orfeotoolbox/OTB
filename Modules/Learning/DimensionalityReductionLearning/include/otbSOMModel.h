@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -112,7 +112,7 @@ private:
   virtual TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
 
   /** Map size (width, height) */
-  SizeType m_MapSize;
+  SizeType m_MapSize{0,0};
   /** Number of iterations */
   unsigned int m_NumberOfIterations;
   /** Initial learning coefficient */
@@ -120,7 +120,7 @@ private:
   /** Final learning coefficient */
   double m_BetaEnd;
   /** Initial neighborhood size */
-  SizeType m_NeighborhoodSizeInit;
+  SizeType m_NeighborhoodSizeInit{0,0};
   /** Minimum initial neuron weights */
   InputValueType m_MinWeight;
   /** Maximum initial neuron weights */

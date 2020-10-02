@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -25,6 +25,7 @@ otbSmoothingTestDriver.cxx
 otbMeanShiftSmoothingImageFilter.cxx
 otbMeanShiftSmoothingImageFilterSpatialStability.cxx
 otbMeanShiftSmoothingImageFilterThreading.cxx
+otbFastNLMeansImageFilter.cxx
 )
 
 add_executable(otbSmoothingTestDriver ${OTBSmoothingTests})
@@ -32,11 +33,6 @@ target_link_libraries(otbSmoothingTestDriver ${OTBSmoothing-Test_LIBRARIES})
 otb_module_target_label(otbSmoothingTestDriver)
 
 # Tests Declaration
-
-
-
-
-
 
 otb_add_test(NAME bfTvMeanShiftSmoothingImageFilterOptim COMMAND otbSmoothingTestDriver
   --compare-image ${EPSILON_7}
@@ -50,6 +46,10 @@ otb_add_test(NAME bfTvMeanShiftSmoothingImageFilterOptim COMMAND otbSmoothingTes
   ${TEMP}/bfTvMeanShiftSmoothingImageFilterLabelOutputOptim.tif
   2 10 0.1 10 1
   )
+
+set_tests_properties(bfTvMeanShiftSmoothingImageFilterOptim PROPERTIES
+  ENVIRONMENT ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=4)
+
 
 otb_add_test(NAME bfTuMeanShiftSmoothingImageFilterSPOT5 COMMAND otbSmoothingTestDriver
   otbMeanShiftSmoothingImageFilter
@@ -148,4 +148,11 @@ otb_add_test(NAME bfTvMeanShiftSmoothingImageFilterThreadingNonOpt COMMAND otbSm
   ${TEMP}/bfMeanShiftSmoothingImageFilterSingleThread.tif
   ${TEMP}/bfMeanShiftSmoothingImageFilterMultiThread.tif
   4 50 0
+  )
+
+otb_add_test(NAME fastNLMeansImageFilter COMMAND otbSmoothingTestDriver
+  otbFastNLMeansImageFilter
+  ${INPUTDATA}/GomaAvant.tif
+  ${TEMP}/GomaAvant_FastNLMeansFilter.tif
+  2 11 30
   )

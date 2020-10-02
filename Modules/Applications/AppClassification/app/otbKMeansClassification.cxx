@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -106,7 +106,7 @@ public:
   {
     ShareParameter("ram", "polystats.ram");
     ShareParameter("sampler", "select.sampler");
-    ShareParameter("centroids.out", "training.classifier.sharkkm.centroids.out");
+    ShareParameter("centroids.out", "training.classifier.sharkkm.outcentroids");
     ShareParameter("vm", "polystats.mask", "Validity Mask", "Validity mask, only non-zero pixels will be used to estimate KMeans modes.");
   }
 
@@ -248,10 +248,10 @@ public:
     GetInternalApplication("training")->SetParameterInt("classifier.sharkkm.k", GetParameterInt("nc"));
     if (IsParameterEnabled("centroids.in") && HasValue("centroids.in"))
     {
-      GetInternalApplication("training")->SetParameterString("classifier.sharkkm.centroids.in", GetParameterString("centroids.in"));
+      GetInternalApplication("training")->SetParameterString("classifier.sharkkm.incentroids", GetParameterString("centroids.in"));
 
       GetInternalApplication("training")
-          ->SetParameterString("classifier.sharkkm.centroids.stats", GetInternalApplication("imgstats")->GetParameterString("out"));
+          ->SetParameterString("classifier.sharkkm.cstats", GetInternalApplication("imgstats")->GetParameterString("out"));
     }
 
 

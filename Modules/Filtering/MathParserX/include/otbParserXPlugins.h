@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,14 +24,25 @@
 #include "itkMacro.h"
 #include "otbMath.h"
 
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Winconsistent-missing-override"
+#if defined(__clang__)
+#pragma clang diagnostic push
+
+#if defined(__apple_build_version__)
+/* Apple's 3.6.0 based clang doesn't support -Winconsistent-missing-override */
+#if __apple_build_version__ >= 7000053
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
+#elif __clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 7)
+#pragma clang diagnostic ignored "-Winconsistent-missing-override"
+#endif
+
 #include "mpParser.h"
-#pragma GCC diagnostic pop
+#pragma clang diagnostic pop
+
 #else
 #include "mpParser.h"
 #endif
+
 #include <vector>
 
 namespace otb

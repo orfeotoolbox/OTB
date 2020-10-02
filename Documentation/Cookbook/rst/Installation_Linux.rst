@@ -96,6 +96,23 @@ to select their own existing Python installation rather than the one dibstribute
 
 By default, bindings for Python 3.5 will be enabled with the ``otbenv`` script.
 
+Recompiling Python bindings
++++++++++++++++++++++++++++
+
+If you are using another version of Python 3 than 3.5, but still want to use OTB Python bindings, it is possible
+to compile the python bindings again with your version of Python. CMake is required (it is available in most package
+managers or at [https://cmake.org/]). At the root of the OTB installation run :
+
+.. parsed-literal::
+
+    source otbenv.profile 
+    ctest -S share/otb/swig/build_wrapping.cmake -VV
+
+You should now be able to import ``otbApplication`` through Python !
+
+Alternatively, you could use a virtual env or otb Conda Package to use the OTB Python bindings.
+
+
 Notes:
 ~~~~~~
 
@@ -112,8 +129,8 @@ Notes:
 FAQ
 ~~~
 
-Q: Unable to import otbApplication library with Python3
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Q: Unable to import otbApplication library with Python3.5
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 ::
 

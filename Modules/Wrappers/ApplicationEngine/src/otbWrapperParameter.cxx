@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -229,6 +229,11 @@ float Parameter::ToFloat() const
   TypeError("float");
 }
 
+double Parameter::ToDouble() const
+{
+  TypeError("double");
+}
+
 std::string Parameter::ToString() const
 {
   TypeError("std::string");
@@ -247,6 +252,11 @@ void Parameter::FromInt(int)
 void Parameter::FromFloat(float)
 {
   TypeError("float");
+}
+
+void Parameter::FromDouble(double)
+{
+  TypeError("double");
 }
 
 void Parameter::FromString(const std::string&)

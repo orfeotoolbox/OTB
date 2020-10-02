@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -361,7 +361,7 @@ otb_add_test(NAME prTvGeometriesProjectionFilterPoints COMMAND otbProjectionTest
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shp
   ${TEMP}/prTvGeometriesProjectionFilterPoints.shp
   otbGeometriesProjectionFilter
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${TEMP}/prTvGeometriesProjectionFilterPoints.shp
   )
 
@@ -409,7 +409,7 @@ otb_add_test(NAME prTvVectorDataProjectionFilterFromMapToSensor COMMAND otbProje
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
   ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
   otbVectorDataProjectionFilterFromMapToSensor
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${INPUTDATA}/QB_PAN_ROI_1000_100.tif
   ${TEMP}/prTvVectorDataProjectionFilterFromMapToSensor.shp
   )
@@ -431,7 +431,7 @@ otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToSensor COMMAND otbProje
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToSensor.shp
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToSensor.shp
   otbGeometriesProjectionFilterFromMapToSensor
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${INPUTDATA}/QB_PAN_ROI_1000_100.tif
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToSensor.shp
   )
@@ -459,7 +459,7 @@ otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToGeo COMMAND otbProjecti
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.shp
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.shp
   otbGeometriesProjectionFilterFromMapToGeo
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToGeo.shp
   )
 
@@ -478,7 +478,7 @@ otb_add_test(NAME prTvVectorDataProjectionFilterFromMapToGeo COMMAND otbProjecti
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.shp
   ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.shp
   otbVectorDataProjectionFilterFromMapToGeo
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${TEMP}/prTvVectorDataProjectionFilterFromMapToGeo.shp
   )
 
@@ -501,7 +501,7 @@ otb_add_test(NAME prTvVectorDataProjectionFilterFromMapToImage COMMAND otbProjec
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
   ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.shp
   otbVectorDataProjectionFilterFromMapToImage
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
   ${TEMP}/prTvVectorDataProjectionFilterFromMapToImage.shp
   )
@@ -1073,7 +1073,7 @@ otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToImage COMMAND otbProjec
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToImage.shp
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToImage.shp
   otbGeometriesProjectionFilterFromMapToImage
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToImage.shp
   )
@@ -1092,7 +1092,7 @@ otb_add_test(NAME prTvGeometriesProjectionFilterFromMapToEPSG_WGS84 COMMAND otbP
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterFromMapToGeo.shp
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.shp
   otbGeometriesProjectionFilterFromMapToEPSG
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${TEMP}/prTvGeometriesProjectionFilterFromMapToEPSG_WGS84.shp
   4326 )
 
@@ -1101,7 +1101,7 @@ otb_add_test(NAME prTvVectorDataProjectionFilterPoints COMMAND otbProjectionTest
   ${BASELINE_FILES}/prTvVectorDataProjectionFilterPoints.shp
   ${TEMP}/prTvVectorDataProjectionFilterPoints.shp
   otbVectorDataProjectionFilter
-  ${INPUTDATA}/ToulousePoints-examples.shp
+  ${INPUTDATA}/toulousepoints_examples.shp
   ${TEMP}/prTvVectorDataProjectionFilterPoints.shp
   )
 

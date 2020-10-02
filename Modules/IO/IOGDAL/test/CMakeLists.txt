@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -245,7 +245,7 @@ foreach(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
 
   otb_add_test(NAME ioTvGDALReadPxlComplex${INPUTFILE_PIXELTYPE} COMMAND otbIOGDALTestDriver
     otbGDALReadPxlComplex${INPUTFILE_PIXELTYPE}
-    ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_3bands.tif
+    ${INPUTDATA}/multibandComplex${INPUTFILE_PIXELTYPE}_3bands_50x50.tif
     1 5 10 2) #old file hdr sans extensions
 
 endforeach()

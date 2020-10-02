@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -62,11 +62,21 @@ private:
 
     SetDocLongDescription(
         "This application applies a smoothing filter to an "
-        "image. Three methods can be used: a gaussian filter , a mean filter "
-        ", or an anisotropic diffusion using the Perona-Malik algorithm.");
+        "image. Three methods can be used: a mean filter, a gaussian filter based on [1]"
+        ", or an anisotropic diffusion using the Perona-Malik algorithm [2].");
     SetDocLimitations("None");
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" ");
+    SetDocSeeAlso("FastNLMeans \n"
+                   "[1] Tony Lindeberg Discrete "
+                   "Scale-Space Theory and the Scale-Space Primal Sketch.  Dissertation. Royal "
+                   "Institute of Technology, Stockholm, Sweden. May 1991 \n"
+                   "[2] Pietro Perona and Jitendra Malik, "
+                   "Scale-space and edge detection using anisotropic diffusion, "
+                   "IEEE Transactions on Pattern Analysis Machine Intelligence, vol. 12, pp. 629-639, 1990. \n"
+                   "itk::MeanImageFilter (mean mode)\n"
+                   "itk::DiscreteGaussianImageFilter (gaussian mode)\n"
+                   "itk::GradientAnisotropicDiffusionImageFilter (anidif mode)."
+                   );
 
     AddDocTag(Tags::Filter);
 
@@ -86,13 +96,21 @@ private:
 
     AddChoice("type.gaussian", "Gaussian");
 
-    AddParameter(ParameterType_Float, "type.gaussian.radius", "Radius");
-    SetParameterDescription("type.gaussian.radius", "Standard deviation of the gaussian kernel used to filter the image");
-    SetDefaultParameterFloat("type.gaussian.radius", 2.0);
-    // TODO rename this parameter
+    AddParameter(ParameterType_Float, "type.gaussian.stdev", "Standard deviation");
+    SetParameterDescription("type.gaussian.stdev", "Standard deviation of the gaussian kernel used to filter the image");
+    SetDefaultParameterFloat("type.gaussian.stdev", 2.0);
+
+    AddParameter(ParameterType_Float, "type.gaussian.maxerror", "Maximum error");
+    SetParameterDescription("type.gaussian.maxerror", "The algorithm will size the discrete kernel so that the error "
+                            "resulting from truncation of the kernel is no greater than maxerror.");
+    SetDefaultParameterFloat("type.gaussian.maxerror", 0.01);
+
+    AddParameter(ParameterType_Int, "type.gaussian.maxwidth", "Maximum kernel width");
+    SetParameterDescription("type.gaussian.maxwidth", "Set the kernel to be no wider than maxwidth pixels, "
+                             "even if type.gaussian.maxerror demands it.");
+    SetDefaultParameterInt("type.gaussian.maxwidth", 32);
 
     AddChoice("type.anidif", "Anisotropic Diffusion");
-
 
     AddParameter(ParameterType_Float, "type.anidif.timestep", "Time Step");
     SetParameterDescription("type.anidif.timestep", "Time step that will be used to discretize the diffusion equation");
@@ -139,79 +157,79 @@ private:
 
   void DoExecute() override
   {
-    GetLogger()->Debug("Entering DoExecute\n");
-
-
-    FloatVectorImageType::Pointer inImage = GetParameterImage("in");
+    const auto inImage = GetParameterImage("in");
 
     switch (GetParameterInt("type"))
     {
     case Smoothing_Mean:
     {
-      GetLogger()->Debug("Using mean");
+      otbAppLogINFO("Using mean smoothing");
 
       typedef itk::MeanImageFilter<ImageType, ImageType> MeanFilterType;
       typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, MeanFilterType> PerBandMeanFilterType;
 
-      PerBandMeanFilterType::Pointer perBand = PerBandMeanFilterType::New();
+      auto perBand = PerBandMeanFilterType::New();
       perBand->SetInput(inImage);
 
       MeanFilterType::InputSizeType radius;
       radius.Fill(GetParameterInt("type.mean.radius"));
       perBand->GetFilter()->SetRadius(radius);
-      perBand->UpdateOutputInformation();
-      m_FilterRef = perBand;
+
       SetParameterOutputImage("out", perBand->GetOutput());
+      
+      RegisterPipeline();
     }
     break;
     case Smoothing_Gaussian:
     {
-      GetLogger()->Debug("Using gaussian");
+      otbAppLogINFO("Using gaussian smoothing");
 
       typedef itk::DiscreteGaussianImageFilter<ImageType, ImageType> DiscreteGaussianFilterType;
       typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, DiscreteGaussianFilterType> PerBandDiscreteGaussianFilterType;
 
-      PerBandDiscreteGaussianFilterType::Pointer perBand = PerBandDiscreteGaussianFilterType::New();
+      auto perBand = PerBandDiscreteGaussianFilterType::New();
       perBand->SetInput(inImage);
 
-      double radius   = GetParameterFloat("type.gaussian.radius");
-      double variance = radius * radius;
+      const auto stdev = GetParameterFloat("type.gaussian.stdev");
+      const auto variance = stdev * stdev;
+      
       perBand->GetFilter()->SetVariance(variance);
       perBand->GetFilter()->SetUseImageSpacing(false);
-      perBand->UpdateOutputInformation();
-      m_FilterRef = perBand;
+      perBand->GetFilter()->SetMaximumError(GetParameterFloat("type.gaussian.maxerror"));
+      perBand->GetFilter()->SetMaximumKernelWidth(GetParameterInt("type.gaussian.maxwidth"));
+      
       SetParameterOutputImage("out", perBand->GetOutput());
+      
+      RegisterPipeline();
     }
     break;
     case Smoothing_Anisotropic:
     {
-      GetLogger()->Debug("Using anisotropic diffusion");
+      otbAppLogINFO("Using anisotropic diffusion smoothing");
 
       typedef itk::GradientAnisotropicDiffusionImageFilter<ImageType, ImageType> GradientAnisotropicDiffusionFilterType;
       typedef otb::PerBandVectorImageFilter<FloatVectorImageType, FloatVectorImageType, GradientAnisotropicDiffusionFilterType>
           PerBandGradientAnisotropicDiffusionFilterType;
 
-      PerBandGradientAnisotropicDiffusionFilterType::Pointer perBand = PerBandGradientAnisotropicDiffusionFilterType::New();
+      auto perBand = PerBandGradientAnisotropicDiffusionFilterType::New();
       perBand->SetInput(inImage);
 
-      const int aniDifNbIter = GetParameterInt("type.anidif.nbiter");
+      const auto aniDifNbIter = GetParameterInt("type.anidif.nbiter");
       perBand->GetFilter()->SetNumberOfIterations(static_cast<unsigned int>(aniDifNbIter));
 
-      const float aniDifTimeStep = GetParameterFloat("type.anidif.timestep");
+      const auto aniDifTimeStep = GetParameterFloat("type.anidif.timestep");
       perBand->GetFilter()->SetTimeStep(static_cast<double>(aniDifTimeStep));
 
       perBand->GetFilter()->SetConductanceParameter(GetParameterFloat("type.anidif.conductance"));
       perBand->GetFilter()->SetUseImageSpacing(false);
-      perBand->UpdateOutputInformation();
 
-      m_FilterRef = perBand;
       SetParameterOutputImage("out", perBand->GetOutput());
+      
+      RegisterPipeline();
     }
     break;
     }
   }
-
-  itk::LightObject::Pointer m_FilterRef;
 };
 }
 }

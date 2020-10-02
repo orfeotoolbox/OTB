@@ -1,3 +1,5 @@
+.. _classif:
+
 Classification
 ==============
 
@@ -473,7 +475,7 @@ to positive reference samples (either represented as a raster labeled
 image or as a vector data containing the reference classes). It will
 compute the confusion matrix and precision, recall and F-score of each
 class too, based on the
-`ConfusionMatrixCalculator <http://www.orfeo-toolbox.org/doxygen-current/classotb_1_1ConfusionMatrixCalculator.html>`_ 
+`ConfusionMatrixCalculator <https://www.orfeo-toolbox.org/doxygen/classotb_1_1ConfusionMatrixCalculator.html>`_ 
 class.
 
 If you have made an unsupervised classification, it must be specified

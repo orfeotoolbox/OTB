@@ -1,7 +1,7 @@
 Welcome to Orfeo ToolBox!
 =========================
 
-`Orfeo ToolBox (OTB) <http://orfeo-toolbox.org>`_ is an open-source project for
+`Orfeo ToolBox (OTB) <https://www.orfeo-toolbox.org/>`_ is an open-source project for
 state-of-the-art remote sensing. Built on the shoulders of the open-source
 geospatial community, it can process high resolution optical, multispectral and
 radar images at the terabyte scale. A wide variety of applications are
@@ -32,7 +32,7 @@ joining `our community <https://www.orfeo-toolbox.org/community/>`_ and
 For other documentation, be sure to read:
 
 - OTB's website: `www.orfeo-toolbox.org <https://www.orfeo-toolbox.org/>`_
-- `Doxygen <http://orfeo-toolbox.org/doxygen/>`_, for exhaustive documentation
+- `Doxygen <https://www.orfeo-toolbox.org/doxygen/>`_, for exhaustive documentation
   of the C++ API.
 
 Table of Contents

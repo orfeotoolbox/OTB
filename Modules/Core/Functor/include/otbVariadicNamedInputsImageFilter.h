@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -138,7 +138,7 @@ public:
   template <typename Tag>
   void SetInput(Tag, const InputImageType<internal::tuple_index<Tag, TInputNameMap>::value>* inputPtr)
   {
-    SetInput<Tag>(inputPtr);
+    this->template SetInput<Tag>(inputPtr);
   }
 
   /**
@@ -161,7 +161,7 @@ public:
   template <typename Tag>
   const InputImageType<internal::tuple_index<Tag, TInputNameMap>::value>* GetInput(Tag)
   {
-    return GetInput<Tag>();
+    return this->template GetInput<Tag>();
   }
 
 protected:

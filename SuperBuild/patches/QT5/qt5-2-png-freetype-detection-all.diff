@@ -1,0 +1,25 @@
+--- qt-everywhere-src-5.10.1/qtbase/src/gui/configure.json  2018-02-08 19:24:48.000000000 +0100
++++ QT5/src/QT5/qtbase/src/gui/configure.json   2018-04-10 14:34:05.529668610 +0200
+@@ -158,8 +158,8 @@
+                 ]
+             },
+             "sources": [
+-                { "type": "pkgConfig", "args": "freetype2" },
+-                { "type": "freetype", "libs": "-lfreetype" }
++                { "type": "freetype", "libs": "-lfreetype" },
++                { "type": "pkgConfig", "args": "freetype2" }
+             ]
+         },
+         "fontconfig": {
+@@ -289,9 +289,9 @@
+                 "main": "(void) png_create_read_struct(PNG_LIBPNG_VER_STRING,0,0,0);"
+             },
+             "sources": [
+-                { "type": "pkgConfig", "args": "libpng" },
++                { "libs": "-lpng", "condition": "!config.msvc" },
+                 { "libs": "-llibpng", "condition": "config.msvc" },
+-                { "libs": "-lpng", "condition": "!config.msvc" }
++                { "type": "pkgConfig", "args": "libpng" }
+             ],
+             "use": [
+                 { "lib": "zlib", "condition": "features.system-zlib" }

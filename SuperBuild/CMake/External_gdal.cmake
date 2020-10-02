@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -23,7 +23,7 @@ INCLUDE_ONCE_MACRO(GDAL)
 SETUP_SUPERBUILD(GDAL)
 
 # declare dependencies
-ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL CURL OPENJPEG TIFF GEOTIFF PNG JPEG SQLITE GEOS ZLIB EXPAT HDF5 NETCDF HDF4)
+ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL CURL OPENJPEG TIFF GEOTIFF PNG JPEG SQLITE GEOS ZLIB EXPAT HDF5 NETCDF HDF4 PROJ)
 
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL TIFF_ROOT     --with-libtiff)
 ADD_SUPERBUILD_CONFIGURE_VAR(GDAL GEOTIFF_ROOT  --with-geotiff)
@@ -81,6 +81,7 @@ if(UNIX)
     --with-ingres=no
     --with-jp2mrsid=no
     --with-kakadu=no
+    --with-kea=no
     --with-jasper=no
     --with-libgrass=no
     --with-mrsid=no
@@ -105,7 +106,7 @@ if(UNIX)
     --with-webp=no
     --with-threads=yes
     --with-freexl=no
-    --with-proj=yes
+    --with-proj=${SB_INSTALL_PREFIX}
     --with-libjson-c=internal
     ${GDAL_SB_CONFIG}
     ${GDAL_SB_EXTRA_OPTIONS}
@@ -148,8 +149,8 @@ endif()
 
 ExternalProject_Add(GDAL
   PREFIX GDAL
-  URL "http://download.osgeo.org/gdal/2.4.1/gdal-2.4.1.tar.gz"
-  URL_MD5 8bc93c7ae4d3a46916918a52c7f5f10f
+  URL "http://download.osgeo.org/gdal/3.1.0/gdal-3.1.0.tar.gz"
+  URL_MD5 bda0f002cd63b51c8d2f1b1400daffa9
   SOURCE_DIR ${GDAL_SB_SRC}
   BINARY_DIR ${GDAL_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

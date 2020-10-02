@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -127,6 +127,15 @@ public:
     return static_cast<float>(*m_Value);
   }
 
+  double ToDouble() const override
+  {
+    if (!HasValue())
+    {
+      itkExceptionMacro("Cannot convert parameter " << GetKey() << " to double (no value).");
+    }
+    return static_cast<double>(*m_Value);
+  }
+
   void FromInt(int value) override
   {
     SetValue(value);
@@ -185,12 +194,34 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_Float;
   }
 
   void FromFloat(float value) override
+  {
+    SetValue(value);
+  }
+};
+
+class OTBApplicationEngine_EXPORT DoubleParameter : public NumericalParameter<double>
+{
+public:
+  /** Standard class typedef */
+  typedef DoubleParameter                Self;
+  typedef itk::SmartPointer<Self>       Pointer;
+  typedef itk::SmartPointer<const Self> ConstPointer;
+
+  itkNewMacro(Self);
+  itkTypeMacro(NumericalParameter, Parameter);
+
+  ParameterType GetType() const override
+  {
+    return ParameterType_Double;
+  }
+
+  void FromDouble(double value) override
   {
     SetValue(value);
   }
@@ -207,7 +238,7 @@ public:
   itkNewMacro(Self);
   itkTypeMacro(NumericalParameter, Parameter);
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_Int;
   }
@@ -228,7 +259,7 @@ public:
   /** RTTI support */
   itkTypeMacro(RAMParameter, Parameter);
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_RAM;
   }
@@ -260,7 +291,7 @@ public:
     return true;
   }
 
-  virtual ParameterType GetType() const override
+  ParameterType GetType() const override
   {
     return ParameterType_Radius;
   }

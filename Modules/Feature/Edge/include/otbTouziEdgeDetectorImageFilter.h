@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -95,7 +95,7 @@ public:
    * a treatment input area larger than the output one.
    *
    * \sa ImageToImageFilter::GenerateInputRequestedRegion() */
-  void GenerateInputRequestedRegion() throw(itk::InvalidRequestedRegionError) override;
+  void GenerateInputRequestedRegion() override;
 
 protected:
   TouziEdgeDetectorImageFilter();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -30,6 +30,10 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 #pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Waddress"
+#if defined(__GNUC__) && (__GNUC__ > 5)
+#pragma GCC diagnostic ignored "-Wnonnull-compare"
+#endif
 #include "ossim/projection/ossimRpcSolver.h"
 #include "ossim/projection/ossimProjection.h"
 #include "ossim/projection/ossimRpcProjection.h"

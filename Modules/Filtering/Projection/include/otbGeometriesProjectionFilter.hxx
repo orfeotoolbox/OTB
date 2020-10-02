@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,7 +39,7 @@ inline otb::ogr::UniqueGeometryPtr otb::internal::ReprojectTransformationFunctor
   if (out)
     m_Reprojector.do_transform(*out);
   ogr::UniqueGeometryPtr res(out.release());
-  return otb::move(res);
+  return res;
 }
 
 template <typename TGeometry>
