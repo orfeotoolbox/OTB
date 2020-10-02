@@ -24,6 +24,7 @@
 #include "otbGeographicalDistance.h"
 #include "otbGenericRSTransform.h"
 #include <iomanip>
+#include "otbDEMHandler.h"
 
 typedef otb::Image<unsigned int>             ImageType;
 typedef otb::TileImageFilter<ImageType>      TileImageFilterType;
@@ -49,7 +50,7 @@ int otbTileImageFilterRSTransformTest(int argc, char* argv[])
   TileImageFilterType::Pointer tileFilter = TileImageFilterType::New();
   tileFilter->SetLayout(layout);
 
-  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(0);
+  otb::DEMHandler::GetInstance().SetDefaultHeightAboveEllipsoid(0);
 
   for (unsigned int i = 0; i < numberOfImages; ++i)
   {

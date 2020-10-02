@@ -18,31 +18,30 @@
 # limitations under the License.
 #
 
-set(OTBOSSIMAdapters_SRC
-  otbOssimDEMHandler.cxx
-  otbImageKeywordlist.cxx
-  otbRPCSolverAdapter.cxx
-  otbDateTimeAdapter.cxx
-  otbEllipsoidAdapter.cxx
+set(OTBTransform_SRC
+  otbSensorModelAdapter.cxx
+  otbSarSensorModelAdapter.cxx
   )
 
-add_library(OTBOSSIMAdapters ${OTBOSSIMAdapters_SRC})
-target_link_libraries(OTBOSSIMAdapters
+add_library(OTBTransform ${OTBTransform_SRC})
+target_link_libraries(OTBTransform
+  ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBGDAL_LIBRARIES}
   ${OTBCommon_LIBRARIES}
   ${OTBOssim_LIBRARIES}
   ${OTBOssimPlugins_LIBRARIES}
   ${OTBOpenThreads_LIBRARIES}
+  ${OTBIOGDAL_LIBRARIES}
   )
 
-otb_module_target(OTBOSSIMAdapters)
+otb_module_target(OTBTransform)
 
 # add the OTB_OSSIM_VERSION definition
-get_target_property(_OTBOSSIMAdapters_COMP_DEF OTBOSSIMAdapters COMPILE_DEFINITIONS)
-if(_OTBOSSIMAdapters_COMP_DEF)
-  set_target_properties(OTBOSSIMAdapters
-    PROPERTIES COMPILE_DEFINITIONS "${_OTBOSSIMAdapters_COMP_DEF};OTB_OSSIM_VERSION=${OTB_OSSIM_VERSION}")
+get_target_property(_OTBTransform_COMP_DEF OTBTransform COMPILE_DEFINITIONS)
+if(_OTBTransform_COMP_DEF)
+  set_target_properties(OTBTransform
+    PROPERTIES COMPILE_DEFINITIONS "${_OTBTransform_COMP_DEF};OTB_OSSIM_VERSION=${OTB_OSSIM_VERSION}")
 else()
-  set_target_properties(OTBOSSIMAdapters
+  set_target_properties(OTBTransform
     PROPERTIES COMPILE_DEFINITIONS "OTB_OSSIM_VERSION=${OTB_OSSIM_VERSION}")
 endif()

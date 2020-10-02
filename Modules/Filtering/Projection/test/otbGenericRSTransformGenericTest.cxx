@@ -25,6 +25,7 @@
 #include "itkEuclideanDistanceMetric.h"
 #include "otbSpatialReference.h"
 #include "otbGeographicalDistance.h"
+#include "otbDEMHandler.h"
 
 typedef otb::Image<unsigned short>                          ImageType;
 typedef otb::ImageFileReader<ImageType>                     ReaderType;
@@ -150,7 +151,7 @@ int otbGenericRSTransformGenericTest(int argc, char* argv[])
     }
 
     double averageElevation = atof(argv[14]);
-    otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(averageElevation);
+    otb::DEMHandler::GetInstance().SetDefaultHeightAboveEllipsoid(averageElevation);
 
     std::cout << "Average elevation " << averageElevation << " used." << std::endl;
   }
@@ -162,7 +163,7 @@ int otbGenericRSTransformGenericTest(int argc, char* argv[])
       return EXIT_FAILURE;
     }
 
-    otb::DEMHandler::Instance()->OpenDEMDirectory(argv[14]);
+    otb::DEMHandler::GetInstance().OpenDEMDirectory(argv[14]);
 
     std::cout << "Elevation from DEM " << argv[14] << " used." << std::endl;
   }

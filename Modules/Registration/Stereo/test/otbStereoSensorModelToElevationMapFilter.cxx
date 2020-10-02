@@ -66,8 +66,8 @@ int otbStereoSensorModelToElevationMapFilter(int itkNotUsed(argc), char* argv[])
   gaussian2->SetInput(slaveReader->GetOutput());
   gaussian2->SetVariance(sigma);
 
-  otb::DEMHandler::Instance()->OpenDEMDirectory(argv[4]);
-  otb::DEMHandler::Instance()->OpenGeoidFile(argv[5]);
+  otb::DEMHandler::GetInstance().OpenDEMDirectory(argv[4]);
+  otb::DEMHandler::GetInstance().OpenGeoidFile(argv[5]);
 
   StereoFilterType::Pointer stereoFilter = StereoFilterType::New();
   stereoFilter->SetMasterInput(gaussian1->GetOutput());

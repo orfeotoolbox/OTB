@@ -36,6 +36,7 @@ otb_module(OTBImageManipulation
     OTBObjectList
     OTBStreaming
     OTBTransform
+    OTBIOGDAL
 
   TEST_DEPENDS
     OTBDensity
