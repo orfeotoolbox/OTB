@@ -33,7 +33,7 @@ namespace otb
  * This class is the single configuration and access point for
  * elevation handling in images projections and localization
  * functions. Since this class is a singleton, there is no New() method. The
- * DEMHandler::Instance() method should be used instead.
+ * DEMHandler::GetInstance() method should be used instead.
  *
  * Please be aware that a proper instantiation and parameter setting
  * of this class is advised before any call to geometric filters or
@@ -140,6 +140,9 @@ public:
 
   /** Clear the DEM list and close all DEM datasets */
   void ClearDEMs();
+
+  /** Path to the in-memory vrt */
+  const std::string DEM_DATASET_PATH = "/vsimem/otb_dem_dataset.vrt";
 
 protected: 
   DEMHandler(); 

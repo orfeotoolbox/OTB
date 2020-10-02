@@ -181,6 +181,7 @@ DEMHandler::~DEMHandler()
   }
 
   ClearDEMs();
+  VSIUnlink(DEM_DATASET_PATH.c_str());
 }
 
 void DEMHandler::OpenDEMFile(const std::string& path)
@@ -194,6 +195,10 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
 {  
   // TODO : RemoveOSSIM
   OssimDEMHandler::Instance()->OpenDEMDirectory(DEMDirectory);
+
+  // Free the previous in-memory dataset (if any)
+  if (!m_DatasetList.empty())
+    VSIUnlink(DEM_DATASET_PATH.c_str());
 
   auto demFiles = DEMDetails::GetFilesInDirectory(DEMDirectory);
   for (const auto & file : demFiles)
@@ -227,8 +232,11 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
         vrtDatasetList[i] = m_DatasetList[i]->GetDataSet();
       }
 
-      m_Dataset = static_cast<GDALDataset *> (GDALBuildVRT(nullptr, vrtSize, vrtDatasetList.data(), 
-                                                nullptr, nullptr, nullptr));
+      auto close_me = GDALBuildVRT(DEM_DATASET_PATH.c_str(), vrtSize, vrtDatasetList.data(),
+                                   nullptr, nullptr, nullptr);
+      // Need to close the dataset, so it is flushed into memory.
+      GDALClose(close_me);
+      m_Dataset = static_cast<GDALDataset*>(GDALOpen(DEM_DATASET_PATH.c_str(), GA_ReadOnly));
       m_DEMDirectories.push_back(DEMDirectory);
     }
     
