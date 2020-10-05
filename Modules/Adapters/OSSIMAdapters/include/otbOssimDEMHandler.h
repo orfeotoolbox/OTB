@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbDEMHandler_h
-#define otbDEMHandler_h
+#ifndef otbOssimDEMHandler_h
+#define otbOssimDEMHandler_h
 
 #include <cstdio>
 
@@ -35,14 +35,14 @@ class ossimElevManager;
 
 namespace otb
 {
-/** \class DEMHandler
+/** \class OssimDEMHandler
  *
  * \brief Single access point for DEM data retrieval
  *
  * This class is the single configuration and access point for
  * elevation handling in images projections and localization
  * functions. Since this class is a singleton, there is no New() method. The
- * DEMHandler::Instance() method should be used instead.
+ * OssimDEMHandler::Instance() method should be used instead.
  *
  * Please be aware that a proper instantiation and parameter setting
  * of this class is advised before any call to geometric filters or
@@ -87,11 +87,11 @@ namespace otb
  * \ingroup OTBOSSIMAdapters
  */
 
-class OTBOSSIMAdapters_EXPORT DEMHandler : public itk::Object
+class OTBOSSIMAdapters_EXPORT OssimDEMHandler : public itk::Object
 {
 public:
   /** Standard class typedefs. */
-  typedef DEMHandler                    Self;
+  typedef OssimDEMHandler                    Self;
   typedef itk::Object                   Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
@@ -102,7 +102,7 @@ public:
   static Pointer Instance();
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(DEMHandler, Object);
+  itkTypeMacro(OssimDEMHandler, Object);
 
   /** Try to open the DEM directory. */
   virtual void OpenDEMDirectory(const char* DEMDirectory);
@@ -168,8 +168,8 @@ public:
   void ClearDEMs();
 
 protected:
-  DEMHandler();
-  ~DEMHandler() override
+  OssimDEMHandler();
+  ~OssimDEMHandler() override
   {
   }
 

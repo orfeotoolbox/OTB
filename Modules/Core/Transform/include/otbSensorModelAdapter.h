@@ -44,10 +44,10 @@ class ImageKeywordlist;
  * \ingroup Projection
  *
  *
- * \ingroup OTBOSSIMAdapters
+ * \ingroup OTBTransform
  **/
 
-class OTBOSSIMAdapters_EXPORT SensorModelAdapter : public itk::Object
+class ITK_EXPORT SensorModelAdapter : public itk::Object
 {
 public:
   /** Standard class typedefs. */
@@ -116,9 +116,6 @@ private:
   InternalMapProjectionPointer m_SensorModel;
 
   InternalTiePointsContainerPointer m_TiePoints;
-
-  /** Object that read and use DEM */
-  DEMHandler::Pointer m_DEMHandler;
 };
 
 } // namespace otb

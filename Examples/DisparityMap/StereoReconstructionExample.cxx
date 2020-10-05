@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
   using DisparityToElevationFilterType = otb::DisparityMapToDEMFilter<FloatImageType, FloatImageType, FloatImageType, FloatVectorImageType, FloatImageType>;
 
   double avgElevation = atof(argv[5]);
-  otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(avgElevation);
+  otb::DEMHandler::GetInstance().SetDefaultHeightAboveEllipsoid(avgElevation);
 
   ImageReaderType::Pointer leftReader  = ImageReaderType::New();
   ImageReaderType::Pointer rightReader = ImageReaderType::New();

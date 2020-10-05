@@ -40,8 +40,8 @@ int otbDEMHandlerTest(int argc, char* argv[])
   double      target        = atof(argv[7]);
   double      tolerance     = atof(argv[8]);
 
-  otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
-  demHandler->SetDefaultHeightAboveEllipsoid(defaultHeight);
+  auto& demHandler = otb::DEMHandler::GetInstance();
+  demHandler.SetDefaultHeightAboveEllipsoid(defaultHeight);
 
   bool fail = false;
 
@@ -50,21 +50,21 @@ int otbDEMHandlerTest(int argc, char* argv[])
 
   if (demdir != "no")
   {
-    if (!demHandler->IsValidDEMDirectory(demdir.c_str()))
+    if (!demHandler.IsValidDEMDirectory(demdir.c_str()))
     {
       std::cerr << "IsValidDEMDirectory(" << demdir << ") = false" << std::endl;
       fail = true;
     }
 
-    demHandler->OpenDEMDirectory(demdir);
-    std::cout << "GetDEMDirectory() = " << demHandler->GetDEMDirectory() << std::endl;
+    demHandler.OpenDEMDirectory(demdir);
+    std::cout << "GetDEMDirectory() = " << demHandler.GetDEMDirectory() << std::endl;
   }
 
   if (geoid != "no")
   {
     try
     {
-      demHandler->OpenGeoidFile(geoid);
+      demHandler.OpenGeoidFile(geoid);
     }
     catch (const std::exception& exception)
     {
@@ -73,10 +73,8 @@ int otbDEMHandlerTest(int argc, char* argv[])
       fail = true;
     }
 
-    std::cout << "GetGeoidFile() = " << demHandler->GetGeoidFile() << std::endl;
+    std::cout << "GetGeoidFile() = " << demHandler.GetGeoidFile() << std::endl;
   }
-
-  std::cout << "PrintSelf: " << demHandler << std::endl;
 
   otb::DEMHandler::PointType point;
   point[0] = longitude;
@@ -86,13 +84,13 @@ int otbDEMHandlerTest(int argc, char* argv[])
 
   if (aboveMSL)
   {
-    height = demHandler->GetHeightAboveMSL(point);
+    height = demHandler.GetHeightAboveMSL(point);
 
     std::cout << "height above MSL (" << longitude << ", " << latitude << ") = " << height << " meters" << std::endl;
   }
   else
   {
-    height = demHandler->GetHeightAboveEllipsoid(point);
+    height = demHandler.GetHeightAboveEllipsoid(point);
     std::cout << "height above ellipsoid (" << longitude << ", " << latitude << ") = " << height << " meters" << std::endl;
   }
 

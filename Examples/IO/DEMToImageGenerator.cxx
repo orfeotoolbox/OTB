@@ -20,7 +20,7 @@
 
 
 /* Example usage:
-./DEMToImageGenerator Output/DEMToImageGenerator.tif Output/pretty_DEMToImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM_srtm
+./DEMToImageGenerator Output/DEMToImageGenerator.tif Output/pretty_DEMToImageGenerator.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM/srtm_directory
 */
 
 
@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
   WriterType::Pointer writer = WriterType::New();
 
   // The path to the DEM folder is given to the \doxygen{otb}{DEMHandler}.
-  otb::DEMHandler::Instance()->OpenDEMDirectory(folderPath);
+  otb::DEMHandler::GetInstance().OpenDEMDirectory(folderPath);
 
   // The origin (Longitude/Latitude) of the output image in the DEM is given to the filter.
   PointType origin;

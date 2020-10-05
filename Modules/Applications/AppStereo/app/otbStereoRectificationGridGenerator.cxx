@@ -311,7 +311,7 @@ private:
       AddProcess(m_StatisticsFilter->GetStreamer(), "Computing DEM statistics ...");
       m_StatisticsFilter->Update();
 
-      otb::DEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(m_StatisticsFilter->GetMean());
+      otb::DEMHandler::GetInstance().SetDefaultHeightAboveEllipsoid(m_StatisticsFilter->GetMean());
 
       EnableParameter("epi.elevation.avgdem.value");
       SetParameterFloat("epi.elevation.avgdem.value", m_StatisticsFilter->GetMean());
