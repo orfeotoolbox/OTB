@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -21,9 +21,9 @@
 set(OPENCV_SEARCH_PATH)
 
 if(OpenCV_DIR)
-  get_filename_component(OPENCV_SEARCH_PATH "${OpenCV_DIR}" PATH)
+  get_filename_component(OPENCV_SEARCH_PATH "${OpenCV_DIR}" REALPATH)
   if(OPENCV_SEARCH_PATH)
-    get_filename_component(OPENCV_SEARCH_PATH "${OPENCV_SEARCH_PATH}" PATH)
+    get_filename_component(OPENCV_SEARCH_PATH "${OPENCV_SEARCH_PATH}" REALPATH)
   endif()
   if(OPENCV_SEARCH_PATH)
     find_path(

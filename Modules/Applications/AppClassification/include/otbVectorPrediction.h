@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -104,9 +104,12 @@ private:
   /** Normalize a list sample using the statistic file given  */
   typename ListSampleType::Pointer NormalizeListSample(ListSampleType::Pointer input);
 
-  /** Create the output DataSource, in update mode the input layer is buffered and the input
-   * data source is re opened in update mode. */
-  otb::ogr::DataSource::Pointer CreateOutputDataSource(otb::ogr::DataSource::Pointer source, otb::ogr::Layer& layer, bool updateMode);
+  /** Update the output DataSource : the input layer is buffered and the input data source is re opened in update mode. */
+  otb::ogr::DataSource::Pointer ReopenDataSourceInUpdateMode(ogr::DataSource::Pointer source, ogr::Layer& layer,
+                                                             ogr::DataSource::Pointer buffer);
+
+  /** Create the output DataSource. */
+  otb::ogr::DataSource::Pointer CreateOutputDataSource(ogr::Layer& layer);
 
   /** Add a prediction field in the output layer if it does not exist.
    * If computeConfidenceMap evaluates to true a confidence field will be

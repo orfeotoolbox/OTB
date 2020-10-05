@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -72,7 +72,7 @@ public:
 
   typedef itk::VariableLengthVector<double> RealVectorPixelType;
 
-  typedef std::unordered_map<InputLabelType, std::set<InputLabelType>> NeigboursMapType;
+  typedef std::unordered_map<InputLabelType, std::set<InputLabelType>> NeighboursMapType;
 
   typedef std::unordered_map<InputLabelType, RealVectorPixelType> LabelStatisticType;
   typedef std::unordered_map<InputLabelType, double>              LabelPopulationType;
@@ -137,7 +137,7 @@ private:
   LabelStatisticType m_LabelStatistic;
 
   /** Neighbours maps for each thread */
-  std::vector<NeigboursMapType> m_NeighboursMapsTmp;
+  std::vector<NeighboursMapType> m_NeighboursMapsTmp;
 
   /** LUT giving correspondance between labels in the original segmentation
    * and the merged labels */

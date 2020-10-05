@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -245,7 +245,7 @@ void OGRLayerStreamStitchingFilter<TInputImage>::ProcessStreamingLine(bool line,
         {
           FeatureStruct upper = upperStreamFeatureList[u];
           FeatureStruct lower = lowerStreamFeatureList[l];
-          if (!(upper.feat == lower.feat))
+          if (!(upper.feat == lower.feat) && upper.feat.GetGeometry()->IsValid() && lower.feat.GetGeometry()->IsValid())
           {
             if (ogr::Intersects(*upper.feat.GetGeometry(), *lower.feat.GetGeometry()))
             {

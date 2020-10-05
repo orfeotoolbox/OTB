@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -333,7 +333,7 @@ macro(check_compiler_platform_flags)
     set(OTB_CXX_DISABLE_OPTIMIZATION_FLAG "-O0")
   endif()
   if(DEFINED OTB_CXX_DISABLE_OPTIMIZATION_FLAG)
-    CHECK_CXX_SOURCE_COMPILES(${OTB_CXX_DISABLE_OPTIMIZATION_FLAG} CXX_HAS_DISABLE_OPTIMIZATION_FLAG)
+    CHECK_CXX_COMPILER_FLAG(${OTB_CXX_DISABLE_OPTIMIZATION_FLAG} CXX_HAS_DISABLE_OPTIMIZATION_FLAG)
   endif()
 endmacro()#End the platform check function
 

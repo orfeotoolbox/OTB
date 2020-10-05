@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -126,9 +126,6 @@ set(classifierList)
 if(OTB_USE_OPENCV)
   #list(APPEND classifierList "SVM" "BOOST" "DT" "ANN" "BAYES" "RF" "KNN")
   list(APPEND classifierList "BOOST" "DT" "ANN" "BAYES" "RF" "KNN")
-  if(NOT OTB_OPENCV_3)
-   set(dt_output_format "cv2.dt")
-  endif()
 endif()
 if(OTB_USE_SHARK)
   list(APPEND classifierList "SHARKRF" "SHARKKM")

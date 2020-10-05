@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -19,8 +19,17 @@
  */
 
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable : 4251)
 #include "gdal_priv.h"
 #include "ogr_core.h"
+#pragma warning(pop)
+#else
+#include "gdal_priv.h"
+#include "ogr_core.h"
+#endif
+
 #include <iostream>
 #include <complex>
 

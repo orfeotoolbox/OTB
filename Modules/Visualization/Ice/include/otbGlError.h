@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,6 +34,13 @@
 #include <iostream>
 #include <stdexcept>
 
+#include <sstream>
+
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4275) // warning C4275: non-DLL-interface std::runtime_error used as base for DLL-interface Error
+#endif
 
 namespace otb { namespace gl {
 
@@ -44,7 +51,17 @@ struct OTBIce_EXPORT Error : public std::runtime_error
 {
   /** Construct an OpenGL exception related to the OpenGL error code.
    */
-  Error( GLenum code );
+  Error( GLenum code ):
+    std::runtime_error(
+      [ code ]()
+      {
+        std::ostringstream oss;
+
+        oss << "OpenGL error #" << code << ": '" << gluErrorString( code ) << "'";
+
+        return oss.str();
+      }()
+    ) {}
 
 }; // End class GlError
 
@@ -92,5 +109,9 @@ CheckError()
 
 } // End namespace otb.
 
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif // otb_GlError_h

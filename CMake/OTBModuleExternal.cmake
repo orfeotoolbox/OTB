@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -36,7 +36,7 @@ if(NOT EXISTS ${OTB_CMAKE_DIR}/OTBModuleMacros.cmake)
     message(FATAL_ERROR "Modules can only be built against an OTB build tree; "
             "they cannot be built against an OTB install tree. You can build "
             "your module as a standalone CMake project instead, by activating "
-            "the BUILD_MODULE_AS_STANDALONE option. Beware that dependency "
+            "the OTB_BUILD_MODULE_AS_STANDALONE option. Beware that dependency "
             "between remote modules will NOT be tracked.")
   endif()
 endif()

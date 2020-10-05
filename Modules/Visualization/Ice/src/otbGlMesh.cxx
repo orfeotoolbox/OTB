@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -49,7 +49,7 @@ MakeTexturedQuad( Id_t xy, Id_t uv )
   mesh.VertexAttribPointer( xy, 2, 0 );
   mesh.VertexAttribPointer( uv, 2, 8 );
 
-  return std::move( mesh );
+  return mesh;
 }
 
 
@@ -75,7 +75,7 @@ MakeInterleavedTexturedQuad( Id_t xy, Id_t uv )
   mesh.VertexAttribPointer( xy, 2, 0 );
   mesh.VertexAttribPointer( uv, 2, 2 );
 
-  return std::move( mesh );
+  return mesh;
 }
 
 Mesh
@@ -99,7 +99,7 @@ MakeQuad( Id_t xy)
 
   mesh.VertexAttribPointer( xy, 2, 0 );
 
-  return std::move( mesh );
+  return mesh;
 }
 
 void
@@ -112,10 +112,10 @@ Mesh
 
   glVertexAttribPointer(
     id,
-    components,
+    static_cast<GLint>(components),
     m_VBO.GlType(),
     GL_FALSE,
-    m_VBO.Stride( components ),
+    static_cast<GLsizei>(m_VBO.Stride(components)),
     reinterpret_cast< GLvoid const * >( first * m_VBO.Size() )
     );
 

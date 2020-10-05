@@ -19,7 +19,7 @@
  */
 
 
-%module otbApplication
+%module("threads"=1) otbApplication
 
 %{
 #include "itkBase.includes"
@@ -78,6 +78,7 @@ namespace Wrapper
   {
     ParameterType_Int,
     ParameterType_Float,
+    ParameterType_Double,
     ParameterType_String,
     ParameterType_StringList,
     ParameterType_InputFilename,
@@ -217,6 +218,10 @@ public:
     self.UpdateParameters()
 %}
 
+%pythonappend Application::SetParameterDouble %{
+    self.UpdateParameters()
+%}
+
 %pythonappend Application::SetParameterString %{
     self.UpdateParameters()
 %}
@@ -255,22 +260,22 @@ public:
 #if SWIGPYTHON
   Logger* GetLogger();
 #endif
-  unsigned long itk::Object::AddObserver(const EventObject & event, 
+  unsigned long itk::Object::AddObserver(const EventObject & event,
                                           Command * command);
 
   bool IsDeprecated();
 
 #if SWIGPYTHON
-  %extend 
+  %extend
     {
-    /** SetupLogger : Add the PythonLogOutput and setup the progress 
+    /** SetupLogger : Add the PythonLogOutput and setup the progress
      * reporting for the application */
     %pythoncode
       {
       def SetupLogger(self):
           logger = self.GetLogger()
           logger.AddLogOutput(_libraryLogOutput.GetPointer())
-          
+
           self.progressReportManager = ProgressReporterManager_New()
           self.progressReportManager.SetLogOutputCallback(_libraryLogCallback)
           self.AddObserver(AddProcessToWatchEvent(),
@@ -307,6 +312,7 @@ public:
 
   void SetParameterInt(std::string parameter, int value, bool hasUserValueFlag = true);
   void SetParameterFloat(std::string parameter, float value, bool hasUserValueFlag = true);
+  void SetParameterDouble(std::string parameter, double value, bool hasUserValueFlag = true);
   void SetParameterString(std::string parameter, std::string value, bool hasUserValueFlag = true);
   void SetParameterStringList(std::string parameter, std::vector<std::string> values, bool hasUserValueFlag = true);
 
@@ -316,6 +322,7 @@ public:
 
   int GetParameterInt(std::string parameter);
   float GetParameterFloat(std::string parameter);
+  double GetParameterDouble(std::string parameter);
   std::string GetParameterString(std::string parameter);
   std::vector<std::string> GetParameterStringList(std::string parameter);
   std::string GetParameterAsString(std::string paramKey);
@@ -359,6 +366,8 @@ public:
   void SetDocTags( std::vector<std::string> val );
   void AddDocTag( const std::string & tag );
   std::vector<std::string> GetDocTags();
+
+  bool IsMultiWritingEnabled();
 
   otb::Wrapper::ParameterGroup* GetParameterList();
 
@@ -625,6 +634,7 @@ class ApplicationProxy(object):
         ParameterType_Int : 'ParameterType_Int',
         ParameterType_Radius : 'ParameterType_Radius',
         ParameterType_RAM : 'ParameterType_RAM',
+        ParameterType_Double : 'ParameterType_Double',
         ParameterType_Float : 'ParameterType_Float',
         ParameterType_Choice : 'ParameterType_Choice',
         ParameterType_Group : 'ParameterType_Group',
@@ -658,6 +668,8 @@ class ApplicationProxy(object):
         return self.SetParameterInt(paramKey, value)
       elif paramType in [ParameterType_Float]:
         return self.SetParameterFloat(paramKey, value)
+      elif paramType in [ParameterType_Double]:
+        return self.SetParameterDouble(paramKey, value)
       elif paramType in [ParameterType_Bool]:
         return self.SetParameterString(paramKey, str(value) )
       elif paramType in [ParameterType_Group]:
@@ -692,6 +704,8 @@ class ApplicationProxy(object):
         return self.GetParameterInt(paramKey)
       elif paramType in [ParameterType_Float]:
         return self.GetParameterFloat(paramKey)
+      elif paramType in [ParameterType_Double]:
+        return self.GetParameterDouble(paramKey)
       elif paramType in [ParameterType_Bool]:
         return bool(self.GetParameterInt(paramKey))
       elif paramType in [ParameterType_Group, ParameterType_Choice]:
@@ -713,9 +727,11 @@ class ApplicationProxy(object):
       """
       if (name == "thisown"):
         return self.this.own()
-      method = Application.__swig_getmethods__.get(name, None)
-      if method:
-        return method(self)
+
+      if hasattr(Application, "__swig_getmethods__"):
+        method = Application.__swig_getmethods__.get(name, None)
+        if method:
+          return method(self)
       key_list = [k.upper() for k in self.GetParametersKeys(True)]
       if name in key_list:
         return self.GetParameterValue(name.lower())
@@ -742,9 +758,11 @@ class ApplicationProxy(object):
       if (name == "progressReportManager"):
         super().__setattr__(name, value)
         return
-      method = Application.__swig_setmethods__.get(name, None)
-      if method:
-        return method(self, value)
+
+      if hasattr(Application, "__swig_setmethods__"):
+        method = Application.__swig_setmethods__.get(name, None)
+        if method:
+          return method(self, value)
       key_list = [k.upper() for k in self.GetParametersKeys(True)]
       if name in key_list:
         self.SetParameterValue(name.lower(), value)
@@ -796,7 +814,7 @@ class ApplicationProxy(object):
       ImagePixelType_cfloat : SetVectorImageFromCFloatNumpyArray_,
       ImagePixelType_cdouble : SetVectorImageFromCDoubleNumpyArray_,
       }
-    
+
     def SetImageFromNumpyArray(self, paramKey, npArray, index=0):
       """
       This method takes a numpy array and set ImageIOBase of

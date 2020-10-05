@@ -124,11 +124,18 @@ The dock on the right side is divided into four tabs:
    will be shortcut before being rescaled to 0-255: either by setting
    the extremal values, or by setting the extremal quantiles.
 
-Each tab is represented by the figures below ( [fig:quickhisto]
- [fig:colorsetdyn]).
+Each tab is represented by the figures below ( [:numref:`quickhisto`]
+ [:numref:`colsetdyn`]).
 
+.. _quickhisto:
 .. figure:: Art/MonteverdiImages/quickhisto.png
+
+:numref:`quickhisto`: The quicklook and histogram tabs.
+
+.. _colsetdyn:
 .. figure:: Art/MonteverdiImages/colsetdyn.png
+
+:numref:`colsetdyn`: The color Setup and color dynamics tabs.
 
 Layer stack
 ~~~~~~~~~~~
@@ -161,23 +168,29 @@ Concerning the six icons, from left to right:
 -  6th: applies all display settings (color-setup, color-dynamics,
    shader and so forth) of selected layer to all other layers
 
-The layer stack is represented in the figure below ( [fig:layerstack]):
+The layer stack is represented in the figure [:numref:`layerstack`] below:
 
+.. _layerstack:
 .. figure:: Art/MonteverdiImages/layerstack.png
+
+:numref:`layerstack`: The layer stack.
 
 Examples
 --------
 
 With , it is also possible to interactively load otb-applications and
 use them to process images. For that purpose, the user just has to load
-otb-applications by clicking on the Main menu, File/Load
-OTB-Applications (or by simply using the shortcut CTRL+A). The figure
-below ( [fig:applications]) represents the otb-applications loading
+otb-applications by clicking on the Main menu, View/OTB-Applications browser
+(or by simply using the shortcut CTRL+A). The figure
+[:numref:`applications`] represents the otb-applications browser
 window. The applications are arranged in thematic functionalities; the
 user can also quickly find the wanted application by typing its name in
-the dedicated field at the top of the loading window.
+the dedicated field at the top of the browser window.
 
+.. _applications:
 .. figure:: Art/MonteverdiImages/applications.png
+
+:numref:`applications`: The OTB6Applications browser panel.
 
 Optical calibration
 ~~~~~~~~~~~~~~~~~~~
@@ -196,11 +209,14 @@ the documentation of the application).
    the image to be calibrated, then some of the fields will be
    automatically filled in.
 
-In the figure below ( [fig:OC]), by taking a look at the layer stack,
+In the figure [:numref:`OC`] below, by taking a look at the layer stack,
 one can notice that the values of the calibrated image are now expressed
 in spectral radiance.
 
+.. _OC:
 .. figure:: Art/MonteverdiImages/OC.png
+
+:numref:`OC`: The layer stack with values expressed in spectral radiance.
 
 BandMath
 ~~~~~~~~
@@ -210,25 +226,31 @@ pixels (launch it with shortcut CTRL+A). In this example, we are going
 to use this application to change the dynamics of an image, and check
 the result by looking at the histogram tab on the right-hand side of the GUI. The
 formula used is the following: :math:`\text{im1b1} \times 1000`. In the
-figures below ( [fig:BM]), one can notice that the mode of the
+figure [:numref:`BM`] below, one can notice that the mode of the
 distribution is located at position :math:`356.0935`, whereas in the
 transformed image, the mode is located at position :math:`354737.1454`,
 that’s to say approximately 1000 times further away (the cursors aren’t
 placed exactly at the same position in the screenshots).
 
+.. _BM:
 .. figure:: Art/MonteverdiImages/BM.png
+
+:numref:`BM`: Comparison of histograms before and after applying BandMath.
 
 Segmentation
 ~~~~~~~~~~~~
 From within Monteverdi, the Segmentation application can be launched using the 
 shortcut CTRL+A. We let the user take a look at the application’s documentation;
-let’s simply say that as we wish we could display the segmentation with
-, we must tell the application to output the segmentation in raster
+let’s simply say that as we wish we could display the segmentation with, 
+we must tell the application to output the segmentation in raster
 format. Thus, the value of the mode option must be set to raster. The
-following figure ( [fig:seg12]) shows the original image and the labels
+figure [:numref:`seg12`] shows the original image and the labels
 image.
 
+.. _seg12:
 .. figure:: Art/MonteverdiImages/seg1-2.png
+
+:numref:`seg12`: The original image and the corresponding segmented image.
 
 Gray colors aren’t very convenient for visualizing a segmentation.
 That’s why we are going to use another application, the ColorMapping one
@@ -236,21 +258,27 @@ That’s why we are going to use another application, the ColorMapping one
 use this application (see the documentation for more details). We wish
 we could colour the segmentation so that color difference between
 adjacent regions is maximized. For this purpose, we can use the method
-optimal (set the value of this option to optimal). The figure below
-( [fig:seg3]) shows the result of such colorization.
+optimal (set the value of this option to optimal). The figure [:numref:`seg3`]
+shows the result of such colorization.
 
+.. _seg3:
 .. figure:: Art/MonteverdiImages/seg3.png
 
+:numref:`seg3`: Colorized segmentation.
+
 Now it should be nice to superimpose this colorization with the original
-image to assess the quality of the segmentation. provides the user a
-very simple way to do it. Once the two images are loaded in and that the
-original image is placed on the top of the stack, the user just has to
-select the translucency layer effect and set the size of the exploration
-circle to convenience. The figure below ( [fig:seg4]) shows the result
+image to assess the quality of the segmentation. The local transparence effect 
+provides the user a very simple way to do it. Once the two images are loaded in 
+and that the original image is placed on the top of the stack, the user just has 
+to select the translucency layer effect and set the size of the exploration
+circle to convenience. The figure [:numref:`seg4`] shows the result
 of such colorization. We encourage the reader to test the other layer
 effects.
 
+.. _seg4:
 .. figure:: Art/MonteverdiImages/seg4.png
+
+:numref:`seg4`: Superimposition of the original image with the colorized label image.
 
 Polarimetry
 ~~~~~~~~~~~
@@ -285,10 +313,13 @@ In this example, we are going to use three applications:
       H ranges from 0 to 1. Generally speaking, the histogram of can
       also be used for this purpose).
 
-In the figure below ( [fig:pol1]), we show the obtained result, with the
+In the figure [:numref:`pol1`], we show the obtained result, with the
 local contrast layer effect.
 
+.. _pol1:
 .. figure:: Art/MonteverdiImages/pol1.png
+
+:numref:`pol1`: Result of the SARDecompositions > SplitImage > ColorMapping pipeline.
 
 Pansharpening
 ~~~~~~~~~~~~~
@@ -296,26 +327,38 @@ Pansharpening
 Finally, let’s try a last example with the Pansharpening application
 (launch it with shortcut CTRL+A). The fields are quite easy to fill in:
 this application needs a panchromatic image, a XS image, and an output
-image. These images are represented in the figures below ( [fig:ps12]
-and  [fig:ps3]):
+image. These images are represented in the figures [:numref:`ps12`]
+and [:numref:`ps3`]:
 
+.. _ps12:
 .. figure:: Art/MonteverdiImages/ps1-2.png
 
+:numref:`ps12`: Original panchromatic and XS images.
+
+.. _ps3:
 .. figure:: Art/MonteverdiImages/ps3.png
+
+:numref:`ps3`: Result of the pansharpening.
 
 Now, in order to inspect the result properly, these three images are
 loaded in . The pansharpened image is placed to the top of the stack
 layer, and different layer effects are applied to it:
 
--  in figure  [fig:ps4]: chessboard effect, to compare the result with
+-  in the figure [:numref:`ps4`]: chessboard effect, to compare the result with
    the XS image.
 
--  in figure  [fig:ps5]: translucency effect, to compare the result
+-  in the figure [:numref:`ps5`]: translucency effect, to compare the result
    with the panchromatic image.
 
+.. _ps4:
 .. figure:: Art/MonteverdiImages/ps4.png
 
+:numref:`ps4`: Chessboard effect.
+
+.. _ps5:
 .. figure:: Art/MonteverdiImages/ps5.png
+
+:numref:`ps5`: Translucency effect.
 
 Conclusion
 ~~~~~~~~~~

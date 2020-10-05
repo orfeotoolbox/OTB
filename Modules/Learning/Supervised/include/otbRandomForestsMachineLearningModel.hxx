@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -32,11 +32,7 @@ namespace otb
 template <class TInputValue, class TOutputValue>
 RandomForestsMachineLearningModel<TInputValue, TOutputValue>::RandomForestsMachineLearningModel()
   :
-#ifdef OTB_OPENCV_3
     m_RFModel(CvRTreesWrapper::create()),
-#else
-    m_RFModel(new CvRTreesWrapper),
-#endif
     m_MaxDepth(5),
     m_MinSampleCount(10),
     m_RegressionAccuracy(0.01),
@@ -54,19 +50,9 @@ RandomForestsMachineLearningModel<TInputValue, TOutputValue>::RandomForestsMachi
   this->m_IsRegressionSupported = true;
 }
 
-
-template <class TInputValue, class TOutputValue>
-RandomForestsMachineLearningModel<TInputValue, TOutputValue>::~RandomForestsMachineLearningModel()
-{
-#ifndef OTB_OPENCV_3
-  delete m_RFModel;
-#endif
-}
-
 template <class TInputValue, class TOutputValue>
 float RandomForestsMachineLearningModel<TInputValue, TOutputValue>::GetTrainError()
 {
-#ifdef OTB_OPENCV_3
   // TODO
   cv::Mat samples;
   otb::ListSampleToMat<InputListSampleType>(this->GetInputListSample(), samples);
@@ -84,9 +70,6 @@ float RandomForestsMachineLearningModel<TInputValue, TOutputValue>::GetTrainErro
 
   return m_RFModel->calcError(cv::ml::TrainData::create(samples, cv::ml::ROW_SAMPLE, labels, cv::noArray(), cv::noArray(), cv::noArray(), var_type), false,
                               cv::noArray());
-#else
-  return m_RFModel->get_train_error();
-#endif
 }
 
 /** Train the machine learning model */
@@ -112,7 +95,6 @@ void RandomForestsMachineLearningModel<TInputValue, TOutputValue>::Train()
 // std::cout << "priors " << m_Priors[0] << std::endl;
 // Define random forests paramneters
 // FIXME do this in the constructor?
-#ifdef OTB_OPENCV_3
   m_RFModel->setMaxDepth(m_MaxDepth);
   m_RFModel->setMinSampleCount(m_MinSampleCount);
   m_RFModel->setRegressionAccuracy(m_RegressionAccuracy);
@@ -123,24 +105,6 @@ void RandomForestsMachineLearningModel<TInputValue, TOutputValue>::Train()
   m_RFModel->setActiveVarCount(m_MaxNumberOfVariables);
   m_RFModel->setTermCriteria(cv::TermCriteria(m_TerminationCriteria, m_MaxNumberOfTrees, m_ForestAccuracy));
   m_RFModel->train(cv::ml::TrainData::create(samples, cv::ml::ROW_SAMPLE, labels, cv::noArray(), cv::noArray(), cv::noArray(), var_type));
-#else
-  float* priors = m_Priors.empty() ? nullptr : &m_Priors.front();
-
-  CvRTParams params = CvRTParams(m_MaxDepth,                    // max depth
-                                 m_MinSampleCount,              // min sample count
-                                 m_RegressionAccuracy,          // regression accuracy: N/A here
-                                 m_ComputeSurrogateSplit,       // compute surrogate split, no missing data
-                                 m_MaxNumberOfCategories,       // max number of categories (use sub-optimal algorithm for larger numbers)
-                                 priors,                        // the array of priors
-                                 m_CalculateVariableImportance, // calculate variable importance
-                                 m_MaxNumberOfVariables,        // number of variables randomly selected at node and used to find the best split(s).
-                                 m_MaxNumberOfTrees,            // max number of trees in the forest
-                                 m_ForestAccuracy,              // forest accuracy
-                                 m_TerminationCriteria          // termination criteria
-                                 );
-  // train the RT model
-  m_RFModel->train(samples, CV_ROW_SAMPLE, labels, cv::Mat(), cv::Mat(), var_type, cv::Mat(), params);
-#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -176,32 +140,18 @@ RandomForestsMachineLearningModel<TInputValue, TOutputValue>::DoPredict(const In
 template <class TInputValue, class TOutputValue>
 void RandomForestsMachineLearningModel<TInputValue, TOutputValue>::Save(const std::string& filename, const std::string& name)
 {
-#ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::WRITE);
   fs << (name.empty() ? m_RFModel->getDefaultName() : cv::String(name)) << "{";
   m_RFModel->write(fs);
   fs << "}";
   fs.release();
-#else
-  if (name == "")
-    m_RFModel->save(filename.c_str(), nullptr);
-  else
-    m_RFModel->save(filename.c_str(), name.c_str());
-#endif
 }
 
 template <class TInputValue, class TOutputValue>
 void RandomForestsMachineLearningModel<TInputValue, TOutputValue>::Load(const std::string& filename, const std::string& name)
 {
-#ifdef OTB_OPENCV_3
   cv::FileStorage fs(filename, cv::FileStorage::READ);
   m_RFModel->read(name.empty() ? fs.getFirstTopLevelNode() : fs[name]);
-#else
-  if (name == "")
-    m_RFModel->load(filename.c_str(), nullptr);
-  else
-    m_RFModel->load(filename.c_str(), name.c_str());
-#endif
 }
 
 template <class TInputValue, class TOutputValue>
@@ -223,13 +173,8 @@ bool RandomForestsMachineLearningModel<TInputValue, TOutputValue>::CanReadFile(c
     std::getline(ifs, line);
 
     // if (line.find(m_RFModel->getName()) != std::string::npos)
-    if (line.find(CV_TYPE_NAME_ML_RTREES) != std::string::npos
-#ifdef OTB_OPENCV_3
-        || line.find(m_RFModel->getDefaultName()) != std::string::npos
-#endif
-        )
+    if (line.find(CV_TYPE_NAME_ML_RTREES) != std::string::npos || line.find(m_RFModel->getDefaultName()) != std::string::npos)
     {
-      // std::cout<<"Reading a "<<CV_TYPE_NAME_ML_RTREES<<" model"<<std::endl;
       return true;
     }
   }

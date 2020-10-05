@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -26,4 +26,9 @@ otb_create_application(
 otb_create_application(
   NAME           ContrastEnhancement
   SOURCES        otbContrastEnhancement.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           FastNLMeans
+  SOURCES        otbFastNLMeans.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})

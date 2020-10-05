@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -332,7 +332,7 @@ void HistogramModel::virtual_Read(QIODevice* device)
 
   qDebug() << tr("%1: Reading histogram...").arg(QDateTime::currentDateTime().toString(Qt::ISODate));
 
-  QTime time;
+  QElapsedTimer time;
   time.start();
 
 
@@ -385,7 +385,7 @@ void HistogramModel::virtual_Write(QIODevice& device) const
 
   qDebug() << tr("%1: Writing histogram...").arg(QDateTime::currentDateTime().toString(Qt::ISODate));
 
-  QTime time;
+  QElapsedTimer time;
   time.start();
 
 #if 0

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -29,3 +29,8 @@ set(OTBOpenCV_INCLUDE_DIRS
   )
 
 otb_module_impl()
+
+install(FILES ${OTBOpenCV_BINARY_DIR}/src/otb_opencv_api.h
+  DESTINATION ${OTBOpenCV_INSTALL_INCLUDE_DIR}
+  COMPONENT Development
+  )

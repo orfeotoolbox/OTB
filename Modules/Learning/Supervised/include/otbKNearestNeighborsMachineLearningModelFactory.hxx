@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,11 +39,6 @@ KNearestNeighborsMachineLearningModelFactory<TInputValue, TOutputValue>::KNeares
 
   this->RegisterOverride(classOverride.c_str(), subclass.c_str(), "KNN ML Model", 1,
                          itk::CreateObjectFunction<KNearestNeighborsMachineLearningModel<TInputValue, TOutputValue>>::New());
-}
-
-template <class TInputValue, class TOutputValue>
-KNearestNeighborsMachineLearningModelFactory<TInputValue, TOutputValue>::~KNearestNeighborsMachineLearningModelFactory()
-{
 }
 
 template <class TInputValue, class TOutputValue>

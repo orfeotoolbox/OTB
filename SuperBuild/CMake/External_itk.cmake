@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -146,8 +146,8 @@ set(_SB_ITK_DIR ${SB_INSTALL_PREFIX}/lib/cmake/ITK-${SB_ITK_VERSION_MAJOR}.${SB_
 
 ExternalProject_Add(ITK
   PREFIX ITK
-  URL "https://sourceforge.net/projects/itk/files/itk/4.13/InsightToolkit-4.13.1.tar.gz"
-  URL_MD5 c7e229802c4ee64e1b2a6d48b1df67e9
+  URL "https://github.com/InsightSoftwareConsortium/ITK/archive/v4.13.3.tar.gz"
+  URL_MD5 cc0e2d9b243f28db84b8b4a45a23f9d7
   SOURCE_DIR ${ITK_SB_SRC}
   BINARY_DIR ${ITK_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

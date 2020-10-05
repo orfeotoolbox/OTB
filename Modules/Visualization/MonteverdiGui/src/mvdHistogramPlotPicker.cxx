@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -214,10 +214,10 @@ QwtText HistogramPlotPicker::trackerTextF(const QPointF& point) const
     return QwtPlotPicker::trackerTextF(point);
 
   if (!isActive())
-    return QwtText(QString().sprintf("%.4f, %.4f", point.x(), point.y()));
+    return QwtText(QString("%.4f, %.4f").arg(point.x()).arg(point.y()));
 
   QString text;
-  text.sprintf("%.4f", point.x());
+  text = QString("%.4f").arg(point.x());
 
   CountType start = 0;
   CountType stop  = 0;
@@ -232,7 +232,7 @@ QwtText HistogramPlotPicker::trackerTextF(const QPointF& point) const
 
         Find(m_PlotCurves[i], point.x(), c0, c1, cf);
 
-        text.append(QString().sprintf("\n[%.4f; %.4f[, %.0f", c0, c1, cf));
+        text.append(QString("\n[%.4f; %.4f[, %.0f").arg(c0).arg(c1).arg(cf));
       }
 
   return text;

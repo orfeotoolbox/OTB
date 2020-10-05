@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,6 +23,7 @@
 #endif
 
 #include "otbWrapperNumericalParameter.h"
+#include <typeinfo>
 
 using namespace otb::Wrapper;
 
@@ -32,6 +33,15 @@ void assert_equal(const T& a, const T& b)
   if (a != b)
   {
     itkGenericExceptionMacro("assert_equal failed");
+  }
+}
+
+template <typename T>
+void assert_close(const T& a, const T& b)
+{
+  if (std::abs(a-b) > 1e-7)
+  {
+    itkGenericExceptionMacro("assert_close failed");
   }
 }
 
@@ -50,6 +60,7 @@ int otbWrapperFloatParameterTest(int, char* [])
     assert_equal(param->GetValue(), val);
     assert_equal(param->ToInt(), int(val));
     assert_equal(param->ToFloat(), val);
+    assert_equal(param->ToDouble(), (double)val);
     assert_equal(param->ToString(), std::string("42.005"));
   }
 
@@ -59,6 +70,7 @@ int otbWrapperFloatParameterTest(int, char* [])
     assert_equal(param->GetValue(), val);
     assert_equal(param->ToInt(), int(val));
     assert_equal(param->ToFloat(), val);
+    assert_equal(param->ToDouble(), (double)val);
     assert_equal(param->ToString(), std::string("-6.5"));
   }
 
@@ -69,6 +81,50 @@ int otbWrapperFloatParameterTest(int, char* [])
     assert_equal(param->GetValue(), val);
     assert_equal(param->ToInt(), int(val));
     assert_equal(param->ToFloat(), val);
+    assert_equal(param->ToDouble(), (double)val);
+    assert_equal(param->ToString(), std::string("-100.01"));
+  }
+
+  return EXIT_SUCCESS;
+}
+
+int otbWrapperDoubleParameterTest(int, char* [])
+{
+  auto param = DoubleParameter::New();
+
+  param->SetKey("mykey");
+  param->SetDescription("My description.");
+
+  assert_equal(param->GetType(), ParameterType_Double);
+
+  { // SetValue
+    const double val = 42.005;
+    param->SetValue(val);
+    assert_equal(param->GetValue(), val);
+    assert_equal(param->ToInt(), int(val));
+    assert_close(param->ToFloat(), (float)val);
+    assert_close(param->ToDouble(), val);
+    assert_equal(param->ToString(), std::string("42.005"));
+  }
+
+  { // FromDouble
+    const double val = -6.5;
+    param->FromDouble(val);
+    assert_equal(param->GetValue(), val);
+    assert_equal(param->ToInt(), int(val));
+    assert_close(param->ToFloat(), (float)val);
+    assert_close(param->ToDouble(), val);
+    assert_equal(param->ToString(), std::string("-6.5"));
+  }
+
+  { // FromString
+    const std::string str = "-100.01";
+    const double       val = -100.01;
+    param->FromString(str);
+    assert_equal(param->GetValue(), val);
+    assert_equal(param->ToInt(), int(val));
+    assert_close(param->ToFloat(), (float)val);
+    assert_close(param->ToDouble(), val);
     assert_equal(param->ToString(), std::string("-100.01"));
   }
 
@@ -90,6 +146,7 @@ int otbWrapperIntParameterTest(int, char* [])
     assert_equal(param->GetValue(), val);
     assert_equal(param->ToInt(), val);
     assert_equal(param->ToFloat(), float(val));
+    assert_equal(param->ToDouble(), double(val));
     assert_equal(param->ToString(), std::string("42"));
   }
 
@@ -100,6 +157,7 @@ int otbWrapperIntParameterTest(int, char* [])
     assert_equal(param->GetValue(), val);
     assert_equal(param->ToInt(), val);
     assert_equal(param->ToFloat(), float(val));
+    assert_equal(param->ToDouble(), double(val));
     assert_equal(param->ToString(), std::string("-100"));
   }
 

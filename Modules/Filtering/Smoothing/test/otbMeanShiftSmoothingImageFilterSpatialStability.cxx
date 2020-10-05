@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,6 +21,8 @@
 #include "otbImageFileReader.h"
 #include "otbMeanShiftSmoothingImageFilter.h"
 
+
+#include "otbPersistentFilterStreamingDecorator.h"
 
 #include "otbDifferenceImageFilter.h"
 #include "otbMultiChannelExtractROI.h"
@@ -61,8 +63,10 @@ int otbMeanShiftSmoothingImageFilterSpatialStability(int argc, char* argv[])
   typedef otb::MultiChannelExtractROI<PixelType, PixelType>               ExtractROIFilterType;
   typedef otb::MultiChannelExtractROI<SpatialPixelType, SpatialPixelType> SpatialExtractROIFilterType;
 
-  typedef otb::DifferenceImageFilter<ImageType, ImageType>               SubtractFilterType;
-  typedef otb::DifferenceImageFilter<SpatialImageType, SpatialImageType> SpatialSubtractFilterType;
+  typedef otb::PersistentFilterStreamingDecorator<otb::DifferenceImageFilter<ImageType, ImageType> >     
+            SubtractFilterType;
+  typedef otb::PersistentFilterStreamingDecorator<otb::DifferenceImageFilter<SpatialImageType, SpatialImageType> > 
+            SpatialSubtractFilterType;
 
   // Instantiating object
 
@@ -133,11 +137,11 @@ int otbMeanShiftSmoothingImageFilterSpatialStability(int argc, char* argv[])
   filterROISpatial2->SetSizeY(sizeYROI);
 
   SpatialSubtractFilterType::Pointer filterSubSpatial = SpatialSubtractFilterType::New();
-  filterSubSpatial->SetValidInput(filterROISpatial1->GetOutput());
-  filterSubSpatial->SetTestInput(filterROISpatial2->GetOutput());
+  filterSubSpatial->GetFilter()->SetValidInput(filterROISpatial1->GetOutput());
+  filterSubSpatial->GetFilter()->SetTestInput(filterROISpatial2->GetOutput());
   filterSubSpatial->Update();
 
-  SpatialImageType::PixelType spatialOutputDiff = filterSubSpatial->GetTotalDifference();
+  SpatialImageType::PixelType spatialOutputDiff = filterSubSpatial->GetFilter()->GetTotalDifference();
 
   ExtractROIFilterType::Pointer filterROISpectral1 = ExtractROIFilterType::New();
   filterROISpectral1->SetInput(MSfilter->GetRangeOutput());
@@ -155,11 +159,12 @@ int otbMeanShiftSmoothingImageFilterSpatialStability(int argc, char* argv[])
   filterROISpectral2->SetSizeY(sizeYROI);
 
   SubtractFilterType::Pointer filterSubSpectral = SubtractFilterType::New();
-  filterSubSpectral->SetValidInput(filterROISpectral1->GetOutput());
-  filterSubSpectral->SetTestInput(filterROISpectral2->GetOutput());
+  
+  filterSubSpectral->GetFilter()->SetValidInput(filterROISpectral1->GetOutput());
+  filterSubSpectral->GetFilter()->SetTestInput(filterROISpectral2->GetOutput());
   filterSubSpectral->Update();
 
-  ImageType::PixelType spectralOutputDiff = filterSubSpectral->GetTotalDifference();
+  ImageType::PixelType spectralOutputDiff = filterSubSpectral->GetFilter()->GetTotalDifference();
 
   bool spatialUnstable  = false;
   bool spectralUnstable = false;

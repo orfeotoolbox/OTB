@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -46,7 +46,7 @@ median, variance, kurtosis, skewness. The result could be use to perform further
 object-oriented image analysis.
 "
   GIT_REPOSITORY https://github.com/gpo-geo/SertitObject
-  GIT_TAG b725cb16255fa46ce5662956523ac1ecba733d02
+  GIT_TAG b13961b775724c8de4fa45bc5c5bec14b6d2afef
 )
 
 # use a temporary fork because pull request #8 not merged yet

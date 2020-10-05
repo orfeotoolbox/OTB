@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -49,22 +49,15 @@ GDALDriverManagerWrapper::GDALDriverManagerWrapper()
 
 GDALDriverManagerWrapper::~GDALDriverManagerWrapper()
 {
+  // calling GDALDestroyDriverManager() (or GDALDestroy) from the destructor of a 
+  // static C++ object is unsafe.
   // GDALDestroyDriverManager();
-  // Since gdal 2.4 we need to explicitely call GDALDestroy
-  // GDALDestroyDriverManager is called inside
-  GDALDestroy(); // gdaldllmain.cpp line 74
 }
 
 // Open the file for reading and returns a smart dataset pointer
 GDALDatasetWrapper::Pointer GDALDriverManagerWrapper::Open(std::string filename) const
 {
   GDALDatasetWrapper::Pointer datasetWrapper;
-
-  if (boost::algorithm::starts_with(filename, "http://") || boost::algorithm::starts_with(filename, "https://"))
-  {
-    // don't try to open it and exit
-    return datasetWrapper;
-  }
 
   // test if a driver can identify the dataset
   GDALDriverH identifyDriverH = GDALIdentifyDriver(filename.c_str(), nullptr);

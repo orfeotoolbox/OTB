@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -42,4 +42,18 @@ otb_test_application(NAME  apTvFESFSTextureExtraction
                      VALID   --compare-image ${NOTOL}
                    			 ${BASELINE}/apTvFESFSTextureExtraction.tif
                  		     ${TEMP}/apTvFESFSTextureExtraction.tif)
+
+
+#----------- PantexTextureExtraction TESTS ----------------
+otb_test_application(NAME  apTvFEPantexTextureExtraction
+                     APP  PantexTextureExtraction
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -channel 1
+                             -out ${TEMP}/apTvFEPantexTextureExtraction.tif
+                             -nbin 8
+                             -sradx 4
+                             -srady 4
+                     VALID   --compare-image ${NOTOL}
+                   			 ${BASELINE}/apTvFEPantexTextureExtraction.tif
+                 		     ${TEMP}/apTvFEPantexTextureExtraction.tif)
 

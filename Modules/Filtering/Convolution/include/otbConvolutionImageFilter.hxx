@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,8 +44,7 @@ ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPre
 }
 
 template <class TInputImage, class TOutputImage, class TBoundaryCondition, class TFilterPrecision>
-void ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>::GenerateInputRequestedRegion() throw(
-    itk::InvalidRequestedRegionError)
+void ConvolutionImageFilter<TInputImage, TOutputImage, TBoundaryCondition, TFilterPrecision>::GenerateInputRequestedRegion()
 {
   // call the superclass' implementation of this method
   Superclass::GenerateInputRequestedRegion();

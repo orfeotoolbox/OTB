@@ -126,25 +126,14 @@ public:
    *  You may specify top and bottom margins that will be removed from the input image, according to its largest possible region.
    */
   template <class TImage>
-  void AddInputImage(const TImage* inputPtr, const std::string& fileName)
-  {
-    Sink<TImage>* sink = new Sink<TImage>(inputPtr, fileName);
-    m_SinkList.push_back(SinkBase::Pointer(sink));
-    unsigned int size = m_SinkList.size();
-    this->SetNthInput(size - 1, const_cast<itk::DataObject*>(dynamic_cast<const itk::DataObject*>(inputPtr)));
-  }
+  void AddInputImage(const TImage* inputPtr, const std::string& fileName);
+
 
   /** Add a new ImageFileWriter to the multi-writer. This is an alternative method
    *  when you already have an instanciated writer.
    */
   template <class TWriter>
-  void AddInputWriter(const TWriter* writer)
-  {
-    Sink<typename TWriter::InputImageType>* sink = new Sink<typename TWriter::InputImageType>(writer);
-    m_SinkList.push_back(SinkBase::Pointer(sink));
-    unsigned int size = m_SinkList.size();
-    this->SetNthInput(size - 1, const_cast<itk::DataObject*>(dynamic_cast<const itk::DataObject*>(writer->GetInput())));
-  }
+  void AddInputWriter(typename TWriter::Pointer writer);
 
   virtual void UpdateOutputInformation() override;
 
@@ -244,8 +233,11 @@ private:
     }
     virtual void WriteImageInformation()                 = 0;
     virtual void Write(const RegionType& streamRegion)   = 0;
-    virtual bool                        CanStreamWrite() = 0;
+    virtual bool                        CanStreamWrite() const = 0;
     typedef boost::shared_ptr<SinkBase> Pointer;
+
+
+    virtual itk::ImageRegion<2> GetRegionToWrite() const = 0;
 
   protected:
     /** The image on which streaming is performed */
@@ -265,17 +257,22 @@ private:
     {
     }
     Sink(typename TImage::ConstPointer inputImage, const std::string& filename);
-    Sink(typename otb::ImageFileWriter<TImage>::ConstPointer writer);
+    Sink(typename otb::ImageFileWriter<TImage>::Pointer writer);
 
     virtual ~Sink()
     {
     }
 
-    virtual void WriteImageInformation();
-    virtual void Write(const RegionType& streamRegion);
-    virtual bool                    CanStreamWrite();
+    void WriteImageInformation() override;
+    void Write(const RegionType& streamRegion) override;
+    bool                    CanStreamWrite() const override;
     typedef boost::shared_ptr<Sink> Pointer;
-
+    
+    /** Get the region that should be written. By default this is the largest possible region
+     * of the input image, but this might be overridden by the box extended filename parameter of 
+     * the input writer */
+    itk::ImageRegion<2> GetRegionToWrite() const override;
+  
   private:
     /** Actual writer for this image */
     typename otb::ImageFileWriter<TImage>::Pointer m_Writer;

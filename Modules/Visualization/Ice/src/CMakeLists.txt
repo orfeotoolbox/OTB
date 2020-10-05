@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -21,7 +21,6 @@
 set(OTBICE_SRCS
   otbGeoInterface.cxx
   otbGlActor.cxx
-  otbGlError.cxx
   otbGlImageActor.cxx
   otbGlMesh.cxx
   otbGlROIActor.cxx

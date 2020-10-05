@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -141,7 +141,6 @@ public:
 
   /**
    * Set/Get input & output projections.
-   * Set/Get input & output keywordlist
    * The macro are not used here cause the input and the output are
    * inversed.
    */
@@ -167,7 +166,9 @@ public:
     return m_Transform->GetInputProjectionRef();
   }
 
-  /** Set/Get Input Keywordlist*/
+  /** Set/Get Input Keywordlist
+   * \deprecated
+   */
   void SetInputKeywordList(const ImageKeywordlist& kwl)
   {
     m_Transform->SetOutputKeywordList(kwl);
@@ -178,7 +179,9 @@ public:
     return m_Transform->GetOutputKeywordList();
   }
 
-  /** Set/Get output Keywordlist*/
+  /** Set/Get output Keywordlist
+   * \deprecated
+   */
   void SetOutputKeywordList(const ImageKeywordlist& kwl)
   {
     m_Transform->SetInputKeywordList(kwl);

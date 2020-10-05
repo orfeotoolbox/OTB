@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -35,25 +35,44 @@ namespace Functor
  *
  * \ingroup OTBImageManipulation
  */
-template <class TInputVectorPixel, class TOutputPixel>
-class SqrtSpectralAngleFunctor : public SpectralAngleFunctor<TInputVectorPixel, TOutputPixel>
+
+/** \class SpectralAngleFunctor
+ *  \brief This functor computes the spectral angle according to a reference pixel.
+ *
+ * \ingroup OTBImageManipulation
+ */
+template <class TInput, class TOutputValue>
+class SqrtSpectralAngleFunctor
 {
 public:
-  typedef SqrtSpectralAngleFunctor Self;
-  typedef SpectralAngleFunctor<TInputVectorPixel, TOutputPixel> Superclass;
-
   SqrtSpectralAngleFunctor()
   {
-  }
-  ~SqrtSpectralAngleFunctor() override
-  {
+    m_ReferencePixel.SetSize(4);
+    m_ReferencePixel.Fill(1);
   }
 
-protected:
-  TOutputPixel Evaluate(const TInputVectorPixel& inPix) const override
+  virtual ~SqrtSpectralAngleFunctor() = default;
+
+  // Binary operator
+  inline TOutputValue operator()(TInput const & inPix) const
   {
-    return static_cast<TOutputPixel>(std::sqrt(Superclass::Evaluate(inPix)));
+    return std::sqrt(SpectralAngleDetails::ComputeSpectralAngle<TInput, TInput, TOutputValue>(inPix, inPix.GetNorm(), m_ReferencePixel, m_RefNorm));
   }
+
+  void SetReferencePixel(TInput const & ref)
+  {
+    m_ReferencePixel = ref;
+    m_RefNorm = ref.GetNorm();
+  }
+  
+  TInput GetReferencePixel() const
+  {
+    return m_ReferencePixel;
+  }
+
+private :
+  TInput m_ReferencePixel;
+  double m_RefNorm;
 };
 
 } // end namespace Functor

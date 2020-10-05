@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,6 +24,7 @@ void RegisterTests()
 {
   REGISTER_TEST(otbWrapperInputImageParameterTest);
   REGISTER_TEST(otbWrapperFloatParameterTest);
+  REGISTER_TEST(otbWrapperDoubleParameterTest);
   REGISTER_TEST(otbWrapperIntParameterTest);
   REGISTER_TEST(otbWrapperRAMParameterTest);
   REGISTER_TEST(otbWrapperStringParameterTest1);

@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -89,6 +89,14 @@ void PersistentImageToOGRLayerFilter<TImage>::Initialize()
 
   oSRSESRI.morphToESRI();
   oSRSESRI.morphFromESRI();
+
+#if GDAL_VERSION_NUM >= 3000000 // importFromWkt is const-correct in GDAL 3
+    // Use the same mapping strategy as the one in the datasource.
+    auto mappingStrategy = m_OGRLayer.GetSpatialRef()->GetAxisMappingStrategy();
+    oSRS.SetAxisMappingStrategy(mappingStrategy);
+    oSRSESRI.SetAxisMappingStrategy(mappingStrategy);
+#endif
+
   if (m_OGRLayer.GetSpatialRef() && (!oSRS.IsSame(m_OGRLayer.GetSpatialRef()) && !oSRSESRI.IsSame(m_OGRLayer.GetSpatialRef())))
   {
     if ((oSRS.Validate() != OGRERR_NONE) && (oSRSESRI.Validate() != OGRERR_NONE))

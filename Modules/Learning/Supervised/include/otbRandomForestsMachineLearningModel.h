@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -133,7 +133,7 @@ protected:
   RandomForestsMachineLearningModel();
 
   /** Destructor */
-  ~RandomForestsMachineLearningModel() override;
+  ~RandomForestsMachineLearningModel() override = default;
 
   /** Predict values using the model */
   TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
@@ -151,11 +151,8 @@ private:
   RandomForestsMachineLearningModel(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-#ifdef OTB_OPENCV_3
   cv::Ptr<CvRTreesWrapper> m_RFModel;
-#else
-  CvRTreesWrapper* m_RFModel;
-#endif
+
   /** The depth of the tree. A low value will likely underfit and conversely a
    * high value will likely overfit. The optimal value can be obtained using cross
    * validation or other suitable methods. */

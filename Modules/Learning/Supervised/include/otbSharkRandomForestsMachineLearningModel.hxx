@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -52,12 +52,6 @@ SharkRandomForestsMachineLearningModel<TInputValue, TOutputValue>::SharkRandomFo
   this->m_IsDoPredictBatchMultiThreaded = true;
   this->m_NormalizeClassLabels          = true;
   this->m_ComputeMargin                 = false;
-}
-
-
-template <class TInputValue, class TOutputValue>
-SharkRandomForestsMachineLearningModel<TInputValue, TOutputValue>::~SharkRandomForestsMachineLearningModel()
-{
 }
 
 /** Train the machine learning model */

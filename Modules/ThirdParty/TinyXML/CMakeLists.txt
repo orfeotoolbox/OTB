@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -21,12 +21,16 @@
 project(OTBTinyXML)
 
 # Check if we need to define TIXML_USE_STL
-try_compile( TIXML_USE_STL
+try_compile( TIXML_TEST_STL
              ${CMAKE_CURRENT_BINARY_DIR}/CMake
              ${CMAKE_CURRENT_SOURCE_DIR}/CMake/otbTestTinyXMLUseSTL.cxx
              CMAKE_FLAGS "-DINCLUDE_DIRECTORIES:PATH=${TINYXML_INCLUDE_DIRS}" "-DLINK_LIBRARIES:STRING=${TINYXML_LIBRARIES}"
              COMPILE_DEFINITIONS "-DTIXML_USE_STL"
              OUTPUT_VARIABLE OUTPUT)
+
+if (NOT TIXML_TEST_STL)
+    message(FATAL_ERROR "TIXML must be compiled with TIXML_USE_STL=ON.")
+endif()
 
 configure_file( src/otb_tinyxml.h.in src/otb_tinyxml.h )
 

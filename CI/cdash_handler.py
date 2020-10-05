@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -44,6 +44,9 @@ def CheckEnvParameters(params, verbose=True):
       return False
   return True
 
+class CDashException(Exception):
+  pass
+
 """
 Handler class to retrieve build informations
 """
@@ -78,8 +81,7 @@ class Handler:
         print ( configure_xml )
       self.configure_path = configure_xml
       return self.configure_path
-    print("Could not find the Configure.xml produced by ctest")
-    sys.exit(1)
+    raise CDashException("Could not find the Configure.xml produced by ctest")
 
   def ParseConfigureFile(self):
     """
@@ -98,21 +100,18 @@ class Handler:
     if trace:
       print( root.attrib )
     if not 'Name' in root.keys():
-      print("Can't find site name in Configure.XML")
-      sys.exit(1)
+      raise CDashException("Can't find site name in Configure.XML")
     if not 'BuildName' in root.keys():
-      print("Can't find build name in Configure.XML")
-      sys.exit(1)
+      raise CDashException("Can't find build name in Configure.XML")
     if not 'BuildStamp' in root.keys():
-      print("Can't find build stamp in Configure.XML")
-      sys.exit(1)
+      raise CDashException("Can't find build stamp in Configure.XML")
     self.site = root.get('Name')
     self.name = root.get('BuildName')
     self.stamp = root.get('BuildStamp')
 
   def GetBuildId (self, **kwargs):
     """
-    This function is returning the buildid. Dict can be passed with the 
+    This function is returning the buildid. Dict can be passed with the
     different informations
     """
     site = self.site
@@ -129,8 +128,7 @@ class Handler:
       if key == "project":
         project = value
     if ( site == "" or stamp == "" or name == "" or project == ""):
-      print( "Missing argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
-      sys.exit(1)
+      raise CDashException("Missing argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     elif trace:
       print( "Argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     buildid_api = "/api/v1/getbuildid.php?"
@@ -157,8 +155,7 @@ class Handler:
         print ( "build id is ", self.buildid)
       return buildid.group(1)
     else:
-      print("Error in recovering buildid")
-      sys.exit(1)
+      raise CDashException("Error in recovering buildid")
 
   def GetBuildUrl (self , buildid = "" ):
     """
@@ -246,6 +243,12 @@ if __name__ == "__main__":
   if ( len(sys.argv) < 6 and len(sys.argv) > 1 ):
     print("Usage : "+sys.argv[0]+" commit_sha1 project_id project_directory token ref_name")
     sys.exit(1)
+
+  if os.environ.get('CI_SKIP_CDASH', False):
+    sys.exit(0)
+
+  allow_failure = os.environ.get('CI_ALLOW_FAILURE', False)
+
   if ( len(sys.argv) >= 6):
     sha1 = sys.argv[1]
     proj = sys.argv[2]
@@ -272,20 +275,29 @@ if __name__ == "__main__":
   if trace:
     print("build_dir is: " + build_dir)
   handler.build_dir = build_dir
-  handler.GetConfigureFile()
-  handler.ParseConfigureFile()
-  if handler.GetBuildId() is None:
-    cdash_url = "https://cdash.orfeo-toolbox.org"
-    state = 'failed'
-    error = "Failed to get build id"
-  else:
-    cdash_url = handler.GetBuildUrl()
-    ( state , error ) = handler.GetLogStatus( os.path.join( pdir , "log") )
-  print("CDash build URL : "+cdash_url)
-  if token is None:
-    sys.exit(0)
-  gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
-  gitlab_url += proj + "/statuses/" + sha1
+
+  try:
+    handler.GetConfigureFile()
+    handler.ParseConfigureFile()
+    if handler.GetBuildId() is None:
+      cdash_url = "https://cdash.orfeo-toolbox.org"
+      state = 'failed'
+      error = "Failed to get build id"
+    else:
+      cdash_url = handler.GetBuildUrl()
+      ( state , error ) = handler.GetLogStatus( os.path.join( pdir , "log") )
+    print("CDash build URL : "+cdash_url)
+    if token is None:
+      sys.exit(0)
+    gitlab_url = "https://gitlab.orfeo-toolbox.org/api/v4/projects/"
+    gitlab_url += proj + "/statuses/" + sha1
+  except CDashException as e:
+    if allow_failure:
+      state = 'success'
+    else:
+      print(e)
+      sys.exit(1)
+
   params = urllib.parse.urlencode({'name':'cdash:' + handler.site , 'state': state ,\
    'target_url' : cdash_url , 'description' : error , 'ref' : refn })
   gitlab_request = urllib.request.Request(gitlab_url)

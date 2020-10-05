@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -55,91 +55,121 @@ public:
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
-  /** Get the radiometric bias from the ossim metadata */
+  /** Get the radiometric bias from the ossim metadata
+   * \deprecated
+   */
   VariableLengthVectorType GetPhysicalBias() const
   {
     itkExceptionMacro("GetPhysicalBias not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the radiometric gain from the ossim metadata */
+  /** Get the radiometric gain from the ossim metadata
+   * \deprecated
+   */
   VariableLengthVectorType GetPhysicalGain() const
   {
     itkExceptionMacro("GetPhysicalGain not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the solar irradiance from the ossim metadata */
+  /** Get the solar irradiance from the ossim metadata
+   * \deprecated
+   */
   VariableLengthVectorType GetSolarIrradiance() const
   {
     itkExceptionMacro("GetSolarIrradiance not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging acquisition day from the ossim metadata */
+  /** Get the imaging acquisition day from the ossim metadata
+   * \deprecated
+   */
   int GetDay() const override
   {
     itkExceptionMacro("GetDay not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging acquisition month from the ossim metadata */
+  /** Get the imaging acquisition month from the ossim metadata
+   * \deprecated
+   */
   int GetMonth() const override
   {
     itkExceptionMacro("GetMonth not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging acquisition year from the ossim metadata */
+  /** Get the imaging acquisition year from the ossim metadata
+   * \deprecated
+   */
   int GetYear() const override
   {
     itkExceptionMacro("GetYear not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging acquisition hour from the ossim metadata */
+  /** Get the imaging acquisition hour from the ossim metadata
+   * \deprecated
+   */
   int GetHour() const override
   {
     itkExceptionMacro("GetHour not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging acquisition minute from the ossim metadata */
+  /** Get the imaging acquisition minute from the ossim metadata
+   * \deprecated
+   */
   int GetMinute() const override
   {
     itkExceptionMacro("GetMinute not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging production day from the ossim metadata */
+  /** Get the imaging production day from the ossim metadata
+   * \deprecated
+   */
   int GetProductionDay() const override
   {
     itkExceptionMacro("GetProductionDay not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging production month from the ossim metadata */
+  /** Get the imaging production month from the ossim metadata
+   * \deprecated
+   */
   int GetProductionMonth() const override
   {
     itkExceptionMacro("GetProductionMonth not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging production year from the ossim metadata */
+  /** Get the imaging production year from the ossim metadata
+   * \deprecated
+   */
   int GetProductionYear() const override
   {
     itkExceptionMacro("GetProductionYear not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the sat elevation from the ossim metadata */
+  /** Get the sat elevation from the ossim metadata
+   * \deprecated
+   */
   double GetSatElevation() const
   {
     itkExceptionMacro("GetSatElevation not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the sat azimuth from the ossim metadata */
+  /** Get the sat azimuth from the ossim metadata
+   * \deprecated
+   */
   double GetSatAzimuth() const
   {
     itkExceptionMacro("GetSatElevation not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the first wavelength for the spectral band definition */
+  /** Get the first wavelength for the spectral band definition
+   * \deprecated
+   */
   VariableLengthVectorType GetFirstWavelengths() const
   {
     itkExceptionMacro("GetFirstWavelengths not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the last wavelength for the spectral band definition */
+  /** Get the last wavelength for the spectral band definition
+   * \deprecated
+   */
   VariableLengthVectorType GetLastWavelengths() const
   {
     itkExceptionMacro("GetLastWavelengths not implemented in DefaultImageMetadataInterface, no captor type found");

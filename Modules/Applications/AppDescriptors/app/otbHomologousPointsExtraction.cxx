@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -150,7 +150,7 @@ private:
 
     AddChoice("mode.geobins", "Search keypoints in small spatial bins regularly spread across first image");
     SetParameterDescription("mode.geobins",
-                            "This method retrieves a set of tie points regulary spread across image 1. Corresponding bins in image 2 are retrieved using "
+                            "This method retrieves a set of tie points regularly spread across image 1. Corresponding bins in image 2 are retrieved using "
                             "sensor and geographical information if available. The first bin position takes into account the margin parameter. Bins are "
                             "cropped to the largest image region shrunk by the margin parameter for both in1 and in2 images.");
 

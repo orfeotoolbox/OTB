@@ -505,7 +505,16 @@ namespace ossimplugins
     std::vector<std::string> vGeoCoor_BR;
     otb::Utils::ConvertStringToVector(geoCoor_BR, vGeoCoor_BR, "S01_SBI_Bottom_Right_Geodetic_Coordinates", " ");
    
-    
+    ///// Add Corner into the keywordlist ////
+    add(theProductKwl, "ul_lat", vGeoCoor_TL[0]); 
+    add(theProductKwl, "ul_lon", vGeoCoor_TL[1]);
+    add(theProductKwl, "ur_lat", vGeoCoor_TR[0]); 
+    add(theProductKwl, "ur_lon", vGeoCoor_TR[1]);
+    add(theProductKwl, "ll_lat", vGeoCoor_BL[0]); 
+    add(theProductKwl, "ll_lon", vGeoCoor_BL[1]);
+    add(theProductKwl, "lr_lat", vGeoCoor_BR[0]); 
+    add(theProductKwl, "lr_lon", vGeoCoor_BR[1]);
+
     // Mean
     std::vector<double> vGeoCoor_Mean;
     vGeoCoor_Mean.push_back((std::stod(vGeoCoor_TL[0]) + std::stod(vGeoCoor_TR[0]) + std::stod(vGeoCoor_BL[0]) +

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,7 +21,7 @@
 #ifndef otbDifferenceImageFilter_h
 #define otbDifferenceImageFilter_h
 
-#include "itkImageToImageFilter.h"
+#include "otbPersistentImageFilter.h"
 #include "itkNumericTraits.h"
 #include "itkArray.h"
 
@@ -42,7 +42,7 @@ namespace otb
  * \ingroup OTBTestKernel
  */
 template <class TInputImage, class TOutputImage>
-class ITK_EXPORT DifferenceImageFilter : public itk::ImageToImageFilter<TInputImage, TOutputImage>
+class ITK_EXPORT DifferenceImageFilter : public otb::PersistentImageFilter <TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
@@ -87,11 +87,12 @@ public:
   itkGetMacro(TotalDifference, AccumulateType);
   itkGetMacro(NumberOfPixelsWithDifferences, unsigned long);
 
+  void Synthetize(void) override;
+  void Reset(void) override;
+
 protected:
   DifferenceImageFilter();
-  ~DifferenceImageFilter() override
-  {
-  }
+  ~DifferenceImageFilter() = default;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
@@ -108,10 +109,8 @@ protected:
    *     ImageToImageFilter::GenerateData()  */
   void ThreadedGenerateData(const OutputImageRegionType& threadRegion, itk::ThreadIdType threadId) override;
 
-  void BeforeThreadedGenerateData() override;
-  void AfterThreadedGenerateData() override;
   void GenerateOutputInformation() override;
-
+  
   ScalarRealType m_DifferenceThreshold;
   RealType       m_MeanDifference;
   AccumulateType m_TotalDifference;

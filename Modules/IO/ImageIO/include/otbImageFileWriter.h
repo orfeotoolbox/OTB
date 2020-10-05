@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2020 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -57,7 +58,7 @@ namespace otb
  * \sa ImageFileReader
  * \sa ImageSeriesReader
  * \sa ImageIOBase
- * \sa ExtendedFilenameToReaderOptions
+ * \sa ExtendedFilenameToWriterOptions
  *
  * \ingroup OTBImageIO
  */
@@ -199,6 +200,8 @@ public:
   itkSetObjectMacro(ImageIO, otb::ImageIOBase);
   itkGetObjectMacro(ImageIO, otb::ImageIOBase);
   itkGetConstObjectMacro(ImageIO, otb::ImageIOBase);
+
+  itkGetConstObjectMacro(FilenameHelper, FNameHelperType);
 
   /** This override doesn't return a const ref on the actual boolean */
   const bool& GetAbortGenerateData() const override;

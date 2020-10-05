@@ -25,7 +25,7 @@ The operation to perform can be defined as a free function:
 
 .. code-block:: cpp
 
-    double myFreeFunction(const double& int in) {...}
+    double myFreeFunction(const double& in) {...}
 
 It can also be defined as a functor (i.e. a class defining ``operator()``:
 
@@ -34,14 +34,14 @@ It can also be defined as a functor (i.e. a class defining ``operator()``:
     class MyFunctor
     {
     public:
-        double operator()(const double& int in) {...}
+        double operator()(const double& in) {...}
     };
 
 It can also be defined as a lambda:
 
 .. code-block:: cpp
 
-    auto myLambda = [](const double & int in) -> double {...}
+    auto myLambda = [](const double& in) -> double {...}
 
 
 Creating a ``FunctorImageFilter``
@@ -52,7 +52,7 @@ Once the operation to perform has been implemented, it is very easy to get an in
 .. code-block:: cpp
 
     auto filterFromFreeFunction = NewFunctorFilter(myFreeFunction);
-    auto filterFromFunctor      = NewFunctorFilter(MyFunctor);
+    auto filterFromFunctor      = NewFunctorFilter(MyFunctor());
     auto filterFromLambda       = NewFunctorFilter(myLambda);
 
 And you can use it just like any other filter:
@@ -114,7 +114,7 @@ Alternative prototype for performance
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Automatic type deduction will also work with the following signature:
-``void (const R&, T1 t1, T2 t2 ..., TN tn)``
+``void (R&, T1 t1, T2 t2 ..., TN tn)``
 
 This will be more efficient when ``R`` is of type ``itk::VariableLengthVector<T>`` and should be preferred in this case.
 

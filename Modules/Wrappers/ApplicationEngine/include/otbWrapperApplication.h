@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -219,6 +219,7 @@ public:
    * \li ParameterType_Int
    * \li ParameterType_Bool
    * \li ParameterType_Float
+   * \li ParameterType_Double
    * \li ParameterType_Radius
    * \li ParameterType_Choice
    */
@@ -228,8 +229,17 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_Float
+   * \li ParameterType_Double
    */
   void SetParameterFloat(std::string const& parameter, float value, bool hasUserValueFlag = true);
+
+  /* Set a double precision floating value
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   * \li ParameterType_Double
+   */
+  void SetParameterDouble(std::string const& parameter, double value, bool hasUserValueFlag = true);
 
   /* Set a string value
    *
@@ -253,6 +263,7 @@ public:
    * \li ParameterType_Directory
    * \li ParameterType_Choice
    * \li ParameterType_Float
+   * \li ParameterType_Double
    * \li ParameterType_Int
    * \li ParameterType_Radius
    * \li ParameterType_InputImageParameter
@@ -285,6 +296,7 @@ public:
    * Can be called for types :
    * \li ParameterType_Int
    * \li ParameterType_Float
+   * \li ParameterType_Double
    * \li ParameterType_Radius
    * \li ParameterType_Choice
    */
@@ -295,6 +307,7 @@ public:
    * Can be called for types :
    * \li ParameterType_Int
    * \li ParameterType_Float
+   * \li ParameterType_Double
    * \li ParameterType_Radius
    * \li ParameterType_Choice
    */
@@ -306,6 +319,7 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_Float
+   * \li ParameterType_Double
    */
   void SetDefaultParameterFloat(std::string const& parameter, float value);
 
@@ -313,8 +327,27 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_Float
+   * \li ParameterType_Double
    */
   float GetDefaultParameterFloat(std::string const& parameter);
+
+  /* Set a default double precision floating value, must be used in the
+   * DoInit when setting a value by default
+   * for the parameter
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   * \li ParameterType_Double
+   */
+  void SetDefaultParameterDouble(std::string const& parameter, double value);
+
+  /* Get the default double precision floating value of a parameter
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   * \li ParameterType_Double
+   */
+  double GetDefaultParameterDouble(std::string const& parameter);
 
   /** Set a default pixel type for an output image parameter
    *
@@ -348,7 +381,7 @@ public:
    */
   void SetMaximumParameterIntValue(std::string const& parameter, int value);
 
-  /* Set a minimum int value, must used in the
+  /* Set a minimum float value, must used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -357,7 +390,7 @@ public:
    */
   void SetMinimumParameterFloatValue(std::string const& parameter, float value);
 
-  /* Set a maximum int value, must used in the
+  /* Set a maximum float value, must used in the
    * DoInit when setting a value by default
    * for the parameter
    *
@@ -365,6 +398,26 @@ public:
    * \li ParameterType_Float
    */
   void SetMaximumParameterFloatValue(std::string const& parameter, float value);
+
+  /* Set a minimum double precision float value, must used in the
+   * DoInit when setting a value by default
+   * for the parameter
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   * \li ParameterType_Double
+   */
+  void SetMinimumParameterDoubleValue(std::string const& parameter, double value);
+
+  /* Set a maximum double precision value, must used in the
+   * DoInit when setting a value by default
+   * for the parameter
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   * \li ParameterType_Double
+   */
+  void SetMaximumParameterDoubleValue(std::string const& parameter, double value);
 
 
   /**
@@ -411,6 +464,7 @@ public:
    * \li ParameterType_Int
    * \li ParameterType_Bool
    * \li ParameterType_Float
+   * \li ParameterType_Double
    * \li ParameterType_Radius
    * \li ParameterType_Choice
    */
@@ -420,8 +474,17 @@ public:
    *
    * Can be called for types :
    * \li ParameterType_Float
+   * \li ParameterType_Double
    */
   float GetParameterFloat(std::string const& parameter) const;
+
+  /* Get a double precision floating parameter value
+   *
+   * Can be called for types :
+   * \li ParameterType_Float
+   * \li ParameterType_Double
+   */
+  double GetParameterDouble(std::string const& parameter) const;
 
   /* Get a string parameter value
    *
@@ -609,6 +672,7 @@ public:
     *
     * Can be called for types :
     * \li ParameterType_Float
+    * \li ParameterType_Double
     * \li ParameterType_Int
     * \li ParameterType_Choice
     * \li ParameterType_Radius
@@ -779,6 +843,9 @@ public:
 
   bool IsExecuteDone();
 
+  /** Is multiWriting enabled for this application ? */
+  bool IsMultiWritingEnabled();
+
 protected:
   /** Constructor */
   Application();
@@ -803,11 +870,10 @@ protected:
   /** Add a parameterRAM method with parameter*/
   void AddRAMParameter(std::string const& paramKey, std::string const& paramName, unsigned int defaultValue);
 
-  /** Add a parameterRAND method with no parameter*/
+  /** Add a parameterRAND method with no parameter */
   void AddRANDParameter(std::string const& paramKey = "rand");
 
-  /** Add a parameterRAND method with parameter
-   * by default seed initialization is based on time value*/
+  /** Add a parameterRAND method with parameter */
   void AddRANDParameter(std::string const& paramKey, std::string const& paramName, unsigned int defaultValue);
 
   /** Remove the items added to the ListWidget */
@@ -849,6 +915,15 @@ protected:
    */
   template <class TImageType>
   void SetParameterOutputImage(std::string const& parameter, TImageType* value);
+
+  /** Enable/Disable multiWriting */
+  itkSetMacro(MultiWriting, bool);
+
+  /* Enable in-application prevention of modifications to m_UserValue (default behaviour) */
+  void EnableInPrivateDo();
+
+  /* Disable in-application prevention of modifications to m_UserValue */
+  void DisableInPrivateDo();
 
 private:
   /* Implement this method to add parameters */
@@ -903,6 +978,9 @@ private:
 
   /** Flag to check if Execute has already been called */
   bool m_ExecuteDone;
+
+  /** Flag that determine if a multiWriter should be used to write output images */
+  bool m_MultiWriting;
 
   /**
     * Declare the class

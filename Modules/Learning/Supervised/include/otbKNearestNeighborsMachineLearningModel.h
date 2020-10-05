@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -27,11 +27,7 @@
 #include "itkFixedArray.h"
 #include "otbMachineLearningModel.h"
 
-#ifdef OTB_OPENCV_3
 #include "otbOpenCVUtils.h"
-#else
-class CvKNearest;
-#endif
 
 namespace otb
 {
@@ -105,7 +101,7 @@ protected:
   KNearestNeighborsMachineLearningModel();
 
   /** Destructor */
-  ~KNearestNeighborsMachineLearningModel() override;
+  ~KNearestNeighborsMachineLearningModel() override = default;
 
   /** Predict values using the model */
   TargetSampleType DoPredict(const InputSampleType& input, ConfidenceValueType* quality = nullptr, ProbaSampleType* proba = nullptr) const override;
@@ -117,11 +113,8 @@ private:
   KNearestNeighborsMachineLearningModel(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-#ifdef OTB_OPENCV_3
   cv::Ptr<cv::ml::KNearest> m_KNearestModel;
-#else
-  CvKNearest* m_KNearestModel;
-#endif
+
   int m_K;
 
   int m_DecisionRule;

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -90,6 +90,24 @@ otb_test_application(NAME apTvDmStereoRectificationGridGeneratorTest
                              ${BASELINE}/apTvDmStereoRectificationGridGeneratorInverseRightTest.tif
                              ${TEMP}/apTvDmStereoRectificationGridGeneratorInverseRightTest.tif
                      )
+
+
+otb_test_application(NAME apTvDmStereoRectificationGridGeneratorTestAvgDEM
+                     APP  StereoRectificationGridGenerator
+
+                     OPTIONS -io.inleft ${INPUTDATA}/sensor_stereo_left.tif
+                             -io.inright ${INPUTDATA}/sensor_stereo_right.tif
+                             -io.outleft ${TEMP}/apTvDmStereoRectificationGridGeneratorLeftTestAvgDEM.tif
+                             -io.outright ${TEMP}/apTvDmStereoRectificationGridGeneratorRightTestAvgDEM.tif
+                             -inverse.outleft  ${TEMP}/apTvDmStereoRectificationGridGeneratorInverseLeftTestAvgDEM.tif
+                             -inverse.outright ${TEMP}/apTvDmStereoRectificationGridGeneratorInverseRightTestAvgDEM.tif
+                             -epi.elevation.dem ${INPUTDATA}/DEM/srtm_directory
+                             -epi.elevation.geoid ${INPUTDATA}/DEM/egm96.grd
+                             -epi.elevation.avgdem.step 10
+                             -epi.scale 1.0
+                             -epi.step 4
+                             # No validation here, purpose is only to see that te avgdem mode works without errors
+                             )
 
 
 #----------- FineRegistration TESTS ----------------

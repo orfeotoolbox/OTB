@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -48,11 +48,11 @@
   }
 
 
+
 namespace otb
 {
 namespace Wrapper
 {
-
 
 // Declare specialisation for UInt8RGBAImageType
 template <>
@@ -63,12 +63,14 @@ template <>
 void OutputImageParameter::SwitchInput(UInt8RGBImageType*);
 
 
-OutputImageParameter::OutputImageParameter() : m_PixelType(ImagePixelType_float), m_DefaultPixelType(ImagePixelType_float), m_RAMValue(0)
+OutputImageParameter::OutputImageParameter()
+  : m_PixelType(ImagePixelType_float)
+  , m_DefaultPixelType(ImagePixelType_float)
+  , m_RAMValue(0)
 {
   SetName("Output Image");
   SetKey("out");
 }
-
 
 OutputImageParameter::~OutputImageParameter()
 {
@@ -174,8 +176,9 @@ bool OutputImageParameter::ConvertStringToPixelType(const std::string& value, Im
 }
 
 
-void OutputImageParameter::InitializeWriters()
+void OutputImageParameter::InitializeWriters(otb::MultiImageFileWriter::Pointer multi)
 {
+  m_MultiWriter = multi;
   ImageBaseType* image = m_Image.GetPointer();
 
   CAST_IMAGE_BASE(UInt8VectorImageType, image);
@@ -302,6 +305,10 @@ void OutputImageParameter::ClampAndWriteVectorImage(TInputImage* in)
   m_OutputCaster = clamp.ocif;
 
   m_Writer = writer;
+  if (IsMultiWritingEnabled())
+    {
+    m_MultiWriter->AddInputWriter<otb::ImageFileWriter<TOutputImage>>(writer);
+    }
 }
 
 
@@ -449,8 +456,12 @@ void OutputImageParameter::SwitchInput(UInt8RGBAImageType* img)
   writer->SetFileName(GetFileName());
   writer->SetInput(img);
   writer->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
-
+  
   m_Writer = writer;
+  if (IsMultiWritingEnabled())
+    {
+    m_MultiWriter->AddInputWriter<otb::ImageFileWriter<UInt8RGBAImageType>>(writer);
+    }
 }
 
 // Specialization for UInt8RGBImageType
@@ -467,6 +478,10 @@ void OutputImageParameter::SwitchInput(UInt8RGBImageType* img)
   writer->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
 
   m_Writer = writer;
+  if (IsMultiWritingEnabled())
+    {
+    m_MultiWriter->AddInputWriter<otb::ImageFileWriter<UInt8RGBImageType>>(writer);
+    }
 }
 
 void OutputImageParameter::SetFileName(const char* filename)
@@ -479,5 +494,17 @@ void OutputImageParameter::SetFileName(const std::string& filename)
   m_FileName = filename;
   SetActive(true);
 }
+
+bool OutputImageParameter::IsMultiWritingEnabled()
+{
+  if (m_MultiWriter)
+    {
+    otb::ExtendedFilenameToWriterOptions::Pointer filenameHelper = otb::ExtendedFilenameToWriterOptions::New();
+    filenameHelper->SetExtendedFileName(this->GetFileName());
+    return filenameHelper->GetMultiWrite();
+    }
+  return false;
+}
+
 }
 }

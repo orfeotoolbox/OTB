@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -147,11 +147,13 @@ public:
    */
   virtual int                      ToInt() const;
   virtual float                    ToFloat() const;
+  virtual double                   ToDouble() const;
   virtual std::string              ToString() const;
   virtual std::vector<std::string> ToStringList() const;
 
   virtual void FromInt(int);
   virtual void FromFloat(float);
+  virtual void FromDouble(double);
   virtual void FromString(const std::string&);
   virtual void FromStringList(const std::vector<std::string>&);
 

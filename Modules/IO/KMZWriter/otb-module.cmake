@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -27,6 +27,7 @@ otb_module(OTBKMZWriter
     OTBImageBase
     OTBImageIO
     OTBImageManipulation
+    OTBMetadata
     OTBOSSIMAdapters
     OTBTransform
     OTBVectorDataBase

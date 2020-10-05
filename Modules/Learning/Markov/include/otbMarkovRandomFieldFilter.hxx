@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -253,7 +253,7 @@ void MarkovRandomFieldFilter<TInputImage, TClassifiedImage>::Allocate()
 * Initialize pipeline and values
 */
 template <class TInputImage, class TClassifiedImage>
-void MarkovRandomFieldFilter<TInputImage, TClassifiedImage>::Initialize() throw(itk::ExceptionObject)
+void MarkovRandomFieldFilter<TInputImage, TClassifiedImage>::Initialize()
 {
 
   m_ImageDeltaEnergy = 0.0;

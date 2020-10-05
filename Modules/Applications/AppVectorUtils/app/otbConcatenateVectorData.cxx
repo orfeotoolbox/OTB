@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -75,7 +75,7 @@ private:
     SetParameterDescription("out", "Output conctenated vector data file.");
 
     // Doc example parameter settings
-    SetDocExampleParameterValue("vd", "ToulousePoints-examples.shp ToulouseRoad-examples.shp");
+    SetDocExampleParameterValue("vd", "toulousepoints_examples.shp ToulouseRoad-examples.shp");
     SetDocExampleParameterValue("out", "ConcatenatedVectorData.shp");
 
     SetOfficialDocLink();

@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
- * Copyright (C) 2018 CS Systemes d'Information (CS SI)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2018-2020 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -308,7 +308,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       {
         if (sizevalue == 0)
         {
-          otbLogMacro(Warning, << "Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting "
+          otbLogMacro(Warning, << "Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
                                   "the sizevalue by using &streaming:sizevalue=x.");
         }
         this->SetNumberOfDivisionsTiledStreaming(sizevalue);
@@ -317,7 +317,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       {
         if (sizevalue == 0)
         {
-          otbLogMacro(Warning, << "Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting "
+          otbLogMacro(Warning, << "Streaming sizemode is set to height but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
                                   "the sizevalue by using &streaming:sizevalue=x.");
         }
 
@@ -340,7 +340,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       {
         if (sizevalue == 0)
         {
-          otbLogMacro(Warning, << "Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in upredicted behaviour. Please consider setting "
+          otbLogMacro(Warning, << "Streaming sizemode is set to nbsplits but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
                                   "the sizevalue by using &streaming:sizevalue=x.");
         }
         this->SetNumberOfDivisionsStrippedStreaming(sizevalue);
@@ -349,7 +349,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       {
         if (sizevalue == 0)
         {
-          otbLogMacro(Warning, << "Streaming sizemode is set to height but sizevalue is 0. This will result in upredicted behaviour. Please consider setting "
+          otbLogMacro(Warning, << "Streaming sizemode is set to height but sizevalue is 0. This will result in undefined behaviour. Please consider setting "
                                   "the sizevalue by using &streaming:sizevalue=x.");
         }
         this->SetNumberOfLinesStrippedStreaming(sizevalue);
@@ -421,7 +421,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
 
   // Manage extended filename
   if ((strcmp(m_ImageIO->GetNameOfClass(), "GDALImageIO") == 0) &&
-      (m_FilenameHelper->gdalCreationOptionsIsSet() || m_FilenameHelper->WriteRPCTagsIsSet() || m_FilenameHelper->NoDataValueIsSet()))
+      (m_FilenameHelper->gdalCreationOptionsIsSet() || m_FilenameHelper->WriteRPCTagsIsSet() || m_FilenameHelper->NoDataValueIsSet() || m_FilenameHelper->SrsValueIsSet()))
   {
     typename GDALImageIO::Pointer imageIO = dynamic_cast<GDALImageIO*>(m_ImageIO.GetPointer());
 
@@ -438,6 +438,8 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
     imageIO->SetWriteRPCTags(m_FilenameHelper->GetWriteRPCTags());
     if (m_FilenameHelper->NoDataValueIsSet())
       imageIO->SetNoDataList(m_FilenameHelper->GetNoDataList());
+    if  (m_FilenameHelper->SrsValueIsSet())
+	  imageIO->SetEpsgCode(m_FilenameHelper->GetSrsValue());
   }
 
 
@@ -451,16 +453,26 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
   /** Parse region size modes */
   if (m_FilenameHelper->BoxIsSet())
   {
-    std::vector<int> boxVector;
+    std::vector<unsigned int> boxVector;
     Utils::ConvertStringToVector(m_FilenameHelper->GetBox(), boxVector, "ExtendedFileName:box", ":");
+
+    if (boxVector.size() != 4)
+    {
+      itk::ImageFileWriterException e(__FILE__, __LINE__);
+      std::ostringstream            msg;
+      msg << "Invalid box option " << m_FilenameHelper->GetBox() << ". The box should contains four elements: startx:starty:sizex:sizey";
+      e.SetDescription(msg.str());
+      e.SetLocation(ITK_LOCATION);
+      throw e;
+    }
 
     typename InputImageRegionType::IndexType start;
     typename InputImageRegionType::SizeType  size;
-
     start[0] = boxVector[0]; // first index on X
     start[1] = boxVector[1]; // first index on Y
     size[0]  = boxVector[2]; // size along X
     size[1]  = boxVector[3]; // size along Y
+
     inputRegion.SetSize(size);
     inputRegion.SetIndex(start);
 

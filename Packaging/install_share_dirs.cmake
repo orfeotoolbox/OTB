@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -44,9 +44,6 @@ function(install_share_dirs)
       "Cannot generate package without GDAL_DATA : ${GDAL_DATA_DIR}")
   endif()
   install_without_message("${GDAL_DATA_DIR}" "share" )
-
-  ####################### install GeoTIFF data ########################
-  install_without_message("${PKG_SHARE_SOURCE_DIR}/epsg_csv" "share" )
 
   ####################### install OSSIM data ##########################
   install_without_message("${PKG_SHARE_SOURCE_DIR}/ossim" "share" )

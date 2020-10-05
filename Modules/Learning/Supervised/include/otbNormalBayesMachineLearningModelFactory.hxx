@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -39,11 +39,6 @@ NormalBayesMachineLearningModelFactory<TInputValue, TOutputValue>::NormalBayesMa
 
   this->RegisterOverride(classOverride.c_str(), subclass.c_str(), "Normal Bayes ML Model", 1,
                          itk::CreateObjectFunction<NormalBayesMachineLearningModel<TInputValue, TOutputValue>>::New());
-}
-
-template <class TInputValue, class TOutputValue>
-NormalBayesMachineLearningModelFactory<TInputValue, TOutputValue>::~NormalBayesMachineLearningModelFactory()
-{
 }
 
 template <class TInputValue, class TOutputValue>

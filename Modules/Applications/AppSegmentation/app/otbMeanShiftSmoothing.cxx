@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -176,6 +176,7 @@ private:
                             "the result will slightly depend on thread number and the results will not be stable (see [4] for more details).");
 
     AddRAMParameter();
+    SetMultiWriting(true);
 
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "maur_rgb.png");

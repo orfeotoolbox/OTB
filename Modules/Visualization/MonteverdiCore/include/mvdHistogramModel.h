@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -433,9 +433,9 @@ HistogramModel
 template <typename TImageModel>
 void HistogramModel::template_BuildModel_M(BuildContext*)
 {
-  QTime lMain;
-  QTime lPass1;
-  QTime lPass2;
+  QElapsedTimer lMain;
+  QElapsedTimer lPass1;
+  QElapsedTimer lPass2;
 
   lMain.start();
 

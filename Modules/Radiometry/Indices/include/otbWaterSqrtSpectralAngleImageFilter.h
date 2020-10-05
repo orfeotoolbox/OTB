@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -23,6 +23,7 @@
 
 #include "otbSqrtSpectralAngleFunctor.h"
 #include "itkUnaryFunctorImageFilter.h"
+#include "otbRadiometricIndex.h"
 
 namespace otb
 {
@@ -38,100 +39,102 @@ namespace Functor
  *
  * \ingroup OTBIndices
  */
-template <class TInputVectorPixel, class TOutputPixel>
-class WaterSqrtSpectralAngleFunctor : public SqrtSpectralAngleFunctor<TInputVectorPixel, TOutputPixel>
+template <class TInput, class TOutput>
+class WaterSqrtSpectralAngleFunctor : public RadiometricIndex<TInput, TOutput>
 {
 public:
-  typedef WaterSqrtSpectralAngleFunctor Self;
-  typedef SqrtSpectralAngleFunctor<TInputVectorPixel, TOutputPixel> Superclass;
-  typedef TInputVectorPixel InputVectorPixelType;
-  WaterSqrtSpectralAngleFunctor()
+  using typename RadiometricIndex<TInput, TOutput>::PixelType;
+
+  WaterSqrtSpectralAngleFunctor() 
+        : RadiometricIndex<TInput, TOutput>({CommonBandNames::BLUE, CommonBandNames::GREEN, CommonBandNames::RED, CommonBandNames::NIR} )
   {
-
-    // Set the channels indices
-    m_BlueIndex  = 0;
-    m_GreenIndex = 1;
-    m_RedIndex   = 2;
-    m_NIRIndex   = 3;
-
-    // Set reference water value
-    InputVectorPixelType reference;
-    reference.SetSize(4);
-    reference[0] = 136.0;
-    reference[1] = 132.0;
-    reference[2] = 47.0;
-    reference[3] = 24.0;
-    this->SetReferenceWaterPixel(reference);
+    // Set default reference water value
+    m_ReferencePixel.SetSize(4);
+    m_ReferencePixel[0] = 136.0;
+    m_ReferencePixel[1] = 132.0;
+    m_ReferencePixel[2] = 47.0;
+    m_ReferencePixel[3] = 24.0;
+    m_RefNorm = m_ReferencePixel.GetNorm();
   }
-  ~WaterSqrtSpectralAngleFunctor() override
-  {
-  }
+  
+  virtual ~WaterSqrtSpectralAngleFunctor() = default;
 
-  /** Set Reference Pixel */
-  void SetReferenceWaterPixel(InputVectorPixelType ref)
+  /** Set Reference Pixel 
+   * \param ref : The new reference pixel, the band indices will be used.
+   * */
+  void SetReferenceWaterPixel(PixelType ref)
   {
-    if (ref.GetSize() != 4)
-    {
-    }
-    InputVectorPixelType reference;
-    reference.SetSize(4);
-    reference[m_BlueIndex]  = ref[0];
-    reference[m_GreenIndex] = ref[1];
-    reference[m_RedIndex]   = ref[2];
-    reference[m_NIRIndex]   = ref[3];
-    this->SetReferencePixel(reference);
+    assert(m_ReferencePixel.Size() == 4);
+    m_ReferencePixel[0] = this->Value(CommonBandNames::BLUE, ref);
+    m_ReferencePixel[1] = this->Value(CommonBandNames::GREEN, ref);
+    m_ReferencePixel[2] = this->Value(CommonBandNames::RED, ref);
+    m_ReferencePixel[3] = this->Value(CommonBandNames::NIR, ref);
+    m_RefNorm = m_ReferencePixel.GetNorm();
   }
 
-  /** Getters and setters */
+  // Binary operator
+  inline TOutput operator()(PixelType const & inPix) const override
+  {
+    PixelType pix(4);
+    pix[0] = this->Value(CommonBandNames::BLUE, inPix);
+    pix[1] = this->Value(CommonBandNames::GREEN, inPix);
+    pix[2] = this->Value(CommonBandNames::RED, inPix);
+    pix[3] = this->Value(CommonBandNames::NIR, inPix);
+
+    return std::sqrt(SpectralAngleDetails::ComputeSpectralAngle<PixelType, PixelType, TOutput>
+                                                                  (pix, pix.GetNorm(),
+                                                                   m_ReferencePixel, m_RefNorm));
+  }
+
+  /**@{*/ 
+  /** Legacy getters and setters (use SetBandIndex/GetBandIndex instead)
+   * \deprecated
+   * */
   void SetBlueChannel(unsigned int channel)
   {
-    m_BlueIndex = channel;
+    this->SetBandIndex(CommonBandNames::BLUE, channel + 1);
   }
   unsigned int GetBlueChannel() const
   {
-    return m_BlueIndex;
+    return this->GetBandIndex(CommonBandNames::BLUE) - 1;
   }
   void SetGreenChannel(unsigned int channel)
   {
-    m_GreenIndex = channel;
+    this->SetBandIndex(CommonBandNames::GREEN, channel + 1);
   }
   unsigned int GetGreenChannel() const
   {
-    return m_GreenIndex;
+    return this->GetBandIndex(CommonBandNames::GREEN) - 1;
   }
   void SetRedChannel(unsigned int channel)
   {
-    m_RedIndex = channel;
+    this->SetBandIndex(CommonBandNames::RED, channel + 1);
   }
   unsigned int GetRedChannel() const
   {
-    return m_RedIndex;
+     return this->GetBandIndex(CommonBandNames::RED) - 1;
   }
   void SetNIRChannel(unsigned int channel)
   {
-    m_NIRIndex = channel;
+    this->SetBandIndex(CommonBandNames::NIR, channel + 1);
   }
   unsigned int GetNIRChannel() const
   {
-    return m_NIRIndex;
+    return this->GetBandIndex(CommonBandNames::NIR) - 1;
   }
+  /**@}*/
+  
 
-protected:
-  inline TOutputPixel Evaluate(const TInputVectorPixel& inPix) const override
-  {
-    return static_cast<TOutputPixel>(Superclass::Evaluate(inPix));
-  }
+private:
 
-  /** Channels */
-  int m_BlueIndex;
-  int m_GreenIndex;
-  int m_RedIndex;
-  int m_NIRIndex;
+  PixelType m_ReferencePixel;
+  double m_RefNorm;
 };
 } // End namespace Functor
 
 
 /** \class WaterSqrtSpectralAngleImageFilter
+ *  \deprecated
  *  \brief Compute a radiometric water indice
  *
  *  This filter calculates a pixel wise water indice by calculating
@@ -147,11 +150,11 @@ protected:
  *  probability of water.
  *
  *  \sa SpectralAngleDistanceImageFilter
- *
+ * 
  * \ingroup OTBIndices
  */
 template <class TInputVectorImage, class TOutputImage,
-          class TFunction = Functor::WaterSqrtSpectralAngleFunctor<typename TInputVectorImage::PixelType, typename TOutputImage::PixelType>>
+          class TFunction = Functor::WaterSqrtSpectralAngleFunctor<double, typename TOutputImage::PixelType>>
 class ITK_EXPORT WaterSqrtSpectralAngleImageFilter : public itk::UnaryFunctorImageFilter<TInputVectorImage, TOutputImage, TFunction>
 {
 public:

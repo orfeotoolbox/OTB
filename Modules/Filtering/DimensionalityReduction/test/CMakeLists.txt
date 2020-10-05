@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -301,7 +301,8 @@ otb_add_test(NAME bfTvPCAImageFilter2 COMMAND otbDimensionalityReductionTestDriv
   ${TEMP}/bfTvPCAImageFilter2.tif
   ${TEMP}/bfTvPCAImageFilter2Inv.tif
   true
-  0)
+  0
+  true)
 
 otb_add_test(NAME bfTvPCAImageFilter4 COMMAND otbDimensionalityReductionTestDriver
   --compare-n-images ${EPSILON_7} 2
@@ -314,7 +315,8 @@ otb_add_test(NAME bfTvPCAImageFilter4 COMMAND otbDimensionalityReductionTestDriv
   ${TEMP}/bfTvPCAImageFilter4.tif
   ${TEMP}/bfTvPCAImageFilter4Inv.tif
   false
-  4)
+  4
+  true)
 
 otb_add_test(NAME bfTvPCAImageFilter4Norm COMMAND otbDimensionalityReductionTestDriver
   --compare-n-images ${EPSILON_7} 2
@@ -327,7 +329,8 @@ otb_add_test(NAME bfTvPCAImageFilter4Norm COMMAND otbDimensionalityReductionTest
   ${TEMP}/bfTvPCAImageFilter4Norm.tif
   ${TEMP}/bfTvPCAImageFilter4InvNorm.tif
   true
-  4)
+  4
+  true)
 
 otb_add_test(NAME bfTvPCAImageFilter3 COMMAND otbDimensionalityReductionTestDriver
   --compare-n-images ${EPSILON_7} 2
@@ -340,7 +343,22 @@ otb_add_test(NAME bfTvPCAImageFilter3 COMMAND otbDimensionalityReductionTestDriv
   ${TEMP}/bfTvPCAImageFilter3.tif
   ${TEMP}/bfTvPCAImageFilter3Inv.tif
   false
-  0)
+  0
+  true)
+
+otb_add_test(NAME bfTvPCAImageFilter5 COMMAND otbDimensionalityReductionTestDriver
+  --compare-n-images ${EPSILON_7} 2
+  ${BASELINE}/bfTvPCAImageFilter5.tif
+  ${TEMP}/bfTvPCAImageFilter5.tif
+  ${BASELINE}/bfTvPCAImageFilter5Inv.tif
+  ${TEMP}/bfTvPCAImageFilter5Inv.tif
+  otbPCAImageFilterTest
+  ${INPUTDATA}/cupriteSubHsi.tif
+  ${TEMP}/bfTvPCAImageFilter5.tif
+  ${TEMP}/bfTvPCAImageFilter5Inv.tif
+  false
+  0
+  false)
 
 otb_add_test(NAME bfTvPCAImageFilter1 COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
@@ -351,7 +369,8 @@ otb_add_test(NAME bfTvPCAImageFilter1 COMMAND otbDimensionalityReductionTestDriv
   ${TEMP}/bfTvPCAImageFilter1.tif
   ${TEMP}/bfTvPCAImageFilter1Inv.tif
   false
-  0)
+  0
+  true)
 
 
 otb_add_test(NAME bfTvPCAImageFilter3Norm COMMAND otbDimensionalityReductionTestDriver
@@ -365,7 +384,8 @@ otb_add_test(NAME bfTvPCAImageFilter3Norm COMMAND otbDimensionalityReductionTest
   ${TEMP}/bfTvPCAImageFilter3Norm.tif
   ${TEMP}/bfTvPCAImageFilter3InvNorm.tif
   true
-  0)
+  0
+  true)
 
 otb_add_test(NAME bfTvNAPCAImageFilter1 COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}

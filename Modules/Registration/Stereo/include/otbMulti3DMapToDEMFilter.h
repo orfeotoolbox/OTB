@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2019 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -296,10 +296,10 @@ private:
   double m_ElevationMax;
 
 
-  SizeType    m_OutputSize;
+  SizeType    m_OutputSize{0,0};
   IndexType   m_OutputStartIndex;
-  SpacingType m_OutputSpacing;
-  OriginType  m_OutputOrigin;
+  SpacingType m_OutputSpacing{0.0};
+  OriginType  m_OutputOrigin{0.0};
 
   SizeType m_Margin;
 
