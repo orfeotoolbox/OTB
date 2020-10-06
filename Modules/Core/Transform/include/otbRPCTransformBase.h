@@ -21,7 +21,7 @@
 #ifndef otbRPCTransformBase_h
 #define otbRPCTransformBase_h
 
-#include "otbSensorModelBase.h"
+#include "otbSensorTransformBase.h"
 #include "otbGeometryMetadata.h"
 #include "otbGDALRPCTransformer.h"
 
@@ -42,13 +42,13 @@ namespace otb
  * \ingroup OTBTransform
  */
 template <class TScalarType, unsigned int NInputDimensions = 3, unsigned int NOutputDimensions = 2>
-class ITK_EXPORT RPCTransformBase : public SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>
+class ITK_EXPORT RPCTransformBase : public SensorTransformBase<TScalarType, NInputDimensions, NOutputDimensions>
 {
 public:
   /** @name Standard class type definitions */
   //@{
   using Self         = RPCTransformBase;
-  using Superclass   = SensorModelBase<TScalarType, NInputDimensions, NOutputDimensions>;
+  using Superclass   = SensorTransformBase<TScalarType, NInputDimensions, NOutputDimensions>;
   using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self> ;
 

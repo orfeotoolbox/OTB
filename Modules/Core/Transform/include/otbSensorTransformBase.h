@@ -18,8 +18,8 @@
  * limitations under the License.
  */
 
-#ifndef otbSensorModelBase_h
-#define otbSensorModelBase_h
+#ifndef otbSensorTransformBase_h
+#define otbSensorTransformBase_h
 
 #include "otbMacro.h"
 #include "otbImageMetadata.h"
@@ -29,7 +29,7 @@
 
 namespace otb
 {
-/** \class SensorModelBase
+/** \class SensorTransformBase
  *  \brief Base class for the sensor model projection classes.
  *
  *  This is the base class for sensor model projection classes. Those
@@ -45,13 +45,13 @@ namespace otb
  * \ingroup OTBTransform
  */
 template <class TScalarType, unsigned int NInputDimensions = 2, unsigned int NOutputDimensions = 3>
-class ITK_EXPORT SensorModelBase : public Transform<TScalarType, NInputDimensions, NOutputDimensions>
+class ITK_EXPORT SensorTransformBase : public Transform<TScalarType, NInputDimensions, NOutputDimensions>
 {
 
 public:
   /** @name Standard class type definitions */
   //@{
-  using Self         = SensorModelBase;
+  using Self         = SensorTransformBase;
   using Superclass   = Transform<TScalarType, NInputDimensions, NOutputDimensions>;
   using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self> ;
@@ -77,11 +77,11 @@ public:
   virtual bool IsValidSensorModel() const = 0;
 
 protected:
-  SensorModelBase() = default;
-  ~SensorModelBase() = default;
+  SensorTransformBase() = default;
+  ~SensorTransformBase() = default;
 
 private:
-  SensorModelBase(const Self&) = delete;
+  SensorTransformBase(const Self&) = delete;
   void operator=(const Self&) = delete;
 };
 
