@@ -187,7 +187,13 @@ DEMHandler::~DEMHandler()
 void DEMHandler::OpenDEMFile(const std::string& path)
 {
   m_DatasetList.push_back(otb::GDALDriverManagerWrapper::GetInstance().Open(path));
-  m_Dataset = m_DatasetList.back()->GetDataSet();
+  std::vector<GDALDatasetH> vrtDatasetList(1);
+  vrtDatasetList[0] = m_DatasetList[0]->GetDataSet();
+  auto close_me = GDALBuildVRT(DEM_DATASET_PATH.c_str(), 1, vrtDatasetList.data(),
+                               nullptr, nullptr, nullptr);
+  // Need to close the dataset, so it is flushed into memory.
+  GDALClose(close_me);
+  m_Dataset = static_cast<GDALDataset*>(GDALOpen(DEM_DATASET_PATH.c_str(), GA_ReadOnly));
   m_DEMDirectories.push_back(path);
 }
 
@@ -212,34 +218,25 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
   
   int vrtSize = m_DatasetList.size();
  
-  // Don't build a vrt if there is less than two dataset
+  // Don't build a vrt if there is no dataset
   if (m_DatasetList.empty())
   {
     m_Dataset = nullptr;
   }
   else
   {
-    if (vrtSize == 1)
+    std::vector<GDALDatasetH> vrtDatasetList(vrtSize);
+    for (int i = 0; i < vrtSize; i++)
     {
-      m_Dataset = m_DatasetList[0]->GetDataSet();
-      m_DEMDirectories.push_back(DEMDirectory);
+      vrtDatasetList[i] = m_DatasetList[i]->GetDataSet();
     }
-    else
-    {
-      std::vector<GDALDatasetH> vrtDatasetList(vrtSize);
-      for (int i = 0; i < vrtSize; i++)
-      {
-        vrtDatasetList[i] = m_DatasetList[i]->GetDataSet();
-      }
 
-      auto close_me = GDALBuildVRT(DEM_DATASET_PATH.c_str(), vrtSize, vrtDatasetList.data(),
-                                   nullptr, nullptr, nullptr);
-      // Need to close the dataset, so it is flushed into memory.
-      GDALClose(close_me);
-      m_Dataset = static_cast<GDALDataset*>(GDALOpen(DEM_DATASET_PATH.c_str(), GA_ReadOnly));
-      m_DEMDirectories.push_back(DEMDirectory);
-    }
-    
+    auto close_me = GDALBuildVRT(DEM_DATASET_PATH.c_str(), vrtSize, vrtDatasetList.data(),
+                                 nullptr, nullptr, nullptr);
+    // Need to close the dataset, so it is flushed into memory.
+    GDALClose(close_me);
+    m_Dataset = static_cast<GDALDataset*>(GDALOpen(DEM_DATASET_PATH.c_str(), GA_ReadOnly));
+    m_DEMDirectories.push_back(DEMDirectory);
   }
 }
 
