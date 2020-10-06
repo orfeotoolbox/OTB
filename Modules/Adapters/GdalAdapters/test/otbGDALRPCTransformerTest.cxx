@@ -34,41 +34,41 @@ int otbGDALRPCTransformerTest(int itkNotUsed(argc), char* argv[])
 {
   bool success = true;
 
-  double LineOffset = 15834.0, SampleOffset = 13464.0,
-         LatOffset = -42.8607, LonOffset = 147.2588, HeightOffset = 300.0,
-         LineScale = 15834.0, SampleScale = 13464.0,
-		 LatScale = 0.0715, LonScale = 0.0828, HeightScale = 970.0;
+  double LineOffset = 16201.0, SampleOffset = 15184.0,
+         LatOffset = 39.7792, LonOffset = 125.7510, HeightOffset = 97.0,
+         LineScale = 16480.0, SampleScale = 15217.0,
+		 LatScale = 0.0900, LonScale = 0.1096, HeightScale = 501.0;
   const double line_num_coeff[20] = {
-		  -0.000539636886315094, 0.00262771165447159, -1.00287836503009, -0.0340303311076584, 0.00523658598538616,
-		  0.00210057328569037, 0.00311664695421511, 0.000406267962891555, -0.00550089873884607, 5.26202553862825e-05,
-		  2.5958707865627e-06, -2.23632198653199e-06, 2.02822452334703e-05, -5.24009408417096e-06, 2.16913023637956e-05,
-		  -2.36002554032361e-05, 1.56703932477487e-06, -6.14095576183939e-06, 1.8422191786661e-05, 2.01615774485329e-07};
+		  +5.105608E-04, -2.921055E-02, -1.010407E+00, -1.743729E-02, -6.604239E-05,
+		  -7.871396E-05, +3.027877E-04, -4.323587E-04, -2.624751E-04, +6.186490E-06,
+		  +1.084676E-06, +5.389738E-05, +4.145232E-06, +3.911486E-07, +1.772434E-05,
+		  +3.302960E-06, +3.006106E-06, +1.662606E-05, +6.051677E-06, -2.657667E-08};
   const double line_den_coeff[20] = {
-		  1, -0.00520769693945429, 0.00549138470185778, -0.00472718007439368, -2.02057365543208e-05,
-		  8.39509604990839e-06, -3.43728317291176e-05, -1.94598141718645e-05, 2.35660616018416e-05, 3.71653924834455e-06,
-		  7.08406853351595e-08, -5.72002373463043e-09, 8.71363385561163e-09, -4.39082343385483e-09, 1.39161295297537e-08,
-		  -1.24914964124471e-08, 4.6171143198849e-08, 1.70067569381897e-08, -2.37449991316111e-08, 9.05460084990073e-10};
+		  +1.000000E+00, -9.652128E-05, +2.488346E-04, +3.089019E-04, -2.120170E-06,
+		  +4.117913E-07,  +1.370009E-06, +1.357281E-05, -4.174324E-06, -3.146787E-06,
+		  -7.724587E-06, +3.524480E-04, -1.303224E-05, -8.507679E-07, -1.670972E-05,
+		  +6.781061E-06, +5.602262E-07, +1.161421E-05, +4.681872E-06, +5.593931E-08};
   const double samp_num_coeff[20] = {
-		  0.00121386429106107, 1.0047652205584, 0.00363040578479236, -0.033702055558379, 0.00665808526532754,
-		  -0.0036225246184886, -0.000251174639124558, -0.00523232964739848, 1.74629130199178e-05, 0.000131049715749837,
-		  -2.8029900276216e-05, -1.95273546561053e-05, 2.91977037724833e-05, 2.78736117374265e-07, -2.64005759423042e-05,
-		  7.08277764663844e-08, 1.12211574945991e-06, 1.15330773275834e-06, 7.15463416011193e-07, -2.42741993962372e-08};
+		  -2.429563E-04, +1.028320E+00, -3.360972E-02, +3.519600E-03, -6.568341E-04,
+		  +5.951139E-04, -3.875716E-04, +1.260622E-04, -5.273817E-05, -4.418981E-06,
+		  -3.520581E-06, -2.502760E-04, -4.167704E-05, -5.973233E-05, -1.438949E-04,
+		  +7.603041E-06, +2.358136E-06, -2.275274E-05,  +1.602657E-06, -1.716541E-07};
   const double samp_den_coeff[20] = {
-		  1, -0.00520769693945429, 0.00549138470185778, -0.00472718007439368, -2.02057365543208e-05,
-		  8.39509604990839e-06, -3.43728317291176e-05, -1.94598141718645e-05, 2.35660616018416e-05, 3.71653924834455e-06,
-		  7.08406853351595e-08, -5.72002373463043e-09, 8.71363385561163e-09, -4.39082343385483e-09, 1.39161295297537e-08,
-		  -1.24914964124471e-08, 4.6171143198849e-08, 1.70067569381897e-08, -2.37449991316111e-08, 9.05460084990073e-10};
+		  +1.000000E+00, +7.765620E-05, +6.568707E-04, -6.270621E-04, +5.163170E-05,
+		  +6.979463E-06, +2.476334E-07, +1.083558E-04, -4.043734E-05, -5.819288E-05,
+		  +1.778201E-07, +5.665202E-05, +6.927205E-06, +6.793485E-07, +3.604209E-05,
+		  -4.057103E-07, -8.291254E-07, +1.010650E-05, -2.875552E-06, +5.142751E-08};
 
   otb::GDALRPCTransformer transformer(LineOffset, SampleOffset, LatOffset, LonOffset, HeightOffset,
                                       LineScale, SampleScale, LatScale, LonScale, HeightScale,
                                       line_num_coeff, line_den_coeff, samp_num_coeff, samp_den_coeff);
 
   // Test ForwardTransform
-  std::vector<double> x = {20, 20};
-  std::vector<double> y = {10, 10};
+  std::vector<double> x = {20.5, 20.5};
+  std::vector<double> y = {10.5, 10.5};
   std::vector<double> z = {0, 0};
-  double exp_x = 147.1753248795781;
-  double exp_y = -42.78881952208293;
+  double exp_x = 125.64830100509131;
+  double exp_y = 39.869433991997553;
   double exp_z = 0.0;
   std::cout << "Test ForwardTransform with double interface." << '\n';
   if(!transformer.ForwardTransform(x.data(), y.data(), z.data(), 2))
@@ -76,39 +76,39 @@ int otbGDALRPCTransformerTest(int itkNotUsed(argc), char* argv[])
     std::cout << "ForwardTransform failed, returned False." << '\n';
     success = false;
   } else {
-    if (!itk::Math::FloatAlmostEqual(x[0], exp_x))
+    if (x[0] - exp_x > 0.000001)
     {
       std::cout << "Bad value for latitude. Expected " << exp_x << " but computed " << x[0] << "\n";
       success = false;
     }
-    if (!itk::Math::FloatAlmostEqual(y[0], exp_y))
+    if (y[0] - exp_y > 0.000001)
     {
       std::cout << "Bad value for longitude. Expected " << exp_y << " but computed " << y[0] << "\n";
       success = false;
     }
-    if (!itk::Math::FloatAlmostEqual(z[0], exp_z))
+    if (z[0] - exp_z > 0.1)
     {
       std::cout << "Bad value for height. Expected " << exp_z << " but computed " << z[0] << "\n";
       success = false;
     }
   }
   otb::GDALRPCTransformer::PointType zePoint;
-  zePoint[0] = 20.0;
-  zePoint[1] = 10.0;
+  zePoint[0] = 20.5;
+  zePoint[1] = 10.5;
   zePoint[2] = 0.0;
   std::cout << "Test ForwardTransform with point interface." << '\n';
   zePoint = transformer.ForwardTransform(zePoint);
-  if (!itk::Math::FloatAlmostEqual(zePoint[0], exp_x))
+  if (zePoint[0] - exp_x > 0.000001)
   {
     std::cout << "Bad value for latitude. Expected " << exp_x << " but computed " << zePoint[0] << "\n";
     success = false;
   }
-  if (!itk::Math::FloatAlmostEqual(zePoint[1], exp_y))
+  if (zePoint[1] - exp_y > 0.000001)
   {
     std::cout << "Bad value for longitude. Expected " << exp_y << " but computed " << zePoint[1] << "\n";
     success = false;
   }
-  if (!itk::Math::FloatAlmostEqual(zePoint[2], exp_z))
+  if (zePoint[2] - exp_z > 0.1)
   {
     std::cout << "Bad value for height. Expected " << exp_z << " but computed " << zePoint[2] << "\n";
     success = false;
@@ -120,25 +120,25 @@ int otbGDALRPCTransformerTest(int itkNotUsed(argc), char* argv[])
   zePoint[0] = exp_x;
   zePoint[1] = exp_y;
   zePoint[2] = 0.0;
-  exp_x = 20.01139515217801;
-  exp_y = 9.984517889590279;
+  exp_x = 20.5;
+  exp_y = 10.5;
   std::cout << "Test InverseTransform with double interface." << '\n';
   if(!transformer.InverseTransform(x.data(), y.data(), z.data(), 2))
   {
     std::cout << "InverseTransform failed, returned False." << '\n';
     success = false;
   } else {
-    if (!itk::Math::FloatAlmostEqual(x[0], exp_x))
+    if (x[0] - exp_x > 0.05)
     {
       std::cout << "Bad value for latitude. Expected " << exp_x << " but computed " << x[0] << "\n";
       success = false;
     }
-    if (!itk::Math::FloatAlmostEqual(y[0], exp_y))
+    if (y[0] - exp_y > 0.05)
     {
       std::cout << "Bad value for longitude. Expected " << exp_y << " but computed " << y[0] << "\n";
       success = false;
     }
-    if (!itk::Math::FloatAlmostEqual(z[0], exp_z))
+    if (z[0] - exp_z > 0.1)
     {
       std::cout << "Bad value for height. Expected " << exp_z << " but computed " << z[0] << "\n";
       success = false;
@@ -146,31 +146,70 @@ int otbGDALRPCTransformerTest(int itkNotUsed(argc), char* argv[])
   }
   std::cout << "Test InverseTransform with point interface." << '\n';
   zePoint = transformer.InverseTransform(zePoint);
-  if (!itk::Math::FloatAlmostEqual(zePoint[0], exp_x))
+  if (zePoint[0] - exp_x > 0.05)
   {
-    std::cout << "Bad value for latitude. Expected " << exp_x << " but computed " << zePoint[0] << "\n";
+    std::cout << "Bad value for latitude. Expected " << exp_y << " but computed " << zePoint[1] << "\n";
     success = false;
-  } else {
-    if (!itk::Math::FloatAlmostEqual(zePoint[1], exp_y))
-    {
-      std::cout << "Bad value for longitude. Expected " << exp_y << " but computed " << zePoint[1] << "\n";
-      success = false;
-    }
-    if (!itk::Math::FloatAlmostEqual(zePoint[2], exp_z))
-    {
-      std::cout << "Bad value for height. Expected " << exp_z << " but computed " << zePoint[2] << "\n";
-      success = false;
-    }
+  }
+  if (zePoint[1] - exp_y > 0.05)
+  {
+    std::cout << "Bad value for longitude. Expected " << exp_y << " but computed " << zePoint[1] << "\n";
+    success = false;
+  }
+  if (zePoint[2] - exp_z > 0.1)
+  {
+    std::cout << "Bad value for height. Expected " << exp_z << " but computed " << zePoint[2] << "\n";
+    success = false;
   }
 
   // Test with a DEM
   otb::DEMHandler& dem = otb::DEMHandler::GetInstance();
-  dem.OpenDEMDirectory(argv[1]);
-  zePoint[0] = 41.9051;
-  zePoint[1] = 2.3495;
+  dem.OpenDEMFile(argv[1]);
+  zePoint[0] = 20.5;
+  zePoint[1] = 10.5;
+  zePoint[2] = 0.0;
+  exp_x = 125.64828521533849;
+  exp_y = 39.869345204440144;
   transformer.SetOption("RPC_DEM", dem.DEM_DATASET_PATH);
+  transformer.SetOption("RPC_HEIGHT_SCALE", "2");
+
+  std::cout << "Test ForwardTransform with DEM." << '\n';
+  zePoint = transformer.ForwardTransform(zePoint);
+  if (zePoint[0] - exp_x > 0.000001)
+  {
+    std::cout << "Bad value for latitude. Expected " << exp_y << " but computed " << zePoint[1] << "\n";
+    success = false;
+  }
+  if (zePoint[1] - exp_y > 0.000001)
+  {
+    std::cout << "Bad value for longitude. Expected " << exp_y << " but computed " << zePoint[1] << "\n";
+    success = false;
+  }
+  if (zePoint[2] - exp_z > 0.1)
+  {
+    std::cout << "Bad value for height. Expected " << exp_z << " but computed " << zePoint[2] << "\n";
+    success = false;
+  }
+
+  exp_x = 20.5;
+  exp_y = 10.5;
+  std::cout << "Test InverseTransform with DEM." << '\n';
   zePoint = transformer.InverseTransform(zePoint);
-  std::cout << "POINT : " << zePoint << '\n';
+  if (zePoint[0] - exp_x > 0.05)
+  {
+    std::cout << "Bad value for latitude. Expected " << exp_y << " but computed " << zePoint[1] << "\n";
+    success = false;
+  }
+  if (zePoint[1] - exp_y > 0.05)
+  {
+    std::cout << "Bad value for longitude. Expected " << exp_y << " but computed " << zePoint[1] << "\n";
+    success = false;
+  }
+  if (zePoint[2] - exp_z > 0.1)
+  {
+    std::cout << "Bad value for height. Expected " << exp_z << " but computed " << zePoint[2] << "\n";
+    success = false;
+  }
 
   if (success)
     return EXIT_SUCCESS;

@@ -102,5 +102,5 @@ otb_add_test(NAME TuOCoordinateTransformationTest
 otb_add_test(NAME TuGDALRPCTransformerTest
              COMMAND otbGdalAdaptersTestDriver 
              otbGDALRPCTransformerTest
-             ${INPUTDATA}/DEM/srtm_directory/
+             ${INPUTDATA}/TuGDALRPCTransformerTest_DEM.tif
              )
