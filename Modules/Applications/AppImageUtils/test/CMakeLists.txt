@@ -215,6 +215,11 @@ otb_test_application(NAME apTvUtQuicklookROI1Channel
                              ${TEMP}/apTvUtQuicklookROI1Channel.tif
                      )
 
+# this tests has two baseline to take into account the bug described in
+# https://github.com/opengeospatial/ogc_api_coverages/issues/92
+# (half pixel shift applied in the wrong direction to GCPs with the PixelIsPoint convention)
+# The first baseline corresponds to the gdal < 3.1.3 case, 
+# and the second baseline correspond to gdal >= 3.1.3 case.
 otb_test_application(NAME apTvUtQuicklookWithGCP
                      APP Quicklook
                      OPTIONS -in ${INPUTDATA}/spot5SubWithGcps.tif
