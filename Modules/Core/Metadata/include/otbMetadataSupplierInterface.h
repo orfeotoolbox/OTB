@@ -70,6 +70,8 @@ public:
   {
     bool hasValue;
     std::string ret = GetMetadataValue(path, hasValue, band);
+    std::cout << "hasValue : " << hasValue << std::endl ;
+    std::cout << "ret : " << ret << std::endl ;
     if (!hasValue)
     {
       otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata '"<<path<<"'")

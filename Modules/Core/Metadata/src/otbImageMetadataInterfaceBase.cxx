@@ -661,12 +661,15 @@ ImageMetadataInterfaceBase::Fetch(
   const char *path,
   int band)
 {
+  std::cout << "Fetching..." << std::endl ;
   if (band >= 0)
     {
     assert( (size_t)(band) < m_Imd.Bands.size());
     m_Imd.Bands[band].Add(key, mds.GetAs<MetaData::Time>(path, band));
     return m_Imd.Bands[band][key];
     }
+  std::cout << "path : " << path << std::endl ;
+
   m_Imd.Add(key, mds.GetAs<MetaData::Time>(path));
   return m_Imd[key];
 }

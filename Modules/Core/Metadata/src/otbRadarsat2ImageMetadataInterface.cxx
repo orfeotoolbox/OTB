@@ -119,6 +119,8 @@ void Radarsat2ImageMetadataInterface::ParseDateTime(const char* key, std::vector
   }
 }
 
+
+
 int Radarsat2ImageMetadataInterface::GetYear() const
 {
   int value = 0;
@@ -237,4 +239,30 @@ Radarsat2ImageMetadataInterface::UIntVectorType Radarsat2ImageMetadataInterface:
   return rgb;
 }
 
+
+void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+{
+  assert(mds);
+  assert(mds->GetNbBands() == this->m_Imd.Bands.size());
+
+  // Metadata read by GDAL
+  Fetch(MDTime::AcquisitionStartTime, *mds, "ACQUISITION_START_TIME");
+  // Fetch(MDTime::AcquisitionStopTime, *mds, "ACQUISITION_STOP_TIME");
+  Fetch(MDStr::BeamMode, *mds, "BEAM_MODE");
+  // Fetch(MDStr::BeamSwath, *mds, "BEAM_SWATH");
+  Fetch("FACILITY_IDENTIFIER", *mds, "FACILITY_IDENTIFIER");
+  Fetch(MDNum::LineSpacing, *mds, "LINE_SPACING");
+  // Fetch(MDStr::Mission, *mds, "MISSION_ID");
+  // Fetch(MDStr::Mode, *mds, "MODE");
+  Fetch(MDStr::OrbitDirection, *mds, "ORBIT_DIRECTION");
+  // Fetch(MDNum::OrbitNumber, *mds, "ORBIT_NUMBER");
+  Fetch(MDNum::PixelSpacing, *mds, "PIXEL_SPACING");
+  Fetch(MDStr::ProductType, *mds, "PRODUCT_TYPE");
+  Fetch(MDStr::Instrument, *mds, "SATELLITE_IDENTIFIER");
+  Fetch(MDStr::SensorID, *mds, "SENSOR_IDENTIFIER");
+  // Fetch(MDStr::Swath, *mds, "SWATH");
+
+  }
+
 } // end namespace otb
+
