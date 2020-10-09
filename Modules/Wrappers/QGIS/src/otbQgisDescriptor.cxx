@@ -74,18 +74,8 @@ int main(int argc, char* argv[])
   parameterTypeToString[ParameterType_Directory]           = "QgsProcessingParameterFile";
   // TODO
   parameterTypeToString[ParameterType_StringList] = "QgsProcessingParameterString";
-  // ListView parameters are treated as plain string (QLineEdit) in qgis processing ui.
-  // This seems rather unpleasant when comparing Qgis processing with Monteverdi/Mapla in OTB
-  // We tried to push something simple with checkboxes but its too risky for this version
-  // and clock is ticking...
 
-  parameterTypeToString[ParameterType_ListView] = "QgsProcessingParameterString";
-
-// For next update of plugin code ListView should use a custom widget wrapper and behave
-// exactly like OTB Mapla. And this #if 0 block is our TODO remainder.
-#if 0
-  parameterTypeToString[ParameterType_ListView] = "OTBParameterListView";
-#endif
+  parameterTypeToString[ParameterType_ListView] = "QgsProcessingParameterEnum";
 
   const std::vector<std::string> appKeyList = appli->GetParametersKeys(true);
   const unsigned int             nbOfParam  = appKeyList.size();
@@ -155,24 +145,6 @@ int main(int argc, char* argv[])
       return EXIT_FAILURE;
     }
     std::string qgis_type = it->second;
-#if 0
-      if (type == ParameterType_ListView)
-	{
-	  ListViewParameter *lv_param = dynamic_cast<ListViewParameter*>(param.GetPointer());
-	  std::cerr << "lv_param->GetSingleSelection()" << lv_param->GetSingleSelection() << std::endl;
-	  if (lv_param->GetSingleSelection())
-	    {
-
-	      qgis_type = "QgsProcessingParameterEnum";
-	      std::vector<std::string>  key_list  = appli->GetChoiceKeys(name);
-	      std::string values = "";
-	      for( auto k : key_list)
-		values += k + ";";
-	      values.pop_back();
-	      dFile << "|" << values ;
-	    }
-	}
-#endif
 
     bool isEpsgCode = false;
 
@@ -265,7 +237,14 @@ int main(int argc, char* argv[])
     }
     else if (type == ParameterType_ListView)
     {
-      // default is None and nothing to add to dFile
+        ListViewParameter *lv_param = dynamic_cast<ListViewParameter*>(param.GetPointer());
+	      std::vector<std::string>  key_list  = appli->GetChoiceKeys(name);
+	      std::string values = "";
+	      for( auto k : key_list)
+          values += k + ";";
+	      values.pop_back();
+	      dFile << "|" << values ;
+        dFile << "|" << (lv_param->GetSingleSelection() ? "False" : "True");
     }
     else if (type == ParameterType_Bool)
     {
