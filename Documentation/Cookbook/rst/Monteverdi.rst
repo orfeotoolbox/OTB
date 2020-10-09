@@ -235,7 +235,7 @@ placed exactly at the same position in the screenshots).
 .. _BM:
 .. figure:: Art/MonteverdiImages/BM.png
 
-:numref:`BM`: Comparision of histograms before and after applying BandMath.
+:numref:`BM`: Comparison of histograms before and after applying BandMath.
 
 Segmentation
 ~~~~~~~~~~~~
