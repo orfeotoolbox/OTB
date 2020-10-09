@@ -1,29 +1,24 @@
-diff -burN  qt-everywhere-src-5.14.1_orig/qtbase/src/gui/configure.json qt-everywhere-src-5.14.1/qtbase/src/gui/configure.json--- qt-everywhere-src-5.14.1_orig/qtbase/src/gui/configure.json   2020-07-27 18:13:35.779000908 +0200
-+++ qt-everywhere-src-5.14.1/qtbase/src/gui/configure.json  2020-07-27 18:18:11.226987484 +0200
-@@ -239,10 +239,10 @@
+--- qt-everywhere-src-5.10.1/qtbase/src/gui/configure.json  2018-02-08 19:24:48.000000000 +0100
++++ QT5/src/QT5/qtbase/src/gui/configure.json   2018-04-10 14:34:05.529668610 +0200
+@@ -158,8 +158,8 @@
+                 ]
              },
-             "headers": "ft2build.h",
              "sources": [
 -                { "type": "pkgConfig", "args": "freetype2" },
-                 { "type": "freetype", "libs": "-lfreetype", "condition": "!config.wasm" },
-                 { "libs": "-s USE_FREETYPE=1", "condition": "config.wasm" },
--                { "libs": "-lfreetype" }
-+                { "libs": "-lfreetype" },
+-                { "type": "freetype", "libs": "-lfreetype" }
++                { "type": "freetype", "libs": "-lfreetype" },
 +                { "type": "pkgConfig", "args": "freetype2" }
-             ],
-             "use": [
-                 { "lib": "zlib", "condition": "features.system-zlib" }
-@@ -397,12 +397,12 @@
+             ]
+         },
+         "fontconfig": {
+@@ -289,9 +289,9 @@
+                 "main": "(void) png_create_read_struct(PNG_LIBPNG_VER_STRING,0,0,0);"
              },
-             "headers": "png.h",
              "sources": [
 -                { "type": "pkgConfig", "args": "libpng" },
-                 { "libs": "-llibpng16", "condition": "config.msvc" },
++                { "libs": "-lpng", "condition": "!config.msvc" },
                  { "libs": "-llibpng", "condition": "config.msvc" },
-                 { "libs": "-lpng16", "condition": "!config.msvc" },
-                 { "libs": "-lpng", "condition": "!config.msvc" },
--                { "libs": "-s USE_LIBPNG=1", "condition": "config.wasm" }
-+                { "libs": "-s USE_LIBPNG=1", "condition": "config.wasm" },
+-                { "libs": "-lpng", "condition": "!config.msvc" }
 +                { "type": "pkgConfig", "args": "libpng" }
              ],
              "use": [
