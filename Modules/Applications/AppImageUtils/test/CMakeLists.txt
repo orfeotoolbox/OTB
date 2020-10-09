@@ -120,6 +120,18 @@ otb_test_application(NAME apTvUtExtractROIExtentFitVect
                              ${OTBAPP_BASELINE}/apTvUtExtractROI.tif
                              ${TEMP}/apTvUtExtractROIExtentFitVect.tif)
 
+#----------- Clamp ROI tests  ----------------
+otb_test_application(NAME apTvUtResetMargin
+                     APP  ResetMargin
+                     OPTIONS -in ${INPUTDATA}/ResetMarginInput100x100.tiff
+                             -out ${TEMP}/apTvUtResetMargin.tif
+                             -threshold.x       10
+                             -threshold.y.start 12
+                             -threshold.y.end   25
+                     VALID   --compare-image ${NOTOL}
+                             ${OTBAPP_BASELINE}/ResetMarginBaseline100x100.tiff
+                             ${TEMP}/apTvUtResetMargin.tif)
+
 #----------- Rescale TESTS ----------------
 otb_test_application(NAME  apTvUtRescaleTest
                      APP  Rescale
@@ -203,6 +215,11 @@ otb_test_application(NAME apTvUtQuicklookROI1Channel
                              ${TEMP}/apTvUtQuicklookROI1Channel.tif
                      )
 
+# this tests has two baseline to take into account the bug described in
+# https://github.com/opengeospatial/ogc_api_coverages/issues/92
+# (half pixel shift applied in the wrong direction to GCPs with the PixelIsPoint convention)
+# The first baseline corresponds to the gdal < 3.1.3 case, 
+# and the second baseline correspond to gdal >= 3.1.3 case.
 otb_test_application(NAME apTvUtQuicklookWithGCP
                      APP Quicklook
                      OPTIONS -in ${INPUTDATA}/spot5SubWithGcps.tif
@@ -251,6 +268,16 @@ otb_test_application(NAME apTvUtConcatenateImages_1Image
                              ${INPUTDATA}/poupees_c1.raw
                              ${TEMP}/apTvUtConcatenateImages_1Image.tif)
 
+
+#----------- Synthetize TESTS ----------------
+otb_test_application(NAME apTvUtSynthetize
+                     APP  Synthetize
+                     OPTIONS -il ${INPUTDATA}/s1a_33NWB_vv_DES_007_20200108t044150_100x100.tif
+                                 ${INPUTDATA}/s1a_33NWB_vv_DES_007_20200108t044215_100x100.tif
+                             -out ${TEMP}/apTvUtSynthetize.tif
+                     VALID   --compare-image ${NOTOL}
+                             ${OTBAPP_BASELINE}/s1a_33NWB_vv_DES_007_20200108txxxxxx_100x100.tif
+                             ${TEMP}/apTvUtSynthetize.tif)
 
 #----------- MultiResolutionPyramid TESTS ----------------
 
@@ -443,8 +470,8 @@ otb_test_application(NAME apTvUtSplitImage
 #----------- Mosaic TESTS ----------------
 otb_test_application(NAME MosaicTestLargeFeathering
                      APP  Mosaic
-                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif 
-                             -out ${TEMP}/apTvMosaicTestLargeFeathering.tif uint8 
+                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif
+                             -out ${TEMP}/apTvMosaicTestLargeFeathering.tif uint8
                              -comp.feather large
                      VALID   --compare-image ${EPSILON_8}
                              ${BASELINE}/apTvMosaicTestLargeFeathering.tif
@@ -453,9 +480,9 @@ otb_test_application(NAME MosaicTestLargeFeathering
 
 otb_test_application(NAME MosaicTestSlimFeathering
                      APP  Mosaic
-                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif 
-                             -out ${TEMP}/apTvMosaicTestSlimFeathering.tif uint8 
-                             -comp.feather slim 
+                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif
+                             -out ${TEMP}/apTvMosaicTestSlimFeathering.tif uint8
+                             -comp.feather slim
                              -comp.feather.slim.length 100
                      VALID   --compare-image ${EPSILON_8}
                              ${BASELINE}/apTvMosaicTestSlimFeathering.tif
@@ -464,9 +491,9 @@ otb_test_application(NAME MosaicTestSlimFeathering
 
 otb_test_application(NAME MosaicTestSimpleWithHarmoBandRmse
                      APP  Mosaic
-                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif 
-                             -out ${TEMP}/apTvMosaicTestSimpleWithHarmoBandRmse.tif uint8 
-                             -harmo.method band 
+                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif
+                             -out ${TEMP}/apTvMosaicTestSimpleWithHarmoBandRmse.tif uint8
+                             -harmo.method band
                              -harmo.cost rmse
                      VALID   --compare-image ${EPSILON_8}
                              ${BASELINE}/apTvMosaicTestSimpleWithHarmoBandRmse.tif
@@ -474,9 +501,9 @@ otb_test_application(NAME MosaicTestSimpleWithHarmoBandRmse
 
 otb_test_application(NAME MosaicTestSimpleWithHarmoRgbRmse
                      APP  Mosaic
-                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif 
-                             -out ${TEMP}/apTvMosaicTestSimpleWithHarmoRgbRmse.tif uint8 
-                             -harmo.method rgb 
+                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif
+                             -out ${TEMP}/apTvMosaicTestSimpleWithHarmoRgbRmse.tif uint8
+                             -harmo.method rgb
                              -harmo.cost rmse
                      VALID   --compare-image ${EPSILON_8}
                              ${BASELINE}/apTvMosaicTestSimpleWithHarmoRgbRmse.tif
@@ -484,18 +511,18 @@ otb_test_application(NAME MosaicTestSimpleWithHarmoRgbRmse
 
 otb_test_application(NAME MosaicTestSimpleWithCutline
                      APP  Mosaic
-                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif 
-                             -out ${TEMP}/apTvMosaicTestSimpleWithCutline.tif uint8 
-                             -vdcut ${INPUTDATA}/SP67_FR_subset_1_cutline.shp ${INPUTDATA}/SP67_FR_subset_2_cutline.shp 
+                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif
+                             -out ${TEMP}/apTvMosaicTestSimpleWithCutline.tif uint8
+                             -vdcut ${INPUTDATA}/SP67_FR_subset_1_cutline.shp ${INPUTDATA}/SP67_FR_subset_2_cutline.shp
                      VALID   --compare-image ${EPSILON_8}
                              ${BASELINE}/apTvMosaicTestSimpleWithCutline.tif
                              ${TEMP}/apTvMosaicTestSimpleWithCutline.tif)
 
 otb_test_application(NAME MosaicTestSimpleWithVdstats
                      APP  Mosaic
-                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif 
-                             -out ${TEMP}/apTvMosaicTestSimpleWithVdstats.tif uint8 
-                             -vdstats ${INPUTDATA}/SP67_FR_subset_1_cutline.shp ${INPUTDATA}/SP67_FR_subset_2_cutline.shp 
+                     OPTIONS -il ${INPUTDATA}/SP67_FR_subset_1.tif ${INPUTDATA}/SP67_FR_subset_2.tif
+                             -out ${TEMP}/apTvMosaicTestSimpleWithVdstats.tif uint8
+                             -vdstats ${INPUTDATA}/SP67_FR_subset_1_cutline.shp ${INPUTDATA}/SP67_FR_subset_2_cutline.shp
                      VALID   --compare-image ${EPSILON_8}
                              ${BASELINE}/apTvMosaicTestSimpleWithVdstats.tif
                              ${TEMP}/apTvMosaicTestSimpleWithVdstats.tif)

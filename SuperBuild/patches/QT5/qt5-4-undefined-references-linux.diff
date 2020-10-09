@@ -65,3 +65,26 @@ diff -burN  qt-everywhere-src-5.14.1/qttools/src/assistant/assistant/assistant.p
 +LIBS += -lpng
  
  load(qt_app)
+
+--- qt-everywhere-src-5.11.3-orig/qttools/src/assistant/qcollectiongenerator/qcollectiongenerator.pro   2018-11-23 08:41:24.000000000 +0100
++++ qt-everywhere-src-5.11.3/qttools/src/assistant/qcollectiongenerator/qcollectiongenerator.pro    2020-09-04 15:42:48.968480227 +0200
+@@ -1,5 +1,8 @@
+ QT += network help-private
+ TARGET = qcollectiongenerator
++
++LIBS += -lpng
++
+ SOURCES += ../shared/helpgenerator.cpp \
+     main.cpp \
+     ../shared/collectionconfiguration.cpp
+
+--- qt-everywhere-src-5.11.3-orig/qttools/src/assistant/qhelpconverter/qhelpconverter.pro   2018-11-23 08:41:24.000000000 +0100
++++ qt-everywhere-src-5.11.3/qttools/src/assistant/qhelpconverter/qhelpconverter.pro    2020-09-04 15:48:05.003811338 +0200
+@@ -1,5 +1,7 @@
+ QT += help widgets
+ 
++LIBS += -lpng
++
+ SOURCES += conversionwizard.cpp \
+            inputpage.cpp \
+            generalpage.cpp \

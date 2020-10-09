@@ -148,7 +148,9 @@ public:
     return m_Transform->GetOutputProjectionRef();
   }
 
-  /** Set/Get Input Keywordlist*/
+  /** Set/Get Input Keywordlist
+   * \deprecated
+   */
   void SetInputKeywordList(const ImageKeywordlist& kwl)
   {
     m_Transform->SetOutputKeywordList(kwl);
