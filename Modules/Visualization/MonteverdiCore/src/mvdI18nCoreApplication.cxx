@@ -348,9 +348,7 @@ void I18nCoreApplication::SetModel(AbstractModel* model)
 /*******************************************************************************/
 bool I18nCoreApplication::ElevationSetup()
 {
-  assert(!otb::DEMHandler::Instance().IsNull());
-
-  otb::DEMHandler::Pointer demHandlerInstance(otb::DEMHandler::Instance());
+  auto & demHandlerInstance = otb::DEMHandler::GetInstance();
 
   bool geoidUpdated = false;
 
@@ -363,7 +361,7 @@ bool I18nCoreApplication::ElevationSetup()
     {
       QString filename(I18nCoreApplication::RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_GEOID_PATH).toString());
 
-      geoidUpdated = demHandlerInstance->OpenGeoidFile(QFile::encodeName(filename));
+      geoidUpdated = demHandlerInstance.OpenGeoidFile(QFile::encodeName(filename).toStdString());
 
       // BUGFIX: When geoid file has not been updated by
       // otb::DEMHandler, the filename may be erroneous and unchecked
@@ -397,9 +395,9 @@ bool I18nCoreApplication::ElevationSetup()
 
     try
     {
-      demHandlerInstance->ClearDEMs();
+      demHandlerInstance.ClearDEMs();
 
-      demHandlerInstance->OpenDEMDirectory(QFile::encodeName(I18nCoreApplication::RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR).toString()));
+      demHandlerInstance.OpenDEMDirectory(QFile::encodeName(I18nCoreApplication::RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR).toString()).toStdString());
     }
     catch (const std::exception& err)
     {
@@ -413,7 +411,7 @@ bool I18nCoreApplication::ElevationSetup()
   }
   else
   {
-    otb::DEMHandler::Instance()->ClearDEMs();
+    otb::DEMHandler::GetInstance().ClearDEMs();
   }
 
   return geoidUpdated;

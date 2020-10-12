@@ -117,10 +117,10 @@ int otbGenericRSTransformImageAndMNTToWGS84ConversionChecking(int itkNotUsed(arg
   GeoDistanceType::Pointer   geoDistance   = GeoDistanceType::New();
   GeoDistance3DType::Pointer geoDistance3d = GeoDistance3DType::New();
 
-  otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
-  demHandler->OpenDEMDirectory(argv[2]);
-  demHandler->OpenGeoidFile(argv[3]);
-  double heightAboveEllipsoid = demHandler->GetHeightAboveEllipsoid(refGeoPt);
+  auto & demHandler = otb::DEMHandler::GetInstance();
+  demHandler.OpenDEMDirectory(argv[2]);
+  demHandler.OpenGeoidFile(argv[3]);
+  double heightAboveEllipsoid = demHandler.GetHeightAboveEllipsoid(refGeoPt);
 
   // Instantiate WGS->Image transform
   TransformType::Pointer wgs2img = TransformType::New();

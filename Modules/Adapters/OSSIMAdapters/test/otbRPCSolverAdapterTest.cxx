@@ -26,6 +26,7 @@
 #include "itkEuclideanDistanceMetric.h"
 #include "otbSensorModelAdapter.h"
 #include "otbRPCSolverAdapter.h"
+#include "otbDEMHandler.h"
 
 typedef otb::Image<double>                 ImageType;
 typedef otb::ImageFileReader<ImageType>    ReaderType;
@@ -62,12 +63,12 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
   std::cout << "GeoTol: " << geoTol << " meters" << std::endl;
   std::cout << "ImgTol: " << imgTol << " pixels" << std::endl;
 
-  otb::DEMHandler::Pointer demHandler = otb::DEMHandler::Instance();
-  demHandler->SetDefaultHeightAboveEllipsoid(0);
+  auto& demHandler = otb::DEMHandler::GetInstance();
+  demHandler.SetDefaultHeightAboveEllipsoid(0);
   if (demdir != "no")
-    demHandler->OpenDEMDirectory(demdir);
+    demHandler.OpenDEMDirectory(demdir);
   if (geoid != "no")
-    demHandler->OpenGeoidFile(geoid);
+    demHandler.OpenGeoidFile(geoid);
 
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(infname);
@@ -98,7 +99,7 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
 
       currentWgs84Point = fwd2dTransform->TransformPoint(currentPoint);
 
-      double height = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(currentWgs84Point);
+      double height = demHandler.GetHeightAboveEllipsoid(currentWgs84Point);
 
       Point3DType current3DWgs84Point;
       current3DWgs84Point[0] = currentWgs84Point[0];

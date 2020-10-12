@@ -49,10 +49,10 @@ class ImageKeywordlist;
  * \ingroup Projection
  *
  *
- * \ingroup OTBOSSIMAdapters
+ * \ingroup OTBTransform
  **/
 
-class OTBOSSIMAdapters_EXPORT SarSensorModelAdapter : public itk::Object
+class ITK_EXPORT SarSensorModelAdapter : public itk::Object
 {
 public:
   /** Standard class typedefs. */

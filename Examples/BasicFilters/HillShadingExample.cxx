@@ -20,7 +20,7 @@
 
 
 /* Example usage:
-./HillShadingExample Output/HillShadingExample.png Output/HillShadingColorExample.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM_srtm
+./HillShadingExample Output/HillShadingExample.png Output/HillShadingColorExample.png 6.5 45.5 500 500 0.002 -0.002 Input/DEM/srtm_directory
 */
 
 
@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
   using SpacingType = DEMToImageGeneratorType::SpacingType;
   using PointType   = DEMToImageGeneratorType::PointType;
 
-  otb::DEMHandler::Instance()->OpenDEMDirectory(argv[9]);
+  otb::DEMHandler::GetInstance().OpenDEMDirectory(argv[9]);
 
   PointType origin;
   origin[0] = ::atof(argv[3]);

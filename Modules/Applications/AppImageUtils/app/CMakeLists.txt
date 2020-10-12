@@ -92,3 +92,13 @@ OTB_CREATE_APPLICATION(
   NAME           Mosaic
   SOURCES        otbMosaic.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+OTB_CREATE_APPLICATION(
+  NAME           ResetMargin
+  SOURCES        otbResetMargin.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+OTB_CREATE_APPLICATION(
+  NAME           Synthetize
+  SOURCES        otbSynthetize.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})

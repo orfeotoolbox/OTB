@@ -69,7 +69,7 @@ private:
     SetDocLimitations("None");
 
     SetDocAuthors("OTB-Team");
-    SetDocSeeAlso(" Pesari, M., A. Gerhardinger, F. Kayitakire. 2008.  A robust built-up area precense"
+    SetDocSeeAlso(" Pesari, M., A. Gerhardinger, F. Kayitakire. 2008.  A robust built-up area presence"
       " index by anisotropic rotation-invariant textural measure."
       " IEEE Journal of selected topics in applied earth observations and remote sensing.Vol1, NO3.");
 
@@ -89,7 +89,7 @@ private:
 
     AddParameter(ParameterType_Float, "min", "Image minimum");
     SetParameterDescription("min", "Input image minimum. If this parameter is not set, the application will compute "
-                            "the minumum of the image.");
+                            "the minimum of the image.");
     MandatoryOff("min");
 
     AddParameter(ParameterType_Float, "max", "Image maximum");

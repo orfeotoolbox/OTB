@@ -98,7 +98,6 @@ public:
 
   /** DEM typedef */
   typedef otb::DEMHandler                  DEMHandlerType;
-  typedef typename DEMHandlerType::Pointer DEMHandlerPointerType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -124,10 +123,6 @@ public:
   /** Set/Get the mean elevation */
   itkSetMacro(MeanElevation, double);
   itkGetConstReferenceMacro(MeanElevation, double);
-
-  /** Set/Get the DEMHandler */
-  itkSetObjectMacro(DEMHandler, DEMHandlerType);
-  itkGetObjectMacro(DEMHandler, DEMHandlerType);
 
   /** Get the residual ground error */
   itkGetConstReferenceMacro(RMSGroundError, double);
@@ -206,9 +201,6 @@ private:
   /** If no DEM is used, a MeanElevation
    * over the image is used instead */
   double m_MeanElevation;
-
-  /** The DEMHandler */
-  DEMHandlerPointerType m_DEMHandler;
 
   /** Container of GCPs */
   GCPsContainerType m_GCPsContainer;
