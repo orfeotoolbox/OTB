@@ -274,7 +274,7 @@ public:
 };
 
 template <unsigned int VDim>
-OTBMetadata_EXPORT bool operator==(const LUT<VDim> & lhs, const LUT<VDim> & rhs)
+bool operator==(const LUT<VDim> & lhs, const LUT<VDim> & rhs)
 {
   bool axisComparison = true;
   for (unsigned int i = 0; i < VDim; i++)
