@@ -431,8 +431,9 @@ otb_add_test(NAME ioTuotbXMLMetadataSupplierTest COMMAND otbMetadataTestDriver
   )
 
 
-
-otb_add_test(NAME ioTvImageMetadataInterfaceTest_Radarsat2 COMMAND otbMetadataTestDriver
+  otb_add_test(NAME ioTvImageMetadataInterfaceTest_Radarsat2 COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_Radarsat2.txt
+  ${TEMP}/ioTvImageMetadataInterfaceTest_Radarsat2.txt
   otbImageMetadataInterfaceTest
   LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona}
   ${TEMP}/ioTvImageMetadataInterfaceTest_Radarsat2.txt

@@ -28,6 +28,7 @@
 
 // useful constants
 #include <otbMath.h>
+#include "otbXMLMetadataSupplier.h"
 
 namespace otb
 {
@@ -239,6 +240,8 @@ Radarsat2ImageMetadataInterface::UIntVectorType Radarsat2ImageMetadataInterface:
   return rgb;
 }
 
+//"
+
 
 void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 {
@@ -247,12 +250,12 @@ void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
 
   // Metadata read by GDAL
   Fetch(MDTime::AcquisitionStartTime, *mds, "ACQUISITION_START_TIME");
-  // Fetch(MDTime::AcquisitionStopTime, *mds, "ACQUISITION_STOP_TIME");
+  // Fetch(MDTime::AcquisitionStopTime, *mds, "PROCESSING_TIME"); 
   Fetch(MDStr::BeamMode, *mds, "BEAM_MODE");
-  // Fetch(MDStr::BeamSwath, *mds, "BEAM_SWATH");
   Fetch("FACILITY_IDENTIFIER", *mds, "FACILITY_IDENTIFIER");
   Fetch(MDNum::LineSpacing, *mds, "LINE_SPACING");
-  // Fetch(MDStr::Mission, *mds, "MISSION_ID");
+  Fetch(MDNum::PixelSpacing, *mds, "PIXEL_SPACING");
+  // Fetch(MDStr::Mission, *mds, "MISSION_ID"); // TODO : product.sourceAttributes.satellite ? 
   // Fetch(MDStr::Mode, *mds, "MODE");
   Fetch(MDStr::OrbitDirection, *mds, "ORBIT_DIRECTION");
   // Fetch(MDNum::OrbitNumber, *mds, "ORBIT_NUMBER");
@@ -260,9 +263,30 @@ void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
   Fetch(MDStr::ProductType, *mds, "PRODUCT_TYPE");
   Fetch(MDStr::Instrument, *mds, "SATELLITE_IDENTIFIER");
   Fetch(MDStr::SensorID, *mds, "SENSOR_IDENTIFIER");
-  // Fetch(MDStr::Swath, *mds, "SWATH");
+  
 
-  }
+  // Product file
+  std::string ProductFilePath = mds->GetResourceFile("product.xml");
+  if (!ProductFilePath.empty())
+    {
+    // std::cout<< ProductFilePath << std::endl;
+    XMLMetadataSupplier ProductMS(ProductFilePath);
+
+    // m_Imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
+    // m_Imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));
+    m_Imd.Add(MDTime::ProductionDate,
+        ProductMS.GetFirstAs<MetaData::Time>("product.imageGenerationParameters.generalProcessingInformation.processingTime"));
+    // m_Imd.Add(MDNum::RadarFrequency, ProductMS.GetAs<double>("product.sourceAttributes.radarParameters.radarCenterFrequency"));
+    // m_Imd.Add(MDNum::AverageSceneHeight, ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
+
+    SARParam sarParam;
+    for (int bandId = 0 ; bandId < mds->GetNbBands() ; ++bandId)
+      {
+      Fetch(MDStr::Polarization, *mds, "POLARIMETRIC_INTERP", bandId);
+      m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
+      }
+    }
+}
+
 
 } // end namespace otb
-

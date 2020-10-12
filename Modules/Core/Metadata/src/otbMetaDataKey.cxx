@@ -182,6 +182,11 @@ std::istream& operator>>(std::istream& is, Time& val)
   _OTB_ISTREAM_FAIL_IF( val.tm_sec < 0 || val.tm_sec > 60 )
   _OTB_ISTREAM_FAIL_IF( val.frac_sec < 0.0 || val.frac_sec >= 1.0)
   //_OTB_ISTREAM_FAIL_IF( is.get() != 'Z' )
+  if (!is.eof())
+  {
+    _OTB_ISTREAM_FAIL_IF( is.get() != 'Z' )
+  }
+
   return is;
 }
 
