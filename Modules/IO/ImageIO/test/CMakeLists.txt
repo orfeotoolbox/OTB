@@ -1306,3 +1306,14 @@ otb_add_test(NAME ioTvCompoundMetadataReaderTest
   otbWriteGeomFile
   ${INPUTDATA}/QB_Toulouse_combo.vrt
   ${TEMP}/ioTvCompoundMetadataReaderTest.tif)
+
+
+
+
+otb_add_test(NAME ioTvCompareMetadataTest COMMAND otbImageIOTestDriver
+  --compare-metadata ${EPSILON_9}
+  LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043}
+  LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043}
+  otbImageFileReaderRGBTest
+  ${INPUTDATA}/couleurs_extrait.png
+  ${TEMP}/ioImageFileReaderRGB_PNG2PNG.png )

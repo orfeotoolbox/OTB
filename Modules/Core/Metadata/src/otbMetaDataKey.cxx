@@ -187,6 +187,16 @@ std::istream& operator>>(std::istream& is, Time& val)
 
 #undef _OTB_ISTREAM_EXPECT
 
+
+
+bool operator==(const Time & lhs, const Time & rhs)
+{
+  tm tmLhs = lhs;
+  tm tmRhs = rhs;
+  return mktime(&tmLhs) + lhs.frac_sec == mktime(&tmRhs) + rhs.frac_sec;
+}
+
+
 std::string LUTAxis::ToJSON(bool multiline) const
 {
   std::ostringstream oss;
@@ -393,6 +403,63 @@ MDGeomBmType MDGeomNames = bimapGenerator<MDGeom>(std::map<MDGeom, std::string> 
   {MDGeom::GCP,            "GCP"},
   {MDGeom::Adjustment,     "Adjustment"}
 });
+
+
+OTBMetadata_EXPORT bool operator==(const LUTAxis & lhs, const LUTAxis & rhs)
+{
+  return lhs.Size == rhs.Size
+      && lhs.Origin == rhs.Origin
+      && lhs.Spacing == rhs.Spacing
+      && lhs.Values == rhs.Values;
+}
+
+template<>
+std::string EnumToString(MDGeom value)
+{
+  return MetaData::MDGeomNames.left.at(value);
+}
+
+template<>
+std::string EnumToString(MDNum value)
+{
+  return MetaData::MDNumNames.left.at(value);
+}
+
+template<>
+std::string EnumToString(MDStr value)
+{
+  return MetaData::MDStrNames.left.at(value);
+}
+
+template<>
+std::string EnumToString(MDL1D value)
+{
+  return MetaData::MDL1DNames.left.at(value);
+}
+
+template<>
+std::string EnumToString(MDL2D value)
+{
+  return MetaData::MDL2DNames.left.at(value);
+}
+
+template<>
+std::string EnumToString(MDTime value)
+{
+  return MetaData::MDTimeNames.left.at(value);
+}
+
+// Specialization for extra keys
+template<>
+std::string EnumToString(std::string value)
+{
+  return value;
+}
+
+
+
+
+
 
 } // end namespace MetaData
 
