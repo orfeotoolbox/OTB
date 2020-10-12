@@ -1418,7 +1418,78 @@ int TestHelper::RegressionTestImage(int cpt, const char* testImageFilename, cons
   return ret;
 }
 
-int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char* baselineImageFilename, const double /*toleranceDiffPixelImage*/) const
+namespace
+{
+
+template <class InputIt1, class InputIt2, class BinaryPredicate >
+int CompareMetadataDict( InputIt1 first1, InputIt1 last1,
+                          InputIt2 first2, InputIt2 last2,
+                          bool reportErrors,
+                          const BinaryPredicate & p)
+{
+  if (std::distance(first1, last1) != std::distance(first2, last2))
+  {
+    if (reportErrors)
+    {
+      std::cerr << "Input metadata dictionaries have different sizes" << std::endl;
+    }
+
+    return 1;
+  }
+
+  int errorCount = 0;
+
+  while (first1 != last1)
+  {
+    if (first1->first != first2->first)
+    {
+      errorCount++;
+      if (reportErrors)
+      {
+        std::cerr << "Metadata key " << otb::MetaData::EnumToString(first1->first) 
+                    << " does not match between test and baseline images: "
+                    << std::endl;
+      }
+      return errorCount;
+    }
+
+
+    if (!p(first1->second, first2->second))
+    {
+      errorCount++;
+      if (reportErrors)
+        std::cerr << "Metadata " << otb::MetaData::EnumToString(first1->first) 
+                  << " does not match between test and baseline images: "
+                  << std::endl
+                  << "Baseline image: " 
+                  << first1->second
+                  << std::endl
+                  << "Test image: " 
+                  << first2->second 
+                  << std::endl;
+    }
+
+    ++first1;
+    ++first2;
+  }
+
+  return errorCount;
+}
+
+
+template <class InputIt1, class InputIt2 >
+int CompareMetadataDict( InputIt1 first1, InputIt1 last1,
+                          InputIt2 first2, InputIt2 last2,
+                          bool reportErrors)
+{
+  auto p = []( const decltype(first1->second) & rhs, 
+               const decltype(first2->second) & lhs) 
+          {return rhs == lhs;};
+  return CompareMetadataDict(first1, last1, first2, last2, reportErrors, p);
+}
+}
+
+int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char* baselineImageFilename, const double tolerance) const
 {
   // Use the factory mechanism to read the test and baseline files and convert them to double
   typedef otb::Image<double, ITK_TEST_DIMENSION_MAX> ImageType;
@@ -1449,6 +1520,7 @@ int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char
   }
 
   unsigned int errcount = 0;
+
   // The sizes of the baseline and test image must match
   ImageType::SizeType baselineSize;
   baselineSize = baselineReader->GetOutput()->GetLargestPossibleRegion().GetSize();
@@ -1583,12 +1655,88 @@ int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char
       }
     }
   }
+  
+  const auto & baselineImageMetadata = blImPtr->GetImageMetadata();
+  const auto & testImageMetadata = testImPtr->GetImageMetadata();
+
+  // Compare string keys (strict equality)
+  errcount += CompareMetadataDict(baselineImageMetadata.StringKeys.begin(),
+                                    baselineImageMetadata.StringKeys.end(), 
+                                    testImageMetadata.StringKeys.begin(),
+                                    testImageMetadata.StringKeys.end(),
+                                    m_ReportErrors);
+
+  // Compare numeric keys
+  auto compareDouble = [tolerance](double lhs, double rhs)
+        {return fabs(lhs - rhs) 
+                <= ( (fabs(lhs) < fabs(rhs) ? fabs(rhs) : fabs(lhs)) * tolerance);};
+
+  errcount += CompareMetadataDict(baselineImageMetadata.NumericKeys.begin(),
+                                    baselineImageMetadata.NumericKeys.end(), 
+                                    testImageMetadata.NumericKeys.begin(),
+                                    testImageMetadata.NumericKeys.end(),
+                                    m_ReportErrors,
+                                    compareDouble);
+
+  // Compare time keys (strict equality)
+  errcount += CompareMetadataDict(baselineImageMetadata.TimeKeys.begin(),
+                                    baselineImageMetadata.TimeKeys.end(), 
+                                    testImageMetadata.TimeKeys.begin(),
+                                    testImageMetadata.TimeKeys.end(),
+                                    m_ReportErrors);
+
+
+  // Compare LUTs (strict equality)
+  errcount += CompareMetadataDict(baselineImageMetadata.LUT1DKeys.begin(),
+                                    baselineImageMetadata.LUT1DKeys.end(), 
+                                    testImageMetadata.LUT1DKeys.begin(),
+                                    testImageMetadata.LUT1DKeys.end(),
+                                    m_ReportErrors);
+
+  errcount += CompareMetadataDict(baselineImageMetadata.LUT2DKeys.begin(),
+                                    baselineImageMetadata.LUT2DKeys.end(), 
+                                    testImageMetadata.LUT2DKeys.begin(),
+                                    testImageMetadata.LUT2DKeys.end(),
+                                    m_ReportErrors);
+
+
+  // Compare extra keys (strict equality)
+  errcount += CompareMetadataDict(baselineImageMetadata.ExtraKeys.begin(),
+                                    baselineImageMetadata.ExtraKeys.end(), 
+                                    testImageMetadata.ExtraKeys.begin(),
+                                    testImageMetadata.ExtraKeys.end(),
+                                    m_ReportErrors);
+
+
+  if (baselineImageMetadata.Has(MDGeom::RPC))
+  {
+    if (!testImageMetadata.Has(MDGeom::RPC))
+    {
+      errcount++;
+      if (m_ReportErrors)
+      {
+        std::cerr << "Test image does not have RPC coefficients" << std::endl;
+      }
+
+    }
+    if (!(boost::any_cast<Projection::RPCParam>(baselineImageMetadata[MDGeom::RPC]) 
+          == boost::any_cast<Projection::RPCParam>(testImageMetadata[MDGeom::RPC])))
+    {
+      errcount++;
+      if (m_ReportErrors)
+      {
+        std::cerr << "RPC parameters mismatch between baseline and test images" << std::endl;
+      }
+    }
+  }
+  
   if (errcount > 0)
   {
     std::cout << "<DartMeasurement name=\"MetadataError\" type=\"numeric/int\">";
     std::cout << errcount;
     std::cout << "</DartMeasurement>" << std::endl;
   }
+
   return errcount;
 }
 

@@ -164,6 +164,9 @@ struct OTBMetadata_EXPORT RPCParam
 
 };
 
+OTBMetadata_EXPORT bool operator==(const RPCParam & lhs, const RPCParam & rhs);
+
+
 } // end namespace Projection
 
 } // end namespace otb
