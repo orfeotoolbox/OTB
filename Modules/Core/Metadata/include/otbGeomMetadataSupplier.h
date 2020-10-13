@@ -48,6 +48,7 @@ public:
   GeomMetadataSupplier(const std::string &);
   GeomMetadataSupplier(const GeomMetadataSupplier &) = delete;
   GeomMetadataSupplier& operator=(const GeomMetadataSupplier&) = delete;
+  ~GeomMetadataSupplier() = default;
 
   /**
    * @brief Get the metadata value corresponding to a given path

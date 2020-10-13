@@ -52,7 +52,7 @@ std::string GeomMetadataSupplier::GetResourceFile(std::string) const
 
 int GeomMetadataSupplier::GetNbBands() const
 {
-  return 0;
+  return this->GetAsVector<std::string>("support_data.band_name_list").size();
 }
 
 const boost::any& GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
