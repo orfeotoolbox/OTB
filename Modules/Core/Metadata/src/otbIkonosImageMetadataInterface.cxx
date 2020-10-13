@@ -786,4 +786,42 @@ IkonosImageMetadataInterface::WavelengthSpectralBandVectorType IkonosImageMetada
   return wavelengthSpectralBand;
 }
 
+
+namespace
+{
+  struct IkonosMetadata
+  {
+    double sunAzimuth;
+
+  }
+
+}
+
+void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+{
+  assert(mds);
+
+  std::cout << "IkonosImageMetadataInterface::Parse " << std::endl;
+
+  bool hasValue = 0;
+
+  auto metadatatype = mds->GetMetadataValue("METADATATYPE", hasValue);
+  if (!hasValue || metadatatype != "GE")
+  {
+    otbGenericExceptionMacro(MissingMetadataException, 
+      << "No Geo-Eye metadata has been found")
+  }
+
+
+  auto inputFilename = mds->GetResourceFile();
+  auto fileNames = mds->GetResourceFiles();
+  for (const auto & filename: fileNames )
+  {
+    std::cout << filename << std::endl;
+  }
+
+  FetchRPC(*mds);
+  std::cout << m_Imd << std::endl;
+}
+
 } // end namespace otb
