@@ -24,10 +24,9 @@
 #include "OTBMetadataExport.h"
 #include <vector>
 #include <string>
-#include "otbStringUtils.h"
 #include "otbMacro.h"
-#include "otbStringUtilities.h"
 #include "otbStringUtils.h"
+#include "otbStringUtilities.h"
 
 namespace otb
 {

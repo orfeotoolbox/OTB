@@ -24,6 +24,7 @@
 #include "otbGeomMetadataSupplier.h"
 #include "otbMetaDataKey.h"
 #include "otbGeometryMetadata.h"
+#include "otbStringUtils.h"
 
 namespace otb
 {
@@ -52,7 +53,13 @@ std::string GeomMetadataSupplier::GetResourceFile(std::string) const
 
 int GeomMetadataSupplier::GetNbBands() const
 {
-  return this->GetAsVector<std::string>("support_data.band_name_list").size();
+  bool hasValue;
+  std::string ret = this->GetMetadataValue("support_data.band_name_list", hasValue);
+  if (!hasValue)
+    otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata 'support_data.band_name_list'")
+  std::vector<std::string> ret_vect;
+	otb::Utils::ConvertStringToVector(ret, ret_vect, "band name");
+  return ret_vect.size();
 }
 
 const boost::any& GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
