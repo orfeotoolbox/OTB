@@ -107,23 +107,5 @@ std::string RPCParam::ToJSON(bool multiline) const
   return oss.str();
 }
 
-bool operator==(const RPCParam & lhs, const RPCParam & rhs)
-{
-  return lhs.LineOffset == rhs.LineOffset
-      && lhs.SampleOffset == rhs.SampleOffset
-      && lhs.LatOffset == rhs.LatOffset
-      && lhs.LonOffset == rhs.LonOffset
-      && lhs.HeightOffset == rhs.HeightOffset
-      && lhs.LineScale == rhs.LineScale
-      && lhs.SampleScale == rhs.SampleScale
-      && lhs.LatScale == rhs.LatScale
-      && lhs.LonScale == rhs.LonScale
-      && lhs.HeightScale == rhs.HeightScale
-      && std::equal(lhs.LineNum, lhs.LineNum+20, rhs.LineNum )
-      && std::equal(lhs.LineDen, lhs.LineDen+20, rhs.LineDen )
-      && std::equal(lhs.SampleNum, lhs.SampleNum+20, rhs.SampleNum )
-      && std::equal(lhs.SampleDen, lhs.SampleDen+20, rhs.SampleDen );
-}
-
 } // end namespace Projection
 } // end namespace otb

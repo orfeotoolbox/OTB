@@ -1456,7 +1456,6 @@ int CompareMetadataDict( const MapType & baselineMap,
   while (first1 != last1)
   {
     if (std::find(untestedKeys.begin(), untestedKeys.end(), first1->first) == untestedKeys.end())
-    //if (first1->first != untestedKeys)
     {
       if (first1->first != first2->first)
       {

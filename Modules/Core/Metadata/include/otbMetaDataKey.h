@@ -238,9 +238,14 @@ struct OTBMetadata_EXPORT Time : tm
 
   friend OTBMetadata_EXPORT std::istream& operator>>(std::istream& is, Time& val);
 
+  friend OTBMetadata_EXPORT bool operator==(const Time & lhs, const Time & rhs)
+  {
+    tm tmLhs = lhs;
+    tm tmRhs = rhs;
+    return mktime(&tmLhs) + lhs.frac_sec == mktime(&tmRhs) + rhs.frac_sec;
+  }
 };
 
-OTBMetadata_EXPORT bool operator==(const Time & lhs, const Time & rhs);
 
 struct LUTAxis
 {
@@ -254,10 +259,15 @@ struct LUTAxis
   std::vector<double> Values;
   /** Export to JSON */
   std::string ToJSON(bool multiline=false) const;
+
+  friend bool operator==(const LUTAxis & lhs, const LUTAxis & rhs)
+  {
+    return lhs.Size == rhs.Size
+        && lhs.Origin == rhs.Origin
+        && lhs.Spacing == rhs.Spacing
+        && lhs.Values == rhs.Values;
+  }
 };
-
-OTBMetadata_EXPORT bool operator==(const LUTAxis & lhs, const LUTAxis & rhs);
-
 
 template <unsigned int VDim> class LUT
 {
@@ -271,14 +281,14 @@ public:
   std::string OTBMetadata_EXPORT ToString() const;
 
   void OTBMetadata_EXPORT FromString(std::string);
-};
 
-template <unsigned int VDim>
-bool operator==(const LUT<VDim> & lhs, const LUT<VDim> & rhs)
-{
-  return std::equal(std::begin(lhs.Array), std::end(lhs.Array), std::begin(rhs.Array) ) 
-          && lhs.Array == rhs.Array;
-}
+  friend bool operator==(const LUT<VDim> & lhs, const LUT<VDim> & rhs)
+  {
+    return std::equal(std::begin(lhs.Array), std::end(lhs.Array), std::begin(rhs.Array) ) 
+            && lhs.Array == rhs.Array;
+  }
+
+};
 
 
 template <unsigned int VDim>

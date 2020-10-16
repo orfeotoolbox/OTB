@@ -188,15 +188,6 @@ std::istream& operator>>(std::istream& is, Time& val)
 #undef _OTB_ISTREAM_EXPECT
 
 
-
-bool operator==(const Time & lhs, const Time & rhs)
-{
-  tm tmLhs = lhs;
-  tm tmRhs = rhs;
-  return mktime(&tmLhs) + lhs.frac_sec == mktime(&tmRhs) + rhs.frac_sec;
-}
-
-
 std::string LUTAxis::ToJSON(bool multiline) const
 {
   std::ostringstream oss;
@@ -403,15 +394,6 @@ MDGeomBmType MDGeomNames = bimapGenerator<MDGeom>(std::map<MDGeom, std::string> 
   {MDGeom::GCP,            "GCP"},
   {MDGeom::Adjustment,     "Adjustment"}
 });
-
-
-OTBMetadata_EXPORT bool operator==(const LUTAxis & lhs, const LUTAxis & rhs)
-{
-  return lhs.Size == rhs.Size
-      && lhs.Origin == rhs.Origin
-      && lhs.Spacing == rhs.Spacing
-      && lhs.Values == rhs.Values;
-}
 
 template<>
 std::string EnumToString(MDGeom value)
