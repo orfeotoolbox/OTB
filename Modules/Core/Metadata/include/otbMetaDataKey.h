@@ -276,12 +276,8 @@ public:
 template <unsigned int VDim>
 bool operator==(const LUT<VDim> & lhs, const LUT<VDim> & rhs)
 {
-  bool axisComparison = true;
-  for (unsigned int i = 0; i < VDim; i++)
-  {
-    axisComparison = axisComparison && lhs.Axis[i] == rhs.Axis[i];
-  }
-  return axisComparison && lhs.Array == rhs.Array;
+  return std::equal(std::begin(lhs.Array), std::end(lhs.Array), std::begin(rhs.Array) ) 
+          && lhs.Array == rhs.Array;
 }
 
 
