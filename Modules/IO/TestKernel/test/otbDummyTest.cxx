@@ -18,18 +18,16 @@
  * limitations under the License.
  */
 
-#include "otbTestMain.h"
+#include <iostream>
 
-void RegisterTests()
-{
-  REGISTER_TEST(otbCompareAsciiTests2);
-  REGISTER_TEST(otbCompareAsciiTests3);
-  REGISTER_TEST(otbCompareAsciiTests4);
-  REGISTER_TEST(otbCompareAsciiTests5);
-  REGISTER_TEST(otbCompareAsciiTests6);
-  REGISTER_TEST(otbCompareAsciiTestScientificNotation);
-  REGISTER_TEST(otbCompareAsciiTests);
-  REGISTER_TEST(otbCompareAsciiTestsEpsilon3_WhiteSpace);
-  REGISTER_TEST(otbCopyTest);
-  REGISTER_TEST(otbDummyTest);
+// This test does nothing. It is used to test the TestKernel module
+int otbDummyTest(int argc, char* argv[])
+{ 
+  if (argc != 1)
+  {
+    std::cerr << argv[0] << "does not take any additional parameter" << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  return EXIT_SUCCESS;
 }
