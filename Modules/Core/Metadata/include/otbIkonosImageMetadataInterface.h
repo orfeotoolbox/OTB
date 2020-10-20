@@ -139,14 +139,19 @@ public:
   void Parse(const MetadataSupplierInterface *) override;
 
 protected:
-  IkonosImageMetadataInterface();
-  ~IkonosImageMetadataInterface() override
-  {
-  }
+  IkonosImageMetadataInterface() = default;
+  ~IkonosImageMetadataInterface() override = default;
 
 private:
   IkonosImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
+
+
+  void FetchProductionDate(const std::string & productionDate);
+
+  void FetchAcquisitionDate(const std::string & acquisitionDate,
+                             const std::string & acquisitionTime);
+
 };
 
 } // end namespace otb

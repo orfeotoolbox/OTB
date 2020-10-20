@@ -25,12 +25,11 @@
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
 
+#include "itksys/SystemTools.hxx"
+#include "otbStringUtilities.h"
+
 namespace otb
 {
-
-IkonosImageMetadataInterface::IkonosImageMetadataInterface()
-{
-}
 
 bool IkonosImageMetadataInterface::CanRead() const
 {
@@ -789,19 +788,233 @@ IkonosImageMetadataInterface::WavelengthSpectralBandVectorType IkonosImageMetada
 
 namespace
 {
-  struct IkonosMetadata
+  template<class T>
+  bool ContainsIkonosMetadata(const T & associativeContainer)
   {
-    double sunAzimuth;
+    const auto pastTheEnd = associativeContainer.end();
+    return associativeContainer.find("productionDate") != pastTheEnd
+        && associativeContainer.find("sensorID") != pastTheEnd
+        && associativeContainer.find("nominalCollectionAzimuth") != pastTheEnd
+        && associativeContainer.find("nominalCollectionElevation") != pastTheEnd
+        && associativeContainer.find("sunAzimuth")!= pastTheEnd
+        && associativeContainer.find("sunElevation") != pastTheEnd
+        && associativeContainer.find("acquisitionDate") != pastTheEnd;
+  }
+
+  template<class T>
+  void ParseMetadataFile(const std::string & metadataFilename, 
+                         T& metadataAssociativeContainer)
+  {
+
+    std::ifstream file(metadataFilename);
+
+    if (file.is_open()) 
+    {
+      std::string line;
+
+      auto fetchMetadata = [&metadataAssociativeContainer, &line]
+                               (const std::string & key,
+                                const std::string & metadataPath,
+                                int pos = 0,
+                                const std::string & separator = " ")
+      {
+        if (starts_with(line, metadataPath))
+        {
+          std::string metadata = line.substr(metadataPath.size(), line.size()-metadataPath.size());
+          
+          // Remove carriage return and new line caracters.
+          metadata.erase(std::remove(metadata.begin(), metadata.end(), '\r'), metadata.end());
+          metadata.erase(std::remove(metadata.begin(), metadata.end(), '\n'), metadata.end());
+
+          std::vector<std::string> metadataParts;
+          boost::split(metadataParts,
+                       metadata,
+                       boost::is_any_of(separator));
+
+          metadataAssociativeContainer[key] = metadataParts[pos];
+        }
+      };
+
+      while (std::getline(file, line)) 
+      {
+        fetchMetadata("productionDate", "Creation Date: ");
+        fetchMetadata("sensorID", "Sensor: ");
+        fetchMetadata("nominalCollectionAzimuth", "Nominal Collection Azimuth: ");
+        fetchMetadata("nominalCollectionElevation", "Nominal Collection Elevation: ");
+        fetchMetadata("sunAzimuth", "Sun Angle Azimuth: ");
+        fetchMetadata("sunElevation", "Sun Angle Elevation: ");
+        fetchMetadata("acquisitionDate", "Acquisition Date/Time: ");
+        fetchMetadata("acquisitionTime", "Acquisition Date/Time: ", 1);
+      }
+    }
+    else
+    {
+      otbGenericExceptionMacro(MissingMetadataException, 
+        << "Cannot open the Ikonos metadata file: " << metadataFilename);
+    }
 
   }
 
+  template<class T>
+  void ParseHeaderFile(const std::string & hdrFilename, 
+                         T& metadataAssociativeContainer)
+  {
+
+    std::ifstream file(hdrFilename);
+
+    if (file.is_open()) 
+    {
+      std::string line;
+
+      auto fetchMetadata = [&metadataAssociativeContainer, &line]
+                               (const std::string & key,
+                                const std::string & metadataPath,
+                                int pos = 0,
+                                const std::string & separator = " ")
+      {
+        if (starts_with(line, metadataPath))
+        {
+          std::string metadata = line.substr(metadataPath.size(), line.size()-metadataPath.size());
+          
+          // Remove carriage return and new line caracters.
+          metadata.erase(std::remove(metadata.begin(), metadata.end(), '\r'), metadata.end());
+          metadata.erase(std::remove(metadata.begin(), metadata.end(), '\n'), metadata.end());
+
+          std::vector<std::string> metadataParts;
+          boost::split(metadataParts,
+                       metadata,
+                       boost::is_any_of(separator));
+
+          metadataAssociativeContainer[key] = metadataParts[pos];
+        }
+      };
+
+      while (std::getline(file, line)) 
+      {
+        fetchMetadata("bandName", "Band: ");
+      }
+    }
+    else
+    {
+      otbGenericExceptionMacro(MissingMetadataException, 
+        << "Cannot open the Ikonos header file: " << hdrFilename);
+    }
+
+  }
+
+  std::unordered_map<std::string, double> ikonosSolarIrradiance = {
+    {"Pan", 1375.8},
+    {"Blue", 1930.9},
+    {"Green", 1854.8},
+    {"Red", 1556.5},
+    {"NIR", 1156.9}};
+
+
+  // Value computed from
+  // http://www.geoeye.com/CorpSite/assets/docs/technical-papers/2009/IKONOS_Esun_Calculations.pdf
+  // to get the equivalent of the SPOT alpha
+  std::unordered_map<std::string, double> ikonosPhysicalGainPre20010122 = {
+    {"Pan", 6.48830},
+    {"Blue", 4.51329},
+    {"Green", 5.75014},
+    {"Red", 5.52720},
+    {"NIR", 7.11684}};
+
+  std::unordered_map<std::string, double> ikonosPhysicalGainPost20010122 = {
+    {"Pan", 6.48830},
+    {"Blue", 5.19064},
+    {"Green", 6.44122},
+    {"Red", 6.24442},
+    {"NIR", 8.04222}};
+
 }
+
+
+void IkonosImageMetadataInterface::FetchProductionDate(const std::string & productionDate)
+{
+    std::vector<std::string> dateParts;
+
+    // Producion date format: MM/DD/YY
+    boost::split(dateParts,
+                  productionDate, 
+                  boost::is_any_of("/"));
+
+    if(dateParts.size() != 3)
+    {
+      otbGenericExceptionMacro(MissingMetadataException, 
+        "Invalid production date: " << productionDate)
+    }
+
+    otb::MetaData::Time productionDateMD;
+
+    productionDateMD.tm_sec = 0;
+    productionDateMD.tm_min = 0;
+    productionDateMD.tm_hour = 0;
+    productionDateMD.frac_sec = 0;
+
+    productionDateMD.tm_mday = boost::lexical_cast<int>(dateParts[1]);
+    // tm_mon: number of months since january (0-11)
+    productionDateMD.tm_mon = boost::lexical_cast<int>(dateParts[0]) - 1;
+
+    auto productionYear = boost::lexical_cast<int>(dateParts[2]);
+    // 1999 is the only possible year before 2000 for Ikonos dates
+    // as the satellite was launched the 09/24/1999 
+    if (productionYear != 99)
+    {
+      productionYear += 100;
+    }
+    // tm year: number of years since 1900
+    productionDateMD.tm_year = productionYear;
+
+    m_Imd.Add(MDTime::ProductionDate, productionDateMD);
+
+}
+
+void IkonosImageMetadataInterface::FetchAcquisitionDate(const std::string & acquisitionDate,
+                                                        const std::string & acquisitionTime)
+{
+  std::vector<std::string> dateParts;
+
+  otb::MetaData::Time acquisitionDateMD;
+
+  // Acquisition date format: YYYY-MM-DD
+  boost::split(dateParts,
+                acquisitionDate, 
+                boost::is_any_of("-"));
+
+  if(dateParts.size() != 3)
+  {
+    otbGenericExceptionMacro(MissingMetadataException, 
+        "Invalid acquistion date: " << acquisitionDate)
+  }
+
+  acquisitionDateMD.tm_year = boost::lexical_cast<int>(dateParts[0]) - 1900;
+  acquisitionDateMD.tm_mon = boost::lexical_cast<int>(dateParts[1]) - 1;
+  acquisitionDateMD.tm_mday = boost::lexical_cast<int>(dateParts[2]);
+
+  // Acquisition time format: hh:mm
+  boost::split(dateParts,
+                  acquisitionTime , 
+                  boost::is_any_of(":"));
+
+  if(dateParts.size() != 2)
+  {
+    otbGenericExceptionMacro(MissingMetadataException, 
+        "Invalid acquistion time: " << acquisitionTime)
+  }
+
+  acquisitionDateMD.tm_hour = boost::lexical_cast<int>(dateParts[0]);
+  acquisitionDateMD.tm_min = boost::lexical_cast<int>(dateParts[1]);
+  acquisitionDateMD.tm_sec = 0;
+  acquisitionDateMD.frac_sec = 0;
+
+  m_Imd.Add(MDTime::AcquisitionDate, acquisitionDateMD);
+}
+
 
 void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 {
   assert(mds);
-
-  std::cout << "IkonosImageMetadataInterface::Parse " << std::endl;
 
   bool hasValue = 0;
 
@@ -812,16 +1025,101 @@ void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
       << "No Geo-Eye metadata has been found")
   }
 
+  auto inputFilenameWithDir = mds->GetResourceFile();
 
-  auto inputFilename = mds->GetResourceFile();
-  auto fileNames = mds->GetResourceFiles();
-  for (const auto & filename: fileNames )
+  auto inputFilename = itksys::SystemTools::GetFilenameName(inputFilenameWithDir);
+  // Find hdr and metadata files : 
+  std::vector<std::string> inputFilenameParts;
+  boost::split(inputFilenameParts,
+                inputFilename, 
+                boost::is_any_of("_"));
+
+
+  auto metadataFilename = itksys::SystemTools::GetParentDirectory(inputFilenameWithDir) 
+              + "/" 
+              + inputFilenameParts[0] 
+              + "_" 
+              + inputFilenameParts[1]
+              + "_metadata.txt";
+
+  if (!itksys::SystemTools::FileExists(metadataFilename))
   {
-    std::cout << filename << std::endl;
+    otbGenericExceptionMacro(MissingMetadataException, 
+      << "Cannot find the Ikonos metadata file, tried: " << metadataFilename)
+  }
+  
+  // Read metadata from the metadata file
+
+  std::unordered_map<std::string, std::string> ikonosMetadata;
+  ParseMetadataFile(metadataFilename, ikonosMetadata);
+
+  if (!ContainsIkonosMetadata(ikonosMetadata))
+  {
+    otbGenericExceptionMacro(MissingMetadataException, 
+      << "The Ikonos metadata file is incomplete: " << metadataFilename)
   }
 
-  FetchRPC(*mds);
+  auto hdrFilename  = itksys::SystemTools::GetParentDirectory(inputFilenameWithDir) 
+              + "/"
+              + itksys::SystemTools::GetFilenameWithoutExtension(inputFilenameWithDir) 
+              + ".hdr";
+
+  if (!itksys::SystemTools::FileExists(hdrFilename))
+  {
+    otbGenericExceptionMacro(MissingMetadataException, 
+      << "Cannot find the Ikonos hdr file, tried: " << hdrFilename)
+  }
+  
+  ParseHeaderFile(hdrFilename, ikonosMetadata);
+
+  try
+  {
+    m_Imd.Add(MDStr::SensorID, ikonosMetadata["sensorID"]);
+    
+    m_Imd.Add(MDNum::SunElevation, boost::lexical_cast<double>(ikonosMetadata["sunElevation"]));
+    m_Imd.Add(MDNum::SunAzimuth, boost::lexical_cast<double>(ikonosMetadata["sunAzimuth"]));
+    m_Imd.Add(MDNum::SatElevation, boost::lexical_cast<double>(ikonosMetadata["nominalCollectionElevation"]));
+    m_Imd.Add(MDNum::SatAzimuth, boost::lexical_cast<double>(ikonosMetadata["nominalCollectionAzimuth"]));
+  
+    FetchProductionDate(ikonosMetadata["productionDate"]);
+    FetchAcquisitionDate(ikonosMetadata["acquisitionDate"],
+                          ikonosMetadata["acquisitionTime"]);
+
+  }
+  catch (boost::bad_lexical_cast&)
+  {
+    otbGenericExceptionMacro(MissingMetadataException, "Cannot read Ikonos metadata")
+  }
+
+  const auto & bandName = ikonosMetadata["bandName"];
+
+  m_Imd.Bands[0].Add(MDStr::BandName, bandName);
+
+  otb::MetaData::Time date;
+  date.tm_year = 101;
+  date.tm_mon = 0;
+  date.tm_mday = 22;
+  date.tm_hour = 0;
+  date.tm_min = 0;
+  date.tm_sec = 0;
+  date.frac_sec = 0;
+
+  // TODO : implements comparison operator 
+  if (0)
+  //if (m_Imd["MDTime::AcquisitionDate"] < date)
+  {
+    m_Imd.Bands[0].Add(MDNum::PhysicalGain, ikonosPhysicalGainPre20010122[bandName]);
+  }
+  else
+  {
+    m_Imd.Bands[0].Add(MDNum::PhysicalGain, ikonosPhysicalGainPost20010122[bandName]);
+  }
+
+  m_Imd.Bands[0].Add(MDNum::PhysicalBias, 0.);
+  m_Imd.Bands[0].Add(MDNum::SolarIrradiance, ikonosSolarIrradiance[bandName]);
+
   std::cout << m_Imd << std::endl;
+  FetchRPC(*mds);
 }
 
 } // end namespace otb
