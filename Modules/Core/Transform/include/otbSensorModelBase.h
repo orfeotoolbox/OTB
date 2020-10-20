@@ -73,6 +73,7 @@ public:
   /*
    * Set the Imagekeywordlist and affect the ossim projection ( m_Model)
    * Return false if not model found.
+   * \deprecated
    */
   virtual void SetImageGeometry(const ImageKeywordlist& image_kwl);
 

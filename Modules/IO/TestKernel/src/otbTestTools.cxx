@@ -79,7 +79,7 @@ void PrintMetadataBase(ImageMetadataBase imdb, std::ostream& oss)
 void PrintMetadata(ImageMetadata imd, std::ostream& oss)
 {
   PrintMetadataBase(imd, oss);
-  for (ImageMetadataBase imdb : imd.Bands)
+  for (const ImageMetadataBase & imdb : imd.Bands)
     PrintMetadataBase(imdb, oss);
 }
 

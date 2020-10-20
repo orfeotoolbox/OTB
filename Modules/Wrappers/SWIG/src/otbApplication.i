@@ -19,7 +19,7 @@
  */
 
 
-%module otbApplication
+%module("threads"=1) otbApplication
 
 %{
 #include "itkBase.includes"
@@ -259,22 +259,22 @@ public:
 #if SWIGPYTHON
   Logger* GetLogger();
 #endif
-  unsigned long itk::Object::AddObserver(const EventObject & event, 
+  unsigned long itk::Object::AddObserver(const EventObject & event,
                                           Command * command);
 
   bool IsDeprecated();
 
 #if SWIGPYTHON
-  %extend 
+  %extend
     {
-    /** SetupLogger : Add the PythonLogOutput and setup the progress 
+    /** SetupLogger : Add the PythonLogOutput and setup the progress
      * reporting for the application */
     %pythoncode
       {
       def SetupLogger(self):
           logger = self.GetLogger()
           logger.AddLogOutput(_libraryLogOutput.GetPointer())
-          
+
           self.progressReportManager = ProgressReporterManager_New()
           self.progressReportManager.SetLogOutputCallback(_libraryLogCallback)
           self.AddObserver(AddProcessToWatchEvent(),
@@ -726,7 +726,7 @@ class ApplicationProxy(object):
       """
       if (name == "thisown"):
         return self.this.own()
-        
+
       if hasattr(Application, "__swig_getmethods__"):
         method = Application.__swig_getmethods__.get(name, None)
         if method:
@@ -757,7 +757,7 @@ class ApplicationProxy(object):
       if (name == "progressReportManager"):
         super().__setattr__(name, value)
         return
-      
+
       if hasattr(Application, "__swig_setmethods__"):
         method = Application.__swig_setmethods__.get(name, None)
         if method:
@@ -813,7 +813,7 @@ class ApplicationProxy(object):
       ImagePixelType_cfloat : SetVectorImageFromCFloatNumpyArray_,
       ImagePixelType_cdouble : SetVectorImageFromCDoubleNumpyArray_,
       }
-    
+
     def SetImageFromNumpyArray(self, paramKey, npArray, index=0):
       """
       This method takes a numpy array and set ImageIOBase of

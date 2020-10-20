@@ -238,7 +238,14 @@ struct OTBMetadata_EXPORT Time : tm
 
   friend OTBMetadata_EXPORT std::istream& operator>>(std::istream& is, Time& val);
 
+  friend OTBMetadata_EXPORT bool operator==(const Time & lhs, const Time & rhs)
+  {
+    tm tmLhs = lhs;
+    tm tmRhs = rhs;
+    return mktime(&tmLhs) + lhs.frac_sec == mktime(&tmRhs) + rhs.frac_sec;
+  }
 };
+
 
 struct LUTAxis
 {
@@ -252,6 +259,14 @@ struct LUTAxis
   std::vector<double> Values;
   /** Export to JSON */
   std::string ToJSON(bool multiline=false) const;
+
+  friend bool operator==(const LUTAxis & lhs, const LUTAxis & rhs)
+  {
+    return lhs.Size == rhs.Size
+        && lhs.Origin == rhs.Origin
+        && lhs.Spacing == rhs.Spacing
+        && lhs.Values == rhs.Values;
+  }
 };
 
 template <unsigned int VDim> class LUT
@@ -266,7 +281,23 @@ public:
   std::string OTBMetadata_EXPORT ToString() const;
 
   void OTBMetadata_EXPORT FromString(std::string);
+
+  friend bool operator==(const LUT<VDim> & lhs, const LUT<VDim> & rhs)
+  {
+    return std::equal(std::begin(lhs.Array), std::end(lhs.Array), std::begin(rhs.Array) ) 
+            && lhs.Array == rhs.Array;
+  }
+
 };
+
+
+template <unsigned int VDim>
+std::ostream& operator<<(std::ostream& os, const LUT<VDim>& val)
+{
+  os << val.ToString();
+  return os;
+}
+
 
 typedef LUT<1> LUT1D;
 
@@ -299,6 +330,32 @@ extern OTBMetadata_EXPORT MDL1DBmType MDL1DNames;
 
 typedef boost::bimap<MDL2D, std::string> MDL2DBmType;
 extern OTBMetadata_EXPORT MDL2DBmType MDL2DNames;
+
+template<class T>
+std::string EnumToString(T t);
+
+template<>
+std::string EnumToString(MDGeom value);
+
+template<>
+std::string EnumToString(MDNum value);
+
+template<>
+std::string EnumToString(MDStr value);
+
+template<>
+std::string EnumToString(MDL1D value);
+
+template<>
+std::string EnumToString(MDL2D value);
+
+template<>
+std::string EnumToString(MDTime value);
+
+// Specialization for extra keys
+template<>
+std::string EnumToString(std::string value);
+
 
 } // end namespace MetaData
 

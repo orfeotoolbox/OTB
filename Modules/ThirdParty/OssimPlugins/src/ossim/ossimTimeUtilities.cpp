@@ -83,7 +83,7 @@ ossimDate ossimplugins::time::details::strptime(string_view const& format, strin
                          }
                          break;
                default:
-                  throw std::logic_error("Unsupported date format speficier (in "+format+": "+fmt.front()+")");
+                  throw std::logic_error("Unsupported date format specifier (in "+format+": "+fmt.front()+")");
             }
             break;
          default:

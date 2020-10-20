@@ -33,6 +33,7 @@ otb_module(OTBTransform
     OTBOSSIMAdapters
     OTBMetadata
     OTBGdalAdapters
+    OTBIOGDAL
   TEST_DEPENDS
     OTBImageBase
     OTBImageIO

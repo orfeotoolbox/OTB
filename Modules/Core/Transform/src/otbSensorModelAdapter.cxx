@@ -63,7 +63,6 @@ namespace otb
 
 SensorModelAdapter::SensorModelAdapter() : m_SensorModel(nullptr), m_TiePoints(nullptr) // FIXME keeping the original value but...
 {
-  m_DEMHandler = DEMHandler::Instance();
   m_TiePoints  = new ossimTieGptSet();
 }
 
@@ -154,7 +153,7 @@ void SensorModelAdapter::InverseTransformPoint(double lon, double lat, double& x
   }
 
   // Get elevation from DEMHandler
-  double h = m_DEMHandler->GetHeightAboveEllipsoid(lon, lat);
+  double h = DEMHandler::GetInstance().GetHeightAboveEllipsoid(lon, lat);
 
   // Initialize with value from the function parameters
   ossimGpt ossimGPoint(lat, lon, h);
@@ -183,7 +182,7 @@ void SensorModelAdapter::AddTiePoint(double x, double y, double lon, double lat)
   ossimDpt imagePoint(internal::ConvertToOSSIMFrame(x), internal::ConvertToOSSIMFrame(y));
 
   // Get elevation from DEMHandler
-  double z = m_DEMHandler->GetHeightAboveEllipsoid(lon, lat);
+  double z = DEMHandler::GetInstance().GetHeightAboveEllipsoid(lon, lat);
 
   ossimGpt ossimGPoint(lat, lon, z);
 

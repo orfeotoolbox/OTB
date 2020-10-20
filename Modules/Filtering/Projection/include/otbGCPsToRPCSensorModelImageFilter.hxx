@@ -40,7 +40,6 @@ GCPsToRPCSensorModelImageFilter<TImage>::GCPsToRPCSensorModelImageFilter()
     m_MeanError(0.),
     m_UseDEM(false),
     m_MeanElevation(0.),
-    m_DEMHandler(),
     m_GCPsContainer(),
     m_ModelUpToDate(false)
 {
@@ -51,9 +50,6 @@ GCPsToRPCSensorModelImageFilter<TImage>::GCPsToRPCSensorModelImageFilter()
 
   // Clear the GCPs container
   this->ClearGCPs();
-
-  /** Create the DEM handler */
-  m_DEMHandler = DEMHandler::Instance();
 }
 
 template <class TImage>
@@ -122,7 +118,7 @@ void GCPsToRPCSensorModelImageFilter<TImage>::AddGCP(const Point2DType& sensorPo
   if (m_UseDEM)
   {
     // If so, use it to get the elevation
-    double height = m_DEMHandler->GetHeightAboveEllipsoid(groundPoint);
+    double height = DEMHandler::GetInstance().GetHeightAboveEllipsoid(groundPoint);
     // To avoid nan value
     if (height != height)
       height                    = 0;

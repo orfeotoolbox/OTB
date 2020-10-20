@@ -32,13 +32,14 @@ ENABLE_SHARED
     OTBGDAL
     OTBOssimPlugins
     OTBOssim
-
+    
   TEST_DEPENDS
     OTBTestKernel
     OTBImageBase
     OTBImageIO
     OTBTransform
     OTBProjection
+    OTBIOGDAL
 
   DESCRIPTION
     "${DOCUMENTATION}"

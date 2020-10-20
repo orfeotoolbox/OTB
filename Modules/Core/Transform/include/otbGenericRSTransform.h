@@ -100,7 +100,9 @@ public:
   itkSetStringMacro(OutputProjectionRef);
   itkGetStringMacro(OutputProjectionRef);
 
-  /** Set/Get Dictionary*/
+  /** Set/Get Dictionary
+   * \deprecated
+   */
   const itk::MetaDataDictionary& GetInputDictionary() const
   {
     return m_InputDictionary;
@@ -123,7 +125,9 @@ public:
     this->Modified();
   }
 
-  /** Set/Get Keywordlist*/
+  /** Set/Get Keywordlist
+   * \deprecated
+   */
 
   itkGetMacro(InputKeywordList, ImageKeywordlist);
   void SetInputKeywordList(const ImageKeywordlist& kwl)

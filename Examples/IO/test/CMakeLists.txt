@@ -49,13 +49,13 @@ otb_add_test(NAME ioTeDEMToImageGeneratorTest COMMAND ${OTB_TEST_DRIVER}
     500
     0.002
     -0.002
-    ${INPUTDATA}/DEM_srtm
+    ${INPUTDATA}/DEM/srtm_directory
 )
 
 otb_add_test(NAME prTeDEMHandlerExampleTest COMMAND ${OTB_TEST_DRIVER}
   Execute $<TARGET_FILE:DEMHandlerExample>
-    ${INPUTDATA}/DEM_srtm
-    ${INPUTDATA}/DEM_srtm/egm96.grd
+    ${INPUTDATA}/DEM/srtm_directory
+    ${INPUTDATA}/DEM/egm96.grd
     40
     8.434583
     44.647083

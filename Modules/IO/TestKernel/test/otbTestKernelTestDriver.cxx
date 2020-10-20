@@ -31,4 +31,5 @@ void RegisterTests()
   REGISTER_TEST(otbCompareAsciiTests);
   REGISTER_TEST(otbCompareAsciiTestsEpsilon3_WhiteSpace);
   REGISTER_TEST(otbCopyTest);
+  REGISTER_TEST(otbDummyTest);
 }
