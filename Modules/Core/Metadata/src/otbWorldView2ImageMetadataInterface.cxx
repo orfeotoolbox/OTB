@@ -1491,10 +1491,10 @@ void WorldView2ImageMetadataInterface::Parse(const MetadataSupplierInterface *md
     // Find band names at group definitions : 
     // BEGIN_GROUP = BAND_N
     const auto key = "BEGIN_GROUP";
-    constexpr auto key_size = strlen(key);
+    const auto key_size = strlen(key);
 
     const auto prefix = "BAND_";
-    constexpr auto prefix_size = strlen(prefix);
+    const auto prefix_size = strlen(prefix);
 
     std::string line;
     while (std::getline(file, line)) 
