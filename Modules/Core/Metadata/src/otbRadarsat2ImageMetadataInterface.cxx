@@ -272,12 +272,19 @@ void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
     // std::cout<< ProductFilePath << std::endl;
     XMLMetadataSupplier ProductMS(ProductFilePath);
 
-    // m_Imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
-    // m_Imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));
+    m_Imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
+    m_Imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));
     m_Imd.Add(MDTime::ProductionDate,
         ProductMS.GetFirstAs<MetaData::Time>("product.imageGenerationParameters.generalProcessingInformation.processingTime"));
     // m_Imd.Add(MDNum::RadarFrequency, ProductMS.GetAs<double>("product.sourceAttributes.radarParameters.radarCenterFrequency"));
-    // m_Imd.Add(MDNum::AverageSceneHeight, ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
+    m_Imd.Add(MDNum::AverageSceneHeight, ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
+
+
+    m_Imd.Add(MDNum::RadarFrequency, this->GetRadarFrequency());
+    m_Imd.Add(MDNum::PRF, this->GetPRF());
+    m_Imd.Add(MDNum::RSF, this->GetRSF());
+    m_Imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle());
+
 
     SARParam sarParam;
     for (int bandId = 0 ; bandId < mds->GetNbBands() ; ++bandId)
