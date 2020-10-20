@@ -1104,9 +1104,8 @@ void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   date.tm_sec = 0;
   date.frac_sec = 0;
 
-  // TODO : implements comparison operator 
-  if (0)
-  //if (m_Imd["MDTime::AcquisitionDate"] < date)
+  std::cout << date << " " << m_Imd[MDTime::AcquisitionDate] << std::endl;
+  if (m_Imd[MDTime::AcquisitionDate] < date)
   {
     m_Imd.Bands[0].Add(MDNum::PhysicalGain, ikonosPhysicalGainPre20010122[bandName]);
   }
