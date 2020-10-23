@@ -37,6 +37,10 @@
 // useful constants
 #include <otbMath.h>
 #include <iomanip>
+#include "otbSystem.h"
+#include "otbXMLMetadataSupplier.h"
+#include "gdal_pam.h"
+
 
 namespace otb
 {
@@ -249,5 +253,73 @@ double CosmoImageMetadataInterface::GetCenterIncidenceAngle() const
 {
   return 0;
 }
+
+
+
+void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+{
+
+  assert(mds);
+  assert(mds->GetNbBands() == this->m_Imd.Bands.size());
+
+  // Check SubDatasets (For COSMO, we need //S01/SBI dataset)
+  auto subDsName = "HDF5:" + mds->GetResourceFile() + "://S01/SBI";
+  auto ds = (GDALDataset *) GDALOpen(subDsName.c_str(), GA_ReadOnly );
+  if (ds)
+  {
+    std::cout << "Found S01/SBI ! : " << std::endl;
+    // Do stuff
+    GDALClose(ds);
+  }
+  else
+  {
+    otbGenericExceptionMacro(MissingMetadataException,
+      << "Cannot find S01/SBI subdataset")
+  }
+
+  // Metadata read by GDAL
+
+  Fetch(MDStr::Mission, *mds, "MISSION_ID");
+  Fetch(MDStr::Mode, *mds, "Acquisition_Mode");
+  Fetch(MDStr::ProductType, *mds, "Product_Type");
+
+  // Check Mission Id, acquisition mode and product type
+  if(! (m_Imd[MDStr::Mission] == "CSK" ))
+    {
+    itkExceptionMacro(<< "Not a valid missionId" << m_Imd[MDStr::Mission] );
+    }
+  if((m_Imd[MDStr::Mode] != "HIMAGE") &&
+        (m_Imd[MDStr::Mode] != "SPOTLIGHT") &&
+          (m_Imd[MDStr::Mode] != "ENHANCED SPOTLIGHT"))
+    {
+    itkExceptionMacro(<< "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << m_Imd[MDStr::Mode] );
+    }
+
+  if( (m_Imd[MDStr::ProductType] != "SCS_B") && m_Imd[MDStr::ProductType] != "SCS_U")
+    {
+    itkExceptionMacro(<< "Not an expected product type (only SCS_B and SCS_U expected) " << m_Imd[MDStr::ProductType] );
+    }
+
+
+
+  m_Imd.Add(MDStr::SensorID, "CSK");
+  Fetch(MDStr::Instrument, *mds, "Satellite_ID");
+
+  Fetch(MDStr::OrbitDirection, *mds, "Orbit_Direction");
+  bool hasOrbitNumber ;
+  std::string orbitNumber =  mds->GetMetadataValue("Orbit_Number", hasOrbitNumber) ;
+  m_Imd.Add(MDNum::OrbitNumber, std::stoi(orbitNumber));
+
+  bool hasRadarFrequency ;
+  std::string radarFrequency =  mds->GetMetadataValue("Radar_Frequency", hasRadarFrequency) ;
+  m_Imd.Add(MDNum::RadarFrequency, std::stod(radarFrequency));
+
+  Fetch(MDStr::Polarization, *mds, "S01_Polarisation") ;
+  m_Imd.Add(MDStr::Swath, "S1");
+
+
+}
+
+
 
 } // end namespace otb

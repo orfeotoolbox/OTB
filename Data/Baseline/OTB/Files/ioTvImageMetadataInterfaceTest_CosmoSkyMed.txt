@@ -1,0 +1,13 @@
+SensorID CSK
+Mission CSK
+Instrument CSKS3
+ProductType SCS_B
+Polarization HH
+Mode ENHANCED SPOTLIGHT
+Swath S1
+OrbitDirection DESCENDING
+TileHintX 128
+TileHintY 128
+DataType 1
+OrbitNumber 13415
+RadarFrequency 9.6e+09

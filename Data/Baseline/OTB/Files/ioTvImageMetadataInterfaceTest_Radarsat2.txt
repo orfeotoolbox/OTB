@@ -6,6 +6,13 @@ BeamMode FQ9
 TileHintX 2822
 TileHintY 185
 DataType 11
+NumberOfLines 12953
+NumberOfColumns 2822
+AverageSceneHeight 453.201
+PRF 0
+RSF 0
+RadarFrequency 0
+CenterIncidenceAngle 0
 LineSpacing 4.8254
 PixelSpacing 4.73308
 ProductionDate 2008-04-05T13:35:50Z

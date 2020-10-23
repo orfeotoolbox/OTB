@@ -90,6 +90,8 @@ public:
 
   double GetCenterIncidenceAngle() const override;
 
+  void Parse(const MetadataSupplierInterface *) override;
+
 protected:
   /* class ctor */
   CosmoImageMetadataInterface() = default;
