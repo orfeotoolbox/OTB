@@ -81,6 +81,7 @@ if(UNIX)
     --with-ingres=no
     --with-jp2mrsid=no
     --with-kakadu=no
+    --with-kea=no
     --with-jasper=no
     --with-libgrass=no
     --with-mrsid=no

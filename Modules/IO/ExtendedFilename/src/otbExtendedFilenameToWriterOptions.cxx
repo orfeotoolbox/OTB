@@ -225,7 +225,7 @@ void ExtendedFilenameToWriterOptions::SetExtendedFileName(const std::string& ext
 	{
 	  code = std::stoi(map["epsg"]);
 	}
-	catch(const std::invalid_argument& e)
+	catch(const std::invalid_argument&)
 	{
 	  itkWarningMacro("Invalid value ("
                       << map["epsg"]

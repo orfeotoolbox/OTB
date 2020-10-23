@@ -34,6 +34,8 @@ void PythonLogOutput::Write(double timestamp)
 
 void PythonLogOutput::Write(std::string const& content)
 {
+  // Note : Reacuiring the GIL before calling the callback doesn' seems to be
+  // necessary with thread=1 and director classes
   m_Callback->Call(content);
 }
 

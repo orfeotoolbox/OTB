@@ -106,11 +106,8 @@ if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
 set(PACKAGE_ARCH "64")
 endif()
 
-
 include(${PACKAGE_OTB_SRC_DIR}/CMake/GetVersionFromGitTag.cmake)
-get_package_name(${PACKAGE_OTB_SRC_DIR} OTB_VERSION_STRING2)
-message(STATUS "OTB_VERSION_STRING2 : ${OTB_VERSION_STRING2}")
-
+get_package_name(${PACKAGE_OTB_SRC_DIR} PKG_OTB OTB_VERSION_STRING2)
 
 # This directory is important.
 # We stage/keep files that goes into final package in this directory
