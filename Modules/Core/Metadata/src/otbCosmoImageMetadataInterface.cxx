@@ -40,6 +40,7 @@
 #include "otbSystem.h"
 #include "otbXMLMetadataSupplier.h"
 #include "gdal_pam.h"
+#include <iostream>
 
 
 namespace otb
@@ -256,15 +257,116 @@ double CosmoImageMetadataInterface::GetCenterIncidenceAngle() const
 
 
 
+std::vector<std::map<std::string, std::string> > CosmoImageMetadataInterface::saveMetadataBands(std::string file)
+{
+  // Create GDALImageIO to retrieve all metadata (from .h5 input file)
+  std::map<std::string, std::string> metadataDataSet;
+  std::vector<std::map<std::string, std::string> > metadataBands;
+  GDALDataset * dataset = static_cast<GDALDataset*>(GDALOpen(file.c_str(), GA_ReadOnly));
+  // Metadata for dataset
+  char** papszMetadata = dataset->GetMetadata(nullptr);
+  for (int cpt = 0; papszMetadata[cpt] != nullptr; ++cpt)
+    {
+    std::string key, value;
+    if (otb::System::ParseHdfSubsetName(papszMetadata[cpt], key, value))
+      {
+      metadataDataSet[key] = value;
+      }
+    }
+
+  int nbRasterCount = dataset->GetRasterCount();
+  // Metadata for each Band
+  for (int iBand = 0; iBand < nbRasterCount; iBand++)
+    {
+    std::map<std::string, std::string> mapCurrentBand;
+    GDALRasterBand * Band = dataset->GetRasterBand(iBand + 1);
+
+    papszMetadata = Band->GetMetadata(nullptr);
+    for (int cpt = 0; papszMetadata[cpt] != nullptr; ++cpt)
+      {
+      std::string key, value;
+      if (otb::System::ParseHdfSubsetName(papszMetadata[cpt], key, value))
+        {
+        mapCurrentBand[key] = value;
+        }
+      }
+    metadataBands.push_back(mapCurrentBand);
+    }
+
+  GDALClose(static_cast<GDALDatasetH>(dataset));
+  return metadataBands;
+
+}
+
+
+
+
+std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const MetadataSupplierInterface *mds, std::string reference_UTC)
+{
+    ////////////////// Add Orbit List ////////////////
+  bool hasOrbit ;
+  std::string nb_orbits =  mds->GetMetadataValue("Number_of_State_Vectors", hasOrbit) ;
+    // Get elements
+    int stateVectorList_size = std::stoi(nb_orbits);
+    std::string state_times = mds->GetMetadataValue("State_Vectors_Times", hasOrbit);
+    std::string ecef_satellite_pos = mds->GetMetadataValue("ECEF_Satellite_Position", hasOrbit) ;
+    std::string ecef_satellite_vel = mds->GetMetadataValue("ECEF_Satellite_Velocity", hasOrbit);
+    // Convert std::string to vector
+    std::vector<std::string> vTimes;
+    otb::Utils::ConvertStringToVector(state_times, vTimes, "State_Vectors_Times", " ");
+
+    std::vector<std::string> vECEF_sat_pos;
+    otb::Utils::ConvertStringToVector(ecef_satellite_pos, vECEF_sat_pos, "ECEF_Satellite_Position", " ");
+    std::vector<std::string> vECEF_sat_vel;
+    otb::Utils::ConvertStringToVector(ecef_satellite_vel, vECEF_sat_vel, "ECEF_Satellite_Velocity", " ");
+
+  std::vector<Orbit> orbitVector;
+
+  std::ostringstream oss;
+  for (int i = 0; i != stateVectorList_size ; ++i)
+  {
+    oss.str("");
+    oss << stateVectorList_size;
+    Orbit orbit;
+
+    double total_seconds = std::stod(vTimes[i]);
+    int hour = static_cast<int> (total_seconds/3600.0);
+    int minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
+    double seconds = total_seconds - hour*3600 - minutes*60;
+    std::string timestr = reference_UTC + "T" + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
+
+    MetaData::Time time = Utils::LexicalCast<MetaData::Time,std::string>(timestr, std::string("T"));
+
+    orbit.time = time ;
+
+    orbit.posX = std::stod(vECEF_sat_pos[i*3 + 0]) ;
+    orbit.posY = std::stod(vECEF_sat_pos[i*3 + 1]) ;
+    orbit.posZ = std::stod(vECEF_sat_pos[i*3 + 2]) ;
+
+    orbit.velX = std::stod(vECEF_sat_vel[i*3 + 0]) ;
+    orbit.velY = std::stod(vECEF_sat_vel[i*3 + 1]) ;
+    orbit.velZ = std::stod(vECEF_sat_vel[i*3 + 2]) ;
+
+
+    orbitVector.push_back(orbit);
+  }
+  return orbitVector ;
+}
+
+
+
 void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 {
 
   assert(mds);
   assert(mds->GetNbBands() == this->m_Imd.Bands.size());
 
+
+
   // Check SubDatasets (For COSMO, we need //S01/SBI dataset)
   auto subDsName = "HDF5:" + mds->GetResourceFile() + "://S01/SBI";
   auto ds = (GDALDataset *) GDALOpen(subDsName.c_str(), GA_ReadOnly );
+
   if (ds)
   {
     std::cout << "Found S01/SBI ! : " << std::endl;
@@ -300,8 +402,6 @@ void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
     itkExceptionMacro(<< "Not an expected product type (only SCS_B and SCS_U expected) " << m_Imd[MDStr::ProductType] );
     }
 
-
-
   m_Imd.Add(MDStr::SensorID, "CSK");
   Fetch(MDStr::Instrument, *mds, "Satellite_ID");
 
@@ -317,8 +417,46 @@ void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   Fetch(MDStr::Polarization, *mds, "S01_Polarisation") ;
   m_Imd.Add(MDStr::Swath, "S1");
 
+  bool hasPRF;
+  std::string PRFNumber =  mds->GetMetadataValue("S01_PRF", hasPRF);
+  m_Imd.Add(MDNum::OrbitNumber, std::stoi(PRFNumber));
+
+
+  //getTIme
+  auto metadataBands = this->saveMetadataBands(subDsName) ;
+  bool hasTimeUTC;
+  int pos = mds->GetMetadataValue("Reference_UTC", hasTimeUTC).find(" ");;
+  std::string reference_UTC = mds->GetMetadataValue("Reference_UTC", hasTimeUTC).substr(0, pos);
+
+  double total_seconds = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Azimuth_First_Time"]);
+  int hour = static_cast<int> (total_seconds/3600.0);
+  int minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
+  double seconds = total_seconds - hour*3600 - minutes*60;
+  std::string first_line_time = reference_UTC + "T" + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds); 
+
+  total_seconds = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Azimuth_Last_Time"]);
+  hour = static_cast<int> (total_seconds/3600.0);
+  minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
+  seconds = total_seconds - hour*3600 - minutes*60;
+  std::string last_line_time = reference_UTC + "T" + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
+  MetaData::Time startTime = Utils::LexicalCast<MetaData::Time,std::string>(first_line_time, std::string("T"));
+  MetaData::Time stoptTime = Utils::LexicalCast<MetaData::Time,std::string>(last_line_time, std::string("T"));
+
+  m_Imd.Add(MDTime::AcquisitionStartTime, startTime);
+  m_Imd.Add(MDTime::AcquisitionStopTime, stoptTime);
+
+  //SAR Parameters
+  SARParam sarParam;
+  sarParam.orbits = this->getOrbits(mds, reference_UTC);
+
+  m_Imd.Bands[0].Add(MDGeom::SAR, sarParam);
 
 }
+
+
+
+
+
 
 
 
