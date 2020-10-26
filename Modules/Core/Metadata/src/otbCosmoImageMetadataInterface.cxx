@@ -369,7 +369,7 @@ void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 
   if (ds)
   {
-    std::cout << "Found S01/SBI ! : " << std::endl;
+    std::cout << "Found S01/SBI ! " << std::endl;
     // Do stuff
     GDALClose(ds);
   }
@@ -388,18 +388,18 @@ void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   // Check Mission Id, acquisition mode and product type
   if(! (m_Imd[MDStr::Mission] == "CSK" ))
     {
-    itkExceptionMacro(<< "Not a valid missionId" << m_Imd[MDStr::Mission] );
+    itkWarningMacro(<< "Not a valid missionId" << m_Imd[MDStr::Mission] );
     }
   if((m_Imd[MDStr::Mode] != "HIMAGE") &&
         (m_Imd[MDStr::Mode] != "SPOTLIGHT") &&
           (m_Imd[MDStr::Mode] != "ENHANCED SPOTLIGHT"))
     {
-    itkExceptionMacro(<< "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << m_Imd[MDStr::Mode] );
+    itkWarningMacro(<< "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << m_Imd[MDStr::Mode] );
     }
 
   if( (m_Imd[MDStr::ProductType] != "SCS_B") && m_Imd[MDStr::ProductType] != "SCS_U")
     {
-    itkExceptionMacro(<< "Not an expected product type (only SCS_B and SCS_U expected) " << m_Imd[MDStr::ProductType] );
+    itkWarningMacro(<< "Not an expected product type (only SCS_B and SCS_U expected) " << m_Imd[MDStr::ProductType] );
     }
 
   m_Imd.Add(MDStr::SensorID, "CSK");
