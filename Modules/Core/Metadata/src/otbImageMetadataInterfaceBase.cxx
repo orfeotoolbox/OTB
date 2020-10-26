@@ -700,15 +700,14 @@ const boost::any& ImageMetadataInterfaceBase::FetchRPC(
   auto GetMetadataWithoutUnit = [](const std::string & path, 
                                     const MetadataSupplierInterface & mds)
   {
-    const std::vector<std::string> unitNames = {"meters", "degrees", "pixels"};
     auto metadataAsString = mds.GetAs<std::string>(path);
 
-    for (const auto & name : unitNames)
+    for (const auto & name : {"meters", "degrees", "pixels"})
     {
       auto i = metadataAsString.find(name);
       if (i != std::string::npos)
       {
-        metadataAsString.erase(i, name.size());
+        metadataAsString.erase(i, strlen(name));
         break;
       }
     }

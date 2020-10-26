@@ -1337,6 +1337,7 @@ void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
     if (file.find("METADATA.DIM")!=std::string::npos)
     {
       metadataFile = file;
+      break;
     }
   }
 
@@ -1354,11 +1355,6 @@ void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   
 
   auto nbBands = m_Imd.Bands.size();
-
-  std::cout << nbBands << " " << dimapData.PhysicalBias.size() << " " 
-  << dimapData.SolarIrradiance.size() << " " << dimapData.PhysicalGain.size() << " "
-  << dimapData.BandIDs.size() <<  std::endl;
-
 
   // Band names are not in the metadata. Two cases should be considered 
   // here: panchromatic and multispectral
@@ -1388,8 +1384,6 @@ void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   {
     FetchRPC(*mds);
   }
-
-  std::cout << m_Imd << std::endl;
 }
 
 
