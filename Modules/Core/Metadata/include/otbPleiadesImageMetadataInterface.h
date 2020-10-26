@@ -168,6 +168,7 @@ private:
                       const std::vector<double> & axrossTrackIncidenceAngles,
                       const std::vector<double> & sceneOrientation);
 
+  void FetchSpectralSensitivity(const std::string & sensorId);
 };
 
 } // end namespace otb

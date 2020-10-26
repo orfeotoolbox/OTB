@@ -98,6 +98,8 @@ public:
   void ParseDimapV1(const MetadataSupplierInterface & mds, const std::string prefix)
   {
     std::vector<double> defaultValue = {};
+    std::vector<std::string> defaultValueStr = {};
+
     std::vector<std::string> missionVec;
     ParseVector(mds, prefix + "Dataset_Sources.Source_Information"
                     ,"Scene_Source.MISSION", missionVec);
@@ -107,10 +109,10 @@ public:
     ParseVector(mds, prefix + "Dataset_Sources.Source_Information"
                     ,"Scene_Source.MISSION_INDEX", missionIndexVec);
     m_Data.missionIndex = missionIndexVec[0];
-/*
-    ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
-                       "BAND_ID", m_Data.BandIDs);
-*/
+
+    ParseVector(mds, prefix + "Image_Interpretation.Spectral_Band_Info",
+                       "BAND_DESCRIPTION", m_Data.BandIDs, defaultValueStr);
+
     ParseVector(mds, prefix + "Dataset_Sources.Source_Information",
                        "Scene_Source.SUN_ELEVATION", m_Data.SunElevation);
 
@@ -168,17 +170,14 @@ public:
 
     m_Data.ProductionDate = mds.GetAs<std::string>(path);
 
-    auto imagingDate = mds.GetAs<std::string>(prefix + 
-            "Dataset_Sources.Source_Information.Scene_Source.IMAGING_DATE");
-    auto imagingTime = mds.GetAs<std::string>(prefix + 
-            "Dataset_Sources.Source_Information.Scene_Source.IMAGING_TIME");
+    std::vector<std::string> imagingDateVec;
 
+    auto imagingDate = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Information", "Scene_Source.IMAGING_DATE" );
+    auto imagingTime = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Information", "Scene_Source.IMAGING_TIME" );
     m_Data.AcquisitionDate = imagingDate + "T" + imagingTime;
-    
-    m_Data.Instrument = mds.GetAs<std::string>(prefix + 
-      "Dataset_Sources.Source_Information.Scene_Source.INSTRUMENT");
-    m_Data.InstrumentIndex = mds.GetAs<std::string>(prefix + 
-      "Dataset_Sources.Source_Information.Scene_Source.INSTRUMENT_INDEX");
+
+    m_Data.Instrument = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Information", "Scene_Source.INSTRUMENT" );
+    m_Data.InstrumentIndex = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Information", "Scene_Source.INSTRUMENT_INDEX" );
 
     m_Data.ProcessingLevel = mds.GetAs<std::string>
       (prefix + "Data_Processing.PROCESSING_LEVEL");

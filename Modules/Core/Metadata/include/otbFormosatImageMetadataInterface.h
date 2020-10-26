@@ -161,6 +161,8 @@ protected:
 private:
   FormosatImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
+
+  void FetchSpectralSensitivity();
 };
 
 } // end namespace otb

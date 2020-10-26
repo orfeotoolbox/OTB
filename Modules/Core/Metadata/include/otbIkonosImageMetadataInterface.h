@@ -152,6 +152,8 @@ private:
   void FetchAcquisitionDate(const std::string & acquisitionDate,
                              const std::string & acquisitionTime);
 
+  void FetchSpectralSensitivity(const std::string & bandName);
+
 };
 
 } // end namespace otb
