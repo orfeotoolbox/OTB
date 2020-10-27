@@ -61,9 +61,9 @@ otb_test_application(NAME apTvUtDynamicConvertExtendedFilename_readerGEOM
                      APP  DynamicConvert
                      OPTIONS -in ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&geom=${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
                              -out ${TEMP}/apTvUtGeomExtendedFilename.tif
-                     VALID   --compare-ascii ${EPSILON_7}
-                             ${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
-                             ${TEMP}/apTvUtGeomExtendedFilename.geom)
+                     VALID   --compare-metadata ${NOTOL}
+                             ${INPUTDATA}/ToulouseExtract_ModifiedMetadata.tif
+                             ${TEMP}/apTvUtGeomExtendedFilename.tif)
 
 otb_test_application(NAME apTvUtDynamicConvertLog2
                      APP DynamicConvert
