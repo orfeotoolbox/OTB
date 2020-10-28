@@ -36,6 +36,7 @@
 #include "otbWrapperParameterKey.h"
 #include "otbWrapperProxyParameter.h"
 #include "otbWrapperBoolParameter.h"
+#include "otbWrapperFieldParameter.h"
 
 #include "otb_boost_string_header.h"
 
@@ -324,6 +325,11 @@ void ParameterGroup::AddParameter(ParameterType type, std::string paramKey, std:
     case ParameterType_Bool:
     {
       newParam = BoolParameter::New();
+    }
+    break;
+    case ParameterType_Field:
+    {
+      newParam = FieldParameter::New();
     }
     break;
     default:
