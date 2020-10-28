@@ -426,7 +426,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         }
 
         if (type == ParameterType_InputVectorDataList || type == ParameterType_InputImageList || type == ParameterType_InputFilenameList ||
-            type == ParameterType_StringList || type == ParameterType_ListView)
+            type == ParameterType_StringList || type == ParameterType_ListView || type == ParameterType_Field )
         {
           // Multiple values parameters
           m_Application->SetParameterStringList(paramKey, values);

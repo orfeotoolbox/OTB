@@ -36,6 +36,7 @@
 #include "otbWrapperProxyParameter.h"
 #include "otbWrapperParameterKey.h"
 #include "otbWrapperBoolParameter.h"
+#include "otbWrapperFieldParameter.h"
 
 #include "otbWrapperAddProcessToWatchEvent.h"
 #include "otbExtendedFilenameToWriterOptions.h"
@@ -1357,6 +1358,12 @@ void Application::SetNthParameterStringList(std::string const& key, const unsign
 {
   auto param = downcast_check<InputImageListParameter>(GetParameterByKey(key));
   param->SetNthFileName(id, str);
+}
+
+void Application::SetVectorData(std::string const& key, std::string const& vectorData )
+{
+  auto param = downcast_check<FieldParameter>(GetParameterByKey(key));
+  param->SetVectorData(vectorData);
 }
 
 void Application::ClearParameterInputImageList(std::string const& key)

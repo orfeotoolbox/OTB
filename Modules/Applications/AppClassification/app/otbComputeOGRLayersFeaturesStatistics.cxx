@@ -63,8 +63,9 @@ private:
     AddParameter(ParameterType_OutputFilename, "outstats", "Output XML file");
     SetParameterDescription("outstats", "XML file containing mean and variance of each feature.");
 
-    AddParameter(ParameterType_ListView, "feat", "Feature");
+    AddParameter(ParameterType_Field, "feat", "Feature");
     SetParameterDescription("feat", "List of features to consider for statistics.");
+    SetVectorData("feat", "inshp");
 
     // Doc example parameter settings
     SetDocExampleParameterValue("inshp", "vectorData.shp");

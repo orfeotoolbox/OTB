@@ -75,9 +75,9 @@ private:
     AddParameter(ParameterType_OutputFilename, "insvm", "Input model filename");
     SetParameterDescription("insvm", "Input model filename.");
 
-
-    AddParameter(ParameterType_ListView, "feat", "Features");
+    AddParameter(ParameterType_Field, "feat", "Features");
     SetParameterDescription("feat", "Features to be calculated");
+    SetVectorData("feat","inshp");
 
     AddParameter(ParameterType_String, "cfield", "Field containing the predicted class");
     SetParameterDescription("cfield", "Field containing the predicted class");

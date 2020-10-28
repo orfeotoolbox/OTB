@@ -50,7 +50,7 @@ void VectorClassifier::DoInitSpecialization()
   SetDocSeeAlso("TrainVectorClassifier");
   AddDocTag(Tags::Learning);
 
-  AddParameter(ParameterType_InputFilename, "in", "Name of the input vector data");
+  AddParameter(ParameterType_InputVectorData, "in", "Name of the input vector data");
   SetParameterDescription("in", "The input vector data file to classify.");
 
   AddParameter(ParameterType_InputFilename, "instat", "Statistics file");
@@ -70,10 +70,11 @@ void VectorClassifier::DoInitSpecialization()
                           "Caution, the 'cfield' must not exist in the input file if you are updating the file.");
   SetParameterString("cfield", "predicted");
 
-  AddParameter(ParameterType_ListView, "feat", "Field names to be calculated");
+  AddParameter(ParameterType_Field, "feat", "Field names to be calculated");
   SetParameterDescription("feat",
                           "List of field names in the input vector data used as features for training. "
                           "Put the same field names as the TrainVectorClassifier application.");
+  SetVectorData("feat", "in");
 
   AddParameter(ParameterType_Bool, "confmap", "Confidence map");
   SetParameterDescription("confmap",
