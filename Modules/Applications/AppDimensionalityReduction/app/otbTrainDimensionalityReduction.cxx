@@ -97,8 +97,9 @@ private:
     MandatoryOff("io.stats");
     SetParameterDescription("io.stats", "XML file containing mean and variance of each feature.");
 
-    AddParameter(ParameterType_StringList, "feat", "Field names to be used for training");
+    AddParameter(ParameterType_Field, "feat", "Field names to be used for training");
     SetParameterDescription("feat", "List of field names in the input vector data used as features for training.");
+    SetVectorData("feat", "io.vd");
 
     Superclass::DoInit();
 

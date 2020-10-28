@@ -563,6 +563,13 @@ public:
   void SetNthParameterInputImageList(std::string const& parameter, const unsigned int& id, ImageBaseType* img);
 
   /**
+   * Set vector data name from which we choose the fields for a FieldParameter
+   * \in parameter The parameter key (must be a FieldParameter)
+   * \in vectorData vector data name
+   */
+  void SetVectorData(std::string const& key, std::string const& vectorData );
+
+  /**
      * Add a value to a parameter list as a string
      *
      * Can be called for parameter types:
