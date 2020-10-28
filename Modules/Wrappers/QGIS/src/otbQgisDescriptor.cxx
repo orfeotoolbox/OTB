@@ -21,6 +21,7 @@
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperBoolParameter.h"
+#include "otbWrapperFieldParameter.h"
 #include "otbWrapperApplicationRegistry.h"
 
 #include <iostream>
@@ -72,6 +73,7 @@ int main(int argc, char* argv[])
   parameterTypeToString[ParameterType_OutputVectorData]    = "QgsProcessingParameterVectorDestination";
   parameterTypeToString[ParameterType_OutputFilename]      = "QgsProcessingParameterFileDestination";
   parameterTypeToString[ParameterType_Directory]           = "QgsProcessingParameterFile";
+  parameterTypeToString[ParameterType_Field]               = "QgsProcessingParameterField";
   // TODO
   parameterTypeToString[ParameterType_StringList] = "QgsProcessingParameterString";
 
@@ -238,9 +240,9 @@ int main(int argc, char* argv[])
     else if (type == ParameterType_ListView)
     {
         ListViewParameter *lv_param = dynamic_cast<ListViewParameter*>(param.GetPointer());
-	      std::vector<std::string>  key_list  = appli->GetChoiceKeys(name);
+	      std::vector<std::string>  name_list  = appli->GetChoiceNames(name);
 	      std::string values = "";
-	      for( auto k : key_list)
+	      for( auto k : name_list)
           values += k + ";";
 	      values.pop_back();
 	      dFile << "|" << values ;
@@ -261,6 +263,13 @@ int main(int argc, char* argv[])
       dFile << "|" << values;
       ChoiceParameter* cparam = dynamic_cast<ChoiceParameter*>(param.GetPointer());
       default_value           = std::to_string(cparam->GetValue());
+    }
+    else if (type == ParameterType_Field)
+    {
+      FieldParameter *f_param = dynamic_cast<FieldParameter*>(param.GetPointer());
+
+      dFile << "|None|" << f_param->GetVectorData()
+            << "|QgsProcessingParameterField.Any|False";
     }
     else
     {
@@ -290,7 +299,17 @@ int main(int argc, char* argv[])
     	  std::cerr << " qgis_type=" << qgis_type;
     	  std::cerr << " optional=" << optional << std::endl;
 #endif
-    dFile << "|" << default_value << "|" << optional;
+
+    // optionnal and default value are not in the same order than
+    // other QGis processing parameters
+    if (type == ParameterType_Field)
+    {
+      dFile << "|" << optional << "|False";
+    }
+    else
+    {
+      dFile << "|" << default_value << "|" << optional;
+    }
     dFile << std::endl;
   }
 
