@@ -133,11 +133,12 @@ private:
     AddParameter(ParameterType_InputImage, "ref.raster.in", "Input reference image");
     SetParameterDescription("ref.raster.in", "Input image containing the ground truth labels");
 
-    AddParameter(ParameterType_InputFilename, "ref.vector.in", "Input reference vector data");
+    AddParameter(ParameterType_InputVectorData, "ref.vector.in", "Input reference vector data");
     SetParameterDescription("ref.vector.in", "Input vector data of the ground truth");
 
-    AddParameter(ParameterType_ListView, "ref.vector.field", "Field name");
+    AddParameter(ParameterType_Field, "ref.vector.field", "Field name");
     SetParameterDescription("ref.vector.field", "Field name containing the label values");
+    SetVectorData("ref.vector.field", "ref.vector.in");
     SetListViewSingleSelectionMode("ref.vector.field", true);
 
     AddParameter(ParameterType_Int, "ref.raster.nodata", "Value for nodata pixels in the reference raster");
