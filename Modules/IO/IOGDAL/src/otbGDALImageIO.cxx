@@ -1538,6 +1538,26 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       CSLDestroy(rpcMetadata);
       }
     }
+    // ToDo : remove this part. This case is here for compatibility for images
+    // that still use Ossim for managing the sensor model (with OSSIMKeywordList).
+    else if (otb_kwl.GetSize())
+      {
+      /* -------------------------------------------------------------------- */
+      /* Set the RPC coeffs (since GDAL 1.10.0)                               */
+      /* -------------------------------------------------------------------- */
+      if (m_WriteRPCTags)
+        {
+        GDALRPCInfo gdalRpcStruct;
+        if (otb_kwl.convertToGDALRPC(gdalRpcStruct))
+          {
+          otbLogMacro(Debug, << "Saving RPC to file (" << m_FileName << ")")
+          char** rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
+          dataset->SetMetadata(rpcMetadata, "RPC");
+          CSLDestroy(rpcMetadata);
+          }
+        }
+      }
+
   /* -------------------------------------------------------------------- */
   /* Case 3: Set the GCPs                                                 */
   /* -------------------------------------------------------------------- */

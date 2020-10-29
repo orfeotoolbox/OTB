@@ -553,6 +553,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
   }
 
   m_ImageIO->SetUseCompression(m_UseCompression);
+  m_ImageIO->SetMetaDataDictionary(inputPtr->GetMetaDataDictionary());
 
   const ImageCommons* img_common = dynamic_cast<const ImageCommons*>(inputPtr.GetPointer());
   if (img_common != nullptr)
