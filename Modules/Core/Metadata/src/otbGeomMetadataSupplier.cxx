@@ -55,7 +55,14 @@ std::string GeomMetadataSupplier::GetResourceFile(std::string) const
 int GeomMetadataSupplier::GetNbBands() const
 {
   bool hasValue;
-  std::string ret = this->GetMetadataValue("support_data.band_name_list", hasValue);
+  std::string ret = this->GetMetadataValue("support_data.number_bands", hasValue);
+  if (hasValue)
+  {
+    boost::algorithm::trim_if(ret, boost::algorithm::is_any_of("\" "));
+    return std::stoi(ret);
+  }
+
+  ret = this->GetMetadataValue("support_data.band_name_list", hasValue);
   boost::algorithm::trim_if(ret, boost::algorithm::is_any_of("\" "));
   if (!hasValue)
     otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata 'support_data.band_name_list'")
