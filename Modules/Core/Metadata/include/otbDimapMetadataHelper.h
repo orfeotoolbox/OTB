@@ -160,6 +160,9 @@ public:
     ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Solar_Irradiance",
                        "VALUE" , m_Data.SolarIrradiance, defaultValue);
 
+    ParseVector(mds, prefix + "Data_Strip.Sensor_Calibration.Solar_Irradiance.Band_Solar_Irradiance",
+                       "SOLAR_IRRADIANCE_VALUE" , m_Data.SolarIrradiance, defaultValue);
+
     ParseVector(mds, prefix + "Dataset_Frame",
                        "SCENE_ORIENTATION" , m_Data.SceneOrientation);
 

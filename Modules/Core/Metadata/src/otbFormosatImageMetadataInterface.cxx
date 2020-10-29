@@ -1349,7 +1349,7 @@ void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   XMLMetadataSupplier xmlMds(metadataFile);
 
   DimapMetadataHelper helper;
-    
+
   helper.ParseDimapV1(xmlMds, "Dimap_Document.");
   const auto & dimapData = helper.GetDimapData();
   

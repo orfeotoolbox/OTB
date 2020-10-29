@@ -29,7 +29,7 @@
 #include "otbGDALImageIO.h"
 #include "otbMetaDataKey.h"
 #include "otbTestTools.h"
-
+#include "otbOpticalImageMetadataInterface.h"
 
 int otbImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
 {
@@ -44,13 +44,10 @@ int otbImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
   reader->SetFileName(inputFilename);
   reader->UpdateOutputInformation();
 
-  otb::ImageMetadata imd = reader->GetImageIO()->GetImageMetadata();
-  otb::MetadataSupplierInterface* mds = dynamic_cast<otb::MetadataSupplierInterface*>(reader->GetImageIO());
+  auto imd = reader->GetImageIO()->GetImageMetadata();
+  auto mds = dynamic_cast<otb::MetadataSupplierInterface*>(reader->GetImageIO());
   otb::ImageMetadataInterfaceBase::Pointer imi = otb::ImageMetadataInterfaceFactory::CreateIMI(imd, mds);
 
-  // Test the image interface
-  otb::GDALImageIO* mds2 = dynamic_cast<otb::GDALImageIO*>(mds);
-  imi->Parse(mds);
   const otb::ImageMetadata& imd2 = imi->GetImageMetadata();
   std::ofstream file;
   file.open(outputFilename);
@@ -58,6 +55,15 @@ int otbImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
   if (imd2.Has(otb::MDGeom::GCP))
     file << boost::any_cast<otb::Projection::GCPParam>(imd2[otb::MDGeom::GCP]).ToJSON(true);
   file.close();
+
+  if (dynamic_cast<otb::OpticalImageMetadataInterface*>(imi.GetPointer()))
+  {
+    if (!otb::HasOpticalSensorMetadata(imi->GetImageMetadata()))
+    {
+      std::cout << "Input image does not contains all required optical image metadata" << std::endl;
+      return EXIT_FAILURE;
+    }
+  }
 
   return EXIT_SUCCESS;
 }

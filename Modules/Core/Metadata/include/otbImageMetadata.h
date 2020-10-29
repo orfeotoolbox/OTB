@@ -308,6 +308,8 @@ extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::
 
 extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::ImageMetadata& imd);
 
+OTBMetadata_EXPORT bool HasOpticalSensorMetadata(const ImageMetadata & imd);
+
 } // end namespace otb
 
 #endif

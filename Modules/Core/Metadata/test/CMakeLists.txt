@@ -429,3 +429,11 @@ otb_add_test(NAME ioTuotbXMLMetadataSupplierTest COMMAND otbMetadataTestDriver
   ${INPUTDATA}/ioTuotbXMLMetadataSupplierTest.xml
   ${TEMP}/ioTuotbXMLMetadataSupplierTest.txt
   )
+
+otb_add_test(NAME ioTvImageMetadataInterfaceTest_Pleiades COMMAND otbMetadataTestDriver 
+  --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_Pleiades.txt
+  ${TEMP}/ioTvImageMetadataInterfaceTest_TerraSar.txt
+  otbImageMetadataInterfaceTest
+  LARGEINPUT{PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201206050630064_SEN_559102101-002_R1C1.JP2}
+  ${TEMP}/ioTvImageMetadataInterfaceTest_Pleiades.txt
+  )

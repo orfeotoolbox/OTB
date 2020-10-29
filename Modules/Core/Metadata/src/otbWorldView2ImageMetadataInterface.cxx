@@ -536,7 +536,12 @@ WorldView2ImageMetadataInterface::VariableLengthVectorType WorldView2ImageMetada
   }
   else if (keywordStringBId == multi || keywordStringBId == ms1)
   {
-    outputValuesVariableLengthVector.SetSize(m_Imd.Bands.size());
+    std::string keywordStringBandNameList = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
+    std::vector<std::string> bandNameList;
+    boost::trim(keywordStringBandNameList);
+    boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
+
+    outputValuesVariableLengthVector.SetSize(bandNameList.size());
     outputValuesVariableLengthVector.Fill(0.0);
   }
   else

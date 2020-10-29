@@ -26,6 +26,8 @@
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
 
+#include "otbXMLMetadataSupplier.h"
+
 #include "otbDimapMetadataHelper.h"
 
 namespace otb
@@ -1759,30 +1761,54 @@ void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
     otbGenericExceptionMacro(MissingMetadataException,<<"Not a spot 5 product")
     }
 
+  //Find the METADATA.DIM file (Dimap V1 metadata file)
+  auto resourceFiles = mds->GetResourceFiles();
+  
+  std::string metadataFile;
+  for (const auto & file: resourceFiles)
+  {
+    if (file.find("METADATA.DIM")!=std::string::npos)
+    {
+      metadataFile = file;
+      break;
+    }
+  }
+
+  if (metadataFile.empty())
+  {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Cannot find the METADATA.DIM file")
+  }
+
+  XMLMetadataSupplier xmlMds(metadataFile);
+
   DimapMetadataHelper helper;
 
-  helper.ParseDimapV1(*mds, "IMD/");
-
+  helper.ParseDimapV1(xmlMds, "Dimap_Document.");
   const auto & dimapData = helper.GetDimapData();
-
+  
   auto nbBands = m_Imd.Bands.size();
   if (dimapData.PhysicalBias.size() == nbBands
     && dimapData.PhysicalGain.size() == nbBands
+    && dimapData.SolarIrradiance.size() == nbBands
     && dimapData.BandIDs.size() == nbBands)
   {
     auto bias = dimapData.PhysicalBias.begin();
     auto gain = dimapData.PhysicalGain.begin();
     auto bandId = dimapData.BandIDs.begin();
+    auto solarIrradiance = dimapData.SolarIrradiance.begin();
+
 
     for (auto & band: m_Imd.Bands)
     {
       band.Add(MDNum::PhysicalGain, *gain);
       band.Add(MDNum::PhysicalBias, *bias);
       band.Add(MDStr::BandName, *bandId);
+      band.Add(MDNum::SolarIrradiance, *solarIrradiance);
 
       bias++;
       gain++;
       bandId++;
+      solarIrradiance++;
     }
   }
   else
@@ -1796,8 +1822,7 @@ void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
     FetchSpectralSensitivity();
   }
 
-  //FetchRPC(*mds);
-
+  FetchRPC(*mds);
 }
 
 } // end namespace otb
