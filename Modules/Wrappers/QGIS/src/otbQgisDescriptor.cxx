@@ -259,7 +259,9 @@ int main(int argc, char* argv[])
       for (auto k : key_list)
         values += k + ";";
 
-      values.pop_back();
+      if (values.size())
+        values.pop_back();
+
       dFile << "|" << values;
       ChoiceParameter* cparam = dynamic_cast<ChoiceParameter*>(param.GetPointer());
       default_value           = std::to_string(cparam->GetValue());
