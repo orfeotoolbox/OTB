@@ -151,7 +151,7 @@ support_data.R_band_absCalFactor:  0.0126735
 support_data.TDI_level:  13
 support_data.azimuth_angle:  154.8
 support_data.band_id:  Multi
-support_data.band_name_list:  B G R N
+support_data.band_name_list:  X Y
 support_data.bits_per_pixel:  16
 support_data.elevation_angle:  48.6
 support_data.generation_date:  2004-05-25T19:49:03.000000Z

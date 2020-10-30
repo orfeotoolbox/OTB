@@ -112,7 +112,7 @@ void VectorImage<TPixel, VImageDimension>::CopyInformation(const itk::DataObject
   if (imc != nullptr)
   {
     const auto & imd = imc->GetImageMetadata();
-    std::cout << "hello " << this->GetNumberOfComponentsPerPixel() << std::endl;
+    // std::cout << "hello " << this->GetNumberOfComponentsPerPixel() << std::endl;
     if (imd.Bands.size() > 0 && imd.Bands.size() != this->GetNumberOfComponentsPerPixel())
     {
       SetImageMetadata(ImageMetadata(imd.GeometryKeys, imd.NumericKeys, imd.StringKeys, imd.LUT1DKeys,

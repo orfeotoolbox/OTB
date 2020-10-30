@@ -29,7 +29,8 @@ set(OTBTestKernelTests
   otbCompareAsciiTests.cxx
   otbCopyTest.cxx
   otbCompareAsciiTestsEpsilon3_WhiteSpace.cxx
-  otbTestKernelTestDriver.cxx )
+  otbTestKernelTestDriver.cxx 
+  otbDummyTest.cxx)
 
 add_executable(otbTestKernelTestDriver ${OTBTestKernelTests})
 target_link_libraries(otbTestKernelTestDriver ${OTBTestKernel-Test_LIBRARIES})
@@ -205,3 +206,18 @@ otb_add_test(NAME tsTvCompareImages_DifferentSizes COMMAND otbTestKernelTestDriv
   ${TEMP}/tsTvCompareImages_DifferentSizes.tif
   )
 set_property(TEST tsTvCompareImages_DifferentSizes PROPERTY WILL_FAIL true)
+
+otb_add_test(NAME tsTvCompareMetadata1 COMMAND otbTestKernelTestDriver
+  --compare-metadata 0
+  LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043}
+  LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043}
+  otbDummyTest
+  )
+
+otb_add_test(NAME tsTvCompareMetadata2 COMMAND otbTestKernelTestDriver
+  --compare-metadata 0
+  ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES-PRE/TLSE_JP2_ORTHO_DIMAPv2_PMS-N_lossy_12bits/IMG_PHR1Z_PMS_N_001/IMG_PHR1A_PMS-N_201006181052297_ORT_IPU_20111011_0619-001_R1C1.JP2
+  ${OTB_DATA_LARGEINPUT_ROOT}/PLEIADES-PRE/TLSE_TIFF_ORTHO_DIMAPv2_MS_lossless_8bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201006181052297_ORT_IPU_20111109_7807-004_R1C1.TIF
+  otbDummyTest
+  )
+set_property(TEST tsTvCompareMetadata2 PROPERTY WILL_FAIL true)

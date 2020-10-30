@@ -33,5 +33,6 @@ void RegisterTests()
   REGISTER_TEST(otbNoDataHelperTest);
   REGISTER_TEST(otbSarCalibrationLookupDataTest);
   REGISTER_TEST(otbImageMetadataTest);
+  REGISTER_TEST(otbGeomMetadataSupplierTest);
   REGISTER_TEST(otbXMLMetadataSupplierTest);
 }

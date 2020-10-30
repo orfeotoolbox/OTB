@@ -72,6 +72,7 @@ set(OTBMetadata_SRC
   otbImageMetadata.cxx
   otbGeometryMetadata.cxx
   
+  otbGeomMetadataSupplier.cxx
   otbXMLMetadataSupplier.cxx
 
   otbMetadataStorageInterface.cxx

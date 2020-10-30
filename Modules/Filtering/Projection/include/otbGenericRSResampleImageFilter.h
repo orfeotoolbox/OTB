@@ -141,7 +141,6 @@ public:
 
   /**
    * Set/Get input & output projections.
-   * Set/Get input & output keywordlist
    * The macro are not used here cause the input and the output are
    * inversed.
    */

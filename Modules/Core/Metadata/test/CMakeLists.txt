@@ -33,6 +33,7 @@ otbImageMetadataInterfaceTest2.cxx
 otbNoDataHelperTest.cxx
 otbSarCalibrationLookupDataTest.cxx
 otbImageMetadataTest.cxx
+otbGeomMetadataSupplierTest.cxx
 otbXMLMetadataSupplierTest.cxx
 )
 
@@ -420,6 +421,14 @@ otb_add_test(NAME ioTuImageMetadataToFromKeywordlistTest COMMAND otbMetadataTest
   otbImageMetadataTest
   otbImageMetadataToFromKeywordlistTest
   ${TEMP}/ioTuImageMetadataToFromKeywordlistTest.txt
+  )
+  
+otb_add_test(NAME ioTuotbGeomMetadataSupplierTest COMMAND otbMetadataTestDriver
+  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuotbGeomMetadataSupplierTest.txt
+  ${TEMP}/ioTuotbGeomMetadataSupplierTest.txt
+  otbGeomMetadataSupplierTest
+  ${INPUTDATA}/QB/qb-1.geom
+  ${TEMP}/ioTuotbGeomMetadataSupplierTest.txt
   )
   
 otb_add_test(NAME ioTuotbXMLMetadataSupplierTest COMMAND otbMetadataTestDriver

@@ -166,6 +166,25 @@ struct OTBMetadata_EXPORT RPCParam
     oss << "]";
     return oss.str();
   };
+  
+  // Equality comparison operator (hidden friend idiom)
+  friend bool operator==(const RPCParam & lhs, const RPCParam & rhs)
+  {
+    return lhs.LineOffset == rhs.LineOffset
+        && lhs.SampleOffset == rhs.SampleOffset
+        && lhs.LatOffset == rhs.LatOffset
+        && lhs.LonOffset == rhs.LonOffset
+        && lhs.HeightOffset == rhs.HeightOffset
+        && lhs.LineScale == rhs.LineScale
+        && lhs.SampleScale == rhs.SampleScale
+        && lhs.LatScale == rhs.LatScale
+        && lhs.LonScale == rhs.LonScale
+        && lhs.HeightScale == rhs.HeightScale
+        && std::equal(std::begin(lhs.LineNum), std::end(lhs.LineNum), std::begin(rhs.LineNum))
+        && std::equal(std::begin(lhs.LineDen), std::end(lhs.LineDen), std::begin(rhs.LineDen))
+        && std::equal(std::begin(lhs.SampleNum), std::end(lhs.SampleNum), std::begin(rhs.SampleNum))
+        && std::equal(std::begin(lhs.SampleDen), std::end(lhs.SampleDen), std::begin(rhs.SampleDen));
+  }
 
 };
 

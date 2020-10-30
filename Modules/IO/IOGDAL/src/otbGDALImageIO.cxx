@@ -1308,7 +1308,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   }
 
   // TODO : this should be a warning instead of an exception
-  // For complex pixels the number of bands is twice the number of compnents (in GDAL sense)
+  // For complex pixels the number of bands is twice the number of components (in GDAL sense)
   if ( !m_Imd.Bands.empty() 
     && static_cast<std::size_t>(m_NbBands) != m_Imd.Bands.size()
     && !((m_Imd.Bands.size() == static_cast<std::size_t>(2 * m_NbBands)) && this->GetPixelType() == COMPLEX))
@@ -1538,25 +1538,26 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       CSLDestroy(rpcMetadata);
       }
     }
-  // ToDo : remove this part. This case is here for compatibility for images
-  // that still use Ossim for managing the sensor model (with OSSIMKeywordList).
-  else if (otb_kwl.GetSize())
-    {
-    /* -------------------------------------------------------------------- */
-    /* Set the RPC coeffs (since GDAL 1.10.0)                               */
-    /* -------------------------------------------------------------------- */
-    if (m_WriteRPCTags)
+    // ToDo : remove this part. This case is here for compatibility for images
+    // that still use Ossim for managing the sensor model (with OSSIMKeywordList).
+    else if (otb_kwl.GetSize())
       {
-      GDALRPCInfo gdalRpcStruct;
-      if (otb_kwl.convertToGDALRPC(gdalRpcStruct))
+      /* -------------------------------------------------------------------- */
+      /* Set the RPC coeffs (since GDAL 1.10.0)                               */
+      /* -------------------------------------------------------------------- */
+      if (m_WriteRPCTags)
         {
-        otbLogMacro(Debug, << "Saving RPC to file (" << m_FileName << ")")
-        char** rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
-        dataset->SetMetadata(rpcMetadata, "RPC");
-        CSLDestroy(rpcMetadata);
+        GDALRPCInfo gdalRpcStruct;
+        if (otb_kwl.convertToGDALRPC(gdalRpcStruct))
+          {
+          otbLogMacro(Debug, << "Saving RPC to file (" << m_FileName << ")")
+          char** rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
+          dataset->SetMetadata(rpcMetadata, "RPC");
+          CSLDestroy(rpcMetadata);
+          }
         }
       }
-    }
+
   /* -------------------------------------------------------------------- */
   /* Case 3: Set the GCPs                                                 */
   /* -------------------------------------------------------------------- */
