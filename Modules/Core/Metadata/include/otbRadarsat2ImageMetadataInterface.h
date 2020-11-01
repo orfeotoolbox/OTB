@@ -98,6 +98,8 @@ public:
   /*get lookup data for calculating backscatter */
   void CreateCalibrationLookupData(const short type) override;
 
+  void Parse(const MetadataSupplierInterface *) override;
+
 
 protected:
   /* class constructor */
