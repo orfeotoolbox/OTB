@@ -1266,7 +1266,7 @@ void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
     XMLMetadataSupplier MainXMLFileMS(MainFilePath);
     m_Imd.Add(MDStr::Mission, MainXMLFileMS.GetAs<std::string>("level1Product.generalHeader.mission"));
     m_Imd.Add(MDStr::ProductType, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.productVariantInfo.productType"));
-    m_Imd.Add(MDStr::Mode, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.imagingMode"));
+    // m_Imd.Add(MDStr::Mode, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.imagingMode"));
     m_Imd.Add(MDStr::SensorID, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.sensor"));
     m_Imd.Add(MDNum::RadarFrequency, MainXMLFileMS.GetAs<double>("level1Product.instrument.radarParameters.centerFrequency"));
 

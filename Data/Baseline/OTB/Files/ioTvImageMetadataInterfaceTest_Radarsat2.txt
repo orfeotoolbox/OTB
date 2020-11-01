@@ -1,4 +1,5 @@
 SensorID SAR
+Mission RADARSAT-2
 Instrument RADARSAT-2
 ProductType SLC
 OrbitDirection Descending

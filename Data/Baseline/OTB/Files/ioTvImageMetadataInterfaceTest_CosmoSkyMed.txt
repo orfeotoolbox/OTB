@@ -9,7 +9,8 @@ OrbitDirection DESCENDING
 TileHintX 128
 TileHintY 128
 DataType 1
-OrbitNumber 3321
+OrbitNumber 13415
+PRF 3321
 RadarFrequency 9.6e+09
 AcquisitionStartTime 2011-04-18T18:03:27.915976Z
 AcquisitionStopTime 2011-04-18T18:03:29.380925Z

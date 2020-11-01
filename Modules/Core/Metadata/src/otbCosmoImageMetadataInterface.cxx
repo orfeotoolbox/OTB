@@ -419,7 +419,7 @@ void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 
   bool hasPRF;
   std::string PRFNumber =  mds->GetMetadataValue("S01_PRF", hasPRF);
-  m_Imd.Add(MDNum::OrbitNumber, std::stoi(PRFNumber));
+  m_Imd.Add(MDNum::PRF, std::stoi(PRFNumber));
 
 
   //getTIme

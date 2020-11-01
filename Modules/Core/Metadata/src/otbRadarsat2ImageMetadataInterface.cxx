@@ -255,7 +255,6 @@ void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
   Fetch("FACILITY_IDENTIFIER", *mds, "FACILITY_IDENTIFIER");
   Fetch(MDNum::LineSpacing, *mds, "LINE_SPACING");
   Fetch(MDNum::PixelSpacing, *mds, "PIXEL_SPACING");
-  // Fetch(MDStr::Mission, *mds, "MISSION_ID"); // TODO : product.sourceAttributes.satellite ? 
   // Fetch(MDStr::Mode, *mds, "MODE");
   Fetch(MDStr::OrbitDirection, *mds, "ORBIT_DIRECTION");
   // Fetch(MDNum::OrbitNumber, *mds, "ORBIT_NUMBER");
@@ -271,6 +270,7 @@ void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
     {
     // std::cout<< ProductFilePath << std::endl;
     XMLMetadataSupplier ProductMS(ProductFilePath);
+    m_Imd.Add(MDStr::Mission, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
 
     m_Imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
     m_Imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));
