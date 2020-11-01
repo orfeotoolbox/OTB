@@ -30,6 +30,7 @@
 #include "otbMetaDataKey.h"
 #include "otbTestTools.h"
 #include "otbOpticalImageMetadataInterface.h"
+#include "otbSarImageMetadataInterface.h"
 
 int otbImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
 {
@@ -64,6 +65,18 @@ int otbImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
       return EXIT_FAILURE;
     }
   }
-
+  else if (dynamic_cast<otb::SarImageMetadataInterface*>(imi.GetPointer()))
+  {
+    if (!otb::HasSARSensorMetadata(imi->GetImageMetadata()))
+    {
+      std::cout << "Input image does not contains all required sar image metadata" << std::endl;
+      return EXIT_FAILURE;
+    }
+  }
+  else
+  {
+    std::cout << "Unknown interface" ;
+    return EXIT_FAILURE;
+  }
   return EXIT_SUCCESS;
 }
