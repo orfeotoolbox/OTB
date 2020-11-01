@@ -178,10 +178,12 @@ std::istream& operator>>(std::istream& is, Time& val)
   is >> sec;
   _OTB_ISTREAM_FAIL_IF( is.fail() )
   val.tm_sec = (int) sec;
+
   val.frac_sec = sec - (double) val.tm_sec;
   _OTB_ISTREAM_FAIL_IF( val.tm_sec < 0 || val.tm_sec > 60 )
   _OTB_ISTREAM_FAIL_IF( val.frac_sec < 0.0 || val.frac_sec >= 1.0)
-  //_OTB_ISTREAM_FAIL_IF( is.get() != 'Z' )
+  //_OTB_ISTREAM_FAIL_IF( is.get() != 'Z' )  
+
   if (!is.eof())
   {
     _OTB_ISTREAM_FAIL_IF( is.get() != 'Z' )

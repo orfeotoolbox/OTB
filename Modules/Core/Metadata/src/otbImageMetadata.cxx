@@ -653,4 +653,30 @@ std::ostream& operator<<(std::ostream& os, const otb::ImageMetadata& imd)
   return os;
 }
 
+
+bool HasOpticalSensorMetadata(const ImageMetadata & imd)
+{
+  auto hasBandMetadataNum = [&imd](MDNum key)
+                        {return std::all_of(imd.Bands.begin(),
+                                            imd.Bands.end(),
+                                            [key](ImageMetadataBase band){return band.Has(key);});};
+
+  auto hasBandMetadataLut = [&imd](MDL1D key)
+                        {return std::all_of(imd.Bands.begin(),
+                                            imd.Bands.end(),
+                                            [key](ImageMetadataBase band){return band.Has(key);});};
+
+  return imd.Has(MDStr::SensorID)
+      && imd.Has(MDNum::SunElevation)
+      && imd.Has(MDNum::SunAzimuth)
+      && imd.Has(MDNum::SatElevation)
+      && imd.Has(MDNum::SatAzimuth)
+      && imd.Has(MDTime::AcquisitionDate)
+      && imd.Has(MDTime::ProductionDate)
+      && hasBandMetadataNum(MDNum::PhysicalBias)
+      && hasBandMetadataNum(MDNum::PhysicalGain)
+      && hasBandMetadataNum(MDNum::SolarIrradiance)
+      && hasBandMetadataLut(MDL1D::SpectralSensitivity);
+}
+
 }

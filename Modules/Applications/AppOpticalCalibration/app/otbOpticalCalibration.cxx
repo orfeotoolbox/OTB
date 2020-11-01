@@ -397,6 +397,9 @@ private:
         itk::MetaDataDictionary                dict                    = inImage->GetMetaDataDictionary();
         OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
+        //TODO : Remove, this is an Ossim compatibility layer
+        lImageMetadataInterface->SetImageMetadata(inImage->GetImageMetadata());
+
         std::string IMIName(lImageMetadataInterface->GetNameOfClass()), IMIOptDfltName("OpticalDefaultImageMetadataInterface");
         if ((IMIName != IMIOptDfltName))
         {
@@ -627,6 +630,9 @@ private:
     OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
     std::string                            IMIName(lImageMetadataInterface->GetNameOfClass());
     std::string                            IMIOptDfltName("OpticalDefaultImageMetadataInterface");
+    
+    //TODO : Remove, this is an Ossim compatibility layer
+    lImageMetadataInterface->SetImageMetadata(inImage->GetImageMetadata());
 
     // Set (Date and Day) OR FluxNormalizationCoef to corresponding filters OR solardistance
     if (IsParameterEnabled("acqui.fluxnormcoeff"))

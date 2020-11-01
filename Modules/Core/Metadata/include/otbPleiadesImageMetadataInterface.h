@@ -154,13 +154,21 @@ public:
 
 protected:
   PleiadesImageMetadataInterface();
-  ~PleiadesImageMetadataInterface() override
-  {
-  }
+  ~PleiadesImageMetadataInterface() = default;
 
 private:
   PleiadesImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
+
+  void FetchTabulatedPhysicalGain(const MetaData::Time & date);
+  void FetchSolarIrradiance(const std::vector<double> & dimapSolarIrradiance);
+
+  void FetchSatAngles(const std::vector<double> & incidenceAngles,
+                      const std::vector<double> & alongTrackIncidenceAngles,
+                      const std::vector<double> & axrossTrackIncidenceAngles,
+                      const std::vector<double> & sceneOrientation);
+
+  void FetchSpectralSensitivity(const std::string & sensorId);
 };
 
 } // end namespace otb

@@ -431,6 +431,7 @@ otb_add_test(NAME ioTuotbXMLMetadataSupplierTest COMMAND otbMetadataTestDriver
   )
 
 
+
   otb_add_test(NAME ioTvImageMetadataInterfaceTest_Radarsat2 COMMAND otbMetadataTestDriver
   --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_Radarsat2.txt
   ${TEMP}/ioTvImageMetadataInterfaceTest_Radarsat2.txt
@@ -454,3 +455,12 @@ otb_add_test(NAME ioTuotbXMLMetadataSupplierTest COMMAND otbMetadataTestDriver
   LARGEINPUT{COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5}
   ${TEMP}/ioTvImageMetadataInterfaceTest_CosmoSkyMed.txt
   )
+
+otb_add_test(NAME ioTvImageMetadataInterfaceTest_Pleiades COMMAND otbMetadataTestDriver 
+  --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_Pleiades.txt
+  ${TEMP}/ioTvImageMetadataInterfaceTest_Pleiades.txt
+  otbImageMetadataInterfaceTest
+  LARGEINPUT{PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201206050630064_SEN_559102101-002_R1C1.JP2}
+  ${TEMP}/ioTvImageMetadataInterfaceTest_Pleiades.txt
+  )
+
