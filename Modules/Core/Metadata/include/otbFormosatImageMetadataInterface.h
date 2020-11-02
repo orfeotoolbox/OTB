@@ -161,7 +161,14 @@ protected:
 private:
   FormosatImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
-
+  
+  void FetchSatAngles(
+                    const std::vector<double> & incidenceAngles,
+                    const std::vector<double> & alongTrackViewingAngles,
+                    const std::vector<double> & acrossTrackViewingAngles,
+                    const std::vector<double> & sceneOrientation,
+                    const std::string & softwareVersion,
+                    double satAzimuth);
   void FetchSpectralSensitivity();
 };
 

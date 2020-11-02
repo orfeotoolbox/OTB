@@ -2290,8 +2290,6 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   {
     FetchRPC(*mds);
   }
-
-  std::cout << m_Imd << std::endl;
 }
 
 } // end namespace otb

@@ -33,7 +33,6 @@ struct DimapData
   std::string mission;
   std::string missionIndex;
 
-  std::string SensorID;
   std::string ImageID;
   std::string ProductionDate;
   std::string AcquisitionDate;
@@ -61,10 +60,9 @@ struct DimapData
   std::vector<double> AcrossTrackIncidenceAngle;
   std::vector<double> AlongTrackViewingAngle;
   std::vector<double> AcrossTrackViewingAngle;
-   
-  double sunElevation;
-  double sunAzimuth;
-
+  int StepCount;
+  std::string softwareVersion;
+  double SatAzimuth;
 };
 
 
@@ -172,6 +170,12 @@ public:
     path = prefix + "Production.DATASET_PRODUCTION_DATE";
 
     m_Data.ProductionDate = mds.GetAs<std::string>(path);
+    
+    auto pos = m_Data.ProductionDate.find(" ",10);
+    if (pos != std::string::npos)
+    {
+      m_Data.ProductionDate.replace(pos,1,"T");
+    }
 
     std::vector<std::string> imagingDateVec;
 
@@ -184,6 +188,23 @@ public:
 
     m_Data.ProcessingLevel = mds.GetAs<std::string>
       (prefix + "Data_Processing.PROCESSING_LEVEL");
+
+    // Metadata specific to spot 5
+    if (m_Data.mission == "SPOT" && m_Data.missionIndex == "5")
+    {
+      m_Data.StepCount = mds.GetAs<int>
+            (prefix + "Data_Strip.Sensor_Configuration.Mirror_Position.STEP_COUNT");
+    }
+
+    // Metadata speific to formosat
+    if (m_Data.mission == "FORMOSAT" && m_Data.missionIndex == "2")
+    {
+      m_Data.softwareVersion = mds.GetAs<std::string>
+            (prefix + "Production.Production_Facility.SOFTWARE_VERSION");
+    
+      m_Data.SatAzimuth = mds.GetAs<double>
+            (prefix + "Dataset_Sources.Source_Information.Scene_Source.SATELLITE_AZIMUTH_ANGLE");
+    }
   }
 
 

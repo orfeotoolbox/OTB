@@ -161,7 +161,7 @@ public:
   void Parse(const MetadataSupplierInterface *mds);
 
 protected:
-  SpotImageMetadataInterface();
+  SpotImageMetadataInterface() = default;
   ~SpotImageMetadataInterface() override = default;
 
 private:

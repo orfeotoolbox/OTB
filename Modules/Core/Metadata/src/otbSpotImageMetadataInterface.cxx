@@ -33,10 +33,6 @@
 namespace otb
 {
 
-SpotImageMetadataInterface::SpotImageMetadataInterface()
-{
-}
-
 bool SpotImageMetadataInterface::CanRead() const
 {
   std::string sensorID = GetSensorID();
@@ -1786,6 +1782,24 @@ void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   helper.ParseDimapV1(xmlMds, "Dimap_Document.");
   const auto & dimapData = helper.GetDimapData();
   
+  m_Imd.Add(MDTime::ProductionDate, 
+    boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));
+  m_Imd.Add(MDTime::AcquisitionDate, 
+    boost::lexical_cast<MetaData::Time>(dimapData.AcquisitionDate));
+
+  m_Imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
+  m_Imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
+  m_Imd.Add(MDNum::SatElevation, 90. - dimapData.IncidenceAngle[0]);
+  
+  if (dimapData.StepCount < 48)
+  {
+    m_Imd.Add(MDNum::SatAzimuth, dimapData.SceneOrientation[0] + 90);
+  }
+  else
+  {
+    m_Imd.Add(MDNum::SatAzimuth, dimapData.SceneOrientation[0] - 90);
+  }
+
   auto nbBands = m_Imd.Bands.size();
   if (dimapData.PhysicalBias.size() == nbBands
     && dimapData.PhysicalGain.size() == nbBands
@@ -1796,7 +1810,6 @@ void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
     auto gain = dimapData.PhysicalGain.begin();
     auto bandId = dimapData.BandIDs.begin();
     auto solarIrradiance = dimapData.SolarIrradiance.begin();
-
 
     for (auto & band: m_Imd.Bands)
     {
@@ -1821,8 +1834,6 @@ void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   {
     FetchSpectralSensitivity();
   }
-
-  FetchRPC(*mds);
 }
 
 } // end namespace otb

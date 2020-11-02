@@ -388,6 +388,7 @@ QuickBirdImageMetadataInterface::VariableLengthVectorType QuickBirdImageMetadata
 
 QuickBirdImageMetadataInterface::VariableLengthVectorType QuickBirdImageMetadataInterface::GetPhysicalGain() const
 {
+  // Reference : Radiance Conversion of QuickBird Data - Technical Note.
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
   {
@@ -418,8 +419,6 @@ QuickBirdImageMetadataInterface::VariableLengthVectorType QuickBirdImageMetadata
     }
   }
 
-  // Value computed from
-  // Radiance Conversion of QuickBird Data - Technical Note.
   std::string keywordStringBitsPerPixel = imageKeywordlist.GetMetadataByKey("support_data.bits_per_pixel");
   int         bitsPerPixel              = atoi(keywordStringBitsPerPixel.c_str());
   if (bitsPerPixel != 16 && bitsPerPixel != 8)
@@ -957,6 +956,249 @@ QuickBirdImageMetadataInterface::WavelengthSpectralBandVectorType QuickBirdImage
   return wavelengthSpectralBand;
 }
 
+void QuickBirdImageMetadataInterface::FetchDates(const MetadataSupplierInterface & mds)
+{
+  if(m_Imd[MDStr::SensorID] != "QB02")
+  {
+    itkExceptionMacro(<< "Invalid Metadata, not a Quickbird product");
+  }
+
+  bool hasValue = 0;
+  // Use TLC time in priority, only available for level 1B products.
+  // If it is not available use firstLineTime instead.
+  auto tlcTimeStr = mds.GetMetadataValue("IMAGE_1.TLCTime", hasValue);
+  if (hasValue)
+  {
+    try
+    {
+      m_Imd.Add(MDTime::AcquisitionDate, 
+                boost::lexical_cast<MetaData::Time>(tlcTimeStr));
+    }
+    catch (boost::bad_lexical_cast&)
+    {
+      otbGenericExceptionMacro(MissingMetadataException,
+            <<"Bad metadata value for 'IMAGE_1.TLCTime', got: "
+            <<tlcTimeStr);
+    }
+  }
+  else
+  {
+    Fetch(MDTime::AcquisitionDate, mds, "IMD/IMAGE_1.firstLineTime" );
+  }
+  Fetch(MDTime::ProductionDate, mds, "IMD/generationTime" );
+}
+
+
+void QuickBirdImageMetadataInterface::FetchPhysicalBias()
+{
+  if(m_Imd[MDStr::SensorID] != "QB02")
+  {
+    itkExceptionMacro(<< "Invalid Metadata, not a Quickbird product");
+  }
+
+  auto productType = m_Imd[MDStr::ProductType];
+
+  std::string              panchro("P");
+  std::string              multi("Multi");
+
+  if (productType == panchro)
+  {
+    m_Imd.Bands[0].Add(MDNum::PhysicalBias, 0.0);
+  }
+  else if (productType == multi)
+  {
+    for (auto & band : m_Imd.Bands)
+    {
+      band.Add(MDNum::PhysicalBias, 0.0);
+    }
+  }
+  else
+  {
+    itkExceptionMacro(<< "Invalid bandID " << productType);
+  }
+}
+
+void QuickBirdImageMetadataInterface::FetchSolarIrradiance()
+{
+  if(m_Imd[MDStr::SensorID] != "QB02")
+  {
+    itkExceptionMacro(<< "Invalid Metadata, not a Quickbird product");
+  }
+
+  auto productType = m_Imd[MDStr::ProductType];
+
+  std::string              panchro("P");
+  std::string              multi("Multi");
+
+  if (productType == panchro)
+  {
+    m_Imd.Bands[0].Add(MDNum::SolarIrradiance, 1381.79);
+  }
+  else
+  {
+    const std::unordered_map<std::string, double> BandNameToSolarIrradianceTable{
+       {"B", 1924.59},
+       {"G", 1843.08},
+       {"R", 1574.77},
+       {"N", 1113.71}};
+
+    for (auto & band: m_Imd.Bands)
+    {
+      auto solarIrradianceIt = BandNameToSolarIrradianceTable.find(band[MDStr::BandName] );
+      if (solarIrradianceIt != BandNameToSolarIrradianceTable.end())
+      {
+        band.Add(MDNum::SolarIrradiance, solarIrradianceIt->second);
+      }
+      else
+      {
+        band.Add(MDNum::SolarIrradiance, 0.0);
+      }
+    }
+  }
+}
+
+
+
+void QuickBirdImageMetadataInterface::FetchPhysicalGain(const MetadataSupplierInterface &mds)
+{
+  if(m_Imd[MDStr::SensorID] != "QB02")
+  {
+    itkExceptionMacro(<< "Invalid Metadata, not a Quickbird product");
+  }
+
+  bool isPost20030606 = false;
+
+  otb::MetaData::Time date;
+  date.tm_year = 101;
+  date.tm_mon = 0;
+  date.tm_mday = 22;
+  date.tm_hour = 0;
+  date.tm_min = 0;
+  date.tm_sec = 0;
+  date.frac_sec = 0;
+
+  if (m_Imd[MDTime::ProductionDate] > date)
+  {
+    isPost20030606 = true;
+  }
+
+  auto bitsPerPixel = mds.GetAs<int>("IMD/bitsPerPixel");
+
+  if ((bitsPerPixel != 16 && bitsPerPixel != 8))
+  {
+    itkExceptionMacro(<< "Invalid bitsPerPixel " << bitsPerPixel);
+  }
+
+  auto productType = m_Imd[MDStr::ProductType];
+
+  std::string panchro("P");
+  std::string multi("Multi");
+
+  if (productType != panchro && productType != multi)
+  {
+    itkExceptionMacro(<< "Invalid bandID " << productType);
+  }
+
+  std::unordered_map<std::string, double> BandNameToPysicalGainNum = {
+    {"P", 0.398},
+    {"B", 0.068},
+    {"G", 0.099},
+    {"R", 0.071},
+    {"N", 0.114}};
+
+  std::unordered_map<std::string, double> BandNameToPysicalGainDen;
+
+  // In this case the, absCalFactor are correct (k factor)
+  if (isPost20030606)
+  {
+    if (productType == panchro)
+    {
+    BandNameToPysicalGainDen["P"] = mds.GetAs<double>("IMD/BAND_P.absCalFactor");
+    }
+    else
+    {
+    BandNameToPysicalGainDen["B"] = mds.GetAs<double>("IMD/BAND_B.absCalFactor");
+    BandNameToPysicalGainDen["G"] = mds.GetAs<double>("IMD/BAND_G.absCalFactor");
+    BandNameToPysicalGainDen["R"] = mds.GetAs<double>("IMD/BAND_R.absCalFactor");
+    BandNameToPysicalGainDen["N"] = mds.GetAs<double>("IMD/BAND_N.absCalFactor");
+    }
+  }
+  // k factor should be adapted
+  else
+  {
+    // 16 bits products. The revised K factor is used instead of the original absCalFactors
+    if (bitsPerPixel == 16)
+    {
+      if (productType == panchro)
+      {
+        auto TDILevel = mds.GetAs<int>("IMD/BAND_P.TDILevel");
+
+        if (TDILevel == 10) 
+          BandNameToPysicalGainDen["P"] = 0.08381880;
+        else if (TDILevel == 13) 
+          BandNameToPysicalGainDen["P"] = 0.06447600;
+        else if (TDILevel == 18) 
+          BandNameToPysicalGainDen["P"] = 0.04656600;
+        else if (TDILevel == 24) 
+          BandNameToPysicalGainDen["P"] = 0.03494440;
+        else if (TDILevel == 32)
+          BandNameToPysicalGainDen["P"] = 0.02618840;
+        else
+        {
+          otbGenericExceptionMacro(MissingMetadataException, "Invalid number of TDI in the Quickbird product")
+        }
+      }
+      else
+      {
+        BandNameToPysicalGainDen["B"] = 0.01604120;
+        BandNameToPysicalGainDen["G"] = 0.01438470;
+        BandNameToPysicalGainDen["R"] = 0.01267350;
+        BandNameToPysicalGainDen["N"] = 0.01542420;
+      }
+    }
+    // 8 bit product case
+    else
+    {
+      if (productType == panchro)
+      {
+        auto TDILevel = mds.GetAs<int>("IMD/BAND_P.TDILevel");
+
+        if (TDILevel == 10) 
+          BandNameToPysicalGainDen["P"] = 1.02681367;
+        else if (TDILevel == 13) 
+          BandNameToPysicalGainDen["P"] = 1.02848939;
+        else if (TDILevel == 18) 
+          BandNameToPysicalGainDen["P"] = 1.02794702;
+        else if (TDILevel == 24) 
+          BandNameToPysicalGainDen["P"] = 1.02989685;
+        else if (TDILevel == 32)
+          BandNameToPysicalGainDen["P"] = 1.02739898;
+        else
+        {
+          otbGenericExceptionMacro(MissingMetadataException, "Invalid number of TDI in the Quickbird product")
+        }
+        BandNameToPysicalGainDen["P"] *= mds.GetAs<double>("IMD/BAND_P.absCalFactor");
+      }
+      else
+      {
+        BandNameToPysicalGainDen["B"] = 1.12097834 * mds.GetAs<double>("IMD/BAND_B.absCalFactor");
+        BandNameToPysicalGainDen["G"] = 1.37652632 * mds.GetAs<double>("IMD/BAND_G.absCalFactor");
+        BandNameToPysicalGainDen["R"] = 1.30954587 * mds.GetAs<double>("IMD/BAND_R.absCalFactor");
+        BandNameToPysicalGainDen["N"] = 0.98368622 * mds.GetAs<double>("IMD/BAND_N.absCalFactor");
+      }
+    }
+  }
+
+  for (auto & band: m_Imd.Bands)
+  {
+    const auto & bandName = band[MDStr::BandName];
+    double physicalGain = BandNameToPysicalGainNum[bandName] / BandNameToPysicalGainDen[bandName];
+    band.Add(MDNum::PhysicalGain, physicalGain);
+  }
+
+}
+
+
 void QuickBirdImageMetadataInterface::FetchSpectralSensitivity()
 {
   const std::unordered_map<std::string, std::vector<double>> BandNameToSpectralSensitivityTable{
@@ -1117,9 +1359,21 @@ void QuickBirdImageMetadataInterface::FetchSpectralSensitivity()
   }
 }
 
+namespace
+{
+  // Quickbird String metadata parsed by GDAL are quoted ("md")
+  // this helper function removes the quotes
+  void Unquote(std::string & s)
+  {
+    if ( s.front() == '"' ) {
+      s.erase( 0, 1 ); // erase the first character
+      s.erase( s.size() - 1 ); // erase the last character
+    }
+  }
+}
 
 void QuickBirdImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
-{  
+{
   assert(mds);
   // Check if there is DG metadatas
   bool hasValue = false;
@@ -1192,6 +1446,28 @@ void QuickBirdImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
     file.close();
   }
 
+  auto geometricLevel = mds->GetMetadataValue("IMD/productLevel", hasValue);
+  // throw missing
+  Unquote(geometricLevel);
+  m_Imd.Add(MDStr::GeometricLevel, geometricLevel);
+  
+  auto productType = mds->GetMetadataValue("IMD/bandId", hasValue);
+  // throw missing
+  Unquote(productType);
+  m_Imd.Add(MDStr::ProductType, productType);
+  
+  // Acquisition and production dates
+  FetchDates(*mds);
+
+  //Radiometry
+  Fetch(MDNum::SunElevation, *mds, "IMD/IMAGE_1.sunEl");
+  Fetch(MDNum::SunAzimuth, *mds, "IMD/IMAGE_1.sunAz");
+  Fetch(MDNum::SatElevation, *mds, "IMD/IMAGE_1.satAz");
+  Fetch(MDNum::SatAzimuth , *mds, "IMD/IMAGE_1.satEl");
+  
+  FetchPhysicalBias();
+  FetchSolarIrradiance();
+  FetchPhysicalGain(*mds);
   FetchSpectralSensitivity();
 
   FetchRPC(*mds);

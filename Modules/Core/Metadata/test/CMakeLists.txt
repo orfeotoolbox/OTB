@@ -405,7 +405,7 @@ otb_add_test(NAME ioTuImageMetadataAppendTest COMMAND otbMetadataTestDriver
   otbImageMetadataAppendTest
   ${TEMP}/ioTuImageMetadataAppendTest.txt
   )
-    
+
 otb_add_test(NAME ioTuImageMetadataMergeTest COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataMergeTest.txt
   ${TEMP}/ioTuImageMetadataMergeTest.txt
@@ -430,10 +430,23 @@ otb_add_test(NAME ioTuotbXMLMetadataSupplierTest COMMAND otbMetadataTestDriver
   ${TEMP}/ioTuotbXMLMetadataSupplierTest.txt
   )
 
-otb_add_test(NAME ioTvImageMetadataInterfaceTest_Pleiades COMMAND otbMetadataTestDriver 
-  --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_Pleiades.txt
-  ${TEMP}/ioTvImageMetadataInterfaceTest_Pleiades.txt
+set(sensor_list pleiades spot6 spot5 spot5_2 formosat ikonos worldview2 quickbird)
+
+set(pleiades_filename LARGEINPUT{PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201206050630064_SEN_559102101-002_R1C1.JP2})
+set(spot6_filename LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2})
+set(spot5_filename LARGEINPUT{SPOT5/Arcachon-SCENE01/IMAGERY.TIF})
+set(spot5_2_filename LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF})
+set(formosat_filename LARGEINPUT{FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF})
+set(ikonos_filename LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif})
+set(worldview2_filename LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF})
+set(quickbird_filename LARGEINPUT{QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF})
+
+foreach(sensor ${sensor_list})
+otb_add_test(NAME ioTvImageMetadataInterfaceTest_${sensor} COMMAND otbMetadataTestDriver 
+  --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_${sensor}.txt
+  ${TEMP}/ioTvImageMetadataInterfaceTest_${sensor}.txt
   otbImageMetadataInterfaceTest
-  LARGEINPUT{PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201206050630064_SEN_559102101-002_R1C1.JP2}
-  ${TEMP}/ioTvImageMetadataInterfaceTest_Pleiades.txt
+  ${${sensor}_filename}
+  ${TEMP}/ioTvImageMetadataInterfaceTest_${sensor}.txt
   )
+endforeach()

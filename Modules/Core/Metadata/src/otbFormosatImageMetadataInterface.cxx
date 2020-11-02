@@ -1157,6 +1157,63 @@ FormosatImageMetadataInterface::WavelengthSpectralBandVectorType FormosatImageMe
 }
 
 
+void FormosatImageMetadataInterface::FetchSatAngles(
+                    const std::vector<double> & incidenceAngles,
+                    const std::vector<double> & alongTrackViewingAngles,
+                    const std::vector<double> & acrossTrackViewingAngles,
+                    const std::vector<double> & sceneOrientation,
+                    const std::string & softwareVersion,
+                    double satAzimuth)
+{
+  if(incidenceAngles.size() != 1)
+  {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Missing satellite angles in Dimap")
+  }
+
+  m_Imd.Add(MDNum::SatElevation, 90. - incidenceAngles[0]);
+
+  // In some software version, a bug exists.
+  // We have to check the version to correct the satellite azimuth angle contained in the metadata
+  if ((softwareVersion == "R2P_02.03.P1") 
+      || (softwareVersion == "R2P_02.02") 
+      || (softwareVersion == "R2P_02.03"))
+  {
+    if(sceneOrientation.size() != 1 
+       || alongTrackViewingAngles.size() != 1 
+       || acrossTrackViewingAngles.size() != 1)
+    {
+      otbGenericExceptionMacro(MissingMetadataException,<<"Missing satellite angles in Dimap")
+    }
+
+    double alpha = std::atan(std::tan(acrossTrackViewingAngles[0] * CONST_PI_180) 
+                      / std::tan(alongTrackViewingAngles[0] * CONST_PI_180)) * CONST_180_PI;
+
+    if (alongTrackViewingAngles[0] < 0)
+    {
+      if (alpha > 0)
+      {
+        alpha = alpha - 180;
+      }
+      else
+      {
+        alpha = alpha + 180;
+      }
+    }
+
+    alpha -= sceneOrientation[0];
+    if (alpha > 0)
+    {
+      satAzimuth += 180;
+    }
+    else
+    {
+      satAzimuth = 180 - satAzimuth;
+    }
+  }
+  
+  m_Imd.Add(MDNum::SatAzimuth, satAzimuth);
+}
+
 void FormosatImageMetadataInterface::FetchSpectralSensitivity()
 {
   std::unordered_map<std::string, std::vector<double>> BandNameToSpectralSensitivityTable = {
@@ -1373,6 +1430,55 @@ void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   {
     otbGenericExceptionMacro(MissingMetadataException,
             "Invalid number of band for a FORMOSAT product")
+  }
+
+  m_Imd.Add(MDTime::ProductionDate, 
+    boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));
+
+  m_Imd.Add(MDTime::AcquisitionDate, 
+    boost::lexical_cast<MetaData::Time>(dimapData.AcquisitionDate));
+
+
+  m_Imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
+  m_Imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
+
+  FetchSatAngles(dimapData.IncidenceAngle, dimapData.AlongTrackViewingAngle,
+                 dimapData.AcrossTrackViewingAngle, dimapData.SceneOrientation,
+                 dimapData.softwareVersion, dimapData.SatAzimuth);
+
+  std::vector<double> solarIrradianceVec;
+  if (dimapData.SolarIrradiance.empty())
+  {
+    solarIrradianceVec = std::vector<double>(nbBands, 0.);
+  }
+  else
+  {
+    solarIrradianceVec = dimapData.SolarIrradiance;
+  }
+
+  if (dimapData.PhysicalBias.size() == nbBands
+    && dimapData.PhysicalGain.size() == nbBands
+    && solarIrradianceVec.size() == nbBands)
+  {
+    auto bias = dimapData.PhysicalBias.begin();
+    auto gain = dimapData.PhysicalGain.begin();
+    auto solarIrradiance = solarIrradianceVec.begin();
+
+    for (auto & band: m_Imd.Bands)
+    {
+      band.Add(MDNum::PhysicalGain, *gain);
+      band.Add(MDNum::PhysicalBias, *bias);
+      band.Add(MDNum::SolarIrradiance, *solarIrradiance);
+
+      bias++;
+      gain++;
+      solarIrradiance++;
+    }
+  }
+  else
+  {
+    otbGenericExceptionMacro(MissingMetadataException,
+      << "The number of bands in image metadatas is incoherent with the DIMAP product")
   }
 
   m_Imd.Add(MDStr::GeometricLevel, dimapData.ProcessingLevel);
