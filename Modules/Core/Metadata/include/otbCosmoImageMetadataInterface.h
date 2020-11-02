@@ -90,6 +90,11 @@ public:
 
   double GetCenterIncidenceAngle() const override;
 
+  void Parse(const MetadataSupplierInterface *) override;
+
+  std::vector<std::map<std::string, std::string> > saveMetadataBands(std::string file) ;
+  std::vector<Orbit> getOrbits(const MetadataSupplierInterface *, std::string referenceTime) ;
+
 protected:
   /* class ctor */
   CosmoImageMetadataInterface() = default;

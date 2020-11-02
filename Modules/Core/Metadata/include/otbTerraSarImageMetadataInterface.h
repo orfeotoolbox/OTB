@@ -174,6 +174,8 @@ public:
    *  in the order R, G, B */
   std::vector<unsigned int> GetDefaultDisplay() const override;
 
+  void Parse(const MetadataSupplierInterface *) override;
+
 protected:
   TerraSarImageMetadataInterface();
   ~TerraSarImageMetadataInterface() override

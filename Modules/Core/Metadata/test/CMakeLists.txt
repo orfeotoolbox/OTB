@@ -429,3 +429,28 @@ otb_add_test(NAME ioTuotbXMLMetadataSupplierTest COMMAND otbMetadataTestDriver
   ${INPUTDATA}/ioTuotbXMLMetadataSupplierTest.xml
   ${TEMP}/ioTuotbXMLMetadataSupplierTest.txt
   )
+
+
+  otb_add_test(NAME ioTvImageMetadataInterfaceTest_Radarsat2 COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_Radarsat2.txt
+  ${TEMP}/ioTvImageMetadataInterfaceTest_Radarsat2.txt
+  otbImageMetadataInterfaceTest
+  LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona}
+  ${TEMP}/ioTvImageMetadataInterfaceTest_Radarsat2.txt
+  )
+
+  otb_add_test(NAME ioTvImageMetadataInterfaceTest_TerraSar COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_TerraSar.txt
+  ${TEMP}/ioTvImageMetadataInterfaceTest_TerraSar.txt
+  otbImageMetadataInterfaceTest
+  LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228}
+  ${TEMP}/ioTvImageMetadataInterfaceTest_TerraSar.txt
+  )
+  
+  otb_add_test(NAME ioTvImageMetadataInterfaceTest_CosmoSkyMed COMMAND otbMetadataTestDriver
+  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_CosmoSkyMed.txt
+  ${TEMP}/ioTvImageMetadataInterfaceTest_CosmoSkyMed.txt
+  otbImageMetadataInterfaceTest
+  LARGEINPUT{COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5}
+  ${TEMP}/ioTvImageMetadataInterfaceTest_CosmoSkyMed.txt
+  )
