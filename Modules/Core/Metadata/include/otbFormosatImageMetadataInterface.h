@@ -152,15 +152,17 @@ public:
    * There values a computed by 6S. */
   WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
+  void Parse(const MetadataSupplierInterface *) override;
+
 protected:
-  FormosatImageMetadataInterface();
-  ~FormosatImageMetadataInterface() override
-  {
-  }
+  FormosatImageMetadataInterface() = default;
+  ~FormosatImageMetadataInterface() = default;
 
 private:
   FormosatImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
+
+  void FetchSpectralSensitivity();
 };
 
 } // end namespace otb

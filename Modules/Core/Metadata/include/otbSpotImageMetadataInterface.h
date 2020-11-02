@@ -158,15 +158,17 @@ public:
      * There values a computed by 6S. */
   WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
+  void Parse(const MetadataSupplierInterface *mds);
+
 protected:
   SpotImageMetadataInterface();
-  ~SpotImageMetadataInterface() override
-  {
-  }
+  ~SpotImageMetadataInterface() override = default;
 
 private:
   SpotImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
+
+  void FetchSpectralSensitivity();
 };
 
 } // end namespace otb

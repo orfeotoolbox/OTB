@@ -244,6 +244,34 @@ struct OTBMetadata_EXPORT Time : tm
     tm tmRhs = rhs;
     return mktime(&tmLhs) + lhs.frac_sec == mktime(&tmRhs) + rhs.frac_sec;
   }
+
+  friend OTBMetadata_EXPORT bool operator!=(const Time & lhs, const Time & rhs)
+  {
+    return !(lhs == rhs);
+  }
+
+  friend OTBMetadata_EXPORT bool operator<(const Time & lhs, const Time & rhs)
+  {
+    tm tmLhs = lhs;
+    tm tmRhs = rhs;
+    return mktime(&tmLhs) + lhs.frac_sec < mktime(&tmRhs) + rhs.frac_sec;
+  }
+
+  friend OTBMetadata_EXPORT bool operator>(const Time & lhs, const Time & rhs)
+  {
+    return rhs < lhs;
+  }
+
+  friend OTBMetadata_EXPORT bool operator<=(const Time & lhs, const Time & rhs)
+  {
+    return !(lhs > rhs);
+  }
+
+  friend OTBMetadata_EXPORT bool operator>=(const Time & lhs, const Time & rhs)
+  {
+    return !(lhs < rhs);
+  }
+
 };
 
 
