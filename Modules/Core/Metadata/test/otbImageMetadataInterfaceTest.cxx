@@ -61,7 +61,7 @@ int otbImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
   {
     if (!otb::HasOpticalSensorMetadata(imi->GetImageMetadata()))
     {
-      std::cout << "Input image does not contains all required optical image metadata" << std::endl;
+      std::cout << "Input image does not contain all required optical image metadata" << std::endl;
       return EXIT_FAILURE;
     }
   }
@@ -69,7 +69,7 @@ int otbImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
   {
     if (!otb::HasSARSensorMetadata(imi->GetImageMetadata()))
     {
-      std::cout << "Input image does not contains all required sar image metadata" << std::endl;
+      std::cout << "Input image does not contain all required sar image metadata" << std::endl;
       return EXIT_FAILURE;
     }
   }
