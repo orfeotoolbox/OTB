@@ -667,6 +667,7 @@ ImageMetadataInterfaceBase::Fetch(
     m_Imd.Bands[band].Add(key, mds.GetAs<MetaData::Time>(path, band));
     return m_Imd.Bands[band][key];
     }
+
   m_Imd.Add(key, mds.GetAs<MetaData::Time>(path));
   return m_Imd[key];
 }
