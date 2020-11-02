@@ -103,6 +103,16 @@ private:
                             "upper left corner and the size of the region, decomposed "
                             "in X and Y coordinates.");
 
+    // Standard parameter
+    AddParameter(ParameterType_Int, "mode.standard.startx", "Start X");
+    SetParameterDescription("mode.standard.startx", "ROI start x position.");
+    AddParameter(ParameterType_Int, "mode.standard.starty", "Start Y");
+    SetParameterDescription("mode.standard.starty", "ROI start y position.");
+    AddParameter(ParameterType_Int, "mode.standard.sizex", "Size X");
+    SetParameterDescription("mode.standard.sizex", "size along x in pixels.");
+    AddParameter(ParameterType_Int, "mode.standard.sizey", "Size Y");
+    SetParameterDescription("mode.standard.sizey", "size along y in pixels.");
+
     // Fit mode: the ROI is computed through a ref vector dataset or a ref image
     AddChoice("mode.fit", "Fit");
     SetParameterDescription("mode.fit", "In fit mode, extract is made from a reference: image or vector dataset.");
@@ -113,6 +123,11 @@ private:
     SetParameterDescription("mode.fit.vect",
                             "The extent of the input vector file is computed and then "
                             "gives a region of interest that will be extracted.");
+
+    // These parameters need to be set as non mandatory so they don't have to be selected both in QGIS
+    // Mandatory states will be updated later in DoUpdateParameters method
+    MandatoryOff("mode.fit.im");
+    MandatoryOff("mode.fit.vect");
 
     // Extent mode: ROI is computed with two point (upper left and lower left corners)
     AddChoice("mode.extent", "Extent");
@@ -184,7 +199,7 @@ private:
                             "the latitude.");
 
 
-    // Standard parameter
+    // Output information on current ROI position and size
     AddParameter(ParameterType_Int, "startx", "Start X");
     SetParameterDescription("startx", "ROI start x position.");
     AddParameter(ParameterType_Int, "starty", "Start Y");
@@ -193,6 +208,16 @@ private:
     SetParameterDescription("sizex", "size along x in pixels.");
     AddParameter(ParameterType_Int, "sizey", "Size Y");
     SetParameterDescription("sizey", "size along y in pixels.");
+
+    SetParameterRole("startx", Role_Output);
+    SetParameterRole("starty", Role_Output);
+    SetParameterRole("sizex", Role_Output);
+    SetParameterRole("sizey", Role_Output);
+
+    MandatoryOff("startx");
+    MandatoryOff("starty");
+    MandatoryOff("sizex");
+    MandatoryOff("sizey");
 
     // Channelist Parameters
     AddParameter(ParameterType_ListView, "cl", "Output Image channels");
@@ -203,10 +228,10 @@ private:
     AddRAMParameter();
 
     // Default values
-    SetDefaultParameterInt("startx", 0);
-    SetDefaultParameterInt("starty", 0);
-    SetDefaultParameterInt("sizex", 0);
-    SetDefaultParameterInt("sizey", 0);
+    SetDefaultParameterInt("mode.standard.startx", 0);
+    SetDefaultParameterInt("mode.standard.starty", 0);
+    SetDefaultParameterInt("mode.standard.sizex", 0);
+    SetDefaultParameterInt("mode.standard.sizey", 0);
 
     SetDefaultParameterInt("mode.extent.ulx", 0);
     SetDefaultParameterInt("mode.extent.uly", 0);
@@ -226,10 +251,10 @@ private:
     SetDocExampleParameterValue("mode.extent.lrx", "150");
     SetDocExampleParameterValue("mode.extent.lry", "150");
     SetDocExampleParameterValue("out", "ExtractROI.tif");
-    SetMinimumParameterIntValue("sizex", 0);
-    SetMinimumParameterIntValue("sizey", 0);
-    SetMinimumParameterIntValue("startx", 0);
-    SetMinimumParameterIntValue("starty", 0);
+    SetMinimumParameterIntValue("mode.standard.sizex", 0);
+    SetMinimumParameterIntValue("mode.standard.sizey", 0);
+    SetMinimumParameterIntValue("mode.standard.startx", 0);
+    SetMinimumParameterIntValue("mode.standard.starty", 0);
     SetMinimumParameterFloatValue("mode.radius.r", 0);
 
     SetOfficialDocLink();
@@ -244,32 +269,32 @@ private:
       ImageType::RegionType largestRegion = inImage->GetLargestPossibleRegion();
 
       ImageType::RegionType currentLargest;
-      currentLargest.SetSize(0, GetDefaultParameterInt("sizex"));
-      currentLargest.SetSize(1, GetDefaultParameterInt("sizey"));
-      currentLargest.SetIndex(1, GetDefaultParameterInt("starty"));
-      currentLargest.SetIndex(0, GetDefaultParameterInt("startx"));
+      currentLargest.SetSize(0, GetDefaultParameterInt("mode.standard.sizex"));
+      currentLargest.SetSize(1, GetDefaultParameterInt("mode.standard.sizey"));
+      currentLargest.SetIndex(1, GetDefaultParameterInt("mode.standard.starty"));
+      currentLargest.SetIndex(0, GetDefaultParameterInt("mode.standard.startx"));
       // Update default only if largest has changed
       if (currentLargest != largestRegion)
       {
         // Setting maximum value
-        SetMaximumParameterIntValue("sizex", largestRegion.GetSize(0));
-        SetMaximumParameterIntValue("sizey", largestRegion.GetSize(1));
-        SetMaximumParameterIntValue("startx", largestRegion.GetIndex(0) + largestRegion.GetSize(0));
-        SetMaximumParameterIntValue("starty", largestRegion.GetIndex(1) + largestRegion.GetSize(1));
+        SetMaximumParameterIntValue("mode.standard.sizex", largestRegion.GetSize(0));
+        SetMaximumParameterIntValue("mode.standard.sizey", largestRegion.GetSize(1));
+        SetMaximumParameterIntValue("mode.standard.startx", largestRegion.GetIndex(0) + largestRegion.GetSize(0));
+        SetMaximumParameterIntValue("mode.standard.starty", largestRegion.GetIndex(1) + largestRegion.GetSize(1));
         // Setting default value
-        SetDefaultParameterInt("sizex", largestRegion.GetSize(0));
-        SetDefaultParameterInt("sizey", largestRegion.GetSize(1));
-        SetDefaultParameterInt("startx", largestRegion.GetIndex(0));
-        SetDefaultParameterInt("starty", largestRegion.GetIndex(1));
+        SetDefaultParameterInt("mode.standard.sizex", largestRegion.GetSize(0));
+        SetDefaultParameterInt("mode.standard.sizey", largestRegion.GetSize(1));
+        SetDefaultParameterInt("mode.standard.startx", largestRegion.GetIndex(0));
+        SetDefaultParameterInt("mode.standard.starty", largestRegion.GetIndex(1));
 
         // Setting actual value
-        if (!HasUserValue("sizex"))
+        if (!HasUserValue("mode.standard.sizex"))
         {
-          SetParameterInt("sizex", GetDefaultParameterInt("sizex"));
+          SetParameterInt("mode.standard.sizex", GetDefaultParameterInt("mode.standard.sizex"));
         }
-        if (!HasUserValue("sizey"))
+        if (!HasUserValue("mode.standard.sizey"))
         {
-          SetParameterInt("sizey", GetDefaultParameterInt("sizey"));
+          SetParameterInt("mode.standard.sizey", GetDefaultParameterInt("mode.standard.sizey"));
         }
 
         // Compute radius parameters default value
@@ -299,56 +324,43 @@ private:
       if (GetParameterString("mode") == "radius")
         ComputeIndexFromRadius();
 
-      if (GetParameterString("mode") == "fit")
+    }
+
+    if (GetParameterString("mode") == "fit")
+    {
+      if (HasValue("mode.fit.im"))
       {
-        SetParameterRole("startx", Role_Output);
-        SetParameterRole("starty", Role_Output);
-        SetParameterRole("sizex", Role_Output);
-        SetParameterRole("sizey", Role_Output);
+        MandatoryOff("mode.fit.vect");
+        MandatoryOn("mode.fit.im");
+      }
+      else if (HasValue("mode.fit.vect"))
+      {
+        MandatoryOff("mode.fit.im");
+        MandatoryOn("mode.fit.vect");
       }
       else
       {
-        SetParameterRole("startx", Role_Input);
-        SetParameterRole("starty", Role_Input);
-        SetParameterRole("sizex", Role_Input);
-        SetParameterRole("sizey", Role_Input);
+        MandatoryOn("mode.fit.im");
+        MandatoryOn("mode.fit.vect");
       }
     }
-
-    // If not standard mode start and size parameter will be computed by the application
-    if (GetParameterString("mode") != "standard")
+    else if(GetParameterString("mode") == "standard")
     {
-      MandatoryOff("startx");
-      MandatoryOff("starty");
-      MandatoryOff("sizex");
-      MandatoryOff("sizey");
-      DisableParameter("startx");
-      DisableParameter("starty");
-      DisableParameter("sizex");
-      DisableParameter("sizey");
-    }
-    else
-    {
-      MandatoryOn("startx");
-      MandatoryOn("starty");
-      MandatoryOn("sizex");
-      MandatoryOn("sizey");
-      EnableParameter("startx");
-      EnableParameter("starty");
-      EnableParameter("sizex");
-      EnableParameter("sizey");
+      SetParameterInt("startx", GetParameterInt("mode.standard.startx"));
+      SetParameterInt("starty", GetParameterInt("mode.standard.starty"));
+      SetParameterInt("sizex", GetParameterInt("mode.standard.sizex"));
+      SetParameterInt("sizey", GetParameterInt("mode.standard.sizey"));
     }
 
-    if (GetParameterString("mode") == "fit" && HasValue("mode.fit.im"))
-    {
-      MandatoryOff("mode.fit.vect");
-      MandatoryOn("mode.fit.im");
-    }
-    else if (GetParameterString("mode") == "fit" && HasValue("mode.fit.vect"))
-    {
-      MandatoryOff("mode.fit.im");
-      MandatoryOn("mode.fit.vect");
-    }
+    // these parameters are for display only
+    MandatoryOff("startx");
+    MandatoryOff("starty");
+    MandatoryOff("sizex");
+    MandatoryOff("sizey");
+    DisableParameter("startx");
+    DisableParameter("starty");
+    DisableParameter("sizex");
+    DisableParameter("sizey");
   }
 
   // This method is called in DoExecute() once
