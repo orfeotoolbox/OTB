@@ -206,11 +206,11 @@ public:
   // MetadataSupplierInterface overrides
 
   /** Get main image file */
-  std::string GetResourceFile(std::string="") const override;
+  std::string GetResourceFile(std::string const& s="") const override;
   std::vector<std::string> GetResourceFiles() const override;
 
   /** Get metadata item in GDALDataset, domain can specified as "domain/key" */
-  std::string GetMetadataValue(const std::string path, bool& hasValue, int band = -1) const override;
+  std::string GetMetadataValue(std::string const& path, bool& hasValue, int band = -1) const override;
 
   /** Set metadata item in GDALDataset, domain can specified as prefix of the
    *  path, like "domain/key"*/

@@ -20,7 +20,8 @@
 
 #include <iomanip>
 #include <iostream>
-#include<boost/algorithm/string.hpp>
+#include <fstream>
+#include <boost/algorithm/string.hpp>
 
 #include "otbGeomMetadataSupplier.h"
 #include "otbMetaDataKey.h"
@@ -29,13 +30,13 @@
 
 namespace otb
 {
-GeomMetadataSupplier::GeomMetadataSupplier(const std::string & fileName)
+GeomMetadataSupplier::GeomMetadataSupplier(std::string const& fileName)
   : m_FileName(fileName)
 {
   this->ReadGeomFile();
 }
 
-std::string GeomMetadataSupplier::GetMetadataValue(const std::string path, bool& hasValue, int band) const
+std::string GeomMetadataSupplier::GetMetadataValue(std::string const& path, bool& hasValue, int band) const
 {
   auto value = this->m_MetadataDic.find(path);
   if(value != this->m_MetadataDic.end())
@@ -47,7 +48,7 @@ std::string GeomMetadataSupplier::GetMetadataValue(const std::string path, bool&
   return "";
 }
 
-std::string GeomMetadataSupplier::GetResourceFile(std::string) const
+std::string GeomMetadataSupplier::GetResourceFile(std::string const& s) const
 {
   return this->m_FileName;
 }
@@ -121,7 +122,7 @@ const boost::any& GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
   return imd[MDGeom::RPC];
 }
 
-std::string GeomMetadataSupplier::PrintSelf()
+std::string GeomMetadataSupplier::PrintSelf() const
 {
   std::ostringstream oss;
   oss << "GeomMetadataSupplier: " << this->m_FileName << '\n';
