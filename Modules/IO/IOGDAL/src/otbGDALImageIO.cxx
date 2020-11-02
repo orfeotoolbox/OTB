@@ -678,8 +678,7 @@ void GDALImageIO::InternalReadImageInformation()
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
 
   // Initialize the ImageMetadata structure
-  ImageMetadata imd;
-  m_Imd = imd;
+  m_Imd = ImageMetadata();
 
   // Report the typical block size if possible
   if (dataset->GetRasterCount() > 0)
@@ -1811,7 +1810,7 @@ int GDALImageIO::GetNbBands() const
   return m_Dataset->GetDataSet()->GetRasterCount();
 }
 
-std::string GDALImageIO::GetResourceFile(std::string str) const
+std::string GDALImageIO::GetResourceFile(std::string const& str) const
 {
   if (str.empty())
     return m_FileName;
@@ -1833,7 +1832,7 @@ std::vector<std::string> GDALImageIO::GetResourceFiles() const
   return result;
 }
 
-std::string GDALImageIO::GetMetadataValue(const std::string path, bool& hasValue, int band) const
+std::string GDALImageIO::GetMetadataValue(std::string const& path, bool& hasValue, int band) const
 {
   // detect namespace if any
   std::string domain("");
