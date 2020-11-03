@@ -54,7 +54,7 @@ public:
    * @param band not used
    * @return The value corresponding to path. Empty string if not found.
    */
-  std::string GetMetadataValue(const std::string path, bool& hasValue, int band=1) const override;
+  std::string GetMetadataValue(std::string const& path, bool& hasValue, int band=1) const override;
 
   /**
    * @brief Get the first metadata value corresponding to a given path
@@ -63,7 +63,7 @@ public:
    * @param hasValue True if path is found
    * @return The value corresponding to path. Empty string if not found.
    */
-  std::string GetFirstMetadataValue(const std::string paths, bool& hasValue) const;
+  std::string GetFirstMetadataValue(std::string const& paths, bool& hasValue) const;
 
   /**
    * @brief Get the metadata value corresponding to a given path
@@ -80,7 +80,7 @@ public:
    * @return The value corresponding to path.
    * @raises otb::Error if path not found
    */
-  template <typename T> T GetFirstAs(const std::string &path) const
+  template <typename T> T GetFirstAs(std::string const& path) const
   {
     bool hasValue;
     std::string ret = GetFirstMetadataValue(path, hasValue);
@@ -98,7 +98,7 @@ public:
     }
   }
 
-  std::string GetResourceFile(std::string="") const override;
+  std::string GetResourceFile(std::string const& s="") const override;
 
   int GetNbBands() const override;
 

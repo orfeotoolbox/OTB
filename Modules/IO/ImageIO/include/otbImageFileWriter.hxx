@@ -667,16 +667,6 @@ void ImageFileWriter<TInputImage>::Update()
     source->RemoveObserver(m_ObserverID);
   }
 
-  // Write the image keyword list if any
-  // ossimKeywordlist geom_kwl;
-  // ImageKeywordlist otb_kwl;
-
-  // itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
-  // itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-  // otb_kwl.convertToOSSIMKeywordlist(geom_kwl);
-  // FIXME: why nothing is done with otb_kwl in that case???
-  // If required, put a call to WriteGeometry() here
-
   /**
    * Release any inputs if marked for release
    */
@@ -803,14 +793,6 @@ void ImageFileWriter<TInputImage>::GenerateData(void)
   }
 
   m_ImageIO->Write(dataPtr);
-
-  if (m_WriteGeomFile || m_FilenameHelper->GetWriteGEOMFile())
-  {
-    ImageKeywordlist        otb_kwl;
-    itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
-    itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-    WriteGeometry(otb_kwl, this->GetFileName());
-  }
 }
 
 template <class TInputImage>

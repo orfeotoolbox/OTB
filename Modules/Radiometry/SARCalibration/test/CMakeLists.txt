@@ -291,46 +291,46 @@ otb_add_test(NAME raTvSarBrightnessToImageFilter COMMAND  otbSARCalibrationTestD
   1000 1000 250 250 # Extract
   )
 
-otb_add_test(NAME saTvSarDeburstImageFilterTest COMMAND otbSARCalibrationTestDriver
-  --compare-image ${NOTOL}
-  ${BASELINE}/saTvSarDeburstImageFilterTestOutput.tif
-  ${TEMP}/saTvSarDeburstImageFilterTestOutput.tif
-  otbSarDeburstFilterTest
-  ${INPUTDATA}/s1a-iw1-slc-vh-amp_xt.tif
-  ${TEMP}/saTvSarDeburstImageFilterTestOutput.tif)
+#otb_add_test(NAME saTvSarDeburstImageFilterTest COMMAND otbSARCalibrationTestDriver
+#  --compare-image ${NOTOL}
+#  ${BASELINE}/saTvSarDeburstImageFilterTestOutput.tif
+#  ${TEMP}/saTvSarDeburstImageFilterTestOutput.tif
+#  otbSarDeburstFilterTest
+#  ${INPUTDATA}/s1a-iw1-slc-vh-amp_xt.tif
+#  ${TEMP}/saTvSarDeburstImageFilterTestOutput.tif)
+#
+#otb_add_test(NAME saTvSarDeburstImageFilterTest2 COMMAND otbSARCalibrationTestDriver
+#  --compare-image ${NOTOL}
+#  ${BASELINE}/saTvSarDeburstImageFilterTest2Output.tif
+#  ${TEMP}/saTvSarDeburstImageFilterTest2Output.tif
+#  otbSarDeburstFilterTest
+#  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.tiff
+#  ${TEMP}/saTvSarDeburstImageFilterTest2Output.tif)
+#
+#otb_add_test(NAME saTvSarDeburstImageFilterTest3 COMMAND otbSARCalibrationTestDriver
+#  --compare-image ${NOTOL}
+#  ${BASELINE}/saTvSarDeburstImageFilterTest3Output.tif
+#  ${TEMP}/saTvSarDeburstImageFilterTest3Output.tif
+#  otbSarDeburstFilterTest
+#  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.tiff
+#  ${TEMP}/saTvSarDeburstImageFilterTest3Output.tif
+#  WithOnlyValidSamples)
 
-otb_add_test(NAME saTvSarDeburstImageFilterTest2 COMMAND otbSARCalibrationTestDriver
-  --compare-image ${NOTOL}
-  ${BASELINE}/saTvSarDeburstImageFilterTest2Output.tif
-  ${TEMP}/saTvSarDeburstImageFilterTest2Output.tif
-  otbSarDeburstFilterTest
-  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.tiff
-  ${TEMP}/saTvSarDeburstImageFilterTest2Output.tif)
 
-otb_add_test(NAME saTvSarDeburstImageFilterTest3 COMMAND otbSARCalibrationTestDriver
-  --compare-image ${NOTOL}
-  ${BASELINE}/saTvSarDeburstImageFilterTest3Output.tif
-  ${TEMP}/saTvSarDeburstImageFilterTest3Output.tif
-  otbSarDeburstFilterTest
-  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.tiff
-  ${TEMP}/saTvSarDeburstImageFilterTest3Output.tif
-  WithOnlyValidSamples)
-
-
-otb_add_test(NAME saTvSarBurstExtractionImageFilterTest1 COMMAND otbSARCalibrationTestDriver
-  --compare-image ${NOTOL}
-  ${BASELINE}/saTvSarBurstImageFilterTest1Output.tif
-  ${TEMP}/saTvSarBurstImageFilterTest1Output.tif
-  otbSarBurstExtractionFilterTest
-  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.tiff
-  ${TEMP}/saTvSarBurstImageFilterTest1Output.tif
-  0)
-
-otb_add_test(NAME saTvSarBurstExtractionImageFilterTest2 COMMAND otbSARCalibrationTestDriver
-  --compare-image ${NOTOL}
-  ${BASELINE}/saTvSarBurstImageFilterTest2Output.tif
-  ${TEMP}/saTvSarBurstImageFilterTest2Output.tif
-  otbSarBurstExtractionFilterTest
-  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.tiff
-  ${TEMP}/saTvSarBurstImageFilterTest2Output.tif
-  1)
+#otb_add_test(NAME saTvSarBurstExtractionImageFilterTest1 COMMAND otbSARCalibrationTestDriver
+#  --compare-image ${NOTOL}
+#  ${BASELINE}/saTvSarBurstImageFilterTest1Output.tif
+#  ${TEMP}/saTvSarBurstImageFilterTest1Output.tif
+#  otbSarBurstExtractionFilterTest
+#  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.tiff
+#  ${TEMP}/saTvSarBurstImageFilterTest1Output.tif
+#  0)
+#
+#otb_add_test(NAME saTvSarBurstExtractionImageFilterTest2 COMMAND otbSARCalibrationTestDriver
+#  --compare-image ${NOTOL}
+#  ${BASELINE}/saTvSarBurstImageFilterTest2Output.tif
+#  ${TEMP}/saTvSarBurstImageFilterTest2Output.tif
+#  otbSarBurstExtractionFilterTest
+#  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.tiff
+#  ${TEMP}/saTvSarBurstImageFilterTest2Output.tif
+#  1)
