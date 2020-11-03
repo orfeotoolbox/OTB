@@ -118,15 +118,16 @@ otb_add_test(NAME ioTvImageFileReaderExtendedFileName_GEOM COMMAND otbExtendedFi
   ${TEMP}/ioImageFileReaderWithExternalGEOMFile_pr.txt
   )
 
-otb_add_test(NAME ioTvImageFileWriterExtendedFileName_GEOM COMMAND otbExtendedFilenameTestDriver
-  --ignore-order --compare-ascii ${NOTOL}
-  ${INPUTDATA}/ToulouseExtract_WithGeom.geom
-  ${TEMP}/ioImageFileWriterExtendedFileName_GEOM.geom
-  --ignore-lines-with 2 ce90_absolute ce90_relative
-  otbImageFileWriterWithExtendedFilename
-  ${INPUTDATA}/ToulouseExtract_WithGeom.tif
-  ${TEMP}/ioImageFileWriterExtendedFileName_GEOM.tif?&writegeom=ON
-  )
+# TODO: This test needs to be removed when the extended filename writegeom is replaced by writeMetadata  
+#otb_add_test(NAME ioTvImageFileWriterExtendedFileName_GEOM COMMAND otbExtendedFilenameTestDriver
+#  --ignore-order --compare-ascii ${NOTOL}
+#  ${INPUTDATA}/ToulouseExtract_WithGeom.geom
+#  ${TEMP}/ioImageFileWriterExtendedFileName_GEOM.geom
+#  --ignore-lines-with 2 ce90_absolute ce90_relative
+#  otbImageFileWriterWithExtendedFilename
+#  ${INPUTDATA}/ToulouseExtract_WithGeom.tif
+#  ${TEMP}/ioImageFileWriterExtendedFileName_GEOM.tif?&writegeom=ON
+#  )
 
 otb_add_test(NAME ioTvImageFileWriterExtendedFileName_StreamingAuto COMMAND otbExtendedFilenameTestDriver
   --compare-image ${NOTOL}

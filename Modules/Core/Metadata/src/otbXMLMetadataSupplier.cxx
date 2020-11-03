@@ -36,7 +36,7 @@ XMLMetadataSupplier::XMLMetadataSupplier(const std::string & fileName)
   CPLDestroyXMLNode(psNode);
 }
 
-std::string XMLMetadataSupplier::GetMetadataValue(const std::string path, bool& hasValue, int band) const
+std::string XMLMetadataSupplier::GetMetadataValue(std::string const& path, bool& hasValue, int band) const
 {
   const char * ret = CSLFetchNameValue(m_MetadataDic, path.c_str());
   if (ret)
@@ -49,7 +49,7 @@ std::string XMLMetadataSupplier::GetMetadataValue(const std::string path, bool& 
   return std::string(ret);
 }
 
-std::string XMLMetadataSupplier::GetFirstMetadataValue(const std::string path, bool& hasValue) const
+std::string XMLMetadataSupplier::GetFirstMetadataValue(std::string const& path, bool& hasValue) const
 {
   // Search for the  first joker
   std::size_t found = path.find("_#");
@@ -83,7 +83,7 @@ std::string XMLMetadataSupplier::GetFirstMetadataValue(const std::string path, b
   }
 }
 
-std::string XMLMetadataSupplier::GetResourceFile(std::string) const
+std::string XMLMetadataSupplier::GetResourceFile(std::string const& s) const
 {
   return m_FileName;
 }
