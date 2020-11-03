@@ -155,13 +155,13 @@ public:
 
 protected:
   Spot6ImageMetadataInterface();
-  ~Spot6ImageMetadataInterface() override
-  {
-  }
+  ~Spot6ImageMetadataInterface() = default;
 
 private:
   Spot6ImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
+
+  void FetchSpectralSensitivity(const std::string & sensorId);
 };
 
 } // end namespace otb

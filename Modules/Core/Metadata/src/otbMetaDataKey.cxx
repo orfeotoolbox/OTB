@@ -162,7 +162,9 @@ std::istream& operator>>(std::istream& is, Time& val)
   is >> val.tm_mday;
   _OTB_ISTREAM_FAIL_IF( is.fail() )
   _OTB_ISTREAM_FAIL_IF( val.tm_mday < 1 || val.tm_mday > 31 )
-  _OTB_ISTREAM_FAIL_IF( is.get() != 'T' )
+
+  _OTB_ISTREAM_FAIL_IF( is.get() != 'T')
+
   // Hour
   is >> val.tm_hour;
   _OTB_ISTREAM_FAIL_IF( is.fail() )
@@ -178,10 +180,16 @@ std::istream& operator>>(std::istream& is, Time& val)
   is >> sec;
   _OTB_ISTREAM_FAIL_IF( is.fail() )
   val.tm_sec = (int) sec;
+
   val.frac_sec = sec - (double) val.tm_sec;
   _OTB_ISTREAM_FAIL_IF( val.tm_sec < 0 || val.tm_sec > 60 )
   _OTB_ISTREAM_FAIL_IF( val.frac_sec < 0.0 || val.frac_sec >= 1.0)
-  //_OTB_ISTREAM_FAIL_IF( is.get() != 'Z' )
+
+  if (!is.eof())
+  {
+    _OTB_ISTREAM_FAIL_IF( is.get() != 'Z' )
+  }
+
   return is;
 }
 

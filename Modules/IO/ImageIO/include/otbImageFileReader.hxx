@@ -478,36 +478,27 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   }
 
   // NEW METADATA FRAMEWORK
-  // This unique_ptr is used to keep the reference to the GeomMetadataSupplier (if any)
-  std::unique_ptr<MetadataSupplierInterface> unique_ptr_mds;
-  // This pointer is used to receive the selected supplier
-  MetadataSupplierInterface* mds;
   std::string DerivatedFileName = GetDerivedDatasetSourceFileName(m_FileName);
   std::string extension                 = itksys::SystemTools::GetFilenameLastExtension(DerivatedFileName);
   std::string attachedGeom              = DerivatedFileName.substr(0, DerivatedFileName.size() - extension.size()) + std::string(".geom");
   // Case 1: external geom supplied through extended filename
   if (!m_FilenameHelper->GetSkipGeom() && m_FilenameHelper->ExtGEOMFileNameIsSet())
   {
-    unique_ptr_mds = std::make_unique<GeomMetadataSupplier>(m_FilenameHelper->GetExtGEOMFileName());
-    mds = unique_ptr_mds.get();
+    GeomMetadataSupplier geomSupplier(m_FilenameHelper->GetExtGEOMFileName());
+    UpdateImdWithImiAndMds(imd, &geomSupplier);
   }
   // Case 2: attached geom (if present)
   else if (!m_FilenameHelper->GetSkipGeom() && itksys::SystemTools::FileExists(attachedGeom))
   {
-    unique_ptr_mds = std::make_unique<GeomMetadataSupplier>(attachedGeom);
-    mds = unique_ptr_mds.get();
+    GeomMetadataSupplier geomSupplier(m_FilenameHelper->GetExtGEOMFileName());
+    UpdateImdWithImiAndMds(imd, &geomSupplier);
   }
   // Case 3: tags in file
   else
-    mds = dynamic_cast<MetadataSupplierInterface*>(m_ImageIO.GetPointer());
-
-  if (mds)
   {
-    ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(imd, mds);
-    // update 'imd' with the parsed metadata
-    imd = imi->GetImageMetadata();
+    auto gdalSupplierPointer = dynamic_cast<MetadataSupplierInterface*>(m_ImageIO.GetPointer());
+    UpdateImdWithImiAndMds(imd, gdalSupplierPointer);
   }
-
 
   // If Skip ProjectionRef is activated, remove ProjRef from dict
   if (m_FilenameHelper->GetSkipCarto())
@@ -585,6 +576,17 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     }
 
   output->SetLargestPossibleRegion(region);
+}
+
+template <class TOutputImage, class ConvertPixelTraits>
+void ImageFileReader<TOutputImage, ConvertPixelTraits>::UpdateImdWithImiAndMds(ImageMetadata& imd, MetadataSupplierInterface* mds)
+{
+  if(mds)
+  {
+    ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(imd, mds);
+    // update 'imd' with the parsed metadata
+    imd = imi->GetImageMetadata();
+  }
 }
 
 template <class TOutputImage, class ConvertPixelTraits>

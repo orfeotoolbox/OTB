@@ -667,6 +667,7 @@ ImageMetadataInterfaceBase::Fetch(
     m_Imd.Bands[band].Add(key, mds.GetAs<MetaData::Time>(path, band));
     return m_Imd.Bands[band][key];
     }
+
   m_Imd.Add(key, mds.GetAs<MetaData::Time>(path));
   return m_Imd[key];
 }
@@ -692,17 +693,47 @@ const boost::any& ImageMetadataInterfaceBase::FetchRPC(
   const MetadataSupplierInterface & mds)
 {
   Projection::RPCParam rpcStruct;
-  rpcStruct.LineOffset    = mds.GetAs<double>("RPC/LINE_OFF");
-  rpcStruct.SampleOffset  = mds.GetAs<double>("RPC/SAMP_OFF");
-  rpcStruct.LatOffset     = mds.GetAs<double>("RPC/LAT_OFF");
-  rpcStruct.LonOffset     = mds.GetAs<double>("RPC/LONG_OFF");
-  rpcStruct.HeightOffset  = mds.GetAs<double>("RPC/HEIGHT_OFF");
 
-  rpcStruct.LineScale    = mds.GetAs<double>("RPC/LINE_SCALE");
-  rpcStruct.SampleScale  = mds.GetAs<double>("RPC/SAMP_SCALE");
-  rpcStruct.LatScale     = mds.GetAs<double>("RPC/LAT_SCALE");
-  rpcStruct.LonScale     = mds.GetAs<double>("RPC/LONG_SCALE");
-  rpcStruct.HeightScale  = mds.GetAs<double>("RPC/HEIGHT_SCALE");
+  // In some products, RPC metadata read by GDAL have an unit attached, and the
+  // fetched string cannot be converted to double directly, e.g.
+  // LINE_OFF=+002320.00 pixels (from an Ikonos product)
+  // This lambda removes the unit suffix from the metadata.
+  auto GetMetadataWithoutUnit = [](const std::string & path, 
+                                    const MetadataSupplierInterface & mds)
+  {
+    auto metadataAsString = mds.GetAs<std::string>(path);
+
+    for (const auto & name : {"meters", "degrees", "pixels"})
+    {
+      auto i = metadataAsString.find(name);
+      if (i != std::string::npos)
+      {
+        metadataAsString.erase(i, strlen(name));
+        break;
+      }
+    }
+    
+    try
+    {
+      return std::stod(metadataAsString);
+    }
+    catch (const std::invalid_argument&)
+    {
+      otbGenericExceptionMacro(MissingMetadataException,<<"Bad metadata value for '"<<path<<"', got: "<<metadataAsString)
+    }
+  };
+
+  rpcStruct.LineOffset    = GetMetadataWithoutUnit("RPC/LINE_OFF", mds);
+  rpcStruct.SampleOffset  = GetMetadataWithoutUnit("RPC/SAMP_OFF", mds);
+  rpcStruct.LatOffset     = GetMetadataWithoutUnit("RPC/LAT_OFF", mds);
+  rpcStruct.LonOffset     = GetMetadataWithoutUnit("RPC/LONG_OFF", mds);
+  rpcStruct.HeightOffset  = GetMetadataWithoutUnit("RPC/HEIGHT_OFF", mds);
+
+  rpcStruct.LineScale    = GetMetadataWithoutUnit("RPC/LINE_SCALE", mds);
+  rpcStruct.SampleScale  = GetMetadataWithoutUnit("RPC/SAMP_SCALE", mds);
+  rpcStruct.LatScale     = GetMetadataWithoutUnit("RPC/LAT_SCALE", mds);
+  rpcStruct.LonScale     = GetMetadataWithoutUnit("RPC/LONG_SCALE", mds);
+  rpcStruct.HeightScale  = GetMetadataWithoutUnit("RPC/HEIGHT_SCALE", mds);
 
   std::vector<double> coeffs(20);
 

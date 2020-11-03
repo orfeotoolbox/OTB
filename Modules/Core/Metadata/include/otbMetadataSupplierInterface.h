@@ -47,7 +47,7 @@ public:
 class OTBMetadata_EXPORT MetadataSupplierInterface
 {
 public:
-  virtual std::string GetResourceFile(std::string="") const = 0;
+  virtual std::string GetResourceFile(std::string const& ="") const = 0;
   virtual std::vector<std::string> GetResourceFiles() const
   {
     return std::vector<std::string>{this->GetResourceFile()};
@@ -58,14 +58,14 @@ public:
    * depends on the specific implementation. Returns empty string when path is not found,
    * and hasValue is set to False.
    * If band >= 0, the metadata value is looked in the specified band*/
-  virtual std::string GetMetadataValue(const std::string path, bool& hasValue, int band=-1) const = 0;
+  virtual std::string GetMetadataValue(std::string const& path, bool& hasValue, int band=-1) const = 0;
 
-  bool HasValue(std::string path, int band=-1);
+  bool HasValue(std::string const& path, int band=-1);
 
   virtual int GetNbBands() const = 0;
 
   // utility functions
-  template <typename T> T GetAs(std::string path, int band=-1) const
+  template <typename T> T GetAs(std::string const& path, int band=-1) const
   {
     bool hasValue;
     std::string ret = GetMetadataValue(path, hasValue, band);
@@ -86,7 +86,7 @@ public:
   /** Parse a metadata value to a std::vector,
    *  If size>=0, then the final std::vector size is checked and an exception
    *  is raised if it doesn't match the given size.*/
-  template < typename T> std::vector<T> GetAsVector(std::string path, const char sep=' ', int size=-1, int band=-1) const
+  template < typename T> std::vector<T> GetAsVector(std::string const& path, char sep=' ', int size=-1, int band=-1) const
   {
     bool hasValue;
     std::string ret = GetMetadataValue(path, hasValue, band);

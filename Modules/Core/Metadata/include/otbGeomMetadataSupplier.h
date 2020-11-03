@@ -21,8 +21,6 @@
 #ifndef otbGeomMetadataSupplier_h
 #define otbGeomMetadataSupplier_h
 
-#include <fstream>
-#include <boost/algorithm/string.hpp>
 #include <boost/any.hpp>
 
 #include "OTBMetadataExport.h"
@@ -58,9 +56,9 @@ public:
    * @param band not used
    * @return The value corresponding to path. Empty string if not found.
    */
-  std::string GetMetadataValue(const std::string path, bool& hasValue, int band=1) const override;
+  std::string GetMetadataValue(std::string const& path, bool& hasValue, int band=1) const override;
 
-  std::string GetResourceFile(std::string="") const override;
+  std::string GetResourceFile(std::string const& s="") const override;
 
   int GetNbBands() const override;
 
@@ -76,7 +74,7 @@ public:
    *
    * @return A std::string
    */
-  std::string PrintSelf();
+  std::string PrintSelf() const;
 
 protected:
   /**

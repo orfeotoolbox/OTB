@@ -678,8 +678,7 @@ void GDALImageIO::InternalReadImageInformation()
   itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
 
   // Initialize the ImageMetadata structure
-  ImageMetadata imd;
-  m_Imd = imd;
+  m_Imd = ImageMetadata();
 
   // Report the typical block size if possible
   if (dataset->GetRasterCount() > 0)
@@ -1811,7 +1810,7 @@ int GDALImageIO::GetNbBands() const
   return m_Dataset->GetDataSet()->GetRasterCount();
 }
 
-std::string GDALImageIO::GetResourceFile(std::string str) const
+std::string GDALImageIO::GetResourceFile(std::string const& str) const
 {
   if (str.empty())
     return m_FileName;
@@ -1833,7 +1832,7 @@ std::vector<std::string> GDALImageIO::GetResourceFiles() const
   return result;
 }
 
-std::string GDALImageIO::GetMetadataValue(const std::string path, bool& hasValue, int band) const
+std::string GDALImageIO::GetMetadataValue(std::string const& path, bool& hasValue, int band) const
 {
   // detect namespace if any
   std::string domain("");
@@ -1941,27 +1940,18 @@ void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int 
     }
     else if (kv.first == MetaData::MDGeomNames.left.at(MDGeom::RPC))
     {
-      // RPC Models are exported directly from the ImageMetadata.
-      Projection::RPCParam rpcStruct = boost::any_cast<Projection::RPCParam>(m_Imd[MDGeom::RPC]);
-      this->SetAs("RPC/LINE_OFF",   rpcStruct.LineOffset);
-      this->SetAs("RPC/SAMP_OFF",   rpcStruct.SampleOffset);
-      this->SetAs("RPC/LAT_OFF",    rpcStruct.LatOffset);
-      this->SetAs("RPC/LONG_OFF",   rpcStruct.LonOffset);
-      this->SetAs("RPC/HEIGHT_OFF", rpcStruct.HeightOffset);
-
-      this->SetAs("RPC/LINE_SCALE",   rpcStruct.LineScale);
-      this->SetAs("RPC/SAMP_SCALE",   rpcStruct.SampleScale);
-      this->SetAs("RPC/LAT_SCALE",    rpcStruct.LatScale);
-      this->SetAs("RPC/LONG_SCALE",   rpcStruct.LonScale);
-      this->SetAs("RPC/HEIGHT_SCALE", rpcStruct.HeightScale);
-
-      this->SetAsVector("RPC/LINE_NUM_COEFF", std::vector<double> (rpcStruct.LineNum,   rpcStruct.LineNum   + 20 / sizeof(double)), ' ');
-      this->SetAsVector("RPC/LINE_DEN_COEFF", std::vector<double> (rpcStruct.LineDen,   rpcStruct.LineDen   + 20 / sizeof(double)), ' ');
-      this->SetAsVector("RPC/SAMP_NUM_COEFF", std::vector<double> (rpcStruct.SampleNum, rpcStruct.SampleNum + 20 / sizeof(double)), ' ');
-      this->SetAsVector("RPC/SAMP_DEN_COEFF", std::vector<double> (rpcStruct.SampleDen, rpcStruct.SampleDen + 20 / sizeof(double)), ' ');
+      // RPC Models have already been exported (see InternalWriteImageInformation)
     }
-    // Note that GCPs have already been exported
-    SetMetadataValue(kv.first.c_str(), kv.second.c_str(), band);
+    else if (kv.first == MetaData::MDGeomNames.left.at(MDGeom::GCP))
+    {
+      // GCPs have already been exported (see InternalWriteImageInformation)
+    }
+    else if (kv.first == MetaData::MDGeomNames.left.at(MDGeom::ProjectionWKT))
+    {
+      // WKT projection have already been exported (see InternalWriteImageInformation)
+    }
+    else
+      SetMetadataValue(kv.first.c_str(), kv.second.c_str(), band);
   }
 }
 

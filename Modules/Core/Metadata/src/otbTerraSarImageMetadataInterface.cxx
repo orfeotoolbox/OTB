@@ -26,6 +26,19 @@
 #include "itkIndex.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
+#include "otbXMLMetadataSupplier.h"
+
+
+
+#include <boost/filesystem.hpp>
+//TODO C++ 17 : use std::optional instead
+#include <boost/optional.hpp>
+
+#include "itksys/SystemTools.hxx"
+#include "itksys/RegularExpression.hxx"
+
+
+
 
 namespace otb
 {
@@ -33,6 +46,63 @@ namespace otb
 TerraSarImageMetadataInterface::TerraSarImageMetadataInterface()
 {
 }
+
+
+
+namespace ExtractXMLFiles {
+
+// Adapted from boost filesystem documentation : https://www.boost.org/doc/libs/1_53_0/libs/filesystem/doc/reference.html
+std::vector<std::string> GetXMLFilesInDirectory(const std::string & directoryPath)
+{
+  std::vector<std::string> fileList;
+  if ( !boost::filesystem::exists( directoryPath) )
+  {
+    return fileList;
+  }
+  else if (!boost::filesystem::is_directory(directoryPath))
+  {
+    fileList.push_back(directoryPath);
+    return fileList;
+  }
+  // End iterator : default construction yields past-the-end
+  for ( const auto & item : boost::make_iterator_range(boost::filesystem::directory_iterator(directoryPath), {}) )
+  {
+    if ( boost::filesystem::is_directory(item.status()) )
+    {
+      auto subDirList = GetXMLFilesInDirectory(item.path().string());
+      fileList.insert(fileList.end(), subDirList.begin(), subDirList.end());
+    }
+    else
+    {
+      //Extract only XML files
+      std::string extension = boost::filesystem::extension(item);
+      if (extension ==".xml")
+        fileList.push_back(item.path().string());
+    }
+  }
+
+  return fileList;
+}
+
+
+
+std::string GetResourceFile(const std::string & directoryPath, std::string pattern)
+  {
+  auto xmlFiles = GetXMLFilesInDirectory(directoryPath);
+  itksys::RegularExpression reg;
+  reg.compile(pattern);
+  for (const auto & file : xmlFiles)
+    {
+    if (reg.find(boost::filesystem::path(file).filename().string()))
+      return file ;
+    }
+  return std::string("");
+  }
+
+
+}
+
+
 
 bool TerraSarImageMetadataInterface::CanRead() const
 {
@@ -1171,6 +1241,60 @@ void TerraSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent ind
 {
   Superclass::PrintSelf(os, indent);
 }
+
+
+
+
+
+void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+{
+
+  assert(mds);
+  assert(mds->GetNbBands() == this->m_Imd.Bands.size());
+
+  // Metadata read by GDAL
+  Fetch(MDNum::LineSpacing, *mds, "ROW_SPACING");
+  Fetch(MDStr::Mode, *mds, "IMAGING_MODE");
+  Fetch(MDStr::OrbitDirection, *mds, "ORBIT_DIRECTION");
+  Fetch(MDNum::OrbitNumber, *mds, "ABSOLUTE_ORBIT");
+  Fetch(MDNum::PixelSpacing, *mds, "COL_SPACING");
+
+  // Main XML file
+  std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(mds->GetResourceFile("")), "T[S|D]X1_SAR__.*.xml") ;
+  if (!MainFilePath.empty())
+  {
+    XMLMetadataSupplier MainXMLFileMS(MainFilePath);
+    m_Imd.Add(MDStr::Mission, MainXMLFileMS.GetAs<std::string>("level1Product.generalHeader.mission"));
+    m_Imd.Add(MDStr::ProductType, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.productVariantInfo.productType"));
+    // m_Imd.Add(MDStr::Mode, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.imagingMode"));
+    m_Imd.Add(MDStr::SensorID, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.sensor"));
+    m_Imd.Add(MDNum::RadarFrequency, MainXMLFileMS.GetAs<double>("level1Product.instrument.radarParameters.centerFrequency"));
+
+    bool hasValueStarttimeUTC;
+    MainXMLFileMS.GetFirstMetadataValue("level1Product.productInfo.sceneInfo.start.timeUTC", hasValueStarttimeUTC);
+    if(!hasValueStarttimeUTC)
+      m_Imd.Add(MDTime::AcquisitionStartTime, MainXMLFileMS.GetFirstAs<MetaData::Time>("level1Product.instrument.settings.rxGainSetting.startTimeUTC"));
+    else
+      m_Imd.Add(MDTime::AcquisitionStartTime, MainXMLFileMS.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.start.timeUTC"));
+
+    bool hasValueStoptimeUTC;
+    MainXMLFileMS.GetFirstMetadataValue("level1Product.productInfo.sceneInfo.stop.timeUTC", hasValueStoptimeUTC);
+    if(!hasValueStoptimeUTC)
+      m_Imd.Add(MDTime::AcquisitionStopTime, MainXMLFileMS.GetFirstAs<MetaData::Time>("level1Product.instrument.settings.settingRecord.dataSegment segmentID.stopTimeUTC"));
+    else
+      m_Imd.Add(MDTime::AcquisitionStopTime, MainXMLFileMS.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.stop.timeUTC"));
+    m_Imd.Add(MDNum::PRF, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonPRF"));
+    m_Imd.Add(MDNum::RSF, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
+
+  }
+
+  SARParam sarParam;
+  for (int bandId = 0 ; bandId < mds->GetNbBands() ; ++bandId)
+    {
+    Fetch(MDStr::Polarization, *mds, "POLARIMETRIC_INTERP", bandId);
+    m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
+    }
+  }
 
 
 } // end namespace otb
