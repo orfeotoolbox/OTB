@@ -89,14 +89,6 @@ otb_module_target_label(otbMetadataTestDriver)
 #  ${TEMP}/ioTvSentinel1ImageMetadataInterfaceTest.txt
 #  )
 
-otb_add_test(NAME ioTvImageMetadataInterfaceTest_Sentinel1 COMMAND otbMetadataTestDriver
-  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_Sentinel1.txt
-  ${TEMP}/ioTvImageMetadataInterfaceTest_Sentinel1.txt
-  otbImageMetadataInterfaceTest
-  LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043}
-  ${TEMP}/ioTvImageMetadataInterfaceTest_Sentinel1.txt
-  )
-
 #otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_SENTINEL1 COMMAND otbMetadataTestDriver
   #--compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_SENTINEL1.txt
   #${TEMP}/ioTvImageMetadataInterfaceBase_SENTINEL1.txt
@@ -406,7 +398,7 @@ otb_add_test(NAME ioTuImageMetadataAppendTest COMMAND otbMetadataTestDriver
   otbImageMetadataAppendTest
   ${TEMP}/ioTuImageMetadataAppendTest.txt
   )
-    
+
 otb_add_test(NAME ioTuImageMetadataMergeTest COMMAND otbMetadataTestDriver
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTuImageMetadataMergeTest.txt
   ${TEMP}/ioTuImageMetadataMergeTest.txt
@@ -439,27 +431,27 @@ otb_add_test(NAME ioTuotbXMLMetadataSupplierTest COMMAND otbMetadataTestDriver
   ${TEMP}/ioTuotbXMLMetadataSupplierTest.txt
   )
 
+set(sensor_list pleiades spot6 spot5 spot5_2 formosat ikonos worldview2 quickbird Radarsat2 TerraSar CosmoSkyMed Sentinel1)
 
-  otb_add_test(NAME ioTvImageMetadataInterfaceTest_Radarsat2 COMMAND otbMetadataTestDriver
-  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_Radarsat2.txt
-  ${TEMP}/ioTvImageMetadataInterfaceTest_Radarsat2.txt
-  otbImageMetadataInterfaceTest
-  LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona}
-  ${TEMP}/ioTvImageMetadataInterfaceTest_Radarsat2.txt
-  )
+set(pleiades_filename LARGEINPUT{PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201206050630064_SEN_559102101-002_R1C1.JP2})
+set(spot6_filename LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2})
+set(spot5_filename LARGEINPUT{SPOT5/Arcachon-SCENE01/IMAGERY.TIF})
+set(spot5_2_filename LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF})
+set(formosat_filename LARGEINPUT{FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF})
+set(ikonos_filename LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif})
+set(worldview2_filename LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF})
+set(quickbird_filename LARGEINPUT{QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF})
+set(Radarsat2_filename LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona})
+set(TerraSar_filename LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228})
+set(CosmoSkyMed_filename LARGEINPUT{COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5})
+set(Sentinel1_filename LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043})
 
-  otb_add_test(NAME ioTvImageMetadataInterfaceTest_TerraSar COMMAND otbMetadataTestDriver
-  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_TerraSar.txt
-  ${TEMP}/ioTvImageMetadataInterfaceTest_TerraSar.txt
+foreach(sensor ${sensor_list})
+otb_add_test(NAME ioTvImageMetadataInterfaceTest_${sensor} COMMAND otbMetadataTestDriver 
+  --compare-ascii 0 ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_${sensor}.txt
+  ${TEMP}/ioTvImageMetadataInterfaceTest_${sensor}.txt
   otbImageMetadataInterfaceTest
-  LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228}
-  ${TEMP}/ioTvImageMetadataInterfaceTest_TerraSar.txt
+  ${${sensor}_filename}
+  ${TEMP}/ioTvImageMetadataInterfaceTest_${sensor}.txt
   )
-  
-  otb_add_test(NAME ioTvImageMetadataInterfaceTest_CosmoSkyMed COMMAND otbMetadataTestDriver
-  --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_CosmoSkyMed.txt
-  ${TEMP}/ioTvImageMetadataInterfaceTest_CosmoSkyMed.txt
-  otbImageMetadataInterfaceTest
-  LARGEINPUT{COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5}
-  ${TEMP}/ioTvImageMetadataInterfaceTest_CosmoSkyMed.txt
-  )
+endforeach()
