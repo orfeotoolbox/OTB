@@ -89,7 +89,7 @@ ImageMetadataInterfaceFactory::ImageMetadataInterfaceBasePointerType ImageMetada
 
 ImageMetadataInterfaceFactory::ImageMetadataInterfaceBasePointerType
 ImageMetadataInterfaceFactory
-::CreateIMI(const ImageMetadata & imd, const MetadataSupplierInterface *mds)
+::CreateIMI(const ImageMetadata & imd, const MetadataSupplierInterface & mds)
 {
   RegisterBuiltInFactories();
 

@@ -1371,11 +1371,11 @@ void FormosatImageMetadataInterface::FetchSpectralSensitivity()
   
 }
 
-void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
   assert(mds);
 
-  Fetch(MDStr::SensorID, *mds, "IMAGERY/SATELLITEID");
+  Fetch(MDStr::SensorID, mds, "IMAGERY/SATELLITEID");
   if (m_Imd[MDStr::SensorID] == "FORMOSAT 2")
   {
     m_Imd.Add(MDStr::Mission, "Formasat 2");
@@ -1386,7 +1386,7 @@ void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   }
 
   //Find the METADATA.DIM file (Dimap V1 metadata file)
-  auto resourceFiles = mds->GetResourceFiles();
+  auto resourceFiles = mds.GetResourceFiles();
   
   std::string metadataFile;
   for (const auto & file: resourceFiles)
@@ -1488,7 +1488,7 @@ void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   // fill RPC model
   if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
   {
-    FetchRPC(*mds);
+    FetchRPC(mds);
   }
 }
 

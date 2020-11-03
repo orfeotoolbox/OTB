@@ -1694,12 +1694,11 @@ void Spot6ImageMetadataInterface::FetchSpectralSensitivity(const std::string & s
   }
 }
 
-void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds);
   DimapMetadataHelper helper;
   
-  helper.Parse(*mds);
+  helper.Parse(mds);
   const auto & dimapData = helper.GetDimapData();
   
   if (dimapData.mission == "SPOT")
@@ -1758,7 +1757,7 @@ void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   // fill RPC model
   if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
   {
-    FetchRPC(*mds);
+    FetchRPC(mds);
   }
 
   FetchSpectralSensitivity(m_Imd[MDStr::SensorID]);

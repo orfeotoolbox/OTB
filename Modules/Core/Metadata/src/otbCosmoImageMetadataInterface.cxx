@@ -301,16 +301,16 @@ std::vector<std::map<std::string, std::string> > CosmoImageMetadataInterface::sa
 
 
 
-std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const MetadataSupplierInterface *mds, std::string reference_UTC)
+std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const MetadataSupplierInterface & mds, const std::string & reference_UTC)
 {
     ////////////////// Add Orbit List ////////////////
   bool hasOrbit ;
-  std::string nb_orbits =  mds->GetMetadataValue("Number_of_State_Vectors", hasOrbit) ;
+  std::string nb_orbits =  mds.GetMetadataValue("Number_of_State_Vectors", hasOrbit) ;
     // Get elements
     int stateVectorList_size = std::stoi(nb_orbits);
-    std::string state_times = mds->GetMetadataValue("State_Vectors_Times", hasOrbit);
-    std::string ecef_satellite_pos = mds->GetMetadataValue("ECEF_Satellite_Position", hasOrbit) ;
-    std::string ecef_satellite_vel = mds->GetMetadataValue("ECEF_Satellite_Velocity", hasOrbit);
+    std::string state_times = mds.GetMetadataValue("State_Vectors_Times", hasOrbit);
+    std::string ecef_satellite_pos = mds.GetMetadataValue("ECEF_Satellite_Position", hasOrbit) ;
+    std::string ecef_satellite_vel = mds.GetMetadataValue("ECEF_Satellite_Velocity", hasOrbit);
     // Convert std::string to vector
     std::vector<std::string> vTimes;
     otb::Utils::ConvertStringToVector(state_times, vTimes, "State_Vectors_Times", " ");
@@ -355,16 +355,12 @@ std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const MetadataSupplier
 
 
 
-void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-
-  assert(mds);
-  assert(mds->GetNbBands() == this->m_Imd.Bands.size());
-
-
+  assert(mds.GetNbBands() == this->m_Imd.Bands.size());
 
   // Check SubDatasets (For COSMO, we need //S01/SBI dataset)
-  auto subDsName = "HDF5:" + mds->GetResourceFile() + "://S01/SBI";
+  auto subDsName = "HDF5:" + mds.GetResourceFile() + "://S01/SBI";
   auto ds = (GDALDataset *) GDALOpen(subDsName.c_str(), GA_ReadOnly );
 
   if (ds)
@@ -381,9 +377,9 @@ void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 
   // Metadata read by GDAL
 
-  Fetch(MDStr::Mission, *mds, "MISSION_ID");
-  Fetch(MDStr::Mode, *mds, "Acquisition_Mode");
-  Fetch(MDStr::ProductType, *mds, "Product_Type");
+  Fetch(MDStr::Mission, mds, "MISSION_ID");
+  Fetch(MDStr::Mode, mds, "Acquisition_Mode");
+  Fetch(MDStr::ProductType, mds, "Product_Type");
 
   // Check Mission Id, acquisition mode and product type
   if(! (m_Imd[MDStr::Mission] == "CSK" ))
@@ -403,30 +399,30 @@ void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
     }
 
   m_Imd.Add(MDStr::SensorID, "CSK");
-  Fetch(MDStr::Instrument, *mds, "Satellite_ID");
+  Fetch(MDStr::Instrument, mds, "Satellite_ID");
 
-  Fetch(MDStr::OrbitDirection, *mds, "Orbit_Direction");
+  Fetch(MDStr::OrbitDirection, mds, "Orbit_Direction");
   bool hasOrbitNumber ;
-  std::string orbitNumber =  mds->GetMetadataValue("Orbit_Number", hasOrbitNumber) ;
+  std::string orbitNumber =  mds.GetMetadataValue("Orbit_Number", hasOrbitNumber) ;
   m_Imd.Add(MDNum::OrbitNumber, std::stoi(orbitNumber));
 
   bool hasRadarFrequency ;
-  std::string radarFrequency =  mds->GetMetadataValue("Radar_Frequency", hasRadarFrequency) ;
+  std::string radarFrequency =  mds.GetMetadataValue("Radar_Frequency", hasRadarFrequency) ;
   m_Imd.Add(MDNum::RadarFrequency, std::stod(radarFrequency));
 
-  Fetch(MDStr::Polarization, *mds, "S01_Polarisation") ;
+  Fetch(MDStr::Polarization, mds, "S01_Polarisation") ;
   m_Imd.Add(MDStr::Swath, "S1");
 
   bool hasPRF;
-  std::string PRFNumber =  mds->GetMetadataValue("S01_PRF", hasPRF);
+  std::string PRFNumber =  mds.GetMetadataValue("S01_PRF", hasPRF);
   m_Imd.Add(MDNum::PRF, std::stoi(PRFNumber));
 
 
   //getTIme
   auto metadataBands = this->saveMetadataBands(subDsName) ;
   bool hasTimeUTC;
-  int pos = mds->GetMetadataValue("Reference_UTC", hasTimeUTC).find(" ");;
-  std::string reference_UTC = mds->GetMetadataValue("Reference_UTC", hasTimeUTC).substr(0, pos);
+  int pos = mds.GetMetadataValue("Reference_UTC", hasTimeUTC).find(" ");;
+  std::string reference_UTC = mds.GetMetadataValue("Reference_UTC", hasTimeUTC).substr(0, pos);
 
   double total_seconds = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Azimuth_First_Time"]);
   int hour = static_cast<int> (total_seconds/3600.0);

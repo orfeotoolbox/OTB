@@ -2213,17 +2213,15 @@ void PleiadesImageMetadataInterface::FetchSpectralSensitivity(const std::string 
   }
 }
 
-void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds);
-
   bool hasValue = false;
-  auto metadatatype = mds->GetMetadataValue("METADATATYPE", hasValue);
-  auto dimapV1Filename = itksys::SystemTools::GetParentDirectory(mds->GetResourceFile()) + "/PHRDIMAP.XML";
+  auto metadatatype = mds.GetMetadataValue("METADATATYPE", hasValue);
+  auto dimapV1Filename = itksys::SystemTools::GetParentDirectory(mds.GetResourceFile()) + "/PHRDIMAP.XML";
 
   DimapMetadataHelper helper;
-    
-  helper.Parse(*mds);
+
+  helper.Parse(mds);
   const auto & dimapData = helper.GetDimapData();
 
   if (dimapData.mission == "PHR")
@@ -2288,7 +2286,7 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   // fill RPC model
   if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
   {
-    FetchRPC(*mds);
+    FetchRPC(mds);
   }
 }
 

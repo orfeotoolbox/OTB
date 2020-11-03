@@ -1743,22 +1743,20 @@ void SpotImageMetadataInterface::FetchSpectralSensitivity()
   }
 }
 
-void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds);
-
-  Fetch(MDStr::SensorID, *mds, "IMAGERY/SATELLITEID");
+  Fetch(MDStr::SensorID, mds, "IMAGERY/SATELLITEID");
   if (strncmp(m_Imd[MDStr::SensorID].c_str(), "SPOT 5", 6) == 0)
-    {
+  {
     m_Imd.Add(MDStr::Mission, "SPOT 5");
-    }
+  }
   else
-    {
-    otbGenericExceptionMacro(MissingMetadataException,<<"Not a spot 5 product")
-    }
+  {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Not a Spot 5 product")
+  }
 
   //Find the METADATA.DIM file (Dimap V1 metadata file)
-  auto resourceFiles = mds->GetResourceFiles();
+  auto resourceFiles = mds.GetResourceFiles();
   
   std::string metadataFile;
   for (const auto & file: resourceFiles)

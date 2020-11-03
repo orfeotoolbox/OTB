@@ -47,8 +47,13 @@ int otbImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
 
   auto imd = reader->GetImageIO()->GetImageMetadata();
   auto mds = dynamic_cast<otb::MetadataSupplierInterface*>(reader->GetImageIO());
-  otb::ImageMetadataInterfaceBase::Pointer imi = otb::ImageMetadataInterfaceFactory::CreateIMI(imd, mds);
+  if (!mds)
+  {
+    std::cout << "Input reader does not use GDALImageIO" << std::endl;
+    return EXIT_FAILURE;
+  }
 
+  otb::ImageMetadataInterfaceBase::Pointer imi = otb::ImageMetadataInterfaceFactory::CreateIMI(imd, *mds);
   const otb::ImageMetadata& imd2 = imi->GetImageMetadata();
   std::ofstream file;
   file.open(outputFilename);

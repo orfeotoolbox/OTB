@@ -1772,11 +1772,11 @@ namespace
   }
 }
 
-void WorldView2ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void WorldView2ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
   // Check if there is DG metadatas
   bool hasValue = false;
-  auto metadatatype = mds->GetMetadataValue("METADATATYPE", hasValue);
+  auto metadatatype = mds.GetMetadataValue("METADATATYPE", hasValue);
   if (!hasValue || metadatatype != "DG")
   {
     otbGenericExceptionMacro(MissingMetadataException, 
@@ -1784,7 +1784,7 @@ void WorldView2ImageMetadataInterface::Parse(const MetadataSupplierInterface *md
   }
 
   // Check if the sensor is WorldView 2
-  auto sensorID = mds->GetMetadataValue("IMD/IMAGE_1.satId", hasValue);
+  auto sensorID = mds.GetMetadataValue("IMD/IMAGE_1.satId", hasValue);
 
   if (sensorID.find("WV02") != std::string::npos)
   {
@@ -1796,7 +1796,7 @@ void WorldView2ImageMetadataInterface::Parse(const MetadataSupplierInterface *md
     otbGenericExceptionMacro(MissingMetadataException, << "Not a Worldview 2 sensor")
   }
 
-  auto ressourceFiles = mds->GetResourceFiles();
+  auto ressourceFiles = mds.GetResourceFiles();
 
   // return true if the file extension is .IMD
   auto lambda = [](const std::string & filename){return itksys::SystemTools::GetFilenameLastExtension(filename) == ".IMD";};
@@ -1845,36 +1845,36 @@ void WorldView2ImageMetadataInterface::Parse(const MetadataSupplierInterface *md
     file.close();
   }
 
-  auto geometricLevel = mds->GetMetadataValue("IMD/productLevel", hasValue);
+  auto geometricLevel = mds.GetMetadataValue("IMD/productLevel", hasValue);
   // throw missing
   Unquote(geometricLevel);
   m_Imd.Add(MDStr::GeometricLevel, geometricLevel);
   
-  auto productType = mds->GetMetadataValue("IMD/bandId", hasValue);
+  auto productType = mds.GetMetadataValue("IMD/bandId", hasValue);
   // throw missing
   Unquote(productType);
   m_Imd.Add(MDStr::ProductType, productType);
   
   // Acquisition and production dates
-  FetchDates(*mds);
+  FetchDates(mds);
 
   //Radiometry
-  Fetch(MDNum::SunElevation, *mds, "IMD/IMAGE_1.meanSunEl");
-  Fetch(MDNum::SunAzimuth, *mds, "IMD/IMAGE_1.meanSunAz");
-  Fetch(MDNum::SatElevation, *mds, "IMD/IMAGE_1.meanSatAz");
-  Fetch(MDNum::SatAzimuth , *mds, "IMD/IMAGE_1.meanSatEl");
+  Fetch(MDNum::SunElevation, mds, "IMD/IMAGE_1.meanSunEl");
+  Fetch(MDNum::SunAzimuth, mds, "IMD/IMAGE_1.meanSunAz");
+  Fetch(MDNum::SatElevation, mds, "IMD/IMAGE_1.meanSatAz");
+  Fetch(MDNum::SatAzimuth , mds, "IMD/IMAGE_1.meanSatEl");
   
   //Physical Bias
   FetchPhysicalBias();
   
-  FetchPhysicalGain(*mds);
+  FetchPhysicalGain(mds);
 
   FetchSolarIrradiance();
 
   //First wavelengths and last wavelengths
   FetchWavelengths();
 
-  FetchRPC(*mds);
+  FetchRPC(mds);
 
   FetchSpectralSensitivity();
 }

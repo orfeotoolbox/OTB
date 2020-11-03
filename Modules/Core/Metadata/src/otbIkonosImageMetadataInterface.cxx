@@ -1184,20 +1184,18 @@ void IkonosImageMetadataInterface::FetchSpectralSensitivity(const std::string & 
 }
 
 
-void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds);
-
   bool hasValue = 0;
 
-  auto metadatatype = mds->GetMetadataValue("METADATATYPE", hasValue);
+  auto metadatatype = mds.GetMetadataValue("METADATATYPE", hasValue);
   if (!hasValue || metadatatype != "GE")
   {
     otbGenericExceptionMacro(MissingMetadataException, 
       << "No Geo-Eye metadata has been found")
   }
 
-  auto inputFilenameWithDir = mds->GetResourceFile();
+  auto inputFilenameWithDir = mds.GetResourceFile();
 
   auto inputFilename = itksys::SystemTools::GetFilenameName(inputFilenameWithDir);
   // Find hdr and metadata files : 
@@ -1288,7 +1286,7 @@ void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   m_Imd.Bands[0].Add(MDNum::PhysicalBias, 0.);
   m_Imd.Bands[0].Add(MDNum::SolarIrradiance, ikonosSolarIrradiance[bandName]);
 
-  FetchRPC(*mds);
+  FetchRPC(mds);
 
   FetchSpectralSensitivity(bandName);
 }

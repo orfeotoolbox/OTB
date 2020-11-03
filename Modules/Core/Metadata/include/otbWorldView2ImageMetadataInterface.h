@@ -138,7 +138,7 @@ public:
    */
   std::vector<std::string> GetEnhancedBandNames() const override;
 
-  void Parse(const MetadataSupplierInterface *) override;
+  void Parse(const MetadataSupplierInterface &) override;
 
 protected:
   WorldView2ImageMetadataInterface() = default;
