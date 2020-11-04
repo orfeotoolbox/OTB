@@ -195,8 +195,9 @@ private:
     SetParameterDescription("sizey", "size along y in pixels.");
 
     // Channelist Parameters
-    AddParameter(ParameterType_ListView, "cl", "Output Image channels");
+    AddParameter(ParameterType_Band, "cl", "Output Image channels");
     SetParameterDescription("cl", "Channels to write in the output image.");
+    SetRasterData("cl", "in");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");
