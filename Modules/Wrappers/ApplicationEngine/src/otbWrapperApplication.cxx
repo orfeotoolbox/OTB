@@ -37,6 +37,7 @@
 #include "otbWrapperParameterKey.h"
 #include "otbWrapperBoolParameter.h"
 #include "otbWrapperFieldParameter.h"
+#include "otbWrapperBandParameter.h"
 
 #include "otbWrapperAddProcessToWatchEvent.h"
 #include "otbExtendedFilenameToWriterOptions.h"
@@ -1364,6 +1365,12 @@ void Application::SetVectorData(std::string const& key, std::string const& vecto
 {
   auto param = downcast_check<FieldParameter>(GetParameterByKey(key));
   param->SetVectorData(vectorData);
+}
+
+void Application::SetRasterData(std::string const& key, std::string const& rasterData )
+{
+  auto param = downcast_check<BandParameter>(GetParameterByKey(key));
+  param->SetRasterData(rasterData);
 }
 
 void Application::ClearParameterInputImageList(std::string const& key)
