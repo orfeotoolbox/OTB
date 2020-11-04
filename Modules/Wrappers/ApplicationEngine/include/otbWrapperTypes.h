@@ -59,6 +59,7 @@ typedef enum {
   ParameterType_InputProcessXML,
   ParameterType_Bool,
   ParameterType_Field,
+  ParameterType_Band,
   ParameterType_MAX__
 } ParameterType;
 
@@ -88,6 +89,8 @@ constexpr char const* parameterTypesStrings[] = {"Int",
                                                  "InputProcessXML",
                                                  "Bool",
                                                  "Field",
+                                                 "Band",
+
 };
 static_assert(std::extent<decltype(parameterTypesStrings)>::value == ParameterType_MAX__, "Wrong number of parameters in parameterTypesStrings");
 }
