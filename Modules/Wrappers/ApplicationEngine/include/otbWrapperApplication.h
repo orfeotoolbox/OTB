@@ -570,6 +570,13 @@ public:
   void SetVectorData(std::string const& key, std::string const& vectorData );
 
   /**
+   * Set raster data name from which we choose the bands for a BandParameter
+   * \in parameter The parameter key (must be a BandParameter)
+   * \in rasterData vector data name
+   */
+  void SetRasterData(std::string const& key, std::string const& rasterData );
+
+  /**
      * Add a value to a parameter list as a string
      *
      * Can be called for parameter types:
