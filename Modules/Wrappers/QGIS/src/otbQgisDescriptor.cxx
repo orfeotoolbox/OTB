@@ -22,6 +22,7 @@
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperBoolParameter.h"
 #include "otbWrapperFieldParameter.h"
+#include "otbWrapperBandParameter.h"
 #include "otbWrapperApplicationRegistry.h"
 
 #include <iostream>
@@ -74,6 +75,7 @@ int main(int argc, char* argv[])
   parameterTypeToString[ParameterType_OutputFilename]      = "QgsProcessingParameterFileDestination";
   parameterTypeToString[ParameterType_Directory]           = "QgsProcessingParameterFile";
   parameterTypeToString[ParameterType_Field]               = "QgsProcessingParameterField";
+  parameterTypeToString[ParameterType_Band]                = "QgsProcessingParameterBand";
   // TODO
   parameterTypeToString[ParameterType_StringList] = "QgsProcessingParameterString";
 
@@ -273,6 +275,12 @@ int main(int argc, char* argv[])
       dFile << "|None|" << f_param->GetVectorData()
             << "|QgsProcessingParameterField.Any|False";
     }
+    else if (type == ParameterType_Band)
+    {
+      BandParameter *f_param = dynamic_cast<BandParameter*>(param.GetPointer());
+
+      dFile << "|None|" << f_param->GetRasterData();
+    }
     else
     {
       std::cout << "ERROR: default_value is empty for '" << name << "' type='" << qgis_type << "'" << std::endl;
@@ -303,8 +311,8 @@ int main(int argc, char* argv[])
 #endif
 
     // optionnal and default value are not in the same order than
-    // other QGis processing parameters
-    if (type == ParameterType_Field)
+    // other QGis processing parameters for field and band
+    if (type == ParameterType_Field || type == ParameterType_Band)
     {
       dFile << "|" << optional << "|False";
     }
