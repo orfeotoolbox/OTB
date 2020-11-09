@@ -7,7 +7,7 @@ SunElevation 67.9004
 SunAzimuth 128.882
 SatElevation 95.7372
 SatAzimuth 103.464
-AcquisitionDate 2003-07-23T07:27:43Z
+AcquisitionDate 2003-07-23T07:27:43.889716Z
 ProductionDate 2003-12-05T08:21:19Z
 GCP <GCPParam>
 BandName XS1
