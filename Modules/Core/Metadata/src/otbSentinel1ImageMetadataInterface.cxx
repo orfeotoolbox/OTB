@@ -600,6 +600,7 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
     if (NoiseFilePath.empty())
           otbGenericExceptionMacro(MissingMetadataException,<<"Missing Noise file for band '"<<swath<<"'");
     XMLMetadataSupplier NoiseMS(NoiseFilePath);
+    sarParam.noiseVector = this->GetNoiseVector(NoiseMS);
 
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
