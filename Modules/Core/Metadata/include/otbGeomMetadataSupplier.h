@@ -67,7 +67,7 @@ public:
    *
    * @param imd The ImageMetadata to fill
    */
-  const boost::any& FetchRPC(ImageMetadata & imd);
+  bool FetchRPC(ImageMetadata & imd);
 
   /**
    * @brief Writes the content of the Geom file into a string
