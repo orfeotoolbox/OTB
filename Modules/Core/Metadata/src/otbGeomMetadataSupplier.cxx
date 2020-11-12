@@ -72,8 +72,13 @@ int GeomMetadataSupplier::GetNbBands() const
   return ret_vect.size();
 }
 
-const boost::any& GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
+bool GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
 {
+  bool hasValue;
+  GetMetadataValue("polynomial_format", hasValue);
+  if (!hasValue)
+    return false;
+
   Projection::RPCParam rpcStruct;
   rpcStruct.LineOffset    = this->GetAs<double>("line_off");
   rpcStruct.SampleOffset  = this->GetAs<double>("samp_off");
@@ -118,8 +123,10 @@ const boost::any& GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
     coeff = this->GetAs<double>(path.str());
   }
 
-  imd.Add(MDGeom::RPC, rpcStruct);
-  return imd[MDGeom::RPC];
+  boost::any any_rpcStruct = rpcStruct;
+  imd.Add(MDGeom::RPC, std::move(any_rpcStruct));
+  auto toto = imd[MDGeom::RPC];
+  return true;
 }
 
 std::string GeomMetadataSupplier::PrintSelf() const
