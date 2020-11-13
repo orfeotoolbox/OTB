@@ -75,6 +75,7 @@ void VectorClassifier::DoInitSpecialization()
                           "List of field names in the input vector data used as features for training. "
                           "Put the same field names as the TrainVectorClassifier application.");
   SetVectorData("feat", "in");
+  SetTypeFilter("feat", {OFTInteger, OFTInteger64, OFTReal});
 
   AddParameter(ParameterType_Bool, "confmap", "Confidence map");
   SetParameterDescription("confmap",

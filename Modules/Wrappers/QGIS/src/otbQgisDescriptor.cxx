@@ -272,8 +272,26 @@ int main(int argc, char* argv[])
     {
       FieldParameter *f_param = dynamic_cast<FieldParameter*>(param.GetPointer());
 
+      enum {
+            STRING = 1 << 0,
+            NUMERIC = 1 << 1
+      };
+
+      int filterType = 0;
+      for (auto type : f_param->GetTypeFilter())
+      {
+        if (type == OFTString)
+          filterType |= STRING;
+        else if (type == OFTInteger || type == OFTInteger64 || type == OFTReal)
+          filterType |= NUMERIC;
+      }
+
       dFile << "|None|" << f_param->GetVectorData()
-            << "|QgsProcessingParameterField.Any|False";
+            << "|"
+            << (filterType == STRING  ? "QgsProcessingParameterField.String" :
+                filterType == NUMERIC ? "QgsProcessingParameterField.Numeric" :
+                "QgsProcessingParameterField.Any")
+            << "|False";
     }
     else if (type == ParameterType_Band)
     {
