@@ -50,6 +50,8 @@ public:
   /** RTTI support */
   itkTypeMacro(FieldParameter, ListViewParameter);
 
+  typedef std::vector<OGRFieldType> TypeFilterType;
+
   ParameterType GetType() const override
   {
     return ParameterType_Field;
@@ -67,6 +69,18 @@ public:
     return m_VectorData;
   }
 
+  /** Set list of allowed field types */
+  void SetTypeFilter(const TypeFilterType& typeFilter)
+  {
+    m_TypeFilter = typeFilter;
+  }
+
+  /** Get list of allowed field types */
+  const TypeFilterType& GetTypeFilter() const
+  {
+    return m_TypeFilter;
+  }
+
 protected:
   /** Constructor */
   FieldParameter()
@@ -79,6 +93,7 @@ protected:
   }
 
   std::string m_VectorData;
+  TypeFilterType m_TypeFilter;
 
 private:
   FieldParameter(const FieldParameter&) = delete;
