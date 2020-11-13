@@ -139,6 +139,7 @@ private:
     AddParameter(ParameterType_Field, "ref.vector.field", "Field name");
     SetParameterDescription("ref.vector.field", "Field name containing the label values");
     SetVectorData("ref.vector.field", "ref.vector.in");
+    SetTypeFilter("ref.vector.field", { OFTString, OFTInteger, OFTInteger64 });
     SetListViewSingleSelectionMode("ref.vector.field", true);
 
     AddParameter(ParameterType_Int, "ref.raster.nodata", "Value for nodata pixels in the reference raster");
@@ -187,6 +188,7 @@ private:
 
       ClearChoices("ref.vector.field");
 
+      FieldParameter::TypeFilterType typeFilter = GetTypeFilter("ref.vector.field");
       for (int iField = 0; iField < feature.ogr().GetFieldCount(); iField++)
       {
         std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
@@ -196,11 +198,13 @@ private:
 
         OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
 
-        if (fieldType == OFTString || fieldType == OFTInteger || fieldType == OFTInteger64)
-        {
-          std::string tmpKey = "ref.vector.field." + key.substr(0, end - key.begin());
-          AddChoice(tmpKey, item);
-        }
+        for (auto type : typeFilter)
+          if (fieldType == type)
+          {
+              std::string tmpKey = "ref.vector.field." + key.substr(0, end - key.begin());
+              AddChoice(tmpKey, item);
+              break;
+          }
       }
     }
   }
