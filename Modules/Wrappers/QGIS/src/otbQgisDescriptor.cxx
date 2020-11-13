@@ -261,7 +261,7 @@ int main(int argc, char* argv[])
       for (auto k : key_list)
         values += k + ";";
 
-      if (values.size())
+      if (!values.empty())
         values.pop_back();
 
       dFile << "|" << values;
