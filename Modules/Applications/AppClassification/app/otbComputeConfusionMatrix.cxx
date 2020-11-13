@@ -198,13 +198,11 @@ private:
 
         OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
 
-        for (auto type : typeFilter)
-          if (fieldType == type)
-          {
-              std::string tmpKey = "ref.vector.field." + key.substr(0, end - key.begin());
-              AddChoice(tmpKey, item);
-              break;
-          }
+        if (std::find(typeFilter.begin(), typeFilter.end(), fieldType) != std::end(typeFilter))
+        {
+          std::string tmpKey = "ref.vector.field." + key.substr(0, end - key.begin());
+          AddChoice(tmpKey, item);
+        }
       }
     }
   }
