@@ -26,6 +26,7 @@
 #include "otbWrapperTypes.h"
 #include "otbWrapperTags.h"
 #include "otbWrapperParameterGroup.h"
+#include "otbWrapperFieldParameter.h"
 
 #include "otbLogger.h"
 #include "otbStopwatch.h"
@@ -568,6 +569,20 @@ public:
    * \in vectorData vector data name
    */
   void SetVectorData(std::string const& key, std::string const& vectorData );
+
+  /**
+   * Set list of allowed field types for a FieldParameter
+   * \in key The parameter key (must be a FieldParameter)
+   * \in typeFilter List of allowed types
+   */
+  void SetTypeFilter(std::string const& key, FieldParameter::TypeFilterType const& typeFilter );
+
+  /**
+   * Get list of allowed field types for a FieldParameter
+   * \in key The parameter key (must be a FieldParameter)
+   * \return List of allowed types
+   */
+  const FieldParameter::TypeFilterType& GetTypeFilter(std::string const& key );
 
   /**
    * Set raster data name from which we choose the bands for a BandParameter
