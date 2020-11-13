@@ -58,9 +58,9 @@ public:
   }
 
   /** Set vector data name from which we choose the fields */
-  void SetVectorData(const std::string& vectorData)
+  void SetVectorData(std::string vectorData)
   {
-    m_VectorData = vectorData;
+    m_VectorData = std::move(vectorData);
   }
 
   /** Get vector data name from which we choose the fields */
@@ -70,9 +70,9 @@ public:
   }
 
   /** Set list of allowed field types */
-  void SetTypeFilter(const TypeFilterType& typeFilter)
+  void SetTypeFilter(TypeFilterType typeFilter)
   {
-    m_TypeFilter = typeFilter;
+    m_TypeFilter = std::move(typeFilter);
   }
 
   /** Get list of allowed field types */
@@ -83,14 +83,10 @@ public:
 
 protected:
   /** Constructor */
-  FieldParameter()
-  {
-  }
+  FieldParameter() = default;
 
   /** Destructor */
-  ~FieldParameter() override
-  {
-  }
+  ~FieldParameter() override = default;
 
   std::string m_VectorData;
   TypeFilterType m_TypeFilter;

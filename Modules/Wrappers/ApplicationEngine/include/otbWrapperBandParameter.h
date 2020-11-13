@@ -56,9 +56,9 @@ public:
   }
 
   /** Set raster data name from which we choose the fields */
-  void SetRasterData(const std::string& rasterData)
+  void SetRasterData(std::string rasterData)
   {
-    m_RasterData = rasterData;
+    m_RasterData = std::move(rasterData);
   }
 
   /** Get raster data name from which we choose the fields */
@@ -69,14 +69,10 @@ public:
 
 protected:
   /** Constructor */
-  BandParameter()
-  {
-  }
+  BandParameter() = default;
 
   /** Destructor */
-  ~BandParameter() override
-  {
-  }
+  ~BandParameter() override = default;
 
   std::string m_RasterData;
 
