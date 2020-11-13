@@ -118,8 +118,8 @@ struct OTBMetadata_EXPORT RPCParam
 {
   // Constructors
   RPCParam() = default;
-  RPCParam( const RPCParam & ); // CopyConstructible required for boost::any
-  RPCParam& operator=(RPCParam); //CopyAssignment optional for boost::any
+  RPCParam(const RPCParam &) = default; // CopyConstructible required for boost::any
+  RPCParam& operator=(RPCParam &) = default; //CopyAssignment optional for boost::any
 
   // Offsets
   double LineOffset = 0.0;
