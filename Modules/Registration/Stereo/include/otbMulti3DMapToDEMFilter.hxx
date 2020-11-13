@@ -175,7 +175,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::SetOutputPara
     T3DImage* imgPtr = const_cast<T3DImage*>(this->Get3DMapInput(k));
 
     RSTransform2DType::Pointer mapToGroundTransform = RSTransform2DType::New();
-    mapToGroundTransform->SetInputImageMetadata(imgPtr->GetImageMetadata());
+    mapToGroundTransform->SetInputImageMetadata(&(imgPtr->GetImageMetadata()));
 
     /*if(!m_ProjectionRef.empty())
      {
@@ -389,7 +389,7 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateInput
     // groundToSensorTransform->SetInputSpacing(outputDEM->GetSignedSpacing());
     groundToSensorTransform->SetInputProjectionRef(m_ProjectionRef);
 
-    groundToSensorTransform->SetOutputImageMetadata(imgPtr->GetImageMetadata());
+    groundToSensorTransform->SetOutputImageMetadata(&(imgPtr->GetImageMetadata()));
     groundToSensorTransform->SetOutputOrigin(imgPtr->GetOrigin());
     groundToSensorTransform->SetOutputSpacing(imgPtr->GetSignedSpacing());
     groundToSensorTransform->InstantiateTransform();

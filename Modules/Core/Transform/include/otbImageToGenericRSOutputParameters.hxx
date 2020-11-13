@@ -73,7 +73,7 @@ void ImageToGenericRSOutputParameters<TImage>::Compute()
 template <class TImage>
 void ImageToGenericRSOutputParameters<TImage>::UpdateTransform()
 {
-  m_Transform->SetOutputImageMetadata(this->GetInput()->GetImageMetadata());
+  m_Transform->SetOutputImageMetadata(&(this->GetInput()->GetImageMetadata()));
   m_Transform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef());
   m_Transform->InstantiateTransform();
 }

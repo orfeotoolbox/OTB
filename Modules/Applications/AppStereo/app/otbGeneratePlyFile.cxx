@@ -165,7 +165,7 @@ private:
     }
 
     rsTransform->SetOutputProjectionRef(colorPtr->GetProjectionRef());
-    rsTransform->SetOutputImageMetadata(colorPtr->GetImageMetadata());
+    rsTransform->SetOutputImageMetadata(&(colorPtr->GetImageMetadata()));
     rsTransform->InstantiateTransform();
     toMap->InstantiateTransform();
 

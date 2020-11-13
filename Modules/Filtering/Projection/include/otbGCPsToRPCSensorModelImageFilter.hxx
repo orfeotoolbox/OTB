@@ -219,7 +219,7 @@ void GCPsToRPCSensorModelImageFilter<TImage>::ComputeErrors()
   typedef GenericRSTransform<double, 3, 3> RSTransformType;
 
   RSTransformType::Pointer rsTransform = RSTransformType::New();
-  rsTransform->SetInputImageMetadata(this->GetOutput()->GetImageMetadata());
+  rsTransform->SetInputImageMetadata(&(this->GetOutput()->GetImageMetadata()));
   rsTransform->InstantiateTransform();
 
   ContinuousIndexType   idFix, idOut;

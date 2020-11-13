@@ -84,7 +84,7 @@ void ImageToOSMVectorDataGenerator<TImage>::EstimateImageExtent()
   // Local generic RS Transform to project the 4 corners to WGS84
   typedef otb::GenericRSTransform<> TransformType;
   typename TransformType::Pointer   transform = TransformType::New();
-  transform->SetInputImageMetadata(input->GetImageMetadata());
+  transform->SetInputImageMetadata(&(input->GetImageMetadata()));
   transform->SetInputProjectionRef(input->GetProjectionRef());
   transform->SetOutputProjectionRef(otb::SpatialReference::FromWGS84().ToWkt());
   transform->InstantiateTransform();

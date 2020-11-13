@@ -243,10 +243,10 @@ private:
       m_Resampler->SetDisplacementFieldSpacing(defSpacing);
 
       // Setup transform through projRef and ImageMetadata
-      m_Resampler->SetInputImageMetadata(movingImage->GetImageMetadata());
+      m_Resampler->SetInputImageMetadata(&(movingImage->GetImageMetadata()));
       m_Resampler->SetInputProjectionRef(movingImage->GetProjectionRef());
 
-      m_Resampler->SetOutputImageMetadata(refImage->GetImageMetadata());
+      m_Resampler->SetOutputImageMetadata(&(refImage->GetImageMetadata()));
       m_Resampler->SetOutputProjectionRef(refImage->GetProjectionRef());
 
       m_Resampler->SetInput(movingImage);

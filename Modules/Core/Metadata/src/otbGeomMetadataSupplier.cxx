@@ -123,9 +123,10 @@ bool GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
     coeff = this->GetAs<double>(path.str());
   }
 
-  boost::any any_rpcStruct = rpcStruct;
-  imd.Add(MDGeom::RPC, std::move(any_rpcStruct));
-  auto toto = imd[MDGeom::RPC];
+  boost::any to_append = rpcStruct;
+  imd.Add(MDGeom::RPC, to_append);
+  assert(imd.Has(MDGeom::RPC));
+  assert(rpcStruct == boost::any_cast<Projection::RPCParam>(imd[MDGeom::RPC]));
   return true;
 }
 

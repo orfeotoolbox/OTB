@@ -128,7 +128,7 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::EstimateOutputRpcM
   m_OutputRpcEstimator->UpdateOutputInformation();
 
   // Fill the transform with the right metadata
-  m_Transform->SetInputImageMetadata(m_OutputRpcEstimator->GetOutput()->GetImageMetadata());
+  m_Transform->SetInputImageMetadata(&(m_OutputRpcEstimator->GetOutput()->GetImageMetadata()));
 }
 
 /**
@@ -140,7 +140,7 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::UpdateTransform()
 {
   if (!m_EstimateInputRpcModel)
   {
-    m_Transform->SetOutputImageMetadata(this->GetInput()->GetImageMetadata());
+    m_Transform->SetOutputImageMetadata(&(this->GetInput()->GetImageMetadata()));
     m_Transform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef());
   }
   m_Transform->InstantiateTransform();
@@ -177,7 +177,7 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::EstimateInputRpcMo
   m_InputRpcEstimator->UpdateOutputInformation();
 
   // setup the transform with the estimated RPC model
-  m_Transform->SetOutputImageMetadata(m_InputRpcEstimator->GetOutput()->GetImageMetadata());
+  m_Transform->SetOutputImageMetadata(&(m_InputRpcEstimator->GetOutput()->GetImageMetadata()));
 
   // Update the flag for input rpcEstimation in order to not compute
   // the rpc model for each stream

@@ -494,7 +494,6 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     GeomMetadataSupplier geomSupplier(attachedGeom);
     UpdateImdWithImiAndMds(imd, &geomSupplier);
     geomSupplier.FetchRPC(imd);
-    auto toto = imd[MDGeom::RPC];
   }
   // Case 3: tags in file
   else

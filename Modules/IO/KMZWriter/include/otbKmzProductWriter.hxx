@@ -415,7 +415,7 @@ void KmzProductWriter<TInputImage>::Tiling()
         /** TODO : Generate KML for this tile */
         // Search Lat/Lon box
         m_Transform = TransformType::New();
-        m_Transform->SetInputImageMetadata(m_ResampleVectorImage->GetImageMetadata());
+        m_Transform->SetInputImageMetadata(&(m_ResampleVectorImage->GetImageMetadata()));
         m_Transform->SetInputProjectionRef(m_VectorImage->GetProjectionRef());
         m_Transform->SetOutputProjectionRef(wgsRef);
         m_Transform->InstantiateTransform();

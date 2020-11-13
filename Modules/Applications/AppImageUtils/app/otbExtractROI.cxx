@@ -421,7 +421,7 @@ private:
     {
       RSTransformType::Pointer rsTransform = RSTransformType::New();
       ImageType*               inImage     = GetParameterImage("in");
-      rsTransform->SetOutputImageMetadata(inImage->GetImageMetadata());
+      rsTransform->SetOutputImageMetadata(&(inImage->GetImageMetadata()));
       rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());
       rsTransform->InstantiateTransform();
       itk::Point<float, 2> ulp_in, lrp_in, ulp_out, lrp_out;
@@ -480,7 +480,7 @@ private:
     else // if ( GetParameterString( "mode.extent.unit" ) == "lonlat" )
     {
       RSTransformType::Pointer rsTransform = RSTransformType::New();
-      rsTransform->SetInputImageMetadata(input->GetImageMetadata());
+      rsTransform->SetInputImageMetadata(&(input->GetImageMetadata()));
       rsTransform->SetInputProjectionRef(input->GetProjectionRef());
       rsTransform->InstantiateTransform();
       itk::Point<float, 2> ulp_in, lrp_in, ulp_out, lrp_out;
@@ -538,7 +538,7 @@ private:
       {
         RSTransformType::Pointer rsTransform = RSTransformType::New();
         ImageType*               inImage     = GetParameterImage("in");
-        rsTransform->SetOutputImageMetadata(inImage->GetImageMetadata());
+        rsTransform->SetOutputImageMetadata(&(inImage->GetImageMetadata()));
         rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());
         rsTransform->InstantiateTransform();
         itk::Point<float, 2> centerp_in, centerp_out;
@@ -580,7 +580,7 @@ private:
       else // if ( GetParameterString( "mode.radius.unitc" ) == "lon/lat" )
       {
         RSTransformType::Pointer rsTransform = RSTransformType::New();
-        rsTransform->SetOutputImageMetadata(inImage->GetImageMetadata());
+        rsTransform->SetOutputImageMetadata(&(inImage->GetImageMetadata()));
         rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());
         rsTransform->InstantiateTransform();
         itk::Point<float, 2> centerp_in;
@@ -653,7 +653,7 @@ private:
     else // if ( GetParameterString("mode.radius.unitc") == "lonlat" )
     {
       RSTransformType::Pointer rsTransform = RSTransformType::New();
-      rsTransform->SetInputImageMetadata(input->GetImageMetadata());
+      rsTransform->SetInputImageMetadata(&(input->GetImageMetadata()));
       rsTransform->SetInputProjectionRef(input->GetProjectionRef());
       rsTransform->InstantiateTransform();
       itk::Point<float, 2> centerp_in, centerp_out;
@@ -718,7 +718,7 @@ private:
         }
         RSTransformType::Pointer rsTransform = RSTransformType::New();
         rsTransform->SetInputProjectionRef(inputProjectionRef);
-        rsTransform->SetOutputImageMetadata(inImage->GetImageMetadata());
+        rsTransform->SetOutputImageMetadata(&(inImage->GetImageMetadata()));
         rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());
         rsTransform->InstantiateTransform();
         itk::Point<float, 2> ulp_in, urp_in, llp_in, lrp_in;
@@ -762,9 +762,9 @@ private:
 
 
         RSTransformType::Pointer rsTransform = RSTransformType::New();
-        rsTransform->SetInputImageMetadata(referencePtr->GetImageMetadata());
+        rsTransform->SetInputImageMetadata(&(referencePtr->GetImageMetadata()));
         rsTransform->SetInputProjectionRef(referencePtr->GetProjectionRef());
-        rsTransform->SetOutputImageMetadata(inImage->GetImageMetadata());
+        rsTransform->SetOutputImageMetadata(&(inImage->GetImageMetadata()));
         rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());
         rsTransform->InstantiateTransform();
 

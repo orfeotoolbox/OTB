@@ -116,7 +116,7 @@ GroundSpacingImageFunction<TInputImage, TCoordRep>::GetPixelLocation(const Index
   }
 
   TransformType::Pointer         transform = TransformType::New();
-  transform->SetOutputImageMetadata(this->GetInputImage()->GetImageMetadata());
+  transform->SetOutputImageMetadata(&(this->GetInputImage()->GetImageMetadata()));
   transform->SetInputOrigin(this->GetInputImage()->GetOrigin());
   transform->SetInputSpacing(this->GetInputImage()->GetSignedSpacing());
 

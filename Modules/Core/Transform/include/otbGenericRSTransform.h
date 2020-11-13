@@ -113,12 +113,6 @@ public:
     this->Modified();
   }
 
-  void SetInputImageMetadata(const ImageMetadata imd)
-  {
-    m_InputImd = &imd;
-    this->Modified();
-  }
-
   const ImageMetadata* GetOutputImageMetadata() const
   {
     return m_OutputImd;
@@ -127,12 +121,6 @@ public:
   void SetOutputImageMetadata(const ImageMetadata* imd)
   {
     m_OutputImd = imd;
-    this->Modified();
-  }
-
-  void SetOutputImageMetadata(const ImageMetadata imd)
-  {
-    m_OutputImd = &imd;
     this->Modified();
   }
 

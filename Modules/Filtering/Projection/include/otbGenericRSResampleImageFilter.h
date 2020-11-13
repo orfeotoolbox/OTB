@@ -168,13 +168,7 @@ public:
 
   /** Set/Get Input ImageMetadata
    */
-  void SetInputImageMetadata(ImageMetadata* imd)
-  {
-    m_Transform->SetOutputImageMetadata(imd);
-    this->Modified();
-  }
-
-  void SetInputImageMetadata(ImageMetadata imd)
+  void SetInputImageMetadata(const ImageMetadata* imd)
   {
     m_Transform->SetOutputImageMetadata(imd);
     this->Modified();
@@ -187,13 +181,7 @@ public:
 
   /** Set/Get Output ImageMetadata
    */
-  void SetOutputImageMetadata(ImageMetadata* imd)
-  {
-    m_Transform->SetInputImageMetadata(imd);
-    this->Modified();
-  }
-
-  void SetOutputImageMetadata(ImageMetadata imd)
+  void SetOutputImageMetadata(const ImageMetadata* imd)
   {
     m_Transform->SetInputImageMetadata(imd);
     this->Modified();

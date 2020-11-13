@@ -1134,13 +1134,13 @@ void GlImageActor::UpdateTransforms()
     //TODO OSSIM: Replace KeywordList by ImageMetadata in the settings object
     //m_ViewportToImageTransform->SetInputKeywordList(settings->GetKeywordList());
     m_ViewportToImageTransform->SetOutputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
-    m_ViewportToImageTransform->SetOutputImageMetadata(m_FileReader->GetOutput()->GetImageMetadata());
+    m_ViewportToImageTransform->SetOutputImageMetadata(&(m_FileReader->GetOutput()->GetImageMetadata()));
 
     m_ImageToViewportTransform->SetOutputProjectionRef(settings->GetWkt());
     //TODO OSSIM: Replace KeywordList by ImageMetadata in the settings object
     //m_ImageToViewportTransform->SetOutputKeywordList(settings->GetKeywordList());
     m_ImageToViewportTransform->SetInputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
-    m_ImageToViewportTransform->SetInputImageMetadata(m_FileReader->GetOutput()->GetImageMetadata());
+    m_ImageToViewportTransform->SetInputImageMetadata(&(m_FileReader->GetOutput()->GetImageMetadata()));
 
     hasChanged = true;
     }

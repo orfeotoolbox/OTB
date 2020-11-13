@@ -146,8 +146,8 @@ void StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>::GenerateInp
 
   // Build the transform to switch from the master to the slave image
   typename GenericRSTransformType::Pointer transform = GenericRSTransformType::New();
-  transform->SetInputImageMetadata(masterPtr->GetImageMetadata());
-  transform->SetOutputImageMetadata(slavePtr->GetImageMetadata());
+  transform->SetInputImageMetadata(&(masterPtr->GetImageMetadata()));
+  transform->SetOutputImageMetadata(&(slavePtr->GetImageMetadata()));
 
   transform->InstantiateTransform();
 
@@ -266,7 +266,7 @@ void StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>::BeforeThrea
   OutputImageType* outputPtr = this->GetOutput();
 
   typename GenericRSTransformType::Pointer rsTransform = GenericRSTransformType::New();
-  rsTransform->SetInputImageMetadata(outputPtr->GetImageMetadata());
+  rsTransform->SetInputImageMetadata(&(outputPtr->GetImageMetadata()));
   rsTransform->InstantiateTransform();
 
   // Fill output
@@ -288,8 +288,8 @@ void StereoSensorModelToElevationFilter<TInputImage, TOutputHeight>::BeforeThrea
 
   // Set-up the forward-inverse sensor model transform
   m_MasterToSlave = GenericRSTransform3DType::New();
-  m_MasterToSlave->SetInputImageMetadata(masterPtr->GetImageMetadata());
-  m_MasterToSlave->SetOutputImageMetadata(slavePtr->GetImageMetadata());
+  m_MasterToSlave->SetInputImageMetadata(&(masterPtr->GetImageMetadata()));
+  m_MasterToSlave->SetOutputImageMetadata(&(slavePtr->GetImageMetadata()));
   m_MasterToSlave->InstantiateTransform();
 }
 
