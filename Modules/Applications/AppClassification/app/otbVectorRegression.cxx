@@ -74,6 +74,7 @@ void VectorRegression::DoInitSpecialization()
                           "List of field names in the input vector data used as features for training. "
                           "Put the same field names as the TrainVectorRegression application.");
   SetVectorData("feat", "in");
+  SetTypeFilter("feat", {OFTInteger, OFTInteger64, OFTReal});
 
   AddParameter(ParameterType_OutputFilename, "out", "Output vector data file");
   MandatoryOff("out");

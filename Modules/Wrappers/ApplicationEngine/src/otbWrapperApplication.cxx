@@ -1367,6 +1367,18 @@ void Application::SetVectorData(std::string const& key, std::string const& vecto
   param->SetVectorData(vectorData);
 }
 
+void Application::SetTypeFilter(std::string const& key, FieldParameter::TypeFilterType const& typeFilter )
+{
+  auto param = downcast_check<FieldParameter>(GetParameterByKey(key));
+  param->SetTypeFilter(typeFilter);
+}
+
+const FieldParameter::TypeFilterType& Application::GetTypeFilter(std::string const& key )
+{
+  auto param = downcast_check<FieldParameter>(GetParameterByKey(key));
+  return param->GetTypeFilter();
+}
+
 void Application::SetRasterData(std::string const& key, std::string const& rasterData )
 {
   auto param = downcast_check<BandParameter>(GetParameterByKey(key));
