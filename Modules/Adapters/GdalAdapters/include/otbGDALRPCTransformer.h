@@ -22,12 +22,7 @@
 
 #include "OTBGdalAdaptersExport.h"
 #include "itkPoint.h"
-
-#include <memory>
-#include <string>
-
 #include "gdal_alg.h"
-#include "cpl_string.h"
 
 namespace otb
 {
@@ -66,8 +61,8 @@ public:
    *
    */
   GDALRPCTransformer(double LineOffset, double SampleOffset, double LatOffset, double LonOffset, double HeightOffset,
-	                 double LineScale, double SampleScale, double LatScale, double LonScale, double HeightScale,
-					 const double LineNum[20], const double LineDen[20], const double SampleNum[20], const double SampleDen[20]);
+		     double LineScale, double SampleScale, double LatScale, double LonScale, double HeightScale,
+		     const double (&LineNum)[20], const double (&LineDen)[20], const double (&SampleNum)[20], const double (&SampleDen)[20]);
 
   /**
    * Set additional options to the transformer

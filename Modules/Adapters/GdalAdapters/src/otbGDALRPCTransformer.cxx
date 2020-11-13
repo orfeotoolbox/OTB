@@ -20,12 +20,13 @@
 
 #include "otbGDALRPCTransformer.h"
 #include <assert.h>
+#include "cpl_string.h"
 
 namespace otb
 {
 GDALRPCTransformer::GDALRPCTransformer(double LineOffset, double SampleOffset, double LatOffset, double LonOffset, double HeightOffset,
-		double LineScale, double SampleScale, double LatScale, double LonScale, double HeightScale,
-		const double LineNum[20], const double LineDen[20], const double SampleNum[20], const double SampleDen[20])
+				       double LineScale, double SampleScale, double LatScale, double LonScale, double HeightScale,
+				       const double (&LineNum)[20], const double (&LineDen)[20], const double (&SampleNum)[20], const double (&SampleDen)[20])
 {
   // Offsets
   this->m_GDALRPCInfo.dfLINE_OFF = LineOffset;
@@ -40,13 +41,10 @@ GDALRPCTransformer::GDALRPCTransformer(double LineOffset, double SampleOffset, d
   this->m_GDALRPCInfo.dfLONG_SCALE = LonScale;
   this->m_GDALRPCInfo.dfHEIGHT_SCALE = HeightScale;
   // Coefficients
-  for (unsigned int i = 0 ; i < 20 ; ++i)
-  {
-    this->m_GDALRPCInfo.adfLINE_NUM_COEFF[i] = LineNum[i];
-    this->m_GDALRPCInfo.adfLINE_DEN_COEFF[i] = LineDen[i];
-    this->m_GDALRPCInfo.adfSAMP_NUM_COEFF[i] = SampleNum[i];
-    this->m_GDALRPCInfo.adfSAMP_DEN_COEFF[i] = SampleDen[i];
-  }
+  std::copy_n(LineNum, 20, this->m_GDALRPCInfo.adfLINE_NUM_COEFF);
+  std::copy_n(LineDen, 20, this->m_GDALRPCInfo.adfLINE_DEN_COEFF);
+  std::copy_n(SampleNum, 20, this->m_GDALRPCInfo.adfSAMP_NUM_COEFF);
+  std::copy_n(SampleDen, 20, this->m_GDALRPCInfo.adfSAMP_DEN_COEFF);
 }
 
 void GDALRPCTransformer::SetOption(const std::string& Name, const std::string& Value)
