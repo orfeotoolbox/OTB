@@ -160,6 +160,7 @@ void LearningApplicationBase<TInputValue, TOutputValue>::TrainLibSVM(typename Li
     libSVMClassifier->SetKernelType(POLY);
     libSVMClassifier->SetKernelGamma(GetParameterFloat("classifier.libsvm.gamma"));
     libSVMClassifier->SetKernelCoef0(GetParameterFloat("classifier.libsvm.coef0"));
+    libSVMClassifier->SetPolynomialKernelDegree(GetParameterInt("classifier.libsvm.degree"));
     break;
   case 3: // SIGMOID
     libSVMClassifier->SetKernelType(SIGMOID);
