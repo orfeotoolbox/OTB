@@ -93,6 +93,20 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitLibSVMParams()
                           "SVM models have a cost parameter C (1 by default) to control the "
                           "trade-off between training errors and forcing rigid margins.");
 
+  AddParameter(ParameterType_Float, "classifier.libsvm.gamma", "Gamma parameter");
+  SetParameterFloat("classifier.libsvm.gamma", 1.0);
+  SetMinimumParameterFloatValue("classifier.libsvm.gamma", 0.0);
+  SetParameterDescription("classifier.libsvm.gamma", "Set gamma parameter in poly/rbf/sigmoid kernel function");
+
+  AddParameter(ParameterType_Float, "classifier.libsvm.coef0", "Coefficient parameter");
+  SetParameterFloat("classifier.libsvm.coef0", 0.0);
+  SetParameterDescription("classifier.libsvm.coef0", "Set coef0 parameter in poly/sigmoid kernel function");
+
+  AddParameter(ParameterType_Int, "classifier.libsvm.degree", "Degree parameter");
+  SetParameterInt("classifier.libsvm.degree", 3);
+  SetMinimumParameterIntValue("classifier.libsvm.degree", 1);
+  SetParameterDescription("classifier.libsvm.degree", "Set polynomial degree in poly kernel function");
+
   AddParameter(ParameterType_Float, "classifier.libsvm.nu", "Cost parameter Nu");
   SetParameterFloat("classifier.libsvm.nu", 0.5);
   SetParameterDescription("classifier.libsvm.nu",
@@ -140,12 +154,18 @@ void LearningApplicationBase<TInputValue, TOutputValue>::TrainLibSVM(typename Li
     break;
   case 1: // RBF
     libSVMClassifier->SetKernelType(RBF);
+    libSVMClassifier->SetKernelGamma(GetParameterFloat("classifier.libsvm.gamma"));
     break;
   case 2: // POLY
     libSVMClassifier->SetKernelType(POLY);
+    libSVMClassifier->SetKernelGamma(GetParameterFloat("classifier.libsvm.gamma"));
+    libSVMClassifier->SetKernelCoef0(GetParameterFloat("classifier.libsvm.coef0"));
+    libSVMClassifier->SetPolynomialKernelDegree(GetParameterInt("classifier.libsvm.degree"));
     break;
   case 3: // SIGMOID
     libSVMClassifier->SetKernelType(SIGMOID);
+    libSVMClassifier->SetKernelGamma(GetParameterFloat("classifier.libsvm.gamma"));
+    libSVMClassifier->SetKernelCoef0(GetParameterFloat("classifier.libsvm.coef0"));
     break;
   default: // DEFAULT = LINEAR
     libSVMClassifier->SetKernelType(LINEAR);
