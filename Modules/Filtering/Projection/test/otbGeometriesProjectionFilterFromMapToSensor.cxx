@@ -61,7 +61,7 @@ int otbGeometriesProjectionFilterFromMapToSensor(int argc, char* argv[])
   GeometriesFilterType::Pointer           filter = GeometriesFilterType::New();
   filter->SetInput(in_set);
   filter->SetOutput(out_set);
-  filter->SetOutputImageMetadata(imageReader->GetOutput()->GetImageMetadata());
+  filter->SetOutputImageMetadata(&(imageReader->GetOutput()->GetImageMetadata()));
   filter->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
   filter->SetOutputSpacing(imageReader->GetOutput()->GetSignedSpacing());
 

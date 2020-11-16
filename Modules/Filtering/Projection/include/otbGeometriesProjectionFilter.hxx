@@ -79,28 +79,4 @@ inline void otb::GeometriesProjectionFilter::SetOutputOrigin(ImageReference::Ori
   m_OutputImageReference.SetOrigin(origin);
 }
 
-inline void otb::GeometriesProjectionFilter::SetInputImageMetadata(ImageMetadata* imd)
-{
-  this->m_InputImageMetadata = imd;
-  this->Modified();
-}
-
-inline void otb::GeometriesProjectionFilter::SetInputImageMetadata(ImageMetadata imd)
-{
-  this->m_InputImageMetadata = &imd;
-  this->Modified();
-}
-
-inline void otb::GeometriesProjectionFilter::SetOutputImageMetadata(ImageMetadata* imd)
-{
-  this->m_OutputImageMetadata = imd;
-  this->Modified();
-}
-
-inline void otb::GeometriesProjectionFilter::SetOutputImageMetadata(ImageMetadata imd)
-{
-  this->m_OutputImageMetadata = &imd;
-  this->Modified();
-}
-
 #endif

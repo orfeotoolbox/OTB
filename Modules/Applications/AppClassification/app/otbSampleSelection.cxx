@@ -375,7 +375,7 @@ private:
       geometriesProjFilter->SetInput(inputGeomSet);
       if (imageProjectionRef.empty())
       {
-        geometriesProjFilter->SetOutputImageMetadata(inputImg->GetImageMetadata());
+        geometriesProjFilter->SetOutputImageMetadata(&(inputImg->GetImageMetadata()));
       }
       geometriesProjFilter->SetOutputProjectionRef(imageProjectionRef);
       geometriesProjFilter->SetOutput(outputGeomSet);

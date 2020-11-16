@@ -134,7 +134,7 @@ private:
     if (HasValue("in.kwl"))
     {
       FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in.kwl");
-      m_GeometriesProjFilter->SetInputImageMetadata(inImage->GetImageMetadata());
+      m_GeometriesProjFilter->SetInputImageMetadata(&(inImage->GetImageMetadata()));
       // otbAppLogINFO(<<"kwl."<<std::endl);
     }
 
@@ -147,7 +147,7 @@ private:
         m_OutputProjectionRef = outImage->GetProjectionRef(); // ~ wkt
         if (m_OutputProjectionRef.empty())
         {
-          m_GeometriesProjFilter->SetOutputImageMetadata(outImage->GetImageMetadata());
+          m_GeometriesProjFilter->SetOutputImageMetadata(&(outImage->GetImageMetadata()));
         }
       }
       else

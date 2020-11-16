@@ -256,13 +256,25 @@ public:
 
   /**\name ImageMetadata accessors and mutators */
   //@{
-  itkGetMacro(InputImageMetadata, ImageMetadata*);
-  void SetInputImageMetadata(ImageMetadata* imd);
-  void SetInputImageMetadata(ImageMetadata imd);
+  const ImageMetadata* GetInputImageMetadata() const
+  {
+    return m_InputImageMetadata;
+  }
+  void SetInputImageMetadata(const ImageMetadata* imd)
+  {
+    m_InputImageMetadata = imd;
+    this->Modified();
+  }
 
-  itkGetMacro(OutputImageMetadata, ImageMetadata*);
-  void SetOutputImageMetadata(ImageMetadata* imd);
-  void SetOutputImageMetadata(ImageMetadata imd);
+  const ImageMetadata* GetOutputImageMetadata() const
+  {
+    return m_OutputImageMetadata;
+  }
+  void SetOutputImageMetadata(const ImageMetadata* imd)
+    {
+      m_OutputImageMetadata = imd;
+      this->Modified();
+    }
   //@}
 
   /**\name Projection references accessors and mutators
@@ -300,8 +312,8 @@ private:
   //@}
 
   std::string      m_OutputProjectionRef; // in WKT format!
-  ImageMetadata*   m_InputImageMetadata = nullptr;
-  ImageMetadata*   m_OutputImageMetadata = nullptr;
+  const ImageMetadata*   m_InputImageMetadata = nullptr;
+  const ImageMetadata*   m_OutputImageMetadata = nullptr;
 };
 } // end namespace otb
 
