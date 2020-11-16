@@ -291,7 +291,7 @@ int main(int argc, char* argv[])
             << (filterType == STRING  ? "QgsProcessingParameterField.String" :
                 filterType == NUMERIC ? "QgsProcessingParameterField.Numeric" :
                 "QgsProcessingParameterField.Any")
-            << "|False";
+            << "|" << (f_param->GetSingleSelection() ? "False" : "True");
     }
     else if (type == ParameterType_Band)
     {
