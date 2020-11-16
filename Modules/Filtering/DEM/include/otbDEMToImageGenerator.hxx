@@ -65,7 +65,8 @@ void DEMToImageGenerator<TDEMImage>::GenerateOutputInformation()
 
   // Add the metadata set by the user to the output
   output->m_Imd.Add(MDGeom::ProjectionProj, m_Transform->GetInputProjectionRef());
-  output->m_Imd.Merge(*m_Transform->GetInputImageMetadata());
+  if (m_Transform->GetInputImageMetadata() != nullptr)
+    output->m_Imd.Merge(*m_Transform->GetInputImageMetadata());
 }
 
 // InstantiateTransform method

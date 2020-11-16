@@ -137,34 +137,12 @@ public:
     return m_Transform->GetInputProjectionRef();
   }
 
-  /** Set/Get Input Keywordlist
-   * \deprecated
-   */
-  void SetInputKeywordList(const ImageKeywordlist& kwl)
-  {
-  }
-  const ImageKeywordlist GetInputKeywordList()
-  {
-  }
-
-  /** Set/Get output Keywordlist
-   * \deprecated
-   */
-  void SetOutputKeywordList(const ImageKeywordlist& kwl)
-  {
-  }
-
-  const ImageKeywordlist GetOutputKeywordList()
-  {
-  }
-
   /** Set/Get ImageMetadata*/
   const ImageMetadata* GetInputImageMetadata() const
   {
     return m_Transform->GetInputImageMetadata();
   }
-
-  void SetInputImageMetadata(ImageMetadata* imd)
+  void SetInputImageMetadata(const ImageMetadata* imd)
   {
     m_Transform->SetInputImageMetadata(imd);
     this->Modified();
@@ -174,8 +152,7 @@ public:
   {
     return m_Transform->GetOutputImageMetadata();
   }
-
-  void SetOutputImageMetadata(ImageMetadata* imd)
+  void SetOutputImageMetadata(const ImageMetadata* imd)
   {
     m_Transform->SetOutputImageMetadata(imd);
     this->Modified();
@@ -190,7 +167,7 @@ public:
     // this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
     this->SetOutputSize(image->GetLargestPossibleRegion().GetSize());
     this->SetOutputProjectionRef(image->GetProjectionRef());
-    this->SetOutputKeywordList(image->GetImageKeywordlist());
+    this->SetOutputImageMetadata(&(image->GetImageMetadata()));
 
     InstantiateTransform();
   }

@@ -47,6 +47,12 @@ GDALRPCTransformer::GDALRPCTransformer(double LineOffset, double SampleOffset, d
   std::copy_n(SampleDen, 20, this->m_GDALRPCInfo.adfSAMP_DEN_COEFF);
 }
 
+GDALRPCTransformer::~GDALRPCTransformer()
+{
+  if(m_TransformArg != nullptr)
+    GDALDestroyTransformer(m_TransformArg);
+}
+
 void GDALRPCTransformer::SetOption(const std::string& Name, const std::string& Value)
 {
   this->m_Options = CSLSetNameValue(this->m_Options, Name.c_str(), Value.c_str());
@@ -61,6 +67,8 @@ void GDALRPCTransformer::SetPixErrThreshold(double PixErrThreshold)
 
 void GDALRPCTransformer::Update()
 {
+  if(m_TransformArg != nullptr)
+    GDALDestroyTransformer(m_TransformArg);
   this->m_TransformArg = GDALCreateRPCTransformer(&this->m_GDALRPCInfo, false, this->m_PixErrThreshold, this->m_Options);
   this->m_Modified = false;
 }
