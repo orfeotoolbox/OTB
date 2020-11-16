@@ -60,7 +60,7 @@ public:
    * If band >= 0, the metadata value is looked in the specified band*/
   virtual std::string GetMetadataValue(std::string const& path, bool& hasValue, int band=-1) const = 0;
 
-  bool HasValue(std::string const& path, int band=-1);
+  bool HasValue(std::string const& path, int band=-1) const;
 
   virtual int GetNbBands() const = 0;
 
