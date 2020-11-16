@@ -92,6 +92,40 @@ private:
     SetMinimumParameterIntValue("threshold.y.start", 0);
     SetMinimumParameterIntValue("threshold.y.end",   0);
 
+    AddParameter(ParameterType_Group, "roi", "ROI group");
+    SetParameterDescription("roi", "Contains index and size of ROI");
+
+    AddParameter(ParameterType_Int, "roi.startx", "X start index");
+    SetParameterDescription("roi.startx", "X position of ROI start (in pixels)");
+    SetDefaultParameterInt("roi.startx", 0);
+
+    AddParameter(ParameterType_Int, "roi.starty", "Y start index");
+    SetParameterDescription("roi.starty", "Y position of ROI start (in pixels)");
+    SetDefaultParameterInt("roi.starty", 0);
+
+    AddParameter(ParameterType_Int, "roi.sizex", "X size");
+    SetParameterDescription("roi.sizex", "X size of ROI (in pixels)");
+    SetDefaultParameterInt("roi.sizex", 0);
+
+    AddParameter(ParameterType_Int, "roi.sizey", "Y size");
+    SetParameterDescription("roi.sizey", "Y size of ROI (in pixels)");
+    SetDefaultParameterInt("roi.sizey", 0);
+
+    MandatoryOff("roi.startx");
+    MandatoryOff("roi.starty");
+    MandatoryOff("roi.sizex");
+    MandatoryOff("roi.sizey");
+
+    AddParameter(ParameterType_Choice, "mode", "Region mode");
+    AddChoice("mode.roi", "Pixel region with start and size");
+
+    AddChoice("mode.threshold", "Threshold for X, Y top and botton (DEPRECATED)");
+
+    AddParameter(ParameterType_Float, "val", "Padding value");
+    SetParameterDescription("val", "Value to insert in margins");
+    SetDefaultParameterFloat("val", 0.0);
+    MandatoryOff("val");
+
     AddRAMParameter();
 
     SetDocExampleParameterValue("in", "ResetMarginInput100x100.tiff");
@@ -107,26 +141,41 @@ private:
 
   void DoExecute() override
   {
-    auto const thrX = GetParameterInt("threshold.x");
-    auto const thrYtop = GetParameterInt("threshold.y.start");
-    auto const thrYbot = GetParameterInt("threshold.y.end");
-    if (thrX < 0)
-      itkExceptionMacro("The column threshold is expected to be positive");
-    if (thrYtop < 0)
-      itkExceptionMacro("The top line threshold is expected to be positive");
-    if (thrYbot < 0)
-      itkExceptionMacro("The bottom line threshold is expected to be positive");
-    if (thrX == 0 && thrYtop == 0 && thrYbot == 0)
-      itkExceptionMacro("Don't use ResetMargin to clamp nothing!");
+    FloatImageType* input = GetParameterFloatImage("in");
+    FloatImageType::RegionType region;
+    switch (GetParameterInt("mode"))
+      {
+      case 0: // roi
+        {
+        region.SetIndex({GetParameterInt("roi.startx"),GetParameterInt("roi.starty")});
+        region.SetSize({(unsigned long)GetParameterInt("roi.sizex"),(unsigned long)GetParameterInt("roi.sizey")});
+        break;
+        }
+      case 1: // threshold
+        {
+        region = input->GetLargestPossibleRegion();
+        FloatImageType::IndexType idx = region.GetIndex();
+        FloatImageType::SizeType sz = region.GetSize();
+        int thrX = GetParameterInt("threshold.x");
+        int thrYtop = GetParameterInt("threshold.y.start");
+        int thrYbot = GetParameterInt("threshold.y.end");
+        region.SetIndex(0, idx[0] + thrX);
+        region.SetSize(0,  std::max(0UL, sz[0] - 2 * thrX));
+        region.SetIndex(1, idx[1] + thrYtop);
+        region.SetSize(1, std::max(0UL, sz[1] - thrYtop - thrYbot));
+        break;
+        }
+      default:
+        {
+        otbAppLogFATAL("Unknown region mode: "<<GetParameterString("mode"));
+        break;
+        }
+      }
 
     auto filter = ResetMarginFilter<FloatImageType>::New();
-    assert(thrX >= 0);
-    assert(thrYtop >= 0);
-    assert(thrYbot >= 0);
-    filter->SetThresholdX(thrX);
-    filter->SetThresholdYtop(thrYtop);
-    filter->SetThresholdYbot(thrYbot);
-    filter->SetInput(GetParameterFloatImage("in"));
+    filter->SetROI(region);
+    filter->SetInput(input);
+    filter->SetPaddingValue(GetParameterFloat("val"));
 
     SetParameterOutputImage("out", filter->GetOutput());
     RegisterPipeline();
