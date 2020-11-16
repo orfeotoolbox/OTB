@@ -1857,7 +1857,7 @@ void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::
   }
   else
   {
-    itkExceptionMacro(<< "Invalid metadata, bad sensor id");
+    otbGenericExceptionMacro(MissingMetadataException, << "Invalid metadata, bad sensor id");
   }
 
   for (auto & band: m_Imd.Bands)
@@ -1865,7 +1865,7 @@ void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::
     auto gain = bandNameToPhysicalGain.find(band[MDStr::BandName]);
     if (gain ==  bandNameToPhysicalGain.end())
     {
-      itkExceptionMacro(<< "Cannot find the physical gain associated with " << band[MDStr::BandName]);
+      otbGenericExceptionMacro(MissingMetadataException, << "Cannot find the physical gain associated with " << band[MDStr::BandName]);
     }
     else
     {
@@ -1881,6 +1881,7 @@ void PleiadesImageMetadataInterface::FetchSolarIrradiance(const std::vector<doub
   std::unordered_map<std::string, double> defaultSolarIrradiance;
 
   const auto & sensorID = m_Imd[MDStr::SensorID];
+
   if (sensorID == "PHR 1A")
   {
     defaultSolarIrradiance =  { {"P", 1548.71},
@@ -1893,7 +1894,8 @@ void PleiadesImageMetadataInterface::FetchSolarIrradiance(const std::vector<doub
   }
   else
   {
-    itkExceptionMacro(<< "Invalid metadata, bad sensor id");
+    otbGenericExceptionMacro(MissingMetadataException,
+      << "Invalid metadata, bad sensor id")
   }
 
 
@@ -2215,24 +2217,41 @@ void PleiadesImageMetadataInterface::FetchSpectralSensitivity(const std::string 
 
 void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  bool hasValue = false;
-  auto metadatatype = mds.GetMetadataValue("METADATATYPE", hasValue);
-  auto dimapV1Filename = itksys::SystemTools::GetParentDirectory(mds.GetResourceFile()) + "/PHRDIMAP.XML";
+  //auto dimapV1Filename = itksys::SystemTools::GetParentDirectory(mds.GetResourceFile()) + "/PHRDIMAP.XML";
 
   DimapMetadataHelper helper;
 
-  helper.Parse(mds);
-  const auto & dimapData = helper.GetDimapData();
-
-  if (dimapData.mission == "PHR")
+  // Satellite ID is either PHR 1A or PHR 1B
+  // DimapV2 case
+  if (mds.GetAs<std::string>("", "IMAGERY/SATELLITEID").find("PHR") != std::string::npos)
   {
-    m_Imd.Add(MDStr::SensorID, dimapData.mission + " " +dimapData.missionIndex);
-    m_Imd.Add(MDStr::Mission, "Pléiades");
+    helper.ParseDimapV2(mds);
+
+    m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
+
+    // fill RPC model
+    if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
+    {
+      FetchRPC(mds);
+    }
+  }
+  // Geom case
+  else if (mds.GetAs<std::string>("", "support_data.sensorID").find("PHR") != std::string::npos)
+  {
+    helper.ParseGeom(mds);
+
+    m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
+
   }
   else
   {
-    otbGenericExceptionMacro(MissingMetadataException,<<"Sensor ID doesn't start with PHR : '"<<dimapData.mission<<"'")
+    otbGenericExceptionMacro(MissingMetadataException,<<"Sensor ID doesn't start with PHR")
   }
+
+  const auto & dimapData = helper.GetDimapData();
+
+  m_Imd.Add(MDStr::SensorID, dimapData.mission + " " +dimapData.missionIndex);
+  m_Imd.Add(MDStr::Mission, "Pléiades");
 
   if (dimapData.BandIDs.size() == m_Imd.Bands.size())
   {
@@ -2279,14 +2298,6 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
   {
     otbGenericExceptionMacro(MissingMetadataException,
       << "The number of bands in image metadatas is incoherent with the DIMAP product")
-  }
-
-  m_Imd.Add(MDStr::GeometricLevel, dimapData.ProcessingLevel);
-
-  // fill RPC model
-  if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
-  {
-    FetchRPC(mds);
   }
 }
 

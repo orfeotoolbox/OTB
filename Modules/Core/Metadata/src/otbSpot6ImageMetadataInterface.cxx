@@ -1698,7 +1698,7 @@ void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
   DimapMetadataHelper helper;
   
-  helper.Parse(mds);
+  helper.ParseDimapV2(mds);
   const auto & dimapData = helper.GetDimapData();
   
   if (dimapData.mission == "SPOT")

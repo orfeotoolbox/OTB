@@ -23,7 +23,7 @@
 namespace otb
 {
 
-bool MetadataSupplierInterface::HasValue(std::string const& path, int band)
+bool MetadataSupplierInterface::HasValue(std::string const& path, int band) const
 {
   bool hasValue;
   const std::string ret = GetMetadataValue(path, hasValue, band);

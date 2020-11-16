@@ -486,12 +486,14 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   {
     GeomMetadataSupplier geomSupplier(m_FilenameHelper->GetExtGEOMFileName());
     UpdateImdWithImiAndMds(imd, geomSupplier);
+    geomSupplier.FetchRPC(imd);
   }
   // Case 2: attached geom (if present)
   else if (!m_FilenameHelper->GetSkipGeom() && itksys::SystemTools::FileExists(attachedGeom))
   {
     GeomMetadataSupplier geomSupplier(attachedGeom);
     UpdateImdWithImiAndMds(imd, geomSupplier);
+    geomSupplier.FetchRPC(imd);
   }
   // Case 3: tags in file
   else

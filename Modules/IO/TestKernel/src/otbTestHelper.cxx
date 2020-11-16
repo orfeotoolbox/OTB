@@ -1723,7 +1723,7 @@ int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char
   errcount += CompareMetadataDict(baselineImageMetadata.ExtraKeys, 
                                     testImageMetadata.ExtraKeys,
                                     m_ReportErrors,
-									untestedExtra);
+                                    untestedExtra);
 
 
   if (baselineImageMetadata.Has(MDGeom::RPC))
@@ -1737,8 +1737,10 @@ int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char
       }
 
     }
-    if (!(boost::any_cast<Projection::RPCParam>(baselineImageMetadata[MDGeom::RPC]) 
-          == boost::any_cast<Projection::RPCParam>(testImageMetadata[MDGeom::RPC])))
+    //if (!(boost::any_cast<Projection::RPCParam>(baselineImageMetadata[MDGeom::RPC]) 
+    //      == boost::any_cast<Projection::RPCParam>(testImageMetadata[MDGeom::RPC])))
+    if (! ( boost::any_cast<Projection::RPCParam>(baselineImageMetadata[MDGeom::RPC]).Compare( 
+          boost::any_cast<Projection::RPCParam>(testImageMetadata[MDGeom::RPC]), compareDouble)))
     {
       errcount++;
       if (m_ReportErrors)

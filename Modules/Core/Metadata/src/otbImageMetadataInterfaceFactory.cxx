@@ -116,6 +116,7 @@ ImageMetadataInterfaceFactory
         {
         // silent catch of MissingMetadataException
         // just means that this IMI can't parse the file
+          std::cout << e.what() << std::endl;
         }
     }
     else

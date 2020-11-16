@@ -457,6 +457,7 @@ set(Sentinel1_filename LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043})
 
 set(spot5_2_geom_file ${INPUTDATA}/spot5/spot5-1.geom)
 set(formosat_geom_file ${INPUTDATA}/FORMOSAT_ROI_1000_100.geom)
+set(pleiades_geom_file ${INPUTDATA}/pleiades/maido.geom)
 
 foreach(sensor ${sensor_list})
 
@@ -465,7 +466,7 @@ otb_add_test(NAME ioTvImageMetadataInterfaceTest_${sensor} COMMAND otbMetadataTe
   --compare-ascii 0 
   ${BASELINE_FILES}/ioTvImageMetadataInterfaceTest_${sensor}.txt
   ${TEMP}/ioTvImageMetadataInterfaceTest_${sensor}.txt
-  --compare-metadata 0 
+  --compare-metadata ${EPSILON_9} 
   ${${sensor}_filename}
   ${${sensor}_filename}?&geom=${${sensor}_geom_file}
   otbImageMetadataInterfaceTest

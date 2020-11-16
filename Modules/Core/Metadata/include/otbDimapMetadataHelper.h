@@ -105,11 +105,28 @@ public:
                                   ( std::istream_iterator<double>() ) );
     };
 
-
     m_Data.mission = mds.GetAs<std::string>("sensor");
+    auto sensorName = mds.GetAs<std::string>("sensor");
+    std::vector<std::string> parts;
+    boost::split(parts, sensorName, boost::is_any_of(" "));
+    m_Data.mission = parts[0];
+    if (parts.size() > 1)
+    {
+      m_Data.missionIndex = parts[1];
+    }
     
     m_Data.ImageID = mds.GetAs<std::string>("support_data.image_id");
-    
+    m_Data.ProcessingLevel = mds.GetAs<std::string>("", "support_data.processing_level");
+
+    // Band name list might not be present in the dimap
+    auto bandNameListStr = mds.GetAs<std::string>("", "support_data.band_name_list");
+    if (!bandNameListStr.empty())
+    {
+      bandNameListStr.erase(std::remove(bandNameListStr.begin(), bandNameListStr.end(), '\"'), bandNameListStr.end());
+      boost::trim(bandNameListStr);
+      boost::split(m_Data.BandIDs, bandNameListStr, boost::is_any_of(" "));
+    }
+
     m_Data.ProductionDate = mds.GetAs<std::string>("support_data.production_date");
     
     // Convert YYYY-MM-DD HH:mm:ss to YYYY-MM-DDTHH:mm:ss
@@ -127,11 +144,11 @@ public:
       m_Data.AcquisitionDate.replace(pos,1,"T");
     }
     
-    m_Data.SunAzimuth = {mds.GetAs<double>("support_data.azimuth_angle")};
-    m_Data.SunElevation = {mds.GetAs<double>("support_data.elevation_angle")};
+    m_Data.SunAzimuth = readVector("support_data.azimuth_angle");
+    m_Data.SunElevation = readVector("support_data.elevation_angle");
     
-    m_Data.IncidenceAngle = {mds.GetAs<double>("support_data.incident_angle") };
-    m_Data.SceneOrientation = {mds.GetAs<double>("support_data.scene_orientation")};
+    m_Data.IncidenceAngle = readVector("support_data.incident_angle");
+    m_Data.SceneOrientation = readVector("support_data.scene_orientation");
 
     m_Data.StepCount = mds.GetAs<int>(0, "support_data.step_count");
 
@@ -154,6 +171,17 @@ public:
     {
       m_Data.AlongTrackViewingAngle.push_back(std::stod("alongTrackViewingAngle"));
     }
+
+    if (mds.HasValue("support_data.along_track_incidence_angle"))
+    {
+      m_Data.AlongTrackIncidenceAngle = readVector("support_data.along_track_incidence_angle");
+    }
+
+    if (mds.HasValue("support_data.across_track_incidence_angle"))
+    {
+      m_Data.AcrossTrackIncidenceAngle = readVector("support_data.across_track_incidence_angle");
+    }
+
   }
 
 
@@ -283,7 +311,7 @@ public:
   }
 
 
-  void Parse(const MetadataSupplierInterface & mds)
+  void ParseDimapV2(const MetadataSupplierInterface & mds)
   {
     std::vector<std::string> missionVec;
     ParseVector(mds, "IMD/Dataset_Sources.Source_Identification"
