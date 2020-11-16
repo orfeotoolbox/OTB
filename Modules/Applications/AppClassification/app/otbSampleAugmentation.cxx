@@ -70,7 +70,7 @@ private:
 
     AddDocTag(Tags::Learning);
 
-    AddParameter(ParameterType_InputFilename, "in", "Input samples");
+    AddParameter(ParameterType_InputVectorData, "in", "Input samples");
     SetParameterDescription("in", "Vector data file containing samples (OGR format)");
 
     AddParameter(ParameterType_OutputFilename, "out", "Output samples");
@@ -78,9 +78,10 @@ private:
                             "Output vector data file storing new samples"
                             "(OGR format).");
 
-    AddParameter(ParameterType_ListView, "field", "Field Name");
+    AddParameter(ParameterType_Field, "field", "Field Name");
     SetParameterDescription("field", "Name of the field carrying the class name in the input vectors.");
     SetListViewSingleSelectionMode("field", true);
+    SetVectorData("field", "in");
 
     AddParameter(ParameterType_Int, "layer", "Layer Index");
     SetParameterDescription("layer", "Layer index to read in the input vector file.");
@@ -99,8 +100,9 @@ private:
                             "be generated.");
     SetDefaultParameterInt("samples", 100);
 
-    AddParameter(ParameterType_ListView, "exclude", "Field names for excluded features");
+    AddParameter(ParameterType_Field, "exclude", "Field names for excluded features");
     SetParameterDescription("exclude", "List of field names in the input vector data that will not be generated in the output file.");
+    SetVectorData("exclude", "in");
 
     AddParameter(ParameterType_Choice, "strategy", "Augmentation strategy");
 

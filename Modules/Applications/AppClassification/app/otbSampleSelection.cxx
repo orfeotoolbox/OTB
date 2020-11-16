@@ -121,7 +121,7 @@ private:
     SetParameterDescription("mask", "Validity mask (only pixels corresponding to a mask value greater than 0 will be used for statistics)");
     MandatoryOff("mask");
 
-    AddParameter(ParameterType_InputFilename, "vec", "Input vectors");
+    AddParameter(ParameterType_InputVectorData, "vec", "Input vectors");
     SetParameterDescription("vec", "Input geometries to analyse");
 
     AddParameter(ParameterType_OutputFilename, "out", "Output vectors");
@@ -190,9 +190,10 @@ private:
     // Default strategy : smallest
     SetParameterString("strategy", "smallest");
 
-    AddParameter(ParameterType_ListView, "field", "Field Name");
+    AddParameter(ParameterType_Field, "field", "Field Name");
     SetParameterDescription("field", "Name of the field carrying the class name in the input vectors.");
     SetListViewSingleSelectionMode("field", true);
+    SetVectorData("field", "vec");
 
     AddParameter(ParameterType_Int, "layer", "Layer Index");
     SetParameterDescription("layer", "Layer index to read in the input vector file.");
