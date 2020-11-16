@@ -28,20 +28,23 @@
 #include "itkImageScanlineConstIterator.h"
 #include "itkImageScanlineIterator.h"
 #include "itkProgressReporter.h"
-#include <boost/numeric/interval.hpp>
 #include <algorithm>
 #include <cassert>
 #include <ostream>
 
-template <typename T, typename P>
-inline
-std::ostream & operator<<(std::ostream & os, boost::numeric::interval<T,P> const& v)
-{
-  return os << '[' << v.lower() << ".." << v.upper() << '[';
-}
-
 namespace otb
 {
+
+template<typename TImage>
+void
+ResetMarginFilter<TImage>
+::GenerateOutputInformation()
+{
+  Superclass::GenerateOutputInformation();
+  OutputImageType* output = this->GetOutput();
+  const InputImageType* input = this->GetInput();
+  output->SetNumberOfComponentsPerPixel(input->GetNumberOfComponentsPerPixel());
+}
 
 template<typename TImage>
 void
@@ -50,7 +53,6 @@ ResetMarginFilter<TImage>
     OutputImageRegionType const& outputRegionForThread,
     itk::ThreadIdType            threadId)
 {
-  // otbMsgDevMacro("ThreadedGenerateData begin("<<NeatRegionLogger{outputRegionForThread}<<")");
   using InputIterator   = itk::ImageScanlineConstIterator<InputImageType const>;
   using OutputIterator  = itk::ImageScanlineIterator<OutputImageType>;
 
@@ -58,14 +60,10 @@ ResetMarginFilter<TImage>
   auto      * output = this->GetOutput();
   assert(input);
   assert(output);
-  InputIterator  inputIterator (input,  OutputRegionToInputRegion(outputRegionForThread));
-  OutputIterator outputIterator(output, outputRegionForThread);
 
-  auto const& imgRegion = output->GetLargestPossibleRegion();
-  auto const  imgSizeX  = imgRegion.GetSize()[0];
-  auto const  imgSizeY  = imgRegion.GetSize()[1];
-  itk::IndexValueType const  imgEndX   = imgRegion.GetIndex()[0] + imgSizeX;
-  itk::IndexValueType const  imgEndY   = imgRegion.GetIndex()[1] + imgSizeY;
+  auto curRoi = OutputRegionToInputRegion(outputRegionForThread);
+  InputIterator  inputIterator (input,  curRoi);
+  OutputIterator outputIterator(output, outputRegionForThread);
 
   auto const& size      = outputRegionForThread.GetSize();
   auto const& index     = outputRegionForThread.GetIndex();
@@ -75,31 +73,24 @@ ResetMarginFilter<TImage>
   auto const  startY    = index[1];
   itk::IndexValueType const  endX      = startX + sizeX;
   itk::IndexValueType const  endY      = startY + sizeY;
-  auto const  thrX1     = std::min<itk::IndexValueType>(endX, m_thresholdX);
-  auto const  thrX2     = std::min<itk::IndexValueType>(endX, imgEndX - m_thresholdX);
-  auto const  thrY1     = std::min<itk::IndexValueType>(endY, m_thresholdYtop);
-  auto const  thrY2     = std::min<itk::IndexValueType>(endY, imgEndY - m_thresholdYbot);
+
+  auto const nBand = output->GetNumberOfComponentsPerPixel();
+
+  itk::IndexValueType thrX1 = curRoi.GetIndex(0);
+  itk::IndexValueType thrX2 = curRoi.GetIndex(0) + curRoi.GetSize(0);
+  itk::IndexValueType thrY1 = curRoi.GetIndex(1);
+  itk::IndexValueType thrY2 = curRoi.GetIndex(1) + curRoi.GetSize(1);
 
   assert(thrX1 <= endX && "Iterations shall stay within requested region");
   assert(thrX2 <= endX && "Iterations shall stay within requested region");
   assert(thrY1 <= endY && "Iterations shall stay within requested region");
   assert(thrY2 <= endY && "Iterations shall stay within requested region");
 
-  // using interval_t = boost::numeric::interval<long>;
-  using interval_t = Interval;
-  auto const region      = interval_t{startX, endX};
-  auto const zero_left   = intersect(interval_t{startX, thrX1}, region);
-  auto const copy_middle = intersect(interval_t{thrX1, thrX2},  region);
-  auto const zero_right  = intersect(interval_t{thrX2, endX},   region);
-  otbMsgDevMacro("X in " << zero_left   << " <<-- 0");
-  otbMsgDevMacro("X in " << copy_middle << " <<-- copy input");
-  otbMsgDevMacro("X in " << zero_right  << " <<-- 0");
-  otbMsgDevMacro("Y in ["<<startY<<".."<<thrY1<<"[  <<--- 0");
-
-  auto const nb_z_l = zero_left.upper()   - zero_left.lower();
-  auto const nb_c_m = copy_middle.upper() - copy_middle.lower();
-  auto const nb_z_r = zero_right.upper()  - zero_right.lower();
-  assert(nb_z_l + nb_c_m + nb_z_r == sizeX);
+  auto const full_line = sizeX * nBand;
+  auto const nb_z_l = (unsigned long)(thrX1 - startX) * nBand;
+  auto const nb_c_m = (unsigned long)(thrX2 - thrX1) * nBand;
+  auto const nb_z_r = (unsigned long)(endX - thrX2) * nBand;
+  assert(nb_z_l + nb_c_m + nb_z_r == full_line);
 
   itk::ProgressReporter progress( this, threadId, outputRegionForThread.GetNumberOfPixels() / sizeY );
   outputIterator.GoToBegin();
@@ -116,10 +107,10 @@ ResetMarginFilter<TImage>
     // otbMsgDevMacro("o(" << y << ") <-- 0");
     assert(! outputIterator.IsAtEnd());
     outputIterator.GoToBeginOfLine();
-    std::fill_n(&outputIterator.Value(), sizeX, OutputPixelType{});
+    std::fill_n(&outputIterator.Value(), full_line, m_Pad);
     progress.CompletedPixel(); // Completed...Line()
   }
-  assert(y == thrY1 || y == startY);
+  assert(y == thrY1);
   otbMsgDevMacro("Y in ["<<thrY1<<".."<<thrY2<<"[  <<--- Input");
   inputIterator.GoToBegin();
   for (
@@ -131,14 +122,14 @@ ResetMarginFilter<TImage>
     assert(! outputIterator.IsAtEnd());
     inputIterator.GoToBeginOfLine();
     outputIterator.GoToBeginOfLine();
-    auto const t1 = std::fill_n(&outputIterator.Value(), nb_z_l, OutputPixelType{});
+    auto const t1 = std::fill_n(&outputIterator.Value(), nb_z_l, m_Pad);
     // If there is any trimming of first columns, the inputIterator iterator
     // will directly point to the right region. we shall not apply an offset!
     auto const t2 = std::copy_n(&inputIterator.Value(), nb_c_m, t1);
-    std::fill_n(t2, nb_z_r, OutputPixelType{});
+    std::fill_n(t2, nb_z_r, m_Pad);
     progress.CompletedPixel(); // Completed...Line()
   }
-  assert(y == thrY2 || y == startY);
+  assert(y == thrY2);
   otbMsgDevMacro("Y in ["<<thrY2<<".."<<endY<<"[  <<--- 0");
   for (
       ; y < endY
@@ -149,7 +140,7 @@ ResetMarginFilter<TImage>
     // otbMsgDevMacro("o(" << y << ") <-- 0");
     assert(! outputIterator.IsAtEnd());
     outputIterator.GoToBeginOfLine();
-    std::fill_n(&outputIterator.Value(), sizeX, OutputPixelType{});
+    std::fill_n(&outputIterator.Value(), full_line, m_Pad);
     progress.CompletedPixel(); // Completed...Line()
   }
   assert(y == endY);
@@ -161,52 +152,13 @@ typename ResetMarginFilter<TImage>::InputImageRegionType
 ResetMarginFilter<TImage>
 ::OutputRegionToInputRegion(OutputImageRegionType const& srcRegion)
 {
-  auto const* output = this->GetOutput();
-  assert(output);
-
-  auto const& maxRegion = output->GetLargestPossibleRegion();
-  auto const& maxSize   = maxRegion.GetSize();
-  auto const& maxStart  = maxRegion.GetIndex();
-
-  auto const& reqRegion = srcRegion;
-  auto const& reqSize   = reqRegion.GetSize();
-  auto const& reqStart  = reqRegion.GetIndex();
-
-  // using interval_t = boost::numeric::interval<long>;
-  using interval_t = Interval;
-  auto const maxRegionX = interval_t{
-    maxStart[0]+m_thresholdX,
-    static_cast<itk::IndexValueType>(maxStart[0]+maxSize[0]-m_thresholdX)
-  };
-  auto const maxRegionY = interval_t{
-    maxStart[1]+m_thresholdYtop,
-    static_cast<itk::IndexValueType>(maxStart[1]+maxSize[1]-m_thresholdYbot)
-  };
-
-  auto const reqRegionX = interval_t::OfLength(reqStart[0], reqSize[0]);
-  auto const reqRegionY = interval_t::OfLength(reqStart[1], reqSize[1]);
-#if 0
-  otbMsgDevMacro("OutputRegionToInputRegion: "
-      << "out="<< NeatRegionLogger{reqRegion}
-      << ";    max: x="<<maxRegionX << "  y="<<maxRegionY
-      << ";    req: x="<<reqRegionX << "  y="<<reqRegionY
-      );
-#endif
-
-  auto const inRegionX = intersect(reqRegionX, maxRegionX);
-  auto const inRegionY = intersect(reqRegionY, maxRegionY);
-  // otbMsgDevMacro(" --> ∩X: " << inRegionX << " ∩Y: " << inRegionY);
-
-  const InputIndexType inStart{inRegionX.lower(), inRegionY.lower()};
-  assert(inRegionX.lower() <= inRegionX.upper());
-  assert(inRegionY.lower() <= inRegionY.upper());
-  const InputSizeType inSize{
-    static_cast<unsigned long>(inRegionX.upper()-inRegionX.lower()),
-    static_cast<unsigned long>(inRegionY.upper()-inRegionY.lower())
-  };
-  auto const inRegion = InputImageRegionType{inStart, inSize};
-  otbMsgDevMacro("OutputRegionToInputRegion: out="<< NeatRegionLogger{reqRegion}<<"   --> in="<<NeatRegionLogger{inRegion});
-  return inRegion;
+  auto curROI = m_ROI;
+  if (!curROI.Crop(srcRegion))
+    {
+    curROI.SetIndex(srcRegion.GetIndex() + srcRegion.GetSize());
+    curROI.SetSize({0,0});
+    }
+  return curROI;
 }
 
 } // otb namespace

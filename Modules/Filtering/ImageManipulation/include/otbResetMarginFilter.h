@@ -28,7 +28,8 @@ namespace otb
 /**
  * Region clamping filter.
  * This filter is a kind of ROI pass filter. Data within the ROI is kept with
- * its original value. Data outside ROI is forced to 0.
+ * its original value. Data outside ROI is forced to a padding value (0 by
+ * default).
  *
  * Also, this filter propagate the exact ROI upstream in the pipeline. This
  * way, if it's piped after another filter, the upstream filter isn't executed
@@ -73,6 +74,7 @@ public:
   //@{
   using InputPixelType        = typename InputImageType::PixelType;
   using OutputPixelType       = typename OutputImageType::PixelType;
+  using InternalPixelType     = typename OutputImageType::InternalPixelType;
   using InputRealType         = typename itk::NumericTraits<InputPixelType>::RealType;
   using InputImageRegionType  = typename InputImageType::RegionType;
   using OutputImageRegionType = typename OutputImageType::RegionType;
@@ -84,26 +86,25 @@ public:
   static_assert(InputImageDimension == OutputImageDimension, "Images have the same number of components");
    //@}
 
-  /** Column threshold setter. */
-  void SetThresholdX(long threshold) noexcept
-  { m_thresholdX = threshold; }
-  /** Column threshold getter. */
-  long GetThresholdX() const noexcept
-  { return m_thresholdX;}
+  void SetROI(const InputImageRegionType& roi)
+    {
+    m_ROI = roi;
+    }
 
-  /** Top line threshold setter. */
-  void SetThresholdYtop(long threshold) noexcept
-  { m_thresholdYtop = threshold; }
-  /** Top line threshold getter. */
-  long GetThresholdYtop() const noexcept
-  { return m_thresholdYtop;}
+  InputImageRegionType GetROI() const
+    {
+    return m_ROI;
+    }
 
-  /** Bottom line threshold setter. */
-  void SetThresholdYbot(long threshold) noexcept
-  { m_thresholdYbot = threshold; }
-  /** Bottom line threshold getter. */
-  long GetThresholdYbot() const noexcept
-  { return m_thresholdYbot;}
+  void SetPaddingValue(const InternalPixelType& val)
+    {
+    m_Pad = val;
+    }
+
+  InternalPixelType GetPaddingValue() const
+    {
+    return m_Pad;
+    }
 
 protected:
   /// Hidden constructor
@@ -130,6 +131,11 @@ protected:
       OutputImageRegionType const& srcRegion);
 
   /**
+   * Override GenerateOutputInformation() to handle vector images
+   */
+  void GenerateOutputInformation();
+
+  /**
    * Main computation function called by each thread.
    * \param[in] outputRegionForThread  Specified output region to compute
    * \param[in] threadId               Id of the computing threads
@@ -139,9 +145,10 @@ protected:
       itk::ThreadIdType            threadId) override;
 
 private:
-  long m_thresholdX    = 0;
-  long m_thresholdYtop = 0;
-  long m_thresholdYbot = 0;
+
+  InputImageRegionType m_ROI;
+
+  InternalPixelType m_Pad = 0.0;
 };
 
 } // otb namespace
