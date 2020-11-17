@@ -27,7 +27,6 @@
 #include "itkTransform.h"
 #include "otbGenericRSTransform.h"
 #include "otbImageMetadata.h"
-#include "otbImageKeywordlist.h"
 
 #include "OTBProjectionExport.h"
 #include <string>
