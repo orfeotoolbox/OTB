@@ -98,7 +98,7 @@ public:
   /*get lookup data for calculating backscatter */
   void CreateCalibrationLookupData(const short type) override;
 
-  void Parse(const MetadataSupplierInterface *) override;
+  void Parse(const MetadataSupplierInterface &) override;
 
 
 protected:
@@ -106,9 +106,7 @@ protected:
   Radarsat2ImageMetadataInterface();
 
   /* class desctructor */
-  ~Radarsat2ImageMetadataInterface() override
-  {
-  }
+  ~Radarsat2ImageMetadataInterface() override =default;
 
 private:
   Radarsat2ImageMetadataInterface(const Self&) = delete;

@@ -243,32 +243,30 @@ Radarsat2ImageMetadataInterface::UIntVectorType Radarsat2ImageMetadataInterface:
 //"
 
 
-void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds);
-  assert(mds->GetNbBands() == this->m_Imd.Bands.size());
+  assert(mds.GetNbBands() == this->m_Imd.Bands.size());
 
   // Metadata read by GDAL
-  Fetch(MDTime::AcquisitionStartTime, *mds, "ACQUISITION_START_TIME");
-  // Fetch(MDTime::AcquisitionStopTime, *mds, "PROCESSING_TIME"); 
-  Fetch(MDStr::BeamMode, *mds, "BEAM_MODE");
-  Fetch("FACILITY_IDENTIFIER", *mds, "FACILITY_IDENTIFIER");
-  Fetch(MDNum::LineSpacing, *mds, "LINE_SPACING");
-  Fetch(MDNum::PixelSpacing, *mds, "PIXEL_SPACING");
-  // Fetch(MDStr::Mode, *mds, "MODE");
-  Fetch(MDStr::OrbitDirection, *mds, "ORBIT_DIRECTION");
-  // Fetch(MDNum::OrbitNumber, *mds, "ORBIT_NUMBER");
-  Fetch(MDNum::PixelSpacing, *mds, "PIXEL_SPACING");
-  Fetch(MDStr::ProductType, *mds, "PRODUCT_TYPE");
-  Fetch(MDStr::Instrument, *mds, "SATELLITE_IDENTIFIER");
-  Fetch(MDStr::SensorID, *mds, "SENSOR_IDENTIFIER");
+  Fetch(MDTime::AcquisitionStartTime, mds, "ACQUISITION_START_TIME");
+  // Fetch(MDTime::AcquisitionStopTime, mds, "PROCESSING_TIME"); 
+  Fetch(MDStr::BeamMode, mds, "BEAM_MODE");
+  Fetch("FACILITY_IDENTIFIER", mds, "FACILITY_IDENTIFIER");
+  Fetch(MDNum::LineSpacing, mds, "LINE_SPACING");
+  Fetch(MDNum::PixelSpacing, mds, "PIXEL_SPACING");
+  // Fetch(MDStr::Mode, mds, "MODE");
+  Fetch(MDStr::OrbitDirection, mds, "ORBIT_DIRECTION");
+  // Fetch(MDNum::OrbitNumber, mds, "ORBIT_NUMBER");
+  Fetch(MDNum::PixelSpacing, mds, "PIXEL_SPACING");
+  Fetch(MDStr::ProductType, mds, "PRODUCT_TYPE");
+  Fetch(MDStr::Instrument, mds, "SATELLITE_IDENTIFIER");
+  Fetch(MDStr::SensorID, mds, "SENSOR_IDENTIFIER");
   
 
   // Product file
-  std::string ProductFilePath = mds->GetResourceFile("product.xml");
+  std::string ProductFilePath = mds.GetResourceFile("product.xml");
   if (!ProductFilePath.empty())
     {
-    // std::cout<< ProductFilePath << std::endl;
     XMLMetadataSupplier ProductMS(ProductFilePath);
     m_Imd.Add(MDStr::Mission, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
 
@@ -287,9 +285,9 @@ void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
 
 
     SARParam sarParam;
-    for (int bandId = 0 ; bandId < mds->GetNbBands() ; ++bandId)
+    for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
       {
-      Fetch(MDStr::Polarization, *mds, "POLARIMETRIC_INTERP", bandId);
+      Fetch(MDStr::Polarization, mds, "POLARIMETRIC_INTERP", bandId);
       m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
       }
     }

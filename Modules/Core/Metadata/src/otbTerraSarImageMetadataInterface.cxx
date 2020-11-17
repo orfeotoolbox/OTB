@@ -1246,21 +1246,19 @@ void TerraSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent ind
 
 
 
-void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-
-  assert(mds);
   assert(mds->GetNbBands() == this->m_Imd.Bands.size());
 
   // Metadata read by GDAL
-  Fetch(MDNum::LineSpacing, *mds, "ROW_SPACING");
-  Fetch(MDStr::Mode, *mds, "IMAGING_MODE");
-  Fetch(MDStr::OrbitDirection, *mds, "ORBIT_DIRECTION");
-  Fetch(MDNum::OrbitNumber, *mds, "ABSOLUTE_ORBIT");
-  Fetch(MDNum::PixelSpacing, *mds, "COL_SPACING");
+  Fetch(MDNum::LineSpacing, mds, "ROW_SPACING");
+  Fetch(MDStr::Mode, mds, "IMAGING_MODE");
+  Fetch(MDStr::OrbitDirection, mds, "ORBIT_DIRECTION");
+  Fetch(MDNum::OrbitNumber, mds, "ABSOLUTE_ORBIT");
+  Fetch(MDNum::PixelSpacing, mds, "COL_SPACING");
 
   // Main XML file
-  std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(mds->GetResourceFile("")), "T[S|D]X1_SAR__.*.xml") ;
+  std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(mds.GetResourceFile("")), "T[S|D]X1_SAR__.*.xml") ;
   if (!MainFilePath.empty())
   {
     XMLMetadataSupplier MainXMLFileMS(MainFilePath);
@@ -1289,9 +1287,9 @@ void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   }
 
   SARParam sarParam;
-  for (int bandId = 0 ; bandId < mds->GetNbBands() ; ++bandId)
+  for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
     {
-    Fetch(MDStr::Polarization, *mds, "POLARIMETRIC_INTERP", bandId);
+    Fetch(MDStr::Polarization, mds, "POLARIMETRIC_INTERP", bandId);
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
     }
   }

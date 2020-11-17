@@ -7,7 +7,7 @@ SunElevation 40.6549
 SunAzimuth 156.82
 SatElevation 82.7227
 SatAzimuth -74.1736
-AcquisitionDate 2009-03-16T11:03:49Z
+AcquisitionDate 2009-03-16T11:03:49.972847Z
 ProductionDate 2009-03-26T11:56:45Z
 BandName XS1
 PhysicalGain 2.24793

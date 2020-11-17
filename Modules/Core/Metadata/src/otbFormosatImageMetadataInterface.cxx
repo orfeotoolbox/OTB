@@ -1371,46 +1371,51 @@ void FormosatImageMetadataInterface::FetchSpectralSensitivity()
   
 }
 
-void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds);
+  DimapMetadataHelper helper;
 
-  Fetch(MDStr::SensorID, *mds, "IMAGERY/SATELLITEID");
-  if (m_Imd[MDStr::SensorID] == "FORMOSAT 2")
+  // GDAL DIMAP metadata case
+  if (mds.GetAs<std::string>("", "IMAGERY/SATELLITEID") == "FORMOSAT 2")
   {
-    m_Imd.Add(MDStr::Mission, "Formasat 2");
+    //Find the METADATA.DIM file (Dimap V1 metadata file)
+    auto resourceFiles = mds.GetResourceFiles();
+    
+    std::string metadataFile;
+    for (const auto & file: resourceFiles)
+    {
+      if (file.find("METADATA.DIM")!=std::string::npos)
+      {
+        metadataFile = file;
+        break;
+      }
+    }
+
+    if (metadataFile.empty())
+    {
+      otbGenericExceptionMacro(MissingMetadataException,<<"Cannot find the METADATA.DIM file")
+    }
+
+    XMLMetadataSupplier xmlMds(metadataFile);
+    helper.ParseDimapV1(xmlMds, "Dimap_Document.");
+    
   }
+  // geom metadata case
+  else if (mds.GetAs<std::string>("", "support_data.sensorID" ) == "Formosat 2")
+  {
+    helper.ParseGeom(mds);
+  }
+
   else
   {
     otbGenericExceptionMacro(MissingMetadataException,<<"Not a Formosat product")
   }
 
-  //Find the METADATA.DIM file (Dimap V1 metadata file)
-  auto resourceFiles = mds->GetResourceFiles();
-  
-  std::string metadataFile;
-  for (const auto & file: resourceFiles)
-  {
-    if (file.find("METADATA.DIM")!=std::string::npos)
-    {
-      metadataFile = file;
-      break;
-    }
-  }
+  m_Imd.Add(MDStr::Mission, "Formasat 2");
+  m_Imd.Add(MDStr::SensorID, "FORMOSAT 2");
 
-  if (metadataFile.empty())
-  {
-    otbGenericExceptionMacro(MissingMetadataException,<<"Cannot find the METADATA.DIM file")
-  }
 
-  XMLMetadataSupplier xmlMds(metadataFile);
-
-  DimapMetadataHelper helper;
-
-  helper.ParseDimapV1(xmlMds, "Dimap_Document.");
   const auto & dimapData = helper.GetDimapData();
-  
-
   auto nbBands = m_Imd.Bands.size();
 
   // Band names are not in the metadata. Two cases should be considered 
@@ -1481,15 +1486,8 @@ void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
       << "The number of bands in image metadatas is incoherent with the DIMAP product")
   }
 
-  m_Imd.Add(MDStr::GeometricLevel, dimapData.ProcessingLevel);
-
   FetchSpectralSensitivity();
 
-  // fill RPC model
-  if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
-  {
-    FetchRPC(*mds);
-  }
 }
 
 

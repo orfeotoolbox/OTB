@@ -524,29 +524,28 @@ double Sentinel1ImageMetadataInterface::getBandTerrainHeight(const XMLMetadataSu
   return heightSum / (double)listCount;
 }
 
-void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds);
-  assert(mds->GetNbBands() == this->m_Imd.Bands.size());
+  assert(mds.GetNbBands() == this->m_Imd.Bands.size());
   // Metadata read by GDAL
-  Fetch(MDTime::AcquisitionStartTime, *mds, "ACQUISITION_START_TIME");
-  Fetch(MDTime::AcquisitionStopTime, *mds, "ACQUISITION_STOP_TIME");
-  Fetch(MDStr::BeamMode, *mds, "BEAM_MODE");
-  Fetch(MDStr::BeamSwath, *mds, "BEAM_SWATH");
-  Fetch("FACILITY_IDENTIFIER", *mds, "FACILITY_IDENTIFIER");
-  Fetch(MDNum::LineSpacing, *mds, "LINE_SPACING");
-  Fetch(MDStr::Mission, *mds, "MISSION_ID");
-  Fetch(MDStr::Mode, *mds, "MODE");
-  Fetch(MDStr::OrbitDirection, *mds, "ORBIT_DIRECTION");
-  Fetch(MDNum::OrbitNumber, *mds, "ORBIT_NUMBER");
-  Fetch(MDNum::PixelSpacing, *mds, "PIXEL_SPACING");
-  Fetch(MDStr::ProductType, *mds, "PRODUCT_TYPE");
-  Fetch(MDStr::Instrument, *mds, "SATELLITE_IDENTIFIER");
-  Fetch(MDStr::SensorID, *mds, "SENSOR_IDENTIFIER");
-  Fetch(MDStr::Swath, *mds, "SWATH");
+  Fetch(MDTime::AcquisitionStartTime, mds, "ACQUISITION_START_TIME");
+  Fetch(MDTime::AcquisitionStopTime, mds, "ACQUISITION_STOP_TIME");
+  Fetch(MDStr::BeamMode, mds, "BEAM_MODE");
+  Fetch(MDStr::BeamSwath, mds, "BEAM_SWATH");
+  Fetch("FACILITY_IDENTIFIER", mds, "FACILITY_IDENTIFIER");
+  Fetch(MDNum::LineSpacing, mds, "LINE_SPACING");
+  Fetch(MDStr::Mission, mds, "MISSION_ID");
+  Fetch(MDStr::Mode, mds, "MODE");
+  Fetch(MDStr::OrbitDirection, mds, "ORBIT_DIRECTION");
+  Fetch(MDNum::OrbitNumber, mds, "ORBIT_NUMBER");
+  Fetch(MDNum::PixelSpacing, mds, "PIXEL_SPACING");
+  Fetch(MDStr::ProductType, mds, "PRODUCT_TYPE");
+  Fetch(MDStr::Instrument, mds, "SATELLITE_IDENTIFIER");
+  Fetch(MDStr::SensorID, mds, "SENSOR_IDENTIFIER");
+  Fetch(MDStr::Swath, mds, "SWATH");
 
   // Manifest file
-  std::string ManifestFilePath = mds->GetResourceFile(std::string("manifest\\.safe"));
+  std::string ManifestFilePath = mds.GetResourceFile(std::string("manifest\\.safe"));
   if (!ManifestFilePath.empty())
   {
     XMLMetadataSupplier ManifestMS(ManifestFilePath);
@@ -557,14 +556,14 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds
   }
 
   // Band metadata
-  for (int bandId = 0 ; bandId < mds->GetNbBands() ; ++bandId)
+  for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
   {
     SARParam sarParam;
-    Fetch(MDStr::Polarization, *mds, "POLARISATION", bandId);
-    std::string swath = Fetch(MDStr::Swath, *mds, "SWATH", bandId);
+    Fetch(MDStr::Polarization, mds, "POLARISATION", bandId);
+    std::string swath = Fetch(MDStr::Swath, mds, "SWATH", bandId);
 
     // Annotation file
-    std::string AnnotationFilePath = mds->GetResourceFile(std::string("annotation[/\\\\]s1[ab].*-")
+    std::string AnnotationFilePath = mds.GetResourceFile(std::string("annotation[/\\\\]s1[ab].*-")
                                                           + itksys::SystemTools::LowerCase(swath)
                                                           + std::string("-.*\\.xml"));
     if (AnnotationFilePath.empty())

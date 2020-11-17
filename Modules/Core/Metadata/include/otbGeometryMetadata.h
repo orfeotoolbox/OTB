@@ -167,23 +167,30 @@ struct OTBMetadata_EXPORT RPCParam
     return oss.str();
   };
   
+  // Equality comparison with tolerance
+  template <class BinaryPredicate>
+  bool Compare(const RPCParam & other, const BinaryPredicate & p) const
+  {
+    return p(LineOffset, other.LineOffset)
+          && p(SampleOffset, other.SampleOffset)
+          && p(LatOffset, other.LatOffset)
+          && p(LonOffset, other.LonOffset)
+          && p(HeightOffset, other.HeightOffset)
+          && p(LineScale, other.LineScale)
+          && p(SampleScale, other.SampleScale)
+          && p(LatScale, other.LatScale)
+          && p(LonScale, other.LonScale)
+          && p(HeightScale, other.HeightScale)
+          && std::equal(std::begin(LineNum), std::end(LineNum), std::begin(other.LineNum),p)
+          && std::equal(std::begin(LineDen), std::end(LineDen), std::begin(other.LineDen),p)
+          && std::equal(std::begin(SampleNum), std::end(SampleNum), std::begin(other.SampleNum),p)
+          && std::equal(std::begin(SampleDen), std::end(SampleDen), std::begin(other.SampleDen),p);
+  }
+
   // Equality comparison operator (hidden friend idiom)
   friend bool operator==(const RPCParam & lhs, const RPCParam & rhs)
   {
-    return lhs.LineOffset == rhs.LineOffset
-        && lhs.SampleOffset == rhs.SampleOffset
-        && lhs.LatOffset == rhs.LatOffset
-        && lhs.LonOffset == rhs.LonOffset
-        && lhs.HeightOffset == rhs.HeightOffset
-        && lhs.LineScale == rhs.LineScale
-        && lhs.SampleScale == rhs.SampleScale
-        && lhs.LatScale == rhs.LatScale
-        && lhs.LonScale == rhs.LonScale
-        && lhs.HeightScale == rhs.HeightScale
-        && std::equal(std::begin(lhs.LineNum), std::end(lhs.LineNum), std::begin(rhs.LineNum))
-        && std::equal(std::begin(lhs.LineDen), std::end(lhs.LineDen), std::begin(rhs.LineDen))
-        && std::equal(std::begin(lhs.SampleNum), std::end(lhs.SampleNum), std::begin(rhs.SampleNum))
-        && std::equal(std::begin(lhs.SampleDen), std::end(lhs.SampleDen), std::begin(rhs.SampleDen));
+    return lhs.Compare(rhs, [](double rhs, double lhs){return rhs == lhs;});
   }
 
 };

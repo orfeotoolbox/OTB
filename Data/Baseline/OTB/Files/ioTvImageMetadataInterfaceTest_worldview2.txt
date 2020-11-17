@@ -1,14 +1,13 @@
 SensorID WV02
 Mission WorldView-2
 ProductType Multi
-GeometricLevel LV2A
 TileHintX 1150
 TileHintY 455
 DataType 3
 SunElevation 24.9
 SunAzimuth 171.7
-SatElevation 299.2
-SatAzimuth 60.5
+SatElevation 60.5
+SatAzimuth 299.2
 AcquisitionDate 2009-12-10T10:30:18.142149Z
 ProductionDate 2010-01-11T19:51:30Z
 ProjectionWKT PROJCS["WGS 84 / UTM zone 33N",

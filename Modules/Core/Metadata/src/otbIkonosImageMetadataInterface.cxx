@@ -801,6 +801,22 @@ namespace
         && associativeContainer.find("acquisitionDate") != pastTheEnd;
   }
 
+  // Read Ikonos metadata from a geom file
+  template<class T>
+  void ParseGeomFile(const MetadataSupplierInterface & mds, 
+                         T& metadataAssociativeContainer)
+  {
+    metadataAssociativeContainer["productionDate"] = mds.GetAs<std::string>("support_data.production_date");
+    metadataAssociativeContainer["sensorID"] = mds.GetAs<std::string>("support_data.sensor");
+    metadataAssociativeContainer["nominalCollectionAzimuth"] = mds.GetAs<std::string>("support_data.nominal_collection_azimuth_angle");
+    metadataAssociativeContainer["nominalCollectionElevation"] = mds.GetAs<std::string>("support_data.nominal_collection_elevation_angle");
+    metadataAssociativeContainer["sunAzimuth"] = mds.GetAs<std::string>("support_data.azimuth_angle");
+    metadataAssociativeContainer["sunElevation"] = mds.GetAs<std::string>("support_data.elevation_angle");
+    metadataAssociativeContainer["acquisitionDate"] = mds.GetAs<std::string>("support_data.acquisition_date");
+    metadataAssociativeContainer["acquisitionTime"] = mds.GetAs<std::string>("support_data.acquisition_time");
+    metadataAssociativeContainer["bandName"] = mds.GetAs<std::string>("support_data.band_name");
+  }
+
   template<class T>
   void ParseMetadataFile(const std::string & metadataFilename, 
                          T& metadataAssociativeContainer)
@@ -951,6 +967,7 @@ void IkonosImageMetadataInterface::FetchProductionDate(const std::string & produ
     productionDateMD.tm_min = 0;
     productionDateMD.tm_hour = 0;
     productionDateMD.frac_sec = 0;
+    productionDateMD.tm_isdst = 0;
 
     productionDateMD.tm_mday = boost::lexical_cast<int>(dateParts[1]);
     // tm_mon: number of months since january (0-11)
@@ -1184,65 +1201,69 @@ void IkonosImageMetadataInterface::FetchSpectralSensitivity(const std::string & 
 }
 
 
-void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds);
+  std::unordered_map<std::string, std::string> ikonosMetadata;
 
-  bool hasValue = 0;
+  if (mds.GetAs<std::string>("", "METADATATYPE") == "GE")
+  {
+    FetchRPC(mds);
 
-  auto metadatatype = mds->GetMetadataValue("METADATATYPE", hasValue);
-  if (!hasValue || metadatatype != "GE")
+    auto inputFilenameWithDir = mds.GetResourceFile();
+
+    auto inputFilename = itksys::SystemTools::GetFilenameName(inputFilenameWithDir);
+    // Find hdr and metadata files : 
+    std::vector<std::string> inputFilenameParts;
+    boost::split(inputFilenameParts,
+                  inputFilename, 
+                  boost::is_any_of("_"));
+
+
+    auto metadataFilename = itksys::SystemTools::GetParentDirectory(inputFilenameWithDir) 
+                + "/" 
+                + inputFilenameParts[0] 
+                + "_" 
+                + inputFilenameParts[1]
+                + "_metadata.txt";
+
+    if (!itksys::SystemTools::FileExists(metadataFilename))
+    {
+      otbGenericExceptionMacro(MissingMetadataException, 
+        << "Cannot find the Ikonos metadata file, tried: " << metadataFilename)
+    }
+    
+    // Read metadata from the metadata file
+    ParseMetadataFile(metadataFilename, ikonosMetadata);
+
+    if (!ContainsIkonosMetadata(ikonosMetadata))
+    {
+      otbGenericExceptionMacro(MissingMetadataException, 
+        << "The Ikonos metadata file is incomplete: " << metadataFilename)
+    }
+
+    auto hdrFilename  = itksys::SystemTools::GetParentDirectory(inputFilenameWithDir) 
+                + "/"
+                + itksys::SystemTools::GetFilenameWithoutExtension(inputFilenameWithDir) 
+                + ".hdr";
+
+    if (!itksys::SystemTools::FileExists(hdrFilename))
+    {
+      otbGenericExceptionMacro(MissingMetadataException, 
+        << "Cannot find the Ikonos hdr file, tried: " << hdrFilename)
+    }
+    
+    ParseHeaderFile(hdrFilename, ikonosMetadata);
+  }
+  else if (mds.GetAs<std::string>("", "support_data.sensor") == "IKONOS-2")
+  {
+    ParseGeomFile(mds, ikonosMetadata);
+  }
+  else
   {
     otbGenericExceptionMacro(MissingMetadataException, 
       << "No Geo-Eye metadata has been found")
   }
 
-  auto inputFilenameWithDir = mds->GetResourceFile();
-
-  auto inputFilename = itksys::SystemTools::GetFilenameName(inputFilenameWithDir);
-  // Find hdr and metadata files : 
-  std::vector<std::string> inputFilenameParts;
-  boost::split(inputFilenameParts,
-                inputFilename, 
-                boost::is_any_of("_"));
-
-
-  auto metadataFilename = itksys::SystemTools::GetParentDirectory(inputFilenameWithDir) 
-              + "/" 
-              + inputFilenameParts[0] 
-              + "_" 
-              + inputFilenameParts[1]
-              + "_metadata.txt";
-
-  if (!itksys::SystemTools::FileExists(metadataFilename))
-  {
-    otbGenericExceptionMacro(MissingMetadataException, 
-      << "Cannot find the Ikonos metadata file, tried: " << metadataFilename)
-  }
-  
-  // Read metadata from the metadata file
-
-  std::unordered_map<std::string, std::string> ikonosMetadata;
-  ParseMetadataFile(metadataFilename, ikonosMetadata);
-
-  if (!ContainsIkonosMetadata(ikonosMetadata))
-  {
-    otbGenericExceptionMacro(MissingMetadataException, 
-      << "The Ikonos metadata file is incomplete: " << metadataFilename)
-  }
-
-  auto hdrFilename  = itksys::SystemTools::GetParentDirectory(inputFilenameWithDir) 
-              + "/"
-              + itksys::SystemTools::GetFilenameWithoutExtension(inputFilenameWithDir) 
-              + ".hdr";
-
-  if (!itksys::SystemTools::FileExists(hdrFilename))
-  {
-    otbGenericExceptionMacro(MissingMetadataException, 
-      << "Cannot find the Ikonos hdr file, tried: " << hdrFilename)
-  }
-  
-  ParseHeaderFile(hdrFilename, ikonosMetadata);
 
   try
   {
@@ -1287,8 +1308,6 @@ void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 
   m_Imd.Bands[0].Add(MDNum::PhysicalBias, 0.);
   m_Imd.Bands[0].Add(MDNum::SolarIrradiance, ikonosSolarIrradiance[bandName]);
-
-  FetchRPC(*mds);
 
   FetchSpectralSensitivity(bandName);
 }

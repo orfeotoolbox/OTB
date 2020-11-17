@@ -41,7 +41,7 @@ class OTBMetadata_EXPORT GeomMetadataSupplier
   : public MetadataSupplierInterface
 {
 public:
-  using DictType = std::map<std::string, std::string>;
+  using DictType = std::unordered_map<std::string, std::string>;
 
   GeomMetadataSupplier(const std::string &);
   GeomMetadataSupplier(const GeomMetadataSupplier &) = delete;

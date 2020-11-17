@@ -62,7 +62,7 @@ public:
   // GDALImageIO and initialize the correct number of bands. It should not be
   // needed once we have a merge() function,
   /** Create the appropriate IMI based on a MetadataSupplier */
-  static ImageMetadataInterfaceBasePointerType CreateIMI(const ImageMetadata & imd, const MetadataSupplierInterface *mds);
+  static ImageMetadataInterfaceBasePointerType CreateIMI(const ImageMetadata & imd, const MetadataSupplierInterface & mds);
 
   /** Register Built-in factories */
   static void RegisterBuiltInFactories();

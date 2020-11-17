@@ -145,10 +145,15 @@ void GeomMetadataSupplier::ReadGeomFile()
   std::vector< std::string > keyVal;
   while (std::getline(inputFile, line))
   {
-    boost::split(keyVal, line, [](char c){return c == ':';});
-    boost::trim(keyVal[0]);
-    boost::trim(keyVal[1]);
-    this->m_MetadataDic[keyVal[0]] = keyVal[1];
+    auto pos = line.find(":");
+    if (pos != std::string::npos)
+    {
+      auto key = line.substr(0,pos);
+      auto value = line.substr(pos+1, line.size());
+      boost::trim(key);
+      boost::trim(value);
+      m_MetadataDic[key] = value;
+    }
   }
 }
 
