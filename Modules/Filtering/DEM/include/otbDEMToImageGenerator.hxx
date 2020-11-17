@@ -47,8 +47,7 @@ DEMToImageGenerator<TDEMImage>::DEMToImageGenerator()
 template <class TDEMImage>
 void DEMToImageGenerator<TDEMImage>::GenerateOutputInformation()
 {
-  DEMImageType* output;
-  output = this->GetOutput(0);
+  DEMImageType* output = this->GetOutput(0);
 
   IndexType start;
   start[0] = 0;
@@ -64,7 +63,7 @@ void DEMToImageGenerator<TDEMImage>::GenerateOutputInformation()
   output->SetOrigin(m_OutputOrigin);
 
   // Add the metadata set by the user to the output
-  output->m_Imd.Add(MDGeom::ProjectionProj, m_Transform->GetInputProjectionRef());
+  output->m_Imd.Add(MDGeom::ProjectionProj, std::string(m_Transform->GetInputProjectionRef()));
   if (m_Transform->GetInputImageMetadata() != nullptr)
     output->m_Imd.Merge(*m_Transform->GetInputImageMetadata());
 }
