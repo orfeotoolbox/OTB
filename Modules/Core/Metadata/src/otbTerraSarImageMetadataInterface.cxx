@@ -1248,7 +1248,7 @@ void TerraSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent ind
 
 void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds->GetNbBands() == this->m_Imd.Bands.size());
+  assert(mds.GetNbBands() == this->m_Imd.Bands.size());
 
   // Metadata read by GDAL
   Fetch(MDNum::LineSpacing, mds, "ROW_SPACING");
