@@ -87,39 +87,6 @@ void WorldView2ImageMetadataInterface::FetchSolarIrradiance()
   }
 }
 
-void WorldView2ImageMetadataInterface::FetchDates(const MetadataSupplierInterface & mds)
-{
-  if(m_Imd[MDStr::SensorID] != "WV02")
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
-  }
-
-  bool hasValue = 0;
-  // Use TLC time in priority, only available for level 1B products.
-  // If it is not available use firstLineTime instead.
-  auto tlcTimeStr = mds.GetMetadataValue("IMAGE_1.TLCTime", hasValue);
-  if (hasValue)
-  {
-    try
-    {
-      m_Imd.Add(MDTime::AcquisitionDate, 
-                boost::lexical_cast<MetaData::Time>(tlcTimeStr));
-    }
-    catch (boost::bad_lexical_cast&)
-    {
-      otbGenericExceptionMacro(MissingMetadataException,
-            <<"Bad metadata value for 'IMAGE_1.TLCTime', got: "
-            <<tlcTimeStr);
-    }
-  }
-  else
-  {
-    Fetch(MDTime::AcquisitionDate, mds, "IMD/IMAGE_1.firstLineTime" );
-  }
-  Fetch(MDTime::ProductionDate, mds, "IMD/generationTime" );
-}
-
-
 void WorldView2ImageMetadataInterface::FetchWavelengths()
 {
   if(m_Imd[MDStr::SensorID] != "WV02")
@@ -693,53 +660,6 @@ WorldView2ImageMetadataInterface::VariableLengthVectorType WorldView2ImageMetada
   }
 
   return outputValuesVariableLengthVector;
-}
-
-void WorldView2ImageMetadataInterface::FetchPhysicalGain(const MetadataSupplierInterface &mds)
-{
-  if(m_Imd[MDStr::SensorID] != "WV02")
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
-  }
-
-  auto bitsPerPixel = mds.GetAs<int>("IMD/bitsPerPixel");
-
-  if (bitsPerPixel != 16)
-  {
-    itkExceptionMacro(<< "Invalid bitsPerPixel " << bitsPerPixel);
-  }
-
-  auto productType = m_Imd[MDStr::ProductType];
-
-  std::string panchro("P");
-  std::string multi("Multi");
-  std::string ms1("MS1");
-
-  if (productType != panchro && productType != multi && productType != ms1)
-  {
-    itkExceptionMacro(<< "Invalid bandID " << productType);
-  }
-
-  for (auto & band: m_Imd.Bands)
-  {
-    auto prefix = "IMD/BAND_" + band[MDStr::BandName] + ".";
-    auto TDILevel = mds.GetAs<int>(prefix + "TDILevel");
-
-    // Verify if TDI level is correct, according to the document 
-    // Radiometric_Use_of_WorldView-2_Imagery, Technical Note, 2010 (Digital Globe)
-    if ( (productType == panchro && (TDILevel <8 || TDILevel > 64))
-        || ( (productType == multi || productType == ms1 ) && (TDILevel <3 || TDILevel > 24)) )
-    {
-      otbGenericExceptionMacro(MissingMetadataException, 
-        << "Invalid TDI settings for band " << band[MDStr::BandName]);
-    }
-
-    // In previous version of OTB the effective bandwith was tabulated
-    // because Ossim did not read this specific metadata.
-    auto effectiveBandwidth = mds.GetAs<double>(prefix + "effectiveBandwidth");
-    auto absCalFactor = mds.GetAs<double>(prefix + "absCalFactor");
-    band.Add(MDNum::PhysicalGain, effectiveBandwidth / absCalFactor);
-  }
 }
 
 double WorldView2ImageMetadataInterface::GetSatElevation() const
@@ -1770,111 +1690,254 @@ namespace
       s.erase( s.size() - 1 ); // erase the last character
     }
   }
+
+  struct WorldView2Metadata
+  {
+    std::string sensorId;
+    std::string bandId;
+    
+    std::string acquisitionDateStr;
+    std::string productionDateStr;
+
+    double sunElevation;
+    double sunAzimuth;
+    double satElevation;
+    double satAzimuth;
+    
+    int bitsPerPixel;
+    
+    std::vector<std::string> bandNameList;
+    std::unordered_map<std::string, double> absCalFactor;
+    std::unordered_map<std::string, int> TDILevel;
+    std::unordered_map<std::string, double> effectiveBandwidth;
+  };
+
+  void ParseGeomMetadata(const MetadataSupplierInterface & mds, WorldView2Metadata & outMetadata)
+  {
+    outMetadata.sensorId = mds.GetAs<std::string>("sensor");
+    outMetadata.bandId = mds.GetAs<std::string>("support_data.band_id");
+    
+    // the date might have a semicolon at its end in the geom, e.g.
+    // support_data.tlc_date:  2009-12-10T10:30:18.142149Z;
+    outMetadata.acquisitionDateStr = mds.GetAs<std::string>("support_data.tlc_date");
+    if (outMetadata.acquisitionDateStr.back() == ';')
+    {
+      outMetadata.acquisitionDateStr.pop_back();
+    }
+
+    outMetadata.productionDateStr = mds.GetAs<std::string>("support_data.generation_date");
+    
+    outMetadata.sunElevation = mds.GetAs<double>("support_data.elevation_angle");
+    outMetadata.sunAzimuth = mds.GetAs<double>("support_data.azimuth_angle");
+    outMetadata.satElevation = mds.GetAs<double>("support_data.sat_elevation_angle");
+    outMetadata.satAzimuth = mds.GetAs<double>("support_data.sat_azimuth_angle");
+
+    outMetadata.bitsPerPixel = mds.GetAs<int>("support_data.bits_per_pixel");
+    outMetadata.bandNameList = mds.GetAsVector<std::string>("support_data.band_name_list");
+
+    // In the case of WorldView-2, we need to divide the absolute calibration
+    // factor by the effective bandwidth see for details:
+    // http://www.digitalglobe.com/downloads/Radiometric_Use_of_WorldView-2_Imagery.pdf
+    // These values are not written in the geom file by OSSIM as
+    // there are specific to WV2 We did not retrieve those values in the ossim
+    // class and consider them as constant values
+    outMetadata.effectiveBandwidth = {
+      {"P", 2.846000e-01},
+      {"C", 4.730000e-02},
+      {"B", 5.430000e-02},
+      {"G", 6.300000e-02},
+      {"Y", 3.740000e-02},
+      {"R", 5.740000e-02},
+      {"RE", 3.930000e-02},
+      {"N", 9.890000e-02},
+      {"N2", 9.960000e-02}
+    };
+
+    auto TDILevel = mds.GetAs<int>("support_data.TDI_level");
+
+    for (const auto & bandName : outMetadata.bandNameList)
+    {
+      outMetadata.TDILevel[bandName] = TDILevel;
+      outMetadata.absCalFactor[bandName] = mds.GetAs<double>("support_data." + bandName + "_band_absCalFactor");
+    }
+  }
+
+  void ParseProductMetadata(const MetadataSupplierInterface & mds, WorldView2Metadata & outMetadata)
+  {
+    // Open the metadata file to find the band names, as it is not parsed by GDAL
+    auto ressourceFiles = mds.GetResourceFiles();
+
+    // return true if the file extension is .IMD
+    auto lambda = [](const std::string & filename){return itksys::SystemTools::GetFilenameLastExtension(filename) == ".IMD";};
+    auto filename = std::find_if(ressourceFiles.begin(), ressourceFiles.end(), lambda);
+    if (filename == ressourceFiles.end())
+    {
+      otbGenericExceptionMacro(MissingMetadataException, 
+        << "Cannot find the .IMD file associated with the Digital Globe dataset");
+    }
+  
+    std::ifstream file(*filename);
+
+    if (file.is_open()) 
+    {
+      // Find band names at group definitions : 
+      // BEGIN_GROUP = BAND_N
+      const auto key = "BEGIN_GROUP";
+      const auto key_size = strlen(key);
+
+      const auto prefix = "BAND_";
+      const auto prefix_size = strlen(prefix);
+
+      std::string line;
+      while (std::getline(file, line)) 
+      {
+        if (starts_with(line, "BEGIN_GROUP"))
+        {
+          auto pos = line.find(prefix, key_size);
+          if (pos != std::string::npos)
+          {
+            outMetadata.bandNameList.push_back(line.substr(pos+prefix_size, line.size()-pos-prefix_size));
+          }
+        }
+      }
+      file.close();
+    }
+
+    outMetadata.sensorId = mds.GetAs<std::string>("IMD/IMAGE_1.satId");
+    outMetadata.bandId = mds.GetAs<std::string>("IMD/bandId");
+    
+    outMetadata.sunElevation = mds.GetAs<double>("IMD/IMAGE_1.meanSunEl");
+    outMetadata.sunAzimuth = mds.GetAs<double>("IMD/IMAGE_1.meanSunAz");
+    outMetadata.satElevation = mds.GetAs<double>("IMD/IMAGE_1.meanSatEl");
+    outMetadata.satAzimuth = mds.GetAs<double>("IMD/IMAGE_1.meanSatAz");
+
+    outMetadata.productionDateStr = mds.GetAs<std::string>("IMD/generationTime");
+    
+    // Use TLC time in priority, only available for level 1B products.
+    // If it is not available use firstLineTime instead.
+    outMetadata.acquisitionDateStr = mds.GetAs<std::string>("", "IMAGE_1.TLCTime");
+    if (outMetadata.acquisitionDateStr == "")
+    {
+      outMetadata.acquisitionDateStr = mds.GetAs<std::string>("IMD/IMAGE_1.firstLineTime");
+    }
+
+    outMetadata.bitsPerPixel = mds.GetAs<int>("IMD/bitsPerPixel");
+
+    if (outMetadata.bitsPerPixel != 16)
+    {
+      otbGenericExceptionMacro(MissingMetadataException,<< "Invalid bitsPerPixel " << outMetadata.bitsPerPixel);
+    }
+
+    for (auto & bandName: outMetadata.bandNameList)
+    {
+      auto prefix = "IMD/BAND_" + bandName + ".";
+      auto TDILevel = mds.GetAs<int>(prefix + "TDILevel");
+      outMetadata.TDILevel[bandName] = TDILevel;
+
+      // Verify if TDI level is correct, according to the document 
+      // Radiometric_Use_of_WorldView-2_Imagery, Technical Note, 2010 (Digital Globe)
+      if ( (outMetadata.bandId == "P" && (TDILevel <8 || TDILevel > 64))
+            || ( (outMetadata.bandId == "Multi" || outMetadata.bandId == "MS1" ) && (TDILevel <3 || TDILevel > 24)) )
+      {
+          otbGenericExceptionMacro(MissingMetadataException, 
+            << "Invalid TDI settings for band " << bandName);
+      }
+
+      // In previous version of OTB the effective bandwith was tabulated
+      // because Ossim did not read this specific metadata.
+      outMetadata.effectiveBandwidth[bandName] = mds.GetAs<double>(prefix + "effectiveBandwidth");
+      outMetadata.absCalFactor[bandName] = mds.GetAs<double>(prefix + "absCalFactor");
+    }
+  }
+
 }
 
 void WorldView2ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  // Check if there is DG metadatas
-  bool hasValue = false;
-  auto metadatatype = mds.GetMetadataValue("METADATATYPE", hasValue);
-  if (!hasValue || metadatatype != "DG")
-  {
-    otbGenericExceptionMacro(MissingMetadataException, 
-      << "No Digital Globe metadata has been found")
-  }
+  WorldView2Metadata metadata;
 
   // Check if the sensor is WorldView 2
-  auto sensorID = mds.GetMetadataValue("IMD/IMAGE_1.satId", hasValue);
-
-  if (sensorID.find("WV02") != std::string::npos)
+  if (mds.GetAs<std::string>("", "IMD/IMAGE_1.satId").find("WV02") != std::string::npos)
   {
-    m_Imd.Add(MDStr::SensorID, "WV02");
-    m_Imd.Add(MDStr::Mission, "WorldView-2");
+    ParseProductMetadata(mds, metadata);
+    FetchRPC(mds);
+  }
+  else if (mds.GetAs<std::string>("", "support_data.sat_id").find("WV02") != std::string::npos)
+  {
+    ParseGeomMetadata(mds, metadata);
   }
   else
   {
     otbGenericExceptionMacro(MissingMetadataException, << "Not a Worldview 2 sensor")
   }
 
-  auto ressourceFiles = mds.GetResourceFiles();
+  m_Imd.Add(MDStr::SensorID, "WV02");
+  m_Imd.Add(MDStr::Mission, "WorldView-2");
 
-  // return true if the file extension is .IMD
-  auto lambda = [](const std::string & filename){return itksys::SystemTools::GetFilenameLastExtension(filename) == ".IMD";};
-  auto filename = std::find_if(ressourceFiles.begin(), ressourceFiles.end(), lambda);
-  if (filename == ressourceFiles.end())
+  // Product type (Multi, MS1 or P)
+  Unquote(metadata.bandId);
+  m_Imd.Add(MDStr::ProductType, metadata.bandId);
+  
+
+  if (m_Imd.Bands.size() == metadata.bandNameList.size())
+  {
+    auto bandIt = m_Imd.Bands.begin();
+    for (const auto & bandName : metadata.bandNameList)
+    {
+      bandIt->Add(MDStr::BandName, bandName);
+      bandIt++;
+    }
+  }
+  else
   {
     otbGenericExceptionMacro(MissingMetadataException, 
-      << "Cannot find the .IMD file associated with the Digital Globe dataset");
-  }
-  
-  std::ifstream file(*filename);
-
-  auto bandIt = m_Imd.Bands.begin();
-  if (file.is_open()) 
-  {
-    // Find band names at group definitions : 
-    // BEGIN_GROUP = BAND_N
-    const auto key = "BEGIN_GROUP";
-    const auto key_size = strlen(key);
-
-    const auto prefix = "BAND_";
-    const auto prefix_size = strlen(prefix);
-
-    std::string line;
-    while (std::getline(file, line)) 
-    {
-      if (starts_with(line, "BEGIN_GROUP"))
-      {
-        auto pos = line.find(prefix, key_size);
-        if (pos != std::string::npos)
-        {
-          if (bandIt == m_Imd.Bands.end())
-          {
-            otbGenericExceptionMacro(MissingMetadataException, 
-              << "Number of bands in " 
-              << *filename 
-              << " inconsistent with the number of bands of the image");
-          }
-          bandIt->Add(MDStr::BandName, 
-            line.substr(pos+prefix_size, line.size()-pos-prefix_size));
-
-          bandIt++;
-        }
-      }
-    }
-    file.close();
+      << "The Number of bands in the metadata is inconsistent with the number of bands of the image");
   }
 
-  auto geometricLevel = mds.GetMetadataValue("IMD/productLevel", hasValue);
-  // throw missing
-  Unquote(geometricLevel);
-  m_Imd.Add(MDStr::GeometricLevel, geometricLevel);
-  
-  auto productType = mds.GetMetadataValue("IMD/bandId", hasValue);
-  // throw missing
-  Unquote(productType);
-  m_Imd.Add(MDStr::ProductType, productType);
-  
   // Acquisition and production dates
-  FetchDates(mds);
+  try
+  {
+    m_Imd.Add(MDTime::AcquisitionDate, 
+                boost::lexical_cast<MetaData::Time>(metadata.acquisitionDateStr));
+  }
+  catch (boost::bad_lexical_cast&)
+  {
+    otbGenericExceptionMacro(MissingMetadataException,
+            << "Invalid value for the acquisition date, got: "
+            << metadata.acquisitionDateStr);
+  }
+
+  try
+  {
+    m_Imd.Add(MDTime::ProductionDate, 
+                boost::lexical_cast<MetaData::Time>(metadata.productionDateStr));
+  }
+  catch (boost::bad_lexical_cast&)
+  {
+    otbGenericExceptionMacro(MissingMetadataException,
+            << "Invalid value for the production date, got: "
+            << metadata.productionDateStr);
+  }
 
   //Radiometry
-  Fetch(MDNum::SunElevation, mds, "IMD/IMAGE_1.meanSunEl");
-  Fetch(MDNum::SunAzimuth, mds, "IMD/IMAGE_1.meanSunAz");
-  Fetch(MDNum::SatElevation, mds, "IMD/IMAGE_1.meanSatAz");
-  Fetch(MDNum::SatAzimuth , mds, "IMD/IMAGE_1.meanSatEl");
-  
+  m_Imd.Add(MDNum::SunElevation, metadata.sunElevation);
+  m_Imd.Add(MDNum::SunAzimuth, metadata.sunAzimuth);
+  m_Imd.Add(MDNum::SatElevation, metadata.satElevation);
+  m_Imd.Add(MDNum::SatAzimuth, metadata.satAzimuth);
+
   //Physical Bias
   FetchPhysicalBias();
   
-  FetchPhysicalGain(mds);
+  for (auto & band : m_Imd.Bands)
+  {
+    auto bandName = band[MDStr::BandName];
+    band.Add(MDNum::PhysicalGain, metadata.effectiveBandwidth[bandName] / metadata.absCalFactor[bandName]);
+  }
 
   FetchSolarIrradiance();
 
   //First wavelengths and last wavelengths
   FetchWavelengths();
-
-  FetchRPC(mds);
 
   FetchSpectralSensitivity();
 }

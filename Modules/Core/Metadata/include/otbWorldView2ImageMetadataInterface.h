@@ -150,9 +150,7 @@ private:
 
   void FetchPhysicalBias();
   void FetchSolarIrradiance();
-  void FetchPhysicalGain(const MetadataSupplierInterface &);
-  void FetchDates(const MetadataSupplierInterface &);
-  void FetchWavelengths();  
+  void FetchWavelengths();
   void FetchSpectralSensitivity();
 };
 

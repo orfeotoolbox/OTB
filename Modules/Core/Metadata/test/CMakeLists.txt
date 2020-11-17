@@ -460,6 +460,7 @@ set(formosat_geom_file ${INPUTDATA}/FORMOSAT_ROI_1000_100.geom)
 set(pleiades_geom_file ${INPUTDATA}/pleiades/maido.geom)
 set(spot6_geom_file ${INPUTDATA}/spot6/spot6-1.geom)
 set(ikonos_geom_file ${INPUTDATA}/ikonos/ikonos-2.geom)
+set(worldview2_geom_file ${INPUTDATA}/wv2/wv2-2.geom)
 
 foreach(sensor ${sensor_list})
 
