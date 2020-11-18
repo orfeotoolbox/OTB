@@ -32,7 +32,6 @@ set(OTBGdalAdapters_SRC
   otbOGRExtendedFilenameToOptions.cxx
   otbSpatialReference.cxx
   otbCoordinateTransformation.cxx
-  otbGDALRPCTransformer.cxx
   )
 
 add_library(OTBGdalAdapters ${OTBGdalAdapters_SRC})

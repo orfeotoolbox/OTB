@@ -32,6 +32,7 @@ otbGDALImageIOTestCanRead.cxx
 otbMultiDatasetReadingInfo.cxx
 otbOGRVectorDataIOCanRead.cxx
 otbGDALImageIOImportExportMetadata.cxx
+otbGDALRPCTransformerTest.cxx
 )
 
 add_executable(otbIOGDALTestDriver ${OTBIOGDALTests})
@@ -260,3 +261,9 @@ foreach(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
     1 5 10 2) #old file hdr sans extensions
 
 endforeach()
+
+otb_add_test(NAME TuGDALRPCTransformerTest
+             COMMAND otbGdalAdaptersTestDriver 
+             otbGDALRPCTransformerTest
+             ${INPUTDATA}/TuGDALRPCTransformerTest_DEM.tif
+             )

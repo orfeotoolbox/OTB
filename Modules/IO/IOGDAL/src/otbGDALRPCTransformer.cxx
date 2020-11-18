@@ -21,6 +21,7 @@
 #include "otbGDALRPCTransformer.h"
 #include <assert.h>
 #include "cpl_string.h"
+#include "otbDEMHandler.h"
 
 namespace otb
 {
@@ -45,6 +46,10 @@ GDALRPCTransformer::GDALRPCTransformer(double LineOffset, double SampleOffset, d
   std::copy_n(LineDen, 20, this->m_GDALRPCInfo.adfLINE_DEN_COEFF);
   std::copy_n(SampleNum, 20, this->m_GDALRPCInfo.adfSAMP_NUM_COEFF);
   std::copy_n(SampleDen, 20, this->m_GDALRPCInfo.adfSAMP_DEN_COEFF);
+
+  auto & demHandler = otb::DEMHandler::GetInstance();
+  if (demHandler.GetDEMCount() > 0)
+    this->SetOption("RPC_DEM", demHandler.DEM_DATASET_PATH);
 }
 
 GDALRPCTransformer::~GDALRPCTransformer()

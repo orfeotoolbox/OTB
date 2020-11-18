@@ -86,7 +86,6 @@ add_executable(otbGdalAdaptersTestDriver
                otbGdalAdaptersTestDriver.cxx
                otbSpatialReferenceTest.cxx
                otbCoordinateTransformationTest.cxx
-               otbGDALRPCTransformerTest.cxx
                )
 
 target_link_libraries(otbGdalAdaptersTestDriver ${OTBGdalAdapters-Test_LIBRARIES})
@@ -98,9 +97,3 @@ otb_add_test(NAME TuSpatialReferenceTest
   
 otb_add_test(NAME TuOCoordinateTransformationTest
             COMMAND otbGdalAdaptersTestDriver otbCoordinateTransformationTest)
-        
-otb_add_test(NAME TuGDALRPCTransformerTest
-             COMMAND otbGdalAdaptersTestDriver 
-             otbGDALRPCTransformerTest
-             ${INPUTDATA}/TuGDALRPCTransformerTest_DEM.tif
-             )
