@@ -117,6 +117,7 @@ public:
   const Projection::GCPParam & GetGCPParam() const;
 
   std::string GetProjectionWKT() const;
+  std::string GetProjectionProj() const;
   
   // -------------------- Geom utility function ----------------------------
 

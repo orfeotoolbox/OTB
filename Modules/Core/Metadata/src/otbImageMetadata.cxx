@@ -81,6 +81,19 @@ std::string ImageMetadataBase::GetProjectionWKT() const
   }
 }
 
+std::string ImageMetadataBase::GetProjectionProj() const
+{
+  auto proj = GeometryKeys.find(MDGeom::ProjectionProj);
+  if (proj !=  GeometryKeys.end())
+  {
+    return boost::any_cast<std::string>(proj->second);
+  }
+  else
+  {
+    return "";
+  }
+}
+
 // -------------------- Geom utility function ----------------------------
 const boost::any & ImageMetadataBase::operator[](const MDGeom& key) const
 {
