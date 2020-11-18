@@ -23,7 +23,6 @@
 
 #include "otbGenericRSTransform.h"
 #include "otbMacro.h"
-#include "otbMetaDataKey.h"
 #include "otbRPCForwardTransform.h"
 #include "otbRPCInverseTransform.h"
 

@@ -63,7 +63,7 @@ template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutput
 void RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "RPC Model: " << this->m_RPCParam.get() << std::endl;
+  os << indent << "RPC Model: " << this->m_RPCParam.get()->ToJSON() << std::endl;
 }
 
 }
