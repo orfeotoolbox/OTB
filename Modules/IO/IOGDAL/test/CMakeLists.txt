@@ -263,7 +263,7 @@ foreach(INPUTFILE_PIXELTYPE ${INPUTFILE_PIXELTYPES_LIST})
 endforeach()
 
 otb_add_test(NAME TuGDALRPCTransformerTest
-             COMMAND otbGdalAdaptersTestDriver 
+             COMMAND otbIOGDALTestDriver
              otbGDALRPCTransformerTest
              ${INPUTDATA}/TuGDALRPCTransformerTest_DEM.tif
              )

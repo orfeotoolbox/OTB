@@ -24,7 +24,6 @@
 #include "otbGenericRSResampleImageFilter.h"
 
 #include "itkMetaDataObject.h"
-#include "otbMetaDataKey.h"
 
 #include "itkProgressAccumulator.h"
 

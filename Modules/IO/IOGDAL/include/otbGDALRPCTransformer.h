@@ -20,7 +20,6 @@
 #ifndef otbGDALRPCTransformer_h
 #define otbGDALRPCTransformer_h
 
-#include "OTBGdalAdaptersExport.h"
 #include "itkPoint.h"
 #include "gdal_alg.h"
 
@@ -42,10 +41,10 @@ namespace otb
  * RPCParam structure defined in the otbGeometryMetadata.h file. They
  * are quite similar to what can be found in GDALRPCInfo.
  *
- * \ingroup OTBGdalAdapters
+ * \ingroup OTBIOGDAL
  */
 
-class OTBGdalAdapters_EXPORT GDALRPCTransformer
+class  GDALRPCTransformer
 {
 public:
 
