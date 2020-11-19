@@ -152,7 +152,7 @@ public:
    * There values a computed by 6S. */
   WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
-  void Parse(const MetadataSupplierInterface *) override;
+  void Parse(const MetadataSupplierInterface &) override;
 
 protected:
   FormosatImageMetadataInterface() = default;

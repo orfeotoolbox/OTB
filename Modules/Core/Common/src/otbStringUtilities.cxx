@@ -25,20 +25,22 @@ namespace otb
 
 string_view lstrip(string_view const& v, string_view const& c )
 {
-  string_view::const_iterator pos = std::find_first_of(
-    v.cbegin(), v.cend(), c.cbegin(), c.cend(),
-    [](char c1, char c2) -> bool { return bool(c1 != c2) ;});
+  string_view::const_iterator pos = std::find_if(
+        v.cbegin(), v.cend(),
+        [&v, &c](char in) -> bool {return std::find(c.cbegin(),c.cend(),in) == c.cend();});
+
   // Beware: returned string_view may be empty
   return string_view(pos, v.cend());
 }
 
 string_view rstrip(string_view const& v, string_view const& c )
 {
-  string_view::const_reverse_iterator pos = std::find_first_of(
-    v.crbegin(), v.crend(), c.cbegin(), c.cend(),
-    [](char c1, char c2) -> bool { return bool(c1 != c2) ;});
+  string_view::const_reverse_iterator pos = std::find_if(
+        v.crbegin(), v.crend(),
+        [&v, &c](char in) -> bool {return std::find(c.cbegin(),c.cend(),in) == c.cend();});
+
   // Beware: returned string_view may be empty
-  return string_view(v.cbegin(),&*pos - &(*v.cbegin()));
+  return string_view(v.cbegin(), &*pos - &(*v.cbegin()) + 1);
 }
 
 } // end namespace otb

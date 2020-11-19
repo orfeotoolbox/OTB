@@ -99,16 +99,14 @@ public:
   /*get lookup data for calculating backscatter */
   void CreateCalibrationLookupData(const short type) override;
 
-  void Parse(const MetadataSupplierInterface *) override;
+  void Parse(const MetadataSupplierInterface &) override;
 
 protected:
   /* class ctor */
   Sentinel1ImageMetadataInterface();
 
   /* class dtor */
-  ~Sentinel1ImageMetadataInterface() override
-  {
-  }
+  ~Sentinel1ImageMetadataInterface() override = default;
 
   /* Fetch the AzimuthFmRate metadata */
   std::vector<AzimuthFmRate> GetAzimuthFmRate(const XMLMetadataSupplier&) const;
@@ -177,9 +175,7 @@ public:
   {
   }
 
-  ~Sentinel1CalibrationLookupData() override
-  {
-  }
+  ~Sentinel1CalibrationLookupData() override = default;
 
   void InitParameters(short type, double ft, double lt, int lines, int c, std::vector<Sentinel1CalibrationStruct> const& vlist)
   {

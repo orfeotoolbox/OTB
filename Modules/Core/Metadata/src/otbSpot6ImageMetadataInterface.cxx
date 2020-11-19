@@ -1694,14 +1694,39 @@ void Spot6ImageMetadataInterface::FetchSpectralSensitivity(const std::string & s
   }
 }
 
-void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds);
   DimapMetadataHelper helper;
-  
-  helper.Parse(*mds);
+
+  // DimapV2 case
+  if (mds.GetAs<std::string>("", "IMAGERY/SATELLITEID") == "SPOT 6"
+      || mds.GetAs<std::string>("", "IMAGERY/SATELLITEID") == "SPOT 7")
+  {
+    helper.ParseDimapV2(mds);
+
+    m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
+
+    // fill RPC model
+    if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
+    {
+      FetchRPC(mds);
+    }
+  }
+  // Geom case
+  else if (mds.GetAs<std::string>("", "support_data.sensorID") == "SPOT 6"
+           || mds.GetAs<std::string>("", "support_data.sensorID") == "SPOT 7")
+  {
+    helper.ParseGeom(mds);
+
+    m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
+  }
+  else
+  {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Not a Spot 6/7 product")
+  }
+
   const auto & dimapData = helper.GetDimapData();
-  
+
   if (dimapData.mission == "SPOT")
   {
     m_Imd.Add(MDStr::SensorID, dimapData.mission + " " +dimapData.missionIndex);
@@ -1754,12 +1779,6 @@ void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
 
 
   m_Imd.Add(MDStr::GeometricLevel, dimapData.ProcessingLevel);
-
-  // fill RPC model
-  if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
-  {
-    FetchRPC(*mds);
-  }
 
   FetchSpectralSensitivity(m_Imd[MDStr::SensorID]);
 }

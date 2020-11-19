@@ -41,7 +41,7 @@ class OTBMetadata_EXPORT GeomMetadataSupplier
   : public MetadataSupplierInterface
 {
 public:
-  using DictType = std::map<std::string, std::string>;
+  using DictType = std::unordered_map<std::string, std::string>;
 
   GeomMetadataSupplier(const std::string &);
   GeomMetadataSupplier(const GeomMetadataSupplier &) = delete;
@@ -67,7 +67,7 @@ public:
    *
    * @param imd The ImageMetadata to fill
    */
-  const boost::any& FetchRPC(ImageMetadata & imd);
+  bool FetchRPC(ImageMetadata & imd);
 
   /**
    * @brief Writes the content of the Geom file into a string

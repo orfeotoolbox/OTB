@@ -136,8 +136,6 @@ public:
      * There values a computed by 6S. */
   WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
-  void Parse(const MetadataSupplierInterface *) override;
-
 protected:
   QuickBirdImageMetadataInterface();
   ~QuickBirdImageMetadataInterface() override = default;
@@ -145,13 +143,6 @@ protected:
 private:
   QuickBirdImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
-
-  void FetchDates(const MetadataSupplierInterface &);
-
-  void FetchPhysicalBias();
-  void FetchSolarIrradiance();
-  void FetchPhysicalGain(const MetadataSupplierInterface &);
-  void FetchSpectralSensitivity();
 };
 
 } // end namespace otb

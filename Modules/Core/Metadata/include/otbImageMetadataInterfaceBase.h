@@ -230,7 +230,7 @@ public:
 
   virtual bool CanRead() const {return false;}
 
-  virtual void Parse(const MetadataSupplierInterface *)
+  virtual void Parse(const MetadataSupplierInterface &)
     {
     otbGenericExceptionMacro(MissingMetadataException,<<"Metadata parsing not implemented")
     }
@@ -254,9 +254,7 @@ public:
 
 protected:
   ImageMetadataInterfaceBase();
-  ~ImageMetadataInterfaceBase() override
-  {
-  }
+  ~ImageMetadataInterfaceBase() override = default;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 

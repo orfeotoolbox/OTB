@@ -60,7 +60,7 @@ public:
    * If band >= 0, the metadata value is looked in the specified band*/
   virtual std::string GetMetadataValue(std::string const& path, bool& hasValue, int band=-1) const = 0;
 
-  bool HasValue(std::string const& path, int band=-1);
+  bool HasValue(std::string const& path, int band=-1) const;
 
   virtual int GetNbBands() const = 0;
 
@@ -82,6 +82,25 @@ public:
       otbGenericExceptionMacro(MissingMetadataException,<<"Bad metadata value for '"<<path<<"', got: "<<ret)
     }
   }
+
+  template <typename T> T GetAs(T const& defaultValue, std::string const& path, int band=-1) const
+  {
+    bool hasValue;
+    std::string ret = GetMetadataValue(path, hasValue, band);
+    if (!hasValue)
+    {
+      return defaultValue;
+    }
+    try
+    {
+      return boost::lexical_cast<T>(ret);
+    }
+    catch (boost::bad_lexical_cast&)
+    {
+      return defaultValue;
+    }
+  }
+
 
   /** Parse a metadata value to a std::vector,
    *  If size>=0, then the final std::vector size is checked and an exception
