@@ -461,6 +461,7 @@ set(pleiades_geom_file ${INPUTDATA}/pleiades/maido.geom)
 set(spot6_geom_file ${INPUTDATA}/spot6/spot6-2.geom)
 set(ikonos_geom_file ${INPUTDATA}/ikonos/ikonos-2.geom)
 set(worldview2_geom_file ${INPUTDATA}/wv2/wv2-2.geom)
+set(quickbird_geom_file ${INPUTDATA}/QB/qb-2.geom)
 
 foreach(sensor ${sensor_list})
 
