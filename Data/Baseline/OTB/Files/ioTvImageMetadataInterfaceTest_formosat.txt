@@ -1,6 +1,5 @@
 SensorID FORMOSAT 2
 Mission Formasat 2
-GeometricLevel 1A
 TileHintX 3000
 TileHintY 500
 DataType 1
@@ -8,7 +7,7 @@ SunElevation 37.4423
 SunAzimuth 160.749
 SatElevation 57.9678
 SatAzimuth 241.823
-AcquisitionDate 2007-10-13T10:40:33.644225Z
+AcquisitionDate 2007-10-13T10:40:31.793824Z
 ProductionDate 2007-10-15T17:58:07Z
 GCP <GCPParam>
 BandName B1

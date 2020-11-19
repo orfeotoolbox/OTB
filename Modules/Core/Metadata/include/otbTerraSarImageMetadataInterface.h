@@ -174,13 +174,11 @@ public:
    *  in the order R, G, B */
   std::vector<unsigned int> GetDefaultDisplay() const override;
 
-  void Parse(const MetadataSupplierInterface *) override;
+  void Parse(const MetadataSupplierInterface &) override;
 
 protected:
   TerraSarImageMetadataInterface();
-  ~TerraSarImageMetadataInterface() override
-  {
-  }
+  ~TerraSarImageMetadataInterface() override = default;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Evaluate polynom with Horner scheme*/

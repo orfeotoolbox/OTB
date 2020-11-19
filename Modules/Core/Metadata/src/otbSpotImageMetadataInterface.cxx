@@ -1743,45 +1743,51 @@ void SpotImageMetadataInterface::FetchSpectralSensitivity()
   }
 }
 
-void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
+void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds);
-
-  Fetch(MDStr::SensorID, *mds, "IMAGERY/SATELLITEID");
-  if (strncmp(m_Imd[MDStr::SensorID].c_str(), "SPOT 5", 6) == 0)
-    {
-    m_Imd.Add(MDStr::Mission, "SPOT 5");
-    }
-  else
-    {
-    otbGenericExceptionMacro(MissingMetadataException,<<"Not a spot 5 product")
-    }
-
-  //Find the METADATA.DIM file (Dimap V1 metadata file)
-  auto resourceFiles = mds->GetResourceFiles();
-  
-  std::string metadataFile;
-  for (const auto & file: resourceFiles)
-  {
-    if (file.find("METADATA.DIM")!=std::string::npos)
-    {
-      metadataFile = file;
-      break;
-    }
-  }
-
-  if (metadataFile.empty())
-  {
-    otbGenericExceptionMacro(MissingMetadataException,<<"Cannot find the METADATA.DIM file")
-  }
-
-  XMLMetadataSupplier xmlMds(metadataFile);
-
   DimapMetadataHelper helper;
 
-  helper.ParseDimapV1(xmlMds, "Dimap_Document.");
+  // GDAL DIMAP metadata case
+  if (mds.GetAs<std::string>("", "IMAGERY/SATELLITEID") == "SPOT 5")
+  {
+    //Find the METADATA.DIM file (Dimap V1 metadata file)
+    auto resourceFiles = mds.GetResourceFiles();
+    
+    std::string metadataFile;
+    for (const auto & file: resourceFiles)
+    {
+      if (file.find("METADATA.DIM")!=std::string::npos)
+      {
+        metadataFile = file;
+        break;
+      }
+    }
+
+    if (metadataFile.empty())
+    {
+      otbGenericExceptionMacro(MissingMetadataException,<<"Cannot find the METADATA.DIM file")
+    }
+
+    XMLMetadataSupplier xmlMds(metadataFile);
+
+    helper.ParseDimapV1(xmlMds, "Dimap_Document.");
+
+  }
+  // geom metadata case
+  else if (mds.GetAs<std::string>("", "support_data.sensorID" ) == "Spot 5")
+  {
+    helper.ParseGeom(mds);
+  }
+  else
+  {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Not a Spot 5 product")
+  }
+
   const auto & dimapData = helper.GetDimapData();
   
+  m_Imd.Add(MDStr::SensorID, "SPOT 5");
+  m_Imd.Add(MDStr::Mission, "SPOT 5");
+
   m_Imd.Add(MDTime::ProductionDate, 
     boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));
   m_Imd.Add(MDTime::AcquisitionDate, 
@@ -1803,24 +1809,20 @@ void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   auto nbBands = m_Imd.Bands.size();
   if (dimapData.PhysicalBias.size() == nbBands
     && dimapData.PhysicalGain.size() == nbBands
-    && dimapData.SolarIrradiance.size() == nbBands
-    && dimapData.BandIDs.size() == nbBands)
+    && dimapData.SolarIrradiance.size() == nbBands)
   {
     auto bias = dimapData.PhysicalBias.begin();
     auto gain = dimapData.PhysicalGain.begin();
-    auto bandId = dimapData.BandIDs.begin();
     auto solarIrradiance = dimapData.SolarIrradiance.begin();
 
     for (auto & band: m_Imd.Bands)
     {
       band.Add(MDNum::PhysicalGain, *gain);
       band.Add(MDNum::PhysicalBias, *bias);
-      band.Add(MDStr::BandName, *bandId);
       band.Add(MDNum::SolarIrradiance, *solarIrradiance);
 
       bias++;
       gain++;
-      bandId++;
       solarIrradiance++;
     }
   }
@@ -1828,6 +1830,36 @@ void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface *mds)
   {
     otbGenericExceptionMacro(MissingMetadataException,
       << "The number of bands in image metadatas is incoherent with the DIMAP product")
+  }
+
+  // band IDs is not parsed in geom files. There are two possible cases: panchromatic and multispectral
+  if (dimapData.BandIDs.empty())
+  {
+    if (m_Imd.Bands.size() == 1)
+    {
+      m_Imd.Bands[0].Add(MDStr::BandName, "P");
+    }
+    else if (m_Imd.Bands.size() == 4)
+    {
+      m_Imd.Bands[0].Add(MDStr::BandName, "XS1");
+      m_Imd.Bands[1].Add(MDStr::BandName, "XS2");
+      m_Imd.Bands[2].Add(MDStr::BandName, "XS3");
+      m_Imd.Bands[3].Add(MDStr::BandName, "SWIR");
+    }
+  }
+  else if (dimapData.BandIDs.size() == nbBands )
+  {
+    auto bandId = dimapData.BandIDs.begin();
+    
+    for (auto & band: m_Imd.Bands)
+    {
+      band.Add(MDStr::BandName, *bandId);
+      bandId++;
+    }
+  }
+  else
+  {
+    otbGenericExceptionMacro(MissingMetadataException,<<"Invalid band number in the SPOT 5 product")
   }
 
   if (nbBands == 4)

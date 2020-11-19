@@ -28,7 +28,7 @@ GDALImageMetadataInterface::GDALImageMetadataInterface()
 }
 
 void
-GDALImageMetadataInterface::Parse(const MetadataSupplierInterface *)
+GDALImageMetadataInterface::Parse(const MetadataSupplierInterface &)
 {
   otbGenericExceptionMacro(MissingMetadataException,<<"Metadata parsing not implemented")
 }

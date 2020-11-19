@@ -24,7 +24,6 @@
 #include "OTBMetadataExport.h"
 #include "otbMetadataSupplierInterface.h"
 
-
 namespace otb
 {
 
@@ -92,6 +91,99 @@ public:
   {
     return m_Data;
   }
+
+  void ParseGeom(const MetadataSupplierInterface & mds)
+  {
+    // Read a vector value from 
+    auto readVector = [&mds](const std::string & path) 
+    {
+      auto strMetadata = mds.GetAs<std::string>(path);
+      strMetadata.erase(std::remove(strMetadata.begin(), strMetadata.end(), '\"'), strMetadata.end());
+      
+      std::istringstream is( strMetadata );
+      return std::vector<double>(( std::istream_iterator<double>( is ) ), 
+                                  ( std::istream_iterator<double>() ) );
+    };
+
+    m_Data.mission = mds.GetAs<std::string>("sensor");
+    auto sensorName = mds.GetAs<std::string>("sensor");
+    std::vector<std::string> parts;
+    boost::split(parts, sensorName, boost::is_any_of(" "));
+    m_Data.mission = parts[0];
+    if (parts.size() > 1)
+    {
+      m_Data.missionIndex = parts[1];
+    }
+    
+    m_Data.ImageID = mds.GetAs<std::string>("support_data.image_id");
+    m_Data.ProcessingLevel = mds.GetAs<std::string>("", "support_data.processing_level");
+
+    // Band name list might not be present in the dimap
+    auto bandNameListStr = mds.GetAs<std::string>("", "support_data.band_name_list");
+    if (!bandNameListStr.empty())
+    {
+      bandNameListStr.erase(std::remove(bandNameListStr.begin(), bandNameListStr.end(), '\"'), bandNameListStr.end());
+      boost::trim(bandNameListStr);
+      boost::split(m_Data.BandIDs, bandNameListStr, boost::is_any_of(" "));
+    }
+
+    m_Data.ProductionDate = mds.GetAs<std::string>("support_data.production_date");
+    
+    // Convert YYYY-MM-DD HH:mm:ss to YYYY-MM-DDTHH:mm:ss
+    auto pos = m_Data.ProductionDate.find(" ",10);
+    if (pos != std::string::npos)
+    {
+      m_Data.ProductionDate.replace(pos,1,"T");
+    }
+
+    m_Data.AcquisitionDate = mds.GetAs<std::string>("support_data.image_date");
+    
+    pos = m_Data.AcquisitionDate.find(" ",10);
+    if (pos != std::string::npos)
+    {
+      m_Data.AcquisitionDate.replace(pos,1,"T");
+    }
+    
+    m_Data.SunAzimuth = readVector("support_data.azimuth_angle");
+    m_Data.SunElevation = readVector("support_data.elevation_angle");
+    
+    m_Data.IncidenceAngle = readVector("support_data.incident_angle");
+    m_Data.SceneOrientation = readVector("support_data.scene_orientation");
+
+    m_Data.StepCount = mds.GetAs<int>(0, "support_data.step_count");
+
+    m_Data.PhysicalGain = readVector("support_data.physical_gain");
+    m_Data.PhysicalBias = readVector("support_data.physical_bias");
+    m_Data.SolarIrradiance = readVector("support_data.solar_irradiance");
+
+
+    m_Data.softwareVersion = mds.GetAs<std::string>("", "support_data.software_version");
+    m_Data.SatAzimuth = mds.GetAs<double>(0, "support_data.sat_azimuth_angle");
+    auto acrossTrackViewingAngle = mds.GetAs<std::string>("", "viewing_angle_across_track");
+    auto alongTrackViewingAngle = mds.GetAs<std::string>("", "viewing_angle_along_track");
+
+    if (!acrossTrackViewingAngle.empty())
+    {
+      m_Data.AcrossTrackViewingAngle.push_back(std::stod("acrossTrackViewingAngle"));
+    }
+    
+    if (!alongTrackViewingAngle.empty())
+    {
+      m_Data.AlongTrackViewingAngle.push_back(std::stod("alongTrackViewingAngle"));
+    }
+
+    if (mds.HasValue("support_data.along_track_incidence_angle"))
+    {
+      m_Data.AlongTrackIncidenceAngle = readVector("support_data.along_track_incidence_angle");
+    }
+
+    if (mds.HasValue("support_data.across_track_incidence_angle"))
+    {
+      m_Data.AcrossTrackIncidenceAngle = readVector("support_data.across_track_incidence_angle");
+    }
+
+  }
+
 
   void ParseDimapV1(const MetadataSupplierInterface & mds, const std::string prefix)
   {
@@ -171,6 +263,7 @@ public:
 
     m_Data.ProductionDate = mds.GetAs<std::string>(path);
     
+    // Convert YYYY-MM-DD HH:mm:ss to YYYY-MM-DDTHH:mm:ss
     auto pos = m_Data.ProductionDate.find(" ",10);
     if (pos != std::string::npos)
     {
@@ -179,9 +272,19 @@ public:
 
     std::vector<std::string> imagingDateVec;
 
-    auto imagingDate = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Information", "Scene_Source.IMAGING_DATE" );
-    auto imagingTime = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Information", "Scene_Source.IMAGING_TIME" );
-    m_Data.AcquisitionDate = imagingDate + "T" + imagingTime;
+    m_Data.AcquisitionDate = mds.GetAs<std::string>("", prefix + "Data_Strip.Sensor_Configuration.Time_Stamp.SCENE_CENTER_TIME");
+
+    // If SCENE_CENTER_TIME is not present, try /Dimap_Document/Data_Strip/Time_Stamp/REFERENCE_TIME instead (e.g. Formosat)
+    if (m_Data.AcquisitionDate.empty())
+    {
+      m_Data.AcquisitionDate = mds.GetAs<std::string>("", prefix + "Data_Strip.Time_Stamp.REFERENCE_TIME");
+      
+      pos = m_Data.AcquisitionDate.find(" ",10);
+      if (pos != std::string::npos)
+      {
+        m_Data.AcquisitionDate.replace(pos,1,"T");
+      }
+    }
 
     m_Data.Instrument = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Information", "Scene_Source.INSTRUMENT" );
     m_Data.InstrumentIndex = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Information", "Scene_Source.INSTRUMENT_INDEX" );
@@ -208,7 +311,7 @@ public:
   }
 
 
-  void Parse(const MetadataSupplierInterface & mds)
+  void ParseDimapV2(const MetadataSupplierInterface & mds)
   {
     std::vector<std::string> missionVec;
     ParseVector(mds, "IMD/Dataset_Sources.Source_Identification"

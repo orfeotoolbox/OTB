@@ -138,7 +138,7 @@ public:
    */
   std::vector<std::string> GetEnhancedBandNames() const override;
 
-  void Parse(const MetadataSupplierInterface *) override;
+  void Parse(const MetadataSupplierInterface &) override;
 
 protected:
   WorldView2ImageMetadataInterface() = default;
@@ -149,11 +149,16 @@ private:
   void operator=(const Self&) = delete;
 
   void FetchPhysicalBias();
-  void FetchSolarIrradiance();
-  void FetchPhysicalGain(const MetadataSupplierInterface &);
-  void FetchDates(const MetadataSupplierInterface &);
-  void FetchWavelengths();  
-  void FetchSpectralSensitivity();
+  
+  void FetchSolarIrradianceWorldView2();
+  void FetchWavelengthsWorldView2();
+  void FetchSpectralSensitivityWorldView2();
+
+  void FetchSolarIrradianceQuickBird();
+  void FetchSpectralSensitivityQuickBird();
+  void FetchPhysicalGainQuickBird(int bitsPerPixel, 
+                                  const std::unordered_map<std::string, double> & absCalFactor,
+                                  const std::unordered_map<std::string, int> & TDILevels);
 };
 
 } // end namespace otb
