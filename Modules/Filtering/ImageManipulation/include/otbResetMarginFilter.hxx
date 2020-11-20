@@ -62,8 +62,6 @@ ResetMarginFilter<TImage>
   assert(output);
 
   auto curRoi = OutputRegionToInputRegion(outputRegionForThread);
-  InputIterator  inputIterator (input,  curRoi);
-  OutputIterator outputIterator(output, outputRegionForThread);
 
   auto const& size      = outputRegionForThread.GetSize();
   auto const& index     = outputRegionForThread.GetIndex();
@@ -92,57 +90,84 @@ ResetMarginFilter<TImage>
   auto const nb_z_r = (unsigned long)(endX - thrX2) * nBand;
   assert(nb_z_l + nb_c_m + nb_z_r == full_line);
 
-  itk::ProgressReporter progress( this, threadId, outputRegionForThread.GetNumberOfPixels() / sizeY );
-  outputIterator.GoToBegin();
+  const InternalPixelType *inData = input->GetBufferPointer();
+  InternalPixelType *outData = output->GetBufferPointer();
+  const unsigned long inLineOff = nBand * input->GetBufferedRegion().GetSize(0);
+  const unsigned long outLineOff = nBand * output->GetBufferedRegion().GetSize(0);
+  bool hasContiguousLines( sizeX == output->GetBufferedRegion().GetSize(0) );
+  // Go to begin
+  outData += nBand * output->ComputeOffset(index);
+  if (curRoi.GetNumberOfPixels())
+    {
+    inData += nBand * input->ComputeOffset(curRoi.GetIndex());
+    }
 
-  // TODO: Can we consider that lines are contiguous in memory?
-  // If so, we could have only 2 fill_n and one copy_n!
+  itk::ProgressReporter progress( this, threadId, outputRegionForThread.GetNumberOfPixels() / sizeY );
+
   auto y = startY;
-  for (
-      ; y < thrY1
-      ; ++y, outputIterator.NextLine())
-  {
-    // If there is any trimming of first lines, the inputIterator iterator will
-    // directly point to the right region. we shall not increment it!
-    // otbMsgDevMacro("o(" << y << ") <-- 0");
-    assert(! outputIterator.IsAtEnd());
-    outputIterator.GoToBeginOfLine();
-    std::fill_n(&outputIterator.Value(), full_line, m_Pad);
-    progress.CompletedPixel(); // Completed...Line()
-  }
+  if (hasContiguousLines)
+    {
+    // if output lines are contiguous, we can do one call to std::fill_n
+    std::fill_n(outData, full_line*(thrY1-y), m_Pad);
+    for (
+        ; y < thrY1
+        ; ++y, outData+=outLineOff )
+      {
+      progress.CompletedPixel(); // Completed...Line()
+      }
+    }
+  else
+    {
+    for (
+        ; y < thrY1
+        ; ++y, outData+=outLineOff )
+      {
+      // If there is any trimming of first lines, the inData will
+      // directly point to the right region. we shall not increment it!
+      // otbMsgDevMacro("o(" << y << ") <-- 0");
+      std::fill_n(outData, full_line, m_Pad);
+      progress.CompletedPixel(); // Completed...Line()
+      }
+    }
   assert(y == thrY1);
   otbMsgDevMacro("Y in ["<<thrY1<<".."<<thrY2<<"[  <<--- Input");
-  inputIterator.GoToBegin();
   for (
       ; y < thrY2
-      ; ++y, inputIterator.NextLine(), outputIterator.NextLine())
+      ; ++y, inData+=inLineOff,  outData+=outLineOff)
   {
-    // otbMsgDevMacro("o(" << y << ") <-- Input");
-    assert(! inputIterator.IsAtEnd());
-    assert(! outputIterator.IsAtEnd());
-    inputIterator.GoToBeginOfLine();
-    outputIterator.GoToBeginOfLine();
-    auto const t1 = std::fill_n(&outputIterator.Value(), nb_z_l, m_Pad);
-    // If there is any trimming of first columns, the inputIterator iterator
+    auto const t1 = std::fill_n(outData, nb_z_l, m_Pad);
+    // If there is any trimming of first columns, the inData iterator
     // will directly point to the right region. we shall not apply an offset!
-    auto const t2 = std::copy_n(&inputIterator.Value(), nb_c_m, t1);
+    auto const t2 = std::copy_n(inData, nb_c_m, t1);
     std::fill_n(t2, nb_z_r, m_Pad);
     progress.CompletedPixel(); // Completed...Line()
   }
   assert(y == thrY2);
   otbMsgDevMacro("Y in ["<<thrY2<<".."<<endY<<"[  <<--- 0");
-  for (
-      ; y < endY
-      ; ++y, outputIterator.NextLine())
-  {
-    // If there is any trimming of last lines, the inputIterator iterator will
-    // directly point to the right region. we shall not increment it!
-    // otbMsgDevMacro("o(" << y << ") <-- 0");
-    assert(! outputIterator.IsAtEnd());
-    outputIterator.GoToBeginOfLine();
-    std::fill_n(&outputIterator.Value(), full_line, m_Pad);
-    progress.CompletedPixel(); // Completed...Line()
-  }
+  if (hasContiguousLines)
+    {
+    // if output lines are contiguous, we can do one call to std::fill_n
+    std::fill_n(outData, full_line*(endY-y), m_Pad);
+    for (
+        ; y < endY
+        ; ++y, outData+=outLineOff )
+      {
+      progress.CompletedPixel(); // Completed...Line()
+      }
+    }
+  else
+    {
+    for (
+        ; y < endY
+        ; ++y,  outData+=outLineOff)
+      {
+      // If there is any trimming of last lines, the inputIterator iterator will
+      // directly point to the right region. we shall not increment it!
+      // otbMsgDevMacro("o(" << y << ") <-- 0");
+      std::fill_n(outData, full_line, m_Pad);
+      progress.CompletedPixel(); // Completed...Line()
+      }
+    }
   assert(y == endY);
   otbMsgDevMacro("ThreadedGenerateData end");
 }
@@ -164,4 +189,3 @@ ResetMarginFilter<TImage>
 } // otb namespace
 
 #endif  // otbResetMarginFilter_hxx
-
