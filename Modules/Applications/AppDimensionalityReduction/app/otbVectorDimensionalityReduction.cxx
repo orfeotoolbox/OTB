@@ -128,10 +128,11 @@ private:
     AddChoice("featout.list", "List");
     SetParameterDescription("featout.list", "Use a list with all names");
 
-    AddParameter(ParameterType_StringList, "featout.list.names", "Feature name list");
+    AddParameter(ParameterType_Field, "featout.list.names", "Feature name list");
     SetParameterDescription("featout.list.names",
                             "List of field names for the output "
                             "features which result from the reduction.");
+    SetVectorData("featout.list.names", "in");
 
     AddParameter(ParameterType_Int, "pcadim", "Principal component dimension");
     SetParameterDescription("pcadim",
