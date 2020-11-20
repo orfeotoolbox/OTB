@@ -99,8 +99,10 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::GenerateOutputInfo
   m_Resampler->UpdateOutputInformation();
   this->GraftOutput(m_Resampler->GetOutput());
 
-  // Encapsulate output projRef
-  this->GetOutput()->m_Imd.Add(MDGeom::ProjectionProj, this->GetOutputProjectionRef());
+  // Encapsulate output projRef and metadata
+  if (this->GetOutputImageMetadata() != nullptr)
+    this->GetOutput()->m_Imd.Merge(*(this->GetOutputImageMetadata()));
+  this->GetOutput()->m_Imd.Add(MDGeom::ProjectionWKT, this->GetOutputProjectionRef());
 }
 
 /**
@@ -119,8 +121,8 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::EstimateOutputRpcM
   tempPtr->SetRegions(region);
 
   // Encapsulate the output metadata in the temp image
+  tempPtr->m_Imd.Add(MDGeom::ProjectionWKT, this->GetOutputProjectionRef());
   tempPtr->SetImageMetadata(*(this->GetOutputImageMetadata()));
-  tempPtr->m_Imd.Add(MDGeom::ProjectionProj, this->GetOutputProjectionRef());
 
   // Estimate the rpc model from the temp image
   m_OutputRpcEstimator->SetInput(tempPtr);

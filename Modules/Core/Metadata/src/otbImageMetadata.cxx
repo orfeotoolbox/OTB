@@ -481,7 +481,7 @@ void ImageMetadata::Merge(const ImageMetadata& imd)
 {
   ImageMetadataBase::Fuse(imd);
   
-  for (unsigned int i = 0; i < std::min(Bands.size(), imd.Bands.size()); i++)
+  for (unsigned int i = 0; i < std::min(Bands.size(), imd.Bands.size()); ++i)
   {
     Bands[i].Fuse(imd.Bands[i]);
   }
