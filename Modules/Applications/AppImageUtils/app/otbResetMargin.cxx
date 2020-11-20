@@ -141,8 +141,8 @@ private:
 
   void DoExecute() override
   {
-    FloatImageType* input = GetParameterFloatImage("in");
-    FloatImageType::RegionType region;
+    FloatVectorImageType* input = GetParameterFloatVectorImage("in");
+    FloatVectorImageType::RegionType region;
     switch (GetParameterInt("mode"))
       {
       case 0: // roi
@@ -154,8 +154,8 @@ private:
       case 1: // threshold
         {
         region = input->GetLargestPossibleRegion();
-        FloatImageType::IndexType idx = region.GetIndex();
-        FloatImageType::SizeType sz = region.GetSize();
+        FloatVectorImageType::IndexType idx = region.GetIndex();
+        FloatVectorImageType::SizeType sz = region.GetSize();
         int thrX = GetParameterInt("threshold.x");
         int thrYtop = GetParameterInt("threshold.y.start");
         int thrYbot = GetParameterInt("threshold.y.end");
@@ -172,7 +172,7 @@ private:
         }
       }
 
-    auto filter = ResetMarginFilter<FloatImageType>::New();
+    auto filter = ResetMarginFilter<FloatVectorImageType>::New();
     filter->SetROI(region);
     filter->SetInput(input);
     filter->SetPaddingValue(GetParameterFloat("val"));
