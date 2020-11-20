@@ -250,6 +250,8 @@ public:
    * \li ParameterType_InputFilenameListParameter
    * \li ParameterType_StringList
    * \li ParameterType_ListView
+   * \li ParameterType_Band
+   * \li ParameterType_Field
    */
   void SetParameterString(std::string const& parameter, std::string value, bool hasUserValueFlag = true);
 
@@ -259,6 +261,8 @@ public:
    * \li ParameterType_String
    * \li ParameterType_StringList
    * \li ParameterType_ListView
+   * \li ParameterType_Band
+   * \li ParameterType_Field
    * \li ParameterType_InputFilename
    * \li ParameterType_OutputFilename
    * \li ParameterType_Directory
@@ -427,6 +431,8 @@ public:
    *
    * Can be called for types:
    * \li ParameterType_ListView
+   * \li ParameterType_Band
+   * \li ParameterType_Field
    */
   void SetListViewSingleSelectionMode(std::string const& parameter, bool status);
 
@@ -435,6 +441,8 @@ public:
    *
    * Can be called for types:
    * \li ParameterType_ListView
+   * \li ParameterType_Band
+   * \li ParameterType_Field
    */
   bool GetListViewSingleSelectionMode(const std::string& parameter);
 
