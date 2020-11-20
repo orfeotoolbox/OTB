@@ -169,6 +169,12 @@ parameters:
 -  ``ParameterType_RAM`` : parameter storing the maximum amount of RAM
    to be used.
 
+-  ``ParameterType_Field`` : parameter storing a list of field from a given
+   vector data (support multi-choice and single-choice).
+
+-  ``ParameterType_Band`` : parameter storing a list of band from a given
+   raster data (support multi-choice and single-choice).
+
 Parameters description
 ~~~~~~~~~~~~~~~~~~~~~~
 
