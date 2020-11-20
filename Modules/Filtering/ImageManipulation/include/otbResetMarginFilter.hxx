@@ -22,11 +22,8 @@
 #define otbResetMarginFilter_hxx
 
 #include "otbResetMarginFilter.h"
-#include "otbInterval.h"
 #include "otbMacro.h"
 #include "otbLogHelpers.h"
-#include "itkImageScanlineConstIterator.h"
-#include "itkImageScanlineIterator.h"
 #include "itkProgressReporter.h"
 #include <algorithm>
 #include <cassert>
@@ -53,9 +50,6 @@ ResetMarginFilter<TImage>
     OutputImageRegionType const& outputRegionForThread,
     itk::ThreadIdType            threadId)
 {
-  using InputIterator   = itk::ImageScanlineConstIterator<InputImageType const>;
-  using OutputIterator  = itk::ImageScanlineIterator<OutputImageType>;
-
   auto const* input  = this->GetInput();
   auto      * output = this->GetOutput();
   assert(input);
