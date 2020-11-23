@@ -114,6 +114,11 @@ private:
                             "The extent of the input vector file is computed and then "
                             "gives a region of interest that will be extracted.");
 
+    // These parameters need to be set as non mandatory so they don't have to be selected both in QGIS
+    // Mandatory states will be updated later in DoUpdateParameters method
+    MandatoryOff("mode.fit.im");
+    MandatoryOff("mode.fit.vect");
+
     // Extent mode: ROI is computed with two point (upper left and lower left corners)
     AddChoice("mode.extent", "Extent");
     SetParameterDescription("mode.extent",
