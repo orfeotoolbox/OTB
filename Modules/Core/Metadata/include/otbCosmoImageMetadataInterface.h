@@ -22,7 +22,7 @@
 #define otbCosmoImageMetadataInterface_h
 
 #include "otbSarImageMetadataInterface.h"
-
+#include "otbSARMetadata.h"
 
 namespace otb
 {

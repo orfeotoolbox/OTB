@@ -30,6 +30,7 @@ ENABLE_SHARED
     OTBITK
     OTBOSSIMAdapters
     OTBCommon
+    OTBGdalAdapters
     
   TEST_DEPENDS
     OTBTestKernel

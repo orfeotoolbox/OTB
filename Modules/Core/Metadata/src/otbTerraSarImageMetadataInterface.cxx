@@ -27,7 +27,7 @@
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
 #include "otbXMLMetadataSupplier.h"
-
+#include "otbSARMetadata.h"
 
 
 #include <boost/filesystem.hpp>

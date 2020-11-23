@@ -21,6 +21,7 @@
 
 #include "otbSarImageMetadataInterface.h"
 #include "otbRadarsat2ImageMetadataInterface.h"
+#include "otbSARMetadata.h"
 
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
