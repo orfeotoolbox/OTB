@@ -394,36 +394,32 @@ private:
 
         // Check if valid metadata information are available to compute ImageToRadiance and RadianceToReflectance
         FloatVectorImageType::Pointer          inImage                 = GetParameterFloatVectorImage("in");
-        itk::MetaDataDictionary                dict                    = inImage->GetMetaDataDictionary();
-        OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
+        
+        const auto & metadata = inImage->GetImageMetadata();
 
-        //TODO : Remove, this is an Ossim compatibility layer
-        lImageMetadataInterface->SetImageMetadata(inImage->GetImageMetadata());
-
-        std::string IMIName(lImageMetadataInterface->GetNameOfClass()), IMIOptDfltName("OpticalDefaultImageMetadataInterface");
-        if ((IMIName != IMIOptDfltName))
+        if ((otb::HasOpticalSensorMetadata(metadata)))
         {
-          ossOutput << "Sensor detected: " << lImageMetadataInterface->GetSensorID() << std::endl;
+          ossOutput << "Sensor detected: " << metadata[MDStr::SensorID]<< std::endl;
 
           itk::VariableLengthVector<double> vlvector;
           std::stringstream                 ss;
 
           ossOutput << "Parameters extract from input image: " << std::endl
-                    << "\tAcquisition Day: " << lImageMetadataInterface->GetDay() << std::endl
-                    << "\tAcquisition Month: " << lImageMetadataInterface->GetMonth() << std::endl
-                    << "\tAcquisition Year: " << lImageMetadataInterface->GetYear() << std::endl
-                    << "\tAcquisition Sun Elevation Angle: " << lImageMetadataInterface->GetSunElevation() << std::endl
-                    << "\tAcquisition Sun Azimuth Angle: " << lImageMetadataInterface->GetSunAzimuth() << std::endl
-                    << "\tAcquisition Viewing Elevation Angle: " << lImageMetadataInterface->GetSatElevation() << std::endl
-                    << "\tAcquisition Viewing Azimuth Angle: " << lImageMetadataInterface->GetSatAzimuth() << std::endl;
+                    << "\tAcquisition Day: " << metadata[MDTime::AcquisitionDate].GetDay() << std::endl
+                    << "\tAcquisition Month: " << metadata[MDTime::AcquisitionDate].GetMonth() << std::endl
+                    << "\tAcquisition Year: " << metadata[MDTime::AcquisitionDate].GetYear() << std::endl
+                    << "\tAcquisition Sun Elevation Angle: " << metadata[MDNum::SunElevation] << std::endl
+                    << "\tAcquisition Sun Azimuth Angle: " << metadata[MDNum::SunAzimuth] << std::endl
+                    << "\tAcquisition Viewing Elevation Angle: " << metadata[MDNum::SatElevation] << std::endl
+                    << "\tAcquisition Viewing Azimuth Angle: " << metadata[MDNum::SatAzimuth] << std::endl;
 
-          vlvector = lImageMetadataInterface->GetPhysicalGain();
+          vlvector = metadata.GetAsVector(MDNum::PhysicalGain);
           ossOutput << "\tAcquisition gain (per band): ";
           for (unsigned int k = 0; k < vlvector.Size(); k++)
             ossOutput << vlvector[k] << " ";
           ossOutput << std::endl;
 
-          vlvector = lImageMetadataInterface->GetPhysicalBias();
+          vlvector = metadata.GetAsVector(MDNum::PhysicalBias);
           ossOutput << "\tAcquisition bias (per band): ";
           for (unsigned int k = 0; k < vlvector.Size(); k++)
             ossOutput << vlvector[k] << " ";
@@ -431,7 +427,7 @@ private:
           DisableParameter("acqui.gainbias");
           MandatoryOff("acqui.gainbias");
 
-          vlvector = lImageMetadataInterface->GetSolarIrradiance();
+          vlvector = metadata.GetAsVector(MDNum::SolarIrradiance);
           ossOutput << "\tSolar Irradiance (per band): ";
           for (unsigned int k = 0; k < vlvector.Size(); k++)
             ossOutput << vlvector[k] << " ";
@@ -443,21 +439,21 @@ private:
             ossOutput << "Acquisition Minute already set by user: no overload" << std::endl;
           else
           {
-            SetParameterInt("acqui.minute", lImageMetadataInterface->GetMinute());
+            SetParameterInt("acqui.minute", metadata[MDTime::AcquisitionDate].GetMinute());
           }
 
           if (HasUserValue("acqui.hour"))
             ossOutput << "Acquisition Hour already set by user: no overload" << std::endl;
           else
           {
-            SetParameterInt("acqui.hour", lImageMetadataInterface->GetHour());
+            SetParameterInt("acqui.hour", metadata[MDTime::AcquisitionDate].GetHour());
           }
 
           if (HasUserValue("acqui.day"))
             ossOutput << "Acquisition Day already set by user: no overload" << std::endl;
           else
           {
-            SetParameterInt("acqui.day", lImageMetadataInterface->GetDay());
+            SetParameterInt("acqui.day", metadata[MDTime::AcquisitionDate].GetDay());
             if (IsParameterEnabled("acqui.fluxnormcoeff") || IsParameterEnabled("acqui.solardistance"))
               DisableParameter("acqui.day");
           }
@@ -466,7 +462,7 @@ private:
             ossOutput << "Acquisition Month already set by user: no overload" << std::endl;
           else
           {
-            SetParameterInt("acqui.month", lImageMetadataInterface->GetMonth());
+            SetParameterInt("acqui.month", metadata[MDTime::AcquisitionDate].GetMonth());
             if (IsParameterEnabled("acqui.fluxnormcoeff") || IsParameterEnabled("acqui.solardistance"))
               DisableParameter("acqui.month");
           }
@@ -475,40 +471,40 @@ private:
             ossOutput << "Acquisition Year already set by user: no overload" << std::endl;
           else
           {
-            SetParameterInt("acqui.year", lImageMetadataInterface->GetYear());
+            SetParameterInt("acqui.year", metadata[MDTime::AcquisitionDate].GetYear());
           }
 
           if (HasUserValue("acqui.sun.elev"))
             ossOutput << "Acquisition Sun Elevation Angle already set by user: no overload" << std::endl;
           else
-            SetParameterFloat("acqui.sun.elev", lImageMetadataInterface->GetSunElevation());
+            SetParameterFloat("acqui.sun.elev", metadata[MDNum::SunElevation]);
 
           if (HasUserValue("acqui.sun.azim"))
             ossOutput << "Acquisition Sun Azimuth Angle already set by user: no overload" << std::endl;
           else
-            SetParameterFloat("acqui.sun.azim", lImageMetadataInterface->GetSunAzimuth());
+            SetParameterFloat("acqui.sun.azim", metadata[MDNum::SunAzimuth]);
 
           if (HasUserValue("acqui.view.elev"))
             ossOutput << "Acquisition Viewing Elevation Angle already set by user: no overload" << std::endl;
           else
-            SetParameterFloat("acqui.view.elev", lImageMetadataInterface->GetSatElevation());
+            SetParameterFloat("acqui.view.elev", metadata[MDNum::SatElevation]);
 
           if (HasUserValue("acqui.view.azim"))
             ossOutput << "Acquisition Viewing Azimuth Angle already set by user: no overload" << std::endl;
           else
-            SetParameterFloat("acqui.view.azim", lImageMetadataInterface->GetSatAzimuth());
+            SetParameterFloat("acqui.view.azim", metadata[MDNum::SatAzimuth]);
 
           // Set default value so that they are stored somewhere even if
           // they are overloaded by user values
-          SetDefaultParameterInt("acqui.minute", lImageMetadataInterface->GetMinute());
-          SetDefaultParameterInt("acqui.hour", lImageMetadataInterface->GetHour());
-          SetDefaultParameterInt("acqui.day", lImageMetadataInterface->GetDay());
-          SetDefaultParameterInt("acqui.month", lImageMetadataInterface->GetMonth());
-          SetDefaultParameterInt("acqui.year", lImageMetadataInterface->GetYear());
-          SetDefaultParameterFloat("acqui.sun.elev", lImageMetadataInterface->GetSunElevation());
-          SetDefaultParameterFloat("acqui.sun.azim", lImageMetadataInterface->GetSunAzimuth());
-          SetDefaultParameterFloat("acqui.view.elev", lImageMetadataInterface->GetSatElevation());
-          SetDefaultParameterFloat("acqui.view.azim", lImageMetadataInterface->GetSatAzimuth());
+          SetDefaultParameterInt("acqui.minute", metadata[MDTime::AcquisitionDate].GetMinute());
+          SetDefaultParameterInt("acqui.hour", metadata[MDTime::AcquisitionDate].GetHour());
+          SetDefaultParameterInt("acqui.day", metadata[MDTime::AcquisitionDate].GetDay());
+          SetDefaultParameterInt("acqui.month", metadata[MDTime::AcquisitionDate].GetMonth());
+          SetDefaultParameterInt("acqui.year", metadata[MDTime::AcquisitionDate].GetYear());
+          SetDefaultParameterFloat("acqui.sun.elev", metadata[MDNum::SunElevation]);
+          SetDefaultParameterFloat("acqui.sun.azim", metadata[MDNum::SunAzimuth]);
+          SetDefaultParameterFloat("acqui.view.elev", metadata[MDNum::SatElevation]);
+          SetDefaultParameterFloat("acqui.view.azim", metadata[MDNum::SatAzimuth]);
         }
         else
         {
@@ -625,14 +621,8 @@ private:
 
     FloatVectorImageType::Pointer inImage = GetParameterFloatVectorImage("in");
 
-    // Prepare a metadata interface on the input image.
-    itk::MetaDataDictionary                dict                    = inImage->GetMetaDataDictionary();
-    OpticalImageMetadataInterface::Pointer lImageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
-    std::string                            IMIName(lImageMetadataInterface->GetNameOfClass());
-    std::string                            IMIOptDfltName("OpticalDefaultImageMetadataInterface");
-    
-    //TODO : Remove, this is an Ossim compatibility layer
-    lImageMetadataInterface->SetImageMetadata(inImage->GetImageMetadata());
+    const auto & metadata = inImage->GetImageMetadata();
+    auto hasOpticalSensorMetadata = HasOpticalSensorMetadata(metadata);
 
     // Set (Date and Day) OR FluxNormalizationCoef to corresponding filters OR solardistance
     if (IsParameterEnabled("acqui.fluxnormcoeff"))
@@ -723,13 +713,13 @@ private:
     else
     {
       // Try to retrieve information from image metadata
-      if (IMIName != IMIOptDfltName)
+      if (hasOpticalSensorMetadata)
       {
-        m_ImageToRadianceFilter->SetAlpha(lImageMetadataInterface->GetPhysicalGain());
-        m_RadianceToImageFilter->SetAlpha(lImageMetadataInterface->GetPhysicalGain());
+        m_ImageToRadianceFilter->SetAlpha(metadata.GetAsVector(MDNum::PhysicalGain));
+        m_RadianceToImageFilter->SetAlpha(metadata.GetAsVector(MDNum::PhysicalGain));
 
-        m_ImageToRadianceFilter->SetBeta(lImageMetadataInterface->GetPhysicalBias());
-        m_RadianceToImageFilter->SetBeta(lImageMetadataInterface->GetPhysicalBias());
+        m_ImageToRadianceFilter->SetBeta(metadata.GetAsVector(MDNum::PhysicalBias));
+        m_RadianceToImageFilter->SetBeta(metadata.GetAsVector(MDNum::PhysicalBias));
       }
       else
         itkExceptionMacro(<< "Please, provide a type of sensor supported by OTB for automatic metadata extraction! ");
@@ -781,10 +771,10 @@ private:
     else
     {
       // Try to retrieve information from image metadata
-      if (IMIName != IMIOptDfltName)
+      if (hasOpticalSensorMetadata)
       {
-        m_RadianceToReflectanceFilter->SetSolarIllumination(lImageMetadataInterface->GetSolarIrradiance());
-        m_ReflectanceToRadianceFilter->SetSolarIllumination(lImageMetadataInterface->GetSolarIrradiance());
+        m_RadianceToReflectanceFilter->SetSolarIllumination(metadata.GetAsVector(MDNum::SolarIrradiance));
+        m_ReflectanceToRadianceFilter->SetSolarIllumination(metadata.GetAsVector(MDNum::SolarIrradiance));
       }
       else
         itkExceptionMacro(<< "Please, provide a type of sensor supported by OTB for automatic metadata extraction! ");
@@ -873,10 +863,22 @@ private:
         else
           otbAppLogFATAL("Please, set a sensor relative spectral response file.");
       }
-      else if (IMIName != IMIOptDfltName)
+      else if (hasOpticalSensorMetadata)
       {
-        // Avoid to call GetSpectralSensitivity() multiple times
-        OpticalImageMetadataInterface::WavelengthSpectralBandVectorType spectralSensitivity = lImageMetadataInterface->GetSpectralSensitivity();
+        auto spectralSensitivity = AcquiCorrectionParametersType::InternalWavelengthSpectralBandVectorType::New();
+        for (const auto & band : metadata.Bands)
+        {
+            const auto & spectralSensitivityLUT = band[MDL1D::SpectralSensitivity];
+            const auto & axis = spectralSensitivityLUT.Axis[0];
+            auto filterFunction = FilterFunctionValues::New();
+            // LUT1D stores a double vector whereas FilterFunctionValues stores a float vector
+            std::vector<float> vec(spectralSensitivityLUT.Array.begin(), spectralSensitivityLUT.Array.end());
+            filterFunction->SetFilterFunctionValues(vec);
+            filterFunction->SetMinSpectralValue(axis.Origin);
+            filterFunction->SetMaxSpectralValue(axis.Origin + axis.Spacing * axis.Size);
+            filterFunction->SetUserStep(axis.Spacing);
+            spectralSensitivity->PushBack(filterFunction);
+        }
 
         if (spectralSensitivity->Size() > 0)
           m_paramAcqui->SetWavelengthSpectralBand(spectralSensitivity);
