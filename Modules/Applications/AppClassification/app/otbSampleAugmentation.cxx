@@ -82,6 +82,7 @@ private:
     SetParameterDescription("field", "Name of the field carrying the class name in the input vectors.");
     SetListViewSingleSelectionMode("field", true);
     SetVectorData("field", "in");
+    SetTypeFilter("field", { OFTString, OFTInteger, OFTInteger64 });
 
     AddParameter(ParameterType_Int, "layer", "Layer Index");
     SetParameterDescription("layer", "Layer index to read in the input vector file.");
@@ -164,6 +165,7 @@ private:
       ClearChoices("exclude");
       ClearChoices("field");
 
+      FieldParameter::TypeFilterType typeFilter = GetTypeFilter("field");
       for (int iField = 0; iField < feature.ogr().GetFieldCount(); iField++)
       {
         std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
@@ -173,7 +175,7 @@ private:
 
         OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
 
-        if (fieldType == OFTString || fieldType == OFTInteger || fieldType == OFTInteger64)
+        if (std::find(typeFilter.begin(), typeFilter.end(), fieldType) != std::end(typeFilter))
         {
           std::string tmpKey = "field." + key.substr(0, end - key.begin());
           AddChoice(tmpKey, item);
