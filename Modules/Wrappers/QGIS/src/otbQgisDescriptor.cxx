@@ -132,8 +132,36 @@ int main(int argc, char* argv[])
   {
     const std::string        name        = appKeyList[i];
     const Parameter::Pointer param       = appli->GetParameterByKey(name);
-    const ParameterType      type        = appli->GetParameterType(name);
+    ParameterType            type        = appli->GetParameterType(name);
     const std::string        description = appli->GetParameterName(name);
+
+    // if there is no choice value for a list view parameter
+    // we switch to parameter stringlist to avoid aving empty combobox in QGIS
+    if (type == ParameterType_ListView)
+    {
+      ListViewParameter *lv_param = dynamic_cast<ListViewParameter*>(param.GetPointer());
+      if ( appli->GetChoiceNames(name).empty() )
+      {
+        type = ParameterType_StringList;
+      }
+    }
+
+    std::string optional;
+    if (param->GetMandatory())
+    {
+      // TODO: avoid workaround for stringlist types (fix appengine)
+      // type == ParameterType_StringList check is needed because:
+      // If parameter is  mandatory it can have no value
+      // It is accepted in OTB that, string list could be generated dynamically
+      // qgis has no such option to handle dynamic values yet..
+      // So mandatory parameters whose type is StringList is considered optional
+      optional = param->HasValue() || type == ParameterType_StringList ? "True" : "False";
+    }
+    else
+    {
+      optional = "True";
+    }
+
     if (type == ParameterType_Group || type == ParameterType_RAM || param->GetRole() == Role_Output)
     {
       // group parameter cannot have any value.
@@ -141,6 +169,7 @@ int main(int argc, char* argv[])
       // parameter role cannot be of type Role_Output
       continue;
     }
+
     auto it = parameterTypeToString.find(type);
     assert(it != parameterTypeToString.end());
     if (it == parameterTypeToString.end())
@@ -286,18 +315,22 @@ int main(int argc, char* argv[])
           filterType |= NUMERIC;
       }
 
-      dFile << "|None|" << f_param->GetVectorData()
-            << "|"
-            << (filterType == STRING  ? "QgsProcessingParameterField.String" :
-                filterType == NUMERIC ? "QgsProcessingParameterField.Numeric" :
-                "QgsProcessingParameterField.Any")
-            << "|" << (f_param->GetSingleSelection() ? "False" : "True");
+      dFile << "|None|"
+            << f_param->GetVectorData()
+            << "|"  << (filterType == STRING  ? "QgsProcessingParameterField.String" :
+                        filterType == NUMERIC ? "QgsProcessingParameterField.Numeric" :
+                        "QgsProcessingParameterField.Any")
+            << "|" << (f_param->GetSingleSelection() ? "False" : "True")
+            << "|" << optional;
     }
     else if (type == ParameterType_Band)
     {
       BandParameter *f_param = dynamic_cast<BandParameter*>(param.GetPointer());
 
-      dFile << "|None|" << f_param->GetRasterData();
+      dFile << "|None|"
+            << f_param->GetRasterData()
+            << optional
+            << "|" << (f_param->GetSingleSelection() ? "False" : "True");
     }
     else
     {
@@ -305,21 +338,6 @@ int main(int argc, char* argv[])
       return EXIT_FAILURE;
     }
 
-    std::string optional;
-    if (param->GetMandatory())
-    {
-      // TODO: avoid workaround for stringlist types (fix appengine)
-      // type == ParameterType_StringList check is needed because:
-      // If parameter is  mandatory it can have no value
-      // It is accepted in OTB that, string list could be generated dynamically
-      // qgis has no such option to handle dynamic values yet..
-      // So mandatory parameters whose type is StringList is considered optional
-      optional = param->HasValue() || type == ParameterType_StringList ? "True" : "False";
-    }
-    else
-    {
-      optional = "True";
-    }
 #if 0
     	  std::cerr << name;
     	  std::cerr << " mandatory=" << param->GetMandatory();
@@ -328,13 +346,9 @@ int main(int argc, char* argv[])
     	  std::cerr << " optional=" << optional << std::endl;
 #endif
 
-    // optionnal and default value are not in the same order than
+    // optional and default value are not in the same order than
     // other QGis processing parameters for field and band
-    if (type == ParameterType_Field || type == ParameterType_Band)
-    {
-      dFile << "|" << optional << "|False";
-    }
-    else
+    if (type != ParameterType_Field && type != ParameterType_Band)
     {
       dFile << "|" << default_value << "|" << optional;
     }
