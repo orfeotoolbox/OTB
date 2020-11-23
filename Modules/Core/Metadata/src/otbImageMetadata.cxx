@@ -631,6 +631,20 @@ void ImageMetadata::Add(const MDNum& key, const MetaDataKey::VariableLengthVecto
   }
 }
 
+
+itk::VariableLengthVector<double> ImageMetadata::GetAsVector(const MDNum& key) const
+{
+  itk::VariableLengthVector<double> output(Bands.size());
+  int i = 0;
+  for (const auto & band : Bands)
+  {
+    output[i] = band[key];
+    i++;
+  }
+
+  return output;
+}
+
 // printing
 std::ostream& operator<<(std::ostream& os, const otb::ImageMetadataBase& imd)
 {
