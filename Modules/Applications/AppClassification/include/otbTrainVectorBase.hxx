@@ -49,8 +49,10 @@ void TrainVectorBase<TInputValue, TOutputValue>::DoInit()
   this->MandatoryOff("layer");
   this->SetDefaultParameterInt("layer", 0);
 
-  this->AddParameter(ParameterType_ListView, "feat", "Field names for training features");
+  this->AddParameter(ParameterType_Field, "feat", "Field names for training features");
   this->SetParameterDescription("feat", "List of field names in the input vector data to be used as features for training.");
+  this->SetVectorData("feat", "io.vd");
+  this->SetTypeFilter("feat", { OFTInteger, OFTInteger64, OFTReal });
 
   // Add validation data used to compute confusion matrix or contingency table
   this->AddParameter(ParameterType_Group, "valid", "Validation data");
@@ -68,11 +70,13 @@ void TrainVectorBase<TInputValue, TOutputValue>::DoInit()
   this->SetDefaultParameterInt("valid.layer", 0);
 
   // Add class field if we used validation
-  this->AddParameter(ParameterType_ListView, "cfield", "Field containing the class integer label for supervision");
+  this->AddParameter(ParameterType_Field, "cfield", "Field containing the class integer label for supervision");
   this->SetParameterDescription("cfield",
                                 "Field containing the class id for supervision. "
                                 "The values in this field shall be cast into integers. "
                                 "Only geometries with this field available will be taken into account.");
+  this->SetVectorData("cfield", "io.vd");
+  this->SetTypeFilter("cfield", { OFTString, OFTInteger, OFTInteger64, OFTReal });
   this->SetListViewSingleSelectionMode("cfield", true);
 
   this->AddParameter(ParameterType_Bool, "v", "Verbose mode");
@@ -107,6 +111,8 @@ void TrainVectorBase<TInputValue, TOutputValue>::DoUpdateParameters()
     this->ClearChoices("feat");
     this->ClearChoices("cfield");
 
+    FieldParameter::TypeFilterType featTypeFilter = this->GetTypeFilter("feat");
+    FieldParameter::TypeFilterType cfieldTypeFilter = this->GetTypeFilter("cfield");
     for (int iField = 0; iField < feature.ogr().GetFieldCount(); iField++)
     {
       std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
@@ -116,12 +122,12 @@ void TrainVectorBase<TInputValue, TOutputValue>::DoUpdateParameters()
 
       OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
 
-      if (fieldType == OFTInteger || fieldType == OFTInteger64 || fieldType == OFTReal)
+      if (std::find(featTypeFilter.begin(), featTypeFilter.end(), fieldType) != std::end(featTypeFilter))
       {
         std::string tmpKey = "feat." + key.substr(0, static_cast<unsigned long>(end - key.begin()));
         this->AddChoice(tmpKey, item);
       }
-      if (fieldType == OFTString || fieldType == OFTInteger || fieldType == OFTInteger64 || fieldType == OFTReal)
+      if (std::find(cfieldTypeFilter.begin(), cfieldTypeFilter.end(), fieldType) != std::end(cfieldTypeFilter))
       {
         std::string tmpKey = "cfield." + key.substr(0, static_cast<unsigned long>(end - key.begin()));
         this->AddChoice(tmpKey, item);
