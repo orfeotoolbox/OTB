@@ -67,7 +67,7 @@ private:
     AddParameter(ParameterType_InputImage, "in", "InputImage");
     SetParameterDescription("in", "Support image");
 
-    AddParameter(ParameterType_InputFilename, "vec", "Input sampling positions");
+    AddParameter(ParameterType_InputVectorData, "vec", "Input sampling positions");
     SetParameterDescription("vec",
                             "Vector data file containing sampling"
                             "positions. (OGR format)");
@@ -96,9 +96,11 @@ private:
     AddParameter(ParameterType_StringList, "outfield.list.names", "Output field names");
     SetParameterDescription("outfield.list.names", "Full list of output field names.");
 
-    AddParameter(ParameterType_ListView, "field", "Field Name");
+    AddParameter(ParameterType_Field, "field", "Field Name");
     SetParameterDescription("field", "Name of the field carrying the class name in the input vectors.");
     SetListViewSingleSelectionMode("field", true);
+    SetVectorData("field", "vec");
+    SetTypeFilter("field", { OFTString, OFTInteger, OFTInteger64 });
 
     AddParameter(ParameterType_Int, "layer", "Layer Index");
     SetParameterDescription("layer", "Layer index to read in the input vector file.");
@@ -134,6 +136,7 @@ private:
 
       ClearChoices("field");
 
+      FieldParameter::TypeFilterType typeFilter = GetTypeFilter("field");
       for (int iField = 0; iField < feature.ogr().GetFieldCount(); iField++)
       {
         std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
@@ -143,7 +146,7 @@ private:
 
         OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
 
-        if (fieldType == OFTString || fieldType == OFTInteger || fieldType == OFTInteger64)
+        if (std::find(typeFilter.begin(), typeFilter.end(), fieldType) != std::end(typeFilter))
         {
           std::string tmpKey = "field." + key.substr(0, end - key.begin());
           AddChoice(tmpKey, item);
