@@ -382,22 +382,6 @@ void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
     itkWarningMacro(<< "Not an expected product type (only SCS_B and SCS_U expected) " << m_Imd[MDStr::ProductType] );
   }
 
-  // Check SubDatasets (For COSMO, we need //S01/SBI dataset)
-  auto subDsName = "HDF5:" + mds.GetResourceFile() + "://S01/SBI";
-  auto ds = (GDALDataset *) GDALOpen(subDsName.c_str(), GA_ReadOnly );
-
-  if (ds)
-  {
-    std::cout << "Found S01/SBI ! " << std::endl;
-    // Do stuff
-    GDALClose(ds);
-  }
-  else
-  {
-    otbGenericExceptionMacro(MissingMetadataException,
-      << "Cannot find S01/SBI subdataset")
-  }
-
   m_Imd.Add(MDStr::SensorID, "CSK");
   Fetch(MDStr::Instrument, mds, "Satellite_ID");
 
@@ -418,7 +402,8 @@ void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
   m_Imd.Add(MDNum::PRF, std::stoi(PRFNumber));
 
 
-  //getTIme
+  //getTime
+  auto subDsName = "HDF5:" + mds.GetResourceFile() + "://S01/SBI";
   auto metadataBands = this->saveMetadataBands(subDsName) ;
   bool hasTimeUTC;
   int pos = mds.GetMetadataValue("Reference_UTC", hasTimeUTC).find(" ");;
