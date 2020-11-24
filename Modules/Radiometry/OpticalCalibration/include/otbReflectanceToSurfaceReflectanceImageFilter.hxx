@@ -96,34 +96,49 @@ void ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>::Upda
     SetFilterFunctionValuesFileName = true;
   }
 
-
-  MetaDataDictionaryType                 dict                   = this->GetInput()->GetMetaDataDictionary();
-  OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
-
+  const auto & metadata = this->GetInput()->GetImageMetadata();
 
   if (m_AtmoCorrectionParameters->GetAeronetFileName() != "")
-    m_AtmoCorrectionParameters->UpdateAeronetData(imageMetadataInterface->GetYear(), imageMetadataInterface->GetHour(), imageMetadataInterface->GetMinute());
-
+  {
+    m_AtmoCorrectionParameters->UpdateAeronetData(metadata[MDTime::AcquisitionDate].GetYear(),
+                                                  metadata[MDTime::AcquisitionDate].GetHour(),
+                                                  metadata[MDTime::AcquisitionDate].GetMinute());
+  }
 
   // Acquisition parameters
-  if (!m_IsSetAcquiCorrectionParameters) // Get info from image metadata interface
+  if (!m_IsSetAcquiCorrectionParameters) // Get info from image metadata
   {
     m_AcquiCorrectionParameters = AcquiCorrectionParametersType::New();
 
-    m_AcquiCorrectionParameters->SetSolarZenithalAngle(90. - imageMetadataInterface->GetSunElevation());
-    m_AcquiCorrectionParameters->SetSolarAzimutalAngle(imageMetadataInterface->GetSunAzimuth());
-    m_AcquiCorrectionParameters->SetViewingZenithalAngle(90. - imageMetadataInterface->GetSatElevation());
-    m_AcquiCorrectionParameters->SetViewingAzimutalAngle(imageMetadataInterface->GetSatAzimuth());
+    m_AcquiCorrectionParameters->SetSolarZenithalAngle(90. - metadata[MDNum::SunElevation]);
+    m_AcquiCorrectionParameters->SetSolarAzimutalAngle(metadata[MDNum::SunAzimuth]);
+    m_AcquiCorrectionParameters->SetViewingZenithalAngle(90. - metadata[MDNum::SatElevation]);
+    m_AcquiCorrectionParameters->SetViewingAzimutalAngle(metadata[MDNum::SatAzimuth]);
 
-    m_AcquiCorrectionParameters->SetDay(imageMetadataInterface->GetDay());
-    m_AcquiCorrectionParameters->SetMonth(imageMetadataInterface->GetMonth());
+    m_AcquiCorrectionParameters->SetDay(metadata[MDTime::AcquisitionDate].GetDay());
+    m_AcquiCorrectionParameters->SetMonth(metadata[MDTime::AcquisitionDate].GetMonth());
 
 
     if (!SetFilterFunctionValuesFileName)
     {
-      if (imageMetadataInterface->GetSpectralSensitivity()->Capacity() > 0)
+      if (metadata.HasBandMetadata(MDL1D::SpectralSensitivity))
       {
-        m_AcquiCorrectionParameters->SetWavelengthSpectralBand(imageMetadataInterface->GetSpectralSensitivity());
+        auto spectralSensitivity = AcquiCorrectionParametersType::InternalWavelengthSpectralBandVectorType::New();
+        for (const auto & band : metadata.Bands)
+        {
+            const auto & spectralSensitivityLUT = band[MDL1D::SpectralSensitivity];
+            const auto & axis = spectralSensitivityLUT.Axis[0];
+            auto filterFunction = FilterFunctionValues::New();
+            // LUT1D stores a double vector whereas FilterFunctionValues stores a float vector
+            std::vector<float> vec(spectralSensitivityLUT.Array.begin(), spectralSensitivityLUT.Array.end());
+            filterFunction->SetFilterFunctionValues(vec);
+            filterFunction->SetMinSpectralValue(axis.Origin);
+            filterFunction->SetMaxSpectralValue(axis.Origin + axis.Spacing * axis.Size);
+            filterFunction->SetUserStep(axis.Spacing);
+            spectralSensitivity->PushBack(filterFunction);
+        }
+
+        m_AcquiCorrectionParameters->SetWavelengthSpectralBand(spectralSensitivity);
       }
       else
       {
@@ -151,9 +166,6 @@ void ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>::Upda
   {
     itkExceptionMacro(<< "Input must be set before updating the functors");
   }
-
-  MetaDataDictionaryType                 dict                   = this->GetInput()->GetMetaDataDictionary();
-  OpticalImageMetadataInterface::Pointer imageMetadataInterface = OpticalImageMetadataInterfaceFactory::CreateIMI(dict);
 
   this->GetFunctorVector().clear();
 

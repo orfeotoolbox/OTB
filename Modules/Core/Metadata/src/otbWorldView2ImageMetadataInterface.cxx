@@ -2202,7 +2202,7 @@ namespace
 
       // In previous version of OTB the effective bandwith was tabulated
       // because Ossim did not read this specific metadata.
-      outMetadata.effectiveBandwidth[bandName] = mds.GetAs<double>(prefix + "effectiveBandwidth");
+      outMetadata.effectiveBandwidth[bandName] = mds.GetAs<double>(0., prefix + "effectiveBandwidth");
 
       outMetadata.absCalFactor[bandName] = mds.GetAs<double>(prefix + "absCalFactor");
 

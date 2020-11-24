@@ -645,6 +645,19 @@ itk::VariableLengthVector<double> ImageMetadata::GetAsVector(const MDNum& key) c
   return output;
 }
 
+
+bool ImageMetadata::HasBandMetadata(const MDNum & key) const
+{
+  return std::all_of(Bands.begin(), Bands.end(),
+                      [key](ImageMetadataBase band){return band.Has(key);});
+}
+
+bool ImageMetadata::HasBandMetadata(const MDL1D & key) const
+{
+  return std::all_of(Bands.begin(), Bands.end(),
+                      [key](ImageMetadataBase band){return band.Has(key);});
+}
+
 // printing
 std::ostream& operator<<(std::ostream& os, const otb::ImageMetadataBase& imd)
 {
