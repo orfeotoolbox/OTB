@@ -42,8 +42,8 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
 
   typedef otb::Image<unsigned int, 2> ImageType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::RPCInverseTransform<double> InverseRPCModelType;
-  typedef otb::RPCForwardTransform<double> ForwardRPCModelType;
+  typedef otb::RPCInverseTransform<double, 3, 2> InverseRPCModelType;
+  typedef otb::RPCForwardTransform<double, 2, 3> ForwardRPCModelType;
 
   // Allocate pointer
   InverseRPCModelType::Pointer inverse_rpc_model = InverseRPCModelType::New();
@@ -84,16 +84,16 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
   std::ofstream ofs(argv[2], std::ofstream::out);
   ofs.precision(8);
   
-  InverseModelType::InputPointType geoPoint;
+  InverseRPCModelType::InputPointType geoPoint;
   geoPoint[0] = atof(argv[3]);
   geoPoint[1] = atof(argv[4]);
 
   ofs << "Testing geopoint: " << geoPoint << "\n\n";
 
-  auto indexPoint = inverse_model->TransformPoint(geoPoint);
+  auto indexPoint = inverse_rpc_model->TransformPoint(geoPoint);
   ofs << "Testing InverseSensorModel: " << geoPoint << " -> " << indexPoint << "\n";
 
-  auto newGeoPoint = forward_model->TransformPoint(indexPoint);
+  auto newGeoPoint = forward_rpc_model->TransformPoint(indexPoint);
   ofs << "Testing ForwardSensorModel: " << indexPoint << " -> " << newGeoPoint << "\n";
   
   return EXIT_SUCCESS;
