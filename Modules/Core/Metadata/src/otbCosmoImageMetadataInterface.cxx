@@ -359,44 +359,28 @@ void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
   assert(mds.GetNbBands() == this->m_Imd.Bands.size());
 
-  // Check SubDatasets (For COSMO, we need //S01/SBI dataset)
-  auto subDsName = "HDF5:" + mds.GetResourceFile() + "://S01/SBI";
-  auto ds = (GDALDataset *) GDALOpen(subDsName.c_str(), GA_ReadOnly );
+  // Check Mission Id, acquisition mode and product type
+  Fetch(MDStr::Mission, mds, "MISSION_ID");
 
-  if (ds)
-  {
-    std::cout << "Found S01/SBI ! " << std::endl;
-    // Do stuff
-    GDALClose(ds);
-  }
-  else
+  if (m_Imd[MDStr::Mission] != "CSK" )
   {
     otbGenericExceptionMacro(MissingMetadataException,
-      << "Cannot find S01/SBI subdataset")
+      << "Not a CosmoSkyMed product");
   }
 
-  // Metadata read by GDAL
-
-  Fetch(MDStr::Mission, mds, "MISSION_ID");
   Fetch(MDStr::Mode, mds, "Acquisition_Mode");
-  Fetch(MDStr::ProductType, mds, "Product_Type");
-
-  // Check Mission Id, acquisition mode and product type
-  if(! (m_Imd[MDStr::Mission] == "CSK" ))
-    {
-    itkWarningMacro(<< "Not a valid missionId" << m_Imd[MDStr::Mission] );
-    }
   if((m_Imd[MDStr::Mode] != "HIMAGE") &&
         (m_Imd[MDStr::Mode] != "SPOTLIGHT") &&
           (m_Imd[MDStr::Mode] != "ENHANCED SPOTLIGHT"))
-    {
+  {
     itkWarningMacro(<< "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << m_Imd[MDStr::Mode] );
-    }
-
+  }
+  
+  Fetch(MDStr::ProductType, mds, "Product_Type");
   if( (m_Imd[MDStr::ProductType] != "SCS_B") && m_Imd[MDStr::ProductType] != "SCS_U")
-    {
+  {
     itkWarningMacro(<< "Not an expected product type (only SCS_B and SCS_U expected) " << m_Imd[MDStr::ProductType] );
-    }
+  }
 
   m_Imd.Add(MDStr::SensorID, "CSK");
   Fetch(MDStr::Instrument, mds, "Satellite_ID");
@@ -418,7 +402,8 @@ void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
   m_Imd.Add(MDNum::PRF, std::stoi(PRFNumber));
 
 
-  //getTIme
+  //getTime
+  auto subDsName = "HDF5:" + mds.GetResourceFile() + "://S01/SBI";
   auto metadataBands = this->saveMetadataBands(subDsName) ;
   bool hasTimeUTC;
   int pos = mds.GetMetadataValue("Reference_UTC", hasTimeUTC).find(" ");;

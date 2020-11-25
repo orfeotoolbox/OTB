@@ -149,9 +149,16 @@ private:
   void operator=(const Self&) = delete;
 
   void FetchPhysicalBias();
-  void FetchSolarIrradiance();
-  void FetchWavelengths();
-  void FetchSpectralSensitivity();
+  
+  void FetchSolarIrradianceWorldView2();
+  void FetchWavelengthsWorldView2();
+  void FetchSpectralSensitivityWorldView2();
+
+  void FetchSolarIrradianceQuickBird();
+  void FetchSpectralSensitivityQuickBird();
+  void FetchPhysicalGainQuickBird(int bitsPerPixel, 
+                                  const std::unordered_map<std::string, double> & absCalFactor,
+                                  const std::unordered_map<std::string, int> & TDILevels);
 };
 
 } // end namespace otb
