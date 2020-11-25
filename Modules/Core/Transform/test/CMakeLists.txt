@@ -63,13 +63,25 @@ otb_add_test(NAME prTvGenericRSTransformWithSRID COMMAND otbTransformTestDriver
   )
 
 otb_add_test(NAME prTvTestCreateInverseForwardSensorModel_Cevennes COMMAND otbTransformTestDriver
+  --compare-ascii ${EPSILON_4}
+  ${BASELINE_FILES}/prTvTestCreateInverseForwardSensorModel_Cevennes.txt
+  ${TEMP}/prTvTestCreateInverseForwardSensorModel_Cevennes.txt
   otbCreateInverseForwardSensorModel
   LARGEINPUT{QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF}
+  ${TEMP}/prTvTestCreateInverseForwardSensorModel_Cevennes.txt
+  3.740934
+  44.107956
   )
 
 otb_add_test(NAME prTvTestCreateInverseForwardSensorModel_Toulouse COMMAND otbTransformTestDriver
+  --compare-ascii ${EPSILON_4}
+  ${BASELINE_FILES}/prTvTestCreateInverseForwardSensorModel_Toulouse.txt
+  ${TEMP}/prTvTestCreateInverseForwardSensorModel_Toulouse.txt
   otbCreateInverseForwardSensorModel
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  ${TEMP}/prTvTestCreateInverseForwardSensorModel_Toulouse.txt
+  1.44348693
+  43.60468837
   )
 
 otb_add_test(NAME prTvTestCreateProjectionWithOSSIM_Cevennes COMMAND otbTransformTestDriver
@@ -150,7 +162,6 @@ set(FWDBWDChecking_INPUTS
   #LARGEINPUT{ONERA/spa3_0215_rad.dat}
   #LARGEINPUT{RAPIDEYE/level3A/2008-12-25T005918_RE3_3A-NAC_752656_40091.tif}
   )
-
 
 otb_add_test(NAME bfTvInverseLogPolarTransform COMMAND otbTransformTestDriver
   --compare-ascii ${NOTOL}

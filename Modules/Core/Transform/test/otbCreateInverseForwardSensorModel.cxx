@@ -18,16 +18,6 @@
  * limitations under the License.
  */
 
-
-/*!
- *
- * PURPOSE:
- *
- * Application to rproject an image region into gepgraphical coordinates
- * usinf un Interpolator+regionextractor and an Iterator.
- *
- */
-
 // iostream is used for general output
 #include <iostream>
 #include <iterator>
@@ -43,9 +33,9 @@
 
 int otbCreateInverseForwardSensorModel(int argc, char* argv[])
 {
-  if (argc != 2)
+  if (argc != 5)
   {
-    std::cout << argv[0] << " <input filename>" << std::endl;
+    std::cout << argv[0] << " <input filename> <output filename> <test_point_X> <test_point_Y>\n";
     return EXIT_FAILURE;
   }
 
@@ -82,5 +72,20 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
+  std::ofstream ofs(argv[2], std::ofstream::out);
+  ofs.precision(8);
+  
+  InverseModelType::InputPointType geoPoint;
+  geoPoint[0] = atof(argv[3]);
+  geoPoint[1] = atof(argv[4]);
+
+  ofs << "Testing geopoint: " << geoPoint << "\n\n";
+
+  auto indexPoint = inverse_model->TransformPoint(geoPoint);
+  ofs << "Testing InverseSensorModel: " << geoPoint << " -> " << indexPoint << "\n";
+
+  auto newGeoPoint = forward_model->TransformPoint(indexPoint);
+  ofs << "Testing ForwardSensorModel: " << indexPoint << " -> " << newGeoPoint << "\n";
+  
   return EXIT_SUCCESS;
 }
