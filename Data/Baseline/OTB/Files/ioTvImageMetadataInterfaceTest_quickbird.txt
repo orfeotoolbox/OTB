@@ -1,14 +1,13 @@
 SensorID QB02
 Mission Quickbird
 ProductType P
-GeometricLevel LV1B
 TileHintX 27552
 TileHintY 19
 DataType 3
 SunElevation 30.3
 SunAzimuth 160.2
-SatElevation 104.9
-SatAzimuth 65.1
+SatElevation 65.1
+SatAzimuth 104.9
 AcquisitionDate 2006-02-12T10:49:12.695Z
 ProductionDate 2006-02-12T17:51:57Z
 RPC <RPCParam>
