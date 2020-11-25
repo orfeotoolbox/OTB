@@ -49,7 +49,10 @@ GDALRPCTransformer::GDALRPCTransformer(double LineOffset, double SampleOffset, d
 
   auto & demHandler = otb::DEMHandler::GetInstance();
   if (demHandler.GetDEMCount() > 0)
+  {
     this->SetOption("RPC_DEM", demHandler.DEM_DATASET_PATH);
+    this->SetOption("RPC_DEM_MISSING_VALUE", std::to_string(demHandler.GetDefaultHeightAboveEllipsoid()));
+  }
 }
 
 GDALRPCTransformer::~GDALRPCTransformer()
