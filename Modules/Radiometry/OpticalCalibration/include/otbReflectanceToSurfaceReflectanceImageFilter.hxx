@@ -97,7 +97,7 @@ void ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>::Upda
   }
 
   const auto & metadata = this->GetInput()->GetImageMetadata();
-
+std::cout << "Debug: UpdateAtmosphericRadiativeTerms " << metadata << std::endl;
   if (m_AtmoCorrectionParameters->GetAeronetFileName() != "")
   {
     m_AtmoCorrectionParameters->UpdateAeronetData(metadata[MDTime::AcquisitionDate].GetYear(),
