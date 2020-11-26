@@ -36,7 +36,7 @@ RPCInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::Transform
   if (NInputDimensions > 2)
     zePoint[2] = static_cast<double>(point[2]);
 
-  this->m_Transformer->InverseTransform(zePoint);
+  zePoint = this->m_Transformer->InverseTransform(zePoint);
 
   OutputPointType pOut;
   pOut[0] = static_cast<TScalarType>(zePoint[0]);

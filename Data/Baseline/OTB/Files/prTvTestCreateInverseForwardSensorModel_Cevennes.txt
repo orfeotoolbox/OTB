@@ -1,4 +1,4 @@
-Testing geopoint: [3.740934, 44.107956]
+Testing geopoint: [3.740934, 44.107956, 0]
 
-Testing InverseSensorModel: [3.740934, 44.107956] -> [14190.558, 13591.703]
-Testing ForwardSensorModel: [14190.558, 13591.703] -> [3.7409338, 44.107956]
+Testing InverseSensorModel: [3.740934, 44.107956, 0] -> [14190.558, 13591.703]
+Testing ForwardSensorModel: [14190.558, 13591.703] -> [3.740934, 44.107956, 0]

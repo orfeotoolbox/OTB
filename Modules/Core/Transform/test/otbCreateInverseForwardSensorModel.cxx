@@ -87,7 +87,8 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
   InverseRPCModelType::InputPointType geoPoint;
   geoPoint[0] = atof(argv[3]);
   geoPoint[1] = atof(argv[4]);
-
+  geoPoint[2] = 0.0;
+  
   ofs << "Testing geopoint: " << geoPoint << "\n\n";
 
   auto indexPoint = inverse_rpc_model->TransformPoint(geoPoint);

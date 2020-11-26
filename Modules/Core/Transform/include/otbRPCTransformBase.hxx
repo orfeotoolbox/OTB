@@ -31,13 +31,12 @@ bool RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::SetMeta
 {
   if (!imd.Has(MDGeom::RPC))
     return false;
+  const boost::any any_rpc = imd[MDGeom::RPC];
+  if (any_rpc.empty())
+    return false;
   try
   {
-    const boost::any any_rpc = imd[MDGeom::RPC];  //TODO: Segfault here.
-    if (any_rpc.empty())
-      return false;
-    Projection::RPCParam newParam = boost::any_cast<Projection::RPCParam>(imd[MDGeom::RPC]);
-    this->m_RPCParam = std::make_unique<Projection::RPCParam>(newParam);
+    this->m_RPCParam = std::make_unique<Projection::RPCParam>(boost::any_cast<Projection::RPCParam>(imd[MDGeom::RPC]));
   }
   catch (boost::bad_any_cast)
   {

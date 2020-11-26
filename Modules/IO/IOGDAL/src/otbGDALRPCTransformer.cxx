@@ -59,11 +59,12 @@ GDALRPCTransformer::~GDALRPCTransformer()
 {
   if(m_TransformArg != nullptr)
     GDALDestroyTransformer(m_TransformArg);
+  CSLDestroy(m_Options);
 }
 
 void GDALRPCTransformer::SetOption(const std::string& Name, const std::string& Value)
 {
-  this->m_Options = CSLSetNameValue(this->m_Options, Name.c_str(), Value.c_str());
+  this->m_Options = CSLSetNameValue(m_Options, Name.c_str(), Value.c_str());
   this->m_Modified = true;
 }
 

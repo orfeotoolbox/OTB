@@ -35,7 +35,7 @@ RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::Transform
   zePoint[1] = static_cast<double>(point[1]);
   zePoint[2] = 0.0;
 
-  this->m_Transformer->ForwardTransform(zePoint);
+  zePoint = this->m_Transformer->ForwardTransform(zePoint);
 
   OutputPointType pOut;
   pOut[0] = static_cast<TScalarType>(zePoint[0]);
