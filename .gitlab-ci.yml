@@ -39,7 +39,7 @@ variables:
   GIT_STRATEGY: "clone"
 
 stages:
-  - precheck
+  # - precheck
   - prepare
   - build
   - report
@@ -104,110 +104,110 @@ stages:
       - build/*/*/*/*.cmake
 
 #-------------------------- precheck job ---------------------------------------
-fast-build:
-  extends: .common
-  only:
-    - merge_requests
-    - branches
-  stage: precheck
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
-  before_script:
-    - export GIT_LFS_SKIP_SMUDGE=1
-    - git checkout -f -q $CI_COMMIT_SHA
-    - python3 CI/check_twin_pipelines.py
-  script:
-    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
-    - ccache -s
+# fast-build:
+#   extends: .common
+#   only:
+#     - merge_requests
+#     - branches
+#   stage: precheck
+#   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
+#   before_script:
+#     - export GIT_LFS_SKIP_SMUDGE=1
+#     - git checkout -f -q $CI_COMMIT_SHA
+#     - python3 CI/check_twin_pipelines.py
+#   script:
+#     - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
+#     - ccache -s
 
-legal-check:
-  extends: .common
-  only:
-    - merge_requests
-    - develop
-    - /^release-[0-9]+\.[0-9]+$/
-  stage: precheck
-  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
-  variables:
-    GIT_DEPTH: ""
-  allow_failure: true
-  script:
-    - ./CI/contributors_check.sh
-    - ./CI/headers_check.py
-  after_script: []
+# legal-check:
+#   extends: .common
+#   only:
+#     - merge_requests
+#     - develop
+#     - /^release-[0-9]+\.[0-9]+$/
+#   stage: precheck
+#   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+#   variables:
+#     GIT_DEPTH: ""
+#   allow_failure: true
+#   script:
+#     - ./CI/contributors_check.sh
+#     - ./CI/headers_check.py
+#   after_script: []
 
 #------------------------- prepare & build jobs --------------------------------
-debian-build:
-  extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-debian-native:testing
-  allow_failure: true
-  script:
-    - QT_QPA_PLATFORM=offscreen ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-testing-gcc
-  after_script:
-    - export CI_ALLOW_FAILURE=ON
-    - python3 -u CI/cdash_handler.py
-  needs:
-    - job: fast-build
+# debian-build:
+#   extends: .common-build
+#   image: $BUILD_IMAGE_REGISTRY/otb-debian-native:testing
+#   allow_failure: true
+#   script:
+#     - QT_QPA_PLATFORM=offscreen ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=debian-testing-gcc
+#   after_script:
+#     - export CI_ALLOW_FAILURE=ON
+#     - python3 -u CI/cdash_handler.py
+#   needs:
+#     - job: fast-build
 
 ## Ubuntu superbuild
-ubuntu-xdk-prepare:
-  extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm
+# ubuntu-xdk-prepare:
+#   extends: .common-prepare
+#   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+#   script:
+#     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm
 
-ubuntu-xdk-build-doc:
-  extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
-  script:
-    - export QT_QPA_PLATFORM=offscreen
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
-    - mv build/CookBook-*-html.tar.gz . || true
-    - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
-    - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk -DNAME_SUFFIX:string=-glibc-2.27
-    - mv build_packages/OTB-*.run . || true
-  needs:
-    - job: ubuntu-xdk-prepare
-      artifacts: true
+# ubuntu-xdk-build-doc:
+#   extends: .common-build
+#   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+#   script:
+#     - export QT_QPA_PLATFORM=offscreen
+#     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
+#     - mv build/CookBook-*-html.tar.gz . || true
+#     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
+#     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
+#     - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk -DNAME_SUFFIX:string=-glibc-2.27
+#     - mv build_packages/OTB-*.run . || true
+#   needs:
+#     - job: ubuntu-xdk-prepare
+#       artifacts: true
 
-## CentOS superbuild
-centos-xdk-prepare:
-  extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=centos-6.6-gcc
+# ## CentOS superbuild
+# centos-xdk-prepare:
+#   extends: .common-prepare
+#   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+#   script:
+#     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=centos-6.6-gcc
 
-centos-xdk-build:
-  extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
-  script:
-    - export QT_QPA_PLATFORM=offscreen
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=centos-6.6-gcc
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=centos-6.6-gcc
-    - mv build_packages/OTB-*.run . || true
-  needs:
-    - job: centos-xdk-prepare
-      artifacts: true
+# centos-xdk-build:
+#   extends: .common-build
+#   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:6.6
+#   script:
+#     - export QT_QPA_PLATFORM=offscreen
+#     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=centos-6.6-gcc
+#     - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=centos-6.6-gcc
+#     - mv build_packages/OTB-*.run . || true
+#   needs:
+#     - job: centos-xdk-prepare
+#       artifacts: true
 
-## MacOS superbuild
-macos-xdk-prepare:
-  extends: .common-prepare
-  tags:
-    - macos
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
+# ## MacOS superbuild
+# macos-xdk-prepare:
+#   extends: .common-prepare
+#   tags:
+#     - macos
+#   script:
+#     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
 
-macos-xdk-build:
-  tags:
-    - macos
-  extends: .common-build
-  script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
-    - mv build_packages/OTB-*.run . || true
-  needs:
-    - job: macos-xdk-prepare
-      artifacts: true
+# macos-xdk-build:
+#   tags:
+#     - macos
+#   extends: .common-build
+#   script:
+#     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
+#     - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
+#     - mv build_packages/OTB-*.run . || true
+#   needs:
+#     - job: macos-xdk-prepare
+#       artifacts: true
 
 ## Windows
 .windows-prepare:
@@ -251,105 +251,105 @@ windows-10-build:
       artifacts: true
 
 # - Win8.1
-windows-8-prepare:
-  extends: .windows-prepare
-  tags:
-    - windows8
-  script:
-    - call ./CI/dev_env.bat x86 xdk 8.1
-    - clcache.exe -s
-    - ctest -C Release -V -S CI/prepare_superbuild.cmake
-    - clcache.exe -s
+# windows-8-prepare:
+#   extends: .windows-prepare
+#   tags:
+#     - windows8
+#   script:
+#     - call ./CI/dev_env.bat x86 xdk 8.1
+#     - clcache.exe -s
+#     - ctest -C Release -V -S CI/prepare_superbuild.cmake
+#     - clcache.exe -s
 
-windows-8-build:
-  extends: .windows-build
-  tags:
-    - windows8
-  script:
-    - call ./CI/dev_env.bat x86 otb 8.1
-    - clcache.exe -s
-    - ctest -V -S CI/main_superbuild.cmake
-    - clcache.exe -s
-    - ctest -V -S CI/main_packages.cmake
-    - move "build_packages\OTB-*.zip" . || dir build_packages
-  needs:
-    - job: windows-8-prepare
-      artifacts: true
+# windows-8-build:
+#   extends: .windows-build
+#   tags:
+#     - windows8
+#   script:
+#     - call ./CI/dev_env.bat x86 otb 8.1
+#     - clcache.exe -s
+#     - ctest -V -S CI/main_superbuild.cmake
+#     - clcache.exe -s
+#     - ctest -V -S CI/main_packages.cmake
+#     - move "build_packages\OTB-*.zip" . || dir build_packages
+#   needs:
+#     - job: windows-8-prepare
+#       artifacts: true
 
 #------------------------- QA related jobs -------------------------------------
-ubuntu-xdk-qa-code-coverage:
-  extends: .common-build
-  only:
-    refs:
-      - merge_requests
-      - develop
-      - /^release-[0-9]+\.[0-9]+$/
-    variables:
-      - $SONAR_OTB_TOKEN
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
-  script:
-    - QT_QPA_PLATFORM=offscreen ctest -V -S CI/main_qa.cmake
-                     -DIMAGE_NAME:string=ubuntu-18.04-llvm-qa
-                     -DQA:BOOL=ON
-    - ./CI/otb_coverage.sh
-    - saxon-xslt -o build/ctest_report.xml
-                 build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
-                 CI/ctest2junit.xsl
-  needs:
-    - job: ubuntu-xdk-prepare
-      artifacts: true
+# ubuntu-xdk-qa-code-coverage:
+#   extends: .common-build
+#   only:
+#     refs:
+#       - merge_requests
+#       - develop
+#       - /^release-[0-9]+\.[0-9]+$/
+#     variables:
+#       - $SONAR_OTB_TOKEN
+#   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
+#   script:
+#     - QT_QPA_PLATFORM=offscreen ctest -V -S CI/main_qa.cmake
+#                      -DIMAGE_NAME:string=ubuntu-18.04-llvm-qa
+#                      -DQA:BOOL=ON
+#     - ./CI/otb_coverage.sh
+#     - saxon-xslt -o build/ctest_report.xml
+#                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
+#                  CI/ctest2junit.xsl
+#   needs:
+#     - job: ubuntu-xdk-prepare
+#       artifacts: true
 
-ubuntu-xdk-qa-static-analysis:
-  extends: .common-build
-  only:
-    refs:
-      - merge_requests
-      - develop
-      - /^release-[0-9]+\.[0-9]+$/
-    variables:
-      - $SONAR_OTB_TOKEN
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
-  script:
-    - find Modules -type f -regextype posix-extended -regex '.*\.(h|hxx)$' -exec dirname '{}' \; |
-          grep -vE '^Modules/ThirdParty/' |
-          sort -u > header_directories
-    - cppcheck -j 8 -q --xml --xml-version=2 --enable=all
-               --language=c++ --std=c++14 --platform=unix64
-               --includes-file=header_directories
-               -i Modules/ThirdParty Modules
-               2> build/cppcheck_report.xml
-  after_script: []
-  needs:
-    - job: ubuntu-xdk-prepare
-      artifacts: true
+# ubuntu-xdk-qa-static-analysis:
+#   extends: .common-build
+#   only:
+#     refs:
+#       - merge_requests
+#       - develop
+#       - /^release-[0-9]+\.[0-9]+$/
+#     variables:
+#       - $SONAR_OTB_TOKEN
+#   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
+#   script:
+#     - find Modules -type f -regextype posix-extended -regex '.*\.(h|hxx)$' -exec dirname '{}' \; |
+#           grep -vE '^Modules/ThirdParty/' |
+#           sort -u > header_directories
+#     - cppcheck -j 8 -q --xml --xml-version=2 --enable=all
+#                --language=c++ --std=c++14 --platform=unix64
+#                --includes-file=header_directories
+#                -i Modules/ThirdParty Modules
+#                2> build/cppcheck_report.xml
+#   after_script: []
+#   needs:
+#     - job: ubuntu-xdk-prepare
+#       artifacts: true
 
-ubuntu-xdk-report:
-  extends: .common
-  variables:
-    GIT_DEPTH: ""
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
-  stage: report
-  only:
-    refs:
-      - merge_requests
-      - develop
-      - /^release-[0-9]+\.[0-9]+$/
-    variables:
-      - $SONAR_OTB_TOKEN
-  script:
-    - sonar-scanner -Dproject.settings=sonar-project.properties
-                    -Dsonar.host.url=https://sonar.orfeo-toolbox.org
-                    -Dsonar.login=$SONAR_OTB_TOKEN
-                    -Dsonar.projectKey=$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME
-                    `test -z "$CI_COMMIT_TAG" || echo "-Dsonar.projectVersion=$CI_COMMIT_TAG"`
-                    -Dsonar.branch.name=$CI_COMMIT_REF_NAME
+# ubuntu-xdk-report:
+#   extends: .common
+#   variables:
+#     GIT_DEPTH: ""
+#   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
+#   stage: report
+#   only:
+#     refs:
+#       - merge_requests
+#       - develop
+#       - /^release-[0-9]+\.[0-9]+$/
+#     variables:
+#       - $SONAR_OTB_TOKEN
+#   script:
+#     - sonar-scanner -Dproject.settings=sonar-project.properties
+#                     -Dsonar.host.url=https://sonar.orfeo-toolbox.org
+#                     -Dsonar.login=$SONAR_OTB_TOKEN
+#                     -Dsonar.projectKey=$CI_PROJECT_NAMESPACE-$CI_PROJECT_NAME
+#                     `test -z "$CI_COMMIT_TAG" || echo "-Dsonar.projectVersion=$CI_COMMIT_TAG"`
+#                     -Dsonar.branch.name=$CI_COMMIT_REF_NAME
 
-  after_script: []
-  needs:
-    - job: ubuntu-xdk-qa-code-coverage
-      artifacts: true
-    - job: ubuntu-xdk-qa-static-analysis
-      artifacts: true
+#   after_script: []
+#   needs:
+#     - job: ubuntu-xdk-qa-code-coverage
+#       artifacts: true
+#     - job: ubuntu-xdk-qa-static-analysis
+#       artifacts: true
 
 # #------------------------- Conda packages jobs ---------------------------------
 # conda-linux-build:
