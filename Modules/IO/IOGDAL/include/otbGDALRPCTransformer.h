@@ -22,7 +22,6 @@
 
 #include "itkPoint.h"
 #include "gdal_alg.h"
-#include "cpl_string.h"
 
 namespace otb
 {
@@ -207,7 +206,7 @@ private:
   /** The RPC model */
   GDALRPCInfo m_GDALRPCInfo;
   /** The options */
-  CPLStringList m_Options;
+  char ** m_Options = nullptr;
   /** The error allowed in the iterative solution */
   double m_PixErrThreshold = 0.1;
   /** The transformer arguments */
