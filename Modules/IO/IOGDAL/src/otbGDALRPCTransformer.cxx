@@ -47,6 +47,12 @@ GDALRPCTransformer::GDALRPCTransformer(double LineOffset, double SampleOffset, d
   std::copy_n(SampleNum, 20, this->m_GDALRPCInfo.adfSAMP_NUM_COEFF);
   std::copy_n(SampleDen, 20, this->m_GDALRPCInfo.adfSAMP_DEN_COEFF);
 
+  // min/max longitude and latitude (default values)
+  this->m_GDALRPCInfo.dfMIN_LONG = -180.0;
+  this->m_GDALRPCInfo.dfMIN_LAT = -90.0;
+  this->m_GDALRPCInfo.dfMAX_LONG = 180.0;
+  this->m_GDALRPCInfo.dfMAX_LAT = 90.0;
+
   auto & demHandler = otb::DEMHandler::GetInstance();
   if (demHandler.GetDEMCount() > 0)
   {
@@ -55,6 +61,7 @@ GDALRPCTransformer::GDALRPCTransformer(double LineOffset, double SampleOffset, d
   }
   else
   {
+    // RPC height is used as a constant height offset applied to all points in case no DEM is set.
     this->SetOption("RPC_HEIGHT", std::to_string(demHandler.GetDefaultHeightAboveEllipsoid()));
   }
 }
