@@ -172,7 +172,7 @@ private:
 
       VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
       vproj->SetInput(vd);
-      vproj->SetInputKeywordList(GetParameterImage("in")->GetImageKeywordlist());
+      vproj->SetInputImageMetadata(&GetParameterImage("in")->GetImageMetadata());
       // vproj->SetInputOrigin(GetParameterImage("in")->GetOrigin());
       // vproj->SetInputSpacing(GetParameterImage("in")->GetSignedSpacing());
 

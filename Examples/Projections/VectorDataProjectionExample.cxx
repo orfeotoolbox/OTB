@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
   // Information about the target projection is retrieved directly from
   // the image:
 
-  vectorDataProjection->SetOutputKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
+  vectorDataProjection->SetOutputImageMetadata(&imageReader->GetOutput()->GetImageMetadata());
   vectorDataProjection->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
   vectorDataProjection->SetOutputSpacing(imageReader->GetOutput()->GetSignedSpacing());
   vectorDataProjection->SetOutputProjectionRef(imageReader->GetOutput()->GetProjectionRef());

@@ -176,7 +176,7 @@ void VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>::Generat
 
   if (m_InputImage->GetProjectionRef().empty() || boost::algorithm::istarts_with(m_InputImage->GetProjectionRef(), "LOCAL_CS"))
   {
-    m_VdProjFilter->SetOutputKeywordList(m_InputImage->GetImageKeywordlist());
+    m_VdProjFilter->SetOutputImageMetadata(&m_InputImage->GetImageMetadata());
   }
   else
   {
