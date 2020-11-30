@@ -107,11 +107,11 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest2(int itkNotUsed(argc), cha
   AtmoCorrectionParametersType::Pointer                  paramAtmo = AtmoCorrectionParametersType::New();
 
 
-  paramAtmo->SetAtmosphericPressure(static_cast<double>(atof(argv[3])));
-  paramAtmo->SetWaterVaporAmount(static_cast<double>(atof(argv[4])));
-  paramAtmo->SetOzoneAmount(static_cast<double>(atof(argv[5])));
-  paramAtmo->SetAerosolModel(static_cast<AerosolModelType>(atoi(argv[6])));
-  paramAtmo->SetAerosolOptical(static_cast<double>(atof(argv[7])));
+  paramAtmo->SetAtmosphericPressure(std::stod(argv[3]));
+  paramAtmo->SetWaterVaporAmount(std::stod(argv[4]));
+  paramAtmo->SetOzoneAmount(std::stod(argv[5]));
+  paramAtmo->SetAerosolModel(static_cast<AerosolModelType>(std::stoi(argv[6])));
+  paramAtmo->SetAerosolOptical(std::stod(argv[7]));
 
 
 
@@ -129,7 +129,7 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest2(int itkNotUsed(argc), cha
   writer->SetInput(filter->GetOutput());
 
   writer->Update();
-  std::cout << "PRINT FILTER" << filter << std::endl;
+  //std::cout << "PRINT FILTER" << filter << std::endl;
   /*filter->GenerateParameters();
   otb::AtmosphericRadiativeTerms::Pointer terms = filter->GetAtmosphericRadiativeTerms();
 
