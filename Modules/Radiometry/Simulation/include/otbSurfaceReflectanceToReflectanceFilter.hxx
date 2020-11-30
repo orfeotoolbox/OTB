@@ -82,7 +82,7 @@ void SurfaceReflectanceToReflectanceFilter<TInputImage, TOutputImage>::UpdateAtm
         std::vector<float> vec(spectralSensitivityLUT.Array.begin(), spectralSensitivityLUT.Array.end());
         filterFunction->SetFilterFunctionValues(vec);
         filterFunction->SetMinSpectralValue(axis.Origin);
-        filterFunction->SetMaxSpectralValue(axis.Origin + axis.Spacing * axis.Size);
+        filterFunction->SetMaxSpectralValue(axis.Origin + axis.Spacing * (axis.Size-1));
         filterFunction->SetUserStep(axis.Spacing);
         spectralSensitivity->PushBack(filterFunction);
       }
