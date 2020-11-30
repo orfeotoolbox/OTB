@@ -97,15 +97,14 @@ void ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>::Upda
   }
 
   const auto & metadata = this->GetInput()->GetImageMetadata();
-std::cout << "Debug: UpdateAtmosphericRadiativeTerms " << metadata << std::endl;
+//std::cout << "Debug: UpdateAtmosphericRadiativeTerms " << metadata << std::endl;
   if (m_AtmoCorrectionParameters->GetAeronetFileName() != "")
   {
     m_AtmoCorrectionParameters->UpdateAeronetData(metadata[MDTime::AcquisitionDate].GetYear(),
                                                   metadata[MDTime::AcquisitionDate].GetHour(),
                                                   metadata[MDTime::AcquisitionDate].GetMinute());
   }
-std::cout << metadata[MDTime::AcquisitionDate].GetYear() << " " << metadata[MDTime::AcquisitionDate].GetMonth() << " " << metadata[MDTime::AcquisitionDate].GetDay() << " " 
-          << metadata[MDTime::AcquisitionDate].GetHour() << " " << metadata[MDTime::AcquisitionDate].GetMinute() << std::endl;
+
   // Acquisition parameters
   if (!m_IsSetAcquiCorrectionParameters) // Get info from image metadata
   {
@@ -137,7 +136,7 @@ std::cout << metadata[MDTime::AcquisitionDate].GetYear() << " " << metadata[MDTi
             filterFunction->SetMaxSpectralValue(axis.Origin + axis.Spacing * axis.Size);
             filterFunction->SetUserStep(axis.Spacing);
             spectralSensitivity->PushBack(filterFunction);
-            std::cout << band[MDStr::BandName] << " " << filterFunction << std::endl;
+            //std::cout << filterFunction << std::endl;
         }
 
         m_AcquiCorrectionParameters->SetWavelengthSpectralBand(spectralSensitivity);
@@ -145,7 +144,8 @@ std::cout << metadata[MDTime::AcquisitionDate].GetYear() << " " << metadata[MDTi
       else
       {
         otbMsgDevMacro(<< "use dummy filter");
-        auto spectralDummy = AcquiCorrectionParametersType::InternalWavelengthSpectralBandVectorType::New();
+        WavelengthSpectralBandVectorType spectralDummy;
+        spectralDummy->Clear();
         for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
         {
           spectralDummy->PushBack(FilterFunctionValuesType::New());
@@ -167,7 +167,7 @@ void ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>::Upda
   {
     itkExceptionMacro(<< "Input must be set before updating the functors");
   }
-
+std::cout << "Update functor " << this->GetInput()->GetImageMetadata() << std::endl;
   this->GetFunctorVector().clear();
 
   for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)

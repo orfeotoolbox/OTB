@@ -114,6 +114,7 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest2(int itkNotUsed(argc), cha
   paramAtmo->SetAerosolOptical(static_cast<double>(atof(argv[7])));
 
 
+
   ReaderType::Pointer reader = ReaderType::New();
   WriterType::Pointer writer = WriterType::New();
   reader->SetFileName(inputFileName);
@@ -128,7 +129,7 @@ int otbReflectanceToSurfaceReflectanceImageFilterTest2(int itkNotUsed(argc), cha
   writer->SetInput(filter->GetOutput());
 
   writer->Update();
-
+  std::cout << "PRINT FILTER" << filter << std::endl;
   /*filter->GenerateParameters();
   otb::AtmosphericRadiativeTerms::Pointer terms = filter->GetAtmosphericRadiativeTerms();
 
