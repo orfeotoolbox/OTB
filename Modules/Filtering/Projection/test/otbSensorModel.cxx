@@ -35,6 +35,9 @@
 #include "itkEuclideanDistanceMetric.h"
 #include "otbGeographicalDistance.h"
 #include "otbGenericRSTransform.h"
+#include "otbImageMetadata.h"
+#include "otbImageMetadataInterfaceFactory.h"
+#include "otbGeomMetadataSupplier.h"
 #include "otbMacro.h"
 
 #if defined(__GNUC__) || defined(__clang__)
@@ -178,7 +181,13 @@ int otbSensorModel(int argc, char* argv[])
   // Some instantiations
   // -------------------
   otb::ImageKeywordlist kwlist = otb::ReadGeometryFromGEOMFile(geomfilename);
-  otb::ImageMetadata imd; // TODO: Read metadata from GEOMFile
+  otb::ImageMetadata imd;
+  otb::GeomMetadataSupplier geomSupplier(geomfilename);
+  for (int loop = 0 ; loop < geomSupplier.GetNbBands() ; ++loop)
+    imd.Bands.emplace_back();
+  otb::ImageMetadataInterfaceBase::Pointer imi = otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
+  imd = imi->GetImageMetadata();
+  geomSupplier.FetchRPC(imd);
 
   if (!(kwlist.GetSize() > 0))
   {
@@ -188,7 +197,7 @@ int otbSensorModel(int argc, char* argv[])
 
   if (writeBaseline)
   {
-    //TODO when reading geomfiles OK: return produceGCP(outFilename, kwlist);
+    return produceGCP(outFilename, imd);
   }
 
   typedef otb::ImageKeywordlist::KeywordlistMap KeywordlistMapType;
@@ -342,7 +351,6 @@ int otbSensorModel(int argc, char* argv[])
 
   pointsContainerType::iterator      pointsIt      = pointsContainer.begin();
   geo3dPointsContainerType::iterator geo3dPointsIt = geo3dPointsContainer.begin();
-  // for(; pointsIt!=pointsContainer.end(); ++pointsIt)
   while ((pointsIt != pointsContainer.end()) && (geo3dPointsIt != geo3dPointsContainer.end()))
   {
     imagePoint = *pointsIt;
