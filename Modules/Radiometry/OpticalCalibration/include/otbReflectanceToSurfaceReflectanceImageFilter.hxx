@@ -167,7 +167,7 @@ void ReflectanceToSurfaceReflectanceImageFilter<TInputImage, TOutputImage>::Upda
   {
     itkExceptionMacro(<< "Input must be set before updating the functors");
   }
-std::cout << "Update functor " << this->GetInput()->GetImageMetadata() << std::endl;
+//std::cout << "Update functor " << this->GetInput()->GetImageMetadata() << std::endl;
   this->GetFunctorVector().clear();
 
   for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
