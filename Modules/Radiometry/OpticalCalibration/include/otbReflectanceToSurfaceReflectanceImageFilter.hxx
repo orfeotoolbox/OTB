@@ -104,7 +104,8 @@ std::cout << "Debug: UpdateAtmosphericRadiativeTerms " << metadata << std::endl;
                                                   metadata[MDTime::AcquisitionDate].GetHour(),
                                                   metadata[MDTime::AcquisitionDate].GetMinute());
   }
-
+std::cout << metadata[MDTime::AcquisitionDate].GetYear() << " " << metadata[MDTime::AcquisitionDate].GetMonth() << " " << metadata[MDTime::AcquisitionDate].GetDay() << " " 
+          << metadata[MDTime::AcquisitionDate].GetHour() << " " << metadata[MDTime::AcquisitionDate].GetMinute() << std::endl;
   // Acquisition parameters
   if (!m_IsSetAcquiCorrectionParameters) // Get info from image metadata
   {
@@ -136,6 +137,7 @@ std::cout << "Debug: UpdateAtmosphericRadiativeTerms " << metadata << std::endl;
             filterFunction->SetMaxSpectralValue(axis.Origin + axis.Spacing * axis.Size);
             filterFunction->SetUserStep(axis.Spacing);
             spectralSensitivity->PushBack(filterFunction);
+            std::cout << band[MDStr::BandName] << " " << filterFunction << std::endl;
         }
 
         m_AcquiCorrectionParameters->SetWavelengthSpectralBand(spectralSensitivity);
@@ -143,8 +145,7 @@ std::cout << "Debug: UpdateAtmosphericRadiativeTerms " << metadata << std::endl;
       else
       {
         otbMsgDevMacro(<< "use dummy filter");
-        WavelengthSpectralBandVectorType spectralDummy;
-        spectralDummy->Clear();
+        auto spectralDummy = AcquiCorrectionParametersType::InternalWavelengthSpectralBandVectorType::New();
         for (unsigned int i = 0; i < this->GetInput()->GetNumberOfComponentsPerPixel(); ++i)
         {
           spectralDummy->PushBack(FilterFunctionValuesType::New());
