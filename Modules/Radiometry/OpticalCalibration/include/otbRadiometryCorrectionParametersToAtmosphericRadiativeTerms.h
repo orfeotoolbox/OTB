@@ -73,6 +73,24 @@ public:
       upwardDirectTransmittance             = 0.;
       upwardDiffuseTransmittanceForRayleigh = 0.;
       upwardDiffuseTransmittanceForAerosol  = 0.;
+
+      if (i == 0)
+      { std::cout << "before ComputeAtmosphericParameters" << std::endl;
+        std::cout << paramAcqui->GetSolarZenithalAngle() << std::endl;
+        std::cout << paramAcqui->GetSolarAzimutalAngle() << std::endl;
+        std::cout << paramAcqui->GetViewingZenithalAngle() << std::endl;
+        std::cout << paramAcqui->GetViewingAzimutalAngle() << std::endl;
+        std::cout << paramAcqui->GetMonth() << std::endl;
+        std::cout << paramAcqui->GetDay() << std::endl;
+        std::cout << paramAtmo->GetAtmosphericPressure() << std::endl;
+        std::cout << paramAtmo->GetWaterVaporAmount() << std::endl;
+        std::cout << paramAtmo->GetOzoneAmount() << std::endl;
+        std::cout << paramAtmo->GetAerosolModel() << std::endl;
+        std::cout << paramAtmo->GetAerosolOptical() << std::endl;
+        std::cout << paramAcqui->GetWavelengthSpectralBand()->GetNthElement(i) << std::endl;
+        std::cout << "---------------------------------------" << std::endl;
+      }
+
       SIXSTraits::ComputeAtmosphericParameters(
           paramAcqui->GetSolarZenithalAngle(),   /** The Solar zenithal angle */
           paramAcqui->GetSolarAzimutalAngle(),   /** The Solar azimutal angle */
@@ -97,6 +115,20 @@ public:
           upwardDiffuseTransmittanceForRayleigh, /** Upward diffuse transmittance for rayleigh */
           upwardDiffuseTransmittanceForAerosol   /** Upward diffuse transmittance for aerosols */
           );
+      if (i==0)
+      {
+        std::cout << "after ComputeAtmosphericParameters" << std::endl;
+        std::cout << atmosphericReflectance << std::endl;
+        std::cout << atmosphericSphericalAlbedo << std::endl;
+        std::cout << totalGaseousTransmission << std::endl;
+        std::cout << downwardTransmittance << std::endl;
+        std::cout << upwardTransmittance << std::endl;
+        std::cout << upwardDiffuseTransmittance << std::endl;
+        std::cout << upwardDirectTransmittance << std::endl;
+        std::cout << upwardDiffuseTransmittanceForRayleigh << std::endl;
+        std::cout << upwardDiffuseTransmittanceForAerosol << std::endl;
+        std::cout << "---------------------------------------" << std::endl;
+      }
 
       radTermsOut->SetIntrinsicAtmosphericReflectance(i, atmosphericReflectance);
       radTermsOut->SetSphericalAlbedo(i, atmosphericSphericalAlbedo);
