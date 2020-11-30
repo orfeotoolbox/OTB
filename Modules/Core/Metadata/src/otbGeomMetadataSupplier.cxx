@@ -65,11 +65,14 @@ int GeomMetadataSupplier::GetNbBands() const
 
   ret = this->GetMetadataValue("support_data.band_name_list", hasValue);
   boost::algorithm::trim_if(ret, boost::algorithm::is_any_of("\" "));
-  if (!hasValue)
-    otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata 'support_data.band_name_list'")
-  std::vector<std::string> ret_vect;
-  otb::Utils::ConvertStringToVector(ret, ret_vect, "band name");
-  return ret_vect.size();
+  if (hasValue)
+  {
+    std::vector<std::string> ret_vect;
+    otb::Utils::ConvertStringToVector(ret, ret_vect, "band name");
+    return ret_vect.size();
+  }
+
+  return 0;
 }
 
 bool GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
