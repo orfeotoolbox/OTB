@@ -222,7 +222,7 @@ int Time::GetMinute() const
   return tm_min;
 }
 
-int Time::GetSecond() const
+double Time::GetSecond() const
 {
   return tm_sec + frac_sec;
 }

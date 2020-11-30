@@ -281,7 +281,7 @@ struct OTBMetadata_EXPORT Time : tm
   int GetYear() const;
   int GetHour() const;
   int GetMinute() const;
-  int GetSecond() const;
+  double GetSecond() const;
   ///@}
 };
 
