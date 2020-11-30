@@ -115,6 +115,20 @@ public:
           upwardDiffuseTransmittanceForRayleigh, /** Upward diffuse transmittance for rayleigh */
           upwardDiffuseTransmittanceForAerosol   /** Upward diffuse transmittance for aerosols */
           );
+      if (i==0)
+      {
+        std::cout << "after ComputeAtmosphericParameters" << std::endl;
+        std::cout << atmosphericReflectance << std::endl;
+        std::cout << atmosphericSphericalAlbedo << std::endl;
+        std::cout << totalGaseousTransmission << std::endl;
+        std::cout << downwardTransmittance << std::endl;
+        std::cout << upwardTransmittance << std::endl;
+        std::cout << upwardDiffuseTransmittance << std::endl;
+        std::cout << upwardDirectTransmittance << std::endl;
+        std::cout << upwardDiffuseTransmittanceForRayleigh << std::endl;
+        std::cout << upwardDiffuseTransmittanceForAerosol << std::endl;
+        std::cout << "---------------------------------------" << std::endl;
+      }
 
       radTermsOut->SetIntrinsicAtmosphericReflectance(i, atmosphericReflectance);
       radTermsOut->SetSphericalAlbedo(i, atmosphericSphericalAlbedo);
