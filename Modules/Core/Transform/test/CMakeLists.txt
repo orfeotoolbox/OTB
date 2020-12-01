@@ -83,6 +83,18 @@ otb_add_test(NAME prTvTestCreateInverseForwardSensorModel_Toulouse COMMAND otbTr
   43.60468837
   )
 
+otb_add_test(NAME prTvTestCreateInverseForwardSensorModel_DEM COMMAND otbTransformTestDriver
+  --compare-ascii ${EPSILON_4}
+  ${BASELINE_FILES}/prTvTestCreateInverseForwardSensorModel_DEM.txt
+  ${TEMP}/prTvTestCreateInverseForwardSensorModel_DEM.txt
+  otbCreateInverseForwardSensorModel
+  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  ${TEMP}/prTvTestCreateInverseForwardSensorModel_DEM.txt
+  1.44348693
+  43.60468837
+  ${INPUTDATA}/DEM/srtm_directory/N43E001.hgt
+  )
+
 otb_add_test(NAME bfTvLogPolarTransformResample COMMAND otbTransformTestDriver
   --compare-image ${EPSILON_7}  ${BASELINE}/bfLogPolarTransformResampleOutput.tif
   ${TEMP}/bfLogPolarTransformResampleOutput.tif

@@ -27,16 +27,27 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-
 #include "otbRPCInverseTransform.h"
 #include "otbRPCForwardTransform.h"
 #include "otbMetaDataKey.h"
+#include "otbDEMHandler.h"
 
 int otbCreateInverseForwardSensorModel(int argc, char* argv[])
 {
-  if (argc != 5)
+
+  std::string InputFilename, OutputFilename, pointX, pointY;
+  switch (argc)
   {
-    std::cout << argv[0] << " <input filename> <output filename> <test_point_X> <test_point_Y>\n";
+  case 6 :
+    otb::DEMHandler::GetInstance().OpenDEMFile(argv[5]);
+  case 5 :
+    InputFilename = argv[1];
+    OutputFilename = argv[2];
+    pointX = argv[3];
+    pointY = argv[4];
+    break;
+  default :
+    std::cout << argv[0] << " <input filename> <output filename> <test_point_X> <test_point_Y> [optional DEM path]\n";
     return EXIT_FAILURE;
   }
 
@@ -51,7 +62,7 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
   ReaderType::Pointer          reader            = ReaderType::New();
 
   // Set parameters ...
-  reader->SetFileName(argv[1]);
+  reader->SetFileName(InputFilename);
 
   // Read metadata
   reader->GenerateOutputInformation();
@@ -81,14 +92,14 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  std::ofstream ofs(argv[2], std::ofstream::out);
+  std::ofstream ofs(OutputFilename, std::ofstream::out);
   ofs.precision(8);
   
   InverseRPCModelType::InputPointType geoPoint;
-  geoPoint[0] = atof(argv[3]);
-  geoPoint[1] = atof(argv[4]);
+  geoPoint[0] = atof(pointX.c_str());
+  geoPoint[1] = atof(pointY.c_str());
   geoPoint[2] = 0.0;
-  
+
   ofs << "Testing geopoint: " << geoPoint << "\n\n";
 
   auto indexPoint = inverse_rpc_model->TransformPoint(geoPoint);
