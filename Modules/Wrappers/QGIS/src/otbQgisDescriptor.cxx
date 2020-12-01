@@ -328,7 +328,7 @@ int main(int argc, char* argv[])
       BandParameter *f_param = dynamic_cast<BandParameter*>(param.GetPointer());
 
       dFile << "|None|"
-            << f_param->GetRasterData()
+            << f_param->GetRasterData() << "|"
             << optional
             << "|" << (f_param->GetSingleSelection() ? "False" : "True");
     }
