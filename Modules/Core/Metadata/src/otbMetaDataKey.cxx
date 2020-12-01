@@ -196,6 +196,37 @@ std::istream& operator>>(std::istream& is, Time& val)
 #undef _OTB_ISTREAM_EXPECT
 
 
+
+int Time::GetDay() const
+{
+  return tm_mday;
+}
+
+int Time::GetMonth() const
+{
+  return tm_mon + 1;
+}
+
+int Time::GetYear() const
+{
+  return tm_year + 1900;
+}
+
+int Time::GetHour() const
+{
+  return tm_hour;
+}
+
+int Time::GetMinute() const
+{
+  return tm_min;
+}
+
+double Time::GetSecond() const
+{
+  return tm_sec + frac_sec;
+}
+
 std::string LUTAxis::ToJSON(bool multiline) const
 {
   std::ostringstream oss;
