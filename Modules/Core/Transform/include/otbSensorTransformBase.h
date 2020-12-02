@@ -77,7 +77,7 @@ public:
   virtual bool IsValidSensorModel() const = 0;
 
 protected:
-  SensorTransformBase() = default;
+  SensorTransformBase() : Superclass(0) {}
   ~SensorTransformBase() = default;
 
 private:
