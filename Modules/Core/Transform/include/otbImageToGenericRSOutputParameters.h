@@ -23,7 +23,7 @@
 
 #include "itkObject.h"
 #include "otbGenericRSTransform.h"
-#include "otbImageKeywordlist.h"
+#include "otbImageMetadata.h"
 #include <string>
 
 namespace otb

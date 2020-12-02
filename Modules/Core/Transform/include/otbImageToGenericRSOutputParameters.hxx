@@ -48,7 +48,7 @@ void ImageToGenericRSOutputParameters<TImage>::Compute()
   if (m_Input.IsNull())
     itkExceptionMacro(<< "The input is null , please set a non null input image");
 
-  if (m_Input->GetProjectionRef().empty() && m_Input->GetImageKeywordlist().GetSize() == 0)
+  if (m_Input->GetProjectionRef().empty())
     itkExceptionMacro(<< "No information in the metadata, please set an image with non empty metadata");
 
   // First Call to UpdateTransform : Initialize with the input image
