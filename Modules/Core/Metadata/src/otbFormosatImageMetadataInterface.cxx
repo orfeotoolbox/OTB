@@ -1461,30 +1461,31 @@ void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
     solarIrradianceVec = dimapData.SolarIrradiance;
   }
 
-  if (dimapData.PhysicalBias.size() == nbBands
-    && dimapData.PhysicalGain.size() == nbBands
-    && solarIrradianceVec.size() == nbBands)
+  auto setDimapBandMetadata = [this](const MDNum & key, const std::vector<double> & input)
   {
-    auto bias = dimapData.PhysicalBias.begin();
-    auto gain = dimapData.PhysicalGain.begin();
-    auto solarIrradiance = solarIrradianceVec.begin();
-
-    for (auto & band: m_Imd.Bands)
+    if (input.size() == 1)
     {
-      band.Add(MDNum::PhysicalGain, *gain);
-      band.Add(MDNum::PhysicalBias, *bias);
-      band.Add(MDNum::SolarIrradiance, *solarIrradiance);
-
-      bias++;
-      gain++;
-      solarIrradiance++;
+      // this is a PAN image
+      m_Imd.Bands[0].Add(key, input[0]);
     }
-  }
-  else
-  {
-    otbGenericExceptionMacro(MissingMetadataException,
+    else if (input.size() == 4)
+    {
+      // MS image, note the band ordering
+      m_Imd.Bands[0].Add(key, input[2]);
+      m_Imd.Bands[1].Add(key, input[1]);
+      m_Imd.Bands[2].Add(key, input[0]);
+      m_Imd.Bands[3].Add(key, input[3]);
+    }
+    else
+    {
+      otbGenericExceptionMacro(MissingMetadataException,
       << "The number of bands in image metadatas is incoherent with the DIMAP product")
-  }
+    }
+  };
+
+  setDimapBandMetadata(MDNum::PhysicalBias, dimapData.PhysicalBias);
+  setDimapBandMetadata(MDNum::PhysicalGain, dimapData.PhysicalGain);
+  setDimapBandMetadata(MDNum::SolarIrradiance, solarIrradianceVec);
 
   FetchSpectralSensitivity();
 
