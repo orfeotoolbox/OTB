@@ -234,7 +234,7 @@ void ParseGroup(Application::Pointer app, TiXmlElement* n_App, const std::string
           }
         }
         else if (type == ParameterType_InputImageList || type == ParameterType_InputFilenameList || type == ParameterType_InputVectorDataList ||
-                 type == ParameterType_StringList || type == ParameterType_ListView)
+                 type == ParameterType_StringList || type == ParameterType_ListView || type == ParameterType_Field || type == ParameterType_Band)
         {
           values       = app->GetParameterStringList(key);
           hasValueList = true;

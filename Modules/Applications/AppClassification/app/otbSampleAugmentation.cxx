@@ -70,7 +70,7 @@ private:
 
     AddDocTag(Tags::Learning);
 
-    AddParameter(ParameterType_InputFilename, "in", "Input samples");
+    AddParameter(ParameterType_InputVectorData, "in", "Input samples");
     SetParameterDescription("in", "Vector data file containing samples (OGR format)");
 
     AddParameter(ParameterType_OutputFilename, "out", "Output samples");
@@ -78,9 +78,11 @@ private:
                             "Output vector data file storing new samples"
                             "(OGR format).");
 
-    AddParameter(ParameterType_ListView, "field", "Field Name");
+    AddParameter(ParameterType_Field, "field", "Field Name");
     SetParameterDescription("field", "Name of the field carrying the class name in the input vectors.");
     SetListViewSingleSelectionMode("field", true);
+    SetVectorData("field", "in");
+    SetTypeFilter("field", { OFTString, OFTInteger, OFTInteger64 });
 
     AddParameter(ParameterType_Int, "layer", "Layer Index");
     SetParameterDescription("layer", "Layer index to read in the input vector file.");
@@ -99,8 +101,9 @@ private:
                             "be generated.");
     SetDefaultParameterInt("samples", 100);
 
-    AddParameter(ParameterType_ListView, "exclude", "Field names for excluded features");
+    AddParameter(ParameterType_Field, "exclude", "Field names for excluded features");
     SetParameterDescription("exclude", "List of field names in the input vector data that will not be generated in the output file.");
+    SetVectorData("exclude", "in");
 
     AddParameter(ParameterType_Choice, "strategy", "Augmentation strategy");
 
@@ -162,6 +165,7 @@ private:
       ClearChoices("exclude");
       ClearChoices("field");
 
+      FieldParameter::TypeFilterType typeFilter = GetTypeFilter("field");
       for (int iField = 0; iField < feature.ogr().GetFieldCount(); iField++)
       {
         std::string key, item = feature.ogr().GetFieldDefnRef(iField)->GetNameRef();
@@ -171,7 +175,7 @@ private:
 
         OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
 
-        if (fieldType == OFTString || fieldType == OFTInteger || fieldType == OFTInteger64)
+        if (std::find(typeFilter.begin(), typeFilter.end(), fieldType) != std::end(typeFilter))
         {
           std::string tmpKey = "field." + key.substr(0, end - key.begin());
           AddChoice(tmpKey, item);

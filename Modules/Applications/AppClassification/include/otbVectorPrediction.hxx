@@ -55,6 +55,7 @@ void           VectorPrediction<RegressionMode>::DoUpdateParameters()
 
     ClearChoices("feat");
 
+    FieldParameter::TypeFilterType typeFilter = GetTypeFilter("feat");
     for (int iField = 0; iField < layerDefn.GetFieldCount(); iField++)
     {
       auto        fieldDefn = layerDefn.GetFieldDefn(iField);
@@ -63,7 +64,8 @@ void           VectorPrediction<RegressionMode>::DoUpdateParameters()
       key.erase(std::remove_if(key.begin(), key.end(), [](char c) { return !std::isalnum(c); }), key.end());
       std::transform(key.begin(), key.end(), key.begin(), tolower);
       auto fieldType = fieldDefn->GetType();
-      if (fieldType == OFTInteger || fieldType == OFTInteger64 || fieldType == OFTReal)
+
+      if (std::find(typeFilter.begin(), typeFilter.end(), fieldType) != std::end(typeFilter))
       {
         std::string tmpKey = "feat." + key;
         AddChoice(tmpKey, item);
