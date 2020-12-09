@@ -139,7 +139,6 @@ int main(int argc, char* argv[])
     // we switch to parameter stringlist to avoid aving empty combobox in QGIS
     if (type == ParameterType_ListView)
     {
-      ListViewParameter *lv_param = dynamic_cast<ListViewParameter*>(param.GetPointer());
       if ( appli->GetChoiceNames(name).empty() )
       {
         type = ParameterType_StringList;
