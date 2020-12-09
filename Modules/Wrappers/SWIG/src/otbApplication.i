@@ -638,7 +638,7 @@ class ApplicationProxy(object):
         ParameterType_Choice : 'ParameterType_Choice',
         ParameterType_Group : 'ParameterType_Group',
         ParameterType_Bool : 'ParameterType_Bool',
-        ParameterType_Field : 'ParameterType_Field'
+        ParameterType_Field : 'ParameterType_Field',
         ParameterType_Band : 'ParameterType_Band'
       }.get(parameter_type, 'ParameterType_UNKNOWN')
 
