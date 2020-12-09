@@ -122,12 +122,12 @@ void TrainVectorBase<TInputValue, TOutputValue>::DoUpdateParameters()
 
       OGRFieldType fieldType = feature.ogr().GetFieldDefnRef(iField)->GetType();
 
-      if (std::find(featTypeFilter.begin(), featTypeFilter.end(), fieldType) != std::end(featTypeFilter))
+      if (featTypeFilter.empty() || std::find(featTypeFilter.begin(), featTypeFilter.end(), fieldType) != std::end(featTypeFilter))
       {
         std::string tmpKey = "feat." + key.substr(0, static_cast<unsigned long>(end - key.begin()));
         this->AddChoice(tmpKey, item);
       }
-      if (std::find(cfieldTypeFilter.begin(), cfieldTypeFilter.end(), fieldType) != std::end(cfieldTypeFilter))
+      if (cfieldTypeFilter.empty() || std::find(cfieldTypeFilter.begin(), cfieldTypeFilter.end(), fieldType) != std::end(cfieldTypeFilter))
       {
         std::string tmpKey = "cfield." + key.substr(0, static_cast<unsigned long>(end - key.begin()));
         this->AddChoice(tmpKey, item);
