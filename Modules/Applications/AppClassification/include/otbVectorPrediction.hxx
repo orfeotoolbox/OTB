@@ -65,7 +65,7 @@ void           VectorPrediction<RegressionMode>::DoUpdateParameters()
       std::transform(key.begin(), key.end(), key.begin(), tolower);
       auto fieldType = fieldDefn->GetType();
 
-      if (std::find(typeFilter.begin(), typeFilter.end(), fieldType) != std::end(typeFilter))
+      if (typeFilter.empty() || std::find(typeFilter.begin(), typeFilter.end(), fieldType) != std::end(typeFilter))
       {
         std::string tmpKey = "feat." + key;
         AddChoice(tmpKey, item);
