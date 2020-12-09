@@ -122,6 +122,33 @@ private:
 
   void DoUpdateParameters() override
   {
+    if (HasValue("io.vd"))
+    {
+      auto shapefileName = GetParameterString("io.vd");
+
+      auto            ogrDS     = otb::ogr::DataSource::New(shapefileName, otb::ogr::DataSource::Modes::Read);
+      auto            layer     = ogrDS->GetLayer(0);
+      OGRFeatureDefn& layerDefn = layer.GetLayerDefn();
+
+      ClearChoices("feat");
+
+      FieldParameter::TypeFilterType typeFilter = GetTypeFilter("feat");
+      for (int iField = 0; iField < layerDefn.GetFieldCount(); iField++)
+      {
+        auto        fieldDefn = layerDefn.GetFieldDefn(iField);
+        std::string item      = fieldDefn->GetNameRef();
+        std::string key(item);
+        key.erase(std::remove_if(key.begin(), key.end(), [](char c) { return !std::isalnum(c); }), key.end());
+        std::transform(key.begin(), key.end(), key.begin(), tolower);
+        auto fieldType = fieldDefn->GetType();
+
+        if (typeFilter.empty() || std::find(typeFilter.begin(), typeFilter.end(), fieldType) != std::end(typeFilter))
+        {
+          std::string tmpKey = "feat." + key;
+          AddChoice(tmpKey, item);
+        }
+      }
+    }
   }
 
   void DoExecute() override
