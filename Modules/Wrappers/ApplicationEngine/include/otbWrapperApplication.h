@@ -590,7 +590,7 @@ public:
    * \param[in] key The parameter key (must be a FieldParameter)
    * \return List of allowed types
    */
-  const FieldParameter::TypeFilterType& GetTypeFilter(std::string const& key );
+  const FieldParameter::TypeFilterType& GetTypeFilter(std::string const& key ) const;
 
   /**
    * Set raster data name from which we choose the bands for a BandParameter

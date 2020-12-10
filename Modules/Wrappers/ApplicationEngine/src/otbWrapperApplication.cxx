@@ -476,6 +476,17 @@ T* downcast_check(Parameter* param)
   return down;
 }
 
+template <typename T>
+const T* const_downcast_check(const Parameter* param)
+{
+  const T* down = dynamic_cast<const T*>(param);
+  if (down == nullptr)
+  {
+    param->TypeError(ParameterTypeToString(T::New()->GetType()));
+  }
+  return down;
+}
+
 void Application::LoadParametersFromXML(const std::string& filename)
 {
   otb::Wrapper::XML::Read(filename, this);
@@ -1373,9 +1384,9 @@ void Application::SetTypeFilter(std::string const& key, FieldParameter::TypeFilt
   param->SetTypeFilter(typeFilter);
 }
 
-const FieldParameter::TypeFilterType& Application::GetTypeFilter(std::string const& key )
+const FieldParameter::TypeFilterType& Application::GetTypeFilter(std::string const& key ) const
 {
-  auto param = downcast_check<FieldParameter>(GetParameterByKey(key));
+  auto param = const_downcast_check<FieldParameter>(GetParameterByKey(key));
   return param->GetTypeFilter();
 }
 
