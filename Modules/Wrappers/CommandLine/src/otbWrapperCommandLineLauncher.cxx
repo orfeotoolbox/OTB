@@ -426,7 +426,7 @@ CommandLineLauncher::ParamResultType CommandLineLauncher::LoadParameters()
         }
 
         if (type == ParameterType_InputVectorDataList || type == ParameterType_InputImageList || type == ParameterType_InputFilenameList ||
-            type == ParameterType_StringList || type == ParameterType_ListView)
+            type == ParameterType_StringList || type == ParameterType_ListView || type == ParameterType_Field || type == ParameterType_Band )
         {
           // Multiple values parameters
           m_Application->SetParameterStringList(paramKey, values);
@@ -673,9 +673,9 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer& 
 
   bool singleSelectionForListView = false;
 
-  if (type == ParameterType_ListView)
+  ListViewParameter* tmp  = dynamic_cast<ListViewParameter*>(param.GetPointer());
+  if (tmp)
   {
-    ListViewParameter* tmp     = static_cast<ListViewParameter*>(param.GetPointer());
     singleSelectionForListView = tmp->GetSingleSelection();
   }
 
@@ -714,7 +714,7 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer& 
   }
   else if (type == ParameterType_InputFilename || type == ParameterType_OutputFilename || type == ParameterType_Directory || type == ParameterType_InputImage ||
            type == ParameterType_InputVectorData || type == ParameterType_OutputVectorData || type == ParameterType_String || type == ParameterType_Choice ||
-           (type == ParameterType_ListView && singleSelectionForListView))
+           ((type == ParameterType_ListView || type == ParameterType_Band || type == ParameterType_Field) && singleSelectionForListView))
   {
     oss << "<string>        ";
   }
@@ -722,7 +722,8 @@ std::string CommandLineLauncher::DisplayParameterHelp(const Parameter::Pointer& 
   {
     oss << "<string> [pixel]";
   }
-  else if (type == ParameterType_Choice || (type == ParameterType_ListView && !singleSelectionForListView) || type == ParameterType_InputImageList ||
+  else if (type == ParameterType_Choice
+           || ((type == ParameterType_ListView || type == ParameterType_Band || type == ParameterType_Field) && !singleSelectionForListView) || type == ParameterType_InputImageList ||
            type == ParameterType_InputVectorDataList || type == ParameterType_InputFilenameList || type == ParameterType_StringList)
   {
     oss << "<string list>   ";

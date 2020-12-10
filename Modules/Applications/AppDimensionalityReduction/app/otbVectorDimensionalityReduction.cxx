@@ -109,8 +109,9 @@ private:
                             "In overwrite mode, the original features will be lost.");
     MandatoryOff("out");
 
-    AddParameter(ParameterType_ListView, "feat", "Input features to use for reduction");
+    AddParameter(ParameterType_Field, "feat", "Input features to use for reduction");
     SetParameterDescription("feat", "List of field names in the input vector data used as features for reduction.");
+    SetVectorData("feat", "in");
 
     AddParameter(ParameterType_Choice, "featout", "Output feature");
     SetParameterDescription("featout", "Naming of output features");
@@ -127,10 +128,11 @@ private:
     AddChoice("featout.list", "List");
     SetParameterDescription("featout.list", "Use a list with all names");
 
-    AddParameter(ParameterType_StringList, "featout.list.names", "Feature name list");
+    AddParameter(ParameterType_Field, "featout.list.names", "Feature name list");
     SetParameterDescription("featout.list.names",
                             "List of field names for the output "
                             "features which result from the reduction.");
+    SetVectorData("featout.list.names", "in");
 
     AddParameter(ParameterType_Int, "pcadim", "Principal component dimension");
     SetParameterDescription("pcadim",

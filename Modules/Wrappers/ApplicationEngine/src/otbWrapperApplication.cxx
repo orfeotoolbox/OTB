@@ -36,6 +36,8 @@
 #include "otbWrapperProxyParameter.h"
 #include "otbWrapperParameterKey.h"
 #include "otbWrapperBoolParameter.h"
+#include "otbWrapperFieldParameter.h"
+#include "otbWrapperBandParameter.h"
 
 #include "otbWrapperAddProcessToWatchEvent.h"
 #include "otbExtendedFilenameToWriterOptions.h"
@@ -467,6 +469,17 @@ template <typename T>
 T* downcast_check(Parameter* param)
 {
   T* down = dynamic_cast<T*>(param);
+  if (down == nullptr)
+  {
+    param->TypeError(ParameterTypeToString(T::New()->GetType()));
+  }
+  return down;
+}
+
+template <typename T>
+const T* const_downcast_check(const Parameter* param)
+{
+  const T* down = dynamic_cast<const T*>(param);
   if (down == nullptr)
   {
     param->TypeError(ParameterTypeToString(T::New()->GetType()));
@@ -1357,6 +1370,30 @@ void Application::SetNthParameterStringList(std::string const& key, const unsign
 {
   auto param = downcast_check<InputImageListParameter>(GetParameterByKey(key));
   param->SetNthFileName(id, str);
+}
+
+void Application::SetVectorData(std::string const& key, std::string const& vectorData )
+{
+  auto param = downcast_check<FieldParameter>(GetParameterByKey(key));
+  param->SetVectorData(vectorData);
+}
+
+void Application::SetTypeFilter(std::string const& key, FieldParameter::TypeFilterType const& typeFilter )
+{
+  auto param = downcast_check<FieldParameter>(GetParameterByKey(key));
+  param->SetTypeFilter(typeFilter);
+}
+
+const FieldParameter::TypeFilterType& Application::GetTypeFilter(std::string const& key ) const
+{
+  auto param = const_downcast_check<FieldParameter>(GetParameterByKey(key));
+  return param->GetTypeFilter();
+}
+
+void Application::SetRasterData(std::string const& key, std::string const& rasterData )
+{
+  auto param = downcast_check<BandParameter>(GetParameterByKey(key));
+  param->SetRasterData(rasterData);
 }
 
 void Application::ClearParameterInputImageList(std::string const& key)
