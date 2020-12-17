@@ -116,8 +116,33 @@ private:
     MandatoryOff("roi.sizex");
     MandatoryOff("roi.sizey");
 
+    AddParameter(ParameterType_Group, "margin", "Margins group");
+    SetParameterDescription("margin", "Contains margins to define the ROI");
+
+    AddParameter(ParameterType_Int, "margin.top", "Top margin");
+    SetParameterDescription("margin.top", "Top margin for ROI (in pixels)");
+    SetDefaultParameterInt("margin.top", 0);
+
+    AddParameter(ParameterType_Int, "margin.down", "Down margin");
+    SetParameterDescription("margin.down", "Down margin for ROI (in pixels)");
+    SetDefaultParameterInt("margin.down", 0);
+
+    AddParameter(ParameterType_Int, "margin.left", "Left margin");
+    SetParameterDescription("margin.left", "Left margin for ROI (in pixels)");
+    SetDefaultParameterInt("margin.left", 0);
+
+    AddParameter(ParameterType_Int, "margin.right", "Right margin");
+    SetParameterDescription("margin.right", "Right margin for ROI (in pixels)");
+    SetDefaultParameterInt("margin.right", 0);
+
+    MandatoryOff("margin.top");
+    MandatoryOff("margin.down");
+    MandatoryOff("margin.left");
+    MandatoryOff("margin.right");
+
     AddParameter(ParameterType_Choice, "mode", "Region mode");
     AddChoice("mode.roi", "Pixel region with start and size");
+    AddChoice("mode.margin", "Pixel region with top / bottom / left / right.");
 
     AddChoice("mode.threshold", "Threshold for X, Y top and botton (DEPRECATED)");
 
@@ -142,6 +167,8 @@ private:
   void DoExecute() override
   {
     FloatVectorImageType* input = GetParameterFloatVectorImage("in");
+    // TODO : check largest possible region index
+    // TODO : check margins for empty region
     FloatVectorImageType::RegionType region;
     switch (GetParameterInt("mode"))
       {
@@ -151,7 +178,24 @@ private:
         region.SetSize({(unsigned long)GetParameterInt("roi.sizex"),(unsigned long)GetParameterInt("roi.sizey")});
         break;
         }
-      case 1: // threshold
+      case 1: // margin
+        {
+        region = input->GetLargestPossibleRegion();
+        FloatVectorImageType::IndexType idx = region.GetIndex();
+        FloatVectorImageType::SizeType sz = region.GetSize();
+        idx[0] += GetParameterInt("margin.left");
+        idx[1] += GetParameterInt("margin.top");
+        sz[0] -= GetParameterInt("margin.left") + GetParameterInt("margin.right");
+        sz[1] -= GetParameterInt("margin.top") + GetParameterInt("margin.down")
+        region.SetIndex({GetParameterInt("margin.left"),GetParameterInt("margin.top")});
+        region = input->GetLargestPossibleRegion();
+        FloatVectorImageType::IndexType idx = region.GetIndex();
+        FloatVectorImageType::SizeType sz = region.GetSize();
+        region.SetIndex(idx);
+        region.SetSize(sz);
+        break;
+        }
+      case 2: // threshold
         {
         region = input->GetLargestPossibleRegion();
         FloatVectorImageType::IndexType idx = region.GetIndex();
