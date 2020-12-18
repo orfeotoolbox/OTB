@@ -922,6 +922,10 @@ void GDALImageIO::InternalReadImageInformation()
   /*      Report metadata.                                                */
   /* -------------------------------------------------------------------- */
 
+  ImportMetadata() ;
+
+
+
   papszMetadata = dataset->GetMetadata(nullptr);
   if (CSLCount(papszMetadata) > 0)
   {
@@ -1927,6 +1931,7 @@ void GDALImageIO::ImportMetadata()
   m_Imd.FromKeywordlist(kwl);
   // GCPs are imported directly in the ImageMetadata.
   m_Imd.Add(MDGeom::GCP, m_Dataset->GetGCPParam());
+
   // Parsing the bands
   for (int band = 0 ; band < m_NbBands ; ++band)
   {
@@ -1942,7 +1947,7 @@ void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int 
   {
     if (kv.first == MetaData::MDGeomNames.left.at(MDGeom::SensorGeometry))
     {
-      SetMetadataValue("OTB/MDGeomNames[MDGeom::SensorGeometry].", kv.second.c_str(), band);
+      SetMetadataValue("MDGeomNames[MDGeom::SensorGeometry].", kv.second.c_str(), band);
     }
     else if (kv.first == MetaData::MDGeomNames.left.at(MDGeom::RPC))
     {
@@ -1957,9 +1962,9 @@ void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int 
       // Projection have already been exported (see InternalWriteImageInformation)
     }
     else{
-      std::string domain = "OTB";
-      std::string path = domain + "/" + kv.first ;
-      SetMetadataValue(path.c_str(), kv.second.c_str(), band);
+      // std::string domain = "OTB";
+      // std::string path = domain + "/" + kv.first ;
+      SetMetadataValue(kv.first.c_str(), kv.second.c_str(), band);
     }
   }
 }
@@ -2013,8 +2018,10 @@ void GDALImageIO::GDALMetadataToKeywordlist(const char* const* metadataList, Ima
 
         m_Imd.Add(MDGeom::RPC, rpcStruct);
       }
-      else
+      else{
+        std::cout << fieldName << ":: " << fieldValue << std::endl ;
         kwl.emplace(fieldName, fieldValue);
+      }
     }
 }
 
