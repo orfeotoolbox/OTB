@@ -735,7 +735,6 @@ void GDALImageIO::InternalReadImageInformation()
 
   if (m_NumberOfDimensions == 3)
     m_Spacing[2] = 1;
-
   char** papszMetadata = dataset->GetMetadata(nullptr);
 
   /* -------------------------------------------------------------------- */
@@ -921,10 +920,6 @@ void GDALImageIO::InternalReadImageInformation()
   /* -------------------------------------------------------------------- */
   /*      Report metadata.                                                */
   /* -------------------------------------------------------------------- */
-
-  ImportMetadata() ;
-
-
 
   papszMetadata = dataset->GetMetadata(nullptr);
   if (CSLCount(papszMetadata) > 0)
@@ -1121,6 +1116,8 @@ void GDALImageIO::InternalReadImageInformation()
     }
     m_Imd.Bands.push_back(bmd);
   }
+
+  ImportMetadata() ;
 
   if (noDataFound)
   {
