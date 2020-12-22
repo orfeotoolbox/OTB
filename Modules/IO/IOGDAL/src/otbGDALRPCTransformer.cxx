@@ -64,6 +64,9 @@ GDALRPCTransformer::GDALRPCTransformer(double LineOffset, double SampleOffset, d
     // RPC height is used as a constant height offset applied to all points in case no DEM is set.
     this->SetOption("RPC_HEIGHT", std::to_string(demHandler.GetDefaultHeightAboveEllipsoid()));
   }
+
+  this->SetOption("RPC_MAX_ITERATIONS", "40");
+  this->SetOption("RPC_PIXEL_ERROR_THRESHOLD",  "0.000001");
 }
 
 GDALRPCTransformer::~GDALRPCTransformer()
