@@ -72,3 +72,10 @@ ExternalProject_Add(QWT
   )
 
 SUPERBUILD_PATCH_SOURCE(QWT)
+
+set(_SB_QWT_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
+if(WIN32)
+  set(_SB_QWT_LIBRARY ${SB_INSTALL_PREFIX}/lib/qwt_i.lib)
+elseif(UNIX)
+  set(_SB_QWT_LIBRARY ${SB_INSTALL_PREFIX}/lib/libqwt${CMAKE_SHARED_LIBRARY_SUFFIX})
+endif()
