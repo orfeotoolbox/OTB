@@ -1905,6 +1905,7 @@ void GDALImageIO::ExportMetadata()
     KeywordlistToMetadata(kwl, bIdx);
     ++bIdx;
   }
+
 }
 
 void GDALImageIO::ImportMetadata()
@@ -1922,6 +1923,7 @@ void GDALImageIO::ImportMetadata()
   m_Imd.FromKeywordlist(kwl);
   // GCPs are imported directly in the ImageMetadata.
   m_Imd.Add(MDGeom::GCP, m_Dataset->GetGCPParam());
+
   // Parsing the bands
   for (int band = 0 ; band < m_NbBands ; ++band)
   {
@@ -2009,6 +2011,7 @@ void GDALImageIO::GDALMetadataToKeywordlist(const char* const* metadataList, Ima
         m_Imd.Add(MDGeom::RPC, rpcStruct);
       }
       else{
+        std::cout << fieldName << ":: " << fieldValue << std::endl ;
         kwl.emplace(fieldName, fieldValue);
       }
     }
