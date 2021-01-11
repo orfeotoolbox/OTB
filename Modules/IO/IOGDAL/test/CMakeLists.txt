@@ -131,14 +131,14 @@ otb_add_test(NAME ioTvGDALImageIOWriteMetadata COMMAND otbIOGDALTestDriver
   )
   
 # TODO implement this test
- otb_add_test(NAME ioTvGDALImageIOImportExportMetadata_JPEG_99 COMMAND otbIOGDALTestDriver
-  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALImageIOImportExportMetadata_JPEG_99.txt
-  ${TEMP}/ioTvGDALImageIOImportExportMetadata_JPEG_99.txt
-  otbGDALImageIOImportExportMetadata
-  /datas/Documents_Julie/Logiciels/OTB/bin/build/OTB/build/roi.tif
-  ${TEMP}/ioTvGDALImageIOImportExportMetadata_JPEG_99.tif
-  ${TEMP}/ioTvGDALImageIOImportExportMetadata_JPEG_99.txt
-  )
+# otb_add_test(NAME ioTvGDALImageIOImportExportMetadata_JPEG_99 COMMAND otbIOGDALTestDriver
+#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALImageIOImportExportMetadata_JPEG_99.txt
+#  ${TEMP}/ioTvGDALImageIOImportExportMetadata_JPEG_99.txt
+#  otbGDALImageIOImportExportMetadata
+#  ${INPUTDATA}/maur_rgb_24bpp.tif
+#  ${TEMP}/ioTvGDALImageIOImportExportMetadata_JPEG_99.tif
+#  ${TEMP}/ioTvGDALImageIOImportExportMetadata_JPEG_99.txt
+#  )
 
 otb_add_test(NAME ioTvGDALOverviewsBuilder_TIFF COMMAND otbIOGDALTestDriver
   otbGDALOverviewsBuilder

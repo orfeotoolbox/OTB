@@ -37,20 +37,6 @@ int otbGDALImageIOImportExportMetadata(int itkNotUsed(argc), char* argv[])
   const char* outputTextFilename = argv[3];
 
   std::ofstream outfile(outputTextFilename);
-  otb::GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
-  readerGDAL->SetFileName(inputFilename);
-  if (readerGDAL->CanReadFile(inputFilename))
-  	{
-  	std::cout << "Read file OK" << std::endl;
-  	readerGDAL->ReadImageInformation();
-  	outfile << readerGDAL->GetImageMetadata();	
-    }
-    
-  else
-  {
-    std::cout << "Read file K0" << std::endl;
-    return EXIT_FAILURE;
-  }
 
 //  otb::sGDALImageIO::Pointer io = otb::sGDALImageIO::New();
 //  io->CanReadFile(inputFilename);
