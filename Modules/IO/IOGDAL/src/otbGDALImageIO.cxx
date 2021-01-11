@@ -1904,7 +1904,6 @@ void GDALImageIO::ExportMetadata()
     KeywordlistToMetadata(kwl, bIdx);
     ++bIdx;
   }
-
 }
 
 void GDALImageIO::ImportMetadata()
@@ -1937,7 +1936,7 @@ void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int 
   {
     if (kv.first == MetaData::MDGeomNames.left.at(MDGeom::SensorGeometry))
     {
-      SetMetadataValue("OTB/MDGeomNames[MDGeom::SensorGeometry].", kv.second.c_str(), band);
+      SetMetadataValue("MDGeomNames[MDGeom::SensorGeometry].", kv.second.c_str(), band);
     }
     else if (kv.first == MetaData::MDGeomNames.left.at(MDGeom::RPC))
     {
@@ -1951,11 +1950,8 @@ void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int 
     {
       // WKT projection have already been exported (see InternalWriteImageInformation)
     }
-    else{
-      std::string domain = "OTB";
-      std::string path = domain + "/" + kv.first ;
-      SetMetadataValue(path.c_str(), kv.second.c_str(), band);
-    }
+    else
+      SetMetadataValue(kv.first.c_str(), kv.second.c_str(), band);
   }
 }
 
