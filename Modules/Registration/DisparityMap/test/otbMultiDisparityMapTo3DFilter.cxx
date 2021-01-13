@@ -84,19 +84,19 @@ int otbMultiDisparityMapTo3DFilter(int argc, char* argv[])
   vectorToListFilter2->UpdateOutputInformation();
 
   Multi3DFilterType::Pointer multiFilter = Multi3DFilterType::New();
-  multiFilter->SetReferenceKeywordList(masterReader->GetOutput()->GetImageKeywordlist());
+  multiFilter->SetReferenceImageMetadata(&(masterReader->GetOutput()->GetImageMetadata()));
 
   multiFilter->SetNumberOfMovingImages(2);
 
   multiFilter->SetHorizontalDisparityMapInput(0, vectorToListFilter1->GetOutput()->GetNthElement(0));
   multiFilter->SetVerticalDisparityMapInput(0, vectorToListFilter1->GetOutput()->GetNthElement(1));
   multiFilter->SetDisparityMaskInput(0, mask1Reader->GetOutput());
-  multiFilter->SetMovingKeywordList(0, slave1Reader->GetOutput()->GetImageKeywordlist());
+  multiFilter->SetMovingImageMetadata(0, &(slave1Reader->GetOutput()->GetImageMetadata()));
 
   multiFilter->SetHorizontalDisparityMapInput(1, vectorToListFilter2->GetOutput()->GetNthElement(0));
   multiFilter->SetVerticalDisparityMapInput(1, vectorToListFilter2->GetOutput()->GetNthElement(1));
   multiFilter->SetDisparityMaskInput(1, mask2Reader->GetOutput());
-  multiFilter->SetMovingKeywordList(1, slave2Reader->GetOutput()->GetImageKeywordlist());
+  multiFilter->SetMovingImageMetadata(1, &(slave2Reader->GetOutput()->GetImageMetadata()));
 
   WriterType::Pointer writer = WriterType::New();
   writer->SetInput(multiFilter->GetOutput());

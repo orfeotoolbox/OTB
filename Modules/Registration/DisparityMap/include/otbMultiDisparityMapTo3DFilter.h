@@ -94,8 +94,6 @@ public:
   typedef typename PointSetType::PointsContainer    PointsContainer;
   typedef typename PointSetType::PointDataContainer LabelContainer;
 
-  typedef otb::ImageKeywordlist ImageKeywordListType;
-
   typedef std::map<unsigned int, itk::ImageRegionConstIterator<DisparityMapType>> DispMapIteratorList;
 
   typedef std::map<unsigned int, itk::ImageRegionConstIterator<MaskImageType>> MaskIteratorList;
@@ -126,24 +124,24 @@ public:
   const TResidueImage* GetResidueOutput() const;
   TResidueImage*       GetResidueOutput();
 
-  /** Set keywordlist of the reference image */
-  void SetReferenceKeywordList(const ImageKeywordListType kwl)
+  /** Set ImageMetadata of the reference image */
+  void SetReferenceImageMetadata(const ImageMetadata* imd)
   {
-    this->m_ReferenceKeywordList = kwl;
+    this->m_ReferenceImageMetadata = imd;
     this->Modified();
   }
 
-  /** Get keywordlist of the reference image */
-  const ImageKeywordListType& GetReferenceKeywordList() const
+  /** Get ImageMetadata of the reference image */
+  const ImageMetadata* GetReferenceImageMetadata() const
   {
-    return this->m_ReferenceKeywordList;
+    return this->m_ReferenceImageMetadata;
   }
 
-  /** Set keywordlist of the moving image 'index' */
-  void SetMovingKeywordList(unsigned int index, const ImageKeywordListType kwl);
+  /** Set ImageMetadata of the moving image 'index' */
+  void SetMovingImageMetadata(unsigned int index, const ImageMetadata* imd);
 
-  /** Get keywordlist of the moving image 'index' */
-  const ImageKeywordListType& GetMovingKeywordList(unsigned int index) const;
+  /** Get ImageMetadata of the moving image 'index' */
+  const ImageMetadata* GetMovingImageMetadata(unsigned int index) const;
 
 protected:
   /** Constructor */
@@ -168,17 +166,19 @@ private:
   MultiDisparityMapTo3DFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  /** Keywordlist of reference sensor image */
-  ImageKeywordListType m_ReferenceKeywordList;
-
-  /** Keywordlists of moving sensor images */
-  std::vector<ImageKeywordListType> m_MovingKeywordLists;
-
   /** Reference sensor image transform */
   RSTransformType::Pointer m_ReferenceToGroundTransform;
 
   /** Moving sensor image transforms */
   std::vector<RSTransformType::Pointer> m_MovingToGroundTransform;
+
+  /** ImageMetadata of reference sensor image */
+  const ImageMetadata*   m_ReferenceImageMetadata = nullptr;
+  
+  /** ImageMetadata of moving sensor images */
+  std::vector<const ImageMetadata*> m_MovingImageMetadatas;
+
+
 };
 } // end namespace otb
 
