@@ -296,7 +296,8 @@ int otbSensorModel(int argc, char* argv[])
 
   pointsContainerType::iterator      pointsIt      = pointsContainer.begin();
   geo3dPointsContainerType::iterator geo3dPointsIt = geo3dPointsContainer.begin();
-  while ((pointsIt != pointsContainer.end()) && (geo3dPointsIt != geo3dPointsContainer.end()))
+  pointsContainerType::iterator      ossimIt       = ossimContainer.begin();
+  while ((pointsIt != pointsContainer.end()) && (geo3dPointsIt != geo3dPointsContainer.end()) && (ossimIt != ossimContainer.end()))
   {
     imagePoint = *pointsIt;
     geo3dPoint = *geo3dPointsIt;
