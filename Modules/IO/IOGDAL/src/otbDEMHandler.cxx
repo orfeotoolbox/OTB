@@ -337,7 +337,7 @@ void DEMHandler::CreateShiftedDataset()
 
   poVRTDS->SetGeoTransform(geoTransform);
 
-  poVRTDS->SetSpatialRef(m_Dataset->GetSpatialRef());
+  poVRTDS->SetProjection(m_Dataset->GetProjectionRef());
 
   char** derivedBandOptions = NULL;
 
