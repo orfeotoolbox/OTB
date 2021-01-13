@@ -36,28 +36,13 @@
 #include "otbGenericRSTransform.h"
 #include "otbMacro.h"
 
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#pragma GCC diagnostic ignored "-Woverloaded-virtual"
-#include "ossim/projection/ossimProjection.h"
-#include "ossim/projection/ossimSensorModelFactory.h"
-#pragma GCC diagnostic pop
-#else
-#include "ossim/projection/ossimProjection.h"
-#include "ossim/projection/ossimSensorModelFactory.h"
-#endif
-
-#include "ossim/ossimPluginProjectionFactory.h"
-
-
 typedef std::list<itk::Point<double, 2>> pointsContainerType;
 typedef std::list<itk::Point<double, 3>> geo3dPointsContainerType;
 typedef otb::VectorImage<double, 2>      ImageType;
 typedef itk::Statistics::EuclideanDistanceMetric<ImageType::PointType> DistanceType;
 typedef otb::GeographicalDistance<ImageType::PointType>                GeographicalDistanceType;
 
-int produceGCP(char* outputgcpfilename, const otb::ImageKeywordlist& kwlist, bool useForwardSensorModel = true, double z = 16.19688987731934)
+int produceGCP(char* outputgcpfilename, const otb::ImageKeywordlist& kwlist, double z = 16.19688987731934)
 {
   itk::Point<double, 2> imagePoint;
   itk::Point<double, 2> geoPoint;
@@ -74,21 +59,6 @@ int produceGCP(char* outputgcpfilename, const otb::ImageKeywordlist& kwlist, boo
 
   otb::DEMHandler::GetInstance().SetDefaultHeightAboveEllipsoid(z);
 
-  // ossim classes
-  ossimKeywordlist ossimKwlist;
-  kwlist.convertToOSSIMKeywordlist(ossimKwlist);
-
-  ossimProjection* ossimSensorModel = ossimSensorModelFactory::instance()->createProjection(ossimKwlist);
-  if (ossimSensorModel == nullptr)
-  {
-    ossimSensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(ossimKwlist);
-  }
-  if (ossimSensorModel == nullptr) // Model validity
-  {
-    std::cerr << "Invalid sensor model (ossimSensorModel is NULL)" << std::endl;
-    return EXIT_FAILURE;
-  }
-
   std::ofstream file(outputgcpfilename, std::ios::out | std::ios::trunc);
   if (file)
   {
@@ -97,21 +67,8 @@ int produceGCP(char* outputgcpfilename, const otb::ImageKeywordlist& kwlist, boo
       {
         imagePoint[0] = x;
         imagePoint[1] = y;
-        if (useForwardSensorModel) // otbForwardSensorModel
-        {
-          geoPoint = forwardSensorModel->TransformPoint(imagePoint);
-        }
-        else // ossim classes
-        {
-          ossimDpt ossimPoint(otb::internal::ConvertToOSSIMFrame(imagePoint[0]),  // x
-                              otb::internal::ConvertToOSSIMFrame(imagePoint[1])); // y
-          ossimGpt ossimGPoint;
-          ossimSensorModel->lineSampleHeightToWorld(ossimPoint, z, ossimGPoint);
-          geoPoint[0] = ossimGPoint.lon;
-          geoPoint[1] = ossimGPoint.lat;
-        }
-
-        file << std::setprecision(16) << x << " " << y << " " << geoPoint[0] << " " << geoPoint[1] << " " << z << std::endl;
+	geoPoint = forwardSensorModel->TransformPoint(imagePoint);
+	file << std::setprecision(16) << x << " " << y << " " << geoPoint[0] << " " << geoPoint[1] << " " << z << std::endl;
       }
   }
   else
@@ -125,10 +82,11 @@ int produceGCP(char* outputgcpfilename, const otb::ImageKeywordlist& kwlist, boo
   return EXIT_SUCCESS;
 }
 
-bool provideGCP(char* gcpfilename, pointsContainerType& imgPt, geo3dPointsContainerType& geo3dPt)
+bool provideGCP(char* gcpfilename, pointsContainerType& imgPt, geo3dPointsContainerType& geo3dPt, pointsContainerType& OSSIMPt)
 {
   itk::Point<double, 2> imagePoint;
   itk::Point<double, 3> geo3dPoint;
+  itk::Point<double, 2> OSSIMPoint;
 
   std::ifstream file(gcpfilename, std::ios::in);
   if (file)
@@ -140,10 +98,11 @@ bool provideGCP(char* gcpfilename, pointsContainerType& imgPt, geo3dPointsContai
       {
         std::istringstream iss(line);
 
-        iss >> imagePoint[0] >> imagePoint[1] >> geo3dPoint[0] >> geo3dPoint[1] >> geo3dPoint[2];
+        iss >> imagePoint[0] >> imagePoint[1] >> geo3dPoint[0] >> geo3dPoint[1] >> geo3dPoint[2] >> OSSIMPoint[0] >> OSSIMPoint[1];
 
         imgPt.push_back(imagePoint);
         geo3dPt.push_back(geo3dPoint);
+	OSSIMPt.push_back(OSSIMPoint);
       }
     }
     file.close();
@@ -256,21 +215,6 @@ int otbSensorModel(int argc, char* argv[])
   wgs2img->SetOutputKeywordList(kwlist);
   wgs2img->InstantiateTransform();
 
-  // ossim classes
-  ossimKeywordlist ossimKwlist;
-  kwlist.convertToOSSIMKeywordlist(ossimKwlist);
-
-  ossimProjection* ossimSensorModel = ossimSensorModelFactory::instance()->createProjection(ossimKwlist);
-  if (ossimSensorModel == nullptr)
-  {
-    ossimSensorModel = ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(ossimKwlist);
-  }
-  if (ossimSensorModel == nullptr) // Model validity
-  {
-    std::cerr << "Invalid sensor model (ossimSensorModel is NULL)" << std::endl;
-    return EXIT_FAILURE;
-  }
-
   itk::Point<double, 2> imagePoint;
   itk::Point<double, 2> geoPoint, geoPointGCP;
   itk::Point<double, 3> geo3dPoint;
@@ -282,7 +226,8 @@ int otbSensorModel(int argc, char* argv[])
 
   pointsContainerType      pointsContainer;
   geo3dPointsContainerType geo3dPointsContainer;
-  bool                     okStatus = provideGCP(gcpfilename, pointsContainer, geo3dPointsContainer);
+  pointsContainerType      ossimContainer;
+  bool                     okStatus = provideGCP(gcpfilename, pointsContainer, geo3dPointsContainer, ossimContainer);
   if (!okStatus)
   {
     std::cerr << "File" << gcpfilename << " couldn't be opened" << std::endl;
@@ -340,12 +285,14 @@ int otbSensorModel(int argc, char* argv[])
 
   pointsContainerType::iterator      pointsIt      = pointsContainer.begin();
   geo3dPointsContainerType::iterator geo3dPointsIt = geo3dPointsContainer.begin();
+  pointsContainerType::iterator      ossimIt       = ossimContainer.begin();
   // for(; pointsIt!=pointsContainer.end(); ++pointsIt)
-  while ((pointsIt != pointsContainer.end()) && (geo3dPointsIt != geo3dPointsContainer.end()))
+  while ((pointsIt != pointsContainer.end()) && (geo3dPointsIt != geo3dPointsContainer.end()) && (ossimIt != ossimContainer.end()))
   {
     imagePoint = *pointsIt;
     geo3dPoint = *geo3dPointsIt;
-
+    geoPointOSSIM = *ossimIt;
+    
     double z = geo3dPoint[2];
     otb::DEMHandler::GetInstance().SetDefaultHeightAboveEllipsoid(z);
 
@@ -357,14 +304,6 @@ int otbSensorModel(int argc, char* argv[])
     geoPointGRS           = img2wgs->TransformPoint(imagePoint);
     reversedImagePointGRS = wgs2img->TransformPoint(geoPointGRS);
 
-    // ossim classes
-    ossimDpt ossimPoint(otb::internal::ConvertToOSSIMFrame(imagePoint[0]),  // x
-                        otb::internal::ConvertToOSSIMFrame(imagePoint[1])); // y
-    ossimGpt ossimGPoint;
-    ossimSensorModel->lineSampleHeightToWorld(ossimPoint, z, ossimGPoint);
-    geoPointOSSIM[0] = ossimGPoint.lon;
-    geoPointOSSIM[1] = ossimGPoint.lat;
-
     // Just for debug purpose
     otbLogMacro(Debug, << "------------------------------------------------");
     otbLogMacro(Debug, << geomfilename);
@@ -375,32 +314,8 @@ int otbSensorModel(int argc, char* argv[])
     otbLogMacro(Debug, << std::setprecision(15) << "Image to geo (OSSIM): " << imagePoint << " -> " << geoPointOSSIM);
 
 
-    // 3. Results should be plausible (no NaN and no clearly out of bound results)
+    // 3. Results should be plausible (not clearly out of bound results)
     /*-------------------------------------*/
-    if ((ossim::isnan(geoPoint[0])) || (ossim::isnan(geoPoint[1])))
-    {
-      std::cerr << " Nan results (otbForwardSensorModel otbInverseSensorModel) : image to geo: " << imagePoint << " -> " << geoPoint << "\n";
-      return EXIT_FAILURE;
-    }
-
-    if ((ossim::isnan(geoPointGRS[0])) || (ossim::isnan(geoPointGRS[1])))
-    {
-      std::cerr << "Nan results (otbGenericRSTransform) : image to geo: " << imagePoint << " -> " << geoPointGRS << "\n";
-      return EXIT_FAILURE;
-    }
-
-    if ((ossim::isnan(reversedImagePoint[0])) || (ossim::isnan(reversedImagePoint[1])))
-    {
-      std::cerr << "Nan results (otbForwardSensorModel otbInverseSensorModel) : geo to image: " << geoPoint << " -> " << reversedImagePoint << "\n";
-      return EXIT_FAILURE;
-    }
-
-    if ((ossim::isnan(reversedImagePointGRS[0])) || (ossim::isnan(reversedImagePointGRS[1])))
-    {
-      std::cerr << "Nan results (otbGenericRSTransform) : geo to image: " << geoPointGRS << " -> " << reversedImagePointGRS << "\n";
-      return EXIT_FAILURE;
-    }
-
     if (!((geoPoint[0] >= -180.0) && (geoPoint[0] <= 180.0)) || !((geoPoint[1] >= -90.0) && (geoPoint[1] <= 90.0)))
     {
       std::cerr << "GeoPoint out of bound (otbForwardSensorModel otbInverseSensorModel) : " << geoPoint << "\n";
@@ -483,6 +398,7 @@ int otbSensorModel(int argc, char* argv[])
 
     ++pointsIt;
     ++geo3dPointsIt;
+    ++ossimIt;
   }
   //-----------------
   // Tests core (end)
