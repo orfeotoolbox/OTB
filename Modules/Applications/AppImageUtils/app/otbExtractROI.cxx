@@ -114,6 +114,11 @@ private:
                             "The extent of the input vector file is computed and then "
                             "gives a region of interest that will be extracted.");
 
+    // These parameters need to be set as non mandatory so they don't have to be selected both in QGIS
+    // Mandatory states will be updated later in DoUpdateParameters method
+    MandatoryOff("mode.fit.im");
+    MandatoryOff("mode.fit.vect");
+
     // Extent mode: ROI is computed with two point (upper left and lower left corners)
     AddChoice("mode.extent", "Extent");
     SetParameterDescription("mode.extent",
@@ -195,8 +200,9 @@ private:
     SetParameterDescription("sizey", "size along y in pixels.");
 
     // Channelist Parameters
-    AddParameter(ParameterType_ListView, "cl", "Output Image channels");
+    AddParameter(ParameterType_Band, "cl", "Output Image channels");
     SetParameterDescription("cl", "Channels to write in the output image.");
+    SetRasterData("cl", "in");
 
     // Elevation
     ElevationParametersHandler::AddElevationParameters(this, "elev");

@@ -272,6 +272,17 @@ struct OTBMetadata_EXPORT Time : tm
     return !(lhs < rhs);
   }
 
+  /** @name Getters
+   *  Getters on the date components
+   */
+  ///@{
+  int GetDay() const;
+  int GetMonth() const;
+  int GetYear() const;
+  int GetHour() const;
+  int GetMinute() const;
+  double GetSecond() const;
+  ///@}
 };
 
 

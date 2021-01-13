@@ -97,8 +97,9 @@ private:
                             "If no system is specified, WGS84 (EPSG: 4326) is used by default.");
     MandatoryOff("mode.epsg.code");
 
-    AddParameter(ParameterType_ListView, "cl", "Channels");
+    AddParameter(ParameterType_Band, "cl", "Channels");
     SetParameterDescription("cl", "Displayed channels");
+    SetRasterData("cl", "in");
     MandatoryOff("cl");
 
     AddParameter(ParameterType_String, "value", "Pixel Value");

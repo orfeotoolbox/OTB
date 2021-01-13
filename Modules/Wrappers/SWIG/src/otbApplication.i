@@ -96,7 +96,9 @@ namespace Wrapper
     ParameterType_Group,
     ParameterType_ListView,
     ParameterType_RAM,
-    ParameterType_Bool
+    ParameterType_Bool,
+    ParameterType_Field,
+    ParameterType_Band
   } ParameterType;
 
   typedef enum
@@ -637,7 +639,9 @@ class ApplicationProxy(object):
         ParameterType_Float : 'ParameterType_Float',
         ParameterType_Choice : 'ParameterType_Choice',
         ParameterType_Group : 'ParameterType_Group',
-        ParameterType_Bool : 'ParameterType_Bool'
+        ParameterType_Bool : 'ParameterType_Bool',
+        ParameterType_Field : 'ParameterType_Field',
+        ParameterType_Band : 'ParameterType_Band'
       }.get(parameter_type, 'ParameterType_UNKNOWN')
 
     def __str__(self):
@@ -661,7 +665,7 @@ class ApplicationProxy(object):
         return self.SetParameterString(paramKey, value)
       elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
                          ParameterType_InputFilenameList, ParameterType_StringList,
-                         ParameterType_ListView]:
+                         ParameterType_ListView, ParameterType_Field, ParameterType_Band]:
         return self.SetParameterStringList(paramKey, value)
       elif paramType in [ParameterType_Int, ParameterType_Radius]:
         return self.SetParameterInt(paramKey, value)
@@ -697,7 +701,7 @@ class ApplicationProxy(object):
         return self.GetParameterString(paramKey)
       elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
                          ParameterType_InputFilenameList, ParameterType_StringList,
-                         ParameterType_ListView]:
+                         ParameterType_ListView, ParameterType_Field, ParameterType_Band]:
         return self.GetParameterStringList(paramKey)
       elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
         return self.GetParameterInt(paramKey)

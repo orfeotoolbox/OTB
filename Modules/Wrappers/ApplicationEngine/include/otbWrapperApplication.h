@@ -26,6 +26,7 @@
 #include "otbWrapperTypes.h"
 #include "otbWrapperTags.h"
 #include "otbWrapperParameterGroup.h"
+#include "otbWrapperFieldParameter.h"
 
 #include "otbLogger.h"
 #include "otbStopwatch.h"
@@ -249,6 +250,8 @@ public:
    * \li ParameterType_InputFilenameListParameter
    * \li ParameterType_StringList
    * \li ParameterType_ListView
+   * \li ParameterType_Band
+   * \li ParameterType_Field
    */
   void SetParameterString(std::string const& parameter, std::string value, bool hasUserValueFlag = true);
 
@@ -258,6 +261,8 @@ public:
    * \li ParameterType_String
    * \li ParameterType_StringList
    * \li ParameterType_ListView
+   * \li ParameterType_Band
+   * \li ParameterType_Field
    * \li ParameterType_InputFilename
    * \li ParameterType_OutputFilename
    * \li ParameterType_Directory
@@ -426,6 +431,8 @@ public:
    *
    * Can be called for types:
    * \li ParameterType_ListView
+   * \li ParameterType_Band
+   * \li ParameterType_Field
    */
   void SetListViewSingleSelectionMode(std::string const& parameter, bool status);
 
@@ -434,6 +441,8 @@ public:
    *
    * Can be called for types:
    * \li ParameterType_ListView
+   * \li ParameterType_Band
+   * \li ParameterType_Field
    */
   bool GetListViewSingleSelectionMode(const std::string& parameter);
 
@@ -561,6 +570,34 @@ public:
    * InputImageList parameter or if id is out of bounds
    */
   void SetNthParameterInputImageList(std::string const& parameter, const unsigned int& id, ImageBaseType* img);
+
+  /**
+   * Set vector data name from which we choose the fields for a FieldParameter
+   * \param[in] key The parameter key (must be a FieldParameter)
+   * \param[in] vectorData vector data name
+   */
+  void SetVectorData(std::string const& key, std::string const& vectorData );
+
+  /**
+   * Set list of allowed field types for a FieldParameter
+   * \param[in] key The parameter key (must be a FieldParameter)
+   * \param[in] typeFilter List of allowed types
+   */
+  void SetTypeFilter(std::string const& key, FieldParameter::TypeFilterType const& typeFilter );
+
+  /**
+   * Get list of allowed field types for a FieldParameter
+   * \param[in] key The parameter key (must be a FieldParameter)
+   * \return List of allowed types
+   */
+  const FieldParameter::TypeFilterType& GetTypeFilter(std::string const& key ) const;
+
+  /**
+   * Set raster data name from which we choose the bands for a BandParameter
+   * \param[in] key The parameter key (must be a BandParameter)
+   * \param[in] rasterData raster data name
+   */
+  void SetRasterData(std::string const& key, std::string const& rasterData );
 
   /**
      * Add a value to a parameter list as a string

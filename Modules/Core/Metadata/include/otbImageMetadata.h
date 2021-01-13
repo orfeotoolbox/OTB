@@ -299,6 +299,15 @@ public:
   /** Setter for numeric keys on each band*/
   using ImageMetadataBase::Add;
   void Add(const MDNum&, const MetaDataKey::VariableLengthVectorType);
+
+  /** Getter for numeric keys on each band*/
+  itk::VariableLengthVector<double> GetAsVector(const MDNum & key) const;
+
+  /** test wether the metadata corresponding to key is present on each band */
+  bool HasBandMetadata(const MDNum & key) const;
+
+  /** test wether the metadata corresponding to key is present on each band */
+  bool HasBandMetadata(const MDL1D & key) const;
 };
 
 extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::ImageMetadataBase& imd);

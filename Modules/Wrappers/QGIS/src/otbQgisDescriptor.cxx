@@ -21,6 +21,8 @@
 #include "otbWrapperChoiceParameter.h"
 #include "otbWrapperListViewParameter.h"
 #include "otbWrapperBoolParameter.h"
+#include "otbWrapperFieldParameter.h"
+#include "otbWrapperBandParameter.h"
 #include "otbWrapperApplicationRegistry.h"
 
 #include <iostream>
@@ -72,20 +74,12 @@ int main(int argc, char* argv[])
   parameterTypeToString[ParameterType_OutputVectorData]    = "QgsProcessingParameterVectorDestination";
   parameterTypeToString[ParameterType_OutputFilename]      = "QgsProcessingParameterFileDestination";
   parameterTypeToString[ParameterType_Directory]           = "QgsProcessingParameterFile";
+  parameterTypeToString[ParameterType_Field]               = "QgsProcessingParameterField";
+  parameterTypeToString[ParameterType_Band]                = "QgsProcessingParameterBand";
   // TODO
   parameterTypeToString[ParameterType_StringList] = "QgsProcessingParameterString";
-  // ListView parameters are treated as plain string (QLineEdit) in qgis processing ui.
-  // This seems rather unpleasant when comparing Qgis processing with Monteverdi/Mapla in OTB
-  // We tried to push something simple with checkboxes but its too risky for this version
-  // and clock is ticking...
 
-  parameterTypeToString[ParameterType_ListView] = "QgsProcessingParameterString";
-
-// For next update of plugin code ListView should use a custom widget wrapper and behave
-// exactly like OTB Mapla. And this #if 0 block is our TODO remainder.
-#if 0
-  parameterTypeToString[ParameterType_ListView] = "OTBParameterListView";
-#endif
+  parameterTypeToString[ParameterType_ListView] = "QgsProcessingParameterEnum";
 
   const std::vector<std::string> appKeyList = appli->GetParametersKeys(true);
   const unsigned int             nbOfParam  = appKeyList.size();
@@ -138,8 +132,35 @@ int main(int argc, char* argv[])
   {
     const std::string        name        = appKeyList[i];
     const Parameter::Pointer param       = appli->GetParameterByKey(name);
-    const ParameterType      type        = appli->GetParameterType(name);
+    ParameterType            type        = appli->GetParameterType(name);
     const std::string        description = appli->GetParameterName(name);
+
+    // if there is no choice value for a list view parameter
+    // we switch to parameter stringlist to avoid aving empty combobox in QGIS
+    if (type == ParameterType_ListView)
+    {
+      if ( appli->GetChoiceNames(name).empty() )
+      {
+        type = ParameterType_StringList;
+      }
+    }
+
+    std::string optional;
+    if (param->GetMandatory())
+    {
+      // TODO: avoid workaround for stringlist types (fix appengine)
+      // type == ParameterType_StringList check is needed because:
+      // If parameter is  mandatory it can have no value
+      // It is accepted in OTB that, string list could be generated dynamically
+      // qgis has no such option to handle dynamic values yet..
+      // So mandatory parameters whose type is StringList is considered optional
+      optional = param->HasValue() || type == ParameterType_StringList ? "True" : "False";
+    }
+    else
+    {
+      optional = "True";
+    }
+
     if (type == ParameterType_Group || type == ParameterType_RAM || param->GetRole() == Role_Output)
     {
       // group parameter cannot have any value.
@@ -147,6 +168,7 @@ int main(int argc, char* argv[])
       // parameter role cannot be of type Role_Output
       continue;
     }
+
     auto it = parameterTypeToString.find(type);
     assert(it != parameterTypeToString.end());
     if (it == parameterTypeToString.end())
@@ -155,24 +177,6 @@ int main(int argc, char* argv[])
       return EXIT_FAILURE;
     }
     std::string qgis_type = it->second;
-#if 0
-      if (type == ParameterType_ListView)
-	{
-	  ListViewParameter *lv_param = dynamic_cast<ListViewParameter*>(param.GetPointer());
-	  std::cerr << "lv_param->GetSingleSelection()" << lv_param->GetSingleSelection() << std::endl;
-	  if (lv_param->GetSingleSelection())
-	    {
-
-	      qgis_type = "QgsProcessingParameterEnum";
-	      std::vector<std::string>  key_list  = appli->GetChoiceKeys(name);
-	      std::string values = "";
-	      for( auto k : key_list)
-		values += k + ";";
-	      values.pop_back();
-	      dFile << "|" << values ;
-	    }
-	}
-#endif
 
     bool isEpsgCode = false;
 
@@ -265,7 +269,14 @@ int main(int argc, char* argv[])
     }
     else if (type == ParameterType_ListView)
     {
-      // default is None and nothing to add to dFile
+        ListViewParameter *lv_param = dynamic_cast<ListViewParameter*>(param.GetPointer());
+	      std::vector<std::string>  name_list  = appli->GetChoiceNames(name);
+	      std::string values = "";
+	      for( auto k : name_list)
+          values += k + ";";
+	      values.pop_back();
+	      dFile << "|" << values ;
+        dFile << "|" << (lv_param->GetSingleSelection() ? "False" : "True");
     }
     else if (type == ParameterType_Bool)
     {
@@ -278,10 +289,47 @@ int main(int argc, char* argv[])
       for (auto k : key_list)
         values += k + ";";
 
-      values.pop_back();
+      if (!values.empty())
+        values.pop_back();
+
       dFile << "|" << values;
       ChoiceParameter* cparam = dynamic_cast<ChoiceParameter*>(param.GetPointer());
       default_value           = std::to_string(cparam->GetValue());
+    }
+    else if (type == ParameterType_Field)
+    {
+      FieldParameter *f_param = dynamic_cast<FieldParameter*>(param.GetPointer());
+
+      enum {
+            STRING = 1 << 0,
+            NUMERIC = 1 << 1
+      };
+
+      int filterType = 0;
+      for (auto type : f_param->GetTypeFilter())
+      {
+        if (type == OFTString)
+          filterType |= STRING;
+        else if (type == OFTInteger || type == OFTInteger64 || type == OFTReal)
+          filterType |= NUMERIC;
+      }
+
+      dFile << "|None|"
+            << f_param->GetVectorData()
+            << "|"  << (filterType == STRING  ? "QgsProcessingParameterField.String" :
+                        filterType == NUMERIC ? "QgsProcessingParameterField.Numeric" :
+                        "QgsProcessingParameterField.Any")
+            << "|" << (f_param->GetSingleSelection() ? "False" : "True")
+            << "|" << optional;
+    }
+    else if (type == ParameterType_Band)
+    {
+      BandParameter *f_param = dynamic_cast<BandParameter*>(param.GetPointer());
+
+      dFile << "|None|"
+            << f_param->GetRasterData() << "|"
+            << optional
+            << "|" << (f_param->GetSingleSelection() ? "False" : "True");
     }
     else
     {
@@ -289,21 +337,6 @@ int main(int argc, char* argv[])
       return EXIT_FAILURE;
     }
 
-    std::string optional;
-    if (param->GetMandatory())
-    {
-      // TODO: avoid workaround for stringlist types (fix appengine)
-      // type == ParameterType_StringList check is needed because:
-      // If parameter is  mandatory it can have no value
-      // It is accepted in OTB that, string list could be generated dynamically
-      // qgis has no such option to handle dynamic values yet..
-      // So mandatory parameters whose type is StringList is considered optional
-      optional = param->HasValue() || type == ParameterType_StringList ? "True" : "False";
-    }
-    else
-    {
-      optional = "True";
-    }
 #if 0
     	  std::cerr << name;
     	  std::cerr << " mandatory=" << param->GetMandatory();
@@ -311,7 +344,13 @@ int main(int argc, char* argv[])
     	  std::cerr << " qgis_type=" << qgis_type;
     	  std::cerr << " optional=" << optional << std::endl;
 #endif
-    dFile << "|" << default_value << "|" << optional;
+
+    // optional and default value are not in the same order than
+    // other QGis processing parameters for field and band
+    if (type != ParameterType_Field && type != ParameterType_Band)
+    {
+      dFile << "|" << default_value << "|" << optional;
+    }
     dFile << std::endl;
   }
 

@@ -97,8 +97,9 @@ private:
     MandatoryOff("io.stats");
     SetParameterDescription("io.stats", "XML file containing mean and variance of each feature.");
 
-    AddParameter(ParameterType_StringList, "feat", "Field names to be used for training");
+    AddParameter(ParameterType_Field, "feat", "Field names to be used for training");
     SetParameterDescription("feat", "List of field names in the input vector data used as features for training.");
+    SetVectorData("feat", "io.vd");
 
     Superclass::DoInit();
 
@@ -121,6 +122,33 @@ private:
 
   void DoUpdateParameters() override
   {
+    if (HasValue("io.vd"))
+    {
+      auto shapefileName = GetParameterString("io.vd");
+
+      auto            ogrDS     = otb::ogr::DataSource::New(shapefileName, otb::ogr::DataSource::Modes::Read);
+      auto            layer     = ogrDS->GetLayer(0);
+      OGRFeatureDefn& layerDefn = layer.GetLayerDefn();
+
+      ClearChoices("feat");
+
+      FieldParameter::TypeFilterType typeFilter = GetTypeFilter("feat");
+      for (int iField = 0; iField < layerDefn.GetFieldCount(); iField++)
+      {
+        auto        fieldDefn = layerDefn.GetFieldDefn(iField);
+        std::string item      = fieldDefn->GetNameRef();
+        std::string key(item);
+        key.erase(std::remove_if(key.begin(), key.end(), [](char c) { return !std::isalnum(c); }), key.end());
+        std::transform(key.begin(), key.end(), key.begin(), tolower);
+        auto fieldType = fieldDefn->GetType();
+
+        if (typeFilter.empty() || std::find(typeFilter.begin(), typeFilter.end(), fieldType) != std::end(typeFilter))
+        {
+          std::string tmpKey = "feat." + key;
+          AddChoice(tmpKey, item);
+        }
+      }
+    }
   }
 
   void DoExecute() override
