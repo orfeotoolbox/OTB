@@ -143,6 +143,8 @@ public:
 
   /** Path to the in-memory vrt */
   const std::string DEM_DATASET_PATH = "/vsimem/otb_dem_dataset.vrt";
+  const std::string DEM_WARPED_DATASET_PATH = "/vsimem/otb_dem_warped_dataset.vrt";
+  const std::string DEM_SHIFTED_DATASET_PATH = "/vsimem/otb_dem_shifted_dataset.vrt";
 
 protected: 
   DEMHandler(); 
@@ -152,7 +154,10 @@ protected:
 
 private:
   DEMHandler(const Self&) = delete;
-  void operator=(const Self&) = delete;
+  void operator=(const Self&) = delete;  
+
+  void CreateShiftedDataset();
+
   /** List of RAII capsules on all opened DEM datasets for memory management */
   std::vector<otb::GDALDatasetWrapper::Pointer> m_DatasetList;
   
@@ -161,6 +166,9 @@ private:
 
   /** Pointer to the geoid dataset */
   GDALDataset* m_GeoidDS;
+  
+  /** Pointer to the sifted dataset */
+  GDALDataset* m_ShiftedDS;
   
   /** Default height above elliposid, used when no DEM or geoid height is available. */
   double m_DefaultHeightAboveEllipsoid;

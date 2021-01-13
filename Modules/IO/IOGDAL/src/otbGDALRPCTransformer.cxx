@@ -54,9 +54,18 @@ GDALRPCTransformer::GDALRPCTransformer(double LineOffset, double SampleOffset, d
   this->m_GDALRPCInfo.dfMAX_LAT = 90.0;
 
   auto & demHandler = otb::DEMHandler::GetInstance();
+
   if (demHandler.GetDEMCount() > 0)
   {
-    this->SetOption("RPC_DEM", demHandler.DEM_DATASET_PATH);
+    if (demHandler.GetGeoidFile().empty())
+    {
+      this->SetOption("RPC_DEM", demHandler.DEM_DATASET_PATH);
+    }
+    else
+    {
+      this->SetOption("RPC_DEM", demHandler.DEM_SHIFTED_DATASET_PATH);
+    
+    }
     this->SetOption("RPC_DEM_MISSING_VALUE", std::to_string(demHandler.GetDefaultHeightAboveEllipsoid()));
   }
   else
