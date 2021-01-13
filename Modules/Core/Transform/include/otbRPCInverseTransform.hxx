@@ -43,6 +43,10 @@ RPCInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::Transform
   OutputPointType pOut;
   pOut[0] = static_cast<TScalarType>(zePoint[0]);
   pOut[1] = static_cast<TScalarType>(zePoint[1]);
+
+  if (NOutputDimensions > 2)
+    pOut[2] = static_cast<TScalarType>(zePoint[2]);
+
   return pOut;
 }
 
