@@ -61,7 +61,7 @@ int otbGDALRPCTransformerTest(int itkNotUsed(argc), char* argv[])
 
   otb::GDALRPCTransformer transformer(LineOffset, SampleOffset, LatOffset, LonOffset, HeightOffset,
                                       LineScale, SampleScale, LatScale, LonScale, HeightScale,
-                                      line_num_coeff, line_den_coeff, samp_num_coeff, samp_den_coeff);
+                                      line_num_coeff, line_den_coeff, samp_num_coeff, samp_den_coeff, true);
 
   // Test ForwardTransform
   std::vector<double> x = {20.5, 20.5};

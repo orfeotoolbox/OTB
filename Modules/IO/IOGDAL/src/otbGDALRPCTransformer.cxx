@@ -27,7 +27,9 @@ namespace otb
 {
 GDALRPCTransformer::GDALRPCTransformer(double LineOffset, double SampleOffset, double LatOffset, double LonOffset, double HeightOffset,
 				       double LineScale, double SampleScale, double LatScale, double LonScale, double HeightScale,
-				       const double (&LineNum)[20], const double (&LineDen)[20], const double (&SampleNum)[20], const double (&SampleDen)[20])
+				       const double (&LineNum)[20], const double (&LineDen)[20], const double (&SampleNum)[20], const double (&SampleDen)[20],
+               bool useDEM)
+  : m_UseDEM(useDEM)
 {
   // Offsets
   this->m_GDALRPCInfo.dfLINE_OFF = LineOffset;
@@ -87,22 +89,26 @@ void GDALRPCTransformer::Update()
   const std::lock_guard<std::mutex> lock(m_Mutex);
 
   auto & demHandler = otb::DEMHandler::GetInstance();
-  if (demHandler.GetDEMCount() > 0)
+
+  if (m_UseDEM)
   {
-    if (demHandler.GetGeoidFile().empty())
+    if (demHandler.GetDEMCount() > 0)
     {
-      this->SetOption("RPC_DEM", demHandler.DEM_DATASET_PATH);
+      if (demHandler.GetGeoidFile().empty())
+      {
+        this->SetOption("RPC_DEM", demHandler.DEM_DATASET_PATH);
+      }
+      else
+      {
+        this->SetOption("RPC_DEM", demHandler.DEM_SHIFTED_DATASET_PATH);
+      }
+      this->SetOption("RPC_DEM_MISSING_VALUE", std::to_string(demHandler.GetDefaultHeightAboveEllipsoid()));
     }
     else
     {
-      this->SetOption("RPC_DEM", demHandler.DEM_SHIFTED_DATASET_PATH);
+      // RPC height is used as a constant height offset applied to all points in case no DEM is set.
+      this->SetOption("RPC_HEIGHT", std::to_string(demHandler.GetDefaultHeightAboveEllipsoid()));
     }
-    this->SetOption("RPC_DEM_MISSING_VALUE", std::to_string(demHandler.GetDefaultHeightAboveEllipsoid()));
-  }
-  else
-  {
-    // RPC height is used as a constant height offset applied to all points in case no DEM is set.
-    this->SetOption("RPC_HEIGHT", std::to_string(demHandler.GetDefaultHeightAboveEllipsoid()));
   }
 
   if(m_TransformArg != nullptr)
