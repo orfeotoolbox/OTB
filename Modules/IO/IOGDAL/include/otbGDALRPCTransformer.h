@@ -23,6 +23,10 @@
 #include "itkPoint.h"
 #include "gdal_alg.h"
 
+#include "otbDEMHandler.h"
+
+#include <mutex>
+
 namespace otb
 {
 /**
@@ -44,7 +48,7 @@ namespace otb
  * \ingroup OTBIOGDAL
  */
 
-class  GDALRPCTransformer
+class  GDALRPCTransformer : public DEMObserverInterface
 {
 public:
 
@@ -198,19 +202,27 @@ protected:
    *
    * Called when performing a transformation and some options were modified.
    */
-  void Update();
+  void Update() override;
 
 private:
   /** Used to know if Update is required after a change in the options */
   bool m_Modified = true;
+
   /** The RPC model */
   GDALRPCInfo m_GDALRPCInfo;
+
   /** The options */
   char ** m_Options = nullptr;
+
   /** The error allowed in the iterative solution */
   double m_PixErrThreshold = 0.1;
+
   /** The transformer arguments */
   void * m_TransformArg = nullptr;
+
+  /** Lock threads when instantiating the GDAL RPC transformer */
+  std::mutex m_Mutex;
+
 };
 }
 #endif

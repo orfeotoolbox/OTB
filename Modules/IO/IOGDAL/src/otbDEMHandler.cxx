@@ -202,6 +202,13 @@ void DEMHandler::OpenDEMFile(const std::string& path)
   GDALClose(close_me);
   m_Dataset = static_cast<GDALDataset*>(GDALOpen(DEM_DATASET_PATH.c_str(), GA_ReadOnly));
   m_DEMDirectories.push_back(path);
+
+  if(m_GeoidDS)
+  {
+    CreateShiftedDataset();
+  }
+
+  Notify();
 }
 
 void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
@@ -250,6 +257,7 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
   {
     CreateShiftedDataset();
   }
+  Notify();
 }
 
 bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
@@ -277,6 +285,7 @@ bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
     CreateShiftedDataset();
   }
 
+  Notify();
   return pbError;
 }
 
@@ -481,6 +490,7 @@ void DEMHandler::ClearDEMs()
 
   // This will call GDALClose on all datasets
   m_DatasetList.clear();
+  Notify();
 }
 
 void DEMHandler::SetDefaultHeightAboveEllipsoid(double height)
@@ -488,11 +498,20 @@ void DEMHandler::SetDefaultHeightAboveEllipsoid(double height)
   OssimDEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(height);
 
   m_DefaultHeightAboveEllipsoid = height;
+  Notify();
 }
 
 double DEMHandler::GetDefaultHeightAboveEllipsoid() const
 {
   return m_DefaultHeightAboveEllipsoid;
 }
+
+void DEMHandler::Notify() const
+{
+  for (const auto & observer: m_ObserverList)
+  {
+    observer->Update();
+  }
+};
 
 } // namespace otb

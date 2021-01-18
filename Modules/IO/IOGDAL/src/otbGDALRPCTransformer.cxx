@@ -53,26 +53,7 @@ GDALRPCTransformer::GDALRPCTransformer(double LineOffset, double SampleOffset, d
   this->m_GDALRPCInfo.dfMAX_LONG = 180.0;
   this->m_GDALRPCInfo.dfMAX_LAT = 90.0;
 
-  auto & demHandler = otb::DEMHandler::GetInstance();
-
-  if (demHandler.GetDEMCount() > 0)
-  {
-    if (demHandler.GetGeoidFile().empty())
-    {
-      this->SetOption("RPC_DEM", demHandler.DEM_DATASET_PATH);
-    }
-    else
-    {
-      this->SetOption("RPC_DEM", demHandler.DEM_SHIFTED_DATASET_PATH);
-    
-    }
-    this->SetOption("RPC_DEM_MISSING_VALUE", std::to_string(demHandler.GetDefaultHeightAboveEllipsoid()));
-  }
-  else
-  {
-    // RPC height is used as a constant height offset applied to all points in case no DEM is set.
-    this->SetOption("RPC_HEIGHT", std::to_string(demHandler.GetDefaultHeightAboveEllipsoid()));
-  }
+  otb::DEMHandler::GetInstance().AttachObserver(this);
 
   this->SetOption("RPC_MAX_ITERATIONS", "40");
   this->SetOption("RPC_PIXEL_ERROR_THRESHOLD",  "0.000001");
@@ -83,6 +64,8 @@ GDALRPCTransformer::~GDALRPCTransformer()
   if(m_TransformArg != nullptr)
     GDALDestroyTransformer(m_TransformArg);
   CSLDestroy(m_Options);
+
+  otb::DEMHandler::GetInstance().DetachObserver(this);
 }
 
 void GDALRPCTransformer::SetOption(const std::string& Name, const std::string& Value)
@@ -99,6 +82,29 @@ void GDALRPCTransformer::SetPixErrThreshold(double PixErrThreshold)
 
 void GDALRPCTransformer::Update()
 {
+  // We need a lock here because Update() is not called until the first call
+  // to Forward/InverseTransform(), which might be done in a thread.
+  const std::lock_guard<std::mutex> lock(m_Mutex);
+
+  auto & demHandler = otb::DEMHandler::GetInstance();
+  if (demHandler.GetDEMCount() > 0)
+  {
+    if (demHandler.GetGeoidFile().empty())
+    {
+      this->SetOption("RPC_DEM", demHandler.DEM_DATASET_PATH);
+    }
+    else
+    {
+      this->SetOption("RPC_DEM", demHandler.DEM_SHIFTED_DATASET_PATH);
+    }
+    this->SetOption("RPC_DEM_MISSING_VALUE", std::to_string(demHandler.GetDefaultHeightAboveEllipsoid()));
+  }
+  else
+  {
+    // RPC height is used as a constant height offset applied to all points in case no DEM is set.
+    this->SetOption("RPC_HEIGHT", std::to_string(demHandler.GetDefaultHeightAboveEllipsoid()));
+  }
+
   if(m_TransformArg != nullptr)
     GDALDestroyTransformer(m_TransformArg);
   this->m_TransformArg = GDALCreateRPCTransformer(&this->m_GDALRPCInfo, false, this->m_PixErrThreshold, this->m_Options);

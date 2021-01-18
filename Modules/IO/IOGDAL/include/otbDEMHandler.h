@@ -26,6 +26,34 @@
 
 namespace otb
 {
+
+
+
+/** \class DEMObserverInterface
+ *
+ * \brief Observer design pattern to keep track of DEM configuration changes
+ * \ingroup OTBIOGDAL
+ */
+class DEMObserverInterface {
+ public:
+  virtual ~DEMObserverInterface() = default;
+  virtual void Update() = 0;
+};
+
+/** \class DEMSubjectInterface
+ *
+ * \brief Observer design pattern to keep track of DEM configuration changes
+ * \ingroup OTBIOGDAL
+ */
+class DEMSubjectInterface {
+ public:
+  virtual ~DEMSubjectInterface() = default;
+  virtual void AttachObserver(DEMObserverInterface *observer) = 0;
+  virtual void DetachObserver(DEMObserverInterface *observer) = 0;
+  virtual void Notify() const = 0;
+};
+
+
 /** \class DEMHandler
  *
  * \brief Single access point for DEM data retrieval
@@ -67,7 +95,7 @@ namespace otb
  *
  * \ingroup OTBIOGDAL
  */
-class DEMHandler
+class DEMHandler : public DEMSubjectInterface
 {
 public:
   using Self =          DEMHandler;
@@ -140,6 +168,16 @@ public:
 
   /** Clear the DEM list and close all DEM datasets */
   void ClearDEMs();
+  
+  /** Add an element to the current list of observers. The obsever will be updated whenever the DEM configuration
+  is modified*/
+  void AttachObserver(DEMObserverInterface *observer) override {m_ObserverList.push_back(observer);};
+  
+  /** Remove an element of the current list of observers. */
+  void DetachObserver(DEMObserverInterface *observer) override {m_ObserverList.remove(observer);};
+  
+  /** Update all observers */
+  void Notify() const override;
 
   /** Path to the in-memory vrt */
   const std::string DEM_DATASET_PATH = "/vsimem/otb_dem_dataset.vrt";
@@ -179,6 +217,8 @@ private:
   /** Filename of the current geoid */
   std::string m_GeoidFilename;
 
+  /** Observers on the DEM */
+  std::list<DEMObserverInterface *> m_ObserverList;
 };
 
 }
