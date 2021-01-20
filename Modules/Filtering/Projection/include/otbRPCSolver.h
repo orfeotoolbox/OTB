@@ -33,6 +33,15 @@ namespace otb
     using GCPType = std::pair<Point2DType, Point3DType>;
     using GCPsContainerType = std::vector<GCPType>;
 
+  /** Solve RPC modelling from a set of GCPs and image bounds.
+   *  The estimated RPC model is written in a RPCParam structure that can
+   *  for instance be added to an ImageMetadata object.
+   *  Please note that at least 20 points are required to estimate the
+   *  RPC model. Between 20 and 40 points, the estimated model will
+   *  not provide elevation support, since there are not enough points
+   *  to estimate all the coefficients. Starting at 40 points, a full
+   *  RPC model is estimated.
+   */
     void Solve(const GCPsContainerType& gcpContainer, double& rmsError, Projection::RPCParam& outputParams);
   };
 
