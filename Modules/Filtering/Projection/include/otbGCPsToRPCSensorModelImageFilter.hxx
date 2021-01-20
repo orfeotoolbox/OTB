@@ -24,6 +24,9 @@
 #include "otbGCPsToRPCSensorModelImageFilter.h"
 
 #include "otbRPCSolverAdapter.h"
+#include "otbRPCSolver.h"
+
+
 #include "otbGenericRSTransform.h"
 
 #include "itkMetaDataObject.h"
