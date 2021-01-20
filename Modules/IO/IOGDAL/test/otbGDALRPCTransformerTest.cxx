@@ -20,15 +20,10 @@
 
 #include "otbGDALRPCTransformer.h"
 #include "otbMacro.h"
-#include "otbImage.h"
-#include "otbImageFileReader.h"
 #include "otbImageMetadata.h"
 #include "gdal_utils.h"
 #include <gdal_priv.h>
 #include "otbDEMHandler.h"
-
-typedef otb::Image<double>                 ImageType;
-typedef otb::ImageFileReader<ImageType>    ReaderType;
 
 int otbGDALRPCTransformerTest(int itkNotUsed(argc), char* argv[])
 {

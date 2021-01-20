@@ -38,6 +38,7 @@ ENABLE_SHARED
   TEST_DEPENDS
     OTBTestKernel
     OTBImageIO
+    OTBProjection
 
   DESCRIPTION
     "${DOCUMENTATION}"

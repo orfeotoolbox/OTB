@@ -35,4 +35,5 @@ void RegisterTests()
   REGISTER_TEST(otbOGRVectorDataIOTestCanRead);
   REGISTER_TEST(otbGDALImageIOImportExportMetadata);
   REGISTER_TEST(otbGDALRPCTransformerTest);
+  REGISTER_TEST(otbGDALRPCTransformerTest2);
 }

@@ -26,7 +26,6 @@
 #include <iterator>
 
 #include "otbVectorImage.h"
-#include "otbImageFileReader.h"
 #include "otbImageMetadata.h"
 #include "otbRPCForwardTransform.h"
 #include "otbRPCInverseTransform.h"

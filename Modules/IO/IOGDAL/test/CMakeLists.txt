@@ -33,6 +33,7 @@ otbMultiDatasetReadingInfo.cxx
 otbOGRVectorDataIOCanRead.cxx
 otbGDALImageIOImportExportMetadata.cxx
 otbGDALRPCTransformerTest.cxx
+otbGDALRPCTransformerTest2.cxx
 )
 
 add_executable(otbIOGDALTestDriver ${OTBIOGDALTests})
@@ -267,3 +268,49 @@ otb_add_test(NAME TuGDALRPCTransformerTest
              otbGDALRPCTransformerTest
              ${INPUTDATA}/TuGDALRPCTransformerTest_DEM.tif
              )
+
+otb_add_test(NAME ioTvGDALRPCTransformerTest_ikonos
+             COMMAND otbIOGDALTestDriver
+             otbGDALRPCTransformerTest2
+             ${INPUTDATA}/ikonos/ikonos-1.geom # Geom
+	     ${INPUTDATA}/ikonos/ikonos-1.gcp2 # GCP
+	     1 # GeoTol
+	     1 # ImgTol
+             )
+
+otb_add_test(NAME ioTvGDALRPCTransformerTest_quickbird
+             COMMAND otbIOGDALTestDriver
+             otbGDALRPCTransformerTest2
+             ${INPUTDATA}/QB/qb-1.geom # Geom
+	     ${INPUTDATA}/QB/qb-1.gcp2 # GCP
+	     1 # GeoTol
+	     1 # ImgTol
+             )
+	   
+otb_add_test(NAME ioTvGDALRPCTransformerTest_spot6
+             COMMAND otbIOGDALTestDriver
+             otbGDALRPCTransformerTest2
+             ${INPUTDATA}/spot6/spot6-1.geom # Geom
+	     ${INPUTDATA}/spot6/spot6-1.gcp2 # GCP
+	     1 # GeoTol
+	     1 # ImgTol
+             )
+
+otb_add_test(NAME ioTvGDALRPCTransformerTest_worldview2
+             COMMAND otbIOGDALTestDriver
+             otbGDALRPCTransformerTest2
+             ${INPUTDATA}/wv2/wv2-1.geom # Geom
+	     ${INPUTDATA}/wv2/wv2-1.gcp2 # GCP
+	     1 # GeoTol
+	     1 # ImgTol
+             )
+
+otb_add_test(NAME ioTvGDALRPCTransformerTest_pl_hnord
+             COMMAND otbIOGDALTestDriver
+             otbGDALRPCTransformerTest2
+             ${INPUTDATA}/pleiades/pleiades-1.geom # Geom
+	     ${INPUTDATA}/pleiades/pleiades-1.gcp2 # GCP
+	     1 # GeoTol
+	     1 # ImgTol
+             )
+
