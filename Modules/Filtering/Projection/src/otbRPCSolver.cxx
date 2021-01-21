@@ -24,20 +24,22 @@
 #include "vnl/algo/vnl_svd.h"
 #include "vnl/algo/vnl_matrix_inverse.h"
 
+#include "otbGDALRPCTransformer.h"
+
 namespace otb
 {
-
-const double epsilon = 1e-7;
 
 using PrecisionType = double;
 using VectorType = vnl_vector<PrecisionType>;
 using MatrixType = vnl_matrix<PrecisionType>;
 using DiagonalMatrixType = vnl_diag_matrix<PrecisionType>;
 
+const PrecisionType epsilon = 1e-7;
+
 void UpdateMatrix(const VectorType & f, 
-                    const std::vector<double> & x,
-                    const std::vector<double> & y,
-                    const std::vector<double> & z,
+                    const std::vector<PrecisionType> & x,
+                    const std::vector<PrecisionType> & y,
+                    const std::vector<PrecisionType> & z,
                     MatrixType & M)
 {
    for(unsigned int i = 0; i < f.size(); i++)
@@ -84,13 +86,13 @@ void UpdateMatrix(const VectorType & f,
    }
 }
 
-void UpdateWeights(const std::vector<double> & x,
-                    const std::vector<double> & y,
-                    const std::vector<double> & z,
+void UpdateWeights(const std::vector<PrecisionType> & x,
+                    const std::vector<PrecisionType> & y,
+                    const std::vector<PrecisionType> & z,
                     const VectorType & coeff,
                     DiagonalMatrixType & W)
 {
-   std::vector<double> row(coeff.size());
+   std::vector<PrecisionType> row(coeff.size());
    
     for(unsigned int i = 0; i < x.size(); i++)
     {
@@ -129,11 +131,11 @@ void UpdateWeights(const std::vector<double> & x,
     }
 }
 
-void computeCoefficients(const std::vector<double> & f, 
-                          const std::vector<double> & x,
-                          const std::vector<double> & y,
-                          const std::vector<double> & z,
-                          std::vector<double> & outCoeffs)
+void computeCoefficients(const std::vector<PrecisionType> & f, 
+                          const std::vector<PrecisionType> & x,
+                          const std::vector<PrecisionType> & y,
+                          const std::vector<PrecisionType> & z,
+                          std::vector<PrecisionType> & outCoeffs)
 {
   auto numberOfPoints = f.size();
 
@@ -143,12 +145,15 @@ void computeCoefficients(const std::vector<double> & f,
   VectorType r(numberOfPoints, numberOfPoints, f.data());
   DiagonalMatrixType weights(numberOfPoints, 1.);
 
-  double res = std::numeric_limits<double>::max();
+  PrecisionType res = std::numeric_limits<PrecisionType>::max();
   VectorType coeffs;
 
-  int i =0;
-  while (res > epsilon && i < 10)
+  for (int i =0; i<10; i++)
   {
+    if (res < epsilon)
+    {
+      break;
+    }
     auto w2 = weights * weights;
     
     UpdateMatrix(r, x, y ,z ,M);
@@ -168,6 +173,7 @@ void computeCoefficients(const std::vector<double> & f,
       }
     }
     
+    // "svd.V() * diag * svd.U().transpose()" is the inverse of M.transpose()*w2*M
     coeffs =  svd.V() * diag * svd.U().transpose() * M.transpose()*w2*r;
 
     auto denominator = VectorType(&(coeffs[19]), 20);
@@ -179,37 +185,31 @@ void computeCoefficients(const std::vector<double> & f,
     auto residual = M.transpose()*w2*(M*coeffs-r);
 
     auto residualValue = inner_product(residual,residual);
-    i++;
   }
 
-  outCoeffs.resize(coeffs.size());
-  std::copy(coeffs.begin(), coeffs.end(), outCoeffs.begin());
+  outCoeffs.assign(coeffs.begin(), coeffs.end());
 }
 
 
-
-
-
-
-void RPCSolver::Solve(const GCPsContainerType& gcpContainer, double& rmsError, Projection::RPCParam& outputParams)
+void RPCSolver::Solve(const GCPsContainerType& gcpContainer, PrecisionType& rmsError, Projection::RPCParam& outputParams)
 {
   // By default, use elevation provided with ground control points
   bool useElevation = true;
   auto numberOfPoints = gcpContainer.size();
 
-  std::vector<double> colNorm;
+  std::vector<PrecisionType> colNorm;
   colNorm.reserve(numberOfPoints);
   
-  std::vector<double> lineNorm;
+  std::vector<PrecisionType> lineNorm;
   lineNorm.reserve(numberOfPoints);
 
-  std::vector<double> lonNorm;
+  std::vector<PrecisionType> lonNorm;
   lonNorm.reserve(numberOfPoints);
   
-  std::vector<double> latNorm;
+  std::vector<PrecisionType> latNorm;
   latNorm.reserve(numberOfPoints);
   
-  std::vector<double> altNorm;
+  std::vector<PrecisionType> altNorm;
   altNorm.reserve(numberOfPoints);
   
   // Check for enough points
@@ -235,9 +235,9 @@ void RPCSolver::Solve(const GCPsContainerType& gcpContainer, double& rmsError, P
   // Compute Offsets
 
   // Find the ground points center of mass
-  double accLat = 0.;
-  double accLon = 0.;
-  double accAlt = 0.;
+  PrecisionType accLat = 0.;
+  PrecisionType accLon = 0.;
+  PrecisionType accAlt = 0.;
 
   for (const auto & gcp : gcpContainer)
   {
@@ -257,10 +257,10 @@ void RPCSolver::Solve(const GCPsContainerType& gcpContainer, double& rmsError, P
   groundCenter[2] = useElevation ? accAlt / numberOfPoints : 0.;
 
 
-  double minc = std::numeric_limits<double>::max();
-  double minl = std::numeric_limits<double>::max();
-  double maxc = std::numeric_limits<double>::min();
-  double maxl = std::numeric_limits<double>::min();
+  PrecisionType minc = std::numeric_limits<PrecisionType>::max();
+  PrecisionType minl = std::numeric_limits<PrecisionType>::max();
+  PrecisionType maxc = std::numeric_limits<PrecisionType>::min();
+  PrecisionType maxl = std::numeric_limits<PrecisionType>::min();
 
   for (const auto & gcp : gcpContainer)
   {
@@ -280,9 +280,9 @@ void RPCSolver::Solve(const GCPsContainerType& gcpContainer, double& rmsError, P
   auto height = std::abs(minl - maxl) +1;
   auto width = std::abs(minc - maxc) +1;
 
-  double maxDeltaLon = std::numeric_limits<double>::min();
-  double maxDeltaLat = std::numeric_limits<double>::min();
-  double maxDeltaAlt = std::numeric_limits<double>::min();
+  PrecisionType maxDeltaLon = std::numeric_limits<PrecisionType>::min();
+  PrecisionType maxDeltaLat = std::numeric_limits<PrecisionType>::min();
+  PrecisionType maxDeltaAlt = std::numeric_limits<PrecisionType>::min();
 
   for (const auto & gcp : gcpContainer)
   {
@@ -308,40 +308,43 @@ void RPCSolver::Solve(const GCPsContainerType& gcpContainer, double& rmsError, P
   {
     maxDeltaLat = 1.0;
   }
+  else
+  {
+    for (auto & lat: latNorm)
+    {
+      lat /= maxDeltaLat;
+    }
+  }
+
 
   if(maxDeltaLon < 1.0)
   {
     maxDeltaLon = 1.0;
   }
-
-  if(fabs(maxDeltaAlt) < epsilon) 
+  else
   {
-    maxDeltaAlt = false;
+    for (auto & lon: lonNorm)
+    {
+      lon /= maxDeltaLon;
+    }
   }
 
   if(maxDeltaAlt < 1.0) 
   {
     maxDeltaAlt = 1.0;
   }
-
-  // Normalize ground coordinates 
-  for (auto & lon: lonNorm)
+  else
   {
-    lon /= maxDeltaLon;
-  }
-  for (auto & lat: latNorm)
-  {
-    lat /= maxDeltaLat;
-  }
-  for (auto & alt: altNorm)
-  {
-    alt /= maxDeltaAlt;
+    for (auto & alt: altNorm)
+    {
+      alt /= maxDeltaAlt;
+    }
   }
 
-  std::vector<double> colCoeffs;
+  std::vector<PrecisionType> colCoeffs;
   computeCoefficients(colNorm, lonNorm, latNorm, altNorm, colCoeffs);
 
-  std::vector<double> lineCoeffs;
+  std::vector<PrecisionType> lineCoeffs;
   computeCoefficients(lineNorm, lonNorm, latNorm, altNorm, lineCoeffs);
 
     // Offsets
@@ -367,12 +370,22 @@ void RPCSolver::Solve(const GCPsContainerType& gcpContainer, double& rmsError, P
   // Sample numerator coefficients
   std::copy(colCoeffs.begin(), colCoeffs.begin() +20, outputParams.SampleNum);
   // Sample denominator coefficients
-   outputParams.SampleDen[0] = 1.;
+  outputParams.SampleDen[0] = 1.;
   std::copy(colCoeffs.begin()+20, colCoeffs.end(), outputParams.SampleDen +1);
 
-  // TODO instantiate a model a compute error on input tie points
-  rmsError = std::numeric_limits<double>::max();
+  // Compute rmse between input ground point and transformed image points
+  GDALRPCTransformer transformer(outputParams, false);
+  
+  PrecisionType rmseAcc = 0.;
 
+  for (const auto & gcp : gcpContainer)
+  {
+    auto outPoint = transformer.InverseTransform(gcp.second);
+    rmseAcc += (gcp.first[0] - outPoint[0]) * (gcp.first[0] - outPoint[0])
+                + (gcp.first[1] - outPoint[1]) * (gcp.first[1] - outPoint[1]);
+  }
+
+  rmsError = std::sqrt(rmseAcc)/numberOfPoints;
 }
 
 }

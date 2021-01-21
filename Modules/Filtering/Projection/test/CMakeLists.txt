@@ -583,7 +583,7 @@ otb_add_test(NAME prTvLeastSquareAffineTransformEstimator COMMAND otbProjectionT
   )
 
 
-otb_add_test(NAME uaTvRPCSolverNoDEMValidationTest COMMAND otbProjectionTestDriver
+otb_add_test(NAME prTvRPCSolverNoDEMValidationTest COMMAND otbProjectionTestDriver
   otbRPCSolverTest
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   10 0.25 0.35
@@ -591,7 +591,7 @@ otb_add_test(NAME uaTvRPCSolverNoDEMValidationTest COMMAND otbProjectionTestDriv
   no
   )
 
-otb_add_test(NAME uaTvRPCSolverNotEnoughPointsForElevationTest COMMAND otbProjectionTestDriver
+otb_add_test(NAME prTvRPCSolverNotEnoughPointsForElevationTest COMMAND otbProjectionTestDriver
   otbRPCSolverTest
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   5 0.25 0.35
@@ -599,7 +599,7 @@ otb_add_test(NAME uaTvRPCSolverNotEnoughPointsForElevationTest COMMAND otbProjec
   no
   )
 
-otb_add_test(NAME uaTvRPCSolverNotEnoughPointsTest COMMAND otbProjectionTestDriver
+otb_add_test(NAME prTvRPCSolverNotEnoughPointsTest COMMAND otbProjectionTestDriver
   otbRPCSolverTest
   LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
   4 0.25 0.35
@@ -607,7 +607,7 @@ otb_add_test(NAME uaTvRPCSolverNotEnoughPointsTest COMMAND otbProjectionTestDriv
   ${INPUTDATA}/DEM/egm96.grd
   )
 if (OTB_DATA_USE_LARGEINPUT)
-  set_property(TEST uaTvRPCSolverNotEnoughPointsTest PROPERTY WILL_FAIL TRUE)
+  set_property(TEST prTvRPCSolverNotEnoughPointsTest PROPERTY WILL_FAIL TRUE)
 endif()
 
 
