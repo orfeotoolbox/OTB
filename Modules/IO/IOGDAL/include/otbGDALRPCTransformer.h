@@ -24,6 +24,7 @@
 #include "gdal_alg.h"
 
 #include "otbDEMHandler.h"
+#include "otbGeometryMetadata.h"
 
 #include <mutex>
 
@@ -66,6 +67,9 @@ public:
   GDALRPCTransformer(double LineOffset, double SampleOffset, double LatOffset, double LonOffset, double HeightOffset,
 		     double LineScale, double SampleScale, double LatScale, double LonScale, double HeightScale,
 		     const double (&LineNum)[20], const double (&LineDen)[20], const double (&SampleNum)[20], const double (&SampleDen)[20], bool useDEM);
+
+  GDALRPCTransformer(const Projection::RPCParam &, bool useDEM);
+
   ~GDALRPCTransformer();
 
   /**

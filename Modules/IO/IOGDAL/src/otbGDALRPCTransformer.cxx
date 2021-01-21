@@ -61,6 +61,14 @@ GDALRPCTransformer::GDALRPCTransformer(double LineOffset, double SampleOffset, d
   this->SetOption("RPC_PIXEL_ERROR_THRESHOLD",  "0.000001");
 }
 
+GDALRPCTransformer::GDALRPCTransformer(const Projection::RPCParam & param, bool useDEM)
+  : GDALRPCTransformer( param.LineOffset, param.SampleOffset, param.LatOffset, param.LonOffset, param.HeightOffset,
+               param.LineScale, param.SampleScale, param.LatScale, param.LonScale, param.HeightScale,
+               param.LineNum, param.LineDen, param.SampleNum, param.SampleDen,
+               useDEM)
+{
+}
+
 GDALRPCTransformer::~GDALRPCTransformer()
 {
   if(m_TransformArg != nullptr)

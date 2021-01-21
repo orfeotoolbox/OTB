@@ -44,10 +44,7 @@ bool RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::SetMeta
   }
 
   constexpr bool useDEM = NInputDimensions == 2 ? true : false;
-  this->m_Transformer = std::make_unique<GDALRPCTransformer>(
-          m_RPCParam->LineOffset, m_RPCParam->SampleOffset, m_RPCParam->LatOffset, m_RPCParam->LonOffset, m_RPCParam->HeightOffset,
-          m_RPCParam->LineScale, m_RPCParam->SampleScale, m_RPCParam->LatScale, m_RPCParam->LonScale, m_RPCParam->HeightScale,
-          m_RPCParam->LineNum, m_RPCParam->LineDen, m_RPCParam->SampleNum, m_RPCParam->SampleDen, useDEM);
+  this->m_Transformer = std::make_unique<GDALRPCTransformer>(*m_RPCParam, useDEM);
   return true;
 }
 
