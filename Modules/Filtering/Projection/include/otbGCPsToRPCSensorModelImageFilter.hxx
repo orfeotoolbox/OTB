@@ -219,17 +219,12 @@ void GCPsToRPCSensorModelImageFilter<TImage>::LoadImageGCPs()
 template <class TImage>
 void GCPsToRPCSensorModelImageFilter<TImage>::ComputeErrors()
 {
-  typedef GenericRSTransform<double, 3, 3> RSTransformType;
+  using RSTransformType = GenericRSTransform<double, 2, 2>;
 
   RSTransformType::Pointer rsTransform = RSTransformType::New();
-  rsTransform->SetInputImageMetadata(&(this->GetOutput()->GetImageMetadata()));
+  rsTransform->SetInputImageMetadata(&m_ImageMetadata);
+
   rsTransform->InstantiateTransform();
-
-  ContinuousIndexType   idFix, idOut;
-  Continuous3DIndexType idOut3D, idTrans3D;
-
-  Point2DType sensorPoint;
-  Point3DType groundPoint;
 
   double sum  = 0.;
   m_MeanError = 0.;
@@ -240,30 +235,22 @@ void GCPsToRPCSensorModelImageFilter<TImage>::ComputeErrors()
   for (unsigned int i = 0; i < m_GCPsContainer.size(); ++i)
   {
     // GCP value
-    sensorPoint = m_GCPsContainer[i].first;
-    groundPoint = m_GCPsContainer[i].second;
+    const auto & sensorPoint = m_GCPsContainer[i].first;
+    const auto & groundPoint = m_GCPsContainer[i].second;
 
     // Compute Transform
     Point3DType groundPointTemp, sensorPointTemp;
     sensorPointTemp[0] = sensorPoint[0];
     sensorPointTemp[1] = sensorPoint[1];
-    sensorPointTemp[2] = groundPoint[2];
 
-    groundPointTemp = rsTransform->TransformPoint(sensorPointTemp);
+    auto outPoint = rsTransform->TransformPoint(sensorPoint);
 
-    // Compute Euclidian distance
-    idFix[0] = sensorPoint[0];
-    idFix[1] = sensorPoint[1];
+    Point2DType groundPoint2D;
 
-    idOut3D[0] = groundPoint[0];
-    idOut3D[1] = groundPoint[1];
-    idOut3D[2] = groundPoint[2];
+    groundPoint2D[0] = groundPoint[0];
+    groundPoint2D[1] = groundPoint[1];
 
-    idTrans3D[0] = groundPointTemp[0];
-    idTrans3D[1] = groundPointTemp[1];
-    idTrans3D[2] = groundPointTemp[2];
-
-    double error = idOut3D.EuclideanDistanceTo(idTrans3D);
+    double error = outPoint.EuclideanDistanceTo(outPoint);
 
     // Add error to the container
     m_ErrorsContainer.push_back(error);
@@ -282,30 +269,28 @@ void GCPsToRPCSensorModelImageFilter<TImage>::GenerateOutputInformation()
   Superclass::GenerateOutputInformation();
 
   // First, retrieve the image pointer
-  typename TImage::Pointer imagePtr = this->GetOutput();
+  auto imagePtr = this->GetOutput();
 
   if (!m_ModelUpToDate)
   {
-    double           rmsError;
-    ImageKeywordlist otb_kwl;
-    otb::RPCSolverAdapter::Solve(m_GCPsContainer, rmsError, otb_kwl);
+    double rmsError;
+
+    Projection::RPCParam rpcParams;
+    otb::RPCSolver::Solve(m_GCPsContainer, rmsError, rpcParams);
 
     // Retrieve the residual ground error
     m_RMSGroundError = rmsError;
 
+    m_ImageMetadata = imagePtr->GetImageMetadata();
+    m_ImageMetadata.Add(MDGeom::RPC, rpcParams);
+
     // Compute errors
     this->ComputeErrors();
-
-    m_Keywordlist = otb_kwl;
 
     m_ModelUpToDate = true;
   }
 
-  // Update image keywordlist. We need to do it at each stream
-  // because it will be overwritten by up-stream
-  // GenerateOutputInformation() calls.
-  itk::MetaDataDictionary& dict = imagePtr->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, m_Keywordlist);
+  imagePtr->SetImageMetadata(m_ImageMetadata);
 }
 
 template <class TImage>

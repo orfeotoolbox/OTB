@@ -37,9 +37,14 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
     nbPoints--; // last argument in not a gcp pairs point
     tol = stoi(s_tol.substr(s_tol.find("=") + 1));
   }
+  
+  // Set the DEM Directory
+  if (std::string(argv[2]).compare("no_output") != 0)
+  {
+    otb::DEMHandler::GetInstance().OpenDEMDirectory(argv[2]);
+  }
+  
   // Check if the number of gcp pairs point is consistent
-
-
   if (nbPoints % 5 != 0)
   {
     std::cerr << "Inconsistent GCPs description!" << std::endl;
@@ -51,7 +56,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
   typedef otb::GCPsToRPCSensorModelImageFilter<ImageType> GCPsToSensorModelFilterType;
   typedef GCPsToSensorModelFilterType::Point2DType        Point2DType;
   typedef GCPsToSensorModelFilterType::Point3DType        Point3DType;
-  typedef otb::GenericRSTransform<double, 3, 3> GenericRSTransformType;
+  typedef otb::GenericRSTransform<double, 2, 2> GenericRSTransformType;
   typedef otb::GeographicalDistance<ImageType::PointType> GeoDistanceType;
 
   ReaderType::Pointer reader = ReaderType::New();
@@ -90,15 +95,8 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
   // geographical coordinates.
 
   GenericRSTransformType::Pointer grsTrasnform = GenericRSTransformType::New();
-  //TODO OSSIM:Update GCPsToRPCSensorModelImageFilter so it uses ImageMetdata instead of KeywordList
-  //grsTrasnform->SetInputKeywordList(rpcEstimator->GetKeywordlist());
-  otbLogMacro(Debug, << rpcEstimator->GetKeywordlist());
+  grsTrasnform->SetInputImageMetadata(&rpcEstimator->GetOutput()->GetImageMetadata());
   grsTrasnform->SetOutputProjectionRef("EPSG:4326");
-
-  // Set the DEM Directory
-  if (std::string(argv[2]).compare("no_output") != 0)
-    otb::DEMHandler::GetInstance().OpenDEMDirectory(argv[2]);
-
   grsTrasnform->InstantiateTransform();
 
   // Test
@@ -107,17 +105,11 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
 
   for (unsigned int gcpId = 0; gcpId < nbGCPs; ++gcpId)
   {
-    Point3DType point;
+    Point2DType point;
     point[0] = std::stof(argv[3 + gcpId * 5]);
     point[1] = std::stof(argv[4 + gcpId * 5]);
-    point[2] = std::stof(argv[7 + gcpId * 5]);
 
-    Point3DType transformedPoint;
-    transformedPoint = grsTrasnform->TransformPoint(point);
-
-    Point2DType transformedPoint2D;
-    transformedPoint2D[0] = transformedPoint[0];
-    transformedPoint2D[1] = transformedPoint[1];
+    auto transformedPoint = grsTrasnform->TransformPoint(point);
 
     // reference point
     Point2DType geoPoint;
@@ -125,18 +117,18 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
     geoPoint[1] = std::stof(argv[6 + gcpId * 5]);
 
     // Search for nans
-    if (vnl_math_isnan(transformedPoint2D[0]) || vnl_math_isnan(transformedPoint2D[1]))
+    if (vnl_math_isnan(transformedPoint[0]) || vnl_math_isnan(transformedPoint[1]))
     {
-      otbLogMacro(Warning, << "Reference : " << geoPoint << " --> Result of the reprojection using the estimated RpcModel " << transformedPoint2D);
+      otbLogMacro(Warning, << "Reference : " << geoPoint << " --> Result of the reprojection using the estimated RpcModel " << transformedPoint);
       otbLogMacro(Warning, << "The result of the projection is nan, there is a problem with the estimated RpcModel");
       isErrorDetected = true;
     }
 
     // Search for wrong projection results
-    double residual = geoDistance->Evaluate(geoPoint, transformedPoint2D);
+    double residual = geoDistance->Evaluate(geoPoint, transformedPoint);
     if (residual > tol)
     {
-      otbLogMacro(Warning, << "Reference : " << geoPoint << " --> Result of the reprojection using the estimated RpcModel " << transformedPoint2D << std::endl
+      otbLogMacro(Warning, << "Reference : " << geoPoint << " --> Result of the reprojection using the estimated RpcModel " << transformedPoint << std::endl
                            << " Residual [" << residual << "] is higher than the tolerance [" << tol << "], there is a problem with the estimated RpcModel");
       isErrorDetected = true;
     }
