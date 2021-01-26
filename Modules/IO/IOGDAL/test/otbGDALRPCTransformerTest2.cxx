@@ -27,15 +27,18 @@
 #include "otbGeomMetadataSupplier.h"
 #include "otbImageMetadataInterfaceFactory.h"
 #include "otbMacro.h"
+#include "otbDEMHandler.h"
 
 //typedef otb::Image<double> ImageType;
-typedef std::list<itk::Point<double, 3>> pointsContainerType;
+typedef std::vector<itk::Point<double, 3>> pointsContainerType;
 typedef itk::Statistics::EuclideanDistanceMetric<otb::GDALRPCTransformer::PointType> DistanceType;
 typedef otb::GeographicalDistance<otb::GDALRPCTransformer::PointType> GeographicalDistanceType;
 
 int otbGDALRPCTransformerTest2(int itkNotUsed(argc), char* argv[])
 {
   bool success = true;
+  otb::GDALRPCTransformer::PointType imagePoint;
+  otb::GDALRPCTransformer::PointType geo3dPoint;
 
   // Inputs
   std::string inputGeomFile(argv[1]);
@@ -58,6 +61,7 @@ int otbGDALRPCTransformerTest2(int itkNotUsed(argc), char* argv[])
   auto rpcModel = boost::any_cast<otb::Projection::RPCParam>(imd[otb::MDGeom::RPC]);
 
   // Setting the RPCTransformer
+  //  otb::DEMHandler::GetInstance().SetDefaultHeightAboveEllipsoid(0.0);
   otb::GDALRPCTransformer transformer(rpcModel.LineOffset, rpcModel.SampleOffset, rpcModel.LatOffset, rpcModel.LonOffset, rpcModel.HeightOffset,
                                       rpcModel.LineScale, rpcModel.SampleScale, rpcModel.LatScale, rpcModel.LonScale, rpcModel.HeightScale,
                                       rpcModel.LineNum, rpcModel.LineDen, rpcModel.SampleNum, rpcModel.SampleDen, false);
@@ -68,10 +72,7 @@ int otbGDALRPCTransformerTest2(int itkNotUsed(argc), char* argv[])
   std::ifstream file(gcpFileName, std::ios::in);
   if (file)
   {
-    otb::GDALRPCTransformer::PointType imagePoint;
-    otb::GDALRPCTransformer::PointType geo3dPoint;
     std::string line;
-    imagePoint[2] = rpcModel.HeightOffset;
     while (getline(file, line))
     {
       if (line.find_first_of("#") != 0)
@@ -79,6 +80,7 @@ int otbGDALRPCTransformerTest2(int itkNotUsed(argc), char* argv[])
         std::istringstream iss(line);
 
         iss >> imagePoint[0] >> imagePoint[1] >> geo3dPoint[0] >> geo3dPoint[1] >> geo3dPoint[2];
+	imagePoint[2] = geo3dPoint[2];
 
         pointsContainer.push_back(imagePoint);
         geo3dPointsContainer.push_back(geo3dPoint);
@@ -88,35 +90,32 @@ int otbGDALRPCTransformerTest2(int itkNotUsed(argc), char* argv[])
   }
 
   // For each CGP
-  pointsContainerType::iterator pointsIt = pointsContainer.begin();
-  pointsContainerType::iterator geo3dPointsIt = geo3dPointsContainer.begin();
-  while ((pointsIt != pointsContainer.end()) && (geo3dPointsIt != geo3dPointsContainer.end()))
+  for (pointsContainerType::iterator pointsIt = pointsContainer.begin(), geo3dPointsIt = geo3dPointsContainer.begin() ;
+       (pointsIt != pointsContainer.end()) && (geo3dPointsIt != geo3dPointsContainer.end()) ;
+       ++pointsIt, ++geo3dPointsIt)
   {
-    otbLogMacro(Debug, << "Point: " << *pointsIt << " GeoPoint: " << *geo3dPointsIt);
+    //    std::cout << "Point: " << *pointsIt << " GeoPoint: " << *geo3dPointsIt << "\n";
     // Testing forward transform
-    otbLogMacro(Debug, << "ForwardTransform: " << transformer.ForwardTransform(*pointsIt));
-    auto forwardPointDistance = geoDistance->Evaluate(transformer.ForwardTransform(*pointsIt), *geo3dPointsIt);
-    otbLogMacro(Debug, << "forwardPointDistance: " << forwardPointDistance);
+    geo3dPoint = transformer.ForwardTransform(*pointsIt);
+    auto forwardPointDistance = geoDistance->Evaluate(geo3dPoint, *geo3dPointsIt);
     if (forwardPointDistance > geoTol)
     {
-      std::cerr << "Geo distance between otbGDALRPCTransformer->ForwardTransform and GCP too high : "
+      std::cerr << "Geo distance between otbGDALRPCTransformer->ForwardTransform and GCP too high :\n"
+		<< "GCP: " << *geo3dPointsIt << " / computed: " << geo3dPoint << "\n"
                 << "dist = " << forwardPointDistance << " (tol = " << geoTol << ")" << std::endl;
       success = false;
     }
 
     // Testing inverse transform
-    otbLogMacro(Debug, << "InverseTransform: " << transformer.InverseTransform(*geo3dPointsIt));
-    auto inversePointDistance = distance->Evaluate(transformer.InverseTransform(*geo3dPointsIt), *pointsIt);
-    otbLogMacro(Debug, << "inversePointDistance: " << inversePointDistance);
+    imagePoint = transformer.InverseTransform(*geo3dPointsIt);
+    auto inversePointDistance = distance->Evaluate(imagePoint, *pointsIt);
     if (inversePointDistance > imgTol)
     {
-      std::cerr << "Distance between otbGDALRPCTransformer->InverseTransform and GCP too high : "
+      std::cerr << "Distance between otbGDALRPCTransformer->InverseTransform and GCP too high :\n"
+		<< "GCP: " << *pointsIt << " / computed: " << imagePoint << "\n"
                 << "dist = " << inversePointDistance << " (tol = " << imgTol << ")" << std::endl;
       success = false;
     }
-
-    ++pointsIt;
-    ++geo3dPointsIt;
   }
   
   if (success)

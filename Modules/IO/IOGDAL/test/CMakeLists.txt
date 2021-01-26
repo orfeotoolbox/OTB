@@ -274,8 +274,8 @@ otb_add_test(NAME ioTvGDALRPCTransformerTest_ikonos
              otbGDALRPCTransformerTest2
              ${INPUTDATA}/ikonos/ikonos-1.geom # Geom
 	     ${INPUTDATA}/ikonos/ikonos-1.gcp2 # GCP
-	     1 # GeoTol
-	     1 # ImgTol
+	     0.04 # GeoTol
+	     0.1 # ImgTol
              )
 
 otb_add_test(NAME ioTvGDALRPCTransformerTest_quickbird
@@ -283,8 +283,8 @@ otb_add_test(NAME ioTvGDALRPCTransformerTest_quickbird
              otbGDALRPCTransformerTest2
              ${INPUTDATA}/QB/qb-1.geom # Geom
 	     ${INPUTDATA}/QB/qb-1.gcp2 # GCP
-	     1 # GeoTol
-	     1 # ImgTol
+	     0.024 # GeoTol
+	     0.1 # ImgTol
              )
 	   
 otb_add_test(NAME ioTvGDALRPCTransformerTest_spot6
@@ -292,8 +292,8 @@ otb_add_test(NAME ioTvGDALRPCTransformerTest_spot6
              otbGDALRPCTransformerTest2
              ${INPUTDATA}/spot6/spot6-1.geom # Geom
 	     ${INPUTDATA}/spot6/spot6-1.gcp2 # GCP
-	     1 # GeoTol
-	     1 # ImgTol
+	     0.06 # GeoTol
+	     0.1 # ImgTol
              )
 
 otb_add_test(NAME ioTvGDALRPCTransformerTest_worldview2
@@ -301,8 +301,8 @@ otb_add_test(NAME ioTvGDALRPCTransformerTest_worldview2
              otbGDALRPCTransformerTest2
              ${INPUTDATA}/wv2/wv2-1.geom # Geom
 	     ${INPUTDATA}/wv2/wv2-1.gcp2 # GCP
-	     1 # GeoTol
-	     1 # ImgTol
+	     0.0185 # GeoTol
+	     0.1 # ImgTol
              )
 
 otb_add_test(NAME ioTvGDALRPCTransformerTest_pl_hnord
@@ -310,7 +310,7 @@ otb_add_test(NAME ioTvGDALRPCTransformerTest_pl_hnord
              otbGDALRPCTransformerTest2
              ${INPUTDATA}/pleiades/pleiades-1.geom # Geom
 	     ${INPUTDATA}/pleiades/pleiades-1.gcp2 # GCP
-	     1 # GeoTol
-	     1 # ImgTol
+	     0.02 # GeoTol
+	     0.1 # ImgTol
              )
 
