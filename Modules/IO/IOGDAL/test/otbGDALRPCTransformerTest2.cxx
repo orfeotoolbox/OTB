@@ -28,6 +28,8 @@
 #include "otbImageMetadataInterfaceFactory.h"
 #include "otbMacro.h"
 #include "otbDEMHandler.h"
+#include "otbImage.h"
+#include "otbImageFileReader.h"
 
 //typedef otb::Image<double> ImageType;
 typedef std::vector<itk::Point<double, 3>> pointsContainerType;
@@ -41,7 +43,7 @@ int otbGDALRPCTransformerTest2(int itkNotUsed(argc), char* argv[])
   otb::GDALRPCTransformer::PointType geo3dPoint;
 
   // Inputs
-  std::string inputGeomFile(argv[1]);
+  std::string rpcFile(argv[1]);
   std::string gcpFileName(argv[2]);
   double geoTol(atof(argv[3]));
   double imgTol(atof(argv[4]));
@@ -49,15 +51,28 @@ int otbGDALRPCTransformerTest2(int itkNotUsed(argc), char* argv[])
   // Tools
   auto distance = DistanceType::New();
   auto geoDistance = GeographicalDistanceType::New();
-  
-  // Fetching the RPC model from the product
+   
   otb::ImageMetadata imd;
-  otb::GeomMetadataSupplier geomSupplier(inputGeomFile);
-  for (int loop = 0 ; loop < geomSupplier.GetNbBands() ; ++loop)
-    imd.Bands.emplace_back();
-  auto imi = otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
-  imd = imi->GetImageMetadata();
-  geomSupplier.FetchRPC(imd);
+  if (0 == rpcFile.compare(rpcFile.length() - 4, 4, "geom"))
+  {
+    // Fetching the RPC model from a GEOM file
+    otb::GeomMetadataSupplier geomSupplier(rpcFile);
+    for (int loop = 0 ; loop < geomSupplier.GetNbBands() ; ++loop)
+      imd.Bands.emplace_back();
+    auto imi = otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
+    imd = imi->GetImageMetadata();
+    geomSupplier.FetchRPC(imd);
+  }
+  else
+  {
+    // Fetching the RPC model from a product
+    typedef otb::Image<double, 2> ImageType;
+    typedef otb::ImageFileReader<ImageType> ImageFileReaderType;
+    auto reader = ImageFileReaderType::New();
+    reader->SetFileName(rpcFile);
+    reader->UpdateOutputInformation();
+    imd = reader->GetOutput()->GetImageMetadata();
+  }
   auto rpcModel = boost::any_cast<otb::Projection::RPCParam>(imd[otb::MDGeom::RPC]);
 
   // Setting the RPCTransformer
