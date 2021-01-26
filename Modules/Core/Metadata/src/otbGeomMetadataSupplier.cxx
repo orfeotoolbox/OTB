@@ -83,8 +83,8 @@ bool GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
     return false;
 
   Projection::RPCParam rpcStruct;
-  rpcStruct.LineOffset    = this->GetAs<double>("line_off");
-  rpcStruct.SampleOffset  = this->GetAs<double>("samp_off");
+  rpcStruct.LineOffset    = this->GetAs<double>("line_off") - 0.5;
+  rpcStruct.SampleOffset  = this->GetAs<double>("samp_off") - 0.5;
   rpcStruct.LatOffset     = this->GetAs<double>("lat_off");
   rpcStruct.LonOffset     = this->GetAs<double>("long_off");
   rpcStruct.HeightOffset  = this->GetAs<double>("height_off");
