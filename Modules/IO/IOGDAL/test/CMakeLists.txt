@@ -270,9 +270,19 @@ otb_add_test(NAME TuGDALRPCTransformerTest
              )
 
 otb_add_test(NAME ioTvGDALRPCTransformerTest_ikonos
+otb_add_test(NAME ioTvGDALRPCTransformerTest_ikonos_geom
              COMMAND otbIOGDALTestDriver
              otbGDALRPCTransformerTest2
              ${INPUTDATA}/ikonos/ikonos-1.geom # Geom
+	     ${INPUTDATA}/ikonos/ikonos-1.gcp2 # GCP
+	     0.04 # GeoTol
+	     0.1 # ImgTol
+             )
+
+otb_add_test(NAME ioTvGDALRPCTransformerTest_ikonos_product
+             COMMAND otbIOGDALTestDriver
+             otbGDALRPCTransformerTest2
+             LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif} # Product
 	     ${INPUTDATA}/ikonos/ikonos-1.gcp2 # GCP
 	     0.04 # GeoTol
 	     0.1 # ImgTol
