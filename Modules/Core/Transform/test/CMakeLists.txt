@@ -23,7 +23,6 @@ otb_module_test()
 set(OTBTransformTests
 otbTransformTestDriver.cxx
 otbGenericRSTransformWithSRID.cxx
-otbCreateInverseForwardSensorModel.cxx
 otbLogPolarTransformResample.cxx
 otbLogPolarTransform.cxx
 otbGeocentricTransform.cxx
@@ -34,6 +33,7 @@ otbInverseLogPolarTransform.cxx
 otbInverseLogPolarTransformResample.cxx
 otbStreamingResampleImageFilterWithAffineTransform.cxx
 otbSarSensorModelAdapterTest.cxx
+otbRPCTransformTest.cxx
 )
 
 add_executable(otbTransformTestDriver ${OTBTransformTests})
@@ -61,38 +61,52 @@ otb_add_test(NAME prTvGenericRSTransformWithSRID COMMAND otbTransformTestDriver
   ${TEMP}/prTvGenericRSTransform_WithSRID.txt
   )
 
-otb_add_test(NAME prTvTestCreateInverseForwardSensorModel_Cevennes COMMAND otbTransformTestDriver
-  --compare-ascii ${EPSILON_4}
-  ${BASELINE_FILES}/prTvTestCreateInverseForwardSensorModel_Cevennes.txt
-  ${TEMP}/prTvTestCreateInverseForwardSensorModel_Cevennes.txt
-  otbCreateInverseForwardSensorModel
-  LARGEINPUT{QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF}
-  ${TEMP}/prTvTestCreateInverseForwardSensorModel_Cevennes.txt
-  3.740934
-  44.107956
+otb_add_test(NAME trTvRPCTransformTest_ikonos_geom COMMAND otbTransformTestDriver
+  otbRPCTransformTest
+  ${INPUTDATA}/ikonos/ikonos-1.geom # Geom
+  ${INPUTDATA}/ikonos/ikonos-1.gcp2 # GCP
+  0.04 # GeoTol
+  0.1 # ImgTol
   )
 
-otb_add_test(NAME prTvTestCreateInverseForwardSensorModel_Toulouse COMMAND otbTransformTestDriver
-  --compare-ascii ${EPSILON_4}
-  ${BASELINE_FILES}/prTvTestCreateInverseForwardSensorModel_Toulouse.txt
-  ${TEMP}/prTvTestCreateInverseForwardSensorModel_Toulouse.txt
-  otbCreateInverseForwardSensorModel
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  ${TEMP}/prTvTestCreateInverseForwardSensorModel_Toulouse.txt
-  1.44348693
-  43.60468837
+otb_add_test(NAME trTvRPCTransformTest_ikonos_product COMMAND otbTransformTestDriver
+  otbRPCTransformTest
+  LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif} # Product
+  ${INPUTDATA}/ikonos/ikonos-1.gcp2 # GCP
+  0.04 # GeoTol
+  0.1 # ImgTol
   )
 
-otb_add_test(NAME prTvTestCreateInverseForwardSensorModel_DEM COMMAND otbTransformTestDriver
-  --compare-ascii ${EPSILON_4}
-  ${BASELINE_FILES}/prTvTestCreateInverseForwardSensorModel_DEM.txt
-  ${TEMP}/prTvTestCreateInverseForwardSensorModel_DEM.txt
-  otbCreateInverseForwardSensorModel
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  ${TEMP}/prTvTestCreateInverseForwardSensorModel_DEM.txt
-  1.44348693
-  43.60468837
-  ${INPUTDATA}/DEM/srtm_directory/N43E001.hgt
+otb_add_test(NAME trTvRPCTransformTest_quickbird COMMAND otbTransformTestDriver
+  otbRPCTransformTest
+  ${INPUTDATA}/QB/qb-1.geom # Geom
+  ${INPUTDATA}/QB/qb-1.gcp2 # GCP
+  0.024 # GeoTol
+  0.1 # ImgTol
+  )
+
+otb_add_test(NAME trTvRPCTransformTest_spot6 COMMAND otbTransformTestDriver
+  otbRPCTransformTest
+  ${INPUTDATA}/spot6/spot6-1.geom # Geom
+  ${INPUTDATA}/spot6/spot6-1.gcp2 # GCP
+  0.06 # GeoTol
+  0.1 # ImgTol
+  )
+
+otb_add_test(NAME trTvRPCTransformTest_worldview2 COMMAND otbTransformTestDriver
+  otbRPCTransformTest
+  ${INPUTDATA}/wv2/wv2-1.geom # Geom
+  ${INPUTDATA}/wv2/wv2-1.gcp2 # GCP
+  0.0185 # GeoTol
+  0.1 # ImgTol
+  )
+
+otb_add_test(NAME trTvRPCTransformTest_pl_hnord COMMAND otbTransformTestDriver
+  otbRPCTransformTest
+  ${INPUTDATA}/pleiades/pleiades-1.geom # Geom
+  ${INPUTDATA}/pleiades/pleiades-1.gcp2 # GCP
+  0.02 # GeoTol
+  0.1 # ImgTol
   )
 
 otb_add_test(NAME bfTvLogPolarTransformResample COMMAND otbTransformTestDriver
