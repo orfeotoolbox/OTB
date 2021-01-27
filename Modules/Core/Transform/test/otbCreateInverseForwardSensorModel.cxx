@@ -51,17 +51,17 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  typedef otb::Image<unsigned int, 2> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::RPCInverseTransform<double, 3, 2> InverseRPCModelType;
-  typedef otb::RPCForwardTransform<double, 2, 3> ForwardRPCModelType;
+  using ImageType = otb::Image<unsigned int, 2>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using ForwardRPCModelType = otb::RPCForwardTransform<double, 2, 3>;
+  using InverseRPCModelType = otb::RPCInverseTransform<double, 2, 2>;
 
   // Allocate pointer
-  InverseRPCModelType::Pointer inverse_rpc_model = InverseRPCModelType::New();
-  ForwardRPCModelType::Pointer forward_rpc_model = ForwardRPCModelType::New();
-  ReaderType::Pointer          reader            = ReaderType::New();
+  auto inverse_rpc_model = InverseRPCModelType::New();
+  auto forward_rpc_model = ForwardRPCModelType::New();
+  auto reader            = ReaderType::New();
 
-  // Set parameters ...
+  // Set parameters
   reader->SetFileName(InputFilename);
 
   // Read metadata
@@ -98,7 +98,6 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
   InverseRPCModelType::InputPointType geoPoint;
   geoPoint[0] = atof(pointX.c_str());
   geoPoint[1] = atof(pointY.c_str());
-  geoPoint[2] = 0.0;
 
   ofs << "Testing geopoint: " << geoPoint << "\n\n";
 
