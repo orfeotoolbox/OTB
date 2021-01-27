@@ -184,7 +184,7 @@ void computeCoefficients(const std::vector<PrecisionType> & f,
     // compute the residual
     auto residual = M.transpose()*w2*(M*coeffs-r);
 
-    auto residualValue = inner_product(residual,residual);
+    res = inner_product(residual,residual);
   }
 
   outCoeffs.assign(coeffs.begin(), coeffs.end());
@@ -266,7 +266,7 @@ void RPCSolver::Solve(const GCPsContainerType& gcpContainer, PrecisionType& rmsE
   {
     const auto & imagePoint = gcp.first;
 
-    minc = std::min(imagePoint[0], minl);
+    minc = std::min(imagePoint[0], minc);
     maxc = std::max(imagePoint[0], maxc);
 
     minl = std::min(imagePoint[1], minl);
@@ -385,7 +385,7 @@ void RPCSolver::Solve(const GCPsContainerType& gcpContainer, PrecisionType& rmsE
                 + (gcp.first[1] - outPoint[1]) * (gcp.first[1] - outPoint[1]);
   }
 
-  rmsError = std::sqrt(rmseAcc)/numberOfPoints;
+  rmsError = std::sqrt(rmseAcc/numberOfPoints);
 }
 
 }
