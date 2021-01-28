@@ -156,21 +156,12 @@ protected:
   /** Generate input requested region */
   void GenerateInputRequestedRegion() override;
 
-  /** Before threaded generate data */
-  void BeforeThreadedGenerateData() override;
-
   /** Threaded generate data */
   void ThreadedGenerateData(const RegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 private:
   MultiDisparityMapTo3DFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
-
-  /** Reference sensor image transform */
-  RSTransformType::Pointer m_ReferenceToGroundTransform;
-
-  /** Moving sensor image transforms */
-  std::vector<RSTransformType::Pointer> m_MovingToGroundTransform;
 
   /** ImageMetadata of reference sensor image */
   const ImageMetadata*   m_ReferenceImageMetadata = nullptr;

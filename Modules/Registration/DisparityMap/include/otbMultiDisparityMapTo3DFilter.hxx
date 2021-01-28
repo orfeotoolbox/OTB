@@ -278,28 +278,26 @@ void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TRes
 }
 
 template <class TDisparityImage, class TOutputImage, class TMaskImage, class TResidueImage>
-void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TResidueImage>::BeforeThreadedGenerateData()
-{
-  // Instantiate all transforms
-  this->m_ReferenceToGroundTransform = RSTransformType::New();
+void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TResidueImage>::ThreadedGenerateData(const RegionType& outputRegionForThread,
+                                                                                                                 itk::ThreadIdType itkNotUsed(threadId))
+{  // Instantiate all transforms
+  auto referenceToGroundTransform = RSTransformType::New();
 
-  this->m_ReferenceToGroundTransform->SetInputImageMetadata(this->m_ReferenceImageMetadata);
-  this->m_ReferenceToGroundTransform->InstantiateTransform();
+  referenceToGroundTransform->SetInputImageMetadata(this->m_ReferenceImageMetadata);
+  referenceToGroundTransform->InstantiateTransform();
 
-  this->m_MovingToGroundTransform.clear();
+  /** Moving sensor image transforms */
+  std::vector<RSTransformType::Pointer> movingToGroundTransform;
+
   for (unsigned int k = 0; k < this->m_MovingImageMetadatas.size(); ++k)
   {
     RSTransformType::Pointer transfo = RSTransformType::New();
     transfo->SetInputImageMetadata(this->m_MovingImageMetadatas[k]);
     transfo->InstantiateTransform();
-    this->m_MovingToGroundTransform.push_back(transfo);
+    movingToGroundTransform.push_back(transfo);
   }
-}
 
-template <class TDisparityImage, class TOutputImage, class TMaskImage, class TResidueImage>
-void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TResidueImage>::ThreadedGenerateData(const RegionType& outputRegionForThread,
-                                                                                                                 itk::ThreadIdType itkNotUsed(threadId))
-{
+
   TOutputImage*  outputPtr  = this->GetOutput();
   TResidueImage* residuePtr = this->GetResidueOutput();
 
@@ -359,10 +357,11 @@ void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TRes
     currentPoint[0] = pointRef[0];
     currentPoint[1] = pointRef[1];
     currentPoint[2] = altiMax;
-    pointA          = this->m_ReferenceToGroundTransform->TransformPoint(currentPoint);
+
+    pointA          = referenceToGroundTransform->TransformPoint(currentPoint);
 
     currentPoint[2] = altiMin;
-    pointB          = this->m_ReferenceToGroundTransform->TransformPoint(currentPoint);
+    pointB          = referenceToGroundTransform->TransformPoint(currentPoint);
 
     pointSetA->SetPoint(0, pointA);
     pointSetB->SetPoint(0, pointB);
@@ -389,9 +388,9 @@ void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TRes
       }
 
       currentPoint[2] = altiMax;
-      pointAi         = this->m_MovingToGroundTransform[k]->TransformPoint(currentPoint);
+      pointAi         = movingToGroundTransform[k]->TransformPoint(currentPoint);
       currentPoint[2] = altiMin;
-      pointBi         = this->m_MovingToGroundTransform[k]->TransformPoint(currentPoint);
+      pointBi         = movingToGroundTransform[k]->TransformPoint(currentPoint);
       pointSetA->SetPoint(nbPoints, pointAi);
       pointSetB->SetPoint(nbPoints, pointBi);
       pointSetA->SetPointData(nbPoints, k + 1);
