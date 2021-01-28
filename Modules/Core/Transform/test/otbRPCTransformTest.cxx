@@ -31,11 +31,13 @@
 #include "otbImageFileReader.h"
 #include "otbRPCForwardTransform.h"
 #include "otbRPCInverseTransform.h"
+#include "otbGenericRSTransform.h"
 
 using PointType = itk::Point<double, 3>;
 using PointsContainerType = std::vector<PointType>;
 using ForwardTransformType = otb::RPCForwardTransform<double, 3, 3>;
 using InverseTransformType = otb::RPCInverseTransform<double, 3, 3>;
+using GenericRSTransformType = otb::GenericRSTransform<double, 3, 3>;
 using DistanceType = itk::Statistics::EuclideanDistanceMetric<PointType>;
 using GeographicalDistanceType = otb::GeographicalDistance<PointType>;
 
@@ -52,8 +54,12 @@ int otbRPCTransformTest(int itkNotUsed(argc), char* argv[])
   double imgTol(atof(argv[4]));
 
   // Tools
-  auto distance = DistanceType::New();
+  auto imgDistance = DistanceType::New();
   auto geoDistance = GeographicalDistanceType::New();
+  OGRSpatialReference oSRS;
+  oSRS.SetWellKnownGeogCS("WGS84");
+  char* wgsRef = nullptr;
+  oSRS.exportToWkt(&wgsRef);
    
   otb::ImageMetadata imd;
   if (0 == rpcFile.compare(rpcFile.length() - 4, 4, "geom"))
@@ -75,13 +81,27 @@ int otbRPCTransformTest(int itkNotUsed(argc), char* argv[])
     reader->SetFileName(rpcFile);
     reader->UpdateOutputInformation();
     imd = reader->GetOutput()->GetImageMetadata();
+    imd.Remove(otb::MDGeom::ProjectionWKT);
   }
 
-  // Setting the forward and inverse transform
+  // Setting the transforms
   auto ForwardTransform = ForwardTransformType::New();
   ForwardTransform->SetMetadata(imd);
+  
   auto InverseTransform = InverseTransformType::New();
   InverseTransform->SetMetadata(imd);
+  
+  auto GenericRSTransform_img2wgs = GenericRSTransformType::New();
+  GenericRSTransform_img2wgs->SetInputProjectionRef("");
+  GenericRSTransform_img2wgs->SetOutputProjectionRef(wgsRef);
+  GenericRSTransform_img2wgs->SetInputImageMetadata(&imd);
+  GenericRSTransform_img2wgs->InstantiateTransform();
+
+  auto GenericRSTransform_wgs2img = GenericRSTransformType::New();
+  GenericRSTransform_wgs2img->SetInputProjectionRef(wgsRef);
+  GenericRSTransform_wgs2img->SetOutputProjectionRef("");
+  GenericRSTransform_wgs2img->SetOutputImageMetadata(&imd);
+  GenericRSTransform_wgs2img->InstantiateTransform();
   
   // Loading the GCP
   PointsContainerType pointsContainer;
@@ -107,32 +127,54 @@ int otbRPCTransformTest(int itkNotUsed(argc), char* argv[])
   }
 
   // For each CGP
+  double distance;
   for (PointsContainerType::iterator pointsIt = pointsContainer.begin(), geo3dPointsIt = geo3dPointsContainer.begin() ;
        (pointsIt != pointsContainer.end()) && (geo3dPointsIt != geo3dPointsContainer.end()) ;
        ++pointsIt, ++geo3dPointsIt)
   {
-    // std::cout << "Point: " << *pointsIt << " GeoPoint: " << *geo3dPointsIt << "\n";
     // Testing forward transform
-    geo3dPoint = ForwardTransform->TransformPoint(*pointsIt);
-    auto forwardPointDistance = geoDistance->Evaluate(geo3dPoint, *geo3dPointsIt);
-    if (forwardPointDistance > geoTol)
+    // geo3dPoint = ForwardTransform->TransformPoint(*pointsIt);
+    // distance = geoDistance->Evaluate(geo3dPoint, *geo3dPointsIt);
+    // if (distance > geoTol)
+    // {
+    //   std::cerr << "Geo distance between ForwardTransform->TransformPoint and GCP too high :\n"
+    // 		<< "GCP: " << *geo3dPointsIt << " / computed: " << geo3dPoint << "\n"
+    //             << "dist = " << distance << " (tol = " << geoTol << ")" << std::endl;
+    //   success = false;
+    // }
+
+    // // Testing inverse transform
+    // imagePoint = InverseTransform->TransformPoint(*geo3dPointsIt);
+    // distance = imgDistance->Evaluate(imagePoint, *pointsIt);
+    // if (distance > imgTol)
+    // {
+    //   std::cerr << "Distance between InverseTransform->TransformPoint and GCP too high :\n"
+    // 		<< "GCP: " << *pointsIt << " / computed: " << imagePoint << "\n"
+    //             << "dist = " << distance << " (tol = " << imgTol << ")" << std::endl;
+    //   success = false;
+    // }
+
+    // Testing image to wgs transform
+    geo3dPoint = GenericRSTransform_img2wgs->TransformPoint(*pointsIt);
+    distance = geoDistance->Evaluate(geo3dPoint, *geo3dPointsIt);
+    if (distance > geoTol)
     {
-      std::cerr << "Geo distance between ForwardTransform->TransformPoint and GCP too high :\n"
+      std::cerr << "Geo distance between GenericRSTransform_img2wgs->TransformPoint and GCP too high :\n"
 		<< "GCP: " << *geo3dPointsIt << " / computed: " << geo3dPoint << "\n"
-                << "dist = " << forwardPointDistance << " (tol = " << geoTol << ")" << std::endl;
+                << "dist = " << distance << " (tol = " << geoTol << ")" << std::endl;
       success = false;
     }
 
-    // Testing inverse transform
-    imagePoint = InverseTransform->TransformPoint(*geo3dPointsIt);
-    auto inversePointDistance = distance->Evaluate(imagePoint, *pointsIt);
-    if (inversePointDistance > imgTol)
-    {
-      std::cerr << "Distance between InverseTransform->TransformPoint and GCP too high :\n"
-		<< "GCP: " << *pointsIt << " / computed: " << imagePoint << "\n"
-                << "dist = " << inversePointDistance << " (tol = " << imgTol << ")" << std::endl;
-      success = false;
-    }
+    // Testing wgs to image transform
+    // imagePoint = GenericRSTransform_wgs2img->TransformPoint(*geo3dPointsIt);
+    // distance = imgDistance->Evaluate(imagePoint, *pointsIt);
+    // if (distance > imgTol)
+    // {
+    //   std::cerr << "Distance between GenericRSTransform_wgs2img->TransformPoint and GCP too high :\n"
+    // 		<< "GCP: " << *pointsIt << " / computed: " << imagePoint << "\n"
+    //             << "dist = " << distance << " (tol = " << imgTol << ")" << std::endl;
+    //   success = false;
+    // }
   }
   
   if (success)
