@@ -23,8 +23,6 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbGenericRSTransformWithSRID);
-  REGISTER_TEST(otbCreateInverseForwardSensorModel);
-//  REGISTER_TEST(otbCreateProjectionWithOSSIM);
   REGISTER_TEST(otbLogPolarTransformResample);
   REGISTER_TEST(otbLogPolarTransform);
   REGISTER_TEST(otbGeocentricTransform);
@@ -36,4 +34,5 @@ void RegisterTests()
   REGISTER_TEST(otbInverseLogPolarTransformResample);
   REGISTER_TEST(otbStreamingResampleImageFilterWithAffineTransform);
   REGISTER_TEST(otbSarSensorModelAdapterTest);
+  REGISTER_TEST(otbRPCTransformTest);
 }
