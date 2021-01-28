@@ -2635,7 +2635,9 @@ void TestHelper::ogrReportOnLayer(OGRLayer* ref_poLayer, const char* ref_pszWHER
   otbCheckValue("GetExtent", ref_poLayer->GetExtent(&ref_oExt, TRUE), test_poLayer->GetExtent(&test_oExt, TRUE), nbdiff, m_ReportErrors);
 
   if (ref_poLayer->GetExtent(&ref_oExt, TRUE) == OGRERR_NONE)
-  {
+  {std::cout << "test1 : " << ref_oExt.MinX << " " << ref_oExt.MinY << " " << ref_oExt.MaxX << " " << ref_oExt.MaxY << std::endl;
+std::cout << "ref1 : " << test_oExt.MinX << " " << test_oExt.MinY << " " << test_oExt.MaxX << " " << test_oExt.MaxY << std::endl;
+
     CheckValueTolerance("Extent: MinX", ref_oExt.MinX, test_oExt.MinX, nbdiff, m_ReportErrors, epsilon);
     CheckValueTolerance("Extent: MinY", ref_oExt.MinY, test_oExt.MinY, nbdiff, m_ReportErrors, epsilon);
     CheckValueTolerance("Extent: MaxX", ref_oExt.MaxX, test_oExt.MaxX, nbdiff, m_ReportErrors, epsilon);
