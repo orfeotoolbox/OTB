@@ -314,7 +314,7 @@ otb_add_test(NAME ioTvGDALRPCTransformerTest_worldview2
 	     0.1 # ImgTol
              )
 
-otb_add_test(NAME ioTvGDALRPCTransformerTest_pl_hnord
+otb_add_test(NAME ioTvGDALRPCTransformerTest_pl_hnord_geom
              COMMAND otbIOGDALTestDriver
              otbGDALRPCTransformerTest2
              ${INPUTDATA}/pleiades/pleiades-1.geom # Geom
@@ -323,3 +323,11 @@ otb_add_test(NAME ioTvGDALRPCTransformerTest_pl_hnord
 	     0.1 # ImgTol
              )
 
+otb_add_test(NAME ioTvGDALRPCTransformerTest_pl_hnord_product
+             COMMAND otbIOGDALTestDriver
+             otbGDALRPCTransformerTest2
+             LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2}
+       ${INPUTDATA}/pleiades/pleiades-1.gcp2 # GCP
+       0.02 # GeoTol
+       0.1 # ImgTol
+             )
