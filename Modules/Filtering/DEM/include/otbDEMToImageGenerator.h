@@ -111,7 +111,6 @@ public:
 
   /**
    * Set/Get input & output projections.
-   * Set/Get input & output keywordlist
    * The macro are not used here cause the input and the output are
    * inversed.
    */
@@ -140,21 +139,21 @@ public:
   /** Set/Get ImageMetadata*/
   const ImageMetadata* GetInputImageMetadata() const
   {
-    return m_Transform->GetInputImageMetadata();
+    return m_Transform->GetOutputImageMetadata();
   }
   void SetInputImageMetadata(const ImageMetadata* imd)
   {
-    m_Transform->SetInputImageMetadata(imd);
+    m_Transform->SetOutputImageMetadata(imd);
     this->Modified();
   }
 
   const ImageMetadata* GetOutputImageMetadata() const
   {
-    return m_Transform->GetOutputImageMetadata();
+    return m_Transform->GetInputImageMetadata();
   }
   void SetOutputImageMetadata(const ImageMetadata* imd)
   {
-    m_Transform->SetOutputImageMetadata(imd);
+    m_Transform->SetInputImageMetadata(imd);
     this->Modified();
   }
 
