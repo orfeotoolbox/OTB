@@ -133,6 +133,7 @@ bool GDALRPCTransformer::ForwardTransform(double* x, double* y, double* z, int n
   if (this->m_Modified)
     this->Update();
   std::vector<int> success(nPointCount);
+  const std::lock_guard<std::mutex> lock(m_Mutex);
   GDALRPCTransform(this->m_TransformArg, false, nPointCount, x, y, z, success.data());
   bool finalSuccess = std::all_of(success.begin(), success.end(), [](int i){return i;});
   return finalSuccess;
@@ -143,6 +144,7 @@ GDALRPCTransformer::PointType GDALRPCTransformer::ForwardTransform(GDALRPCTransf
   if (m_Modified)
     this->Update();
   int success;
+  const std::lock_guard<std::mutex> lock(m_Mutex);
   GDALRPCTransform(this->m_TransformArg, false, 1, &p[0], &p[1], &p[2], &success);
   if (!success)
     throw std::runtime_error("GDALRPCTransform was not able to process the ForwardTransform.");
@@ -158,6 +160,7 @@ bool GDALRPCTransformer::InverseTransform(double* x, double* y, double* z, int n
   if (this->m_Modified)
     this->Update();
   std::vector<int> success(nPointCount);
+  const std::lock_guard<std::mutex> lock(m_Mutex);
   GDALRPCTransform(this->m_TransformArg, true, nPointCount, x, y, z, success.data());
   bool finalSuccess = std::all_of(success.begin(), success.end(), [](int i){return i;});
   return finalSuccess;
@@ -168,6 +171,7 @@ GDALRPCTransformer::PointType GDALRPCTransformer::InverseTransform(GDALRPCTransf
   if (m_Modified)
     this->Update();
   int success;
+  const std::lock_guard<std::mutex> lock(m_Mutex);
   GDALRPCTransform(this->m_TransformArg, true, 1, &p[0], &p[1], &p[2], &success);
   if (!success)
     throw std::runtime_error("GDALRPCTransform was not able to process the InverseTransform.");
