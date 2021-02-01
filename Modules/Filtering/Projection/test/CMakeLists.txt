@@ -129,7 +129,7 @@ endforeach()
 #Other sensor : no keyword check
 set(GEOMGCP
 #"ers2/ers2-1"       #LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}  TODO: Reactivate when new SARModel is implemented
-"spot5/spot5-1"     #LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
+# "spot5/spot5-1"     #LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}  TODO: Reactivate when new SensorModel is implemented
 "geoeye1/geoeye1-1" #LARGEINPUT{GEOEYE/MARCILLOLES/po_350134_bgrn_0000001.tif}
 )
 
