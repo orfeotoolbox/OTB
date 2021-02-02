@@ -2232,7 +2232,7 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
     // fill RPC model
     if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
     {
-      FetchRPC(mds);
+      FetchRPC(mds, -0.5, -0.5);
     }
   }
   // Geom case
