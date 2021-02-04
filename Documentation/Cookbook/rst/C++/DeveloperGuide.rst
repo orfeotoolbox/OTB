@@ -7,6 +7,7 @@ Developer Guide
     Iterators
     Filters
     StreamingAndThreading
+    Metadata
     FunctorImageFilter
     PersistentFilters
     WriteAnApplication
