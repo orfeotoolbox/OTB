@@ -246,8 +246,6 @@ Radarsat2ImageMetadataInterface::UIntVectorType Radarsat2ImageMetadataInterface:
 
 void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds.GetNbBands() == this->m_Imd.Bands.size());
-
   // Metadata read by GDAL
   Fetch(MDTime::AcquisitionStartTime, mds, "ACQUISITION_START_TIME");
   // Fetch(MDTime::AcquisitionStopTime, mds, "PROCESSING_TIME"); 
@@ -284,6 +282,8 @@ void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface & md
     m_Imd.Add(MDNum::RSF, this->GetRSF());
     m_Imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle());
 
+
+    assert(mds.GetNbBands() == this->m_Imd.Bands.size());
 
     SARParam sarParam;
     for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)

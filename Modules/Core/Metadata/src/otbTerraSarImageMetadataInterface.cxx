@@ -1248,8 +1248,6 @@ void TerraSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent ind
 
 void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds.GetNbBands() == this->m_Imd.Bands.size());
-
   // Metadata read by GDAL
   Fetch(MDNum::LineSpacing, mds, "ROW_SPACING");
   Fetch(MDStr::Mode, mds, "IMAGING_MODE");
@@ -1285,6 +1283,8 @@ void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
     m_Imd.Add(MDNum::RSF, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
 
   }
+
+  assert(mds.GetNbBands() == this->m_Imd.Bands.size());
 
   SARParam sarParam;
   for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
