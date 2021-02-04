@@ -72,7 +72,7 @@ int GeomMetadataSupplier::GetNbBands() const
     return ret_vect.size();
   }
 
-  return 0;
+  return 1;
 }
 
 bool GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
