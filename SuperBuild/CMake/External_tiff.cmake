@@ -31,8 +31,8 @@ endif()
 
 ExternalProject_Add(TIFF
   PREFIX TIFF
-  URL "http://download.osgeo.org/libtiff/tiff-4.0.8.tar.gz"
-  URL_MD5 2a7d1c1318416ddf36d5f6fa4600069b
+  URL "https://download.osgeo.org/libtiff/tiff-4.2.0.tar.gz"
+  URL_MD5 2bbf6db1ddc4a59c89d6986b368fc063
   SOURCE_DIR ${TIFF_SB_SRC}
   BINARY_DIR ${TIFF_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -64,10 +64,10 @@ ExternalProject_Add(TIFF
   LOG_BUILD 1
   LOG_INSTALL 1
   )
-    
+
 SUPERBUILD_PATCH_SOURCE(TIFF)
 
-#do we really need these variables? 
+#do we really need these variables?
 set(_SB_TIFF_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
   set(_SB_TIFF_LIBRARY ${SB_INSTALL_PREFIX}/lib/tiff.lib)

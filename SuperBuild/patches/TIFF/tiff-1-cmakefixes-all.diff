@@ -4,7 +4,7 @@ diff -burN tiff-4.0.8.orig/CMakeLists.txt tiff-4.0.8/CMakeLists.txt
 @@ -601,21 +601,35 @@
    set(CXX_SUPPORT TRUE)
  endif()
- 
+
 -# OpenGL and GLUT
 -find_package(OpenGL)
 -find_package(GLUT)
@@ -45,7 +45,7 @@ diff -burN tiff-4.0.8.orig/CMakeLists.txt tiff-4.0.8/CMakeLists.txt
 +  set(HAVE_OPENGL_GL_H FALSE)
 +  set(HAVE_OPENGL_GLU_H FALSE)
 +endif() #with_opengl
- 
+
 +
  # Win32 IO
  set(win32_io FALSE)
@@ -56,8 +56,8 @@ diff -burN tiff-4.0.8.orig/CMakeLists.txt tiff-4.0.8/CMakeLists.txt
  endif()
 -
  #report_values(TIFF_INCLUDES TIFF_LIBRARY_DEPS)
- 
-+# NEED_LIBPORT is later updated in port/CMakeLists.txt and 
+
++# NEED_LIBPORT is later updated in port/CMakeLists.txt and
 +# used in libtiff/CMakeLists.txt to generate tif_config.h.
 +# see libtiff/tif_config.h.cmake.in for usage
 +set(NEED_LIBPORT FALSE)
@@ -94,7 +94,7 @@ diff -burN tiff-4.0.8.orig/CMakeLists.txt tiff-4.0.8/CMakeLists.txt
 +  add_subdirectory(html)
 +endif()
  #message(STATUS "EXTRA_DIST: ${EXTRA_DIST}")
- 
+
  message(STATUS "")
 diff -burN tiff-4.0.8.orig/contrib/iptcutil/iptcutil.c tiff-4.0.8/contrib/iptcutil/iptcutil.c
 --- tiff-4.0.8.orig/contrib/iptcutil/iptcutil.c	Thu Jul 20 12:53:54 2017
@@ -102,17 +102,17 @@ diff -burN tiff-4.0.8.orig/contrib/iptcutil/iptcutil.c tiff-4.0.8/contrib/iptcut
 @@ -19,7 +19,7 @@
  # include <fcntl.h>
  #endif
- 
+
 -#ifdef WIN32
 +#ifdef _MSC_VER
  #define STRNICMP strnicmp
- #else 
+ #else
  #define STRNICMP strncasecmp
 diff -burN tiff-4.0.8.orig/libtiff/tif_config.h.cmake.in tiff-4.0.8/libtiff/tif_config.h.cmake.in
 --- tiff-4.0.8.orig/libtiff/tif_config.h.cmake.in	Thu Jul 20 12:53:54 2017
 +++ tiff-4.0.8/libtiff/tif_config.h.cmake.in	Thu Jul 20 13:15:21 2017
 @@ -259,3 +259,9 @@
- 
+
  /* Define to `unsigned int' if <sys/types.h> does not define. */
  #undef size_t
 +
@@ -121,43 +121,3 @@ diff -burN tiff-4.0.8.orig/libtiff/tif_config.h.cmake.in tiff-4.0.8/libtiff/tif_
 +#endif
 +
 +#cmakedefine NEED_LIBPORT 1
-diff -burN tiff-4.0.8.orig/port/CMakeLists.txt tiff-4.0.8/port/CMakeLists.txt
---- tiff-4.0.8.orig/port/CMakeLists.txt	Thu Jul 20 12:53:54 2017
-+++ tiff-4.0.8/port/CMakeLists.txt	Thu Jul 20 13:15:32 2017
-@@ -32,25 +32,35 @@
-   strtoull.c)
- 
- set(port_USED_FILES ${port_SOURCES} ${port_HEADERS})
--
-+  set(LIBPORT_USED FALSE)
- if(NOT HAVE_GETOPT)
-   list(APPEND port_USED_FILES getopt.c)
-+    set(LIBPORT_USED TRUE)
- endif()
- if(NOT HAVE_LFIND)
-   list(APPEND port_USED_FILES lfind.c)
-+    set(LIBPORT_USED TRUE)
- endif()
- if(MSVC AND NOT HAVE_SNPRINTF)
-   list(APPEND port_USED_FILES snprintf.c)
-+    set(LIBPORT_USED TRUE)
- endif()
- if(NOT HAVE_STRCASECMP)
-   list(APPEND port_USED_FILES strcasecmp.c)
-+    set(LIBPORT_USED TRUE)
- endif()
- if(NOT HAVE_STRTOUL)
-   list(APPEND port_USED_FILES strtoul.c)
-+    set(LIBPORT_USED TRUE)
- endif()
- if(NOT HAVE_STRTOULL)
-   list(APPEND port_USED_FILES strtoull.c)
-+  set(LIBPORT_USED TRUE)
- endif()
-+
-+# We set NEED_LIBPORT with PARENT_SCOPE 
-+# because it is used in libtiff/CMakeLists.txt
-+set(NEED_LIBPORT ${LIBPORT_USED} PARENT_SCOPE)
- 
- add_library(port STATIC ${port_USED_FILES})
- 
