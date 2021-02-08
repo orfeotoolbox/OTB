@@ -8,6 +8,7 @@ Developer Guide
     Filters
     StreamingAndThreading
     Metadata
+    DEM
     SensorModel
     FunctorImageFilter
     PersistentFilters
