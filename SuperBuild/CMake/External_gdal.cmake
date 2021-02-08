@@ -112,10 +112,10 @@ if(UNIX)
     ${GDAL_SB_EXTRA_OPTIONS}
     )
 
-  # For now gdal is built if Superbuild has find python... And only on UNIX 
+  # For now gdal is built if Superbuild has find python... And only on UNIX
   # That might be a problem
   # User will not be able to override this...
-  if ( OTB_WRAP_PYTHON AND PYTHON_EXECUTABLE)
+  if(OTB_WRAP_PYTHON AND PYTHON_EXECUTABLE)
     list(APPEND GDAL_CONFIGURE_COMMAND "--with-python=${PYTHON_EXECUTABLE}")
   endif()
 
@@ -128,11 +128,11 @@ else(MSVC)
   foreach(opt_line ${GDAL_SB_EXTRA_OPTIONS})
     file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "${opt_line}\r\n")
   endforeach()
-  
+
   if(OTB_TARGET_SYSTEM_ARCH_IS_X64)
     file(APPEND "${CMAKE_BINARY_DIR}/nmake_gdal_extra.opt" "WIN64=YES\r\n")
   endif()
-  
+
   set(GDAL_CONFIGURE_COMMAND ${CMAKE_COMMAND} -E touch  ${CMAKE_BINARY_DIR}/configure)
   set(GDAL_BUILD_COMMAND nmake
     /f ${GDAL_SB_SRC}/makefile.vc
@@ -149,8 +149,8 @@ endif()
 
 ExternalProject_Add(GDAL
   PREFIX GDAL
-  URL "http://download.osgeo.org/gdal/3.1.0/gdal-3.1.0.tar.gz"
-  URL_MD5 bda0f002cd63b51c8d2f1b1400daffa9
+  URL "https://download.osgeo.org/gdal/3.2.1/gdal-3.2.1.tar.xz"
+  URL_MD5 cf7fe042403e73ad991aa5797247b586
   SOURCE_DIR ${GDAL_SB_SRC}
   BINARY_DIR ${GDAL_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
