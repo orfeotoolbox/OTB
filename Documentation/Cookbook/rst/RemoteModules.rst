@@ -81,13 +81,6 @@ List of available modules
         + License: All rights reserverd (without license granting more rights, copyright fully applies, this component can not be used without the explicit and prior authorization of the copyright owner).
         + Description: This module contains a FeatureSelection application based on the `FST3Lib <http://fst.utia.cz/>`__.
 
-  - **GKSVM** : Generic kernel SVM
-
-        + Repository:  https://github.com/jmichel-otb/GKSVM 
-        + Author: Julien Michel 
-        + License: All rights reserverd (without license granting more rights, copyright fully applies, this component can not be used without the explicit and prior authorization of the copyright owner).
-        + Description: GKSVM contains a modified version of libsvm to support generic kernels, as well as a set of Orfeo ToolBox classes to use them. This code once belonged to Orfeo ToolBox source code, but has been removed to enforce the new third party policy (no modified third party in source code). Code has been turned into a legacy remote module.
-
   - **OTBTensorflow (otbtf)** : generic, multi purpose deep learning framework, targeting remote sensing images processing
 
         + Repository:  https://gitlab.irstea.fr/remi.cresson/otbtf 
@@ -519,6 +512,39 @@ if your repository is on Gitlab, you can make a `mirror of your repo to github <
 
 To modify the travis.yml: use the `manual <https://docs.travis-ci.com/user/customizing-the-build/>`__
 
+You have two options to use OTB in your CI :
+
+* Get an installer from the website and install it in the ``install:`` part of travis.yml. You will have to build your module as standalone
+
+.. code-block:: bash
+
+  env:
+    global:
+      - OTB_URL=https://www.orfeo-toolbox.org/packages/archives/OTB
+      - OTB_VER=7.2.0
+      - OTB_OS=Linux64
+      - OTB_PKG_EXT=run
+
+  install:
+    - export OTB_PKG="OTB-${OTB_VER}-${OTB_OS}.${OTB_PKG_EXT}"
+    - wget ${OTB_URL}/${OTB_PKG}
+    - chmod +x ${OTB_PKG}
+    - ./${OTB_PKG} --target xdk
+
+  script:
+    - command to build and test your module here
+
+* Build a docker image containing an otb build tree. Run this docker image in travis and build your module against this build tree
+
+.. code-block:: bash
+
+  before_script:
+    - docker pull YourOTBImage
+
+  script:
+    - docker run -it YourOTBImage /bin/bash -c "ctest -VV -S ci.cmake"
+
+
 In the before script section, you have to set the environment variables. For this you can create a script called activate_env.sh in your main module folder which contains:
 
 .. code-block:: bash
@@ -532,12 +558,14 @@ and call it in travis.yml:
 
 .. code-block:: bash
 
-  before-script: source activate_env.sh
+  before-script: 
+     - source activate_env.sh
 
 You can test your module with one line in the travis.yml:
 
 .. code-block:: bash
 
-  ctest -VV -S ci.cmake
+  script:
+     - ctest -VV -S ci.cmake
 
 This command builds your project and launches the tests.
