@@ -204,10 +204,7 @@ private:
 
   /** Pointer to the geoid dataset */
   GDALDataset* m_GeoidDS;
-  
-  /** Pointer to the sifted dataset */
-  GDALDataset* m_ShiftedDS;
-  
+
   /** Default height above elliposid, used when no DEM or geoid height is available. */
   double m_DefaultHeightAboveEllipsoid;
 

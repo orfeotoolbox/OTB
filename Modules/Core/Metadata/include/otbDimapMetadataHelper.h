@@ -75,17 +75,7 @@ struct DimapData
 class OTBMetadata_EXPORT DimapMetadataHelper
 {
 public:
-  enum DIMAPVersion
-  {
-    UNKNOWN,
-    V1,
-    V2
-  };
-  
-  DimapMetadataHelper() : m_DimapLevel(DIMAPVersion::UNKNOWN)
-  {
-  }
-  
+  DimapMetadataHelper() = default;
   
   const DimapData & GetDimapData() const
   {
@@ -500,10 +490,6 @@ private:
     return vector[0];
 
   }
-
-
-
-  DIMAPVersion m_DimapLevel;
 
   DimapData m_Data;
 };
