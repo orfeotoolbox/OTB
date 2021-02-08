@@ -28,7 +28,7 @@
 
 // The \doxygen{otb}{GCPsToRPCSensorModelImageFilter} estimates a RPC
 // sensor model from a list of user defined GCPs. Internally, it uses
-// an ossimRpcSolver, which performs the estimation using the well
+// an RpcSolver, which performs the estimation using the well
 // known least-square method.
 
 // Let's look at the minimal code required to use this
@@ -119,7 +119,7 @@ int main(int argc, char* argv[])
   rpcEstimator->GetOutput()->UpdateOutputInformation();
 
   // The result of the RPC model estimation and the residual ground
-  // error is then save in a txt file. Note that This filter does
+  // error is then saved in a txt file. Note that This filter does
   // not modify the image buffer, but only the metadata.
 
   std::ofstream ofs;
@@ -129,7 +129,9 @@ int main(int argc, char* argv[])
   ofs.setf(std::ios::fixed, std::ios::floatfield);
   ofs.precision(10);
 
-  ofs << (ImageType::Pointer)rpcEstimator->GetOutput() << std::endl;
+  auto outputRPC = boost::any_cast<otb::Projection::RPCParam>(rpcEstimator->GetOutput()->GetImageMetadata()[otb::MDGeom::RPC]);
+
+  ofs << outputRPC.ToJSON() << std::endl;
   ofs << "Residual ground error: " << rpcEstimator->GetRMSGroundError() << std::endl;
   ofs.close();
 

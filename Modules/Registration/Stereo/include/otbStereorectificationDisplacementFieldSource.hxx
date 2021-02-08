@@ -124,7 +124,7 @@ void StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>::Gene
   // Set-up a transform to use the DEMHandler
   typedef otb::GenericRSTransform<> RSTransform2DType;
   RSTransform2DType::Pointer        leftToGroundTransform = RSTransform2DType::New();
-  leftToGroundTransform->SetInputKeywordList(m_LeftImage->GetImageKeywordlist());
+  leftToGroundTransform->SetInputImageMetadata(&(m_LeftImage->GetImageMetadata()));
 
   leftToGroundTransform->InstantiateTransform();
 
@@ -132,13 +132,13 @@ void StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>::Gene
   OutputImageType* leftDFPtr  = this->GetLeftDisplacementFieldOutput();
   OutputImageType* rightDFPtr = this->GetRightDisplacementFieldOutput();
 
-  // Set up  the RS transforms
-  m_LeftToRightTransform->SetInputKeywordList(m_LeftImage->GetImageKeywordlist());
-  m_LeftToRightTransform->SetOutputKeywordList(m_RightImage->GetImageKeywordlist());
+  // Set up the RS transforms
+  m_LeftToRightTransform->SetInputImageMetadata(&(m_LeftImage->GetImageMetadata()));
+  m_LeftToRightTransform->SetOutputImageMetadata(&(m_RightImage->GetImageMetadata()));
   m_LeftToRightTransform->InstantiateTransform();
 
-  m_RightToLeftTransform->SetInputKeywordList(m_RightImage->GetImageKeywordlist());
-  m_RightToLeftTransform->SetOutputKeywordList(m_LeftImage->GetImageKeywordlist());
+  m_RightToLeftTransform->SetInputImageMetadata(&(m_RightImage->GetImageMetadata()));
+  m_RightToLeftTransform->SetOutputImageMetadata(&(m_LeftImage->GetImageMetadata()));
   m_RightToLeftTransform->InstantiateTransform();
 
   // Now, we must determine the optimized size, spacing and origin of the
@@ -301,7 +301,7 @@ void StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>::Gene
   typedef otb::GenericRSTransform<> RSTransform2DType;
   RSTransform2DType::Pointer        leftToGroundTransform = RSTransform2DType::New();
 
-  leftToGroundTransform->SetInputKeywordList(m_LeftImage->GetImageKeywordlist());
+  leftToGroundTransform->SetInputImageMetadata(&(m_LeftImage->GetImageMetadata()));
 
   leftToGroundTransform->InstantiateTransform();
 

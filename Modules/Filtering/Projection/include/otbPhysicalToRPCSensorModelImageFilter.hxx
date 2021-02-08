@@ -65,7 +65,7 @@ void PhysicalToRPCSensorModelImageFilter<TImage>::GenerateOutputInformation()
     // Build the grid
     // Generate GCPs from physical sensor model
     RSTransformPointerType rsTransform = RSTransformType::New();
-    rsTransform->SetInputKeywordList(input->GetImageKeywordlist());
+    rsTransform->SetInputImageMetadata(&(input->GetImageMetadata()));
     rsTransform->InstantiateTransform();
 
     // Compute the size of the grid
@@ -91,9 +91,8 @@ void PhysicalToRPCSensorModelImageFilter<TImage>::GenerateOutputInformation()
     otbGenericMsgDebugMacro(<< "RPC model estimated. RMS ground error: " << m_GCPsToSensorModelFilter->GetRMSGroundError()
                             << ", Mean error: " << m_GCPsToSensorModelFilter->GetMeanError());
 
-    // Encapsulate the keywordlist
-    itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, m_GCPsToSensorModelFilter->GetKeywordlist());
+
+    this->GetOutput()->SetImageMetadata(m_GCPsToSensorModelFilter->GetOutput()->GetImageMetadata());
 
     // put the flag to true
     m_OutputInformationGenerated = true;

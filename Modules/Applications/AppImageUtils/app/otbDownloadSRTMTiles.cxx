@@ -291,7 +291,7 @@ private:
       auto inImage = inList->GetNthElement(i);
 
       auto rsTransformToWGS84 = RSTransformType::New();
-      rsTransformToWGS84->SetInputKeywordList(inImage->GetImageKeywordlist());
+      rsTransformToWGS84->SetInputImageMetadata(&(inImage->GetImageMetadata()));
       rsTransformToWGS84->SetInputProjectionRef(inImage->GetProjectionRef());
       rsTransformToWGS84->SetOutputProjectionRef(static_cast<std::string>(otb::SpatialReference::FromWGS84().ToWkt()));
       rsTransformToWGS84->InstantiateTransform();

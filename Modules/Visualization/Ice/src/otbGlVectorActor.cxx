@@ -663,11 +663,12 @@ void GlVectorActor::UpdateTransforms()
   if(settings->GetUseProjection())
     {
     m_ViewportToVectorTransform->SetInputProjectionRef(settings->GetWkt());
-    m_ViewportToVectorTransform->SetInputKeywordList(settings->GetKeywordList());
+    //TODO OSSIM: Replace KeywordList by ImageMetadata in the settings object
+    //m_ViewportToVectorTransform->SetInputKeywordList(settings->GetKeywordList());
     m_ViewportToVectorTransform->SetOutputProjectionRef((m_OGRDataSource->GetLayerChecked(m_CurrentLayer).GetProjectionRef()));
     
     m_VectorToViewportTransform->SetOutputProjectionRef(settings->GetWkt());
-    m_VectorToViewportTransform->SetOutputKeywordList(settings->GetKeywordList());
+    //TODO OSSIM: m_VectorToViewportTransform->SetOutputKeywordList(settings->GetKeywordList());
     m_VectorToViewportTransform->SetInputProjectionRef((m_OGRDataSource->GetLayerChecked(m_CurrentLayer).GetProjectionRef()));
     }
   m_ViewportToVectorTransform->InstantiateTransform();

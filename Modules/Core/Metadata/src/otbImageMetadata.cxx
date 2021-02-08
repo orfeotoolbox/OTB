@@ -19,6 +19,8 @@
  */
 
 #include "otbImageMetadata.h"
+#include "otbSpatialReference.h"
+
 namespace otb
 {
 // ---------------------- [ImageMetadataBase] ------------------------------
@@ -43,24 +45,10 @@ ImageMetadataBase::ImageMetadataBase(DictType<MDGeom, boost::any> geometryKeys,
 	ExtraKeys(std::move(extraKeys))
 {}
 
-bool ImageMetadataBase::HasSensorGeometry() const
+// -------------------- Geom utility function ----------------------------
+const boost::any & ImageMetadataBase::operator[](const MDGeom& key) const
 {
-  return Has(MDGeom::RPC) || Has(MDGeom::SAR) || Has(MDGeom::SensorGeometry);
-}
-
-bool ImageMetadataBase::HasProjectedGeometry() const
-{
-  return Has(MDGeom::ProjectionWKT) || Has(MDGeom::ProjectionEPSG) || Has(MDGeom::ProjectionProj);
-}
-
-size_t ImageMetadataBase::RemoveSensorGeometry()
-{
-  return Remove(MDGeom::RPC) + Remove(MDGeom::SAR) + Remove(MDGeom::SensorGeometry);
-}
-
-size_t ImageMetadataBase::RemoveProjectedGeometry()
-{
-  return Remove(MDGeom::ProjectionWKT) + Remove(MDGeom::ProjectionEPSG) + Remove(MDGeom::ProjectionProj);
+  return GeometryKeys.at(key);
 }
 
 const Projection::GCPParam & ImageMetadataBase::GetGCPParam() const
@@ -68,23 +56,47 @@ const Projection::GCPParam & ImageMetadataBase::GetGCPParam() const
   return boost::any_cast<const Projection::GCPParam &>(GeometryKeys.at(MDGeom::GCP));
 }
 
+std::string ImageMetadataBase::GetProjectedGeometry() const
+{
+  if (this->Has(MDGeom::ProjectionWKT))
+  {
+    // MDGeom::ProjectionWKT is a std::string stored as a boost::any
+    return boost::any_cast<std::string>(GeometryKeys.at(MDGeom::ProjectionWKT));
+  }
+  else if (this->Has(MDGeom::ProjectionEPSG))
+  {
+    // MDGeom::ProjectionEPSG is an integer stored as a boost::any
+    return std::to_string(boost::any_cast<int>(GeometryKeys.at(MDGeom::ProjectionEPSG)));
+  }
+  else if (this->Has(MDGeom::ProjectionProj))
+  {
+    // MDGeom::ProjectionProj is a std::string stored as a boost::any
+    return boost::any_cast<std::string>(GeometryKeys.at(MDGeom::ProjectionProj));
+  }
+  else
+    return "";
+}
+
 std::string ImageMetadataBase::GetProjectionWKT() const
 {
-  auto projWKT = GeometryKeys.find(MDGeom::ProjectionWKT);
-  if (projWKT !=  GeometryKeys.end())
+  auto theProj = this->GetProjectedGeometry();
+  if (theProj.empty())
+    return "";
+  else
+    return SpatialReference::FromDescription(theProj).ToWkt();
+}
+
+std::string ImageMetadataBase::GetProjectionProj() const
+{
+  auto proj = GeometryKeys.find(MDGeom::ProjectionProj);
+  if (proj !=  GeometryKeys.end())
   {
-    return boost::any_cast<std::string>(projWKT->second);
+    return boost::any_cast<std::string>(proj->second);
   }
   else
   {
     return "";
   }
-}
-
-// -------------------- Geom utility function ----------------------------
-const boost::any & ImageMetadataBase::operator[](const MDGeom& key) const
-{
-  return GeometryKeys.at(key);
 }
 
 void ImageMetadataBase::Add(const MDGeom& key, const boost::any &value)
@@ -97,9 +109,29 @@ size_t ImageMetadataBase::Remove(const MDGeom& key)
   return GeometryKeys.erase(key);
 }
 
+size_t ImageMetadataBase::RemoveSensorGeometry()
+{
+  return Remove(MDGeom::RPC) + Remove(MDGeom::SAR) + Remove(MDGeom::SensorGeometry);
+}
+
+size_t ImageMetadataBase::RemoveProjectedGeometry()
+{
+  return Remove(MDGeom::ProjectionWKT) + Remove(MDGeom::ProjectionEPSG) + Remove(MDGeom::ProjectionProj);
+}
+
 bool ImageMetadataBase::Has(const MDGeom& key) const
 {
   return (GeometryKeys.find(key) != GeometryKeys.end());
+}
+
+bool ImageMetadataBase::HasSensorGeometry() const
+{
+  return Has(MDGeom::RPC) || Has(MDGeom::SAR) || Has(MDGeom::SensorGeometry);
+}
+
+bool ImageMetadataBase::HasProjectedGeometry() const
+{
+  return Has(MDGeom::ProjectionWKT) || Has(MDGeom::ProjectionEPSG) || Has(MDGeom::ProjectionProj);
 }
 
 // -------------------- Double utility function ----------------------------
@@ -468,7 +500,7 @@ void ImageMetadata::Merge(const ImageMetadata& imd)
 {
   ImageMetadataBase::Fuse(imd);
   
-  for (unsigned int i = 0; i < std::min(Bands.size(), imd.Bands.size()); i++)
+  for (unsigned int i = 0; i < std::min(Bands.size(), imd.Bands.size()); ++i)
   {
     Bands[i].Fuse(imd.Bands[i]);
   }

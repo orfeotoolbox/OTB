@@ -221,7 +221,7 @@ int otbVectorDataIntoImageProjectionFilterCompareImplTest(int itkNotUsed(argc), 
   vproj = VectorDataProjectionFilterType::New();
   vproj->SetInput(vdextract->GetOutput());
   vproj->SetInputProjectionRef(vdReader->GetOutput()->GetProjectionRef());
-  vproj->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+  vproj->SetOutputImageMetadata(&reader->GetOutput()->GetImageMetadata());
   vproj->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
   vproj->SetOutputOrigin(reader->GetOutput()->GetOrigin());
   vproj->SetOutputSpacing(reader->GetOutput()->GetSignedSpacing());

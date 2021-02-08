@@ -40,6 +40,7 @@ otb_module(OTBTransform
     OTBImageManipulation
     OTBOssim
     OTBTestKernel
+    OTBProjection
 
   DESCRIPTION
     "${DOCUMENTATION}"

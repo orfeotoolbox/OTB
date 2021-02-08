@@ -111,7 +111,6 @@ public:
 
   /**
    * Set/Get input & output projections.
-   * Set/Get input & output keywordlist
    * The macro are not used here cause the input and the output are
    * inversed.
    */
@@ -137,27 +136,25 @@ public:
     return m_Transform->GetInputProjectionRef();
   }
 
-  /** Set/Get Input Keywordlist*/
-  void SetInputKeywordList(const ImageKeywordlist& kwl)
+  /** Set/Get ImageMetadata*/
+  const ImageMetadata* GetInputImageMetadata() const
   {
-    m_Transform->SetOutputKeywordList(kwl);
-    this->Modified();
+    return m_Transform->GetOutputImageMetadata();
   }
-  const ImageKeywordlist GetInputKeywordList()
+  void SetInputImageMetadata(const ImageMetadata* imd)
   {
-    return m_Transform->GetOutputKeywordList();
-  }
-
-  /** Set/Get output Keywordlist*/
-  void SetOutputKeywordList(const ImageKeywordlist& kwl)
-  {
-    m_Transform->SetInputKeywordList(kwl);
+    m_Transform->SetOutputImageMetadata(imd);
     this->Modified();
   }
 
-  const ImageKeywordlist GetOutputKeywordList()
+  const ImageMetadata* GetOutputImageMetadata() const
   {
-    return m_Transform->GetInputKeywordList();
+    return m_Transform->GetInputImageMetadata();
+  }
+  void SetOutputImageMetadata(const ImageMetadata* imd)
+  {
+    m_Transform->SetInputImageMetadata(imd);
+    this->Modified();
   }
 
   /** Useful to set the output parameters from an existing image*/
@@ -169,7 +166,7 @@ public:
     // this->SetOutputStartIndex ( image->GetLargestPossibleRegion().GetIndex() );
     this->SetOutputSize(image->GetLargestPossibleRegion().GetSize());
     this->SetOutputProjectionRef(image->GetProjectionRef());
-    this->SetOutputKeywordList(image->GetImageKeywordlist());
+    this->SetOutputImageMetadata(&(image->GetImageMetadata()));
 
     InstantiateTransform();
   }

@@ -689,8 +689,8 @@ ImageMetadataInterfaceBase::Fetch(
   return m_Imd[key];
 }
 
-const boost::any& ImageMetadataInterfaceBase::FetchRPC(
-  const MetadataSupplierInterface & mds)
+const boost::any& ImageMetadataInterfaceBase::FetchRPC(const MetadataSupplierInterface & mds,
+						       const double lineOffset, const double sampleOffset)
 {
   Projection::RPCParam rpcStruct;
 
@@ -723,8 +723,8 @@ const boost::any& ImageMetadataInterfaceBase::FetchRPC(
     }
   };
 
-  rpcStruct.LineOffset    = GetMetadataWithoutUnit("RPC/LINE_OFF", mds);
-  rpcStruct.SampleOffset  = GetMetadataWithoutUnit("RPC/SAMP_OFF", mds);
+  rpcStruct.LineOffset    = GetMetadataWithoutUnit("RPC/LINE_OFF", mds) + lineOffset;
+  rpcStruct.SampleOffset  = GetMetadataWithoutUnit("RPC/SAMP_OFF", mds) + sampleOffset;
   rpcStruct.LatOffset     = GetMetadataWithoutUnit("RPC/LAT_OFF", mds);
   rpcStruct.LonOffset     = GetMetadataWithoutUnit("RPC/LONG_OFF", mds);
   rpcStruct.HeightOffset  = GetMetadataWithoutUnit("RPC/HEIGHT_OFF", mds);
@@ -750,6 +750,8 @@ const boost::any& ImageMetadataInterfaceBase::FetchRPC(
   std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleDen);
 
   m_Imd.Add(MDGeom::RPC, rpcStruct);
+  assert(m_Imd.Has(MDGeom::RPC));
+  assert(rpcStruct == boost::any_cast<Projection::RPCParam>(m_Imd[MDGeom::RPC]));
   return m_Imd[MDGeom::RPC];
 }
 

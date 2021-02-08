@@ -25,6 +25,7 @@
 
 #include "otbImageList.h"
 #include "otbVectorImageToImageListFilter.h"
+#include "otbDEMHandler.h"
 
 #include "otbDEMHandler.h"
 

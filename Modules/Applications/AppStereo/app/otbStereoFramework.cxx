@@ -1141,11 +1141,11 @@ private:
       }
 
       // transform disparity into 3D map
-      m_MultiDisparityTo3DFilterList[i]->SetReferenceKeywordList(inleft->GetImageKeywordlist());
+      m_MultiDisparityTo3DFilterList[i]->SetReferenceImageMetadata(&(inleft->GetImageMetadata()));
       m_MultiDisparityTo3DFilterList[i]->SetNumberOfMovingImages(1);
       m_MultiDisparityTo3DFilterList[i]->SetHorizontalDisparityMapInput(0, hDispOutput2);
       m_MultiDisparityTo3DFilterList[i]->SetVerticalDisparityMapInput(0, vDispOutput2);
-      m_MultiDisparityTo3DFilterList[i]->SetMovingKeywordList(0, inright->GetImageKeywordlist());
+      m_MultiDisparityTo3DFilterList[i]->SetMovingImageMetadata(0, &(inright->GetImageMetadata()));
       m_MultiDisparityTo3DFilterList[i]->SetDisparityMaskInput(0, translatedMaskImage);
       m_MultiDisparityTo3DFilterList[i]->UpdateOutputInformation();
 

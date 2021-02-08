@@ -47,8 +47,7 @@ DEMToImageGenerator<TDEMImage>::DEMToImageGenerator()
 template <class TDEMImage>
 void DEMToImageGenerator<TDEMImage>::GenerateOutputInformation()
 {
-  DEMImageType* output;
-  output = this->GetOutput(0);
+  DEMImageType* output = this->GetOutput(0);
 
   IndexType start;
   start[0] = 0;
@@ -63,17 +62,10 @@ void DEMToImageGenerator<TDEMImage>::GenerateOutputInformation()
   output->SetSignedSpacing(m_OutputSpacing);
   output->SetOrigin(m_OutputOrigin);
 
-
-  // Get the Output MetaData Dictionary
-  itk::MetaDataDictionary& dict = output->GetMetaDataDictionary();
-
-  // Encapsulate the   metadata set by the user
-  itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, m_Transform->GetInputProjectionRef());
-
-  if (this->GetOutputKeywordList().GetSize() > 0)
-  {
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, m_Transform->GetInputKeywordList());
-  }
+  // Add the metadata set by the user to the output
+  output->m_Imd.Add(MDGeom::ProjectionProj, std::string(m_Transform->GetInputProjectionRef()));
+  if (m_Transform->GetInputImageMetadata() != nullptr)
+    output->m_Imd.Merge(*m_Transform->GetInputImageMetadata());
 }
 
 // InstantiateTransform method

@@ -200,8 +200,9 @@ void DisparityMapTo3DFilter<TDisparityImage, TOutputImage, TEpipolarGridImage, T
   m_LeftToGroundTransform  = RSTransformType::New();
   m_RightToGroundTransform = RSTransformType::New();
 
-  m_LeftToGroundTransform->SetInputKeywordList(m_LeftKeywordList);
-  m_RightToGroundTransform->SetInputKeywordList(m_RightKeywordList);
+  //TODO: Replace KeywordLists by ImageMetadatas
+  //m_LeftToGroundTransform->SetInputKeywordList(m_LeftKeywordList);
+  //m_RightToGroundTransform->SetInputKeywordList(m_RightKeywordList);
 
   m_LeftToGroundTransform->InstantiateTransform();
   m_RightToGroundTransform->InstantiateTransform();

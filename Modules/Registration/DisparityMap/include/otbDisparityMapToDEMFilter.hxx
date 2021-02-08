@@ -211,11 +211,11 @@ void DisparityMapToDEMFilter<TDisparityImage, TInputImage, TOutputDEMImage, TEpi
   // Set-up a transform to use the DEMHandler
   typedef otb::GenericRSTransform<> RSTransform2DType;
   RSTransform2DType::Pointer        leftToGroundTransform = RSTransform2DType::New();
-  leftToGroundTransform->SetInputKeywordList(leftImgPtr->GetImageKeywordlist());
+  leftToGroundTransform->SetInputImageMetadata(&(leftImgPtr->GetImageMetadata()));
   leftToGroundTransform->InstantiateTransform();
 
   RSTransform2DType::Pointer rightToGroundTransform = RSTransform2DType::New();
-  rightToGroundTransform->SetInputKeywordList(rightImgPtr->GetImageKeywordlist());
+  rightToGroundTransform->SetInputImageMetadata(&(rightImgPtr->GetImageMetadata()));
   rightToGroundTransform->InstantiateTransform();
 
   // left image
@@ -335,7 +335,7 @@ void DisparityMapToDEMFilter<TDisparityImage, TInputImage, TOutputDEMImage, TEpi
   typename DEMImageType::SpacingType outSpacing = outputDEM->GetSignedSpacing();
 
   RSTransformType::Pointer groundToLeftTransform = RSTransformType::New();
-  groundToLeftTransform->SetOutputKeywordList(leftSensor->GetImageKeywordlist());
+  groundToLeftTransform->SetOutputImageMetadata(&(leftSensor->GetImageMetadata()));
   groundToLeftTransform->InstantiateTransform();
 
   // For the disparity maps and mask
@@ -591,8 +591,8 @@ void DisparityMapToDEMFilter<TDisparityImage, TInputImage, TOutputDEMImage, TEpi
   m_LeftToGroundTransform  = RSTransformType::New();
   m_RightToGroundTransform = RSTransformType::New();
 
-  m_LeftToGroundTransform->SetInputKeywordList(leftSensor->GetImageKeywordlist());
-  m_RightToGroundTransform->SetInputKeywordList(rightSensor->GetImageKeywordlist());
+  m_LeftToGroundTransform->SetInputImageMetadata(&(leftSensor->GetImageMetadata()));
+  m_RightToGroundTransform->SetInputImageMetadata(&(rightSensor->GetImageMetadata()));
 
   m_LeftToGroundTransform->InstantiateTransform();
   m_RightToGroundTransform->InstantiateTransform();

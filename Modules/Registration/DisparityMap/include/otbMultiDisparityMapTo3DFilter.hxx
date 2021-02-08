@@ -34,7 +34,7 @@ MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TResidueI
   // Set the number of inputs (1 moving image by default -> 3 inputs)
   this->SetNumberOfRequiredInputs(3);
   this->SetNumberOfRequiredInputs(1);
-  this->m_MovingKeywordLists.resize(1);
+  this->m_MovingImageMetadatas.resize(1);
 
   // Set the outputs
   this->SetNumberOfRequiredOutputs(2);
@@ -53,14 +53,14 @@ void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TRes
   if (nb > 0)
   {
     this->SetNumberOfRequiredInputs(3 * nb);
-    this->m_MovingKeywordLists.resize(nb);
+    this->m_MovingImageMetadatas.resize(nb);
   }
 }
 
 template <class TDisparityImage, class TOutputImage, class TMaskImage, class TResidueImage>
 unsigned int MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TResidueImage>::GetNumberOfMovingImages()
 {
-  return this->m_MovingKeywordLists.size();
+  return this->m_MovingImageMetadatas.size();
 }
 
 template <class TDisparityImage, class TOutputImage, class TMaskImage, class TResidueImage>
@@ -143,24 +143,24 @@ TResidueImage* MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskI
 }
 
 template <class TDisparityImage, class TOutputImage, class TMaskImage, class TResidueImage>
-void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TResidueImage>::SetMovingKeywordList(unsigned int index,
-                                                                                                                 const ImageKeywordListType kwl)
+void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TResidueImage>::SetMovingImageMetadata(unsigned int index,
+                                                                                                                 const ImageMetadata* imd)
 {
-  if (this->m_MovingKeywordLists.size() > index)
+  if (this->m_MovingImageMetadatas.size() > index)
   {
-    this->m_MovingKeywordLists[index] = kwl;
+    this->m_MovingImageMetadatas[index] = imd;
   }
 }
 
 template <class TDisparityImage, class TOutputImage, class TMaskImage, class TResidueImage>
-const typename MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TResidueImage>::ImageKeywordListType&
-MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TResidueImage>::GetMovingKeywordList(unsigned int index) const
+const ImageMetadata*
+MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TResidueImage>::GetMovingImageMetadata(unsigned int index) const
 {
-  if (this->m_MovingKeywordLists.size() <= index)
+  if (this->m_MovingImageMetadatas.size() <= index)
   {
-    itkExceptionMacro(<< "Keywordlist index is outside the container");
+    itkExceptionMacro(<< "ImageMetadata index is outside the container");
   }
-  return this->m_MovingKeywordLists[index];
+  return this->m_MovingImageMetadatas[index];
 }
 
 template <class TDisparityImage, class TOutputImage, class TMaskImage, class TResidueImage>
@@ -185,14 +185,17 @@ void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TRes
     residuePtr->SetOrigin(horizDisp->GetOrigin());
     residuePtr->SetSignedSpacing(horizDisp->GetSignedSpacing());
 
-    if (this->m_ReferenceKeywordList.GetSize() > 0)
+    if (this->m_ReferenceImageMetadata)
     {
-      itk::EncapsulateMetaData<ImageKeywordListType>(outputPtr->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, this->m_ReferenceKeywordList);
-      itk::EncapsulateMetaData<ImageKeywordListType>(residuePtr->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, this->m_ReferenceKeywordList);
+      auto outputmetadata = *m_ReferenceImageMetadata;
+      // Don't copy band metadata, as output bands are not related to input bands.
+      outputmetadata.Bands.clear();
+      outputPtr->SetImageMetadata(outputmetadata);
+      residuePtr->SetImageMetadata(outputmetadata);
     }
     else
     {
-      itkExceptionMacro(<< "Reference keywordlist is missing");
+      itkExceptionMacro(<< "Reference ImageMetadata is missing");
     }
   }
   else
@@ -264,38 +267,37 @@ void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TRes
     }
   }
 
-  // Check moving keywordlist
-  for (unsigned int k = 0; k < this->m_MovingKeywordLists.size(); ++k)
+  // Check moving ImageMetadata
+  for (unsigned int k = 0; k < this->m_MovingImageMetadatas.size(); ++k)
   {
-    if (this->m_MovingKeywordLists[k].GetSize() == 0)
+    if (!this->m_MovingImageMetadatas[k])
     {
-      itkExceptionMacro(<< "Keywordlist of moving image at position " << k << " is empty");
+      itkExceptionMacro(<< "ImageMetadata of moving image at position " << k << " is empty");
     }
-  }
-}
-
-template <class TDisparityImage, class TOutputImage, class TMaskImage, class TResidueImage>
-void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TResidueImage>::BeforeThreadedGenerateData()
-{
-  // Instantiate all transforms
-  this->m_ReferenceToGroundTransform = RSTransformType::New();
-  this->m_ReferenceToGroundTransform->SetInputKeywordList(this->m_ReferenceKeywordList);
-  this->m_ReferenceToGroundTransform->InstantiateTransform();
-
-  this->m_MovingToGroundTransform.clear();
-  for (unsigned int k = 0; k < this->m_MovingKeywordLists.size(); ++k)
-  {
-    RSTransformType::Pointer transfo = RSTransformType::New();
-    transfo->SetInputKeywordList(this->m_MovingKeywordLists[k]);
-    transfo->InstantiateTransform();
-    this->m_MovingToGroundTransform.push_back(transfo);
   }
 }
 
 template <class TDisparityImage, class TOutputImage, class TMaskImage, class TResidueImage>
 void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TResidueImage>::ThreadedGenerateData(const RegionType& outputRegionForThread,
                                                                                                                  itk::ThreadIdType itkNotUsed(threadId))
-{
+{  // Instantiate all transforms
+  auto referenceToGroundTransform = RSTransformType::New();
+
+  referenceToGroundTransform->SetInputImageMetadata(this->m_ReferenceImageMetadata);
+  referenceToGroundTransform->InstantiateTransform();
+
+  /** Moving sensor image transforms */
+  std::vector<RSTransformType::Pointer> movingToGroundTransform;
+
+  for (unsigned int k = 0; k < this->m_MovingImageMetadatas.size(); ++k)
+  {
+    RSTransformType::Pointer transfo = RSTransformType::New();
+    transfo->SetInputImageMetadata(this->m_MovingImageMetadatas[k]);
+    transfo->InstantiateTransform();
+    movingToGroundTransform.push_back(transfo);
+  }
+
+
   TOutputImage*  outputPtr  = this->GetOutput();
   TResidueImage* residuePtr = this->GetResidueOutput();
 
@@ -308,7 +310,7 @@ void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TRes
   DispMapIteratorList vDispIts;
   MaskIteratorList    maskIts;
 
-  for (unsigned int k = 0; k < this->m_MovingKeywordLists.size(); ++k)
+  for (unsigned int k = 0; k < this->m_MovingImageMetadatas.size(); ++k)
   {
     // Iterators over horizontal disparity maps
     hDispIts[k] = itk::ImageRegionConstIterator<DisparityMapType>(this->GetHorizontalDisparityMapInput(k), outputRegionForThread);
@@ -355,10 +357,11 @@ void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TRes
     currentPoint[0] = pointRef[0];
     currentPoint[1] = pointRef[1];
     currentPoint[2] = altiMax;
-    pointA          = this->m_ReferenceToGroundTransform->TransformPoint(currentPoint);
+
+    pointA          = referenceToGroundTransform->TransformPoint(currentPoint);
 
     currentPoint[2] = altiMin;
-    pointB          = this->m_ReferenceToGroundTransform->TransformPoint(currentPoint);
+    pointB          = referenceToGroundTransform->TransformPoint(currentPoint);
 
     pointSetA->SetPoint(0, pointA);
     pointSetB->SetPoint(0, pointB);
@@ -367,7 +370,7 @@ void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TRes
 
     unsigned int nbPoints = 1;
 
-    for (unsigned int k = 0; k < this->m_MovingKeywordLists.size(); ++k)
+    for (unsigned int k = 0; k < this->m_MovingImageMetadatas.size(); ++k)
     {
       // Compute the N moving lines of sight
       TDPointType pointAi, pointBi;
@@ -385,11 +388,9 @@ void MultiDisparityMapTo3DFilter<TDisparityImage, TOutputImage, TMaskImage, TRes
       }
 
       currentPoint[2] = altiMax;
-      pointAi         = this->m_MovingToGroundTransform[k]->TransformPoint(currentPoint);
-
+      pointAi         = movingToGroundTransform[k]->TransformPoint(currentPoint);
       currentPoint[2] = altiMin;
-      pointBi         = this->m_MovingToGroundTransform[k]->TransformPoint(currentPoint);
-
+      pointBi         = movingToGroundTransform[k]->TransformPoint(currentPoint);
       pointSetA->SetPoint(nbPoints, pointAi);
       pointSetB->SetPoint(nbPoints, pointBi);
       pointSetA->SetPointData(nbPoints, k + 1);

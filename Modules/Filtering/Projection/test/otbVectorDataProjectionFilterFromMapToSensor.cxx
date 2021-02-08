@@ -58,7 +58,7 @@ int otbVectorDataProjectionFilterFromMapToSensor(int argc, char* argv[])
 
   vectorDataProjection->SetInput(reader->GetOutput());
 
-  vectorDataProjection->SetOutputKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
+  vectorDataProjection->SetOutputImageMetadata(&imageReader->GetOutput()->GetImageMetadata());
   vectorDataProjection->SetOutputOrigin(imageReader->GetOutput()->GetOrigin());
   vectorDataProjection->SetOutputSpacing(imageReader->GetOutput()->GetSignedSpacing());
 

@@ -111,7 +111,6 @@ int otbDEMToImageGeneratorFromImageTest(int argc, char* argv[])
   {
     char* outputName2 = argv[4];
     generatorFilter2->SetOutputParametersFromImage(reader->GetOutput());
-    generatorFilter2->InstantiateTransform();
 
     extract2->SetInput(generatorFilter2->GetOutput());
     extract2->SetSizeX(atoi(argv[7]));
