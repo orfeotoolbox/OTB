@@ -51,11 +51,11 @@ List of available modules
         + License: Apache
         + Description: This module implements a method to perform a fast forward feature selection using a Gaussian Mixture Model for the classification of high dimensional remote sensing images. The algorithm is describes in the following paper https://hal.archives-ouvertes.fr/hal-01382500.
 
-  - **GRM : Generic** region merging segmentation
+  - **GRM** : Generic region merging segmentation
 
         + Repository:  http://tully.ups-tlse.fr/lassallep/grm/tree/master
         + Author: Pierre Lassalle
-        + License:
+        + License: GPL v3
         + Description: This module provides the GRM OTB application to perform multi-scale region-merging segmentation on satellite images. Three local homogeneity criteria are available: the Baatz & Schäpe criterion, the Full Lambda Schedule criterion and the simple Euclidean Distance criterion. This module was contributed by Pierre Lassalle who also provides a tutorial to learn how to use the library.
 
   - **SertitObject** : Object oriented image analysis
@@ -78,14 +78,14 @@ List of available modules
 
         + Repository:  https://github.com/boussaffawalid/FeatureSelection 
         + Author: Walid Boussafa and Nesrine Chehata 
-        + License:
+        + License: All rights reserverd (without license granting more rights, copyright fully applies, this component can not be used without the explicit and prior authorization of the copyright owner).
         + Description: This module contains a FeatureSelection application based on the `FST3Lib <http://fst.utia.cz/>`__.
 
   - **GKSVM** : Generic kernel SVM
 
         + Repository:  https://github.com/jmichel-otb/GKSVM 
         + Author: Julien Michel 
-        + License:
+        + License: All rights reserverd (without license granting more rights, copyright fully applies, this component can not be used without the explicit and prior authorization of the copyright owner).
         + Description: GKSVM contains a modified version of libsvm to support generic kernels, as well as a set of Orfeo ToolBox classes to use them. This code once belonged to Orfeo ToolBox source code, but has been removed to enforce the new third party policy (no modified third party in source code). Code has been turned into a legacy remote module.
 
   - **OTBTensorflow (otbtf)** : generic, multi purpose deep learning framework, targeting remote sensing images processing
@@ -459,8 +459,8 @@ This file should contain the following:
     otb_fetch_module(TheModuleName
       "A description of the module, to appear during CMake configuration step"
 
-      GIT_REPOSITORY http_link_to_a_git_repository_hosting the module
-      GIT TAG the git revision to checkout
+      GIT_REPOSITORY http_link_to_a_git_repository_hosting_the_module
+      GIT TAG the git revision_to_checkout
     )
 
 This file should be provided along with your remote module inclusion
@@ -469,11 +469,11 @@ If accepted, your CMake file will be placed into the Modules/Remote folder insid
 
 **Important Note**: a remote module bringing in new third party dependencies will not be included in binary packages. 
 
-During the OTB release process, all module complying with the remote module release policy will be packaged along with standard modules.
+During the OTB release process, all modules complying with the remote module release policy will be packaged along with standard modules.
 
 A remote module can be removed from Modules/Remote (this only requires to remove the CMake file describing it), if:
 
-  - It does no longer comply with the remote module acceptance policy (in which case the decision is submitted to vote on otb-developers),
+  - It does no longer comply with the remote module acceptance policy (in which case the decision is submitted to vote on `OTB's forum <https://forum.orfeo-toolbox.org/>`_),
   - The author of the remote module ask to remove it.
 
 * **Remote module acceptance policy**
@@ -481,7 +481,7 @@ A remote module can be removed from Modules/Remote (this only requires to remove
 So as to get your module accepted as an official remote module, you should comply with the following:
 
   - Remote module source code should be hosted on a publicly available Git repository
-  - Author of the remote module should be identified and registered to otb-developers mailing list
+  - Author of the remote module should be identified and registered to `OTB's forum <https://forum.orfeo-toolbox.org/>`_
   - Author of the remote module accepts to be contacted by developers or users regarding issues with his module (on a best effort basis),
   - Remote module source code should comply with OTB style as much as possible,
   - Remote module source code should be documented using doxygen tags,
