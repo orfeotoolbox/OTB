@@ -22,5 +22,5 @@
 otb_fetch_module(DiapOTBModule
   "OTB module for SAR processing in Diapason."
   GIT_REPOSITORY https://gitlab.orfeo-toolbox.org/remote_modules/diapotb.git
-  GIT_TAG 130f9286533414faf4b1a2bae3ff2496d2541d0f
+  GIT_TAG 69bc3588a51b9a52291e415f0822dadd8a8951fc
 )

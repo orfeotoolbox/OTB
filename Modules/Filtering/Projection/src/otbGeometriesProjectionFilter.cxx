@@ -178,8 +178,8 @@ void otb::GeometriesProjectionFilter::DoFinalizeInitialization()
   // process is known
   // m_Transform->SetInputProjectionRef(m_InputProjectionRef);
   m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
-  m_Transform->SetInputKeywordList(m_InputKeywordList);
-  m_Transform->SetOutputKeywordList(m_OutputKeywordList);
+  m_Transform->SetInputImageMetadata(m_InputImageMetadata);
+  m_Transform->SetOutputImageMetadata(m_OutputImageMetadata);
 
   m_Transform->SetInputSpacing(m_InputImageReference.GetSpacing());
   m_Transform->SetInputOrigin(m_InputImageReference.GetOrigin());

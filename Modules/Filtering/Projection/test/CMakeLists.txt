@@ -55,6 +55,7 @@ otbGeometriesProjectionFilterFromMapToImage.cxx
 otbGeometriesProjectionFilterFromMapToEPSG.cxx
 otbVectorDataProjectionFilter.cxx
 otbImportGeoInformationImageFilter.cxx
+otbRPCSolverTest.cxx
 )
 
 
@@ -65,7 +66,7 @@ set(GEOMGCP
 "QB/qb-1"             #LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
 "ikonos/ikonos-1"     #LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif}
 "rapideye/rapideye-1" #LARGEINPUT{RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf}
-"sentinel1/sentinel1-1" #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}
+#"sentinel1/sentinel1-1" #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff} TODO: Reactivate when new SARModel is implemented
 )
 
 set(NEEDEDKW
@@ -127,8 +128,8 @@ endforeach()
 
 #Other sensor : no keyword check
 set(GEOMGCP
-"ers2/ers2-1"       #LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}
-"spot5/spot5-1"     #LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
+#"ers2/ers2-1"       #LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}  TODO: Reactivate when new SARModel is implemented
+# "spot5/spot5-1"     #LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}  TODO: Reactivate when new SensorModel is implemented
 "geoeye1/geoeye1-1" #LARGEINPUT{GEOEYE/MARCILLOLES/po_350134_bgrn_0000001.tif}
 )
 
@@ -183,7 +184,7 @@ SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_S
 QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF
 IKONOS/BLOSSEVILLE/po_2619900_nir_0000000.tif
 RAPIDEYE/level1B/2008-12-25T005918_RE3_1B-NAC_397971_12345_band3.ntf
-SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff
+#SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff # TODO Reactivate when SARModel is implemented
 )
 
 set(TOLERANCE_RATIO
@@ -580,6 +581,35 @@ otb_add_test(NAME prTvLeastSquareAffineTransformEstimator COMMAND otbProjectionT
   400 891 283 5955 7530 9105
   352 807 919 10023 12102 14181
   )
+
+
+otb_add_test(NAME prTvRPCSolverNoDEMValidationTest COMMAND otbProjectionTestDriver
+  otbRPCSolverTest
+  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  10 0.25 0.35
+  no
+  no
+  )
+
+otb_add_test(NAME prTvRPCSolverNotEnoughPointsForElevationTest COMMAND otbProjectionTestDriver
+  otbRPCSolverTest
+  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  5 0.25 0.35
+  no
+  no
+  )
+
+otb_add_test(NAME prTvRPCSolverNotEnoughPointsTest COMMAND otbProjectionTestDriver
+  otbRPCSolverTest
+  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
+  4 0.25 0.35
+  ${INPUTDATA}/DEM/srtm_directory/
+  ${INPUTDATA}/DEM/egm96.grd
+  )
+if (OTB_DATA_USE_LARGEINPUT)
+  set_property(TEST prTvRPCSolverNotEnoughPointsTest PROPERTY WILL_FAIL TRUE)
+endif()
+
 
 set(VALID_CONDITION err=12)
 if(OTB_OSSIM_VERSION LESS 20200)

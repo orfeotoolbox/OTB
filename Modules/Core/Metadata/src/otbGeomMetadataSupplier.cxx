@@ -65,11 +65,14 @@ int GeomMetadataSupplier::GetNbBands() const
 
   ret = this->GetMetadataValue("support_data.band_name_list", hasValue);
   boost::algorithm::trim_if(ret, boost::algorithm::is_any_of("\" "));
-  if (!hasValue)
-    otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata 'support_data.band_name_list'")
-  std::vector<std::string> ret_vect;
-  otb::Utils::ConvertStringToVector(ret, ret_vect, "band name");
-  return ret_vect.size();
+  if (hasValue)
+  {
+    std::vector<std::string> ret_vect;
+    otb::Utils::ConvertStringToVector(ret, ret_vect, "band name");
+    return ret_vect.size();
+  }
+
+  return 1;
 }
 
 bool GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
@@ -123,9 +126,9 @@ bool GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
     coeff = this->GetAs<double>(path.str());
   }
 
-  boost::any any_rpcStruct = rpcStruct;
-  imd.Add(MDGeom::RPC, std::move(any_rpcStruct));
-  auto toto = imd[MDGeom::RPC];
+  imd.Add(MDGeom::RPC, rpcStruct);
+  assert(imd.Has(MDGeom::RPC));
+  assert(rpcStruct == boost::any_cast<Projection::RPCParam>(imd[MDGeom::RPC]));
   return true;
 }
 

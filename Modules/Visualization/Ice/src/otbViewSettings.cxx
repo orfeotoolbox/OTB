@@ -129,13 +129,13 @@ void ViewSettings::SetPersepectiveAngle()
   typedef otb::GenericRSTransform<double,3,3> RSTransformType;
   // Build the RS transform
   RSTransformType::Pointer forwardTransform = RSTransformType::New();
-  forwardTransform->SetInputKeywordList(m_KeywordList);
+  //TODO OSSIM: forwardTransform->SetInputKeywordList(m_KeywordList);
   forwardTransform->SetInputProjectionRef(m_Wkt);
   forwardTransform->InstantiateTransform();
 
   RSTransformType::Pointer inverseTransform = RSTransformType::New();
   inverseTransform->SetOutputProjectionRef(m_Wkt);
-  inverseTransform->SetOutputKeywordList(m_KeywordList);
+  //TODO OSSIM: inverseTransform->SetOutputKeywordList(m_KeywordList);
   inverseTransform->InstantiateTransform();
 
   PointType centerPoint = GetViewportCenter();
@@ -163,13 +163,13 @@ void ViewSettings::SetNorthUpAngle()
   typedef otb::GenericRSTransform<double,3,3> RSTransformType;
   // Build the RS transform
   RSTransformType::Pointer forwardTransform = RSTransformType::New();
-  forwardTransform->SetInputKeywordList(m_KeywordList);
+  //TODO OSSIM: forwardTransform->SetInputKeywordList(m_KeywordList);
   forwardTransform->SetInputProjectionRef(m_Wkt);
   forwardTransform->InstantiateTransform();
 
   RSTransformType::Pointer inverseTransform = RSTransformType::New();
   inverseTransform->SetOutputProjectionRef(m_Wkt);
-  inverseTransform->SetOutputKeywordList(m_KeywordList);
+  //TODO OSSIM: inverseTransform->SetOutputKeywordList(m_KeywordList);
   inverseTransform->InstantiateTransform();
   
   PointType centerPoint = GetViewportCenter();

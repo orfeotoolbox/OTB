@@ -29,6 +29,7 @@ set(OTBIOGDAL_SRC
   otbOGRVectorDataIOFactory.cxx
   otbDEMHandler.cxx
   otbGDALImageMetadataInterface.cxx
+  otbGDALRPCTransformer.cxx
   )
 
 add_library(OTBIOGDAL ${OTBIOGDAL_SRC})
@@ -41,7 +42,7 @@ target_link_libraries(OTBIOGDAL
   ${OTBGDAL_LIBRARIES}
   ${OTBBoost_LIBRARIES}
   ${OTBOSSIMAdapters_LIBRARIES}
-   ${Boost_LIBRARIES}
+  ${Boost_LIBRARIES}
   )
 
 otb_module_target(OTBIOGDAL)

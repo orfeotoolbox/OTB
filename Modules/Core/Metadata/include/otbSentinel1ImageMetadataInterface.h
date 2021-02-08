@@ -23,6 +23,7 @@
 
 #include "otbSarImageMetadataInterface.h"
 #include "otbXMLMetadataSupplier.h"
+#include "otbSARMetadata.h"
 
 namespace otb
 {

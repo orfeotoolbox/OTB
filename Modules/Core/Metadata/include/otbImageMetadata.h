@@ -22,20 +22,15 @@
 #define otbImageMetadata_h
 
 #include "otbGeometryMetadata.h"
-#include "otbSARMetadata.h"
 #include "otbMetaDataKey.h"
 #include "OTBMetadataExport.h"
 #include "otbMacro.h"
-#include "itkMath.h"
 
 #include <boost/any.hpp>
 #include <vector>
 #include <string>
-#include <ctime>
-#include <bitset>
 #include <map>
 #include <unordered_map>
-//~ #include <stdexcept>
 
 namespace otb
 {
@@ -104,33 +99,35 @@ public:
                     DictType<MDTime, MetaData::Time> timeKeys,
                     DictType<std::string, std::string> extraKeys);
 
-  // TODO : iterators ?
-
-  bool HasSensorGeometry() const;
-
-  bool HasProjectedGeometry() const;
-
-  size_t RemoveSensorGeometry();
-
-  size_t RemoveProjectedGeometry();
-
-  const Projection::GCPParam & GetGCPParam() const;
-
-  std::string GetProjectionWKT() const;
-  
   // -------------------- Geom utility function ----------------------------
 
   /** Read-only accessor to geometric keys */
   const boost::any & operator[](const MDGeom& key) const;
+
+  const Projection::GCPParam & GetGCPParam() const;
+
+  std::string GetProjectedGeometry() const;
+
+  std::string GetProjectionWKT() const;
+  
+  std::string GetProjectionProj() const;
   
   /** Setter for geometric keys */
   void Add(const MDGeom& key, const boost::any &value);
   
   /** Remove a key from the dictionary (even if the key is already missing) */
   size_t Remove(const MDGeom& key);
+
+  size_t RemoveSensorGeometry();
+
+  size_t RemoveProjectedGeometry();
   
   /** Test if a key is available */
   bool Has(const MDGeom& key) const;
+
+  bool HasSensorGeometry() const;
+
+  bool HasProjectedGeometry() const;
 
   // -------------------- Double utility function ----------------------------
 

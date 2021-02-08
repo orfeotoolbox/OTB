@@ -127,20 +127,6 @@ public:
   itkSetStringMacro(OutputProjectionRef);
   itkGetStringMacro(OutputProjectionRef);
 
-  itkGetMacro(InputKeywordList, ImageKeywordlist);
-  void SetInputKeywordList(const ImageKeywordlist& kwl)
-  {
-    this->m_InputKeywordList = kwl;
-    this->Modified();
-  }
-
-  itkGetMacro(OutputKeywordList, ImageKeywordlist);
-  void SetOutputKeywordList(const ImageKeywordlist& kwl)
-  {
-    this->m_OutputKeywordList = kwl;
-    this->Modified();
-  }
-
   /** Set the origin of the vector data.
    * \sa GetOrigin() */
   itkSetMacro(InputOrigin, OriginType);
@@ -173,6 +159,29 @@ public:
 
   itkGetConstReferenceMacro(OutputSpacing, SpacingType);
 
+  /**\name ImageMetadata accessors and mutators */
+  //@{
+  const ImageMetadata* GetInputImageMetadata() const
+  {
+    return m_InputImageMetadata;
+  }
+  void SetInputImageMetadata(const ImageMetadata* imd)
+  {
+    m_InputImageMetadata = imd;
+    this->Modified();
+  }
+
+  const ImageMetadata* GetOutputImageMetadata() const
+  {
+    return m_OutputImageMetadata;
+  }
+  void SetOutputImageMetadata(const ImageMetadata* imd)
+    {
+      m_OutputImageMetadata = imd;
+      this->Modified();
+    }
+  //@}
+
 protected:
   VectorDataProjectionFilter();
   ~VectorDataProjectionFilter() override
@@ -196,8 +205,8 @@ private:
   InternalTransformPointerType m_Transform;
   std::string                  m_InputProjectionRef;
   std::string                  m_OutputProjectionRef;
-  ImageKeywordlist             m_InputKeywordList;
-  ImageKeywordlist             m_OutputKeywordList;
+  const ImageMetadata*   m_InputImageMetadata = nullptr;
+  const ImageMetadata*   m_OutputImageMetadata = nullptr;
 
   SpacingType m_InputSpacing;
   OriginType  m_InputOrigin;

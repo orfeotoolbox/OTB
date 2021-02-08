@@ -43,15 +43,6 @@ int otbImageToGenericRSOutputParameters(int itkNotUsed(argc), char* argv[])
   reader->SetFileName(infname);
   reader->UpdateOutputInformation();
 
-  // ForceSize
-  SizeType size;
-  size[0] = 400;
-  size[1] = 399;
-
-  SpacingType spacing;
-  spacing[0] = 0.000006;
-  spacing[1] = -0.000006;
-
   // Filter  : Target SRS : WGS84
   FilterType::Pointer filter = FilterType::New();
   filter->SetInput(reader->GetOutput());
@@ -61,20 +52,20 @@ int otbImageToGenericRSOutputParameters(int itkNotUsed(argc), char* argv[])
   // Output file
   std::ofstream outfile(outfname);
 
-  outfile << "Output Parameters for SRID : 4326 (WGS84)" << std::endl;
-  outfile << "Output Origin : " << filter->GetOutputOrigin() << std::endl;
-  outfile << "Output Spacing : " << filter->GetOutputSpacing() << std::endl;
-  outfile << "Output Size : " << filter->GetOutputSize() << std::endl;
+  outfile << "Output Parameters for SRID : 4326 (WGS84)\n";
+  outfile << "Output Origin : " << filter->GetOutputOrigin() << "\n";
+  outfile << "Output Spacing : " << filter->GetOutputSpacing() << "\n";
+  outfile << "Output Size : " << filter->GetOutputSize() << "\n";
   outfile << std::endl;
 
   // Target SRS : 32631 UTM 31 N
   filter->SetOutputProjectionRef("EPSG:32631"); // UTM 31 N
   filter->Compute();
 
-  outfile << "Output Parameters for SRID : 32631 (UTM 31 N)" << std::endl;
-  outfile << "Output Origin : " << filter->GetOutputOrigin() << std::endl;
-  outfile << "Output Spacing : " << filter->GetOutputSpacing() << std::endl;
-  outfile << "Output Size : " << filter->GetOutputSize() << std::endl;
+  outfile << "Output Parameters for SRID : 32631 (UTM 31 N)\n";
+  outfile << "Output Origin : " << filter->GetOutputOrigin() << "\n";
+  outfile << "Output Spacing : " << filter->GetOutputSpacing() << "\n";
+  outfile << "Output Size : " << filter->GetOutputSize() << "\n";
   outfile << std::endl;
 
   // Target SRS : lambertII
@@ -83,10 +74,10 @@ int otbImageToGenericRSOutputParameters(int itkNotUsed(argc), char* argv[])
   filter->SetOutputProjectionRef(lambertRef);
   filter->Compute();
 
-  outfile << "Output Parameters for SRS : Lambert II Etendu" << std::endl;
-  outfile << "Output Origin : " << filter->GetOutputOrigin() << std::endl;
-  outfile << "Output Spacing : " << filter->GetOutputSpacing() << std::endl;
-  outfile << "Output Size : " << filter->GetOutputSize() << std::endl;
+  outfile << "Output Parameters for SRS : Lambert II Etendu" << "\n";
+  outfile << "Output Origin : " << filter->GetOutputOrigin() << "\n";
+  outfile << "Output Spacing : " << filter->GetOutputSpacing() << "\n";
+  outfile << "Output Size : " << filter->GetOutputSize() << "\n";
   outfile << std::endl;
 
 

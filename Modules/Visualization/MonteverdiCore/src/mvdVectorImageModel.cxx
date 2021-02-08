@@ -121,7 +121,7 @@ void VectorImageModel::SetFilename(const QString& filename, int w, int h)
 
   // Setup GenericRSTransform
   m_ToWgs84 = otb::GenericRSTransform<>::New();
-  m_ToWgs84->SetInputDictionary(m_ImageFileReader->GetOutput()->GetMetaDataDictionary());
+  m_ToWgs84->SetInputImageMetadata(&(m_ImageFileReader->GetOutput()->GetImageMetadata()));
   m_ToWgs84->SetOutputProjectionRef(otb::SpatialReference::FromWGS84().ToWkt());
   m_ToWgs84->InstantiateTransform();
 

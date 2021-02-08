@@ -209,7 +209,7 @@ private:
     }
 
   private:
-    /** No data flags and values for APN image */
+    /** No data flags and values for PAN image */
     bool                                      m_NoDataValuePanAvailable;
     typename TPanImageType::InternalPixelType m_NoDataValuePan;
 

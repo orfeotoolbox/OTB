@@ -85,7 +85,7 @@ target_link_libraries(OTBMetadata
   ${OTBCommon_LIBRARIES}
   ${OTBOSSIMAdapters_LIBRARIES}
   ${Boost_LIBRARIES}
-
+  ${OTBGdalAdapters_LIBRARIES}
   )
 
 otb_module_target(OTBMetadata)

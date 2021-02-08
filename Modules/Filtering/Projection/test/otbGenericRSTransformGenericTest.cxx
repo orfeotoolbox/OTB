@@ -75,7 +75,7 @@ int otbGenericRSTransformGenericTest(int argc, char* argv[])
     reader->UpdateOutputInformation();
 
     transform->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
-    transform->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+    transform->SetInputImageMetadata(&(reader->GetOutput()->GetImageMetadata()));
 
     std::cout << "Input projection read from image: " << argv[6] << std::endl;
   }
@@ -111,7 +111,7 @@ int otbGenericRSTransformGenericTest(int argc, char* argv[])
     reader->UpdateOutputInformation();
 
     transform->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
-    transform->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+    transform->SetOutputImageMetadata(&(reader->GetOutput()->GetImageMetadata()));
 
     std::cout << "Output projection read from image: " << argv[8] << std::endl;
   }

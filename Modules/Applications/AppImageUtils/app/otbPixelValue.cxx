@@ -167,7 +167,7 @@ private:
         std::string wktFromEpsg = otb::SpatialReference::FromEPSG(GetParameterInt("mode.epsg.code")).ToWkt();
         inverse->SetOutputProjectionRef(wktFromEpsg);
       }
-      inverse->SetInputKeywordList(inImage->GetImageKeywordlist());
+      inverse->SetInputImageMetadata(&(inImage->GetImageMetadata()));
       inverse->SetInputProjectionRef(inImage->GetProjectionRef());
       inverse->InstantiateTransform();
       itk::Point<float, 2> minPOut(0), maxPOut(0), minP(0), maxP(0);
@@ -239,7 +239,7 @@ private:
         std::string wktFromEpsg = otb::SpatialReference::FromEPSG(GetParameterInt("mode.epsg.code")).ToWkt();
         rsTransform->SetInputProjectionRef(wktFromEpsg);
       }
-      rsTransform->SetOutputKeywordList(inImage->GetImageKeywordlist());
+      rsTransform->SetOutputImageMetadata(&(inImage->GetImageMetadata()));
       rsTransform->SetOutputProjectionRef(inImage->GetProjectionRef());
       rsTransform->InstantiateTransform();
       itk::Point<float, 2> pixelIn(0), pixelOut(0);

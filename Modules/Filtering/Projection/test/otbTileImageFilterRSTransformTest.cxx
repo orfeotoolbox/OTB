@@ -23,6 +23,7 @@
 #include "otbImageFileReader.h"
 #include "otbGeographicalDistance.h"
 #include "otbGenericRSTransform.h"
+#include "otbDEMHandler.h"
 #include <iomanip>
 #include "otbDEMHandler.h"
 
@@ -74,7 +75,7 @@ int otbTileImageFilterRSTransformTest(int argc, char* argv[])
 
     // Set-up transform
     RSTransformType::Pointer rsTransform = RSTransformType::New();
-    rsTransform->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+    rsTransform->SetInputImageMetadata(&(reader->GetOutput()->GetImageMetadata()));
     rsTransform->InstantiateTransform();
     transforms.push_back(rsTransform);
 
@@ -85,7 +86,7 @@ int otbTileImageFilterRSTransformTest(int argc, char* argv[])
 
   // Build RS transform for tiled image
   RSTransformType::Pointer mosaicRsTransform = RSTransformType::New();
-  mosaicRsTransform->SetInputKeywordList(tileFilter->GetOutput()->GetImageKeywordlist());
+  mosaicRsTransform->SetInputImageMetadata(&(tileFilter->GetOutput()->GetImageMetadata()));
   mosaicRsTransform->InstantiateTransform();
 
   // Check that individual RSTransform gives the same result as tiled

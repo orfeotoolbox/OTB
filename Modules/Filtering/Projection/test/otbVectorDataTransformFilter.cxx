@@ -56,7 +56,7 @@ int otbVectorDataTransformFilter(int itkNotUsed(argc), char* argv[])
   VDProjectionFilterType::Pointer vdproj = VDProjectionFilterType::New();
   vdproj->SetInput(vdreader->GetOutput());
   vdproj->SetInputProjectionRef(vdreader->GetOutput()->GetProjectionRef());
-  vdproj->SetOutputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+  vdproj->SetOutputImageMetadata(&reader->GetOutput()->GetImageMetadata());
   vdproj->SetOutputProjectionRef(reader->GetOutput()->GetProjectionRef());
 
   // Test the translation using the ApplyTransformTo
@@ -78,7 +78,7 @@ int otbVectorDataTransformFilter(int itkNotUsed(argc), char* argv[])
   VDProjectionFilterType::Pointer reverseVdProj = VDProjectionFilterType::New();
   reverseVdProj->SetInput(transformFilter->GetOutput());
   reverseVdProj->SetOutputProjectionRef(vdreader->GetOutput()->GetProjectionRef());
-  reverseVdProj->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+  reverseVdProj->SetInputImageMetadata(&reader->GetOutput()->GetImageMetadata());
   reverseVdProj->SetInputProjectionRef(reader->GetOutput()->GetProjectionRef());
 
   // Write the vectordata

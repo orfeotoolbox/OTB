@@ -24,6 +24,10 @@
 #include <boost/range/iterator_range.hpp>
 #include "gdal_utils.h"
 
+//Warp utility
+#include "gdalwarper.h"
+#include "vrtdataset.h"
+
 //TODO C++ 17 : use std::optional instead
 #include <boost/optional.hpp>
 
@@ -181,19 +185,40 @@ DEMHandler::~DEMHandler()
   }
 
   ClearDEMs();
+
+  VSIUnlink(DEM_DATASET_PATH.c_str());
+  VSIUnlink(DEM_WARPED_DATASET_PATH.c_str());
+  VSIUnlink(DEM_SHIFTED_DATASET_PATH.c_str());
 }
 
 void DEMHandler::OpenDEMFile(const std::string& path)
 {
   m_DatasetList.push_back(otb::GDALDriverManagerWrapper::GetInstance().Open(path));
-  m_Dataset = m_DatasetList.back()->GetDataSet();
+  std::vector<GDALDatasetH> vrtDatasetList(1);
+  vrtDatasetList[0] = m_DatasetList[0]->GetDataSet();
+  auto close_me = GDALBuildVRT(DEM_DATASET_PATH.c_str(), 1, vrtDatasetList.data(),
+                               nullptr, nullptr, nullptr);
+  // Need to close the dataset, so it is flushed into memory.
+  GDALClose(close_me);
+  m_Dataset = static_cast<GDALDataset*>(GDALOpen(DEM_DATASET_PATH.c_str(), GA_ReadOnly));
   m_DEMDirectories.push_back(path);
+
+  if(m_GeoidDS)
+  {
+    CreateShiftedDataset();
+  }
+
+  Notify();
 }
 
 void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
-{  
+{
   // TODO : RemoveOSSIM
   OssimDEMHandler::Instance()->OpenDEMDirectory(DEMDirectory);
+
+  // Free the previous in-memory dataset (if any)
+  if (!m_DatasetList.empty())
+    VSIUnlink(DEM_DATASET_PATH.c_str());
 
   auto demFiles = DEMDetails::GetFilesInDirectory(DEMDirectory);
   for (const auto & file : demFiles)
@@ -207,36 +232,36 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
   
   int vrtSize = m_DatasetList.size();
  
-  // Don't build a vrt if there is less than two dataset
+  // Don't build a vrt if there is no dataset
   if (m_DatasetList.empty())
   {
     m_Dataset = nullptr;
   }
   else
   {
-    if (vrtSize == 1)
+    std::vector<GDALDatasetH> vrtDatasetList(vrtSize);
+    for (int i = 0; i < vrtSize; i++)
     {
-      m_Dataset = m_DatasetList[0]->GetDataSet();
-      m_DEMDirectories.push_back(DEMDirectory);
+      vrtDatasetList[i] = m_DatasetList[i]->GetDataSet();
     }
-    else
-    {
-      std::vector<GDALDatasetH> vrtDatasetList(vrtSize);
-      for (int i = 0; i < vrtSize; i++)
-      {
-        vrtDatasetList[i] = m_DatasetList[i]->GetDataSet();
-      }
 
-      m_Dataset = static_cast<GDALDataset *> (GDALBuildVRT(nullptr, vrtSize, vrtDatasetList.data(), 
-                                                nullptr, nullptr, nullptr));
-      m_DEMDirectories.push_back(DEMDirectory);
-    }
-    
+    auto close_me = GDALBuildVRT(DEM_DATASET_PATH.c_str(), vrtSize, vrtDatasetList.data(),
+                                 nullptr, nullptr, nullptr);
+    // Need to close the dataset, so it is flushed into memory.
+    GDALClose(close_me);
+    m_Dataset = static_cast<GDALDataset*>(GDALOpen(DEM_DATASET_PATH.c_str(), GA_ReadOnly));
+    m_DEMDirectories.push_back(DEMDirectory);
   }
+
+  if(m_GeoidDS)
+  {
+    CreateShiftedDataset();
+  }
+  Notify();
 }
 
 bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
-{  
+{
   // TODO : RemoveOSSIM
   OssimDEMHandler::Instance()->OpenGeoidFile(geoidFile);
 
@@ -255,8 +280,110 @@ bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
     m_GeoidFilename = geoidFile;
   }
 
+  if(m_Dataset)
+  {
+    CreateShiftedDataset();
+  }
+
+  Notify();
   return pbError;
 }
+
+
+void DEMHandler::CreateShiftedDataset()
+{
+
+  // WIP : no data is not handed at the moment
+
+  double geoTransform[6];
+  m_Dataset->GetGeoTransform(geoTransform);
+
+  // Warp geoid dataset
+  auto warpOptions = GDALCreateWarpOptions();;
+  warpOptions->hSrcDS = m_GeoidDS;
+  //warpOptions->hDstDS = m_Dataset;
+  warpOptions->eResampleAlg =  GRA_Bilinear;
+  warpOptions->eWorkingDataType = GDT_Float64;
+  warpOptions->nBandCount = 1;
+    warpOptions->panSrcBands =
+        (int *) CPLMalloc(sizeof(int) * warpOptions->nBandCount );
+    warpOptions->panSrcBands[0] = 1;
+    warpOptions->panDstBands =
+        (int *) CPLMalloc(sizeof(int) * warpOptions->nBandCount );
+    warpOptions->panDstBands[0] = 1;
+
+  // Establish reprojection transformer.
+  warpOptions->pTransformerArg =
+        GDALCreateGenImgProjTransformer( m_GeoidDS,
+                                        GDALGetProjectionRef(m_GeoidDS),
+                                        m_Dataset,
+                                        GDALGetProjectionRef(m_Dataset),
+                                        FALSE, 0.0, 1 );
+  warpOptions->pfnTransformer = GDALGenImgProjTransform;
+
+  auto ds = static_cast<GDALDataset *> (GDALCreateWarpedVRT(m_GeoidDS, 
+                      m_Dataset->GetRasterXSize(), 
+                      m_Dataset->GetRasterYSize(), 
+                      geoTransform, 
+                      warpOptions));
+
+/*
+  auto warpedDataset = dynamic_cast<VRTDataset*>(ds);
+  if(warpedDataset)
+  {
+    auto xmlWarpedDs= CPLSerializeXMLTree(warpedDataset->SerializeToXML(nullptr));
+    std::cout << xmlWarpedDs << std::endl;
+  }
+*/
+
+  ds->SetDescription(DEM_WARPED_DATASET_PATH.c_str());
+  GDALClose(ds);
+
+  GDALDriver *poDriver = (GDALDriver *) GDALGetDriverByName( "VRT" );
+  GDALDataset *poVRTDS;
+
+  poVRTDS = poDriver->Create( DEM_SHIFTED_DATASET_PATH.c_str(), m_Dataset->GetRasterXSize(), m_Dataset->GetRasterYSize(), 0, GDT_Float64, NULL );
+
+  poVRTDS->SetGeoTransform(geoTransform);
+
+  poVRTDS->SetProjection(m_Dataset->GetProjectionRef());
+
+  char** derivedBandOptions = NULL;
+
+  derivedBandOptions = CSLAddNameValue(derivedBandOptions, "subclass", "VRTDerivedRasterBand");
+  derivedBandOptions = CSLAddNameValue(derivedBandOptions, "PixelFunctionType", "sum");
+  poVRTDS->AddBand(GDT_Float64, derivedBandOptions);
+
+  GDALRasterBand *poBand = poVRTDS->GetRasterBand( 1 );
+
+// TODO use std string (and boost format ?) or stream
+  char demVrtXml[10000];
+
+  sprintf( demVrtXml,
+          "<SimpleSource>"
+          "  <SourceFilename>%s</SourceFilename>"
+          "  <SourceBand>1</SourceBand>"
+          "</SimpleSource>",
+          DEM_DATASET_PATH.c_str());
+
+  poBand->SetMetadataItem( "source_0", demVrtXml, "new_vrt_sources" );
+  
+
+  char geoidVrtXml[10000];
+
+  sprintf( geoidVrtXml,
+          "<SimpleSource>"
+          "  <SourceFilename>%s</SourceFilename>"
+          "  <SourceBand>1</SourceBand>"
+          "</SimpleSource>",
+          DEM_WARPED_DATASET_PATH.c_str());
+
+
+  poBand->SetMetadataItem( "source_1", geoidVrtXml, "new_vrt_sources" );
+
+  GDALClose(poVRTDS);
+}
+
 
 double DEMHandler::GetHeightAboveEllipsoid(double lon, double lat) const
 {
@@ -363,6 +490,7 @@ void DEMHandler::ClearDEMs()
 
   // This will call GDALClose on all datasets
   m_DatasetList.clear();
+  Notify();
 }
 
 void DEMHandler::SetDefaultHeightAboveEllipsoid(double height)
@@ -370,11 +498,20 @@ void DEMHandler::SetDefaultHeightAboveEllipsoid(double height)
   OssimDEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(height);
 
   m_DefaultHeightAboveEllipsoid = height;
+  Notify();
 }
 
 double DEMHandler::GetDefaultHeightAboveEllipsoid() const
 {
   return m_DefaultHeightAboveEllipsoid;
 }
+
+void DEMHandler::Notify() const
+{
+  for (const auto & observer: m_ObserverList)
+  {
+    observer->Update();
+  }
+};
 
 } // namespace otb

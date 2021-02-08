@@ -27,9 +27,9 @@
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-
-#include "otbInverseSensorModel.h"
-#include "otbForwardSensorModel.h"
+#include "otbRPCInverseTransform.h"
+#include "otbRPCForwardTransform.h"
+#include "otbMetaDataKey.h"
 #include "otbDEMHandler.h"
 
 int otbCreateInverseForwardSensorModel(int argc, char* argv[])
@@ -51,52 +51,60 @@ int otbCreateInverseForwardSensorModel(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  typedef otb::Image<unsigned int, 2> ImageType;
-  typedef otb::ImageFileReader<ImageType> ReaderType;
-  typedef otb::InverseSensorModel<double> InverseModelType;
-  typedef otb::ForwardSensorModel<double> ForwardModelType;
+  using ImageType = otb::Image<unsigned int, 2>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using ForwardRPCModelType = otb::RPCForwardTransform<double, 2, 3>;
+  using InverseRPCModelType = otb::RPCInverseTransform<double, 2, 2>;
 
   // Allocate pointer
-  InverseModelType::Pointer inverse_model = InverseModelType::New();
-  ForwardModelType::Pointer forward_model = ForwardModelType::New();
-  ReaderType::Pointer       reader        = ReaderType::New();
+  auto inverse_rpc_model = InverseRPCModelType::New();
+  auto forward_rpc_model = ForwardRPCModelType::New();
+  auto reader            = ReaderType::New();
 
-  // Set parameters ...
+  // Set parameters
   reader->SetFileName(InputFilename);
 
-  // Read meta data (ossimKeywordlist)
+  // Read metadata
   reader->GenerateOutputInformation();
   ImageType::Pointer inputImage = reader->GetOutput();
 
   otbGenericMsgDebugMacro(<< "Inverse model creation...");
-  inverse_model->SetImageGeometry(inputImage->GetImageKeywordlist());
-  if (inverse_model->IsValidSensorModel() == false)
+  if (!inverse_rpc_model->SetMetadata(inputImage->GetImageMetadata()))
   {
-    std::cout << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!" << std::endl;
+    std::cout << "Error while reading model. This is not a RPC model!" << std::endl;
+    return EXIT_FAILURE;
+  }
+  if (!inverse_rpc_model->IsValidSensorModel())
+  {
+    std::cout << "Model not set!" << std::endl;
     return EXIT_FAILURE;
   }
 
   otbGenericMsgDebugMacro(<< "Forward model creation...");
-  forward_model->SetImageGeometry(inputImage->GetImageKeywordlist());
-  if (forward_model->IsValidSensorModel() == false)
+  if (!forward_rpc_model->SetMetadata(inputImage->GetImageMetadata()))
   {
-    std::cout << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!" << std::endl;
+    std::cout << "Error while reading model. This is not a RPC model!" << std::endl;
+    return EXIT_FAILURE;
+  }
+  if (!forward_rpc_model->IsValidSensorModel())
+  {
+    std::cout << "Model not set!" << std::endl;
     return EXIT_FAILURE;
   }
 
   std::ofstream ofs(OutputFilename, std::ofstream::out);
   ofs.precision(8);
   
-  InverseModelType::InputPointType geoPoint;
+  InverseRPCModelType::InputPointType geoPoint;
   geoPoint[0] = atof(pointX.c_str());
   geoPoint[1] = atof(pointY.c_str());
 
   ofs << "Testing geopoint: " << geoPoint << "\n\n";
 
-  auto indexPoint = inverse_model->TransformPoint(geoPoint);
+  auto indexPoint = inverse_rpc_model->TransformPoint(geoPoint);
   ofs << "Testing InverseSensorModel: " << geoPoint << " -> " << indexPoint << "\n";
 
-  auto newGeoPoint = forward_model->TransformPoint(indexPoint);
+  auto newGeoPoint = forward_rpc_model->TransformPoint(indexPoint);
   ofs << "Testing ForwardSensorModel: " << indexPoint << " -> " << newGeoPoint << "\n";
   
   return EXIT_SUCCESS;

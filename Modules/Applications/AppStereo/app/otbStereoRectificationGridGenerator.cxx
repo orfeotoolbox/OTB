@@ -303,7 +303,7 @@ private:
       m_DEMToImageGenerator->SetOutputSize(size);
       m_DEMToImageGenerator->SetOutputSpacing(spacing);
       m_DEMToImageGenerator->SetOutputProjectionRef(GetParameterImage("io.inleft")->GetProjectionRef());
-      m_DEMToImageGenerator->SetOutputKeywordList(GetParameterImage("io.inleft")->GetImageKeywordlist());
+      m_DEMToImageGenerator->SetOutputImageMetadata(&(GetParameterImage("io.inleft")->GetImageMetadata()));
       m_DEMToImageGenerator->AboveEllipsoidOn();
 
       m_StatisticsFilter->SetInput(m_DEMToImageGenerator->GetOutput());

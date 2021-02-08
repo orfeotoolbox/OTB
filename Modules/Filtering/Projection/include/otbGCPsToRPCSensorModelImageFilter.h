@@ -140,9 +140,6 @@ public:
   /** Set the GCP container */
   void SetGCPsContainer(const GCPsContainerType& container);
 
-  /** Get Keywordlist */
-  itkGetConstReferenceMacro(Keywordlist, ImageKeywordlist);
-
   /** Add a GCP to the GCPContainer. This version of the AddGCP method
    * accepts a 3D ground point and does not use DEM or MeanElevation
    * to handle the elevation */
@@ -205,8 +202,8 @@ private:
   /** Container of GCPs */
   GCPsContainerType m_GCPsContainer;
 
-  /** Keywordlist */
-  ImageKeywordlist m_Keywordlist;
+  /** ImageMetadata */
+  ImageMetadata m_ImageMetadata;
 
   /** Flag to see if model is up-to-date */
   mutable bool m_ModelUpToDate;

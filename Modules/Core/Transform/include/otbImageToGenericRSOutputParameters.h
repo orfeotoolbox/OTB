@@ -23,6 +23,7 @@
 
 #include "itkObject.h"
 #include "otbGenericRSTransform.h"
+#include "otbImageMetadata.h"
 #include <string>
 
 namespace otb
@@ -148,18 +149,17 @@ public:
     return m_Transform->GetOutputProjectionRef();
   }
 
-  /** Set/Get Input Keywordlist
-   * \deprecated
+  /** Set/Get Input ImageMetadata
    */
-  void SetInputKeywordList(const ImageKeywordlist& kwl)
+  void SetInputImageMetadata(ImageMetadata* imd)
   {
-    m_Transform->SetOutputKeywordList(kwl);
+    m_Transform->SetOutputImageMetadata(imd);
     this->Modified();
   }
 
-  const ImageKeywordlist GetInputKeywordList()
+  const ImageMetadata* GetInputImageMetadata()
   {
-    return m_Transform->GetOutputKeywordList();
+    return m_Transform->GetOutputImageMetadata();
   }
 
   /** Method to trigger the output parameters */

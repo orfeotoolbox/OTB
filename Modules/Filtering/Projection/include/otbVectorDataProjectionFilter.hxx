@@ -37,8 +37,6 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::VectorDataProje
 {
   m_InputProjectionRef.clear();
   m_OutputProjectionRef.clear();
-  m_InputKeywordList.Clear();
-  m_OutputKeywordList.Clear();
   m_InputSpacing.Fill(1);
   m_InputOrigin.Fill(0);
   m_OutputSpacing.Fill(1);
@@ -241,35 +239,24 @@ VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::ProcessPolygonL
 template <class TInputVectorData, class TOutputVectorData>
 void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::InstantiateTransform(void)
 {
-
-  //   otbMsgDevMacro(<< "Information to instantiate transform (VectorDataProjectionFilter): ");
-  //   otbMsgDevMacro(<< " * Input Origin: " << m_InputOrigin);
-  //   otbMsgDevMacro(<< " * Input Spacing: " << m_InputSpacing);
-  //   otbMsgDevMacro(<< " * Input keyword list: "
-  //       << ((m_InputKeywordList.GetSize() == 0)?"Empty":"Full"));
-  //   otbMsgDevMacro(<< " * Input projection: " << m_InputProjectionRef);
-  //   otbMsgDevMacro(<< " * Output keyword list: "
-  //       << ((m_OutputKeywordList.GetSize() == 0)?"Empty":"Full"));
-  //   otbMsgDevMacro(<< " * Output projection: " << m_OutputProjectionRef);
-  //   otbMsgDevMacro(<< " * Output Origin: " << m_OutputOrigin);
-  //   otbMsgDevMacro(<< " * Output Spacing: " << m_OutputSpacing);
-
   m_Transform = InternalTransformType::New();
 
-  InputVectorDataPointer         input     = this->GetInput();
+  InputVectorDataPointer input      = this->GetInput();
   const itk::MetaDataDictionary& inputDict = input->GetMetaDataDictionary();
 
   OutputVectorDataPointer  output     = this->GetOutput();
   itk::MetaDataDictionary& outputDict = output->GetMetaDataDictionary();
 
-  //   m_Transform->SetInputDictionary(input->GetMetaDataDictionary());
-  m_Transform->SetInputDictionary(inputDict);
-  m_Transform->SetOutputDictionary(output->GetMetaDataDictionary());
+  m_Transform->SetInputImageMetadata(m_InputImageMetadata);
+  m_Transform->SetOutputImageMetadata(m_OutputImageMetadata);
+
+  if (m_InputProjectionRef.empty())
+  {
+    itk::ExposeMetaData<std::string>(inputDict, MetaDataKey::ProjectionRefKey, m_InputProjectionRef);
+  }
 
   m_Transform->SetInputProjectionRef(m_InputProjectionRef);
   m_Transform->SetOutputProjectionRef(m_OutputProjectionRef);
-  m_Transform->SetInputKeywordList(m_InputKeywordList);
-  m_Transform->SetOutputKeywordList(m_OutputKeywordList);
   m_Transform->SetInputSpacing(m_InputSpacing);
   m_Transform->SetInputOrigin(m_InputOrigin);
   m_Transform->SetOutputSpacing(m_OutputSpacing);
@@ -282,11 +269,6 @@ void VectorDataProjectionFilter<TInputVectorData, TOutputVectorData>::Instantiat
   m_OutputProjectionRef = m_Transform->GetOutputProjectionRef();
 
   // If the projection information for the output is provided, propagate it
-
-  if (m_OutputKeywordList.GetSize() != 0)
-  {
-    itk::EncapsulateMetaData<ImageKeywordlist>(outputDict, MetaDataKey::OSSIMKeywordlistKey, m_OutputKeywordList);
-  }
   if (!m_OutputProjectionRef.empty())
   {
     itk::EncapsulateMetaData<std::string>(outputDict, MetaDataKey::ProjectionRefKey, m_OutputProjectionRef);

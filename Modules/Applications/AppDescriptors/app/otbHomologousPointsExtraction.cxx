@@ -333,17 +333,17 @@ private:
 
     // Setting up RS Transform
     RSTransformType::Pointer rsTransform = RSTransformType::New();
-    rsTransform->SetInputKeywordList(image1->GetImageKeywordlist());
+    rsTransform->SetInputImageMetadata(&(image1->GetImageMetadata()));
     rsTransform->SetInputProjectionRef(image1->GetProjectionRef());
-    rsTransform->SetOutputKeywordList(image2->GetImageKeywordlist());
+    rsTransform->SetOutputImageMetadata(&(image2->GetImageMetadata()));
     rsTransform->SetOutputProjectionRef(image2->GetProjectionRef());
 
     RSTransformType::Pointer rsTransform1ToWGS84 = RSTransformType::New();
-    rsTransform1ToWGS84->SetInputKeywordList(image1->GetImageKeywordlist());
+    rsTransform1ToWGS84->SetInputImageMetadata(&(image1->GetImageMetadata()));
     rsTransform1ToWGS84->SetInputProjectionRef(image1->GetProjectionRef());
 
     RSTransformType::Pointer rsTransform2ToWGS84 = RSTransformType::New();
-    rsTransform2ToWGS84->SetInputKeywordList(image2->GetImageKeywordlist());
+    rsTransform2ToWGS84->SetInputImageMetadata(&(image2->GetImageMetadata()));
     rsTransform2ToWGS84->SetInputProjectionRef(image2->GetProjectionRef());
 
     // Setting up output file

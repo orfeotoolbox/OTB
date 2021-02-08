@@ -1504,6 +1504,11 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     std::string projectionRef( m_Imd.GetProjectionWKT() );
     dataset->SetProjection(projectionRef.c_str());
     }
+  else if (m_Imd.Has(MDGeom::ProjectionProj))
+   {
+     std::string projectionRef( m_Imd.GetProjectionProj() );
+     dataset->SetProjection(projectionRef.c_str());
+   }
   /* -------------------------------------------------------------------- */
   /* Case 2: Sensor geometry                                              */
   /* -------------------------------------------------------------------- */
@@ -1946,9 +1951,9 @@ void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int 
     {
       // GCPs have already been exported (see InternalWriteImageInformation)
     }
-    else if (kv.first == MetaData::MDGeomNames.left.at(MDGeom::ProjectionWKT))
+    else if ((kv.first == MetaData::MDGeomNames.left.at(MDGeom::ProjectionWKT)) || (kv.first == MetaData::MDGeomNames.left.at(MDGeom::ProjectionProj)))
     {
-      // WKT projection have already been exported (see InternalWriteImageInformation)
+      // Projection have already been exported (see InternalWriteImageInformation)
     }
     else
       SetMetadataValue(kv.first.c_str(), kv.second.c_str(), band);

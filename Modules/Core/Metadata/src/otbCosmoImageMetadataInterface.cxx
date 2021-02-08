@@ -357,8 +357,6 @@ std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const MetadataSupplier
 
 void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds.GetNbBands() == this->m_Imd.Bands.size());
-
   // Check Mission Id, acquisition mode and product type
   Fetch(MDStr::Mission, mds, "MISSION_ID");
 
@@ -431,7 +429,6 @@ void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
   sarParam.orbits = this->getOrbits(mds, reference_UTC);
 
   m_Imd.Bands[0].Add(MDGeom::SAR, sarParam);
-
 }
 
 

@@ -1254,7 +1254,6 @@ Spot6ImageMetadataInterface::WavelengthSpectralBandVectorType Spot6ImageMetadata
   return wavelengthSpectralBand;
 }
 
-
 void Spot6ImageMetadataInterface::FetchSpectralSensitivity(const std::string & sensorId)
 {
   std::unordered_map<std::string, std::vector<double>> BandNameToSpectralSensitivityTable;

@@ -251,14 +251,15 @@ void GlROIActor::UpdateTransforms()
       m_ViewportToImageTransform = RSTransformType::New();
 
       m_ViewportToImageTransform->SetInputProjectionRef( settings->GetWkt() );
-      m_ViewportToImageTransform->SetInputKeywordList( settings->GetKeywordList() );
+      //TODO: Replace KeywordList by ImageMetadata in the settings object
+      //m_ViewportToImageTransform->SetInputKeywordList( settings->GetKeywordList() );
       m_ViewportToImageTransform->SetOutputProjectionRef( m_Wkt );
-      m_ViewportToImageTransform->SetOutputKeywordList( m_Kwl );
+      //TODO: m_ViewportToImageTransform->SetOutputKeywordList( m_Kwl );
 
       m_ImageToViewportTransform->SetInputProjectionRef( m_Wkt );
-      m_ImageToViewportTransform->SetInputKeywordList( m_Kwl );
+      //TODO: m_ImageToViewportTransform->SetInputKeywordList( m_Kwl );
       m_ImageToViewportTransform->SetOutputProjectionRef( settings->GetWkt() );
-      m_ImageToViewportTransform->SetOutputKeywordList( settings->GetKeywordList() );
+      //TODO: m_ImageToViewportTransform->SetOutputKeywordList( settings->GetKeywordList() );
 
       m_ViewportToImageTransform->InstantiateTransform();
       m_ImageToViewportTransform->InstantiateTransform();

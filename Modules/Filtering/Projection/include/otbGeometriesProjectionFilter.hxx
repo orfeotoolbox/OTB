@@ -79,17 +79,4 @@ inline void otb::GeometriesProjectionFilter::SetOutputOrigin(ImageReference::Ori
   m_OutputImageReference.SetOrigin(origin);
 }
 
-
-inline void otb::GeometriesProjectionFilter::SetInputKeywordList(const ImageKeywordlist& kwl)
-{
-  this->m_InputKeywordList = kwl;
-  this->Modified();
-}
-
-inline void otb::GeometriesProjectionFilter::SetOutputKeywordList(const ImageKeywordlist& kwl)
-{
-  this->m_OutputKeywordList = kwl;
-  this->Modified();
-}
-
 #endif

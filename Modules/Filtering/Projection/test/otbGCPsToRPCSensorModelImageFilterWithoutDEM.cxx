@@ -80,7 +80,9 @@ int otbGCPsToRPCSensorModelImageFilterWithoutDEM(int argc, char* argv[])
   ofs.setf(std::ios::fixed, std::ios::floatfield);
   ofs.precision(10);
 
-  ofs << rpcEstimator->GetOutput()->GetImageKeywordlist() << std::endl;
+  auto outputRPC = boost::any_cast<otb::Projection::RPCParam>(rpcEstimator->GetOutput()->GetImageMetadata()[otb::MDGeom::RPC]);
+
+  ofs << outputRPC.ToJSON() << std::endl;
   ofs << "Residual ground error: " << rpcEstimator->GetRMSGroundError() << std::endl;
   ofs.close();
 

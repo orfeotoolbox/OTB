@@ -526,7 +526,6 @@ double Sentinel1ImageMetadataInterface::getBandTerrainHeight(const XMLMetadataSu
 
 void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  assert(mds.GetNbBands() == this->m_Imd.Bands.size());
   // Metadata read by GDAL
   Fetch(MDTime::AcquisitionStartTime, mds, "ACQUISITION_START_TIME");
   Fetch(MDTime::AcquisitionStopTime, mds, "ACQUISITION_STOP_TIME");
@@ -555,6 +554,7 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface & md
     		ManifestMS.GetFirstAs<MetaData::Time>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:acquisitionPeriod.safe:startTime"));
   }
 
+  assert(mds.GetNbBands() == this->m_Imd.Bands.size());
   // Band metadata
   for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
   {
@@ -599,6 +599,7 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface & md
     if (NoiseFilePath.empty())
           otbGenericExceptionMacro(MissingMetadataException,<<"Missing Noise file for band '"<<swath<<"'");
     XMLMetadataSupplier NoiseMS(NoiseFilePath);
+    sarParam.noiseVector = this->GetNoiseVector(NoiseMS);
 
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }

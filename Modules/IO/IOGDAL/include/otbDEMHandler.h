@@ -26,6 +26,34 @@
 
 namespace otb
 {
+
+
+
+/** \class DEMObserverInterface
+ *
+ * \brief Observer design pattern to keep track of DEM configuration changes
+ * \ingroup OTBIOGDAL
+ */
+class DEMObserverInterface {
+ public:
+  virtual ~DEMObserverInterface() = default;
+  virtual void Update() = 0;
+};
+
+/** \class DEMSubjectInterface
+ *
+ * \brief Observer design pattern to keep track of DEM configuration changes
+ * \ingroup OTBIOGDAL
+ */
+class DEMSubjectInterface {
+ public:
+  virtual ~DEMSubjectInterface() = default;
+  virtual void AttachObserver(DEMObserverInterface *observer) = 0;
+  virtual void DetachObserver(DEMObserverInterface *observer) = 0;
+  virtual void Notify() const = 0;
+};
+
+
 /** \class DEMHandler
  *
  * \brief Single access point for DEM data retrieval
@@ -33,7 +61,7 @@ namespace otb
  * This class is the single configuration and access point for
  * elevation handling in images projections and localization
  * functions. Since this class is a singleton, there is no New() method. The
- * DEMHandler::Instance() method should be used instead.
+ * DEMHandler::GetInstance() method should be used instead.
  *
  * Please be aware that a proper instantiation and parameter setting
  * of this class is advised before any call to geometric filters or
@@ -67,7 +95,7 @@ namespace otb
  *
  * \ingroup OTBIOGDAL
  */
-class DEMHandler
+class DEMHandler : public DEMSubjectInterface
 {
 public:
   using Self =          DEMHandler;
@@ -140,6 +168,21 @@ public:
 
   /** Clear the DEM list and close all DEM datasets */
   void ClearDEMs();
+  
+  /** Add an element to the current list of observers. The obsever will be updated whenever the DEM configuration
+  is modified*/
+  void AttachObserver(DEMObserverInterface *observer) override {m_ObserverList.push_back(observer);};
+  
+  /** Remove an element of the current list of observers. */
+  void DetachObserver(DEMObserverInterface *observer) override {m_ObserverList.remove(observer);};
+  
+  /** Update all observers */
+  void Notify() const override;
+
+  /** Path to the in-memory vrt */
+  const std::string DEM_DATASET_PATH = "/vsimem/otb_dem_dataset.vrt";
+  const std::string DEM_WARPED_DATASET_PATH = "/vsimem/otb_dem_warped_dataset.vrt";
+  const std::string DEM_SHIFTED_DATASET_PATH = "/vsimem/otb_dem_shifted_dataset.vrt";
 
 protected: 
   DEMHandler(); 
@@ -149,7 +192,10 @@ protected:
 
 private:
   DEMHandler(const Self&) = delete;
-  void operator=(const Self&) = delete;
+  void operator=(const Self&) = delete;  
+
+  void CreateShiftedDataset();
+
   /** List of RAII capsules on all opened DEM datasets for memory management */
   std::vector<otb::GDALDatasetWrapper::Pointer> m_DatasetList;
   
@@ -158,6 +204,9 @@ private:
 
   /** Pointer to the geoid dataset */
   GDALDataset* m_GeoidDS;
+  
+  /** Pointer to the sifted dataset */
+  GDALDataset* m_ShiftedDS;
   
   /** Default height above elliposid, used when no DEM or geoid height is available. */
   double m_DefaultHeightAboveEllipsoid;
@@ -168,6 +217,8 @@ private:
   /** Filename of the current geoid */
   std::string m_GeoidFilename;
 
+  /** Observers on the DEM */
+  std::list<DEMObserverInterface *> m_ObserverList;
 };
 
 }

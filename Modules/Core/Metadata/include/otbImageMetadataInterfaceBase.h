@@ -245,7 +245,7 @@ public:
 
   const std::string& Fetch(std::string key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
 
-  const boost::any& FetchRPC(const MetadataSupplierInterface & mds);
+  const boost::any& FetchRPC(const MetadataSupplierInterface & mds, const double lineOffset = 0.0, const double sampleOffset = 0.0);
 
   /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
    * then translate it into ImageMetadata.

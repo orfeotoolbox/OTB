@@ -18,42 +18,41 @@
  * limitations under the License.
  */
 
-#include "otbMacro.h"
-#include "otbImage.h"
+#include "otbRPCSolver.h" 
+#include "otbDEMHandler.h"
 #include "otbImageFileReader.h"
 #include "otbGenericRSTransform.h"
 #include "otbGeographicalDistance.h"
 #include "itkEuclideanDistanceMetric.h"
-#include "otbSensorModelAdapter.h"
-#include "otbRPCSolverAdapter.h"
-#include "otbDEMHandler.h"
 
-typedef otb::Image<double>                 ImageType;
-typedef otb::ImageFileReader<ImageType>    ReaderType;
-typedef otb::GenericRSTransform<>          RSTranformType;
-typedef otb::RPCSolverAdapter::Point2DType Point2DType;
-typedef otb::RPCSolverAdapter::Point3DType Point3DType;
-typedef otb::GenericRSTransform<double, 3, 3> RSTranform3dType;
-typedef itk::Statistics::EuclideanDistanceMetric<Point2DType> EuclideanDistanceMetricType;
-typedef otb::GeographicalDistance<Point2DType>                GeoDistanceType;
+int otbRPCSolverTest(int argc, char* argv[])
+{ 
+  using ImageType = otb::Image<double>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+  using RSTranformType = otb::GenericRSTransform<>;
+  using Point2DType = otb::RPCSolver::Point2DType;
+  using Point3DType = otb::RPCSolver::Point3DType;
+  using RSTranform3dType = otb::GenericRSTransform<double, 3, 3>;
+  using EuclideanDistanceMetricType = itk::Statistics::EuclideanDistanceMetric<Point2DType>;
+  using GeoDistanceType = otb::GeographicalDistance<Point2DType>;
 
-int otbRPCSolverAdapterTest(int argc, char* argv[])
-{
+
   if (argc < 7)
   {
     std::cout << "Usage: test_driver input grid_size geo_tol img_tol dem_dir geoid" << std::endl;
     return EXIT_FAILURE;
   }
+
   // This test takes a sensor model (possibly a rpc one), use it to
   // generate gcps and estimate a rpc model. It then checks the
   // precision of both forward and inverse transform
-  std::string        infname  = argv[1];
+  const std::string        infname  = argv[1];
   const unsigned int gridSize = atoi(argv[2]);
   const double       geoTol   = atof(argv[3]);
   const double       imgTol   = atof(argv[4]);
   const std::string  demdir   = argv[5];
   const std::string  geoid    = argv[6];
-
+  
   if (gridSize == 0)
   {
     std::cerr << "Grid size is null!" << std::endl;
@@ -75,15 +74,17 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
   reader->UpdateOutputInformation();
 
   RSTranformType::Pointer fwd2dTransform = RSTranformType::New();
-  fwd2dTransform->SetInputKeywordList(reader->GetOutput()->GetImageKeywordlist());
+
+  fwd2dTransform->SetInputImageMetadata(&(reader->GetOutput()->GetImageMetadata()));
   fwd2dTransform->InstantiateTransform();
 
-  ImageType::SizeType size = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
 
-  unsigned int stepx = size[0] / gridSize;
-  unsigned int stepy = size[1] / gridSize;
+    ImageType::SizeType size = reader->GetOutput()->GetLargestPossibleRegion().GetSize();
 
-  otb::RPCSolverAdapter::GCPsContainerType gcps;
+    unsigned int stepx = size[0] / gridSize;
+    unsigned int stepy = size[1] / gridSize;
+
+    otb::RPCSolver::GCPsContainerType gcps;
 
   // Generate gcps
   for (unsigned int i = 0; i < gridSize; ++i)
@@ -108,51 +109,39 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
 
       gcps.push_back(std::make_pair(currentPoint, current3DWgs84Point));
 
-      std::cout << currentPoint[0] << " " << currentPoint[1] << " " << current3DWgs84Point[0] << " " << current3DWgs84Point[1] << " " << current3DWgs84Point[2]
-                << std::endl;
     }
   }
 
-  // Solve rpc
-  otb::ImageKeywordlist rpcKwl;
-  double                rmse;
+  double rmse;
+  otb::Projection::RPCParam params;
+  
+  otb::RPCSolver::Solve(gcps, rmse, params);
 
-  // Call solver: either write geom and exit, or evaluate model precision
-  if (argc == 8)
-  {
-    const std::string outgeom = argv[7];
-    bool              success = otb::RPCSolverAdapter::Solve(gcps, rmse, outgeom);
-    if (success)
-      return EXIT_SUCCESS;
-    else
-      return EXIT_FAILURE;
-  }
-
-  otb::RPCSolverAdapter::Solve(gcps, rmse, rpcKwl);
-
-  std::cout << "Optimization done, RMSE=" << rmse << std::endl;
+  auto outputMetadata = reader->GetOutput()->GetImageMetadata();
+  
+  outputMetadata.Add(otb::MDGeom::RPC, params);
 
   // Build forward and inverse rpc transform
   RSTranform3dType::Pointer rpcFwdTransform = RSTranform3dType::New();
-  rpcFwdTransform->SetInputKeywordList(rpcKwl);
+  rpcFwdTransform->SetInputImageMetadata(&outputMetadata);
   rpcFwdTransform->InstantiateTransform();
   RSTranformType::Pointer rpcInvTransform = RSTranformType::New();
-  rpcInvTransform->SetOutputKeywordList(rpcKwl);
+  rpcInvTransform->SetOutputImageMetadata(&outputMetadata);
   rpcInvTransform->InstantiateTransform();
-
+  
   EuclideanDistanceMetricType::Pointer euclideanDistanceMetric = EuclideanDistanceMetricType::New();
   GeoDistanceType::Pointer             geoDistance             = GeoDistanceType::New();
 
   bool fail = false;
 
-  for (otb::RPCSolverAdapter::GCPsContainerType::iterator it = gcps.begin(); it != gcps.end(); ++it)
+  for (auto it = gcps.begin(); it != gcps.end(); ++it)
   {
     Point2DType imgPoint, groundPoint, groundPoint2dRef;
     Point3DType imgPoint3D, groundPoint3D;
 
     groundPoint2dRef[0] = it->second[0];
     groundPoint2dRef[1] = it->second[1];
-
+    
     // Check forward transform
     imgPoint3D[0] = it->first[0];
     imgPoint3D[1] = it->first[1];
@@ -162,7 +151,7 @@ int otbRPCSolverAdapterTest(int argc, char* argv[])
 
     groundPoint[0] = groundPoint3D[0];
     groundPoint[1] = groundPoint3D[1];
-
+    
     double groundRes = geoDistance->Evaluate(groundPoint, groundPoint2dRef);
 
     if (groundRes > geoTol)
