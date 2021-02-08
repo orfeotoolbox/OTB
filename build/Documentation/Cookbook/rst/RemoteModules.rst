@@ -534,7 +534,7 @@ You have two options to use OTB in your CI :
   script:
     - command to build and test your module here
 
-* Build a docker image containing an otb build tree. Run this docker image in travis and build your module against this build tree
+* Build a docker image containing an otb build tree. Run this docker image in travis and build you module against this build tree
 
 .. code-block:: bash
 
