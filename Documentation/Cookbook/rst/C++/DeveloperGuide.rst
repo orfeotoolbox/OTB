@@ -7,6 +7,9 @@ Developer Guide
     Iterators
     Filters
     StreamingAndThreading
+    Metadata
+    DEM
+    SensorModel
     FunctorImageFilter
     PersistentFilters
     WriteAnApplication
