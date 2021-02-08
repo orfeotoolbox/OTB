@@ -1,9 +1,6 @@
 DEM Handler
 ===========
 
-Before the refactoring, otb::DEMHandler class was an adapter class for
-OSSIM DEMs. It provided an API to retrieve height from DEM and/or geoid using OSSIM, and was used to set up DEM and geoids to be used by OSSIM internally (which is used in OSSIM RPCs for example).
-
 
 The ``otb::DEMHandler`` class is a singleton, a reference to the singleton object can be acquired via the ``otb::DEMHandler::GetInstance()`` method. The DEMHandler is based on RasterIO from GDAL. A 2x2 window is extracted around the point of interest, and the height above ellipsoid or above mean sea level is interpolated on this window. The interpolation is bilinear. The following methods are provided:
 
