@@ -10,4 +10,3 @@ Developer Guide
     FunctorImageFilter
     PersistentFilters
     WriteAnApplication
-    AddingNewModules
