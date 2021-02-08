@@ -78,7 +78,6 @@ Table of Contents
     C++/Tutorial.rst
     C++/UserGuide.rst
     C++/Examples.rst
-
     C++/DeveloperGuide.rst
 
 .. toctree::
@@ -88,5 +87,6 @@ Table of Contents
     EnvironmentVariables
     ExtendedFilenames
     CompilingOTBFromSource
+    RemoteModules
     FAQ
     Contributors
