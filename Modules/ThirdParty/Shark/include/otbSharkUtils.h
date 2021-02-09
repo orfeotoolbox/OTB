@@ -27,6 +27,7 @@
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-copy"
 #pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Wsign-compare"
@@ -55,35 +56,37 @@ namespace otb
 {
 namespace Shark
 {
-template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::vector<shark::RealVector> & output, unsigned int start, unsigned int size)
+template <class T>
+void ListSampleRangeToSharkVector(const T* listSample, std::vector<shark::RealVector>& output, unsigned int start, unsigned int size)
 {
   assert(listSample != nullptr);
 
-  if(start+size>listSample->Size())
-    {
-    std::out_of_range e_(std::string("otb::Shark::ListSampleRangeToSharkVector "
-      ": Requested range is out of list sample bounds"));
+  if (start + size > listSample->Size())
+  {
+    std::out_of_range e_(
+        std::string("otb::Shark::ListSampleRangeToSharkVector "
+                    ": Requested range is out of list sample bounds"));
     throw e_;
-    }
-  
+  }
+
   output.clear();
-      
+
   // Sample index
   unsigned int sampleIdx = start;
-    
-  //Check for valid listSample
-  if(listSample->Size()>0)
-    {
+
+  // Check for valid listSample
+  if (listSample->Size() > 0)
+  {
     // Retrieve samples size alike
     const unsigned int sampleSize = listSample->GetMeasurementVectorSize();
 
     // Fill the output vector
 
-    for (auto const endOfRange = start+size ; sampleIdx < endOfRange ; ++sampleIdx)
-      {
+    for (auto const endOfRange = start + size; sampleIdx < endOfRange; ++sampleIdx)
+    {
       // Retrieve sample
-      typename T::MeasurementVectorType const & sample = listSample->GetMeasurementVector(sampleIdx);
-	   
+      typename T::MeasurementVectorType const& sample = listSample->GetMeasurementVector(sampleIdx);
+
       // // Define a shark::RealVector
       // shark::RealVector rv(sampleSize);
       // // Loop on sample size
@@ -94,83 +97,88 @@ template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::
       // using std::move;
       // output.emplace_back(move(rv));
 
-      output.emplace_back(&sample[0], &sample[0]+sampleSize);
-      }
+      output.emplace_back(&sample[0], &sample[0] + sampleSize);
     }
+  }
 }
 
-template <class T> void ListSampleRangeToSharkVector(const T * listSample, std::vector<unsigned int> & output, unsigned int start, unsigned int size)
+template <class T>
+void ListSampleRangeToSharkVector(const T* listSample, std::vector<unsigned int>& output, unsigned int start, unsigned int size)
 {
   assert(listSample != nullptr);
 
-  if(start+size>listSample->Size())
-    {
-    std::out_of_range e_(std::string("otb::Shark::ListSampleRangeToSharkVector "
-      ": Requested range is out of list sample bounds"));
+  if (start + size > listSample->Size())
+  {
+    std::out_of_range e_(
+        std::string("otb::Shark::ListSampleRangeToSharkVector "
+                    ": Requested range is out of list sample bounds"));
     throw e_;
-    }
+  }
 
   output.clear();
-  
+
   // Sample index
   unsigned int sampleIdx = start;
-    
-  //Check for valid listSample
-  if(listSample->Size()>0)
-    {
+
+  // Check for valid listSample
+  if (listSample->Size() > 0)
+  {
     // Fill the output vector
-    while(sampleIdx<start+size)
-      {
+    while (sampleIdx < start + size)
+    {
       // Retrieve sample
-      typename T::MeasurementVectorType const & sample = listSample->GetMeasurementVector(sampleIdx);
-	   
+      typename T::MeasurementVectorType const& sample = listSample->GetMeasurementVector(sampleIdx);
+
       // Define a shark::RealVector
       output.push_back(sample[0]);
       ++sampleIdx;
-      }
-    } 
+    }
+  }
 }
 
-template <class T> void ListSampleToSharkVector(const T * listSample, std::vector<shark::RealVector> & output)
+template <class T>
+void ListSampleToSharkVector(const T* listSample, std::vector<shark::RealVector>& output)
 {
   assert(listSample != nullptr);
-  ListSampleRangeToSharkVector(listSample,output,0U,static_cast<unsigned int>(listSample->Size()));
+  ListSampleRangeToSharkVector(listSample, output, 0U, static_cast<unsigned int>(listSample->Size()));
 }
 
-template <class T> void ListSampleToSharkVector(const T * listSample, std::vector<unsigned int> & output)
+template <class T>
+void ListSampleToSharkVector(const T* listSample, std::vector<unsigned int>& output)
 {
   assert(listSample != nullptr);
-  ListSampleRangeToSharkVector(listSample,output,0, static_cast<unsigned int>(listSample->Size()));
+  ListSampleRangeToSharkVector(listSample, output, 0, static_cast<unsigned int>(listSample->Size()));
 }
 
-/** Shark assumes that labels are 0 ... (nbClasses-1). This function modifies the labels contained in the input vector and returns a vector with size = nbClasses which allows the translation from the normalised labels to the new ones oldLabel = dictionary[newLabel].
-When we want to generate the image containing the probability for each class, we need to ensure that the probabilities are in the correct order wrt the incoming labels. We therefore sort the labels before building the encoding.
+/** Shark assumes that labels are 0 ... (nbClasses-1). This function modifies the labels contained in the input vector and returns a vector with size =
+nbClasses which allows the translation from the normalised labels to the new ones oldLabel = dictionary[newLabel]. When we want to generate the image containing
+the probability for each class, we need to ensure that the probabilities are in the correct order wrt the incoming labels. We therefore sort the labels before
+building the encoding.
 */
-template <typename T> void NormalizeLabelsAndGetDictionary(std::vector<T>& labels, 
-                                                           std::vector<T>& dictionary)
+template <typename T>
+void NormalizeLabelsAndGetDictionary(std::vector<T>& labels, std::vector<T>& dictionary)
 {
   std::vector<T> sorted_labels = labels;
   std::sort(std::begin(sorted_labels), std::end(sorted_labels));
   auto last = std::unique(std::begin(sorted_labels), std::end(sorted_labels));
   sorted_labels.erase(last, std::end(sorted_labels));
   std::unordered_map<T, T> dictMap;
-  T labelCount{0};
-  for(const auto& l : sorted_labels)
-    {
-    if(dictMap.find(l)==dictMap.end())
+  T                        labelCount{0};
+  for (const auto& l : sorted_labels)
+  {
+    if (dictMap.find(l) == dictMap.end())
       dictMap.insert({l, labelCount++});
-    }
+  }
   dictionary.resize(labelCount);
-  for(auto& l : labels)
-    {
-    auto newLabel = dictMap[l];
+  for (auto& l : labels)
+  {
+    auto newLabel        = dictMap[l];
     dictionary[newLabel] = l;
-    l = newLabel;
-    }
+    l                    = newLabel;
+  }
 }
-  
-}
-}
+
+} // namespace Shark
+} // namespace otb
 
 #endif
-
