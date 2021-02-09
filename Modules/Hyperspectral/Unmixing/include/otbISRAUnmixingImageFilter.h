@@ -24,7 +24,7 @@
 #include "itkNumericTraits.h"
 #include "otbFunctorImageFilter.h"
 #include "vnl/algo/vnl_svd.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace otb
 {
@@ -80,7 +80,7 @@ private:
   }
 
   typedef vnl_svd<PrecisionType>     SVDType;
-  typedef boost::shared_ptr<SVDType> SVDPointerType;
+  typedef std::shared_ptr<SVDType> SVDPointerType;
 
   MatrixType     m_U;
   SVDPointerType m_Svd; // SVD of U
