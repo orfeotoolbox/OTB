@@ -29,9 +29,11 @@ otb_add_test(NAME leTvANNMachineLearningModelReg COMMAND otbSupervisedTestDriver
   otbNeuralNetworkRegressionTests
   )
 
+if(OTB_USE_LIBSVM)
 otb_add_test(NAME leTvSVMMachineLearningModelReg COMMAND otbSupervisedTestDriver
   otbSVMRegressionTests
   )
+endif()
 
 otb_add_test(NAME leTvDecisionTreeMachineLearningModelReg COMMAND otbSupervisedTestDriver
   otbDecisionTreeRegressionTests
@@ -46,6 +48,7 @@ otb_add_test(NAME leTvRandomForestsMachineLearningModelReg COMMAND otbSupervised
   )
 # --------------------------------------------------------------
 
+if(OTB_USE_LIBSVM)
 otb_add_test(NAME leTvSVMMachineLearningRegressionModel COMMAND otbSupervisedTestDriver
   otbSVMMachineLearningRegressionModel
   ${INPUTDATA}/abalone.scale
@@ -57,6 +60,7 @@ otb_add_test(NAME leTvSVMMachineLearningModel COMMAND otbSupervisedTestDriver
   ${INPUTDATA}/letter_light.scale
   ${TEMP}/svm_model.txt
   )
+endif()
 
 otb_add_test(NAME leTvNormalBayesMachineLearningModel COMMAND otbSupervisedTestDriver
   otbNormalBayesMachineLearningModel
@@ -116,11 +120,13 @@ otb_add_test(NAME leTvANNMachineLearningModelCanRead COMMAND otbSupervisedTestDr
   )
 set_property(TEST leTvANNMachineLearningModelCanRead PROPERTY DEPENDS leTvANNMachineLearningModel)
 
+if(OTB_USE_LIBSVM)
 otb_add_test(NAME leTvSVMMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbSVMMachineLearningModelCanRead
   ${TEMP}/svm_model.txt
   )
 set_property(TEST leTvSVMMachineLearningModelCanRead PROPERTY DEPENDS leTvSVMMachineLearningModel)
+endif()
 
 otb_add_test(NAME leTvBoostMachineLearningModelCanRead COMMAND otbSupervisedTestDriver
   otbBoostMachineLearningModelCanRead

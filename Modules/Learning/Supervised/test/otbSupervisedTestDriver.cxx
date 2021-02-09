@@ -43,7 +43,12 @@ void RegisterTests()
 
 #ifdef OTB_USE_OPENCV
   // can read tests
-  REGISTER_TEST(otbSVMMachineLearningModelCanRead);
+  #ifdef OTB_USE_LIBSVM
+    REGISTER_TEST(otbSVMMachineLearningModelCanRead);
+    REGISTER_TEST(otbSVMMachineLearningModel);
+    REGISTER_TEST(otbSVMRegressionTests);
+    REGISTER_TEST(otbSVMMachineLearningRegressionModel);
+  #endif
   REGISTER_TEST(otbRandomForestsMachineLearningModelCanRead);
   REGISTER_TEST(otbBoostMachineLearningModelCanRead);
   REGISTER_TEST(otbNeuralNetworkMachineLearningModelCanRead);
@@ -51,7 +56,6 @@ void RegisterTests()
   REGISTER_TEST(otbDecisionTreeMachineLearningModelCanRead);
   REGISTER_TEST(otbKNNMachineLearningModelCanRead);
   // training tests
-  REGISTER_TEST(otbSVMMachineLearningModel);
   REGISTER_TEST(otbKNearestNeighborsMachineLearningModel);
   REGISTER_TEST(otbRandomForestsMachineLearningModel);
   REGISTER_TEST(otbBoostMachineLearningModel);
@@ -60,8 +64,6 @@ void RegisterTests()
   REGISTER_TEST(otbDecisionTreeMachineLearningModel);
   // regression tests
   REGISTER_TEST(otbNeuralNetworkRegressionTests);
-  REGISTER_TEST(otbSVMRegressionTests);
-  REGISTER_TEST(otbSVMMachineLearningRegressionModel);
   REGISTER_TEST(otbDecisionTreeRegressionTests);
   REGISTER_TEST(otbKNearestNeighborsRegressionTests);
   REGISTER_TEST(otbRandomForestsRegressionTests);
