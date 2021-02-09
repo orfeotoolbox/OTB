@@ -1,3 +1,39 @@
+OTB-v 8.0.0-alpha - Changes since version 7.2.0 (February 09nd, 2021)
+----------------------------------------------------------------
+
+Features added:
+
+   * !769: Missing kernels parameters in libsvm by Rémi Cresson
+   * !767: Improve QGIS interface for ExtractROI application by Julien Cabieces
+   * !697: Use Boost.SmallVec in BCO interpolator by Laurențiu Nicola
+
+Bugs fixed:
+
+   * !775: Fix CosmoSkyMed ImageMetadataInterface by Cédric Traizet
+   * !752: Fix output image from orthorectification having no projection by Cédric Traizet
+   * !751: Disable noisy std output message by Brad Hards
+
+Refactoring:
+
+   * !778: Remove OSSIM dependency from SensorModel tests by Julien Osman
+   * !776: Improve tests prTvTestCreateInverseForwardSensorModel by Julien Osman
+   * !773: Refactor the OpticalCalibration application by Cédric Traizet
+   * !770: Parse optical metadata from geom by Cédric Traizet
+   * !768: Improve qgis parameter integration by Julien Cabieces
+   * !765: Refactor optical image metadata interface by Cédric Traizet
+   * !763: Compare image metadata in --compare-metadata by Cédric Traizet
+   * !761: SAR metadata interfaces by Julie Brossard
+   * !759: Reading the metadata from the geom files without OSSIM by Julien Osman
+   * !744: Implementing an interface for sensor models and the RPC model by Julien Osman and Cédric Traizet
+   * !729: DEM handler based on GDAL by Cédric Traizet
+   * !707: Metadata refactoring by Guillaume Pasero, Julien Osman and Cédric Traizet
+
+Documentation:
+
+   * !781: Update the documentation about Remote Modules by Thibaut ROMAIN
+   * !780: Updating the documentation in preparation for OTB 8.0.0-alpha1 by Julien Osman
+
+
 OTB-v 7.2.0 - Changes since version 7.1.0 (October 02nd, 2020)
 ----------------------------------------------------------------
 
