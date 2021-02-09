@@ -21,8 +21,9 @@
 #ifndef otbOGRFieldWrapper_h
 #define otbOGRFieldWrapper_h
 
+#include <memory>
 #include <string>
-#include <boost/shared_ptr.hpp>
+
 class OGRFieldDefn;
 class OGRFeature;
 #if defined(_MSC_VER)
@@ -224,7 +225,7 @@ private:
   /// Definition of the field.
   FieldDefn m_Definition;
   /// Link to the actual \c OGRFeature in charge of the fields.
-  boost::shared_ptr<OGRFeature>& m_Feature;
+  std::shared_ptr<OGRFeature>& m_Feature;
   /** Index of the field according to the feature definition.
    * \internal
    * All the fields decoding is at the wrong place (\c OGRFeature instead of

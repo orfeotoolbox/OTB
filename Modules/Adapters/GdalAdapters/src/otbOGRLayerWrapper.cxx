@@ -50,7 +50,7 @@
 namespace
 { // Anonymous namespace
   /**\ingroup GeometryInternals
-   * Deleter for \c boost::shared_ptr<> that doesn't delete.
+   * Deleter for \c std::shared_ptr<> that doesn't delete.
    * This is required for \c OGRLayer s that belong to \c OGRDataSource.
    * \internal Unlike OGR, works as a no-op on null geometries.
    */

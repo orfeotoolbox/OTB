@@ -23,7 +23,6 @@
 
 #include "otbProspectModel.h"
 #include "otb_boost_expint_header.h"
-#include <boost/shared_ptr.hpp>
 #include "otbMath.h"
 
 // TODO check EPSILON matlab

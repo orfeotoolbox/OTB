@@ -24,7 +24,7 @@
 #include "itkMacro.h"
 #include "otbFunctorImageFilter.h"
 #include "vnl/algo/vnl_svd.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace otb
 {
@@ -62,7 +62,7 @@ public:
 
 private:
   typedef vnl_svd<PrecisionType>     SVDType;
-  typedef boost::shared_ptr<SVDType> SVDPointerType;
+  typedef std::shared_ptr<SVDType> SVDPointerType;
 
   unsigned int   m_OutputSize;
   SVDPointerType m_Svd;

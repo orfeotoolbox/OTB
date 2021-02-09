@@ -25,17 +25,16 @@
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wshadow"
-#include <boost/shared_ptr.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/utility/enable_if.hpp>
 #pragma GCC diagnostic pop
 #else
-#include <boost/shared_ptr.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/utility/enable_if.hpp>
 #endif
 // #include "itkIndent.h", included from field
 #include "otbOGRFeatureWrapper.h"
+#include <memory>
 #include <string>
 
 // #include "ogr_core.h" // OGRwkbGeometryType, included from feature -> field
@@ -568,7 +567,7 @@ private:
    * unless this is the result of \c ExecuteSQL(). In that case a deleter is set
    * to correctly release the layer.
    */
-  boost::shared_ptr<OGRLayer> m_Layer;
+  std::shared_ptr<OGRLayer> m_Layer;
 
   bool m_Modifiable;
 
