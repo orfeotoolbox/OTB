@@ -21,7 +21,8 @@
 #define otbSharkKMeansMachineLearningModel_hxx
 
 #include <fstream>
-#include "boost/make_shared.hpp"
+#include <utility>
+
 #include "itkMacro.h"
 #include "otbSharkKMeansMachineLearningModel.h"
 
@@ -53,7 +54,7 @@ SharkKMeansMachineLearningModel<TInputValue, TOutputValue>::SharkKMeansMachineLe
 {
   // Default set HardClusteringModel
   this->m_ConfidenceIndex = true;
-  m_ClusteringModel       = boost::make_shared<ClusteringModelType>(&m_Centroids);
+  m_ClusteringModel       = std::make_shared<ClusteringModelType>(&m_Centroids);
 }
 
 
@@ -73,7 +74,7 @@ void SharkKMeansMachineLearningModel<TInputValue, TOutputValue>::Train()
 
   // Use a Hard Clustering Model for classification
   shark::kMeans(data, m_K, m_Centroids, m_MaximumNumberOfIterations);
-  m_ClusteringModel = boost::make_shared<ClusteringModelType>(&m_Centroids);
+  m_ClusteringModel = std::make_shared<ClusteringModelType>(&m_Centroids);
 }
 
 template <class TInputValue, class TOutputValue>

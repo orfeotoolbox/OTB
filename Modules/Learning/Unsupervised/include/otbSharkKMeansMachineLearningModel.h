@@ -20,7 +20,8 @@
 #ifndef otbSharkKMeansMachineLearningModel_h
 #define otbSharkKMeansMachineLearningModel_h
 
-#include "boost/shared_ptr.hpp"
+#include <memory>
+
 #include "itkLightObject.h"
 #include "otbMachineLearningModel.h"
 
@@ -164,7 +165,7 @@ private:
   shark::Centroids m_Centroids;
 
   /** shark Model could be SoftClusteringModel or HardClusteringModel */
-  boost::shared_ptr<ClusteringModelType> m_ClusteringModel;
+  std::shared_ptr<ClusteringModelType> m_ClusteringModel;
 };
 } // end namespace otb
 

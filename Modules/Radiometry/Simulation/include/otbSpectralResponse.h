@@ -32,8 +32,6 @@
 
 #include "otbAtmosphericCorrectionParameters.h"
 
-#include <boost/shared_ptr.hpp>
-
 namespace otb
 {
 /** \class SpectralResponse
@@ -68,7 +66,7 @@ public:
   typedef TValuePrecision ValuePrecisionType;
 
   typedef std::pair<TPrecision, TValuePrecision> PairType;
-  // typedef boost::shared_ptr<PairType> PairPointerType;
+  // typedef std::shared_ptr<PairType> PairPointerType;
   typedef typename std::vector<PairType> VectorPairType;
 
   /** Standard image typedef */

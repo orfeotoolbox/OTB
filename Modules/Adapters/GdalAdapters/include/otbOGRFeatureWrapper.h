@@ -21,15 +21,8 @@
 #ifndef otbOGRFeatureWrapper_h
 #define otbOGRFeatureWrapper_h
 
-// #include <iosfwd> // std::ostream&
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wshadow"
-#include <boost/shared_ptr.hpp>
-#pragma GCC diagnostic pop
-#else
-#include <boost/shared_ptr.hpp>
-#endif
+#include <memory>
+
 // #include "itkIndent.h", included from field
 #include "otbOGRFieldWrapper.h"
 #include "otbOGRGeometryWrapper.h"
@@ -157,12 +150,12 @@ public:
    * stored, without introducing a cyclic dependency, nor deporting the fields
    * R/W to \c Feature interface.
    */
-  boost::shared_ptr<OGRFeature>& sptr()
+  std::shared_ptr<OGRFeature>& sptr()
   {
     return m_Feature;
   }
   /** \copydoc Feature::sptr() */
-  boost::shared_ptr<OGRFeature> const& sptr() const
+  std::shared_ptr<OGRFeature> const& sptr() const
   {
     return m_Feature;
   }
@@ -368,7 +361,7 @@ private:
   void CheckInvariants() const;
   /** Internal pointer to the shared \c OGRFeature.
    */
-  boost::shared_ptr<OGRFeature> m_Feature;
+  std::shared_ptr<OGRFeature> m_Feature;
 };
 
 
