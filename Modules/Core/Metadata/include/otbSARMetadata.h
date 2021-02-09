@@ -85,7 +85,7 @@ struct OTBMetadata_EXPORT DopplerCentroid
 
 /** \struct SARNoise
  *
- * \breif This structure is used to handle Noise look up tables
+ * \brief This structure is used to handle Noise look up tables
  */
 struct OTBMetadata_EXPORT SARNoise
 {
@@ -99,7 +99,7 @@ struct OTBMetadata_EXPORT SARNoise
 
 /** \struct Orbit
  *
- * \breif This structure is used to handle orbit information
+ * \brief This structure is used to handle orbit information
  */
 struct OTBMetadata_EXPORT Orbit
 {

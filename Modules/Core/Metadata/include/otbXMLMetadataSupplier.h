@@ -69,7 +69,7 @@ public:
    * @brief Get the metadata value corresponding to a given path
    * converted to the given type
    *
-   * This method can look for a value in a list, using the _# jocker. For exemple,
+   * This method can look for a value in a list, using the _# jocker. For example,
    * looking for "value" in a dictionary like this :
    * foo_1.bar=42
    * foo_1.doo=99
