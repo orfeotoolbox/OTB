@@ -33,7 +33,6 @@
 #else
 #include <boost/test/unit_test.hpp>
 #endif
-#include <boost/foreach.hpp>
 #include "otb_boost_string_header.h"
 #include "itksys/SystemTools.hxx"
 #include "otbOGRDataSourceWrapper.h"
@@ -821,7 +820,7 @@ BOOST_AUTO_TEST_CASE(Add_n_Read_Geometries)
   BOOST_CHECK_EQUAL(l.GetFeatureCount(false), 20);
 
   int u = -10;
-  BOOST_FOREACH (ogr::Feature f, l)
+  for (ogr::Feature f : l)
   {
     const OGRPoint         ref(u, u);
     ogr::UniqueGeometryPtr p = f.StealGeometry();
