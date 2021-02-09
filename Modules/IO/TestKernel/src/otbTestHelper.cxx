@@ -1426,7 +1426,7 @@ namespace
   \param[in] testMap : metadata dictionary to be compared
   \param[in] reportErrors : print difference between dictionaries into srd::cerr
   \param[in] untestedKeys : list of keys that should be ignored during comparison
-  \param[in] p bianry predicate used to compare elements (mapped type) of the two input maps
+  \param[in] p binary predicate used to compare elements (mapped type) of the two input maps
   \return number of different elements.
 */
 template <class MapType, class BinaryPredicate >

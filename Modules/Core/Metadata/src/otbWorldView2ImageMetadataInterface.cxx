@@ -2200,7 +2200,7 @@ namespace
             << "Invalid TDI settings for band " << bandName);
       }
 
-      // In previous version of OTB the effective bandwith was tabulated
+      // In previous version of OTB the effective bandwidth was tabulated
       // because Ossim did not read this specific metadata.
       outMetadata.effectiveBandwidth[bandName] = mds.GetAs<double>(0., prefix + "effectiveBandwidth");
 
