@@ -32,8 +32,8 @@
 int otbGDALImageIOImportExportMetadata(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char* inputFilename  = argv[1];
-  const char* outputFilename = argv[2];
+  //const char* inputFilename  = argv[1];
+  //const char* outputFilename = argv[2];
   const char* outputTextFilename = argv[3];
 
   std::ofstream outfile(outputTextFilename);

@@ -45,7 +45,7 @@ typedef otb::VectorImage<double, 2>      ImageType;
 typedef itk::Statistics::EuclideanDistanceMetric<ImageType::PointType> DistanceType;
 typedef otb::GeographicalDistance<ImageType::PointType>                GeographicalDistanceType;
 
-int produceGCP(char* outputgcpfilename, const otb::ImageMetadata& imd, bool useForwardSensorModel = true, double z = 16.19688987731934)
+int produceGCP(char* outputgcpfilename, const otb::ImageMetadata& imd, double z = 16.19688987731934)
 {
   itk::Point<double, 2> imagePoint;
   itk::Point<double, 2> geoPoint;

@@ -430,7 +430,6 @@ void VectorDataExtractROI<TVectorData>::ProjectRegionToInputVectorProjection()
   genericTransform->SetInputProjectionRef(m_ROI.GetRegionProjection());
   //TODO: genericTransform->SetInputImageMetadata(m_ROI.GetImageMetadata());
   genericTransform->SetOutputProjectionRef(this->GetInput()->GetProjectionRef());
-  const itk::MetaDataDictionary& inputDict = this->GetInput()->GetMetaDataDictionary();
   //TODO: genericTransform->SetOutputImageMetadata(this->GetInput()->GetImageMetadata());
   genericTransform->SetOutputOrigin(this->GetInput()->GetOrigin());
   genericTransform->SetOutputSpacing(this->GetInput()->GetSpacing());
