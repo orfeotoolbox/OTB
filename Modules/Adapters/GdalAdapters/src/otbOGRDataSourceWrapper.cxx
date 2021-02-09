@@ -25,10 +25,6 @@
 #include <numeric>
 #include <algorithm>
 #include <clocale> // toupper
-#include <boost/bind.hpp>
-#include <boost/foreach.hpp>
-#include <boost/range/begin.hpp>
-#include <boost/range/end.hpp>
 // ITK includes
 #include "itkMacro.h" // itkExceptionMacro
 #include "itkExceptionObject.h"
@@ -99,8 +95,8 @@ char const* DeduceDriverName(std::string filename)
   }
   const std::string                 extension = itksys::SystemTools::GetFilenameLastExtension(filename);
   ExtensionDriverAssociation const* whichIt =
-      std::find_if(boost::begin(k_ExtensionDriverMap), boost::end(k_ExtensionDriverMap), [&](auto const& x) { return x.Matches(extension); });
-  if (whichIt == boost::end(k_ExtensionDriverMap))
+      std::find_if(std::begin(k_ExtensionDriverMap), std::end(k_ExtensionDriverMap), [&](auto const& x) { return x.Matches(extension); });
+  if (whichIt == std::end(k_ExtensionDriverMap))
   {
     return nullptr; // nothing found
   }
@@ -692,7 +688,7 @@ std::string otb::ogr::DataSource::GetGlobalExtent(double& ulx, double& uly, doub
 void otb::ogr::DataSource::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   assert(m_DataSource && "Datasource not initialized");
-  BOOST_FOREACH (Layer const& l, *this)
+  for (const Layer &l : *this)
   {
     l.PrintSelf(os, indent);
   }
