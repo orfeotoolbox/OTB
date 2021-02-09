@@ -24,8 +24,6 @@
 /*===========================================================================*/
 
 #include <cassert>
-#include <boost/bind.hpp>
-#include <boost/foreach.hpp>
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -50,7 +48,7 @@
 namespace
 { // Anonymous namespace
   /**\ingroup GeometryInternals
-   * Deleter for \c boost::shared_ptr<> that doesn't delete.
+   * Deleter for \c std::shared_ptr<> that doesn't delete.
    * This is required for \c OGRLayer s that belong to \c OGRDataSource.
    * \internal Unlike OGR, works as a no-op on null geometries.
    */
@@ -223,7 +221,7 @@ void otb::ogr::Layer::PrintSelf(std::ostream& os, itk::Indent indent) const
   {
     os << "Layer <" << GetName() << "> of " << OGRGeometryTypeToName(GetGeomType()) << "\n";
     indent = indent.GetNextIndent();
-    BOOST_FOREACH (Feature f, *this)
+    for (Feature f : *this)
     {
       f.PrintSelf(os, indent);
     }
