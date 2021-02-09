@@ -34,8 +34,6 @@ int otbImageToGenericRSOutputParameters(int itkNotUsed(argc), char* argv[])
   const char* infname  = argv[1];
   const char* outfname = argv[2];
 
-  typedef ImageType::SizeType             SizeType;
-  typedef ImageType::SpacingType          SpacingType;
   typedef otb::ImageFileReader<ImageType> ReaderType;
 
   // Reader
