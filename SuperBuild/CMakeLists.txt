@@ -355,26 +355,6 @@ option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SW
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)
 
-# do a system checkup
-if (NOT EXISTS "${CMAKE_BINARY_DIR}/CMake/SystemCheckup")
-  file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/CMake/SystemCheckup")
-endif()
-execute_process(COMMAND ${CMAKE_COMMAND} ${CMAKE_SOURCE_DIR}/CMake/SystemCheckup
-                WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/CMake/SystemCheckup
-                OUTPUT_QUIET
-                ERROR_QUIET)
-file(STRINGS "${CMAKE_BINARY_DIR}/CMake/SystemCheckup/SystemCheckupResult.txt" _SYSTEM_CHECKUP_CONTENT)
-message(STATUS "|----------------------------------------------------------")
-message(STATUS "|----------------- System checkup results -----------------")
-message(STATUS "| The following libraries have been found on your system.")
-message(STATUS "| You can choose to use them (instead of superbuild versions)")
-message(STATUS "| by setting the corresponding option USE_SYSTEM_XXX.")
-message(STATUS "|----------------------------------------------------------")
-foreach(lib ${_SYSTEM_CHECKUP_CONTENT})
-  message(STATUS "| ${lib}")
-  message(STATUS "|----------------------------------------------------------")
-endforeach()
-
 # Python
 # This should set the following variables (and more):
 #   -PYTHON_EXECUTABLE
