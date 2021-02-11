@@ -38,13 +38,13 @@ bool RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::SetMeta
   {
     this->m_RPCParam = std::make_unique<Projection::RPCParam>(boost::any_cast<Projection::RPCParam>(imd[MDGeom::RPC]));
   }
-  catch (boost::bad_any_cast)
+  catch (const boost::bad_any_cast&)
   {
     return false;
   }
 
   constexpr bool useDEM = NInputDimensions == 2 ? true : false;
-  this->m_Transformer = std::make_unique<GDALRPCTransformer>(*m_RPCParam, useDEM);
+  this->m_Transformer   = std::make_unique<GDALRPCTransformer>(*m_RPCParam, useDEM);
   return true;
 }
 
@@ -64,6 +64,6 @@ void RPCTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::PrintSe
   os << indent << "RPC Model: " << this->m_RPCParam.get()->ToJSON() << std::endl;
 }
 
-}
+} // namespace otb
 
 #endif
