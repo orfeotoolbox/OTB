@@ -515,6 +515,7 @@ foreach(otb_option
     CMAKE_CXX_FLAGS
     ${option_list}
     OTB_WRAP_PYTHON
+    OTB_WRAP_QGIS
     OTB_DATA_ROOT
     OTB_USE_OPENMP
     OTB_USE_SSE_FLAGS
