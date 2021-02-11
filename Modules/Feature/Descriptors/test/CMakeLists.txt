@@ -26,8 +26,11 @@ otbHistogramOfOrientedGradientCovariantImageFunction.cxx
 otbFourierMellinImageFilter.cxx
 otbImageToHessianDeterminantImageFilter.cxx
 otbFourierMellinDescriptors.cxx
-otbKeyPointsAlgorithmsTest.cxx
 )
+
+if(OTB_USE_SIFTFAST)
+  set(OTBDescriptorsTests ${OTBDescriptorsTests} otbKeyPointsAlgorithmsTest.cxx)
+endif()
 
 add_executable(otbDescriptorsTestDriver ${OTBDescriptorsTests})
 target_link_libraries(otbDescriptorsTestDriver ${OTBDescriptors-Test_LIBRARIES})
@@ -95,7 +98,8 @@ otb_add_test(NAME feTvFourierMellinDescriptors COMMAND otbDescriptorsTestDriver
   ${TEMP}/feTvFourierMellinDescriptors.txt
   )
 
-otb_add_test(NAME feTvKeyPointsAlgorithmsTest COMMAND otbDescriptorsTestDriver
-  otbKeyPointsAlgorithmsTest
-  ${INPUTDATA}/QB_TOULOUSE_RpcTag_100_100.tif
-)
+if(OTB_USE_SIFTFAST)
+    otb_add_test(NAME feTvKeyPointsAlgorithmsTest COMMAND otbDescriptorsTestDriver
+      otbKeyPointsAlgorithmsTest
+      ${INPUTDATA}/QB_TOULOUSE_RpcTag_100_100.tif)
+endif()

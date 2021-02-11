@@ -28,5 +28,7 @@ void RegisterTests()
   REGISTER_TEST(otbFourierMellinDescriptors);
   REGISTER_TEST(otbFourierMellinDescriptorsScaleInvariant);
   REGISTER_TEST(otbFourierMellinDescriptorsRotationInvariant);
+ #ifdef OTB_USE_SIFTFAST
   REGISTER_TEST(otbKeyPointsAlgorithmsTest);
+ #endif
 }
