@@ -24,7 +24,6 @@
 
 #include "otbPersistentImageToOGRDataFilter.h"
 #include "otbStopwatch.h"
-#include <boost/foreach.hpp>
 #include <stdio.h>
 #include "otbMacro.h"
 #include "otbOGRHelpers.h"
