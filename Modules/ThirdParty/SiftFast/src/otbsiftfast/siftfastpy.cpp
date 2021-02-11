@@ -16,7 +16,6 @@
 #define BOOST_ENABLE_ASSERT_HANDLER
 
 #include <vector>
-#include <boost/shared_ptr.hpp>
 
 #define PY_ARRAY_UNIQUE_SYMBOL PyArrayHandle
 #include <boost/python.hpp>

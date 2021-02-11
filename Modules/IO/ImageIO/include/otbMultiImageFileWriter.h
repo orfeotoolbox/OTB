@@ -28,7 +28,7 @@
 #include "itkImageIOBase.h"
 #include "OTBImageIOExport.h"
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 namespace otb
 {
@@ -234,7 +234,7 @@ private:
     virtual void WriteImageInformation()                 = 0;
     virtual void Write(const RegionType& streamRegion)   = 0;
     virtual bool                        CanStreamWrite() const = 0;
-    typedef boost::shared_ptr<SinkBase> Pointer;
+    typedef std::shared_ptr<SinkBase> Pointer;
 
 
     virtual itk::ImageRegion<2> GetRegionToWrite() const = 0;
@@ -266,7 +266,7 @@ private:
     void WriteImageInformation() override;
     void Write(const RegionType& streamRegion) override;
     bool                    CanStreamWrite() const override;
-    typedef boost::shared_ptr<Sink> Pointer;
+    typedef std::shared_ptr<Sink> Pointer;
     
     /** Get the region that should be written. By default this is the largest possible region
      * of the input image, but this might be overridden by the box extended filename parameter of 
@@ -282,8 +282,8 @@ private:
   };
 
   /** The list of inputs and their associated parameters, built using AddInput */
-  typedef std::vector<boost::shared_ptr<SinkBase>> SinkListType;
-  SinkListType                                     m_SinkList;
+  typedef std::vector<std::shared_ptr<SinkBase>> SinkListType;
+  SinkListType                                   m_SinkList;
 
   std::vector<RegionType> m_StreamRegionList;
 };
