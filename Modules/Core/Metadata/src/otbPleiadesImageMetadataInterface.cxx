@@ -2268,8 +2268,10 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
       << "The number of bands in image metadatas is incoherent with the DIMAP product")
   }
 
-  m_Imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
-  m_Imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
+  //Sun elevation and azimuth should be taken from the center of the image , [0] is Top Center, [1] is Center, [2] is Bottom Center
+  //This is the same for Viewing angle, it is taken from the center of the image (see FetchSatAngles)
+  m_Imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[1]);
+  m_Imd.Add(MDNum::SunElevation, dimapData.SunElevation[1]);
 
   FetchSatAngles(dimapData.IncidenceAngle, dimapData.AlongTrackIncidenceAngle,
                  dimapData.AcrossTrackIncidenceAngle, dimapData.SceneOrientation);
