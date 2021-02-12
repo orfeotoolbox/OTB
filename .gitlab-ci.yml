@@ -426,6 +426,10 @@ update-archive:
   only:
     - merge_requests
     - develop
+  before_script:
+    # Provision efficiently the local LFS cache before checkout
+    - git lfs fetch origin $CI_COMMIT_SHA
+    - git checkout -f -q $CI_COMMIT_SHA
   script:
     - ./Utilities/Maintenance/SuperbuildDownloadList.sh download build_archive
     - ./CI/deploy-archive.sh
