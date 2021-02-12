@@ -420,7 +420,7 @@ deploy:
 update-archive:
   tags:
     - deploy
-  image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   stage: precheck
   extends: .general
   only:
