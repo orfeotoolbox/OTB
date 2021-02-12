@@ -413,17 +413,9 @@ private:
                     << "\tAcquisition Viewing Elevation Angle: " << metadata[MDNum::SatElevation] << std::endl
                     << "\tAcquisition Viewing Azimuth Angle: " << metadata[MDNum::SatAzimuth] << std::endl;
 
-          vlvector = metadata.GetAsVector(MDNum::PhysicalGain);
-          ossOutput << "\tAcquisition gain (per band): ";
-          for (unsigned int k = 0; k < vlvector.Size(); k++)
-            ossOutput << vlvector[k] << " ";
-          ossOutput << std::endl;
-
-          vlvector = metadata.GetAsVector(MDNum::PhysicalBias);
-          ossOutput << "\tAcquisition bias (per band): ";
-          for (unsigned int k = 0; k < vlvector.Size(); k++)
-            ossOutput << vlvector[k] << " ";
-          ossOutput << std::endl;
+          // The Gain and Bias are read in the GetImageMetadata, we will display in DoExecute what gain and bias the user finally chose,
+          // but for now we have gain and bias values from hard-coded tables in MTD, so we can disable the parameter and use those values as default
+          // The user is able to enable it by giving a txt file as a parameter of acqui.gainbias, or a dimap as an extended image file name
           DisableParameter("acqui.gainbias");
           MandatoryOff("acqui.gainbias");
 
@@ -612,6 +604,8 @@ private:
     m_ReflectanceToRadianceFilter           = ReflectanceToRadianceImageFilterType::New();
     m_RadianceToImageFilter                 = RadianceToImageImageFilterType::New();
 
+    std::ostringstream ossOutput;
+
     // Other instantiations
     m_ScaleFilter = ScaleFilterOutDoubleType::New();
     // m_ScaleFilter->InPlaceOn();
@@ -691,19 +685,29 @@ private:
             case 1:
               m_ImageToRadianceFilter->SetAlpha(vlvector);
               m_RadianceToImageFilter->SetAlpha(vlvector);
-              GetLogger()->Info("Trying to get gains/biases information... OK (1/2)\n");
+              ossOutput << "\n\tUsing Acquisition gain from file (per band): ";
+              for (unsigned int k = 0; k < vlvector.Size(); k++)
+                ossOutput << vlvector[k] << " ";
+              ossOutput << std::endl;
               break;
 
             case 2:
               m_ImageToRadianceFilter->SetBeta(vlvector);
               m_RadianceToImageFilter->SetBeta(vlvector);
-              GetLogger()->Info("Trying to get gains/biases information... OK (2/2)\n");
+              ossOutput << "\tUsing Acquisition biases from file (per band): ";
+              for (unsigned int k = 0; k < vlvector.Size(); k++)
+                ossOutput << vlvector[k] << " ";
+              ossOutput << std::endl;
               break;
 
             default:
               itkExceptionMacro(<< "File : " << filename << " contains wrong number of lines (needs two, one for gains and one for biases)");
             }
           }
+        }
+        if(!ossOutput.str().empty())
+        {
+            GetLogger()->Info(ossOutput.str());
         }
         file.close();
       }
@@ -715,6 +719,22 @@ private:
       // Try to retrieve information from image metadata
       if (hasOpticalSensorMetadata)
       {
+          itk::VariableLengthVector<double> vlvector;
+
+          vlvector = metadata.GetAsVector(MDNum::PhysicalGain);
+          ossOutput << "\n\tUsing Acquisition gain from image metadata (per band): ";
+          for (unsigned int k = 0; k < vlvector.Size(); k++)
+            ossOutput << vlvector[k] << " ";
+          ossOutput << std::endl;
+
+          vlvector = metadata.GetAsVector(MDNum::PhysicalBias);
+          ossOutput << "\tUsing Acquisition bias from image metadata (per band): ";
+          for (unsigned int k = 0; k < vlvector.Size(); k++)
+            ossOutput << vlvector[k] << " ";
+          ossOutput << std::endl;
+
+        GetLogger()->Info(ossOutput.str());
+
         m_ImageToRadianceFilter->SetAlpha(metadata.GetAsVector(MDNum::PhysicalGain));
         m_RadianceToImageFilter->SetAlpha(metadata.GetAsVector(MDNum::PhysicalGain));
 
