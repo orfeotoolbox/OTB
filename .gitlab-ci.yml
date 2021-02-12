@@ -421,7 +421,7 @@ update-archive:
   tags:
     - deploy
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
-  stage: deploy
+  stage: precheck
   extends: .general
   only:
     - merge_requests
