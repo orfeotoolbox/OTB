@@ -421,11 +421,11 @@ update-archive:
   tags:
     - deploy
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
-    stage: deploy
+  stage: deploy
   extends: .general
-    only:
-      - merge_requests
-      - develop
+  only:
+    - merge_requests
+    - develop
   script:
     - ./Utilities/Maintenance/SuperbuildDownloadList.sh download build_archive
     - ./CI/deploy-archive.sh
