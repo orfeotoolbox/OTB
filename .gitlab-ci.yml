@@ -432,7 +432,7 @@ update-archive:
     - git checkout -f -q $CI_COMMIT_SHA
   script:
     - ./Utilities/Maintenance/SuperbuildDownloadList.sh download build_archive
-    - ./CI/deploy-archive.sh
+    - ./CI/deploy-archive.sh build_archive
 
 
 release-container:
