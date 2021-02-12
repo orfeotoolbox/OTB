@@ -50,6 +50,7 @@ CMAKE_FILES=$(find "${SB_CMAKE_DIR}" -maxdepth 1 -type f -name "External_*")
 DOWNLOAD_NAMES=
 
 mkdir -p "${DOWNLOAD_DIR}"
+
 cd "${DOWNLOAD_DIR}" || echo "cannot cd to DOWNLOAD_DIR"
 echo "Downloading files to ${DOWNLOAD_DIR}/"
 for cmake in ${CMAKE_FILES}; do
@@ -77,7 +78,9 @@ done
 
 ARCHIVE_NAME="SuperBuild-archives-$VERSION"
 echo "Creating archive ${OUTPUT_DIR}/$ARCHIVE_NAME.tar.bz2"
-cd "${OUTPUT_DIR}" || echo "cannot cd to OUTPUT_DIR"
+
+mkdir -p "${OUTPUT_DIR}"
+cd "${OUTPUT_DIR}" || echo "cannot cd to ${OUTPUT_DIR}"
 touch "${DOWNLOAD_DIR}/OTBSuperBuild.readme"
 tar -cjf "$ARCHIVE_NAME.tar.bz2" -C ${DOWNLOAD_DIR} ${DOWNLOAD_NAMES} OTBSuperBuild.readme
 echo "Saving md5sum to ${OUTPUT_DIR}/$ARCHIVE_NAME.md5"
