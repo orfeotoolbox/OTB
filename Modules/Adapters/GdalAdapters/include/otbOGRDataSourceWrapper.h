@@ -567,16 +567,6 @@ private:
 }
 } // end namespace otb::ogr
 
-#if 0
-// Either this, or inheriting from noncopyable is required for DataSource to be
-// compatible with BOOST_FOREACH
-namespace boost { namespace foreach {
-  template<typename T> struct is_noncopyable; // forward declaration
-  template <>
-  struct is_noncopyable<otb::ogr::DataSource> : mpl::true_ {};
-}}
-#endif
-
 #ifndef OTB_MANUAL_INSTANTIATION
 #include "otbOGRDataSourceWrapper.hxx"
 #endif
