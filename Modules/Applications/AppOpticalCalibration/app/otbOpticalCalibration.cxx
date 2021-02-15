@@ -705,9 +705,9 @@ private:
             }
           }
         }
-        if(!ossOutput.str().empty())
+        if (!ossOutput.str().empty())
         {
-            GetLogger()->Info(ossOutput.str());
+          otbAppLogINFO(<< ossOutput.str());
         }
         file.close();
       }
@@ -719,21 +719,20 @@ private:
       // Try to retrieve information from image metadata
       if (hasOpticalSensorMetadata)
       {
-          itk::VariableLengthVector<double> vlvector;
 
-          vlvector = metadata.GetAsVector(MDNum::PhysicalGain);
-          ossOutput << "\n\tUsing Acquisition gain from image metadata (per band): ";
-          for (unsigned int k = 0; k < vlvector.Size(); k++)
-            ossOutput << vlvector[k] << " ";
-          ossOutput << std::endl;
+        auto vlvector = metadata.GetAsVector(MDNum::PhysicalGain);
+        ossOutput << "\n\tUsing Acquisition gain from image metadata (per band): ";
+        for (unsigned int k = 0; k < vlvector.Size(); k++)
+        ossOutput << vlvector[k] << " ";
+        ossOutput << std::endl;
 
-          vlvector = metadata.GetAsVector(MDNum::PhysicalBias);
-          ossOutput << "\tUsing Acquisition bias from image metadata (per band): ";
-          for (unsigned int k = 0; k < vlvector.Size(); k++)
-            ossOutput << vlvector[k] << " ";
-          ossOutput << std::endl;
+        vlvector = metadata.GetAsVector(MDNum::PhysicalBias);
+        ossOutput << "\tUsing Acquisition bias from image metadata (per band): ";
+        for (unsigned int k = 0; k < vlvector.Size(); k++)
+        ossOutput << vlvector[k] << " ";
+        ossOutput << std::endl;
 
-        GetLogger()->Info(ossOutput.str());
+        otbAppLogINFO(<< ossOutput.str());
 
         m_ImageToRadianceFilter->SetAlpha(metadata.GetAsVector(MDNum::PhysicalGain));
         m_RadianceToImageFilter->SetAlpha(metadata.GetAsVector(MDNum::PhysicalGain));
@@ -813,7 +812,7 @@ private:
     {
     case Level_IM_TOA:
     {
-      GetLogger()->Info("Compute Top of Atmosphere reflectance\n");
+      otbAppLogINFO("Compute Top of Atmosphere reflectance\n");
 
       // Pipeline
       m_ImageToRadianceFilter->SetInput(inImage);
@@ -821,7 +820,7 @@ private:
 
       if (GetParameterInt("clamp"))
       {
-        GetLogger()->Info("Clamp values between [0, 100]\n");
+        otbAppLogINFO("Clamp values between [0, 100]\n");
       }
 
       m_RadianceToReflectanceFilter->SetUseClamp(GetParameterInt("clamp"));
@@ -831,7 +830,7 @@ private:
     break;
     case Level_TOA_IM:
     {
-      GetLogger()->Info("Convert Top of Atmosphere reflectance to image DN\n");
+      otbAppLogINFO("Convert Top of Atmosphere reflectance to image DN\n");
 
       // Pipeline
       m_ReflectanceToRadianceFilter->SetInput(inImage);
@@ -842,7 +841,7 @@ private:
     break;
     case Level_TOC:
     {
-      GetLogger()->Info("Compute Top of Canopy reflectance\n");
+      otbAppLogINFO("Compute Top of Canopy reflectance\n");
 
       // Pipeline
       m_ImageToRadianceFilter->SetInput(inImage);
@@ -922,7 +921,7 @@ private:
       // Aeronet file
       if (IsParameterEnabled("atmo.aeronet"))
       {
-        GetLogger()->Info("Use Aeronet file to retrieve atmospheric parameters\n");
+        otbAppLogINFO("Use Aeronet file to retrieve atmospheric parameters\n");
         m_paramAtmo->SetAeronetFileName(GetParameterString("atmo.aeronet"));
         m_paramAtmo->UpdateAeronetData(GetParameterInt("acqui.year"), GetParameterInt("acqui.month"), GetParameterInt("acqui.day"),
                                        GetParameterInt("acqui.hour"), GetParameterInt("acqui.minute"), 0.4);
@@ -946,12 +945,12 @@ private:
       AtmosphericRadiativeTerms::Pointer atmoTerms = m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
       oss << std::endl << std::endl << atmoTerms << std::endl;
 
-      GetLogger()->Info("Atmospheric correction parameters compute by 6S : " + oss.str());
+      otbAppLogINFO("Atmospheric correction parameters compute by 6S : " + oss.str());
 
       bool adjComputation = false;
       if (IsParameterEnabled("atmo.radius"))
       {
-        GetLogger()->Info("Compute adjacency effects\n");
+        otbAppLogINFO("Compute adjacency effects\n");
         adjComputation = true;
         // Compute adjacency effect
         m_SurfaceAdjacencyEffectCorrectionSchemeFilter = SurfaceAdjacencyEffectCorrectionSchemeFilterType::New();
@@ -975,7 +974,7 @@ private:
       }
       else
       {
-        GetLogger()->Info("Clamp values between [0, 100]\n");
+        otbAppLogINFO("Clamp values between [0, 100]\n");
 
         if (!adjComputation)
           m_ClampFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
@@ -994,7 +993,7 @@ private:
 
     if (GetParameterInt("milli"))
     {
-      GetLogger()->Info("Use milli-reflectance\n");
+      otbAppLogINFO("Use milli-reflectance\n");
       if ((GetParameterInt("level") == Level_IM_TOA) || (GetParameterInt("level") == Level_TOC))
         scale = 1000.;
       if (GetParameterInt("level") == Level_TOA_IM)
