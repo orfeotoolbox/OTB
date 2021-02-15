@@ -604,8 +604,6 @@ private:
     m_ReflectanceToRadianceFilter           = ReflectanceToRadianceImageFilterType::New();
     m_RadianceToImageFilter                 = RadianceToImageImageFilterType::New();
 
-    std::ostringstream ossOutput;
-
     // Other instantiations
     m_ScaleFilter = ScaleFilterOutDoubleType::New();
     // m_ScaleFilter->InPlaceOn();
@@ -685,29 +683,19 @@ private:
             case 1:
               m_ImageToRadianceFilter->SetAlpha(vlvector);
               m_RadianceToImageFilter->SetAlpha(vlvector);
-              ossOutput << "\n\tUsing Acquisition gain from file (per band): ";
-              for (unsigned int k = 0; k < vlvector.Size(); k++)
-                ossOutput << vlvector[k] << " ";
-              ossOutput << std::endl;
+              otbAppLogINFO("Using Acquisition gain from file (per band): " << vlvector);
               break;
 
             case 2:
               m_ImageToRadianceFilter->SetBeta(vlvector);
               m_RadianceToImageFilter->SetBeta(vlvector);
-              ossOutput << "\tUsing Acquisition biases from file (per band): ";
-              for (unsigned int k = 0; k < vlvector.Size(); k++)
-                ossOutput << vlvector[k] << " ";
-              ossOutput << std::endl;
+              otbAppLogINFO("Using Acquisition biases from file (per band): " << vlvector);
               break;
 
             default:
               itkExceptionMacro(<< "File : " << filename << " contains wrong number of lines (needs two, one for gains and one for biases)");
             }
           }
-        }
-        if (!ossOutput.str().empty())
-        {
-          otbAppLogINFO(<< ossOutput.str());
         }
         file.close();
       }
@@ -721,18 +709,10 @@ private:
       {
 
         auto vlvector = metadata.GetAsVector(MDNum::PhysicalGain);
-        ossOutput << "\n\tUsing Acquisition gain from image metadata (per band): ";
-        for (unsigned int k = 0; k < vlvector.Size(); k++)
-        ossOutput << vlvector[k] << " ";
-        ossOutput << std::endl;
+        otbAppLogINFO("Using Acquisition gain from image metadata (per band): " << vlvector);
 
         vlvector = metadata.GetAsVector(MDNum::PhysicalBias);
-        ossOutput << "\tUsing Acquisition bias from image metadata (per band): ";
-        for (unsigned int k = 0; k < vlvector.Size(); k++)
-        ossOutput << vlvector[k] << " ";
-        ossOutput << std::endl;
-
-        otbAppLogINFO(<< ossOutput.str());
+        otbAppLogINFO("Using Acquisition bias from image metadata (per band): " << vlvector);
 
         m_ImageToRadianceFilter->SetAlpha(metadata.GetAsVector(MDNum::PhysicalGain));
         m_RadianceToImageFilter->SetAlpha(metadata.GetAsVector(MDNum::PhysicalGain));
