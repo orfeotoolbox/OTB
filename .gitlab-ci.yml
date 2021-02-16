@@ -421,10 +421,9 @@ update-archive:
   tags:
     - deploy
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
-  stage: precheck
+  stage: deploy
   extends: .general
   only:
-    - merge_requests
     - develop
   before_script:
     # Provision efficiently the local LFS cache before checkout
@@ -433,6 +432,10 @@ update-archive:
   script:
     - ./Utilities/Maintenance/SuperbuildDownloadList.sh download build_archive
     - ./CI/deploy-archive.sh build_archive
+  needs:
+    # don't push the archive if Superbuild was not successful
+    - job: ubuntu-xdk-prepare
+      artifacts: false
 
 
 release-container:
