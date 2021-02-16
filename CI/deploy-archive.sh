@@ -25,3 +25,5 @@ build_dir=$(readlink -f "$1")
 
 scp ${build_dir}/SuperBuild-archives-*.{tar.bz2,md5} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
 
+ssh otbpush@otb5-vm2.orfeo-toolbox.org \
+  mv ${jobs_directory}/SuperBuild-archives-*.{tar.bz2,md5} ${jobs_directory}/superbuild_archive
