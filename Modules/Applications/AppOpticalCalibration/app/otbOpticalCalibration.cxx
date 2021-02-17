@@ -39,7 +39,7 @@
 #include <sstream>
 #include <vector>
 #include <itkVariableLengthVector.h>
-
+#include "otbStringUtils.h"
 
 namespace otb
 {
@@ -415,7 +415,7 @@ private:
 
           // The Gain and Bias are read in the GetImageMetadata, we will display in DoExecute what gain and bias the user finally chose,
           // but for now we have gain and bias values from hard-coded tables in MTD, so we can disable the parameter and use those values as default
-          // The user is able to enable it by giving a txt file as a parameter of acqui.gainbias, or a dimap as an extended image file name
+          // The user is able to enable it by giving a txt file or "dimap" as a parameter of acqui.gainbias
           DisableParameter("acqui.gainbias");
           MandatoryOff("acqui.gainbias");
 
@@ -645,66 +645,99 @@ private:
     // Set Gain and Bias to corresponding filters
     if (IsParameterEnabled("acqui.gainbias") && HasValue("acqui.gainbias"))
     {
-      // Try to retrieve information from file provided by user
-      std::string filename(GetParameterString("acqui.gainbias"));
+      std::string gainbiasParam = GetParameterString("acqui.gainbias");
 
-      std::ifstream file(filename, std::ios::in);
-      if (file)
+      //If the user wants to use dimap gain and biases
+      if (gainbiasParam.compare("dimap") == 0)
       {
-        std::string  line;
-        unsigned int numLine = 0;
-        while (getline(file, line))
+        if (metadata.Has("DIMAP_Gain"))
         {
-          // clean line
-          std::string::size_type startPos = line.find_first_not_of(std::string(" \t\n\r"));
-          if (startPos == std::string::npos)
-            continue;
+          itk::VariableLengthVector<double> vlvectorGain;
+          std::vector<double> values;
+          std::string errormsg;
 
-          line = line.substr(startPos);
-          if (line[0] != '#')
+          otb::Utils::ConvertStringToVector(metadata["DIMAP_Gain"],values,errormsg," ");
+          if(!errormsg.empty())
           {
-            numLine++;
-            std::vector<double> values;
-            std::istringstream  iss(line);
-            std::string         value;
-            double              dvalue;
-            while (getline(iss, value, ':'))
-            {
-              std::istringstream iss2(value);
-              iss2 >> dvalue;
-              values.push_back(dvalue);
-            }
-
-            itk::VariableLengthVector<double> vlvector;
-            vlvector.SetData(values.data(), values.size(), false);
-
-            switch (numLine)
-            {
-            case 1:
-              m_ImageToRadianceFilter->SetAlpha(vlvector);
-              m_RadianceToImageFilter->SetAlpha(vlvector);
-              otbAppLogINFO("Using Acquisition gain from file (per band): " << vlvector);
-              break;
-
-            case 2:
-              m_ImageToRadianceFilter->SetBeta(vlvector);
-              m_RadianceToImageFilter->SetBeta(vlvector);
-              otbAppLogINFO("Using Acquisition biases from file (per band): " << vlvector);
-              break;
-
-            default:
-              itkExceptionMacro(<< "File : " << filename << " contains wrong number of lines (needs two, one for gains and one for biases)");
-            }
+            otbAppLogWARNING("An error occured while parsing DIMAP Gain values : " << errormsg);
           }
+          vlvectorGain.SetData(values.data(), values.size(), false);
+          m_ImageToRadianceFilter->SetAlpha(vlvectorGain);
+          m_RadianceToImageFilter->SetAlpha(vlvectorGain);
+          otbAppLogINFO("Using Acquisition gain from DIMAP (per band): " << vlvectorGain);
+
+          m_ImageToRadianceFilter->SetBeta(metadata.GetAsVector(MDNum::PhysicalBias));
+          m_RadianceToImageFilter->SetBeta(metadata.GetAsVector(MDNum::PhysicalBias));
+          otbAppLogINFO("Using Acquisition biases from DIMAP (per band): " << metadata.GetAsVector(MDNum::PhysicalBias));
         }
-        file.close();
+        else
+        {
+          itkExceptionMacro("Gain and Bias values from DIMAP could not be read, ensure the DIMAP file contains Band_Radiance.GAIN and BIAS")
+        }
       }
       else
-        itkExceptionMacro(<< "File : " << filename << " couldn't be opened");
+      {
+        // Try to retrieve information from file provided by user
+        std::string filename(gainbiasParam);
+
+        std::ifstream file(filename, std::ios::in);
+        if (file)
+        {
+          std::string  line;
+          unsigned int numLine = 0;
+          while (getline(file, line))
+          {
+            // clean line
+            std::string::size_type startPos = line.find_first_not_of(std::string(" \t\n\r"));
+            if (startPos == std::string::npos)
+              continue;
+
+            line = line.substr(startPos);
+            if (line[0] != '#')
+            {
+              numLine++;
+              std::vector<double> values;
+              std::istringstream  iss(line);
+              std::string         value;
+              double              dvalue;
+              while (getline(iss, value, ':'))
+              {
+                std::istringstream iss2(value);
+                iss2 >> dvalue;
+                values.push_back(dvalue);
+              }
+
+              itk::VariableLengthVector<double> vlvector;
+              vlvector.SetData(values.data(), values.size(), false);
+
+              switch (numLine)
+              {
+                case 1:
+                  m_ImageToRadianceFilter->SetAlpha(vlvector);
+                  m_RadianceToImageFilter->SetAlpha(vlvector);
+                  otbAppLogINFO("Using Acquisition gain from file (per band): " << vlvector);
+                break;
+
+                case 2:
+                  m_ImageToRadianceFilter->SetBeta(vlvector);
+                  m_RadianceToImageFilter->SetBeta(vlvector);
+                  otbAppLogINFO("Using Acquisition biases from file (per band): " << vlvector);
+                break;
+
+                default:
+                  itkExceptionMacro(<< "File : " << filename << " contains wrong number of lines (needs two, one for gains and one for biases)");
+              }
+            }
+          }
+        file.close();
+        }
+        else
+          itkExceptionMacro(<< "File : " << filename << " couldn't be opened");
+      }
     }
     else
     {
-      // Try to retrieve information from image metadata
+      // Try to retrieve information from image metadata (hard-coded tables from CNES calibration team)
       if (hasOpticalSensorMetadata)
       {
 

@@ -2381,7 +2381,23 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
 
   FetchSolarIrradiance(dimapData.SolarIrradiance);
 
+  //Store hard-coded values for gain
   FetchTabulatedPhysicalGain(m_Imd[MDTime::ProductionDate]);
+
+  //Store gain values from the dimap
+  if (dimapData.PhysicalGain.size() == m_Imd.Bands.size())
+  {
+    auto gain = dimapData.PhysicalGain.begin();
+    std::stringstream ssGain;
+    while(gain != dimapData.PhysicalGain.end())
+    {
+       ssGain << *gain;
+       gain++;
+       if(gain != dimapData.PhysicalGain.end())
+          ssGain << " ";
+    }
+    m_Imd.Add("DIMAP_Gain",ssGain.str());
+  }
 
   FetchSpectralSensitivity(m_Imd[MDStr::SensorID]);
 
@@ -2391,7 +2407,6 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
     for (auto & band: m_Imd.Bands)
     {
       band.Add(MDNum::PhysicalBias, *bias);
-      bias++;
     }
   }
   else
@@ -2400,5 +2415,6 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
       << "The number of bands in image metadatas is incoherent with the DIMAP product")
   }
 }
+
 
 } // end namespace otb
