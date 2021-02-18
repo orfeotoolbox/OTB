@@ -31,7 +31,6 @@ otbGDALReadPxlComplex.cxx
 otbGDALImageIOTestCanRead.cxx
 otbMultiDatasetReadingInfo.cxx
 otbOGRVectorDataIOCanRead.cxx
-otbGDALImageIOImportMetadata.cxx
 otbGDALRPCTransformerTest.cxx
 otbGDALRPCTransformerTest2.cxx
 )
@@ -130,15 +129,6 @@ otb_add_test(NAME ioTvGDALImageIOWriteMetadata COMMAND otbIOGDALTestDriver
   ${TEMP}/ioTvGDALImageIOWriteMetadata.tif
   ${TEMP}/ioTvGDALImageIOWriteMetadata.hdr
   ${TEMP}/ioTvGDALImageIOWriteMetadata_Report.txt
-  )
-  
-# TODO implement this test
- otb_add_test(NAME ioTvGDALImageIOImportMetadata COMMAND otbIOGDALTestDriver
-#  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvGDALImageIOImportExportMetadata_JPEG_99.txt
- # ${TEMP}/ioTvGDALImageIOImportExportMetadata_JPEG_99.txt
-  otbGDALImageIOImportMetadata
-  ${INPUTDATA}/metadataIOexample.tif
-  ${TEMP}/ioTvGDALImageIOImportMetadata.txt
   )
 
 otb_add_test(NAME ioTvGDALOverviewsBuilder_TIFF COMMAND otbIOGDALTestDriver

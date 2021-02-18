@@ -1317,3 +1317,12 @@ otb_add_test(NAME ioTvCompareMetadataTest COMMAND otbImageIOTestDriver
   otbImageFileReaderRGBTest
   ${INPUTDATA}/couleurs_extrait.png
   ${TEMP}/ioImageFileReaderRGB_PNG2PNG.png )
+
+# Imports metadata from a tif file containing OTB type metadata and export it in another tif
+otb_add_test(NAME ioTvImportExportMetadataTest COMMAND otbImageIOTestDriver
+  --compare-metadata ${EPSILON_9}
+  ${INPUTDATA}/metadataIOexample.tif
+  ${TEMP}/ioTvImportExportMetadataTest.tif
+  otbImageFileReaderTest
+  ${INPUTDATA}/metadataIOexample.tif # contains OTB metadata
+  ${TEMP}/ioTvImportExportMetadataTest.tif )
