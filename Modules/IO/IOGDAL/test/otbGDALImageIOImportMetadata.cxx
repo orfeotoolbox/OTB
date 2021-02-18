@@ -29,39 +29,27 @@
 //
 //};
 
-int otbGDALImageIOImportExportMetadata(int itkNotUsed(argc), char* argv[])
+int otbGDALImageIOImportMetadata(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
   const char* inputFilename  = argv[1];
-  const char* outputFilename = argv[2];
-  const char* outputReaderFilename = argv[3];
-
+  const char* outputReaderFilename = argv[2];
 
   std::ofstream outfileR(outputReaderFilename);
-  otb::GDALImageIO::Pointer readerGDAL = otb::GDALImageIO::New();
+  auto readerGDAL = otb::GDALImageIO::New();
   readerGDAL->SetFileName(inputFilename);
+
   if (readerGDAL->CanReadFile(inputFilename))
-  	{
-  	std::cout << "Read file OK" << std::endl;
-  	readerGDAL->ReadImageInformation();
-  	outfileR << readerGDAL->GetImageMetadata();	
-    }    
+  {
+    readerGDAL->ReadImageInformation();
+    outfileR << readerGDAL->GetImageMetadata();
+  }
   else
-  	{
-    std::cout << "Read file K0" << std::endl;
+  {
+    std::cout << "GDALImageIO cannot read the input file: " 
+              << inputFilename << std::endl;
     return EXIT_FAILURE;
-  	}
-
-  otb::GDALImageIO::Pointer writerGDAL = otb::GDALImageIO::New();
-  if(writerGDAL->CanWriteFile(outputFilename))
-    {
-   	writerGDAL->WriteImageInformation();
-    }  	
-  else
-    {
-  	return EXIT_FAILURE ;
-    }  	
-
+  }
 
   return EXIT_SUCCESS;
 }

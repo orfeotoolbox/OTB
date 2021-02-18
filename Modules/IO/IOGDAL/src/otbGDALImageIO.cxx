@@ -965,7 +965,6 @@ void GDALImageIO::InternalReadImageInformation()
     }
   }
 
-
   /* -------------------------------------------------------------------- */
   /*      Report subdatasets.                                             */
   /* -------------------------------------------------------------------- */
@@ -1090,7 +1089,6 @@ void GDALImageIO::InternalReadImageInformation()
     this->SetNumberOfComponents(m_NbBands);
     this->SetPixelType(VECTOR);
   }
-
 
   // Read no data value if present
   std::vector<bool>   isNoDataAvailable(dataset->GetRasterCount(), false);
@@ -1927,6 +1925,7 @@ void GDALImageIO::ImportMetadata()
   m_Imd.FromKeywordlist(kwl);
   // GCPs are imported directly in the ImageMetadata.
   m_Imd.Add(MDGeom::GCP, m_Dataset->GetGCPParam());
+
   // Parsing the bands
   for (int band = 0 ; band < m_NbBands ; ++band)
   {
@@ -1934,6 +1933,7 @@ void GDALImageIO::ImportMetadata()
     GDALMetadataToKeywordlist(m_Dataset->GetDataSet()->GetRasterBand(band+1)->GetMetadata(), kwl);
     m_Imd.Bands[band].FromKeywordlist(kwl);
   }
+
 }
 
 void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int band)
@@ -1966,6 +1966,11 @@ void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int 
 
 void GDALImageIO::GDALMetadataToKeywordlist(const char* const* metadataList, ImageMetadataBase::Keywordlist &kwl)
 {
+  if (!metadataList)
+  {
+    return;
+  }
+
   // The GDAL metadata string list is formatted as a “Name=value” list with the last pointer value being NULL.
   for ( ; *metadataList != nullptr ; ++metadataList )
     {
