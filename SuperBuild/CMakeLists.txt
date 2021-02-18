@@ -351,6 +351,7 @@ find_path(OTB_DATA_ROOT
 
 # SWIG Wrapping
 option(OTB_WRAP_PYTHON "Enable python wrappers for OTB applications (requires SWIG)" ON)
+option(OTB_WRAP_QGIS "Enable QGIS descriptor compilation" ON)
 
 configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)

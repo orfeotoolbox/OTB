@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2021 CS Systemes d'Information (CS SI)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -16,8 +16,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
-project(OTBQGIS)
-if(OTB_WRAP_QGIS)
-	otb_module_impl()
-endif()
+option ( OTB_WRAP_QGIS "Build QGIS Descriptors" ON )
