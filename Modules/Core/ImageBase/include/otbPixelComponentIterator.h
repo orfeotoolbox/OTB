@@ -77,15 +77,16 @@ public:
 
   /**\name ITK Constants and Typedefs */
   //@{
-  static constexpr bool is_const      = std::is_same<ConstOrMutable, ConstTag>::value;
-  static constexpr bool is_mutable    = std::is_same<ConstOrMutable, MutableTag>::value;
+  static constexpr bool is_const        = std::is_same<ConstOrMutable, ConstTag>::value;
+  static constexpr bool is_mutable      = std::is_same<ConstOrMutable, MutableTag>::value;
   /** Pixel Type. */
-  using PixelType                     = TPixel;
-  using InternalPixelType             = std::remove_reference_t<decltype(std::declval<PixelType>()[0])>;
+  using PixelType                       = TPixel;
+  using InternalPixelType               = std::remove_reference_t<decltype(std::declval<PixelType>()[0])>;
+  static constexpr bool is_scalar_array = std::is_arithmetic<InternalPixelType>::value;
 
-  using Self                          = PixelComponentIterator;
-  using ConstMut_IntPixelType         = std::conditional_t<is_const, std::add_const_t<InternalPixelType>, InternalPixelType>;
-  using SubPixelComponentIteratorType = PixelComponentIterator<ConstMut_IntPixelType, ConstOrMutable>;
+  using Self                            = PixelComponentIterator;
+  using ConstMut_IntPixelType           = std::conditional_t<is_const, std::add_const_t<InternalPixelType>, InternalPixelType>;
+  using SubPixelComponentIteratorType   = PixelComponentIterator<ConstMut_IntPixelType, ConstOrMutable>;
 
   /** Run-time type information (and related methods). */
   itkTypeMacroNoParent(PixelComponentIterator);
@@ -169,7 +170,9 @@ public:
   friend bool operator==(PixelComponentIterator const& lhs, PixelComponentIterator const& rhs) noexcept
   {
     assert(lhs.m_pixel == rhs.m_pixel);
-    return (lhs.m_component == rhs.m_component) && (lhs.m_subiter == rhs.m_subiter);
+    // As is_scalar_array is constexpr it should be optimized away by
+    // the compiler
+    return (lhs.m_component == rhs.m_component) && (is_scalar_array || (lhs.m_subiter == rhs.m_subiter));
   }
   friend bool operator!=(PixelComponentIterator const& lhs, PixelComponentIterator const& rhs) noexcept
   { return ! (lhs == rhs); }
@@ -177,14 +180,18 @@ public:
   friend bool operator<=(PixelComponentIterator const& lhs, PixelComponentIterator const& rhs) noexcept
   {
     assert(lhs.m_pixel == rhs.m_pixel);
+    // As is_scalar_array is constexpr it should be optimized away by
+    // the compiler
     return (lhs.m_component <= rhs.m_component)
-      || ( (lhs.m_component == rhs.m_component) && (lhs.m_subiter <= rhs.m_subiter) );
+      || ( !is_scalar_array &&
+           (lhs.m_component == rhs.m_component) && (lhs.m_subiter <= rhs.m_subiter) );
   }
   friend bool operator<(PixelComponentIterator const& lhs, PixelComponentIterator const& rhs) noexcept
   {
     assert(lhs.m_pixel == rhs.m_pixel);
-    return lhs.m_component < rhs.m_component
-      || ( (lhs.m_component == rhs.m_component) && (lhs.m_subiter < rhs.m_subiter) );
+    return (lhs.m_component < rhs.m_component)
+      || ( !is_scalar_array &&
+           (lhs.m_component == rhs.m_component) && (lhs.m_subiter < rhs.m_subiter) );
   }
   friend bool operator>=(PixelComponentIterator const& lhs, PixelComponentIterator const& rhs) noexcept
   { return ! (lhs < rhs); }
@@ -200,6 +207,14 @@ public:
   Self& operator++()
   {
     assert(m_component < mpl::GetNumberOfComponents(*m_pixel));
+#if defined(__cpp_if_constexpr)
+    // Optimization for array<scalar> cases
+    if constexpr(std::is_arithmetic<InternalPixelType>::value)
+    {
+      ++m_component;
+      return *this;
+    }
+#endif
     ++m_subiter;
     if (m_subiter.is_at_end())
     {
@@ -223,6 +238,12 @@ public:
     // TODO: proxy
     // - read: subiter->get_current_pixel()
     // - write: set_current_pixel(subiter->set_current_pixel(value))
+#if defined(__cpp_if_constexpr)
+    if constexpr (is_scalar_array)
+    {
+      return get_current_pixel();
+    }
+#endif
     return *m_subiter;
   }
   decltype(auto) operator*() const
@@ -230,6 +251,13 @@ public:
     // TODO: proxy
     // - read: subiter->get_current_pixel()
     // - write: set_current_pixel(subiter->set_current_pixel(value))
+#if defined(__cpp_if_constexpr)
+    if constexpr (is_scalar_array)
+    {
+      return get_current_pixel();
+    }
+#endif
+
     return *m_subiter;
   }
   //@}
@@ -316,7 +344,6 @@ public:
     PixelComponentIterator(PixelComponentIterator<PixelType, MutableTag> const& rhs)
     : m_pixel(rhs.m_pixel)
     , m_component(rhs.m_component)
-    , m_subiter(rhs.m_subiter)
     {}
 
   /** Convertion move constructor.
@@ -327,7 +354,6 @@ public:
     PixelComponentIterator(PixelComponentIterator<PixelType, MutableTag> && rhs)
     : m_pixel(rhs.m_pixel)
     , m_component(rhs.m_component)
-    , m_subiter(rhs.m_subiter)
     {}
 #endif
 
@@ -339,7 +365,6 @@ public:
   explicit PixelComponentIterator(PixelType & pixel, std::size_t component = 0)
     : m_pixel(&pixel)
     , m_component(component)
-    , m_subiter(SubPixelComponentIteratorType(get_current_pixel()))
     {
       assert(component <= 2);
     }
@@ -362,7 +387,7 @@ public:
   friend bool operator==(PixelComponentIterator const& lhs, PixelComponentIterator const& rhs) noexcept
   {
     assert(lhs.m_pixel == rhs.m_pixel);
-    return (lhs.m_component == rhs.m_component) && (lhs.m_subiter == rhs.m_subiter);
+    return lhs.m_component == rhs.m_component;
   }
   friend bool operator!=(PixelComponentIterator const& lhs, PixelComponentIterator const& rhs) noexcept
   { return ! (lhs == rhs); }
@@ -370,14 +395,12 @@ public:
   friend bool operator<=(PixelComponentIterator const& lhs, PixelComponentIterator const& rhs) noexcept
   {
     assert(lhs.m_pixel == rhs.m_pixel);
-    return (lhs.m_component <= rhs.m_component)
-      || ( (lhs.m_component == rhs.m_component) && (lhs.m_subiter <= rhs.m_subiter) );
+    return lhs.m_component <= rhs.m_component;
   }
   friend bool operator<(PixelComponentIterator const& lhs, PixelComponentIterator const& rhs) noexcept
   {
     assert(lhs.m_pixel == rhs.m_pixel);
-    return lhs.m_component < rhs.m_component
-      || ( (lhs.m_component == rhs.m_component) && (lhs.m_subiter < rhs.m_subiter) );
+    return lhs.m_component < rhs.m_component;
   }
   friend bool operator>=(PixelComponentIterator const& lhs, PixelComponentIterator const& rhs) noexcept
   { return ! (lhs < rhs); }
@@ -393,12 +416,7 @@ public:
   Self& operator++()
   {
     // assert(m_component < size(*m_pixel));
-    ++m_subiter;
-    if (m_subiter.is_at_end())
-    {
-      ++m_component;
-      m_subiter = SubPixelComponentIteratorType{get_current_pixel()};
-    }
+    ++m_component;
     return *this;
   }
 
@@ -416,14 +434,14 @@ public:
     // TODO: proxy
     // - read: subiter->get_current_pixel()
     // - write: set_current_pixel(subiter->set_current_pixel(value))
-    return *m_subiter;
+    return get_current_pixel();
   }
   decltype(auto) operator*() const
   {
     // TODO: proxy
     // - read: subiter->get_current_pixel()
     // - write: set_current_pixel(subiter->set_current_pixel(value))
-    return *m_subiter;
+    return get_current_pixel();
   }
   //@}
 
@@ -442,7 +460,6 @@ private:
 
   NotNull<PixelType*>           m_pixel;
   std::size_t                   m_component;
-  SubPixelComponentIteratorType m_subiter;
 };
 
 /*===============================[ Numbers ]=================================*/
