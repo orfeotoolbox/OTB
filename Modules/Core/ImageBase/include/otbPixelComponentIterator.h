@@ -87,6 +87,7 @@ public:
   using Self                            = PixelComponentIterator;
   using ConstMut_IntPixelType           = std::conditional_t<is_const, std::add_const_t<InternalPixelType>, InternalPixelType>;
   using SubPixelComponentIteratorType   = PixelComponentIterator<ConstMut_IntPixelType, ConstOrMutable>;
+  using ComponentType                   = typename SubPixelComponentIteratorType::ComponentType;
 
   /** Run-time type information (and related methods). */
   itkTypeMacroNoParent(PixelComponentIterator);
@@ -262,6 +263,12 @@ public:
   }
   //@}
 
+  auto size() const {
+    assert(! is_at_end());
+    auto const shallow_size = mpl::GetNumberOfComponents(*m_pixel);
+    return shallow_size ? shallow_size * m_subiter.size() : 0U;
+  }
+
 private:
   template <bool IsMutable_ = is_mutable, class = std::enable_if_t<IsMutable_>>
   decltype(auto) get_current_pixel()
@@ -307,6 +314,7 @@ public:
   using Self                          = PixelComponentIterator;
   using ConstMut_IntPixelType         = std::conditional_t<is_const, std::add_const_t<InternalPixelType>, InternalPixelType>;
   using SubPixelComponentIteratorType = PixelComponentIterator<ConstMut_IntPixelType, ConstOrMutable>;
+  using ComponentType                 = InternalPixelType;
 
   /** Run-time type information (and related methods). */
   itkTypeMacroNoParent(PixelComponentIterator);
@@ -445,6 +453,11 @@ public:
   }
   //@}
 
+  constexpr std::size_t size() const noexcept {
+    assert(! is_at_end());
+    return 2;
+  }
+
 private:
   template <bool IsMutable_ = is_mutable, class = std::enable_if_t<IsMutable_>>
   decltype(auto) get_current_pixel()
@@ -479,6 +492,7 @@ public:
   /** Pixel Type. */
   using PixelType                  = TPixel;
   // using InternalPixelType       = TPixel;
+  using ComponentType              = PixelType;
 
   using Self                       = PixelComponentIterator;
 
@@ -623,6 +637,11 @@ public:
 
   bool end() const noexcept { return m_component > 0; }
 
+  constexpr std::size_t size() const noexcept {
+    assert(! is_at_end());
+    return 1;
+  }
+
 private:
   NotNull<PixelType*>           m_pixel;
   std::size_t                   m_component;
@@ -648,10 +667,13 @@ using PixelComponentConstIterator = internals::PixelComponentIterator<TPixel, in
 template <typename TPixel>
 struct PixelRange_t
 {
-  using PixelType = TPixel;
+  using PixelType       = TPixel;
 
-  using iterator       = otb::PixelComponentIterator<PixelType>;
-  using const_iterator = otb::PixelComponentConstIterator<PixelType>;
+  using iterator        = otb::PixelComponentIterator<PixelType>;
+  using const_iterator  = otb::PixelComponentConstIterator<PixelType>;
+  using value_type      = typename iterator::ComponentType;
+  using size_type       = unsigned long;
+  using difference_type = long;
 
   explicit PixelRange_t(PixelType & pixel) : m_pixel(&pixel) {}
   auto begin() { return otb::PixelComponentIterator<PixelType>{*m_pixel, 0U}; }
@@ -663,7 +685,11 @@ struct PixelRange_t
   auto cbegin() const { return otb::PixelComponentConstIterator<PixelType>{*m_pixel, 0U}; }
   auto cend()   const { return otb::PixelComponentConstIterator<PixelType>{*m_pixel, shallow_size()}; }
 
-  std::size_t shallow_size() const /*noexcept*/ { return  mpl::GetNumberOfComponents(*m_pixel);}
+  size_type shallow_size() const /*noexcept*/ { return  mpl::GetNumberOfComponents(*m_pixel);}
+  size_type size() const {
+    auto const sh_size = shallow_size();
+    return sh_size ? begin().size() : 0U;
+  }
 private:
   NotNull<PixelType*> m_pixel;
 };

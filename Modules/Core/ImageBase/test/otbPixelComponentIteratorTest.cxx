@@ -56,6 +56,7 @@ BOOST_AUTO_TEST_CASE(PixelComponentIterator_Scalar_Creation)
 
   auto pr = PixelRange(p);
   BOOST_REQUIRE_EQUAL(pr.shallow_size(), 1U);
+  BOOST_REQUIRE_EQUAL(pr.size(), 1U);
   for (auto c : pr)
   {
     BOOST_CHECK_EQUAL(c, 0);
@@ -74,6 +75,8 @@ BOOST_AUTO_TEST_CASE(PixelComponentIterator_Complex_Creation)
 
   auto pr = PixelRange(p);
   BOOST_REQUIRE_EQUAL(pr.shallow_size(), 2U);
+  BOOST_REQUIRE_EQUAL(pr.size(), 2U);
+  BOOST_REQUIRE_EQUAL(mpl::GetNumberOfComponents(p), 2U);
   BOOST_TEST(pr == ref, tt::per_element());
 }
 
@@ -94,6 +97,7 @@ BOOST_AUTO_TEST_CASE(PixelComponentIterator_VLV_Creation)
 
   auto pr = PixelRange(p);
   BOOST_REQUIRE_EQUAL(pr.shallow_size(), 4U);
+  BOOST_REQUIRE_EQUAL(pr.size(), 4U);
   BOOST_TEST(pr == ref, tt::per_element());
 }
 #endif
@@ -137,6 +141,7 @@ BOOST_AUTO_TEST_CASE(PixelComponentIterator_Scalar_Set)
 
   auto pr = PixelRange(p);
   BOOST_REQUIRE_EQUAL(pr.shallow_size(), 1U);
+  BOOST_REQUIRE_EQUAL(pr.size(), 1U);
   std::fill(std::begin(pr), std::end(pr), 42);
   for (auto c : pr)
   {
@@ -156,6 +161,7 @@ BOOST_AUTO_TEST_CASE(PixelComponentIterator_Complex_Set)
 
   auto pr = PixelRange(p);
   BOOST_REQUIRE_EQUAL(pr.shallow_size(), 2U);
+  BOOST_REQUIRE_EQUAL(pr.size(), 2U);
   std::iota(std::begin(pr), std::end(pr), 42);
   BOOST_TEST(pr == ref, tt::per_element());
 }
@@ -177,6 +183,7 @@ BOOST_AUTO_TEST_CASE(PixelComponentIterator_VLV_Set)
 
   auto pr = PixelRange(p);
   BOOST_REQUIRE_EQUAL(pr.shallow_size(), 4U);
+  BOOST_REQUIRE_EQUAL(pr.size(), 4U);
   std::iota(std::begin(pr), std::end(pr), 42);
   BOOST_TEST(pr == ref, tt::per_element());
 }
@@ -495,7 +502,11 @@ void PixelComponentIterator_VLV2Complex_Convert()
 
   std::array<double, 2> ref = {42, 43};
 
+  BOOST_REQUIRE_EQUAL(PixelRange(in).shallow_size(), 2U);
+  BOOST_REQUIRE_EQUAL(PixelRange(in).size(), 2U);
   BOOST_TEST(PixelRange(in) == ref, tt::per_element());
+  BOOST_REQUIRE_EQUAL(PixelRange(out).shallow_size(), 2U);
+  BOOST_REQUIRE_EQUAL(PixelRange(out).size(), 2U);
   BOOST_TEST(PixelRange(out) == ref, tt::per_element());
 }
 
@@ -547,7 +558,12 @@ void PixelComponentIterator_VLVComplex2VLV_Convert()
   std::array<InComponentType, 6> iref = {42, 43, 44, 45, 46, 47};
   std::array<OutComponentType, 6> ref = {42, 43, 44, 45, 46, 47};
 
+  BOOST_REQUIRE_EQUAL(PixelRange(in).shallow_size(), 3U);
+  BOOST_REQUIRE_EQUAL(PixelRange(in).size(), 6U);
   BOOST_TEST(PixelRange(in) == iref, tt::per_element());
+
+  BOOST_REQUIRE_EQUAL(PixelRange(out).shallow_size(), 6U);
+  BOOST_REQUIRE_EQUAL(PixelRange(out).size(), 6U);
   BOOST_TEST(PixelRange(out) == ref, tt::per_element());
 }
 
@@ -599,7 +615,12 @@ void PixelComponentIterator_VLV2VLVComplex_Convert()
   std::array<InComponentType, 6> iref = {42, 43, 44, 45, 46, 47};
   std::array<OutComponentType, 6> ref = {42, 43, 44, 45, 46, 47};
 
+  BOOST_REQUIRE_EQUAL(PixelRange(in).shallow_size(), 6U);
+  BOOST_REQUIRE_EQUAL(PixelRange(in).size(), 6U);
   BOOST_TEST(PixelRange(in) == iref, tt::per_element());
+
+  BOOST_REQUIRE_EQUAL(PixelRange(out).shallow_size(), 3U);
+  BOOST_REQUIRE_EQUAL(PixelRange(out).size(), 6U);
   BOOST_TEST(PixelRange(out) == ref, tt::per_element());
 }
 
