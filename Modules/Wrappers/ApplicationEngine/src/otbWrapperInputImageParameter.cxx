@@ -35,17 +35,9 @@ InputImageParameter::InputImageParameter()
 {
   this->SetName("Input Image");
   this->SetKey("in");
-  m_FileName         = "";
-  m_PreviousFileName = "";
-  m_UseFilename      = true;
-  this->ClearValue();
 }
 
-InputImageParameter::~InputImageParameter()
-{
-}
-
-bool InputImageParameter::SetFromFileName(const std::string& filename)
+bool InputImageParameter::SetFromFileName(std::string filename)
 {
   // First clear previous file chosen
   this->ClearValue();
@@ -54,7 +46,7 @@ bool InputImageParameter::SetFromFileName(const std::string& filename)
   //  - Done in the reader
   //  - allow appending additional information to the filename
   // myfile.tif:2 for example, or myfile.tif:nocarto
-  m_FileName    = filename;
+  m_FileName    = move(filename);
   m_UseFilename = true;
   SetActive(true);
 
@@ -105,8 +97,8 @@ void InputImageParameter::ClearValue()
   m_Reader           = nullptr;
   m_InputCaster      = nullptr;
   m_OutputCaster     = nullptr;
-  m_FileName         = "";
-  m_PreviousFileName = "";
+  m_FileName         .clear();
+  m_PreviousFileName .clear();
   m_UseFilename      = true;
 }
 
