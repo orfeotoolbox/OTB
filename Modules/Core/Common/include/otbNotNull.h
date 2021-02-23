@@ -21,6 +21,7 @@
 #ifndef otbNotNull_h
 #define otbNotNull_h
 
+#include <cstddef>
 #include <cassert>
 
 namespace otb
