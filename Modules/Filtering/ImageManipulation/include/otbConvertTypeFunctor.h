@@ -47,6 +47,7 @@ public:
 
   using InputPixelValueType     = typename itk::NumericTraits<InputInternalPixelType>::ValueType;
   using OutputPixelValueType    = typename itk::NumericTraits<OutputInternalPixelType>::ValueType;
+  using ThresholdPixelValueType = std::common_type_t<InputPixelValueType, OutputPixelValueType>;
 
   static constexpr bool m_cInPix          = boost::is_complex<InputPixelType>::value;
   static constexpr bool m_cOutPix         = boost::is_complex<OutputPixelType>::value;
@@ -96,13 +97,13 @@ public:
   void SetLowest(OutputPixelValueType const& lowest) noexcept
   {
     m_LowestB  = lowest;
-    m_Zero     = std::max(m_Zero, lowest);
+    m_Zero      = clamp<ThresholdPixelValueType>(m_Zero, lowest, m_HighestB);
   }
 
   void SetHighest(OutputPixelValueType const& highest) noexcept
   {
     m_HighestB  = highest;
-    m_Zero      = std::min(m_Zero, highest);
+    m_Zero      = clamp<ThresholdPixelValueType>(m_Zero, m_LowestB, highest);
   }
 
   void operator()(OutputPixelType & out, InputPixelType const& in) const
@@ -126,7 +127,13 @@ public:
     // `end` and `dend`, we loop manually
     for (; first!=end && dfirst!=dend ; ++first, ++dfirst)
     {
-      *dfirst = otb::clamp<OutputPixelValueType>(*first, lo, hi);
+      // The conversion to OutputPixelValueType needs to be done after
+      // clamping!
+      // Indeed, let's suppose InputType=short, OutputType=unsigned char
+      // clamp<OutputType>(300) would yield 300-256=44 instead of 255.
+      // Hence the use of ThresholdPixelValueType which is the common
+      // type between Input and Output PixelValueTypes.
+      *dfirst = static_cast<OutputPixelValueType>(otb::clamp<ThresholdPixelValueType>(*first, lo, hi));
     }
     // complete with extra 0 (case where we have less input bands, and we store into complex)
 #if 0
@@ -145,8 +152,8 @@ private:
   ConvertTypeFunctor(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  OutputPixelValueType m_LowestB  = std::numeric_limits<OutputPixelValueType>::lowest();
-  OutputPixelValueType m_HighestB = std::numeric_limits<OutputPixelValueType>::max();
+  ThresholdPixelValueType m_LowestB  = std::numeric_limits<OutputPixelValueType>::lowest();
+  ThresholdPixelValueType m_HighestB = std::numeric_limits<OutputPixelValueType>::max();
   OutputPixelValueType m_Zero     {}; // initialized to zero!
   unsigned int         m_CompIn, m_CompOut, m_Scal;
 };
