@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2021 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -21,13 +21,13 @@
 #ifndef otbConvertTypeFunctor_h
 #define otbConvertTypeFunctor_h
 
+
+#include "otbPixelComponentIterator.h"
+#include "otbAlgoClamp.h"
+#include "itkNumericTraits.h"
+#include <boost/type_traits/is_complex.hpp>
 #include <limits>
 #include <type_traits>
-#include <boost/type_traits/is_complex.hpp>
-#include <boost/type_traits/is_scalar.hpp>
-
-#include "itkNumericTraits.h"
-#include "otbDefaultConvertPixelTraits.h"
 
 namespace otb
 {
@@ -38,38 +38,24 @@ template <class TInputPixelType, class TOutputPixelType>
 class ConvertTypeFunctor
 {
 public:
-  typedef TInputPixelType    InputPixelType;
-  typedef TOutputPixelType   OutputPixelType;
-  typedef ConvertTypeFunctor Self;
+  using InputPixelType          = TInputPixelType;
+  using OutputPixelType         = TOutputPixelType;
+  using Self                    = ConvertTypeFunctor;
 
-  typedef typename itk::NumericTraits<InputPixelType>::ValueType  InputInternalPixelType;
-  typedef typename itk::NumericTraits<OutputPixelType>::ValueType OutputInternalPixelType;
+  using InputInternalPixelType  = typename itk::NumericTraits<InputPixelType>::ValueType;
+  using OutputInternalPixelType = typename itk::NumericTraits<OutputPixelType>::ValueType;
 
-  typedef typename itk::NumericTraits<InputInternalPixelType>::ValueType  InputPixelValueType;
-  typedef typename itk::NumericTraits<OutputInternalPixelType>::ValueType OutputPixelValueType;
+  using InputPixelValueType     = typename itk::NumericTraits<InputInternalPixelType>::ValueType;
+  using OutputPixelValueType    = typename itk::NumericTraits<OutputInternalPixelType>::ValueType;
+  using ThresholdPixelValueType = std::common_type_t<InputPixelValueType, OutputPixelValueType>;
 
   static constexpr bool m_cInPix          = boost::is_complex<InputPixelType>::value;
   static constexpr bool m_cOutPix         = boost::is_complex<OutputPixelType>::value;
   static constexpr bool m_cInInternalPix  = boost::is_complex<InputInternalPixelType>::value;
   static constexpr bool m_cOutInternalPix = boost::is_complex<OutputInternalPixelType>::value;
 
-  ConvertTypeFunctor()
-  // m_cInPix ( boost::is_complex < InputPixelType > :: value ) ,
-  // m_cOutPix ( boost::is_complex < OutputPixelType > :: value ) ,
-  // m_cInInternalPix ( boost::is_complex < InputInternalPixelType > :: value ) ,
-  // m_cOutInternalPix ( boost::is_complex < OutputInternalPixelType > :: value )
-  {
-    m_LowestB  = std::numeric_limits<OutputPixelValueType>::lowest();
-    m_HighestB = std::numeric_limits<OutputPixelValueType>::max();
-
-    m_LowestBD  = static_cast<double>(m_LowestB);
-    m_HighestBD = static_cast<double>(m_HighestB);
-
-    // m_cInPix = boost::is_complex < InputPixelType > :: value ;
-    // m_cOutPix = boost::is_complex < OutputPixelType > :: value ;
-    // m_cInInternalPix = boost::is_complex < InputInternalPixelType > :: value ;
-    // m_cOutInternalPix = boost::is_complex < OutputInternalPixelType > :: value ;
-  }
+  ConvertTypeFunctor() = default;
+  ~ConvertTypeFunctor() = default;
 
   // template < class InternalPixelType  >
   void SetInputComponents(unsigned int sizeIn)
@@ -81,10 +67,7 @@ public:
       // two components...
       m_CompIn /= 2;
     }
-  }
 
-  unsigned int GetOutputSize()
-  {
     if (m_cInInternalPix || m_cInPix)
       m_Scal = 2 * m_CompIn;
     else
@@ -104,107 +87,75 @@ public:
       m_CompOut = 1;
     else // fized size container or scalar
       m_CompOut = size;
+  }
 
-
+  unsigned int GetOutputSize() const noexcept
+  {
     return m_CompOut;
   }
 
-  void SetLowest(OutputPixelValueType& lowest)
+  void SetLowest(OutputPixelValueType const& lowest) noexcept
   {
     m_LowestB  = lowest;
-    m_LowestBD = static_cast<double>(m_LowestB);
+    m_Zero      = clamp<ThresholdPixelValueType>(m_Zero, lowest, m_HighestB);
   }
 
-  void SetHighest(OutputPixelValueType& highest)
+  void SetHighest(OutputPixelValueType const& highest) noexcept
   {
     m_HighestB  = highest;
-    m_HighestBD = static_cast<double>(m_HighestB);
+    m_Zero      = clamp<ThresholdPixelValueType>(m_Zero, m_LowestB, highest);
   }
 
-  OutputPixelType operator()(InputPixelType const& in) const
+  void operator()(OutputPixelType & out, InputPixelType const& in) const
   {
-    std::vector<double> vPixel;
-    for (unsigned int i = 0; i < m_CompIn; i++)
-      FillIn<InputPixelType>(i, in, vPixel);
-    assert(m_Scal == vPixel.size());
-    if ((m_cOutPix || m_cOutInternalPix) && vPixel.size() % 2)
+    // PERF: Because VLV pixel may be used, this operator is written
+    // with an output parameter instead of a returned value.
+
+    auto r_out = PixelRange(out);
+    auto r_in  = PixelRange(in);
+
+    auto       first  = r_in.begin();  // Source iterators
+    auto const end    = r_in.end();
+    auto       dfirst = r_out.begin(); // D)estination iterators
+    auto const dend   = r_out.end();
+
+    static_assert(std::is_same<OutputPixelValueType, std::decay_t<decltype(*dfirst)>>::value, "They should match");
+    // PERF: Locally cache the member variable as the compiler cannot
+    auto const lo = m_LowestB;
+    auto const hi = m_HighestB;
+    // As std:transform stop condition is only on `end`, and not on both
+    // `end` and `dend`, we loop manually
+    for (; first!=end && dfirst!=dend ; ++first, ++dfirst)
     {
-      vPixel.push_back(0); // last component has no imaginary part
+      // The conversion to OutputPixelValueType needs to be done after
+      // clamping!
+      // Indeed, let's suppose InputType=short, OutputType=unsigned char
+      // clamp<OutputType>(300) would yield 300-256=44 instead of 255.
+      // Hence the use of ThresholdPixelValueType which is the common
+      // type between Input and Output PixelValueTypes.
+      *dfirst = static_cast<OutputPixelValueType>(otb::clamp<ThresholdPixelValueType>(*first, lo, hi));
     }
-    Clamp(vPixel);
-    OutputPixelType out;
-
-    int hack = 1;
-    if (m_cOutPix)
-      hack += 1; // needed in case we have OutputPixelType == complex<t> as
-    // itk::NumericTraits::SetLength() will ask a length of 2!
-    itk::NumericTraits<OutputPixelType>::SetLength(out, hack * m_CompOut);
-
-    for (unsigned int i = 0; i < m_CompOut; i++)
-      FillOut<OutputPixelType>(i, out, vPixel);
-    return out;
-  }
-
-  ~ConvertTypeFunctor(){};
-
-protected:
-  template <class PixelType, std::enable_if_t<std::is_arithmetic<PixelType>::value, int> = 0>
-  void FillIn(unsigned int i, InputPixelType const& pix, std::vector<double>& vPix) const
-  {
-    vPix.push_back(DefaultConvertPixelTraits<InputPixelType>::GetNthComponent(i, pix));
-  }
-
-  template <class PixelType, std::enable_if_t<boost::is_complex<PixelType>::value, int> = 0>
-  void FillIn(unsigned int i, InputPixelType const& pix, std::vector<double>& vPix) const
-  {
-    PixelType comp = DefaultConvertPixelTraits<InputPixelType>::GetNthComponent(i, pix);
-    vPix.push_back(static_cast<double>(real(comp)));
-    vPix.push_back(static_cast<double>(imag(comp)));
-  }
-
-  template <class PixelType, std::enable_if_t<!(boost::is_complex<PixelType>::value || std::is_arithmetic<PixelType>::value), int> = 0>
-  void FillIn(unsigned int i, InputPixelType const& pix, std::vector<double>& vPix) const
-  {
-    FillIn<InputInternalPixelType>(i, pix, vPix);
-  }
-
-  void Clamp(std::vector<double>& vPixel) const
-  {
-    for (double& comp : vPixel)
+    // complete with extra 0 (case where we have less input bands, and we store into complex)
+#if 0
+    // It seems to be slightly slower with assertions on
+    std::fill(dfirst, dend, m_Zero);
+#else
+    for (; dfirst != dend ; ++dfirst)
     {
-      if (comp >= m_HighestBD)
-        comp = m_HighestBD;
-      else if (comp <= m_LowestBD)
-        comp = m_LowestBD;
+      *dfirst = m_Zero;
     }
-  }
-
-  template <class PixelType, std::enable_if_t<std::is_arithmetic<PixelType>::value, int> = 0>
-  void FillOut(unsigned int i, OutputPixelType& pix, std::vector<double>& vPix) const
-  {
-    DefaultConvertPixelTraits<OutputPixelType>::SetNthComponent(i, pix, vPix[i]);
-  }
-
-  template <class PixelType, std::enable_if_t<boost::is_complex<PixelType>::value, int> = 0>
-  void FillOut(unsigned int i, OutputPixelType& pix, std::vector<double>& vPix) const
-  {
-    DefaultConvertPixelTraits<OutputPixelType>::SetNthComponent(i, pix, PixelType(vPix[2 * i], vPix[2 * i + 1]));
-  }
-
-  template <class PixelType, std::enable_if_t<!(boost::is_complex<PixelType>::value || std::is_arithmetic<PixelType>::value), int> = 0>
-  void FillOut(unsigned int i, OutputPixelType& pix, std::vector<double>& vPix) const
-  {
-    FillOut<OutputInternalPixelType>(i, pix, vPix);
+#endif
   }
 
 private:
+
   ConvertTypeFunctor(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  double               m_LowestBD, m_HighestBD;
-  OutputPixelValueType m_LowestB, m_HighestB;
+  ThresholdPixelValueType m_LowestB  = std::numeric_limits<OutputPixelValueType>::lowest();
+  ThresholdPixelValueType m_HighestB = std::numeric_limits<OutputPixelValueType>::max();
+  OutputPixelValueType m_Zero     {}; // initialized to zero!
   unsigned int         m_CompIn, m_CompOut, m_Scal;
-  // const bool m_cInPix , m_cOutPix , m_cInInternalPix , m_cOutInternalPix ;
 };
 
 } // end namespace Functor
