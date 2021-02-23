@@ -151,8 +151,8 @@ private:
 
   ImageBaseType::Pointer      m_Image = nullptr;
 
-  itk::ProcessObject::Pointer m_InputCaster = nullptr;
   itk::ProcessObject::Pointer m_OutputCaster = nullptr;
+  itk::DataObject::Pointer    m_OutputCasted = nullptr;
 
 private:
   /** */

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2021 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -95,8 +95,8 @@ void InputImageParameter::ClearValue()
 {
   m_Image            = nullptr;
   m_Reader           = nullptr;
-  m_InputCaster      = nullptr;
   m_OutputCaster     = nullptr;
+  m_OutputCasted     = nullptr;
   m_FileName         .clear();
   m_PreviousFileName .clear();
   m_UseFilename      = true;

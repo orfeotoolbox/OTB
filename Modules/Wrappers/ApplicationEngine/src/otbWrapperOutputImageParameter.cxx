@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2021 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -80,7 +80,6 @@ std::string OutputImageParameter::ConvertPixelTypeToString(ImagePixelType type)
   // TODO: Could be replaced by constant static string array e.g.:
   // return PIXEL_TYPE_NAME[ type ];
 
-  std::string ret;
   switch (type)
   {
   case ImagePixelType_uint8:   return "uint8";
@@ -203,7 +202,6 @@ void OutputImageParameter::ClampAndWriteVectorImage(TInputImage* in)
       // Change internal state only when everything has been setup
       // without raising exception.
 
-      m_InputCaster  = clamp.icif;
       m_OutputCaster = clamp.ocif;
 
       m_Writer = vrtWriter;
@@ -226,7 +224,6 @@ void OutputImageParameter::ClampAndWriteVectorImage(TInputImage* in)
       // Change internal state only when everything has been setup
       // without raising exception.
 
-      m_InputCaster  = clamp.icif;
       m_OutputCaster = clamp.ocif;
 
       m_Writer = sptWriter;
@@ -257,7 +254,6 @@ void OutputImageParameter::ClampAndWriteVectorImage(TInputImage* in)
   // Change internal state only when everything has been setup
   // without raising exception.
 
-  m_InputCaster  = clamp.icif;
   m_OutputCaster = clamp.ocif;
 
   m_Writer = writer;
@@ -332,7 +328,6 @@ void OutputImageParameter::Write()
   m_Writer->Update();
 
   // Clean internal filters
-  m_InputCaster  = nullptr;
   m_OutputCaster = nullptr;
 
   m_Writer = nullptr;

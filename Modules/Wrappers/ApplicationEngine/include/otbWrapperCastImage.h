@@ -55,9 +55,6 @@ struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage
     ocif->SetInput(in);
   }
 
-  /** Input-image clamp filter. */
-  itk::ProcessObject::Pointer icif{};
-
   /** Output-image clamp filter. */
   typename InOutClampImageFilter::Pointer ocif;
 
@@ -88,9 +85,6 @@ struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage<TOutputImage, DoubleVector
     ocif->SetInput(in);
   }
 
-  /** Input-image clamp filter. */
-  itk::ProcessObject::Pointer icif;
-
   /** Output-image clamp filter. */
   typename OutputClampImageFilter::Pointer ocif;
 
@@ -113,7 +107,6 @@ struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage<T, T>
     assert(in);
   }
 
-  itk::ProcessObject::Pointer icif;
   itk::ProcessObject::Pointer ocif;
   T*                          out;
 };
@@ -133,7 +126,6 @@ struct OTBApplicationEngine_EXPORT_TEMPLATE CastImage<DoubleVectorImageType, Dou
     assert(in);
   }
 
-  itk::ProcessObject::Pointer icif;
   itk::ProcessObject::Pointer ocif;
   DoubleVectorImageType*      out;
 };
