@@ -86,8 +86,8 @@ TOutputImage* InputImageParameter::Cast(TInputImage* image)
   if (clamp.ocif)
     clamp.ocif->UpdateOutputInformation();
 
-  m_InputCaster  = clamp.icif;
   m_OutputCaster = clamp.ocif;
+  m_OutputCasted = clamp.out;
 
   return clamp.out;
 }
@@ -156,25 +156,29 @@ TImageType* InputImageParameter::GetImage()
       return nullptr;
     }
     // Check if the image type asked here is the same as m_image
-    else if (dynamic_cast<TImageType*>(m_Image.GetPointer()))
+    TImageType *im = dynamic_cast<TImageType*>(m_Image.GetPointer());
+    if (im)
     {
-      return dynamic_cast<TImageType*>(m_Image.GetPointer());
+      return im;
     }
     // check if we already done this cast
-    else if (dynamic_cast<ClampImageFilter<DoubleVectorImageType, TImageType>*>(m_OutputCaster.GetPointer()))
+    if (m_OutputCasted)
     {
-      return dynamic_cast<ClampImageFilter<DoubleVectorImageType, TImageType>*>(m_OutputCaster.GetPointer())->GetOutput();
-    }
-    else
-    {
-      if (m_OutputCaster.IsNotNull())
+      im = dynamic_cast<TImageType*>(m_OutputCasted.GetPointer());
+      if (im)
       {
-        itkExceptionMacro(
-            "GetImage() was already called with a different type, "
-            "probably due to two calls to GetParameter<Type>Image with different types in application code.");
+        return im;
       }
-      CLAMP_IMAGE_BASE(TImageType, m_Image.GetPointer());
     }
+
+    if (m_OutputCaster.IsNotNull())
+    {
+      itkExceptionMacro(
+          "GetImage() was already called with a different type, "
+          "probably due to two calls to GetParameter<Type>Image with different types in application code. Expected: "
+          );
+    }
+    CLAMP_IMAGE_BASE(TImageType, m_Image.GetPointer());
   }
 }
 
