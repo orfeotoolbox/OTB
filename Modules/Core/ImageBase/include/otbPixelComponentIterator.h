@@ -650,6 +650,9 @@ struct PixelRange_t
 {
   using PixelType = TPixel;
 
+  using iterator       = otb::PixelComponentIterator<PixelType>;
+  using const_iterator = otb::PixelComponentConstIterator<PixelType>;
+
   explicit PixelRange_t(PixelType & pixel) : m_pixel(&pixel) {}
   auto begin() { return otb::PixelComponentIterator<PixelType>{*m_pixel, 0U}; }
   auto end()   { return otb::PixelComponentIterator<PixelType>{*m_pixel, shallow_size()}; }
