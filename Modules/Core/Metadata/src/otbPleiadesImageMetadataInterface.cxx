@@ -1890,7 +1890,7 @@ void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::
       bandNameToPhysicalGain = { {"P", 11.52},
           {"B0", 8.96}, {"B1", 9.01}, {"B2", 10.09}, {"B3", 15.31}};
     }
-    // From 01/10/2019 to nowadays
+    // From 01/01/2020 to nowadays
     else
     {
       bandNameToPhysicalGain = { {"P", 11.49},
@@ -2381,22 +2381,21 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
 
   FetchSolarIrradiance(dimapData.SolarIrradiance);
 
-  //Store hard-coded values for gain
-  FetchTabulatedPhysicalGain(m_Imd[MDTime::ProductionDate]);
-
-  //Store gain values from the dimap
+  //Store gain values from the dimap, if present
   if (dimapData.PhysicalGain.size() == m_Imd.Bands.size())
   {
     auto gain = dimapData.PhysicalGain.begin();
-    std::stringstream ssGain;
-    while(gain != dimapData.PhysicalGain.end())
+    for (auto & band: m_Imd.Bands)
     {
-       ssGain << *gain;
-       gain++;
-       if(gain != dimapData.PhysicalGain.end())
-          ssGain << " ";
+      band.Add(MDNum::PhysicalGain, *gain);
+      gain++;
     }
-    m_Imd.Add("DIMAP_Gain",ssGain.str());
+  }
+  else
+  {
+    //Store hard-coded values for gain
+    FetchTabulatedPhysicalGain(m_Imd[MDTime::ProductionDate]);
+    otbLogMacro(Info, << "Gain values from DIMAP could not be retrieved, reading hard-coded tables instead");
   }
 
   FetchSpectralSensitivity(m_Imd[MDStr::SensorID]);
@@ -2412,8 +2411,12 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
   }
   else
   {
-    otbGenericExceptionMacro(MissingMetadataException,
-      << "The number of bands in image metadatas is incoherent with the DIMAP product")
+    //Default Bias value
+    for (auto & band: m_Imd.Bands)
+    {
+      band.Add(MDNum::PhysicalBias, 0.0);
+    }
+    otbLogMacro(Info, << "Bias values from DIMAP could not be retrieved, reading default values instead");
   }
 }
 
