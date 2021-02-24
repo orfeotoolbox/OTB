@@ -10,7 +10,7 @@
      };
 
 --- InsightToolkit-4.10.0.orig/Modules/ThirdParty/VNL/src/vxl/core/vnl/vnl_sparse_matrix.h	2020-07-24 03:47:25.000000000 +0200
-+++ InsightToolkit-4.10.0/Modules/Core/Common/include/vnl_sparse_matrix.h	2021-02-24 10:20:25.523193639 +0100
++++ InsightToolkit-4.10.0/Modules/ThirdParty/VNL/src/vxl/core/vnl/vnl_sparse_matrix.h		2021-02-24 10:20:25.523193639 +0100
 @@ -94,7 +94,7 @@
      return *this;
    }
