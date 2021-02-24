@@ -158,7 +158,7 @@ public:
      * There values a computed by 6S. */
   WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
-  void Parse(const MetadataSupplierInterface & mds);
+  void Parse(const MetadataSupplierInterface & mds) override;
 
 protected:
   SpotImageMetadataInterface() = default;
