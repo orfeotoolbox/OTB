@@ -347,12 +347,13 @@ public:
     ParseVector(mds, "IMD/Geometric_Data.Use_Area.Located_Geometric_Values",
                        "Acquisition_Angles.AZIMUTH_ANGLE", m_Data.AzimuthAngle);
 
+    std::vector<double> gainbiasUnavail={};
     ParseVector(mds, "IMD/Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
-                       "BIAS", m_Data.PhysicalBias);
+                       "BIAS", m_Data.PhysicalBias,gainbiasUnavail);
 
     ParseVector(mds, "IMD/Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
-                       "GAIN", m_Data.PhysicalGain);
-
+                       "GAIN", m_Data.PhysicalGain,gainbiasUnavail);
+    
     ParseVector(mds, "IMD/Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Solar_Irradiance",
                        "VALUE" , m_Data.SolarIrradiance);
 
