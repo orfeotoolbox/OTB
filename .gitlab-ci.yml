@@ -249,33 +249,7 @@ windows-10-build:
   needs:
     - job: windows-10-prepare
       artifacts: true
-
-# - Win8.1
-windows-8-prepare:
-  extends: .windows-prepare
-  tags:
-    - windows8
-  script:
-    - call ./CI/dev_env.bat x86 xdk 8.1
-    - clcache.exe -s
-    - ctest -C Release -V -S CI/prepare_superbuild.cmake
-    - clcache.exe -s
-
-windows-8-build:
-  extends: .windows-build
-  tags:
-    - windows8
-  script:
-    - call ./CI/dev_env.bat x86 otb 8.1
-    - clcache.exe -s
-    - ctest -V -S CI/main_superbuild.cmake
-    - clcache.exe -s
-    - ctest -V -S CI/main_packages.cmake
-    - move "build_packages\OTB-*.zip" . || dir build_packages
-  needs:
-    - job: windows-8-prepare
-      artifacts: true
-
+      
 #------------------------- QA related jobs -------------------------------------
 ubuntu-xdk-qa-code-coverage:
   extends: .common-build
