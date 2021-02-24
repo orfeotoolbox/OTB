@@ -386,8 +386,6 @@ deploy:
       artifacts: true
     - job: macos-xdk-build
       artifacts: true
-    - job: windows-8-build
-      artifacts: true
     - job: windows-10-build
       artifacts: true
 
