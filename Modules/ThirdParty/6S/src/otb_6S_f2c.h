@@ -29,7 +29,7 @@ extern "C" {
 #endif
 #include "otb_6S_f2c_original.h"
 char *F77_aloc(integer Len, char *whence);
-void sig_die(register char *s, int kill);
+void sig_die(char *s, int kill);
 integer i_dnnt(doublereal *x);
 double f__cabs(double real, double imag);
 void exit_(integer *rc);
@@ -49,7 +49,7 @@ double r_imag(complex *z);
 double r_sign(real *a, real *b);
 /* OTB modifications */
 /* int s_copy(char *a, char *b, ftnlen la, ftnlen lb); */
-void s_copy(register char *a, register char *b, ftnlen la, ftnlen lb);
+void s_copy(char *a, char *b, ftnlen la, ftnlen lb);
 
 integer s_cmp(char *a0, char *b0, ftnlen la, ftnlen lb);
 /* OTB modifications */
