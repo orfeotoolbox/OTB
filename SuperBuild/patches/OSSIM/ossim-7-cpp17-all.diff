@@ -1,0 +1,13 @@
+--- OSSIM-orig/ossim/include/ossim/base/ossimRegExp.h	2021-02-24 08:01:53.867567506 +0100
++++ OSSIM/ossim/include/ossim/base/ossimRegExp.h	2021-02-24 08:02:54.679595479 +0100
+@@ -123,8 +123,8 @@
+   char* regpiece (int*);
+   char* regatom (int*);
+   char* regnode (char);
+-  const char* regnext (register const char*);
+-  char* regnext (register char*);
++  const char* regnext (const char*);
++  char* regnext (char*);
+   void        regc (unsigned char);
+   void        reginsert (char, char*);
+   void        regtail (char*, const char*);
