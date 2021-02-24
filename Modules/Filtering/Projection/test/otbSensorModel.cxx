@@ -47,6 +47,8 @@ typedef otb::GeographicalDistance<ImageType::PointType>                Geographi
 
 int produceGCP(char* outputgcpfilename, const otb::ImageMetadata& imd, bool useForwardSensorModel = true, double z = 16.19688987731934)
 {
+  (void)useForwardSensorModel;
+  
   itk::Point<double, 2> imagePoint;
   itk::Point<double, 2> geoPoint;
 

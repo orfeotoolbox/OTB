@@ -51,7 +51,7 @@ int otbRPCTransformTest(int itkNotUsed(argc), char* argv[])
   std::string rpcFile(argv[1]);
   std::string gcpFileName(argv[2]);
   double geoTol(atof(argv[3]));
-  double imgTol(atof(argv[4]));
+  // double imgTol(atof(argv[4]));
 
   // Tools
   auto imgDistance = DistanceType::New();
