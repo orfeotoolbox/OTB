@@ -735,7 +735,6 @@ void GDALImageIO::InternalReadImageInformation()
 
   if (m_NumberOfDimensions == 3)
     m_Spacing[2] = 1;
-
   char** papszMetadata = dataset->GetMetadata(nullptr);
 
   /* -------------------------------------------------------------------- */
@@ -966,7 +965,6 @@ void GDALImageIO::InternalReadImageInformation()
     }
   }
 
-
   /* -------------------------------------------------------------------- */
   /*      Report subdatasets.                                             */
   /* -------------------------------------------------------------------- */
@@ -1092,7 +1090,6 @@ void GDALImageIO::InternalReadImageInformation()
     this->SetPixelType(VECTOR);
   }
 
-
   // Read no data value if present
   std::vector<bool>   isNoDataAvailable(dataset->GetRasterCount(), false);
   std::vector<double> noDataValues(dataset->GetRasterCount(), 0);
@@ -1117,6 +1114,8 @@ void GDALImageIO::InternalReadImageInformation()
     }
     m_Imd.Bands.push_back(bmd);
   }
+
+  ImportMetadata() ;
 
   if (noDataFound)
   {
@@ -1926,6 +1925,7 @@ void GDALImageIO::ImportMetadata()
   m_Imd.FromKeywordlist(kwl);
   // GCPs are imported directly in the ImageMetadata.
   m_Imd.Add(MDGeom::GCP, m_Dataset->GetGCPParam());
+
   // Parsing the bands
   for (int band = 0 ; band < m_NbBands ; ++band)
   {
@@ -1933,6 +1933,7 @@ void GDALImageIO::ImportMetadata()
     GDALMetadataToKeywordlist(m_Dataset->GetDataSet()->GetRasterBand(band+1)->GetMetadata(), kwl);
     m_Imd.Bands[band].FromKeywordlist(kwl);
   }
+
 }
 
 void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int band)
@@ -1955,13 +1956,21 @@ void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int 
     {
       // Projection have already been exported (see InternalWriteImageInformation)
     }
-    else
+    else{
+      // std::string domain = "OTB";
+      // std::string path = domain + "/" + kv.first ;
       SetMetadataValue(kv.first.c_str(), kv.second.c_str(), band);
+    }
   }
 }
 
 void GDALImageIO::GDALMetadataToKeywordlist(const char* const* metadataList, ImageMetadataBase::Keywordlist &kwl)
 {
+  if (!metadataList)
+  {
+    return;
+  }
+
   // The GDAL metadata string list is formatted as a “Name=value” list with the last pointer value being NULL.
   for ( ; *metadataList != nullptr ; ++metadataList )
     {
@@ -2009,8 +2018,9 @@ void GDALImageIO::GDALMetadataToKeywordlist(const char* const* metadataList, Ima
 
         m_Imd.Add(MDGeom::RPC, rpcStruct);
       }
-      else
+      else{
         kwl.emplace(fieldName, fieldValue);
+      }
     }
 }
 
