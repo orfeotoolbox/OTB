@@ -26,9 +26,15 @@ CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}")
 set ( temporary_option
 "OTB_USE_MPI=OFF")
 
+if((CTEST_SITE) AND EXISTS "${CMAKE_CURRENT_LIST_DIR}/sb_${CTEST_SITE}.cmake")
+  # will set its output in 'site_option'
+  include("${CMAKE_CURRENT_LIST_DIR}/sb_${CTEST_SITE}.cmake")
+endif()
+
 set(concat_options
 "${cmake_configure_option}
 ${temporary_option}
+${site_option}
 ")
 
 #Transform the previous string in list
