@@ -832,36 +832,40 @@ void GDALImageIO::InternalReadImageInformation()
     {
       gcpCount = 0; // fix for uninitialized gcpCount in gdal (when
       // reading Palsar image)
+
+      itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey, 0);
+
     }
-
-    std::string key;
-
-    itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey, gcpCount);
-
-    for (unsigned int cpt = 0; cpt < gcpCount; ++cpt)
+    else
     {
+      itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::GCPCountKey, gcpCount);
 
-      const GDAL_GCP* psGCP;
-      psGCP = dataset->GetGCPs() + cpt;
+      std::string key;
+      for (unsigned int cpt = 0; cpt < gcpCount; ++cpt)
+      {
 
-      GCP pOtbGCP;
-      pOtbGCP.m_Id     = std::string(psGCP->pszId);
-      pOtbGCP.m_Info   = std::string(psGCP->pszInfo);
-      pOtbGCP.m_GCPRow = psGCP->dfGCPLine;
-      pOtbGCP.m_GCPCol = psGCP->dfGCPPixel;
-      pOtbGCP.m_GCPX   = psGCP->dfGCPX;
-      pOtbGCP.m_GCPY   = psGCP->dfGCPY;
-      pOtbGCP.m_GCPZ   = psGCP->dfGCPZ;
+        const GDAL_GCP* psGCP;
+        psGCP = dataset->GetGCPs() + cpt;
 
-      // Complete the key with the GCP number : GCP_i
-      std::ostringstream lStream;
-      lStream << MetaDataKey::GCPParametersKey << cpt;
-      key = lStream.str();
+        GCP pOtbGCP;
+        pOtbGCP.m_Id     = std::string(psGCP->pszId);
+        pOtbGCP.m_Info   = std::string(psGCP->pszInfo);
+        pOtbGCP.m_GCPRow = psGCP->dfGCPLine;
+        pOtbGCP.m_GCPCol = psGCP->dfGCPPixel;
+        pOtbGCP.m_GCPX   = psGCP->dfGCPX;
+        pOtbGCP.m_GCPY   = psGCP->dfGCPY;
+        pOtbGCP.m_GCPZ   = psGCP->dfGCPZ;
 
-      itk::EncapsulateMetaData<GCP>(dict, key, pOtbGCP);
-      gcps.GCPs.push_back(pOtbGCP);
+        // Complete the key with the GCP number : GCP_i
+        std::ostringstream lStream;
+        lStream << MetaDataKey::GCPParametersKey << cpt;
+        key = lStream.str();
+
+        itk::EncapsulateMetaData<GCP>(dict, key, pOtbGCP);
+        gcps.GCPs.push_back(pOtbGCP);
+      }
+      m_Imd.Add(MDGeom::GCP, gcps);
     }
-    m_Imd.Add(MDGeom::GCP, gcps);
   }
 
   /* -------------------------------------------------------------------- */
