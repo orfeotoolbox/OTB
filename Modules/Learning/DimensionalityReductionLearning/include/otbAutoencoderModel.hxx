@@ -27,6 +27,7 @@
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-copy"
 #pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
@@ -145,7 +146,7 @@ void AutoencoderModel<TInputValue, NeuronType>::TrainOneLayer(shark::AbstractSto
                                                               shark::Data<shark::RealVector>& samples, std::ostream& File)
 {
   typedef shark::AbstractModel<shark::RealVector, shark::RealVector> BaseModelType;
-  ModelType net;
+  ModelType                                                          net;
   net.add(&(m_InLayers[layer_index]), true);
   net.add((layer_index ? (BaseModelType*)&(m_InLayers[m_NumberOfHiddenNeurons.Size() * 2 - 1 - layer_index]) : (BaseModelType*)&m_OutLayer), true);
 
@@ -156,7 +157,7 @@ void AutoencoderModel<TInputValue, NeuronType>::TrainOneLayer(shark::AbstractSto
   //~ shark::ImpulseNoiseModel noise(inputs,m_Noise[layer_index],1.0); //set an input pixel with probability m_Noise to 0
   //~ shark::ConcatenatedModel<shark::RealVector,shark::RealVector> model = noise>> net;
   shark::LabeledData<shark::RealVector, shark::RealVector> trainSet(samples, samples); // labels identical to inputs
-  shark::SquaredLoss<shark::RealVector> loss;
+  shark::SquaredLoss<shark::RealVector>                    loss;
   //~ shark::ErrorFunction error(trainSet, &model, &loss);
   shark::ErrorFunction<> error(trainSet, &net, &loss);
 
@@ -194,7 +195,7 @@ void AutoencoderModel<TInputValue, NeuronType>::TrainOneSparseLayer(shark::Abstr
                                                                     shark::Data<shark::RealVector>& samples, std::ostream& File)
 {
   typedef shark::AbstractModel<shark::RealVector, shark::RealVector> BaseModelType;
-  ModelType net;
+  ModelType                                                          net;
   net.add(&(m_InLayers[layer_index]), true);
   net.add((layer_index ? (BaseModelType*)&(m_InLayers[m_NumberOfHiddenNeurons.Size() * 2 - 1 - layer_index]) : (BaseModelType*)&m_OutLayer), true);
 
@@ -204,7 +205,7 @@ void AutoencoderModel<TInputValue, NeuronType>::TrainOneSparseLayer(shark::Abstr
   // Idea : set the initials value for the output weights higher than the input weights
 
   shark::LabeledData<shark::RealVector, shark::RealVector> trainSet(samples, samples); // labels identical to inputs
-  shark::SquaredLoss<shark::RealVector> loss;
+  shark::SquaredLoss<shark::RealVector>                    loss;
   //~ shark::SparseAutoencoderError error(trainSet,&net, &loss, m_Rho[layer_index], m_Beta[layer_index]);
   // SparseAutoencoderError doesn't exist anymore, for now use a plain ErrorFunction
   shark::ErrorFunction<> error(trainSet, &net, &loss);
@@ -249,7 +250,7 @@ void AutoencoderModel<TInputValue, NeuronType>::TrainNetwork(shark::AbstractStop
 
   // labels identical to inputs
   shark::LabeledData<shark::RealVector, shark::RealVector> trainSet(samples, samples);
-  shark::SquaredLoss<shark::RealVector> loss;
+  shark::SquaredLoss<shark::RealVector>                    loss;
 
   shark::ErrorFunction<>      error(trainSet, &net, &loss);
   shark::TwoNormRegularizer<> regularizer(error.numberOfVariables());

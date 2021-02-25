@@ -36,7 +36,7 @@ XMLMetadataSupplier::XMLMetadataSupplier(const std::string & fileName)
   CPLDestroyXMLNode(psNode);
 }
 
-std::string XMLMetadataSupplier::GetMetadataValue(std::string const& path, bool& hasValue, int band) const
+std::string XMLMetadataSupplier::GetMetadataValue(std::string const& path, bool& hasValue, int /*band*/) const
 {
   const char * ret = CSLFetchNameValue(m_MetadataDic, path.c_str());
   if (ret)
@@ -83,7 +83,7 @@ std::string XMLMetadataSupplier::GetFirstMetadataValue(std::string const& path, 
   }
 }
 
-std::string XMLMetadataSupplier::GetResourceFile(std::string const& s) const
+std::string XMLMetadataSupplier::GetResourceFile(std::string const& /*s*/) const
 {
   return m_FileName;
 }

@@ -38,15 +38,17 @@ int otbGDALImageIOImportExportMetadata(int itkNotUsed(argc), char* argv[])
 
   std::ofstream outfile(outputTextFilename);
 
-//  otb::sGDALImageIO::Pointer io = otb::sGDALImageIO::New();
-//  io->CanReadFile(inputFilename);
-//  io->ImportMetadata();
-//  outfile << io->m_Imd;
-//
-//  otb::sGDALImageIO::Pointer io2 = otb::sGDALImageIO::New();
-//  io2.CarWriteFile(outputFilename);
-//  io2->m_Imd = io->m_Imd;
-//  io2.ExportMetadata();
+  (void)inputFilename;
+  (void)outputFilename;
+  //  otb::sGDALImageIO::Pointer io = otb::sGDALImageIO::New();
+  //  io->CanReadFile(inputFilename);
+  //  io->ImportMetadata();
+  //  outfile << io->m_Imd;
+  //
+  //  otb::sGDALImageIO::Pointer io2 = otb::sGDALImageIO::New();
+  //  io2.CarWriteFile(outputFilename);
+  //  io2->m_Imd = io->m_Imd;
+  //  io2.ExportMetadata();
 
   return EXIT_SUCCESS;
 }
