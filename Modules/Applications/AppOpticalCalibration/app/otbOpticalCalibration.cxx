@@ -39,7 +39,7 @@
 #include <sstream>
 #include <vector>
 #include <itkVariableLengthVector.h>
-
+#include "otbStringUtils.h"
 
 namespace otb
 {
@@ -413,17 +413,9 @@ private:
                     << "\tAcquisition Viewing Elevation Angle: " << metadata[MDNum::SatElevation] << std::endl
                     << "\tAcquisition Viewing Azimuth Angle: " << metadata[MDNum::SatAzimuth] << std::endl;
 
-          vlvector = metadata.GetAsVector(MDNum::PhysicalGain);
-          ossOutput << "\tAcquisition gain (per band): ";
-          for (unsigned int k = 0; k < vlvector.Size(); k++)
-            ossOutput << vlvector[k] << " ";
-          ossOutput << std::endl;
-
-          vlvector = metadata.GetAsVector(MDNum::PhysicalBias);
-          ossOutput << "\tAcquisition bias (per band): ";
-          for (unsigned int k = 0; k < vlvector.Size(); k++)
-            ossOutput << vlvector[k] << " ";
-          ossOutput << std::endl;
+          // The Gain and Bias are read in the GetImageMetadata, we will display in DoExecute what gain and bias the user finally chose.
+          // For now we have gain and bias values from dimap if available, else from hard-coded tables in MTD, so we can disable the parameter and use those values as default
+          // The user is able to enable it by giving a txt file containing its own values (-acqui.gainbias PathToTxtFile)
           DisableParameter("acqui.gainbias");
           MandatoryOff("acqui.gainbias");
 
@@ -688,20 +680,20 @@ private:
 
             switch (numLine)
             {
-            case 1:
-              m_ImageToRadianceFilter->SetAlpha(vlvector);
-              m_RadianceToImageFilter->SetAlpha(vlvector);
-              GetLogger()->Info("Trying to get gains/biases information... OK (1/2)\n");
+              case 1:
+                m_ImageToRadianceFilter->SetAlpha(vlvector);
+                m_RadianceToImageFilter->SetAlpha(vlvector);
+                otbAppLogINFO("Using Acquisition gain from the user file (per band): " << vlvector);
               break;
 
-            case 2:
-              m_ImageToRadianceFilter->SetBeta(vlvector);
-              m_RadianceToImageFilter->SetBeta(vlvector);
-              GetLogger()->Info("Trying to get gains/biases information... OK (2/2)\n");
+              case 2:
+                m_ImageToRadianceFilter->SetBeta(vlvector);
+                m_RadianceToImageFilter->SetBeta(vlvector);
+                otbAppLogINFO("Using Acquisition biases from the user file (per band): " << vlvector);
               break;
 
-            default:
-              itkExceptionMacro(<< "File : " << filename << " contains wrong number of lines (needs two, one for gains and one for biases)");
+              default:
+                itkExceptionMacro(<< "File : " << filename << " contains wrong number of lines (needs two, one for gains and one for biases)");
             }
           }
         }
@@ -712,12 +704,14 @@ private:
     }
     else
     {
-      // Try to retrieve information from image metadata
+      // Try to retrieve information from image metadata (either DIMAP if available, or hard-coded tables)
       if (hasOpticalSensorMetadata)
       {
+        otbAppLogINFO("Using Acquisition gain from image metadata (per band): " << metadata.GetAsVector(MDNum::PhysicalGain));
         m_ImageToRadianceFilter->SetAlpha(metadata.GetAsVector(MDNum::PhysicalGain));
         m_RadianceToImageFilter->SetAlpha(metadata.GetAsVector(MDNum::PhysicalGain));
 
+        otbAppLogINFO("Using Acquisition bias from image metadata (per band): " <<  metadata.GetAsVector(MDNum::PhysicalBias));
         m_ImageToRadianceFilter->SetBeta(metadata.GetAsVector(MDNum::PhysicalBias));
         m_RadianceToImageFilter->SetBeta(metadata.GetAsVector(MDNum::PhysicalBias));
       }
@@ -793,7 +787,7 @@ private:
     {
     case Level_IM_TOA:
     {
-      GetLogger()->Info("Compute Top of Atmosphere reflectance\n");
+      otbAppLogINFO("Compute Top of Atmosphere reflectance\n");
 
       // Pipeline
       m_ImageToRadianceFilter->SetInput(inImage);
@@ -801,7 +795,7 @@ private:
 
       if (GetParameterInt("clamp"))
       {
-        GetLogger()->Info("Clamp values between [0, 100]\n");
+        otbAppLogINFO("Clamp values between [0, 100]\n");
       }
 
       m_RadianceToReflectanceFilter->SetUseClamp(GetParameterInt("clamp"));
@@ -811,7 +805,7 @@ private:
     break;
     case Level_TOA_IM:
     {
-      GetLogger()->Info("Convert Top of Atmosphere reflectance to image DN\n");
+      otbAppLogINFO("Convert Top of Atmosphere reflectance to image DN\n");
 
       // Pipeline
       m_ReflectanceToRadianceFilter->SetInput(inImage);
@@ -822,7 +816,7 @@ private:
     break;
     case Level_TOC:
     {
-      GetLogger()->Info("Compute Top of Canopy reflectance\n");
+      otbAppLogINFO("Compute Top of Canopy reflectance\n");
 
       // Pipeline
       m_ImageToRadianceFilter->SetInput(inImage);
@@ -902,7 +896,7 @@ private:
       // Aeronet file
       if (IsParameterEnabled("atmo.aeronet"))
       {
-        GetLogger()->Info("Use Aeronet file to retrieve atmospheric parameters\n");
+        otbAppLogINFO("Use Aeronet file to retrieve atmospheric parameters\n");
         m_paramAtmo->SetAeronetFileName(GetParameterString("atmo.aeronet"));
         m_paramAtmo->UpdateAeronetData(GetParameterInt("acqui.year"), GetParameterInt("acqui.month"), GetParameterInt("acqui.day"),
                                        GetParameterInt("acqui.hour"), GetParameterInt("acqui.minute"), 0.4);
@@ -926,12 +920,12 @@ private:
       AtmosphericRadiativeTerms::Pointer atmoTerms = m_ReflectanceToSurfaceReflectanceFilter->GetAtmosphericRadiativeTerms();
       oss << std::endl << std::endl << atmoTerms << std::endl;
 
-      GetLogger()->Info("Atmospheric correction parameters compute by 6S : " + oss.str());
+      otbAppLogINFO("Atmospheric correction parameters compute by 6S : " + oss.str());
 
       bool adjComputation = false;
       if (IsParameterEnabled("atmo.radius"))
       {
-        GetLogger()->Info("Compute adjacency effects\n");
+        otbAppLogINFO("Compute adjacency effects\n");
         adjComputation = true;
         // Compute adjacency effect
         m_SurfaceAdjacencyEffectCorrectionSchemeFilter = SurfaceAdjacencyEffectCorrectionSchemeFilterType::New();
@@ -955,7 +949,7 @@ private:
       }
       else
       {
-        GetLogger()->Info("Clamp values between [0, 100]\n");
+        otbAppLogINFO("Clamp values between [0, 100]\n");
 
         if (!adjComputation)
           m_ClampFilter->SetInput(m_ReflectanceToSurfaceReflectanceFilter->GetOutput());
@@ -974,7 +968,7 @@ private:
 
     if (GetParameterInt("milli"))
     {
-      GetLogger()->Info("Use milli-reflectance\n");
+      otbAppLogINFO("Use milli-reflectance\n");
       if ((GetParameterInt("level") == Level_IM_TOA) || (GetParameterInt("level") == Level_TOC))
         scale = 1000.;
       if (GetParameterInt("level") == Level_TOA_IM)
