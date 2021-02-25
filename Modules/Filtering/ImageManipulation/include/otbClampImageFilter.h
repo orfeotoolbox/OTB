@@ -46,37 +46,34 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage = TInputImage>
 class ITK_EXPORT ClampImageFilter
-    : public itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-                                          Functor::ConvertTypeFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
+: public itk::ImageToImageFilter<TInputImage, TOutputImage>
 {
 public:
   /** Standard class typedefs. */
-  typedef ClampImageFilter Self;
-  typedef itk::UnaryFunctorImageFilter<TInputImage, TOutputImage,
-                                       Functor::ConvertTypeFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>>
-                                        Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  using Self         = ClampImageFilter;
+  using Superclass   = itk::ImageToImageFilter<TInputImage, TOutputImage>;
+  using FunctorType  = Functor::ConvertTypeFunctor<typename TInputImage::PixelType, typename TOutputImage::PixelType>;
+  using Pointer      = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(ClampImageFilter, itk::UnaryFunctorImageFilter);
+  itkTypeMacro(ClampImageFilter, OSEF);
 
 
   /** Some additional typedefs.  */
-  typedef TInputImage                         InputImageType;
-  typedef typename InputImageType::RegionType InputImageRegionType;
-  typedef typename InputImageType::PixelType  InputImagePixelType;
+  using InputImageType          = TInputImage;
+  using InputImageRegionType    = typename InputImageType::RegionType;
+  using InputImagePixelType     = typename InputImageType::PixelType;
 
   /** Some additional typedefs.  */
-  typedef TOutputImage                                                    OutputImageType;
-  typedef typename OutputImageType::RegionType                            OutputImageRegionType;
-  typedef typename OutputImageType::PixelType                             OutputImagePixelType;
-  typedef typename OutputImageType::InternalPixelType                     OutputInternalPixelType;
-  typedef typename itk::NumericTraits<OutputInternalPixelType>::ValueType OutputPixelValueType;
-
+  using OutputImageType         = TOutputImage;
+  using OutputImageRegionType   = typename OutputImageType::RegionType;
+  using OutputImagePixelType    = typename OutputImageType::PixelType;
+  using OutputInternalPixelType = typename OutputImageType::InternalPixelType;
+  using OutputPixelValueType    = typename itk::NumericTraits<OutputInternalPixelType>::ValueType;
 
   /** The values greater than or equal to the value are set to \p thresh. */
   void ClampAbove(const OutputPixelValueType& thresh);
@@ -100,7 +97,7 @@ public:
 
 protected:
   ClampImageFilter();
-  ~ClampImageFilter() override{};
+  ~ClampImageFilter() override = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   void GenerateOutputInformation(void) override
@@ -111,12 +108,18 @@ protected:
     this->GetOutput()->SetNumberOfComponentsPerPixel(this->GetFunctor().GetOutputSize());
   }
 
+  void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
+
+  FunctorType      & GetFunctor()       noexcept { return m_Functor; }
+  FunctorType const& GetFunctor() const noexcept { return m_Functor; }
+
 private:
   ClampImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
   OutputPixelValueType m_Lower;
   OutputPixelValueType m_Upper;
+  FunctorType          m_Functor;
 };
 
 
