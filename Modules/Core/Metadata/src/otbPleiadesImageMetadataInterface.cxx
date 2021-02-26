@@ -34,6 +34,8 @@
 
 #include "itksys/SystemTools.hxx"
 
+#include "otbXMLMetadataSupplier.h"
+
 namespace otb
 {
 using boost::lexical_cast;
@@ -2315,15 +2317,33 @@ void PleiadesImageMetadataInterface::FetchSpectralSensitivity(const std::string 
 
 void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
-  //auto dimapV1Filename = itksys::SystemTools::GetParentDirectory(mds.GetResourceFile()) + "/PHRDIMAP.XML";
-
   DimapMetadataHelper helper;
 
   // Satellite ID is either PHR 1A or PHR 1B
-  // DimapV2 case
+  // Product read by the TIFF/JP2 GDAL driver
   if (mds.GetAs<std::string>("", "IMAGERY/SATELLITEID").find("PHR") != std::string::npos)
   {
-    helper.ParseDimapV2(mds);
+    // The driver stored the content of the Dimap XML file as metadatas in the IMD domain.
+    helper.ParseDimapV2(mds, "IMD/");
+
+    m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
+
+    // fill RPC model
+    if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
+    {
+      FetchRPC(mds, -0.5, -0.5);
+    }
+  }
+  // Product read by the DIMAP GDAL driver
+  else if (mds.GetAs<std::string> ("","MISSION") == "PHR")
+  {
+    // The DIMAP driver does not read the same metadata as the TIFF/JP2 one, and
+    // some required metadata are missing. 
+    // The XML Dimap file is read again and provided to the DimapMetadataHelper
+    // using a XMLMetadataSupplier
+    XMLMetadataSupplier xmlMds(mds.GetResourceFile());
+
+    helper.ParseDimapV2(xmlMds, "Dimap_Document.");
 
     m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
 
@@ -2339,7 +2359,6 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
     helper.ParseGeom(mds);
 
     m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
-
   }
   else
   {
