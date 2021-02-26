@@ -32,7 +32,7 @@
 #include "ossimPluginProjectionFactory.h"
 #include "ossimRadarSatModel.h"
 #include "ossimEnvisatAsarModel.h"
-#include "ossimTerraSarModel.h"
+#include "ossimTerraSarXSarSensorModel.h"
 #include "ossimRadarSat2Model.h"
 #include "ossimErsSarModel.h"
 #include "ossimAlosPalsarModel.h"
@@ -103,11 +103,6 @@ namespace ossimplugins
 
    template <> inline
       ossimRefPtr<ossimProjection> doUpcastModelToProjection<ossimRadarSat2Model>(ossimRefPtr<ossimRadarSat2Model> model)
-      {
-         return doUpcastModelToProjectionWhenOCG(model);
-      }
-   template <> inline
-      ossimRefPtr<ossimProjection> doUpcastModelToProjection<ossimTerraSarModel>(ossimRefPtr<ossimTerraSarModel> model)
       {
          return doUpcastModelToProjectionWhenOCG(model);
       }
@@ -219,10 +214,10 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       if(traceDebug())
       {
          ossimNotify(ossimNotifyLevel_DEBUG)
-            << MODULE << " DEBUG: testing ossimTerraSarModel" << std::endl;
+            << MODULE << " DEBUG: testing ossimTerraSarXSarSensorModel" << std::endl;
       }
 
-      ossimRefPtr<ossimTerraSarModel> model = new ossimTerraSarModel();
+      ossimRefPtr<ossimTerraSarXSarSensorModel> model = new ossimTerraSarXSarSensorModel();
 
       if ( model->open(abs_file_name) )
       {
@@ -238,7 +233,7 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
          model = 0;
       }
 #else
-      projection = doBuildProjection<ossimTerraSarModel>(abs_file_name);
+      projection = doBuildProjection<ossimTerraSarXSarSensorModel>(abs_file_name);
 #endif
    }
 
@@ -355,9 +350,9 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
    {
       return new ossimRadarSat2Model();
    }
-   else if (name == STATIC_TYPE_NAME(ossimTerraSarModel))
+   else if (name == STATIC_TYPE_NAME(ossimTerraSarXSarSensorModel))
    {
-      return new ossimTerraSarModel();
+      return new ossimTerraSarXSarSensorModel();
    }
    else if (name == STATIC_TYPE_NAME(ossimErsSarModel))
    {
@@ -436,9 +431,9 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       {
          result = new ossimRadarSat2Model();
       }
-      else if (type == "ossimTerraSarModel")
+      else if (type == "ossimTerraSarXSarSensorModel")
       {
-         result = new ossimTerraSarModel();
+         result = new ossimTerraSarXSarSensorModel();
       }
       else if (type == "ossimErsSarModel")
       {
@@ -485,7 +480,6 @@ ossimProjection* ossimPluginProjectionFactory::createProjection(
       else if (type == "ossimSarSensorModel")
       {
          result = new ossimSarSensorModel();
-         std::cout<<"ossiMSarSensorModel"<<std::endl;
       }
 
    //***
@@ -523,7 +517,7 @@ void ossimPluginProjectionFactory::getTypeNameList(std::vector<ossimString>& typ
 {
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSatModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimRadarSat2Model));
-   typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarModel));
+   typeList.push_back(STATIC_TYPE_NAME(ossimTerraSarXSarSensorModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimEnvisatAsarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimErsSarModel));
    typeList.push_back(STATIC_TYPE_NAME(ossimAlosPalsarModel));
