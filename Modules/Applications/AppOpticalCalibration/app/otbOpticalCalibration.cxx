@@ -175,6 +175,7 @@ private:
         "10.4416 : 9.529 : 8.5175 : 14.0063\n"
         "# Bias values for each band.\n"
         "0.0 : 0.0 : 0.0 : 0.0\n\n"
+        "Important Note : For Pleiade image calibration, the band order is important, it should be given as : Red, Green, Blue, NIR (B2,B1,B0,B3)."
         "- solarillumination.txt : \n\n"
         "# Solar illumination values in watt/m2/micron ('micron' means actually 'for each band').\n"
         "# Each value must be separated with colons (:), with eventual spaces. Blank lines not allowed.\n"
