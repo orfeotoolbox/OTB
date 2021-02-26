@@ -39,7 +39,6 @@
 #include <sstream>
 #include <vector>
 #include <itkVariableLengthVector.h>
-#include "otbStringUtils.h"
 
 namespace otb
 {

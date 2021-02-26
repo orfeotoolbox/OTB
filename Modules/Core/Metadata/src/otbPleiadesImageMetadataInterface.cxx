@@ -2317,6 +2317,14 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
 {
   //auto dimapV1Filename = itksys::SystemTools::GetParentDirectory(mds.GetResourceFile()) + "/PHRDIMAP.XML";
 
+  //if the user provided a dimap, the following metadata will be present instead of IMAGERY/SATELLITEID
+  //We have to warn the user that they have to give the associated jp2 or TIF, because GDAL DIMAP driver
+  //does not provide the same metadata as the jp2 one, some are missing
+  if (mds.GetAs<std::string>("","MISSION").find("PHR") != std::string::npos)
+  {
+    otbLogMacro(Warning, << "You provided a Pleiade DIMAP as input, please provide the associated JP2 or TIF instead");
+  }
+
   DimapMetadataHelper helper;
 
   // Satellite ID is either PHR 1A or PHR 1B
