@@ -1839,21 +1839,119 @@ void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::
              (date.tm_year == 113 && date.tm_mon < 3))
     { 
       bandNameToPhysicalGain = { {"P", 11.73},
-          {"B0", 9.45}, {"B1", 9.48}, {"B2", 10.51}, {"B3", 15.71}};
+          {"B0", 9.47}, {"B1", 9.53}, {"B2", 10.48}, {"B3", 15.66}};
     }
-    // After 01/03/2013
-    else 
+    // From 01/03/2013 to 01/03/2014
+    else if ((date.tm_year == 113 && date.tm_mon >= 3) ||
+             (date.tm_year == 114 && date.tm_mon < 3))
     {
       bandNameToPhysicalGain = { {"P", 11.70},
-          {"B0", 9.38}, {"B1", 9.34}, {"B2", 10.46}, {"B3", 15.69}};
-
+          {"B0", 9.40}, {"B1", 9.47}, {"B2", 10.44}, {"B3", 15.62}};
+    }
+    // From 01/03/2014 to 01/03/2015
+    else if ((date.tm_year == 114 && date.tm_mon >= 3) ||
+              (date.tm_year == 115 && date.tm_mon < 3))
+    {
+      bandNameToPhysicalGain = { {"P", 11.67},
+          {"B0", 9.33}, {"B1", 9.39}, {"B2", 10.38}, {"B3", 15.57}};
+    }
+    // From 01/03/2015 to 01/03/2016
+    else if ((date.tm_year == 115 && date.tm_mon >= 3) ||
+              (date.tm_year == 116 && date.tm_mon < 3))
+    {
+      bandNameToPhysicalGain = { {"P", 11.64},
+          {"B0", 9.25}, {"B1", 9.31}, {"B2", 10.32}, {"B3", 15.51}};
+    }
+    // From 01/03/2016 to 31/12/2016
+    else if ((date.tm_year == 116 && date.tm_mon >= 3) ||
+              (date.tm_year == 116 && date.tm_mon <=12 ))
+    {
+      bandNameToPhysicalGain = { {"P", 11.61},
+          {"B0", 9.18}, {"B1", 9.25}, {"B2", 10.27}, {"B3", 15.46}};
+    }
+    // From 01/01/2017 to 31/12/2017
+    else if ((date.tm_year == 117 && date.tm_mon >= 1) ||
+              (date.tm_year == 117 && date.tm_mon <= 12))
+    {
+      bandNameToPhysicalGain = { {"P", 11.58},
+          {"B0", 9.11}, {"B1", 9.17}, {"B2", 10.22}, {"B3", 15.41}};
+    }
+    // From 01/01/2018 to 31/12/2018
+    else if ((date.tm_year == 118 && date.tm_mon >= 1) ||
+              (date.tm_year == 118 && date.tm_mon <= 12))
+    {
+      bandNameToPhysicalGain = { {"P", 11.55},
+          {"B0", 9.03}, {"B1", 9.09}, {"B2", 10.16}, {"B3", 15.36}};
+    }
+    // From 01/10/2018 to 31/12/2019
+    else if ((date.tm_year == 119 && date.tm_mon >= 1) ||
+              (date.tm_year == 119 && date.tm_mon <= 12))
+    {
+      bandNameToPhysicalGain = { {"P", 11.52},
+          {"B0", 8.96}, {"B1", 9.01}, {"B2", 10.09}, {"B3", 15.31}};
+    }
+    // From 01/01/2020 to nowadays
+    else
+    {
+      bandNameToPhysicalGain = { {"P", 11.49},
+          {"B0", 8.91}, {"B1", 8.95}, {"B2", 10.01}, {"B3", 15.27}};
     }
   }
   else if (sensorId == "PHR 1B")
   {
+    if  ((date.tm_year < 113) ||
+         (date.tm_year == 113 && date.tm_mon < 9))
+    {
       bandNameToPhysicalGain = { {"P", 12.04},
-          {"B0", 10.46}, {"B1", 10.47}, {"B2", 11.32}, {"B3", 17.21}};
-
+          {"B0", 10.37}, {"B1", 10.50}, {"B2", 11.55}, {"B3", 17.53}};
+    }
+    else if ((date.tm_year == 113 && date.tm_mon >= 9) ||
+             (date.tm_year == 114 && date.tm_mon < 3))
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 10.29}, {"B1", 10.41}, {"B2", 11.48}, {"B3", 17.45}};
+    }
+    else if ((date.tm_year == 114 && date.tm_mon >= 3) ||
+             (date.tm_year == 115 && date.tm_mon < 3))
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 10.22}, {"B1", 10.34}, {"B2", 11.41}, {"B3", 17.39}};
+    }
+    else if ((date.tm_year == 115 && date.tm_mon >= 3) ||
+             (date.tm_year == 116 && date.tm_mon < 3))
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 10.12}, {"B1", 10.23}, {"B2", 11.33}, {"B3", 17.31}};
+    }
+    else if ((date.tm_year == 116 && date.tm_mon >= 3) ||
+             (date.tm_year == 116 && date.tm_mon <= 12))
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 10.04}, {"B1", 10.14}, {"B2", 11.25}, {"B3", 17.24}};
+    }
+    else if ((date.tm_year == 117 && date.tm_mon >= 1) ||
+             (date.tm_year == 117 && date.tm_mon <= 12))
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 9.96}, {"B1", 10.04}, {"B2", 11.17}, {"B3", 17.16}};
+    }
+    else if ((date.tm_year == 118 && date.tm_mon >= 1) ||
+             (date.tm_year == 118 && date.tm_mon <= 12))
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 9.87}, {"B1", 9.94}, {"B2", 11.09}, {"B3", 17.08}};
+    }
+    else if ((date.tm_year == 119 && date.tm_mon >= 1) ||
+             (date.tm_year == 119 && date.tm_mon <= 12))
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 9.80}, {"B1", 9.87}, {"B2", 11.02}, {"B3", 17.02}};
+    }
+    else
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 9.74}, {"B1", 9.81}, {"B2", 10.96}, {"B3", 16.98}};
+    }
   }
   else
   {
@@ -2268,8 +2366,10 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
       << "The number of bands in image metadatas is incoherent with the DIMAP product")
   }
 
-  m_Imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
-  m_Imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
+  //Sun elevation and azimuth should be taken from the center of the image , [0] is Top Center, [1] is Center, [2] is Bottom Center
+  //This is the same for Viewing angle, it is taken from the center of the image (see FetchSatAngles)
+  m_Imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[1]);
+  m_Imd.Add(MDNum::SunElevation, dimapData.SunElevation[1]);
 
   FetchSatAngles(dimapData.IncidenceAngle, dimapData.AlongTrackIncidenceAngle,
                  dimapData.AcrossTrackIncidenceAngle, dimapData.SceneOrientation);
@@ -2281,7 +2381,22 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
 
   FetchSolarIrradiance(dimapData.SolarIrradiance);
 
-  FetchTabulatedPhysicalGain(m_Imd[MDTime::ProductionDate]);
+  //Store gain values from the dimap, if present
+  if (dimapData.PhysicalGain.size() == m_Imd.Bands.size())
+  {
+    auto gain = dimapData.PhysicalGain.begin();
+    for (auto & band: m_Imd.Bands)
+    {
+      band.Add(MDNum::PhysicalGain, *gain);
+      gain++;
+    }
+  }
+  else
+  {
+    //Store hard-coded values for gain
+    FetchTabulatedPhysicalGain(m_Imd[MDTime::ProductionDate]);
+    otbLogMacro(Info, << "Gain values from DIMAP could not be retrieved, reading hard-coded tables instead");
+  }
 
   FetchSpectralSensitivity(m_Imd[MDStr::SensorID]);
 
@@ -2296,8 +2411,12 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
   }
   else
   {
-    otbGenericExceptionMacro(MissingMetadataException,
-      << "The number of bands in image metadatas is incoherent with the DIMAP product")
+    //Default Bias value
+    for (auto & band: m_Imd.Bands)
+    {
+      band.Add(MDNum::PhysicalBias, 0.0);
+    }
+    otbLogMacro(Info, << "Bias values from DIMAP could not be retrieved, reading default values instead");
   }
 }
 
