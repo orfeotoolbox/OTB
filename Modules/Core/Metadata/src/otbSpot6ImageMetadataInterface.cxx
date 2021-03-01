@@ -28,6 +28,8 @@
 
 #include "otbDimapMetadataHelper.h"
 
+#include "otbXMLMetadataSupplier.h"
+
 namespace otb
 {
 using boost::lexical_cast;
@@ -1697,11 +1699,33 @@ void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
   DimapMetadataHelper helper;
 
-  // DimapV2 case
+  // Product read by the TIFF/JP2 GDAL driver
   if (mds.GetAs<std::string>("", "IMAGERY/SATELLITEID") == "SPOT 6"
       || mds.GetAs<std::string>("", "IMAGERY/SATELLITEID") == "SPOT 7")
   {
-    helper.ParseDimapV2(mds);
+    helper.ParseDimapV2(mds, "IMD/");
+
+    m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
+
+    // fill RPC model
+    if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
+    {
+      FetchRPC(mds);
+    }
+  }
+  // Product read by the DIMAP GDAL driver
+  else if (mds.GetAs<std::string>("", "MISSION") == "SPOT"
+      && (mds.GetAs<std::string>("", "INSTRUMENT_INDEX") == "6"
+          || mds.GetAs<std::string>("", "INSTRUMENT_INDEX") == "7")
+      )
+  {
+    // The DIMAP driver does not read the same metadata as the TIFF/JP2 one, and
+    // some required metadata are missing. 
+    // The XML Dimap file is read again and provided to the DimapMetadataHelper
+    // using a XMLMetadataSupplier
+    XMLMetadataSupplier xmlMds(mds.GetResourceFile());
+
+    helper.ParseDimapV2(xmlMds, "Dimap_Document.");
 
     m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
 
