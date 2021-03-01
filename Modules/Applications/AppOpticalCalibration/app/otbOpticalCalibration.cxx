@@ -140,7 +140,7 @@ private:
         "- solar illuminations, one value for each band (passed by a file).\n\n"
         "For the conversion from DN (for Digital Numbers) to spectral radiance (or 'TOA radiance') L, the following formula is used:\n\n"
 
-        "(1)\tL(b) = DN(b)/gain(b)+bias(b)\t(in W/m2/steradians/micrometers)\twith b being a band ID.\n\n"
+        "**(1)\tL(b) = DN(b)/gain(b)+bias(b)\t(in W/m2/steradians/micrometers)**\twith b being a band ID.\n\n"
 
         "These values are provided by the user thanks to a simple txt file with two lines, one for the gains and one for the biases.\n"
         "Each value must be separated with colons (:), with eventual spaces. Blank lines are not allowed. If a line begins with the '#' symbol, then it is "
@@ -150,7 +150,7 @@ private:
 
         "In order to convert TOA radiance to TOA reflectance, the following formula is used:\n\n"
 
-        "(2)\tR(b) = (pi*L(b)*d*d) / (ESUN(b)*cos(θ))\t(no dimension)\twhere: \n\n"
+        "**(2)\tR(b) = (pi*L(b)*d*d) / (ESUN(b)*cos(θ))\t(no dimension)**\twhere: \n\n"
 
         "- L(b) is the spectral radiance for band b \n"
         "- pi is the famous mathematical constant (3.14159...) \n"
@@ -164,21 +164,22 @@ private:
         "These values are provided by the user thanks to a txt file following the same convention as before.\n"
         "Instead of providing the date of acquisition, the user can also provide a flux normalization coefficient or a solar distance (in AU) 'fn'. "
         "The formula used instead will be the following : \n\n"
-        "(3) \tR(b) = (pi*L(b)) / (ESUN(b)*fn*fn*cos(θ)) \n\n"
+        "**(3) \tR(b) = (pi*L(b)) / (ESUN(b)*fn*fn*cos(θ))** \n\n"
         "Whatever the formula used (2 or 3), the user should pay attention to the interpretation of the parameters he will provide to the application, "
         "by taking into account the original formula that the metadata files assumes.\n\n"
 
         "Below, we give two examples of txt files containing information about gains/biases and solar illuminations :\n\n"
         "- gainbias.txt :\n\n"
-        "# Gain values for each band. Each value must be separated with colons (:), with eventual spaces. Blank lines not allowed.\n"
-        "10.4416 : 9.529 : 8.5175 : 14.0063\n"
-        "# Bias values for each band.\n"
-        "0.0 : 0.0 : 0.0 : 0.0\n\n"
-        "Important Note : For Pleiade image calibration, the band order is important, it should be given as : Red, Green, Blue, NIR (B2,B1,B0,B3)."
+        "| # Gain values for each band. Each value must be separated with colons (:), with eventual spaces.\n"
+        "| # Blank lines not allowed.\n"
+        "| 10.4416 : 9.529 : 8.5175 : 14.0063\n"
+        "| # Bias values for each band.\n"
+        "| 0.0 : 0.0 : 0.0 : 0.0\n\n"
+        "Important Note : For Pleiade image calibration, the band order is important, it should be given as : Red, Green, Blue, NIR (B2,B1,B0,B3).\n\n"
         "- solarillumination.txt : \n\n"
-        "# Solar illumination values in watt/m2/micron ('micron' means actually 'for each band').\n"
-        "# Each value must be separated with colons (:), with eventual spaces. Blank lines not allowed.\n"
-        "1540.494123 : 1826.087443 : 1982.671954 : 1094.747446\n\n"
+        "| # Solar illumination values in watt/m2/micron ('micron' means actually 'for each band').\n"
+        "| # Each value must be separated with colons (:), with eventual spaces. Blank lines not allowed.\n"
+        "| 1540.494123 : 1826.087443 : 1982.671954 : 1094.747446\n\n"
 
         "Finally, the 'Logs' tab provides useful messages that can help the user in knowing the process different status.");
 
@@ -284,8 +285,10 @@ private:
     SetDefaultParameterFloat("acqui.view.azim", 0.0);
 
     // Gain & bias
-    AddParameter(ParameterType_InputFilename, "acqui.gainbias", "Gains or biases");
-    SetParameterDescription("acqui.gainbias", "Gains or biases");
+    AddParameter(ParameterType_InputFilename, "acqui.gainbias", "Gains and biases");
+    SetParameterDescription("acqui.gainbias", "A text file containing user defined gains and biases\n\n"
+                                              "Note: for Pleiades products, if the user does not give this parameter, the gain and bias values are read by default in the DIMAP.\n"
+                                              "If they are not found in the DIMAP, they are taken from hard-coded tables, given by the calibration team.\n");
     MandatoryOff("acqui.gainbias");
     // Solar illuminations
     AddParameter(ParameterType_InputFilename, "acqui.solarilluminations", "Solar illuminations");
