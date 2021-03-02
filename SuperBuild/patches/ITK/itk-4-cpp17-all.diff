@@ -1,0 +1,22 @@
+--- InsightToolkit-4.10.0.orig/Modules/Core/Common/include/itkImageAlgorithm.h	2020-07-24 03:47:25.000000000 +0200
++++ InsightToolkit-4.10.0/Modules/Core/Common/include/itkImageAlgorithm.h	2021-02-24 08:22:40.193765449 +0100
+@@ -190,7 +190,6 @@
+   /** Unary functor just for static_cast operator */
+   template<typename TInputType, typename TOutputType>
+   struct StaticCast
+-    : public std::unary_function<TInputType,TOutputType>
+     {
+     TOutputType operator() (const TInputType i) { return static_cast<TOutputType>(i); }
+     };
+
+--- InsightToolkit-4.10.0.orig/Modules/ThirdParty/VNL/src/vxl/core/vnl/vnl_sparse_matrix.h	2020-07-24 03:47:25.000000000 +0200
++++ InsightToolkit-4.10.0/Modules/ThirdParty/VNL/src/vxl/core/vnl/vnl_sparse_matrix.h		2021-02-24 10:20:25.523193639 +0100
+@@ -94,7 +94,7 @@
+     return *this;
+   }
+ 
+-  struct less : public std::binary_function<vnl_sparse_matrix_pair, vnl_sparse_matrix_pair, bool>
++  struct less :
+   {
+     bool operator() (vnl_sparse_matrix_pair const& p1, vnl_sparse_matrix_pair const& p2) {
+       return p1.first < p2.first;

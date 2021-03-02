@@ -23,6 +23,7 @@
 #include "otbMath.h"
 #include "otbMacro.h"
 #include <algorithm>
+#include <random>
 
 namespace otb
 {
@@ -228,7 +229,9 @@ std::vector<bool> PatternSampler::RandArray(unsigned long N, unsigned long T)
   for (unsigned long i = 0; i < N; i++)
     res[i]             = 1;
 
-  std::random_shuffle(res.begin(), res.end());
+  std::random_device rd;
+  std::mt19937 g(rd());
+  std::shuffle(res.begin(), res.end(), g);
 
   return res;
 }

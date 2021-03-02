@@ -23,6 +23,7 @@
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 #include "otbMath.h"
 #include <algorithm>
+#include <random>
 
 namespace otb
 {
@@ -67,7 +68,9 @@ void RandomSampler::Reset(void)
       buffer[k] = 1;
     }
     // shuffle boolean buffer
-    std::random_shuffle(buffer.begin(), buffer.end());
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(buffer.begin(), buffer.end(), g);
     // compute positions
     for (unsigned long k = 0UL; k < bufferSize; k++)
     {
