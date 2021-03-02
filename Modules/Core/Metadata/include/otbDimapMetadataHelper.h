@@ -311,73 +311,74 @@ public:
   }
 
 
-  void ParseDimapV2(const MetadataSupplierInterface & mds)
+  void ParseDimapV2(const MetadataSupplierInterface & mds, const std::string & prefix = "Dimap_Document.")
   {
     std::vector<std::string> missionVec;
-    ParseVector(mds, "IMD/Dataset_Sources.Source_Identification"
+    ParseVector(mds, prefix + "Dataset_Sources.Source_Identification"
                     ,"Strip_Source.MISSION", missionVec);
     m_Data.mission = missionVec[0];
 
     std::vector<std::string> missionIndexVec;
-    ParseVector(mds, "IMD/Dataset_Sources.Source_Identification"
+    ParseVector(mds, prefix + "Dataset_Sources.Source_Identification"
                     ,"Strip_Source.MISSION_INDEX", missionIndexVec);
     m_Data.missionIndex = missionIndexVec[0];
 
-    ParseVector(mds, "IMD/Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
+    ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
                        "BAND_ID", m_Data.BandIDs);
 
-    ParseVector(mds, "IMD/Geometric_Data.Use_Area.Located_Geometric_Values",
+    ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
                        "Solar_Incidences.SUN_ELEVATION", m_Data.SunElevation);
 
-    ParseVector(mds, "IMD/Geometric_Data.Use_Area.Located_Geometric_Values",
+    ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
                        "Solar_Incidences.SUN_AZIMUTH", m_Data.SunAzimuth);
 
-    ParseVector(mds, "IMD/Geometric_Data.Use_Area.Located_Geometric_Values",
+    ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
                        "Acquisition_Angles.INCIDENCE_ANGLE", m_Data.IncidenceAngle);
 
-    ParseVector(mds, "IMD/Geometric_Data.Use_Area.Located_Geometric_Values",
+    ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
                        "Acquisition_Angles.INCIDENCE_ANGLE_ALONG_TRACK", m_Data.AlongTrackIncidenceAngle);
     
-    ParseVector(mds, "IMD/Geometric_Data.Use_Area.Located_Geometric_Values",
+    ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
                        "Acquisition_Angles.INCIDENCE_ANGLE_ACROSS_TRACK", m_Data.AcrossTrackIncidenceAngle);
 
-    ParseVector(mds, "IMD/Geometric_Data.Use_Area.Located_Geometric_Values",
+    ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
                        "Acquisition_Angles.VIEWING_ANGLE", m_Data.ViewingAngle);
 
-    ParseVector(mds, "IMD/Geometric_Data.Use_Area.Located_Geometric_Values",
+    ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
                        "Acquisition_Angles.AZIMUTH_ANGLE", m_Data.AzimuthAngle);
 
-    ParseVector(mds, "IMD/Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
-                       "BIAS", m_Data.PhysicalBias);
+    std::vector<double> gainbiasUnavail={};
+    ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
+                       "BIAS", m_Data.PhysicalBias,gainbiasUnavail);
 
-    ParseVector(mds, "IMD/Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
-                       "GAIN", m_Data.PhysicalGain);
-
-    ParseVector(mds, "IMD/Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Solar_Irradiance",
+    ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
+                       "GAIN", m_Data.PhysicalGain,gainbiasUnavail);
+    
+    ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Solar_Irradiance",
                        "VALUE" , m_Data.SolarIrradiance);
 
-    ParseVector(mds, "IMD/Geometric_Data.Use_Area.Located_Geometric_Values",
+    ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
                        "Acquisition_Angles.AZIMUTH_ANGLE" , m_Data.SceneOrientation);
 
-    std::string path = "IMD/Product_Information.Delivery_Identification.JOB_ID";
+    std::string path = prefix + "Product_Information.Delivery_Identification.JOB_ID";
     m_Data.ImageID =mds.GetAs<std::string>(path);
     
-    path = "IMD/Product_Information.Delivery_Identification.PRODUCTION_DATE";
+    path = prefix + "Product_Information.Delivery_Identification.PRODUCTION_DATE";
 
     m_Data.ProductionDate = mds.GetAs<std::string>(path);
 
 
-    auto imagingDate = GetSingleValueFromList<std::string>(mds, "IMD/Dataset_Sources.Source_Identification", "Strip_Source.IMAGING_DATE" );
-    auto imagingTime = GetSingleValueFromList<std::string>(mds, "IMD/Dataset_Sources.Source_Identification", "Strip_Source.IMAGING_TIME" );
+    auto imagingDate = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Identification", "Strip_Source.IMAGING_DATE" );
+    auto imagingTime = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Identification", "Strip_Source.IMAGING_TIME" );
     m_Data.AcquisitionDate = imagingDate + "T" + imagingTime;
 
-    m_Data.Instrument = GetSingleValueFromList<std::string>(mds, "IMD/Dataset_Sources.Source_Identification", "Strip_Source.INSTRUMENT" );
-    m_Data.InstrumentIndex = GetSingleValueFromList<std::string>(mds, "IMD/Dataset_Sources.Source_Identification", "Strip_Source.INSTRUMENT_INDEX" );
+    m_Data.Instrument = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Identification", "Strip_Source.INSTRUMENT" );
+    m_Data.InstrumentIndex = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Identification", "Strip_Source.INSTRUMENT_INDEX" );
 
     m_Data.ProcessingLevel = mds.GetAs<std::string>
-      ("IMD/Processing_Information.Product_Settings.PROCESSING_LEVEL");
+      (prefix + "Processing_Information.Product_Settings.PROCESSING_LEVEL");
     m_Data.SpectralProcessing = mds.GetAs<std::string>
-      ("IMD/Processing_Information.Product_Settings.SPECTRAL_PROCESSING");
+      (prefix + "Processing_Information.Product_Settings.SPECTRAL_PROCESSING");
   }
   
 protected:
