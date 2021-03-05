@@ -1115,7 +1115,7 @@ void GDALImageIO::InternalReadImageInformation()
     m_Imd.Bands.push_back(bmd);
   }
 
-  ImportMetadata() ;
+  ImportMetadata();
 
   if (noDataFound)
   {
@@ -1956,9 +1956,8 @@ void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int 
     {
       // Projection have already been exported (see InternalWriteImageInformation)
     }
-    else{
-      // std::string domain = "OTB";
-      // std::string path = domain + "/" + kv.first ;
+    else
+    {
       SetMetadataValue(kv.first.c_str(), kv.second.c_str(), band);
     }
   }
@@ -2018,7 +2017,8 @@ void GDALImageIO::GDALMetadataToKeywordlist(const char* const* metadataList, Ima
 
         m_Imd.Add(MDGeom::RPC, rpcStruct);
       }
-      else{
+      else
+      {
         kwl.emplace(fieldName, fieldValue);
       }
     }
