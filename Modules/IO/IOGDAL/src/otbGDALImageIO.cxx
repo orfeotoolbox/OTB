@@ -1923,8 +1923,6 @@ void GDALImageIO::ImportMetadata()
   ImageMetadataBase::Keywordlist kwl;
   GDALMetadataToKeywordlist(m_Dataset->GetDataSet()->GetMetadata(), kwl);
   m_Imd.FromKeywordlist(kwl);
-  // GCPs are imported directly in the ImageMetadata.
-  m_Imd.Add(MDGeom::GCP, m_Dataset->GetGCPParam());
 
   // Parsing the bands
   for (int band = 0 ; band < m_NbBands ; ++band)
