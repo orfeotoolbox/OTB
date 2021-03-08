@@ -417,6 +417,27 @@ deploy:
     - job: windows-10-build
       artifacts: true
 
+update-archive:
+  tags:
+    - deploy
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+  stage: deploy
+  extends: .general
+  only:
+    - develop
+  before_script:
+    # Provision efficiently the local LFS cache before checkout
+    - git lfs fetch origin $CI_COMMIT_SHA
+    - git checkout -f -q $CI_COMMIT_SHA
+  script:
+    - ./Utilities/Maintenance/SuperbuildDownloadList.sh download build_archive
+    - ./CI/deploy-archive.sh build_archive
+  needs:
+    # don't push the archive if Superbuild was not successful
+    - job: ubuntu-xdk-prepare
+      artifacts: false
+
+
 release-container:
   image: $BUILD_IMAGE_REGISTRY/otb-alpine:3.7
   stage: deploy
