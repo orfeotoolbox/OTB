@@ -120,7 +120,7 @@ private:
         key = item;
 
         // Transform chain : lowercase and alphanumerical
-        key.erase(std::remove_if(key.begin(), key.end(), std::not1(std::ptr_fun(::isalnum))), key.end());
+        key.erase(std::remove_if(key.begin(), key.end(), [](int ch) {return !std::isalnum(ch);}), key.end());
         std::transform(key.begin(), key.end(), key.begin(), tolower);
 
         // Key must be unique
