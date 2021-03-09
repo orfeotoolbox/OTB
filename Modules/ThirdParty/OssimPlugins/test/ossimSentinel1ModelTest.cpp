@@ -78,7 +78,7 @@ int main(int argc, char * argv[])
    }
 
    try {
-      std::auto_ptr<ossimProjection> projection
+      std::unique_ptr<ossimProjection> projection
          (ossimPluginProjectionFactory::instance()->createProjection(annotationXml, 42));
       if (!projection.get()) {
          throw std::runtime_error("Cannot read annotation file ("+annotationXml+"). Cannot create a projection from it.");
