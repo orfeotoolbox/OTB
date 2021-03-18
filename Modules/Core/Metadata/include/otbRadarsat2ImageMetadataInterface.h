@@ -98,6 +98,11 @@ public:
   /*get lookup data for calculating backscatter */
   void CreateCalibrationLookupData(const short type) override;
 
+  virtual void ParseGdal(const MetadataSupplierInterface &) override
+  {
+    itkExceptionMacro("ParseGdal not implemented in Radarsat2ImageMetadataInterface.");
+  }
+
   void Parse(const MetadataSupplierInterface &) override;
 
 

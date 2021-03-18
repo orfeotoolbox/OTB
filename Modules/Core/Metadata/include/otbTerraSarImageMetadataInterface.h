@@ -174,6 +174,11 @@ public:
    *  in the order R, G, B */
   std::vector<unsigned int> GetDefaultDisplay() const override;
 
+  virtual void ParseGdal(const MetadataSupplierInterface &) override
+  {
+    itkExceptionMacro("ParseGdal not implemented in TerraSarImageMetadataInterface.");
+  }
+
   void Parse(const MetadataSupplierInterface &) override;
 
 protected:

@@ -255,8 +255,6 @@ double CosmoImageMetadataInterface::GetCenterIncidenceAngle() const
   return 0;
 }
 
-
-
 std::vector<std::map<std::string, std::string> > CosmoImageMetadataInterface::saveMetadataBands(std::string file)
 {
   // Create GDALImageIO to retrieve all metadata (from .h5 input file)
@@ -297,9 +295,6 @@ std::vector<std::map<std::string, std::string> > CosmoImageMetadataInterface::sa
   return metadataBands;
 
 }
-
-
-
 
 std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const MetadataSupplierInterface & mds, const std::string & reference_UTC)
 {
@@ -353,19 +348,9 @@ std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const MetadataSupplier
   return orbitVector ;
 }
 
-
-
-void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void CosmoImageMetadataInterface::ParseGdal(const MetadataSupplierInterface & mds)
 {
-  // Check Mission Id, acquisition mode and product type
-  Fetch(MDStr::Mission, mds, "MISSION_ID");
-
-  if (m_Imd[MDStr::Mission] != "CSK" )
-  {
-    otbGenericExceptionMacro(MissingMetadataException,
-      << "Not a CosmoSkyMed product");
-  }
-
+  // Check acquisition mode and product type
   Fetch(MDStr::Mode, mds, "Acquisition_Mode");
   if((m_Imd[MDStr::Mode] != "HIMAGE") &&
         (m_Imd[MDStr::Mode] != "SPOTLIGHT") &&
@@ -431,11 +416,23 @@ void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
   m_Imd.Bands[0].Add(MDGeom::SAR, sarParam);
 }
 
+void CosmoImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & mds)
+{
+  Superclass::ParseGeom(mds);
+}
 
-
-
-
-
-
+void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+{
+  // Try to fetch the metadata from GDAL Metadata Supplier
+  if (mds.GetAs<std::string>("", "MISSION_ID") == "CSK")
+    this->ParseGdal(mds);
+  // Try to fetch the metadata from GEOM file
+  else if (mds.GetAs<std::string>("", "support_data.sensor") == "CSK")
+    this->ParseGeom(mds);
+  // Failed to fetch the metadata
+  else
+    otbGenericExceptionMacro(MissingMetadataException,
+			     << "Not a CosmoSkyMed product");
+}
 
 } // end namespace otb

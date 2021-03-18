@@ -24,6 +24,7 @@
 #include "otbMath.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
+#include "otbSARMetadata.h"
 
 namespace otb
 {
@@ -188,6 +189,22 @@ SarImageMetadataInterface::IndexType SarImageMetadataInterface::GetRadiometricCa
   return SarImageMetadataInterface::GetConstantPolynomialDegree();
 }
 
+
+void SarImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & mds)
+{
+  Fetch(MDTime::AcquisitionStartTime, mds, "support_data.first_line_time");
+  Fetch(MDTime::AcquisitionStopTime, mds, "support_data.last_line_time");
+  Fetch(MDStr::BeamMode, mds, "manifest_data.acquisition_mode");
+  Fetch(MDStr::BeamSwath, mds, "manifest_data.swath");
+  Fetch(MDNum::LineSpacing, mds, "support_data.azimuth_spacing");
+  Fetch(MDStr::Mission, mds, "manifest_data.instrument");
+  Fetch(MDStr::OrbitDirection, mds, "manifest_data.orbit_pass");
+  Fetch(MDNum::OrbitNumber, mds, "manifest_data.abs_orbit");
+  Fetch(MDNum::PixelSpacing, mds, "support_data.range_spacing");
+  Fetch(MDStr::ProductType, mds, "manifest_data.product_type");
+  Fetch(MDTime::ProductionDate, mds, "manifest_data.date");
+  Fetch(MDTime::AcquisitionDate, mds, "manifest_data.image_date");
+}
 
 void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const
 {

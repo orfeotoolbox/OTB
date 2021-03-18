@@ -100,6 +100,10 @@ public:
   /*get lookup data for calculating backscatter */
   void CreateCalibrationLookupData(const short type) override;
 
+  void ParseGdal(const MetadataSupplierInterface &);
+
+  void ParseGeom(const MetadataSupplierInterface &);
+
   void Parse(const MetadataSupplierInterface &) override;
 
 protected:
@@ -114,15 +118,19 @@ protected:
 
   /* Fetch the DopplerCentroid metadata */
   std::vector<DopplerCentroid> GetDopplerCentroid(const XMLMetadataSupplier&) const;
+  std::vector<DopplerCentroid> GetDopplerCentroidGeom(const MetadataSupplierInterface&) const;
 
   /* Fetch the Orbits metadata */
   std::vector<Orbit> GetOrbits(const XMLMetadataSupplier&) const;
+  std::vector<Orbit> GetOrbitsGeom(const MetadataSupplierInterface&) const;
 
   /* Fetch the Calibration metadata */
   std::vector<CalibrationVector> GetCalibrationVector(const XMLMetadataSupplier&) const;
+  std::vector<CalibrationVector> GetCalibrationVectorGeom(const MetadataSupplierInterface&) const;
 
   /* Fetch the noise LUTs */
   std::vector<SARNoise> GetNoiseVector(const XMLMetadataSupplier&) const;
+  std::vector<SARNoise> GetNoiseVectorGeom(const MetadataSupplierInterface&) const;
 
   /* Compute the mean terrain elevation */
   double getBandTerrainHeight(const XMLMetadataSupplier&) const;

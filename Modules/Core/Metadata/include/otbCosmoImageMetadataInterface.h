@@ -92,6 +92,10 @@ public:
 
   void Parse(const MetadataSupplierInterface &) override;
 
+  void ParseGdal(const MetadataSupplierInterface &);
+  
+  void ParseGeom(const MetadataSupplierInterface &) override;
+
   std::vector<std::map<std::string, std::string> > saveMetadataBands(std::string file) ;
   std::vector<Orbit> getOrbits(const MetadataSupplierInterface &, const std::string & referenceTime);
 

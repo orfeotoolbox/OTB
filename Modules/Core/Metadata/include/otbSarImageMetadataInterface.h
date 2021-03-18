@@ -112,7 +112,11 @@ public:
    * then translate it into ImageMetadata. Handles most SAR sensors.
    * Returns true if succeed. */
   bool ConvertImageKeywordlistToImageMetadata() override;
-  
+
+  virtual void ParseGdal(const MetadataSupplierInterface &) =0;
+
+  virtual void ParseGeom(const MetadataSupplierInterface &);
+
 protected:
   SarImageMetadataInterface();
   ~SarImageMetadataInterface() override
