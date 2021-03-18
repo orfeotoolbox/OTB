@@ -93,6 +93,7 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
   function->SetApplyRangeSpreadLossCorrection(!apply);
   function->SetApplyRescalingFactor(!apply);
   function->SetApplyLookupDataCorrection(apply);
+  function->SetRemoveS1ThermalNoise(apply && function->GetEnableNoise());
 
   function->SetScale(imageMetadataInterface->GetRadiometricCalibrationScale());
 

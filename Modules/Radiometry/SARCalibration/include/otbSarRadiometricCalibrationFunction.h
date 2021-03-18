@@ -23,6 +23,9 @@
 
 #include "otbSarParametricMapFunction.h"
 #include "otbSarCalibrationLookupData.h"
+
+#include "otbS1ThermalNoiseLookupData.h"
+
 #include "otbMath.h"
 namespace otb
 {
@@ -78,6 +81,9 @@ public:
   typedef otb::SarParametricMapFunction<InputImageType> ParametricFunctionType;
   typedef typename ParametricFunctionType::Pointer      ParametricFunctionPointer;
   typedef typename ParametricFunctionType::ConstPointer ParametricFunctionConstPointer;
+  
+  using S1ThermalNoiseLookupType = otb::S1ThermalNoiseLookupData<double>;
+  using S1ThermalNoiseLookupPointerType = typename S1ThermalNoiseLookupType::Pointer;
 
   /** Evalulate the function at specified index */
   OutputType EvaluateAtIndex(const IndexType& index) const override;
@@ -153,6 +159,9 @@ public:
   itkSetMacro(ApplyLookupDataCorrection, bool);
   itkGetMacro(ApplyLookupDataCorrection, bool);
 
+  itkSetMacro(RemoveS1ThermalNoise, bool);
+  itkGetMacro(RemoveS1ThermalNoise, bool);
+
   itkSetMacro(ApplyRescalingFactor, bool);
   itkGetMacro(ApplyRescalingFactor, bool);
 
@@ -196,6 +205,8 @@ private:
   ParametricFunctionPointer m_IncidenceAngle;
   ParametricFunctionPointer m_RangeSpreadLoss;
   LookupDataPointer         m_Lut;
+  bool                      m_RemoveS1ThermalNoise;
+  S1ThermalNoiseLookupPointerType m_S1ThermaNoise;
 };
 
 } // end namespace otb

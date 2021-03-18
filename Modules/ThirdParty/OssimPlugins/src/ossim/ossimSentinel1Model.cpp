@@ -932,6 +932,7 @@ namespace ossimplugins
             noiseLutName = "noiseRangeLut";
          }
 
+
          int idx = 0;
          for (std::vector< ossimXmlNodePtr >::const_iterator b_noiseVector = noiseVectors.begin(), e_noiseVector = noiseVectors.end()
                ; b_noiseVector != e_noiseVector
@@ -959,6 +960,8 @@ namespace ossimplugins
             addMandatory(theProductKwl, noiseVectorPrefix, "noiseLut", noiseVector, noiseLutName);
             //noiseVectorList[idx]->toKwl(theProductKwl, "noiseVectorList_" + ossimString::toString(idx+1) + ".");
          }
+
+         add(theProductKwl, noisePrefix, "rangeCount", noiseVectors.size());
 
          std::vector< ossimXmlNodePtr > noiseAzimuthVectors;
 
