@@ -39,8 +39,8 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>::SarRadiometricCalibra
     m_ApplyIncidenceAngleCorrection(true),
     m_ApplyRangeSpreadLossCorrection(true),
     m_ApplyLookupDataCorrection(false),
-    m_ApplyRescalingFactor(false)
-
+    m_ApplyRescalingFactor(false),
+    m_RemoveS1ThermalNoise(false)
 {
   /* initialize parametric functions */
   m_Noise                 = ParametricFunctionType::New();
@@ -48,6 +48,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>::SarRadiometricCalibra
   m_AntennaPatternOldGain = ParametricFunctionType::New();
   m_IncidenceAngle        = ParametricFunctionType::New();
   m_RangeSpreadLoss       = ParametricFunctionType::New();
+  m_S1ThermaNoise         = S1ThermalNoiseLookupType::New();
 
   /* initialize default values in paramerticFunction instances  */
   m_Noise->SetConstantValue(0.0);
@@ -71,6 +72,8 @@ void SarRadiometricCalibrationFunction<TInputImage, TCoordRep>::SetInputImage(co
   m_AntennaPatternNewGain->SetInputImage(ptr);
   m_AntennaPatternOldGain->SetInputImage(ptr);
   m_RangeSpreadLoss->SetInputImage(ptr);
+
+  m_S1ThermaNoise->SetImageKeywordlist(ptr->GetImageKeywordlist());
 }
 
 /**
@@ -145,7 +148,13 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>::EvaluateAtIndex(const
     * above values (incidence angle, rangespreadloss etc.. */
   if (m_ApplyLookupDataCorrection)
   {
+    if (m_RemoveS1ThermalNoise)
+    {
+      sigma = std::max(0., sigma - m_S1ThermaNoise->GetValue(index[0], index[1]));
+    }
+
     RealType lutVal = static_cast<RealType>(m_Lut->GetValue(index[0], index[1]));
+
     sigma /= lutVal * lutVal;
   }
 
