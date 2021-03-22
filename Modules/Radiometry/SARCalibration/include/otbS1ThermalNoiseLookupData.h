@@ -74,7 +74,6 @@ public:
     {
       const std::string prefix = "noise.noiseVector[" + std::to_string(i) + "].";
 
-
       Sentinel1CalibrationStruct rangeNoiseVector;
       rangeNoiseVector.timeMJD = ossimplugins::time::toModifiedJulianDate(kwl.GetMetadataByKey(prefix + "azimuthTime")).as_day_frac();
       rangeNoiseVector.deltaMJD = rangeNoiseVector.timeMJD - lastMJD;
@@ -100,6 +99,25 @@ public:
     if (kwl.HasKey("noise.azimuthCount"))
     {
       m_AzimuthCount = std::stoi(kwl.GetMetadataByKey("noise.azimuthCount"));
+
+      for (int i = 0; i < m_AzimuthCount; i++)
+      {
+        const std::string prefix = "noise.noiseAzimuthVector[" + std::to_string(i) + "].";
+
+        Sentinel1AzimuthNoiseStruct azimuthNoiseVector;
+
+        azimuthNoiseVector.firstAzimuthLine = std::stoi(kwl.GetMetadataByKey(prefix + "firstAzimuthLine"));
+        azimuthNoiseVector.firstRangeSample = std::stoi(kwl.GetMetadataByKey(prefix + "firstRangeSample"));
+        azimuthNoiseVector.lastAzimuthLine = std::stoi(kwl.GetMetadataByKey(prefix + "lastAzimuthLine"));
+        azimuthNoiseVector.lastRangeSample = std::stoi(kwl.GetMetadataByKey(prefix + "lastRangeSample"));
+
+        Utils::ConvertStringToVector(kwl.GetMetadataByKey( prefix + "line"), 
+                                   azimuthNoiseVector.lines, prefix + "line");
+        Utils::ConvertStringToVector(kwl.GetMetadataByKey( prefix + "noiseAzimuthLut"), 
+                                   azimuthNoiseVector.vect, prefix + "noiseAzimuthLut");
+
+        m_AzimuthNoiseVectorList.push_back(azimuthNoiseVector);
+      }
     }
   }
 
@@ -113,7 +131,7 @@ public:
 
   T GetRangeNoise(const IndexValueType x, const IndexValueType y)
   {
-    const auto vecIdx = GetVectorIndex(y);
+    const auto vecIdx = GetRangeVectorIndex(y);
     assert(vecIdx >= 0 && vecIdx < m_RangeCount - 1);
 
     const auto& vec0 = m_RangeNoiseVectorList[vecIdx];
@@ -121,7 +139,7 @@ public:
 
     const auto azTime = m_FirstLineTime + y * m_LineTimeInterval;
     const auto muY = (azTime - vec0.timeMJD) / vec1.deltaMJD;
-    const auto pixelIdx = GetPixelIndex(x, vec0);
+    const auto pixelIdx = GetPixelIndex(x, vec0.pixels);
     const double muX = (x - vec0.pixels[pixelIdx]) / vec0.deltaPixels[pixelIdx + 1];
     const double lutVal =
         (1 - muY) * ((1 - muX) * vec0.vect[pixelIdx] + muX * vec0.vect[pixelIdx + 1]) + muY * ((1 - muX) * vec1.vect[pixelIdx] + muX * vec1.vect[pixelIdx + 1]);
@@ -133,10 +151,14 @@ public:
   {
     if (m_AzimuthCount)
     {
-      //TODO compute azimuth correction
-      return 1.;
+      const auto vecIdx = GetAzimuthVectorIndex(x, y);
+      const auto& vec = m_AzimuthNoiseVectorList[vecIdx];
+
+      const auto pixelIdx = GetPixelIndex(y, vec.lines);
+
+      const double lutVal = vec.vect[pixelIdx] + ((y - vec.lines[pixelIdx])/(vec.lines[pixelIdx+1] - vec.lines[pixelIdx]))* (vec.vect[pixelIdx + 1] - vec.vect[pixelIdx]);
+      return lutVal;
     }
-    // Older products do not contain azimuth noise Luts.
     else
     {
       return 1.;
@@ -156,12 +178,11 @@ private:
     int firstRangeSample = 0;
     int lastRangeSample = 0;
 
-    std::vector<int> pixels;
-    //std::vector<double> deltaPixels;
+    std::vector<int> lines;
     std::vector<float>  vect;
   };
 
-  int GetVectorIndex(int y) const
+  int GetRangeVectorIndex(int y) const
   {
     for (int i = 1; i < m_RangeCount; i++)
     {
@@ -174,11 +195,29 @@ private:
     return -1;
   }
 
-  int GetPixelIndex(int x, const Sentinel1CalibrationStruct& vec) const
+  int GetAzimuthVectorIndex(int x, int y) const
   {
-    const int                        size = vec.pixels.size();
-    std::vector<int>::const_iterator wh   = std::upper_bound(vec.pixels.begin(), vec.pixels.end(), x);
-    return wh == vec.pixels.end() ? size - 2 : std::distance(vec.pixels.begin(), wh) - 1;
+    for (int i = 0; i < m_AzimuthCount; i++)
+    {
+      const auto & azimuthVector = m_AzimuthNoiseVectorList[i];
+
+      if (x >= azimuthVector.firstRangeSample && x <= azimuthVector.lastRangeSample
+          && y >= azimuthVector.firstAzimuthLine && y <= azimuthVector.lastAzimuthLine)
+      {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
+
+
+  int GetPixelIndex(int x, const std::vector<int> & vec) const
+  {
+    const int                        size = vec.size();
+    std::vector<int>::const_iterator wh   = std::upper_bound(vec.begin(), vec.end(), x);
+    return wh == vec.end() ? size - 2 : std::distance(vec.begin(), wh) - 1;
   }
 
   //ImageKeywordlist m_kwl;

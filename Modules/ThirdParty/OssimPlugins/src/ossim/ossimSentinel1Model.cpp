@@ -964,8 +964,9 @@ namespace ossimplugins
          add(theProductKwl, noisePrefix, "rangeCount", noiseVectors.size());
 
          std::vector< ossimXmlNodePtr > noiseAzimuthVectors;
-
+          
          noiseRoot->findChildNodes("noiseAzimuthVectorList/noiseAzimuthVector", noiseAzimuthVectors);
+          add(theProductKwl, noisePrefix, "azimuthCount", noiseAzimuthVectors.size());
 
          idx = 0;
          for (const auto & noiseAzimuthNodePtr : noiseAzimuthVectors)
