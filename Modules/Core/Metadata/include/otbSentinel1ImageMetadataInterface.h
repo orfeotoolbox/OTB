@@ -115,6 +115,7 @@ protected:
 
   /* Fetch the AzimuthFmRate metadata */
   std::vector<AzimuthFmRate> GetAzimuthFmRate(const XMLMetadataSupplier&) const;
+  std::vector<AzimuthFmRate> GetAzimuthFmRateGeom(const MetadataSupplierInterface&) const;
 
   /* Fetch the DopplerCentroid metadata */
   std::vector<DopplerCentroid> GetDopplerCentroid(const XMLMetadataSupplier&) const;

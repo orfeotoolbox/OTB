@@ -375,6 +375,31 @@ std::vector<AzimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate(con
   return azimuthFmRateVector;
 }
 
+std::vector<AzimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRateGeom(const MetadataSupplierInterface & mds) const
+{
+  std::vector<AzimuthFmRate> azimuthFmRateVector;
+  // Number of entries in the vector
+  int listCount = mds.GetAs<int>("azimuthFmRate.azi_fm_rate_coef_nb_list");
+  // This streams wild hold the iteration number
+  std::ostringstream oss;
+  for (int listId = 1 ; listId <= listCount ; ++listId)
+  {
+    oss.str("");
+    oss << listId;
+    // Base path to the data, that depends on the iteration number
+    std::string path_root = "azimuthFmRate.azi_fm_rate_coef_list" + oss.str();
+    AzimuthFmRate afr;
+    std::istringstream(mds.GetAs<std::string>(path_root + ".azi_fm_rate_coef_time")) >> afr.azimuthTime;
+    afr.t0 = mds.GetAs<double>(path_root + ".slant_range_time");
+    std::vector<double> polynom(3);
+    for (int polyId = 1 ; polyId < 4 ; ++polyId)
+      polynom.push_back(mds.GetAs<double>(path_root+"."+std::to_string(polyId)+".azi_fm_rate_coef"));
+    afr.azimuthFmRatePolynomial = polynom;
+    azimuthFmRateVector.push_back(afr);
+  }
+  return azimuthFmRateVector;
+}
+
 std::vector<DopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCentroid(const XMLMetadataSupplier &xmlMS) const
 {
   std::vector<DopplerCentroid> dopplerCentroidVector;
@@ -730,7 +755,7 @@ void Sentinel1ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface 
 
   SARParam sarParam;
   Fetch("FACILITY_IDENTIFIER", mds, "manifest_data.Processing_system_identifier");
-  // TODO: sarParam.azimuthFmRates = ???
+  sarParam.azimuthFmRates = this->GetAzimuthFmRateGeom(mds);
   sarParam.dopplerCentroids = this->GetDopplerCentroidGeom(mds);
   sarParam.orbits = this->GetOrbitsGeom(mds);
   m_Imd.Add(MDStr::SensorID, "SAR");

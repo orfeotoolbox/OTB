@@ -1762,7 +1762,7 @@ int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char
 
 //
 // Generate all of the possible baselines
-// The possible baselines are generated fromn the baselineFilename using the following algorithm:
+// The possible baselines are generated from the baselineFilename using the following algorithm:
 // 1) strip the suffix
 // 2) append a digit _x
 // 3) append the original suffix.
