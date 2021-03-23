@@ -463,6 +463,7 @@ set(ikonos_geom_file ${INPUTDATA}/ikonos/ikonos-2.geom)
 set(worldview2_geom_file ${INPUTDATA}/wv2/wv2-2.geom)
 set(quickbird_geom_file ${INPUTDATA}/QB/qb-2.geom)
 set(Radarsat2_geom_file ${INPUTDATA}/radarsat2/radarsat2-1.geom)
+set(TerraSar_geom_file ${INPUTDATA}/terrasar/terrasar-1.geom)
 set(CosmoSkyMed_geom_file ${INPUTDATA}/cosmoskymed/cosmoskymed-1.geom)
 set(Sentinel1_geom_file ${INPUTDATA}/sentinel1/sentinel1-2.geom)
 

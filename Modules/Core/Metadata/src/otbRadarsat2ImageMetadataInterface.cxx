@@ -257,7 +257,6 @@ void Radarsat2ImageMetadataInterface::ParseGdal(const MetadataSupplierInterface 
   // Fetch(MDStr::Mode, mds, "MODE");
   Fetch(MDStr::OrbitDirection, mds, "ORBIT_DIRECTION");
   // Fetch(MDNum::OrbitNumber, mds, "ORBIT_NUMBER");
-  Fetch(MDNum::PixelSpacing, mds, "PIXEL_SPACING");
   Fetch(MDStr::ProductType, mds, "PRODUCT_TYPE");
   Fetch(MDStr::Instrument, mds, "SATELLITE_IDENTIFIER");
   Fetch(MDStr::SensorID, mds, "SENSOR_IDENTIFIER");
@@ -300,7 +299,6 @@ void Radarsat2ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface 
   // Metadata read by GDAL
   Fetch(MDTime::AcquisitionStartTime, mds, "support_data.image_date");
   Fetch(MDNum::LineSpacing, mds, "meters_per_pixel_y");
-  Fetch(MDNum::PixelSpacing, mds, "meters_per_pixel_x");
   Fetch(MDNum::PixelSpacing, mds, "meters_per_pixel_x");
   Fetch(MDStr::Instrument, mds, "sensor");
   m_Imd.Add(MDStr::SensorID, "SAR");  
