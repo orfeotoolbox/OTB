@@ -1298,10 +1298,10 @@ void TerraSarImageMetadataInterface::ParseGeom(const MetadataSupplierInterface &
 void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 {
   // Try to fetch the metadata from GDAL Metadata Supplier
-  if (mds.GetAs<std::string>("", "SATELLITE_IDENTIFIER") == "RADARSAT-2")
+  if (mds.GetAs<std::string>("", "DRIVER") == "TSX/TerraSAR-X Product")
     this->ParseGdal(mds);
   // Try to fetch the metadata from GEOM file
-  else if (mds.GetAs<std::string>("", "sensor") == "RADARSAT-2")
+  else if (mds.GetAs<std::string>("", "sensor") == "TSX-1")
     this->ParseGeom(mds);
   // Failed to fetch the metadata
   else

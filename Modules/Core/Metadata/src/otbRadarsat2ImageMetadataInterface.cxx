@@ -296,10 +296,43 @@ void Radarsat2ImageMetadataInterface::ParseGdal(const MetadataSupplierInterface 
 
 void Radarsat2ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & mds)
 {
-  SARParam sarParam;
-  Fetch(MDStr::Polarization, mds, "POLARIMETRIC_INTERP", 0);
-  m_Imd.Bands[0].Add(MDGeom::SAR, sarParam);
-  throw "Not implemented";
+  // Metadata read by GDAL
+  Fetch(MDTime::AcquisitionStartTime, mds, "support_data.image_date");
+  Fetch(MDNum::LineSpacing, mds, "meters_per_pixel_y");
+  Fetch(MDNum::PixelSpacing, mds, "meters_per_pixel_x");
+  Fetch(MDNum::PixelSpacing, mds, "meters_per_pixel_x");
+  Fetch(MDStr::Instrument, mds, "sensor");
+  m_Imd.Add(MDStr::SensorID, "SAR");  
+
+  // Product file
+  std::string ProductFilePath = mds.GetAs<std::string>("", "product_xml_filename");
+  if (!ProductFilePath.empty())
+  {
+    XMLMetadataSupplier ProductMS(ProductFilePath);
+    m_Imd.Add(MDStr::Mission, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
+    m_Imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
+    m_Imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));
+    m_Imd.Add(MDTime::ProductionDate,
+        ProductMS.GetFirstAs<MetaData::Time>("product.imageGenerationParameters.generalProcessingInformation.processingTime"));
+    m_Imd.Add(MDNum::AverageSceneHeight, ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
+    m_Imd.Add(MDNum::RadarFrequency, this->GetRadarFrequency());
+    m_Imd.Add(MDNum::PRF, this->GetPRF());
+    m_Imd.Add(MDNum::RSF, this->GetRSF());
+    m_Imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle());
+    m_Imd.Add(MDStr::BeamMode, ProductMS.GetAs<std::string>("product.sourceAttributes.beamModeMnemonic"));
+    m_Imd.Add("FACILITY_IDENTIFIER", ProductMS.GetAs<std::string>("product.sourceAttributes.inputDatasetFacilityId"));
+    m_Imd.Add(MDStr::OrbitDirection, ProductMS.GetAs<std::string>("product.sourceAttributes.orbitAndAttitude.orbitInformation.passDirection"));
+    m_Imd.Add(MDStr::ProductType, ProductMS.GetAs<std::string>("product.imageGenerationParameters.generalProcessingInformation.productType"));
+
+    auto polarizations = ProductMS.GetAsVector<std::string>("product.sourceAttributes.radarParameters.polarizations");
+    assert(polarizations.size() == m_Imd.Bands.size());
+    SARParam sarParam;
+    for (int bandId = 0 ; bandId < polarizations.size() ; ++bandId)
+    {
+      m_Imd.Bands[bandId].Add(MDStr::Polarization, polarizations[bandId]);
+      m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
+    }
+  }  
 }
 
 void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
