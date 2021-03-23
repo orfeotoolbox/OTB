@@ -205,12 +205,12 @@ public:
     itkExceptionMacro("GetCenterIncidenceAngle not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  virtual void ParseGdal(const MetadataSupplierInterface &) override
+  void ParseGdal(const MetadataSupplierInterface &) override
   {
     itkExceptionMacro("ParseGdal not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  virtual void ParseGeom(const MetadataSupplierInterface &) override
+  void ParseGeom(const MetadataSupplierInterface &) override
   {
     itkExceptionMacro("ParseGeom not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }

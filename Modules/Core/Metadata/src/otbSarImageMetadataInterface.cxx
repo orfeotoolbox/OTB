@@ -208,8 +208,8 @@ std::vector<AzimuthFmRate> SarImageMetadataInterface::GetAzimuthFmRateGeom(const
     std::vector<double> polynom(3);
     for (int polyId = 1 ; polyId < 4 ; ++polyId)
       polynom.push_back(mds.GetAs<double>(path_root+"."+std::to_string(polyId)+".azi_fm_rate_coef"));
-    afr.azimuthFmRatePolynomial = polynom;
-    azimuthFmRateVector.push_back(afr);
+    afr.azimuthFmRatePolynomial = std::move(polynom);
+    azimuthFmRateVector.push_back(std::move(afr));
   }
   return azimuthFmRateVector;
 }
@@ -229,7 +229,7 @@ std::vector<DopplerCentroid> SarImageMetadataInterface::GetDopplerCentroidGeom(c
     DopplerCentroid dopplerCent;
     std::istringstream(mds.GetAs<std::string>(path_root + ".dop_coef_time")) >> dopplerCent.azimuthTime;
     dopplerCent.t0 = mds.GetAs<double>(path_root + ".slant_range_time");
-    dopplerCentroidVector.push_back(dopplerCent);
+    dopplerCentroidVector.push_back(std::move(dopplerCent));
   }
   return dopplerCentroidVector;
 }
@@ -255,7 +255,7 @@ std::vector<Orbit> SarImageMetadataInterface::GetOrbitsGeom(const MetadataSuppli
     orbit.velX = mds.GetAs<double>(path_root + ".x_vel");
     orbit.velY = mds.GetAs<double>(path_root + ".y_vel");
     orbit.velZ = mds.GetAs<double>(path_root + ".z_vel");
-    orbitVector.push_back(orbit);
+    orbitVector.push_back(std::move(orbit));
   }
   return orbitVector;
 }
@@ -286,24 +286,24 @@ std::vector<CalibrationVector> SarImageMetadataInterface::GetCalibrationVectorGe
     MetaData::LUT1D sigmaNoughtLut;
     sigmaNoughtLut.Axis[0] = ax1;
     sigmaNoughtLut.Array = mds.GetAsVector<double>(path_root + ".sigmaNought", ' ', ax1.Size);
-    calVect.sigmaNought = sigmaNoughtLut;
+    calVect.sigmaNought = std::move(sigmaNoughtLut);
 
     MetaData::LUT1D betaNoughtLut;
     betaNoughtLut.Axis[0] = ax1;
     betaNoughtLut.Array = mds.GetAsVector<double>(path_root + ".betaNought", ' ', ax1.Size);
-    calVect.betaNought = betaNoughtLut;
+    calVect.betaNought = std::move(betaNoughtLut);
 
     MetaData::LUT1D gammaLut;
     gammaLut.Axis[0] = ax1;
     gammaLut.Array = mds.GetAsVector<double>(path_root + ".gamma", ' ', ax1.Size);
-    calVect.gamma = gammaLut;
+    calVect.gamma = std::move(gammaLut);
 
     MetaData::LUT1D dnLut;
     dnLut.Axis[0] = ax1;
     dnLut.Array = mds.GetAsVector<double>(path_root + ".dn", ' ', ax1.Size);
-    calVect.dn = dnLut;
+    calVect.dn = std::move(dnLut);
 
-    calibrationVector.push_back(calVect);
+    calibrationVector.push_back(std::move(calVect));
   }
   return calibrationVector;
 }
@@ -328,8 +328,8 @@ std::vector<SARNoise> SarImageMetadataInterface::GetNoiseVectorGeom(const Metada
     ax1.Values = mds.GetAsVector<double>(path_root + ".pixel", ' ', ax1.Size);
     noiseLut.Axis[0] = ax1;
     noiseLut.Array = mds.GetAsVector<double>(path_root + ".noiseLut", ' ', ax1.Size);
-    noiseVect.noiseLut = noiseLut;
-    noiseVector.push_back(noiseVect);
+    noiseVect.noiseLut = std::move(noiseLut);
+    noiseVector.push_back(std::move(noiseVect));
   }
   return noiseVector;
 }
