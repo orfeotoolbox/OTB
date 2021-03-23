@@ -73,7 +73,11 @@ void SarRadiometricCalibrationFunction<TInputImage, TCoordRep>::SetInputImage(co
   m_AntennaPatternOldGain->SetInputImage(ptr);
   m_RangeSpreadLoss->SetInputImage(ptr);
 
-  m_S1ThermaNoise->SetImageKeywordlist(ptr->GetImageKeywordlist());
+  if (ptr->GetImageKeywordlist().HasKey("noise.rangeCount"))
+  {
+    m_RemoveS1ThermalNoise = true;
+    m_S1ThermaNoise->SetImageKeywordlist(ptr->GetImageKeywordlist());
+  }
 }
 
 /**

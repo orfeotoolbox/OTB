@@ -60,11 +60,6 @@ public:
     m_NumOfLines = std::stoi(kwl.GetMetadataByKey("number_lines"));
     m_LineTimeInterval = (m_LastLineTime - m_FirstLineTime) / (m_NumOfLines - 1);
 
-    if (!kwl.HasKey("noise.count"))
-    {
-      //TODO : noise.count is not read for older products.
-    }
-
     m_RangeCount = std::stoi(kwl.GetMetadataByKey("noise.rangeCount"));
     m_RangeNoiseVectorList.clear();
     
