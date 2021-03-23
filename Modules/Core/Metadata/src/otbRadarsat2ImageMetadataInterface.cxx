@@ -244,7 +244,7 @@ Radarsat2ImageMetadataInterface::UIntVectorType Radarsat2ImageMetadataInterface:
 //"
 
 
-void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void Radarsat2ImageMetadataInterface::ParseGdal(const MetadataSupplierInterface & mds)
 {
   // Metadata read by GDAL
   Fetch(MDTime::AcquisitionStartTime, mds, "ACQUISITION_START_TIME");
@@ -294,5 +294,26 @@ void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface & md
     }
 }
 
+void Radarsat2ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & mds)
+{
+  SARParam sarParam;
+  Fetch(MDStr::Polarization, mds, "POLARIMETRIC_INTERP", 0);
+  m_Imd.Bands[0].Add(MDGeom::SAR, sarParam);
+  throw "Not implemented";
+}
+
+void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+{
+  // Try to fetch the metadata from GDAL Metadata Supplier
+  if (mds.GetAs<std::string>("", "SATELLITE_IDENTIFIER") == "RADARSAT-2")
+    this->ParseGdal(mds);
+  // Try to fetch the metadata from GEOM file
+  else if (mds.GetAs<std::string>("", "sensor") == "RADARSAT-2")
+    this->ParseGeom(mds);
+  // Failed to fetch the metadata
+  else
+    otbGenericExceptionMacro(MissingMetadataException,
+			     << "Not a Sentinel1 product");
+}
 
 } // end namespace otb

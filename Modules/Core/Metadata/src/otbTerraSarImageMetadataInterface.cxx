@@ -1242,11 +1242,7 @@ void TerraSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent ind
   Superclass::PrintSelf(os, indent);
 }
 
-
-
-
-
-void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void TerraSarImageMetadataInterface::ParseGdal(const MetadataSupplierInterface & mds)
 {
   // Metadata read by GDAL
   Fetch(MDNum::LineSpacing, mds, "ROW_SPACING");
@@ -1288,11 +1284,30 @@ void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
 
   SARParam sarParam;
   for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
-    {
+  {
     Fetch(MDStr::Polarization, mds, "POLARIMETRIC_INTERP", bandId);
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
-    }
   }
+}
+
+void TerraSarImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & mds)
+{
+  throw "Not implemented";
+}
+
+void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+{
+  // Try to fetch the metadata from GDAL Metadata Supplier
+  if (mds.GetAs<std::string>("", "SATELLITE_IDENTIFIER") == "RADARSAT-2")
+    this->ParseGdal(mds);
+  // Try to fetch the metadata from GEOM file
+  else if (mds.GetAs<std::string>("", "sensor") == "RADARSAT-2")
+    this->ParseGeom(mds);
+  // Failed to fetch the metadata
+  else
+    otbGenericExceptionMacro(MissingMetadataException,
+			     << "Not a Sentinel1 product");
+}
 
 
 } // end namespace otb

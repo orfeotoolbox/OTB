@@ -189,21 +189,166 @@ SarImageMetadataInterface::IndexType SarImageMetadataInterface::GetRadiometricCa
   return SarImageMetadataInterface::GetConstantPolynomialDegree();
 }
 
-
-void SarImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & mds)
+std::vector<AzimuthFmRate> SarImageMetadataInterface::GetAzimuthFmRateGeom(const MetadataSupplierInterface & mds) const
 {
-  Fetch(MDTime::AcquisitionStartTime, mds, "support_data.first_line_time");
-  Fetch(MDTime::AcquisitionStopTime, mds, "support_data.last_line_time");
-  Fetch(MDStr::BeamMode, mds, "manifest_data.acquisition_mode");
-  Fetch(MDStr::BeamSwath, mds, "manifest_data.swath");
-  Fetch(MDNum::LineSpacing, mds, "support_data.azimuth_spacing");
-  Fetch(MDStr::Mission, mds, "manifest_data.instrument");
-  Fetch(MDStr::OrbitDirection, mds, "manifest_data.orbit_pass");
-  Fetch(MDNum::OrbitNumber, mds, "manifest_data.abs_orbit");
-  Fetch(MDNum::PixelSpacing, mds, "support_data.range_spacing");
-  Fetch(MDStr::ProductType, mds, "manifest_data.product_type");
-  Fetch(MDTime::ProductionDate, mds, "manifest_data.date");
-  Fetch(MDTime::AcquisitionDate, mds, "manifest_data.image_date");
+  std::vector<AzimuthFmRate> azimuthFmRateVector;
+  // Number of entries in the vector
+  int listCount = mds.GetAs<int>("azimuthFmRate.azi_fm_rate_coef_nb_list");
+  // This streams wild hold the iteration number
+  std::ostringstream oss;
+  for (int listId = 1 ; listId <= listCount ; ++listId)
+  {
+    oss.str("");
+    oss << listId;
+    // Base path to the data, that depends on the iteration number
+    std::string path_root = "azimuthFmRate.azi_fm_rate_coef_list" + oss.str();
+    AzimuthFmRate afr;
+    std::istringstream(mds.GetAs<std::string>(path_root + ".azi_fm_rate_coef_time")) >> afr.azimuthTime;
+    afr.t0 = mds.GetAs<double>(path_root + ".slant_range_time");
+    std::vector<double> polynom(3);
+    for (int polyId = 1 ; polyId < 4 ; ++polyId)
+      polynom.push_back(mds.GetAs<double>(path_root+"."+std::to_string(polyId)+".azi_fm_rate_coef"));
+    afr.azimuthFmRatePolynomial = polynom;
+    azimuthFmRateVector.push_back(afr);
+  }
+  return azimuthFmRateVector;
+}
+
+std::vector<DopplerCentroid> SarImageMetadataInterface::GetDopplerCentroidGeom(const MetadataSupplierInterface & mds) const
+{
+  std::vector<DopplerCentroid> dopplerCentroidVector;
+  // Path: dopplerCentroid.dop_coef_list<listId>.{dop_coef_time,slant_range_time,{1,2,3}.dop_coef}
+  // This streams wild hold the iteration number
+  std::ostringstream oss;
+  for (int listId = 1 ; mds.GetAs<std::string>("", std::string("dopplerCentroid.dop_coef_list")+std::to_string(listId)+std::string(".slant_range_time")) != "" ; ++listId)
+  {
+    oss.str("");
+    oss << listId;
+    // Base path to the data, that depends on the iteration number
+    std::string path_root = "dopplerCentroid.dop_coef_list" + oss.str();
+    DopplerCentroid dopplerCent;
+    std::istringstream(mds.GetAs<std::string>(path_root + ".dop_coef_time")) >> dopplerCent.azimuthTime;
+    dopplerCent.t0 = mds.GetAs<double>(path_root + ".slant_range_time");
+    dopplerCentroidVector.push_back(dopplerCent);
+  }
+  return dopplerCentroidVector;
+}
+
+std::vector<Orbit> SarImageMetadataInterface::GetOrbitsGeom(const MetadataSupplierInterface & mds) const
+{
+  std::vector<Orbit> orbitVector;
+  // Number of entries in the vector
+  int listCount = mds.GetAs<int>("orbitList.nb_orbits");
+  // This streams wild hold the iteration number
+  std::ostringstream oss;
+  for (int listId = 0 ; listId <= listCount - 1 ; ++listId)
+  {
+    oss.str("");
+    oss << listId;
+    // Base path to the data, that depends on the iteration number
+    std::string path_root = "orbitList.orbit[" + oss.str() + "]";
+    Orbit orbit;
+    std::istringstream(mds.GetAs<std::string>(path_root + ".time")) >> orbit.time;
+    orbit.posX = mds.GetAs<double>(path_root + ".x_pos");
+    orbit.posY = mds.GetAs<double>(path_root + ".y_pos");
+    orbit.posZ = mds.GetAs<double>(path_root + ".z_pos");
+    orbit.velX = mds.GetAs<double>(path_root + ".x_vel");
+    orbit.velY = mds.GetAs<double>(path_root + ".y_vel");
+    orbit.velZ = mds.GetAs<double>(path_root + ".z_vel");
+    orbitVector.push_back(orbit);
+  }
+  return orbitVector;
+}
+
+std::vector<CalibrationVector> SarImageMetadataInterface::GetCalibrationVectorGeom(const MetadataSupplierInterface & mds) const
+{
+  std::vector<CalibrationVector> calibrationVector;
+  // Number of entries in the vector
+  int listCount = mds.GetAs<int>("calibration.count");
+  // This streams wild hold the iteration number
+  std::ostringstream oss;
+  for (int listId = 0 ; listId <= listCount - 1 ; ++listId)
+  {
+    oss.str("");
+    oss << listId;
+    // Base path to the data, that depends on the iteration number
+    std::string path_root = "calibration.calibrationVector[" + oss.str() + "]";
+
+    CalibrationVector calVect;
+    std::istringstream(mds.GetAs<std::string>(path_root + ".azimuthTime")) >> calVect.azimuthTime;
+    calVect.line = mds.GetAs<int>(path_root + ".line");
+
+    // Same axe for all LUTs
+    MetaData::LUTAxis ax1;
+    ax1.Size = mds.GetAs<int>(path_root + ".pixel_count");
+    ax1.Values = mds.GetAsVector<double>(path_root + ".pixel", ' ', ax1.Size);
+
+    MetaData::LUT1D sigmaNoughtLut;
+    sigmaNoughtLut.Axis[0] = ax1;
+    sigmaNoughtLut.Array = mds.GetAsVector<double>(path_root + ".sigmaNought", ' ', ax1.Size);
+    calVect.sigmaNought = sigmaNoughtLut;
+
+    MetaData::LUT1D betaNoughtLut;
+    betaNoughtLut.Axis[0] = ax1;
+    betaNoughtLut.Array = mds.GetAsVector<double>(path_root + ".betaNought", ' ', ax1.Size);
+    calVect.betaNought = betaNoughtLut;
+
+    MetaData::LUT1D gammaLut;
+    gammaLut.Axis[0] = ax1;
+    gammaLut.Array = mds.GetAsVector<double>(path_root + ".gamma", ' ', ax1.Size);
+    calVect.gamma = gammaLut;
+
+    MetaData::LUT1D dnLut;
+    dnLut.Axis[0] = ax1;
+    dnLut.Array = mds.GetAsVector<double>(path_root + ".dn", ' ', ax1.Size);
+    calVect.dn = dnLut;
+
+    calibrationVector.push_back(calVect);
+  }
+  return calibrationVector;
+}
+
+std::vector<SARNoise> SarImageMetadataInterface::GetNoiseVectorGeom(const MetadataSupplierInterface & mds) const
+{
+  std::vector<SARNoise> noiseVector;
+  // This streams wild hold the iteration number
+  std::ostringstream oss;
+  // Path: noise.noiseVector[<listId>].{azimuthTime,line,noiseLut,pixel,pixel_count}
+  for (int listId = 0 ; mds.GetAs<std::string>("", std::string("noise.noiseVector[")+std::to_string(listId)+std::string("].pixel_count")) != "" ; ++listId)
+  {
+    oss.str("");
+    oss << listId;
+    // Base path to the data, that depends on the iteration number
+    std::string path_root = "noise.noiseVector[" + oss.str() + "]";
+    SARNoise noiseVect;
+    std::istringstream(mds.GetAs<std::string>(path_root + ".azimuthTime")) >> noiseVect.azimuthTime;
+    MetaData::LUT1D noiseLut;
+    MetaData::LUTAxis ax1;
+    ax1.Size = mds.GetAs<int>(path_root + ".pixel_count");
+    ax1.Values = mds.GetAsVector<double>(path_root + ".pixel", ' ', ax1.Size);
+    noiseLut.Axis[0] = ax1;
+    noiseLut.Array = mds.GetAsVector<double>(path_root + ".noiseLut", ' ', ax1.Size);
+    noiseVect.noiseLut = noiseLut;
+    noiseVector.push_back(noiseVect);
+  }
+  return noiseVector;
+}
+
+bool SarImageMetadataInterface::GetSAR(const MetadataSupplierInterface & mds, SARParam & sarParam)
+{
+  bool hasValue;
+  mds.GetMetadataValue("calibration.count", hasValue);
+  if (!hasValue)
+    return false;
+  
+  sarParam.azimuthFmRates = this->GetAzimuthFmRateGeom(mds);
+  sarParam.dopplerCentroids = this->GetDopplerCentroidGeom(mds);
+  sarParam.orbits = this->GetOrbitsGeom(mds);
+  sarParam.calibrationVectors = this->GetCalibrationVectorGeom(mds);
+  sarParam.noiseVector = this->GetNoiseVectorGeom(mds);
+  std::istringstream(mds.GetAs<std::string>("calibration.startTime")) >> sarParam.calibrationStartTime;
+  std::istringstream(mds.GetAs<std::string>("calibration.stopTime")) >> sarParam.calibrationStopTime;
+  return true;
 }
 
 void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const
