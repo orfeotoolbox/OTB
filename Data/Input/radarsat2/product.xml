@@ -1,0 +1,4238 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<product xmlns="http://www.rsi.ca/rs2/prod/xml/schemas" copyright="RADARSAT-2 Data and Products (c) MacDonald, Dettwiler and Associates Ltd., 2008 - All Rights Reserved." xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.rsi.ca/rs2/prod/xml/schemas schemas/rs2prod_product.xsd">
+	<productId>PDS_00058860</productId>
+	<documentIdentifier>RN-RP-51-27, Issue 1/2</documentIdentifier>
+	<sourceAttributes>
+		<satellite>RADARSAT-2</satellite>
+		<sensor>SAR</sensor>
+		<inputDatasetId>61190</inputDatasetId>
+		<imageId>4511</imageId>
+		<inputDatasetFacilityId>GATN</inputDatasetFacilityId>
+		<beamModeId>616</beamModeId>
+		<beamModeMnemonic>FQ9</beamModeMnemonic>
+		<rawDataStartTime>2008-04-05T12:49:00.995676Z</rawDataStartTime>
+		<radarParameters>
+			<acquisitionType>Fine Quad Polarization</acquisitionType>
+			<beams>Q9</beams>
+			<polarizations>HH VV HV VH</polarizations>
+			<pulses>30short</pulses>
+			<rank beam="Q9">16</rank>
+			<settableGain beam="Q9" pole="HH" wing="Combined" units="dB">-1.349999992092401e+01</settableGain>
+			<settableGain beam="Q9" pole="HV" wing="Combined" units="dB">-1.349999992092401e+01</settableGain>
+			<settableGain beam="Q9" pole="VH" wing="Combined" units="dB">-1.349999992092401e+01</settableGain>
+			<settableGain beam="Q9" pole="VV" wing="Combined" units="dB">-1.349999992092401e+01</settableGain>
+			<radarCenterFrequency units="Hz">5.404999242769673e+09</radarCenterFrequency>
+			<pulseRepetitionFrequency beam="Q9" units="Hz">2.756302978515625e+03</pulseRepetitionFrequency>
+			<pulseLength pulse="30short" units="s">2.080838775634766e-05</pulseLength>
+			<pulseBandwidth pulse="30short" units="Hz">3.002442203000000e+07</pulseBandwidth>
+			<antennaPointing>Right</antennaPointing>
+			<adcSamplingRate pulse="30short" units="Hz">3.166992187500000e+07</adcSamplingRate>
+			<yawSteeringFlag>YawSteeringOn</yawSteeringFlag>
+			<geodeticFlag>Off-Geocentric</geodeticFlag>
+			<rawBitsPerSample>3</rawBitsPerSample>
+			<samplesPerEchoLine beam="Q9">3468</samplesPerEchoLine>
+			<referenceNoiseLevel incidenceAngleCorrection="Beta Nought">
+				<pixelFirstNoiseValue>8</pixelFirstNoiseValue>
+				<stepSize>29</stepSize>
+				<numberOfNoiseLevelValues>98</numberOfNoiseLevelValues>
+				<noiseLevelValues units="dB">-3.17334995e+01 -3.18590603e+01 -3.19768200e+01 -3.20935402e+01 -3.22103691e+01 -3.23199997e+01 -3.24281807e+01 -3.25364494e+01 -3.26380310e+01 -3.27378311e+01 -3.28377190e+01 -3.29313011e+01 -3.30228500e+01 -3.31144791e+01 -3.32001190e+01 -3.32835503e+01 -3.33670502e+01 -3.34447899e+01 -3.35201988e+01 -3.35956612e+01 -3.36655083e+01 -3.37329903e+01 -3.38005104e+01 -3.38624916e+01 -3.39221001e+01 -3.39817581e+01 -3.40358505e+01 -3.40876503e+01 -3.41394882e+01 -3.41856918e+01 -3.42297287e+01 -3.42737999e+01 -3.43120689e+01 -3.43483696e+01 -3.43847008e+01 -3.44150085e+01 -3.44435806e+01 -3.44721794e+01 -3.44944801e+01 -3.45153389e+01 -3.45362091e+01 -3.45504112e+01 -3.45635414e+01 -3.45766792e+01 -3.45827103e+01 -3.45880890e+01 -3.45934601e+01 -3.45912399e+01 -3.45888214e+01 -3.45860405e+01 -3.45758018e+01 -3.45655518e+01 -3.45543098e+01 -3.45361786e+01 -3.45180283e+01 -3.44981995e+01 -3.44721107e+01 -3.44459801e+01 -3.44174194e+01 -3.43832703e+01 -3.43490906e+01 -3.43116302e+01 -3.42693291e+01 -3.42269783e+01 -3.41804199e+01 -3.41298485e+01 -3.40792198e+01 -3.40233688e+01 -3.39643898e+01 -3.39053612e+01 -3.38399696e+01 -3.37724419e+01 -3.37048492e+01 -3.36296616e+01 -3.35534210e+01 -3.34768906e+01 -3.33918304e+01 -3.33067017e+01 -3.32199593e+01 -3.31258087e+01 -3.30315704e+01 -3.29342804e+01 -3.28308182e+01 -3.27272491e+01 -3.26190605e+01 -3.25060196e+01 -3.23928909e+01 -3.22733688e+01 -3.21505089e+01 -3.20275192e+01 -3.18962307e+01 -3.17632294e+01 -3.16298599e+01 -3.14865303e+01 -3.13430500e+01 -3.11972008e+01 -3.10430393e+01 -3.08887291e+01</noiseLevelValues>
+			</referenceNoiseLevel>
+			<referenceNoiseLevel incidenceAngleCorrection="Sigma Nought">
+				<pixelFirstNoiseValue>8</pixelFirstNoiseValue>
+				<stepSize>29</stepSize>
+				<numberOfNoiseLevelValues>98</numberOfNoiseLevelValues>
+				<noiseLevelValues units="dB">-3.47682610e+01 -3.48961601e+01 -3.50162582e+01 -3.51353188e+01 -3.52545013e+01 -3.53664818e+01 -3.54770203e+01 -3.55876503e+01 -3.56915894e+01 -3.57937508e+01 -3.58960114e+01 -3.59919701e+01 -3.60858994e+01 -3.61799088e+01 -3.62679405e+01 -3.63537483e+01 -3.64396400e+01 -3.65197792e+01 -3.65975800e+01 -3.66754608e+01 -3.67477112e+01 -3.68176003e+01 -3.68875389e+01 -3.69519310e+01 -3.70139618e+01 -3.70760498e+01 -3.71325684e+01 -3.71868095e+01 -3.72410889e+01 -3.72897301e+01 -3.73362007e+01 -3.73827286e+01 -3.74234581e+01 -3.74622192e+01 -3.75009995e+01 -3.75337791e+01 -3.75648193e+01 -3.75958900e+01 -3.76206703e+01 -3.76440010e+01 -3.76673584e+01 -3.76840591e+01 -3.76996803e+01 -3.77153091e+01 -3.77238503e+01 -3.77317314e+01 -3.77396088e+01 -3.77398987e+01 -3.77400017e+01 -3.77397385e+01 -3.77320290e+01 -3.77243004e+01 -3.77155991e+01 -3.77000008e+01 -3.76843910e+01 -3.76671219e+01 -3.76435814e+01 -3.76199989e+01 -3.75940018e+01 -3.75624199e+01 -3.75307999e+01 -3.74959106e+01 -3.74561806e+01 -3.74164200e+01 -3.73724403e+01 -3.73244591e+01 -3.72764282e+01 -3.72231598e+01 -3.71667900e+01 -3.71103592e+01 -3.70475807e+01 -3.69826698e+01 -3.69177017e+01 -3.68451309e+01 -3.67715187e+01 -3.66976204e+01 -3.66152000e+01 -3.65327110e+01 -3.64486084e+01 -3.63571091e+01 -3.62655296e+01 -3.61708908e+01 -3.60700989e+01 -3.59692001e+01 -3.58636818e+01 -3.57533188e+01 -3.56428604e+01 -3.55260315e+01 -3.54058609e+01 -3.52855606e+01 -3.51569786e+01 -3.50266685e+01 -3.48960190e+01 -3.47554016e+01 -3.46146393e+01 -3.44715118e+01 -3.43200798e+01 -3.41684990e+01</noiseLevelValues>
+			</referenceNoiseLevel>
+			<referenceNoiseLevel incidenceAngleCorrection="Gamma">
+				<pixelFirstNoiseValue>8</pixelFirstNoiseValue>
+				<stepSize>29</stepSize>
+				<numberOfNoiseLevelValues>98</numberOfNoiseLevelValues>
+				<noiseLevelValues units="dB">-3.41516609e+01 -3.42803192e+01 -3.44011917e+01 -3.45210190e+01 -3.46409607e+01 -3.47537117e+01 -3.48650208e+01 -3.49764214e+01 -3.50811310e+01 -3.51840591e+01 -3.52870789e+01 -3.53838005e+01 -3.54785004e+01 -3.55732803e+01 -3.56620789e+01 -3.57486610e+01 -3.58353310e+01 -3.59162216e+01 -3.59948006e+01 -3.60734406e+01 -3.61464691e+01 -3.62171211e+01 -3.62878304e+01 -3.63529892e+01 -3.64157906e+01 -3.64786491e+01 -3.65359383e+01 -3.65909386e+01 -3.66459885e+01 -3.66954002e+01 -3.67426491e+01 -3.67899399e+01 -3.68314400e+01 -3.68709717e+01 -3.69105301e+01 -3.69440689e+01 -3.69758797e+01 -3.70077286e+01 -3.70332718e+01 -3.70573807e+01 -3.70815010e+01 -3.70989685e+01 -3.71153603e+01 -3.71317596e+01 -3.71410713e+01 -3.71497192e+01 -3.71583786e+01 -3.71594315e+01 -3.71603088e+01 -3.71608200e+01 -3.71538696e+01 -3.71469193e+01 -3.71389885e+01 -3.71241684e+01 -3.71093292e+01 -3.70928192e+01 -3.70700493e+01 -3.70472488e+01 -3.70220184e+01 -3.69912109e+01 -3.69603691e+01 -3.69262390e+01 -3.68872910e+01 -3.68482895e+01 -3.68050919e+01 -3.67578812e+01 -3.67106209e+01 -3.66581306e+01 -3.66025314e+01 -3.65468788e+01 -3.64848709e+01 -3.64207306e+01 -3.63565292e+01 -3.62847404e+01 -3.62118912e+01 -3.61387711e+01 -3.60571289e+01 -3.59753990e+01 -3.58920784e+01 -3.58013611e+01 -3.57105408e+01 -3.56166916e+01 -3.55166588e+01 -3.54165306e+01 -3.53117905e+01 -3.52022095e+01 -3.50925217e+01 -3.49764709e+01 -3.48570595e+01 -3.47375488e+01 -3.46097298e+01 -3.44802094e+01 -3.43503304e+01 -3.42104797e+01 -3.40704994e+01 -3.39281387e+01 -3.37774811e+01 -3.36266785e+01</noiseLevelValues>
+			</referenceNoiseLevel>
+		</radarParameters>
+		<rawDataAttributes>
+			<numberOfInputDataGaps>0</numberOfInputDataGaps>
+			<gapSize>100</gapSize>
+			<numberOfMissingLines pole="HH">0</numberOfMissingLines>
+			<numberOfMissingLines pole="HV">0</numberOfMissingLines>
+			<numberOfMissingLines pole="VH">0</numberOfMissingLines>
+			<numberOfMissingLines pole="VV">0</numberOfMissingLines>
+			<rawDataAnalysis pole="HH" wing="Combined" pulse="30short">
+				<bias dataStream="Real">-4.12333608e-01</bias>
+				<bias dataStream="Imaginary">-1.27562153e+00</bias>
+				<standardDeviation dataStream="Real">2.30635643e+01</standardDeviation>
+				<standardDeviation dataStream="Imaginary">2.45960903e+01</standardDeviation>
+				<gainImbalance>8.792668205684464e-01</gainImbalance>
+				<phaseOrthogonality units="deg">-2.41488552e+00</phaseOrthogonality>
+				<rawDataHistogram dataStream="Real">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2503 0 0 0 0 0 0 0 0 0 0 34133 0 0 0 0 0 0 0 0 0 40918 0 0 0 6934 0 0 0 20180 0 0 76351 0 0 11019 0 0 77962 0 0 438 0 56031 0 0 0 0 178502 0 1686 0 164814 0 7202 88309 500 40349 538 0 3613 21557 216585 1084 219409 114576 63893 1834 7896 35360 652 909 774 433 24366 5613 1731 62681 113021 215049 812 216365 21733 3523 0 546 39472 427 86060 6391 0 160817 0 1450 0 173450 0 0 0 0 53556 0 367 0 0 74609 0 0 10246 0 0 73230 0 0 18181 0 0 0 6613 0 0 0 37001 0 0 0 0 0 0 0 0 0 30872 0 0 0 0 0 0 0 0 0 0 2270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</rawDataHistogram>
+				<rawDataHistogram dataStream="Imaginary">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3919 0 0 0 0 0 0 0 0 0 0 49134 0 0 0 0 0 0 0 0 0 56982 0 0 0 7972 0 0 0 28838 0 0 85985 0 0 15708 0 0 87193 0 0 500 0 61478 0 0 0 0 181249 0 1807 0 165372 0 8126 89786 522 41097 579 0 3579 20361 204726 1388 208407 107841 60210 1875 8463 37674 806 721 493 245 19751 4656 1657 58049 104363 198927 788 199739 19817 3297 0 509 37597 474 81095 6494 0 153745 0 1509 0 166745 0 0 0 0 53843 0 426 0 0 76592 0 0 11742 0 0 75944 0 0 22215 0 0 0 7043 0 0 0 45104 0 0 0 0 0 0 0 0 0 39286 0 0 0 0 0 0 0 0 0 0 2953 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</rawDataHistogram>
+			</rawDataAnalysis>
+			<rawDataAnalysis pole="HV" wing="Combined" pulse="30short">
+				<bias dataStream="Real">-5.78479528e-01</bias>
+				<bias dataStream="Imaginary">-1.05201924e+00</bias>
+				<standardDeviation dataStream="Real">5.67261744e+00</standardDeviation>
+				<standardDeviation dataStream="Imaginary">6.07909155e+00</standardDeviation>
+				<gainImbalance>8.707422127882616e-01</gainImbalance>
+				<phaseOrthogonality units="deg">-2.82604504e+00</phaseOrthogonality>
+				<rawDataHistogram dataStream="Real">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 4097 0 15067 0 0 74422 7859 38435 64454 109579 20293 38417 100407 367312 108181 113744 510106 47555 10001 460958 102804 89080 310640 78859 28241 17062 83579 43710 24190 5977 49254 0 0 10331 0 2782 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</rawDataHistogram>
+				<rawDataHistogram dataStream="Imaginary">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 6454 0 23147 0 0 110634 9216 56597 88353 127965 21254 44564 107207 374092 110366 107892 476297 42519 9338 412632 92523 79600 284889 73340 27143 16320 82580 45872 27012 6157 57617 0 0 12386 0 3430 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</rawDataHistogram>
+			</rawDataAnalysis>
+			<rawDataAnalysis pole="VH" wing="Combined" pulse="30short">
+				<bias dataStream="Real">-3.67780298e-01</bias>
+				<bias dataStream="Imaginary">-1.25120282e+00</bias>
+				<standardDeviation dataStream="Real">5.56536722e+00</standardDeviation>
+				<standardDeviation dataStream="Imaginary">5.92126942e+00</standardDeviation>
+				<gainImbalance>8.834012180560116e-01</gainImbalance>
+				<phaseOrthogonality units="deg">-1.93528330e+00</phaseOrthogonality>
+				<rawDataHistogram dataStream="Real">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2418 0 11114 0 0 68494 4765 37208 58643 105779 12706 38142 88500 366685 123156 85035 516751 48663 16769 490201 79837 108821 326847 75530 31878 11220 87864 45038 27577 4192 53228 0 0 8511 0 1824 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</rawDataHistogram>
+				<rawDataHistogram dataStream="Imaginary">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 4267 0 18953 0 0 114956 6209 63444 92562 133101 14005 48368 105478 390509 131897 84762 505702 36969 7537 426917 70502 90358 279681 64196 27470 10030 77240 39902 25608 3738 52350 0 0 8644 0 2041 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</rawDataHistogram>
+			</rawDataAnalysis>
+			<rawDataAnalysis pole="VV" wing="Combined" pulse="30short">
+				<bias dataStream="Real">-6.39854252e-01</bias>
+				<bias dataStream="Imaginary">-1.07624507e+00</bias>
+				<standardDeviation dataStream="Real">2.37677288e+01</standardDeviation>
+				<standardDeviation dataStream="Imaginary">2.54618244e+01</standardDeviation>
+				<gainImbalance>8.713573587425003e-01</gainImbalance>
+				<phaseOrthogonality units="deg">-3.46600151e+00</phaseOrthogonality>
+				<rawDataHistogram dataStream="Real">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 18 0 0 0 0 0 0 0 0 0 0 0 0 0 6258 0 0 0 0 0 0 0 0 0 0 39012 0 0 0 0 43 0 0 0 0 36699 0 0 0 16471 0 0 0 19368 0 0 85366 0 0 8433 0 0 70778 0 0 166 0 73214 0 0 98 0 187734 0 3085 0 149262 0 4880 83585 124 29326 951 0 1504 49881 238941 4735 199776 107668 45590 626 17071 28004 693 883 662 377 16975 10741 604 44430 105591 193275 1791 236680 49566 1279 0 814 27621 106 79956 4238 0 143398 0 2721 0 180294 0 97 0 0 69709 0 121 0 0 65543 0 0 7155 0 0 79914 0 0 16792 0 0 0 14954 0 0 0 32064 0 0 0 0 63 0 0 0 0 34245 0 0 0 0 0 0 0 0 0 0 5367 0 0 0 0 0 0 0 0 0 0 0 0 0 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</rawDataHistogram>
+				<rawDataHistogram dataStream="Imaginary">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 25 0 0 0 0 0 0 0 0 0 0 0 0 0 9034 0 0 0 0 0 0 0 0 0 0 54531 0 0 0 0 70 0 0 0 0 50600 0 0 0 18204 0 0 0 26994 0 0 94169 0 0 11596 0 0 77946 0 0 172 0 77442 0 0 126 0 186799 0 3337 0 146845 0 5221 83087 119 28974 914 0 1484 46369 223076 5429 189068 100590 42547 771 16309 26908 678 783 531 282 16155 10233 537 41401 97981 179220 1988 219232 45820 1259 0 778 26803 130 76563 4500 0 137757 0 2872 0 175533 0 88 0 0 69820 0 132 0 0 69586 0 0 9129 0 0 85342 0 0 21947 0 0 0 16998 0 0 0 41269 0 0 0 0 64 0 0 0 0 45647 0 0 0 0 0 0 0 0 0 0 7562 0 0 0 0 0 0 0 0 0 0 0 0 0 20 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</rawDataHistogram>
+			</rawDataAnalysis>
+		</rawDataAttributes>
+		<orbitAndAttitude>
+			<orbitInformation>
+				<passDirection>Descending</passDirection>
+				<orbitDataSource>Downlinked</orbitDataSource>
+				<orbitDataFile>01614_PRED.ORB</orbitDataFile>
+				<stateVector>
+					<timeStamp>2008-04-05T12:49:00.995000Z</timeStamp>
+					<xPosition units="m">-1.891892785653272e+05</xPosition>
+					<yPosition units="m">-4.754711107277767e+06</yPosition>
+					<zPosition units="m">5.356754503527623e+06</zPosition>
+					<xVelocity units="m/s">-2.237218627130632e+03</xVelocity>
+					<yVelocity units="m/s">-5.354985407826776e+03</yVelocity>
+					<zVelocity units="m/s">-4.820668157819005e+03</zVelocity>
+				</stateVector>
+				<stateVector>
+					<timeStamp>2008-04-05T12:49:03.453250Z</timeStamp>
+					<xPosition units="m">-1.946906415865002e+05</xPosition>
+					<yPosition units="m">-4.767858505616386e+06</yPosition>
+					<zPosition units="m">5.344886571715014e+06</zPosition>
+					<xVelocity units="m/s">-2.238628598066843e+03</xVelocity>
+					<yVelocity units="m/s">-5.341591683148660e+03</yVelocity>
+					<zVelocity units="m/s">-4.834925502431463e+03</zVelocity>
+				</stateVector>
+				<stateVector>
+					<timeStamp>2008-04-05T12:49:05.911500Z</timeStamp>
+					<xPosition units="m">-2.001954745229657e+05</xPosition>
+					<yPosition units="m">-4.780973044957695e+06</yPosition>
+					<zPosition units="m">5.332983515269488e+06</zPosition>
+					<xVelocity units="m/s">-2.240019293150771e+03</xVelocity>
+					<yVelocity units="m/s">-5.328162541569744e+03</yVelocity>
+					<zVelocity units="m/s">-4.849151488248659e+03</zVelocity>
+				</stateVector>
+				<stateVector>
+					<timeStamp>2008-04-05T12:49:08.369750Z</timeStamp>
+					<xPosition units="m">-2.057037780108174e+05</xPosition>
+					<yPosition units="m">-4.794054727416220e+06</yPosition>
+					<zPosition units="m">5.321045332466056e+06</zPosition>
+					<xVelocity units="m/s">-2.241390614093003e+03</xVelocity>
+					<yVelocity units="m/s">-5.314697777931067e+03</yVelocity>
+					<zVelocity units="m/s">-4.863345932393122e+03</zVelocity>
+				</stateVector>
+				<stateVector>
+					<timeStamp>2008-04-05T12:49:10.828000Z</timeStamp>
+					<xPosition units="m">-2.112155496264221e+05</xPosition>
+					<yPosition units="m">-4.807103545840835e+06</yPosition>
+					<zPosition units="m">5.309072028894496e+06</zPosition>
+					<xVelocity units="m/s">-2.242742891997282e+03</xVelocity>
+					<yVelocity units="m/s">-5.301198083286001e+03</yVelocity>
+					<zVelocity units="m/s">-4.877509450941664e+03</zVelocity>
+				</stateVector>
+			</orbitInformation>
+			<attitudeInformation>
+				<attitudeDataSource>Downlink</attitudeDataSource>
+				<attitudeOffsetsApplied>true</attitudeOffsetsApplied>
+				<attitudeAngles>
+					<timeStamp>2008-04-05T12:49:00.995000Z</timeStamp>
+					<yaw units="deg">2.556083157582667e+00</yaw>
+					<roll units="deg">-2.979749283153132e+01</roll>
+					<pitch units="deg">-2.204682589991813e-04</pitch>
+				</attitudeAngles>
+				<attitudeAngles>
+					<timeStamp>2008-04-05T12:49:03.453250Z</timeStamp>
+					<yaw units="deg">2.563656866295605e+00</yaw>
+					<roll units="deg">-2.979724437767180e+01</roll>
+					<pitch units="deg">-8.102051988239394e-05</pitch>
+				</attitudeAngles>
+				<attitudeAngles>
+					<timeStamp>2008-04-05T12:49:05.911500Z</timeStamp>
+					<yaw units="deg">2.571509468087895e+00</yaw>
+					<roll units="deg">-2.979703487416782e+01</roll>
+					<pitch units="deg">1.556718101857780e-03</pitch>
+				</attitudeAngles>
+				<attitudeAngles>
+					<timeStamp>2008-04-05T12:49:08.369750Z</timeStamp>
+					<yaw units="deg">2.578910722430960e+00</yaw>
+					<roll units="deg">-2.979724838721616e+01</roll>
+					<pitch units="deg">2.949049839099387e-03</pitch>
+				</attitudeAngles>
+				<attitudeAngles>
+					<timeStamp>2008-04-05T12:49:10.828000Z</timeStamp>
+					<yaw units="deg">2.586559934903789e+00</yaw>
+					<roll units="deg">-2.979778895669789e+01</roll>
+					<pitch units="deg">3.731565118614525e-03</pitch>
+				</attitudeAngles>
+			</attitudeInformation>
+		</orbitAndAttitude>
+	</sourceAttributes>
+	<imageGenerationParameters>
+		<generalProcessingInformation>
+			<productType>SLC</productType>
+			<processingFacility>GSS</processingFacility>
+			<processingTime>2008-04-05T13:35:50.000000Z</processingTime>
+			<softwareVersion>7.9.1</softwareVersion>
+		</generalProcessingInformation>
+		<sarProcessingInformation>
+			<lutApplied>Constant-beta</lutApplied>
+			<elevationPatternCorrection>true</elevationPatternCorrection>
+			<rangeSpreadingLossCorrection>true</rangeSpreadingLossCorrection>
+			<pulseDependantGainCorrection>true</pulseDependantGainCorrection>
+			<receiverSettableGain>true</receiverSettableGain>
+			<rawDataCorrection>true</rawDataCorrection>
+			<rangeReferenceFunctionSource>Nominal Chirp</rangeReferenceFunctionSource>
+			<interPolarizationMatricesCorrection>true</interPolarizationMatricesCorrection>
+			<dopplerSource>Adaptive Analysis</dopplerSource>
+			<dopplerAmbiguityComputed>false</dopplerAmbiguityComputed>
+			<dopplerAmbiguityUsed>false</dopplerAmbiguityUsed>
+			<estimatedRollAngleUsed>false</estimatedRollAngleUsed>
+			<radiometricSmoothingPerformed>false</radiometricSmoothingPerformed>
+			<zeroDopplerTimeFirstLine>2008-04-05T12:49:01.091411Z</zeroDopplerTimeFirstLine>
+			<zeroDopplerTimeLastLine>2008-04-05T12:49:10.489507Z</zeroDopplerTimeLastLine>
+			<numberOfLinesProcessed pole="HH">13546</numberOfLinesProcessed>
+			<numberOfLinesProcessed pole="VV">13546</numberOfLinesProcessed>
+			<numberOfLinesProcessed pole="HV">13546</numberOfLinesProcessed>
+			<numberOfLinesProcessed pole="VH">13546</numberOfLinesProcessed>
+			<samplingWindowStartTimeFirstRawLine beam="Q9" units="s">1.386804810360777e-04</samplingWindowStartTimeFirstRawLine>
+			<samplingWindowStartTimeLastRawLine beam="Q9" units="s">1.377332099907493e-04</samplingWindowStartTimeLastRawLine>
+			<numberOfSwstChanges beam="Q9">1</numberOfSwstChanges>
+			<numberOfRangeLooks>1</numberOfRangeLooks>
+			<rangeLookBandwidth units="Hz">3.002442000000000e+07</rangeLookBandwidth>
+			<totalProcessedRangeBandwidth units="Hz">3.002442000000000e+07</totalProcessedRangeBandwidth>
+			<numberOfAzimuthLooks>1</numberOfAzimuthLooks>
+			<scalarLookWeights>1.000000000000000e+00</scalarLookWeights>
+			<azimuthLookBandwidth units="Hz">8.550000000000000e+02</azimuthLookBandwidth>
+			<totalProcessedAzimuthBandwidth units="Hz">8.550000000000000e+02</totalProcessedAzimuthBandwidth>
+			<azimuthWindow>
+				<windowName>Kaiser</windowName>
+				<windowCoefficient>2.40000010e+00</windowCoefficient>
+			</azimuthWindow>
+			<rangeWindow>
+				<windowName>Kaiser</windowName>
+				<windowCoefficient>2.40000010e+00</windowCoefficient>
+			</rangeWindow>
+			<incidenceAngleNearRange units="deg">2.80289745e+01</incidenceAngleNearRange>
+			<incidenceAngleFarRange units="deg">2.98192348e+01</incidenceAngleFarRange>
+			<slantRangeNearEdge units="m">8.906360951028680e+05</slantRangeNearEdge>
+			<satelliteHeight units="m">7.988210625000000e+05</satelliteHeight>
+		</sarProcessingInformation>
+		<dopplerCentroid>
+			<timeOfDopplerCentroidEstimate>2008-04-05T12:49:05.790459Z</timeOfDopplerCentroidEstimate>
+			<dopplerAmbiguity>0</dopplerAmbiguity>
+			<dopplerAmbiguityConfidence>0.000000000000000e+00</dopplerAmbiguityConfidence>
+			<dopplerCentroidReferenceTime units="s">5.941462237400000e-03</dopplerCentroidReferenceTime>
+			<dopplerCentroidPolynomialPeriod units="s">8.869614535043926e-05</dopplerCentroidPolynomialPeriod>
+			<dopplerCentroidCoefficients>-2.335583963700000e+02 -9.541877102599999e+03 1.479360821900000e+07</dopplerCentroidCoefficients>
+			<dopplerCentroidConfidence>9.914513826370239e-01</dopplerCentroidConfidence>
+		</dopplerCentroid>
+		<dopplerRateValues>
+			<dopplerRateReferenceTime units="s">5.941462237400000e-03</dopplerRateReferenceTime>
+			<dopplerRateValuesCoefficients>-2.032262259000000e+03 3.585199206543864e+05 -6.189088550600000e+07</dopplerRateValuesCoefficients>
+		</dopplerRateValues>
+		<chirp pole="HH" wing="Combined" pulse="30short">
+			<chirpQuality>
+				<replicaQualityValid>true</replicaQualityValid>
+				<crossCorrelationWidth>9.330863952636719e-01</crossCorrelationWidth>
+				<sideLobeLevel units="dB">-1.294283008575439e+01</sideLobeLevel>
+				<integratedSideLobeRatio units="dB">-1.011688041687012e+01</integratedSideLobeRatio>
+				<crossCorrelationPeakLoc>9.492977142333984e+01</crossCorrelationPeakLoc>
+			</chirpQuality>
+			<chirpPower units="dB">6.387525654060855e+01</chirpPower>
+			<amplitudeCoefficients>1.00000000e+00 -2.05195605e+03 -2.02950592e+08 -1.73786897e+13</amplitudeCoefficients>
+			<phaseCoefficients>7.25005984e-01 -1.91344495e+03 -7.21530520e+11 -1.47157596e+13</phaseCoefficients>
+		</chirp>
+		<chirp pole="HV" wing="Combined" pulse="30short">
+			<chirpQuality>
+				<replicaQualityValid>true</replicaQualityValid>
+				<crossCorrelationWidth>9.359784722328186e-01</crossCorrelationWidth>
+				<sideLobeLevel units="dB">-1.322982978820801e+01</sideLobeLevel>
+				<integratedSideLobeRatio units="dB">-1.023840045928955e+01</integratedSideLobeRatio>
+				<crossCorrelationPeakLoc>9.546926116943359e+01</crossCorrelationPeakLoc>
+			</chirpQuality>
+			<chirpPower units="dB">6.395807467641178e+01</chirpPower>
+			<amplitudeCoefficients>1.00000000e+00 -1.20706201e+03 -5.06236400e+07 -1.92600699e+13</amplitudeCoefficients>
+			<phaseCoefficients>1.57817200e-01 2.07749453e+04 -7.21552081e+11 1.22252501e+13</phaseCoefficients>
+		</chirp>
+		<chirp pole="VH" wing="Combined" pulse="30short">
+			<chirpQuality>
+				<replicaQualityValid>true</replicaQualityValid>
+				<crossCorrelationWidth>9.329404234886169e-01</crossCorrelationWidth>
+				<sideLobeLevel units="dB">-1.294060039520264e+01</sideLobeLevel>
+				<integratedSideLobeRatio units="dB">-1.010676002502441e+01</integratedSideLobeRatio>
+				<crossCorrelationPeakLoc>9.492987060546875e+01</crossCorrelationPeakLoc>
+			</chirpQuality>
+			<chirpPower units="dB">6.388572825616548e+01</chirpPower>
+			<amplitudeCoefficients>1.00000000e+00 -1.80584802e+03 -1.82811696e+08 -2.35394596e+13</amplitudeCoefficients>
+			<phaseCoefficients>7.24356472e-01 -1.91568005e+03 -7.21532223e+11 -1.47305697e+13</phaseCoefficients>
+		</chirp>
+		<chirp pole="VV" wing="Combined" pulse="30short">
+			<chirpQuality>
+				<replicaQualityValid>true</replicaQualityValid>
+				<crossCorrelationWidth>9.357389807701111e-01</crossCorrelationWidth>
+				<sideLobeLevel units="dB">-1.324477958679199e+01</sideLobeLevel>
+				<integratedSideLobeRatio units="dB">-1.022628974914551e+01</integratedSideLobeRatio>
+				<crossCorrelationPeakLoc>9.546923828125000e+01</crossCorrelationPeakLoc>
+			</chirpQuality>
+			<chirpPower units="dB">6.396300446533640e+01</chirpPower>
+			<amplitudeCoefficients>1.00000000e+00 -1.55576599e+03 -4.42937600e+07 -7.25087211e+12</amplitudeCoefficients>
+			<phaseCoefficients>1.58608899e-01 2.08209844e+04 -7.21550574e+11 1.05402901e+13</phaseCoefficients>
+		</chirp>
+		<slantRangeToGroundRange>
+			<zeroDopplerAzimuthTime>2008-04-05T12:49:05.790459Z</zeroDopplerAzimuthTime>
+			<slantRangeTimeToFirstRangeSample units="s">5.941684464276070e-03</slantRangeTimeToFirstRangeSample>
+			<groundRangeOrigin units="m">0.000000000000000e+00</groundRangeOrigin>
+			<groundToSlantRangeCoefficients>8.906360951028680e+05 1.000000000000000e+00 0.000000000000000e+00 0.000000000000000e+00 0.000000000000000e+00 0.000000000000000e+00</groundToSlantRangeCoefficients>
+		</slantRangeToGroundRange>
+		<payloadCharacteristicsParameterFile>PCP_beam_E2007_12_14_00_00_00_G2008_03_08_00_00_00.xml</payloadCharacteristicsParameterFile>
+		<payloadCharacteristicsParameterFile>PCP_baq_E2007_12_14_00_00_00_G2008_01_08_00_00_00.xml</payloadCharacteristicsParameterFile>
+		<payloadCharacteristicsParameterFile>PCP_pulse_E2007_12_14_00_00_00_G2008_04_02_00_00_00.xml</payloadCharacteristicsParameterFile>
+		<payloadCharacteristicsParameterFile>PCP_polarimetric_E2007_12_14_00_00_00_G2008_02_11_00_00_00.xml</payloadCharacteristicsParameterFile>
+		<payloadCharacteristicsParameterFile>PCP_instrument_E2007_12_14_00_00_00_G2008_02_13_00_00_00.xml</payloadCharacteristicsParameterFile>
+	</imageGenerationParameters>
+	<imageAttributes>
+		<productFormat>GeoTIFF</productFormat>
+		<outputMediaInterleaving>BSQ</outputMediaInterleaving>
+		<rasterAttributes>
+			<dataType>Complex</dataType>
+			<bitsPerSample dataStream="Real">16</bitsPerSample>
+			<bitsPerSample dataStream="Imaginary">16</bitsPerSample>
+			<numberOfSamplesPerLine>2822</numberOfSamplesPerLine>
+			<numberOfLines>12953</numberOfLines>
+			<sampledPixelSpacing units="m">4.73307896e+00</sampledPixelSpacing>
+			<sampledLineSpacing units="m">4.82540178e+00</sampledLineSpacing>
+			<lineTimeOrdering>Increasing</lineTimeOrdering>
+			<pixelTimeOrdering>Decreasing</pixelTimeOrdering>
+		</rasterAttributes>
+		<geographicInformation>
+			<geolocationGrid>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>0.00000000e+00</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.940392521219377e+01</latitude>
+						<longitude units="deg">-9.758568320629588e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>0.00000000e+00</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.940019447033016e+01</latitude>
+						<longitude units="deg">-9.755774133346823e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>0.00000000e+00</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.939644172154247e+01</latitude>
+						<longitude units="deg">-9.752968970126001e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>0.00000000e+00</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.939266664245886e+01</latitude>
+						<longitude units="deg">-9.750152656142117e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>0.00000000e+00</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.938886890146231e+01</latitude>
+						<longitude units="deg">-9.747325012110781e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>0.00000000e+00</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.938504815839581e+01</latitude>
+						<longitude units="deg">-9.744485854128858e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>0.00000000e+00</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.938120406425427e+01</latitude>
+						<longitude units="deg">-9.741634993507706e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>0.00000000e+00</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.937733626086175e+01</latitude>
+						<longitude units="deg">-9.738772236598615e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>0.00000000e+00</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.937344438053349e+01</latitude>
+						<longitude units="deg">-9.735897384610014e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>0.00000000e+00</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.936952804572199e+01</latitude>
+						<longitude units="deg">-9.733010233415943e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>0.00000000e+00</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.936558686864576e+01</latitude>
+						<longitude units="deg">-9.730110573355266e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>0.00000000e+00</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.936162045090006e+01</latitude>
+						<longitude units="deg">-9.727198189021097e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>0.00000000e+00</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.935762838304849e+01</latitude>
+						<longitude units="deg">-9.724272859039840e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>0.00000000e+00</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.935361024419419e+01</latitude>
+						<longitude units="deg">-9.721334355839230e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666687e+02</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.938100984749256e+01</latitude>
+						<longitude units="deg">-9.759298456458887e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666687e+02</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.937727969569120e+01</latitude>
+						<longitude units="deg">-9.756505614637624e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666687e+02</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.937352754594807e+01</latitude>
+						<longitude units="deg">-9.753701802415851e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666687e+02</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.936975307502718e+01</latitude>
+						<longitude units="deg">-9.750886845065116e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666687e+02</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.936595595145116e+01</latitude>
+						<longitude units="deg">-9.748060563400274e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666687e+02</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.936213583520674e+01</latitude>
+						<longitude units="deg">-9.745222773620191e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666687e+02</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.935829237743665e+01</latitude>
+						<longitude units="deg">-9.742373287141145e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666687e+02</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.935442522011715e+01</latitude>
+						<longitude units="deg">-9.739511910422341e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666687e+02</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.935053399572025e+01</latitude>
+						<longitude units="deg">-9.736638444783273e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666687e+02</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.934661832685983e+01</latitude>
+						<longitude units="deg">-9.733752686212271e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666687e+02</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.934267782592075e+01</latitude>
+						<longitude units="deg">-9.730854425165901e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666687e+02</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.933871209466970e+01</latitude>
+						<longitude units="deg">-9.727943446358506e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666687e+02</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.933472072384707e+01</latitude>
+						<longitude units="deg">-9.725019528541384e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666687e+02</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.933070329273829e+01</latitude>
+						<longitude units="deg">-9.722082444271005e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933337e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.935809421773835e+01</latitude>
+						<longitude units="deg">-9.760028153457533e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933337e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.935436465424930e+01</latitude>
+						<longitude units="deg">-9.757236655465323e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933337e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.935061310178820e+01</latitude>
+						<longitude units="deg">-9.754434192604084e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933337e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.934683923725470e+01</latitude>
+						<longitude units="deg">-9.751620590241801e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933337e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.934304272931089e+01</latitude>
+						<longitude units="deg">-9.748795669292447e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933337e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.933922323808702e+01</latitude>
+						<longitude units="deg">-9.745959246056800e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933337e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.933538041487345e+01</latitude>
+						<longitude units="deg">-9.743111132055921e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933337e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.933151390179843e+01</latitude>
+						<longitude units="deg">-9.740251133856842e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933337e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.932762333149048e+01</latitude>
+						<longitude units="deg">-9.737379052889955e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933337e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.932370832672470e+01</latitude>
+						<longitude units="deg">-9.734494685257792e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933337e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.931976850005199e+01</latitude>
+						<longitude units="deg">-9.731597821534469e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933337e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.931580345341033e+01</latitude>
+						<longitude units="deg">-9.728688246555427e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933337e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.931181277771655e+01</latitude>
+						<longitude units="deg">-9.725765739196730e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933337e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.930779605243821e+01</latitude>
+						<longitude units="deg">-9.722830072143427e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.61900000e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.933517843590823e+01</latitude>
+						<longitude units="deg">-9.760757407812042e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.61900000e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.933144945832561e+01</latitude>
+						<longitude units="deg">-9.757967252030367e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.61900000e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.932769850072540e+01</latitude>
+						<longitude units="deg">-9.755166136905150e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.61900000e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.932392524014268e+01</latitude>
+						<longitude units="deg">-9.752353887900725e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.61900000e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.932012934537872e+01</latitude>
+						<longitude units="deg">-9.749530326030060e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.61900000e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.931631047670705e+01</latitude>
+						<longitude units="deg">-9.746695267695746e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.61900000e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.931246828556543e+01</latitude>
+						<longitude units="deg">-9.743848524523520e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.61900000e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.930860241423382e+01</latitude>
+						<longitude units="deg">-9.740989903188080e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.61900000e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.930471249549700e+01</latitude>
+						<longitude units="deg">-9.738119205230660e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.61900000e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.930079815229097e+01</latitude>
+						<longitude units="deg">-9.735236226867821e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.61900000e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.929685899733251e+01</latitude>
+						<longitude units="deg">-9.732340758791122e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.61900000e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.929289463273042e+01</latitude>
+						<longitude units="deg">-9.729432585956954e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.61900000e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.928890464957780e+01</latitude>
+						<longitude units="deg">-9.726511487366018e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.61900000e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.928488862752396e+01</latitude>
+						<longitude units="deg">-9.723577235831803e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.15866675e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.931226190557602e+01</latitude>
+						<longitude units="deg">-9.761486244219803e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.15866675e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.930853351484038e+01</latitude>
+						<longitude units="deg">-9.758697428976286e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.15866675e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.930478315303992e+01</latitude>
+						<longitude units="deg">-9.755897659908281e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.15866675e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.930101049734508e+01</latitude>
+						<longitude units="deg">-9.753086762576355e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.15866675e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.929721521669640e+01</latitude>
+						<longitude units="deg">-9.750264558092384e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.15866675e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.929339697151059e+01</latitude>
+						<longitude units="deg">-9.747430862960627e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.15866675e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.928955541337281e+01</latitude>
+						<longitude units="deg">-9.744585488911383e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.15866675e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.928569018471473e+01</latitude>
+						<longitude units="deg">-9.741728242726927e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.15866675e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.928180091847738e+01</latitude>
+						<longitude units="deg">-9.738858926059154e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.15866675e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.927788723775764e+01</latitude>
+						<longitude units="deg">-9.735977335238552e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.15866675e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.927394875543809e+01</latitude>
+						<longitude units="deg">-9.733083261074005e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.15866675e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.926998507379840e+01</latitude>
+						<longitude units="deg">-9.730176488642707e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.15866675e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.926599578410793e+01</latitude>
+						<longitude units="deg">-9.727256797069838e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.15866675e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.926198046619766e+01</latitude>
+						<longitude units="deg">-9.724323959297210e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.69833350e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.928934556281492e+01</latitude>
+						<longitude units="deg">-9.762214625997673e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.69833350e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.928561775449783e+01</latitude>
+						<longitude units="deg">-9.759427149713669e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.69833350e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.928186798404527e+01</latitude>
+						<longitude units="deg">-9.756628725118554e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.69833350e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.927809592876267e+01</latitude>
+						<longitude units="deg">-9.753819177869002e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.69833350e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.927430125772941e+01</latitude>
+						<longitude units="deg">-9.750998329175691e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.69833350e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.927048363150504e+01</latitude>
+						<longitude units="deg">-9.748165995644450e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.69833350e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.926664270182172e+01</latitude>
+						<longitude units="deg">-9.745321989110030e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.69833350e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.926277811126245e+01</latitude>
+						<longitude units="deg">-9.742466116462153e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.69833350e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.925888949292402e+01</latitude>
+						<longitude units="deg">-9.739598179463266e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.69833350e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.925497647006383e+01</latitude>
+						<longitude units="deg">-9.736717974557686e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.69833350e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.925103865572978e+01</latitude>
+						<longitude units="deg">-9.733825292671446e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.69833350e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.924707565237198e+01</latitude>
+						<longitude units="deg">-9.730919919002437e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.69833350e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.924308705143553e+01</latitude>
+						<longitude units="deg">-9.728001632800198e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>2.69833350e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.923907243293265e+01</latitude>
+						<longitude units="deg">-9.725070207134691e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.23800000e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.926642859753385e+01</latitude>
+						<longitude units="deg">-9.762942586413708e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.23800000e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.926270137192367e+01</latitude>
+						<longitude units="deg">-9.760156447432381e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.23800000e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.925895219310301e+01</latitude>
+						<longitude units="deg">-9.757359365646967e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.23800000e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.925518073851228e+01</latitude>
+						<longitude units="deg">-9.754551166810175e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.23800000e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.925138667736963e+01</latitude>
+						<longitude units="deg">-9.751731672231362e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.23800000e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.924756967037739e+01</latitude>
+						<longitude units="deg">-9.748900698617808e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.23800000e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.924372936941467e+01</latitude>
+						<longitude units="deg">-9.746058057908608e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.23800000e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.923986541721570e+01</latitude>
+						<longitude units="deg">-9.743203557100789e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.23800000e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.923597744703299e+01</latitude>
+						<longitude units="deg">-9.740336998067258e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.23800000e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.923206508228436e+01</latitude>
+						<longitude units="deg">-9.737458177365983e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.23800000e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.922812793618299e+01</latitude>
+						<longitude units="deg">-9.734566886040065e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.23800000e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.922416561134938e+01</latitude>
+						<longitude units="deg">-9.731662909407942e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.23800000e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.922017769940425e+01</latitude>
+						<longitude units="deg">-9.728746026843359e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.23800000e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.921616378054102e+01</latitude>
+						<longitude units="deg">-9.725816011544296e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.77766675e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.924351122657415e+01</latitude>
+						<longitude units="deg">-9.763670117480109e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.77766675e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.923978458257958e+01</latitude>
+						<longitude units="deg">-9.760885314171749e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.77766675e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.923603599428961e+01</latitude>
+						<longitude units="deg">-9.758089573560210e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.77766675e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.923226513927946e+01</latitude>
+						<longitude units="deg">-9.755282721494103e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.77766675e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.922847168690596e+01</latitude>
+						<longitude units="deg">-9.752464579381368e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.77766675e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.922465529801403e+01</latitude>
+						<longitude units="deg">-9.749634964030616e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.77766675e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.922081562462953e+01</latitude>
+						<longitude units="deg">-9.746793687485167e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.77766675e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.921695230963783e+01</latitude>
+						<longitude units="deg">-9.743940556849256e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.77766675e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.921306498644694e+01</latitude>
+						<longitude units="deg">-9.741075374106097e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.77766675e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.920915327863496e+01</latitude>
+						<longitude units="deg">-9.738197935927219e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.77766675e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.920521679958016e+01</latitude>
+						<longitude units="deg">-9.735308033472624e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.77766675e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.920125515207322e+01</latitude>
+						<longitude units="deg">-9.732405452181180e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.77766675e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.919726792791030e+01</latitude>
+						<longitude units="deg">-9.729489971550704e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>3.77766675e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.919325470746582e+01</latitude>
+						<longitude units="deg">-9.726561364907050e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.31733350e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.922059378227643e+01</latitude>
+						<longitude units="deg">-9.764397206676564e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.31733350e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.921686771686775e+01</latitude>
+						<longitude units="deg">-9.761613737447021e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.31733350e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.921311971606101e+01</latitude>
+						<longitude units="deg">-9.758819336409346e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.31733350e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.920934945756596e+01</latitude>
+						<longitude units="deg">-9.756013829507950e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.31733350e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.920555661087779e+01</latitude>
+						<longitude units="deg">-9.753197038249236e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.31733350e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.920174083698376e+01</latitude>
+						<longitude units="deg">-9.750368779543062e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.31733350e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.919790178805623e+01</latitude>
+						<longitude units="deg">-9.747528865536833e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.31733350e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.919403910713128e+01</latitude>
+						<longitude units="deg">-9.744677103441886e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.31733350e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.919015242777224e+01</latitude>
+						<longitude units="deg">-9.741813295351629e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.31733350e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.918624137371708e+01</latitude>
+						<longitude units="deg">-9.738937238051005e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.31733350e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.918230555850886e+01</latitude>
+						<longitude units="deg">-9.736048722816818e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.31733350e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.917834458510809e+01</latitude>
+						<longitude units="deg">-9.733147535208214e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.31733350e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.917435804548604e+01</latitude>
+						<longitude units="deg">-9.730233454846949e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.31733350e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.917034552019772e+01</latitude>
+						<longitude units="deg">-9.727306255186615e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.85700000e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.919767560921030e+01</latitude>
+						<longitude units="deg">-9.765123881126856e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.85700000e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.919395012332097e+01</latitude>
+						<longitude units="deg">-9.762341744315701e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.85700000e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.919020271092925e+01</latitude>
+						<longitude units="deg">-9.759548681185069e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.85700000e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.918643304987937e+01</latitude>
+						<longitude units="deg">-9.756744517775056e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.85700000e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.918264080980491e+01</latitude>
+						<longitude units="deg">-9.753929075690431e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.85700000e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.917882565183541e+01</latitude>
+						<longitude units="deg">-9.751102171942159e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.85700000e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.917498722828969e+01</latitude>
+						<longitude units="deg">-9.748263618781633e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.85700000e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.917112518235461e+01</latitude>
+						<longitude units="deg">-9.745413223527157e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.85700000e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.916723914774872e+01</latitude>
+						<longitude units="deg">-9.742550788382219e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.85700000e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.916332874836988e+01</latitude>
+						<longitude units="deg">-9.739676110245051e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.85700000e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.915939359792588e+01</latitude>
+						<longitude units="deg">-9.736788980509101e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.85700000e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.915543329954707e+01</latitude>
+						<longitude units="deg">-9.733889184853687e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.85700000e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.915144744537980e+01</latitude>
+						<longitude units="deg">-9.730976503024345e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>4.85700000e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.914743561615974e+01</latitude>
+						<longitude units="deg">-9.728050708602287e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666699e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.917475745045876e+01</latitude>
+						<longitude units="deg">-9.765850111641996e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666699e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.917103254033751e+01</latitude>
+						<longitude units="deg">-9.763069305673886e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666699e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.916728571258884e+01</latitude>
+						<longitude units="deg">-9.760277578869189e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666699e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.916351664519123e+01</latitude>
+						<longitude units="deg">-9.757474757363607e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666699e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.915972500791622e+01</latitude>
+						<longitude units="deg">-9.754660662860152e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666699e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.915591046203535e+01</latitude>
+						<longitude units="deg">-9.751835112470795e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666699e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.915207266001354e+01</latitude>
+						<longitude units="deg">-9.748997918550806e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666699e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.914821124518808e+01</latitude>
+						<longitude units="deg">-9.746148888525343e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666699e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.914432585143236e+01</latitude>
+						<longitude units="deg">-9.743287824707836e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666699e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.914041610280374e+01</latitude>
+						<longitude units="deg">-9.740414524109703e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666699e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.913648161317443e+01</latitude>
+						<longitude units="deg">-9.737528778240915e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666699e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.913252198584416e+01</latitude>
+						<longitude units="deg">-9.734630372900806e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666699e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.912853681313396e+01</latitude>
+						<longitude units="deg">-9.731719087958589e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.39666699e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.912452567595962e+01</latitude>
+						<longitude units="deg">-9.728794697122903e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.93633350e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.915183878328319e+01</latitude>
+						<longitude units="deg">-9.766575920172669e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.93633350e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.914811444857531e+01</latitude>
+						<longitude units="deg">-9.763796443414050e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.93633350e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.914436820510814e+01</latitude>
+						<longitude units="deg">-9.761006051295530e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.93633350e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.914059973099419e+01</latitude>
+						<longitude units="deg">-9.758204570048295e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.93633350e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.913680869614292e+01</latitude>
+						<longitude units="deg">-9.755391821473499e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.93633350e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.913299476196783e+01</latitude>
+						<longitude units="deg">-9.752567622784024e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.93633350e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.912915758107976e+01</latitude>
+						<longitude units="deg">-9.749731786438875e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.93633350e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.912529679696629e+01</latitude>
+						<longitude units="deg">-9.746884119969963e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.93633350e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.912141204365557e+01</latitude>
+						<longitude units="deg">-9.744024425800521e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.93633350e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.911750294536440e+01</latitude>
+						<longitude units="deg">-9.741152501055031e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.93633350e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.911356911612918e+01</latitude>
+						<longitude units="deg">-9.738268137359860e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.93633350e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.910961015941894e+01</latitude>
+						<longitude units="deg">-9.735371120634233e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.93633350e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.910562566772929e+01</latitude>
+						<longitude units="deg">-9.732461230870875e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>5.93633350e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.910161522215602e+01</latitude>
+						<longitude units="deg">-9.729538241905750e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>6.47600000e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.912891960302574e+01</latitude>
+						<longitude units="deg">-9.767301307583476e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>6.47600000e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.912519584328754e+01</latitude>
+						<longitude units="deg">-9.764523158405795e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>6.47600000e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.912145018365083e+01</latitude>
+						<longitude units="deg">-9.761734099338713e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>6.47600000e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.911768230236223e+01</latitude>
+						<longitude units="deg">-9.758933956708803e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>6.47600000e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.911389186946895e+01</latitude>
+						<longitude units="deg">-9.756122552415246e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>6.47600000e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.911007854652622e+01</latitude>
+						<longitude units="deg">-9.753299703771694e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>6.47600000e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.910624198629085e+01</latitude>
+						<longitude units="deg">-9.750465223340828e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>6.47600000e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.910238183240052e+01</latitude>
+						<longitude units="deg">-9.747618918761123e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>6.47600000e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.909849771903803e+01</latitude>
+						<longitude units="deg">-9.744760592565555e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>6.47600000e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.909458927057946e+01</latitude>
+						<longitude units="deg">-9.741890041991515e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>6.47600000e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.909065610122534e+01</latitude>
+						<longitude units="deg">-9.739007058781641e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>6.47600000e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.908669781461383e+01</latitude>
+						<longitude units="deg">-9.736111428974898e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>6.47600000e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.908271400341494e+01</latitude>
+						<longitude units="deg">-9.733202932687409e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>6.47600000e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.907870424890441e+01</latitude>
+						<longitude units="deg">-9.730281343882304e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.01566699e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.910600039747394e+01</latitude>
+						<longitude units="deg">-9.768026254886510e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.01566699e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.910227720906164e+01</latitude>
+						<longitude units="deg">-9.765249431720757e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.01566699e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.909853212959152e+01</latitude>
+						<longitude units="deg">-9.762461704130367e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.01566699e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.909476483744375e+01</latitude>
+						<longitude units="deg">-9.759662898537178e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.01566699e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.909097500280313e+01</latitude>
+						<longitude units="deg">-9.756852836938302e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.01566699e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.908716228736628e+01</latitude>
+						<longitude units="deg">-9.754031336748059e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.01566699e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.908332634403556e+01</latitude>
+						<longitude units="deg">-9.751198210632654e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.01566699e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.907946681659850e+01</latitude>
+						<longitude units="deg">-9.748353266337085e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.01566699e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.907558333939217e+01</latitude>
+						<longitude units="deg">-9.745496306503891e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.01566699e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.907167553695152e+01</latitude>
+						<longitude units="deg">-9.742627128483257e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.01566699e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.906774302364081e+01</latitude>
+						<longitude units="deg">-9.739745524133971e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.01566699e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.906378540326701e+01</latitude>
+						<longitude units="deg">-9.736851279614632e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.01566699e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.905980226867410e+01</latitude>
+						<longitude units="deg">-9.733944175164594e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.01566699e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.905579320131734e+01</latitude>
+						<longitude units="deg">-9.731023984874038e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.55533350e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.908308047764407e+01</latitude>
+						<longitude units="deg">-9.768750790766421e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.55533350e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.907935786148431e+01</latitude>
+						<longitude units="deg">-9.765975291964286e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.55533350e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.907561336310562e+01</latitude>
+						<longitude units="deg">-9.763188894195893e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.55533350e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.907184666102197e+01</latitude>
+						<longitude units="deg">-9.760391423978290e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.55533350e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.906805742555554e+01</latitude>
+						<longitude units="deg">-9.757582703406381e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.55533350e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.906424531854437e+01</latitude>
+						<longitude units="deg">-9.754762549995050e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.55533350e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.906040999303637e+01</latitude>
+						<longitude units="deg">-9.751930776513908e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.55533350e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.905655109296885e+01</latitude>
+						<longitude units="deg">-9.749087190814325e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.55533350e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.905266825283316e+01</latitude>
+						<longitude units="deg">-9.746231595648315e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.55533350e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.904876109732314e+01</latitude>
+						<longitude units="deg">-9.743363788478730e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.55533350e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.904482924096674e+01</latitude>
+						<longitude units="deg">-9.740483561280361e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.55533350e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.904087228773968e+01</latitude>
+						<longitude units="deg">-9.737590700331296e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.55533350e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.903688983065994e+01</latitude>
+						<longitude units="deg">-9.734684985994012e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>7.55533350e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.903288145136222e+01</latitude>
+						<longitude units="deg">-9.731766192485570e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.09500049e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.906016043198457e+01</latitude>
+						<longitude units="deg">-9.769474892109118e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.09500049e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.905643838499159e+01</latitude>
+						<longitude units="deg">-9.766700716096754e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.09500049e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.905269446460074e+01</latitude>
+						<longitude units="deg">-9.763915646570743e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.09500049e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.904892834945926e+01</latitude>
+						<longitude units="deg">-9.761119510143153e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.09500049e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.904513971002660e+01</latitude>
+						<longitude units="deg">-9.758312129006627e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.09500049e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.904132820828193e+01</latitude>
+						<longitude units="deg">-9.755493320776480e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.09500049e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.903749349741837e+01</latitude>
+						<longitude units="deg">-9.752662898325634e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.09500049e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.903363522152268e+01</latitude>
+						<longitude units="deg">-9.749820669611712e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.09500049e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.902975301524022e+01</latitude>
+						<longitude units="deg">-9.746966437496073e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.09500049e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.902584650342335e+01</latitude>
+						<longitude units="deg">-9.744099999554120e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.09500049e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.902191530076340e+01</latitude>
+						<longitude units="deg">-9.741221147876519e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.09500049e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.901795901140449e+01</latitude>
+						<longitude units="deg">-9.738329668860722e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.09500049e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.901397722853824e+01</latitude>
+						<longitude units="deg">-9.735425342992181e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.09500049e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.900996953397843e+01</latitude>
+						<longitude units="deg">-9.732507944614692e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.63466699e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.903723996905344e+01</latitude>
+						<longitude units="deg">-9.770198571611776e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.63466699e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.903351849023952e+01</latitude>
+						<longitude units="deg">-9.767425716779323e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.63466699e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.902977514683927e+01</latitude>
+						<longitude units="deg">-9.764641973879711e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.63466699e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.902600961763326e+01</latitude>
+						<longitude units="deg">-9.761847169619995e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.63466699e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.902222157321791e+01</latitude>
+						<longitude units="deg">-9.759041126290383e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.63466699e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.901841067571343e+01</latitude>
+						<longitude units="deg">-9.756223661606555e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.63466699e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.901457657845793e+01</latitude>
+						<longitude units="deg">-9.753394588544596e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.63466699e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.901071892568761e+01</latitude>
+						<longitude units="deg">-9.750553715168287e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.63466699e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.900683735220151e+01</latitude>
+						<longitude units="deg">-9.747700844448198e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.63466699e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.900293148301044e+01</latitude>
+						<longitude units="deg">-9.744835774072146e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.63466699e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.899900093296894e+01</latitude>
+						<longitude units="deg">-9.741958296246575e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.63466699e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.899504530638933e+01</latitude>
+						<longitude units="deg">-9.739068197488137e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.63466699e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.899106419663666e+01</latitude>
+						<longitude units="deg">-9.736165258405136e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>8.63466699e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.898705718570366e+01</latitude>
+						<longitude units="deg">-9.733249253467972e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.17433398e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.901431886699677e+01</latitude>
+						<longitude units="deg">-9.770921838634847e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.17433398e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.901059795655637e+01</latitude>
+						<longitude units="deg">-9.768150303356413e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.17433398e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.900685519033660e+01</latitude>
+						<longitude units="deg">-9.765367885451084e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.17433398e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.900309024725119e+01</latitude>
+						<longitude units="deg">-9.762574411720784e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.17433398e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.899930279803359e+01</latitude>
+						<longitude units="deg">-9.759769704553196e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.17433398e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.899549250494485e+01</latitude>
+						<longitude units="deg">-9.756953581764226e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.17433398e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.899165902146816e+01</latitude>
+						<longitude units="deg">-9.754125856433028e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.17433398e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.898780199198895e+01</latitude>
+						<longitude units="deg">-9.751286336729403e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.17433398e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.898392105145997e+01</latitude>
+						<longitude units="deg">-9.748434825733021e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.17433398e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.898001582505033e+01</latitude>
+						<longitude units="deg">-9.745571121244002e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.17433398e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.897608592777772e+01</latitude>
+						<longitude units="deg">-9.742695015584398e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.17433398e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.897213096412258e+01</latitude>
+						<longitude units="deg">-9.739806295389971e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.17433398e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.896815052762337e+01</latitude>
+						<longitude units="deg">-9.736904741391707e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.17433398e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.896414420045161e+01</latitude>
+						<longitude units="deg">-9.733990128186484e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.71400000e+03</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.899139785807304e+01</latitude>
+						<longitude units="deg">-9.771644665008988e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.71400000e+03</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.898767751175463e+01</latitude>
+						<longitude units="deg">-9.768874447735179e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.71400000e+03</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.898393531844111e+01</latitude>
+						<longitude units="deg">-9.766093353269089e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.71400000e+03</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.898017095717908e+01</latitude>
+						<longitude units="deg">-9.763301208507366e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.71400000e+03</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.897638409883857e+01</latitude>
+						<longitude units="deg">-9.760497835935112e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.71400000e+03</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.897257440582119e+01</latitude>
+						<longitude units="deg">-9.757683053468320e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.71400000e+03</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.896874153175472e+01</latitude>
+						<longitude units="deg">-9.754856674289107e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.71400000e+03</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.896488512117353e+01</latitude>
+						<longitude units="deg">-9.752018506673193e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.71400000e+03</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.896100480918361e+01</latitude>
+						<longitude units="deg">-9.749168353809215e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.71400000e+03</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.895710022111198e+01</latitude>
+						<longitude units="deg">-9.746306013609474e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.71400000e+03</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.895317097213906e+01</latitude>
+						<longitude units="deg">-9.743431278511511e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.71400000e+03</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.894921666691294e+01</latitude>
+						<longitude units="deg">-9.740543935270044e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.71400000e+03</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.894523689914506e+01</latitude>
+						<longitude units="deg">-9.737643764738648e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>9.71400000e+03</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.894123125118523e+01</latitude>
+						<longitude units="deg">-9.734730541640504e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.02536670e+04</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.896847607671805e+01</latitude>
+						<longitude units="deg">-9.772367085530681e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.02536670e+04</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.896475629544325e+01</latitude>
+						<longitude units="deg">-9.769598184629321e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.02536670e+04</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.896101467595599e+01</latitude>
+						<longitude units="deg">-9.766818411963992e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.02536670e+04</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.895725089743566e+01</latitude>
+						<longitude units="deg">-9.764027594525975e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.02536670e+04</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.895346463088889e+01</latitude>
+						<longitude units="deg">-9.761225554897642e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.02536670e+04</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.894965553885783e+01</latitude>
+						<longitude units="deg">-9.758412111095005e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.02536670e+04</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.894582327511488e+01</latitude>
+						<longitude units="deg">-9.755587076403009e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.02536670e+04</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.894196748434320e+01</latitude>
+						<longitude units="deg">-9.752750259203161e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.02536670e+04</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.893808780180213e+01</latitude>
+						<longitude units="deg">-9.749901462792958e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.02536670e+04</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.893418385297653e+01</latitude>
+						<longitude units="deg">-9.747040485196742e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.02536670e+04</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.893025525320952e+01</latitude>
+						<longitude units="deg">-9.744167118967427e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.02536670e+04</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.892630160731689e+01</latitude>
+						<longitude units="deg">-9.741281150978567e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.02536670e+04</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.892232250918290e+01</latitude>
+						<longitude units="deg">-9.738382362206134e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.02536670e+04</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.891831754133575e+01</latitude>
+						<longitude units="deg">-9.735470527499530e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933340e+04</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.894555406245491e+01</latitude>
+						<longitude units="deg">-9.773089079643856e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933340e+04</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.894183484379231e+01</latitude>
+						<longitude units="deg">-9.770321493540989e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933340e+04</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.893809379568464e+01</latitude>
+						<longitude units="deg">-9.767543041096570e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933340e+04</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.893433059744383e+01</latitude>
+						<longitude units="deg">-9.764753549396437e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933340e+04</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.893054492021287e+01</latitude>
+						<longitude units="deg">-9.761952841120110e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933340e+04</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.892673642667420e+01</latitude>
+						<longitude units="deg">-9.759140734383500e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933340e+04</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.892290477074457e+01</latitude>
+						<longitude units="deg">-9.756317042574283e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933340e+04</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.891904959725573e+01</latitude>
+						<longitude units="deg">-9.753481574179627e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933340e+04</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.891517054162001e+01</latitude>
+						<longitude units="deg">-9.750634132605772e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933340e+04</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.891126722947993e+01</latitude>
+						<longitude units="deg">-9.747774515988979e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933340e+04</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.890733927634093e+01</latitude>
+						<longitude units="deg">-9.744902516997399e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933340e+04</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.890338628718626e+01</latitude>
+						<longitude units="deg">-9.742017922623290e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933340e+04</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.889940785607273e+01</latitude>
+						<longitude units="deg">-9.739120513964924e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.07933340e+04</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.889540356570657e+01</latitude>
+						<longitude units="deg">-9.736210065997729e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.13330000e+04</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.892263173015377e+01</latitude>
+						<longitude units="deg">-9.773810651799307e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.13330000e+04</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.891891307249122e+01</latitude>
+						<longitude units="deg">-9.771044378907146e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.13330000e+04</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.891517259413900e+01</latitude>
+						<longitude units="deg">-9.768267245089881e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.13330000e+04</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.891140997454148e+01</latitude>
+						<longitude units="deg">-9.765479077527769e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.13330000e+04</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.890762488497779e+01</latitude>
+						<longitude units="deg">-9.762679698997398e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.13330000e+04</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.890381698827044e+01</latitude>
+						<longitude units="deg">-9.759868927714450e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.13330000e+04</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.889998593848038e+01</latitude>
+						<longitude units="deg">-9.757046577169226e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.13330000e+04</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.889613138058772e+01</latitude>
+						<longitude units="deg">-9.754212455954436e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.13330000e+04</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.889225295015760e+01</latitude>
+						<longitude units="deg">-9.751366367584947e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.13330000e+04</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.888835027298992e+01</latitude>
+						<longitude units="deg">-9.748508110308804e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.13330000e+04</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.888442296475232e+01</latitude>
+						<longitude units="deg">-9.745637476909289e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.13330000e+04</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.888047063059519e+01</latitude>
+						<longitude units="deg">-9.742754254497196e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.13330000e+04</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.887649286474770e+01</latitude>
+						<longitude units="deg">-9.739858224292975e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.13330000e+04</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.887248925009386e+01</latitude>
+						<longitude units="deg">-9.736949161397949e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.18726670e+04</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.889970864514332e+01</latitude>
+						<longitude units="deg">-9.774531819596498e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.18726670e+04</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.889599054930398e+01</latitude>
+						<longitude units="deg">-9.771766858291760e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.18726670e+04</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.889225064152837e+01</latitude>
+						<longitude units="deg">-9.768991041472093e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.18726670e+04</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.888848860139320e+01</latitude>
+						<longitude units="deg">-9.766204196412082e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.18726670e+04</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.888470410031378e+01</latitude>
+						<longitude units="deg">-9.763406145985259e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.18726670e+04</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.888089680125272e+01</latitude>
+						<longitude units="deg">-9.760596708506992e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.18726670e+04</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.887706635841501e+01</latitude>
+						<longitude units="deg">-9.757775697570044e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.18726670e+04</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.887321241692922e+01</latitude>
+						<longitude units="deg">-9.754942921872600e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.18726670e+04</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.886933461251320e+01</latitude>
+						<longitude units="deg">-9.752098185037981e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.18726670e+04</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.886543257112425e+01</latitude>
+						<longitude units="deg">-9.749241285425933e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.18726670e+04</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.886150590859216e+01</latitude>
+						<longitude units="deg">-9.746372015934716e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.18726670e+04</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.885755423023441e+01</latitude>
+						<longitude units="deg">-9.743490163793541e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.18726670e+04</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.885357713045253e+01</latitude>
+						<longitude units="deg">-9.740595510344879e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.18726670e+04</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.884957419230827e+01</latitude>
+						<longitude units="deg">-9.737687830815825e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.24123340e+04</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.887678565546635e+01</latitude>
+						<longitude units="deg">-9.775252549820706e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.24123340e+04</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.887306811660185e+01</latitude>
+						<longitude units="deg">-9.772488898578995e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.24123340e+04</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.886932877452934e+01</latitude>
+						<longitude units="deg">-9.769714397226952e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.24123340e+04</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.886556730895759e+01</latitude>
+						<longitude units="deg">-9.766928873133401e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.24123340e+04</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.886178339143763e+01</latitude>
+						<longitude units="deg">-9.764132149268711e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.24123340e+04</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.885797668507167e+01</latitude>
+						<longitude units="deg">-9.761324044047802e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.24123340e+04</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.885414684420848e+01</latitude>
+						<longitude units="deg">-9.758504371165841e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.24123340e+04</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.885029351412450e+01</latitude>
+						<longitude units="deg">-9.755672939426313e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.24123340e+04</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.884641633068998e+01</latitude>
+						<longitude units="deg">-9.752829552560931e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.24123340e+04</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.884251492001905e+01</latitude>
+						<longitude units="deg">-9.749974009040983e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.24123340e+04</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.883858889810318e+01</latitude>
+						<longitude units="deg">-9.747106101879575e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.24123340e+04</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.883463787042650e+01</latitude>
+						<longitude units="deg">-9.744225618424231e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.24123340e+04</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.883066143156239e+01</latitude>
+						<longitude units="deg">-9.741332340139314e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.24123340e+04</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.882665916474981e+01</latitude>
+						<longitude units="deg">-9.738426042377532e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.29520000e+04</line>
+						<pixel>0.00000000e+00</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.885386198032334e+01</latitude>
+						<longitude units="deg">-9.775972875145433e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.29520000e+04</line>
+						<pixel>2.17000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.885014499934683e+01</latitude>
+						<longitude units="deg">-9.773210532342235e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.29520000e+04</line>
+						<pixel>4.34000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.884640622388896e+01</latitude>
+						<longitude units="deg">-9.770437344827030e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.29520000e+04</line>
+						<pixel>6.51000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.884264533379042e+01</latitude>
+						<longitude units="deg">-9.767653140062760e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.29520000e+04</line>
+						<pixel>8.68000000e+02</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.883886200073805e+01</latitude>
+						<longitude units="deg">-9.764857741116538e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.29520000e+04</line>
+						<pixel>1.08500000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.883505588797362e+01</latitude>
+						<longitude units="deg">-9.762050966502717e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.29520000e+04</line>
+						<pixel>1.30200000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.883122664998963e+01</latitude>
+						<longitude units="deg">-9.759232630018744e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.29520000e+04</line>
+						<pixel>1.51900000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.882737393221043e+01</latitude>
+						<longitude units="deg">-9.756402540573293e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.29520000e+04</line>
+						<pixel>1.73600000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.882349737065851e+01</latitude>
+						<longitude units="deg">-9.753560502006333e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.29520000e+04</line>
+						<pixel>1.95300000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.881959659160497e+01</latitude>
+						<longitude units="deg">-9.750706312900584e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.29520000e+04</line>
+						<pixel>2.17000000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.881567121120290e+01</latitude>
+						<longitude units="deg">-9.747839766383872e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.29520000e+04</line>
+						<pixel>2.38700000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.881172083510307e+01</latitude>
+						<longitude units="deg">-9.744960649921892e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.29520000e+04</line>
+						<pixel>2.60400000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.880774505805061e+01</latitude>
+						<longitude units="deg">-9.742068745100750e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+				<imageTiePoint>
+					<imageCoordinate>
+						<line>1.29520000e+04</line>
+						<pixel>2.82100000e+03</pixel>
+					</imageCoordinate>
+					<geodeticCoordinate>
+						<latitude units="deg">4.880374346346170e+01</latitude>
+						<longitude units="deg">-9.739163827398639e+01</longitude>
+						<height units="m">4.532005615234375e+02</height>
+					</geodeticCoordinate>
+				</imageTiePoint>
+			</geolocationGrid>
+			<rationalFunctions>
+				<biasError units="m">5.000000000000000e-01</biasError>
+				<randomError units="m">1.000000000000000e-01</randomError>
+				<lineFitQuality>3.562003955378714e-04</lineFitQuality>
+				<pixelFitQuality>6.739672086953899e-05</pixelFitQuality>
+				<lineOffset>6476</lineOffset>
+				<pixelOffset>1411</pixelOffset>
+				<latitudeOffset units="deg">4.910380000000000e+01</latitudeOffset>
+				<longitudeOffset units="deg">-9.748660000000000e+01</longitudeOffset>
+				<heightOffset units="m">4.530000000000000e+02</heightOffset>
+				<lineScale>6477</lineScale>
+				<pixelScale>1541</pixelScale>
+				<latitudeScale>3.001000000000000e-01</latitudeScale>
+				<longitudeScale>2.732000000000000e-01</longitudeScale>
+				<heightScale>7.010000000000000e+02</heightScale>
+				<lineNumeratorCoefficients>-1.875630700820368e-05 -4.416900944906543e-05 3.292218887419661e-09 -1.829949153802487e-08 -1.291431506352352e-01 4.155423049725686e-08 -5.605529985386446e-08 -1.133678223058874e-03 1.439072242658076e-08 -3.085610043482122e-07 -1.045727896845655e+00 -3.031132235970269e-08 -1.152873122599132e-07 6.878923785398633e-04 2.600959658413764e-08 6.588221857883571e-07 -1.538471674587533e-04 -5.508194033848200e-09 1.420453531685189e-06 2.293646517452941e-06</lineNumeratorCoefficients>
+				<lineDenominatorCoefficients>1.000000000000000e+00 -3.357102353285711e-08 1.184736909965334e-07 3.060458627007423e-08 5.705413861171655e-04 -3.274646037858787e-08 4.274366250085124e-08 9.399078837048661e-07 3.653078274291706e-09 -5.730379335844651e-08 -9.153491112739168e-05 8.426829834037951e-09 -7.311047817281620e-09 1.017138850020705e-06 -1.423305999908185e-08 7.278485150913686e-08 1.428499030654406e-06 5.323427718467861e-09 -1.784389669684441e-07 -4.986962453079158e-07</lineDenominatorCoefficients>
+				<pixelNumeratorCoefficients>1.861419860774506e-02 8.409845134419185e-02 -1.155197782148640e-04 -5.229454791045699e-06 1.294698766099916e+00 -1.838811650436804e-04 -8.291278638192329e-05 -2.003938674696065e-02 2.844668493659609e-05 2.691682518166058e-06 -4.555729008334929e-01 1.337829201347167e-04 2.988271866206801e-05 6.721680290157834e-03 -1.433729503647246e-05 9.211291407763361e-05 -1.710241502699227e-03 -2.993077582762444e-06 -1.059596326236307e-04 2.159922947195270e-05</pixelNumeratorCoefficients>
+				<pixelDenominatorCoefficients>1.000000000000000e+00 -1.255784775173984e-03 -6.227112428917125e-05 1.296277069289315e-07 4.920304009928550e-03 -1.879922531946903e-05 -1.221198426744144e-06 3.025030340503267e-04 -8.867677689859045e-07 6.857006159713126e-06 -1.006874043295383e-03 1.526795030583299e-05 -1.986416325278611e-08 -3.344185781421392e-04 1.362874833511519e-06 -1.264728306651225e-05 1.629873941114815e-05 -8.280464509935960e-08 3.542750599918985e-06 -4.058171190567270e-07</pixelDenominatorCoefficients>
+			</rationalFunctions>
+			<referenceEllipsoidParameters>
+				<ellipsoidName>WGS84</ellipsoidName>
+				<semiMajorAxis units="m">6.378137000000000e+06</semiMajorAxis>
+				<semiMinorAxis units="m">6.356752314245179e+06</semiMinorAxis>
+				<datumShiftParameters units="m">0.000000000000000e+00 0.000000000000000e+00 0.000000000000000e+00</datumShiftParameters>
+				<geodeticTerrainHeight units="m">4.532005615234375e+02</geodeticTerrainHeight>
+			</referenceEllipsoidParameters>
+		</geographicInformation>
+		<radiometricInformation pole="HH">
+			<mean dataStream="Real">3.196448160700000e+00</mean>
+			<mean dataStream="Imaginary">-4.389804585800000e+00</mean>
+			<standardDeviation dataStream="Real">1.090735445406200e+03</standardDeviation>
+			<standardDeviation dataStream="Imaginary">1.090560532417000e+03</standardDeviation>
+		</radiometricInformation>
+		<radiometricInformation pole="VV">
+			<mean dataStream="Real">-5.928972753100000e+00</mean>
+			<mean dataStream="Imaginary">-2.222375495900000e+00</mean>
+			<standardDeviation dataStream="Real">1.090629526857900e+03</standardDeviation>
+			<standardDeviation dataStream="Imaginary">1.090603975596300e+03</standardDeviation>
+		</radiometricInformation>
+		<radiometricInformation pole="HV">
+			<mean dataStream="Real">-4.119978844300000e+00</mean>
+			<mean dataStream="Imaginary">3.350372237800000e+00</mean>
+			<standardDeviation dataStream="Real">2.546366633435000e+02</standardDeviation>
+			<standardDeviation dataStream="Imaginary">2.545929590230000e+02</standardDeviation>
+		</radiometricInformation>
+		<radiometricInformation pole="VH">
+			<mean dataStream="Real">4.662713848600000e+00</mean>
+			<mean dataStream="Imaginary">5.022385141000000e-01</mean>
+			<standardDeviation dataStream="Real">2.565995124581000e+02</standardDeviation>
+			<standardDeviation dataStream="Imaginary">2.565854123292000e+02</standardDeviation>
+		</radiometricInformation>
+		<lookupTable incidenceAngleCorrection="Beta Nought">lutBeta.xml</lookupTable>
+		<lookupTable incidenceAngleCorrection="Sigma Nought">lutSigma.xml</lookupTable>
+		<lookupTable incidenceAngleCorrection="Gamma">lutGamma.xml</lookupTable>
+		<fullResolutionImageData pole="HH">imagery_HH.tif</fullResolutionImageData>
+		<fullResolutionImageData pole="VV">imagery_VV.tif</fullResolutionImageData>
+		<fullResolutionImageData pole="HV">imagery_HV.tif</fullResolutionImageData>
+		<fullResolutionImageData pole="VH">imagery_VH.tif</fullResolutionImageData>
+	</imageAttributes>
+</product>

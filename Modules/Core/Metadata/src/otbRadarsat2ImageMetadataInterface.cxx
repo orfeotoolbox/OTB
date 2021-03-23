@@ -30,6 +30,7 @@
 // useful constants
 #include <otbMath.h>
 #include "otbXMLMetadataSupplier.h"
+#include <boost/filesystem.hpp> 
 
 namespace otb
 {
@@ -305,10 +306,10 @@ void Radarsat2ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface 
   m_Imd.Add(MDStr::SensorID, "SAR");  
 
   // Product file
-  std::string ProductFilePath = mds.GetAs<std::string>("", "product_xml_filename");
+  auto ProductFilePath = boost::filesystem::path(mds.GetResourceFile());
   if (!ProductFilePath.empty())
   {
-    XMLMetadataSupplier ProductMS(ProductFilePath);
+    XMLMetadataSupplier ProductMS((ProductFilePath.remove_filename() /= "product.xml").string());
     m_Imd.Add(MDStr::Mission, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
     m_Imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
     m_Imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));

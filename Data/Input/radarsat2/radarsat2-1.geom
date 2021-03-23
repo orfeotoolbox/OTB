@@ -40,7 +40,6 @@ platform_position[4]ephemeris.position:  (-211215.549626422,-4807103.54584084,53
 platform_position[4]ephemeris.velocity:  (-2242.74289199728,-5301.198083286,-4877.50945094166)
 platform_positions_count:  5
 product_georeferenced_flag:  false
-product_xml_filename:  /home/julien/Projects/orfeo-toolbox/misc/OTB-LargeInput/RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/product.xml
 rect:  0 0 2821 12952
 ref_point.col:  0
 ref_point.distance:  890636.095102868
