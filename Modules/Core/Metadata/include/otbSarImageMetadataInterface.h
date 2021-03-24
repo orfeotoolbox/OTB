@@ -117,7 +117,7 @@ public:
   virtual void ParseGdal(const MetadataSupplierInterface &) =0;
 
   virtual void ParseGeom(const MetadataSupplierInterface &) =0;
-  bool GetSAR(const MetadataSupplierInterface &, SARParam &);
+  bool GetSAR(const MetadataSupplierInterface &, SARParam &) const;
   std::vector<AzimuthFmRate> GetAzimuthFmRateGeom(const MetadataSupplierInterface &) const;
   std::vector<DopplerCentroid> GetDopplerCentroidGeom(const MetadataSupplierInterface &) const;
   std::vector<Orbit> GetOrbitsGeom(const MetadataSupplierInterface &) const;

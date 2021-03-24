@@ -92,7 +92,7 @@ public:
 
   void Parse(const MetadataSupplierInterface &) override;
 
-  void ParseGdal(const MetadataSupplierInterface &);
+  void ParseGdal(const MetadataSupplierInterface &) override;
   
   void ParseGeom(const MetadataSupplierInterface &) override;
 

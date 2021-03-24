@@ -312,8 +312,9 @@ void Radarsat2ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface 
     m_Imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
     m_Imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));
     m_Imd.Add(MDTime::ProductionDate,
-        ProductMS.GetFirstAs<MetaData::Time>("product.imageGenerationParameters.generalProcessingInformation.processingTime"));
-    m_Imd.Add(MDNum::AverageSceneHeight, ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
+	      ProductMS.GetFirstAs<MetaData::Time>("product.imageGenerationParameters.generalProcessingInformation.processingTime"));
+    m_Imd.Add(MDNum::AverageSceneHeight,
+	      ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
     m_Imd.Add(MDNum::RadarFrequency, this->GetRadarFrequency());
     m_Imd.Add(MDNum::PRF, this->GetPRF());
     m_Imd.Add(MDNum::RSF, this->GetRSF());

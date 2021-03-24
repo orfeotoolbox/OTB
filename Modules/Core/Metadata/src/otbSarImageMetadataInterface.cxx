@@ -220,7 +220,9 @@ std::vector<DopplerCentroid> SarImageMetadataInterface::GetDopplerCentroidGeom(c
   // Path: dopplerCentroid.dop_coef_list<listId>.{dop_coef_time,slant_range_time,{1,2,3}.dop_coef}
   // This streams wild hold the iteration number
   std::ostringstream oss;
-  for (int listId = 1 ; mds.GetAs<std::string>("", std::string("dopplerCentroid.dop_coef_list")+std::to_string(listId)+std::string(".slant_range_time")) != "" ; ++listId)
+  for (int listId = 1 ;
+       mds.GetAs<std::string>("", std::string("dopplerCentroid.dop_coef_list")+std::to_string(listId)+std::string(".slant_range_time")) != "" ;
+       ++listId)
   {
     oss.str("");
     oss << listId;
@@ -334,7 +336,7 @@ std::vector<SARNoise> SarImageMetadataInterface::GetNoiseVectorGeom(const Metada
   return noiseVector;
 }
 
-bool SarImageMetadataInterface::GetSAR(const MetadataSupplierInterface & mds, SARParam & sarParam)
+bool SarImageMetadataInterface::GetSAR(const MetadataSupplierInterface & mds, SARParam & sarParam) const
 {
   bool hasValue;
   mds.GetMetadataValue("calibration.count", hasValue);
