@@ -159,9 +159,6 @@ public:
   itkSetMacro(ApplyLookupDataCorrection, bool);
   itkGetMacro(ApplyLookupDataCorrection, bool);
 
-  itkSetMacro(RemoveS1ThermalNoise, bool);
-  itkGetMacro(RemoveS1ThermalNoise, bool);
-
   itkSetMacro(ApplyRescalingFactor, bool);
   itkGetMacro(ApplyRescalingFactor, bool);
 

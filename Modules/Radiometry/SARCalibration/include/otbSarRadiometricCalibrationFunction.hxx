@@ -152,7 +152,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>::EvaluateAtIndex(const
     * above values (incidence angle, rangespreadloss etc.. */
   if (m_ApplyLookupDataCorrection)
   {
-    if (m_RemoveS1ThermalNoise)
+    if (m_EnableNoise && m_RemoveS1ThermalNoise)
     {
       sigma = std::max(0., sigma - m_S1ThermaNoise->GetValue(index[0], index[1]));
     }

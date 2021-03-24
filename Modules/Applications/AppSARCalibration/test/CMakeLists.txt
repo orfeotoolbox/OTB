@@ -20,13 +20,34 @@
 
 otb_module_test()
 #----------- SARCalibration TESTS ----------------
-otb_test_application(NAME apTvRaSARCalibration_SENTINEL1
+otb_test_application(NAME apTvRaSARCalibration_SENTINEL1_old
   APP  SARCalibration
   OPTIONS -in ${INPUTDATA}/SENTINEL1_SLC_S6_1S_extract_1200_1100_300_300.tiff?&geom=${INPUTDATA}/SENTINEL1_SLC_S6_1S_extract_1200_1100_300_300.geom
   -out ${TEMP}/apTvRaSarRadiometricCalibration_SENTINEL1.tif
   VALID   --compare-image ${NOTOL}
   ${BASELINE}/raTvSarRadiometricCalibration_SENTINEL1.tif
   ${TEMP}/apTvRaSarRadiometricCalibration_SENTINEL1.tif )
+
+
+otb_test_application(NAME apTvRaSARCalibration_SENTINEL1_recent_noise
+  APP  SARCalibration
+  OPTIONS -in ${INPUTDATA}/s1b-iw-grd-vh-roi.tif?&geom=${INPUTDATA}/s1b-iw-grd-vh-roi.geom
+  -out ${TEMP}/apTvRaSARCalibration_SENTINEL1_recent_noise.tif
+  -noise 0
+  VALID   --compare-image ${NOTOL}
+  ${BASELINE}/apTvRaSARCalibration_SENTINEL1_recent_noise.tif
+  ${TEMP}/apTvRaSARCalibration_SENTINEL1_recent_noise.tif )
+
+
+otb_test_application(NAME apTvRaSARCalibration_SENTINEL1_recent
+  APP  SARCalibration
+  OPTIONS -in ${INPUTDATA}/s1b-iw-grd-vh-roi.tif?&geom=${INPUTDATA}/s1b-iw-grd-vh-roi.geom
+  -out ${TEMP}/apTvRaSARCalibration_SENTINEL1_recent.tif
+  -noise 1
+  VALID   --compare-image ${NOTOL}
+  ${BASELINE}/apTvRaSARCalibration_SENTINEL1_recent.tif 
+  ${TEMP}/apTvRaSARCalibration_SENTINEL1_recent.tif )
+
 
 if(OTB_DATA_USE_LARGEINPUT)
   otb_test_application(NAME apTvRaSARCalibration_SENTINEL1_PRODUCT_INPUT
