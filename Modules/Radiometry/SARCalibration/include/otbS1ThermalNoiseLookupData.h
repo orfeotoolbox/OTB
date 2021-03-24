@@ -126,19 +126,26 @@ public:
 
   T GetRangeNoise(const IndexValueType x, const IndexValueType y)
   {
-    const auto vecIdx = GetRangeVectorIndex(y);
-    assert(vecIdx >= 0 && vecIdx < m_RangeCount - 1);
+    if (m_RangeCount)
+    {
+      const auto vecIdx = GetRangeVectorIndex(y);
+      assert(vecIdx >= 0 && vecIdx < m_RangeCount - 1);
 
-    const auto& vec0 = m_RangeNoiseVectorList[vecIdx];
-    const auto& vec1 = m_RangeNoiseVectorList[vecIdx + 1];
+      const auto& vec0 = m_RangeNoiseVectorList[vecIdx];
+      const auto& vec1 = m_RangeNoiseVectorList[vecIdx + 1];
 
-    const auto azTime = m_FirstLineTime + y * m_LineTimeInterval;
-    const auto muY = (azTime - vec0.timeMJD) / vec1.deltaMJD;
-    const auto pixelIdx = GetPixelIndex(x, vec0.pixels);
-    const double muX = (x - vec0.pixels[pixelIdx]) / vec0.deltaPixels[pixelIdx + 1];
-    const double lutVal =
-        (1 - muY) * ((1 - muX) * vec0.vect[pixelIdx] + muX * vec0.vect[pixelIdx + 1]) + muY * ((1 - muX) * vec1.vect[pixelIdx] + muX * vec1.vect[pixelIdx + 1]);
-    return lutVal;
+      const auto azTime = m_FirstLineTime + y * m_LineTimeInterval;
+      const auto muY = (azTime - vec0.timeMJD) / vec1.deltaMJD;
+      const auto pixelIdx = GetPixelIndex(x, vec0.pixels);
+      const double muX = (x - vec0.pixels[pixelIdx]) / vec0.deltaPixels[pixelIdx + 1];
+      const double lutVal =
+          (1 - muY) * ((1 - muX) * vec0.vect[pixelIdx] + muX * vec0.vect[pixelIdx + 1]) + muY * ((1 - muX) * vec1.vect[pixelIdx] + muX * vec1.vect[pixelIdx + 1]);
+      return lutVal;
+    }
+    else
+    {
+      return 1.;
+    }
   }
 
 
