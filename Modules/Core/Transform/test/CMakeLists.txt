@@ -218,3 +218,18 @@ otb_add_test(NAME uaTvSarSensorModelAdapter2 COMMAND otbTransformTestDriver
   otbSarSensorModelAdapterTest
   ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.geom
   )
+
+if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
+  add_executable(otbSarSensorModelTest otbSarSensorModelTest.cxx)
+  target_link_libraries(
+    otbSarSensorModelTest
+    ${OTBTransform-Test_LIBRARIES}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
+  
+  otb_add_test(NAME prTvSarSensorModel
+           COMMAND otbSarSensorModelTest --
+           LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff} 
+           1
+           2
+           3)
+endif()

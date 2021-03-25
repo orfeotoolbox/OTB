@@ -20,6 +20,7 @@
 
 set(OTBTransform_SRC
   otbSensorModelAdapter.cxx
+  otbSarSensorModel.cxx
   otbSarSensorModelAdapter.cxx
   )
 
