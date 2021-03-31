@@ -467,7 +467,7 @@ void CosmoImageMetadataInterface::Parse(ImageMetadata & imd)
   // Failed to fetch the metadata
   else
     otbGenericExceptionMacro(MissingMetadataException,
-			     << "Not a CosmoSkyMed product");
+             << "Not a CosmoSkyMed product");
 }
 
 } // end namespace otb

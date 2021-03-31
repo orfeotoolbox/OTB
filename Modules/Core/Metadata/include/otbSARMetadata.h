@@ -32,6 +32,8 @@
 
 #include "itkPoint.h"
 
+#include "itkPoint.h"
+
 namespace otb
 {
 
