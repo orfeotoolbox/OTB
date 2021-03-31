@@ -16,17 +16,7 @@ SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::CreateT
   RegisterBuiltInFactories();
 
   std::list<SensorTransformTypePointer> possibleSensorTransform;
-  std::list<LightObject::Pointer>            possibleobjects;
-  if(direction == TransformDirection::FORWARD)
-  {
-    possibleobjects = itk::ObjectFactoryBase::CreateAllInstance("RPCForwardTransform");
-    //TODO: Add SARForwardTransform to this list possibleobjects.append(...CreateAllInstance("SARForwardTransform"))
-  }
-  else
-  {
-    possibleobjects = itk::ObjectFactoryBase::CreateAllInstance("RPCInverseTransform");
-    //TODO: Add SARInverseTransform to this list possibleobjects.append(...CreateAllInstance("SARInverseTransform"))
-  }
+  std::list<LightObject::Pointer>       possibleobjects = itk::ObjectFactoryBase::CreateAllInstance("otbSensorTransformBase");
   for (std::list<LightObject::Pointer>::iterator i = possibleobjects.begin(); i != possibleobjects.end(); ++i)
   {
     SensorTransformBase<TScalarType, NInputDimensions,NOutputDimensions>* io = dynamic_cast<SensorTransformBase<TScalarType, NInputDimensions,NOutputDimensions>*>(i->GetPointer());
@@ -42,7 +32,7 @@ SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::CreateT
   for (typename std::list<SensorTransformTypePointer>::iterator k = possibleSensorTransform.begin(); k != possibleSensorTransform.end(); ++k)
   {
     (*k)->SetMetadata(imd);
-    if ((*k)->IsValidSensorModel())
+    if ((*k)->IsValidSensorModel() && (*k)->getDirection() == direction)
     {
       return *k;
     }

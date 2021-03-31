@@ -27,6 +27,14 @@
 
 namespace otb
 {
+namespace TransformDirection
+{
+enum TransformationDirection
+{
+  FORWARD = 0,
+  INVERSE = 1
+};
+}
 /** \class Transform
  * \brief Class to overload method passed to virtual pure in ITK V4.
  *

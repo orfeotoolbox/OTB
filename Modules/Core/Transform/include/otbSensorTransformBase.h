@@ -76,9 +76,18 @@ public:
   /** Check model validity */
   virtual bool IsValidSensorModel() const = 0;
 
+  void setDirection(const TransformDirection::TransformationDirection& d) {
+      m_direction = d;
+  };
+  const TransformDirection::TransformationDirection& getDirection() {
+      return m_direction;
+  };
+
 protected:
   SensorTransformBase() : Superclass(0) {}
   ~SensorTransformBase() = default;
+
+  TransformDirection::TransformationDirection m_direction;
 
 private:
   SensorTransformBase(const Self&) = delete;

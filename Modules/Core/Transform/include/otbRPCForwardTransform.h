@@ -63,7 +63,7 @@ public:
   OutputPointType TransformPoint(const InputPointType& point) const override;
 
 protected:
-  RPCForwardTransform() = default;
+  RPCForwardTransform() {this->setDirection(TransformDirection::FORWARD);} ;
   ~RPCForwardTransform() = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 

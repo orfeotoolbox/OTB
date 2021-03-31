@@ -11,7 +11,7 @@ namespace otb
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::RPCInverseTransformFactory()
 {
-  this->RegisterOverride("RPCTransformBase", "RPCInverseTransform", "RPC Inverse Transform", 1,
+  this->RegisterOverride("otbSensorTransformBase", "otbRPCInverseTransform", "RPC Inverse Transform", 1,
                            itk::CreateObjectFunction<RPCInverseTransform<TScalarType,NInputDimensions,NOutputDimensions>>::New());
 }
 

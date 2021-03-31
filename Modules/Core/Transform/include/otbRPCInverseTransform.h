@@ -63,7 +63,7 @@ public:
   OutputPointType TransformPoint(const InputPointType& point) const override;
 
 protected:
-  RPCInverseTransform() = default;
+  RPCInverseTransform() {this->setDirection(TransformDirection::INVERSE);};
   ~RPCInverseTransform() = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 

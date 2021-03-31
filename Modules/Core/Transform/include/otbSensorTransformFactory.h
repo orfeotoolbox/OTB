@@ -24,9 +24,7 @@ public:
 	typedef itk::SmartPointer<const Self> ConstPointer;
 	typedef typename SensorTransformBase<TScalarType, NInputDimensions,NOutputDimensions>::Pointer SensorTransformTypePointer;
 
-	/** Class Methods used to interface with the registered factories */
-
-	/** Run-time type information (and related methods). */
+    /** Run-time type information (and related methods). */
 	itkTypeMacro(SensorTransformFactory, itk::Object);
 
 	/** Create the appropriate transform. */

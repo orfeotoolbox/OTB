@@ -151,7 +151,7 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
   if ((m_OutputTransform.IsNull()) && (m_OutputImd != nullptr) && (m_OutputImd->Has(MDGeom::RPC)))
   {
     typedef otb::SensorTransformFactory<double, InputSpaceDimension, OutputSpaceDimension> SensorTransformModelFactoryType;
-    auto sensorModel = SensorTransformModelFactoryType::CreateTransform(*m_InputImd,TransformDirection::INVERSE);
+    auto sensorModel = SensorTransformModelFactoryType::CreateTransform(*m_OutputImd,TransformDirection::INVERSE);
 
     if (sensorModel != nullptr)
     {

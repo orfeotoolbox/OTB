@@ -30,16 +30,6 @@
 
 namespace otb
 {
-
-namespace TransformDirection
-{
-enum TransformationDirection
-{
-  FORWARD = 0,
-  INVERSE = 1
-};
-}
-
 /** \class GenericMapProjection
  *  \brief This is the base class for generic map projection transformation
  *
