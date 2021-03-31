@@ -251,12 +251,12 @@ std::vector<Orbit> SarImageMetadataInterface::GetOrbitsGeom(const MetadataSuppli
     std::string path_root = "orbitList.orbit[" + oss.str() + "]";
     Orbit orbit;
     std::istringstream(mds.GetAs<std::string>(path_root + ".time")) >> orbit.time;
-    orbit.posX = mds.GetAs<double>(path_root + ".x_pos");
-    orbit.posY = mds.GetAs<double>(path_root + ".y_pos");
-    orbit.posZ = mds.GetAs<double>(path_root + ".z_pos");
-    orbit.velX = mds.GetAs<double>(path_root + ".x_vel");
-    orbit.velY = mds.GetAs<double>(path_root + ".y_vel");
-    orbit.velZ = mds.GetAs<double>(path_root + ".z_vel");
+    orbit.position = mds.GetAs<double>(path_root + ".x_pos");
+    orbit.position = mds.GetAs<double>(path_root + ".y_pos");
+    orbit.position = mds.GetAs<double>(path_root + ".z_pos");
+    orbit.velocity = mds.GetAs<double>(path_root + ".x_vel");
+    orbit.velocity = mds.GetAs<double>(path_root + ".y_vel");
+    orbit.velocity = mds.GetAs<double>(path_root + ".z_vel");
     orbitVector.push_back(std::move(orbit));
   }
   return orbitVector;
