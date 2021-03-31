@@ -340,7 +340,7 @@ std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const MetadataSupplier
 
     orbit.velocity[0] = std::stod(vECEF_sat_vel[i*3 + 0]) ;
     orbit.velocity[1] = std::stod(vECEF_sat_vel[i*3 + 1]) ;
-    orbit.velocity[0] = std::stod(vECEF_sat_vel[i*3 + 2]) ;
+    orbit.velocity[2] = std::stod(vECEF_sat_vel[i*3 + 2]) ;
 
     orbitVector.push_back(orbit);
   }
