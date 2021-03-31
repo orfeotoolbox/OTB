@@ -334,14 +334,13 @@ std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const MetadataSupplier
 
     orbit.time = time ;
 
-    orbit.posX = std::stod(vECEF_sat_pos[i*3 + 0]) ;
-    orbit.posY = std::stod(vECEF_sat_pos[i*3 + 1]) ;
-    orbit.posZ = std::stod(vECEF_sat_pos[i*3 + 2]) ;
+    orbit.position[0] = std::stod(vECEF_sat_pos[i*3 + 0]) ;
+    orbit.position[1] = std::stod(vECEF_sat_pos[i*3 + 1]) ;
+    orbit.position[2] = std::stod(vECEF_sat_pos[i*3 + 2]) ;
 
-    orbit.velX = std::stod(vECEF_sat_vel[i*3 + 0]) ;
-    orbit.velY = std::stod(vECEF_sat_vel[i*3 + 1]) ;
-    orbit.velZ = std::stod(vECEF_sat_vel[i*3 + 2]) ;
-
+    orbit.velocity[0] = std::stod(vECEF_sat_vel[i*3 + 0]) ;
+    orbit.velocity[1] = std::stod(vECEF_sat_vel[i*3 + 1]) ;
+    orbit.velocity[0] = std::stod(vECEF_sat_vel[i*3 + 2]) ;
 
     orbitVector.push_back(orbit);
   }

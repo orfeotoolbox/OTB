@@ -415,12 +415,12 @@ std::vector<Orbit> Sentinel1ImageMetadataInterface::GetOrbits(const XMLMetadataS
     std::string path_root = "product.generalAnnotation.orbitList.orbit_" + oss.str();
     Orbit orbit;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".time")) >> orbit.time;
-    orbit.posX = xmlMS.GetAs<double>(path_root + ".position.x");
-    orbit.posY = xmlMS.GetAs<double>(path_root + ".position.y");
-    orbit.posZ = xmlMS.GetAs<double>(path_root + ".position.z");
-    orbit.velX = xmlMS.GetAs<double>(path_root + ".velocity.x");
-    orbit.velY = xmlMS.GetAs<double>(path_root + ".velocity.y");
-    orbit.velZ = xmlMS.GetAs<double>(path_root + ".velocity.z");
+    orbit.position[0] = xmlMS.GetAs<double>(path_root + ".position.x");
+    orbit.position[1] = xmlMS.GetAs<double>(path_root + ".position.y");
+    orbit.position[2] = xmlMS.GetAs<double>(path_root + ".position.z");
+    orbit.velocity[0] = xmlMS.GetAs<double>(path_root + ".velocity.x");
+    orbit.velocity[1] = xmlMS.GetAs<double>(path_root + ".velocity.y");
+    orbit.velocity[2] = xmlMS.GetAs<double>(path_root + ".velocity.z");
     orbitVector.push_back(orbit);
   }
   return orbitVector;
