@@ -20,12 +20,12 @@ SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::CreateT
   if(direction == TransformDirection::FORWARD)
   {
     possibleobjects = itk::ObjectFactoryBase::CreateAllInstance("RPCForwardTransform");
-    //TODO: Add SARForwardTransform to this list
+    //TODO: Add SARForwardTransform to this list possibleobjects.append(...CreateAllInstance("SARForwardTransform"))
   }
   else
   {
     possibleobjects = itk::ObjectFactoryBase::CreateAllInstance("RPCInverseTransform");
-    //TODO: Add SARInverseTransform to this list
+    //TODO: Add SARInverseTransform to this list possibleobjects.append(...CreateAllInstance("SARInverseTransform"))
   }
   for (std::list<LightObject::Pointer>::iterator i = possibleobjects.begin(); i != possibleobjects.end(); ++i)
   {
@@ -54,18 +54,18 @@ SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::CreateT
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::RegisterBuiltInFactories()
 {
-	static bool firstTime = true;
+  static bool firstTime = true;
 
-	static itk::SimpleMutexLock mutex;
-	{
-		itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
-		if(firstTime)
-		{
-		RegisterFactory(RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
-		RegisterFactory(RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
-		//TODO: Add Factories for SAR Forward and Inverse transform
-		}
-	}
+  static itk::SimpleMutexLock mutex;
+  {
+    itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
+    if(firstTime)
+    {
+      RegisterFactory(RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
+      RegisterFactory(RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
+      //TODO: Add Factories for SAR Forward and Inverse transform
+    }
+  }
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
@@ -81,37 +81,37 @@ void SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::Re
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::CleanFactories()
 {
-	static bool firstTime = true;
+  static bool firstTime = true;
 
-	static itk::SimpleMutexLock mutex;
-	{
-  itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
+  static itk::SimpleMutexLock mutex;
+  {
+    itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(mutex);
 
-	  if(firstTime)
-		{
-			std::list<itk::ObjectFactoryBase*>           factories = itk::ObjectFactoryBase::GetRegisteredFactories();
-			std::list<itk::ObjectFactoryBase*>::iterator itFac;
+    if(firstTime)
+    {
+      std::list<itk::ObjectFactoryBase*>           factories = itk::ObjectFactoryBase::GetRegisteredFactories();
+      std::list<itk::ObjectFactoryBase*>::iterator itFac;
 
-			for (itFac = factories.begin(); itFac != factories.end(); ++itFac)
-			{
-				RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>* rpcForwardFactory =
-				    dynamic_cast<RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>*>(*itFac);
-				if (rpcForwardFactory)
-				{
-					itk::ObjectFactoryBase::UnRegisterFactory(rpcForwardFactory);
-					continue;
-				}
+      for (itFac = factories.begin(); itFac != factories.end(); ++itFac)
+      {
+        RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>* rpcForwardFactory =
+          dynamic_cast<RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>*>(*itFac);
+        if (rpcForwardFactory)
+        {
+          itk::ObjectFactoryBase::UnRegisterFactory(rpcForwardFactory);
+          continue;
+        }
 
-				RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>* rpcInverseFactory =
-				    dynamic_cast<RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>*>(*itFac);
-				if (rpcInverseFactory)
-				{
-					itk::ObjectFactoryBase::UnRegisterFactory(rpcInverseFactory);
-					continue;
-				}
-			}
-		}
-	}
+        RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>* rpcInverseFactory =
+          dynamic_cast<RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>*>(*itFac);
+        if (rpcInverseFactory)
+        {
+          itk::ObjectFactoryBase::UnRegisterFactory(rpcInverseFactory);
+          continue;
+        }
+      }
+    }
+  }
 }
 
 } // end namespace otb
