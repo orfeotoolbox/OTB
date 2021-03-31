@@ -30,7 +30,7 @@ namespace otb
 /** \class SensorTransformFactory
  * \brief Creation of object instance using object factory.
  *
- * \ingroup OTBCore
+ * \ingroup OTBTransform
  */
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 class SensorTransformFactory : public itk::Object

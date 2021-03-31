@@ -28,7 +28,7 @@ namespace otb
 /** \class RPCForwardTransformFactory
  * \brief Creation d'un instance d'un objet RPCForwardTransformFactory utilisant les object factory.
  *
- * \ingroup OTBCore
+ * \ingroup OTBTransform
  */
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 class ITK_EXPORT RPCForwardTransformFactory : public itk::ObjectFactoryBase

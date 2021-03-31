@@ -27,7 +27,7 @@ namespace otb
 /** \class RPCInverseTransformFactory
  * \brief Creation d'un instance d'un objet RPCInverseTransform utilisant les object factory.
  *
- * \ingroup OTBCore
+ * \ingroup OTBTransform
  */
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 class ITK_EXPORT RPCInverseTransformFactory : public itk::ObjectFactoryBase
