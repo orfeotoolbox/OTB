@@ -29,6 +29,8 @@
 #include <vector>
 #include <sstream>
 
+#include "itkPoint.h"
+
 namespace otb
 {
 
@@ -103,16 +105,14 @@ struct OTBMetadata_EXPORT SARNoise
  */
 struct OTBMetadata_EXPORT Orbit
 {
+  using PointType = itk::Point<double, 3>;
+
   /** Timestamp at which orbit state vectors apply */
   MetaData::Time time;
   /** Position vector */
-  double posX;
-  double posY;
-  double posZ;
+  PointType position;
   /** Velocity vector */
-  double velX;
-  double velY;
-  double velZ;
+  PointType velocity;
 };
 
 /** \struct SARParam

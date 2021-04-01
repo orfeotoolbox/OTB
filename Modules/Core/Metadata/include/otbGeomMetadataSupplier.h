@@ -63,7 +63,7 @@ public:
   int GetNbBands() const override;
 
   /**
-   * @brief Fill the ImageMetadata with the data from the geom file
+   * @brief Fill the ImageMetadata with the RPC model from the geom file
    *
    * @param imd The ImageMetadata to fill
    */

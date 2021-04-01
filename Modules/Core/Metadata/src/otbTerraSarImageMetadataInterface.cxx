@@ -1242,43 +1242,27 @@ void TerraSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent ind
   Superclass::PrintSelf(os, indent);
 }
 
-
-
-
-
-void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void TerraSarImageMetadataInterface::ParseGdal(const MetadataSupplierInterface & mds)
 {
   // Metadata read by GDAL
-  Fetch(MDNum::LineSpacing, mds, "ROW_SPACING");
   Fetch(MDStr::Mode, mds, "IMAGING_MODE");
   Fetch(MDStr::OrbitDirection, mds, "ORBIT_DIRECTION");
   Fetch(MDNum::OrbitNumber, mds, "ABSOLUTE_ORBIT");
-  Fetch(MDNum::PixelSpacing, mds, "COL_SPACING");
 
   // Main XML file
   std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(mds.GetResourceFile("")), "T[S|D]X1_SAR__.*.xml") ;
   if (!MainFilePath.empty())
   {
     XMLMetadataSupplier MainXMLFileMS(MainFilePath);
+    m_Imd.Add(MDNum::LineSpacing, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingAzimuth"));
+    m_Imd.Add(MDNum::PixelSpacing, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingRange.slantRange"));
     m_Imd.Add(MDStr::Mission, MainXMLFileMS.GetAs<std::string>("level1Product.generalHeader.mission"));
     m_Imd.Add(MDStr::ProductType, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.productVariantInfo.productType"));
     // m_Imd.Add(MDStr::Mode, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.imagingMode"));
     m_Imd.Add(MDStr::SensorID, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.sensor"));
     m_Imd.Add(MDNum::RadarFrequency, MainXMLFileMS.GetAs<double>("level1Product.instrument.radarParameters.centerFrequency"));
-
-    bool hasValueStarttimeUTC;
-    MainXMLFileMS.GetFirstMetadataValue("level1Product.productInfo.sceneInfo.start.timeUTC", hasValueStarttimeUTC);
-    if(!hasValueStarttimeUTC)
-      m_Imd.Add(MDTime::AcquisitionStartTime, MainXMLFileMS.GetFirstAs<MetaData::Time>("level1Product.instrument.settings.rxGainSetting.startTimeUTC"));
-    else
-      m_Imd.Add(MDTime::AcquisitionStartTime, MainXMLFileMS.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.start.timeUTC"));
-
-    bool hasValueStoptimeUTC;
-    MainXMLFileMS.GetFirstMetadataValue("level1Product.productInfo.sceneInfo.stop.timeUTC", hasValueStoptimeUTC);
-    if(!hasValueStoptimeUTC)
-      m_Imd.Add(MDTime::AcquisitionStopTime, MainXMLFileMS.GetFirstAs<MetaData::Time>("level1Product.instrument.settings.settingRecord.dataSegment segmentID.stopTimeUTC"));
-    else
-      m_Imd.Add(MDTime::AcquisitionStopTime, MainXMLFileMS.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.stop.timeUTC"));
+    m_Imd.Add(MDTime::AcquisitionStartTime, MainXMLFileMS.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.start.timeUTC"));
+    m_Imd.Add(MDTime::AcquisitionStopTime, MainXMLFileMS.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.stop.timeUTC"));
     m_Imd.Add(MDNum::PRF, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonPRF"));
     m_Imd.Add(MDNum::RSF, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
 
@@ -1288,11 +1272,58 @@ void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
 
   SARParam sarParam;
   for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
-    {
+  {
     Fetch(MDStr::Polarization, mds, "POLARIMETRIC_INTERP", bandId);
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
-    }
   }
+}
+
+void TerraSarImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & mds)
+{
+  Fetch(MDNum::LineSpacing, mds, "meters_per_pixel_y");
+  Fetch(MDNum::PixelSpacing, mds, "meters_per_pixel_x");
+  Fetch(MDStr::Mode, mds, "acquisitionInfo.imagingMode");
+  Fetch(MDStr::Mission, mds, "sensor");
+  Fetch(MDStr::ProductType, mds, "product_type");
+  Fetch(MDStr::SensorID, mds, "acquisitionInfo.sensor");
+  Fetch(MDTime::AcquisitionStartTime, mds, "azimuth_start_time");
+  Fetch(MDTime::AcquisitionStopTime, mds, "azimuth_stop_time");
+  Fetch(MDNum::PRF, mds, "sensor_params.prf");
+    
+  // Main XML file
+  std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(mds.GetResourceFile("")), "T[S|D]X1_SAR__.*.xml") ;
+  if (!MainFilePath.empty())
+  {
+    XMLMetadataSupplier MainXMLFileMS(MainFilePath);
+    m_Imd.Add(MDNum::RadarFrequency, MainXMLFileMS.GetAs<double>("level1Product.instrument.radarParameters.centerFrequency"));
+    m_Imd.Add(MDStr::OrbitDirection, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.missionInfo.orbitDirection"));
+    m_Imd.Add(MDNum::OrbitNumber, MainXMLFileMS.GetAs<double>("level1Product.productInfo.missionInfo.absOrbit"));
+    m_Imd.Add(MDNum::RSF, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
+  }
+
+  assert(mds.GetNbBands() == this->m_Imd.Bands.size());
+
+  SARParam sarParam;
+  for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
+  {
+    Fetch(MDStr::Polarization, mds, ("acquisitionInfo.polarisationList[" + std::to_string(bandId) + "]").c_str(), bandId);
+    m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
+  }
+}
+
+void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+{
+  // Try to fetch the metadata from GDAL Metadata Supplier
+  if (boost::filesystem::path(mds.GetResourceFile()).filename().string().rfind("TSX1_", 0) == 0)
+    this->ParseGdal(mds);
+  // Try to fetch the metadata from GEOM file
+  else if (mds.GetAs<std::string>("", "sensor") == "TSX-1")
+    this->ParseGeom(mds);
+  // Failed to fetch the metadata
+  else
+    otbGenericExceptionMacro(MissingMetadataException,
+			     << "Not a Sentinel1 product");
+}
 
 
 } // end namespace otb
