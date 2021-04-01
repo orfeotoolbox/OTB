@@ -43,30 +43,33 @@ void SarBrightnessToImageFilter<TInputImage, TOutputImage>::BeforeThreadedGenera
   // will SetInputImage on the function
   Superclass::BeforeThreadedGenerateData();
 
-  SarImageMetadataInterface::Pointer imageMetadataInterface = SarImageMetadataInterfaceFactory::CreateIMI(this->GetInput()->GetMetaDataDictionary());
+  /** Retrieve the ImageMetadata */
+  auto imd = this->GetInput()->GetImageMetadata();
+  /** Fetch the SARModel */
+  auto sarParam = boost::any_cast<SARParam>(imd[MDGeom::SAR]);
 
   FunctionPointer function = this->GetFunction();
 
-  function->SetScale(imageMetadataInterface->GetRadiometricCalibrationScale());
+  function->SetScale(imd[MDNum::CalScale]);
 
   ParametricFunctionPointer noise = function->GetNoise();
-  noise->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationNoise());
-  noise->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationNoisePolynomialDegree());
+  noise->SetPointSet(sarParam.radiometricCalibrationNoise);
+  noise->SetPolynomalSize({imd[MDNum::NoisePolyDegX], imd[MDNum::NoisePolyDegY]});
   noise->EvaluateParametricCoefficient();
 
   ParametricFunctionPointer antennaPatternNewGain = function->GetAntennaPatternNewGain();
-  antennaPatternNewGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGain());
-  antennaPatternNewGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree());
+  antennaPatternNewGain->SetPointSet(sarParam.radiometricCalibrationAntennaPatternNewGain);
+  antennaPatternNewGain->SetPolynomalSize({imd[MDNum::AntennaPatternNewGainPolyDegX], imd[MDNum::AntennaPatternNewGainPolyDegY]});
   antennaPatternNewGain->EvaluateParametricCoefficient();
 
   ParametricFunctionPointer antennaPatternOldGain = function->GetAntennaPatternOldGain();
-  antennaPatternOldGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGain());
-  antennaPatternOldGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree());
+  antennaPatternOldGain->SetPointSet(sarParam.radiometricCalibrationAntennaPatternOldGain);
+  antennaPatternOldGain->SetPolynomalSize({imd[MDNum::AntennaPatternOldGainPolyDegX], imd[MDNum::AntennaPatternOldGainPolyDegY]});
   antennaPatternOldGain->EvaluateParametricCoefficient();
 
   ParametricFunctionPointer rangeSpreadLoss = function->GetRangeSpreadLoss();
-  rangeSpreadLoss->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLoss());
-  rangeSpreadLoss->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree());
+  rangeSpreadLoss->SetPointSet(sarParam.radiometricCalibrationRangeSpreadLoss);
+  rangeSpreadLoss->SetPolynomalSize({imd[MDNum::RangeSpreadLossPolyDegX], imd[MDNum::RangeSpreadLossPolyDegY]});
   rangeSpreadLoss->EvaluateParametricCoefficient();
 
 #if 0
