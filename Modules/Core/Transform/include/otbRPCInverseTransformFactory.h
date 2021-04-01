@@ -25,7 +25,7 @@
 namespace otb
 {
 /** \class RPCInverseTransformFactory
- * \brief Creation d'un instance d'un objet RPCInverseTransform utilisant les object factory.
+ * \brief Creates an instance of RPCInverseTransform using itk object factory.
  *
  * \ingroup OTBTransform
  */

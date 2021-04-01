@@ -26,18 +26,18 @@
 namespace otb
 {
 
-template <TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+template <TransformDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 GeocentricTransform<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>::GeocentricTransform() : Superclass(ParametersDimension)
 {
   m_Ellipsoid = EllipsoidAdapter::New();
 }
 
-template <TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+template <TransformDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 GeocentricTransform<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>::~GeocentricTransform()
 {
 }
 
-template <TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+template <TransformDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename GeocentricTransform<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
 GeocentricTransform<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>::TransformPoint(const InputPointType& point) const
 {

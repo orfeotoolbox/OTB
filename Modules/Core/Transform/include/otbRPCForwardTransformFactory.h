@@ -26,7 +26,7 @@
 namespace otb
 {
 /** \class RPCForwardTransformFactory
- * \brief Creation d'un instance d'un objet RPCForwardTransformFactory utilisant les object factory.
+ * \brief Creates an instance of RPCForwardTransform using itk object factory.
  *
  * \ingroup OTBTransform
  */

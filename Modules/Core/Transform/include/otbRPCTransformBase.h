@@ -73,7 +73,7 @@ public:
   bool IsValidSensorModel() const override;
 
 protected:
-  RPCTransformBase() = default;
+  RPCTransformBase(TransformDirection dir) : Superclass(dir) {};
   ~RPCTransformBase() = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 

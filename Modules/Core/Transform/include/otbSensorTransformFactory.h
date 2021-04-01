@@ -28,7 +28,7 @@
 namespace otb
 {
 /** \class SensorTransformFactory
- * \brief Creation of object instance using object factory.
+ * \brief Creats an instance of SensorTransform (RPC, SAR ...) object using object factory.
  *
  * \ingroup OTBTransform
  */
@@ -47,7 +47,7 @@ public:
 	itkTypeMacro(SensorTransformFactory, itk::Object);
 
 	/** Create the appropriate transform. */
-    static SensorTransformTypePointer CreateTransform(const ImageMetadata &imd,TransformDirection::TransformationDirection d);
+    static SensorTransformTypePointer CreateTransform(const ImageMetadata &imd,TransformDirection d);
 
 	static void CleanFactories();
 
@@ -55,6 +55,7 @@ protected:
 	SensorTransformFactory();
 	~SensorTransformFactory() override;
 
+    static itk::SimpleMutexLock m_mutex;
 private:
 	SensorTransformFactory(const Self&) = delete;
 	void operator=(const Self&) = delete;
@@ -64,7 +65,7 @@ private:
 
 	/** Register a single factory, ensuring it has not been registered
 		* twice */
-	static void RegisterFactory(itk::ObjectFactoryBase* factory);
+    static void RegisterFactory(itk::ObjectFactoryBase* factory);
 };
 }
 
