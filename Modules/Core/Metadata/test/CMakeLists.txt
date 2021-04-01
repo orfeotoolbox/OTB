@@ -440,10 +440,12 @@ otb_add_test(NAME ioTuotbXMLMetadataSupplierTest COMMAND otbMetadataTestDriver
 # Additionally, it is possible to compare the metadata of the product with the metadata of a geom file
 # with the --compare-metadata utility by setting ${sensor}_geom_file
 
-set(sensor_list pleiades spot6 spot5 spot5_2 formosat ikonos worldview2 quickbird Radarsat2 TerraSar CosmoSkyMed Sentinel1)
+set(sensor_list pleiades pleiades_2 spot6 spot6_2 spot5 spot5_2 formosat ikonos worldview2 quickbird Radarsat2 TerraSar CosmoSkyMed Sentinel1)
 
 set(pleiades_filename LARGEINPUT{PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201206050630064_SEN_559102101-002_R1C1.JP2})
+set(pleiades_2_filename LARGEINPUT{PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/DIM_PHR1A_MS_201206050630064_SEN_559102101-002.XML})
 set(spot6_filename LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2})
+set(spot6_2_filename LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/DIM_SPOT6_MS_201212071020271_SEN_600143101.XML})
 set(spot5_filename LARGEINPUT{SPOT5/Arcachon-SCENE01/IMAGERY.TIF})
 set(spot5_2_filename LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF})
 set(formosat_filename LARGEINPUT{FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF})
