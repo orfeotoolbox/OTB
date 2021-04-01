@@ -32,17 +32,15 @@ void TerraSarBrightnessImageFilter<TInputImage, TOutputImage>::BeforeThreadedGen
 {
   Superclass::BeforeThreadedGenerateData();
 
-  // Load metada
-  TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
-  lImageMetadata->SetMetaDataDictionary(this->GetInput()->GetMetaDataDictionary());
-  bool mdIsAvailable = lImageMetadata->CanRead();
+  /** Retrieve the ImageMetadata */
+  auto imd = this->GetInput()->GetImageMetadata();
 
   // If the user doesn't set it AND the metadata is available, set calFactor using image metadata
   if (this->GetCalibrationFactor() == itk::NumericTraits<double>::Zero)
   {
-    if (mdIsAvailable)
+    if (imd.Has(MDNum::CalScale))
     {
-      this->SetCalibrationFactor(lImageMetadata->GetCalibrationFactor());
+      this->SetCalibrationFactor(imd[MDNum::CalScale]);
     }
     else
     {
