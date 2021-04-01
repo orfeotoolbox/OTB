@@ -286,6 +286,7 @@ void Radarsat2ImageMetadataInterface::ParseGdal(const MetadataSupplierInterface 
     assert(mds.GetNbBands() == this->m_Imd.Bands.size());
 
     SARParam sarParam;
+    LoadRadiometricCalibrationData(sarParam);
     for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
       {
       Fetch(MDStr::Polarization, mds, "POLARIMETRIC_INTERP", bandId);
@@ -327,6 +328,7 @@ void Radarsat2ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface 
     auto polarizations = ProductMS.GetAsVector<std::string>("product.sourceAttributes.radarParameters.polarizations");
     assert(polarizations.size() == m_Imd.Bands.size());
     SARParam sarParam;
+    LoadRadiometricCalibrationData(sarParam);
     for (int bandId = 0 ; bandId < polarizations.size() ; ++bandId)
     {
       m_Imd.Bands[bandId].Add(MDStr::Polarization, polarizations[bandId]);

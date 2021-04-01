@@ -51,6 +51,7 @@ public:
 
   typedef Superclass::ImageType                ImageType;
   typedef ImageType::IndexType                 IndexType;
+  typedef std::array<int, 2>                   ArrayIndexType;
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
@@ -90,29 +91,29 @@ public:
     itkExceptionMacro("GetRadiometricCalibrationNoise() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const override
+  ArrayIndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const override
   {
     itkExceptionMacro(
         "GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const override
+  ArrayIndexType GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const override
   {
     itkExceptionMacro(
         "GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override
+  ArrayIndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationIncidenceAnglePolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const override
+  ArrayIndexType GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const override
+  ArrayIndexType GetRadiometricCalibrationNoisePolynomialDegree() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationNoisePolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }

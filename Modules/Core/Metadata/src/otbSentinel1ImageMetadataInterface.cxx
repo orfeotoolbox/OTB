@@ -599,7 +599,8 @@ void Sentinel1ImageMetadataInterface::ParseGdal(const MetadataSupplierInterface 
           otbGenericExceptionMacro(MissingMetadataException,<<"Missing Noise file for band '"<<swath<<"'");
     XMLMetadataSupplier NoiseMS(NoiseFilePath);
     sarParam.noiseVector = this->GetNoiseVector(NoiseMS);
-
+    
+    LoadRadiometricCalibrationData(sarParam);
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
 }
@@ -634,7 +635,10 @@ void Sentinel1ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface 
   SARParam sarParam;
   auto hasSAR = GetSAR(mds, sarParam);
   if (hasSAR)
+  {
+    LoadRadiometricCalibrationData(sarParam);
     m_Imd.Bands[0].Add(MDGeom::SAR, sarParam);
+  }
 }
 
 void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)

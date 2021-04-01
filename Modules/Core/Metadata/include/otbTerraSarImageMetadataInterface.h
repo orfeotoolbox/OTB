@@ -52,6 +52,7 @@ public:
 
   typedef itk::ImageBase<2>                     ImageType;
   typedef ImageType::IndexType                  IndexType;
+  typedef std::array<int, 2>                       ArrayIndexType;
   typedef std::vector<IndexType>                IndexVectorType;
   typedef itk::MetaDataDictionary               MetaDataDictionaryType;
   typedef MetaDataKey::VectorType               VectorType;
@@ -162,11 +163,11 @@ public:
   RealType GetRadiometricCalibrationScale() const override;
 
   PointSetPointer GetRadiometricCalibrationNoise() const override;
-  IndexType       GetRadiometricCalibrationNoisePolynomialDegree() const override;
+  ArrayIndexType GetRadiometricCalibrationNoisePolynomialDegree() const override;
 
   // PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
   PointSetPointer GetRadiometricCalibrationIncidenceAngle() const override;
-  IndexType       GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override;
+  ArrayIndexType  GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override;
 
   bool CanRead() const override;
 

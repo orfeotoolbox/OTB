@@ -23,7 +23,7 @@
 
 #include "OTBMetadataExport.h"
 #include "otbMetaDataKey.h"
-
+#include "otbSarCalibrationLookupData.h"
 
 #include <string>
 #include <vector>
@@ -123,6 +123,10 @@ struct OTBMetadata_EXPORT Orbit
  */
 struct OTBMetadata_EXPORT SARParam
 {
+  using PointSetType = itk::PointSet<double, 2>;
+  using ArrayType    = std::array<int, 2>;
+  using LookupDataType = SarCalibrationLookupData;
+  
   /** Azimuth Frequency Modulation (FM) rate list.
    * contains an entry for each azimuth FM rate update made along azimuth.
    */
@@ -133,6 +137,21 @@ struct OTBMetadata_EXPORT SARParam
 
   MetaData::Time calibrationStartTime;
   MetaData::Time calibrationStopTime;
+
+  /** Radiometric Calibration */
+  bool calibrationLookupFlag;
+  double rescalingFactor;
+  ArrayType radiometricCalibrationNoisePolynomialDegree;
+  ArrayType radiometricCalibrationAntennaPatternNewGainPolynomialDegree;
+  ArrayType radiometricCalibrationAntennaPatternOldGainPolynomialDegree;
+  ArrayType radiometricCalibrationIncidenceAnglePolynomialDegree;
+  ArrayType radiometricCalibrationRangeSpreadLossPolynomialDegree;
+  PointSetType::Pointer radiometricCalibrationNoise;
+  PointSetType::Pointer radiometricCalibrationAntennaPatternNewGain;
+  PointSetType::Pointer radiometricCalibrationAntennaPatternOldGain;
+  PointSetType::Pointer radiometricCalibrationIncidenceAngle;
+  PointSetType::Pointer radiometricCalibrationRangeSpreadLoss;
+  std::unordered_map<short, LookupDataType::Pointer> calibrationLookupData;
 
   /** Doppler centroid estimates */
   std::vector<DopplerCentroid> dopplerCentroids;

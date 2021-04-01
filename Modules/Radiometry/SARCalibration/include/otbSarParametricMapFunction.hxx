@@ -70,6 +70,12 @@ void SarParametricMapFunction<TInputImage, TCoordRep>::SetPolynomalSize(const In
 }
 
 template <class TInputImage, class TCoordRep>
+void SarParametricMapFunction<TInputImage, TCoordRep>::SetPolynomalSize(const ArrayIndexType polynomalSize)
+{
+  SetPolynomalSize(IndexType {polynomalSize[0], polynomalSize[1]});
+}
+
+template <class TInputImage, class TCoordRep>
 double SarParametricMapFunction<TInputImage, TCoordRep>::Horner(PointType point) const
 {
   // Implementation of a Horner scheme evaluation for bivariate polynomial

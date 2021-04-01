@@ -408,6 +408,7 @@ void CosmoImageMetadataInterface::ParseGdal(const MetadataSupplierInterface & md
   //SAR Parameters
   SARParam sarParam;
   sarParam.orbits = this->getOrbits(mds, reference_UTC);
+  LoadRadiometricCalibrationData(sarParam);
 
   m_Imd.Bands[0].Add(MDGeom::SAR, sarParam);
 }
@@ -443,6 +444,7 @@ void CosmoImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & md
   //SAR Parameters
   SARParam sarParam;
   sarParam.orbits = this->GetOrbitsGeom(mds);
+  LoadRadiometricCalibrationData(sarParam);
   m_Imd.Bands[0].Add(MDGeom::SAR, sarParam);
 }
 

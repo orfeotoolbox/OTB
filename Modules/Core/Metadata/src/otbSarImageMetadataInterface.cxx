@@ -150,41 +150,36 @@ SarImageMetadataInterface::PointSetPointer SarImageMetadataInterface::GetRadiome
 }
 
 
-SarImageMetadataInterface::IndexType SarImageMetadataInterface::GetConstantPolynomialDegree() const
+SarImageMetadataInterface::ArrayIndexType SarImageMetadataInterface::GetConstantPolynomialDegree() const
 {
-  IndexType polynomialDegree;
-  polynomialDegree[0] = 0;
-  polynomialDegree[1] = 0;
-  return polynomialDegree;
+  return {0, 0};
 }
 
 double SarImageMetadataInterface::GetRescalingFactor() const
 {
   return 1.0;
 }
-SarImageMetadataInterface::IndexType SarImageMetadataInterface::GetRadiometricCalibrationNoisePolynomialDegree() const
+SarImageMetadataInterface::ArrayIndexType SarImageMetadataInterface::GetRadiometricCalibrationNoisePolynomialDegree() const
 {
   return SarImageMetadataInterface::GetConstantPolynomialDegree();
 }
 
-SarImageMetadataInterface::IndexType SarImageMetadataInterface::GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const
+SarImageMetadataInterface::ArrayIndexType SarImageMetadataInterface::GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const
 {
   return SarImageMetadataInterface::GetConstantPolynomialDegree();
 }
 
-SarImageMetadataInterface::IndexType SarImageMetadataInterface::GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const
+SarImageMetadataInterface::ArrayIndexType SarImageMetadataInterface::GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const
 {
   return SarImageMetadataInterface::GetConstantPolynomialDegree();
 }
 
-
-SarImageMetadataInterface::IndexType SarImageMetadataInterface::GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const
+SarImageMetadataInterface::ArrayIndexType SarImageMetadataInterface::GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const
 {
   return SarImageMetadataInterface::GetConstantPolynomialDegree();
 }
 
-
-SarImageMetadataInterface::IndexType SarImageMetadataInterface::GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const
+SarImageMetadataInterface::ArrayIndexType SarImageMetadataInterface::GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const
 {
   return SarImageMetadataInterface::GetConstantPolynomialDegree();
 }
@@ -353,32 +348,66 @@ bool SarImageMetadataInterface::GetSAR(const MetadataSupplierInterface & mds, SA
   return true;
 }
 
+void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARParam &sarParam)
+{
+  sarParam.calibrationLookupFlag = HasCalibrationLookupDataFlag();
+  sarParam.rescalingFactor = GetRescalingFactor();
+  sarParam.radiometricCalibrationNoisePolynomialDegree = GetRadiometricCalibrationNoisePolynomialDegree();
+  sarParam.radiometricCalibrationAntennaPatternNewGainPolynomialDegree = GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree();
+  sarParam.radiometricCalibrationAntennaPatternOldGainPolynomialDegree = GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree();
+  sarParam.radiometricCalibrationIncidenceAnglePolynomialDegree = GetRadiometricCalibrationIncidenceAnglePolynomialDegree();
+  sarParam.radiometricCalibrationRangeSpreadLossPolynomialDegree = GetRadiometricCalibrationRangeSpreadLossPolynomialDegree();
+  sarParam.radiometricCalibrationNoise = GetRadiometricCalibrationNoise();
+  sarParam.radiometricCalibrationAntennaPatternNewGain = GetRadiometricCalibrationAntennaPatternNewGain();
+  sarParam.radiometricCalibrationAntennaPatternOldGain = GetRadiometricCalibrationAntennaPatternOldGain();
+  sarParam.radiometricCalibrationIncidenceAngle = GetRadiometricCalibrationIncidenceAngle();
+  sarParam.radiometricCalibrationRangeSpreadLoss = GetRadiometricCalibrationRangeSpreadLoss();
+  sarParam.calibrationLookupData[SarCalibrationLookupData::SIGMA] = GetCalibrationLookupData(SarCalibrationLookupData::SIGMA);
+  sarParam.calibrationLookupData[SarCalibrationLookupData::BETA] = GetCalibrationLookupData(SarCalibrationLookupData::BETA);
+  sarParam.calibrationLookupData[SarCalibrationLookupData::GAMMA] = GetCalibrationLookupData(SarCalibrationLookupData::GAMMA);
+  sarParam.calibrationLookupData[SarCalibrationLookupData::DN] = GetCalibrationLookupData(SarCalibrationLookupData::DN);
+}
+
 void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 
   if (this->CanRead())
   {
-    os << indent << "GetRadiometricCalibrationScale:                 " << this->GetRadiometricCalibrationScale() << std::endl;
-    os << indent << "GetRadiometricCalibrationNoise:                 " << this->GetRadiometricCalibrationNoise() << std::endl;
-    os << indent << "GetRadiometricCalibrationAntennaPatternNewGain: " << this->GetRadiometricCalibrationAntennaPatternNewGain() << std::endl;
-    os << indent << "GetRadiometricCalibrationAntennaPatternOldGain: " << this->GetRadiometricCalibrationAntennaPatternOldGain() << std::endl;
-    os << indent << "GetRadiometricCalibrationIncidenceAngle:        " << this->GetRadiometricCalibrationIncidenceAngle() << std::endl;
-    os << indent << "GetRadiometricCalibrationRangeSpreadLoss:       " << this->GetRadiometricCalibrationRangeSpreadLoss() << std::endl;
-    os << indent << "GetConstantPolynomialDegree:                    " << this->GetConstantPolynomialDegree() << std::endl;
-    os << indent << "GetRadiometricCalibrationNoisePolynomialDegree: " << this->GetRadiometricCalibrationNoisePolynomialDegree() << std::endl;
-    os << indent << "GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree: " << this->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree()
-       << std::endl;
-    os << indent << "GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree: " << this->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree()
-       << std::endl;
-    os << indent << "GetRadiometricCalibrationIncidenceAnglePolynomialDegree:        " << this->GetRadiometricCalibrationIncidenceAnglePolynomialDegree()
-       << std::endl;
-    os << indent << "GetRadiometricCalibrationRangeSpreadLossPolynomialDegree:       " << this->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree()
-       << std::endl;
-    os << indent << "GetPRF:                  " << this->GetPRF() << std::endl;
-    os << indent << "GetRSF:                  " << this->GetRSF() << std::endl;
-    os << indent << "GetRadarFrequency:       " << this->GetRadarFrequency() << std::endl;
-    os << indent << "GetCenterIncidenceAngle: " << this->GetCenterIncidenceAngle() << std::endl;
+    os << indent << "GetRadiometricCalibrationScale:                 " << this->GetRadiometricCalibrationScale() << "\n"
+       << indent << "GetRadiometricCalibrationNoise:                 " << this->GetRadiometricCalibrationNoise() << "\n"
+       << indent << "GetRadiometricCalibrationAntennaPatternNewGain: " << this->GetRadiometricCalibrationAntennaPatternNewGain() << "\n"
+       << indent << "GetRadiometricCalibrationAntennaPatternOldGain: " << this->GetRadiometricCalibrationAntennaPatternOldGain() << "\n"
+       << indent << "GetRadiometricCalibrationIncidenceAngle:        " << this->GetRadiometricCalibrationIncidenceAngle() << "\n"
+       << indent << "GetRadiometricCalibrationRangeSpreadLoss:       " << this->GetRadiometricCalibrationRangeSpreadLoss() << "\n"
+       << indent << "GetConstantPolynomialDegree:                    ";
+    for(const auto& s: this->GetConstantPolynomialDegree())
+      os << s << " ";
+    os << "\n"
+       << indent << "GetRadiometricCalibrationNoisePolynomialDegree: ";
+    for(const auto& s: this->GetRadiometricCalibrationNoisePolynomialDegree())
+      os << s << " ";
+    os << "\n"
+       << indent << "GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree: ";
+    for(const auto& s: this->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree())
+      os << s << " ";
+    os << "\n"
+       << indent << "GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree: ";
+    for(const auto& s: this->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree())
+      os << s << " ";
+    os << "\n"
+       << indent << "GetRadiometricCalibrationIncidenceAnglePolynomialDegree:        ";
+    for(const auto& s: this->GetRadiometricCalibrationIncidenceAnglePolynomialDegree())
+      os << s << " ";
+    os << "\n"
+       << indent << "GetRadiometricCalibrationRangeSpreadLossPolynomialDegree:       ";
+    for(const auto& s: this->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree())
+      os << s << " ";
+    os << "\n"
+       << indent << "GetPRF:                  " << this->GetPRF() << "\n"
+       << indent << "GetRSF:                  " << this->GetRSF() << "\n"
+       << indent << "GetRadarFrequency:       " << this->GetRadarFrequency() << "\n"
+       << indent << "GetCenterIncidenceAngle: " << this->GetCenterIncidenceAngle() << std::endl;
   }
 }
 

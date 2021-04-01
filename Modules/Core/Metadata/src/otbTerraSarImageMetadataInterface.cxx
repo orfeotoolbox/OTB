@@ -1073,13 +1073,9 @@ TerraSarImageMetadataInterface::PointSetPointer TerraSarImageMetadataInterface::
   return points;
 }
 
-TerraSarImageMetadataInterface::IndexType TerraSarImageMetadataInterface::GetRadiometricCalibrationNoisePolynomialDegree() const
+SarImageMetadataInterface::ArrayIndexType TerraSarImageMetadataInterface::GetRadiometricCalibrationNoisePolynomialDegree() const
 {
-  IndexType polynomSize;
-  polynomSize[0] = 2;
-  polynomSize[1] = 2;
-
-  return polynomSize;
+  return {2, 2};
 }
 
 double TerraSarImageMetadataInterface::GetStartTimeUTC() const
@@ -1217,13 +1213,9 @@ TerraSarImageMetadataInterface::PointSetPointer TerraSarImageMetadataInterface::
   return points;
 }
 
-TerraSarImageMetadataInterface::IndexType TerraSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const
+TerraSarImageMetadataInterface::ArrayIndexType TerraSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const
 {
-  IndexType polynomSize;
-  polynomSize[0] = 2;
-  polynomSize[1] = 1;
-
-  return polynomSize;
+  return {2, 1};
 }
 
 
@@ -1265,12 +1257,13 @@ void TerraSarImageMetadataInterface::ParseGdal(const MetadataSupplierInterface &
     m_Imd.Add(MDTime::AcquisitionStopTime, MainXMLFileMS.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.stop.timeUTC"));
     m_Imd.Add(MDNum::PRF, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonPRF"));
     m_Imd.Add(MDNum::RSF, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
-
+    m_Imd.Add(MDNum::CalScale, MainXMLFileMS.GetAs<double>("level1Product.calibration.calibrationConstant.calFactor"));
   }
 
   assert(mds.GetNbBands() == this->m_Imd.Bands.size());
 
   SARParam sarParam;
+  LoadRadiometricCalibrationData(sarParam);
   for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
   {
     Fetch(MDStr::Polarization, mds, "POLARIMETRIC_INTERP", bandId);
@@ -1289,6 +1282,7 @@ void TerraSarImageMetadataInterface::ParseGeom(const MetadataSupplierInterface &
   Fetch(MDTime::AcquisitionStartTime, mds, "azimuth_start_time");
   Fetch(MDTime::AcquisitionStopTime, mds, "azimuth_stop_time");
   Fetch(MDNum::PRF, mds, "sensor_params.prf");
+  Fetch(MDNum::CalScale, mds, "calibration.calibrationConstant.calFactor");
     
   // Main XML file
   std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(mds.GetResourceFile("")), "T[S|D]X1_SAR__.*.xml") ;
@@ -1304,6 +1298,7 @@ void TerraSarImageMetadataInterface::ParseGeom(const MetadataSupplierInterface &
   assert(mds.GetNbBands() == this->m_Imd.Bands.size());
 
   SARParam sarParam;
+  LoadRadiometricCalibrationData(sarParam);
   for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
   {
     Fetch(MDStr::Polarization, mds, ("acquisitionInfo.polarisationList[" + std::to_string(bandId) + "]").c_str(), bandId);

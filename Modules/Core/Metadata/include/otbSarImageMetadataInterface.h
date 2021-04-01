@@ -52,6 +52,7 @@ public:
 
   typedef Superclass::ImageType                ImageType;
   typedef ImageType::IndexType                 IndexType;
+  typedef std::array<int, 2>                   ArrayIndexType;
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
@@ -84,11 +85,11 @@ public:
   virtual PointSetPointer GetRadiometricCalibrationRangeSpreadLoss() const;
   virtual PointSetPointer GetRadiometricCalibrationNoise() const;
 
-  virtual IndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const;
-  virtual IndexType GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const;
-  virtual IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const;
-  virtual IndexType GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const;
-  virtual IndexType GetRadiometricCalibrationNoisePolynomialDegree() const;
+  virtual ArrayIndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const;
+  virtual ArrayIndexType GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const;
+  virtual ArrayIndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const;
+  virtual ArrayIndexType GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const;
+  virtual ArrayIndexType GetRadiometricCalibrationNoisePolynomialDegree() const;
 
   virtual double GetPRF() const                  = 0;
   virtual double GetRSF() const                  = 0;
@@ -124,6 +125,8 @@ public:
   std::vector<CalibrationVector> GetCalibrationVectorGeom(const MetadataSupplierInterface &) const;
   std::vector<SARNoise> GetNoiseVectorGeom(const MetadataSupplierInterface &) const;
 
+  void LoadRadiometricCalibrationData(SARParam &);
+
 protected:
   SarImageMetadataInterface();
   ~SarImageMetadataInterface() override
@@ -131,7 +134,7 @@ protected:
   }
 
   PointSetPointer GetConstantValuePointSet(const RealType& value) const;
-  IndexType GetConstantPolynomialDegree() const;
+  ArrayIndexType GetConstantPolynomialDegree() const;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 

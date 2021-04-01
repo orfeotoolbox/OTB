@@ -44,9 +44,6 @@ namespace otb
  * class. Each have a Evaluate() method and a special
  * EvaluateParametricCoefficient() which computes the actual value.
  *
- * The technical details and more discussion of SarCalibration can be found in jira
- * story #863.
- *
  * \see \c otb::SarParametricFunction
  * \see \c otb::SarCalibrationLookupBase
  * References (Retrieved on 08-Sept-2015)
