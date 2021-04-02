@@ -52,7 +52,7 @@ public:
 	/** Register one factory of this type  */
 	static void RegisterOneFactory(void)
 	{
-		Pointer RPCInverseFactory = RPCInverseTransformFactory::New();
+        RPCInverseTransformFactory<TScalarType,NInputDimensions,NOutputDimensions>::Pointer RPCInverseFactory = RPCInverseTransformFactory::New();
 		itk::ObjectFactoryBase::RegisterFactory(RPCInverseFactory);
 	}
 

@@ -30,7 +30,7 @@ namespace otb
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::RPCForwardTransformFactory()
 {
-  this->RegisterOverride("otbSensorTransformBase", "otbRPCForwardTransform", "RPC Forward Transform", 1,
+  this->RegisterOverride("otbRPCTransformBase", "otbRPCForwardTransform", "RPC Forward Transform", 1,
                            itk::CreateObjectFunction<RPCForwardTransform<TScalarType,NInputDimensions,NOutputDimensions>>::New());
 }
 

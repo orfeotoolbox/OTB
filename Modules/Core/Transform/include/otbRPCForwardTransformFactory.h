@@ -53,7 +53,7 @@ public:
 	/** Register one factory of this type  */
 	static void RegisterOneFactory(void)
 	{
-		Pointer RPCForwardFactory = RPCForwardTransformFactory::New();
+        RPCForwardTransformFactory<TScalarType,NInputDimensions,NOutputDimensions>::Pointer RPCForwardFactory = RPCForwardTransformFactory::New();
 		itk::ObjectFactoryBase::RegisterFactory(RPCForwardFactory);
 	}
 

@@ -19,11 +19,10 @@
  */
 #ifndef otbSensorTransformFactory_h
 #define otbSensorTransformFactory_h
+#include "otbSensorTransformBase.h"
 #include "itkObject.h"
 #include "itkObjectFactory.h"
 #include "itkMutexLock.h"
-#include "otbSensorTransformBase.h"
-#include "otbGenericMapProjection.h"
 
 namespace otb
 {
@@ -55,10 +54,11 @@ protected:
 	SensorTransformFactory();
 	~SensorTransformFactory() override;
 
-    static itk::SimpleMutexLock m_mutex;
 private:
 	SensorTransformFactory(const Self&) = delete;
 	void operator=(const Self&) = delete;
+
+    static itk::SimpleMutexLock m_mutex;
 
 	/** Register Built-in factories */
 	static void RegisterBuiltInFactories();
