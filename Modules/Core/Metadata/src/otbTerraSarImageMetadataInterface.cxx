@@ -1257,7 +1257,7 @@ void TerraSarImageMetadataInterface::ParseGdal(const MetadataSupplierInterface &
     m_Imd.Add(MDTime::AcquisitionStopTime, MainXMLFileMS.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.stop.timeUTC"));
     m_Imd.Add(MDNum::PRF, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonPRF"));
     m_Imd.Add(MDNum::RSF, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
-    m_Imd.Add(MDNum::CalScale, MainXMLFileMS.GetAs<double>("level1Product.calibration.calibrationConstant.calFactor"));
+    m_Imd.Add(MDNum::CalFactor, MainXMLFileMS.GetAs<double>("level1Product.calibration.calibrationConstant.calFactor"));
   }
 
   assert(mds.GetNbBands() == this->m_Imd.Bands.size());
@@ -1282,7 +1282,7 @@ void TerraSarImageMetadataInterface::ParseGeom(const MetadataSupplierInterface &
   Fetch(MDTime::AcquisitionStartTime, mds, "azimuth_start_time");
   Fetch(MDTime::AcquisitionStopTime, mds, "azimuth_stop_time");
   Fetch(MDNum::PRF, mds, "sensor_params.prf");
-  Fetch(MDNum::CalScale, mds, "calibration.calibrationConstant.calFactor");
+  Fetch(MDNum::CalFactor, mds, "calibration.calibrationConstant.calFactor");
     
   // Main XML file
   std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(mds.GetResourceFile("")), "T[S|D]X1_SAR__.*.xml") ;

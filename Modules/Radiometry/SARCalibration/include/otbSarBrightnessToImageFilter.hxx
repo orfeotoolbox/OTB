@@ -23,8 +23,8 @@
 #define otbSarBrightnessToImageFilter_hxx
 
 #include "otbSarBrightnessToImageFilter.h"
-
-#include "otbSarImageMetadataInterfaceFactory.h"
+#include "otbSARMetadata.h"
+#include <boost/any.hpp>
 
 namespace otb
 {
@@ -54,22 +54,22 @@ void SarBrightnessToImageFilter<TInputImage, TOutputImage>::BeforeThreadedGenera
 
   ParametricFunctionPointer noise = function->GetNoise();
   noise->SetPointSet(sarParam.radiometricCalibrationNoise);
-  noise->SetPolynomalSize({imd[MDNum::NoisePolyDegX], imd[MDNum::NoisePolyDegY]});
+  noise->SetPolynomalSize(sarParam.radiometricCalibrationNoisePolynomialDegree);
   noise->EvaluateParametricCoefficient();
 
   ParametricFunctionPointer antennaPatternNewGain = function->GetAntennaPatternNewGain();
   antennaPatternNewGain->SetPointSet(sarParam.radiometricCalibrationAntennaPatternNewGain);
-  antennaPatternNewGain->SetPolynomalSize({imd[MDNum::AntennaPatternNewGainPolyDegX], imd[MDNum::AntennaPatternNewGainPolyDegY]});
+  antennaPatternNewGain->SetPolynomalSize(sarParam.radiometricCalibrationAntennaPatternNewGainPolynomialDegree);
   antennaPatternNewGain->EvaluateParametricCoefficient();
 
   ParametricFunctionPointer antennaPatternOldGain = function->GetAntennaPatternOldGain();
   antennaPatternOldGain->SetPointSet(sarParam.radiometricCalibrationAntennaPatternOldGain);
-  antennaPatternOldGain->SetPolynomalSize({imd[MDNum::AntennaPatternOldGainPolyDegX], imd[MDNum::AntennaPatternOldGainPolyDegY]});
+  antennaPatternOldGain->SetPolynomalSize(sarParam.radiometricCalibrationAntennaPatternOldGainPolynomialDegree);
   antennaPatternOldGain->EvaluateParametricCoefficient();
 
   ParametricFunctionPointer rangeSpreadLoss = function->GetRangeSpreadLoss();
   rangeSpreadLoss->SetPointSet(sarParam.radiometricCalibrationRangeSpreadLoss);
-  rangeSpreadLoss->SetPolynomalSize({imd[MDNum::RangeSpreadLossPolyDegX], imd[MDNum::RangeSpreadLossPolyDegY]});
+  rangeSpreadLoss->SetPolynomalSize(sarParam.radiometricCalibrationRangeSpreadLossPolynomialDegree);
   rangeSpreadLoss->EvaluateParametricCoefficient();
 
 #if 0

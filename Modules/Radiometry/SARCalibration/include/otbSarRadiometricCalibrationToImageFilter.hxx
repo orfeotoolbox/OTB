@@ -23,9 +23,9 @@
 #define otbSarRadiometricCalibrationToImageFilter_hxx
 
 #include "otbSarRadiometricCalibrationToImageFilter.h"
-#include "otbSarImageMetadataInterfaceFactory.h"
 #include "otbSarCalibrationLookupData.h"
 #include "otbSARMetadata.h"
+#include <boost/any.hpp>
 
 namespace otb
 {

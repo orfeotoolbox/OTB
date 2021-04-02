@@ -38,9 +38,9 @@ void TerraSarBrightnessImageFilter<TInputImage, TOutputImage>::BeforeThreadedGen
   // If the user doesn't set it AND the metadata is available, set calFactor using image metadata
   if (this->GetCalibrationFactor() == itk::NumericTraits<double>::Zero)
   {
-    if (imd.Has(MDNum::CalScale))
+    if (imd.Has(MDNum::CalFactor))
     {
-      this->SetCalibrationFactor(imd[MDNum::CalScale]);
+      this->SetCalibrationFactor(imd[MDNum::CalFactor]);
     }
     else
     {
