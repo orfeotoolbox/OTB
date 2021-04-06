@@ -225,7 +225,7 @@ int XMLMetadataSupplier::GetNbBands() const
   return 0;
 }
 
-std::string XMLMetadataSupplier::PrintSelf()
+std::string XMLMetadataSupplier::PrintSelf() const
 {
   std::ostringstream oss;
   oss << "XMLMetadataSupplier: " << this->m_FileName << '\n';

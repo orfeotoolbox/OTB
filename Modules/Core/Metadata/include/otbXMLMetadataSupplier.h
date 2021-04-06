@@ -107,7 +107,7 @@ public:
    *
    * @return A std::string
    */
-  std::string PrintSelf();
+  std::string PrintSelf() const;
 
 protected:
   /**

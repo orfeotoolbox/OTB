@@ -34,10 +34,13 @@
 #include "otbSarSensorModel.h"
 #include "otbImageFileReader.h"
 
+//TODO: replace by baselines
+#include "otbSarSensorModelAdapter.h"
+
 using namespace boost::unit_test;
 
 
-BOOST_AUTO_TEST_CASE(SARSensorModel_new)
+BOOST_AUTO_TEST_CASE(SARSensorModel_parameters)
 {
   
   BOOST_TEST_REQUIRE( framework::master_test_suite().argc == 5 );
@@ -45,14 +48,10 @@ BOOST_AUTO_TEST_CASE(SARSensorModel_new)
   //BOOST_TEST_REQUIRE( framework::master_test_suite().argv[1] == "--input" );
   std::cout << "argv[1] " << framework::master_test_suite().argv[1] << std::endl;
 
-  otb::ImageMetadata imd;
-  otb::SarSensorModel model(imd);
-
 }
 
 BOOST_AUTO_TEST_CASE(SARSensorModel_WorldToLineSample)
 {
-  //BOOST_TEST_REQUIRE( framework::master_test_suite().argc == 4 );
   using ImageType = otb::Image<unsigned int, 2>;
   using ReaderType = otb::ImageFileReader<ImageType>;
 
@@ -69,7 +68,17 @@ BOOST_AUTO_TEST_CASE(SARSensorModel_WorldToLineSample)
   inWorldPoint[1] = std::stod(framework::master_test_suite().argv[3]);
   inWorldPoint[2] = std::stod(framework::master_test_suite().argv[4]);
 
-  otb::SarSensorModel::Point2DType outLineSample;
+  otb::SarSensorModel::Point2DType outLineSampleOssim;
 
-  model.WorldToLineSample(inWorldPoint, outLineSample);
+  std::cout << "test with ossim" << std::endl;
+  auto ossimModel = otb::SarSensorModelAdapter::New();
+  ossimModel->LoadState(reader->GetOutput()->GetImageKeywordlist());
+  ossimModel->WorldToLineSample(inWorldPoint, outLineSampleOssim);
+
+  std::cout << "test with otb" << std::endl;
+  otb::SarSensorModel::Point2DType outLineSampleOtb;
+  model.WorldToLineSample(inWorldPoint, outLineSampleOtb);
+
+  //TODO compare results with a baseline
+
 }

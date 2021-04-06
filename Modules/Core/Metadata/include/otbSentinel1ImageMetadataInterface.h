@@ -128,6 +128,13 @@ protected:
   /* Fetch the noise LUTs */
   std::vector<SARNoise> GetNoiseVector(const XMLMetadataSupplier&) const;
 
+  /* Fetch the burst records */
+  std::vector<BurstRecord> GetBurstRecords(const XMLMetadataSupplier&) const;
+
+  /* Fetch azimuth and range times corresponding to GCPs */
+  std::unordered_map<std::string, GCPTime> GetGCPTimes(const XMLMetadataSupplier & xmlMS,
+                                                       const Projection::GCPParam & gcps) const;
+
   /* Compute the mean terrain elevation */
   double getBandTerrainHeight(const XMLMetadataSupplier&) const;
 

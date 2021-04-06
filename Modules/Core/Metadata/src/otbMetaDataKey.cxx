@@ -198,8 +198,6 @@ std::istream& operator>>(std::istream& is, Time& val)
 
 #undef _OTB_ISTREAM_EXPECT
 
-
-
 int Time::GetDay() const
 {
   return tm_mday;

@@ -33,6 +33,7 @@
 #include "itkPoint.h"
 
 #include "itkPoint.h"
+#include "otbDateTime.h"
 
 namespace otb
 {
@@ -90,7 +91,7 @@ struct OTBMetadata_EXPORT DopplerCentroid
 
 /** \struct SARNoise
  *
- * \breif This structure is used to handle Noise look up tables
+ * \brief This structure is used to handle Noise look up tables
  */
 struct OTBMetadata_EXPORT SARNoise
 {
@@ -104,19 +105,49 @@ struct OTBMetadata_EXPORT SARNoise
 
 /** \struct Orbit
  *
- * \breif This structure is used to handle orbit information
+ * \brief This structure is used to handle orbit information
  */
 struct OTBMetadata_EXPORT Orbit
 {
   using PointType = itk::Point<double, 3>;
 
   /** Timestamp at which orbit state vectors apply */
-  MetaData::Time time;
+  MetaData::TimeType time;
   /** Position vector */
   PointType position;
   /** Velocity vector */
   PointType velocity;
 };
+
+/** \struct BurstRecord
+ *
+ * \brief This structure is used to handle burst records
+ */
+struct OTBMetadata_EXPORT BurstRecord
+{
+  MetaData::TimeType      azimuthStartTime;
+  unsigned long startLine;
+  MetaData::TimeType      azimuthStopTime;
+  unsigned long endLine;
+  unsigned long startSample;
+  unsigned long endSample;
+  double        azimuthAnxTime;
+};
+
+/** \struct GCPTime
+ *
+ * \brief This structure contains the azimuth and range times associated with a gcp
+ */
+struct OTBMetadata_EXPORT GCPTime
+{
+  /** Azimuth time of the gcp */
+  MetaData::TimeType azimuthTime;
+
+  /** Slant range time of the gcp */
+  double slantRangeTime;
+};
+
+
 
 /** \struct SARParam
  *
@@ -137,6 +168,10 @@ struct OTBMetadata_EXPORT SARParam
   MetaData::Time calibrationStartTime;
   MetaData::Time calibrationStopTime;
 
+  MetaData::DurationType azimuthTimeInterval;
+  double nearRangeTime;
+  double rangeSamplingRate;
+
   /** Doppler centroid estimates */
   std::vector<DopplerCentroid> dopplerCentroids;
 
@@ -145,6 +180,12 @@ struct OTBMetadata_EXPORT SARParam
 
   /** List of orbit information */
   std::vector<Orbit> orbits;
+
+  /** List of burst records */
+  std::vector<BurstRecord> burstRecords;
+
+  /** map between GCP ids and corresponding azimuth and range times */
+  std::unordered_map<std::string, GCPTime> gcpTimes;
 };
 
 /** \struct SARCalib
@@ -177,4 +218,3 @@ struct OTBMetadata_EXPORT SARCalib
 } // end namespace otb
 
 #endif
-

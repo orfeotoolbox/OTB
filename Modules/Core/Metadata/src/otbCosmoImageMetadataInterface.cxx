@@ -328,11 +328,9 @@ std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const std::string & re
     int hour = static_cast<int> (total_seconds/3600.0);
     int minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
     double seconds = total_seconds - hour*3600 - minutes*60;
-    std::string timestr = reference_UTC + "T" + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
+    std::string timestr = reference_UTC + " " + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
 
-    MetaData::Time time = Utils::LexicalCast<MetaData::Time,std::string>(timestr, std::string("T"));
-
-    orbit.time = time ;
+    orbit.time = boost::posix_time::time_from_string(timestr);
 
     orbit.position[0] = std::stod(vECEF_sat_pos[i*3 + 0]) ;
     orbit.position[1] = std::stod(vECEF_sat_pos[i*3 + 1]) ;

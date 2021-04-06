@@ -228,8 +228,9 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
   
   otb_add_test(NAME prTvSarSensorModel
            COMMAND otbSarSensorModelTest --
-           LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff} 
-           1
-           2
-           3)
+           #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff} 
+           LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/manifest.safe} 
+           -23.9431732671333
+           15.7637929806278
+           0)
 endif()
