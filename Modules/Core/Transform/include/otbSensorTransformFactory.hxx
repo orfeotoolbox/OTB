@@ -53,18 +53,19 @@ SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::CreateT
     }
     //io is null is possible because createAllInstance will return all known instances with different types like SensorTransform<double,2,2> SensorTransform<double,3,3> which has been registered before
   }
-
+  // if no object has been found, we have to warn the user
+  otbLogMacro(Warning, << "The SensorTransform factory could not find a compatible Sensor Transform");
   return nullptr;
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::RegisterBuiltInFactories()
 {
-    itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(m_mutex);
+  itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(m_mutex);
 
-    //TODO: register SAR Inverse and Forward factories here
-    RegisterFactory(RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
-    RegisterFactory(RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
+  //TODO: register SAR Inverse and Forward factories here
+  RegisterFactory(RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
+  RegisterFactory(RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
