@@ -97,7 +97,10 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
   function->SetApplyRescalingFactor(!apply);
   function->SetApplyLookupDataCorrection(apply);
 
-  function->SetScale(imd[MDNum::CalScale]);
+  if (imd.Has(MDNum::CalScale))
+    function->SetScale(imd[MDNum::CalScale]);
+  else if ((imd.Bands.size() > 0) && (imd.Bands[0].Has(MDNum::CalScale)))
+    function->SetScale(imd.Bands[0][MDNum::CalScale]);
 
   /* Compute noise if enabled */
   if (function->GetEnableNoise())

@@ -189,7 +189,7 @@ std::vector<AzimuthFmRate> SarImageMetadataInterface::GetAzimuthFmRateGeom(const
 {
   std::vector<AzimuthFmRate> azimuthFmRateVector;
   // Number of entries in the vector
-  int listCount = mds.GetAs<int>("azimuthFmRate.azi_fm_rate_coef_nb_list");
+  int listCount = mds.GetAs<int>(0, "azimuthFmRate.azi_fm_rate_coef_nb_list");
   // This streams wild hold the iteration number
   std::ostringstream oss;
   for (int listId = 1 ; listId <= listCount ; ++listId)
