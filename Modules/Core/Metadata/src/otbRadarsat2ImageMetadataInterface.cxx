@@ -52,7 +52,7 @@ bool Radarsat2ImageMetadataInterface::CanRead() const
 }
 
 
-void Radarsat2ImageMetadataInterface::CreateCalibrationLookupData(const short type)
+const Radarsat2ImageMetadataInterface::LookupDataPointerType Radarsat2ImageMetadataInterface::CreateCalibrationLookupData(const short type) const
 {
   std::string lut = "SigmaNought";
 
@@ -97,7 +97,7 @@ void Radarsat2ImageMetadataInterface::CreateCalibrationLookupData(const short ty
   Radarsat2CalibrationLookupData::Pointer sarLut;
   sarLut = Radarsat2CalibrationLookupData::New();
   sarLut->InitParameters(type, offset, glist);
-  this->SetCalibrationLookupData(sarLut);
+  return static_cast<Radarsat2ImageMetadataInterface::LookupDataPointerType> (sarLut);
 }
 
 void Radarsat2ImageMetadataInterface::ParseDateTime(const char* key, std::vector<int>& dateFields) const
@@ -265,7 +265,7 @@ void Radarsat2ImageMetadataInterface::ParseGdal(const MetadataSupplierInterface 
   // Product file
   std::string ProductFilePath = mds.GetResourceFile("product.xml");
   if (!ProductFilePath.empty())
-    {
+  {
     XMLMetadataSupplier ProductMS(ProductFilePath);
     m_Imd.Add(MDStr::Mission, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
 
@@ -286,13 +286,15 @@ void Radarsat2ImageMetadataInterface::ParseGdal(const MetadataSupplierInterface 
     assert(mds.GetNbBands() == this->m_Imd.Bands.size());
 
     SARParam sarParam;
-    LoadRadiometricCalibrationData(sarParam);
     for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
-      {
+    {
       Fetch(MDStr::Polarization, mds, "POLARIMETRIC_INTERP", bandId);
       m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
-      }
     }
+  }
+  SARCalib sarCalib;
+  LoadRadiometricCalibrationData(sarCalib);
+  m_Imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
 void Radarsat2ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & mds)
@@ -328,13 +330,15 @@ void Radarsat2ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface 
     auto polarizations = ProductMS.GetAsVector<std::string>("product.sourceAttributes.radarParameters.polarizations");
     assert(polarizations.size() == m_Imd.Bands.size());
     SARParam sarParam;
-    LoadRadiometricCalibrationData(sarParam);
     for (int bandId = 0 ; bandId < polarizations.size() ; ++bandId)
     {
       m_Imd.Bands[bandId].Add(MDStr::Polarization, polarizations[bandId]);
       m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
     }
   }  
+  SARCalib sarCalib;
+  LoadRadiometricCalibrationData(sarCalib);
+  m_Imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
 void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)

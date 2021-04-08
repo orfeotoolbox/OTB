@@ -66,16 +66,11 @@ public:
   typedef SarCalibrationLookupData LookupDataType;
   typedef LookupDataType::Pointer  LookupDataPointerType;
 
-  virtual void CreateCalibrationLookupData(const short t);
+  virtual const LookupDataPointerType CreateCalibrationLookupData(const short t) const;
 
-  const LookupDataPointerType GetCalibrationLookupData(const short type);
+  const LookupDataPointerType GetCalibrationLookupData(const short type) const;
 
   bool HasCalibrationLookupDataFlag() const;
-
-  void SetCalibrationLookupData(LookupDataType* lut)
-  {
-    m_SarLut = lut;
-  }
 
   virtual RealType GetRadiometricCalibrationScale() const;
 
@@ -125,7 +120,7 @@ public:
   std::vector<CalibrationVector> GetCalibrationVectorGeom(const MetadataSupplierInterface &) const;
   std::vector<SARNoise> GetNoiseVectorGeom(const MetadataSupplierInterface &) const;
 
-  void LoadRadiometricCalibrationData(SARParam &);
+  void LoadRadiometricCalibrationData(SARCalib &) const;
 
 protected:
   SarImageMetadataInterface();
@@ -137,9 +132,6 @@ protected:
   ArrayIndexType GetConstantPolynomialDegree() const;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
-
-  LookupDataPointerType m_SarLut;
-
 
 private:
   SarImageMetadataInterface(const Self&) = delete;

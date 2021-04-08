@@ -212,6 +212,7 @@ enum class MDGeom
   ProjectionProj, // -> string
   RPC,            // -> RPCParam
   SAR,            // -> SARParam
+  SARCalib,       // -> SARCalib
   SensorGeometry, // -> boost::any
   GCP,            // -> GCPParam
   Adjustment,     // -> ?

@@ -123,11 +123,7 @@ struct OTBMetadata_EXPORT Orbit
  * \ingroup OTBMetadata
  */
 struct OTBMetadata_EXPORT SARParam
-{
-  using PointSetType = itk::PointSet<double, 2>;
-  using ArrayType    = std::array<int, 2>;
-  using LookupDataType = SarCalibrationLookupData;
-  
+{ 
   /** Azimuth Frequency Modulation (FM) rate list.
    * contains an entry for each azimuth FM rate update made along azimuth.
    */
@@ -139,7 +135,28 @@ struct OTBMetadata_EXPORT SARParam
   MetaData::Time calibrationStartTime;
   MetaData::Time calibrationStopTime;
 
-  /** Radiometric Calibration */
+  /** Doppler centroid estimates */
+  std::vector<DopplerCentroid> dopplerCentroids;
+
+  /** Noise look up tables */
+  std::vector<SARNoise> noiseVector;
+
+  /** List of orbit information */
+  std::vector<Orbit> orbits;
+};
+
+/** \struct SARCalib
+ *
+ * \brief SAR calibration LUTs
+ *
+ * \ingroup OTBMetadata
+ */
+struct OTBMetadata_EXPORT SARCalib
+{
+  using PointSetType = itk::PointSet<double, 2>;
+  using ArrayType    = std::array<int, 2>;
+  using LookupDataType = SarCalibrationLookupData;
+  
   bool calibrationLookupFlag;
   double rescalingFactor;
   ArrayType radiometricCalibrationNoisePolynomialDegree;
@@ -153,15 +170,6 @@ struct OTBMetadata_EXPORT SARParam
   PointSetType::Pointer radiometricCalibrationIncidenceAngle;
   PointSetType::Pointer radiometricCalibrationRangeSpreadLoss;
   std::unordered_map<short, LookupDataType::Pointer> calibrationLookupData;
-
-  /** Doppler centroid estimates */
-  std::vector<DopplerCentroid> dopplerCentroids;
-
-  /** Noise look up tables */
-  std::vector<SARNoise> noiseVector;
-
-  /** List of orbit information */
-  std::vector<Orbit> orbits;
 };
 
 } // end namespace otb

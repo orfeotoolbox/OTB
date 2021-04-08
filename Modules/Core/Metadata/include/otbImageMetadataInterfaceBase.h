@@ -238,12 +238,16 @@ public:
   static void PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict);
 
   const std::string& Fetch(MDStr key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
+  void CheckFetch(MDStr key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
 
   const double& Fetch(MDNum key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
+  void CheckFetch(MDNum key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
 
   const MetaData::Time& Fetch(MDTime key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
+  void CheckFetch(MDTime key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
 
   const std::string& Fetch(std::string key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
+  void CheckFetch(std::string key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
 
   const boost::any& FetchRPC(const MetadataSupplierInterface & mds, const double lineOffset = 0.0, const double sampleOffset = 0.0);
 

@@ -1263,12 +1263,14 @@ void TerraSarImageMetadataInterface::ParseGdal(const MetadataSupplierInterface &
   assert(mds.GetNbBands() == this->m_Imd.Bands.size());
 
   SARParam sarParam;
-  LoadRadiometricCalibrationData(sarParam);
   for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
   {
     Fetch(MDStr::Polarization, mds, "POLARIMETRIC_INTERP", bandId);
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
+  SARCalib sarCalib;
+  LoadRadiometricCalibrationData(sarCalib);
+  m_Imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
 void TerraSarImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & mds)
@@ -1298,12 +1300,14 @@ void TerraSarImageMetadataInterface::ParseGeom(const MetadataSupplierInterface &
   assert(mds.GetNbBands() == this->m_Imd.Bands.size());
 
   SARParam sarParam;
-  LoadRadiometricCalibrationData(sarParam);
   for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
   {
     Fetch(MDStr::Polarization, mds, ("acquisitionInfo.polarisationList[" + std::to_string(bandId) + "]").c_str(), bandId);
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
+  SARCalib sarCalib;
+  LoadRadiometricCalibrationData(sarCalib);
+  m_Imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
 void TerraSarImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)

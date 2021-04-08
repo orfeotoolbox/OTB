@@ -69,7 +69,9 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
   /** Retrieve the ImageMetadata */
   auto imd = this->GetInput()->GetImageMetadata();
   /** Fetch the SARModel */
-  auto sarParam = boost::any_cast<SARParam>(imd[MDGeom::SAR]);
+  if (!imd.Has(MDGeom::SARCalib))
+    throw std::runtime_error("otbSarRadiometricCalibrationTiImageFilter was not able to fetch the SARCalib metadata.");
+  auto sarParam = boost::any_cast<SARCalib>(imd[MDGeom::SARCalib]);
 
   /** Get the SarRadiometricCalibrationFunction function instance.  */
   FunctionPointer function = this->GetFunction();

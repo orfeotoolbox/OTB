@@ -54,7 +54,7 @@ bool Sentinel1ImageMetadataInterface::CanRead() const
   return sensorID.find("SENTINEL-1") != std::string::npos;
 }
 
-void Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(const short type)
+const Sentinel1ImageMetadataInterface::LookupDataPointerType Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(const short type) const
 {
   bool sigmaLut = false;
   bool betaLut  = false;
@@ -168,7 +168,7 @@ void Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(const short ty
 
   Sentinel1CalibrationLookupData::Pointer sarLut = Sentinel1CalibrationLookupData::New();
   sarLut->InitParameters(type, firstLineTime.as_day_frac(), lastLineTime.as_day_frac(), numOfLines, count, calibrationVectorList);
-  this->SetCalibrationLookupData(sarLut);
+  return static_cast<SarImageMetadataInterface::LookupDataPointerType> (sarLut);
 }
 
 void Sentinel1ImageMetadataInterface::ParseDateTime(const char* key, std::vector<int>& dateFields) const
@@ -600,32 +600,24 @@ void Sentinel1ImageMetadataInterface::ParseGdal(const MetadataSupplierInterface 
     XMLMetadataSupplier NoiseMS(NoiseFilePath);
     sarParam.noiseVector = this->GetNoiseVector(NoiseMS);
     
-    LoadRadiometricCalibrationData(sarParam);
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
+  SARCalib sarCalib;
+  LoadRadiometricCalibrationData(sarCalib);
+  m_Imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
 void Sentinel1ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & mds)
 {
   Fetch(MDTime::AcquisitionStartTime, mds, "support_data.first_line_time");
   Fetch(MDTime::AcquisitionStopTime, mds, "support_data.last_line_time");
-  Fetch(MDStr::BeamMode, mds, "manifest_data.acquisition_mode");
-  Fetch(MDStr::BeamSwath, mds, "manifest_data.swath");
   Fetch(MDNum::LineSpacing, mds, "support_data.azimuth_spacing");
-  Fetch(MDStr::Mission, mds, "manifest_data.instrument");
-  Fetch(MDStr::OrbitDirection, mds, "manifest_data.orbit_pass");
-  Fetch(MDNum::OrbitNumber, mds, "manifest_data.abs_orbit");
   Fetch(MDNum::PixelSpacing, mds, "support_data.range_spacing");
-  Fetch(MDStr::ProductType, mds, "manifest_data.product_type");
-  Fetch(MDTime::ProductionDate, mds, "manifest_data.date");
-  Fetch(MDTime::AcquisitionDate, mds, "manifest_data.image_date");
-  Fetch("FACILITY_IDENTIFIER", mds, "manifest_data.Processing_system_identifier");
   m_Imd.Add(MDStr::SensorID, "SAR");
   auto instrument = mds.GetAs<std::string>("sensor");
   instrument.pop_back();
   m_Imd.Add(MDStr::Instrument, instrument);
   Fetch(MDStr::Mode, mds, "header.swath");
-  Fetch(MDStr::Swath, mds, "manifest_data.swath");
   Fetch(MDNum::NumberOfLines, mds, "number_lines", 0);
   Fetch(MDNum::NumberOfColumns, mds, "number_samples", 0);
   Fetch(MDNum::AverageSceneHeight, mds, "support_data.avg_scene_height", 0);
@@ -636,9 +628,23 @@ void Sentinel1ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface 
   auto hasSAR = GetSAR(mds, sarParam);
   if (hasSAR)
   {
-    LoadRadiometricCalibrationData(sarParam);
     m_Imd.Bands[0].Add(MDGeom::SAR, sarParam);
   }
+  SARCalib sarCalib;
+  LoadRadiometricCalibrationData(sarCalib);
+  m_Imd.Add(MDGeom::SARCalib, sarCalib);
+  
+  // Manifect data may not be present in geom file
+  CheckFetch(MDStr::BeamMode, mds, "manifest_data.acquisition_mode");
+  CheckFetch(MDStr::BeamSwath, mds, "manifest_data.swath");
+  CheckFetch(MDStr::Mission, mds, "manifest_data.instrument");
+  CheckFetch(MDStr::OrbitDirection, mds, "manifest_data.orbit_pass");
+  CheckFetch(MDNum::OrbitNumber, mds, "manifest_data.abs_orbit");
+  CheckFetch(MDStr::ProductType, mds, "manifest_data.product_type");
+  CheckFetch(MDTime::ProductionDate, mds, "manifest_data.date");
+  CheckFetch(MDTime::AcquisitionDate, mds, "manifest_data.image_date");
+  CheckFetch("FACILITY_IDENTIFIER", mds, "manifest_data.Processing_system_identifier");
+  CheckFetch(MDStr::Swath, mds, "manifest_data.swath");
 }
 
 void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)

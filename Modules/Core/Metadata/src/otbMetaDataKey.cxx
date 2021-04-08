@@ -423,6 +423,7 @@ MDGeomBmType MDGeomNames = bimapGenerator<MDGeom>(std::map<MDGeom, std::string> 
   {MDGeom::ProjectionProj, "ProjectionProj"},
   {MDGeom::RPC,            "RPC"},
   {MDGeom::SAR,            "SAR"},
+  {MDGeom::SARCalib,       "SARCalib"},
   {MDGeom::SensorGeometry, "SensorGeometry"},
   {MDGeom::GCP,            "GCP"},
   {MDGeom::Adjustment,     "Adjustment"}

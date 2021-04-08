@@ -79,18 +79,19 @@ const std::string SarImageMetadataInterface::GetAcquisitionMode() const
   return "";
 }
 
-void SarImageMetadataInterface::CreateCalibrationLookupData(const short itkNotUsed(t))
+const SarImageMetadataInterface::LookupDataPointerType SarImageMetadataInterface::CreateCalibrationLookupData(const short itkNotUsed(t)) const
 {
+  return SarCalibrationLookupData::New();
 }
 
-const SarImageMetadataInterface::LookupDataPointerType SarImageMetadataInterface::GetCalibrationLookupData(const short type)
+const SarImageMetadataInterface::LookupDataPointerType SarImageMetadataInterface::GetCalibrationLookupData(const short type) const
 {
   if (HasCalibrationLookupDataFlag())
   {
-    CreateCalibrationLookupData(type);
+    return CreateCalibrationLookupData(type);
   }
 
-  return m_SarLut;
+  return SarCalibrationLookupData::New();
 }
 
 bool SarImageMetadataInterface::HasCalibrationLookupDataFlag() const
@@ -348,24 +349,29 @@ bool SarImageMetadataInterface::GetSAR(const MetadataSupplierInterface & mds, SA
   return true;
 }
 
-void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARParam &sarParam)
+void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCalib) const
 {
-  sarParam.calibrationLookupFlag = HasCalibrationLookupDataFlag();
-  sarParam.rescalingFactor = GetRescalingFactor();
-  sarParam.radiometricCalibrationNoisePolynomialDegree = GetRadiometricCalibrationNoisePolynomialDegree();
-  sarParam.radiometricCalibrationAntennaPatternNewGainPolynomialDegree = GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree();
-  sarParam.radiometricCalibrationAntennaPatternOldGainPolynomialDegree = GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree();
-  sarParam.radiometricCalibrationIncidenceAnglePolynomialDegree = GetRadiometricCalibrationIncidenceAnglePolynomialDegree();
-  sarParam.radiometricCalibrationRangeSpreadLossPolynomialDegree = GetRadiometricCalibrationRangeSpreadLossPolynomialDegree();
-  sarParam.radiometricCalibrationNoise = GetRadiometricCalibrationNoise();
-  sarParam.radiometricCalibrationAntennaPatternNewGain = GetRadiometricCalibrationAntennaPatternNewGain();
-  sarParam.radiometricCalibrationAntennaPatternOldGain = GetRadiometricCalibrationAntennaPatternOldGain();
-  sarParam.radiometricCalibrationIncidenceAngle = GetRadiometricCalibrationIncidenceAngle();
-  sarParam.radiometricCalibrationRangeSpreadLoss = GetRadiometricCalibrationRangeSpreadLoss();
-  sarParam.calibrationLookupData[SarCalibrationLookupData::SIGMA] = GetCalibrationLookupData(SarCalibrationLookupData::SIGMA);
-  sarParam.calibrationLookupData[SarCalibrationLookupData::BETA] = GetCalibrationLookupData(SarCalibrationLookupData::BETA);
-  sarParam.calibrationLookupData[SarCalibrationLookupData::GAMMA] = GetCalibrationLookupData(SarCalibrationLookupData::GAMMA);
-  sarParam.calibrationLookupData[SarCalibrationLookupData::DN] = GetCalibrationLookupData(SarCalibrationLookupData::DN);
+  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlag();
+  sarCalib.rescalingFactor = GetRescalingFactor();
+  auto coeffs = GetRadiometricCalibrationNoisePolynomialDegree();
+  std::copy(coeffs.begin(), coeffs.end(), sarCalib.radiometricCalibrationNoisePolynomialDegree.begin());
+  coeffs = GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree();
+  std::copy(coeffs.begin(), coeffs.end(), sarCalib.radiometricCalibrationAntennaPatternNewGainPolynomialDegree.begin());
+  coeffs = GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree();
+  std::copy(coeffs.begin(), coeffs.end(), sarCalib.radiometricCalibrationAntennaPatternOldGainPolynomialDegree.begin());
+  coeffs = GetRadiometricCalibrationIncidenceAnglePolynomialDegree();
+  std::copy(coeffs.begin(), coeffs.end(), sarCalib.radiometricCalibrationIncidenceAnglePolynomialDegree.begin());
+  coeffs = GetRadiometricCalibrationRangeSpreadLossPolynomialDegree();
+  std::copy(coeffs.begin(), coeffs.end(), sarCalib.radiometricCalibrationRangeSpreadLossPolynomialDegree.begin());
+  sarCalib.radiometricCalibrationNoise = GetRadiometricCalibrationNoise();
+  sarCalib.radiometricCalibrationAntennaPatternNewGain = GetRadiometricCalibrationAntennaPatternNewGain();
+  sarCalib.radiometricCalibrationAntennaPatternOldGain = GetRadiometricCalibrationAntennaPatternOldGain();
+  sarCalib.radiometricCalibrationIncidenceAngle = GetRadiometricCalibrationIncidenceAngle();
+  sarCalib.radiometricCalibrationRangeSpreadLoss = GetRadiometricCalibrationRangeSpreadLoss();
+  sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = GetCalibrationLookupData(SarCalibrationLookupData::SIGMA);
+  sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = GetCalibrationLookupData(SarCalibrationLookupData::BETA);
+  sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = GetCalibrationLookupData(SarCalibrationLookupData::GAMMA);
+  sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = GetCalibrationLookupData(SarCalibrationLookupData::DN);
 }
 
 void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const

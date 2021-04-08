@@ -97,7 +97,7 @@ public:
   double GetCenterIncidenceAngle() const override;
 
   /*get lookup data for calculating backscatter */
-  void CreateCalibrationLookupData(const short type) override;
+  const LookupDataPointerType CreateCalibrationLookupData(const short type) const override;
 
   void ParseGdal(const MetadataSupplierInterface &) override;
 
