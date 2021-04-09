@@ -54,6 +54,11 @@ bool Sentinel1ImageMetadataInterface::CanRead() const
   return sensorID.find("SENTINEL-1") != std::string::npos;
 }
 
+bool Sentinel1ImageMetadataInterface::HasCalibrationLookupDataFlag() const
+{
+  itkExceptionMacro("HasCalibrationLookupDataFlag(mds) not yet implemented in Sentinel1ImageMetadataInterface"); // TODO
+}
+
 const Sentinel1ImageMetadataInterface::LookupDataPointerType Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(const short type) const
 {
   bool sigmaLut = false;
@@ -524,46 +529,46 @@ double Sentinel1ImageMetadataInterface::getBandTerrainHeight(const XMLMetadataSu
   return heightSum / (double)listCount;
 }
 
-void Sentinel1ImageMetadataInterface::ParseGdal(const MetadataSupplierInterface & mds)
+void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 {
   // Metadata read by GDAL
-  Fetch(MDTime::AcquisitionStartTime, mds, "ACQUISITION_START_TIME");
-  Fetch(MDTime::AcquisitionStopTime, mds, "ACQUISITION_STOP_TIME");
-  Fetch(MDStr::BeamMode, mds, "BEAM_MODE");
-  Fetch(MDStr::BeamSwath, mds, "BEAM_SWATH");
-  Fetch("FACILITY_IDENTIFIER", mds, "FACILITY_IDENTIFIER");
-  Fetch(MDNum::LineSpacing, mds, "LINE_SPACING");
-  Fetch(MDStr::Mission, mds, "MISSION_ID");
-  Fetch(MDStr::Mode, mds, "MODE");
-  Fetch(MDStr::OrbitDirection, mds, "ORBIT_DIRECTION");
-  Fetch(MDNum::OrbitNumber, mds, "ORBIT_NUMBER");
-  Fetch(MDNum::PixelSpacing, mds, "PIXEL_SPACING");
-  Fetch(MDStr::ProductType, mds, "PRODUCT_TYPE");
-  Fetch(MDStr::Instrument, mds, "SATELLITE_IDENTIFIER");
-  Fetch(MDStr::SensorID, mds, "SENSOR_IDENTIFIER");
-  Fetch(MDStr::Swath, mds, "SWATH");
+  Fetch(MDTime::AcquisitionStartTime, imd, "ACQUISITION_START_TIME");
+  Fetch(MDTime::AcquisitionStopTime, imd, "ACQUISITION_STOP_TIME");
+  Fetch(MDStr::BeamMode, imd, "BEAM_MODE");
+  Fetch(MDStr::BeamSwath, imd, "BEAM_SWATH");
+  Fetch("FACILITY_IDENTIFIER", imd, "FACILITY_IDENTIFIER");
+  Fetch(MDNum::LineSpacing, imd, "LINE_SPACING");
+  Fetch(MDStr::Mission, imd, "MISSION_ID");
+  Fetch(MDStr::Mode, imd, "MODE");
+  Fetch(MDStr::OrbitDirection, imd, "ORBIT_DIRECTION");
+  Fetch(MDNum::OrbitNumber, imd, "ORBIT_NUMBER");
+  Fetch(MDNum::PixelSpacing, imd, "PIXEL_SPACING");
+  Fetch(MDStr::ProductType, imd, "PRODUCT_TYPE");
+  Fetch(MDStr::Instrument, imd, "SATELLITE_IDENTIFIER");
+  Fetch(MDStr::SensorID, imd, "SENSOR_IDENTIFIER");
+  Fetch(MDStr::Swath, imd, "SWATH");
 
   // Manifest file
-  std::string ManifestFilePath = mds.GetResourceFile(std::string("manifest\\.safe"));
+  std::string ManifestFilePath = m_MetadataSupplierInterface->GetResourceFile(std::string("manifest\\.safe"));
   if (!ManifestFilePath.empty())
   {
     XMLMetadataSupplier ManifestMS(ManifestFilePath);
-    m_Imd.Add(MDTime::ProductionDate,
+    imd.Add(MDTime::ProductionDate,
     		ManifestMS.GetFirstAs<MetaData::Time>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.start"));
-    m_Imd.Add(MDTime::AcquisitionDate,
+    imd.Add(MDTime::AcquisitionDate,
     		ManifestMS.GetFirstAs<MetaData::Time>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:acquisitionPeriod.safe:startTime"));
   }
 
-  assert(mds.GetNbBands() == this->m_Imd.Bands.size());
+  assert(m_MetadataSupplierInterface->GetNbBands() == imd.Bands.size());
   // Band metadata
-  for (int bandId = 0 ; bandId < mds.GetNbBands() ; ++bandId)
+  for (int bandId = 0 ; bandId < m_MetadataSupplierInterface->GetNbBands() ; ++bandId)
   {
     SARParam sarParam;
-    Fetch(MDStr::Polarization, mds, "POLARISATION", bandId);
-    std::string swath = Fetch(MDStr::Swath, mds, "SWATH", bandId);
+    Fetch(MDStr::Polarization, imd, "POLARISATION", bandId);
+    std::string swath = Fetch(MDStr::Swath, imd, "SWATH", bandId);
 
     // Annotation file
-    std::string AnnotationFilePath = mds.GetResourceFile(std::string("annotation[/\\\\]s1[ab].*-")
+    std::string AnnotationFilePath = m_MetadataSupplierInterface->GetResourceFile(std::string("annotation[/\\\\]s1[ab].*-")
                                                           + itksys::SystemTools::LowerCase(swath)
                                                           + std::string("-.*\\.xml"));
     if (AnnotationFilePath.empty())
@@ -573,11 +578,11 @@ void Sentinel1ImageMetadataInterface::ParseGdal(const MetadataSupplierInterface 
     sarParam.azimuthFmRates = this->GetAzimuthFmRate(AnnotationMS);
     sarParam.dopplerCentroids = this->GetDopplerCentroid(AnnotationMS);
     sarParam.orbits = this->GetOrbits(AnnotationMS);
-    m_Imd.Bands[bandId].Add(MDNum::NumberOfLines, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines"));
-    m_Imd.Bands[bandId].Add(MDNum::NumberOfColumns, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfSamples"));
-    m_Imd.Bands[bandId].Add(MDNum::AverageSceneHeight, this->getBandTerrainHeight(AnnotationFilePath));
-    m_Imd.Bands[bandId].Add(MDNum::RadarFrequency, AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.radarFrequency"));
-    m_Imd.Bands[bandId].Add(MDNum::PRF, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthFrequency"));
+    imd.Bands[bandId].Add(MDNum::NumberOfLines, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines"));
+    imd.Bands[bandId].Add(MDNum::NumberOfColumns, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfSamples"));
+    imd.Bands[bandId].Add(MDNum::AverageSceneHeight, this->getBandTerrainHeight(AnnotationFilePath));
+    imd.Bands[bandId].Add(MDNum::RadarFrequency, AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.radarFrequency"));
+    imd.Bands[bandId].Add(MDNum::PRF, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthFrequency"));
 
     // Calibration file
     std::string CalibrationFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)
@@ -586,7 +591,7 @@ void Sentinel1ImageMetadataInterface::ParseGdal(const MetadataSupplierInterface 
     if (CalibrationFilePath.empty())
           otbGenericExceptionMacro(MissingMetadataException,<<"Missing Calibration file for band '"<<swath<<"'");
     XMLMetadataSupplier CalibrationMS(CalibrationFilePath);
-    m_Imd.Bands[bandId].Add(MDNum::CalScale, CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant"));
+    imd.Bands[bandId].Add(MDNum::CalScale, CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant"));
     sarParam.calibrationVectors = this->GetCalibrationVector(CalibrationMS);
     std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.startTime")) >> sarParam.calibrationStartTime;
     std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.stopTime")) >> sarParam.calibrationStopTime;
@@ -600,61 +605,63 @@ void Sentinel1ImageMetadataInterface::ParseGdal(const MetadataSupplierInterface 
     XMLMetadataSupplier NoiseMS(NoiseFilePath);
     sarParam.noiseVector = this->GetNoiseVector(NoiseMS);
     
-    m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
+    imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
   SARCalib sarCalib;
+  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlag();
   LoadRadiometricCalibrationData(sarCalib);
-  m_Imd.Add(MDGeom::SARCalib, sarCalib);
+  imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
-void Sentinel1ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & mds)
+void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
 {
-  Fetch(MDTime::AcquisitionStartTime, mds, "support_data.first_line_time");
-  Fetch(MDTime::AcquisitionStopTime, mds, "support_data.last_line_time");
-  Fetch(MDNum::LineSpacing, mds, "support_data.azimuth_spacing");
-  Fetch(MDNum::PixelSpacing, mds, "support_data.range_spacing");
-  m_Imd.Add(MDStr::SensorID, "SAR");
-  auto instrument = mds.GetAs<std::string>("sensor");
+  Fetch(MDTime::AcquisitionStartTime, imd, "support_data.first_line_time");
+  Fetch(MDTime::AcquisitionStopTime, imd, "support_data.last_line_time");
+  Fetch(MDNum::LineSpacing, imd, "support_data.azimuth_spacing");
+  Fetch(MDNum::PixelSpacing, imd, "support_data.range_spacing");
+  imd.Add(MDStr::SensorID, "SAR");
+  auto instrument = m_MetadataSupplierInterface->GetAs<std::string>("sensor");
   instrument.pop_back();
-  m_Imd.Add(MDStr::Instrument, instrument);
-  Fetch(MDStr::Mode, mds, "header.swath");
-  Fetch(MDNum::NumberOfLines, mds, "number_lines", 0);
-  Fetch(MDNum::NumberOfColumns, mds, "number_samples", 0);
-  Fetch(MDNum::AverageSceneHeight, mds, "support_data.avg_scene_height", 0);
-  Fetch(MDNum::RadarFrequency, mds, "support_data.radar_frequency", 0);
-  Fetch(MDNum::PRF, mds, "support_data.pulse_repetition_frequency", 0);
-  Fetch(MDNum::CalScale, mds, "calibration.absoluteCalibrationConstant", 0);
+  imd.Add(MDStr::Instrument, instrument);
+  Fetch(MDStr::Mode, imd, "header.swath");
+  Fetch(MDNum::NumberOfLines, imd, "number_lines", 0);
+  Fetch(MDNum::NumberOfColumns, imd, "number_samples", 0);
+  Fetch(MDNum::AverageSceneHeight, imd, "support_data.avg_scene_height", 0);
+  Fetch(MDNum::RadarFrequency, imd, "support_data.radar_frequency", 0);
+  Fetch(MDNum::PRF, imd, "support_data.pulse_repetition_frequency", 0);
+  Fetch(MDNum::CalScale, imd, "calibration.absoluteCalibrationConstant", 0);
   SARParam sarParam;
-  auto hasSAR = GetSAR(mds, sarParam);
+  auto hasSAR = GetSAR(sarParam);
   if (hasSAR)
   {
-    m_Imd.Bands[0].Add(MDGeom::SAR, sarParam);
+    imd.Bands[0].Add(MDGeom::SAR, sarParam);
   }
   SARCalib sarCalib;
+  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlagGeom();
   LoadRadiometricCalibrationData(sarCalib);
-  m_Imd.Add(MDGeom::SARCalib, sarCalib);
+  imd.Add(MDGeom::SARCalib, sarCalib);
   
   // Manifect data may not be present in geom file
-  CheckFetch(MDStr::BeamMode, mds, "manifest_data.acquisition_mode");
-  CheckFetch(MDStr::BeamSwath, mds, "manifest_data.swath");
-  CheckFetch(MDStr::Mission, mds, "manifest_data.instrument");
-  CheckFetch(MDStr::OrbitDirection, mds, "manifest_data.orbit_pass");
-  CheckFetch(MDNum::OrbitNumber, mds, "manifest_data.abs_orbit");
-  CheckFetch(MDStr::ProductType, mds, "manifest_data.product_type");
-  CheckFetch(MDTime::ProductionDate, mds, "manifest_data.date");
-  CheckFetch(MDTime::AcquisitionDate, mds, "manifest_data.image_date");
-  CheckFetch("FACILITY_IDENTIFIER", mds, "manifest_data.Processing_system_identifier");
-  CheckFetch(MDStr::Swath, mds, "manifest_data.swath");
+  CheckFetch(MDStr::BeamMode, imd, "manifest_data.acquisition_mode");
+  CheckFetch(MDStr::BeamSwath, imd, "manifest_data.swath");
+  CheckFetch(MDStr::Mission, imd, "manifest_data.instrument");
+  CheckFetch(MDStr::OrbitDirection, imd, "manifest_data.orbit_pass");
+  CheckFetch(MDNum::OrbitNumber, imd, "manifest_data.abs_orbit");
+  CheckFetch(MDStr::ProductType, imd, "manifest_data.product_type");
+  CheckFetch(MDTime::ProductionDate, imd, "manifest_data.date");
+  CheckFetch(MDTime::AcquisitionDate, imd, "manifest_data.image_date");
+  CheckFetch("FACILITY_IDENTIFIER", imd, "manifest_data.Processing_system_identifier");
+  CheckFetch(MDStr::Swath, imd, "manifest_data.swath");
 }
 
-void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void Sentinel1ImageMetadataInterface::Parse(ImageMetadata & imd)
 {
   // Try to fetch the metadata from GDAL Metadata Supplier
-  if (mds.GetAs<std::string>("", "MISSION_ID") == "S1A" || mds.GetAs<std::string>("", "MISSION_ID") == "S1B")
-    this->ParseGdal(mds);
+  if (m_MetadataSupplierInterface->GetAs<std::string>("", "MISSION_ID") == "S1A" || m_MetadataSupplierInterface->GetAs<std::string>("", "MISSION_ID") == "S1B")
+    this->ParseGdal(imd);
   // Try to fetch the metadata from GEOM file
-  else if (mds.GetAs<std::string>("", "sensor") == "SENTINEL-1A" || mds.GetAs<std::string>("", "sensor") == "SENTINEL-1B")
-    this->ParseGeom(mds);
+  else if (m_MetadataSupplierInterface->GetAs<std::string>("", "sensor") == "SENTINEL-1A" || m_MetadataSupplierInterface->GetAs<std::string>("", "sensor") == "SENTINEL-1B")
+    this->ParseGeom(imd);
   // Failed to fetch the metadata
   else
     otbGenericExceptionMacro(MissingMetadataException,

@@ -69,8 +69,10 @@ public:
   virtual const LookupDataPointerType CreateCalibrationLookupData(const short t) const;
 
   const LookupDataPointerType GetCalibrationLookupData(const short type) const;
+  const LookupDataPointerType GetCalibrationLookupDataGeom(const short type) const;
 
-  bool HasCalibrationLookupDataFlag() const;
+  virtual bool HasCalibrationLookupDataFlag() const;
+  bool HasCalibrationLookupDataFlagGeom() const;
 
   virtual RealType GetRadiometricCalibrationScale() const;
 
@@ -108,25 +110,23 @@ public:
   /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
    * then translate it into ImageMetadata. Handles most SAR sensors.
    * Returns true if succeed. */
-  bool ConvertImageKeywordlistToImageMetadata() override;
+  bool ConvertImageKeywordlistToImageMetadata(ImageMetadata &) override;
 
-  virtual void ParseGdal(const MetadataSupplierInterface &) =0;
+  virtual void ParseGdal(ImageMetadata &) =0;
+  virtual void ParseGeom(ImageMetadata &) =0;
 
-  virtual void ParseGeom(const MetadataSupplierInterface &) =0;
-  bool GetSAR(const MetadataSupplierInterface &, SARParam &) const;
-  std::vector<AzimuthFmRate> GetAzimuthFmRateGeom(const MetadataSupplierInterface &) const;
-  std::vector<DopplerCentroid> GetDopplerCentroidGeom(const MetadataSupplierInterface &) const;
-  std::vector<Orbit> GetOrbitsGeom(const MetadataSupplierInterface &) const;
-  std::vector<CalibrationVector> GetCalibrationVectorGeom(const MetadataSupplierInterface &) const;
-  std::vector<SARNoise> GetNoiseVectorGeom(const MetadataSupplierInterface &) const;
+  bool GetSAR(SARParam &) const;
+  std::vector<AzimuthFmRate> GetAzimuthFmRateGeom() const;
+  std::vector<DopplerCentroid> GetDopplerCentroidGeom() const;
+  std::vector<Orbit> GetOrbitsGeom() const;
+  std::vector<CalibrationVector> GetCalibrationVectorGeom() const;
+  std::vector<SARNoise> GetNoiseVectorGeom() const;
 
   void LoadRadiometricCalibrationData(SARCalib &) const;
 
 protected:
   SarImageMetadataInterface();
-  ~SarImageMetadataInterface() override
-  {
-  }
+  ~SarImageMetadataInterface() override = default;
 
   PointSetPointer GetConstantValuePointSet(const RealType& value) const;
   ArrayIndexType GetConstantPolynomialDegree() const;

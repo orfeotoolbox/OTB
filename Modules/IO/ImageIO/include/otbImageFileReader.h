@@ -152,8 +152,6 @@ private:
   // Retrieve the real source file name if derived dataset */
   std::string GetDerivedDatasetSourceFileName(const std::string& filename) const;
 
-  void UpdateImdWithImiAndMds(ImageMetadata& imd, const MetadataSupplierInterface & mds);
-
   ImageFileReader(const Self&) = delete;
   void operator=(const Self&) = delete;
 

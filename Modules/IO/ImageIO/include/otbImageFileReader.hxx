@@ -485,14 +485,14 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   if (!m_FilenameHelper->GetSkipGeom() && m_FilenameHelper->ExtGEOMFileNameIsSet())
   {
     GeomMetadataSupplier geomSupplier(m_FilenameHelper->GetExtGEOMFileName());
-    UpdateImdWithImiAndMds(imd, geomSupplier);
+    ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
     geomSupplier.FetchRPC(imd);
   }
   // Case 2: attached geom (if present)
   else if (!m_FilenameHelper->GetSkipGeom() && itksys::SystemTools::FileExists(attachedGeom))
   {
     GeomMetadataSupplier geomSupplier(attachedGeom);
-    UpdateImdWithImiAndMds(imd, geomSupplier);
+    ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
     geomSupplier.FetchRPC(imd);
   }
   // Case 3: tags in file
@@ -501,7 +501,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     auto gdalMetadataSupplierPointer = dynamic_cast<MetadataSupplierInterface*>(m_ImageIO.GetPointer());
     if (gdalMetadataSupplierPointer)
     {
-      UpdateImdWithImiAndMds(imd, *gdalMetadataSupplierPointer);
+      ImageMetadataInterfaceFactory::CreateIMI(imd, *gdalMetadataSupplierPointer);
     }
   }
 
@@ -581,15 +581,6 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     }
 
   output->SetLargestPossibleRegion(region);
-}
-
-template <class TOutputImage, class ConvertPixelTraits>
-void ImageFileReader<TOutputImage, ConvertPixelTraits>::UpdateImdWithImiAndMds(ImageMetadata& imd, const MetadataSupplierInterface & mds)
-{
-  ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(imd, mds);
-  // update 'imd' with the parsed metadata
-  imd = imi->GetImageMetadata();
-
 }
 
 template <class TOutputImage, class ConvertPixelTraits>

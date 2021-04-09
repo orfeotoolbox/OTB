@@ -53,18 +53,10 @@ ImageMetadataInterfaceBase::GetMetaDataDictionary() const
   return m_MetaDataDictionary;
 }
 
-
-void ImageMetadataInterfaceBase::SetImageMetadata(ImageMetadata imd)
+void ImageMetadataInterfaceBase::SetMetadataSupplierInterface(const MetadataSupplierInterface& mds)
 {
-  m_Imd = std::move(imd);
+  m_MetadataSupplierInterface = &mds;
 }
-
-
-const ImageMetadata& ImageMetadataInterfaceBase::GetImageMetadata() const
-{
-  return m_Imd;
-}
-
 
 std::string ImageMetadataInterfaceBase::GetProjectionRef() const
 {
@@ -623,118 +615,119 @@ void ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent)
 const std::string&
 ImageMetadataInterfaceBase::Fetch(
   MDStr key,
-  const MetadataSupplierInterface & mds,
+  ImageMetadata& imd,
   const char *path,
   int band)
 {
   if (band >= 0)
     {
-    assert( (size_t)(band) < m_Imd.Bands.size());
-    m_Imd.Bands[band].Add(key, mds.GetAs<std::string>(path, band));
-    return m_Imd.Bands[band][key];
+    assert( (size_t)(band) < imd.Bands.size());
+    imd.Bands[band].Add(key, m_MetadataSupplierInterface->GetAs<std::string>(path, band));
+    return imd.Bands[band][key];
     }
-  m_Imd.Add(key, mds.GetAs<std::string>(path) );
-  return m_Imd[key];
+  imd.Add(key, m_MetadataSupplierInterface->GetAs<std::string>(path) );
+  return imd[key];
 }
 
 void
 ImageMetadataInterfaceBase::CheckFetch(
   MDStr key,
-  const MetadataSupplierInterface & mds,
+  ImageMetadata& imd,
   const char *path,
   int band)
 {
-  if (mds.HasValue(path, band))
-    Fetch(key, mds, path, band);
+  if (m_MetadataSupplierInterface->HasValue(path, band))
+    Fetch(key, imd, path, band);
 }
 
 const double&
 ImageMetadataInterfaceBase::Fetch(
   MDNum key,
-  const MetadataSupplierInterface & mds,
+  ImageMetadata& imd,
   const char *path,
   int band)
 {
   if (band >= 0)
     {
-    assert( (size_t)(band) < m_Imd.Bands.size());
-    m_Imd.Bands[band].Add(key, mds.GetAs<double>(path, band));
-    return m_Imd.Bands[band][key];
+    assert( (size_t)(band) < imd.Bands.size());
+    imd.Bands[band].Add(key, m_MetadataSupplierInterface->GetAs<double>(path, band));
+    return imd.Bands[band][key];
     }
-  m_Imd.Add(key, mds.GetAs<double>(path));
-  return m_Imd[key];
+  imd.Add(key, m_MetadataSupplierInterface->GetAs<double>(path));
+  return imd[key];
 }
 
 void
 ImageMetadataInterfaceBase::CheckFetch(
   MDNum key,
-  const MetadataSupplierInterface & mds,
+  ImageMetadata& imd,
   const char *path,
   int band)
 {
-  if (mds.HasValue(path, band))
-    Fetch(key, mds, path, band);
+  if (m_MetadataSupplierInterface->HasValue(path, band))
+    Fetch(key, imd, path, band);
 }
 
 const MetaData::Time&
 ImageMetadataInterfaceBase::Fetch(
   MDTime key,
-  const MetadataSupplierInterface & mds,
+  ImageMetadata& imd,
   const char *path,
   int band)
 {
   if (band >= 0)
     {
-    assert( (size_t)(band) < m_Imd.Bands.size());
-    m_Imd.Bands[band].Add(key, mds.GetAs<MetaData::Time>(path, band));
-    return m_Imd.Bands[band][key];
+    assert( (size_t)(band) < imd.Bands.size());
+    imd.Bands[band].Add(key, m_MetadataSupplierInterface->GetAs<MetaData::Time>(path, band));
+    return imd.Bands[band][key];
     }
 
-  m_Imd.Add(key, mds.GetAs<MetaData::Time>(path));
-  return m_Imd[key];
+  imd.Add(key, m_MetadataSupplierInterface->GetAs<MetaData::Time>(path));
+  return imd[key];
 }
 
 void
 ImageMetadataInterfaceBase::CheckFetch(
   MDTime key,
-  const MetadataSupplierInterface & mds,
+  ImageMetadata& imd,
   const char *path,
   int band)
 {
-  if (mds.HasValue(path, band))
-    Fetch(key, mds, path, band);
+  if (m_MetadataSupplierInterface->HasValue(path, band))
+    Fetch(key, imd, path, band);
 }
 
 const std::string&
 ImageMetadataInterfaceBase::Fetch(
-		std::string key,
-		const MetadataSupplierInterface & mds,
-		const char *path,
-		int band)
+  std::string key,
+  ImageMetadata& imd,
+  const char *path,
+  int band)
 {
   if (band >= 0)
     {
-    assert( (size_t)(band) < m_Imd.Bands.size());
-    m_Imd.Bands[band].Add(key, mds.GetAs<std::string>(path, band));
-    return m_Imd.Bands[band][key];
+    assert( (size_t)(band) < imd.Bands.size());
+    imd.Bands[band].Add(key, m_MetadataSupplierInterface->GetAs<std::string>(path, band));
+    return imd.Bands[band][key];
     }
-  m_Imd.Add(key, mds.GetAs<std::string>(path) );
-  return m_Imd[key];
+  imd.Add(key, m_MetadataSupplierInterface->GetAs<std::string>(path) );
+  return imd[key];
 }
 
 void
 ImageMetadataInterfaceBase::CheckFetch(
-		std::string key,
-		const MetadataSupplierInterface & mds,
-		const char *path,
-		int band)
+  std::string key,
+  ImageMetadata& imd,
+  const char *path,
+  int band)
 {
-  if (mds.HasValue(path, band))
-    Fetch(key, mds, path, band);
+  if (m_MetadataSupplierInterface->HasValue(path, band))
+    Fetch(key, imd, path, band);
 }
 
-const boost::any& ImageMetadataInterfaceBase::FetchRPC(const MetadataSupplierInterface & mds,
-						       const double lineOffset, const double sampleOffset)
+const boost::any& ImageMetadataInterfaceBase::FetchRPC(
+        ImageMetadata& imd,
+        const double lineOffset, const double sampleOffset)
 {
   Projection::RPCParam rpcStruct;
 
@@ -742,10 +735,9 @@ const boost::any& ImageMetadataInterfaceBase::FetchRPC(const MetadataSupplierInt
   // fetched string cannot be converted to double directly, e.g.
   // LINE_OFF=+002320.00 pixels (from an Ikonos product)
   // This lambda removes the unit suffix from the metadata.
-  auto GetMetadataWithoutUnit = [](const std::string & path, 
-                                    const MetadataSupplierInterface & mds)
+  auto GetMetadataWithoutUnit = [this](const std::string & path)
   {
-    auto metadataAsString = mds.GetAs<std::string>(path);
+    auto metadataAsString = this->m_MetadataSupplierInterface->GetAs<std::string>(path);
 
     for (const auto & name : {"meters", "degrees", "pixels"})
     {
@@ -767,39 +759,39 @@ const boost::any& ImageMetadataInterfaceBase::FetchRPC(const MetadataSupplierInt
     }
   };
 
-  rpcStruct.LineOffset    = GetMetadataWithoutUnit("RPC/LINE_OFF", mds) + lineOffset;
-  rpcStruct.SampleOffset  = GetMetadataWithoutUnit("RPC/SAMP_OFF", mds) + sampleOffset;
-  rpcStruct.LatOffset     = GetMetadataWithoutUnit("RPC/LAT_OFF", mds);
-  rpcStruct.LonOffset     = GetMetadataWithoutUnit("RPC/LONG_OFF", mds);
-  rpcStruct.HeightOffset  = GetMetadataWithoutUnit("RPC/HEIGHT_OFF", mds);
+  rpcStruct.LineOffset    = GetMetadataWithoutUnit("RPC/LINE_OFF") + lineOffset;
+  rpcStruct.SampleOffset  = GetMetadataWithoutUnit("RPC/SAMP_OFF") + sampleOffset;
+  rpcStruct.LatOffset     = GetMetadataWithoutUnit("RPC/LAT_OFF");
+  rpcStruct.LonOffset     = GetMetadataWithoutUnit("RPC/LONG_OFF");
+  rpcStruct.HeightOffset  = GetMetadataWithoutUnit("RPC/HEIGHT_OFF");
 
-  rpcStruct.LineScale    = GetMetadataWithoutUnit("RPC/LINE_SCALE", mds);
-  rpcStruct.SampleScale  = GetMetadataWithoutUnit("RPC/SAMP_SCALE", mds);
-  rpcStruct.LatScale     = GetMetadataWithoutUnit("RPC/LAT_SCALE", mds);
-  rpcStruct.LonScale     = GetMetadataWithoutUnit("RPC/LONG_SCALE", mds);
-  rpcStruct.HeightScale  = GetMetadataWithoutUnit("RPC/HEIGHT_SCALE", mds);
+  rpcStruct.LineScale    = GetMetadataWithoutUnit("RPC/LINE_SCALE");
+  rpcStruct.SampleScale  = GetMetadataWithoutUnit("RPC/SAMP_SCALE");
+  rpcStruct.LatScale     = GetMetadataWithoutUnit("RPC/LAT_SCALE");
+  rpcStruct.LonScale     = GetMetadataWithoutUnit("RPC/LONG_SCALE");
+  rpcStruct.HeightScale  = GetMetadataWithoutUnit("RPC/HEIGHT_SCALE");
 
   std::vector<double> coeffs(20);
 
-  coeffs = mds.GetAsVector<double>("RPC/LINE_NUM_COEFF",' ',20);
+  coeffs = m_MetadataSupplierInterface->GetAsVector<double>("RPC/LINE_NUM_COEFF",' ',20);
   std::copy(coeffs.begin(), coeffs.end(), rpcStruct.LineNum);
 
-  coeffs = mds.GetAsVector<double>("RPC/LINE_DEN_COEFF",' ',20);
+  coeffs = m_MetadataSupplierInterface->GetAsVector<double>("RPC/LINE_DEN_COEFF",' ',20);
   std::copy(coeffs.begin(), coeffs.end(), rpcStruct.LineDen);
 
-  coeffs = mds.GetAsVector<double>("RPC/SAMP_NUM_COEFF",' ',20);
+  coeffs = m_MetadataSupplierInterface->GetAsVector<double>("RPC/SAMP_NUM_COEFF",' ',20);
   std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleNum);
 
-  coeffs = mds.GetAsVector<double>("RPC/SAMP_DEN_COEFF",' ',20);
+  coeffs = m_MetadataSupplierInterface->GetAsVector<double>("RPC/SAMP_DEN_COEFF",' ',20);
   std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleDen);
 
-  m_Imd.Add(MDGeom::RPC, rpcStruct);
-  assert(m_Imd.Has(MDGeom::RPC));
-  assert(rpcStruct == boost::any_cast<Projection::RPCParam>(m_Imd[MDGeom::RPC]));
-  return m_Imd[MDGeom::RPC];
+  imd.Add(MDGeom::RPC, rpcStruct);
+  assert(imd.Has(MDGeom::RPC));
+  assert(rpcStruct == boost::any_cast<Projection::RPCParam>(imd[MDGeom::RPC]));
+  return imd[MDGeom::RPC];
 }
 
-bool ImageMetadataInterfaceBase::ConvertImageKeywordlistToImageMetadata()
+bool ImageMetadataInterfaceBase::ConvertImageKeywordlistToImageMetadata(ImageMetadata &)
 {
   // by default, no conversion
   return false;

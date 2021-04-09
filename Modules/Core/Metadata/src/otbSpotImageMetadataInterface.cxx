@@ -1492,7 +1492,7 @@ SpotImageMetadataInterface::WavelengthSpectralBandVectorType SpotImageMetadataIn
 
 
 
-void SpotImageMetadataInterface::FetchSpectralSensitivity()
+void SpotImageMetadataInterface::FetchSpectralSensitivity(ImageMetadata& imd)
 {
   // XS1 (Green), XS2 (Red), XS3 (near IR), SWIR 
   std::unordered_map<std::string, std::vector<double>> BandNameToSpectralSensitivityTable = {
@@ -1731,7 +1731,7 @@ void SpotImageMetadataInterface::FetchSpectralSensitivity()
   spectralSensitivity.Axis[0].Size = 541;
 
 
-  for (auto & band: m_Imd.Bands)
+  for (auto & band: imd.Bands)
   {
     auto SpectralSensitivityIt = BandNameToSpectralSensitivityTable.find(band[MDStr::BandName] );
     if (SpectralSensitivityIt != BandNameToSpectralSensitivityTable.end())
@@ -1743,15 +1743,15 @@ void SpotImageMetadataInterface::FetchSpectralSensitivity()
   }
 }
 
-void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void SpotImageMetadataInterface::Parse(ImageMetadata & imd)
 {
   DimapMetadataHelper helper;
 
   // GDAL DIMAP metadata case
-  if (mds.GetAs<std::string>("", "IMAGERY/SATELLITEID") == "SPOT 5")
+  if (m_MetadataSupplierInterface->GetAs<std::string>("", "IMAGERY/SATELLITEID") == "SPOT 5")
   {
     //Find the METADATA.DIM file (Dimap V1 metadata file)
-    auto resourceFiles = mds.GetResourceFiles();
+    auto resourceFiles = m_MetadataSupplierInterface->GetResourceFiles();
     
     std::string metadataFile;
     for (const auto & file: resourceFiles)
@@ -1774,9 +1774,9 @@ void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 
   }
   // geom metadata case
-  else if (mds.GetAs<std::string>("", "support_data.sensorID" ) == "Spot 5")
+  else if (m_MetadataSupplierInterface->GetAs<std::string>("", "support_data.sensorID" ) == "Spot 5")
   {
-    helper.ParseGeom(mds);
+    helper.ParseGeom(*m_MetadataSupplierInterface);
   }
   else
   {
@@ -1785,47 +1785,47 @@ void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 
   const auto & dimapData = helper.GetDimapData();
   
-  m_Imd.Add(MDStr::SensorID, "SPOT 5");
-  m_Imd.Add(MDStr::Mission, "SPOT 5");
+  imd.Add(MDStr::SensorID, "SPOT 5");
+  imd.Add(MDStr::Mission, "SPOT 5");
 
-  m_Imd.Add(MDTime::ProductionDate, 
+  imd.Add(MDTime::ProductionDate,
     boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));
-  m_Imd.Add(MDTime::AcquisitionDate, 
+  imd.Add(MDTime::AcquisitionDate,
     boost::lexical_cast<MetaData::Time>(dimapData.AcquisitionDate));
 
-  m_Imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
-  m_Imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
-  m_Imd.Add(MDNum::SatElevation, 90. - dimapData.IncidenceAngle[0]);
+  imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
+  imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
+  imd.Add(MDNum::SatElevation, 90. - dimapData.IncidenceAngle[0]);
   
   if (dimapData.StepCount < 48)
   {
-    m_Imd.Add(MDNum::SatAzimuth, dimapData.SceneOrientation[0] + 90);
+    imd.Add(MDNum::SatAzimuth, dimapData.SceneOrientation[0] + 90);
   }
   else
   {
-    m_Imd.Add(MDNum::SatAzimuth, dimapData.SceneOrientation[0] - 90);
+    imd.Add(MDNum::SatAzimuth, dimapData.SceneOrientation[0] - 90);
   }
 
-  auto setDimapBandMetadata = [this](const MDNum & key, const std::vector<double> & input)
+  auto setDimapBandMetadata = [&imd](const MDNum & key, const std::vector<double> & input)
   {
     if (input.size() == 1)
     {
       // this is a PAN image
-      m_Imd.Bands[0].Add(key, input[0]);
+      imd.Bands[0].Add(key, input[0]);
     }
     else if (input.size() == 4)
     {
       // MS image, note the band ordering
-      m_Imd.Bands[0].Add(key, input[2]);
-      m_Imd.Bands[1].Add(key, input[1]);
-      m_Imd.Bands[2].Add(key, input[0]);
-      m_Imd.Bands[3].Add(key, input[3]);
+      imd.Bands[0].Add(key, input[2]);
+      imd.Bands[1].Add(key, input[1]);
+      imd.Bands[2].Add(key, input[0]);
+      imd.Bands[3].Add(key, input[3]);
     }
     else if (input.size() == 3)
     {
-      m_Imd.Bands[0].Add(key, input[2]);
-      m_Imd.Bands[1].Add(key, input[1]);
-      m_Imd.Bands[2].Add(key, input[0]);
+      imd.Bands[0].Add(key, input[2]);
+      imd.Bands[1].Add(key, input[1]);
+      imd.Bands[2].Add(key, input[0]);
     }
     else
     {
@@ -1838,28 +1838,28 @@ void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
   setDimapBandMetadata(MDNum::PhysicalGain, dimapData.PhysicalGain);
   setDimapBandMetadata(MDNum::SolarIrradiance, dimapData.SolarIrradiance);
 
-  auto nbBands = m_Imd.Bands.size();
+  auto nbBands = imd.Bands.size();
 
   // band IDs is not parsed in geom files. There are two possible cases: panchromatic and multispectral
   if (dimapData.BandIDs.empty())
   {
-    if (m_Imd.Bands.size() == 1)
+    if (imd.Bands.size() == 1)
     {
-      m_Imd.Bands[0].Add(MDStr::BandName, "P");
+      imd.Bands[0].Add(MDStr::BandName, "P");
     }
-    else if (m_Imd.Bands.size() == 4)
+    else if (imd.Bands.size() == 4)
     {
-      m_Imd.Bands[0].Add(MDStr::BandName, "XS1");
-      m_Imd.Bands[1].Add(MDStr::BandName, "XS2");
-      m_Imd.Bands[2].Add(MDStr::BandName, "XS3");
-      m_Imd.Bands[3].Add(MDStr::BandName, "SWIR");
+      imd.Bands[0].Add(MDStr::BandName, "XS1");
+      imd.Bands[1].Add(MDStr::BandName, "XS2");
+      imd.Bands[2].Add(MDStr::BandName, "XS3");
+      imd.Bands[3].Add(MDStr::BandName, "SWIR");
     }
   }
   else if (dimapData.BandIDs.size() == nbBands )
   {
     auto bandId = dimapData.BandIDs.begin();
     
-    for (auto & band: m_Imd.Bands)
+    for (auto & band: imd.Bands)
     {
       band.Add(MDStr::BandName, *bandId);
       bandId++;
@@ -1872,7 +1872,7 @@ void SpotImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 
   if (nbBands == 4)
   {
-    FetchSpectralSensitivity();
+    FetchSpectralSensitivity(imd);
   }
 }
 

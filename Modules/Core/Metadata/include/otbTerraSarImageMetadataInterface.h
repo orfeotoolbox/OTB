@@ -175,11 +175,11 @@ public:
    *  in the order R, G, B */
   std::vector<unsigned int> GetDefaultDisplay() const override;
 
-  void ParseGdal(const MetadataSupplierInterface &) override;
+  void ParseGdal(ImageMetadata &) override;
 
-  void ParseGeom(const MetadataSupplierInterface &) override;
+  void ParseGeom(ImageMetadata &) override;
   
-  void Parse(const MetadataSupplierInterface &) override;
+  void Parse(ImageMetadata &) override;
 
 protected:
   TerraSarImageMetadataInterface();

@@ -68,8 +68,7 @@ int otbRPCTransformTest(int itkNotUsed(argc), char* argv[])
     otb::GeomMetadataSupplier geomSupplier(rpcFile);
     for (int loop = 0 ; loop < geomSupplier.GetNbBands() ; ++loop)
       imd.Bands.emplace_back();
-    auto imi = otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
-    imd = imi->GetImageMetadata();
+    otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
     geomSupplier.FetchRPC(imd);
   }
   else

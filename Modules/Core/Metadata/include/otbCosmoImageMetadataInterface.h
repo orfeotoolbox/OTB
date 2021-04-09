@@ -90,14 +90,14 @@ public:
 
   double GetCenterIncidenceAngle() const override;
 
-  void Parse(const MetadataSupplierInterface &) override;
+  void Parse(ImageMetadata &) override;
 
-  void ParseGdal(const MetadataSupplierInterface &) override;
+  void ParseGdal(ImageMetadata &) override;
   
-  void ParseGeom(const MetadataSupplierInterface &) override;
+  void ParseGeom(ImageMetadata &) override;
 
   std::vector<std::map<std::string, std::string> > saveMetadataBands(std::string file) ;
-  std::vector<Orbit> getOrbits(const MetadataSupplierInterface &, const std::string & referenceTime);
+  std::vector<Orbit> getOrbits(const std::string & referenceTime);
 
 protected:
   /* class ctor */

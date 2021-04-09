@@ -656,7 +656,8 @@ void PleiadesImageMetadataInterface::FetchSatAngles(
                     const std::vector<double> & incidenceAngles,
                     const std::vector<double> & alongTrackIncidenceAngles,
                     const std::vector<double> & acrossTrackIncidenceAngles,
-                    const std::vector<double> & sceneOrientation)
+                    const std::vector<double> & sceneOrientation,
+                    ImageMetadata& imd)
 {
   if(incidenceAngles.size() != 3 ||  sceneOrientation.size() != 3)
   {
@@ -667,13 +668,13 @@ void PleiadesImageMetadataInterface::FetchSatAngles(
   //"90 - satOrientation". Pleiades does not seem to follow this convention so
   // inverse the formula here to be able to take the angle read in the metadata
   // as input for 6S. The second value is used (center value)
-  m_Imd.Add(MDNum::SatElevation, 90. - incidenceAngles[1]);
+  imd.Add(MDNum::SatElevation, 90. - incidenceAngles[1]);
 
   if (alongTrackIncidenceAngles.size() != 3 ||
       acrossTrackIncidenceAngles.size() != 3)
   {
     // Use only orientation if across/along track incidence are not available
-    m_Imd.Add(MDNum::SatAzimuth, sceneOrientation[1]);
+    imd.Add(MDNum::SatAzimuth, sceneOrientation[1]);
   }
   else
   {
@@ -686,7 +687,7 @@ void PleiadesImageMetadataInterface::FetchSatAngles(
                                         std::tan(along * CONST_PI_180)) 
                           * CONST_180_PI);
 
-    m_Imd.Add(MDNum::SatAzimuth, fmod(satAzimuth, 360));
+    imd.Add(MDNum::SatAzimuth, fmod(satAzimuth, 360));
 
   }
 }
@@ -1804,7 +1805,7 @@ PleiadesImageMetadataInterface::WavelengthSpectralBandVectorType PleiadesImageMe
 }
 
 
-void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::Time & date)
+void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::Time & date, ImageMetadata& imd)
 {
   // We use here tabulate in flight values for physical gain of PHR. Those values evolve
   // with time and are much more accurate. Values provided by CNES calibration
@@ -1827,7 +1828,7 @@ void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::
 
   std::unordered_map<std::string, double> bandNameToPhysicalGain;
   // TODO check band order here.
-  const auto &  sensorId = m_Imd[MDStr::SensorID];
+  const auto &  sensorId = imd[MDStr::SensorID];
   if (sensorId == "PHR 1A")
   {
     // tm_year: years since 1900
@@ -1960,7 +1961,7 @@ void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::
     otbGenericExceptionMacro(MissingMetadataException, << "Invalid metadata, bad sensor id");
   }
 
-  for (auto & band: m_Imd.Bands)
+  for (auto & band: imd.Bands)
   {
     auto gain = bandNameToPhysicalGain.find(band[MDStr::BandName]);
     if (gain ==  bandNameToPhysicalGain.end())
@@ -1976,11 +1977,11 @@ void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::
 }
 
 
-void PleiadesImageMetadataInterface::FetchSolarIrradiance(const std::vector<double> & dimapSolarIrradiance)
+void PleiadesImageMetadataInterface::FetchSolarIrradiance(const std::vector<double> & dimapSolarIrradiance, ImageMetadata& imd)
 {
   std::unordered_map<std::string, double> defaultSolarIrradiance;
 
-  const auto & sensorID = m_Imd[MDStr::SensorID];
+  const auto & sensorID = imd[MDStr::SensorID];
 
   if (sensorID == "PHR 1A")
   {
@@ -2007,7 +2008,7 @@ void PleiadesImageMetadataInterface::FetchSolarIrradiance(const std::vector<doub
   double tolerance = 0.05;
 
   auto solarIrradianceIt = dimapSolarIrradiance.begin();
-  for (auto & band : m_Imd.Bands)
+  for (auto & band : imd.Bands)
   {
     auto defaultValue = defaultSolarIrradiance.find(band[MDStr::BandName]);
     if (defaultValue != defaultSolarIrradiance.end() &&
@@ -2024,7 +2025,7 @@ void PleiadesImageMetadataInterface::FetchSolarIrradiance(const std::vector<doub
 
 }
 
-void PleiadesImageMetadataInterface::FetchSpectralSensitivity(const std::string & sensorId)
+void PleiadesImageMetadataInterface::FetchSpectralSensitivity(const std::string & sensorId, ImageMetadata& imd)
 {
   std::unordered_map<std::string, std::vector<double>> BandNameToSpectralSensitivityTable;
   otb::MetaData::LUT1D spectralSensitivity;
@@ -2303,7 +2304,7 @@ void PleiadesImageMetadataInterface::FetchSpectralSensitivity(const std::string 
     otbGenericExceptionMacro(MissingMetadataException, "Invalid PHR Sensor ID")
   }
 
-  for (auto & band: m_Imd.Bands)
+  for (auto & band: imd.Bands)
   {
     auto SpectralSensitivityIt = BandNameToSpectralSensitivityTable.find(band[MDStr::BandName] );
     if (SpectralSensitivityIt != BandNameToSpectralSensitivityTable.end())
@@ -2315,50 +2316,50 @@ void PleiadesImageMetadataInterface::FetchSpectralSensitivity(const std::string 
   }
 }
 
-void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void PleiadesImageMetadataInterface::Parse(ImageMetadata &imd)
 {
   DimapMetadataHelper helper;
 
   // Satellite ID is either PHR 1A or PHR 1B
   // Product read by the TIFF/JP2 GDAL driver
-  if (mds.GetAs<std::string>("", "IMAGERY/SATELLITEID").find("PHR") != std::string::npos)
+  if (m_MetadataSupplierInterface->GetAs<std::string>("", "IMAGERY/SATELLITEID").find("PHR") != std::string::npos)
   {
     // The driver stored the content of the Dimap XML file as metadatas in the IMD domain.
-    helper.ParseDimapV2(mds, "IMD/");
+    helper.ParseDimapV2(*m_MetadataSupplierInterface, "IMD/");
 
-    m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
+    imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
 
     // fill RPC model
-    if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
+    if (imd[MDStr::GeometricLevel] == "SENSOR")
     {
-      FetchRPC(mds, -0.5, -0.5);
+      FetchRPC(imd, -0.5, -0.5);
     }
   }
   // Product read by the DIMAP GDAL driver
-  else if (mds.GetAs<std::string> ("","MISSION") == "PHR")
+  else if (m_MetadataSupplierInterface->GetAs<std::string> ("","MISSION") == "PHR")
   {
     // The DIMAP driver does not read the same metadata as the TIFF/JP2 one, and
     // some required metadata are missing. 
     // The XML Dimap file is read again and provided to the DimapMetadataHelper
     // using a XMLMetadataSupplier
-    XMLMetadataSupplier xmlMds(mds.GetResourceFile());
+    XMLMetadataSupplier xmlMds(m_MetadataSupplierInterface->GetResourceFile());
 
     helper.ParseDimapV2(xmlMds, "Dimap_Document.");
 
-    m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
+    imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
 
     // fill RPC model
-    if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
+    if (imd[MDStr::GeometricLevel] == "SENSOR")
     {
-      FetchRPC(mds, -0.5, -0.5);
+      FetchRPC(imd, -0.5, -0.5);
     }
   }
   // Geom case
-  else if (mds.GetAs<std::string>("", "support_data.sensorID").find("PHR") != std::string::npos)
+  else if (m_MetadataSupplierInterface->GetAs<std::string>("", "support_data.sensorID").find("PHR") != std::string::npos)
   {
-    helper.ParseGeom(mds);
+    helper.ParseGeom(*m_MetadataSupplierInterface);
 
-    m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
+    imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
   }
   else
   {
@@ -2367,13 +2368,13 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
 
   const auto & dimapData = helper.GetDimapData();
 
-  m_Imd.Add(MDStr::SensorID, dimapData.mission + " " +dimapData.missionIndex);
-  m_Imd.Add(MDStr::Mission, "Pléiades");
+  imd.Add(MDStr::SensorID, dimapData.mission + " " +dimapData.missionIndex);
+  imd.Add(MDStr::Mission, "Pléiades");
 
-  if (dimapData.BandIDs.size() == m_Imd.Bands.size())
+  if (dimapData.BandIDs.size() == imd.Bands.size())
   {
     auto bandId = dimapData.BandIDs.begin();
-    for (auto & band: m_Imd.Bands)
+    for (auto & band: imd.Bands)
     {
       band.Add(MDStr::BandName, *bandId);
       bandId++;
@@ -2387,24 +2388,25 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
 
   //Sun elevation and azimuth should be taken from the center of the image , [0] is Top Center, [1] is Center, [2] is Bottom Center
   //This is the same for Viewing angle, it is taken from the center of the image (see FetchSatAngles)
-  m_Imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[1]);
-  m_Imd.Add(MDNum::SunElevation, dimapData.SunElevation[1]);
+  imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[1]);
+  imd.Add(MDNum::SunElevation, dimapData.SunElevation[1]);
 
   FetchSatAngles(dimapData.IncidenceAngle, dimapData.AlongTrackIncidenceAngle,
-                 dimapData.AcrossTrackIncidenceAngle, dimapData.SceneOrientation);
+                 dimapData.AcrossTrackIncidenceAngle, dimapData.SceneOrientation,
+                 imd);
 
-  m_Imd.Add(MDTime::ProductionDate, 
+  imd.Add(MDTime::ProductionDate,
     boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));
-  m_Imd.Add(MDTime::AcquisitionDate, 
+  imd.Add(MDTime::AcquisitionDate,
     boost::lexical_cast<MetaData::Time>(dimapData.AcquisitionDate));
 
-  FetchSolarIrradiance(dimapData.SolarIrradiance);
+  FetchSolarIrradiance(dimapData.SolarIrradiance, imd);
 
   //Store gain values from the dimap, if present
-  if (dimapData.PhysicalGain.size() == m_Imd.Bands.size())
+  if (dimapData.PhysicalGain.size() == imd.Bands.size())
   {
     auto gain = dimapData.PhysicalGain.begin();
-    for (auto & band: m_Imd.Bands)
+    for (auto & band: imd.Bands)
     {
       band.Add(MDNum::PhysicalGain, *gain);
       gain++;
@@ -2413,16 +2415,16 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
   else
   {
     //Store hard-coded values for gain
-    FetchTabulatedPhysicalGain(m_Imd[MDTime::ProductionDate]);
+    FetchTabulatedPhysicalGain(imd[MDTime::ProductionDate], imd);
     otbLogMacro(Info, << "Gain values from DIMAP could not be retrieved, reading hard-coded tables instead");
   }
 
-  FetchSpectralSensitivity(m_Imd[MDStr::SensorID]);
+  FetchSpectralSensitivity(imd[MDStr::SensorID], imd);
 
-  if (dimapData.PhysicalBias.size() == m_Imd.Bands.size())
+  if (dimapData.PhysicalBias.size() == imd.Bands.size())
   {
     auto bias = dimapData.PhysicalBias.begin();
-    for (auto & band: m_Imd.Bands)
+    for (auto & band: imd.Bands)
     {
       band.Add(MDNum::PhysicalBias, *bias);
       bias++;
@@ -2431,7 +2433,7 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
   else
   {
     //Default Bias value
-    for (auto & band: m_Imd.Bands)
+    for (auto & band: imd.Bands)
     {
       band.Add(MDNum::PhysicalBias, 0.0);
     }
