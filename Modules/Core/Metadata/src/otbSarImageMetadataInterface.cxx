@@ -363,7 +363,7 @@ bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
   return true;
 }
 
-void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCalib) const
+void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCalib, bool geom) const
 {
   sarCalib.rescalingFactor = GetRescalingFactor();
   auto coeffs = GetRadiometricCalibrationNoisePolynomialDegree();
@@ -381,10 +381,21 @@ void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCali
   sarCalib.radiometricCalibrationAntennaPatternOldGain = GetRadiometricCalibrationAntennaPatternOldGain();
   sarCalib.radiometricCalibrationIncidenceAngle = GetRadiometricCalibrationIncidenceAngle();
   sarCalib.radiometricCalibrationRangeSpreadLoss = GetRadiometricCalibrationRangeSpreadLoss();
-  sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = GetCalibrationLookupData(SarCalibrationLookupData::SIGMA);
-  sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = GetCalibrationLookupData(SarCalibrationLookupData::BETA);
-  sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = GetCalibrationLookupData(SarCalibrationLookupData::GAMMA);
-  sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = GetCalibrationLookupData(SarCalibrationLookupData::DN);
+  if (geom)
+  {
+    sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlagGeom();
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = GetCalibrationLookupDataGeom(SarCalibrationLookupData::SIGMA);
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = GetCalibrationLookupDataGeom(SarCalibrationLookupData::BETA);
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = GetCalibrationLookupDataGeom(SarCalibrationLookupData::GAMMA);
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = GetCalibrationLookupDataGeom(SarCalibrationLookupData::DN);
+  } else
+  {
+    sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlag();
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = GetCalibrationLookupData(SarCalibrationLookupData::SIGMA);
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = GetCalibrationLookupData(SarCalibrationLookupData::BETA);
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = GetCalibrationLookupData(SarCalibrationLookupData::GAMMA);
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = GetCalibrationLookupData(SarCalibrationLookupData::DN);
+  }
 }
 
 void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const

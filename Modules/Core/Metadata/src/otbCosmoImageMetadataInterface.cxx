@@ -411,8 +411,7 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Bands[0].Add(MDGeom::SAR, sarParam);
   
   SARCalib sarCalib;
-  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlag();
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, false);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
@@ -450,8 +449,7 @@ void CosmoImageMetadataInterface::ParseGeom(ImageMetadata &imd)
   imd.Bands[0].Add(MDGeom::SAR, sarParam);
   
   SARCalib sarCalib;
-  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlagGeom();
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, true);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 

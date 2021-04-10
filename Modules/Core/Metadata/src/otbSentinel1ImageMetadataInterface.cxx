@@ -608,8 +608,7 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
     imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
   SARCalib sarCalib;
-  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlag();
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, false);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
@@ -637,8 +636,7 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     imd.Bands[0].Add(MDGeom::SAR, sarParam);
   }
   SARCalib sarCalib;
-  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlagGeom();
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, true);
   imd.Add(MDGeom::SARCalib, sarCalib);
   
   // Manifect data may not be present in geom file

@@ -122,7 +122,7 @@ public:
   std::vector<CalibrationVector> GetCalibrationVectorGeom() const;
   std::vector<SARNoise> GetNoiseVectorGeom() const;
 
-  void LoadRadiometricCalibrationData(SARCalib &) const;
+  void LoadRadiometricCalibrationData(SARCalib &, bool) const;
 
 protected:
   SarImageMetadataInterface();

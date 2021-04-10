@@ -297,8 +297,7 @@ void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
     }
   }
   SARCalib sarCalib;
-  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlag();
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, false);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
@@ -342,8 +341,7 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     }
   }  
   SARCalib sarCalib;
-  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlagGeom();
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, true);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 

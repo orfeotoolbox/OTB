@@ -1269,8 +1269,7 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
     imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
   SARCalib sarCalib;
-  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlag();
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, false);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
@@ -1307,8 +1306,7 @@ void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
   SARCalib sarCalib;
-  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlagGeom();
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, true);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
