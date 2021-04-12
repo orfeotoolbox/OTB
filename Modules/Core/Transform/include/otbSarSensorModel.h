@@ -47,16 +47,16 @@ public:
   (col,row) */
   void WorldToLineSample(const Point3DType& inGeoPoint, Point2DType& outLineSample) const;
 
-protected:
-
-private:
-  void OptimizeTimeOffsetsFromGcps();
-
   bool WorldToAzimuthRangeTime(const Point3DType& inGeoPoint, 
                                           TimeType & azimuthTime, 
                                           double & rangeTime, 
                                           Point3DType& sensorPos, 
                                           Vector3DType& sensorVel) const;
+
+protected:
+
+private:
+  void OptimizeTimeOffsetsFromGcps();
 
 
   bool ZeroDopplerLookup(const Point3DType& inEcefPoint, 

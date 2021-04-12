@@ -233,4 +233,5 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
            -23.9431732671333
            15.7637929806278
            0)
+
 endif()
