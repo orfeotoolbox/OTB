@@ -32,7 +32,7 @@
 
 #include "itkPoint.h"
 
-#include "itkPoint.h"
+#include "itkPointSet.h"
 #include "otbDateTime.h"
 
 namespace otb

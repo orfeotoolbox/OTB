@@ -56,7 +56,10 @@ bool Sentinel1ImageMetadataInterface::CanRead() const
 
 bool Sentinel1ImageMetadataInterface::HasCalibrationLookupDataFlag() const
 {
-  itkExceptionMacro("HasCalibrationLookupDataFlag(mds) not yet implemented in Sentinel1ImageMetadataInterface"); // TODO
+  //itkExceptionMacro("HasCalibrationLookupDataFlag(mds) not yet implemented in Sentinel1ImageMetadataInterface"); // TODO
+
+  // WIP 2159
+  return false;
 }
 
 const Sentinel1ImageMetadataInterface::LookupDataPointerType Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(const short type) const
@@ -656,14 +659,14 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
     sarParam.nearRangeTime = AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.slantRangeTime");
     sarParam.rangeSamplingRate = AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.rangeSamplingRate");
 
-    sarParam.gcpTimes = this->GetGCPTimes(AnnotationMS, m_Imd.GetGCPParam());
+    sarParam.gcpTimes = this->GetGCPTimes(AnnotationMS, imd.GetGCPParam());
 
-    m_Imd.Add(MDNum::NumberOfLines, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines"));
-    m_Imd.Add(MDNum::NumberOfColumns, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfSamples"));
-    m_Imd.Add(MDNum::AverageSceneHeight, this->getBandTerrainHeight(AnnotationFilePath));
-    m_Imd.Add(MDNum::RadarFrequency, AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.radarFrequency"));
-    m_Imd.Add(MDNum::PRF, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthFrequency"));
-    m_Imd.Add(MDNum::CenterIncidenceAngle, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.incidenceAngleMidSwath"));
+    imd.Add(MDNum::NumberOfLines, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines"));
+    imd.Add(MDNum::NumberOfColumns, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfSamples"));
+    imd.Add(MDNum::AverageSceneHeight, this->getBandTerrainHeight(AnnotationFilePath));
+    imd.Add(MDNum::RadarFrequency, AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.radarFrequency"));
+    imd.Add(MDNum::PRF, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthFrequency"));
+    imd.Add(MDNum::CenterIncidenceAngle, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.incidenceAngleMidSwath"));
 
     // Calibration file
     std::string CalibrationFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)

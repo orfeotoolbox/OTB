@@ -75,9 +75,13 @@ BOOST_AUTO_TEST_CASE(SARSensorModel_WorldToLineSample)
   ossimModel->LoadState(reader->GetOutput()->GetImageKeywordlist());
   ossimModel->WorldToLineSample(inWorldPoint, outLineSampleOssim);
 
+  std::cout << inWorldPoint << " " << outLineSampleOssim << std::endl;
+
   std::cout << "test with otb" << std::endl;
   otb::SarSensorModel::Point2DType outLineSampleOtb;
   model.WorldToLineSample(inWorldPoint, outLineSampleOtb);
+
+  std::cout << inWorldPoint << " " << outLineSampleOtb << std::endl;
 
   //TODO compare results with a baseline
 
@@ -95,6 +99,13 @@ BOOST_AUTO_TEST_CASE(SARSensorModel_auto_validate_inverse_transform )
   auto reader = ReaderType::New();
   reader->SetFileName(framework::master_test_suite().argv[1]);
   reader->GenerateOutputInformation();
+
+  if (reader->GetOutput()->GetGCPCount() == 0)
+  {
+    otbLogMacro(Info, << "Input product has no gcp, skipping gcp inverse transform validation.");
+    return;
+  }
+
   const auto & imd = reader->GetOutput()->GetImageMetadata();
 
   otb::SarSensorModel model(imd);

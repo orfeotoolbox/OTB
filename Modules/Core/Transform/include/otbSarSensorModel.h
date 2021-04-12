@@ -96,6 +96,9 @@ private:
 
   // Speed of light 
   const double C = 299792458;
+
+  // True if the input product is a ground product
+  bool m_IsGrd;
 };
 
 }

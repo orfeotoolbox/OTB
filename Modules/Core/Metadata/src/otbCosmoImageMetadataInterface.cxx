@@ -342,7 +342,34 @@ std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const std::string & re
 
     orbitVector.push_back(orbit);
   }
-  return orbitVector ;
+  return orbitVector;
+}
+
+
+
+std::vector<BurstRecord> CosmoImageMetadataInterface::CreateBurstRecord(const std::string & firstLineTimeStr, const std::string & lastLineTimeStr, const unsigned long endLine, const unsigned long endSample) const
+{
+  BurstRecord record;
+  record.startLine = 0;
+  record.startSample = 0;
+
+  record.endLine = endLine;
+  record.endSample = endSample;
+
+
+  std::stringstream ss;
+  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
+  ss.imbue(std::locale(std::locale(), facet));
+
+  ss << firstLineTimeStr;
+  ss >> record.azimuthStartTime;
+
+  ss << lastLineTimeStr;
+  ss >> record.azimuthStopTime;
+
+  record.azimuthAnxTime = 0.;
+
+  return {record};
 }
 
 void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
@@ -378,7 +405,6 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 
   Fetch(MDNum::PRF, imd, "S01_PRF");
 
-
   //getTime
   auto subDsName = "HDF5:" + m_MetadataSupplierInterface->GetResourceFile() + "://S01/SBI";
   auto metadataBands = this->saveMetadataBands(subDsName) ;
@@ -403,9 +429,31 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Add(MDTime::AcquisitionStartTime, startTime);
   imd.Add(MDTime::AcquisitionStopTime, stoptTime);
 
+  // Retrieve the product dimension, as it is not stored in the metadata
+  auto dataset = static_cast<GDALDataset*>(GDALOpen(subDsName.c_str(), GA_ReadOnly));
+
+  int sizex = dataset->GetRasterXSize();
+  int sizey = dataset->GetRasterYSize();
+  GDALClose(dataset);
+
   //SAR Parameters
   SARParam sarParam;
   sarParam.orbits = this->getOrbits(reference_UTC);
+  sarParam.burstRecords = CreateBurstRecord(first_line_time, last_line_time, sizex-1, sizey-1);
+
+  auto rangeTimeInterval = std::stod(metadataBands[0]["S01_SBI_Column_Time_Interval"]);
+  
+  if (!rangeTimeInterval)
+  {
+    otbGenericExceptionMacro(MissingMetadataException, "Range time interval is null.");
+  }
+  sarParam.rangeSamplingRate = 1 / rangeTimeInterval;
+
+  sarParam.azimuthTimeInterval = boost::posix_time::precise_duration(
+      std::stod(metadataBands[0]["S01_SBI_Line_Time_Interval"])
+      * 1e6);
+  sarParam.nearRangeTime = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Range_First_Time"]);
+
   imd.Bands[0].Add(MDGeom::SAR, sarParam);
   
   SARCalib sarCalib;
@@ -441,12 +489,11 @@ void CosmoImageMetadataInterface::ParseGeom(ImageMetadata &imd)
   Fetch(MDNum::PRF, imd, "support_data.pulse_repetition_frequency");
   Fetch(MDTime::AcquisitionStartTime, imd, "header.first_line_time");
   Fetch(MDTime::AcquisitionStopTime, imd, "header.last_line_time");
-  
+
   //SAR Parameters
   SARParam sarParam;
   sarParam.orbits = this->GetOrbitsGeom();
   imd.Bands[0].Add(MDGeom::SAR, sarParam);
-  
   SARCalib sarCalib;
   sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlagGeom();
   LoadRadiometricCalibrationData(sarCalib);

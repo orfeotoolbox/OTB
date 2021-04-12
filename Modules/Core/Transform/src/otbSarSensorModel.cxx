@@ -66,6 +66,11 @@ SarSensorModel::SarSensorModel(const ImageMetadata & imd)
   m_SarParam = boost::any_cast<SARParam>(imd.Bands[0][MDGeom::SAR]);
   
   OptimizeTimeOffsetsFromGcps();
+
+  const std::vector<std::string> grdProductTypes = {"GRD", "MGD", "GEC", "EEC"};
+  m_IsGrd = m_Imd.Has(MDStr::ProductType) &&
+    std::find(grdProductTypes.begin(), grdProductTypes.end(), m_Imd[MDStr::ProductType]) != grdProductTypes.end();
+
 }
 
 void SarSensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DType& outLineSample) const
@@ -86,20 +91,16 @@ void SarSensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DTyp
   // Convert azimuth time to line
   AzimuthTimeToLine(azimuthTime, outLineSample[1]);
 
-  if (m_Imd[MDStr::ProductType] == "GRD")
+  if (m_IsGrd)
   {
     //TODO GRD case
   }
-  else if (m_Imd[MDStr::ProductType] == "SLC")
+  else
   {
     // SLC case
     // Eq 23 and 24 p. 28
     outLineSample[0] = (rangeTime - m_SarParam.nearRangeTime) 
                         * m_SarParam.rangeSamplingRate;
-  }
-  else
-  {
-    otbGenericExceptionMacro(itk::ExceptionObject, <<"Invalid SAR product type: " << m_Imd[MDStr::ProductType]);
   }
 }
 
@@ -289,6 +290,11 @@ void SarSensorModel::interpolateSensorPosVel(const TimeType & azimuthTime,
 
 void SarSensorModel::OptimizeTimeOffsetsFromGcps()
 {
+  if (!m_Imd.Has(MDGeom::GCP))
+  {
+    return;
+  }
+
   DurationType cumulAzimuthTime(seconds(0));
   double cumulRangeTime(0);
   unsigned int count=0;
@@ -296,34 +302,34 @@ void SarSensorModel::OptimizeTimeOffsetsFromGcps()
   
   // reset offsets before optimisation
   m_AzimuthTimeOffset = seconds(0);
-
   auto gcpParam = m_Imd.GetGCPParam();
-
   // First, fix the azimuth time
-  for(auto  gcpIt = gcpParam.GCPs.begin(); gcpIt!=gcpParam.GCPs.end(); ++gcpIt)
+  for(auto gcpIt = gcpParam.GCPs.begin(); gcpIt!=gcpParam.GCPs.end(); ++gcpIt)
   {
-    TimeType estimatedAzimuthTime;
-    double   estimatedRangeTime;
-
-    Point3DType sensorPos;
-    Point3DType sensorVel;
-
-    Point3DType inWorldPoint;
-    inWorldPoint[0] = gcpIt->m_GCPX;
-    inWorldPoint[1] = gcpIt->m_GCPY;
-    inWorldPoint[2] = gcpIt->m_GCPZ;
-
-
-    // Estimate times
-    const bool s1 = this->WorldToAzimuthRangeTime(inWorldPoint,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
-
-    if(s1)
+    auto gcpTimeIt = m_SarParam.gcpTimes.find(gcpIt->m_Id);
+    if (gcpTimeIt != std::end(m_SarParam.gcpTimes))
     {
-      cumulAzimuthTime -= (estimatedAzimuthTime - m_SarParam.gcpTimes[gcpIt->m_Id].azimuthTime);
-      ++count;
+      TimeType estimatedAzimuthTime;
+      double   estimatedRangeTime;
+
+      Point3DType sensorPos;
+      Point3DType sensorVel;
+
+      Point3DType inWorldPoint;
+      inWorldPoint[0] = gcpIt->m_GCPX;
+      inWorldPoint[1] = gcpIt->m_GCPY;
+      inWorldPoint[2] = gcpIt->m_GCPZ;
+
+      // Estimate times
+      const bool s1 = this->WorldToAzimuthRangeTime(inWorldPoint,estimatedAzimuthTime,estimatedRangeTime, sensorPos, sensorVel);
+
+      if(s1)
+      {
+        cumulAzimuthTime -= (estimatedAzimuthTime - gcpTimeIt->second.azimuthTime);
+        ++count;
+      }
     }
   }
-
   m_AzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(seconds(0));
 }
 
