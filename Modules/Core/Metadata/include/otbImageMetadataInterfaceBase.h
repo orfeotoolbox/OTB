@@ -243,16 +243,16 @@ public:
   static void PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict);
 
   const std::string& Fetch(MDStr key, ImageMetadata & imd, const char *path, int band=-1);
-  void CheckFetch(MDStr key, ImageMetadata & imd, const char *path, int band=-1);
+  bool CheckFetch(MDStr key, ImageMetadata & imd, const char *path, int band=-1);
 
   const double& Fetch(MDNum key, ImageMetadata & imd, const char *path, int band=-1);
-  void CheckFetch(MDNum key, ImageMetadata & imd, const char *path, int band=-1);
+  bool CheckFetch(MDNum key, ImageMetadata & imd, const char *path, int band=-1);
 
   const MetaData::Time& Fetch(MDTime key, ImageMetadata & imd, const char *path, int band=-1);
-  void CheckFetch(MDTime key, ImageMetadata & imd, const char *path, int band=-1);
+  bool CheckFetch(MDTime key, ImageMetadata & imd, const char *path, int band=-1);
 
   const std::string& Fetch(std::string key, ImageMetadata & imd, const char *path, int band=-1);
-  void CheckFetch(std::string key, ImageMetadata & imd, const char *path, int band=-1);
+  bool CheckFetch(std::string key, ImageMetadata & imd, const char *path, int band=-1);
 
   const boost::any& FetchRPC(ImageMetadata& imd, const double lineOffset = 0.0, const double sampleOffset = 0.0);
 

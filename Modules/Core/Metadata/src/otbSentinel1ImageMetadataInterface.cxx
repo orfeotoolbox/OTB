@@ -639,17 +639,17 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   LoadRadiometricCalibrationData(sarCalib, true);
   imd.Add(MDGeom::SARCalib, sarCalib);
   
-  // Manifect data may not be present in geom file
-  CheckFetch(MDStr::BeamMode, imd, "manifest_data.acquisition_mode");
-  CheckFetch(MDStr::BeamSwath, imd, "manifest_data.swath");
-  CheckFetch(MDStr::Mission, imd, "manifest_data.instrument");
-  CheckFetch(MDStr::OrbitDirection, imd, "manifest_data.orbit_pass");
-  CheckFetch(MDNum::OrbitNumber, imd, "manifest_data.abs_orbit");
-  CheckFetch(MDStr::ProductType, imd, "manifest_data.product_type");
-  CheckFetch(MDTime::ProductionDate, imd, "manifest_data.date");
-  CheckFetch(MDTime::AcquisitionDate, imd, "manifest_data.image_date");
-  CheckFetch("FACILITY_IDENTIFIER", imd, "manifest_data.Processing_system_identifier");
-  CheckFetch(MDStr::Swath, imd, "manifest_data.swath");
+  // Manifest data may not be present in geom file, but support data should be present in that case
+  CheckFetch(MDStr::BeamMode, imd, "manifest_data.acquisition_mode") || CheckFetch(MDStr::BeamMode, imd, "support_data.acquisition_mode");
+  CheckFetch(MDStr::BeamSwath, imd, "manifest_data.swath") || CheckFetch(MDStr::BeamSwath, imd, "support_data.swath");
+  CheckFetch(MDStr::Mission, imd, "manifest_data.instrument") || CheckFetch(MDStr::Mission, imd, "support_data.instrument");
+  CheckFetch(MDStr::OrbitDirection, imd, "manifest_data.orbit_pass") || CheckFetch(MDStr::OrbitDirection, imd, "support_data.orbit_pass");
+  CheckFetch(MDNum::OrbitNumber, imd, "manifest_data.abs_orbit") || CheckFetch(MDStr::OrbitDirection, imd, "support_data.abs_orbit");
+  CheckFetch(MDStr::ProductType, imd, "manifest_data.product_type") || CheckFetch(MDStr::ProductType, imd, "support_data.product_type");
+  CheckFetch(MDTime::ProductionDate, imd, "manifest_data.date") || CheckFetch(MDTime::ProductionDate, imd, "support_data.date");
+  CheckFetch(MDTime::AcquisitionDate, imd, "manifest_data.image_date") || CheckFetch(MDTime::AcquisitionDate, imd, "support_data.image_date");
+  CheckFetch("FACILITY_IDENTIFIER", imd, "manifest_data.Processing_system_identifier") || CheckFetch("FACILITY_IDENTIFIER", imd, "support_data.Processing_system_identifier");
+  CheckFetch(MDStr::Swath, imd, "manifest_data.swath") || CheckFetch(MDStr::Swath, imd, "support_data.swath");
 }
 
 void Sentinel1ImageMetadataInterface::Parse(ImageMetadata & imd)
