@@ -629,7 +629,7 @@ ImageMetadataInterfaceBase::Fetch(
   return imd[key];
 }
 
-void
+bool
 ImageMetadataInterfaceBase::CheckFetch(
   MDStr key,
   ImageMetadata& imd,
@@ -637,7 +637,11 @@ ImageMetadataInterfaceBase::CheckFetch(
   int band)
 {
   if (m_MetadataSupplierInterface->HasValue(path, band))
+  {
     Fetch(key, imd, path, band);
+    return true;
+  }
+  return false;
 }
 
 const double&
@@ -657,7 +661,7 @@ ImageMetadataInterfaceBase::Fetch(
   return imd[key];
 }
 
-void
+bool
 ImageMetadataInterfaceBase::CheckFetch(
   MDNum key,
   ImageMetadata& imd,
@@ -665,7 +669,11 @@ ImageMetadataInterfaceBase::CheckFetch(
   int band)
 {
   if (m_MetadataSupplierInterface->HasValue(path, band))
+  {
     Fetch(key, imd, path, band);
+    return true;
+  }
+  return false;
 }
 
 const MetaData::Time&
@@ -686,7 +694,7 @@ ImageMetadataInterfaceBase::Fetch(
   return imd[key];
 }
 
-void
+bool
 ImageMetadataInterfaceBase::CheckFetch(
   MDTime key,
   ImageMetadata& imd,
@@ -694,7 +702,11 @@ ImageMetadataInterfaceBase::CheckFetch(
   int band)
 {
   if (m_MetadataSupplierInterface->HasValue(path, band))
+  {
     Fetch(key, imd, path, band);
+    return true;
+  }
+  return false;
 }
 
 const std::string&
@@ -714,7 +726,7 @@ ImageMetadataInterfaceBase::Fetch(
   return imd[key];
 }
 
-void
+bool
 ImageMetadataInterfaceBase::CheckFetch(
   std::string key,
   ImageMetadata& imd,
@@ -722,7 +734,11 @@ ImageMetadataInterfaceBase::CheckFetch(
   int band)
 {
   if (m_MetadataSupplierInterface->HasValue(path, band))
+  {
     Fetch(key, imd, path, band);
+    return true;
+  }
+  return false;
 }
 
 const boost::any& ImageMetadataInterfaceBase::FetchRPC(
