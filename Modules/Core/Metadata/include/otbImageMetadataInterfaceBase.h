@@ -229,12 +229,9 @@ public:
 
   virtual bool CanRead() const {return false;}
 
-  void SupplierCheck() const
-  {
-    if (m_MetadataSupplierInterface == nullptr)
-      throw std::runtime_error("In ImageMetadataInterface, the MetadataSupplier needs to be set before calling the Parse function.");
-  }
-
+  /** Parses the metadata using the MetadataSupplierInterface and fill the ImageMetadata object
+   * Raises "MissingMetadataException" if parsing failes.
+   */
   virtual void Parse(ImageMetadata &)
   {
     otbGenericExceptionMacro(MissingMetadataException,<<"Metadata parsing not implemented")

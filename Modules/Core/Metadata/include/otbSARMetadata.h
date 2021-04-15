@@ -50,26 +50,6 @@ struct OTBMetadata_EXPORT AzimuthFmRate
   std::vector<double> azimuthFmRatePolynomial;
 };
 
-/** \struct CalibrationVector
- *
- * \brief This structure is used to handle calibration look up tables
- */
-struct OTBMetadata_EXPORT CalibrationVector
-{
-  /** Image line at which the calibration vector applies */
-  int line;
-  /** Zero Doppler azimuth time at which calibration vector applies */
-  MetaData::Time azimuthTime;
-  /** Sigma nought calibration vector */
-  MetaData::LUT1D sigmaNought;
-  /* Beta nought calibration vector */
-  MetaData::LUT1D betaNought;
-  /* Gamma calibration vector */
-  MetaData::LUT1D gamma;
-  /* Digital number calibration vector */
-  MetaData::LUT1D dn;
-};
-
 /** \struct DopplerCentroid
  *
  * \brief This structure is used to handle Doppler centroid estimates
@@ -129,12 +109,6 @@ struct OTBMetadata_EXPORT SARParam
    */
   std::vector<AzimuthFmRate> azimuthFmRates;
 
-  /** Calibration vector list */
-  std::vector<CalibrationVector> calibrationVectors;
-
-  MetaData::Time calibrationStartTime;
-  MetaData::Time calibrationStopTime;
-
   /** Doppler centroid estimates */
   std::vector<DopplerCentroid> dopplerCentroids;
 
@@ -159,6 +133,8 @@ struct OTBMetadata_EXPORT SARCalib
   
   bool calibrationLookupFlag;
   double rescalingFactor;
+  MetaData::Time calibrationStartTime;
+  MetaData::Time calibrationStopTime;
   ArrayType radiometricCalibrationNoisePolynomialDegree;
   ArrayType radiometricCalibrationAntennaPatternNewGainPolynomialDegree;
   ArrayType radiometricCalibrationAntennaPatternOldGainPolynomialDegree;

@@ -66,10 +66,7 @@ public:
   typedef SarCalibrationLookupData LookupDataType;
   typedef LookupDataType::Pointer  LookupDataPointerType;
 
-  virtual const LookupDataPointerType CreateCalibrationLookupData(const short t) const;
-
-  const LookupDataPointerType GetCalibrationLookupData(const short type) const;
-  const LookupDataPointerType GetCalibrationLookupDataGeom(const short type) const;
+  virtual bool CreateCalibrationLookupData(SARCalib&, const ImageMetadata&, const MetadataSupplierInterface&, const bool) const;
 
   virtual bool HasCalibrationLookupDataFlag() const;
   bool HasCalibrationLookupDataFlagGeom() const;
@@ -119,10 +116,9 @@ public:
   std::vector<AzimuthFmRate> GetAzimuthFmRateGeom() const;
   std::vector<DopplerCentroid> GetDopplerCentroidGeom() const;
   std::vector<Orbit> GetOrbitsGeom() const;
-  std::vector<CalibrationVector> GetCalibrationVectorGeom() const;
   std::vector<SARNoise> GetNoiseVectorGeom() const;
 
-  void LoadRadiometricCalibrationData(SARCalib &, bool) const;
+  void LoadRadiometricCalibrationData(SARCalib &) const;
 
 protected:
   SarImageMetadataInterface();

@@ -97,7 +97,7 @@ public:
   void ParseGeom(ImageMetadata &) override;
 
   std::vector<std::map<std::string, std::string> > saveMetadataBands(std::string file) ;
-  std::vector<Orbit> getOrbits(const std::string & referenceTime);
+  std::vector<Orbit> getOrbits(const std::string & referenceTime) const;
 
 protected:
   /* class ctor */

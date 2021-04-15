@@ -71,7 +71,7 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
   /** Fetch the SARModel */
   if (!imd.Has(MDGeom::SARCalib))
     throw std::runtime_error("otbSarRadiometricCalibrationTiImageFilter was not able to fetch the SARCalib metadata.");
-  auto sarParam = boost::any_cast<SARCalib>(imd[MDGeom::SARCalib]);
+  auto sarCalib = boost::any_cast<SARCalib>(imd[MDGeom::SARCalib]);
 
   /** Get the SarRadiometricCalibrationFunction function instance.  */
   FunctionPointer function = this->GetFunction();
@@ -82,12 +82,12 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
     * depends on the given product.*
     * B. The other value such as antenna pattern gain, rangespread loss, incidence
     * angle has no effect in calibration  */
-  bool apply = sarParam.calibrationLookupFlag;
+  bool apply = sarCalib.calibrationLookupFlag;
 
   /* Below lines will toggle the necessary flags which can help skip some
    * computation. For example, if there is lookup value and ofcourse antenna
    * pattern gain is not required. Even if we try to compute the value with
-   * SarParametricFunction we  get 1. This is the safe side. But as we are so sure
+   * sarCalibetricFunction we  get 1. This is the safe side. But as we are so sure
    * we skip all those calls to EvaluateParametricCoefficient and also the
    * Evaluate(). For the function the value is 1 by default.
    */
@@ -107,8 +107,8 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
   {
     ParametricFunctionPointer noise;
     noise = function->GetNoise();
-    noise->SetPointSet(sarParam.radiometricCalibrationNoise);
-    noise->SetPolynomalSize(sarParam.radiometricCalibrationNoisePolynomialDegree);
+    noise->SetPointSet(sarCalib.radiometricCalibrationNoise);
+    noise->SetPolynomalSize(sarCalib.radiometricCalibrationNoisePolynomialDegree);
     noise->EvaluateParametricCoefficient();
   }
 
@@ -117,14 +117,14 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
   {
     ParametricFunctionPointer antennaPatternNewGain;
     antennaPatternNewGain = function->GetAntennaPatternNewGain();
-    antennaPatternNewGain->SetPointSet(sarParam.radiometricCalibrationAntennaPatternNewGain);
-    antennaPatternNewGain->SetPolynomalSize(sarParam.radiometricCalibrationAntennaPatternNewGainPolynomialDegree);
+    antennaPatternNewGain->SetPointSet(sarCalib.radiometricCalibrationAntennaPatternNewGain);
+    antennaPatternNewGain->SetPolynomalSize(sarCalib.radiometricCalibrationAntennaPatternNewGainPolynomialDegree);
     antennaPatternNewGain->EvaluateParametricCoefficient();
 
     ParametricFunctionPointer antennaPatternOldGain;
     antennaPatternOldGain = function->GetAntennaPatternOldGain();
-    antennaPatternOldGain->SetPointSet(sarParam.radiometricCalibrationAntennaPatternOldGain);
-    antennaPatternOldGain->SetPolynomalSize(sarParam.radiometricCalibrationAntennaPatternOldGainPolynomialDegree);
+    antennaPatternOldGain->SetPointSet(sarCalib.radiometricCalibrationAntennaPatternOldGain);
+    antennaPatternOldGain->SetPolynomalSize(sarCalib.radiometricCalibrationAntennaPatternOldGainPolynomialDegree);
     antennaPatternOldGain->EvaluateParametricCoefficient();
   }
 
@@ -133,8 +133,8 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
   {
     ParametricFunctionPointer incidenceAngle;
     incidenceAngle = function->GetIncidenceAngle();
-    incidenceAngle->SetPointSet(sarParam.radiometricCalibrationIncidenceAngle);
-    incidenceAngle->SetPolynomalSize(sarParam.radiometricCalibrationIncidenceAnglePolynomialDegree);
+    incidenceAngle->SetPointSet(sarCalib.radiometricCalibrationIncidenceAngle);
+    incidenceAngle->SetPolynomalSize(sarCalib.radiometricCalibrationIncidenceAnglePolynomialDegree);
     incidenceAngle->EvaluateParametricCoefficient();
   }
 
@@ -143,8 +143,8 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
   {
     ParametricFunctionPointer rangeSpreadLoss;
     rangeSpreadLoss = function->GetRangeSpreadLoss();
-    rangeSpreadLoss->SetPointSet(sarParam.radiometricCalibrationRangeSpreadLoss);
-    rangeSpreadLoss->SetPolynomalSize(sarParam.radiometricCalibrationRangeSpreadLossPolynomialDegree);
+    rangeSpreadLoss->SetPointSet(sarCalib.radiometricCalibrationRangeSpreadLoss);
+    rangeSpreadLoss->SetPolynomalSize(sarCalib.radiometricCalibrationRangeSpreadLossPolynomialDegree);
     rangeSpreadLoss->EvaluateParametricCoefficient();
   }
 
@@ -159,13 +159,13 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
    */
   if (function->GetApplyLookupDataCorrection())
   {
-    function->SetCalibrationLookupData(sarParam.calibrationLookupData[this->GetLookupSelected()]);
+    function->SetCalibrationLookupData(sarCalib.calibrationLookupData[this->GetLookupSelected()]);
   }
 
   /** This was introduced for cosmoskymed which required a rescaling factor */
   if (function->GetApplyRescalingFactor())
   {
-    function->SetRescalingFactor(sarParam.rescalingFactor);
+    function->SetRescalingFactor(sarCalib.rescalingFactor);
   }
 }
 

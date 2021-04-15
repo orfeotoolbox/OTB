@@ -56,52 +56,52 @@ bool Radarsat2ImageMetadataInterface::HasCalibrationLookupDataFlag() const
   itkExceptionMacro("HasCalibrationLookupDataFlag(mds) not yet implemented in Radarsat2ImageMetadataInterface"); // TODO
 }
 
-const Radarsat2ImageMetadataInterface::LookupDataPointerType Radarsat2ImageMetadataInterface::CreateCalibrationLookupData(const short type) const
+bool Radarsat2ImageMetadataInterface::CreateCalibrationLookupData(SARCalib&, const ImageMetadata&, const MetadataSupplierInterface&, const bool) const
 {
-  std::string lut = "SigmaNought";
+//  std::string lut = "SigmaNought";
 
-  switch (type)
-  {
-  case SarCalibrationLookupData::BETA:
-  {
-    lut = "BetaNought";
-  }
-  break;
+//  switch (type)
+//  {
+//  case SarCalibrationLookupData::BETA:
+//  {
+//    lut = "BetaNought";
+//  }
+//  break;
 
-  case SarCalibrationLookupData::GAMMA:
-  {
-    lut = "GammaNought";
-  }
-  break;
+//  case SarCalibrationLookupData::GAMMA:
+//  {
+//    lut = "GammaNought";
+//  }
+//  break;
 
-  case SarCalibrationLookupData::DN:
-  {
-    lut = "DN";
-  }
-  break;
+//  case SarCalibrationLookupData::DN:
+//  {
+//    lut = "DN";
+//  }
+//  break;
 
-  case SarCalibrationLookupData::SIGMA:
-  default:
-  {
-    lut = "SigmaNought";
-  }
-  break;
-  }
+//  case SarCalibrationLookupData::SIGMA:
+//  default:
+//  {
+//    lut = "SigmaNought";
+//  }
+//  break;
+//  }
 
-  const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
-  const std::string          key              = "referenceNoiseLevel[" + lut + "].gain";
+//  const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
+//  const std::string          key              = "referenceNoiseLevel[" + lut + "].gain";
 
-  Radarsat2CalibrationLookupData::GainListType glist;
-  int                                          offset = 0;
+//  Radarsat2CalibrationLookupData::GainListType glist;
+//  int                                          offset = 0;
 
-  Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey("referenceNoiseLevel[" + lut + "].gain"), glist, "referenceNoiseLevel[" + lut + "].gain");
+//  Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey("referenceNoiseLevel[" + lut + "].gain"), glist, "referenceNoiseLevel[" + lut + "].gain");
 
-  Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey("referenceNoiseLevel[" + lut + "].offset"), "referenceNoiseLevel[" + lut + "].offset");
+//  Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey("referenceNoiseLevel[" + lut + "].offset"), "referenceNoiseLevel[" + lut + "].offset");
 
-  Radarsat2CalibrationLookupData::Pointer sarLut;
-  sarLut = Radarsat2CalibrationLookupData::New();
-  sarLut->InitParameters(type, offset, glist);
-  return static_cast<Radarsat2ImageMetadataInterface::LookupDataPointerType> (sarLut);
+//  Radarsat2CalibrationLookupData::Pointer sarLut;
+//  sarLut = Radarsat2CalibrationLookupData::New();
+//  sarLut->InitParameters(type, offset, glist);
+//  return static_cast<Radarsat2ImageMetadataInterface::LookupDataPointerType> (sarLut);
 }
 
 void Radarsat2ImageMetadataInterface::ParseDateTime(const char* key, std::vector<int>& dateFields) const
@@ -246,9 +246,6 @@ Radarsat2ImageMetadataInterface::UIntVectorType Radarsat2ImageMetadataInterface:
   return rgb;
 }
 
-//"
-
-
 void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 {
   // Metadata read by GDAL
@@ -265,7 +262,6 @@ void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   Fetch(MDStr::Instrument, imd, "SATELLITE_IDENTIFIER");
   Fetch(MDStr::SensorID, imd, "SENSOR_IDENTIFIER");
   
-
   // Product file
   std::string ProductFilePath = m_MetadataSupplierInterface->GetResourceFile("product.xml");
   if (!ProductFilePath.empty())
@@ -295,10 +291,10 @@ void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
       Fetch(MDStr::Polarization, imd, "POLARIMETRIC_INTERP", bandId);
       imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
     }
+    SARCalib sarCalib;
+    LoadRadiometricCalibrationData(sarCalib);
+    imd.Add(MDGeom::SARCalib, sarCalib);
   }
-  SARCalib sarCalib;
-  LoadRadiometricCalibrationData(sarCalib, false);
-  imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
 void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
@@ -341,7 +337,7 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     }
   }  
   SARCalib sarCalib;
-  LoadRadiometricCalibrationData(sarCalib, true);
+  LoadRadiometricCalibrationData(sarCalib);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 

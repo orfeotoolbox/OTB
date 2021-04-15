@@ -79,29 +79,17 @@ const std::string SarImageMetadataInterface::GetAcquisitionMode() const
   return "";
 }
 
-const SarImageMetadataInterface::LookupDataPointerType SarImageMetadataInterface::CreateCalibrationLookupData(const short itkNotUsed(t)) const
+bool SarImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarCalib, const ImageMetadata&, const MetadataSupplierInterface &, const bool) const
 {
-  return SarCalibrationLookupData::New();
-}
-
-const SarImageMetadataInterface::LookupDataPointerType SarImageMetadataInterface::GetCalibrationLookupData(const short type) const
-{
-  if (HasCalibrationLookupDataFlag())
+  if (!HasCalibrationLookupDataFlag())
   {
-    return CreateCalibrationLookupData(type);
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = SarCalibrationLookupData::New();
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = SarCalibrationLookupData::New();
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = SarCalibrationLookupData::New();
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = SarCalibrationLookupData::New();
+    return true;
   }
-
-  return SarCalibrationLookupData::New();
-}
-
-const SarImageMetadataInterface::LookupDataPointerType SarImageMetadataInterface::GetCalibrationLookupDataGeom(const short type) const
-{
-  if (HasCalibrationLookupDataFlagGeom())
-  {
-    return CreateCalibrationLookupData(type);
-  }
-
-  return SarCalibrationLookupData::New();
+  return false;
 }
 
 bool SarImageMetadataInterface::HasCalibrationLookupDataFlag() const
@@ -272,54 +260,6 @@ std::vector<Orbit> SarImageMetadataInterface::GetOrbitsGeom() const
   return orbitVector;
 }
 
-std::vector<CalibrationVector> SarImageMetadataInterface::GetCalibrationVectorGeom() const
-{
-  std::vector<CalibrationVector> calibrationVector;
-  // Number of entries in the vector
-  int listCount = m_MetadataSupplierInterface->GetAs<int>("calibration.count");
-  // This streams wild hold the iteration number
-  std::ostringstream oss;
-  for (int listId = 0 ; listId <= listCount - 1 ; ++listId)
-  {
-    oss.str("");
-    oss << listId;
-    // Base path to the data, that depends on the iteration number
-    std::string path_root = "calibration.calibrationVector[" + oss.str() + "]";
-
-    CalibrationVector calVect;
-    std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>(path_root + ".azimuthTime")) >> calVect.azimuthTime;
-    calVect.line = m_MetadataSupplierInterface->GetAs<int>(path_root + ".line");
-
-    // Same axe for all LUTs
-    MetaData::LUTAxis ax1;
-    ax1.Size = m_MetadataSupplierInterface->GetAs<int>(path_root + ".pixel_count");
-    ax1.Values = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".pixel", ' ', ax1.Size);
-
-    MetaData::LUT1D sigmaNoughtLut;
-    sigmaNoughtLut.Axis[0] = ax1;
-    sigmaNoughtLut.Array = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".sigmaNought", ' ', ax1.Size);
-    calVect.sigmaNought = std::move(sigmaNoughtLut);
-
-    MetaData::LUT1D betaNoughtLut;
-    betaNoughtLut.Axis[0] = ax1;
-    betaNoughtLut.Array = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".betaNought", ' ', ax1.Size);
-    calVect.betaNought = std::move(betaNoughtLut);
-
-    MetaData::LUT1D gammaLut;
-    gammaLut.Axis[0] = ax1;
-    gammaLut.Array = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".gamma", ' ', ax1.Size);
-    calVect.gamma = std::move(gammaLut);
-
-    MetaData::LUT1D dnLut;
-    dnLut.Axis[0] = ax1;
-    dnLut.Array = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".dn", ' ', ax1.Size);
-    calVect.dn = std::move(dnLut);
-
-    calibrationVector.push_back(std::move(calVect));
-  }
-  return calibrationVector;
-}
-
 std::vector<SARNoise> SarImageMetadataInterface::GetNoiseVectorGeom() const
 {
   std::vector<SARNoise> noiseVector;
@@ -356,14 +296,11 @@ bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
   sarParam.azimuthFmRates = this->GetAzimuthFmRateGeom();
   sarParam.dopplerCentroids = this->GetDopplerCentroidGeom();
   sarParam.orbits = this->GetOrbitsGeom();
-  sarParam.calibrationVectors = this->GetCalibrationVectorGeom();
   sarParam.noiseVector = this->GetNoiseVectorGeom();
-  std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>("calibration.startTime")) >> sarParam.calibrationStartTime;
-  std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>("calibration.stopTime")) >> sarParam.calibrationStopTime;
   return true;
 }
 
-void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCalib, bool geom) const
+void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCalib) const
 {
   sarCalib.rescalingFactor = GetRescalingFactor();
   auto coeffs = GetRadiometricCalibrationNoisePolynomialDegree();
@@ -381,21 +318,6 @@ void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCali
   sarCalib.radiometricCalibrationAntennaPatternOldGain = GetRadiometricCalibrationAntennaPatternOldGain();
   sarCalib.radiometricCalibrationIncidenceAngle = GetRadiometricCalibrationIncidenceAngle();
   sarCalib.radiometricCalibrationRangeSpreadLoss = GetRadiometricCalibrationRangeSpreadLoss();
-  if (geom)
-  {
-    sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlagGeom();
-    sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = GetCalibrationLookupDataGeom(SarCalibrationLookupData::SIGMA);
-    sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = GetCalibrationLookupDataGeom(SarCalibrationLookupData::BETA);
-    sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = GetCalibrationLookupDataGeom(SarCalibrationLookupData::GAMMA);
-    sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = GetCalibrationLookupDataGeom(SarCalibrationLookupData::DN);
-  } else
-  {
-    sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlag();
-    sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = GetCalibrationLookupData(SarCalibrationLookupData::SIGMA);
-    sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = GetCalibrationLookupData(SarCalibrationLookupData::BETA);
-    sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = GetCalibrationLookupData(SarCalibrationLookupData::GAMMA);
-    sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = GetCalibrationLookupData(SarCalibrationLookupData::DN);
-  }
 }
 
 void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const

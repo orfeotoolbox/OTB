@@ -58,7 +58,7 @@ int otbSarCalibrationLookupDataTest(int argc, char* argv[])
 
   outfile << sensorId << std::endl;
 
-  LookupDataType::Pointer lookupDataObj = imageMetadataInterface->GetCalibrationLookupData(0);
+  LookupDataType::Pointer lookupDataObj; //TODO = imageMetadataInterface->GetCalibrationLookupData(0);
 
   if (!lookupDataObj.IsNotNull())
   {
