@@ -105,7 +105,10 @@ bool Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarC
     Sentinel1CalibrationStruct sigmaCalibrationVector;
 
     prefix.str("");
-    prefix << sPrefixBase << "CalibrationVector_" << i+1 << ".";
+    if(geom)
+      prefix << sPrefixBase << "calibrationVector[" << i << "].";
+    else
+      prefix << sPrefixBase << "calibrationVector_" << i+1 << ".";
     const std::string sPrefix = prefix.str();
 
     sigmaCalibrationVector.line = mds.GetAs<int>(sPrefix + "line");
