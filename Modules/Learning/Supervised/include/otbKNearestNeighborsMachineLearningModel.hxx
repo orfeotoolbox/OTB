@@ -170,6 +170,7 @@ void KNearestNeighborsMachineLearningModel<TInputValue, TTargetValue>::Load(cons
     cv::FileStorage fs(filename, cv::FileStorage::READ);
     m_KNearestModel->read(fs.getFirstTopLevelNode());
     m_DecisionRule = (int)(fs.getFirstTopLevelNode()["DecisionRule"]);
+    m_K = m_KNearestModel->getDefaultK();
     return;
   }
   ifs.open(filename);
