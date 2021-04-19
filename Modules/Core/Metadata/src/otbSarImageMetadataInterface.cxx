@@ -124,7 +124,8 @@ SarImageMetadataInterface::PointSetPointer SarImageMetadataInterface::GetConstan
   return pointSet;
 }
 
-SarImageMetadataInterface::PointSetPointer SarImageMetadataInterface::GetRadiometricCalibrationNoise() const
+SarImageMetadataInterface::PointSetPointer
+SarImageMetadataInterface::GetRadiometricCalibrationNoise(const MetadataSupplierInterface &, const ImageMetadata &) const
 {
   return SarImageMetadataInterface::GetConstantValuePointSet(0.0);
 }
@@ -141,7 +142,8 @@ SarImageMetadataInterface::PointSetPointer SarImageMetadataInterface::GetRadiome
 }
 
 
-SarImageMetadataInterface::PointSetPointer SarImageMetadataInterface::GetRadiometricCalibrationIncidenceAngle() const
+SarImageMetadataInterface::PointSetPointer
+SarImageMetadataInterface::GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface&) const
 {
   return SarImageMetadataInterface::GetConstantValuePointSet(CONST_PI_2);
 }
@@ -300,7 +302,8 @@ bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
   return true;
 }
 
-void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCalib) const
+void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCalib, const MetadataSupplierInterface &mds,
+                                                               const ImageMetadata &imd) const
 {
   sarCalib.rescalingFactor = GetRescalingFactor();
   auto coeffs = GetRadiometricCalibrationNoisePolynomialDegree();
@@ -313,10 +316,10 @@ void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCali
   std::copy(coeffs.begin(), coeffs.end(), sarCalib.radiometricCalibrationIncidenceAnglePolynomialDegree.begin());
   coeffs = GetRadiometricCalibrationRangeSpreadLossPolynomialDegree();
   std::copy(coeffs.begin(), coeffs.end(), sarCalib.radiometricCalibrationRangeSpreadLossPolynomialDegree.begin());
-  sarCalib.radiometricCalibrationNoise = GetRadiometricCalibrationNoise();
+  sarCalib.radiometricCalibrationNoise = GetRadiometricCalibrationNoise(mds, imd);
   sarCalib.radiometricCalibrationAntennaPatternNewGain = GetRadiometricCalibrationAntennaPatternNewGain();
   sarCalib.radiometricCalibrationAntennaPatternOldGain = GetRadiometricCalibrationAntennaPatternOldGain();
-  sarCalib.radiometricCalibrationIncidenceAngle = GetRadiometricCalibrationIncidenceAngle();
+  sarCalib.radiometricCalibrationIncidenceAngle = GetRadiometricCalibrationIncidenceAngle(mds);
   sarCalib.radiometricCalibrationRangeSpreadLoss = GetRadiometricCalibrationRangeSpreadLoss();
 }
 
@@ -327,10 +330,10 @@ void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) 
   if (this->CanRead())
   {
     os << indent << "GetRadiometricCalibrationScale:                 " << this->GetRadiometricCalibrationScale() << "\n"
-       << indent << "GetRadiometricCalibrationNoise:                 " << this->GetRadiometricCalibrationNoise() << "\n"
+//       << indent << "GetRadiometricCalibrationNoise:                 " << this->GetRadiometricCalibrationNoise() << "\n"
        << indent << "GetRadiometricCalibrationAntennaPatternNewGain: " << this->GetRadiometricCalibrationAntennaPatternNewGain() << "\n"
        << indent << "GetRadiometricCalibrationAntennaPatternOldGain: " << this->GetRadiometricCalibrationAntennaPatternOldGain() << "\n"
-       << indent << "GetRadiometricCalibrationIncidenceAngle:        " << this->GetRadiometricCalibrationIncidenceAngle() << "\n"
+//       << indent << "GetRadiometricCalibrationIncidenceAngle:        " << this->GetRadiometricCalibrationIncidenceAngle() << "\n"
        << indent << "GetRadiometricCalibrationRangeSpreadLoss:       " << this->GetRadiometricCalibrationRangeSpreadLoss() << "\n"
        << indent << "GetConstantPolynomialDegree:                    ";
     for(const auto& s: this->GetConstantPolynomialDegree())

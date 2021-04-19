@@ -76,9 +76,9 @@ public:
     itkExceptionMacro("GetRadiometricCalibrationAntennaPatternOldGain() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const override
+  PointSetPointer GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface&) const override
   {
-    itkExceptionMacro("GetRadiometricCalibrationIncidenceAngle() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface&) not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   PointSetPointer GetRadiometricCalibrationRangeSpreadLoss() const override
@@ -86,9 +86,9 @@ public:
     itkExceptionMacro("GetRadiometricCalibrationRangeSpreadLoss() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  PointSetPointer GetRadiometricCalibrationNoise() const override
+  PointSetPointer GetRadiometricCalibrationNoise(const MetadataSupplierInterface&, const ImageMetadata&) const override
   {
-    itkExceptionMacro("GetRadiometricCalibrationNoise() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetRadiometricCalibrationNoise(const MetadataSupplierInterface&) not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   ArrayIndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const override

@@ -386,6 +386,8 @@ MDNumBmType MDNumNames = bimapGenerator<MDNum>(std::map<MDNum, std::string> {
   {MDNum::RescalingFactor,"RescalingFactor"},
   {MDNum::LineSpacing,"LineSpacing"},
   {MDNum::PixelSpacing,"PixelSpacing"},
+  {MDNum::RangeTimeFirstPixel,"RangeTimeFirstPixel"},
+  {MDNum::RangeTimeLastPixel,"RangeTimeLastPixel"},
 });
 
 MDStrBmType MDStrNames = bimapGenerator<MDStr>(std::map<MDStr, std::string> {

@@ -549,7 +549,7 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
     std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.startTime")) >> sarCalib.calibrationStartTime;
     std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.stopTime")) >> sarCalib.calibrationStopTime;
     sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlag();
-    LoadRadiometricCalibrationData(sarCalib);
+    LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
     CreateCalibrationLookupData(sarCalib, imd, CalibrationMS, false);
     imd.Add(MDGeom::SARCalib, sarCalib);
   }
@@ -595,7 +595,7 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>("calibration.startTime")) >> sarCalib.calibrationStartTime;
   std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>("calibration.stopTime")) >> sarCalib.calibrationStopTime;
   sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlagGeom();
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   CreateCalibrationLookupData(sarCalib, imd, *m_MetadataSupplierInterface, true);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }

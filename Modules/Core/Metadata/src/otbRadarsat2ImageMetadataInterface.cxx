@@ -292,7 +292,7 @@ void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
       imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
     }
     SARCalib sarCalib;
-    LoadRadiometricCalibrationData(sarCalib);
+    LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
     imd.Add(MDGeom::SARCalib, sarCalib);
   }
 }
@@ -337,7 +337,7 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     }
   }  
   SARCalib sarCalib;
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 

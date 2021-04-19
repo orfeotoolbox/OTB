@@ -839,23 +839,15 @@ double TerraSarImageMetadataInterface::GetRSF() const
   return freq;
 }
 
-unsigned int TerraSarImageMetadataInterface::GetNumberOfCornerIncidenceAngles() const
+unsigned int TerraSarImageMetadataInterface::GetNumberOfCornerIncidenceAngles(const MetadataSupplierInterface& mds) const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("sceneCoord.numberOfSceneCornerCoord");
-  int         value       = atoi(valueString.c_str());
-  return value;
+  auto ret = mds.GetAs<unsigned int>(0, "sceneCoord.numberOfSceneCornerCoord");
+  if (ret > 0)
+    return ret;
+  return mds.GetNumberOf("level1Product.productInfo.sceneInfo.sceneCornerCoord");;
 }
 
-double TerraSarImageMetadataInterface::GetMeanIncidenceAngles() const
+double TerraSarImageMetadataInterface::GetMeanIncidenceAngles(const MetadataSupplierInterface& mds) const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
@@ -873,7 +865,7 @@ double TerraSarImageMetadataInterface::GetMeanIncidenceAngles() const
 
   sum += value;
 
-  unsigned int       nbAngles = this->GetNumberOfCornerIncidenceAngles();
+  unsigned int       nbAngles = this->GetNumberOfCornerIncidenceAngles(mds);
   std::ostringstream oss;
   for (unsigned int i = 0; i < nbAngles; ++i)
   {
@@ -926,7 +918,8 @@ TerraSarImageMetadataInterface::IndexType TerraSarImageMetadataInterface::GetCen
   return it;
 }
 
-TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface::GetCornersIncidenceAngles() const
+TerraSarImageMetadataInterface::DoubleVectorType
+TerraSarImageMetadataInterface::GetCornersIncidenceAngles(const MetadataSupplierInterface& imd) const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
@@ -941,7 +934,7 @@ TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface:
 
   std::ostringstream oss;
 
-  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles();
+  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles(imd);
   for (unsigned int i = 0; i < nbAngles; ++i)
   {
     oss.str("");
@@ -954,43 +947,39 @@ TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface:
   return dv;
 }
 
-TerraSarImageMetadataInterface::IndexVectorType TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex() const
+TerraSarImageMetadataInterface::IndexVectorType
+TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex(const MetadataSupplierInterface & imd) const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  ImageKeywordlistType imageKeywordlist;
-
   TerraSarImageMetadataInterface::IndexVectorType iv;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-
   std::ostringstream oss;
-  std::ostringstream oss2;
 
-  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles();
+  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles(imd);
   for (unsigned int i = 0; i < nbAngles; ++i)
   {
     TerraSarImageMetadataInterface::IndexType it;
 
     oss.str("");
     oss << "sceneCoord.sceneCornerCoord[" << i << "].refRow";
+    it[1] = imd.GetAs<int>(INT_MIN, oss.str());
+    if(it[1] == INT_MIN)
+    {
+      oss.str("");
+      oss << "level1Product.productInfo.sceneInfo.sceneCornerCoord_" << (i+1) << ".refRow";
+      it[1] = imd.GetAs<int>(oss.str());
+    }
 
-    std::string valueString = imageKeywordlist.GetMetadataByKey(oss.str());
-    it[1]                   = atoi(valueString.c_str());
-
-    oss2.str("");
-    oss2 << "sceneCoord.sceneCornerCoord[" << i << "].refColumn";
-
-    valueString = imageKeywordlist.GetMetadataByKey(oss2.str());
-    it[0]       = atoi(valueString.c_str());
+    oss.str("");
+    oss << "sceneCoord.sceneCornerCoord[" << i << "].refColumn";
+    it[0] = imd.GetAs<int>(INT_MIN, oss.str());
+    if(it[0] == INT_MIN)
+    {
+      oss.str("");
+      oss << "level1Product.productInfo.sceneInfo.sceneCornerCoord_" << (i+1) << ".refColumn";
+      it[0] = imd.GetAs<int>(oss.str());
+    }
 
     iv.push_back(it);
   }
-
   return iv;
 }
 
@@ -1011,11 +1000,12 @@ double TerraSarImageMetadataInterface::Horner(std::vector<double>& coefficients,
 }
 
 
-TerraSarImageMetadataInterface::PointSetPointer TerraSarImageMetadataInterface::GetRadiometricCalibrationNoise() const
+TerraSarImageMetadataInterface::PointSetPointer
+TerraSarImageMetadataInterface::GetRadiometricCalibrationNoise(const MetadataSupplierInterface& mds, const ImageMetadata& imd) const
 {
   PointSetPointer points = PointSetType::New();
 
-  IndexVectorType cornerIndex  = this->GetCornersIncidenceAnglesIndex();
+  IndexVectorType cornerIndex  = this->GetCornersIncidenceAnglesIndex(mds);
   unsigned int    numberOfRows = 0;
   unsigned int    numberOfCols = 0;
 
@@ -1035,10 +1025,10 @@ TerraSarImageMetadataInterface::PointSetPointer TerraSarImageMetadataInterface::
     }
   }
 
-  double   startTime      = this->GetStartTimeUTC();
-  double   stopTime       = this->GetStopTimeUTC();
-  RealType firstRangeTime = this->GetRangeTimeFirstPixel();
-  RealType lastRangeTime  = this->GetRangeTimeLastPixel();
+  double   startTime      = imd[MDTime::AcquisitionStartTime].GetDay(); // TODO
+  double   stopTime       = imd[MDTime::AcquisitionStopTime].GetDay();
+  RealType firstRangeTime = imd[MDNum::RangeTimeFirstPixel];
+  RealType lastRangeTime  = imd[MDNum::RangeTimeLastPixel];
 
   points->Initialize();
   unsigned int noPoint = 0;
@@ -1078,88 +1068,6 @@ SarImageMetadataInterface::ArrayIndexType TerraSarImageMetadataInterface::GetRad
   return {2, 2};
 }
 
-double TerraSarImageMetadataInterface::GetStartTimeUTC() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string referenceUTC = imageKeywordlist.GetMetadataByKey("azimuth_start_time");
-  double      julianDay    = ConvertStringTimeUTCToJulianDay(referenceUTC);
-
-  return julianDay;
-}
-
-double TerraSarImageMetadataInterface::GetStopTimeUTC() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string referenceUTC = imageKeywordlist.GetMetadataByKey("azimuth_stop_time");
-  double      julianDay    = ConvertStringTimeUTCToJulianDay(referenceUTC);
-
-  return julianDay;
-}
-
-TerraSarImageMetadataInterface::RealType TerraSarImageMetadataInterface::GetRangeTimeFirstPixel() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("range_first_time");
-  double      value       = atof(valueString.c_str());
-  return value;
-}
-
-TerraSarImageMetadataInterface::RealType TerraSarImageMetadataInterface::GetRangeTimeLastPixel() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("range_last_time");
-  double      value       = atof(valueString.c_str());
-  return value;
-}
-
 TerraSarImageMetadataInterface::RealType TerraSarImageMetadataInterface::GetRadiometricCalibrationScale() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
@@ -1180,7 +1088,8 @@ TerraSarImageMetadataInterface::RealType TerraSarImageMetadataInterface::GetRadi
   return value;
 }
 
-TerraSarImageMetadataInterface::PointSetPointer TerraSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAngle() const
+TerraSarImageMetadataInterface::PointSetPointer
+TerraSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface& imd) const
 {
   PointSetPointer points = PointSetType::New();
   PointType       p0;
@@ -1188,8 +1097,8 @@ TerraSarImageMetadataInterface::PointSetPointer TerraSarImageMetadataInterface::
   double    centerIncidenceAngleValue = this->GetCenterIncidenceAngle();
   IndexType centerIncidenceAngleIndex = this->GetCenterIncidenceAngleIndex();
 
-  DoubleVectorType cornerIncidenceAngleValue = this->GetCornersIncidenceAngles();
-  IndexVectorType  cornerIncidenceAngleIndex = this->GetCornersIncidenceAnglesIndex();
+  DoubleVectorType cornerIncidenceAngleValue = this->GetCornersIncidenceAngles(imd);
+  IndexVectorType  cornerIncidenceAngleIndex = this->GetCornersIncidenceAnglesIndex(imd);
   points->Initialize();
   unsigned int noPoint = 0;
 
@@ -1245,19 +1154,23 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(m_MetadataSupplierInterface->GetResourceFile("")), "T[S|D]X1_SAR__.*.xml") ;
   if (!MainFilePath.empty())
   {
-    XMLMetadataSupplier MainXMLFileMS(MainFilePath);
-    imd.Add(MDNum::LineSpacing, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingAzimuth"));
-    imd.Add(MDNum::PixelSpacing, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingRange.slantRange"));
-    imd.Add(MDStr::Mission, MainXMLFileMS.GetAs<std::string>("level1Product.generalHeader.mission"));
-    imd.Add(MDStr::ProductType, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.productVariantInfo.productType"));
+    XMLMetadataSupplier MainXMLFileMetadataSupplier(MainFilePath);
+    imd.Add(MDNum::LineSpacing, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingAzimuth"));
+    imd.Add(MDNum::PixelSpacing, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingRange.slantRange"));
+    imd.Add(MDStr::Mission, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.generalHeader.mission"));
+    imd.Add(MDStr::ProductType, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.productVariantInfo.productType"));
     // imd.Add(MDStr::Mode, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.imagingMode"));
-    imd.Add(MDStr::SensorID, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.sensor"));
-    imd.Add(MDNum::RadarFrequency, MainXMLFileMS.GetAs<double>("level1Product.instrument.radarParameters.centerFrequency"));
-    imd.Add(MDTime::AcquisitionStartTime, MainXMLFileMS.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.start.timeUTC"));
-    imd.Add(MDTime::AcquisitionStopTime, MainXMLFileMS.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.stop.timeUTC"));
-    imd.Add(MDNum::PRF, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonPRF"));
-    imd.Add(MDNum::RSF, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
-    imd.Add(MDNum::CalFactor, MainXMLFileMS.GetAs<double>("level1Product.calibration.calibrationConstant.calFactor"));
+    imd.Add(MDStr::SensorID, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.sensor"));
+    imd.Add(MDNum::RadarFrequency, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.instrument.radarParameters.centerFrequency"));
+    imd.Add(MDTime::AcquisitionStartTime, MainXMLFileMetadataSupplier.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.start.timeUTC"));
+    imd.Add(MDTime::AcquisitionStopTime, MainXMLFileMetadataSupplier.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.stop.timeUTC"));
+    imd.Add(MDNum::RangeTimeFirstPixel, MainXMLFileMetadataSupplier.GetFirstAs<double>("level1Product.productInfo.sceneInfo.rangeTime.firstPixel"));
+    imd.Add(MDNum::PRF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonPRF"));
+    imd.Add(MDNum::RSF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
+    imd.Add(MDNum::CalFactor, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.calibration.calibrationConstant.calFactor"));
+    SARCalib sarCalib;
+    LoadRadiometricCalibrationData(sarCalib, MainXMLFileMetadataSupplier, imd);
+    imd.Add(MDGeom::SARCalib, sarCalib);
   }
 
   assert(m_MetadataSupplierInterface->GetNbBands() == imd.Bands.size());
@@ -1268,9 +1181,6 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
     Fetch(MDStr::Polarization, imd, "POLARIMETRIC_INTERP", bandId);
     imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
-  SARCalib sarCalib;
-  LoadRadiometricCalibrationData(sarCalib);
-  imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
 void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
@@ -1283,6 +1193,8 @@ void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   Fetch(MDStr::SensorID, imd, "acquisitionInfo.sensor");
   Fetch(MDTime::AcquisitionStartTime, imd, "azimuth_start_time");
   Fetch(MDTime::AcquisitionStopTime, imd, "azimuth_stop_time");
+  Fetch(MDNum::RangeTimeFirstPixel, imd, "range_first_time");
+  Fetch(MDNum::RangeTimeLastPixel, imd, "range_last_time");
   Fetch(MDNum::PRF, imd, "sensor_params.prf");
   Fetch(MDNum::CalFactor, imd, "calibration.calibrationConstant.calFactor");
     
@@ -1306,7 +1218,7 @@ void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
   SARCalib sarCalib;
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 

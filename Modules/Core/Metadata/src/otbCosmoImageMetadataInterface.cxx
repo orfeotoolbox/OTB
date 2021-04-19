@@ -411,7 +411,7 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Bands[0].Add(MDGeom::SAR, sarParam);
   
   SARCalib sarCalib;
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
@@ -449,7 +449,7 @@ void CosmoImageMetadataInterface::ParseGeom(ImageMetadata &imd)
   imd.Bands[0].Add(MDGeom::SAR, sarParam);
   
   SARCalib sarCalib;
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 

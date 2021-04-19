@@ -158,6 +158,8 @@ enum class MDNum
   RescalingFactor,
   LineSpacing,
   PixelSpacing,
+  RangeTimeFirstPixel,
+  RangeTimeLastPixel,
   END
 };
 

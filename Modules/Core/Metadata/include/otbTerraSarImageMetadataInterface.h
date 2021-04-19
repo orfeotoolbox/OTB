@@ -142,10 +142,10 @@ public:
   double GetRSF() const override;
 
   /** Get the number of corner incidence angles */
-  unsigned int GetNumberOfCornerIncidenceAngles() const;
+  unsigned int GetNumberOfCornerIncidenceAngles(const MetadataSupplierInterface&) const;
 
   /** Get the Mean Incidence angles */
-  double GetMeanIncidenceAngles() const;
+  double GetMeanIncidenceAngles(const MetadataSupplierInterface&) const;
 
   /** Get the center incidence angle */
   double GetCenterIncidenceAngle() const override;
@@ -154,19 +154,18 @@ public:
   IndexType GetCenterIncidenceAngleIndex() const;
 
   /** Get the corners incidence angles */
-  DoubleVectorType GetCornersIncidenceAngles() const;
+  DoubleVectorType GetCornersIncidenceAngles(const MetadataSupplierInterface&) const;
 
   /** Get the corners index */
-  IndexVectorType GetCornersIncidenceAnglesIndex() const;
+  IndexVectorType GetCornersIncidenceAnglesIndex(const MetadataSupplierInterface&) const;
 
   /** Get the constant calibration factor */
   RealType GetRadiometricCalibrationScale() const override;
 
-  PointSetPointer GetRadiometricCalibrationNoise() const override;
+  PointSetPointer GetRadiometricCalibrationNoise(const MetadataSupplierInterface&, const ImageMetadata&) const override;
   ArrayIndexType GetRadiometricCalibrationNoisePolynomialDegree() const override;
 
-  // PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
-  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const override;
+  PointSetPointer GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface&) const override;
   ArrayIndexType  GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override;
 
   bool CanRead() const override;
@@ -190,12 +189,6 @@ protected:
 
   inline double Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const;
 
-  double   GetStartTimeUTC() const;
-  double   GetStopTimeUTC() const;
-  RealType GetRangeTimeFirstPixel() const;
-
-  RealType GetRangeTimeLastPixel() const;
-
   /** convert a TimeUTC string to a julian day */
   double ConvertStringTimeUTCToJulianDay(const std::string& value) const;
 
@@ -214,6 +207,7 @@ protected:
 private:
   TerraSarImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
+  int m_NumberOfCornerIncidenceAngles = 0;
 };
 
 } // end namespace otb

@@ -56,8 +56,8 @@ int otbSarImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
   ImageReaderType::Pointer reader = ImageReaderType::New();
   reader->SetFileName(inputFilename);
   reader->UpdateOutputInformation();
-
-  otb::SarImageMetadataInterface::Pointer lImageMetadata = otb::SarImageMetadataInterfaceFactory::CreateIMI(reader->GetOutput()->GetMetaDataDictionary());
+// TODO Use new framework !
+  otb::SarImageMetadataInterface::Pointer lImageMetadata  = otb::SarImageMetadataInterfaceFactory::CreateIMI(reader->GetOutput()->GetMetaDataDictionary());
 
   std::ofstream file;
   file.open(outputFilename);
@@ -66,7 +66,7 @@ int otbSarImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
        << "Polynomial degree : ";
   for(const auto& s: lImageMetadata->GetRadiometricCalibrationNoisePolynomialDegree())
     file << s << " ";
-  printPointSet(lImageMetadata->GetRadiometricCalibrationNoise(), file);
+  //printPointSet(lImageMetadata->GetRadiometricCalibrationNoise(lImageMetadata), file);
 
   file << "\n"
        << "CalibrationAntennaPatternNewGain : " << "\n"
@@ -87,7 +87,7 @@ int otbSarImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
        << "Polynomial degree : ";
   for(const auto& s: lImageMetadata->GetRadiometricCalibrationIncidenceAnglePolynomialDegree())
     file << s << " ";
-  printPointSet(lImageMetadata->GetRadiometricCalibrationIncidenceAngle(), file);
+  //printPointSet(lImageMetadata->GetRadiometricCalibrationIncidenceAngle(lImageMetadata), file);
 
   file << "\n"
        << "CalibrationRangeSpreadLoss : " << "\n"
