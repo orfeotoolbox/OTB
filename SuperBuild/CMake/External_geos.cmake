@@ -43,8 +43,6 @@ ExternalProject_Add(GEOS
    LOG_INSTALL 1
    )
 
-# Patch still needed with version 3.6.1 to avoid error during CMake configuration
-# See https://trac.osgeo.org/geos/ticket/753
 SUPERBUILD_PATCH_SOURCE(GEOS)
 
 set(_SB_GEOS_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
