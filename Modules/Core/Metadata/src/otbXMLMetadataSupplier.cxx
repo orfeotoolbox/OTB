@@ -254,7 +254,7 @@ unsigned int XMLMetadataSupplier::GetNumberOf(std::string const & path) const
   return idx.size();
 }
 
-std::string XMLMetadataSupplier::PrintSelf()
+std::string XMLMetadataSupplier::PrintSelf() const
 {
   std::ostringstream oss;
   oss << "XMLMetadataSupplier: " << this->m_FileName << '\n';

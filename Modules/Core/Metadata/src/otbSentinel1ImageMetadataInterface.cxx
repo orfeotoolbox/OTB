@@ -412,7 +412,15 @@ std::vector<Orbit> Sentinel1ImageMetadataInterface::GetOrbits(const XMLMetadataS
     // Base path to the data, that depends on the iteration number
     std::string path_root = "product.generalAnnotation.orbitList.orbit_" + oss.str();
     Orbit orbit;
-    std::istringstream(xmlMS.GetAs<std::string>(path_root + ".time")) >> orbit.time;
+
+    auto dateStr = xmlMS.GetAs<std::string>(path_root + ".time");
+
+    std::stringstream ss;
+    auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
+    ss.imbue(std::locale(std::locale(), facet));
+    ss << xmlMS.GetAs<std::string>(path_root + ".time");
+    ss >> orbit.time;
+
     orbit.position[0] = xmlMS.GetAs<double>(path_root + ".position.x");
     orbit.position[1] = xmlMS.GetAs<double>(path_root + ".position.y");
     orbit.position[2] = xmlMS.GetAs<double>(path_root + ".position.z");
@@ -450,6 +458,68 @@ std::vector<SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(const XMLM
     noiseVector.push_back(noiseVect);
   }
   return noiseVector;
+}
+
+std::vector<BurstRecord> Sentinel1ImageMetadataInterface::GetBurstRecords(const XMLMetadataSupplier &xmlMS) const
+{
+  std::vector<BurstRecord> burstRecords;
+
+  // number of burst records
+  int listCount = xmlMS.GetAs<int>(0, "product.swathTiming.burstList.count");
+
+  std::stringstream ss;
+  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
+  ss.imbue(std::locale(std::locale(), facet));
+
+  if (!listCount)
+  {
+    BurstRecord record;
+
+    ss << xmlMS.GetAs<std::string>("product.imageAnnotation.imageInformation.productFirstLineUtcTime");
+    ss >> record.azimuthStartTime;
+
+    ss << xmlMS.GetAs<std::string>("product.imageAnnotation.imageInformation.productLastLineUtcTime");
+    ss >> record.azimuthStopTime;
+
+    record.startLine = 0;
+    record.endLine = xmlMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines") - 1;
+    record.startSample = 0;
+    record.endSample = xmlMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfSamples") - 1;
+
+    record.azimuthAnxTime = 0.;
+
+    burstRecords.push_back(record);
+  }
+  else
+  {
+    // TODO
+    otbGenericExceptionMacro(MissingMetadataException,
+      <<"Burst record parsing not implemented yet");
+  }
+
+  return burstRecords;
+}
+
+std::unordered_map<std::string, GCPTime> Sentinel1ImageMetadataInterface::GetGCPTimes(const XMLMetadataSupplier &xmlMS,
+                                                                                          const Projection::GCPParam & gcps) const
+{
+  std::unordered_map<std::string, GCPTime> gcpTimes;
+  
+  std::stringstream ss;
+  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
+  ss.imbue(std::locale(std::locale(), facet));
+
+  for (const auto & gcp : gcps.GCPs)
+  {
+    const std::string prefix = "product.geolocationGrid.geolocationGridPointList.geolocationGridPoint_" + gcp.m_Id + ".";
+    GCPTime time;
+    ss << xmlMS.GetAs<std::string>(prefix + "azimuthTime");
+    ss >> time.azimuthTime;
+    time.slantRangeTime = xmlMS.GetAs<double>(prefix + "slantRangeTime"); 
+    gcpTimes[gcp.m_Id] = time;
+  }
+
+  return gcpTimes;
 }
 
 double Sentinel1ImageMetadataInterface::getBandTerrainHeight(const XMLMetadataSupplier &xmlMS) const
@@ -519,11 +589,22 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
     sarParam.azimuthFmRates = this->GetAzimuthFmRate(AnnotationMS);
     sarParam.dopplerCentroids = this->GetDopplerCentroid(AnnotationMS);
     sarParam.orbits = this->GetOrbits(AnnotationMS);
-    imd.Bands[bandId].Add(MDNum::NumberOfLines, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines"));
-    imd.Bands[bandId].Add(MDNum::NumberOfColumns, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfSamples"));
-    imd.Bands[bandId].Add(MDNum::AverageSceneHeight, this->getBandTerrainHeight(AnnotationFilePath));
-    imd.Bands[bandId].Add(MDNum::RadarFrequency, AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.radarFrequency"));
-    imd.Bands[bandId].Add(MDNum::PRF, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthFrequency"));
+
+    sarParam.burstRecords = this->GetBurstRecords(AnnotationMS);
+    sarParam.azimuthTimeInterval = boost::posix_time::precise_duration(
+      AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthTimeInterval")
+      * 1e6);
+    sarParam.nearRangeTime = AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.slantRangeTime");
+    sarParam.rangeSamplingRate = AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.rangeSamplingRate");
+
+    sarParam.gcpTimes = this->GetGCPTimes(AnnotationMS, imd.GetGCPParam());
+
+    imd.Add(MDNum::NumberOfLines, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines"));
+    imd.Add(MDNum::NumberOfColumns, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfSamples"));
+    imd.Add(MDNum::AverageSceneHeight, this->getBandTerrainHeight(AnnotationFilePath));
+    imd.Add(MDNum::RadarFrequency, AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.radarFrequency"));
+    imd.Add(MDNum::PRF, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthFrequency"));
+    imd.Add(MDNum::CenterIncidenceAngle, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.incidenceAngleMidSwath"));
 
     // Calibration file
     std::string CalibrationFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)
@@ -612,7 +693,7 @@ void Sentinel1ImageMetadataInterface::Parse(ImageMetadata & imd)
   // Failed to fetch the metadata
   else
     otbGenericExceptionMacro(MissingMetadataException,
-			     << "Not a Sentinel1 product");
+           << "Not a Sentinel1 product");
 }
 
 } // end namespace otb
