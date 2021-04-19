@@ -102,6 +102,9 @@ public:
 
   int GetNbBands() const override;
 
+  /** Get the number of keys starting with path */
+  unsigned int GetNumberOf(std::string const& path) const override;
+
   /**
    * @brief Writes the content of the XML file into a string
    *
@@ -145,7 +148,16 @@ protected:
    *         contain Name
    */
   std::vector<std::string> FetchPartialNameValueMultiple(const std::vector<std::string> &StringVector,
-		                                                 const std::string &Name) const;
+                                                     const std::string &Name) const;
+
+  /**
+   * @brief In a StringList of “Name=Value” pairs, look for the keys equal to the specified string
+   * @param papszStrList A StringList that will be searched
+   * @param pszName A string that will be looked for at the begining of the keys
+   * @return A StringList containing only the pairs from papszStrList whose key
+   *         start with pszName
+   */
+  std::vector<std::string> GetAllStartWith(char** papszStrList, const char *pszName) const;
 
 private:
   /** List of resource files */

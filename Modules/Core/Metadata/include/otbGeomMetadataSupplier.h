@@ -69,6 +69,12 @@ public:
    */
   bool FetchRPC(ImageMetadata & imd);
 
+  /** Get the number of keys starting with path */
+  unsigned int GetNumberOf(std::string const&) const override
+  {
+    otbLogMacro(Error, << "GetNumberOf() not yet implemented in otbGeomMetadataSupplier");
+  }
+
   /**
    * @brief Writes the content of the Geom file into a string
    *

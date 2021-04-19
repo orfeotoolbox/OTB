@@ -75,6 +75,9 @@ public:
    *  If size>=0, then the final std::vector size is checked and an exception
    *  is raised if it doesn't match the given size.*/
   template < typename T> std::vector<T> GetAsVector(std::string const& path, char sep=' ', int size=-1, int band=-1) const;
+
+  /** Get the number of keys starting with path */
+  virtual unsigned int GetNumberOf(std::string const& path) const = 0;
 };
 
 // TODO : for complex types ...

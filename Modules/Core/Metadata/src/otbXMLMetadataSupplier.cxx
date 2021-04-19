@@ -19,6 +19,7 @@
  */
 
 #include "otbXMLMetadataSupplier.h"
+#include <unordered_set>
 
 namespace otb
 {
@@ -220,9 +221,37 @@ std::vector<std::string> XMLMetadataSupplier::FetchPartialNameValueMultiple(cons
   return retStringVector;
 }
 
+std::vector<std::string> XMLMetadataSupplier::GetAllStartWith(char** papszStrList,
+                                                                  const char *pszName) const
+{
+  std::vector<std::string> retStringVector;
+  if( papszStrList == nullptr || pszName == nullptr )
+    return retStringVector;
+
+  for( ; *papszStrList != nullptr ; ++papszStrList )
+    if( strstr(*papszStrList, pszName) == *papszStrList)
+      retStringVector.push_back(*papszStrList);
+  return retStringVector;
+}
+
 int XMLMetadataSupplier::GetNbBands() const
 {
   return 0;
+}
+
+unsigned int XMLMetadataSupplier::GetNumberOf(std::string const & path) const
+{
+  std::unordered_set<int> idx;
+  for(auto const& key : GetAllStartWith(m_MetadataDic, path.c_str()))
+  {
+    auto after = key.substr(path.size());
+    if(after.size() > 0 && after.compare(0, 1, "_") == 0)
+    {
+      auto sub = after.substr(1, after.find("."));
+      idx.insert(std::stoi(sub));
+    }
+  }
+  return idx.size();
 }
 
 std::string XMLMetadataSupplier::PrintSelf()
