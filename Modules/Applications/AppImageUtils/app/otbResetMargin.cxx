@@ -186,11 +186,9 @@ private:
         idx[0] += GetParameterInt("margin.left");
         idx[1] += GetParameterInt("margin.top");
         sz[0] -= GetParameterInt("margin.left") + GetParameterInt("margin.right");
-        sz[1] -= GetParameterInt("margin.top") + GetParameterInt("margin.down")
+        sz[1] -= GetParameterInt("margin.top") + GetParameterInt("margin.down");
         region.SetIndex({GetParameterInt("margin.left"),GetParameterInt("margin.top")});
         region = input->GetLargestPossibleRegion();
-        FloatVectorImageType::IndexType idx = region.GetIndex();
-        FloatVectorImageType::SizeType sz = region.GetSize();
         region.SetIndex(idx);
         region.SetSize(sz);
         break;

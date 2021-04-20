@@ -73,16 +73,19 @@ ResetMarginFilter<TImage>
   itk::IndexValueType thrY1 = curRoi.GetIndex(1);
   itk::IndexValueType thrY2 = curRoi.GetIndex(1) + curRoi.GetSize(1);
 
-  assert(thrX1 <= endX && "Iterations shall stay within requested region");
-  assert(thrX2 <= endX && "Iterations shall stay within requested region");
-  assert(thrY1 <= endY && "Iterations shall stay within requested region");
-  assert(thrY2 <= endY && "Iterations shall stay within requested region");
+  assert(startX <= thrX1 && "Iterations shall stay within requested region");
+  assert(thrX1  <= thrX2 && "Iterations shall stay within requested region");
+  assert(thrX2  <= endX  && "Iterations shall stay within requested region");
+
+  assert(startY <= thrY1 && "Iterations shall stay within requested region");
+  assert(thrY1  <= thrY2 && "Iterations shall stay within requested region");
+  assert(thrY2  <= endY  && "Iterations shall stay within requested region");
 
   auto const full_line = sizeX * nBand;
-  auto const nb_z_l = (unsigned long)(thrX1 - startX) * nBand;
-  auto const nb_c_m = (unsigned long)(thrX2 - thrX1) * nBand;
-  auto const nb_z_r = (unsigned long)(endX - thrX2) * nBand;
-  assert(nb_z_l + nb_c_m + nb_z_r == full_line);
+  auto const nb_zero_left = (unsigned long)(thrX1 - startX) * nBand;
+  auto const nb_copy_middle = (unsigned long)(thrX2 - thrX1) * nBand;
+  auto const nb_zero_right = (unsigned long)(endX - thrX2) * nBand;
+  assert(nb_zero_left + nb_copy_middle + nb_zero_right == full_line);
 
   const InternalPixelType *inData = input->GetBufferPointer();
   InternalPixelType *outData = output->GetBufferPointer();
@@ -129,11 +132,11 @@ ResetMarginFilter<TImage>
       ; y < thrY2
       ; ++y, inData+=inLineOff,  outData+=outLineOff)
   {
-    auto const t1 = std::fill_n(outData, nb_z_l, m_Pad);
+    auto const t1 = std::fill_n(outData, nb_zero_left, m_Pad);
     // If there is any trimming of first columns, the inData iterator
     // will directly point to the right region. we shall not apply an offset!
-    auto const t2 = std::copy_n(inData, nb_c_m, t1);
-    std::fill_n(t2, nb_z_r, m_Pad);
+    auto const t2 = std::copy_n(inData, nb_copy_middle, t1);
+    std::fill_n(t2, nb_zero_right, m_Pad);
     progress.CompletedPixel(); // Completed...Line()
   }
   assert(y == thrY2);
