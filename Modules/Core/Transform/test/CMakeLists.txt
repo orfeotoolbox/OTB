@@ -241,4 +241,11 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
            43.5726757080402
            0)
 
+  otb_add_test(NAME prTvSarSensorModelTerraSarX
+           COMMAND otbSarSensorModelTest --
+           LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228}
+           -111.664738184032
+           36.2692959995967
+           0)
+
 endif()
