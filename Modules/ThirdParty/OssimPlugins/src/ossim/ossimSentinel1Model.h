@@ -30,6 +30,18 @@
 #include <string>
 #include <boost/config.hpp>
 
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-copy"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+#pragma GCC diagnostic ignored "-Wshadow"
+#pragma GCC diagnostic ignored "-Waddress"
+#if defined(__GNUC__) && (__GNUC__ > 5)
+#pragma GCC diagnostic ignored "-Wnonnull-compare"
+#endif
+#endif
+
 #include "ossimPluginConstants.h" // OSSIM_PLUGINS_DLL
 
 #include <ossim/base/ossimCommon.h>
@@ -44,6 +56,10 @@
 #include "ossim/ossimSarSensorModel.h"
 
 #include <ossim/support_data/ossimSupportFilesList.h>
+
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic pop
+#endif
 
 //#include "ossimGeometricSarSensorModel.h"
 
@@ -139,9 +155,15 @@ namespace ossimplugins
 
       void setMetadataDirectory(ossimFilename const& d)
       {
-         theManifestDirectory = d;
+#if defined(__GNUC__) || defined(__clang__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-copy"
+        theManifestDirectory = d;
+#pragma GCC diagnostic pop
+#endif
       }
-   protected:
+
+    protected:
 #if defined(__clang__)
 #pragma clang diagnostic push
 

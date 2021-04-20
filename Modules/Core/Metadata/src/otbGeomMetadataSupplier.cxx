@@ -36,7 +36,7 @@ GeomMetadataSupplier::GeomMetadataSupplier(std::string const& fileName)
   this->ReadGeomFile();
 }
 
-std::string GeomMetadataSupplier::GetMetadataValue(std::string const& path, bool& hasValue, int band) const
+std::string GeomMetadataSupplier::GetMetadataValue(std::string const& path, bool& hasValue, int /*band*/) const
 {
   auto value = this->m_MetadataDic.find(path);
   if(value != this->m_MetadataDic.end())
@@ -48,7 +48,7 @@ std::string GeomMetadataSupplier::GetMetadataValue(std::string const& path, bool
   return "";
 }
 
-std::string GeomMetadataSupplier::GetResourceFile(std::string const& s) const
+std::string GeomMetadataSupplier::GetResourceFile(std::string const& /*s*/) const
 {
   return this->m_FileName;
 }
