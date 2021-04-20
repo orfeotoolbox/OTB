@@ -56,7 +56,7 @@ if %3.==. (
 )
 
 if %4.==. (
-  set VCVER=14.0
+  set VCVER=14.20
 ) else (
   set VCVER=%4
 )
