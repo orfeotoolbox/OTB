@@ -43,7 +43,7 @@ ExternalProject_Add(EXPAT
 
 set(_SB_EXPAT_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
-  set(_SB_EXPAT_LIBRARY ${SB_INSTALL_PREFIX}/lib/expat.lib)
+  set(_SB_EXPAT_LIBRARY ${SB_INSTALL_PREFIX}/lib/libexpat.lib)
 elseif(UNIX)
   set(_SB_EXPAT_LIBRARY ${SB_INSTALL_PREFIX}/lib/libexpat${CMAKE_SHARED_LIBRARY_SUFFIX})
 endif()
