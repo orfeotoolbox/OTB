@@ -125,6 +125,7 @@ otb_test_application(NAME apTvUtResetMargin
                      APP  ResetMargin
                      OPTIONS -in ${INPUTDATA}/ResetMarginInput100x100.tiff
                              -out ${TEMP}/apTvUtResetMargin.tif
+                             -mode threshold
                              -threshold.x       10
                              -threshold.y.start 12
                              -threshold.y.end   25
