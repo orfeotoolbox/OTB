@@ -112,25 +112,25 @@ public:
   double GetCalibrationFactor() const;
 
   /** Get the number of noise records */
-  unsigned int GetNumberOfNoiseRecords() const;
+  unsigned int GetNumberOfNoiseRecords(const MetadataSupplierInterface&) const;
 
   /** Get the polynomial degree list */
-  UIntVectorType GetNoisePolynomialDegrees() const;
+  UIntVectorType GetNoisePolynomialDegrees(const MetadataSupplierInterface &mds) const;
 
   /** Get the polynomial coefficient list */
-  DoubleVectorVectorType GetNoisePolynomialCoefficientsList() const;
+  DoubleVectorVectorType GetNoisePolynomialCoefficientsList(const MetadataSupplierInterface &mds) const;
 
   /** Get timeUTC noise acquisition list in Julian day */
-  DoubleVectorType GetNoiseTimeUTCList() const;
+  DoubleVectorType GetNoiseTimeUTCList(const MetadataSupplierInterface &mds) const;
 
   /** Get noise minimum validity range list */
-  DoubleVectorType GetNoiseValidityRangeMinList() const;
+  DoubleVectorType GetNoiseValidityRangeMinList(const MetadataSupplierInterface &mds) const;
 
   /** Get noise maximum validity range list */
-  DoubleVectorType GetNoiseValidityRangeMaxList() const;
+  DoubleVectorType GetNoiseValidityRangeMaxList(const MetadataSupplierInterface &mds) const;
 
   /** Get noise reference point list */
-  DoubleVectorType GetNoiseReferencePointList() const;
+  DoubleVectorType GetNoiseReferencePointList(const MetadataSupplierInterface &mds) const;
 
   /** Get the radar frequency */
   double GetRadarFrequency() const override;
@@ -148,13 +148,13 @@ public:
   double GetMeanIncidenceAngles(const MetadataSupplierInterface&) const;
 
   /** Get the center incidence angle */
-  double GetCenterIncidenceAngle() const override;
+  double GetCenterIncidenceAngle(const MetadataSupplierInterface& mds) const override;
 
   /** Get the center index */
-  IndexType GetCenterIncidenceAngleIndex() const;
+  IndexType GetCenterIncidenceAngleIndex(const MetadataSupplierInterface& mds) const;
 
   /** Get the corners incidence angles */
-  DoubleVectorType GetCornersIncidenceAngles(const MetadataSupplierInterface&) const;
+  DoubleVectorType GetCornersIncidenceAngles(const MetadataSupplierInterface&mds) const;
 
   /** Get the corners index */
   IndexVectorType GetCornersIncidenceAnglesIndex(const MetadataSupplierInterface&) const;
@@ -193,16 +193,16 @@ protected:
   double ConvertStringTimeUTCToJulianDay(const std::string& value) const;
 
   /** Get the polynomial degree for a given noise record */
-  unsigned int GetNoisePolynomialDegrees(unsigned int noiseRecord) const;
+  unsigned int GetNoisePolynomialDegrees(const unsigned int noiseRecord, const MetadataSupplierInterface &mds) const;
 
   /** Get the polynomial coefficient for a given noise record */
-  DoubleVectorType GetNoisePolynomialCoefficients(unsigned int noiseRecord) const;
+  DoubleVectorType GetNoisePolynomialCoefficients(const unsigned int noiseRecord, const MetadataSupplierInterface& mds) const;
 
   /** Get timeUTC noise acquisition in Julian day for a given noise record*/
-  double GetNoiseTimeUTC(unsigned int noiseRecord) const;
+  double GetNoiseTimeUTC(const unsigned int noiseRecord, const MetadataSupplierInterface& mds) const;
 
   /** Get noise reference point for a given noise record */
-  double GetNoiseReferencePoint(unsigned int noiseRecord) const;
+  double GetNoiseReferencePoint(const unsigned int noiseRecord, const MetadataSupplierInterface &mds) const;
 
 private:
   TerraSarImageMetadataInterface(const Self&) = delete;

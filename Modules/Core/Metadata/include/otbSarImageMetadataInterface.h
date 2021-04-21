@@ -88,7 +88,7 @@ public:
   virtual double GetPRF() const                  = 0;
   virtual double GetRSF() const                  = 0;
   virtual double GetRadarFrequency() const       = 0;
-  virtual double GetCenterIncidenceAngle() const = 0;
+  virtual double GetCenterIncidenceAngle(const MetadataSupplierInterface& mds) const = 0;
 
 
   virtual double GetRescalingFactor() const;

@@ -93,7 +93,7 @@ public:
 
   double GetRadarFrequency() const override;
 
-  double GetCenterIncidenceAngle() const override;
+  double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override;
 
   /*get lookup data for calculating backscatter */
   bool HasCalibrationLookupDataFlag() const override;

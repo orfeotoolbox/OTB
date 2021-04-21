@@ -232,7 +232,7 @@ double Radarsat2ImageMetadataInterface::GetRadarFrequency() const
   return 0;
 }
 
-double Radarsat2ImageMetadataInterface::GetCenterIncidenceAngle() const
+double Radarsat2ImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface &) const
 {
   return 0;
 }
@@ -280,7 +280,7 @@ void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
     imd.Add(MDNum::RadarFrequency, this->GetRadarFrequency());
     imd.Add(MDNum::PRF, this->GetPRF());
     imd.Add(MDNum::RSF, this->GetRSF());
-    imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle());
+    imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle(ProductMS));
 
 
     assert(m_MetadataSupplierInterface->GetNbBands() == imd.Bands.size());
@@ -321,7 +321,7 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     imd.Add(MDNum::RadarFrequency, this->GetRadarFrequency());
     imd.Add(MDNum::PRF, this->GetPRF());
     imd.Add(MDNum::RSF, this->GetRSF());
-    imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle());
+    imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle(ProductMS));
     imd.Add(MDStr::BeamMode, ProductMS.GetAs<std::string>("product.sourceAttributes.beamModeMnemonic"));
     imd.Add("FACILITY_IDENTIFIER", ProductMS.GetAs<std::string>("product.sourceAttributes.inputDatasetFacilityId"));
     imd.Add(MDStr::OrbitDirection, ProductMS.GetAs<std::string>("product.sourceAttributes.orbitAndAttitude.orbitInformation.passDirection"));

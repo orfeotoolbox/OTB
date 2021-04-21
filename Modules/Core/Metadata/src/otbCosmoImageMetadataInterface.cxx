@@ -250,7 +250,7 @@ double CosmoImageMetadataInterface::GetRadarFrequency() const
   return 0;
 }
 
-double CosmoImageMetadataInterface::GetCenterIncidenceAngle() const
+double CosmoImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface &) const
 {
   return 0;
 }

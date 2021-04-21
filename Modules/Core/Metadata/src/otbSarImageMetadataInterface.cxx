@@ -361,8 +361,8 @@ void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) 
     os << "\n"
        << indent << "GetPRF:                  " << this->GetPRF() << "\n"
        << indent << "GetRSF:                  " << this->GetRSF() << "\n"
-       << indent << "GetRadarFrequency:       " << this->GetRadarFrequency() << "\n"
-       << indent << "GetCenterIncidenceAngle: " << this->GetCenterIncidenceAngle() << std::endl;
+       << indent << "GetRadarFrequency:       " << this->GetRadarFrequency() << "\n";
+//       << indent << "GetCenterIncidenceAngle: " << this->GetCenterIncidenceAngle() << std::endl;
   }
 }
 

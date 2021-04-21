@@ -117,7 +117,7 @@ bool Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarC
     // safety
     MetaData::Time tmpDate;
     std::istringstream(mds.GetAs<std::string>(sPrefix + "azimuthTime")) >> tmpDate;
-    sigmaCalibrationVector.timeMJD = tmpDate.GetDay(); // TODO as_day_frac()
+    sigmaCalibrationVector.timeMJD = tmpDate.GetModifiedJulian();
     sigmaCalibrationVector.deltaMJD = sigmaCalibrationVector.timeMJD - lastMJD;
     lastMJD                    = sigmaCalibrationVector.timeMJD;
 
@@ -151,19 +151,23 @@ bool Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarC
   }
 
   Sentinel1CalibrationLookupData::Pointer sigmaSarLut = Sentinel1CalibrationLookupData::New();
-  sigmaSarLut->InitParameters(SarCalibrationLookupData::SIGMA, firstLineTime.GetDay(), lastLineTime.GetDay(), numOfLines, count, sigmaCalibrationVectorList); // TODO: firstLineTime.as_day_frac()
+  sigmaSarLut->InitParameters(SarCalibrationLookupData::SIGMA, firstLineTime.GetModifiedJulian(),
+                              lastLineTime.GetModifiedJulian(), numOfLines, count, sigmaCalibrationVectorList);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = sigmaSarLut;
 
   Sentinel1CalibrationLookupData::Pointer betaSarLut = Sentinel1CalibrationLookupData::New();
-  betaSarLut->InitParameters(SarCalibrationLookupData::BETA, firstLineTime.GetDay(), lastLineTime.GetDay(), numOfLines, count, betaCalibrationVectorList); // TODO: firstLineTime.as_day_frac()
+  betaSarLut->InitParameters(SarCalibrationLookupData::BETA, firstLineTime.GetModifiedJulian(),
+                             lastLineTime.GetModifiedJulian(), numOfLines, count, betaCalibrationVectorList);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = betaSarLut;
 
   Sentinel1CalibrationLookupData::Pointer gammaSarLut = Sentinel1CalibrationLookupData::New();
-  gammaSarLut->InitParameters(SarCalibrationLookupData::GAMMA, firstLineTime.GetDay(), lastLineTime.GetDay(), numOfLines, count, gammaCalibrationVectorList); // TODO: firstLineTime.as_day_frac()
+  gammaSarLut->InitParameters(SarCalibrationLookupData::GAMMA, firstLineTime.GetModifiedJulian(),
+                              lastLineTime.GetModifiedJulian(), numOfLines, count, gammaCalibrationVectorList);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = gammaSarLut;
 
   Sentinel1CalibrationLookupData::Pointer dnSarLut = Sentinel1CalibrationLookupData::New();
-  dnSarLut->InitParameters(SarCalibrationLookupData::SIGMA, firstLineTime.GetDay(), lastLineTime.GetDay(), numOfLines, count, dnCalibrationVectorList); // TODO: firstLineTime.as_day_frac()
+  dnSarLut->InitParameters(SarCalibrationLookupData::SIGMA, firstLineTime.GetModifiedJulian(),
+                           lastLineTime.GetModifiedJulian(), numOfLines, count, dnCalibrationVectorList);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = sigmaSarLut;
 
   return true;
@@ -345,7 +349,7 @@ double Sentinel1ImageMetadataInterface::GetRadarFrequency() const
   return 0;
 }
 
-double Sentinel1ImageMetadataInterface::GetCenterIncidenceAngle() const
+double Sentinel1ImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface &) const
 {
   return 0;
 }

@@ -402,63 +402,36 @@ double TerraSarImageMetadataInterface::GetCalibrationFactor() const
   return std::numeric_limits<double>::quiet_NaN(); // Invalid value
 }
 
-unsigned int TerraSarImageMetadataInterface::GetNumberOfNoiseRecords() const
+unsigned int TerraSarImageMetadataInterface::GetNumberOfNoiseRecords(const MetadataSupplierInterface& mds) const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string key("noise.numberOfNoiseRecords");
-  if (imageKeywordlist.HasKey(key))
-  {
-    std::string  valueString = imageKeywordlist.GetMetadataByKey(key);
-    unsigned int value       = atoi(valueString.c_str());
-    return value;
-  }
-
-  return std::numeric_limits<unsigned int>::quiet_NaN(); // Invalid value
+  auto ret = mds.GetAs<unsigned int>(std::numeric_limits<unsigned int>::quiet_NaN(),
+                                     "level1Product.noise.numberOfNoiseRecords");
+  if(ret == std::numeric_limits<unsigned int>::quiet_NaN())
+    ret = mds.GetAs<unsigned int>(std::numeric_limits<unsigned int>::quiet_NaN(),
+                                  "noise.numberOfNoiseRecords");
+  return ret;
 }
 
-unsigned int TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(unsigned int noiseRecord) const
+unsigned int TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(const unsigned int noiseRecord,
+                                                                       const MetadataSupplierInterface& mds) const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
   std::ostringstream oss;
+  oss << "level1Product.noise.imageNoise_" << (noiseRecord+1) << ".noiseEstimate.polynomialDegree";
+  auto ret = mds.GetAs<unsigned int>(std::numeric_limits<unsigned int>::quiet_NaN(), oss.str());
+  if(ret != std::numeric_limits<unsigned int>::quiet_NaN())
+    return ret;
   oss.str("");
-  oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.polynomialDegree";
-  std::string key = oss.str();
-  if (imageKeywordlist.HasKey(key))
-  {
-    std::string  valueString = imageKeywordlist.GetMetadataByKey(key);
-    unsigned int value       = atoi(valueString.c_str());
-    return value;
-  }
+  oss << "noise.imageNoise_" << noiseRecord << ".noiseEstimate.polynomialDegree";
+  ret = mds.GetAs<unsigned int>(std::numeric_limits<unsigned int>::quiet_NaN(), oss.str());
+  if(ret != std::numeric_limits<unsigned int>::quiet_NaN())
+    return ret;
 
   return std::numeric_limits<unsigned int>::quiet_NaN(); // Invalid value
 }
 
 
-TerraSarImageMetadataInterface::UIntVectorType TerraSarImageMetadataInterface::GetNoisePolynomialDegrees() const
+TerraSarImageMetadataInterface::UIntVectorType
+TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(const MetadataSupplierInterface& mds) const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -476,7 +449,7 @@ TerraSarImageMetadataInterface::UIntVectorType TerraSarImageMetadataInterface::G
   UIntVectorType     polDeg;
   std::ostringstream oss;
 
-  unsigned int nbRec = this->GetNumberOfNoiseRecords();
+  unsigned int nbRec = this->GetNumberOfNoiseRecords(mds);
   for (unsigned int i = 0; i < nbRec; ++i)
   {
     oss.str("");
@@ -491,22 +464,11 @@ TerraSarImageMetadataInterface::UIntVectorType TerraSarImageMetadataInterface::G
 }
 
 
-TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface::GetNoisePolynomialCoefficients(unsigned int noiseRecord) const
+TerraSarImageMetadataInterface::DoubleVectorType
+TerraSarImageMetadataInterface::GetNoisePolynomialCoefficients(const unsigned int noiseRecord,
+                                                               const MetadataSupplierInterface& mds) const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  unsigned int polDegs = this->GetNoisePolynomialDegrees(noiseRecord);
+  unsigned int polDegs = this->GetNoisePolynomialDegrees(noiseRecord, mds);
 
   DoubleVectorType   polCoef;
   std::ostringstream oss;
@@ -516,10 +478,14 @@ TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface:
   for (unsigned int j = 0; j <= polDegs; ++j)
   {
     oss.str("");
-    oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.coefficient[" << j << "]";
-    std::string key         = oss.str();
-    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
-    double      value       = atof(valueString.c_str());
+    oss << "level1Product.noise.imageNoise_" << (noiseRecord+1) << ".noiseEstimate.coefficient_" << (j+1);
+    auto value = mds.GetAs<double>(std::numeric_limits<double>::min(), oss.str());
+    if(value == std::numeric_limits<double>::min())
+    {
+      oss.str("");
+      oss << "noise.imageNoise_" << noiseRecord << ".noiseEstimate.coefficient_" << j;
+      value = mds.GetAs<double>(oss.str());
+    }
     polCoef.push_back(value);
   }
 
@@ -527,7 +493,8 @@ TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface:
 }
 
 
-TerraSarImageMetadataInterface::DoubleVectorVectorType TerraSarImageMetadataInterface::GetNoisePolynomialCoefficientsList() const
+TerraSarImageMetadataInterface::DoubleVectorVectorType
+TerraSarImageMetadataInterface::GetNoisePolynomialCoefficientsList(const MetadataSupplierInterface& mds) const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -542,8 +509,8 @@ TerraSarImageMetadataInterface::DoubleVectorVectorType TerraSarImageMetadataInte
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
 
-  unsigned int   nbRec   = this->GetNumberOfNoiseRecords();
-  UIntVectorType polDegs = this->GetNoisePolynomialDegrees();
+  unsigned int   nbRec   = this->GetNumberOfNoiseRecords(mds);
+  UIntVectorType polDegs = this->GetNoisePolynomialDegrees(mds);
 
   DoubleVectorVectorType polCoefList;
   DoubleVectorType       polCoef;
@@ -568,34 +535,21 @@ TerraSarImageMetadataInterface::DoubleVectorVectorType TerraSarImageMetadataInte
   return polCoefList;
 }
 
-double TerraSarImageMetadataInterface::GetNoiseTimeUTC(unsigned int noiseRecord) const
+double TerraSarImageMetadataInterface::GetNoiseTimeUTC(const unsigned int noiseRecord,
+                                                       const MetadataSupplierInterface& mds) const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  DoubleVectorType   timeList;
+  MetaData::Time time, defaultTime;
+  std::istringstream("2000-01-01T00:0:00.000000Z") >> defaultTime;
   std::ostringstream oss;
-
+  oss << "level1Product.noise.imageNoise_" << noiseRecord << ".timeUTC";
+  std::istringstream(mds.GetAs<std::string>("2000-01-01T00:0:00.000000Z", oss.str())) >> time;
+  if(time != defaultTime)
+    return time.GetJulianDay();
   oss.str("");
-  oss << "noise[" << noiseRecord << "]imageNoise.timeUTC";
-  std::string key = oss.str();
-  if (imageKeywordlist.HasKey(key))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
-    double      julianDay   = ConvertStringTimeUTCToJulianDay(valueString);
-    return julianDay;
-  }
-
+  oss << "noise.imageNoise_" << noiseRecord << ".timeUTC";
+  std::istringstream(mds.GetAs<std::string>("2000-01-01T00:0:00.000000Z", oss.str())) >> time;
+  if(time != defaultTime)
+    return time.GetJulianDay();
   return std::numeric_limits<double>::quiet_NaN(); // Invalid value
 }
 
@@ -626,7 +580,8 @@ double TerraSarImageMetadataInterface::ConvertStringTimeUTCToJulianDay(const std
   return julianDay;
 }
 
-TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface::GetNoiseTimeUTCList() const
+TerraSarImageMetadataInterface::DoubleVectorType
+TerraSarImageMetadataInterface::GetNoiseTimeUTCList(const MetadataSupplierInterface& mds) const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -644,7 +599,7 @@ TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface:
   DoubleVectorType   timeList;
   std::ostringstream oss;
 
-  unsigned int nbRec = this->GetNumberOfNoiseRecords();
+  unsigned int nbRec = this->GetNumberOfNoiseRecords(mds);
   for (unsigned int i = 0; i < nbRec; ++i)
   {
     oss.str("");
@@ -658,7 +613,8 @@ TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface:
   return timeList;
 }
 
-TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface::GetNoiseValidityRangeMaxList() const
+TerraSarImageMetadataInterface::DoubleVectorType
+TerraSarImageMetadataInterface::GetNoiseValidityRangeMaxList(const MetadataSupplierInterface& mds) const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -676,7 +632,7 @@ TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface:
   DoubleVectorType   maxList;
   std::ostringstream oss;
 
-  unsigned int nbRec = this->GetNumberOfNoiseRecords();
+  unsigned int nbRec = this->GetNumberOfNoiseRecords(mds);
   for (unsigned int i = 0; i < nbRec; ++i)
   {
     oss.str("");
@@ -688,7 +644,8 @@ TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface:
   return maxList;
 }
 
-TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface::GetNoiseValidityRangeMinList() const
+TerraSarImageMetadataInterface::DoubleVectorType
+TerraSarImageMetadataInterface::GetNoiseValidityRangeMinList(const MetadataSupplierInterface& mds) const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -706,7 +663,7 @@ TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface:
   DoubleVectorType   minList;
   std::ostringstream oss;
 
-  unsigned int nbRec = this->GetNumberOfNoiseRecords();
+  unsigned int nbRec = this->GetNumberOfNoiseRecords(mds);
   for (unsigned int i = 0; i < nbRec; ++i)
   {
     oss.str("");
@@ -719,34 +676,25 @@ TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface:
 }
 
 
-double TerraSarImageMetadataInterface::GetNoiseReferencePoint(unsigned int noiseRecord) const
+double TerraSarImageMetadataInterface::GetNoiseReferencePoint(const unsigned int noiseRecord,
+                                                              const MetadataSupplierInterface& mds) const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  double             refPoint;
   std::ostringstream oss;
-
+  oss << "level1Product.noise.imageNoise_" << noiseRecord << ".noiseEstimate.referencePoint";
+  auto ret = mds.GetAs<double>(std::numeric_limits<double>::min(), oss.str());
+  if(ret != std::numeric_limits<double>::min())
+    return ret;
   oss.str("");
-  oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.referencePoint";
-  std::string valueString = imageKeywordlist.GetMetadataByKey(oss.str());
-  refPoint                = atof(valueString.c_str());
-
-  return refPoint;
+  oss << "noise.imageNoise_" << noiseRecord << ".noiseEstimate.referencePoint";
+  ret = mds.GetAs<double>(std::numeric_limits<double>::min(), oss.str());
+  if(ret != std::numeric_limits<double>::min())
+    return ret;
+  return std::numeric_limits<double>::quiet_NaN();
 }
 
 
-TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface::GetNoiseReferencePointList() const
+TerraSarImageMetadataInterface::DoubleVectorType
+TerraSarImageMetadataInterface::GetNoiseReferencePointList(const MetadataSupplierInterface& mds) const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -764,7 +712,7 @@ TerraSarImageMetadataInterface::DoubleVectorType TerraSarImageMetadataInterface:
   DoubleVectorType   refPointList;
   std::ostringstream oss;
 
-  unsigned int nbRec = this->GetNumberOfNoiseRecords();
+  unsigned int nbRec = this->GetNumberOfNoiseRecords(mds);
   for (unsigned int i = 0; i < nbRec; ++i)
   {
     oss.str("");
@@ -879,69 +827,51 @@ double TerraSarImageMetadataInterface::GetMeanIncidenceAngles(const MetadataSupp
   return (sum / (nbAngles + 1));
 }
 
-double TerraSarImageMetadataInterface::GetCenterIncidenceAngle() const
+double TerraSarImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface& mds) const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("sceneCoord.sceneCenterCoord.incidenceAngle");
-  double      value       = atof(valueString.c_str());
-
-  return value;
+  auto ret = mds.GetAs<double>(std::numeric_limits<double>::min(), "level1Product.productInfo.sceneInfo.sceneCenterCoord.incidenceAngle");
+  if(ret != std::numeric_limits<double>::min())
+    return ret;
+  ret = mds.GetAs<double>(std::numeric_limits<double>::min(), "sceneCoord.sceneCenterCoord.incidenceAngle");
+  return ret;
 }
 
-TerraSarImageMetadataInterface::IndexType TerraSarImageMetadataInterface::GetCenterIncidenceAngleIndex() const
+TerraSarImageMetadataInterface::IndexType
+TerraSarImageMetadataInterface::GetCenterIncidenceAngleIndex(const MetadataSupplierInterface& mds) const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
   TerraSarImageMetadataInterface::IndexType it;
 
-  ImageKeywordlistType imageKeywordlist;
+  auto value= mds.GetAs<int>(std::numeric_limits<int>::min(), "level1Product.productInfo.sceneInfo.sceneCenterCoord.refRow");
+  if(value == std::numeric_limits<int>::min())
+    value= mds.GetAs<int>("sceneCoord.sceneCenterCoord.refRow");
+  it[1] = value;
 
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("sceneCoord.sceneCenterCoord.refRow");
-  it[1]                   = atoi(valueString.c_str());
-
-  valueString = imageKeywordlist.GetMetadataByKey("sceneCoord.sceneCenterCoord.refColumn");
-  it[0]       = atoi(valueString.c_str());
+  value= mds.GetAs<int>(std::numeric_limits<int>::min(), "level1Product.productInfo.sceneInfo.sceneCenterCoord.refColumn");
+  if(value == std::numeric_limits<int>::min())
+    value= mds.GetAs<int>("sceneCoord.sceneCenterCoord.refColumn");
+  it[0] = value;
 
   return it;
 }
 
 TerraSarImageMetadataInterface::DoubleVectorType
-TerraSarImageMetadataInterface::GetCornersIncidenceAngles(const MetadataSupplierInterface& imd) const
+TerraSarImageMetadataInterface::GetCornersIncidenceAngles(const MetadataSupplierInterface& mds) const
 {
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  ImageKeywordlistType imageKeywordlist;
-
   TerraSarImageMetadataInterface::DoubleVectorType dv;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
   std::ostringstream oss;
-
-  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles(imd);
+  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles(mds);
   for (unsigned int i = 0; i < nbAngles; ++i)
   {
     oss.str("");
-    oss << "sceneCoord.sceneCornerCoord[" << i << "].incidenceAngle";
-    std::string valueString = imageKeywordlist.GetMetadataByKey(oss.str());
-
-    dv.push_back(atof(valueString.c_str()));
+    oss << "level1Product.productInfo.sceneInfo.sceneCornerCoord_" << (i+1) << ".incidenceAngle";
+    auto value = mds.GetAs<double>(std::numeric_limits<double>::min(), oss.str());
+    if(value == std::numeric_limits<double>::min())
+    {
+      oss.str("");
+      oss << "sceneCoord.sceneCornerCoord[" << i << "].incidenceAngle";
+      value = mds.GetAs<double>(oss.str());
+    }
+    dv.push_back(value);
   }
 
   return dv;
@@ -959,22 +889,22 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex(const MetadataSup
     TerraSarImageMetadataInterface::IndexType it;
 
     oss.str("");
-    oss << "sceneCoord.sceneCornerCoord[" << i << "].refRow";
-    it[1] = imd.GetAs<int>(INT_MIN, oss.str());
-    if(it[1] == INT_MIN)
+    oss << "level1Product.productInfo.sceneInfo.sceneCornerCoord_" << (i+1) << ".refRow";
+    it[1] = imd.GetAs<int>(std::numeric_limits<int>::min(), oss.str());
+    if(it[1] == std::numeric_limits<int>::min())
     {
       oss.str("");
-      oss << "level1Product.productInfo.sceneInfo.sceneCornerCoord_" << (i+1) << ".refRow";
+      oss << "sceneCoord.sceneCornerCoord[" << i << "].refRow";
       it[1] = imd.GetAs<int>(oss.str());
     }
 
     oss.str("");
-    oss << "sceneCoord.sceneCornerCoord[" << i << "].refColumn";
-    it[0] = imd.GetAs<int>(INT_MIN, oss.str());
-    if(it[0] == INT_MIN)
+    oss << "level1Product.productInfo.sceneInfo.sceneCornerCoord_" << (i+1) << ".refColumn";
+    it[0] = imd.GetAs<int>(std::numeric_limits<int>::min(), oss.str());
+    if(it[0] == std::numeric_limits<int>::min())
     {
       oss.str("");
-      oss << "level1Product.productInfo.sceneInfo.sceneCornerCoord_" << (i+1) << ".refColumn";
+      oss << "sceneCoord.sceneCornerCoord[" << i << "].refColumn";
       it[0] = imd.GetAs<int>(oss.str());
     }
 
@@ -1025,8 +955,8 @@ TerraSarImageMetadataInterface::GetRadiometricCalibrationNoise(const MetadataSup
     }
   }
 
-  double   startTime      = imd[MDTime::AcquisitionStartTime].GetDay(); // TODO
-  double   stopTime       = imd[MDTime::AcquisitionStopTime].GetDay();
+  double   startTime      = imd[MDTime::AcquisitionStartTime].GetJulianDay();
+  double   stopTime       = imd[MDTime::AcquisitionStopTime].GetJulianDay();
   RealType firstRangeTime = imd[MDNum::RangeTimeFirstPixel];
   RealType lastRangeTime  = imd[MDNum::RangeTimeLastPixel];
 
@@ -1035,16 +965,16 @@ TerraSarImageMetadataInterface::GetRadiometricCalibrationNoise(const MetadataSup
 
   PointType p0;
 
-  unsigned int numberOfNoiseRecords = this->GetNumberOfNoiseRecords();
+  unsigned int numberOfNoiseRecords = this->GetNumberOfNoiseRecords(mds);
 
   for (unsigned int noiseRecord = 0; noiseRecord < numberOfNoiseRecords; ++noiseRecord)
   {
-    double   currentNoiseTime   = this->GetNoiseTimeUTC(noiseRecord);
+    double   currentNoiseTime   = this->GetNoiseTimeUTC(noiseRecord, mds);
     RealType AzimutAcquisition  = (currentNoiseTime - startTime) * numberOfRows / (stopTime - startTime);
-    RealType referencePointTime = this->GetNoiseReferencePoint(noiseRecord);
+    RealType referencePointTime = this->GetNoiseReferencePoint(noiseRecord, mds);
 
     std::vector<RealType> polynomialCoefficient;
-    polynomialCoefficient = this->GetNoisePolynomialCoefficients(noiseRecord);
+    polynomialCoefficient = this->GetNoisePolynomialCoefficients(noiseRecord, mds);
 
     p0[0] = AzimutAcquisition;
 
@@ -1094,8 +1024,8 @@ TerraSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAngle(const Me
   PointSetPointer points = PointSetType::New();
   PointType       p0;
 
-  double    centerIncidenceAngleValue = this->GetCenterIncidenceAngle();
-  IndexType centerIncidenceAngleIndex = this->GetCenterIncidenceAngleIndex();
+  double    centerIncidenceAngleValue = this->GetCenterIncidenceAngle(imd);
+  IndexType centerIncidenceAngleIndex = this->GetCenterIncidenceAngleIndex(imd);
 
   DoubleVectorType cornerIncidenceAngleValue = this->GetCornersIncidenceAngles(imd);
   IndexVectorType  cornerIncidenceAngleIndex = this->GetCornersIncidenceAnglesIndex(imd);
@@ -1165,6 +1095,7 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
     imd.Add(MDTime::AcquisitionStartTime, MainXMLFileMetadataSupplier.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.start.timeUTC"));
     imd.Add(MDTime::AcquisitionStopTime, MainXMLFileMetadataSupplier.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.stop.timeUTC"));
     imd.Add(MDNum::RangeTimeFirstPixel, MainXMLFileMetadataSupplier.GetFirstAs<double>("level1Product.productInfo.sceneInfo.rangeTime.firstPixel"));
+    imd.Add(MDNum::RangeTimeLastPixel, MainXMLFileMetadataSupplier.GetFirstAs<double>("level1Product.productInfo.sceneInfo.rangeTime.lastPixel"));
     imd.Add(MDNum::PRF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonPRF"));
     imd.Add(MDNum::RSF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
     imd.Add(MDNum::CalFactor, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.calibration.calibrationConstant.calFactor"));

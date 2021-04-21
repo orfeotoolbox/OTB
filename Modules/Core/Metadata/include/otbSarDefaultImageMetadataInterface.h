@@ -201,7 +201,7 @@ public:
   }
 
   /** Get the center incidence angle */
-  double GetCenterIncidenceAngle() const override
+  double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override
   {
     itkExceptionMacro("GetCenterIncidenceAngle not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
