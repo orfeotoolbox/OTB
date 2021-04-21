@@ -206,7 +206,7 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::DoPredict(const In
   // MODE CLASSIFICATION : find the highest response
   float secondResponse = -1e10;
 
-  target[0] = m_MatrixOfLabels.at<TOutputValue>(0);
+  target[0] = m_MatrixOfLabels.at<float>(0);
   unsigned int nbClasses = m_MatrixOfLabels.size[1];
 
   for (unsigned itLabel = 1; itLabel < nbClasses; ++itLabel)
@@ -217,7 +217,7 @@ NeuralNetworkMachineLearningModel<TInputValue, TOutputValue>::DoPredict(const In
       secondResponse = maxResponse;
 
       maxResponse = currentResponse;
-      target[0] = m_MatrixOfLabels.at<TOutputValue>(itLabel);
+      target[0] = m_MatrixOfLabels.at<float>(itLabel);
     }
     else
     {
