@@ -96,7 +96,7 @@ public:
     return m_ROI;
   }
 
-  void SetPaddingValue(const InternalPixelType& val)
+  void SetPaddingValue(InternalPixelType val)
   {
     m_Pad = val;
   }
