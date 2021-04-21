@@ -110,7 +110,7 @@ set(sharkkm_parameters "")
 
 # Validation depending on mode
 set(ascii_comparison --compare-ascii ${EPSILON_6})
-set(ascii_confmat_comparison --compare-ascii 2)
+set(ascii_confmat_comparison --compare-ascii ${NOTOL})
 set(raster_comparison --compare-image ${NOTOL})
 set(raster_comparison_two --compare-n-images ${NOTOL} 2)
 set(raster_comparison_three --compare-n-images ${NOTOL} 3)
@@ -120,6 +120,11 @@ set(ascii_ref_path ${OTBAPP_BASELINE_FILES})
 set(raster_ref_path ${OTBAPP_BASELINE})
 
 set(classifierList)
+
+# This is a black list for classifier that can not have a baseline
+# because they are using randomness and seed can not be set
+set(classifier_without_baseline "")
+
 #if(OTB_USE_LIBSVM)
 #list(APPEND classifierList "LIBSVM")
 #endif()
@@ -129,14 +134,12 @@ if(OTB_USE_OPENCV)
 endif()
 if(OTB_USE_SHARK)
   list(APPEND classifierList "SHARKRF" "SHARKKM")
+  list(APPEND classifier_without_baseline "SHARKRF" "SHARKKM")
 endif()
 
 set(classifier_with_confmap "LIBSVM" "BOOST" "KNN" "ANN" "RF")
 set(classifier_with_probamap "SHARKRF")
 
-# This is a black list for classifier that can not have a baseline
-# because they are using randomness and seed can not be set
-set(classifier_without_baseline "")
 
 # Loop on classifiers
 foreach(classifier ${classifierList})
