@@ -228,6 +228,28 @@ double Time::GetSecond() const
   return tm_sec + frac_sec;
 }
 
+double Time::GetJulianDay() const
+{
+  // Conversion to julian day
+  // according to http://en.wikipedia.org/wiki/Julian_day
+  // division are integer divisions:
+  int a = (14 - GetMonth()) / 12;
+  int y = GetYear() + 4800 - a;
+  int m = GetMonth() + 12 * a - 3;
+
+  double julianDay = GetDay() + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045;
+
+  // now, the division are NOT integer
+  julianDay += GetHour() / 24. + GetMinute() / 1440. + GetSecond() / 86400.;
+
+  return julianDay;
+}
+
+double Time::GetModifiedJulian() const
+{
+  return GetJulianDay() - 2400000.5;;
+}
+
 std::string LUTAxis::ToJSON(bool multiline) const
 {
   std::ostringstream oss;

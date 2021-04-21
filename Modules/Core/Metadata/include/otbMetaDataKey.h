@@ -276,6 +276,8 @@ struct OTBMetadata_EXPORT Time : tm
   int GetHour() const;
   int GetMinute() const;
   double GetSecond() const;
+  double GetJulianDay() const;
+  double GetModifiedJulian() const;
   ///@}
 
 };
