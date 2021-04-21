@@ -87,24 +87,24 @@ public:
    //@}
 
   void SetROI(const InputImageRegionType& roi)
-    {
+  {
     m_ROI = roi;
-    }
+  }
 
-  InputImageRegionType GetROI() const
-    {
+  const InputImageRegionType& GetROI() const
+  {
     return m_ROI;
-    }
+  }
 
   void SetPaddingValue(const InternalPixelType& val)
-    {
+  {
     m_Pad = val;
-    }
+  }
 
   InternalPixelType GetPaddingValue() const
-    {
+  {
     return m_Pad;
-    }
+  }
 
 protected:
   /// Hidden constructor

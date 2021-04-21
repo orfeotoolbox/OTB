@@ -171,15 +171,15 @@ private:
     // TODO : check margins for empty region
     FloatVectorImageType::RegionType region;
     switch (GetParameterInt("mode"))
-      {
+    {
       case 0: // roi
-        {
+      {
         region.SetIndex({GetParameterInt("roi.startx"),GetParameterInt("roi.starty")});
         region.SetSize({(unsigned long)GetParameterInt("roi.sizex"),(unsigned long)GetParameterInt("roi.sizey")});
         break;
-        }
+      }
       case 1: // margin
-        {
+      {
         region = input->GetLargestPossibleRegion();
         FloatVectorImageType::IndexType idx = region.GetIndex();
         FloatVectorImageType::SizeType sz = region.GetSize();
@@ -192,9 +192,9 @@ private:
         region.SetIndex(idx);
         region.SetSize(sz);
         break;
-        }
+      }
       case 2: // threshold
-        {
+      {
         region = input->GetLargestPossibleRegion();
         FloatVectorImageType::IndexType idx = region.GetIndex();
         FloatVectorImageType::SizeType sz = region.GetSize();
@@ -206,13 +206,13 @@ private:
         region.SetIndex(1, idx[1] + thrYtop);
         region.SetSize(1, std::max(0UL, sz[1] - thrYtop - thrYbot));
         break;
-        }
+      }
       default:
-        {
+      {
         otbAppLogFATAL("Unknown region mode: "<<GetParameterString("mode"));
         break;
-        }
       }
+    }
 
     auto filter = ResetMarginFilter<FloatVectorImageType>::New();
     filter->SetROI(region);

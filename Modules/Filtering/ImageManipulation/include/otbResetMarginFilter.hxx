@@ -95,37 +95,37 @@ ResetMarginFilter<TImage>
   // Go to begin
   outData += nBand * output->ComputeOffset(index);
   if (curRoi.GetNumberOfPixels())
-    {
+  {
     inData += nBand * input->ComputeOffset(curRoi.GetIndex());
-    }
+  }
 
   itk::ProgressReporter progress( this, threadId, outputRegionForThread.GetNumberOfPixels() / sizeY );
 
   auto y = startY;
   if (hasContiguousLines)
-    {
+  {
     // if output lines are contiguous, we can do one call to std::fill_n
     std::fill_n(outData, full_line*(thrY1-y), m_Pad);
     for (
         ; y < thrY1
         ; ++y, outData+=outLineOff )
-      {
-      progress.CompletedPixel(); // Completed...Line()
-      }
-    }
-  else
     {
+      progress.CompletedPixel(); // Completed...Line()
+    }
+  }
+  else
+  {
     for (
         ; y < thrY1
         ; ++y, outData+=outLineOff )
-      {
+    {
       // If there is any trimming of first lines, the inData will
       // directly point to the right region. we shall not increment it!
       // otbMsgDevMacro("o(" << y << ") <-- 0");
       std::fill_n(outData, full_line, m_Pad);
       progress.CompletedPixel(); // Completed...Line()
-      }
     }
+  }
   assert(y == thrY1);
   otbMsgDevMacro("Y in ["<<thrY1<<".."<<thrY2<<"[  <<--- Input");
   for (
@@ -142,29 +142,29 @@ ResetMarginFilter<TImage>
   assert(y == thrY2);
   otbMsgDevMacro("Y in ["<<thrY2<<".."<<endY<<"[  <<--- 0");
   if (hasContiguousLines)
-    {
+  {
     // if output lines are contiguous, we can do one call to std::fill_n
     std::fill_n(outData, full_line*(endY-y), m_Pad);
     for (
         ; y < endY
         ; ++y, outData+=outLineOff )
-      {
-      progress.CompletedPixel(); // Completed...Line()
-      }
-    }
-  else
     {
+      progress.CompletedPixel(); // Completed...Line()
+    }
+  }
+  else
+  {
     for (
         ; y < endY
         ; ++y,  outData+=outLineOff)
-      {
+    {
       // If there is any trimming of last lines, the inputIterator iterator will
       // directly point to the right region. we shall not increment it!
       // otbMsgDevMacro("o(" << y << ") <-- 0");
       std::fill_n(outData, full_line, m_Pad);
       progress.CompletedPixel(); // Completed...Line()
-      }
     }
+  }
   assert(y == endY);
   otbMsgDevMacro("ThreadedGenerateData end");
 }
@@ -176,10 +176,10 @@ ResetMarginFilter<TImage>
 {
   auto curROI = m_ROI;
   if (!curROI.Crop(srcRegion))
-    {
+  {
     curROI.SetIndex(srcRegion.GetIndex() + srcRegion.GetSize());
     curROI.SetSize({0,0});
-    }
+  }
   return curROI;
 }
 
