@@ -24,8 +24,12 @@
 #include "itkLightObject.h"
 #include "otbMachineLearningModel.h"
 
+// Quiet a deprecation warning
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS
+
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-copy"
 #pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
@@ -71,10 +75,10 @@ class ITK_EXPORT SharkRandomForestsMachineLearningModel : public MachineLearning
 {
 public:
   /** Standard class typedefs. */
-  typedef SharkRandomForestsMachineLearningModel Self;
+  typedef SharkRandomForestsMachineLearningModel          Self;
   typedef MachineLearningModel<TInputValue, TTargetValue> Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   typedef typename Superclass::InputValueType           InputValueType;
   typedef typename Superclass::InputSampleType          InputSampleType;
@@ -120,22 +124,22 @@ public:
   itkSetMacro(MTry, unsigned int);
 
   /** From Shark doc: Controls when a node is considered pure. If set
-* to 1, a node is pure when it only consists of a single node.
-*/
+   * to 1, a node is pure when it only consists of a single node.
+   */
   itkGetMacro(NodeSize, unsigned int);
   /** From Shark doc: Controls when a node is considered pure. If
-* set to 1, a node is pure when it only consists of a single node.
-*/
+   * set to 1, a node is pure when it only consists of a single node.
+   */
   itkSetMacro(NodeSize, unsigned int);
 
   /** From Shark doc: Get the fraction of the original training
-* dataset to use as the out of bag sample. The default value is
-* 0.66.*/
+   * dataset to use as the out of bag sample. The default value is
+   * 0.66.*/
   itkGetMacro(OobRatio, float);
 
   /** From Shark doc: Set the fraction of the original training
-* dataset to use as the out of bag sample. The default value is 0.66.
-*/
+   * dataset to use as the out of bag sample. The default value is 0.66.
+   */
   itkSetMacro(OobRatio, float);
 
   /** If true, margin confidence value will be computed */
