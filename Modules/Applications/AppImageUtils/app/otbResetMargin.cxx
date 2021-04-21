@@ -123,9 +123,9 @@ private:
     SetParameterDescription("margin.top", "Top margin for ROI (in pixels)");
     SetDefaultParameterInt("margin.top", 0);
 
-    AddParameter(ParameterType_Int, "margin.down", "Down margin");
-    SetParameterDescription("margin.down", "Down margin for ROI (in pixels)");
-    SetDefaultParameterInt("margin.down", 0);
+    AddParameter(ParameterType_Int, "margin.bottom", "Bottom margin");
+    SetParameterDescription("margin.bottom", "Bottom margin for ROI (in pixels)");
+    SetDefaultParameterInt("margin.bottom", 0);
 
     AddParameter(ParameterType_Int, "margin.left", "Left margin");
     SetParameterDescription("margin.left", "Left margin for ROI (in pixels)");
@@ -136,7 +136,7 @@ private:
     SetDefaultParameterInt("margin.right", 0);
 
     MandatoryOff("margin.top");
-    MandatoryOff("margin.down");
+    MandatoryOff("margin.bottom");
     MandatoryOff("margin.left");
     MandatoryOff("margin.right");
 
@@ -154,9 +154,11 @@ private:
     AddRAMParameter();
 
     SetDocExampleParameterValue("in", "ResetMarginInput100x100.tiff");
-    SetDocExampleParameterValue("threshold.x",       "10");
-    SetDocExampleParameterValue("threshold.y.start", "12");
-    SetDocExampleParameterValue("threshold.y.end",    "25");
+    SetDocExampleParameterValue("mode", "roi");
+    SetDocExampleParameterValue("roi.startx", "10");
+    SetDocExampleParameterValue("roi.starty", "10");
+    SetDocExampleParameterValue("roi.sizex", "50");
+    SetDocExampleParameterValue("roi.sizey", "25");
     SetDocExampleParameterValue("out", "ResetMargin.tiff");
     SetOfficialDocLink();
   }
@@ -186,7 +188,7 @@ private:
         idx[0] += GetParameterInt("margin.left");
         idx[1] += GetParameterInt("margin.top");
         sz[0] -= GetParameterInt("margin.left") + GetParameterInt("margin.right");
-        sz[1] -= GetParameterInt("margin.top") + GetParameterInt("margin.down");
+        sz[1] -= GetParameterInt("margin.top") + GetParameterInt("margin.bottom");
         region.SetIndex({GetParameterInt("margin.left"),GetParameterInt("margin.top")});
         region = input->GetLargestPossibleRegion();
         region.SetIndex(idx);
@@ -202,9 +204,9 @@ private:
         int thrYtop = GetParameterInt("threshold.y.start");
         int thrYbot = GetParameterInt("threshold.y.end");
         region.SetIndex(0, idx[0] + thrX);
-        region.SetSize(0,  std::max(0UL, sz[0] - 2 * thrX));
+        region.SetSize(0,  (sz[0] - 2 * thrX));
         region.SetIndex(1, idx[1] + thrYtop);
-        region.SetSize(1, std::max(0UL, sz[1] - thrYtop - thrYbot));
+        region.SetSize(1, (sz[1] - thrYtop - thrYbot));
         break;
       }
       default:
