@@ -226,6 +226,13 @@ public:
         "GetNumberOf() not yet implemented in otbGDALImageIO");
   }
 
+  /** If multiple keys have the same path, gives the position of the one with value value*/
+  unsigned int GetAttributId(std::string const& path, std::string const& value) const override
+  {
+    itkExceptionMacro(
+        "GetAttributId() not yet implemented in otbGDALImageIO");
+  }
+
 protected:
   /**
    * Constructor.

@@ -253,6 +253,31 @@ unsigned int XMLMetadataSupplier::GetNumberOf(std::string const & path) const
   }
   return idx.size();
 }
+unsigned int XMLMetadataSupplier::GetAttributId(std::string const& path, std::string const& value) const
+{
+  // Search for the joker
+  std::size_t found = path.find("_#");
+  // Looking for the keys corresponding to the part of the path before the joker
+  std::vector<std::string> values = this->FetchPartialNameValueMultiple(m_MetadataDic, path.substr(0, found).c_str());
+  // Position of the beginning of the path after the joker
+  std::size_t start = found + 2;
+  // Looking for the keys corresponding to the part of the path after the joker
+  values = this->FetchPartialNameValueMultiple(values, path.substr(start));
+
+  if ((values.size() == 0) || (values[0].empty()))
+    return 0;
+
+  for(auto const& s: values)
+  {
+    auto val = s.substr(s.find('=') + 1);
+    if (val == value)
+    {
+      val = s.substr(found + 1, s.find(".", found) - found - 1);
+      return std::stoi(val);
+    }
+  }
+  return 0;
+}
 
 std::string XMLMetadataSupplier::PrintSelf() const
 {

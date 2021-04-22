@@ -53,55 +53,64 @@ bool Radarsat2ImageMetadataInterface::CanRead() const
 
 bool Radarsat2ImageMetadataInterface::HasCalibrationLookupDataFlag() const
 {
-  itkExceptionMacro("HasCalibrationLookupDataFlag(mds) not yet implemented in Radarsat2ImageMetadataInterface"); // TODO
+  return true; // TODO
 }
 
-bool Radarsat2ImageMetadataInterface::CreateCalibrationLookupData(SARCalib&, const ImageMetadata&, const MetadataSupplierInterface&, const bool) const
+bool Radarsat2ImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarCalib,
+                                                                  const ImageMetadata& imd,
+                                                                  const MetadataSupplierInterface& mds,
+                                                                  const bool geom) const
 {
-//  std::string lut = "SigmaNought";
 
-//  switch (type)
-//  {
-//  case SarCalibrationLookupData::BETA:
-//  {
-//    lut = "BetaNought";
-//  }
-//  break;
+  if(SarImageMetadataInterface::CreateCalibrationLookupData(sarCalib, imd, mds, geom))
+    return true;
 
-//  case SarCalibrationLookupData::GAMMA:
-//  {
-//    lut = "GammaNought";
-//  }
-//  break;
+  int offset = 0;
 
-//  case SarCalibrationLookupData::DN:
-//  {
-//    lut = "DN";
-//  }
-//  break;
+  std::ostringstream ossSigma;
+  std::ostringstream ossBeta;
+  std::ostringstream ossGamma;
+  if(geom)
+  {
+    ossSigma << "referenceNoiseLevel[SigmaNought].gain";
+    ossBeta << "referenceNoiseLevel[BetaNought].gain";
+    ossGamma << "referenceNoiseLevel[GammaNought].gain";
+  }
+  else
+  {
+    ossSigma << "product.sourceAttributes.radarParameters.referenceNoiseLevel_"
+             << mds.GetAttributId("product.sourceAttributes.radarParameters.referenceNoiseLevel_#.incidenceAngleCorrection",
+                                  "Sigma Nought")
+             << ".noiseLevelValues";
+    ossBeta << "product.sourceAttributes.radarParameters.referenceNoiseLevel_"
+            << mds.GetAttributId("product.sourceAttributes.radarParameters.referenceNoiseLevel_#.incidenceAngleCorrection",
+                                 "Beta Nought")
+            << ".noiseLevelValues";
+    ossGamma << "product.sourceAttributes.radarParameters.referenceNoiseLevel_"
+             << mds.GetAttributId("product.sourceAttributes.radarParameters.referenceNoiseLevel_#.incidenceAngleCorrection",
+                                  "gamma")
+             << ".noiseLevelValues";
+  }
 
-//  case SarCalibrationLookupData::SIGMA:
-//  default:
-//  {
-//    lut = "SigmaNought";
-//  }
-//  break;
-//  }
+  Radarsat2CalibrationLookupData::Pointer sigmaSarLut = Radarsat2CalibrationLookupData::New();
+  auto glist = mds.GetAsVector<float>(ossSigma.str());
+  sigmaSarLut->InitParameters(SarCalibrationLookupData::SIGMA, offset, glist);
+  sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = std::move(sigmaSarLut);
 
-//  const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
-//  const std::string          key              = "referenceNoiseLevel[" + lut + "].gain";
+  Radarsat2CalibrationLookupData::Pointer betaSarLut = Radarsat2CalibrationLookupData::New();
+  glist = mds.GetAsVector<float>(ossSigma.str());
+  betaSarLut->InitParameters(SarCalibrationLookupData::BETA, offset, glist);
+  sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = std::move(betaSarLut);
 
-//  Radarsat2CalibrationLookupData::GainListType glist;
-//  int                                          offset = 0;
+  Radarsat2CalibrationLookupData::Pointer gammaSarLut = Radarsat2CalibrationLookupData::New();
+  glist = mds.GetAsVector<float>(ossSigma.str());
+  gammaSarLut->InitParameters(SarCalibrationLookupData::GAMMA, offset, glist);
+  sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = std::move(gammaSarLut);
 
-//  Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey("referenceNoiseLevel[" + lut + "].gain"), glist, "referenceNoiseLevel[" + lut + "].gain");
+  Radarsat2CalibrationLookupData::Pointer dnSarLut = Radarsat2CalibrationLookupData::New();
+  sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = std::move(dnSarLut);
 
-//  Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey("referenceNoiseLevel[" + lut + "].offset"), "referenceNoiseLevel[" + lut + "].offset");
-
-//  Radarsat2CalibrationLookupData::Pointer sarLut;
-//  sarLut = Radarsat2CalibrationLookupData::New();
-//  sarLut->InitParameters(type, offset, glist);
-//  return static_cast<Radarsat2ImageMetadataInterface::LookupDataPointerType> (sarLut);
+  return true;
 }
 
 void Radarsat2ImageMetadataInterface::ParseDateTime(const char* key, std::vector<int>& dateFields) const
@@ -292,7 +301,8 @@ void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
       imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
     }
     SARCalib sarCalib;
-    LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
+    LoadRadiometricCalibrationData(sarCalib, ProductMS, imd);
+    CreateCalibrationLookupData(sarCalib, imd, ProductMS, false);
     imd.Add(MDGeom::SARCalib, sarCalib);
   }
 }
@@ -338,6 +348,7 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   }  
   SARCalib sarCalib;
   LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
+  CreateCalibrationLookupData(sarCalib, imd, *m_MetadataSupplierInterface, true);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 

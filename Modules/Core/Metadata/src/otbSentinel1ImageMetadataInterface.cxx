@@ -166,9 +166,9 @@ bool Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarC
   sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = gammaSarLut;
 
   Sentinel1CalibrationLookupData::Pointer dnSarLut = Sentinel1CalibrationLookupData::New();
-  dnSarLut->InitParameters(SarCalibrationLookupData::SIGMA, firstLineTime.GetModifiedJulian(),
+  dnSarLut->InitParameters(SarCalibrationLookupData::DN, firstLineTime.GetModifiedJulian(),
                            lastLineTime.GetModifiedJulian(), numOfLines, count, dnCalibrationVectorList);
-  sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = sigmaSarLut;
+  sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = dnSarLut;
 
   return true;
 }
