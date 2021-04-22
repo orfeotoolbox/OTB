@@ -96,7 +96,7 @@ public:
   double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override;
 
   /*get lookup data for calculating backscatter */
-  bool HasCalibrationLookupDataFlag() const override;
+  bool HasCalibrationLookupDataFlag(const MetadataSupplierInterface&) const override;
   bool CreateCalibrationLookupData(SARCalib&, const ImageMetadata&, const MetadataSupplierInterface&, const bool) const override;
 
   void ParseGdal(ImageMetadata &) override;

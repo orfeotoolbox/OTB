@@ -79,9 +79,10 @@ const std::string SarImageMetadataInterface::GetAcquisitionMode() const
   return "";
 }
 
-bool SarImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarCalib, const ImageMetadata&, const MetadataSupplierInterface &, const bool) const
+bool SarImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarCalib, const ImageMetadata&, const MetadataSupplierInterface &mds, const bool) const
 {
-  if (!HasCalibrationLookupDataFlag())
+  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlag(mds);
+  if (!sarCalib.calibrationLookupFlag)
   {
     sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = SarCalibrationLookupData::New();
     sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = SarCalibrationLookupData::New();
@@ -92,15 +93,9 @@ bool SarImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarCalib, 
   return false;
 }
 
-bool SarImageMetadataInterface::HasCalibrationLookupDataFlag() const
+bool SarImageMetadataInterface::HasCalibrationLookupDataFlag(const MetadataSupplierInterface&) const
 {
   return false;
-}
-
-bool SarImageMetadataInterface::HasCalibrationLookupDataFlagGeom() const
-{
-  /* checking if the key exist is more than enough */
-  return m_MetadataSupplierInterface->GetAs<bool>(false, "support_data.calibration_lookup_flag");
 }
 
 SarImageMetadataInterface::RealType SarImageMetadataInterface::GetRadiometricCalibrationScale() const

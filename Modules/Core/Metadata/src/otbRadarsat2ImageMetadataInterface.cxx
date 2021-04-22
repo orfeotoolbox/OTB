@@ -51,9 +51,9 @@ bool Radarsat2ImageMetadataInterface::CanRead() const
     return false;
 }
 
-bool Radarsat2ImageMetadataInterface::HasCalibrationLookupDataFlag() const
+bool Radarsat2ImageMetadataInterface::HasCalibrationLookupDataFlag(const MetadataSupplierInterface &mds) const
 {
-  return true; // TODO
+  return mds.GetAs<bool>(true, "support_data.calibration_lookup_flag");
 }
 
 bool Radarsat2ImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarCalib,
@@ -309,7 +309,6 @@ void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 
 void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
 {
-  // Metadata read by GDAL
   Fetch(MDTime::AcquisitionStartTime, imd, "support_data.image_date");
   Fetch(MDNum::LineSpacing, imd, "meters_per_pixel_y");
   Fetch(MDNum::PixelSpacing, imd, "meters_per_pixel_x");
@@ -317,35 +316,39 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   imd.Add(MDStr::SensorID, "SAR");
 
   // Product file
-  auto ProductFilePath = boost::filesystem::path(m_MetadataSupplierInterface->GetResourceFile());
+  auto ProductFilePath = boost::filesystem::path(m_MetadataSupplierInterface->GetResourceFile());  // TODO C++ 2017 use std::filesystem
   if (!ProductFilePath.empty())
   {
-    XMLMetadataSupplier ProductMS((ProductFilePath.remove_filename() /= "product.xml").string());
-    imd.Add(MDStr::Mission, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
-    imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
-    imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));
-    imd.Add(MDTime::ProductionDate,
-	      ProductMS.GetFirstAs<MetaData::Time>("product.imageGenerationParameters.generalProcessingInformation.processingTime"));
-    imd.Add(MDNum::AverageSceneHeight,
-	      ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
-    imd.Add(MDNum::RadarFrequency, this->GetRadarFrequency());
-    imd.Add(MDNum::PRF, this->GetPRF());
-    imd.Add(MDNum::RSF, this->GetRSF());
-    imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle(ProductMS));
-    imd.Add(MDStr::BeamMode, ProductMS.GetAs<std::string>("product.sourceAttributes.beamModeMnemonic"));
-    imd.Add("FACILITY_IDENTIFIER", ProductMS.GetAs<std::string>("product.sourceAttributes.inputDatasetFacilityId"));
-    imd.Add(MDStr::OrbitDirection, ProductMS.GetAs<std::string>("product.sourceAttributes.orbitAndAttitude.orbitInformation.passDirection"));
-    imd.Add(MDStr::ProductType, ProductMS.GetAs<std::string>("product.imageGenerationParameters.generalProcessingInformation.productType"));
-
-    auto polarizations = ProductMS.GetAsVector<std::string>("product.sourceAttributes.radarParameters.polarizations");
-    assert(polarizations.size() == imd.Bands.size());
-    SARParam sarParam;
-    for (int bandId = 0 ; bandId < polarizations.size() ; ++bandId)
+    ProductFilePath = ProductFilePath.remove_filename() /= "product.xml";
+    if(boost::filesystem::exists(ProductFilePath))
     {
-      imd.Bands[bandId].Add(MDStr::Polarization, polarizations[bandId]);
-      imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
+      XMLMetadataSupplier ProductMS((ProductFilePath.remove_filename() /= "product.xml").string());
+      imd.Add(MDStr::Mission, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
+      imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
+      imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));
+      imd.Add(MDTime::ProductionDate,
+          ProductMS.GetFirstAs<MetaData::Time>("product.imageGenerationParameters.generalProcessingInformation.processingTime"));
+      imd.Add(MDNum::AverageSceneHeight,
+          ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
+      imd.Add(MDNum::RadarFrequency, this->GetRadarFrequency());
+      imd.Add(MDNum::PRF, this->GetPRF());
+      imd.Add(MDNum::RSF, this->GetRSF());
+      imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle(ProductMS));
+      imd.Add(MDStr::BeamMode, ProductMS.GetAs<std::string>("product.sourceAttributes.beamModeMnemonic"));
+      imd.Add("FACILITY_IDENTIFIER", ProductMS.GetAs<std::string>("product.sourceAttributes.inputDatasetFacilityId"));
+      imd.Add(MDStr::OrbitDirection, ProductMS.GetAs<std::string>("product.sourceAttributes.orbitAndAttitude.orbitInformation.passDirection"));
+      imd.Add(MDStr::ProductType, ProductMS.GetAs<std::string>("product.imageGenerationParameters.generalProcessingInformation.productType"));
+
+      auto polarizations = ProductMS.GetAsVector<std::string>("product.sourceAttributes.radarParameters.polarizations");
+      assert(polarizations.size() == imd.Bands.size());
+      SARParam sarParam;
+      for (int bandId = 0 ; bandId < polarizations.size() ; ++bandId)
+      {
+        imd.Bands[bandId].Add(MDStr::Polarization, polarizations[bandId]);
+        imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
+      }
     }
-  }  
+  }
   SARCalib sarCalib;
   LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   CreateCalibrationLookupData(sarCalib, imd, *m_MetadataSupplierInterface, true);

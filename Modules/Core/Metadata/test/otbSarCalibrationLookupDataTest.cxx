@@ -68,7 +68,7 @@ int otbSarCalibrationLookupDataTest(int argc, char* argv[])
 
   RealType lutVal = static_cast<RealType>(lookupDataObj->GetValue(10, 19));
 
-  outfile << imageMetadataInterface->HasCalibrationLookupDataFlag() << std::endl;
+  //outfile << imageMetadataInterface->HasCalibrationLookupDataFlag() << std::endl; TODO
   outfile << lutVal << std::endl;
 
   return EXIT_SUCCESS;

@@ -68,8 +68,7 @@ public:
 
   virtual bool CreateCalibrationLookupData(SARCalib&, const ImageMetadata&, const MetadataSupplierInterface&, const bool) const;
 
-  virtual bool HasCalibrationLookupDataFlag() const;
-  bool HasCalibrationLookupDataFlagGeom() const;
+  virtual bool HasCalibrationLookupDataFlag(const MetadataSupplierInterface&) const;
 
   virtual RealType GetRadiometricCalibrationScale() const;
 
