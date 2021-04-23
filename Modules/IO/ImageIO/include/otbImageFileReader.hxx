@@ -584,15 +584,15 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-std::string ImageFileReader<TOutputImage, ConvertPixelTraits>::GetDerivedDatasetSourceFileName(const std::string& filename) const
+std::string ImageFileReader<TOutputImage, ConvertPixelTraits>::GetDerivedDatasetSourceFileName(const std::string& filename)
 {
 
-  const size_t dsds_pos = filename.find(DerivedSubdatasetPrefix);
+  const size_t dsds_pos = filename.find(otb::DerivedSubdatasetPrefix);
 
   if (dsds_pos != std::string::npos)
   {
     // Derived subdataset from gdal
-    const size_t alg_pos = filename.find(":", dsds_pos + DerivedSubdatasetPrefixLength);
+    const size_t alg_pos = filename.find(":", dsds_pos + otb::DerivedSubdatasetPrefixLength);
     if (alg_pos != std::string::npos)
     {
       std::string sourceFilename = filename.substr(alg_pos + 1, filename.size() - alg_pos);

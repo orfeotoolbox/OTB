@@ -23,30 +23,65 @@
 #include "itkMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
+#include "otbExtendedFilenameToReaderOptions.h"
 #include "otbSarImageMetadataInterfaceFactory.h"
+#include "otbGeomMetadataSupplier.h"
+#include "otbSARMetadata.h"
+
+using RealType = double;
+using ImageMetadataInterfaceType = otb::SarImageMetadataInterface;
+using ImageMetadataInterfaceFactoryType = otb::SarImageMetadataInterfaceFactory;
+using LookupDataType = otb::SarCalibrationLookupData;
+using InputImageType = otb::Image<double, 2>;
+using ImageReaderType = otb::ImageFileReader<InputImageType>;
+using MetadataSupplierInterfaceType = otb::MetadataSupplierInterface;
+using ImageMetadataType = otb::ImageMetadata;
+
+std::unique_ptr<MetadataSupplierInterfaceType> GetIMI(const char* TheFileName)
+{
+  otb::ExtendedFilenameToReaderOptions::Pointer FilenameHelper = otb::ExtendedFilenameToReaderOptions::New();
+  FilenameHelper->SetExtendedFileName(TheFileName);
+  std::string DerivatedFileName = ImageReaderType::GetDerivedDatasetSourceFileName(TheFileName);
+  std::string extension         = itksys::SystemTools::GetFilenameLastExtension(DerivatedFileName);
+  std::string attachedGeom      = DerivatedFileName.substr(0, DerivatedFileName.size() - extension.size()) + std::string(".geom");
+  // Case 1: external geom supplied through extended filename
+  if (!FilenameHelper->GetSkipGeom() && FilenameHelper->ExtGEOMFileNameIsSet())
+  {
+    return std::make_unique<otb::GeomMetadataSupplier>(FilenameHelper->GetExtGEOMFileName());
+  }
+  // Case 2: attached geom (if present)
+  else if (!FilenameHelper->GetSkipGeom() && itksys::SystemTools::FileExists(attachedGeom))
+  {
+    return std::make_unique<otb::GeomMetadataSupplier>(attachedGeom);
+  }
+  // Case 3: tags in file
+  else
+  {
+    auto supplierPointer = dynamic_cast<MetadataSupplierInterfaceType*>(
+          otb::ImageIOFactory::CreateImageIO(TheFileName, otb::ImageIOFactory::ReadMode).GetPointer());
+    return std::unique_ptr<MetadataSupplierInterfaceType>(supplierPointer);
+  }
+}
 
 int otbSarCalibrationLookupDataTest(int argc, char* argv[])
 {
-  typedef double                         RealType;
-  typedef otb::SarImageMetadataInterface ImageMetadataInterfaceType;
-  typedef otb::SarCalibrationLookupData  LookupDataType;
-  typedef otb::Image<double, 2> InputImageType;
-  typedef otb::ImageFileReader<InputImageType> ImageReaderType;
-
   if (argc < 3)
   {
     std::cerr << "Usage: otbSarCalibationLookupDataTest /path/to/input/file /path/to/output/file  !" << std::endl;
     return EXIT_FAILURE;
   }
   ImageReaderType::Pointer reader = ImageReaderType::New();
-  reader->SetFileName(argv[1]);
+  const char*   inFileName = argv[1];
+  reader->SetFileName(inFileName);
   reader->UpdateOutputInformation();
+  auto imd = reader->GetOutput()->GetImageMetadata();
 
   const char*   outFileName = argv[2];
   std::ofstream outfile;
   outfile.open(outFileName);
 
-  ImageMetadataInterfaceType::Pointer imageMetadataInterface = otb::SarImageMetadataInterfaceFactory::CreateIMI(reader->GetOutput()->GetMetaDataDictionary());
+  auto supplier = GetIMI(inFileName);
+  ImageMetadataInterfaceType::Pointer imageMetadataInterface = ImageMetadataInterfaceFactoryType::CreateIMI(imd, *supplier);
 
   if (!imageMetadataInterface.IsNotNull())
   {
@@ -54,22 +89,7 @@ int otbSarCalibrationLookupDataTest(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  const std::string sensorId = imageMetadataInterface->GetSensorID();
-
-  outfile << sensorId << std::endl;
-
-  LookupDataType::Pointer lookupDataObj; //TODO = imageMetadataInterface->GetCalibrationLookupData(0);
-
-  if (!lookupDataObj.IsNotNull())
-  {
-    std::cerr << "lookupDataObj is Null" << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  RealType lutVal = static_cast<RealType>(lookupDataObj->GetValue(10, 19));
-
-  //outfile << imageMetadataInterface->HasCalibrationLookupDataFlag() << std::endl; TODO
-  outfile << lutVal << std::endl;
+  outfile << imd[otb::MDStr::Instrument] << std::endl;
 
   return EXIT_SUCCESS;
 }

@@ -130,6 +130,9 @@ public:
    * Returns: overview info, empty if none.*/
   std::vector<std::string> GetOverviewsInfo();
 
+  // Retrieve the real source file name if derived dataset */
+  static std::string GetDerivedDatasetSourceFileName(const std::string& filename);
+
 protected:
   ImageFileReader();
   ~ImageFileReader() override;
@@ -148,9 +151,6 @@ private:
     * CEOS product (file "DAT...") In this case, the GdalFileName contain the open image file.
     */
   bool GetGdalReadImageFileName(const std::string& filename, std::string& GdalFileName);
-
-  // Retrieve the real source file name if derived dataset */
-  std::string GetDerivedDatasetSourceFileName(const std::string& filename) const;
 
   ImageFileReader(const Self&) = delete;
   void operator=(const Self&) = delete;
