@@ -28,18 +28,10 @@ ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(PNG ZLIB)
 ADD_SUPERBUILD_CMAKE_VAR(PNG ZLIB_INCLUDE_DIR)
 ADD_SUPERBUILD_CMAKE_VAR(PNG ZLIB_LIBRARY)
 
-if(WIN32)
-  set(URL "http://downloads.sourceforge.net/project/libpng/libpng16/1.6.37/lpng1637.zip")
-  set(MD5CHK 883764a8ebb8352904679f2ec70eda69)
-else()
-  set(URL "http://downloads.sourceforge.net/project/libpng/libpng16/1.6.37/libpng-1.6.37.tar.gz")
-  set(MD5CHK 6c7519f6c75939efa0ed3053197abd54)
-endif()
-
 ExternalProject_Add(PNG
   PREFIX PNG
-  URL ${URL}
-  URL_MD5 ${MD5CHK}
+  URL "http://downloads.sourceforge.net/project/libpng/libpng16/1.6.37/libpng-1.6.37.tar.gz"
+  URL_MD5 6c7519f6c75939efa0ed3053197abd54
   BINARY_DIR ${PNG_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
