@@ -1,0 +1,106 @@
+diff -burN lpng1637.orig/CMakeLists.txt lpng1637/CMakeLists.txt
+--- lpng1637.orig/CMakeLists.txt	2019-04-14 20:10:32.000000000 +0200
++++ lpng1637/CMakeLists.txt	2021-04-23 10:10:21.560899662 +0200
+@@ -27,7 +27,16 @@
+ set(PNGLIB_MAJOR 1)
+ set(PNGLIB_MINOR 6)
+ set(PNGLIB_RELEASE 37)
+-set(PNGLIB_NAME libpng${PNGLIB_MAJOR}${PNGLIB_MINOR})
++
++option(VERSIONED_OUTPUT_LIB "create output library with major.minor suffix" OFF)
++
++set(PNGLIB_NAME libpng)
++set(PNG_LIB_NAME png)
++if(VERSIONED_OUTPUT_LIB)
++  set(PNGLIB_NAME libpng${PNGLIB_MAJOR}${PNGLIB_MINOR})
++  set(PNG_LIB_NAME png${PNGLIB_MAJOR}${PNGLIB_MINOR})
++endif()
++
+ set(PNGLIB_VERSION ${PNGLIB_MAJOR}.${PNGLIB_MINOR}.${PNGLIB_RELEASE})
+
+ include(GNUInstallDirs)
+@@ -196,11 +205,9 @@
+
+ endif(PNG_HARDWARE_OPTIMIZATIONS)
+
+-# SET LIBNAME
+-set(PNG_LIB_NAME png${PNGLIB_MAJOR}${PNGLIB_MINOR})
+
+ # to distinguish between debug and release lib
+-set(CMAKE_DEBUG_POSTFIX "d")
++#set(CMAKE_DEBUG_POSTFIX "d")
+
+ include(CheckCSourceCompiles)
+ option(ld-version-script "Enable linker version script" ON)
+@@ -525,7 +532,6 @@
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR})
+
+ unset(PNG_LIB_TARGETS)
+-
+ if(PNG_SHARED)
+   add_library(png SHARED ${libpng_sources})
+   set(PNG_LIB_TARGETS png)
+@@ -838,9 +844,8 @@
+ # SET UP LINKS
+ if(PNG_SHARED)
+   set_target_properties(png PROPERTIES
+-#   VERSION 16.${PNGLIB_RELEASE}.1.6.37
+-    VERSION 16.${PNGLIB_RELEASE}.0
+-    SOVERSION 16
++    VERSION ${PNGLIB_VERSION}
++    SOVERSION ${PNGLIB_MAJOR}
+     CLEAN_DIRECT_OUTPUT 1)
+ endif()
+
+@@ -852,29 +857,30 @@
+           LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+           ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+           FRAMEWORK DESTINATION ${CMAKE_INSTALL_LIBDIR})
++  if(VERSIONED_OUTPUT_LIB)
++    if(PNG_SHARED)
++        # Create a symlink for libpng.dll.a => libpng16.dll.a on Cygwin
++        if(CYGWIN OR MINGW)
++        create_symlink(libpng${CMAKE_IMPORT_LIBRARY_SUFFIX} TARGET png)
++        install(FILES $<TARGET_LINKER_FILE_DIR:png>/libpng${CMAKE_IMPORT_LIBRARY_SUFFIX}
++                DESTINATION ${CMAKE_INSTALL_LIBDIR})
++        endif()
+
+-  if(PNG_SHARED)
+-    # Create a symlink for libpng.dll.a => libpng16.dll.a on Cygwin
+-    if(CYGWIN OR MINGW)
+-      create_symlink(libpng${CMAKE_IMPORT_LIBRARY_SUFFIX} TARGET png)
+-      install(FILES $<TARGET_LINKER_FILE_DIR:png>/libpng${CMAKE_IMPORT_LIBRARY_SUFFIX}
+-              DESTINATION ${CMAKE_INSTALL_LIBDIR})
+-    endif()
+-
+-    if(NOT WIN32)
+-      create_symlink(libpng${CMAKE_SHARED_LIBRARY_SUFFIX} TARGET png)
+-      install(FILES $<TARGET_LINKER_FILE_DIR:png>/libpng${CMAKE_SHARED_LIBRARY_SUFFIX}
+-              DESTINATION ${CMAKE_INSTALL_LIBDIR})
+-    endif()
+-  endif()
++        if(NOT WIN32)
++        create_symlink(libpng${CMAKE_SHARED_LIBRARY_SUFFIX} TARGET png)
++        install(FILES $<TARGET_LINKER_FILE_DIR:png>/libpng${CMAKE_SHARED_LIBRARY_SUFFIX}
++                DESTINATION ${CMAKE_INSTALL_LIBDIR})
++        endif()
++    endif(PNG_SHARED)
+
+-  if(PNG_STATIC)
+-    if(NOT WIN32 OR CYGWIN OR MINGW)
+-      create_symlink(libpng${CMAKE_STATIC_LIBRARY_SUFFIX} TARGET png_static)
+-      install(FILES $<TARGET_LINKER_FILE_DIR:png_static>/libpng${CMAKE_STATIC_LIBRARY_SUFFIX}
+-              DESTINATION ${CMAKE_INSTALL_LIBDIR})
+-    endif()
+-  endif()
++    if(PNG_STATIC)
++        if(NOT WIN32 OR CYGWIN OR MINGW)
++        create_symlink(libpng${CMAKE_STATIC_LIBRARY_SUFFIX} TARGET png_static)
++        install(FILES $<TARGET_LINKER_FILE_DIR:png_static>/libpng${CMAKE_STATIC_LIBRARY_SUFFIX}
++                DESTINATION ${CMAKE_INSTALL_LIBDIR})
++        endif()
++    endif(PNG_STATIC)
++  endif(VERSIONED_OUTPUT_LIB)
+ endif()
+
+ if(NOT SKIP_INSTALL_HEADERS AND NOT SKIP_INSTALL_ALL)
