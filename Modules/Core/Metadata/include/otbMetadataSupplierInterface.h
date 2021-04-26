@@ -83,6 +83,7 @@ public:
   virtual unsigned int GetAttributId(std::string const& path, std::string const& value) const = 0;
 };
 
+template <> bool MetadataSupplierInterface::GetAs(bool const& defaultValue, std::string const& path, int band) const;
 // TODO : for complex types ...
 
 } // end namespace otb
