@@ -26,6 +26,8 @@
 #ifndef otbOperatorUtilities_h
 #define otbOperatorUtilities_h
 
+#include <iostream>
+
 namespace boostAdapter {
    // Uses Barton-Nackman trick to help implement operator on classes
    // Strongly inspired by boost.operators interface
