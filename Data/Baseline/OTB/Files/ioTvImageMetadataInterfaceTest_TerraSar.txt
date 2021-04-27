@@ -7,13 +7,17 @@ TileHintX 15328
 TileHintY 1
 DataType 11
 OrbitNumber 4091
+CalFactor 1.04345e-05
 PRF 3832.52
 RSF 1.09886e+08
 RadarFrequency 9.65e+09
 LineSpacing 1.84541
 PixelSpacing 1.36411
+RangeTimeFirstPixel 0.00422717
+RangeTimeLastPixel 0.00436665
 AcquisitionStartTime 2008-03-10T13:32:20.083162Z
 AcquisitionStopTime 2008-03-10T13:32:28.617747Z
+SARCalib <SARCalib>
 GCP <GCPParam>
 Polarization HH
 SAR <SARParam>

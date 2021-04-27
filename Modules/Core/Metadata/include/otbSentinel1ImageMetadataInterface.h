@@ -94,11 +94,11 @@ public:
 
   double GetRadarFrequency() const override;
 
-  double GetCenterIncidenceAngle() const override;
+  double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override;
 
   /*get lookup data for calculating backscatter */
-  bool HasCalibrationLookupDataFlag() const;
-  const LookupDataPointerType CreateCalibrationLookupData(const short type) const override;
+  bool HasCalibrationLookupDataFlag(const MetadataSupplierInterface&) const override;
+  bool CreateCalibrationLookupData(SARCalib&, const ImageMetadata&, const MetadataSupplierInterface&, const bool) const override;
 
   void ParseGdal(ImageMetadata &) override;
 
@@ -121,9 +121,6 @@ protected:
 
   /* Fetch the Orbits metadata */
   std::vector<Orbit> GetOrbits(const XMLMetadataSupplier&) const;
-
-  /* Fetch the Calibration metadata */
-  std::vector<CalibrationVector> GetCalibrationVector(const XMLMetadataSupplier&) const;
 
   /* Fetch the noise LUTs */
   std::vector<SARNoise> GetNoiseVector(const XMLMetadataSupplier&) const;

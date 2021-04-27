@@ -66,21 +66,17 @@ public:
   typedef SarCalibrationLookupData LookupDataType;
   typedef LookupDataType::Pointer  LookupDataPointerType;
 
-  virtual const LookupDataPointerType CreateCalibrationLookupData(const short t) const;
+  virtual bool CreateCalibrationLookupData(SARCalib&, const ImageMetadata&, const MetadataSupplierInterface&, const bool) const;
 
-  const LookupDataPointerType GetCalibrationLookupData(const short type) const;
-  const LookupDataPointerType GetCalibrationLookupDataGeom(const short type) const;
-
-  virtual bool HasCalibrationLookupDataFlag() const;
-  bool HasCalibrationLookupDataFlagGeom() const;
+  virtual bool HasCalibrationLookupDataFlag(const MetadataSupplierInterface&) const;
 
   virtual RealType GetRadiometricCalibrationScale() const;
 
   virtual PointSetPointer GetRadiometricCalibrationAntennaPatternNewGain() const;
   virtual PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
-  virtual PointSetPointer GetRadiometricCalibrationIncidenceAngle() const;
+  virtual PointSetPointer GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface &) const;
   virtual PointSetPointer GetRadiometricCalibrationRangeSpreadLoss() const;
-  virtual PointSetPointer GetRadiometricCalibrationNoise() const;
+  virtual PointSetPointer GetRadiometricCalibrationNoise(const MetadataSupplierInterface&, const ImageMetadata&) const;
 
   virtual ArrayIndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const;
   virtual ArrayIndexType GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const;
@@ -91,7 +87,7 @@ public:
   virtual double GetPRF() const                  = 0;
   virtual double GetRSF() const                  = 0;
   virtual double GetRadarFrequency() const       = 0;
-  virtual double GetCenterIncidenceAngle() const = 0;
+  virtual double GetCenterIncidenceAngle(const MetadataSupplierInterface& mds) const = 0;
 
 
   virtual double GetRescalingFactor() const;
@@ -119,10 +115,15 @@ public:
   std::vector<AzimuthFmRate> GetAzimuthFmRateGeom() const;
   std::vector<DopplerCentroid> GetDopplerCentroidGeom() const;
   std::vector<Orbit> GetOrbitsGeom() const;
-  std::vector<CalibrationVector> GetCalibrationVectorGeom() const;
   std::vector<SARNoise> GetNoiseVectorGeom() const;
 
-  void LoadRadiometricCalibrationData(SARCalib &) const;
+  /**
+   * @brief Loads the radiometric calibration data to the SARCalib
+   * @param sarCalib The SARCalib objct to complet
+   * @param mds The MetadataSupplierInterface containing the calibration data
+   * @param imd The ImageMetadata containing the calibration data
+   */
+  void LoadRadiometricCalibrationData(SARCalib& sarCalib, const MetadataSupplierInterface& mds, const ImageMetadata& imd) const;
 
 protected:
   SarImageMetadataInterface();

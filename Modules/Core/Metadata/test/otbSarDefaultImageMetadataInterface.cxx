@@ -60,7 +60,7 @@ int otbSarDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(a
 
   try
   {
-    std::cout << obj->GetRadiometricCalibrationIncidenceAngle() << std::endl;
+    // std::cout << obj->GetRadiometricCalibrationIncidenceAngle() << std::endl; TODO
   }
   catch (itk::ExceptionObject& err)
   {
@@ -80,7 +80,7 @@ int otbSarDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(a
 
   try
   {
-    std::cout << obj->GetRadiometricCalibrationNoise() << std::endl;
+    // std::cout << obj->GetRadiometricCalibrationNoise() << std::endl; TODO
   }
   catch (itk::ExceptionObject& err)
   {

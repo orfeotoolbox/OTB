@@ -34,7 +34,7 @@ GEOTIFF_LIB = @SB_INSTALL_PREFIX_NATIVE@\lib\geotiff_i.lib
 
 EXPAT_DIR = @SB_INSTALL_PREFIX_NATIVE@
 EXPAT_INCLUDE = -I$(EXPAT_DIR)\include
-EXPAT_LIB = $(EXPAT_DIR)\lib\expat.lib
+EXPAT_LIB = $(EXPAT_DIR)\lib\libexpat.lib
 
 # SQLite Libraries
 SQLITE_INC=-I@SB_INSTALL_PREFIX_NATIVE@\include
@@ -109,7 +109,7 @@ NETCDF_INC_DIR = @SB_INSTALL_PREFIX_NATIVE@\include
 NETCDF_HAS_NC4 = YES
 NETCDF_HAS_HDF4 = YES
 
-# Needed to define H5_BUILT_AS_DYNAMIC_LIB for windows compilation 
+# Needed to define H5_BUILT_AS_DYNAMIC_LIB for windows compilation
 # scenarios where it is not exported on the target (non-CMake builds)
 HDF5_H5_IS_DLL = YES
 

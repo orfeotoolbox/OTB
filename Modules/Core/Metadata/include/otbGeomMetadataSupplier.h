@@ -69,6 +69,18 @@ public:
    */
   bool FetchRPC(ImageMetadata & imd);
 
+  /** Get the number of keys starting with path */
+  unsigned int GetNumberOf(std::string const&) const override
+  {
+    otbLogMacro(Error, << "GetNumberOf() not yet implemented in otbGeomMetadataSupplier");
+  }
+
+  /** If multiple keys have the same path, gives the position of the one with value value*/
+  unsigned int GetAttributId(std::string const& path, std::string const& value) const override
+  {
+    otbLogMacro(Error, << "GetAttributId() not yet implemented in otbGeomMetadataSupplier");
+  }
+
   /**
    * @brief Writes the content of the Geom file into a string
    *

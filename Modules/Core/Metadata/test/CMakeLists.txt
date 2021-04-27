@@ -363,7 +363,7 @@ otb_add_test(NAME ioTvSarCalibrationLookupDataTest_RADARSAT2 COMMAND otbMetadata
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvSarCalibrationLookupDataTest_RADARSAT2.txt
   ${TEMP}/ioTvSarCalibrationLookupDataTest_RADARSAT2.txt
   otbSarCalibrationLookupDataTest
-  ${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.tif?&geom=${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.geom
+  ${INPUTDATA}/radarsat2/RADARSAT2_ALTONA_300_300_VV.tif?&geom=${INPUTDATA}/radarsat2/RADARSAT2_ALTONA_300_300_VV.geom
   ${TEMP}/ioTvSarCalibrationLookupDataTest_RADARSAT2.txt
   )
 

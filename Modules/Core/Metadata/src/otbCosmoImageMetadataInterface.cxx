@@ -250,7 +250,7 @@ double CosmoImageMetadataInterface::GetRadarFrequency() const
   return 0;
 }
 
-double CosmoImageMetadataInterface::GetCenterIncidenceAngle() const
+double CosmoImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface &) const
 {
   return 0;
 }
@@ -296,7 +296,7 @@ std::vector<std::map<std::string, std::string> > CosmoImageMetadataInterface::sa
 
 }
 
-std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const std::string & reference_UTC)
+std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const std::string & reference_UTC) const
 {
     ////////////////// Add Orbit List ////////////////
   bool hasOrbit ;
@@ -467,8 +467,7 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Bands[0].Add(MDGeom::SAR, sarParam);
   
   SARCalib sarCalib;
-  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlag();
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
@@ -505,14 +504,13 @@ void CosmoImageMetadataInterface::ParseGeom(ImageMetadata &imd)
   sarParam.orbits = this->GetOrbitsGeom();
   imd.Bands[0].Add(MDGeom::SAR, sarParam);
   SARCalib sarCalib;
-  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlagGeom();
-  LoadRadiometricCalibrationData(sarCalib);
+  LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
 void CosmoImageMetadataInterface::Parse(ImageMetadata & imd)
 {
-  SupplierCheck();
+  assert(m_MetadataSupplierInterface != nullptr && "In ImageMetadataInterface, the MetadataSupplier needs to be set before calling the Parse function.");
   // Try to fetch the metadata from GDAL Metadata Supplier
   if (m_MetadataSupplierInterface->GetAs<std::string>("", "MISSION_ID") == "CSK")
     this->ParseGdal(imd);

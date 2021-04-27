@@ -30,5 +30,15 @@ bool MetadataSupplierInterface::HasValue(std::string const& path, int band) cons
   return hasValue;
 }
 
+template <> bool MetadataSupplierInterface::GetAs(bool const& defaultValue, std::string const& path, int band) const
+{
+  auto ret = GetAs<std::string>(boost::lexical_cast<std::string>(defaultValue), path, band);
+    if (std::any_of(TRUES.begin(), TRUES.end(), [ret](std::string s){return s == ret;}))
+      return true;
+    else if (std::any_of(FALSES.begin(), FALSES.end(), [ret](std::string s){return s == ret;}))
+      return false;
+    else
+      return defaultValue;
+}
 
 }

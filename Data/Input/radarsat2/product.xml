@@ -14,13 +14,11 @@
 		<radarParameters>
 			<acquisitionType>Fine Quad Polarization</acquisitionType>
 			<beams>Q9</beams>
-			<polarizations>HH VV HV VH</polarizations>
+			<polarizations>HV VH</polarizations>
 			<pulses>30short</pulses>
 			<rank beam="Q9">16</rank>
-			<settableGain beam="Q9" pole="HH" wing="Combined" units="dB">-1.349999992092401e+01</settableGain>
 			<settableGain beam="Q9" pole="HV" wing="Combined" units="dB">-1.349999992092401e+01</settableGain>
 			<settableGain beam="Q9" pole="VH" wing="Combined" units="dB">-1.349999992092401e+01</settableGain>
-			<settableGain beam="Q9" pole="VV" wing="Combined" units="dB">-1.349999992092401e+01</settableGain>
 			<radarCenterFrequency units="Hz">5.404999242769673e+09</radarCenterFrequency>
 			<pulseRepetitionFrequency beam="Q9" units="Hz">2.756302978515625e+03</pulseRepetitionFrequency>
 			<pulseLength pulse="30short" units="s">2.080838775634766e-05</pulseLength>
@@ -53,20 +51,8 @@
 		<rawDataAttributes>
 			<numberOfInputDataGaps>0</numberOfInputDataGaps>
 			<gapSize>100</gapSize>
-			<numberOfMissingLines pole="HH">0</numberOfMissingLines>
 			<numberOfMissingLines pole="HV">0</numberOfMissingLines>
 			<numberOfMissingLines pole="VH">0</numberOfMissingLines>
-			<numberOfMissingLines pole="VV">0</numberOfMissingLines>
-			<rawDataAnalysis pole="HH" wing="Combined" pulse="30short">
-				<bias dataStream="Real">-4.12333608e-01</bias>
-				<bias dataStream="Imaginary">-1.27562153e+00</bias>
-				<standardDeviation dataStream="Real">2.30635643e+01</standardDeviation>
-				<standardDeviation dataStream="Imaginary">2.45960903e+01</standardDeviation>
-				<gainImbalance>8.792668205684464e-01</gainImbalance>
-				<phaseOrthogonality units="deg">-2.41488552e+00</phaseOrthogonality>
-				<rawDataHistogram dataStream="Real">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2503 0 0 0 0 0 0 0 0 0 0 34133 0 0 0 0 0 0 0 0 0 40918 0 0 0 6934 0 0 0 20180 0 0 76351 0 0 11019 0 0 77962 0 0 438 0 56031 0 0 0 0 178502 0 1686 0 164814 0 7202 88309 500 40349 538 0 3613 21557 216585 1084 219409 114576 63893 1834 7896 35360 652 909 774 433 24366 5613 1731 62681 113021 215049 812 216365 21733 3523 0 546 39472 427 86060 6391 0 160817 0 1450 0 173450 0 0 0 0 53556 0 367 0 0 74609 0 0 10246 0 0 73230 0 0 18181 0 0 0 6613 0 0 0 37001 0 0 0 0 0 0 0 0 0 30872 0 0 0 0 0 0 0 0 0 0 2270 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</rawDataHistogram>
-				<rawDataHistogram dataStream="Imaginary">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 3919 0 0 0 0 0 0 0 0 0 0 49134 0 0 0 0 0 0 0 0 0 56982 0 0 0 7972 0 0 0 28838 0 0 85985 0 0 15708 0 0 87193 0 0 500 0 61478 0 0 0 0 181249 0 1807 0 165372 0 8126 89786 522 41097 579 0 3579 20361 204726 1388 208407 107841 60210 1875 8463 37674 806 721 493 245 19751 4656 1657 58049 104363 198927 788 199739 19817 3297 0 509 37597 474 81095 6494 0 153745 0 1509 0 166745 0 0 0 0 53843 0 426 0 0 76592 0 0 11742 0 0 75944 0 0 22215 0 0 0 7043 0 0 0 45104 0 0 0 0 0 0 0 0 0 39286 0 0 0 0 0 0 0 0 0 0 2953 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</rawDataHistogram>
-			</rawDataAnalysis>
 			<rawDataAnalysis pole="HV" wing="Combined" pulse="30short">
 				<bias dataStream="Real">-5.78479528e-01</bias>
 				<bias dataStream="Imaginary">-1.05201924e+00</bias>
@@ -86,16 +72,6 @@
 				<phaseOrthogonality units="deg">-1.93528330e+00</phaseOrthogonality>
 				<rawDataHistogram dataStream="Real">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2418 0 11114 0 0 68494 4765 37208 58643 105779 12706 38142 88500 366685 123156 85035 516751 48663 16769 490201 79837 108821 326847 75530 31878 11220 87864 45038 27577 4192 53228 0 0 8511 0 1824 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</rawDataHistogram>
 				<rawDataHistogram dataStream="Imaginary">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 4267 0 18953 0 0 114956 6209 63444 92562 133101 14005 48368 105478 390509 131897 84762 505702 36969 7537 426917 70502 90358 279681 64196 27470 10030 77240 39902 25608 3738 52350 0 0 8644 0 2041 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</rawDataHistogram>
-			</rawDataAnalysis>
-			<rawDataAnalysis pole="VV" wing="Combined" pulse="30short">
-				<bias dataStream="Real">-6.39854252e-01</bias>
-				<bias dataStream="Imaginary">-1.07624507e+00</bias>
-				<standardDeviation dataStream="Real">2.37677288e+01</standardDeviation>
-				<standardDeviation dataStream="Imaginary">2.54618244e+01</standardDeviation>
-				<gainImbalance>8.713573587425003e-01</gainImbalance>
-				<phaseOrthogonality units="deg">-3.46600151e+00</phaseOrthogonality>
-				<rawDataHistogram dataStream="Real">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 18 0 0 0 0 0 0 0 0 0 0 0 0 0 6258 0 0 0 0 0 0 0 0 0 0 39012 0 0 0 0 43 0 0 0 0 36699 0 0 0 16471 0 0 0 19368 0 0 85366 0 0 8433 0 0 70778 0 0 166 0 73214 0 0 98 0 187734 0 3085 0 149262 0 4880 83585 124 29326 951 0 1504 49881 238941 4735 199776 107668 45590 626 17071 28004 693 883 662 377 16975 10741 604 44430 105591 193275 1791 236680 49566 1279 0 814 27621 106 79956 4238 0 143398 0 2721 0 180294 0 97 0 0 69709 0 121 0 0 65543 0 0 7155 0 0 79914 0 0 16792 0 0 0 14954 0 0 0 32064 0 0 0 0 63 0 0 0 0 34245 0 0 0 0 0 0 0 0 0 0 5367 0 0 0 0 0 0 0 0 0 0 0 0 0 10 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</rawDataHistogram>
-				<rawDataHistogram dataStream="Imaginary">0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 25 0 0 0 0 0 0 0 0 0 0 0 0 0 9034 0 0 0 0 0 0 0 0 0 0 54531 0 0 0 0 70 0 0 0 0 50600 0 0 0 18204 0 0 0 26994 0 0 94169 0 0 11596 0 0 77946 0 0 172 0 77442 0 0 126 0 186799 0 3337 0 146845 0 5221 83087 119 28974 914 0 1484 46369 223076 5429 189068 100590 42547 771 16309 26908 678 783 531 282 16155 10233 537 41401 97981 179220 1988 219232 45820 1259 0 778 26803 130 76563 4500 0 137757 0 2872 0 175533 0 88 0 0 69820 0 132 0 0 69586 0 0 9129 0 0 85342 0 0 21947 0 0 0 16998 0 0 0 41269 0 0 0 0 64 0 0 0 0 45647 0 0 0 0 0 0 0 0 0 0 7562 0 0 0 0 0 0 0 0 0 0 0 0 0 20 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</rawDataHistogram>
 			</rawDataAnalysis>
 		</rawDataAttributes>
 		<orbitAndAttitude>
@@ -208,8 +184,6 @@
 			<radiometricSmoothingPerformed>false</radiometricSmoothingPerformed>
 			<zeroDopplerTimeFirstLine>2008-04-05T12:49:01.091411Z</zeroDopplerTimeFirstLine>
 			<zeroDopplerTimeLastLine>2008-04-05T12:49:10.489507Z</zeroDopplerTimeLastLine>
-			<numberOfLinesProcessed pole="HH">13546</numberOfLinesProcessed>
-			<numberOfLinesProcessed pole="VV">13546</numberOfLinesProcessed>
 			<numberOfLinesProcessed pole="HV">13546</numberOfLinesProcessed>
 			<numberOfLinesProcessed pole="VH">13546</numberOfLinesProcessed>
 			<samplingWindowStartTimeFirstRawLine beam="Q9" units="s">1.386804810360777e-04</samplingWindowStartTimeFirstRawLine>
@@ -4203,18 +4177,6 @@
 				<geodeticTerrainHeight units="m">4.532005615234375e+02</geodeticTerrainHeight>
 			</referenceEllipsoidParameters>
 		</geographicInformation>
-		<radiometricInformation pole="HH">
-			<mean dataStream="Real">3.196448160700000e+00</mean>
-			<mean dataStream="Imaginary">-4.389804585800000e+00</mean>
-			<standardDeviation dataStream="Real">1.090735445406200e+03</standardDeviation>
-			<standardDeviation dataStream="Imaginary">1.090560532417000e+03</standardDeviation>
-		</radiometricInformation>
-		<radiometricInformation pole="VV">
-			<mean dataStream="Real">-5.928972753100000e+00</mean>
-			<mean dataStream="Imaginary">-2.222375495900000e+00</mean>
-			<standardDeviation dataStream="Real">1.090629526857900e+03</standardDeviation>
-			<standardDeviation dataStream="Imaginary">1.090603975596300e+03</standardDeviation>
-		</radiometricInformation>
 		<radiometricInformation pole="HV">
 			<mean dataStream="Real">-4.119978844300000e+00</mean>
 			<mean dataStream="Imaginary">3.350372237800000e+00</mean>
@@ -4230,8 +4192,6 @@
 		<lookupTable incidenceAngleCorrection="Beta Nought">lutBeta.xml</lookupTable>
 		<lookupTable incidenceAngleCorrection="Sigma Nought">lutSigma.xml</lookupTable>
 		<lookupTable incidenceAngleCorrection="Gamma">lutGamma.xml</lookupTable>
-		<fullResolutionImageData pole="HH">imagery_HH.tif</fullResolutionImageData>
-		<fullResolutionImageData pole="VV">imagery_VV.tif</fullResolutionImageData>
 		<fullResolutionImageData pole="HV">imagery_HV.tif</fullResolutionImageData>
 		<fullResolutionImageData pole="VH">imagery_VH.tif</fullResolutionImageData>
 	</imageAttributes>

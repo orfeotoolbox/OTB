@@ -54,129 +54,123 @@ bool Sentinel1ImageMetadataInterface::CanRead() const
   return sensorID.find("SENTINEL-1") != std::string::npos;
 }
 
-bool Sentinel1ImageMetadataInterface::HasCalibrationLookupDataFlag() const
+bool Sentinel1ImageMetadataInterface::HasCalibrationLookupDataFlag(const MetadataSupplierInterface &mds) const
 {
-  //itkExceptionMacro("HasCalibrationLookupDataFlag(mds) not yet implemented in Sentinel1ImageMetadataInterface"); // TODO
-
-  // WIP 2159
-  return false;
+  return mds.GetAs<bool>(true, "support_data.calibration_lookup_flag");
 }
 
-const Sentinel1ImageMetadataInterface::LookupDataPointerType Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(const short type) const
+bool Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarCalib,
+                                                                  const ImageMetadata& imd,
+                                                                  const MetadataSupplierInterface& mds,
+                                                                  const bool geom) const
 {
-  bool sigmaLut = false;
-  bool betaLut  = false;
-  bool gammaLut = false;
-  bool dnLut    = false;
+  if(SarImageMetadataInterface::CreateCalibrationLookupData(sarCalib, imd, mds, geom))
+    return true;
 
-  switch (type)
-  {
-  case SarCalibrationLookupData::BETA:
-  {
-    otbMsgDevMacro("betaNought");
-    betaLut = true;
-  }
-  break;
+  std::stringstream prefix("calibration.");
+  if(!geom)
+    prefix << "CalibrationVectorList.";
+  const std::string sPrefixBase = prefix.str();
 
-  case SarCalibrationLookupData::GAMMA:
-  {
-    otbMsgDevMacro("gamma");
-    gammaLut = true;
-  }
-  break;
-
-  case SarCalibrationLookupData::DN:
-  {
-    otbMsgDevMacro("dn");
-    dnLut = true;
-  }
-  break;
-
-  case SarCalibrationLookupData::SIGMA:
-  default:
-    otbMsgDevMacro("sigmaNought");
-    sigmaLut = true;
-    break;
-  }
-
-  const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
-
-  // const double firstLineTime = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("calibration.startTime"), "calibration.startTime(double)");
-
-  // const double lastLineTime = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("calibration.stopTime"), "calibration.stopTime(double)");
-  using namespace ossimplugins::time;
-  const ModifiedJulianDate firstLineTime = toModifiedJulianDate(imageKeywordlist.GetMetadataByKey("calibration.startTime"));
-  const ModifiedJulianDate lastLineTime  = toModifiedJulianDate(imageKeywordlist.GetMetadataByKey("calibration.stopTime"));
+  auto firstLineTime = sarCalib.calibrationStartTime;
+  auto lastLineTime = sarCalib.calibrationStopTime;
   otbMsgDevMacro(<< "calibration.startTime: " << std::setprecision(16) << firstLineTime);
   otbMsgDevMacro(<< "calibration.stopTime : " << std::setprecision(16) << lastLineTime);
 
-  // const std::string supportDataPrefix = "support_data."; //make && use GetBandPrefix(subSwath, polarisation)
-
-  const int numOfLines = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey("number_lines"), "number_lines(int)");
+  int numOfLines = 0;
+  if(imd.Has(MDNum::NumberOfLines))
+    numOfLines = imd[MDNum::NumberOfLines];
+  else
+  {
+    for(auto const& band: imd.Bands)
+    {
+      if(band.Has(MDNum::NumberOfLines))
+      {
+        numOfLines = band[MDNum::NumberOfLines];
+        break;
+      }
+    }
+  }
   otbMsgDevMacro(<< "numOfLines   : " << numOfLines);
 
-  const int count = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey("calibration.count"), "calibration.count");
-
-  std::vector<Sentinel1CalibrationStruct> calibrationVectorList(count);
+  const int count = mds.GetAs<int>(sPrefixBase + "count");
+  std::vector<Sentinel1CalibrationStruct> sigmaCalibrationVectorList(count);
+  std::vector<Sentinel1CalibrationStruct> betaCalibrationVectorList(count);
+  std::vector<Sentinel1CalibrationStruct> gammaCalibrationVectorList(count);
+  std::vector<Sentinel1CalibrationStruct> dnCalibrationVectorList(count);
   double                                  lastMJD = 0;
 
   for (int i = 0; i < count; i++)
   {
-    Sentinel1CalibrationStruct calibrationVector;
+    Sentinel1CalibrationStruct sigmaCalibrationVector;
 
-    std::stringstream prefix;
-    prefix << "calibration.calibrationVector[" << i << "].";
+    prefix.str("");
+    if(geom)
+      prefix << sPrefixBase << "calibrationVector[" << i << "].";
+    else
+      prefix << sPrefixBase << "calibrationVector_" << i+1 << ".";
     const std::string sPrefix = prefix.str();
 
-    calibrationVector.line = Utils::LexicalCast<int>(imageKeywordlist.GetMetadataByKey(sPrefix + "line"), sPrefix + "line");
+    sigmaCalibrationVector.line = mds.GetAs<int>(sPrefix + "line");
 
     // TODO: don't manipulate doubles, but ModifiedJulianDate for a better type
     // safety
-    const std::string sAzimuth = imageKeywordlist.GetMetadataByKey(sPrefix + "azimuthTime");
-    calibrationVector.timeMJD  = toModifiedJulianDate(sAzimuth).as_day_frac();
-    calibrationVector.deltaMJD = calibrationVector.timeMJD - lastMJD;
-    lastMJD                    = calibrationVector.timeMJD;
+    MetaData::Time tmpDate;
+    std::istringstream(mds.GetAs<std::string>(sPrefix + "azimuthTime")) >> tmpDate;
+    sigmaCalibrationVector.timeMJD = tmpDate.GetModifiedJulian();
+    sigmaCalibrationVector.deltaMJD = sigmaCalibrationVector.timeMJD - lastMJD;
+    lastMJD                    = sigmaCalibrationVector.timeMJD;
 
-    otbMsgDevMacro(<< sPrefix << "line   : " << calibrationVector.line << " ;\t" << sPrefix << "timeMJD: " << std::setprecision(16) << calibrationVector.timeMJD
-                   << " (" << sAzimuth << ")");
+    otbMsgDevMacro(<< sPrefix << "line   : " << sigmaCalibrationVector.line << " ;\t" << sPrefix << "timeMJD: " << std::setprecision(16) << sigmaCalibrationVector.timeMJD
+                   << " (" << tmpDate << ")");
 
-    Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(sPrefix + "pixel"), calibrationVector.pixels, sPrefix + "pixel");
+    sigmaCalibrationVector.pixels = mds.GetAsVector<int>(sPrefix + "pixel");
 
     // prepare deltaPixels vector
     int prev_pixels = 0;
-    calibrationVector.deltaPixels.resize(calibrationVector.pixels.size());
-    for (std::size_t p = 0, N = calibrationVector.pixels.size(); p != N; ++p)
+    sigmaCalibrationVector.deltaPixels.resize(sigmaCalibrationVector.pixels.size());
+    for (std::size_t p = 0, N = sigmaCalibrationVector.pixels.size(); p != N; ++p)
     {
-      calibrationVector.deltaPixels[p] = (calibrationVector.pixels[p] - prev_pixels);
-      prev_pixels                      = calibrationVector.pixels[p];
+      sigmaCalibrationVector.deltaPixels[p] = (sigmaCalibrationVector.pixels[p] - prev_pixels);
+      prev_pixels                      = sigmaCalibrationVector.pixels[p];
     }
 
-    if (sigmaLut)
-    {
-      Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(sPrefix + "sigmaNought"), calibrationVector.vect, sPrefix + "sigmaNought");
-    }
+    Sentinel1CalibrationStruct betaCalibrationVector = sigmaCalibrationVector;
+    Sentinel1CalibrationStruct gammaCalibrationVector = sigmaCalibrationVector;
+    Sentinel1CalibrationStruct dnCalibrationVector = sigmaCalibrationVector;
 
-    if (betaLut)
-    {
-      Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(sPrefix + "betaNought"), calibrationVector.vect, sPrefix + "betaNought");
-    }
+    sigmaCalibrationVector.vect = mds.GetAsVector<float>(sPrefix + "sigmaNought");
+    betaCalibrationVector.vect = mds.GetAsVector<float>(sPrefix + "betaNought");
+    gammaCalibrationVector.vect = mds.GetAsVector<float>(sPrefix + "gamma");
+    dnCalibrationVector.vect = mds.GetAsVector<float>(sPrefix + "dn");
 
-    if (gammaLut)
-    {
-      Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(sPrefix + "gamma"), calibrationVector.vect, sPrefix + "gamma");
-    }
-
-    if (dnLut)
-    {
-      Utils::ConvertStringToVector(imageKeywordlist.GetMetadataByKey(sPrefix + "dn"), calibrationVector.vect, sPrefix + "dn");
-    }
-
-    calibrationVectorList[i] = calibrationVector;
+    sigmaCalibrationVectorList[i] = sigmaCalibrationVector;
+    betaCalibrationVectorList[i] = betaCalibrationVector;
+    gammaCalibrationVectorList[i] = gammaCalibrationVector;
+    dnCalibrationVectorList[i] = dnCalibrationVector;
   }
 
-  Sentinel1CalibrationLookupData::Pointer sarLut = Sentinel1CalibrationLookupData::New();
-  sarLut->InitParameters(type, firstLineTime.as_day_frac(), lastLineTime.as_day_frac(), numOfLines, count, calibrationVectorList);
-  return static_cast<SarImageMetadataInterface::LookupDataPointerType> (sarLut);
+  Sentinel1CalibrationLookupData::Pointer sigmaSarLut = Sentinel1CalibrationLookupData::New();
+  sigmaSarLut->InitParameters(SarCalibrationLookupData::SIGMA, firstLineTime.GetModifiedJulian(),
+                              lastLineTime.GetModifiedJulian(), numOfLines, count, sigmaCalibrationVectorList);
+  sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = sigmaSarLut;
+
+  Sentinel1CalibrationLookupData::Pointer betaSarLut = Sentinel1CalibrationLookupData::New();
+  betaSarLut->InitParameters(SarCalibrationLookupData::BETA, firstLineTime.GetModifiedJulian(),
+                             lastLineTime.GetModifiedJulian(), numOfLines, count, betaCalibrationVectorList);
+  sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = betaSarLut;
+
+  Sentinel1CalibrationLookupData::Pointer gammaSarLut = Sentinel1CalibrationLookupData::New();
+  gammaSarLut->InitParameters(SarCalibrationLookupData::GAMMA, firstLineTime.GetModifiedJulian(),
+                              lastLineTime.GetModifiedJulian(), numOfLines, count, gammaCalibrationVectorList);
+  sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = gammaSarLut;
+
+  Sentinel1CalibrationLookupData::Pointer dnSarLut = Sentinel1CalibrationLookupData::New();
+  dnSarLut->InitParameters(SarCalibrationLookupData::DN, firstLineTime.GetModifiedJulian(),
+                           lastLineTime.GetModifiedJulian(), numOfLines, count, dnCalibrationVectorList);
+  sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = dnSarLut;
+
+  return true;
 }
 
 void Sentinel1ImageMetadataInterface::ParseDateTime(const char* key, std::vector<int>& dateFields) const
@@ -355,7 +349,7 @@ double Sentinel1ImageMetadataInterface::GetRadarFrequency() const
   return 0;
 }
 
-double Sentinel1ImageMetadataInterface::GetCenterIncidenceAngle() const
+double Sentinel1ImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface &) const
 {
   return 0;
 }
@@ -440,58 +434,6 @@ std::vector<Orbit> Sentinel1ImageMetadataInterface::GetOrbits(const XMLMetadataS
     orbitVector.push_back(orbit);
   }
   return orbitVector;
-}
-
-std::vector<CalibrationVector> Sentinel1ImageMetadataInterface::GetCalibrationVector(const XMLMetadataSupplier &xmlMS) const
-{
-  std::vector<CalibrationVector> calibrationVector;
-  // Number of entries in the vector
-  int listCount = xmlMS.GetAs<int>("calibration.calibrationVectorList.count");
-  // This streams wild hold the iteration number
-  std::ostringstream oss;
-  for (int listId = 1 ; listId <= listCount ; ++listId)
-  {
-    oss.str("");
-    oss << listId;
-    // Base path to the data, that depends on the iteration number
-    std::string path_root = "calibration.calibrationVectorList.calibrationVector_" + oss.str();
-
-    CalibrationVector calVect;
-    std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> calVect.azimuthTime;
-    calVect.line = xmlMS.GetAs<int>(path_root + ".line");
-
-    // Same axe for all LUTs
-    MetaData::LUTAxis ax1;
-    ax1.Size = xmlMS.GetAs<int>(path_root + ".pixel.count");
-    ax1.Values = xmlMS.GetAsVector<double>(path_root + ".pixel", ' ', ax1.Size);
-
-    MetaData::LUT1D sigmaNoughtLut;
-    sigmaNoughtLut.Axis[0] = ax1;
-    sigmaNoughtLut.Array = xmlMS.GetAsVector<double>(path_root + ".sigmaNought",
-     		' ', xmlMS.GetAs<int>(path_root + ".sigmaNought.count"));
-    calVect.sigmaNought = sigmaNoughtLut;
-
-    MetaData::LUT1D betaNoughtLut;
-    betaNoughtLut.Axis[0] = ax1;
-    betaNoughtLut.Array = xmlMS.GetAsVector<double>(path_root + ".betaNought",
-     		' ', xmlMS.GetAs<int>(path_root + ".betaNought.count"));
-    calVect.betaNought = betaNoughtLut;
-
-    MetaData::LUT1D gammaLut;
-    gammaLut.Axis[0] = ax1;
-    gammaLut.Array = xmlMS.GetAsVector<double>(path_root + ".gamma",
-     		' ', xmlMS.GetAs<int>(path_root + ".gamma.count"));
-    calVect.gamma = gammaLut;
-
-    MetaData::LUT1D dnLut;
-    dnLut.Axis[0] = ax1;
-    dnLut.Array = xmlMS.GetAsVector<double>(path_root + ".dn",
-     		' ', xmlMS.GetAs<int>(path_root + ".dn.count"));
-    calVect.dn = dnLut;
-
-    calibrationVector.push_back(calVect);
-  }
-  return calibrationVector;
 }
 
 std::vector<SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(const XMLMetadataSupplier &xmlMS) const
@@ -788,9 +730,6 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
           otbGenericExceptionMacro(MissingMetadataException,<<"Missing Calibration file for band '"<<swath<<"'");
     XMLMetadataSupplier CalibrationMS(CalibrationFilePath);
     imd.Bands[bandId].Add(MDNum::CalScale, CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant"));
-    sarParam.calibrationVectors = this->GetCalibrationVector(CalibrationMS);
-    std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.startTime")) >> sarParam.calibrationStartTime;
-    std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.stopTime")) >> sarParam.calibrationStopTime;
 
     // Noise file
     std::string NoiseFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)
@@ -802,11 +741,14 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
     sarParam.noiseVector = this->GetNoiseVector(NoiseMS);
     
     imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
+
+    SARCalib sarCalib;
+    std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.startTime")) >> sarCalib.calibrationStartTime;
+    std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.stopTime")) >> sarCalib.calibrationStopTime;
+    LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
+    CreateCalibrationLookupData(sarCalib, imd, CalibrationMS, false);
+    imd.Add(MDGeom::SARCalib, sarCalib);
   }
-  SARCalib sarCalib;
-  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlag();
-  LoadRadiometricCalibrationData(sarCalib);
-  imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
 void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
@@ -826,6 +768,19 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   Fetch(MDNum::RadarFrequency, imd, "support_data.radar_frequency", 0);
   Fetch(MDNum::PRF, imd, "support_data.pulse_repetition_frequency", 0);
   Fetch(MDNum::CalScale, imd, "calibration.absoluteCalibrationConstant", 0);
+  
+  // Manifest data may not be present in geom file, but support data should be present in that case
+  CheckFetch(MDStr::BeamMode, imd, "manifest_data.acquisition_mode") || CheckFetch(MDStr::BeamMode, imd, "support_data.acquisition_mode");
+  CheckFetch(MDStr::BeamSwath, imd, "manifest_data.swath") || CheckFetch(MDStr::BeamSwath, imd, "support_data.swath");
+  CheckFetch(MDStr::Mission, imd, "manifest_data.instrument") || CheckFetch(MDStr::Mission, imd, "support_data.instrument");
+  CheckFetch(MDStr::OrbitDirection, imd, "manifest_data.orbit_pass") || CheckFetch(MDStr::OrbitDirection, imd, "support_data.orbit_pass");
+  CheckFetch(MDNum::OrbitNumber, imd, "manifest_data.abs_orbit") || CheckFetch(MDStr::OrbitDirection, imd, "support_data.abs_orbit");
+  CheckFetch(MDStr::ProductType, imd, "manifest_data.product_type") || CheckFetch(MDStr::ProductType, imd, "support_data.product_type");
+  CheckFetch(MDTime::ProductionDate, imd, "manifest_data.date") || CheckFetch(MDTime::ProductionDate, imd, "support_data.date");
+  CheckFetch(MDTime::AcquisitionDate, imd, "manifest_data.image_date") || CheckFetch(MDTime::AcquisitionDate, imd, "support_data.image_date");
+  CheckFetch("FACILITY_IDENTIFIER", imd, "manifest_data.Processing_system_identifier") || CheckFetch("FACILITY_IDENTIFIER", imd, "support_data.Processing_system_identifier");
+  CheckFetch(MDStr::Swath, imd, "manifest_data.swath") || CheckFetch(MDStr::Swath, imd, "support_data.swath");
+
   SARParam sarParam;
   auto hasSAR = GetSAR(sarParam);
   if (hasSAR)
@@ -833,27 +788,18 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     imd.Bands[0].Add(MDGeom::SAR, sarParam);
   }
   SARCalib sarCalib;
-  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlagGeom();
-  LoadRadiometricCalibrationData(sarCalib);
+  std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>("calibration.startTime")) >> sarCalib.calibrationStartTime;
+  std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>("calibration.stopTime")) >> sarCalib.calibrationStopTime;
+  LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
+  CreateCalibrationLookupData(sarCalib, imd, *m_MetadataSupplierInterface, true);
   imd.Add(MDGeom::SARCalib, sarCalib);
-  
-  // Manifect data may not be present in geom file
-  CheckFetch(MDStr::BeamMode, imd, "manifest_data.acquisition_mode");
-  CheckFetch(MDStr::BeamSwath, imd, "manifest_data.swath");
-  CheckFetch(MDStr::Mission, imd, "manifest_data.instrument");
-  CheckFetch(MDStr::OrbitDirection, imd, "manifest_data.orbit_pass");
-  CheckFetch(MDNum::OrbitNumber, imd, "manifest_data.abs_orbit");
-  CheckFetch(MDStr::ProductType, imd, "manifest_data.product_type");
-  CheckFetch(MDTime::ProductionDate, imd, "manifest_data.date");
-  CheckFetch(MDTime::AcquisitionDate, imd, "manifest_data.image_date");
-  CheckFetch("FACILITY_IDENTIFIER", imd, "manifest_data.Processing_system_identifier");
-  CheckFetch(MDStr::Swath, imd, "manifest_data.swath");
 }
 
 void Sentinel1ImageMetadataInterface::Parse(ImageMetadata & imd)
-{
+ {
   // Try to fetch the metadata from GDAL Metadata Supplier
-  if (m_MetadataSupplierInterface->GetAs<std::string>("", "MISSION_ID") == "S1A" || m_MetadataSupplierInterface->GetAs<std::string>("", "MISSION_ID") == "S1B")
+  if (m_MetadataSupplierInterface->GetAs<std::string>("", "MISSION_ID").substr(0, 2) == "S1"
+      || m_MetadataSupplierInterface->GetAs<std::string>("", "TIFFTAG_IMAGEDESCRIPTION").substr(0, 10) == "Sentinel-1")
     this->ParseGdal(imd);
   // Try to fetch the metadata from GEOM file
   else if (m_MetadataSupplierInterface->GetAs<std::string>("", "sensor") == "SENTINEL-1A" || m_MetadataSupplierInterface->GetAs<std::string>("", "sensor") == "SENTINEL-1B")

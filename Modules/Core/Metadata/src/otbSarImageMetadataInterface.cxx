@@ -79,40 +79,23 @@ const std::string SarImageMetadataInterface::GetAcquisitionMode() const
   return "";
 }
 
-const SarImageMetadataInterface::LookupDataPointerType SarImageMetadataInterface::CreateCalibrationLookupData(const short itkNotUsed(t)) const
+bool SarImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarCalib, const ImageMetadata&, const MetadataSupplierInterface &mds, const bool) const
 {
-  return SarCalibrationLookupData::New();
-}
-
-const SarImageMetadataInterface::LookupDataPointerType SarImageMetadataInterface::GetCalibrationLookupData(const short type) const
-{
-  if (HasCalibrationLookupDataFlag())
+  sarCalib.calibrationLookupFlag = HasCalibrationLookupDataFlag(mds);
+  if (!sarCalib.calibrationLookupFlag)
   {
-    return CreateCalibrationLookupData(type);
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = SarCalibrationLookupData::New();
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = SarCalibrationLookupData::New();
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = SarCalibrationLookupData::New();
+    sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = SarCalibrationLookupData::New();
+    return true;
   }
-
-  return SarCalibrationLookupData::New();
-}
-
-const SarImageMetadataInterface::LookupDataPointerType SarImageMetadataInterface::GetCalibrationLookupDataGeom(const short type) const
-{
-  if (HasCalibrationLookupDataFlagGeom())
-  {
-    return CreateCalibrationLookupData(type);
-  }
-
-  return SarCalibrationLookupData::New();
-}
-
-bool SarImageMetadataInterface::HasCalibrationLookupDataFlag() const
-{
   return false;
 }
 
-bool SarImageMetadataInterface::HasCalibrationLookupDataFlagGeom() const
+bool SarImageMetadataInterface::HasCalibrationLookupDataFlag(const MetadataSupplierInterface&) const
 {
-  /* checking if the key exist is more than enough */
-  return m_MetadataSupplierInterface->GetAs<bool>(false, "support_data.calibration_lookup_flag");
+  return false;
 }
 
 SarImageMetadataInterface::RealType SarImageMetadataInterface::GetRadiometricCalibrationScale() const
@@ -136,7 +119,8 @@ SarImageMetadataInterface::PointSetPointer SarImageMetadataInterface::GetConstan
   return pointSet;
 }
 
-SarImageMetadataInterface::PointSetPointer SarImageMetadataInterface::GetRadiometricCalibrationNoise() const
+SarImageMetadataInterface::PointSetPointer
+SarImageMetadataInterface::GetRadiometricCalibrationNoise(const MetadataSupplierInterface &, const ImageMetadata &) const
 {
   return SarImageMetadataInterface::GetConstantValuePointSet(0.0);
 }
@@ -153,7 +137,8 @@ SarImageMetadataInterface::PointSetPointer SarImageMetadataInterface::GetRadiome
 }
 
 
-SarImageMetadataInterface::PointSetPointer SarImageMetadataInterface::GetRadiometricCalibrationIncidenceAngle() const
+SarImageMetadataInterface::PointSetPointer
+SarImageMetadataInterface::GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface&) const
 {
   return SarImageMetadataInterface::GetConstantValuePointSet(CONST_PI_2);
 }
@@ -272,54 +257,6 @@ std::vector<Orbit> SarImageMetadataInterface::GetOrbitsGeom() const
   return orbitVector;
 }
 
-std::vector<CalibrationVector> SarImageMetadataInterface::GetCalibrationVectorGeom() const
-{
-  std::vector<CalibrationVector> calibrationVector;
-  // Number of entries in the vector
-  int listCount = m_MetadataSupplierInterface->GetAs<int>("calibration.count");
-  // This streams wild hold the iteration number
-  std::ostringstream oss;
-  for (int listId = 0 ; listId <= listCount - 1 ; ++listId)
-  {
-    oss.str("");
-    oss << listId;
-    // Base path to the data, that depends on the iteration number
-    std::string path_root = "calibration.calibrationVector[" + oss.str() + "]";
-
-    CalibrationVector calVect;
-    std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>(path_root + ".azimuthTime")) >> calVect.azimuthTime;
-    calVect.line = m_MetadataSupplierInterface->GetAs<int>(path_root + ".line");
-
-    // Same axe for all LUTs
-    MetaData::LUTAxis ax1;
-    ax1.Size = m_MetadataSupplierInterface->GetAs<int>(path_root + ".pixel_count");
-    ax1.Values = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".pixel", ' ', ax1.Size);
-
-    MetaData::LUT1D sigmaNoughtLut;
-    sigmaNoughtLut.Axis[0] = ax1;
-    sigmaNoughtLut.Array = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".sigmaNought", ' ', ax1.Size);
-    calVect.sigmaNought = std::move(sigmaNoughtLut);
-
-    MetaData::LUT1D betaNoughtLut;
-    betaNoughtLut.Axis[0] = ax1;
-    betaNoughtLut.Array = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".betaNought", ' ', ax1.Size);
-    calVect.betaNought = std::move(betaNoughtLut);
-
-    MetaData::LUT1D gammaLut;
-    gammaLut.Axis[0] = ax1;
-    gammaLut.Array = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".gamma", ' ', ax1.Size);
-    calVect.gamma = std::move(gammaLut);
-
-    MetaData::LUT1D dnLut;
-    dnLut.Axis[0] = ax1;
-    dnLut.Array = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".dn", ' ', ax1.Size);
-    calVect.dn = std::move(dnLut);
-
-    calibrationVector.push_back(std::move(calVect));
-  }
-  return calibrationVector;
-}
-
 std::vector<SARNoise> SarImageMetadataInterface::GetNoiseVectorGeom() const
 {
   std::vector<SARNoise> noiseVector;
@@ -356,14 +293,12 @@ bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
   sarParam.azimuthFmRates = this->GetAzimuthFmRateGeom();
   sarParam.dopplerCentroids = this->GetDopplerCentroidGeom();
   sarParam.orbits = this->GetOrbitsGeom();
-  sarParam.calibrationVectors = this->GetCalibrationVectorGeom();
   sarParam.noiseVector = this->GetNoiseVectorGeom();
-  std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>("calibration.startTime")) >> sarParam.calibrationStartTime;
-  std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>("calibration.stopTime")) >> sarParam.calibrationStopTime;
   return true;
 }
 
-void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCalib) const
+void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCalib, const MetadataSupplierInterface &mds,
+                                                               const ImageMetadata &imd) const
 {
   sarCalib.rescalingFactor = GetRescalingFactor();
   auto coeffs = GetRadiometricCalibrationNoisePolynomialDegree();
@@ -376,15 +311,11 @@ void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCali
   std::copy(coeffs.begin(), coeffs.end(), sarCalib.radiometricCalibrationIncidenceAnglePolynomialDegree.begin());
   coeffs = GetRadiometricCalibrationRangeSpreadLossPolynomialDegree();
   std::copy(coeffs.begin(), coeffs.end(), sarCalib.radiometricCalibrationRangeSpreadLossPolynomialDegree.begin());
-  sarCalib.radiometricCalibrationNoise = GetRadiometricCalibrationNoise();
+  sarCalib.radiometricCalibrationNoise = GetRadiometricCalibrationNoise(mds, imd);
   sarCalib.radiometricCalibrationAntennaPatternNewGain = GetRadiometricCalibrationAntennaPatternNewGain();
   sarCalib.radiometricCalibrationAntennaPatternOldGain = GetRadiometricCalibrationAntennaPatternOldGain();
-  sarCalib.radiometricCalibrationIncidenceAngle = GetRadiometricCalibrationIncidenceAngle();
+  sarCalib.radiometricCalibrationIncidenceAngle = GetRadiometricCalibrationIncidenceAngle(mds);
   sarCalib.radiometricCalibrationRangeSpreadLoss = GetRadiometricCalibrationRangeSpreadLoss();
-  sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = GetCalibrationLookupData(SarCalibrationLookupData::SIGMA);
-  sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = GetCalibrationLookupData(SarCalibrationLookupData::BETA);
-  sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = GetCalibrationLookupData(SarCalibrationLookupData::GAMMA);
-  sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = GetCalibrationLookupData(SarCalibrationLookupData::DN);
 }
 
 void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const
@@ -394,10 +325,10 @@ void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) 
   if (this->CanRead())
   {
     os << indent << "GetRadiometricCalibrationScale:                 " << this->GetRadiometricCalibrationScale() << "\n"
-       << indent << "GetRadiometricCalibrationNoise:                 " << this->GetRadiometricCalibrationNoise() << "\n"
+//       << indent << "GetRadiometricCalibrationNoise:                 " << this->GetRadiometricCalibrationNoise() << "\n"
        << indent << "GetRadiometricCalibrationAntennaPatternNewGain: " << this->GetRadiometricCalibrationAntennaPatternNewGain() << "\n"
        << indent << "GetRadiometricCalibrationAntennaPatternOldGain: " << this->GetRadiometricCalibrationAntennaPatternOldGain() << "\n"
-       << indent << "GetRadiometricCalibrationIncidenceAngle:        " << this->GetRadiometricCalibrationIncidenceAngle() << "\n"
+//       << indent << "GetRadiometricCalibrationIncidenceAngle:        " << this->GetRadiometricCalibrationIncidenceAngle() << "\n"
        << indent << "GetRadiometricCalibrationRangeSpreadLoss:       " << this->GetRadiometricCalibrationRangeSpreadLoss() << "\n"
        << indent << "GetConstantPolynomialDegree:                    ";
     for(const auto& s: this->GetConstantPolynomialDegree())
@@ -425,8 +356,8 @@ void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) 
     os << "\n"
        << indent << "GetPRF:                  " << this->GetPRF() << "\n"
        << indent << "GetRSF:                  " << this->GetRSF() << "\n"
-       << indent << "GetRadarFrequency:       " << this->GetRadarFrequency() << "\n"
-       << indent << "GetCenterIncidenceAngle: " << this->GetCenterIncidenceAngle() << std::endl;
+       << indent << "GetRadarFrequency:       " << this->GetRadarFrequency() << "\n";
+//       << indent << "GetCenterIncidenceAngle: " << this->GetCenterIncidenceAngle() << std::endl;
   }
 }
 
