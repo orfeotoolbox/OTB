@@ -121,7 +121,7 @@ otb_test_application(NAME apTvUtExtractROIExtentFitVect
                              ${TEMP}/apTvUtExtractROIExtentFitVect.tif)
 
 #----------- Clamp ROI tests  ----------------
-otb_test_application(NAME apTvUtResetMargin
+otb_test_application(NAME apTvUtResetMargin_Threshold
                      APP  ResetMargin
                      OPTIONS -in ${INPUTDATA}/ResetMarginInput100x100.tiff
                              -out ${TEMP}/apTvUtResetMargin.tif
@@ -132,6 +132,32 @@ otb_test_application(NAME apTvUtResetMargin
                      VALID   --compare-image ${NOTOL}
                              ${OTBAPP_BASELINE}/ResetMarginBaseline100x100.tiff
                              ${TEMP}/apTvUtResetMargin.tif)
+
+otb_test_application(NAME apTvUtResetMargin_ROI
+                     APP  ResetMargin
+                     OPTIONS -in ${INPUTDATA}/ResetMarginInput100x100.tiff
+                             -out ${TEMP}/apTvUtResetMargin_ROI.tif
+                             -mode roi
+                             -roi.startx 10
+                             -roi.starty 12
+                             -roi.sizex 80
+                             -roi.sizey 63
+                     VALID   --compare-image ${NOTOL}
+                             ${OTBAPP_BASELINE}/ResetMarginBaseline100x100.tiff
+                             ${TEMP}/apTvUtResetMargin_ROI.tif)
+
+otb_test_application(NAME apTvUtResetMargin_Margin
+                     APP  ResetMargin
+                     OPTIONS -in ${INPUTDATA}/ResetMarginInput100x100.tiff
+                             -out ${TEMP}/apTvUtResetMargin_Mar.tif
+                             -mode margin
+                             -margin.top 12
+                             -margin.left 10
+                             -margin.right 10
+                             -margin.bottom 25
+                     VALID   --compare-image ${NOTOL}
+                             ${OTBAPP_BASELINE}/ResetMarginBaseline100x100.tiff
+                             ${TEMP}/apTvUtResetMargin_Mar.tif)
 
 #----------- Rescale TESTS ----------------
 otb_test_application(NAME  apTvUtRescaleTest
@@ -219,7 +245,7 @@ otb_test_application(NAME apTvUtQuicklookROI1Channel
 # this tests has two baseline to take into account the bug described in
 # https://github.com/opengeospatial/ogc_api_coverages/issues/92
 # (half pixel shift applied in the wrong direction to GCPs with the PixelIsPoint convention)
-# The first baseline corresponds to the gdal < 3.1.3 case, 
+# The first baseline corresponds to the gdal < 3.1.3 case,
 # and the second baseline correspond to gdal >= 3.1.3 case.
 otb_test_application(NAME apTvUtQuicklookWithGCP
                      APP Quicklook
