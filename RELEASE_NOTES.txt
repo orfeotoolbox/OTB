@@ -1,3 +1,35 @@
+OTB-v 7.3.0 - Changes since version 7.2.0 (April 28th, 2021)
+----------------------------------------------------------------
+
+Bugs fixed:
+
+   * !804: Remove thermal noise in S1 calibration by Cédric Traizet
+   * !810: Fix KNearestNeighborsMachineLearningModel by Cédric Traizet
+
+Refactoring:
+
+   * !772: Refactor ResetMargin app (add an ROI and Margin mode) by Guillaume Pasero and Thibaut Romain
+   * !809: Update DiapOTB version to 1.0.1 by Julien Osman
+   * !815: Update Expat version in Superbuild to 2.3 by Cédric Traizet and Thibaut Romain
+   * !813: Update superbuild dependencies for FFTW to 3.3.9 by Mickaël Savinaud and Thibaut Romain
+   * !814: Update superbuild dependencies for GEOS to 3.6.5 by Mickaël Savinaud and Thibaut Romain
+   * !812: Update OpenJPEG to the last patch version of 2.3 (2.3.1) by Mickaël Savinaud and Thibaut Romain
+   * !811: Upgrade Superbuild GDAL to 3.2.2 by Laurențiu Nicola
+   * Commit on branch release-7.3 : Update Zlib version to 1.2.11 by Thibaut Romain
+   * Commit on branch release-7.3 : Update OpenCV version to 4.1.2 by Thibaut Romain
+   * Commit on branch release-7.3 : Update NetCDF version to 4.7.4 by Thibaut Romain
+   * Commit on branch release-7.3 : Update LibJPEG-turbo to 1.4.2 by Thibaut Romain
+   * Commit on branch release-7.3 : Update MuparserX to 4.0.8 by Thibaut Romain
+   * Commit on branch release-7.3 : Update OpenSSL version to 1.1.1k by Thibaut Romain
+   * Commit on branch release-7.3 : Update OpenThreads version to 3.4.1 by Thibaut Romain
+   * Commit on branch release-7.3 : Update SWIG version to 3.0.12 by Thibaut Romain
+   * Commit on branch release-7.3 : Update QWT to 6.1.6 by Thibaut Romain
+   * Commit on branch release-7.3 : Update LibPNG to 1.6.37 by Thibaut Romain
+
+CI:
+
+   * !815: Update VC version in Windows CI builds to VS2019 by Thibaut Romain
+
 OTB-v 7.2.0 - Changes since version 7.1.0 (October 02nd, 2020)
 ----------------------------------------------------------------
 
@@ -998,14 +1030,14 @@ OTB-v.5.6.0 - Changes since version 5.4.0 (July 28th, 2016)
 
 * Request for Changes (http://wiki.orfeo-toolbox.org/index.php/Requests_for_Changes):
   * Request for Changes-49: Improve classification on vectors
-  * Request for Changes-48: Add geometric correction to S1 Sensor Model 
+  * Request for Changes-48: Add geometric correction to S1 Sensor Model
   * Request for Changes-47: Improve the CompareImages app
   * Request for Changes-46: Sample extractor
   * Request for Changes-45: CMake uninstall target
   * Request for Changes-43: Update SuperBuild cmake script and thirdparty versions
   * Request for Changes-42: Generator for completion scripts
   * Request for Changes-40: clang modernize
-  * Request for Changes-41: Provide a summary after cmake configuration 
+  * Request for Changes-41: Provide a summary after cmake configuration
   * Request for Changes-38: update gdal to 2.x version in superbuild
   * Request for Changes-37: Enhance ManageNodata application
   * Request for Changes-36: Samples selection filter
@@ -1054,7 +1086,7 @@ OTB-v.5.4.0 - Changes since version 5.2.1 (2016/05/04)
   * Allow a module to be built outside the OTB source tree (RFC 32)
   * Dashboard cleaning, part 1 (RFC 33)
   * Enhancement of SARDecompositions : Barnes, Huynen, Pauli decompositions (RFC 34)
-  
+
 * Monteverdi
   * Take screenshot of current display (RFC 20)
   * Allow subdatasets import (RFC 21)
@@ -1064,7 +1096,7 @@ OTB-v.5.4.0 - Changes since version 5.2.1 (2016/05/04)
 * Documentation:
   * Merge software guide into main OTB repository (RFC 17)
   * Remove random contributor list generation (RFC 28)
-   
+
 * SuperBuild:
   * Add Monteverdi and its dependencies (glfw, GLEW, glut)
 
