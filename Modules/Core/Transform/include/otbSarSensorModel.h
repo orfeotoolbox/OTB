@@ -88,6 +88,16 @@ private:
   void AzimuthTimeToLine(const TimeType & azimuthTime, 
                           double & line) const;
 
+  void SlantRangeToGroundRange(const double & slantRange, 
+                               const TimeType & azimuthTime, 
+                               double & groundRange) const;
+
+
+  void ApplyCoordinateConversion(const double & in,
+                                 const TimeType& azimuthTime,
+                                 const std::vector<CoordinateConversionRecord> & records,
+                                 double & out) const;
+
   const ImageMetadata & m_Imd;
   SARParam m_SarParam;
 

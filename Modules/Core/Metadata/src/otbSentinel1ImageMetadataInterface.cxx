@@ -540,18 +540,19 @@ std::vector<SARNoise> Sentinel1ImageMetadataInterface::GetNoiseVector(const XMLM
   return noiseVector;
 }
 
-std::vector<BurstRecord> Sentinel1ImageMetadataInterface::GetBurstRecords(const XMLMetadataSupplier &xmlMS) const
+std::vector<BurstRecord> Sentinel1ImageMetadataInterface::GetBurstRecords(const XMLMetadataSupplier &xmlMS, const MetaData::DurationType& azimuthTimeInterval) const
 {
   std::vector<BurstRecord> burstRecords;
 
+  const std::string prefix = "product.swathTiming.";
   // number of burst records
-  int listCount = xmlMS.GetAs<int>(0, "product.swathTiming.burstList.count");
+  int numberOfBursts = xmlMS.GetAs<int>(0, prefix + "burstList.count");
 
   std::stringstream ss;
   auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
   ss.imbue(std::locale(std::locale(), facet));
 
-  if (!listCount)
+  if (!numberOfBursts)
   {
     BurstRecord record;
 
@@ -572,13 +573,100 @@ std::vector<BurstRecord> Sentinel1ImageMetadataInterface::GetBurstRecords(const 
   }
   else
   {
-    // TODO
-    otbGenericExceptionMacro(MissingMetadataException,
-      <<"Burst record parsing not implemented yet");
+    const auto linesPerBurst = xmlMS.GetAs<int>(prefix + "linesPerBurst"); 
+    const auto samplesPerBurst = xmlMS.GetAs<int>(prefix + "samplesPerBurst");
+
+    for (int i = 0; i<numberOfBursts; i++)
+    {
+      const std::string burstPath = prefix + "burstList.burst_" + std::to_string(i+1) + ".";
+
+      BurstRecord record;
+
+      MetaData::TimeType azimuthTime;
+      ss << xmlMS.GetAs<std::string>(burstPath + "azimuthTime");
+      ss >> azimuthTime;
+
+      auto firstValidSamples = xmlMS.GetAsVector<int>(burstPath + "firstValidSample");
+      int firstValidSample = 0, lastValidSample = samplesPerBurst - 1;
+      int firstValid = 0, lastValid = firstValidSamples.size();
+      int currentIndex = 0;
+      bool firstIndexFound = false;
+      for (const auto & elem : firstValidSamples)
+      {
+        if (elem != -1)
+        {
+          if (!firstIndexFound)
+          {
+            firstIndexFound = true;
+            firstValid = currentIndex;
+          }
+
+          lastValid = currentIndex;
+
+          if (elem < samplesPerBurst && elem > firstValidSample)
+          {
+            firstValidSample = elem;
+          }
+        }
+
+        currentIndex++;
+      }
+      for (const auto & elem : xmlMS.GetAsVector<int>(burstPath + "lastValidSample"))
+      {
+        if (elem != -1 && elem < lastValidSample)
+        {
+          lastValidSample = elem;
+        }
+      }
+
+      record.startLine = i*linesPerBurst + firstValid;
+      record.endLine = i*linesPerBurst + lastValid;
+      record.startSample = firstValidSample;
+      record.endSample = lastValidSample;
+      record.azimuthAnxTime = xmlMS.GetAs<double>(burstPath + "azimuthAnxTime");
+
+      record.azimuthStartTime = azimuthTime + firstValid * azimuthTimeInterval;
+      record.azimuthStopTime  = azimuthTime + lastValid * azimuthTimeInterval;
+
+      burstRecords.push_back(record);
+    }
   }
 
   return burstRecords;
 }
+
+
+std::vector<CoordinateConversionRecord> Sentinel1ImageMetadataInterface::GetCoordinateConversionRecord(const XMLMetadataSupplier &xmlMS,
+                                                                                                      const std::string & rg0_path,
+                                                                                                      const std::string & coeffs_path) const
+{
+  std::vector<CoordinateConversionRecord> records;
+
+  const std::string prefixPath = "product.coordinateConversion.coordinateConversionList.";
+
+  auto listCount = xmlMS.GetAs<int>(prefixPath + "count");
+
+  std::stringstream ss;
+  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
+  ss.imbue(std::locale(std::locale(), facet));
+
+  for (int i = 0; i < listCount; i++)
+  {
+    CoordinateConversionRecord coordinateConversionRecord;
+    const std::string recordPath = prefixPath +"coordinateConversion_" + std::to_string(i+1) + ".";
+    
+    //coordinateConversionRecord.azimuthTime;
+    ss << xmlMS.GetAs<std::string>(recordPath + "azimuthTime");
+    ss >> coordinateConversionRecord.azimuthTime;
+    coordinateConversionRecord.rg0 = xmlMS.GetAs<double>(recordPath + rg0_path);
+    coordinateConversionRecord.coeffs = xmlMS.GetAsVector<double>(recordPath + coeffs_path, ' ');
+
+    records.push_back(coordinateConversionRecord);
+  }
+
+  return records;
+}
+
 
 std::unordered_map<std::string, GCPTime> Sentinel1ImageMetadataInterface::GetGCPTimes(const XMLMetadataSupplier &xmlMS,
                                                                                           const Projection::GCPParam & gcps) const
@@ -670,12 +758,18 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
     sarParam.dopplerCentroids = this->GetDopplerCentroid(AnnotationMS);
     sarParam.orbits = this->GetOrbits(AnnotationMS);
 
-    sarParam.burstRecords = this->GetBurstRecords(AnnotationMS);
+    sarParam.slantRangeToGroundRangeRecords = this->GetCoordinateConversionRecord(AnnotationMS, "sr0", "srgrCoefficients");
+    sarParam.groundRangeToSlantRangeRecords = this->GetCoordinateConversionRecord(AnnotationMS, "gr0", "grsrCoefficients");
+
     sarParam.azimuthTimeInterval = boost::posix_time::precise_duration(
       AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthTimeInterval")
       * 1e6);
+
+    sarParam.burstRecords = this->GetBurstRecords(AnnotationMS, sarParam.azimuthTimeInterval);
+
     sarParam.nearRangeTime = AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.slantRangeTime");
     sarParam.rangeSamplingRate = AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.rangeSamplingRate");
+    sarParam.rangeResolution = AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.rangePixelSpacing");
 
     sarParam.gcpTimes = this->GetGCPTimes(AnnotationMS, imd.GetGCPParam());
 
