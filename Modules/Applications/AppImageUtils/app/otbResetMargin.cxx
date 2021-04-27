@@ -146,10 +146,10 @@ private:
 
     AddChoice("mode.threshold", "Threshold for X, Y top and botton (DEPRECATED)");
 
-    AddParameter(ParameterType_Float, "val", "Padding value");
-    SetParameterDescription("val", "Value to insert in margins");
-    SetDefaultParameterFloat("val", 0.0);
-    MandatoryOff("val");
+    AddParameter(ParameterType_Float, "fillval", "Padding fill value");
+    SetParameterDescription("fillval", "Value to insert in margins");
+    SetDefaultParameterFloat("fillval", 0.0);
+    MandatoryOff("fillval");
 
     AddRAMParameter();
 
@@ -169,9 +169,8 @@ private:
   void DoExecute() override
   {
     FloatVectorImageType* input = GetParameterFloatVectorImage("in");
-    // TODO : check largest possible region index
-    // TODO : check margins for empty region
-    FloatVectorImageType::RegionType region;
+    FloatVectorImageType::RegionType region = input->GetLargestPossibleRegion();
+
     switch (GetParameterInt("mode"))
     {
       case 0: // roi
@@ -182,22 +181,40 @@ private:
       }
       case 1: // margin
       {
-        region = input->GetLargestPossibleRegion();
         FloatVectorImageType::IndexType idx = region.GetIndex();
         FloatVectorImageType::SizeType sz = region.GetSize();
         idx[0] += GetParameterInt("margin.left");
         idx[1] += GetParameterInt("margin.top");
         sz[0] -= GetParameterInt("margin.left") + GetParameterInt("margin.right");
         sz[1] -= GetParameterInt("margin.top") + GetParameterInt("margin.bottom");
-        region.SetIndex({GetParameterInt("margin.left"),GetParameterInt("margin.top")});
-        region = input->GetLargestPossibleRegion();
+        // check largest possible region index
+        if(idx[0] < 0)
+        {
+          otbLogMacro(Error, << "The start index of the region in x coordinates is negative, cannot continue processing");
+          break;
+        }
+        if(idx[1] < 0)
+        {
+          otbLogMacro(Error, << "The start index of the region in y coordinates is negative, cannot continue processing");
+          break;
+        }
+        // check margins for empty region
+        if(sz[0] <= 0)
+        {
+          otbLogMacro(Error, << "The ROI size with given margins (left + right) is empty, cannot continue processing");
+          break;
+        }
+        if(sz[1] <= 0)
+        {
+          otbLogMacro(Error, << "The ROI size with given margins (top + bottom) is empty, cannot continue processing");
+          break;
+        }
         region.SetIndex(idx);
         region.SetSize(sz);
         break;
       }
       case 2: // threshold
       {
-        region = input->GetLargestPossibleRegion();
         FloatVectorImageType::IndexType idx = region.GetIndex();
         FloatVectorImageType::SizeType sz = region.GetSize();
         int thrX = GetParameterInt("threshold.x");
@@ -219,7 +236,7 @@ private:
     auto filter = ResetMarginFilter<FloatVectorImageType>::New();
     filter->SetROI(region);
     filter->SetInput(input);
-    filter->SetPaddingValue(GetParameterFloat("val"));
+    filter->SetPaddingValue(GetParameterFloat("fillval"));
 
     SetParameterOutputImage("out", filter->GetOutput());
     RegisterPipeline();
