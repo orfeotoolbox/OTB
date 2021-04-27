@@ -121,22 +121,15 @@ void SarParametricMapFunction<TInputImage, TCoordRep>::EvaluateParametricCoeffic
   else
   {
     // Get input region for normalization of coordinates
-    const itk::MetaDataDictionary& dict = this->GetInputImage()->GetMetaDataDictionary();
-    if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    {
-      ImageKeywordlist imageKeywordlist;
-      itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-      std::string nbLinesValue   = imageKeywordlist.GetMetadataByKey("number_lines");
-      std::string nbSamplesValue = imageKeywordlist.GetMetadataByKey("number_samples");
-      // TODO: Don't use atof!
-      m_ProductWidth  = atof(nbSamplesValue.c_str());
-      m_ProductHeight = atof(nbLinesValue.c_str());
-    }
+    auto imd = this->GetInputImage()->GetImageMetadata();
+    if (imd.Has(MDNum::NumberOfLines))
+      m_ProductHeight = imd[MDNum::NumberOfLines];
     else
-    {
       m_ProductHeight = this->GetInputImage()->GetLargestPossibleRegion().GetSize()[0];
+    if (imd.Has(MDNum::NumberOfColumns))
+      m_ProductWidth = imd[MDNum::NumberOfColumns];
+    else
       m_ProductWidth  = this->GetInputImage()->GetLargestPossibleRegion().GetSize()[1];
-    }
 
     // Perform the plane least square estimation
     unsigned int nbRecords = pointSet->GetNumberOfPoints();
@@ -172,7 +165,6 @@ void SarParametricMapFunction<TInputImage, TCoordRep>::EvaluateParametricCoeffic
     // Solve linear system with SVD decomposition
     vnl_svd<double> svd(a);
     bestParams = svd.solve(b);
-
 
     for (unsigned int xcoeff = 0; xcoeff < m_Coeff.Cols(); ++xcoeff)
     {

@@ -408,6 +408,9 @@ unsigned int TerraSarImageMetadataInterface::GetNumberOfNoiseRecords(const Metad
                                      "level1Product.noise.numberOfNoiseRecords");
   if(ret == std::numeric_limits<unsigned int>::quiet_NaN())
     ret = mds.GetAs<unsigned int>(std::numeric_limits<unsigned int>::quiet_NaN(),
+                                  "level1Product.noise_1.numberOfNoiseRecords");
+  if(ret == std::numeric_limits<unsigned int>::quiet_NaN())
+    ret = mds.GetAs<unsigned int>(std::numeric_limits<unsigned int>::quiet_NaN(),
                                   "noise.numberOfNoiseRecords");
   return ret;
 }
@@ -418,6 +421,11 @@ unsigned int TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(const uns
   std::ostringstream oss;
   oss << "level1Product.noise.imageNoise_" << (noiseRecord+1) << ".noiseEstimate.polynomialDegree";
   auto ret = mds.GetAs<unsigned int>(std::numeric_limits<unsigned int>::quiet_NaN(), oss.str());
+  if(ret != std::numeric_limits<unsigned int>::quiet_NaN())
+    return ret;
+  oss.str("");
+  oss << "level1Product.noise_1.imageNoise_" << (noiseRecord+1) << ".noiseEstimate.polynomialDegree";
+  ret = mds.GetAs<unsigned int>(std::numeric_limits<unsigned int>::quiet_NaN(), oss.str());
   if(ret != std::numeric_limits<unsigned int>::quiet_NaN())
     return ret;
   oss.str("");
@@ -480,6 +488,12 @@ TerraSarImageMetadataInterface::GetNoisePolynomialCoefficients(const unsigned in
     oss.str("");
     oss << "level1Product.noise.imageNoise_" << (noiseRecord+1) << ".noiseEstimate.coefficient_" << (j+1);
     auto value = mds.GetAs<double>(std::numeric_limits<double>::min(), oss.str());
+    if(value == std::numeric_limits<double>::min())
+    {
+      oss.str("");
+      oss << "level1Product.noise_1.imageNoise_" << (noiseRecord+1) << ".noiseEstimate.coefficient_" << (j+1);
+      value = mds.GetAs<double>(oss.str());
+    }
     if(value == std::numeric_limits<double>::min())
     {
       oss.str("");
@@ -1099,7 +1113,10 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
     imd.Add(MDNum::RSF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
     auto numberOfCalFactor = MainXMLFileMetadataSupplier.GetNumberOf("level1Product.calibration.calibrationConstant");
     if(numberOfCalFactor == 1)
+    {
       imd.Add(MDNum::CalFactor, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.calibration.calibrationConstant.calFactor"));
+      imd.Add(MDNum::CalScale, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.calibration.calibrationConstant.calFactor"));
+    }
     else
     {
       std::stringstream path;
@@ -1108,6 +1125,7 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
         path.str("");
         path << "level1Product.calibration.calibrationConstant_" << layer << ".calFactor";
         imd.Add(MDNum::CalFactor, MainXMLFileMetadataSupplier.GetAs<double>(path.str()));
+        imd.Add(MDNum::CalScale, MainXMLFileMetadataSupplier.GetAs<double>(path.str()));
       }
     }
     SARCalib sarCalib;
@@ -1139,6 +1157,7 @@ void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   Fetch(MDNum::RangeTimeLastPixel, imd, "range_last_time");
   Fetch(MDNum::PRF, imd, "sensor_params.prf");
   Fetch(MDNum::CalFactor, imd, "calibration.calibrationConstant.calFactor");
+  Fetch(MDNum::CalScale, imd, "calibration.calibrationConstant.calFactor");
     
   // Main XML file
   std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(m_MetadataSupplierInterface->GetResourceFile("")), "T[S|D]X1_SAR__.*.xml") ;
