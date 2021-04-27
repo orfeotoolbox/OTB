@@ -1089,7 +1089,6 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
     imd.Add(MDNum::PixelSpacing, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingRange.slantRange"));
     imd.Add(MDStr::Mission, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.generalHeader.mission"));
     imd.Add(MDStr::ProductType, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.productVariantInfo.productType"));
-    // imd.Add(MDStr::Mode, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.imagingMode"));
     imd.Add(MDStr::SensorID, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.sensor"));
     imd.Add(MDNum::RadarFrequency, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.instrument.radarParameters.centerFrequency"));
     imd.Add(MDTime::AcquisitionStartTime, MainXMLFileMetadataSupplier.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.start.timeUTC"));
@@ -1098,7 +1097,19 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
     imd.Add(MDNum::RangeTimeLastPixel, MainXMLFileMetadataSupplier.GetFirstAs<double>("level1Product.productInfo.sceneInfo.rangeTime.lastPixel"));
     imd.Add(MDNum::PRF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonPRF"));
     imd.Add(MDNum::RSF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
-    imd.Add(MDNum::CalFactor, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.calibration.calibrationConstant.calFactor"));
+    auto numberOfCalFactor = MainXMLFileMetadataSupplier.GetNumberOf("level1Product.calibration.calibrationConstant");
+    if(numberOfCalFactor == 1)
+      imd.Add(MDNum::CalFactor, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.calibration.calibrationConstant.calFactor"));
+    else
+    {
+      std::stringstream path;
+      for (int layer = 1 ; layer <= numberOfCalFactor ; ++layer)
+      {
+        path.str("");
+        path << "level1Product.calibration.calibrationConstant_" << layer << ".calFactor";
+        imd.Add(MDNum::CalFactor, MainXMLFileMetadataSupplier.GetAs<double>(path.str()));
+      }
+    }
     SARCalib sarCalib;
     LoadRadiometricCalibrationData(sarCalib, MainXMLFileMetadataSupplier, imd);
     imd.Add(MDGeom::SARCalib, sarCalib);
