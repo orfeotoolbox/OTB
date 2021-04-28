@@ -3,6 +3,12 @@ be downloaded from `otb download page <https://www.orfeo-toolbox.org/download>`_
 
 Pick the correct version (32 bit or 64 bit) depending on your system.
 
+Notes:
+~~~~~~
+
+- You must have "Visual C++ Redistributable for Visual Studio 2019" installed for using this package.
+  It can be downloaded freely from `https://aka.ms/vs/16/release/vc_redist.x64.exe`_
+
 Extract the archive and use one of the launchers, they contain all applications
 and their launchers (both command line and graphical launchers are provided):
 
@@ -47,18 +53,11 @@ Since OTB 6.7.0 OTB bindings for Python 3.5 are distributed as a binary
 package.
 Please note that using a different Python version may not be compatible with
 OTB wrappings. If the installation completes
-without issue, information relating to your Python bindings will be provided. 
+without issue, information relating to your Python bindings will be provided.
 
 You must have Python numpy bindings installed in your system. They can be installed locally
-without admin rights as follows: "pip install --user numpy". This is to give users the option 
+without admin rights as follows: "pip install --user numpy". This is to give users the option
 to select their own existing Python installation rather than the one dibstributed by the OTB package.
 
 By default, bindings for Python 3.5 will be enabled with the ``otbenv`` script.
-
-Notes:
-~~~~~~
-
-- You must have "Visual C++ Redistributable for Visual Studio 2015" installed for using this package.
-  It can be downloaded freely from `microsoft <https://www.microsoft.com/en-us/download/details.aspx?id=48145>`_
-
 
