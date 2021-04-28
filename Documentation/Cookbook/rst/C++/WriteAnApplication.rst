@@ -294,14 +294,14 @@ images, you have two options :
    the input image parameter (with functions
    ``SetParameterInputImage()`` and ``GetParameterOutputImage()``). It
    will connect the pipelines in applications A and B, to form an
-   “in-memory” connexion. This has to be done between the calls to
+   “in-memory” connection. This has to be done between the calls to
    ``DoExecute()`` of application A and B.
 
 -  Use a temporary filename to store the output image ``a.out`` and read
    it with ``b.in``. In this case, you have to manually call the writers
    of parameter ``a.out``.
 
-At the moment, the in-memory connexion of vector data parameters is not
+At the moment, the in-memory connection of vector data parameters is not
 supported.
 
 Orchestration
@@ -340,7 +340,7 @@ name.
 Execute your application
 ------------------------
 
-There are different ways to launch applicatons :
+There are different ways to launch applications :
 
 CommandLine :
     The command line option is invoked using

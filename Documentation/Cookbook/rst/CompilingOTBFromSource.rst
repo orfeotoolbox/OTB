@@ -84,7 +84,7 @@ GNU/Linux and macOS
 Setting up the build environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Note: On some distibutions, gcc 5+ is not available by default. For example in CentOS 7 the default version 
+Note: On some distributions, gcc 5+ is not available by default. For example in CentOS 7 the default version 
 is 4.8 (gcc 7 can be installed using devtoolset, see devtoolset6_ and devtoolset7_).
 
 The first thing to do is to create a directory for working with OTB.

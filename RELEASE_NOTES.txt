@@ -72,7 +72,7 @@ Documentation:
    * !735: Correct menu instructions to open application-browser in Monteverdi by Julien Osman
    * !728: DOC: Deprecate methods that will be removed in OTB 8.0.0 by Julien Osman
    * !722: Clean QGIS interface documentation according migration into QGIS documentation by Mickael Savinaud
-   * !716: Error in the documenation of the QGIS plugin by Cédric Traizet
+   * !716: Error in the documentation of the QGIS plugin by Cédric Traizet
    * !713: Update documentation for QGIS, Python and multiwriter by Cédric Traizet
    * !702: DOC: correct filthy typo by Rémi Cresson
    * !695: DOC: Fixed typos by guillaume pernot
@@ -1471,7 +1471,7 @@ OTB-v.4.2.0 - Changes since version 4.0 (2014/09/04)
 * Bugs fixed:
 
 * Monteverdi2
-    * 0000915: In mvd2 applications wrappers InputImageList parameters, only the first item of the list is dropable
+    * 0000915: In mvd2 applications wrappers InputImageList parameters, only the first item of the list is droppable
     * 0000960: Drop from file explorer doest not work.
     * 0000928: Output results of applications are not selected in the dataset manager
     * 0000908: Vector-image model settings serialization persistence (gamma)
@@ -1484,7 +1484,7 @@ OTB-v.4.2.0 - Changes since version 4.0 (2014/09/04)
     * 0000964: Wrong update of Gamme cursor position
     * 0000929: Drag and Drop in otb application a dataset leads to the disappearance of the dataset into the widget
     * 0000921: Application freezes at the end of image import.
-    * 0000947: Droping dataset to the last subgroup of the data tree crash the application
+    * 0000947: Dropping dataset to the last subgroup of the data tree crash the application
     * 0000933: Drag a dataset from temporary in the dataset manager outside the tree leads to a crash
     * 0000903: Removing mvd2 directory content leads to a core dumped as startup
     * 0000920: Wide unzoom aborts application
@@ -1538,7 +1538,7 @@ OTB-v.4.0.0 - Changes since version 3.20 (2014/03/13)
     * Clean up JoinHistogramMI code
     * Fix race condition in BinaryFunctorNeighborhoodJoinHistogramImageFilter
     * Remove unused OTB_USE_SYSTEM_VXL and OTB_VXL_DIR from OTBConfig and UseOTB
-    * Improve detection of Large Files Support by not unconditionnally defining LFS related macros
+    * Improve detection of Large Files Support by not unconditionally defining LFS related macros
     * Support for Visual Studio 2012
     * Support for Visual Studio 2013
     * Support compilation in MacOSX 10.9 with latest XCode
@@ -1583,7 +1583,7 @@ OTB-v.4.0.0 - Changes since version 3.20 (2014/03/13)
 * Bugs fixed:
   * OTB-applications:
     * 0000884: InputImage parameter in java wrappers didn't overload the input parameters provided by input XML file
-    * 0000883: InputImageList parameter in pyhton wrappers didn't overload the input parameters provided by input XML file
+    * 0000883: InputImageList parameter in python wrappers didn't overload the input parameters provided by input XML file
     * 0000873: BandMath application in gui mode "Save to xml" option doesn't save "exp" parameter
     * 0000836: Error in Exact Large-Scale Mean-Shift segmentation, step 2
     * 0000824: otbgui_Orthorectification : changing the input image does not update UTM parameters
@@ -1724,8 +1724,8 @@ OTB-v.3.18.1 - Changes since version 3.18.0 (2013/07/22)
 OTB-v.3.18 - Changes since version 3.16 (2013/07/05)
 --------------------------------------------------------
 
-Among the classical improvements and bug fixes to existing functionnalities, this release provides
-the following main functionnalities :
+Among the classical improvements and bug fixes to existing functionalities, this release provides
+the following main functionalities :
  * Huge improvements in Stereo framework, to compute DEM from stereo pairs :
    check the StereoFramework application !
  * Whole new classification framework, with seamless integration of all OpenCV classifiers in addition to the
@@ -1769,7 +1769,7 @@ The full list of improvements comes here :
       * New classes
         * MachineLearningModel
         * MachineLearningModelFactory
-        * LibSVMMachineLearningModel, based on pre exsiting libsvm functionnalities
+        * LibSVMMachineLearningModel, based on pre existing libsvm functionalities
         * OpenCV based classifiers :
             BoostMachineLearningModel DecisionTreeMachineLearningModel GradientBoostedTreeMachineLearningModel
             KNearestNeighborsMachineLearningModel NeuralNetworkMachineLearningModel
@@ -1809,8 +1809,8 @@ The full list of improvements comes here :
         * Add support for final projection of DEM in other SRS than WGS84
       * ExtractROI : add a mode to fit another reference image
       * StereoRectificationGridGenerator : disable agvdem by default
-      * StereoSensorModelToElevationMap application removed to avoid duplicating functionnalities provided by StereoFramework
-      * MaxiumuAutocorrelationFactor application removed to avoid duplicating functionnalities provided by DimensionnalityReduction
+      * StereoSensorModelToElevationMap application removed to avoid duplicating functionalities provided by StereoFramework
+      * MaxiumuAutocorrelationFactor application removed to avoid duplicating functionalities provided by DimensionnalityReduction
       * BlockMatching : expose step parameter
       * BlockMatching : supports a shift on the subsampled grid
       * ColorMapping : remove flooding of logs
@@ -1867,7 +1867,7 @@ The full list of improvements comes here :
     * 0000659: At first startup, 'mvd2' dir is not created but Monteverdi2 should create it
     * 0000660: Wrong display settings saved
     * 0000657: Radiometry values hide WGS84 coordinates in status bar
-    * 0000654: When minimzing the window, all widgets are closed
+    * 0000654: When minimizing the window, all widgets are closed
     * 0000665: Monteverdi2-0.1 label in Startup menu does not have an icon
     * 0000644: Make Monteverdi2 window autofit to the screen's size
     * 0000638: Displacement in the image let a black line of pixels at the top of the full res window
@@ -1976,7 +1976,7 @@ OTB-v.3.16 - Changes since version 3.14.1 (2013/02/04)
   * Orfeo Toolbox (OTB)
     * 0000608: Annoying GDAL warning about GCP in OTB writer
     * 0000619: Superimpose application can't deal with 2 ortho images
-    * 0000622: Extended filename does not seem to be compatible with OTB applicatiosn (command line)
+    * 0000622: Extended filename does not seem to be compatible with OTB applications (command line)
     * 0000599: Optical calibration of DIMAPv1 PHR products
     * 0000601: PHR optical calibration : Band_Solar_Irradiance at 999 on some files
     * 0000618: MultiResolutionPyramid application can not handle relative output path
@@ -2626,7 +2626,7 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/06/30)
   * New Vector data to image manual registration module
   * New connected component segmentation and OBIA based on user-defined
     criterions module
-  * Removed the Orthorectification since its functionnalities are covered
+  * Removed the Orthorectification since its functionalities are covered
     by the Reprojection module
   * Specify output map projection by EPSG code in reprojection module
   * Handle multi band complex images
@@ -2699,7 +2699,7 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/06/30)
     * JointMassOfBeliefFilter
   * Add a Dempster-Shaffer based vectorial objects validation framework
     * TODO: List classes here
-  * AssymmetricFusionOfLineDetectorImageFilter: call SetNumberOfDirections
+  * AsymmetricFusionOfLineDetectorImageFilter: call SetNumberOfDirections
     on internal filters (contribution from A. Ferro)
   * RADARSAT 1: more product types supported
   * VectorDataToImageFilter: Binary rasterization available, support
@@ -3360,7 +3360,7 @@ OTB-v.2.2.0 - Changes since version 2.0.0 (2008/05/29)
           . Cosmo-Skymed - SLC and PRI
           . Radarsat 2 - SLC and PRI
     - Bug fixed in CMake configuration
-    - Added SIFT implementation in InsigthJournal
+    - Added SIFT implementation in InsightJournal
 
 *Applications:
     - Various Bug fix
@@ -3872,7 +3872,7 @@ Note : On MS Windows platforms, if you have any problem related
 OTB-v.1.0.1 - Changes since version 1.0.0
 --------------------------------------------------------
 
-- Building the visualization functionnalities is now an option
+- Building the visualization functionalities is now an option
     (OTB_USE_VISU variable within CMake). This allows you to build OTB
     without Fltk and Open GL.
 
