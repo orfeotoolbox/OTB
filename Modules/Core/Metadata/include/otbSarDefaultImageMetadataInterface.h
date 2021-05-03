@@ -86,7 +86,7 @@ public:
     itkExceptionMacro("GetRadiometricCalibrationRangeSpreadLoss() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  PointSetPointer GetRadiometricCalibrationNoise(const MetadataSupplierInterface&, const ImageMetadata&) const override
+  PointSetPointer GetRadiometricCalibrationNoise(const MetadataSupplierInterface&, const ImageMetadata&, const std::string&) const override
   {
     itkExceptionMacro("GetRadiometricCalibrationNoise(const MetadataSupplierInterface&) not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }

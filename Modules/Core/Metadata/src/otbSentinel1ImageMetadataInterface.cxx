@@ -67,7 +67,8 @@ bool Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarC
   if(SarImageMetadataInterface::CreateCalibrationLookupData(sarCalib, imd, mds, geom))
     return true;
 
-  std::stringstream prefix("calibration.");
+  std::stringstream prefix;
+  prefix << "calibration.";
   if(!geom)
     prefix << "CalibrationVectorList.";
   const std::string sPrefixBase = prefix.str();
