@@ -45,13 +45,18 @@ public:
 
   /** Transform world point (lat,lon,hgt) to input image point
   (col,row) */
-  void WorldToLineSample(const Point3DType& inGeoPoint, Point2DType& outLineSample) const;
+  void WorldToLineSample(const Point3DType& inGeoPoint,
+                         Point2DType& outLineSample) const;
 
   bool WorldToAzimuthRangeTime(const Point3DType& inGeoPoint, 
                                           TimeType & azimuthTime, 
                                           double & rangeTime, 
                                           Point3DType& sensorPos, 
                                           Vector3DType& sensorVel) const;
+
+  void LineSampleHeightToWorld(const Point2DType& imPt,
+                               const double & heightAboveEllipsoid,
+                               Point3DType& worldPt) const;
 
 protected:
 
@@ -97,6 +102,14 @@ private:
                                  const TimeType& azimuthTime,
                                  const std::vector<CoordinateConversionRecord> & records,
                                  double & out) const;
+
+
+  const GCP & findClosestGCP(const Point2DType& imPt, const Projection::GCPParam & gcpParam) const;
+
+  void projToSurface(const GCP & gcp,
+                     const Point2DType & imPt,
+                     double heightAboveEllipsoid,
+                     Point3DType & ecefPoint) const;
 
   const ImageMetadata & m_Imd;
   SARParam m_SarParam;

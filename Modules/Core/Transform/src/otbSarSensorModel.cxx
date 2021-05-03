@@ -134,6 +134,21 @@ bool SarSensorModel::WorldToAzimuthRangeTime(const Point3DType& inGeoPoint,
 
 }
 
+void SarSensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
+                                             const double & heightAboveEllipsoid,
+                                             Point3DType& worldPt) const
+{
+  assert(m_Imd.Has(MDGeom::GCP));
+
+  const auto gcp = findClosestGCP(imPt, m_Imd.GetGCPParam());
+
+  Point3DType ecefPoint;
+
+  // Simple iterative inversion of inverse model starting at closest gcp
+  projToSurface(gcp, imPt, heightAboveEllipsoid, ecefPoint);
+
+  worldPt = EcefToWorld(ecefPoint);
+}
 
 bool SarSensorModel::ZeroDopplerLookup(const Point3DType& inEcefPoint, 
                                         TimeType & azimuthTime, 
@@ -476,5 +491,155 @@ void SarSensorModel::ApplyCoordinateConversion(const double & in,
     out = *cIt + sr_minus_sr0*out;
   }
 }
+
+const GCP & SarSensorModel::findClosestGCP(const Point2DType& imPt, const Projection::GCPParam & gcpParam) const
+{
+  assert(gcpParam.GCPs.size() > 0);
+  const GCP* closest;
+
+  // Squared distance between a Point and a gcp
+  auto squaredDistance = [](const Point2DType & imPt, const GCP & gcp) 
+    {
+      double dx = imPt[0] - gcp.m_GCPCol;
+      double dy = imPt[1] - gcp.m_GCPRow;
+
+      return dx*dx + dy*dy;
+    };
+
+  double minDistance = std::numeric_limits<double>::max();
+
+  for (const auto & elem : gcpParam.GCPs)
+  {
+    auto currentDistance = squaredDistance(imPt, elem);
+    if (currentDistance < minDistance)
+    {
+      minDistance = currentDistance;
+      closest = &elem;
+    }
+  }
+
+  return *closest;
+}
+
+void SarSensorModel::projToSurface(const GCP & gcp, const Point2DType& imPt, double heightAboveEllipsoid, Point3DType & ecefPoint) const
+{
+  // Stop condition: img residual < 1e-2 pixels, height residual² <
+  // 0.01² m, nb iter < 50. the loop runs at least once.
+  const int maxIter = 50; //50
+  const double imgResidual = 1e-2;
+  const double heightResidual = 1e-2;
+
+  using MatrixType = itk::Matrix<double, 3, 3>;
+  using VectorType = itk::Vector<double, 3>;
+
+  Point3DType groundGcp;
+  groundGcp[0] = gcp.m_GCPX;
+  groundGcp[1] = gcp.m_GCPY;
+  groundGcp[2] = gcp.m_GCPZ;
+
+  // Initialize current estimation
+  auto currentEstimation = WorldToEcef(groundGcp);
+
+  // Corresponding image position
+  Point2DType currentImPoint;
+  currentImPoint[0] = gcp.m_GCPCol;
+  currentImPoint[1] = gcp.m_GCPRow;
+
+  auto currentImSquareResidual = imPt.SquaredEuclideanDistanceTo(currentImPoint);
+  double currentHeightResidual = 0.; //TODO
+
+  MatrixType B, BtB;
+  VectorType BtF;
+  VectorType F;
+  VectorType dR;
+
+  // Delta use for partial derivatives estimation (in meters)
+  const double d = 10.;
+
+  for (int i = 0; i < maxIter; i++)
+  {
+    // compute residuals
+    F[0] = imPt[0] - currentImPoint[0];
+    F[1] = imPt[1] - currentImPoint[1];
+    F[2] = currentHeightResidual;
+
+    // Compute partial derivatives
+    VectorType p_fx, p_fy, p_fh, dx(0.) ,dy(0.), dz(0.);
+    dx[0] = d;
+    dy[1] = d;
+    dz[2] = d;
+
+    Point2DType tmpImPt;
+    double rdx(0.), rdy(0.), rdz(0.), fdx(0.), fdy(0.), fdz(0.);
+
+    auto currentEstimationWorld = EcefToWorld(currentEstimation);
+
+    auto tmpGpt = EcefToWorld(currentEstimation + dx);
+    WorldToLineSample(tmpGpt, tmpImPt);
+
+    p_fx[0] = (currentImPoint[0] - tmpImPt[0])/d;
+    p_fy[0] = (currentImPoint[1] - tmpImPt[1])/d;
+    p_fh[0] = (currentEstimationWorld[2] - tmpGpt[2])/d;
+
+    tmpGpt = EcefToWorld(currentEstimation + dy);
+    WorldToLineSample(tmpGpt,tmpImPt);
+
+
+    p_fx[1] = (currentImPoint[0] - tmpImPt[0])/d;
+    p_fy[1] = (currentImPoint[1] - tmpImPt[1])/d;
+    p_fh[1] = (currentEstimationWorld[2] - tmpGpt[2])/d;
+
+    tmpGpt = EcefToWorld(currentEstimation + dz);
+    WorldToLineSample(tmpGpt,tmpImPt);
+    p_fx[2] = (currentImPoint[0] - tmpImPt[0])/d;
+    p_fy[2] = (currentImPoint[1] - tmpImPt[1])/d;
+    p_fh[2] = (currentEstimationWorld[2] - tmpGpt[2])/d;
+
+    B(0,0) = p_fx[0];
+    B(0,1) = p_fx[1];
+    B(0,2) = p_fx[2];
+    B(1,0) = p_fy[0];
+    B(1,1) = p_fy[1];
+    B(1,2) = p_fy[2];
+    B(2,0) = p_fh[0];
+    B(2,1) = p_fh[1];
+    B(2,2) = p_fh[2];
+
+    // Invert system
+    try
+    {
+      dR = MatrixType(B.GetInverse()) * F;
+    }
+    catch (itk::ExceptionObject const& e)
+    {
+      ecefPoint = currentEstimation;
+      otbLogMacro(Warning, << "SarSensorModel::projToSurface(): singular matrix can not be inverted. Returning best estimation so far(" 
+                           << ecefPoint 
+                           << ") for output point (" 
+                           << imPt << ")" << std::endl);
+      return;
+    }
+
+    currentEstimation -= dR;
+
+    currentEstimationWorld = EcefToWorld(currentEstimation);
+
+    currentImSquareResidual = imPt.SquaredEuclideanDistanceTo(currentImPoint);
+/* TODO manage elevation
+         const ossim_float64 atHgt = hgtRef.getRefHeight(currentEstimationWorld);
+         currentHeightResidual = atHgt - currentEstimationWorld.height();
+*/
+
+    WorldToLineSample(currentEstimationWorld, currentImPoint);
+
+    if (currentImSquareResidual <= imgResidual && currentHeightResidual <= heightResidual)
+    {
+      break;
+    }
+  }
+
+  ecefPoint = currentEstimation;
+}
+
 
 } //namespace otb
