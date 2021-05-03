@@ -93,7 +93,13 @@ void SarSensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DTyp
 
   if (m_IsGrd)
   {
-    //TODO GRD case
+    // GRD case
+    double groundRange(0);
+    SlantRangeToGroundRange(rangeTime*C/2,azimuthTime,groundRange);
+
+    // Eq 32 p. 31
+    outLineSample[0] = groundRange/m_SarParam.rangeResolution;
+    //imPt.x = groundRange/theRangeResolution;
   }
   else
   {
@@ -381,6 +387,94 @@ void SarSensorModel::AzimuthTimeToLine(const TimeType & azimuthTime, double & li
 
   // Eq 22 p 27
   line = (timeSinceStart/m_SarParam.azimuthTimeInterval) + currentBurst->startLine;
+}
+
+void SarSensorModel::SlantRangeToGroundRange(const double & slantRange, const TimeType & azimuthTime, double & groundRange) const
+{
+  ApplyCoordinateConversion(slantRange, azimuthTime, m_SarParam.slantRangeToGroundRangeRecords , groundRange);
+}
+
+void SarSensorModel::ApplyCoordinateConversion(const double & in,
+                                 const TimeType& azimuthTime,
+                                 const std::vector<CoordinateConversionRecord> & records,
+                                 double & out) const
+{
+  assert(!records.empty()&&"The records vector is empty.");
+
+  // First, we need to find the correct pair of records for interpolation
+  auto it = records.cbegin();
+  auto previousRecord = it;
+  ++it;
+
+  auto nextRecord = it;
+
+  // Look for the correct record
+  while(it!=records.end())
+  {
+    if(azimuthTime >= previousRecord->azimuthTime
+        && azimuthTime < nextRecord->azimuthTime)
+    {
+      break;
+    }
+
+    previousRecord = nextRecord;
+    ++it;
+    nextRecord = it;
+  }
+
+  CoordinateConversionRecord srgrRecord;
+
+  if(it == records.cend())
+  {
+    if(azimuthTime < records.front().azimuthTime)
+    {
+      srgrRecord = records.front();
+    }
+    else if(azimuthTime >= records.back().azimuthTime)
+    {
+      srgrRecord = records.back();
+    }
+
+  }
+
+  else
+  {
+    assert(nextRecord != records.end());
+    assert(!previousRecord->coeffs.empty()&&"previousRecord coefficients vector is empty.");
+    assert(!nextRecord->coeffs.empty()&&"nextRecord coefficients vector is empty.");
+
+    // If azimuth time is between 2 records, interpolate
+    const double interp
+            = DurationType(azimuthTime             - previousRecord->azimuthTime)
+            / (nextRecord->azimuthTime - previousRecord->azimuthTime)
+            ;
+
+    srgrRecord.rg0 = (1-interp) * previousRecord->rg0 + interp*nextRecord->rg0;
+
+    srgrRecord.coeffs.clear();
+    std::vector<double>::const_iterator pIt = previousRecord->coeffs.cbegin();
+    std::vector<double>::const_iterator nIt = nextRecord->coeffs.cbegin();
+
+    for(;pIt != previousRecord->coeffs.end() && nIt != nextRecord->coeffs.cend();++pIt,++nIt)
+    {
+      srgrRecord.coeffs.push_back(interp*(*nIt)+(1-interp)*(*pIt));
+    }
+
+    assert(!srgrRecord.coeffs.empty()&&"Slant range to ground range interpolated coefficients vector is empty.");
+  }
+
+  // Now that we have the interpolated coeffs, compute ground range
+  // from slant range
+  const double sr_minus_sr0 =  in-srgrRecord.rg0;
+
+  assert(!srgrRecord.coeffs.empty()&&"Slant range to ground range coefficients vector is empty.");
+
+  out = 0.;
+
+  for(auto cIt = srgrRecord.coeffs.crbegin();cIt!=srgrRecord.coeffs.crend();++cIt)
+  {
+    out = *cIt + sr_minus_sr0*out;
+  }
 }
 
 } //namespace otb

@@ -126,7 +126,12 @@ protected:
   std::vector<SARNoise> GetNoiseVector(const XMLMetadataSupplier&) const;
 
   /* Fetch the burst records */
-  std::vector<BurstRecord> GetBurstRecords(const XMLMetadataSupplier&) const;
+  std::vector<BurstRecord> GetBurstRecords(const XMLMetadataSupplier&, const MetaData::DurationType & azimuthTimeInterval) const;
+
+  /* Fetch coordinate conversion records (Sr0/Gr0) */
+  std::vector<CoordinateConversionRecord> GetCoordinateConversionRecord(const XMLMetadataSupplier &xmlMS,
+                                                                        const std::string & rg0_path,
+                                                                        const std::string & coeffs_path) const;
 
   /* Fetch azimuth and range times corresponding to GCPs */
   std::unordered_map<std::string, GCPTime> GetGCPTimes(const XMLMetadataSupplier & xmlMS,

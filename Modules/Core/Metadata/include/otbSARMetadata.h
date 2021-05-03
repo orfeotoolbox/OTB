@@ -106,8 +106,8 @@ struct OTBMetadata_EXPORT Orbit
 struct OTBMetadata_EXPORT BurstRecord
 {
   MetaData::TimeType      azimuthStartTime;
-  unsigned long startLine;
   MetaData::TimeType      azimuthStopTime;
+  unsigned long startLine;
   unsigned long endLine;
   unsigned long startSample;
   unsigned long endSample;
@@ -127,6 +127,17 @@ struct OTBMetadata_EXPORT GCPTime
   double slantRangeTime;
 };
 
+/** \struct CoordinateConversionRecord
+ *
+ * \brief This structure contains coefficients to convert between coordinates types, e.g. 
+ * from ground range to slant range
+ */
+struct CoordinateConversionRecord
+{
+  MetaData::TimeType azimuthTime;
+  double rg0;
+  std::vector<double> coeffs;
+};
 
 
 /** \struct SARParam
@@ -145,6 +156,7 @@ struct OTBMetadata_EXPORT SARParam
   MetaData::DurationType azimuthTimeInterval;
   double nearRangeTime;
   double rangeSamplingRate;
+  double rangeResolution;
 
   /** Doppler centroid estimates */
   std::vector<DopplerCentroid> dopplerCentroids;
@@ -160,6 +172,12 @@ struct OTBMetadata_EXPORT SARParam
 
   /** map between GCP ids and corresponding azimuth and range times */
   std::unordered_map<std::string, GCPTime> gcpTimes;
+
+  /** Conversion coefficients from slant range to ground range */
+  std::vector<CoordinateConversionRecord> slantRangeToGroundRangeRecords;
+
+  /** Conversion coefficients from ground range to slant range */
+  std::vector<CoordinateConversionRecord> groundRangeToSlantRangeRecords;
 };
 
 /** \struct SARCalib
