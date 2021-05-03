@@ -135,7 +135,7 @@ bool SarSensorModel::WorldToAzimuthRangeTime(const Point3DType& inGeoPoint,
 }
 
 void SarSensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
-                                             const double & heightAboveEllipsoid,
+                                             double  heightAboveEllipsoid,
                                              Point3DType& worldPt) const
 {
   assert(m_Imd.Has(MDGeom::GCP));
@@ -404,12 +404,12 @@ void SarSensorModel::AzimuthTimeToLine(const TimeType & azimuthTime, double & li
   line = (timeSinceStart/m_SarParam.azimuthTimeInterval) + currentBurst->startLine;
 }
 
-void SarSensorModel::SlantRangeToGroundRange(const double & slantRange, const TimeType & azimuthTime, double & groundRange) const
+void SarSensorModel::SlantRangeToGroundRange(double slantRange, const TimeType & azimuthTime, double & groundRange) const
 {
   ApplyCoordinateConversion(slantRange, azimuthTime, m_SarParam.slantRangeToGroundRangeRecords , groundRange);
 }
 
-void SarSensorModel::ApplyCoordinateConversion(const double & in,
+void SarSensorModel::ApplyCoordinateConversion(double in,
                                  const TimeType& azimuthTime,
                                  const std::vector<CoordinateConversionRecord> & records,
                                  double & out) const

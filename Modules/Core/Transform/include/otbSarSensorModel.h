@@ -55,7 +55,7 @@ public:
                                           Vector3DType& sensorVel) const;
 
   void LineSampleHeightToWorld(const Point2DType& imPt,
-                               const double & heightAboveEllipsoid,
+                               double heightAboveEllipsoid,
                                Point3DType& worldPt) const;
 
 protected:
@@ -93,12 +93,12 @@ private:
   void AzimuthTimeToLine(const TimeType & azimuthTime, 
                           double & line) const;
 
-  void SlantRangeToGroundRange(const double & slantRange, 
+  void SlantRangeToGroundRange(double slantRange, 
                                const TimeType & azimuthTime, 
                                double & groundRange) const;
 
 
-  void ApplyCoordinateConversion(const double & in,
+  void ApplyCoordinateConversion(double in,
                                  const TimeType& azimuthTime,
                                  const std::vector<CoordinateConversionRecord> & records,
                                  double & out) const;
