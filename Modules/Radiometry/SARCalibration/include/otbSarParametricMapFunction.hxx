@@ -182,7 +182,8 @@ void SarParametricMapFunction<TInputImage, TCoordRep>::EvaluateParametricCoeffic
  *
  */
 template <class TInputImage, class TCoordRep>
-typename SarParametricMapFunction<TInputImage, TCoordRep>::RealType SarParametricMapFunction<TInputImage, TCoordRep>::Evaluate(const PointType& point) const
+typename SarParametricMapFunction<TInputImage, TCoordRep>::RealType
+SarParametricMapFunction<TInputImage, TCoordRep>::Evaluate(const PointType& point) const
 {
   RealType result = itk::NumericTraits<RealType>::Zero;
 

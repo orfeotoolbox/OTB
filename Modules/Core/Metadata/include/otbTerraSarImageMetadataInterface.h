@@ -112,25 +112,10 @@ public:
   double GetCalibrationFactor() const;
 
   /** Get the number of noise records */
-  unsigned int GetNumberOfNoiseRecords(const MetadataSupplierInterface&) const;
+  unsigned int GetNumberOfNoiseRecords(const MetadataSupplierInterface&, const unsigned int) const;
 
   /** Get the polynomial degree list */
-  UIntVectorType GetNoisePolynomialDegrees(const MetadataSupplierInterface &mds) const;
-
-  /** Get the polynomial coefficient list */
-  DoubleVectorVectorType GetNoisePolynomialCoefficientsList(const MetadataSupplierInterface &mds) const;
-
-  /** Get timeUTC noise acquisition list in Julian day */
-  DoubleVectorType GetNoiseTimeUTCList(const MetadataSupplierInterface &mds) const;
-
-  /** Get noise minimum validity range list */
-  DoubleVectorType GetNoiseValidityRangeMinList(const MetadataSupplierInterface &mds) const;
-
-  /** Get noise maximum validity range list */
-  DoubleVectorType GetNoiseValidityRangeMaxList(const MetadataSupplierInterface &mds) const;
-
-  /** Get noise reference point list */
-  DoubleVectorType GetNoiseReferencePointList(const MetadataSupplierInterface &mds) const;
+  UIntVectorType GetNoisePolynomialDegrees(const MetadataSupplierInterface &mds, const unsigned int polLayer) const;
 
   /** Get the radar frequency */
   double GetRadarFrequency() const override;
@@ -162,7 +147,7 @@ public:
   /** Get the constant calibration factor */
   RealType GetRadiometricCalibrationScale() const override;
 
-  PointSetPointer GetRadiometricCalibrationNoise(const MetadataSupplierInterface&, const ImageMetadata&) const override;
+  PointSetPointer GetRadiometricCalibrationNoise(const MetadataSupplierInterface&, const ImageMetadata&, const std::string& b="") const override;
   ArrayIndexType GetRadiometricCalibrationNoisePolynomialDegree() const override;
 
   PointSetPointer GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface&) const override;
@@ -193,16 +178,16 @@ protected:
   double ConvertStringTimeUTCToJulianDay(const std::string& value) const;
 
   /** Get the polynomial degree for a given noise record */
-  unsigned int GetNoisePolynomialDegrees(const unsigned int noiseRecord, const MetadataSupplierInterface &mds) const;
+  unsigned int GetNoisePolynomialDegrees(const unsigned int noiseRecord, const MetadataSupplierInterface &mds, const unsigned int polLayer) const;
 
   /** Get the polynomial coefficient for a given noise record */
-  DoubleVectorType GetNoisePolynomialCoefficients(const unsigned int noiseRecord, const MetadataSupplierInterface& mds) const;
+  DoubleVectorType GetNoisePolynomialCoefficients(const unsigned int noiseRecord, const MetadataSupplierInterface& mds, const unsigned int polLayer) const;
 
   /** Get timeUTC noise acquisition in Julian day for a given noise record*/
-  double GetNoiseTimeUTC(const unsigned int noiseRecord, const MetadataSupplierInterface& mds) const;
+  double GetNoiseTimeUTC(const unsigned int noiseRecord, const MetadataSupplierInterface& mds, const unsigned int polLayer) const;
 
   /** Get noise reference point for a given noise record */
-  double GetNoiseReferencePoint(const unsigned int noiseRecord, const MetadataSupplierInterface &mds) const;
+  double GetNoiseReferencePoint(const unsigned int noiseRecord, const MetadataSupplierInterface &mds, const unsigned int polLayer) const;
 
 private:
   TerraSarImageMetadataInterface(const Self&) = delete;

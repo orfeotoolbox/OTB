@@ -76,7 +76,7 @@ public:
   virtual PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
   virtual PointSetPointer GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface &) const;
   virtual PointSetPointer GetRadiometricCalibrationRangeSpreadLoss() const;
-  virtual PointSetPointer GetRadiometricCalibrationNoise(const MetadataSupplierInterface&, const ImageMetadata&) const;
+  virtual PointSetPointer GetRadiometricCalibrationNoise(const MetadataSupplierInterface&, const ImageMetadata&, const std::string& b="") const;
 
   virtual ArrayIndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const;
   virtual ArrayIndexType GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const;
@@ -123,7 +123,7 @@ public:
    * @param mds The MetadataSupplierInterface containing the calibration data
    * @param imd The ImageMetadata containing the calibration data
    */
-  void LoadRadiometricCalibrationData(SARCalib& sarCalib, const MetadataSupplierInterface& mds, const ImageMetadata& imd) const;
+  void LoadRadiometricCalibrationData(SARCalib& sarCalib, const MetadataSupplierInterface& mds, const ImageMetadata& imd, const std::string &band="") const;
 
 protected:
   SarImageMetadataInterface();
