@@ -37,6 +37,8 @@
 //TODO: replace by baselines
 #include "otbSarSensorModelAdapter.h"
 
+#include "ossim/ossimSarSensorModel.h"
+
 using namespace boost::unit_test;
 
 
@@ -52,7 +54,7 @@ BOOST_AUTO_TEST_CASE(SARSensorModel_parameters)
 
 BOOST_AUTO_TEST_CASE(SARSensorModel_WorldToLineSample)
 {
-  using ImageType = otb::Image<unsigned int, 2>;
+  using ImageType = otb::VectorImage<unsigned int, 2>;
   using ReaderType = otb::ImageFileReader<ImageType>;
 
   auto reader = ReaderType::New();
@@ -70,21 +72,9 @@ BOOST_AUTO_TEST_CASE(SARSensorModel_WorldToLineSample)
 
   otb::SarSensorModel::Point2DType outLineSampleOssim;
 
-  std::cout << "test with ossim" << std::endl;
-  auto ossimModel = otb::SarSensorModelAdapter::New();
-  ossimModel->LoadState(reader->GetOutput()->GetImageKeywordlist());
-  ossimModel->WorldToLineSample(inWorldPoint, outLineSampleOssim);
-
-  std::cout << inWorldPoint << " " << outLineSampleOssim << std::endl;
-
-  std::cout << "test with otb" << std::endl;
+  std::cout << "Direct test with otb" << std::endl;
   otb::SarSensorModel::Point2DType outLineSampleOtb;
   model.WorldToLineSample(inWorldPoint, outLineSampleOtb);
-
-  std::cout << inWorldPoint << " " << outLineSampleOtb << std::endl;
-
-  //TODO compare results with a baseline
-
 }
 
 
@@ -93,7 +83,7 @@ BOOST_AUTO_TEST_CASE(SARSensorModel_auto_validate_inverse_transform )
   double lineTol = 1.;
   double sampleTol = 1.;
 
-  using ImageType = otb::Image<unsigned int, 2>;
+  using ImageType = otb::VectorImage<unsigned int, 2>;
   using ReaderType = otb::ImageFileReader<ImageType>;
 
   auto reader = ReaderType::New();
@@ -127,6 +117,70 @@ BOOST_AUTO_TEST_CASE(SARSensorModel_auto_validate_inverse_transform )
 
     BOOST_TEST(std::abs(lineSample[0] - lineSampleBaseline[0]) < lineTol); 
     BOOST_TEST(std::abs(lineSample[1] - lineSampleBaseline[1]) < sampleTol); 
+  }
+}
+
+
+
+BOOST_AUTO_TEST_CASE(SARSensorModel_auto_validate_forward_transform)
+{
+  double sqResTol = 25;
+
+  using ImageType = otb::VectorImage<unsigned int, 2>;
+  using ReaderType = otb::ImageFileReader<ImageType>;
+
+
+  auto reader = ReaderType::New();
+  reader->SetFileName(framework::master_test_suite().argv[1]);
+  reader->GenerateOutputInformation();
+
+  if (reader->GetOutput()->GetGCPCount() == 0)
+  {
+    otbLogMacro(Info, << "Input product has no gcp, skipping gcp forward transform validation.");
+    return;
+  }
+
+  auto & imd = reader->GetOutput()->m_Imd;
+  auto & GCPParam = imd.GetGCPParam();
+
+  std::vector<otb::GCP> testGCPs;
+  otb::Projection::GCPParam productGCPs;
+
+  bool odd = false;
+
+  for (auto gcp: GCPParam.GCPs)
+  {
+    gcp.m_GCPZ = 0.;
+    if (odd)
+    {
+      productGCPs.GCPs.push_back(gcp);
+    }
+    else
+    {
+      testGCPs.push_back(gcp);
+    }
+    odd = !odd;
+  }
+
+  imd.Add(otb::MDGeom::GCP, productGCPs);
+
+  otb::SarSensorModel model(imd);
+
+  for (const auto & gcp : testGCPs)
+  {
+    itk::Point<double, 2> sensorPoint;
+    sensorPoint[0] = gcp.m_GCPCol;
+    sensorPoint[1] = gcp.m_GCPRow;
+
+    itk::Point<double, 3> geoPointBaseline;
+    geoPointBaseline[0] = gcp.m_GCPX;
+    geoPointBaseline[1] = gcp.m_GCPY;
+    geoPointBaseline[2] = gcp.m_GCPZ;
+
+    itk::Point<double, 3> geoPoint;
+
+    model.LineSampleHeightToWorld(sensorPoint, gcp.m_GCPZ, geoPoint);
+    BOOST_TEST(geoPoint.SquaredEuclideanDistanceTo(geoPointBaseline) < sqResTol);
   }
 
 }
