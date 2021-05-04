@@ -84,25 +84,20 @@ std::vector<std::string> GetXMLFilesInDirectory(const std::string & directoryPat
   return fileList;
 }
 
-
-
 std::string GetResourceFile(const std::string & directoryPath, std::string pattern)
-  {
+{
   auto xmlFiles = GetXMLFilesInDirectory(directoryPath);
   itksys::RegularExpression reg;
   reg.compile(pattern);
   for (const auto & file : xmlFiles)
-    {
+  {
     if (reg.find(boost::filesystem::path(file).filename().string()))
       return file ;
-    }
-  return std::string("");
   }
-
-
+  return std::string("");
 }
 
-
+}
 
 bool TerraSarImageMetadataInterface::CanRead() const
 {
@@ -962,6 +957,7 @@ void TerraSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent ind
 void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
                         const XMLMetadataSupplier & geoXmlMS,
                         const Projection::GCPParam & gcps,
+                        const std::string& polarization,
                         SARParam & param)
 {
   // Number of entries in the vector
@@ -1002,7 +998,26 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
   }
 
   param.nearRangeTime = xmlMS.GetAs<double>("level1Product.productInfo.sceneInfo.rangeTime.firstPixel");
-  param.rangeSamplingRate = xmlMS.GetAs<double>("level1Product.instrument.settings.RSF");
+
+  if(xmlMS.HasValue("level1Product.instrument.settings.RSF"))
+    param.rangeSamplingRate = xmlMS.GetAs<double>("level1Product.instrument.settings.RSF");
+  else
+  {
+    // Retrive the polarisation layer
+    auto nbLayers = xmlMS.GetAs<unsigned int>("level1Product.productInfo.imageDataInfo.numberOfLayers");
+    for(unsigned int band = 1 ; band <= nbLayers ; ++band)
+    {
+      oss.str("");
+      oss << "level1Product.instrument.settings_" << band << ".polLayer";
+      if(xmlMS.GetAs<std::string>(oss.str()) == polarization)
+      {
+        oss.str("");
+        oss << "level1Product.instrument.settings_" << band << ".RSF";
+        param.rangeSamplingRate = xmlMS.GetAs<double>(oss.str());
+        break;
+      }
+    }
+  }
 
   const auto azimuthTimeStart = readFormattedDate(
       xmlMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC"), dateFormat);
@@ -1049,13 +1064,16 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
 
 void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
 {
-  // Metadata read by GDAL
-  Fetch(MDStr::Mode, imd, "IMAGING_MODE");
-  Fetch(MDStr::OrbitDirection, imd, "ORBIT_DIRECTION");
-  Fetch(MDNum::OrbitNumber, imd, "ABSOLUTE_ORBIT");
+  // Polarisation
+  auto polarization =
+      itksys::SystemTools::GetFilenameName(m_MetadataSupplierInterface->GetResourceFile("")).substr(6, 2);
 
   // Main XML file
-  std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(m_MetadataSupplierInterface->GetResourceFile("")), "T[S|D]X1_SAR__.*.xml") ;
+  std::string MainFilePath =
+      ExtractXMLFiles::GetResourceFile(
+        itksys::SystemTools::GetParentDirectory(
+          itksys::SystemTools::GetParentDirectory(m_MetadataSupplierInterface->GetResourceFile(""))),
+        "T[S|D]X1_SAR__.*.xml");
   if (MainFilePath.empty())
   {
     otbGenericExceptionMacro(MissingMetadataException,
@@ -1063,11 +1081,13 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   }
 
   XMLMetadataSupplier MainXMLFileMetadataSupplier(MainFilePath);
+  imd.Add(MDStr::OrbitDirection, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.missionInfo.orbitDirection"));
+  imd.Add(MDNum::OrbitNumber, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productInfo.missionInfo.absOrbit"));
   imd.Add(MDNum::LineSpacing, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingAzimuth"));
   imd.Add(MDNum::PixelSpacing, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingRange.slantRange"));
   imd.Add(MDStr::Mission, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.generalHeader.mission"));
   imd.Add(MDStr::ProductType, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.productVariantInfo.productType"));
-  // imd.Add(MDStr::Mode, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.imagingMode"));
+  imd.Add(MDStr::Mode, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.imagingMode"));
   imd.Add(MDStr::SensorID, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.sensor"));
   imd.Add(MDNum::RadarFrequency, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.instrument.radarParameters.centerFrequency"));
   imd.Add(MDTime::AcquisitionStartTime, MainXMLFileMetadataSupplier.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.start.timeUTC"));
@@ -1076,25 +1096,32 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   imd.Add(MDNum::RangeTimeLastPixel, MainXMLFileMetadataSupplier.GetFirstAs<double>("level1Product.productInfo.sceneInfo.rangeTime.lastPixel"));
   imd.Add(MDNum::PRF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonPRF"));
   imd.Add(MDNum::RSF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
-auto numberOfCalFactor = MainXMLFileMetadataSupplier.GetNumberOf("level1Product.calibration.calibrationConstant");
-    if(numberOfCalFactor == 1)
+  auto numberOfCalFactor = MainXMLFileMetadataSupplier.GetNumberOf("level1Product.calibration.calibrationConstant");
+  if(numberOfCalFactor == 1)
+  {
+    imd.Add(MDNum::CalFactor, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.calibration.calibrationConstant.calFactor"));
+    imd.Add(MDNum::CalScale, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.calibration.calibrationConstant.calFactor"));
+  }
+  else
+  {
+    // Retrive the polarisation layer
+    std::stringstream oss;
+    for(unsigned int band = 1 ; band <= imd.Bands.size() ; ++band)
     {
-      imd.Add(MDNum::CalFactor, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.calibration.calibrationConstant.calFactor"));
-      imd.Add(MDNum::CalScale, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.calibration.calibrationConstant.calFactor"));
-    }
-    else
-    {
-      std::stringstream path;
-      for (int layer = 1 ; layer <= numberOfCalFactor ; ++layer)
+      oss.str("");
+      oss << "level1Product.calibration.calibrationConstant_" << band << ".polLayer";
+      if(MainXMLFileMetadataSupplier.GetAs<std::string>(oss.str()) == polarization)
       {
-        path.str("");
-        path << "level1Product.calibration.calibrationConstant_" << layer << ".calFactor";
-        imd.Add(MDNum::CalFactor, MainXMLFileMetadataSupplier.GetAs<double>(path.str()));
-        imd.Add(MDNum::CalScale, MainXMLFileMetadataSupplier.GetAs<double>(path.str()));
+        oss.str("");
+        oss << "level1Product.calibration.calibrationConstant_" << band << ".calFactor";
+        imd.Add(MDNum::CalFactor, MainXMLFileMetadataSupplier.GetAs<double>(oss.str()));
+        imd.Add(MDNum::CalScale, MainXMLFileMetadataSupplier.GetAs<double>(oss.str()));
       }
     }
+  }
+
   SARCalib sarCalib;
-  LoadRadiometricCalibrationData(sarCalib, MainXMLFileMetadataSupplier, imd);
+  LoadRadiometricCalibrationData(sarCalib, MainXMLFileMetadataSupplier, imd, polarization);
   imd.Add(MDGeom::SARCalib, sarCalib);
 
   assert(m_MetadataSupplierInterface->GetNbBands() == imd.Bands.size());
@@ -1105,7 +1132,13 @@ auto numberOfCalFactor = MainXMLFileMetadataSupplier.GetNumberOf("level1Product.
   XMLMetadataSupplier GCPXMLFileMS(m_MetadataSupplierInterface->GetResourceFile() 
                                     + "/ANNOTATION/GEOREF.xml");
 
-  ReadSARSensorModel(MainXMLFileMetadataSupplier, GCPXMLFileMS, imd.GetGCPParam(), sarParam);
+  if(imd.Has(MDGeom::GCP))
+    ReadSARSensorModel(MainXMLFileMetadataSupplier, GCPXMLFileMS, imd.GetGCPParam(), polarization, sarParam);
+  else
+  {
+    Projection::GCPParam gcp;
+    ReadSARSensorModel(MainXMLFileMetadataSupplier, GCPXMLFileMS, gcp, polarization, sarParam);
+  }
 
   for (int bandId = 0 ; bandId < m_MetadataSupplierInterface->GetNbBands() ; ++bandId)
   {
@@ -1132,7 +1165,8 @@ void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   Fetch(MDNum::CalScale, imd, "calibration.calibrationConstant.calFactor");
     
   // Main XML file
-  std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(m_MetadataSupplierInterface->GetResourceFile("")), "T[S|D]X1_SAR__.*.xml") ;
+  std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(m_MetadataSupplierInterface->GetResourceFile("")),
+                                                              "T[S|D]X1_SAR__.*.xml") ;
   if (!MainFilePath.empty())
   {
     XMLMetadataSupplier MainXMLFileMS(MainFilePath);
@@ -1157,16 +1191,12 @@ void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
 
 void TerraSarImageMetadataInterface::Parse(ImageMetadata & imd)
 {
-  // Try to fetch the metadata from GDAL Metadata Supplier
-  if (boost::filesystem::path(m_MetadataSupplierInterface->GetResourceFile()).filename().string().rfind("TSX1_", 0) == 0)
-    this->ParseGdal(imd);
   // Try to fetch the metadata from GEOM file
-  else if (m_MetadataSupplierInterface->GetAs<std::string>("", "sensor") == "TSX-1")
+  if (m_MetadataSupplierInterface->GetAs<std::string>("", "sensor") == "TSX-1")
     this->ParseGeom(imd);
-  // Failed to fetch the metadata
+  // Try to fetch the metadata from GDAL Metadata Supplier
   else
-    otbGenericExceptionMacro(MissingMetadataException,
-			     << "Not a TerraSar product");
+    this->ParseGdal(imd);
 }
 
 
