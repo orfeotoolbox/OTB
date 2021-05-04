@@ -226,10 +226,16 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
     ${OTBTransform-Test_LIBRARIES}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
   
-  otb_add_test(NAME prTvSarSensorModelSentinel1
+  otb_add_test(NAME prTvSarSensorModelSentinel1_SLC
            COMMAND otbSarSensorModelTest --
-           #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff} 
            LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/manifest.safe} 
+           -23.9431732671333
+           15.7637929806278
+           0)
+  
+  otb_add_test(NAME prTvSarSensorModelSentinel1_geom
+           COMMAND otbSarSensorModelTest --
+           LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}?&geom=${INPUTDATA}/sentinel1/sentinel1-2.geom
            -23.9431732671333
            15.7637929806278
            0)
@@ -241,11 +247,11 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
            43.5726757080402
            0)
 
-  otb_add_test(NAME prTvSarSensorModelTerraSarX
-           COMMAND otbSarSensorModelTest --
-           LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228}
-           -111.664738184032
-           36.2692959995967
-           0)
+#  otb_add_test(NAME prTvSarSensorModelTerraSarX
+#           COMMAND otbSarSensorModelTest --
+#           LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228}
+#           -111.664738184032
+#           36.2692959995967
+#           0)
 
 endif()

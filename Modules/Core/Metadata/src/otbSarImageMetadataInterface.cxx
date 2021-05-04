@@ -236,8 +236,13 @@ std::vector<Orbit> SarImageMetadataInterface::GetOrbitsGeom() const
   std::vector<Orbit> orbitVector;
   // Number of entries in the vector
   int listCount = m_MetadataSupplierInterface->GetAs<int>("orbitList.nb_orbits");
-  // This streams wild hold the iteration number
+  // This streams will hold the iteration number
   std::ostringstream oss;
+
+  std::stringstream ss;
+  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
+  ss.imbue(std::locale(std::locale(), facet));
+
   for (int listId = 0 ; listId <= listCount - 1 ; ++listId)
   {
     oss.str("");
@@ -245,16 +250,54 @@ std::vector<Orbit> SarImageMetadataInterface::GetOrbitsGeom() const
     // Base path to the data, that depends on the iteration number
     std::string path_root = "orbitList.orbit[" + oss.str() + "]";
     Orbit orbit;
-    std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>(path_root + ".time")) >> orbit.time;
-    orbit.position = m_MetadataSupplierInterface->GetAs<double>(path_root + ".x_pos");
-    orbit.position = m_MetadataSupplierInterface->GetAs<double>(path_root + ".y_pos");
-    orbit.position = m_MetadataSupplierInterface->GetAs<double>(path_root + ".z_pos");
-    orbit.velocity = m_MetadataSupplierInterface->GetAs<double>(path_root + ".x_vel");
-    orbit.velocity = m_MetadataSupplierInterface->GetAs<double>(path_root + ".y_vel");
-    orbit.velocity = m_MetadataSupplierInterface->GetAs<double>(path_root + ".z_vel");
+
+    ss << m_MetadataSupplierInterface->GetAs<std::string>(path_root + ".time");
+    ss >> orbit.time;
+
+    orbit.position[0] = m_MetadataSupplierInterface->GetAs<double>(path_root + ".x_pos");
+    orbit.position[1] = m_MetadataSupplierInterface->GetAs<double>(path_root + ".y_pos");
+    orbit.position[2] = m_MetadataSupplierInterface->GetAs<double>(path_root + ".z_pos");
+    orbit.velocity[0] = m_MetadataSupplierInterface->GetAs<double>(path_root + ".x_vel");
+    orbit.velocity[1] = m_MetadataSupplierInterface->GetAs<double>(path_root + ".y_vel");
+    orbit.velocity[2] = m_MetadataSupplierInterface->GetAs<double>(path_root + ".z_vel");
     orbitVector.push_back(std::move(orbit));
   }
   return orbitVector;
+}
+
+
+std::vector<BurstRecord> SarImageMetadataInterface::GetBurstRecordsGeom() const
+{
+  const std::string prefix = "support_data.";
+  std::vector<BurstRecord> burstRecords;
+
+  int listCount = m_MetadataSupplierInterface->GetAs<int>(prefix + "geom.bursts.number");
+
+  std::stringstream ss;
+  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
+  ss.imbue(std::locale(std::locale(), facet));
+
+  for (int listId = 0 ; listId <= listCount - 1 ; ++listId)
+  {
+    const std::string burstName = prefix + "geom.bursts.burst[" + std::to_string(listId) + "].";
+    BurstRecord record;
+    
+    ss << m_MetadataSupplierInterface->GetAs<std::string>(burstName + "azimuth_start_time");
+    ss >> record.azimuthStartTime;
+
+    ss << m_MetadataSupplierInterface->GetAs<std::string>(burstName + "azimuth_stop_time");
+    ss >> record.azimuthStopTime;
+
+    record.azimuthAnxTime = m_MetadataSupplierInterface->GetAs<double>(burstName + "azimuth_anx_time");
+    record.startLine = m_MetadataSupplierInterface->GetAs<int>(burstName + "start_line");
+    record.endLine = m_MetadataSupplierInterface->GetAs<int>(burstName + "end_line");
+    record.startSample = m_MetadataSupplierInterface->GetAs<int>(burstName + "start_sample");
+    record.endSample = m_MetadataSupplierInterface->GetAs<int>(burstName + "end_sample");
+
+    burstRecords.push_back(std::move(record));
+  }
+
+  return burstRecords;
 }
 
 std::vector<SARNoise> SarImageMetadataInterface::GetNoiseVectorGeom() const
@@ -294,6 +337,21 @@ bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
   sarParam.dopplerCentroids = this->GetDopplerCentroidGeom();
   sarParam.orbits = this->GetOrbitsGeom();
   sarParam.noiseVector = this->GetNoiseVectorGeom();
+  sarParam.burstRecords = this->GetBurstRecordsGeom();
+
+  const std::string supportDataPrefix = "support_data.";
+  sarParam.rangeSamplingRate = m_MetadataSupplierInterface->GetAs<double>(
+                                supportDataPrefix + "range_sampling_rate");
+
+  sarParam.nearRangeTime = m_MetadataSupplierInterface->GetAs<double>(
+                                supportDataPrefix + "slant_range_to_first_pixel");
+
+  sarParam.rangeResolution = m_MetadataSupplierInterface->GetAs<double>(
+                                supportDataPrefix + "range_spacing");
+
+  sarParam.azimuthTimeInterval = boost::posix_time::precise_duration(m_MetadataSupplierInterface->GetAs<double>(
+                                supportDataPrefix + "line_time_interval") * 1e6);
+
   return true;
 }
 
