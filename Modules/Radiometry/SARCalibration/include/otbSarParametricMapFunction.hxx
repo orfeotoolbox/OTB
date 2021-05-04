@@ -153,11 +153,12 @@ void SarParametricMapFunction<TInputImage, TCoordRep>::EvaluateParametricCoeffic
       for (unsigned int xcoeff = 0; xcoeff < m_Coeff.Cols(); ++xcoeff)
       {
         double xpart = std::pow(static_cast<double>(point[0]) / m_ProductWidth, static_cast<double>(xcoeff));
+        //std::cout << "xpart(" << i << ") = (" << static_cast<double>(point[0]) << " / " << m_ProductWidth << ")^" << xcoeff << "\n";
         for (unsigned int ycoeff = 0; ycoeff < m_Coeff.Rows(); ++ycoeff)
         {
           double ypart = std::pow(static_cast<double>(point[1]) / m_ProductHeight, static_cast<double>(ycoeff));
           a(i, xcoeff * m_Coeff.Rows() + ycoeff) = xpart * ypart;
-          // std::cout << "a(" << i << "," << xcoeff * m_Coeff.Rows() + ycoeff << ") = " <<  xpart * ypart << std::endl;
+          // std::cout << "a(" << i << "," << xcoeff * m_Coeff.Rows() + ycoeff << ") = " <<  xpart << " * " << ypart << std::endl;
         }
       }
     }

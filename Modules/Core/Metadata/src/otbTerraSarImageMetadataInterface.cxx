@@ -422,17 +422,17 @@ unsigned int TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(const uns
   std::ostringstream oss;
   if(polLayer == 0)
   {
-    oss << "level1Product.noise.imageNoise_" << (noiseRecord+1) << ".noiseEstimate.polynomialDegree";
+    oss << "level1Product.noise.imageNoise_" << noiseRecord << ".noiseEstimate.polynomialDegree";
     if(mds.HasValue(oss.str()))
       return mds.GetAs<unsigned int>(oss.str());
     oss.str("");
-    oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.polynomialDegree";
+    oss << "noise[" << (noiseRecord-1) << "]imageNoise.noiseEstimate.polynomialDegree";
     if(mds.HasValue(oss.str()))
       return mds.GetAs<unsigned int>(oss.str());
   }
   else
   {
-    oss << "level1Product.noise_" << polLayer << ".imageNoise_" << (noiseRecord+1) << ".noiseEstimate.polynomialDegree";
+    oss << "level1Product.noise_" << polLayer << ".imageNoise_" << noiseRecord << ".noiseEstimate.polynomialDegree";
     if(mds.HasValue(oss.str()))
       return mds.GetAs<unsigned int>(oss.str());
   }
@@ -485,7 +485,7 @@ TerraSarImageMetadataInterface::GetNoisePolynomialCoefficients(const unsigned in
   polCoef.clear();
 
   std::ostringstream oss, oss2 , oss3;
-  int shift = 1;
+  int shift = 0;
   if(polLayer == 0)
   {
     if (mds.HasValue("level1Product.noise.polLayer"))
@@ -498,7 +498,7 @@ TerraSarImageMetadataInterface::GetNoisePolynomialCoefficients(const unsigned in
       oss << "noise[";
       oss2 << "]imageNoise.noiseEstimate.coefficient[";
       oss3 << "]";
-      shift = 0;
+      shift = 1;
     }
   }
   else
@@ -512,10 +512,10 @@ TerraSarImageMetadataInterface::GetNoisePolynomialCoefficients(const unsigned in
   const unsigned int const_shift = shift;
 
   // set <= condition because degree N means N+1 coeff
-  for (unsigned int j = 0; j <= polDegs; ++j)
+  for (unsigned int j = 1; j <= polDegs+1; ++j)
   {
     oss.str("");
-    oss << path_start << (noiseRecord + const_shift) << path_middle << (j + const_shift) << path_end;
+    oss << path_start << (noiseRecord - const_shift) << path_middle << (j - const_shift) << path_end;
     polCoef.push_back(mds.GetAs<double>(oss.str()));
   }
 
@@ -536,7 +536,7 @@ double TerraSarImageMetadataInterface::GetNoiseTimeUTC(const unsigned int noiseR
     if (mds.HasValue(oss.str()))
       std::istringstream(mds.GetAs<std::string>(oss.str())) >> time;
     oss.str("");
-    oss << "noise[" << noiseRecord << "]imageNoise.timeUTC";
+    oss << "noise[" << (noiseRecord-1) << "]imageNoise.timeUTC";
     std::istringstream(mds.GetAs<std::string>("2000-01-01T00:0:00.000000Z", oss.str())) >> time;
   }
   else
@@ -588,7 +588,7 @@ double TerraSarImageMetadataInterface::GetNoiseReferencePoint(const unsigned int
     if(mds.HasValue(oss.str()))
       return mds.GetAs<double>(std::numeric_limits<double>::min(), oss.str());
     oss.str();
-    oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.referencePoint";
+    oss << "noise[" << (noiseRecord+1) << "]imageNoise.noiseEstimate.referencePoint";
     return mds.GetAs<double>(std::numeric_limits<double>::min(), oss.str());
   }
   oss << "level1Product.noise_" << polLayer << ".imageNoise_" << noiseRecord << ".noiseEstimate.referencePoint";
@@ -847,7 +847,7 @@ TerraSarImageMetadataInterface::GetRadiometricCalibrationNoise(const MetadataSup
 
   unsigned int numberOfNoiseRecords = this->GetNumberOfNoiseRecords(mds, polLayer);
 
-  for (unsigned int noiseRecord = 0; noiseRecord < numberOfNoiseRecords; ++noiseRecord)
+  for (unsigned int noiseRecord = 1; noiseRecord <= numberOfNoiseRecords; ++noiseRecord)
   {
     double   currentNoiseTime   = this->GetNoiseTimeUTC(noiseRecord, mds, polLayer);
     RealType AzimutAcquisition  = (currentNoiseTime - startTime) * numberOfRows / (stopTime - startTime);
