@@ -140,14 +140,12 @@ void SarSensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
 {
   assert(m_Imd.Has(MDGeom::GCP));
 
-  const auto gcp = findClosestGCP(imPt, m_Imd.GetGCPParam());
+  const auto& gcp = findClosestGCP(imPt, m_Imd.GetGCPParam());
 
   Point3DType ecefPoint;
 
   // Simple iterative inversion of inverse model starting at closest gcp
-  projToSurface(gcp, imPt, heightAboveEllipsoid, ecefPoint);
-
-  worldPt = EcefToWorld(ecefPoint);
+  worldPt = EcefToWorld(projToSurface(gcp, imPt, heightAboveEllipsoid));
 }
 
 bool SarSensorModel::ZeroDopplerLookup(const Point3DType& inEcefPoint, 
@@ -317,10 +315,8 @@ void SarSensorModel::OptimizeTimeOffsetsFromGcps()
   }
 
   DurationType cumulAzimuthTime(seconds(0));
-  double cumulRangeTime(0);
   unsigned int count=0;
 
-  
   // reset offsets before optimisation
   m_AzimuthTimeOffset = seconds(0);
   auto gcpParam = m_Imd.GetGCPParam();
@@ -359,7 +355,6 @@ void SarSensorModel::AzimuthTimeToLine(const TimeType & azimuthTime, double & li
   assert(!m_SarParam.burstRecords.empty()&&"Burst records are empty (at least one burst should be available)");
 
   auto currentBurst = m_SarParam.burstRecords.cbegin();
-
 
   // Look for the correct burst. In most cases the number of burst
   // records will be 1 (except for TOPSAR Sentinel1 products)
@@ -521,7 +516,7 @@ const GCP & SarSensorModel::findClosestGCP(const Point2DType& imPt, const Projec
   return *closest;
 }
 
-void SarSensorModel::projToSurface(const GCP & gcp, const Point2DType& imPt, double heightAboveEllipsoid, Point3DType & ecefPoint) const
+SarSensorModel::Point3DType SarSensorModel::projToSurface(const GCP & gcp, const Point2DType& imPt, double heightAboveEllipsoid) const
 {
   // Stop condition: img residual < 1e-2 pixels, height residual² <
   // 0.01² m, nb iter < 50. the loop runs at least once.
@@ -570,7 +565,6 @@ void SarSensorModel::projToSurface(const GCP & gcp, const Point2DType& imPt, dou
     dz[2] = d;
 
     Point2DType tmpImPt;
-    double rdx(0.), rdy(0.), rdz(0.), fdx(0.), fdy(0.), fdz(0.);
 
     auto currentEstimationWorld = EcefToWorld(currentEstimation);
 
@@ -612,12 +606,11 @@ void SarSensorModel::projToSurface(const GCP & gcp, const Point2DType& imPt, dou
     }
     catch (itk::ExceptionObject const& e)
     {
-      ecefPoint = currentEstimation;
       otbLogMacro(Warning, << "SarSensorModel::projToSurface(): singular matrix can not be inverted. Returning best estimation so far(" 
-                           << ecefPoint 
+                           << currentEstimation 
                            << ") for output point (" 
                            << imPt << ")" << std::endl);
-      return;
+      return currentEstimation;
     }
 
     currentEstimation -= dR;
@@ -638,7 +631,7 @@ void SarSensorModel::projToSurface(const GCP & gcp, const Point2DType& imPt, dou
     }
   }
 
-  ecefPoint = currentEstimation;
+  return currentEstimation;
 }
 
 

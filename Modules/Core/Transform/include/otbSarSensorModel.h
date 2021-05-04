@@ -35,6 +35,9 @@ public:
   SarSensorModel(const ImageMetadata & imd);
   virtual ~SarSensorModel() = default;
 
+  SarSensorModel(const SarSensorModel&) = delete; // non construction-copyable
+  SarSensorModel& operator=(const SarSensorModel&) = delete; // non copyable
+
   using Point2DType = itk::Point<double, 2>;
   using Point3DType = itk::Point<double, 3>;
 
@@ -106,10 +109,9 @@ private:
 
   const GCP & findClosestGCP(const Point2DType& imPt, const Projection::GCPParam & gcpParam) const;
 
-  void projToSurface(const GCP & gcp,
+  Point3DType projToSurface(const GCP & gcp,
                      const Point2DType & imPt,
-                     double heightAboveEllipsoid,
-                     Point3DType & ecefPoint) const;
+                     double heightAboveEllipsoid) const;
 
   const ImageMetadata & m_Imd;
   SARParam m_SarParam;
@@ -118,7 +120,7 @@ private:
   double m_RangeTimeOffset; // Offset in seconds
 
   // Speed of light 
-  const double C = 299792458;
+  static constexpr double C = 299792458;
 
   // True if the input product is a ground product
   bool m_IsGrd;
