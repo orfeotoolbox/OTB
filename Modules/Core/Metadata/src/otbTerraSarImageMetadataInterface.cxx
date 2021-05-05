@@ -52,7 +52,8 @@ TerraSarImageMetadataInterface::TerraSarImageMetadataInterface()
 namespace ExtractXMLFiles {
 
 // Adapted from boost filesystem documentation : https://www.boost.org/doc/libs/1_53_0/libs/filesystem/doc/reference.html
-std::vector<std::string> GetXMLFilesInDirectory(const std::string & directoryPath)
+std::vector<std::string> GetXMLFilesInDirectory(const std::string & directoryPath,
+                                                bool getSubDirectories=true)
 {
   std::vector<std::string> fileList;
   if ( !boost::filesystem::exists( directoryPath) )
@@ -67,7 +68,7 @@ std::vector<std::string> GetXMLFilesInDirectory(const std::string & directoryPat
   // End iterator : default construction yields past-the-end
   for ( const auto & item : boost::make_iterator_range(boost::filesystem::directory_iterator(directoryPath), {}) )
   {
-    if ( boost::filesystem::is_directory(item.status()) )
+    if ( boost::filesystem::is_directory(item.status()) && getSubDirectories )
     {
       auto subDirList = GetXMLFilesInDirectory(item.path().string());
       fileList.insert(fileList.end(), subDirList.begin(), subDirList.end());
@@ -84,9 +85,9 @@ std::vector<std::string> GetXMLFilesInDirectory(const std::string & directoryPat
   return fileList;
 }
 
-std::string GetResourceFile(const std::string & directoryPath, std::string pattern)
+std::string GetResourceFile(const std::string & directoryPath, std::string pattern, bool getSubDirectories=true)
 {
-  auto xmlFiles = GetXMLFilesInDirectory(directoryPath);
+  auto xmlFiles = GetXMLFilesInDirectory(directoryPath, getSubDirectories);
   itksys::RegularExpression reg;
   reg.compile(pattern);
   for (const auto & file : xmlFiles)
@@ -1069,11 +1070,10 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
       itksys::SystemTools::GetFilenameName(m_MetadataSupplierInterface->GetResourceFile("")).substr(6, 2);
 
   // Main XML file
+  std::string MainDirectory = itksys::SystemTools::GetParentDirectory(
+        itksys::SystemTools::GetParentDirectory(m_MetadataSupplierInterface->GetResourceFile("")));
   std::string MainFilePath =
-      ExtractXMLFiles::GetResourceFile(
-        itksys::SystemTools::GetParentDirectory(
-          itksys::SystemTools::GetParentDirectory(m_MetadataSupplierInterface->GetResourceFile(""))),
-        "T[S|D]X1_SAR__.*.xml");
+      ExtractXMLFiles::GetResourceFile(MainDirectory, "T[S|D]X1_SAR__.*.xml", false);
   if (MainFilePath.empty())
   {
     otbGenericExceptionMacro(MissingMetadataException,
@@ -1129,8 +1129,7 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   SARParam sarParam;
 
   // Open the georef file containing GCPs
-  XMLMetadataSupplier GCPXMLFileMS(m_MetadataSupplierInterface->GetResourceFile() 
-                                    + "/ANNOTATION/GEOREF.xml");
+  XMLMetadataSupplier GCPXMLFileMS(MainDirectory + "/ANNOTATION/GEOREF.xml");
 
   if(imd.Has(MDGeom::GCP))
     ReadSARSensorModel(MainXMLFileMetadataSupplier, GCPXMLFileMS, imd.GetGCPParam(), polarization, sarParam);
