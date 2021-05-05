@@ -340,7 +340,7 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
       imd.Add(MDStr::ProductType, ProductMS.GetAs<std::string>("product.imageGenerationParameters.generalProcessingInformation.productType"));
 
       auto polarizations = ProductMS.GetAsVector<std::string>("product.sourceAttributes.radarParameters.polarizations");
-// TODO      assert(polarizations.size() == imd.Bands.size());
+      assert(polarizations.size() == imd.Bands.size());
       SARParam sarParam;
       for (int bandId = 0 ; bandId < imd.Bands.size() ; ++bandId)
       {
