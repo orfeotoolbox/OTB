@@ -763,12 +763,12 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   instrument.pop_back();
   imd.Add(MDStr::Instrument, instrument);
   Fetch(MDStr::Mode, imd, "header.swath");
-  Fetch(MDNum::NumberOfLines, imd, "number_lines", 0);
-  Fetch(MDNum::NumberOfColumns, imd, "number_samples", 0);
-  Fetch(MDNum::AverageSceneHeight, imd, "support_data.avg_scene_height", 0);
-  Fetch(MDNum::RadarFrequency, imd, "support_data.radar_frequency", 0);
-  Fetch(MDNum::PRF, imd, "support_data.pulse_repetition_frequency", 0);
-  Fetch(MDNum::CalScale, imd, "calibration.absoluteCalibrationConstant", 0);
+  Fetch(MDNum::NumberOfLines, imd, "number_lines");
+  Fetch(MDNum::NumberOfColumns, imd, "number_samples");
+  Fetch(MDNum::AverageSceneHeight, imd, "support_data.avg_scene_height");
+  Fetch(MDNum::RadarFrequency, imd, "support_data.radar_frequency");
+  Fetch(MDNum::PRF, imd, "support_data.pulse_repetition_frequency");
+  Fetch(MDNum::CalScale, imd, "calibration.absoluteCalibrationConstant");
   
   // Manifest data may not be present in geom file, but support data should be present in that case
   CheckFetch(MDStr::BeamMode, imd, "manifest_data.acquisition_mode") || CheckFetch(MDStr::BeamMode, imd, "support_data.acquisition_mode");
