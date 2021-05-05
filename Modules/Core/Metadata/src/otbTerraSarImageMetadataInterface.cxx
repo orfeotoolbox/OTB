@@ -400,20 +400,19 @@ double TerraSarImageMetadataInterface::GetCalibrationFactor() const
 
 unsigned int TerraSarImageMetadataInterface::GetNumberOfNoiseRecords(const MetadataSupplierInterface& mds, const unsigned int polLayer) const
 {
-  unsigned int ret = std::numeric_limits<unsigned int>::quiet_NaN();
   if(polLayer == 0)
   {
     if(mds.HasValue("level1Product.noise.numberOfNoiseRecords"))
-      ret = mds.GetAs<unsigned int>("level1Product.noise.numberOfNoiseRecords");
-    ret = mds.GetAs<unsigned int>("noise.numberOfNoiseRecords");
+      return mds.GetAs<unsigned int>(std::numeric_limits<unsigned int>::quiet_NaN(), "level1Product.noise.numberOfNoiseRecords");
+    else
+      return mds.GetAs<unsigned int>(std::numeric_limits<unsigned int>::quiet_NaN(), "noise.numberOfNoiseRecords");
   }
   else
   {
     std::stringstream oss;
     oss << "level1Product.noise_" << polLayer << ".numberOfNoiseRecords";
-    ret = mds.GetAs<unsigned int>(oss.str());
+    return mds.GetAs<unsigned int>(std::numeric_limits<unsigned int>::quiet_NaN(), oss.str());
   }
-  return ret;
 }
 
 unsigned int TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(const unsigned int noiseRecord,
@@ -806,7 +805,7 @@ TerraSarImageMetadataInterface::GetRadiometricCalibrationNoise(const MetadataSup
     {
       oss.str("");
       oss << "level1Product.noise_" << band << ".polLayer";
-      if(mds.GetAs<std::string>(oss.str()) == bandName)
+      if(mds.GetAs<std::string>("", oss.str()) == bandName)
       {
         polLayer = band;
         break;
@@ -1068,7 +1067,7 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   // Polarisation
   auto polarization =
       itksys::SystemTools::GetFilenameName(m_MetadataSupplierInterface->GetResourceFile("")).substr(6, 2);
-
+  imd.Add(MDStr::Polarization, polarization);
   // Main XML file
   std::string MainDirectory = itksys::SystemTools::GetParentDirectory(
         itksys::SystemTools::GetParentDirectory(m_MetadataSupplierInterface->GetResourceFile("")));
@@ -1138,13 +1137,7 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
     Projection::GCPParam gcp;
     ReadSARSensorModel(MainXMLFileMetadataSupplier, GCPXMLFileMS, gcp, polarization, sarParam);
   }
-
-  for (int bandId = 0 ; bandId < m_MetadataSupplierInterface->GetNbBands() ; ++bandId)
-  {
-    Fetch(MDStr::Polarization, imd, "POLARIMETRIC_INTERP", bandId);
-    imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
-  }
-
+  imd.Add(MDGeom::SAR, sarParam);
 }
 
 void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
@@ -1178,11 +1171,9 @@ void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   assert(m_MetadataSupplierInterface->GetNbBands() == imd.Bands.size());
 
   SARParam sarParam;
-  for (int bandId = 0 ; bandId < m_MetadataSupplierInterface->GetNbBands() ; ++bandId)
-  {
-    Fetch(MDStr::Polarization, imd, ("acquisitionInfo.polarisationList[" + std::to_string(bandId) + "]").c_str(), bandId);
-    imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
-  }
+  Fetch(MDStr::Polarization, imd, "acquisitionInfo.polarisationList[0]");
+  imd.Add(MDGeom::SAR, sarParam);
+
   SARCalib sarCalib;
   LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   imd.Add(MDGeom::SARCalib, sarCalib);
