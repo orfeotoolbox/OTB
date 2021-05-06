@@ -250,6 +250,8 @@ unsigned int XMLMetadataSupplier::GetNumberOf(std::string const & path) const
       auto sub = after.substr(1, after.find("."));
       idx.insert(std::stoi(sub));
     }
+    else if(after.size() > 0 && after.compare(0, 1, ".") == 0)
+      idx.insert(0);
   }
   return idx.size();
 }
