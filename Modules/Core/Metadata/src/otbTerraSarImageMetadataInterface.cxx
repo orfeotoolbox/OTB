@@ -28,7 +28,7 @@
 #include "otbImageKeywordlist.h"
 #include "otbXMLMetadataSupplier.h"
 #include "otbSARMetadata.h"
-
+#include "otbSpatialReference.h"
 
 #include <boost/filesystem.hpp>
 //TODO C++ 17 : use std::optional instead
@@ -953,6 +953,54 @@ void TerraSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent ind
   Superclass::PrintSelf(os, indent);
 }
 
+void ReadGeorefGCP(const XMLMetadataSupplier & geoXmlMS, ImageMetadata& imd)
+{
+  Projection::GCPParam gcp;
+  std::stringstream ss;
+
+  // Get the ellipsoid and semi-major, semi-minor axes
+  if(geoXmlMS.HasValue("geoReference.referenceFrames.sphere.ellipsoidID"))
+  {
+    auto ellipsoidID = geoXmlMS.GetAs<std::string>("geoReference.referenceFrames.sphere.ellipsoidID");
+    auto minor_axis = geoXmlMS.GetAs<double>(0, "geoReference.referenceFrames.sphere.semiMinorAxis");
+    auto major_axis = geoXmlMS.GetAs<double>(0, "geoReference.referenceFrames.sphere.semiMajorAxis");
+    if(ellipsoidID.empty() || minor_axis == 0 || major_axis == 0)
+    {
+      otbGenericExceptionMacro(MissingMetadataException, << "Cannot read GCP's spatial reference");
+    }
+    else if(ellipsoidID == "WGS84")
+    {
+      gcp.GCPProjection = SpatialReference::FromWGS84().ToWkt();
+    }
+    else
+    {
+      gcp.GCPProjection = SpatialReference::FromGeogCS("", "", ellipsoidID, major_axis,
+                                                       major_axis/(major_axis - minor_axis)).ToWkt();
+    }
+  }
+
+  auto GCPCount = geoXmlMS.GetAs<unsigned int>(0, "geoReference.geolocationGrid.numberOfGridPoints.total");
+  // Count the gcps if the given count value is invalid
+  if(GCPCount == 0)
+    GCPCount = geoXmlMS.GetNumberOf("geoReference.geolocationGrid.gridPoint");
+  // Put some reasonable limits of the number of gcps
+  if(GCPCount > 5000)
+    GCPCount = 5000;
+
+  for(unsigned int i = 1 ; i <= GCPCount ; ++i)
+  {
+    ss.str("");
+    ss << "geoReference.geolocationGrid.gridPoint_" << i << ".";
+    gcp.GCPs.emplace_back(std::to_string(i),                   // id
+                     "",                                       // info
+                     geoXmlMS.GetAs<double>(ss.str() + "col"), // col
+                     geoXmlMS.GetAs<double>(ss.str() + "row"), // row
+                     geoXmlMS.GetAs<double>(ss.str() + "lon"), // px
+                     geoXmlMS.GetAs<double>(ss.str() + "lat"), // py
+                     0);                                       // pz ("height" in the xml file, but GDAL doesn't read it, so we do the same)
+  }
+  imd.Add(MDGeom::GCP, gcp);
+}
 
 void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
                         const XMLMetadataSupplier & geoXmlMS,
@@ -1123,20 +1171,15 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   LoadRadiometricCalibrationData(sarCalib, MainXMLFileMetadataSupplier, imd, polarization);
   imd.Add(MDGeom::SARCalib, sarCalib);
 
-  assert(m_MetadataSupplierInterface->GetNbBands() == imd.Bands.size());
-
-  SARParam sarParam;
-
   // Open the georef file containing GCPs
   XMLMetadataSupplier GCPXMLFileMS(MainDirectory + "/ANNOTATION/GEOREF.xml");
 
-  if(imd.Has(MDGeom::GCP))
-    ReadSARSensorModel(MainXMLFileMetadataSupplier, GCPXMLFileMS, imd.GetGCPParam(), polarization, sarParam);
-  else
-  {
-    Projection::GCPParam gcp;
-    ReadSARSensorModel(MainXMLFileMetadataSupplier, GCPXMLFileMS, gcp, polarization, sarParam);
-  }
+  // Fetch the GCP
+  if(!imd.Has(MDGeom::GCP))
+    ReadGeorefGCP(GCPXMLFileMS, imd);
+
+  SARParam sarParam;
+  ReadSARSensorModel(MainXMLFileMetadataSupplier, GCPXMLFileMS, imd.GetGCPParam(), polarization, sarParam);
   imd.Add(MDGeom::SAR, sarParam);
 }
 
@@ -1155,6 +1198,7 @@ void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   Fetch(MDNum::PRF, imd, "sensor_params.prf");
   Fetch(MDNum::CalFactor, imd, "calibration.calibrationConstant.calFactor");
   Fetch(MDNum::CalScale, imd, "calibration.calibrationConstant.calFactor");
+  Fetch(MDStr::Polarization, imd, "acquisitionInfo.polarisationList[0]");
     
   // Main XML file
   std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(m_MetadataSupplierInterface->GetResourceFile("")),
@@ -1166,13 +1210,18 @@ void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     imd.Add(MDStr::OrbitDirection, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.missionInfo.orbitDirection"));
     imd.Add(MDNum::OrbitNumber, MainXMLFileMS.GetAs<double>("level1Product.productInfo.missionInfo.absOrbit"));
     imd.Add(MDNum::RSF, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
+
+    // Open the georef file containing GCPs
+    XMLMetadataSupplier GCPXMLFileMS(itksys::SystemTools::GetParentDirectory(MainFilePath) + "/ANNOTATION/GEOREF.xml");
+
+    // Fetch the GCP
+    if(!imd.Has(MDGeom::GCP))
+      ReadGeorefGCP(GCPXMLFileMS, imd);
+
+    SARParam sarParam;
+    ReadSARSensorModel(MainXMLFileMS, GCPXMLFileMS, imd.GetGCPParam(), imd[MDStr::Polarization], sarParam);
+    imd.Add(MDGeom::SAR, sarParam);
   }
-
-  assert(m_MetadataSupplierInterface->GetNbBands() == imd.Bands.size());
-
-  SARParam sarParam;
-  Fetch(MDStr::Polarization, imd, "acquisitionInfo.polarisationList[0]");
-  imd.Add(MDGeom::SAR, sarParam);
 
   SARCalib sarCalib;
   LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
