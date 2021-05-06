@@ -125,11 +125,11 @@ void SarParametricMapFunction<TInputImage, TCoordRep>::EvaluateParametricCoeffic
     if (imd.Has(MDNum::NumberOfLines))
       m_ProductHeight = imd[MDNum::NumberOfLines];
     else
-      m_ProductHeight = this->GetInputImage()->GetLargestPossibleRegion().GetSize()[0];
+      m_ProductHeight = this->GetInputImage()->GetLargestPossibleRegion().GetSize()[1];
     if (imd.Has(MDNum::NumberOfColumns))
       m_ProductWidth = imd[MDNum::NumberOfColumns];
     else
-      m_ProductWidth  = this->GetInputImage()->GetLargestPossibleRegion().GetSize()[1];
+      m_ProductWidth  = this->GetInputImage()->GetLargestPossibleRegion().GetSize()[0];
 
     // Perform the plane least square estimation
     unsigned int nbRecords = pointSet->GetNumberOfPoints();
