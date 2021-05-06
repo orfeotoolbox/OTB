@@ -185,6 +185,22 @@ SpatialReference SpatialReference::FromUTM(unsigned int zone, hemisphere hem)
   return SpatialReference(std::move(tmpSR));
 }
 
+SpatialReference SpatialReference::FromGeogCS(const std::string& GeogName, const std::string& DatumName,
+                                              const std::string& SpheroidName, const double SemiMajor,
+                                              const double InvFlattening)
+{
+  OGRSpatialReferencePtr tmpSR(new OGRSpatialReference());
+  OGRErr code = tmpSR->SetGeogCS(GeogName.c_str(), DatumName.c_str(), SpheroidName.c_str(), SemiMajor, InvFlattening);
+  if (code != OGRERR_NONE)
+  {
+    std::ostringstream oss;
+    oss << "(InvalidSRDescriptionException) "
+        << "FromGeogCS(" << GeogName << ", " << DatumName << ", " << SpheroidName << ", " << SemiMajor << ", " << InvFlattening << ")";
+    throw std::runtime_error(oss.str());
+  }
+  return SpatialReference(std::move(tmpSR));
+}
+
 std::string SpatialReference::ToWkt() const
 {
   char* cwkt;
