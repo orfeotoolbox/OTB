@@ -953,7 +953,18 @@ void TerraSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent ind
   Superclass::PrintSelf(os, indent);
 }
 
-void ReadGeorefGCP(const XMLMetadataSupplier & geoXmlMS, ImageMetadata& imd)
+MetaData::TimeType ReadFormattedDate(const std::string & dateStr, const std::string & format = "%Y-%m-%dT%H:%M:%S%F") 
+{ 
+    MetaData::TimeType outputDate;
+    std::stringstream ss;
+    auto facet = new boost::posix_time::time_input_facet(format);
+    ss.imbue(std::locale(std::locale(), facet));
+    ss << dateStr;
+    ss >> outputDate;
+    return outputDate; 
+}
+
+void ReadGeorefGCP(const XMLMetadataSupplier & xmlMS, const XMLMetadataSupplier & geoXmlMS, ImageMetadata & imd, SARParam & param)
 {
   Projection::GCPParam gcp;
   std::stringstream ss;
@@ -987,40 +998,39 @@ void ReadGeorefGCP(const XMLMetadataSupplier & geoXmlMS, ImageMetadata& imd)
   if(GCPCount > 5000)
     GCPCount = 5000;
 
+  const auto azimuthTimeStart = ReadFormattedDate(
+      xmlMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC"));
+
   for(unsigned int i = 1 ; i <= GCPCount ; ++i)
   {
     ss.str("");
     ss << "geoReference.geolocationGrid.gridPoint_" << i << ".";
-    gcp.GCPs.emplace_back(std::to_string(i),                   // id
+    const std::string id = std::to_string(i);
+    gcp.GCPs.emplace_back(id,                                  // id
                      "",                                       // info
                      geoXmlMS.GetAs<double>(ss.str() + "col"), // col
                      geoXmlMS.GetAs<double>(ss.str() + "row"), // row
                      geoXmlMS.GetAs<double>(ss.str() + "lon"), // px
                      geoXmlMS.GetAs<double>(ss.str() + "lat"), // py
                      0);                                       // pz ("height" in the xml file, but GDAL doesn't read it, so we do the same)
+    
+    GCPTime time;
+    auto deltaAz = boost::posix_time::precise_duration(geoXmlMS.GetAs<double>(ss.str() + "t"));
+
+    time.azimuthTime = azimuthTimeStart + deltaAz;
+    time.slantRangeTime = param.nearRangeTime + geoXmlMS.GetAs<double>(ss.str() + "tau"); 
+
+    param.gcpTimes[id] = time;
   }
   imd.Add(MDGeom::GCP, gcp);
 }
 
 void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
-                        const XMLMetadataSupplier & geoXmlMS,
-                        const Projection::GCPParam & gcps,
                         const std::string& polarization,
                         SARParam & param)
 {
   // Number of entries in the vector
   int listCount = xmlMS.GetAs<int>("level1Product.platform.orbit.orbitHeader.numStateVectors");
-
-  const auto readFormattedDate  = [](const std::string & dateStr, const std::string & format) 
-  { 
-    MetaData::TimeType outputDate;
-    std::stringstream ss;
-    auto facet = new boost::posix_time::time_input_facet(format);
-    ss.imbue(std::locale(std::locale(), facet));
-    ss << dateStr;
-    ss >> outputDate;
-    return outputDate; 
-  };
 
   const std::string dateFormat = "%Y-%m-%dT%H:%M:%S%F";
 
@@ -1034,7 +1044,7 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
     std::string path_root = "level1Product.platform.orbit.stateVec_" + oss.str();
     Orbit orbit;
     
-    orbit.time = readFormattedDate(xmlMS.GetAs<std::string>(path_root + ".timeUTC"), dateFormat);
+    orbit.time = ReadFormattedDate(xmlMS.GetAs<std::string>(path_root + ".timeUTC"), dateFormat);
 
     orbit.position[0] = xmlMS.GetAs<double>(path_root + ".posX");
     orbit.position[1] = xmlMS.GetAs<double>(path_root + ".posY");
@@ -1067,10 +1077,10 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
     }
   }
 
-  const auto azimuthTimeStart = readFormattedDate(
+  const auto azimuthTimeStart = ReadFormattedDate(
       xmlMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC"), dateFormat);
 
-  const auto azimuthTimeStop = readFormattedDate(
+  const auto azimuthTimeStop = ReadFormattedDate(
       xmlMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.stop.timeUTC"), dateFormat);
 
   const auto td = azimuthTimeStop - azimuthTimeStart;
@@ -1094,19 +1104,6 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
   burstRecord.azimuthAnxTime = 0.;
 
   param.burstRecords.push_back(burstRecord);
-
-  for (const auto & gcp : gcps.GCPs)
-  {
-    const std::string prefix = "geoReference.geolocationGrid.gridPoint_" + gcp.m_Id + ".";
-    
-    GCPTime time;
-    auto deltaAz = boost::posix_time::precise_duration(geoXmlMS.GetAs<double>(prefix + "t"));
-
-    time.azimuthTime = azimuthTimeStart + deltaAz;
-    time.slantRangeTime = param.nearRangeTime + geoXmlMS.GetAs<double>(prefix + "tau"); 
-
-    param.gcpTimes[gcp.m_Id] = time;
-  }
 }
 
 
@@ -1128,6 +1125,8 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   }
 
   XMLMetadataSupplier MainXMLFileMetadataSupplier(MainFilePath);
+  imd.Add(MDNum::NumberOfLines, MainXMLFileMetadataSupplier.GetAs<int>("level1Product.productInfo.imageDataInfo.imageRaster.numberOfRows"));
+  imd.Add(MDNum::NumberOfColumns, MainXMLFileMetadataSupplier.GetAs<int>("level1Product.productInfo.imageDataInfo.imageRaster.numberOfColumns"));
   imd.Add(MDStr::OrbitDirection, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.missionInfo.orbitDirection"));
   imd.Add(MDNum::OrbitNumber, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productInfo.missionInfo.absOrbit"));
   imd.Add(MDNum::LineSpacing, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingAzimuth"));
@@ -1174,12 +1173,12 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   // Open the georef file containing GCPs
   XMLMetadataSupplier GCPXMLFileMS(MainDirectory + "/ANNOTATION/GEOREF.xml");
 
-  // Fetch the GCP
-  if(!imd.Has(MDGeom::GCP))
-    ReadGeorefGCP(GCPXMLFileMS, imd);
-
   SARParam sarParam;
-  ReadSARSensorModel(MainXMLFileMetadataSupplier, GCPXMLFileMS, imd.GetGCPParam(), polarization, sarParam);
+
+  // Fetch the GCP
+  ReadGeorefGCP(MainXMLFileMetadataSupplier, GCPXMLFileMS, imd, sarParam);
+
+  ReadSARSensorModel(MainXMLFileMetadataSupplier, polarization, sarParam);
   imd.Add(MDGeom::SAR, sarParam);
 }
 
@@ -1214,12 +1213,12 @@ void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     // Open the georef file containing GCPs
     XMLMetadataSupplier GCPXMLFileMS(itksys::SystemTools::GetParentDirectory(MainFilePath) + "/ANNOTATION/GEOREF.xml");
 
-    // Fetch the GCP
-    if(!imd.Has(MDGeom::GCP))
-      ReadGeorefGCP(GCPXMLFileMS, imd);
-
     SARParam sarParam;
-    ReadSARSensorModel(MainXMLFileMS, GCPXMLFileMS, imd.GetGCPParam(), imd[MDStr::Polarization], sarParam);
+
+    // Fetch the GCP
+    ReadGeorefGCP(MainXMLFileMS, GCPXMLFileMS, imd, sarParam);
+
+    ReadSARSensorModel(MainXMLFileMS, imd[MDStr::Polarization], sarParam);
     imd.Add(MDGeom::SAR, sarParam);
   }
 
