@@ -1128,6 +1128,8 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   }
 
   XMLMetadataSupplier MainXMLFileMetadataSupplier(MainFilePath);
+  imd.Add(MDNum::NumberOfLines, MainXMLFileMetadataSupplier.GetAs<int>("level1Product.productInfo.imageDataInfo.imageRaster.numberOfRows"));
+  imd.Add(MDNum::NumberOfColumns, MainXMLFileMetadataSupplier.GetAs<int>("level1Product.productInfo.imageDataInfo.imageRaster.numberOfColumns"));
   imd.Add(MDStr::OrbitDirection, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.missionInfo.orbitDirection"));
   imd.Add(MDNum::OrbitNumber, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productInfo.missionInfo.absOrbit"));
   imd.Add(MDNum::LineSpacing, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingAzimuth"));
