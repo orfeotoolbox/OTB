@@ -455,7 +455,7 @@ set(quickbird_filename LARGEINPUT{QUICKBIRD/CEVENNES/06FEB12104912-P1BS-00553399
 set(Radarsat2_filename LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona})
 set(TerraSar_filename LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos})
 set(CosmoSkyMed_filename LARGEINPUT{COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5})
-set(Sentinel1_filename LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043})
+set(Sentinel1_filename LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff})
 
 set(spot5_2_geom_file ${INPUTDATA}/spot5/spot5-1.geom)
 set(formosat_geom_file ${INPUTDATA}/FORMOSAT_ROI_1000_100.geom)
@@ -467,7 +467,6 @@ set(quickbird_geom_file ${INPUTDATA}/QB/qb-2.geom)
 set(Radarsat2_geom_file ${INPUTDATA}/radarsat2/radarsat2-1.geom)
 set(TerraSar_geom_file ${INPUTDATA}/terrasar/terrasar-1.geom)
 set(CosmoSkyMed_geom_file ${INPUTDATA}/cosmoskymed/cosmoskymed-1.geom)
-set(Sentinel1_geom_file ${INPUTDATA}/sentinel1/sentinel1-2.geom)
 
 foreach(sensor ${sensor_list})
 
