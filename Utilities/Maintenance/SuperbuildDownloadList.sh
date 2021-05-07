@@ -38,13 +38,16 @@ CUR_DIR="$( cd "$( dirname "$0" )" && pwd )"
 SB_CMAKE_DIR_REL=$CUR_DIR/../../SuperBuild/CMake
 SB_CMAKE_DIR=$(readlink -f "${SB_CMAKE_DIR_REL}")
 cd "$CUR_DIR/../../" || echo "cannot cd to CUR_DIR/../../"
-GIT_BRANCH=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
-#if a branch contains release-X.Y then xdk is taken from packages/xdk/OTB-X.Y
-if [[ "$GIT_BRANCH" =~ release-* ]]; then
-    VERSION=$(echo "${GIT_BRANCH}"| sed 's/.*release-//'| cut -d'-' -f 1)
+
+GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+# the version is the branch name for develop and release-X.Y branches and the commit short hash for other branches
+if [[ ${GIT_BRANCH} =~ develop|release-+[0-9]+\.[0-9] ]] ; then
+  VERSION=${GIT_BRANCH}
 else
-    VERSION="develop"
+  VERSION=$(git rev-parse --short HEAD)
 fi
+
 CMAKE_FILES=$(find "${SB_CMAKE_DIR}" -maxdepth 1 -type f -name "External_*")
 
 DOWNLOAD_NAMES=
