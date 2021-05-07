@@ -1,4 +1,4 @@
-OTB-v 7.3.0 - Changes since version 7.2.0 (April 28th, 2021)
+OTB-v 7.3.0 - Changes since version 7.2.0 (May 7th, 2021)
 ----------------------------------------------------------------
 
 Bugs fixed:
