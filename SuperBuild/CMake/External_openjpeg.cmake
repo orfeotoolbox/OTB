@@ -40,7 +40,7 @@ ExternalProject_Add(OPENJPEG
   PREFIX OPENJPEG
   URL "https://github.com/uclouvain/openjpeg/archive/v2.3.1.tar.gz"
   URL_MD5 3b9941dc7a52f0376694adb15a72903f
-  DOWNLOAD_NAME openjpeg_v2.3.0.tar.gz
+  DOWNLOAD_NAME openjpeg_v2.3.1.tar.gz
   BINARY_DIR ${OPENJPEG_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
