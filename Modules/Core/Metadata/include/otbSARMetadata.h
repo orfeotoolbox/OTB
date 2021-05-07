@@ -192,7 +192,7 @@ struct OTBMetadata_EXPORT SARCalib
   using ArrayType    = std::array<int, 2>;
   using LookupDataType = SarCalibrationLookupData;
   
-  bool calibrationLookupFlag;
+  bool calibrationLookupFlag = false;
   double rescalingFactor;
   MetaData::Time calibrationStartTime;
   MetaData::Time calibrationStopTime;

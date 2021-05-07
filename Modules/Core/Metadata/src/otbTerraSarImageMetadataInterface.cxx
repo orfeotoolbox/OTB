@@ -1168,6 +1168,8 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
 
   SARCalib sarCalib;
   LoadRadiometricCalibrationData(sarCalib, MainXMLFileMetadataSupplier, imd, polarization);
+  sarCalib.calibrationLookupFlag = false;
+
   imd.Add(MDGeom::SARCalib, sarCalib);
 
   // Open the georef file containing GCPs
@@ -1224,6 +1226,8 @@ void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
 
   SARCalib sarCalib;
   LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
+  sarCalib.calibrationLookupFlag = false;
+
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
