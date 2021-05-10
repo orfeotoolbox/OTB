@@ -837,9 +837,6 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   Fetch(MDNum::LineSpacing, imd, "support_data.azimuth_spacing");
   Fetch(MDNum::PixelSpacing, imd, "support_data.range_spacing");
   imd.Add(MDStr::SensorID, "SAR");
-//  auto instrument = m_MetadataSupplierInterface->GetAs<std::string>("sensor");
-//  instrument.pop_back();
-//  imd.Add(MDStr::Instrument, instrument);
   Fetch(MDStr::Mode, imd, "header.swath");
   Fetch(MDNum::NumberOfLines, imd, "number_lines");
   Fetch(MDNum::NumberOfColumns, imd, "number_samples");
@@ -851,7 +848,7 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   // Manifest data may not be present in geom file, but support data should be present in that case
   CheckFetch(MDStr::BeamMode, imd, "manifest_data.acquisition_mode") || CheckFetch(MDStr::BeamMode, imd, "support_data.acquisition_mode");
   CheckFetch(MDStr::BeamSwath, imd, "manifest_data.swath") || CheckFetch(MDStr::BeamSwath, imd, "support_data.swath");
-  CheckFetch(MDStr::Instrument, imd, "manifest_data.instrument") || CheckFetch(MDStr::Mission, imd, "support_data.instrument");
+  CheckFetch(MDStr::Instrument, imd, "manifest_data.instrument") || CheckFetch(MDStr::Instrument, imd, "support_data.instrument");
   CheckFetch(MDStr::OrbitDirection, imd, "manifest_data.orbit_pass") || CheckFetch(MDStr::OrbitDirection, imd, "support_data.orbit_pass");
   CheckFetch(MDNum::OrbitNumber, imd, "manifest_data.abs_orbit") || CheckFetch(MDStr::OrbitDirection, imd, "support_data.abs_orbit");
   CheckFetch(MDStr::ProductType, imd, "manifest_data.product_type") || CheckFetch(MDStr::ProductType, imd, "support_data.product_type");
