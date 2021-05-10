@@ -1109,10 +1109,6 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
 
 void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
 {
-  // Polarisation
-  auto polarization =
-      itksys::SystemTools::GetFilenameName(m_MetadataSupplierInterface->GetResourceFile("")).substr(6, 2);
-  imd.Add(MDStr::Polarization, polarization);
   // Main XML file
   std::string MainDirectory = itksys::SystemTools::GetParentDirectory(
         itksys::SystemTools::GetParentDirectory(m_MetadataSupplierInterface->GetResourceFile("")));
@@ -1142,6 +1138,12 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   imd.Add(MDNum::RangeTimeLastPixel, MainXMLFileMetadataSupplier.GetFirstAs<double>("level1Product.productInfo.sceneInfo.rangeTime.lastPixel"));
   imd.Add(MDNum::PRF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonPRF"));
   imd.Add(MDNum::RSF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
+
+  // Polarisation
+  auto polarization =
+      itksys::SystemTools::GetFilenameName(m_MetadataSupplierInterface->GetResourceFile("")).substr(6, 2);
+  imd.Add(MDStr::Polarization, polarization);
+
   auto numberOfCalFactor = MainXMLFileMetadataSupplier.GetNumberOf("level1Product.calibration.calibrationConstant");
   if(numberOfCalFactor == 1)
   {
