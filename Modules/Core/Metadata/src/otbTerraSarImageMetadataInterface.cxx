@@ -1202,6 +1202,8 @@ void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   Fetch(MDNum::CalFactor, imd, "calibration.calibrationConstant.calFactor");
   Fetch(MDNum::CalScale, imd, "calibration.calibrationConstant.calFactor");
   Fetch(MDStr::Polarization, imd, "acquisitionInfo.polarisationList[0]");
+  Fetch(MDNum::NumberOfLines, imd, "number_lines");
+  Fetch(MDNum::NumberOfColumns, imd, "number_samples");
     
   // Main XML file
   std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(m_MetadataSupplierInterface->GetResourceFile("")),
