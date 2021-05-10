@@ -118,7 +118,7 @@ In our case, we have:
     epi.baseline:  0.2094
 
 The *epi.baseline* parameter provides the mean value (in pixels per meters) of
-the baseline to sensor altitude ratio (also called B/H in the litterature).
+the baseline to sensor altitude ratio (also called B/H in the literature).
 It can be used to do an approximate conversion of disparities to physical
 elevation :
 

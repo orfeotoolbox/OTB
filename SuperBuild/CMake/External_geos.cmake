@@ -24,8 +24,8 @@ SETUP_SUPERBUILD(GEOS)
 
 ExternalProject_Add(GEOS
    PREFIX GEOS
-   URL "http://download.osgeo.org/geos/geos-3.6.1.tar.bz2"
-   URL_MD5 c97e338b3bc81f9848656e9d693ca6cc
+   URL "http://download.osgeo.org/geos/geos-3.6.5.tar.bz2"
+   URL_MD5 5ddbbe9dbaf0ac45a36856c185c56b23
    SOURCE_DIR ${GEOS_SB_SRC}
    BINARY_DIR ${GEOS_SB_SRC}
    INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -43,8 +43,6 @@ ExternalProject_Add(GEOS
    LOG_INSTALL 1
    )
 
-# Patch still needed with version 3.6.1 to avoid error during CMake configuration
-# See https://trac.osgeo.org/geos/ticket/753
 SUPERBUILD_PATCH_SOURCE(GEOS)
 
 set(_SB_GEOS_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)

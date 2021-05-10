@@ -92,12 +92,73 @@ private:
     SetMinimumParameterIntValue("threshold.y.start", 0);
     SetMinimumParameterIntValue("threshold.y.end",   0);
 
+    AddParameter(ParameterType_Group, "roi", "ROI group");
+    SetParameterDescription("roi", "Contains index and size of ROI");
+
+    AddParameter(ParameterType_Int, "roi.startx", "X start index");
+    SetParameterDescription("roi.startx", "X position of ROI start (in pixels)");
+    SetDefaultParameterInt("roi.startx", 0);
+
+    AddParameter(ParameterType_Int, "roi.starty", "Y start index");
+    SetParameterDescription("roi.starty", "Y position of ROI start (in pixels)");
+    SetDefaultParameterInt("roi.starty", 0);
+
+    AddParameter(ParameterType_Int, "roi.sizex", "X size");
+    SetParameterDescription("roi.sizex", "X size of ROI (in pixels)");
+    SetDefaultParameterInt("roi.sizex", 0);
+
+    AddParameter(ParameterType_Int, "roi.sizey", "Y size");
+    SetParameterDescription("roi.sizey", "Y size of ROI (in pixels)");
+    SetDefaultParameterInt("roi.sizey", 0);
+
+    MandatoryOff("roi.startx");
+    MandatoryOff("roi.starty");
+    MandatoryOff("roi.sizex");
+    MandatoryOff("roi.sizey");
+
+    AddParameter(ParameterType_Group, "margin", "Margins group");
+    SetParameterDescription("margin", "Contains margins to define the ROI");
+
+    AddParameter(ParameterType_Int, "margin.top", "Top margin");
+    SetParameterDescription("margin.top", "Top margin for ROI (in pixels)");
+    SetDefaultParameterInt("margin.top", 0);
+
+    AddParameter(ParameterType_Int, "margin.bottom", "Bottom margin");
+    SetParameterDescription("margin.bottom", "Bottom margin for ROI (in pixels)");
+    SetDefaultParameterInt("margin.bottom", 0);
+
+    AddParameter(ParameterType_Int, "margin.left", "Left margin");
+    SetParameterDescription("margin.left", "Left margin for ROI (in pixels)");
+    SetDefaultParameterInt("margin.left", 0);
+
+    AddParameter(ParameterType_Int, "margin.right", "Right margin");
+    SetParameterDescription("margin.right", "Right margin for ROI (in pixels)");
+    SetDefaultParameterInt("margin.right", 0);
+
+    MandatoryOff("margin.top");
+    MandatoryOff("margin.bottom");
+    MandatoryOff("margin.left");
+    MandatoryOff("margin.right");
+
+    AddParameter(ParameterType_Choice, "mode", "Region mode");
+    AddChoice("mode.roi", "Pixel region with start and size");
+    AddChoice("mode.margin", "Pixel region with top / bottom / left / right.");
+
+    AddChoice("mode.threshold", "Threshold for X, Y top and botton (DEPRECATED)");
+
+    AddParameter(ParameterType_Float, "fillval", "Padding fill value");
+    SetParameterDescription("fillval", "Value to insert in margins");
+    SetDefaultParameterFloat("fillval", 0.0);
+    MandatoryOff("fillval");
+
     AddRAMParameter();
 
     SetDocExampleParameterValue("in", "ResetMarginInput100x100.tiff");
-    SetDocExampleParameterValue("threshold.x",       "10");
-    SetDocExampleParameterValue("threshold.y.start", "12");
-    SetDocExampleParameterValue("threshold.y.end",    "25");
+    SetDocExampleParameterValue("mode", "roi");
+    SetDocExampleParameterValue("roi.startx", "10");
+    SetDocExampleParameterValue("roi.starty", "10");
+    SetDocExampleParameterValue("roi.sizex", "50");
+    SetDocExampleParameterValue("roi.sizey", "25");
     SetDocExampleParameterValue("out", "ResetMargin.tiff");
     SetOfficialDocLink();
   }
@@ -107,26 +168,75 @@ private:
 
   void DoExecute() override
   {
-    auto const thrX = GetParameterInt("threshold.x");
-    auto const thrYtop = GetParameterInt("threshold.y.start");
-    auto const thrYbot = GetParameterInt("threshold.y.end");
-    if (thrX < 0)
-      itkExceptionMacro("The column threshold is expected to be positive");
-    if (thrYtop < 0)
-      itkExceptionMacro("The top line threshold is expected to be positive");
-    if (thrYbot < 0)
-      itkExceptionMacro("The bottom line threshold is expected to be positive");
-    if (thrX == 0 && thrYtop == 0 && thrYbot == 0)
-      itkExceptionMacro("Don't use ResetMargin to clamp nothing!");
+    FloatVectorImageType* input = GetParameterFloatVectorImage("in");
+    FloatVectorImageType::RegionType region = input->GetLargestPossibleRegion();
 
-    auto filter = ResetMarginFilter<FloatImageType>::New();
-    assert(thrX >= 0);
-    assert(thrYtop >= 0);
-    assert(thrYbot >= 0);
-    filter->SetThresholdX(thrX);
-    filter->SetThresholdYtop(thrYtop);
-    filter->SetThresholdYbot(thrYbot);
-    filter->SetInput(GetParameterFloatImage("in"));
+    switch (GetParameterInt("mode"))
+    {
+      case 0: // roi
+      {
+        region.SetIndex({GetParameterInt("roi.startx"),GetParameterInt("roi.starty")});
+        region.SetSize({(unsigned long)GetParameterInt("roi.sizex"),(unsigned long)GetParameterInt("roi.sizey")});
+        break;
+      }
+      case 1: // margin
+      {
+        FloatVectorImageType::IndexType idx = region.GetIndex();
+        FloatVectorImageType::SizeType sz = region.GetSize();
+        idx[0] += GetParameterInt("margin.left");
+        idx[1] += GetParameterInt("margin.top");
+        sz[0] -= GetParameterInt("margin.left") + GetParameterInt("margin.right");
+        sz[1] -= GetParameterInt("margin.top") + GetParameterInt("margin.bottom");
+        // check largest possible region index
+        if(idx[0] < 0)
+        {
+          otbLogMacro(Error, << "The start index of the region in x coordinates is negative, cannot continue processing");
+          break;
+        }
+        if(idx[1] < 0)
+        {
+          otbLogMacro(Error, << "The start index of the region in y coordinates is negative, cannot continue processing");
+          break;
+        }
+        // check margins for empty region
+        if(sz[0] <= 0)
+        {
+          otbLogMacro(Error, << "The ROI size with given margins (left + right) is empty, cannot continue processing");
+          break;
+        }
+        if(sz[1] <= 0)
+        {
+          otbLogMacro(Error, << "The ROI size with given margins (top + bottom) is empty, cannot continue processing");
+          break;
+        }
+        region.SetIndex(idx);
+        region.SetSize(sz);
+        break;
+      }
+      case 2: // threshold
+      {
+        FloatVectorImageType::IndexType idx = region.GetIndex();
+        FloatVectorImageType::SizeType sz = region.GetSize();
+        int thrX = GetParameterInt("threshold.x");
+        int thrYtop = GetParameterInt("threshold.y.start");
+        int thrYbot = GetParameterInt("threshold.y.end");
+        region.SetIndex(0, idx[0] + thrX);
+        region.SetSize(0,  (sz[0] - 2 * thrX));
+        region.SetIndex(1, idx[1] + thrYtop);
+        region.SetSize(1, (sz[1] - thrYtop - thrYbot));
+        break;
+      }
+      default:
+      {
+        otbAppLogFATAL("Unknown region mode: "<<GetParameterString("mode"));
+        break;
+      }
+    }
+
+    auto filter = ResetMarginFilter<FloatVectorImageType>::New();
+    filter->SetROI(region);
+    filter->SetInput(input);
+    filter->SetPaddingValue(GetParameterFloat("fillval"));
 
     SetParameterOutputImage("out", filter->GetOutput());
     RegisterPipeline();
