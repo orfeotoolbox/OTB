@@ -35,6 +35,9 @@ public:
   SarSensorModel(const ImageMetadata & imd);
   virtual ~SarSensorModel() = default;
 
+  SarSensorModel(const SarSensorModel&) = delete; // non construction-copyable
+  SarSensorModel& operator=(const SarSensorModel&) = delete; // non copyable
+
   using Point2DType = itk::Point<double, 2>;
   using Point3DType = itk::Point<double, 3>;
 
@@ -45,13 +48,18 @@ public:
 
   /** Transform world point (lat,lon,hgt) to input image point
   (col,row) */
-  void WorldToLineSample(const Point3DType& inGeoPoint, Point2DType& outLineSample) const;
+  void WorldToLineSample(const Point3DType& inGeoPoint,
+                         Point2DType& outLineSample) const;
 
   bool WorldToAzimuthRangeTime(const Point3DType& inGeoPoint, 
                                           TimeType & azimuthTime, 
                                           double & rangeTime, 
                                           Point3DType& sensorPos, 
                                           Vector3DType& sensorVel) const;
+
+  void LineSampleHeightToWorld(const Point2DType& imPt,
+                               double heightAboveEllipsoid,
+                               Point3DType& worldPt) const;
 
 protected:
 
@@ -88,15 +96,22 @@ private:
   void AzimuthTimeToLine(const TimeType & azimuthTime, 
                           double & line) const;
 
-  void SlantRangeToGroundRange(const double & slantRange, 
+  void SlantRangeToGroundRange(double slantRange, 
                                const TimeType & azimuthTime, 
                                double & groundRange) const;
 
 
-  void ApplyCoordinateConversion(const double & in,
+  void ApplyCoordinateConversion(double in,
                                  const TimeType& azimuthTime,
                                  const std::vector<CoordinateConversionRecord> & records,
                                  double & out) const;
+
+
+  const GCP & findClosestGCP(const Point2DType& imPt, const Projection::GCPParam & gcpParam) const;
+
+  Point3DType projToSurface(const GCP & gcp,
+                     const Point2DType & imPt,
+                     double heightAboveEllipsoid) const;
 
   const ImageMetadata & m_Imd;
   SARParam m_SarParam;
@@ -105,7 +120,7 @@ private:
   double m_RangeTimeOffset; // Offset in seconds
 
   // Speed of light 
-  const double C = 299792458;
+  static constexpr double C = 299792458;
 
   // True if the input product is a ground product
   bool m_IsGrd;

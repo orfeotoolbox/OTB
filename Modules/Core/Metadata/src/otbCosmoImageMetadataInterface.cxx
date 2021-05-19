@@ -464,8 +464,8 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
       * 1e6);
   sarParam.nearRangeTime = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Range_First_Time"]);
 
-  imd.Bands[0].Add(MDGeom::SAR, sarParam);
-  
+  imd.Add(MDGeom::SAR, sarParam);
+
   SARCalib sarCalib;
   LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   imd.Add(MDGeom::SARCalib, sarCalib);
@@ -502,7 +502,7 @@ void CosmoImageMetadataInterface::ParseGeom(ImageMetadata &imd)
   //SAR Parameters
   SARParam sarParam;
   sarParam.orbits = this->GetOrbitsGeom();
-  imd.Bands[0].Add(MDGeom::SAR, sarParam);
+  imd.Add(MDGeom::SAR, sarParam);
   SARCalib sarCalib;
   LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   imd.Add(MDGeom::SARCalib, sarCalib);

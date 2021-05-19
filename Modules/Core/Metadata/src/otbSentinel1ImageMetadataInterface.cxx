@@ -863,7 +863,7 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   auto hasSAR = GetSAR(sarParam);
   if (hasSAR)
   {
-    imd.Bands[0].Add(MDGeom::SAR, sarParam);
+    imd.Add(MDGeom::SAR, sarParam);
   }
   SARCalib sarCalib;
   std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>("calibration.startTime")) >> sarCalib.calibrationStartTime;
