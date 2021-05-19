@@ -277,6 +277,8 @@ std::vector<BurstRecord> SarImageMetadataInterface::GetBurstRecordsGeom() const
   auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
   ss.imbue(std::locale(std::locale(), facet));
 
+  const int version = m_MetadataSupplierInterface->GetAs<int>("header.version");
+
   for (int listId = 0 ; listId <= listCount - 1 ; ++listId)
   {
     const std::string burstName = prefix + "geom.bursts.burst[" + std::to_string(listId) + "].";
@@ -288,11 +290,28 @@ std::vector<BurstRecord> SarImageMetadataInterface::GetBurstRecordsGeom() const
     ss << m_MetadataSupplierInterface->GetAs<std::string>(burstName + "azimuth_stop_time");
     ss >> record.azimuthStopTime;
 
-    record.azimuthAnxTime = m_MetadataSupplierInterface->GetAs<double>(burstName + "azimuth_anx_time");
     record.startLine = m_MetadataSupplierInterface->GetAs<int>(burstName + "start_line");
     record.endLine = m_MetadataSupplierInterface->GetAs<int>(burstName + "end_line");
-    record.startSample = m_MetadataSupplierInterface->GetAs<int>(burstName + "start_sample");
-    record.endSample = m_MetadataSupplierInterface->GetAs<int>(burstName + "end_sample");
+
+    if (version >= 4)
+    {
+      record.azimuthAnxTime = m_MetadataSupplierInterface->GetAs<double>(burstName + "azimuth_anx_time");
+    }
+    else
+    {
+      record.azimuthAnxTime = 0.;
+    }
+    
+    if (version >= 3)
+    {
+      record.startSample = m_MetadataSupplierInterface->GetAs<int>(burstName + "start_sample");
+      record.endSample = m_MetadataSupplierInterface->GetAs<int>(burstName + "end_sample");
+    }
+    else
+    {
+      record.startSample = 0;
+      record.endSample = 0;
+    }
 
     burstRecords.push_back(std::move(record));
   }
