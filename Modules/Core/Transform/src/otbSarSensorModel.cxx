@@ -58,12 +58,12 @@ SarSensorModel::SarSensorModel(const ImageMetadata & imd)
             m_AzimuthTimeOffset(boost::posix_time::seconds(0)),
             m_RangeTimeOffset(0.)
 {
-  if (!imd.Bands[0].Has(MDGeom::SAR))
+  if (!imd.Has(MDGeom::SAR))
   {
     otbGenericExceptionMacro(itk::ExceptionObject, <<"Input metadata does not contain SAR parameters");
   }
 
-  m_SarParam = boost::any_cast<SARParam>(imd.Bands[0][MDGeom::SAR]);
+  m_SarParam = boost::any_cast<SARParam>(imd[MDGeom::SAR]);
   
   OptimizeTimeOffsetsFromGcps();
 
