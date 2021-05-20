@@ -380,13 +380,13 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
         (imd[MDStr::Mode] != "SPOTLIGHT") &&
           (imd[MDStr::Mode] != "ENHANCED SPOTLIGHT"))
   {
-    itkWarningMacro(<< "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << imd[MDStr::Mode] );
+    otbGenericExceptionMacro(MissingMetadataException, "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << imd[MDStr::Mode] );
   }
   
   Fetch(MDStr::ProductType, imd, "Product_Type");
   if( (imd[MDStr::ProductType] != "SCS_B") && imd[MDStr::ProductType] != "SCS_U")
   {
-    itkWarningMacro(<< "Not an expected product type (only SCS_B and SCS_U expected) " << imd[MDStr::ProductType] );
+    otbGenericExceptionMacro(MissingMetadataException, "Not an expected product type (only SCS_B and SCS_U expected) " << imd[MDStr::ProductType] );
   }
 
   imd.Add(MDStr::Mission, "CSK");
@@ -479,13 +479,14 @@ void CosmoImageMetadataInterface::ParseGeom(ImageMetadata &imd)
         (imd[MDStr::Mode] != "SPOTLIGHT") &&
           (imd[MDStr::Mode] != "ENHANCED SPOTLIGHT"))
   {
-    itkWarningMacro(<< "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << imd[MDStr::Mode] );
+    otbGenericExceptionMacro(MissingMetadataException, << "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << imd[MDStr::Mode] );
+
   }
   
   Fetch(MDStr::ProductType, imd, "support_data.product_type");
   if( (imd[MDStr::ProductType] != "SCS_B") && imd[MDStr::ProductType] != "SCS_U")
   {
-    itkWarningMacro(<< "Not an expected product type (only SCS_B and SCS_U expected) " << imd[MDStr::ProductType] );
+    otbGenericExceptionMacro(MissingMetadataException, << "Not an expected product type (only SCS_B and SCS_U expected) " << imd[MDStr::ProductType] );
   }
 
   imd.Add(MDStr::Mission, "CSK");
