@@ -22,6 +22,7 @@
 #define otbGeomMetadataSupplier_h
 
 #include <boost/any.hpp>
+#include <unordered_map>
 
 #include "OTBMetadataExport.h"
 #include "otbMetadataSupplierInterface.h"
@@ -43,7 +44,8 @@ class OTBMetadata_EXPORT GeomMetadataSupplier
 public:
   using DictType = std::unordered_map<std::string, std::string>;
 
-  GeomMetadataSupplier(const std::string &);
+  GeomMetadataSupplier(const std::string & geomFile);
+  GeomMetadataSupplier(const std::string & geomFile, const std::string & imageFile);
   GeomMetadataSupplier(const GeomMetadataSupplier &) = delete;
   GeomMetadataSupplier& operator=(const GeomMetadataSupplier&) = delete;
   ~GeomMetadataSupplier() = default;
@@ -59,6 +61,7 @@ public:
   std::string GetMetadataValue(std::string const& path, bool& hasValue, int band=1) const override;
 
   std::string GetResourceFile(std::string const& s="") const override;
+  std::vector<std::string> GetResourceFiles() const override;
 
   int GetNbBands() const override;
 
@@ -96,9 +99,10 @@ protected:
 
 private:
   /** List of resource files */
-  std::string m_FileName;
+  std::unordered_map<std::string, std::string> m_FileNames;
   /** Dictionary containing the metadata */
   DictType m_MetadataDic;
+
 };
 
 } // end namespace otb

@@ -44,15 +44,16 @@ std::unique_ptr<MetadataSupplierInterfaceType> GetIMI(const char* TheFileName)
   std::string DerivatedFileName = ImageReaderType::GetDerivedDatasetSourceFileName(TheFileName);
   std::string extension         = itksys::SystemTools::GetFilenameLastExtension(DerivatedFileName);
   std::string attachedGeom      = DerivatedFileName.substr(0, DerivatedFileName.size() - extension.size()) + std::string(".geom");
+  std::string imageFileName     = DerivatedFileName.substr(0, DerivatedFileName.find('?'));
   // Case 1: external geom supplied through extended filename
   if (!FilenameHelper->GetSkipGeom() && FilenameHelper->ExtGEOMFileNameIsSet())
   {
-    return std::make_unique<otb::GeomMetadataSupplier>(FilenameHelper->GetExtGEOMFileName());
+    return std::make_unique<otb::GeomMetadataSupplier>(FilenameHelper->GetExtGEOMFileName(), imageFileName);
   }
   // Case 2: attached geom (if present)
   else if (!FilenameHelper->GetSkipGeom() && itksys::SystemTools::FileExists(attachedGeom))
   {
-    return std::make_unique<otb::GeomMetadataSupplier>(attachedGeom);
+    return std::make_unique<otb::GeomMetadataSupplier>(attachedGeom, imageFileName);
   }
   // Case 3: tags in file
   else

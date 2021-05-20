@@ -484,14 +484,14 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   // Case 1: external geom supplied through extended filename
   if (!m_FilenameHelper->GetSkipGeom() && m_FilenameHelper->ExtGEOMFileNameIsSet())
   {
-    GeomMetadataSupplier geomSupplier(m_FilenameHelper->GetExtGEOMFileName());
+    GeomMetadataSupplier geomSupplier(m_FilenameHelper->GetExtGEOMFileName(), m_FileName);
     ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
     geomSupplier.FetchRPC(imd);
   }
   // Case 2: attached geom (if present)
   else if (!m_FilenameHelper->GetSkipGeom() && itksys::SystemTools::FileExists(attachedGeom))
   {
-    GeomMetadataSupplier geomSupplier(attachedGeom);
+    GeomMetadataSupplier geomSupplier(attachedGeom, m_FileName);
     ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
     geomSupplier.FetchRPC(imd);
   }

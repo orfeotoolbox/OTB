@@ -30,9 +30,15 @@
 
 namespace otb
 {
-GeomMetadataSupplier::GeomMetadataSupplier(std::string const& fileName)
-  : m_FileName(fileName)
+GeomMetadataSupplier::GeomMetadataSupplier(std::string const& geomFile)
 {
+  GeomMetadataSupplier(geomFile, "");
+}
+
+GeomMetadataSupplier::GeomMetadataSupplier(std::string const& geomFile, const std::string & imageFile)
+{
+  this->m_FileNames["geom"] = geomFile;
+  this->m_FileNames["image"] = imageFile;
   this->ReadGeomFile();
 }
 
@@ -48,9 +54,17 @@ std::string GeomMetadataSupplier::GetMetadataValue(std::string const& path, bool
   return "";
 }
 
-std::string GeomMetadataSupplier::GetResourceFile(std::string const&) const
+std::string GeomMetadataSupplier::GetResourceFile(std::string const& name) const
 {
-  return this->m_FileName;
+  assert((name == "") || (name == "geom") || (name == "image"));
+  if (name.empty())
+    return this->m_FileNames.at("geom");
+  return this->m_FileNames.at(name);
+}
+
+std::vector<std::string> GeomMetadataSupplier::GetResourceFiles() const
+{
+  return std::vector<std::string>({this->m_FileNames.at("geom"), this->m_FileNames.at("image")});
 }
 
 int GeomMetadataSupplier::GetNbBands() const
@@ -135,7 +149,7 @@ bool GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
 std::string GeomMetadataSupplier::PrintSelf() const
 {
   std::ostringstream oss;
-  oss << "GeomMetadataSupplier: " << this->m_FileName << '\n';
+  oss << "GeomMetadataSupplier: " << this->m_FileNames.at("geom") << '\t' << this->m_FileNames.at("image") << '\n';
   for (const auto& kv : this->m_MetadataDic)
     oss << kv.first << " : " << kv.second << '\n';
   return oss.str();
@@ -143,9 +157,8 @@ std::string GeomMetadataSupplier::PrintSelf() const
 
 void GeomMetadataSupplier::ReadGeomFile()
 {
-  std::ifstream inputFile(this->m_FileName);
+  std::ifstream inputFile(this->m_FileNames["geom"]);
   std::string line;
-  std::vector< std::string > keyVal;
   while (std::getline(inputFile, line))
   {
     auto pos = line.find(":");
