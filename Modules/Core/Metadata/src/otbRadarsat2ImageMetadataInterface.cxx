@@ -31,6 +31,7 @@
 #include <otbMath.h>
 #include "otbXMLMetadataSupplier.h"
 #include <boost/filesystem.hpp> 
+#include "itksys/SystemTools.hxx"
 
 namespace otb
 {
@@ -257,54 +258,47 @@ Radarsat2ImageMetadataInterface::UIntVectorType Radarsat2ImageMetadataInterface:
 
 void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 {
-  // Metadata read by GDAL
-  Fetch(MDTime::AcquisitionStartTime, imd, "ACQUISITION_START_TIME");
-  // Fetch(MDTime::AcquisitionStopTime, imd, "PROCESSING_TIME");
-  Fetch(MDStr::BeamMode, imd, "BEAM_MODE");
-  Fetch("FACILITY_IDENTIFIER", imd, "FACILITY_IDENTIFIER");
-  Fetch(MDNum::LineSpacing, imd, "LINE_SPACING");
-  Fetch(MDNum::PixelSpacing, imd, "PIXEL_SPACING");
-  // Fetch(MDStr::Mode, imd, "MODE");
-  Fetch(MDStr::OrbitDirection, imd, "ORBIT_DIRECTION");
-  // Fetch(MDNum::OrbitNumber, imd, "ORBIT_NUMBER");
-  Fetch(MDStr::ProductType, imd, "PRODUCT_TYPE");
-  Fetch(MDStr::Instrument, imd, "SATELLITE_IDENTIFIER");
-  Fetch(MDStr::SensorID, imd, "SENSOR_IDENTIFIER");
-  
   // Product file
-  std::string ProductFilePath = m_MetadataSupplierInterface->GetResourceFile("product.xml");
-  if (!ProductFilePath.empty())
+  std::string ProductFilePath =
+      itksys::SystemTools::GetParentDirectory(m_MetadataSupplierInterface->GetResourceFile(""))
+      + "/product.xml";
+  if (!itksys::SystemTools::FileExists(ProductFilePath))
   {
-    XMLMetadataSupplier ProductMS(ProductFilePath);
-    imd.Add(MDStr::Mission, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
-
-    imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
-    imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));
-    imd.Add(MDTime::ProductionDate,
-        ProductMS.GetFirstAs<MetaData::Time>("product.imageGenerationParameters.generalProcessingInformation.processingTime"));
-    // imd.Add(MDNum::RadarFrequency, ProductMS.GetAs<double>("product.sourceAttributes.radarParameters.radarCenterFrequency"));
-    imd.Add(MDNum::AverageSceneHeight, ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
-
-
-    imd.Add(MDNum::RadarFrequency, this->GetRadarFrequency());
-    imd.Add(MDNum::PRF, this->GetPRF());
-    imd.Add(MDNum::RSF, this->GetRSF());
-    imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle(ProductMS));
-
-
-    assert(m_MetadataSupplierInterface->GetNbBands() == imd.Bands.size());
-
-    SARParam sarParam;
-    for (int bandId = 0 ; bandId < m_MetadataSupplierInterface->GetNbBands() ; ++bandId)
-    {
-      Fetch(MDStr::Polarization, imd, "POLARIMETRIC_INTERP", bandId);
-      imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
-    }
-    SARCalib sarCalib;
-    LoadRadiometricCalibrationData(sarCalib, ProductMS, imd);
-    CreateCalibrationLookupData(sarCalib, imd, ProductMS, false);
-    imd.Add(MDGeom::SARCalib, sarCalib);
+    otbGenericExceptionMacro(MissingMetadataException,
+           << "Cannot find the Radarsat2 product.xml file");
   }
+  XMLMetadataSupplier ProductMS(ProductFilePath);
+
+  // Polarization
+  std::string ImageFilePath = itksys::SystemTools::GetFilenameName(m_MetadataSupplierInterface->GetResourceFile(""));
+  imd.Add(MDStr::Polarization, ImageFilePath.substr(8, 2));
+
+  imd.Add(MDTime::AcquisitionStartTime, ProductMS.GetAs<MetaData::Time>("product.sourceAttributes.rawDataStartTime"));
+  imd.Add(MDStr::BeamMode, ProductMS.GetAs<std::string>("product.sourceAttributes.beamModeMnemonic"));
+  imd.Add("FACILITY_IDENTIFIER", ProductMS.GetAs<std::string>("product.sourceAttributes.inputDatasetFacilityId"));
+  imd.Add(MDNum::LineSpacing, ProductMS.GetAs<double>("product.imageAttributes.rasterAttributes.sampledLineSpacing"));
+  imd.Add(MDNum::PixelSpacing, ProductMS.GetAs<double>("product.imageAttributes.rasterAttributes.sampledPixelSpacing"));
+  imd.Add(MDStr::OrbitDirection, ProductMS.GetAs<std::string>("product.sourceAttributes.orbitAndAttitude.orbitInformation.passDirection"));
+  imd.Add(MDStr::ProductType, ProductMS.GetAs<std::string>("product.imageGenerationParameters.generalProcessingInformation.productType"));
+  imd.Add(MDStr::Instrument, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
+  imd.Add(MDStr::SensorID, ProductMS.GetAs<std::string>("product.sourceAttributes.sensor"));
+  imd.Add(MDStr::Mission, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
+  imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
+  imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));
+  imd.Add(MDTime::ProductionDate, ProductMS.GetFirstAs<MetaData::Time>("product.imageGenerationParameters.generalProcessingInformation.processingTime"));
+  imd.Add(MDNum::AverageSceneHeight, ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
+  imd.Add(MDNum::RadarFrequency, this->GetRadarFrequency());
+  imd.Add(MDNum::PRF, this->GetPRF());
+  imd.Add(MDNum::RSF, this->GetRSF());
+  imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle(ProductMS));
+
+  SARParam sarParam;
+  imd.Add(MDGeom::SAR, sarParam);
+
+  SARCalib sarCalib;
+  LoadRadiometricCalibrationData(sarCalib, ProductMS, imd);
+  CreateCalibrationLookupData(sarCalib, imd, ProductMS, false);
+  imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
 void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
@@ -316,7 +310,8 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   imd.Add(MDStr::SensorID, "SAR");
 
   // Product file
-  auto ProductFilePath = boost::filesystem::path(m_MetadataSupplierInterface->GetResourceFile());  // TODO C++ 2017 use std::filesystem
+  auto ProductFilePath = boost::filesystem::path(m_MetadataSupplierInterface->GetResourceFile("geom"));  // TODO C++ 2017 use std::filesystem
+
   if (!ProductFilePath.empty())
   {
     ProductFilePath = ProductFilePath.remove_filename() /= "product.xml";
@@ -338,17 +333,21 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
       imd.Add("FACILITY_IDENTIFIER", ProductMS.GetAs<std::string>("product.sourceAttributes.inputDatasetFacilityId"));
       imd.Add(MDStr::OrbitDirection, ProductMS.GetAs<std::string>("product.sourceAttributes.orbitAndAttitude.orbitInformation.passDirection"));
       imd.Add(MDStr::ProductType, ProductMS.GetAs<std::string>("product.imageGenerationParameters.generalProcessingInformation.productType"));
-
-      auto polarizations = ProductMS.GetAsVector<std::string>("product.sourceAttributes.radarParameters.polarizations");
-      assert(polarizations.size() == imd.Bands.size());
-      SARParam sarParam;
-      for (int bandId = 0 ; bandId < imd.Bands.size() ; ++bandId)
-      {
-        imd.Bands[bandId].Add(MDStr::Polarization, polarizations[bandId]);
-        imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
-      }
     }
   }
+
+  // Polarization
+  auto polarization = m_MetadataSupplierInterface->GetResourceFile("image");
+  if(!polarization.empty())
+  {
+    polarization = itksys::SystemTools::GetFilenameName(polarization);
+    polarization = polarization.substr(polarization.rfind("_") + 1, 2);
+    imd.Add(MDStr::Polarization, polarization);
+  }
+
+  // SAR Model
+  SARParam sarParam;
+  imd.Add(MDGeom::SAR, sarParam);
   SARCalib sarCalib;
   LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   CreateCalibrationLookupData(sarCalib, imd, *m_MetadataSupplierInterface, true);
@@ -357,16 +356,11 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
 
 void Radarsat2ImageMetadataInterface::Parse(ImageMetadata & imd)
 {
-  // Try to fetch the metadata from GDAL Metadata Supplier
-  if (m_MetadataSupplierInterface->GetAs<std::string>("", "SATELLITE_IDENTIFIER") == "RADARSAT-2")
-    this->ParseGdal(imd);
   // Try to fetch the metadata from GEOM file
-  else if (m_MetadataSupplierInterface->GetAs<std::string>("", "sensor") == "RADARSAT-2")
+  if (m_MetadataSupplierInterface->GetAs<std::string>("", "sensor") == "RADARSAT-2")
     this->ParseGeom(imd);
-  // Failed to fetch the metadata
-  else
-    otbGenericExceptionMacro(MissingMetadataException,
-			     << "Not a Sentinel1 product");
+  // Try to fetch the metadata from GDAL Metadata Supplier
+  this->ParseGdal(imd);
 }
 
 } // end namespace otb
