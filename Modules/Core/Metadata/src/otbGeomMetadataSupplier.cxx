@@ -31,9 +31,8 @@
 namespace otb
 {
 GeomMetadataSupplier::GeomMetadataSupplier(std::string const& geomFile)
-{
-  GeomMetadataSupplier(geomFile, "");
-}
+  : GeomMetadataSupplier(geomFile, "")
+{}
 
 GeomMetadataSupplier::GeomMetadataSupplier(std::string const& geomFile, const std::string & imageFile)
 {
@@ -157,15 +156,16 @@ std::string GeomMetadataSupplier::PrintSelf() const
 
 void GeomMetadataSupplier::ReadGeomFile()
 {
-  std::ifstream inputFile(this->m_FileNames["geom"]);
-  std::string line;
+  std::ifstream inputFile(this->m_FileNames.at("geom"));
+  std::string line, key, value;
+  std::string::size_type pos;
   while (std::getline(inputFile, line))
   {
-    auto pos = line.find(":");
+    pos = line.find(":");
     if (pos != std::string::npos)
     {
-      auto key = line.substr(0,pos);
-      auto value = line.substr(pos+1, line.size());
+      key = line.substr(0,pos);
+      value = line.substr(pos+1, line.size());
       boost::trim(key);
       boost::trim(value);
       m_MetadataDic[key] = value;
