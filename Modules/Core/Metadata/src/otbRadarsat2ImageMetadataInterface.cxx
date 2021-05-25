@@ -26,6 +26,7 @@
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
 #include "otbImageKeywordlist.h"
+#include "otbSpatialReference.h"
 
 // useful constants
 #include <otbMath.h>
@@ -256,6 +257,50 @@ Radarsat2ImageMetadataInterface::UIntVectorType Radarsat2ImageMetadataInterface:
   return rgb;
 }
 
+void ReadGeorefGCP(const XMLMetadataSupplier & xmlMS, ImageMetadata & imd)
+{
+  Projection::GCPParam gcp;
+  std::stringstream ss;
+
+  // Get the ellipsoid and semi-major, semi-minor axes
+  if(xmlMS.HasValue("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.ellipsoidName"))
+  {
+    auto ellipsoidID = xmlMS.GetAs<std::string>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.ellipsoidName");
+    auto minor_axis = xmlMS.GetAs<double>(0, "product.imageAttributes.geographicInformation.referenceEllipsoidParameters.semiMinorAxis");
+    auto major_axis = xmlMS.GetAs<double>(0, "product.imageAttributes.geographicInformation.referenceEllipsoidParameters.semiMajorAxis");
+    if(ellipsoidID.empty() || minor_axis == 0 || major_axis == 0)
+    {
+      otbGenericExceptionMacro(MissingMetadataException, << "Cannot read GCP's spatial reference");
+    }
+    else if(ellipsoidID == "WGS84")
+    {
+      gcp.GCPProjection = SpatialReference::FromWGS84().ToWkt();
+    }
+    else
+    {
+      gcp.GCPProjection = SpatialReference::FromGeogCS("", "", ellipsoidID, major_axis,
+                                                       major_axis/(major_axis - minor_axis)).ToWkt();
+    }
+  }
+
+  auto GCPCount = xmlMS.GetNumberOf("product.imageAttributes.geographicInformation.geolocationGrid.imageTiePoint");
+
+  for(unsigned int i = 1 ; i <= GCPCount ; ++i)
+  {
+    ss.str("");
+    ss << "product.imageAttributes.geographicInformation.geolocationGrid.imageTiePoint_" << i << ".";
+    const std::string id = std::to_string(i);
+    gcp.GCPs.emplace_back(id,                                                        // id
+                     "",                                                             // info
+                     xmlMS.GetAs<double>(ss.str() + "imageCoordinate.pixel") + 0.5,  // col
+                     xmlMS.GetAs<double>(ss.str() + "imageCoordinate.line") + 0.5,   // row
+                     xmlMS.GetAs<double>(ss.str() + "geodeticCoordinate.longitude"), // px
+                     xmlMS.GetAs<double>(ss.str() + "geodeticCoordinate.latitude"),  // py
+                     xmlMS.GetAs<double>(ss.str() + "geodeticCoordinate.height"));   // pz
+  }
+  imd.Add(MDGeom::GCP, gcp);
+}
+
 void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 {
   // Product file
@@ -293,6 +338,8 @@ void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle(ProductMS));
 
   SARParam sarParam;
+  // Fetch the GCP
+  ReadGeorefGCP(ProductMS, imd);
   imd.Add(MDGeom::SAR, sarParam);
 
   SARCalib sarCalib;
@@ -333,6 +380,8 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
       imd.Add("FACILITY_IDENTIFIER", ProductMS.GetAs<std::string>("product.sourceAttributes.inputDatasetFacilityId"));
       imd.Add(MDStr::OrbitDirection, ProductMS.GetAs<std::string>("product.sourceAttributes.orbitAndAttitude.orbitInformation.passDirection"));
       imd.Add(MDStr::ProductType, ProductMS.GetAs<std::string>("product.imageGenerationParameters.generalProcessingInformation.productType"));
+
+      ReadGeorefGCP(ProductMS, imd);
     }
   }
 
@@ -360,7 +409,8 @@ void Radarsat2ImageMetadataInterface::Parse(ImageMetadata & imd)
   if (m_MetadataSupplierInterface->GetAs<std::string>("", "sensor") == "RADARSAT-2")
     this->ParseGeom(imd);
   // Try to fetch the metadata from GDAL Metadata Supplier
-  this->ParseGdal(imd);
+  else
+    this->ParseGdal(imd);
 }
 
 } // end namespace otb

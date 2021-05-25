@@ -35,8 +35,8 @@
 int otbImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char* inputFilename  = argv[1];
-  const char* outputFilename = argv[2];
+  std::string inputFilename  = argv[1];
+  std::string outputFilename = argv[2];
 
   typedef otb::Image<double, 2> InputImageType;
   typedef otb::ImageFileReader<InputImageType> ImageReaderType;
