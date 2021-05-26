@@ -63,53 +63,54 @@ bool Radarsat2ImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarC
                                                                   const MetadataSupplierInterface& mds,
                                                                   const bool geom) const
 {
-
   if(SarImageMetadataInterface::CreateCalibrationLookupData(sarCalib, imd, mds, geom))
     return true;
 
   int offset = 0;
 
-  std::ostringstream ossSigma;
-  std::ostringstream ossBeta;
-  std::ostringstream ossGamma;
+  Radarsat2CalibrationLookupData::Pointer sigmaSarLut = Radarsat2CalibrationLookupData::New();
+  Radarsat2CalibrationLookupData::Pointer betaSarLut = Radarsat2CalibrationLookupData::New();
+  Radarsat2CalibrationLookupData::Pointer gammaSarLut = Radarsat2CalibrationLookupData::New();
+  Radarsat2CalibrationLookupData::Pointer dnSarLut = Radarsat2CalibrationLookupData::New();
+
   if(geom)
   {
-    ossSigma << "referenceNoiseLevel[SigmaNought].gain";
-    ossBeta << "referenceNoiseLevel[BetaNought].gain";
-    ossGamma << "referenceNoiseLevel[GammaNought].gain";
+    std::string path = "referenceNoiseLevel[SigmaNought].gain";
+    auto glist = mds.GetAsVector<float>(path);
+    sigmaSarLut->InitParameters(SarCalibrationLookupData::SIGMA, offset, glist);
+
+    path =  "referenceNoiseLevel[BetaNought].gain";
+    glist = mds.GetAsVector<float>(path);
+    betaSarLut->InitParameters(SarCalibrationLookupData::BETA, offset, glist);
+
+    path = "referenceNoiseLevel[GammaNought].gain";
+    glist = mds.GetAsVector<float>(path);
+    gammaSarLut->InitParameters(SarCalibrationLookupData::GAMMA, offset, glist);
   }
   else
   {
-    ossSigma << "product.sourceAttributes.radarParameters.referenceNoiseLevel_"
-             << mds.GetAttributId("product.sourceAttributes.radarParameters.referenceNoiseLevel_#.incidenceAngleCorrection",
-                                  "Sigma Nought")
-             << ".noiseLevelValues";
-    ossBeta << "product.sourceAttributes.radarParameters.referenceNoiseLevel_"
-            << mds.GetAttributId("product.sourceAttributes.radarParameters.referenceNoiseLevel_#.incidenceAngleCorrection",
-                                 "Beta Nought")
-            << ".noiseLevelValues";
-    ossGamma << "product.sourceAttributes.radarParameters.referenceNoiseLevel_"
-             << mds.GetAttributId("product.sourceAttributes.radarParameters.referenceNoiseLevel_#.incidenceAngleCorrection",
-                                  "gamma")
-             << ".noiseLevelValues";
+    std::string pathGains = "lut.gains";
+    auto productPath = boost::filesystem::path(mds.GetResourceFile());  // TODO C++ 2017 use std::filesystem
+
+    productPath = productPath.remove_filename() /= "lutSigma.xml";
+    XMLMetadataSupplier sigmaLutSupplier(productPath.string());
+    auto glist = sigmaLutSupplier.GetAsVector<float>(pathGains);
+    sigmaSarLut->InitParameters(SarCalibrationLookupData::SIGMA, offset, glist);
+
+    productPath = productPath.remove_filename() /= "lutBeta.xml";
+    XMLMetadataSupplier betaLutSupplier(productPath.string());
+    glist = betaLutSupplier.GetAsVector<float>(pathGains);
+    betaSarLut->InitParameters(SarCalibrationLookupData::BETA, offset, glist);
+
+    productPath = productPath.remove_filename() /= "lutGamma.xml";
+    XMLMetadataSupplier gammaLutSupplier(productPath.string());
+    glist = gammaLutSupplier.GetAsVector<float>(pathGains);
+    gammaSarLut->InitParameters(SarCalibrationLookupData::GAMMA, offset, glist);
   }
 
-  Radarsat2CalibrationLookupData::Pointer sigmaSarLut = Radarsat2CalibrationLookupData::New();
-  auto glist = mds.GetAsVector<float>(ossSigma.str());
-  sigmaSarLut->InitParameters(SarCalibrationLookupData::SIGMA, offset, glist);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = std::move(sigmaSarLut);
-
-  Radarsat2CalibrationLookupData::Pointer betaSarLut = Radarsat2CalibrationLookupData::New();
-  glist = mds.GetAsVector<float>(ossSigma.str());
-  betaSarLut->InitParameters(SarCalibrationLookupData::BETA, offset, glist);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = std::move(betaSarLut);
-
-  Radarsat2CalibrationLookupData::Pointer gammaSarLut = Radarsat2CalibrationLookupData::New();
-  glist = mds.GetAsVector<float>(ossSigma.str());
-  gammaSarLut->InitParameters(SarCalibrationLookupData::GAMMA, offset, glist);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = std::move(gammaSarLut);
-
-  Radarsat2CalibrationLookupData::Pointer dnSarLut = Radarsat2CalibrationLookupData::New();
   sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = std::move(dnSarLut);
 
   return true;
@@ -336,6 +337,7 @@ void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Add(MDNum::PRF, this->GetPRF());
   imd.Add(MDNum::RSF, this->GetRSF());
   imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle(ProductMS));
+  imd.Add(MDNum::CalScale, 1.0);
 
   SARParam sarParam;
   // Fetch the GCP
@@ -355,6 +357,7 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   Fetch(MDNum::PixelSpacing, imd, "meters_per_pixel_x");
   Fetch(MDStr::Instrument, imd, "sensor");
   imd.Add(MDStr::SensorID, "SAR");
+  imd.Add(MDNum::CalScale, 1.0);
 
   // Product file
   auto ProductFilePath = boost::filesystem::path(m_MetadataSupplierInterface->GetResourceFile("geom"));  // TODO C++ 2017 use std::filesystem
