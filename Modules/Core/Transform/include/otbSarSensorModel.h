@@ -61,6 +61,11 @@ public:
                                double heightAboveEllipsoid,
                                Point3DType& worldPt) const;
 
+  /** Deburst metadata if possible and return lines to keep in image file */
+  bool Deburst(std::vector<std::pair<unsigned long, unsigned long>>& lines,
+               std::pair<unsigned long, unsigned long>& samples,
+               bool onlyValidSample = false);
+
 protected:
 
 private:
@@ -110,8 +115,20 @@ private:
   const GCP & findClosestGCP(const Point2DType& imPt, const Projection::GCPParam & gcpParam) const;
 
   Point3DType projToSurface(const GCP & gcp,
-                     const Point2DType & imPt,
-                     double heightAboveEllipsoid) const;
+                            const Point2DType & imPt,
+                            double heightAboveEllipsoid) const;
+
+  /**
+    * This is a helper function to convert image line to deburst image
+    * line.
+    * \param lines The vector of lines range to keep
+    * \param imageLine The input image line
+    * \param deburstLine The output deburst line
+    * \return True if imageLine is within a preserved range, false otherwise
+    */
+  bool ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines,
+                              unsigned long imageLine,
+                              unsigned long & deburstLine) const;
 
   const ImageMetadata & m_Imd;
   SARParam m_SarParam;

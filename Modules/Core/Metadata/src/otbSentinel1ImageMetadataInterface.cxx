@@ -563,6 +563,9 @@ std::vector<BurstRecord> Sentinel1ImageMetadataInterface::GetBurstRecords(const 
         }
       }
 
+      //TODO: in OssimPlugins lastValid is the first sample index after the last valid one. Is this correct ?
+      lastValid += 1;
+
       record.startLine = i*linesPerBurst + firstValid;
       record.endLine = i*linesPerBurst + lastValid;
       record.startSample = firstValidSample;
