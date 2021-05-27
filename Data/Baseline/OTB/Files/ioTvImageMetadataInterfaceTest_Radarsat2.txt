@@ -11,6 +11,7 @@ DataType 4
 NumberOfLines 12953
 NumberOfColumns 2822
 AverageSceneHeight 453.201
+CalScale 1
 PRF 0
 RSF 0
 RadarFrequency 0

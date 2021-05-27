@@ -83,7 +83,7 @@ bool Radarsat2ImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarC
     glist = mds.GetAsVector<float>(path);
     betaSarLut->InitParameters(SarCalibrationLookupData::BETA, offset, glist);
 
-    path = "referenceNoiseLevel[GammaNought].gain";
+    path = "referenceNoiseLevel[Gamma].gain";
     glist = mds.GetAsVector<float>(path);
     gammaSarLut->InitParameters(SarCalibrationLookupData::GAMMA, offset, glist);
   }
