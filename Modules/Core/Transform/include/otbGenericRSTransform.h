@@ -179,7 +179,7 @@ protected:
   GenericRSTransform();
   ~GenericRSTransform() override
   {
-    SensorTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>::CleanFactories();
+   // SensorTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>::CleanFactories();
   }
 
   void Modified() const override

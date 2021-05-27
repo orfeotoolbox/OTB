@@ -59,13 +59,18 @@ SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::CreateT
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+struct RegisterOnce {
+    RegisterOnce() {
+      itk::ObjectFactoryBase::RegisterFactory(RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
+      itk::ObjectFactoryBase::RegisterFactory(RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
+    }
+};
+
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::RegisterBuiltInFactories()
 {
-  itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(m_mutex);
-
-  //TODO: register SAR Inverse and Forward factories here
-  RegisterFactory(RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
-  RegisterFactory(RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
+  // Use a static variable to guarentee thread safety (C++ 11)
+  static RegisterOnce<TScalarType, NInputDimensions,NOutputDimensions> ro{};
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
