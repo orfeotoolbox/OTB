@@ -21,13 +21,17 @@
 #define otbSensorTransformFactory_hxx
 
 #include "otbSensorTransformFactory.h"
+#include "otbRPCTransformBase.h"
 #include "otbRPCForwardTransformFactory.h"
 #include "otbRPCInverseTransformFactory.h"
-#include "otbRPCTransformBase.h"
 #include "itkMutexLockHolder.h"
 
 namespace otb
 {
+
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+itk::SimpleMutexLock SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::m_mutex;
+
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename SensorTransformBase<TScalarType, NInputDimensions,NOutputDimensions>::Pointer
 SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::CreateTransform(const ImageMetadata &imd,TransformDirection direction)
@@ -47,10 +51,7 @@ SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::CreateT
           return io;
         }
     }
-    else
-    {
-      otbLogMacro(Error, << "Error SensorTransform Factory did not return a SensorTransform: " << po->GetNameOfClass())
-    }
+    //io is null is possible because createAllInstance will return all known instances with different types like SensorTransform<double,2,2> SensorTransform<double,3,3> which has been registered before
   }
   // if no object has been found, we have to warn the user
   otbLogMacro(Warning, << "The SensorTransform factory could not find a compatible Sensor Transform");
@@ -60,10 +61,11 @@ SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::CreateT
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::RegisterBuiltInFactories()
 {
-    static std::once_flag initFlagForward,initFlagInverse;
-    std::call_once(initFlagForward,&SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::RegisterFactory,RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
-    std::call_once(initFlagInverse,&SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::RegisterFactory,RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
-    //TODO: register SAR Inverse and Forward factories here
+  itk::MutexLockHolder<itk::SimpleMutexLock> lockHolder(m_mutex);
+
+  //TODO: register SAR Inverse and Forward factories here
+  RegisterFactory(RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
+  RegisterFactory(RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
@@ -95,7 +97,7 @@ void SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::Cl
     }
 
     RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>* rpcInverseFactory =
-      dynamic_cast<RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>*>(*itFac);
+      dynamic_cast<RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>*>(*itFac);
     if (rpcInverseFactory)
     {
       itk::ObjectFactoryBase::UnRegisterFactory(rpcInverseFactory);
