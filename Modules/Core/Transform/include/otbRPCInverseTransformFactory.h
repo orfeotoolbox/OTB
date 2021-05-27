@@ -33,36 +33,36 @@ template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutput
 class ITK_EXPORT RPCInverseTransformFactory : public itk::ObjectFactoryBase
 {
 public:
-	/** Standard class typedefs. */
-	typedef RPCInverseTransformFactory Self;
-	typedef itk::ObjectFactoryBase            Superclass;
-	typedef itk::SmartPointer<Self>           Pointer;
-	typedef itk::SmartPointer<const Self>     ConstPointer;
+  /** Standard class typedefs. */
+  typedef RPCInverseTransformFactory Self;
+  typedef itk::ObjectFactoryBase            Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
-	/** Class methods used to interface with the registered factories. */
-	const char* GetITKSourceVersion(void) const override;
-	const char* GetDescription(void) const override;
+  /** Class methods used to interface with the registered factories. */
+  const char* GetITKSourceVersion(void) const override;
+  const char* GetDescription(void) const override;
 
-	/** Method for class instantiation. */
-	itkFactorylessNewMacro(Self);
+  /** Method for class instantiation. */
+  itkFactorylessNewMacro(Self);
 
-	/** Run-time type information (and related methods). */
-	itkTypeMacro(RPCInverseTransformFactory, itk::ObjectFactoryBase);
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(RPCInverseTransformFactory, itk::ObjectFactoryBase);
 
-	/** Register one factory of this type  */
-	static void RegisterOneFactory(void)
-	{
-        RPCInverseTransformFactory<TScalarType,NInputDimensions,NOutputDimensions>::Pointer RPCInverseFactory = RPCInverseTransformFactory::New();
-		itk::ObjectFactoryBase::RegisterFactory(RPCInverseFactory);
-	}
+  /** Register one factory of this type  */
+  static void RegisterOneFactory(void)
+  {
+    Pointer RPCInverseFactory = RPCInverseTransformFactory::New();
+    itk::ObjectFactoryBase::RegisterFactory(RPCInverseFactory);
+  }
 
 protected:
-	RPCInverseTransformFactory();
-	~RPCInverseTransformFactory() override = default;
+  RPCInverseTransformFactory();
+  ~RPCInverseTransformFactory() override = default;
 
 private:
-	RPCInverseTransformFactory(const Self&) = delete;
-	void operator=(const Self&) = delete;
+  RPCInverseTransformFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 }
 

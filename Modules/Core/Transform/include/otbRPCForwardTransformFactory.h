@@ -34,36 +34,36 @@ template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutput
 class ITK_EXPORT RPCForwardTransformFactory : public itk::ObjectFactoryBase
 {
 public:
-	/** Standard class typedefs. */
-	typedef RPCForwardTransformFactory Self;
-	typedef itk::ObjectFactoryBase            Superclass;
-	typedef itk::SmartPointer<Self>           Pointer;
-	typedef itk::SmartPointer<const Self>     ConstPointer;
+  /** Standard class typedefs. */
+  typedef RPCForwardTransformFactory Self;
+  typedef itk::ObjectFactoryBase            Superclass;
+  typedef itk::SmartPointer<Self>           Pointer;
+  typedef itk::SmartPointer<const Self>     ConstPointer;
 
-	/** Class methods used to interface with the registered factories. */
-	const char* GetITKSourceVersion(void) const override;
-	const char* GetDescription(void) const override;
+  /** Class methods used to interface with the registered factories. */
+  const char* GetITKSourceVersion(void) const override;
+  const char* GetDescription(void) const override;
 
-	/** Method for class instantiation. */
-	itkFactorylessNewMacro(Self);
+  /** Method for class instantiation. */
+  itkFactorylessNewMacro(Self);
 
-	/** Run-time type information (and related methods). */
-	itkTypeMacro(RPCForwardTransformFactory, itk::ObjectFactoryBase);
+  /** Run-time type information (and related methods). */
+  itkTypeMacro(RPCForwardTransformFactory, itk::ObjectFactoryBase);
 
-	/** Register one factory of this type  */
-	static void RegisterOneFactory(void)
-	{
-        RPCForwardTransformFactory<TScalarType,NInputDimensions,NOutputDimensions>::Pointer RPCForwardFactory = RPCForwardTransformFactory::New();
-		itk::ObjectFactoryBase::RegisterFactory(RPCForwardFactory);
-	}
+  /** Register one factory of this type  */
+  static void RegisterOneFactory(void)
+  {
+    Pointer RPCForwardFactory = RPCForwardTransformFactory::New();
+    itk::ObjectFactoryBase::RegisterFactory(RPCForwardFactory);
+  }
 
 protected:
-	RPCForwardTransformFactory();
-	~RPCForwardTransformFactory() override = default;
+  RPCForwardTransformFactory();
+  ~RPCForwardTransformFactory() override = default;
 
 private:
-	RPCForwardTransformFactory(const Self&) = delete;
-	void operator=(const Self&) = delete;
+  RPCForwardTransformFactory(const Self&) = delete;
+  void operator=(const Self&) = delete;
 };
 }
 #ifndef OTB_MANUAL_INSTANTIATION

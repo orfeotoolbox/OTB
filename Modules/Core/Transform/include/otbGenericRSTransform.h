@@ -23,7 +23,6 @@
 
 #include "otbCompositeTransform.h"
 #include "otbImageMetadata.h"
-#include "otbSensorTransformFactory.h"
 #include <string>
 
 namespace otb
@@ -179,7 +178,6 @@ protected:
   GenericRSTransform();
   ~GenericRSTransform() override
   {
-    SensorTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>::CleanFactories();
   }
 
   void Modified() const override
