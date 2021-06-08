@@ -372,19 +372,22 @@ std::vector<BurstRecord> CosmoImageMetadataInterface::CreateBurstRecord(const st
   return {record};
 }
 
+bool not_in(std::vector<std::string> possible_values, std::string test_value)
+{
+  return std::none_of(possible_values.begin(), possible_values.end(), [test_value](std::string s){return s == test_value;});
+}
+
 void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 {
   // Check acquisition mode and product type
   Fetch(MDStr::Mode, imd, "Acquisition_Mode");
-  if((imd[MDStr::Mode] != "HIMAGE") &&
-        (imd[MDStr::Mode] != "SPOTLIGHT") &&
-          (imd[MDStr::Mode] != "ENHANCED SPOTLIGHT"))
+  if (not_in({"HIMAGE", "SPOTLIGHT", "ENHANCED SPOTLIGHT"}, imd[MDStr::Mode]))
   {
     otbGenericExceptionMacro(MissingMetadataException, "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << imd[MDStr::Mode] );
   }
   
   Fetch(MDStr::ProductType, imd, "Product_Type");
-  if( (imd[MDStr::ProductType] != "SCS_B") && imd[MDStr::ProductType] != "SCS_U")
+  if (not_in({"SCS_B", "SCS_U"}, imd[MDStr::ProductType]))
   {
     otbGenericExceptionMacro(MissingMetadataException, "Not an expected product type (only SCS_B and SCS_U expected) " << imd[MDStr::ProductType] );
   }
@@ -475,16 +478,14 @@ void CosmoImageMetadataInterface::ParseGeom(ImageMetadata &imd)
 {
   // Check acquisition mode and product type
   Fetch(MDStr::Mode, imd, "support_data.acquisition_mode");
-  if((imd[MDStr::Mode] != "HIMAGE") &&
-        (imd[MDStr::Mode] != "SPOTLIGHT") &&
-          (imd[MDStr::Mode] != "ENHANCED SPOTLIGHT"))
+  if(not_in({"HIMAGE", "SPOTLIGHT", "ENHANCED SPOTLIGHT"}, imd[MDStr::Mode]))
   {
     otbGenericExceptionMacro(MissingMetadataException, << "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << imd[MDStr::Mode] );
 
   }
   
   Fetch(MDStr::ProductType, imd, "support_data.product_type");
-  if( (imd[MDStr::ProductType] != "SCS_B") && imd[MDStr::ProductType] != "SCS_U")
+  if(not_in({"SCS_B", "SCS_U"}, imd[MDStr::ProductType]))
   {
     otbGenericExceptionMacro(MissingMetadataException, << "Not an expected product type (only SCS_B and SCS_U expected) " << imd[MDStr::ProductType] );
   }
