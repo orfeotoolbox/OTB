@@ -40,13 +40,13 @@ bool WorldView2ImageMetadataInterface::CanRead() const
     return false;
 }
 
-void WorldView2ImageMetadataInterface::FetchSolarIrradianceWorldView2()
+void WorldView2ImageMetadataInterface::FetchSolarIrradianceWorldView2(ImageMetadata& imd)
 {
   // Reference:
   // Radiometric_Use_of_WorldView-2_Imagery, Technical Note, 2010 (Digital Globe)
   
 
-  auto productType = m_Imd[MDStr::ProductType];
+  auto productType = imd[MDStr::ProductType];
 
   std::string              panchro("P");
   std::string              multi("Multi");
@@ -54,7 +54,7 @@ void WorldView2ImageMetadataInterface::FetchSolarIrradianceWorldView2()
 
   if (productType == panchro)
   {
-    m_Imd.Bands[0].Add(MDNum::SolarIrradiance, 1580.8140);
+    imd.Bands[0].Add(MDNum::SolarIrradiance, 1580.8140);
   }
   else
   {
@@ -68,7 +68,7 @@ void WorldView2ImageMetadataInterface::FetchSolarIrradianceWorldView2()
        {"N", 1069.7302},
        {"N2", 861.2866}};
 
-    for (auto & band: m_Imd.Bands)
+    for (auto & band: imd.Bands)
     {
       auto solarIrradianceIt = BandNameToSolarIrradianceTable.find(band[MDStr::BandName] );
       if (solarIrradianceIt != BandNameToSolarIrradianceTable.end())
@@ -83,9 +83,9 @@ void WorldView2ImageMetadataInterface::FetchSolarIrradianceWorldView2()
   }
 }
 
-void WorldView2ImageMetadataInterface::FetchWavelengthsWorldView2()
+void WorldView2ImageMetadataInterface::FetchWavelengthsWorldView2(ImageMetadata& imd)
 {
-  auto productType = m_Imd[MDStr::ProductType];
+  auto productType = imd[MDStr::ProductType];
 
   std::string              panchro("P");
   std::string              multi("Multi");
@@ -93,8 +93,8 @@ void WorldView2ImageMetadataInterface::FetchWavelengthsWorldView2()
 
   if (productType == panchro)
   {
-    m_Imd.Bands[0].Add(MDNum::FirstWavelength, 0.464);
-    m_Imd.Bands[0].Add(MDNum::LastWavelength, 0.801);
+    imd.Bands[0].Add(MDNum::FirstWavelength, 0.464);
+    imd.Bands[0].Add(MDNum::LastWavelength, 0.801);
   }
   else
   {
@@ -110,7 +110,7 @@ void WorldView2ImageMetadataInterface::FetchWavelengthsWorldView2()
        {"N", {0.772, 0.890}},
        {"N2", {0.862, 0.954}}};
 
-    for (auto & band: m_Imd.Bands)
+    for (auto & band: imd.Bands)
     {
       auto wavelengthIt = BandNameToWavelengthTable.find(band[MDStr::BandName] );
       if (wavelengthIt != BandNameToWavelengthTable.end())
@@ -511,9 +511,9 @@ WorldView2ImageMetadataInterface::VariableLengthVectorType WorldView2ImageMetada
 }
 
 
-void WorldView2ImageMetadataInterface::FetchPhysicalBias()
+void WorldView2ImageMetadataInterface::FetchPhysicalBias(ImageMetadata& imd)
 {
-  auto productType = m_Imd[MDStr::ProductType];
+  auto productType = imd[MDStr::ProductType];
 
   std::string              panchro("P");
   std::string              multi("Multi");
@@ -521,11 +521,11 @@ void WorldView2ImageMetadataInterface::FetchPhysicalBias()
 
   if (productType == panchro)
   {
-    m_Imd.Bands[0].Add(MDNum::PhysicalBias, 0.0);
+    imd.Bands[0].Add(MDNum::PhysicalBias, 0.0);
   }
   else if (productType == multi || productType == ms1)
   {
-    for (auto & band : m_Imd.Bands)
+    for (auto & band : imd.Bands)
     {
       band.Add(MDNum::PhysicalBias, 0.0);
     }
@@ -1346,7 +1346,7 @@ WorldView2ImageMetadataInterface::WavelengthSpectralBandVectorType WorldView2Ima
   return wavelengthSpectralBand;
 }
 
-void WorldView2ImageMetadataInterface::FetchSpectralSensitivityWorldView2()
+void WorldView2ImageMetadataInterface::FetchSpectralSensitivityWorldView2(ImageMetadata& imd)
 {
   const std::unordered_map<std::string, std::vector<double>> BandNameToSpectralSensitivityTable{
       {"P", {
@@ -1648,7 +1648,7 @@ void WorldView2ImageMetadataInterface::FetchSpectralSensitivityWorldView2()
       6.76079e-07f}}
     };
 
-  for (auto & band: m_Imd.Bands)
+  for (auto & band: imd.Bands)
   {
     auto SpectralSensitivityIt = BandNameToSpectralSensitivityTable.find(band[MDStr::BandName] );
     if (SpectralSensitivityIt != BandNameToSpectralSensitivityTable.end())
@@ -1665,7 +1665,7 @@ void WorldView2ImageMetadataInterface::FetchSpectralSensitivityWorldView2()
   }
 }
 
-void WorldView2ImageMetadataInterface::FetchSpectralSensitivityQuickBird()
+void WorldView2ImageMetadataInterface::FetchSpectralSensitivityQuickBird(ImageMetadata& imd)
 {
   const std::unordered_map<std::string, std::vector<double>> BandNameToSpectralSensitivityTable{
       {"P",{
@@ -1813,7 +1813,7 @@ void WorldView2ImageMetadataInterface::FetchSpectralSensitivityQuickBird()
   spectralSensitivity.Axis[0].Spacing = 0.0025;
   spectralSensitivity.Axis[0].Size = 321;
 
-  for (auto & band: m_Imd.Bands)
+  for (auto & band: imd.Bands)
   {
     auto SpectralSensitivityIt = BandNameToSpectralSensitivityTable.find(band[MDStr::BandName] );
     if (SpectralSensitivityIt != BandNameToSpectralSensitivityTable.end())
@@ -1825,21 +1825,21 @@ void WorldView2ImageMetadataInterface::FetchSpectralSensitivityQuickBird()
   }
 }
 
-void WorldView2ImageMetadataInterface::FetchSolarIrradianceQuickBird()
+void WorldView2ImageMetadataInterface::FetchSolarIrradianceQuickBird(ImageMetadata& imd)
 {
-  if(m_Imd[MDStr::SensorID] != "QB02")
+  if(imd[MDStr::SensorID] != "QB02")
   {
     itkExceptionMacro(<< "Invalid Metadata, not a Quickbird product");
   }
 
-  auto productType = m_Imd[MDStr::ProductType];
+  auto productType = imd[MDStr::ProductType];
 
   std::string              panchro("P");
   std::string              multi("Multi");
 
   if (productType == panchro)
   {
-    m_Imd.Bands[0].Add(MDNum::SolarIrradiance, 1381.79);
+    imd.Bands[0].Add(MDNum::SolarIrradiance, 1381.79);
   }
   else
   {
@@ -1849,7 +1849,7 @@ void WorldView2ImageMetadataInterface::FetchSolarIrradianceQuickBird()
        {"R", 1574.77},
        {"N", 1113.71}};
 
-    for (auto & band: m_Imd.Bands)
+    for (auto & band: imd.Bands)
     {
       auto solarIrradianceIt = BandNameToSolarIrradianceTable.find(band[MDStr::BandName] );
       if (solarIrradianceIt != BandNameToSolarIrradianceTable.end())
@@ -1866,9 +1866,10 @@ void WorldView2ImageMetadataInterface::FetchSolarIrradianceQuickBird()
 
 void WorldView2ImageMetadataInterface::FetchPhysicalGainQuickBird(int bitsPerPixel, 
                                                                   const std::unordered_map<std::string, double> & absCalFactor,
-                                                                  const std::unordered_map<std::string, int> & TDILevels)
+                                                                  const std::unordered_map<std::string, int> & TDILevels,
+                                                                  ImageMetadata& imd)
 {
-  if(m_Imd[MDStr::SensorID] != "QB02")
+  if(imd[MDStr::SensorID] != "QB02")
   {
     itkExceptionMacro(<< "Invalid Metadata, not a Quickbird product");
   }
@@ -1884,7 +1885,7 @@ void WorldView2ImageMetadataInterface::FetchPhysicalGainQuickBird(int bitsPerPix
   date.tm_sec = 0;
   date.frac_sec = 0;
 
-  if (m_Imd[MDTime::ProductionDate] > date)
+  if (imd[MDTime::ProductionDate] > date)
   {
     isPost20030606 = true;
   }
@@ -1894,7 +1895,7 @@ void WorldView2ImageMetadataInterface::FetchPhysicalGainQuickBird(int bitsPerPix
     itkExceptionMacro(<< "Invalid bitsPerPixel " << bitsPerPixel);
   }
 
-  auto productType = m_Imd[MDStr::ProductType];
+  auto productType = imd[MDStr::ProductType];
 
   std::string panchro("P");
   std::string multi("Multi");
@@ -1994,7 +1995,7 @@ void WorldView2ImageMetadataInterface::FetchPhysicalGainQuickBird(int bitsPerPix
     }
   }
 
-  for (auto & band: m_Imd.Bands)
+  for (auto & band: imd.Bands)
   {
     const auto & bandName = band[MDStr::BandName];
     double physicalGain = BandNameToPysicalGainNum[bandName] / BandNameToPysicalGainDen[bandName];
@@ -2212,21 +2213,21 @@ namespace
 
 }
 
-void WorldView2ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void WorldView2ImageMetadataInterface::Parse(ImageMetadata &imd)
 {
   DigitalGlobeMetadata metadata;
 
   // Check if the sensor is a digital globe sensor
-  //if (mds.GetAs<std::string>("", "IMD/IMAGE_1.satId").find("WV02") != std::string::npos)
-  if (mds.GetAs<std::string>("", "METADATATYPE") == "DG")
+  //if (m_MetadataSupplierInterface->GetAs<std::string>("", "IMD/IMAGE_1.satId").find("WV02") != std::string::npos)
+  if (m_MetadataSupplierInterface->GetAs<std::string>("", "METADATATYPE") == "DG")
   {
-    ParseProductMetadata(mds, metadata);
-    FetchRPC(mds);
+    ParseProductMetadata(*m_MetadataSupplierInterface, metadata);
+    FetchRPC(imd);
   }
-  else if (mds.GetAs<std::string>("", "support_data.sat_id").find("WV02") != std::string::npos
-           || mds.GetAs<std::string>("", "support_data.sat_id").find("QB02") != std::string::npos)
+  else if (m_MetadataSupplierInterface->GetAs<std::string>("", "support_data.sat_id").find("WV02") != std::string::npos
+           || m_MetadataSupplierInterface->GetAs<std::string>("", "support_data.sat_id").find("QB02") != std::string::npos)
   {
-    ParseGeomMetadata(mds, metadata);
+    ParseGeomMetadata(*m_MetadataSupplierInterface, metadata);
   }
   else
   {
@@ -2234,11 +2235,11 @@ void WorldView2ImageMetadataInterface::Parse(const MetadataSupplierInterface & m
   }
 
   // Product type (Multi, MS1 or P)
-  m_Imd.Add(MDStr::ProductType, metadata.bandId);
+  imd.Add(MDStr::ProductType, metadata.bandId);
 
-  if (m_Imd.Bands.size() == metadata.bandNameList.size())
+  if (imd.Bands.size() == metadata.bandNameList.size())
   {
-    auto bandIt = m_Imd.Bands.begin();
+    auto bandIt = imd.Bands.begin();
     for (const auto & bandName : metadata.bandNameList)
     {
       bandIt->Add(MDStr::BandName, bandName);
@@ -2254,7 +2255,7 @@ void WorldView2ImageMetadataInterface::Parse(const MetadataSupplierInterface & m
   // Acquisition and production dates
   try
   {
-    m_Imd.Add(MDTime::AcquisitionDate, 
+    imd.Add(MDTime::AcquisitionDate,
                 boost::lexical_cast<MetaData::Time>(metadata.acquisitionDateStr));
   }
   catch (boost::bad_lexical_cast&)
@@ -2266,7 +2267,7 @@ void WorldView2ImageMetadataInterface::Parse(const MetadataSupplierInterface & m
 
   try
   {
-    m_Imd.Add(MDTime::ProductionDate, 
+    imd.Add(MDTime::ProductionDate,
                 boost::lexical_cast<MetaData::Time>(metadata.productionDateStr));
   }
   catch (boost::bad_lexical_cast&)
@@ -2277,39 +2278,40 @@ void WorldView2ImageMetadataInterface::Parse(const MetadataSupplierInterface & m
   }
 
   //Radiometry
-  m_Imd.Add(MDNum::SunElevation, metadata.sunElevation);
-  m_Imd.Add(MDNum::SunAzimuth, metadata.sunAzimuth);
-  m_Imd.Add(MDNum::SatElevation, metadata.satElevation);
-  m_Imd.Add(MDNum::SatAzimuth, metadata.satAzimuth);
+  imd.Add(MDNum::SunElevation, metadata.sunElevation);
+  imd.Add(MDNum::SunAzimuth, metadata.sunAzimuth);
+  imd.Add(MDNum::SatElevation, metadata.satElevation);
+  imd.Add(MDNum::SatAzimuth, metadata.satAzimuth);
 
   //Physical Bias
-  FetchPhysicalBias();
+  FetchPhysicalBias(imd);
   
   if (metadata.sensorId == "WV02")
   {
-    m_Imd.Add(MDStr::SensorID, "WV02");
-    m_Imd.Add(MDStr::Mission, "WorldView-2");
+    imd.Add(MDStr::SensorID, "WV02");
+    imd.Add(MDStr::Mission, "WorldView-2");
 
-    for (auto & band : m_Imd.Bands)
+    for (auto & band : imd.Bands)
     {
       auto bandName = band[MDStr::BandName];
       band.Add(MDNum::PhysicalGain, metadata.effectiveBandwidth[bandName] / metadata.absCalFactor[bandName]);
     }
 
-    FetchSolarIrradianceWorldView2();
-    FetchWavelengthsWorldView2();
-    FetchSpectralSensitivityWorldView2();
+    FetchSolarIrradianceWorldView2(imd);
+    FetchWavelengthsWorldView2(imd);
+    FetchSpectralSensitivityWorldView2(imd);
   }
   else if (metadata.sensorId == "QB02")
   {
-    m_Imd.Add(MDStr::SensorID, "QB02");
-    m_Imd.Add(MDStr::Mission, "Quickbird");
+    imd.Add(MDStr::SensorID, "QB02");
+    imd.Add(MDStr::Mission, "Quickbird");
 
-    FetchSolarIrradianceQuickBird();
+    FetchSolarIrradianceQuickBird(imd);
     FetchPhysicalGainQuickBird(metadata.bitsPerPixel,
                                metadata.absCalFactor,
-                               metadata.TDILevel);
-    FetchSpectralSensitivityQuickBird();
+                               metadata.TDILevel,
+                               imd);
+    FetchSpectralSensitivityQuickBird(imd);
   }
   else
   {

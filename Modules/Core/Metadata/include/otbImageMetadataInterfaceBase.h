@@ -72,9 +72,8 @@ public:
   /** Get the MetadataDictionary  */
   const MetaDataDictionaryType& GetMetaDataDictionary() const;
 
-  void SetImageMetadata(ImageMetadata imd);
-
-  const ImageMetadata& GetImageMetadata() const;
+  /** Set the MetadataSupplierInterface */
+  void SetMetadataSupplierInterface(const MetadataSupplierInterface&);
 
   /** Get the projection coordinate system of the image. */
   std::string GetProjectionRef() const;
@@ -230,27 +229,34 @@ public:
 
   virtual bool CanRead() const {return false;}
 
-  virtual void Parse(const MetadataSupplierInterface &)
-    {
+  /** Parses the metadata using the MetadataSupplierInterface and fill the ImageMetadata object
+   * Raises "MissingMetadataException" if parsing failes.
+   */
+  virtual void Parse(ImageMetadata &)
+  {
     otbGenericExceptionMacro(MissingMetadataException,<<"Metadata parsing not implemented")
-    }
+  }
 
   static void PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict);
 
-  const std::string& Fetch(MDStr key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
+  const std::string& Fetch(MDStr key, ImageMetadata & imd, const char *path, int band=-1);
+  bool CheckFetch(MDStr key, ImageMetadata & imd, const char *path, int band=-1);
 
-  const double& Fetch(MDNum key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
+  const double& Fetch(MDNum key, ImageMetadata & imd, const char *path, int band=-1);
+  bool CheckFetch(MDNum key, ImageMetadata & imd, const char *path, int band=-1);
 
-  const MetaData::Time& Fetch(MDTime key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
+  const MetaData::Time& Fetch(MDTime key, ImageMetadata & imd, const char *path, int band=-1);
+  bool CheckFetch(MDTime key, ImageMetadata & imd, const char *path, int band=-1);
 
-  const std::string& Fetch(std::string key, const MetadataSupplierInterface & mds, const char *path, int band=-1);
+  const std::string& Fetch(std::string key, ImageMetadata & imd, const char *path, int band=-1);
+  bool CheckFetch(std::string key, ImageMetadata & imd, const char *path, int band=-1);
 
-  const boost::any& FetchRPC(const MetadataSupplierInterface & mds, const double lineOffset = 0.0, const double sampleOffset = 0.0);
+  const boost::any& FetchRPC(ImageMetadata& imd, const double lineOffset = 0.0, const double sampleOffset = 0.0);
 
   /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
    * then translate it into ImageMetadata.
    * Returns true if succeed. */
-  virtual bool ConvertImageKeywordlistToImageMetadata();
+  virtual bool ConvertImageKeywordlistToImageMetadata(ImageMetadata&);
 
 protected:
   ImageMetadataInterfaceBase();
@@ -260,7 +266,7 @@ protected:
 
   MetaDataDictionaryType m_MetaDataDictionary;
 
-  ImageMetadata m_Imd;
+  const MetadataSupplierInterface * m_MetadataSupplierInterface = nullptr;
 
 private:
   ImageMetadataInterfaceBase(const Self&) = delete;

@@ -32,6 +32,7 @@ int otbXMLMetadataSupplierTest(int itkNotUsed(argc), char* argv[])
   file.open(outputFilename);
   file << mds.GetMetadataValue("OTB.application.name", hasValue) << "\n";
   file << mds.GetMetadataValue("OTB.application.parameter_3.name", hasValue) << "\n";
+  file << mds.GetNumberOf("OTB.application.parameter") << "\n";
   file.close();
 
   return EXIT_SUCCESS;

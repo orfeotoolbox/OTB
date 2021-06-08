@@ -18,19 +18,19 @@
  * limitations under the License.
  */
 
-#include "otbGDALImageMetadataInterface.h"
+#include "otbDateTime.h"
 
-namespace otb
+namespace boost 
+{ 
+namespace posix_time 
 {
 
-GDALImageMetadataInterface::GDALImageMetadataInterface()
+time_duration abs(time_duration d)
 {
+  if(d.is_negative())
+    d = d.invert_sign();
+  return d;
 }
 
-void
-GDALImageMetadataInterface::Parse(ImageMetadata &)
-{
-  otbGenericExceptionMacro(MissingMetadataException,<<"Metadata parsing not implemented")
 }
-
-} // end namespace otb
+}

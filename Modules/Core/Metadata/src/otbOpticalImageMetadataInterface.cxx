@@ -96,12 +96,12 @@ void OpticalImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent inde
   }
 }
 
-bool OpticalImageMetadataInterface::ConvertImageKeywordlistToImageMetadata()
+bool OpticalImageMetadataInterface::ConvertImageKeywordlistToImageMetadata(ImageMetadata& imd)
 {
   bool result = true;
   try
   {
-    this->m_Imd.Add(MDNum::SunElevation, this->GetSunElevation());
+    imd.Add(MDNum::SunElevation, this->GetSunElevation());
   }
   catch (const itk::ExceptionObject &)
   {
@@ -109,7 +109,7 @@ bool OpticalImageMetadataInterface::ConvertImageKeywordlistToImageMetadata()
   }
   try
   {
-	  this->m_Imd.Add(MDNum::SunAzimuth, this->GetSunAzimuth());
+    imd.Add(MDNum::SunAzimuth, this->GetSunAzimuth());
   }
   catch (const itk::ExceptionObject &)
   {
@@ -117,7 +117,7 @@ bool OpticalImageMetadataInterface::ConvertImageKeywordlistToImageMetadata()
   }
   try
   {
-	  this->m_Imd.Add(MDNum::SatElevation, this->GetSatElevation());
+    imd.Add(MDNum::SatElevation, this->GetSatElevation());
   }
   catch (const itk::ExceptionObject &)
   {
@@ -125,7 +125,7 @@ bool OpticalImageMetadataInterface::ConvertImageKeywordlistToImageMetadata()
   }
   try
   {
-	  this->m_Imd.Add(MDNum::SatAzimuth, this->GetSatAzimuth());
+    imd.Add(MDNum::SatAzimuth, this->GetSatAzimuth());
   }
   catch (const itk::ExceptionObject &)
   {
@@ -133,7 +133,7 @@ bool OpticalImageMetadataInterface::ConvertImageKeywordlistToImageMetadata()
   }
   try
   {
-	  this->m_Imd.Add(MDNum::PhysicalBias, this->GetPhysicalBias());
+    imd.Add(MDNum::PhysicalBias, this->GetPhysicalBias());
   }
   catch (const itk::ExceptionObject &)
   {
@@ -141,7 +141,7 @@ bool OpticalImageMetadataInterface::ConvertImageKeywordlistToImageMetadata()
   }
   try
   {
-	  this->m_Imd.Add(MDNum::PhysicalGain, this->GetPhysicalGain());
+    imd.Add(MDNum::PhysicalGain, this->GetPhysicalGain());
   }
   catch (const itk::ExceptionObject &)
   {
@@ -149,7 +149,7 @@ bool OpticalImageMetadataInterface::ConvertImageKeywordlistToImageMetadata()
   }
   try
   {
-	  this->m_Imd.Add(MDNum::SolarIrradiance, this->GetSolarIrradiance());
+    imd.Add(MDNum::SolarIrradiance, this->GetSolarIrradiance());
   }
   catch (const itk::ExceptionObject &)
   {
@@ -157,7 +157,7 @@ bool OpticalImageMetadataInterface::ConvertImageKeywordlistToImageMetadata()
   }
   try
   {
-	  this->m_Imd.Add(MDNum::FirstWavelength, this->GetFirstWavelengths());
+    imd.Add(MDNum::FirstWavelength, this->GetFirstWavelengths());
   }
   catch (const itk::ExceptionObject &)
   {
@@ -165,7 +165,7 @@ bool OpticalImageMetadataInterface::ConvertImageKeywordlistToImageMetadata()
   }
   try
   {
-	  this->m_Imd.Add(MDNum::LastWavelength,  this->GetLastWavelengths());
+    imd.Add(MDNum::LastWavelength,  this->GetLastWavelengths());
   }
   catch (const itk::ExceptionObject &)
   {

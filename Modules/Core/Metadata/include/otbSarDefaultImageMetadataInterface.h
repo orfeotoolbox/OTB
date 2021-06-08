@@ -51,6 +51,7 @@ public:
 
   typedef Superclass::ImageType                ImageType;
   typedef ImageType::IndexType                 IndexType;
+  typedef std::array<int, 2>                   ArrayIndexType;
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
@@ -75,9 +76,9 @@ public:
     itkExceptionMacro("GetRadiometricCalibrationAntennaPatternOldGain() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const override
+  PointSetPointer GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface&) const override
   {
-    itkExceptionMacro("GetRadiometricCalibrationIncidenceAngle() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface&) not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   PointSetPointer GetRadiometricCalibrationRangeSpreadLoss() const override
@@ -85,34 +86,34 @@ public:
     itkExceptionMacro("GetRadiometricCalibrationRangeSpreadLoss() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  PointSetPointer GetRadiometricCalibrationNoise() const override
+  PointSetPointer GetRadiometricCalibrationNoise(const MetadataSupplierInterface&, const ImageMetadata&, const std::string&) const override
   {
-    itkExceptionMacro("GetRadiometricCalibrationNoise() not implemented in SarDefaultImageMetadataInterface, no captor type found");
+    itkExceptionMacro("GetRadiometricCalibrationNoise(const MetadataSupplierInterface&) not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const override
+  ArrayIndexType GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() const override
   {
     itkExceptionMacro(
         "GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const override
+  ArrayIndexType GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() const override
   {
     itkExceptionMacro(
         "GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override
+  ArrayIndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationIncidenceAnglePolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const override
+  ArrayIndexType GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const override
+  ArrayIndexType GetRadiometricCalibrationNoisePolynomialDegree() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationNoisePolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
@@ -200,17 +201,17 @@ public:
   }
 
   /** Get the center incidence angle */
-  double GetCenterIncidenceAngle() const override
+  double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override
   {
     itkExceptionMacro("GetCenterIncidenceAngle not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  void ParseGdal(const MetadataSupplierInterface &) override
+  void ParseGdal(ImageMetadata &) override
   {
     itkExceptionMacro("ParseGdal not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  void ParseGeom(const MetadataSupplierInterface &) override
+  void ParseGeom(ImageMetadata &) override
   {
     itkExceptionMacro("ParseGeom not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
@@ -233,10 +234,8 @@ public:
   }
 
 protected:
-  SarDefaultImageMetadataInterface(){};
-  ~SarDefaultImageMetadataInterface() override
-  {
-  }
+  SarDefaultImageMetadataInterface() = default;
+  ~SarDefaultImageMetadataInterface() override = default;
 
 private:
   SarDefaultImageMetadataInterface(const Self&) = delete;

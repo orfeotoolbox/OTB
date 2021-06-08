@@ -1163,14 +1163,15 @@ void FormosatImageMetadataInterface::FetchSatAngles(
                     const std::vector<double> & acrossTrackViewingAngles,
                     const std::vector<double> & sceneOrientation,
                     const std::string & softwareVersion,
-                    double satAzimuth)
+                    double satAzimuth,
+                    ImageMetadata& imd)
 {
   if(incidenceAngles.size() != 1)
   {
     otbGenericExceptionMacro(MissingMetadataException,<<"Missing satellite angles in Dimap")
   }
 
-  m_Imd.Add(MDNum::SatElevation, 90. - incidenceAngles[0]);
+  imd.Add(MDNum::SatElevation, 90. - incidenceAngles[0]);
 
   // In some software version, a bug exists.
   // We have to check the version to correct the satellite azimuth angle contained in the metadata
@@ -1211,10 +1212,10 @@ void FormosatImageMetadataInterface::FetchSatAngles(
     }
   }
   
-  m_Imd.Add(MDNum::SatAzimuth, satAzimuth);
+  imd.Add(MDNum::SatAzimuth, satAzimuth);
 }
 
-void FormosatImageMetadataInterface::FetchSpectralSensitivity()
+void FormosatImageMetadataInterface::FetchSpectralSensitivity(ImageMetadata& imd)
 {
   std::unordered_map<std::string, std::vector<double>> BandNameToSpectralSensitivityTable = {
     {"P", {
@@ -1358,7 +1359,7 @@ void FormosatImageMetadataInterface::FetchSpectralSensitivity()
   spectralSensitivity.Axis[0].Size = 281;
 
 
-  for (auto & band: m_Imd.Bands)
+  for (auto & band: imd.Bands)
   {
     auto SpectralSensitivityIt = BandNameToSpectralSensitivityTable.find(band[MDStr::BandName] );
     if (SpectralSensitivityIt != BandNameToSpectralSensitivityTable.end())
@@ -1371,15 +1372,15 @@ void FormosatImageMetadataInterface::FetchSpectralSensitivity()
   
 }
 
-void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void FormosatImageMetadataInterface::Parse(ImageMetadata &imd)
 {
   DimapMetadataHelper helper;
 
   // GDAL DIMAP metadata case
-  if (mds.GetAs<std::string>("", "IMAGERY/SATELLITEID") == "FORMOSAT 2")
+  if (m_MetadataSupplierInterface->GetAs<std::string>("", "IMAGERY/SATELLITEID") == "FORMOSAT 2")
   {
     //Find the METADATA.DIM file (Dimap V1 metadata file)
-    auto resourceFiles = mds.GetResourceFiles();
+    auto resourceFiles = m_MetadataSupplierInterface->GetResourceFiles();
     
     std::string metadataFile;
     for (const auto & file: resourceFiles)
@@ -1401,9 +1402,9 @@ void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
     
   }
   // geom metadata case
-  else if (mds.GetAs<std::string>("", "support_data.sensorID" ) == "Formosat 2")
+  else if (m_MetadataSupplierInterface->GetAs<std::string>("", "support_data.sensorID" ) == "Formosat 2")
   {
-    helper.ParseGeom(mds);
+    helper.ParseGeom(*m_MetadataSupplierInterface);
   }
 
   else
@@ -1411,25 +1412,25 @@ void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
     otbGenericExceptionMacro(MissingMetadataException,<<"Not a Formosat product")
   }
 
-  m_Imd.Add(MDStr::Mission, "Formasat 2");
-  m_Imd.Add(MDStr::SensorID, "FORMOSAT 2");
+  imd.Add(MDStr::Mission, "Formasat 2");
+  imd.Add(MDStr::SensorID, "FORMOSAT 2");
 
 
   const auto & dimapData = helper.GetDimapData();
-  auto nbBands = m_Imd.Bands.size();
+  auto nbBands = imd.Bands.size();
 
   // Band names are not in the metadata. Two cases should be considered 
   // here: panchromatic and multispectral
   if (nbBands == 1)
   {
-    m_Imd.Bands[0].Add(MDStr::BandName, "P");
+    imd.Bands[0].Add(MDStr::BandName, "P");
   }
   else if (nbBands == 4)
   {
-    m_Imd.Bands[0].Add(MDStr::BandName, "B1");
-    m_Imd.Bands[1].Add(MDStr::BandName, "B2");
-    m_Imd.Bands[2].Add(MDStr::BandName, "B3");
-    m_Imd.Bands[3].Add(MDStr::BandName, "B4");
+    imd.Bands[0].Add(MDStr::BandName, "B1");
+    imd.Bands[1].Add(MDStr::BandName, "B2");
+    imd.Bands[2].Add(MDStr::BandName, "B3");
+    imd.Bands[3].Add(MDStr::BandName, "B4");
   }
   else
   {
@@ -1437,19 +1438,20 @@ void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
             "Invalid number of band for a FORMOSAT product")
   }
 
-  m_Imd.Add(MDTime::ProductionDate, 
+  imd.Add(MDTime::ProductionDate,
     boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));
 
-  m_Imd.Add(MDTime::AcquisitionDate, 
+  imd.Add(MDTime::AcquisitionDate,
     boost::lexical_cast<MetaData::Time>(dimapData.AcquisitionDate));
 
 
-  m_Imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
-  m_Imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
+  imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
+  imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
 
   FetchSatAngles(dimapData.IncidenceAngle, dimapData.AlongTrackViewingAngle,
                  dimapData.AcrossTrackViewingAngle, dimapData.SceneOrientation,
-                 dimapData.softwareVersion, dimapData.SatAzimuth);
+                 dimapData.softwareVersion, dimapData.SatAzimuth,
+                 imd);
 
   std::vector<double> solarIrradianceVec;
   if (dimapData.SolarIrradiance.empty())
@@ -1461,20 +1463,20 @@ void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
     solarIrradianceVec = dimapData.SolarIrradiance;
   }
 
-  auto setDimapBandMetadata = [this](const MDNum & key, const std::vector<double> & input)
+  auto setDimapBandMetadata = [&imd](const MDNum & key, const std::vector<double> & input)
   {
     if (input.size() == 1)
     {
       // this is a PAN image
-      m_Imd.Bands[0].Add(key, input[0]);
+      imd.Bands[0].Add(key, input[0]);
     }
     else if (input.size() == 4)
     {
       // MS image, note the band ordering
-      m_Imd.Bands[0].Add(key, input[2]);
-      m_Imd.Bands[1].Add(key, input[1]);
-      m_Imd.Bands[2].Add(key, input[0]);
-      m_Imd.Bands[3].Add(key, input[3]);
+      imd.Bands[0].Add(key, input[2]);
+      imd.Bands[1].Add(key, input[1]);
+      imd.Bands[2].Add(key, input[0]);
+      imd.Bands[3].Add(key, input[3]);
     }
     else
     {
@@ -1487,7 +1489,7 @@ void FormosatImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
   setDimapBandMetadata(MDNum::PhysicalGain, dimapData.PhysicalGain);
   setDimapBandMetadata(MDNum::SolarIrradiance, solarIrradianceVec);
 
-  FetchSpectralSensitivity();
+  FetchSpectralSensitivity(imd);
 
 }
 
