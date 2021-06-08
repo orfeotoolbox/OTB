@@ -205,6 +205,16 @@ public:
     itkExceptionMacro("GetCenterIncidenceAngle not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
+  void ParseGdal(const MetadataSupplierInterface &) override
+  {
+    itkExceptionMacro("ParseGdal not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+
+  void ParseGeom(const MetadataSupplierInterface &) override
+  {
+    itkExceptionMacro("ParseGeom not implemented in SarDefaultImageMetadataInterface, no captor type found");
+  }
+
   bool CanRead() const override
   {
     // This class is the default one, it has to be able to call every metadata

@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 # Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
 #
@@ -18,8 +19,11 @@
 # limitations under the License.
 #
 
-# Configuration options for windows-8.1-x86-vc14.0.cmake
+jobs_directory=/home/otbpush/test
 
-set(site_option
-"CMAKE_CXX_FLAGS:STRING=/DTHROW_QCRITICAL=0 /DWIN32 /D_WINDOWS /W3 /GR /EHsc
-")
+build_dir=$(readlink -f "$1")
+
+scp ${build_dir}/SuperBuild-archives-*.{tar.bz2,md5} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
+
+ssh otbpush@otb5-vm2.orfeo-toolbox.org \
+  mv ${jobs_directory}/SuperBuild-archives-*.{tar.bz2,md5} ${jobs_directory}/superbuild_archive

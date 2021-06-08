@@ -10,8 +10,8 @@ OrbitNumber 4091
 PRF 3832.52
 RSF 1.09886e+08
 RadarFrequency 9.65e+09
-LineSpacing 9.10033e-09
-PixelSpacing 0.000260925
+LineSpacing 1.84541
+PixelSpacing 1.36411
 AcquisitionStartTime 2008-03-10T13:32:20.083162Z
 AcquisitionStopTime 2008-03-10T13:32:28.617747Z
 GCP <GCPParam>

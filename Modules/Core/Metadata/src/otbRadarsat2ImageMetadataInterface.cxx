@@ -30,6 +30,7 @@
 // useful constants
 #include <otbMath.h>
 #include "otbXMLMetadataSupplier.h"
+#include <boost/filesystem.hpp> 
 
 namespace otb
 {
@@ -244,7 +245,7 @@ Radarsat2ImageMetadataInterface::UIntVectorType Radarsat2ImageMetadataInterface:
 //"
 
 
-void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void Radarsat2ImageMetadataInterface::ParseGdal(const MetadataSupplierInterface & mds)
 {
   // Metadata read by GDAL
   Fetch(MDTime::AcquisitionStartTime, mds, "ACQUISITION_START_TIME");
@@ -256,7 +257,6 @@ void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface & md
   // Fetch(MDStr::Mode, mds, "MODE");
   Fetch(MDStr::OrbitDirection, mds, "ORBIT_DIRECTION");
   // Fetch(MDNum::OrbitNumber, mds, "ORBIT_NUMBER");
-  Fetch(MDNum::PixelSpacing, mds, "PIXEL_SPACING");
   Fetch(MDStr::ProductType, mds, "PRODUCT_TYPE");
   Fetch(MDStr::Instrument, mds, "SATELLITE_IDENTIFIER");
   Fetch(MDStr::SensorID, mds, "SENSOR_IDENTIFIER");
@@ -294,5 +294,59 @@ void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface & md
     }
 }
 
+void Radarsat2ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & mds)
+{
+  // Metadata read by GDAL
+  Fetch(MDTime::AcquisitionStartTime, mds, "support_data.image_date");
+  Fetch(MDNum::LineSpacing, mds, "meters_per_pixel_y");
+  Fetch(MDNum::PixelSpacing, mds, "meters_per_pixel_x");
+  Fetch(MDStr::Instrument, mds, "sensor");
+  m_Imd.Add(MDStr::SensorID, "SAR");  
+
+  // Product file
+  auto ProductFilePath = boost::filesystem::path(mds.GetResourceFile());
+  if (!ProductFilePath.empty())
+  {
+    XMLMetadataSupplier ProductMS((ProductFilePath.remove_filename() /= "product.xml").string());
+    m_Imd.Add(MDStr::Mission, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
+    m_Imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
+    m_Imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));
+    m_Imd.Add(MDTime::ProductionDate,
+	      ProductMS.GetFirstAs<MetaData::Time>("product.imageGenerationParameters.generalProcessingInformation.processingTime"));
+    m_Imd.Add(MDNum::AverageSceneHeight,
+	      ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
+    m_Imd.Add(MDNum::RadarFrequency, this->GetRadarFrequency());
+    m_Imd.Add(MDNum::PRF, this->GetPRF());
+    m_Imd.Add(MDNum::RSF, this->GetRSF());
+    m_Imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle());
+    m_Imd.Add(MDStr::BeamMode, ProductMS.GetAs<std::string>("product.sourceAttributes.beamModeMnemonic"));
+    m_Imd.Add("FACILITY_IDENTIFIER", ProductMS.GetAs<std::string>("product.sourceAttributes.inputDatasetFacilityId"));
+    m_Imd.Add(MDStr::OrbitDirection, ProductMS.GetAs<std::string>("product.sourceAttributes.orbitAndAttitude.orbitInformation.passDirection"));
+    m_Imd.Add(MDStr::ProductType, ProductMS.GetAs<std::string>("product.imageGenerationParameters.generalProcessingInformation.productType"));
+
+    auto polarizations = ProductMS.GetAsVector<std::string>("product.sourceAttributes.radarParameters.polarizations");
+    assert(polarizations.size() == m_Imd.Bands.size());
+    SARParam sarParam;
+    for (int bandId = 0 ; bandId < polarizations.size() ; ++bandId)
+    {
+      m_Imd.Bands[bandId].Add(MDStr::Polarization, polarizations[bandId]);
+      m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
+    }
+  }  
+}
+
+void Radarsat2ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+{
+  // Try to fetch the metadata from GDAL Metadata Supplier
+  if (mds.GetAs<std::string>("", "SATELLITE_IDENTIFIER") == "RADARSAT-2")
+    this->ParseGdal(mds);
+  // Try to fetch the metadata from GEOM file
+  else if (mds.GetAs<std::string>("", "sensor") == "RADARSAT-2")
+    this->ParseGeom(mds);
+  // Failed to fetch the metadata
+  else
+    otbGenericExceptionMacro(MissingMetadataException,
+			     << "Not a Sentinel1 product");
+}
 
 } // end namespace otb

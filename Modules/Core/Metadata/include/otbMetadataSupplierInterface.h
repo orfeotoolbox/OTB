@@ -27,6 +27,7 @@
 #include "otbMacro.h"
 #include "otbStringUtils.h"
 #include "otbStringUtilities.h"
+#include <boost/algorithm/string.hpp>
 
 namespace otb
 {
@@ -73,6 +74,7 @@ public:
     {
       otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata '"<<path<<"'")
     }
+    boost::trim(ret);
     try
     {
       return boost::lexical_cast<T>(ret);
@@ -91,6 +93,7 @@ public:
     {
       return defaultValue;
     }
+    boost::trim(ret);
     try
     {
       return boost::lexical_cast<T>(ret);

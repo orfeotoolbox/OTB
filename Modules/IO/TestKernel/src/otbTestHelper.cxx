@@ -1478,10 +1478,10 @@ int CompareMetadataDict( const MapType & baselineMap,
                     << " does not match between test and baseline images: "
                     << std::endl
                     << "Baseline image: " 
-                    << first1->second
+                    << first2->second
                     << std::endl
                     << "Test image: " 
-                    << first2->second 
+                    << first1->second 
                     << std::endl;
       }
     }
@@ -1527,7 +1527,7 @@ int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char
     itkGenericExceptionMacro(<< "Exception detected while reading " << baselineImageFilename << " : " << e.GetDescription());
   }
 
-  // Read the baseline file
+  // Read the test file
   ReaderType::Pointer testReader = ReaderType::New();
   testReader->SetFileName(testImageFilename);
   try
@@ -1681,9 +1681,9 @@ int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char
 
   // Compare string keys (strict equality)
   errcount += CompareMetadataDict(baselineImageMetadata.StringKeys,
-                                    testImageMetadata.StringKeys,
-                                    m_ReportErrors,
-                                    {});
+				  testImageMetadata.StringKeys,
+				  m_ReportErrors,
+				  {});
 
   // Compare numeric keys
   auto compareDouble = [tolerance](double lhs, double rhs)
@@ -1693,37 +1693,37 @@ int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char
   // Don't test TileHints and datatype, as these metadata are written by gdal drivers, not otb.
   std::vector<MDNum> untestedMDNum  = {MDNum::TileHintX, MDNum::TileHintY, MDNum::DataType};
   errcount += CompareMetadataDict(baselineImageMetadata.NumericKeys,
-                                    testImageMetadata.NumericKeys,
-                                    m_ReportErrors,
-                                    untestedMDNum,
-                                    compareDouble);
+				  testImageMetadata.NumericKeys,
+				  m_ReportErrors,
+				  untestedMDNum,
+				  compareDouble);
 
   // Compare time keys (strict equality)
   errcount += CompareMetadataDict(baselineImageMetadata.TimeKeys, 
-                                    testImageMetadata.TimeKeys,
-                                    m_ReportErrors,
-                                    {});
+				  testImageMetadata.TimeKeys,
+				  m_ReportErrors,
+				  {});
 
 
   // Compare LUTs (strict equality)
   errcount += CompareMetadataDict(baselineImageMetadata.LUT1DKeys, 
-                                    testImageMetadata.LUT1DKeys,
-                                    m_ReportErrors,
-                                    {});
+				  testImageMetadata.LUT1DKeys,
+				  m_ReportErrors,
+				  {});
 
   errcount += CompareMetadataDict(baselineImageMetadata.LUT2DKeys, 
-                                    testImageMetadata.LUT2DKeys,
-                                    m_ReportErrors,
-                                    {});
+				  testImageMetadata.LUT2DKeys,
+				  m_ReportErrors,
+				  {});
 
 
   // Compare extra keys
   // Don't test OTB_VERSION, as it change with the version of OTB used
   std::vector<std::string> untestedExtra = {"OTB_VERSION"};
   errcount += CompareMetadataDict(baselineImageMetadata.ExtraKeys, 
-                                    testImageMetadata.ExtraKeys,
-                                    m_ReportErrors,
-                                    untestedExtra);
+				  testImageMetadata.ExtraKeys,
+				  m_ReportErrors,
+				  untestedExtra);
 
 
   if (baselineImageMetadata.Has(MDGeom::RPC))
@@ -1762,7 +1762,7 @@ int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char
 
 //
 // Generate all of the possible baselines
-// The possible baselines are generated fromn the baselineFilename using the following algorithm:
+// The possible baselines are generated from the baselineFilename using the following algorithm:
 // 1) strip the suffix
 // 2) append a digit _x
 // 3) append the original suffix.

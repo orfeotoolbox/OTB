@@ -23,7 +23,6 @@
 
 #include "otbSarImageMetadataInterface.h"
 #include "otbXMLMetadataSupplier.h"
-#include "otbSARMetadata.h"
 
 namespace otb
 {
@@ -99,6 +98,10 @@ public:
 
   /*get lookup data for calculating backscatter */
   void CreateCalibrationLookupData(const short type) override;
+
+  void ParseGdal(const MetadataSupplierInterface &) override;
+
+  void ParseGeom(const MetadataSupplierInterface &) override;
 
   void Parse(const MetadataSupplierInterface &) override;
 

@@ -28,6 +28,7 @@
 #include "itkPointSet.h"
 #include "otbSarCalibrationLookupData.h"
 #include "otbStringUtils.h"
+#include "otbSARMetadata.h"
 
 namespace otb
 {
@@ -112,7 +113,17 @@ public:
    * then translate it into ImageMetadata. Handles most SAR sensors.
    * Returns true if succeed. */
   bool ConvertImageKeywordlistToImageMetadata() override;
-  
+
+  virtual void ParseGdal(const MetadataSupplierInterface &) =0;
+
+  virtual void ParseGeom(const MetadataSupplierInterface &) =0;
+  bool GetSAR(const MetadataSupplierInterface &, SARParam &) const;
+  std::vector<AzimuthFmRate> GetAzimuthFmRateGeom(const MetadataSupplierInterface &) const;
+  std::vector<DopplerCentroid> GetDopplerCentroidGeom(const MetadataSupplierInterface &) const;
+  std::vector<Orbit> GetOrbitsGeom(const MetadataSupplierInterface &) const;
+  std::vector<CalibrationVector> GetCalibrationVectorGeom(const MetadataSupplierInterface &) const;
+  std::vector<SARNoise> GetNoiseVectorGeom(const MetadataSupplierInterface &) const;
+
 protected:
   SarImageMetadataInterface();
   ~SarImageMetadataInterface() override

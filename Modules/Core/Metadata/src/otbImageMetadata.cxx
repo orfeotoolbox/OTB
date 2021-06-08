@@ -741,19 +741,20 @@ bool HasOpticalSensorMetadata(const ImageMetadata & imd)
 
 bool HasSARSensorMetadata(const ImageMetadata & imd)
 {
-  auto hasBandMetadataStr = [&imd](MDStr key)
-                        {return std::all_of(imd.Bands.begin(),
-                                            imd.Bands.end(),
-                                            [key](ImageMetadataBase band){return band.Has(key);});};
+  auto hasBandMetadata = [&imd](auto key) {
+    return std::all_of(imd.Bands.begin(),
+		       imd.Bands.end(),
+		       [key](ImageMetadataBase band){return band.Has(key);});
+  };
 
   return imd.Has(MDStr::SensorID)
-      && imd.Has(MDStr::Mission)
-      && imd.Has(MDStr::ProductType)
-      && imd.Has(MDNum::RadarFrequency)
-      && imd.Has(MDNum::PRF)
-      && imd.Has(MDTime::AcquisitionStartTime)
-      && imd.Has(MDStr::OrbitDirection)
-      && (hasBandMetadataStr(MDStr::Polarization) || imd.Has(MDStr::Polarization));
+    && imd.Has(MDStr::Mission)
+    && imd.Has(MDStr::ProductType)
+    && (imd.Has(MDNum::RadarFrequency) || hasBandMetadata(MDNum::RadarFrequency))
+    && (imd.Has(MDNum::PRF) || hasBandMetadata(MDNum::PRF))
+    && imd.Has(MDTime::AcquisitionStartTime)
+    && imd.Has(MDStr::OrbitDirection)
+    && (hasBandMetadata(MDStr::Polarization) || imd.Has(MDStr::Polarization));
 }
 
 }

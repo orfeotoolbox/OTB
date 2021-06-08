@@ -24,9 +24,9 @@ entry points. While the framework can be extended, the Orfeo ToolBox ships with 
    set-up and executed into a high-level language such as Python
    for instance.
 
--  `QGIS <http://www.qgis.org/>`_  plugin built on top of
-   the SWIG/Python interface is available with seamless integration within
-   QGIS.
+-  A :doc:`QGISInterface` based on the providers is built on top of the
+   SWIG/Python interface and is available with seamless integration
+   within `QGIS <http://www.qgis.org/>`_.
 
 The complete list of applications is described in the Chapter :ref:`apprefdoc`.
 

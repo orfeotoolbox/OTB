@@ -392,10 +392,10 @@ std::vector<DopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCentroid
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> dopplerCent.azimuthTime;
     dopplerCent.t0 = xmlMS.GetAs<double>(path_root + ".t0");
     dopplerCent.dopCoef = xmlMS.GetAsVector<double>(path_root + ".dataDcPolynomial",
-    		' ', xmlMS.GetAs<int>(path_root + ".dataDcPolynomial.count"));
-	dopplerCent.geoDopCoef = xmlMS.GetAsVector<double>(path_root + ".geometryDcPolynomial",
-    		' ', xmlMS.GetAs<int>(path_root + ".geometryDcPolynomial.count"));
-	dopplerCentroidVector.push_back(dopplerCent);
+						    ' ', xmlMS.GetAs<int>(path_root + ".dataDcPolynomial.count"));
+    dopplerCent.geoDopCoef = xmlMS.GetAsVector<double>(path_root + ".geometryDcPolynomial",
+						       ' ', xmlMS.GetAs<int>(path_root + ".geometryDcPolynomial.count"));
+    dopplerCentroidVector.push_back(dopplerCent);
   }
   return dopplerCentroidVector;
 }
@@ -415,12 +415,12 @@ std::vector<Orbit> Sentinel1ImageMetadataInterface::GetOrbits(const XMLMetadataS
     std::string path_root = "product.generalAnnotation.orbitList.orbit_" + oss.str();
     Orbit orbit;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".time")) >> orbit.time;
-    orbit.posX = xmlMS.GetAs<double>(path_root + ".position.x");
-    orbit.posY = xmlMS.GetAs<double>(path_root + ".position.y");
-    orbit.posZ = xmlMS.GetAs<double>(path_root + ".position.z");
-    orbit.velX = xmlMS.GetAs<double>(path_root + ".velocity.x");
-    orbit.velY = xmlMS.GetAs<double>(path_root + ".velocity.y");
-    orbit.velZ = xmlMS.GetAs<double>(path_root + ".velocity.z");
+    orbit.position[0] = xmlMS.GetAs<double>(path_root + ".position.x");
+    orbit.position[1] = xmlMS.GetAs<double>(path_root + ".position.y");
+    orbit.position[2] = xmlMS.GetAs<double>(path_root + ".position.z");
+    orbit.velocity[0] = xmlMS.GetAs<double>(path_root + ".velocity.x");
+    orbit.velocity[1] = xmlMS.GetAs<double>(path_root + ".velocity.y");
+    orbit.velocity[2] = xmlMS.GetAs<double>(path_root + ".velocity.z");
     orbitVector.push_back(orbit);
   }
   return orbitVector;
@@ -524,7 +524,7 @@ double Sentinel1ImageMetadataInterface::getBandTerrainHeight(const XMLMetadataSu
   return heightSum / (double)listCount;
 }
 
-void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void Sentinel1ImageMetadataInterface::ParseGdal(const MetadataSupplierInterface & mds)
 {
   // Metadata read by GDAL
   Fetch(MDTime::AcquisitionStartTime, mds, "ACQUISITION_START_TIME");
@@ -573,12 +573,11 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface & md
     sarParam.azimuthFmRates = this->GetAzimuthFmRate(AnnotationMS);
     sarParam.dopplerCentroids = this->GetDopplerCentroid(AnnotationMS);
     sarParam.orbits = this->GetOrbits(AnnotationMS);
-    m_Imd.Add(MDNum::NumberOfLines, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines"));
-    m_Imd.Add(MDNum::NumberOfColumns, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfSamples"));
-    m_Imd.Add(MDNum::AverageSceneHeight, this->getBandTerrainHeight(AnnotationFilePath));
-    m_Imd.Add(MDNum::RadarFrequency, AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.radarFrequency"));
-    m_Imd.Add(MDNum::PRF, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthFrequency"));
-    m_Imd.Add(MDNum::CenterIncidenceAngle, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.incidenceAngleMidSwath"));
+    m_Imd.Bands[bandId].Add(MDNum::NumberOfLines, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines"));
+    m_Imd.Bands[bandId].Add(MDNum::NumberOfColumns, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfSamples"));
+    m_Imd.Bands[bandId].Add(MDNum::AverageSceneHeight, this->getBandTerrainHeight(AnnotationFilePath));
+    m_Imd.Bands[bandId].Add(MDNum::RadarFrequency, AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.radarFrequency"));
+    m_Imd.Bands[bandId].Add(MDNum::PRF, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthFrequency"));
 
     // Calibration file
     std::string CalibrationFilePath = itksys::SystemTools::GetFilenamePath(AnnotationFilePath)
@@ -587,7 +586,7 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface & md
     if (CalibrationFilePath.empty())
           otbGenericExceptionMacro(MissingMetadataException,<<"Missing Calibration file for band '"<<swath<<"'");
     XMLMetadataSupplier CalibrationMS(CalibrationFilePath);
-    m_Imd.Add(MDNum::CalScale, CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant"));
+    m_Imd.Bands[bandId].Add(MDNum::CalScale, CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant"));
     sarParam.calibrationVectors = this->GetCalibrationVector(CalibrationMS);
     std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.startTime")) >> sarParam.calibrationStartTime;
     std::istringstream(CalibrationMS.GetAs<std::string>("calibration.adsHeader.stopTime")) >> sarParam.calibrationStopTime;
@@ -603,6 +602,53 @@ void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface & md
 
     m_Imd.Bands[bandId].Add(MDGeom::SAR, sarParam);
   }
+}
+
+void Sentinel1ImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & mds)
+{
+  Fetch(MDTime::AcquisitionStartTime, mds, "support_data.first_line_time");
+  Fetch(MDTime::AcquisitionStopTime, mds, "support_data.last_line_time");
+  Fetch(MDStr::BeamMode, mds, "manifest_data.acquisition_mode");
+  Fetch(MDStr::BeamSwath, mds, "manifest_data.swath");
+  Fetch(MDNum::LineSpacing, mds, "support_data.azimuth_spacing");
+  Fetch(MDStr::Mission, mds, "manifest_data.instrument");
+  Fetch(MDStr::OrbitDirection, mds, "manifest_data.orbit_pass");
+  Fetch(MDNum::OrbitNumber, mds, "manifest_data.abs_orbit");
+  Fetch(MDNum::PixelSpacing, mds, "support_data.range_spacing");
+  Fetch(MDStr::ProductType, mds, "manifest_data.product_type");
+  Fetch(MDTime::ProductionDate, mds, "manifest_data.date");
+  Fetch(MDTime::AcquisitionDate, mds, "manifest_data.image_date");
+  Fetch("FACILITY_IDENTIFIER", mds, "manifest_data.Processing_system_identifier");
+  m_Imd.Add(MDStr::SensorID, "SAR");
+  auto instrument = mds.GetAs<std::string>("sensor");
+  instrument.pop_back();
+  m_Imd.Add(MDStr::Instrument, instrument);
+  Fetch(MDStr::Mode, mds, "header.swath");
+  Fetch(MDStr::Swath, mds, "manifest_data.swath");
+  Fetch(MDNum::NumberOfLines, mds, "number_lines", 0);
+  Fetch(MDNum::NumberOfColumns, mds, "number_samples", 0);
+  Fetch(MDNum::AverageSceneHeight, mds, "support_data.avg_scene_height", 0);
+  Fetch(MDNum::RadarFrequency, mds, "support_data.radar_frequency", 0);
+  Fetch(MDNum::PRF, mds, "support_data.pulse_repetition_frequency", 0);
+  Fetch(MDNum::CalScale, mds, "calibration.absoluteCalibrationConstant", 0);
+  SARParam sarParam;
+  auto hasSAR = GetSAR(mds, sarParam);
+  if (hasSAR)
+    m_Imd.Bands[0].Add(MDGeom::SAR, sarParam);
+}
+
+void Sentinel1ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+{
+  // Try to fetch the metadata from GDAL Metadata Supplier
+  if (mds.GetAs<std::string>("", "MISSION_ID") == "S1A" || mds.GetAs<std::string>("", "MISSION_ID") == "S1B")
+    this->ParseGdal(mds);
+  // Try to fetch the metadata from GEOM file
+  else if (mds.GetAs<std::string>("", "sensor") == "SENTINEL-1A" || mds.GetAs<std::string>("", "sensor") == "SENTINEL-1B")
+    this->ParseGeom(mds);
+  // Failed to fetch the metadata
+  else
+    otbGenericExceptionMacro(MissingMetadataException,
+			     << "Not a Sentinel1 product");
 }
 
 } // end namespace otb

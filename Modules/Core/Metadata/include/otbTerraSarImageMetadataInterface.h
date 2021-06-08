@@ -174,6 +174,10 @@ public:
    *  in the order R, G, B */
   std::vector<unsigned int> GetDefaultDisplay() const override;
 
+  void ParseGdal(const MetadataSupplierInterface &) override;
+
+  void ParseGeom(const MetadataSupplierInterface &) override;
+  
   void Parse(const MetadataSupplierInterface &) override;
 
 protected:
