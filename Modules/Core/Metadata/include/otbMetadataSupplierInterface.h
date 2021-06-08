@@ -81,6 +81,8 @@ public:
 
   /** If multiple keys have the same path, gives the position of the one with value value*/
   virtual unsigned int GetAttributId(std::string const& path, std::string const& value) const = 0;
+
+  virtual ~MetadataSupplierInterface() = default;
 };
 
 template <> bool MetadataSupplierInterface::GetAs(bool const& defaultValue, std::string const& path, int band) const;

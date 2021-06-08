@@ -34,8 +34,8 @@ ADD_SUPERBUILD_CMAKE_VAR(OPENCV PNG_LIBRARY)
 
 ExternalProject_Add(OPENCV
   PREFIX OPENCV
-  URL "https://github.com/opencv/opencv/archive/4.1.1.tar.gz"
-  URL_MD5 d9d3138d12e52bb0684f4a5862f6a46c
+  URL "https://github.com/opencv/opencv/archive/4.5.1.tar.gz"
+  URL_MD5 2205d3169238ec1f184438a96de68513
   BINARY_DIR ${OPENCV_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

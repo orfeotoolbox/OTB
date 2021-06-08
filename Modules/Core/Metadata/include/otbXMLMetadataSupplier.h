@@ -115,6 +115,7 @@ public:
    */
   std::string PrintSelf() const;
 
+  ~XMLMetadataSupplier() = default;
 protected:
   /**
   * @brief ReadXMLToList Transform xml to list of NULL terminated name=value

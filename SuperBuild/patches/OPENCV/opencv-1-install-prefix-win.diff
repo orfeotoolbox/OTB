@@ -1,12 +1,12 @@
-diff -burN opencv.orig/CMakeLists.txt opencv/CMakeLists.txt
---- opencv.orig/CMakeLists.txt	2019-09-17 09:33:13.196155000 +0200
-+++ opencv/CMakeLists.txt	2019-09-17 09:39:18.076164185 +0200
-@@ -531,7 +531,7 @@
+diff -burN opencv.orig/cmake/OpenCVInstallLayout.cmake opencv/cmake/OpenCVInstallLayout.cmake
+--- opencv.orig/cmake/OpenCVInstallLayout.cmake	2021-06-08 09:30:22.007336301 +0200
++++ opencv/cmake/OpenCVInstallLayout.cmake	2021-06-08 09:30:54.279376480 +0200
+@@ -23,7 +23,7 @@
+ elseif(WIN32 AND CMAKE_HOST_SYSTEM_NAME MATCHES Windows)
  
- if(WIN32 AND CMAKE_HOST_SYSTEM_NAME MATCHES Windows)
    if(DEFINED OpenCV_RUNTIME AND DEFINED OpenCV_ARCH)
--    ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "${OpenCV_ARCH}/${OpenCV_RUNTIME}/")
+-    ocv_update(OPENCV_INSTALL_BINARIES_PREFIX "${OpenCV_ARCH}/${OpenCV_RUNTIME}/")
 +    ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "") #"${OpenCV_ARCH}/${OpenCV_RUNTIME}/")
    else()
      message(STATUS "Can't detect runtime and/or arch")
-     ocv_update(OpenCV_INSTALL_BINARIES_PREFIX "")
+     ocv_update(OPENCV_INSTALL_BINARIES_PREFIX "")
