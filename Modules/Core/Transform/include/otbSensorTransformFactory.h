@@ -66,6 +66,8 @@ private:
 	/** Register a single factory, ensuring it has not been registered
 		* twice */
     static void RegisterFactory(itk::ObjectFactoryBase* factory);
+
+  static void DoRegisterBuiltInFactories();
 };
 }
 

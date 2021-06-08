@@ -59,18 +59,18 @@ SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::CreateT
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-struct RegisterOnce {
-    RegisterOnce() {
-      itk::ObjectFactoryBase::RegisterFactory(RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
-      itk::ObjectFactoryBase::RegisterFactory(RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
-    }
-};
+void SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::DoRegisterBuiltInFactories()
+{
+  itk::ObjectFactoryBase::RegisterFactory(RPCForwardTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
+  itk::ObjectFactoryBase::RegisterFactory(RPCInverseTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::New());
+}
+
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 void SensorTransformFactory<TScalarType, NInputDimensions,NOutputDimensions>::RegisterBuiltInFactories()
 {
-  // Use a static variable to guarentee thread safety (C++ 11)
-  static RegisterOnce<TScalarType, NInputDimensions,NOutputDimensions> ro{};
+  static std::once_flag reg_flag;
+  std::call_once(reg_flag, &SensorTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>::DoRegisterBuiltInFactories);
 }
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
