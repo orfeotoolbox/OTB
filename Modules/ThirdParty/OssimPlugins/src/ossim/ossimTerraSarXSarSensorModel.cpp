@@ -26,6 +26,7 @@
 #include <ossimTerraSarXSarSensorModel.h>
 #include <ossim/base/ossimXmlDocument.h>
 #include "ossim/ossimXmlTools.h"
+#include "itksys/SystemTools.hxx"
 
 
 namespace {// Anonymous namespace
@@ -45,15 +46,19 @@ namespace {// Anonymous namespace
     const ossimString attHeight  = "height";
 }// Anonymous namespace
 
-void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::string & annotationXml, const std::string & geoXml)
+bool ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::string & annotationXml, const std::string & geoXml)
 {
     ossimRefPtr<ossimXmlDocument> xmlDoc = new ossimXmlDocument(annotationXml);
     const ossimXmlNode & xmlRoot = *xmlDoc->getRoot();
 
     //isGRD parse variant?
-    std::string const& product_type = getTextFromFirstNode(xmlRoot, "productInfo/productVariantInfo/productVariant");
+    std::string product_type = getTextFromFirstNode(xmlRoot, "productInfo/productVariantInfo/productVariant");
 
-    std::cout << "type " <<  product_type << '\n';
+    if (product_type == "SSC")
+      {
+	product_type = "SLC";
+      }
+
 
     theProductType = ProductType(product_type);
 
@@ -219,4 +224,38 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
     }
 
     this->optimizeTimeOffsetsFromGcps();
+
+    return true;
+}
+
+
+bool ossimplugins::ossimTerraSarXSarSensorModel::open(const ossimFilename& file)
+{
+  // We expect the filename given here to be the image file (.tif or .cos) found in the IMAGEDATA directory
+  // Reference: TerraSar-X Ground Segment Level 1b Product Format Specification
+
+  // Get the path to the root of the image product
+  using namespace itksys;
+  const auto product_root = SystemTools::GetParentDirectory(SystemTools::GetParentDirectory(SystemTools::GetRealPath(file)));
+
+  // Get paths to the two xml we need, and check they exist
+  std::vector<std::string> components;
+  SystemTools::SplitPath(product_root, components);
+
+  std::vector<std::string> components_georef = components;
+  components_georef.push_back("ANNOTATION");
+  components_georef.push_back("GEOREF.xml");
+  const auto georef = SystemTools::JoinPath(components_georef);
+
+  std::vector<std::string> components_annotation = components;
+  components_annotation.push_back(components.back() + std::string(".xml"));
+  const auto annotation = SystemTools::JoinPath(components_annotation);
+
+  if (!SystemTools::FileExists(georef) || !SystemTools::FileExists(annotation))
+  {
+    return false;
+  }
+
+  // Try to read annotation file
+  return readAnnotationFile(annotation, georef);
 }
