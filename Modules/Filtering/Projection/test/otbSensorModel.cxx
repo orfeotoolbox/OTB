@@ -47,6 +47,8 @@ typedef otb::GeographicalDistance<ImageType::PointType>                Geographi
 
 int produceGCP(char* outputgcpfilename, const otb::ImageMetadata& imd, bool useForwardSensorModel = true, double z = 16.19688987731934)
 {
+  (void)useForwardSensorModel;
+  
   itk::Point<double, 2> imagePoint;
   itk::Point<double, 2> geoPoint;
 
@@ -143,8 +145,7 @@ int otbSensorModel(int argc, char* argv[])
   otb::GeomMetadataSupplier geomSupplier(geomfilename);
   for (int loop = 0 ; loop < geomSupplier.GetNbBands() ; ++loop)
     imd.Bands.emplace_back();
-  otb::ImageMetadataInterfaceBase::Pointer imi = otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
-  imd = imi->GetImageMetadata();
+  otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
   geomSupplier.FetchRPC(imd);
 
   if (!(kwlist.GetSize() > 0))

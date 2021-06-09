@@ -30,27 +30,29 @@ The table below summarizes which version of OTB can be used with which version o
 | OTB 8.0.0     | Not Compatible  | Not Compatible  | Compatible      |
 +---------------+-----------------+-----------------+-----------------+
 
+Troubleshooting
+---------------
+
 Use OTB in old QGIS version (3.6 and less)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-.. warning:: Please consider upgrading your QGIS version.
+.. warning:: This method is deprecated. Please consider upgrading your QGIS version.
 
-Since QGIS 3.8 and with 3.10 LTR version, the configuration of OTB Application is
-directly done in QGIS Provider (see above).
+Since QGIS 3.8 and with 3.10 LTR version, the configuration of OTB
+Application is directly done in QGIS Provider (see above).
 
-If you use older version of QGIS (from 3.2 to 3.6), you need to install an
-additional plugin in order to use OTB applications. This plugin is available
-`here <https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin>`_
-with specific installation instructions.
+If you use an older version of QGIS (from 3.2 to 3.6), you need to
+install an additional plugin in order to use OTB applications. This
+plugin is available `here
+<https://gitlab.orfeo-toolbox.org/orfeotoolbox/qgis-otb-plugin>`_ with
+specific installation instructions.
 
-Troubleshooting
-^^^^^^^^^^^^^^^
-As of QGIS 3.8 the OTB plugin is in the core. It might get messy if you
-have a previously installed plugin. Try to remove the old plugin before
-launching QGIS.
+Don't use this plugin with QGIS 3.8 or higher. It might get messy if
+you upgrade your QGIS version and still have a previously installed
+plugin. Try to remove the old plugin before launching QGIS.
 
 
 Issue tracking
-^^^^^^^^^^^^^^
+--------------
 If you encounter issues with integration of OTB application into QGIS,
 please `fill an issue <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/new?issue[assignee_id]=&issue[milestone_id]=>`_ into the OTB issue tracker with `qgis` label.

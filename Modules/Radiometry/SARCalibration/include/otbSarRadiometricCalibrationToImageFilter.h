@@ -30,22 +30,18 @@ namespace otb
 
 /** \class SarRadiometricCalibrationToImageFilter
  * \brief Evaluates the SarRadiometricCalibrationFunction onto a source image
- * The BeforeThreadedGenerateData create a SarImageMetadataInterface based on
- * input metadata dictionary. The nature of product(TerrSARX, Sentinel1, etc..)
- * are thus detected  automatically from this. The filter then reads necessary
+ * The nature of product(TerrSARX, Sentinel1, etc..)
+ * are thus detected  automatically from the metadata. The filter then reads necessary
  * parameters required to perform SarCalibration in a generic way.
  *
  * BeforeThreadedGenerateData() instantiate a SarRadiometricCalibrationFunction
- * and pass the values taken from SarImageMetadataInterface instance to it. This
+ * and pass the values taken from ImageMetadata instance to it. This
  * is where the actual computation of sigma (backscatter) occurs.
  *
  * Noise, Antenna pattern gain (old && new), range spread loss, incidence angle
  * data members used in this class are all instances of SarPrametricFunction
  * class. Each have a Evaluate() method and a special
  * EvaluateParametricCoefficient() which computes the actual value.
- *
- * The technical details and more discussion of SarCalibration can be found in jira
- * story #863.
  *
  * \see \c otb::SarParametricFunction
  * \see \c otb::SarCalibrationLookupBase

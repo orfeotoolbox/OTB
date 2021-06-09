@@ -35,8 +35,8 @@
 int otbImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
 {
   // Verify the number of parameters in the command line
-  const char* inputFilename  = argv[1];
-  const char* outputFilename = argv[2];
+  std::string inputFilename  = argv[1];
+  std::string outputFilename = argv[2];
 
   typedef otb::Image<double, 2> InputImageType;
   typedef otb::ImageFileReader<InputImageType> ImageReaderType;
@@ -54,17 +54,16 @@ int otbImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
   }
 
   otb::ImageMetadataInterfaceBase::Pointer imi = otb::ImageMetadataInterfaceFactory::CreateIMI(imd, *mds);
-  const otb::ImageMetadata& imd2 = imi->GetImageMetadata();
   std::ofstream file;
   file.open(outputFilename);
-  otb::testtools::PrintMetadata(imd2, file);
-  if (imd2.Has(otb::MDGeom::GCP))
-    file << boost::any_cast<otb::Projection::GCPParam>(imd2[otb::MDGeom::GCP]).ToJSON(true);
+  otb::testtools::PrintMetadata(imd, file);
+  if (imd.Has(otb::MDGeom::GCP))
+    file << boost::any_cast<otb::Projection::GCPParam>(imd[otb::MDGeom::GCP]).ToJSON(true);
   file.close();
 
   if (dynamic_cast<otb::OpticalImageMetadataInterface*>(imi.GetPointer()))
   {
-    if (!otb::HasOpticalSensorMetadata(imi->GetImageMetadata()))
+    if (!otb::HasOpticalSensorMetadata(imd))
     {
       std::cout << "Input image does not contain all required optical image metadata" << std::endl;
       return EXIT_FAILURE;
@@ -72,7 +71,7 @@ int otbImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
   }
   else if (dynamic_cast<otb::SarImageMetadataInterface*>(imi.GetPointer()))
   {
-    if (!otb::HasSARSensorMetadata(imi->GetImageMetadata()))
+    if (!otb::HasSARSensorMetadata(imd))
     {
       std::cout << "Input image does not contain all required sar image metadata" << std::endl;
       return EXIT_FAILURE;

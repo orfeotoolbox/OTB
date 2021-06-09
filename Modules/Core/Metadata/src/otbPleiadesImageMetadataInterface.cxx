@@ -34,6 +34,8 @@
 
 #include "itksys/SystemTools.hxx"
 
+#include "otbXMLMetadataSupplier.h"
+
 namespace otb
 {
 using boost::lexical_cast;
@@ -654,7 +656,8 @@ void PleiadesImageMetadataInterface::FetchSatAngles(
                     const std::vector<double> & incidenceAngles,
                     const std::vector<double> & alongTrackIncidenceAngles,
                     const std::vector<double> & acrossTrackIncidenceAngles,
-                    const std::vector<double> & sceneOrientation)
+                    const std::vector<double> & sceneOrientation,
+                    ImageMetadata& imd)
 {
   if(incidenceAngles.size() != 3 ||  sceneOrientation.size() != 3)
   {
@@ -665,13 +668,13 @@ void PleiadesImageMetadataInterface::FetchSatAngles(
   //"90 - satOrientation". Pleiades does not seem to follow this convention so
   // inverse the formula here to be able to take the angle read in the metadata
   // as input for 6S. The second value is used (center value)
-  m_Imd.Add(MDNum::SatElevation, 90. - incidenceAngles[1]);
+  imd.Add(MDNum::SatElevation, 90. - incidenceAngles[1]);
 
   if (alongTrackIncidenceAngles.size() != 3 ||
       acrossTrackIncidenceAngles.size() != 3)
   {
     // Use only orientation if across/along track incidence are not available
-    m_Imd.Add(MDNum::SatAzimuth, sceneOrientation[1]);
+    imd.Add(MDNum::SatAzimuth, sceneOrientation[1]);
   }
   else
   {
@@ -684,7 +687,7 @@ void PleiadesImageMetadataInterface::FetchSatAngles(
                                         std::tan(along * CONST_PI_180)) 
                           * CONST_180_PI);
 
-    m_Imd.Add(MDNum::SatAzimuth, fmod(satAzimuth, 360));
+    imd.Add(MDNum::SatAzimuth, fmod(satAzimuth, 360));
 
   }
 }
@@ -1802,7 +1805,7 @@ PleiadesImageMetadataInterface::WavelengthSpectralBandVectorType PleiadesImageMe
 }
 
 
-void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::Time & date)
+void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::Time & date, ImageMetadata& imd)
 {
   // We use here tabulate in flight values for physical gain of PHR. Those values evolve
   // with time and are much more accurate. Values provided by CNES calibration
@@ -1825,7 +1828,7 @@ void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::
 
   std::unordered_map<std::string, double> bandNameToPhysicalGain;
   // TODO check band order here.
-  const auto &  sensorId = m_Imd[MDStr::SensorID];
+  const auto &  sensorId = imd[MDStr::SensorID];
   if (sensorId == "PHR 1A")
   {
     // tm_year: years since 1900
@@ -1839,28 +1842,126 @@ void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::
              (date.tm_year == 113 && date.tm_mon < 3))
     { 
       bandNameToPhysicalGain = { {"P", 11.73},
-          {"B0", 9.45}, {"B1", 9.48}, {"B2", 10.51}, {"B3", 15.71}};
+          {"B0", 9.47}, {"B1", 9.53}, {"B2", 10.48}, {"B3", 15.66}};
     }
-    // After 01/03/2013
-    else 
+    // From 01/03/2013 to 01/03/2014
+    else if ((date.tm_year == 113 && date.tm_mon >= 3) ||
+             (date.tm_year == 114 && date.tm_mon < 3))
     {
       bandNameToPhysicalGain = { {"P", 11.70},
-          {"B0", 9.38}, {"B1", 9.34}, {"B2", 10.46}, {"B3", 15.69}};
-
+          {"B0", 9.40}, {"B1", 9.47}, {"B2", 10.44}, {"B3", 15.62}};
+    }
+    // From 01/03/2014 to 01/03/2015
+    else if ((date.tm_year == 114 && date.tm_mon >= 3) ||
+              (date.tm_year == 115 && date.tm_mon < 3))
+    {
+      bandNameToPhysicalGain = { {"P", 11.67},
+          {"B0", 9.33}, {"B1", 9.39}, {"B2", 10.38}, {"B3", 15.57}};
+    }
+    // From 01/03/2015 to 01/03/2016
+    else if ((date.tm_year == 115 && date.tm_mon >= 3) ||
+              (date.tm_year == 116 && date.tm_mon < 3))
+    {
+      bandNameToPhysicalGain = { {"P", 11.64},
+          {"B0", 9.25}, {"B1", 9.31}, {"B2", 10.32}, {"B3", 15.51}};
+    }
+    // From 01/03/2016 to 31/12/2016
+    else if ((date.tm_year == 116 && date.tm_mon >= 3) ||
+              (date.tm_year == 116 && date.tm_mon <=12 ))
+    {
+      bandNameToPhysicalGain = { {"P", 11.61},
+          {"B0", 9.18}, {"B1", 9.25}, {"B2", 10.27}, {"B3", 15.46}};
+    }
+    // From 01/01/2017 to 31/12/2017
+    else if ((date.tm_year == 117 && date.tm_mon >= 1) ||
+              (date.tm_year == 117 && date.tm_mon <= 12))
+    {
+      bandNameToPhysicalGain = { {"P", 11.58},
+          {"B0", 9.11}, {"B1", 9.17}, {"B2", 10.22}, {"B3", 15.41}};
+    }
+    // From 01/01/2018 to 31/12/2018
+    else if ((date.tm_year == 118 && date.tm_mon >= 1) ||
+              (date.tm_year == 118 && date.tm_mon <= 12))
+    {
+      bandNameToPhysicalGain = { {"P", 11.55},
+          {"B0", 9.03}, {"B1", 9.09}, {"B2", 10.16}, {"B3", 15.36}};
+    }
+    // From 01/10/2018 to 31/12/2019
+    else if ((date.tm_year == 119 && date.tm_mon >= 1) ||
+              (date.tm_year == 119 && date.tm_mon <= 12))
+    {
+      bandNameToPhysicalGain = { {"P", 11.52},
+          {"B0", 8.96}, {"B1", 9.01}, {"B2", 10.09}, {"B3", 15.31}};
+    }
+    // From 01/01/2020 to nowadays
+    else
+    {
+      bandNameToPhysicalGain = { {"P", 11.49},
+          {"B0", 8.91}, {"B1", 8.95}, {"B2", 10.01}, {"B3", 15.27}};
     }
   }
   else if (sensorId == "PHR 1B")
   {
+    if  ((date.tm_year < 113) ||
+         (date.tm_year == 113 && date.tm_mon < 9))
+    {
       bandNameToPhysicalGain = { {"P", 12.04},
-          {"B0", 10.46}, {"B1", 10.47}, {"B2", 11.32}, {"B3", 17.21}};
-
+          {"B0", 10.37}, {"B1", 10.50}, {"B2", 11.55}, {"B3", 17.53}};
+    }
+    else if ((date.tm_year == 113 && date.tm_mon >= 9) ||
+             (date.tm_year == 114 && date.tm_mon < 3))
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 10.29}, {"B1", 10.41}, {"B2", 11.48}, {"B3", 17.45}};
+    }
+    else if ((date.tm_year == 114 && date.tm_mon >= 3) ||
+             (date.tm_year == 115 && date.tm_mon < 3))
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 10.22}, {"B1", 10.34}, {"B2", 11.41}, {"B3", 17.39}};
+    }
+    else if ((date.tm_year == 115 && date.tm_mon >= 3) ||
+             (date.tm_year == 116 && date.tm_mon < 3))
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 10.12}, {"B1", 10.23}, {"B2", 11.33}, {"B3", 17.31}};
+    }
+    else if ((date.tm_year == 116 && date.tm_mon >= 3) ||
+             (date.tm_year == 116 && date.tm_mon <= 12))
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 10.04}, {"B1", 10.14}, {"B2", 11.25}, {"B3", 17.24}};
+    }
+    else if ((date.tm_year == 117 && date.tm_mon >= 1) ||
+             (date.tm_year == 117 && date.tm_mon <= 12))
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 9.96}, {"B1", 10.04}, {"B2", 11.17}, {"B3", 17.16}};
+    }
+    else if ((date.tm_year == 118 && date.tm_mon >= 1) ||
+             (date.tm_year == 118 && date.tm_mon <= 12))
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 9.87}, {"B1", 9.94}, {"B2", 11.09}, {"B3", 17.08}};
+    }
+    else if ((date.tm_year == 119 && date.tm_mon >= 1) ||
+             (date.tm_year == 119 && date.tm_mon <= 12))
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 9.80}, {"B1", 9.87}, {"B2", 11.02}, {"B3", 17.02}};
+    }
+    else
+    {
+      bandNameToPhysicalGain = { {"P", 12.04},
+          {"B0", 9.74}, {"B1", 9.81}, {"B2", 10.96}, {"B3", 16.98}};
+    }
   }
   else
   {
     otbGenericExceptionMacro(MissingMetadataException, << "Invalid metadata, bad sensor id");
   }
 
-  for (auto & band: m_Imd.Bands)
+  for (auto & band: imd.Bands)
   {
     auto gain = bandNameToPhysicalGain.find(band[MDStr::BandName]);
     if (gain ==  bandNameToPhysicalGain.end())
@@ -1876,11 +1977,11 @@ void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::
 }
 
 
-void PleiadesImageMetadataInterface::FetchSolarIrradiance(const std::vector<double> & dimapSolarIrradiance)
+void PleiadesImageMetadataInterface::FetchSolarIrradiance(const std::vector<double> & dimapSolarIrradiance, ImageMetadata& imd)
 {
   std::unordered_map<std::string, double> defaultSolarIrradiance;
 
-  const auto & sensorID = m_Imd[MDStr::SensorID];
+  const auto & sensorID = imd[MDStr::SensorID];
 
   if (sensorID == "PHR 1A")
   {
@@ -1907,7 +2008,7 @@ void PleiadesImageMetadataInterface::FetchSolarIrradiance(const std::vector<doub
   double tolerance = 0.05;
 
   auto solarIrradianceIt = dimapSolarIrradiance.begin();
-  for (auto & band : m_Imd.Bands)
+  for (auto & band : imd.Bands)
   {
     auto defaultValue = defaultSolarIrradiance.find(band[MDStr::BandName]);
     if (defaultValue != defaultSolarIrradiance.end() &&
@@ -1924,7 +2025,7 @@ void PleiadesImageMetadataInterface::FetchSolarIrradiance(const std::vector<doub
 
 }
 
-void PleiadesImageMetadataInterface::FetchSpectralSensitivity(const std::string & sensorId)
+void PleiadesImageMetadataInterface::FetchSpectralSensitivity(const std::string & sensorId, ImageMetadata& imd)
 {
   std::unordered_map<std::string, std::vector<double>> BandNameToSpectralSensitivityTable;
   otb::MetaData::LUT1D spectralSensitivity;
@@ -2203,7 +2304,7 @@ void PleiadesImageMetadataInterface::FetchSpectralSensitivity(const std::string 
     otbGenericExceptionMacro(MissingMetadataException, "Invalid PHR Sensor ID")
   }
 
-  for (auto & band: m_Imd.Bands)
+  for (auto & band: imd.Bands)
   {
     auto SpectralSensitivityIt = BandNameToSpectralSensitivityTable.find(band[MDStr::BandName] );
     if (SpectralSensitivityIt != BandNameToSpectralSensitivityTable.end())
@@ -2215,33 +2316,50 @@ void PleiadesImageMetadataInterface::FetchSpectralSensitivity(const std::string 
   }
 }
 
-void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void PleiadesImageMetadataInterface::Parse(ImageMetadata &imd)
 {
-  //auto dimapV1Filename = itksys::SystemTools::GetParentDirectory(mds.GetResourceFile()) + "/PHRDIMAP.XML";
-
   DimapMetadataHelper helper;
 
   // Satellite ID is either PHR 1A or PHR 1B
-  // DimapV2 case
-  if (mds.GetAs<std::string>("", "IMAGERY/SATELLITEID").find("PHR") != std::string::npos)
+  // Product read by the TIFF/JP2 GDAL driver
+  if (m_MetadataSupplierInterface->GetAs<std::string>("", "IMAGERY/SATELLITEID").find("PHR") != std::string::npos)
   {
-    helper.ParseDimapV2(mds);
+    // The driver stored the content of the Dimap XML file as metadatas in the IMD domain.
+    helper.ParseDimapV2(*m_MetadataSupplierInterface, "IMD/");
 
-    m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
+    imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
 
     // fill RPC model
-    if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
+    if (imd[MDStr::GeometricLevel] == "SENSOR")
     {
-      FetchRPC(mds, -0.5, -0.5);
+      FetchRPC(imd, -0.5, -0.5);
+    }
+  }
+  // Product read by the DIMAP GDAL driver
+  else if (m_MetadataSupplierInterface->GetAs<std::string> ("","MISSION") == "PHR")
+  {
+    // The DIMAP driver does not read the same metadata as the TIFF/JP2 one, and
+    // some required metadata are missing. 
+    // The XML Dimap file is read again and provided to the DimapMetadataHelper
+    // using a XMLMetadataSupplier
+    XMLMetadataSupplier xmlMds(m_MetadataSupplierInterface->GetResourceFile());
+
+    helper.ParseDimapV2(xmlMds, "Dimap_Document.");
+
+    imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
+
+    // fill RPC model
+    if (imd[MDStr::GeometricLevel] == "SENSOR")
+    {
+      FetchRPC(imd, -0.5, -0.5);
     }
   }
   // Geom case
-  else if (mds.GetAs<std::string>("", "support_data.sensorID").find("PHR") != std::string::npos)
+  else if (m_MetadataSupplierInterface->GetAs<std::string>("", "support_data.sensorID").find("PHR") != std::string::npos)
   {
-    helper.ParseGeom(mds);
+    helper.ParseGeom(*m_MetadataSupplierInterface);
 
-    m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
-
+    imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
   }
   else
   {
@@ -2250,13 +2368,13 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
 
   const auto & dimapData = helper.GetDimapData();
 
-  m_Imd.Add(MDStr::SensorID, dimapData.mission + " " +dimapData.missionIndex);
-  m_Imd.Add(MDStr::Mission, "Pléiades");
+  imd.Add(MDStr::SensorID, dimapData.mission + " " +dimapData.missionIndex);
+  imd.Add(MDStr::Mission, "Pléiades");
 
-  if (dimapData.BandIDs.size() == m_Imd.Bands.size())
+  if (dimapData.BandIDs.size() == imd.Bands.size())
   {
     auto bandId = dimapData.BandIDs.begin();
-    for (auto & band: m_Imd.Bands)
+    for (auto & band: imd.Bands)
     {
       band.Add(MDStr::BandName, *bandId);
       bandId++;
@@ -2268,27 +2386,45 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
       << "The number of bands in image metadatas is incoherent with the DIMAP product")
   }
 
-  m_Imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
-  m_Imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
+  //Sun elevation and azimuth should be taken from the center of the image , [0] is Top Center, [1] is Center, [2] is Bottom Center
+  //This is the same for Viewing angle, it is taken from the center of the image (see FetchSatAngles)
+  imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[1]);
+  imd.Add(MDNum::SunElevation, dimapData.SunElevation[1]);
 
   FetchSatAngles(dimapData.IncidenceAngle, dimapData.AlongTrackIncidenceAngle,
-                 dimapData.AcrossTrackIncidenceAngle, dimapData.SceneOrientation);
+                 dimapData.AcrossTrackIncidenceAngle, dimapData.SceneOrientation,
+                 imd);
 
-  m_Imd.Add(MDTime::ProductionDate, 
+  imd.Add(MDTime::ProductionDate,
     boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));
-  m_Imd.Add(MDTime::AcquisitionDate, 
+  imd.Add(MDTime::AcquisitionDate,
     boost::lexical_cast<MetaData::Time>(dimapData.AcquisitionDate));
 
-  FetchSolarIrradiance(dimapData.SolarIrradiance);
+  FetchSolarIrradiance(dimapData.SolarIrradiance, imd);
 
-  FetchTabulatedPhysicalGain(m_Imd[MDTime::ProductionDate]);
+  //Store gain values from the dimap, if present
+  if (dimapData.PhysicalGain.size() == imd.Bands.size())
+  {
+    auto gain = dimapData.PhysicalGain.begin();
+    for (auto & band: imd.Bands)
+    {
+      band.Add(MDNum::PhysicalGain, *gain);
+      gain++;
+    }
+  }
+  else
+  {
+    //Store hard-coded values for gain
+    FetchTabulatedPhysicalGain(imd[MDTime::ProductionDate], imd);
+    otbLogMacro(Info, << "Gain values from DIMAP could not be retrieved, reading hard-coded tables instead");
+  }
 
-  FetchSpectralSensitivity(m_Imd[MDStr::SensorID]);
+  FetchSpectralSensitivity(imd[MDStr::SensorID], imd);
 
-  if (dimapData.PhysicalBias.size() == m_Imd.Bands.size())
+  if (dimapData.PhysicalBias.size() == imd.Bands.size())
   {
     auto bias = dimapData.PhysicalBias.begin();
-    for (auto & band: m_Imd.Bands)
+    for (auto & band: imd.Bands)
     {
       band.Add(MDNum::PhysicalBias, *bias);
       bias++;
@@ -2296,8 +2432,12 @@ void PleiadesImageMetadataInterface::Parse(const MetadataSupplierInterface & mds
   }
   else
   {
-    otbGenericExceptionMacro(MissingMetadataException,
-      << "The number of bands in image metadatas is incoherent with the DIMAP product")
+    //Default Bias value
+    for (auto & band: imd.Bands)
+    {
+      band.Add(MDNum::PhysicalBias, 0.0);
+    }
+    otbLogMacro(Info, << "Bias values from DIMAP could not be retrieved, reading default values instead");
   }
 }
 

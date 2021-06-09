@@ -24,8 +24,8 @@ SETUP_SUPERBUILD(EXPAT)
 
 ExternalProject_Add(EXPAT
   PREFIX EXPAT
-  URL "http://downloads.sourceforge.net/project/expat/expat/2.1.0/expat-2.1.0.tar.gz"
-  URL_MD5 dd7dab7a5fea97d2a6a43f511449b7cd
+  URL "https://downloads.sourceforge.net/project/expat/expat/2.4.1/expat-2.4.1.tar.gz"
+  URL_MD5 8738ef9ed1c5dcc03207286ea84f4299
   BINARY_DIR ${EXPAT_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
@@ -34,6 +34,7 @@ ExternalProject_Add(EXPAT
   -DBUILD_examples:BOOL=OFF
   -DBUILD_tests:BOOL=OFF
   -DBUILD_tools:BOOL=OFF
+  -DCMAKE_INSTALL_LIBDIR:STRING=lib
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
   LOG_DOWNLOAD 1
   LOG_CONFIGURE 1

@@ -299,6 +299,11 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
       // To be completed by ImageIO
       oss << std::string("<SARParam>");
     }
+    else if (kv.first == MDGeom::SARCalib)
+    {
+      // To be completed by ImageIO
+      oss << std::string("<SARCalib>");
+    }
     // TODO : MDGeom::Adjustment
     else
     {
@@ -381,13 +386,12 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
       {
         this->Add(geomKey->second, Utils::LexicalCast<int>(kv.second.c_str(), "Keywordlist.second.c_str()"));
       }
-      // TODO : MDGeom::SAR
       // TODO : MDGeom::Adjustment
       else if (geomKey->second ==  MDGeom::ProjectionWKT ||geomKey->second ==  MDGeom:: ProjectionProj)
       {
         this->Add(geomKey->second, kv.second);
       }
-      // skip MDGeom::SensorGeometry, MDGeom::RPC and MDGeom::GCP
+      // skip MDGeom::SensorGeometry, MDGeom::RPC, MDGeom::GCP, MDGeom::SAR and MDGeom::SARCalib
       continue;
     }
   // Converting the StringKeys
@@ -741,19 +745,20 @@ bool HasOpticalSensorMetadata(const ImageMetadata & imd)
 
 bool HasSARSensorMetadata(const ImageMetadata & imd)
 {
-  auto hasBandMetadataStr = [&imd](MDStr key)
-                        {return std::all_of(imd.Bands.begin(),
-                                            imd.Bands.end(),
-                                            [key](ImageMetadataBase band){return band.Has(key);});};
+  auto hasBandMetadata = [&imd](auto key) {
+    return std::all_of(imd.Bands.begin(),
+		       imd.Bands.end(),
+		       [key](ImageMetadataBase band){return band.Has(key);});
+  };
 
   return imd.Has(MDStr::SensorID)
-      && imd.Has(MDStr::Mission)
-      && imd.Has(MDStr::ProductType)
-      && imd.Has(MDNum::RadarFrequency)
-      && imd.Has(MDNum::PRF)
-      && imd.Has(MDTime::AcquisitionStartTime)
-      && imd.Has(MDStr::OrbitDirection)
-      && (hasBandMetadataStr(MDStr::Polarization) || imd.Has(MDStr::Polarization));
+    && imd.Has(MDStr::Mission)
+    && imd.Has(MDStr::ProductType)
+    && (imd.Has(MDNum::RadarFrequency) || hasBandMetadata(MDNum::RadarFrequency))
+    && (imd.Has(MDNum::PRF) || hasBandMetadata(MDNum::PRF))
+    && imd.Has(MDTime::AcquisitionStartTime)
+    && imd.Has(MDStr::OrbitDirection)
+    && (hasBandMetadata(MDStr::Polarization) || imd.Has(MDStr::Polarization));
 }
 
 }

@@ -88,12 +88,22 @@ public:
 
   double GetRadarFrequency() const override;
 
-  double GetCenterIncidenceAngle() const override;
+  double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override;
 
-  void Parse(const MetadataSupplierInterface &) override;
+  void Parse(ImageMetadata &) override;
+
+  void ParseGdal(ImageMetadata &) override;
+  
+  void ParseGeom(ImageMetadata &) override;
 
   std::vector<std::map<std::string, std::string> > saveMetadataBands(std::string file) ;
-  std::vector<Orbit> getOrbits(const MetadataSupplierInterface &, const std::string & referenceTime);
+
+  std::vector<Orbit> getOrbits(const std::string & referenceTime) const;
+  
+  std::vector<BurstRecord> CreateBurstRecord(const std::string & firstLineTimeStr,
+					     const std::string & lastLineTimeStr,
+					     const unsigned long endLine, 
+					     const unsigned long endSample) const;
 
 protected:
   /* class ctor */

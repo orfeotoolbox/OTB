@@ -23,11 +23,17 @@
 
 #include "OTBMetadataExport.h"
 #include "otbMetaDataKey.h"
-
+#include "otbSarCalibrationLookupData.h"
 
 #include <string>
 #include <vector>
 #include <sstream>
+#include <unordered_map>
+
+#include "itkPoint.h"
+
+#include "itkPointSet.h"
+#include "otbDateTime.h"
 
 namespace otb
 {
@@ -45,26 +51,6 @@ struct OTBMetadata_EXPORT AzimuthFmRate
   double t0;
   /** Azimuth FM rate coefficients c0 c1 c2 */
   std::vector<double> azimuthFmRatePolynomial;
-};
-
-/** \struct CalibrationVector
- *
- * \brief This structure is used to handle calibration look up tables
- */
-struct OTBMetadata_EXPORT CalibrationVector
-{
-  /** Image line at which the calibration vector applies */
-  int line;
-  /** Zero Doppler azimuth time at which calibration vector applies */
-  MetaData::Time azimuthTime;
-  /** Sigma nought calibration vector */
-  MetaData::LUT1D sigmaNought;
-  /* Beta nought calibration vector */
-  MetaData::LUT1D betaNought;
-  /* Gamma calibration vector */
-  MetaData::LUT1D gamma;
-  /* Digital number calibration vector */
-  MetaData::LUT1D dn;
 };
 
 /** \struct DopplerCentroid
@@ -85,7 +71,7 @@ struct OTBMetadata_EXPORT DopplerCentroid
 
 /** \struct SARNoise
  *
- * \breif This structure is used to handle Noise look up tables
+ * \brief This structure is used to handle Noise look up tables
  */
 struct OTBMetadata_EXPORT SARNoise
 {
@@ -99,21 +85,60 @@ struct OTBMetadata_EXPORT SARNoise
 
 /** \struct Orbit
  *
- * \breif This structure is used to handle orbit information
+ * \brief This structure is used to handle orbit information
  */
 struct OTBMetadata_EXPORT Orbit
 {
+  using PointType = itk::Point<double, 3>;
+
   /** Timestamp at which orbit state vectors apply */
-  MetaData::Time time;
+  MetaData::TimeType time;
   /** Position vector */
-  double posX;
-  double posY;
-  double posZ;
+  PointType position;
   /** Velocity vector */
-  double velX;
-  double velY;
-  double velZ;
+  PointType velocity;
 };
+
+/** \struct BurstRecord
+ *
+ * \brief This structure is used to handle burst records
+ */
+struct OTBMetadata_EXPORT BurstRecord
+{
+  MetaData::TimeType      azimuthStartTime;
+  MetaData::TimeType      azimuthStopTime;
+  unsigned long startLine;
+  unsigned long endLine;
+  unsigned long startSample;
+  unsigned long endSample;
+  double        azimuthAnxTime;
+};
+
+/** \struct GCPTime
+ *
+ * \brief This structure contains the azimuth and range times associated with a gcp
+ */
+struct OTBMetadata_EXPORT GCPTime
+{
+  /** Azimuth time of the gcp */
+  MetaData::TimeType azimuthTime;
+
+  /** Slant range time of the gcp */
+  double slantRangeTime;
+};
+
+/** \struct CoordinateConversionRecord
+ *
+ * \brief This structure contains coefficients to convert between coordinates types, e.g. 
+ * from ground range to slant range
+ */
+struct CoordinateConversionRecord
+{
+  MetaData::TimeType azimuthTime;
+  double rg0;
+  std::vector<double> coeffs;
+};
+
 
 /** \struct SARParam
  *
@@ -122,17 +147,16 @@ struct OTBMetadata_EXPORT Orbit
  * \ingroup OTBMetadata
  */
 struct OTBMetadata_EXPORT SARParam
-{
+{ 
   /** Azimuth Frequency Modulation (FM) rate list.
    * contains an entry for each azimuth FM rate update made along azimuth.
    */
   std::vector<AzimuthFmRate> azimuthFmRates;
 
-  /** Calibration vector list */
-  std::vector<CalibrationVector> calibrationVectors;
-
-  MetaData::Time calibrationStartTime;
-  MetaData::Time calibrationStopTime;
+  MetaData::DurationType azimuthTimeInterval;
+  double nearRangeTime;
+  double rangeSamplingRate;
+  double rangeResolution;
 
   /** Doppler centroid estimates */
   std::vector<DopplerCentroid> dopplerCentroids;
@@ -142,9 +166,49 @@ struct OTBMetadata_EXPORT SARParam
 
   /** List of orbit information */
   std::vector<Orbit> orbits;
+
+  /** List of burst records */
+  std::vector<BurstRecord> burstRecords;
+
+  /** map between GCP ids and corresponding azimuth and range times */
+  std::unordered_map<std::string, GCPTime> gcpTimes;
+
+  /** Conversion coefficients from slant range to ground range */
+  std::vector<CoordinateConversionRecord> slantRangeToGroundRangeRecords;
+
+  /** Conversion coefficients from ground range to slant range */
+  std::vector<CoordinateConversionRecord> groundRangeToSlantRangeRecords;
+};
+
+/** \struct SARCalib
+ *
+ * \brief SAR calibration LUTs
+ *
+ * \ingroup OTBMetadata
+ */
+struct OTBMetadata_EXPORT SARCalib
+{
+  using PointSetType = itk::PointSet<double, 2>;
+  using ArrayType    = std::array<int, 2>;
+  using LookupDataType = SarCalibrationLookupData;
+  
+  bool calibrationLookupFlag = false;
+  double rescalingFactor;
+  MetaData::Time calibrationStartTime;
+  MetaData::Time calibrationStopTime;
+  ArrayType radiometricCalibrationNoisePolynomialDegree;
+  ArrayType radiometricCalibrationAntennaPatternNewGainPolynomialDegree;
+  ArrayType radiometricCalibrationAntennaPatternOldGainPolynomialDegree;
+  ArrayType radiometricCalibrationIncidenceAnglePolynomialDegree;
+  ArrayType radiometricCalibrationRangeSpreadLossPolynomialDegree;
+  PointSetType::Pointer radiometricCalibrationNoise;
+  PointSetType::Pointer radiometricCalibrationAntennaPatternNewGain;
+  PointSetType::Pointer radiometricCalibrationAntennaPatternOldGain;
+  PointSetType::Pointer radiometricCalibrationIncidenceAngle;
+  PointSetType::Pointer radiometricCalibrationRangeSpreadLoss;
+  std::unordered_map<short, LookupDataType::Pointer> calibrationLookupData;
 };
 
 } // end namespace otb
 
 #endif
-

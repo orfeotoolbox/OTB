@@ -1,22 +1,29 @@
 SensorID SAR
 Mission TSX-1
 ProductType SSC____SM_S
+Polarization HH
 Mode SM
 OrbitDirection DESCENDING
 TileHintX 15328
 TileHintY 1
 DataType 11
 OrbitNumber 4091
+NumberOfLines 32710
+NumberOfColumns 15328
+CalScale 1.04345e-05
+CalFactor 1.04345e-05
 PRF 3832.52
 RSF 1.09886e+08
 RadarFrequency 9.65e+09
-LineSpacing 9.10033e-09
-PixelSpacing 0.000260925
+LineSpacing 1.84541
+PixelSpacing 1.36411
+RangeTimeFirstPixel 0.00422717
+RangeTimeLastPixel 0.00436665
 AcquisitionStartTime 2008-03-10T13:32:20.083162Z
 AcquisitionStopTime 2008-03-10T13:32:28.617747Z
-GCP <GCPParam>
-Polarization HH
 SAR <SARParam>
+SARCalib <SARCalib>
+GCP <GCPParam>
 {"Projection": "GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AXIS["Latitude",NORTH],AXIS["Longitude",EAST],AUTHORITY["EPSG","4326"]]", 
 [{"GCP_Id": "1", "GCP_Info": "", "GCP_Row": "1", "GCP_Col": "1", "GCP_X": "-111.665", "GCP_Y": "36.2693", "GCP_Z": "0", }, 
 {"GCP_Id": "2", "GCP_Info": "", "GCP_Row": "1", "GCP_Col": "232", "GCP_X": "-111.671", "GCP_Y": "36.2701", "GCP_Z": "0", }, 

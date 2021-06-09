@@ -146,6 +146,8 @@ file ( WRITE
 
 if ( NOT _build_rv EQUAL 0 )
   message( SEND_ERROR "An error occurs during ctest_build.")
+  #don't execute tests as the build failed
+  set(ci_skip_testing 1)
 endif()
 
 # ----------------------------- Test -------------------------------------------

@@ -25,8 +25,12 @@
 #include "itkLightObject.h"
 #include "otbMachineLearningModel.h"
 
+// Quiet a deprecation warning
+#define BOOST_BIND_GLOBAL_PLACEHOLDERS
+
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-copy"
 #pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
@@ -75,10 +79,10 @@ class ITK_EXPORT SharkKMeansMachineLearningModel : public MachineLearningModel<T
 {
 public:
   /** Standard class typedefs. */
-  typedef SharkKMeansMachineLearningModel Self;
+  typedef SharkKMeansMachineLearningModel                 Self;
   typedef MachineLearningModel<TInputValue, TTargetValue> Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
+  typedef itk::SmartPointer<Self>                         Pointer;
+  typedef itk::SmartPointer<const Self>                   ConstPointer;
 
   typedef typename Superclass::InputValueType           InputValueType;
   typedef typename Superclass::InputSampleType          InputSampleType;

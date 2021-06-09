@@ -946,7 +946,7 @@ namespace
 }
 
 
-void IkonosImageMetadataInterface::FetchProductionDate(const std::string & productionDate)
+void IkonosImageMetadataInterface::FetchProductionDate(const std::string & productionDate, ImageMetadata& imd)
 {
     std::vector<std::string> dateParts;
 
@@ -983,12 +983,13 @@ void IkonosImageMetadataInterface::FetchProductionDate(const std::string & produ
     // tm year: number of years since 1900
     productionDateMD.tm_year = productionYear;
 
-    m_Imd.Add(MDTime::ProductionDate, productionDateMD);
+    imd.Add(MDTime::ProductionDate, productionDateMD);
 
 }
 
 void IkonosImageMetadataInterface::FetchAcquisitionDate(const std::string & acquisitionDate,
-                                                        const std::string & acquisitionTime)
+                                                        const std::string & acquisitionTime,
+                                                        ImageMetadata& imd)
 {
   std::vector<std::string> dateParts;
 
@@ -1025,11 +1026,11 @@ void IkonosImageMetadataInterface::FetchAcquisitionDate(const std::string & acqu
   acquisitionDateMD.tm_sec = 0;
   acquisitionDateMD.frac_sec = 0;
 
-  m_Imd.Add(MDTime::AcquisitionDate, acquisitionDateMD);
+  imd.Add(MDTime::AcquisitionDate, acquisitionDateMD);
 }
 
 
-void IkonosImageMetadataInterface::FetchSpectralSensitivity(const std::string & bandName)
+void IkonosImageMetadataInterface::FetchSpectralSensitivity(const std::string & bandName, ImageMetadata& imd)
 {
   otb::MetaData::LUT1D spectralSensitivity;
 
@@ -1196,20 +1197,20 @@ void IkonosImageMetadataInterface::FetchSpectralSensitivity(const std::string & 
           0.0027541f,   0.00137705f,  0.0f,         0.0f,         0.0f};
   }
 
-  m_Imd.Bands[0].Add(MDL1D::SpectralSensitivity, spectralSensitivity);
+  imd.Bands[0].Add(MDL1D::SpectralSensitivity, spectralSensitivity);
 
 }
 
 
-void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void IkonosImageMetadataInterface::Parse(ImageMetadata &imd)
 {
   std::unordered_map<std::string, std::string> ikonosMetadata;
 
-  if (mds.GetAs<std::string>("", "METADATATYPE") == "GE")
+  if (m_MetadataSupplierInterface->GetAs<std::string>("", "METADATATYPE") == "GE")
   {
-    FetchRPC(mds);
+    FetchRPC(imd);
 
-    auto inputFilenameWithDir = mds.GetResourceFile();
+    auto inputFilenameWithDir = m_MetadataSupplierInterface->GetResourceFile();
 
     auto inputFilename = itksys::SystemTools::GetFilenameName(inputFilenameWithDir);
     // Find hdr and metadata files : 
@@ -1254,9 +1255,9 @@ void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
     
     ParseHeaderFile(hdrFilename, ikonosMetadata);
   }
-  else if (mds.GetAs<std::string>("", "support_data.sensor") == "IKONOS-2")
+  else if (m_MetadataSupplierInterface->GetAs<std::string>("", "support_data.sensor") == "IKONOS-2")
   {
-    ParseGeomFile(mds, ikonosMetadata);
+    ParseGeomFile(*m_MetadataSupplierInterface, ikonosMetadata);
   }
   else
   {
@@ -1267,16 +1268,17 @@ void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 
   try
   {
-    m_Imd.Add(MDStr::SensorID, ikonosMetadata["sensorID"]);
+    imd.Add(MDStr::SensorID, ikonosMetadata["sensorID"]);
     
-    m_Imd.Add(MDNum::SunElevation, boost::lexical_cast<double>(ikonosMetadata["sunElevation"]));
-    m_Imd.Add(MDNum::SunAzimuth, boost::lexical_cast<double>(ikonosMetadata["sunAzimuth"]));
-    m_Imd.Add(MDNum::SatElevation, boost::lexical_cast<double>(ikonosMetadata["nominalCollectionElevation"]));
-    m_Imd.Add(MDNum::SatAzimuth, boost::lexical_cast<double>(ikonosMetadata["nominalCollectionAzimuth"]));
+    imd.Add(MDNum::SunElevation, boost::lexical_cast<double>(ikonosMetadata["sunElevation"]));
+    imd.Add(MDNum::SunAzimuth, boost::lexical_cast<double>(ikonosMetadata["sunAzimuth"]));
+    imd.Add(MDNum::SatElevation, boost::lexical_cast<double>(ikonosMetadata["nominalCollectionElevation"]));
+    imd.Add(MDNum::SatAzimuth, boost::lexical_cast<double>(ikonosMetadata["nominalCollectionAzimuth"]));
   
-    FetchProductionDate(ikonosMetadata["productionDate"]);
+    FetchProductionDate(ikonosMetadata["productionDate"], imd);
     FetchAcquisitionDate(ikonosMetadata["acquisitionDate"],
-                          ikonosMetadata["acquisitionTime"]);
+                         ikonosMetadata["acquisitionTime"],
+                         imd);
 
   }
   catch (boost::bad_lexical_cast&)
@@ -1286,7 +1288,7 @@ void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 
   const auto & bandName = ikonosMetadata["bandName"];
 
-  m_Imd.Bands[0].Add(MDStr::BandName, bandName);
+  imd.Bands[0].Add(MDStr::BandName, bandName);
 
   otb::MetaData::Time date;
   date.tm_year = 101;
@@ -1297,19 +1299,19 @@ void IkonosImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
   date.tm_sec = 0;
   date.frac_sec = 0;
 
-  if (m_Imd[MDTime::AcquisitionDate] < date)
+  if (imd[MDTime::AcquisitionDate] < date)
   {
-    m_Imd.Bands[0].Add(MDNum::PhysicalGain, ikonosPhysicalGainPre20010122[bandName]);
+    imd.Bands[0].Add(MDNum::PhysicalGain, ikonosPhysicalGainPre20010122[bandName]);
   }
   else
   {
-    m_Imd.Bands[0].Add(MDNum::PhysicalGain, ikonosPhysicalGainPost20010122[bandName]);
+    imd.Bands[0].Add(MDNum::PhysicalGain, ikonosPhysicalGainPost20010122[bandName]);
   }
 
-  m_Imd.Bands[0].Add(MDNum::PhysicalBias, 0.);
-  m_Imd.Bands[0].Add(MDNum::SolarIrradiance, ikonosSolarIrradiance[bandName]);
+  imd.Bands[0].Add(MDNum::PhysicalBias, 0.);
+  imd.Bands[0].Add(MDNum::SolarIrradiance, ikonosSolarIrradiance[bandName]);
 
-  FetchSpectralSensitivity(bandName);
+  FetchSpectralSensitivity(bandName, imd);
 }
 
 } // end namespace otb

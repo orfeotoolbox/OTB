@@ -152,7 +152,7 @@ public:
    * There values a computed by 6S. */
   WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
-  void Parse(const MetadataSupplierInterface &) override;
+  void Parse(ImageMetadata &imd) override;
 
 protected:
   FormosatImageMetadataInterface() = default;
@@ -168,8 +168,9 @@ private:
                     const std::vector<double> & acrossTrackViewingAngles,
                     const std::vector<double> & sceneOrientation,
                     const std::string & softwareVersion,
-                    double satAzimuth);
-  void FetchSpectralSensitivity();
+                    double satAzimuth,
+                    ImageMetadata & imd);
+  void FetchSpectralSensitivity(ImageMetadata &);
 };
 
 } // end namespace otb

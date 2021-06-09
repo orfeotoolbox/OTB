@@ -184,6 +184,9 @@ std::istream& operator>>(std::istream& is, Time& val)
   val.frac_sec = sec - (double) val.tm_sec;
   _OTB_ISTREAM_FAIL_IF( val.tm_sec < 0 || val.tm_sec > 60 )
   _OTB_ISTREAM_FAIL_IF( val.frac_sec < 0.0 || val.frac_sec >= 1.0)
+ 
+  // Disable Daylight Saving Time
+  val.tm_isdst = 0;
 
   if (!is.eof())
   {
@@ -194,8 +197,6 @@ std::istream& operator>>(std::istream& is, Time& val)
 }
 
 #undef _OTB_ISTREAM_EXPECT
-
-
 
 int Time::GetDay() const
 {
@@ -225,6 +226,28 @@ int Time::GetMinute() const
 double Time::GetSecond() const
 {
   return tm_sec + frac_sec;
+}
+
+double Time::GetJulianDay() const
+{
+  // Conversion to julian day
+  // according to http://en.wikipedia.org/wiki/Julian_day
+  // division are integer divisions:
+  int a = (14 - GetMonth()) / 12;
+  int y = GetYear() + 4800 - a;
+  int m = GetMonth() + 12 * a - 3;
+
+  double julianDay = GetDay() + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045;
+
+  // now, the division are NOT integer
+  julianDay += GetHour() / 24. + GetMinute() / 1440. + GetSecond() / 86400.;
+
+  return julianDay;
+}
+
+double Time::GetModifiedJulian() const
+{
+  return GetJulianDay() - 2400000.5;;
 }
 
 std::string LUTAxis::ToJSON(bool multiline) const
@@ -375,23 +398,16 @@ MDNumBmType MDNumNames = bimapGenerator<MDNum>(std::map<MDNum, std::string> {
   {MDNum::SpectralMin,"SpectralMin"},
   {MDNum::SpectralMax,"SpectralMax"},
   {MDNum::CalScale,"CalScale"},
+  {MDNum::CalFactor,"CalFactor"},
   {MDNum::PRF,"PRF"},
   {MDNum::RSF,"RSF"},
   {MDNum::RadarFrequency,"RadarFrequency"},
   {MDNum::CenterIncidenceAngle,"CenterIncidenceAngle"},
   {MDNum::RescalingFactor,"RescalingFactor"},
-  {MDNum::AntennaPatternNewGainPolyDegX,"AntennaPatternNewGainPolyDegX"},
-  {MDNum::AntennaPatternNewGainPolyDegY,"AntennaPatternNewGainPolyDegY"},
-  {MDNum::AntennaPatternOldGainPolyDegX,"AntennaPatternOldGainPolyDegX"},
-  {MDNum::AntennaPatternOldGainPolyDegY,"AntennaPatternOldGainPolyDegY"},
-  {MDNum::IncidenceAnglePolyDegX,"IncidenceAnglePolyDegX"},
-  {MDNum::IncidenceAnglePolyDegY,"IncidenceAnglePolyDegY"},
-  {MDNum::RangeSpreadLossPolyDegX,"RangeSpreadLossPolyDegX"},
-  {MDNum::RangeSpreadLossPolyDegY,"RangeSpreadLossPolyDegY"},
-  {MDNum::NoisePolyDegX,"NoisePolyDegX"},
-  {MDNum::NoisePolyDegY,"NoisePolyDegY"},
   {MDNum::LineSpacing,"LineSpacing"},
   {MDNum::PixelSpacing,"PixelSpacing"},
+  {MDNum::RangeTimeFirstPixel,"RangeTimeFirstPixel"},
+  {MDNum::RangeTimeLastPixel,"RangeTimeLastPixel"},
 });
 
 MDStrBmType MDStrNames = bimapGenerator<MDStr>(std::map<MDStr, std::string> {
@@ -429,6 +445,7 @@ MDGeomBmType MDGeomNames = bimapGenerator<MDGeom>(std::map<MDGeom, std::string> 
   {MDGeom::ProjectionProj, "ProjectionProj"},
   {MDGeom::RPC,            "RPC"},
   {MDGeom::SAR,            "SAR"},
+  {MDGeom::SARCalib,       "SARCalib"},
   {MDGeom::SensorGeometry, "SensorGeometry"},
   {MDGeom::GCP,            "GCP"},
   {MDGeom::Adjustment,     "Adjustment"}

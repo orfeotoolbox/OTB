@@ -61,6 +61,7 @@ public:
   typedef typename InputImageType::PixelType       InputPixelType;
   typedef typename Superclass::OutputType          OutputType;
   typedef typename Superclass::IndexType           IndexType;
+  typedef typename std::array<int, 2>              ArrayIndexType;
   typedef typename Superclass::ContinuousIndexType ContinuousIndexType;
 
   itkStaticConstMacro(ImageDimension, unsigned int, InputImageType::ImageDimension);
@@ -115,6 +116,7 @@ public:
 
   /** Get/Set the PolynomalSize pointer*/
   void SetPolynomalSize(const IndexType PolynomalSize);
+  void SetPolynomalSize(const ArrayIndexType PolynomalSize);
 
   /** Evaluate parametric coefficient from pointset */
   void EvaluateParametricCoefficient();

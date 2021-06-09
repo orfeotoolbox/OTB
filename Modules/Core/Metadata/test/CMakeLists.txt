@@ -363,7 +363,7 @@ otb_add_test(NAME ioTvSarCalibrationLookupDataTest_RADARSAT2 COMMAND otbMetadata
   --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvSarCalibrationLookupDataTest_RADARSAT2.txt
   ${TEMP}/ioTvSarCalibrationLookupDataTest_RADARSAT2.txt
   otbSarCalibrationLookupDataTest
-  ${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.tif?&geom=${INPUTDATA}/RADARSAT2_ALTONA_300_300_VV.geom
+  ${INPUTDATA}/radarsat2/RADARSAT2_ALTONA_300_300_VV.tif?&geom=${INPUTDATA}/radarsat2/RADARSAT2_ALTONA_300_300_VV.geom
   ${TEMP}/ioTvSarCalibrationLookupDataTest_RADARSAT2.txt
   )
 
@@ -440,20 +440,22 @@ otb_add_test(NAME ioTuotbXMLMetadataSupplierTest COMMAND otbMetadataTestDriver
 # Additionally, it is possible to compare the metadata of the product with the metadata of a geom file
 # with the --compare-metadata utility by setting ${sensor}_geom_file
 
-set(sensor_list pleiades spot6 spot5 spot5_2 formosat ikonos worldview2 quickbird Radarsat2 TerraSar CosmoSkyMed Sentinel1)
+set(sensor_list pleiades pleiades_2 spot6 spot6_2 spot5 spot5_2 formosat ikonos worldview2 quickbird Radarsat2 TerraSar CosmoSkyMed Sentinel1)
 
 set(pleiades_filename LARGEINPUT{PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201206050630064_SEN_559102101-002_R1C1.JP2})
+set(pleiades_2_filename LARGEINPUT{PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/DIM_PHR1A_MS_201206050630064_SEN_559102101-002.XML})
 set(spot6_filename LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2})
+set(spot6_2_filename LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/DIM_SPOT6_MS_201212071020271_SEN_600143101.XML})
 set(spot5_filename LARGEINPUT{SPOT5/Arcachon-SCENE01/IMAGERY.TIF})
 set(spot5_2_filename LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF})
 set(formosat_filename LARGEINPUT{FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF})
 set(ikonos_filename LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif})
 set(worldview2_filename LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF})
 set(quickbird_filename LARGEINPUT{QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF})
-set(Radarsat2_filename LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona})
-set(TerraSar_filename LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228})
+set(Radarsat2_filename LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HH.tif})
+set(TerraSar_filename LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos})
 set(CosmoSkyMed_filename LARGEINPUT{COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5})
-set(Sentinel1_filename LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043})
+set(Sentinel1_filename LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff})
 
 set(spot5_2_geom_file ${INPUTDATA}/spot5/spot5-1.geom)
 set(formosat_geom_file ${INPUTDATA}/FORMOSAT_ROI_1000_100.geom)
@@ -462,6 +464,9 @@ set(spot6_geom_file ${INPUTDATA}/spot6/spot6-2.geom)
 set(ikonos_geom_file ${INPUTDATA}/ikonos/ikonos-2.geom)
 set(worldview2_geom_file ${INPUTDATA}/wv2/wv2-2.geom)
 set(quickbird_geom_file ${INPUTDATA}/QB/qb-2.geom)
+set(Radarsat2_geom_file ${INPUTDATA}/radarsat2/radarsat2-1.geom)
+set(TerraSar_geom_file ${INPUTDATA}/terrasar/terrasar-1.geom)
+set(CosmoSkyMed_geom_file ${INPUTDATA}/cosmoskymed/cosmoskymed-1.geom)
 
 foreach(sensor ${sensor_list})
 

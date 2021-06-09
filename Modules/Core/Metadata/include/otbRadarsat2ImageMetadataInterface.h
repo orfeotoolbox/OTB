@@ -93,12 +93,17 @@ public:
 
   double GetRadarFrequency() const override;
 
-  double GetCenterIncidenceAngle() const override;
+  double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override;
 
   /*get lookup data for calculating backscatter */
-  void CreateCalibrationLookupData(const short type) override;
+  bool HasCalibrationLookupDataFlag(const MetadataSupplierInterface&) const override;
+  bool CreateCalibrationLookupData(SARCalib&, const ImageMetadata&, const MetadataSupplierInterface&, const bool) const override;
 
-  void Parse(const MetadataSupplierInterface &) override;
+  void ParseGdal(ImageMetadata &) override;
+
+  void ParseGeom(ImageMetadata &) override;
+
+  void Parse(ImageMetadata &) override;
 
 
 protected:

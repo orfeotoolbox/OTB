@@ -18,8 +18,13 @@
 # limitations under the License.
 #
 
-# Configuration options for windows-10-x64-vc14.0.cmake
+set(OTBBoostAdapters_SRC
+  otbDateTime.cxx
+  )
 
-set(site_option
-"CMAKE_CXX_FLAGS:STRING=/DTHROW_QCRITICAL=0 /DWIN32 /D_WINDOWS /W3 /GR /EHsc
-")
+add_library(OTBBoostAdapters ${OTBBoostAdapters_SRC})
+target_link_libraries(OTBBoostAdapters 
+  ${OTBBoost_LIBRARIES}
+  )
+
+otb_module_target(OTBBoostAdapters)

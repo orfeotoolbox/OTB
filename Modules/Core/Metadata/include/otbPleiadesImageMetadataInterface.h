@@ -150,7 +150,7 @@ public:
      * There values a computed by 6S. */
   WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
-  void Parse(const MetadataSupplierInterface &) override;
+  void Parse(ImageMetadata &) override;
 
 protected:
   PleiadesImageMetadataInterface();
@@ -160,15 +160,16 @@ private:
   PleiadesImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  void FetchTabulatedPhysicalGain(const MetaData::Time & date);
-  void FetchSolarIrradiance(const std::vector<double> & dimapSolarIrradiance);
+  void FetchTabulatedPhysicalGain(const MetaData::Time & date, ImageMetadata& imd);
+  void FetchSolarIrradiance(const std::vector<double> & dimapSolarIrradiance, ImageMetadata& imd);
 
   void FetchSatAngles(const std::vector<double> & incidenceAngles,
                       const std::vector<double> & alongTrackIncidenceAngles,
                       const std::vector<double> & axrossTrackIncidenceAngles,
-                      const std::vector<double> & sceneOrientation);
+                      const std::vector<double> & sceneOrientation,
+                      ImageMetadata & imd);
 
-  void FetchSpectralSensitivity(const std::string & sensorId);
+  void FetchSpectralSensitivity(const std::string & sensorId, ImageMetadata &imd);
 };
 
 } // end namespace otb

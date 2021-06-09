@@ -20,6 +20,7 @@
 
 set(OTBTransform_SRC
   otbSensorModelAdapter.cxx
+  otbSarSensorModel.cxx
   otbSarSensorModelAdapter.cxx
   )
 
@@ -32,6 +33,7 @@ target_link_libraries(OTBTransform
   ${OTBOssimPlugins_LIBRARIES}
   ${OTBOpenThreads_LIBRARIES}
   ${OTBIOGDAL_LIBRARIES}
+  ${OTBBoostAdapters_LIBRARIES}
   )
 
 otb_module_target(OTBTransform)

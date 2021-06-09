@@ -51,7 +51,7 @@ int otbRPCTransformTest(int itkNotUsed(argc), char* argv[])
   std::string rpcFile(argv[1]);
   std::string gcpFileName(argv[2]);
   double geoTol(atof(argv[3]));
-  double imgTol(atof(argv[4]));
+  // double imgTol(atof(argv[4]));
 
   // Tools
   auto imgDistance = DistanceType::New();
@@ -68,8 +68,7 @@ int otbRPCTransformTest(int itkNotUsed(argc), char* argv[])
     otb::GeomMetadataSupplier geomSupplier(rpcFile);
     for (int loop = 0 ; loop < geomSupplier.GetNbBands() ; ++loop)
       imd.Bands.emplace_back();
-    auto imi = otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
-    imd = imi->GetImageMetadata();
+    otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
     geomSupplier.FetchRPC(imd);
   }
   else
