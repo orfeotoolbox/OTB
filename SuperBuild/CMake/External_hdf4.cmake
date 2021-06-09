@@ -32,7 +32,7 @@ set(HDF4_SB_MF_LIB mfhdfalt)
 
 ExternalProject_Add(HDF4
   PREFIX HDF4
-  URL "http://support.hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.13.tar.gz"
+  URL "https://support.hdfgroup.org/ftp/HDF/HDF_Current/src/hdf-4.2.13.tar.gz"
   URL_MD5 a6aa950b3fce5162b96496d8ea0b82bf
   SOURCE_DIR ${HDF4_SB_SRC}
   BINARY_DIR ${HDF4_SB_BUILD_DIR}
