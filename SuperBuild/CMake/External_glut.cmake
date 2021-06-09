@@ -40,13 +40,13 @@ else(MSVC)
   ${CMAKE_SOURCE_DIR}/patches/GLUT/CMakeLists.txt
   ${GLUT_SB_SRC}
   )
-  
+
   set(GLUT_CONFIGURE_COMMAND ${SB_CMAKE_COMMAND} ${SB_CMAKE_ARGS} ${SB_CMAKE_CACHE_ARGS} ${GLUT_SB_SRC} )
 endif()
 
 ExternalProject_Add(GLUT
   PREFIX GLUT
-  URL "http://downloads.sourceforge.net/project/freeglut/freeglut/2.8.1/freeglut-2.8.1.tar.gz"
+  URL "https://downloads.sourceforge.net/project/freeglut/freeglut/2.8.1/freeglut-2.8.1.tar.gz"
   URL_MD5 918ffbddcffbac83c218bc52355b6d5a
   BINARY_DIR ${GLUT_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

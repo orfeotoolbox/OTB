@@ -37,7 +37,7 @@ ADD_SUPERBUILD_CMAKE_VAR(GEOTIFF JPEG_LIBRARY)
 
 ExternalProject_Add(GEOTIFF
   PREFIX GEOTIFF
-  URL "http://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.5.1.tar.gz"
+  URL "https://download.osgeo.org/geotiff/libgeotiff/libgeotiff-1.5.1.tar.gz"
   URL_MD5 6d0fa650c206791bc7d5e60ef625ea77
   SOURCE_DIR ${GEOTIFF_SB_SRC}
   BINARY_DIR ${GEOTIFF_SB_BUILD_DIR}
