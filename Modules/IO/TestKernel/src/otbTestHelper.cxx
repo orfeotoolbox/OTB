@@ -1463,26 +1463,21 @@ int CompareMetadataDict( const MapType & baselineMap,
         if (reportErrors)
         {
           std::cerr << "Metadata key " << otb::MetaData::EnumToString(first1->first) 
-                      << " does not match between test and baseline images: "
-                      << std::endl;
+                    << " does not match between test and baseline images:\n"
+                    << "Baseline image: " << first2->second << "\n"
+                    << "Test image: " << first1->second << "\n";
         }
         return errorCount;
       }
-
 
       if (!p(first1->second, first2->second))
       {
         errorCount++;
         if (reportErrors)
           std::cerr << "Metadata " << otb::MetaData::EnumToString(first1->first) 
-                    << " does not match between test and baseline images: "
-                    << std::endl
-                    << "Baseline image: " 
-                    << first2->second
-                    << std::endl
-                    << "Test image: " 
-                    << first1->second 
-                    << std::endl;
+                    << " does not match between test and baseline images:\n"
+                    << "Baseline image: " << first2->second << "\n"
+                    << "Test image: " << first1->second << "\n";
       }
     }
     

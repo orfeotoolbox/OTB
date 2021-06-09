@@ -114,7 +114,7 @@ public:
     /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
    * then translate it into ImageMetadata. Handles most optical sensors.
    * Returns true if succeed. */
-  bool ConvertImageKeywordlistToImageMetadata() override;
+  bool ConvertImageKeywordlistToImageMetadata(ImageMetadata &) override;
 
 protected:
   OpticalImageMetadataInterface();

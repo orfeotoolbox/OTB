@@ -150,23 +150,16 @@ enum class MDNum
   SpectralMax,
 // SAR section
   CalScale,
+  CalFactor,
   PRF,
   RSF,
   RadarFrequency,
   CenterIncidenceAngle,
   RescalingFactor,
-  AntennaPatternNewGainPolyDegX,
-  AntennaPatternNewGainPolyDegY,
-  AntennaPatternOldGainPolyDegX,
-  AntennaPatternOldGainPolyDegY,
-  IncidenceAnglePolyDegX,
-  IncidenceAnglePolyDegY,
-  RangeSpreadLossPolyDegX,
-  RangeSpreadLossPolyDegY,
-  NoisePolyDegX,
-  NoisePolyDegY,
   LineSpacing,
   PixelSpacing,
+  RangeTimeFirstPixel,
+  RangeTimeLastPixel,
   END
 };
 
@@ -221,6 +214,7 @@ enum class MDGeom
   ProjectionProj, // -> string
   RPC,            // -> RPCParam
   SAR,            // -> SARParam
+  SARCalib,       // -> SARCalib
   SensorGeometry, // -> boost::any
   GCP,            // -> GCPParam
   Adjustment,     // -> ?
@@ -282,7 +276,10 @@ struct OTBMetadata_EXPORT Time : tm
   int GetHour() const;
   int GetMinute() const;
   double GetSecond() const;
+  double GetJulianDay() const;
+  double GetModifiedJulian() const;
   ///@}
+
 };
 
 

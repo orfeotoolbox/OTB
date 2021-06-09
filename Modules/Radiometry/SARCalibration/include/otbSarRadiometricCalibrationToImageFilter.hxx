@@ -23,8 +23,9 @@
 #define otbSarRadiometricCalibrationToImageFilter_hxx
 
 #include "otbSarRadiometricCalibrationToImageFilter.h"
-#include "otbSarImageMetadataInterfaceFactory.h"
 #include "otbSarCalibrationLookupData.h"
+#include "otbSARMetadata.h"
+#include <boost/any.hpp>
 
 namespace otb
 {
@@ -64,27 +65,38 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
 {
   // will SetInputImage on the function
   Superclass::BeforeThreadedGenerateData();
-
-  /** cretate a SarImageMetadataInterface instance from
-   * GetMetaDataDictionary(). This will return the appropriate IMI depending on
-   * the Sensor information & co available in GetMetaDataDictionary()  */
-  SarImageMetadataInterface::Pointer imageMetadataInterface = SarImageMetadataInterfaceFactory::CreateIMI(this->GetInput()->GetMetaDataDictionary());
+  
+  /** Retrieve the ImageMetadata */
+  auto imd = this->GetInput()->GetImageMetadata();
+  
+  /** Fetch the SARCalib */
+  std::unique_ptr<SARCalib> sarCalibPtr;
+  if (imd.Has(MDGeom::SARCalib))
+  {
+    sarCalibPtr = std::make_unique<SARCalib>(boost::any_cast<SARCalib>(imd[MDGeom::SARCalib]));
+  }
+  else if ((imd.Bands.size() > 0) && imd.Bands[0].Has(MDGeom::SARCalib))
+  {
+    sarCalibPtr = std::make_unique<SARCalib>(boost::any_cast<SARCalib>(imd.Bands[0][MDGeom::SARCalib]));
+  }
+  else
+      throw std::runtime_error("otbSarRadiometricCalibrationTiImageFilter was not able to fetch the SARCalib metadata.");
 
   /** Get the SarRadiometricCalibrationFunction function instance.  */
   FunctionPointer function = this->GetFunction();
 
-  /** check if there is a calibration lookupdata is available with the
+  /** Check if a calibration lookupdata is available with the
     * product. eg. Sentinel1. This means
     * A. The computation of the backscatter is based on this lookup value which
     * depends on the given product.*
     * B. The other value such as antenna pattern gain, rangespread loss, incidence
     * angle has no effect in calibration  */
+  bool apply = sarCalibPtr->calibrationLookupFlag;
 
-  bool apply = imageMetadataInterface->HasCalibrationLookupDataFlag();
   /* Below lines will toggle the necessary flags which can help skip some
    * computation. For example, if there is lookup value and ofcourse antenna
    * pattern gain is not required. Even if we try to compute the value with
-   * SarParametricFunction we  get 1. This is the safe side. But as we are so sure
+   * sarCalibetricFunction we  get 1. This is the safe side. But as we are so sure
    * we skip all those calls to EvaluateParametricCoefficient and also the
    * Evaluate(). For the function the value is 1 by default.
    */
@@ -94,15 +106,18 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
   function->SetApplyRescalingFactor(!apply);
   function->SetApplyLookupDataCorrection(apply);
 
-  function->SetScale(imageMetadataInterface->GetRadiometricCalibrationScale());
+  if (imd.Has(MDNum::CalScale))
+    function->SetScale(imd[MDNum::CalScale]);
+  else if ((imd.Bands.size() > 0) && (imd.Bands[0].Has(MDNum::CalScale)))
+    function->SetScale(imd.Bands[0][MDNum::CalScale]);
 
   /* Compute noise if enabled */
   if (function->GetEnableNoise())
   {
     ParametricFunctionPointer noise;
     noise = function->GetNoise();
-    noise->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationNoise());
-    noise->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationNoisePolynomialDegree());
+    noise->SetPointSet(sarCalibPtr->radiometricCalibrationNoise);
+    noise->SetPolynomalSize(sarCalibPtr->radiometricCalibrationNoisePolynomialDegree);
     noise->EvaluateParametricCoefficient();
   }
 
@@ -111,14 +126,14 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
   {
     ParametricFunctionPointer antennaPatternNewGain;
     antennaPatternNewGain = function->GetAntennaPatternNewGain();
-    antennaPatternNewGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGain());
-    antennaPatternNewGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree());
+    antennaPatternNewGain->SetPointSet(sarCalibPtr->radiometricCalibrationAntennaPatternNewGain);
+    antennaPatternNewGain->SetPolynomalSize(sarCalibPtr->radiometricCalibrationAntennaPatternNewGainPolynomialDegree);
     antennaPatternNewGain->EvaluateParametricCoefficient();
 
     ParametricFunctionPointer antennaPatternOldGain;
     antennaPatternOldGain = function->GetAntennaPatternOldGain();
-    antennaPatternOldGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGain());
-    antennaPatternOldGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree());
+    antennaPatternOldGain->SetPointSet(sarCalibPtr->radiometricCalibrationAntennaPatternOldGain);
+    antennaPatternOldGain->SetPolynomalSize(sarCalibPtr->radiometricCalibrationAntennaPatternOldGainPolynomialDegree);
     antennaPatternOldGain->EvaluateParametricCoefficient();
   }
 
@@ -127,8 +142,8 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
   {
     ParametricFunctionPointer incidenceAngle;
     incidenceAngle = function->GetIncidenceAngle();
-    incidenceAngle->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationIncidenceAngle());
-    incidenceAngle->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationIncidenceAnglePolynomialDegree());
+    incidenceAngle->SetPointSet(sarCalibPtr->radiometricCalibrationIncidenceAngle);
+    incidenceAngle->SetPolynomalSize(sarCalibPtr->radiometricCalibrationIncidenceAnglePolynomialDegree);
     incidenceAngle->EvaluateParametricCoefficient();
   }
 
@@ -137,28 +152,29 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
   {
     ParametricFunctionPointer rangeSpreadLoss;
     rangeSpreadLoss = function->GetRangeSpreadLoss();
-    rangeSpreadLoss->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLoss());
-    rangeSpreadLoss->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree());
+    rangeSpreadLoss->SetPointSet(sarCalibPtr->radiometricCalibrationRangeSpreadLoss);
+    rangeSpreadLoss->SetPolynomalSize(sarCalibPtr->radiometricCalibrationRangeSpreadLossPolynomialDegree);
     rangeSpreadLoss->EvaluateParametricCoefficient();
   }
 
-  /** Get the lookupdata instance. unlike the all the above this is not a
-* parametricFunction instance. But rather an internal class in IMI called
-* SarCalibrationLookupData.
-*
-*NOTE: As the computation of lookup data for sensors is not universal. One must
-*provide a sub-class.
-See Also: otbSentinel1ImageMetadataInterface, otbTerraSarImageMetadataInterface,
-*otbRadarsat2ImageMetadataInterface  */
+  /** Get the lookupdata instance. Unlike all the above this is not a
+   * parametricFunction instance. But rather an internal class in IMI called
+   * SarCalibrationLookupData.
+   *
+   * NOTE: As the computation of lookup data for sensors is not universal. One must
+   * provide a sub-class.
+   * See Also: otbSentinel1ImageMetadataInterface, otbTerraSarImageMetadataInterface,
+   * otbRadarsat2ImageMetadataInterface  
+   */
   if (function->GetApplyLookupDataCorrection())
   {
-    function->SetCalibrationLookupData(imageMetadataInterface->GetCalibrationLookupData(this->GetLookupSelected()));
+    function->SetCalibrationLookupData(sarCalibPtr->calibrationLookupData[this->GetLookupSelected()]);
   }
 
   /** This was introduced for cosmoskymed which required a rescaling factor */
   if (function->GetApplyRescalingFactor())
   {
-    function->SetRescalingFactor(imageMetadataInterface->GetRescalingFactor());
+    function->SetRescalingFactor(sarCalibPtr->rescalingFactor);
   }
 }
 

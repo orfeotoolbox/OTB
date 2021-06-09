@@ -1256,7 +1256,7 @@ Spot6ImageMetadataInterface::WavelengthSpectralBandVectorType Spot6ImageMetadata
   return wavelengthSpectralBand;
 }
 
-void Spot6ImageMetadataInterface::FetchSpectralSensitivity(const std::string & sensorId)
+void Spot6ImageMetadataInterface::FetchSpectralSensitivity(const std::string & sensorId, ImageMetadata& imd)
 {
   std::unordered_map<std::string, std::vector<double>> BandNameToSpectralSensitivityTable;
   otb::MetaData::LUT1D spectralSensitivity;
@@ -1683,7 +1683,7 @@ void Spot6ImageMetadataInterface::FetchSpectralSensitivity(const std::string & s
     otbGenericExceptionMacro(MissingMetadataException, "Invalid Spot6/7 Sensor ID")
   }
 
-  for (auto & band: m_Imd.Bands)
+  for (auto & band: imd.Bands)
   {
     auto SpectralSensitivityIt = BandNameToSpectralSensitivityTable.find(band[MDStr::BandName] );
     if (SpectralSensitivityIt != BandNameToSpectralSensitivityTable.end())
@@ -1695,53 +1695,53 @@ void Spot6ImageMetadataInterface::FetchSpectralSensitivity(const std::string & s
   }
 }
 
-void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void Spot6ImageMetadataInterface::Parse(ImageMetadata & imd)
 {
   DimapMetadataHelper helper;
 
   // Product read by the TIFF/JP2 GDAL driver
-  if (mds.GetAs<std::string>("", "IMAGERY/SATELLITEID") == "SPOT 6"
-      || mds.GetAs<std::string>("", "IMAGERY/SATELLITEID") == "SPOT 7")
+  if (m_MetadataSupplierInterface->GetAs<std::string>("", "IMAGERY/SATELLITEID") == "SPOT 6"
+      || m_MetadataSupplierInterface->GetAs<std::string>("", "IMAGERY/SATELLITEID") == "SPOT 7")
   {
-    helper.ParseDimapV2(mds, "IMD/");
+    helper.ParseDimapV2(*m_MetadataSupplierInterface, "IMD/");
 
-    m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
+    imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
 
     // fill RPC model
-    if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
+    if (imd[MDStr::GeometricLevel] == "SENSOR")
     {
-      FetchRPC(mds);
+      FetchRPC(imd);
     }
   }
   // Product read by the DIMAP GDAL driver
-  else if (mds.GetAs<std::string>("", "MISSION") == "SPOT"
-      && (mds.GetAs<std::string>("", "INSTRUMENT_INDEX") == "6"
-          || mds.GetAs<std::string>("", "INSTRUMENT_INDEX") == "7")
+  else if (m_MetadataSupplierInterface->GetAs<std::string>("", "MISSION") == "SPOT"
+      && (m_MetadataSupplierInterface->GetAs<std::string>("", "INSTRUMENT_INDEX") == "6"
+          || m_MetadataSupplierInterface->GetAs<std::string>("", "INSTRUMENT_INDEX") == "7")
       )
   {
     // The DIMAP driver does not read the same metadata as the TIFF/JP2 one, and
     // some required metadata are missing. 
     // The XML Dimap file is read again and provided to the DimapMetadataHelper
     // using a XMLMetadataSupplier
-    XMLMetadataSupplier xmlMds(mds.GetResourceFile());
+    XMLMetadataSupplier xmlMds(m_MetadataSupplierInterface->GetResourceFile());
 
     helper.ParseDimapV2(xmlMds, "Dimap_Document.");
 
-    m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
+    imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
 
     // fill RPC model
-    if (m_Imd[MDStr::GeometricLevel] == "SENSOR")
+    if (imd[MDStr::GeometricLevel] == "SENSOR")
     {
-      FetchRPC(mds);
+      FetchRPC(imd);
     }
   }
   // Geom case
-  else if (mds.GetAs<std::string>("", "support_data.sensorID") == "SPOT 6"
-           || mds.GetAs<std::string>("", "support_data.sensorID") == "SPOT 7")
+  else if (m_MetadataSupplierInterface->GetAs<std::string>("", "support_data.sensorID") == "SPOT 6"
+           || m_MetadataSupplierInterface->GetAs<std::string>("", "support_data.sensorID") == "SPOT 7")
   {
-    helper.ParseGeom(mds);
+    helper.ParseGeom(*m_MetadataSupplierInterface);
 
-    m_Imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
+    imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
   }
   else
   {
@@ -1752,25 +1752,25 @@ void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
 
   if (dimapData.mission == "SPOT")
   {
-    m_Imd.Add(MDStr::SensorID, dimapData.mission + " " +dimapData.missionIndex);
-    m_Imd.Add(MDStr::Mission, "Spot");
+    imd.Add(MDStr::SensorID, dimapData.mission + " " +dimapData.missionIndex);
+    imd.Add(MDStr::Mission, "Spot");
   }
   else
   {
     otbGenericExceptionMacro(MissingMetadataException,<<"Sensor ID doesn't start with SPOT : '"<<dimapData.mission<<"'")
   }
 
-  m_Imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
-  m_Imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
-  m_Imd.Add(MDNum::SatElevation, 90. - dimapData.IncidenceAngle[0]);
-  m_Imd.Add(MDNum::SatAzimuth, dimapData.SceneOrientation[0]);
+  imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
+  imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
+  imd.Add(MDNum::SatElevation, 90. - dimapData.IncidenceAngle[0]);
+  imd.Add(MDNum::SatAzimuth, dimapData.SceneOrientation[0]);
 
-  m_Imd.Add(MDTime::ProductionDate, 
+  imd.Add(MDTime::ProductionDate,
     boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));
-  m_Imd.Add(MDTime::AcquisitionDate, 
+  imd.Add(MDTime::AcquisitionDate,
     boost::lexical_cast<MetaData::Time>(dimapData.AcquisitionDate));
 
-  auto nbBands = m_Imd.Bands.size();
+  auto nbBands = imd.Bands.size();
   if (dimapData.PhysicalBias.size() == nbBands
     && dimapData.SolarIrradiance.size() == nbBands
     && dimapData.PhysicalGain.size() == nbBands
@@ -1781,7 +1781,7 @@ void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
     auto solarIrradiance = dimapData.SolarIrradiance.begin();
     auto bandId = dimapData.BandIDs.begin();
 
-    for (auto & band: m_Imd.Bands)
+    for (auto & band: imd.Bands)
     {
       band.Add(MDNum::SolarIrradiance, *solarIrradiance);
       band.Add(MDNum::PhysicalGain, *gain);
@@ -1801,9 +1801,9 @@ void Spot6ImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
   }
 
 
-  m_Imd.Add(MDStr::GeometricLevel, dimapData.ProcessingLevel);
+  imd.Add(MDStr::GeometricLevel, dimapData.ProcessingLevel);
 
-  FetchSpectralSensitivity(m_Imd[MDStr::SensorID]);
+  FetchSpectralSensitivity(imd[MDStr::SensorID], imd);
 }
 
 

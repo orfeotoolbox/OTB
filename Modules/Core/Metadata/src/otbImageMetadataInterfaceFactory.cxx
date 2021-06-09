@@ -89,7 +89,7 @@ ImageMetadataInterfaceFactory::ImageMetadataInterfaceBasePointerType ImageMetada
 
 ImageMetadataInterfaceFactory::ImageMetadataInterfaceBasePointerType
 ImageMetadataInterfaceFactory
-::CreateIMI(const ImageMetadata & imd, const MetadataSupplierInterface & mds)
+::CreateIMI(ImageMetadata & imd, const MetadataSupplierInterface & mds)
 {
   RegisterBuiltInFactories();
 
@@ -106,17 +106,17 @@ ImageMetadataInterfaceFactory
     if (io)
     {
       // the static part of ImageMetadata is already filled
-      io->SetImageMetadata(imd);
+      io->SetMetadataSupplierInterface(mds);
       try
-        {
-        io->Parse(mds);
+      {
+        io->Parse(imd);
         return io;
-        }
+      }
       catch(MissingMetadataException& e)
-        {
+      {
         // silent catch of MissingMetadataException
         // just means that this IMI can't parse the file
-        }
+      }
     }
     else
     {
@@ -125,7 +125,7 @@ ImageMetadataInterfaceFactory
   }
 
   auto defaultIMI = DefaultImageMetadataInterface::New();
-  defaultIMI->SetImageMetadata(imd);
+  defaultIMI->SetMetadataSupplierInterface(mds);
   return dynamic_cast<ImageMetadataInterfaceBase*>(static_cast<DefaultImageMetadataInterface*>(defaultIMI));
 }
 

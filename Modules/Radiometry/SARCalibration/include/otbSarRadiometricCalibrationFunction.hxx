@@ -110,9 +110,9 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>::EvaluateAtIndex(const
     this->GetInputImage()->TransformIndexToPhysicalPoint(index, point);
 
   /** digitalNumber:
-    * For complex pixel type, std::abs() returns the modulus. which is
+    * For complex pixel type, std::abs() returns the modulus, which is
     * sqrt((I*I) + (Q*Q)). Where I and Q are real and imaginary part of the
-    * complex pixel. So to to get (I*I) + (Q*Q) in our calculation, the output
+    * complex pixel. So to get (I*I) + (Q*Q) in our calculation, the output
     * of std::abs() is squared. See below (digitalNumber * digitalNumber) where
     * digitalNumber is the output of std::abs() which is sqrt((I*I) + (Q*Q)). For
     * non-complex pixel types, std::abs() simply returns absolute value.

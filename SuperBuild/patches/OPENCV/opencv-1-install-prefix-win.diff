@@ -1,9 +1,9 @@
 diff -burN opencv.orig/cmake/OpenCVInstallLayout.cmake opencv/cmake/OpenCVInstallLayout.cmake
---- opencv.orig/cmake/OpenCVInstallLayout.cmake	2019-10-10 00:53:14.000000000 +0200
-+++ opencv/cmake/OpenCVInstallLayout.cmake	2021-04-23 09:26:03.858765137 +0200
+--- opencv.orig/cmake/OpenCVInstallLayout.cmake	2021-06-08 09:30:22.007336301 +0200
++++ opencv/cmake/OpenCVInstallLayout.cmake	2021-06-08 09:30:54.279376480 +0200
 @@ -23,7 +23,7 @@
  elseif(WIN32 AND CMAKE_HOST_SYSTEM_NAME MATCHES Windows)
-
+ 
    if(DEFINED OpenCV_RUNTIME AND DEFINED OpenCV_ARCH)
 -    ocv_update(OPENCV_INSTALL_BINARIES_PREFIX "${OpenCV_ARCH}/${OpenCV_RUNTIME}/")
 +    ocv_update(OPENCV_INSTALL_BINARIES_PREFIX "") #"${OpenCV_ARCH}/${OpenCV_RUNTIME}/")

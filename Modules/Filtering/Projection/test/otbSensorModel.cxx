@@ -145,8 +145,7 @@ int otbSensorModel(int argc, char* argv[])
   otb::GeomMetadataSupplier geomSupplier(geomfilename);
   for (int loop = 0 ; loop < geomSupplier.GetNbBands() ; ++loop)
     imd.Bands.emplace_back();
-  otb::ImageMetadataInterfaceBase::Pointer imi = otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
-  imd = imi->GetImageMetadata();
+  otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
   geomSupplier.FetchRPC(imd);
 
   if (!(kwlist.GetSize() > 0))

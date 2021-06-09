@@ -32,7 +32,7 @@ namespace otb
 {
 
 /** \class FunctionToImageFilter
-  * \brief Evaluates a ImageFunction onto a source image
+ * \brief Evaluates a ImageFunction onto a source image
  *
  * The class walks an input image and evaluates
  * the function at every pixel location. The output of the spatial function

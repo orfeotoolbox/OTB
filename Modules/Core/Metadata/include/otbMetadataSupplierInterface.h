@@ -48,6 +48,8 @@ public:
 class OTBMetadata_EXPORT MetadataSupplierInterface
 {
 public:
+  const std::array<std::string, 3> TRUES = {"1", "true", "True"};
+  const std::array<std::string, 3> FALSES = {"0", "false", "False"};
   virtual std::string GetResourceFile(std::string const& ="") const = 0;
   virtual std::vector<std::string> GetResourceFiles() const
   {
@@ -65,91 +67,31 @@ public:
 
   virtual int GetNbBands() const = 0;
 
-  // utility functions
-  template <typename T> T GetAs(std::string const& path, int band=-1) const
-  {
-    bool hasValue;
-    std::string ret = GetMetadataValue(path, hasValue, band);
-    if (!hasValue)
-    {
-      otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata '"<<path<<"'")
-    }
-    boost::trim(ret);
-    try
-    {
-      return boost::lexical_cast<T>(ret);
-    }
-    catch (boost::bad_lexical_cast&)
-    {
-      otbGenericExceptionMacro(MissingMetadataException,<<"Bad metadata value for '"<<path<<"', got: "<<ret)
-    }
-  }
+  template <typename T> T GetAs(T const& defaultValue, std::string const& path, int band=-1) const;
 
-  template <typename T> T GetAs(T const& defaultValue, std::string const& path, int band=-1) const
-  {
-    bool hasValue;
-    std::string ret = GetMetadataValue(path, hasValue, band);
-    if (!hasValue)
-    {
-      return defaultValue;
-    }
-    boost::trim(ret);
-    try
-    {
-      return boost::lexical_cast<T>(ret);
-    }
-    catch (boost::bad_lexical_cast&)
-    {
-      return defaultValue;
-    }
-  }
-
+  template <typename T> T GetAs(std::string const& path, int band=-1) const;
 
   /** Parse a metadata value to a std::vector,
    *  If size>=0, then the final std::vector size is checked and an exception
    *  is raised if it doesn't match the given size.*/
-  template < typename T> std::vector<T> GetAsVector(std::string const& path, char sep=' ', int size=-1, int band=-1) const
-  {
-    bool hasValue;
-    std::string ret = GetMetadataValue(path, hasValue, band);
-    if (!hasValue)
-    {
-      otbGenericExceptionMacro(MissingMetadataException,<<"Missing metadata '"<<path<<"'")
-    }
-    string_view value(ret);
-    string_view filt_value = rstrip(lstrip(value,"[ "), "] ");
-    std::vector<T> output;
-    typedef part_range<splitter_on_delim> range_type;
-    const range_type parts = split_on(filt_value, sep);
-    for (auto const& part : parts)
-    {
-      // TODO: check if we can use lexical_cast on a string_view
-      std::string strPart = to<std::string>(part, "casting string_view to std::string");
-      if (strPart.empty())
-      {
-        continue;
-      }
-      try
-      {
-        output.push_back(boost::lexical_cast<T>(strPart));
-      }
-      catch (boost::bad_lexical_cast&)
-      {
-        otbGenericExceptionMacro(MissingMetadataException,<<"Bad metadata vector element in '"<<path<<"', got :"<<part)
-      }
-    }
-    if ((size >= 0) && (output.size() != (size_t)size))
-    {
-      otbGenericExceptionMacro(MissingMetadataException,<<"Bad number of elements in vector '"<<path<<"', expected "<<size<< ", got "<<output.size())
-    }
-    return output;
-  }
+  template < typename T> std::vector<T> GetAsVector(std::string const& path, char sep=' ', int size=-1, int band=-1) const;
 
+  /** Get the number of keys starting with path */
+  virtual unsigned int GetNumberOf(std::string const& path) const = 0;
+
+  /** If multiple keys have the same path, gives the position of the one with value value*/
+  virtual unsigned int GetAttributId(std::string const& path, std::string const& value) const = 0;
+
+  virtual ~MetadataSupplierInterface() = default;
 };
 
+template <> bool MetadataSupplierInterface::GetAs(bool const& defaultValue, std::string const& path, int band) const;
 // TODO : for complex types ...
 
 } // end namespace otb
 
+#ifndef OTB_MANUAL_INSTANTIATION
+#include "otbMetadataSupplierInterface.hxx"
 #endif
 
+#endif

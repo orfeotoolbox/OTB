@@ -250,7 +250,7 @@ double CosmoImageMetadataInterface::GetRadarFrequency() const
   return 0;
 }
 
-double CosmoImageMetadataInterface::GetCenterIncidenceAngle() const
+double CosmoImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface &) const
 {
   return 0;
 }
@@ -296,16 +296,16 @@ std::vector<std::map<std::string, std::string> > CosmoImageMetadataInterface::sa
 
 }
 
-std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const MetadataSupplierInterface & mds, const std::string & reference_UTC)
+std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const std::string & reference_UTC) const
 {
     ////////////////// Add Orbit List ////////////////
   bool hasOrbit ;
-  std::string nb_orbits =  mds.GetMetadataValue("Number_of_State_Vectors", hasOrbit) ;
+  std::string nb_orbits =  m_MetadataSupplierInterface->GetMetadataValue("Number_of_State_Vectors", hasOrbit) ;
     // Get elements
     int stateVectorList_size = std::stoi(nb_orbits);
-    std::string state_times = mds.GetMetadataValue("State_Vectors_Times", hasOrbit);
-    std::string ecef_satellite_pos = mds.GetMetadataValue("ECEF_Satellite_Position", hasOrbit) ;
-    std::string ecef_satellite_vel = mds.GetMetadataValue("ECEF_Satellite_Velocity", hasOrbit);
+    std::string state_times = m_MetadataSupplierInterface->GetMetadataValue("State_Vectors_Times", hasOrbit);
+    std::string ecef_satellite_pos = m_MetadataSupplierInterface->GetMetadataValue("ECEF_Satellite_Position", hasOrbit) ;
+    std::string ecef_satellite_vel = m_MetadataSupplierInterface->GetMetadataValue("ECEF_Satellite_Velocity", hasOrbit);
     // Convert std::string to vector
     std::vector<std::string> vTimes;
     otb::Utils::ConvertStringToVector(state_times, vTimes, "State_Vectors_Times", " ");
@@ -328,11 +328,9 @@ std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const MetadataSupplier
     int hour = static_cast<int> (total_seconds/3600.0);
     int minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
     double seconds = total_seconds - hour*3600 - minutes*60;
-    std::string timestr = reference_UTC + "T" + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
+    std::string timestr = reference_UTC + " " + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
 
-    MetaData::Time time = Utils::LexicalCast<MetaData::Time,std::string>(timestr, std::string("T"));
-
-    orbit.time = time ;
+    orbit.time = boost::posix_time::time_from_string(timestr);
 
     orbit.position[0] = std::stod(vECEF_sat_pos[i*3 + 0]) ;
     orbit.position[1] = std::stod(vECEF_sat_pos[i*3 + 1]) ;
@@ -344,120 +342,187 @@ std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const MetadataSupplier
 
     orbitVector.push_back(orbit);
   }
-  return orbitVector ;
+  return orbitVector;
 }
 
-void CosmoImageMetadataInterface::ParseGdal(const MetadataSupplierInterface & mds)
+
+
+std::vector<BurstRecord> CosmoImageMetadataInterface::CreateBurstRecord(const std::string & firstLineTimeStr, const std::string & lastLineTimeStr, const unsigned long endLine, const unsigned long endSample) const
+{
+  BurstRecord record;
+  record.startLine = 0;
+  record.startSample = 0;
+
+  record.endLine = endLine;
+  record.endSample = endSample;
+
+
+  std::stringstream ss;
+  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
+  ss.imbue(std::locale(std::locale(), facet));
+
+  ss << firstLineTimeStr;
+  ss >> record.azimuthStartTime;
+
+  ss << lastLineTimeStr;
+  ss >> record.azimuthStopTime;
+
+  record.azimuthAnxTime = 0.;
+
+  return {record};
+}
+
+bool not_in(std::vector<std::string> possible_values, std::string test_value)
+{
+  return std::none_of(possible_values.begin(), possible_values.end(), [test_value](std::string s){return s == test_value;});
+}
+
+void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 {
   // Check acquisition mode and product type
-  Fetch(MDStr::Mode, mds, "Acquisition_Mode");
-  if((m_Imd[MDStr::Mode] != "HIMAGE") &&
-        (m_Imd[MDStr::Mode] != "SPOTLIGHT") &&
-          (m_Imd[MDStr::Mode] != "ENHANCED SPOTLIGHT"))
+  Fetch(MDStr::Mode, imd, "Acquisition_Mode");
+  if (not_in({"HIMAGE", "SPOTLIGHT", "ENHANCED SPOTLIGHT"}, imd[MDStr::Mode]))
   {
-    itkWarningMacro(<< "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << m_Imd[MDStr::Mode] );
+    otbGenericExceptionMacro(MissingMetadataException, "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << imd[MDStr::Mode] );
   }
   
-  Fetch(MDStr::ProductType, mds, "Product_Type");
-  if( (m_Imd[MDStr::ProductType] != "SCS_B") && m_Imd[MDStr::ProductType] != "SCS_U")
+  Fetch(MDStr::ProductType, imd, "Product_Type");
+  if (not_in({"SCS_B", "SCS_U"}, imd[MDStr::ProductType]))
   {
-    itkWarningMacro(<< "Not an expected product type (only SCS_B and SCS_U expected) " << m_Imd[MDStr::ProductType] );
+    otbGenericExceptionMacro(MissingMetadataException, "Not an expected product type (only SCS_B and SCS_U expected) " << imd[MDStr::ProductType] );
   }
 
-  m_Imd.Add(MDStr::Mission, "CSK");
-  m_Imd.Add(MDStr::SensorID, "CSK");
-  Fetch(MDStr::OrbitDirection, mds, "Orbit_Direction");
+  imd.Add(MDStr::Mission, "CSK");
+  imd.Add(MDStr::SensorID, "CSK");
+  Fetch(MDStr::OrbitDirection, imd, "Orbit_Direction");
   bool hasOrbitNumber ;
-  std::string orbitNumber =  mds.GetMetadataValue("Orbit_Number", hasOrbitNumber) ;
-  m_Imd.Add(MDNum::OrbitNumber, std::stoi(orbitNumber));
+  std::string orbitNumber =  m_MetadataSupplierInterface->GetMetadataValue("Orbit_Number", hasOrbitNumber) ;
+  imd.Add(MDNum::OrbitNumber, std::stoi(orbitNumber));
 
   bool hasRadarFrequency ;
-  std::string radarFrequency =  mds.GetMetadataValue("Radar_Frequency", hasRadarFrequency) ;
-  m_Imd.Add(MDNum::RadarFrequency, std::stod(radarFrequency));
+  std::string radarFrequency =  m_MetadataSupplierInterface->GetMetadataValue("Radar_Frequency", hasRadarFrequency) ;
+  imd.Add(MDNum::RadarFrequency, std::stod(radarFrequency));
 
-  Fetch(MDStr::Polarization, mds, "S01_Polarisation") ;
-  m_Imd.Add(MDStr::Swath, "S1");
+  Fetch(MDStr::Polarization, imd, "S01_Polarisation") ;
+  imd.Add(MDStr::Swath, "S1");
 
-  Fetch(MDNum::PRF, mds, "S01_PRF");
-
+  Fetch(MDNum::PRF, imd, "S01_PRF");
 
   //getTime
-  auto subDsName = "HDF5:" + mds.GetResourceFile() + "://S01/SBI";
+  auto subDsName = "HDF5:" + m_MetadataSupplierInterface->GetResourceFile() + "://S01/SBI";
   auto metadataBands = this->saveMetadataBands(subDsName) ;
   bool hasTimeUTC;
-  int pos = mds.GetMetadataValue("Reference_UTC", hasTimeUTC).find(" ");;
-  std::string reference_UTC = mds.GetMetadataValue("Reference_UTC", hasTimeUTC).substr(0, pos);
+  int pos = m_MetadataSupplierInterface->GetMetadataValue("Reference_UTC", hasTimeUTC).find(" ");;
+  std::string reference_UTC = m_MetadataSupplierInterface->GetMetadataValue("Reference_UTC", hasTimeUTC).substr(0, pos);
 
   double total_seconds = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Azimuth_First_Time"]);
   int hour = static_cast<int> (total_seconds/3600.0);
   int minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
   double seconds = total_seconds - hour*3600 - minutes*60;
-  std::string first_line_time = reference_UTC + "T" + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds); 
+
+
+  // Helper function to convert to a two digit string.
+  auto formatTimeInt = [](int i) { return (i < 10 ? "0" + std::to_string(i)
+                                                 : std::to_string(i) );};
+  auto formatTimeDouble = [](double d) { return (d < 10 ? "0" + std::to_string(d)
+                                                       : std::to_string(d) );};
+
+  std::string first_line_time = reference_UTC + "T" + formatTimeInt(hour) + ":" + formatTimeInt(minutes) + ":" + formatTimeDouble(seconds); 
 
   total_seconds = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Azimuth_Last_Time"]);
   hour = static_cast<int> (total_seconds/3600.0);
   minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
   seconds = total_seconds - hour*3600 - minutes*60;
-  std::string last_line_time = reference_UTC + "T" + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
+
+
+  std::string last_line_time = reference_UTC + "T" + formatTimeInt(hour) + ":" + formatTimeInt(minutes) + ":" + formatTimeDouble(seconds);
   MetaData::Time startTime = Utils::LexicalCast<MetaData::Time,std::string>(first_line_time, std::string("T"));
   MetaData::Time stoptTime = Utils::LexicalCast<MetaData::Time,std::string>(last_line_time, std::string("T"));
 
-  m_Imd.Add(MDTime::AcquisitionStartTime, startTime);
-  m_Imd.Add(MDTime::AcquisitionStopTime, stoptTime);
+  imd.Add(MDTime::AcquisitionStartTime, startTime);
+  imd.Add(MDTime::AcquisitionStopTime, stoptTime);
+
+  // Retrieve the product dimension, as it is not stored in the metadata
+  auto dataset = static_cast<GDALDataset*>(GDALOpen(subDsName.c_str(), GA_ReadOnly));
+
+  int sizex = dataset->GetRasterXSize();
+  int sizey = dataset->GetRasterYSize();
+  GDALClose(dataset);
 
   //SAR Parameters
   SARParam sarParam;
-  sarParam.orbits = this->getOrbits(mds, reference_UTC);
+  sarParam.orbits = this->getOrbits(reference_UTC);
+  sarParam.burstRecords = CreateBurstRecord(first_line_time, last_line_time, sizex-1, sizey-1);
 
-  m_Imd.Bands[0].Add(MDGeom::SAR, sarParam);
+  auto rangeTimeInterval = std::stod(metadataBands[0]["S01_SBI_Column_Time_Interval"]);
+  
+  if (!rangeTimeInterval)
+  {
+    otbGenericExceptionMacro(MissingMetadataException, "Range time interval is null.");
+  }
+  sarParam.rangeSamplingRate = 1 / rangeTimeInterval;
+
+  sarParam.azimuthTimeInterval = boost::posix_time::precise_duration(
+      std::stod(metadataBands[0]["S01_SBI_Line_Time_Interval"])
+      * 1e6);
+  sarParam.nearRangeTime = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Range_First_Time"]);
+
+  imd.Add(MDGeom::SAR, sarParam);
+
+  SARCalib sarCalib;
+  LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
+  imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
-void CosmoImageMetadataInterface::ParseGeom(const MetadataSupplierInterface & mds)
+void CosmoImageMetadataInterface::ParseGeom(ImageMetadata &imd)
 {
   // Check acquisition mode and product type
-  Fetch(MDStr::Mode, mds, "support_data.acquisition_mode");
-  if((m_Imd[MDStr::Mode] != "HIMAGE") &&
-        (m_Imd[MDStr::Mode] != "SPOTLIGHT") &&
-          (m_Imd[MDStr::Mode] != "ENHANCED SPOTLIGHT"))
+  Fetch(MDStr::Mode, imd, "support_data.acquisition_mode");
+  if(not_in({"HIMAGE", "SPOTLIGHT", "ENHANCED SPOTLIGHT"}, imd[MDStr::Mode]))
   {
-    itkWarningMacro(<< "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << m_Imd[MDStr::Mode] );
+    otbGenericExceptionMacro(MissingMetadataException, << "Not an expected acquisition mode (only HIMAGE and SPOTLIGHT expected)" << imd[MDStr::Mode] );
+
   }
   
-  Fetch(MDStr::ProductType, mds, "support_data.product_type");
-  if( (m_Imd[MDStr::ProductType] != "SCS_B") && m_Imd[MDStr::ProductType] != "SCS_U")
+  Fetch(MDStr::ProductType, imd, "support_data.product_type");
+  if(not_in({"SCS_B", "SCS_U"}, imd[MDStr::ProductType]))
   {
-    itkWarningMacro(<< "Not an expected product type (only SCS_B and SCS_U expected) " << m_Imd[MDStr::ProductType] );
+    otbGenericExceptionMacro(MissingMetadataException, << "Not an expected product type (only SCS_B and SCS_U expected) " << imd[MDStr::ProductType] );
   }
 
-  m_Imd.Add(MDStr::Mission, "CSK");
-  m_Imd.Add(MDStr::SensorID, "CSK");
-  Fetch(MDStr::OrbitDirection, mds, "support_data.orbit_pass");
-  Fetch(MDNum::OrbitNumber, mds, "support_data.abs_orbit");
-  Fetch(MDNum::RadarFrequency, mds, "support_data.radar_frequency");
-  Fetch(MDStr::Polarization, mds, "header.polarisation");
-  m_Imd.Add(MDStr::Swath, "S1");
-  Fetch(MDNum::PRF, mds, "support_data.pulse_repetition_frequency");
-  Fetch(MDTime::AcquisitionStartTime, mds, "header.first_line_time");
-  Fetch(MDTime::AcquisitionStopTime, mds, "header.last_line_time");
-  
+  imd.Add(MDStr::Mission, "CSK");
+  imd.Add(MDStr::SensorID, "CSK");
+  Fetch(MDStr::OrbitDirection, imd, "support_data.orbit_pass");
+  Fetch(MDNum::OrbitNumber, imd, "support_data.abs_orbit");
+  Fetch(MDNum::RadarFrequency, imd, "support_data.radar_frequency");
+  Fetch(MDStr::Polarization, imd, "header.polarisation");
+  imd.Add(MDStr::Swath, "S1");
+  Fetch(MDNum::PRF, imd, "support_data.pulse_repetition_frequency");
+  Fetch(MDTime::AcquisitionStartTime, imd, "header.first_line_time");
+  Fetch(MDTime::AcquisitionStopTime, imd, "header.last_line_time");
+
   //SAR Parameters
   SARParam sarParam;
-  sarParam.orbits = this->GetOrbitsGeom(mds);
-  m_Imd.Bands[0].Add(MDGeom::SAR, sarParam);
+  sarParam.orbits = this->GetOrbitsGeom();
+  imd.Add(MDGeom::SAR, sarParam);
+  SARCalib sarCalib;
+  LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
+  imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
-void CosmoImageMetadataInterface::Parse(const MetadataSupplierInterface & mds)
+void CosmoImageMetadataInterface::Parse(ImageMetadata & imd)
 {
+  assert(m_MetadataSupplierInterface != nullptr && "In ImageMetadataInterface, the MetadataSupplier needs to be set before calling the Parse function.");
   // Try to fetch the metadata from GDAL Metadata Supplier
-  if (mds.GetAs<std::string>("", "MISSION_ID") == "CSK")
-    this->ParseGdal(mds);
+  if (m_MetadataSupplierInterface->GetAs<std::string>("", "MISSION_ID") == "CSK")
+    this->ParseGdal(imd);
   // Try to fetch the metadata from GEOM file
-  else if (mds.GetAs<std::string>("", "sensor") == "CSK")
-    this->ParseGeom(mds);
+  else if (m_MetadataSupplierInterface->GetAs<std::string>("", "sensor") == "CSK")
+    this->ParseGeom(imd);
   // Failed to fetch the metadata
   else
     otbGenericExceptionMacro(MissingMetadataException,
-			     << "Not a CosmoSkyMed product");
+             << "Not a CosmoSkyMed product");
 }
 
 } // end namespace otb

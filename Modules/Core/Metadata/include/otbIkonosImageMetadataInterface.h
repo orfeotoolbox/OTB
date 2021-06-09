@@ -136,7 +136,7 @@ public:
      * There values a computed by 6S. */
   WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
-  void Parse(const MetadataSupplierInterface &) override;
+  void Parse(ImageMetadata &) override;
 
 protected:
   IkonosImageMetadataInterface() = default;
@@ -147,12 +147,13 @@ private:
   void operator=(const Self&) = delete;
 
 
-  void FetchProductionDate(const std::string & productionDate);
+  void FetchProductionDate(const std::string & productionDate, ImageMetadata &imd);
 
   void FetchAcquisitionDate(const std::string & acquisitionDate,
-                             const std::string & acquisitionTime);
+                            const std::string & acquisitionTime,
+                            ImageMetadata &imd);
 
-  void FetchSpectralSensitivity(const std::string & bandName);
+  void FetchSpectralSensitivity(const std::string & bandName, ImageMetadata &imd);
 
 };
 
