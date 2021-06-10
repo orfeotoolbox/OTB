@@ -56,6 +56,9 @@ set(OTBMetadata_SRC
   otbTerraSarImageMetadataInterfaceFactory.cxx
   otbTerraSarImageMetadataInterface.cxx
 
+  otbTerraSarXSarImageMetadataInterfaceFactory.cxx
+  otbTerraSarXSarImageMetadataInterface.cxx
+
   otbSentinel1ImageMetadataInterfaceFactory.cxx
   otbSentinel1ImageMetadataInterface.cxx
 
