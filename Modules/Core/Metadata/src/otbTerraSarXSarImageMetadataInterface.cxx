@@ -37,10 +37,14 @@ TerraSarXSarImageMetadataInterface::TerraSarXSarImageMetadataInterface()
 bool TerraSarXSarImageMetadataInterface::CanRead() const
 {
   std::string sensorID = GetSensorID();
-  if (sensorID.find("TSX") != std::string::npos)
-    return true;
+  if (sensorID.find("TSX-1") != std::string::npos)
+    {
+      return true;
+    }
   else
-    return false;
+    {
+      return false;
+    }
 }
 
 int TerraSarXSarImageMetadataInterface::GetDay() const
@@ -58,7 +62,7 @@ int TerraSarXSarImageMetadataInterface::GetDay() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
 
-  std::string key("azimuth_start_time");
+  std::string key("support_data.first_line_time");
   if (!imageKeywordlist.HasKey(key))
   {
     return -1;
@@ -91,7 +95,7 @@ int TerraSarXSarImageMetadataInterface::GetMonth() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
 
-  std::string key("azimuth_start_time");
+  std::string key("support_data.first_line_time");
   if (!imageKeywordlist.HasKey(key))
   {
     return -1;
@@ -124,7 +128,7 @@ int TerraSarXSarImageMetadataInterface::GetYear() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
 
-  std::string key("azimuth_start_time");
+  std::string key("support_data.first_line_time");
   if (!imageKeywordlist.HasKey(key))
   {
     return -1;
@@ -157,7 +161,7 @@ int TerraSarXSarImageMetadataInterface::GetHour() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
 
-  std::string key("azimuth_start_time");
+  std::string key("support_data.first_line_time");
   if (!imageKeywordlist.HasKey(key))
   {
     return -1;
@@ -190,7 +194,7 @@ int TerraSarXSarImageMetadataInterface::GetMinute() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
 
-  std::string key("azimuth_start_time");
+  std::string key("support_data.first_line_time");
   if (!imageKeywordlist.HasKey(key))
   {
     return -1;

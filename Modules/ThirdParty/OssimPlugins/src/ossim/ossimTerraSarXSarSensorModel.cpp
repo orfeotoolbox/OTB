@@ -110,9 +110,22 @@ namespace ossimplugins
 
     ////////////////// Add General Parameters ///////////////// 
     theProductType = ProductType(product_type);
-    theSensorID = "TSX";
+    theSensorID = "TSX-1";
     
-    add(theProductKwl, "sample_type", "COMPLEX");
+    std::string sampleType = getTextFromFirstNode(xmlRoot, "productInfo/imageDataInfo/imageDataType");
+    std::string orbitDirection = getTextFromFirstNode(xmlRoot, "productInfo/missionInfo/orbitDirection");
+    std::string absOrbit = getTextFromFirstNode(xmlRoot, "productInfo/missionInfo/absOrbit");
+    std::string acquisitionMode = getTextFromFirstNode(xmlRoot, "productInfo/acquisitionInfo/imagingMode");
+    std::string lookDirection = getTextFromFirstNode(xmlRoot, "productInfo/acquisitionInfo/lookDirection");
+    std::string sceneId = getTextFromFirstNode(xmlRoot, "productInfo/sceneInfo/sceneID");
+
+    add(theProductKwl, "sample_type", sampleType);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "slice_num", "1");
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "orbit_pass", orbitDirection);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "abs_orbit", absOrbit);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "acquisition_mode", acquisitionMode);
+    theImageID = sceneId;
+
     //saveState(theProductKwl);
 
     //Parse the near range time (in seconds)
@@ -159,6 +172,9 @@ namespace ossimplugins
     std::cout << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds()  << " and 1/prf: " << (1 / theRadarFrequency) * 1000000 << '\n';
 
     
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "first_line_time", azimuthTimeStart);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "last_line_time", azimuthTimeStop);
+
     ////////////////// GRD (detected product) ///////////////// 
     std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
     if(isGRD())

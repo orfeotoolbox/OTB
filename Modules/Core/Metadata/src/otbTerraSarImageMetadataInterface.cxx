@@ -37,7 +37,7 @@ TerraSarImageMetadataInterface::TerraSarImageMetadataInterface()
 bool TerraSarImageMetadataInterface::CanRead() const
 {
   std::string sensorID = GetSensorID();
-  if (sensorID.find("TSX") != std::string::npos)
+  if (sensorID == "TSX")
     return true;
   else
     return false;
