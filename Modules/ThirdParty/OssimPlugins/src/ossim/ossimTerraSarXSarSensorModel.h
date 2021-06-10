@@ -29,6 +29,8 @@
 #include "ossim/ossimSarSensorModel.h"
 #include <string>
 
+#include <ossim/base/ossimXmlDocument.h>
+
 namespace ossimplugins
 {
 
@@ -57,6 +59,11 @@ public:
   bool readAnnotationFile(const std::string & annotationXml, const std::string & geoXml);
 
   bool open(const ossimFilename& file);
+
+private:
+  bool readOrbitVector(const ossimRefPtr<ossimXmlDocument> xmlDoc);
+  bool readGCPs(const std::string & geoXml, const TimeType azimuthTimeStart);
+
 };
 
 } // end namespace
