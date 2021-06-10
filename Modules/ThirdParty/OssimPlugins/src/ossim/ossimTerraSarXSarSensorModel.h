@@ -30,6 +30,7 @@
 #include <string>
 
 #include <ossim/base/ossimXmlDocument.h>
+#include <ossim/base/ossimKeywordNames.h>
 
 namespace ossimplugins
 {
@@ -51,6 +52,16 @@ public:
   virtual ~ossimTerraSarXSarSensorModel() = default;
 #endif
 
+  /*!
+   * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
+   * KWL files. Returns true if successful.
+   */
+  virtual bool saveState(ossimKeywordlist& kwl,
+			 const char* prefix=NULL) const override;
+
+  virtual bool loadState(ossimKeywordlist const& kwl,
+			 const char* prefix=NULL) override;
+
   //Not implemented yet
   /** References
    * TerraSAR-X Image Product Guide
@@ -63,6 +74,8 @@ public:
 private:
   bool readOrbitVector(const ossimRefPtr<ossimXmlDocument> xmlDoc);
   bool readGCPs(const std::string & geoXml, const TimeType azimuthTimeStart);
+
+  ossimKeywordlist   theProductKwl;
 
 };
 

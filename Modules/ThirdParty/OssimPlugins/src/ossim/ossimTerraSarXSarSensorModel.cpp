@@ -28,27 +28,72 @@
 #include "ossim/ossimXmlTools.h"
 #include "itksys/SystemTools.hxx"
 
+#include "ossim/ossimTraceHelpers.h"
+#include "ossim/ossimKeyWordListUtilities.h"
+#include "ossim/ossimSarSensorModelPathsAndKeys.h"
 
 namespace {// Anonymous namespace
-    const ossimString attTimeUTC = "timeUTC";
-    const ossimString attPosX    = "posX";
-    const ossimString attPosY    = "posY";
-    const ossimString attPosZ    = "posZ";
-    const ossimString attVelX    = "velX";
-    const ossimString attVelY    = "velY";
-    const ossimString attVelZ    = "velZ";
-    const ossimString attT       = "t";
-    const ossimString attTau     = "tau";
-    const ossimString attCol     = "col";
-    const ossimString attRow     = "row";
-    const ossimString attLat     = "lat";
-    const ossimString attLon     = "lon";
-    const ossimString attHeight  = "height";
+  ossimTrace traceDebug ("ossimTerraSarXSarSensorModel:debug");
+  const ossimString attTimeUTC = "timeUTC";
+  const ossimString attPosX    = "posX";
+  const ossimString attPosY    = "posY";
+  const ossimString attPosZ    = "posZ";
+  const ossimString attVelX    = "velX";
+  const ossimString attVelY    = "velY";
+  const ossimString attVelZ    = "velZ";
+  const ossimString attT       = "t";
+  const ossimString attTau     = "tau";
+  const ossimString attCol     = "col";
+  const ossimString attRow     = "row";
+  const ossimString attLat     = "lat";
+  const ossimString attLon     = "lon";
+  const ossimString attHeight  = "height";
 }// Anonymous namespace
 
 
 namespace ossimplugins
 {
+  bool ossimTerraSarXSarSensorModel::saveState(ossimKeywordlist& kwl,
+					       const char* prefix) const
+  {
+    static const char MODULE[] = "ossimplugins::ossimTerraSarXSarSensorModel::saveState";
+    SCOPED_LOG(traceDebug, MODULE);
+
+    // kwl.add(prefix,
+    // 	    ossimKeywordNames::TYPE_KW,
+    // 	    "ossimTerraSarXSarSensorModel",
+    // 	    true);
+
+   
+    // kwl.add("support_data.",
+    // 	    "calibration_lookup_flag",
+    // 	    "false",
+    // 	    false);
+
+    kwl.addList(theProductKwl,  true);
+      
+    return ossimSarSensorModel::saveState(kwl, prefix);
+  }
+
+
+//*************************************************************************************************
+// Load State
+//*************************************************************************************************
+  bool ossimTerraSarXSarSensorModel::loadState(const ossimKeywordlist& kwl,
+					       const char* prefix)
+  {
+    // Specify the looking flag (can be left or right for Cosmo)
+    std::string look_side;
+    // get(kwl, SUPPORT_DATA_PREFIX, "look_side", look_side);
+    
+    // if (look_side != "RIGHT")
+    //   {
+    // 	theRightLookingFlag = false;
+    //   }
+
+    return ossimSarSensorModel::loadState(kwl, prefix);
+  }
+ 
 
   bool ossimTerraSarXSarSensorModel::readAnnotationFile(const std::string & annotationXml, const std::string & geoXml)
   {
@@ -65,6 +110,10 @@ namespace ossimplugins
 
     ////////////////// Add General Parameters ///////////////// 
     theProductType = ProductType(product_type);
+    theSensorID = "TSX";
+    
+    add(theProductKwl, "sample_type", "COMPLEX");
+    //saveState(theProductKwl);
 
     //Parse the near range time (in seconds)
     theNearRangeTime = getDoubleFromFirstNode(xmlRoot, "productInfo/sceneInfo/rangeTime/firstPixel");
@@ -173,6 +222,9 @@ namespace ossimplugins
     //Parse GCPs
     readGCPs(geoXml, azimuthTimeStart);
 
+    // Ensure that superclass members are initialized
+    saveState(theProductKwl);
+
     return true;
   }
 
@@ -276,6 +328,8 @@ namespace ossimplugins
 
         theGCPRecords.push_back(gcpRecord);
       }
+
+    add(theProductKwl, GCP_NUMBER_KEY, static_cast<ossim_uint32>(theGCPRecords.size()));
 
     this->optimizeTimeOffsetsFromGcps();
   }
