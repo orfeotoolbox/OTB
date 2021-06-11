@@ -32,22 +32,28 @@
 #include "ossim/ossimKeyWordListUtilities.h"
 #include "ossim/ossimSarSensorModelPathsAndKeys.h"
 
+#include "cpl_minixml.h"
+#include "cpl_string.h"
+
 namespace {// Anonymous namespace
   ossimTrace traceDebug ("ossimTerraSarXSarSensorModel:debug");
-  const ossimString attTimeUTC = "timeUTC";
-  const ossimString attPosX    = "posX";
-  const ossimString attPosY    = "posY";
-  const ossimString attPosZ    = "posZ";
-  const ossimString attVelX    = "velX";
-  const ossimString attVelY    = "velY";
-  const ossimString attVelZ    = "velZ";
-  const ossimString attT       = "t";
-  const ossimString attTau     = "tau";
-  const ossimString attCol     = "col";
-  const ossimString attRow     = "row";
-  const ossimString attLat     = "lat";
-  const ossimString attLon     = "lon";
-  const ossimString attHeight  = "height";
+  const ossimString attTimeUTC  = "timeUTC";
+  const ossimString attPosX     = "posX";
+  const ossimString attPosY     = "posY";
+  const ossimString attPosZ     = "posZ";
+  const ossimString attVelX     = "velX";
+  const ossimString attVelY     = "velY";
+  const ossimString attVelZ     = "velZ";
+  const ossimString attT        = "t";
+  const ossimString attTau      = "tau";
+  const ossimString attCol      = "col";
+  const ossimString attRow      = "row";
+  const ossimString attLat      = "lat";
+  const ossimString attLon      = "lon";
+  const ossimString attHeight   = "height";
+  const ossimString attPolDeg   = "polynomialDegree";
+  const ossimString attPolCoef  = "coefficient";
+  const ossimString attRefPoint = "referencePoint";
 }// Anonymous namespace
 
 
@@ -100,7 +106,17 @@ namespace ossimplugins
     ossimRefPtr<ossimXmlDocument> xmlDoc = new ossimXmlDocument(annotationXml);
     const ossimXmlNode & xmlRoot = *xmlDoc->getRoot();
 
-    //isGRD parse variant?
+    // First, get polarization from image name (only). 
+    // The annotationXml contains metadata for the whole product => possibly for several polarizations
+    std::string tmp_name = m_imageName.substr(m_imageName.find("_") + 1, m_imageName.size()-1); 
+    std::string polarisation = tmp_name.substr(0, tmp_name.find("_")); 
+
+    assert((polarisation == "HH" || polarisation == "HV") && "Wrong polarization for TSX-1 products. Please, check the initial image name (must be IMAGE_FF_* wiht FF eq to polarisation)");
+    std::cout << "polarisation : " << polarisation << std::endl;
+
+    add(theProductKwl, HEADER_PREFIX, "polarisation", polarisation);
+
+    // Get product_type
     std::string product_type = getTextFromFirstNode(xmlRoot, "productInfo/productVariantInfo/productVariant");
 
     if (product_type == "SSC")
@@ -161,8 +177,16 @@ namespace ossimplugins
 
     const DurationType td = azimuthTimeStop - azimuthTimeStart;
 
-    // numberOfRows
+    // numberOfRows and numberOfColumns
     unsigned int numberOfRows = xmlRoot.findFirstNode("productInfo/imageDataInfo/imageRaster/numberOfRows")->getText().toUInt16();
+    
+    unsigned int numberOfColumns = xmlRoot.findFirstNode("productInfo/imageDataInfo/imageRaster/numberOfColumns")->getText().toUInt16();
+
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "number_samples", numberOfColumns);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "number_lines", numberOfRows);
+    add(theProductKwl,"number_samples", numberOfColumns);  // Does not override the metadata (Why ?????)
+    add(theProductKwl, "number_lines", numberOfRows);  // Does not override the metadata (Why ?????)
+
 
     std::cout << "numberOfRows " << numberOfRows << '\n';
 
@@ -235,8 +259,14 @@ namespace ossimplugins
     // Lookup position/velocity records
     readOrbitVector(xmlDoc);
 
-    //Parse GCPs
+    // Parse GCPs
     readGCPs(geoXml, azimuthTimeStart);
+
+    // Parse Doppler Rate
+    readDopplerRate(xmlDoc);
+
+    // Parse Doppler Centroid
+    readDopplerCentroid(xmlDoc);
 
     // Ensure that superclass members are initialized
     saveState(theProductKwl);
@@ -254,6 +284,9 @@ namespace ossimplugins
     using namespace itksys;
     const auto product_root = SystemTools::GetParentDirectory(SystemTools::GetParentDirectory(SystemTools::GetRealPath(file)));
 
+    // Get image name (to retrieve specific information such as polarization)
+    m_imageName = SystemTools::GetFilenameName(file);
+    
     // Get paths to the two xml we need, and check they exist
     std::vector<std::string> components;
     SystemTools::SplitPath(product_root, components);
@@ -305,6 +338,183 @@ namespace ossimplugins
         std::cout << "Add theOrbitRecords\n";
         theOrbitRecords.push_back(orbitRecord);
       }
+  }
+
+  bool ossimTerraSarXSarSensorModel::readDopplerRate(const ossimRefPtr<ossimXmlDocument> xmlDoc)
+  {
+    std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+    xmlDoc->findNodes("/level1Product/processing/geometry/dopplerRate", xnodes);
+
+    std::cout << "Number of Doppler rate polynomial " << xnodes.size() << '\n';
+
+    // Vector to store coefficient for the current polynomial
+    std::vector<double> polCoefVector;
+
+    std::vector<ossimRefPtr<ossimXmlNode> > coeffNodes;
+    ossimRefPtr<ossimXmlNode>  polNode;
+
+    unsigned int index = 1;
+
+    for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
+      {
+	// Clear the current coefficients
+	polCoefVector.clear();
+	coeffNodes.clear();
+
+	// Retieve acquisition time
+	const TimeType timeUTC = getTimeFromFirstNode(**itNode, attTimeUTC);
+
+	// Retrive the dopplerRatePolynomial Node
+	polNode = itNode[0]->findFirstNode("dopplerRatePolynomial");
+	
+	// Retrieve reference point
+	const double refPoint = getDoubleFromFirstNode(*polNode, attRefPoint);
+	
+	// Retrieve polynomial degree
+	const unsigned int degree = getTextFromFirstNode(*polNode, attPolDeg).toUInt16();
+	
+	const ossimString EXP = "exponent";
+        ossimString s;
+	polNode->findChildNodes("coefficient", coeffNodes);
+
+
+        if ( coeffNodes.size() )
+	  {
+            for (unsigned int i = 0; i < coeffNodes.size(); ++i)
+	      {
+                if (coeffNodes[i].valid())
+		  {
+                    coeffNodes[i]->getAttributeValue(s, EXP);
+                    const double coeff = coeffNodes[i]->getText().toDouble();
+                    polCoefVector.push_back(coeff);
+		  }
+	      }
+	  }
+
+	assert((polCoefVector.size() == degree) && "The doppler rate record has an incoherent size.");
+
+	// Add the metadata inot our keywordlist
+	char prefix[256];
+	//Doppler_Centroid_Coefficients.dop_coef_list;
+	s_printf(prefix, "azimuthFmRate.azi_fm_rate_coef_list%d.", index);
+	
+	add(theProductKwl, prefix, "azi_fm_rate_coef_time", timeUTC);
+	add(theProductKwl, prefix, "slant_range_time", refPoint);
+	
+	for (int count = 1 ; count < (polCoefVector.size()+1) ; ++count)
+	  {
+	    char coeff_prefix[256];
+	    s_printf(coeff_prefix, "%s%d.azi_fm_rate_coef", prefix, count);
+	    
+	    add(theProductKwl, coeff_prefix, polCoefVector[count-1]);
+	  }
+	
+	++index;
+      }
+    
+    add(theProductKwl, "azimuthFmRate.azi_fm_rate_coef_nb_list", xnodes.size());
+
+    return true;
+  }
+  
+  bool ossimTerraSarXSarSensorModel::readDopplerCentroid(const ossimRefPtr<ossimXmlDocument> xmlDoc, 
+							 const std::string polarisation)
+  {
+    // Retrieve doppler Centroid nodes (may have several doppler centroid nodes following some layers (polarisations)
+    std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+    xmlDoc->findNodes("/level1Product/processing/doppler/dopplerCentroid", xnodes);
+
+    // Loop on nodes with a check on layer (must match to our image)
+    for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itDopplerNode = xnodes.begin(); 
+	itDopplerNode!=xnodes.end();++itDopplerNode)
+      {  
+	// Get the polLayer
+	std::string polarisationLayer  = getTextFromFirstNode(**itDopplerNode, "polLayer");
+	// Check if the current polLayer match with our image (if not then pass the iteration)
+	if (polarisationLayer != polarisation)
+	  {
+	    continue;
+	  }
+	
+	std::cout << "polarisationLayer : " << polarisationLayer << std::endl;
+	
+	std::vector<ossimRefPtr<ossimXmlNode> > dopplerEstimateNodes;
+	// Get dopplerEstimate nodes
+	(*itDopplerNode)->findChildNodes("dopplerEstimate", dopplerEstimateNodes);
+    
+	std::cout << "Number of Doppler centroid polynomial : " << dopplerEstimateNodes.size() << std::endl;
+
+	// Vector to store coefficient for the current polynomial
+	std::vector<double> polCoefVector;
+
+	std::vector<ossimRefPtr<ossimXmlNode> > coeffNodes;
+	ossimRefPtr<ossimXmlNode>  polNode;
+
+	unsigned int index = 1;
+
+	for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = dopplerEstimateNodes.begin(); 
+	    itNode!=dopplerEstimateNodes.end();++itNode)
+	  {
+	    // Clear the current coefficients
+	    polCoefVector.clear();
+	    coeffNodes.clear();
+	    
+	    // Retieve acquisition time
+	    const TimeType timeUTC = getTimeFromFirstNode(**itNode, attTimeUTC);
+	
+	    // Retrtive he combinedDoppler Node
+	    polNode = itNode[0]->findFirstNode("combinedDoppler");
+	
+	    // Retrieve reference point
+	    const double refPoint = getDoubleFromFirstNode(*polNode, attRefPoint);
+	
+	    // Retrieve polynomial degree
+	    const unsigned int degree = getTextFromFirstNode(*polNode, attPolDeg).toUInt16();
+	
+	    const ossimString EXP = "exponent";
+	    ossimString s;
+	    polNode->findChildNodes("coefficient", coeffNodes);
+
+	    
+	    if ( coeffNodes.size() )
+	      {
+		for (unsigned int i = 0; i < coeffNodes.size(); ++i)
+		  {
+		    if (coeffNodes[i].valid())
+		      {
+			coeffNodes[i]->getAttributeValue(s, EXP);
+			const double coeff = coeffNodes[i]->getText().toDouble();
+			polCoefVector.push_back(coeff);
+		      }
+		  }
+	      }
+
+	    assert((polCoefVector.size() == degree) && "The doppler rate record has an incoherent size.");
+    
+	    // Add the metadata inot our keywordlist
+	    char prefix[256];
+	    //Doppler_Centroid_Coefficients.dop_coef_list;
+	    s_printf(prefix, "dopplerCentroid.dop_coef_list%d.", index);
+	
+	    add(theProductKwl, prefix, "dop_coef_time", timeUTC);
+	    add(theProductKwl, prefix, "slant_range_time", refPoint);
+	    
+	    for (int count = 1 ; count < (polCoefVector.size()+1) ; ++count)
+	      {
+		char coeff_prefix[256];
+		s_printf(coeff_prefix, "%s%d.dop_coef", prefix, count);
+		
+		add(theProductKwl, coeff_prefix, polCoefVector[count-1]);
+	      }
+
+	    ++index;
+
+	  }
+	
+	add(theProductKwl, "dopplerCentroid.dop_coef_nb_list", dopplerEstimateNodes.size());
+      }
+
+    return true;
   }
 
 
