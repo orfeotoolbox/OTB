@@ -24,7 +24,7 @@ SETUP_SUPERBUILD(GEOS)
 
 ExternalProject_Add(GEOS
    PREFIX GEOS
-   URL "http://download.osgeo.org/geos/geos-3.6.5.tar.bz2"
+   URL "https://download.osgeo.org/geos/geos-3.6.5.tar.bz2"
    URL_MD5 5ddbbe9dbaf0ac45a36856c185c56b23
    SOURCE_DIR ${GEOS_SB_SRC}
    BINARY_DIR ${GEOS_SB_SRC}

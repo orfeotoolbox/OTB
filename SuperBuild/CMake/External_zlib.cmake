@@ -26,7 +26,7 @@ SETUP_SUPERBUILD(ZLIB)
 # Try official release 1.2.11
 ExternalProject_Add(ZLIB
   PREFIX ZLIB
-  URL "http://downloads.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.gz"
+  URL "https://downloads.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.gz"
   URL_MD5 1c9f62f0778697a09d36121ead88e08e
   BINARY_DIR ${ZLIB_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

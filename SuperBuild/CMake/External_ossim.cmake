@@ -47,7 +47,7 @@ endif()
 # archive version
 ExternalProject_Add(OSSIM
   PREFIX OSSIM
-  URL "http://download.osgeo.org/ossim/source/ossim-1.8.20/ossim-1.8.20-3.tar.gz"
+  URL "https://download.osgeo.org/ossim/source/ossim-1.8.20/ossim-1.8.20-3.tar.gz"
   URL_MD5 eb2265db0d4d9201e255b92317121cfd
   BINARY_DIR ${OSSIM_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
