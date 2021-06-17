@@ -28,27 +28,60 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 #include <boost/config.hpp>
-
-#include "otbOperatorUtilities.h"
+#include <boost/operators.hpp>
 
 // boost::posix_time::time_duration doesn't have a sufficient precision to
 // store things such an azimuth time interval, and yet, this IS a duration.
 // Hence this new class injected into boost namespace to emulate a duration
 // with precision behind the microsecond.
-namespace boost { namespace posix_time {
+namespace boost 
+{
+namespace posix_time 
+{
+
+namespace details
+{
+// division by a scalar and ratio
+template <typename T, typename R> struct dividable 
+{
+  typedef R scalar_type;
+  friend T operator/(T lhs, scalar_type const& rhs)
+  {
+    lhs /= rhs;
+    return lhs;
+  }
+  friend scalar_type operator/(T const& lhs, T const& rhs)
+  {
+    return ratio_(lhs, rhs);
+  }
+};
+
+template <typename T> struct streamable
+{
+  friend std::ostream & operator<<(std::ostream & os, const T & v)
+  {
+    return v.display(os);
+  }
+  friend std::istream & operator>>(std::istream & is, T & v)
+  {
+    return v.read(is);
+  }
+};
+} // namespace details
+
   class precise_duration;
   double ratio_(precise_duration const& lhs, precise_duration const& rhs);
 
   class precise_duration
-      : private boostAdapter::addable<precise_duration>
-      , private boostAdapter::substractable<precise_duration>
-      , private boostAdapter::streamable<precise_duration>
-      , private boostAdapter::multipliable2<precise_duration, double>
-      , private boostAdapter::dividable<precise_duration, double>
-      , private boostAdapter::equality_comparable<precise_duration>
-      , private boostAdapter::less_than_comparable<precise_duration>
-      , private boostAdapter::addable<ptime, precise_duration>
-      , private boostAdapter::substractable<ptime, precise_duration>
+      : private boost::addable<precise_duration>
+      , private boost::subtractable<precise_duration>
+      , private details::streamable<precise_duration>
+      , private boost::multipliable2<precise_duration, double>
+      , private details::dividable<precise_duration, double>
+      , private boost::equality_comparable<precise_duration>
+      , private boost::less_than_comparable<precise_duration>
+      , private boost::addable<ptime, precise_duration>
+      , private boost::subtractable<ptime, precise_duration>
       {
       public:
          typedef double scalar_type;
@@ -155,7 +188,7 @@ TimeType ReadFormattedDate(const std::string & dateStr, const std::string & form
 
 #else //OTB_USE_BOOST_TIME
 
-#include "otbOperatorUtilities.h"
+#include <boost/operators.hpp>
 #include <cassert>
 #include <iomanip>
 
@@ -165,6 +198,42 @@ namespace MetaData
 {
 namespace details
 {
+
+template <typename U, typename V> struct substractable_asym
+{
+  friend U operator-(V const& lhs, V const& rhs) 
+  {
+    return V::template diff<U,V>(lhs, rhs);
+  }
+};
+
+// division by a scalar and ratio
+template <typename T, typename R> struct dividable 
+{
+  typedef R scalar_type;
+  friend T operator/(T lhs, scalar_type const& rhs)
+  {
+    lhs /= rhs;
+    return lhs;
+  }
+  friend scalar_type operator/(T const& lhs, T const& rhs)
+  {
+    return ratio_(lhs, rhs);
+  }
+};
+
+template <typename T> struct streamable
+{
+  friend std::ostream & operator<<(std::ostream & os, const T & v)
+  {
+    return v.display(os);
+  }
+  friend std::istream & operator>>(std::istream & is, T & v)
+  {
+    return v.read(is);
+  }
+};
+
 class DayFrac
 {
   public:
@@ -249,13 +318,13 @@ class DayFrac
     */
    class Duration
       : public details::DayFrac
-      , private boostAdapter::addable<Duration>
-      , private boostAdapter::substractable<Duration>
-      , private boostAdapter::streamable<Duration>
-      , private boostAdapter::multipliable2<Duration, double>
-      , private boostAdapter::dividable<Duration, details::DayFrac::scalar_type>
-      , private boostAdapter::equality_comparable<Duration>
-      , private boostAdapter::less_than_comparable<Duration>
+      , private boost::addable<Duration>
+      , private boost::subtractable<Duration>
+      , private details::streamable<Duration>
+      , private boost::multipliable2<Duration, double>
+      , private details::dividable<Duration, details::DayFrac::scalar_type>
+      , private boost::equality_comparable<Duration>
+      , private boost::less_than_comparable<Duration>
       {
       public:
          typedef details::DayFrac::scalar_type scalar_type;
@@ -293,12 +362,12 @@ class DayFrac
     */
    class ModifiedJulianDate
       : public details::DayFrac
-      , private boostAdapter::addable<ModifiedJulianDate, Duration>
-      , private boostAdapter::substractable<ModifiedJulianDate, Duration>
-      , private boostAdapter::substractable_asym<Duration, ModifiedJulianDate>
-      , private boostAdapter::streamable<ModifiedJulianDate>
-      , private boostAdapter::equality_comparable<ModifiedJulianDate>
-      , private boostAdapter::less_than_comparable<ModifiedJulianDate>
+      , private boost::addable<ModifiedJulianDate, Duration>
+      , private boost::subtractable<ModifiedJulianDate, Duration>
+      , private details::substractable_asym<Duration, ModifiedJulianDate>
+      , private details::streamable<ModifiedJulianDate>
+      , private boost::equality_comparable<ModifiedJulianDate>
+      , private boost::less_than_comparable<ModifiedJulianDate>
       {
       public:
          typedef details::DayFrac::scalar_type scalar_type;
