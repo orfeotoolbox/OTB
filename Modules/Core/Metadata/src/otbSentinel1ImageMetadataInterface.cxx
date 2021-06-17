@@ -373,7 +373,7 @@ std::vector<AzimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate(con
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> afr.azimuthTime;
     afr.t0 = xmlMS.GetAs<double>(path_root + ".t0");
     afr.azimuthFmRatePolynomial = xmlMS.GetAsVector<double>(path_root + ".azimuthFmRatePolynomial",
-    		' ', xmlMS.GetAs<int>(path_root + ".azimuthFmRatePolynomial.count"));
+        ' ', xmlMS.GetAs<int>(path_root + ".azimuthFmRatePolynomial.count"));
     azimuthFmRateVector.push_back(afr);
   }
   return azimuthFmRateVector;
@@ -396,9 +396,9 @@ std::vector<DopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCentroid
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> dopplerCent.azimuthTime;
     dopplerCent.t0 = xmlMS.GetAs<double>(path_root + ".t0");
     dopplerCent.dopCoef = xmlMS.GetAsVector<double>(path_root + ".dataDcPolynomial",
-						    ' ', xmlMS.GetAs<int>(path_root + ".dataDcPolynomial.count"));
+                  ' ', xmlMS.GetAs<int>(path_root + ".dataDcPolynomial.count"));
     dopplerCent.geoDopCoef = xmlMS.GetAsVector<double>(path_root + ".geometryDcPolynomial",
-						       ' ', xmlMS.GetAs<int>(path_root + ".geometryDcPolynomial.count"));
+                  ' ', xmlMS.GetAs<int>(path_root + ".geometryDcPolynomial.count"));
     dopplerCentroidVector.push_back(dopplerCent);
   }
   return dopplerCentroidVector;
@@ -419,13 +419,7 @@ std::vector<Orbit> Sentinel1ImageMetadataInterface::GetOrbits(const XMLMetadataS
     std::string path_root = "product.generalAnnotation.orbitList.orbit_" + oss.str();
     Orbit orbit;
 
-    auto dateStr = xmlMS.GetAs<std::string>(path_root + ".time");
-
-    std::stringstream ss;
-    auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
-    ss.imbue(std::locale(std::locale(), facet));
-    ss << xmlMS.GetAs<std::string>(path_root + ".time");
-    ss >> orbit.time;
+    orbit.time = MetaData::ReadFormattedDate(xmlMS.GetAs<std::string>(path_root + ".time"));
 
     orbit.position[0] = xmlMS.GetAs<double>(path_root + ".position.x");
     orbit.position[1] = xmlMS.GetAs<double>(path_root + ".position.y");
@@ -492,19 +486,14 @@ std::vector<BurstRecord> Sentinel1ImageMetadataInterface::GetBurstRecords(const 
   // number of burst records
   int numberOfBursts = xmlMS.GetAs<int>(0, prefix + "burstList.count");
 
-  std::stringstream ss;
-  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
-  ss.imbue(std::locale(std::locale(), facet));
-
   if (!numberOfBursts)
   {
     BurstRecord record;
 
-    ss << xmlMS.GetAs<std::string>("product.imageAnnotation.imageInformation.productFirstLineUtcTime");
-    ss >> record.azimuthStartTime;
-
-    ss << xmlMS.GetAs<std::string>("product.imageAnnotation.imageInformation.productLastLineUtcTime");
-    ss >> record.azimuthStopTime;
+    record.azimuthStartTime = MetaData::ReadFormattedDate(
+              xmlMS.GetAs<std::string>("product.imageAnnotation.imageInformation.productFirstLineUtcTime"));
+    record.azimuthStopTime = MetaData::ReadFormattedDate(
+              xmlMS.GetAs<std::string>("product.imageAnnotation.imageInformation.productLastLineUtcTime"));
 
     record.startLine = 0;
     record.endLine = xmlMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines") - 1;
@@ -526,9 +515,7 @@ std::vector<BurstRecord> Sentinel1ImageMetadataInterface::GetBurstRecords(const 
 
       BurstRecord record;
 
-      MetaData::TimeType azimuthTime;
-      ss << xmlMS.GetAs<std::string>(burstPath + "azimuthTime");
-      ss >> azimuthTime;
+      MetaData::TimeType azimuthTime = MetaData::ReadFormattedDate(xmlMS.GetAs<std::string>(burstPath + "azimuthTime"));
 
       auto firstValidSamples = xmlMS.GetAsVector<int>(burstPath + "firstValidSample");
       int firstValidSample = 0, lastValidSample = samplesPerBurst - 1;
@@ -593,18 +580,15 @@ std::vector<CoordinateConversionRecord> Sentinel1ImageMetadataInterface::GetCoor
 
   auto listCount = xmlMS.GetAs<int>(prefixPath + "count");
 
-  std::stringstream ss;
-  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
-  ss.imbue(std::locale(std::locale(), facet));
-
   for (int i = 0; i < listCount; i++)
   {
     CoordinateConversionRecord coordinateConversionRecord;
     const std::string recordPath = prefixPath +"coordinateConversion_" + std::to_string(i+1) + ".";
-    
-    //coordinateConversionRecord.azimuthTime;
-    ss << xmlMS.GetAs<std::string>(recordPath + "azimuthTime");
-    ss >> coordinateConversionRecord.azimuthTime;
+
+    coordinateConversionRecord.azimuthTime = MetaData::ReadFormattedDate(
+                                xmlMS.GetAs<std::string>(recordPath + "azimuthTime"));
+
+
     coordinateConversionRecord.rg0 = xmlMS.GetAs<double>(recordPath + rg0_path);
     coordinateConversionRecord.coeffs = xmlMS.GetAsVector<double>(recordPath + coeffs_path, ' ');
 
@@ -612,29 +596,6 @@ std::vector<CoordinateConversionRecord> Sentinel1ImageMetadataInterface::GetCoor
   }
 
   return records;
-}
-
-
-std::unordered_map<std::string, GCPTime> Sentinel1ImageMetadataInterface::GetGCPTimes(const XMLMetadataSupplier &xmlMS,
-                                                                                          const Projection::GCPParam & gcps) const
-{
-  std::unordered_map<std::string, GCPTime> gcpTimes;
-  
-  std::stringstream ss;
-  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
-  ss.imbue(std::locale(std::locale(), facet));
-
-  for (const auto & gcp : gcps.GCPs)
-  {
-    const std::string prefix = "product.geolocationGrid.geolocationGridPointList.geolocationGridPoint_" + gcp.m_Id + ".";
-    GCPTime time;
-    ss << xmlMS.GetAs<std::string>(prefix + "azimuthTime");
-    ss >> time.azimuthTime;
-    time.slantRangeTime = xmlMS.GetAs<double>(prefix + "slantRangeTime"); 
-    gcpTimes[gcp.m_Id] = time;
-  }
-
-  return gcpTimes;
 }
 
 double Sentinel1ImageMetadataInterface::getBandTerrainHeight(const XMLMetadataSupplier &xmlMS) const
@@ -655,9 +616,10 @@ double Sentinel1ImageMetadataInterface::getBandTerrainHeight(const XMLMetadataSu
   return heightSum / (double)listCount;
 }
 
-void ReadGCP(const XMLMetadataSupplier &AnnotationMS, ImageMetadata& imd)
+void ReadGCP(const XMLMetadataSupplier &AnnotationMS, 
+              Projection::GCPParam &gcp, 
+              std::unordered_map<std::string, GCPTime> & gcpTimes)
 {
-  Projection::GCPParam gcp;
   std::stringstream ss;
 
   // Get the ellipsoid and semi-major, semi-minor axes
@@ -700,8 +662,40 @@ void ReadGCP(const XMLMetadataSupplier &AnnotationMS, ImageMetadata& imd)
                           AnnotationMS.GetAs<double>(ss.str() + "longitude"), // px
                           AnnotationMS.GetAs<double>(ss.str() + "latitude"),  // py
                           AnnotationMS.GetAs<double>(ss.str() + "height"));   // pz
+
+    GCPTime time;
+    time.azimuthTime = MetaData::ReadFormattedDate(AnnotationMS.GetAs<std::string>(ss.str() + "azimuthTime"));
+    time.slantRangeTime = AnnotationMS.GetAs<double>(ss.str() + "slantRangeTime"); 
+    gcpTimes[std::to_string(i)] = time;
   }
-  imd.Add(MDGeom::GCP, gcp);
+}
+
+void Sentinel1ImageMetadataInterface::ReadSarParamAndGCPs(const XMLMetadataSupplier &AnnotationMS,
+                                                          SARParam& sarParam,
+                                                          Projection::GCPParam &gcp)
+{
+  std::unordered_map<std::string, GCPTime> gcpTimes;
+  // Fetch the GCP
+  ReadGCP(AnnotationMS, gcp, gcpTimes);
+  sarParam.gcpTimes = gcpTimes;
+
+  sarParam.azimuthFmRates = this->GetAzimuthFmRate(AnnotationMS);
+  sarParam.dopplerCentroids = this->GetDopplerCentroid(AnnotationMS);
+  sarParam.orbits = this->GetOrbits(AnnotationMS);
+
+  sarParam.slantRangeToGroundRangeRecords = this->GetCoordinateConversionRecord(AnnotationMS, "sr0", "srgrCoefficients");
+  sarParam.groundRangeToSlantRangeRecords = this->GetCoordinateConversionRecord(AnnotationMS, "gr0", "grsrCoefficients");
+
+  sarParam.azimuthTimeInterval = MetaData::seconds(
+    AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthTimeInterval")
+    );
+
+  sarParam.burstRecords = this->GetBurstRecords(AnnotationMS, sarParam.azimuthTimeInterval);
+
+  sarParam.nearRangeTime = AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.slantRangeTime");
+  sarParam.rangeSamplingRate = AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.rangeSamplingRate");
+  sarParam.rangeResolution = AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.rangePixelSpacing");
+
 }
 
 void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
@@ -773,28 +767,11 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Add(MDNum::OrbitNumber, AnnotationMS.GetAs<double>("product.adsHeader.absoluteOrbitNumber"));
   imd.Add(MDNum::PixelSpacing, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.rangePixelSpacing"));
 
-  // Fetch the GCP
-  ReadGCP(AnnotationMS, imd);
-
+  Projection::GCPParam gcp;
   SARParam sarParam;
-  sarParam.azimuthFmRates = this->GetAzimuthFmRate(AnnotationMS);
-  sarParam.dopplerCentroids = this->GetDopplerCentroid(AnnotationMS);
-  sarParam.orbits = this->GetOrbits(AnnotationMS);
+  ReadSarParamAndGCPs(AnnotationMS, sarParam, gcp);
 
-  sarParam.slantRangeToGroundRangeRecords = this->GetCoordinateConversionRecord(AnnotationMS, "sr0", "srgrCoefficients");
-  sarParam.groundRangeToSlantRangeRecords = this->GetCoordinateConversionRecord(AnnotationMS, "gr0", "grsrCoefficients");
-
-  sarParam.azimuthTimeInterval = boost::posix_time::precise_duration(
-    AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthTimeInterval")
-    * 1e6);
-
-  sarParam.burstRecords = this->GetBurstRecords(AnnotationMS, sarParam.azimuthTimeInterval);
-
-  sarParam.nearRangeTime = AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.slantRangeTime");
-  sarParam.rangeSamplingRate = AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.rangeSamplingRate");
-  sarParam.rangeResolution = AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.rangePixelSpacing");
-
-  sarParam.gcpTimes = this->GetGCPTimes(AnnotationMS, imd.GetGCPParam());
+  imd.Add(MDGeom::GCP, gcp);
 
   imd.Add(MDNum::NumberOfLines, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfLines"));
   imd.Add(MDNum::NumberOfColumns, AnnotationMS.GetAs<int>("product.imageAnnotation.imageInformation.numberOfSamples"));

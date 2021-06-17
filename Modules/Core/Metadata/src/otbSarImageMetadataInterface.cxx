@@ -239,10 +239,6 @@ std::vector<Orbit> SarImageMetadataInterface::GetOrbitsGeom() const
   // This streams will hold the iteration number
   std::ostringstream oss;
 
-  std::stringstream ss;
-  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
-  ss.imbue(std::locale(std::locale(), facet));
-
   for (int listId = 0 ; listId <= listCount - 1 ; ++listId)
   {
     oss.str("");
@@ -251,8 +247,7 @@ std::vector<Orbit> SarImageMetadataInterface::GetOrbitsGeom() const
     std::string path_root = "orbitList.orbit[" + oss.str() + "]";
     Orbit orbit;
 
-    ss << m_MetadataSupplierInterface->GetAs<std::string>(path_root + ".time");
-    ss >> orbit.time;
+    orbit.time = MetaData::ReadFormattedDate(m_MetadataSupplierInterface->GetAs<std::string>(path_root + ".time"));
 
     orbit.position[0] = m_MetadataSupplierInterface->GetAs<double>(path_root + ".x_pos");
     orbit.position[1] = m_MetadataSupplierInterface->GetAs<double>(path_root + ".y_pos");
@@ -273,10 +268,6 @@ std::vector<BurstRecord> SarImageMetadataInterface::GetBurstRecordsGeom() const
 
   int listCount = m_MetadataSupplierInterface->GetAs<int>(prefix + "geom.bursts.number");
 
-  std::stringstream ss;
-  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
-  ss.imbue(std::locale(std::locale(), facet));
-
   const int version = m_MetadataSupplierInterface->GetAs<int>("header.version");
 
   for (int listId = 0 ; listId <= listCount - 1 ; ++listId)
@@ -284,11 +275,8 @@ std::vector<BurstRecord> SarImageMetadataInterface::GetBurstRecordsGeom() const
     const std::string burstName = prefix + "geom.bursts.burst[" + std::to_string(listId) + "].";
     BurstRecord record;
     
-    ss << m_MetadataSupplierInterface->GetAs<std::string>(burstName + "azimuth_start_time");
-    ss >> record.azimuthStartTime;
-
-    ss << m_MetadataSupplierInterface->GetAs<std::string>(burstName + "azimuth_stop_time");
-    ss >> record.azimuthStopTime;
+    record.azimuthStartTime = MetaData::ReadFormattedDate(m_MetadataSupplierInterface->GetAs<std::string>(burstName + "azimuth_start_time"));
+    record.azimuthStopTime = MetaData::ReadFormattedDate(m_MetadataSupplierInterface->GetAs<std::string>(burstName + "azimuth_stop_time"));
 
     record.startLine = m_MetadataSupplierInterface->GetAs<int>(burstName + "start_line");
     record.endLine = m_MetadataSupplierInterface->GetAs<int>(burstName + "end_line");
@@ -368,8 +356,8 @@ bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
   sarParam.rangeResolution = m_MetadataSupplierInterface->GetAs<double>(
                                 supportDataPrefix + "range_spacing");
 
-  sarParam.azimuthTimeInterval = boost::posix_time::precise_duration(m_MetadataSupplierInterface->GetAs<double>(
-                                supportDataPrefix + "line_time_interval") * 1e6);
+  sarParam.azimuthTimeInterval = MetaData::DurationType(m_MetadataSupplierInterface->GetAs<double>(
+                                supportDataPrefix + "line_time_interval") );
 
   return true;
 }

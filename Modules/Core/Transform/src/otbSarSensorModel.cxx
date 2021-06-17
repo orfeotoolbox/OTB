@@ -27,8 +27,6 @@
 
 namespace otb
 {
-using boost::posix_time::seconds;
-
 itk::Point<double, 3> EcefToWorld(const itk::Point<double, 3> & ecefPoint)
 {
   auto transform = otb::GenericMapProjection<otb::TransformDirection::INVERSE, double,3, 3>::New();
@@ -53,24 +51,26 @@ double DotProduct(const itk::Point<double, 3> & pt1, const itk::Point<double, 3>
 }
 
 
-SarSensorModel::SarSensorModel(const ImageMetadata & imd) 
-          : m_Imd(imd),
-            m_AzimuthTimeOffset(boost::posix_time::seconds(0)),
-            m_RangeTimeOffset(0.)
+SarSensorModel::SarSensorModel( const std::string & productType,
+                                const SARParam & sarParam,
+                                const Projection::GCPParam & gcps)
+                            : m_ProductType(productType),
+                              m_GCP(gcps),
+                              m_SarParam(sarParam),
+                              m_AzimuthTimeOffset(MetaData::seconds(0)),
+                              m_RangeTimeOffset(0.)
 {
-  if (!imd.Has(MDGeom::SAR))
-  {
-    otbGenericExceptionMacro(itk::ExceptionObject, <<"Input metadata does not contain SAR parameters");
-  }
-
-  m_SarParam = boost::any_cast<SARParam>(imd[MDGeom::SAR]);
-  
   OptimizeTimeOffsetsFromGcps();
 
   const std::vector<std::string> grdProductTypes = {"GRD", "MGD", "GEC", "EEC"};
-  m_IsGrd = m_Imd.Has(MDStr::ProductType) &&
-    std::find(grdProductTypes.begin(), grdProductTypes.end(), m_Imd[MDStr::ProductType]) != grdProductTypes.end();
+  m_IsGrd = std::find(grdProductTypes.begin(), grdProductTypes.end(), m_ProductType) != grdProductTypes.end();
+}
 
+SarSensorModel::SarSensorModel(const ImageMetadata & imd)
+          : SarSensorModel(imd.Has(MDStr::ProductType) ? imd[MDStr::ProductType] : "UNKNOWN",
+                            boost::any_cast<SARParam>(imd[MDGeom::SAR]),
+                            imd.GetGCPParam())
+{
 }
 
 void SarSensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DType& outLineSample) const
@@ -138,9 +138,9 @@ void SarSensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
                                              double  heightAboveEllipsoid,
                                              Point3DType& worldPt) const
 {
-  assert(m_Imd.Has(MDGeom::GCP));
+  assert(m_GCP.GCP.size());
 
-  const auto& gcp = findClosestGCP(imPt, m_Imd.GetGCPParam());
+  const auto& gcp = findClosestGCP(imPt, m_GCP);
 
   Point3DType ecefPoint;
 
@@ -309,19 +309,16 @@ void SarSensorModel::interpolateSensorPosVel(const TimeType & azimuthTime,
 
 void SarSensorModel::OptimizeTimeOffsetsFromGcps()
 {
-  if (!m_Imd.Has(MDGeom::GCP))
-  {
-    return;
-  }
+  assert(m_GCP.GCP.size());
 
-  DurationType cumulAzimuthTime(seconds(0));
+  DurationType cumulAzimuthTime(MetaData::seconds(0));
   unsigned int count=0;
 
   // reset offsets before optimisation
-  m_AzimuthTimeOffset = seconds(0);
-  auto gcpParam = m_Imd.GetGCPParam();
+  m_AzimuthTimeOffset = MetaData::seconds(0);
+
   // First, fix the azimuth time
-  for(auto gcpIt = gcpParam.GCPs.begin(); gcpIt!=gcpParam.GCPs.end(); ++gcpIt)
+  for(auto gcpIt = m_GCP.GCPs.begin(); gcpIt!= m_GCP.GCPs.end(); ++gcpIt)
   {
     auto gcpTimeIt = m_SarParam.gcpTimes.find(gcpIt->m_Id);
     if (gcpTimeIt != std::end(m_SarParam.gcpTimes))
@@ -347,7 +344,7 @@ void SarSensorModel::OptimizeTimeOffsetsFromGcps()
       }
     }
   }
-  m_AzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(seconds(0));
+  m_AzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(MetaData::seconds(0));
 }
 
 void SarSensorModel::AzimuthTimeToLine(const TimeType & azimuthTime, double & line) const
@@ -668,9 +665,7 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
   for(; next != burstRecords.cend() ;++it,++next)
   {
     DurationType timeOverlapEnd = (it->azimuthStopTime - next->azimuthStartTime);
-
     unsigned long overlapLength = timeOverlapEnd/m_SarParam.azimuthTimeInterval;
-
     unsigned long halfLineOverlapEnd = overlapLength/2;
     TimeType endTimeInNextBurst = it->azimuthStopTime-(halfLineOverlapEnd-1)*m_SarParam.azimuthTimeInterval;
     
@@ -735,11 +730,10 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
   burstRecords.push_back(deburstBurst);
 
   // Now move GCPs
-  auto gcpParam = m_Imd.GetGCPParam();
 
   std::vector<GCP> deburstGCPs;
   
-  for (auto gcp : gcpParam.GCPs)
+  for (auto gcp : m_GCP.GCPs)
   {
     unsigned long newLine=0;
 
@@ -774,7 +768,7 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
     }
   }
 
-  gcpParam.GCPs.swap(deburstGCPs);
+  m_GCP.GCPs.swap(deburstGCPs);
 
   // TODO: Adapt general metadata : theNearRangeTime, first_time_line, last_time_line
   // redaptMedataAfterDeburst = true;

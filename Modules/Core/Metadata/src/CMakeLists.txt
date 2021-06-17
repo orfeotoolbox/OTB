@@ -77,6 +77,8 @@ set(OTBMetadata_SRC
 
   otbMetadataStorageInterface.cxx
   otbMetadataSupplierInterface.cxx
+
+  otbDateTime.cxx
   )
 
 add_library(OTBMetadata ${OTBMetadata_SRC})
@@ -86,6 +88,7 @@ target_link_libraries(OTBMetadata
   ${OTBOSSIMAdapters_LIBRARIES}
   ${Boost_LIBRARIES}
   ${OTBGdalAdapters_LIBRARIES}
+  ${OTBBoostAdapters_LIBRARIES}
   )
 
 otb_module_target(OTBMetadata)

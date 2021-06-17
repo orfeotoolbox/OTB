@@ -220,7 +220,7 @@ otb_add_test(NAME uaTvSarSensorModelAdapter2 COMMAND otbTransformTestDriver
   )
 
 if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
-  add_executable(otbSarSensorModelTest otbSarSensorModelTest.cxx)
+  add_executable(otbSarSensorModelTest otbSarSensorModelTest.cxx )
   target_link_libraries(
     otbSarSensorModelTest
     ${OTBTransform-Test_LIBRARIES}
@@ -231,20 +231,23 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
            LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff} 
            -23.9431732671333
            15.7637929806278
-           0)
+           0
+           1)
   
   otb_add_test(NAME prTvSarSensorModelSentinel1_geom
            COMMAND otbSarSensorModelTest --
            LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}?&geom=${INPUTDATA}/sentinel1/sentinel1-2.geom
            -23.9431732671333
            15.7637929806278
-           0)
+           0
+           1)
 
   otb_add_test(NAME prTvSarSensorModelCosmoSkyMed
            COMMAND otbSarSensorModelTest --
            LARGEINPUT{COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5} 
            1.3736840073413
            43.5726757080402
+           0
            0)
 
 #  otb_add_test(NAME prTvSarSensorModelTerraSarX
@@ -253,5 +256,17 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
 #           -111.664738184032
 #           36.2692959995967
 #           0)
+
+  add_executable(otbSentinel1SensorModelTest otbSentinel1SensorModelTest.cxx )
+  target_link_libraries(
+    otbSentinel1SensorModelTest
+    ${OTBTransform-Test_LIBRARIES}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
+  
+  otb_add_test(NAME prTvSarSensorModelSentinel1_Deburst
+           COMMAND otbSentinel1SensorModelTest --
+           ${INPUTDATA}/ossimPlugins/s1/s1a-iw2-slc-vv-20160114t054007-20160114t054032-009486-00dc3c-005.xml
+           )
+
 
 endif()

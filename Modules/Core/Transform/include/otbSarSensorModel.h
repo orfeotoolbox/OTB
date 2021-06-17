@@ -32,6 +32,11 @@ namespace otb
 class SarSensorModel
 {
 public:
+
+  SarSensorModel(const std::string & productType,
+                 const SARParam & sarParam,
+                 const Projection::GCPParam & gcps);
+
   SarSensorModel(const ImageMetadata & imd);
   virtual ~SarSensorModel() = default;
 
@@ -130,7 +135,8 @@ private:
                               unsigned long imageLine,
                               unsigned long & deburstLine) const;
 
-  const ImageMetadata & m_Imd;
+  std::string m_ProductType;
+  Projection::GCPParam m_GCP;
   SARParam m_SarParam;
 
   DurationType m_AzimuthTimeOffset;

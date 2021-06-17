@@ -953,17 +953,6 @@ void TerraSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent ind
   Superclass::PrintSelf(os, indent);
 }
 
-MetaData::TimeType ReadFormattedDate(const std::string & dateStr, const std::string & format = "%Y-%m-%dT%H:%M:%S%F") 
-{ 
-    MetaData::TimeType outputDate;
-    std::stringstream ss;
-    auto facet = new boost::posix_time::time_input_facet(format);
-    ss.imbue(std::locale(std::locale(), facet));
-    ss << dateStr;
-    ss >> outputDate;
-    return outputDate; 
-}
-
 void ReadGeorefGCP(const XMLMetadataSupplier & xmlMS, const XMLMetadataSupplier & geoXmlMS, ImageMetadata & imd, SARParam & param)
 {
   Projection::GCPParam gcp;
@@ -998,7 +987,7 @@ void ReadGeorefGCP(const XMLMetadataSupplier & xmlMS, const XMLMetadataSupplier 
   if(GCPCount > 5000)
     GCPCount = 5000;
 
-  const auto azimuthTimeStart = ReadFormattedDate(
+  const auto azimuthTimeStart = MetaData::ReadFormattedDate(
       xmlMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC"));
 
   for(unsigned int i = 1 ; i <= GCPCount ; ++i)
@@ -1015,7 +1004,7 @@ void ReadGeorefGCP(const XMLMetadataSupplier & xmlMS, const XMLMetadataSupplier 
                      0);                                       // pz ("height" in the xml file, but GDAL doesn't read it, so we do the same)
     
     GCPTime time;
-    auto deltaAz = boost::posix_time::precise_duration(geoXmlMS.GetAs<double>(ss.str() + "t"));
+    auto deltaAz = MetaData::DurationType(geoXmlMS.GetAs<double>(ss.str() + "t"));
 
     time.azimuthTime = azimuthTimeStart + deltaAz;
     time.slantRangeTime = param.nearRangeTime + geoXmlMS.GetAs<double>(ss.str() + "tau"); 
@@ -1044,7 +1033,7 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
     std::string path_root = "level1Product.platform.orbit.stateVec_" + oss.str();
     Orbit orbit;
     
-    orbit.time = ReadFormattedDate(xmlMS.GetAs<std::string>(path_root + ".timeUTC"), dateFormat);
+    orbit.time = MetaData::ReadFormattedDate(xmlMS.GetAs<std::string>(path_root + ".timeUTC"), dateFormat);
 
     orbit.position[0] = xmlMS.GetAs<double>(path_root + ".posX");
     orbit.position[1] = xmlMS.GetAs<double>(path_root + ".posY");
@@ -1077,14 +1066,14 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
     }
   }
 
-  const auto azimuthTimeStart = ReadFormattedDate(
+  const auto azimuthTimeStart = MetaData::ReadFormattedDate(
       xmlMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC"), dateFormat);
 
-  const auto azimuthTimeStop = ReadFormattedDate(
+  const auto azimuthTimeStop = MetaData::ReadFormattedDate(
       xmlMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.stop.timeUTC"), dateFormat);
 
   const auto td = azimuthTimeStop - azimuthTimeStart;
-  assert(td > boost::posix_time::seconds(0));
+  assert(td > MetaData::seconds(0));
 
   const auto numberOfRows = xmlMS.GetAs<double>("level1Product.productInfo.imageDataInfo.imageRaster.numberOfRows");
 
