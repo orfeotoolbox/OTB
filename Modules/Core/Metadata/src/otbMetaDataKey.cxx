@@ -424,6 +424,7 @@ MDStrBmType MDStrNames = bimapGenerator<MDStr>(std::map<MDStr, std::string> {
   {MDStr::BandName,"BandName"},
   {MDStr::BeamMode, "BeamMode"},
   {MDStr::BeamSwath, "BeamSwath"},
+  {MDStr::AreaOrPoint, "AreaOrPoint"},
 });
 
 MDTimeBmType MDTimeNames = bimapGenerator<MDTime>(std::map<MDTime, std::string> {
