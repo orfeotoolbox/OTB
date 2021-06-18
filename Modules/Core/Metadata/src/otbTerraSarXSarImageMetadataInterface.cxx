@@ -37,7 +37,10 @@ TerraSarXSarImageMetadataInterface::TerraSarXSarImageMetadataInterface()
 bool TerraSarXSarImageMetadataInterface::CanRead() const
 {
   std::string sensorID = GetSensorID();
-  if (sensorID.find("TSX-1") != std::string::npos)
+
+  // TerraSarXSar model works for PAZ-1 mission as well as TSX-1
+  if (sensorID.find("TSX-1") != std::string::npos || 
+      sensorID.find("PAZ-1") != std::string::npos)
     {
       return true;
     }

@@ -66,6 +66,8 @@ public:
   /** References
    * TerraSAR-X Image Product Guide
    * SNAP source code (s1tbx-io/src/main/java/org/esa/s1tbx/io/terrasarx/TerraSarXProductDirectory.java)
+
+   This class works for TSX-1 and PAZ-1 mission
   */
   bool readAnnotationFile(const std::string & annotationXml, const std::string & geoXml);
 

@@ -111,9 +111,6 @@ namespace ossimplugins
     std::string tmp_name = m_imageName.substr(m_imageName.find("_") + 1, m_imageName.size()-1); 
     std::string polarisation = tmp_name.substr(0, tmp_name.find("_")); 
 
-    assert((polarisation == "HH" || polarisation == "HV") && "Wrong polarization for TSX-1 products. Please, check the initial image name (must be IMAGE_FF_* wiht FF eq to polarisation)");
-    std::cout << "polarisation : " << polarisation << std::endl;
-
     add(theProductKwl, HEADER_PREFIX, "polarisation", polarisation);
 
     // Get product_type
@@ -126,7 +123,7 @@ namespace ossimplugins
 
     ////////////////// Add General Parameters ///////////////// 
     theProductType = ProductType(product_type);
-    theSensorID = "TSX-1";
+    theSensorID = getTextFromFirstNode(xmlRoot, "generalHeader/mission");
     
     std::string sampleType = getTextFromFirstNode(xmlRoot, "productInfo/imageDataInfo/imageDataType");
     std::string orbitDirection = getTextFromFirstNode(xmlRoot, "productInfo/missionInfo/orbitDirection");
@@ -266,7 +263,7 @@ namespace ossimplugins
     readDopplerRate(xmlDoc);
 
     // Parse Doppler Centroid
-    readDopplerCentroid(xmlDoc);
+    readDopplerCentroid(xmlDoc, polarisation);
 
     // Ensure that superclass members are initialized
     saveState(theProductKwl);
@@ -430,6 +427,7 @@ namespace ossimplugins
       {  
 	// Get the polLayer
 	std::string polarisationLayer  = getTextFromFirstNode(**itDopplerNode, "polLayer");
+
 	// Check if the current polLayer match with our image (if not then pass the iteration)
 	if (polarisationLayer != polarisation)
 	  {
