@@ -86,6 +86,26 @@ public:
   bool BurstExtraction(const unsigned int burst_index, std::pair<unsigned long,unsigned long> & lines,
       std::pair<unsigned long,unsigned long> & samples, bool allPixels = false);
 
+   /**
+    * This method will perform a deburst and concatenation operation, and return the
+    * vector of lines and the vector of samples to keep in the 
+    * image file. The lines and samples represents start/size into each independent bursts. 
+    * Note that the deburst operation has no effect if theBurstRecords
+    * contains a single burst. Otherwise it will merge burst together
+    * into a single burst, and update GCPs accordingly.
+    * \return true if the deburst operation succeeded. No changes is
+    * made to the object if the operation fails.
+    * \param lines A container for the lines ranges to keep in the
+    * deburst image.
+    * \param samples A container for the samples ranges to keep in the
+    * deburst image.
+    * \param lines A Boolean to indicate only valids samples are required.
+    */
+   bool DeburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts, 
+            std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts,
+            unsigned int & linesOffset, unsigned int first_burstInd,
+            bool inputWithInvalidPixels=false);
+
 protected:
 
 private:
