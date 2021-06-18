@@ -54,6 +54,8 @@ namespace {// Anonymous namespace
   const ossimString attPolDeg   = "polynomialDegree";
   const ossimString attPolCoef  = "coefficient";
   const ossimString attRefPoint = "referencePoint";
+  const ossimString attRefRow   = "refRow";
+  const ossimString attRefCol   = "refColumn";
 }// Anonymous namespace
 
 
@@ -65,10 +67,10 @@ namespace ossimplugins
     static const char MODULE[] = "ossimplugins::ossimTerraSarXSarSensorModel::saveState";
     SCOPED_LOG(traceDebug, MODULE);
 
-    // kwl.add(prefix,
-    // 	    ossimKeywordNames::TYPE_KW,
-    // 	    "ossimTerraSarXSarSensorModel",
-    // 	    true);
+    kwl.add(prefix,
+    	    ossimKeywordNames::TYPE_KW,
+    	    "ossimTerraSarXSarSensorModel",
+    	    true);
 
    
     // kwl.add("support_data.",
@@ -77,7 +79,7 @@ namespace ossimplugins
     // 	    false);
 
     kwl.addList(theProductKwl,  true);
-      
+
     return ossimSarSensorModel::saveState(kwl, prefix);
   }
 
@@ -123,8 +125,7 @@ namespace ossimplugins
 
     ////////////////// Add General Parameters ///////////////// 
     theProductType = ProductType(product_type);
-    theSensorID = getTextFromFirstNode(xmlRoot, "generalHeader/mission");
-    
+
     std::string sampleType = getTextFromFirstNode(xmlRoot, "productInfo/imageDataInfo/imageDataType");
     std::string orbitDirection = getTextFromFirstNode(xmlRoot, "productInfo/missionInfo/orbitDirection");
     std::string absOrbit = getTextFromFirstNode(xmlRoot, "productInfo/missionInfo/absOrbit");
@@ -137,22 +138,21 @@ namespace ossimplugins
     add(theProductKwl, SUPPORT_DATA_PREFIX, "orbit_pass", orbitDirection);
     add(theProductKwl, SUPPORT_DATA_PREFIX, "abs_orbit", absOrbit);
     add(theProductKwl, SUPPORT_DATA_PREFIX, "acquisition_mode", acquisitionMode);
-    theImageID = sceneId;
 
-    //saveState(theProductKwl);
-
-    //Parse the near range time (in seconds)
+    // Parse the near range time (in seconds)
     theNearRangeTime = getDoubleFromFirstNode(xmlRoot, "productInfo/sceneInfo/rangeTime/firstPixel");
 
     std::cout << "theNearRangeTime " << theNearRangeTime << '\n';
 
-    //Parse the range sampling rate
+    // Parse the range sampling rate
     theRangeSamplingRate = getDoubleFromFirstNode(xmlRoot, "instrument/settings/RSF");
 
     std::cout << "theRangeSamplingRate " << theRangeSamplingRate << '\n';
 
-    //Parse the range resolution
+    // Parse the range resolution
     theRangeResolution = getDoubleFromFirstNode(xmlRoot, "productSpecific/complexImageInfo/slantRangeResolution");
+
+    add(theProductKwl, "meters_per_pixel_x", theRangeResolution);
 
     std::cout << "theRangeResolution " << theRangeResolution << '\n';
 
@@ -162,8 +162,7 @@ namespace ossimplugins
     std::cout << "theRadarFrequency " << theRadarFrequency << '\n';
 
     //Manage only strip map product for now (one burst)
-
-    //Parse azimuth time start/stop
+    // Parse azimuth time start/stop
     const TimeType azimuthTimeStart = getTimeFromFirstNode(xmlRoot, "productInfo/sceneInfo/start/timeUTC");
 
     std::cout << "azimuthTimeStart " << azimuthTimeStart << '\n';
@@ -184,7 +183,6 @@ namespace ossimplugins
     add(theProductKwl,"number_samples", numberOfColumns);  // Does not override the metadata (Why ?????)
     add(theProductKwl, "number_lines", numberOfRows);  // Does not override the metadata (Why ?????)
 
-
     std::cout << "numberOfRows " << numberOfRows << '\n';
 
     //Compute azimuth time interval
@@ -195,6 +193,12 @@ namespace ossimplugins
     
     add(theProductKwl, SUPPORT_DATA_PREFIX, "first_line_time", azimuthTimeStart);
     add(theProductKwl, SUPPORT_DATA_PREFIX, "last_line_time", azimuthTimeStop);
+
+    // Parse the azimut resolution/spacing
+    const double aziSpacing = getDoubleFromFirstNode(xmlRoot, "productSpecific/complexImageInfo/projectedSpacingAzimuth");
+
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_spacing", aziSpacing);
+    add(theProductKwl, "meters_per_pixel_y", aziSpacing);
 
     ////////////////// GRD (detected product) ///////////////// 
     std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
@@ -248,10 +252,14 @@ namespace ossimplugins
     burstRecord.startLine = 0;
     burstRecord.azimuthStartTime = azimuthTimeStart;
     burstRecord.azimuthStopTime = azimuthTimeStop;
-
     burstRecord.endLine = numberOfRows - 1;
-
+    burstRecord.startSample = 0;
+    burstRecord.endSample = numberOfColumns - 1;
+    burstRecord.azimuthAnxTime = 0;
     theBurstRecords.push_back(burstRecord);
+
+    // ul/ur/ll/lr lon/lat coords
+    readSceneCornerCoord(xmlDoc, numberOfRows, numberOfColumns);
 
     // Lookup position/velocity records
     readOrbitVector(xmlDoc);
@@ -266,7 +274,11 @@ namespace ossimplugins
     readDopplerCentroid(xmlDoc, polarisation);
 
     // Ensure that superclass members are initialized
-    saveState(theProductKwl);
+    loadState(theProductKwl);
+
+    // SensorId and ImageId
+    theSensorID = getTextFromFirstNode(xmlRoot, "generalHeader/mission");
+    theImageID = sceneId;
 
     return true;
   }
@@ -304,6 +316,53 @@ namespace ossimplugins
 
     // Try to read annotation file
     return readAnnotationFile(annotation, georef);
+  }
+
+  bool ossimTerraSarXSarSensorModel::readSceneCornerCoord(const ossimRefPtr<ossimXmlDocument> xmlDoc,
+							  unsigned int numberOfRows,
+							  unsigned int numberOfColumns)
+  {
+    std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+    xmlDoc->findNodes("/level1Product/productInfo/sceneInfo/sceneCornerCoord",xnodes);
+
+    std::cout << "Number of corner " << xnodes.size() << '\n';
+
+        for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
+      {
+	// Retrieve for the current corner : row and col
+	const unsigned int row = getTextFromFirstNode(**itNode, attRefRow).toUInt16();
+	const unsigned int col = getTextFromFirstNode(**itNode, attRefCol).toUInt16();
+
+	// Retrieve lat/lon
+	const double lat = getDoubleFromFirstNode(**itNode, attLat);
+	const double lon = getDoubleFromFirstNode(**itNode, attLon);
+
+	// Define which corner to add lat/lon
+	std::string kwl_lat_key = "ul_lat";
+	std::string kwl_lon_key = "ul_lon";
+	if (row == 1 && col == numberOfColumns)
+	  {
+	    kwl_lat_key = "ur_lat";
+	    kwl_lon_key = "ur_lon";
+	  }
+	if (row == numberOfRows && col == numberOfColumns)
+	  {
+	    kwl_lat_key = "lr_lat";
+	    kwl_lon_key = "lr_lon";
+	  }
+	if (row == numberOfRows && col == 1)
+	  {
+	    kwl_lat_key = "ll_lat";
+	    kwl_lon_key = "ll_lon";
+	  }
+
+
+	// Add information into ossimkeywordlist
+	add(theProductKwl, kwl_lat_key, "", lat);
+	add(theProductKwl, kwl_lon_key, "", lon);
+      }
+
+    return true;
   }
 
   

@@ -74,6 +74,9 @@ public:
   bool open(const ossimFilename& file);
 
 private:
+  bool readSceneCornerCoord(const ossimRefPtr<ossimXmlDocument> xmlDoc,
+			    unsigned int numberOfRows,
+			    unsigned int numberOfColumns);
   bool readOrbitVector(const ossimRefPtr<ossimXmlDocument> xmlDoc);
   bool readDopplerRate(const ossimRefPtr<ossimXmlDocument> xmlDoc);
   bool readDopplerCentroid(const ossimRefPtr<ossimXmlDocument> xmlDoc, const std::string polarisation="HH");
