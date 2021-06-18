@@ -68,13 +68,17 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
   imi->ReadSarParamAndGCPs(mds, sarParam, gcpParam);
 
 
-  otb::SarSensorModel model(productType, sarParam, gcpParam);
 
+  std::cout << "OTB Tests" << std::endl;
+
+  std::cout << "Deburst with OTB" << std::endl;
   std::vector<std::pair<unsigned long, unsigned long> > deburstLines;
   std::pair<unsigned long, unsigned long> deburstSamples;
 
-  std::cout << "Deburst with OTB" << std::endl;
+  {
+  otb::SarSensorModel model(productType, sarParam, gcpParam);
   BOOST_TEST(model.Deburst(deburstLines, deburstSamples));
+  }
 
   std::cout << "Deburst lines: ";
   for (const auto & elem: deburstLines)
@@ -83,11 +87,23 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
   }
   std::cout << std::endl;
   std::cout << "Deburst Samples: " << deburstSamples.first << " " << deburstSamples.second << std::endl;
+  
 
+  std::cout << "Burst extraction" << std::endl;
+  unsigned int burstIndex = 3;
+  std::pair<unsigned long, unsigned long> burstExtractionLines;
+  std::pair<unsigned long, unsigned long> burstExtractionSamples;
+
+  bool allPixel = false;
+  {
+  otb::SarSensorModel model(productType, sarParam, gcpParam);
+  BOOST_TEST(model.BurstExtraction(burstIndex, burstExtractionLines, burstExtractionSamples, allPixel));
+  }
 
   // the code below uses OssimPlugins to validate the results OTB (see ossimSentinel1ModelTest).
   // TODO: generate baselines instead.
-  std::cout << "Deburst with OSSIM" << std::endl;
+
+  std::cout << "Ossim Tests" << std::endl;
   std::auto_ptr<ossimProjection> projection
          (ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(annotationXml, 42));
   if (!projection.get()) 
@@ -95,7 +111,7 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
     throw std::runtime_error("Cannot read annotation file ("+annotationXml+"). Cannot create a projection from it.");
   }
 
-  ossimplugins::ossimSentinel1Model * sensor = dynamic_cast<ossimplugins::ossimSentinel1Model*>(projection.get());
+  auto * sensor = dynamic_cast<ossimplugins::ossimSentinel1Model*>(projection.get());
   if (!sensor) 
   {
     throw std::runtime_error(
@@ -103,9 +119,6 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
   }
 
   ossimKeywordlist kwl;
-  sensor->saveState(kwl, "S1.");
-  sensor->loadState(kwl, "S1.");
-
   std::vector<std::pair<unsigned long, unsigned long> > deburstLinesOssim;
   std::pair<unsigned long, unsigned long> deburstSamplesOssim;
 
@@ -127,5 +140,35 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
   BOOST_CHECK(deburstLines.size() == deburstLinesOssim.size() 
               && std::equal(deburstLines.begin(), deburstLines.end(), deburstLinesOssim.begin()));
 
+
+  std::cout << "Burst extraction" << std::endl;
+
+
+  std::auto_ptr<ossimProjection> projection2
+         (ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(annotationXml, 42));
+  auto * sensor2 = dynamic_cast<ossimplugins::ossimSentinel1Model*>(projection2.get());
+  if (!sensor2) 
+  {
+    throw std::runtime_error(
+      "Unlike Expectations, the annotation file ("+annotationXml+") is not a Sentinel Annotation File");
+  }
+  std::pair<unsigned long, unsigned long> ossimBurstExtractionLines;
+  std::pair<unsigned long, unsigned long> ossimBurstExtractionSamples;
+  BOOST_TEST(sensor2->burstExtraction(burstIndex, ossimBurstExtractionLines, ossimBurstExtractionSamples, allPixel));
+
+  std::cout << "OTB : burst extraction lines " << burstExtractionLines.first << " " 
+                                                 << burstExtractionLines.second << std::endl;
+
+  std::cout << "OTB : burst extraction samples " << burstExtractionSamples.first << " " 
+                                                 << burstExtractionSamples.second << std::endl;
+
+  std::cout << "OSSIM : burst extraction lines " << ossimBurstExtractionLines.first << " " 
+                                                 << ossimBurstExtractionLines.second << std::endl;
+
+  std::cout << "OSSIM : burst extraction samples " << ossimBurstExtractionSamples.first << " " 
+                                                 << ossimBurstExtractionSamples.second << std::endl;
+
+  BOOST_CHECK(burstExtractionLines == ossimBurstExtractionLines);
+  BOOST_CHECK(burstExtractionSamples == ossimBurstExtractionSamples);
 
 }

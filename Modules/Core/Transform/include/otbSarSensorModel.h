@@ -71,6 +71,21 @@ public:
                std::pair<unsigned long, unsigned long>& samples,
                bool onlyValidSample = false);
 
+
+  /**
+    * This method will perform an extration of one burst. It wil return the
+    * lines and samples to extract in the image file.
+    * \return true if the extraction operation succeeded. No changes is
+    * made to the object if the operation fails.
+    * \param burst_index Index of Burst.
+    * \param lines A container for the lines to keep in the
+    * standalone burst.
+    * \param samples A container for the samples to keep in the
+    * standalone burst.
+    */
+  bool BurstExtraction(const unsigned int burst_index, std::pair<unsigned long,unsigned long> & lines,
+      std::pair<unsigned long,unsigned long> & samples, bool allPixels = false);
+
 protected:
 
 private:
@@ -138,6 +153,9 @@ private:
   std::string m_ProductType;
   Projection::GCPParam m_GCP;
   SARParam m_SarParam;
+
+  TimeType m_FirstLineTime;
+  TimeType m_LastLineTime;
 
   DurationType m_AzimuthTimeOffset;
   double m_RangeTimeOffset; // Offset in seconds
