@@ -696,6 +696,9 @@ void Sentinel1ImageMetadataInterface::ReadSarParamAndGCPs(const XMLMetadataSuppl
   sarParam.rangeSamplingRate = AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.rangeSamplingRate");
   sarParam.rangeResolution = AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.rangePixelSpacing");
 
+  sarParam.numberOfLinesPerBurst = AnnotationMS.GetAs<unsigned long>("product.swathTiming.linesPerBurst");
+  sarParam.numberOfSamplesPerBurst = AnnotationMS.GetAs<unsigned long>("product.swathTiming.samplesPerBurst");
+
 }
 
 void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)

@@ -359,6 +359,12 @@ bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
   sarParam.azimuthTimeInterval = MetaData::DurationType(m_MetadataSupplierInterface->GetAs<double>(
                                 supportDataPrefix + "line_time_interval") );
 
+  sarParam.numberOfLinesPerBurst = m_MetadataSupplierInterface->GetAs<unsigned long>(
+                                supportDataPrefix + "geom.bursts.number_lines_per_burst");
+
+  sarParam.numberOfSamplesPerBurst = m_MetadataSupplierInterface->GetAs<unsigned long>(
+                                supportDataPrefix + "geom.bursts.number_samples_per_burst");
+
   return true;
 }
 
