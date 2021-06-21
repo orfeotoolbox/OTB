@@ -5,6 +5,7 @@ ProductType SLC
 Polarization HH
 OrbitDirection Descending
 BeamMode FQ9
+AreaOrPoint Area
 TileHintX 2822
 TileHintY 185
 DataType 4
