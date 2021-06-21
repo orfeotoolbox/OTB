@@ -23,11 +23,13 @@
 #define otbClampImageFilter_hxx
 
 #include "otbClampImageFilter.h"
+#include "itkImageScanlineIterator.h"
+#include "itkImageScanlineConstIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkNumericTraits.h"
-#include <limits>
 #include "itkObjectFactory.h"
 #include "itkProgressReporter.h"
+#include <limits>
 
 namespace otb
 {
@@ -131,6 +133,46 @@ void ClampImageFilter<TInputImage, TOutputImage>::ClampOutside(const OutputPixel
   }
 }
 
-} // end namespace itk
+template <class TInputImage, class TOutputImage>
+void
+ClampImageFilter<TInputImage, TOutputImage>
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+{
+  const auto& regionSize = outputRegionForThread.GetSize();
+
+  if (regionSize[0] == 0)
+  {
+    return;
+  }
+  const auto            numberOfLinesToProcess = outputRegionForThread.GetNumberOfPixels() / regionSize[0];
+  itk::ProgressReporter p(this, threadId, numberOfLinesToProcess);
+
+  // Build output iterator
+  itk::ImageScanlineConstIterator<InputImageType>  inIt(this->GetInput(), outputRegionForThread);
+  itk::ImageScanlineIterator<OutputImageType>      outIt(this->GetOutput(), outputRegionForThread);
+
+  // Build a default value
+  typename OutputImageType::PixelType outputValueHolder;
+  // Luc: I'm not sure this will be the correct size given the convoluted
+  // size computations done in the ConvertTypeFunctor
+  itk::NumericTraits<typename OutputImageType::PixelType>::SetLength(outputValueHolder, this->GetOutput()->GetNumberOfComponentsPerPixel());
+
+  while (!outIt.IsAtEnd())
+  {
+    // MoveIterartors will ++ all iterators in the tuple
+    for (; !outIt.IsAtEndOfLine(); ++outIt, ++inIt)
+    {
+      // This will call the operator with inputIterators Get() results
+      // and fill outputValueHolder with the result.
+      m_Functor(outputValueHolder, inIt.Get());
+      outIt.Set(outputValueHolder);
+    }
+    outIt.NextLine();
+    inIt.NextLine();
+    p.CompletedPixel(); // may throw
+  }
+}
+
+} // end namespace otb
 
 #endif

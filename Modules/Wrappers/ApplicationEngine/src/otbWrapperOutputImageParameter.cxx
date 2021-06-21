@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2021 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -20,7 +20,6 @@
 
 #include "otbWrapperOutputImageParameter.h"
 
-#include "otbClampImageFilter.h"
 #include "otbImageIOFactory.h"
 #include "otbWrapperCastImage.h"
 
@@ -81,66 +80,22 @@ std::string OutputImageParameter::ConvertPixelTypeToString(ImagePixelType type)
   // TODO: Could be replaced by constant static string array e.g.:
   // return PIXEL_TYPE_NAME[ type ];
 
-  std::string ret;
   switch (type)
   {
-  case ImagePixelType_uint8:
-  {
-    ret = "uint8";
-    break;
+  case ImagePixelType_uint8:   return "uint8";
+  case ImagePixelType_int16:   return "int16";
+  case ImagePixelType_uint16:  return "uint16";
+  case ImagePixelType_int32:   return "int32";
+  case ImagePixelType_uint32:  return "uint32";
+  case ImagePixelType_float:   return "float";
+  case ImagePixelType_double:  return "double";
+  case ImagePixelType_cint16:  return "cint16";
+  case ImagePixelType_cint32:  return "cint32";
+  case ImagePixelType_cfloat:  return "cfloat";
+  case ImagePixelType_cdouble: return "cdouble";
   }
-  case ImagePixelType_int16:
-  {
-    ret = "int16";
-    break;
-  }
-  case ImagePixelType_uint16:
-  {
-    ret = "uint16";
-    break;
-  }
-  case ImagePixelType_int32:
-  {
-    ret = "int32";
-    break;
-  }
-  case ImagePixelType_uint32:
-  {
-    ret = "uint32";
-    break;
-  }
-  case ImagePixelType_float:
-  {
-    ret = "float";
-    break;
-  }
-  case ImagePixelType_double:
-  {
-    ret = "double";
-    break;
-  }
-  case ImagePixelType_cint16:
-  {
-    ret = "cint16";
-    break;
-  }
-  case ImagePixelType_cint32:
-  {
-    ret = "cint32";
-    break;
-  }
-  case ImagePixelType_cfloat:
-  {
-    ret = "cfloat";
-    break;
-  }
-  case ImagePixelType_cdouble:
-  {
-    ret = "cdouble";
-    break;
-  }
-  }
-  return ret;
+  assert(!"Invalid type");
+  return "ERROR";
 }
 
 bool OutputImageParameter::ConvertStringToPixelType(const std::string& value, ImagePixelType& type)
@@ -247,7 +202,6 @@ void OutputImageParameter::ClampAndWriteVectorImage(TInputImage* in)
       // Change internal state only when everything has been setup
       // without raising exception.
 
-      m_InputCaster  = clamp.icif;
       m_OutputCaster = clamp.ocif;
 
       m_Writer = vrtWriter;
@@ -270,7 +224,6 @@ void OutputImageParameter::ClampAndWriteVectorImage(TInputImage* in)
       // Change internal state only when everything has been setup
       // without raising exception.
 
-      m_InputCaster  = clamp.icif;
       m_OutputCaster = clamp.ocif;
 
       m_Writer = sptWriter;
@@ -301,14 +254,13 @@ void OutputImageParameter::ClampAndWriteVectorImage(TInputImage* in)
   // Change internal state only when everything has been setup
   // without raising exception.
 
-  m_InputCaster  = clamp.icif;
   m_OutputCaster = clamp.ocif;
 
   m_Writer = writer;
   if (IsMultiWritingEnabled())
-    {
+  {
     m_MultiWriter->AddInputWriter<otb::ImageFileWriter<TOutputImage>>(writer);
-    }
+  }
 }
 
 
@@ -376,7 +328,6 @@ void OutputImageParameter::Write()
   m_Writer->Update();
 
   // Clean internal filters
-  m_InputCaster  = nullptr;
   m_OutputCaster = nullptr;
 
   m_Writer = nullptr;
@@ -406,7 +357,7 @@ bool OutputImageParameter::HasValue() const
 
 std::string OutputImageParameter::CheckFileName(bool fixMissingExtension)
 {
-  std::string ret("");
+  std::string ret;
   // Check that there is an ImageIO capable of writing the file
   otb::ExtendedFilenameToWriterOptions::Pointer filenameHelper = otb::ExtendedFilenameToWriterOptions::New();
   filenameHelper->SetExtendedFileName(this->GetFileName());
@@ -456,12 +407,12 @@ void OutputImageParameter::SwitchInput(UInt8RGBAImageType* img)
   writer->SetFileName(GetFileName());
   writer->SetInput(img);
   writer->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
-  
+
   m_Writer = writer;
   if (IsMultiWritingEnabled())
-    {
+  {
     m_MultiWriter->AddInputWriter<otb::ImageFileWriter<UInt8RGBAImageType>>(writer);
-    }
+  }
 }
 
 // Specialization for UInt8RGBImageType
@@ -479,9 +430,9 @@ void OutputImageParameter::SwitchInput(UInt8RGBImageType* img)
 
   m_Writer = writer;
   if (IsMultiWritingEnabled())
-    {
+  {
     m_MultiWriter->AddInputWriter<otb::ImageFileWriter<UInt8RGBImageType>>(writer);
-    }
+  }
 }
 
 void OutputImageParameter::SetFileName(const char* filename)
@@ -498,13 +449,13 @@ void OutputImageParameter::SetFileName(const std::string& filename)
 bool OutputImageParameter::IsMultiWritingEnabled()
 {
   if (m_MultiWriter)
-    {
+  {
     otb::ExtendedFilenameToWriterOptions::Pointer filenameHelper = otb::ExtendedFilenameToWriterOptions::New();
     filenameHelper->SetExtendedFileName(this->GetFileName());
     return filenameHelper->GetMultiWrite();
-    }
+  }
   return false;
 }
 
-}
-}
+} // namespace otb::Wrapper
+} // namespace otb
