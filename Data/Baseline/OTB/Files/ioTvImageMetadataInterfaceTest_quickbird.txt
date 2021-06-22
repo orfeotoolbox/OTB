@@ -1,6 +1,7 @@
 SensorID QB02
 Mission Quickbird
 ProductType P
+AreaOrPoint Area
 TileHintX 27552
 TileHintY 19
 DataType 3

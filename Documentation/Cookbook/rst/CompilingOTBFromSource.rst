@@ -9,7 +9,7 @@ instructions from the :doc:`Installation` section.
 
 OTB is known to work on:
 
-* Visual Studio 2015 on Windows
+* Visual Studio 2017/2019 on Windows
 
 * GCC 5 or higher, Clang 3.4 or higher on GNU/Linux
 
@@ -29,7 +29,7 @@ process:
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `ITK <http://www.itk.org>`_                                      | Yes                   | 4.6.0                      | 4.13.1                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `GDAL <http://www.gdal.org>`_                                    | Yes                   | 2.4.1                      | 3.1.0                    |
+    | `GDAL <http://www.gdal.org>`_                                    | Yes                   | 2.4.1                      | 3.2.2                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `OSSIM <http://www.ossim.org>`_                                  | Yes                   | 1.8.20-3                   | 1.8.20                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
@@ -37,7 +37,7 @@ process:
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `boost <http://www.boost.org>`_                                  | Yes                   |                            | 1.69                     |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `openthreads <http://www.openscenegraph.org>`_                   | Yes                   |                            | 3.4.0                    |
+    | `openthreads <http://www.openscenegraph.org>`_                   | Yes                   |                            | 3.4.1                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `tinyXML <http://www.grinninglizard.com/tinyxml>`_               | Yes                   |                            | 2.6.2                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
@@ -45,7 +45,7 @@ process:
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `Curl <http://www.curl.haxx.se>`_                                | No                    |                            | 7.54.1                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `FFTW <http://www.fftw.org>`_                                    | No                    |                            | 3.3.8                    |
+    | `FFTW <http://www.fftw.org>`_                                    | No                    |                            | 3.3.9                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `GLEW <http://glew.sourceforge.net/>`_                           | No                    |                            | 1.13                     |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
@@ -61,15 +61,15 @@ process:
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `MuParser <http://www.muparser.sourceforge.net>`_                | No                    |                            | 2.2.5                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `MuParserX <http://muparserx.beltoforion.de>`_                   | No                    | 4.0.7                      | 4.0.7                    |
+    | `MuParserX <http://muparserx.beltoforion.de>`_                   | No                    | 4.0.7                      | 4.0.8                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `OpenCV <http://opencv.org>`_                                    | No                    | 3.0.0                      | 4.5.1                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `OPENGL <https://www.opengl.org/>`_                              | No                    |                            |                          |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `Qt <https://www.qt.io/developers/>`_                            | No                    | 5                          | 5.10.1                   |
+    | `Qt <https://www.qt.io/developers/>`_                            | No                    | 5                          | 5.11.3                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `QWT <http://qwt.sourceforge.net>`_                              | No                    | 6                          | 6.1.3                    |
+    | `QWT <http://qwt.sourceforge.net>`_                              | No                    | 6                          | 6.1.6                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `Shark <http://image.diku.dk/shark/>`_                           | No                    | 4                          | 4.0                      |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
@@ -77,14 +77,14 @@ process:
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `SPTW <https://github.com/remicres/sptw.git>`_                   | No                    |                            |                          |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    
+
 GNU/Linux and macOS
 -------------------
 
 Setting up the build environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Note: On some distibutions, gcc 5+ is not available by default. For example in CentOS 7 the default version 
+Note: On some distributions, gcc 5+ is not available by default. For example in CentOS 7 the default version
 is 4.8 (gcc 7 can be installed using devtoolset, see devtoolset6_ and devtoolset7_).
 
 The first thing to do is to create a directory for working with OTB.
@@ -372,9 +372,9 @@ hours to run them all, depending on compilation options
 To run the tests, first make sure to set the option
 ``BUILD_TESTING`` to ``ON`` before building the library.
 
-For some of the tests, you also need the test data and the baselines (~1GB). These files are stored 
+For some of the tests, you also need the test data and the baselines (~1GB). These files are stored
 using `git-lfs` in the `Data` folder at the root of otb sources. To download them, you have to make
-sure `git-lfs` is installed before cloning otb (binaries for `git lfs` are available for different 
+sure `git-lfs` is installed before cloning otb (binaries for `git lfs` are available for different
 OS `here <https://github.com/git-lfs/git-lfs/releases>`_).
 
 After downloading, add the binary to $PATH and run `git lfs install`. You can then clone otb sources :

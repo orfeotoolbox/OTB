@@ -514,7 +514,7 @@ Remote Sensing Letters, vol. 4, n. 2, 2007, pp 260-264.
 The texture is computed for each pixel using its neighborhood. User can
 set the spatial threshold that is the max line length, the spectral
 threshold that is the max difference authorized between a pixel of the
-line and the center pixel of the current neighborhood. The adjustement
+line and the center pixel of the current neighborhood. The adjustment
 constant alpha and the ratio Maximum Consideration Number, which
 describes the shape contour around the central pixel, are used to
 compute the :math:`w - mean` value.

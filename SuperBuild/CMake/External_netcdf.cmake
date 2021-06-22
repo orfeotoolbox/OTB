@@ -36,8 +36,8 @@ endif()
 
 ExternalProject_Add(NETCDF
   PREFIX NETCDF
-  URL "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-4.7.3.tar.gz"
-  URL_MD5 9e1d7f13c2aef921c854d87037bcbd96
+  URL "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-4.7.4.tar.gz"
+  URL_MD5 3e0a97e6abb9a989f8a8a2e395473597
   SOURCE_DIR ${NETCDF_SB_SRC}
   BINARY_DIR ${NETCDF_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

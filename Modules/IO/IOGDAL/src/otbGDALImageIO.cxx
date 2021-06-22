@@ -1126,6 +1126,12 @@ void GDALImageIO::InternalReadImageInformation()
     itk::EncapsulateMetaData<MetaDataKey::BoolVectorType>(dict, MetaDataKey::NoDataValueAvailable, isNoDataAvailable);
     itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::NoDataValue, noDataValues);
   }
+
+  // Read AREA_OR_POINT value if present
+  papszMetadata = dataset->GetMetadata(nullptr);
+  auto areaOrPoint = CSLFetchNameValue(papszMetadata, "AREA_OR_POINT");
+  if (areaOrPoint)
+    m_Imd.Add(MDStr::AreaOrPoint, areaOrPoint);
 }
 
 bool GDALImageIO::CanWriteFile(const char* name)
@@ -1638,6 +1644,14 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   // Write no-data flags from extended filenames
   for (auto const& noData : m_NoDataList)
     dataset->GetRasterBand(noData.first)->SetNoDataValue(noData.second);
+
+  /* -------------------------------------------------------------------- */
+  /*      AREA_OR_POINT                                                   */
+  /* -------------------------------------------------------------------- */
+
+  // Write AREA_OR_POINT flag from ImageMetadata
+  if (m_Imd.Has(MDStr::AreaOrPoint))
+    dataset->SetMetadataItem("AREA_OR_POINT", m_Imd[MDStr::AreaOrPoint].c_str());
 }
 
 std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) const
