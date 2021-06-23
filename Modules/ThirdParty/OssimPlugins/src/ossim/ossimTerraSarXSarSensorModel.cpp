@@ -92,12 +92,12 @@ namespace ossimplugins
   {
     // Specify the looking flag (can be left or right for Cosmo)
     std::string look_side;
-    // get(kwl, SUPPORT_DATA_PREFIX, "look_side", look_side);
+    get(kwl, SUPPORT_DATA_PREFIX, "look_side", look_side);
     
-    // if (look_side != "RIGHT")
-    //   {
-    // 	theRightLookingFlag = false;
-    //   }
+    if (look_side != "RIGHT")
+      {
+    	theRightLookingFlag = false;
+      }
 
     return ossimSarSensorModel::loadState(kwl, prefix);
   }
@@ -129,15 +129,25 @@ namespace ossimplugins
     std::string sampleType = getTextFromFirstNode(xmlRoot, "productInfo/imageDataInfo/imageDataType");
     std::string orbitDirection = getTextFromFirstNode(xmlRoot, "productInfo/missionInfo/orbitDirection");
     std::string absOrbit = getTextFromFirstNode(xmlRoot, "productInfo/missionInfo/absOrbit");
+    std::string orbitCycle = getTextFromFirstNode(xmlRoot, "productInfo/missionInfo/orbitCycle");
+    
     std::string acquisitionMode = getTextFromFirstNode(xmlRoot, "productInfo/acquisitionInfo/imagingMode");
     std::string lookDirection = getTextFromFirstNode(xmlRoot, "productInfo/acquisitionInfo/lookDirection");
     std::string sceneId = getTextFromFirstNode(xmlRoot, "productInfo/sceneInfo/sceneID");
+
+    const double sceneAvgHeight = getDoubleFromFirstNode(xmlRoot, "productInfo/sceneInfo/sceneAverageHeight");
+
+    std::string takeId = getTextFromFirstNode(xmlRoot, "setup/inputData/uniqueDataTakeID");
 
     add(theProductKwl, "sample_type", sampleType);
     add(theProductKwl, SUPPORT_DATA_PREFIX, "slice_num", "1");
     add(theProductKwl, SUPPORT_DATA_PREFIX, "orbit_pass", orbitDirection);
     add(theProductKwl, SUPPORT_DATA_PREFIX, "abs_orbit", absOrbit);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "orbit_cycle", orbitCycle);
     add(theProductKwl, SUPPORT_DATA_PREFIX, "acquisition_mode", acquisitionMode);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "avg_scene_height", acquisitionMode);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "data_take_id", takeId);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "look_side", lookDirection);
 
     // Parse the near range time (in seconds)
     theNearRangeTime = getDoubleFromFirstNode(xmlRoot, "productInfo/sceneInfo/rangeTime/firstPixel");
@@ -156,10 +166,22 @@ namespace ossimplugins
 
     std::cout << "theRangeResolution " << theRangeResolution << '\n';
 
-    //Parse the radar frequency
-    theRadarFrequency = getDoubleFromFirstNode(xmlRoot, "instrument/settings/settingRecord/PRF");
+    // Parse the radar frequency
+    theRadarFrequency = getDoubleFromFirstNode(xmlRoot, "instrument/radarParameters/centerFrequency");
 
     std::cout << "theRadarFrequency " << theRadarFrequency << '\n';
+
+    // Parse the PRF
+    const double azimuthFrequency = getDoubleFromFirstNode(xmlRoot, "instrument/settings/settingRecord/PRF");
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "pulse_repetition_frequency", azimuthFrequency);
+
+    
+    // Parse azimuth and range number of looks
+    const unsigned int nbAziLooks = xmlRoot.findFirstNode("productInfo/imageDataInfo/imageRaster/azimuthLooks")->getText().toUInt16();
+    const unsigned int nbRanLooks = xmlRoot.findFirstNode("productInfo/imageDataInfo/imageRaster/rangeLooks")->getText().toUInt16();
+
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "range_looks", nbRanLooks);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_looks", nbAziLooks);
 
     //Manage only strip map product for now (one burst)
     // Parse azimuth time start/stop
@@ -199,6 +221,13 @@ namespace ossimplugins
 
     add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_spacing", aziSpacing);
     add(theProductKwl, "meters_per_pixel_y", aziSpacing);
+
+    // Parse the azimut/range bandwidth
+    const double aziBandwidth = getDoubleFromFirstNode(xmlRoot, "processing/processingParameter/totalProcessedAzimuthBandwidth");
+    const double ranBandwidth = getDoubleFromFirstNode(xmlRoot, "processing/processingParameter/totalProcessedRangeBandwidth");
+    
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_bandwidth", aziBandwidth);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "range_bandwidth", ranBandwidth);
 
     ////////////////// GRD (detected product) ///////////////// 
     std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
