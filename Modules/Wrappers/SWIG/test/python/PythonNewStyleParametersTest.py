@@ -107,11 +107,11 @@ def test(otb, argv):
 	cm_assert(app.GetParameterFloat('elev.default'), -2.5)
 
 	#18 - parameter ram get
-	app.SetParameterString('opt.ram', '256')
+	app.SetParameterInt('opt.ram', 256)
 	cm_assert(256, app.OPT.RAM)
 
 	#19 - parameter ram set
-	app.OPT.RAM = '512'
+	app.OPT.RAM = 512
 	cm_assert(app.GetParameterInt('opt.ram'), 512)
 
 	#20 - parameter bool set

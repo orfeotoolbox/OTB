@@ -656,8 +656,7 @@ class ApplicationProxy(object):
 
     def SetParameterValue(self, paramKey, value):
       paramType = self.GetParameterType(paramKey)
-      if paramType in [ParameterType_RAM,
-                       ParameterType_String, ParameterType_InputFilename,
+      if paramType in [ParameterType_String, ParameterType_InputFilename,
                        ParameterType_OutputImage, ParameterType_OutputVectorData,
                        ParameterType_OutputFilename,
                        ParameterType_Directory, ParameterType_InputImage,
@@ -667,7 +666,7 @@ class ApplicationProxy(object):
                          ParameterType_InputFilenameList, ParameterType_StringList,
                          ParameterType_ListView, ParameterType_Field, ParameterType_Band]:
         return self.SetParameterStringList(paramKey, value)
-      elif paramType in [ParameterType_Int, ParameterType_Radius]:
+      elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
         return self.SetParameterInt(paramKey, value)
       elif paramType in [ParameterType_Float]:
         return self.SetParameterFloat(paramKey, value)
