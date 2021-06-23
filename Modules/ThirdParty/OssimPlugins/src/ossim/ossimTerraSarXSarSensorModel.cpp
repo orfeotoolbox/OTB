@@ -294,7 +294,7 @@ namespace ossimplugins
     readOrbitVector(xmlDoc);
 
     // Parse GCPs
-    readGCPs(geoXml, azimuthTimeStart);
+    readGCPs(geoXml);
 
     // Parse Doppler Rate
     readDopplerRate(xmlDoc);
@@ -369,12 +369,12 @@ namespace ossimplugins
 	// Define which corner to add lat/lon
 	std::string kwl_lat_key = "ul_lat";
 	std::string kwl_lon_key = "ul_lon";
-	if (row == 1 && col == numberOfColumns)
+	if (row == 1 && col > 1)
 	  {
 	    kwl_lat_key = "ur_lat";
 	    kwl_lon_key = "ur_lon";
 	  }
-	if (row == numberOfRows && col == numberOfColumns)
+	if (row == numberOfRows && col > 1)
 	  {
 	    kwl_lat_key = "lr_lat";
 	    kwl_lon_key = "lr_lon";
@@ -604,15 +604,22 @@ namespace ossimplugins
   }
 
 
-  bool ossimTerraSarXSarSensorModel::readGCPs(const std::string & geoXml, const TimeType azimuthTimeStart)
+  bool ossimTerraSarXSarSensorModel::readGCPs(const std::string & geoXml)
   {
     ossimRefPtr<ossimXmlDocument> xmlGeo = new ossimXmlDocument(geoXml);
+    const ossimXmlNode & xmlGeoRoot = *xmlGeo->getRoot();
 
     std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
     xmlGeo->findNodes("/geoReference/geolocationGrid/gridPoint",xnodes);
 
     std::cout<<"Found "<<xnodes.size()<<" GCPs\n";
 
+    // Retrieve reference azimuth and range Time for geo grid
+    const TimeType tReferenceTime = getTimeFromFirstNode(xmlGeoRoot, "geolocationGrid/gridReferenceTime/tReferenceTimeUTC");
+
+    const double tauReference = getDoubleFromFirstNode(xmlGeoRoot, "geolocationGrid/gridReferenceTime/tauReferenceTime");
+
+    // Loop on points
     for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
       {
         GCPRecordType gcpRecord;
@@ -624,10 +631,11 @@ namespace ossimplugins
 #else
         using ossimplugins::time::microseconds;
 #endif
-        gcpRecord.azimuthTime = azimuthTimeStart + microseconds(deltaAzimuth * 1000000);
+	gcpRecord.azimuthTime = tReferenceTime + microseconds(deltaAzimuth * 1000000);
 
         //Get delta range time
-        gcpRecord.slantRangeTime = theNearRangeTime + getDoubleFromFirstNode(**itNode, attTau);
+	gcpRecord.slantRangeTime = tauReference + getDoubleFromFirstNode(**itNode, attTau);
+
 
         gcpRecord.imPt.x = getDoubleFromFirstNode(**itNode, attCol) - 1.;
 
