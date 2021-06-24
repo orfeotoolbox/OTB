@@ -94,16 +94,12 @@ public:
     return m_CompOut;
   }
 
-  void SetLowest(OutputPixelValueType const& lowest) noexcept
+  void SetThresholds(OutputPixelValueType const& lowest, OutputPixelValueType const& highest) noexcept
   {
+    assert( lowest <= highest );
     m_LowestB  = lowest;
-    m_Zero      = clamp<ThresholdPixelValueType>(m_Zero, lowest, m_HighestB);
-  }
-
-  void SetHighest(OutputPixelValueType const& highest) noexcept
-  {
     m_HighestB  = highest;
-    m_Zero      = clamp<ThresholdPixelValueType>(m_Zero, m_LowestB, highest);
+    m_Zero      = clamp<ThresholdPixelValueType>(ThresholdPixelValueType{}, lowest, highest);
   }
 
   void operator()(OutputPixelType & out, InputPixelType const& in) const

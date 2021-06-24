@@ -246,8 +246,7 @@ private:
 
     m_ClampFilter = ClampFilterType::New();
     m_ClampFilter->SetInput(m_ExtractorFilter->GetOutput());
-    m_ClampFilter->SetLower(GetParameterFloat("parameters.min"));
-    m_ClampFilter->SetUpper(GetParameterFloat("parameters.max"));
+    m_ClampFilter->SetThresholds(GetParameterFloat("parameters.min"), GetParameterFloat("parameters.max"));
 
     m_HarTexFilter  = HarTexturesFilterType::New();
     m_HarImageList  = ImageListType::New();

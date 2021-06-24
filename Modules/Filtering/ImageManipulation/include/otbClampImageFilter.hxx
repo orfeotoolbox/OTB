@@ -45,23 +45,14 @@ ClampImageFilter<TInputImage, TOutputImage>::ClampImageFilter()
 }
 
 template <class TInputImage, class TOutputImage>
-void ClampImageFilter<TInputImage, TOutputImage>::SetLower(OutputPixelValueType val)
+void ClampImageFilter<TInputImage, TOutputImage>::SetThresholds(OutputPixelValueType lowerVal, OutputPixelValueType upperVal)
 {
-  if (m_Lower != val)
+  assert( lowerVal <= upperVal );
+  if ((m_Lower != lowerVal) || (m_Upper != upperVal))
   {
-    m_Lower = val;
-    this->GetFunctor().SetLowest(m_Lower);
-    this->Modified();
-  }
-}
-
-template <class TInputImage, class TOutputImage>
-void ClampImageFilter<TInputImage, TOutputImage>::SetUpper(OutputPixelValueType val)
-{
-  if (m_Upper != val)
-  {
-    m_Upper = val;
-    this->GetFunctor().SetHighest(m_Upper);
+    m_Lower = lowerVal;
+    m_Upper = upperVal;
+    this->GetFunctor().SetThresholds(m_Lower, m_Upper);
     this->Modified();
   }
 }
@@ -88,8 +79,7 @@ void ClampImageFilter<TInputImage, TOutputImage>::ClampAbove(const OutputPixelVa
   {
     m_Lower = std::numeric_limits<OutputPixelValueType>::lowest();
     m_Upper = thresh;
-    this->GetFunctor().SetLowest(m_Lower);
-    this->GetFunctor().SetHighest(m_Upper);
+    this->GetFunctor().SetThresholds(m_Lower, m_Upper);
     this->Modified();
   }
 }
@@ -104,8 +94,7 @@ void ClampImageFilter<TInputImage, TOutputImage>::ClampBelow(const OutputPixelVa
   {
     m_Upper = std::numeric_limits<OutputPixelValueType>::max();
     m_Lower = thresh;
-    this->GetFunctor().SetLowest(m_Lower);
-    this->GetFunctor().SetHighest(m_Upper);
+    this->GetFunctor().SetThresholds(m_Lower, m_Upper);
     this->Modified();
   }
 }
@@ -127,8 +116,7 @@ void ClampImageFilter<TInputImage, TOutputImage>::ClampOutside(const OutputPixel
   {
     m_Lower = lower;
     m_Upper = upper;
-    this->GetFunctor().SetLowest(m_Lower);
-    this->GetFunctor().SetHighest(m_Upper);
+    this->GetFunctor().SetThresholds(m_Lower, m_Upper);
     this->Modified();
   }
 }
