@@ -205,7 +205,14 @@ private:
 
   void DoUpdateParameters() override
   {
-    // Nothing to do here : all parameters are independent
+    if (HasValue("parameters.min") && HasValue("parameters.max"))
+    {
+      if (GetParameterFloat("parameters.min") > GetParameterFloat("parameters.max"))
+      {
+        otbAppLogFATAL(<< "Lower threshold (-parameters.min) cannot be greater than upper threshold (-parameters.max).");
+        return;
+      }
+    }
   }
 
   void DoExecute() override
