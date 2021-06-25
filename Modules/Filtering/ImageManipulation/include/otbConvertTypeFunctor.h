@@ -24,11 +24,11 @@
 
 #include "otbPixelComponentIterator.h"
 #include "otbAlgoClamp.h"
+#include "otbNumericTraits.h"
 #include "itkNumericTraits.h"
 #include <boost/type_traits/is_complex.hpp>
 #include <limits>
 #include <type_traits>
-#include "otbNumericTraits.h"
 
 namespace otb
 {
