@@ -28,9 +28,11 @@
 #include <boost/type_traits/is_complex.hpp>
 #include <limits>
 #include <type_traits>
+#include "otbNumericTraits.h"
 
 namespace otb
 {
+
 namespace Functor
 {
 
@@ -148,8 +150,8 @@ private:
   ConvertTypeFunctor(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  ThresholdPixelValueType m_LowestB  = std::numeric_limits<OutputPixelValueType>::lowest();
-  ThresholdPixelValueType m_HighestB = std::numeric_limits<OutputPixelValueType>::max();
+  ThresholdPixelValueType m_LowestB  = common_lowest<InputPixelValueType, OutputPixelValueType>();
+  ThresholdPixelValueType m_HighestB = common_highest<InputPixelValueType, OutputPixelValueType>();
   OutputPixelValueType m_Zero     {}; // initialized to zero!
   unsigned int         m_CompIn, m_CompOut, m_Scal;
 };
