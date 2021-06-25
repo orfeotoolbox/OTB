@@ -21,6 +21,10 @@
 #ifndef OtbNumericTraits_h
 #define OtbNumericTraits_h
 
+#include <limits>
+#include <cmath>
+#include <type_traits>
+
 namespace otb
 {
 
