@@ -24,6 +24,7 @@
 
 #include "otbPixelComponentIterator.h"
 #include "otbAlgoClamp.h"
+#include "otbNumericTraits.h"
 #include "itkNumericTraits.h"
 #include <boost/type_traits/is_complex.hpp>
 #include <limits>
@@ -31,6 +32,7 @@
 
 namespace otb
 {
+
 namespace Functor
 {
 
@@ -94,16 +96,12 @@ public:
     return m_CompOut;
   }
 
-  void SetLowest(OutputPixelValueType const& lowest) noexcept
+  void SetThresholds(OutputPixelValueType const& lowest, OutputPixelValueType const& highest) noexcept
   {
+    assert( lowest <= highest );
     m_LowestB  = lowest;
-    m_Zero      = clamp<ThresholdPixelValueType>(m_Zero, lowest, m_HighestB);
-  }
-
-  void SetHighest(OutputPixelValueType const& highest) noexcept
-  {
     m_HighestB  = highest;
-    m_Zero      = clamp<ThresholdPixelValueType>(m_Zero, m_LowestB, highest);
+    m_Zero      = clamp<ThresholdPixelValueType>(ThresholdPixelValueType{}, lowest, highest);
   }
 
   void operator()(OutputPixelType & out, InputPixelType const& in) const
@@ -152,8 +150,8 @@ private:
   ConvertTypeFunctor(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  ThresholdPixelValueType m_LowestB  = std::numeric_limits<OutputPixelValueType>::lowest();
-  ThresholdPixelValueType m_HighestB = std::numeric_limits<OutputPixelValueType>::max();
+  ThresholdPixelValueType m_LowestB  = common_lowest<InputPixelValueType, OutputPixelValueType>();
+  ThresholdPixelValueType m_HighestB = common_highest<InputPixelValueType, OutputPixelValueType>();
   OutputPixelValueType m_Zero     {}; // initialized to zero!
   unsigned int         m_CompIn, m_CompOut, m_Scal;
 };

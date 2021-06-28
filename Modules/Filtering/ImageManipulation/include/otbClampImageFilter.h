@@ -84,14 +84,9 @@ public:
   /** The values outside the range are set to \p lower or \p upper. */
   void ClampOutside(const OutputPixelValueType& lower, const OutputPixelValueType& upper);
 
-  /** Set/Get methods to set the lower threshold */
-  void SetLower(OutputPixelValueType val);
-
+  /** Set/Get methods to set the lower and upper threshold */
+  void SetThresholds(OutputPixelValueType lowerVal, OutputPixelValueType upperVal);
   itkGetConstMacro(Lower, OutputPixelValueType);
-
-  /** Set/Get methods to set the upper threshold */
-  void SetUpper(OutputPixelValueType val);
-
   itkGetConstMacro(Upper, OutputPixelValueType);
 
 
