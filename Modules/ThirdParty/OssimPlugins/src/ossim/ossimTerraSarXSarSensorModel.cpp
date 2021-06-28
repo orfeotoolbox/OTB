@@ -201,7 +201,7 @@ void ossimplugins::ossimTerraSarXSarSensorModel::readAnnotationFile(const std::s
 #else
         using ossimplugins::time::microseconds;
 #endif
-        gcpRecord.azimuthTime = azimuthTimeStart + microseconds(deltaAzimuth * 1000000);
+        gcpRecord.azimuthTime = azimuthTimeStart + microseconds(static_cast<int>(deltaAzimuth * 1000000));
 
         //Get delta range time
         gcpRecord.slantRangeTime = theNearRangeTime + getDoubleFromFirstNode(**itNode, attTau);

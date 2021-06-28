@@ -30,6 +30,9 @@
 #include "ossimPluginConstants.h"
 #include <cassert>
 #include <ostream>
+
+#define USE_BOOST_TIME 1
+
 class ossimDate;
 
 namespace ossimplugins { namespace time {
@@ -205,19 +208,19 @@ namespace ossimplugins { namespace time {
 } } // ossimplugins namespace::time
 
 #if defined(USE_BOOST_TIME)
+
+
+// Use nanosecond precision in boost dates and durations
+#define BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
 #  include <boost/config.hpp>
 #  include <boost/date_time/posix_time/posix_time.hpp>
-// boost::posix_time::time_duration doesn't have a sufficient precision to
-// store things such an azimuth time interval, and yet, this IS a duration.
-// Hence this new class injected into boost namespace to emulate a duration
-// with precision behind the microsecond.
-// TODO:
-// - check whether we could have used another boost date
-// - move this elsewhere
-// - move this into another namespace
+
 namespace boost { namespace posix_time {
    class precise_duration;
    double ratio_(precise_duration const& lhs, precise_duration const& rhs);
+
+
+
 
    class precise_duration
       : private ossimplugins::addable<precise_duration>
@@ -230,97 +233,104 @@ namespace boost { namespace posix_time {
       , private ossimplugins::addable<ptime, precise_duration>
       , private ossimplugins::substractable<ptime, precise_duration>
       {
-      public:
-         typedef double scalar_type;
+public:
+        using InternalDurationType = boost::posix_time::time_duration;
 
-         /**@name Construction/destruction
-         */
-         //@{
-         /** Initialization constructor.
-         */
-         precise_duration() {} // = default;
-         explicit precise_duration(double usec_frac)
-            : m_usec_frac(usec_frac) {}
-         precise_duration(time_duration const& d)
-            : m_usec_frac(d.total_microseconds()) {}
-         //@}
+        precise_duration() = default;
+        precise_duration(InternalDurationType const& d): m_duration(d) {}
+precise_duration(double us ): m_duration(boost::posix_time::nanoseconds(static_cast<long>(std::floor(us * 1e3)))){}
+
 
          double total_seconds() const {
-            return total_microseconds() / 1000000.;
+            return m_duration.total_nanoseconds() / 1000000000.;
          }
          double total_microseconds() const {
-            return m_usec_frac;
+            return m_duration.total_nanoseconds() / 1000.;
          }
-         bool is_negative() const { return total_microseconds() < 0.0; }
-         precise_duration invert_sign() { return precise_duration(- total_seconds()); }
-         std::ostream & display(std::ostream & os) const { return os << m_usec_frac; }
-         std::istream & read   (std::istream & is)       { return is >> m_usec_frac; }
+         double total_nanoseconds() const {
+            return m_duration.total_nanoseconds();
+         }
+         
+         bool is_negative() const { return total_nanoseconds() < 0.0; }
+         precise_duration invert_sign() { return precise_duration(- total_microseconds()); }
+         std::ostream & display(std::ostream & os) const { return os << m_duration; }
+         std::istream & read   (std::istream & is)       { return is >> m_duration; }
 
-      protected:
+  friend precise_duration& operator+=(precise_duration & u, precise_duration const& v)
+  {
+    u.m_duration += v.m_duration;
+    return u;
+  }
 
-         /**@name Operations
-         */
-         //@{
-         void add(precise_duration const& rhs) { m_usec_frac += rhs.total_microseconds(); }
-         void sub(precise_duration const& rhs) { m_usec_frac -= rhs.total_microseconds(); }
-         void mult(scalar_type coeff)          { m_usec_frac *= coeff; }
-         void div(scalar_type coeff)           { assert(coeff && "Cannot divide by 0"); m_usec_frac /= coeff; }
-         friend precise_duration& operator+=(precise_duration & u, precise_duration const& v) {
-            u.add(v);
-            return u;
-         }
-         friend ptime& operator+=(ptime & u, precise_duration const& v) {
-            const time_duration d = microseconds(floor(v.total_microseconds()+0.5));
-            u += d;
-            return u;
-         }
-         friend precise_duration& operator-=(precise_duration & u, precise_duration const& v) {
-            u.sub(v);
-            return u;
-         }
-         friend ptime& operator-=(ptime & u, precise_duration const& v) {
-            const time_duration d = microseconds(floor(v.total_microseconds()+0.5));
-            u -= d;
-            return u;
-         }
+  friend precise_duration& operator-=(precise_duration & u, precise_duration const& v)
+  {
+    u.m_duration -= v.m_duration;
+    return u;
+  }
 
-         template <typename U, typename V> static U diff(V const& lhs, V const& rhs) {
-            U const res(lhs.total_microseconds() - rhs.total_microseconds());
-            return res;
-         }
+  friend precise_duration& operator*=(precise_duration & u, double v)
+  {
+    u.m_duration = boost::posix_time::nanoseconds(static_cast<long>(std::round(
+                            u.m_duration.total_nanoseconds() * v)));
+    return u;
+  }
 
-         friend precise_duration& operator*=(precise_duration & u, scalar_type const& v) {
-            u.mult(v);
-            return u;
-         }
-         friend precise_duration& operator/=(precise_duration & u, scalar_type const& v) {
-            u.div(v);
-            return u;
-         }
 
-         friend bool operator<(precise_duration const& lhs, precise_duration const& rhs) {
-            return lhs.total_microseconds() < rhs.total_microseconds();
-         }
-         friend bool operator==(precise_duration const& lhs, precise_duration const& rhs) {
-            return lhs.total_microseconds() == rhs.total_microseconds();
-         }
+  friend precise_duration& operator/=(precise_duration & u, double v)
+  {
+    u.m_duration = boost::posix_time::nanoseconds(static_cast<long>(std::round(
+                            u.m_duration.total_nanoseconds() / v)));
+    return u;
+  }
 
-      public:
-         friend scalar_type ratio_(precise_duration const& lhs, precise_duration const& rhs)
-         { return lhs.total_microseconds() / rhs.total_microseconds(); }
+  friend bool operator < (precise_duration const& lhs, precise_duration const& rhs)
+  {
+    return lhs.m_duration < rhs.m_duration;
+  }
+  
+  friend bool operator == (precise_duration const& lhs, precise_duration const& rhs)
+  {
+    return lhs.m_duration == rhs.m_duration;
+  }
+  
 
-         //@}
-      private:
-         double m_usec_frac;
+  friend ptime& operator+=(ptime & u, precise_duration const& v)
+  {
+    u += v.m_duration;
+    return u;
+  }
+
+  friend ptime& operator-=(ptime & u, precise_duration const& v)
+  {
+    u -= v.m_duration;
+    return u;
+  }
+
+   friend scalar_type ratio_(precise_duration const& lhs, precise_duration const& rhs)
+   { return lhs.total_nanoseconds() / rhs.total_nanoseconds(); }
+
+
+private:
+  InternalDurationType m_duration;
+
       };
 
-   time_duration abs(time_duration d) {
-       if(d.is_negative())
-           d = d.invert_sign();
-       return d;
-   }
+
+   time_duration abs(time_duration d); 
 
 } } // boost::time namespaces
+
+
+
+
+namespace ossimplugins
+{
+namespace time
+{
+boost::posix_time::ptime readFormattedDate(const std::string & dateStr, const std::string & format = "%Y-%m-%dT%H:%M:%S%F");
+}
+};
+
 #endif
 
 #endif // ossimTimeUtilities_h

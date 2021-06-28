@@ -247,7 +247,7 @@ namespace ossimplugins
 // readSBI
 //*************************************************************************************************
   bool ossimCosmoSkymedModel::readSBI(std::string fileSBI)
-  {
+  {std::cout << "--------------------------------- Inside ReadSBI ----------------" << std::endl;
     static const char MODULE[] = "ossimplugins::ossimCosmoSkymedModel::open";
     SCOPED_LOG(traceDebug, MODULE);
     
@@ -471,10 +471,17 @@ namespace ossimplugins
     burstRecord.startSample = add(theProductKwl, BURST_PREFIX, "[0].start_sample", 0);
     burstRecord.endSample   = add(theProductKwl, BURST_PREFIX, "[0].end_sample",  sizex-1);
 
+#if defined(USE_BOOST_TIME)
     burstRecord.azimuthStartTime = add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", 
-				       ossimplugins::time::toModifiedJulianDate(first_line_time));
+               ossimplugins::time::readFormattedDate(first_line_time));
     burstRecord.azimuthStopTime  = add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  
-				       ossimplugins::time::toModifiedJulianDate(last_line_time));
+               ossimplugins::time::readFormattedDate(last_line_time));
+#else
+    burstRecord.azimuthStartTime = add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", 
+               ossimplugins::time::toModifiedJulianDate(first_line_time));
+    burstRecord.azimuthStopTime  = add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  
+               ossimplugins::time::toModifiedJulianDate(last_line_time));
+#endif
 
     burstRecord.azimuthAnxTime = add(theProductKwl, BURST_PREFIX, "[0].azimuth_anx_time", 0);
 
