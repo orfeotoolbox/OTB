@@ -262,11 +262,13 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
     otbSentinel1SensorModelTest
     ${OTBTransform-Test_LIBRARIES}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
-  
-  otb_add_test(NAME prTvSarSensorModelSentinel1_Deburst
-           COMMAND otbSentinel1SensorModelTest --
-           ${INPUTDATA}/ossimPlugins/s1/s1a-iw2-slc-vv-20160114t054007-20160114t054032-009486-00dc3c-005.xml
-           )
 
+  #S1 tests
+  file(GLOB s1_files ${INPUTDATA}/ossimPlugins/s1/*.xml)
+  #Loop over all S1 annotation files
+  foreach(entry ${s1_files})
+    get_filename_component(name ${entry} NAME_WE)
+    otb_add_test( NAME prTvSentinel1SensorModel_${name} COMMAND otbSentinel1SensorModelTest ${entry})
+  endforeach()
 
 endif()
