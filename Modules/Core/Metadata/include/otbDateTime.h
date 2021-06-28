@@ -18,25 +18,27 @@
  * limitations under the License.
  */
 
-#ifndef ossimDateTime_h
-#define ossimDateTime_h
+#ifndef otbDateTime_h
+#define otbDateTime_h
 
-#define OTB_USE_BOOST_TIME 0
-
-#if OTB_USE_BOOST_TIME
-
+// Use nanosecond precision in boost dates and durations
+#define BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 #include <boost/config.hpp>
 #include <boost/operators.hpp>
 
-// boost::posix_time::time_duration doesn't have a sufficient precision to
-// store things such an azimuth time interval, and yet, this IS a duration.
-// Hence this new class injected into boost namespace to emulate a duration
-// with precision behind the microsecond.
 namespace boost 
 {
 namespace posix_time 
+{
+time_duration abs(time_duration d);
+}
+} // boost::time namespaces
+
+namespace otb
+{
+namespace MetaData
 {
 
 namespace details
@@ -60,124 +62,116 @@ template <typename T> struct streamable
 {
   friend std::ostream & operator<<(std::ostream & os, const T & v)
   {
-    return v.display(os);
+    return v.Display(os);
   }
   friend std::istream & operator>>(std::istream & is, T & v)
   {
-    return v.read(is);
+    return v.Read(is);
   }
 };
 } // namespace details
 
-  class precise_duration;
-  double ratio_(precise_duration const& lhs, precise_duration const& rhs);
-
-  class precise_duration
-      : private boost::addable<precise_duration>
-      , private boost::subtractable<precise_duration>
-      , private details::streamable<precise_duration>
-      , private boost::multipliable2<precise_duration, double>
-      , private details::dividable<precise_duration, double>
-      , private boost::equality_comparable<precise_duration>
-      , private boost::less_than_comparable<precise_duration>
-      , private boost::addable<ptime, precise_duration>
-      , private boost::subtractable<ptime, precise_duration>
-      {
-      public:
-         typedef double scalar_type;
-
-         /**@name Construction/destruction
-         */
-         //@{
-         /** Initialization constructor.
-         */
-         precise_duration() {} // = default;
-         explicit precise_duration(double usec_frac)
-            : m_usec_frac(usec_frac) {}
-         precise_duration(time_duration const& d)
-            : m_usec_frac(d.total_microseconds()) {}
-         //@}
-
-         double total_seconds() const {
-            return total_microseconds() / 1000000.;
-         }
-         double total_microseconds() const {
-            return m_usec_frac;
-         }
-         bool is_negative() const { return total_microseconds() < 0.0; }
-         precise_duration invert_sign() { return precise_duration(- total_seconds()); }
-         std::ostream & display(std::ostream & os) const { return os << m_usec_frac; }
-         std::istream & read   (std::istream & is)       { return is >> m_usec_frac; }
-
-      protected:
-
-         /**@name Operations
-         */
-         //@{
-         void add(precise_duration const& rhs) { m_usec_frac += rhs.total_microseconds(); }
-         void sub(precise_duration const& rhs) { m_usec_frac -= rhs.total_microseconds(); }
-         void mult(scalar_type coeff)          { m_usec_frac *= coeff; }
-         void div(scalar_type coeff)           { assert(coeff && "Cannot divide by 0"); m_usec_frac /= coeff; }
-         friend precise_duration& operator+=(precise_duration & u, precise_duration const& v) {
-            u.add(v);
-            return u;
-         }
-         friend ptime& operator+=(ptime & u, precise_duration const& v) {
-            const time_duration d = microseconds(static_cast<int> (floor(v.total_microseconds()+0.5)));
-            u += d;
-            return u;
-         }
-         friend precise_duration& operator-=(precise_duration & u, precise_duration const& v) {
-            u.sub(v);
-            return u;
-         }
-         friend ptime& operator-=(ptime & u, precise_duration const& v) {
-            const time_duration d = microseconds(static_cast<int>( floor(v.total_microseconds()+0.5)));
-            u -= d;
-            return u;
-         }
-
-         template <typename U, typename V> static U diff(V const& lhs, V const& rhs) {
-            U const res(lhs.total_microseconds() - rhs.total_microseconds());
-            return res;
-         }
-
-         friend precise_duration& operator*=(precise_duration & u, scalar_type const& v) {
-            u.mult(v);
-            return u;
-         }
-         friend precise_duration& operator/=(precise_duration & u, scalar_type const& v) {
-            u.div(v);
-            return u;
-         }
-
-         friend bool operator<(precise_duration const& lhs, precise_duration const& rhs) {
-            return lhs.total_microseconds() < rhs.total_microseconds();
-         }
-         friend bool operator==(precise_duration const& lhs, precise_duration const& rhs) {
-            return lhs.total_microseconds() == rhs.total_microseconds();
-         }
-
-      public:
-         friend scalar_type ratio_(precise_duration const& lhs, precise_duration const& rhs)
-         { return lhs.total_microseconds() / rhs.total_microseconds(); }
-
-         //@}
-      private:
-         double m_usec_frac;
-      };
-
-   time_duration abs(time_duration d);
-
-} 
-} // boost::time namespaces
-
-namespace otb
-{
-namespace MetaData
-{
 using TimeType = boost::posix_time::ptime;
-using DurationType = boost::posix_time::precise_duration;
+
+//using DurationType = boost::posix_time::precise_duration;
+
+class Duration;
+double ratio_(Duration const& lhs, Duration const& rhs);
+
+class Duration : private details::streamable<Duration>,
+                 private boost::addable<Duration>,
+                 private boost::subtractable<Duration>,
+                 private boost::multipliable2<Duration, double>,
+                 private details::dividable<Duration, double>,
+                 private boost::equality_comparable<Duration>,
+                 private boost::less_than_comparable<Duration>,
+                 private boost::addable<TimeType, Duration>,
+                 private boost::subtractable<TimeType, Duration>
+{
+public:
+  using InternalDurationType = boost::posix_time::time_duration;
+
+  Duration() = default;
+  Duration(InternalDurationType const& d): m_duration(d) {}
+
+
+  static Duration Seconds(double d) 
+  {
+    return Duration(boost::posix_time::nanoseconds(static_cast<long>(std::round(d * 1e9))));
+  }
+
+  static Duration Nanoseconds(double d) 
+  {
+    return Duration(boost::posix_time::nanoseconds(static_cast<long>(std::round(d))));
+  }
+
+Duration(double d): m_duration(boost::posix_time::nanoseconds(static_cast<long>(std::round(d)))) {}
+
+  double TotalNanoseconds() const
+  {
+    return m_duration.total_nanoseconds();
+  }
+
+
+  friend Duration& operator+=(Duration & u, Duration const& v)
+  {
+    u.m_duration += v.m_duration;
+    return u;
+  }
+
+  friend Duration& operator-=(Duration & u, Duration const& v)
+  {
+    u.m_duration -= v.m_duration;
+    return u;
+  }
+
+  friend Duration& operator*=(Duration & u, double v)
+  {
+    u.m_duration = boost::posix_time::nanoseconds(static_cast<long>(std::round(
+                            u.m_duration.total_nanoseconds() * v)));
+    return u;
+  }
+
+
+  friend Duration& operator/=(Duration & u, double v)
+  {
+    u.m_duration = boost::posix_time::nanoseconds(static_cast<long>(std::round(
+                            u.m_duration.total_nanoseconds() / v)));
+    return u;
+  }
+
+  friend bool operator < (Duration const& lhs, Duration const& rhs)
+  {
+    return lhs.m_duration < rhs.m_duration;
+  }
+  
+  friend bool operator == (Duration const& lhs, Duration const& rhs)
+  {
+    return lhs.m_duration == rhs.m_duration;
+  }
+  
+
+  friend TimeType& operator+=(TimeType & u, Duration const& v)
+  {
+    u += v.m_duration;
+    return u;
+  }
+
+  friend TimeType& operator-=(TimeType & u, Duration const& v)
+  {
+    u -= v.m_duration;
+    return u;
+  }
+
+  std::ostream & Display(std::ostream & os) const { return os << m_duration; }
+  std::istream & Read   (std::istream & is)       { return is >> m_duration; }
+
+private:
+  InternalDurationType m_duration;
+};
+
+
+using DurationType = Duration;
 
 DurationType seconds(double);
 
@@ -185,221 +179,6 @@ TimeType ReadFormattedDate(const std::string & dateStr, const std::string & form
 
 }
 }
-
-#else //OTB_USE_BOOST_TIME
-
-#include <boost/operators.hpp>
-#include <cassert>
-#include <iomanip>
-
-namespace otb
-{
-namespace MetaData
-{
-namespace details
-{
-
-template <typename U, typename V> struct substractable_asym
-{
-  friend U operator-(V const& lhs, V const& rhs) 
-  {
-    return V::template diff<U,V>(lhs, rhs);
-  }
-};
-
-// division by a scalar and ratio
-template <typename T, typename R> struct dividable 
-{
-  typedef R scalar_type;
-  friend T operator/(T lhs, scalar_type const& rhs)
-  {
-    lhs /= rhs;
-    return lhs;
-  }
-  friend scalar_type operator/(T const& lhs, T const& rhs)
-  {
-    return ratio_(lhs, rhs);
-  }
-};
-
-template <typename T> struct streamable
-{
-  friend std::ostream & operator<<(std::ostream & os, const T & v)
-  {
-    return v.display(os);
-  }
-  friend std::istream & operator>>(std::istream & is, T & v)
-  {
-    return v.read(is);
-  }
-};
-
-class DayFrac
-{
-  public:
-    typedef double scalar_type;
-    // DayFrac(DayFrac const&) = default;
-    // DayFrac(DayFrac &&) = default;
-         // DayFrac& operator=(DayFrac const&) = default;
-         // DayFrac& operator=(DayFrac &&) = default;
-    double as_day_frac() const { return m_day_frac; }
-
-    std::ostream & display(std::ostream & os) const { return os << m_day_frac; }
-    std::istream & read   (std::istream & is)       { return is >> m_day_frac; }
-
-      protected:
-         /**@name Construction/destruction
-         */
-         //@{
-         /** Initialization constructor.
-         */
-         explicit DayFrac() = default;
-         explicit DayFrac(double day_frac) : m_day_frac(day_frac) {}
-         /** Protected destructor.
-         */
-         ~DayFrac() = default;
-         //@}
-
-         /**@name Operations
-         */
-         //@{
-         void add(DayFrac const& rhs) { m_day_frac += rhs.m_day_frac; }
-         void sub(DayFrac const& rhs) { m_day_frac -= rhs.m_day_frac; }
-         void mult(scalar_type coeff) { m_day_frac *= coeff; }
-         void div(scalar_type coeff)  { assert(coeff && "Cannot divide by 0"); m_day_frac /= coeff; }
-         template <typename V> friend scalar_type ratio_(V const& lhs, V const& rhs)
-         { return lhs.as_day_frac() / rhs.as_day_frac(); }
-
-         template <typename U, typename V> friend U& operator+=(U & u, V const& v) {
-            u.add(v);
-            return u;
-         }
-         template <typename U, typename V> friend U& operator-=(U & u, V const& v) {
-            u.sub(v);
-            return u;
-         }
-
-         template <typename U, typename V> static U diff(V const& lhs, V const& rhs) {
-            U const res(lhs.as_day_frac() - rhs.as_day_frac());
-            return res;
-         }
-
-         template <typename U> friend U& operator*=(U & u, scalar_type const& v) {
-            u.mult(v);
-            return u;
-         }
-         template <typename U> friend U& operator/=(U & u, scalar_type const& v) {
-            u.div(v);
-            return u;
-         }
-
-         template <typename T> friend bool operator<(T const& lhs, T const& rhs) {
-            return lhs.as_day_frac() < rhs.as_day_frac();
-         }
-         template <typename T> friend bool operator==(T const& lhs, T const& rhs) {
-            return lhs.as_day_frac() == rhs.as_day_frac();
-         }
-         //@}
-      private:
-         double m_day_frac;
-      };
-   }
-
-   /**
-    * Duration abstraction.
-    *
-    * Values of this class represent time interval.
-    *
-    * <p><b>Semantics</b><br>
-    * <li> Value, mathematical: it's relative position
-    * <li> Time interval
-    *
-    * @see \c std::duration<>
-    */
-   class Duration
-      : public details::DayFrac
-      , private boost::addable<Duration>
-      , private boost::subtractable<Duration>
-      , private details::streamable<Duration>
-      , private boost::multipliable2<Duration, double>
-      , private details::dividable<Duration, details::DayFrac::scalar_type>
-      , private boost::equality_comparable<Duration>
-      , private boost::less_than_comparable<Duration>
-      {
-      public:
-         typedef details::DayFrac::scalar_type scalar_type;
-
-         /**@name Construction/destruction
-         */
-         //@{
-         /** Initialization constructor.
-         */
-         Duration() = default;
-         explicit Duration(double day_frac)
-            : details::DayFrac(day_frac) {}
-         //@}
-
-         double total_seconds() const {
-            return as_day_frac() * 24 * 60 * 60;
-         }
-         double total_microseconds() const {
-            return total_seconds() * 1000 * 1000;
-         }
-         bool is_negative() const { return as_day_frac() < 0.0; }
-         Duration invert_sign() { return Duration(- as_day_frac()); }
-         friend Duration abs(Duration const& d) { return Duration(std::abs(d.as_day_frac())); }
-      };
-
-   /**
-    * Modified JulianDate abstraction.
-    *
-    * Objects of this class represent points in time.
-    *
-    * <p><b>Semantics</b><br>
-    * <li> Value, mathematical: it's an absolute position
-    * <li> Point in time
-    * @see \c std::time_point<>
-    */
-   class ModifiedJulianDate
-      : public details::DayFrac
-      , private boost::addable<ModifiedJulianDate, Duration>
-      , private boost::subtractable<ModifiedJulianDate, Duration>
-      , private details::substractable_asym<Duration, ModifiedJulianDate>
-      , private details::streamable<ModifiedJulianDate>
-      , private boost::equality_comparable<ModifiedJulianDate>
-      , private boost::less_than_comparable<ModifiedJulianDate>
-      {
-      public:
-         typedef details::DayFrac::scalar_type scalar_type;
-
-         /**@name Construction/destruction
-         */
-         //@{
-         /** Initialization constructor.
-         */
-         ModifiedJulianDate() = default;
-         explicit ModifiedJulianDate(double day_frac)
-            : details::DayFrac(day_frac) {}
-         //@}
-         using details::DayFrac::diff;
-      };
-
-   ModifiedJulianDate toModifiedJulianDate(std::string const& utcTimeString);
-   inline Duration microseconds(double us) {
-      return Duration(us / (24ULL * 60 * 60 * 1000 * 1000));
-  }
-  inline Duration seconds(double us) {
-    return Duration(us / (24ULL * 60 * 60));
-  }
-
-  ModifiedJulianDate ReadFormattedDate(const std::string & dateStr, const std::string & format = "%Y-%m-%dT%H:%M:%S%F");
-
-  using TimeType = ModifiedJulianDate;
-  using DurationType = Duration;
-}
-}
-
-#endif
 
 
 #endif
