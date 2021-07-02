@@ -145,7 +145,7 @@ namespace ossimplugins
     add(theProductKwl, SUPPORT_DATA_PREFIX, "abs_orbit", absOrbit);
     add(theProductKwl, SUPPORT_DATA_PREFIX, "orbit_cycle", orbitCycle);
     add(theProductKwl, SUPPORT_DATA_PREFIX, "acquisition_mode", acquisitionMode);
-    add(theProductKwl, SUPPORT_DATA_PREFIX, "avg_scene_height", acquisitionMode);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "avg_scene_height", sceneAvgHeight);
     add(theProductKwl, SUPPORT_DATA_PREFIX, "data_take_id", takeId);
     add(theProductKwl, SUPPORT_DATA_PREFIX, "look_side", lookDirection);
 
@@ -160,7 +160,7 @@ namespace ossimplugins
     std::cout << "theRangeSamplingRate " << theRangeSamplingRate << '\n';
 
     // Parse the range resolution
-    theRangeResolution = getDoubleFromFirstNode(xmlRoot, "productSpecific/complexImageInfo/slantRangeResolution");
+    theRangeResolution = getDoubleFromFirstNode(xmlRoot, "productSpecific/complexImageInfo/projectedSpacingRange/slantRange");
 
     add(theProductKwl, "meters_per_pixel_x", theRangeResolution);
 
