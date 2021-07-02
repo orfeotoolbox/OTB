@@ -183,6 +183,28 @@ namespace ossimplugins
     add(theProductKwl, SUPPORT_DATA_PREFIX, "range_looks", nbRanLooks);
     add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_looks", nbAziLooks);
 
+    // Parse spectral window coeff and id
+    const double ranWinCoeff = getDoubleFromFirstNode(xmlRoot, "processing/processingParameter/rangeWindowCoefficient");
+    const double aziWinCoeff = getDoubleFromFirstNode(xmlRoot, "processing/processingParameter/azimuthWindowCoefficient");
+    std::string ranWinId = getTextFromFirstNode(xmlRoot, "processing/processingParameter/rangeWindowID");
+    std::string aziWinId = getTextFromFirstNode(xmlRoot, "processing/processingParameter/azimuthWindowID");
+
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "range_window_coeff", ranWinCoeff);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_window_coeff", aziWinCoeff);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "range_spectral_window", ranWinId);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "azimuth_spectral_window", aziWinId);
+
+    // Parse processing/acquisition mode : if TDM => bistatic
+    const std::string processingFacility = getTextFromFirstNode(xmlRoot, "productInfo/generationInfo/level0ProcessingFacility");
+    std::string processingMode = "monostatic";
+
+    if (processingFacility.find("TDM") != std::string::npos )
+      {
+	processingMode = "bistatic";
+      }
+
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "processing_mode", processingMode);
+
     //Manage only strip map product for now (one burst)
     // Parse azimuth time start/stop
     const TimeType azimuthTimeStart = getTimeFromFirstNode(xmlRoot, "productInfo/sceneInfo/start/timeUTC");
