@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2021 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -24,8 +24,9 @@
 #include "otbImage.h"
 #include "otbImageFileReader.h"
 #include "otbSarImageMetadataInterfaceFactory.h"
+#include "otbS1ThermalNoiseLookupData.h"
 
-int otbSarCalibrationLookupDataTest(int argc, char* argv[])
+int otbS1ThermalNoiseLutTest(int argc, char* argv[])
 {
   typedef double                         RealType;
   typedef otb::SarImageMetadataInterface ImageMetadataInterfaceType;
@@ -33,18 +34,18 @@ int otbSarCalibrationLookupDataTest(int argc, char* argv[])
   typedef otb::Image<double, 2> InputImageType;
   typedef otb::ImageFileReader<InputImageType> ImageReaderType;
 
-  if (argc < 3)
+  using S1ThermalNoiseLookupType = otb::S1ThermalNoiseLookupData<double>;
+  using S1ThermalNoiseLookupPointerType = typename S1ThermalNoiseLookupType::Pointer;
+
+
+  if (argc < 2)
   {
-    std::cerr << "Usage: otbSarCalibationLookupDataTest /path/to/input/file /path/to/output/file  !" << std::endl;
+    std::cerr << "Usage: otbS1ThermalNoiseLutTest /path/to/input/file !" << std::endl;
     return EXIT_FAILURE;
   }
   ImageReaderType::Pointer reader = ImageReaderType::New();
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
-
-  const char*   outFileName = argv[2];
-  std::ofstream outfile;
-  outfile.open(outFileName);
 
   ImageMetadataInterfaceType::Pointer imageMetadataInterface = otb::SarImageMetadataInterfaceFactory::CreateIMI(reader->GetOutput()->GetMetaDataDictionary());
 
@@ -55,8 +56,6 @@ int otbSarCalibrationLookupDataTest(int argc, char* argv[])
   }
 
   const std::string sensorId = imageMetadataInterface->GetSensorID();
-
-  outfile << sensorId << std::endl;
 
   std::cout << sensorId << std::endl;
   std::cout << imageMetadataInterface->GetGCPCount()<< std::endl;
@@ -73,12 +72,10 @@ int otbSarCalibrationLookupDataTest(int argc, char* argv[])
   RealType lutVal = static_cast<RealType>(lookupDataObj->GetValue(396, 333));
   std::cout << lutVal << std::endl;
 
-  outfile << imageMetadataInterface->HasCalibrationLookupDataFlag() << std::endl;
-  outfile << lutVal << std::endl;
-
-  std::cout << "HERE" << std::endl;
-
-  outfile.close();
+  S1ThermalNoiseLookupPointerType S1ThermaNoise = S1ThermalNoiseLookupType::New();
+  S1ThermaNoise->SetImageKeywordlist(reader->GetOutput()->GetImageKeywordlist());
+  std::cout << S1ThermaNoise->GetValue(396, 333) << std::endl;
+  
 
   return EXIT_SUCCESS;
 }

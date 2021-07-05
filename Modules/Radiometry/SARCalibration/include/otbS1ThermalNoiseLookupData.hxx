@@ -80,6 +80,8 @@ void S1ThermalNoiseLookupData<T>::SetImageKeywordlist(const ImageKeywordlist & k
 template <class T>
 T S1ThermalNoiseLookupData<T>::GetValue(const IndexValueType x, const IndexValueType y)
 {
+  std::cout << GetRangeNoise(x, y) << std::endl;
+  std::cout << GetAzimuthNoise(x, y) << std::endl;
   return GetRangeNoise(x,y) * GetAzimuthNoise(x,y);
 }
 
@@ -114,11 +116,18 @@ T S1ThermalNoiseLookupData<T>::GetAzimuthNoise(const IndexValueType x, const Ind
   if (m_AzimuthCount)
   {
     const auto vecIdx = GetAzimuthVectorIndex(x, y);
+    std::cout << "AzimuthNoise vecIdx:" << vecIdx << std::endl;
     const auto& vec = m_AzimuthNoiseVectorList[vecIdx];
+    std::cout << "AzimuthNoise vec:" <<vec.firstAzimuthLine << ", " << vec.lastAzimuthLine  << std::endl;
+    std::cout << "AzimuthNoise vec:" <<vec.firstRangeSample << ", " << vec.lastRangeSample  << std::endl;
 
     const auto pixelIdx = GetPixelIndex(y, vec.lines);
+    std::cout << "AzimuthNoise pixelIdx:" << pixelIdx << std::endl;
 
-    const double lutVal = vec.vect[pixelIdx] + ((y - vec.lines[pixelIdx])/(vec.lines[pixelIdx+1] - vec.lines[pixelIdx]))* (vec.vect[pixelIdx + 1] - vec.vect[pixelIdx]);
+    std::cout << "vec.vect[pixelIdx]" << vec.vect[pixelIdx] << std::endl;
+    std::cout << "vec.vect[pixelIdx+1]" << vec.vect[pixelIdx+1] << std::endl;
+
+    const double lutVal = vec.vect[pixelIdx] + ( (y - vec.lines[pixelIdx]) / (vec.lines[pixelIdx+1] - vec.lines[pixelIdx]) ) * (vec.vect[pixelIdx + 1] - vec.vect[pixelIdx]);
     return lutVal;
   }
   else
