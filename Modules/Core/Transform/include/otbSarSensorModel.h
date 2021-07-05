@@ -106,6 +106,18 @@ public:
             unsigned int & linesOffset, unsigned int first_burstInd,
             bool inputWithInvalidPixels=false);
 
+
+  /** 
+    * This is a helper function to convert deburst line to input image
+    * line
+    * \param lines The vector of lines range to keep
+    * \param imageLine The input deburst line
+    * \param deburstLine The output original image line
+  */
+  void DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, 
+                                              unsigned long deburstLine, 
+                                              unsigned long & imageLine);
+
 protected:
 
 private:

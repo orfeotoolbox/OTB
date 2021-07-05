@@ -258,11 +258,11 @@ void SarSensorModel::interpolateSensorPosVel(const TimeType & azimuthTime,
   {
      // Search for the deg number of records around the azimuth time
      unsigned int t_min_idx = 0;
-     DurationType t_min = abs(azimuthTime - m_SarParam.orbits.front().time);
+    auto t_min = Abs(azimuthTime - m_SarParam.orbits.front().time);
      unsigned int count = 0;
      for(auto it = m_SarParam.orbits.cbegin();it!= m_SarParam.orbits.cend();++it,++count)
      {
-        const DurationType current_time = abs(azimuthTime-it->time);
+        const auto current_time = Abs(azimuthTime-it->time);
         if(t_min > current_time)
         {
            t_min_idx = count;
@@ -665,6 +665,7 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
   for(; next != burstRecords.cend() ;++it,++next)
   {
     DurationType timeOverlapEnd = (it->azimuthStopTime - next->azimuthStartTime);
+
     unsigned long overlapLength = timeOverlapEnd/m_SarParam.azimuthTimeInterval;
     unsigned long halfLineOverlapEnd = overlapLength/2;
     TimeType endTimeInNextBurst = it->azimuthStopTime-(halfLineOverlapEnd-1)*m_SarParam.azimuthTimeInterval;
@@ -1122,6 +1123,29 @@ bool SarSensorModel::ImageLineToDeburstLine(const std::vector<std::pair<unsigned
     lineOffset+=nit->first - vit->second-1;
   }
   return false;
+}
+
+void SarSensorModel::DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, 
+                                            unsigned long deburstLine, 
+                                            unsigned long & imageLine)
+{
+  auto vit = lines.cbegin();
+  auto nit = vit+1;
+  
+  unsigned long lineOffset = vit->first;
+
+  imageLine = deburstLine;
+  
+  while(nit != lines.end())
+  {
+    if(imageLine+lineOffset>=vit->first && imageLine+lineOffset<=vit->second)
+      break;
+
+    lineOffset += nit->first - vit->second-1;
+    ++vit;
+    ++nit;
+  }
+  imageLine += lineOffset;
 }
 
 } //namespace otb
