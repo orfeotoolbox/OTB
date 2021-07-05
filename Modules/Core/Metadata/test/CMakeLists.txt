@@ -495,3 +495,17 @@ endif()
 
 endforeach()
 
+
+if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
+
+  add_executable(otbDateTest otbDateTest.cxx )
+  target_link_libraries(
+    otbDateTest
+    ${OTBMetadata-Test_LIBRARIES}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
+
+  otb_add_test(NAME ioTvDateTest
+           COMMAND otbDateTest --
+           )
+
+endif()
