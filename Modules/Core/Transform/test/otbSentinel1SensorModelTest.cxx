@@ -80,8 +80,7 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
   otb::Projection::GCPParam gcpParam;
 
   imi->ReadSarParamAndGCPs(mds, sarParam, gcpParam);
-
-
+  auto numberOfBursts = sarParam.burstRecords.size();
 
   std::cout << "OTB Tests" << std::endl;
 
@@ -91,7 +90,8 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
 
   {
   otb::SarSensorModel model(productType, sarParam, gcpParam);
-  BOOST_TEST(model.Deburst(deburstLines, deburstSamples));
+  // Deburst returns false when the number of burst is 1
+  BOOST_TEST(model.Deburst(deburstLines, deburstSamples) == (numberOfBursts > 1));
   }
 
   PrintVectorOfPair(deburstLines, "Deburst lines");
@@ -107,20 +107,24 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
   bool allPixel = false;
   {
   otb::SarSensorModel model(productType, sarParam, gcpParam);
-  BOOST_TEST(model.BurstExtraction(burstIndex, burstExtractionLines, burstExtractionSamples, allPixel));
+  // BurstExtraction returns false when the number of burst is 1
+  BOOST_TEST(model.BurstExtraction(burstIndex, burstExtractionLines, burstExtractionSamples, allPixel) 
+              == (numberOfBursts > 1));
   }
 
 
   std::cout << "Deburst and concatenate" << std::endl;
   std::vector<std::pair<unsigned long,unsigned long> > linesBursts;
   std::vector<std::pair<unsigned long,unsigned long> > samplesBursts;
-  unsigned int linesOffset;
+  unsigned int linesOffset = 0;
   unsigned int first_burstInd = 3;
   bool inputWithInvalidPixels = false;
 
   {
   otb::SarSensorModel model(productType, sarParam, gcpParam);
-  BOOST_TEST(model.DeburstAndConcatenate(linesBursts, samplesBursts, linesOffset, first_burstInd, inputWithInvalidPixels));
+  // DeburstAndConcatenate returns false when the number of burst is 1
+  BOOST_TEST(model.DeburstAndConcatenate(linesBursts, samplesBursts, linesOffset, first_burstInd, inputWithInvalidPixels)
+      == (numberOfBursts > 1) );
   }
 
   PrintVectorOfPair(linesBursts, "DeburstAndConcatenate: LinesBursts");
@@ -175,7 +179,8 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
   }
   std::pair<unsigned long, unsigned long> ossimBurstExtractionLines;
   std::pair<unsigned long, unsigned long> ossimBurstExtractionSamples;
-  BOOST_TEST(sensor2->burstExtraction(burstIndex, ossimBurstExtractionLines, ossimBurstExtractionSamples, allPixel));
+  BOOST_TEST(sensor2->burstExtraction(burstIndex, ossimBurstExtractionLines, ossimBurstExtractionSamples, allPixel)
+      == (numberOfBursts > 1));
 
   std::cout << "OTB : burst extraction lines " << burstExtractionLines.first << " " 
                                                  << burstExtractionLines.second << std::endl;
@@ -203,15 +208,16 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
 
   std::cout << "Deburst and concatenate" << std::endl;
 
-  unsigned int ossimLinesOffset;
+  unsigned int ossimLinesOffset = 0;
 
   std::vector<std::pair<unsigned long,unsigned long> > ossimLinesBursts;
   std::vector<std::pair<unsigned long,unsigned long> > ossimSamplesBursts;
-  BOOST_TEST(sensor3->deburstAndConcatenate(ossimLinesBursts, ossimSamplesBursts, ossimLinesOffset, first_burstInd, inputWithInvalidPixels));
+  BOOST_TEST(sensor3->deburstAndConcatenate(ossimLinesBursts, ossimSamplesBursts, ossimLinesOffset, first_burstInd, inputWithInvalidPixels)
+              == (numberOfBursts > 1));
 
   PrintVectorOfPair(ossimLinesBursts, "DeburstAndConcatenate: ossimLinesBursts");
   PrintVectorOfPair(ossimSamplesBursts, "DeburstAndConcatenate: ossimSamplesBursts");
-  std::cout << "DeburstAndConcatenate: lines Offset ossim: " << linesOffset << std::endl;
+  std::cout << "DeburstAndConcatenate: lines Offset ossim: " << ossimLinesOffset << std::endl;
 
   BOOST_CHECK(linesBursts == ossimLinesBursts);
   BOOST_CHECK(samplesBursts == ossimSamplesBursts);
