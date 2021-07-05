@@ -118,6 +118,18 @@ public:
                                               unsigned long deburstLine, 
                                               unsigned long & imageLine);
 
+  /**
+    * This is a helper function to convert image line to deburst image
+    * line.
+    * \param lines The vector of lines range to keep
+    * \param imageLine The input image line
+    * \param deburstLine The output deburst line
+    * \return True if imageLine is within a preserved range, false otherwise
+    */
+  bool ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines,
+                              unsigned long imageLine,
+                              unsigned long & deburstLine) const;
+
 protected:
 
 private:
@@ -169,18 +181,6 @@ private:
   Point3DType projToSurface(const GCP & gcp,
                             const Point2DType & imPt,
                             double heightAboveEllipsoid) const;
-
-  /**
-    * This is a helper function to convert image line to deburst image
-    * line.
-    * \param lines The vector of lines range to keep
-    * \param imageLine The input image line
-    * \param deburstLine The output deburst line
-    * \return True if imageLine is within a preserved range, false otherwise
-    */
-  bool ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines,
-                              unsigned long imageLine,
-                              unsigned long & deburstLine) const;
 
   std::string m_ProductType;
   Projection::GCPParam m_GCP;
