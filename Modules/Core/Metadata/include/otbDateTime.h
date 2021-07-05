@@ -28,14 +28,6 @@
 #include <boost/config.hpp>
 #include <boost/operators.hpp>
 
-namespace boost 
-{
-namespace posix_time 
-{
-time_duration abs(time_duration d);
-}
-} // boost::time namespaces
-
 namespace otb
 {
 namespace MetaData
@@ -54,7 +46,16 @@ template <typename T, typename R> struct dividable
   }
   friend scalar_type operator/(T const& lhs, T const& rhs)
   {
-    return ratio_(lhs, rhs);
+    return ratio(lhs, rhs);
+  }
+};
+
+
+template <typename U, typename V> struct substractable_asym
+{
+  friend U operator-(V const& lhs, V const& rhs) 
+  {
+    return V::template diff<U,V>(lhs, rhs);
   }
 };
 
@@ -71,12 +72,44 @@ template <typename T> struct streamable
 };
 } // namespace details
 
-using TimeType = boost::posix_time::ptime;
-
-//using DurationType = boost::posix_time::precise_duration;
-
 class Duration;
-double ratio_(Duration const& lhs, Duration const& rhs);
+
+class TimePoint : private details::streamable<TimePoint>,
+                  private details::substractable_asym<Duration, TimePoint>,
+                  private boost::equality_comparable<TimePoint>,
+                  private boost::less_than_comparable<TimePoint>
+{
+public:
+  //friend class Duration;
+  TimePoint() = default;
+
+  std::ostream & Display(std::ostream & os) const { return os << m_Time; }
+  std::istream & Read   (std::istream & is)       { return is >> m_Time; }
+
+  template <typename U, typename V> static U diff(V const& lhs, V const& rhs) 
+  {
+    U const res(lhs.m_Time - rhs.m_Time);
+    return res;
+  }
+
+  friend bool operator < (TimePoint const& lhs, TimePoint const& rhs)
+  {
+    return lhs.m_Time < rhs.m_Time;
+  }
+  
+  friend bool operator == (TimePoint const& lhs, TimePoint const& rhs)
+  {
+    return lhs.m_Time == rhs.m_Time;
+  }
+
+
+public:
+  boost::posix_time::ptime m_Time;
+};
+
+using TimeType = TimePoint;
+
+double ratio(Duration const& lhs, Duration const& rhs);
 
 class Duration : private details::streamable<Duration>,
                  private boost::addable<Duration>,
@@ -92,7 +125,7 @@ public:
   using InternalDurationType = boost::posix_time::time_duration;
 
   Duration() = default;
-  Duration(InternalDurationType const& d): m_duration(d) {}
+  Duration(InternalDurationType const& d): m_Duration(d) {}
 
 
   static Duration Seconds(double d) 
@@ -105,70 +138,74 @@ public:
     return Duration(boost::posix_time::nanoseconds(static_cast<long>(std::round(d))));
   }
 
-Duration(double d): m_duration(boost::posix_time::nanoseconds(static_cast<long>(std::round(d)))) {}
+  Duration(double d): m_Duration(boost::posix_time::nanoseconds(static_cast<long>(std::round(d)))) {}
 
   double TotalNanoseconds() const
   {
-    return m_duration.total_nanoseconds();
+    return m_Duration.total_nanoseconds();
   }
 
 
   friend Duration& operator+=(Duration & u, Duration const& v)
   {
-    u.m_duration += v.m_duration;
+    u.m_Duration += v.m_Duration;
     return u;
   }
 
   friend Duration& operator-=(Duration & u, Duration const& v)
   {
-    u.m_duration -= v.m_duration;
+    u.m_Duration -= v.m_Duration;
     return u;
   }
 
   friend Duration& operator*=(Duration & u, double v)
   {
-    u.m_duration = boost::posix_time::nanoseconds(static_cast<long>(std::round(
-                            u.m_duration.total_nanoseconds() * v)));
+    u.m_Duration = boost::posix_time::nanoseconds(static_cast<long>(std::round(
+                            u.m_Duration.total_nanoseconds() * v)));
     return u;
   }
 
 
   friend Duration& operator/=(Duration & u, double v)
   {
-    u.m_duration = boost::posix_time::nanoseconds(static_cast<long>(std::round(
-                            u.m_duration.total_nanoseconds() / v)));
+    u.m_Duration = boost::posix_time::nanoseconds(static_cast<long>(std::round(
+                            u.m_Duration.total_nanoseconds() / v)));
     return u;
   }
 
   friend bool operator < (Duration const& lhs, Duration const& rhs)
   {
-    return lhs.m_duration < rhs.m_duration;
+    return lhs.m_Duration < rhs.m_Duration;
   }
   
   friend bool operator == (Duration const& lhs, Duration const& rhs)
   {
-    return lhs.m_duration == rhs.m_duration;
+    return lhs.m_Duration == rhs.m_Duration;
   }
   
 
   friend TimeType& operator+=(TimeType & u, Duration const& v)
   {
-    u += v.m_duration;
+    u.m_Time += v.m_Duration;
     return u;
   }
 
   friend TimeType& operator-=(TimeType & u, Duration const& v)
   {
-    u -= v.m_duration;
+    u.m_Time -= v.m_Duration;
     return u;
   }
 
-  std::ostream & Display(std::ostream & os) const { return os << m_duration; }
-  std::istream & Read   (std::istream & is)       { return is >> m_duration; }
+  std::ostream & Display(std::ostream & os) const { return os << m_Duration; }
+  std::istream & Read   (std::istream & is)       { return is >> m_Duration; }
+
+  friend Duration Abs(Duration d);
 
 private:
-  InternalDurationType m_duration;
+  InternalDurationType m_Duration;
 };
+
+Duration Abs(Duration d);
 
 
 using DurationType = Duration;

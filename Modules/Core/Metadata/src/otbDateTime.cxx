@@ -21,28 +21,12 @@
 #include "otbDateTime.h"
 #include "otbStringUtilities.h"
 
-namespace boost 
-{
-namespace posix_time 
-{
-
-time_duration abs(time_duration d)
-{
-  if(d.is_negative())
-    d = d.invert_sign();
-  return d;
-}
-
-}
-}
-
 namespace otb
 {
 namespace MetaData
 {
 
-
-double ratio_(Duration const& lhs, Duration const& rhs)
+double ratio(Duration const& lhs, Duration const& rhs)
 {
   return (lhs.TotalNanoseconds() / rhs.TotalNanoseconds());
 }
@@ -62,6 +46,13 @@ DurationType seconds(double input)
 {
   //return boost::posix_time::precise_duration(input * 1e9);
   return DurationType::Seconds(input);
+}
+
+Duration Abs(Duration d)
+{
+  if(d.m_Duration.is_negative())
+    d.m_Duration = d.m_Duration.invert_sign();
+  return d;
 }
 
 }
