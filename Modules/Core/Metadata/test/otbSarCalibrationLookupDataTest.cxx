@@ -90,7 +90,37 @@ int otbSarCalibrationLookupDataTest(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
+<<<<<<< HEAD
   outfile << imd[otb::MDStr::Instrument] << std::endl;
+
+//TODO adapt this part
+/*
+  const std::string sensorId = imageMetadataInterface->GetSensorID();
+
+  outfile << sensorId << std::endl;
+
+  std::cout << sensorId << std::endl;
+  std::cout << imageMetadataInterface->GetGCPCount()<< std::endl;
+
+
+  LookupDataType::Pointer lookupDataObj = imageMetadataInterface->GetCalibrationLookupData(0);
+
+  if (!lookupDataObj.IsNotNull())
+  {
+    std::cerr << "lookupDataObj is Null" << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  RealType lutVal = static_cast<RealType>(lookupDataObj->GetValue(396, 333));
+  std::cout << lutVal << std::endl;
+
+  outfile << imageMetadataInterface->HasCalibrationLookupDataFlag() << std::endl;
+  outfile << lutVal << std::endl;
+*/
+
+  std::cout << "HERE" << std::endl;
+
+  outfile.close();
 
   return EXIT_SUCCESS;
 }

@@ -43,6 +43,7 @@ otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest.cxx
 otbSarBrightnessToImageFilterTest.cxx
 otbSarDeburstFilterTest.cxx
 otbSarBurstExtractionFilterTest.cxx
+otbS1ThermalNoiseLutTest.cxx
 )
 
 add_executable(otbSARCalibrationTestDriver ${OTBSARCalibrationTests})
@@ -334,3 +335,7 @@ otb_add_test(NAME raTvSarBrightnessToImageFilter COMMAND  otbSARCalibrationTestD
 #  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.tiff
 #  ${TEMP}/saTvSarBurstImageFilterTest2Output.tif
 #  1)
+
+otb_add_test(NAME saTvS1ThermalNoiseLutTest COMMAND otbSARCalibrationTestDriver
+  otbS1ThermalNoiseLutTest
+  ${INPUTDATA}/S1A_IW_GRDH_1SDV_20210202T060035_20210202T060100_036407_0445F3_B8EA_vh_extract.tif?&geom=${INPUTDATA}/S1A_IW_GRDH_1SDV_20210202T060035_20210202T060100_036407_0445F3_B8EA_vh_extract.geom)
