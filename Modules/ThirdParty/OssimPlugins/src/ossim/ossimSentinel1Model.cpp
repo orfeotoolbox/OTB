@@ -630,8 +630,31 @@ namespace ossimplugins
          const bool ret = read(productXmlFile);
          if ( ret )
          {
-            readCalibrationMetadata();
-            readNoiseMetadata();
+            const ossimFilename calibrationFilename = theManifestDirectory
+                                              + "/annotation/calibration/calibration-"
+                                              + productXmlFile.file();
+            if (calibrationFilename.exists())
+            {
+              readCalibrationMetadata(calibrationFilename);
+            }
+            else
+            {
+              ossimNotify(ossimNotifyLevel_FATAL)
+               << "The calibration file " << calibrationFilename << " cannot be found.\n";
+            }
+            const ossimFilename noiseFilename = theManifestDirectory
+                                              + "/annotation/calibration/noise-"
+                                              + productXmlFile.file();
+
+            if (noiseFilename.exists())
+            {
+              readNoiseMetadata(noiseFilename);
+            }
+            else
+            {
+              ossimNotify(ossimNotifyLevel_FATAL)
+               << "The noise file " << noiseFilename << " cannot be found.\n";
+            }
             return true;
          }
       } catch (std::exception const& e) {
@@ -828,171 +851,156 @@ namespace ossimplugins
       return true;
    }
 
-   void ossimSentinel1Model::readCalibrationMetadata()
+   void ossimSentinel1Model::readCalibrationMetadata(ossimFilename const& calibrationFilename)
    {
-      ossimDirectory calibrationDir( theManifestDirectory.dirCat( "annotation/calibration") );
-      std::vector<ossimFilename> files;
-      if (calibrationDir.isOpened())
-        {
-        calibrationDir.findAllFilesThatMatch(files, "calibration*");
-        }
-      std::vector<ossimFilename>::const_iterator it = files.begin();
+      assert(calibrationFilename.exists());
 
-      ossimNotify(ossimNotifyLevel_DEBUG) << files.size() << " calibration files found in " << theManifestDirectory << "\n";
       std::stringstream strm;
-      for (; it != files.end(); ++it)
+
+      ossimXmlDocument calibrationDoc;
+      openMetadataFile(calibrationDoc, calibrationFilename );
+
+      const ossimXmlNodePtr & calibrationRoot = calibrationDoc.getRoot();
+      assert(calibrationRoot.get());
+      ossimXmlNode const& adsHeader = getExpectedFirstNode(*calibrationRoot, "adsHeader");
+      ossimXmlNode const& calibrationInformation = getExpectedFirstNode(*calibrationRoot, "calibrationInformation");
+      ossimXmlNode const& calibrationVectorList  = getExpectedFirstNode(*calibrationRoot, "calibrationVectorList");
+
+      char const calibrationPrefix[] = "calibration.";
+
+      addMandatory(theProductKwl, calibrationPrefix, "swath", adsHeader, "swath");
+      addMandatory(theProductKwl, calibrationPrefix, "polarisation", adsHeader, "polarisation");
+
+      // store as a string
+      addMandatory(theProductKwl, calibrationPrefix, "startTime", adsHeader, "startTime");
+      addMandatory(theProductKwl, calibrationPrefix, "stopTime",  adsHeader, "stopTime");
+
+      addMandatory(theProductKwl, calibrationPrefix, "absoluteCalibrationConstant", calibrationInformation, "absoluteCalibrationConstant");
+
+      add(theProductKwl, calibrationPrefix,
+            "count",
+            calibrationVectorList.getAttributeValue("count").string());
+
+      std::vector< ossimXmlNodePtr > calibrationVectors;
+      calibrationRoot->findChildNodes("calibrationVectorList/calibrationVector", calibrationVectors);
+      int idx = 0;
+      for (std::vector< ossimXmlNodePtr >::const_iterator b_calibVector = calibrationVectors.begin(), e_calibVector = calibrationVectors.end()
+            ; b_calibVector != e_calibVector
+            ; ++b_calibVector, ++idx
+          )
       {
-         ossimXmlDocument calibrationDoc;
-         openMetadataFile(calibrationDoc, *it );
+         char calibrationVectorPrefix[256];
+         s_printf(calibrationVectorPrefix, "%scalibrationVector[%d].", calibrationPrefix, idx);
+         assert(b_calibVector->get());
 
-         const ossimXmlNodePtr & calibrationRoot = calibrationDoc.getRoot();
-         assert(calibrationRoot.get());
-         ossimXmlNode const& adsHeader = getExpectedFirstNode(*calibrationRoot, "adsHeader");
-         ossimXmlNode const& calibrationInformation = getExpectedFirstNode(*calibrationRoot, "calibrationInformation");
-         ossimXmlNode const& calibrationVectorList  = getExpectedFirstNode(*calibrationRoot, "calibrationVectorList");
+         ossimXmlNode const& calibrationVector = **b_calibVector;
+           const ossimXmlNodePtr & node = calibrationVector.findFirstNode("pixel");
 
-         char const calibrationPrefix[] = "calibration.";
-
-         addMandatory(theProductKwl, calibrationPrefix, "swath", adsHeader, "swath");
-         addMandatory(theProductKwl, calibrationPrefix, "polarisation", adsHeader, "polarisation");
+         add(theProductKwl, calibrationVectorPrefix,
+                 "pixel_count",
+                 node->getAttributeValue("count").string());
 
          // store as a string
-         addMandatory(theProductKwl, calibrationPrefix, "startTime", adsHeader, "startTime");
-         addMandatory(theProductKwl, calibrationPrefix, "stopTime",  adsHeader, "stopTime");
+         addMandatory(theProductKwl, calibrationVectorPrefix, keyAzimuthTime, calibrationVector, "azimuthTime");
 
-         addMandatory(theProductKwl, calibrationPrefix, "absoluteCalibrationConstant", calibrationInformation, "absoluteCalibrationConstant");
+         addMandatory(theProductKwl, calibrationVectorPrefix, "line",        calibrationVector, "line");
+         addMandatory(theProductKwl, calibrationVectorPrefix, "pixel",       calibrationVector, "pixel");
+         addMandatory(theProductKwl, calibrationVectorPrefix, "sigmaNought", calibrationVector, "sigmaNought");
+         addMandatory(theProductKwl, calibrationVectorPrefix, "betaNought",  calibrationVector, "betaNought");
+         addMandatory(theProductKwl, calibrationVectorPrefix, "gamma",       calibrationVector, "gamma");
+         addMandatory(theProductKwl, calibrationVectorPrefix, "dn",          calibrationVector, "dn");
 
-         add(theProductKwl, calibrationPrefix,
-               "count",
-               calibrationVectorList.getAttributeValue("count").string());
-
-         std::vector< ossimXmlNodePtr > calibrationVectors;
-         calibrationRoot->findChildNodes("calibrationVectorList/calibrationVector", calibrationVectors);
-         int idx = 0;
-         for (std::vector< ossimXmlNodePtr >::const_iterator b_calibVector = calibrationVectors.begin(), e_calibVector = calibrationVectors.end()
-               ; b_calibVector != e_calibVector
-               ; ++b_calibVector, ++idx
-             )
-         {
-            char calibrationVectorPrefix[256];
-            s_printf(calibrationVectorPrefix, "%scalibrationVector[%d].", calibrationPrefix, idx);
-            assert(b_calibVector->get());
-
-            ossimXmlNode const& calibrationVector = **b_calibVector;
-            const ossimXmlNodePtr & node = calibrationVector.findFirstNode("pixel");
-
-            add(theProductKwl, calibrationVectorPrefix,
-                  "pixel_count",
-                  node->getAttributeValue("count").string());
-
-            // store as a string
-            addMandatory(theProductKwl, calibrationVectorPrefix, keyAzimuthTime, calibrationVector, "azimuthTime");
-
-            addMandatory(theProductKwl, calibrationVectorPrefix, "line",        calibrationVector, "line");
-            addMandatory(theProductKwl, calibrationVectorPrefix, "pixel",       calibrationVector, "pixel");
-            addMandatory(theProductKwl, calibrationVectorPrefix, "sigmaNought", calibrationVector, "sigmaNought");
-            addMandatory(theProductKwl, calibrationVectorPrefix, "betaNought",  calibrationVector, "betaNought");
-            addMandatory(theProductKwl, calibrationVectorPrefix, "gamma",       calibrationVector, "gamma");
-            addMandatory(theProductKwl, calibrationVectorPrefix, "dn",          calibrationVector, "dn");
-
-            //  calibrationVectors[idx]->toKwl(theProductKwl, "calibrationVectorList_" + ossimString::toString(idx+1) + ".");
-         }
+       //  calibrationVectors[idx]->toKwl(theProductKwl, "calibrationVectorList_" + ossimString::toString(idx+1) + ".");
       }
    }
 
-   void ossimSentinel1Model::readNoiseMetadata()
+   void ossimSentinel1Model::readNoiseMetadata(ossimFilename const& noiseFilename)
    {
-      ossimDirectory calibrationDir( theManifestDirectory.dirCat( "annotation/calibration") );
-      std::vector<ossimFilename> files;
-      if (calibrationDir.isOpened())
-        {
-        calibrationDir.findAllFilesThatMatch(files, "noise*");
-        }
-      std::vector<ossimFilename>::const_iterator it = files.begin();
+      assert(noiseFilename.exists());
+
       const char noisePrefix[] = "noise.";
 
-      for (; it != files.end(); ++it)
-      {
-         ossimXmlDocument noiseDoc;
-         openMetadataFile(noiseDoc, *it );
+      ossimXmlDocument noiseDoc;
+      openMetadataFile(noiseDoc, noiseFilename);
 
-         const ossimXmlNodePtr noiseRoot = noiseDoc.getRoot();
-         std::vector< ossimXmlNodePtr > noiseVectors;
+      const ossimXmlNodePtr noiseRoot = noiseDoc.getRoot();
+      std::vector< ossimXmlNodePtr > noiseVectors;
          
-         noiseRoot->findChildNodes("noiseVectorList/noiseVector", noiseVectors);
-         std::string noiseLutName = "noiseLut";
+      ossimXmlNode const& adsHeader = getExpectedFirstNode(*noiseRoot, "adsHeader");
 
-         // Starting with IPF 2.9.0, the noiseLut field has been renamed into noiseRangeVectorList, and the 
-         // noiseAzimuthVectorList has been added. 
-         // Ref: MPC-0392 DI-MPC-TN Issue 1.1 2017,Nov.28 Thermal Denoising of Products Generated by the S-1 IPF
+      noiseRoot->findChildNodes("noiseVectorList/noiseVector", noiseVectors);
+      std::string noiseLutName = "noiseLut";
 
-         if (noiseVectors.empty())
-         {
-            noiseRoot->findChildNodes("noiseRangeVectorList/noiseRangeVector", noiseVectors);
-            noiseLutName = "noiseRangeLut";
-         }
+      // Starting with IPF 2.9.0, the noiseLut field has been renamed into noiseRangeVectorList, and the 
+      // noiseAzimuthVectorList has been added. 
+      // Ref: MPC-0392 DI-MPC-TN Issue 1.1 2017,Nov.28 Thermal Denoising of Products Generated by the S-1 IPF
 
-
-         int idx = 0;
-         for (std::vector< ossimXmlNodePtr >::const_iterator b_noiseVector = noiseVectors.begin(), e_noiseVector = noiseVectors.end()
-               ; b_noiseVector != e_noiseVector
-               ; ++b_noiseVector, ++idx
-             )
-         {
-            char noiseVectorPrefix [256];
-            s_printf(noiseVectorPrefix, "%snoiseVector[%d].", noisePrefix, idx);
-            assert(b_noiseVector->get());
-
-            ossimXmlNode const& noiseVector = **b_noiseVector;
-
-            const ossimXmlNodePtr & node = noiseVector.findFirstNode("pixel");
-
-            add(theProductKwl, noiseVectorPrefix,
-                  "pixel_count",
-                  node->getAttributeValue("count"),
-                  ShallOverwrite::no);
-
-            // store as a string
-            addMandatory(theProductKwl, noiseVectorPrefix, keyAzimuthTime, noiseVector, "azimuthTime");
-
-            addMandatory(theProductKwl, noiseVectorPrefix, "line",     noiseVector, "line");
-            addMandatory(theProductKwl, noiseVectorPrefix, "pixel",    noiseVector, "pixel");
-            addMandatory(theProductKwl, noiseVectorPrefix, "noiseLut", noiseVector, noiseLutName);
-            //noiseVectorList[idx]->toKwl(theProductKwl, "noiseVectorList_" + ossimString::toString(idx+1) + ".");
-         }
-
-         add(theProductKwl, noisePrefix, "rangeCount", noiseVectors.size());
-
-         std::vector< ossimXmlNodePtr > noiseAzimuthVectors;
-          
-         noiseRoot->findChildNodes("noiseAzimuthVectorList/noiseAzimuthVector", noiseAzimuthVectors);
-          add(theProductKwl, noisePrefix, "azimuthCount", noiseAzimuthVectors.size());
-
-         idx = 0;
-         for (const auto & noiseAzimuthNodePtr : noiseAzimuthVectors)
-         {
-            const auto & noiseAzimuthNode = *noiseAzimuthNodePtr;
-
-            std::string noiseAzimuthVectorPrefix = "noise.noiseAzimuthVector[" + std::to_string(idx) + "]." ;
-
-            const ossimXmlNodePtr & node = noiseAzimuthNode.findFirstNode("line");
-
-            add(theProductKwl, noiseAzimuthVectorPrefix,
-                  "pixel_count",
-                  node->getAttributeValue("count"),
-                  ShallOverwrite::no);
-
-            addMandatory(theProductKwl, noiseAzimuthVectorPrefix, "swath",     noiseAzimuthNode, "swath");
-            addMandatory(theProductKwl, noiseAzimuthVectorPrefix, "firstAzimuthLine",    noiseAzimuthNode, "firstAzimuthLine");
-            addMandatory(theProductKwl, noiseAzimuthVectorPrefix, "firstRangeSample", noiseAzimuthNode, "firstRangeSample");
-            addMandatory(theProductKwl, noiseAzimuthVectorPrefix, "lastAzimuthLine",    noiseAzimuthNode, "lastAzimuthLine");
-            addMandatory(theProductKwl, noiseAzimuthVectorPrefix, "lastRangeSample", noiseAzimuthNode, "lastRangeSample");
-            addMandatory(theProductKwl, noiseAzimuthVectorPrefix, "line", noiseAzimuthNode, "line");
-            addMandatory(theProductKwl, noiseAzimuthVectorPrefix, "noiseAzimuthLut", noiseAzimuthNode, "noiseAzimuthLut");
-
-            idx++;
-         }
+      if (noiseVectors.empty())
+      {
+         noiseRoot->findChildNodes("noiseRangeVectorList/noiseRangeVector", noiseVectors);
+         noiseLutName = "noiseRangeLut";
       }
+
+      int idx = 0;
+      for (std::vector< ossimXmlNodePtr >::const_iterator b_noiseVector = noiseVectors.begin(), e_noiseVector = noiseVectors.end()
+            ; b_noiseVector != e_noiseVector
+            ; ++b_noiseVector, ++idx
+          )
+      {
+         char noiseVectorPrefix [256];
+         s_printf(noiseVectorPrefix, "%snoiseVector[%d].", noisePrefix, idx);
+         assert(b_noiseVector->get());
+
+         ossimXmlNode const& noiseVector = **b_noiseVector;
+
+         const ossimXmlNodePtr & node = noiseVector.findFirstNode("pixel");
+
+         add(theProductKwl, noiseVectorPrefix,
+               "pixel_count",
+               node->getAttributeValue("count"),
+               ShallOverwrite::no);
+
+         // store as a string
+         addMandatory(theProductKwl, noiseVectorPrefix, keyAzimuthTime, noiseVector, "azimuthTime");
+
+         addMandatory(theProductKwl, noiseVectorPrefix, "line",     noiseVector, "line");
+         addMandatory(theProductKwl, noiseVectorPrefix, "pixel",    noiseVector, "pixel");
+         addMandatory(theProductKwl, noiseVectorPrefix, "noiseLut", noiseVector, noiseLutName);
+         //noiseVectorList[idx]->toKwl(theProductKwl, "noiseVectorList_" + ossimString::toString(idx+1) + ".");
+      }
+
+      add(theProductKwl, noisePrefix, "rangeCount", noiseVectors.size());
+
+      std::vector< ossimXmlNodePtr > noiseAzimuthVectors;
+          
+      noiseRoot->findChildNodes("noiseAzimuthVectorList/noiseAzimuthVector", noiseAzimuthVectors);
+       add(theProductKwl, noisePrefix, "azimuthCount", noiseAzimuthVectors.size());
+
+      idx = 0;
+      for (const auto & noiseAzimuthNodePtr : noiseAzimuthVectors)
+      {
+         const auto & noiseAzimuthNode = *noiseAzimuthNodePtr;
+
+         std::string noiseAzimuthVectorPrefix = "noise.noiseAzimuthVector[" + std::to_string(idx) + "]." ;
+
+         const ossimXmlNodePtr & node = noiseAzimuthNode.findFirstNode("line");
+
+         add(theProductKwl, noiseAzimuthVectorPrefix,
+               "pixel_count",
+               node->getAttributeValue("count"),
+               ShallOverwrite::no);
+
+         addMandatory(theProductKwl, noiseAzimuthVectorPrefix, "swath",     noiseAzimuthNode, "swath");
+         addMandatory(theProductKwl, noiseAzimuthVectorPrefix, "firstAzimuthLine",    noiseAzimuthNode, "firstAzimuthLine");
+         addMandatory(theProductKwl, noiseAzimuthVectorPrefix, "firstRangeSample", noiseAzimuthNode, "firstRangeSample");
+         addMandatory(theProductKwl, noiseAzimuthVectorPrefix, "lastAzimuthLine",    noiseAzimuthNode, "lastAzimuthLine");
+         addMandatory(theProductKwl, noiseAzimuthVectorPrefix, "lastRangeSample", noiseAzimuthNode, "lastRangeSample");
+         addMandatory(theProductKwl, noiseAzimuthVectorPrefix, "line", noiseAzimuthNode, "line");
+         addMandatory(theProductKwl, noiseAzimuthVectorPrefix, "noiseAzimuthLut", noiseAzimuthNode, "noiseAzimuthLut");
+
+         idx++;
+      }
+
    }
 
    void ossimSentinel1Model::readBurstRecords(ossimXmlNode const& productRoot, ossimXmlNode const& imageInformation)
