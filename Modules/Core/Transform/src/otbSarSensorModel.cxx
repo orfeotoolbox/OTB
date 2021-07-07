@@ -138,7 +138,7 @@ void SarSensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
                                              double  heightAboveEllipsoid,
                                              Point3DType& worldPt) const
 {
-  assert(m_GCP.GCP.size());
+  assert(m_GCP.GCPs.size());
 
   const auto& gcp = findClosestGCP(imPt, m_GCP);
 
@@ -309,7 +309,7 @@ void SarSensorModel::interpolateSensorPosVel(const TimeType & azimuthTime,
 
 void SarSensorModel::OptimizeTimeOffsetsFromGcps()
 {
-  assert(m_GCP.GCP.size());
+  assert(m_GCP.GCPs.size());
 
   DurationType cumulAzimuthTime(MetaData::seconds(0));
   unsigned int count=0;
