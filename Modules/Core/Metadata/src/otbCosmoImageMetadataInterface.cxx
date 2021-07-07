@@ -469,6 +469,13 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 
   imd.Add(MDGeom::SAR, sarParam);
 
+  // TODO: compute a GCP at the center of scene using the inverse sar model like it is done in ossim plugins
+  // This require to move IMIs to another higher level module that depends on OTBTransform (which depends 
+  // on OTBMetadata) so that SarSensorModel can be used. (this cannot be done while IMIs still depend on Ossim)
+  Projection::GCPParam gcp;
+  imd.Add(MDGeom::GCP, gcp);
+
+
   SARCalib sarCalib;
   LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   imd.Add(MDGeom::SARCalib, sarCalib);
