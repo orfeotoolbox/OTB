@@ -130,15 +130,15 @@ public:
 
   static Duration Seconds(double d) 
   {
-    return Duration(boost::posix_time::nanoseconds(static_cast<long>(std::round(d * 1e9))));
+    return Duration(boost::posix_time::nanoseconds(static_cast<long long>(std::round(d * 1e9))));
   }
 
   static Duration Nanoseconds(double d) 
   {
-    return Duration(boost::posix_time::nanoseconds(static_cast<long>(std::round(d))));
+    return Duration(boost::posix_time::nanoseconds(static_cast<long long>(std::round(d))));
   }
 
-  Duration(double d): m_Duration(boost::posix_time::nanoseconds(static_cast<long>(std::round(d)))) {}
+  Duration(double d): m_Duration(boost::posix_time::nanoseconds(static_cast<long long>(std::round(d)))) {}
 
   double TotalNanoseconds() const
   {
