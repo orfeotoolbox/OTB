@@ -22,7 +22,7 @@
 #define otbTerraSarBrightnessImageFilter_hxx
 
 #include "otbTerraSarBrightnessImageFilter.h"
-#include "otbTerraSarImageMetadataInterface.h"
+#include "otbTerraSarXSarImageMetadataInterface.h"
 
 namespace otb
 {
@@ -33,7 +33,7 @@ void TerraSarBrightnessImageFilter<TInputImage, TOutputImage>::BeforeThreadedGen
   Superclass::BeforeThreadedGenerateData();
 
   // Load metada
-  TerraSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarImageMetadataInterface::New();
+  TerraSarXSarImageMetadataInterface::Pointer lImageMetadata = otb::TerraSarXSarImageMetadataInterface::New();
   lImageMetadata->SetMetaDataDictionary(this->GetInput()->GetMetaDataDictionary());
   bool mdIsAvailable = lImageMetadata->CanRead();
 
