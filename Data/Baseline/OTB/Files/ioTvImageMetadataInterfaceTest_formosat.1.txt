@@ -1,5 +1,6 @@
 SensorID FORMOSAT 2
 Mission Formasat 2
+AreaOrPoint Point
 TileHintX 3000
 TileHintY 500
 DataType 1

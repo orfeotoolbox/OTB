@@ -23,11 +23,13 @@
 #define otbClampImageFilter_hxx
 
 #include "otbClampImageFilter.h"
+#include "itkImageScanlineIterator.h"
+#include "itkImageScanlineConstIterator.h"
 #include "itkImageRegionIterator.h"
 #include "itkNumericTraits.h"
-#include <limits>
 #include "itkObjectFactory.h"
 #include "itkProgressReporter.h"
+#include <limits>
 
 namespace otb
 {
@@ -43,23 +45,14 @@ ClampImageFilter<TInputImage, TOutputImage>::ClampImageFilter()
 }
 
 template <class TInputImage, class TOutputImage>
-void ClampImageFilter<TInputImage, TOutputImage>::SetLower(OutputPixelValueType val)
+void ClampImageFilter<TInputImage, TOutputImage>::SetThresholds(OutputPixelValueType lowerVal, OutputPixelValueType upperVal)
 {
-  if (m_Lower != val)
+  assert( lowerVal <= upperVal );
+  if ((m_Lower != lowerVal) || (m_Upper != upperVal))
   {
-    m_Lower = val;
-    this->GetFunctor().SetLowest(m_Lower);
-    this->Modified();
-  }
-}
-
-template <class TInputImage, class TOutputImage>
-void ClampImageFilter<TInputImage, TOutputImage>::SetUpper(OutputPixelValueType val)
-{
-  if (m_Upper != val)
-  {
-    m_Upper = val;
-    this->GetFunctor().SetHighest(m_Upper);
+    m_Lower = lowerVal;
+    m_Upper = upperVal;
+    this->GetFunctor().SetThresholds(m_Lower, m_Upper);
     this->Modified();
   }
 }
@@ -86,8 +79,7 @@ void ClampImageFilter<TInputImage, TOutputImage>::ClampAbove(const OutputPixelVa
   {
     m_Lower = std::numeric_limits<OutputPixelValueType>::lowest();
     m_Upper = thresh;
-    this->GetFunctor().SetLowest(m_Lower);
-    this->GetFunctor().SetHighest(m_Upper);
+    this->GetFunctor().SetThresholds(m_Lower, m_Upper);
     this->Modified();
   }
 }
@@ -102,8 +94,7 @@ void ClampImageFilter<TInputImage, TOutputImage>::ClampBelow(const OutputPixelVa
   {
     m_Upper = std::numeric_limits<OutputPixelValueType>::max();
     m_Lower = thresh;
-    this->GetFunctor().SetLowest(m_Lower);
-    this->GetFunctor().SetHighest(m_Upper);
+    this->GetFunctor().SetThresholds(m_Lower, m_Upper);
     this->Modified();
   }
 }
@@ -125,12 +116,51 @@ void ClampImageFilter<TInputImage, TOutputImage>::ClampOutside(const OutputPixel
   {
     m_Lower = lower;
     m_Upper = upper;
-    this->GetFunctor().SetLowest(m_Lower);
-    this->GetFunctor().SetHighest(m_Upper);
+    this->GetFunctor().SetThresholds(m_Lower, m_Upper);
     this->Modified();
   }
 }
 
-} // end namespace itk
+template <class TInputImage, class TOutputImage>
+void
+ClampImageFilter<TInputImage, TOutputImage>
+::ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId)
+{
+  const auto& regionSize = outputRegionForThread.GetSize();
+
+  if (regionSize[0] == 0)
+  {
+    return;
+  }
+  const auto            numberOfLinesToProcess = outputRegionForThread.GetNumberOfPixels() / regionSize[0];
+  itk::ProgressReporter p(this, threadId, numberOfLinesToProcess);
+
+  // Build output iterator
+  itk::ImageScanlineConstIterator<InputImageType>  inIt(this->GetInput(), outputRegionForThread);
+  itk::ImageScanlineIterator<OutputImageType>      outIt(this->GetOutput(), outputRegionForThread);
+
+  // Build a default value
+  typename OutputImageType::PixelType outputValueHolder;
+  // Luc: I'm not sure this will be the correct size given the convoluted
+  // size computations done in the ConvertTypeFunctor
+  itk::NumericTraits<typename OutputImageType::PixelType>::SetLength(outputValueHolder, this->GetOutput()->GetNumberOfComponentsPerPixel());
+
+  while (!outIt.IsAtEnd())
+  {
+    // MoveIterartors will ++ all iterators in the tuple
+    for (; !outIt.IsAtEndOfLine(); ++outIt, ++inIt)
+    {
+      // This will call the operator with inputIterators Get() results
+      // and fill outputValueHolder with the result.
+      m_Functor(outputValueHolder, inIt.Get());
+      outIt.Set(outputValueHolder);
+    }
+    outIt.NextLine();
+    inIt.NextLine();
+    p.CompletedPixel(); // may throw
+  }
+}
+
+} // end namespace otb
 
 #endif

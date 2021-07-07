@@ -352,7 +352,7 @@ a subtle interplay between this method and
 ``GenerateInputRequestedRegion()`` is occurring here. The default
 behavior of ``GenerateInputRequestedRegion()`` (at least for
 :doxygen-itk:`ImageToImageFilter`) is to set the input RequestedRegion
-to the output’s ReqestedRegion. Hence, by overriding the method
+to the output’s RequestedRegion. Hence, by overriding the method
 ``EnlargeOutputRequestedRegion()`` to set the output to the
 LargestPossibleRegion, effectively sets the input to this filter to the
 LargestPossibleRegion (and probably causing all upstream filters to

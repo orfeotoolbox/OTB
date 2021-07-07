@@ -55,20 +55,20 @@ public:
   /** RTTI support */
   itkTypeMacro(InputImageParameter, Parameter);
 
-  typedef struct
+  struct Connector
   {
     itk::Object::Pointer app;
     std::string          key;
     bool                 isMem;
-  } Connector;
+  };
 
   /** Set value from filename */
-  bool SetFromFileName(const std::string& filename);
+  bool SetFromFileName(std::string filename);
   itkGetConstReferenceMacro(FileName, std::string);
 
   void SetConnection(Connector c)
   {
-    m_Connection = c;
+    m_Connection = std::move(c);
   }
 
   const Connector& GetConnection() const
@@ -140,29 +140,21 @@ protected:
   InputImageParameter();
 
   /** Destructor */
-  ~InputImageParameter() override;
+  ~InputImageParameter() override = default;
 
 private:
   InputImageParameter(const Parameter&) = delete;
   void operator=(const Parameter&) = delete;
 
   std::string                 m_FileName;
-  itk::ProcessObject::Pointer m_Reader;
+  itk::ProcessObject::Pointer m_Reader = nullptr;
 
-  ImageBaseType::Pointer m_Image;
+  ImageBaseType::Pointer      m_Image = nullptr;
 
-  itk::ProcessObject::Pointer m_InputCaster;
-  itk::ProcessObject::Pointer m_OutputCaster;
+  itk::ProcessObject::Pointer m_OutputCaster = nullptr;
+  itk::DataObject::Pointer    m_OutputCasted = nullptr;
 
 private:
-  /** */
-  template <typename T>
-  using InputClampImageFilter = ClampImageFilter<T, otb::Wrapper::DoubleVectorImageType>;
-
-  /** */
-  template <typename T>
-  using OutputClampImageFilter = ClampImageFilter<otb::Wrapper::DoubleVectorImageType, T>;
-
   /** */
   template <typename TOutputImage, typename TInputImage>
   TOutputImage* Cast(TInputImage*);
@@ -171,9 +163,9 @@ private:
   std::string m_PreviousFileName;
 
   /** flag : are we using a filename or an image pointer as an input */
-  bool m_UseFilename;
+  bool        m_UseFilename = true;
 
-  Connector m_Connection;
+  Connector   m_Connection{};
 
 }; // End class InputImage Parameter
 

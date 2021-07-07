@@ -205,7 +205,14 @@ private:
 
   void DoUpdateParameters() override
   {
-    // Nothing to do here : all parameters are independent
+    if (HasValue("parameters.min") && HasValue("parameters.max"))
+    {
+      if (GetParameterFloat("parameters.min") > GetParameterFloat("parameters.max"))
+      {
+        otbAppLogFATAL(<< "Lower threshold (-parameters.min) cannot be greater than upper threshold (-parameters.max).");
+        return;
+      }
+    }
   }
 
   void DoExecute() override
@@ -246,8 +253,7 @@ private:
 
     m_ClampFilter = ClampFilterType::New();
     m_ClampFilter->SetInput(m_ExtractorFilter->GetOutput());
-    m_ClampFilter->SetLower(GetParameterFloat("parameters.min"));
-    m_ClampFilter->SetUpper(GetParameterFloat("parameters.max"));
+    m_ClampFilter->SetThresholds(GetParameterFloat("parameters.min"), GetParameterFloat("parameters.max"));
 
     m_HarTexFilter  = HarTexturesFilterType::New();
     m_HarImageList  = ImageListType::New();

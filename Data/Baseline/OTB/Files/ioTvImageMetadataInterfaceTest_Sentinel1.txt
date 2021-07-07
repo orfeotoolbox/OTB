@@ -8,6 +8,7 @@ Swath S6
 OrbitDirection ASCENDING
 BeamMode SM
 BeamSwath S6
+AreaOrPoint Area
 TileHintX 17663
 TileHintY 1
 DataType 11

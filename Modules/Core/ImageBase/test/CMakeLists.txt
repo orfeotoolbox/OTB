@@ -775,3 +775,16 @@ otb_add_test(NAME ioTvOtbVectorImageTestRadarsat COMMAND otbImageBaseTestDriver
   otbVectorImageLegacyTest
   LARGEINPUT{/RADARSAT1/GOMA/SCENE01/}
   ${TEMP}/ioOtbVectorImageTestRadarsat.txt)
+
+if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
+  # Unit tests
+  add_executable(otbPixelComponentIteratorTests otbPixelComponentIteratorTest.cxx)
+  target_link_libraries(
+    otbPixelComponentIteratorTests
+    ${OTBImageBase-Test_LIBRARIES}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
+
+  add_test(NAME coTuPixelComponentIterator
+           COMMAND otbPixelComponentIteratorTests
+           WORKING_DIRECTORY ${TEMP})
+endif()

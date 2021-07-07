@@ -56,8 +56,8 @@ include(ExternalProject)
 #mantis: 1193
 if(APPLE)
   # https://cmake.org/cmake/help/v3.10/variable/CMAKE_SYSTEM_FRAMEWORK_PATH.html
-  # By default it contains the standard directories for the current system. It 
-  # is not intended to be modified by the project, use CMAKE_FRAMEWORK_PATH 
+  # By default it contains the standard directories for the current system. It
+  # is not intended to be modified by the project, use CMAKE_FRAMEWORK_PATH
   # for this.
   set(CMAKE_SYSTEM_FRAMEWORK_PATH "" CACHE PATH "" FORCE)
 endif()
@@ -133,7 +133,7 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 #-----------------------------------------------------------------------------
 # OTB version number.
 set(OTB_VERSION_MAJOR "7")
-set(OTB_VERSION_MINOR "2")
+set(OTB_VERSION_MINOR "3")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 

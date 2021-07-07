@@ -227,7 +227,7 @@ public:
   }
 
   /** If multiple keys have the same path, gives the position of the one with value value*/
-  unsigned int GetAttributId(std::string const& path, std::string const& value) const override
+  unsigned int GetAttributId(std::string const&, std::string const&) const override
   {
     itkExceptionMacro(
         "GetAttributId() not yet implemented in otbGDALImageIO");

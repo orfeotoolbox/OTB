@@ -398,7 +398,7 @@ deploy:
   extends: .general
   only:
     - develop@orfeotoolbox/otb
-    - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
+    - /^release-[0-9]+\.[0-9]+$/
   before_script:
     # Provision efficiently the local LFS cache before checkout
     - git lfs fetch origin $CI_COMMIT_SHA
@@ -425,12 +425,13 @@ update-archive:
   extends: .general
   only:
     - develop
+    - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
   before_script:
     # Provision efficiently the local LFS cache before checkout
     - git lfs fetch origin $CI_COMMIT_SHA
     - git checkout -f -q $CI_COMMIT_SHA
   script:
-    - ./Utilities/Maintenance/SuperbuildDownloadList.sh download build_archive
+    - ./CI/SuperbuildDownloadList.sh download build_archive
     - ./CI/deploy-archive.sh build_archive
   needs:
     # don't push the archive if Superbuild was not successful

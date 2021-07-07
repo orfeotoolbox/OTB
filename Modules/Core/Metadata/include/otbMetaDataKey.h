@@ -179,6 +179,7 @@ enum class MDStr
   OrbitDirection,
   BeamMode,
   BeamSwath,
+  AreaOrPoint,
   // ...
   END
 };

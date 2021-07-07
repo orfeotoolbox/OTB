@@ -24,8 +24,8 @@ SETUP_SUPERBUILD(OPENTHREADS)
 
 ExternalProject_Add(OPENTHREADS
   PREFIX OPENTHREADS
-  URL "http://www.openscenegraph.org/downloads/stable_releases/OpenSceneGraph-3.4.0/source/OpenSceneGraph-3.4.0.zip"
-  URL_MD5 a5e762c64373a46932e444f6f7332496
+  URL "https://github.com/openscenegraph/OpenSceneGraph/archive/refs/tags/OpenSceneGraph-3.4.1.zip"
+  URL_MD5 b60a03352a1dd5fbd283d2e342396fb0
   SOURCE_DIR ${OPENTHREADS_SB_SRC}
   BINARY_DIR ${OPENTHREADS_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

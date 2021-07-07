@@ -32,7 +32,7 @@ if(NOT APPLE AND NOT WIN32)
   list(APPEND CURL_SB_CONFIG
     -DCMAKE_USE_OPENSSL:BOOL=ON
     -DCMAKE_C_FLAGS:STRING=-fPIC)
-# Set CURL_CA_PATH to none because openssl in not enabled and CMake generation will fail if 
+# Set CURL_CA_PATH to none because openssl in not enabled and CMake generation will fail if
 # a CA path is found in auto mode.
 elseif(APPLE)
   list(APPEND CURL_SB_CONFIG
@@ -50,7 +50,7 @@ endif()
 
 ExternalProject_Add(CURL
   PREFIX CURL
-  URL "http://curl.haxx.se/download/curl-7.54.1.tar.gz"
+  URL "https://curl.haxx.se/download/curl-7.54.1.tar.gz"
   URL_MD5 21a6e5658fd55103a90b11de7b2a8a8c
   BINARY_DIR ${CURL_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
