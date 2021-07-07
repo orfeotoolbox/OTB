@@ -81,6 +81,7 @@ private:
   bool readDopplerRate(const ossimRefPtr<ossimXmlDocument> xmlDoc);
   bool readDopplerCentroid(const ossimRefPtr<ossimXmlDocument> xmlDoc, const std::string polarisation="HH");
   bool readGCPs(const std::string & geoXml);
+  bool readCalibrationFactor(const ossimRefPtr<ossimXmlDocument> xmlDoc, const std::string polarisation="HH");
 
   ossimKeywordlist   theProductKwl;
   std::string m_imageName;

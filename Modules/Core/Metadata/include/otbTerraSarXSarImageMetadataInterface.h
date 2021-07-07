@@ -119,6 +119,9 @@ public:
   
   bool CanRead() const override;
 
+  double GetCalibrationFactor() const;
+
+
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
   std::vector<unsigned int> GetDefaultDisplay() const override;

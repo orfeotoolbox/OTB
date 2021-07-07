@@ -324,6 +324,9 @@ namespace ossimplugins
     // Parse Doppler Centroid
     readDopplerCentroid(xmlDoc, polarisation);
 
+    // Parse calibration factor
+    readCalibrationFactor(xmlDoc, polarisation);
+
     // Ensure that superclass members are initialized
     loadState(theProductKwl);
 
@@ -445,6 +448,34 @@ namespace ossimplugins
         std::cout << "Add theOrbitRecords\n";
         theOrbitRecords.push_back(orbitRecord);
       }
+  }
+
+  bool ossimTerraSarXSarSensorModel::readCalibrationFactor(const ossimRefPtr<ossimXmlDocument> xmlDoc, const std::string polarisation)
+  {
+    // Retrieve calibrationConstant nodes (may have several calibration nodes following some layers :
+    // polaristaions
+    std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+    xmlDoc->findNodes("/level1Product/calibration/calibrationConstant", xnodes);
+
+    // Loop on nodes with a check on layer (must match to our image)
+    for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itCalConstnantNode = xnodes.begin(); 
+	itCalConstnantNode!=xnodes.end();++itCalConstnantNode)
+      {
+	// Get the polLayer
+	std::string polarisationLayer  = getTextFromFirstNode(**itCalConstnantNode, "polLayer");
+
+	// Check if the current polLayer match with our image (if not then pass the iteration)
+	if (polarisationLayer != polarisation)
+	  {
+	    continue;
+	  }
+
+	const double calFactor = getDoubleFromFirstNode(**itCalConstnantNode, "calFactor");
+
+	// Add value into keywordlist
+	add(theProductKwl, "calibration.calibrationConstant.calFactor", calFactor);
+      }
+
   }
 
   bool ossimTerraSarXSarSensorModel::readDopplerRate(const ossimRefPtr<ossimXmlDocument> xmlDoc)

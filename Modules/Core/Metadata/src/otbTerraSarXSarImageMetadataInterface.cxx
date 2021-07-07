@@ -510,7 +510,32 @@ TerraSarXSarImageMetadataInterface::UIntVectorType TerraSarXSarImageMetadataInte
   return rgb;
 }
 
+
+double TerraSarXSarImageMetadataInterface::GetCalibrationFactor() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  std::string key("calibration.calibrationConstant.calFactor");
+  if (imageKeywordlist.HasKey(key))
+  {
+    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+    double      value       = atof(valueString.c_str());
+    return value;
+  }
+
+  return std::numeric_limits<double>::quiet_NaN(); // Invalid value
 }
 
 
-
+}
