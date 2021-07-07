@@ -26,7 +26,7 @@ namespace otb
 namespace MetaData
 {
 
-double ratio(Duration const& lhs, Duration const& rhs)
+double ratio_(Duration const& lhs, Duration const& rhs)
 {
   return (lhs.TotalNanoseconds() / rhs.TotalNanoseconds());
 }

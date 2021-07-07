@@ -46,7 +46,7 @@ template <typename T, typename R> struct dividable
   }
   friend scalar_type operator/(T const& lhs, T const& rhs)
   {
-    return ratio(lhs, rhs);
+    return ratio_(lhs, rhs);
   }
 };
 
@@ -109,7 +109,7 @@ public:
 
 using TimeType = TimePoint;
 
-double ratio(Duration const& lhs, Duration const& rhs);
+double ratio_(Duration const& lhs, Duration const& rhs);
 
 class Duration : private details::streamable<Duration>,
                  private boost::addable<Duration>,
@@ -145,6 +145,10 @@ public:
     return m_Duration.total_nanoseconds();
   }
 
+  double TotalSeconds() const
+  {
+    return m_Duration.total_nanoseconds() * 1e9;
+  }
 
   friend Duration& operator+=(Duration & u, Duration const& v)
   {
