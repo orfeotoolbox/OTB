@@ -30,24 +30,13 @@
 namespace otb
 {
 
-TerraSarXSarImageMetadataInterface::TerraSarXSarImageMetadataInterface()
-{
-}
-
 bool TerraSarXSarImageMetadataInterface::CanRead() const
 {
   std::string sensorID = GetSensorID();
 
   // TerraSarXSar model works for PAZ-1 mission as well as TSX-1
-  if (sensorID.find("TSX-1") != std::string::npos || 
-      sensorID.find("PAZ-1") != std::string::npos)
-    {
-      return true;
-    }
-  else
-    {
-      return false;
-    }
+  return (sensorID.find("TSX-1") != std::string::npos ||
+	  sensorID.find("PAZ-1") != std::string::npos);
 }
 
 int TerraSarXSarImageMetadataInterface::GetDay() const
@@ -79,7 +68,17 @@ int TerraSarXSarImageMetadataInterface::GetDay() const
   if (outputValues.size() <= 2)
     itkExceptionMacro(<< "Invalid Day");
 
-  int value = atoi(outputValues[2].c_str());
+  int value = 0;
+  try
+    {
+      value = std::stoi(outputValues[2]);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to convert the day.");
+    }
+
   return value;
 }
 
@@ -112,7 +111,17 @@ int TerraSarXSarImageMetadataInterface::GetMonth() const
   if (outputValues.size() <= 2)
     itkExceptionMacro(<< "Invalid Month");
 
-  int value = atoi(outputValues[1].c_str());
+  int value = 0;
+  try
+    {
+      value = std::stoi(outputValues[1]);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to convert the month.");
+    }
+
   return value;
 }
 
@@ -145,7 +154,17 @@ int TerraSarXSarImageMetadataInterface::GetYear() const
   if (outputValues.size() <= 2)
     itkExceptionMacro(<< "Invalid Year");
 
-  int value = atoi(outputValues[0].c_str());
+  int value = 0;
+  try
+    {
+      value = std::stoi(outputValues[0]);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to convert the year.");
+    }
+
   return value;
 }
 
@@ -178,7 +197,16 @@ int TerraSarXSarImageMetadataInterface::GetHour() const
   if (outputValues.size() <= 4)
     itkExceptionMacro(<< "Invalid Hour");
 
-  int value = atoi(outputValues[3].c_str());
+  int value = 0;
+  try
+    {
+      value = std::stoi(outputValues[3]);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to convert hour.");
+    }
   return value;
 }
 
@@ -211,7 +239,17 @@ int TerraSarXSarImageMetadataInterface::GetMinute() const
   if (outputValues.size() <= 4)
     itkExceptionMacro(<< "Invalid Minute");
 
-  int value = atoi(outputValues[4].c_str());
+  int value = 0;
+  try
+    {
+      value = std::stoi(outputValues[4]);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to convert minutes.");
+    }
+
   return value;
 }
 
@@ -243,7 +281,17 @@ int TerraSarXSarImageMetadataInterface::GetProductionDay() const
   if (outputValues.size() <= 2)
     itkExceptionMacro(<< "Invalid Production Day");
 
-  int value = atoi(outputValues[2].c_str());
+  int value = 0;
+  try
+    {
+      value = std::stoi(outputValues[2]);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to convert the day.");
+    }
+
   return value;
 }
 
@@ -276,7 +324,17 @@ int TerraSarXSarImageMetadataInterface::GetProductionMonth() const
   if (outputValues.size() <= 2)
     itkExceptionMacro(<< "Invalid Production Month");
 
-  int value = atoi(outputValues[1].c_str());
+  int value = 0;
+  try
+    {
+      value = std::stoi(outputValues[1]);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to convert the month.");
+    }
+
   return value;
 }
 
@@ -309,7 +367,17 @@ int TerraSarXSarImageMetadataInterface::GetProductionYear() const
   if (outputValues.size() <= 2)
     itkExceptionMacro(<< "Invalid Production Year");
 
-  int value = atoi(outputValues[0].c_str());
+  int value = 0;
+  try
+    {
+      value = std::stoi(outputValues[0]);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to convert the year.");
+    }
+
   return value;
 }
 
@@ -330,7 +398,17 @@ double TerraSarXSarImageMetadataInterface::GetRadarFrequency() const
   }
 
   std::string valueString = imageKeywordlist.GetMetadataByKey("radarFrequency");
-  double      freq        = atof(valueString.c_str());
+
+  double freq = 0;
+  try
+    {
+      freq = std::stod(valueString);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to convert frequency.");
+    }
 
   return freq;
 }
@@ -350,7 +428,17 @@ double TerraSarXSarImageMetadataInterface::GetPRF() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
   std::string valueString = imageKeywordlist.GetMetadataByKey("sensor_params.prf");
-  double      freq        = atof(valueString.c_str());
+
+  double freq = 0;
+  try
+    {
+      freq = std::stod(valueString);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to convert PRF.");
+    }
 
   return freq;
 }
@@ -371,7 +459,17 @@ double TerraSarXSarImageMetadataInterface::GetRSF() const
   }
 
   std::string valueString = imageKeywordlist.GetMetadataByKey("sensor_params.sampling_frequency");
-  double      freq        = atof(valueString.c_str());
+
+  double freq = 0;
+  try
+    {
+      freq = std::stod(valueString);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to convert RSF.");
+    }
 
   return freq;
 }
@@ -388,7 +486,17 @@ double TerraSarXSarImageMetadataInterface::GetCenterIncidenceAngle() const
   }
 
   std::string valueString = imageKeywordlist.GetMetadataByKey("sceneCoord.sceneCenterCoord.incidenceAngle");
-  double      value       = atof(valueString.c_str());
+
+  double value = 0;
+  try
+    {
+      value = std::stod(valueString);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to convert the incidence angle.");
+    }
 
   return value;
 }

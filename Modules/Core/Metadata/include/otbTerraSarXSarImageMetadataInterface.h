@@ -124,10 +124,8 @@ public:
   std::vector<unsigned int> GetDefaultDisplay() const override;
 
 protected:
-  TerraSarXSarImageMetadataInterface();
-  ~TerraSarXSarImageMetadataInterface() override
-  {
-  }
+  TerraSarXSarImageMetadataInterface() = default;
+  ~TerraSarXSarImageMetadataInterface() = default;
  
 
 private:
