@@ -238,7 +238,7 @@ public:
 
         precise_duration() = default;
         precise_duration(InternalDurationType const& d): m_duration(d) {}
-precise_duration(double us ): m_duration(boost::posix_time::nanoseconds(static_cast<long>(std::floor(us * 1e3)))){}
+precise_duration(double us ): m_duration(boost::posix_time::nanoseconds(static_cast<long long>(std::floor(us * 1e3)))){}
 
 
          double total_seconds() const {
@@ -270,7 +270,7 @@ precise_duration(double us ): m_duration(boost::posix_time::nanoseconds(static_c
 
   friend precise_duration& operator*=(precise_duration & u, double v)
   {
-    u.m_duration = boost::posix_time::nanoseconds(static_cast<long>(std::round(
+    u.m_duration = boost::posix_time::nanoseconds(static_cast<long long>(std::round(
                             u.m_duration.total_nanoseconds() * v)));
     return u;
   }
@@ -278,7 +278,7 @@ precise_duration(double us ): m_duration(boost::posix_time::nanoseconds(static_c
 
   friend precise_duration& operator/=(precise_duration & u, double v)
   {
-    u.m_duration = boost::posix_time::nanoseconds(static_cast<long>(std::round(
+    u.m_duration = boost::posix_time::nanoseconds(static_cast<long long>(std::round(
                             u.m_duration.total_nanoseconds() / v)));
     return u;
   }

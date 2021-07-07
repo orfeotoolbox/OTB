@@ -164,7 +164,7 @@ public:
 
   friend Duration& operator*=(Duration & u, double v)
   {
-    u.m_Duration = boost::posix_time::nanoseconds(static_cast<long>(std::round(
+    u.m_Duration = boost::posix_time::nanoseconds(static_cast<long long>(std::round(
                             u.m_Duration.total_nanoseconds() * v)));
     return u;
   }
@@ -172,7 +172,7 @@ public:
 
   friend Duration& operator/=(Duration & u, double v)
   {
-    u.m_Duration = boost::posix_time::nanoseconds(static_cast<long>(std::round(
+    u.m_Duration = boost::posix_time::nanoseconds(static_cast<long long>(std::round(
                             u.m_Duration.total_nanoseconds() / v)));
     return u;
   }
