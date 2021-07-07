@@ -23,7 +23,7 @@
 
 #include "otbSarDeburstImageFilter.h"
 
-#include "otbSarSensorModelAdapter.h"
+#include "otbSarSensorModel.h"
 #include "otbImageKeywordlist.h"
 #include "itkImageScanlineIterator.h"
 #include "itkImageScanlineConstIterator.h"
@@ -57,18 +57,13 @@ void SarDeburstImageFilter<TImage>::GenerateOutputInformation()
   if (std::abs(inputPtr->GetOrigin()[1] - static_cast<long>(inputPtr->GetOrigin()[1]) - 0.5) >= std::numeric_limits<double>::epsilon())
     itkExceptionMacro("Can not perform deburst if input image azimuth origin is not N.5");
 
-  // Retrieve input image keywordlist
-  ImageKeywordlist inputKwl = inputPtr->GetImageKeywordlist();
+  // Retrieve input image metadata
+  auto imd = inputPtr->GetImageMetadata();
 
-  // Try to create a SarSensorModelAdapter
-  SarSensorModelAdapter::Pointer sarSensorModel = SarSensorModelAdapter::New();
-  bool                           loadOk         = sarSensorModel->LoadState(inputKwl);
-
-  if (!loadOk || !sarSensorModel->IsValidSensorModel())
-    itkExceptionMacro(<< "Input image does not contain a valid SAR sensor model.");
+  SarSensorModel sarSensorModel(imd);
 
   // Try to call the deburst function
-  bool deburstOk = sarSensorModel->Deburst(m_LinesRecord, m_SamplesRecord, m_OnlyValidSample);
+  bool deburstOk = sarSensorModel.Deburst(m_LinesRecord, m_SamplesRecord, m_OnlyValidSample);
 
   if (!deburstOk || m_LinesRecord.empty())
     itkExceptionMacro(<< "Could not deburst SAR sensor model from input image");
@@ -76,14 +71,6 @@ void SarDeburstImageFilter<TImage>::GenerateOutputInformation()
   // Compute the actual lines to remove
   typename ImageType::RegionType largestPossibleRegion = this->GetInput()->GetLargestPossibleRegion();
   typename ImageType::PointType  origin                = this->GetInput()->GetOrigin();
-
-  // Export the new keywordlist
-  ImageKeywordlist newKwl;
-
-  bool saveOk = sarSensorModel->SaveState(newKwl);
-
-  if (!saveOk)
-    itkExceptionMacro(<< "Could not export deburst SAR sensor model to keyword list");
 
   // Now, filter the LinesRecord so as to account for possible
   // extracts on input image
@@ -94,7 +81,7 @@ void SarDeburstImageFilter<TImage>::GenerateOutputInformation()
 
   // Move origin
   unsigned long outputOriginLine = 0;
-  SarSensorModelAdapter::ImageLineToDeburstLine(m_LinesRecord, firstInputLine, outputOriginLine);
+  SarSensorModel::ImageLineToDeburstLine(m_LinesRecord, firstInputLine, outputOriginLine);
 
   long          originOffset_samples = static_cast<long>(this->GetInput()->GetOrigin()[0] - 0.5);
   unsigned long outputOriginSample   = 0;
@@ -158,14 +145,10 @@ void SarDeburstImageFilter<TImage>::GenerateOutputInformation()
   largestPossibleRegion.SetSize(deburstSize);
   outputPtr->SetLargestPossibleRegion(largestPossibleRegion);
 
-  newKwl.AddKey("support_data.number_samples", std::to_string(deburstSize[0]));
-  newKwl.AddKey("support_data.number_lines", std::to_string(deburstSize[1]));
+  imd.Add(MDNum::NumberOfLines, deburstSize[0]);
+  imd.Add(MDNum::NumberOfColumns, deburstSize[1]);
 
-  newKwl.AddKey("number_samples", std::to_string(deburstSize[0]));
-  newKwl.AddKey("number_lines", std::to_string(deburstSize[1]));
-
-  // Set new keyword list to output image
-  outputPtr->SetImageKeywordList(newKwl);
+  outputPtr->SetImageMetadata(imd);
 }
 
 template <class TImage>
@@ -186,8 +169,8 @@ typename SarDeburstImageFilter<TImage>::RegionType SarDeburstImageFilter<TImage>
 
   unsigned long inputUpperLeftLine, inputLowerLeftLine;
 
-  SarSensorModelAdapter::DeburstLineToImageLine(m_LinesRecord, upperLeftLine, inputUpperLeftLine);
-  SarSensorModelAdapter::DeburstLineToImageLine(m_LinesRecord, lowerLeftLine, inputLowerLeftLine);
+  SarSensorModel::DeburstLineToImageLine(m_LinesRecord, upperLeftLine, inputUpperLeftLine);
+  SarSensorModel::DeburstLineToImageLine(m_LinesRecord, lowerLeftLine, inputLowerLeftLine);
 
   long originOffset         = static_cast<long>(this->GetInput()->GetOrigin()[1] - 0.5);
   long originOffset_samples = static_cast<long>(this->GetInput()->GetOrigin()[0] - 0.5);

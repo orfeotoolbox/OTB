@@ -1102,9 +1102,15 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
   return true;
 }
 
+void SarSensorModel::UpdateImageMetadata(ImageMetadata & imd)
+{
+  imd.Add(MDGeom::SAR, m_SarParam);
+  imd.Add(MDGeom::GCP, m_GCP);
+}
+
 bool SarSensorModel::ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines,
                                             unsigned long imageLine,
-                                            unsigned long & deburstLine) const
+                                            unsigned long & deburstLine)
 {
   auto vit = lines.cbegin();
   auto nit = vit + 1;

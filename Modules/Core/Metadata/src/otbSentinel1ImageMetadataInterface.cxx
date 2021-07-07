@@ -854,10 +854,13 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   CreateCalibrationLookupData(sarCalib, imd, *m_MetadataSupplierInterface, true);
   imd.Add(MDGeom::SARCalib, sarCalib);
+
+  Projection::GCPParam gcp;
+  imd.Add(MDGeom::GCP, gcp);
 }
 
 void Sentinel1ImageMetadataInterface::Parse(ImageMetadata & imd)
- {
+{
   // Try to fetch the metadata from GDAL Metadata Supplier
   if (m_MetadataSupplierInterface->GetAs<std::string>("", "MISSION_ID").substr(0, 2) == "S1"
       || m_MetadataSupplierInterface->GetAs<std::string>("", "TIFFTAG_IMAGEDESCRIPTION").substr(0, 10) == "Sentinel-1")

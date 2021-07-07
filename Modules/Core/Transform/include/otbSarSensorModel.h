@@ -106,6 +106,11 @@ public:
             unsigned int & linesOffset, unsigned int first_burstInd,
             bool inputWithInvalidPixels=false);
 
+   /** Update a ImageMetadata object with the sotred SarParam and GCPs, possibly modified from the 
+    * original metadata by the SarSensorModel
+    * \param imd The ImageMetadata to be updated
+     */ 
+   void UpdateImageMetadata(ImageMetadata & imd);
 
   /** 
     * This is a helper function to convert deburst line to input image
@@ -114,7 +119,7 @@ public:
     * \param imageLine The input deburst line
     * \param deburstLine The output original image line
   */
-  void DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, 
+  static void DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, 
                                               unsigned long deburstLine, 
                                               unsigned long & imageLine);
 
@@ -126,9 +131,9 @@ public:
     * \param deburstLine The output deburst line
     * \return True if imageLine is within a preserved range, false otherwise
     */
-  bool ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines,
+  static bool ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines,
                               unsigned long imageLine,
-                              unsigned long & deburstLine) const;
+                              unsigned long & deburstLine);
 
 protected:
 

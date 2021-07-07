@@ -23,7 +23,7 @@
 
 #include "otbSarBurstExtractionImageFilter.h"
 
-#include "otbSarSensorModelAdapter.h"
+#include "otbSarSensorModel.h"
 #include "otbImageKeywordlist.h"
 #include "itkImageScanlineIterator.h"
 #include "itkImageScanlineConstIterator.h"
@@ -57,33 +57,23 @@ void SarBurstExtractionImageFilter<TImage>::GenerateOutputInformation()
   if (std::abs(inputPtr->GetOrigin()[1] - static_cast<long>(inputPtr->GetOrigin()[1]) - 0.5) >= std::numeric_limits<double>::epsilon())
     itkExceptionMacro("Can not perform burst extraction if input image azimuth origin is not N.5");
 
-  // Retrieve input image keywordlist
-  ImageKeywordlist inputKwl = inputPtr->GetImageKeywordlist();
+  // Retrieve input image metadata
+  auto imd = inputPtr->GetImageMetadata();
 
   // Try to create a SarSensorModelAdapter
-  SarSensorModelAdapter::Pointer sarSensorModel = SarSensorModelAdapter::New();
-  bool                           loadOk         = sarSensorModel->LoadState(inputKwl);
-
-  if (!loadOk || !sarSensorModel->IsValidSensorModel())
-    itkExceptionMacro(<< "Input image does not contain a valid SAR sensor model.");
+  SarSensorModel sarSensorModel(imd);
 
   // Try to call the burst extraction function
-  bool burstExtractionOk = sarSensorModel->BurstExtraction(m_BurstIndex, m_LinesRecord, m_SamplesRecord, m_AllPixels);
+  bool burstExtractionOk = sarSensorModel.BurstExtraction(m_BurstIndex, m_LinesRecord, m_SamplesRecord, m_AllPixels);
 
   if (!burstExtractionOk)
-    itkExceptionMacro(<< "Could not etract Burst from input image");
+    itkExceptionMacro(<< "Could not extract Burst from input image");
+
+  sarSensorModel.UpdateImageMetadata(imd);
 
   // Compute the actual lines to remove
   typename ImageType::RegionType largestPossibleRegion = this->GetInput()->GetLargestPossibleRegion();
   typename ImageType::PointType  origin                = this->GetInput()->GetOrigin();
-
-  // Export the new keywordlist
-  ImageKeywordlist newKwl;
-
-  bool saveOk = sarSensorModel->SaveState(newKwl);
-
-  if (!saveOk)
-    itkExceptionMacro(<< "Could not export deburst SAR sensor model to keyword list");
 
   // Move origin and size (if necessary)
   long          originOffset_samples = static_cast<long>(this->GetInput()->GetOrigin()[0] - 0.5);
@@ -132,23 +122,20 @@ void SarBurstExtractionImageFilter<TImage>::GenerateOutputInformation()
   largestPossibleRegion.SetSize(burstSize);
   outputPtr->SetLargestPossibleRegion(largestPossibleRegion);
 
-  newKwl.AddKey("support_data.number_samples", std::to_string(burstSize[0]));
-  newKwl.AddKey("support_data.number_lines", std::to_string(burstSize[1]));
-
-  newKwl.AddKey("number_samples", std::to_string(burstSize[0]));
-  newKwl.AddKey("number_lines", std::to_string(burstSize[1]));
+  imd.Add(MDNum::NumberOfLines, burstSize[0]);
+  imd.Add(MDNum::NumberOfColumns, burstSize[1]);
 
   if (m_AllPixels)
   {
-    newKwl.AddKey("support_data.invalid_pixels", "yes");
+    imd.Add("invalid_pixels", "yes");
   }
   else
   {
-    newKwl.AddKey("support_data.invalid_pixels", "no");
+    imd.Add("invalid_pixels", "no");
   }
 
   // Set new keyword list to output image
-  outputPtr->SetImageKeywordList(newKwl);
+  outputPtr->SetImageMetadata(imd);
 }
 
 template <class TImage>

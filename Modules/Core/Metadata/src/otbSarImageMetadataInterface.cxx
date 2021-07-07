@@ -323,8 +323,9 @@ std::vector<SARNoise> SarImageMetadataInterface::GetNoiseVectorGeom() const
     std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>(path_root + ".azimuthTime")) >> noiseVect.azimuthTime;
     MetaData::LUT1D noiseLut;
     MetaData::LUTAxis ax1;
-    ax1.Size = m_MetadataSupplierInterface->GetAs<int>(path_root + ".pixel_count");
-    ax1.Values = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".pixel", ' ', ax1.Size);
+    // note: in some geom products pixel_count does not match the vector size in noiseVector. 
+    ax1.Values = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".pixel", ' ');
+    ax1.Size = ax1.Values.size();
     noiseLut.Axis[0] = ax1;
     noiseLut.Array = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".noiseLut", ' ', ax1.Size);
     noiseVect.noiseLut = std::move(noiseLut);
@@ -356,10 +357,10 @@ bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
   sarParam.rangeResolution = m_MetadataSupplierInterface->GetAs<double>(
                                 supportDataPrefix + "range_spacing");
 
-  sarParam.azimuthTimeInterval = MetaData::DurationType(m_MetadataSupplierInterface->GetAs<double>(
+  sarParam.azimuthTimeInterval = MetaData::DurationType::Seconds(m_MetadataSupplierInterface->GetAs<double>(
                                 supportDataPrefix + "line_time_interval") );
 
-  if (sarParam.burstRecords.size() > 1)
+  if (sarParam.burstRecords.size() > 1 && m_MetadataSupplierInterface->GetAs<int>("header.version") > 2)
   {
     sarParam.numberOfLinesPerBurst = m_MetadataSupplierInterface->GetAs<unsigned long>(
                                   supportDataPrefix + "geom.bursts.number_lines_per_burst");
@@ -367,7 +368,6 @@ bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
     sarParam.numberOfSamplesPerBurst = m_MetadataSupplierInterface->GetAs<unsigned long>(
                                   supportDataPrefix + "geom.bursts.number_samples_per_burst");
   }
-
   return true;
 }
 

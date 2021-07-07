@@ -80,7 +80,7 @@ public:
   itkTypeMacro(SarConcatenateBurstsImageFilter, TileImageFilter);
 
   // Setter
-  void SetSLCImageKeyWorList(ImageKeywordlist sarImageKWL);
+  void SetSLCImageMetadata(ImageMetadata sarImd);
 
   bool getDeburstLinesAndSamples(LinesRecordVectorType& linesRecord, LinesRecordVectorType& samplesRecord, unsigned int first_burstInd,
                                  bool inputWithInvalidPixels);
@@ -101,10 +101,7 @@ private:
   void operator=(const Self&) = delete;
 
   // SLC KeywordList
-  ImageKeywordlist m_SLCImageKWL;
-
-  // Deburst SLC KeywordList
-  ImageKeywordlist m_DeburstSLCImageKWL;
+  ImageMetadata m_SLCImd;
 
   unsigned int m_Offset_OriginL;
 };
