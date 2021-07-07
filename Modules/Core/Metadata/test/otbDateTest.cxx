@@ -49,6 +49,14 @@ BOOST_AUTO_TEST_CASE(Duration)
                 == 3);
   BOOST_TEST(otb::MetaData::Duration::Seconds(5.5) + otb::MetaData::Duration::Nanoseconds(10) 
                 == otb::MetaData::Duration::Seconds(5.50000001) );
+
+  // debug windows
+  std::cout << "otb::MetaData::Duration::Seconds(5.5) * 3.5 " 
+            << otb::MetaData::Duration::Seconds(5.5) * 3.5 << std::endl;
+
+  std::cout << "otb::MetaData::Duration::Seconds(5.5) / 2 " 
+            << otb::MetaData::Duration::Seconds(5.5) / 2 << std::endl;
+
 }
 
 BOOST_AUTO_TEST_CASE(TimePoint)
