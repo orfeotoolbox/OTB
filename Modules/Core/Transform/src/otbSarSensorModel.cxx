@@ -1119,7 +1119,6 @@ bool SarSensorModel::ImageLineToDeburstLine(const std::vector<std::pair<unsigned
   deburstLine = imageLine;
   
   for(; nit != lines.end(); ++vit, ++nit)
-  while(nit != lines.end())
   {
     if(imageLine >= vit->first && imageLine <= vit->second)
     {
