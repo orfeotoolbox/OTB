@@ -22,11 +22,14 @@
 #include <iostream>
 #include <fstream>
 #include <boost/algorithm/string.hpp>
+#include <boost/date_time/posix_time/posix_time_io.hpp>
+#include <unordered_map>
 
 #include "otbGeomMetadataSupplier.h"
 #include "otbMetaDataKey.h"
 #include "otbGeometryMetadata.h"
 #include "otbStringUtils.h"
+#include "otbSARMetadata.h"
 
 namespace otb
 {
@@ -142,6 +145,54 @@ bool GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
   imd.Add(MDGeom::RPC, rpcStruct);
   assert(imd.Has(MDGeom::RPC));
   assert(rpcStruct == boost::any_cast<Projection::RPCParam>(imd[MDGeom::RPC]));
+  return true;
+}
+
+bool GeomMetadataSupplier::FetchGCP(ImageMetadata & imd)
+{
+  int numberOfGcp = GetAs<int>(0, "support_data.geom.gcp.number");
+  if (numberOfGcp == 0)
+    return false;
+
+  std::stringstream ss;
+  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
+  ss.imbue(std::locale(std::locale(), facet));
+
+  Projection::GCPParam gcpPrm;
+  std::unordered_map<std::string, GCPTime> gcpTimes;
+  std::ostringstream oss;
+  for(int i = 0 ; i < numberOfGcp ; ++i)
+  {
+    oss.str("");
+    oss << "support_data.geom.gcp[" << i << "].";
+    gcpPrm.GCPs.emplace_back(std::to_string(i),                           // ID
+                             "",                                          // Comment
+                             GetAs<double>(oss.str() + "im_pt.x"),        // col
+                             GetAs<double>(oss.str() + "im_pt.y"),        // row
+                             GetAs<double>(oss.str() + "world_pt.lat"),   // px
+                             GetAs<double>(oss.str() + "world_pt.lon"),   // py
+                             GetAs<double>(oss.str() + "world_pt.hgt"));  // pz
+    GCPTime time;
+    ss << GetAs<std::string>(oss.str() + "azimuthTime");
+    ss >> time.azimuthTime;
+    time.slantRangeTime = GetAs<double>((oss.str() + "slant_range_time"));
+    gcpTimes[std::to_string(i)] = time;
+  }
+  imd.Add(MDGeom::GCP, gcpPrm);  // This step will erase the GCP read by GDAL if any.
+  if(imd.Has(MDGeom::SAR))
+  {
+    auto sarParam = boost::any_cast<SARParam>(imd[MDGeom::SAR]);
+    sarParam.gcpTimes = std::move(gcpTimes);
+    imd.Add(MDGeom::SAR, sarParam);
+  }
+  else
+  {
+    SARParam sarParam;
+    sarParam.gcpTimes = std::move(gcpTimes);
+    imd.Add(MDGeom::SAR, sarParam);
+  }
+
+  assert(imd.Has(MDGeom::GCP));
   return true;
 }
 
