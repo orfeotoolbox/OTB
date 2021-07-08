@@ -530,7 +530,17 @@ double TerraSarXSarImageMetadataInterface::GetCalibrationFactor() const
   if (imageKeywordlist.HasKey(key))
   {
     std::string valueString = imageKeywordlist.GetMetadataByKey(key);
-    double      value       = atof(valueString.c_str());
+
+    double value = 0;
+    try
+      {
+	value = std::stod(valueString);
+      }
+    catch( ... )
+      {
+	// Throw an execption
+	throw std::runtime_error("Failed to convert calibration factor.");
+      }
     return value;
   }
 
