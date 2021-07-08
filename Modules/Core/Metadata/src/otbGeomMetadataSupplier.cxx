@@ -22,7 +22,6 @@
 #include <iostream>
 #include <fstream>
 #include <boost/algorithm/string.hpp>
-#include <boost/date_time/posix_time/posix_time_io.hpp>
 #include <unordered_map>
 
 #include "otbGeomMetadataSupplier.h"
@@ -30,6 +29,7 @@
 #include "otbGeometryMetadata.h"
 #include "otbStringUtils.h"
 #include "otbSARMetadata.h"
+#include "otbDateTime.h"
 
 namespace otb
 {
@@ -154,10 +154,6 @@ bool GeomMetadataSupplier::FetchGCP(ImageMetadata & imd)
   if (numberOfGcp == 0)
     return false;
 
-  std::stringstream ss;
-  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
-  ss.imbue(std::locale(std::locale(), facet));
-
   Projection::GCPParam gcpPrm;
   std::unordered_map<std::string, GCPTime> gcpTimes;
   std::ostringstream oss;
@@ -173,8 +169,7 @@ bool GeomMetadataSupplier::FetchGCP(ImageMetadata & imd)
                              GetAs<double>(oss.str() + "world_pt.lon"),   // py
                              GetAs<double>(oss.str() + "world_pt.hgt"));  // pz
     GCPTime time;
-    ss << GetAs<std::string>(oss.str() + "azimuthTime");
-    ss >> time.azimuthTime;
+    time.azimuthTime = MetaData::ReadFormattedDate(GetAs<std::string>(oss.str() + "azimuthTime"));
     time.slantRangeTime = GetAs<double>((oss.str() + "slant_range_time"));
     gcpTimes[std::to_string(i)] = time;
   }
