@@ -165,8 +165,8 @@ bool GeomMetadataSupplier::FetchGCP(ImageMetadata & imd)
                              "",                                          // Comment
                              GetAs<double>(oss.str() + "im_pt.x"),        // col
                              GetAs<double>(oss.str() + "im_pt.y"),        // row
-                             GetAs<double>(oss.str() + "world_pt.lat"),   // px
-                             GetAs<double>(oss.str() + "world_pt.lon"),   // py
+                             GetAs<double>(oss.str() + "world_pt.lon"),   // px
+                             GetAs<double>(oss.str() + "world_pt.lat"),   // py
                              GetAs<double>(oss.str() + "world_pt.hgt"));  // pz
     GCPTime time;
     time.azimuthTime = MetaData::ReadFormattedDate(GetAs<std::string>(oss.str() + "azimuthTime"));
