@@ -69,6 +69,13 @@ public:
    */
   bool FetchRPC(ImageMetadata & imd);
 
+  /**
+   * @brief Fill the ImageMetadata with the GCP from the geom file
+   *
+   * @param imd The ImageMetadata to fill
+   */
+  bool FetchGCP(ImageMetadata & imd);
+
   /** Get the number of keys starting with path */
   unsigned int GetNumberOf(std::string const&) const override
   {

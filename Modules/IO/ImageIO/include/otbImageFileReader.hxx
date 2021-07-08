@@ -487,6 +487,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     GeomMetadataSupplier geomSupplier(m_FilenameHelper->GetExtGEOMFileName());
     ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
     geomSupplier.FetchRPC(imd);
+    geomSupplier.FetchGCP(imd);
   }
   // Case 2: attached geom (if present)
   else if (!m_FilenameHelper->GetSkipGeom() && itksys::SystemTools::FileExists(attachedGeom))
@@ -494,6 +495,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     GeomMetadataSupplier geomSupplier(attachedGeom);
     ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
     geomSupplier.FetchRPC(imd);
+    geomSupplier.FetchGCP(imd);
   }
   // Case 3: tags in file
   else
