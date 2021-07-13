@@ -448,6 +448,8 @@ namespace ossimplugins
         std::cout << "Add theOrbitRecords\n";
         theOrbitRecords.push_back(orbitRecord);
       }
+
+    return true;
   }
 
   bool ossimTerraSarXSarSensorModel::readCalibrationFactor(const ossimRefPtr<ossimXmlDocument> xmlDoc, const std::string polarisation)
@@ -476,6 +478,7 @@ namespace ossimplugins
 	add(theProductKwl, "calibration.calibrationConstant.calFactor", calFactor);
       }
 
+    return true;
   }
 
   bool ossimTerraSarXSarSensorModel::readDopplerRate(const ossimRefPtr<ossimXmlDocument> xmlDoc)
@@ -705,6 +708,8 @@ namespace ossimplugins
     add(theProductKwl, GCP_NUMBER_KEY, static_cast<ossim_uint32>(theGCPRecords.size()));
 
     this->optimizeTimeOffsetsFromGcps();
+
+    return true;
   }
   
 }
