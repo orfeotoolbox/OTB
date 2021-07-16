@@ -299,6 +299,11 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
       // To be completed by ImageIO
       oss << std::string("<SARParam>");
     }
+    else if (kv.first == MDGeom::SARCalib)
+    {
+      // To be completed by ImageIO
+      oss << std::string("<SARCalib>");
+    }
     // TODO : MDGeom::Adjustment
     else
     {
@@ -381,13 +386,12 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
       {
         this->Add(geomKey->second, Utils::LexicalCast<int>(kv.second.c_str(), "Keywordlist.second.c_str()"));
       }
-      // TODO : MDGeom::SAR
       // TODO : MDGeom::Adjustment
       else if (geomKey->second ==  MDGeom::ProjectionWKT ||geomKey->second ==  MDGeom:: ProjectionProj)
       {
         this->Add(geomKey->second, kv.second);
       }
-      // skip MDGeom::SensorGeometry, MDGeom::RPC and MDGeom::GCP
+      // skip MDGeom::SensorGeometry, MDGeom::RPC, MDGeom::GCP, MDGeom::SAR and MDGeom::SARCalib
       continue;
     }
   // Converting the StringKeys

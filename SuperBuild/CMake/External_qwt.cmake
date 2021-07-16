@@ -55,8 +55,8 @@ endif()
 
 ExternalProject_Add(QWT
   PREFIX QWT
-  URL "http://downloads.sourceforge.net/project/qwt/qwt/6.1.5/qwt-6.1.5.zip"
-  URL_MD5 61a8cae35ab6201d916304ec4a6f06b8
+  URL "https://downloads.sourceforge.net/project/qwt/qwt/6.1.6/qwt-6.1.6.zip"
+  URL_MD5 5f59c0843484afb1462d21444227d6f6
   SOURCE_DIR ${QWT_SB_SRC}
   BINARY_DIR ${QWT_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

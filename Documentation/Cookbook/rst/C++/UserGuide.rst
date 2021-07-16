@@ -84,7 +84,7 @@ Lidar, this is too restrictive and we need other representations.
 
 Vector data are also used to represent cartographic objects,
 segmentation results, etc: basically, everything which can be seen as
-points, lines or polygons. OTB provides functionnalities for accessing
+points, lines or polygons. OTB provides functionalities for accessing
 this kind of data.
 
 * Reading DEM Files. See example :ref:`DEMToImageGenerator.cxx`.
@@ -865,7 +865,7 @@ amount of information in multivariate data into a fewer number of
 variables (or dimensions). An interesting review of the domain has been
 done by Fodor .
 
-Though there are plenty of non-linear methods in the litterature, OTB
+Though there are plenty of non-linear methods in the literature, OTB
 provides only linear dimension reduction techniques applied to images
 for now.
 

@@ -64,6 +64,42 @@ SarImageMetadataInterfaceFactory::SarImageMetadataInterfacePointerType SarImageM
   return dynamic_cast<SarImageMetadataInterface*>(static_cast<SarDefaultImageMetadataInterface*>(defaultIMI));
 }
 
+SarImageMetadataInterfaceFactory::SarImageMetadataInterfacePointerType
+SarImageMetadataInterfaceFactory
+::CreateIMI(ImageMetadata & imd, const MetadataSupplierInterface & mds)
+{
+  RegisterBuiltInFactories();
+
+  auto allObjects     = itk::ObjectFactoryBase::CreateAllInstance("SarImageMetadataInterface");
+
+  for (auto i = allObjects.begin(); i != allObjects.end(); ++i)
+  {
+    SarImageMetadataInterface* io = dynamic_cast<SarImageMetadataInterface*>(i->GetPointer());
+    if (io)
+    {
+      // the static part of ImageMetadata is already filled
+      io->SetMetadataSupplierInterface(mds);
+      try
+      {
+        io->Parse(imd);
+        return io;
+      }
+      catch(MissingMetadataException& e)
+      {
+        // silent catch of MissingMetadataException
+        // just means that this IMI can't parse the file
+      }
+    }
+    else
+    {
+      itkGenericExceptionMacro(<< "Error SarImageMetadataInterface factory did not return an SarImageMetadataInterface: " << (*i)->GetNameOfClass());
+    }
+  }
+
+  SarDefaultImageMetadataInterface::Pointer defaultIMI = SarDefaultImageMetadataInterface::New();
+  return dynamic_cast<SarImageMetadataInterface*>(static_cast<SarDefaultImageMetadataInterface*>(defaultIMI));
+}
+
 void SarImageMetadataInterfaceFactory::RegisterBuiltInFactories()
 {
   static bool firstTime = true;

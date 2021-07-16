@@ -57,13 +57,13 @@ The top toolbar is made up of ten icons; from left to right:
 #. gives/changes the current projection, used as reference of the view
 
 #. selects the effect to be applied to the selected layer:
-   chessboard, local constrast, local translucency, normal, spectral
+   chessboard, local contrast, local translucency, normal, spectral
    angle, swipe (horizontal and vertical)
 
 #. a parameter used for the following effects: chessboard, local
    contrast, local translucency, spectral angle
 
-#. a parameter used for the following effects: local constrast,
+#. a parameter used for the following effects: local contrast,
    spectral angle
 
 Image displaying

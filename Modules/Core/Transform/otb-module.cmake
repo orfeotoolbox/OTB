@@ -26,6 +26,7 @@ from any map projection or sensor model to any map projection or sensor model.")
 otb_module(OTBTransform
   DEPENDS
     OTBBoost
+    OTBBoostAdapters
     OTBCommon
     OTBGDAL
     OTBITK

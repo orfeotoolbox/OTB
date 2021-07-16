@@ -1,33 +1,35 @@
 SensorID SAR
 Mission S1A
-Instrument SENTINEL-1
+Instrument S1A
 ProductType SLC
+Polarization VV
 Mode S6
 Swath S6
 OrbitDirection ASCENDING
 BeamMode SM
 BeamSwath S6
+AreaOrPoint Area
 TileHintX 17663
 TileHintY 1
 DataType 11
 OrbitNumber 6447
-LineSpacing 4.08568
-PixelSpacing 3.19483
-AcquisitionDate 2015-06-19T19:50:43.223221Z
-ProductionDate 2015-06-20T01:51:06.838854Z
-AcquisitionStartTime 2015-06-19T19:50:43.223221Z
-AcquisitionStopTime 2015-06-19T19:51:01.921994Z
-GCP <GCPParam>
-Extra.FACILITY_IDENTIFIER UPA_
-Polarization VV
-Swath S6
 NumberOfLines 31106
 NumberOfColumns 17663
 AverageSceneHeight 19
 CalScale 1
 PRF 1663.48
 RadarFrequency 5.405e+09
+CenterIncidenceAngle 44.7171
+LineSpacing 4.08568
+PixelSpacing 3.19483
+AcquisitionDate 2015-06-19T19:50:43.223221Z
+ProductionDate 2015-06-20T01:51:06.838854Z
+AcquisitionStartTime 2015-06-19T19:50:43.223221Z
+AcquisitionStopTime 2015-06-19T19:51:01.921994Z
 SAR <SARParam>
+SARCalib <SARCalib>
+GCP <GCPParam>
+Extra.FACILITY_IDENTIFIER UPA_
 {"Projection": "GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AXIS["Latitude",NORTH],AXIS["Longitude",EAST],AUTHORITY["EPSG","4326"]]", 
 [{"GCP_Id": "1", "GCP_Info": "", "GCP_Row": "0", "GCP_Col": "0", "GCP_X": "-24.4551", "GCP_Y": "14.4996", "GCP_Z": "0", }, 
 {"GCP_Id": "2", "GCP_Info": "", "GCP_Row": "0", "GCP_Col": "884", "GCP_X": "-24.4171", "GCP_Y": "14.5067", "GCP_Z": "0", }, 

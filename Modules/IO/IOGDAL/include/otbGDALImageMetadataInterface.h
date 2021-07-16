@@ -48,7 +48,7 @@ public:
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
-  void Parse(const MetadataSupplierInterface &) override;
+  void Parse(ImageMetadata &) override;
 
 protected:
   GDALImageMetadataInterface();

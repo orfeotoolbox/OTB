@@ -19,6 +19,7 @@
  */
 
 #include "otbXMLMetadataSupplier.h"
+#include <unordered_set>
 
 namespace otb
 {
@@ -220,12 +221,67 @@ std::vector<std::string> XMLMetadataSupplier::FetchPartialNameValueMultiple(cons
   return retStringVector;
 }
 
+std::vector<std::string> XMLMetadataSupplier::GetAllStartWith(char** papszStrList,
+                                                                  const char *pszName) const
+{
+  std::vector<std::string> retStringVector;
+  if( papszStrList == nullptr || pszName == nullptr )
+    return retStringVector;
+
+  for( ; *papszStrList != nullptr ; ++papszStrList )
+    if( strstr(*papszStrList, pszName) == *papszStrList)
+      retStringVector.push_back(*papszStrList);
+  return retStringVector;
+}
+
 int XMLMetadataSupplier::GetNbBands() const
 {
   return 0;
 }
 
-std::string XMLMetadataSupplier::PrintSelf()
+unsigned int XMLMetadataSupplier::GetNumberOf(std::string const & path) const
+{
+  std::unordered_set<int> idx;
+  for(auto const& key : GetAllStartWith(m_MetadataDic, path.c_str()))
+  {
+    auto after = key.substr(path.size());
+    if(after.size() > 0 && after.compare(0, 1, "_") == 0)
+    {
+      auto sub = after.substr(1, after.find("."));
+      idx.insert(std::stoi(sub));
+    }
+    else if(after.size() > 0 && after.compare(0, 1, ".") == 0)
+      idx.insert(0);
+  }
+  return idx.size();
+}
+unsigned int XMLMetadataSupplier::GetAttributId(std::string const& path, std::string const& value) const
+{
+  // Search for the joker
+  std::size_t found = path.find("_#");
+  // Looking for the keys corresponding to the part of the path before the joker
+  std::vector<std::string> values = this->FetchPartialNameValueMultiple(m_MetadataDic, path.substr(0, found).c_str());
+  // Position of the beginning of the path after the joker
+  std::size_t start = found + 2;
+  // Looking for the keys corresponding to the part of the path after the joker
+  values = this->FetchPartialNameValueMultiple(values, path.substr(start));
+
+  if ((values.size() == 0) || (values[0].empty()))
+    return 0;
+
+  for(auto const& s: values)
+  {
+    auto val = s.substr(s.find('=') + 1);
+    if (val == value)
+    {
+      val = s.substr(found + 1, s.find(".", found) - found - 1);
+      return std::stoi(val);
+    }
+  }
+  return 0;
+}
+
+std::string XMLMetadataSupplier::PrintSelf() const
 {
   std::ostringstream oss;
   oss << "XMLMetadataSupplier: " << this->m_FileName << '\n';

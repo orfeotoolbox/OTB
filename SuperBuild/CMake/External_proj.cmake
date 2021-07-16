@@ -28,7 +28,7 @@ ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(PROJ SQLITE)
 ExternalProject_Add(PROJ
   DEPENDS ${PROJ_DEPENDENCIES}
   PREFIX PROJ
-  URL "http://download.osgeo.org/proj/proj-6.2.1.tar.gz"  # If we update PROJ to v7+, check option PROJ_TESTS!
+  URL "https://download.osgeo.org/proj/proj-6.2.1.tar.gz"  # If we update PROJ to v7+, check option PROJ_TESTS!
   URL_MD5 9f874e227d221daf95f7858dc55dfa3e
   BINARY_DIR ${PROJ_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

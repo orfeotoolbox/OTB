@@ -484,15 +484,15 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   // Case 1: external geom supplied through extended filename
   if (!m_FilenameHelper->GetSkipGeom() && m_FilenameHelper->ExtGEOMFileNameIsSet())
   {
-    GeomMetadataSupplier geomSupplier(m_FilenameHelper->GetExtGEOMFileName());
-    UpdateImdWithImiAndMds(imd, geomSupplier);
+    GeomMetadataSupplier geomSupplier(m_FilenameHelper->GetExtGEOMFileName(), m_FileName);
+    ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
     geomSupplier.FetchRPC(imd);
   }
   // Case 2: attached geom (if present)
   else if (!m_FilenameHelper->GetSkipGeom() && itksys::SystemTools::FileExists(attachedGeom))
   {
-    GeomMetadataSupplier geomSupplier(attachedGeom);
-    UpdateImdWithImiAndMds(imd, geomSupplier);
+    GeomMetadataSupplier geomSupplier(attachedGeom, m_FileName);
+    ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
     geomSupplier.FetchRPC(imd);
   }
   // Case 3: tags in file
@@ -501,7 +501,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     auto gdalMetadataSupplierPointer = dynamic_cast<MetadataSupplierInterface*>(m_ImageIO.GetPointer());
     if (gdalMetadataSupplierPointer)
     {
-      UpdateImdWithImiAndMds(imd, *gdalMetadataSupplierPointer);
+      ImageMetadataInterfaceFactory::CreateIMI(imd, *gdalMetadataSupplierPointer);
     }
   }
 
@@ -584,24 +584,15 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
 }
 
 template <class TOutputImage, class ConvertPixelTraits>
-void ImageFileReader<TOutputImage, ConvertPixelTraits>::UpdateImdWithImiAndMds(ImageMetadata& imd, const MetadataSupplierInterface & mds)
-{
-  ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(imd, mds);
-  // update 'imd' with the parsed metadata
-  imd = imi->GetImageMetadata();
-
-}
-
-template <class TOutputImage, class ConvertPixelTraits>
-std::string ImageFileReader<TOutputImage, ConvertPixelTraits>::GetDerivedDatasetSourceFileName(const std::string& filename) const
+std::string ImageFileReader<TOutputImage, ConvertPixelTraits>::GetDerivedDatasetSourceFileName(const std::string& filename)
 {
 
-  const size_t dsds_pos = filename.find(DerivedSubdatasetPrefix);
+  const size_t dsds_pos = filename.find(otb::DerivedSubdatasetPrefix);
 
   if (dsds_pos != std::string::npos)
   {
     // Derived subdataset from gdal
-    const size_t alg_pos = filename.find(":", dsds_pos + DerivedSubdatasetPrefixLength);
+    const size_t alg_pos = filename.find(":", dsds_pos + otb::DerivedSubdatasetPrefixLength);
     if (alg_pos != std::string::npos)
     {
       std::string sourceFilename = filename.substr(alg_pos + 1, filename.size() - alg_pos);

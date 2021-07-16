@@ -23,8 +23,8 @@
 #define otbSarBrightnessToImageFilter_hxx
 
 #include "otbSarBrightnessToImageFilter.h"
-
-#include "otbSarImageMetadataInterfaceFactory.h"
+#include "otbSARMetadata.h"
+#include <boost/any.hpp>
 
 namespace otb
 {
@@ -43,30 +43,44 @@ void SarBrightnessToImageFilter<TInputImage, TOutputImage>::BeforeThreadedGenera
   // will SetInputImage on the function
   Superclass::BeforeThreadedGenerateData();
 
-  SarImageMetadataInterface::Pointer imageMetadataInterface = SarImageMetadataInterfaceFactory::CreateIMI(this->GetInput()->GetMetaDataDictionary());
+  /** Retrieve the ImageMetadata */
+  auto imd = this->GetInput()->GetImageMetadata();
+
+  /** Fetch the SARCalib */
+  std::unique_ptr<SARCalib> sarCalibPtr;
+  if (imd.Has(MDGeom::SARCalib))
+  {
+    sarCalibPtr = std::make_unique<SARCalib>(boost::any_cast<SARCalib>(imd[MDGeom::SARCalib]));
+  }
+  else if ((imd.Bands.size() > 0) && imd.Bands[0].Has(MDGeom::SARCalib))
+  {
+    sarCalibPtr = std::make_unique<SARCalib>(boost::any_cast<SARCalib>(imd.Bands[0][MDGeom::SARCalib]));
+  }
+  else
+      throw std::runtime_error("otbSarBrightnessToImageFilter was not able to fetch the SARCalib metadata.");
 
   FunctionPointer function = this->GetFunction();
 
-  function->SetScale(imageMetadataInterface->GetRadiometricCalibrationScale());
+  function->SetScale(imd[MDNum::CalScale]);
 
   ParametricFunctionPointer noise = function->GetNoise();
-  noise->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationNoise());
-  noise->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationNoisePolynomialDegree());
+  noise->SetPointSet(sarCalibPtr->radiometricCalibrationNoise);
+  noise->SetPolynomalSize(sarCalibPtr->radiometricCalibrationNoisePolynomialDegree);
   noise->EvaluateParametricCoefficient();
 
   ParametricFunctionPointer antennaPatternNewGain = function->GetAntennaPatternNewGain();
-  antennaPatternNewGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGain());
-  antennaPatternNewGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree());
+  antennaPatternNewGain->SetPointSet(sarCalibPtr->radiometricCalibrationAntennaPatternNewGain);
+  antennaPatternNewGain->SetPolynomalSize(sarCalibPtr->radiometricCalibrationAntennaPatternNewGainPolynomialDegree);
   antennaPatternNewGain->EvaluateParametricCoefficient();
 
   ParametricFunctionPointer antennaPatternOldGain = function->GetAntennaPatternOldGain();
-  antennaPatternOldGain->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGain());
-  antennaPatternOldGain->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree());
+  antennaPatternOldGain->SetPointSet(sarCalibPtr->radiometricCalibrationAntennaPatternOldGain);
+  antennaPatternOldGain->SetPolynomalSize(sarCalibPtr->radiometricCalibrationAntennaPatternOldGainPolynomialDegree);
   antennaPatternOldGain->EvaluateParametricCoefficient();
 
   ParametricFunctionPointer rangeSpreadLoss = function->GetRangeSpreadLoss();
-  rangeSpreadLoss->SetPointSet(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLoss());
-  rangeSpreadLoss->SetPolynomalSize(imageMetadataInterface->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree());
+  rangeSpreadLoss->SetPointSet(sarCalibPtr->radiometricCalibrationRangeSpreadLoss);
+  rangeSpreadLoss->SetPolynomalSize(sarCalibPtr->radiometricCalibrationRangeSpreadLossPolynomialDegree);
   rangeSpreadLoss->EvaluateParametricCoefficient();
 
 #if 0
