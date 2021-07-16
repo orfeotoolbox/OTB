@@ -25,6 +25,7 @@
 
 #include <ossimTerraSarXSarSensorModel.h>
 #include <ossim/base/ossimXmlDocument.h>
+#include <ossim/base/ossimDirectory.h>
 #include "ossim/ossimXmlTools.h"
 #include "itksys/SystemTools.hxx"
 
@@ -349,7 +350,7 @@ namespace ossimplugins
 
     // Get image name (to retrieve specific information such as polarization)
     m_imageName = SystemTools::GetFilenameName(file);
-    
+
     // Get paths to the two xml we need, and check they exist
     std::vector<std::string> components;
     SystemTools::SplitPath(product_root, components);
@@ -361,7 +362,23 @@ namespace ossimplugins
 
     std::vector<std::string> components_annotation = components;
     components_annotation.push_back(components.back() + std::string(".xml"));
-    const auto annotation = SystemTools::JoinPath(components_annotation);
+    std::string annotation = SystemTools::JoinPath(components_annotation);
+
+    if (!SystemTools::FileExists(annotation))
+      {
+	ossimDirectory directory = ossimDirectory(product_root);
+
+        std::vector<ossimFilename> vectName;
+        ossimString reg = "^T(S|D)X1_SAR__.*\\.xml$";
+        directory.findAllFilesThatMatch( vectName, reg, 1 );
+        if (vectName.size())
+	  {
+	    const ossimFilename annotationName = vectName[0];
+	    std::vector<std::string> components_annotation_xml = components;
+	    components_annotation_xml.push_back(SystemTools::GetFilenameName(annotationName));
+	    annotation = SystemTools::JoinPath(components_annotation_xml);
+	  }
+      }
 
     if (!SystemTools::FileExists(georef) || !SystemTools::FileExists(annotation))
       {
