@@ -21,6 +21,7 @@
 set(OTBTransform_SRC
   otbSensorModelAdapter.cxx
   otbSarSensorModelAdapter.cxx
+  otbSensorTransformFactory.cxx
   )
 
 add_library(OTBTransform ${OTBTransform_SRC})

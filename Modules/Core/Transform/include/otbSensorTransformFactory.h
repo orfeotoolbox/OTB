@@ -19,10 +19,9 @@
  */
 #ifndef otbSensorTransformFactory_h
 #define otbSensorTransformFactory_h
+
 #include "otbSensorTransformBase.h"
-#include "itkObject.h"
-#include "itkObjectFactory.h"
-#include "itkMutexLock.h"
+#include "itkMacro.h"
 
 namespace otb
 {
@@ -31,43 +30,26 @@ namespace otb
  *
  * \ingroup OTBTransform
  */
-template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-class SensorTransformFactory : public itk::Object
+//template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+class ITK_EXPORT SensorTransformFactory : boost::noncopyable
 {
 public:
-	/** Standard class typedefs. */
-	typedef SensorTransformFactory   Self;
-	typedef itk::Object                   Superclass;
-	typedef itk::SmartPointer<Self>       Pointer;
-	typedef itk::SmartPointer<const Self> ConstPointer;
-	typedef typename SensorTransformBase<TScalarType, NInputDimensions,NOutputDimensions>::Pointer SensorTransformTypePointer;
+  /** Standard class typedefs. */
+  using Self = SensorTransformFactory;
 
-    /** Run-time type information (and related methods). */
-	itkTypeMacro(SensorTransformFactory, itk::Object);
+  /** Retrieve the singleton instance */
+  static SensorTransformFactory & GetInstance();
 
 	/** Create the appropriate transform. */
-    static SensorTransformTypePointer CreateTransform(const ImageMetadata &imd,TransformDirection d);
-
-	static void CleanFactories();
-
-protected:
-	SensorTransformFactory();
-	~SensorTransformFactory() override;
+  template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+  typename otb::SensorTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::Pointer
+  CreateTransform(const ImageMetadata &imd, TransformDirection d) const;
 
 private:
+  SensorTransformFactory() = default;
+  ~SensorTransformFactory() = default;
 	SensorTransformFactory(const Self&) = delete;
-	void operator=(const Self&) = delete;
-
-    static itk::SimpleMutexLock m_mutex;
-
-	/** Register Built-in factories */
-	static void RegisterBuiltInFactories();
-
-	/** Register a single factory, ensuring it has not been registered
-		* twice */
-    static void RegisterFactory(itk::ObjectFactoryBase* factory);
-
-  static void DoRegisterBuiltInFactories();
+  void operator=(const Self&) = delete;
 };
 }
 
@@ -75,4 +57,4 @@ private:
 #include "otbSensorTransformFactory.hxx"
 #endif
 
-#endif // OTBSENSORTRANSFORMFACTORY_H
+#endif // otbSensorTransformFactory_h

@@ -25,6 +25,9 @@
 
 namespace otb
 {
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::RPCForwardTransform() : Superclass(TransformDirection::FORWARD)
+{}
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename RPCForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
