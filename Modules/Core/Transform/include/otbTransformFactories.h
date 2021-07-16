@@ -24,6 +24,7 @@
 #include "otbCast.h"
 #include "otbImageMetadata.h"
 #include "otbSensorTransformBase.h"
+#include "otbTransform.h"
 
 #include "otbRPCForwardTransform.h"
 #include "otbRPCInverseTransform.h"
@@ -36,8 +37,8 @@ namespace otb {
  * Each function is in charge of instanciating a specific transformation classes. It is
  * templated with the scalar type used in the Sensor Model, the dimension of the
  * inpute space, and the dimension of the output space. It takes as parameter a
- * reference to the ImageMetadata object used to instanciate the Sensor Model.
- * It returns an instance of otb::SensorTransformBase.
+ * reference to the ImageMetadata object used to instanciate the Sensor Model, and the
+ * TransformDirection. It returns an instance of otb::SensorTransformBase.
  *
  * \ingroup OTBTransform
  */
@@ -48,11 +49,13 @@ namespace TransformFactories {
  */
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>::Pointer
-RPCForwardTransformFactory(const ImageMetadata &imd)
+RPCForwardTransformFactory(const ImageMetadata &imd, TransformDirection direction)
 {
   if(imd.Has(MDGeom::RPC))
   {
     auto transform = RPCForwardTransform<TScalarType, NInputDimensions,NOutputDimensions>::New();
+    if(transform->getDirection() != direction)
+      return nullptr;
     transform->SetMetadata(imd);
     return DynamicCast<typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>>(transform);
   }
@@ -64,11 +67,13 @@ RPCForwardTransformFactory(const ImageMetadata &imd)
  */
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>::Pointer
-RPCInverseTransformFactory(const ImageMetadata &imd)
+RPCInverseTransformFactory(const ImageMetadata &imd, TransformDirection direction)
 {
   if(imd.Has(MDGeom::RPC))
   {
     auto transform = RPCInverseTransform<TScalarType, NInputDimensions,NOutputDimensions>::New();
+    if(transform->getDirection() != direction)
+      return nullptr;
     transform->SetMetadata(imd);
     return DynamicCast<typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>>(transform);
   }

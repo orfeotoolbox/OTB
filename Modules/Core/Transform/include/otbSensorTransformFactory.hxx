@@ -22,6 +22,7 @@
 
 #include "otbImageMetadata.h"
 #include "otbSensorTransformFactory.h"
+#include "otbTransform.h"
 #include "otbTransformFactories.h"
 #include <functional>
 
@@ -35,7 +36,8 @@ SensorTransformFactory::CreateTransform(const ImageMetadata &imd, TransformDirec
   // Instanciate the factories
   std::vector<
     std::function<
-      typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>::Pointer (const ImageMetadata &)
+      typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>::Pointer (const ImageMetadata &,
+                                                                                               TransformDirection direction)
     >
   > factories;
   factories.push_back(TransformFactories::RPCForwardTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>);
@@ -44,7 +46,7 @@ SensorTransformFactory::CreateTransform(const ImageMetadata &imd, TransformDirec
   typename otb::SensorTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::Pointer transformPointer;
   for (auto& transformFactory : factories)
   {
-    transformPointer = transformFactory(imd);
+    transformPointer = transformFactory(imd, direction);
     if (transformPointer)
     {
       if (transformPointer->IsValidSensorModel() && transformPointer->getDirection() == direction)
