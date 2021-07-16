@@ -48,8 +48,6 @@ public:
 private:
   SensorTransformFactory() = default;
   ~SensorTransformFactory() = default;
-	SensorTransformFactory(const Self&) = delete;
-  void operator=(const Self&) = delete;
 };
 }
 
