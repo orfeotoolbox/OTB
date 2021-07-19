@@ -76,7 +76,7 @@ public:
   /** Check model validity */
   virtual bool IsValidSensorModel() const = 0;
 
-  TransformDirection getDirection() {
+  TransformDirection getDirection() const {
       return m_direction;
   };
 
