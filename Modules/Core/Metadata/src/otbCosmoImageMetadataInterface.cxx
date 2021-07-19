@@ -317,6 +317,12 @@ std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const std::string & re
 
   std::vector<Orbit> orbitVector;
 
+  // Helper function to convert to a two digit string.
+  auto formatTimeInt = [](int i) { return (i < 10 ? "0" + std::to_string(i)
+                                                 : std::to_string(i) );};
+  auto formatTimeDouble = [](double d) { return (d < 10 ? "0" + std::to_string(d)
+                                                       : std::to_string(d) );};
+
   std::ostringstream oss;
   for (int i = 0; i != stateVectorList_size ; ++i)
   {
@@ -328,9 +334,11 @@ std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const std::string & re
     int hour = static_cast<int> (total_seconds/3600.0);
     int minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
     double seconds = total_seconds - hour*3600 - minutes*60;
-    std::string timestr = reference_UTC + " " + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
+    seconds += 0.5;
 
-    orbit.time = boost::posix_time::time_from_string(timestr);
+    std::string timeStr = reference_UTC + "T" + formatTimeInt(hour) + ":" + formatTimeInt(minutes) + ":" + formatTimeDouble(seconds);
+
+    orbit.time = MetaData::ReadFormattedDate(timeStr);
 
     orbit.position[0] = std::stod(vECEF_sat_pos[i*3 + 0]) ;
     orbit.position[1] = std::stod(vECEF_sat_pos[i*3 + 1]) ;
@@ -356,16 +364,8 @@ std::vector<BurstRecord> CosmoImageMetadataInterface::CreateBurstRecord(const st
   record.endLine = endLine;
   record.endSample = endSample;
 
-
-  std::stringstream ss;
-  auto facet = new boost::posix_time::time_input_facet("%Y-%m-%dT%H:%M:%S%F");
-  ss.imbue(std::locale(std::locale(), facet));
-
-  ss << firstLineTimeStr;
-  ss >> record.azimuthStartTime;
-
-  ss << lastLineTimeStr;
-  ss >> record.azimuthStopTime;
+  record.azimuthStartTime = MetaData::ReadFormattedDate(firstLineTimeStr, "%Y-%m-%dT%H:%M:%S%F");
+  record.azimuthStopTime = MetaData::ReadFormattedDate(lastLineTimeStr, "%Y-%m-%dT%H:%M:%S%F");
 
   record.azimuthAnxTime = 0.;
 
@@ -462,12 +462,19 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   }
   sarParam.rangeSamplingRate = 1 / rangeTimeInterval;
 
-  sarParam.azimuthTimeInterval = boost::posix_time::precise_duration(
+  sarParam.azimuthTimeInterval = MetaData::DurationType(
       std::stod(metadataBands[0]["S01_SBI_Line_Time_Interval"])
       * 1e6);
   sarParam.nearRangeTime = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Range_First_Time"]);
 
   imd.Add(MDGeom::SAR, sarParam);
+
+  // TODO: compute a GCP at the center of scene using the inverse sar model like it is done in ossim plugins
+  // This require to move IMIs to another higher level module that depends on OTBTransform (which depends 
+  // on OTBMetadata) so that SarSensorModel can be used. (this cannot be done while IMIs still depend on Ossim)
+  Projection::GCPParam gcp;
+  imd.Add(MDGeom::GCP, gcp);
+
 
   SARCalib sarCalib;
   LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);

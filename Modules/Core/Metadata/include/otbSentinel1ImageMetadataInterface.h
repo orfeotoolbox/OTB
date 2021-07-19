@@ -100,6 +100,12 @@ public:
   bool HasCalibrationLookupDataFlag(const MetadataSupplierInterface&) const override;
   bool CreateCalibrationLookupData(SARCalib&, const ImageMetadata&, const MetadataSupplierInterface&, const bool) const override;
 
+  /* Read the Sar parameters and GCPs from the annotation xml file, this method can be used 
+    to instantiate a otb::SarModel */
+  void ReadSarParamAndGCPs(const XMLMetadataSupplier &,
+                           SARParam &,
+                           Projection::GCPParam &);
+
   void ParseGdal(ImageMetadata &) override;
 
   void ParseGeom(ImageMetadata &) override;
@@ -132,10 +138,6 @@ protected:
   std::vector<CoordinateConversionRecord> GetCoordinateConversionRecord(const XMLMetadataSupplier &xmlMS,
                                                                         const std::string & rg0_path,
                                                                         const std::string & coeffs_path) const;
-
-  /* Fetch azimuth and range times corresponding to GCPs */
-  std::unordered_map<std::string, GCPTime> GetGCPTimes(const XMLMetadataSupplier & xmlMS,
-                                                       const Projection::GCPParam & gcps) const;
 
   /* Compute the mean terrain elevation */
   double getBandTerrainHeight(const XMLMetadataSupplier&) const;

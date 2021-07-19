@@ -70,7 +70,7 @@ set(ossimplugins_SOURCES
 
 add_library(otbossimplugins SHARED ${ossimplugins_SOURCES})
 target_link_libraries(otbossimplugins
-  ${OTBBoost_LIBRARIES}
+  ${Boost_LIBRARIES}
   ${OTBGDAL_LIBRARIES}
   ${OTBOssim_LIBRARIES}
   ${OTBGeoTIFF_LIBRARIES}

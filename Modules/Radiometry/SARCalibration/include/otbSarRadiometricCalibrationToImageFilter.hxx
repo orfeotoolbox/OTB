@@ -80,7 +80,7 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
     sarCalibPtr = std::make_unique<SARCalib>(boost::any_cast<SARCalib>(imd.Bands[0][MDGeom::SARCalib]));
   }
   else
-      throw std::runtime_error("otbSarRadiometricCalibrationTiImageFilter was not able to fetch the SARCalib metadata.");
+      throw std::runtime_error("otbSarRadiometricCalibrationToImageFilter was not able to fetch the SARCalib metadata.");
 
   /** Get the SarRadiometricCalibrationFunction function instance.  */
   FunctionPointer function = this->GetFunction();

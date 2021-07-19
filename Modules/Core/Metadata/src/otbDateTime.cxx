@@ -19,16 +19,39 @@
  */
 
 #include "otbDateTime.h"
+#include "otbStringUtilities.h"
 
-namespace boost 
-{ 
-namespace posix_time 
+namespace otb
+{
+namespace MetaData
 {
 
-time_duration abs(time_duration d)
+double ratio_(Duration const& lhs, Duration const& rhs)
 {
-  if(d.is_negative())
-    d = d.invert_sign();
+  return (lhs.TotalNanoseconds() / rhs.TotalNanoseconds());
+}
+
+TimeType ReadFormattedDate(const std::string & dateStr, const std::string & format)
+{
+  MetaData::TimeType outputDate;
+  std::stringstream ss;
+  auto facet = new boost::posix_time::time_input_facet(format);
+  ss.imbue(std::locale(std::locale(), facet));
+  ss << dateStr;
+  ss >> outputDate;
+  return outputDate;
+}
+
+DurationType seconds(double input)
+{
+  //return boost::posix_time::precise_duration(input * 1e9);
+  return DurationType::Seconds(input);
+}
+
+Duration Abs(Duration d)
+{
+  if(d.m_Duration.is_negative())
+    d.m_Duration = d.m_Duration.invert_sign();
   return d;
 }
 

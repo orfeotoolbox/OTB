@@ -19,7 +19,4 @@
 #
 
 project(OTBBoostAdapters)
-
-set(OTBBoostAdapters_LIBRARIES OTBBoostAdapters)
-
 otb_module_impl()

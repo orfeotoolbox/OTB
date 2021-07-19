@@ -114,6 +114,7 @@ struct OTBMetadata_EXPORT BurstRecord
   double        azimuthAnxTime;
 };
 
+
 /** \struct GCPTime
  *
  * \brief This structure contains the azimuth and range times associated with a gcp
@@ -158,6 +159,9 @@ struct OTBMetadata_EXPORT SARParam
   double rangeSamplingRate;
   double rangeResolution;
 
+  unsigned long numberOfLinesPerBurst;
+  unsigned long numberOfSamplesPerBurst;
+
   /** Doppler centroid estimates */
   std::vector<DopplerCentroid> dopplerCentroids;
 
@@ -178,6 +182,7 @@ struct OTBMetadata_EXPORT SARParam
 
   /** Conversion coefficients from ground range to slant range */
   std::vector<CoordinateConversionRecord> groundRangeToSlantRangeRecords;
+
 };
 
 /** \struct SARCalib

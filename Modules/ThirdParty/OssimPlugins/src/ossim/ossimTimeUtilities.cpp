@@ -152,3 +152,29 @@ std::string ossimplugins::time::to_simple_string(Duration const& d)
    return std::string(buffer, N);
 }
 
+
+boost::posix_time::time_duration boost::posix_time::abs(boost::posix_time::time_duration d) {
+       if(d.is_negative())
+           d = d.invert_sign();
+       return d;
+   }
+
+
+
+namespace ossimplugins
+{
+namespace time
+{
+boost::posix_time::ptime readFormattedDate(const std::string & dateStr, const std::string & format)
+{
+
+  boost::posix_time::ptime outputDate;
+  std::stringstream ss;
+  auto facet = new boost::posix_time::time_input_facet(format);
+  ss.imbue(std::locale(std::locale(), facet));
+  ss << dateStr;
+  ss >> outputDate;
+  return outputDate;
+}
+}
+};

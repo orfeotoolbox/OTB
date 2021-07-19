@@ -395,14 +395,23 @@ namespace ossimplugins
     int minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
     double seconds = total_seconds - hour*3600 - minutes*60;
 
-    std::string first_line_time = reference_UTC + "T" + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
+
+    // Helper function to convert to a two digit string.
+    auto formatTimeInt = [](int i) { return (i < 10 ? "0" + std::to_string(i)
+                                                   : std::to_string(i) );};
+    auto formatTimeDouble = [](double d) { return (d < 10 ? "0" + std::to_string(d)
+                                                         : std::to_string(d) );};
+
+
+
+    std::string first_line_time = reference_UTC + "T" + formatTimeInt(hour) + ":" + formatTimeInt(minutes) + ":" + formatTimeDouble(seconds);
     
     total_seconds = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Azimuth_Last_Time"]);
     hour = static_cast<int> (total_seconds/3600.0);
     minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
     seconds = total_seconds - hour*3600 - minutes*60;
 
-    std::string last_line_time = reference_UTC + "T" + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
+    std::string last_line_time = reference_UTC + "T" + formatTimeInt(hour) + ":" + formatTimeInt(minutes) + ":" + formatTimeDouble(seconds);
 
     add(theProductKwl, HEADER_PREFIX, "first_line_time", first_line_time);
     add(theProductKwl, HEADER_PREFIX, "last_line_time",  last_line_time);
@@ -446,7 +455,7 @@ namespace ossimplugins
 	seconds = total_seconds - hour*3600 - minutes*60;
 
 
-	std::string time = reference_UTC + "T" + std::to_string(hour) + ":" + std::to_string(minutes) + ":" + std::to_string(seconds);
+	std::string time = reference_UTC + "T" + formatTimeInt(hour) + ":" + formatTimeInt(minutes) + ":" + formatTimeDouble(seconds);
 
 	add(theProductKwl, orbit_prefix + keyTime, time);
         
@@ -471,10 +480,17 @@ namespace ossimplugins
     burstRecord.startSample = add(theProductKwl, BURST_PREFIX, "[0].start_sample", 0);
     burstRecord.endSample   = add(theProductKwl, BURST_PREFIX, "[0].end_sample",  sizex-1);
 
+#if defined(USE_BOOST_TIME)
     burstRecord.azimuthStartTime = add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", 
-				       ossimplugins::time::toModifiedJulianDate(first_line_time));
+               ossimplugins::time::readFormattedDate(first_line_time));
     burstRecord.azimuthStopTime  = add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  
-				       ossimplugins::time::toModifiedJulianDate(last_line_time));
+               ossimplugins::time::readFormattedDate(last_line_time));
+#else
+    burstRecord.azimuthStartTime = add(theProductKwl, BURST_PREFIX, "[0].azimuth_start_time", 
+               ossimplugins::time::toModifiedJulianDate(first_line_time));
+    burstRecord.azimuthStopTime  = add(theProductKwl, BURST_PREFIX, "[0].azimuth_stop_time",  
+               ossimplugins::time::toModifiedJulianDate(last_line_time));
+#endif
 
     burstRecord.azimuthAnxTime = add(theProductKwl, BURST_PREFIX, "[0].azimuth_anx_time", 0);
 

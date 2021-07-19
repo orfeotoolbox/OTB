@@ -220,12 +220,12 @@ otb_add_test(NAME uaTvSarSensorModelAdapter2 COMMAND otbTransformTestDriver
   )
 
 if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
-  add_executable(otbSarSensorModelTest otbSarSensorModelTest.cxx)
+  add_executable(otbSarSensorModelTest otbSarSensorModelTest.cxx )
   target_link_libraries(
     otbSarSensorModelTest
     ${OTBTransform-Test_LIBRARIES}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
-  
+
   otb_add_test(NAME prTvSarSensorModelSentinel1_SLC
            COMMAND otbSarSensorModelTest --
            LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff} 
@@ -253,5 +253,19 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
 #           -111.664738184032
 #           36.2692959995967
 #           0)
+
+  add_executable(otbSentinel1SensorModelTest otbSentinel1SensorModelTest.cxx )
+  target_link_libraries(
+    otbSentinel1SensorModelTest
+    ${OTBTransform-Test_LIBRARIES}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
+
+  #S1 tests
+  file(GLOB s1_files ${INPUTDATA}/ossimPlugins/s1/*.xml)
+  #Loop over all S1 annotation files
+  foreach(entry ${s1_files})
+    get_filename_component(name ${entry} NAME_WE)
+    otb_add_test( NAME prTvSentinel1SensorModel_${name} COMMAND otbSentinel1SensorModelTest ${entry})
+  endforeach()
 
 endif()

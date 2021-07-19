@@ -137,15 +137,13 @@ private:
   }*/
 
     // Coniguration for fusion filter
-    fusionFilter->SetSLCImageKeyWorList(in->GetImageKeywordlist());
+    fusionFilter->SetSLCImageMetadata(in->GetImageMetadata());
     // Get Invalid pixel Key (from Image 0)
     FloatVectorImageType::Pointer Im0 = inList->GetNthElement(0);
     Im0->UpdateOutputInformation();
 
-    auto const& kwl = Im0->GetImageKeywordlist();
-
-    const bool inputWithInvalidPixels = kwl.HasKey("support_data.invalid_pixels") && kwl.GetMetadataByKey("support_data.invalid_pixels") == "yes";
-
+    auto const & imd = Im0->GetImageMetadata();
+    const bool inputWithInvalidPixels = imd.Has("invalid_pixels") && imd["invalid_pixels"] == "yes";
 
     fusionFilter->getDeburstLinesAndSamples(lines, samples, burst_index, inputWithInvalidPixels);
 

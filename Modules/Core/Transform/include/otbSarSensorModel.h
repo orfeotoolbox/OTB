@@ -32,6 +32,11 @@ namespace otb
 class SarSensorModel
 {
 public:
+
+  SarSensorModel(const std::string & productType,
+                 const SARParam & sarParam,
+                 const Projection::GCPParam & gcps);
+
   SarSensorModel(const ImageMetadata & imd);
   virtual ~SarSensorModel() = default;
 
@@ -60,6 +65,75 @@ public:
   void LineSampleHeightToWorld(const Point2DType& imPt,
                                double heightAboveEllipsoid,
                                Point3DType& worldPt) const;
+
+  /** Deburst metadata if possible and return lines to keep in image file */
+  bool Deburst(std::vector<std::pair<unsigned long, unsigned long>>& lines,
+               std::pair<unsigned long, unsigned long>& samples,
+               bool onlyValidSample = false);
+
+
+  /**
+    * This method will perform an extration of one burst. It wil return the
+    * lines and samples to extract in the image file.
+    * \return true if the extraction operation succeeded. No changes is
+    * made to the object if the operation fails.
+    * \param burst_index Index of Burst.
+    * \param lines A container for the lines to keep in the
+    * standalone burst.
+    * \param samples A container for the samples to keep in the
+    * standalone burst.
+    */
+  bool BurstExtraction(const unsigned int burst_index, std::pair<unsigned long,unsigned long> & lines,
+      std::pair<unsigned long,unsigned long> & samples, bool allPixels = false);
+
+   /**
+    * This method will perform a deburst and concatenation operation, and return the
+    * vector of lines and the vector of samples to keep in the 
+    * image file. The lines and samples represents start/size into each independent bursts. 
+    * Note that the deburst operation has no effect if theBurstRecords
+    * contains a single burst. Otherwise it will merge burst together
+    * into a single burst, and update GCPs accordingly.
+    * \return true if the deburst operation succeeded. No changes is
+    * made to the object if the operation fails.
+    * \param lines A container for the lines ranges to keep in the
+    * deburst image.
+    * \param samples A container for the samples ranges to keep in the
+    * deburst image.
+    * \param lines A Boolean to indicate only valids samples are required.
+    */
+   bool DeburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts, 
+            std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts,
+            unsigned int & linesOffset, unsigned int first_burstInd,
+            bool inputWithInvalidPixels=false);
+
+   /** Update a ImageMetadata object with the sotred SarParam and GCPs, possibly modified from the 
+    * original metadata by the SarSensorModel
+    * \param imd The ImageMetadata to be updated
+     */ 
+   void UpdateImageMetadata(ImageMetadata & imd);
+
+  /** 
+    * This is a helper function to convert deburst line to input image
+    * line
+    * \param lines The vector of lines range to keep
+    * \param imageLine The input deburst line
+    * \param deburstLine The output original image line
+  */
+  static void DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, 
+                                              unsigned long deburstLine, 
+                                              unsigned long & imageLine);
+
+  /**
+    * This is a helper function to convert image line to deburst image
+    * line.
+    * \param lines The vector of lines range to keep
+    * \param imageLine The input image line
+    * \param deburstLine The output deburst line
+    * \return True if imageLine is within a preserved range, false otherwise
+    */
+  static bool ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines,
+                              unsigned long imageLine,
+                              unsigned long & deburstLine);
 
 protected:
 
@@ -110,11 +184,15 @@ private:
   const GCP & findClosestGCP(const Point2DType& imPt, const Projection::GCPParam & gcpParam) const;
 
   Point3DType projToSurface(const GCP & gcp,
-                     const Point2DType & imPt,
-                     double heightAboveEllipsoid) const;
+                            const Point2DType & imPt,
+                            double heightAboveEllipsoid) const;
 
-  const ImageMetadata & m_Imd;
+  std::string m_ProductType;
+  Projection::GCPParam m_GCP;
   SARParam m_SarParam;
+
+  TimeType m_FirstLineTime;
+  TimeType m_LastLineTime;
 
   DurationType m_AzimuthTimeOffset;
   double m_RangeTimeOffset; // Offset in seconds

@@ -27,8 +27,6 @@
 
 namespace otb
 {
-using boost::posix_time::seconds;
-
 itk::Point<double, 3> EcefToWorld(const itk::Point<double, 3> & ecefPoint)
 {
   auto transform = otb::GenericMapProjection<otb::TransformDirection::INVERSE, double,3, 3>::New();
@@ -53,24 +51,26 @@ double DotProduct(const itk::Point<double, 3> & pt1, const itk::Point<double, 3>
 }
 
 
-SarSensorModel::SarSensorModel(const ImageMetadata & imd) 
-          : m_Imd(imd),
-            m_AzimuthTimeOffset(boost::posix_time::seconds(0)),
-            m_RangeTimeOffset(0.)
+SarSensorModel::SarSensorModel( const std::string & productType,
+                                const SARParam & sarParam,
+                                const Projection::GCPParam & gcps)
+                            : m_ProductType(productType),
+                              m_GCP(gcps),
+                              m_SarParam(sarParam),
+                              m_AzimuthTimeOffset(MetaData::seconds(0)),
+                              m_RangeTimeOffset(0.)
 {
-  if (!imd.Has(MDGeom::SAR))
-  {
-    otbGenericExceptionMacro(itk::ExceptionObject, <<"Input metadata does not contain SAR parameters");
-  }
-
-  m_SarParam = boost::any_cast<SARParam>(imd[MDGeom::SAR]);
-  
   OptimizeTimeOffsetsFromGcps();
 
   const std::vector<std::string> grdProductTypes = {"GRD", "MGD", "GEC", "EEC"};
-  m_IsGrd = m_Imd.Has(MDStr::ProductType) &&
-    std::find(grdProductTypes.begin(), grdProductTypes.end(), m_Imd[MDStr::ProductType]) != grdProductTypes.end();
+  m_IsGrd = std::find(grdProductTypes.begin(), grdProductTypes.end(), m_ProductType) != grdProductTypes.end();
+}
 
+SarSensorModel::SarSensorModel(const ImageMetadata & imd)
+          : SarSensorModel(imd.Has(MDStr::ProductType) ? imd[MDStr::ProductType] : "UNKNOWN",
+                            boost::any_cast<SARParam>(imd[MDGeom::SAR]),
+                            imd.GetGCPParam())
+{
 }
 
 void SarSensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DType& outLineSample) const
@@ -138,9 +138,9 @@ void SarSensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
                                              double  heightAboveEllipsoid,
                                              Point3DType& worldPt) const
 {
-  assert(m_Imd.Has(MDGeom::GCP));
+  assert(m_GCP.GCPs.size());
 
-  const auto& gcp = findClosestGCP(imPt, m_Imd.GetGCPParam());
+  const auto& gcp = findClosestGCP(imPt, m_GCP);
 
   Point3DType ecefPoint;
 
@@ -258,11 +258,11 @@ void SarSensorModel::interpolateSensorPosVel(const TimeType & azimuthTime,
   {
      // Search for the deg number of records around the azimuth time
      unsigned int t_min_idx = 0;
-     DurationType t_min = abs(azimuthTime - m_SarParam.orbits.front().time);
+    auto t_min = Abs(azimuthTime - m_SarParam.orbits.front().time);
      unsigned int count = 0;
      for(auto it = m_SarParam.orbits.cbegin();it!= m_SarParam.orbits.cend();++it,++count)
      {
-        const DurationType current_time = abs(azimuthTime-it->time);
+        const auto current_time = Abs(azimuthTime-it->time);
         if(t_min > current_time)
         {
            t_min_idx = count;
@@ -309,19 +309,16 @@ void SarSensorModel::interpolateSensorPosVel(const TimeType & azimuthTime,
 
 void SarSensorModel::OptimizeTimeOffsetsFromGcps()
 {
-  if (!m_Imd.Has(MDGeom::GCP))
-  {
-    return;
-  }
+  assert(m_GCP.GCPs.size());
 
-  DurationType cumulAzimuthTime(seconds(0));
+  DurationType cumulAzimuthTime(MetaData::seconds(0));
   unsigned int count=0;
 
   // reset offsets before optimisation
-  m_AzimuthTimeOffset = seconds(0);
-  auto gcpParam = m_Imd.GetGCPParam();
+  m_AzimuthTimeOffset = MetaData::seconds(0);
+
   // First, fix the azimuth time
-  for(auto gcpIt = gcpParam.GCPs.begin(); gcpIt!=gcpParam.GCPs.end(); ++gcpIt)
+  for(auto gcpIt = m_GCP.GCPs.begin(); gcpIt!= m_GCP.GCPs.end(); ++gcpIt)
   {
     auto gcpTimeIt = m_SarParam.gcpTimes.find(gcpIt->m_Id);
     if (gcpTimeIt != std::end(m_SarParam.gcpTimes))
@@ -347,7 +344,7 @@ void SarSensorModel::OptimizeTimeOffsetsFromGcps()
       }
     }
   }
-  m_AzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(seconds(0));
+  m_AzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(MetaData::seconds(0));
 }
 
 void SarSensorModel::AzimuthTimeToLine(const TimeType & azimuthTime, double & line) const
@@ -634,5 +631,526 @@ SarSensorModel::Point3DType SarSensorModel::projToSurface(const GCP & gcp, const
   return currentEstimation;
 }
 
+bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>>& lines,
+                             std::pair<unsigned long, unsigned long>& samples,
+                             bool onlyValidSample)
+{
+  auto & burstRecords = m_SarParam.burstRecords;
+  if (burstRecords.empty())
+  {
+    return false;
+  }
+
+  // First, clear lines record
+  lines.clear();
+
+  // Check the single burst record case
+  if(burstRecords.size() == 1)
+  {
+    lines.push_back(std::make_pair(burstRecords.front().startLine, burstRecords.front().endLine));
+    return false;
+  }
+
+  // Process each burst
+  auto it = burstRecords.cbegin();
+  // Correct since we have at least 2 bursts records
+  auto next = it + 1;
+
+  unsigned long currentStart  = it->startLine;
+  TimeType deburstAzimuthStartTime = it->azimuthStartTime;
+  double deburstAzimuthAnxTime = it->azimuthAnxTime;
+  unsigned long deburstEndLine = 0;
+  samples = std::make_pair(it->startSample, it->endSample);
+
+  for(; next != burstRecords.cend() ;++it,++next)
+  {
+    DurationType timeOverlapEnd = (it->azimuthStopTime - next->azimuthStartTime);
+
+    unsigned long overlapLength = timeOverlapEnd/m_SarParam.azimuthTimeInterval;
+    unsigned long halfLineOverlapEnd = overlapLength/2;
+    TimeType endTimeInNextBurst = it->azimuthStopTime-(halfLineOverlapEnd-1)*m_SarParam.azimuthTimeInterval;
+    
+    unsigned long halfLineOverlapBegin = std::floor(0.5+(endTimeInNextBurst-next->azimuthStartTime)/m_SarParam.azimuthTimeInterval);
+      
+    unsigned long currentStop = it->endLine-halfLineOverlapEnd;
+
+    deburstEndLine+= currentStop - currentStart + 1; // +1 because currentStart/Stop are both valids
+
+    lines.push_back(std::make_pair(currentStart,currentStop));
+
+    currentStart = next->startLine+halfLineOverlapBegin;
+
+    if (onlyValidSample)
+    {
+      // Find the first and last valid sampleburst
+      if (it->startSample > samples.first)
+      {
+        samples.first = it->startSample;
+      }
+      if (it->endSample < samples.second)
+      {
+        samples.second = it->endSample;
+      }
+    }
+  }
+
+  TimeType deburstAzimuthStopTime = it->azimuthStopTime;
+  deburstEndLine+=it->endLine-currentStart;
+
+  lines.push_back(std::make_pair(currentStart,it->endLine));
+
+  if (onlyValidSample)
+  {
+    if (it->startSample > samples.first)
+    {
+      samples.first = it->startSample;
+    }
+    if (it->endSample < samples.second)
+    {
+      samples.second = it->endSample;
+    }
+  }
+
+  // Clear the previous burst records
+  burstRecords.clear();
+
+  // Create the single burst
+  BurstRecord deburstBurst;
+  deburstBurst.startLine = 0;
+  deburstBurst.azimuthStartTime = deburstAzimuthStartTime;
+  deburstBurst.endLine = deburstEndLine;
+  deburstBurst.azimuthStopTime = deburstAzimuthStopTime;
+  deburstBurst.azimuthAnxTime = deburstAzimuthAnxTime; 
+
+  if (onlyValidSample)
+  {
+    deburstBurst.startSample = 0;
+    deburstBurst.endSample = samples.second - samples.first;
+  }
+
+  burstRecords.push_back(deburstBurst);
+
+  // Now move GCPs
+
+  std::vector<GCP> deburstGCPs;
+  
+  for (auto gcp : m_GCP.GCPs)
+  {
+    unsigned long newLine=0;
+
+    unsigned long gcpLine = std::floor(gcp.m_GCPY + 0.5);
+    unsigned long gcpSample = std::floor(gcp.m_GCPX + 0.5);
+
+    // Be careful about fractional part of GCPs
+    double fractionalLines = gcp.m_GCPY - gcpLine;
+    double fractionalSamples = gcp.m_GCPX - gcpSample;
+
+    bool linesOk = ImageLineToDeburstLine(lines, gcpLine, newLine);
+
+    // Gcp into valid samples
+    bool samplesOk = true;
+    unsigned long newSample = gcpSample;
+
+    if (onlyValidSample)
+      {
+      samplesOk = false;
+      if (gcpSample >= samples.first && gcpSample <= samples.second)
+      {
+          samplesOk = true;
+          newSample -= samples.first; // Offset with first valid sample
+      }
+    }
+
+    if(linesOk && samplesOk)
+    {
+      gcp.m_GCPY = newLine + fractionalLines;
+      gcp.m_GCPX = newSample + fractionalSamples;
+      deburstGCPs.push_back(gcp);
+    }
+  }
+
+  m_GCP.GCPs.swap(deburstGCPs);
+
+  // redaptMedataAfterDeburst = true;
+  m_FirstLineTime = deburstBurst.azimuthStartTime;
+  m_LastLineTime = deburstBurst.azimuthStopTime;
+  
+  if (onlyValidSample)
+    m_SarParam.nearRangeTime += samples.first / m_SarParam.rangeSamplingRate; 
+
+
+  return true;
+}
+
+
+bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
+                                     std::pair<unsigned long,unsigned long> & lines,
+                                     std::pair<unsigned long,unsigned long> & samples,
+                                     bool allPixels)
+{ 
+  auto & burstRecords = m_SarParam.burstRecords;
+  if (burstRecords.empty())
+  {
+    return false;
+  }
+
+  // Check the single burst record case
+  if(burstRecords.size() == 1)
+  {
+    lines = {burstRecords.front().startLine, burstRecords.front().endLine};
+    return false;
+  }
+
+  if (allPixels)
+  {
+    samples = {0, m_SarParam.numberOfSamplesPerBurst - 1};
+    lines = {burst_index*m_SarParam.numberOfLinesPerBurst, 
+                           (burst_index+1)*m_SarParam.numberOfLinesPerBurst - 1};
+
+    //redaptMedataAfterDeburst = true;
+    m_FirstLineTime = burstRecords[burst_index].azimuthStartTime - (burstRecords[burst_index].startLine - lines.first)
+                       * m_SarParam.azimuthTimeInterval;
+    m_LastLineTime = m_FirstLineTime + (lines.second - lines.first) * m_SarParam.azimuthTimeInterval;
+
+    // Clear the previous burst records
+    burstRecords.clear();
+
+    // Create the single burst
+    BurstRecord burst;
+    burst.startLine = 0;
+    burst.azimuthStartTime = m_FirstLineTime;
+    burst.endLine = lines.second - lines.first;
+    burst.azimuthStopTime = m_LastLineTime;
+    burst.startSample = 0;
+    burst.endSample = samples.second - samples.first;
+    burst.azimuthAnxTime = 0;
+
+    burstRecords.push_back(burst);
+  }
+  else
+  {
+    // Retrieve into TheBurstRecord, the required index
+    auto burstInd_Record = burstRecords[burst_index];
+    lines = {burstInd_Record.startLine, burstInd_Record.endLine};
+    samples = {burstInd_Record.startSample, burstInd_Record.endSample};
+    auto burstAzimuthStartTime = burstInd_Record.azimuthStartTime;
+    auto burstAzimuthStopTime = burstInd_Record.azimuthStopTime;
+
+    // Clear the previous burst records
+    burstRecords.clear();
+
+    // Create the single burst
+    BurstRecord oneBurst;
+    oneBurst.startLine = 0;
+    oneBurst.azimuthStartTime = burstAzimuthStartTime;
+    oneBurst.endLine = lines.second - lines.first;
+    oneBurst.azimuthStopTime = burstAzimuthStopTime;
+    oneBurst.startSample = 0;
+    oneBurst.endSample = samples.second - samples.first;
+    oneBurst.azimuthAnxTime = burstInd_Record.azimuthAnxTime;
+
+    burstRecords.push_back(oneBurst);
+
+    // Adapt general metadata : theNearRangeTime, first_time_line, last_time_line
+    //redaptMedataAfterDeburst = true;
+    m_FirstLineTime = oneBurst.azimuthStartTime;
+    m_LastLineTime = oneBurst.azimuthStopTime;
+    m_SarParam.nearRangeTime += samples.first / m_SarParam.rangeSamplingRate; 
+  }
+
+  std::vector<GCP> oneBurstGCPs;
+
+  // Now move GCPs
+  for (auto const& token : m_GCP.GCPs)
+  {
+    auto currentGCP = token;
+
+    unsigned long gcpLine = std::floor(currentGCP.m_GCPY + 0.5);
+    unsigned long gcpSample = std::floor(currentGCP.m_GCPX + 0.5);
+
+    // Be careful about fractional part of GCPs
+    double fractionalLines = currentGCP.m_GCPY - gcpLine;
+    double fractionalSamples = currentGCP.m_GCPX - gcpSample;
+
+    // Gcp into valid samples and valid lines
+    unsigned long newSample = gcpSample;
+    bool samplesOk = false;
+
+    if (gcpSample >= samples.first && gcpSample <= samples.second)
+    {
+      samplesOk = true;
+      newSample -= samples.first; // Offset with first valid sample
+    }
+
+    unsigned long newLine = gcpLine;
+    bool linesOk = false;
+  
+    if (gcpLine >= lines.first && gcpLine <= lines.second)
+    {
+      linesOk = true;
+      newLine -= lines.first; // Offset with first valid line
+    }
+
+    if(linesOk && samplesOk)
+    {
+      currentGCP.m_GCPY = newLine + fractionalLines;
+      currentGCP.m_GCPX = newSample + fractionalSamples;
+      oneBurstGCPs.push_back(currentGCP);
+    }
+  }
+
+  m_GCP.GCPs.swap(oneBurstGCPs);
+
+  return true;
+
+}
+
+bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,unsigned long> >& linesBursts, 
+                                           std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts,
+                                           unsigned int & linesOffset,
+                                           unsigned int first_burstInd,
+                                           bool inputWithInvalidPixels)
+{
+  auto & burstRecords = m_SarParam.burstRecords;
+  if (burstRecords.empty())
+  {
+    return false;
+  }
+
+  // declare lines and samples 
+  std::vector<std::pair<unsigned long,unsigned long> > lines;
+  lines.reserve(burstRecords.size());
+  std::pair<unsigned long,unsigned long> samples;
+
+  // First, clear lines record
+  linesBursts.clear();
+  samplesBursts.clear();
+
+  // Check the single burst record case
+  if(burstRecords.size() == 1)
+  {
+    linesBursts.push_back({burstRecords.front().startLine, burstRecords.front().endLine});
+    samplesBursts.push_back({burstRecords.front().startLine, burstRecords.front().endLine});
+    return false;
+  }
+
+  ///////// deburst operation ////////
+  // Process each burst
+  auto it = burstRecords.cbegin();
+  // Correct since we have at least 2 bursts records
+  auto next = it+1;
+
+  unsigned long currentStart  = it->startLine;
+  TimeType deburstAzimuthStartTime = it->azimuthStartTime;
+  double deburstAzimuthAnxTime = it->azimuthAnxTime;
+
+  unsigned long deburstEndLine = 0;
+  samples = {it->startSample, it->endSample};
+
+  // Store halfLineOverlapBegin/End
+  std::vector<unsigned long> halfLineOverlapBegin(burstRecords.size());
+  std::vector<unsigned long> halfLineOverlapEnd(burstRecords.size());
+
+  halfLineOverlapBegin[0] = 0;
+
+  unsigned int counterBegin = 1;
+  unsigned int counterEnd = 0;
+
+  for(; next!= burstRecords.cend() ;++it,++next)
+  {
+    DurationType timeOverlapEnd = (it->azimuthStopTime - next->azimuthStartTime);
+    unsigned long overlapLength = timeOverlapEnd / m_SarParam.azimuthTimeInterval;
+
+    halfLineOverlapEnd[counterEnd] = overlapLength/2;
+    TimeType endTimeInNextBurst = it->azimuthStopTime-(halfLineOverlapEnd[counterEnd]-1)*m_SarParam.azimuthTimeInterval;
+
+    halfLineOverlapBegin[counterBegin] = std::floor(0.5+(endTimeInNextBurst-next->azimuthStartTime)/m_SarParam.azimuthTimeInterval);
+
+    unsigned long currentStop = it->endLine-halfLineOverlapEnd[counterEnd];
+
+    deburstEndLine+= currentStop - currentStart + 1; // +1 because currentStart/Stop are both valids
+
+    lines.push_back({currentStart,currentStop});
+
+    // Find the first and last valid sampleburst
+    if (it->startSample > samples.first)
+    {
+      samples.first = it->startSample;
+    }
+    if (it->endSample < samples.second)
+    {
+      samples.second = it->endSample;
+    }
+
+    ++counterBegin;
+    ++counterEnd;
+  }
+
+  halfLineOverlapEnd[burstRecords.size() - 1] = 0;
+
+  TimeType deburstAzimuthStopTime = it->azimuthStopTime;
+  deburstEndLine+=it->endLine - currentStart;
+
+  lines.push_back({currentStart,it->endLine});
+
+  if (it->startSample > samples.first)
+  {
+    samples.first = it->startSample;
+  }
+  if (it->endSample < samples.second)
+  {
+    samples.second = it->endSample;
+  }
+
+  // Now, update other metadata accordingly
+  std::vector<GCP> deburstGCPs;
+  
+  for (auto gcp : m_GCP.GCPs)
+  {
+    unsigned long newLine=0;
+
+    unsigned long gcpLine = std::floor(gcp.m_GCPY + 0.5);
+    unsigned long gcpSample = std::floor(gcp.m_GCPX + 0.5);
+
+    // Be careful about fractional part of GCPs
+    double fractionalLines = gcp.m_GCPY - gcpLine;
+    double fractionalSamples = gcp.m_GCPX - gcpSample;
+
+    bool linesOk = ImageLineToDeburstLine(lines,gcpLine,newLine);
+
+    // Gcp into valid samples
+    unsigned long newSample = gcpSample;
+
+    if (linesOk && gcpSample >= samples.first && gcpSample <= samples.second)
+    {
+      newSample -= samples.first; // Offset with first valid sample
+      gcp.m_GCPY = newLine + fractionalLines;
+      gcp.m_GCPX = newSample + fractionalSamples;
+      deburstGCPs.push_back(gcp);
+     }
+
+  }
+
+  m_GCP.GCPs.swap(deburstGCPs);
+
+  ///// linesBursts and samplesBursts (into Burst geometry) /////
+
+  unsigned int counter = 0;
+
+  for (const auto & burst: burstRecords)
+  {
+    unsigned long currentStart_L = halfLineOverlapBegin[counter];
+
+    if (inputWithInvalidPixels)
+    {
+      currentStart_L += burst.startLine - counter * m_SarParam.numberOfLinesPerBurst;
+    }
+
+    unsigned long currentStop_L = burst.endLine - burst.startLine - halfLineOverlapEnd[counter];
+
+    if (inputWithInvalidPixels)
+    {
+      currentStop_L = burst.endLine - counter * m_SarParam.numberOfLinesPerBurst - halfLineOverlapEnd[counter];
+    }
+
+    linesBursts.push_back({currentStart_L, currentStop_L});
+
+    unsigned long currentStart_S = 0;
+    unsigned long currentStop_S = samples.second-samples.first;
+
+    if (inputWithInvalidPixels)
+    {
+      currentStart_S = samples.first;
+    }
+    else if (burst.startSample < samples.first)
+    {
+      currentStart_S = samples.first - burst.startSample;
+    }
+
+    currentStop_S += currentStart_S;
+
+    samplesBursts.push_back({currentStart_S, currentStop_S});
+
+    ++counter;
+  }
+
+  // Define linesOffset
+  linesOffset = (burstRecords[first_burstInd].azimuthStartTime - burstRecords[0].azimuthStartTime)/m_SarParam.azimuthTimeInterval;
+
+  // Clear the previous burst records
+  burstRecords.clear();
+
+  // Create the single burst
+  BurstRecord deburstBurst;
+  deburstBurst.startLine = 0;
+  deburstBurst.azimuthStartTime = deburstAzimuthStartTime;
+  deburstBurst.endLine = deburstEndLine;
+  deburstBurst.azimuthStopTime = deburstAzimuthStopTime;
+  deburstBurst.startSample = 0;
+  deburstBurst.endSample = samples.second - samples.first;
+  deburstBurst.azimuthAnxTime = deburstAzimuthAnxTime;
+
+  burstRecords.push_back(deburstBurst);
+
+  // Adapt general metadata : theNearRangeTime, first_time_line, last_time_line
+  //redaptMedataAfterDeburst = true;
+  m_FirstLineTime = deburstBurst.azimuthStartTime;
+  m_LastLineTime = deburstBurst.azimuthStopTime;
+  
+  m_SarParam.nearRangeTime += samples.first*(1/m_SarParam.rangeSamplingRate); 
+
+  return true;
+}
+
+void SarSensorModel::UpdateImageMetadata(ImageMetadata & imd)
+{
+  imd.Add(MDGeom::SAR, m_SarParam);
+  imd.Add(MDGeom::GCP, m_GCP);
+}
+
+bool SarSensorModel::ImageLineToDeburstLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines,
+                                            unsigned long imageLine,
+                                            unsigned long & deburstLine)
+{
+  auto vit = lines.cbegin();
+  auto nit = vit + 1;
+  
+  auto lineOffset = vit->first;
+  deburstLine = imageLine;
+  
+  for(; nit != lines.end(); ++vit, ++nit)
+  {
+    if(imageLine >= vit->first && imageLine <= vit->second)
+    {
+      deburstLine-=lineOffset;
+      return true;
+    }
+    lineOffset+=nit->first - vit->second-1;
+  }
+  return false;
+}
+
+void SarSensorModel::DeburstLineToImageLine(const std::vector<std::pair<unsigned long,unsigned long> >& lines, 
+                                            unsigned long deburstLine, 
+                                            unsigned long & imageLine)
+{
+  auto vit = lines.cbegin();
+  auto nit = vit+1;
+  
+  unsigned long lineOffset = vit->first;
+
+  imageLine = deburstLine;
+  
+  while(nit != lines.end())
+  {
+    if(imageLine+lineOffset>=vit->first && imageLine+lineOffset<=vit->second)
+      break;
+
+    lineOffset += nit->first - vit->second-1;
+    ++vit;
+    ++nit;
+  }
+  imageLine += lineOffset;
+}
 
 } //namespace otb

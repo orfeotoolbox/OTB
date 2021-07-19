@@ -466,7 +466,7 @@ set(worldview2_geom_file ${INPUTDATA}/wv2/wv2-2.geom)
 set(quickbird_geom_file ${INPUTDATA}/QB/qb-2.geom)
 set(Radarsat2_geom_file ${INPUTDATA}/radarsat2/radarsat2-1.geom)
 set(TerraSar_geom_file ${INPUTDATA}/terrasar/terrasar-1.geom)
-set(CosmoSkyMed_geom_file ${INPUTDATA}/cosmoskymed/cosmoskymed-1.geom)
+#set(CosmoSkyMed_geom_file ${INPUTDATA}/cosmoskymed/cosmoskymed-1.geom)
 
 foreach(sensor ${sensor_list})
 
@@ -495,3 +495,17 @@ endif()
 
 endforeach()
 
+
+if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
+
+  add_executable(otbDateTest otbDateTest.cxx )
+  target_link_libraries(
+    otbDateTest
+    ${OTBMetadata-Test_LIBRARIES}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
+
+  otb_add_test(NAME ioTvDateTest
+           COMMAND otbDateTest --
+           )
+
+endif()
