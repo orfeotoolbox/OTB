@@ -25,6 +25,9 @@
 
 namespace otb
 {
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+RPCInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::RPCInverseTransform() : Superclass(TransformDirection::INVERSE)
+{}
 
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename RPCInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType

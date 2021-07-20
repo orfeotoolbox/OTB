@@ -30,16 +30,6 @@
 
 namespace otb
 {
-
-namespace TransformDirection
-{
-enum TransformationDirection
-{
-  FORWARD = 0,
-  INVERSE = 1
-};
-}
-
 /** \class GenericMapProjection
  *  \brief This is the base class for generic map projection transformation
  *
@@ -55,7 +45,7 @@ enum TransformationDirection
  * \ingroup OTBTransform
  **/
 
-template <TransformDirection::TransformationDirection TDirectionOfMapping, class TScalarType = double, unsigned int NInputDimensions = 2,
+template <TransformDirection TDirectionOfMapping, class TScalarType = double, unsigned int NInputDimensions = 2,
           unsigned int NOutputDimensions = 2>
 class ITK_EXPORT       GenericMapProjection : public Transform<TScalarType, // Data type for scalars
                                                          NInputDimensions,  // Number of dimensions in the input space
@@ -78,7 +68,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(GenericMapProjection, Transform);
 
-  static const TransformDirection::TransformationDirection DirectionOfMapping = TDirectionOfMapping;
+  static const TransformDirection DirectionOfMapping = TDirectionOfMapping;
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);

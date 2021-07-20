@@ -23,6 +23,7 @@
 
 #include "otbCompositeTransform.h"
 #include "otbImageMetadata.h"
+#include "otbSensorTransformFactory.h"
 #include <string>
 
 namespace otb
@@ -87,7 +88,7 @@ public:
   /** Run-time type information (and related methods). */
   itkTypeMacro(GenericRSTransform, Transform);
 
-  typedef TransformDirection::TransformationDirection DirectionOfMappingEnumType;
+  typedef TransformDirection DirectionOfMappingEnumType;
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
@@ -178,6 +179,7 @@ protected:
   GenericRSTransform();
   ~GenericRSTransform() override
   {
+   // SensorTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>::CleanFactories();
   }
 
   void Modified() const override

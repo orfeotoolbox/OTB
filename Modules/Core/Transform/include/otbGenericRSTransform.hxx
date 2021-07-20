@@ -29,6 +29,7 @@
 #include "otbSpatialReference.h"
 
 #include "ogr_spatialref.h"
+#include "otbSensorTransformFactory.h"
 
 namespace otb
 {
@@ -119,12 +120,10 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
   // If not, try to make a RPC sensor model
   if ((m_InputTransform.IsNull()) && (m_InputImd != nullptr) && (m_InputImd->Has(MDGeom::RPC)))
   {
-    typedef otb::RPCForwardTransform<double, InputSpaceDimension, OutputSpaceDimension> RPCForwardTransformType;
-    typename RPCForwardTransformType::Pointer sensorModel = RPCForwardTransformType::New();
+    auto sensorModel = otb::SensorTransformFactory::GetInstance().CreateTransform
+        <double, InputSpaceDimension, OutputSpaceDimension>(*m_InputImd,TransformDirection::FORWARD);
 
-    sensorModel->SetMetadata(*m_InputImd);
-
-    if (sensorModel->IsValidSensorModel())
+    if (sensorModel != nullptr)
     {
       m_InputTransform       = sensorModel.GetPointer();
       inputTransformIsSensor = true;
@@ -151,12 +150,10 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
   // If not, try to make a RPC sensor model
   if ((m_OutputTransform.IsNull()) && (m_OutputImd != nullptr) && (m_OutputImd->Has(MDGeom::RPC)))
   {
-    typedef otb::RPCInverseTransform<double, InputSpaceDimension, OutputSpaceDimension> RPCInverseTransformType;
-    typename RPCInverseTransformType::Pointer sensorModel = RPCInverseTransformType::New();
+    auto sensorModel = otb::SensorTransformFactory::GetInstance().CreateTransform
+        <double, InputSpaceDimension, OutputSpaceDimension>(*m_OutputImd,TransformDirection::INVERSE);
 
-    sensorModel->SetMetadata(*m_OutputImd);
-
-    if (sensorModel->IsValidSensorModel())
+    if (sensorModel != nullptr)
     {
       m_OutputTransform       = sensorModel.GetPointer();
       outputTransformIsSensor = true;

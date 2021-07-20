@@ -62,9 +62,10 @@ public:
   /**  Method to transform a point. */
   OutputPointType TransformPoint(const InputPointType& point) const override;
 
-protected:
-  RPCForwardTransform() = default;
+  RPCForwardTransform();
   ~RPCForwardTransform() = default;
+
+protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
 private:
