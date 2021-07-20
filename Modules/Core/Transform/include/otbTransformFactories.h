@@ -45,7 +45,7 @@ namespace otb {
 namespace TransformFactories {
 
 /**
- * Factory for the forward transformer based of the RPC sensor model
+ * Factory for the forward transformer based on the RPC sensor model
  */
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>::Pointer
@@ -63,7 +63,7 @@ RPCForwardTransformFactory(const ImageMetadata &imd, TransformDirection directio
 }
 
 /**
- * Factory for the inverse transformer based of the RPC sensor model
+ * Factory for the inverse transformer based on the RPC sensor model
  */
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>::Pointer

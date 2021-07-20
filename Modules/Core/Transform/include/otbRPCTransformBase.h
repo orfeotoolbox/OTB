@@ -36,7 +36,7 @@ namespace otb
  *  - Forward Transformation of a point in the sensor geometry (i, j)
  *  to a geographic point in (lat, long)
  *
- *  - Inverse Transformation of a a geographic point in (lat, long) to
+ *  - Inverse Transformation of a geographic point in (lat, long) to
  *  a point in the sensor geometry (i, j).
  *
  * \ingroup OTBTransform
