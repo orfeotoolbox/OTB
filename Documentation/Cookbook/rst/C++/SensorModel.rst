@@ -35,3 +35,21 @@ description from the ``otb::ImageMetadata`` and instantiates an
 The classes ``otb::RPCForwardTransform`` and
 ``otb::RPCInverseTransform`` each implement a version of the
 ``TransformPoint`` method which uses the ``otb::GDALRPCTransformer``.
+
+Sensor Transform Factory
+------------------------
+
+The class ``SensorTransformFactory`` is designed to automatically
+instanciate the best sensor transform based on the available
+metadata. One should use the function ``CreateTransform`` which is
+templated over the scalar type used in the transform and the
+dimensions of the input and output spaces. It takes as parameters a
+pointer to the ImageMetadata object, and the direction of the
+transform (either FORWARD or INVERSE). It returns a std::unique_ptr to
+the transform object.
+
+.. code-block:: cpp
+
+    #include "otbSensorTransformFactory.h"
+    auto sensorModel = otb::SensorTransformFactory::GetInstance().CreateTransform <double, 2, 3>(imageMetadataPointer, TransformDirection::FORWARD);
+    auto worldPoint = sensorModel->TransformPoint(sensorPoint);
