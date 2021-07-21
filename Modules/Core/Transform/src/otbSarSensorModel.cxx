@@ -99,7 +99,6 @@ void SarSensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DTyp
 
     // Eq 32 p. 31
     outLineSample[0] = groundRange/m_SarParam.rangeResolution;
-    //imPt.x = groundRange/theRangeResolution;
   }
   else
   {

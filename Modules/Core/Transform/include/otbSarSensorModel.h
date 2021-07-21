@@ -106,7 +106,7 @@ public:
             unsigned int & linesOffset, unsigned int first_burstInd,
             bool inputWithInvalidPixels=false);
 
-   /** Update a ImageMetadata object with the sotred SarParam and GCPs, possibly modified from the 
+   /** Update a ImageMetadata object with the stored SarParam and GCPs, possibly modified from the 
     * original metadata by the SarSensorModel
     * \param imd The ImageMetadata to be updated
      */ 
