@@ -42,6 +42,8 @@ SensorTransformFactory::CreateTransform(const ImageMetadata &imd, TransformDirec
   > factories;
   factories.push_back(TransformFactories::RPCForwardTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>);
   factories.push_back(TransformFactories::RPCInverseTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>);
+  factories.push_back(TransformFactories::SARForwardTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>);
+  factories.push_back(TransformFactories::SARInverseTransformFactory<TScalarType, NInputDimensions, NOutputDimensions>);
 
   typename otb::SensorTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::Pointer transformPointer;
   for (auto& transformFactory : factories)
