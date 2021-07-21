@@ -35,4 +35,5 @@ void RegisterTests()
   REGISTER_TEST(otbStreamingResampleImageFilterWithAffineTransform);
   REGISTER_TEST(otbSarSensorModelAdapterTest);
   REGISTER_TEST(otbRPCTransformTest);
+  REGISTER_TEST(otbSarTransformTest);
 }
