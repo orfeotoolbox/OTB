@@ -316,7 +316,8 @@ namespace ossimplugins
     theBurstRecords.push_back(burstRecord);
 
     // ul/ur/ll/lr lon/lat coords
-    readSceneCornerCoord(xmlDoc, numberOfRows, numberOfColumns);
+    readSceneCoord(xmlDoc, numberOfRows, numberOfColumns, "sceneCornerCoord");
+    readSceneCoord(xmlDoc, numberOfRows, numberOfColumns, "sceneCenterCoord");
 
     // Lookup position/velocity records
     readOrbitVector(xmlDoc);
@@ -397,16 +398,32 @@ namespace ossimplugins
     return readAnnotationFile(annotation, georef);
   }
 
-  bool ossimTerraSarXSarSensorModel::readSceneCornerCoord(const ossimRefPtr<ossimXmlDocument> xmlDoc,
-							  unsigned int numberOfRows,
-							  unsigned int numberOfColumns)
+  bool ossimTerraSarXSarSensorModel::readSceneCoord(const ossimRefPtr<ossimXmlDocument> xmlDoc,
+						    const unsigned int numberOfRows,
+						    const unsigned int numberOfColumns,
+						    const std::string scenePosition)
   {
     std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
-    xmlDoc->findNodes("/level1Product/productInfo/sceneInfo/sceneCornerCoord",xnodes);
+
+    if (scenePosition == "sceneCornerCoord")
+      {
+	xmlDoc->findNodes("/level1Product/productInfo/sceneInfo/sceneCornerCoord",xnodes);
+
+	add(theProductKwl, "sceneCoord.numberOfSceneCornerCoord", xnodes.size());
+      }
+    else if (scenePosition == "sceneCenterCoord")
+      {
+	xmlDoc->findNodes("/level1Product/productInfo/sceneInfo/sceneCenterCoord",xnodes);
+      }
+    else
+      {
+	return false;
+      }
 
     std::cout << "Number of corner " << xnodes.size() << '\n';
+    unsigned int index = 0;
 
-        for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
+    for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
       {
 	// Retrieve for the current corner : row and col
 	const unsigned int row = getTextFromFirstNode(**itNode, attRefRow).toUInt16();
@@ -416,29 +433,54 @@ namespace ossimplugins
 	const double lat = getDoubleFromFirstNode(**itNode, attLat);
 	const double lon = getDoubleFromFirstNode(**itNode, attLon);
 
-	// Define which corner to add lat/lon
-	std::string kwl_lat_key = "ul_lat";
-	std::string kwl_lon_key = "ul_lon";
-	if (row == 1 && col > 1)
+	// Retrive azimuth/range time and incidence angle
+	const std::string aziTimeUTC = getTextFromFirstNode(**itNode, "azimuthTimeUTC");
+	const double rangeTime = getDoubleFromFirstNode(**itNode, "rangeTime");
+	const double incAngle = getDoubleFromFirstNode(**itNode, "incidenceAngle");
+
+	if (scenePosition == "sceneCornerCoord")
 	  {
-	    kwl_lat_key = "ur_lat";
-	    kwl_lon_key = "ur_lon";
-	  }
-	if (row == numberOfRows && col > 1)
-	  {
-	    kwl_lat_key = "lr_lat";
-	    kwl_lon_key = "lr_lon";
-	  }
-	if (row == numberOfRows && col == 1)
-	  {
-	    kwl_lat_key = "ll_lat";
-	    kwl_lon_key = "ll_lon";
-	  }
+	    // Define which corner to add lat/lon
+	    std::string kwl_lat_key = "ul_lat";
+	    std::string kwl_lon_key = "ul_lon";
+	    if (row == 1 && col > 1)
+	      {
+		kwl_lat_key = "ur_lat";
+		kwl_lon_key = "ur_lon";
+	      }
+	    if (row == numberOfRows && col > 1)
+	      {
+		kwl_lat_key = "lr_lat";
+		kwl_lon_key = "lr_lon";
+	      }
+	    if (row == numberOfRows && col == 1)
+	      {
+		kwl_lat_key = "ll_lat";
+		kwl_lon_key = "ll_lon";
+	      }
 
 
-	// Add information into ossimkeywordlist
-	add(theProductKwl, kwl_lat_key, "", lat);
-	add(theProductKwl, kwl_lon_key, "", lon);
+	    // Add information into ossimkeywordlist
+	    add(theProductKwl, kwl_lat_key, "", lat);
+	    add(theProductKwl, kwl_lon_key, "", lon);
+	  }
+
+	// Add the metadata into our keywordlist
+	char prefix[256];
+	if (scenePosition == "sceneCornerCoord")
+	  s_printf(prefix, "sceneCoord.sceneCornerCoord[%d].", index);
+	else
+	  s_printf(prefix, "sceneCoord.sceneCenterCoord.");
+
+	add(theProductKwl, prefix, "azimuthTimeUTC", aziTimeUTC);
+	add(theProductKwl, prefix, "incidenceAngle", incAngle);
+	add(theProductKwl, prefix, "lat", lat);
+	add(theProductKwl, prefix, "lon", lon);
+	add(theProductKwl, prefix, "rangeTime", rangeTime);
+	add(theProductKwl, prefix, "refColumn", col);
+	add(theProductKwl, prefix, "refRow", row);
+
+	++index;
       }
 
     return true;

@@ -125,6 +125,19 @@ public:
 
   /** Get the center incidence angle */
   double GetCenterIncidenceAngle() const override;
+
+    // Scene Corner and Center
+  unsigned int GetNumberOfCornerIncidenceAngles() const;
+
+  IndexType GetCenterIncidenceAngleIndex() const;
+
+  DoubleVectorType GetCornersIncidenceAngles() const;
+
+  IndexVectorType GetCornersIncidenceAnglesIndex() const;
+
+  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const;
+
+  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const;
   
   bool CanRead() const override;
 
@@ -149,6 +162,8 @@ public:
   IndexType GetRadiometricCalibrationNoisePolynomialDegree() const;
 
   PointSetPointer GetRadiometricCalibrationNoise() const;
+
+
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */

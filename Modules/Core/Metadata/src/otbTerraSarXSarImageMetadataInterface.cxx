@@ -1063,6 +1063,201 @@ TerraSarXSarImageMetadataInterface::PointSetPointer TerraSarXSarImageMetadataInt
 }
 
 
+// CalibrationIncidenceAngle
+unsigned int TerraSarXSarImageMetadataInterface::GetNumberOfCornerIncidenceAngles() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  std::string valueString = imageKeywordlist.GetMetadataByKey("sceneCoord.numberOfSceneCornerCoord");
+  int value = 0;
+  try
+    {
+      value = std::stoi(valueString);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to convert number of scene coords.");
+    }
+
+  return value;
+}
+
+
+TerraSarXSarImageMetadataInterface::IndexType TerraSarXSarImageMetadataInterface::GetCenterIncidenceAngleIndex() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+
+  IndexType it;
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  std::string valueString1 = imageKeywordlist.GetMetadataByKey("sceneCoord.sceneCenterCoord.refRow");
+  std::string valueString0 = imageKeywordlist.GetMetadataByKey("sceneCoord.sceneCenterCoord.refColumn");
+  it[1] = 0;
+  it[0] = 0;
+
+  try
+    {
+      it[1] = std::stoi(valueString1);
+      it[0] = std::stoi(valueString0);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to convert indexes.");
+    }
+
+  return it;
+}
+
+TerraSarXSarImageMetadataInterface::DoubleVectorType TerraSarXSarImageMetadataInterface::GetCornersIncidenceAngles() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+
+  ImageKeywordlistType imageKeywordlist;
+
+  DoubleVectorType dv;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  std::ostringstream oss;
+
+  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles();
+  for (unsigned int i = 0; i < nbAngles; ++i)
+  {
+    oss.str("");
+    oss << "sceneCoord.sceneCornerCoord[" << i << "].incidenceAngle";
+    std::string valueString = imageKeywordlist.GetMetadataByKey(oss.str());
+
+    double value = 0;
+    try
+      {
+	value = std::stod(valueString);
+      }
+    catch( ... )
+      {
+	// Throw an execption
+	throw std::runtime_error("Failed to convert scene coord.");
+      }
+
+    dv.push_back(value);
+  }
+
+  return dv;
+}
+
+TerraSarXSarImageMetadataInterface::IndexVectorType TerraSarXSarImageMetadataInterface::GetCornersIncidenceAnglesIndex() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+
+  ImageKeywordlistType imageKeywordlist;
+
+  IndexVectorType iv;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+
+  std::ostringstream oss;
+  std::ostringstream oss2;
+
+  unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles();
+  for (unsigned int i = 0; i < nbAngles; ++i)
+  {
+    IndexType it;
+
+    oss.str("");
+    oss << "sceneCoord.sceneCornerCoord[" << i << "].refRow";
+
+    std::string valueString1 = imageKeywordlist.GetMetadataByKey(oss.str());
+
+    oss2.str("");
+    oss2 << "sceneCoord.sceneCornerCoord[" << i << "].refColumn";
+
+    std::string valueString0 = imageKeywordlist.GetMetadataByKey(oss2.str());
+
+    it[1] = 0;
+    it[0] = 0;
+
+    try
+      {
+	it[1] = std::stoi(valueString1);
+	it[0] = std::stoi(valueString0);
+      }
+    catch( ... )
+      {
+	// Throw an execption
+	throw std::runtime_error("Failed to convert indexes.");
+      }
+
+    iv.push_back(it);
+  }
+
+  return iv;
+}
+
+
+
+TerraSarXSarImageMetadataInterface::PointSetPointer TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAngle() const
+{
+  PointSetPointer points = PointSetType::New();
+  PointType       p0;
+
+  double    centerIncidenceAngleValue = this->GetCenterIncidenceAngle();
+  IndexType centerIncidenceAngleIndex = this->GetCenterIncidenceAngleIndex();
+
+  DoubleVectorType cornerIncidenceAngleValue = this->GetCornersIncidenceAngles();
+  IndexVectorType  cornerIncidenceAngleIndex = this->GetCornersIncidenceAnglesIndex();
+  points->Initialize();
+  unsigned int noPoint = 0;
+
+  p0[0] = centerIncidenceAngleIndex[0];
+  p0[1] = centerIncidenceAngleIndex[1];
+
+  points->SetPoint(noPoint, p0);
+  points->SetPointData(noPoint, centerIncidenceAngleValue * CONST_PI_180);
+  ++noPoint;
+
+  for (unsigned int i = 0; i < cornerIncidenceAngleIndex.size(); ++i)
+  {
+
+    p0[0] = cornerIncidenceAngleIndex.at(i)[0];
+    p0[1] = cornerIncidenceAngleIndex.at(i)[1];
+
+    points->SetPoint(noPoint, p0);
+    points->SetPointData(noPoint, cornerIncidenceAngleValue[i] * CONST_PI_180);
+    ++noPoint;
+  }
+  return points;
+}
+
+TerraSarXSarImageMetadataInterface::IndexType TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const
+{
+  IndexType polynomSize;
+  polynomSize[0] = 2;
+  polynomSize[1] = 1;
+
+  return polynomSize;
+}
+
 
 
 }
