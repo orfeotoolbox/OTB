@@ -22,6 +22,7 @@
 
 
 #include "otbGenericMapProjection.h"
+#include "otbDEMHandler.h"
 
 #include <numeric>
 
@@ -537,7 +538,8 @@ SarSensorModel::Point3DType SarSensorModel::projToSurface(const GCP & gcp, const
   currentImPoint[1] = gcp.m_GCPRow;
 
   auto currentImSquareResidual = imPt.SquaredEuclideanDistanceTo(currentImPoint);
-  double currentHeightResidual = 0.; //TODO
+
+  double currentHeightResidual = heightAboveEllipsoid - heightAboveEllipsoid;
 
   MatrixType B, BtB;
   VectorType BtF;
@@ -614,10 +616,10 @@ SarSensorModel::Point3DType SarSensorModel::projToSurface(const GCP & gcp, const
     currentEstimationWorld = EcefToWorld(currentEstimation);
 
     currentImSquareResidual = imPt.SquaredEuclideanDistanceTo(currentImPoint);
-/* TODO manage elevation
-         const ossim_float64 atHgt = hgtRef.getRefHeight(currentEstimationWorld);
-         currentHeightResidual = atHgt - currentEstimationWorld.height();
-*/
+ 
+    //TODO Manage DEM case (here the constant height case in implemented)
+    const double atHgt = heightAboveEllipsoid;
+    currentHeightResidual = atHgt - currentEstimationWorld[2];
 
     WorldToLineSample(currentEstimationWorld, currentImPoint);
 
