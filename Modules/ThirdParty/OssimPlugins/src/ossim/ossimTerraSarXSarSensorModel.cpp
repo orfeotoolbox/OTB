@@ -155,6 +155,9 @@ namespace ossimplugins
 
     std::cout << "theNearRangeTime " << theNearRangeTime << '\n';
 
+    const double lastRangePixel = getDoubleFromFirstNode(xmlRoot, "productInfo/sceneInfo/rangeTime/lastPixel");
+    add(theProductKwl, "support_data.slant_range_to_last_pixel", lastRangePixel);
+
     // Parse the range sampling rate
     theRangeSamplingRate = getDoubleFromFirstNode(xmlRoot, "instrument/settings/RSF");
 
@@ -236,8 +239,10 @@ namespace ossimplugins
     std::cout << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds()  << " and 1/prf: " << (1 / theRadarFrequency) * 1000000 << '\n';
 
     
-    add(theProductKwl, SUPPORT_DATA_PREFIX, "first_line_time", azimuthTimeStart);
-    add(theProductKwl, SUPPORT_DATA_PREFIX, "last_line_time", azimuthTimeStop);
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "first_line_time", 
+	getTextFromFirstNode(xmlRoot, "productInfo/sceneInfo/start/timeUTC"));
+    add(theProductKwl, SUPPORT_DATA_PREFIX, "last_line_time", 
+	getTextFromFirstNode(xmlRoot, "productInfo/sceneInfo/stop/timeUTC"));
 
     // Parse the azimut resolution/spacing
     const double aziSpacing = getDoubleFromFirstNode(xmlRoot, "productSpecific/complexImageInfo/projectedSpacingAzimuth");
@@ -327,6 +332,9 @@ namespace ossimplugins
 
     // Parse calibration factor
     readCalibrationFactor(xmlDoc, polarisation);
+
+    // Parse noise
+    readNoise(xmlDoc, polarisation);
 
     // Ensure that superclass members are initialized
     loadState(theProductKwl);
@@ -671,6 +679,113 @@ namespace ossimplugins
 	  }
 	
 	add(theProductKwl, "dopplerCentroid.dop_coef_nb_list", dopplerEstimateNodes.size());
+      }
+
+    return true;
+  }
+
+ bool ossimTerraSarXSarSensorModel::readNoise(const ossimRefPtr<ossimXmlDocument> xmlDoc,
+							 const std::string polarisation)
+  {
+    // Retrieve doppler Centroid nodes (may have several doppler centroid nodes following some layers (polarisations)
+    std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
+    xmlDoc->findNodes("/level1Product/noise", xnodes);
+
+    // Loop on nodes with a check on layer (must match to our image)
+    for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNoiseNode = xnodes.begin();
+	itNoiseNode!=xnodes.end();++itNoiseNode)
+      {
+	// Get the polLayer
+	std::string polarisationLayer  = getTextFromFirstNode(**itNoiseNode, "polLayer");
+
+	// Check if the current polLayer match with our image (if not then pass the iteration)
+	if (polarisationLayer != polarisation)
+	  {
+	    continue;
+	  }
+
+	std::cout << "polarisationLayer : " << polarisationLayer << std::endl;
+
+	std::vector<ossimRefPtr<ossimXmlNode> > imageNoiseNodes;
+	// Get dopplerEstimate nodes
+	(*itNoiseNode)->findChildNodes("imageNoise", imageNoiseNodes);
+
+	std::cout << "Number of Noise polynomial : " << imageNoiseNodes.size() << std::endl;
+
+	// Vector to store coefficient for the current polynomial
+	std::vector<double> polCoefVector;
+
+	std::vector<ossimRefPtr<ossimXmlNode> > coeffNodes;
+	ossimRefPtr<ossimXmlNode>  polNode;
+
+	unsigned int index = 0;
+
+	for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = imageNoiseNodes.begin();
+	    itNode!=imageNoiseNodes.end();++itNode)
+	  {
+	    // Clear the current coefficients
+	    polCoefVector.clear();
+	    coeffNodes.clear();
+
+	    // Retieve acquisition time
+	    //const TimeType timeUTC = getTimeFromFirstNode(**itNode, attTimeUTC);
+	    std::string timeUTC = getTextFromFirstNode(**itNode, attTimeUTC);
+
+	    // Retrtive he combinedDoppler Node
+	    polNode = itNode[0]->findFirstNode("noiseEstimate");
+
+	    // Retrieve reference point and validaty range
+	    const double refPoint = getDoubleFromFirstNode(*polNode, attRefPoint);
+	    const double validityMin = getDoubleFromFirstNode(*polNode, "validityRangeMin");
+	    const double validityMax = getDoubleFromFirstNode(*polNode, "validityRangeMax");
+
+	    // Retrieve polynomial degree
+	    const unsigned int degree = getTextFromFirstNode(*polNode, attPolDeg).toUInt16();
+
+	    const ossimString EXP = "exponent";
+	    ossimString s;
+	    polNode->findChildNodes("coefficient", coeffNodes);
+
+	    if ( coeffNodes.size() )
+	      {
+		for (unsigned int i = 0; i < coeffNodes.size(); ++i)
+		  {
+		    if (coeffNodes[i].valid())
+		      {
+			coeffNodes[i]->getAttributeValue(s, EXP);
+			const double coeff = coeffNodes[i]->getText().toDouble();
+			polCoefVector.push_back(coeff);
+		      }
+		  }
+	      }
+
+	    assert((polCoefVector.size() == degree) && "The doppler rate record has an incoherent size.");
+
+	    // Add the metadata inot our keywordlist
+	    char prefix[256];
+	    //Doppler_Centroid_Coefficients.dop_coef_list;
+	    s_printf(prefix, "noise[%d]imageNoise.", index);
+
+	    add(theProductKwl, prefix, "timeUTC", timeUTC);
+	    add(theProductKwl, prefix, "noiseEstimate.referencePoint", refPoint);
+	    add(theProductKwl, prefix, "noiseEstimate.validityRangeMax", validityMax);
+	    add(theProductKwl, prefix, "noiseEstimate.validityRangeMin", validityMin);
+	    add(theProductKwl, prefix, "noiseEstimate.polynomialDegree", degree);
+
+	    for (int count = 0 ; count < polCoefVector.size() ; ++count)
+	      {
+		char coeff_prefix[256];
+		s_printf(coeff_prefix, "%snoiseEstimate.coefficient[%d]", prefix, count);
+
+		add(theProductKwl, coeff_prefix, polCoefVector[count]);
+	      }
+
+	    ++index;
+
+	  }
+
+	add(theProductKwl, "noise.numberOfNoiseRecords", imageNoiseNodes.size());
+	add(theProductKwl, "noise.nameOfNoisePolarisation", polarisation);
       }
 
     return true;

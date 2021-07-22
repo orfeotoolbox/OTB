@@ -39,6 +39,111 @@ bool TerraSarXSarImageMetadataInterface::CanRead() const
 	  sensorID.find("PAZ-1") != std::string::npos);
 }
 
+
+double TerraSarXSarImageMetadataInterface::GetStartTimeUTC() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  std::string referenceUTC = imageKeywordlist.GetMetadataByKey("support_data.first_line_time");
+  double      julianDay    = this->ConvertStringTimeUTCToJulianDay(referenceUTC);
+
+  return julianDay;
+}
+
+double TerraSarXSarImageMetadataInterface::GetStopTimeUTC() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  std::string referenceUTC = imageKeywordlist.GetMetadataByKey("support_data.last_line_time");
+  double      julianDay    = this->ConvertStringTimeUTCToJulianDay(referenceUTC);
+
+  return julianDay;
+}
+
+double TerraSarXSarImageMetadataInterface::GetRangeTimeFirstPixel() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.slant_range_to_first_pixel");
+  double value = 0;
+    try
+      {
+	value = std::stod(valueString);
+      }
+    catch( ... )
+      {
+	// Throw an execption
+	throw std::runtime_error("Failed to convert first range pixel.");
+      }
+
+  return value;
+}
+
+double TerraSarXSarImageMetadataInterface::GetRangeTimeLastPixel() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.slant_range_to_last_pixel");
+  double value = 0;
+    try
+      {
+	value = std::stod(valueString);
+      }
+    catch( ... )
+      {
+	// Throw an execption
+	throw std::runtime_error("Failed to convert last range pixel.");
+      }
+  return value;
+}
+
+
+
+
 int TerraSarXSarImageMetadataInterface::GetDay() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
@@ -382,6 +487,45 @@ int TerraSarXSarImageMetadataInterface::GetProductionYear() const
 }
 
 
+double TerraSarXSarImageMetadataInterface::ConvertStringTimeUTCToJulianDay(const std::string& value) const
+{
+  std::vector<std::string> splitDate;
+  boost::split(splitDate, value, boost::is_any_of("-T:"));
+
+  int    year  = this->GetYear();
+  int    month = this->GetMonth();
+  int    day   = this->GetDay();
+  int    hour  = this->GetHour();
+  int    minu  = this->GetMinute();
+  double sec   = 0;
+  try
+      {
+	sec = std::stod(splitDate[5]);
+      }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to seconds.");
+    }
+
+  // Conversion to julian day
+  // according to http://en.wikipedia.org/wiki/Julian_day
+  // division are integer divisions:
+  int a = (14 - month) / 12;
+  int y = year + 4800 - a;
+  int m = month + 12 * a - 3;
+
+  double julianDay = day + (153 * m + 2) / 5 + 365 * y + y / 4 - y / 100 + y / 400 - 32045;
+
+  // now, the division are NOT integer
+  julianDay += hour / 24. + minu / 1440. + sec / 86400.;
+
+  return julianDay;
+}
+
+
+
+
 double TerraSarXSarImageMetadataInterface::GetRadarFrequency() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
@@ -546,6 +690,379 @@ double TerraSarXSarImageMetadataInterface::GetCalibrationFactor() const
 
   return std::numeric_limits<double>::quiet_NaN(); // Invalid value
 }
+
+double TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationScale() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  std::string key("calibration.calibrationConstant.calFactor");
+  double value = 0;
+  if (imageKeywordlist.HasKey(key))
+  {
+    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+
+    try
+      {
+	value = std::stod(valueString);
+      }
+    catch( ... )
+      {
+	// Throw an execption
+	throw std::runtime_error("Failed to convert calibration factor.");
+      }
+  }
+  return value;
+}
+
+
+// Noise
+double TerraSarXSarImageMetadataInterface::GetNoiseTimeUTC(unsigned int noiseRecord) const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  DoubleVectorType   timeList;
+  std::ostringstream oss;
+
+  oss.str("");
+  oss << "noise[" << noiseRecord << "]imageNoise.timeUTC";
+  std::string key = oss.str();
+  if (imageKeywordlist.HasKey(key))
+  {
+    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+    double      julianDay   = ConvertStringTimeUTCToJulianDay(valueString);
+    return julianDay;
+  }
+
+  return std::numeric_limits<double>::quiet_NaN(); // Invalid value
+}
+
+double TerraSarXSarImageMetadataInterface::GetNoiseReferencePoint(unsigned int noiseRecord) const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  std::ostringstream oss;
+
+  oss.str("");
+  oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.referencePoint";
+  std::string valueString = imageKeywordlist.GetMetadataByKey(oss.str());
+  double refPoint = 0;
+    try
+      {
+	refPoint = std::stod(valueString);
+      }
+    catch( ... )
+      {
+	// Throw an execption
+	throw std::runtime_error("Failed to convert the year.");
+      }
+
+  return refPoint;
+}
+
+
+
+unsigned int TerraSarXSarImageMetadataInterface::GetNoisePolynomialDegrees(unsigned int noiseRecord) const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  std::ostringstream oss;
+  oss.str("");
+  oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.polynomialDegree";
+  std::string key = oss.str();
+  if (imageKeywordlist.HasKey(key))
+  {
+    std::string  valueString = imageKeywordlist.GetMetadataByKey(key);
+
+    unsigned int value = 0;
+    try
+      {
+	value = std::stoi(valueString);
+      }
+    catch( ... )
+      {
+	// Throw an execption
+	throw std::runtime_error("Failed to convert the year.");
+      }
+
+    return value;
+  }
+
+  return std::numeric_limits<unsigned int>::quiet_NaN(); // Invalid value
+}
+
+
+
+TerraSarXSarImageMetadataInterface::UIntVectorType TerraSarXSarImageMetadataInterface::GetNoisePolynomialDegrees() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  UIntVectorType     polDeg;
+  std::ostringstream oss;
+
+  unsigned int nbRec = this->GetNumberOfNoiseRecords();
+  for (unsigned int i = 0; i < nbRec; ++i)
+  {
+    oss.str("");
+    oss << "noise[" << i << "]imageNoise.noiseEstimate.polynomialDegree";
+    std::string  key         = oss.str();
+    std::string  valueString = imageKeywordlist.GetMetadataByKey(key);
+    unsigned int value = 0;
+    try
+      {
+	value = std::stoi(valueString);
+      }
+    catch( ... )
+      {
+	// Throw an execption
+	throw std::runtime_error("Failed to convert the year.");
+      }
+
+    polDeg.push_back(value);
+  }
+
+  return polDeg;
+}
+
+
+unsigned int TerraSarXSarImageMetadataInterface::GetNumberOfNoiseRecords() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  std::string key("noise.numberOfNoiseRecords");
+  if (imageKeywordlist.HasKey(key))
+  {
+    std::string  valueString = imageKeywordlist.GetMetadataByKey(key);
+    unsigned int value = 0;
+    try
+      {
+	value = std::stoi(valueString);
+      }
+    catch( ... )
+      {
+	// Throw an execption
+	throw std::runtime_error("Failed to convert the year.");
+      }
+
+    return value;
+  }
+
+  return std::numeric_limits<unsigned int>::quiet_NaN(); // Invalid value
+}
+
+
+
+
+double TerraSarXSarImageMetadataInterface::Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const
+{
+  std::vector<double>::reverse_iterator coefIt = coefficients.rbegin();
+  double                                res    = *(coefIt);
+  ++coefIt;
+
+  while (coefIt < coefficients.rend())
+  {
+    // Cumulate polynomial
+    res = res * tauMinusTauRef + (*coefIt);
+    ++coefIt;
+  }
+  return res;
+}
+
+TerraSarXSarImageMetadataInterface::DoubleVectorType TerraSarXSarImageMetadataInterface::GetNoisePolynomialCoefficients(unsigned int noiseRecord) const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  unsigned int polDegs = this->GetNoisePolynomialDegrees(noiseRecord);
+
+  DoubleVectorType   polCoef;
+  std::ostringstream oss;
+
+  polCoef.clear();
+  // set <= condition because degree N means N+1 coeff
+  for (unsigned int j = 0; j <= polDegs; ++j)
+  {
+    oss.str("");
+    oss << "noise[" << noiseRecord << "]imageNoise.noiseEstimate.coefficient[" << j << "]";
+    std::string key         = oss.str();
+    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+
+    double value = 0;
+    try
+      {
+	value = std::stod(valueString);
+      }
+    catch( ... )
+      {
+	// Throw an execption
+	throw std::runtime_error("Failed to convert the year.");
+      }
+
+    polCoef.push_back(value);
+  }
+
+  return polCoef;
+}
+
+TerraSarXSarImageMetadataInterface::IndexType TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationNoisePolynomialDegree() const
+{
+  IndexType polynomSize;
+  polynomSize[0] = 2;
+  polynomSize[1] = 2;
+
+  return polynomSize;
+}
+
+
+TerraSarXSarImageMetadataInterface::PointSetPointer TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationNoise() const
+{
+  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
+  if (!this->CanRead())
+  {
+    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
+  }
+
+  ImageKeywordlistType imageKeywordlist;
+
+  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
+  {
+    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
+  }
+
+  PointSetPointer points = PointSetType::New();
+
+  std::string keyNbRow("number_lines");
+  std::string keyNbCol("number_samples");
+  std::string  nbRowString = imageKeywordlist.GetMetadataByKey(keyNbRow);
+  std::string  nbColString = imageKeywordlist.GetMetadataByKey(keyNbCol);
+  unsigned int numberOfRows = 0;
+  unsigned int numberOfCols = 0;
+  try
+    {
+      numberOfRows = std::stoi(nbRowString);
+      numberOfCols = std::stoi(nbColString);
+    }
+  catch( ... )
+    {
+      // Throw an execption
+      throw std::runtime_error("Failed to number of lines or colunms.");
+    }
+
+
+  double   startTime      = this->GetStartTimeUTC();
+  double   stopTime       = this->GetStopTimeUTC();
+  RealType firstRangeTime = this->GetRangeTimeFirstPixel();
+  RealType lastRangeTime  = this->GetRangeTimeLastPixel();
+
+  points->Initialize();
+  unsigned int noPoint = 0;
+
+  PointType p0;
+
+  unsigned int numberOfNoiseRecords = this->GetNumberOfNoiseRecords();
+
+  for (unsigned int noiseRecord = 0; noiseRecord < numberOfNoiseRecords; ++noiseRecord)
+  {
+    double   currentNoiseTime   = this->GetNoiseTimeUTC(noiseRecord);
+    RealType AzimutAcquisition  = (currentNoiseTime - startTime) * numberOfRows / (stopTime - startTime);
+    RealType referencePointTime = this->GetNoiseReferencePoint(noiseRecord);
+
+    std::vector<RealType> polynomialCoefficient;
+    polynomialCoefficient = this->GetNoisePolynomialCoefficients(noiseRecord);
+
+    p0[0] = AzimutAcquisition;
+
+    for (unsigned int col = 0; col < numberOfCols; ++col)
+    {
+      RealType rangeTime      = col * (lastRangeTime - firstRangeTime) / (numberOfCols) + firstRangeTime;
+      RealType tauMinusTauRef = rangeTime - referencePointTime;
+      RealType value          = this->Horner(polynomialCoefficient, tauMinusTauRef);
+
+      p0[1] = col;
+      points->SetPoint(noPoint, p0);
+      points->SetPointData(noPoint, value);
+      ++noPoint;
+    }
+  }
+  return points;
+}
+
+
 
 
 }

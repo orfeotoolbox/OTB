@@ -65,6 +65,15 @@ public:
   typedef Superclass::PointSetPointer PointSetPointer;
   typedef double                      RealType;
 
+  double   GetStartTimeUTC() const;
+  double   GetStopTimeUTC() const;
+  double GetRangeTimeFirstPixel() const;
+
+  double GetRangeTimeLastPixel() const;
+
+
+  double ConvertStringTimeUTCToJulianDay(const std::string& value) const;
+
   /** Get the imaging start acquisition day from the ossim metadata
    * \deprecated
    */
@@ -121,6 +130,25 @@ public:
 
   double GetCalibrationFactor() const;
 
+  double GetRadiometricCalibrationScale() const;
+
+  double GetNoiseTimeUTC(unsigned int noiseRecord) const;
+
+  double GetNoiseReferencePoint(unsigned int noiseRecord) const;
+
+  unsigned int GetNumberOfNoiseRecords() const;
+
+  double Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const;
+
+  DoubleVectorType GetNoisePolynomialCoefficients(unsigned int noiseRecord) const;
+
+  UIntVectorType GetNoisePolynomialDegrees() const;
+
+  unsigned int GetNoisePolynomialDegrees(unsigned int noiseRecord) const;
+
+  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const;
+
+  PointSetPointer GetRadiometricCalibrationNoise() const;
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
