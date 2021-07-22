@@ -135,15 +135,15 @@ public:
 
   IndexVectorType GetCornersIncidenceAnglesIndex() const;
 
-  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const;
+  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const override;
 
-  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const;
+  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override;
   
   bool CanRead() const override;
 
   double GetCalibrationFactor() const;
 
-  double GetRadiometricCalibrationScale() const;
+  double GetRadiometricCalibrationScale() const override;
 
   double GetNoiseTimeUTC(unsigned int noiseRecord) const;
 
@@ -159,9 +159,9 @@ public:
 
   unsigned int GetNoisePolynomialDegrees(unsigned int noiseRecord) const;
 
-  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const;
+  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const override;
 
-  PointSetPointer GetRadiometricCalibrationNoise() const;
+  PointSetPointer GetRadiometricCalibrationNoise() const override;
 
 
 
