@@ -853,8 +853,6 @@ namespace ossimplugins
 
    void ossimSentinel1Model::readCalibrationMetadata(ossimFilename const& calibrationFilename)
    {
-      assert(calibrationFilename.exists());
-
       std::stringstream strm;
 
       ossimXmlDocument calibrationDoc;
@@ -866,7 +864,7 @@ namespace ossimplugins
       ossimXmlNode const& calibrationInformation = getExpectedFirstNode(*calibrationRoot, "calibrationInformation");
       ossimXmlNode const& calibrationVectorList  = getExpectedFirstNode(*calibrationRoot, "calibrationVectorList");
 
-      char const calibrationPrefix[] = "calibration.";
+      const char *calibrationPrefix = "calibration.";
 
       addMandatory(theProductKwl, calibrationPrefix, "swath", adsHeader, "swath");
       addMandatory(theProductKwl, calibrationPrefix, "polarisation", adsHeader, "polarisation");
