@@ -34,13 +34,15 @@ int otbS1ThermalNoiseLutTest(int argc, char* argv[])
   typedef otb::Image<double, 2> InputImageType;
   typedef otb::ImageFileReader<InputImageType> ImageReaderType;
 
+  const double tol = 1e-10;
+
   using S1ThermalNoiseLookupType = otb::S1ThermalNoiseLookupData<double>;
   using S1ThermalNoiseLookupPointerType = typename S1ThermalNoiseLookupType::Pointer;
 
 
-  if (argc < 2)
+  if (argc < 3)
   {
-    std::cerr << "Usage: otbS1ThermalNoiseLutTest /path/to/input/file !" << std::endl;
+    std::cerr << "Usage: otbS1ThermalNoiseLutTest /path/to/input/file lutValue thermalNoise" << std::endl;
     return EXIT_FAILURE;
   }
   ImageReaderType::Pointer reader = ImageReaderType::New();
@@ -57,10 +59,6 @@ int otbS1ThermalNoiseLutTest(int argc, char* argv[])
 
   const std::string sensorId = imageMetadataInterface->GetSensorID();
 
-  std::cout << sensorId << std::endl;
-  std::cout << imageMetadataInterface->GetGCPCount()<< std::endl;
-
-
   LookupDataType::Pointer lookupDataObj = imageMetadataInterface->GetCalibrationLookupData(0);
 
   if (!lookupDataObj.IsNotNull())
@@ -69,13 +67,32 @@ int otbS1ThermalNoiseLutTest(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  RealType lutVal = static_cast<RealType>(lookupDataObj->GetValue(396, 333));
-  std::cout << lutVal << std::endl;
+  const unsigned int idx1 = 396, idx2 = 333;
+
+  auto lutVal = static_cast<RealType>(lookupDataObj->GetValue(idx1, idx2));
+  const auto lutValBaseline = static_cast<RealType>(std::stod(argv[2]));
+
+  if (std::abs(lutVal - lutValBaseline) > tol)
+  {
+    std::cerr << "LUT value value at [" << idx1 << ", " << idx2 
+              << "]: " << lutVal 
+              <<  "does not match the baseline: " << lutValBaseline << std::endl;
+    return EXIT_FAILURE;
+  }
 
   S1ThermalNoiseLookupPointerType S1ThermaNoise = S1ThermalNoiseLookupType::New();
   S1ThermaNoise->SetImageKeywordlist(reader->GetOutput()->GetImageKeywordlist());
-  std::cout << S1ThermaNoise->GetValue(396, 333) << std::endl;
-  
+
+  auto thermalNoise = static_cast<RealType>(S1ThermaNoise->GetValue(idx1, idx2));
+  const auto thermalNoiseBaseline = static_cast<RealType>(std::stod(argv[3]));
+
+  if (std::abs(thermalNoise - thermalNoiseBaseline) > tol)
+  {
+    std::cerr << "Computed thermal noise value at [" << idx1 << ", " << idx2 
+              << "]: " << thermalNoise 
+              <<  "does not match the baseline: " << thermalNoiseBaseline << std::endl;
+    return EXIT_FAILURE;
+  }
 
   return EXIT_SUCCESS;
 }
