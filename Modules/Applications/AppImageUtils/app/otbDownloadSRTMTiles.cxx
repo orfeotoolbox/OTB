@@ -207,6 +207,7 @@ private:
 
     AddDocTag(Tags::Manip);
     AddDocTag("Utilities");
+    AddDocTag(Tags::Deprecated);
 
     AddParameter(ParameterType_InputImageList, "il", "Input images list");
     SetParameterDescription("il",
