@@ -33,7 +33,7 @@ otb_test_application(NAME apTvRaSARCalibration_SENTINEL1_recent_noise
   APP  SARCalibration
   OPTIONS -in ${INPUTDATA}/s1b-iw-grd-vh-roi.tif?&geom=${INPUTDATA}/s1b-iw-grd-vh-roi.geom
   -out ${TEMP}/apTvRaSARCalibration_SENTINEL1_recent_noise.tif
-  -noise 0
+  -removenoise 1
   VALID   --compare-image ${NOTOL}
   ${BASELINE}/apTvRaSARCalibration_SENTINEL1_recent_noise.tif
   ${TEMP}/apTvRaSARCalibration_SENTINEL1_recent_noise.tif )
@@ -43,7 +43,7 @@ otb_test_application(NAME apTvRaSARCalibration_SENTINEL1_recent
   APP  SARCalibration
   OPTIONS -in ${INPUTDATA}/s1b-iw-grd-vh-roi.tif?&geom=${INPUTDATA}/s1b-iw-grd-vh-roi.geom
   -out ${TEMP}/apTvRaSARCalibration_SENTINEL1_recent.tif
-  -noise 1
+  -removenoise 0
   VALID   --compare-image ${NOTOL}
   ${BASELINE}/apTvRaSARCalibration_SENTINEL1_recent.tif 
   ${TEMP}/apTvRaSARCalibration_SENTINEL1_recent.tif )
