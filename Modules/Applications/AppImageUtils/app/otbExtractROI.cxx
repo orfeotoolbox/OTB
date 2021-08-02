@@ -418,10 +418,10 @@ private:
       ulp[1]                                  = GetParameterFloat("mode.extent.uly");
       lrp[0]                                  = GetParameterFloat("mode.extent.lrx");
       lrp[1]                                  = GetParameterFloat("mode.extent.lry");
-      m_IsExtentInverted                      = (lrp[0] < ulp[0] || lrp[1] < ulp[1]);
       ImageType*                      inImage = GetParameterImage("in");
       inImage->TransformPhysicalPointToIndex(ulp, raw_uli);
       inImage->TransformPhysicalPointToIndex(lrp, raw_lri);
+      m_IsExtentInverted = (raw_lri[0] < raw_uli[0] || raw_lri[1] < raw_uli[1]);
     }
     else // if( GetParameterString( "mode.extent.unit" ) == "lonlat" )
     {
