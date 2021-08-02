@@ -161,8 +161,8 @@ namespace ossimplugins
 
    private:
       bool read(ossimFilename const& annotationXml);
-      void readCalibrationMetadata();
-      void readNoiseMetadata();
+      void readCalibrationMetadata(ossimFilename const& calibrationFilename);
+      void readNoiseMetadata(ossimFilename const& noiseFilename);
       void readBurstRecords(ossimXmlNode const& productRoot, ossimXmlNode const& imageInformation);
       void addSRGRCoefficients(ossimXmlNode const& coordinateConversion);
       void readCoordinates(
