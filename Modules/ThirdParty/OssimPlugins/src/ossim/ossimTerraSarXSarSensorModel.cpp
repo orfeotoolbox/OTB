@@ -153,27 +153,19 @@ namespace ossimplugins
     // Parse the near range time (in seconds)
     theNearRangeTime = getDoubleFromFirstNode(xmlRoot, "productInfo/sceneInfo/rangeTime/firstPixel");
 
-    std::cout << "theNearRangeTime " << theNearRangeTime << '\n';
-
     const double lastRangePixel = getDoubleFromFirstNode(xmlRoot, "productInfo/sceneInfo/rangeTime/lastPixel");
     add(theProductKwl, "support_data.slant_range_to_last_pixel", lastRangePixel);
 
     // Parse the range sampling rate
     theRangeSamplingRate = getDoubleFromFirstNode(xmlRoot, "instrument/settings/RSF");
 
-    std::cout << "theRangeSamplingRate " << theRangeSamplingRate << '\n';
-
     // Parse the range resolution
     theRangeResolution = getDoubleFromFirstNode(xmlRoot, "productSpecific/complexImageInfo/projectedSpacingRange/slantRange");
 
     add(theProductKwl, "meters_per_pixel_x", theRangeResolution);
 
-    std::cout << "theRangeResolution " << theRangeResolution << '\n';
-
     // Parse the radar frequency
     theRadarFrequency = getDoubleFromFirstNode(xmlRoot, "instrument/radarParameters/centerFrequency");
-
-    std::cout << "theRadarFrequency " << theRadarFrequency << '\n';
 
     // Parse the PRF
     const double azimuthFrequency = getDoubleFromFirstNode(xmlRoot, "instrument/settings/settingRecord/PRF");
@@ -212,12 +204,7 @@ namespace ossimplugins
     //Manage only strip map product for now (one burst)
     // Parse azimuth time start/stop
     const TimeType azimuthTimeStart = getTimeFromFirstNode(xmlRoot, "productInfo/sceneInfo/start/timeUTC");
-
-    std::cout << "azimuthTimeStart " << azimuthTimeStart << '\n';
-
     const TimeType azimuthTimeStop = getTimeFromFirstNode(xmlRoot, "productInfo/sceneInfo/stop/timeUTC");
-
-    std::cout << "azimuthTimeStop " << azimuthTimeStop << '\n';
 
     const DurationType td = azimuthTimeStop - azimuthTimeStart;
 
@@ -231,13 +218,8 @@ namespace ossimplugins
     add(theProductKwl,"number_samples", numberOfColumns);  // Does not override the metadata (Why ?????)
     add(theProductKwl, "number_lines", numberOfRows);  // Does not override the metadata (Why ?????)
 
-    std::cout << "numberOfRows " << numberOfRows << '\n';
-
     //Compute azimuth time interval
     theAzimuthTimeInterval = td / static_cast<double> (numberOfRows);
-
-    std::cout << "theAzimuthTimeInterval " << theAzimuthTimeInterval.total_microseconds()  << " and 1/prf: " << (1 / theRadarFrequency) * 1000000 << '\n';
-
     
     add(theProductKwl, SUPPORT_DATA_PREFIX, "first_line_time", 
 	getTextFromFirstNode(xmlRoot, "productInfo/sceneInfo/start/timeUTC"));
@@ -275,8 +257,6 @@ namespace ossimplugins
 
         const unsigned int polynomialDegree = xmlRoot.findFirstNode("productSpecific/projectedImageInfo/slantToGroundRangeProjection/polynomialDegree")->getText().toUInt16();
 
-        std::cout << "Number of coefficients " << polynomialDegree << '\n';
-
         ossimString path = "/level1Product/productSpecific/projectedImageInfo/slantToGroundRangeProjection/coefficient";
         const ossimString EXP = "exponent";
         ossimString s;
@@ -292,7 +272,6 @@ namespace ossimplugins
                     xnodes[i]->getAttributeValue(s, EXP);
                     const double coeff = xnodes[i]->getText().toDouble();
                     coordRecord.coefs.push_back(coeff);
-                    std::cout << "Coef number " << i << " value: " << coeff << '\n';
 		  }
 	      }
 	  }
@@ -420,7 +399,6 @@ namespace ossimplugins
 	return false;
       }
 
-    std::cout << "Number of corner " << xnodes.size() << '\n';
     unsigned int index = 0;
 
     for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
@@ -492,8 +470,6 @@ namespace ossimplugins
     std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
     xmlDoc->findNodes("/level1Product/platform/orbit/stateVec",xnodes);
 
-    std::cout << "Number of states " << xnodes.size() << '\n';
-
     for(std::vector<ossimRefPtr<ossimXmlNode> >::iterator itNode = xnodes.begin(); itNode!=xnodes.end();++itNode)
       {
         OrbitRecordType orbitRecord;
@@ -512,7 +488,6 @@ namespace ossimplugins
         orbitRecord.velocity[2] = getDoubleFromFirstNode(**itNode, attVelZ);
 
         //Add one orbits record
-        std::cout << "Add theOrbitRecords\n";
         theOrbitRecords.push_back(orbitRecord);
       }
 
@@ -552,8 +527,6 @@ namespace ossimplugins
   {
     std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
     xmlDoc->findNodes("/level1Product/processing/geometry/dopplerRate", xnodes);
-
-    std::cout << "Number of Doppler rate polynomial " << xnodes.size() << '\n';
 
     // Vector to store coefficient for the current polynomial
     std::vector<double> polCoefVector;
@@ -645,13 +618,9 @@ namespace ossimplugins
 	    continue;
 	  }
 	
-	std::cout << "polarisationLayer : " << polarisationLayer << std::endl;
-	
 	std::vector<ossimRefPtr<ossimXmlNode> > dopplerEstimateNodes;
 	// Get dopplerEstimate nodes
 	(*itDopplerNode)->findChildNodes("dopplerEstimate", dopplerEstimateNodes);
-    
-	std::cout << "Number of Doppler centroid polynomial : " << dopplerEstimateNodes.size() << std::endl;
 
 	// Vector to store coefficient for the current polynomial
 	std::vector<double> polCoefVector;
@@ -746,13 +715,9 @@ namespace ossimplugins
 	    continue;
 	  }
 
-	std::cout << "polarisationLayer : " << polarisationLayer << std::endl;
-
 	std::vector<ossimRefPtr<ossimXmlNode> > imageNoiseNodes;
 	// Get dopplerEstimate nodes
 	(*itNoiseNode)->findChildNodes("imageNoise", imageNoiseNodes);
-
-	std::cout << "Number of Noise polynomial : " << imageNoiseNodes.size() << std::endl;
 
 	// Vector to store coefficient for the current polynomial
 	std::vector<double> polCoefVector;
@@ -841,8 +806,6 @@ namespace ossimplugins
 
     std::vector<ossimRefPtr<ossimXmlNode> > xnodes;
     xmlGeo->findNodes("/geoReference/geolocationGrid/gridPoint",xnodes);
-
-    std::cout<<"Found "<<xnodes.size()<<" GCPs\n";
 
     // Retrieve reference azimuth and range Time for geo grid
     const TimeType tReferenceTime = getTimeFromFirstNode(xmlGeoRoot, "geolocationGrid/gridReferenceTime/tReferenceTimeUTC");
