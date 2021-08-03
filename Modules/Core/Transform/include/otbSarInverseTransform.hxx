@@ -48,6 +48,9 @@ SarInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::Transform
   pOut[0] = static_cast<TScalarType>(sensorPoint[0]);
   pOut[1] = static_cast<TScalarType>(sensorPoint[1]);
 
+  if (NOutputDimensions > 2)
+    pOut[2] = static_cast<TScalarType>(worldPoint[2]);
+
   return pOut;
 }
 
