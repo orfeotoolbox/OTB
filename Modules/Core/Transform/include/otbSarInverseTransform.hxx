@@ -45,8 +45,10 @@ SarInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::Transform
   this->m_Transformer->WorldToLineSample(worldPoint, sensorPoint);
 
   OutputPointType pOut;
-  pOut[0] = static_cast<TScalarType>(sensorPoint[0]);
-  pOut[1] = static_cast<TScalarType>(sensorPoint[1]);
+
+  // from centered to upper left corner pixel convetion
+  pOut[0] = static_cast<TScalarType>(sensorPoint[0]) + 0.5;
+  pOut[1] = static_cast<TScalarType>(sensorPoint[1]) + 0.5;
 
   if (NOutputDimensions > 2)
     pOut[2] = static_cast<TScalarType>(worldPoint[2]);

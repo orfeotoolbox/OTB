@@ -36,8 +36,9 @@ SarForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::Transform
   SarSensorModel::Point2DType sensorPoint;
   SarSensorModel::Point3DType worldPoint;
   double heightAboveEllipsoid = 0.0;
-  sensorPoint[0] = static_cast<double>(point[0]);
-  sensorPoint[1] = static_cast<double>(point[1]);
+  // from upper left corner to centered pixel convetion
+  sensorPoint[0] = static_cast<double>(point[0]) - 0.5;
+  sensorPoint[1] = static_cast<double>(point[1]) - 0.5;
   if (NInputDimensions > 2)
     heightAboveEllipsoid = static_cast<double>(point[2]);
 
