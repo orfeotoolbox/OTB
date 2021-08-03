@@ -160,12 +160,32 @@ ubuntu-xdk-build-doc:
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
+    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk -DNAME_SUFFIX:string=-glibc-2.27
     - mv build_packages/OTB-*.run . || true
   needs:
     - job: ubuntu-xdk-prepare
       artifacts: true
-      
+
+## CentOS superbuild
+centos-xdk-prepare:
+  extends: .common-prepare
+  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:7.6.1810
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=centos-7.6.1810-gcc
+
+centos-xdk-build:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:7.6.1810
+  script:
+    - export QT_QPA_PLATFORM=offscreen
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=centos-7.6.1810-gcc
+    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=centos-7.6.1810-gcc
+    - mv build_packages/OTB-*.run . || true
+  needs:
+    - job: centos-xdk-prepare
+      artifacts: true
+
+
 ## MacOS superbuild
 macos-xdk-prepare:
   extends: .common-prepare
