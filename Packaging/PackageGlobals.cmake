@@ -107,6 +107,7 @@ set(LINUX_SYSTEM_DLLS
   libdrm.so.2
   libGL.so*
   libGLX.so*
+  libOpenGL.so*
   libGLU.so*
   libXrender.so*
   libSM.so*
