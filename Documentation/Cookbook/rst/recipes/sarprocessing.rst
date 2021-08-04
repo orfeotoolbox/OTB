@@ -36,7 +36,7 @@ possible to use a noise LUT to derive calibrated noise profiles:
 ::
 
     otbcli_SarRadiometricCalibration -in SARimg.tif 
-                                     -lut gamma -noise 1
+                                     -lut gamma -removenoise 1
                                      -out SARimg-calibrated.tif 
 
 Despeckle

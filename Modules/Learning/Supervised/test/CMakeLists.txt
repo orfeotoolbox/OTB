@@ -28,12 +28,14 @@ otbTrainMachineLearningModel.cxx
 otbImageClassificationFilter.cxx
 otbMachineLearningRegressionTests.cxx
 otbExhaustiveExponentialOptimizerTest.cxx
-otbLabelMapClassifier.cxx
-otbSVMMarginSampler.cxx
 )
 
 if(OTB_USE_SHARK)
 set(OTBSupervisedTests ${OTBSupervisedTests} otbSharkImageClassificationFilter.cxx)
+endif()
+
+if(OTB_USE_LIBSVM)
+    set(OTBSupervisedTests ${OTBSupervisedTests} otbLabelMapClassifier.cxx otbSVMMarginSampler.cxx)
 endif()
 
 add_executable(otbSupervisedTestDriver ${OTBSupervisedTests})
