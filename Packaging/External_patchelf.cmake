@@ -37,12 +37,22 @@ endif()
 
 include(ExternalProject)
 
+# Find patch and setup the patch command.
+find_program(PATCH_PROGRAM NAMES patch)
+if(NOT PATCH_PROGRAM)
+  message(FATAL_ERROR "patch program not found. PATCH_PROGRAM. search names :' patch'")
+endif()
+set (PATCH_FILE "${CMAKE_SOURCE_DIR}/patchelf_remove_warning.diff")
+set (PATCH_COMMAND "${PATCH_PROGRAM}" "-u" "-p1" "--input=${PATCH_FILE}" "${PATCHELF_SOURCE_DIR}/src/patchelf.cc")
+
+
 set(PATCHELF_ENV_COMMAND env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} CXXFLAGS=-static)
 
 ExternalProject_Add(PATCHELF
   PREFIX "${PATCHELF_PREFIX_DIR}"
   URL                 "http://nixos.org/releases/patchelf/patchelf-0.9/patchelf-0.9.tar.bz2"
   URL_MD5             d02687629c7e1698a486a93a0d607947
+  PATCH_COMMAND       "${PATCH_COMMAND}"
   DOWNLOAD_DIR        "${DOWNLOAD_LOCATION}"
   SOURCE_DIR          "${PATCHELF_SOURCE_DIR}"
   BINARY_DIR          "${PATCHELF_SOURCE_DIR}"

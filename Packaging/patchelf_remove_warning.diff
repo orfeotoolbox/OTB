@@ -1,0 +1,12 @@
+diff -burN patchelf-orig/src/patchelf.cc patchelf/src/patchelf.cc
+--- patchelf-orig/src/patchelf.cc 2021-08-04 18:22:18.276171741 +0200
++++ patchelf/src/patchelf.cc  2021-08-04 18:19:25.360167453 +0200
+@@ -614,7 +614,7 @@
+         } else {
+             size_t hole = startPage - startOffset;
+             /* Print a warning, because the hole could be very big. */
+-            fprintf(stderr, "warning: working around a Linux kernel bug by creating a hole of %zu bytes in ‘%s’\n", hole, fileName.c_str());
++            //fprintf(stderr, "warning: working around a Linux kernel bug by creating a hole of %zu bytes in ‘%s’\n", hole, fileName.c_str());
+             assert(hole % getPageSize() == 0);
+             /* !!! We could create an actual hole in the file here,
+                but it's probably not worth the effort. */
