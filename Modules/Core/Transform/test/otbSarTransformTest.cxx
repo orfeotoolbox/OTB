@@ -29,19 +29,21 @@
 #include <string>
 #include <vector>
 
-using PointType = itk::Point<double, 3>;
-using PointsContainerType = std::vector<PointType>;
-using ForwardTransformType = otb::SarForwardTransform<double, 3, 3>;
-using InverseTransformType = otb::SarInverseTransform<double, 3, 3>;
+using Point2DType = itk::Point<double, 2>;
+using Point3DType = itk::Point<double, 3>;
+using Points2DContainerType = std::vector<Point2DType>;
+using Points3DContainerType = std::vector<Point3DType>;
+using ForwardTransformType = otb::SarForwardTransform<double, 2, 3>;
+using InverseTransformType = otb::SarInverseTransform<double, 3, 2>;
 using GenericRSTransformType = otb::GenericRSTransform<double, 3, 3>;
-using DistanceType = itk::Statistics::EuclideanDistanceMetric<PointType>;
-using GeographicalDistanceType = otb::GeographicalDistance<PointType>;
+using DistanceType = itk::Statistics::EuclideanDistanceMetric<Point2DType>;
+using GeographicalDistanceType = otb::GeographicalDistance<Point3DType>;
 
 int otbSarTransformTest(int itkNotUsed(argc), char* argv[])
 {
   bool success = true;
-  PointType imagePoint;
-  PointType geo3dPoint;
+  Point2DType imagePoint;
+  Point3DType geo3dPoint;
 
   // Inputs
   std::string sarFile(argv[1]);
@@ -85,8 +87,8 @@ int otbSarTransformTest(int itkNotUsed(argc), char* argv[])
   GenericRSTransform_wgs2img->InstantiateTransform();
 
   // Loading the GCP
-  PointsContainerType pointsContainer;
-  PointsContainerType geo3dPointsContainer;
+  Points2DContainerType pointsContainer;
+  Points3DContainerType geo3dPointsContainer;
   std::ifstream file(gcpFileName, std::ios::in);
   if (file)
   {
@@ -98,7 +100,6 @@ int otbSarTransformTest(int itkNotUsed(argc), char* argv[])
         std::istringstream iss(line);
 
         iss >> imagePoint[0] >> imagePoint[1] >> geo3dPoint[0] >> geo3dPoint[1] >> geo3dPoint[2];
-        imagePoint[2] = geo3dPoint[2];
 
         pointsContainer.push_back(imagePoint);
         geo3dPointsContainer.push_back(geo3dPoint);
@@ -109,7 +110,9 @@ int otbSarTransformTest(int itkNotUsed(argc), char* argv[])
 
   // For each CGP
   double distance;
-  for (PointsContainerType::iterator pointsIt = pointsContainer.begin(), geo3dPointsIt = geo3dPointsContainer.begin() ;
+  auto pointsIt = pointsContainer.begin();
+  auto geo3dPointsIt = geo3dPointsContainer.begin();
+  for ( ;
        (pointsIt != pointsContainer.end()) && (geo3dPointsIt != geo3dPointsContainer.end()) ;
        ++pointsIt, ++geo3dPointsIt)
   {
@@ -118,8 +121,9 @@ int otbSarTransformTest(int itkNotUsed(argc), char* argv[])
      distance = geoDistance->Evaluate(geo3dPoint, *geo3dPointsIt);
      if (distance > geoTol)
      {
-       std::cerr << "Geo distance between ForwardTransform->TransformPoint and GCP too high :\n"
-        << "GCP: " << *geo3dPointsIt << " / computed: " << geo3dPoint << "\n"
+       std::cerr << std::fixed << std::setw(15) << std::setprecision(15)
+                 << "Geo distance between ForwardTransform->TransformPoint and GCP too high :\n"
+                 << "GCP: " << *geo3dPointsIt << " / computed: " << geo3dPoint << "\n"
                  << "dist = " << distance << " (tol = " << geoTol << ")" << std::endl;
        success = false;
      }
@@ -129,14 +133,20 @@ int otbSarTransformTest(int itkNotUsed(argc), char* argv[])
      distance = imgDistance->Evaluate(imagePoint, *pointsIt);
      if (distance > imgTol)
      {
-       std::cerr << "Distance between InverseTransform->TransformPoint and GCP too high :\n"
-        << "GCP: " << *pointsIt << " / computed: " << imagePoint << "\n"
+       std::cerr << std::fixed << std::setw(15) << std::setprecision(15)
+                 << "Distance between InverseTransform->TransformPoint and GCP too high :\n"
+                 << "GCP: " << *pointsIt << " / computed: " << imagePoint << "\n"
                  << "dist = " << distance << " (tol = " << imgTol << ")" << std::endl;
        success = false;
      }
 
     // Testing image to wgs transform
-    geo3dPoint = GenericRSTransform_img2wgs->TransformPoint(*pointsIt);
+    Point3DType gcpPoint;
+    gcpPoint[0] = (*pointsIt)[0];
+    gcpPoint[1] = (*pointsIt)[1];
+    gcpPoint[2] = 0;
+
+    geo3dPoint = GenericRSTransform_img2wgs->TransformPoint(gcpPoint);
     distance = geoDistance->Evaluate(geo3dPoint, *geo3dPointsIt);
     if (distance > geoTol)
     {
@@ -147,12 +157,14 @@ int otbSarTransformTest(int itkNotUsed(argc), char* argv[])
     }
 
     // Testing wgs to image transform
-     imagePoint = GenericRSTransform_wgs2img->TransformPoint(*geo3dPointsIt);
-     distance = imgDistance->Evaluate(imagePoint, *pointsIt);
+     Point3DType image3dPoint = GenericRSTransform_wgs2img->TransformPoint(*geo3dPointsIt);
+     using Distance3dType = itk::Statistics::EuclideanDistanceMetric<Point3DType>;
+     auto imgDistance3d = Distance3dType::New();
+     distance = imgDistance3d->Evaluate(image3dPoint, gcpPoint);
      if (distance > imgTol)
      {
        std::cerr << "Distance between GenericRSTransform_wgs2img->TransformPoint and GCP too high :\n"
-        << "GCP: " << *pointsIt << " / computed: " << imagePoint << "\n"
+        << "GCP: " << *pointsIt << " / computed: " << image3dPoint << "\n"
                  << "dist = " << distance << " (tol = " << imgTol << ")" << std::endl;
        success = false;
      }

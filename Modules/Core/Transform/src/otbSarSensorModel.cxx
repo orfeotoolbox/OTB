@@ -142,8 +142,6 @@ void SarSensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
 
   const auto& gcp = findClosestGCP(imPt, m_GCP);
 
-  Point3DType ecefPoint;
-
   auto heightFunction = [heightAboveEllipsoid](const double, const double)
                         {return heightAboveEllipsoid;};
 
