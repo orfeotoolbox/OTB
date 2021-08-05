@@ -51,7 +51,7 @@ int otbRPCTransformTest(int itkNotUsed(argc), char* argv[])
   std::string rpcFile(argv[1]);
   std::string gcpFileName(argv[2]);
   double geoTol(atof(argv[3]));
-  // double imgTol(atof(argv[4]));
+  double imgTol(atof(argv[4]));
 
   // Tools
   auto imgDistance = DistanceType::New();
@@ -131,27 +131,27 @@ int otbRPCTransformTest(int itkNotUsed(argc), char* argv[])
        (pointsIt != pointsContainer.end()) && (geo3dPointsIt != geo3dPointsContainer.end()) ;
        ++pointsIt, ++geo3dPointsIt)
   {
-    // Testing forward transform
-    // geo3dPoint = ForwardTransform->TransformPoint(*pointsIt);
-    // distance = geoDistance->Evaluate(geo3dPoint, *geo3dPointsIt);
-    // if (distance > geoTol)
-    // {
-    //   std::cerr << "Geo distance between ForwardTransform->TransformPoint and GCP too high :\n"
-    // 		<< "GCP: " << *geo3dPointsIt << " / computed: " << geo3dPoint << "\n"
-    //             << "dist = " << distance << " (tol = " << geoTol << ")" << std::endl;
-    //   success = false;
-    // }
+     // Testing forward transform
+     geo3dPoint = ForwardTransform->TransformPoint(*pointsIt);
+     distance = geoDistance->Evaluate(geo3dPoint, *geo3dPointsIt);
+     if (distance > geoTol)
+     {
+       std::cerr << "Geo distance between ForwardTransform->TransformPoint and GCP too high :\n"
+        << "GCP: " << *geo3dPointsIt << " / computed: " << geo3dPoint << "\n"
+                 << "dist = " << distance << " (tol = " << geoTol << ")" << std::endl;
+       success = false;
+     }
 
-    // // Testing inverse transform
-    // imagePoint = InverseTransform->TransformPoint(*geo3dPointsIt);
-    // distance = imgDistance->Evaluate(imagePoint, *pointsIt);
-    // if (distance > imgTol)
-    // {
-    //   std::cerr << "Distance between InverseTransform->TransformPoint and GCP too high :\n"
-    // 		<< "GCP: " << *pointsIt << " / computed: " << imagePoint << "\n"
-    //             << "dist = " << distance << " (tol = " << imgTol << ")" << std::endl;
-    //   success = false;
-    // }
+     // Testing inverse transform
+     imagePoint = InverseTransform->TransformPoint(*geo3dPointsIt);
+     distance = imgDistance->Evaluate(imagePoint, *pointsIt);
+     if (distance > imgTol)
+     {
+       std::cerr << "Distance between InverseTransform->TransformPoint and GCP too high :\n"
+        << "GCP: " << *pointsIt << " / computed: " << imagePoint << "\n"
+                 << "dist = " << distance << " (tol = " << imgTol << ")" << std::endl;
+       success = false;
+     }
 
     // Testing image to wgs transform
     geo3dPoint = GenericRSTransform_img2wgs->TransformPoint(*pointsIt);
@@ -164,16 +164,16 @@ int otbRPCTransformTest(int itkNotUsed(argc), char* argv[])
       success = false;
     }
 
-    // Testing wgs to image transform
-    // imagePoint = GenericRSTransform_wgs2img->TransformPoint(*geo3dPointsIt);
-    // distance = imgDistance->Evaluate(imagePoint, *pointsIt);
-    // if (distance > imgTol)
-    // {
-    //   std::cerr << "Distance between GenericRSTransform_wgs2img->TransformPoint and GCP too high :\n"
-    // 		<< "GCP: " << *pointsIt << " / computed: " << imagePoint << "\n"
-    //             << "dist = " << distance << " (tol = " << imgTol << ")" << std::endl;
-    //   success = false;
-    // }
+     // Testing wgs to image transform
+     imagePoint = GenericRSTransform_wgs2img->TransformPoint(*geo3dPointsIt);
+     distance = imgDistance->Evaluate(imagePoint, *pointsIt);
+     if (distance > imgTol)
+     {
+       std::cerr << "Distance between GenericRSTransform_wgs2img->TransformPoint and GCP too high :\n"
+        << "GCP: " << *pointsIt << " / computed: " << imagePoint << "\n"
+                 << "dist = " << distance << " (tol = " << imgTol << ")" << std::endl;
+       success = false;
+     }
   }
   
   if (success)
