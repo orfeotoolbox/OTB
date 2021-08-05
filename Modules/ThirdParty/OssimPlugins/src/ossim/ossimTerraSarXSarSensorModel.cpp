@@ -572,7 +572,7 @@ namespace ossimplugins
 	      }
 	  }
 
-	assert((polCoefVector.size() == degree) && "The doppler rate record has an incoherent size.");
+	assert((polCoefVector.size() == (degree + 1)) && "The doppler rate record has an incoherent size.");
 
 	// Add the metadata inot our keywordlist
 	char prefix[256];
@@ -667,7 +667,7 @@ namespace ossimplugins
 		  }
 	      }
 
-	    assert((polCoefVector.size() == degree) && "The doppler rate record has an incoherent size.");
+	    assert((polCoefVector.size() == (degree + 1)) && "The doppler centroid record has an incoherent size.");
     
 	    // Add the metadata inot our keywordlist
 	    char prefix[256];
@@ -766,7 +766,7 @@ namespace ossimplugins
 		  }
 	      }
 
-	    assert((polCoefVector.size() == degree) && "The doppler rate record has an incoherent size.");
+	    assert((polCoefVector.size() == (degree + 1)) && "The noise record has an incoherent size.");
 
 	    // Add the metadata inot our keywordlist
 	    char prefix[256];

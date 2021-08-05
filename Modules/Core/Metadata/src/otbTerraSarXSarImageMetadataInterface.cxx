@@ -786,7 +786,7 @@ double TerraSarXSarImageMetadataInterface::GetNoiseReferencePoint(unsigned int n
     catch( ... )
       {
 	// Throw an execption
-	throw std::runtime_error("Failed to convert the year.");
+	throw std::runtime_error("Failed to convert noise.");
       }
 
   return refPoint;
@@ -825,7 +825,7 @@ unsigned int TerraSarXSarImageMetadataInterface::GetNoisePolynomialDegrees(unsig
     catch( ... )
       {
 	// Throw an execption
-	throw std::runtime_error("Failed to convert the year.");
+	throw std::runtime_error("Failed to convert polynomial degree.");
       }
 
     return value;
@@ -869,7 +869,7 @@ TerraSarXSarImageMetadataInterface::UIntVectorType TerraSarXSarImageMetadataInte
     catch( ... )
       {
 	// Throw an execption
-	throw std::runtime_error("Failed to convert the year.");
+	throw std::runtime_error("Failed to convert polynomial degree.");
       }
 
     polDeg.push_back(value);
@@ -906,7 +906,7 @@ unsigned int TerraSarXSarImageMetadataInterface::GetNumberOfNoiseRecords() const
     catch( ... )
       {
 	// Throw an execption
-	throw std::runtime_error("Failed to convert the year.");
+	throw std::runtime_error("Failed to convert number of noise records.");
       }
 
     return value;
@@ -970,7 +970,7 @@ TerraSarXSarImageMetadataInterface::DoubleVectorType TerraSarXSarImageMetadataIn
     catch( ... )
       {
 	// Throw an execption
-	throw std::runtime_error("Failed to convert the year.");
+	throw std::runtime_error("Failed to convert polynomial coefficients.");
       }
 
     polCoef.push_back(value);
@@ -1153,7 +1153,7 @@ TerraSarXSarImageMetadataInterface::DoubleVectorType TerraSarXSarImageMetadataIn
     catch( ... )
       {
 	// Throw an execption
-	throw std::runtime_error("Failed to convert scene coord.");
+	throw std::runtime_error("Failed to convert angles.");
       }
 
     dv.push_back(value);
