@@ -35,14 +35,13 @@ SarForwardTransform<TScalarType, NInputDimensions, NOutputDimensions>::Transform
 {
   SarSensorModel::Point2DType sensorPoint;
   SarSensorModel::Point3DType worldPoint;
-  double heightAboveEllipsoid = 0.0;
-  // from upper left corner to centered pixel convetion
+  // from upper left corner to centered pixel convention
   sensorPoint[0] = static_cast<double>(point[0]) - 0.5;
   sensorPoint[1] = static_cast<double>(point[1]) - 0.5;
   if (NInputDimensions > 2)
-    heightAboveEllipsoid = static_cast<double>(point[2]);
-
-  this->m_Transformer->LineSampleHeightToWorld(sensorPoint, heightAboveEllipsoid, worldPoint);
+    this->m_Transformer->LineSampleHeightToWorld(sensorPoint, static_cast<double>(point[2]), worldPoint);
+  else
+    this->m_Transformer->LineSampleToWorld(sensorPoint, worldPoint);
 
   OutputPointType pOut;
   pOut[0] = static_cast<TScalarType>(worldPoint[0]);
