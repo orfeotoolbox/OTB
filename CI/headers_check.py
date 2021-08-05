@@ -140,6 +140,7 @@ excludedfiles = set([
     './Packaging/Files/qt.conf',
     './Packaging/Files/template.app/Contents/Info.plist',
     './Packaging/LICENSE',
+    './Packaging/patchelf_remove_warning.diff',
     './Packaging/howto_update_makeself',
     './Packaging/otb_update_makeself',
     './SuperBuild/LICENSE',
