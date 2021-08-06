@@ -38,7 +38,7 @@ namespace otb
  *
  * \todo{Add the support for different ellipsoid models}
  *
- *
+ * \deprecated
  * \ingroup OTBOSSIMAdapters
  **/
 

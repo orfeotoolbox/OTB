@@ -48,7 +48,7 @@ class ImageKeywordlist;
  * \sa ForwardSensorModel
  * \ingroup Projection
  *
- *
+ * \deprecated
  * \ingroup OTBTransform
  **/
 

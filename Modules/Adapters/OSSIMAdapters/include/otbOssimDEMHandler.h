@@ -83,7 +83,7 @@ namespace otb
  * DEM directory can either contain DTED or SRTM formats.
  * \ingroup Images
  *
- *
+ * \deprecated
  * \ingroup OTBOSSIMAdapters
  */
 

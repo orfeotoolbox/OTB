@@ -45,6 +45,7 @@ class ImageKeywordlist;
  *
  * \sa GCPsToRPCSensorModelImageFilter
  *
+ * \deprecated
  * \ingroup OTBOSSIMAdapters
  **/
 
