@@ -40,6 +40,8 @@ ENABLE_SHARED
     OTBTransform
     OTBProjection
 
+  DEPRECATED
+
   DESCRIPTION
     "${DOCUMENTATION}"
 )
