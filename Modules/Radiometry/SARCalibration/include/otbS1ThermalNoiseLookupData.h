@@ -68,7 +68,9 @@ public:
   /** RTTI */
   itkTypeMacro(S1ThermalNoiseLookupData, itk::LightObject);
 
-  /** Set input metadata containing denoising LUTs */
+  /** Set input metadata containing denoising LUTs 
+   \deprecated 
+   */
   void SetImageKeywordlist(const ImageKeywordlist & kwl);
 
   using IndexValueType = itk::IndexValueType ;
