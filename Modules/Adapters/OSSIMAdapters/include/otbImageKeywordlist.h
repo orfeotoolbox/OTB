@@ -73,6 +73,7 @@ inline double ConvertFromOSSIMFrame(double val)
  * \ingroup Projections
  *
  *
+ * \deprecated
  * \ingroup OTBOSSIMAdapters
  */
 class OTBOSSIMAdapters_EXPORT ImageKeywordlist
