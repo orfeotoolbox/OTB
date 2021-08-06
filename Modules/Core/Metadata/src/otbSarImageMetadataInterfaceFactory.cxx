@@ -23,7 +23,7 @@
 #include "otbSarDefaultImageMetadataInterface.h"
 
 // SAR Sensors
-#include "otbTerraSarImageMetadataInterfaceFactory.h"
+#include "otbTerraSarXSarImageMetadataInterfaceFactory.h"
 #include "otbSentinel1ImageMetadataInterfaceFactory.h"
 #include "otbCosmoImageMetadataInterfaceFactory.h"
 #include "otbRadarsat2ImageMetadataInterfaceFactory.h"
@@ -75,7 +75,7 @@ void SarImageMetadataInterfaceFactory::RegisterBuiltInFactories()
     itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
     if (firstTime)
     {
-      itk::ObjectFactoryBase::RegisterFactory(TerraSarImageMetadataInterfaceFactory::New());
+      itk::ObjectFactoryBase::RegisterFactory(TerraSarXSarImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(Sentinel1ImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(CosmoImageMetadataInterfaceFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(Radarsat2ImageMetadataInterfaceFactory::New());

@@ -18,24 +18,24 @@
  * limitations under the License.
  */
 
-#ifndef otbTerraSarImageMetadataInterfaceFactory_h
-#define otbTerraSarImageMetadataInterfaceFactory_h
+#ifndef otbTerraSarXSarImageMetadataInterfaceFactory_h
+#define otbTerraSarXSarImageMetadataInterfaceFactory_h
 
 #include "OTBMetadataExport.h"
 #include "itkObjectFactoryBase.h"
 
 namespace otb
 {
-/** \class TerraSarImageMetadataInterfaceFactory
+/** \class TerraSarXSarImageMetadataInterfaceFactory
  * \brief Creating an instance of a ImageMetadataInterface object using object factory.
  *
  * \ingroup OTBMetadata
  */
-class OTBMetadata_EXPORT TerraSarImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
+class OTBMetadata_EXPORT TerraSarXSarImageMetadataInterfaceFactory : public itk::ObjectFactoryBase
 {
 public:
   /** Standard class typedefs. */
-  typedef TerraSarImageMetadataInterfaceFactory Self;
+  typedef TerraSarXSarImageMetadataInterfaceFactory Self;
   typedef itk::ObjectFactoryBase                Superclass;
   typedef itk::SmartPointer<Self>               Pointer;
   typedef itk::SmartPointer<const Self>         ConstPointer;
@@ -48,21 +48,21 @@ public:
   itkFactorylessNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TerraSarImageMetadataInterfaceFactory, itk::ObjectFactoryBase);
+  itkTypeMacro(TerraSarXSarImageMetadataInterfaceFactory, itk::ObjectFactoryBase);
 
   /** Register one factory of this type  */
   static void RegisterOneFactory(void)
   {
-    TerraSarImageMetadataInterfaceFactory::Pointer TerraSarIMIFactory = TerraSarImageMetadataInterfaceFactory::New();
+    TerraSarXSarImageMetadataInterfaceFactory::Pointer TerraSarIMIFactory = TerraSarXSarImageMetadataInterfaceFactory::New();
     itk::ObjectFactoryBase::RegisterFactory(TerraSarIMIFactory);
   }
 
 protected:
-  TerraSarImageMetadataInterfaceFactory();
-  ~TerraSarImageMetadataInterfaceFactory() override;
+  TerraSarXSarImageMetadataInterfaceFactory();
+  ~TerraSarXSarImageMetadataInterfaceFactory() override;
 
 private:
-  TerraSarImageMetadataInterfaceFactory(const Self&) = delete;
+  TerraSarXSarImageMetadataInterfaceFactory(const Self&) = delete;
   void operator=(const Self&) = delete;
 };
 

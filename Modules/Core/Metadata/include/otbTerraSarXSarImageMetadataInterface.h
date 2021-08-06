@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbTerraSarImageMetadataInterface_h
-#define otbTerraSarImageMetadataInterface_h
+#ifndef otbTerraSarXSarImageMetadataInterface_h
+#define otbTerraSarXSarImageMetadataInterface_h
 
 #include <string>
 
@@ -29,17 +29,17 @@
 
 namespace otb
 {
-/** \class TerraSarImageMetadataInterface
+/** \class TerraSarXSarImageMetadataInterface
  *
- * \brief Creation of an "otb" TerraSarImageMetadataInterface that gets metadata.
+ * \brief Creation of an "otb" TerraSarXSarImageMetadataInterface that gets metadata.
  *
  *
  * \ingroup OTBMetadata
  */
-class OTBMetadata_EXPORT TerraSarImageMetadataInterface : public SarImageMetadataInterface
+class OTBMetadata_EXPORT TerraSarXSarImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
-  typedef TerraSarImageMetadataInterface Self;
+  typedef TerraSarXSarImageMetadataInterface Self;
   typedef SarImageMetadataInterface      Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -48,7 +48,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TerraSarImageMetadataInterface, otbSarImageMetadataInterface);
+  itkTypeMacro(TerraSarXSarImageMetadataInterface, otbSarImageMetadataInterface);
 
   typedef itk::ImageBase<2>                     ImageType;
   typedef ImageType::IndexType                  IndexType;
@@ -64,6 +64,15 @@ public:
   typedef Superclass::PointSetType    PointSetType;
   typedef Superclass::PointSetPointer PointSetPointer;
   typedef double                      RealType;
+
+  double   GetStartTimeUTC() const;
+  double   GetStopTimeUTC() const;
+  double GetRangeTimeFirstPixel() const;
+
+  double GetRangeTimeLastPixel() const;
+
+
+  double ConvertStringTimeUTCToJulianDay(const std::string& value) const;
 
   /** Get the imaging start acquisition day from the ossim metadata
    * \deprecated
@@ -105,32 +114,6 @@ public:
    */
   int GetProductionYear() const override;
 
-  /** Get the calibration.calFactor : generationTime variable
-   * \deprecated
-   */
-  double GetCalibrationFactor() const;
-
-  /** Get the number of noise records */
-  unsigned int GetNumberOfNoiseRecords() const;
-
-  /** Get the polynomial degree list */
-  UIntVectorType GetNoisePolynomialDegrees() const;
-
-  /** Get the polynomial coefficient list */
-  DoubleVectorVectorType GetNoisePolynomialCoefficientsList() const;
-
-  /** Get timeUTC noise acquisition list in Julian day */
-  DoubleVectorType GetNoiseTimeUTCList() const;
-
-  /** Get noise minimum validity range list */
-  DoubleVectorType GetNoiseValidityRangeMinList() const;
-
-  /** Get noise maximum validity range list */
-  DoubleVectorType GetNoiseValidityRangeMaxList() const;
-
-  /** Get noise reference point list */
-  DoubleVectorType GetNoiseReferencePointList() const;
-
   /** Get the radar frequency */
   double GetRadarFrequency() const override;
 
@@ -140,74 +123,59 @@ public:
   /** Get the RSF */
   double GetRSF() const override;
 
-  /** Get the number of corner incidence angles */
-  unsigned int GetNumberOfCornerIncidenceAngles() const;
-
-  /** Get the Mean Incidence angles */
-  double GetMeanIncidenceAngles() const;
-
   /** Get the center incidence angle */
   double GetCenterIncidenceAngle() const override;
 
-  /** Get the center index */
+    // Scene Corner and Center
+  unsigned int GetNumberOfCornerIncidenceAngles() const;
+
   IndexType GetCenterIncidenceAngleIndex() const;
 
-  /** Get the corners incidence angles */
   DoubleVectorType GetCornersIncidenceAngles() const;
 
-  /** Get the corners index */
   IndexVectorType GetCornersIncidenceAnglesIndex() const;
 
-  /** Get the constant calibration factor */
-  RealType GetRadiometricCalibrationScale() const override;
+  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const override;
+
+  IndexType GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override;
+  
+  bool CanRead() const override;
+
+  double GetCalibrationFactor() const;
+
+  double GetRadiometricCalibrationScale() const override;
+
+  double GetNoiseTimeUTC(unsigned int noiseRecord) const;
+
+  double GetNoiseReferencePoint(unsigned int noiseRecord) const;
+
+  unsigned int GetNumberOfNoiseRecords() const;
+
+  double Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const;
+
+  DoubleVectorType GetNoisePolynomialCoefficients(unsigned int noiseRecord) const;
+
+  UIntVectorType GetNoisePolynomialDegrees() const;
+
+  unsigned int GetNoisePolynomialDegrees(unsigned int noiseRecord) const;
+
+  IndexType GetRadiometricCalibrationNoisePolynomialDegree() const override;
 
   PointSetPointer GetRadiometricCalibrationNoise() const override;
-  IndexType       GetRadiometricCalibrationNoisePolynomialDegree() const override;
 
-  // PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
-  PointSetPointer GetRadiometricCalibrationIncidenceAngle() const override;
-  IndexType       GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override;
 
-  bool CanRead() const override;
 
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
   std::vector<unsigned int> GetDefaultDisplay() const override;
 
 protected:
-  TerraSarImageMetadataInterface();
-  ~TerraSarImageMetadataInterface() override
-  {
-  }
-
-  void PrintSelf(std::ostream& os, itk::Indent indent) const override;
-  /** Evaluate polynom with Horner scheme*/
-
-  inline double Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const;
-
-  double   GetStartTimeUTC() const;
-  double   GetStopTimeUTC() const;
-  RealType GetRangeTimeFirstPixel() const;
-
-  RealType GetRangeTimeLastPixel() const;
-
-  /** convert a TimeUTC string to a julian day */
-  double ConvertStringTimeUTCToJulianDay(const std::string& value) const;
-
-  /** Get the polynomial degree for a given noise record */
-  unsigned int GetNoisePolynomialDegrees(unsigned int noiseRecord) const;
-
-  /** Get the polynomial coefficient for a given noise record */
-  DoubleVectorType GetNoisePolynomialCoefficients(unsigned int noiseRecord) const;
-
-  /** Get timeUTC noise acquisition in Julian day for a given noise record*/
-  double GetNoiseTimeUTC(unsigned int noiseRecord) const;
-
-  /** Get noise reference point for a given noise record */
-  double GetNoiseReferencePoint(unsigned int noiseRecord) const;
+  TerraSarXSarImageMetadataInterface() = default;
+  ~TerraSarXSarImageMetadataInterface() = default;
+ 
 
 private:
-  TerraSarImageMetadataInterface(const Self&) = delete;
+  TerraSarXSarImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
 };
 
