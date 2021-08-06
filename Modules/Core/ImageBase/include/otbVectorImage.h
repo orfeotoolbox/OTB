@@ -141,10 +141,19 @@ public:
   virtual void SetSignedSpacing(SpacingType spacing);
   virtual void SetSignedSpacing(double spacing[VImageDimension]);
 
-  /** Get image keyword list */
+  /** Get image keyword list 
+  * \deprecated
+  */
   virtual ImageKeywordlistType       GetImageKeywordlist(void);
+
+  /** Get image keyword list 
+  * \deprecated
+  */
   virtual const ImageKeywordlistType GetImageKeywordlist(void) const;
 
+  /** Set the image keywordlist 
+    \deprecated
+   */
   virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
 
   virtual void SetNumberOfComponentsPerPixel(unsigned int n) override;

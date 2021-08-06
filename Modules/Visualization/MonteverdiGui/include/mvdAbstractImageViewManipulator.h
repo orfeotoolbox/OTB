@@ -122,7 +122,8 @@ public:
    */
   virtual void SetWkt(const std::string& wkt) = 0;
 
-  /**
+  /** Set the image keywordlist 
+    \deprecated
    */
   virtual void SetKeywordList(const DefaultImageType::ImageKeywordlistType& kwl) = 0;
 

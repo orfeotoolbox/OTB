@@ -259,6 +259,7 @@ public:
   {
     return m_InputImageMetadata;
   }
+
   void SetInputImageMetadata(const ImageMetadata* imd)
   {
     m_InputImageMetadata = imd;

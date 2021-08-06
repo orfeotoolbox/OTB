@@ -110,6 +110,9 @@ public:
   itkSetMacro(GeometryChanged,bool);
   itkGetConstMacro(GeometryChanged,bool);
 
+  /** Set the image keywordlist 
+    \deprecated
+   */
   void SetKeywordList(const KeywordListType& kwl)
   {
     // std::cout << std::hex << this << "::SetKeywordList()" << std::endl;
