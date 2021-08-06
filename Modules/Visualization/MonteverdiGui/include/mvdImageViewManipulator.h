@@ -145,6 +145,9 @@ public:
 
   void SetWkt(const std::string& wkt) override;
 
+  /** Set the image keywordlist 
+    \deprecated
+   */
   void SetKeywordList(const DefaultImageType::ImageKeywordlistType& kwl) override;
 
   PointType GetCenter() const override;

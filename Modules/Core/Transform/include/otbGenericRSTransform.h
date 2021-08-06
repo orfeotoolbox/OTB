@@ -125,10 +125,9 @@ public:
     this->Modified();
   }
 
-  /** Set/Get Keywordlist
+  /** Set InputKeywordlist
    * \deprecated
    */
-
   itkGetMacro(InputKeywordList, ImageKeywordlist);
   void SetInputKeywordList(const ImageKeywordlist& kwl)
   {
@@ -136,6 +135,9 @@ public:
     this->Modified();
   }
 
+  /** Set OutputKeywordlist
+   * \deprecated
+   */
   itkGetMacro(OutputKeywordList, ImageKeywordlist);
   void SetOutputKeywordList(const ImageKeywordlist& kwl)
   {

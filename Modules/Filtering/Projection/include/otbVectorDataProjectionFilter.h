@@ -127,6 +127,9 @@ public:
   itkSetStringMacro(OutputProjectionRef);
   itkGetStringMacro(OutputProjectionRef);
 
+  /**\name Keywords lists accessors and mutators 
+     \deprecated */
+  //@{
   itkGetMacro(InputKeywordList, ImageKeywordlist);
   void SetInputKeywordList(const ImageKeywordlist& kwl)
   {
@@ -140,6 +143,7 @@ public:
     this->m_OutputKeywordList = kwl;
     this->Modified();
   }
+  //@}
 
   /** Set the origin of the vector data.
    * \sa GetOrigin() */

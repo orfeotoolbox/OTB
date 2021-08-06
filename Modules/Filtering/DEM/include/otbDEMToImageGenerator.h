@@ -137,7 +137,9 @@ public:
     return m_Transform->GetInputProjectionRef();
   }
 
-  /** Set/Get Input Keywordlist*/
+  /**\name Keywords lists accessors and mutators 
+     \deprecated */
+  //@{
   void SetInputKeywordList(const ImageKeywordlist& kwl)
   {
     m_Transform->SetOutputKeywordList(kwl);
@@ -159,6 +161,7 @@ public:
   {
     return m_Transform->GetInputKeywordList();
   }
+  //@}
 
   /** Useful to set the output parameters from an existing image*/
   template <class TImageType>

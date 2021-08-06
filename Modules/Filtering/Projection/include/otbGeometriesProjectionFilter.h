@@ -252,7 +252,8 @@ public:
   void SetInputOrigin(ImageReference::OriginType const& origin);
   void SetOutputOrigin(ImageReference::OriginType const& origin);
   //@}
-  /**\name Keywords lists accessors and mutators */
+  /**\name Keywords lists accessors and mutators 
+     \deprecated */
   //@{
   itkGetMacro(InputKeywordList, ImageKeywordlist);
   void SetInputKeywordList(const ImageKeywordlist& kwl);

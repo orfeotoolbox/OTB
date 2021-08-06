@@ -28,7 +28,9 @@ otb_module(OTBOssimPlugins
     OTBGDAL
     OTBOssim
   TEST_DEPENDS
-    
+
+  DEPRECATED
+
   DESCRIPTION
     "${DOCUMENTATION}"
   )
