@@ -397,7 +397,7 @@ public:
    * region not the largest. The derived ImageIO class should verify that
    * the file is capable of being written with this configuration.
    * If pasted is enabled and is not support or does not work with the file,
-   * then an excepetion should be thrown.
+   * then an exception should be thrown.
    *
    * The default implementation depends on CanStreamWrite.
    * If false then 1 is returned (unless pasting is indicated), so that the whole file will be updated in one region.

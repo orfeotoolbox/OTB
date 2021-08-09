@@ -46,7 +46,7 @@ namespace otb
  *  must be consistent for all images, and the size of the images must
  *  match with each others.
  *
- *  Metadata are adapted in order to correspond to the contatenated SAR image.
+ *  Metadata are adapted in order to correspond to the concatenated SAR image.
  *
  * \ingroup OTBSARCalibration
  * \ingroup MultiThreaded

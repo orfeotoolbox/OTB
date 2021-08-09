@@ -48,7 +48,7 @@ class CDashException(Exception):
   pass
 
 """
-Handler class to retrieve build informations
+Handler class to retrieve build information
 """
 class Handler:
   def __init__ (self):
@@ -112,7 +112,7 @@ class Handler:
   def GetBuildId (self, **kwargs):
     """
     This function is returning the buildid. Dict can be passed with the
-    different informations
+    different information
     """
     site = self.site
     stamp = self.stamp

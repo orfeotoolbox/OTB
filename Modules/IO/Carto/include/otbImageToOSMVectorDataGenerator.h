@@ -34,7 +34,7 @@ namespace otb
  *  This class compute the extent of the input image. The extent is
  *  then used to fill the bbox values.
  *  The class OSMDataToVectorDataGenerator request the OSM server to get
- *  the OSM XML file storing the datas within this input image bbox.
+ *  the OSM XML file storing the data within this input image bbox.
  *
  * \sa otb::OSMDataToVectorDataGenerator
  *

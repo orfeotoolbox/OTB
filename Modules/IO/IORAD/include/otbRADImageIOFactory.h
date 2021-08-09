@@ -26,7 +26,7 @@
 namespace otb
 {
 /** \class RADImageIOFactory
- * \brief Creation d'un instance d'un objet RADImageIO utilisant les object factory.
+ * \brief Create an instance of RADImageIO through the object factory.
  *
  * \ingroup OTBIORAD
  */

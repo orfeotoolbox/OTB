@@ -117,7 +117,7 @@ protected:
   /** Upper threshold */
   InputPixelType m_UpperThreshold;
 
-  /** Point set to store thresold results */
+  /** Point set to store threshold results */
   PointSetPointerType m_PointSet;
 
   /** Multiply filter*/

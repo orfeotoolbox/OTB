@@ -37,7 +37,7 @@ namespace Wrapper
  *
  * \brief Contains small helper functions to manipulate itk::MetaDataDictionary
  *
- * These functions are only here to instanciate the different template function that
+ * These functions are only here to instantiate the different template function that
  * allow to get/set values in MetaDataDictionary.
  *
  */

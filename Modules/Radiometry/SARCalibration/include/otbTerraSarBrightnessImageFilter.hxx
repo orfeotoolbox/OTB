@@ -46,7 +46,7 @@ void TerraSarBrightnessImageFilter<TInputImage, TOutputImage>::BeforeThreadedGen
     }
     else
     {
-      itkExceptionMacro(<< "Invalid input image. Only TerraSar images are supproted");
+      itkExceptionMacro(<< "Invalid input image. Only TerraSar images are supported");
     }
   }
 }

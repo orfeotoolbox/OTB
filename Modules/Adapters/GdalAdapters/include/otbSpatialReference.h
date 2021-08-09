@@ -135,7 +135,7 @@ public:
   /// Copy constructor
   SpatialReference(const SpatialReference& other) noexcept;
 
-  /// Asignment operator
+  /// Assignment operator
   SpatialReference& operator=(const SpatialReference& other) noexcept;
 
   /**

@@ -194,7 +194,7 @@ int main(int argc, char* argv[])
   }
 
 
-  // generat the output value along a segment crossing the lower image border
+  // generate the output value along a segment crossing the lower image border
   // at the center position
   itk::Point<double, 2> imagePoint1;
   imagePoint1[0] = region.GetIndex(0) + region.GetSize(0) / 2;

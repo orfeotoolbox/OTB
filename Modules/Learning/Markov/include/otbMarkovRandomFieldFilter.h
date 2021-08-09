@@ -219,7 +219,7 @@ public:
   itkSetMacro(MaximumNumberOfIterations, unsigned int);
   itkGetMacro(MaximumNumberOfIterations, unsigned int);
 
-  /** Set/Get the error tollerance level which is used as a threshold
+  /** Set/Get the error tolerance level which is used as a threshold
    * to quit the iterations */
   itkSetMacro(ErrorTolerance, double);
   itkGetMacro(ErrorTolerance, double);

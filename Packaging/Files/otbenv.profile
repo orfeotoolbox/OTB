@@ -45,7 +45,7 @@ export CMAKE_PREFIX_PATH
 # check and set OTB_APPLICATION_PATH
 OTB_APPLICATION_PATH=$(cat_path "OUT_DIR/lib/otb/applications" "$OTB_APPLICATION_PATH")
 
-# Add bin direcotory to system PATH
+# Add bin directory to system PATH
 PATH=$(cat_path "OUT_DIR/bin" "$PATH")
 
 # export PYTHONPATH to import otbApplication.py

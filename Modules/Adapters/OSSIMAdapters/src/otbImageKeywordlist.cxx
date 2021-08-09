@@ -134,7 +134,7 @@ bool ImageKeywordlist::convertToGDALRPC(GDALRPCInfo& rpc) const
   /* ossimRpcModel::loadState() actually expects certain keyword values to be
    * present in the keywordlist. So We check a single keyword value
    * (polynomial_format) first.  Even though it is not enough to ensure a valid
-   * ossimRpcModel by checking for presence of one single key but atleast we
+   * ossimRpcModel by checking for presence of one single key but at least we
    * are sure about not to create an ossimRpcModel.
    *
    * The current mechanism creates ossimRpcModel instance, calls loadState()

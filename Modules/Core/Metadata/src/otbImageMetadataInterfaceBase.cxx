@@ -370,7 +370,7 @@ std::vector<std::string> ImageMetadataInterfaceBase::GetBandName() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
 
-  /* band_name attribut is only used by OSSIM metadata reader otherwise it is band_name_list */
+  /* band_name attribute is only used by OSSIM metadata reader otherwise it is band_name_list */
   std::vector<std::string> outputValues;
   if (!imageKeywordlist.HasKey("support_data.band_name"))
   {

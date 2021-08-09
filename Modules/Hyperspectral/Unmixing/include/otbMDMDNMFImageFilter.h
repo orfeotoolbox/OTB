@@ -84,7 +84,7 @@ namespace otb
  *  \f$ D_A(\mathbf A)=Tr(\mathbf A^T\mathbf A)-\frac{1}{L}Tr\left ( \mathbf A^T \1_{LL}\mathbf A
  *  \right) \f$, which ensures low spectral dispersion on endmembers.
  *  The physical
- *  motivation is based on the assuption that in most situations, the
+ *  motivation is based on the assumption that in most situations, the
  *  whole set of pure materials do not appear in each pixel, but
  *  selectively in multiple piece-wise convex sets. As a consequence, the mean value of the abundance,
  *  \f$ \frac{1}{J} \f$, is the least likely one.  The maximum abundance

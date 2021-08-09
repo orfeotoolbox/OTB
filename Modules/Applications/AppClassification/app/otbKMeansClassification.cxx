@@ -446,7 +446,7 @@ private:
     // Compute a classification of the input image according to a model file
     Superclass::KMeansClassif();
 
-    // Remove all tempory files
+    // Remove all temporary files
     if (GetParameterInt("cleanup"))
     {
       otbAppLogINFO(<< "Final clean-up ...");

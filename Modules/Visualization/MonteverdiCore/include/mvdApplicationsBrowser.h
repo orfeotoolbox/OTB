@@ -77,7 +77,7 @@ namespace mvd
  *
  * \brief Search for available applications in a directory.
  *
- * This class provides the functionnalities to look for
+ * This class provides the functionalities to look for
  * otbWrapperApplication apps in a given directory. The method used to
  * set the directory is SetAutoLoadPath(const std::string &).
  *

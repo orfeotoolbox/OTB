@@ -48,7 +48,7 @@ namespace otb
 # define ICE_CALLBACK
 #endif
 
-// Static Combine callback for tesselation
+// Static Combine callback for tessellation
 static void ICE_CALLBACK TesselationCombineCallback(GLdouble coords[3],
                                                 GLdouble * /*data*/[4],
                                                 GLfloat /*weights*/[4],
@@ -61,27 +61,27 @@ static void ICE_CALLBACK TesselationCombineCallback(GLdouble coords[3],
   *dataOut = vertex;
 }
 
-// Static error callback fir tesselation
+// Static error callback fir tessellation
 static void ICE_CALLBACK TesselationErrorCallback(GLenum errorCode)
 {
   const GLubyte * estring = gluErrorString(errorCode);
-  otbMsgDevMacro(<< "Glu Tesselation error: " << estring);
+  otbMsgDevMacro(<< "Glu Tessellation error: " << estring);
   (void)estring;
 }
 
-// Static begin callback for tesselation
+// Static begin callback for tessellation
 static void ICE_CALLBACK BeginCallback(GLenum prim)
 {
   glBegin(prim);
 }
 
-// Static end callback for tesselation
+// Static end callback for tessellation
 static void ICE_CALLBACK EndCallback()
 {
   glEnd();
 }
 
-// static vertex callback for tesselation
+// static vertex callback for tessellation
 static void ICE_CALLBACK VertexCallback(void * data)
 {
   glVertex3dv((GLdouble*) data);
@@ -113,10 +113,10 @@ GlVectorActor::GlVectorActor()
   m_Color.Fill(0);
   m_Color[0]=1.0;
 
-  // Create tesselator
+  // Create tessellator
   m_GluTesselator = gluNewTess();
 
-  // Setting up the tesselator callbacks
+  // Setting up the tessellator callbacks
   gluTessCallback(m_GluTesselator, GLU_TESS_BEGIN,   (FunctionPointerType) BeginCallback);
   gluTessCallback(m_GluTesselator, GLU_TESS_END,     (FunctionPointerType) EndCallback);
   gluTessCallback(m_GluTesselator, GLU_TESS_ERROR,   (FunctionPointerType) TesselationErrorCallback);
@@ -127,7 +127,7 @@ GlVectorActor::GlVectorActor()
 
 GlVectorActor::~GlVectorActor()
 {
-  // Delete tesselator
+  // Delete tessellator
   gluDeleteTess(m_GluTesselator);
 
   // Free the display list

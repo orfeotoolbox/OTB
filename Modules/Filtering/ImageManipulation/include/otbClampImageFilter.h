@@ -28,7 +28,7 @@ namespace otb
 {
 
 /** \class ClampImageFilter
- * \brief Clamp image values to be below, over, or between threhold values.
+ * \brief Clamp image values to be below, over, or between threshold values.
  *
  * ClampImageFilter  clamp image values to be between an upper
  * and lower value. Values lower than m_Lower values are set to lower,

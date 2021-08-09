@@ -86,7 +86,7 @@ public:
 
   UIntVectorType GetDefaultDisplay() const override;
 
-  /*SarImageMetadataInterface pure virutals rituals */
+  /*SarImageMetadataInterface pure virtuals rituals */
   double GetPRF() const override;
 
   double GetRSF() const override;
@@ -103,7 +103,7 @@ protected:
   /* class constructor */
   Radarsat2ImageMetadataInterface();
 
-  /* class desctructor */
+  /* class destructor */
   ~Radarsat2ImageMetadataInterface() override
   {
   }

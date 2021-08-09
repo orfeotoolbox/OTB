@@ -80,7 +80,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
-    os << "Attempt to use inexistant implementation of the converter!" << std::endl;
+    os << "Attempt to use inexistent implementation of the converter!" << std::endl;
   }
 
 private:
@@ -124,7 +124,7 @@ protected:
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {
     Superclass::PrintSelf(os, indent);
-    os << "Attempt to use inexistant implementation of the converter!" << std::endl;
+    os << "Attempt to use inexistent implementation of the converter!" << std::endl;
   }
 
 private:

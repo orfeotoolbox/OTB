@@ -26,7 +26,7 @@
 namespace otb
 {
 /** \class BSQImageIOFactory
- * \brief Creation d'un instance d'un objet BSQImageIO utilisant les object factory.
+ * \brief Create an instance of BSQImageIO through the object factory.
  *
  * \ingroup OTBIOBSQ
  */

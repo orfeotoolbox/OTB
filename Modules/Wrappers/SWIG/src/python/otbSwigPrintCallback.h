@@ -49,7 +49,7 @@ public:
   /** Flush the buffer */
   virtual void Flush(){};
 
-  /** Determine if the bufer is interactive */
+  /** Determine if the buffer is interactive */
   virtual bool IsInteractive()
   {
     return false;

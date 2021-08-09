@@ -49,7 +49,7 @@ namespace otb
  * In order to use this filter, at least one input image is to be
  * set. An associated variable name can be specified or not by using
  * the corresponding SetNthInput method. For the nth input image, if
- * no associated variable name has been spefified, a default variable
+ * no associated variable name has been specified, a default variable
  * name is given by concatenating the letter "b" (for band) and the
  * corresponding input index.
  * Next step is to set the expression according to the variable

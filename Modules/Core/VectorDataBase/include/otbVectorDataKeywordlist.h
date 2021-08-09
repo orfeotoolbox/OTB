@@ -41,7 +41,7 @@ namespace otb
 /** \class VectorDataKeywordlist
  * \brief this class handle the metadata of vector data.
  *
- * This class is used internaly to handle the information associated with
+ * This class is used internally to handle the information associated with
  * a vector object. This information is retrieved from the input file (a
  * shapefile for example) and propagated along the pipeline with the object.
  *

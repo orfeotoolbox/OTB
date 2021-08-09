@@ -73,7 +73,7 @@ namespace otb
  *  elevation offset which is only used for local epipolar lines
  *  estimation. The default value of 50 meters should do.
  *
- *  Additionnaly, the SetScale() method allows deriving deformation
+ *  Additionally, the SetScale() method allows deriving deformation
  *  fields and images size at a coarser (scale > 1) or finer (scale <
  *  1) resolution. The SetGridStep() allows tuning the step of the
  *  resampling grid. Please keep in mind that the whole grid is loaded

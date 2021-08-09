@@ -262,7 +262,7 @@ void OSMDataToVectorDataGenerator::ProcessVectorData(const std::string& key, con
   // the output
   m_OutputVectorData = VectorDataType::New();
 
-  // Intitialize the vectordata : EPSG 4326 is for WGS84
+  // Initialize the vectordata : EPSG 4326 is for WGS84
   m_OutputVectorData->SetProjectionRef(otb::SpatialReference::FromWGS84().ToWkt());
   DataNodeType::Pointer root     = m_OutputVectorData->GetDataTree()->GetRoot()->Get();
   DataNodeType::Pointer document = DataNodeType::New();
@@ -295,7 +295,7 @@ void OSMDataToVectorDataGenerator::ProcessVectorData(const std::string& key, con
     {
 
       // value is empty
-      // or if it is not empty it has to match the requestd value
+      // or if it is not empty it has to match the requested value
       if (value.empty() || elementPair.second.compare(value) == 0)
       {
 

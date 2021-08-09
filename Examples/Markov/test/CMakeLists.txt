@@ -83,5 +83,5 @@ otb_add_test(NAME maTeMarkovRegularizationExampleTest COMMAND ${OTB_TEST_DRIVER}
     0.2
     20
     0.0
-    1 # true to use always the same rand() sample, false otherwis
+    1 # true to use always the same rand() sample, false otherwise
 )

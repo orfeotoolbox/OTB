@@ -261,7 +261,7 @@ bool CommandLineLauncher::BeforeExecute()
     return false;
   }
 
-  // if we want to load test environnement
+  // if we want to load test environment
   if (m_Parser->IsAttributExists("-testenv", m_VExpression) == true)
   {
     this->LoadTestEnv();

@@ -116,7 +116,7 @@ SpatialReference& SpatialReference::operator=(const SpatialReference& other) noe
 
 SpatialReference SpatialReference::FromWGS84()
 {
-  // GetWGS84SRS() is only avalaible since gdal 2.0, so we use the
+  // GetWGS84SRS() is only available since gdal 2.0, so we use the
   // epsg code instead
   return FromEPSG(4326);
 }
@@ -190,7 +190,7 @@ std::string SpatialReference::ToWkt() const
   char* cwkt;
   m_SR->exportToWkt(&cwkt);
   std::string wkt(cwkt);
-  // as recommanded in Gdal doc of exportToWkt()
+  // as recommended in Gdal doc of exportToWkt()
   CPLFree(cwkt);
 
   return wkt;

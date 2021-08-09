@@ -273,7 +273,7 @@ struct NumberOfOutputComponents<F, otb::Image<T>, N>
   }
 };
 
-// O is a VectorImage AND F has a fixed OuptutSize static constexrp size_t;
+// O is a VectorImage AND F has a fixed OutputSize static constexrp size_t;
 template <class F, class T, size_t N>
 struct NumberOfOutputComponents<F, otb::VectorImage<T>, N>
 {

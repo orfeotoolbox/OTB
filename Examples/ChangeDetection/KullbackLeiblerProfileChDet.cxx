@@ -78,7 +78,7 @@ int main(int argc, char* argv[])
   // of the analysis window. The program will begin by performing change
   // detection through the smaller window size and then applying moments update
   // by incrementing the radius of the analysis window (i.e. add a ring of
-  // width 1 pixel around the current neightborhood shape). The process is
+  // width 1 pixel around the current neighborhood shape). The process is
   // applied until the larger window size is reached.
   FilterType::Pointer filter = FilterType::New();
   filter->SetRadius((winSizeMin - 1) / 2, (winSizeMax - 1) / 2);

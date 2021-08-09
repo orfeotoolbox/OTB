@@ -68,7 +68,7 @@ bool PeriodicSampler::TakeSample(void)
 {
   bool ret = false;
   // Take p elements among N, while iterating on the full set (current index i)
-  // where k elements have already been selected. The offset is in the intervall
+  // where k elements have already been selected. The offset is in the interval
   // [0, N/p]
   //   val = (i - offset)*p/N  - k
   //  if ceil(val) > 0; then take the sample

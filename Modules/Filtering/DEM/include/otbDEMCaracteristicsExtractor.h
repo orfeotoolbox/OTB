@@ -45,7 +45,7 @@ namespace otb
 /** \class DEMCaracteristicsExtractor
    *  \brief Calculates the slope, the orientation incidence and exitance radius values for each pixel.
    *
-   * To note that azimuth value are projection over North-South direction and angles have to be given in degres.
+   * To note that azimuth value are projection over North-South direction and angles have to be given in degrees.
    *
    * \ingroup DEMHanler
    * \ingroup DEMToImageGenerator

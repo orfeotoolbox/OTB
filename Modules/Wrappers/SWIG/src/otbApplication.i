@@ -206,7 +206,7 @@ public:
 
 #if SWIGPYTHON
 
-// We want all SetParameterXXX functions to call UpdateParameters automaticaly
+// We want all SetParameterXXX functions to call UpdateParameters automatically
 // so that using it is not required from the Python API
 // for more discussion about this see gitlab issue #1842
 

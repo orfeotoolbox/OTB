@@ -94,7 +94,7 @@ public:
   typedef typename VectorDataType::DataTreeType::TreeNodeType              InternalTreeNodeType;
   typedef typename InternalTreeNodeType::ChildrenListType                  ChildrenListType;
 
-  /** Method to Set/Get the Region of intereset*/
+  /** Method to Set/Get the Region of interest*/
   void SetRegion(const RegionType& region)
   {
     m_ROI = region;

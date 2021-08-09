@@ -157,7 +157,7 @@ private:
       endmembers.push_back(it.Get());
     }
     
-    // Process objects to keep references on the actual filter instanciated below and its output
+    // Process objects to keep references on the actual filter instantiated below and its output
     itk::LightObject::Pointer filter;
     ImageType::Pointer filterOutput;
     

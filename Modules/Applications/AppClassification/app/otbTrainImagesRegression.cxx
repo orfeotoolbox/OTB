@@ -554,7 +554,7 @@ private:
   /** Field used for sampling operations. */
   std::string m_ClassFieldName = "regclass";
 
-  /** field containg the extracted regression groundtruth */
+  /** field containing the extracted regression groundtruth */
   std::string m_PredictionFieldName = "prediction";
 
   /** field containing the extracted pixel values for regression */

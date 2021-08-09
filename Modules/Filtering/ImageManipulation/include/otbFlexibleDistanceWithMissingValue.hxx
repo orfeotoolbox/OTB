@@ -93,7 +93,7 @@ inline double FlexibleDistanceWithMissingValue<TVector>::Evaluate(const ValueTyp
   if (IsEuclidean())
     return Superclass::Evaluate(a, b);
 
-  // FIXME throw NaN exception instaed of returning 0. ??
+  // FIXME throw NaN exception instead of returning 0. ??
   if (this->IsMissingValue(a) || this->IsMissingValue(b))
     return 0.0;
 

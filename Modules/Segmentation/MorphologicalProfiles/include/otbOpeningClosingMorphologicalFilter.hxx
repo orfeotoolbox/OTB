@@ -58,10 +58,10 @@ void OpeningClosingMorphologicalFilter<TInputImage, TOutputImage, TKernel>::Gene
   progress->SetMiniPipelineFilter(this);
   progress->RegisterInternalFilter(opening, .5f);
   progress->RegisterInternalFilter(closing, .5f);
-  // Internal Pipeline connexion
+  // Internal Pipeline connection
   closing->SetInput(this->GetInput());
   opening->SetInput(closing->GetOutput());
-  // Output connexion
+  // Output connection
   opening->GraftOutput(this->GetOutput());
   opening->Update();
   this->GraftOutput(opening->GetOutput());

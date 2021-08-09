@@ -98,7 +98,7 @@ public:
  * \li A key point is a local minimum or a local maximum on 3*3 neighborhood
  * \li An interpolated location of the maximum key point is compute with fitting
  *     a 3D quadratic function
- * \li DoG low constrast are discarded (DoG < 3%)
+ * \li DoG low contrast are discarded (DoG < 3%)
  * \li High edge responses key point are discarded
  *
  * Selected key points are stored in a itk::PointSet structure.
@@ -383,7 +383,7 @@ private:
   /** Gaussian sigma for histogram smoothing */
   std::vector<double> m_HistogramGaussianWeights;
 
-  /** Offsets vector, conveniance datas */
+  /** Offsets vector, convenience data */
   OffsetType m_Offsets[8];
 };
 } // End namespace otb

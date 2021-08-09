@@ -46,6 +46,6 @@ signals:
 };
 
 } // end of namespace Wrapper
-} // end of namepsace otb
+} // end of namespace otb
 
 #endif

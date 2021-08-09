@@ -33,7 +33,7 @@ elements. They are:
 
 \li \b Target: the object that is assumed to be static.
 \li \b Reference: the object that will be transformed in order to be superimpossed to the \e Target
-\li \b Transform: the mapping that will conver one point from the \e Reference object space to the \e Target object space.
+\li \b Transform: the mapping that will convert one point from the \e Reference object space to the \e Target object space.
 \li \b Metric: a measure that indicates how well the \e Target object matches the \e Reference object after transformation.
 \li \b Mapper: the particular technique used for interpolating values when objects are resampled through the \e Transform.
 \li \b Optimizer: the method used to find the \e Transform parameters that optimize the \e Metric.

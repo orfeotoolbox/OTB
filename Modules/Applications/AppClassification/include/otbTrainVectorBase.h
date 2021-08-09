@@ -68,7 +68,7 @@ public:
   typedef otb::Statistics::ShiftScaleSampleListFilter<ListSampleType, ListSampleType> ShiftScaleFilterType;
 
 protected:
-  /** Class used to store statistics Measurment (mean/stddev) */
+  /** Class used to store statistics Measurement (mean/stddev) */
   class ShiftScaleParameters
   {
   public:

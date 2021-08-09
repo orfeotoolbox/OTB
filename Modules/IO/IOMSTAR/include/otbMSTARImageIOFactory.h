@@ -26,7 +26,7 @@
 namespace otb
 {
 /** \class MSTARImageIOFactory
- * \brief Creation d'un instance d'un objet MSTARImageIO utilisant les object factory.
+ * \brief Create an instance of MSTARImageIO through the object factory.
  *
  * \ingroup OTBIOMSTAR
  */

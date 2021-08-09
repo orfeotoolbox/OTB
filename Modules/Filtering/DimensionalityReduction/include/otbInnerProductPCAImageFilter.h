@@ -37,7 +37,7 @@ namespace otb
  *
  * InnerProductPCAImageFilter performs a principal component analysis (as
  * itk::ImagePCAShapeModelEstimator) (PCA) on a vector image in streaming capabilities.
- * Alls channels of the input vector image are used for training images
+ * All channels of the input vector image are used for training images
  * and also the number of desired largest principal components needed.
  * The number of channels of the output image are the user specified number of desired
  * largest principal components.
@@ -136,7 +136,7 @@ protected:
    * execution model.  The original documentation of this method is
    * below.
    *
-   * \sa ProcessObject::GenerateOutputInformaton()  */
+   * \sa ProcessObject::GenerateOutputInformation()  */
   void GenerateOutputInformation() override;
 
 private:

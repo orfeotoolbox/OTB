@@ -146,7 +146,7 @@ void ApplicationsToolBox::FillTreeUsingTags()
     // current Doctag name
     QString qcurrentTag((*itTag).first.c_str());
 
-    // If a current tag applicaton name match the searchText, add the
+    // If a current tag application name match the searchText, add the
     // tag as an item to the tree
     if (m_SearchText.isEmpty() || IsSearchTextMatchAnyAlgorithm(qcurrentTag, search) || qcurrentTag.contains(search, Qt::CaseInsensitive))
     {
@@ -232,7 +232,7 @@ void ApplicationsToolBox::LaunchApplication(const QString& appName)
 /*******************************************************************************/
 void ApplicationsToolBox::OnAvailableApplicationsTagsChanged(const ApplicationsTagContainer& appsTags)
 {
-  // rememeber the map
+  // remember the map
   m_AppTags = appsTags;
 
   // fill the tree with the application

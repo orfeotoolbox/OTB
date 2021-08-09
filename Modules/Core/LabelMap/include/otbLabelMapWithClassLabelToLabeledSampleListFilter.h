@@ -27,7 +27,7 @@ namespace otb
 {
 /** \class LabelMapWithClassLabelToLabeledSampleListFilter
  * \brief This class converts a LabelObjectMap with some class labeled
- * objets to a SampleList and a TrainingSampleList suitable for supervised learning,
+ * objects to a SampleList and a TrainingSampleList suitable for supervised learning,
  * and compatible with otb::SVMSampleListModelEstimator
  *
  * The conversion from label object to measurement vector is made

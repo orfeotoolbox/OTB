@@ -136,7 +136,7 @@ void WaveletsBandsListToWaveletsSynopsisImageFilter<TImageList, TImage>::Threade
       currentLevel   = 1 + (bandIndex - 1) / 3;
       currentSubBand = (bandIndex - 1) % 3;
 
-      // Compute potentiel offset in x and y
+      // Compute potential offset in x and y
       unsigned int offsetX = largestSize[0] / (unsigned int)std::pow((double)m_DecimationRatio, (double)1 + numberOfDecompositionLevels - currentLevel);
       unsigned int offsetY = largestSize[1] / (unsigned int)std::pow((double)m_DecimationRatio, (double)1 + numberOfDecompositionLevels - currentLevel);
 

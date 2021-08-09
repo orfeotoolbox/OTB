@@ -27,7 +27,7 @@ namespace otb
 {
 
 /** \class Count
- * \brief Compute the density of a neighboorhood centerred in a pixel
+ * \brief Compute the density of a neighborhood centerred in a pixel
  *
  * This filter is templated over the pixel type of the input image
  * and the pixel type of the output image.

@@ -114,7 +114,7 @@ public:
   itkNewMacro(Self);
 
   // Import definitions for SetInput and GetInput to avoid shadowing
-  // by SetInput<> and GetIntput<> defined in this method
+  // by SetInput<> and GetInput<> defined in this method
   using Superclass::GetInput;
   using Superclass::SetInput;
 

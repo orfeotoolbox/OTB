@@ -109,7 +109,7 @@ public:
 protected:
   /** Constructor */
   DrawPathListFilter();
-  /** Desctructor */
+  /** Destructor */
   ~DrawPathListFilter() override
   {
   }

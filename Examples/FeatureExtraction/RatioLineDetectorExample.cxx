@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
   writer->SetInput(rescaler->GetOutput());
 
   //  The methods \code{SetLengthLine()} and \code{SetWidthLine()}
-  //  allow setting the minimum length and the typical witdh of the
+  //  allow setting the minimum length and the typical width of the
   //  lines which are to be detected.
   //
   //  \index{otb::LineRatioDetector!SetWidthLine()}

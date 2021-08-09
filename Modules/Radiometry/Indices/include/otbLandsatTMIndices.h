@@ -108,7 +108,7 @@ public:
       m_Reflectance(Normalized)
   {
   }
-  /// Desctructor
+  /// Destructor
   virtual ~LandsatTMIndexBase()
   {
   }

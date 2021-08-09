@@ -162,7 +162,7 @@ protected:
 
   void GenerateInputRequestedRegion(void) override;
 
-  /** Compute the calss statistics*/
+  /** Compute the class statistics*/
   void GenerateClassStatistics();
 
 private:

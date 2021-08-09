@@ -1251,7 +1251,7 @@ void GDALImageIO::Write(const void* buffer)
   }
 }
 
-/** TODO : Methode WriteImageInformation non implementee */
+/** TODO : Method WriteImageInformation not implemented */
 void GDALImageIO::WriteImageInformation()
 {
 }

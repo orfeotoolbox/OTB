@@ -837,7 +837,7 @@ public:
     \li ParameterType_OutputImage
     \li ParameterType_OutputVectorData
 
-  Once registered, the methode ReleaseData is called on each one of them.
+  Once registered, the method ReleaseData is called on each one of them.
   */
   void FreeRessources();
 

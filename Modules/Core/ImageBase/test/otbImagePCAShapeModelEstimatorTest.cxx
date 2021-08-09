@@ -40,7 +40,7 @@
 #define NUMTRAINIMAGES 3
 #define NUMLARGESTPC 3
 
-// class to support progress feeback
+// class to support progress feedback
 
 class ShowProgressObject
 {

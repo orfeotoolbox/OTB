@@ -39,7 +39,7 @@ namespace otb
  * - box
  * - &bands=<BANDS_LIST> : to select a subset of bands from the output image
  * - &nodata=<VALUE>/<VALUE:VALUE...> : to set specific nodata values
- * - &multiwrite=<(bool)false> : to desactivate multi-writing
+ * - &multiwrite=<(bool)false> : to deactivate multi-writing
  * - &epsg=<VALUE> : to set the spatial reference system
  *
  * See http://wiki.orfeo-toolbox.org/index.php/ExtendedFileName for

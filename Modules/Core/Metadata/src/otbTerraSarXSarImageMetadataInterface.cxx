@@ -105,7 +105,7 @@ double TerraSarXSarImageMetadataInterface::GetRangeTimeFirstPixel() const
       }
     catch( ... )
       {
-	// Throw an execption
+	// Throw an exception
 	throw std::runtime_error("Failed to convert first range pixel.");
       }
 
@@ -135,7 +135,7 @@ double TerraSarXSarImageMetadataInterface::GetRangeTimeLastPixel() const
       }
     catch( ... )
       {
-	// Throw an execption
+	// Throw an exception
 	throw std::runtime_error("Failed to convert last range pixel.");
       }
   return value;
@@ -180,7 +180,7 @@ int TerraSarXSarImageMetadataInterface::GetDay() const
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to convert the day.");
     }
 
@@ -223,7 +223,7 @@ int TerraSarXSarImageMetadataInterface::GetMonth() const
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to convert the month.");
     }
 
@@ -266,7 +266,7 @@ int TerraSarXSarImageMetadataInterface::GetYear() const
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to convert the year.");
     }
 
@@ -309,7 +309,7 @@ int TerraSarXSarImageMetadataInterface::GetHour() const
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to convert hour.");
     }
   return value;
@@ -351,7 +351,7 @@ int TerraSarXSarImageMetadataInterface::GetMinute() const
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to convert minutes.");
     }
 
@@ -393,7 +393,7 @@ int TerraSarXSarImageMetadataInterface::GetProductionDay() const
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to convert the day.");
     }
 
@@ -436,7 +436,7 @@ int TerraSarXSarImageMetadataInterface::GetProductionMonth() const
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to convert the month.");
     }
 
@@ -479,7 +479,7 @@ int TerraSarXSarImageMetadataInterface::GetProductionYear() const
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to convert the year.");
     }
 
@@ -504,7 +504,7 @@ double TerraSarXSarImageMetadataInterface::ConvertStringTimeUTCToJulianDay(const
       }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to seconds.");
     }
 
@@ -550,7 +550,7 @@ double TerraSarXSarImageMetadataInterface::GetRadarFrequency() const
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to convert frequency.");
     }
 
@@ -580,7 +580,7 @@ double TerraSarXSarImageMetadataInterface::GetPRF() const
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to convert PRF.");
     }
 
@@ -611,7 +611,7 @@ double TerraSarXSarImageMetadataInterface::GetRSF() const
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to convert RSF.");
     }
 
@@ -638,7 +638,7 @@ double TerraSarXSarImageMetadataInterface::GetCenterIncidenceAngle() const
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to convert the incidence angle.");
     }
 
@@ -682,7 +682,7 @@ double TerraSarXSarImageMetadataInterface::GetCalibrationFactor() const
       }
     catch( ... )
       {
-	// Throw an execption
+	// Throw an exception
 	throw std::runtime_error("Failed to convert calibration factor.");
       }
     return value;
@@ -718,7 +718,7 @@ double TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationScale() cons
       }
     catch( ... )
       {
-	// Throw an execption
+	// Throw an exception
 	throw std::runtime_error("Failed to convert calibration factor.");
       }
   }
@@ -785,7 +785,7 @@ double TerraSarXSarImageMetadataInterface::GetNoiseReferencePoint(unsigned int n
       }
     catch( ... )
       {
-	// Throw an execption
+	// Throw an exception
 	throw std::runtime_error("Failed to convert noise.");
       }
 
@@ -824,7 +824,7 @@ unsigned int TerraSarXSarImageMetadataInterface::GetNoisePolynomialDegrees(unsig
       }
     catch( ... )
       {
-	// Throw an execption
+	// Throw an exception
 	throw std::runtime_error("Failed to convert polynomial degree.");
       }
 
@@ -868,7 +868,7 @@ TerraSarXSarImageMetadataInterface::UIntVectorType TerraSarXSarImageMetadataInte
       }
     catch( ... )
       {
-	// Throw an execption
+	// Throw an exception
 	throw std::runtime_error("Failed to convert polynomial degree.");
       }
 
@@ -905,7 +905,7 @@ unsigned int TerraSarXSarImageMetadataInterface::GetNumberOfNoiseRecords() const
       }
     catch( ... )
       {
-	// Throw an execption
+	// Throw an exception
 	throw std::runtime_error("Failed to convert number of noise records.");
       }
 
@@ -969,7 +969,7 @@ TerraSarXSarImageMetadataInterface::DoubleVectorType TerraSarXSarImageMetadataIn
       }
     catch( ... )
       {
-	// Throw an execption
+	// Throw an exception
 	throw std::runtime_error("Failed to convert polynomial coefficients.");
       }
 
@@ -1019,7 +1019,7 @@ TerraSarXSarImageMetadataInterface::PointSetPointer TerraSarXSarImageMetadataInt
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to number of lines or colunms.");
     }
 
@@ -1083,7 +1083,7 @@ unsigned int TerraSarXSarImageMetadataInterface::GetNumberOfCornerIncidenceAngle
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to convert number of scene coords.");
     }
 
@@ -1116,7 +1116,7 @@ TerraSarXSarImageMetadataInterface::IndexType TerraSarXSarImageMetadataInterface
     }
   catch( ... )
     {
-      // Throw an execption
+      // Throw an exception
       throw std::runtime_error("Failed to convert indexes.");
     }
 
@@ -1152,7 +1152,7 @@ TerraSarXSarImageMetadataInterface::DoubleVectorType TerraSarXSarImageMetadataIn
       }
     catch( ... )
       {
-	// Throw an execption
+	// Throw an exception
 	throw std::runtime_error("Failed to convert angles.");
       }
 
@@ -1204,7 +1204,7 @@ TerraSarXSarImageMetadataInterface::IndexVectorType TerraSarXSarImageMetadataInt
       }
     catch( ... )
       {
-	// Throw an execption
+	// Throw an exception
 	throw std::runtime_error("Failed to convert indexes.");
       }
 

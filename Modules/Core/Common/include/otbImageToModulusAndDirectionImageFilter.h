@@ -30,7 +30,7 @@ namespace otb
  *
  * \brief Base class for modulus and direction image filters.
  *
- * This is the base class for alls class' generate modulus and
+ * This is the base class for all class' generate modulus and
  * directions outputs.
  * GetOutput() method return the output image modulus and
  * GetOutputDirection() return the output image direction

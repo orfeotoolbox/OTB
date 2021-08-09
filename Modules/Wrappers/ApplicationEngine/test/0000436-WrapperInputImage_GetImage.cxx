@@ -27,7 +27,7 @@
 #include "otbVectorDataFileWriter.h"
 #include "otbImageFileWriter.h"
 
-// Code showing a problem calling twice GetImputImageParameter
+// Code showing a problem calling twice GetInputImageParameter
 // http://bugs.orfeo-toolbox.org/view.php?id=436
 
 int main(int argc, char* argv[])

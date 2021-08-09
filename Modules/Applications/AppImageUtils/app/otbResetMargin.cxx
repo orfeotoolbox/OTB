@@ -55,7 +55,7 @@ private:
 
     SetDescription("This is the ResetMargin application");
     SetDocLongDescription(
-        "This application is similar to ExtractROI in the sense it extracts a Region of Interrest.\n"
+        "This application is similar to ExtractROI in the sense it extracts a Region of Interest.\n"
         "However, the region outside of the ROI isn't trimmed, but set to 0.\n"
         "\n"
         "The filter set lines of index < threshold.y, and of index >= threshold.y to 0\n"
@@ -144,7 +144,7 @@ private:
     AddChoice("mode.roi", "Pixel region with start and size");
     AddChoice("mode.margin", "Pixel region with top / bottom / left / right.");
 
-    AddChoice("mode.threshold", "Threshold for X, Y top and botton (DEPRECATED)");
+    AddChoice("mode.threshold", "Threshold for X, Y top and bottom (DEPRECATED)");
 
     AddParameter(ParameterType_Float, "fillval", "Padding fill value");
     SetParameterDescription("fillval", "Value to insert in margins");

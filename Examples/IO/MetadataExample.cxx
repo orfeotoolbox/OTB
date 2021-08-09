@@ -28,7 +28,7 @@
 //  image formats which typically support metadata are for example
 //  CEOS and GeoTiff.
 //
-//  The metadata support is embedded in OTB's IO functionnalities and
+//  The metadata support is embedded in OTB's IO functionalities and
 //  is accessible through the \doxygen{otb}{Image} and
 //  \doxygen{otb}{VectorImage} classes. You should avoid using the
 //  \doxygen{itk}{Image} class if you want to have metadata support.

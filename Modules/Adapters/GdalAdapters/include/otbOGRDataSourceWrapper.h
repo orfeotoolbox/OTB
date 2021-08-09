@@ -487,7 +487,7 @@ public:
    */
   void SyncToDisk();
 
-  /** Returns whether a capability is avalaible.
+  /** Returns whether a capability is available.
    * \param[in] capabilityName  name of the capability to check.
    * \throw None
    * \sa \c GDALDataset::TestCapability()

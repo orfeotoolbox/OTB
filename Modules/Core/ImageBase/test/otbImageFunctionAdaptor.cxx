@@ -322,7 +322,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char* argv[])
   }
 
   // Testing the use of a user defined InternalImageFunction instead
-  // of the build-in InternalImageFunction
+  // of the built-in InternalImageFunction
   try
   {
     FMDFunctionType::Pointer             myFunction        = FMDFunctionType::New();

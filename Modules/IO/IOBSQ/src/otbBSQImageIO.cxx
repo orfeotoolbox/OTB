@@ -655,7 +655,7 @@ void BSQImageIO::WriteImageInformation()
   for (unsigned int channels = 0; channels < m_ChannelsFileName.size(); ++channels)
   {
     m_ChannelsFile[channels].seekp(0, std::ios::beg);
-    // Write Header line and all file (whitout information)
+    // Write Header line and all file (without information)
     for (unsigned int numLigne = 0; numLigne < (m_Dimensions[1]); numLigne++)
     {
       m_ChannelsFile[channels].write(value, headerLength);

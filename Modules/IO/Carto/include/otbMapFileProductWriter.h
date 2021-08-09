@@ -172,7 +172,7 @@ private:
   MapFileProductWriter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  /** Mehtod to initialize the variables*/
+  /** Method to initialize the variables*/
   virtual void Initialize();
 
   /**MapFile  IndexTule build*/

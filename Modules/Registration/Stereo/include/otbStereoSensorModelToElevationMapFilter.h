@@ -113,7 +113,7 @@ public:
   /** Set the master input image */
   void SetMasterInput(const TInputImage* image);
 
-  /** Set the slave input iamge */
+  /** Set the slave input image */
   void SetSlaveInput(const TInputImage* image);
 
   /** Get the master input image */

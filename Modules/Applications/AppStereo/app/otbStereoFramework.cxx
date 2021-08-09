@@ -639,7 +639,7 @@ private:
 
     unsigned int stereoCouples = couples.size();
     m_ExtractorList.resize(inList->Size());
-    // TODO JGT check the mutli stereo fusion step
+    // TODO JGT check the multi stereo fusion step
     //     N MultiDisp which gives N 3D Map Then fuse N 3D Map to DSM
     // or
     //     1 MultiDisp which fuse N Disp Couples to 1 3D Map and then convert one 3D Map into DSM

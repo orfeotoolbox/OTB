@@ -102,14 +102,14 @@ CoordinateTransformation::CoordinateTransformation(const CoordinateTransformatio
   m_Transform = std::move(newTransform);
 }
 
-// Asignment operator
+// Assignment operator
 CoordinateTransformation& CoordinateTransformation::operator=(const CoordinateTransformation& other) noexcept
 {
   // Mimic a clone operator
   CoordinateTransformationPtr newTransform(
       OGRCreateCoordinateTransformation(other.GetSourceSpatialReference().m_SR.get(), other.GetTargetSpatialReference().m_SR.get()));
 
-  // Only update transfrom if newTransform is valid
+  // Only update transform if newTransform is valid
   if (newTransform)
     m_Transform = std::move(newTransform);
 
@@ -126,7 +126,7 @@ SpatialReference CoordinateTransformation::GetTargetSpatialReference() const
   return SpatialReference(m_Transform->GetTargetCS());
 }
 
-// 3D Transfrom of points
+// 3D Transform of points
 std::tuple<double, double, double> CoordinateTransformation::Transform(const std::tuple<double, double, double>& in) const
 {
   double outX, outY, outZ;
@@ -145,7 +145,7 @@ std::tuple<double, double, double> CoordinateTransformation::Transform(const std
   return std::make_tuple(outX, outY, outZ);
 }
 
-// 2D Transfrom of points
+// 2D Transform of points
 std::tuple<double, double> CoordinateTransformation::Transform(const std::tuple<double, double>& in) const
 {
   double outX, outY;

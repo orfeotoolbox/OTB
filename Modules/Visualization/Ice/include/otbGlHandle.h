@@ -73,7 +73,7 @@ public:
   /** Copy constructor (disabled). */
   Handle( Handle const & ) = delete;
 
-  /** Assignement operator (disabled). */
+  /** Assignment operator (disabled). */
   Handle & operator = ( Handle const & ) = delete;
 
   /** Move constructor. */

@@ -253,7 +253,7 @@ bool GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::GetIn
     return false;
   }
 
-  // Swich projection refs
+  // Switch projection refs
   inverseTransform->SetInputProjectionRef(m_OutputProjectionRef);
   inverseTransform->SetOutputProjectionRef(m_InputProjectionRef);
 
@@ -261,7 +261,7 @@ bool GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::GetIn
   inverseTransform->SetInputKeywordList(m_OutputKeywordList);
   inverseTransform->SetOutputKeywordList(m_InputKeywordList);
 
-  // Switch dictionnaries
+  // Switch dictionaries
   inverseTransform->SetInputDictionary(m_OutputDictionary);
   inverseTransform->SetOutputDictionary(m_InputDictionary);
 

@@ -59,7 +59,7 @@ OTBGdalAdapters_EXPORT bool operator==(Layer const& lhs, Layer const& rhs);
 
 /**\ingroup gGeometry
  * \class Layer
- * \brief %Layer of geometric objets.
+ * \brief %Layer of geometric objects.
  *
  * It provides an encapsulation of OGR classes. In that particular case, it's an
  * encapsulation of \c OGRLayer.

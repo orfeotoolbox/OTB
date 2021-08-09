@@ -139,7 +139,7 @@ private:
   /** Neighbours maps for each thread */
   std::vector<NeighboursMapType> m_NeighboursMapsTmp;
 
-  /** LUT giving correspondance between labels in the original segmentation
+  /** LUT giving correspondence between labels in the original segmentation
    * and the merged labels */
   LUTType m_LUT;
 };

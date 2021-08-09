@@ -33,7 +33,7 @@ void           VectorPrediction<RegressionMode>::DoInit()
 {
   DoInitSpecialization();
 
-  // Assert that the all needed parameters have ben definied in DoInitSpecialization
+  // Assert that the all needed parameters have ben defined in DoInitSpecialization
   assert(GetParameterByKey("in") != nullptr);
   assert(GetParameterByKey("instat") != nullptr);
   assert(GetParameterByKey("model") != nullptr);

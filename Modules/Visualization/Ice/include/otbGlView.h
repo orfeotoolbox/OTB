@@ -432,7 +432,7 @@ GlView
     spacing[ 1 ] = -spacing[ 1 ];
 
   //
-  // Chech outputs.
+  // Check outputs.
   assert_NaN( center[ 0 ] );
   assert_NaN( center[ 1 ] );
 

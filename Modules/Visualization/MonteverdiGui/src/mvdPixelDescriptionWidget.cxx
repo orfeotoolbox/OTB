@@ -90,7 +90,7 @@ PixelDescriptionWidget::~PixelDescriptionWidget()
 void PixelDescriptionWidget::SetupUI()
 {
   //
-  // Cartographic coordiantes
+  // Cartographic coordinates
   m_CartographicRootItem = new QTreeWidgetItem(GetDescriptionTree());
   // m_CartographicRootItem->setText(0, tr("Cartographic"));
   m_CartographicRootItem->setExpanded(true);

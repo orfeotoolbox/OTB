@@ -65,7 +65,7 @@ namespace otb
  * "Information Measures of Correlation IC2" \f$ = f_{13} = \sqrt{1 - \exp{-2}|HXY2 - f_9|} \f$
  *
  * Above, \f$ \mu =  \f$ (weighted pixel average) \f$ = \sum_{i, j}i \cdot g(i, j) =
- * \sum_{i, j}j \cdot g(i, j) \f$ (due to matrix simmetry), and
+ * \sum_{i, j}j \cdot g(i, j) \f$ (due to matrix symmetry), and
  *
  * \f$ g_{x+y}(k) =  \sum_{i}\sum_{j}g(i)\f$ where \f$ i+j=k \f$ and \f$ k = 2, 3, .., 2N_{g}  \f$ and
  *

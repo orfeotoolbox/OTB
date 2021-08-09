@@ -849,7 +849,7 @@ void DisparityMapToDEMFilter<TDisparityImage, TInputImage, TOutputDEMImage, TEpi
     outputDEM->TransformPhysicalPointToContinuousIndex(midPoint2D, midIndex);
     typename DEMImageType::IndexType cellIndex;
 
-    // TODO JGT check if cellIndex should be calculed from the center of the pixel
+    // TODO JGT check if cellIndex should be calculated from the center of the pixel
     // TransformContinuousIndexToPhysicalPoint with index [0,0] returns Origin of image
     // TransformContinuousIndexToPhysicalPoint with index [0.5,0.5] returns a slight difference from Origin of image
     cellIndex[0] = static_cast<int>(std::floor(midIndex[0] + 0.5));

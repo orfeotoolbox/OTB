@@ -145,7 +145,7 @@ private:
  * \param[in] InputGeometriesSet
  * \param[in] InputKeywordList if the \em InputGeometriesSet doesn't have a
  * projection reference (i.e. a \c OGRSpatialReference), this filter will use
- * the \em InputKeywordList to describe the positionning of the geometries set.
+ * the \em InputKeywordList to describe the positioning of the geometries set.
  *
  * \param[in,out] OutputGeometriesSet This set of geometries needs to be given to
  * the filter (in order to set the exact output file/OGR driver). However the

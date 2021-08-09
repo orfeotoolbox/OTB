@@ -182,7 +182,7 @@ public:
   //     return AccessorType( this->GetNumberOfComponentsPerPixel() );
   //   }
 
-  //   /** Return the Pixel Accesor object */
+  //   /** Return the Pixel Accessor object */
   //   const AccessorType GetPixelAccessor( void ) const
   //   {
   //     return AccessorType( this->GetNumberOfComponentsPerPixel() );
@@ -231,7 +231,7 @@ namespace otb
 {
 
 // Prevent implicit instantiation of common types to improve build performance
-// Explicit instanciations are provided in the .cxx
+// Explicit instantiations are provided in the .cxx
 extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<unsigned int, 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<int, 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE VectorImage<unsigned char, 2>;

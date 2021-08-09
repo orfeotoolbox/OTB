@@ -179,7 +179,7 @@ protected:
   {
   }
 
-  /** Desctructor */
+  /** Destructor */
   ~MassOfBelief() override
   {
   }

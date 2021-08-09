@@ -113,7 +113,7 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitLibSVMParams()
     SetParameterDescription("classifier.libsvm.eps",
                             "The distance between feature vectors from the training set and "
                             "the fitting hyper-plane must be less than Epsilon. For outliers"
-                            "the penalty mutliplier is set by C.");
+                            "the penalty multiplier is set by C.");
   }
 }
 
