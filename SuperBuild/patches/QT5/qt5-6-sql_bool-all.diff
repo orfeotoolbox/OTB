@@ -1,0 +1,15 @@
+diff -burN  QT5-orig/qtbase/src/plugins/sqldrivers/mysql/qsql_mysql.cpp QT5/qtbase/src/plugins/sqldrivers/mysql/qsql_mysql.cpp
+--- QT5-orig/qtbase/src/plugins/sqldrivers/mysql/qsql_mysql.cpp	2021-08-09 12:31:58.683361911 +0200
++++ QT5/qtbase/src/plugins/sqldrivers/mysql/qsql_mysql.cpp	2021-08-09 12:50:06.263308909 +0200
+@@ -76,6 +76,11 @@
+ #  define Q_CLIENT_MULTI_STATEMENTS 0
+ #endif
+ 
++// Commit 818ab021f5fbeeddaed001efd8716907e735bd71 from QT, integrated in QT 5.12
++// MySQL above version 8 removed my_bool typedef while MariaDB kept it,
++// by redefining it we can regain source compatibility.
++using my_bool = decltype(mysql_stmt_bind_result(nullptr, nullptr));
++
+ QT_BEGIN_NAMESPACE
+ 
+ class QMYSQLDriverPrivate : public QSqlDriverPrivate
