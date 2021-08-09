@@ -22,7 +22,7 @@ set -e
 
 # verify basic tools are here (install_name_tool is specific macOS)
 which sh >/dev/null 2>&1 || ret=$?
-if [ ! -z "$ret" ] ; then echo "ERROR: Missing tool 'which'"; exit 1 ; fi
+if [ -n "$ret" ] ; then echo "ERROR: Missing tool 'which'"; exit 1 ; fi
 for tool in dirname find file grep cut sed chmod cat readlink install_name_tool ; do
   if [ -z "$(which $tool)" ] ; then
     echo "ERROR: Missing tool '${tool}'"
