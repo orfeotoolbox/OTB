@@ -19,7 +19,7 @@
 #
 
 set(DOCUMENTATION "This module contains tools related to SAR calibration
-(classes to compute the backscatter or the brigthness of a given pixel and so on).")
+(classes to compute the backscatter or the brightness of a given pixel and so on).")
 
 otb_module(OTBSARCalibration
   DEPENDS

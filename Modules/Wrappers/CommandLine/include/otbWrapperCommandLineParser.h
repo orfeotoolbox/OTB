@@ -58,10 +58,10 @@ public:
   /** Parse result enum */
   typedef enum { OK, NOMODULENAME, MULTIPLEMODULENAME, INVALIDMODULENAME, NOMODULEPATH, INVALIDMODULEPATH, DEFAULT } ParseResultType;
 
-  /** Get the attribut associatd to a key (list of element after the key and before the next "--") as a vector of string. */
+  /** Get the attribut associated to a key (list of element after the key and before the next "--") as a vector of string. */
   std::vector<std::string> GetAttribut(const std::string& key, const std::string& exp);
   std::vector<std::string> GetAttribut(const std::string& key, const std::vector<std::string>& exp);
-  /** Get the attribut associatd to a key (list of element after the key and before the next "--") as a string separated by spaces. */
+  /** Get the attribut associated to a key (list of element after the key and before the next "--") as a string separated by spaces. */
   std::string GetAttributAsString(const std::string& key, const std::string& exp);
   std::string GetAttributAsString(const std::string& key, const std::vector<std::string>& exp);
   /** Look if a given key is in an expression. */

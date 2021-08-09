@@ -80,7 +80,7 @@ public:
     return ::std::sqrt(Superclass::Evaluate(x1, x2));
   }
 
-  /** Gets the cooridnate distance between a and b. NOTE: a and b
+  /** Gets the coordinate distance between a and b. NOTE: a and b
   * should be type of component */
   double Evaluate(const ValueType& a, const ValueType& b) const
   {

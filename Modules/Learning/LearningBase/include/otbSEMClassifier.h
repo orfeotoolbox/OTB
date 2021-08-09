@@ -134,7 +134,7 @@ public:
   ClassLabelVectorType& GetClassLabels();
 
   /** Set/Gets the maximum number of iterations. When the optimization
-   * process reaches the maximum number of interations, even if the
+   * process reaches the maximum number of iterations, even if the
    * class parameters aren't converged, the optimization process
    * stops. */
   itkSetMacro(MaximumIteration, int);
@@ -158,7 +158,7 @@ public:
   typedef enum { CONVERGED = 0, NOT_CONVERGED = 1 } TerminationCodeType;
 
   /** Set/Get the termination threshold (ratio of the number of sample that
-   * change affected class during interation over the total number of
+   * change affected class during iteration over the total number of
    * samples (def is 1E-5) */
   itkSetMacro(TerminationThreshold, double);
   itkGetMacro(TerminationThreshold, double);

@@ -236,7 +236,7 @@ namespace ossimplugins
      if (!ret)
        {
 	 ossimNotify(ossimNotifyLevel_WARN) << 
-	   "Probleme with metadata extraction!\n";
+	   "Problem with metadata extraction!\n";
 	 return false;
        }
     

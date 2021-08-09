@@ -183,7 +183,7 @@ protected:
 
   /** ComputeDescriptor
    *
-   * \param neigh current scale neighboorhood
+   * \param neigh current scale neighborhood
    * \param O orientation assigned to the key point
    * \param S scale
    *
@@ -229,7 +229,7 @@ private:
   /** Number of shifted keypoints*/
   unsigned int m_DifferentSamplePoints;
 
-  /** Offsets vector, conveniance datas */
+  /** Offsets vector, convenience data */
   OffsetType m_Offsets[8];
 };
 }

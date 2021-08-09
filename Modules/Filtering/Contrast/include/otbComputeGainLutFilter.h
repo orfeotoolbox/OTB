@@ -34,7 +34,7 @@ namespace otb
  *  is to compute a look up table filled with gain that need to be applied
  *  on the input to match the target histogram. To keep consistency with
  *  the other parts of the algorithm it needs the minimum and maximum value
- *  of the input image and also the theorical number of pixel per histogram.
+ *  of the input image and also the theoretical number of pixel per histogram.
  *
  * \ingroup OTBContrast
  */
@@ -90,7 +90,7 @@ private:
   ComputeGainLutFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  /** Post-process the look up tabe to get a gain instead of a simple value */
+  /** Post-process the look up table to get a gain instead of a simple value */
   OutputPixelType PostProcess(unsigned int countMapValue, unsigned int countValue);
 
   /** Equalized input histogram regarding the target and filling the

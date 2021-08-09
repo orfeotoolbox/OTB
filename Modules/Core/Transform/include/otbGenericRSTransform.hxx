@@ -247,7 +247,7 @@ bool GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::GetIn
     return false;
   }
 
-  // Swich projection refs
+  // Switch projection refs
   inverseTransform->SetInputProjectionRef(m_OutputProjectionRef);
   inverseTransform->SetOutputProjectionRef(m_InputProjectionRef);
 

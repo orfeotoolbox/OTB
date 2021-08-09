@@ -168,7 +168,7 @@ protected:
   /** Value */
   boost::optional<T> m_Value;
 
-  /** Default value (when appliable) */
+  /** Default value (when applicable) */
   ScalarType m_DefaultValue;
 
   /** Minimum value */

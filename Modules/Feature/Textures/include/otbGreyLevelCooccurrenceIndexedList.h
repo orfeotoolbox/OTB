@@ -102,7 +102,7 @@ public:
   typedef std::pair<IndexType, FrequencyType> CooccurrencePairType;
 
   /** Lookup array used to store the index of the given pixel pair. Size of
-    * LookupAray is equal to the nbins * nbins. Values in the array represents 1D
+    * LookupArray is equal to the nbins * nbins. Values in the array represents 1D
     * index of the IndexType*/
   typedef itk::Array<int> LookupArrayType;
 

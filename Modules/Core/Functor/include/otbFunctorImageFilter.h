@@ -63,7 +63,7 @@ struct IsNeighborhood<const itk::ConstNeighborhoodIterator<VectorImage<T>>&> : s
  * \struct IsSuitableType
  * \brief Helper struct to check if a type can be used as pixel type.
  *
- * ::value maps to true if type can be used and false otherwhise.
+ * ::value maps to true if type can be used and false otherwise.
  */
 template <class T>
 struct IsSuitableType : std::is_scalar<T>::type
@@ -441,7 +441,7 @@ auto NewFunctorFilter(Functor f, itk::Size<2> radius)
 /**
  * \struct NumberOfOutputBandsDecorator
  * \brief This struct allows forwarding the operator of template
- *        parameter, while adding number of ouptut components service.
+ *        parameter, while adding number of output components service.
  *
  * Its purpose is to enable the use of lambda or functor with
  * Outputsize() method with FunctorImageFilter.
@@ -469,7 +469,7 @@ private:
 /**
  * brief This helper method builds a fully functional
  * FunctorImageFilter from a functor instance which does not provide
- * the OutputSize() service, or a lambda, returing a VariableLengthVector
+ * the OutputSize() service, or a lambda, returning a VariableLengthVector
  *
  * \param[in] f the Functor to build the filter from
  * \param[in] numberOfOutputBands The number of output bands that

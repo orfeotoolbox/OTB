@@ -411,7 +411,7 @@ namespace ossimplugins
 	const double lat = getDoubleFromFirstNode(**itNode, attLat);
 	const double lon = getDoubleFromFirstNode(**itNode, attLon);
 
-	// Retrive azimuth/range time and incidence angle
+	// Retrieve azimuth/range time and incidence angle
 	const std::string aziTimeUTC = getTextFromFirstNode(**itNode, "azimuthTimeUTC");
 	const double rangeTime = getDoubleFromFirstNode(**itNode, "rangeTime");
 	const double incAngle = getDoubleFromFirstNode(**itNode, "incidenceAngle");
@@ -542,10 +542,10 @@ namespace ossimplugins
 	polCoefVector.clear();
 	coeffNodes.clear();
 
-	// Retieve acquisition time
+	// Retrieve acquisition time
 	const TimeType timeUTC = getTimeFromFirstNode(**itNode, attTimeUTC);
 
-	// Retrive the dopplerRatePolynomial Node
+	// Retrieve the dopplerRatePolynomial Node
 	polNode = itNode[0]->findFirstNode("dopplerRatePolynomial");
 	
 	// Retrieve reference point
@@ -637,7 +637,7 @@ namespace ossimplugins
 	    polCoefVector.clear();
 	    coeffNodes.clear();
 	    
-	    // Retieve acquisition time
+	    // Retrieve acquisition time
 	    const TimeType timeUTC = getTimeFromFirstNode(**itNode, attTimeUTC);
 	
 	    // Retrtive he combinedDoppler Node
@@ -669,7 +669,7 @@ namespace ossimplugins
 
 	    assert((polCoefVector.size() == (degree + 1)) && "The doppler centroid record has an incoherent size.");
     
-	    // Add the metadata inot our keywordlist
+	    // Add the metadata into our keywordlist
 	    char prefix[256];
 	    //Doppler_Centroid_Coefficients.dop_coef_list;
 	    s_printf(prefix, "dopplerCentroid.dop_coef_list%d.", index);
@@ -734,7 +734,7 @@ namespace ossimplugins
 	    polCoefVector.clear();
 	    coeffNodes.clear();
 
-	    // Retieve acquisition time
+	    // Retrieve acquisition time
 	    //const TimeType timeUTC = getTimeFromFirstNode(**itNode, attTimeUTC);
 	    std::string timeUTC = getTextFromFirstNode(**itNode, attTimeUTC);
 
@@ -768,7 +768,7 @@ namespace ossimplugins
 
 	    assert((polCoefVector.size() == (degree + 1)) && "The noise record has an incoherent size.");
 
-	    // Add the metadata inot our keywordlist
+	    // Add the metadata into our keywordlist
 	    char prefix[256];
 	    //Doppler_Centroid_Coefficients.dop_coef_list;
 	    s_printf(prefix, "noise[%d]imageNoise.", index);

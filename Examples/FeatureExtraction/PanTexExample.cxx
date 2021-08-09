@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
   reader->SetFileName(infname);
   writer->SetFileName(outfname);
 
-  // We can now instatiate the filter.
+  // We can now instantiate the filter.
 
   PanTexTextureFilterType::Pointer textureFilter = PanTexTextureFilterType::New();
 

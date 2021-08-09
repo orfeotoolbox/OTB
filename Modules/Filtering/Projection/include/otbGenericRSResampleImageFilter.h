@@ -39,10 +39,10 @@ namespace otb
  *  system information listed below. This class can resample the input to an
  *  output image with the Size/Origin/Spacing/StartIndex defined by
  *  the user. Note that there are no default values for all the
- *  parmeters, so it is mandatory to set correct parameters to have a
+ *  parameters, so it is mandatory to set correct parameters to have a
  *  correct result.
  *
- *  The methods SetOutputParmatersFromMap can estimate the output
+ *  The methods SetOutputParametersFromMap can estimate the output
  *  image parameters Size/Origin/Spacing so the hole image can be
  *  reprojected without setting any output parameter.
  *
@@ -195,7 +195,7 @@ public:
   /** Useful to set the output parameters from an existing image*/
   void SetOutputParametersFromImage(const ImageBaseType* image);
 
-  /** Useful to set output parmaters form an existing image with type
+  /** Useful to set output parameters form an existing image with type
     * different from input or output image
     */
   template <class TImageType>

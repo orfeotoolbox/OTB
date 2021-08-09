@@ -90,7 +90,7 @@ int otbGCPsToRPCSensorModelImageFilterCheckRpcModel(int argc, char* argv[])
 
   // Instancicate a GenericRSTransform in order to transform the
   // indexes, using the rpcModel estimated, into geographical
-  // coordiantes.
+  // coordinates.
   // The test will check for nan coordinates, and the distance between
   // geographical coordinates.
 

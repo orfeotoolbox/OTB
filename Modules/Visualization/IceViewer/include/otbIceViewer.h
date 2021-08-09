@@ -23,7 +23,7 @@
 
 /* Include windows.h before glfw,
  * since GLFW redefines APIENTRY if not already defined,
- * while windef.h unconditionnally defines it
+ * while windef.h unconditionally defines it
  */
 #if defined(WIN32)
 #include <windows.h>

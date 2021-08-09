@@ -196,7 +196,7 @@ void StreamingMultibandFeatherMosaicFilter<TInputImage, TOutputImage, TDistanceI
   // too...)
   // Because LF gaussian filters have the biggest kernel, one must
   // set an offset equal to this kernel size, in geographic unit. This will
-  // avoid the use of blured "no data" values
+  // avoid the use of blurred "no data" values
   const double maximumSpacingInXY  = std::max(std::abs(this->GetOutputSpacing()[0]), std::abs(this->GetOutputSpacing()[1]));
   const double extrapolationOffset = ((double)m_SingleFilter.at(0).at(m_NumberOfLevels - 1)->GetMaximumKernelWidth()) * maximumSpacingInXY;
   itkDebugMacro(<< "Extrapolation offset: " << extrapolationOffset);

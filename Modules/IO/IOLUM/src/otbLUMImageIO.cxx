@@ -402,7 +402,7 @@ void LUMImageIO::WriteImageInformation()
 
   m_File.seekp(0, std::ios::beg);
   char* value = new char[headerLength];
-  // Write Header line and all file (whitout information)
+  // Write Header line and all file (without information)
   for (unsigned int numLigne = 0; numLigne < (m_Dimensions[1] + 1); numLigne++)
   {
     m_File.write(value, headerLength);

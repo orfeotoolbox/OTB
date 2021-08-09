@@ -24,7 +24,7 @@
 // objects.
 //
 // Most of the time, you won't be interested in the whole area and would like
-// to focuss only on the area corresponding to your satellite image.
+// to focus only on the area corresponding to your satellite image.
 //
 // The \doxygen{otb}{VectorDataExtractROI} is able to extract the area corresponding
 // to your satellite image, even if the image is still in sensor geometry (provided

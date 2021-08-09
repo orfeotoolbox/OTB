@@ -95,7 +95,7 @@ int otbVectorDataToLabelMapFilter(int argc, char* argv[])
   myFilter->SetOrigin(origin);
   myFilter->SetSpacing(reader->GetOutput()->GetSpacing());
 
-  // Translate the LabelMap in a labeld image
+  // Translate the LabelMap in a labelled image
   LabelMapToLabelImageFilterType::Pointer labelMapToImageFilter = LabelMapToLabelImageFilterType::New();
   labelMapToImageFilter->SetInput(myFilter->GetOutput());
 

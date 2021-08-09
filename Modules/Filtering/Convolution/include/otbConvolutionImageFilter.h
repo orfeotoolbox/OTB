@@ -42,7 +42,7 @@ namespace otb
  * By default, the input filter is not normalized but it can be using the
  * NormalizeFilterOn() method.
  *
- * This filter allows the user to choose the boundary condtions in the template parameters.
+ * This filter allows the user to choose the boundary conditions in the template parameters.
  Default boundary conditions are zero flux Neumann boundary conditions.
  *
  * An optimized version of this filter using FFTW is available in the Orfeo ToolBox and

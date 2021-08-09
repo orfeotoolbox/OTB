@@ -75,7 +75,7 @@ public:
   /** Gets the distance between x1 and x2 */
   double Evaluate(const TVector& x1, const TVector& x2) const override;
 
-  /** Gets the cooridnate distance between a and b. NOTE: a and b
+  /** Gets the coordinate distance between a and b. NOTE: a and b
   * should be type of component */
   double Evaluate(const ValueType& a, const ValueType& b) const;
 

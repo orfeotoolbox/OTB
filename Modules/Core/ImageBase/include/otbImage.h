@@ -177,7 +177,7 @@ public:
   //     return AccessorType();
   //   }
 
-  //   /** Return the Pixel Accesor object */
+  //   /** Return the Pixel Accessor object */
   //   const AccessorType GetPixelAccessor( void ) const
   //   {
   //     return AccessorType();
@@ -273,7 +273,7 @@ namespace otb
 {
 
 // Prevent implicit instantiation of common types to improve build performance
-// Explicit instanciations are provided in the .cxx
+// Explicit instantiations are provided in the .cxx
 extern template class OTBImageBase_EXPORT_TEMPLATE Image<unsigned int, 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE Image<int, 2>;
 extern template class OTBImageBase_EXPORT_TEMPLATE Image<unsigned char, 2>;

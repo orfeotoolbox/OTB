@@ -29,7 +29,7 @@
 namespace otb
 {
 /** \class GDALImageIOFactory
- * \brief Creation d'un instance d'un objet GDALImageIO utilisant les object factory.
+ * \brief Create an instance of GDALImageIO through the object factory.
  *
  * \ingroup OTBIOGDAL
  */

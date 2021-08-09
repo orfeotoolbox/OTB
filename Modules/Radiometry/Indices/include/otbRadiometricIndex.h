@@ -202,7 +202,7 @@ protected:
   }
 
 private:
-  // Explicitely disable default constructor
+  // Explicitly disable default constructor
   RadiometricIndex() = delete;
 
   /// An array storing the required status for each band

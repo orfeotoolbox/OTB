@@ -915,7 +915,7 @@ bool ossimOgcWktTranslator::toOssimKwl( const ossimString& wktString,
             << "ossimOgcWktTranslator::toOssimKwl DEBUG:\n"
             << "Projection conversion to OSSIM not supported !!!!!!!!!\n"
             << "Please send the following string to the development staff\n" 
-            << "to be added to the transaltion to OSSIM\n"
+            << "to be added to the translation to OSSIM\n"
             << wkt << std::endl;
       }
       return false;

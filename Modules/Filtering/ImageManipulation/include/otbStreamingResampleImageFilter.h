@@ -42,7 +42,7 @@ namespace otb
  * otb::VectorImage using a transformation set with SetTransform()
  * method. First, a displacement grid, with a spacing m_DisplacementGridSpacing
  * and a size relative to this spacing, is built. Then, the image is
- * wraped using this displacement grid. The size (SetOutputSize()), the
+ * wrapped using this displacement grid. The size (SetOutputSize()), the
  * spacing (SetOutputSpacing()), the start index (SetOutputIndex()) and
  * the  interpolator (SetInterpolator()) and the origin (SetOrigin())
  * can be set using the method between brackets.

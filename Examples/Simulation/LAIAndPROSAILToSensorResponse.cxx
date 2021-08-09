@@ -344,7 +344,7 @@ protected:
 } // namespace Functor
 
 // \code{TernaryFunctorImageFilterWithNBands} class is defined here.
-// This class inherits form \doxygen{itk}{TernaryFunctorImageFilter} with additional nuber of band parameters.
+// This class inherits form \doxygen{itk}{TernaryFunctorImageFilter} with additional number of band parameters.
 // It's implementation is done to process Label, LAI, and mask image with Simulation functor.
 
 template <class TInputImage1, class TInputImage2, class TInputImage3, class TOutputImage, class TFunctor>

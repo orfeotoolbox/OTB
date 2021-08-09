@@ -120,8 +120,7 @@ private:
   MSTARImageIO(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  /** Methode permettant de recuperer le format et le nom de l'image a partir du
-  nom d'un fichier image. */
+  /** Fetch the format and name of the image from it's name. */
   float byteswap_SR_IR(unsigned char* pointer);
   unsigned short byteswap_SUS_IUS(unsigned char* pointer);
   int CheckByteOrder(void);

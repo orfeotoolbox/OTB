@@ -160,7 +160,7 @@ void ExtendedFilenameToWriterOptions::SetExtendedFileName(const std::string& ext
     }
     else
     {
-      itkWarningMacro("Unkwown value " << map["streaming:type"] << " for streaming:type option. Available values are auto,tiled,stripped.");
+      itkWarningMacro("Unknown value " << map["streaming:type"] << " for streaming:type option. Available values are auto,tiled,stripped.");
     }
   }
 
@@ -173,7 +173,7 @@ void ExtendedFilenameToWriterOptions::SetExtendedFileName(const std::string& ext
     }
     else
     {
-      itkWarningMacro("Unkwown value " << map["streaming:sizemode"] << " for streaming:sizemode option. Available values are auto,nbsplits,height.");
+      itkWarningMacro("Unknown value " << map["streaming:sizemode"] << " for streaming:sizemode option. Available values are auto,nbsplits,height.");
     }
   }
 
@@ -196,7 +196,7 @@ void ExtendedFilenameToWriterOptions::SetExtendedFileName(const std::string& ext
     }
     else
     {
-      itkWarningMacro("Unkwown value " << map["box"] << " for image region to write. Must be 'xmin ymin sizex sizey', with whitespace as separator");
+      itkWarningMacro("Unknown value " << map["box"] << " for image region to write. Must be 'xmin ymin sizex sizey', with whitespace as separator");
     }
   }
 
@@ -212,7 +212,7 @@ void ExtendedFilenameToWriterOptions::SetExtendedFileName(const std::string& ext
     }
     else
     {
-      itkWarningMacro("Unkwown value "
+      itkWarningMacro("Unknown value "
                       << map["bands"]
                       << " for band range. Expect a list of tokens separated with comma (each token being a single band index or a range in the form x:y)");
     }

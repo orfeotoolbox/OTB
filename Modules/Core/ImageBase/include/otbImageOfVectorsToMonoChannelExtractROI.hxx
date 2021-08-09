@@ -50,7 +50,7 @@ void ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>::PrintSelf
  * the pipeline execution model.  The original documentation of this
  * method is below.
  *
- * \sa ProcessObject::GenerateOutputInformaton()
+ * \sa ProcessObject::GenerateOutputInformation()
  */
 template <class TInputImage, class TOutputImage>
 void ImageOfVectorsToMonoChannelExtractROI<TInputImage, TOutputImage>::GenerateOutputInformation()

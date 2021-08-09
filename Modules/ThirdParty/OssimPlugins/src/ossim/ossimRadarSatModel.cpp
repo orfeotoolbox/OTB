@@ -326,7 +326,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
 
         /*
          * Leader file path construction from the DAT file path
-         * Warning : the filename case has to be homogenous
+         * Warning : the filename case has to be homogeneous
          */
         std::string leader_file = dataFilePath;
         std::string::size_type loc = leader_file.find( "DAT_01", 0 );
@@ -366,7 +366,7 @@ bool ossimRadarSatModel::open(const ossimFilename& file)
 
         /*
          * Trailer file path construction from the DAT file path
-         * Warning : the filename case has to be homogenous
+         * Warning : the filename case has to be homogeneous
          */
         std::string trailer_file = dataFilePath;
         loc = trailer_file.find( "DAT_01", 0 );

@@ -169,7 +169,7 @@ void TaskProgressDialog::OnExceptionRaised(QString what)
 /*******************************************************************************/
 void TaskProgressDialog::OnObjectDestroyed(QObject* object)
 {
-  // qDebug() << this << "::OnObjectDestryed(" << object << ")";
+  // qDebug() << this << "::OnObjectDestroyed(" << object << ")";
 
   assert(object == m_BackgroundTask);
 
@@ -180,7 +180,7 @@ void TaskProgressDialog::OnObjectDestroyed(QObject* object)
     // Forget background-task.
     m_BackgroundTask = NULL;
 
-    // Accept QDialog te prevent locking the UI.
+    // Accept QDialog to prevent locking the UI.
     accept();
   }
 }

@@ -33,7 +33,7 @@ namespace otb
  * \f$ \rho = 1/2*log((x-xc)^2+(y+yc)^2) \f$
  * \f$ \theta = asin(y-yc)/(\sqrt{(x-xc)^2+(y+yc)^2}) \f$
  *
- * In this implemenatation, theta is expressed in degree, and the result of the asin function
+ * In this implementation, theta is expressed in degree, and the result of the asin function
  * is clamped to the [0, 360] range. Please note that since the transform of the center has no meaning
  * it is rejected to the point [400, 0], which does not belong to this range.  This is done to provide
  * a coordinate not likely to belong to a log-polar image buffer.

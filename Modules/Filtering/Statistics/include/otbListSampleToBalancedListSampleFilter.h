@@ -35,7 +35,7 @@ namespace Statistics
  *  fair distribution of learning samples.
  *
  * The maximum number of samples with same labels are first
- * computed. This maximum number by the m_BalacingFactor determines
+ * computed. This maximum number by the m_BalancingFactor determines
  * the final number of samples belonging to each label.
  *
  * Mean and Variance are set via the methods SetMean() and SetVariance().

@@ -191,7 +191,7 @@
 #
 # The macro ``SOMELIB_EXPORT_TEMPLATE`` should be used when declaring template
 # classes or functions. The macro ``SOMELIB_EXPORT_EXPLICIT_TEMPLATE`` should be
-# used when compiling explicit instanciations of template classes/functions.
+# used when compiling explicit instantiations of template classes/functions.
 
 include(CheckCCompilerFlag)
 include(CheckCXXCompilerFlag)

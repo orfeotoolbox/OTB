@@ -33,7 +33,7 @@
 //  the scenes by a family of classes of type
 //  \doxygen{itk}{ImageIO}. Actually, the OTB image Readers and
 //  Writers are very similar to those of ITK, but provide new
-//  functionnalities which are specific to remote sensing images.
+//  functionalities which are specific to remote sensing images.
 //
 //  The first step for performing reading and writing is to include the
 //  following headers.

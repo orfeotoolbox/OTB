@@ -108,7 +108,7 @@ void KeyPointSetsMatchingFilter<TPointSet, TDistance>::GenerateData()
       // If the back matching option is on
       if (m_UseBackMatching)
       {
-        // Peform the back search
+        // Perform the back search
         NeighborSearchResultType searchResult2 = NearestNeighbor(dataMatch, ps1);
 
         // Test if back search finds the same match

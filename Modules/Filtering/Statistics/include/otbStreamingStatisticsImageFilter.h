@@ -35,7 +35,7 @@ namespace otb
  * \brief Compute min. max, variance and mean of an image using the output requested region.
  *
  *  This filter persists its temporary data. It means that if you Update it n times on n different
- * requested regions, the output statistics will be the statitics of the whole set of n regions.
+ * requested regions, the output statistics will be the statistics of the whole set of n regions.
  *
  * To reset the temporary data, one should call the Reset() function.
  *

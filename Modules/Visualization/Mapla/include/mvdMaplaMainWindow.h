@@ -196,7 +196,7 @@ private:
 private Q_SLOTS:
   /**
    * \brief Qt auto-connected slot which is called when
-   * 'File/Preferences' menu action is trigerred.
+   * 'File/Preferences' menu action is triggered.
    */
   void on_action_Preferences_triggered();
 };

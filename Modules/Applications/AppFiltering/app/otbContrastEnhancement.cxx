@@ -568,7 +568,7 @@ private:
     otbAppLogINFO(<< oss.str());
   }
 
-  // Prepare the first half of the pipe that is common to every methode of
+  // Prepare the first half of the pipe that is common to every method of
   // equalization
   void SetUpPipeline(unsigned int channel, const FloatImageType::Pointer input)
   {

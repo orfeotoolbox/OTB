@@ -20,7 +20,7 @@
 
 find_package(GLEW REQUIRED)
 
-# FIX: glew-config.cmake import GLEW::GLEW taget but does not necessarily set GLEW_LIBRARY
+# FIX: glew-config.cmake import GLEW::GLEW target but does not necessarily set GLEW_LIBRARY
 if(NOT GLEW_LIBRARY)
   get_target_property(GLEW_LIBRARY GLEW::GLEW IMPORTED_LOCATION_RELEASE)
 endif()

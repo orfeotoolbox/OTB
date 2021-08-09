@@ -104,7 +104,7 @@ private:
     std::string inputProjRef = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "mapproj");
 
     // Instantiate a GenericRSTransform
-    // Input : coordiante system picked up by the user
+    // Input : coordinate system picked up by the user
     // Output : WGS84 corresponding to epsg code 4326
     TransformType::Pointer transform = TransformType::New();
     transform->SetInputProjectionRef(inputProjRef);

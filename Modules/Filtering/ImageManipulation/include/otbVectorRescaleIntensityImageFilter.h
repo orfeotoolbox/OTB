@@ -51,7 +51,7 @@ public:
   VectorAffineTransform() : m_OutputMaximum(), m_OutputMinimum(), m_InputMinimum(), m_InputMaximum(), m_Gamma(1.)
   {
   }
-  /// Desctructor
+  /// Destructor
   virtual ~VectorAffineTransform()
   {
   }

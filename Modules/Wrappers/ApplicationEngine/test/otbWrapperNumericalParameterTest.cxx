@@ -186,19 +186,19 @@ int otbWrapperRAMParameterTest(int, char* [])
 
   if (parameter->GetMinimumValue() != min)
   {
-    std::cout << "Minimum Value : expexted " << min << " --> got " << parameter->GetMinimumValue() << std::endl;
+    std::cout << "Minimum Value : expected " << min << " --> got " << parameter->GetMinimumValue() << std::endl;
     return EXIT_FAILURE;
   }
 
   if (parameter->GetMaximumValue() != max)
   {
-    std::cout << "Maximum Value : expexted " << max << " --> got " << parameter->GetMaximumValue() << std::endl;
+    std::cout << "Maximum Value : expected " << max << " --> got " << parameter->GetMaximumValue() << std::endl;
     return EXIT_FAILURE;
   }
 
   if (parameter->GetDefaultValue() != def)
   {
-    std::cout << "Default Value : expexted " << def << " --> got " << parameter->GetDefaultValue() << std::endl;
+    std::cout << "Default Value : expected " << def << " --> got " << parameter->GetDefaultValue() << std::endl;
     return EXIT_FAILURE;
   }
 

@@ -146,7 +146,7 @@ void ExtractROIBase<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
  * the pipeline execution model.  The original documentation of this
  * method is below.
  *
- * \sa ProcessObject::GenerateOutputInformaton()
+ * \sa ProcessObject::GenerateOutputInformation()
  */
 template <class TInputImage, class TOutputImage>
 void ExtractROIBase<TInputImage, TOutputImage>::GenerateOutputInformation()

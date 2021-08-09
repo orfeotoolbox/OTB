@@ -161,7 +161,7 @@ private:
     tmpFilenames.push_back(outPath + std::string("_labelmap.tif"));
     tmpFilenames.push_back(outPath + std::string("_labelmap.geom"));
     ExecuteInternal("smoothing");
-    // in-memory connexion here (saves 1 additional update for foutpos)
+    // in-memory connection here (saves 1 additional update for foutpos)
     GetInternalApplication("segmentation")->SetParameterInputImage("in", GetInternalApplication("smoothing")->GetParameterOutputImage("fout"));
     GetInternalApplication("segmentation")->SetParameterInputImage("inpos", GetInternalApplication("smoothing")->GetParameterOutputImage("foutpos"));
     // temporary file output here

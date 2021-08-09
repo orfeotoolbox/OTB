@@ -81,7 +81,7 @@ public:
 
   /** This method creates the output layer in the OGRDataSource set by the user.
    * The name of the layer is set by \c SetLayerName .
-   * \note This methode must be called before the call of Update .
+   * \note This method must be called before the call of Update .
    */
   virtual void Initialize(void);
 

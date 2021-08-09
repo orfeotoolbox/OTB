@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
   writer->SetFileName(argv[2]);
 
   // Now that we have all the elements, we connect the pipeline,
-  // pluging the output of the reader to the input of the writer.
+  // plugging the output of the reader to the input of the writer.
 
   writer->SetInput(reader->GetOutput());
 

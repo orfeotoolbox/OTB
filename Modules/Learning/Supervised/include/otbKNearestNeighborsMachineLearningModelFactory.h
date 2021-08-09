@@ -29,7 +29,7 @@
 namespace otb
 {
 /** \class KNearestNeighborsMachineLearningModelFactory
- * \brief Creation d'un instance d'un objet KNearestNeighborsMachineLearningModel utilisant les object factory.
+ * \brief Create an instance of KNearestNeighborsMachineLearningModel through the object factory.
  *
  * \ingroup OTBSupervised
  */

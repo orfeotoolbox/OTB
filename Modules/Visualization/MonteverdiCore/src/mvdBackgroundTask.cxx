@@ -162,7 +162,7 @@ void BackgroundTask::OnObjectDestroyed(QObject* object)
 {
   // NOTE: Won't be called if deleteLater() is used!?
 
-  // qDebug() << this << "::OnObjectDestryed(" << object << ")";
+  // qDebug() << this << "::OnObjectDestroyed(" << object << ")";
 
   //
   // If worker instance is destroyed before this instance, simply

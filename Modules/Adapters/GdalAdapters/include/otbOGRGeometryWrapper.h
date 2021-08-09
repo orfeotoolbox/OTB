@@ -65,7 +65,7 @@ struct OTBGdalAdapters_EXPORT GeometryDeleter
  *
  * \note %OTB doesn't provide anything on top of \c OGRGeometryFactory to create
  * new factories. Please, never create new \c OGRGeometry by hand with
- * <tt>new</tt> operator as there is no garanty they'll get destroyed within the
+ * <tt>new</tt> operator as there is no guarantee they'll get destroyed within the
  * proper memory context when released from an owning \c OGRFeature.
  *
  * Thus, always use \c OGRGeometryFactory functions to create new geometries.

@@ -114,7 +114,7 @@ namespace otb
   }
 
 /** Testing macro. This macro doesn't throw a exception if the called command
- * generate a itk::ExceptionObject object. For alls others use cases, the macro
+ * generate a itk::ExceptionObject object. For all others use cases, the macro
  * generate a exception. */
 #define otbTestingCheckValidCommand(command)                                                \
   {                                                                                         \

@@ -222,7 +222,7 @@ void AbstractImageModel::RefreshHistogram(void* const context)
   HistogramModel::BuildContext* const buildContext =
     static_cast< HistogramModel::BuildContext* const >( context );
 
-  // Force writing histgram file by setting IsBeingStored flag.
+  // Force writing histogram file by setting IsBeingStored flag.
   buildContext->m_IsBeingStored = true;
 #endif
 

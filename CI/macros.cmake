@@ -88,7 +88,7 @@ macro(get_xdk)
     message( "clone_res = ${clone_res}" )
     message( "clone_out = ${clone_out}" )
     message( "clone_err = ${clone_err}" )
-    message( FATAL_ERROR "Problem in retreiving the archive")
+    message( FATAL_ERROR "Problem in retrieving the archive")
   endif()
 
   execute_process(

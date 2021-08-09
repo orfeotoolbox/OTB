@@ -29,4 +29,4 @@ otb_module(OTBCurl
     "${DOCUMENTATION}"
   )
 
-otb_module_activation_option("Enable curl based functionnalities" OFF)
+otb_module_activation_option("Enable curl based functionalities" OFF)

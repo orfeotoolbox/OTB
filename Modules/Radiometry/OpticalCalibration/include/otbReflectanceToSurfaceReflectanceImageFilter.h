@@ -73,7 +73,7 @@ public:
   }
 
   /**
-   * Set/Get Coefficient, computed from AtmosphericRadiativeTermsPointerType datas.
+   * Set/Get Coefficient, computed from AtmosphericRadiativeTermsPointerType data.
    */
   void SetCoefficient(double coef)
   {
@@ -85,7 +85,7 @@ public:
   }
 
   /**
-   * Set/Get Residu, computed from AtmosphericRadiativeTermsPointerType datas.
+   * Set/Get Residu, computed from AtmosphericRadiativeTermsPointerType data.
    */
   void SetResidu(double res)
   {
@@ -221,7 +221,7 @@ public:
   itkGetObjectMacro(AcquiCorrectionParameters, AcquiCorrectionParametersType);
 
 
-  /** Compute radiative terms if necessary and then update functors attributs. */
+  /** Compute radiative terms if necessary and then update functors attributes. */
   void GenerateParameters();
 
   /** Set/Get UseGenerateParameters. */

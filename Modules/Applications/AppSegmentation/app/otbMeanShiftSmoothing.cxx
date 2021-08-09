@@ -123,7 +123,7 @@ private:
 
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription(
-        "in", "The input image can be any single or multiband image. Beware of pontential imbalance between bands ranges as it may alter euclidean distance.");
+        "in", "The input image can be any single or multiband image. Beware of potential imbalance between bands ranges as it may alter euclidean distance.");
 
     AddParameter(ParameterType_OutputImage, "fout", "Spectral filtered output");
     SetParameterDescription("fout",

@@ -71,7 +71,7 @@ struct otb::internal::ProcessVisitor : boost::static_visitor<>
    *   choices made in the actual specialization of \c
    *   GeometriesToGeometriesFilter regarding layer options, layer spatial
    *   reference, geometries type, ...);
-   * - defines new fileds in the new layer;
+   * - defines new fields in the new layer;
    * - and finally processes the layer thanks to the polymorphic \c
    *   GeometriesToGeometriesFilter::DoProcessLayer() function.
    */
@@ -185,9 +185,9 @@ void otb::GeometriesToGeometriesFilter::GenerateData(void)
   this->DoFinalizeInitialization();
 
   InputGeometriesType::ConstPointer input = this->GetInput();
-  // assert(input && "Cann't filter to a nil geometries set");
+  // assert(input && "Can't filter to a nil geometries set");
   OutputGeometriesType::Pointer output = this->GetOutput();
-  assert(output && "Cann't filter a nil geometries set");
+  assert(output && "Can't filter a nil geometries set");
 
   // Start recursive processing
   otb::Stopwatch chrono = otb::Stopwatch::StartNew();

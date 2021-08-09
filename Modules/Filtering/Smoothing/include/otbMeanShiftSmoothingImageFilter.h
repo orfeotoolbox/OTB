@@ -432,7 +432,7 @@ private:
  * spatial bandwidth parameter to the spatial radius defining how many pixels
  * are in the processing window local to a pixel.
  *
- * MeanShifVector squared norm is compared with Threshold (set using Get/Set accessor) to define pixel convergence (1e-3 by default).
+ * MeanShiftVector squared norm is compared with Threshold (set using Get/Set accessor) to define pixel convergence (1e-3 by default).
  * MaxIterationNumber defines maximum iteration number for each pixel convergence (set using Get/Set accessor). Set to 4 by default.
  * ModeSearch is a boolean value, to choose between optimized and non optimized algorithm. If set to true (by default), assign mode value to each pixel on a
  * path covered in convergence steps.

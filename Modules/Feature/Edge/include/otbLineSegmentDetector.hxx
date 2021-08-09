@@ -133,7 +133,7 @@ void LineSegmentDetector<TInputImage, TPrecision>::GenerateData()
   /** Search the segments on the image by growing a region from a seed */
   this->LineSegmentDetection(CoordinateHistogram);
 
-  /** Transfert the detected segment to the output vector data */
+  /** Transfer the detected segment to the output vector data */
   this->ComputeRectangles();
 }
 
@@ -609,7 +609,7 @@ bool LineSegmentDetector<TInputImage, TPrecision>::GrowRegion(InputIndexType ind
   /** Add the point to the used list point*/
   this->SetPixelToUsed(index);
 
-  /** Neighborhooding */
+  /** Neighboring */
   typedef itk::ConstNeighborhoodIterator<OutputImageType> NeighborhoodIteratorType;
   typename NeighborhoodIteratorType::SizeType             radius;
   radius.Fill(1);
@@ -698,7 +698,7 @@ typename LineSegmentDetector<TInputImage, TPrecision>::RectangleType LineSegment
   double x = 0., y = 0.;
   double l_min = 0., l_max = 0., l = 0., w = 0., w_min = 0., w_max = 0.;
 
-  /** Neighborhooding again*/
+  /** Neighboring again*/
   typedef itk::ConstNeighborhoodIterator<OutputImageType> NeighborhoodIteratorType;
   typename NeighborhoodIteratorType::SizeType             radius;
   radius.Fill(0);
@@ -836,7 +836,7 @@ double LineSegmentDetector<TInputImage, TPrecision>::ComputeRegionOrientation(In
   double theta  = 0.;
   double weight = 0., sum = 0.;
 
-  /** Neighborhooding again*/
+  /** Neighboring again*/
   typedef itk::ConstNeighborhoodIterator<OutputImageType> NeighborhoodIteratorType;
   typename NeighborhoodIteratorType::SizeType             radius;
   radius.Fill(0);

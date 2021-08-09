@@ -394,7 +394,7 @@ public:
   }
 
 protected:
-  /** spectral threshold conditon*/
+  /** spectral threshold condition*/
   InternalPixelType m_SpectralThreshold;
   /** spatial threshold condition */
   unsigned int m_SpatialThreshold;

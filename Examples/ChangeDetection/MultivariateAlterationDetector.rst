@@ -1,7 +1,7 @@
 This example illustrates the class
 :doxygen:`MultivariateAlterationDetectorImageFilter`,
 which implements the Multivariate Alteration Change Detector
-algorithm. This algorihtm allows
+algorithm. This algorithm allows
 performing change detection from a pair multi-band images, including
 images with different number of bands or modalities. Its output is
 a multi-band image of change maps, each one being unccorrelated

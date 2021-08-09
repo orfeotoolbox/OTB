@@ -88,7 +88,7 @@ protected:
 
   /** ExtractROI
    *
-   * \sa ExtractROIBase::GenerateOutputInformaton()  */
+   * \sa ExtractROIBase::GenerateOutputInformation()  */
   void GenerateOutputInformation() override;
 
 private:

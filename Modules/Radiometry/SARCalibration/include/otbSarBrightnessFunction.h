@@ -32,7 +32,7 @@ namespace otb
  * \class SarBrightnessFunction
  * \brief Calculate the backscatter for the given pixel
  *
- * Calculate the brigthness value for the given pixel
+ * Calculate the brightness value for the given pixel
  *
  * If called with a ContinuousIndex or Point, the calculation is performed
  * at the nearest neighbor.

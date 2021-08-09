@@ -301,7 +301,7 @@ namespace otb
 {
 
 // Prevent implicit instantiation of common types to improve build performance
-// Explicit instanciations are provided in the .cxx
+// Explicit instantiations are provided in the .cxx
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<unsigned int, 2>>;
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<int, 2>>;
 extern template class OTBImageIO_EXPORT_TEMPLATE ImageFileWriter<Image<unsigned char, 2>>;
