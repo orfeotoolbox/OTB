@@ -376,6 +376,8 @@ deploy:
       artifacts: true
     - job: windows-10-build
       artifacts: true
+    - job: centos-xdk-build
+      artifacts: true
 
 update-archive:
   tags:
