@@ -126,29 +126,29 @@ otb_add_test(NAME trTvSarTransformTest_Sentinel1 COMMAND otbTransformTestDriver
   0.1 # ImgTol
   )
 
-otb_add_test(NAME trTvSarTransformTest_CosmoSkyMed COMMAND otbTransformTestDriver
-  otbSarTransformTest
-  LARGEINPUT{COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5} # Product
-  ${INPUTDATA}/cosmoskymed/cosmoskymed-1.gcp2 # GCP
-  0.02 # GeoTol
-  0.1 # ImgTol
-  )
+#otb_add_test(NAME trTvSarTransformTest_CosmoSkyMed COMMAND otbTransformTestDriver
+#  otbSarTransformTest
+#  LARGEINPUT{COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5} # Product
+#  ${INPUTDATA}/cosmoskymed/cosmoskymed-1.gcp2 # GCP
+#  0.02 # GeoTol
+#  0.1 # ImgTol
+#  )
 
-otb_add_test(NAME trTvSarTransformTest_TerraSar COMMAND otbTransformTestDriver
-  otbSarTransformTest
-  LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos} # Product
-  ${INPUTDATA}/terrasar/terrasar-1.gcp2 # GCP
-  0.02 # GeoTol
-  0.1 # ImgTol
-  )
+#otb_add_test(NAME trTvSarTransformTest_TerraSar COMMAND otbTransformTestDriver
+#  otbSarTransformTest
+#  LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos} # Product
+#  ${INPUTDATA}/terrasar/terrasar-1.gcp2 # GCP
+#  0.02 # GeoTol
+#  0.1 # ImgTol
+#  )
 
-otb_add_test(NAME trTvSarTransformTest_Radarsat2 COMMAND otbTransformTestDriver
-  otbSarTransformTest
-  LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HH.tif} # Product
-  ${INPUTDATA}/radarsat2/radarsat2-1.gcp2 # GCP
-  0.02 # GeoTol
-  0.1 # ImgTol
-  )
+#otb_add_test(NAME trTvSarTransformTest_Radarsat2 COMMAND otbTransformTestDriver
+#  otbSarTransformTest
+#  LARGEINPUT{RADARSAT2/ALTONA/Fine_Quad-Pol_Dataset/PK6621_DK406_FQ9_20080405_124900_HH_VV_HV_VH_SLC_Altona/imagery_HH.tif} # Product
+#  ${INPUTDATA}/radarsat2/radarsat2-1.gcp2 # GCP
+#  0.02 # GeoTol
+#  0.1 # ImgTol
+#  )
 
 otb_add_test(NAME bfTvLogPolarTransformResample COMMAND otbTransformTestDriver
   --compare-image ${EPSILON_7}  ${BASELINE}/bfLogPolarTransformResampleOutput.tif
