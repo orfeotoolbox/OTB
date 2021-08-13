@@ -79,7 +79,7 @@ void DecisionTree<AttributeValueType, LabelType>::AddBranch(AttributeValueType a
 }
 
 template <class AttributeValueType, class LabelType>
-LabelType DecisionTree<AttributeValueType, LabelType>::Decide(const ExampleType example)
+LabelType DecisionTree<AttributeValueType, LabelType>::Decide(const ExampleType& example)
 {
   AttributeValueType attrValue = example[m_Attribute];
 

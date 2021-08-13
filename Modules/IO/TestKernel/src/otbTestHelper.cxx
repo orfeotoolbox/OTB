@@ -1004,7 +1004,7 @@ int TestHelper::RegressionTestDiffFile(const char* testAsciiFileName, const char
           if (nbTokenRef > nbTokenTestSelected)
             ossTest << "|";
         }
-        else if (nbTokenRef < nbTokenTestSelected)
+        else
         {
           ossBase << "|";
           ossTest << lineTestSelected.substr(tokenTestSelected[nbTokenRef - 1].end() - lineTestSelected.begin());

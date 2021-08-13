@@ -30,13 +30,8 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage, class TFilter, class TParameter>
 ImageToProfileFilter<TInputImage, TOutputImage, TFilter, TParameter>::ImageToProfileFilter()
-{
-  m_InitialValue = 0;
-  m_Step         = 1;
-  m_ProfileSize  = 10;
-  m_OutputIndex  = 0;
-  m_Filter       = FilterType::New();
-}
+  : m_InitialValue(0), m_Step(1), m_ProfileSize(10), m_OutputIndex(0), m_Filter(FilterType::New())
+{}
 /**
  * GenerateOutputInformation method
  */

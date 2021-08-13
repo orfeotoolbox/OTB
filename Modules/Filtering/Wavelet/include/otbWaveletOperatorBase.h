@@ -87,16 +87,17 @@ public:
   itkStaticConstMacro(MotherWaveletOperator, MotherWaveletOperatorEnumType, TMotherWaveletOperator);
 
   /** Construction */
-  WaveletOperatorBase() : m_UpSampleFactor(0)
-  {
-    m_WaveletGenerator = WaveletGeneratorType::New();
-  }
+  WaveletOperatorBase() :
+    m_UpSampleFactor(0),
+    m_WaveletGenerator(WaveletGeneratorType::New())
+    {}
 
   /** Construction by copy */
-  WaveletOperatorBase(const Self& other) : itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>(other), m_UpSampleFactor(other.GetUpSampleFactor())
-  {
-    m_WaveletGenerator = WaveletGeneratorType::New();
-  }
+  WaveletOperatorBase(const Self& other) :
+    itk::NeighborhoodOperator<TPixel, VDimension, TAllocator>(other),
+    m_UpSampleFactor(other.GetUpSampleFactor()),
+    m_WaveletGenerator(WaveletGeneratorType::New())
+    {}
 
   ~WaveletOperatorBase() override
   {

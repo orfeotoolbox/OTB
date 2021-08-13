@@ -62,11 +62,11 @@ public:
   {
     m_WeightingValues = cont;
   }
-  void SetUpwardTransmittanceRatio(DoubleContainerType upwardTransmittanceRatio)
+  void SetUpwardTransmittanceRatio(DoubleContainerType& upwardTransmittanceRatio)
   {
     m_UpwardTransmittanceRatio = upwardTransmittanceRatio;
   }
-  void SetDiffuseRatio(DoubleContainerType diffuseRatio)
+  void SetDiffuseRatio(DoubleContainerType& diffuseRatio)
   {
     m_DiffuseRatio = diffuseRatio;
   }

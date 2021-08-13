@@ -65,8 +65,8 @@ public:
   std::string GetAttributAsString(const std::string& key, const std::string& exp);
   std::string GetAttributAsString(const std::string& key, const std::vector<std::string>& exp);
   /** Look if a given key is in an expression. */
-  bool IsAttributExists(const std::string key, const std::string& exp);
-  bool IsAttributExists(const std::string key, const std::vector<std::string>& exp);
+  bool IsAttributExists(const std::string &key, const std::string& exp);
+  bool IsAttributExists(const std::string &key, const std::vector<std::string>& exp);
 
   /** Get the paths executables in an expression. Store the list in a vector of string. */
   CommandLineParser::ParseResultType GetPaths(std::vector<std::string>& paths, const std::string& exp);

@@ -73,9 +73,9 @@ public:
   {
   }
   GDALDataTypeWrapper(const GDALDataTypeWrapper& w)
-  {
-    pixType = w.pixType;
-  }
+    :
+    pixType(w.pixType)
+  {}
   GDALDataTypeWrapper& operator=(GDALDataTypeWrapper w)
   {
     pixType = w.pixType;

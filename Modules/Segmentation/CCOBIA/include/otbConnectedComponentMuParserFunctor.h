@@ -124,7 +124,7 @@ public:
     return static_cast<bool>(value);
   }
 
-  void SetExpression(const std::string expression)
+  void SetExpression(const std::string &expression)
   {
     m_Expression = expression;
     m_Parser->SetExpr(m_Expression);
@@ -181,10 +181,8 @@ public:
   }
 
   ConnectedComponentMuParserFunctor()
-  {
-    m_Parser    = ParserType::New();
-    m_NbOfBands = 0;
-  }
+    :  m_Parser(ParserType::New()), m_NbOfBands(0)
+    {}
 
   ~ConnectedComponentMuParserFunctor()
   {

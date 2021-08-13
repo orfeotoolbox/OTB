@@ -118,7 +118,8 @@ T S1ThermalNoiseLookupData<T>::GetAzimuthNoise(const IndexValueType x, const Ind
 
     const auto pixelIdx = GetPixelIndex(y, vec.lines);
 
-    const double lutVal = vec.vect[pixelIdx] + (vec.vect[pixelIdx + 1] - vec.vect[pixelIdx]) * (static_cast<double>(y - vec.lines[pixelIdx]) / static_cast<double>(vec.lines[pixelIdx+1] - vec.lines[pixelIdx]));
+    const double lutVal = vec.vect[pixelIdx] + (vec.vect[pixelIdx + 1] - vec.vect[pixelIdx]) *
+      (static_cast<double>(y - vec.lines[pixelIdx]) / static_cast<double>(vec.lines[pixelIdx+1] - vec.lines[pixelIdx]));
     return lutVal;
   }
   else

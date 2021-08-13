@@ -163,9 +163,9 @@ public:
     Iterator(){};
     /** Constructor with iternal iterator parameter */
     Iterator(InternalIteratorType iter)
-    {
-      m_Iter = iter;
-    };
+      : m_Iter(iter)
+    {};
+    
     /**
        * Get the current object.
        * \return The current object pointed by the iterator.
@@ -251,9 +251,8 @@ public:
        * Copy operator.
        */
     Iterator(const Iterator& it)
-    {
-      m_Iter = it.m_Iter;
-    };
+      : m_Iter(it.m_Iter)
+    {};
 
     /**
       * Get the current internal iterator
@@ -344,16 +343,15 @@ public:
        * Copy operator.
        */
     ConstIterator(const ConstIterator& it)
-    {
-      m_Iter = it.m_Iter;
-    };
+      : m_Iter(it.m_Iter)
+    {};
+    
     /**
        * Copy operator.
        */
     ConstIterator(const Iterator& it)
-    {
-      m_Iter = it.m_Iter;
-    };
+      : m_Iter(it.m_Iter)
+    {};
 
   private:
     // Internal iterator.
@@ -377,9 +375,8 @@ public:
     ReverseIterator(){};
     /** Constructor with iternal iterator parameter */
     ReverseIterator(InternalReverseIteratorType iter)
-    {
-      m_Iter = iter;
-    };
+      : m_Iter(iter)
+    {};
     /**
        * Get the current object.
        * \return The current object pointed by the iterator.
@@ -437,9 +434,8 @@ public:
        * Copy operator.
        */
     ReverseIterator(const ReverseIterator& it)
-    {
-      m_Iter = it.m_Iter;
-    };
+      : m_Iter(it.m_Iter)
+    {};
 
     /**
       * Get the current internal iterator
@@ -471,9 +467,9 @@ public:
     ReverseConstIterator(){};
     /** Constructor with iternal iterator parameter */
     ReverseConstIterator(InternalReverseConstIteratorType iter)
-    {
-      m_Iter = iter;
-    };
+      : m_Iter(iter)
+    {};
+    
     /**
        * Get the current object.
        * \return The current object pointed by the iterator.

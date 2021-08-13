@@ -36,13 +36,12 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 ClampVectorImageFilter<TInputImage, TOutputImage>::ClampVectorImageFilter()
-{
-  m_Lower = itk::NumericTraits<OutputImageInternalPixelType>::NonpositiveMin();
-  m_Upper = itk::NumericTraits<OutputImageInternalPixelType>::max();
-
-  m_DLower = static_cast<double>(m_Lower);
-  m_DUpper = static_cast<double>(m_Upper);
-}
+  :
+  m_Lower(itk::NumericTraits<OutputImageInternalPixelType>::NonpositiveMin()),
+  m_Upper(itk::NumericTraits<OutputImageInternalPixelType>::max()),
+  m_DLower(static_cast<double>(m_Lower)),
+  m_DUpper(static_cast<double>(m_Upper))
+{}
 
 
 /**
