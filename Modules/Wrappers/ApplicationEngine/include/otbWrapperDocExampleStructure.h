@@ -67,7 +67,7 @@ public:
 
   /** Parameter list accessors. */
   /** Parameter list accessors : adding key and name */
-  void AddParameter(const std::string key, const std::string name, unsigned int exId = 0);
+  void AddParameter(const std::string &key, const std::string &name, unsigned int exId = 0);
 
   /** Get the parameter list. */
   ParametersVectorOfVectorType GetParameterList();
@@ -82,7 +82,7 @@ public:
   std::string GetParameterValue(unsigned int i, unsigned int exId = 0);
 
   /** Set Application name. */
-  void SetApplicationName(const std::string name);
+  void SetApplicationName(const std::string &name);
 
   /** Get Application name. */
   std::string GetApplicationName();

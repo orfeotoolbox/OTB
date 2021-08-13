@@ -189,12 +189,12 @@ private:
       m_NoDataValuePan = noDataValue;
     }
 
-    void SetNoDataValuesXsAvailable(std::vector<bool> noDataValuesAvailable)
+    void SetNoDataValuesXsAvailable(std::vector<bool>& noDataValuesAvailable)
     {
       m_NoDataValuesXsAvailable = noDataValuesAvailable;
     }
 
-    void SetNoDataValuesXs(std::vector<typename TXsImageType::InternalPixelType> noDataValues)
+    void SetNoDataValuesXs(std::vector<typename TXsImageType::InternalPixelType>& noDataValues)
     {
       m_NoDataValuesXs = noDataValues;
     }

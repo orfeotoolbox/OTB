@@ -77,7 +77,7 @@ public:
   GDALDatasetWrapper::Pointer Open(std::string filename) const;
 
   // Open the new  file for writing and returns a smart dataset pointer
-  GDALDatasetWrapper::Pointer Create(std::string driverShortName, std::string filename, int nXSize, int nYSize, int nBands, GDALDataType eType,
+  GDALDatasetWrapper::Pointer Create(std::string& driverShortName, std::string filename, int nXSize, int nYSize, int nBands, GDALDataType eType,
                                      char** papszOptions) const;
 
 

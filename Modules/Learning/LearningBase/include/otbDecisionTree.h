@@ -102,7 +102,7 @@ public:
       EQ case*/
   void AddBranch(AttributeValueType attr, LabelType label);
 
-  LabelType Decide(const ExampleType example);
+  LabelType Decide(const ExampleType& example);
 
 protected:
   /** Constructor */

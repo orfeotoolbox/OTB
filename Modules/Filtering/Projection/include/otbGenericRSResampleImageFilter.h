@@ -205,12 +205,12 @@ public:
   /** Useful to set the output parameters using a map (UTM|WGS84) and
    * a spacing set by the user
    */
-  void SetOutputParametersFromMap(const std::string map, const SpacingType& spacing);
+  void SetOutputParametersFromMap(const std::string& map, const SpacingType& spacing);
 
   /** Useful to set the output parameters from a projectionRef, the
     * output size, spacing and origin are estimated
     */
-  void SetOutputParametersFromMap(const std::string projectionRef);
+  void SetOutputParametersFromMap(const std::string& projectionRef);
 
   /** Set/Get the grid size for rpc estimator*/
   void SetInputRpcGridSize(const SizeType& gridSize)

@@ -104,7 +104,7 @@ public:
   /* Gives the correspondence between a class label
    * and its index in the confusion matrix
    */
-  virtual void SetMapOfClasses(const MapOfClassesType _arg)
+  virtual void SetMapOfClasses(const MapOfClassesType &_arg)
   {
     m_MapOfClasses = _arg;
     typename MapOfClassesType::iterator itMapOfClasses;
@@ -124,7 +124,7 @@ public:
   /* Gives the correspondence between an index in the
    * confusion matrix and the class label
    */
-  virtual void SetMapOfIndices(const MapOfIndicesType _arg)
+  virtual void SetMapOfIndices(const MapOfIndicesType &_arg)
   {
     m_MapOfIndices = _arg;
     typename MapOfIndicesType::iterator itMapOfIndices;

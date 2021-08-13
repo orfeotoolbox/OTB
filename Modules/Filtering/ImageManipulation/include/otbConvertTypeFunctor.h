@@ -54,22 +54,12 @@ public:
   static constexpr bool m_cOutInternalPix = boost::is_complex<OutputInternalPixelType>::value;
 
   ConvertTypeFunctor()
-  // m_cInPix ( boost::is_complex < InputPixelType > :: value ) ,
-  // m_cOutPix ( boost::is_complex < OutputPixelType > :: value ) ,
-  // m_cInInternalPix ( boost::is_complex < InputInternalPixelType > :: value ) ,
-  // m_cOutInternalPix ( boost::is_complex < OutputInternalPixelType > :: value )
-  {
-    m_LowestB  = std::numeric_limits<OutputPixelValueType>::lowest();
-    m_HighestB = std::numeric_limits<OutputPixelValueType>::max();
-
-    m_LowestBD  = static_cast<double>(m_LowestB);
-    m_HighestBD = static_cast<double>(m_HighestB);
-
-    // m_cInPix = boost::is_complex < InputPixelType > :: value ;
-    // m_cOutPix = boost::is_complex < OutputPixelType > :: value ;
-    // m_cInInternalPix = boost::is_complex < InputInternalPixelType > :: value ;
-    // m_cOutInternalPix = boost::is_complex < OutputInternalPixelType > :: value ;
-  }
+    :
+    m_LowestB(std::numeric_limits<OutputPixelValueType>::lowest()),
+    m_HighestB(std::numeric_limits<OutputPixelValueType>::max()),
+    m_LowestBD(static_cast<double>(m_LowestB)),
+    m_HighestBD(static_cast<double>(m_HighestB))
+  {}
 
   // template < class InternalPixelType  >
   void SetInputComponents(unsigned int sizeIn)
@@ -201,10 +191,9 @@ private:
   ConvertTypeFunctor(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  double               m_LowestBD, m_HighestBD;
   OutputPixelValueType m_LowestB, m_HighestB;
+  double               m_LowestBD, m_HighestBD;
   unsigned int         m_CompIn, m_CompOut, m_Scal;
-  // const bool m_cInPix , m_cOutPix , m_cInInternalPix , m_cOutInternalPix ;
 };
 
 } // end namespace Functor

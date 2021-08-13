@@ -32,11 +32,9 @@ namespace otb
 {
 
 template <class TFirstTransform, class TSecondTransform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>::CompositeTransform() : Superclass(ParametersDimension)
-{
-  m_FirstTransform  = nullptr;
-  m_SecondTransform = nullptr;
-}
+CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>::CompositeTransform()
+  : Superclass(ParametersDimension), m_FirstTransform(nullptr), m_SecondTransform(nullptr)
+{}
 
 template <class TFirstTransform, class TSecondTransform, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 CompositeTransform<TFirstTransform, TSecondTransform, TScalarType, NInputDimensions, NOutputDimensions>::~CompositeTransform()

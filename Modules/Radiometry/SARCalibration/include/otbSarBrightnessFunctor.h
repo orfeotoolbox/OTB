@@ -47,13 +47,8 @@ public:
   typedef typename itk::NumericTraits<InputType>::AbsType RealType;
 
   SarBrightnessFunctor()
-  {
-    m_Noise                 = 0.0;
-    m_Scale                 = 1.0;
-    m_AntennaPatternOldGain = 1.0;
-    m_AntennaPatternNewGain = 1.0;
-    m_RangeSpreadLoss       = 1.0;
-  };
+    :  m_Noise(0.0), m_Scale(1.0), m_AntennaPatternOldGain(1.0), m_AntennaPatternNewGain(1.0), m_RangeSpreadLoss(1.0)
+    {};
 
   ~SarBrightnessFunctor(){};
 

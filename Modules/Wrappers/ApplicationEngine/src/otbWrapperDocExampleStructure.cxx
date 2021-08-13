@@ -35,7 +35,7 @@ DocExampleStructure::~DocExampleStructure()
 {
 }
 
-void DocExampleStructure::AddParameter(const std::string key, const std::string value, unsigned int exId)
+void DocExampleStructure::AddParameter(const std::string &key, const std::string &value, unsigned int exId)
 {
   if (m_ParameterList.size() < exId + 1)
   {
@@ -70,7 +70,7 @@ std::string DocExampleStructure::GetParameterValue(unsigned int i, unsigned int 
   return m_ParameterList.at(exId).at(i).second;
 }
 
-void DocExampleStructure::SetApplicationName(const std::string name)
+void DocExampleStructure::SetApplicationName(const std::string &name)
 {
   m_ApplicationName = name;
 }

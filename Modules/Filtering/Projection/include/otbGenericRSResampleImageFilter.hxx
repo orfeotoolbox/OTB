@@ -41,18 +41,18 @@ namespace otb
 
 template <class TInputImage, class TOutputImage>
 GenericRSResampleImageFilter<TInputImage, TOutputImage>::GenericRSResampleImageFilter()
-{
+  :
   // flags initialization
-  m_EstimateInputRpcModel  = false;
-  m_EstimateOutputRpcModel = false;
-  m_RpcEstimationUpdated   = false;
+  m_EstimateInputRpcModel(false),
+  m_EstimateOutputRpcModel(false),
+  m_RpcEstimationUpdated(false),
 
   // internal filters instantiation
-  m_Resampler          = ResamplerType::New();
-  m_InputRpcEstimator  = InputRpcModelEstimatorType::New();
-  m_OutputRpcEstimator = OutputRpcModelEstimatorType::New();
-  m_Transform          = GenericRSTransformType::New();
-
+  m_Resampler(ResamplerType::New()),
+  m_InputRpcEstimator(InputRpcModelEstimatorType::New()),
+  m_OutputRpcEstimator(OutputRpcModelEstimatorType::New()),
+  m_Transform(GenericRSTransformType::New())
+{
   /** Set number of threads to 1 for Displacement field generator (use for faster access to
     * OSSIM elevation source, which does not handle multithreading when accessing to DEM data) */
   this->SetDisplacementFilterNumberOfThreads(1);
@@ -237,7 +237,7 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::SetOutputParameter
  *
  */
 template <class TInputImage, class TOutputImage>
-void GenericRSResampleImageFilter<TInputImage, TOutputImage>::SetOutputParametersFromMap(const std::string map, const SpacingType& spacing)
+void GenericRSResampleImageFilter<TInputImage, TOutputImage>::SetOutputParametersFromMap(const std::string& map, const SpacingType& spacing)
 {
   // Get the input Image
   const InputImageType* input = this->GetInput();
@@ -313,7 +313,7 @@ void GenericRSResampleImageFilter<TInputImage, TOutputImage>::SetOutputParameter
  *
  */
 template <class TInputImage, class TOutputImage>
-void GenericRSResampleImageFilter<TInputImage, TOutputImage>::SetOutputParametersFromMap(const std::string projectionRef)
+void GenericRSResampleImageFilter<TInputImage, TOutputImage>::SetOutputParametersFromMap(const std::string& projectionRef)
 {
   const InputImageType* input = this->GetInput();
 

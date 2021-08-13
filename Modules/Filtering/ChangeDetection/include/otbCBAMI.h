@@ -189,13 +189,13 @@ protected:
     return result;
   }
 
-  inline TOutput Rxy(VectorType va, VectorType vb) const
+  inline TOutput Rxy(const VectorType &va, const VectorType &vb) const
   {
 
     return Exyc(va, vb);
   }
 
-  inline TOutput Qxijkl(VectorType va, VectorType vb, VectorType vc, VectorType vd) const
+  inline TOutput Qxijkl(const VectorType &va, const VectorType &vb, const VectorType &vc, const VectorType &vd) const
   {
     //    IteratorType ita;
     //    IteratorType itb;
