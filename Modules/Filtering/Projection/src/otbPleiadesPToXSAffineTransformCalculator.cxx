@@ -27,87 +27,33 @@
 namespace otb
 {
 
-bool PleiadesPToXSAffineTransformCalculator::CanCompute(const itk::ImageBase<2>* panchromaticImage, const itk::ImageBase<2>* xsImage)
+bool PleiadesPToXSAffineTransformCalculator::CanCompute(const ImageMetadata & panImd, const ImageMetadata & xsImd)
 {
-  bool isPanPHR = false;
-  bool isXSPHR  = false;
+  const auto hasRequiredMetadata = [](const ImageMetadata & imd)
+                                    {return imd[MDStr::Mission].find("PHR") //PHR 1A or PHR 1B
+                                         && imd[MDStr::GeometricLevel] == "SENSOR"
+                                         && MetaData::PleiadesUtils::HasSensorModelCharacteristics(imd);};
 
-  otb::PleiadesImageMetadataInterface::Pointer phrIMI = otb::PleiadesImageMetadataInterface::New();
-  phrIMI->SetMetaDataDictionary(panchromaticImage->GetMetaDataDictionary());
-  isPanPHR = phrIMI->CanRead();
-
-  phrIMI->SetMetaDataDictionary(xsImage->GetMetaDataDictionary());
-  isXSPHR = phrIMI->CanRead();
-
-  if (isPanPHR && isXSPHR)
+  if (hasRequiredMetadata(panImd) && hasRequiredMetadata(xsImd))
   {
-    ImageKeywordlist kwlPan;
-    ImageKeywordlist kwlXS;
+    std::string pid  = panImd[MetaData::PleiadesUtils::IMAGE_ID_KEY];
+    std::string xsid = xsImd[MetaData::PleiadesUtils::IMAGE_ID_KEY];
+    pid  = pid.substr(0, pid.size() - 4);
+    xsid = xsid.substr(0, xsid.size() - 4);
 
-    itk::ExposeMetaData<ImageKeywordlist>(panchromaticImage->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwlPan);
-
-    itk::ExposeMetaData<ImageKeywordlist>(xsImage->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwlXS);
-
-    // Get geometric processing
-    std::string panProcessing = kwlPan.GetMetadataByKey("support_data.processing_level");
-    std::string xsProcessing  = kwlXS.GetMetadataByKey("support_data.processing_level");
-
-    if (panProcessing.compare("SENSOR") == 0 && xsProcessing.compare("SENSOR") == 0)
-    {
-
-      std::string pid  = kwlPan.GetMetadataByKey("image_id");
-      std::string xsid = kwlXS.GetMetadataByKey("image_id");
-
-      pid  = pid.substr(0, pid.size() - 4);
-      xsid = xsid.substr(0, xsid.size() - 4);
-
-      if (pid == xsid)
-      {
-        return true;
-      }
-    }
+    return pid == xsid;
   }
   return false;
 }
 
 
-PleiadesPToXSAffineTransformCalculator::OffsetType PleiadesPToXSAffineTransformCalculator::ComputeOffset(const itk::ImageBase<2>* panchromaticImage,
-                                                                                                         const itk::ImageBase<2>* xsImage)
+PleiadesPToXSAffineTransformCalculator::OffsetType PleiadesPToXSAffineTransformCalculator::ComputeOffset(const ImageMetadata & panImd,
+                                                                                                         const ImageMetadata & xsImd)
 {
-  if (!CanCompute(panchromaticImage, xsImage))
-  {
-    itkGenericExceptionMacro("Can not compute affine transform between images, they do not correspond to Pleiades sensor bundle.");
-  }
+  const auto panSensorCharacteristics = MetaData::PleiadesUtils::GetSensorModelCharacteristics(panImd);
+  const auto xsSensorCharacteristics = MetaData::PleiadesUtils::GetSensorModelCharacteristics(xsImd);
 
-  ImageKeywordlist kwlPan;
-  ImageKeywordlist kwlXS;
-
-  itk::ExposeMetaData<ImageKeywordlist>(panchromaticImage->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwlPan);
-
-  itk::ExposeMetaData<ImageKeywordlist>(xsImage->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwlXS);
-
-  // Compute time delta
-  std::string strStartTimePan = kwlPan.GetMetadataByKey("support_data.time_range_start");
-  std::string strStartTimeXS  = kwlXS.GetMetadataByKey("support_data.time_range_start");
-
-  DateTimeAdapter::Pointer startTimePan = DateTimeAdapter::New();
-  DateTimeAdapter::Pointer startTimeXS  = DateTimeAdapter::New();
-
-  startTimePan->SetFromIso8601(strStartTimePan);
-  startTimeXS->SetFromIso8601(strStartTimeXS);
-
-  double timeDelta = startTimeXS->GetDeltaInSeconds(startTimePan);
-
-  // Retrieve line period in Pan
-  std::string tmpStr        = kwlPan.GetMetadataByKey("support_data.line_period");
-  double      linePeriodPan = atof(tmpStr.c_str());
-
-  // Retrieve column start
-  tmpStr          = kwlPan.GetMetadataByKey("support_data.swath_first_col");
-  int colStartPan = atoi(tmpStr.c_str());
-  tmpStr          = kwlXS.GetMetadataByKey("support_data.swath_first_col");
-  int colStartXS  = atoi(tmpStr.c_str());
-
+  double timeDelta =  (xsSensorCharacteristics.timeRangeStart - panSensorCharacteristics.timeRangeStart).TotalSeconds();
 
   /**
   This code compute the shift between PAN and XS image from a bundle
@@ -147,8 +93,8 @@ PleiadesPToXSAffineTransformCalculator::OffsetType PleiadesPToXSAffineTransformC
 
   This leads to the following formula:
    */
-  double lineShift_MS_P = -std::floor((timeDelta / (linePeriodPan / 1000) + 0.5)) + 1.5;
-  double colShift_MS_P  = -((colStartXS - 1) * 4 - colStartPan + 1) + 1.5;
+  double lineShift_MS_P = -std::floor((timeDelta / (panSensorCharacteristics.linePeriod / 1000) + 0.5)) + 1.5;
+  double colShift_MS_P  = -((xsSensorCharacteristics.swathFirstCol - 1) * 4 - panSensorCharacteristics.swathFirstCol + 1) + 1.5;
 
   OffsetType offset;
 
@@ -159,11 +105,11 @@ PleiadesPToXSAffineTransformCalculator::OffsetType PleiadesPToXSAffineTransformC
 }
 
 
-PleiadesPToXSAffineTransformCalculator::TransformType::Pointer PleiadesPToXSAffineTransformCalculator::Compute(const itk::ImageBase<2>* panchromaticImage,
-                                                                                                               const itk::ImageBase<2>* xsImage)
+PleiadesPToXSAffineTransformCalculator::TransformType::Pointer PleiadesPToXSAffineTransformCalculator::Compute(const ImageMetadata & panchromaticImd,
+                                                                                                               const ImageMetadata & xsImd)
 {
   // Compute the offset
-  OffsetType offset = ComputeOffset(panchromaticImage, xsImage);
+  OffsetType offset = ComputeOffset(panchromaticImd, xsImd);
 
   // Apply the scaling
   TransformType::Pointer transform = TransformType::New();

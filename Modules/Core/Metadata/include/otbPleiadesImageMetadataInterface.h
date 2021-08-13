@@ -23,6 +23,7 @@
 
 #include "otbOpticalImageMetadataInterface.h"
 #include <string>
+#include "otbDateTime.h"
 
 namespace otb
 {
@@ -171,6 +172,39 @@ private:
 
   void FetchSpectralSensitivity(const std::string & sensorId, ImageMetadata &imd);
 };
+
+
+namespace MetaData
+{
+namespace PleiadesUtils
+{
+  const std::string IMAGE_ID_KEY = "ImageID";
+  const std::string TIME_RANGE_START_KEY = "TimeRangeStart";
+  const std::string TIME_RANGE_END_KEY = "TimeRangeEnd";
+  const std::string LINE_PERIOD_KEY = "LinePeriod";
+  const std::string SWATH_FIRST_COL_KEY = "SwathFirstCol";
+  const std::string SWATH_LAST_COL_KEY = "SwathLastCol";
+
+  /** This struct defines additional metadata used to enhance pansharpening of phr products */
+  struct SensorModelCharacteristics
+  {
+    std::string imageID;
+    MetaData::TimePoint timeRangeStart;
+    MetaData::TimePoint timeRangeEnd;
+    double  linePeriod;
+    int     swathFirstCol;
+    int     swathLastCol;
+  };
+
+  bool HasSensorModelCharacteristics(const ImageMetadata &);
+
+  /** extract sensor model characteristics from ImageMetadata */ 
+  SensorModelCharacteristics GetSensorModelCharacteristics(const ImageMetadata &);
+
+} // end namespace PleiadesUtils
+} // end namespace MetaData
+
+
 
 } // end namespace otb
 

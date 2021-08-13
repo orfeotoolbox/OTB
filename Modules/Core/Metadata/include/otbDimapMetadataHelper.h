@@ -62,6 +62,13 @@ struct DimapData
   int StepCount;
   std::string softwareVersion;
   double SatAzimuth;
+
+  // phr sensor characteristics
+  std::string TimeRangeStart;
+  std::string TimeRangeEnd;
+  std::string LinePeriod;
+  std::string SwathFirstCol;
+  std::string SwathLastCol;
 };
 
 
@@ -180,6 +187,16 @@ public:
     if (mds.HasValue("support_data.across_track_incidence_angle"))
     {
       m_Data.AcrossTrackIncidenceAngle = readVector("support_data.across_track_incidence_angle");
+    }
+
+    // These metadata are specific to PHR sensor products
+    if (m_Data.mission == "PHR" && m_Data.ProcessingLevel == "SENSOR")
+    {
+      m_Data.TimeRangeStart = mds.GetAs<std::string>("support_data.time_range_start");
+      m_Data.TimeRangeEnd = mds.GetAs<std::string>("support_data.time_range_end");
+      m_Data.LinePeriod = mds.GetAs<std::string>("support_data.line_period");
+      m_Data.SwathFirstCol = mds.GetAs<std::string>("support_data.swath_first_col");
+      m_Data.SwathLastCol = mds.GetAs<std::string>("support_data.swath_last_col");
     }
 
   }
@@ -379,6 +396,16 @@ public:
       (prefix + "Processing_Information.Product_Settings.PROCESSING_LEVEL");
     m_Data.SpectralProcessing = mds.GetAs<std::string>
       (prefix + "Processing_Information.Product_Settings.SPECTRAL_PROCESSING");
+
+    // These metadata are specific to PHR sensor products
+    if (m_Data.mission == "PHR" && m_Data.ProcessingLevel == "SENSOR")
+    {
+      m_Data.TimeRangeStart = mds.GetAs<std::string>("/Geometric_Data/Refined_Model/Time/Time_Range/START");
+      m_Data.TimeRangeEnd = mds.GetAs<std::string>("/Geometric_Data/Refined_Model/Time/Time_Range/END");
+      m_Data.LinePeriod = mds.GetAs<std::string>("/Geometric_Data/Refined_Model/Time/Time_Stamp/LINE_PERIOD");
+      m_Data.SwathFirstCol = mds.GetAs<std::string>("/Geometric_Data/Refined_Model/Geometric_Calibration/Instrument_Calibration/Swath_Range/FIRST_COL");
+      m_Data.SwathLastCol = mds.GetAs<std::string>("/Geometric_Data/Refined_Model/Geometric_Calibration/Instrument_Calibration/Swath_Range/LAST_COL");
+    }
   }
   
 protected:
