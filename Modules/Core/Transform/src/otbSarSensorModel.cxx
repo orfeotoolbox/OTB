@@ -22,6 +22,7 @@
 
 
 #include "otbGenericMapProjection.h"
+#include "otbDEMHandler.h"
 
 #include <numeric>
 
@@ -99,7 +100,6 @@ void SarSensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DTyp
 
     // Eq 32 p. 31
     outLineSample[0] = groundRange/m_SarParam.rangeResolution;
-    //imPt.x = groundRange/theRangeResolution;
   }
   else
   {
@@ -142,10 +142,27 @@ void SarSensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
 
   const auto& gcp = findClosestGCP(imPt, m_GCP);
 
-  Point3DType ecefPoint;
+  auto heightFunction = [heightAboveEllipsoid](const double, const double)
+                        {return heightAboveEllipsoid;};
 
   // Simple iterative inversion of inverse model starting at closest gcp
-  worldPt = EcefToWorld(projToSurface(gcp, imPt, heightAboveEllipsoid));
+  worldPt = EcefToWorld(projToSurface(gcp, imPt, heightFunction));
+}
+
+void SarSensorModel::LineSampleToWorld(const Point2DType& imPt,
+                                             Point3DType& worldPt) const
+{
+  assert(m_GCP.GCPs.size());
+
+  const auto& gcp = findClosestGCP(imPt, m_GCP);
+
+  Point3DType ecefPoint;
+
+  auto heightFunction = [](const double lon, const double lat)
+                        {return DEMHandler::GetInstance().GetHeightAboveEllipsoid(lon, lat);};
+
+  // Simple iterative inversion of inverse model starting at closest gcp
+  worldPt = EcefToWorld(projToSurface(gcp, imPt, heightFunction));
 }
 
 bool SarSensorModel::ZeroDopplerLookup(const Point3DType& inEcefPoint, 
@@ -513,7 +530,7 @@ const GCP & SarSensorModel::findClosestGCP(const Point2DType& imPt, const Projec
   return *closest;
 }
 
-SarSensorModel::Point3DType SarSensorModel::projToSurface(const GCP & gcp, const Point2DType& imPt, double heightAboveEllipsoid) const
+SarSensorModel::Point3DType SarSensorModel::projToSurface(const GCP & gcp, const Point2DType& imPt, std::function<double(double, double)> heightFunction) const
 {
   // Stop condition: img residual < 1e-2 pixels, height residual² <
   // 0.01² m, nb iter < 50. the loop runs at least once.
@@ -538,7 +555,8 @@ SarSensorModel::Point3DType SarSensorModel::projToSurface(const GCP & gcp, const
   currentImPoint[1] = gcp.m_GCPRow;
 
   auto currentImSquareResidual = imPt.SquaredEuclideanDistanceTo(currentImPoint);
-  double currentHeightResidual = 0.; //TODO
+
+  double currentHeightResidual = groundGcp[2] - heightFunction(groundGcp[0], groundGcp[1]);
 
   MatrixType B, BtB;
   VectorType BtF;
@@ -615,10 +633,9 @@ SarSensorModel::Point3DType SarSensorModel::projToSurface(const GCP & gcp, const
     currentEstimationWorld = EcefToWorld(currentEstimation);
 
     currentImSquareResidual = imPt.SquaredEuclideanDistanceTo(currentImPoint);
-/* TODO manage elevation
-         const ossim_float64 atHgt = hgtRef.getRefHeight(currentEstimationWorld);
-         currentHeightResidual = atHgt - currentEstimationWorld.height();
-*/
+
+    const double atHgt = heightFunction(currentEstimationWorld[0], currentEstimationWorld[1]);
+    currentHeightResidual = atHgt - currentEstimationWorld[2];
 
     WorldToLineSample(currentEstimationWorld, currentImPoint);
 

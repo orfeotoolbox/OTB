@@ -618,7 +618,7 @@ double Sentinel1ImageMetadataInterface::getBandTerrainHeight(const XMLMetadataSu
 
 void ReadGCP(const XMLMetadataSupplier &AnnotationMS, 
               Projection::GCPParam &gcp, 
-              std::unordered_map<std::string, GCPTime> & gcpTimes)
+              SARParam& sarParam)
 {
   std::stringstream ss;
 
@@ -655,18 +655,58 @@ void ReadGCP(const XMLMetadataSupplier &AnnotationMS,
   {
     ss.str("");
     ss << "product.geolocationGrid.geolocationGridPointList.geolocationGridPoint_" << i << ".";
+    const auto azimuthTime = MetaData::ReadFormattedDate(AnnotationMS.GetAs<std::string>(ss.str() + "azimuthTime"));
+    double line = 0.;
+    // In TOPSAR products, GCPs are weird (they fall in black lines
+    // between burst. This code allows moving them to a valid area of
+    // the image.
+    if (sarParam.burstRecords.size() >= 2)
+    {
+      otb::MetaData::TimeType acqStart;
+      unsigned long acqStartLine = 0;
+
+      auto doesContain = [&azimuthTime](const BurstRecord & br)
+        {return br.azimuthStartTime <= azimuthTime && azimuthTime < br.azimuthStopTime;};
+
+      const auto bIt = std::find_if(sarParam.burstRecords.crbegin(), sarParam.burstRecords.crend(), doesContain);
+
+      if (bIt != sarParam.burstRecords.crend())
+      {
+        acqStart = bIt->azimuthStartTime;
+        acqStartLine = bIt->startLine;
+      }
+      else if(azimuthTime < sarParam.burstRecords.front().azimuthStartTime)
+      {
+        acqStart = sarParam.burstRecords.front().azimuthStartTime;
+        acqStartLine = sarParam.burstRecords.front().startLine;
+      }
+      else if (azimuthTime >= sarParam.burstRecords.front().azimuthStopTime)
+      {
+        acqStart = sarParam.burstRecords.back().azimuthStartTime;
+        acqStartLine = sarParam.burstRecords.back().startLine;
+      }
+
+      auto timeSinceStart = azimuthTime - acqStart;
+
+      line = timeSinceStart/sarParam.azimuthTimeInterval + acqStartLine;
+    }
+    else
+    {
+      line = AnnotationMS.GetAs<double>(ss.str() + "line");
+    }
+
     gcp.GCPs.emplace_back(std::to_string(i),                                  // id
                           "",                                                 // info
                           AnnotationMS.GetAs<double>(ss.str() + "pixel"),     // col
-                          AnnotationMS.GetAs<double>(ss.str() + "line"),      // row
+                          line,                                               // row
                           AnnotationMS.GetAs<double>(ss.str() + "longitude"), // px
                           AnnotationMS.GetAs<double>(ss.str() + "latitude"),  // py
                           AnnotationMS.GetAs<double>(ss.str() + "height"));   // pz
 
     GCPTime time;
-    time.azimuthTime = MetaData::ReadFormattedDate(AnnotationMS.GetAs<std::string>(ss.str() + "azimuthTime"));
+    time.azimuthTime = azimuthTime;
     time.slantRangeTime = AnnotationMS.GetAs<double>(ss.str() + "slantRangeTime"); 
-    gcpTimes[std::to_string(i)] = time;
+    sarParam.gcpTimes[std::to_string(i)] = time;
   }
 }
 
@@ -675,9 +715,6 @@ void Sentinel1ImageMetadataInterface::ReadSarParamAndGCPs(const XMLMetadataSuppl
                                                           Projection::GCPParam &gcp)
 {
   std::unordered_map<std::string, GCPTime> gcpTimes;
-  // Fetch the GCP
-  ReadGCP(AnnotationMS, gcp, gcpTimes);
-  sarParam.gcpTimes = gcpTimes;
 
   sarParam.azimuthFmRates = this->GetAzimuthFmRate(AnnotationMS);
   sarParam.dopplerCentroids = this->GetDopplerCentroid(AnnotationMS);
@@ -699,6 +736,8 @@ void Sentinel1ImageMetadataInterface::ReadSarParamAndGCPs(const XMLMetadataSuppl
   sarParam.numberOfLinesPerBurst = AnnotationMS.GetAs<unsigned long>("product.swathTiming.linesPerBurst");
   sarParam.numberOfSamplesPerBurst = AnnotationMS.GetAs<unsigned long>("product.swathTiming.samplesPerBurst");
 
+  // Fetch the GCP
+  ReadGCP(AnnotationMS, gcp, sarParam);
 }
 
 void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)

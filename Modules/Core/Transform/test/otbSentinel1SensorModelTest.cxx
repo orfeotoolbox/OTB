@@ -222,4 +222,99 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
   BOOST_CHECK(linesBursts == ossimLinesBursts);
   BOOST_CHECK(samplesBursts == ossimSamplesBursts);
   BOOST_CHECK(linesOffset == ossimLinesOffset);
+
+}
+
+BOOST_AUTO_TEST_CASE(Sentinel1SensorModel_auto_validate_inverse_transform)
+{
+  BOOST_TEST_REQUIRE( framework::master_test_suite().argc == 2 );
+
+  const std::string annotationXml = framework::master_test_suite().argv[1];
+
+  auto imi = otb::Sentinel1ImageMetadataInterface::New();
+  otb::XMLMetadataSupplier mds(annotationXml);
+
+  const auto & productType = mds.GetAs<std::string>("product.adsHeader.productType");
+
+  otb::SARParam sarParam;
+  otb::Projection::GCPParam gcpParam;
+
+  imi->ReadSarParamAndGCPs(mds, sarParam, gcpParam);
+
+  otb::SarSensorModel model(productType, sarParam, gcpParam);
+
+  for (const auto & gcp : gcpParam.GCPs)
+  {
+    itk::Point<double, 3> geoPoint;
+    geoPoint[0] = gcp.m_GCPX;
+    geoPoint[1] = gcp.m_GCPY;
+    geoPoint[2] = gcp.m_GCPZ;
+
+    itk::Point<double, 2> lineSampleBaseline;
+    lineSampleBaseline[0] = gcp.m_GCPCol;
+    lineSampleBaseline[1] = gcp.m_GCPRow;
+
+    itk::Point<double, 2> lineSample;
+
+    model.WorldToLineSample(geoPoint, lineSample);
+
+    const double lineTol = 1.;
+    const double sampleTol = 1.;
+
+    BOOST_TEST(std::abs(lineSample[0] - lineSampleBaseline[0]) < lineTol); 
+    BOOST_TEST(std::abs(lineSample[1] - lineSampleBaseline[1]) < sampleTol); 
+  }
+}
+
+BOOST_AUTO_TEST_CASE(Sentinel1SensorModel_auto_validate_forward_transform)
+{
+  double sqResTol = 25;
+  const std::string annotationXml = framework::master_test_suite().argv[1];
+
+  auto imi = otb::Sentinel1ImageMetadataInterface::New();
+  otb::XMLMetadataSupplier mds(annotationXml);
+
+  const auto & productType = mds.GetAs<std::string>("product.adsHeader.productType");
+
+  otb::SARParam sarParam;
+  otb::Projection::GCPParam gcpParam;
+
+  imi->ReadSarParamAndGCPs(mds, sarParam, gcpParam);
+
+  std::vector<otb::GCP> testGCPs;
+  otb::Projection::GCPParam productGCPs;
+
+  bool odd = false;
+
+  for (auto gcp: gcpParam.GCPs)
+  {
+    if (odd)
+    {
+      productGCPs.GCPs.push_back(gcp);
+    }
+    else
+    {
+      testGCPs.push_back(gcp);
+    }
+    odd = !odd;
+  }
+
+  otb::SarSensorModel model(productType, sarParam, productGCPs);
+
+  for (const auto & gcp : testGCPs)
+  {
+    itk::Point<double, 2> sensorPoint;
+    sensorPoint[0] = gcp.m_GCPCol;
+    sensorPoint[1] = gcp.m_GCPRow;
+
+    itk::Point<double, 3> geoPointBaseline;
+    geoPointBaseline[0] = gcp.m_GCPX;
+    geoPointBaseline[1] = gcp.m_GCPY;
+    geoPointBaseline[2] = gcp.m_GCPZ;
+
+    itk::Point<double, 3> geoPoint;
+    model.LineSampleHeightToWorld(sensorPoint, gcp.m_GCPZ, geoPoint);
+    BOOST_TEST(geoPoint.SquaredEuclideanDistanceTo(geoPointBaseline) < sqResTol);
+  }
+
 }

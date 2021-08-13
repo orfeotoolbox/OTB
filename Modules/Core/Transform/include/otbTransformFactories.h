@@ -28,6 +28,8 @@
 
 #include "otbRPCForwardTransform.h"
 #include "otbRPCInverseTransform.h"
+#include "otbSarForwardTransform.h"
+#include "otbSarInverseTransform.h"
 
 namespace otb {
 
@@ -45,7 +47,7 @@ namespace otb {
 namespace TransformFactories {
 
 /**
- * Factory for the forward transformer based of the RPC sensor model
+ * Factory for the forward transformer based on the RPC sensor model
  */
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>::Pointer
@@ -63,7 +65,7 @@ RPCForwardTransformFactory(const ImageMetadata &imd, TransformDirection directio
 }
 
 /**
- * Factory for the inverse transformer based of the RPC sensor model
+ * Factory for the inverse transformer based on the RPC sensor model
  */
 template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
 typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>::Pointer
@@ -72,6 +74,42 @@ RPCInverseTransformFactory(const ImageMetadata &imd, TransformDirection directio
   if(imd.Has(MDGeom::RPC))
   {
     auto transform = RPCInverseTransform<TScalarType, NInputDimensions,NOutputDimensions>::New();
+    if(transform->getDirection() != direction)
+      return nullptr;
+    transform->SetMetadata(imd);
+    return DynamicCast<typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>>(transform);
+  }
+  return nullptr;
+}
+
+/**
+ * Factory for the forward transformer based on the SAR sensor model
+ */
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>::Pointer
+SARForwardTransformFactory(const ImageMetadata &imd, TransformDirection direction)
+{
+  if(imd.Has(MDGeom::SAR))
+  {
+    auto transform = SarForwardTransform<TScalarType, NInputDimensions,NOutputDimensions>::New();
+    if(transform->getDirection() != direction)
+      return nullptr;
+    transform->SetMetadata(imd);
+    return DynamicCast<typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>>(transform);
+  }
+  return nullptr;
+}
+
+/**
+ * Factory for the inverse transformer based on the SAR sensor model
+ */
+template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
+typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>::Pointer
+SARInverseTransformFactory(const ImageMetadata &imd, TransformDirection direction)
+{
+  if(imd.Has(MDGeom::SAR))
+  {
+    auto transform = SarInverseTransform<TScalarType, NInputDimensions,NOutputDimensions>::New();
     if(transform->getDirection() != direction)
       return nullptr;
     transform->SetMetadata(imd);

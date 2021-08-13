@@ -13,10 +13,10 @@ and implement the methods:
 
 - ``TransformPoint`` that process the transformation.
 
-.. image:: /Art/C++/UmlSensorModel.png
-
 RPC sensor model
 ----------------
+
+.. image:: /Art/C++/UmlRPCSensorModel.png
 
 The structure ``otb::Projection::RPCParam`` is used to store the
 parameters of the RPC model. It is based on `GDAL's RPC structure
@@ -35,6 +35,30 @@ description from the ``otb::ImageMetadata`` and instantiates an
 The classes ``otb::RPCForwardTransform`` and
 ``otb::RPCInverseTransform`` each implement a version of the
 ``TransformPoint`` method which uses the ``otb::GDALRPCTransformer``.
+
+SAR sensor model
+----------------
+
+.. image:: /Art/C++/UmlSARSensorModel.png
+
+The structure ``otb::SARParam`` is used to store the parameters of the
+SAR model. For an exhaustive list of the paramaters available in the
+``otb::SARParam``, see the `Doxygen
+<https://www.orfeo-toolbox.org/doxygen/structotb_1_1SARParam.html>`_.
+
+The SAR model is stored in the ``otb::ImageMetadata`` object, using
+the key ``MDGeom::SAR``. The classes ``otb::SarTransformBase``,
+``otb::SarForwardTransform`` and ``otb::SarInverseTransform`` are used
+to perform forward and inverse transformation using this model.
+
+The abstract class ``otb::SarTransformBase`` contains the
+implementation of the SetMetadataModel method, which receives the
+``otb::SARParam`` description from the ``otb::ImageMetadata`` and
+instantiates an ``otb::SarSensorModel``.
+
+The classes ``otb::SarForwardTransform`` and
+``otb::SarInverseTransform`` each implement a version of the
+``TransformPoint`` method which uses the ``otb::SarSensorModel``.
 
 Sensor Transform Factory
 ------------------------

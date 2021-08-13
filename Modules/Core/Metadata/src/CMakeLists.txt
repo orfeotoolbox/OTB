@@ -71,6 +71,7 @@ set(OTBMetadata_SRC
 
   otbImageMetadata.cxx
   otbGeometryMetadata.cxx
+  otbSARMetadata.cxx
   
   otbGeomMetadataSupplier.cxx
   otbXMLMetadataSupplier.cxx

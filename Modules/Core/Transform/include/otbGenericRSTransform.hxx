@@ -117,8 +117,8 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
     }
   }
 
-  // If not, try to make a RPC sensor model
-  if ((m_InputTransform.IsNull()) && (m_InputImd != nullptr) && (m_InputImd->Has(MDGeom::RPC)))
+  // If not, try to make a sensor model
+  if ((m_InputTransform.IsNull()) && (m_InputImd != nullptr))
   {
     auto sensorModel = otb::SensorTransformFactory::GetInstance().CreateTransform
         <double, InputSpaceDimension, OutputSpaceDimension>(*m_InputImd,TransformDirection::FORWARD);
@@ -147,8 +147,8 @@ void GenericRSTransform<TScalarType, NInputDimensions, NOutputDimensions>::Insta
     }
   }
 
-  // If not, try to make a RPC sensor model
-  if ((m_OutputTransform.IsNull()) && (m_OutputImd != nullptr) && (m_OutputImd->Has(MDGeom::RPC)))
+  // If not, try to make a sensor model
+  if ((m_OutputTransform.IsNull()) && (m_OutputImd != nullptr))
   {
     auto sensorModel = otb::SensorTransformFactory::GetInstance().CreateTransform
         <double, InputSpaceDimension, OutputSpaceDimension>(*m_OutputImd,TransformDirection::INVERSE);

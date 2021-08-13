@@ -18,19 +18,19 @@
  * limitations under the License.
  */
 
-#ifndef otbRPCTransformBase_h
-#define otbRPCTransformBase_h
+#ifndef otbSarTransformBase_h
+#define otbSarTransformBase_h
 
 #include "otbSensorTransformBase.h"
-#include "otbGeometryMetadata.h"
-#include "otbGDALRPCTransformer.h"
+#include "otbSARMetadata.h"
+#include "otbSarSensorModel.h"
 
 namespace otb
 {
-/** \class RPCTransformBase
- *  \brief Base projection class based on the RPC method.
+/** \class SarTransformBase
+ *  \brief Base projection class based on the Sar model.
  *
- *  This is a projection class, based on a RPC sensor model. This
+ *  This is a projection class, based on a Sar sensor model. This
  *  class allows:
  *
  *  - Forward Transformation of a point in the sensor geometry (i, j)
@@ -42,12 +42,12 @@ namespace otb
  * \ingroup OTBTransform
  */
 template <class TScalarType, unsigned int NInputDimensions = 3, unsigned int NOutputDimensions = 2>
-class ITK_EXPORT RPCTransformBase : public SensorTransformBase<TScalarType, NInputDimensions, NOutputDimensions>
+class ITK_EXPORT SarTransformBase : public SensorTransformBase<TScalarType, NInputDimensions, NOutputDimensions>
 {
 public:
   /** @name Standard class type definitions */
   //@{
-  using Self         = RPCTransformBase;
+  using Self         = SarTransformBase;
   using Superclass   = SensorTransformBase<TScalarType, NInputDimensions, NOutputDimensions>;
   using Pointer      = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self> ;
@@ -58,7 +58,7 @@ public:
   //@}
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(RPCTransformBase, SensorTransformBase);
+  itkTypeMacro(SarTransformBase, SensorTransformBase);
 
   itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
   itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
@@ -73,22 +73,22 @@ public:
   bool IsValidSensorModel() const override;
 
 protected:
-  RPCTransformBase(TransformDirection dir) : Superclass(dir) {};
-  ~RPCTransformBase() = default;
+  SarTransformBase(TransformDirection dir) : Superclass(dir) {};
+  ~SarTransformBase() = default;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
-  std::unique_ptr<Projection::RPCParam> m_RPCParam;
-  std::unique_ptr<GDALRPCTransformer> m_Transformer;
+  std::unique_ptr<SARParam> m_SarParam;
+  std::unique_ptr<SarSensorModel> m_Transformer;
 
 private:
-  RPCTransformBase(const Self&) = delete;
+  SarTransformBase(const Self&) = delete;
   void operator=(const Self&) = delete;
 };
 
 }
 
 #ifndef OTB_MANUAL_INSTANTIATION
-#include "otbRPCTransformBase.hxx"
+#include "otbSarTransformBase.hxx"
 #endif
 
 #endif

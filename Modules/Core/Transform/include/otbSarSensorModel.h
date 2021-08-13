@@ -66,6 +66,10 @@ public:
                                double heightAboveEllipsoid,
                                Point3DType& worldPt) const;
 
+
+  void LineSampleToWorld(const Point2DType& imPt,
+                         Point3DType& worldPt) const;
+
   /** Deburst metadata if possible and return lines to keep in image file */
   bool Deburst(std::vector<std::pair<unsigned long, unsigned long>>& lines,
                std::pair<unsigned long, unsigned long>& samples,
@@ -106,7 +110,7 @@ public:
             unsigned int & linesOffset, unsigned int first_burstInd,
             bool inputWithInvalidPixels=false);
 
-   /** Update a ImageMetadata object with the sotred SarParam and GCPs, possibly modified from the 
+   /** Update a ImageMetadata object with the stored SarParam and GCPs, possibly modified from the 
     * original metadata by the SarSensorModel
     * \param imd The ImageMetadata to be updated
      */ 
@@ -185,7 +189,7 @@ private:
 
   Point3DType projToSurface(const GCP & gcp,
                             const Point2DType & imPt,
-                            double heightAboveEllipsoid) const;
+                            std::function<double(double, double)> heightFunction) const;
 
   std::string m_ProductType;
   Projection::GCPParam m_GCP;

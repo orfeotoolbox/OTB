@@ -183,6 +183,8 @@ struct OTBMetadata_EXPORT SARParam
   /** Conversion coefficients from ground range to slant range */
   std::vector<CoordinateConversionRecord> groundRangeToSlantRangeRecords;
 
+  /** JSON export */
+  std::string ToJSON(bool multiline=false) const;
 };
 
 /** \struct SARCalib
