@@ -10,7 +10,7 @@ We are ready to release OTB version MAJOR.MINOR.PATCH. The following steps need 
 * [ ] In this story, make a list of blocking issues for the release (if any)
 * [ ] [Update the SuperBuild archive](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#superbuild-archive) (if needed)
 * [ ] Update release notes (walk the GitLab MR merged history and log all improvements)
-* [ ] Update the date in RELEASE_NOTES.txt
+* [ ] [Update the RELEASE_NOTES.txt](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/wikis/Help-for-release-actions#update-the-release_notestxt)
 * [ ] Run Debian [spelling](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#spelling-check) checker
 * [ ] Run shellcheck script from [OTB-Devutils/Scripts/](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-devutils/blob/master/Scripts/run_shellcheck.sh)
 * [ ] [Update translation](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/wikis/Help-for-release-actions#translation-for-monteverdi-mapla) for Monteverdi and Mapla
