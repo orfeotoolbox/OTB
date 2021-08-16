@@ -21,8 +21,8 @@
 #ifndef otbGeocentricTransform_h
 #define otbGeocentricTransform_h
 
-#include "otbGenericMapProjection.h"
-#include "otbEllipsoidAdapter.h"
+#include "otbCoordinateTransformation.h"
+#include "otbTransform.h"
 
 namespace otb
 {
