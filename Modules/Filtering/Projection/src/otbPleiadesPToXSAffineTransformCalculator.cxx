@@ -30,7 +30,9 @@ namespace otb
 bool PleiadesPToXSAffineTransformCalculator::CanCompute(const ImageMetadata & panImd, const ImageMetadata & xsImd)
 {
   const auto hasRequiredMetadata = [](const ImageMetadata & imd)
-                                    {return imd[MDStr::Mission].find("PHR") //PHR 1A or PHR 1B
+                                    {return imd.Has(MDStr::SensorID)
+                                         && imd.Has(MDStr::GeometricLevel)
+                                         && imd[MDStr::SensorID].find("PHR") != std::string::npos //PHR 1A or PHR 1B
                                          && imd[MDStr::GeometricLevel] == "SENSOR"
                                          && MetaData::PleiadesUtils::HasSensorModelCharacteristics(imd);};
 
