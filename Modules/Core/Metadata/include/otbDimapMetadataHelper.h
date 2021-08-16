@@ -384,7 +384,6 @@ public:
 
     m_Data.ProductionDate = mds.GetAs<std::string>(path);
 
-
     auto imagingDate = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Identification", "Strip_Source.IMAGING_DATE" );
     auto imagingTime = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Identification", "Strip_Source.IMAGING_TIME" );
     m_Data.AcquisitionDate = imagingDate + "T" + imagingTime;
@@ -400,11 +399,11 @@ public:
     // These metadata are specific to PHR sensor products
     if (m_Data.mission == "PHR" && m_Data.ProcessingLevel == "SENSOR")
     {
-      m_Data.TimeRangeStart = mds.GetAs<std::string>("/Geometric_Data/Refined_Model/Time/Time_Range/START");
-      m_Data.TimeRangeEnd = mds.GetAs<std::string>("/Geometric_Data/Refined_Model/Time/Time_Range/END");
-      m_Data.LinePeriod = mds.GetAs<std::string>("/Geometric_Data/Refined_Model/Time/Time_Stamp/LINE_PERIOD");
-      m_Data.SwathFirstCol = mds.GetAs<std::string>("/Geometric_Data/Refined_Model/Geometric_Calibration/Instrument_Calibration/Swath_Range/FIRST_COL");
-      m_Data.SwathLastCol = mds.GetAs<std::string>("/Geometric_Data/Refined_Model/Geometric_Calibration/Instrument_Calibration/Swath_Range/LAST_COL");
+      m_Data.TimeRangeStart = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Time.Time_Range.START");
+      m_Data.TimeRangeEnd = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Time.Time_Range.END");
+      m_Data.LinePeriod = mds.GetAs<std::string>(prefix +"Geometric_Data.Refined_Model.Time.Time_Stamp.LINE_PERIOD");
+      m_Data.SwathFirstCol = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Swath_Range.FIRST_COL");
+      m_Data.SwathLastCol = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Swath_Range.LAST_COL");
     }
   }
   
