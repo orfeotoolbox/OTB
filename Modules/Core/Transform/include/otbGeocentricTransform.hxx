@@ -26,32 +26,42 @@
 namespace otb
 {
 
-template <TransformDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-GeocentricTransform<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>::GeocentricTransform() : Superclass(ParametersDimension)
+template <TransformDirection TDirectionOfMapping, class TScalarType>
+GeocentricTransform<TDirectionOfMapping, TScalarType>::GeocentricTransform() : Superclass(ParametersDimension)
 {
-  m_Ellipsoid = EllipsoidAdapter::New();
-}
+  SpatialReference wgs84               = SpatialReference::FromWGS84();
+  SpatialReference ecefSpatialReference = SpatialReference::FromDescription("EPSG:4978");
 
-template <TransformDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-GeocentricTransform<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>::~GeocentricTransform()
-{
-}
-
-template <TransformDirection TDirectionOfMapping, class TScalarType, unsigned int NInputDimensions, unsigned int NOutputDimensions>
-typename GeocentricTransform<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>::OutputPointType
-GeocentricTransform<TDirectionOfMapping, TScalarType, NInputDimensions, NOutputDimensions>::TransformPoint(const InputPointType& point) const
-{
-  OutputPointType outputPoint;
+#if GDAL_VERSION_NUM >= 3000000
+  wgs84.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+  ecefSpatialReference.SetAxisMappingStrategy(OAMS_TRADITIONAL_GIS_ORDER);
+#endif
 
   if (DirectionOfMapping == TransformDirection::INVERSE)
   {
-    m_Ellipsoid->XYZToLonLatHeight(point[0], point[1], point[2], outputPoint[0], outputPoint[1], outputPoint[2]);
+    std::unique_ptr<CoordinateTransformation> newMapProjection(new CoordinateTransformation(ecefSpatialReference, wgs84));
+
+    if (newMapProjection)
+      m_MapProjection.swap(newMapProjection);
   }
-  if (DirectionOfMapping == TransformDirection::FORWARD)
+  else
   {
-    m_Ellipsoid->LonLatHeightToXYZ(point[0], point[1], point[2], outputPoint[0], outputPoint[1], outputPoint[2]);
+    std::unique_ptr<CoordinateTransformation> newMapProjection(new CoordinateTransformation(wgs84, ecefSpatialReference));
+
+    if (newMapProjection)
+      m_MapProjection.swap(newMapProjection);
   }
-  // To be completed
+
+}
+
+template <TransformDirection TDirectionOfMapping, class TScalarType>
+typename GeocentricTransform<TDirectionOfMapping, TScalarType>::OutputPointType
+GeocentricTransform<TDirectionOfMapping, TScalarType>::TransformPoint(const InputPointType& point) const
+{
+  OutputPointType outputPoint;
+
+  std::tie(outputPoint[0], outputPoint[1], outputPoint[2]) = m_MapProjection->Transform(std::make_tuple(point[0], point[1], point[2]));
+
   return outputPoint;
 }
 
