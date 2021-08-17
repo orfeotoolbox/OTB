@@ -90,7 +90,6 @@ int otbSarCalibrationLookupDataTest(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-<<<<<<< HEAD
   outfile << imd[otb::MDStr::Instrument] << std::endl;
 
 //TODO adapt this part
