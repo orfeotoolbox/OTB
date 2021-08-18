@@ -133,7 +133,7 @@ protected:
   /**
    * Override GenerateOutputInformation() to handle vector images
    */
-  void GenerateOutputInformation();
+  void GenerateOutputInformation() override;
 
   /**
    * Main computation function called by each thread.
