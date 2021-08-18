@@ -18,16 +18,12 @@
  * limitations under the License.
  */
 
-#ifndef otbS1ThermalNoiseLookupData_hxx
-#define otbS1ThermalNoiseLookupData_hxx
-
-#include "otbS1ThermalNoiseLookupData.h"
+#include "otbSentinel1ThermalNoiseLookupData.h"
 
 namespace otb
 {
 
-template <class T>
-void S1ThermalNoiseLookupData<T>::SetImageKeywordlist(const ImageKeywordlist & kwl)
+void Sentinel1ThermalNoiseLookupData::SetImageKeywordlist(const ImageKeywordlist & kwl)
 {
   m_FirstLineTime = ossimplugins::time::toModifiedJulianDate(kwl.GetMetadataByKey("calibration.startTime")).as_day_frac();
   m_LastLineTime  = ossimplugins::time::toModifiedJulianDate(kwl.GetMetadataByKey("calibration.stopTime")).as_day_frac();
@@ -35,7 +31,7 @@ void S1ThermalNoiseLookupData<T>::SetImageKeywordlist(const ImageKeywordlist & k
   m_LineTimeInterval = (m_LastLineTime - m_FirstLineTime) / (m_NumOfLines - 1);
   m_RangeCount = std::stoi(kwl.GetMetadataByKey("noise.rangeCount"));
   m_RangeNoiseVectorList.clear();
-  
+
   double lastMJD = 0;
   for (int i = 0; i < m_RangeCount; i++)
   {
@@ -77,14 +73,12 @@ void S1ThermalNoiseLookupData<T>::SetImageKeywordlist(const ImageKeywordlist & k
   }
 }
 
-template <class T>
-T S1ThermalNoiseLookupData<T>::GetValue(const IndexValueType x, const IndexValueType y)
+double Sentinel1ThermalNoiseLookupData::GetValue(const IndexValueType x, const IndexValueType y) const
 {
   return GetRangeNoise(x,y) * GetAzimuthNoise(x,y);
 }
 
-template <class T>
-T S1ThermalNoiseLookupData<T>::GetRangeNoise(const IndexValueType x, const IndexValueType y)
+double Sentinel1ThermalNoiseLookupData::GetRangeNoise(const IndexValueType x, const IndexValueType y) const
 {
   if (m_RangeCount)
   {
@@ -108,8 +102,7 @@ T S1ThermalNoiseLookupData<T>::GetRangeNoise(const IndexValueType x, const Index
   }
 }
 
-template <class T>
-T S1ThermalNoiseLookupData<T>::GetAzimuthNoise(const IndexValueType x, const IndexValueType y)
+double Sentinel1ThermalNoiseLookupData::GetAzimuthNoise(const IndexValueType x, const IndexValueType y) const
 {
   if (m_AzimuthCount)
   {
@@ -128,8 +121,7 @@ T S1ThermalNoiseLookupData<T>::GetAzimuthNoise(const IndexValueType x, const Ind
   }
 }
 
-template <class T>
-int S1ThermalNoiseLookupData<T>::GetRangeVectorIndex(int y) const
+int Sentinel1ThermalNoiseLookupData::GetRangeVectorIndex(int y) const
 {
   for (int i = 1; i < m_RangeCount; i++)
   {
@@ -142,8 +134,7 @@ int S1ThermalNoiseLookupData<T>::GetRangeVectorIndex(int y) const
   return -1;
 }
 
-template <class T>
-int S1ThermalNoiseLookupData<T>::GetAzimuthVectorIndex(int x, int y) const
+int Sentinel1ThermalNoiseLookupData::GetAzimuthVectorIndex(int x, int y) const
 {
   for (int i = 0; i < m_AzimuthCount; i++)
   {
@@ -159,14 +150,11 @@ int S1ThermalNoiseLookupData<T>::GetAzimuthVectorIndex(int x, int y) const
   return -1;
 }
 
-template <class T>
-int S1ThermalNoiseLookupData<T>::GetPixelIndex(int x, const std::vector<int> & vec) const
+int Sentinel1ThermalNoiseLookupData::GetPixelIndex(int x, const std::vector<int> & vec) const
 {
   const int size = vec.size();
   std::vector<int>::const_iterator wh   = std::upper_bound(vec.begin(), vec.end(), x);
   return wh == vec.end() ? size - 2 : std::distance(vec.begin(), wh) - 1;
 }
 
-}
-
-#endif
+} //namespace otb

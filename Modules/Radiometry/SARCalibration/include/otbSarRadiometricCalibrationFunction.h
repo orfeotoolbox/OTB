@@ -24,7 +24,7 @@
 #include "otbSarParametricMapFunction.h"
 #include "otbSarCalibrationLookupData.h"
 
-#include "otbS1ThermalNoiseLookupData.h"
+#include "otbSentinel1ThermalNoiseLookupData.h"
 
 #include "otbMath.h"
 namespace otb
@@ -82,8 +82,8 @@ public:
   typedef typename ParametricFunctionType::Pointer      ParametricFunctionPointer;
   typedef typename ParametricFunctionType::ConstPointer ParametricFunctionConstPointer;
   
-  using S1ThermalNoiseLookupType = otb::S1ThermalNoiseLookupData<double>;
-  using S1ThermalNoiseLookupPointerType = typename S1ThermalNoiseLookupType::Pointer;
+  using Sentinel1ThermalNoiseLookupType = otb::Sentinel1ThermalNoiseLookupData;
+  using Sentinel1ThermalNoiseLookupPointerType = typename Sentinel1ThermalNoiseLookupType::Pointer;
 
   /** Evalulate the function at specified index */
   OutputType EvaluateAtIndex(const IndexType& index) const override;
@@ -203,7 +203,7 @@ private:
   ParametricFunctionPointer m_RangeSpreadLoss;
   LookupDataPointer         m_Lut;
   bool                      m_RemoveS1ThermalNoise;
-  S1ThermalNoiseLookupPointerType m_S1ThermaNoise;
+  Sentinel1ThermalNoiseLookupPointerType m_S1ThermaNoise;
 };
 
 } // end namespace otb

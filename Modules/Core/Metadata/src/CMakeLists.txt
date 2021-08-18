@@ -58,6 +58,8 @@ set(OTBMetadata_SRC
 
   otbSentinel1ImageMetadataInterfaceFactory.cxx
   otbSentinel1ImageMetadataInterface.cxx
+  otbSentinel1ThermalNoiseLookupData.cxx
+  otbSentinel1CalibrationLookupData.cxx
 
   otbCosmoImageMetadataInterfaceFactory.cxx
   otbCosmoImageMetadataInterface.cxx

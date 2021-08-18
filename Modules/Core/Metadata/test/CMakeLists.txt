@@ -35,6 +35,7 @@ otbSarCalibrationLookupDataTest.cxx
 otbImageMetadataTest.cxx
 otbGeomMetadataSupplierTest.cxx
 otbXMLMetadataSupplierTest.cxx
+otbSentinel1ThermalNoiseLutTest.cxx
 )
 
 add_executable(otbMetadataTestDriver ${OTBMetadataTests})
@@ -439,6 +440,11 @@ otb_add_test(NAME ioTuotbXMLMetadataSupplierTest COMMAND otbMetadataTestDriver
   ${TEMP}/ioTuotbXMLMetadataSupplierTest.txt
   )
 
+otb_add_test(NAME saTvS1ThermalNoiseLutTest COMMAND otbMetadataTestDriver
+  otbSentinel1ThermalNoiseLutTest
+  ${INPUTDATA}/S1A_IW_GRDH_1SDV_20210202T060035_20210202T060100_036407_0445F3_B8EA_vh_extract.tif?&geom=${INPUTDATA}/S1A_IW_GRDH_1SDV_20210202T060035_20210202T060100_036407_0445F3_B8EA_vh_extract.geom
+  659.993737792968772737
+  2088.05800001586567304912023246)
 
 
 # Image metadata interface tests.

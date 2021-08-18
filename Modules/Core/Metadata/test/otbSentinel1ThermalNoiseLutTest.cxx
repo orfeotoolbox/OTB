@@ -23,18 +23,15 @@
 #include "itkMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbS1ThermalNoiseLookupData.h"
+#include "otbSentinel1ThermalNoiseLookupData.h"
 
-int otbS1ThermalNoiseLutTest(int argc, char* argv[])
+int otbSentinel1ThermalNoiseLutTest(int argc, char* argv[])
 {
   using RealType = double;
   using InputImageType = otb::Image<double, 2>;
   using ImageReaderType = otb::ImageFileReader<InputImageType>;
 
   const double tol = 1e-10;
-
-  using S1ThermalNoiseLookupType = otb::S1ThermalNoiseLookupData<double>;
-  using S1ThermalNoiseLookupPointerType = typename S1ThermalNoiseLookupType::Pointer;
 
   if (argc < 3)
   {
@@ -55,7 +52,7 @@ int otbS1ThermalNoiseLutTest(int argc, char* argv[])
   }
   else
   {
-     std::cerr <<  "Unable to fetch the SARCalib metadata from the input product.";
+    std::cerr <<  "Unable to fetch the SARCalib metadata from the input product.";
   }
 
   auto lut = sarCalibPtr->calibrationLookupData[0];
@@ -73,7 +70,7 @@ int otbS1ThermalNoiseLutTest(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  S1ThermalNoiseLookupPointerType S1ThermaNoise = S1ThermalNoiseLookupType::New();
+  auto S1ThermaNoise = otb::Sentinel1ThermalNoiseLookupData::New();
   S1ThermaNoise->SetImageKeywordlist(reader->GetOutput()->GetImageKeywordlist());
 
   auto thermalNoise = static_cast<RealType>(S1ThermaNoise->GetValue(idx1, idx2));

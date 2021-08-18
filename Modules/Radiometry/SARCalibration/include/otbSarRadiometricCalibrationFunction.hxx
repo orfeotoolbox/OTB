@@ -48,7 +48,7 @@ SarRadiometricCalibrationFunction<TInputImage, TCoordRep>::SarRadiometricCalibra
   m_AntennaPatternOldGain = ParametricFunctionType::New();
   m_IncidenceAngle        = ParametricFunctionType::New();
   m_RangeSpreadLoss       = ParametricFunctionType::New();
-  m_S1ThermaNoise         = S1ThermalNoiseLookupType::New();
+  m_S1ThermaNoise         = Sentinel1ThermalNoiseLookupType::New();
 
   /* initialize default values in paramerticFunction instances  */
   m_Noise->SetConstantValue(0.0);

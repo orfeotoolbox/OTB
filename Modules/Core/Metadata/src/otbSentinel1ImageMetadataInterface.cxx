@@ -43,11 +43,6 @@
 
 namespace otb
 {
-
-Sentinel1ImageMetadataInterface::Sentinel1ImageMetadataInterface()
-{
-}
-
 bool Sentinel1ImageMetadataInterface::CanRead() const
 {
   const std::string sensorID = GetSensorID();

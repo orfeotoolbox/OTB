@@ -18,10 +18,10 @@
  * limitations under the License.
  */
 
-#ifndef otbS1ThermalNoiseLookupData_h
-#define otbS1ThermalNoiseLookupData_h
+#ifndef otbSentinel1ThermalNoiseLookupData_h
+#define otbSentinel1ThermalNoiseLookupData_h
 
-#include "otbSentinel1ImageMetadataInterface.h"
+#include "otbSentinel1CalibrationLookupData.h"
 
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
@@ -36,7 +36,7 @@ namespace otb
 {
 
 /**
- * \class S1ThermalNoiseLookupData
+ * \class Sentinel1ThermalNoiseLookupData
  * \brief Calculate the Sentinel 1 thermal noise contribution for the given pixel
  *
  * This class computes the thermal noise using the noise LUTs contained in the product
@@ -49,15 +49,14 @@ namespace otb
  * This class is templated over the input image type and the
  * coordinate representation type (e.g. float or double ).
  *
- * \ingroup OTBSARCalibration
+ * \ingroup OTBMetadata
  */
-template <class T = double>
-class S1ThermalNoiseLookupData : public itk::LightObject
+class Sentinel1ThermalNoiseLookupData : public SarCalibrationLookupData
 {
 
 public:
   /** Standard typedefs */
-  using Self = S1ThermalNoiseLookupData;
+  using Self = Sentinel1ThermalNoiseLookupData;
   using Superclass = itk::LightObject;
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
@@ -66,7 +65,7 @@ public:
   itkNewMacro(Self);
 
   /** RTTI */
-  itkTypeMacro(S1ThermalNoiseLookupData, itk::LightObject);
+  itkTypeMacro(Sentinel1ThermalNoiseLookupData, itk::LightObject);
 
   /** Set input metadata containing denoising LUTs 
    \deprecated 
@@ -76,11 +75,11 @@ public:
   using IndexValueType = itk::IndexValueType ;
 
   /** Compute noise contribution for a given pixel */
-  T GetValue(const IndexValueType x, const IndexValueType y);
+  double GetValue(const IndexValueType x, const IndexValueType y) const override;
 
 protected:
-  S1ThermalNoiseLookupData() : m_FirstLineTime(0.), m_LastLineTime(0.) {m_FirstLineTime = 1.;};
-  ~S1ThermalNoiseLookupData() = default;
+  Sentinel1ThermalNoiseLookupData() : m_FirstLineTime(0.), m_LastLineTime(0.) {m_FirstLineTime = 1.;};
+  ~Sentinel1ThermalNoiseLookupData() = default;
 
 private:
 
@@ -97,10 +96,10 @@ private:
   };
 
   /** Compute range thermal noise contribution */
-  T GetRangeNoise(const IndexValueType x, const IndexValueType y);
+  double GetRangeNoise(const IndexValueType x, const IndexValueType y) const;
 
   /** Compute azimuth thermal noise contribution */
-  T GetAzimuthNoise(const IndexValueType x, const IndexValueType y);
+  double GetAzimuthNoise(const IndexValueType x, const IndexValueType y) const;
 
   int GetRangeVectorIndex(int y) const;
 
@@ -129,9 +128,5 @@ private:
 };
 
 }
-
-#ifndef OTB_MANUAL_INSTANTIATION
-#include "otbS1ThermalNoiseLookupData.hxx"
-#endif
 
 #endif
