@@ -150,14 +150,10 @@ private:
   ConvertTypeFunctor(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-<<<<<<< HEAD
   ThresholdPixelValueType m_LowestB  = common_lowest<InputPixelValueType, OutputPixelValueType>();
   ThresholdPixelValueType m_HighestB = common_highest<InputPixelValueType, OutputPixelValueType>();
   OutputPixelValueType m_Zero     {}; // initialized to zero!
-=======
-  OutputPixelValueType m_LowestB, m_HighestB;
-  double               m_LowestBD, m_HighestBD;
->>>>>>> 40205e669f... ENH: Fix some code smell from SonarCube
+
   unsigned int         m_CompIn, m_CompOut, m_Scal;
 };
 
