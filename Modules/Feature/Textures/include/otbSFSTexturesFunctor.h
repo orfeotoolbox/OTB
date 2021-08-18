@@ -69,6 +69,7 @@ public:
     this->SetNumberOfDirections(20); // set the step too
     m_SelectedTextures = std::vector<bool>(6, 1);
   }
+
   virtual ~SFSTexturesFunctor()
   {
   }
@@ -395,10 +396,10 @@ public:
   }
 
 protected:
-  /** spectral threshold condition*/
-  InternalPixelType m_SpectralThreshold;
   /** spatial threshold condition */
   unsigned int m_SpatialThreshold;
+  /** spectral threshold condition*/
+  InternalPixelType m_SpectralThreshold;
   /** Max nulber of min and considered for Ration computation */
   unsigned int m_RatioMaxConsiderationNumber;
   /** constant to adjust w-mean values */

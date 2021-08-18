@@ -59,9 +59,8 @@ public:
     :
     m_Minimum(0), m_Maximum(itk::NumericTraits<ScalarType>::max())
     {};
-  ~AmplitudePhaseToRGBFunctor()
-  {
-  }
+
+  ~AmplitudePhaseToRGBFunctor() = default;
 
   void SetMaximum(ScalarType max)
   {
@@ -98,8 +97,8 @@ public:
   }
 
 private:
-  ScalarType          m_Maximum;
   ScalarType          m_Minimum;
+  ScalarType          m_Maximum;
   HSVToRGBFunctorType m_HSVToRGBFunctor;
 };
 }
