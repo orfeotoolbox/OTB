@@ -19,7 +19,7 @@
  */
 
 
-#include "otbTerraSarImageMetadataInterface.h"
+#include "otbTerraSarXSarImageMetadataInterface.h"
 
 #include "otbStringUtils.h"
 #include "otbMath.h"
@@ -43,7 +43,7 @@
 namespace otb
 {
 
-TerraSarImageMetadataInterface::TerraSarImageMetadataInterface()
+TerraSarXSarImageMetadataInterface::TerraSarXSarImageMetadataInterface()
 {
 }
 
@@ -100,7 +100,7 @@ std::string GetResourceFile(const std::string & directoryPath, std::string patte
 
 }
 
-bool TerraSarImageMetadataInterface::CanRead() const
+bool TerraSarXSarImageMetadataInterface::CanRead() const
 {
   std::string sensorID = GetSensorID();
   if (sensorID.find("TSX") != std::string::npos)
@@ -109,7 +109,7 @@ bool TerraSarImageMetadataInterface::CanRead() const
     return false;
 }
 
-int TerraSarImageMetadataInterface::GetDay() const
+int TerraSarXSarImageMetadataInterface::GetDay() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -142,7 +142,7 @@ int TerraSarImageMetadataInterface::GetDay() const
   return value;
 }
 
-int TerraSarImageMetadataInterface::GetMonth() const
+int TerraSarXSarImageMetadataInterface::GetMonth() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -175,7 +175,7 @@ int TerraSarImageMetadataInterface::GetMonth() const
   return value;
 }
 
-int TerraSarImageMetadataInterface::GetYear() const
+int TerraSarXSarImageMetadataInterface::GetYear() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -208,7 +208,7 @@ int TerraSarImageMetadataInterface::GetYear() const
   return value;
 }
 
-int TerraSarImageMetadataInterface::GetHour() const
+int TerraSarXSarImageMetadataInterface::GetHour() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -241,7 +241,7 @@ int TerraSarImageMetadataInterface::GetHour() const
   return value;
 }
 
-int TerraSarImageMetadataInterface::GetMinute() const
+int TerraSarXSarImageMetadataInterface::GetMinute() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -274,7 +274,7 @@ int TerraSarImageMetadataInterface::GetMinute() const
   return value;
 }
 
-int TerraSarImageMetadataInterface::GetProductionDay() const
+int TerraSarXSarImageMetadataInterface::GetProductionDay() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -306,7 +306,7 @@ int TerraSarImageMetadataInterface::GetProductionDay() const
   return value;
 }
 
-int TerraSarImageMetadataInterface::GetProductionMonth() const
+int TerraSarXSarImageMetadataInterface::GetProductionMonth() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -339,7 +339,7 @@ int TerraSarImageMetadataInterface::GetProductionMonth() const
   return value;
 }
 
-int TerraSarImageMetadataInterface::GetProductionYear() const
+int TerraSarXSarImageMetadataInterface::GetProductionYear() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -372,7 +372,7 @@ int TerraSarImageMetadataInterface::GetProductionYear() const
   return value;
 }
 
-double TerraSarImageMetadataInterface::GetCalibrationFactor() const
+double TerraSarXSarImageMetadataInterface::GetCalibrationFactor() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -398,7 +398,7 @@ double TerraSarImageMetadataInterface::GetCalibrationFactor() const
   return std::numeric_limits<double>::quiet_NaN(); // Invalid value
 }
 
-unsigned int TerraSarImageMetadataInterface::GetNumberOfNoiseRecords(const MetadataSupplierInterface& mds, const unsigned int polLayer) const
+unsigned int TerraSarXSarImageMetadataInterface::GetNumberOfNoiseRecords(const MetadataSupplierInterface& mds, const unsigned int polLayer) const
 {
   if(polLayer == 0)
   {
@@ -415,7 +415,7 @@ unsigned int TerraSarImageMetadataInterface::GetNumberOfNoiseRecords(const Metad
   }
 }
 
-unsigned int TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(const unsigned int noiseRecord,
+unsigned int TerraSarXSarImageMetadataInterface::GetNoisePolynomialDegrees(const unsigned int noiseRecord,
                                                                        const MetadataSupplierInterface& mds,
                                                                        const unsigned int polLayer) const
 {
@@ -439,8 +439,8 @@ unsigned int TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(const uns
   return std::numeric_limits<unsigned int>::quiet_NaN(); // Invalid value
 }
 
-TerraSarImageMetadataInterface::UIntVectorType
-TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(const MetadataSupplierInterface& mds,
+TerraSarXSarImageMetadataInterface::UIntVectorType
+TerraSarXSarImageMetadataInterface::GetNoisePolynomialDegrees(const MetadataSupplierInterface& mds,
                                                           const unsigned int polLayer) const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
@@ -474,8 +474,8 @@ TerraSarImageMetadataInterface::GetNoisePolynomialDegrees(const MetadataSupplier
 }
 
 
-TerraSarImageMetadataInterface::DoubleVectorType
-TerraSarImageMetadataInterface::GetNoisePolynomialCoefficients(const unsigned int noiseRecord,
+TerraSarXSarImageMetadataInterface::DoubleVectorType
+TerraSarXSarImageMetadataInterface::GetNoisePolynomialCoefficients(const unsigned int noiseRecord,
                                                                const MetadataSupplierInterface& mds,
                                                                const unsigned int polLayer) const
 {
@@ -522,7 +522,7 @@ TerraSarImageMetadataInterface::GetNoisePolynomialCoefficients(const unsigned in
   return polCoef;
 }
 
-double TerraSarImageMetadataInterface::GetNoiseTimeUTC(const unsigned int noiseRecord,
+double TerraSarXSarImageMetadataInterface::GetNoiseTimeUTC(const unsigned int noiseRecord,
                                                        const MetadataSupplierInterface& mds,
                                                        const unsigned int polLayer) const
 {
@@ -549,7 +549,7 @@ double TerraSarImageMetadataInterface::GetNoiseTimeUTC(const unsigned int noiseR
   return std::numeric_limits<double>::quiet_NaN(); // Invalid value
 }
 
-double TerraSarImageMetadataInterface::ConvertStringTimeUTCToJulianDay(const std::string& value) const
+double TerraSarXSarImageMetadataInterface::ConvertStringTimeUTCToJulianDay(const std::string& value) const
 {
   std::vector<std::string> splitDate;
   boost::split(splitDate, value, boost::is_any_of("-T:Z"));
@@ -577,7 +577,7 @@ double TerraSarImageMetadataInterface::ConvertStringTimeUTCToJulianDay(const std
 }
 
 
-double TerraSarImageMetadataInterface::GetNoiseReferencePoint(const unsigned int noiseRecord,
+double TerraSarXSarImageMetadataInterface::GetNoiseReferencePoint(const unsigned int noiseRecord,
                                                               const MetadataSupplierInterface& mds,
                                                               const unsigned int polLayer) const
 {
@@ -595,7 +595,7 @@ double TerraSarImageMetadataInterface::GetNoiseReferencePoint(const unsigned int
   return mds.GetAs<double>(std::numeric_limits<double>::min(), oss.str());
 }
 
-double TerraSarImageMetadataInterface::GetRadarFrequency() const
+double TerraSarXSarImageMetadataInterface::GetRadarFrequency() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -616,7 +616,7 @@ double TerraSarImageMetadataInterface::GetRadarFrequency() const
   return freq;
 }
 
-double TerraSarImageMetadataInterface::GetPRF() const
+double TerraSarXSarImageMetadataInterface::GetPRF() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -636,7 +636,7 @@ double TerraSarImageMetadataInterface::GetPRF() const
   return freq;
 }
 
-double TerraSarImageMetadataInterface::GetRSF() const
+double TerraSarXSarImageMetadataInterface::GetRSF() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -657,7 +657,7 @@ double TerraSarImageMetadataInterface::GetRSF() const
   return freq;
 }
 
-unsigned int TerraSarImageMetadataInterface::GetNumberOfCornerIncidenceAngles(const MetadataSupplierInterface& mds) const
+unsigned int TerraSarXSarImageMetadataInterface::GetNumberOfCornerIncidenceAngles(const MetadataSupplierInterface& mds) const
 {
   auto ret = mds.GetAs<unsigned int>(0, "sceneCoord.numberOfSceneCornerCoord");
   if (ret > 0)
@@ -665,7 +665,7 @@ unsigned int TerraSarImageMetadataInterface::GetNumberOfCornerIncidenceAngles(co
   return mds.GetNumberOf("level1Product.productInfo.sceneInfo.sceneCornerCoord");;
 }
 
-double TerraSarImageMetadataInterface::GetMeanIncidenceAngles(const MetadataSupplierInterface& mds) const
+double TerraSarXSarImageMetadataInterface::GetMeanIncidenceAngles(const MetadataSupplierInterface& mds) const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
 
@@ -697,17 +697,17 @@ double TerraSarImageMetadataInterface::GetMeanIncidenceAngles(const MetadataSupp
   return (sum / (nbAngles + 1));
 }
 
-double TerraSarImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface& mds) const
+double TerraSarXSarImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface& mds) const
 {
   if(mds.HasValue("level1Product.productInfo.sceneInfo.sceneCenterCoord.incidenceAngle"))
     return mds.GetAs<double>("level1Product.productInfo.sceneInfo.sceneCenterCoord.incidenceAngle");
   return mds.GetAs<double>("sceneCoord.sceneCenterCoord.incidenceAngle");
 }
 
-TerraSarImageMetadataInterface::IndexType
-TerraSarImageMetadataInterface::GetCenterIncidenceAngleIndex(const MetadataSupplierInterface& mds) const
+TerraSarXSarImageMetadataInterface::IndexType
+TerraSarXSarImageMetadataInterface::GetCenterIncidenceAngleIndex(const MetadataSupplierInterface& mds) const
 {
-  TerraSarImageMetadataInterface::IndexType it;
+  TerraSarXSarImageMetadataInterface::IndexType it;
   if(mds.HasValue("level1Product.productInfo.sceneInfo.sceneCenterCoord.refRow"))
     it[1] = mds.GetAs<int>("level1Product.productInfo.sceneInfo.sceneCenterCoord.refRow");
   else
@@ -719,10 +719,10 @@ TerraSarImageMetadataInterface::GetCenterIncidenceAngleIndex(const MetadataSuppl
   return it;
 }
 
-TerraSarImageMetadataInterface::DoubleVectorType
-TerraSarImageMetadataInterface::GetCornersIncidenceAngles(const MetadataSupplierInterface& mds) const
+TerraSarXSarImageMetadataInterface::DoubleVectorType
+TerraSarXSarImageMetadataInterface::GetCornersIncidenceAngles(const MetadataSupplierInterface& mds) const
 {
-  TerraSarImageMetadataInterface::DoubleVectorType dv;
+  TerraSarXSarImageMetadataInterface::DoubleVectorType dv;
   std::ostringstream oss;
   auto nbAngles = this->GetNumberOfCornerIncidenceAngles(mds);
   for (unsigned int i = 0; i < nbAngles; ++i)
@@ -741,16 +741,16 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAngles(const MetadataSupplier
   return dv;
 }
 
-TerraSarImageMetadataInterface::IndexVectorType
-TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex(const MetadataSupplierInterface & imd) const
+TerraSarXSarImageMetadataInterface::IndexVectorType
+TerraSarXSarImageMetadataInterface::GetCornersIncidenceAnglesIndex(const MetadataSupplierInterface & imd) const
 {
-  TerraSarImageMetadataInterface::IndexVectorType iv;
+  TerraSarXSarImageMetadataInterface::IndexVectorType iv;
   std::ostringstream oss;
 
   unsigned int nbAngles = this->GetNumberOfCornerIncidenceAngles(imd);
   for (unsigned int i = 0; i < nbAngles; ++i)
   {
-    TerraSarImageMetadataInterface::IndexType it;
+    TerraSarXSarImageMetadataInterface::IndexType it;
 
     oss.str("");
     oss << "level1Product.productInfo.sceneInfo.sceneCornerCoord_" << (i+1) << ".refRow";
@@ -776,7 +776,7 @@ TerraSarImageMetadataInterface::GetCornersIncidenceAnglesIndex(const MetadataSup
 }
 
 
-double TerraSarImageMetadataInterface::Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const
+double TerraSarXSarImageMetadataInterface::Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const
 {
   std::vector<double>::reverse_iterator coefIt = coefficients.rbegin();
   double                                res    = *(coefIt);
@@ -792,8 +792,8 @@ double TerraSarImageMetadataInterface::Horner(std::vector<double>& coefficients,
 }
 
 
-TerraSarImageMetadataInterface::PointSetPointer
-TerraSarImageMetadataInterface::GetRadiometricCalibrationNoise(const MetadataSupplierInterface& mds,
+TerraSarXSarImageMetadataInterface::PointSetPointer
+TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationNoise(const MetadataSupplierInterface& mds,
                                                                const ImageMetadata& imd, const std::string& bandName) const
 {
   // Retrive the polarisation layer
@@ -873,12 +873,12 @@ TerraSarImageMetadataInterface::GetRadiometricCalibrationNoise(const MetadataSup
   return points;
 }
 
-SarImageMetadataInterface::ArrayIndexType TerraSarImageMetadataInterface::GetRadiometricCalibrationNoisePolynomialDegree() const
+SarImageMetadataInterface::ArrayIndexType TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationNoisePolynomialDegree() const
 {
   return {2, 2};
 }
 
-TerraSarImageMetadataInterface::RealType TerraSarImageMetadataInterface::GetRadiometricCalibrationScale() const
+TerraSarXSarImageMetadataInterface::RealType TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationScale() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
   if (!this->CanRead())
@@ -898,8 +898,8 @@ TerraSarImageMetadataInterface::RealType TerraSarImageMetadataInterface::GetRadi
   return value;
 }
 
-TerraSarImageMetadataInterface::PointSetPointer
-TerraSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface& imd) const
+TerraSarXSarImageMetadataInterface::PointSetPointer
+TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface& imd) const
 {
   PointSetPointer points = PointSetType::New();
   PointType       p0;
@@ -932,14 +932,14 @@ TerraSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAngle(const Me
   return points;
 }
 
-TerraSarImageMetadataInterface::ArrayIndexType TerraSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const
+TerraSarXSarImageMetadataInterface::ArrayIndexType TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const
 {
   return {2, 1};
 }
 
 
 /** Get the R, G, B channel */
-std::vector<unsigned int> TerraSarImageMetadataInterface::GetDefaultDisplay() const
+std::vector<unsigned int> TerraSarXSarImageMetadataInterface::GetDefaultDisplay() const
 {
   std::vector<unsigned int> rgb(3);
   rgb[0] = 0;
@@ -948,7 +948,7 @@ std::vector<unsigned int> TerraSarImageMetadataInterface::GetDefaultDisplay() co
   return rgb;
 }
 
-void TerraSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const
+void TerraSarXSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
 }
@@ -1096,7 +1096,7 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
 }
 
 
-void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
+void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
 {
   // Main XML file
   std::string MainDirectory = itksys::SystemTools::GetParentDirectory(
@@ -1175,7 +1175,7 @@ void TerraSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   imd.Add(MDGeom::SAR, sarParam);
 }
 
-void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
+void TerraSarXSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
 {
   Fetch(MDNum::LineSpacing, imd, "meters_per_pixel_y");
   Fetch(MDNum::PixelSpacing, imd, "meters_per_pixel_x");
@@ -1224,7 +1224,7 @@ void TerraSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
 
-void TerraSarImageMetadataInterface::Parse(ImageMetadata & imd)
+void TerraSarXSarImageMetadataInterface::Parse(ImageMetadata & imd)
 {
   // Try to fetch the metadata from GEOM file
   if (m_MetadataSupplierInterface->GetAs<std::string>("", "sensor") == "TSX-1")

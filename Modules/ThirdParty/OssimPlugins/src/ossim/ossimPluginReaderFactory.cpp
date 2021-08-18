@@ -25,7 +25,6 @@
 
 #include <ossimPluginReaderFactory.h>
 #include <ossimRadarSat2TiffReader.h>
-#include <ossimTerraSarTiffReader.h>
 #include <ossim/base/ossimKeywordlist.h>
 #include <ossim/base/ossimRefPtr.h>
 #include <ossim/base/ossimString.h>
@@ -76,21 +75,6 @@ namespace ossimplugins
          reader = 0;
       }
 
-      if ( !reader.valid() )
-      {
-         if(traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "\ntrying ossimTerraSarTiffReader"
-               << std::endl;
-         }
-      
-         reader = new ossimTerraSarTiffReader();
-         if(reader->open(fileName) == false)
-         {
-            reader = 0;
-         }
-      }
 
       if(traceDebug())
       {
@@ -119,21 +103,6 @@ namespace ossimplugins
          reader = 0;
       }
 
-      if ( !reader.valid() )
-      {
-         if(traceDebug())
-         {
-            ossimNotify(ossimNotifyLevel_DEBUG)
-               << "ossimPluginReaderFactory::open(kwl, prefix) DEBUG: entered..."
-               << "Trying ossimTerraSarTiffReader"
-               << std::endl;
-         }
-         reader = new ossimTerraSarTiffReader;
-         if(reader->loadState(kwl, prefix) == false)
-         {
-            reader = 0;
-         }
-      }
 
       if(traceDebug())
       {
@@ -153,11 +122,6 @@ namespace ossimplugins
       {
          result = new ossimRadarSat2TiffReader;
       }
-      else if(typeName == "ossimTerraSarTiffReader")
-      {
-         result = new ossimTerraSarTiffReader;
-      }
-
       return result.release();
    }
 
@@ -171,7 +135,6 @@ namespace ossimplugins
       std::vector<ossimString>& typeList)const
    {
       typeList.push_back(ossimString("ossimRadarSat2TiffReader"));
-      typeList.push_back(ossimString("ossimTerraSarTiffReader"));
    }
 
    void ossimPluginReaderFactory::getSupportedExtensions(
