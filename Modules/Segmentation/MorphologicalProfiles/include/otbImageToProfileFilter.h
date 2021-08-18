@@ -100,9 +100,8 @@ protected:
   /** Constructor */
   ImageToProfileFilter();
   /** Destructor */
-  ~ImageToProfileFilter() override
-  {
-  }
+  ~ImageToProfileFilter() override = default;
+
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 

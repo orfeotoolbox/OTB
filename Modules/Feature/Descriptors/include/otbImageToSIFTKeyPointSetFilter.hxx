@@ -34,28 +34,26 @@ namespace otb
  */
 template <class TInputImage, class TOutputPointSet>
 ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>::ImageToSIFTKeyPointSetFilter()
-  : m_OctavesNumber(1),
+  : 
+    m_OctavesNumber(1),
     m_ScalesNumber(3),
     m_ExpandFactors(2),
     m_ShrinkFactors(2),
-    m_Sigma0(1.6),
-    m_Sigmak(0),
-    
     m_DoGThreshold(0.03),
     m_EdgeThreshold(10),
     m_RatioEdgeThreshold(0),
-    
+    m_GradientMagnitudeThreshold(0.2),
+    m_Sigma0(1.6),
+    m_Sigmak(0),
+    m_SigmaFactorOrientation(3),
+    m_SigmaFactorDescriptor(1.5),
+
+    m_ExpandFilter(ExpandFilterType::New()),
+
     m_ValidatedKeyPoints(0),
     m_DifferentSamplePoints(0),
     m_DiscardedKeyPoints(0),
     m_ChangeSamplePointsMax(2),
-    
-    m_SigmaFactorOrientation(3),
-    m_SigmaFactorDescriptor(1.5),
-
-    m_GradientMagnitudeThreshold(0.2),
-
-    m_ExpandFilter(ExpandFilterType::New()),
 
     m_HistogramGaussianWeights({
       2.3771112282795414e-07, 3.8860734758633732e-07, 6.2655544995978937e-07, 9.9631120821413786e-07, 1.5624909838697011e-06, 2.4167238265599128e-06,

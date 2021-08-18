@@ -128,9 +128,8 @@ public:
 
 protected:
   BSplineInterpolateImageFunction();
-  ~BSplineInterpolateImageFunction() override
-  {
-  }
+  ~BSplineInterpolateImageFunction() override = default;
+
   void operator=(const Self&) = delete;
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 

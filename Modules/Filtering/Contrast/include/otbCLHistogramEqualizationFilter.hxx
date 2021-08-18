@@ -37,10 +37,10 @@ CLHistogramEqualizationFilter<TInputImage, TOutputImage>::CLHistogramEqualizatio
     m_BufferFilter(BufferFilter::New()),
     m_Min(std::numeric_limits<InputPixelType>::quiet_NaN()),
     m_Max(std::numeric_limits<InputPixelType>::quiet_NaN()),
+    m_NoData(std::numeric_limits<InputPixelType>::quiet_NaN()),
     m_NbBin(256),
     m_Threshold(-1),
-    m_NoDataFlag(false),
-    m_NoData(std::numeric_limits<InputPixelType>::quiet_NaN())
+    m_NoDataFlag(false)
 {
   m_ThumbSize.Fill(0);
   m_GainLutFilter->SetInput(m_HistoFilter->GetHistoOutput());
