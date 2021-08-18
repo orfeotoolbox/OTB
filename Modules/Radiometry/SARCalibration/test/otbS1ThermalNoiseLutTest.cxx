@@ -23,53 +23,46 @@
 #include "itkMacro.h"
 #include "otbImage.h"
 #include "otbImageFileReader.h"
-#include "otbSarImageMetadataInterfaceFactory.h"
 #include "otbS1ThermalNoiseLookupData.h"
 
 int otbS1ThermalNoiseLutTest(int argc, char* argv[])
 {
-  typedef double                         RealType;
-  typedef otb::SarImageMetadataInterface ImageMetadataInterfaceType;
-  typedef otb::SarCalibrationLookupData  LookupDataType;
-  typedef otb::Image<double, 2> InputImageType;
-  typedef otb::ImageFileReader<InputImageType> ImageReaderType;
+  using RealType = double;
+  using InputImageType = otb::Image<double, 2>;
+  using ImageReaderType = otb::ImageFileReader<InputImageType>;
 
   const double tol = 1e-10;
 
   using S1ThermalNoiseLookupType = otb::S1ThermalNoiseLookupData<double>;
   using S1ThermalNoiseLookupPointerType = typename S1ThermalNoiseLookupType::Pointer;
 
-
   if (argc < 3)
   {
     std::cerr << "Usage: otbS1ThermalNoiseLutTest /path/to/input/file lutValue thermalNoise" << std::endl;
     return EXIT_FAILURE;
   }
+
   ImageReaderType::Pointer reader = ImageReaderType::New();
   reader->SetFileName(argv[1]);
   reader->UpdateOutputInformation();
+  const auto & imd = reader->GetOutput()->GetImageMetadata();
 
-  ImageMetadataInterfaceType::Pointer imageMetadataInterface = otb::SarImageMetadataInterfaceFactory::CreateIMI(reader->GetOutput()->GetMetaDataDictionary());
-
-  if (!imageMetadataInterface.IsNotNull())
+  /** Fetch the SARCalib */
+  std::unique_ptr<otb::SARCalib> sarCalibPtr;
+  if (imd.Has(otb::MDGeom::SARCalib))
   {
-    std::cerr << "cannot create a otb::SarImageMetadataInterface for input image." << std::endl;
-    return EXIT_FAILURE;
+    sarCalibPtr = std::make_unique<otb::SARCalib>(boost::any_cast<otb::SARCalib>(imd[otb::MDGeom::SARCalib]));
+  }
+  else
+  {
+     std::cerr <<  "Unable to fetch the SARCalib metadata from the input product.";
   }
 
-  const std::string sensorId = imageMetadataInterface->GetSensorID();
-
-  LookupDataType::Pointer lookupDataObj = imageMetadataInterface->GetCalibrationLookupData(0);
-
-  if (!lookupDataObj.IsNotNull())
-  {
-    std::cerr << "lookupDataObj is Null" << std::endl;
-    return EXIT_FAILURE;
-  }
+  auto lut = sarCalibPtr->calibrationLookupData[0];
 
   const unsigned int idx1 = 396, idx2 = 333;
 
-  auto lutVal = static_cast<RealType>(lookupDataObj->GetValue(idx1, idx2));
+  auto lutVal = static_cast<RealType>(lut->GetValue(idx1, idx2));
   const auto lutValBaseline = static_cast<RealType>(std::stod(argv[2]));
 
   if (std::abs(lutVal - lutValBaseline) > tol)
