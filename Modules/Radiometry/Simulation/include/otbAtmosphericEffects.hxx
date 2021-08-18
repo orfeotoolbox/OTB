@@ -29,11 +29,13 @@ namespace otb
 
 template <class TSpectralResponse, class TRSR>
 AtmosphericEffects<TSpectralResponse, TRSR>::AtmosphericEffects() :
-  m_IsSetAtmosphericRadiativeTerms(false),								    
   m_InputSpectralResponse(InputSpectralResponseType::New()),
   m_CorrectedSpectralResponse(InputSpectralResponseType::New()),
-  m_InputSatRSR(InputRSRType::New())
-{}
+  m_InputSatRSR(InputRSRType::New()),
+  m_IsSetAtmosphericRadiativeTerms(false)
+{
+}
+
 /*
 template <class TSpectralResponse , class TRSR>
 void
