@@ -84,11 +84,6 @@ public:
   /** RTTI */
   itkTypeMacro(Sentinel1ThermalNoiseLookupData, itk::LightObject);
 
-  /** Set input metadata containing denoising LUTs 
-   \deprecated 
-   */
-  void SetImageKeywordlist(const ImageKeywordlist & kwl);
-
   /** Init the LUT using metadatas */
   void InitParameters(double firstLineTime,
                       double lastLineTime,

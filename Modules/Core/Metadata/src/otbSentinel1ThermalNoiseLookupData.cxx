@@ -23,60 +23,6 @@
 namespace otb
 {
 
-void Sentinel1ThermalNoiseLookupData::SetImageKeywordlist(const ImageKeywordlist & kwl)
-{
-  m_FirstLineTime = ossimplugins::time::toModifiedJulianDate(kwl.GetMetadataByKey("calibration.startTime")).as_day_frac();
-  m_LastLineTime  = ossimplugins::time::toModifiedJulianDate(kwl.GetMetadataByKey("calibration.stopTime")).as_day_frac();
-
-  m_NumOfLines = std::stoi(kwl.GetMetadataByKey("number_lines"));
-  m_LineTimeInterval = (m_LastLineTime - m_FirstLineTime) / (m_NumOfLines - 1);
-  m_RangeCount = std::stoi(kwl.GetMetadataByKey("noise.rangeCount"));
-  m_RangeNoiseVectorList.clear();
-
-
-  double lastMJD = 0;
-  for (int i = 0; i < m_RangeCount; i++)
-  {
-    const std::string prefix = "noise.noiseVector[" + std::to_string(i) + "].";
-    Sentinel1CalibrationStruct rangeNoiseVector;
-    rangeNoiseVector.timeMJD = ossimplugins::time::toModifiedJulianDate(kwl.GetMetadataByKey(prefix + "azimuthTime")).as_day_frac();
-    rangeNoiseVector.deltaMJD = rangeNoiseVector.timeMJD - lastMJD;
-
-    rangeNoiseVector.line = std::stoi(kwl.GetMetadataByKey(prefix + "line"));
-    Utils::ConvertStringToVector(kwl.GetMetadataByKey( prefix + "pixel"), 
-                                 rangeNoiseVector.pixels, prefix + "pixel");
-    Utils::ConvertStringToVector(kwl.GetMetadataByKey( prefix + "noiseLut"), 
-                                 rangeNoiseVector.vect, prefix + "noiseLut");
-    int prevPixel = 0;
-    for (const auto & pixel: rangeNoiseVector.pixels)
-    {
-      rangeNoiseVector.deltaPixels.push_back(pixel - prevPixel);
-      prevPixel = pixel;
-    }
-    m_RangeNoiseVectorList.push_back(rangeNoiseVector);
-    lastMJD = rangeNoiseVector.timeMJD;
-  }
-  if (kwl.HasKey("noise.azimuthCount"))
-  {
-    m_AzimuthCount = std::stoi(kwl.GetMetadataByKey("noise.azimuthCount"));
-    for (int i = 0; i < m_AzimuthCount; i++)
-    {
-      const std::string prefix = "noise.noiseAzimuthVector[" + std::to_string(i) + "].";
-      Sentinel1AzimuthNoiseStruct azimuthNoiseVector;
-      azimuthNoiseVector.firstAzimuthLine = std::stoi(kwl.GetMetadataByKey(prefix + "firstAzimuthLine"));
-      azimuthNoiseVector.firstRangeSample = std::stoi(kwl.GetMetadataByKey(prefix + "firstRangeSample"));
-      azimuthNoiseVector.lastAzimuthLine = std::stoi(kwl.GetMetadataByKey(prefix + "lastAzimuthLine"));
-      azimuthNoiseVector.lastRangeSample = std::stoi(kwl.GetMetadataByKey(prefix + "lastRangeSample"));
-      Utils::ConvertStringToVector(kwl.GetMetadataByKey( prefix + "line"), 
-                                 azimuthNoiseVector.lines, prefix + "line");
-      Utils::ConvertStringToVector(kwl.GetMetadataByKey( prefix + "noiseAzimuthLut"), 
-                                 azimuthNoiseVector.vect, prefix + "noiseAzimuthLut");
-      m_AzimuthNoiseVectorList.push_back(azimuthNoiseVector);
-    }
-  }
-
-}
-
 void Sentinel1ThermalNoiseLookupData::InitParameters(double firstLineTime,
                     double lastLineTime,
                     int numOfLines,

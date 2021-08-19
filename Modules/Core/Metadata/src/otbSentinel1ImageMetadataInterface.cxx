@@ -188,7 +188,7 @@ NoiseVectorLists ReadNoiseVectorListsFromGeom(const MetadataSupplierInterface& m
   
   // rangeCount, the number of vectors, is not stored in old geoms, so we iterate until the last vector
   // by testing the presence of the pixel_count field
-  for (int listId = 0 ; listId < mds.GetAs<std::string>("", "noise.noiseVector[" + std::to_string(listId) + "].pixel_count").size() ; ++listId)
+  for (int listId = 0 ; mds.GetAs<std::string>("", "noise.noiseVector[" + std::to_string(listId) + "].pixel_count").size() ; ++listId)
   {
     // Path: noise.noiseVector[<listId>].{azimuthTime,line,noiseLut,pixel,pixel_count}
     const std::string prefix = "noise.noiseVector[" + std::to_string(listId) + "].";
@@ -212,7 +212,7 @@ NoiseVectorLists ReadNoiseVectorListsFromGeom(const MetadataSupplierInterface& m
     }
     output.rangeVectorList.push_back(rangeNoiseVector);
   }
-  std::cout << "here 2" << std::endl;
+
   auto azimuthCount = mds.GetAs<int>(0, "noise.azimuthCount");
   for (int listId = 0; listId < azimuthCount; ++listId)
   {
