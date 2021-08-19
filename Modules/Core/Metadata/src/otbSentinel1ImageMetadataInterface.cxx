@@ -890,7 +890,6 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Add(MDStr::Polarization, itksys::SystemTools::UpperCase(imageFineName.substr(pos, pos2-pos)));
 
   imd.Add(MDStr::Mode, imd[MDStr::Swath]);
-  imd.Add(MDStr::SensorID, "SAR");
 
   // Manifest file
   std::string ManifestFilePath = itksys::SystemTools::GetParentDirectory(itksys::SystemTools::GetParentDirectory(imageFilePath)) + "/manifest.safe";
@@ -904,6 +903,9 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
     }
   }
   XMLMetadataSupplier ManifestMS(ManifestFilePath);
+
+  imd.Add(MDStr::SensorID, ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:platform.safe:familyName") 
+                         + ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:platform.safe:number"));
 
   imd.Add(MDTime::ProductionDate,
     ManifestMS.GetFirstAs<MetaData::Time>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.start"));
@@ -988,7 +990,7 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   Fetch(MDTime::AcquisitionStopTime, imd, "support_data.last_line_time");
   Fetch(MDNum::LineSpacing, imd, "support_data.azimuth_spacing");
   Fetch(MDNum::PixelSpacing, imd, "support_data.range_spacing");
-  imd.Add(MDStr::SensorID, "SAR");
+  Fetch(MDStr::SensorID, imd, "sensor");
   Fetch(MDStr::Mode, imd, "header.swath");
   Fetch(MDNum::NumberOfLines, imd, "number_lines");
   Fetch(MDNum::NumberOfColumns, imd, "number_samples");

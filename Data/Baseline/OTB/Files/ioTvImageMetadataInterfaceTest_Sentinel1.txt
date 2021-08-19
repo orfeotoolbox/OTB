@@ -1,4 +1,4 @@
-SensorID SAR
+SensorID SENTINEL-1A
 Mission S1A
 Instrument S1A
 ProductType SLC
