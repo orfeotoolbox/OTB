@@ -128,9 +128,6 @@ protected:
   /* Fetch the Orbits metadata */
   std::vector<Orbit> GetOrbits(const XMLMetadataSupplier&) const;
 
-  /* Fetch the noise LUTs */
-  std::vector<SARNoise> GetNoiseVector(const XMLMetadataSupplier&) const;
-
   /* Fetch the burst records */
   std::vector<BurstRecord> GetBurstRecords(const XMLMetadataSupplier&, const MetaData::DurationType & azimuthTimeInterval) const;
 

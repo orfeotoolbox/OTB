@@ -69,20 +69,6 @@ struct OTBMetadata_EXPORT DopplerCentroid
   std::vector<double> geoDopCoef;
 };
 
-/** \struct SARNoise
- *
- * \brief This structure is used to handle Noise look up tables
- */
-struct OTBMetadata_EXPORT SARNoise
-{
-  /** Image line at which the noise vector applies */
-  int line;
-  /** Zero Doppler azimuth time at which noise vector applies */
-  MetaData::Time azimuthTime;
-  /** Noise look up talbe */
-  MetaData::LUT1D noiseLut;
-};
-
 /** \struct Orbit
  *
  * \brief This structure is used to handle orbit information
@@ -164,9 +150,6 @@ struct OTBMetadata_EXPORT SARParam
 
   /** Doppler centroid estimates */
   std::vector<DopplerCentroid> dopplerCentroids;
-
-  /** Noise look up tables */
-  std::vector<SARNoise> noiseVector;
 
   /** List of orbit information */
   std::vector<Orbit> orbits;

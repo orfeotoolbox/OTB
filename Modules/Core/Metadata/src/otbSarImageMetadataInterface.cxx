@@ -307,33 +307,6 @@ std::vector<BurstRecord> SarImageMetadataInterface::GetBurstRecordsGeom() const
   return burstRecords;
 }
 
-std::vector<SARNoise> SarImageMetadataInterface::GetNoiseVectorGeom() const
-{
-  std::vector<SARNoise> noiseVector;
-  // This streams wild hold the iteration number
-  std::ostringstream oss;
-  // Path: noise.noiseVector[<listId>].{azimuthTime,line,noiseLut,pixel,pixel_count}
-  for (int listId = 0 ; m_MetadataSupplierInterface->GetAs<std::string>("", std::string("noise.noiseVector[")+std::to_string(listId)+std::string("].pixel_count")) != "" ; ++listId)
-  {
-    oss.str("");
-    oss << listId;
-    // Base path to the data, that depends on the iteration number
-    std::string path_root = "noise.noiseVector[" + oss.str() + "]";
-    SARNoise noiseVect;
-    std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>(path_root + ".azimuthTime")) >> noiseVect.azimuthTime;
-    MetaData::LUT1D noiseLut;
-    MetaData::LUTAxis ax1;
-    // note: in some geom products pixel_count does not match the vector size in noiseVector. 
-    ax1.Values = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".pixel", ' ');
-    ax1.Size = ax1.Values.size();
-    noiseLut.Axis[0] = ax1;
-    noiseLut.Array = m_MetadataSupplierInterface->GetAsVector<double>(path_root + ".noiseLut", ' ', ax1.Size);
-    noiseVect.noiseLut = std::move(noiseLut);
-    noiseVector.push_back(std::move(noiseVect));
-  }
-  return noiseVector;
-}
-
 bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
 {
   bool hasValue;
@@ -344,7 +317,6 @@ bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
   sarParam.azimuthFmRates = this->GetAzimuthFmRateGeom();
   sarParam.dopplerCentroids = this->GetDopplerCentroidGeom();
   sarParam.orbits = this->GetOrbitsGeom();
-  sarParam.noiseVector = this->GetNoiseVectorGeom();
   sarParam.burstRecords = this->GetBurstRecordsGeom();
 
   const std::string supportDataPrefix = "support_data.";
