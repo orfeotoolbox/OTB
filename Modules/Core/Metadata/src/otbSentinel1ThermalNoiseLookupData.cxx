@@ -27,10 +27,12 @@ void Sentinel1ThermalNoiseLookupData::SetImageKeywordlist(const ImageKeywordlist
 {
   m_FirstLineTime = ossimplugins::time::toModifiedJulianDate(kwl.GetMetadataByKey("calibration.startTime")).as_day_frac();
   m_LastLineTime  = ossimplugins::time::toModifiedJulianDate(kwl.GetMetadataByKey("calibration.stopTime")).as_day_frac();
+
   m_NumOfLines = std::stoi(kwl.GetMetadataByKey("number_lines"));
   m_LineTimeInterval = (m_LastLineTime - m_FirstLineTime) / (m_NumOfLines - 1);
   m_RangeCount = std::stoi(kwl.GetMetadataByKey("noise.rangeCount"));
   m_RangeNoiseVectorList.clear();
+
 
   double lastMJD = 0;
   for (int i = 0; i < m_RangeCount; i++)
@@ -39,6 +41,7 @@ void Sentinel1ThermalNoiseLookupData::SetImageKeywordlist(const ImageKeywordlist
     Sentinel1CalibrationStruct rangeNoiseVector;
     rangeNoiseVector.timeMJD = ossimplugins::time::toModifiedJulianDate(kwl.GetMetadataByKey(prefix + "azimuthTime")).as_day_frac();
     rangeNoiseVector.deltaMJD = rangeNoiseVector.timeMJD - lastMJD;
+
     rangeNoiseVector.line = std::stoi(kwl.GetMetadataByKey(prefix + "line"));
     Utils::ConvertStringToVector(kwl.GetMetadataByKey( prefix + "pixel"), 
                                  rangeNoiseVector.pixels, prefix + "pixel");
@@ -71,7 +74,27 @@ void Sentinel1ThermalNoiseLookupData::SetImageKeywordlist(const ImageKeywordlist
       m_AzimuthNoiseVectorList.push_back(azimuthNoiseVector);
     }
   }
+
 }
+
+void Sentinel1ThermalNoiseLookupData::InitParameters(double firstLineTime,
+                    double lastLineTime,
+                    int numOfLines,
+                    std::vector<Sentinel1CalibrationStruct> const& rangeNoiseVectorList,
+                    std::vector<Sentinel1AzimuthNoiseStruct> const& azimuthNoiseVectorList)
+{
+  m_FirstLineTime = firstLineTime,
+  m_LastLineTime = lastLineTime;
+  m_NumOfLines = numOfLines;
+  m_LineTimeInterval = (lastLineTime - firstLineTime) / (numOfLines - 1);;
+  m_RangeNoiseVectorList = rangeNoiseVectorList;
+  m_AzimuthNoiseVectorList = azimuthNoiseVectorList;
+
+  m_RangeCount = rangeNoiseVectorList.size();
+  m_AzimuthCount = azimuthNoiseVectorList.size();
+}
+
+
 
 double Sentinel1ThermalNoiseLookupData::GetValue(const IndexValueType x, const IndexValueType y) const
 {

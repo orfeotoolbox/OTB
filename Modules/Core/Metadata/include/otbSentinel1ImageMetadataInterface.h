@@ -24,8 +24,6 @@
 #include "otbSarImageMetadataInterface.h"
 #include "otbXMLMetadataSupplier.h"
 
-#include "otbSentinel1CalibrationLookupData.h"
-
 namespace otb
 {
 /** \class Sentinel1ImageMetadataInterface
@@ -143,6 +141,12 @@ protected:
 
   /* Compute the mean terrain elevation */
   double getBandTerrainHeight(const XMLMetadataSupplier&) const;
+
+  /* create the thermal denoising LUT */
+  bool CreateThermalNoiseLookupData(SARCalib& sarCalib,
+                                                                    const ImageMetadata& imd,
+                                                                    const MetadataSupplierInterface& mds,
+                                                                    const bool geom) const;
 
 private:
   Sentinel1ImageMetadataInterface(const Self&) = delete;

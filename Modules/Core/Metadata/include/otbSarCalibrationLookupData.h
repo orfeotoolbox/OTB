@@ -53,16 +53,15 @@ public:
     SIGMA = 0,
     BETA,
     GAMMA,
-    DN
+    DN,
+    NOISE
   };
 
   SarCalibrationLookupData() : m_Type(0)
   {
   }
 
-  ~SarCalibrationLookupData() override
-  {
-  }
+  ~SarCalibrationLookupData() override = default;
 
   virtual double GetValue(const IndexValueType itkNotUsed(x), const IndexValueType itkNotUsed(y)) const
   {

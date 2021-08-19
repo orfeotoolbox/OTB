@@ -228,6 +228,7 @@ double Time::GetSecond() const
   return tm_sec + frac_sec;
 }
 
+#if 1
 double Time::GetJulianDay() const
 {
   // Conversion to julian day
@@ -244,6 +245,21 @@ double Time::GetJulianDay() const
 
   return julianDay;
 }
+
+#else // Ossim implementation, which produces slightly different results
+double Time::GetJulianDay() const
+{
+   int J = GetMonth();
+   int K = GetDay();
+   int I = GetYear();
+
+   return (K-32075+1461*(I+4800+(J-14)/12)/4+367*(J-2-(J-14)/12*12)
+           /12-3*((I+4900+(J-14)/12)/100)/4+
+           (GetHour()/24.0)+
+           (GetMinute()/1440.0)+
+           ((GetSecond())/86400.0));
+}
+#endif
 
 double Time::GetModifiedJulian() const
 {

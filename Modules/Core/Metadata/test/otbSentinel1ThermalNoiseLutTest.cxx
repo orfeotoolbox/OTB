@@ -55,7 +55,7 @@ int otbSentinel1ThermalNoiseLutTest(int argc, char* argv[])
     std::cerr <<  "Unable to fetch the SARCalib metadata from the input product.";
   }
 
-  auto lut = sarCalibPtr->calibrationLookupData[0];
+  auto lut = sarCalibPtr->calibrationLookupData[otb::SarCalibrationLookupData::SIGMA];
 
   const unsigned int idx1 = 396, idx2 = 333;
 
@@ -70,10 +70,9 @@ int otbSentinel1ThermalNoiseLutTest(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  auto S1ThermaNoise = otb::Sentinel1ThermalNoiseLookupData::New();
-  S1ThermaNoise->SetImageKeywordlist(reader->GetOutput()->GetImageKeywordlist());
+  auto thermalNoiseLut = sarCalibPtr->calibrationLookupData[otb::SarCalibrationLookupData::NOISE];
 
-  auto thermalNoise = static_cast<RealType>(S1ThermaNoise->GetValue(idx1, idx2));
+  auto thermalNoise = static_cast<RealType>(thermalNoiseLut->GetValue(idx1, idx2));
   const auto thermalNoiseBaseline = static_cast<RealType>(std::stod(argv[3]));
 
   if (std::abs(thermalNoise - thermalNoiseBaseline) > tol)

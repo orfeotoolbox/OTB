@@ -170,6 +170,12 @@ public:
     m_Lut = lut;
   }
 
+  /** Set SetCalibrationLookupData instance */
+  void SetNoiseLookupData(LookupDataPointer lut)
+  {
+    m_NoiseLut = lut;
+  }
+
 protected:
   /** ctor */
   SarRadiometricCalibrationFunction();
@@ -202,8 +208,7 @@ private:
   ParametricFunctionPointer m_IncidenceAngle;
   ParametricFunctionPointer m_RangeSpreadLoss;
   LookupDataPointer         m_Lut;
-  bool                      m_RemoveS1ThermalNoise;
-  Sentinel1ThermalNoiseLookupPointerType m_S1ThermaNoise;
+  LookupDataPointer         m_NoiseLut;
 };
 
 } // end namespace otb

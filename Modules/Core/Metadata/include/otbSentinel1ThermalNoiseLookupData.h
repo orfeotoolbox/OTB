@@ -35,6 +35,22 @@
 namespace otb
 {
 
+/** 
+ * \struct 
+ * \brief Structure containing the Sentinel 1 azimuth noise LUT 
+ * \ingroup OTBMetadata
+*/
+struct Sentinel1AzimuthNoiseStruct
+{
+  int firstAzimuthLine = 0;
+  int lastAzimuthLine = 0;
+  int firstRangeSample = 0;
+  int lastRangeSample = 0;
+
+  std::vector<int> lines;
+  std::vector<float>  vect;
+};
+
 /**
  * \class Sentinel1ThermalNoiseLookupData
  * \brief Calculate the Sentinel 1 thermal noise contribution for the given pixel
@@ -53,13 +69,14 @@ namespace otb
  */
 class Sentinel1ThermalNoiseLookupData : public SarCalibrationLookupData
 {
-
 public:
   /** Standard typedefs */
   using Self = Sentinel1ThermalNoiseLookupData;
   using Superclass = itk::LightObject;
   using Pointer = itk::SmartPointer<Self>;
   using ConstPointer = itk::SmartPointer<const Self>;
+
+  using IndexValueType = itk::IndexValueType ;
 
   /** Creation through the object factory */
   itkNewMacro(Self);
@@ -72,7 +89,12 @@ public:
    */
   void SetImageKeywordlist(const ImageKeywordlist & kwl);
 
-  using IndexValueType = itk::IndexValueType ;
+  /** Init the LUT using metadatas */
+  void InitParameters(double firstLineTime,
+                      double lastLineTime,
+                      int numOfLines,
+                      std::vector<Sentinel1CalibrationStruct> const& rangeNoiseVectorList,
+                      std::vector<Sentinel1AzimuthNoiseStruct> const& azimuthNoiseVectorList);
 
   /** Compute noise contribution for a given pixel */
   double GetValue(const IndexValueType x, const IndexValueType y) const override;
@@ -82,19 +104,6 @@ protected:
   ~Sentinel1ThermalNoiseLookupData() = default;
 
 private:
-
-  /** Structure containing the azimuth noise LUT */
-  struct Sentinel1AzimuthNoiseStruct
-  {
-    int firstAzimuthLine = 0;
-    int lastAzimuthLine = 0;
-    int firstRangeSample = 0;
-    int lastRangeSample = 0;
-
-    std::vector<int> lines;
-    std::vector<float>  vect;
-  };
-
   /** Compute range thermal noise contribution */
   double GetRangeNoise(const IndexValueType x, const IndexValueType y) const;
 
