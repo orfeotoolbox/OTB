@@ -72,11 +72,6 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out", "Output calibrated image. This image contains the backscatter (sigmaNought) of the input image.");
 
-    AddParameter(ParameterType_Bool, "noise", "Disable Noise");
-    SetParameterDescription("noise", "Flag to disable noise. This parameter is deprecated "
-                            ", it has the opposite effect of removenoise, which " 
-                            "should be preferred to this parameter.");
-
     AddParameter(ParameterType_Bool, "removenoise", "Remove Noise");
     SetParameterDescription("removenoise", "Remove the noise of the input product. The type of noise and the "
                             "denoising method depends on the input sensor. The following sensors are supported: \n \n"
@@ -117,12 +112,6 @@ private:
     // Set the filer input
     m_CalibrationFilter = CalibrationFilterType::New();
     m_CalibrationFilter->SetInput(floatComplexImage);
-
-    // Deprecated parameter noise: use the parameter only if removenoise has not been set
-    if (!HasUserValue("removenoise") && HasUserValue("noise"))
-    {
-      SetParameterInt("removenoise", !bool(GetParameterInt("noise")));
-    }
 
     m_CalibrationFilter->SetEnableNoise(GetParameterInt("removenoise"));
     m_CalibrationFilter->SetLookupSelected(GetParameterInt("lut"));
