@@ -466,7 +466,17 @@ TerraSarXSarImageMetadataInterface::GetNoisePolynomialDegrees(const MetadataSupp
     oss << "noise[" << i << "]imageNoise.noiseEstimate.polynomialDegree";
     std::string  key         = oss.str();
     std::string  valueString = imageKeywordlist.GetMetadataByKey(key);
-    unsigned int value       = atoi(valueString.c_str());
+    unsigned int value = 0;
+    try
+    {
+      value = std::stoi(valueString);
+    }
+    catch( ... )
+    {
+      // Throw an exception
+      throw std::runtime_error("Failed to convert polynomial degree.");
+    }
+
     polDeg.push_back(value);
   }
 
@@ -517,6 +527,7 @@ TerraSarXSarImageMetadataInterface::GetNoisePolynomialCoefficients(const unsigne
     oss.str("");
     oss << path_start << (noiseRecord - const_shift) << path_middle << (j - const_shift) << path_end;
     polCoef.push_back(mds.GetAs<double>(oss.str()));
+
   }
 
   return polCoef;
@@ -554,12 +565,12 @@ double TerraSarXSarImageMetadataInterface::ConvertStringTimeUTCToJulianDay(const
   std::vector<std::string> splitDate;
   boost::split(splitDate, value, boost::is_any_of("-T:Z"));
 
-  int    year  = atoi(splitDate[0].c_str());
-  int    month = atoi(splitDate[1].c_str());
-  int    day   = atoi(splitDate[2].c_str());
-  int    hour  = atoi(splitDate[3].c_str());
-  int    minu  = atoi(splitDate[4].c_str());
-  double sec   = atof(splitDate[5].c_str());
+  int    year  = std::stoi(splitDate[0].c_str());
+  int    month = std::stoi(splitDate[1].c_str());
+  int    day   = std::stoi(splitDate[2].c_str());
+  int    hour  = std::stoi(splitDate[3].c_str());
+  int    minu  = std::stoi(splitDate[4].c_str());
+  double sec   = std::stod(splitDate[5].c_str());
 
   // Conversion to julian day
   // according to http://en.wikipedia.org/wiki/Julian_day
@@ -611,7 +622,17 @@ double TerraSarXSarImageMetadataInterface::GetRadarFrequency() const
   }
 
   std::string valueString = imageKeywordlist.GetMetadataByKey("radarFrequency");
-  double      freq        = atof(valueString.c_str());
+
+  double freq = 0;
+  try
+    {
+      freq = std::stod(valueString);
+    }
+  catch( ... )
+    {
+      // Throw an exception
+      throw std::runtime_error("Failed to convert frequency.");
+    }
 
   return freq;
 }
@@ -631,7 +652,17 @@ double TerraSarXSarImageMetadataInterface::GetPRF() const
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
   std::string valueString = imageKeywordlist.GetMetadataByKey("sensor_params.prf");
-  double      freq        = atof(valueString.c_str());
+
+  double freq = 0;
+  try
+    {
+      freq = std::stod(valueString);
+    }
+  catch( ... )
+    {
+      // Throw an exception
+      throw std::runtime_error("Failed to convert PRF.");
+    }
 
   return freq;
 }
@@ -652,7 +683,17 @@ double TerraSarXSarImageMetadataInterface::GetRSF() const
   }
 
   std::string valueString = imageKeywordlist.GetMetadataByKey("sensor_params.sampling_frequency");
-  double      freq        = atof(valueString.c_str());
+
+  double freq = 0;
+  try
+    {
+      freq = std::stod(valueString);
+    }
+  catch( ... )
+    {
+      // Throw an exception
+      throw std::runtime_error("Failed to convert RSF.");
+    }
 
   return freq;
 }
@@ -813,32 +854,18 @@ TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationNoise(const Metadat
     }
   }
 
-  PointSetPointer points = PointSetType::New();
-
-  IndexVectorType cornerIndex  = this->GetCornersIncidenceAnglesIndex(mds);
-  unsigned int    numberOfRows = 0;
-  unsigned int    numberOfCols = 0;
-
-  for (unsigned int i = 0; i < cornerIndex.size(); ++i)
-  {
-    IndexType index;
-    index              = cornerIndex[i];
-    unsigned int noRow = index[0];
-    unsigned int noCol = index[1];
-    if (noRow > numberOfRows)
-    {
-      numberOfRows = noRow;
-    }
-    if (noCol > numberOfCols)
-    {
-      numberOfCols = noCol;
-    }
-  }
+  assert(imd.Has(MDNum::NumberOfLines));
+  assert(imd.Has(MDNum::NumberOfColumns));
+  auto numberOfRows = static_cast<unsigned int>(imd[MDNum::NumberOfLines]);
+  auto numberOfCols = static_cast<unsigned int>(imd[MDNum::NumberOfColumns]);
 
   double   startTime      = imd[MDTime::AcquisitionStartTime].GetJulianDay();
   double   stopTime       = imd[MDTime::AcquisitionStopTime].GetJulianDay();
+
   RealType firstRangeTime = imd[MDNum::RangeTimeFirstPixel];
   RealType lastRangeTime  = imd[MDNum::RangeTimeLastPixel];
+
+  PointSetPointer points = PointSetType::New();
 
   points->Initialize();
   unsigned int noPoint = 0;
@@ -865,6 +892,7 @@ TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationNoise(const Metadat
       RealType value          = this->Horner(polynomialCoefficient, tauMinusTauRef);
 
       p0[1] = col;
+
       points->SetPoint(noPoint, p0);
       points->SetPointData(noPoint, value);
       ++noPoint;
@@ -893,8 +921,22 @@ TerraSarXSarImageMetadataInterface::RealType TerraSarXSarImageMetadataInterface:
     itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
   }
 
-  std::string valueString = imageKeywordlist.GetMetadataByKey("calibration.calibrationConstant.calFactor");
-  double      value       = atof(valueString.c_str());
+  std::string key("calibration.calibrationConstant.calFactor");
+  double value = 0;
+  if (imageKeywordlist.HasKey(key))
+  {
+    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
+
+    try
+      {
+  value = std::stod(valueString);
+      }
+    catch( ... )
+      {
+  // Throw an exception
+  throw std::runtime_error("Failed to convert calibration factor.");
+      }
+  }
   return value;
 }
 
