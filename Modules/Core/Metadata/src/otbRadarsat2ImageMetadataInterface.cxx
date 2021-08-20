@@ -327,7 +327,7 @@ void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Add(MDStr::OrbitDirection, ProductMS.GetAs<std::string>("product.sourceAttributes.orbitAndAttitude.orbitInformation.passDirection"));
   imd.Add(MDStr::ProductType, ProductMS.GetAs<std::string>("product.imageGenerationParameters.generalProcessingInformation.productType"));
   imd.Add(MDStr::Instrument, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
-  imd.Add(MDStr::SensorID, ProductMS.GetAs<std::string>("product.sourceAttributes.sensor"));
+  imd.Add(MDStr::SensorID, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
   imd.Add(MDStr::Mission, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
   imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
   imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));
@@ -356,7 +356,7 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   Fetch(MDNum::LineSpacing, imd, "meters_per_pixel_y");
   Fetch(MDNum::PixelSpacing, imd, "meters_per_pixel_x");
   Fetch(MDStr::Instrument, imd, "sensor");
-  imd.Add(MDStr::SensorID, "SAR");
+  imd.Add(MDStr::SensorID, "RADARSAT-2");
   imd.Add(MDNum::CalScale, 1.0);
 
   // Product file

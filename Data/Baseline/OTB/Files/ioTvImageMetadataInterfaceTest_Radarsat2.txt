@@ -1,4 +1,4 @@
-SensorID SAR
+SensorID RADARSAT-2
 Mission RADARSAT-2
 Instrument RADARSAT-2
 ProductType SLC
