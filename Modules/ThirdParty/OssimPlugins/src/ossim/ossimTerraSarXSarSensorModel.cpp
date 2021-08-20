@@ -171,7 +171,7 @@ namespace ossimplugins
     const double azimuthFrequency = getDoubleFromFirstNode(xmlRoot, "instrument/settings/settingRecord/PRF");
     add(theProductKwl, SUPPORT_DATA_PREFIX, "pulse_repetition_frequency", azimuthFrequency);
 
-    
+
     // Parse azimuth and range number of looks
     const unsigned int nbAziLooks = xmlRoot.findFirstNode("productInfo/imageDataInfo/imageRaster/azimuthLooks")->getText().toUInt16();
     const unsigned int nbRanLooks = xmlRoot.findFirstNode("productInfo/imageDataInfo/imageRaster/rangeLooks")->getText().toUInt16();
@@ -203,8 +203,17 @@ namespace ossimplugins
 
     //Manage only strip map product for now (one burst)
     // Parse azimuth time start/stop
+
+#if defined(USE_BOOST_TIME)
+    const TimeType azimuthTimeStart = time::readFormattedDate(getTextFromFirstNode(xmlRoot, "productInfo/sceneInfo/start/timeUTC"));
+    const TimeType azimuthTimeStop = time::readFormattedDate(getTextFromFirstNode(xmlRoot, "productInfo/sceneInfo/stop/timeUTC"));
+
+#else
+
     const TimeType azimuthTimeStart = getTimeFromFirstNode(xmlRoot, "productInfo/sceneInfo/start/timeUTC");
+
     const TimeType azimuthTimeStop = getTimeFromFirstNode(xmlRoot, "productInfo/sceneInfo/stop/timeUTC");
+#endif
 
     const DurationType td = azimuthTimeStop - azimuthTimeStart;
 
@@ -279,7 +288,6 @@ namespace ossimplugins
 
         theSlantRangeToGroundRangeRecords.push_back(coordRecord);
       }
-
 
     /////////////////// Fill vectors (orbit, gcps, ...) ///////////////////
     //For Terrasar-X only 1 burst is supported for now
@@ -543,7 +551,12 @@ namespace ossimplugins
 	coeffNodes.clear();
 
 	// Retrieve acquisition time
+
+#if defined(USE_BOOST_TIME)
+  const TimeType timeUTC = time::readFormattedDate(getTextFromFirstNode(**itNode, attTimeUTC));
+#else
 	const TimeType timeUTC = getTimeFromFirstNode(**itNode, attTimeUTC);
+#endif
 
 	// Retrieve the dopplerRatePolynomial Node
 	polNode = itNode[0]->findFirstNode("dopplerRatePolynomial");
@@ -638,8 +651,12 @@ namespace ossimplugins
 	    coeffNodes.clear();
 	    
 	    // Retrieve acquisition time
-	    const TimeType timeUTC = getTimeFromFirstNode(**itNode, attTimeUTC);
-	
+#if defined(USE_BOOST_TIME)
+      const TimeType timeUTC = time::readFormattedDate(getTextFromFirstNode(**itNode, attTimeUTC));
+#else
+      const TimeType timeUTC = getTimeFromFirstNode(**itNode, attTimeUTC);
+#endif
+
 	    // Retrtive he combinedDoppler Node
 	    polNode = itNode[0]->findFirstNode("combinedDoppler");
 	
@@ -808,8 +825,12 @@ namespace ossimplugins
     xmlGeo->findNodes("/geoReference/geolocationGrid/gridPoint",xnodes);
 
     // Retrieve reference azimuth and range Time for geo grid
+#if defined(USE_BOOST_TIME)
+    const TimeType tReferenceTime = time::readFormattedDate(getTextFromFirstNode(xmlGeoRoot, "geolocationGrid/gridReferenceTime/tReferenceTimeUTC"));
+#else
     const TimeType tReferenceTime = getTimeFromFirstNode(xmlGeoRoot, "geolocationGrid/gridReferenceTime/tReferenceTimeUTC");
 
+#endif
     const double tauReference = getDoubleFromFirstNode(xmlGeoRoot, "geolocationGrid/gridReferenceTime/tauReferenceTime");
 
     // Loop on points
@@ -824,6 +845,7 @@ namespace ossimplugins
 #else
         using ossimplugins::time::microseconds;
 #endif
+
         gcpRecord.azimuthTime = tReferenceTime + microseconds(static_cast<int>(deltaAzimuth * 1000000));
 
         //Get delta range time
