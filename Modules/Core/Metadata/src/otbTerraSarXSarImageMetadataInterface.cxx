@@ -490,23 +490,24 @@ int TerraSarXSarImageMetadataInterface::GetProductionYear() const
 double TerraSarXSarImageMetadataInterface::ConvertStringTimeUTCToJulianDay(const std::string& value) const
 {
   std::vector<std::string> splitDate;
-  boost::split(splitDate, value, boost::is_any_of("-T:"));
+  boost::split(splitDate, value, boost::is_any_of("-T:Z"));
 
-  int    year  = this->GetYear();
-  int    month = this->GetMonth();
-  int    day   = this->GetDay();
-  int    hour  = this->GetHour();
-  int    minu  = this->GetMinute();
-  double sec   = 0;
+  int year, month, day, hour, minu;
+  double sec;
+
   try
-      {
-	sec = std::stod(splitDate[5]);
-      }
+  {
+    year  = std::stoi(splitDate[0].c_str());
+    month = std::stoi(splitDate[1].c_str());
+    day   = std::stoi(splitDate[2].c_str());
+    hour  = std::stoi(splitDate[3].c_str());
+    minu  = std::stoi(splitDate[4].c_str());
+    sec   = std::stod(splitDate[5].c_str());
+  }
   catch( ... )
-    {
-      // Throw an exception
-      throw std::runtime_error("Failed to seconds.");
-    }
+  {
+    throw std::runtime_error("Failed to parse input date ");
+  }
 
   // Conversion to julian day
   // according to http://en.wikipedia.org/wiki/Julian_day
