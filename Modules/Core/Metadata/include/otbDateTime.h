@@ -147,7 +147,7 @@ public:
 
   double TotalSeconds() const
   {
-    return m_Duration.total_nanoseconds() * 1e9;
+    return m_Duration.total_nanoseconds() * 1e-9;
   }
 
   friend Duration& operator+=(Duration & u, Duration const& v)

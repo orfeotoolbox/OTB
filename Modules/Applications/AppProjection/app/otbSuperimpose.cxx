@@ -156,7 +156,8 @@ private:
   void DoUpdateParameters() override
   {
     if (!HasUserValue("mode") && HasValue("inr") && HasValue("inm") &&
-        otb::PleiadesPToXSAffineTransformCalculator::CanCompute(GetParameterImage("inr"), GetParameterImage("inm")))
+        otb::PleiadesPToXSAffineTransformCalculator::CanCompute(GetParameterImage("inr")->GetImageMetadata(), 
+                                                                GetParameterImage("inm")->GetImageMetadata()))
     {
       otbAppLogWARNING("Forcing PHR mode with PHR data. You need to add \"-mode default\" to force the default mode with PHR images.");
       SetParameterString("mode", "phr");
@@ -266,7 +267,8 @@ private:
       otbAppLogINFO("Using the PHR mode");
 
       otb::PleiadesPToXSAffineTransformCalculator::TransformType::OffsetType offset =
-          otb::PleiadesPToXSAffineTransformCalculator::ComputeOffset(GetParameterImage("inr"), GetParameterImage("inm"));
+          otb::PleiadesPToXSAffineTransformCalculator::ComputeOffset(GetParameterImage("inr")->GetImageMetadata(), 
+                                                                     GetParameterImage("inm")->GetImageMetadata());
 
       m_BasicResampler->SetInput(movingImage);
       origin += offset;

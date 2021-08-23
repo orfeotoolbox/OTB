@@ -80,6 +80,7 @@ set(OTBMetadata_SRC
   otbMetadataSupplierInterface.cxx
 
   otbDateTime.cxx
+  otbDimapMetadataHelper.cxx
   )
 
 add_library(OTBMetadata ${OTBMetadata_SRC})
