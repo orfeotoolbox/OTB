@@ -1550,6 +1550,16 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       dataset->SetMetadata(rpcMetadata, "RPC");
       CSLDestroy(rpcMetadata);
     }
+    else if (m_Imd.Has(MDGeom::SAR))
+    {
+      MetaData::Keywordlist SARKwl;
+      const auto & param = boost::any_cast<const otb::SARParam&>(m_Imd[MDGeom::SAR]);
+      param.ToKeywordlist(SARKwl, "SAR.");
+      for (auto & key: SARKwl)
+      {
+        dataset->SetMetadataItem(key.first.c_str(), key.second.c_str());
+      }
+    }
   }
   // ToDo : remove this part. This case is here for compatibility for images
   // that still use Ossim for managing the sensor model (with OSSIMKeywordList).
@@ -1944,6 +1954,15 @@ void GDALImageIO::ImportMetadata()
     return;
   ImageMetadataBase::Keywordlist kwl;
   GDALMetadataToKeywordlist(m_Dataset->GetDataSet()->GetMetadata(), kwl);
+
+  // Decode SAR metadata
+  if (m_Imd.Has(MDGeom::SAR))
+  {
+    otb::SARParam sar;
+    sar.FromKeywordlist(kwl, "SAR.");
+    m_Imd.Add(MDGeom::SAR, sar);
+  }
+
   m_Imd.FromKeywordlist(kwl);
 
   // Parsing the bands

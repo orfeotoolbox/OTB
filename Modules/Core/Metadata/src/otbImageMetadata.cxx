@@ -394,6 +394,24 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
       // skip MDGeom::SensorGeometry, MDGeom::RPC, MDGeom::GCP, MDGeom::SAR and MDGeom::SARCalib
       continue;
     }
+
+    auto findGeomPrefix = [&kv](const MetaData::MDGeomBmType & bimap)
+      {
+        for (const auto & elem: bimap.right)
+        {
+          if (kv.first.rfind(elem.first + ".") != std::string::npos)
+          {
+            return true;
+          }
+        }
+        return false;
+      };
+
+    if (findGeomPrefix(MetaData::MDGeomNames))
+    {
+      continue;
+    }
+
   // Converting the StringKeys
     auto strKey = MetaData::MDStrNames.right.find(kv.first);
     if (strKey != MetaData::MDStrNames.right.end())

@@ -51,6 +51,12 @@ struct OTBMetadata_EXPORT AzimuthFmRate
   double t0;
   /** Azimuth FM rate coefficients c0 c1 c2 */
   std::vector<double> azimuthFmRatePolynomial;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
+
+  /** Keywordlist import */
+  static AzimuthFmRate FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
 };
 
 /** \struct DopplerCentroid
@@ -67,6 +73,12 @@ struct OTBMetadata_EXPORT DopplerCentroid
   std::vector<double> dopCoef;
   /* Doppler centroid estimated from orbit */
   std::vector<double> geoDopCoef;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
+
+  /** Keywordlist import */
+  static DopplerCentroid FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
 };
 
 /** \struct Orbit
@@ -83,6 +95,12 @@ struct OTBMetadata_EXPORT Orbit
   PointType position;
   /** Velocity vector */
   PointType velocity;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
+
+  /** Keywordlist import */
+  static Orbit FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
 };
 
 /** \struct BurstRecord
@@ -98,6 +116,12 @@ struct OTBMetadata_EXPORT BurstRecord
   unsigned long startSample;
   unsigned long endSample;
   double        azimuthAnxTime;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
+
+  /** Keywordlist import */
+  static BurstRecord FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
 };
 
 
@@ -112,6 +136,9 @@ struct OTBMetadata_EXPORT GCPTime
 
   /** Slant range time of the gcp */
   double slantRangeTime;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
 };
 
 /** \struct CoordinateConversionRecord
@@ -124,6 +151,12 @@ struct CoordinateConversionRecord
   MetaData::TimeType azimuthTime;
   double rg0;
   std::vector<double> coeffs;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
+
+  /** Keywordlist import */
+  static CoordinateConversionRecord FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
 };
 
 
@@ -166,8 +199,11 @@ struct OTBMetadata_EXPORT SARParam
   /** Conversion coefficients from ground range to slant range */
   std::vector<CoordinateConversionRecord> groundRangeToSlantRangeRecords;
 
-  /** JSON export */
-  std::string ToJSON(bool multiline=false) const;
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const;
+
+  /** String import */
+  void FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix);
 };
 
 /** \struct SARCalib

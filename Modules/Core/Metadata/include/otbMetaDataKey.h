@@ -34,6 +34,8 @@
 #include "otbStringUtils.h"
 #include "otbJoinContainer.h"
 
+#include <unordered_map>
+
 namespace otb
 {
 /** \namespace MetaDataKey
@@ -224,6 +226,8 @@ enum class MDGeom
 
 namespace MetaData
 {
+
+using Keywordlist = std::unordered_map<std::string, std::string>;
 
 struct OTBMetadata_EXPORT Time : tm
 {

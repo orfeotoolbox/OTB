@@ -22,6 +22,7 @@
 #define otbImageMetadata_h
 
 #include "otbGeometryMetadata.h"
+#include "otbSARMetadata.h"
 #include "otbMetaDataKey.h"
 #include "OTBMetadataExport.h"
 #include "otbMacro.h"
