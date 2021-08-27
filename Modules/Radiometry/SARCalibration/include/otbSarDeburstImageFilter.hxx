@@ -148,6 +148,8 @@ void SarDeburstImageFilter<TImage>::GenerateOutputInformation()
   imd.Add(MDNum::NumberOfLines, deburstSize[0]);
   imd.Add(MDNum::NumberOfColumns, deburstSize[1]);
 
+  sarSensorModel.UpdateImageMetadata(imd);
+
   outputPtr->SetImageMetadata(imd);
 }
 

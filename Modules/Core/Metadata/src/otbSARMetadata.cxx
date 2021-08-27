@@ -75,7 +75,7 @@ namespace
   }
 
   template<class T>
-  void KeywordlistToVector(std::vector<T> vector,
+  void KeywordlistToVector(std::vector<T> & vector,
                            const otb::MetaData::Keywordlist & kwl,
                            const std::string & prefix)
   {
@@ -132,7 +132,7 @@ void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
   KeywordlistToVector(azimuthFmRates, kwl, prefix + "AzimuthFmRates");
   KeywordlistToVector(dopplerCentroids, kwl, prefix + "DopplerCentroid");
   KeywordlistToVector(orbits, kwl, prefix + "Orbits");
-  KeywordlistToVector(burstRecords, kwl, prefix + "BurstRecords");  
+  KeywordlistToVector(burstRecords, kwl, prefix + "BurstRecords");
   KeywordlistToVector(slantRangeToGroundRangeRecords, kwl, prefix + "SlantRangeToGroundRangeRecords");
   KeywordlistToVector(groundRangeToSlantRangeRecords, kwl, prefix + "GroundRangeToSlantRangeRecords");
 

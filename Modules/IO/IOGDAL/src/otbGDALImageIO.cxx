@@ -1956,7 +1956,7 @@ void GDALImageIO::ImportMetadata()
   GDALMetadataToKeywordlist(m_Dataset->GetDataSet()->GetMetadata(), kwl);
 
   // Decode SAR metadata
-  if (m_Imd.Has(MDGeom::SAR))
+  if (kwl.find("SAR") != kwl.end())
   {
     otb::SARParam sar;
     sar.FromKeywordlist(kwl, "SAR.");
