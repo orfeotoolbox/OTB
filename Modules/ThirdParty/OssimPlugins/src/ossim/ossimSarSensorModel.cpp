@@ -1503,7 +1503,7 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
   samples = std::make_pair(it->startSample, it->endSample);
   
   for(; next!= itend ;++it,++next)
-    {
+  {
     DurationType timeOverlapEnd = (it->azimuthStopTime - next->azimuthStartTime);
 
     unsigned long overlapLength = timeOverlapEnd/theAzimuthTimeInterval;
@@ -1522,38 +1522,31 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
 
     currentStart = next->startLine+halfLineOverlapBegin;
 
-     if (onlyValidSample)
-      {
-	// Find the first and last valid sampleburst
-	if (it->startSample > samples.first)
-	  {
-	    samples.first = it->startSample;
-	  }
-	if (it->endSample < samples.second)
-	  {
-	    samples.second = it->endSample;
-	  }
-      }
+    // Find the first and last valid sampleburst
+    if (it->startSample > samples.first)
+    {
+      samples.first = it->startSample;
     }
+    if (it->endSample < samples.second)
+    {
+    samples.second = it->endSample;
+    }
+  }
 
   TimeType deburstAzimuthStopTime = it->azimuthStopTime;
   deburstEndLine+=it->endLine-currentStart;
 
   lines.push_back(std::make_pair(currentStart,it->endLine));
 
-  if (onlyValidSample)
-    {
-      if (it->startSample > samples.first)
-	{
-	  samples.first = it->startSample;
-	}
-      if (it->endSample < samples.second)
-	{
-	  samples.second = it->endSample;
-	}
-    }
+  if (it->startSample > samples.first)
+  {
+    samples.first = it->startSample;
+  }
+  if (it->endSample < samples.second)
+  {
+    samples.second = it->endSample;
+  }
 
-  
   // Now, update other metadata accordingly
 
   // Clear the previous burst records
@@ -1568,12 +1561,16 @@ bool ossimSarSensorModel::deburst(std::vector<std::pair<unsigned long, unsigned 
   deburstBurst.azimuthAnxTime = deburstAzimuthAnxTime; 
 
   if (onlyValidSample)
-    {
-      deburstBurst.startSample = 0;
-      deburstBurst.endSample = samples.second - samples.first;
-    }
+  {
+    deburstBurst.startSample = 0;
+    deburstBurst.endSample = samples.second - samples.first;
+  }
+  else
+  {
+    deburstBurst.startSample = samples.first;
+    deburstBurst.endSample = samples.second;
+  }
 
-  
   theBurstRecords.push_back(deburstBurst);
 
   std::vector<GCPRecordType> deburstGCPs;
