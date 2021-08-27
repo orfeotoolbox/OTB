@@ -57,6 +57,7 @@ namespace
       if (!it->empty())
         output.push_back(otb::to<double>(*it, "Cannot cast"));
     }
+
     return output;
   }
 
@@ -195,9 +196,18 @@ DopplerCentroid DopplerCentroid::FromKeywordlist(const MetaData::Keywordlist & k
   iss >> output.azimuthTime;
 
   output.t0 = std::stod(kwl.at(prefix + "t0"));
-  output.dopCoef = StringToDoubleVector(kwl.at(prefix + "DopCoef"));
-  output.geoDopCoef = StringToDoubleVector(kwl.at(prefix + "GeoDopCoef"));
 
+  auto dopCoefIt = kwl.find(prefix + "DopCoef");
+  if (dopCoefIt != kwl.end())
+  {
+    output.dopCoef = StringToDoubleVector(dopCoefIt->second);
+  }
+
+  auto geoDopCoefIt = kwl.find(prefix + "GeoDopCoef");
+  if (geoDopCoefIt != kwl.end())
+  {
+    output.geoDopCoef = StringToDoubleVector(geoDopCoefIt->second);
+  }
   return output;
 }
 

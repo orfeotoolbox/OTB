@@ -291,7 +291,7 @@ otb_add_test(NAME raTvSarBrightnessToImageFilter COMMAND  otbSARCalibrationTestD
   1000 1000 250 250 # Extract
   )
 
-otb_add_test(NAME saTvSarDeburstImageFilterTest COMMAND otbSARCalibrationTestDriver
+otb_add_test(NAME saTvSarDeburstImageFilterTest1 COMMAND otbSARCalibrationTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/saTvSarDeburstImageFilterTestOutput.tif
   ${TEMP}/saTvSarDeburstImageFilterTestOutput.tif
