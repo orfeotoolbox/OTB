@@ -212,7 +212,7 @@ std::vector<AzimuthFmRate> SarImageMetadataInterface::GetAzimuthFmRateGeom() con
 std::vector<DopplerCentroid> SarImageMetadataInterface::GetDopplerCentroidGeom() const
 {
   std::vector<DopplerCentroid> dopplerCentroidVector;
-  // Path: dopplerCentroid.dop_coef_list<listId>.{dop_coef_time,slant_range_time,{1,2,3}.dop_coef}
+  // Path: dopplerCentroid.dop_coef_list<listId>.{dop_coef_time,slant_range_time,{1,2,3}.dop_coef, {1,2,3}.geo_dop_coef}
   // This streams wild hold the iteration number
   std::ostringstream oss;
   for (int listId = 1 ;
@@ -222,10 +222,25 @@ std::vector<DopplerCentroid> SarImageMetadataInterface::GetDopplerCentroidGeom()
     oss.str("");
     oss << listId;
     // Base path to the data, that depends on the iteration number
-    std::string path_root = "dopplerCentroid.dop_coef_list" + oss.str();
+    std::string path_root = "dopplerCentroid.dop_coef_list" + oss.str() + ".";
     DopplerCentroid dopplerCent;
-    std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>(path_root + ".dop_coef_time")) >> dopplerCent.azimuthTime;
-    dopplerCent.t0 = m_MetadataSupplierInterface->GetAs<double>(path_root + ".slant_range_time");
+    std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>(path_root + "dop_coef_time")) >> dopplerCent.azimuthTime;
+    dopplerCent.t0 = m_MetadataSupplierInterface->GetAs<double>(path_root + "slant_range_time");
+    
+    int i = 1;
+    while (m_MetadataSupplierInterface->HasValue(path_root + std::to_string(i) + ".dop_coef"))
+    {
+      dopplerCent.dopCoef.push_back(m_MetadataSupplierInterface->GetAs<double>(path_root + std::to_string(i) + ".dop_coef"));
+      i++;
+    }
+
+    i = 1;
+    while (m_MetadataSupplierInterface->HasValue(path_root + std::to_string(i) + ".geo_dop_coef"))
+    {
+      dopplerCent.geoDopCoef.push_back(m_MetadataSupplierInterface->GetAs<double>(path_root + std::to_string(i) + ".geo_dop_coef"));
+      i++;
+    }
+
     dopplerCentroidVector.push_back(std::move(dopplerCent));
   }
   return dopplerCentroidVector;
