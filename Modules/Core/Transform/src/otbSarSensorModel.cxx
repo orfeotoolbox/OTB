@@ -692,27 +692,7 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
 
     currentStart = next->startLine+halfLineOverlapBegin;
 
-    if (onlyValidSample)
-    {
-      // Find the first and last valid sampleburst
-      if (it->startSample > samples.first)
-      {
-        samples.first = it->startSample;
-      }
-      if (it->endSample < samples.second)
-      {
-        samples.second = it->endSample;
-      }
-    }
-  }
-
-  TimeType deburstAzimuthStopTime = it->azimuthStopTime;
-  deburstEndLine+=it->endLine-currentStart;
-
-  lines.push_back(std::make_pair(currentStart,it->endLine));
-
-  if (onlyValidSample)
-  {
+    // Find the first and last valid sampleburst
     if (it->startSample > samples.first)
     {
       samples.first = it->startSample;
@@ -721,6 +701,20 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
     {
       samples.second = it->endSample;
     }
+  }
+
+  TimeType deburstAzimuthStopTime = it->azimuthStopTime;
+  deburstEndLine+=it->endLine-currentStart;
+
+  lines.push_back(std::make_pair(currentStart,it->endLine));
+
+  if (it->startSample > samples.first)
+  {
+    samples.first = it->startSample;
+  }
+  if (it->endSample < samples.second)
+  {
+    samples.second = it->endSample;
   }
 
   // Clear the previous burst records
@@ -738,6 +732,11 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
   {
     deburstBurst.startSample = 0;
     deburstBurst.endSample = samples.second - samples.first;
+  }
+  else
+  {
+    deburstBurst.startSample = samples.first;
+    deburstBurst.endSample = samples.second;
   }
 
   burstRecords.push_back(deburstBurst);
