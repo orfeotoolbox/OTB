@@ -1,8 +1,10 @@
-OTB-v 7.4.0 - Changes since version 7.3.0 (August 9th, 2021)
+OTB-v 7.4.0 - Changes since version 7.3.0 (August 30th, 2021)
 ----------------------------------------------------------------
 
 Bugs fixed:
- 
+
+ * !850: Fix onlyvalidsamples in SARDeburst and allpixels in SARBurstExtraction by Cédric Traizet
+ * !849: FIX: mosaic output image size fit best inputs extents by Rémi Cresson
  * !831: bug fixes in Sentinel 1 calibration by Cédric Traizet
  * !837: Fix Superbuild compilation with gcc-8 by Guillaume Pasero
  * !838: ExtractROI: Test inverted extent on indices instead of physical coordinates by Julien Osman
