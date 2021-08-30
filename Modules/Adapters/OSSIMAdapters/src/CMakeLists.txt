@@ -22,7 +22,6 @@ set(OTBOSSIMAdapters_SRC
   otbOssimDEMHandler.cxx
   otbImageKeywordlist.cxx
   otbRPCSolverAdapter.cxx
-  otbDateTimeAdapter.cxx
   )
 
 add_library(OTBOSSIMAdapters ${OTBOSSIMAdapters_SRC})
