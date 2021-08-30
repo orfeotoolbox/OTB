@@ -24,7 +24,6 @@
 #include "otbSarBurstExtractionImageFilter.h"
 
 #include "otbSarSensorModel.h"
-#include "otbImageKeywordlist.h"
 #include "itkImageScanlineIterator.h"
 #include "itkImageScanlineConstIterator.h"
 #include "itkImageRegionIterator.h"
@@ -134,7 +133,7 @@ void SarBurstExtractionImageFilter<TImage>::GenerateOutputInformation()
     imd.Add("invalid_pixels", "no");
   }
 
-  // Set new keyword list to output image
+  // Update the output image metadata
   outputPtr->SetImageMetadata(imd);
 }
 

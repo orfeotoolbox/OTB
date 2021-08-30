@@ -24,7 +24,6 @@
 #include "otbSarDeburstImageFilter.h"
 
 #include "otbSarSensorModel.h"
-#include "otbImageKeywordlist.h"
 #include "itkImageScanlineIterator.h"
 #include "itkImageScanlineConstIterator.h"
 #include "itkImageRegionIterator.h"
@@ -148,8 +147,8 @@ void SarDeburstImageFilter<TImage>::GenerateOutputInformation()
   imd.Add(MDNum::NumberOfLines, deburstSize[0]);
   imd.Add(MDNum::NumberOfColumns, deburstSize[1]);
 
+  // Update and set the output image metadata
   sarSensorModel.UpdateImageMetadata(imd);
-
   outputPtr->SetImageMetadata(imd);
 }
 
