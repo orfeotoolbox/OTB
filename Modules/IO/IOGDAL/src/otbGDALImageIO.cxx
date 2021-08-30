@@ -1958,9 +1958,16 @@ void GDALImageIO::ImportMetadata()
   // Decode SAR metadata
   if (kwl.find("SAR") != kwl.end())
   {
-    otb::SARParam sar;
-    sar.FromKeywordlist(kwl, "SAR.");
-    m_Imd.Add(MDGeom::SAR, sar);
+    try
+    {
+      otb::SARParam sar;
+      sar.FromKeywordlist(kwl, "SAR.");
+      m_Imd.Add(MDGeom::SAR, sar);
+    }
+    catch(const std::exception& e) 
+    {
+      otbLogMacro(Warning, << "Input image has SAR sensor metadata, but OTB was not able to read it: " << e.what());
+    }
   }
 
   m_Imd.FromKeywordlist(kwl);

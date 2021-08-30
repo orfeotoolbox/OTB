@@ -23,7 +23,7 @@
 
 namespace
 {
-  const int STRING_PRECISION = 20;
+  constexpr int STRING_PRECISION = 20;
 
   // the precision of std::to_string is limited to 6 digits
   template <typename T>
@@ -129,7 +129,6 @@ void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
 
   numberOfLinesPerBurst = std::stoi(kwl.at(prefix + "NumberOfLinesPerBurst"));
   numberOfSamplesPerBurst = std::stoi(kwl.at(prefix + "NumberOfSamplesPerBurst"));
-
   KeywordlistToVector(azimuthFmRates, kwl, prefix + "AzimuthFmRates");
   KeywordlistToVector(dopplerCentroids, kwl, prefix + "DopplerCentroid");
   KeywordlistToVector(orbits, kwl, prefix + "Orbits");
