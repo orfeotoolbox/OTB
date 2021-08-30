@@ -144,7 +144,6 @@ void DEMToImageGenerator<TDEMImage>::ThreadedGenerateData(const OutputImageRegio
     */
     //       otbMsgDevMacro(<< "height" << height);
     // DEM sets a default value (-32768) at point where it doesn't have altitude information.
-    // OSSIM has chosen to change this default value in OSSIM_DBL_NAN (-4.5036e15).
     if (!vnl_math_isnan(height))
     {
       // Fill the image

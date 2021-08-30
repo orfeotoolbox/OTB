@@ -30,7 +30,6 @@
 #include "otbRPCForwardTransform.h"
 #include "otbRPCInverseTransform.h"
 #include "otbDEMHandler.h"
-#include <otbImageKeywordlist.h>
 #include "itkEuclideanDistanceMetric.h"
 #include "otbGeographicalDistance.h"
 #include "otbGenericRSTransform.h"
@@ -120,10 +119,10 @@ bool provideGCP(char* gcpfilename, pointsContainerType& imgPt, geo3dPointsContai
 
 int otbSensorModel(int argc, char* argv[])
 {
-  if (argc != 9)
+  if (argc != 7)
   {
     std::cout << argv[0] << " <input geom filename> <input gcp filename> <output gcp filename> "
-              << " <needed keywords> <imgTol> <geoTol> <writeBaseline> <only check needed keywords>" << std::endl;
+              << " <imgTol> <geoTol> <writeBaseline> <only check needed keywords>" << std::endl;
 
     return EXIT_FAILURE;
   }
@@ -131,16 +130,13 @@ int otbSensorModel(int argc, char* argv[])
   char*              geomfilename = argv[1];
   char*              gcpfilename  = argv[2];
   char*              outFilename  = argv[3];
-  std::istringstream iss(argv[4]);
-  double             imgTol        = atof(argv[5]);
-  double             geoTol        = atof(argv[6]);
-  int                writeBaseline = atoi(argv[7]);
-  bool               checkNeededKw = atoi(argv[8]);
+  double             imgTol        = std::stod(argv[4]);
+  double             geoTol        = std::stod(argv[5]);
+  int                writeBaseline = std::stoi(argv[6]);
 
   // -------------------
   // Some instantiations
   // -------------------
-  otb::ImageKeywordlist kwlist = otb::ReadGeometryFromGEOMFile(geomfilename);
   otb::ImageMetadata imd;
   otb::GeomMetadataSupplier geomSupplier(geomfilename);
   for (int loop = 0 ; loop < geomSupplier.GetNbBands() ; ++loop)
@@ -148,19 +144,11 @@ int otbSensorModel(int argc, char* argv[])
   otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
   geomSupplier.FetchRPC(imd);
 
-  if (!(kwlist.GetSize() > 0))
-  {
-    std::cerr << "ImageKeywordlist is empty." << std::endl;
-    return EXIT_FAILURE;
-  }
 
   if (writeBaseline)
   {
     return produceGCP(outFilename, imd);
   }
-
-  typedef otb::ImageKeywordlist::KeywordlistMap KeywordlistMapType;
-  KeywordlistMapType                            kwmap = kwlist.GetKeywordlist();
 
   //  otbForwardSensorModel
   typedef otb::RPCForwardTransform<double, 2, 2> ForwardSensorModelType;
@@ -251,47 +239,6 @@ int otbSensorModel(int argc, char* argv[])
   //--------------------------
   // Some instantiations (end)
   //--------------------------
-
-
-  //-----------
-  // Tests core
-  //-----------
-
-  // #1 keywordlist, only check the needed keywords
-  /*-------------------------------------*/
-  if (checkNeededKw)
-  {
-    // Split the string into many tokens, with whitespaces as separators
-    std::list<std::string> neededKw;
-    copy(std::istream_iterator<std::string>(iss), std::istream_iterator<std::string>(), back_inserter(neededKw));
-
-
-    std::list<std::string> missingKw;
-    for (std::list<std::string>::iterator neededIt = neededKw.begin(); neededIt != neededKw.end(); ++neededIt)
-    {
-      bool foundNeededKw = false;
-      for (KeywordlistMapType::iterator kwlistIt = kwmap.begin(); kwlistIt != kwmap.end(); ++kwlistIt)
-      {
-        std::size_t found = kwlistIt->first.find(*neededIt);
-        if (found != std::string::npos)
-        {
-          foundNeededKw = true;
-        }
-      }
-
-      if (!foundNeededKw)
-        missingKw.push_back(*neededIt);
-    }
-
-    if ((neededKw.size() > 0) && (missingKw.size() > 0))
-    {
-      std::cerr << "Some keywords were not found; missing keywords : " << std::endl;
-      for (std::list<std::string>::iterator itm = missingKw.begin(); itm != missingKw.end(); ++itm)
-        std::cerr << *itm << std::endl;
-      return EXIT_FAILURE;
-    }
-  }
-  /*-------------------------------------*/
 
 
   pointsContainerType::iterator      pointsIt      = pointsContainer.begin();

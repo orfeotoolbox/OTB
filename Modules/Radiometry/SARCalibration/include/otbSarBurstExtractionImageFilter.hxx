@@ -59,7 +59,7 @@ void SarBurstExtractionImageFilter<TImage>::GenerateOutputInformation()
   // Retrieve input image metadata
   auto imd = inputPtr->GetImageMetadata();
 
-  // Try to create a SarSensorModelAdapter
+  // Try to create a SarSensorModel
   SarSensorModel sarSensorModel(imd);
 
   // Try to call the burst extraction function

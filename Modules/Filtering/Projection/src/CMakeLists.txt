@@ -30,7 +30,6 @@ target_link_libraries(OTBProjection
   ${OTBGdalAdapters_LIBRARIES}
   ${OTBImageBase_LIBRARIES}
   ${OTBTransform_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBImageManipulation_LIBRARIES}
   ${OTBMetadata_LIBRARIES}
   ${OTBBoost_LIBRARIES}

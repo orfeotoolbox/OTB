@@ -61,7 +61,7 @@ int otbCompositeTransform(int argc, char* argv[])
 
   if (sensorModel->IsValidSensorModel() == false)
   {
-    std::cout << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!" << std::endl;
+    std::cout << "Invalid Model pointer m_Model == NULL!\n The image metadata is invalid!" << std::endl;
     return EXIT_FAILURE;
   }
 
