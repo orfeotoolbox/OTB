@@ -20,6 +20,7 @@
 
 #include "otbSARMetadata.h"
 #include "otbStringUtilities.h"
+#include "otbMacro.h"
 
 namespace
 {
@@ -52,10 +53,10 @@ namespace
     std::vector<double> output;
 
     const auto parts = otb::split_on(input, ' ');
-    for (auto it = parts.begin() ; it != parts.end() ; ++it) 
+    for (const auto & elem : parts)
     {
-      if (!it->empty())
-        output.push_back(otb::to<double>(*it, "Cannot cast"));
+      if (!elem.empty())
+        output.push_back(otb::to<double>(elem, "Cannot cast"));
     }
 
     return output;
@@ -121,7 +122,12 @@ void SARParam::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
 void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
 {
   std::istringstream iss(kwl.at(prefix + "AzimuthTimeInterval"));
-  iss >> azimuthTimeInterval;
+  
+  if (!(iss >> azimuthTimeInterval))
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject,
+           << "Unable to decode " << kwl.at(prefix + "AzimuthTimeInterval"));
+  }
 
   nearRangeTime = std::stod(kwl.at(prefix + "NearRangeTime"));
   rangeSamplingRate = std::stod(kwl.at(prefix + "RangeSamplingRate"));
@@ -148,13 +154,12 @@ void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
         continue;
       }
 
-      GCPTime time;
-
       std::istringstream iss(kv.second);
-      iss >> time.azimuthTime;
-      iss >> time.slantRangeTime;
-
-      gcpTimes[id] = time;
+      if (!(iss >> gcpTimes[id].azimuthTime >> gcpTimes[id].slantRangeTime))
+      {
+        otbGenericExceptionMacro(itk::ExceptionObject,
+           << "Unable to decode " << kv.second);
+      }
     }
   }
 }
@@ -171,7 +176,13 @@ AzimuthFmRate AzimuthFmRate::FromKeywordlist(const MetaData::Keywordlist & kwl, 
 {
   AzimuthFmRate output;
   std::istringstream iss(kwl.at(prefix + "AzimuthTime"));
-  iss >> output.azimuthTime;
+
+  if (!(iss >> output.azimuthTime))
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject,
+           << "Unable to decode " << kwl.at(prefix + "AzimuthTime"));
+  }
+
   output.azimuthFmRatePolynomial = StringToDoubleVector(kwl.at(prefix + "AzimuthFmRatePolynomial"));
 
   return output;
@@ -192,7 +203,12 @@ DopplerCentroid DopplerCentroid::FromKeywordlist(const MetaData::Keywordlist & k
   DopplerCentroid output;
 
   std::istringstream iss(kwl.at(prefix + "AzimuthTime"));
-  iss >> output.azimuthTime;
+
+  if (!(iss >> output.azimuthTime))
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject,
+           << "Unable to decode " << kwl.at(prefix + "AzimuthTime"));
+  }
 
   output.t0 = std::stod(kwl.at(prefix + "t0"));
 
@@ -232,7 +248,12 @@ Orbit Orbit::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::strin
   Orbit output;
 
   std::istringstream iss(kwl.at(prefix + "Time"));
-  iss >> output.time;
+
+  if (!(iss >> output.time))
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject,
+           << "Unable to decode " << kwl.at(prefix + "Time"));
+  }
 
   auto stringToPoint = [](const std::string & input)
   {
@@ -271,9 +292,19 @@ BurstRecord BurstRecord::FromKeywordlist(const MetaData::Keywordlist & kwl, cons
   BurstRecord output;
 
   std::istringstream iss(kwl.at(prefix + "AzimuthStartTime"));
-  iss >> output.azimuthStartTime;
+  if (!(iss >> output.azimuthStartTime))
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject,
+           << "Unable to decode " << kwl.at(prefix + "AzimuthStartTime"));
+  }
+
   std::istringstream iss2(kwl.at(prefix + "AzimuthStopTime"));
-  iss >> output.azimuthStopTime;
+  if (!(iss >> output.azimuthStopTime))
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject,
+           << "Unable to decode " << kwl.at(prefix + "AzimuthStopTime"));
+  }
+
 
   output.startLine = std::stoi(kwl.at(prefix + "StartLine"));
   output.endLine = std::stoi(kwl.at(prefix + "EndLine"));
@@ -305,7 +336,12 @@ CoordinateConversionRecord CoordinateConversionRecord::FromKeywordlist(const Met
   CoordinateConversionRecord output;
 
   std::istringstream iss(kwl.at(prefix + "AzimuthTime"));
-  iss >> output.azimuthTime;
+  if (!(iss >> output.azimuthTime))
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject,
+           << "Unable to decode " << kwl.at(prefix + "AzimuthTime"));
+  }
+
   output.rg0 = std::stod(kwl.at(prefix + "rg0"));
   output.coeffs = StringToDoubleVector(kwl.at(prefix + "coeffs"));
 
