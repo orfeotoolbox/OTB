@@ -21,8 +21,8 @@
 #ifndef otbGeocentricTransform_h
 #define otbGeocentricTransform_h
 
-#include "otbGenericMapProjection.h"
-#include "otbEllipsoidAdapter.h"
+#include "otbCoordinateTransformation.h"
+#include "otbTransform.h"
 
 namespace otb
 {
@@ -33,22 +33,22 @@ namespace otb
  *
  * \ingroup OTBTransform
  */
-template <TransformDirection TDirectionOfMapping, class TScalarType = double, unsigned int NInputDimensions = 3,
-          unsigned int NOutputDimensions = 3>
+template <TransformDirection TDirectionOfMapping, class TScalarType = double>
 class ITK_EXPORT       GeocentricTransform : public Transform<TScalarType, // Data type for scalars
-                                                        NInputDimensions,  // Number of dimensions in the input space
-                                                        NOutputDimensions> // Number of dimensions in the output space
+                                                        3,  // Number of dimensions in the input space
+                                                        3> // Number of dimensions in the output space
 {
 public:
   /** Standard class typedefs. */
   typedef GeocentricTransform Self;
-  typedef Transform<TScalarType, NInputDimensions, NOutputDimensions> Superclass;
+  typedef Transform<TScalarType, 3, 3> Superclass;
   typedef itk::SmartPointer<Self>       Pointer;
   typedef itk::SmartPointer<const Self> ConstPointer;
 
   typedef typename Superclass::ScalarType ScalarType;
-  typedef itk::Point<ScalarType, NInputDimensions>  InputPointType;
-  typedef itk::Point<ScalarType, NOutputDimensions> OutputPointType;
+  typedef itk::Point<ScalarType, 3>  InputPointType;
+  typedef itk::Point<ScalarType, 3> OutputPointType;
+
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -58,21 +58,22 @@ public:
 
   static const TransformDirection DirectionOfMapping = TDirectionOfMapping;
 
-  itkStaticConstMacro(InputSpaceDimension, unsigned int, NInputDimensions);
-  itkStaticConstMacro(OutputSpaceDimension, unsigned int, NOutputDimensions);
-  itkStaticConstMacro(SpaceDimension, unsigned int, NInputDimensions);
-  itkStaticConstMacro(ParametersDimension, unsigned int, NInputDimensions*(NInputDimensions + 1));
+  itkStaticConstMacro(InputSpaceDimension, unsigned int, 3);
+  itkStaticConstMacro(OutputSpaceDimension, unsigned int, 3);
+  itkStaticConstMacro(SpaceDimension, unsigned int, 3);
+  itkStaticConstMacro(ParametersDimension, unsigned int, 3*(3 + 1));
 
   OutputPointType TransformPoint(const InputPointType& point) const override;
 
 protected:
   GeocentricTransform();
-  ~GeocentricTransform() override;
-  EllipsoidAdapter::Pointer m_Ellipsoid;
+  ~GeocentricTransform() override = default;
 
 private:
   GeocentricTransform(const Self&) = delete;
   void operator=(const Self&) = delete;
+
+  std::unique_ptr<CoordinateTransformation> m_MapProjection;
 };
 
 } // namespace otb

@@ -240,8 +240,8 @@ void StreamingMosaicFilterBase<TInputImage, TOutputImage, TInternalValueType>::C
   }
 
   // Set final size
-  m_OutputSize[0] = vcl_floor((extentSup[0] - extentInf[0]) / vcl_abs(m_OutputSpacing[0])) + 1;
-  m_OutputSize[1] = vcl_floor((extentSup[1] - extentInf[1]) / vcl_abs(m_OutputSpacing[1])) + 1;
+  m_OutputSize[0] = std::round((extentSup[0] - extentInf[0]) / vcl_abs(m_OutputSpacing[0]));
+  m_OutputSize[1] = std::round((extentSup[1] - extentInf[1]) / vcl_abs(m_OutputSpacing[1]));
 
   // Set final origin (Coordinate of the upper left pixel center)
   m_OutputOrigin[0] = extentInf[0];

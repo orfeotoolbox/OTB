@@ -23,7 +23,6 @@ set(OTBOSSIMAdapters_SRC
   otbImageKeywordlist.cxx
   otbRPCSolverAdapter.cxx
   otbDateTimeAdapter.cxx
-  otbEllipsoidAdapter.cxx
   )
 
 add_library(OTBOSSIMAdapters ${OTBOSSIMAdapters_SRC})

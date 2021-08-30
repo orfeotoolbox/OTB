@@ -30,7 +30,7 @@ endif()
 
 ExternalProject_Add(FREETYPE
   PREFIX FREETYPE
-  URL "https://download.savannah.gnu.org/releases/freetype/freetype-2.6.tar.gz"
+  URL "https://download.savannah.gnu.org/releases/freetype/freetype-old/freetype-2.6.tar.gz"
   URL_MD5 1d733ea6c1b7b3df38169fbdbec47d2b
   BINARY_DIR ${FREETYPE_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

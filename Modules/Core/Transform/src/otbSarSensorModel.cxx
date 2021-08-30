@@ -20,8 +20,7 @@
 
 #include "otbSarSensorModel.h"
 
-
-#include "otbGenericMapProjection.h"
+#include "otbGeocentricTransform.h"
 #include "otbDEMHandler.h"
 
 #include <numeric>
@@ -30,18 +29,14 @@ namespace otb
 {
 itk::Point<double, 3> EcefToWorld(const itk::Point<double, 3> & ecefPoint)
 {
-  auto transform = otb::GenericMapProjection<otb::TransformDirection::INVERSE, double,3, 3>::New();
-  transform->SetWkt("EPSG:4978");
-
+  auto transform = otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New();
   return transform->TransformPoint(ecefPoint);
 }
 
 
 itk::Point<double, 3> WorldToEcef(const itk::Point<double, 3> & worldPoint)
 {
-  auto transform = otb::GenericMapProjection<otb::TransformDirection::FORWARD, double,3, 3>::New();
-  transform->SetWkt("EPSG:4978");
-
+  auto transform = otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New();
   return transform->TransformPoint(worldPoint);
 }
 

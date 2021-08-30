@@ -105,6 +105,7 @@ void TrainImagesBase::ShareSamplingParameters()
   ShareParameter("sample.vfn", "polystat.field", "Field containing the class integer label for supervision",
                  "Field containing the class id for supervision. "
                  "The values in this field shall be cast into integers.");
+  SetVectorData("sample.vfn", "io.vd");
 }
 
 void TrainImagesBase::ConnectSamplingParameters()

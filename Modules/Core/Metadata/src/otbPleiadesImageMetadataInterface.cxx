@@ -2439,6 +2439,49 @@ void PleiadesImageMetadataInterface::Parse(ImageMetadata &imd)
     }
     otbLogMacro(Info, << "Bias values from DIMAP could not be retrieved, reading default values instead");
   }
+
+  imd.Add(MetaData::PleiadesUtils::IMAGE_ID_KEY, dimapData.ImageID);
+
+  if (imd[MDStr::GeometricLevel] == "SENSOR")
+  {
+    /** These metadata are specific to PHR sensor products, and therefore as stored 
+    as extra string keys in the metadata dictionary */
+    imd.Add(MetaData::PleiadesUtils::TIME_RANGE_START_KEY, dimapData.TimeRangeStart);
+    imd.Add(MetaData::PleiadesUtils::TIME_RANGE_END_KEY, dimapData.TimeRangeEnd);
+    imd.Add(MetaData::PleiadesUtils::LINE_PERIOD_KEY, dimapData.LinePeriod);
+    imd.Add(MetaData::PleiadesUtils::SWATH_FIRST_COL_KEY, dimapData.SwathFirstCol);
+    imd.Add(MetaData::PleiadesUtils::SWATH_LAST_COL_KEY, dimapData.SwathLastCol);
+  }
 }
 
+namespace MetaData
+{
+namespace PleiadesUtils
+{
+  bool HasSensorModelCharacteristics(const ImageMetadata & imd)
+  {
+    return imd.Has(IMAGE_ID_KEY)
+        && imd.Has(TIME_RANGE_START_KEY)
+        && imd.Has(TIME_RANGE_END_KEY)
+        && imd.Has(LINE_PERIOD_KEY)
+        && imd.Has(SWATH_FIRST_COL_KEY)
+        && imd.Has(SWATH_LAST_COL_KEY);
+  }
+
+  SensorModelCharacteristics GetSensorModelCharacteristics(const ImageMetadata & imd)
+  {
+    SensorModelCharacteristics output;
+
+    output.imageID = imd[IMAGE_ID_KEY];
+    output.timeRangeStart = ReadFormattedDate(imd[TIME_RANGE_START_KEY]);
+    output.timeRangeEnd = ReadFormattedDate(imd[TIME_RANGE_END_KEY]);
+    output.linePeriod = std::stod(imd[LINE_PERIOD_KEY]);
+    output.swathFirstCol = std::stoi(imd[SWATH_FIRST_COL_KEY]);
+    output.swathLastCol = std::stoi(imd[SWATH_LAST_COL_KEY]);
+
+    return output;
+  }
+
+} // end namespace PleiadesUtils
+} // end namespace MetaData
 } // end namespace otb
