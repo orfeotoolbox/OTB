@@ -299,7 +299,7 @@ BurstRecord BurstRecord::FromKeywordlist(const MetaData::Keywordlist & kwl, cons
   }
 
   std::istringstream iss2(kwl.at(prefix + "AzimuthStopTime"));
-  if (!(iss >> output.azimuthStopTime))
+  if (!(iss2 >> output.azimuthStopTime))
   {
     otbGenericExceptionMacro(itk::ExceptionObject,
            << "Unable to decode " << kwl.at(prefix + "AzimuthStopTime"));
