@@ -26,21 +26,23 @@ endif()
 
 file(MAKE_DIRECTORY ${INSTALL_DIR}/lib/fonts/)
 
-if ( EXISTS "${DOWNLOAD_LOCATION}/dejavu-fonts-ttf-2.37.tar.bz2" )
-  file( MD5 "${DOWNLOAD_LOCATION}/dejavu-fonts-ttf-2.37.tar.bz2" MD5_FONT )
+if ( EXISTS "${DOWNLOAD_LOCATION}/noto-sans.zip" )
+  file( MD5 "${DOWNLOAD_LOCATION}/noto-sans.zip" MD5_FONT )
 endif()
 
-if ( NOT ( "${MD5_FONT}" STREQUAL "d0efec10b9f110a32e9b8f796e21782c" ) )
+if ( NOT ( "${MD5_FONT}" STREQUAL "6c4f1b790d2d7bdac917d5047ea1898d" ) )
 MESSAGE("DOWNLOADING FONTS")
 file(DOWNLOAD 
-  "https://sourceforge.net/projects/dejavu/files/dejavu/2.37/dejavu-fonts-ttf-2.37.tar.bz2"
-  ${DOWNLOAD_LOCATION}/dejavu-fonts-ttf-2.37.tar.bz2
-  EXPECTED_MD5 d0efec10b9f110a32e9b8f796e21782c)
+  "https://www.1001fonts.com/download/noto-sans.zip"
+  ${DOWNLOAD_LOCATION}/noto-sans.zip
+  EXPECTED_MD5 6c4f1b790d2d7bdac917d5047ea1898d)
 endif()
 
-execute_process(
-COMMAND ${CMAKE_COMMAND} -E tar -xf ${DOWNLOAD_LOCATION}/dejavu-fonts-ttf-2.37.tar.bz2 
-WORKING_DIRECTORY ${BUILD_DIR} )
+file(MAKE_DIRECTORY ${BUILD_DIR}/fonts/)
 
-file( COPY ${BUILD_DIR}/dejavu-fonts-ttf-2.37/ttf/.
+execute_process(
+COMMAND ${CMAKE_COMMAND} -E tar xzf ${DOWNLOAD_LOCATION}/noto-sans.zip 
+WORKING_DIRECTORY ${BUILD_DIR}/fonts )
+
+file( COPY ${BUILD_DIR}/fonts/.
   DESTINATION ${INSTALL_DIR}/lib/fonts/.)
