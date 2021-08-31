@@ -125,8 +125,6 @@ public:
   // 2D Transform
   typedef otb::GenericRSTransform<> RSTransform2DType;
 
-  typedef otb::ImageKeywordlist ImageKeywordListType;
-
   typedef std::map<unsigned int, itk::ImageRegionConstIterator<InputMapType>> MapIteratorList;
 
   typedef std::map<unsigned int, itk::ImageRegionConstIterator<MaskImageType>> MaskIteratorList;
@@ -258,10 +256,6 @@ private:
 
   Multi3DMapToDEMFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
-
-  /** Keywordlist of each map */
-  // std::vector<ImageKeywordListType> m_MapKeywordLists;
-
 
   /** Reference sensor image transform */
   RSTransformType::Pointer m_ReferenceToGroundTransform;
