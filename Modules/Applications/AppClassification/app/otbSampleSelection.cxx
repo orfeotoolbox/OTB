@@ -350,10 +350,10 @@ private:
     otb::ogr::DataSource::Pointer vectors = otb::ogr::DataSource::New(this->GetParameterString("vec"));
 
     // Reproject geometries
-    FloatVectorImageType::Pointer              inputImg            = this->GetParameterImage("in");
-    std::string                                imageProjectionRef  = inputImg->GetProjectionRef();
-    FloatVectorImageType::ImageKeywordlistType imageKwl            = inputImg->GetImageKeywordlist();
-    std::string                                vectorProjectionRef = vectors->GetLayer(GetParameterInt("layer")).GetProjectionRef();
+    auto inputImg            = this->GetParameterImage("in");
+    auto imageProjectionRef  = inputImg->GetProjectionRef();
+    const auto & imageMetadata       = inputImg->GetImageMetadata();
+    auto vectorProjectionRef = vectors->GetLayer(GetParameterInt("layer")).GetProjectionRef();
 
     otb::ogr::DataSource::Pointer reprojVector = vectors;
     GeometriesType::Pointer       inputGeomSet;
@@ -363,7 +363,7 @@ private:
     const OGRSpatialReference     imgOGRSref    = OGRSpatialReference(imageProjectionRef.c_str());
     const OGRSpatialReference     vectorOGRSref = OGRSpatialReference(vectorProjectionRef.c_str());
     // don't reproject for these cases
-    if (vectorProjectionRef.empty() || (imgOGRSref.IsSame(&vectorOGRSref)) || (imageProjectionRef.empty() && imageKwl.GetSize() == 0))
+    if (vectorProjectionRef.empty() || (imgOGRSref.IsSame(&vectorOGRSref)) || (imageProjectionRef.empty() && !imageMetadata.HasSensorGeometry()))
       doReproj = false;
 
     if (doReproj)
@@ -376,7 +376,7 @@ private:
       geometriesProjFilter->SetInput(inputGeomSet);
       if (imageProjectionRef.empty())
       {
-        geometriesProjFilter->SetOutputImageMetadata(&(inputImg->GetImageMetadata()));
+        geometriesProjFilter->SetOutputImageMetadata(&imageMetadata);
       }
       geometriesProjFilter->SetOutputProjectionRef(imageProjectionRef);
       geometriesProjFilter->SetOutput(outputGeomSet);

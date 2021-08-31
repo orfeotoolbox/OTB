@@ -157,13 +157,13 @@ private:
      */
 
     std::string      projRef = GetParameterImage("in")->GetProjectionRef();
-    ImageKeywordlist kwl     = GetParameterImage("in")->GetImageKeywordlist();
-
+    const auto & imageMetadata       = GetParameterImage("in")->GetImageMetadata();
+    
     VectorDataType::Pointer vd = lsd->GetFilter()->GetOutputVectorData();
 
     VectorDataType::Pointer projectedVD = vd;
 
-    if (projRef.empty() && kwl.GetSize() > 0)
+    if (projRef.empty() && imageMetadata.HasSensorGeometry())
     {
       // image is in sensor model geometry
 
@@ -172,7 +172,7 @@ private:
 
       VectorDataProjectionFilterType::Pointer vproj = VectorDataProjectionFilterType::New();
       vproj->SetInput(vd);
-      vproj->SetInputImageMetadata(&GetParameterImage("in")->GetImageMetadata());
+      vproj->SetInputImageMetadata(&imageMetadata);
       // vproj->SetInputOrigin(GetParameterImage("in")->GetOrigin());
       // vproj->SetInputSpacing(GetParameterImage("in")->GetSignedSpacing());
 
