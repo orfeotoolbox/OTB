@@ -41,11 +41,6 @@ DisparityMapTo3DFilter<TDisparityImage, TOutputImage, TEpipolarGridImage, TMaskI
 }
 
 template <class TDisparityImage, class TOutputImage, class TEpipolarGridImage, class TMaskImage>
-DisparityMapTo3DFilter<TDisparityImage, TOutputImage, TEpipolarGridImage, TMaskImage>::~DisparityMapTo3DFilter()
-{
-}
-
-template <class TDisparityImage, class TOutputImage, class TEpipolarGridImage, class TMaskImage>
 void DisparityMapTo3DFilter<TDisparityImage, TOutputImage, TEpipolarGridImage, TMaskImage>::SetHorizontalDisparityMapInput(const TDisparityImage* hmap)
 {
   // Process object is not const-correct so the const casting is required.
@@ -187,7 +182,7 @@ void DisparityMapTo3DFilter<TDisparityImage, TOutputImage, TEpipolarGridImage, T
   }
 
   // Check that the keywordlists are not empty
-  if (m_LeftKeywordList.GetSize() == 0 || m_RightKeywordList.GetSize() == 0)
+  if (!m_LeftImageMetadata->HasSensorGeometry() || !m_RightImageMetadata->HasSensorGeometry())
   {
     itkExceptionMacro(<< "At least one of the image keywordlist is empty : can't instantiate corresponding projection");
   }
@@ -200,9 +195,8 @@ void DisparityMapTo3DFilter<TDisparityImage, TOutputImage, TEpipolarGridImage, T
   m_LeftToGroundTransform  = RSTransformType::New();
   m_RightToGroundTransform = RSTransformType::New();
 
-  //TODO: Replace KeywordLists by ImageMetadatas
-  //m_LeftToGroundTransform->SetInputKeywordList(m_LeftKeywordList);
-  //m_RightToGroundTransform->SetInputKeywordList(m_RightKeywordList);
+  m_LeftToGroundTransform->SetInputImageMetadata(m_LeftImageMetadata);
+  m_RightToGroundTransform->SetInputImageMetadata(m_RightImageMetadata);
 
   m_LeftToGroundTransform->InstantiateTransform();
   m_RightToGroundTransform->InstantiateTransform();
