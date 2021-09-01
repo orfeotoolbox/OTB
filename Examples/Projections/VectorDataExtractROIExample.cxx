@@ -96,7 +96,7 @@ int main(int argc, char* argv[])
       otb::ImageMetadataInterfaceFactory::CreateIMI(imageReader->GetOutput()->GetMetaDataDictionary());
   region.SetRegionProjection(imageMetadataInterface->GetProjectionRef());
 
-  region.SetKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
+  region.SetImageMetadata(imageReader->GetOutput()->GetImageMetadata());
 
   filter->SetRegion(region);
 
