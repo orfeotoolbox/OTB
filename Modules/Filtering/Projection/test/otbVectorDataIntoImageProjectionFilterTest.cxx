@@ -212,7 +212,7 @@ int otbVectorDataIntoImageProjectionFilterCompareImplTest(int itkNotUsed(argc), 
   rsRegion.SetOrigin(rsOrigin);
   rsRegion.SetSize(rsSize);
   rsRegion.SetRegionProjection(reader->GetOutput()->GetProjectionRef());
-  rsRegion.SetKeywordList(reader->GetOutput()->GetImageKeywordlist());
+  rsRegion.SetImageMetadata(reader->GetOutput()->GetImageMetadata());
 
   // Set the cartographic region to the extract roi filter
   vdextract->SetRegion(rsRegion);
