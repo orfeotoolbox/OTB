@@ -10,7 +10,7 @@
                  { "libs": "-s USE_FREETYPE=1", "condition": "config.wasm" },
                  { "libs": "-lfreetype" }
              ],
-@@ -397,12 +397,12 @@
+@@ -397,11 +397,11 @@
              "headers": "png.h",
              "sources": [
 -                { "type": "pkgConfig", "args": "libpng" },
