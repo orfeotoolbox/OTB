@@ -779,4 +779,29 @@ bool HasSARSensorMetadata(const ImageMetadata & imd)
     && (hasBandMetadata(MDStr::Polarization) || imd.Has(MDStr::Polarization));
 }
 
+void WriteImageMetadataToGeomFile(const ImageMetadata & imd, const std::string & filename)
+{
+  std::ofstream myfile(filename);
+  auto writeKwl = [&myfile](const MetaData::Keywordlist & kwl, const std::string prefix ="")
+  {
+    for (const auto & kv: kwl)
+    {
+      myfile << prefix << kv.first << ":" << kv.second << std::endl;
+    }
+  };
+
+  MetaData::Keywordlist kwl;
+  imd.ToKeywordlist(kwl);
+  writeKwl(kwl);
+
+  // Band are indexed starting at 1
+  int bIdx = 1;
+  for (const auto& band : imd.Bands)
+  {
+    band.ToKeywordlist(kwl);
+    writeKwl(kwl, "Band_" + std::to_string(bIdx) + ".");
+    ++bIdx;
+  }
+}
+
 }

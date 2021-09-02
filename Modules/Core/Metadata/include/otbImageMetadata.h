@@ -318,7 +318,7 @@ extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::
 OTBMetadata_EXPORT bool HasOpticalSensorMetadata(const ImageMetadata & imd);
 OTBMetadata_EXPORT bool HasSARSensorMetadata(const ImageMetadata & imd);
 
-
+OTBMetadata_EXPORT void WriteImageMetadataToGeomFile(const ImageMetadata & imd, const std::string & filename);
 } // end namespace otb
 
 #endif
