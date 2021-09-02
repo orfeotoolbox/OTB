@@ -102,7 +102,6 @@ void SARParam::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
   kwl.insert({prefix +"NearRangeTime", to_string_with_precision(nearRangeTime)});
   kwl.insert({prefix + "RangeSamplingRate", to_string_with_precision(rangeSamplingRate)});
   kwl.insert({prefix + "RangeResolution", to_string_with_precision(rangeResolution)});
-
   kwl.insert({prefix + "NumberOfLinesPerBurst", to_string_with_precision(numberOfLinesPerBurst)});
   kwl.insert({prefix + "NumberOfSamplesPerBurst", to_string_with_precision(numberOfSamplesPerBurst)});
 
@@ -142,7 +141,7 @@ void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
   KeywordlistToVector(slantRangeToGroundRangeRecords, kwl, prefix + "SlantRangeToGroundRangeRecords");
   KeywordlistToVector(groundRangeToSlantRangeRecords, kwl, prefix + "GroundRangeToSlantRangeRecords");
 
-  for (const auto kv : kwl)
+  for (const auto & kv : kwl)
   {
     const std::string key = "GCPTimes_";
     auto pos = kv.first.find("GCPTimes_");
