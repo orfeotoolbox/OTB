@@ -355,6 +355,12 @@ bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
     sarParam.numberOfSamplesPerBurst = m_MetadataSupplierInterface->GetAs<unsigned long>(
                                   supportDataPrefix + "geom.bursts.number_samples_per_burst");
   }
+  // Make sure the variable are not left uninitialized
+  else
+  {
+    sarParam.numberOfLinesPerBurst = 0;
+    sarParam.numberOfSamplesPerBurst = 0;
+  }
   return true;
 }
 
