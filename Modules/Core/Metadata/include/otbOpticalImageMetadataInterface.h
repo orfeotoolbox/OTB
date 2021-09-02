@@ -77,16 +77,6 @@ public:
    */
   virtual double GetSatAzimuth() const = 0;
 
-  /** Get the radiometric bias from the ossim metadata
-   * \deprecated
-   */
-  virtual VariableLengthVectorType GetPhysicalBias() const = 0;
-
-  /** Get the radiometric gain from the ossim metadata
-   * \deprecated
-   */
-  virtual VariableLengthVectorType GetPhysicalGain() const = 0;
-
   /** Get the solar irradiance from the ossim metadata
    * \deprecated
    */

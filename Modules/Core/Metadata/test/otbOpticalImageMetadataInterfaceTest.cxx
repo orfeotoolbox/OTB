@@ -49,8 +49,6 @@ int otbOpticalImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
   file << "GetSunAzimuth:       " << lImageMetadata->GetSunAzimuth() << std::endl;
   file << "GetSatElevation:     " << lImageMetadata->GetSatElevation() << std::endl;
   file << "GetSatAzimuth:       " << lImageMetadata->GetSatAzimuth() << std::endl;
-  file << "GetPhysicalBias:     " << lImageMetadata->GetPhysicalBias() << std::endl;
-  file << "GetPhysicalGain:     " << lImageMetadata->GetPhysicalGain() << std::endl;
   file << "GetSolarIrradiance:  " << lImageMetadata->GetSolarIrradiance() << std::endl;
   file << "GetFirstWavelengths: " << lImageMetadata->GetFirstWavelengths() << std::endl;
   file << "GetLastWavelengths:  " << lImageMetadata->GetLastWavelengths() << std::endl;

@@ -55,22 +55,6 @@ public:
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
-  /** Get the radiometric bias from the ossim metadata
-   * \deprecated
-   */
-  VariableLengthVectorType GetPhysicalBias() const override
-  {
-    itkExceptionMacro("GetPhysicalBias not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the radiometric gain from the ossim metadata
-   * \deprecated
-   */
-  VariableLengthVectorType GetPhysicalGain() const override
-  {
-    itkExceptionMacro("GetPhysicalGain not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
-  }
-
   /** Get the solar irradiance from the ossim metadata
    * \deprecated
    */

@@ -88,8 +88,6 @@ void OpticalImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent inde
     os << indent << "GetSunAzimuth:       " << this->GetSunAzimuth() << std::endl;
     os << indent << "GetSatElevation:     " << this->GetSatElevation() << std::endl;
     os << indent << "GetSatAzimuth:       " << this->GetSatAzimuth() << std::endl;
-    os << indent << "GetPhysicalBias:     " << this->GetPhysicalBias() << std::endl;
-    os << indent << "GetPhysicalGain:     " << this->GetPhysicalGain() << std::endl;
     os << indent << "GetSolarIrradiance:  " << this->GetSolarIrradiance() << std::endl;
     os << indent << "GetFirstWavelengths: " << this->GetFirstWavelengths() << std::endl;
     os << indent << "GetLastWavelengths:  " << this->GetLastWavelengths() << std::endl;
@@ -126,22 +124,6 @@ bool OpticalImageMetadataInterface::ConvertImageKeywordlistToImageMetadata(Image
   try
   {
     imd.Add(MDNum::SatAzimuth, this->GetSatAzimuth());
-  }
-  catch (const itk::ExceptionObject &)
-  {
-    result = false;
-  }
-  try
-  {
-    imd.Add(MDNum::PhysicalBias, this->GetPhysicalBias());
-  }
-  catch (const itk::ExceptionObject &)
-  {
-    result = false;
-  }
-  try
-  {
-    imd.Add(MDNum::PhysicalGain, this->GetPhysicalGain());
   }
   catch (const itk::ExceptionObject &)
   {

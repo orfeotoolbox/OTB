@@ -34,45 +34,6 @@ int otbDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(argv
 
   try
   {
-    std::cout << obj->GetPhysicalBias() << std::endl;
-  }
-  catch (itk::ExceptionObject& err)
-  {
-    std::cout << "ExceptionObject caught for GetPhysicalBias() !" << std::endl;
-    std::cout << err << std::endl;
-    hasRaisedException = true;
-  }
-
-  if (!hasRaisedException)
-  {
-    std::cerr << " Should has raise an exception !" << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  hasRaisedException = false;
-
-
-  try
-  {
-    std::cout << obj->GetPhysicalGain() << std::endl;
-  }
-  catch (itk::ExceptionObject& err)
-  {
-    std::cout << "ExceptionObject caught for GetPhysicalGain() !" << std::endl;
-    std::cout << err << std::endl;
-    hasRaisedException = true;
-  }
-
-  if (!hasRaisedException)
-  {
-    std::cerr << " Should has raise an exception !" << std::endl;
-    return EXIT_FAILURE;
-  }
-
-  hasRaisedException = false;
-
-  try
-  {
     std::cout << obj->GetSolarIrradiance() << std::endl;
   }
   catch (itk::ExceptionObject& err)

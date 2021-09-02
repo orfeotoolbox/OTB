@@ -53,16 +53,6 @@ public:
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
-  /** Get the radiometric bias from the ossim metadata
-   * \deprecated
-   */
-  VariableLengthVectorType GetPhysicalBias() const override;
-
-  /** Get the radiometric gain from the ossim metadata
-   * \deprecated
-   */
-  VariableLengthVectorType GetPhysicalGain() const override;
-
   /** Get the solar irradiance from the ossim metadata
    * \deprecated
    */
