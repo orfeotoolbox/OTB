@@ -25,9 +25,6 @@ otbMetadataTestDriver.cxx
 otbSarImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceBaseTest.cxx
 otbSarDefaultImageMetadataInterface.cxx
-otbOpticalImageMetadataInterfaceTest.cxx
-otbOpticalDefaultImageMetadataInterface.cxx
-otbDefaultImageMetadataInterface.cxx
 otbImageMetadataInterfaceTest.cxx
 otbImageMetadataInterfaceTest2.cxx
 otbNoDataHelperTest.cxx
@@ -211,83 +208,6 @@ otb_module_target_label(otbMetadataTestDriver)
   #${TEMP}/ioTvImageMetadataInterfaceBase_TSX1TORONTO.txt
   #)
 
-otb_add_test(NAME ioTuSarDefaultImageMetadataInterface COMMAND otbMetadataTestDriver
-  otbSarDefaultImageMetadataInterface )
-
-otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_QBCevennes COMMAND otbMetadataTestDriver
-  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
-  ${TEMP}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
-  otbOpticalImageMetadataInterfaceTest
-  LARGEINPUT{QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF}
-  ${TEMP}/ioTvOpticalImageMetadataInterface_QBCevennes.txt
-  )
-
-otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_WV2Pan COMMAND otbMetadataTestDriver
-  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_WV2RomePan.txt
-  ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomePan.txt
-  otbOpticalImageMetadataInterfaceTest
-  LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_PAN/09DEC10103019-P2AS-052298844010_01_P001.TIF}
-  ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomePan.txt
-  )
-
-otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_QBMUL COMMAND otbMetadataTestDriver
-  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_QBMUL.txt
-  ${TEMP}/ioTvOpticalImageMetadataInterface_QBMUL.txt
-  otbOpticalImageMetadataInterfaceTest
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}
-  ${TEMP}/ioTvOpticalImageMetadataInterface_QBMUL.txt
-  )
-
-otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_WV2Mul COMMAND otbMetadataTestDriver
-  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_WV2RomeMul.txt
-  ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomeMul.txt
-  otbOpticalImageMetadataInterfaceTest
-  LARGEINPUT{WORLDVIEW2/ROME/WV-2_standard_8band_bundle_16bit/052298844010_01_P001_MUL/09DEC10103019-M2AS-052298844010_01_P001.TIF}
-  ${TEMP}/ioTvOpticalImageMetadataInterface_WV2RomeMul.txt
-  )
-
-otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_SPOT COMMAND otbMetadataTestDriver
-  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_SPOT.txt
-  ${TEMP}/ioTvOpticalImageMetadataInterface_SPOT.txt
-  otbOpticalImageMetadataInterfaceTest
-  LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
-  ${TEMP}/ioTvOpticalImageMetadataInterface_SPOT.txt
-  )
-
-otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_QB COMMAND otbMetadataTestDriver
-  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_QB.txt
-  ${TEMP}/ioTvOpticalImageMetadataInterface_QB.txt
-  otbOpticalImageMetadataInterfaceTest
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  ${TEMP}/ioTvOpticalImageMetadataInterface_QB.txt
-  )
-
-otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_IKONOS COMMAND otbMetadataTestDriver
-  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_IKONOS.txt
-  ${TEMP}/ioTvOpticalImageMetadataInterface_IKONOS.txt
-  otbOpticalImageMetadataInterfaceTest
-  LARGEINPUT{IKONOS/BLOSSEVILLE/po_2619900_blu_0000000.tif}
-  ${TEMP}/ioTvOpticalImageMetadataInterface_IKONOS.txt
-  )
-
-otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_FORMOSAT2 COMMAND otbMetadataTestDriver
-  --compare-ascii ${NOTOL} ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_FORMOSAT2.txt
-  ${TEMP}/ioTvOpticalImageMetadataInterface_FORMOSAT2.txt
-  otbOpticalImageMetadataInterfaceTest
-  LARGEINPUT{FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF}
-  ${TEMP}/ioTvOpticalImageMetadataInterface_FORMOSAT2.txt
-  )
-
-
-otb_add_test(NAME ioTuOpticalDefaultImageMetadataInterface COMMAND otbMetadataTestDriver
-  otbOpticalDefaultImageMetadataInterface )
-
-
-
-
-
-
-
 otb_add_test(NAME ioTuDefaultImageMetadataInterface COMMAND otbMetadataTestDriver
   otbDefaultImageMetadataInterface )
 
@@ -298,56 +218,6 @@ otb_add_test(NAME ioTvImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
   ${INPUTDATA}/qb_RoadExtract.tif
   ${TEMP}/ioTvImageMetadataInterface.txt
   )
-
-set( GenericTestPHR_TESTNB 0)
-foreach( current_file ${GenericTestPHR_DATA_INPUTS} )
-  list(GET GenericTestPHR_DATA_TYPES   ${GenericTestPHR_TESTNB} current_type   )
-  math(EXPR GenericTestPHR_TESTNB "${GenericTestPHR_TESTNB} + 1")
-
-  #otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_${current_type} COMMAND otbMetadataTestDriver
-    #--compare-ascii ${NOTOL}
-      #${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_${current_type}.txt
-      #${TEMP}/ioTvImageMetadataInterfaceBase_${current_type}_OUT.txt
-    #otbImageMetadataInterfaceBaseTest
-      #${current_file}
-     #${TEMP}/ioTvImageMetadataInterfaceBase_${current_type}_OUT.txt
-    #)
-
-  otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_${current_type} COMMAND otbMetadataTestDriver
-    --compare-ascii ${NOTOL}
-      ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_${current_type}.txt
-      ${TEMP}/ioTvOpticalImageMetadataInterface_${current_type}_OUT.txt
-    otbOpticalImageMetadataInterfaceTest
-      ${current_file}
-      ${TEMP}/ioTvOpticalImageMetadataInterface_${current_type}_OUT.txt
-    )
-endforeach()
-
-# SPOT 6
-set( GenericTestSPOT6_TESTNB 0)
-
-foreach( current_file ${GenericTestSPOT6_DATA_INPUTS} )
-  list(GET GenericTestSPOT6_DATA_TYPES   ${GenericTestSPOT6_TESTNB} current_type )
-  math(EXPR GenericTestSPOT6_TESTNB "${GenericTestSPOT6_TESTNB} + 1")
-
-  #otb_add_test(NAME ioTvImageMetadataInterfaceBaseTest_${current_type} COMMAND otbMetadataTestDriver
-    #--compare-ascii ${NOTOL}
-      #${BASELINE_FILES}/ioTvImageMetadataInterfaceBase_${current_type}.txt
-      #${TEMP}/ioTvImageMetadataInterfaceBase_${current_type}_OUT.txt
-    #otbImageMetadataInterfaceBaseTest
-      #${current_file}
-      #${TEMP}/ioTvImageMetadataInterfaceBase_${current_type}_OUT.txt
-    #)
-
-  otb_add_test(NAME ioTvOpticalImageMetadataInterfaceTest_${current_type} COMMAND otbMetadataTestDriver
-    --compare-ascii ${NOTOL}
-      ${BASELINE_FILES}/ioTvOpticalImageMetadataInterface_${current_type}.txt
-      ${TEMP}/ioTvOpticalImageMetadataInterface_${current_type}_OUT.txt
-    otbOpticalImageMetadataInterfaceTest
-      ${current_file}
-      ${TEMP}/ioTvOpticalImageMetadataInterface_${current_type}_OUT.txt
-    )
-endforeach()
 
 otb_add_test(NAME coreMetaDataNoDataHelperTest COMMAND otbMetadataTestDriver
   otbNoDataHelperTest)
