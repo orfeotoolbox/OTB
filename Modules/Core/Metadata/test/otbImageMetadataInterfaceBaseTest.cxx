@@ -61,14 +61,6 @@ int otbImageMetadataInterfaceBaseTest(int itkNotUsed(argc), char* argv[])
   file << "NumberOfBands:   " << lImageMetadata->GetNumberOfBands() << std::endl;
   file << "XPixelSpacing:   " << lImageMetadata->GetXPixelSpacing() << std::endl;
   file << "YPixelSpacing:   " << lImageMetadata->GetYPixelSpacing() << std::endl;
-  file << "Day:             " << lImageMetadata->GetDay() << std::endl;
-  file << "Month:           " << lImageMetadata->GetMonth() << std::endl;
-  file << "Year:            " << lImageMetadata->GetYear() << std::endl;
-  file << "Hour:            " << lImageMetadata->GetHour() << std::endl;
-  file << "Minute:          " << lImageMetadata->GetMinute() << std::endl;
-  file << "ProductionDay:   " << lImageMetadata->GetProductionDay() << std::endl;
-  file << "ProductionMonth: " << lImageMetadata->GetProductionMonth() << std::endl;
-  file << "ProductionYear:  " << lImageMetadata->GetProductionYear() << std::endl;
 
   std::vector<std::string> bandNameList = lImageMetadata->GetBandName();
   if (bandNameList.size() == 1)

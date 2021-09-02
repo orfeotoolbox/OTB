@@ -57,27 +57,8 @@ public:
   typedef Superclass::RealType                 RealType;
   typedef Superclass::LookupDataPointerType    LookupDataPointerType;
 
-  /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionDay() const override;
-
-  /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionMonth() const override;
-
-  /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable */
-  int GetProductionYear() const override;
-
   /** check sensor ID */
   bool CanRead() const override;
-
-  int GetDay() const override;
-
-  int GetMonth() const override;
-
-  int GetYear() const override;
-
-  int GetHour() const override;
-
-  int GetMinute() const override;
 
   UIntVectorType GetDefaultDisplay() const override;
 

@@ -601,14 +601,6 @@ void ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent)
     }
     os << indent << "XPixelSpacing:   " << this->GetXPixelSpacing() << std::endl;
     os << indent << "YPixelSpacing:   " << this->GetYPixelSpacing() << std::endl;
-    os << indent << "Day:             " << this->GetDay() << std::endl;
-    os << indent << "Month:           " << this->GetMonth() << std::endl;
-    os << indent << "Year:            " << this->GetYear() << std::endl;
-    os << indent << "Hour:            " << this->GetHour() << std::endl;
-    os << indent << "Minute:          " << this->GetMinute() << std::endl;
-    os << indent << "ProductionDay:   " << this->GetProductionDay() << std::endl;
-    os << indent << "ProductionMonth: " << this->GetProductionMonth() << std::endl;
-    os << indent << "ProductionYear:  " << this->GetProductionYear() << std::endl;
   }
 }
 

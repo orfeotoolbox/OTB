@@ -170,54 +170,6 @@ public:
   double GetYPixelSpacing() const;
   // otbMetadataGetMacro(YPixelSpacing, double);
 
-  /** Get the imaging acquisition day from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetDay() const {return -1;}
-  //  otbMetadataGetMacro(Day, int);
-
-  /** Get the imaging acquisition month from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetMonth() const {return -1;}
-  // otbMetadataGetMacro(Month, int);
-
-  /** Get the imaging acquisition year from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetYear() const {return -1;}
-  // otbMetadataGetMacro(Year, int);
-
-  /** Get the imaging acquisition hour from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetHour() const {return -1;}
-  // otbMetadataGetMacro(Hour, int);
-
-  /** Get the imaging acquisition minute from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetMinute() const {return -1;}
-  // otbMetadataGetMacro(Minute, int);
-
-  /** Get the imaging production day from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetProductionDay() const {return -1;}
-  // otbMetadataGetMacro(ProductionDay, int);
-
-  /** Get the imaging production month from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetProductionMonth() const {return -1;}
-  // otbMetadataGetMacro(ProductionMonth, int);
-
-  /** Get the imaging production year from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetProductionYear() const {return -1;}
-  // otbMetadataGetMacro(ProductionYear, int);
-
   /** Convert the band names provided by ossim to the official band names  
    * \deprecated
    */

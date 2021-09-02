@@ -200,299 +200,6 @@ PleiadesImageMetadataInterface::VariableLengthVectorType PleiadesImageMetadataIn
   return outputValuesVariableLengthVector;
 }
 
-int PleiadesImageMetadataInterface::GetDay() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("support_data.image_date"))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
-  std::vector<std::string> outputValues;
-
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
-
-  int value;
-  try
-  {
-    value = lexical_cast<int>(outputValues[2]);
-  }
-  catch (bad_lexical_cast&)
-  {
-    itkExceptionMacro(<< "Invalid Day");
-  }
-
-  return value;
-}
-
-int PleiadesImageMetadataInterface::GetMonth() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("support_data.image_date"))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
-  std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
-
-  int value;
-  try
-  {
-    value = lexical_cast<int>(outputValues[1]);
-  }
-  catch (bad_lexical_cast&)
-  {
-    itkExceptionMacro(<< "Invalid Month");
-  }
-  return value;
-}
-
-int PleiadesImageMetadataInterface::GetYear() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("support_data.image_date"))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
-  std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
-
-  int value;
-  try
-  {
-    value = lexical_cast<int>(outputValues[0]);
-  }
-  catch (bad_lexical_cast&)
-  {
-    itkExceptionMacro(<< "Invalid Year");
-  }
-  return value;
-}
-
-int PleiadesImageMetadataInterface::GetHour() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("support_data.image_date"))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
-  std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
-
-  int value;
-  try
-  {
-    value = lexical_cast<int>(outputValues[3]);
-  }
-  catch (bad_lexical_cast&)
-  {
-    itkExceptionMacro(<< "Invalid Hour");
-  }
-  return value;
-}
-
-int PleiadesImageMetadataInterface::GetMinute() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("support_data.image_date"))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey("support_data.image_date");
-  std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-."));
-
-  int value;
-  try
-  {
-    value = lexical_cast<int>(outputValues[4]);
-  }
-  catch (bad_lexical_cast&)
-  {
-    itkExceptionMacro(<< "Invalid Minute");
-  }
-  return value;
-}
-
-int PleiadesImageMetadataInterface::GetProductionDay() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("support_data.production_date"))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey("support_data.production_date");
-  std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
-
-  int value;
-  try
-  {
-    value = lexical_cast<int>(outputValues[2]);
-  }
-  catch (bad_lexical_cast&)
-  {
-    itkExceptionMacro(<< "Invalid Day");
-  }
-  return value;
-}
-
-int PleiadesImageMetadataInterface::GetProductionMonth() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("support_data.production_date"))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey("support_data.production_date");
-  std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
-
-  int value;
-  try
-  {
-    value = lexical_cast<int>(outputValues[1]);
-  }
-  catch (bad_lexical_cast&)
-  {
-    itkExceptionMacro(<< "Invalid Month");
-  }
-  return value;
-}
-
-int PleiadesImageMetadataInterface::GetProductionYear() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("support_data.production_date"))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey("support_data.production_date");
-  std::vector<std::string> outputValues;
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
-
-  if (outputValues.size() <= 2)
-    itkExceptionMacro(<< "Invalid Year");
-
-  int value;
-  try
-  {
-    value = lexical_cast<int>(outputValues[0]);
-  }
-  catch (bad_lexical_cast&)
-  {
-    itkExceptionMacro(<< "Invalid Year");
-  }
-  return value;
-}
-
 PleiadesImageMetadataInterface::VariableLengthVectorType PleiadesImageMetadataInterface::GetPhysicalBias() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
@@ -560,10 +267,14 @@ PleiadesImageMetadataInterface::VariableLengthVectorType PleiadesImageMetadataIn
   const std::string   sensorId = this->GetSensorID();
   const int           nbBands  = this->GetNumberOfBands();
 
+  // TODO: remove GetPhysicalGain
+  int year = 2015;
+  int month = 0;
+
   if (sensorId == "PHR 1A")
   {
     // PHR 1A
-    if ((this->GetYear() < 2012) || (this->GetYear() == 2012 && this->GetMonth() < 8))
+    if ((year < 2012) || (year == 2012 && month < 8))
     {
       if (nbBands == 1)
       {
@@ -577,7 +288,7 @@ PleiadesImageMetadataInterface::VariableLengthVectorType PleiadesImageMetadataIn
         outputValues.push_back(15.73);
       }
     }
-    else if ((this->GetYear() == 2012 && this->GetMonth() >= 8) || (this->GetYear() == 2013 && this->GetMonth() < 3))
+    else if ((year == 2012 && month >= 8) || (year == 2013 && month < 3))
     {
       if (nbBands == 1)
       {
@@ -591,7 +302,7 @@ PleiadesImageMetadataInterface::VariableLengthVectorType PleiadesImageMetadataIn
         outputValues.push_back(15.71);
       }
     }
-    else if ((this->GetYear() == 2013 && this->GetMonth() >= 3) || this->GetYear() > 2013)
+    else if ((year == 2013 && month >= 3) || year > 2013)
     {
       if (nbBands == 1)
       {
@@ -613,7 +324,7 @@ PleiadesImageMetadataInterface::VariableLengthVectorType PleiadesImageMetadataIn
   else if (sensorId == "PHR 1B")
   {
     // PHR 1B
-    if (this->GetYear() >= 2012)
+    if (year >= 2012)
     {
       if (nbBands == 1)
       {

@@ -67,46 +67,6 @@ public:
    */
   VariableLengthVectorType GetSolarIrradiance() const override;
 
-  /** Get the imaging acquisition day from the ossim metadata : TLCTime metadata value
-   * \deprecated
-   */
-  int GetDay() const override;
-
-  /** Get the imaging acquisition month from the ossim metadata : TLCTime metadata value
-   * \deprecated
-   */
-  int GetMonth() const override;
-
-  /** Get the imaging acquisition year from the ossim metadata : TLCTime metadata value
-   * \deprecated
-   */
-  int GetYear() const override;
-
-  /** Get the imaging acquisition hour from the ossim metadata : TLCTime metadata value
-   * \deprecated
-   */
-  int GetHour() const override;
-
-  /** Get the imaging acquisition year from the ossim metadata : TLCTime metadata value
-   * \deprecated
-   */
-  int GetMinute() const override;
-
-  /** Get the imaging production day from the ossim metadata : generationTime metadata value
-   * \deprecated
-   */
-  int GetProductionDay() const override;
-
-  /** Get the imaging production month from the ossim metadata : generationTime metadata value
-   * \deprecated
-   */
-  int GetProductionMonth() const override;
-
-  /** Get the imaging production year from the ossim metadata : generationTime metadata value
-   * \deprecated
-   */
-  int GetProductionYear() const override;
-
   /** Get the sat elevation from the ossim metadata
    * \deprecated
    */
