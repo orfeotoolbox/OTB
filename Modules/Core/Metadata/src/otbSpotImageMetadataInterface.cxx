@@ -149,66 +149,6 @@ SpotImageMetadataInterface::VariableLengthVectorType SpotImageMetadataInterface:
   return outputValuesVariableLengthVector;
 }
 
-double SpotImageMetadataInterface::GetSatElevation() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("support_data.incident_angle"))
-  {
-    return 0;
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.incident_angle");
-  double      value       = 90 - atof(valueString.c_str());
-  return value;
-}
-
-double SpotImageMetadataInterface::GetSatAzimuth() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("support_data.step_count") || !imageKeywordlist.HasKey("support_data.scene_orientation"))
-  {
-    return 0;
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.step_count");
-  int         step        = atoi(valueString.c_str());
-  valueString             = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
-  double satAz            = atof(valueString.c_str());
-
-  if ((step - 48) < 0)
-  {
-    satAz += 90.;
-  }
-  else
-    satAz = satAz - 90.;
-
-  return satAz;
-}
-
 SpotImageMetadataInterface::VariableLengthVectorType SpotImageMetadataInterface::GetFirstWavelengths() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();

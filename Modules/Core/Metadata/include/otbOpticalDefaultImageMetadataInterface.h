@@ -63,22 +63,6 @@ public:
     itkExceptionMacro("GetSolarIrradiance not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the sat elevation from the ossim metadata
-   * \deprecated
-   */
-  double GetSatElevation() const override
-  {
-    itkExceptionMacro("GetSatElevation not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the sat azimuth from the ossim metadata
-   * \deprecated
-   */
-  double GetSatAzimuth() const override
-  {
-    itkExceptionMacro("GetSatElevation not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
-  }
-
   /** Get the first wavelength for the spectral band definition */
   VariableLengthVectorType GetFirstWavelengths() const override
   {

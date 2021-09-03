@@ -57,26 +57,6 @@ public:
   typedef otb::ObjectList<FilterFunctionValuesType>         InternalWavelengthSpectralBandVectorType;
   typedef InternalWavelengthSpectralBandVectorType::Pointer WavelengthSpectralBandVectorType;
 
-  /** Get the sun elevation from the ossim metadata
-   * \deprecated
-   */
-  double GetSunElevation() const;
-
-  /** Get the sun azimuth from the ossim metadata
-   * \deprecated
-   */
-  double GetSunAzimuth() const;
-
-  /** Get the sat elevation from the ossim metadata
-   * \deprecated
-   */
-  virtual double GetSatElevation() const = 0;
-
-  /** Get the sat azimuth from the ossim metadata
-   * \deprecated
-   */
-  virtual double GetSatAzimuth() const = 0;
-
   /** Get the solar irradiance from the ossim metadata
    * \deprecated
    */
@@ -101,16 +81,9 @@ public:
    * There values a computed by 6S. */
   virtual WavelengthSpectralBandVectorType GetSpectralSensitivity() const = 0;
 
-    /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
-   * then translate it into ImageMetadata. Handles most optical sensors.
-   * Returns true if succeed. */
-  bool ConvertImageKeywordlistToImageMetadata(ImageMetadata &) override;
-
 protected:
-  OpticalImageMetadataInterface();
-  ~OpticalImageMetadataInterface() override
-  {
-  }
+  OpticalImageMetadataInterface() = default;
+  ~OpticalImageMetadataInterface() override = default;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 

@@ -227,57 +227,6 @@ void WorldView2ImageMetadataInterface::FetchPhysicalBias(ImageMetadata& imd)
   }
 }
 
-double WorldView2ImageMetadataInterface::GetSatElevation() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-  std::string key("support_data.sat_elevation_angle");
-  if (!imageKeywordlist.HasKey(key))
-  {
-    return -1;
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
-  double      value       = atof(valueString.c_str());
-  return value;
-}
-
-double WorldView2ImageMetadataInterface::GetSatAzimuth() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string key("support_data.sat_azimuth_angle");
-  if (!imageKeywordlist.HasKey(key))
-  {
-    return -1;
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey(key);
-  double      value       = atof(valueString.c_str());
-  return value;
-}
-
 WorldView2ImageMetadataInterface::VariableLengthVectorType WorldView2ImageMetadataInterface::GetFirstWavelengths() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();

@@ -140,63 +140,6 @@ Spot6ImageMetadataInterface::VariableLengthVectorType Spot6ImageMetadataInterfac
   return outputValuesVariableLengthVector;
 }
 
-double Spot6ImageMetadataInterface::GetSatElevation() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot6 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("support_data.incident_angle"))
-  {
-    return 0;
-  }
-
-  // MSD: for the moment take only topCenter value
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.incident_angle");
-  double      value       = atof(valueString.c_str());
-
-  // Elevation is measured from ground, incidence from zenith
-  // Elevation angle = 90° - Incidence angle
-  value = 90. - value;
-
-  return value;
-}
-
-double Spot6ImageMetadataInterface::GetSatAzimuth() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot6 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("support_data.scene_orientation"))
-  {
-    return 0;
-  }
-
-  // MSD: for the moment take only topCenter value
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.scene_orientation");
-  double      satAz       = atof(valueString.c_str());
-
-  return satAz;
-}
 
 Spot6ImageMetadataInterface::VariableLengthVectorType Spot6ImageMetadataInterface::GetFirstWavelengths() const
 {

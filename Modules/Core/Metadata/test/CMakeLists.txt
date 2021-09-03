@@ -208,9 +208,6 @@ otb_module_target_label(otbMetadataTestDriver)
   #${TEMP}/ioTvImageMetadataInterfaceBase_TSX1TORONTO.txt
   #)
 
-otb_add_test(NAME ioTuDefaultImageMetadataInterface COMMAND otbMetadataTestDriver
-  otbDefaultImageMetadataInterface )
-
 otb_add_test(NAME ioTvImageMetadataInterfaceTest COMMAND otbMetadataTestDriver
   --compare-ascii ${EPSILON_9} ${BASELINE_FILES}/ioTvImageMetadataInterface.txt
   ${TEMP}/ioTvImageMetadataInterface.txt

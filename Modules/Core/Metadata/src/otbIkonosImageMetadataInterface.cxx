@@ -92,54 +92,6 @@ IkonosImageMetadataInterface::VariableLengthVectorType IkonosImageMetadataInterf
   return outputValuesVariableLengthVector;
 }
 
-double IkonosImageMetadataInterface::GetSatElevation() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-  if (!imageKeywordlist.HasKey("support_data.nominal_collection_elevation_angle"))
-  {
-    return 0;
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.nominal_collection_elevation_angle");
-  double      value       = atof(valueString.c_str());
-  return value;
-}
-
-double IkonosImageMetadataInterface::GetSatAzimuth() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Ikonos Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-  if (!imageKeywordlist.HasKey("support_data.nominal_collection_azimuth_angle"))
-  {
-    return 0;
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.nominal_collection_azimuth_angle");
-  double      value       = atof(valueString.c_str());
-  return value;
-}
-
 IkonosImageMetadataInterface::VariableLengthVectorType IkonosImageMetadataInterface::GetFirstWavelengths() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
