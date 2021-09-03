@@ -52,11 +52,6 @@ public:
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
-  /** Get the solar irradiance from the ossim metadata
-   * \deprecated
-   */
-  VariableLengthVectorType GetSolarIrradiance() const override;
-
   /** Get the first wavelength for the spectral band definition */
   VariableLengthVectorType GetFirstWavelengths() const override;
 
@@ -68,10 +63,6 @@ public:
   /** Get the 3 spectral band numbers corresponding to the default display for visualization,
    *  in the order R, G, B */
   std::vector<unsigned int> GetDefaultDisplay() const override;
-
-  /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
-   * There values a computed by 6S. */
-  WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
 
   /** Get the enhanced band names from band names collected by ossim
    * \deprecated

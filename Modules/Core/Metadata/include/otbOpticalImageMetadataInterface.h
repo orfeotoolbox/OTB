@@ -57,11 +57,6 @@ public:
   typedef otb::ObjectList<FilterFunctionValuesType>         InternalWavelengthSpectralBandVectorType;
   typedef InternalWavelengthSpectralBandVectorType::Pointer WavelengthSpectralBandVectorType;
 
-  /** Get the solar irradiance from the ossim metadata
-   * \deprecated
-   */
-  virtual VariableLengthVectorType GetSolarIrradiance() const = 0;
-
   /** Get the first wavelength for the spectral band definition */
   virtual VariableLengthVectorType GetFirstWavelengths() const = 0;
 
@@ -76,10 +71,6 @@ public:
    *  2 1 0 3 in the tiff file, this method which is overloaded for SPOT enables to retrieve the
    *  proper band. */
   virtual unsigned int BandIndexToWavelengthPosition(unsigned int i) const;
-
-  /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
-   * There values a computed by 6S. */
-  virtual WavelengthSpectralBandVectorType GetSpectralSensitivity() const = 0;
 
 protected:
   OpticalImageMetadataInterface() = default;

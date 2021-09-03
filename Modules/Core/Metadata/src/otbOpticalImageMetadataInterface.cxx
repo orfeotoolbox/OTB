@@ -39,7 +39,6 @@ void OpticalImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent inde
 
   if (this->CanRead())
   {
-    os << indent << "GetSolarIrradiance:  " << this->GetSolarIrradiance() << std::endl;
     os << indent << "GetFirstWavelengths: " << this->GetFirstWavelengths() << std::endl;
     os << indent << "GetLastWavelengths:  " << this->GetLastWavelengths() << std::endl;
   }

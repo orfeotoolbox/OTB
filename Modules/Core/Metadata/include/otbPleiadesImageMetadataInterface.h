@@ -54,11 +54,6 @@ public:
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
-  /** Get the solar irradiance from the ossim metadata
-   * \deprecated
-   */
-  VariableLengthVectorType GetSolarIrradiance() const override;
-
   /** Get the first wavelength for the spectral band definition */
   VariableLengthVectorType GetFirstWavelengths() const override;
 
@@ -86,11 +81,6 @@ public:
   /** Get the enhanced band names of the Pleiades data */
   std::vector<std::string> GetEnhancedBandNames() const override;
 
-
-  /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
-     * There values a computed by 6S. */
-  WavelengthSpectralBandVectorType GetSpectralSensitivity() const override;
-
   void Parse(ImageMetadata &) override;
 
 protected:
@@ -110,6 +100,8 @@ private:
                       const std::vector<double> & sceneOrientation,
                       ImageMetadata & imd);
 
+  /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
+     * There values a computed by 6S. */
   void FetchSpectralSensitivity(const std::string & sensorId, ImageMetadata &imd);
 };
 
