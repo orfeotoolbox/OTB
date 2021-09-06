@@ -325,6 +325,11 @@ void Radarsat2ImageMetadataInterface::Parse(ImageMetadata & imd)
   // Try to fetch the metadata from GDAL Metadata Supplier
   else
     this->ParseGdal(imd);
+
+  // Default display
+  imd.Add(MDNum::RedDisplayChannel, 0);
+  imd.Add(MDNum::GreenDisplayChannel, 0);
+  imd.Add(MDNum::BlueDisplayChannel, 0);
 }
 
 } // end namespace otb

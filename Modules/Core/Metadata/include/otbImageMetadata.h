@@ -232,6 +232,12 @@ public:
    * If a key exists in both ImageMetadataBase, keeps the value of this ImageMetadataBase. */
   void Fuse(const ImageMetadataBase& );
 
+  /** Return the band that should be displayed by default, using the information contained in the
+   *  input ImageMetadata (MDNum::RedDisplayChannel, GreenDisplayChannel and BlueDisplayChannel)
+   *  the first channel being indexed as 0.
+   *  If no information is available the default order (0,1,2) is returned instead */
+  std::vector<unsigned int> GetDefaultDisplay() const;
+
 };
 
 
@@ -319,6 +325,7 @@ OTBMetadata_EXPORT bool HasOpticalSensorMetadata(const ImageMetadata & imd);
 OTBMetadata_EXPORT bool HasSARSensorMetadata(const ImageMetadata & imd);
 
 OTBMetadata_EXPORT void WriteImageMetadataToGeomFile(const ImageMetadata & imd, const std::string & filename);
+
 } // end namespace otb
 
 #endif

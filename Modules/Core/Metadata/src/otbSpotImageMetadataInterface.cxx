@@ -604,6 +604,11 @@ void SpotImageMetadataInterface::Parse(ImageMetadata & imd)
   {
     FetchSpectralSensitivity(imd);
   }
+
+  // Default display
+  imd.Add(MDNum::RedDisplayChannel, 0);
+  imd.Add(MDNum::GreenDisplayChannel, 1);
+  imd.Add(MDNum::BlueDisplayChannel, 2);
 }
 
 } // end namespace otb

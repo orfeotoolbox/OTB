@@ -4,6 +4,9 @@ GeometricLevel SENSOR
 TileHintX 2048
 TileHintY 2048
 DataType 3
+RedDisplayChannel 0
+GreenDisplayChannel 1
+BlueDisplayChannel 2
 SunElevation 39.2072
 SunAzimuth 32.444
 SatElevation 74.254

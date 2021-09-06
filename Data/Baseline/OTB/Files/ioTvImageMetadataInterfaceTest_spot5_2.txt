@@ -1,8 +1,12 @@
 SensorID SPOT 5
 Mission SPOT 5
+AreaOrPoint Point
 TileHintX 6000
 TileHintY 128
 DataType 1
+RedDisplayChannel 0
+GreenDisplayChannel 1
+BlueDisplayChannel 2
 SunElevation 67.9004
 SunAzimuth 128.882
 SatElevation 95.7372

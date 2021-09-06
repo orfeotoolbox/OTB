@@ -1397,6 +1397,22 @@ void WorldView2ImageMetadataInterface::Parse(ImageMetadata &imd)
     otbGenericExceptionMacro(MissingMetadataException, 
       << "Unknown Digital Globe sensor:" << metadata.sensorId)
   }
+
+
+  // Default display
+  if (imd.Bands.size() > 4)
+  {
+    imd.Add(MDNum::RedDisplayChannel, 4);
+    imd.Add(MDNum::GreenDisplayChannel, 2);
+    imd.Add(MDNum::BlueDisplayChannel, 1);
+  }
+  // Multispectral case
+  else
+  {
+    imd.Add(MDNum::RedDisplayChannel, 2);
+    imd.Add(MDNum::GreenDisplayChannel, 1);
+    imd.Add(MDNum::BlueDisplayChannel, 0);
+  }
 }
 
 } // end namespace otb

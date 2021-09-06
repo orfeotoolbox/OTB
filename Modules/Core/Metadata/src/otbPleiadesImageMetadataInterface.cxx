@@ -993,6 +993,22 @@ void PleiadesImageMetadataInterface::Parse(ImageMetadata &imd)
     imd.Add(MetaData::PleiadesUtils::SWATH_FIRST_COL_KEY, dimapData.SwathFirstCol);
     imd.Add(MetaData::PleiadesUtils::SWATH_LAST_COL_KEY, dimapData.SwathLastCol);
   }
+
+  // Default display  
+  // Panchromatic case
+  if (imd.Bands.size() == 1)
+  {
+    imd.Add(MDNum::RedDisplayChannel, 0);
+    imd.Add(MDNum::GreenDisplayChannel, 0);
+    imd.Add(MDNum::BlueDisplayChannel, 0);
+  }
+  // Multispectral case
+  else
+  {
+    imd.Add(MDNum::RedDisplayChannel, 0);
+    imd.Add(MDNum::GreenDisplayChannel, 1);
+    imd.Add(MDNum::BlueDisplayChannel, 2);
+  }
 }
 
 namespace MetaData

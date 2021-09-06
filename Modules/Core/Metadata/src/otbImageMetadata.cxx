@@ -480,6 +480,15 @@ void ImageMetadataBase::Fuse(const ImageMetadataBase& imd)
   this->ExtraKeys.insert(imd.ExtraKeys.begin(), imd.ExtraKeys.end());
 }
 
+std::vector<unsigned int> ImageMetadataBase::GetDefaultDisplay() const
+{
+  unsigned int redChannel = Has(MDNum::RedDisplayChannel) ? NumericKeys.at(MDNum::RedDisplayChannel) : 0;
+  unsigned int greenChannel = Has(MDNum::GreenDisplayChannel) ? NumericKeys.at(MDNum::GreenDisplayChannel) : 1;
+  unsigned int blueChannel = Has(MDNum::BlueDisplayChannel) ? NumericKeys.at(MDNum::BlueDisplayChannel) : 2;
+
+  return {redChannel, greenChannel, blueChannel};
+}
+
 // ----------------------- [ImageMetadata] ------------------------------
 
 ImageMetadata::ImageMetadata()
@@ -803,5 +812,6 @@ void WriteImageMetadataToGeomFile(const ImageMetadata & imd, const std::string &
     ++bIdx;
   }
 }
+
 
 }

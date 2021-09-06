@@ -3,6 +3,9 @@ Mission SPOT 5
 TileHintX 7689
 TileHintY 1
 DataType 1
+RedDisplayChannel 0
+GreenDisplayChannel 1
+BlueDisplayChannel 2
 SunElevation 40.6549
 SunAzimuth 156.82
 SatElevation 82.7227

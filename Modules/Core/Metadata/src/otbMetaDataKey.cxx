@@ -424,6 +424,9 @@ MDNumBmType MDNumNames = bimapGenerator<MDNum>(std::map<MDNum, std::string> {
   {MDNum::PixelSpacing,"PixelSpacing"},
   {MDNum::RangeTimeFirstPixel,"RangeTimeFirstPixel"},
   {MDNum::RangeTimeLastPixel,"RangeTimeLastPixel"},
+  {MDNum::RedDisplayChannel,"RedDisplayChannel"},
+  {MDNum::GreenDisplayChannel,"GreenDisplayChannel"},
+  {MDNum::BlueDisplayChannel,"BlueDisplayChannel"},
 });
 
 MDStrBmType MDStrNames = bimapGenerator<MDStr>(std::map<MDStr, std::string> {

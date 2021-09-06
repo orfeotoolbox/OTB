@@ -799,6 +799,11 @@ void Spot6ImageMetadataInterface::Parse(ImageMetadata & imd)
   imd.Add(MDStr::GeometricLevel, dimapData.ProcessingLevel);
 
   FetchSpectralSensitivity(imd[MDStr::SensorID], imd);
+
+  // Default display
+  imd.Add(MDNum::RedDisplayChannel, 0);
+  imd.Add(MDNum::GreenDisplayChannel, 1);
+  imd.Add(MDNum::BlueDisplayChannel, 2);
 }
 
 

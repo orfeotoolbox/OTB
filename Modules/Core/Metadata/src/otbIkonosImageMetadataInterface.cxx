@@ -661,6 +661,11 @@ void IkonosImageMetadataInterface::Parse(ImageMetadata &imd)
   imd.Bands[0].Add(MDNum::SolarIrradiance, ikonosSolarIrradiance[bandName]);
 
   FetchSpectralSensitivity(bandName, imd);
+
+  // Default display
+  imd.Add(MDNum::RedDisplayChannel, 2);
+  imd.Add(MDNum::GreenDisplayChannel, 1);
+  imd.Add(MDNum::BlueDisplayChannel, 0);
 }
 
 } // end namespace otb

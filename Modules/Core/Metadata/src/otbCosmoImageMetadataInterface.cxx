@@ -390,6 +390,12 @@ void CosmoImageMetadataInterface::Parse(ImageMetadata & imd)
   else
     otbGenericExceptionMacro(MissingMetadataException,
              << "Not a CosmoSkyMed product");
+
+
+  // Default display
+  imd.Add(MDNum::RedDisplayChannel, 0);
+  imd.Add(MDNum::GreenDisplayChannel, 0);
+  imd.Add(MDNum::BlueDisplayChannel, 0);
 }
 
 } // end namespace otb

@@ -137,6 +137,10 @@ enum class MDNum
   NumberOfLines,
   NumberOfColumns,
   AverageSceneHeight,
+// Display
+  RedDisplayChannel,
+  GreenDisplayChannel,
+  BlueDisplayChannel,
 // optical section
   PhysicalGain,
   PhysicalBias,

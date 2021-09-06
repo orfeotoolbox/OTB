@@ -16,6 +16,9 @@ OrbitNumber 6447
 NumberOfLines 31106
 NumberOfColumns 17663
 AverageSceneHeight 19
+RedDisplayChannel 0
+GreenDisplayChannel 0
+BlueDisplayChannel 0
 CalScale 1
 PRF 1663.48
 RadarFrequency 5.405e+09

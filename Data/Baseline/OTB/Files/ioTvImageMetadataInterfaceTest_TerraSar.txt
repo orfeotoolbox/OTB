@@ -10,6 +10,9 @@ DataType 11
 OrbitNumber 4091
 NumberOfLines 32710
 NumberOfColumns 15328
+RedDisplayChannel 0
+GreenDisplayChannel 0
+BlueDisplayChannel 0
 CalScale 1.04345e-05
 CalFactor 1.04345e-05
 PRF 3832.52
