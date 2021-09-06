@@ -441,6 +441,7 @@ MDStrBmType MDStrNames = bimapGenerator<MDStr>(std::map<MDStr, std::string> {
   {MDStr::Swath, "Swath"},
   {MDStr::OrbitDirection, "OrbitDirection"},
   {MDStr::BandName,"BandName"},
+  {MDStr::EnhancedBandName,"EnhancedBandName"},
   {MDStr::BeamMode, "BeamMode"},
   {MDStr::BeamSwath, "BeamSwath"},
   {MDStr::AreaOrPoint, "AreaOrPoint"},

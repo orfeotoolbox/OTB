@@ -176,6 +176,7 @@ enum class MDStr
   Mission,
   Instrument,
   BandName,
+  EnhancedBandName,
   ProductType,
   GeometricLevel,
   RadiometricLevel,
