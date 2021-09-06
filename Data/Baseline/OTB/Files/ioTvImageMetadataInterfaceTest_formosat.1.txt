@@ -4,6 +4,9 @@ AreaOrPoint Point
 TileHintX 3000
 TileHintY 500
 DataType 1
+RedDisplayChannel 0
+GreenDisplayChannel 1
+BlueDisplayChannel 2
 SunElevation 37.4423
 SunAzimuth 160.749
 SatElevation 57.9678
