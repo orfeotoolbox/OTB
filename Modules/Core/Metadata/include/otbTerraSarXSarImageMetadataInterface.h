@@ -115,10 +115,6 @@ public:
 
   bool CanRead() const override;
 
-  /** Get the 3 spectral band numbers corresponding to the default display for visualization,
-   *  in the order R, G, B */
-  std::vector<unsigned int> GetDefaultDisplay() const override;
-
   void ParseGdal(ImageMetadata &) override;
 
   void ParseGeom(ImageMetadata &) override;

@@ -175,10 +175,6 @@ public:
    */
   virtual StringVectorType GetEnhancedBandNames() const {return StringVectorType();}
 
-  /** Get the 3 spectral band numbers corresponding to the default display for visualization,
-   *  in the order R, G, B */
-  virtual UIntVectorType GetDefaultDisplay() const {return {0,1,2}; }
-
   virtual bool CanRead() const {return false;}
 
   /** Parses the metadata using the MetadataSupplierInterface and fill the ImageMetadata object

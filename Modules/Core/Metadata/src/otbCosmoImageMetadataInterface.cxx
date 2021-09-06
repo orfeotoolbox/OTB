@@ -90,16 +90,6 @@ double CosmoImageMetadataInterface::GetPRF() const
   return value;
 }
 
-
-CosmoImageMetadataInterface::UIntVectorType CosmoImageMetadataInterface::GetDefaultDisplay() const
-{
-  UIntVectorType rgb(3);
-  rgb[0] = 0;
-  rgb[1] = 0;
-  rgb[2] = 0;
-  return rgb;
-}
-
 double CosmoImageMetadataInterface::GetRSF() const
 {
   return 0;

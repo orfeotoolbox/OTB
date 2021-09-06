@@ -293,59 +293,6 @@ std::vector<std::string> PleiadesImageMetadataInterface::GetEnhancedBandNames() 
   return enhBandNames;
 }
 
-std::vector<unsigned int> PleiadesImageMetadataInterface::GetDefaultDisplay() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
-  }
-
-  std::vector<unsigned int> rgb(3);
-
-  rgb[0] = 0;
-  rgb[1] = 1;
-  rgb[2] = 2;
-
-  ImageKeywordlistType imageKeywordlist;
-  if (!dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    return rgb;
-  }
-  itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-
-  if (!imageKeywordlist.HasKey("support_data.band_name_list"))
-  {
-    return rgb;
-  }
-
-  const std::string& rgbOrder = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
-
-  std::vector<std::string> bandList;
-  boost::split(bandList, rgbOrder, boost::is_any_of(" "));
-
-  if (bandList[0] == "P")
-  {
-    rgb[1] = 0;
-    rgb[2] = 0;
-    return rgb;
-  }
-
-  if (bandList.size() >= 3)
-  {
-    for (int i = 0; i < 3; i++)
-    {
-      std::string band = bandList[i];
-      if (band[0] == 'B')
-      {
-        rgb[i] = lexical_cast<unsigned int>(band.c_str() + 1);
-      }
-    }
-  }
-
-  return rgb;
-}
-
 void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::Time & date, ImageMetadata& imd)
 {
   // We use here tabulate in flight values for physical gain of PHR. Those values evolve

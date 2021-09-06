@@ -314,53 +314,6 @@ WorldView2ImageMetadataInterface::VariableLengthVectorType WorldView2ImageMetada
   return wavel;
 }
 
-std::vector<unsigned int> WorldView2ImageMetadataInterface::GetDefaultDisplay() const
-{
-  // Handle both 4 bands and 8 bands wv2 products
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, not a WorldView2 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string               key = "support_data.band_name_list";
-  std::vector<unsigned int> rgb(3);
-  if (imageKeywordlist.HasKey(key))
-  {
-    std::string              keywordStringBandNameList = imageKeywordlist.GetMetadataByKey(key);
-    std::vector<std::string> bandNameList;
-    boost::trim(keywordStringBandNameList);
-    boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
-
-    if (bandNameList.size() > 4)
-    {
-      rgb[0] = 4;
-      rgb[1] = 2;
-      rgb[2] = 1;
-    }
-    else
-    {
-      rgb[0] = 2;
-      rgb[1] = 1;
-      rgb[2] = 0;
-    }
-  }
-  else
-  {
-    rgb[0] = 2;
-    rgb[1] = 1;
-    rgb[2] = 0;
-  }
-  return rgb;
-}
-
 std::vector<std::string> WorldView2ImageMetadataInterface::GetEnhancedBandNames() const
 {
   std::vector<std::string> enhBandNames;

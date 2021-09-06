@@ -241,16 +241,6 @@ std::vector<std::string> Spot6ImageMetadataInterface::GetEnhancedBandNames() con
   return enhBandNames;
 }
 
-std::vector<unsigned int> Spot6ImageMetadataInterface::GetDefaultDisplay() const // todo
-{
-
-  std::vector<unsigned int> rgb(3);
-  rgb[0] = 0;
-  rgb[1] = 1;
-  rgb[2] = 2;
-  return rgb;
-}
-
 void Spot6ImageMetadataInterface::FetchSpectralSensitivity(const std::string & sensorId, ImageMetadata& imd)
 {
   std::unordered_map<std::string, std::vector<double>> BandNameToSpectralSensitivityTable;

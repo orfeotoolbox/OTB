@@ -160,15 +160,6 @@ double Radarsat2ImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSu
   return 0;
 }
 
-Radarsat2ImageMetadataInterface::UIntVectorType Radarsat2ImageMetadataInterface::GetDefaultDisplay() const
-{
-  UIntVectorType rgb(3);
-  rgb[0] = 0;
-  rgb[1] = 0;
-  rgb[2] = 0;
-  return rgb;
-}
-
 void ReadGeorefGCP(const XMLMetadataSupplier & xmlMS, ImageMetadata & imd)
 {
   Projection::GCPParam gcp;

@@ -80,17 +80,6 @@ public:
     return false;
   }
 
-  /** Get the 3 spectral band numbers corresponding to the default display for visualization,
-   *  in the order R, G, B */
-  std::vector<unsigned int> GetDefaultDisplay() const override
-  {
-    std::vector<unsigned int> rgb(3);
-    rgb[0] = 0;
-    rgb[1] = 1;
-    rgb[2] = 2;
-    return rgb;
-  }
-
 protected:
   OpticalDefaultImageMetadataInterface() = default;
   ~OpticalDefaultImageMetadataInterface() override = default;

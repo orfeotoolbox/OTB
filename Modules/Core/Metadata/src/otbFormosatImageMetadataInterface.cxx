@@ -198,15 +198,6 @@ unsigned int FormosatImageMetadataInterface::BandIndexToWavelengthPosition(unsig
   return i;
 }
 
-std::vector<unsigned int> FormosatImageMetadataInterface::GetDefaultDisplay() const
-{
-  std::vector<unsigned int> rgb(3);
-  rgb[0] = 0;
-  rgb[1] = 1;
-  rgb[2] = 2;
-  return rgb;
-}
-
 void FormosatImageMetadataInterface::FetchSatAngles(
                     const std::vector<double> & incidenceAngles,
                     const std::vector<double> & alongTrackViewingAngles,

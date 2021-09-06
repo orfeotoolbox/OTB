@@ -120,15 +120,6 @@ IkonosImageMetadataInterface::VariableLengthVectorType IkonosImageMetadataInterf
   return wavel;
 }
 
-std::vector<unsigned int> IkonosImageMetadataInterface::GetDefaultDisplay() const
-{
-  std::vector<unsigned int> rgb(3);
-  rgb[0] = 2;
-  rgb[1] = 1;
-  rgb[2] = 0;
-  return rgb;
-}
-
 std::vector<std::string> IkonosImageMetadataInterface::GetEnhancedBandNames() const
 {
   // Already done for the current file

@@ -386,16 +386,6 @@ double Sentinel1ImageMetadataInterface::GetPRF() const
   return value;
 }
 
-
-Sentinel1ImageMetadataInterface::UIntVectorType Sentinel1ImageMetadataInterface::GetDefaultDisplay() const
-{
-  UIntVectorType rgb(3);
-  rgb[0] = 0;
-  rgb[1] = 0;
-  rgb[2] = 0;
-  return rgb;
-}
-
 double Sentinel1ImageMetadataInterface::GetRSF() const
 {
   return 0;

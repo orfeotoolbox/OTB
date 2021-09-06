@@ -212,16 +212,6 @@ unsigned int SpotImageMetadataInterface::BandIndexToWavelengthPosition(unsigned 
   return i;
 }
 
-std::vector<unsigned int> SpotImageMetadataInterface::GetDefaultDisplay() const
-{
-  std::vector<unsigned int> rgb(3);
-  rgb[0] = 0;
-  rgb[1] = 1;
-  rgb[2] = 2;
-  return rgb;
-}
-
-
 void SpotImageMetadataInterface::FetchSpectralSensitivity(ImageMetadata& imd)
 {
   // XS1 (Green), XS2 (Red), XS3 (near IR), SWIR 

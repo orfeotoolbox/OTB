@@ -563,8 +563,6 @@ void ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent)
   os << indent << "Initialized: " << (canRead ? true : false) << std::endl;
   if (canRead)
   {
-    std::vector<unsigned int> defaultDisplay = this->GetDefaultDisplay();
-    os << indent << "Default RGB Display: [" << defaultDisplay[0] << ", " << defaultDisplay[1] << ", " << defaultDisplay[2] << "]" << std::endl;
     os << indent << "ProjectionRef:   " << this->GetProjectionRef() << std::endl;
     os << indent << "GCPProjection:   " << this->GetGCPProjection() << std::endl;
     os << indent << "GCPCount:        " << this->GetGCPCount() << std::endl;

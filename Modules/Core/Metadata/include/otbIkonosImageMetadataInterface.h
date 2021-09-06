@@ -63,10 +63,6 @@ public:
   /** Get the enhanced band names of Ikonos data*/
   std::vector<std::string> GetEnhancedBandNames() const override;
 
-  /** Get the 3 spectral band numbers corresponding to the default display for visualization,
-   *  in the order R, G, B */
-  std::vector<unsigned int> GetDefaultDisplay() const override;
-
   void Parse(ImageMetadata &) override;
 
 protected:

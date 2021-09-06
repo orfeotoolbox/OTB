@@ -60,8 +60,6 @@ public:
   /** check sensor ID */
   bool CanRead() const override;
 
-  UIntVectorType GetDefaultDisplay() const override;
-
   /*SarImageMetadataInterface pure virtuals rituals */
   double GetPRF() const override;
 

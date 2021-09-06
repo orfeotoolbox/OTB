@@ -45,8 +45,6 @@ int otbImageMetadataInterfaceBaseTest(int itkNotUsed(argc), char* argv[])
   std::ofstream file;
   file.open(outputFilename);
 
-  std::vector<unsigned int> defaultDisplay = lImageMetadata->GetDefaultDisplay();
-  file << "Default RGB Display: [" << defaultDisplay[0] << ", " << defaultDisplay[1] << ", " << defaultDisplay[2] << "]" << std::endl;
   file << "ProjectionRef:   " << lImageMetadata->GetProjectionRef() << std::endl;
   file << "GCPProjection:   " << lImageMetadata->GetGCPProjection() << std::endl;
   file << "GCPCount:        " << lImageMetadata->GetGCPCount() << std::endl;

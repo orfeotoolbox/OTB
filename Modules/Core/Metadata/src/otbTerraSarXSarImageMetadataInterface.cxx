@@ -716,17 +716,6 @@ TerraSarXSarImageMetadataInterface::ArrayIndexType TerraSarXSarImageMetadataInte
   return {2, 1};
 }
 
-
-/** Get the R, G, B channel */
-std::vector<unsigned int> TerraSarXSarImageMetadataInterface::GetDefaultDisplay() const
-{
-  std::vector<unsigned int> rgb(3);
-  rgb[0] = 0;
-  rgb[1] = 0;
-  rgb[2] = 0;
-  return rgb;
-}
-
 void TerraSarXSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);

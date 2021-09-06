@@ -155,11 +155,6 @@ int otbSarDefaultImageMetadataInterface(int itkNotUsed(argc), char* itkNotUsed(a
       itkGenericExceptionMacro(<< "CanRead() must be false ");
     }
 
-    std::vector<unsigned int> displayValue = obj->GetDefaultDisplay();
-    if (displayValue[0] != 0 || displayValue[1] != 0 || displayValue[2] != 0)
-    {
-      itkGenericExceptionMacro(<< "GetDefaultDisplay() wrong value ");
-    }
   }
   catch (itk::ExceptionObject& err)
   {
