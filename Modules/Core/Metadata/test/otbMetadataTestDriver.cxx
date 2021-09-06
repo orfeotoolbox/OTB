@@ -22,11 +22,7 @@
 
 void RegisterTests()
 {
-  REGISTER_TEST(otbSarImageMetadataInterfaceTest);
-  REGISTER_TEST(otbImageMetadataInterfaceBaseTest);
-  REGISTER_TEST(otbSarDefaultImageMetadataInterface);
   REGISTER_TEST(otbImageMetadataInterfaceTest);
-  REGISTER_TEST(otbImageMetadataInterfaceTest2);
   REGISTER_TEST(otbNoDataHelperTest);
   REGISTER_TEST(otbSarCalibrationLookupDataTest);
   REGISTER_TEST(otbImageMetadataTest);
