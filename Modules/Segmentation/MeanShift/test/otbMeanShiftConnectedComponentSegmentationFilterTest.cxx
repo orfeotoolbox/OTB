@@ -52,7 +52,7 @@ int otbMeanShiftConnectedComponentSegmentationFilter(int itkNotUsed(argc), char*
   const double rangeBandwidth   = atof(argv[4]);
   const double threshold        = atof(argv[5]);
 
-  /* conencted component parameters */
+  /* connected component parameters */
 
   const char*  segmentationexpression = argv[6];
   unsigned int minobjectsize          = atoi(argv[7]);

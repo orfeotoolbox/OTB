@@ -144,7 +144,7 @@ private:
     }
     catch (...)
     {
-      // Throw an execption
+      // Throw an exception
       otbAppLogFATAL(<< "Failed to retrieve bursts.number value from .geom file.");
     }
 

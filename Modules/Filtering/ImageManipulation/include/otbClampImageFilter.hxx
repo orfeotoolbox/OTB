@@ -39,10 +39,10 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 ClampImageFilter<TInputImage, TOutputImage>::ClampImageFilter()
-{
-  m_Lower = std::numeric_limits<OutputPixelValueType>::lowest();
-  m_Upper = std::numeric_limits<OutputPixelValueType>::max();
-}
+  :
+  m_Lower(std::numeric_limits<OutputPixelValueType>::lowest()),
+  m_Upper(std::numeric_limits<OutputPixelValueType>::max())
+{}
 
 template <class TInputImage, class TOutputImage>
 void ClampImageFilter<TInputImage, TOutputImage>::SetThresholds(OutputPixelValueType lowerVal, OutputPixelValueType upperVal)

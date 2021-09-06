@@ -116,7 +116,7 @@ private:
    * added. */
   void AddPredictionField(otb::ogr::Layer& outLayer, otb::ogr::Layer const& layer, bool computeConfidenceMap);
 
-  /** Fill the output layer with the predicted values and optionnaly the confidence */
+  /** Fill the output layer with the predicted values and optionally the confidence */
   void FillOutputLayer(otb::ogr::Layer& outLayer, otb::ogr::Layer const& layer, typename LabelListSampleType::Pointer target,
                        typename ConfidenceListSampleType::Pointer quality, bool updateMode, bool computeConfidenceMap);
 

@@ -33,7 +33,7 @@ namespace Functor
 /** \class CoherencyToReciprocalMuellerFunctor
  * \brief Evaluate the reciprocal Mueller matrix from the reciprocal coherency matrix image
  *
- * Outpus are:
+ * Outputs are:
  * - channel #0 : \f$ 0.5*( C_{11}+C_{22}+C_{33} ) \f$
  * - channel #1 : \f$ Re(C_{12}) + Im(C_{22}) \f$
  * - channel #2 : \f$ Re(C_{13}) \f$

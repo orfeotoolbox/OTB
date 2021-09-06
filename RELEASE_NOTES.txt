@@ -1,3 +1,30 @@
+OTB-v 7.4.0 - Changes since version 7.3.0 (September 3rd, 2021)
+----------------------------------------------------------------
+
+Bugs fixed:
+
+ * !850: Fix onlyvalidsamples in SARDeburst and allpixels in SARBurstExtraction by Cédric Traizet
+ * !849: FIX: mosaic output image size fit best inputs extents by Rémi Cresson
+ * !831: bug fixes in Sentinel 1 calibration by Cédric Traizet
+ * !837: Fix Superbuild compilation with gcc-8 by Guillaume Pasero
+ * !838: ExtractROI: Test inverted extent on indices instead of physical coordinates by Julien Osman
+
+Refactoring:
+
+ * !788: Fix build issue when libSVM is OFF or libsiftfast is OFF and Testing ON by Thibaut Romain
+ * !821: update expat version in the Superbuild to 2.4.1 by Julien Osman
+ * !822: Update openCV version to 4.5.1 in the SuperBuild by Julien Osman
+ * !828: refactoring of the TSX (and PAZ) sar sensor model by Gaëlle Usseglio
+ * !835: Update geotiff version in the Superbuild to 1.7.0 by Cédric Traizet
+ * !836: Use Horner method for polynomial evaluation in SAR calibration by Luc Hermitte
+ * !839: Rename the noise parameter into removenoise in SARCalibration by Cédric Traizet
+ * !840: Remove the "working around a kernel bug" warning during OTB binary package installation by Cédric Traizet
+
+Documentation:
+
+ * !833: Add deprecated tags in preparation for release 8.0.0 by Julien Osman and Cédric Traizet
+
+
 OTB-v 7.3.0 - Changes since version 7.2.0 (May 7th, 2021)
 ----------------------------------------------------------------
 

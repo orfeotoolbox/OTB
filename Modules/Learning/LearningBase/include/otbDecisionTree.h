@@ -33,7 +33,7 @@ namespace otb
  * \brief Models a decision tree
  *
  * A decision tree holds an attribute that is being tested and 2
- * maps (STL): one for subtrees and anoter for labels (for the case
+ * maps (STL): one for subtrees and another for labels (for the case
  * where there are no subtrees). These maps as keys a pair (STL) which
  * holds the value of the attribute being tested as well as the type
  * of test (LT, LE, EQ, GE, GT).
@@ -102,7 +102,7 @@ public:
       EQ case*/
   void AddBranch(AttributeValueType attr, LabelType label);
 
-  LabelType Decide(const ExampleType example);
+  LabelType Decide(const ExampleType& example);
 
 protected:
   /** Constructor */

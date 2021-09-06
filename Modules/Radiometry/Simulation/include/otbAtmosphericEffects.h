@@ -96,7 +96,7 @@ protected:
   /** Constructor from a ASCII file */
   // AtmosphericEffects( const std::string & filename );
   /** Destructor */
-  ~AtmosphericEffects() override{};
+  ~AtmosphericEffects() override = default;;
   /** PrintSelf method */
   // void PrintSelf(std::ostream& os, itk::Indent indent) const;
 

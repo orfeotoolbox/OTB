@@ -166,7 +166,7 @@ void VectorDataToLabelImageFilter<TVectorData, TOutputImage>::GenerateOutputInfo
 
     // The method ConvertDataTreeNodeToOGRLayers create the
     // OGRDataSource but don t release it. Destruction is done in the
-    // desctructor
+    // destructor
     m_OGRDataSourcePointer = nullptr;
     ogrLayerVector         = IOConversion->ConvertDataTreeNodeToOGRLayers(inputRoot, m_OGRDataSourcePointer, ogrCurrentLayer, oSRS);
 

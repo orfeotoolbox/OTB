@@ -216,7 +216,7 @@ J=\left[ \begin{array}{cccc}
     return this->m_Jacobian;
   }
 
-  /** Return the number of parameters that completely define the Transfom  */
+  /** Return the number of parameters that completely define the Transform  */
   NumberOfParametersType GetNumberOfParameters(void) const override
   {
     return this->m_Parameters.Size();

@@ -1004,7 +1004,7 @@ int TestHelper::RegressionTestDiffFile(const char* testAsciiFileName, const char
           if (nbTokenRef > nbTokenTestSelected)
             ossTest << "|";
         }
-        else if (nbTokenRef < nbTokenTestSelected)
+        else
         {
           ossBase << "|";
           ossTest << lineTestSelected.substr(tokenTestSelected[nbTokenRef - 1].end() - lineTestSelected.begin());
@@ -1207,7 +1207,7 @@ int TestHelper::RegressionTestImage(int cpt, const char* testImageFilename, cons
   using ImageType = otb::VectorImage<double, 2>;
   using ReaderType = otb::ImageFileReader<ImageType>;
   
-  // Read the baseline image informations
+  // Read the baseline image information
   auto baselineReader = ReaderType::New();
   baselineReader->SetFileName(baselineImageFilename);
   try
@@ -1918,7 +1918,7 @@ int TestHelper::RegressionTestOgrFile(const char* testOgrFilename, const char* b
       return (1);
     }
 
-    // Check Layer inforamtion
+    // Check Layer information
     ogrReportOnLayer(ref_poLayer, nullptr, nullptr, test_poLayer, nullptr, nullptr, nbdiff, toleranceDiffValue);
 
     // If no difference, check the feature
@@ -2460,7 +2460,7 @@ bool TestHelper::CompareLines(const std::string& strfileref, const std::string& 
           if (i == 0)
             etatPrec = etatCour;
 
-          // Case where there's a number after characteres.
+          // Case where there's a number after characters.
           if ((etatCour == ETAT_NUM) && (etatPrec == ETAT_CHAR))
           {
             if (strCharRef != strCharTest)

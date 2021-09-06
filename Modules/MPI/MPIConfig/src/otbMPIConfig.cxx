@@ -165,7 +165,7 @@ void MPIConfig::barrier()
   OTB_MPI_CHECK_RESULT(MPI_Barrier, (MPI_COMM_WORLD));
 }
 
-void MPIConfig::logError(const std::string message)
+void MPIConfig::logError(const std::string& message)
 {
   if (m_MyRank == 0)
   {
@@ -173,7 +173,7 @@ void MPIConfig::logError(const std::string message)
   }
 }
 
-void MPIConfig::logInfo(const std::string message)
+void MPIConfig::logInfo(const std::string& message)
 {
   if (m_MyRank == 0)
   {

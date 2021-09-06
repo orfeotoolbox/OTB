@@ -87,7 +87,7 @@ public:
 
   UIntVectorType GetDefaultDisplay() const override;
 
-  /*SarImageMetadataInterface pure virutals rituals */
+  /*SarImageMetadataInterface pure virtuals rituals */
   double GetPRF() const override;
 
   double GetRSF() const override;
@@ -114,7 +114,7 @@ public:
 
 protected:
   /* class ctor */
-  Sentinel1ImageMetadataInterface();
+  Sentinel1ImageMetadataInterface() = default;
 
   /* class dtor */
   ~Sentinel1ImageMetadataInterface() override = default;
@@ -128,9 +128,6 @@ protected:
   /* Fetch the Orbits metadata */
   std::vector<Orbit> GetOrbits(const XMLMetadataSupplier&) const;
 
-  /* Fetch the noise LUTs */
-  std::vector<SARNoise> GetNoiseVector(const XMLMetadataSupplier&) const;
-
   /* Fetch the burst records */
   std::vector<BurstRecord> GetBurstRecords(const XMLMetadataSupplier&, const MetaData::DurationType & azimuthTimeInterval) const;
 
@@ -141,6 +138,12 @@ protected:
 
   /* Compute the mean terrain elevation */
   double getBandTerrainHeight(const XMLMetadataSupplier&) const;
+
+  /* create the thermal denoising LUT */
+  bool CreateThermalNoiseLookupData(SARCalib& sarCalib,
+                                                                    const ImageMetadata& imd,
+                                                                    const MetadataSupplierInterface& mds,
+                                                                    const bool geom) const;
 
 private:
   Sentinel1ImageMetadataInterface(const Self&) = delete;
@@ -159,97 +162,6 @@ private:
 };
 
 
-struct Sentinel1CalibrationStruct
-{
-public:
-  double              timeMJD;
-  double              deltaMJD; // time difference to previous MJD in the list
-  int                 line;
-  std::vector<int>    pixels;
-  std::vector<double> deltaPixels;
-  std::vector<float>  vect;
-};
-
-class Sentinel1CalibrationLookupData : public SarCalibrationLookupData
-{
-public:
-  /** Standard typedefs */
-  typedef Sentinel1CalibrationLookupData Self;
-  typedef SarCalibrationLookupData       Superclass;
-  typedef itk::SmartPointer<Self>        Pointer;
-  typedef itk::SmartPointer<const Self>  ConstPointer;
-
-  /** Creation through the object factory */
-  itkNewMacro(Self);
-
-  /** RTTI */
-  itkTypeMacro(Sentinel1CalibrationLookupData, SarCalibrationLookupData);
-
-  typedef itk::IndexValueType IndexValueType;
-
-  Sentinel1CalibrationLookupData() : firstLineTime(0.), lastLineTime(0.), numOfLines(0), count(0), lineTimeInterval(0.)
-  {
-  }
-
-  ~Sentinel1CalibrationLookupData() override = default;
-
-  void InitParameters(short type, double ft, double lt, int lines, int c, std::vector<Sentinel1CalibrationStruct> const& vlist)
-  {
-    firstLineTime         = ft;
-    lastLineTime          = lt;
-    numOfLines            = lines;
-    count                 = c;
-    calibrationVectorList = vlist;
-    this->SetType(type);
-    lineTimeInterval = (lt - ft) / ((lines - 1) * 1.0);
-  }
-
-  double GetValue(const IndexValueType x, const IndexValueType y) const override
-  {
-    const int calVecIdx = GetVectorIndex(y);
-    assert(calVecIdx >= 0 && calVecIdx < count - 1);
-    const Sentinel1CalibrationStruct& vec0     = calibrationVectorList[calVecIdx];
-    const Sentinel1CalibrationStruct& vec1     = calibrationVectorList[calVecIdx + 1];
-    const double                      azTime   = firstLineTime + y * lineTimeInterval;
-    const double                      muY      = (azTime - vec0.timeMJD) / vec1.deltaMJD;
-    const int                         pixelIdx = GetPixelIndex(x, calibrationVectorList[calVecIdx]);
-    const double                      muX      = (x - vec0.pixels[pixelIdx]) / vec0.deltaPixels[pixelIdx + 1];
-    const double                      lutVal =
-        (1 - muY) * ((1 - muX) * vec0.vect[pixelIdx] + muX * vec0.vect[pixelIdx + 1]) + muY * ((1 - muX) * vec1.vect[pixelIdx] + muX * vec1.vect[pixelIdx + 1]);
-    return lutVal;
-  }
-
-  int GetVectorIndex(int y) const
-  {
-    for (int i = 1; i < count; i++)
-    {
-      if (y < calibrationVectorList[i].line)
-      {
-        return i - 1;
-      }
-    }
-    return -1;
-  }
-
-  int GetPixelIndex(int x, const Sentinel1CalibrationStruct& calVec) const
-  {
-    const int                        size = calVec.pixels.size();
-    std::vector<int>::const_iterator wh   = std::upper_bound(calVec.pixels.begin(), calVec.pixels.end(), x);
-    return wh == calVec.pixels.end() ? size - 2 : std::distance(calVec.pixels.begin(), wh) - 1;
-  }
-
-private:
-  Sentinel1CalibrationLookupData(const Self&) = delete;
-
-  void operator=(const Self&) = delete;
-
-  double                                  firstLineTime;
-  double                                  lastLineTime;
-  int                                     numOfLines;
-  int                                     count;
-  std::vector<Sentinel1CalibrationStruct> calibrationVectorList;
-  double                                  lineTimeInterval;
-};
 
 
 } // end namespace otb

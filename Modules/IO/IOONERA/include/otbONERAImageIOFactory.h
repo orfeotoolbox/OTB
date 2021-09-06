@@ -26,7 +26,7 @@
 namespace otb
 {
 /** \class ONERAImageIOFactory
- * \brief Creation d'un instance d'un objet ONERAImageIO utilisant les object factory.
+ * \brief Create an instance of ONERAImageIO through the object factory.
  *
  * \ingroup OTBIOONERA
  */

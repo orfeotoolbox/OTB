@@ -97,10 +97,10 @@ public:
 
 #if BOOST_VERSION >= 105800
   // Faster path for small radii.
-  /** Coeficients container type. */
+  /** Coefficients container type. */
   typedef boost::container::small_vector<double, 7> CoefContainerType;
 #else
-  /** Coeficients container type. */
+  /** Coefficients container type. */
   typedef vnl_vector<double> CoefContainerType;
 #endif
 

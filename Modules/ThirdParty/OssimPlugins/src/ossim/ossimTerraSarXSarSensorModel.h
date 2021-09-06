@@ -29,6 +29,9 @@
 #include "ossim/ossimSarSensorModel.h"
 #include <string>
 
+#include <ossim/base/ossimXmlDocument.h>
+#include <ossim/base/ossimKeywordNames.h>
+
 namespace ossimplugins
 {
 
@@ -49,20 +52,42 @@ public:
   virtual ~ossimTerraSarXSarSensorModel() = default;
 #endif
 
+  /*!
+   * Fulfills ossimObject base-class pure virtuals. Loads and saves geometry
+   * KWL files. Returns true if successful.
+   */
+  virtual bool saveState(ossimKeywordlist& kwl,
+			 const char* prefix=NULL) const override;
+
+  virtual bool loadState(ossimKeywordlist const& kwl,
+			 const char* prefix=NULL) override;
+
   //Not implemented yet
   /** References
    * TerraSAR-X Image Product Guide
    * SNAP source code (s1tbx-io/src/main/java/org/esa/s1tbx/io/terrasarx/TerraSarXProductDirectory.java)
-  */
-  void readAnnotationFile(const std::string & annotationXml, const std::string & geoXml);
 
-protected:
-  /*
-  std::string theProductType;
-  std::string theMode;
-  std::string theSwath;
-  std::string thePolarisation;
+   This class works for TSX-1 and PAZ-1 mission
   */
+  bool readAnnotationFile(const std::string & annotationXml, const std::string & geoXml);
+
+  bool open(const ossimFilename& file);
+
+private:
+  bool readSceneCoord(const ossimRefPtr<ossimXmlDocument> xmlDoc,
+			    unsigned int numberOfRows,
+		      unsigned int numberOfColumns,
+		      std::string scenePosition);
+  bool readOrbitVector(const ossimRefPtr<ossimXmlDocument> xmlDoc);
+  bool readDopplerRate(const ossimRefPtr<ossimXmlDocument> xmlDoc);
+  bool readDopplerCentroid(const ossimRefPtr<ossimXmlDocument> xmlDoc, const std::string polarisation="HH");
+  bool readGCPs(const std::string & geoXml);
+  bool readCalibrationFactor(const ossimRefPtr<ossimXmlDocument> xmlDoc, const std::string polarisation="HH");
+  bool readNoise(const ossimRefPtr<ossimXmlDocument> xmlDoc,  const std::string polarisation);
+
+  ossimKeywordlist   theProductKwl;
+  std::string m_imageName;
+
 };
 
 } // end namespace

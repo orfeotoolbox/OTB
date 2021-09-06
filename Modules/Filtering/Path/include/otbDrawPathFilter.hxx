@@ -32,9 +32,9 @@ namespace otb
  */
 template <class TInputImage, class TInputPath, class TOutputImage>
 DrawPathFilter<TInputImage, TInputPath, TOutputImage>::DrawPathFilter()
-{
-  m_Value = static_cast<OutputImagePixelType>(255.0);
-}
+  :
+  m_Value(static_cast<OutputImagePixelType>(255.0))
+{}
 
 template <class TInputImage, class TInputPath, class TOutputImage>
 inline void DrawPathFilter<TInputImage, TInputPath, TOutputImage>::SetInputPath(const TInputPath* path)

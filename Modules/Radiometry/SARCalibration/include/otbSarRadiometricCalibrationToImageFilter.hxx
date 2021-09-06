@@ -114,11 +114,21 @@ void SarRadiometricCalibrationToImageFilter<TInputImage, TOutputImage>::BeforeTh
   /* Compute noise if enabled */
   if (function->GetEnableNoise())
   {
-    ParametricFunctionPointer noise;
-    noise = function->GetNoise();
-    noise->SetPointSet(sarCalibPtr->radiometricCalibrationNoise);
-    noise->SetPolynomalSize(sarCalibPtr->radiometricCalibrationNoisePolynomialDegree);
-    noise->EvaluateParametricCoefficient();
+    // Use a denoising LUT if available (e.g Sentinel 1 thermal noise LUT)
+    if (sarCalibPtr->calibrationLookupData.find(SarCalibrationLookupData::NOISE) 
+          != sarCalibPtr->calibrationLookupData.end())
+    {
+      function->SetNoiseLookupData(sarCalibPtr->calibrationLookupData[SarCalibrationLookupData::NOISE]);
+    }
+    // Use a parametric function instead
+    else
+    {
+      ParametricFunctionPointer noise;
+      noise = function->GetNoise();
+      noise->SetPointSet(sarCalibPtr->radiometricCalibrationNoise);
+      noise->SetPolynomalSize(sarCalibPtr->radiometricCalibrationNoisePolynomialDegree);
+      noise->EvaluateParametricCoefficient();
+    }
   }
 
   /* Compute old and new antenna pattern gain */

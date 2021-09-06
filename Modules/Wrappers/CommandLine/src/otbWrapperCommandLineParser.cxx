@@ -437,7 +437,7 @@ std::string CommandLineParser::GetAttributAsString(const std::string& key, const
 }
 
 
-bool CommandLineParser::IsAttributExists(const std::string key, const std::string& exp)
+bool CommandLineParser::IsAttributExists(const std::string& key, const std::string& exp)
 {
   std::string keySpaced = key;
   std::string expSpaced = exp;
@@ -448,7 +448,7 @@ bool CommandLineParser::IsAttributExists(const std::string key, const std::strin
   return (found != std::string::npos);
 }
 
-bool CommandLineParser::IsAttributExists(const std::string key, const std::vector<std::string>& exp)
+bool CommandLineParser::IsAttributExists(const std::string& key, const std::vector<std::string>& exp)
 {
   for (std::vector<std::string>::const_iterator it = exp.begin(); it != exp.end(); ++it)
   {

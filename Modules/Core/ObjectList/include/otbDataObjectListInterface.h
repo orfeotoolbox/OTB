@@ -30,7 +30,7 @@ namespace otb
 class DataObjectListInterface : private boost::noncopyable
 {
   /** \class DataObjectListInterface
-   *  \brief This non template class is an interface that wrapp ObjectList
+   *  \brief This non template class is an interface that wrap ObjectList
    *
    *  New method that do not need the template parameter of ObjectList
    *  should be declare here.

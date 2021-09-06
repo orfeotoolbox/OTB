@@ -69,9 +69,9 @@ public:
   constexpr IndexType upper() const noexcept
   { return m_upper; }
 
-  /** Computes the intersection between two interals.
+  /** Computes the intersection between two intervals.
    * @return their intersection
-   * @return {0,0} if theyr don't intersect.
+   * @return {0,0} if they don't intersect.
    *
    * @note this function is an hidden friend
    */

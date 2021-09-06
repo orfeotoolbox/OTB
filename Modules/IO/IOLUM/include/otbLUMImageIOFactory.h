@@ -26,7 +26,7 @@
 namespace otb
 {
 /** \class LUMImageIOFactory
- * \brief Creation d'un instance d'un objet LUMImageIO utilisant les object factory.
+ * \brief Create an instance of LUMImageIO through the object factory.
  *
  * \ingroup OTBIOLUM
  */

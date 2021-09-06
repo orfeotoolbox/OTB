@@ -70,7 +70,7 @@
 #include "sptw.h"
 #endif
 
-// GDAL-OTB datatype brigde
+// GDAL-OTB datatype bridge
 #include "otbGdalDataTypeBridge.h"
 
 namespace otb

@@ -107,7 +107,7 @@ void DEMCaracteristicsExtractor<TInputImage, TOutputImage>::GenerateData()
   // // Compute Arctan
   AspectFilter->SetInput1(XAdaptator);
   AspectFilter->SetInput2(YAdaptator);
-  // // Transform values from radian to degres.
+  // // Transform values from radian to degrees.
   typename MultiplyByScalarImageFilterType::Pointer rad2DegFilter1 = MultiplyByScalarImageFilterType::New();
   rad2DegFilter1->SetInput(AspectFilter->GetOutput());
   rad2DegFilter1->SetCoef(rad2degCoef);
@@ -154,7 +154,7 @@ void DEMCaracteristicsExtractor<TInputImage, TOutputImage>::GenerateData()
 
   IncidenceFilter->SetInput(cosIncidence->GetOutput());
 
-  // // Change radians in degres
+  // // Change radians in degrees
   typename MultiplyByScalarImageFilterType::Pointer rad2DegFilter2 = MultiplyByScalarImageFilterType::New();
   rad2DegFilter2->SetInput(IncidenceFilter->GetOutput());
   rad2DegFilter2->SetCoef(rad2degCoef);
@@ -190,7 +190,7 @@ void DEMCaracteristicsExtractor<TInputImage, TOutputImage>::GenerateData()
 
   ExitanceFilter->SetInput(cosIncidence2->GetOutput());
 
-  // // Change radians in degres
+  // // Change radians in degrees
   typename MultiplyByScalarImageFilterType::Pointer rad2DegFilter3 = MultiplyByScalarImageFilterType::New();
   rad2DegFilter3->SetInput(ExitanceFilter->GetOutput());
   rad2DegFilter3->SetCoef(rad2degCoef);

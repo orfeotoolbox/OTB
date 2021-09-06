@@ -70,7 +70,7 @@ void VectorDataFileReader<TOutputVectorData>::TestFileExistenceAndReadability()
   }
 
   // Test if the file can be open for reading access.
-  // Only if m_FileName speciy a filename (not a dirname)
+  // Only if m_FileName specify a filename (not a dirname)
   // FIXME shapefile should be able to open a directory and load the
   // individual shapefiles as layers
   if (itksys::SystemTools::FileExists(this->m_FileName, true) == true)

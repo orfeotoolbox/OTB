@@ -51,7 +51,7 @@ namespace otb
  * FTM is computed  using otbResampleImageFilter and a ProlateInterpolateImageFunction.
  * This method is not a true composite filter and the method UpdateData() must be called in a main program using this class.
  *
- *In order to avoid homogenous regions of a material, for each pixel in the region a noise is added to the reference sprectrum obtained from the spectrum
+ *In order to avoid homogeneous regions of a material, for each pixel in the region a noise is added to the reference sprectrum obtained from the spectrum
  *simulator (see LabelMapToSimulatedImageFilter).
  *
  * \sa ImageSource

@@ -70,7 +70,7 @@ public:
  *           19 : Water "Water (cm)"
  *           37 : Angstrom value "440-870Angstrom"
  *           44 :  Solar zenith angle "Solar_Zenith_Angle"
- *  The datas start in the line number 6.
+ *  The data start in the line number 6.
  *
  * \sa AeronetData
  *

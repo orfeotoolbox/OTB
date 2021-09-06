@@ -108,9 +108,7 @@ public:
 
 protected:
   ImageSeriesFileReader();
-  virtual ~ImageSeriesFileReader()
-  {
-  }
+  ~ImageSeriesFileReader() override = default;
 
   /** TestBandSelection
    * Tests the coherency of the Meta File (especifically band selection) with the image types

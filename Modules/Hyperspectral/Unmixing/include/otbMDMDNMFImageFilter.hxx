@@ -356,12 +356,12 @@ void MDMDNMFImageFilter<TInputImage, TOutputImage>::GenerateData()
   double             critA, critS, crit = 1;
   const unsigned int divisorParam = 10;
 
-  // Tunning the optimized function parameters
+  // Tuning the optimized function parameters
   // const double m_Delt =                       1.;
   // const double m_LambdD =                     0.01;
   m_LambdS *= nbEndmembers;
 
-  // Tunning the projected gradient parameters
+  // Tuning the projected gradient parameters
   double sig   = 0.05;
   double bet   = 0.99;
   double alphA = 1.;

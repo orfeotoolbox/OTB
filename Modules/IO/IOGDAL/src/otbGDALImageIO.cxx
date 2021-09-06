@@ -73,9 +73,9 @@ public:
   {
   }
   GDALDataTypeWrapper(const GDALDataTypeWrapper& w)
-  {
-    pixType = w.pixType;
-  }
+    :
+    pixType(w.pixType)
+  {}
   GDALDataTypeWrapper& operator=(GDALDataTypeWrapper w)
   {
     pixType = w.pixType;
@@ -1292,7 +1292,7 @@ void GDALImageIO::Write(const void* buffer)
   }
 }
 
-/** TODO : Methode WriteImageInformation non implementee */
+/** TODO : Method WriteImageInformation not implemented */
 void GDALImageIO::WriteImageInformation()
 {
 }
@@ -1509,25 +1509,25 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   /* Case 1: Set the projection coordinate system of the image            */
   /* -------------------------------------------------------------------- */
   if (m_Imd.Has(MDGeom::ProjectionWKT))
-    {
+  {
     std::string projectionRef( m_Imd.GetProjectionWKT() );
     dataset->SetProjection(projectionRef.c_str());
-    }
+  }
   else if (m_Imd.Has(MDGeom::ProjectionProj))
-   {
+  {
      std::string projectionRef( m_Imd.GetProjectionProj() );
      dataset->SetProjection(projectionRef.c_str());
-   }
+  }
   /* -------------------------------------------------------------------- */
   /* Case 2: Sensor geometry                                              */
   /* -------------------------------------------------------------------- */
   else if (m_Imd.HasSensorGeometry())
-    {
+  {
     /* -------------------------------------------------------------------- */
     /* Set the RPC coeffs (since GDAL 1.10.0)                               */
     /* -------------------------------------------------------------------- */
     if (m_WriteRPCTags && m_Imd.Has(MDGeom::RPC))
-      {
+    {
       const Projection::RPCParam & rpc = boost::any_cast<const Projection::RPCParam&>(m_Imd[MDGeom::RPC]);
       otbLogMacro(Debug, << "Saving RPC to file (" << m_FileName << ")")
       GDALRPCInfo gdalRpcStruct;
@@ -1549,39 +1549,39 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       char** rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
       dataset->SetMetadata(rpcMetadata, "RPC");
       CSLDestroy(rpcMetadata);
+    }
+  }
+  // ToDo : remove this part. This case is here for compatibility for images
+  // that still use Ossim for managing the sensor model (with OSSIMKeywordList).
+  else if (otb_kwl.GetSize())
+  {
+    /* -------------------------------------------------------------------- */
+    /* Set the RPC coeffs (since GDAL 1.10.0)                               */
+    /* -------------------------------------------------------------------- */
+    if (m_WriteRPCTags)
+    {
+      GDALRPCInfo gdalRpcStruct;
+      if (otb_kwl.convertToGDALRPC(gdalRpcStruct))
+      {
+        otbLogMacro(Debug, << "Saving RPC to file (" << m_FileName << ")")
+        char** rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
+        dataset->SetMetadata(rpcMetadata, "RPC");
+        CSLDestroy(rpcMetadata);
       }
     }
-    // ToDo : remove this part. This case is here for compatibility for images
-    // that still use Ossim for managing the sensor model (with OSSIMKeywordList).
-    else if (otb_kwl.GetSize())
-      {
-      /* -------------------------------------------------------------------- */
-      /* Set the RPC coeffs (since GDAL 1.10.0)                               */
-      /* -------------------------------------------------------------------- */
-      if (m_WriteRPCTags)
-        {
-        GDALRPCInfo gdalRpcStruct;
-        if (otb_kwl.convertToGDALRPC(gdalRpcStruct))
-          {
-          otbLogMacro(Debug, << "Saving RPC to file (" << m_FileName << ")")
-          char** rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
-          dataset->SetMetadata(rpcMetadata, "RPC");
-          CSLDestroy(rpcMetadata);
-          }
-        }
-      }
+  }
 
   /* -------------------------------------------------------------------- */
   /* Case 3: Set the GCPs                                                 */
   /* -------------------------------------------------------------------- */
   else if (m_Imd.Has(MDGeom::GCP))
-    {
+  {
     otbLogMacro(Debug, << "Saving GCPs to file (" << m_FileName << ")")
     const Projection::GCPParam & gcpPrm =
       boost::any_cast<const Projection::GCPParam&>(m_Imd[MDGeom::GCP]);
     std::vector<GDAL_GCP> gdalGcps(gcpPrm.GCPs.size());
     for (unsigned int gcpIndex = 0; gcpIndex < gdalGcps.size(); ++gcpIndex)
-      {
+    {
       const GCP &gcp = gcpPrm.GCPs[gcpIndex];
 
       gdalGcps[gcpIndex].pszId      = const_cast<char*>(gcp.m_Id.c_str());
@@ -1593,33 +1593,33 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       gdalGcps[gcpIndex].dfGCPZ     = gcp.m_GCPZ;
 
       if (writeGeotransform)
-        {
+      {
         // we need to transform GCP col and row accordingly
         // WARNING: assume no rotation is there
         gdalGcps[gcpIndex].dfGCPPixel = (gcp.m_GCPCol - geoTransform[0]) / geoTransform[1];
         gdalGcps[gcpIndex].dfGCPLine  = (gcp.m_GCPRow - geoTransform[3]) / geoTransform[5];
-        }
       }
+    }
 
     const std::string & gcpProjectionRef = gcpPrm.GCPProjection;
     dataset->SetGCPs(gdalGcps.size(), gdalGcps.data(), gcpProjectionRef.c_str());
 
     // disable geotransform with GCP
     writeGeotransform = false;
-    }
+  }
 
   /* -------------------------------------------------------------------- */
   /*  Save geotransform if needed.                                        */
   /* -------------------------------------------------------------------- */
   if (writeGeotransform)
-    {
+  {
     if ( driverShortName == "ENVI" && geoTransform[5] > 0.)
-      {
+    {
       // Error if writing to a ENVI file with a positive Y spacing
       itkExceptionMacro(<< "Can not write to ENVI file format with a positive Y spacing (" << m_FileName << ")");
-      }
-    dataset->SetGeoTransform(geoTransform);
     }
+    dataset->SetGeoTransform(geoTransform);
+  }
 
   /* -------------------------------------------------------------------- */
   /*      Report metadata.                                                */
@@ -1633,17 +1633,19 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   // Write no-data flags from ImageMetadata
   int iBand = 0;
   for (auto const&  bandMD : m_Imd.Bands)
-    {
+  {
     if (bandMD.Has(MDNum::NoData))
-      {
-        dataset->GetRasterBand(iBand + 1)->SetNoDataValue(bandMD[MDNum::NoData]);
-      }
-    ++iBand;
+    {
+      dataset->GetRasterBand(iBand + 1)->SetNoDataValue(bandMD[MDNum::NoData]);
     }
+    ++iBand;
+  }
 
   // Write no-data flags from extended filenames
   for (auto const& noData : m_NoDataList)
+  {
     dataset->GetRasterBand(noData.first)->SetNoDataValue(noData.second);
+  }
 
   /* -------------------------------------------------------------------- */
   /*      AREA_OR_POINT                                                   */
@@ -1651,7 +1653,9 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
   // Write AREA_OR_POINT flag from ImageMetadata
   if (m_Imd.Has(MDStr::AreaOrPoint))
+  {
     dataset->SetMetadataItem("AREA_OR_POINT", m_Imd[MDStr::AreaOrPoint].c_str());
+  }
 }
 
 std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) const

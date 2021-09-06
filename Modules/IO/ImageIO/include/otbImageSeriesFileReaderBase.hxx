@@ -29,10 +29,11 @@ namespace otb
 
 template <class TImage, class TInternalImage>
 ImageSeriesFileReaderBase<TImage, TInternalImage>::ImageSeriesFileReaderBase()
+  :
+  m_FileName(""),
+  m_OutputList(OutputImageListType::New()),
+  m_ImageFileReaderList(ReaderListType::New())
 {
-  m_OutputList          = OutputImageListType::New();
-  m_ImageFileReaderList = ReaderListType::New();
-  m_FileName            = "";
   m_ListOfFileNames.clear();
   m_ListOfBandSelection.clear();
   m_ListOfRegionSelection.clear();

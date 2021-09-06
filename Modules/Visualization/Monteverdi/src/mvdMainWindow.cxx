@@ -1307,7 +1307,7 @@ void MainWindow::OnAboutToChangeModel(const AbstractModel*)
   if (stackedLayerModel == NULL)
     return;
 
-  // Disonnect stacked-layer model from main-window when selected
+  // Disconnect stacked-layer model from main-window when selected
   // layer-model is about to change.
   QObject::disconnect(stackedLayerModel, SIGNAL(AboutToChangeSelectedLayerModel(const StackedLayerModel::KeyType&)),
                       // from:

@@ -354,7 +354,7 @@ private:
    * Fires an assertion otherwise.
    * \internal
    * Used by all the functions of \c Feature. As the definition of this function
-   * is inlined, \c assert() actual behaviour will be conditionned by the
+   * is inlined, \c assert() actual behaviour will be conditioned by the
    * compilation mode (\em debug or \em release; or more exactly on \c NDEBUG
    * precompiler directive).
    */

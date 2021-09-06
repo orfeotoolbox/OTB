@@ -37,13 +37,12 @@ namespace otb
  */
 template <class TImageType, class TCoordRep, class TCoefficientType>
 BSplineInterpolateImageFunction<TImageType, TCoordRep, TCoefficientType>::BSplineInterpolateImageFunction()
+  :
+  m_SplineOrder(0),
+  m_Coefficients(CoefficientImageType::New()),  // TODO: Should we store coefficients in a variable or retrieve from filter?
+  m_CoefficientFilter(CoefficientFilter::New())
 {
-  m_SplineOrder            = 0;
-  unsigned int SplineOrder = 3;
-  m_CoefficientFilter      = CoefficientFilter::New();
-  // ***TODO: Should we store coefficients in a variable or retrieve from filter?
-  m_Coefficients = CoefficientImageType::New();
-  this->SetSplineOrder(SplineOrder);
+  this->SetSplineOrder(3);
 }
 
 /**

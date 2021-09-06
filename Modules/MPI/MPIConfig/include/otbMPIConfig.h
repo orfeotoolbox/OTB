@@ -68,10 +68,10 @@ public:
   void barrier();
 
   /** Log error */
-  void logError(const std::string message);
+  void logError(const std::string& message);
 
   /** Log info */
-  void logInfo(const std::string message);
+  void logInfo(const std::string& message);
 
 protected:
   /** Constructor */

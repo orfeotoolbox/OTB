@@ -170,12 +170,12 @@ void ImageToSURFKeyPointSetFilter<TInputImage, TOutputPointSet>::GenerateData(vo
       m_ImageMovedPrev = m_ImageList->GetNthElement(jj - 1);
       m_ImageMovedNext = m_ImageList->GetNthElement(jj + 1);
 
-      /** NeighboorhoodIterator parameters*/
+      /** NeighborhoodIterator parameters*/
       radius.Fill(1);
       NeighborhoodIteratorType it(radius, m_ImageCurrent, m_ImageCurrent->GetLargestPossibleRegion());
       it.GoToBegin();
 
-      /* NeighboorhoodIterator Adjacents parameters*/
+      /* NeighborhoodIterator Adjacents parameters*/
       NeighborhoodIteratorType itNeighPrev(radius, m_ImageMovedPrev, m_ImageMovedPrev->GetLargestPossibleRegion());
       itNeighPrev.GoToBegin();
 

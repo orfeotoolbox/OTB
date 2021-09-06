@@ -90,12 +90,12 @@ CheckError()
     assert( glError==GL_NO_ERROR );
 
   // When assert is removed (NDEBUG) and Throw is false, this function
-  // body is emtpy and the C++ compiler should optimize the call by
+  // body is empty and the C++ compiler should optimize the call by
   // removing it.
   //
   // N.B.: equivalent of a scoped (and breakpoint-friendly) macro.
 
-  // Condition is splitted because first is determined at compile time
+  // Condition is split because first is determined at compile time
   // and may be removed (see above) and second is determined at
   // runtime.
   if( E>=error::exception )

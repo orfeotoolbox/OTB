@@ -134,7 +134,7 @@ void ExtendedFilenameToReaderOptions::SetExtendedFileName(const std::string& ext
     }
     else
     {
-      itkExceptionMacro("Unkwown value "
+      itkExceptionMacro("Unknown value "
                         << map["bands"]
                         << " for band range. Expect a list of tokens separated with comma (each token being a single band index or a range in the form x:y)");
     }

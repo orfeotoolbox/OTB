@@ -103,7 +103,7 @@ private:
     // Get the first Burst index
     int burst_index = GetParameterInt("burstindex");
 
-    // Instanciate filters
+    // Instantiate filters
     ExtractROIFilterListType::Pointer m_ExtractorList = ExtractROIFilterListType::New();
     ImageListType::Pointer            m_ImageList     = ImageListType::New();
     BurstFusionFilterType::Pointer    fusionFilter    = BurstFusionFilterType::New();
@@ -125,7 +125,7 @@ private:
     }
     catch (...)
     {
-      // Throw an execption
+      // Throw an exception
       otbAppLogFATAL(<< "Failed to retrieve bursts.number value from .geom file.");
     }
 
@@ -159,7 +159,7 @@ private:
 
       if (inputWithInvalidPixels_loop != inputWithInvalidPixels)
       {
-        // Throw an execption
+        // Throw an exception
         otbAppLogFATAL(<< "Incoherency between input images (for support_data.invalid_pixels key).");
       }
 

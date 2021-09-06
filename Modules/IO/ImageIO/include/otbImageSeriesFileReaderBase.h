@@ -150,9 +150,7 @@ public:
 
 protected:
   ImageSeriesFileReaderBase();
-  ~ImageSeriesFileReaderBase() override
-  {
-  }
+  ~ImageSeriesFileReaderBase() override = default;
 
   enum FileType
   {

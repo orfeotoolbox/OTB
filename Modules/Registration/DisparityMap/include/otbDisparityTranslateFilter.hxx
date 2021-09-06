@@ -31,8 +31,8 @@ namespace otb
 
 template <class TDisparityImage, class TGridImage, class TSensorImage, class TMaskImage>
 DisparityTranslateFilter<TDisparityImage, TGridImage, TSensorImage, TMaskImage>::DisparityTranslateFilter()
+  : m_NoDataValue(-32768)
 {
-  m_NoDataValue = -32768;
   // Set the number of inputs (1 moving image by default -> 3 inputs)
   this->SetNumberOfRequiredInputs(6);
   this->SetNumberOfRequiredInputs(1);

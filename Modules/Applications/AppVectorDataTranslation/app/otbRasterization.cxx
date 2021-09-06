@@ -67,7 +67,7 @@ private:
 
     SetDocLongDescription(
         "Reproject and rasterize a vector dataset. The grid of the rasterized output can be set by using a reference image, or by "
-        "setting all parmeters (origin, size, spacing) by hand. In the latter case, at least the spacing (ground sampling distance) is needed (other "
+        "setting all parameters (origin, size, spacing) by hand. In the latter case, at least the spacing (ground sampling distance) is needed (other "
         "parameters are computed automatically). The rasterized output can also be in a different projection reference system than the input dataset.\n\n"
 
         "There are two rasterize mode available in the application. The first is the binary mode: it allows rendering all pixels belonging to a geometry of "

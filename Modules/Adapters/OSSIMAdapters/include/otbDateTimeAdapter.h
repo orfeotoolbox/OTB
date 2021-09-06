@@ -37,7 +37,7 @@ namespace otb
  *
  *  This class provide functions to define, compare and measure times and dates.
  *
- *
+ * \deprecated
  * \ingroup OTBOSSIMAdapters
  **/
 class OTBOSSIMAdapters_EXPORT DateTimeAdapter : public itk::Object

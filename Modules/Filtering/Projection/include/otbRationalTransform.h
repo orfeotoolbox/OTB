@@ -27,7 +27,7 @@
 namespace otb
 {
 /** \class RationalTransform
- *  \brief This class implements a rational transfom
+ *  \brief This class implements a rational transform
  *
  *  A rational transform is a quotient of two polynomial functions.
  *

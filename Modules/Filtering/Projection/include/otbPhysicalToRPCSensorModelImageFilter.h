@@ -96,7 +96,7 @@ public:
   itkSetMacro(GridSize, SizeType);
   itkGetConstReferenceMacro(GridSize, SizeType);
 
-  /** Set Grid size with an unsigned int parmeter*/
+  /** Set Grid size with an unsigned int parameter*/
   void SetGridSize(unsigned int inSize)
   {
     SizeType iSize;

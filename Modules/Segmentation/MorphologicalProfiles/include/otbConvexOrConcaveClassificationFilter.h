@@ -64,12 +64,8 @@ public:
    * Constructor
    */
   ConvexOrConcaveDecisionRule()
-  {
-    m_ConvexLabel  = 1;
-    m_ConcaveLabel = 2;
-    m_FlatLabel    = 0;
-    m_Sigma        = 0.0;
-  }
+    : m_ConvexLabel(1), m_ConcaveLabel(2), m_FlatLabel(0), m_Sigma(0.0)
+    {}
   /**
    * Destructor
    */
@@ -252,12 +248,8 @@ public:
 protected:
   /** Constructor */
   ConvexOrConcaveClassificationFilter()
-  {
-    m_ConvexLabel  = 1;
-    m_ConcaveLabel = 2;
-    m_FlatLabel    = 0;
-    m_Sigma        = 0.0;
-  };
+    : m_ConvexLabel(1), m_ConcaveLabel(2), m_FlatLabel(0), m_Sigma(0.0)
+    {};
   /** Destructor */
   ~ConvexOrConcaveClassificationFilter() override
   {

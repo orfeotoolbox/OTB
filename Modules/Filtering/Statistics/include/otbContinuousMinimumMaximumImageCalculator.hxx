@@ -33,13 +33,14 @@ namespace otb
  */
 template <class TInputImage>
 ContinuousMinimumMaximumImageCalculator<TInputImage>::ContinuousMinimumMaximumImageCalculator()
+  :
+  m_Minimum(itk::NumericTraits<PixelType>::max()),
+  m_Maximum(itk::NumericTraits<PixelType>::NonpositiveMin()),
+  m_Image(TInputImage::New()),
+  m_RegionSetByUser(false)
 {
-  m_Image   = TInputImage::New();
-  m_Maximum = itk::NumericTraits<PixelType>::NonpositiveMin();
-  m_Minimum = itk::NumericTraits<PixelType>::max();
   m_IndexOfMinimum.Fill(0);
   m_IndexOfMaximum.Fill(0);
-  m_RegionSetByUser = false;
 }
 
 /*

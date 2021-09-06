@@ -56,13 +56,11 @@ public:
   typedef TInput1                          ScalarType;
 
   AmplitudePhaseToRGBFunctor()
-  {
-    m_Minimum = 0;
-    m_Maximum = itk::NumericTraits<ScalarType>::max();
-  };
-  ~AmplitudePhaseToRGBFunctor()
-  {
-  }
+    :
+    m_Minimum(0), m_Maximum(itk::NumericTraits<ScalarType>::max())
+    {};
+
+  ~AmplitudePhaseToRGBFunctor() = default;
 
   void SetMaximum(ScalarType max)
   {
@@ -99,8 +97,8 @@ public:
   }
 
 private:
-  ScalarType          m_Maximum;
   ScalarType          m_Minimum;
+  ScalarType          m_Maximum;
   HSVToRGBFunctorType m_HSVToRGBFunctor;
 };
 }

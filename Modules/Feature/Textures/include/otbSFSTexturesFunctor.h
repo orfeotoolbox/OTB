@@ -60,14 +60,16 @@ class SFSTexturesFunctor
 {
 public:
   SFSTexturesFunctor()
+    :
+    m_SpatialThreshold(100),
+    m_SpectralThreshold(50),
+    m_RatioMaxConsiderationNumber(5),
+    m_Alpha(1)
   {
-    m_SpatialThreshold            = 100;
-    m_SpectralThreshold           = 50;
-    m_RatioMaxConsiderationNumber = 5;
-    m_Alpha                       = 1;
     this->SetNumberOfDirections(20); // set the step too
     m_SelectedTextures = std::vector<bool>(6, 1);
   }
+
   virtual ~SFSTexturesFunctor()
   {
   }
@@ -104,7 +106,7 @@ public:
   {
     m_DirectionStep = step;
   }
-  void SetSelectedTextures(std::vector<bool> vect)
+  void SetSelectedTextures(std::vector<bool>& vect)
   {
     m_SelectedTextures.clear();
     m_SelectedTextures = vect;
@@ -394,10 +396,10 @@ public:
   }
 
 protected:
-  /** spectral threshold conditon*/
-  InternalPixelType m_SpectralThreshold;
   /** spatial threshold condition */
   unsigned int m_SpatialThreshold;
+  /** spectral threshold condition*/
+  InternalPixelType m_SpectralThreshold;
   /** Max nulber of min and considered for Ration computation */
   unsigned int m_RatioMaxConsiderationNumber;
   /** constant to adjust w-mean values */

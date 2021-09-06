@@ -73,7 +73,7 @@ void ImportGeoInformationImageFilter<TImage, TSourceImage>::GenerateOutputInform
   // Get output and source pointer
   ImagePointerType outputPtr = this->GetOutput();
   SourceImageType* sourcePtr = const_cast<SourceImageType*>(this->GetSource());
-  // Import metdata
+  // Import metadata
   outputPtr->CopyInformation(sourcePtr);
 
   outputPtr->SetLargestPossibleRegion(this->GetInput()->GetLargestPossibleRegion());
@@ -89,7 +89,7 @@ void ImportGeoInformationImageFilter<TImage, TSourceImage>::GenerateOutputInform
 //   // Get output and source pointer
 //   ImagePointerType outputPtr = this->GetOutput();
 //   SourceImageType * sourcePtr =const_cast<SourceImageType *>(this->GetSource());
-//   // Import metdata
+//   // Import metadata
 //   outputPtr->CopyInformation(sourcePtr);
 //   // Don't forget to copy also the origin and spacing, not handled by the CopyInformation method.
 //   outputPtr->SetOrigin(sourcePtr->GetOrigin());

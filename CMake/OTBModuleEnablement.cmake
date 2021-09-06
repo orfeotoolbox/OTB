@@ -98,7 +98,7 @@ foreach(otb-module ${OTB_MODULES_ALL})
 endforeach()
 
 #----------------------------------------------------------------------
-# Construct direct dependees (first-level) of each module
+# Construct direct dependencies (first-level) of each module
 foreach(otb-module1 ${OTB_MODULES_ALL})
   foreach(otb-module2 ${OTB_MODULES_ALL})
     list(FIND OTB_MODULE_${otb-module2}_DEPENDS ${otb-module1} _find_output)

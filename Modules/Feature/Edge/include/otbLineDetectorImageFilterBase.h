@@ -45,7 +45,7 @@ namespace otb
  * method should be overloaded by each specific line detector.
  *
  * The output is an image of intensity of detection and an image of
- * direction of the line fo each pixel.
+ * direction of the line for each pixel.
  *
  *
  * \ingroup OTBEdge

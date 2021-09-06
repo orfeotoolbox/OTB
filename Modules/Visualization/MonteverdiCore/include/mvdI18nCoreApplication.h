@@ -95,7 +95,7 @@ class VectorImageModel;
  *
  * QCoreApplication is passed as argument of I18nCoreApplication
  * constructor. So, is user application must derive QApplication (to,
- * for example, provide sessio management), the specialized instance
+ * for example, provide session management), the specialized instance
  * can be passed as argument of constructor.
  */
 class OTBMonteverdiCore_EXPORT I18nCoreApplication : public QObject

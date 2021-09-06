@@ -19,8 +19,8 @@
  */
 
 
-#ifndef otbTerraSarImageMetadataInterface_h
-#define otbTerraSarImageMetadataInterface_h
+#ifndef otbTerraSarXSarImageMetadataInterface_h
+#define otbTerraSarXSarImageMetadataInterface_h
 
 #include <string>
 
@@ -29,17 +29,17 @@
 
 namespace otb
 {
-/** \class TerraSarImageMetadataInterface
+/** \class TerraSarXSarImageMetadataInterface
  *
- * \brief Creation of an "otb" TerraSarImageMetadataInterface that gets metadata.
+ * \brief Creation of an "otb" TerraSarXSarImageMetadataInterface that gets metadata.
  *
  *
  * \ingroup OTBMetadata
  */
-class OTBMetadata_EXPORT TerraSarImageMetadataInterface : public SarImageMetadataInterface
+class OTBMetadata_EXPORT TerraSarXSarImageMetadataInterface : public SarImageMetadataInterface
 {
 public:
-  typedef TerraSarImageMetadataInterface Self;
+  typedef TerraSarXSarImageMetadataInterface Self;
   typedef SarImageMetadataInterface      Superclass;
   typedef itk::SmartPointer<Self>        Pointer;
   typedef itk::SmartPointer<const Self>  ConstPointer;
@@ -48,7 +48,7 @@ public:
   itkNewMacro(Self);
 
   /** Run-time type information (and related methods). */
-  itkTypeMacro(TerraSarImageMetadataInterface, otbSarImageMetadataInterface);
+  itkTypeMacro(TerraSarXSarImageMetadataInterface, otbSarImageMetadataInterface);
 
   typedef itk::ImageBase<2>                     ImageType;
   typedef ImageType::IndexType                  IndexType;
@@ -166,8 +166,8 @@ public:
   void Parse(ImageMetadata &) override;
 
 protected:
-  TerraSarImageMetadataInterface();
-  ~TerraSarImageMetadataInterface() override = default;
+  TerraSarXSarImageMetadataInterface();
+  ~TerraSarXSarImageMetadataInterface() override = default;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Evaluate polynom with Horner scheme*/
@@ -190,7 +190,7 @@ protected:
   double GetNoiseReferencePoint(const unsigned int noiseRecord, const MetadataSupplierInterface &mds, const unsigned int polLayer) const;
 
 private:
-  TerraSarImageMetadataInterface(const Self&) = delete;
+  TerraSarXSarImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
   int m_NumberOfCornerIncidenceAngles = 0;
 };

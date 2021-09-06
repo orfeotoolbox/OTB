@@ -275,6 +275,6 @@ typename TileImageFilter<TImage>::RegionType TileImageFilter<TImage>::InputRegio
 }
 
 
-} // end namepsace otb
+} // end namespace otb
 
 #endif

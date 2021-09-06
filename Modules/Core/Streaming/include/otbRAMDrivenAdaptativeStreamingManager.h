@@ -32,7 +32,7 @@ namespace otb
  *  available RAM.
  *
  * This streaming manager uses the TileHint from the
- * MetaDataDictionary to find out the tiling sheme of the input file
+ * MetaDataDictionary to find out the tiling scheme of the input file
  * if available.
  *
  * You can use SetAvailableRAMInMB to set the available RAM. An

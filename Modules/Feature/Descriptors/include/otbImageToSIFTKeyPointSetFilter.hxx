@@ -34,31 +34,28 @@ namespace otb
  */
 template <class TInputImage, class TOutputPointSet>
 ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>::ImageToSIFTKeyPointSetFilter()
-{
-  m_OctavesNumber = 1;
-  m_ScalesNumber  = 3;
-  m_ExpandFactors = 2;
-  m_ShrinkFactors = 2;
-  m_Sigma0        = 1.6;
-  m_Sigmak        = 0;
+  : 
+    m_OctavesNumber(1),
+    m_ScalesNumber(3),
+    m_ExpandFactors(2),
+    m_ShrinkFactors(2),
+    m_DoGThreshold(0.03),
+    m_EdgeThreshold(10),
+    m_RatioEdgeThreshold(0),
+    m_GradientMagnitudeThreshold(0.2),
+    m_Sigma0(1.6),
+    m_Sigmak(0),
+    m_SigmaFactorOrientation(3),
+    m_SigmaFactorDescriptor(1.5),
 
-  m_DoGThreshold       = 0.03;
-  m_EdgeThreshold      = 10;
-  m_RatioEdgeThreshold = 0;
+    m_ExpandFilter(ExpandFilterType::New()),
 
-  m_ValidatedKeyPoints    = 0;
-  m_DifferentSamplePoints = 0;
-  m_DiscardedKeyPoints    = 0;
-  m_ChangeSamplePointsMax = 2;
+    m_ValidatedKeyPoints(0),
+    m_DifferentSamplePoints(0),
+    m_DiscardedKeyPoints(0),
+    m_ChangeSamplePointsMax(2),
 
-  m_SigmaFactorOrientation = 3;
-  m_SigmaFactorDescriptor  = 1.5;
-
-  m_GradientMagnitudeThreshold = 0.2;
-
-  m_ExpandFilter = ExpandFilterType::New();
-
-  const double HistogramGaussianWeights[73] = {
+    m_HistogramGaussianWeights({
       2.3771112282795414e-07, 3.8860734758633732e-07, 6.2655544995978937e-07, 9.9631120821413786e-07, 1.5624909838697011e-06, 2.4167238265599128e-06,
       3.6865788528530121e-06, 5.5463469229192623e-06, 8.2295774080263437e-06, 1.2043009749602365e-05, 1.738119136656513e-05,  2.4740646513897326e-05,
       3.4731980398846277e-05, 4.808781565748272e-05,  6.5664032975164266e-05, 8.8431512984476723e-05, 0.00011745555408931643, 0.00015386047198026335,
@@ -71,10 +68,8 @@ ImageToSIFTKeyPointSetFilter<TInputImage, TOutputPointSet>::ImageToSIFTKeyPointS
       0.00019877765486783745, 0.00015386047198026335, 0.00011745555408931643, 8.8431512984476723e-05, 6.5664032975164266e-05, 4.808781565748272e-05,
       3.4731980398846277e-05, 2.4740646513897326e-05, 1.738119136656513e-05,  1.2043009749602365e-05, 8.2295774080263437e-06, 5.5463469229192623e-06,
       3.6865788528530121e-06, 2.4167238265599128e-06, 1.5624909838697011e-06, 9.9631120821413786e-07, 6.2655544995978937e-07, 3.8860734758633732e-07,
-      2.3771112282795414e-07};
-
-  m_HistogramGaussianWeights = std::vector<double>(HistogramGaussianWeights, HistogramGaussianWeights + 73);
-
+      2.3771112282795414e-07})
+{
   m_Offsets[0][0] = -1;
   m_Offsets[0][1] = -1;
   m_Offsets[1][0] = -1;

@@ -39,7 +39,7 @@ namespace otb
 *   The composite filter internally casts the output from the
 *   itk::WatershedImageFilter into TOutputLabelImage.
 *
-*   For more information, please refere to the documentation of the
+*   For more information, please refer to the documentation of the
 *   original itk::WatershedImageFilter .
 *
  *

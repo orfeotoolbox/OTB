@@ -308,7 +308,7 @@ private:
    ossimGpt createGround(const ossimString& s)const;
    ossimDpt createDpt(const ossimString& s)const;
 
-   /** callibration information for radiometric corrections*/
+   /** calibration information for radiometric corrections*/
 
    std::vector<ossim_float64> thePhysicalBias;
    std::vector<ossim_float64> thePhysicalGain;

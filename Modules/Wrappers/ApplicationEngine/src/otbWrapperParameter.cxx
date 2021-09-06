@@ -143,13 +143,13 @@ bool Parameter::GetAutomaticValue() const
 {
   return !m_UserValue;
 }
-/** Toogle ON the parameter AutomaticValue flag */
+/** Toggle ON the parameter AutomaticValue flag */
 void Parameter::AutomaticValueOn()
 {
   this->SetAutomaticValue(true);
 }
 
-/** Toogle OFF the parameter AutomaticValue flag */
+/** Toggle OFF the parameter AutomaticValue flag */
 void Parameter::AutomaticValueOff()
 {
   this->SetAutomaticValue(false);

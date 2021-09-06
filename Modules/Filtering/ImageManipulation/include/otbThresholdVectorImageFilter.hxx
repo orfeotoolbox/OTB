@@ -36,11 +36,11 @@ namespace otb
  */
 template <class TInputImage, class TOutputImage>
 ThresholdVectorImageFilter<TInputImage, TOutputImage>::ThresholdVectorImageFilter()
-{
-  m_OutsideValue = itk::NumericTraits<OutputImageInternalPixelType>::Zero;
-  m_Lower        = itk::NumericTraits<InputImageInternalPixelType>::NonpositiveMin();
-  m_Upper        = itk::NumericTraits<InputImageInternalPixelType>::max();
-}
+  :
+  m_OutsideValue(itk::NumericTraits<OutputImageInternalPixelType>::Zero),
+  m_Lower(itk::NumericTraits<InputImageInternalPixelType>::NonpositiveMin()),
+  m_Upper(itk::NumericTraits<InputImageInternalPixelType>::max())
+{}
 
 
 /**

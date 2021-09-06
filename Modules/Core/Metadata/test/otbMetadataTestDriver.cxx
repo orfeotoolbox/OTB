@@ -35,4 +35,5 @@ void RegisterTests()
   REGISTER_TEST(otbImageMetadataTest);
   REGISTER_TEST(otbGeomMetadataSupplierTest);
   REGISTER_TEST(otbXMLMetadataSupplierTest);
+  REGISTER_TEST(otbSentinel1ThermalNoiseLutTest);
 }

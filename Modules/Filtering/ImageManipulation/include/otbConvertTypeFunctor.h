@@ -153,6 +153,7 @@ private:
   ThresholdPixelValueType m_LowestB  = common_lowest<InputPixelValueType, OutputPixelValueType>();
   ThresholdPixelValueType m_HighestB = common_highest<InputPixelValueType, OutputPixelValueType>();
   OutputPixelValueType m_Zero     {}; // initialized to zero!
+
   unsigned int         m_CompIn, m_CompOut, m_Scal;
 };
 

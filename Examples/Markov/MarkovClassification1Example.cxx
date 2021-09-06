@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
   using OptimizerType = otb::MRFOptimizerMetropolis;
 
   // Two energy, deriving from the \doxygen{otb}{MRFEnergy} class need to be instantiated. One energy
-  // is required for the regularization, taking into account the relashionship between neighborhing pixels
+  // is required for the regularization, taking into account the relationship between neighboring pixels
   // in the classified image. Here it is done with the \doxygen{otb}{MRFEnergyPotts} which implement
   // a Potts model.
   //
@@ -188,7 +188,7 @@ int main(int argc, char* argv[])
 
   writer->SetInput(rescaleFilter->GetOutput());
 
-  // Finally, the pipeline execution is trigerred.
+  // Finally, the pipeline execution is triggered.
 
   writer->Update();
 

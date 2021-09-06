@@ -22,7 +22,7 @@
 #define otbTerraSarBrightnessImageFilter_hxx
 
 #include "otbTerraSarBrightnessImageFilter.h"
-#include "otbTerraSarImageMetadataInterface.h"
+#include "otbTerraSarXSarImageMetadataInterface.h"
 
 namespace otb
 {
@@ -44,7 +44,7 @@ void TerraSarBrightnessImageFilter<TInputImage, TOutputImage>::BeforeThreadedGen
     }
     else
     {
-      itkExceptionMacro(<< "Invalid input image. Only TerraSar images are supproted");
+      itkExceptionMacro(<< "Invalid input image. Only TerraSar images are supported");
     }
   }
 }

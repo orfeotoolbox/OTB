@@ -90,7 +90,36 @@ int otbSarCalibrationLookupDataTest(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-  outfile << imd[otb::MDStr::Instrument] << std::endl;
+  outfile << imd[otb::MDStr::SensorID] << std::endl;
 
+
+  /** Fetch the SARCalib */
+  std::unique_ptr<otb::SARCalib> sarCalibPtr;
+  if (imd.Has(otb::MDGeom::SARCalib))
+  {
+    sarCalibPtr = std::make_unique<otb::SARCalib>(boost::any_cast<otb::SARCalib>(imd[otb::MDGeom::SARCalib]));
+  }
+  else
+  {
+    std::cerr <<  "Unable to fetch the SARCalib metadata from the input product.";
+  }
+  
+  bool hasLut = sarCalibPtr->calibrationLookupData.find(otb::SarCalibrationLookupData::SIGMA)
+                != sarCalibPtr->calibrationLookupData.end();
+  outfile << hasLut << std::endl;
+
+  if (hasLut)
+  {
+    auto lut = sarCalibPtr->calibrationLookupData[otb::SarCalibrationLookupData::SIGMA];
+    auto lutVal = static_cast<RealType>(lut->GetValue(10,19));
+    outfile << lutVal << std::endl;
+  }
+  else
+  {
+    std::cerr << "No Sigma lut found in the metadata" << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  outfile.close();
   return EXIT_SUCCESS;
 }

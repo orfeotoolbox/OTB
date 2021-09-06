@@ -858,7 +858,7 @@ void ImageViewRenderer::virtual_UpdateScene()
 
           // Should all AbstractLayerModel have a ::GetFilename()
           // method?
-          // -> Not sure: AbstractImageModel coud be derived as a
+          // -> Not sure: AbstractImageModel could be derived as a
           // in-memory image-model.
           VectorImageModel* vectorImageModel = dynamic_cast<VectorImageModel*>(it->second);
 

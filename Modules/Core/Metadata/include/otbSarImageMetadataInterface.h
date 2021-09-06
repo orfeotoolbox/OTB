@@ -116,7 +116,6 @@ public:
   std::vector<DopplerCentroid> GetDopplerCentroidGeom() const;
   std::vector<Orbit> GetOrbitsGeom() const;
   std::vector<BurstRecord> GetBurstRecordsGeom() const;
-  std::vector<SARNoise> GetNoiseVectorGeom() const;
 
   /**
    * @brief Loads the radiometric calibration data to the SARCalib

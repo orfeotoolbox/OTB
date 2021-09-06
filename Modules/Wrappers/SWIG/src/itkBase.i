@@ -159,7 +159,7 @@ public:
   ~Point();
 };
 
-// Instanciate the needed templates
+// Instantiate the needed templates
 %template(itkSize) Size<2>;
 %template(itkIndex) Index<2>;
 %template(itkRegion) ImageRegion<2>;

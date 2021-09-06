@@ -75,6 +75,6 @@ void SarConcatenateBurstsImageFilter<TImage>::GenerateOutputInformation()
 }
 
 
-} // end namepsace otb
+} // end namespace otb
 
 #endif

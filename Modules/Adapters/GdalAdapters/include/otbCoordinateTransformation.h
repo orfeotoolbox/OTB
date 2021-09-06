@@ -94,7 +94,7 @@ public:
   /// Copy constructor
   CoordinateTransformation(const CoordinateTransformation& other);
 
-  /// Asignment operator
+  /// Assignment operator
   CoordinateTransformation& operator=(const CoordinateTransformation& other) noexcept;
 
   /// \return The source spatial reference

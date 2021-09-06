@@ -45,7 +45,7 @@ MapFileProductWriter<TInputImage>::MapFileProductWriter()
 
 
 /**
- * Desctructor
+ * Destructor
  */
 template <class TInputImage>
 MapFileProductWriter<TInputImage>::~MapFileProductWriter()
@@ -148,7 +148,7 @@ void MapFileProductWriter<TInputImage>::Initialize()
 template <class TInputImage>
 void MapFileProductWriter<TInputImage>::InitializeVectorData()
 {
-  // Intitialize the vectordata to build the indexTile
+  // Initialize the vectordata to build the indexTile
   m_VectorDataIndexTile = VectorDataType::New();
   m_VectorDataIndexTile->SetProjectionRef(otb::SpatialReference::FromEPSG(m_SRID).ToWkt());
   DataNodeType::Pointer root     = m_VectorDataIndexTile->GetDataTree()->GetRoot()->Get();

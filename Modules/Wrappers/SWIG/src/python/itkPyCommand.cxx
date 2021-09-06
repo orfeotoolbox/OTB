@@ -29,9 +29,9 @@ class PyGILStateEnsure
 {
 public:
   PyGILStateEnsure()
-    {
-      m_GIL = PyGILState_Ensure();
-    }
+    :
+    m_GIL(PyGILState_Ensure())
+  {}
   ~PyGILStateEnsure()
     {
       PyGILState_Release(m_GIL);

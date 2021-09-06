@@ -130,7 +130,7 @@ public:
 
 
   /** Add a new ImageFileWriter to the multi-writer. This is an alternative method
-   *  when you already have an instanciated writer.
+   *  when you already have an instantiated writer.
    */
   template <class TWriter>
   void AddInputWriter(typename TWriter::Pointer writer);

@@ -86,10 +86,10 @@ public:
   /** Get the parameter AutomaticValue flag */
   virtual bool GetAutomaticValue() const;
 
-  /** Toogle ON the parameter AutomaticValue flag */
+  /** Toggle ON the parameter AutomaticValue flag */
   void AutomaticValueOn();
 
-  /** Toogle OFF the parameter AutomaticValue flag */
+  /** Toggle OFF the parameter AutomaticValue flag */
   void AutomaticValueOff();
 
   /** Set the user access level */

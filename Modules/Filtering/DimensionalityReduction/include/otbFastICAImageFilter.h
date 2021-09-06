@@ -32,7 +32,7 @@ namespace otb
  * \brief Performs a Independent Component Analysis (ICA)
  *
  * This filter is an implementation of the stabilized fixed-point FastICA
- * algorithm described in [1] with a symetric decorrelation at each step.
+ * algorithm described in [1] with a symmetric decorrelation at each step.
  *
  * The contrast function and its derivative can be supplied to the filter as
  * lambda functions.
@@ -170,7 +170,7 @@ protected:
    *
    * In REVERSE mode, the covariance matrix or the transformation matrix
    * (which may not be square) has to be given,
-   * otherwize, GenerateOutputInformation throws an itk::ExceptionObject
+   * otherwise, GenerateOutputInformation throws an itk::ExceptionObject
    */
   void GenerateOutputInformation() override;
 

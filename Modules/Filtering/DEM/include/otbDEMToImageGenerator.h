@@ -141,6 +141,7 @@ public:
   {
     return m_Transform->GetOutputImageMetadata();
   }
+
   void SetInputImageMetadata(const ImageMetadata* imd)
   {
     m_Transform->SetOutputImageMetadata(imd);
@@ -156,6 +157,7 @@ public:
     m_Transform->SetInputImageMetadata(imd);
     this->Modified();
   }
+  //@}
 
   /** Useful to set the output parameters from an existing image*/
   template <class TImageType>

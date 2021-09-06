@@ -31,7 +31,7 @@ namespace otb
  * \class HuMomentsImageFunction
  * \brief Calculate the Hu's invariant parameters.
  *
- * Calculate the Hu's invariants over a specified neighbohood defined
+ * Calculate the Hu's invariants over a specified neighborhood defined
  * as :
  *
  * - \f$ \phi_{1} = c_{11} \f$

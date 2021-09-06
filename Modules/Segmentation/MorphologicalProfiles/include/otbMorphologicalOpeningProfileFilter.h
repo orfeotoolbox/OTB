@@ -79,12 +79,13 @@ protected:
     se.CreateStructuringElement();
     this->GetFilter()->SetKernel(se);
   }
+
   /** Constructor */
   MorphologicalOpeningProfileFilter(){};
+
   /** Destructor */
-  ~MorphologicalOpeningProfileFilter() override
-  {
-  }
+  ~MorphologicalOpeningProfileFilter() override = default;
+
   /**PrintSelf method */
   void PrintSelf(std::ostream& os, itk::Indent indent) const override
   {

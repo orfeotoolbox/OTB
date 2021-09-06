@@ -31,7 +31,7 @@ namespace otb
 {
 
 /* *******************************************************************
-*  Classe CumulantsForEdgeworthProfile
+*  Class CumulantsForEdgeworthProfile
 * ********************************************************************
 */
 template <class TInput>

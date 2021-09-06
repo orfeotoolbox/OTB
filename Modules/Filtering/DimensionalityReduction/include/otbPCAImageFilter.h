@@ -187,7 +187,7 @@ protected:
    *
    * In REVERSE mode, the covariance matrix or the transformation matrix
    * (which may not be square) has to be given,
-   * otherwize, GenerateOutputInformation throws an itk::ExceptionObject
+   * otherwise, GenerateOutputInformation throws an itk::ExceptionObject
    */
   void GenerateOutputInformation() override;
 

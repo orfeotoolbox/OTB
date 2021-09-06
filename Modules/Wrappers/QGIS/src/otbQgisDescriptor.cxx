@@ -123,7 +123,7 @@ int main(int argc, char* argv[])
   From here onwards each line appended to dFile is passed to QgsProcessingParameter* class constructor.
   dFile is nothing but a csv (with a .txt) with "|" as delimiter character.
   First field is the name of Qgis parameter class and rest of it are extracted as list and passed to class constructor.
-  Parsing and calling of paramater classes are done by python.
+  Parsing and calling of parameter classes are done by python.
   source available : qgis/python/plugins/processing/core/parameters.py
   source code of qgis parameter is available at: qgis/src/core/processing/qgsprocessingparameters.cpp
   */
@@ -244,7 +244,7 @@ int main(int argc, char* argv[])
       // 1. default_value = None
       // 2. multiLine = False
       // For more details,
-      // please refer to documetation of QgsProcessingParameterString.
+      // please refer to documentation of QgsProcessingParameterString.
       default_value = "None|False";
     }
     else if (type == ParameterType_StringList)
@@ -253,7 +253,7 @@ int main(int argc, char* argv[])
       // 1. default_value = None
       // 2. multiLine = True
       // For more details,
-      // please refer to documetation of QgsProcessingParameterString.
+      // please refer to documentation of QgsProcessingParameterString.
       // setting default_value this way is an exception for ParameterType_StringList and ParameterType_String
       default_value = "None|True";
     }

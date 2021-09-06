@@ -292,7 +292,7 @@ private:
   DisplacementFieldCastFilterType::Pointer m_DisplacementFieldCaster;
 };
 } // End namespace Wrapper
-} // End namepsace otb
+} // End namespace otb
 
 
 OTB_APPLICATION_EXPORT(otb::Wrapper::GridBasedImageResampling)

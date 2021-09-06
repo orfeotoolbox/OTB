@@ -78,7 +78,7 @@ public:
   void Synthetize(void) override;
 
   /** This method creates the output layer in the OGRLayer set by the user.
-   * \note This methode must be called before the call of Update .
+   * \note This method must be called before the call of Update .
    */
   virtual void Initialize(void);
 

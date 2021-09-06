@@ -196,11 +196,17 @@ public:
     m_Index[i] = idx;
   }
 
+  /** Get the image keywordlist 
+    \deprecated
+   */
   const ImageKeywordlist& GetKeywordList() const
   {
     return m_KeywordList;
   }
 
+  /** Set the image keywordlist 
+    \deprecated
+   */
   void SetKeywordList(const ImageKeywordlist& kwl)
   {
     this->m_KeywordList = kwl;
