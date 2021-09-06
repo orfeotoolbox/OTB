@@ -134,8 +134,8 @@ configure_file( ${QT5_CONFIGURE_COMMAND_IN} ${QT5_CONFIGURE_COMMAND} @ONLY )
 
 ExternalProject_Add(QT5
   PREFIX QT5
-  URL "https://ftp.osuosl.org/pub/blfs/conglomeration/qt5/qt-everywhere-src-5.11.3.tar.xz"
-  URL_MD5 02b353bfe7a40a8dc4274e1d17226d2b
+  URL "http://master.qt.io/archive/qt/5.15/5.15.2/single/qt-everywhere-src-5.15.2.tar.xz"
+  URL_MD5 e1447db4f06c841d8947f0a6ce83a7b5
   BINARY_DIR ${QT5_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

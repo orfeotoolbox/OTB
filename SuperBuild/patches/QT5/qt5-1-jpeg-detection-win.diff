@@ -1,13 +1,10 @@
---- qt-everywhere-src-5.10.1/qtbase/src/gui/configure.json	2018-02-08 19:24:48.000000000 +0100
+--- qt-everywhere-src-5.15.2/qtbase/src/gui/configure.json	2018-02-08 19:24:48.000000000 +0100
 +++ QT5/qtbase/src/gui/configure.json	2018-04-10 11:50:15.631526687 +0200
-@@ -278,8 +278,7 @@
-                 "main": "jpeg_create_compress(cinfo);"
-             },
+@@ -374,7 +374,6 @@
+             "headers": "jpeglib.h",
              "sources": [
+                 { "type": "pkgConfig", "args": "libjpeg" },
 -                { "libs": "-llibjpeg", "condition": "config.msvc" },
--                { "libs": "-ljpeg", "condition": "!config.msvc" }
-+                { "libs": "-ljpeg" }
+                 "-ljpeg"
              ]
          },
-         "libpng": {
-
