@@ -442,15 +442,14 @@ private:
     }
 #endif
 
-#if 0 // TODO: the default display is not is the metadata dictionary
-    auto rgbVect = metadataInterface->GetDefaultDisplay();
+    auto rgbVect = imd.GetDefaultDisplay();
     SetParameterInt("rgb.r", rgbVect[0]);
     SetParameterInt("rgb.g", rgbVect[1]);
     SetParameterInt("rgb.b", rgbVect[2]);
 
     ossOutput << std::endl << "Image default RGB composition:" << std::endl;
     ossOutput << "\t[R, G, B] = [" << GetParameterInt("rgb.r") << "," << GetParameterInt("rgb.g") << "," << GetParameterInt("rgb.b") << "]" << std::endl;
-#endif
+
     SetParameterInt("gcp.count", inImage->GetGCPCount());
     SetParameterString("gcp.proj", inImage->GetGCPProjection());
 

@@ -394,7 +394,7 @@ private:
     }
     else if (what == "RGB")
     {
-      std::vector<unsigned int> rgb = metadataInterface->GetDefaultDisplay();
+      std::vector<unsigned int> rgb = inImage->GetImageMetadata().GetDefaultDisplay();
       unsigned int              m   = inImage->GetVectorLength();
       SetParameterInt("mode.lum.red.ch", rgb[0]);
       SetParameterInt("mode.lum.green.ch", rgb[1]);

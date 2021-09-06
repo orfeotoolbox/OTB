@@ -193,9 +193,6 @@ private:
     // Read information
     if (HasValue("in"))
     {
-      typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
-      ImageMetadataInterfaceType::Pointer     metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(GetParameterImage("in")->GetMetaDataDictionary());
-
       int nbBand = GetParameterImage("in")->GetNumberOfComponentsPerPixel();
       SetMaximumParameterIntValue("channels.grayscale.channel", nbBand);
       SetMaximumParameterIntValue("channels.rgb.red", nbBand);
@@ -205,7 +202,7 @@ private:
       if (nbBand > 1)
       {
         // get band index : Red/Green/Blue, in depending on the sensor
-        auto const& display = metadataInterface->GetDefaultDisplay();
+        auto const& display = GetParameterImage("in")->GetImageMetadata().GetDefaultDisplay();
         SetDefaultParameterInt("channels.rgb.red", display[0] + 1);
         SetDefaultParameterInt("channels.rgb.green", display[1] + 1);
         SetDefaultParameterInt("channels.rgb.blue", display[2] + 1);
