@@ -169,6 +169,12 @@ public:
   ImageBaseType::Pointer ToImageBase() override;
 
   /**
+   * Get a reference to the ImageMetadata.
+   */
+  const otb::ImageMetadata & GetImageMetadata() const override;
+
+
+  /**
    * Get the placename from the center pixel
    */
   std::string GetCenterPixelPlaceName();

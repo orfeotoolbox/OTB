@@ -152,6 +152,14 @@ void VectorImageModel::SetFilename(const QString& filename, int w, int h)
   SetupCurrentLodImage(w, h);
 }
 
+
+const otb::ImageMetadata & VectorImageModel::GetImageMetadata() const
+{
+  return m_ImageFileReader->GetOutput()->GetImageMetadata();
+}
+
+
+
 /*****************************************************************************/
 void VectorImageModel::EnsureValidImage(const QString& filename)
 {
@@ -316,21 +324,21 @@ void VectorImageModel::virtual_BuildModel(void* context)
 void VectorImageModel::InitializeColorSetupSettings()
 {
   // Remember meta-data interface.
-  otb::ImageMetadataInterfaceBase::ConstPointer metaData(GetMetaDataInterface());
+  const auto & metaData = GetImageMetadata();
 
   // Ensure default display returns valid band indices (see OTB bug).
-  assert(metaData->GetDefaultDisplay().size() == 3);
+  assert(metaData.GetDefaultDisplay().size() == 3);
 #if 0
-  assert( metaData->GetDefaultDisplay()[ 0 ]
+  assert( metaData.GetDefaultDisplay()[ 0 ]
     < m_Image->GetNumberOfComponentsPerPixel() );
-  assert( metaData->GetDefaultDisplay()[ 1 ]
+  assert( metaData.GetDefaultDisplay()[ 1 ]
     < m_Image->GetNumberOfComponentsPerPixel() );
-  assert( metaData->GetDefaultDisplay()[ 2 ]
+  assert( metaData.GetDefaultDisplay()[ 2 ]
     < m_Image->GetNumberOfComponentsPerPixel() );
 #endif
 
   // Patch invalid band indices of default-display (see OTB bug).
-  VectorImageSettings::ChannelVector rgb(metaData->GetDefaultDisplay());
+  VectorImageSettings::ChannelVector rgb(metaData.GetDefaultDisplay());
 
   if (rgb[0] >= m_Image->GetNumberOfComponentsPerPixel())
   {

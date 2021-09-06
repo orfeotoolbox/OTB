@@ -230,6 +230,12 @@ GlImageActor::ImageKeywordlistType GlImageActor::GetKwl() const
 }
 
 
+const ImageMetadata & GlImageActor::GetImageMetadata() const
+{
+  return m_FileReader->GetOutput()->GetImageMetadata();
+}
+
+
 bool
 GlImageActor
 ::HasKwl() const

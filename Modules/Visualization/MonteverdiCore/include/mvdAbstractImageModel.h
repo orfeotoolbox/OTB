@@ -186,6 +186,13 @@ public:
    */
   virtual ImageBaseType::Pointer ToImageBase() = 0;
 
+
+  /**
+   * Get a reference to the ImageMetadata.
+   */
+  virtual const otb::ImageMetadata & GetImageMetadata() const = 0;
+
+
   /**
    * \return The largest possible region of the current LOD level.
    */

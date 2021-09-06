@@ -108,11 +108,11 @@ void IceViewer::AddImage(const std::string& fname, const std::string& key, const
   }
 
   // Get advised colors
-  ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(actor->GetMetaDataDictionary());
+  const auto display = actor->GetImageMetadata().GetDefaultDisplay();
 
-  actor->SetRedIdx(std::min(imi->GetDefaultDisplay()[0] + 1, actor->GetNumberOfComponents()));
-  actor->SetGreenIdx(std::min(imi->GetDefaultDisplay()[1] + 1, actor->GetNumberOfComponents()));
-  actor->SetBlueIdx(std::min(imi->GetDefaultDisplay()[2] + 1, actor->GetNumberOfComponents()));
+  actor->SetRedIdx(std::min(display[0] + 1, actor->GetNumberOfComponents()));
+  actor->SetGreenIdx(std::min(display[1] + 1, actor->GetNumberOfComponents()));
+  actor->SetBlueIdx(std::min(display[2] + 1, actor->GetNumberOfComponents()));
 
   otb::ImageSettings::Pointer imageSettings(actor->GetImageSettings());
   assert(!imageSettings.IsNull());

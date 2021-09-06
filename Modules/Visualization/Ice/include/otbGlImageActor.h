@@ -120,6 +120,8 @@ public:
 
   MetaDataDictionaryType & GetMetaDataDictionary() const;
 
+  const ImageMetadata & GetImageMetadata() const;
+
   itkGetMacro(RedIdx,unsigned int);
   itkGetMacro(GreenIdx,unsigned int);
   itkGetMacro(BlueIdx,unsigned int);
