@@ -20,8 +20,6 @@
 
 #include <algorithm>
 
-#include <otbImageMetadataInterfaceFactory.h>
-
 #include "otbGlROIActor.h"
 #include "otbGlVectorActor.h"
 #include "otbGlVersionChecker.h"
