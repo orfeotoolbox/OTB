@@ -121,6 +121,8 @@ set(LINUX_SYSTEM_DLLS
   libodbc.so*
   libpq.so*
   libEGL.so*
+  libxkbcommon*
+  libxcb-*
   )
   # libexpat.so.*
   # libfontconfig.so*
