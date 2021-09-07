@@ -214,7 +214,7 @@ macos-xdk-build:
     - set GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q %CI_COMMIT_SHA%
     - set GIT_LFS_SKIP_SMUDGE=0
-    - sccache.exe --start-server
+    - C:\tools\sccache\sccache.exe --start-server
 
 .windows-build:
   extends: .common-build
