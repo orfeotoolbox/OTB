@@ -100,7 +100,6 @@ if "%PROJECT%"=="otb" (
   set SCCACHE_CACHE_SIZE="2G"
 )
 set PATH=C:\tools\sccache;%PATH%
-call "C:\tools\sccache\sccache.exe --start-server"
 
 set IMAGE_NAME=windows-%SHORT_TARGET%-%ARCH%-vc%VCVER%
 echo Generated IMAGE_NAME: %IMAGE_NAME%
