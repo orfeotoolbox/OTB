@@ -861,10 +861,22 @@ void PleiadesImageMetadataInterface::Parse(ImageMetadata &imd)
 
   if (dimapData.BandIDs.size() == imd.Bands.size())
   {
+    const std::unordered_map<std::string, std::string> bandNameToEnhancedBandName =
+      {{"P", "PAN"}, {"B0", "Blue"}, {"B1", "Green"}, {"B2", "Red"}, {"B3", "NIR"} };
+
     auto bandId = dimapData.BandIDs.begin();
     for (auto & band: imd.Bands)
     {
       band.Add(MDStr::BandName, *bandId);
+      auto it = bandNameToEnhancedBandName.find(*bandId);
+      if (it != bandNameToEnhancedBandName.end())
+      {
+        band.Add(MDStr::EnhancedBandName, it->second);
+      }
+      else
+      {
+        band.Add(MDStr::EnhancedBandName, "Unknown");
+      }
       bandId++;
     }
   }

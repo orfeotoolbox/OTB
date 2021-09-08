@@ -766,12 +766,25 @@ void Spot6ImageMetadataInterface::Parse(ImageMetadata & imd)
     auto solarIrradiance = dimapData.SolarIrradiance.begin();
     auto bandId = dimapData.BandIDs.begin();
 
+    const std::unordered_map<std::string, std::string> bandNameToEnhancedBandName =
+      {{"P", "PAN"}, {"B0", "Blue"}, {"B1", "Green"}, {"B2", "Red"}, {"B3", "NIR"} };
+
     for (auto & band: imd.Bands)
     {
       band.Add(MDNum::SolarIrradiance, *solarIrradiance);
       band.Add(MDNum::PhysicalGain, *gain);
       band.Add(MDNum::PhysicalBias, *bias);
       band.Add(MDStr::BandName, *bandId);
+
+      auto it = bandNameToEnhancedBandName.find(*bandId);
+      if (it != bandNameToEnhancedBandName.end())
+      {
+        band.Add(MDStr::EnhancedBandName, it->second);
+      }
+      else
+      {
+        band.Add(MDStr::EnhancedBandName, "Unknown");
+      }
 
       bias++;
       solarIrradiance++;

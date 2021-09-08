@@ -1271,11 +1271,25 @@ void WorldView2ImageMetadataInterface::Parse(ImageMetadata &imd)
 
   if (imd.Bands.size() == metadata.bandNameList.size())
   {
+    const std::unordered_map<std::string, std::string> bandNameToEnhancedBandName =
+      {{"C", "Coastal"}, {"B", "Blue"}, {"G", "Green"}, {"Y", "Yellow"}, {"R", "Red"},
+         {"RE", "RedEdge"}, {"N", "NIR1"}, {"N2", "NIR2"}};
+
     auto bandIt = imd.Bands.begin();
     for (const auto & bandName : metadata.bandNameList)
     {
       bandIt->Add(MDStr::BandName, bandName);
       bandIt++;
+
+      auto it = bandNameToEnhancedBandName.find(bandName);
+      if (it != bandNameToEnhancedBandName.end())
+      {
+        bandIt->Add(MDStr::EnhancedBandName, it->second);
+      }
+      else
+      {
+        bandIt->Add(MDStr::EnhancedBandName, "Unknown");
+      }
     }
   }
   else
