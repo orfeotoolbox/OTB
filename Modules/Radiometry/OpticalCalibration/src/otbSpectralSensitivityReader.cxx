@@ -36,7 +36,6 @@ SpectralSensitivityReader::SpectralSensitivityReader() : m_FileName(""), m_DataP
 {
   this->Superclass::SetNumberOfRequiredOutputs(1);
   this->Superclass::SetNthOutput(0, WavelengthSpectralBandVectorType::New().GetPointer());
-  m_Image = ImageType::New();
 }
 
 SpectralSensitivityReader::~SpectralSensitivityReader()
@@ -63,31 +62,26 @@ const SpectralSensitivityReader::WavelengthSpectralBandVectorType* SpectralSensi
 
 void SpectralSensitivityReader::FindFileName()
 {
-  if (m_Image.IsNull())
-  {
-    itkExceptionMacro(<< "An input image has to be set or set directly the filename");
-  }
-
   std::string        sensor("");
   std::ostringstream oss;
 
-  try
+  if (!m_ImageMetadata->Has(MDStr::SensorID)
+      || !m_ImageMetadata->Has(MDStr::Instrument)
+      || !m_ImageMetadata->Has(MDStr::InstrumentIndex))
   {
-    SpotImageMetadataInterface::Pointer lImageMetadata = SpotImageMetadataInterface::New();
-    lImageMetadata->SetMetaDataDictionary(m_Image->GetMetaDataDictionary());
-    sensor = lImageMetadata->GetSensorID();
-    sensor = itksys::SystemTools::UpperCase(sensor);
-    // Suppress spaces
-    sensor.erase(std::remove_if(sensor.begin(), sensor.end(), isspace), sensor.end());
+    itkExceptionMacro(<< "Cannot decode the filename from the input metadata: " 
+                      << *m_ImageMetadata);
+  }
 
-    oss.str("");
-    oss << lImageMetadata->GetInstrument();
-    oss << lImageMetadata->GetInstrumentIndex();
-  }
-  catch (itk::ExceptionObject& err)
-  {
-    itkExceptionMacro(<< "Invalid input image" << err.GetDescription());
-  }
+  sensor = (*m_ImageMetadata)[MDStr::SensorID];
+
+  sensor = itksys::SystemTools::UpperCase(sensor);
+  // Suppress spaces
+  sensor.erase(std::remove_if(sensor.begin(), sensor.end(), isspace), sensor.end());
+
+  oss.str("");
+  oss << (*m_ImageMetadata)[MDStr::Instrument];
+  oss << (*m_ImageMetadata)[MDStr::InstrumentIndex];
 
   std::string instrument = oss.str();
 
