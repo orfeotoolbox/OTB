@@ -32,13 +32,6 @@ BUILD_SHARED_LIBS:BOOL=ON
 BUILD_TESTING:BOOL=ON")
 
 
-if(WIN32)
-  set (otb_build_project_option
-    "${otb_build_project_option}
-    CMAKE_C_COMPILER_LAUNCHER:STRING=sccache.exe
-    CMAKE_CXX_COMPILER_LAUNCHER:STRING=sccache.exe")
-endif()
-
 set (otb_qa_option
 "CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON")
 

@@ -83,6 +83,12 @@ set (CMAKE_COMMAND "cmake")
 
 message(STATUS "CI profile : ${ci_profile}")
 
+if(WIN32)
+  set(CL_C_COMPILER ${CMAKE_C_COMPILER})
+  set(CL_CXX_COMPILER ${CMAKE_CXX_COMPILER})
+  set(CMAKE_C_COMPILER "sccache.exe" ${CL_C_COMPILER})
+  set(CMAKE_CXX_COMPILER "sccache.exe" ${CL_CXX_COMPILER})
+endif()
 #The following file set the CONFIGURE_OPTIONS variable
 set (ENABLE_DOXYGEN OFF)
 set (CONFIGURE_OPTIONS  "")
