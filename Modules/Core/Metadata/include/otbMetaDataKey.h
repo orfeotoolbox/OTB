@@ -175,6 +175,7 @@ enum class MDStr
   SensorID,
   Mission,
   Instrument,
+  InstrumentIndex,
   BandName,
   EnhancedBandName,
   ProductType,
