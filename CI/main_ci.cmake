@@ -32,7 +32,9 @@ else()
 endif()
 
 set (CTEST_CMAKE_GENERATOR "Ninja")
-
+if(WIN32)
+  set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "sccache.exe")
+endif()
 # detect short sha
 if(NOT DEFINED ENV{CI_COMMIT_SHORT_SHA})
   execute_process(COMMAND git log -1 --pretty=format:%h

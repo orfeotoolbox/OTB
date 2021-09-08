@@ -31,14 +31,6 @@ BUILD_EXAMPLES:BOOL=ON
 BUILD_SHARED_LIBS:BOOL=ON
 BUILD_TESTING:BOOL=ON")
 
-if(WIN32)
-  set(SCCACHE_C_COMPILER "sccache.exe ${CMAKE_C_COMPILER}")
-  set(SCCACHE_CXX_COMPILER "sccache.exe ${CMAKE_CXX_COMPILER}")
-  set (otb_build_project_option 
-      "${otb_build_project_option}
-      CMAKE_C_COMPILER:FILEPATH=${SCCACHE_C_COMPILER})
-      CMAKE_CXX_COMPILER:FILEPATH=${SCCACHE_CXX_COMPILER}")
-endif()
 
 set (otb_qa_option
 "CMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON")
