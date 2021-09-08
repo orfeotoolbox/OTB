@@ -23,6 +23,14 @@ set ( cmake_configure_option
 "CMAKE_BUILD_TYPE=${CTEST_BUILD_CONFIGURATION}
 CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}")
 
+if(WIN32)
+  set(cmake_configure_option
+"${cmake_configure_option}
+CMAKE_C_COMPILER_LAUNCHER=sccache
+CMAKE_CXX_COMPILER_LAUNCHER=sccache"
+)
+endif()
+
 set ( temporary_option
 "OTB_USE_MPI=OFF")
 
