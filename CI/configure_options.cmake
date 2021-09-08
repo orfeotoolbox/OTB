@@ -31,12 +31,11 @@ BUILD_EXAMPLES:BOOL=ON
 BUILD_SHARED_LIBS:BOOL=ON
 BUILD_TESTING:BOOL=ON")
 
-
 if(WIN32)
   set (otb_build_project_option
-    "${otb_build_project_option}
-    CMAKE_C_COMPILER_LAUNCHER:STRING=sccache
-    CMAKE_CXX_COMPILER_LAUNCHER:STRING=sccache")
+"${otb_build_project_option}
+CMAKE_C_COMPILER_LAUNCHER=sccache
+CMAKE_CXX_COMPILER_LAUNCHER=sccache")
 endif()
 
 set (otb_qa_option
