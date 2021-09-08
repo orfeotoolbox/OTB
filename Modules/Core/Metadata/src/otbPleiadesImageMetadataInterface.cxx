@@ -54,53 +54,6 @@ bool PleiadesImageMetadataInterface::CanRead() const
     return false;
 }
 
-std::string PleiadesImageMetadataInterface::GetInstrument() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (imageKeywordlist.HasKey("support_data.instrument"))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument");
-    return valueString;
-  }
-
-  return "";
-}
-
-std::string PleiadesImageMetadataInterface::GetInstrumentIndex() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Pleiades Image");
-  }
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-  if (imageKeywordlist.HasKey("support_data.instrument_index"))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument_index");
-    return valueString;
-  }
-
-  return ""; // Invalid value
-}
-
-
 void PleiadesImageMetadataInterface::FetchSatAngles(
                     const std::vector<double> & incidenceAngles,
                     const std::vector<double> & alongTrackIncidenceAngles,

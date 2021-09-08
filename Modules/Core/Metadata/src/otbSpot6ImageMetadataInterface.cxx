@@ -48,53 +48,6 @@ bool Spot6ImageMetadataInterface::CanRead() const
     return false;
 }
 
-std::string Spot6ImageMetadataInterface::GetInstrument() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot6 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (imageKeywordlist.HasKey("support_data.instrument"))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument");
-    return valueString;
-  }
-
-  return "";
-}
-
-std::string Spot6ImageMetadataInterface::GetInstrumentIndex() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot6 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-  if (imageKeywordlist.HasKey("support_data.instrument_index"))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument_index");
-    return valueString;
-  }
-
-  return ""; // Invalid value
-}
-
 Spot6ImageMetadataInterface::VariableLengthVectorType Spot6ImageMetadataInterface::GetFirstWavelengths() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();

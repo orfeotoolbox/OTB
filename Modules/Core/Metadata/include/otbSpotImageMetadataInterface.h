@@ -63,12 +63,6 @@ public:
    */
   VariableLengthVectorType GetLastWavelengths() const override;
 
-  /** Get Instrument */
-  std::string GetInstrument() const;
-
-  /** Get Instrument Index */
-  unsigned int GetInstrumentIndex() const;
-
   /** This method is to handle the permutation of the spectral band by some image provider
    * in most cases, this method won't change the value, but for SPOT data, the bands are set up as
    *  2 1 0 3 in the tiff file, this method which is overloaded for SPOT enables to retrieve the

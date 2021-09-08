@@ -42,54 +42,6 @@ bool SpotImageMetadataInterface::CanRead() const
     return false;
 }
 
-std::string SpotImageMetadataInterface::GetInstrument() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (imageKeywordlist.HasKey("support_data.instrument"))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument");
-    return valueString;
-  }
-
-  return "";
-}
-
-unsigned int SpotImageMetadataInterface::GetInstrumentIndex() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-  if (imageKeywordlist.HasKey("support_data.instrument_index"))
-  {
-    std::string  valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument_index");
-    unsigned int value       = atoi(valueString.c_str());
-    return value;
-  }
-
-  return -1; // Invalid value
-}
-
 SpotImageMetadataInterface::VariableLengthVectorType SpotImageMetadataInterface::GetFirstWavelengths() const
 {
   const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
