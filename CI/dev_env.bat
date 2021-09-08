@@ -83,6 +83,13 @@ set PATH=%PATH%;C:\tools\GL\%ARCH%\bin
 :: Setup compiler
 call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" %ARCH% %TARGET% -vcvars_ver=%VCVER%
 
+:: we need to change cache max size using SCCACHE_CACHE_SIZE
+if "%PROJECT%"=="xdk" (
+  set SCCACHE_CACHE_SIZE="3G"
+)
+if "%PROJECT%"=="otb" (
+  set SCCACHE_CACHE_SIZE="2G"
+)
 :: Setup sccache
 set SCCACHE_DIR=C:\sccache\%PROJECT%-%ARCH%-%TARGET%-%VCVER%
 :: SCCACHE DEBUG SETTINGS
@@ -92,13 +99,6 @@ set SCCACHE_DIR=C:\sccache\%PROJECT%-%ARCH%-%TARGET%-%VCVER%
 :: SCCACHE DEBUG SETTINGS
 :: For the output of unhandled panics, since the server sets RUST_BACKTRACE=1.
 
-:: we need to change cache max size using SCCACHE_CACHE_SIZE
-if "%PROJECT%"=="xdk" (
-  set SCCACHE_CACHE_SIZE="3G"
-)
-if "%PROJECT%"=="otb" (
-  set SCCACHE_CACHE_SIZE="2G"
-)
 set PATH=C:\tools\sccache;%PATH%
 
 set IMAGE_NAME=windows-%SHORT_TARGET%-%ARCH%-vc%VCVER%
