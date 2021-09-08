@@ -485,6 +485,8 @@ void FormosatImageMetadataInterface::Parse(ImageMetadata &imd)
   imd.Add(MDTime::AcquisitionDate,
     boost::lexical_cast<MetaData::Time>(dimapData.AcquisitionDate));
 
+  imd.Add(MDStr::Instrument, dimapData.Instrument);
+  imd.Add(MDStr::InstrumentIndex, dimapData.InstrumentIndex);
 
   imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
   imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);

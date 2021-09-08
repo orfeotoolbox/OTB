@@ -120,12 +120,6 @@ IkonosImageMetadataInterface::VariableLengthVectorType IkonosImageMetadataInterf
   return wavel;
 }
 
-std::vector<std::string> IkonosImageMetadataInterface::GetEnhancedBandNames() const
-{
-  // Already done for the current file
-  return this->Superclass::GetBandName();
-}
-
 namespace
 {
   template<class T>

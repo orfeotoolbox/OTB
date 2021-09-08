@@ -193,54 +193,6 @@ unsigned int Spot6ImageMetadataInterface::BandIndexToWavelengthPosition(unsigned
   return i;
 }
 
-std::vector<std::string> Spot6ImageMetadataInterface::GetEnhancedBandNames() const // todo
-{
-  std::vector<std::string> enhBandNames;
-  std::vector<std::string> rawBandNames = this->Superclass::GetBandName();
-
-  if (rawBandNames.size())
-  {
-    for (std::vector<std::string>::iterator it = rawBandNames.begin(); it != rawBandNames.end(); ++it)
-    {
-      // Manage Panchro case
-      if ((rawBandNames.size() == 1) && !(*it).compare("P"))
-      {
-        enhBandNames.push_back("PAN");
-        break;
-      }
-      else if ((rawBandNames.size() != 1) && !(*it).compare("P"))
-      {
-        /* Launch exception situation not valid*/
-        itkExceptionMacro(<< "Invalid Metadata, we cannot provide an consistent name to the band");
-      }
-
-      // Manage MS case
-      if (!(*it).compare("B0"))
-      {
-        enhBandNames.push_back("Blue");
-      }
-      else if (!(*it).compare("B1"))
-      {
-        enhBandNames.push_back("Green");
-      }
-      else if (!(*it).compare("B2"))
-      {
-        enhBandNames.push_back("Red");
-      }
-      else if (!(*it).compare("B3"))
-      {
-        enhBandNames.push_back("NIR");
-      }
-      else
-      {
-        enhBandNames.push_back("Unknown");
-      }
-    }
-  }
-
-  return enhBandNames;
-}
-
 void Spot6ImageMetadataInterface::FetchSpectralSensitivity(const std::string & sensorId, ImageMetadata& imd)
 {
   std::unordered_map<std::string, std::vector<double>> BandNameToSpectralSensitivityTable;
@@ -744,6 +696,9 @@ void Spot6ImageMetadataInterface::Parse(ImageMetadata & imd)
   {
     otbGenericExceptionMacro(MissingMetadataException,<<"Sensor ID doesn't start with SPOT : '"<<dimapData.mission<<"'")
   }
+
+  imd.Add(MDStr::Instrument, dimapData.Instrument);
+  imd.Add(MDStr::InstrumentIndex, dimapData.InstrumentIndex);
 
   imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
   imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);

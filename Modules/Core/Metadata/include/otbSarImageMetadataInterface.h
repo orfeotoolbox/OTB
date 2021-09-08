@@ -96,13 +96,6 @@ public:
 
   virtual const std::string GetAcquisitionMode() const;
 
-  /** Get the enhanced band names (No enhanced band name support for SAR) */
-  StringVectorType GetEnhancedBandNames() const override
-  {
-    StringVectorType nothing;
-    return nothing;
-  }
-
   /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
    * then translate it into ImageMetadata. Handles most SAR sensors.
    * Returns true if succeed. */

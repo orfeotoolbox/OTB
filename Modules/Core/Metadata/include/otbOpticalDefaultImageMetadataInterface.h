@@ -67,13 +67,6 @@ public:
     itkExceptionMacro("GetLastWavelengths not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the enhanced band names (here nothing because the sensor is not identify) */
-  std::vector<std::string> GetEnhancedBandNames() const override
-  {
-    std::vector<std::string> nothing;
-    return nothing;
-  }
-
   bool CanRead() const override
   {
     // This class is the default one, it has to be able to call every metadata

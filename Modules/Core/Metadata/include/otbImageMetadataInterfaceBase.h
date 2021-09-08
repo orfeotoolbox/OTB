@@ -159,8 +159,6 @@ public:
   /** Get the band name from the ossim metadata
    * \deprecated
    */
-  StringVectorType GetBandName() const;
-  // otbMetadataGetMacro(BandName, std::vector<std::string>);
 
   /** Get the x pixel spacing*/
   double GetXPixelSpacing() const;
@@ -169,11 +167,6 @@ public:
   /** Get the y pixel spacing*/
   double GetYPixelSpacing() const;
   // otbMetadataGetMacro(YPixelSpacing, double);
-
-  /** Convert the band names provided by ossim to the official band names  
-   * \deprecated
-   */
-  virtual StringVectorType GetEnhancedBandNames() const {return StringVectorType();}
 
   virtual bool CanRead() const {return false;}
 

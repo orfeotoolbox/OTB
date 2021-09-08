@@ -74,9 +74,6 @@ public:
 
   bool CanRead() const override;
 
-  /** Get the enhanced band names of the Pleiades data */
-  std::vector<std::string> GetEnhancedBandNames() const override;
-
   void Parse(ImageMetadata &) override;
 
 protected:

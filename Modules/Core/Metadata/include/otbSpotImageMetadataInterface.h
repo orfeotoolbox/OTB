@@ -63,14 +63,6 @@ public:
    */
   VariableLengthVectorType GetLastWavelengths() const override;
 
-  /** Get the enhanced band names (here nothing because the metadata did not provide band names)
-   * \deprecated
-   */
-  std::vector<std::string> GetEnhancedBandNames() const override
-  {
-    return this->Superclass::GetBandName();
-  }
-
   /** Get Instrument */
   std::string GetInstrument() const;
 

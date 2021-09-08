@@ -508,6 +508,9 @@ void SpotImageMetadataInterface::Parse(ImageMetadata & imd)
   imd.Add(MDStr::SensorID, "SPOT 5");
   imd.Add(MDStr::Mission, "SPOT 5");
 
+  imd.Add(MDStr::Instrument, dimapData.Instrument);
+  imd.Add(MDStr::InstrumentIndex, dimapData.InstrumentIndex);
+
   imd.Add(MDTime::ProductionDate,
     boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));
   imd.Add(MDTime::AcquisitionDate,

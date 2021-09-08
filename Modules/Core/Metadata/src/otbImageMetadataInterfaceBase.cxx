@@ -385,37 +385,6 @@ unsigned int ImageMetadataInterfaceBase::GetNumberOfBands() const
   return value;
 }
 
-std::vector<std::string> ImageMetadataInterfaceBase::GetBandName() const
-{
-  ImageKeywordlistType          imageKeywordlist;
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  /* band_name attribute is only used by OSSIM metadata reader otherwise it is band_name_list */
-  std::vector<std::string> outputValues;
-  if (!imageKeywordlist.HasKey("support_data.band_name"))
-  {
-    if (imageKeywordlist.HasKey("support_data.band_name_list"))
-    {
-      std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
-      itksys::SystemTools::Split(valueString, outputValues, ' ');
-    }
-    else
-      return outputValues;
-  }
-  else
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.band_name");
-    itksys::SystemTools::Split(valueString, outputValues, '/');
-  }
-
-  return outputValues;
-}
-
 double ImageMetadataInterfaceBase::GetXPixelSpacing() const
 {
   ImageKeywordlistType          imageKeywordlist;
@@ -583,20 +552,6 @@ void ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent)
     os << indent << "SensorID:        " << sensorId << std::endl;
     os << indent << "NumberOfBands:   " << this->GetNumberOfBands() << std::endl;
 
-    std::vector<std::string> bandNameList = this->GetBandName();
-    if (bandNameList.size() == 1)
-    {
-      os << indent << "BandName:        " << bandNameList[0] << std::endl;
-    }
-    else if (bandNameList.size() > 1)
-    {
-      os << indent << "BandNameList:        ";
-      for (std::vector<std::string>::iterator it = bandNameList.begin(); it != bandNameList.end(); ++it)
-      {
-        os << *it << ", ";
-      }
-      os << std::endl;
-    }
     os << indent << "XPixelSpacing:   " << this->GetXPixelSpacing() << std::endl;
     os << indent << "YPixelSpacing:   " << this->GetYPixelSpacing() << std::endl;
   }

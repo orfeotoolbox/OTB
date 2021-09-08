@@ -60,11 +60,6 @@ public:
 
   bool CanRead() const override;
 
-  /** Get the enhanced band names from band names collected by ossim
-   * \deprecated
-   */
-  std::vector<std::string> GetEnhancedBandNames() const override;
-
   void Parse(ImageMetadata &) override;
 
 protected:

@@ -58,9 +58,6 @@ public:
   /** Get the last wavelength for the spectral band definition */
   VariableLengthVectorType GetLastWavelengths() const override;
 
-  /** Get the enhanced band names of QuickBird data */
-  std::vector<std::string> GetEnhancedBandNames() const override;
-
   bool CanRead() const override;
 
 protected:
