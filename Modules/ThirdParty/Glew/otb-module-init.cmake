@@ -22,7 +22,11 @@ find_package(GLEW REQUIRED)
 
 # FIX: glew-config.cmake import GLEW::GLEW target but does not necessarily set GLEW_LIBRARY
 if(NOT GLEW_LIBRARY)
-  get_target_property(GLEW_LIBRARY GLEW::GLEW IMPORTED_IMPLIB_RELEASE)
+  if(WIN32)
+    get_target_property(GLEW_LIBRARY GLEW::GLEW IMPORTED_IMPLIB_RELEASE)
+  else()
+    get_target_property(GLEW_LIBRARY GLEW::GLEW IMPORTED_LOCATION_RELEASE)
+  endif()
 endif()
 
 mark_as_advanced(GLEW_INCLUDE_DIR)
