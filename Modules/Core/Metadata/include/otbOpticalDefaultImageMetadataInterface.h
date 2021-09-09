@@ -55,18 +55,6 @@ public:
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
-  /** Get the first wavelength for the spectral band definition */
-  VariableLengthVectorType GetFirstWavelengths() const override
-  {
-    itkExceptionMacro("GetFirstWavelengths not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the last wavelength for the spectral band definition */
-  VariableLengthVectorType GetLastWavelengths() const override
-  {
-    itkExceptionMacro("GetLastWavelengths not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
-  }
-
   bool CanRead() const override
   {
     // This class is the default one, it has to be able to call every metadata

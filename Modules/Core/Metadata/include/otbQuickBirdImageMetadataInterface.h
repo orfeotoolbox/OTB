@@ -52,12 +52,6 @@ public:
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
   typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
-  /** Get the first wavelength for the spectral band definition */
-  VariableLengthVectorType GetFirstWavelengths() const override;
-
-  /** Get the last wavelength for the spectral band definition */
-  VariableLengthVectorType GetLastWavelengths() const override;
-
   bool CanRead() const override;
 
 protected:

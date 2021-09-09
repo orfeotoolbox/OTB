@@ -36,12 +36,6 @@ unsigned int OpticalImageMetadataInterface::BandIndexToWavelengthPosition(unsign
 void OpticalImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-
-  if (this->CanRead())
-  {
-    os << indent << "GetFirstWavelengths: " << this->GetFirstWavelengths() << std::endl;
-    os << indent << "GetLastWavelengths:  " << this->GetLastWavelengths() << std::endl;
-  }
 }
 
 } // end namespace otb
