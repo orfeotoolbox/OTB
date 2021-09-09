@@ -156,18 +156,6 @@ public:
   UnsignedIntType GetNumberOfBands() const;
   // otbMetadataGetMacro(NumberOfBands, unsigned int);
 
-  /** Get the band name from the ossim metadata
-   * \deprecated
-   */
-
-  /** Get the x pixel spacing*/
-  double GetXPixelSpacing() const;
-  // otbMetadataGetMacro(XPixelSpacing, double);
-
-  /** Get the y pixel spacing*/
-  double GetYPixelSpacing() const;
-  // otbMetadataGetMacro(YPixelSpacing, double);
-
   virtual bool CanRead() const {return false;}
 
   /** Parses the metadata using the MetadataSupplierInterface and fill the ImageMetadata object
