@@ -27,7 +27,7 @@ else()
   set(IMPORTEDLIB_NAME IMPORTED_LOCATION_RELEASE)
 endif()
 if(NOT GLEW_LIBRARY)
-  get_target_property(GLEW_LIBRARY GLEW::GLEW IMPORTEDLIB_NAME
+  get_target_property(GLEW_LIBRARY GLEW::GLEW IMPORTEDLIB_NAME)
 endif()
 
 mark_as_advanced(GLEW_INCLUDE_DIR)
