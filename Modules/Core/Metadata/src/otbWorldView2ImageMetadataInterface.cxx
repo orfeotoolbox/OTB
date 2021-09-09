@@ -1215,7 +1215,6 @@ void WorldView2ImageMetadataInterface::Parse(ImageMetadata &imd)
     for (const auto & bandName : metadata.bandNameList)
     {
       bandIt->Add(MDStr::BandName, bandName);
-      bandIt++;
 
       auto it = bandNameToEnhancedBandName.find(bandName);
       if (it != bandNameToEnhancedBandName.end())
@@ -1226,6 +1225,7 @@ void WorldView2ImageMetadataInterface::Parse(ImageMetadata &imd)
       {
         bandIt->Add(MDStr::EnhancedBandName, "Unknown");
       }
+      bandIt++;
     }
   }
   else

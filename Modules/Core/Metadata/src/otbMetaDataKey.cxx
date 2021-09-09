@@ -433,7 +433,7 @@ MDStrBmType MDStrNames = bimapGenerator<MDStr>(std::map<MDStr, std::string> {
   {MDStr::SensorID,"SensorID"},
   {MDStr::Mission,"Mission"},
   {MDStr::Instrument,"Instrument"},
-  {MDStr::Instrument,"InstrumentIndex"},
+  {MDStr::InstrumentIndex,"InstrumentIndex"},
   {MDStr::ProductType,"ProductType"},
   {MDStr::GeometricLevel,"GeometricLevel"},
   {MDStr::RadiometricLevel,"RadiometricLevel"},
