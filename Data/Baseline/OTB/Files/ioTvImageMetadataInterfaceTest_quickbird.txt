@@ -17,6 +17,7 @@ ProductionDate 2006-02-12T17:51:57Z
 RPC <RPCParam>
 GCP <GCPParam>
 BandName P
+EnhancedBandName PAN
 PhysicalGain 11.3895
 PhysicalBias 0
 SolarIrradiance 1381.79
