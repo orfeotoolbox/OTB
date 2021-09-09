@@ -421,8 +421,6 @@ void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) 
     for(const auto& s: this->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree())
       os << s << " ";
     os << "\n"
-       << indent << "GetPRF:                  " << this->GetPRF() << "\n"
-       << indent << "GetRSF:                  " << this->GetRSF() << "\n"
        << indent << "GetRadarFrequency:       " << this->GetRadarFrequency() << "\n";
 //       << indent << "GetCenterIncidenceAngle: " << this->GetCenterIncidenceAngle() << std::endl;
   }

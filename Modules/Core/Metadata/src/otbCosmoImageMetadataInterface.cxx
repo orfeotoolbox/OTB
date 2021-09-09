@@ -75,26 +75,6 @@ void CosmoImageMetadataInterface::ParseDateTime(std::string key, std::vector<int
   }
 }
 
-double CosmoImageMetadataInterface::GetPRF() const
-{
-  double                     value            = 0;
-  const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
-  if (!imageKeywordlist.HasKey("support_data.pulse_repetition_frequency"))
-  {
-    return value;
-  }
-
-  value = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("support_data.pulse_repetition_frequency"),
-                                     "support_data.pulse_repetition_frequency(double)");
-
-  return value;
-}
-
-double CosmoImageMetadataInterface::GetRSF() const
-{
-  return 0;
-}
-
 double CosmoImageMetadataInterface::GetRadarFrequency() const
 {
   return 0;

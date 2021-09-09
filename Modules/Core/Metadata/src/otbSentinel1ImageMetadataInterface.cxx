@@ -371,26 +371,6 @@ void Sentinel1ImageMetadataInterface::ParseDateTime(const char* key, std::vector
   }
 }
 
-double Sentinel1ImageMetadataInterface::GetPRF() const
-{
-  double                     value            = 0;
-  const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
-  if (!imageKeywordlist.HasKey("support_data.pulse_repetition_frequency"))
-  {
-    return value;
-  }
-
-  value = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("support_data.pulse_repetition_frequency"),
-                                     "support_data.pulse_repetition_frequency(double)");
-
-  return value;
-}
-
-double Sentinel1ImageMetadataInterface::GetRSF() const
-{
-  return 0;
-}
-
 double Sentinel1ImageMetadataInterface::GetRadarFrequency() const
 {
   return 0;

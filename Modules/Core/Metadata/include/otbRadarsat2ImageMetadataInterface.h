@@ -58,11 +58,6 @@ public:
   /** check sensor ID */
   bool CanRead() const override;
 
-  /*SarImageMetadataInterface pure virtuals rituals */
-  double GetPRF() const override;
-
-  double GetRSF() const override;
-
   double GetRadarFrequency() const override;
 
   double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override;

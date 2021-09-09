@@ -80,12 +80,6 @@ public:
   /** Get the radar frequency */
   double GetRadarFrequency() const override;
 
-  /** Get the PRF */
-  double GetPRF() const override;
-
-  /** Get the RSF */
-  double GetRSF() const override;
-
   /** Get the number of corner incidence angles */
   unsigned int GetNumberOfCornerIncidenceAngles(const MetadataSupplierInterface&) const;
 

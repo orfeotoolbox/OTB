@@ -374,67 +374,6 @@ double TerraSarXSarImageMetadataInterface::GetRadarFrequency() const
   return freq;
 }
 
-double TerraSarXSarImageMetadataInterface::GetPRF() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-  std::string valueString = imageKeywordlist.GetMetadataByKey("sensor_params.prf");
-
-  double freq = 0;
-  try
-    {
-      freq = std::stod(valueString);
-    }
-  catch( ... )
-    {
-      // Throw an exception
-      throw std::runtime_error("Failed to convert PRF.");
-    }
-
-  return freq;
-}
-
-double TerraSarXSarImageMetadataInterface::GetRSF() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("sensor_params.sampling_frequency");
-
-  double freq = 0;
-  try
-    {
-      freq = std::stod(valueString);
-    }
-  catch( ... )
-    {
-      // Throw an exception
-      throw std::runtime_error("Failed to convert RSF.");
-    }
-
-  return freq;
-}
-
 unsigned int TerraSarXSarImageMetadataInterface::GetNumberOfCornerIncidenceAngles(const MetadataSupplierInterface& mds) const
 {
   auto ret = mds.GetAs<unsigned int>(0, "sceneCoord.numberOfSceneCornerCoord");

@@ -140,16 +140,6 @@ void Radarsat2ImageMetadataInterface::ParseDateTime(const char* key, std::vector
 
 
 
-double Radarsat2ImageMetadataInterface::GetPRF() const
-{
-  return 0;
-}
-
-double Radarsat2ImageMetadataInterface::GetRSF() const
-{
-  return 0;
-}
-
 double Radarsat2ImageMetadataInterface::GetRadarFrequency() const
 {
   return 0;
@@ -236,8 +226,8 @@ void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Add(MDTime::ProductionDate, ProductMS.GetFirstAs<MetaData::Time>("product.imageGenerationParameters.generalProcessingInformation.processingTime"));
   imd.Add(MDNum::AverageSceneHeight, ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
   imd.Add(MDNum::RadarFrequency, this->GetRadarFrequency());
-  imd.Add(MDNum::PRF, this->GetPRF());
-  imd.Add(MDNum::RSF, this->GetRSF());
+//  imd.Add(MDNum::PRF, 0.); // not parsed
+//  imd.Add(MDNum::RSF, 0.); // not parsed
   imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle(ProductMS));
   imd.Add(MDNum::CalScale, 1.0);
 
@@ -278,8 +268,8 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
       imd.Add(MDNum::AverageSceneHeight,
           ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
       imd.Add(MDNum::RadarFrequency, this->GetRadarFrequency());
-      imd.Add(MDNum::PRF, this->GetPRF());
-      imd.Add(MDNum::RSF, this->GetRSF());
+//    imd.Add(MDNum::PRF, 0.); // not parsed
+//    imd.Add(MDNum::RSF, 0.); // not parsed
       imd.Add(MDNum::CenterIncidenceAngle, this->GetCenterIncidenceAngle(ProductMS));
       imd.Add(MDStr::BeamMode, ProductMS.GetAs<std::string>("product.sourceAttributes.beamModeMnemonic"));
       imd.Add("FACILITY_IDENTIFIER", ProductMS.GetAs<std::string>("product.sourceAttributes.inputDatasetFacilityId"));

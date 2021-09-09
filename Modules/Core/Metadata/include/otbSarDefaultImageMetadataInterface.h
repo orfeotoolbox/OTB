@@ -118,18 +118,6 @@ public:
     itkExceptionMacro("GetRadiometricCalibrationNoisePolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the PRF */
-  double GetPRF() const override
-  {
-    itkExceptionMacro("GetPRF not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the RSF */
-  double GetRSF() const override
-  {
-    itkExceptionMacro("GetRSF not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
   /** Get the radar frequency */
   double GetRadarFrequency() const override
   {
