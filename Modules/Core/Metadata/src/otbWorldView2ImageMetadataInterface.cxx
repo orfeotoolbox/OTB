@@ -1209,7 +1209,7 @@ void WorldView2ImageMetadataInterface::Parse(ImageMetadata &imd)
   {
     const std::unordered_map<std::string, std::string> bandNameToEnhancedBandName =
       {{"C", "Coastal"}, {"B", "Blue"}, {"G", "Green"}, {"Y", "Yellow"}, {"R", "Red"},
-         {"RE", "RedEdge"}, {"N", "NIR1"}, {"N2", "NIR2"}};
+         {"RE", "RedEdge"}, {"N", "NIR1"}, {"N2", "NIR2"}, {"P", "PAN"}};
 
     auto bandIt = imd.Bands.begin();
     for (const auto & bandName : metadata.bandNameList)
