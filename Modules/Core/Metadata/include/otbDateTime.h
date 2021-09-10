@@ -205,7 +205,7 @@ public:
   std::ostream & Display(std::ostream & os) const { return os << m_Duration; }
   std::istream & Read   (std::istream & is)       { return is >> m_Duration; }
 
-  friend Duration Abs(Duration d);
+  OTBMetadata_EXPORT friend Duration Abs(Duration d);
 
 private:
   InternalDurationType m_Duration;
