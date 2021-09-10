@@ -51,7 +51,6 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
   typedef FilterFunctionValues                              FilterFunctionValuesType;
   typedef otb::ObjectList<FilterFunctionValuesType>         InternalWavelengthSpectralBandVectorType;

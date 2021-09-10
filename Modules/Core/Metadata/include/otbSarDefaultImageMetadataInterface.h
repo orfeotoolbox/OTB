@@ -55,7 +55,6 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
   typedef itk::PointSet<double, 2> PointSetType;
   typedef PointSetType::Pointer   PointSetPointer;
   typedef double                  RealType;
