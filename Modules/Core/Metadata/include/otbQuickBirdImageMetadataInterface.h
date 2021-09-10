@@ -50,7 +50,6 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
   bool CanRead() const override;
 

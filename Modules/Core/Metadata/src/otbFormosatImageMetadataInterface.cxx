@@ -24,7 +24,6 @@
 #include "otbMacro.h"
 #include "otbMath.h"
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
 #include "otbStringUtils.h"
 
 #include "otbDimapMetadataHelper.h"

@@ -23,7 +23,6 @@
 
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
 #include "otbGeometryMetadata.h"
 #include "otbStringUtils.h"
 

@@ -24,20 +24,11 @@
 
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
 #include "otbXMLMetadataSupplier.h"
 
 #include "otbSentinel1CalibrationLookupData.h"
 #include "otbSentinel1ThermalNoiseLookupData.h"
 
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#include "ossim/ossimTimeUtilities.h"
-#pragma GCC diagnostic pop
-#else
-#include "ossim/ossimTimeUtilities.h"
-#endif
 #include "itksys/SystemTools.hxx"
 #include "otbSpatialReference.h"
 
@@ -348,32 +339,6 @@ bool Sentinel1ImageMetadataInterface::CreateThermalNoiseLookupData(SARCalib& sar
   sarCalib.calibrationLookupData[SarCalibrationLookupData::NOISE] = noiseSarLut;
 
   return true;
-}
-
-void Sentinel1ImageMetadataInterface::ParseDateTime(const char* key, std::vector<int>& dateFields) const
-{
-  if (dateFields.size() < 1)
-  {
-    // parse from keyword list
-    if (!this->CanRead())
-    {
-      itkExceptionMacro(<< "Invalid Metadata, not a valid product");
-    }
-
-    const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
-    if (!imageKeywordlist.HasKey(key))
-    {
-      itkExceptionMacro(<< "no key named " << key);
-    }
-
-    const std::string date_time_str = imageKeywordlist.GetMetadataByKey(key);
-    Utils::ConvertStringToVector(date_time_str, dateFields, key, "T:-.");
-  }
-}
-
-double Sentinel1ImageMetadataInterface::GetRadarFrequency() const
-{
-  return 0;
 }
 
 double Sentinel1ImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface &) const

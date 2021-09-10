@@ -61,11 +61,6 @@ public:
   typedef double                  RealType;
   typedef PointSetType::PointType PointType;
 
-  RealType GetRadiometricCalibrationScale() const override
-  {
-    itkExceptionMacro("GetRadiometricCalibrationScale() not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
   PointSetPointer GetRadiometricCalibrationAntennaPatternNewGain() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationAntennaPatternNewGain() not implemented in SarDefaultImageMetadataInterface, no captor type found");
@@ -116,12 +111,6 @@ public:
   ArrayIndexType GetRadiometricCalibrationNoisePolynomialDegree() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationNoisePolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the radar frequency */
-  double GetRadarFrequency() const override
-  {
-    itkExceptionMacro("GetRadarFrequency not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the center incidence angle */

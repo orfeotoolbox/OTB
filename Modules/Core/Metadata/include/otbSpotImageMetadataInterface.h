@@ -51,7 +51,6 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
   /** This method is to handle the permutation of the spectral band by some image provider
    * in most cases, this method won't change the value, but for SPOT data, the bands are set up as

@@ -24,15 +24,6 @@
 
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#include "ossim/ossimTimeUtilities.h"
-#pragma GCC diagnostic pop
-#else
-#include "ossim/ossimTimeUtilities.h"
-#endif
 
 // useful constants
 #include <otbMath.h>
@@ -52,32 +43,6 @@ bool CosmoImageMetadataInterface::CanRead() const
   const std::string sensorID = GetSensorID();
 
   return sensorID.find("CSK") != std::string::npos;
-}
-
-void CosmoImageMetadataInterface::ParseDateTime(std::string key, std::vector<int>& dateFields) const
-{
-  if (dateFields.empty())
-  {
-    // parse from keyword list
-    if (!this->CanRead())
-    {
-      itkExceptionMacro(<< "Invalid Metadata, not a valid product");
-    }
-
-    const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
-    if (!imageKeywordlist.HasKey(key))
-    {
-      itkExceptionMacro(<< "no key named " << key);
-    }
-
-    const std::string date_time_str = imageKeywordlist.GetMetadataByKey(key);
-    Utils::ConvertStringToVector(date_time_str, dateFields, key, "T:-.");
-  }
-}
-
-double CosmoImageMetadataInterface::GetRadarFrequency() const
-{
-  return 0;
 }
 
 double CosmoImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface &) const

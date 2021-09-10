@@ -23,7 +23,6 @@
 
 #include "otbStringUtils.h"
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
 
 #include "itksys/SystemTools.hxx"
 #include "otbStringUtilities.h"

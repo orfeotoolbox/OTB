@@ -70,8 +70,6 @@ public:
 
   virtual bool HasCalibrationLookupDataFlag(const MetadataSupplierInterface&) const;
 
-  virtual RealType GetRadiometricCalibrationScale() const;
-
   virtual PointSetPointer GetRadiometricCalibrationAntennaPatternNewGain() const;
   virtual PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
   virtual PointSetPointer GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface &) const;
@@ -84,20 +82,10 @@ public:
   virtual ArrayIndexType GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const;
   virtual ArrayIndexType GetRadiometricCalibrationNoisePolynomialDegree() const;
 
-  virtual double GetRadarFrequency() const       = 0;
   virtual double GetCenterIncidenceAngle(const MetadataSupplierInterface& mds) const = 0;
 
 
   virtual double GetRescalingFactor() const;
-
-  virtual const std::string GetProductType() const;
-
-  virtual const std::string GetAcquisitionMode() const;
-
-  /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
-   * then translate it into ImageMetadata. Handles most SAR sensors.
-   * Returns true if succeed. */
-  bool ConvertImageKeywordlistToImageMetadata(ImageMetadata &) override;
 
   virtual void ParseGdal(ImageMetadata &) =0;
   virtual void ParseGeom(ImageMetadata &) =0;

@@ -57,7 +57,6 @@ public:
   typedef itk::MetaDataDictionary               MetaDataDictionaryType;
   typedef MetaDataKey::VectorType               VectorType;
   typedef MetaDataKey::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType      ImageKeywordlistType;
   typedef std::vector<double>                   DoubleVectorType;
   typedef std::vector<DoubleVectorType>         DoubleVectorVectorType;
   typedef std::vector<unsigned int>             UIntVectorType;
@@ -66,25 +65,11 @@ public:
   typedef Superclass::PointSetPointer PointSetPointer;
   typedef double                      RealType;
 
-  /** Get the calibration.calFactor : generationTime variable
-   * \deprecated
-   */
-  double GetCalibrationFactor() const;
-
   /** Get the number of noise records */
   unsigned int GetNumberOfNoiseRecords(const MetadataSupplierInterface&, const unsigned int) const;
 
-  /** Get the polynomial degree list */
-  UIntVectorType GetNoisePolynomialDegrees(const MetadataSupplierInterface &mds, const unsigned int polLayer) const;
-
-  /** Get the radar frequency */
-  double GetRadarFrequency() const override;
-
   /** Get the number of corner incidence angles */
   unsigned int GetNumberOfCornerIncidenceAngles(const MetadataSupplierInterface&) const;
-
-  /** Get the Mean Incidence angles */
-  double GetMeanIncidenceAngles(const MetadataSupplierInterface&) const;
 
   /** Get the center incidence angle */
   double GetCenterIncidenceAngle(const MetadataSupplierInterface& mds) const override;
@@ -97,9 +82,6 @@ public:
 
   /** Get the corners index */
   IndexVectorType GetCornersIncidenceAnglesIndex(const MetadataSupplierInterface&) const;
-
-  /** Get the constant calibration factor */
-  RealType GetRadiometricCalibrationScale() const override;
 
   PointSetPointer GetRadiometricCalibrationNoise(const MetadataSupplierInterface&, const ImageMetadata&, const std::string& b="") const override;
   ArrayIndexType GetRadiometricCalibrationNoisePolynomialDegree() const override;

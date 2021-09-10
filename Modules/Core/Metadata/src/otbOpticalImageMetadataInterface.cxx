@@ -22,7 +22,6 @@
 #include "otbOpticalImageMetadataInterface.h"
 
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
 
 namespace otb
 {

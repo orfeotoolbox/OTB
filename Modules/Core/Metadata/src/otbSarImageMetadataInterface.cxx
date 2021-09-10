@@ -23,7 +23,6 @@
 
 #include "otbMath.h"
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
 #include "otbSARMetadata.h"
 
 namespace otb
@@ -31,52 +30,6 @@ namespace otb
 
 SarImageMetadataInterface::SarImageMetadataInterface()
 {
-}
-
-const std::string SarImageMetadataInterface::GetProductType() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (imageKeywordlist.HasKey("support_data.product_type"))
-  {
-    const std::string product_type = imageKeywordlist.GetMetadataByKey("support_data.product_type");
-    return product_type;
-  }
-  return "";
-}
-
-const std::string SarImageMetadataInterface::GetAcquisitionMode() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (imageKeywordlist.HasKey("support_data.acquisition_mode"))
-  {
-    const std::string acquisition_mode = imageKeywordlist.GetMetadataByKey("support_data.acquisition_mode");
-    return acquisition_mode;
-  }
-  return "";
 }
 
 bool SarImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarCalib, const ImageMetadata&, const MetadataSupplierInterface &mds, const bool) const
@@ -96,11 +49,6 @@ bool SarImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarCalib, 
 bool SarImageMetadataInterface::HasCalibrationLookupDataFlag(const MetadataSupplierInterface&) const
 {
   return false;
-}
-
-SarImageMetadataInterface::RealType SarImageMetadataInterface::GetRadiometricCalibrationScale() const
-{
-  return static_cast<SarImageMetadataInterface::RealType>(1.0);
 }
 
 SarImageMetadataInterface::PointSetPointer SarImageMetadataInterface::GetConstantValuePointSet(const RealType& value) const
@@ -391,9 +339,7 @@ void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) 
 
   if (this->CanRead())
   {
-    os << indent << "GetRadiometricCalibrationScale:                 " << this->GetRadiometricCalibrationScale() << "\n"
-//       << indent << "GetRadiometricCalibrationNoise:                 " << this->GetRadiometricCalibrationNoise() << "\n"
-       << indent << "GetRadiometricCalibrationAntennaPatternNewGain: " << this->GetRadiometricCalibrationAntennaPatternNewGain() << "\n"
+    os << indent << "GetRadiometricCalibrationAntennaPatternNewGain: " << this->GetRadiometricCalibrationAntennaPatternNewGain() << "\n"
        << indent << "GetRadiometricCalibrationAntennaPatternOldGain: " << this->GetRadiometricCalibrationAntennaPatternOldGain() << "\n"
 //       << indent << "GetRadiometricCalibrationIncidenceAngle:        " << this->GetRadiometricCalibrationIncidenceAngle() << "\n"
        << indent << "GetRadiometricCalibrationRangeSpreadLoss:       " << this->GetRadiometricCalibrationRangeSpreadLoss() << "\n"
@@ -420,16 +366,8 @@ void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) 
        << indent << "GetRadiometricCalibrationRangeSpreadLossPolynomialDegree:       ";
     for(const auto& s: this->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree())
       os << s << " ";
-    os << "\n"
-       << indent << "GetRadarFrequency:       " << this->GetRadarFrequency() << "\n";
-//       << indent << "GetCenterIncidenceAngle: " << this->GetCenterIncidenceAngle() << std::endl;
+    os << "\n";
   }
-}
-
-bool SarImageMetadataInterface::ConvertImageKeywordlistToImageMetadata(ImageMetadata&)
-{
-  // TODO
-  return false;
 }
 
 } // end namespace otb

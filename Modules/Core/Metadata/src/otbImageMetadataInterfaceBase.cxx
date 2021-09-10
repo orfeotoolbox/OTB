@@ -695,10 +695,4 @@ const boost::any& ImageMetadataInterfaceBase::FetchRPC(
   return imd[MDGeom::RPC];
 }
 
-bool ImageMetadataInterfaceBase::ConvertImageKeywordlistToImageMetadata(ImageMetadata &)
-{
-  // by default, no conversion
-  return false;
-}
-
 } // end namespace otb
