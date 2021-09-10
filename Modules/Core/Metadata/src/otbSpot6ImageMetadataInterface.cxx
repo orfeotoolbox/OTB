@@ -47,29 +47,6 @@ bool Spot6ImageMetadataInterface::CanRead() const
     return false;
 }
 
-// TODO MSD need to update this function
-// Comment this part as relative response
-// FIXME check if this is coherent with other sensor
-unsigned int Spot6ImageMetadataInterface::BandIndexToWavelengthPosition(unsigned int i) const // todo
-{
-  int nbBands = this->GetNumberOfBands();
-  // Panchromatic case
-  if (nbBands == 1)
-  {
-    return 0;
-  }
-  else
-  {
-    otbMsgDevMacro(<< "Spot6 detected: first file component is red band and third component is blue one");
-    if (i == 0)
-      return 2;
-    if (i == 2)
-      return 0;
-  }
-
-  return i;
-}
-
 void Spot6ImageMetadataInterface::FetchSpectralSensitivity(const std::string & sensorId, ImageMetadata& imd)
 {
   std::unordered_map<std::string, std::vector<double>> BandNameToSpectralSensitivityTable;

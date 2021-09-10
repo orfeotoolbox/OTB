@@ -365,26 +365,6 @@ bool ImageMetadataInterfaceBase::GetSensorID(std::string& sensorId) const
   return true;
 }
 
-unsigned int ImageMetadataInterfaceBase::GetNumberOfBands() const
-{
-  ImageKeywordlistType          imageKeywordlist;
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("support_data.number_bands"))
-  {
-    return 0;
-  }
-
-  std::string  valueString = imageKeywordlist.GetMetadataByKey("support_data.number_bands");
-  unsigned int value       = atoi(valueString.c_str());
-  return value;
-}
-
 void ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict)
 {
 
@@ -496,7 +476,6 @@ void ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent)
     std::string sensorId;
     this->GetSensorID(sensorId);
     os << indent << "SensorID:        " << sensorId << std::endl;
-    os << indent << "NumberOfBands:   " << this->GetNumberOfBands() << std::endl;
   }
 }
 

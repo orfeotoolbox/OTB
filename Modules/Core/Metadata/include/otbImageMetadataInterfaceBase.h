@@ -150,12 +150,6 @@ public:
 
   // otbMetadataGetMacro(SensorID, std::string);
 
-  /** Get the number of bands from the ossim metadata
-   * \deprecated
-   */
-  UnsignedIntType GetNumberOfBands() const;
-  // otbMetadataGetMacro(NumberOfBands, unsigned int);
-
   virtual bool CanRead() const {return false;}
 
   /** Parses the metadata using the MetadataSupplierInterface and fill the ImageMetadata object

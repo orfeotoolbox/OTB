@@ -93,29 +93,6 @@ void PleiadesImageMetadataInterface::FetchSatAngles(
   }
 }
 
-// TODO MSD need to update this function
-// Comment this part as relative response
-// FIXME check if this is coherent with other sensor
-unsigned int PleiadesImageMetadataInterface::BandIndexToWavelengthPosition(unsigned int i) const
-{
-  int nbBands = this->GetNumberOfBands();
-  // Panchromatic case
-  if (nbBands == 1)
-  {
-    return 0;
-  }
-  else
-  {
-    otbMsgDevMacro(<< "Pleiades detected: first file component is red band and third component is blue one");
-    if (i == 0)
-      return 2;
-    if (i == 2)
-      return 0;
-  }
-
-  return i;
-}
-
 void PleiadesImageMetadataInterface::FetchTabulatedPhysicalGain(const MetaData::Time & date, ImageMetadata& imd)
 {
   // We use here tabulate in flight values for physical gain of PHR. Those values evolve
