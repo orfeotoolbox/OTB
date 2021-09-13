@@ -24,7 +24,7 @@ add_executable(FilteringPipeline FilteringPipeline.cxx)
 target_link_libraries(FilteringPipeline ${OTB_LIBRARIES})
 
 add_executable(HelloWorldOTB HelloWorldOTB.cxx)
-target_link_libraries(HelloWorldOTB ${OTB_LIBRARIES})
+target_link_libraries(HelloWorldOTB ${OTB_LIBRARIES} ${OTBBoost_LIBRARIES})
 
 add_executable(Multispectral Multispectral.cxx)
 target_link_libraries(Multispectral ${OTB_LIBRARIES})
