@@ -36,3 +36,10 @@ if(WIN32)
   # disable autolinking in boost
 	add_definitions( -DBOOST_ALL_NO_LIB )
 endif()
+
+if(NOT USE_SYSTEM_BOOST)
+  #Force boost not to search system paths when using boost from superbuild
+  set(Boost_NO_SYSTEM_PATHS ON)
+else()
+  set(Boost_NO_SYSTEM_PATHS OFF)
+endif()
