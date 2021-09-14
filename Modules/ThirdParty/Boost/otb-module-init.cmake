@@ -22,6 +22,13 @@ set(Boost_USE_STATIC_LIBS OFF CACHE BOOL "use static libraries from boost")
 
 set(Boost_USE_MULTITHREADED ON CACHE BOOL "use multi-threaded libraries from boost")
 
+if(NOT USE_SYSTEM_BOOST)
+  #Force boost not to search system paths when using boost from superbuild
+  set(Boost_NO_SYSTEM_PATHS ON)
+else()
+  set(Boost_NO_SYSTEM_PATHS OFF)
+endif()
+
 find_package (Boost 1.35.0 REQUIRED COMPONENTS filesystem date_time)
 if (BUILD_TESTING)
   find_package (Boost 1.35.0 QUIET COMPONENTS filesystem unit_test_framework date_time)
@@ -35,11 +42,4 @@ endif() #BUILD_TESTING
 if(WIN32)
   # disable autolinking in boost
 	add_definitions( -DBOOST_ALL_NO_LIB )
-endif()
-
-if(NOT USE_SYSTEM_BOOST)
-  #Force boost not to search system paths when using boost from superbuild
-  set(Boost_NO_SYSTEM_PATHS ON)
-else()
-  set(Boost_NO_SYSTEM_PATHS OFF)
 endif()
