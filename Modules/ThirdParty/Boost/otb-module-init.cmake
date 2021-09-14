@@ -22,9 +22,13 @@ set(Boost_USE_STATIC_LIBS OFF CACHE BOOL "use static libraries from boost")
 
 set(Boost_USE_MULTITHREADED ON CACHE BOOL "use multi-threaded libraries from boost")
 
-if(NOT USE_SYSTEM_BOOST)
-  #Force boost not to search system paths when using boost from superbuild
-  set(Boost_NO_SYSTEM_PATHS ON)
+if(DEFINED USE_SYSTEM_BOOST)
+  if(NOT USE_SYSTEM_BOOST)
+    #Force boost not to search system paths when using boost from superbuild
+    set(Boost_NO_SYSTEM_PATHS ON)
+  else()
+    set(Boost_NO_SYSTEM_PATHS OFF)
+  endif()
 else()
   set(Boost_NO_SYSTEM_PATHS OFF)
 endif()
