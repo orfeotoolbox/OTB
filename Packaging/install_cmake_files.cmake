@@ -47,5 +47,7 @@ function(install_cmake_files)
   foreach(_boost_module_file ${_boost_modules_cmake})
     install_without_message("${_boost_module_file}" "lib/cmake")
   endforeach()
+  file(GLOB _boost_detect_file "${SUPERBUILD_INSTALL_DIR}/lib/cmake/BoostDetectToolset-*.cmake")
+  install(FILES ${_boost_detect_file} DESTINATION "${PKG_STAGE_DIR}/lib/cmake")
 
 endfunction()
