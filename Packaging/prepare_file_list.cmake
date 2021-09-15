@@ -41,6 +41,9 @@ function(prepare_file_list file_list_result)
     list(APPEND file_list "${_configured}")
   endforeach()
 
+  file(GLOB _boost_detect_file "${SUPERBUILD_INSTALL_DIR}/lib/cmake/BoostDetectToolset-*.cmake")
+  list(APPEND file_list "${_boost_detect_file}")
+
   if(HAVE_PYTHON)
     list(APPEND file_list "_otbApplication${PYMODULE_EXT}")
   endif()
