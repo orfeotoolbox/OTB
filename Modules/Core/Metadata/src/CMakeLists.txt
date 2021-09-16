@@ -74,7 +74,7 @@ set(OTBMetadata_SRC
   otbImageMetadata.cxx
   otbGeometryMetadata.cxx
   otbSARMetadata.cxx
-  
+
   otbGeomMetadataSupplier.cxx
   otbXMLMetadataSupplier.cxx
 
@@ -90,7 +90,6 @@ target_link_libraries(OTBMetadata
   ${OTBBoost_LIBRARIES}
   ${OTBCommon_LIBRARIES}
   ${OTBOSSIMAdapters_LIBRARIES}
-  ${Boost_LIBRARIES}
   ${OTBGdalAdapters_LIBRARIES}
   ${OTBBoostAdapters_LIBRARIES}
   )

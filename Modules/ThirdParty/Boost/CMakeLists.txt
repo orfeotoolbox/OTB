@@ -29,9 +29,15 @@ set(OTBBoost_INCLUDE_DIRS ${OTBBoost_SOURCE_DIR}/src)
 # named 'unit_testing_framework' is used in two tests.
 # why drag a semi-standard c++ library for use in two tests?.
 # Update OTB 8.0: link with boost libraries as boost::date_time and boost::filesystem are used extensively in core modules.
-#if(Boost_LIBRARIES)
-#   set(OTBBoost_LIBRARIES "${Boost_LIBRARIES}")
-#endif()
+if(Boost_LIBRARIES)
+  set(OTBBoost_IMPORTED_LIBRARIES)
+  foreach(current_LIB ${Boost_LIBRARIES})
+    get_target_property(OTBBoost_current_LIB ${current_LIB} IMPORTED_LOCATION_RELEASE)
+    list(APPEND OTBBoost_IMPORTED_LIBRARIES ${OTBBoost_current_LIB})
+  endforeach()
+   set(OTBBoost_LIBRARIES "${OTBBoost_IMPORTED_LIBRARIES}")
+   set(OTBBoost_SYSTEM_LIBRARY_DIRS "${Boost_LIBRARY_DIRS}")
+endif()
 
 set(Boost_VERSION_STRING "${Boost_MAJOR_VERSION}.${Boost_MINOR_VERSION}.${Boost_SUBMINOR_VERSION}" CACHE INTERNAL "" FORCE)
 

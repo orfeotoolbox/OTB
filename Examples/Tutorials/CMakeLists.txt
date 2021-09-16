@@ -20,27 +20,24 @@
 
 project(TutorialsExamples)
 
-find_package (Boost REQUIRED COMPONENTS filesystem date_time)
-
 add_executable(FilteringPipeline FilteringPipeline.cxx)
-target_link_libraries(FilteringPipeline ${OTB_LIBRARIES})
+target_link_libraries(FilteringPipeline ${OTBImageBase_LIBRARIES})
 
 add_executable(HelloWorldOTB HelloWorldOTB.cxx)
-target_link_libraries(HelloWorldOTB ${OTB_LIBRARIES})
+target_link_libraries(HelloWorldOTB ${OTBImageBase_LIBRARIES})
 
 add_executable(Multispectral Multispectral.cxx)
-target_link_libraries(Multispectral ${OTB_LIBRARIES})
+target_link_libraries(Multispectral ${OTBImageBase_LIBRARIES})
 
 add_executable(OrthoFusion OrthoFusion.cxx)
-target_link_libraries(OrthoFusion ${OTB_LIBRARIES})
+target_link_libraries(OrthoFusion ${OTBImageBase_LIBRARIES})
 
 add_executable(Pipeline Pipeline.cxx)
-target_link_libraries(Pipeline ${OTB_LIBRARIES})
+target_link_libraries(Pipeline ${OTBImageBase_LIBRARIES} ${OTBImageIO_LIBRARIES})
 
 add_executable(ScalingPipeline ScalingPipeline.cxx)
-target_link_libraries(ScalingPipeline ${OTB_LIBRARIES})
+target_link_libraries(ScalingPipeline ${OTBImageBase_LIBRARIES} ${OTBImageIO_LIBRARIES})
 
 if(BUILD_TESTING)
-  find_package (Boost REQUIRED COMPONENTS filesystem date_time unit_test_framework)
   add_subdirectory(test)
 endif()

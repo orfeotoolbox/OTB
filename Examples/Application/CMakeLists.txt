@@ -20,14 +20,11 @@
 
 project(ApplicationExamples)
 
-find_package (Boost REQUIRED COMPONENTS filesystem date_time)
-
 otb_create_application(
   NAME           ApplicationExample
   SOURCES        ApplicationExample.cxx
-  LINK_LIBRARIES ${OTB_LIBRARIES} ${Boost_LIBRARIES})
+  LINK_LIBRARIES ${OTBApplicationEngine_LIBRARIES})
 
 if(BUILD_TESTING)
-  find_package (Boost REQUIRED COMPONENTS filesystem date_time unit_test_framework)
   add_subdirectory(test)
 endif()

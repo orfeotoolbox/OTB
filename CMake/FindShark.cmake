@@ -55,12 +55,12 @@ find_library( SHARK_LIBRARY
 
 mark_as_advanced( SHARK_INCLUDE_DIR  SHARK_LIBRARY )
 
-find_package( Boost 1.48.0 REQUIRED QUIET
-  COMPONENTS serialization
-  )
-if(NOT Boost_FOUND)
-  message(FATAL_ERROR "Please make sure Boost 1.48.0 is installed on your system")
-endif()
+# find_package( Boost 1.48.0 REQUIRED QUIET
+#   COMPONENTS serialization
+#   )
+# if(NOT Boost_FOUND)
+#   message(FATAL_ERROR "Please make sure Boost 1.48.0 is installed on your system")
+# endif()
 
 if(NOT SHARK_LIBRARY)
   message(FATAL_ERROR "Cannot find SHARK_LIBRARY. set it with cmake -DSHARK_LIBRARY=")
@@ -91,9 +91,9 @@ if(SHARK_CONFIG_FILE)
        SHARK_VERSION_MINOR "${SHARK_CONFIG_FILE_CONTENTS}")
   string(REGEX REPLACE
       ".*set.*\\(SHARK_VERSION_PATCH..([0-9]+)\"\\).*" "\\1"
-       SHARK_VERSION_PATCH "${SHARK_CONFIG_FILE_CONTENTS}")       
+       SHARK_VERSION_PATCH "${SHARK_CONFIG_FILE_CONTENTS}")
 
-  set(SHARK_VERSION_STRING 
+  set(SHARK_VERSION_STRING
   "${SHARK_VERSION_MAJOR}.${SHARK_VERSION_MINOR}.${SHARK_VERSION_PATCH}")
 endif()
 
@@ -144,8 +144,8 @@ find_package_handle_standard_args(Shark
   VERSION_VAR SHARK_VERSION_STRING)
 
 if(SHARK_FOUND)
-  set(SHARK_INCLUDE_DIRS ${SHARK_INCLUDE_DIR} ${Boost_INCLUDE_DIR} )
-  set(SHARK_LIBRARIES ${SHARK_LIBRARY} ${Boost_LIBRARIES} )
+  set(SHARK_INCLUDE_DIRS ${SHARK_INCLUDE_DIR} ${OTBBoost_INCLUDE_DIR} )
+  set(SHARK_LIBRARIES ${SHARK_LIBRARY} ${OTBBoost_LIBRARIES} )
   if(REQUIRED_CBLAS_LIB)
     set(SHARK_LIBRARIES ${SHARK_LIBRARIES} ${CBLAS_LIBRARY})
   endif()
