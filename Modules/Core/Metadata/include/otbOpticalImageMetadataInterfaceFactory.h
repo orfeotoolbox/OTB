@@ -50,7 +50,6 @@ public:
   typedef OpticalImageMetadataInterface::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef OpticalImageMetadataInterface::VectorType               VectorType;
   typedef OpticalImageMetadataInterface::VariableLengthVectorType VariableLengthVectorType;
-  typedef OpticalImageMetadataInterface::ImageKeywordlistType     ImageKeywordlistType;
   typedef OpticalImageMetadataInterface::Pointer                  OpticalImageMetadataInterfacePointerType;
 
   /** Create the appropriate OpticalImageMetadataInterfaceFactory depending on the particulars of the file. */

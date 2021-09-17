@@ -34,7 +34,6 @@
 #include "otbImage.h"
 #include "otbSIXSTraits.h"
 #include "otbMath.h"
-#include "otbOpticalImageMetadataInterfaceFactory.h"
 
 namespace otb
 {

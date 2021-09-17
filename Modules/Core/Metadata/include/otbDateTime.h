@@ -21,6 +21,8 @@
 #ifndef otbDateTime_h
 #define otbDateTime_h
 
+#include "OTBMetadataExport.h"
+
 // Use nanosecond precision in boost dates and durations
 #define BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -74,10 +76,10 @@ template <typename T> struct streamable
 
 class Duration;
 
-class TimePoint : private details::streamable<TimePoint>,
-                  private details::substractable_asym<Duration, TimePoint>,
-                  private boost::equality_comparable<TimePoint>,
-                  private boost::less_than_comparable<TimePoint>
+class OTBMetadata_EXPORT TimePoint : private details::streamable<TimePoint>,
+                                     private details::substractable_asym<Duration, TimePoint>,
+                                     private boost::equality_comparable<TimePoint>,
+                                     private boost::less_than_comparable<TimePoint>
 {
 public:
   //friend class Duration;
@@ -111,15 +113,15 @@ using TimeType = TimePoint;
 
 double ratio_(Duration const& lhs, Duration const& rhs);
 
-class Duration : private details::streamable<Duration>,
-                 private boost::addable<Duration>,
-                 private boost::subtractable<Duration>,
-                 private boost::multipliable2<Duration, double>,
-                 private details::dividable<Duration, double>,
-                 private boost::equality_comparable<Duration>,
-                 private boost::less_than_comparable<Duration>,
-                 private boost::addable<TimeType, Duration>,
-                 private boost::subtractable<TimeType, Duration>
+class OTBMetadata_EXPORT Duration : private details::streamable<Duration>,
+                                    private boost::addable<Duration>,
+                                    private boost::subtractable<Duration>,
+                                    private boost::multipliable2<Duration, double>,
+                                    private details::dividable<Duration, double>,
+                                    private boost::equality_comparable<Duration>,
+                                    private boost::less_than_comparable<Duration>,
+                                    private boost::addable<TimeType, Duration>,
+                                    private boost::subtractable<TimeType, Duration>
 {
 public:
   using InternalDurationType = boost::posix_time::time_duration;
@@ -203,20 +205,20 @@ public:
   std::ostream & Display(std::ostream & os) const { return os << m_Duration; }
   std::istream & Read   (std::istream & is)       { return is >> m_Duration; }
 
-  friend Duration Abs(Duration d);
+  OTBMetadata_EXPORT friend Duration Abs(Duration d);
 
 private:
   InternalDurationType m_Duration;
 };
 
-Duration Abs(Duration d);
+OTBMetadata_EXPORT Duration Abs(Duration d);
 
 
 using DurationType = Duration;
 
-DurationType seconds(double);
+OTBMetadata_EXPORT DurationType seconds(double);
 
-TimeType ReadFormattedDate(const std::string & dateStr, const std::string & format = "%Y-%m-%dT%H:%M:%S%F");
+OTBMetadata_EXPORT TimeType ReadFormattedDate(const std::string & dateStr, const std::string & format = "%Y-%m-%dT%H:%M:%S%F");
 
 }
 }

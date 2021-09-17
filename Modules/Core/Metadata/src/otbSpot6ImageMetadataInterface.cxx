@@ -23,7 +23,6 @@
 
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
 #include "otbStringUtils.h"
 
 #include "otbDimapMetadataHelper.h"
@@ -46,199 +45,6 @@ bool Spot6ImageMetadataInterface::CanRead() const
     return true;
   else
     return false;
-}
-
-std::string Spot6ImageMetadataInterface::GetInstrument() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot6 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (imageKeywordlist.HasKey("support_data.instrument"))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument");
-    return valueString;
-  }
-
-  return "";
-}
-
-std::string Spot6ImageMetadataInterface::GetInstrumentIndex() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot6 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-  if (imageKeywordlist.HasKey("support_data.instrument_index"))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument_index");
-    return valueString;
-  }
-
-  return ""; // Invalid value
-}
-
-Spot6ImageMetadataInterface::VariableLengthVectorType Spot6ImageMetadataInterface::GetFirstWavelengths() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot6 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  VariableLengthVectorType wavel(1);
-  wavel.Fill(0.);
-
-  int         nbBands  = this->GetNumberOfBands();
-  std::string sensorId = this->GetSensorID();
-
-  // Panchromatic case
-  if (nbBands == 1)
-  {
-    wavel.SetSize(1);
-  }
-  else if (nbBands > 1 && nbBands < 5)
-  {
-    wavel.SetSize(4);
-  }
-  else
-    itkExceptionMacro(<< "Invalid number of bands...");
-
-  wavel.Fill(0.4);
-
-  return wavel;
-}
-
-Spot6ImageMetadataInterface::VariableLengthVectorType Spot6ImageMetadataInterface::GetLastWavelengths() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot6 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  VariableLengthVectorType wavel(1);
-  wavel.Fill(0.);
-
-  int nbBands = this->GetNumberOfBands();
-
-  // Panchromatic case
-  if (nbBands == 1)
-  {
-    wavel.SetSize(1);
-  }
-  else if (nbBands > 1 && nbBands < 5)
-  {
-    wavel.SetSize(4);
-  }
-  else
-    itkExceptionMacro(<< "Invalid number of bands...");
-
-  wavel.Fill(1.0);
-
-  return wavel;
-}
-
-// TODO MSD need to update this function
-// Comment this part as relative response
-// FIXME check if this is coherent with other sensor
-unsigned int Spot6ImageMetadataInterface::BandIndexToWavelengthPosition(unsigned int i) const // todo
-{
-  int nbBands = this->GetNumberOfBands();
-  // Panchromatic case
-  if (nbBands == 1)
-  {
-    return 0;
-  }
-  else
-  {
-    otbMsgDevMacro(<< "Spot6 detected: first file component is red band and third component is blue one");
-    if (i == 0)
-      return 2;
-    if (i == 2)
-      return 0;
-  }
-
-  return i;
-}
-
-std::vector<std::string> Spot6ImageMetadataInterface::GetEnhancedBandNames() const // todo
-{
-  std::vector<std::string> enhBandNames;
-  std::vector<std::string> rawBandNames = this->Superclass::GetBandName();
-
-  if (rawBandNames.size())
-  {
-    for (std::vector<std::string>::iterator it = rawBandNames.begin(); it != rawBandNames.end(); ++it)
-    {
-      // Manage Panchro case
-      if ((rawBandNames.size() == 1) && !(*it).compare("P"))
-      {
-        enhBandNames.push_back("PAN");
-        break;
-      }
-      else if ((rawBandNames.size() != 1) && !(*it).compare("P"))
-      {
-        /* Launch exception situation not valid*/
-        itkExceptionMacro(<< "Invalid Metadata, we cannot provide an consistent name to the band");
-      }
-
-      // Manage MS case
-      if (!(*it).compare("B0"))
-      {
-        enhBandNames.push_back("Blue");
-      }
-      else if (!(*it).compare("B1"))
-      {
-        enhBandNames.push_back("Green");
-      }
-      else if (!(*it).compare("B2"))
-      {
-        enhBandNames.push_back("Red");
-      }
-      else if (!(*it).compare("B3"))
-      {
-        enhBandNames.push_back("NIR");
-      }
-      else
-      {
-        enhBandNames.push_back("Unknown");
-      }
-    }
-  }
-
-  return enhBandNames;
 }
 
 void Spot6ImageMetadataInterface::FetchSpectralSensitivity(const std::string & sensorId, ImageMetadata& imd)
@@ -745,6 +551,9 @@ void Spot6ImageMetadataInterface::Parse(ImageMetadata & imd)
     otbGenericExceptionMacro(MissingMetadataException,<<"Sensor ID doesn't start with SPOT : '"<<dimapData.mission<<"'")
   }
 
+  imd.Add(MDStr::Instrument, dimapData.Instrument);
+  imd.Add(MDStr::InstrumentIndex, dimapData.InstrumentIndex);
+
   imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
   imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
   imd.Add(MDNum::SatElevation, 90. - dimapData.IncidenceAngle[0]);
@@ -766,12 +575,25 @@ void Spot6ImageMetadataInterface::Parse(ImageMetadata & imd)
     auto solarIrradiance = dimapData.SolarIrradiance.begin();
     auto bandId = dimapData.BandIDs.begin();
 
+    const std::unordered_map<std::string, std::string> bandNameToEnhancedBandName =
+      {{"P", "PAN"}, {"B0", "Blue"}, {"B1", "Green"}, {"B2", "Red"}, {"B3", "NIR"} };
+
     for (auto & band: imd.Bands)
     {
       band.Add(MDNum::SolarIrradiance, *solarIrradiance);
       band.Add(MDNum::PhysicalGain, *gain);
       band.Add(MDNum::PhysicalBias, *bias);
       band.Add(MDStr::BandName, *bandId);
+
+      auto it = bandNameToEnhancedBandName.find(*bandId);
+      if (it != bandNameToEnhancedBandName.end())
+      {
+        band.Add(MDStr::EnhancedBandName, it->second);
+      }
+      else
+      {
+        band.Add(MDStr::EnhancedBandName, "Unknown");
+      }
 
       bias++;
       solarIrradiance++;

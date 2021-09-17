@@ -24,7 +24,6 @@
 #include "otbStringUtils.h"
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
 
 #include "otbXMLMetadataSupplier.h"
 
@@ -40,166 +39,6 @@ bool SpotImageMetadataInterface::CanRead() const
     return true;
   else
     return false;
-}
-
-std::string SpotImageMetadataInterface::GetInstrument() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (imageKeywordlist.HasKey("support_data.instrument"))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument");
-    return valueString;
-  }
-
-  return "";
-}
-
-unsigned int SpotImageMetadataInterface::GetInstrumentIndex() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-  if (imageKeywordlist.HasKey("support_data.instrument_index"))
-  {
-    std::string  valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument_index");
-    unsigned int value       = atoi(valueString.c_str());
-    return value;
-  }
-
-  return -1; // Invalid value
-}
-
-SpotImageMetadataInterface::VariableLengthVectorType SpotImageMetadataInterface::GetFirstWavelengths() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  VariableLengthVectorType wavel(1);
-  wavel.Fill(0.);
-
-  int         nbBands  = this->GetNumberOfBands();
-  std::string sensorId = this->GetSensorID();
-
-  // Panchromatic case
-  if (nbBands == 1)
-  {
-    wavel.SetSize(1);
-    if (sensorId == "Spot 4")
-      wavel.Fill(0.610);
-    else if (sensorId == "Spot 5")
-      wavel.Fill(0.475);
-    else
-      wavel.Fill(0.500); // assume SPOT 123
-    // else itkExceptionMacro(<< "Invalid Spot Sensor ID");
-  }
-  else if (nbBands == 4)
-  {
-    wavel.SetSize(4);
-    // FIXME is that supposed to correspond to the bands in the files?
-    wavel[0] = 0.500;
-    wavel[1] = 0.610;
-    wavel[2] = 0.780;
-    wavel[3] = 1.580;
-  }
-  else if (nbBands == 3)
-  {
-    wavel.SetSize(3);
-    // FIXME is that supposed to correspond to the bands in the files?
-    wavel[0] = 0.500;
-    wavel[1] = 0.610;
-    wavel[2] = 0.780;
-  }
-  else
-    itkExceptionMacro(<< "Invalid number of bands...");
-
-  return wavel;
-}
-
-SpotImageMetadataInterface::VariableLengthVectorType SpotImageMetadataInterface::GetLastWavelengths() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Spot Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  VariableLengthVectorType wavel(1);
-  wavel.Fill(0.);
-
-  int         nbBands  = this->GetNumberOfBands();
-  std::string sensorId = this->GetSensorID();
-
-  // Panchromatic case
-  if (nbBands == 1)
-  {
-    wavel.SetSize(1);
-    if (sensorId == "Spot 4")
-      wavel.Fill(0.680);
-    else if (sensorId == "Spot 5")
-      wavel.Fill(0.710);
-    else
-      wavel.Fill(0.730); // assume SPOT 123
-    // else itkExceptionMacro(<< "Invalid Spot Sensor ID");
-  }
-  else if (nbBands == 4)
-  {
-    // FIXME is that supposed to correspond to the bands in the files?
-    wavel.SetSize(4);
-    wavel[0] = 0.590;
-    wavel[1] = 0.680;
-    wavel[2] = 0.890;
-    wavel[3] = 1.750;
-  }
-  else if (nbBands == 3)
-  {
-    wavel.SetSize(3);
-    wavel[0] = 0.590;
-    wavel[1] = 0.680;
-    wavel[2] = 0.890;
-  }
-  else
-    itkExceptionMacro(<< "Invalid number of bands...");
-
-  return wavel;
 }
 
 unsigned int SpotImageMetadataInterface::BandIndexToWavelengthPosition(unsigned int i) const
@@ -507,6 +346,9 @@ void SpotImageMetadataInterface::Parse(ImageMetadata & imd)
   
   imd.Add(MDStr::SensorID, "SPOT 5");
   imd.Add(MDStr::Mission, "SPOT 5");
+
+  imd.Add(MDStr::Instrument, dimapData.Instrument);
+  imd.Add(MDStr::InstrumentIndex, dimapData.InstrumentIndex);
 
   imd.Add(MDTime::ProductionDate,
     boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));

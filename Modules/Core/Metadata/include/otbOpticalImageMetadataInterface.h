@@ -51,20 +51,10 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
   typedef FilterFunctionValues                              FilterFunctionValuesType;
   typedef otb::ObjectList<FilterFunctionValuesType>         InternalWavelengthSpectralBandVectorType;
   typedef InternalWavelengthSpectralBandVectorType::Pointer WavelengthSpectralBandVectorType;
-
-  /** Get the first wavelength for the spectral band definition */
-  virtual VariableLengthVectorType GetFirstWavelengths() const = 0;
-
-  /** Get the last wavelength for the spectral band definition */
-  virtual VariableLengthVectorType GetLastWavelengths() const = 0;
-
-  /** Get the enhanced band names */
-  std::vector<std::string> GetEnhancedBandNames() const override = 0;
 
   /** This method is to handle the permutation of the spectral band by some image provider
    * in most cases, this method won't change the value, but for SPOT data, the bands are set up as

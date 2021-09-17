@@ -23,7 +23,6 @@
 
 #include "otbStringUtils.h"
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
 
 #include "itksys/SystemTools.hxx"
 #include "otbStringUtilities.h"
@@ -145,237 +144,6 @@ void WorldView2ImageMetadataInterface::FetchPhysicalBias(ImageMetadata& imd)
   {
     itkExceptionMacro(<< "Invalid bandID " << productType);
   }
-}
-
-WorldView2ImageMetadataInterface::VariableLengthVectorType WorldView2ImageMetadataInterface::GetFirstWavelengths() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  VariableLengthVectorType wavel(1);
-  wavel.Fill(0.);
-
-  std::string keywordStringBId = imageKeywordlist.GetMetadataByKey("support_data.band_id");
-  std::string panchro("P");
-  std::string multi("Multi");
-  std::string ms1("MS1");
-
-  if (keywordStringBId != panchro && keywordStringBId != multi && keywordStringBId != ms1)
-  {
-    itkExceptionMacro(<< "Invalid bandID " << keywordStringBId);
-  }
-
-  // Panchromatic case
-  if (keywordStringBId == panchro)
-  {
-    wavel.SetSize(1);
-    wavel.Fill(0.464);
-  }
-  else
-  {
-    std::string              keywordStringBandNameList = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
-    std::vector<std::string> bandNameList;
-    boost::trim(keywordStringBandNameList);
-    boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
-
-    wavel.SetSize(bandNameList.size());
-    for (unsigned int i = 0; i < bandNameList.size(); ++i)
-    {
-      double waveValue = 0.0;
-      if (bandNameList[i] == "C")
-      {
-        waveValue = 0.401;
-      }
-      else if (bandNameList[i] == "B")
-      {
-        waveValue = 0.447;
-      }
-      else if (bandNameList[i] == "G")
-      {
-        waveValue = 0.511;
-      }
-      else if (bandNameList[i] == "Y")
-      {
-        waveValue = 0.588;
-      }
-      else if (bandNameList[i] == "R")
-      {
-        waveValue = 0.629;
-      }
-      else if (bandNameList[i] == "RE")
-      {
-        waveValue = 0.704;
-      }
-      else if (bandNameList[i] == "N")
-      {
-        waveValue = 0.772;
-      }
-      else if (bandNameList[i] == "N2")
-      {
-        waveValue = 0.862;
-      }
-      wavel[i] = waveValue;
-    }
-  }
-
-  return wavel;
-}
-
-WorldView2ImageMetadataInterface::VariableLengthVectorType WorldView2ImageMetadataInterface::GetLastWavelengths() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no WorldView2 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  VariableLengthVectorType wavel(1);
-  wavel.Fill(0.);
-
-  std::string keywordStringBId = imageKeywordlist.GetMetadataByKey("support_data.band_id");
-  std::string panchro("P");
-  std::string multi("Multi");
-  std::string ms1("MS1");
-
-  if (keywordStringBId != panchro && keywordStringBId != multi && keywordStringBId != ms1)
-  {
-    itkExceptionMacro(<< "Invalid bandID " << keywordStringBId);
-  }
-
-  // Panchromatic case
-  if (keywordStringBId == panchro)
-  {
-    wavel.SetSize(1);
-    wavel.Fill(0.801);
-  }
-  else
-  {
-    std::string              keywordStringBandNameList = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
-    std::vector<std::string> bandNameList;
-    boost::trim(keywordStringBandNameList);
-    boost::split(bandNameList, keywordStringBandNameList, boost::is_any_of(" "));
-
-    wavel.SetSize(bandNameList.size());
-    for (unsigned int i = 0; i < bandNameList.size(); ++i)
-    {
-      double waveValue = 0.0;
-      if (bandNameList[i] == "C")
-      {
-        waveValue = 0.453;
-      }
-      else if (bandNameList[i] == "B")
-      {
-        waveValue = 0.581;
-      }
-      else if (bandNameList[i] == "G")
-      {
-        waveValue = 0.581;
-      }
-      else if (bandNameList[i] == "Y")
-      {
-        waveValue = 0.627;
-      }
-      else if (bandNameList[i] == "R")
-      {
-        waveValue = 0.689;
-      }
-      else if (bandNameList[i] == "RE")
-      {
-        waveValue = 0.744;
-      }
-      else if (bandNameList[i] == "N")
-      {
-        waveValue = 0.890;
-      }
-      else if (bandNameList[i] == "N2")
-      {
-        waveValue = 0.954;
-      }
-      wavel[i] = waveValue;
-    }
-  }
-  return wavel;
-}
-
-std::vector<std::string> WorldView2ImageMetadataInterface::GetEnhancedBandNames() const
-{
-  std::vector<std::string> enhBandNames;
-  std::vector<std::string> rawBandNames = this->Superclass::GetBandName();
-
-  if (rawBandNames.size())
-  {
-    for (std::vector<std::string>::iterator it = rawBandNames.begin(); it != rawBandNames.end(); ++it)
-    {
-      // Manage Panchro case
-      if ((rawBandNames.size() == 1) && !(*it).compare("P"))
-      {
-        enhBandNames.push_back("PAN");
-        break;
-      }
-      else if ((rawBandNames.size() != 1) && !(*it).compare("P"))
-      {
-        /* Launch exception situation not valid*/
-        itkExceptionMacro(<< "Invalid Metadata, we cannot provide an consistent name to the band");
-      }
-
-      // Manage MS case
-      if (!(*it).compare("C"))
-      {
-        enhBandNames.push_back("Coastal");
-      }
-      else if (!(*it).compare("B"))
-      {
-        enhBandNames.push_back("Blue");
-      }
-      else if (!(*it).compare("G"))
-      {
-        enhBandNames.push_back("Green");
-      }
-      else if (!(*it).compare("Y"))
-      {
-        enhBandNames.push_back("Yellow");
-      }
-      else if (!(*it).compare("R"))
-      {
-        enhBandNames.push_back("Red");
-      }
-      else if (!(*it).compare("RE"))
-      {
-        enhBandNames.push_back("RedEdge");
-      }
-      else if (!(*it).compare("N"))
-      {
-        enhBandNames.push_back("NIR1");
-      }
-      else if (!(*it).compare("N2"))
-      {
-        enhBandNames.push_back("NIR2");
-      }
-      else
-      {
-        enhBandNames.push_back("Unknown");
-      }
-    }
-  }
-
-  return enhBandNames;
 }
 
 void WorldView2ImageMetadataInterface::FetchSpectralSensitivityWorldView2(ImageMetadata& imd)
@@ -1271,10 +1039,24 @@ void WorldView2ImageMetadataInterface::Parse(ImageMetadata &imd)
 
   if (imd.Bands.size() == metadata.bandNameList.size())
   {
+    const std::unordered_map<std::string, std::string> bandNameToEnhancedBandName =
+      {{"C", "Coastal"}, {"B", "Blue"}, {"G", "Green"}, {"Y", "Yellow"}, {"R", "Red"},
+         {"RE", "RedEdge"}, {"N", "NIR1"}, {"N2", "NIR2"}, {"P", "PAN"}};
+
     auto bandIt = imd.Bands.begin();
     for (const auto & bandName : metadata.bandNameList)
     {
       bandIt->Add(MDStr::BandName, bandName);
+
+      auto it = bandNameToEnhancedBandName.find(bandName);
+      if (it != bandNameToEnhancedBandName.end())
+      {
+        bandIt->Add(MDStr::EnhancedBandName, it->second);
+      }
+      else
+      {
+        bandIt->Add(MDStr::EnhancedBandName, "Unknown");
+      }
       bandIt++;
     }
   }

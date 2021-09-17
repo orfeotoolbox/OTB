@@ -53,26 +53,6 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
-
-  /** Get the first wavelength for the spectral band definition */
-  VariableLengthVectorType GetFirstWavelengths() const override
-  {
-    itkExceptionMacro("GetFirstWavelengths not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the last wavelength for the spectral band definition */
-  VariableLengthVectorType GetLastWavelengths() const override
-  {
-    itkExceptionMacro("GetLastWavelengths not implemented in OpticalDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the enhanced band names (here nothing because the sensor is not identify) */
-  std::vector<std::string> GetEnhancedBandNames() const override
-  {
-    std::vector<std::string> nothing;
-    return nothing;
-  }
 
   bool CanRead() const override
   {

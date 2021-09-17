@@ -50,20 +50,8 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
-
-  /** Get the first wavelength for the spectral band definition */
-  VariableLengthVectorType GetFirstWavelengths() const override;
-
-  /** Get the last wavelength for the spectral band definition */
-  VariableLengthVectorType GetLastWavelengths() const override;
 
   bool CanRead() const override;
-
-  /** Get the enhanced band names from band names collected by ossim
-   * \deprecated
-   */
-  std::vector<std::string> GetEnhancedBandNames() const override;
 
   void Parse(ImageMetadata &) override;
 

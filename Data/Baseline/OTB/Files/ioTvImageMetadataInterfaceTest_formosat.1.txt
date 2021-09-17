@@ -1,5 +1,7 @@
 SensorID FORMOSAT 2
 Mission Formasat 2
+Instrument RSI
+InstrumentIndex 1
 AreaOrPoint Point
 TileHintX 3000
 TileHintY 500

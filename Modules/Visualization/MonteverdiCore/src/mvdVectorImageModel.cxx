@@ -46,6 +46,7 @@
 #include "otbCoordinateToName.h"
 #include "otbDEMHandler.h"
 #include "otbGroundSpacingImageFunction.h"
+#include "otbNoDataHelper.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -269,14 +270,11 @@ void VectorImageModel::virtual_BuildModel(void* context)
   // Get build-context settings.
   VectorImageSettings* const settings = static_cast<VectorImageSettings*>(buildContext->m_Settings);
 
-
   // Fetch the no data flags if any
-  otb::ImageMetadataInterfaceBase::ConstPointer metaData(GetMetaDataInterface());
-
   std::vector<double> values;
   std::vector<bool>   flags;
 
-  bool ret = metaData->GetNoDataFlags(flags, values);
+  bool ret = otb::ReadNoDataFlags(this->ToImageBase()->GetMetaDataDictionary(), flags, values);
 
   if (ret && !values.empty() && !flags.empty() && flags[0])
   {

@@ -55,16 +55,10 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
   typedef itk::PointSet<double, 2> PointSetType;
   typedef PointSetType::Pointer   PointSetPointer;
   typedef double                  RealType;
   typedef PointSetType::PointType PointType;
-
-  RealType GetRadiometricCalibrationScale() const override
-  {
-    itkExceptionMacro("GetRadiometricCalibrationScale() not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
 
   PointSetPointer GetRadiometricCalibrationAntennaPatternNewGain() const override
   {
@@ -116,24 +110,6 @@ public:
   ArrayIndexType GetRadiometricCalibrationNoisePolynomialDegree() const override
   {
     itkExceptionMacro("GetRadiometricCalibrationNoisePolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the PRF */
-  double GetPRF() const override
-  {
-    itkExceptionMacro("GetPRF not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the RSF */
-  double GetRSF() const override
-  {
-    itkExceptionMacro("GetRSF not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the radar frequency */
-  double GetRadarFrequency() const override
-  {
-    itkExceptionMacro("GetRadarFrequency not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
   /** Get the center incidence angle */

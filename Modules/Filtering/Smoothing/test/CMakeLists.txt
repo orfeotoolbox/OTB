@@ -53,7 +53,7 @@ set_tests_properties(bfTvMeanShiftSmoothingImageFilterOptim PROPERTIES
 
 otb_add_test(NAME bfTuMeanShiftSmoothingImageFilterSPOT5 COMMAND otbSmoothingTestDriver
   otbMeanShiftSmoothingImageFilter
-  ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+  ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/IMAGERY.TIF
   ${TEMP}/bfMeanShiftSmoothingImageFilterSpatialOutput_SPOT5.tif
   ${TEMP}/bfMeanShiftSmoothingImageFilterSpectralOutput_SPOT5.tif
   ${TEMP}/bfMeanShiftSmoothingImageFilterIterationOutput_SPOT5.tif

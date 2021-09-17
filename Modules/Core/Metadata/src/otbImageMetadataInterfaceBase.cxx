@@ -365,111 +365,6 @@ bool ImageMetadataInterfaceBase::GetSensorID(std::string& sensorId) const
   return true;
 }
 
-unsigned int ImageMetadataInterfaceBase::GetNumberOfBands() const
-{
-  ImageKeywordlistType          imageKeywordlist;
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("support_data.number_bands"))
-  {
-    return 0;
-  }
-
-  std::string  valueString = imageKeywordlist.GetMetadataByKey("support_data.number_bands");
-  unsigned int value       = atoi(valueString.c_str());
-  return value;
-}
-
-std::vector<std::string> ImageMetadataInterfaceBase::GetBandName() const
-{
-  ImageKeywordlistType          imageKeywordlist;
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  /* band_name attribute is only used by OSSIM metadata reader otherwise it is band_name_list */
-  std::vector<std::string> outputValues;
-  if (!imageKeywordlist.HasKey("support_data.band_name"))
-  {
-    if (imageKeywordlist.HasKey("support_data.band_name_list"))
-    {
-      std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.band_name_list");
-      itksys::SystemTools::Split(valueString, outputValues, ' ');
-    }
-    else
-      return outputValues;
-  }
-  else
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.band_name");
-    itksys::SystemTools::Split(valueString, outputValues, '/');
-  }
-
-  return outputValues;
-}
-
-double ImageMetadataInterfaceBase::GetXPixelSpacing() const
-{
-  ImageKeywordlistType          imageKeywordlist;
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (imageKeywordlist.HasKey("meters_per_pixel_x"))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("meters_per_pixel_x");
-    double      value       = atof(valueString.c_str());
-    return value;
-  }
-
-  if (imageKeywordlist.HasKey("pixel_spacing"))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("pixel_spacing");
-    double      value       = atof(valueString.c_str());
-    return value;
-  }
-
-  return 0;
-}
-
-double ImageMetadataInterfaceBase::GetYPixelSpacing() const
-{
-  ImageKeywordlistType          imageKeywordlist;
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (imageKeywordlist.HasKey("meters_per_pixel_y"))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("meters_per_pixel_y");
-    double      value       = atof(valueString.c_str());
-    return value;
-  }
-
-  if (imageKeywordlist.HasKey("pixel_spacing"))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("pixel_spacing");
-    double      value       = atof(valueString.c_str());
-    return value;
-  }
-
-  return 0;
-}
-
 void ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict)
 {
 
@@ -581,24 +476,6 @@ void ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent)
     std::string sensorId;
     this->GetSensorID(sensorId);
     os << indent << "SensorID:        " << sensorId << std::endl;
-    os << indent << "NumberOfBands:   " << this->GetNumberOfBands() << std::endl;
-
-    std::vector<std::string> bandNameList = this->GetBandName();
-    if (bandNameList.size() == 1)
-    {
-      os << indent << "BandName:        " << bandNameList[0] << std::endl;
-    }
-    else if (bandNameList.size() > 1)
-    {
-      os << indent << "BandNameList:        ";
-      for (std::vector<std::string>::iterator it = bandNameList.begin(); it != bandNameList.end(); ++it)
-      {
-        os << *it << ", ";
-      }
-      os << std::endl;
-    }
-    os << indent << "XPixelSpacing:   " << this->GetXPixelSpacing() << std::endl;
-    os << indent << "YPixelSpacing:   " << this->GetYPixelSpacing() << std::endl;
   }
 }
 
@@ -795,12 +672,6 @@ const boost::any& ImageMetadataInterfaceBase::FetchRPC(
   assert(imd.Has(MDGeom::RPC));
   assert(rpcStruct == boost::any_cast<Projection::RPCParam>(imd[MDGeom::RPC]));
   return imd[MDGeom::RPC];
-}
-
-bool ImageMetadataInterfaceBase::ConvertImageKeywordlistToImageMetadata(ImageMetadata &)
-{
-  // by default, no conversion
-  return false;
 }
 
 } // end namespace otb

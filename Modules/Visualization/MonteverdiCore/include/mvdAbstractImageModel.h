@@ -44,7 +44,6 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbImageMetadataInterfaceBase.h"
 #include "otbImage.h" // Needed to get otb::internal::Get/SetSignedSpacing()
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -290,10 +289,6 @@ protected:
    */
   void RefreshHistogram(void* const context);
 
-  /**
-   */
-  inline otb::ImageMetadataInterfaceBase::ConstPointer GetMetaDataInterface() const;
-
   //
   // AbstractModel methods.
 
@@ -463,12 +458,6 @@ inline const SpacingType& AbstractImageModel::GetEstimatedGroundSpacing() const
 inline CountType AbstractImageModel::GetNbComponents() const
 {
   return ToImageBase()->GetNumberOfComponentsPerPixel();
-}
-
-/*****************************************************************************/
-inline otb::ImageMetadataInterfaceBase::ConstPointer AbstractImageModel::GetMetaDataInterface() const
-{
-  return otb::ConstCast<const otb::ImageMetadataInterfaceBase>(otb::ImageMetadataInterfaceFactory::CreateIMI(ToImageBase()->GetMetaDataDictionary()));
 }
 
 /*****************************************************************************/

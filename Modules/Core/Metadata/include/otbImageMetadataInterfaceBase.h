@@ -150,31 +150,6 @@ public:
 
   // otbMetadataGetMacro(SensorID, std::string);
 
-  /** Get the number of bands from the ossim metadata
-   * \deprecated
-   */
-  UnsignedIntType GetNumberOfBands() const;
-  // otbMetadataGetMacro(NumberOfBands, unsigned int);
-
-  /** Get the band name from the ossim metadata
-   * \deprecated
-   */
-  StringVectorType GetBandName() const;
-  // otbMetadataGetMacro(BandName, std::vector<std::string>);
-
-  /** Get the x pixel spacing*/
-  double GetXPixelSpacing() const;
-  // otbMetadataGetMacro(XPixelSpacing, double);
-
-  /** Get the y pixel spacing*/
-  double GetYPixelSpacing() const;
-  // otbMetadataGetMacro(YPixelSpacing, double);
-
-  /** Convert the band names provided by ossim to the official band names  
-   * \deprecated
-   */
-  virtual StringVectorType GetEnhancedBandNames() const {return StringVectorType();}
-
   virtual bool CanRead() const {return false;}
 
   /** Parses the metadata using the MetadataSupplierInterface and fill the ImageMetadata object
@@ -200,11 +175,6 @@ public:
   bool CheckFetch(std::string key, ImageMetadata & imd, const char *path, int band=-1);
 
   const boost::any& FetchRPC(ImageMetadata& imd, const double lineOffset = 0.0, const double sampleOffset = 0.0);
-
-  /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
-   * then translate it into ImageMetadata.
-   * Returns true if succeed. */
-  virtual bool ConvertImageKeywordlistToImageMetadata(ImageMetadata&);
 
 protected:
   ImageMetadataInterfaceBase();

@@ -24,7 +24,6 @@
 #include "otbMacro.h"
 #include "otbMath.h"
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
 #include "otbStringUtils.h"
 
 #include "otbDimapMetadataHelper.h"
@@ -41,151 +40,6 @@ bool FormosatImageMetadataInterface::CanRead() const
     return true;
   else
     return false;
-}
-
-std::string FormosatImageMetadataInterface::GetInstrument() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (imageKeywordlist.HasKey("support_data.instrument"))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument");
-    return valueString;
-  }
-
-  return "";
-}
-
-unsigned int FormosatImageMetadataInterface::GetInstrumentIndex() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no Formosat Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (imageKeywordlist.HasKey("support_data.instrument_index"))
-  {
-    std::string  valueString = imageKeywordlist.GetMetadataByKey("support_data.instrument_index");
-    unsigned int value       = atoi(valueString.c_str());
-    return value;
-  }
-
-  return -1; // Invalid value
-}
-
-
-FormosatImageMetadataInterface::VariableLengthVectorType FormosatImageMetadataInterface::GetFirstWavelengths() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid metadata, no Formosat2 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  VariableLengthVectorType wavel(1);
-  wavel.Fill(0.);
-
-  int         nbBands  = this->GetNumberOfBands();
-  std::string sensorId = this->GetSensorID();
-
-  // Panchromatic case
-  if (nbBands == 1)
-  {
-    wavel.SetSize(1);
-    // FIXME that's definitely NOT correct in a formosat file!!!
-    if (sensorId == "SPOT4")
-      wavel.Fill(0.610);
-    else if (sensorId == "SPOT5")
-      wavel.Fill(0.480);
-    else
-      itkExceptionMacro(<< "Invalid Formosat2 Sensor ID");
-  }
-  else if (nbBands > 1 && nbBands < 5)
-  {
-    wavel.SetSize(4);
-    // FIXME is that supposed to correspond to the bands in the files?
-    wavel[0] = 0.500;
-    wavel[1] = 0.610;
-    wavel[2] = 0.780;
-    wavel[3] = 1.580;
-  }
-  else
-    itkExceptionMacro(<< "Invalid number of bands...");
-
-  return wavel;
-}
-
-FormosatImageMetadataInterface::VariableLengthVectorType FormosatImageMetadataInterface::GetLastWavelengths() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid metadata, no Formosat2 Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  VariableLengthVectorType wavel(1);
-  wavel.Fill(0.);
-
-  int         nbBands  = this->GetNumberOfBands();
-  std::string sensorId = this->GetSensorID();
-
-  // Panchromatic case
-  if (nbBands == 1)
-  {
-    wavel.SetSize(1);
-    if (sensorId == "SPOT4")
-      wavel.Fill(0.680);
-    else if (sensorId == "SPOT5")
-      wavel.Fill(0.710);
-    else
-      itkExceptionMacro(<< "Invalid Formosat2 Sensor ID");
-  }
-  else if (nbBands > 1 && nbBands < 5)
-  {
-    // FIXME is that supposed to correspond to the bands in the files?
-    wavel.SetSize(4);
-    wavel[0] = 0.590;
-    wavel[1] = 0.680;
-    wavel[2] = 0.890;
-    wavel[3] = 1.750;
-  }
-  else
-    itkExceptionMacro(<< "Invalid number of bands...");
-
-  return wavel;
 }
 
 unsigned int FormosatImageMetadataInterface::BandIndexToWavelengthPosition(unsigned int i) const
@@ -485,6 +339,8 @@ void FormosatImageMetadataInterface::Parse(ImageMetadata &imd)
   imd.Add(MDTime::AcquisitionDate,
     boost::lexical_cast<MetaData::Time>(dimapData.AcquisitionDate));
 
+  imd.Add(MDStr::Instrument, dimapData.Instrument);
+  imd.Add(MDStr::InstrumentIndex, dimapData.InstrumentIndex);
 
   imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
   imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);

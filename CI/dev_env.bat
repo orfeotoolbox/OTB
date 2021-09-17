@@ -84,25 +84,15 @@ set PATH=%PATH%;C:\tools\GL\%ARCH%\bin
 call "C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" %ARCH% %TARGET% -vcvars_ver=%VCVER%
 
 :: Setup Clcache
-set CLCACHE_DIR=C:\clcache\%PROJECT%-%ARCH%-%TARGET%-%VCVER%
-set CLCACHE_HARDLINK=1
-:: set CLCACHE_SERVER=1
-set CLCACHE_CL=
-for /F "delims=" %%a in ('where cl.exe') do @if defined CLCACHE_CL (break ) else (set CLCACHE_CL=%%a)
+set BUILDCACHE_DIR=C:\buildcache\%PROJECT%-%ARCH%-%TARGET%-%VCVER%
 
-echo CL path: "%CLCACHE_CL%"
-
-:: install clcache.exe as cl.exe
-copy C:\tools\Python35-%ARCH%\Scripts\clcache.exe C:\clcache\cl.exe
-set PATH=C:\clcache;%PATH%
-
-:: we need to change cache max size: clcache -M <size-in-bytes>
 if "%PROJECT%"=="xdk" (
-  call "clcache.exe" -M 3000000000
+  set BUILDCACHE_MAX_CACHE_SIZE=3000000000
 )
 if "%PROJECT%"=="otb" (
-  call "clcache.exe" -M 2000000000
+  set BUILDCACHE_MAX_CACHE_SIZE=2000000000
 )
+set PATH=C:\tools\buildcache\bin;%PATH%
 
 set IMAGE_NAME=windows-%SHORT_TARGET%-%ARCH%-vc%VCVER%
 echo Generated IMAGE_NAME: %IMAGE_NAME%

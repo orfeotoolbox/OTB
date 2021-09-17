@@ -53,19 +53,11 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
   typedef Superclass::RealType                 RealType;
   typedef Superclass::LookupDataPointerType    LookupDataPointerType;
 
   /** check sensor ID */
   bool CanRead() const override;
-
-  /*SarImageMetadataInterface pure virtuals rituals */
-  double GetPRF() const override;
-
-  double GetRSF() const override;
-
-  double GetRadarFrequency() const override;
 
   double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override;
 
@@ -94,17 +86,6 @@ protected:
 private:
   CosmoImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
-
-  /* Helper function to parse date and time into a std::vector<std::string>
-   * using boost::split() expect date time in yyyy-mm-ddThh:mm:ss.ms
-   * the date-time string is to be found in keywordlist with key 'key'
-   * fills argument dateFields of type std::vector<std::string> which is mutable!
-   * TODO: move this method into base class
-   */
-  void ParseDateTime(std::string key, std::vector<int>& dateFields) const;
-
-  mutable std::vector<int> m_ProductionDateFields;
-  mutable std::vector<int> m_AcquisitionDateFields;
 };
 
 

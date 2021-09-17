@@ -72,7 +72,7 @@ otb_add_test(NAME raTvSpectralSensitivityReaderGenericTest COMMAND otbOpticalCal
   --ignore-lines-with 2 DataPath FileName
   otbSpectralSensitivityReaderGenericTest
   ${INPUTDATA}/Radiometry/SPOT5/HRG1/rep6S.dat
-  ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+  ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/IMAGERY.TIF
   ${TEMP}/raTvSpectralSensitivityReaderGenericTest.txt
   )
 
@@ -83,7 +83,7 @@ otb_add_test(NAME raTvSpectralSensitivityReaderTest COMMAND otbOpticalCalibratio
   --ignore-lines-with 2 DataPath FileName
   otbSpectralSensitivityReaderTest
   ${INPUTDATA}/Radiometry
-  ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/Arcachon_extrait_3852_3319_546_542.tif
+  ${INPUTDATA}/SPOT5_EXTRACTS/Arcachon/IMAGERY.TIF
   ${TEMP}/rcTuSpectralSensitivityReaderTest.txt
   )
 

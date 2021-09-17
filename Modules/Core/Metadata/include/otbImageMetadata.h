@@ -315,6 +315,14 @@ public:
 
   /** test wether the metadata corresponding to key is present on each band */
   bool HasBandMetadata(const MDL1D & key) const;
+
+  /** Return a vector containing the name of each band of the ImageMetadata or an empty 
+   * vector if at least one band name is missing */
+  std::vector<std::string> GetBandNames() const;
+
+  /** Return a vector containing the name of each band of the ImageMetadata or an empty 
+   * vector if at least one band name is missing */
+  std::vector<std::string> GetEnhancedBandNames() const;
 };
 
 extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::ImageMetadataBase& imd);

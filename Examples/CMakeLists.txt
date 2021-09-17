@@ -20,7 +20,7 @@
 
 ##### check if standalone project ######
 if(NOT PROJECT_NAME)
-  cmake_minimum_required(VERSION 3.1.0)
+  cmake_minimum_required(VERSION 3.10.0)
   project(OTBExamples)
 endif()
 
