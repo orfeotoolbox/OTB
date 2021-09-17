@@ -42,6 +42,10 @@ public:
   std::vector<int>    pixels;
   std::vector<double> deltaPixels;
   std::vector<float>  vect;
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const;
+  /** Keywordlist import */
+  static Sentinel1CalibrationStruct FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix);
 };
 
 /**

@@ -20,8 +20,86 @@
 
 #include "otbSentinel1CalibrationLookupData.h"
 
+namespace
+{
+  constexpr int STRING_PRECISION = 20;
+
+  // the precision of std::to_string is limited to 6 digits
+  template <typename T>
+  std::string to_string_with_precision(const T value)
+  {
+      std::ostringstream out;
+      out.precision(STRING_PRECISION);
+      out << std::fixed << value;
+      return out.str();
+  }
+
+  template <class T>
+  std::string ScalarVectorToString(const std::vector<T> & input)
+  {
+    std::ostringstream oss;
+    oss.precision(STRING_PRECISION);
+    for (auto elem: input)
+    {
+      oss << elem << " ";
+    }
+
+    return oss.str();
+  }
+
+  template <class T>
+  std::vector<T> StringToScalarVector(const std::string & input)
+  {
+    std::vector<T> output;
+
+    const auto parts = otb::split_on(input, ' ');
+    for (const auto & elem : parts)
+    {
+      if (!elem.empty())
+        output.push_back(otb::to<T>(elem, "Cannot cast"));
+    }
+
+    return output;
+  }
+
+}
+
 namespace otb
 {
+
+void Sentinel1CalibrationStruct::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const
+{
+  // Double
+  kwl.insert({prefix + "TimeMJD", to_string_with_precision(timeMJD)});
+  kwl.insert({prefix + "DeltaMJD", to_string_with_precision(deltaMJD)});
+
+  // Int
+  kwl.insert({prefix +"Line", boost::lexical_cast<std::string>(line)});
+
+  // std::vector<T>
+  kwl.insert({prefix + "Pixels", ScalarVectorToString(pixels)});
+  kwl.insert({prefix + "DeltaPixels", ScalarVectorToString(deltaPixels)});
+  kwl.insert({prefix + "Vect", ScalarVectorToString(vect)});
+}
+
+Sentinel1CalibrationStruct Sentinel1CalibrationStruct::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
+{
+  Sentinel1CalibrationStruct output;
+
+  // Double
+  output.timeMJD = std::stod(kwl.at(prefix + "TimeMJD"));
+  output.deltaMJD = std::stod(kwl.at(prefix + "DeltaMJD"));
+
+  // Int
+  output.line = std::stoi(kwl.at(prefix + "Line"));
+
+  // std::vector<T>
+  output.pixels = StringToScalarVector<int>(kwl.at(prefix + "Pixels"));
+  output.deltaPixels = StringToScalarVector<double>(kwl.at(prefix + "DeltaPixels"));
+  output.vect = StringToScalarVector<float>(kwl.at(prefix + "Vect"));
+
+  return output;
+}
 
 Sentinel1CalibrationLookupData::Sentinel1CalibrationLookupData() : firstLineTime(0.), lastLineTime(0.), numOfLines(0), count(0), lineTimeInterval(0.)
 {
