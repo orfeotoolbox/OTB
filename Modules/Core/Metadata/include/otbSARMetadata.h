@@ -202,7 +202,7 @@ struct OTBMetadata_EXPORT SARParam
   /** Keywordlist export */
   void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const;
 
-  /** String import */
+  /** Keywordlist import */
   void FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix);
 };
 
@@ -233,6 +233,11 @@ struct OTBMetadata_EXPORT SARCalib
   PointSetType::Pointer radiometricCalibrationIncidenceAngle = PointSetType::New();
   PointSetType::Pointer radiometricCalibrationRangeSpreadLoss = PointSetType::New();
   std::unordered_map<short, LookupDataType::Pointer> calibrationLookupData;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const;
+  /** Keywordlist import */
+  void FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix);
 };
 
 } // end namespace otb
