@@ -21,22 +21,22 @@
 project(TutorialsExamples)
 
 add_executable(FilteringPipeline FilteringPipeline.cxx)
-target_link_libraries(FilteringPipeline ${OTBImageBase_LIBRARIES})
+target_link_libraries(FilteringPipeline ${OTBCommon_LIBRARIES} ${OTBImageBase_LIBRARIES} ${OTBImageIO_LIBRARIES})
 
 add_executable(HelloWorldOTB HelloWorldOTB.cxx)
 target_link_libraries(HelloWorldOTB ${OTBImageBase_LIBRARIES})
 
 add_executable(Multispectral Multispectral.cxx)
-target_link_libraries(Multispectral ${OTBImageBase_LIBRARIES})
+target_link_libraries(Multispectral ${OTBCommon_LIBRARIES} ${OTBImageBase_LIBRARIES} ${OTBImageIO_LIBRARIES} ${OTBITK_LIBRARIES})
 
 add_executable(OrthoFusion OrthoFusion.cxx)
-target_link_libraries(OrthoFusion ${OTBImageBase_LIBRARIES})
+target_link_libraries(OrthoFusion ${OTBCommon_LIBRARIES} ${OTBImageBase_LIBRARIES} ${OTBImageIO_LIBRARIES} ${OTBTransform_LIBRARIES} ${OTBProjection_LIBRARIES} ${OTBITK_LIBRARIES})
 
 add_executable(Pipeline Pipeline.cxx)
-target_link_libraries(Pipeline ${OTBImageBase_LIBRARIES} ${OTBImageIO_LIBRARIES})
+target_link_libraries(Pipeline ${OTBCommon_LIBRARIES} ${OTBImageBase_LIBRARIES} ${OTBImageIO_LIBRARIES} ${OTBITK_LIBRARIES})
 
 add_executable(ScalingPipeline ScalingPipeline.cxx)
-target_link_libraries(ScalingPipeline ${OTBImageBase_LIBRARIES} ${OTBImageIO_LIBRARIES})
+target_link_libraries(ScalingPipeline ${OTBCommon_LIBRARIES} ${OTBImageBase_LIBRARIES} ${OTBImageIO_LIBRARIES} ${OTBITK_LIBRARIES})
 
 if(BUILD_TESTING)
   add_subdirectory(test)
