@@ -84,6 +84,11 @@ public:
 
   int GetPixelIndex(int x, const Sentinel1CalibrationStruct& calVec) const;
 
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const override;
+  /** Keywordlist import */
+  void FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix) override;
+
 private:
   Sentinel1CalibrationLookupData(const Self&) = delete;
   void operator=(const Self&) = delete;
