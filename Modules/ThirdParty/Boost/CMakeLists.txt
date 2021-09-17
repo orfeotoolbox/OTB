@@ -30,7 +30,7 @@ set(OTBBoost_INCLUDE_DIRS ${OTBBoost_SOURCE_DIR}/src)
 # why drag a semi-standard c++ library for use in two tests?.
 # Update OTB 8.0: link with boost libraries as boost::date_time and boost::filesystem are used extensively in core modules.
 if(Boost_LIBRARIES)
-  if(Boost_VERSION VERSION_GREATER "1.70.0") #In Boost 1.70, FindBoost has been reworked so we have to get the imported location of the libs
+  if(Boost_MINOR_VERSION STREQUAL "72")
     set(OTBBoost_IMPORTED_LIBRARIES)
     foreach(current_LIB ${Boost_LIBRARIES})
       get_target_property(OTBBoost_current_LIB ${current_LIB} IMPORTED_LOCATION_RELEASE)
