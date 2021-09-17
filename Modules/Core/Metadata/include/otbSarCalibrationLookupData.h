@@ -81,6 +81,20 @@ public:
     Superclass::PrintSelf(os, indent);
   }
 
+  /** Keywordlist export */
+  virtual void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const
+  {
+    kwl.insert({prefix + "Sensor", "Default"});
+    kwl.insert({prefix + "Type",
+                 boost::lexical_cast<std::string>(m_Type)});
+  }
+
+  /** Keywordlist import */
+  virtual void FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
+  {
+    m_Type = boost::lexical_cast<short>(kwl.at(prefix + "Type"));
+  }
+
 private:
   SarCalibrationLookupData(const Self&) = delete;
   void  operator=(const Self&) = delete;
