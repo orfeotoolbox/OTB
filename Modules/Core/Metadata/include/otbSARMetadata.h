@@ -227,11 +227,11 @@ struct OTBMetadata_EXPORT SARCalib
   ArrayType radiometricCalibrationAntennaPatternOldGainPolynomialDegree;
   ArrayType radiometricCalibrationIncidenceAnglePolynomialDegree;
   ArrayType radiometricCalibrationRangeSpreadLossPolynomialDegree;
-  PointSetType::Pointer radiometricCalibrationNoise;
-  PointSetType::Pointer radiometricCalibrationAntennaPatternNewGain;
-  PointSetType::Pointer radiometricCalibrationAntennaPatternOldGain;
-  PointSetType::Pointer radiometricCalibrationIncidenceAngle;
-  PointSetType::Pointer radiometricCalibrationRangeSpreadLoss;
+  PointSetType::Pointer radiometricCalibrationNoise = PointSetType::New();
+  PointSetType::Pointer radiometricCalibrationAntennaPatternNewGain = PointSetType::New();
+  PointSetType::Pointer radiometricCalibrationAntennaPatternOldGain = PointSetType::New();
+  PointSetType::Pointer radiometricCalibrationIncidenceAngle = PointSetType::New();
+  PointSetType::Pointer radiometricCalibrationRangeSpreadLoss = PointSetType::New();
   std::unordered_map<short, LookupDataType::Pointer> calibrationLookupData;
 };
 
