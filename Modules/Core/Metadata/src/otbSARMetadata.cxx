@@ -132,8 +132,8 @@ void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
   rangeSamplingRate = std::stod(kwl.at(prefix + "RangeSamplingRate"));
   rangeResolution = std::stod(kwl.at(prefix + "RangeResolution"));
 
-  numberOfLinesPerBurst = std::stoi(kwl.at(prefix + "NumberOfLinesPerBurst"));
-  numberOfSamplesPerBurst = std::stoi(kwl.at(prefix + "NumberOfSamplesPerBurst"));
+  numberOfLinesPerBurst = std::stoul(kwl.at(prefix + "NumberOfLinesPerBurst"));
+  numberOfSamplesPerBurst = std::stoul(kwl.at(prefix + "NumberOfSamplesPerBurst"));
   KeywordlistToVector(azimuthFmRates, kwl, prefix + "AzimuthFmRates");
   KeywordlistToVector(dopplerCentroids, kwl, prefix + "DopplerCentroid");
   KeywordlistToVector(orbits, kwl, prefix + "Orbits");
