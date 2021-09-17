@@ -19,5 +19,7 @@ AcquisitionStopTime 2011-04-18T18:03:29.380925Z
 SAR <SARParam>
 SARCalib <SARCalib>
 GCP <GCPParam>
+
+GCP
 {"Projection": "", 
 []}

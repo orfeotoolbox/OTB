@@ -28,6 +28,8 @@ SAR <SARParam>
 SARCalib <SARCalib>
 GCP <GCPParam>
 Extra.FACILITY_IDENTIFIER GATN
+
+GCP
 {"Projection": "GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AXIS["Latitude",NORTH],AXIS["Longitude",EAST],AUTHORITY["EPSG","4326"]]", 
 [{"GCP_Id": "1", "GCP_Info": "", "GCP_Row": "0.5", "GCP_Col": "0.5", "GCP_X": "-97.5857", "GCP_Y": "49.4039", "GCP_Z": "453.201", }, 
 {"GCP_Id": "2", "GCP_Info": "", "GCP_Row": "0.5", "GCP_Col": "217.5", "GCP_X": "-97.5577", "GCP_Y": "49.4002", "GCP_Z": "453.201", }, 
