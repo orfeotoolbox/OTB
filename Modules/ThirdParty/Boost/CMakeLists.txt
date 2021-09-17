@@ -20,7 +20,7 @@
 
 project(OTBBoost)
 
-set(OTBBoost_SYSTEM_INCLUDE_DIRS ${Boost_INCLUDE_DIR})
+set(OTBBoost_SYSTEM_INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
 set(OTBBoost_INCLUDE_DIRS ${OTBBoost_SOURCE_DIR}/src)
 
 # Do not include boost libraries into full list of OTB_LIBRARIES
