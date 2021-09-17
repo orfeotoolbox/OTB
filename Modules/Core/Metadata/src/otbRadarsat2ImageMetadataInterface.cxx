@@ -247,6 +247,8 @@ void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Add(MDGeom::SAR, sarParam);
 
   SARCalib sarCalib;
+  std::istringstream("1970-01-01T00:00:00.000000") >> sarCalib.calibrationStartTime;
+  std::istringstream("1970-01-01T00:00:00.000000") >> sarCalib.calibrationStopTime;
   LoadRadiometricCalibrationData(sarCalib, ProductMS, imd);
   CreateCalibrationLookupData(sarCalib, imd, ProductMS, false);
   imd.Add(MDGeom::SARCalib, sarCalib);

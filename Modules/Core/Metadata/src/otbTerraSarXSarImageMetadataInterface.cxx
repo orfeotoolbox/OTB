@@ -926,9 +926,10 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   }
 
   SARCalib sarCalib;
+  std::istringstream("1970-01-01T00:00:00.000000") >> sarCalib.calibrationStartTime;
+  std::istringstream("1970-01-01T00:00:00.000000") >> sarCalib.calibrationStopTime;
   LoadRadiometricCalibrationData(sarCalib, MainXMLFileMetadataSupplier, imd, polarization);
   sarCalib.calibrationLookupFlag = false;
-
   imd.Add(MDGeom::SARCalib, sarCalib);
 
   // Open the georef file containing GCPs
