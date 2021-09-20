@@ -22,6 +22,7 @@
 #define SarCalibrationLookupData_H
 
 #include "OTBMetadataExport.h"
+#include "otbMetaDataKey.h"
 
 #include <itkLightObject.h>
 #include <itkNumericTraits.h>
@@ -86,7 +87,7 @@ public:
   }
 
   /** Keywordlist export */
-  virtual void ToKeywordlist(typename MetaData::Keywordlist & kwl, const std::string & prefix) const
+  virtual void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const
   {
     kwl.insert({prefix + "Sensor", "Default"});
     kwl.insert({prefix + "Type",
@@ -94,7 +95,7 @@ public:
   }
 
   /** Keywordlist import */
-  virtual void FromKeywordlist(const typename MetaData::Keywordlist & kwl, const std::string & prefix)
+  virtual void FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
   {
     m_Type = boost::lexical_cast<short>(kwl.at(prefix + "Type"));
   }
