@@ -16,9 +16,6 @@ RedDisplayChannel 0
 GreenDisplayChannel 0
 BlueDisplayChannel 0
 CalScale 1
-PRF 0
-RSF 0
-RadarFrequency 0
 CenterIncidenceAngle 0
 LineSpacing 4.8254
 PixelSpacing 4.73308
