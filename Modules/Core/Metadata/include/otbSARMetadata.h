@@ -38,6 +38,8 @@
 namespace otb
 {
 
+class SarCalibrationLookupData;
+
 /** \struct AzimuthFmRate
  *
  * \brief This structure is used to manage parameters
@@ -214,9 +216,8 @@ struct OTBMetadata_EXPORT SARParam
  */
 struct OTBMetadata_EXPORT SARCalib
 {
-  using PointSetType = itk::PointSet<double, 2>;
-  using ArrayType    = std::array<int, 2>;
-  using LookupDataType = SarCalibrationLookupData;
+  using PointSetType   = itk::PointSet<double, 2>;
+  using ArrayType      = std::array<int, 2>;
   
   bool calibrationLookupFlag = false;
   double rescalingFactor;
@@ -232,7 +233,7 @@ struct OTBMetadata_EXPORT SARCalib
   PointSetType::Pointer radiometricCalibrationAntennaPatternOldGain = PointSetType::New();
   PointSetType::Pointer radiometricCalibrationIncidenceAngle = PointSetType::New();
   PointSetType::Pointer radiometricCalibrationRangeSpreadLoss = PointSetType::New();
-  std::unordered_map<short, LookupDataType::Pointer> calibrationLookupData;
+  std::unordered_map<short, SarCalibrationLookupData::Pointer> calibrationLookupData;
 
   /** Keywordlist export */
   void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const;
