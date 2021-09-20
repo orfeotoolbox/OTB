@@ -45,5 +45,6 @@ endif() #BUILD_TESTING
 
 if(WIN32)
   # disable autolinking in boost
-	add_definitions( -DBOOST_ALL_NO_LIB )
+	add_definitions(-DBOOST_ALL_NO_LIB)
+  add_definitions(-DBOOST_ALL_DYN_LINK)
 endif()
