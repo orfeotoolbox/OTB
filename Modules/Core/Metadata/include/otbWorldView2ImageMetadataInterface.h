@@ -66,7 +66,6 @@ private:
   void FetchPhysicalBias(ImageMetadata&);
   
   void FetchSolarIrradianceWorldView2(ImageMetadata &);
-  void FetchWavelengthsWorldView2(ImageMetadata &);
   void FetchSpectralSensitivityWorldView2(ImageMetadata &);
 
   void FetchSolarIrradianceQuickBird(ImageMetadata &);

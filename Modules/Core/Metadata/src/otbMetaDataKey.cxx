@@ -408,8 +408,6 @@ MDNumBmType MDNumNames = bimapGenerator<MDNum>(std::map<MDNum, std::string> {
   {MDNum::SunAzimuth,"SunAzimuth"},
   {MDNum::SatElevation,"SatElevation"},
   {MDNum::SatAzimuth,"SatAzimuth"},
-  {MDNum::FirstWavelength,"FirstWavelength"},
-  {MDNum::LastWavelength,"LastWavelength"},
   {MDNum::SpectralStep,"SpectralStep"},
   {MDNum::SpectralMin,"SpectralMin"},
   {MDNum::SpectralMax,"SpectralMax"},

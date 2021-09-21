@@ -82,45 +82,6 @@ void WorldView2ImageMetadataInterface::FetchSolarIrradianceWorldView2(ImageMetad
   }
 }
 
-void WorldView2ImageMetadataInterface::FetchWavelengthsWorldView2(ImageMetadata& imd)
-{
-  auto productType = imd[MDStr::ProductType];
-
-  std::string              panchro("P");
-  std::string              multi("Multi");
-  std::string              ms1("MS1");
-
-  if (productType == panchro)
-  {
-    imd.Bands[0].Add(MDNum::FirstWavelength, 0.464);
-    imd.Bands[0].Add(MDNum::LastWavelength, 0.801);
-  }
-  else
-  {
-    //TODO : check result, there might be an error in the old code : lastWavelength blue : 0.581
-    const std::unordered_map<std::string, std::pair<double, double>> 
-              BandNameToWavelengthTable{
-       {"C", {0.401, 0.453}} ,
-       {"B", {0.447, 0.508}},
-       {"G", {0.511, 0.581}},
-       {"Y", {0.588, 0.627}},
-       {"R", {0.629, 0.689}},
-       {"RE", {0.704, 0.744}},
-       {"N", {0.772, 0.890}},
-       {"N2", {0.862, 0.954}}};
-
-    for (auto & band: imd.Bands)
-    {
-      auto wavelengthIt = BandNameToWavelengthTable.find(band[MDStr::BandName] );
-      if (wavelengthIt != BandNameToWavelengthTable.end())
-      {
-        band.Add(MDNum::FirstWavelength, wavelengthIt->second.first);
-        band.Add(MDNum::LastWavelength, wavelengthIt->second.second);
-      }
-    }
-  }
-}
-
 void WorldView2ImageMetadataInterface::FetchPhysicalBias(ImageMetadata& imd)
 {
   auto productType = imd[MDStr::ProductType];
@@ -1112,7 +1073,6 @@ void WorldView2ImageMetadataInterface::Parse(ImageMetadata &imd)
     }
 
     FetchSolarIrradianceWorldView2(imd);
-    FetchWavelengthsWorldView2(imd);
     FetchSpectralSensitivityWorldView2(imd);
   }
   else if (metadata.sensorId == "QB02")

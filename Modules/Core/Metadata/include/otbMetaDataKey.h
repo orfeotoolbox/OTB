@@ -149,8 +149,6 @@ enum class MDNum
   SunAzimuth,
   SatElevation,
   SatAzimuth,
-  FirstWavelength,
-  LastWavelength,
   SpectralStep,
   SpectralMin,
   SpectralMax,
