@@ -1,4 +1,5 @@
 SensorID IKONOS-2
+Instrument OSA
 AreaOrPoint Area
 TileHintX 3667
 TileHintY 256

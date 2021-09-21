@@ -21,11 +21,7 @@
 
 #include "otbQuickBirdImageMetadataInterface.h"
 
-#include "otbStringUtils.h"
-#include "itkMetaDataObject.h"
-
-#include "itksys/SystemTools.hxx"
-#include "otbStringUtilities.h"
+#include <string>
 
 namespace otb
 {
@@ -37,10 +33,7 @@ QuickBirdImageMetadataInterface::QuickBirdImageMetadataInterface()
 bool QuickBirdImageMetadataInterface::CanRead() const
 {
   std::string sensorID = GetSensorID();
-  if (sensorID.find("QB02") != std::string::npos)
-    return true;
-  else
-    return false;
+  return (sensorID.find("QB02") != std::string::npos);
 }
 
 } // end namespace otb

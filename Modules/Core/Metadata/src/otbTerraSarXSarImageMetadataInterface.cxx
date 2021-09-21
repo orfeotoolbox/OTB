@@ -666,6 +666,8 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   imd.Add(MDNum::PRF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonPRF"));
   imd.Add(MDNum::RSF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
 
+  imd.Add(MDStr::Instrument, "TSX-SAR");
+
   // Polarisation
   auto polarization =
       itksys::SystemTools::GetFilenameName(m_MetadataSupplierInterface->GetResourceFile("")).substr(6, 2);
@@ -733,6 +735,8 @@ void TerraSarXSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   Fetch(MDNum::NumberOfLines, imd, "number_lines");
   Fetch(MDNum::NumberOfColumns, imd, "number_samples");
   Fetch(MDNum::RadarFrequency, imd, "radarFrequency");
+
+  imd.Add(MDStr::Instrument, "TSX-SAR");
     
   // Main XML file
   std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(m_MetadataSupplierInterface->GetResourceFile("")),

@@ -189,6 +189,7 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 
   imd.Add(MDStr::Mission, "CSK");
   imd.Add(MDStr::SensorID, "CSK");
+  imd.Add(MDStr::Instrument, "SAR-2000");
   Fetch(MDStr::OrbitDirection, imd, "Orbit_Direction");
   bool hasOrbitNumber ;
   std::string orbitNumber =  m_MetadataSupplierInterface->GetMetadataValue("Orbit_Number", hasOrbitNumber) ;
@@ -296,6 +297,7 @@ void CosmoImageMetadataInterface::ParseGeom(ImageMetadata &imd)
 
   imd.Add(MDStr::Mission, "CSK");
   imd.Add(MDStr::SensorID, "CSK");
+  imd.Add(MDStr::Instrument, "SAR-2000");
   Fetch(MDStr::OrbitDirection, imd, "support_data.orbit_pass");
   Fetch(MDNum::OrbitNumber, imd, "support_data.abs_orbit");
   Fetch(MDNum::RadarFrequency, imd, "support_data.radar_frequency");

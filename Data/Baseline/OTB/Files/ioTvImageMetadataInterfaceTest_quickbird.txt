@@ -1,5 +1,6 @@
 SensorID QB02
 Mission Quickbird
+Instrument BGIS2000
 ProductType P
 AreaOrPoint Area
 TileHintX 27552

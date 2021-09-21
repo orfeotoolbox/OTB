@@ -1,5 +1,6 @@
 SensorID WV02
 Mission WorldView-2
+Instrument WV110
 ProductType Multi
 AreaOrPoint Area
 TileHintX 1150
@@ -41,8 +42,6 @@ EnhancedBandName Coastal
 PhysicalGain 5.0884
 PhysicalBias 0
 SolarIrradiance 1758.22
-FirstWavelength 0.401
-LastWavelength 0.453
 SpectralSensitivity LUT1D.DIM0.SIZE = 301
 LUT1D.DIM0.ORIGIN = 0.35
 LUT1D.DIM0.SPACING = 0.0025
@@ -52,8 +51,6 @@ EnhancedBandName Blue
 PhysicalGain 7.44732
 PhysicalBias 0
 SolarIrradiance 1974.24
-FirstWavelength 0.447
-LastWavelength 0.508
 SpectralSensitivity LUT1D.DIM0.SIZE = 301
 LUT1D.DIM0.ORIGIN = 0.35
 LUT1D.DIM0.SPACING = 0.0025
@@ -63,8 +60,6 @@ EnhancedBandName Green
 PhysicalGain 11.1418
 PhysicalBias 0
 SolarIrradiance 1856.41
-FirstWavelength 0.511
-LastWavelength 0.581
 SpectralSensitivity LUT1D.DIM0.SIZE = 301
 LUT1D.DIM0.ORIGIN = 0.35
 LUT1D.DIM0.SPACING = 0.0025
@@ -74,8 +69,6 @@ EnhancedBandName Yellow
 PhysicalGain 7.33177
 PhysicalBias 0
 SolarIrradiance 1738.48
-FirstWavelength 0.588
-LastWavelength 0.627
 SpectralSensitivity LUT1D.DIM0.SIZE = 301
 LUT1D.DIM0.ORIGIN = 0.35
 LUT1D.DIM0.SPACING = 0.0025
@@ -85,8 +78,6 @@ EnhancedBandName Red
 PhysicalGain 12.5602
 PhysicalBias 0
 SolarIrradiance 1559.46
-FirstWavelength 0.629
-LastWavelength 0.689
 SpectralSensitivity LUT1D.DIM0.SIZE = 301
 LUT1D.DIM0.ORIGIN = 0.35
 LUT1D.DIM0.SPACING = 0.0025
@@ -96,8 +87,6 @@ EnhancedBandName RedEdge
 PhysicalGain 8.65711
 PhysicalBias 0
 SolarIrradiance 1342.07
-FirstWavelength 0.704
-LastWavelength 0.744
 SpectralSensitivity LUT1D.DIM0.SIZE = 301
 LUT1D.DIM0.ORIGIN = 0.35
 LUT1D.DIM0.SPACING = 0.0025
@@ -107,8 +96,6 @@ EnhancedBandName NIR1
 PhysicalGain 19.4802
 PhysicalBias 0
 SolarIrradiance 1069.73
-FirstWavelength 0.772
-LastWavelength 0.89
 SpectralSensitivity LUT1D.DIM0.SIZE = 301
 LUT1D.DIM0.ORIGIN = 0.35
 LUT1D.DIM0.SPACING = 0.0025
@@ -118,8 +105,6 @@ EnhancedBandName NIR2
 PhysicalGain 11.015
 PhysicalBias 0
 SolarIrradiance 861.287
-FirstWavelength 0.862
-LastWavelength 0.954
 SpectralSensitivity LUT1D.DIM0.SIZE = 301
 LUT1D.DIM0.ORIGIN = 0.35
 LUT1D.DIM0.SPACING = 0.0025

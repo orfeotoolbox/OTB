@@ -1,5 +1,6 @@
 SensorID SAR
 Mission TSX-1
+Instrument TSX-SAR
 ProductType SSC____SM_S
 Polarization HH
 Mode SM

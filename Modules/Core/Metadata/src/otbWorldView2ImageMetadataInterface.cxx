@@ -1065,6 +1065,7 @@ void WorldView2ImageMetadataInterface::Parse(ImageMetadata &imd)
   {
     imd.Add(MDStr::SensorID, "WV02");
     imd.Add(MDStr::Mission, "WorldView-2");
+    imd.Add(MDStr::Instrument, "WV110");
 
     for (auto & band : imd.Bands)
     {
@@ -1079,6 +1080,7 @@ void WorldView2ImageMetadataInterface::Parse(ImageMetadata &imd)
   {
     imd.Add(MDStr::SensorID, "QB02");
     imd.Add(MDStr::Mission, "Quickbird");
+    imd.Add(MDStr::Instrument, "BGIS2000");
 
     FetchSolarIrradianceQuickBird(imd);
     FetchPhysicalGainQuickBird(metadata.bitsPerPixel,

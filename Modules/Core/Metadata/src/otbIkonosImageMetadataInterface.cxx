@@ -522,6 +522,7 @@ void IkonosImageMetadataInterface::Parse(ImageMetadata &imd)
   try
   {
     imd.Add(MDStr::SensorID, ikonosMetadata["sensorID"]);
+    imd.Add(MDStr::Instrument, "OSA");
     
     imd.Add(MDNum::SunElevation, boost::lexical_cast<double>(ikonosMetadata["sunElevation"]));
     imd.Add(MDNum::SunAzimuth, boost::lexical_cast<double>(ikonosMetadata["sunAzimuth"]));

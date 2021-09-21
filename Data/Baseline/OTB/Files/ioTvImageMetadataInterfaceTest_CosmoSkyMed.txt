@@ -1,5 +1,6 @@
 SensorID CSK
 Mission CSK
+Instrument SAR-2000
 ProductType SCS_B
 Polarization HH
 Mode ENHANCED SPOTLIGHT
