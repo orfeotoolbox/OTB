@@ -374,18 +374,17 @@ private:
   // Look for default values in the image metadata
   void SetDefaultValue(const FloatVectorImageType* inImage, std::string what)
   {
-    typedef ImageMetadataInterfaceBase  ImageMetadataInterfaceType;
-    ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(inImage->GetMetaDataDictionary());
     if (what == "NODATA")
     {
-      std::vector<double> values;
-      std::vector<bool>   flags;
+      auto imd = inImage->GetImageMetadata();
 
-      bool ret = metadataInterface->GetNoDataFlags(flags, values);
-
-      if (ret && !values.empty() && !flags.empty() && flags[0])
+      if (imd.Has(MDNum::NoData))
       {
-        SetParameterFloat("nodata", static_cast<float>(values[0]));
+        SetParameterFloat("nodata", static_cast<float>(imd[MDNum::NoData]));
+      }
+      else if ((imd.Bands.size() > 0) && imd.Bands[0].Has(MDNum::NoData))
+      {
+        SetParameterFloat("nodata", static_cast<float>(imd.Bands[0][MDNum::NoData]));
       }
       else
       {
