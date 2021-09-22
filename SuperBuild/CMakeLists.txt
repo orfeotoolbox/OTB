@@ -361,16 +361,25 @@ configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
 #   -PYTHON_EXECUTABLE
 #   -PYTHON_INCLUDE_DIR
 #   -PYTHON_LIBRARY
-set ( Python_ADDITIONAL_VERSIONS "3;2" )
-set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
-set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
-find_package( PythonInterp )
-if ( OTB_WRAP_PYTHON AND ( "x${PYTHON_VERSION_MAJOR}" STREQUAL "x2" ) )
-    message (WARNING "Python3 not found. There is no longer support of \
-    wrapping in python2 in OTB, but it can still be used.")
+if(CMAKE_VERSION VERSION_LESS 3.12.0)
+  set ( Python_ADDITIONAL_VERSIONS "3;2" )
+  set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+  set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
+  find_package( PythonInterp )
+  if ( OTB_WRAP_PYTHON AND ( "x${PYTHON_VERSION_MAJOR}" STREQUAL "x2" ) )
+      message (WARNING "Python3 not found. There is no longer support of \
+      wrapping in python2 in OTB, but it can still be used.")
+  endif()
+  # Now that we have a python version the addditional versions should only
+  # contain the version we have to get the corresponding libs
+  set (Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
+  find_package ( PythonLibs )
+else()
+  if(WIN32)
+    set(Python3_ROOT_DIR "C:/tools/Python38-x64")
+  endif()
+  find_package( Python3 REQUIRED COMPONENTS Interpreter Development)
 endif()
-set (Python_ADDITIONAL_VERSIONS "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
-find_package ( PythonLibs )
 
 include(External_otb)
 
