@@ -17,8 +17,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-include_directories ( ${PYTHON_INCLUDE_DIRS} )
+if(CMAKE_VERSION VERSION_LESS 3.12.0)
+  include_directories ( ${PYTHON_INCLUDE_DIR} )
+else()
+  include_directories( ${Python_INCLUDE_DIRS} )
+  set(PYTHON_LIBRARIES ${Python_LIBRARIES})
+endif()
 include_directories ( ${CMAKE_CURRENT_SOURCE_DIR})
 set_source_files_properties ( ../otbApplication.i PROPERTIES CPLUSPLUS ON )
 # Get target name

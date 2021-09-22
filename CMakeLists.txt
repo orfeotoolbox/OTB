@@ -103,7 +103,7 @@ repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
 # Find python stuff
 # Version 3 is preferred before 2
-if(CMAKE_VERSION VERSION_LESS "3.12.0")
+if(CMAKE_VERSION VERSION_LESS 3.12.0)
   set ( Python_ADDITIONAL_VERSIONS "3;2" )
   set ( PythonInterp_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
   set ( PythonLibs_FIND_REQUIRED ${OTB_WRAP_PYTHON} )
@@ -120,7 +120,11 @@ else()
   if(WIN32)
     set(Python3_ROOT_DIR "C:/tools/Python38-x64")
   endif()
-  find_package( Python3 REQUIRED COMPONENTS Interpreter Development)
+  find_package(Python REQUIRED COMPONENTS Interpreter Development)
+  if(Python_FOUND)
+    message(STATUS "Python Library directory : ${Python_LIBRARY_DIRS}")
+    message(STATUS "Python Headers directory : ${Python_INCLUDE_DIRS}")
+  endif()
 endif()
 
 #-----------------------------------------------------------------------------
