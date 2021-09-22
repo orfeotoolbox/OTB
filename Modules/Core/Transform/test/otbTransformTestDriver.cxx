@@ -26,7 +26,6 @@ void RegisterTests()
   REGISTER_TEST(otbLogPolarTransformResample);
   REGISTER_TEST(otbLogPolarTransform);
   REGISTER_TEST(otbGeocentricTransform);
-  REGISTER_TEST(otbCreateProjectionWithOTB);
   REGISTER_TEST(otbGenericMapProjection);
   REGISTER_TEST(otbStreamingWarpImageFilter);
   REGISTER_TEST(otbStreamingWarpImageFilterEmptyRegion);

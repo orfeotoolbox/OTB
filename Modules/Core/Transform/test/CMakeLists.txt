@@ -26,7 +26,6 @@ otbGenericRSTransformWithSRID.cxx
 otbLogPolarTransformResample.cxx
 otbLogPolarTransform.cxx
 otbGeocentricTransform.cxx
-otbCreateProjectionWithOTB.cxx
 otbGenericMapProjection.cxx
 otbStreamingWarpImageFilter.cxx
 otbInverseLogPolarTransform.cxx
@@ -173,16 +172,6 @@ otb_add_test(NAME prTvGeocentricTransform COMMAND otbTransformTestDriver
   ${TEMP}/prTvGeocentricTransform.txt
   otbGeocentricTransform
   ${TEMP}/prTvGeocentricTransform.txt
-  )
-
-otb_add_test(NAME prTvTestCreateProjectionWithOTB_Toulouse COMMAND otbTransformTestDriver
-  otbCreateProjectionWithOTB
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  )
-
-otb_add_test(NAME prTvTestCreateProjectionWithOTB_Cevennes COMMAND otbTransformTestDriver
-  otbCreateProjectionWithOTB
-  LARGEINPUT{QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF}
   )
 
 otb_add_test(NAME dmTvStreamingWarpImageFilter COMMAND otbTransformTestDriver
