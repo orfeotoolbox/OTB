@@ -124,6 +124,12 @@ else()
   if(Python_FOUND)
     message(STATUS "Python Library directory : ${Python_LIBRARY_DIRS}")
     message(STATUS "Python Headers directory : ${Python_INCLUDE_DIRS}")
+    #For compatibility reason, we have to define these variables
+    set(PYTHON_LIBRARIES ${Python_LIBRARIES})
+    set(PYTHON_INCLUDE_DIR ${Python_INCLUDE_DIRS})
+    set(PYTHON_LIBRARY_DIR ${Python_LIBRARY_DIRS})
+    set(PYTHON_VERSION_STRING ${Python_VERSION})
+    set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
   endif()
 endif()
 
