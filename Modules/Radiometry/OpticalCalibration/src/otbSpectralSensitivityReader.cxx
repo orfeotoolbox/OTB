@@ -27,7 +27,6 @@
 #include "otb_boost_string_header.h"
 #include "itksys/SystemTools.hxx"
 
-#include "otbSpotImageMetadataInterface.h"
 #include "itkMacro.h"
 
 namespace otb
