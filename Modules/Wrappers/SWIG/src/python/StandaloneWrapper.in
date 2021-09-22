@@ -52,7 +52,7 @@ else()
   endif()
   find_package( Python3 REQUIRED COMPONENTS Interpreter Development)
 endif()
-include_directories(${PYTHON_INCLUDE_DIR})
+include_directories(${PYTHON_INCLUDE_DIRS})
 
 find_package(Numpy)
 if ( NUMPY_FOUND )

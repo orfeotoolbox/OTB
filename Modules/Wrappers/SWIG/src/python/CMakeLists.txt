@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-include_directories ( ${PYTHON_INCLUDE_DIR} )
+include_directories ( ${PYTHON_INCLUDE_DIRS} )
 include_directories ( ${CMAKE_CURRENT_SOURCE_DIR})
 set_source_files_properties ( ../otbApplication.i PROPERTIES CPLUSPLUS ON )
 # Get target name
