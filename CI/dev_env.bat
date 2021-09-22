@@ -76,7 +76,6 @@ echo Home dir: %HOMEDRIVE%%HOMEPATH%
 :: Setup Python
 set PATH=C:\tools\Python38-%ARCH%;%PATH%
 set PATH=C:\tools\Python38-%ARCH%\Scripts;%PATH%
-set PYTHON_EXECUTABLE=C:\tools\Python38\python.exe
 
 :: Setup GL dlls
 set PATH=%PATH%;C:\tools\GL\%ARCH%\bin
