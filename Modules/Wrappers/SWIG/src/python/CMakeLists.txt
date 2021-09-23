@@ -26,11 +26,9 @@ include_directories ( ${CMAKE_CURRENT_SOURCE_DIR})
 set_source_files_properties ( ../otbApplication.i PROPERTIES CPLUSPLUS ON )
 # Get target name
 set(extension_target _otbApplication)
-if(POLICY CMP0078)
-  cmake_policy(GET CMP0078 swig_target_name_policy)
-  if (swig_target_name_policy STREQUAL "NEW")
-    set(extension_target otbApplication)
-  endif()
+if(CMAKE_VERSION VERSION_GREATER 3.13.0)
+  #UseSwig now defaults its target name to the name of the .i file 
+  set(extension_target otbApplication)
 endif()
 # Run swig
 set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_GLOBAL_FLAGS})
