@@ -22,7 +22,6 @@ otb_module_test()
 
 set(OTBOSSIMAdaptersTests
 otbOSSIMAdaptersTestDriver.cxx
-otbTestImageKeywordlist.cxx
 otbOssimJpegFileResourceLeakTest.cxx
 otbOssimElevManagerTest2.cxx
 otbOssimElevManagerTest4.cxx
@@ -81,23 +80,6 @@ set(TOLS
 )
 
 set(TESTNB 0 )
-foreach( file ${NAME_TESTS} )
-  list(GET IMG   ${TESTNB} current_img   )
-  list(GET NEEDEDKW   ${TESTNB} current_neededkw   )
-  list(GET TOLS   ${TESTNB} current_tols   )
-  list(GET NAME_TESTS   ${TESTNB} current_name   )
-  math(EXPR TESTNB "${TESTNB} + 1")
-
-  otb_add_test(NAME ioTvTestImageKeywordlist_${current_name} COMMAND otbOSSIMAdaptersTestDriver
-             otbTestImageKeywordlist
-             ${current_img}
-             ${current_neededkw}
-             ${current_tols}
-             ${current_name}.geom
-             0 # 1 : Check all keywords (ignore argv[2] and argv[3]) / 0 : Only check the needed keywords
-            )
-            
-endforeach()     
 
 #KEYWORDLIST : RADAR SENSORS
 set(NAME_TESTS
@@ -119,22 +101,6 @@ LARGEINPUT{SAR_ERS2_SLCI_SCENE1/DAT_01.001}
 )
 
 set(TESTNB 0 )
-foreach( file ${NAME_TESTS} )
-  list(GET IMG   ${TESTNB} current_img   )
-  list(GET NAME_TESTS   ${TESTNB} current_name   )
-  math(EXPR TESTNB "${TESTNB} + 1")
-
-  otb_add_test(NAME ioTvTestImageKeywordlist_${current_name} COMMAND otbOSSIMAdaptersTestDriver
-             otbTestImageKeywordlist
-             ${current_img}
-             "Foo"
-             "Foo"
-             ${current_name}.geom
-             1 # 1 : Check all keywords (ignore argv[2] and argv[3]) / 0 : Only check the needed keywords
-            )
-            
-endforeach()       
-
 
 otb_add_test(NAME ioTvOssimJpegFileResourceLeak COMMAND otbOSSIMAdaptersTestDriver
   otbOssimJpegFileResourceLeakTest
