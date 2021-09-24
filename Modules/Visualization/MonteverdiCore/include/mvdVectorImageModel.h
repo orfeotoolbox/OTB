@@ -278,7 +278,7 @@ private:
   // AbstractLayerModel methods.
 
   std::string virtual_GetWkt() const override;
-  bool        virtual_HasKwl() const override;
+  bool virtual_HasSensorModel() const override;
   void virtual_ToWgs84(const PointType&, PointType&, double& alt) const override;
 
   //

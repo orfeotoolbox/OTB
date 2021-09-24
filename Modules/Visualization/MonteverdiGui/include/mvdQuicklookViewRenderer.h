@@ -157,7 +157,7 @@ private:
   //
   // Private methods.
 private:
-  void SetWktAndKwl();
+  void SetWktAndImd();
 
   //
   // ImageViewRenderer methods.

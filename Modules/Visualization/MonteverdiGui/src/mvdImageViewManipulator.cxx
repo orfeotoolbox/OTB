@@ -183,11 +183,11 @@ void ImageViewManipulator::SetWkt(const std::string& wkt)
 }
 
 /******************************************************************************/
-void ImageViewManipulator::SetKeywordList(const DefaultImageType::ImageKeywordlistType& kwl)
+void ImageViewManipulator::SetImd(const otb::ImageMetadata *imd)
 {
   assert(!m_ViewSettings.IsNull());
 
-  m_ViewSettings->SetKeywordList(kwl);
+  m_ViewSettings->SetImageMetadata(imd);
 }
 
 /******************************************************************************/

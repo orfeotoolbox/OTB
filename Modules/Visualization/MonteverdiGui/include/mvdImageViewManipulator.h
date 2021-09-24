@@ -44,6 +44,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbImageMetadata.h"
 #include "otbViewSettings.h"
 #include "OTBMonteverdiGUIExport.h"
 //
@@ -145,10 +146,7 @@ public:
 
   void SetWkt(const std::string& wkt) override;
 
-  /** Set the image keywordlist 
-    \deprecated
-   */
-  void SetKeywordList(const DefaultImageType::ImageKeywordlistType& kwl) override;
+  void SetImd(const otb::ImageMetadata* imd) override;
 
   PointType GetCenter() const override;
 

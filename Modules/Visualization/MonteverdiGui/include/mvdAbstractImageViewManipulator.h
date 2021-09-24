@@ -44,6 +44,7 @@
 
 //
 // OTB includes (sorted by alphabetic order)
+#include "otbImageMetadata.h"
 #include "OTBMonteverdiGUIExport.h"
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -125,7 +126,7 @@ public:
   /** Set the image keywordlist 
     \deprecated
    */
-  virtual void SetKeywordList(const DefaultImageType::ImageKeywordlistType& kwl) = 0;
+  virtual void SetImd(const otb::ImageMetadata* imd) = 0;
 
   /**
    */

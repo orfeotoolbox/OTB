@@ -594,11 +594,11 @@ std::string VectorImageModel::virtual_GetWkt() const
 }
 
 /*****************************************************************************/
-bool VectorImageModel::virtual_HasKwl() const
+bool VectorImageModel::virtual_HasSensorModel() const
 {
   assert(!m_Image.IsNull());
 
-  return m_Image->GetImageKeywordlist().GetSize() > 0;
+  return m_Image->GetImageMetadata().HasSensorGeometry();
 }
 
 /*****************************************************************************/
@@ -712,7 +712,7 @@ void VectorImageModel::OnPhysicalCursorPositionChanged(const QPoint&, const Poin
     {
       geoVector.push_back(ToStdString(tr("Geographic(exact)")));
     }
-    else if (ToImage()->GetImageKeywordlist().GetSize() != 0)
+    else if (ToImage()->GetImageMetadata().HasSensorGeometry())
     {
       geoVector.push_back(ToStdString(tr("Geographic(sensor model)")));
     }
@@ -724,7 +724,7 @@ void VectorImageModel::OnPhysicalCursorPositionChanged(const QPoint&, const Poin
     if (ToImage()->GetLargestPossibleRegion().IsInside(currentLodIndex) || 1)
     {
       // TODO : Is there a better method to detect no geoinfo available ?
-      if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageKeywordlist().GetSize() != 0)
+      if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageMetadata().HasSensorGeometry())
       {
         assert(!m_ToWgs84.IsNull());
 

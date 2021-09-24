@@ -1068,7 +1068,7 @@ void ImageViewWidget::OnClearProjectionRequired()
   assert(m_Manipulator!=NULL);
 
   m_Manipulator->SetWkt(std::string());
-  m_Manipulator->SetKeywordList(otb::ViewSettings::KeywordListType());
+  m_Manipulator->SetImd(nullptr);
 
   // m_Manipulator->SetOrigin( imageModel->GetOrigin() );
   // m_Manipulator->SetSpacing( imageModel->GetSpacing() );
@@ -1573,7 +1573,7 @@ void ImageViewWidget::OnSetProjectionRequired()
     assert(m_Manipulator != NULL);
 
     m_Manipulator->SetWkt(image->GetProjectionRef());
-    m_Manipulator->SetKeywordList(image->GetImageKeywordlist());
+    m_Manipulator->SetImd(&(image->m_Imd));
 
     m_Manipulator->SetOrigin(imageModel->GetOrigin());
     m_Manipulator->SetSpacing(imageModel->GetSpacing());
@@ -1919,7 +1919,7 @@ void ImageViewWidget::OnUpdateProjectionRequired()
     // Update the Manipulator reference projection.
     // Then all view manipulation will use this projection reference.
     m_Manipulator->SetWkt(image->GetProjectionRef());
-    m_Manipulator->SetKeywordList(image->GetImageKeywordlist());
+    m_Manipulator->SetImd(&(image->m_Imd));
     m_Manipulator->SetNativeSpacing(imageModel->GetNativeSpacing());
   }
   else
