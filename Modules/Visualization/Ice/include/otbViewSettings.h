@@ -27,7 +27,7 @@
 #include "itkVector.h"
 #include "itkSize.h"
 
-#include "otbImageKeywordlist.h"
+#include "otbImageMetadata.h"
 #include "OTBIceExport.h"
 #include <string>
 
@@ -46,7 +46,7 @@ public:
   typedef itk::Point<double,2>                                  PointType;
   typedef itk::Vector<double,2>                                 SpacingType;
   typedef itk::Size<2>                                          SizeType;
-  typedef otb::ImageKeywordlist                                 KeywordListType;
+  typedef otb::ImageMetadata                                    ImageMetadataType;
 
   itkNewMacro(Self);
 
@@ -110,23 +110,16 @@ public:
   itkSetMacro(GeometryChanged,bool);
   itkGetConstMacro(GeometryChanged,bool);
 
-  /** Set the image keywordlist 
-    \deprecated
+  /** Set/Get the image imagemetadata
    */
-  void SetKeywordList(const KeywordListType& kwl)
+  void SetImageMetadata(const ImageMetadataType* imd)
   {
-    // std::cout << std::hex << this << "::SetKeywordList()" << std::endl;
-
-    if(!(m_KeywordList==kwl))
-      {
-      // std::cout << "geometry-changed: TRUE" << std::endl;
-
-      m_KeywordList = kwl;
-      m_GeometryChanged = true;
-      }
+    m_ImageMetadata = imd;
   }
-
-  itkGetConstReferenceMacro(KeywordList,KeywordListType);
+  const ImageMetadataType* GetImageMetadata() const
+  {
+    return m_ImageMetadata;
+  }
 
   // Retrieve the current Viewport extent
   void GetViewportExtent(double & ulx, double & uly, double & lrx, double & lry) const;
@@ -163,7 +156,7 @@ private:
   SpacingType m_Spacing;
   SizeType m_ViewportSize;
   std::string m_Wkt;
-  KeywordListType m_KeywordList;
+  const ImageMetadataType* m_ImageMetadata;
   PointType m_RotationCenter;
   double m_RotationAngle;
   bool m_UseProjection : 1;

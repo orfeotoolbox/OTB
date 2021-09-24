@@ -49,7 +49,7 @@ ViewSettings
 
   m_Wkt = "";
 
-  m_KeywordList = KeywordListType();
+  m_ImageMetadata = nullptr;
 
   m_UseProjection = true;
   m_GeometryChanged = false;

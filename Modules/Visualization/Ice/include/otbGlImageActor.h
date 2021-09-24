@@ -112,15 +112,7 @@ public:
 
   std::string GetWkt() const override;
 
-  ImageKeywordlistType GetKwl() const;
-
-  bool HasKwl() const override;
-
-  bool GetKwl( ImageKeywordlist & ) const override;
-
-  MetaDataDictionaryType & GetMetaDataDictionary() const;
-
-  const ImageMetadata & GetImageMetadata() const;
+  const ImageMetadata *GetImd() const;
 
   itkGetMacro(RedIdx,unsigned int);
   itkGetMacro(GreenIdx,unsigned int);

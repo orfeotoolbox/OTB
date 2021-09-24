@@ -224,44 +224,10 @@ std::string GlImageActor::GetWkt() const
   return m_FileReader->GetOutput()->GetProjectionRef();
 }
 
-GlImageActor::ImageKeywordlistType GlImageActor::GetKwl() const
+const ImageMetadata * GlImageActor::GetImd() const
 {
-  return m_FileReader->GetOutput()->GetImageKeywordlist();
+  return &(m_FileReader->GetOutput()->m_Imd);
 }
-
-
-const ImageMetadata & GlImageActor::GetImageMetadata() const
-{
-  return m_FileReader->GetOutput()->GetImageMetadata();
-}
-
-
-bool
-GlImageActor
-::HasKwl() const
-{
-  return true;
-}
-
-
-bool
-GlImageActor
-::GetKwl( ImageKeywordlist & kwl ) const
-{
-  assert( !m_FileReader.IsNull() );
-  assert( m_FileReader->GetOutput()!=NULL );
-
-  kwl = m_FileReader->GetOutput()->GetImageKeywordlist();
-
-  return true;
-}
-
-
-GlImageActor::MetaDataDictionaryType & GlImageActor::GetMetaDataDictionary() const
-{
-  return m_FileReader->GetOutput()->GetMetaDataDictionary();
-}
-
 
 void GlImageActor::Initialize(const std::string & filename)
 {
