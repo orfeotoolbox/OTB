@@ -105,9 +105,10 @@ void MapFileProductWriter<TInputImage>::Write()
   m_VectorImage = const_cast<TInputImage*>(this->GetInput());
   m_VectorImage->UpdateOutputInformation();
 
-  if (m_VectorImage->GetProjectionRef().empty() && m_VectorImage->GetImageKeywordlist().GetSize() > 0)
+  if (!m_VectorImage->GetImageMetadata().HasSensorGeometry()
+      && m_VectorImage->GetImageMetadata().HasSensorGeometry())
   {
-    otbMsgDevMacro("Sensor Model detected : Reprojecting in the targer SRID");
+    otbMsgDevMacro("Sensor Model detected : Reprojecting in the target SRID");
     m_GenericRSResampler->SetInput(this->GetInput());
     m_GenericRSResampler->SetOutputParametersFromMap(otb::SpatialReference::FromEPSG(m_SRID).ToWkt());
     m_VectorImage = m_GenericRSResampler->GetOutput();
