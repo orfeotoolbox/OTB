@@ -251,14 +251,6 @@ protected:
 private:
   Image(const Self&) = delete;
   void operator=(const Self&) = delete;
-
-  /** Return the ImageMetadataInterfacePointer associated to the data
- *  and creates it on first call
- */
-  ImageMetadataInterfacePointerType GetMetaDataInterface() const;
-
-  // The image metadata accessor object. Don't use it directly. Instead use GetMetaDataInterface()
-  mutable ImageMetadataInterfacePointerType m_ImageMetadataInterface;
 };
 
 } // end namespace otb

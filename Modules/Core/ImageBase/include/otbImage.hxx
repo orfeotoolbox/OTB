@@ -124,15 +124,6 @@ void Image<TPixel, VImageDimension>::CopyInformation(const itk::DataObject* data
   }
 }
 
-template <class TPixel, unsigned int                                       VImageDimension>
-typename Image<TPixel, VImageDimension>::ImageMetadataInterfacePointerType Image<TPixel, VImageDimension>::GetMetaDataInterface() const
-{
-  if (m_ImageMetadataInterface.IsNull())
-    m_ImageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(this->GetMetaDataDictionary());
-  return m_ImageMetadataInterface;
-}
-
-
 template <class TPixel, unsigned int                VImageDimension>
 typename Image<TPixel, VImageDimension>::VectorType Image<TPixel, VImageDimension>::GetGeoTransform(void) const
 {
@@ -205,7 +196,6 @@ template <class TPixel, unsigned int VImageDimension>
 void Image<TPixel, VImageDimension>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  this->GetMetaDataInterface()->PrintMetadata(os, indent, this->GetMetaDataDictionary());
 }
 
 } // end namespace otb
