@@ -30,7 +30,6 @@
 #include "itkImage.h"
 #endif
 
-#include "otbImageMetadataInterfaceBase.h"
 #include "otbImageCommons.h"
 #include "OTBImageBaseExport.h"
 
@@ -93,15 +92,15 @@ class OTBImageBase_EXPORT_TEMPLATE Image
 {
 public:
   /** Standard class typedefs. */
-  typedef Image Self;
-  typedef itk::Image<TPixel, VImageDimension> Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-  typedef itk::WeakPointer<const Self>  ConstWeakPointer;
+  using Self = Image;
+  using Superclass = itk::Image<TPixel, VImageDimension>;
+  using Pointer = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
+  using ConstWeakPointer = itk::WeakPointer<const Self>;
 
-  typedef ImageMetadataInterfaceBase::VectorType           VectorType;
-  typedef ImageMetadataInterfaceBase::ImageKeywordlistType ImageKeywordlistType;
-  typedef ImageMetadataInterfaceBase::Pointer              ImageMetadataInterfacePointerType;
+  using VectorType = ImageMetadataInterfaceBase::VectorType;
+  using ImageKeywordlistType = ImageMetadataInterfaceBase::ImageKeywordlistType;
+  using ImageMetadataInterfacePointerType = ImageMetadataInterfaceBase::Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -221,21 +220,6 @@ public:
   /** Set signed spacing */
   virtual void SetSignedSpacing(SpacingType spacing);
   virtual void SetSignedSpacing(double spacing[VImageDimension]);
-
-  /** Get image keyword list 
-  * \deprecated
-  */
-  virtual ImageKeywordlistType GetImageKeywordlist(void);
-
-  /** Get image keyword list 
-  * \deprecated
-  */
-  virtual const ImageKeywordlistType GetImageKeywordlist(void) const;
-
-  /** Set the image keywordlist 
-    \deprecated
-   */
-  virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 

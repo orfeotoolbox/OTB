@@ -23,7 +23,6 @@
 
 
 #include "otbImage.h"
-#include "otbImageMetadataInterfaceFactory.h"
 #include "itkMetaDataObject.h"
 
 namespace otb
@@ -75,31 +74,6 @@ void Image<TPixel, VImageDimension>::SetSignedSpacing(double spacing[VImageDimen
 {
   SpacingType s(spacing);
   this->SetSignedSpacing(s);
-}
-
-template <class TPixel, unsigned int                          VImageDimension>
-typename Image<TPixel, VImageDimension>::ImageKeywordlistType Image<TPixel, VImageDimension>::GetImageKeywordlist(void)
-{
-  ImageKeywordlistType kwl;
-
-  itk::ExposeMetaData<ImageKeywordlistType>(this->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwl);
-  return kwl;
-}
-
-template <class TPixel, unsigned int VImageDimension>
-void Image<TPixel, VImageDimension>::SetImageKeywordList(const ImageKeywordlistType& kwl)
-{
-  itk::EncapsulateMetaData<ImageKeywordlistType>(this->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwl);
-}
-
-
-template <class TPixel, unsigned int                                VImageDimension>
-const typename Image<TPixel, VImageDimension>::ImageKeywordlistType Image<TPixel, VImageDimension>::GetImageKeywordlist(void) const
-{
-  ImageKeywordlistType kwl;
-
-  itk::ExposeMetaData<ImageKeywordlistType>(this->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwl);
-  return kwl;
 }
 
 template <class TPixel, unsigned int VImageDimension>
@@ -196,6 +170,7 @@ template <class TPixel, unsigned int VImageDimension>
 void Image<TPixel, VImageDimension>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
+  os << indent << this->GetImageMetadata();
 }
 
 } // end namespace otb
