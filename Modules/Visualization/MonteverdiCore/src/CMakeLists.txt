@@ -109,7 +109,6 @@ target_link_libraries( OTBMonteverdiCore
   ${OTBIOGDAL_LIBRARIES}
   ${OTBMetadata_LIBRARIES}
   ${OTBObjectList_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBProjection_LIBRARIES}
   ${OTBQt_LIBRARIES}
   ${OTBStatistics_LIBRARIES}

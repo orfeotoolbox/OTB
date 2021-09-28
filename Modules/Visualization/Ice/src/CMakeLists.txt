@@ -45,7 +45,6 @@ target_link_libraries(OTBIce
   ${OTBImageIO_LIBRARIES}
   ${OTBTransform_LIBRARIES}
   ${OTBImageManipulation_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBProjection_LIBRARIES}
   ${OTBImageBase_LIBRARIES}
   ${OTBOpenGL_LIBRARIES}

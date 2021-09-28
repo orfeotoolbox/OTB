@@ -29,7 +29,6 @@ ENABLE_SHARED
     OTBImageIO
     OTBTransform
     OTBImageManipulation
-    OTBOSSIMAdapters
     OTBProjection
     OTBImageBase
     OTBITK

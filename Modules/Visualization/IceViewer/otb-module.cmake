@@ -25,7 +25,6 @@ ENABLE_SHARED
   DEPENDS
     OTBIce
     OTBMetadata
-    OTBOSSIMAdapters
     OTBGlut
     OTBGLFW
     

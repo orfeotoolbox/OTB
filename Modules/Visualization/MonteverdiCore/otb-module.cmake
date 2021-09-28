@@ -34,7 +34,6 @@ otb_module( OTBMonteverdiCore
     OTBIOGDAL
     OTBMetadata
     OTBObjectList
-    OTBOSSIMAdapters
     OTBProjection
     OTBQt
     OTBStatistics

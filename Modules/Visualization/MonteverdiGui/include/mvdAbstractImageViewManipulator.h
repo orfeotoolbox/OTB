@@ -123,8 +123,7 @@ public:
    */
   virtual void SetWkt(const std::string& wkt) = 0;
 
-  /** Set the image keywordlist 
-    \deprecated
+  /**
    */
   virtual void SetImd(const otb::ImageMetadata* imd) = 0;
 
