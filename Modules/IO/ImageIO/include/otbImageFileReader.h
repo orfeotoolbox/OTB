@@ -170,8 +170,6 @@ private:
 
   unsigned int m_AdditionalNumber;
 
-  bool m_KeywordListUpToDate;
-
   /** Mapping between origin components and output components (before any
    * conversion) */
   std::vector<unsigned int> m_BandList;

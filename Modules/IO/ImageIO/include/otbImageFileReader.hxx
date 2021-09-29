@@ -71,7 +71,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>::ImageFileReader()
     m_ActualIORegion(),
     m_FilenameHelper(FNameHelperType::New()),
     m_AdditionalNumber(0),
-    m_KeywordListUpToDate(false),
     m_IOComponents(0)
 {
 }
@@ -395,7 +394,6 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   // Get ImageMetadata from ImageIO
   ImageMetadata imd = m_ImageIO->GetImageMetadata();
 
-  // NEW METADATA FRAMEWORK
   std::string DerivatedFileName = GetDerivedDatasetSourceFileName(m_FileName);
   std::string extension                 = itksys::SystemTools::GetFilenameLastExtension(DerivatedFileName);
   std::string attachedGeom              = DerivatedFileName.substr(0, DerivatedFileName.size() - extension.size()) + std::string(".geom");
@@ -622,26 +620,11 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::SetFileName(const std::s
     if (oldMap.size() != newMap.size() || !std::equal(oldMap.begin(), oldMap.end(), newMap.begin()))
     {
       this->Modified();
-
-      // Now check if keywordlist needs to be generated again
-      // Condition is: one of the old or new map has the skip_geom
-      // key and the other does not
-      // OR
-      // one of the old or new map has the geom key and the other
-      // does not
-      // OR
-      // both have the geom key but the geom value is different
-      if ((oldMap.count(skip_geom_key) != newMap.count(skip_geom_key)) || (oldMap.count(geom_key) != newMap.count(geom_key)) ||
-          ((oldMap.count(geom_key) && newMap.count(geom_key)) && oldMap.find(geom_key)->second != newMap.find(geom_key)->second))
-      {
-        m_KeywordListUpToDate = false;
-      }
     }
   }
   else
   {
     this->m_FileName      = simpleFileName;
-    m_KeywordListUpToDate = false;
     this->Modified();
   }
 
