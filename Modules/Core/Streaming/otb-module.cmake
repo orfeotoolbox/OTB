@@ -30,7 +30,6 @@ ENABLE_SHARED
     OTBITK
     OTBImageBase
     OTBMetadata
-    OTBOSSIMAdapters
     OTBImageList
 
   TEST_DEPENDS
