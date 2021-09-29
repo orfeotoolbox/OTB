@@ -66,9 +66,6 @@ extern OTBMetadata_EXPORT char const* ColorTableNameKey;
 extern OTBMetadata_EXPORT char const* ColorEntryCountKey;
 extern OTBMetadata_EXPORT char const* ColorEntryAsRGBKey;
 
-extern OTBMetadata_EXPORT char const* OSSIMKeywordlistKey;
-extern OTBMetadata_EXPORT char const* OSSIMKeywordlistDelimiterKey;
-
 extern OTBMetadata_EXPORT char const* VectorDataKeywordlistKey;
 extern OTBMetadata_EXPORT char const* VectorDataKeywordlistDelimiterKey;
 
@@ -92,7 +89,6 @@ enum KeyType
   TDOUBLE,
   TGCP,
   TVECTOR,
-  TOSSIMKEYWORDLIST,
   TVECTORDATAKEYWORDLIST,
   TBOOLVECTOR
 };

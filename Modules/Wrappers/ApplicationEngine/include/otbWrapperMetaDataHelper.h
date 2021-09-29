@@ -22,7 +22,6 @@
 #define otbWrapperMetaDataHelper_h
 
 #include "otbMetaDataKey.h"
-#include "otbImageKeywordlist.h"
 #include "otbVectorDataKeywordlist.h"
 #include "otbGeometryMetadata.h"
 #include "itkMetaDataDictionary.h"
@@ -73,9 +72,6 @@ OTBApplicationEngine_EXPORT void SetGCP(itk::MetaDataDictionary& dict, const std
 
 OTBApplicationEngine_EXPORT otb::MetaDataKey::VectorType GetVector(const itk::MetaDataDictionary& dict, const std::string& key);
 OTBApplicationEngine_EXPORT void SetVector(itk::MetaDataDictionary& dict, const std::string& key, const otb::MetaDataKey::VectorType& val);
-
-OTBApplicationEngine_EXPORT otb::ImageKeywordlist GetImageKWL(const itk::MetaDataDictionary& dict, const std::string& key);
-OTBApplicationEngine_EXPORT void SetImageKWL(itk::MetaDataDictionary& dict, const std::string& key, const otb::ImageKeywordlist& val);
 
 OTBApplicationEngine_EXPORT otb::VectorDataKeywordlist GetVectorDataKWL(const itk::MetaDataDictionary& dict, const std::string& key);
 OTBApplicationEngine_EXPORT void SetVectorDataKWL(itk::MetaDataDictionary& dict, const std::string& key, const otb::VectorDataKeywordlist& val);

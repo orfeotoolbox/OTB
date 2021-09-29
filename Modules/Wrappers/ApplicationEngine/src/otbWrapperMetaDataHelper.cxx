@@ -49,9 +49,6 @@ MDType GetType(const std::string& val)
   case otb::MetaDataKey::TVECTOR:
     ret = MDType::Vector;
     break;
-  case otb::MetaDataKey::TOSSIMKEYWORDLIST:
-    ret = MDType::ImageKWL;
-    break;
   case otb::MetaDataKey::TVECTORDATAKEYWORDLIST:
     ret = MDType::VectorDataKWL;
     break;
@@ -124,17 +121,6 @@ void SetVector(itk::MetaDataDictionary& dict, const std::string& key, const otb:
   itk::EncapsulateMetaData<otb::MetaDataKey::VectorType>(dict, key, val);
 }
 
-otb::ImageKeywordlist GetImageKWL(const itk::MetaDataDictionary& dict, const std::string& key)
-{
-  otb::ImageKeywordlist ret;
-  itk::ExposeMetaData<otb::ImageKeywordlist>(dict, key, ret);
-  return ret;
-}
-
-void SetImageKWL(itk::MetaDataDictionary& dict, const std::string& key, const otb::ImageKeywordlist& val)
-{
-  itk::EncapsulateMetaData<otb::ImageKeywordlist>(dict, key, val);
-}
 
 otb::VectorDataKeywordlist GetVectorDataKWL(const itk::MetaDataDictionary& dict, const std::string& key)
 {

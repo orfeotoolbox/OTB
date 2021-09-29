@@ -50,9 +50,6 @@ char const* ColorTableNameKey  = "ColorTableName";
 char const* ColorEntryCountKey = "ColorEntryCount";
 char const* ColorEntryAsRGBKey = "ColorEntryAsRGB";
 
-char const* OSSIMKeywordlistKey          = "OSSIMKeywordlist";
-char const* OSSIMKeywordlistDelimiterKey = "OSSIMKeywordlistDelimiter";
-
 char const* VectorDataKeywordlistKey          = "VectorDataKeywordlist";
 char const* VectorDataKeywordlistDelimiterKey = "VectorDataKeywordlistDelimiter";
 
@@ -87,8 +84,6 @@ const MetaDataKey::KeyTypeDef Types[] = {
     MetaDataKey::KeyTypeDef(MetaDataKey::ColorTableNameKey, MetaDataKey::TSTRING),
     MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryCountKey, MetaDataKey::TENTIER),
     MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryAsRGBKey, MetaDataKey::TVECTOR),
-    MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistKey, MetaDataKey::TOSSIMKEYWORDLIST),
-    MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistDelimiterKey, MetaDataKey::TSTRING),
     MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistKey, MetaDataKey::TVECTORDATAKEYWORDLIST),
     MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistDelimiterKey, MetaDataKey::TSTRING),
     MetaDataKey::KeyTypeDef(MetaDataKey::ResolutionFactor, MetaDataKey::TENTIER),
