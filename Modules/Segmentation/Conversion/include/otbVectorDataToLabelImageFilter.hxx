@@ -27,8 +27,6 @@
 #include "otbVectorDataToLabelImageFilter.h"
 #include "otbOGRIOHelper.h"
 #include "otbGdalDataTypeBridge.h"
-#include "otbImageMetadataInterfaceBase.h"
-#include "otbImageMetadataInterfaceFactory.h"
 #include "otbImage.h"
 
 namespace otb
@@ -101,13 +99,13 @@ void VectorDataToLabelImageFilter<TVectorData, TOutputImage>::SetOutputOrigin(co
 }
 
 template <class TVectorData, class TOutputImage>
-void VectorDataToLabelImageFilter<TVectorData, TOutputImage>::SetOutputParametersFromImage(const ImageBaseType* src)
+template <class ImageType>
+void VectorDataToLabelImageFilter<TVectorData, TOutputImage>::SetOutputParametersFromImage(const ImageType* src)
 {
   this->SetOutputOrigin(src->GetOrigin());
   this->SetOutputSpacing(internal::GetSignedSpacing(src));
   this->SetOutputSize(src->GetLargestPossibleRegion().GetSize());
-  ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(src->GetMetaDataDictionary());
-  this->SetOutputProjectionRef(imi->GetProjectionRef());
+  this->SetOutputProjectionRef(src->GetProjectionRef());
 }
 
 template <class TVectorData, class TOutputImage>

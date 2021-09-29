@@ -143,15 +143,14 @@ public:
   itkBooleanMacro(AllTouchedMode);
 
   /** Useful to set the output parameters from an existing image*/
-  void SetOutputParametersFromImage(const ImageBaseType* image);
+  template <class ImageType>
+  void SetOutputParametersFromImage(const ImageType* image);
 
 protected:
   void GenerateData() override;
 
   OGRDataSourceToLabelImageFilter();
-  ~OGRDataSourceToLabelImageFilter() override
-  {
-  }
+  ~OGRDataSourceToLabelImageFilter() override = default;
 
   void GenerateOutputInformation() override;
 
