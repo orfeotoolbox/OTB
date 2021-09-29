@@ -136,23 +136,6 @@ namespace Wrapper
 
 } // end of namespace Wrapper
 
-class ImageKeywordlist
-{
-public:
-  typedef std::map<std::string, std::string> KeywordlistMap;
-  typedef KeywordlistMap::size_type KeywordlistMapSizeType;
-  ImageKeywordlist();
-  virtual ~ImageKeywordlist();
-  const KeywordlistMap& GetKeywordlist() const;
-  void Clear(void);
-  KeywordlistMapSizeType Empty() const;
-  KeywordlistMapSizeType GetSize(void) const;
-  const std::string& GetMetadataByKey(const std::string& key) const;
-  bool HasKey(const std::string& key) const;
-  virtual void ClearMetadataByKey(const std::string& key);
-  virtual void AddKey(const std::string& key, const std::string& value);
-  virtual void Print(std::ostream& os, itkIndent indent = 0) const;
-};
 
 class VectorDataKeywordlist
 {
@@ -176,25 +159,6 @@ public:
   GCP();
   void Print(std::ostream& os) const;
 };
-
-#if SWIGPYTHON
-%extend ImageKeywordlist
-  {
-  %pythoncode
-    {
-    def __str__(self):
-      return str(self.GetKeywordlist())
-    def __len__(self):
-      return self.GetSize()
-    def __getitem__(self,key):
-      return self.GetKeywordlist()[key]
-    def __setitem__(self,key,val):
-      self.GetKeywordlist()[key] = val
-    def keys(self):
-      return self.GetKeywordlist().keys()
-    }
-  }
-#endif
 
 } // end of namespace otb
 
@@ -344,7 +308,6 @@ public:
   itk::Size<2> GetImageSize(const std::string & key, unsigned int idx = 0);
   unsigned int GetImageNbBands(const std::string & key, unsigned int idx = 0);
   std::string GetImageProjection(const std::string & key, unsigned int idx = 0);
-  otb::ImageKeywordlist GetImageKeywordlist(const std::string & key, unsigned int idx = 0);
   unsigned long PropagateRequestedRegion(const std::string & key, itk::ImageRegion<2> region, unsigned int idx = 0);
   itk::ImageRegion<2> GetImageRequestedRegion(const std::string & key, unsigned int idx = 0);
   itkMetaDataDictionary GetImageMetaData(const std::string & key, unsigned int idx = 0);
@@ -1041,15 +1004,6 @@ public:
   void SetVector(const std::string &key, const std::vector<double> &val)
     {
     otb::Wrapper::MetaDataHelper::SetVector(* $self,key,val);
-    }
-
-  otb::ImageKeywordlist GetImageKWL(const std::string &key)
-    {
-    return otb::Wrapper::MetaDataHelper::GetImageKWL(* $self,key);
-    }
-  void SetImageKWL(const std::string &key, const otb::ImageKeywordlist &val)
-    {
-    otb::Wrapper::MetaDataHelper::SetImageKWL(* $self,key,val);
     }
 
   otb::VectorDataKeywordlist GetVectorDataKWL(const std::string &key)

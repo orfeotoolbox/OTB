@@ -1643,17 +1643,6 @@ std::string Application::GetImageProjection(const std::string& key, unsigned int
   return proj;
 }
 
-otb::ImageKeywordlist Application::GetImageKeywordlist(const std::string& key, unsigned int idx)
-{
-  ImageKeywordlist               kwl;
-  const itk::MetaDataDictionary& dict = this->GetParameterImageBase(key, idx)->GetMetaDataDictionary();
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-    itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, kwl);
-
-  return kwl;
-}
-
 unsigned long Application::PropagateRequestedRegion(const std::string& key, ImageBaseType::RegionType region, unsigned int idx)
 {
   ImageBaseType*            image     = this->GetParameterImageBase(key, idx);

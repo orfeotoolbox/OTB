@@ -30,7 +30,6 @@ otb_module(OTBMPITiffWriter
     OTBITK
     OTBImageBase
     OTBImageIO
-    OTBOSSIMAdapters
     OTBSPTW
     OTBStreaming
     OTBMetadata

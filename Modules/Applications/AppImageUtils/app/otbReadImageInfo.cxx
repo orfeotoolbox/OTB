@@ -499,11 +499,6 @@ private:
 
     // Display image information in the dedicated logger
     otbAppLogINFO(<< ossOutput.str());
-
-    if (IsParameterEnabled("outkwl") && HasValue("outkwl"))
-    {
-      WriteImageMetadataToGeomFile(inImage->GetImageMetadata(), GetParameterString("outkwl"));
-    }
   }
 };
 }
