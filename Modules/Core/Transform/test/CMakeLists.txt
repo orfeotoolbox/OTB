@@ -272,11 +272,14 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
 
   #S1 tests
-  file(GLOB s1_files ${INPUTDATA}/ossimPlugins/s1/*.xml)
+  file(GLOB s1_files ${INPUTDATA}/sentinel1/xml/*.xml)
   #Loop over all S1 annotation files
   foreach(entry ${s1_files})
     get_filename_component(name ${entry} NAME_WE)
-    otb_add_test( NAME prTvSentinel1SensorModel_${name} COMMAND otbSentinel1SensorModelTest ${entry})
+    otb_add_test( NAME prTvSentinel1SensorModel_${name}
+        COMMAND otbSentinel1SensorModelTest
+        ${entry}
+        ${BASELINE_FILES}/prTvSentinel1SensorModel_${name}.xml)
   endforeach()
 
 endif()
