@@ -748,17 +748,6 @@ void SimpleParallelTiffWriter<TInputImage>::Update()
     source->RemoveObserver(m_ObserverID);
   }
 
-  /*
-   * Writing the geom (only master process)
-   */
-  if (otb::MPIConfig::Instance()->GetMyRank() == 0 && (m_WriteGeomFile || m_FilenameHelper->GetWriteGEOMFile()))
-  {
-    otb::ImageKeywordlist   otb_kwl;
-    itk::MetaDataDictionary dict = this->GetInput()->GetMetaDataDictionary();
-    itk::ExposeMetaData<otb::ImageKeywordlist>(dict, otb::MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-    WriteGeometry(otb_kwl, this->GetFileName());
-  }
-
   /**
    * Release any inputs if marked for release
    */

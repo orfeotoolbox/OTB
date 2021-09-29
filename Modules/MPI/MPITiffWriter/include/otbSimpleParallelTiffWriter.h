@@ -39,7 +39,6 @@
 #include "itkImageRegionIterator.h"
 
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
 #include "otbMetaDataKey.h"
 
 #include "otbConfigure.h"
