@@ -55,8 +55,6 @@ public:
   using ConstWeakPointer = itk::WeakPointer<const Self>;
 
   using VectorType = ImageMetadataInterfaceBase::VectorType;
-  using ImageKeywordlistType = ImageMetadataInterfaceBase::ImageKeywordlistType;
-  using ImageMetadataInterfacePointerType = ImageMetadataInterfaceBase::Pointer;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

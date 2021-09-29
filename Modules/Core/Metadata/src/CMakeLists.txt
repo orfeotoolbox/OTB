@@ -89,7 +89,6 @@ add_library(OTBMetadata ${OTBMetadata_SRC})
 target_link_libraries(OTBMetadata
   ${OTBBoost_LIBRARIES}
   ${OTBCommon_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBGdalAdapters_LIBRARIES}
   ${OTBBoostAdapters_LIBRARIES}
   )

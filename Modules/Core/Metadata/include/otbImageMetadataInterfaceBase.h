@@ -23,7 +23,6 @@
 
 #include <string>
 
-#include "otbImageKeywordlist.h"
 #include "itkMetaDataDictionary.h"
 #include "otbMetaDataKey.h"
 #include "itkImageBase.h"
@@ -57,7 +56,6 @@ public:
   typedef itk::MetaDataDictionary               MetaDataDictionaryType;
   typedef MetaDataKey::VectorType               VectorType;
   typedef MetaDataKey::VariableLengthVectorType VariableLengthVectorType;
-  typedef ImageKeywordlist                      ImageKeywordlistType;
   typedef unsigned int                          UnsignedIntType;
   typedef std::vector<std::string>              StringVectorType;
   typedef std::vector<unsigned int>             UIntVectorType;
@@ -134,11 +132,6 @@ public:
   VectorType GetLowerRightCorner() const;
   //  otbMetadataGetMacro(LowerRightCorner, VectorType);
 
-  /** Get the ImageKeywordlist */
-  ImageKeywordlistType GetImageKeywordlist();
-
-  const ImageKeywordlistType GetImageKeywordlist() const;
-
   /** Parses the metadata using the MetadataSupplierInterface and fill the ImageMetadata object
    * Raises "MissingMetadataException" if parsing failes.
    */
@@ -146,8 +139,6 @@ public:
   {
     otbGenericExceptionMacro(MissingMetadataException,<<"Metadata parsing not implemented")
   }
-
-  static void PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict);
 
   const std::string& Fetch(MDStr key, ImageMetadata & imd, const char *path, int band=-1);
   bool CheckFetch(MDStr key, ImageMetadata & imd, const char *path, int band=-1);

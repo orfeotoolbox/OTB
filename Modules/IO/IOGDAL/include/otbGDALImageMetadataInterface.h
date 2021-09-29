@@ -46,7 +46,6 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
   void Parse(ImageMetadata &) override;
 

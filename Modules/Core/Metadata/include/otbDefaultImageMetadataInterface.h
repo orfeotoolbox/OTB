@@ -53,7 +53,6 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
 
   /** Get the solar irradiance from the ossim metadata
    * \deprecated
