@@ -38,7 +38,6 @@
 
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
-#include "otbImageMetadataInterfaceFactory.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
