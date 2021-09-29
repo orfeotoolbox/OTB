@@ -31,7 +31,6 @@ otb_module(OTBTransform
     OTBGDAL
     OTBITK
     OTBInterpolation
-    OTBOSSIMAdapters
     OTBMetadata
     OTBGdalAdapters
     OTBIOGDAL

@@ -19,15 +19,12 @@
 #
 
 set(OTBTransform_SRC
-  otbSensorModelAdapter.cxx
   otbSarSensorModel.cxx
-  otbSarSensorModelAdapter.cxx
   otbSensorTransformFactory.cxx
   )
 
 add_library(OTBTransform ${OTBTransform_SRC})
 target_link_libraries(OTBTransform
-  ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBGDAL_LIBRARIES}
   ${OTBCommon_LIBRARIES}
   ${OTBOssim_LIBRARIES}
