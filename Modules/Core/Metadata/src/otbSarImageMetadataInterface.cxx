@@ -336,38 +336,6 @@ void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCali
 void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-
-  if (this->CanRead())
-  {
-    os << indent << "GetRadiometricCalibrationAntennaPatternNewGain: " << this->GetRadiometricCalibrationAntennaPatternNewGain() << "\n"
-       << indent << "GetRadiometricCalibrationAntennaPatternOldGain: " << this->GetRadiometricCalibrationAntennaPatternOldGain() << "\n"
-//       << indent << "GetRadiometricCalibrationIncidenceAngle:        " << this->GetRadiometricCalibrationIncidenceAngle() << "\n"
-       << indent << "GetRadiometricCalibrationRangeSpreadLoss:       " << this->GetRadiometricCalibrationRangeSpreadLoss() << "\n"
-       << indent << "GetConstantPolynomialDegree:                    ";
-    for(const auto& s: this->GetConstantPolynomialDegree())
-      os << s << " ";
-    os << "\n"
-       << indent << "GetRadiometricCalibrationNoisePolynomialDegree: ";
-    for(const auto& s: this->GetRadiometricCalibrationNoisePolynomialDegree())
-      os << s << " ";
-    os << "\n"
-       << indent << "GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree: ";
-    for(const auto& s: this->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree())
-      os << s << " ";
-    os << "\n"
-       << indent << "GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree: ";
-    for(const auto& s: this->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree())
-      os << s << " ";
-    os << "\n"
-       << indent << "GetRadiometricCalibrationIncidenceAnglePolynomialDegree:        ";
-    for(const auto& s: this->GetRadiometricCalibrationIncidenceAnglePolynomialDegree())
-      os << s << " ";
-    os << "\n"
-       << indent << "GetRadiometricCalibrationRangeSpreadLossPolynomialDegree:       ";
-    for(const auto& s: this->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree())
-      os << s << " ";
-    os << "\n";
-  }
 }
 
 } // end namespace otb

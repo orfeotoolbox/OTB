@@ -56,9 +56,6 @@ public:
   typedef Superclass::RealType                 RealType;
   typedef Superclass::LookupDataPointerType    LookupDataPointerType;
 
-  /** check sensor ID */
-  bool CanRead() const override;
-
   double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override;
 
   void Parse(ImageMetadata &) override;

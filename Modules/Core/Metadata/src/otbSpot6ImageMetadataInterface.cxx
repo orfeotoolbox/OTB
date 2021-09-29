@@ -38,14 +38,6 @@ Spot6ImageMetadataInterface::Spot6ImageMetadataInterface()
 {
 }
 
-bool Spot6ImageMetadataInterface::CanRead() const
-{
-  std::string sensorID = GetSensorID();
-  if (sensorID.find("SPOT 6") != std::string::npos || sensorID.find("SPOT 7") != std::string::npos)
-    return true;
-  else
-    return false;
-}
 
 void Spot6ImageMetadataInterface::FetchSpectralSensitivity(const std::string & sensorId, ImageMetadata& imd)
 {

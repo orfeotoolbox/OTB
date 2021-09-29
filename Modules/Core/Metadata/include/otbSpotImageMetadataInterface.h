@@ -58,8 +58,6 @@ public:
    *  proper band. */
   unsigned int BandIndexToWavelengthPosition(unsigned int i) const override;
 
-  bool CanRead() const override;
-
   void Parse(ImageMetadata &) override;
 
 protected:

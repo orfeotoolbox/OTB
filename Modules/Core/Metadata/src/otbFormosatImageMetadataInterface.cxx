@@ -33,15 +33,6 @@
 namespace otb
 {
 
-bool FormosatImageMetadataInterface::CanRead() const
-{
-  std::string sensorID = GetSensorID();
-  if (sensorID.find("Formosat") != std::string::npos)
-    return true;
-  else
-    return false;
-}
-
 unsigned int FormosatImageMetadataInterface::BandIndexToWavelengthPosition(unsigned int i) const
 {
   otbMsgDevMacro(<< "Formosat2 detected: band 0 and 2 inverted");

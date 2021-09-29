@@ -32,15 +32,6 @@
 namespace otb
 {
 
-bool SpotImageMetadataInterface::CanRead() const
-{
-  std::string sensorID = GetSensorID();
-  if (sensorID.find("Spot") != std::string::npos)
-    return true;
-  else
-    return false;
-}
-
 unsigned int SpotImageMetadataInterface::BandIndexToWavelengthPosition(unsigned int i) const
 {
   otbMsgDevMacro(<< "SPOT detected: band 0 and 2 inverted");

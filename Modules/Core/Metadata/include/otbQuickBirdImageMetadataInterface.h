@@ -51,8 +51,6 @@ public:
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
 
-  bool CanRead() const override;
-
 protected:
   QuickBirdImageMetadataInterface();
   ~QuickBirdImageMetadataInterface() override = default;

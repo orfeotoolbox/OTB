@@ -95,13 +95,6 @@ public:
     itkExceptionMacro("GetLastWavelengths not implemented in DefaultImageMetadataInterface, no captor type found");
   }
 
-  bool CanRead() const override
-  {
-    // This class is the default one, it has to be able to call every metadata
-    return true;
-  }
-
-
 protected:
   DefaultImageMetadataInterface(){};
   ~DefaultImageMetadataInterface() override

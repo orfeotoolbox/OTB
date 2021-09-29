@@ -44,15 +44,6 @@ PleiadesImageMetadataInterface::PleiadesImageMetadataInterface()
 {
 }
 
-bool PleiadesImageMetadataInterface::CanRead() const
-{
-  std::string sensorID = GetSensorID();
-  if (sensorID.find("PHR") != std::string::npos)
-    return true;
-  else
-    return false;
-}
-
 void PleiadesImageMetadataInterface::FetchSatAngles(
                     const std::vector<double> & incidenceAngles,
                     const std::vector<double> & alongTrackIncidenceAngles,

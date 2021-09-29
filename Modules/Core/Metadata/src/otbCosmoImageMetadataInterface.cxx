@@ -37,14 +37,6 @@
 namespace otb
 {
 
-
-bool CosmoImageMetadataInterface::CanRead() const
-{
-  const std::string sensorID = GetSensorID();
-
-  return sensorID.find("CSK") != std::string::npos;
-}
-
 double CosmoImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface &) const
 {
   return 0;

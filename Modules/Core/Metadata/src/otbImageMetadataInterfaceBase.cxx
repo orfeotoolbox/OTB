@@ -30,11 +30,6 @@
 namespace otb
 {
 
-ImageMetadataInterfaceBase::ImageMetadataInterfaceBase()
-{
-}
-
-
 void ImageMetadataInterfaceBase::SetImage(ImageType* image)
 {
   this->SetMetaDataDictionary(image->GetMetaDataDictionary());
@@ -338,33 +333,6 @@ const ImageMetadataInterfaceBase::ImageKeywordlistType ImageMetadataInterfaceBas
   return (imageKeywordlist);
 }
 
-std::string const ImageMetadataInterfaceBase::GetSensorID() const
-{
-  std::string s;
-  GetSensorID(s);
-  return s;
-}
-
-bool ImageMetadataInterfaceBase::GetSensorID(std::string& sensorId) const
-{
-  ImageKeywordlistType          imageKeywordlist;
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (!imageKeywordlist.HasKey("sensor"))
-  {
-    return false;
-  }
-
-  sensorId = imageKeywordlist.GetMetadataByKey("sensor");
-
-  return true;
-}
-
 void ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict)
 {
 
@@ -452,31 +420,6 @@ void ImageMetadataInterfaceBase::PrintMetadata(std::ostream& os, itk::Indent ind
 void ImageMetadataInterfaceBase::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   this->Superclass::PrintSelf(os, indent);
-
-  bool canRead = this->CanRead();
-
-  os << indent << "Initialized: " << (canRead ? true : false) << std::endl;
-  if (canRead)
-  {
-    os << indent << "ProjectionRef:   " << this->GetProjectionRef() << std::endl;
-    os << indent << "GCPProjection:   " << this->GetGCPProjection() << std::endl;
-    os << indent << "GCPCount:        " << this->GetGCPCount() << std::endl;
-    for (unsigned int gcpIdx = 0; gcpIdx < this->GetGCPCount(); ++gcpIdx)
-    {
-      // os << indent << "GCPs:            " << this->GetGCPs(gcpIdx) << std::endl;
-      os << indent << "GCPId:           " << this->GetGCPId(gcpIdx) << std::endl;
-      os << indent << "GCPInfo:         " << this->GetGCPInfo(gcpIdx) << std::endl;
-    }
-    // os << indent << "GeoTransform:    " << this->GetGeoTransform( ) << std::endl;
-    // os << indent << "UpperLeftCorner: " << this->GetUpperLeftCorner( ) << std::endl;
-    // os << indent << "UpperRightCorner:" << this->GetUpperRightCorner( ) << std::endl;
-    // os << indent << "LowerLeftCorner: " << this->GetLowerLeftCorner( ) << std::endl;
-    // os << indent << "LowerRightCorner:" << this->GetLowerRightCorner( ) << std::endl;
-    // os << indent << "ImageKeywordlist:" << this->GetImageKeywordlist( ) << std::endl;
-    std::string sensorId;
-    this->GetSensorID(sensorId);
-    os << indent << "SensorID:        " << sensorId << std::endl;
-  }
 }
 
 const std::string&

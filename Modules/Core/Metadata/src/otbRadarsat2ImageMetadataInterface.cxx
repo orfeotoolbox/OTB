@@ -40,17 +40,6 @@ Radarsat2ImageMetadataInterface::Radarsat2ImageMetadataInterface()
 {
 }
 
-bool Radarsat2ImageMetadataInterface::CanRead() const
-{
-  std::string sensorID = GetSensorID();
-
-  if (sensorID.find("RADARSAT-2") != std::string::npos)
-  {
-    return true;
-  }
-  else
-    return false;
-}
 
 bool Radarsat2ImageMetadataInterface::HasCalibrationLookupDataFlag(const MetadataSupplierInterface &mds) const
 {

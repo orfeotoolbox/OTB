@@ -38,12 +38,6 @@
 
 namespace otb
 {
-bool Sentinel1ImageMetadataInterface::CanRead() const
-{
-  const std::string sensorID = GetSensorID();
-
-  return sensorID.find("SENTINEL-1") != std::string::npos;
-}
 
 bool Sentinel1ImageMetadataInterface::HasCalibrationLookupDataFlag(const MetadataSupplierInterface &mds) const
 {

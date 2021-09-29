@@ -30,15 +30,6 @@
 namespace otb
 {
 
-bool IkonosImageMetadataInterface::CanRead() const
-{
-  std::string sensorID = GetSensorID();
-  if (sensorID.find("IKONOS-2") != std::string::npos)
-    return true;
-  else
-    return false;
-}
-
 namespace
 {
   template<class T>

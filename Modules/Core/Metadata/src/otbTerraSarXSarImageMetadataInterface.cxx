@@ -99,15 +99,6 @@ std::string GetResourceFile(const std::string & directoryPath, std::string patte
 
 }
 
-bool TerraSarXSarImageMetadataInterface::CanRead() const
-{
-  std::string sensorID = GetSensorID();
-  if (sensorID.find("TSX") != std::string::npos)
-    return true;
-  else
-    return false;
-}
-
 unsigned int TerraSarXSarImageMetadataInterface::GetNumberOfNoiseRecords(const MetadataSupplierInterface& mds, const unsigned int polLayer) const
 {
   if(polLayer == 0)

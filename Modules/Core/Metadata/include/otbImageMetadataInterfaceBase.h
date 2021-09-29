@@ -139,19 +139,6 @@ public:
 
   const ImageKeywordlistType GetImageKeywordlist() const;
 
-  /** This method is less performant and has extra copy.
-  Please use bool GetSensorID(std::string& ) **/
-  std::string const GetSensorID() const;
-
-  /** Get the sensor ID from the ossim metadata
-   * \deprecated
-   */
-  bool GetSensorID(std::string& sensorId) const;
-
-  // otbMetadataGetMacro(SensorID, std::string);
-
-  virtual bool CanRead() const {return false;}
-
   /** Parses the metadata using the MetadataSupplierInterface and fill the ImageMetadata object
    * Raises "MissingMetadataException" if parsing failes.
    */
@@ -177,7 +164,7 @@ public:
   const boost::any& FetchRPC(ImageMetadata& imd, const double lineOffset = 0.0, const double sampleOffset = 0.0);
 
 protected:
-  ImageMetadataInterfaceBase();
+  ImageMetadataInterfaceBase() = default;
   ~ImageMetadataInterfaceBase() override = default;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;

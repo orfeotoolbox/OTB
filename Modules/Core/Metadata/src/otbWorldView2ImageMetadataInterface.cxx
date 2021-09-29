@@ -30,15 +30,6 @@
 namespace otb
 {
 
-bool WorldView2ImageMetadataInterface::CanRead() const
-{
-  std::string sensorID = GetSensorID();
-  if (sensorID.find("WV02") != std::string::npos)
-    return true;
-  else
-    return false;
-}
-
 void WorldView2ImageMetadataInterface::FetchSolarIrradianceWorldView2(ImageMetadata& imd)
 {
   // Reference:

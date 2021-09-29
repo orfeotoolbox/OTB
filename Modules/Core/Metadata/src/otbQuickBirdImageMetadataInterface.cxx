@@ -30,10 +30,4 @@ QuickBirdImageMetadataInterface::QuickBirdImageMetadataInterface()
 {
 }
 
-bool QuickBirdImageMetadataInterface::CanRead() const
-{
-  std::string sensorID = GetSensorID();
-  return (sensorID.find("QB02") != std::string::npos);
-}
-
 } // end namespace otb

@@ -54,9 +54,6 @@ public:
   typedef Superclass::LookupDataPointerType    LookupDataPointerType;
   //  typedef Radarsat2CalibrationLookupData::Pointer          LookupDataPointerType;
 
-  /** check sensor ID */
-  bool CanRead() const override;
-
   double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override;
 
   /*get lookup data for calculating backscatter */

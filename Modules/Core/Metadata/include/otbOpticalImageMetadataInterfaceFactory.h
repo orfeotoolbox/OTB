@@ -52,9 +52,6 @@ public:
   typedef OpticalImageMetadataInterface::VariableLengthVectorType VariableLengthVectorType;
   typedef OpticalImageMetadataInterface::Pointer                  OpticalImageMetadataInterfacePointerType;
 
-  /** Create the appropriate OpticalImageMetadataInterfaceFactory depending on the particulars of the file. */
-  static OpticalImageMetadataInterfacePointerType CreateIMI(const MetaDataDictionaryType& dict);
-
   /** Register Built-in factories */
   static void RegisterBuiltInFactories();
 

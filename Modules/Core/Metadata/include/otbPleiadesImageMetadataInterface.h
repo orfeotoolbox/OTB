@@ -53,8 +53,6 @@ public:
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
 
-  bool CanRead() const override;
-
   void Parse(ImageMetadata &) override;
 
 protected:

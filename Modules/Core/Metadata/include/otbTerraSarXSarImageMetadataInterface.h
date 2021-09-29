@@ -89,8 +89,6 @@ public:
   PointSetPointer GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface&) const override;
   ArrayIndexType  GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override;
 
-  bool CanRead() const override;
-
   void ParseGdal(ImageMetadata &) override;
 
   void ParseGeom(ImageMetadata &) override;
