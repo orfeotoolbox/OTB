@@ -54,9 +54,6 @@ public:
   typedef ImageMetadataInterfaceBase::VariableLengthVectorType VariableLengthVectorType;
   typedef ImageMetadataInterfaceBase::Pointer                  ImageMetadataInterfaceBasePointerType;
 
-  /** Create the appropriate ImageMetadataInterfaceFactory depending on the particulars of the file. */
-  static ImageMetadataInterfaceBasePointerType CreateIMI(const MetaDataDictionaryType& dict);
-
   // TODO: the input ImageMetadata is here to inject some metadatas parsed by
   // GDALImageIO and initialize the correct number of bands. It should not be
   // needed once we have a merge() function,
