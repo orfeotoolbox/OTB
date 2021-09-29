@@ -39,8 +39,6 @@ target_link_libraries(OTBImageIO
   ${OTBBoost_LIBRARIES}
   ${OTBCommon_LIBRARIES}
   ${OTBExtendedFilename_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
-
   )
 
 otb_module_target(OTBImageIO)

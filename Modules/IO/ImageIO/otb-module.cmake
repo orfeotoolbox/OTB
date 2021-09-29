@@ -35,7 +35,6 @@ otb_module(OTBImageIO
     OTBIORAD
     OTBITK
     OTBImageBase
-    OTBOSSIMAdapters
     OTBMetadata
     OTBObjectList
     OTBStreaming

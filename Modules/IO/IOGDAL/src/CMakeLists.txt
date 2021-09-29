@@ -41,7 +41,6 @@ target_link_libraries(OTBIOGDAL
   ${OTBCommon_LIBRARIES}
   ${OTBGDAL_LIBRARIES}
   ${OTBBoost_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
   )
 
 otb_module_target(OTBIOGDAL)

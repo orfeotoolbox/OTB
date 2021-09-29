@@ -35,7 +35,6 @@
 #include "OTBImageIOExport.h"
 
 #include "otbDefaultConvertPixelTraits.h"
-#include "otbImageKeywordlist.h"
 #include "otbExtendedFilenameToReaderOptions.h"
 #include "otbImageFileReaderException.h"
 #include "otbMetadataSupplierInterface.h"

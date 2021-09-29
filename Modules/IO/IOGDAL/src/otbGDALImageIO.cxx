@@ -30,7 +30,6 @@
 #include "itksys/SystemTools.hxx"
 #include "otbImage.h"
 #include "otb_tinyxml.h"
-#include "otbImageKeywordlist.h"
 
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
@@ -1475,10 +1474,10 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   std::ostringstream       oss;
   GDALDataset*             dataset = m_Dataset->GetDataSet();
 
-  // In OTB we can have simultaneously projection ref, sensor keywordlist, GCPs
+  // In OTB we can have simultaneously projection ref, sensor model, GCPs
   // but GDAL can't handle both geotransform and GCP (see issue #303). Here is the priority
   // order we will be using in OTB:
-  // [ProjRef+geotransform] > [SensorKeywordlist+geotransform] > [GCPs]
+  // [ProjRef+geotransform] > [Sensor model+geotransform] > [GCPs]
 
   /* -------------------------------------------------------------------- */
   /* Pre-compute geotransform                                             */
@@ -1500,10 +1499,6 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     std::abs(geoTransform[3]) > Epsilon ||
     std::abs(geoTransform[4]) > Epsilon ||
     std::abs(geoTransform[5] - 1.0) > Epsilon;
-
-  itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
-  ImageKeywordlist otb_kwl;
-  itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
 
   /* -------------------------------------------------------------------- */
   /* Case 1: Set the projection coordinate system of the image            */
@@ -1558,25 +1553,6 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       for (auto & key: SARKwl)
       {
         dataset->SetMetadataItem(key.first.c_str(), key.second.c_str());
-      }
-    }
-  }
-  // ToDo : remove this part. This case is here for compatibility for images
-  // that still use Ossim for managing the sensor model (with OSSIMKeywordList).
-  else if (otb_kwl.GetSize())
-  {
-    /* -------------------------------------------------------------------- */
-    /* Set the RPC coeffs (since GDAL 1.10.0)                               */
-    /* -------------------------------------------------------------------- */
-    if (m_WriteRPCTags)
-    {
-      GDALRPCInfo gdalRpcStruct;
-      if (otb_kwl.convertToGDALRPC(gdalRpcStruct))
-      {
-        otbLogMacro(Debug, << "Saving RPC to file (" << m_FileName << ")")
-        char** rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
-        dataset->SetMetadata(rpcMetadata, "RPC");
-        CSLDestroy(rpcMetadata);
       }
     }
   }

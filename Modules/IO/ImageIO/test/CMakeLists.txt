@@ -75,7 +75,6 @@ otbCompareWritingComplexImage.cxx
 otbImageFileReaderOptBandTest.cxx
 otbImageFileWriterOptBandTest.cxx
 otbMultiImageFileWriterTest.cxx
-otbWriteGeomFile.cxx
 )
 
 add_executable(otbImageIOTestDriver ${OTBImageIOTests})
@@ -1296,16 +1295,6 @@ otb_add_test(NAME ioTvMultiImageFileWriter_BoxExtendedFilename
   ${TEMP}/ioTvMultiImageFileWriter_ExtendedFilename1.tif?&box=40:30:5:10
   ${TEMP}/ioTvMultiImageFileWriter_ExtendedFilename2.tif?&box=10:10:15:15
   50)
-
-otb_add_test(NAME ioTvCompoundMetadataReaderTest
-  COMMAND otbImageIOTestDriver
-  --compare-ascii ${EPSILON_9}
-  ${INPUTDATA}/QB_Toulouse_SensorModel_labelImage.geom
-  ${TEMP}/ioTvCompoundMetadataReaderTest.geom
-  --ignore-lines-with 1 support_data.
-  otbWriteGeomFile
-  ${INPUTDATA}/QB_Toulouse_combo.vrt
-  ${TEMP}/ioTvCompoundMetadataReaderTest.tif)
 
 
 
