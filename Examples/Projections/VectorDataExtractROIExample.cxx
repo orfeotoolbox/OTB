@@ -92,9 +92,7 @@ int main(int argc, char* argv[])
   region.SetSize(size);
   region.SetOrigin(index);
 
-  otb::ImageMetadataInterfaceBase::Pointer imageMetadataInterface =
-      otb::ImageMetadataInterfaceFactory::CreateIMI(imageReader->GetOutput()->GetMetaDataDictionary());
-  region.SetRegionProjection(imageMetadataInterface->GetProjectionRef());
+  region.SetRegionProjection(imageReader->GetOutput()->GetProjectionRef());
 
   region.SetImageMetadata(imageReader->GetOutput()->GetImageMetadata());
 
