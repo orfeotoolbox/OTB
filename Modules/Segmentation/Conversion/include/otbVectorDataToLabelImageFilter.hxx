@@ -99,11 +99,11 @@ void VectorDataToLabelImageFilter<TVectorData, TOutputImage>::SetOutputOrigin(co
 }
 
 template <class TVectorData, class TOutputImage>
-template <class ImageType>
-void VectorDataToLabelImageFilter<TVectorData, TOutputImage>::SetOutputParametersFromImage(const ImageType* src)
+template <class ImagePointerType>
+void VectorDataToLabelImageFilter<TVectorData, TOutputImage>::SetOutputParametersFromImage(const ImagePointerType src)
 {
   this->SetOutputOrigin(src->GetOrigin());
-  this->SetOutputSpacing(internal::GetSignedSpacing(src));
+  this->SetOutputSpacing(src->GetSignedSpacing());
   this->SetOutputSize(src->GetLargestPossibleRegion().GetSize());
   this->SetOutputProjectionRef(src->GetProjectionRef());
 }

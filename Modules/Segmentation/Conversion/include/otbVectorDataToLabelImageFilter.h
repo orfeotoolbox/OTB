@@ -134,8 +134,8 @@ public:
   itkBooleanMacro(AllTouchedMode);
 
   /** Useful to set the output parameters from an existing image*/
-  template <class ImageType>
-  void SetOutputParametersFromImage(const ImageType* image);
+  template <class ImagePointerType>
+  void SetOutputParametersFromImage(const ImagePointerType image);
 
 protected:
   void GenerateData() override;

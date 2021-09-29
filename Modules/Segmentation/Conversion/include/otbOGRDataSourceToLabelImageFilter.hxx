@@ -103,11 +103,11 @@ void OGRDataSourceToLabelImageFilter<TOutputImage>::SetOutputOrigin(const float 
 }
 
 template <class TOutputImage>
-template <class ImageType>
-void OGRDataSourceToLabelImageFilter<TOutputImage>::SetOutputParametersFromImage(const ImageType* src)
+template <class ImagePointerType>
+void OGRDataSourceToLabelImageFilter<TOutputImage>::SetOutputParametersFromImage(const ImagePointerType src)
 {
   this->SetOutputOrigin(src->GetOrigin());
-  this->SetOutputSpacing(internal::GetSignedSpacing(src));
+  this->SetOutputSpacing(src->GetSignedSpacing());
   this->SetOutputSize(src->GetLargestPossibleRegion().GetSize());
   this->SetOutputProjectionRef(src->GetProjectionRef());
 }
