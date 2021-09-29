@@ -759,53 +759,6 @@ void VectorImageModel::OnPhysicalCursorPositionChanged(const QPoint&, const Poin
         geoVector.push_back("");
       }
     }
-    /*
-    else
-      {
-      //handle here the case of QL information display. It
-      //displays geographic info when the user is scrolling over the QL
-      //
-      // compute the current ql index
-
-      if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageKeywordlist().GetSize() != 0)
-        {
-      currentLodIndex[0] = (Xpc - GetQuicklookModel()->ToImage()->GetOrigin()[0])
-        / GetQuicklookModel()->ToImage()->GetSpacing()[0];
-      currentLodIndex[1] = (Ypc - GetQuicklookModel()->ToImage()->GetOrigin()[1])
-        / GetQuicklookModel()->ToImage()->GetSpacing()[1];
-
-       PointType wgs84;
-       PointType currentLodPoint;
-       GetQuicklookModel()->ToImage()->TransformIndexToPhysicalPoint(currentLodIndex, currentLodPoint);
-       wgs84 = GetGenericRSTransform()->TransformPoint(currentLodPoint);
-
-       ossGeographicLong.precision(6);
-       ossGeographicLat.precision(6);
-
-       ossGeographicLong << std::fixed << wgs84[0];
-       ossGeographicLat << std::fixed << wgs84[1];
-
-       //Update geovector with location over QL index
-       geoVector.push_back(ossGeographicLong.str());
-       geoVector.push_back(ossGeographicLat.str());
-
-       double elev = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(wgs84[0],wgs84[1]);
-
-       if(elev > -32768)
-         {
-         ossGeographicElevation << elev;
-         geoVector.push_back(ossGeographicElevation.str());
-         }
-        }
-      else
-        {
-        //No geoinfo available
-        geoVector.push_back("");
-        geoVector.push_back("");
-        geoVector.push_back("");
-        }
-      }
-    */
 
     cartoList = ToQStringList(cartoVector);
     geoList   = ToQStringList(geoVector);

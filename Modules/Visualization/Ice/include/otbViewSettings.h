@@ -74,7 +74,7 @@ public:
 
   itkGetConstReferenceMacro(RotationAngle,double);
 
-  // Order of priority is Wkt, then keywordlist, then unknown
+  // Order of priority is Wkt, then ImageMetadata, then unknown
   void SetWkt(const std::string & wkt)
   {
     // std::cout << "Wkt: '" << m_Wkt << "' -> '" << wkt << "'" << std::endl;    

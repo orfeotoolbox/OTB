@@ -61,7 +61,6 @@ public:
   typedef VectorImage<float>                              VectorImageType;
   typedef VectorImage<unsigned char>                      UCharVectorImageType;
   typedef VectorImageType::PixelType                      PixelType;
-  typedef VectorImageType::ImageKeywordlistType           ImageKeywordlistType;
   typedef itk::MetaDataDictionary                        MetaDataDictionaryType;
   typedef VectorImageType::SizeType                       SizeType;
   typedef VectorImageType::IndexType                      IndexType;

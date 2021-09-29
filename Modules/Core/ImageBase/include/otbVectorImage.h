@@ -29,6 +29,7 @@
 #else
 #include "itkVectorImage.h"
 #endif
+#include "otbImageMetadataInterfaceBase.h"
 #include "otbImageCommons.h"
 #include "OTBImageBaseExport.h"
 
