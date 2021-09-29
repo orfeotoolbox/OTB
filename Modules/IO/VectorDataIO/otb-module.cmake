@@ -36,7 +36,6 @@ otb_module(OTBVectorDataIO
 
   TEST_DEPENDS
     OTBTestKernel
-    OTBOSSIMAdapters
 
   DESCRIPTION
     "${DOCUMENTATION}"

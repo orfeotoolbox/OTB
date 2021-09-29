@@ -38,7 +38,6 @@ target_link_libraries(OTBOpticalCalibration
   ${OTBImageBase_LIBRARIES}
   ${OTBImageManipulation_LIBRARIES}
   ${OTBMetadata_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBObjectList_LIBRARIES}
   )
 

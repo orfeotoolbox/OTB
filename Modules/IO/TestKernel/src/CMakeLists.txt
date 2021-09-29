@@ -25,7 +25,6 @@ target_link_libraries(OTBTestKernel
   ${OTBImageBase_LIBRARIES}
   ${OTBCommon_LIBRARIES}
   ${OTBGDAL_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBImageManipulation_LIBRARIES}
   ${OTBMPIConfig_LIBRARIES}
   )

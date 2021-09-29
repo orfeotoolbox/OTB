@@ -28,7 +28,6 @@ otb_module(OTBIOKML
     OTBlibkml
     OTBGDAL
     OTBCommon
-    OTBOSSIMAdapters
     OTBMetadata
     OTBITK
 

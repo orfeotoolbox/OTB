@@ -28,7 +28,6 @@ target_link_libraries(OTBIOKML
   ${OTBVectorDataBase_LIBRARIES}
   ${OTBProjection_LIBRARIES}
   ${OTBlibkml_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBCommon_LIBRARIES}
   ${OTBGDAL_LIBRARIES}
 

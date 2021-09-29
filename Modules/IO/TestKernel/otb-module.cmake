@@ -34,7 +34,6 @@ otb_module(OTBTestKernel
     OTBCommon
     OTBGDAL
     OTBMetadata
-    OTBOSSIMAdapters
     OTBImageManipulation
 
     OPTIONAL_DEPENDS
