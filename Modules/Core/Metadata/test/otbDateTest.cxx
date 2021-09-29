@@ -32,9 +32,6 @@
 
 #include "otbDateTime.h"
 
-
-#include "ossim/ossimTimeUtilities.h"
-
 BOOST_AUTO_TEST_CASE(Duration)
 {
   BOOST_TEST(otb::MetaData::Duration::Seconds(5.5) + otb::MetaData::Duration::Seconds(1.5) 
