@@ -71,9 +71,9 @@ private:
                             "Output the image metadata. It contains metadata information (sensor model, geometry ). Information is stored as "
                             "pairs of key/value.");
 
-    AddParameter(ParameterType_OutputFilename, "outkwl", "Write the OSSIM keywordlist to a geom file");
-    SetParameterDescription("outkwl", "This option allows extracting the OSSIM keywordlist of the image into a geom file.");
-    MandatoryOff("outkwl");
+    AddParameter(ParameterType_OutputFilename, "outgeom", "Write the image metadata to a geom file");
+    SetParameterDescription("outgeom", "This option allows extracting the image metadata of the image into a geom file.");
+    MandatoryOff("outgeom");
 
     // Create output parameters to store image information
     AddParameter(ParameterType_Int, "indexx", "Start index X");
@@ -499,6 +499,11 @@ private:
 
     // Display image information in the dedicated logger
     otbAppLogINFO(<< ossOutput.str());
+
+    if (IsParameterEnabled("outgeom") && HasValue("outgeom"))
+    {
+      WriteImageMetadataToGeomFile(imd, GetParameterString("outgeom"));
+    }
   }
 };
 }
