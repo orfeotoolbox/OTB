@@ -27,7 +27,6 @@ add_library(OTBTransform ${OTBTransform_SRC})
 target_link_libraries(OTBTransform
   ${OTBGDAL_LIBRARIES}
   ${OTBCommon_LIBRARIES}
-  ${OTBOpenThreads_LIBRARIES}
   ${OTBIOGDAL_LIBRARIES}
   ${OTBBoostAdapters_LIBRARIES}
   )
