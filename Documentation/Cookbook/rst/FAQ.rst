@@ -81,3 +81,18 @@ be unique, the first library *SomeLib* loaded will be used by any other binary
 depending on it. Thus, the order of the imports has an effect. In some cases,
 symbol problems have been observed in libcrypto, and the solution was to import
 OTB Applications before importing Fiona.
+
+Problems using OTB and virtual filesystem
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you try to read raster located on virtual filesystem as s3 bucket with 
+the OTB standalone package you can encounter issue with SSL certififcates.
+Indeed this package is build on CentOS and for example Ubuntu’s certs are in a 
+different location. You may need to use the CURL_CA_BUNDLE environment variable 
+to specify the location of SSL certs on your computer.
+
+On an Ubuntu system set the variable as shown below.
+
+.. code-block:: sh
+
+   export CURL_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
