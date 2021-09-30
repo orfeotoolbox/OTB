@@ -1034,9 +1034,8 @@ public:
       2 : GetDouble,
       3 : GetGCP,
       4 : GetVector,
-      5 : GetImageKWL,
-      6 : GetVectorDataKWL,
-      7 : GetBoolVector,
+      5 : GetVectorDataKWL,
+      6 : GetBoolVector,
       }
 
     SetterMap = {
@@ -1045,9 +1044,8 @@ public:
       2 : SetDouble,
       3 : SetGCP,
       4 : SetVector,
-      5 : SetImageKWL,
-      6 : SetVectorDataKWL,
-      7 : SetBoolVector,
+      5 : SetVectorDataKWL,
+      6 : SetBoolVector,
       }
 
     def __str__(self):
