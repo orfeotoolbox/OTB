@@ -42,7 +42,7 @@
   
     <deburstSamples>
       <first>920</first>
-      <second>25219</second>
+      <second>25137</second>
     </deburstSamples>
   
     <burstExtractionLines>
@@ -52,7 +52,7 @@
   
     <burstExtractionSamples>
       <first>838</first>
-      <second>25219</second>
+      <second>25137</second>
     </burstExtractionSamples>
   
     <linesBursts count="9">

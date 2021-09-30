@@ -155,9 +155,11 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
   burstExtractionSamplesOssim.first = baseline.GetAs<unsigned long>("baseline.ossim.burstExtractionSamples.first");
   burstExtractionSamplesOssim.second = baseline.GetAs<unsigned long>("baseline.ossim.burstExtractionSamples.second");
 
-  std::cout << "OTB : burst extraction lines " << burstExtractionLines.first << std::endl;
+  std::cout << "OTB : burst extraction lines " << burstExtractionLines.first << " "
+                                               << burstExtractionLines.second << std::endl;
 
-  std::cout << "OTB : burst extraction samples " << burstExtractionSamples.first << std::endl;
+  std::cout << "OTB : burst extraction samples " << burstExtractionSamples.first << " "
+                                                 << burstExtractionSamples.second << std::endl;
 
   std::cout << "OSSIM : burst extraction lines " << burstExtractionLinesOssim.first << " "
                                                  << burstExtractionLinesOssim.second << std::endl;
