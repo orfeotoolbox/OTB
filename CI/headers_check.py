@@ -118,7 +118,6 @@ excludedfiles = set([
     './CMake/FindGLEW.cmake',
     './CMake/FindKWStyle.cmake',
     './CMake/FindLibSVM.cmake',
-    './CMake/FindOpenThreads.cmake',
     './CMake/Findcppcheck.cmake',
     './CMake/Findcppcheck.cpp',
     './CMake/GenerateExportHeaderCustom.cmake',
