@@ -38,7 +38,6 @@ otb_module(OTBTransform
     OTBImageBase
     OTBImageIO
     OTBImageManipulation
-    OTBOssim
     OTBTestKernel
     OTBProjection
 
