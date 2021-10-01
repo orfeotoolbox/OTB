@@ -57,20 +57,23 @@ VectorImage (0x2055dc0)
       Pointer: 0
       Container manages memory: true
       Size: 0
-      Capacity: 0
+      Capacity:
   {{"DataType": "1",
-"TileHintX": "4800",
 "TileHintY": "4800",
+"TileHintX": "4800",
 "ProjectionWKT": "PROJCS["unnamed",
     GEOGCS["Unknown datum based upon the custom spheroid",
-        DATUM["Not_specified_based_on_custom_spheroid"|
-            AUTHORITY["EPSG","9122"]]],
+        DATUM["Not_specified_based_on_custom_spheroid",
             SPHEROID["Custom spheroid",6371007.181,0]],
         PRIMEM["Greenwich",0],
-        UNIT["degree",0.0174532925199433]],
+        UNIT["degree",0.0174532925199433,
+            AUTHORITY["EPSG","9122"]]],
     PROJECTION["Sinusoidal"],
     PARAMETER["longitude_of_center",0],
     PARAMETER["false_easting",0],
     PARAMETER["false_northing",0],
-    UNIT["Meter",1]]
+    UNIT["Meter",1],
+    AXIS["Easting",EAST],
+    AXIS["Northing",NORTH]]",
 }Bands[{},]
+}
