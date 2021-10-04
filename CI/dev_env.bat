@@ -74,7 +74,7 @@ if "%TARGET%"=="10" (
 echo Home dir: %HOMEDRIVE%%HOMEPATH%
 
 :: Setup Python
-set PATH=C:\tools\Python37%ARCH%;%PATH%
+set PATH=C:\tools\Python37-%ARCH%;%PATH%
 set PATH=C:\tools\Python37-%ARCH%\Scripts;%PATH%
 
 :: Setup GL dlls
