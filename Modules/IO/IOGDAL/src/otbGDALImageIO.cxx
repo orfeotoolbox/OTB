@@ -1590,8 +1590,8 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     const std::string & gcpProjectionRef = gcpPrm.GCPProjection;
     dataset->SetGCPs(gdalGcps.size(), gdalGcps.data(), gcpProjectionRef.c_str());
 
-    // disable geotransform with GCP
-    writeGeotransform = false;
+    // disable geotransform with GCP (check that SetGCPs succeed by verifying the the dataset has GCPs)
+    writeGeotransform = writeGeotransform && !dataset->GetGCPCount();
   }
 
   /* -------------------------------------------------------------------- */
