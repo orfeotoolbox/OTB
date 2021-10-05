@@ -22,7 +22,7 @@
 #define otbTerraSarBrightnessImageFilter_hxx
 
 #include "otbTerraSarBrightnessImageFilter.h"
-#include "otbTerraSarXSarImageMetadataInterface.h"
+#include "otbMetaDataKey.h"
 
 namespace otb
 {

@@ -56,7 +56,6 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
   typedef Superclass::UIntVectorType           UIntVectorType;
   typedef Superclass::StringVectorType         StringVectorType;
   typedef itk::PointSet<double, 2> PointSetType;
@@ -70,8 +69,6 @@ public:
 
   virtual bool HasCalibrationLookupDataFlag(const MetadataSupplierInterface&) const;
 
-  virtual RealType GetRadiometricCalibrationScale() const;
-
   virtual PointSetPointer GetRadiometricCalibrationAntennaPatternNewGain() const;
   virtual PointSetPointer GetRadiometricCalibrationAntennaPatternOldGain() const;
   virtual PointSetPointer GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface &) const;
@@ -84,29 +81,10 @@ public:
   virtual ArrayIndexType GetRadiometricCalibrationRangeSpreadLossPolynomialDegree() const;
   virtual ArrayIndexType GetRadiometricCalibrationNoisePolynomialDegree() const;
 
-  virtual double GetPRF() const                  = 0;
-  virtual double GetRSF() const                  = 0;
-  virtual double GetRadarFrequency() const       = 0;
   virtual double GetCenterIncidenceAngle(const MetadataSupplierInterface& mds) const = 0;
 
 
   virtual double GetRescalingFactor() const;
-
-  virtual const std::string GetProductType() const;
-
-  virtual const std::string GetAcquisitionMode() const;
-
-  /** Get the enhanced band names (No enhanced band name support for SAR) */
-  StringVectorType GetEnhancedBandNames() const override
-  {
-    StringVectorType nothing;
-    return nothing;
-  }
-
-  /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
-   * then translate it into ImageMetadata. Handles most SAR sensors.
-   * Returns true if succeed. */
-  bool ConvertImageKeywordlistToImageMetadata(ImageMetadata &) override;
 
   virtual void ParseGdal(ImageMetadata &) =0;
   virtual void ParseGeom(ImageMetadata &) =0;

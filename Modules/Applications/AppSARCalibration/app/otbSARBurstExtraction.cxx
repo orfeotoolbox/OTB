@@ -131,16 +131,13 @@ private:
     m_BurstExtractionFilter = BurstExtractionFilterType::New();
     m_BurstExtractionFilter->SetInput(in);
 
-    if (IsParameterEnabled("allpixels"))
-    {
-      m_BurstExtractionFilter->SetAllPixels(true);
-    }
+    m_BurstExtractionFilter->SetAllPixels(GetParameterInt("allpixels"));
 
     // Get the number of Bursts
     unsigned int nbBursts = 1;
     try
     {
-      nbBursts = std::stoi(in->GetImageKeywordlist().GetMetadataByKey("support_data.geom.bursts.number"));
+      nbBursts = boost::any_cast<const otb::SARParam&>(in->GetImageMetadata()[otb::MDGeom::SAR]).burstRecords.size();
     }
     catch (...)
     {

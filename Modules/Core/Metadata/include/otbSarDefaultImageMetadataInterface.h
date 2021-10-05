@@ -55,16 +55,10 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
   typedef itk::PointSet<double, 2> PointSetType;
   typedef PointSetType::Pointer   PointSetPointer;
   typedef double                  RealType;
   typedef PointSetType::PointType PointType;
-
-  RealType GetRadiometricCalibrationScale() const override
-  {
-    itkExceptionMacro("GetRadiometricCalibrationScale() not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
 
   PointSetPointer GetRadiometricCalibrationAntennaPatternNewGain() const override
   {
@@ -118,88 +112,6 @@ public:
     itkExceptionMacro("GetRadiometricCalibrationNoisePolynomialDegree() not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  /** Get the imaging acquisition day from the ossim metadata
-   * \deprecated
-   */
-  int GetDay() const override
-  {
-    itkExceptionMacro("GetDay not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the imaging acquisition month from the ossim metadata
-   * \deprecated
-   */
-  int GetMonth() const override
-  {
-    itkExceptionMacro("GetMonth not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the imaging acquisition year from the ossim metadata
-   * \deprecated
-   */
-  int GetYear() const override
-  {
-    itkExceptionMacro("GetYear not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the imaging acquisition hour from the ossim metadata
-   * \deprecated
-   */
-  int GetHour() const override
-  {
-    itkExceptionMacro("GetHour not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the imaging acquisition minute from the ossim metadata
-   * \deprecated
-   */
-  int GetMinute() const override
-  {
-    itkExceptionMacro("GetMinute not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the imaging production day from the ossim metadata
-   * \deprecated
-   */
-  int GetProductionDay() const override
-  {
-    itkExceptionMacro("GetProductionDay not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the imaging production month from the ossim metadata
-   * \deprecated
-   */
-  int GetProductionMonth() const override
-  {
-    itkExceptionMacro("GetProductionMonth not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the imaging production year from the ossim metadata
-   * \deprecated
-   */
-  int GetProductionYear() const override
-  {
-    itkExceptionMacro("GetProductionYear not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the PRF */
-  double GetPRF() const override
-  {
-    itkExceptionMacro("GetPRF not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the RSF */
-  double GetRSF() const override
-  {
-    itkExceptionMacro("GetRSF not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the radar frequency */
-  double GetRadarFrequency() const override
-  {
-    itkExceptionMacro("GetRadarFrequency not implemented in SarDefaultImageMetadataInterface, no captor type found");
-  }
-
   /** Get the center incidence angle */
   double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override
   {
@@ -216,22 +128,6 @@ public:
     itkExceptionMacro("ParseGeom not implemented in SarDefaultImageMetadataInterface, no captor type found");
   }
 
-  bool CanRead() const override
-  {
-    // This class is the default one, it has to be able to call every metadata
-    return false;
-  }
-
-  /** Get the 3 spectral band numbers corresponding to the default display for visualization,
-   *  in the order R, G, B */
-  UIntVectorType GetDefaultDisplay() const override
-  {
-    UIntVectorType rgb(3);
-    rgb[0] = 0;
-    rgb[1] = 0;
-    rgb[2] = 0;
-    return rgb;
-  }
 
 protected:
   SarDefaultImageMetadataInterface() = default;

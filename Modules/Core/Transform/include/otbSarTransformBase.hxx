@@ -60,7 +60,7 @@ template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutput
 void SarTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  os << indent << "Sar Model: " << this->m_SarParam.get()->ToJSON() << std::endl;
+  os << indent << "Sar Model" << std::endl;
 }
 
 } // namespace otb

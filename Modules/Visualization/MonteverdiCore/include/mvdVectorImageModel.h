@@ -169,6 +169,12 @@ public:
   ImageBaseType::Pointer ToImageBase() override;
 
   /**
+   * Get a reference to the ImageMetadata.
+   */
+  const otb::ImageMetadata & GetImageMetadata() const override;
+
+
+  /**
    * Get the placename from the center pixel
    */
   std::string GetCenterPixelPlaceName();
@@ -272,7 +278,7 @@ private:
   // AbstractLayerModel methods.
 
   std::string virtual_GetWkt() const override;
-  bool        virtual_HasKwl() const override;
+  bool virtual_HasSensorModel() const override;
   void virtual_ToWgs84(const PointType&, PointType&, double& alt) const override;
 
   //

@@ -60,9 +60,7 @@ int otbWrapperImageInterface(int argc, char* argv[])
   ofs << "Size: " << app1->GetImageSize("out") << std::endl;
   ofs << "Origin: " << app1->GetImageOrigin("out") << std::endl;
   ofs << "Spacing: " << app1->GetImageSpacing("out") << std::endl;
-  ofs << "Keywordlist: " << std::endl;
-  otb::ImageKeywordlist kwl = app1->GetImageKeywordlist("out");
-  kwl.Print(ofs);
+
   ofs << "ProjectionRef:" << std::endl;
   ofs << app1->GetImageProjection("out") << std::endl;
 

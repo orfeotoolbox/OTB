@@ -45,9 +45,6 @@ function(install_share_dirs)
   endif()
   install_without_message("${GDAL_DATA_DIR}" "share" )
 
-  ####################### install OSSIM data ##########################
-  install_without_message("${PKG_SHARE_SOURCE_DIR}/ossim" "share" )
-
   ####################### install proj share ##########################
   if(EXISTS ${PKG_SHARE_SOURCE_DIR}/proj)
     install_without_message("${PKG_SHARE_SOURCE_DIR}/proj" "share" )

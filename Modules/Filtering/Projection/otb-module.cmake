@@ -36,7 +36,6 @@ ENABLE_SHARED
     OTBImageBase
     OTBImageManipulation
     OTBMetadata
-    OTBOSSIMAdapters
     OTBTransform
     OTBVectorDataBase
     OTBVectorDataManipulation

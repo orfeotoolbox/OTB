@@ -26,7 +26,11 @@
 #include "itkMacro.h"
 #if defined(__GNUC__) || defined(__clang__)
 #pragma GCC diagnostic push
+
+#if (defined (__GNUC__) && (__GNUC__ >= 9)) || (defined (__clang__) && (__clang_major__ >= 10))
 #pragma GCC diagnostic ignored "-Wdeprecated-copy"
+#endif
+
 #pragma GCC diagnostic ignored "-Wshadow"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"

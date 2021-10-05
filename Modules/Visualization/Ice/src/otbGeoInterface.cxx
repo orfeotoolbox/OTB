@@ -138,7 +138,6 @@ GeoInterface
   return INITIALIZER.GetSpacing();
 }
 
-
 std::string
 GeoInterface
 ::GetWkt() const
@@ -146,18 +145,9 @@ GeoInterface
   return std::string();
 }
 
-
 bool
 GeoInterface
-::HasKwl() const
-{
-  return false;
-}
-
-
-bool
-GeoInterface
-::GetKwl( ImageKeywordlist & ) const
+::GetImd( ImageMetadata &) const
 {
   return false;
 }

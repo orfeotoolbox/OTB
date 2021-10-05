@@ -51,7 +51,7 @@ int otbImageFileReaderWithExtendedFilename(int itkNotUsed(argc), char* argv[])
   reader->SetFileName(inputFilename);
   reader->Update();
 
-  file1 << reader->GetOutput()->GetImageKeywordlist();
+  file1 << reader->GetOutput()->GetImageMetadata().ToJSON();
 
   file2 << "ProjRef: " << reader->GetOutput()->GetProjectionRef() << std::endl;
   file2 << "Origin: " << reader->GetOutput()->GetOrigin() << std::endl;

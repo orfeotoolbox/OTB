@@ -24,12 +24,12 @@
 */
 
 
-// OTB relies on OSSIM for elevation handling. Since release 3.16, there is a
-// single configuration class \doxygen{otb}{DEMHandler} to manage elevation (in
-// image projections or localization functions for example).  This configuration
+// Since release 8.0, OTB relies on GDAL for elevation handling. Since release 3.16,
+// there is a single configuration class \doxygen{otb}{DEMHandler} to manage elevation
+// (in image projections or localization functions for example). This configuration
 // is managed by the a proper instantiation and parameters setting of this
-// class.  These instantiations must be done before any call to geometric
-// filters or functionalities. Ossim internal accesses to elevation are also
+// class. These instantiations must be done before any call to geometric
+// filters or functionalities. GDAL internal accesses to elevation are also
 // configured by this class and this will ensure consistency throughout the
 // library.
 
@@ -109,10 +109,6 @@ int main(int argc, char* argv[])
 
   height = demHandler.GetHeightAboveEllipsoid(point);
   std::cout << "height above ellipsoid (" << longitude << ", " << latitude << ") = " << height << " meters" << std::endl;
-
-  // Note that OSSIM internal calls for sensor
-  // modelling use the height above ellipsoid, and follow the same logic as the
-  // \code{GetHeightAboveEllipsoid()} method.
 
   // Check for Nan
   if (vnl_math_isnan(height))

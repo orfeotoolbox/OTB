@@ -25,7 +25,7 @@
 #include <iomanip>
 
 #include "OTBImageBaseExport.h"
-#include "otbImageKeywordlist.h"
+#include "otbImageMetadata.h"
 #include "itkImageRegion.h"
 #include <string>
 
@@ -196,20 +196,20 @@ public:
     m_Index[i] = idx;
   }
 
-  /** Get the image keywordlist 
+  /** Get the image metadata 
     \deprecated
    */
-  const ImageKeywordlist& GetKeywordList() const
+  const ImageMetadata& GetImageMetadata() const
   {
-    return m_KeywordList;
+    return m_ImageMetadata;
   }
 
-  /** Set the image keywordlist 
+  /** Set the image metadata 
     \deprecated
    */
-  void SetKeywordList(const ImageKeywordlist& kwl)
+  void SetImageMetadata(const ImageMetadata& imd)
   {
-    this->m_KeywordList = kwl;
+    m_ImageMetadata = imd;
   }
 
   /** Compare two regions. */
@@ -316,7 +316,7 @@ protected:
     os << indent << "Index:" << this->m_Index << std::endl;
     os << indent << "Size:" << this->m_Size << std::endl;
     os << indent << "Projection:" << this->m_InputProjectionRef << std::endl;
-    os << indent << "Keywordlist: " << this->m_KeywordList << std::endl;
+    os << indent << "ImageMetadata: " << this->m_ImageMetadata << std::endl;
   }
 
 private:
@@ -324,7 +324,7 @@ private:
   SizeType  m_Size;
 
   std::string      m_InputProjectionRef;
-  ImageKeywordlist m_KeywordList; // if we want to specify the region in term of sensor geometry
+  ImageMetadata m_ImageMetadata; // if we want to specify the region in term of sensor geometry
 };
 // extern std::ostream & operator<<(std::ostream &os, const RemoteSensingRegion &region);
 

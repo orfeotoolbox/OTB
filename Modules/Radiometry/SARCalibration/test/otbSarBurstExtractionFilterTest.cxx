@@ -47,7 +47,7 @@ int otbSarBurstExtractionFilterTest(int itkNotUsed(argc), char* argv[])
   reader->SetFileName(argv[2]);
   reader->UpdateOutputInformation();
 
-  unsigned int nb_bursts = atoi(reader->GetOutput()->GetImageKeywordlist().GetMetadataByKey("support_data.geom.bursts.number").c_str());
+  const auto nb_bursts = boost::any_cast<const otb::SARParam&>(reader->GetOutput()->GetImageMetadata()[otb::MDGeom::SAR]).burstRecords.size();
 
   if (nb_bursts != 1)
   {

@@ -46,6 +46,7 @@
 #include "otbCoordinateToName.h"
 #include "otbDEMHandler.h"
 #include "otbGroundSpacingImageFunction.h"
+#include "otbNoDataHelper.h"
 
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -151,6 +152,14 @@ void VectorImageModel::SetFilename(const QString& filename, int w, int h)
   // 2. Setup file-reader.
   SetupCurrentLodImage(w, h);
 }
+
+
+const otb::ImageMetadata & VectorImageModel::GetImageMetadata() const
+{
+  return m_ImageFileReader->GetOutput()->GetImageMetadata();
+}
+
+
 
 /*****************************************************************************/
 void VectorImageModel::EnsureValidImage(const QString& filename)
@@ -261,14 +270,11 @@ void VectorImageModel::virtual_BuildModel(void* context)
   // Get build-context settings.
   VectorImageSettings* const settings = static_cast<VectorImageSettings*>(buildContext->m_Settings);
 
-
   // Fetch the no data flags if any
-  otb::ImageMetadataInterfaceBase::ConstPointer metaData(GetMetaDataInterface());
-
   std::vector<double> values;
   std::vector<bool>   flags;
 
-  bool ret = metaData->GetNoDataFlags(flags, values);
+  bool ret = otb::ReadNoDataFlags(this->ToImageBase()->GetMetaDataDictionary(), flags, values);
 
   if (ret && !values.empty() && !flags.empty() && flags[0])
   {
@@ -316,21 +322,21 @@ void VectorImageModel::virtual_BuildModel(void* context)
 void VectorImageModel::InitializeColorSetupSettings()
 {
   // Remember meta-data interface.
-  otb::ImageMetadataInterfaceBase::ConstPointer metaData(GetMetaDataInterface());
+  const auto & metaData = GetImageMetadata();
 
   // Ensure default display returns valid band indices (see OTB bug).
-  assert(metaData->GetDefaultDisplay().size() == 3);
+  assert(metaData.GetDefaultDisplay().size() == 3);
 #if 0
-  assert( metaData->GetDefaultDisplay()[ 0 ]
+  assert( metaData.GetDefaultDisplay()[ 0 ]
     < m_Image->GetNumberOfComponentsPerPixel() );
-  assert( metaData->GetDefaultDisplay()[ 1 ]
+  assert( metaData.GetDefaultDisplay()[ 1 ]
     < m_Image->GetNumberOfComponentsPerPixel() );
-  assert( metaData->GetDefaultDisplay()[ 2 ]
+  assert( metaData.GetDefaultDisplay()[ 2 ]
     < m_Image->GetNumberOfComponentsPerPixel() );
 #endif
 
   // Patch invalid band indices of default-display (see OTB bug).
-  VectorImageSettings::ChannelVector rgb(metaData->GetDefaultDisplay());
+  VectorImageSettings::ChannelVector rgb(metaData.GetDefaultDisplay());
 
   if (rgb[0] >= m_Image->GetNumberOfComponentsPerPixel())
   {
@@ -588,11 +594,11 @@ std::string VectorImageModel::virtual_GetWkt() const
 }
 
 /*****************************************************************************/
-bool VectorImageModel::virtual_HasKwl() const
+bool VectorImageModel::virtual_HasSensorModel() const
 {
   assert(!m_Image.IsNull());
 
-  return m_Image->GetImageKeywordlist().GetSize() > 0;
+  return m_Image->GetImageMetadata().HasSensorGeometry();
 }
 
 /*****************************************************************************/
@@ -706,7 +712,7 @@ void VectorImageModel::OnPhysicalCursorPositionChanged(const QPoint&, const Poin
     {
       geoVector.push_back(ToStdString(tr("Geographic(exact)")));
     }
-    else if (ToImage()->GetImageKeywordlist().GetSize() != 0)
+    else if (ToImage()->GetImageMetadata().HasSensorGeometry())
     {
       geoVector.push_back(ToStdString(tr("Geographic(sensor model)")));
     }
@@ -718,7 +724,7 @@ void VectorImageModel::OnPhysicalCursorPositionChanged(const QPoint&, const Poin
     if (ToImage()->GetLargestPossibleRegion().IsInside(currentLodIndex) || 1)
     {
       // TODO : Is there a better method to detect no geoinfo available ?
-      if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageKeywordlist().GetSize() != 0)
+      if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageMetadata().HasSensorGeometry())
       {
         assert(!m_ToWgs84.IsNull());
 
@@ -753,53 +759,6 @@ void VectorImageModel::OnPhysicalCursorPositionChanged(const QPoint&, const Poin
         geoVector.push_back("");
       }
     }
-    /*
-    else
-      {
-      //handle here the case of QL information display. It
-      //displays geographic info when the user is scrolling over the QL
-      //
-      // compute the current ql index
-
-      if (!ToImage()->GetProjectionRef().empty() || ToImage()->GetImageKeywordlist().GetSize() != 0)
-        {
-      currentLodIndex[0] = (Xpc - GetQuicklookModel()->ToImage()->GetOrigin()[0])
-        / GetQuicklookModel()->ToImage()->GetSpacing()[0];
-      currentLodIndex[1] = (Ypc - GetQuicklookModel()->ToImage()->GetOrigin()[1])
-        / GetQuicklookModel()->ToImage()->GetSpacing()[1];
-
-       PointType wgs84;
-       PointType currentLodPoint;
-       GetQuicklookModel()->ToImage()->TransformIndexToPhysicalPoint(currentLodIndex, currentLodPoint);
-       wgs84 = GetGenericRSTransform()->TransformPoint(currentLodPoint);
-
-       ossGeographicLong.precision(6);
-       ossGeographicLat.precision(6);
-
-       ossGeographicLong << std::fixed << wgs84[0];
-       ossGeographicLat << std::fixed << wgs84[1];
-
-       //Update geovector with location over QL index
-       geoVector.push_back(ossGeographicLong.str());
-       geoVector.push_back(ossGeographicLat.str());
-
-       double elev = otb::DEMHandler::Instance()->GetHeightAboveEllipsoid(wgs84[0],wgs84[1]);
-
-       if(elev > -32768)
-         {
-         ossGeographicElevation << elev;
-         geoVector.push_back(ossGeographicElevation.str());
-         }
-        }
-      else
-        {
-        //No geoinfo available
-        geoVector.push_back("");
-        geoVector.push_back("");
-        geoVector.push_back("");
-        }
-      }
-    */
 
     cartoList = ToQStringList(cartoVector);
     geoList   = ToQStringList(geoVector);

@@ -152,23 +152,23 @@ otb_test_application(NAME  apTvPrConvertCartoToGeoPoint
 
 #----------- GenerateRPCSensorModel TESTS ----------------
 # Remove baseline for OSSIM >= 2.2, as ossimRPCProjection.optimizeFit() is broken
-set(VALID_CONDITION)
-if(OTB_OSSIM_VERSION LESS 20200)
-set(VALID_CONDITION
-  VALID --compare-ascii ${EPSILON_3}
-        ${BASELINE_FILES}/apTvPrGenerateRPCSensorModelGeomOutput.geom
-        ${TEMP}/apTvPrGenerateRPCSensorModelGeomOutput.geom)
-endif()
-otb_test_application(NAME  apTvPrGenerateRPCSensorModel
-                     APP  GenerateRPCSensorModel
-                     OPTIONS -inpoints  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500_in_tie_points.txt
-                 	     -outgeom   ${TEMP}/apTvPrGenerateRPCSensorModelGeomOutput.geom
-                             -outstat   ${TEMP}/apTvPrGenerateRPCSensorModelStatsOutput.txt
-                             -outvector ${TEMP}/apTvPrGenerateRPCSensorModelVectorOutput.shp
-                             -map utm -map.utm.zone 31 -map.utm.northhem 1
-                             -elev.dem ${INPUTDATA}/DEM/srtm_directory
-                             -elev.geoid ${INPUTDATA}/DEM/egm96.grd
-                     ${VALID_CONDITION})
+# set(VALID_CONDITION)
+# if(OTB_OSSIM_VERSION LESS 20200)
+# set(VALID_CONDITION
+#   VALID --compare-ascii ${EPSILON_3}
+#         ${BASELINE_FILES}/apTvPrGenerateRPCSensorModelGeomOutput.geom
+#         ${TEMP}/apTvPrGenerateRPCSensorModelGeomOutput.geom)
+# endif()
+# otb_test_application(NAME  apTvPrGenerateRPCSensorModel
+#                      APP  GenerateRPCSensorModel
+#                      OPTIONS -inpoints  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500_in_tie_points.txt
+#                  	     -outgeom   ${TEMP}/apTvPrGenerateRPCSensorModelGeomOutput.geom
+#                              -outstat   ${TEMP}/apTvPrGenerateRPCSensorModelStatsOutput.txt
+#                              -outvector ${TEMP}/apTvPrGenerateRPCSensorModelVectorOutput.shp
+#                              -map utm -map.utm.zone 31 -map.utm.northhem 1
+#                              -elev.dem ${INPUTDATA}/DEM/srtm_directory
+#                              -elev.geoid ${INPUTDATA}/DEM/egm96.grd
+#                      ${VALID_CONDITION})
 
 
 #----------- GridBasedImageResampling TESTS ----------------
@@ -275,37 +275,37 @@ otb_test_application(NAME apTvPrObtainUTMZoneFromGeoPoint
 
 
 #----------- RefineSensorModel TESTS ----------------
-otb_test_application(NAME  apTvPrRefineSensorModel
-                     APP  RefineSensorModel
-                     OPTIONS -ingeom    ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.geom
-                             -inpoints  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500_in_tie_points.txt
-                 	         -outgeom   ${TEMP}/apTvPrRefineSensorModelGeomOutput.geom
-                             -outstat   ${TEMP}/apTvPrRefineSensorModelStatsOutput.txt
-                             -outvector ${TEMP}/apTvPrRefineSensorModelVectorOutput.shp
-                             -map utm -map.utm.zone 31 -map.utm.northhem 1
-                             -elev.dem ${INPUTDATA}/DEM/srtm_directory
-                             -elev.geoid ${INPUTDATA}/DEM/egm96.grd
-                     VALID   --compare-ascii 0.1
-                             ${BASELINE_FILES}/apTvPrRefineSensorModelGeomOutput.geom
-                             ${TEMP}/apTvPrRefineSensorModelGeomOutput.geom
-                             --ignore-lines-with 1 support_data.)
+#otb_test_application(NAME  apTvPrRefineSensorModel
+#                     APP  RefineSensorModel
+#                     OPTIONS -ingeom    ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.geom
+#                             -inpoints  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500_in_tie_points.txt
+#                 	         -outgeom   ${TEMP}/apTvPrRefineSensorModelGeomOutput.geom
+#                             -outstat   ${TEMP}/apTvPrRefineSensorModelStatsOutput.txt
+#                             -outvector ${TEMP}/apTvPrRefineSensorModelVectorOutput.shp
+#                             -map utm -map.utm.zone 31 -map.utm.northhem 1
+#                             -elev.dem ${INPUTDATA}/DEM/srtm_directory
+#                             -elev.geoid ${INPUTDATA}/DEM/egm96.grd
+#                     VALID   --compare-ascii 0.1
+#                             ${BASELINE_FILES}/apTvPrRefineSensorModelGeomOutput.geom
+#                             ${TEMP}/apTvPrRefineSensorModelGeomOutput.geom
+#                             --ignore-lines-with 1 support_data.)
 
 # Remove baseline for OSSIM >= 2, as ossimRPCProjection.optimizeFit() is broken
-set(VALID_CONDITION)
-if(OTB_OSSIM_VERSION LESS 20200)
-set(VALID_CONDITION
-  VALID --compare-ascii 0.1
-        ${BASELINE_FILES}/apTvPrRefineSensorModelGeomOutput2.geom
-        ${TEMP}/apTvPrRefineSensorModelGeomOutput2.geom)
-endif()
+# set(VALID_CONDITION)
+# if(OTB_OSSIM_VERSION LESS 20200)
+# set(VALID_CONDITION
+#   VALID --compare-ascii 0.1
+#         ${BASELINE_FILES}/apTvPrRefineSensorModelGeomOutput2.geom
+#         ${TEMP}/apTvPrRefineSensorModelGeomOutput2.geom)
+#endif()
 
-otb_test_application(NAME  apTvPrRefineSensorModel2
-                     APP  RefineSensorModel
-                     OPTIONS -ingeom    ${INPUTDATA}/s1a-iw-grd-vh-20150210t060009-20150210t060034-004557-0059a3-002.geom 
-                             -inpoints  ${INPUTDATA}/pts_idV5.txt
-                 	         -outgeom   ${TEMP}/apTvPrRefineSensorModelGeomOutput2.geom
-                     ${VALID_CONDITION})
-                             
+#otb_test_application(NAME  apTvPrRefineSensorModel2
+#                     APP  RefineSensorModel
+#                     OPTIONS -ingeom    ${INPUTDATA}/s1a-iw-grd-vh-20150210t060009-20150210t060034-004557-0059a3-002.geom 
+#                             -inpoints  ${INPUTDATA}/pts_idV5.txt
+#                 	         -outgeom   ${TEMP}/apTvPrRefineSensorModelGeomOutput2.geom
+#                     ${VALID_CONDITION})
+
 
 
 #----------- RigidTransformResample TESTS ----------------

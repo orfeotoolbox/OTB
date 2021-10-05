@@ -23,7 +23,6 @@
 
 #include "otbVectorDataToVectorDataFilter.h"
 #include "otbGenericRSTransform.h"
-#include "otbImageKeywordlist.h"
 #include <string>
 
 namespace otb

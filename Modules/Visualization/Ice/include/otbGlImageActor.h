@@ -61,7 +61,6 @@ public:
   typedef VectorImage<float>                              VectorImageType;
   typedef VectorImage<unsigned char>                      UCharVectorImageType;
   typedef VectorImageType::PixelType                      PixelType;
-  typedef VectorImageType::ImageKeywordlistType           ImageKeywordlistType;
   typedef itk::MetaDataDictionary                        MetaDataDictionaryType;
   typedef VectorImageType::SizeType                       SizeType;
   typedef VectorImageType::IndexType                      IndexType;
@@ -112,13 +111,8 @@ public:
 
   std::string GetWkt() const override;
 
-  ImageKeywordlistType GetKwl() const;
-
-  bool HasKwl() const override;
-
-  bool GetKwl( ImageKeywordlist & ) const override;
-
-  MetaDataDictionaryType & GetMetaDataDictionary() const;
+  bool GetImd( ImageMetadata & imd ) const override;
+  const ImageMetadata *GetImd() const;
 
   itkGetMacro(RedIdx,unsigned int);
   itkGetMacro(GreenIdx,unsigned int);

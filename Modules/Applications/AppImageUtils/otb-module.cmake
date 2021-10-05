@@ -32,7 +32,6 @@ otb_module(OTBAppImageUtils
     OTBITK
     OTBImageBase
     OTBImageManipulation
-    OTBOSSIMAdapters
     OTBObjectList
     OTBProjection
     OTBStatistics

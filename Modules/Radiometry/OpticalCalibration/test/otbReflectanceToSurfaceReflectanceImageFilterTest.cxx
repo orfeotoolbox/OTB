@@ -27,7 +27,6 @@
 #include "otbImageFileReader.h"
 #include "otbImageFileWriter.h"
 
-#include "otbOpticalImageMetadataInterfaceFactory.h"
 
 
 int otbReflectanceToSurfaceReflectanceImageFilterTest(int itkNotUsed(argc), char* argv[])

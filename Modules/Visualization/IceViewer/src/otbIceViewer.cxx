@@ -20,8 +20,6 @@
 
 #include <algorithm>
 
-#include <otbImageMetadataInterfaceFactory.h>
-
 #include "otbGlROIActor.h"
 #include "otbGlVectorActor.h"
 #include "otbGlVersionChecker.h"
@@ -108,11 +106,11 @@ void IceViewer::AddImage(const std::string& fname, const std::string& key, const
   }
 
   // Get advised colors
-  ImageMetadataInterfaceBase::Pointer imi = ImageMetadataInterfaceFactory::CreateIMI(actor->GetMetaDataDictionary());
+  const auto display = actor->GetImd()->GetDefaultDisplay();
 
-  actor->SetRedIdx(std::min(imi->GetDefaultDisplay()[0] + 1, actor->GetNumberOfComponents()));
-  actor->SetGreenIdx(std::min(imi->GetDefaultDisplay()[1] + 1, actor->GetNumberOfComponents()));
-  actor->SetBlueIdx(std::min(imi->GetDefaultDisplay()[2] + 1, actor->GetNumberOfComponents()));
+  actor->SetRedIdx(std::min(display[0] + 1, actor->GetNumberOfComponents()));
+  actor->SetGreenIdx(std::min(display[1] + 1, actor->GetNumberOfComponents()));
+  actor->SetBlueIdx(std::min(display[2] + 1, actor->GetNumberOfComponents()));
 
   otb::ImageSettings::Pointer imageSettings(actor->GetImageSettings());
   assert(!imageSettings.IsNull());
@@ -311,7 +309,7 @@ void IceViewer::Start()
     m_View->GetSettings()->SetOrigin(firstActor->GetOrigin());
     m_View->GetSettings()->SetSpacing(firstActor->GetSpacing());
     m_View->GetSettings()->SetWkt(firstActor->GetWkt());
-    m_View->GetSettings()->SetKeywordList(firstActor->GetKwl());
+    m_View->GetSettings()->SetImageMetadata(firstActor->GetImd());
     m_View->GetSettings()->UseProjectionOn();
 
     firstActor->ProcessViewSettings();
@@ -1186,7 +1184,7 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
         alrx = aulx + currentImageActor->GetLargestRegion().GetSize()[0] * currentImageActor->GetSpacing()[0];
         alry = auly + currentImageActor->GetLargestRegion().GetSize()[1] * currentImageActor->GetSpacing()[1];
         roiActor->SetWkt(currentImageActor->GetWkt());
-        roiActor->SetKwl(currentImageActor->GetKwl());
+        roiActor->SetImd(currentImageActor->GetImd());
       }
 
       otb::GlROIActor::PointType ul, lr;
@@ -1237,7 +1235,7 @@ void IceViewer::key_callback(GLFWwindow* window, int key, int scancode, int acti
       tmpImPtY = currentImageActor->ViewportToImageTransform(vpCenter);
 
       m_View->GetSettings()->SetWkt(currentImageActor->GetWkt());
-      m_View->GetSettings()->SetKeywordList(currentImageActor->GetKwl());
+      m_View->GetSettings()->SetImageMetadata(currentImageActor->GetImd());
     }
     else if (currentVectorActor.IsNotNull())
     {

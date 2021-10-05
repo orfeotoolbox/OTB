@@ -226,8 +226,8 @@ both delivered as 1 degree by 1 degree tiles. They are:
    30 metres obtained by stereoscopic processing of the archive of
    the ASTER instrument.
 
-The **Orfeo ToolBox** relies on `OSSIM <http://www.ossim.org/>`_
-capabilities for sensor modelling and DEM handling. Tiles of a given DEM
+The **Orfeo ToolBox** relies on `GDAL <https://www.gdal.org/>`_
+capabilities for DEM handling. Tiles of a given DEM
 are supposed to be located within a single directory. General elevation
 support is also supported from GeoTIFF files.
 
@@ -338,7 +338,7 @@ OTB ReadImageInfo application.
 Check if your product verifies following two conditions:
 
 -  The product is in raw geometry: you should expect the presence of
-   RPC coefficients and a non-empty OSSIM keywordlist.
+   RPC coefficients.
 
 -  The product has a map projection: you should see a projection name
    with physical origin and spacing.

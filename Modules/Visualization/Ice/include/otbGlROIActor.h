@@ -24,7 +24,7 @@
 #include "otbGlActor.h"
 
 #include "otbGenericRSTransform.h"
-#include "otbImageKeywordlist.h"
+#include "otbImageMetadata.h"
 #include "itkImageRegion.h"
 #include "itkVector.h"
 #include <string>
@@ -45,7 +45,7 @@ public:
   typedef GlActor                                         Superclass;
   typedef itk::SmartPointer<Self>                         Pointer;
   typedef itk::SmartPointer<const Self>                   ConstPointer;
-  typedef ImageKeywordlist                                ImageKeywordlistType;
+  typedef ImageMetadata                                   ImageMetadataType;
   typedef itk::ImageRegion<2>                             ImageRegionType;
   typedef otb::GenericRSTransform<>                       RSTransformType;
   typedef RSTransformType::InputPointType                 PointType;
@@ -78,8 +78,8 @@ public:
   itkSetStringMacro(Wkt);
   itkGetStringMacro(Wkt);
 
-  void SetKwl(const ImageKeywordlistType & kwl);
-  itkGetConstReferenceMacro(Kwl,ImageKeywordlistType);
+  void SetImd(const ImageMetadataType *imd);
+  const ImageMetadataType* GetImd() const;
   
   itkSetMacro(Color,ColorType);
   itkGetConstReferenceMacro(Color,ColorType);
@@ -107,7 +107,7 @@ private:
   PointType            m_LR;
 
   std::string          m_Wkt;
-  ImageKeywordlistType m_Kwl;
+  const ImageMetadataType *  m_Imd;
 
   ColorType            m_Color;
   double               m_Alpha;

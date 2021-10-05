@@ -30,7 +30,6 @@
 #include "itkCastImageFilter.h"
 
 #include "otbRectangle.h"
-#include "otbRemoteSensingRegion.h"
 
 #include "otbMath.h"
 

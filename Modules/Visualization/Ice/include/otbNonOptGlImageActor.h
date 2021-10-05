@@ -45,7 +45,6 @@ public:
   itkNewMacro(Self);
 
   typedef VectorImage<float>                              VectorImageType;
-  typedef VectorImageType::ImageKeywordlistType           ImageKeywordlistType;
   typedef VectorImageType::SizeType                       SizeType;
   typedef VectorImageType::IndexType                      IndexType;
   typedef VectorImageType::RegionType                     RegionType;
@@ -73,7 +72,7 @@ public:
 
   std::string GetWkt() const;
 
-  ImageKeywordlistType GetKwl() const;
+  ImageMetadata & GetImd() const;
 
   itkSetMacro(UseShader,bool);
   itkGetConstReferenceMacro(UseShader,bool);

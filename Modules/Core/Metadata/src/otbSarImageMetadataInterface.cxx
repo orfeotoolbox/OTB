@@ -23,7 +23,6 @@
 
 #include "otbMath.h"
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
 #include "otbSARMetadata.h"
 
 namespace otb
@@ -31,52 +30,6 @@ namespace otb
 
 SarImageMetadataInterface::SarImageMetadataInterface()
 {
-}
-
-const std::string SarImageMetadataInterface::GetProductType() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (imageKeywordlist.HasKey("support_data.product_type"))
-  {
-    const std::string product_type = imageKeywordlist.GetMetadataByKey("support_data.product_type");
-    return product_type;
-  }
-  return "";
-}
-
-const std::string SarImageMetadataInterface::GetAcquisitionMode() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  if (imageKeywordlist.HasKey("support_data.acquisition_mode"))
-  {
-    const std::string acquisition_mode = imageKeywordlist.GetMetadataByKey("support_data.acquisition_mode");
-    return acquisition_mode;
-  }
-  return "";
 }
 
 bool SarImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarCalib, const ImageMetadata&, const MetadataSupplierInterface &mds, const bool) const
@@ -96,11 +49,6 @@ bool SarImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarCalib, 
 bool SarImageMetadataInterface::HasCalibrationLookupDataFlag(const MetadataSupplierInterface&) const
 {
   return false;
-}
-
-SarImageMetadataInterface::RealType SarImageMetadataInterface::GetRadiometricCalibrationScale() const
-{
-  return static_cast<SarImageMetadataInterface::RealType>(1.0);
 }
 
 SarImageMetadataInterface::PointSetPointer SarImageMetadataInterface::GetConstantValuePointSet(const RealType& value) const
@@ -212,7 +160,7 @@ std::vector<AzimuthFmRate> SarImageMetadataInterface::GetAzimuthFmRateGeom() con
 std::vector<DopplerCentroid> SarImageMetadataInterface::GetDopplerCentroidGeom() const
 {
   std::vector<DopplerCentroid> dopplerCentroidVector;
-  // Path: dopplerCentroid.dop_coef_list<listId>.{dop_coef_time,slant_range_time,{1,2,3}.dop_coef}
+  // Path: dopplerCentroid.dop_coef_list<listId>.{dop_coef_time,slant_range_time,{1,2,3}.dop_coef, {1,2,3}.geo_dop_coef}
   // This streams wild hold the iteration number
   std::ostringstream oss;
   for (int listId = 1 ;
@@ -222,10 +170,25 @@ std::vector<DopplerCentroid> SarImageMetadataInterface::GetDopplerCentroidGeom()
     oss.str("");
     oss << listId;
     // Base path to the data, that depends on the iteration number
-    std::string path_root = "dopplerCentroid.dop_coef_list" + oss.str();
+    std::string path_root = "dopplerCentroid.dop_coef_list" + oss.str() + ".";
     DopplerCentroid dopplerCent;
-    std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>(path_root + ".dop_coef_time")) >> dopplerCent.azimuthTime;
-    dopplerCent.t0 = m_MetadataSupplierInterface->GetAs<double>(path_root + ".slant_range_time");
+    std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>(path_root + "dop_coef_time")) >> dopplerCent.azimuthTime;
+    dopplerCent.t0 = m_MetadataSupplierInterface->GetAs<double>(path_root + "slant_range_time");
+    
+    int i = 1;
+    while (m_MetadataSupplierInterface->HasValue(path_root + std::to_string(i) + ".dop_coef"))
+    {
+      dopplerCent.dopCoef.push_back(m_MetadataSupplierInterface->GetAs<double>(path_root + std::to_string(i) + ".dop_coef"));
+      i++;
+    }
+
+    i = 1;
+    while (m_MetadataSupplierInterface->HasValue(path_root + std::to_string(i) + ".geo_dop_coef"))
+    {
+      dopplerCent.geoDopCoef.push_back(m_MetadataSupplierInterface->GetAs<double>(path_root + std::to_string(i) + ".geo_dop_coef"));
+      i++;
+    }
+
     dopplerCentroidVector.push_back(std::move(dopplerCent));
   }
   return dopplerCentroidVector;
@@ -340,6 +303,12 @@ bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
     sarParam.numberOfSamplesPerBurst = m_MetadataSupplierInterface->GetAs<unsigned long>(
                                   supportDataPrefix + "geom.bursts.number_samples_per_burst");
   }
+  // Make sure the variable are not left uninitialized
+  else
+  {
+    sarParam.numberOfLinesPerBurst = 0;
+    sarParam.numberOfSamplesPerBurst = 0;
+  }
   return true;
 }
 
@@ -367,50 +336,6 @@ void SarImageMetadataInterface::LoadRadiometricCalibrationData(SARCalib &sarCali
 void SarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-
-  if (this->CanRead())
-  {
-    os << indent << "GetRadiometricCalibrationScale:                 " << this->GetRadiometricCalibrationScale() << "\n"
-//       << indent << "GetRadiometricCalibrationNoise:                 " << this->GetRadiometricCalibrationNoise() << "\n"
-       << indent << "GetRadiometricCalibrationAntennaPatternNewGain: " << this->GetRadiometricCalibrationAntennaPatternNewGain() << "\n"
-       << indent << "GetRadiometricCalibrationAntennaPatternOldGain: " << this->GetRadiometricCalibrationAntennaPatternOldGain() << "\n"
-//       << indent << "GetRadiometricCalibrationIncidenceAngle:        " << this->GetRadiometricCalibrationIncidenceAngle() << "\n"
-       << indent << "GetRadiometricCalibrationRangeSpreadLoss:       " << this->GetRadiometricCalibrationRangeSpreadLoss() << "\n"
-       << indent << "GetConstantPolynomialDegree:                    ";
-    for(const auto& s: this->GetConstantPolynomialDegree())
-      os << s << " ";
-    os << "\n"
-       << indent << "GetRadiometricCalibrationNoisePolynomialDegree: ";
-    for(const auto& s: this->GetRadiometricCalibrationNoisePolynomialDegree())
-      os << s << " ";
-    os << "\n"
-       << indent << "GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree: ";
-    for(const auto& s: this->GetRadiometricCalibrationAntennaPatternNewGainPolynomialDegree())
-      os << s << " ";
-    os << "\n"
-       << indent << "GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree: ";
-    for(const auto& s: this->GetRadiometricCalibrationAntennaPatternOldGainPolynomialDegree())
-      os << s << " ";
-    os << "\n"
-       << indent << "GetRadiometricCalibrationIncidenceAnglePolynomialDegree:        ";
-    for(const auto& s: this->GetRadiometricCalibrationIncidenceAnglePolynomialDegree())
-      os << s << " ";
-    os << "\n"
-       << indent << "GetRadiometricCalibrationRangeSpreadLossPolynomialDegree:       ";
-    for(const auto& s: this->GetRadiometricCalibrationRangeSpreadLossPolynomialDegree())
-      os << s << " ";
-    os << "\n"
-       << indent << "GetPRF:                  " << this->GetPRF() << "\n"
-       << indent << "GetRSF:                  " << this->GetRSF() << "\n"
-       << indent << "GetRadarFrequency:       " << this->GetRadarFrequency() << "\n";
-//       << indent << "GetCenterIncidenceAngle: " << this->GetCenterIncidenceAngle() << std::endl;
-  }
-}
-
-bool SarImageMetadataInterface::ConvertImageKeywordlistToImageMetadata(ImageMetadata&)
-{
-  // TODO
-  return false;
 }
 
 } // end namespace otb

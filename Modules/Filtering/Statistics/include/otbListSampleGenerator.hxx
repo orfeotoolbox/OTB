@@ -24,7 +24,6 @@
 #include "otbListSampleGenerator.h"
 
 #include "itkImageRegionConstIteratorWithIndex.h"
-#include "otbRemoteSensingRegion.h"
 #include "otbVectorDataProjectionFilter.h"
 
 #include "otbMacro.h"

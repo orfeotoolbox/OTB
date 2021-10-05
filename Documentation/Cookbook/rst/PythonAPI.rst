@@ -328,8 +328,6 @@ functions:
 +---------------------------------+---------------------------------------+
 | ``GetImageProjection(...)``     | Projection WKT string                 |
 +---------------------------------+---------------------------------------+
-| ``GetImageKeywordlist(...)``    | Ossim keywordlist (sensor model)      |
-+---------------------------------+---------------------------------------+
 | ``GetImageMetaData(...)``       | the entire MetaDataDictionary         |
 +---------------------------------+---------------------------------------+
 | ``GetImageRequestedRegion(...)``| requested region                      |

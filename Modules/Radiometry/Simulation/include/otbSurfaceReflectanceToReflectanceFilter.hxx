@@ -22,7 +22,6 @@
 #define otbSurfaceReflectanceToReflectanceFilter_hxx
 
 #include "otbSurfaceReflectanceToReflectanceFilter.h"
-#include "otbOpticalImageMetadataInterfaceFactory.h"
 
 namespace otb
 {

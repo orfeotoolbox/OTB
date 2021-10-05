@@ -24,7 +24,6 @@
 
 #include "itkImageToImageFilter.h"
 #include "otbTileImageFilter.h"
-#include "otbImageKeywordlist.h"
 
 namespace otb
 {
@@ -100,7 +99,7 @@ private:
   SarConcatenateBurstsImageFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  // SLC KeywordList
+  // SLC Image Metadata
   ImageMetadata m_SLCImd;
 
   unsigned int m_Offset_OriginL;

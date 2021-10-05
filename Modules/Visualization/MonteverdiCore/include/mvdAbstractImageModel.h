@@ -44,7 +44,6 @@
 
 //
 // OTB includes (sorted by alphabetic order)
-#include "otbImageMetadataInterfaceBase.h"
 #include "otbImage.h" // Needed to get otb::internal::Get/SetSignedSpacing()
 //
 // Monteverdi includes (sorted by alphabetic order)
@@ -186,6 +185,13 @@ public:
    */
   virtual ImageBaseType::Pointer ToImageBase() = 0;
 
+
+  /**
+   * Get a reference to the ImageMetadata.
+   */
+  virtual const otb::ImageMetadata & GetImageMetadata() const = 0;
+
+
   /**
    * \return The largest possible region of the current LOD level.
    */
@@ -282,10 +288,6 @@ protected:
    * \param context Pointer to a histogram build-context.
    */
   void RefreshHistogram(void* const context);
-
-  /**
-   */
-  inline otb::ImageMetadataInterfaceBase::ConstPointer GetMetaDataInterface() const;
 
   //
   // AbstractModel methods.
@@ -456,12 +458,6 @@ inline const SpacingType& AbstractImageModel::GetEstimatedGroundSpacing() const
 inline CountType AbstractImageModel::GetNbComponents() const
 {
   return ToImageBase()->GetNumberOfComponentsPerPixel();
-}
-
-/*****************************************************************************/
-inline otb::ImageMetadataInterfaceBase::ConstPointer AbstractImageModel::GetMetaDataInterface() const
-{
-  return otb::ConstCast<const otb::ImageMetadataInterfaceBase>(otb::ImageMetadataInterfaceFactory::CreateIMI(ToImageBase()->GetMetaDataDictionary()));
 }
 
 /*****************************************************************************/

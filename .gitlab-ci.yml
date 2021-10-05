@@ -90,6 +90,7 @@ stages:
       - build/ctest_report.xml
       - build/cppcheck_report.xml
       - build/coverage_report.xml
+      - build/Testing/Temporary/*.txt #DEBUG
 
 .common-prepare:
   extends: .general

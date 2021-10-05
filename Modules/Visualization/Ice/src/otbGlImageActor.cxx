@@ -224,38 +224,16 @@ std::string GlImageActor::GetWkt() const
   return m_FileReader->GetOutput()->GetProjectionRef();
 }
 
-GlImageActor::ImageKeywordlistType GlImageActor::GetKwl() const
+const ImageMetadata * GlImageActor::GetImd() const
 {
-  return m_FileReader->GetOutput()->GetImageKeywordlist();
+  return &(m_FileReader->GetOutput()->m_Imd);
 }
 
-
-bool
-GlImageActor
-::HasKwl() const
+bool GlImageActor::GetImd( ImageMetadata & imd ) const
 {
+  imd = m_FileReader->GetOutput()->GetImageMetadata();
   return true;
 }
-
-
-bool
-GlImageActor
-::GetKwl( ImageKeywordlist & kwl ) const
-{
-  assert( !m_FileReader.IsNull() );
-  assert( m_FileReader->GetOutput()!=NULL );
-
-  kwl = m_FileReader->GetOutput()->GetImageKeywordlist();
-
-  return true;
-}
-
-
-GlImageActor::MetaDataDictionaryType & GlImageActor::GetMetaDataDictionary() const
-{
-  return m_FileReader->GetOutput()->GetMetaDataDictionary();
-}
-
 
 void GlImageActor::Initialize(const std::string & filename)
 {
@@ -1131,14 +1109,12 @@ void GlImageActor::UpdateTransforms()
     m_ImageToViewportTransform = RSTransformType::New();
 
     m_ViewportToImageTransform->SetInputProjectionRef(settings->GetWkt());
-    //TODO OSSIM: Replace KeywordList by ImageMetadata in the settings object
-    //m_ViewportToImageTransform->SetInputKeywordList(settings->GetKeywordList());
+    m_ViewportToImageTransform->SetInputImageMetadata(settings->GetImageMetadata());
     m_ViewportToImageTransform->SetOutputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
     m_ViewportToImageTransform->SetOutputImageMetadata(&(m_FileReader->GetOutput()->GetImageMetadata()));
 
     m_ImageToViewportTransform->SetOutputProjectionRef(settings->GetWkt());
-    //TODO OSSIM: Replace KeywordList by ImageMetadata in the settings object
-    //m_ImageToViewportTransform->SetOutputKeywordList(settings->GetKeywordList());
+    m_ImageToViewportTransform->SetOutputImageMetadata(settings->GetImageMetadata());
     m_ImageToViewportTransform->SetInputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
     m_ImageToViewportTransform->SetInputImageMetadata(&(m_FileReader->GetOutput()->GetImageMetadata()));
 

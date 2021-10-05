@@ -33,7 +33,6 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   "libtool:.install:.warning:.relinking.*"
   "make.*jobserver.unavailable.*"
   "configure:.WARNING:.*"
-  ".*SuperBuild.OSSIM.src.OSSIM.*"
   ".*SuperBuild.LIBKML.src.LIBKML.*"
   ".bin.bash:.*config.rpath:.*directory.*"
   ".*the.curl.cmake.build.system.is.poorly.maintained.*"

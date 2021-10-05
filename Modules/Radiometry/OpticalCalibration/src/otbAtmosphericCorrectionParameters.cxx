@@ -24,7 +24,6 @@
 #include <fstream>
 
 #include "otbAeronetFileReader.h"
-#include "otbSpectralSensitivityReader.h"
 #include "otbAeronetData.h"
 
 namespace otb

@@ -1,0 +1,65 @@
+VectorImage (0xab3ec0)
+  RTTI typeinfo:   otb::VectorImage<double, 2u>
+  Reference Count: 3
+  Modified Time: 123
+  Debug: Off
+  Object Name: 
+  Observers: 
+    none
+  Source: (0xaa4010) 
+  Source output name: Primary
+  Release Data: Off
+  Data Released: False
+  Global Release Data: Off
+  PipelineMTime: 20
+  UpdateMTime: 0
+  RealTimeStamp: 0 seconds 
+  LargestPossibleRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [2592, 1944]
+  BufferedRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [0, 0]
+  RequestedRegion: 
+    Dimension: 2
+    Index: [0, 0]
+    Size: [0, 0]
+  Spacing: [1, 1]
+  Origin: [0.5, 0.5]
+  Direction: 
+1 0
+0 1
+
+  IndexToPointMatrix: 
+1 0
+0 1
+
+  PointToIndexMatrix: 
+1 0
+0 1
+
+  Inverse Direction: 
+1 0
+0 1
+
+  VectorLength: 3
+  PixelContainer: 
+    ImportImageContainer (0xafb170)
+      RTTI typeinfo:   itk::ImportImageContainer<unsigned long, double>
+      Reference Count: 1
+      Modified Time: 11
+      Debug: Off
+      Object Name: 
+      Observers: 
+        none
+      Pointer: 0
+      Container manages memory: true
+      Size: 0
+      Capacity: 0
+  {{"DataType": "1",
+"TileHintX": "640",
+"TileHintY": "480",
+}Bands[{},{},{},]
+}

@@ -71,7 +71,6 @@ ImageFileReader<TOutputImage, ConvertPixelTraits>::ImageFileReader()
     m_ActualIORegion(),
     m_FilenameHelper(FNameHelperType::New()),
     m_AdditionalNumber(0),
-    m_KeywordListUpToDate(false),
     m_IOComponents(0)
 {
 }
@@ -395,89 +394,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   // Get ImageMetadata from ImageIO
   ImageMetadata imd = m_ImageIO->GetImageMetadata();
 
-  if (!m_KeywordListUpToDate && !m_FilenameHelper->GetSkipGeom())
-  {
-
-    std::string lFileNameOssimKeywordlist = GetDerivedDatasetSourceFileName(m_FileName);
-    std::string extension                 = itksys::SystemTools::GetFilenameLastExtension(lFileNameOssimKeywordlist);
-    std::string attachedGeom              = lFileNameOssimKeywordlist.substr(0, lFileNameOssimKeywordlist.size() - extension.size()) + std::string(".geom");
-
-    // Update otb Keywordlist
-    ImageKeywordlist otb_kwl;
-
-    // Case 1: external geom supplied through extended filename
-    if (m_FilenameHelper->ExtGEOMFileNameIsSet())
-    {
-      otb_kwl = ReadGeometryFromGEOMFile(m_FilenameHelper->GetExtGEOMFileName());
-      otbLogMacro(Info, << "Loading kwl metadata from external geom file " << m_FilenameHelper->GetExtGEOMFileName());
-    }
-    // Case 2: attached geom (if present)
-    else if (itksys::SystemTools::FileExists(attachedGeom))
-    {
-      otb_kwl = ReadGeometryFromGEOMFile(attachedGeom);
-      otbLogMacro(Info, << "Loading kwl metadata from attached geom file " << attachedGeom);
-    }
-    // Case 3: find an ossimPluginProjection
-    // Case 4: find an ossimProjection
-    // Case 5: find RPC tags in TIF
-    else
-    {
-      otb_kwl = ReadGeometryFromImage(lFileNameOssimKeywordlist, !m_FilenameHelper->GetSkipRpcTag());
-      if (!otb_kwl.Empty())
-      {
-        otbLogMacro(Info, << "Loading kwl metadata from official product in file " << lFileNameOssimKeywordlist);
-      }
-      else
-      {
-        // Try attached files
-        for (const std::string& path : m_ImageIO->GetAttachedFileNames())
-        {
-          otb_kwl = ReadGeometryFromImage(path, !m_FilenameHelper->GetSkipRpcTag());
-          if (!otb_kwl.Empty())
-          {
-            otbLogMacro(Info, << "Loading kwl metadata in attached file " << path);
-            break;
-          }
-        }
-        if (otb_kwl.Empty())
-        {
-          otbLogMacro(Debug, << "No kwl metadata found in file " << lFileNameOssimKeywordlist);
-        }
-      }
-    }
-
-    // Don't add an empty ossim keyword list
-    if (!otb_kwl.Empty())
-    {
-      itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-    }
-
-    m_KeywordListUpToDate = true;
-  }
-  else
-  {
-    // Read back from existing dictionary
-    ImageKeywordlist otb_kwl;
-    itk::ExposeMetaData<ImageKeywordlist>(this->GetOutput()->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-    // And add to new one
-    itk::EncapsulateMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
-
-//    if (m_KeywordListUpToDate)
-//      {
-//      // Read back from existing dictionary
-//      if (img_common != nullptr)
-//        {
-//        imd = img_common->GetImageMetadata();
-//        }
-//      }
-//    if (m_FilenameHelper->GetSkipGeom())
-//      {
-//      // Make sure the SensorGeometry is empty
-//      imd.RemoveSensorGeometry();
-//      }
-  }
-
-  // NEW METADATA FRAMEWORK
+  // Metadata Framework
   std::string DerivatedFileName = GetDerivedDatasetSourceFileName(m_FileName);
   std::string extension                 = itksys::SystemTools::GetFilenameLastExtension(DerivatedFileName);
   std::string attachedGeom              = DerivatedFileName.substr(0, DerivatedFileName.size() - extension.size()) + std::string(".geom");
@@ -704,26 +621,11 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::SetFileName(const std::s
     if (oldMap.size() != newMap.size() || !std::equal(oldMap.begin(), oldMap.end(), newMap.begin()))
     {
       this->Modified();
-
-      // Now check if keywordlist needs to be generated again
-      // Condition is: one of the old or new map has the skip_geom
-      // key and the other does not
-      // OR
-      // one of the old or new map has the geom key and the other
-      // does not
-      // OR
-      // both have the geom key but the geom value is different
-      if ((oldMap.count(skip_geom_key) != newMap.count(skip_geom_key)) || (oldMap.count(geom_key) != newMap.count(geom_key)) ||
-          ((oldMap.count(geom_key) && newMap.count(geom_key)) && oldMap.find(geom_key)->second != newMap.find(geom_key)->second))
-      {
-        m_KeywordListUpToDate = false;
-      }
     }
   }
   else
   {
     this->m_FileName      = simpleFileName;
-    m_KeywordListUpToDate = false;
     this->Modified();
   }
 

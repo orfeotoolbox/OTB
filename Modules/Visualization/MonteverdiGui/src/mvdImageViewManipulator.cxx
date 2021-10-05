@@ -183,11 +183,11 @@ void ImageViewManipulator::SetWkt(const std::string& wkt)
 }
 
 /******************************************************************************/
-void ImageViewManipulator::SetKeywordList(const DefaultImageType::ImageKeywordlistType& kwl)
+void ImageViewManipulator::SetImd(const otb::ImageMetadata *imd)
 {
   assert(!m_ViewSettings.IsNull());
 
-  m_ViewSettings->SetKeywordList(kwl);
+  m_ViewSettings->SetImageMetadata(imd);
 }
 
 /******************************************************************************/
@@ -218,7 +218,7 @@ void ImageViewManipulator::SetupRenderingContext(AbstractImageViewRenderer::Rend
   context->m_ViewSettings->SetSpacing(m_ViewSettings->GetSpacing());
   context->m_ViewSettings->SetViewportSize(m_ViewSettings->GetViewportSize());
   context->m_ViewSettings->SetWkt(m_ViewSettings->GetWkt());
-  context->m_ViewSettings->SetKeywordList(m_ViewSettings->GetKeywordList());
+  context->m_ViewSettings->SetImageMetadata(m_ViewSettings->GetImageMetadata());
   context->m_ViewSettings->SetUseProjection(m_ViewSettings->GetUseProjection());
   context->m_ViewSettings->SetGeometryChanged(m_ViewSettings->GetGeometryChanged());
 #endif // USE_VIEW_SETTINGS_SIDE_EFFECT

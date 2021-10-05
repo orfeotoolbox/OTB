@@ -27,7 +27,6 @@ otb_module(OTBVectorDataManipulation
     OTBITK
     OTBImageBase
     OTBImageManipulation
-    OTBOSSIMAdapters
     OTBObjectList
     OTBPath
     OTBTransform

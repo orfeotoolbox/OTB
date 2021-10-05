@@ -81,7 +81,7 @@ private:
     AddParameter(ParameterType_InputFilename, "in.vd", "Input vector data");
     SetParameterDescription("in.vd", "The input vector data to reproject");
     AddParameter(ParameterType_InputImage, "in.kwl", "Use image keywords list");
-    SetParameterDescription("in.kwl", "Optional input image to fill vector data with image kwl.");
+    SetParameterDescription("in.kwl", "Optional input image to fill vector data with image metadata.");
     MandatoryOff("in.kwl");
     DisableParameter("in.kwl");
 
@@ -176,7 +176,6 @@ private:
 
   otb::ogr::DataSource::Pointer OGRDSout;
   std::string                   m_OutputProjectionRef;
-  ImageKeywordlist              m_KeywordList;
   InputGeometriesType::Pointer  m_InputGeomSet;
   OutputGeometriesType::Pointer m_OutputGeomSet;
   // FloatVectorImageType::Pointer m_inImage;

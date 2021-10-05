@@ -26,7 +26,6 @@
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "itkNumericTraits.h"
 #include "otbMacro.h"
-#include "otbOpticalImageMetadataInterfaceFactory.h"
 
 
 namespace otb

@@ -26,7 +26,6 @@ otb_module(OTBSARCalibration
     OTBCommon
     OTBITK
     OTBMetadata
-    OTBOSSIMAdapters
     OTBImageManipulation
 
   TEST_DEPENDS

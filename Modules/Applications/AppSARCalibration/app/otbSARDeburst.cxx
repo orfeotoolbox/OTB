@@ -112,10 +112,7 @@ private:
     auto deburstFilter = DeburstFilterType::New();
     deburstFilter->SetInput(in);
 
-    if (IsParameterEnabled("onlyvalidsamples"))
-    {
-      deburstFilter->SetOnlyValidSample(true);
-    }
+    deburstFilter->SetOnlyValidSample(GetParameterInt("onlyvalidsamples"));
 
     // Set the output image
     SetParameterOutputImage("out", deburstFilter->GetOutput());

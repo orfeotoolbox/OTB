@@ -25,8 +25,6 @@
 #include "itkCastImageFilter.h"
 #include "otbDEMHandler.h"
 
-#include "otbImageKeywordlist.h"
-
 namespace otb
 {
 
@@ -34,7 +32,7 @@ namespace otb
  * \brief This filter estimates a RPC sensor models from GCPs.
  *
  * This filters estimates an RPC sensor model from a list of user
- * defined GCPs. Internally, it uses an ossimRpcSolver, which performs
+ * defined GCPs. Internally, it uses an RpcSolver, which performs
  * the estimation using the well known least-square method.
  *
  * The UseImageGCPs flag allows importing GCPs from the image

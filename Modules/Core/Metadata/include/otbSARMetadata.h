@@ -38,6 +38,8 @@
 namespace otb
 {
 
+class SarCalibrationLookupData;
+
 /** \struct AzimuthFmRate
  *
  * \brief This structure is used to manage parameters
@@ -51,6 +53,12 @@ struct OTBMetadata_EXPORT AzimuthFmRate
   double t0;
   /** Azimuth FM rate coefficients c0 c1 c2 */
   std::vector<double> azimuthFmRatePolynomial;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
+
+  /** Keywordlist import */
+  static AzimuthFmRate FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
 };
 
 /** \struct DopplerCentroid
@@ -67,6 +75,12 @@ struct OTBMetadata_EXPORT DopplerCentroid
   std::vector<double> dopCoef;
   /* Doppler centroid estimated from orbit */
   std::vector<double> geoDopCoef;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
+
+  /** Keywordlist import */
+  static DopplerCentroid FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
 };
 
 /** \struct Orbit
@@ -83,6 +97,12 @@ struct OTBMetadata_EXPORT Orbit
   PointType position;
   /** Velocity vector */
   PointType velocity;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
+
+  /** Keywordlist import */
+  static Orbit FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
 };
 
 /** \struct BurstRecord
@@ -98,6 +118,12 @@ struct OTBMetadata_EXPORT BurstRecord
   unsigned long startSample;
   unsigned long endSample;
   double        azimuthAnxTime;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
+
+  /** Keywordlist import */
+  static BurstRecord FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
 };
 
 
@@ -112,6 +138,9 @@ struct OTBMetadata_EXPORT GCPTime
 
   /** Slant range time of the gcp */
   double slantRangeTime;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
 };
 
 /** \struct CoordinateConversionRecord
@@ -124,6 +153,12 @@ struct CoordinateConversionRecord
   MetaData::TimeType azimuthTime;
   double rg0;
   std::vector<double> coeffs;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
+
+  /** Keywordlist import */
+  static CoordinateConversionRecord FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
 };
 
 
@@ -166,8 +201,11 @@ struct OTBMetadata_EXPORT SARParam
   /** Conversion coefficients from ground range to slant range */
   std::vector<CoordinateConversionRecord> groundRangeToSlantRangeRecords;
 
-  /** JSON export */
-  std::string ToJSON(bool multiline=false) const;
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const;
+
+  /** Keywordlist import */
+  void FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix);
 };
 
 /** \struct SARCalib
@@ -178,9 +216,8 @@ struct OTBMetadata_EXPORT SARParam
  */
 struct OTBMetadata_EXPORT SARCalib
 {
-  using PointSetType = itk::PointSet<double, 2>;
-  using ArrayType    = std::array<int, 2>;
-  using LookupDataType = SarCalibrationLookupData;
+  using PointSetType   = itk::PointSet<double, 2>;
+  using ArrayType      = std::array<int, 2>;
   
   bool calibrationLookupFlag = false;
   double rescalingFactor;
@@ -191,12 +228,17 @@ struct OTBMetadata_EXPORT SARCalib
   ArrayType radiometricCalibrationAntennaPatternOldGainPolynomialDegree;
   ArrayType radiometricCalibrationIncidenceAnglePolynomialDegree;
   ArrayType radiometricCalibrationRangeSpreadLossPolynomialDegree;
-  PointSetType::Pointer radiometricCalibrationNoise;
-  PointSetType::Pointer radiometricCalibrationAntennaPatternNewGain;
-  PointSetType::Pointer radiometricCalibrationAntennaPatternOldGain;
-  PointSetType::Pointer radiometricCalibrationIncidenceAngle;
-  PointSetType::Pointer radiometricCalibrationRangeSpreadLoss;
-  std::unordered_map<short, LookupDataType::Pointer> calibrationLookupData;
+  PointSetType::Pointer radiometricCalibrationNoise = PointSetType::New();
+  PointSetType::Pointer radiometricCalibrationAntennaPatternNewGain = PointSetType::New();
+  PointSetType::Pointer radiometricCalibrationAntennaPatternOldGain = PointSetType::New();
+  PointSetType::Pointer radiometricCalibrationIncidenceAngle = PointSetType::New();
+  PointSetType::Pointer radiometricCalibrationRangeSpreadLoss = PointSetType::New();
+  std::unordered_map<short, SarCalibrationLookupData::Pointer> calibrationLookupData;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const;
+  /** Keywordlist import */
+  void FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix);
 };
 
 } // end namespace otb

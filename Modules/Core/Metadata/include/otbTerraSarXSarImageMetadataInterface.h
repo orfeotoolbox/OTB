@@ -57,7 +57,6 @@ public:
   typedef itk::MetaDataDictionary               MetaDataDictionaryType;
   typedef MetaDataKey::VectorType               VectorType;
   typedef MetaDataKey::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType      ImageKeywordlistType;
   typedef std::vector<double>                   DoubleVectorType;
   typedef std::vector<DoubleVectorType>         DoubleVectorVectorType;
   typedef std::vector<unsigned int>             UIntVectorType;
@@ -66,71 +65,11 @@ public:
   typedef Superclass::PointSetPointer PointSetPointer;
   typedef double                      RealType;
 
-  /** Get the imaging start acquisition day from the ossim metadata
-   * \deprecated
-   */
-  int GetDay() const override;
-
-  /** Get the imaging start acquisition month from the ossim metadata
-   * \deprecated
-   */
-  int GetMonth() const override;
-
-  /** Get the imaging start acquisition year from the ossim metadata
-   * \deprecated
-   */
-  int GetYear() const override;
-
-  /** Get the imaging start acquisition hour from the ossim metadata
-   * \deprecated
-   */
-  int GetHour() const override;
-
-  /** Get the imaging start acquisition minute from the ossim metadata
-   * \deprecated
-   */
-  int GetMinute() const override;
-
-  /** Get the imaging production day from the ossim metadata : generationTime variable
-   * \deprecated
-   */
-  int GetProductionDay() const override;
-
-  /** Get the imaging production month from the ossim metadata : generationTime variable
-   * \deprecated
-   */
-  int GetProductionMonth() const override;
-
-  /** Get the imaging production year from the ossim metadata : generationTime variable
-   * \deprecated
-   */
-  int GetProductionYear() const override;
-
-  /** Get the calibration.calFactor : generationTime variable
-   * \deprecated
-   */
-  double GetCalibrationFactor() const;
-
   /** Get the number of noise records */
   unsigned int GetNumberOfNoiseRecords(const MetadataSupplierInterface&, const unsigned int) const;
 
-  /** Get the polynomial degree list */
-  UIntVectorType GetNoisePolynomialDegrees(const MetadataSupplierInterface &mds, const unsigned int polLayer) const;
-
-  /** Get the radar frequency */
-  double GetRadarFrequency() const override;
-
-  /** Get the PRF */
-  double GetPRF() const override;
-
-  /** Get the RSF */
-  double GetRSF() const override;
-
   /** Get the number of corner incidence angles */
   unsigned int GetNumberOfCornerIncidenceAngles(const MetadataSupplierInterface&) const;
-
-  /** Get the Mean Incidence angles */
-  double GetMeanIncidenceAngles(const MetadataSupplierInterface&) const;
 
   /** Get the center incidence angle */
   double GetCenterIncidenceAngle(const MetadataSupplierInterface& mds) const override;
@@ -144,20 +83,11 @@ public:
   /** Get the corners index */
   IndexVectorType GetCornersIncidenceAnglesIndex(const MetadataSupplierInterface&) const;
 
-  /** Get the constant calibration factor */
-  RealType GetRadiometricCalibrationScale() const override;
-
   PointSetPointer GetRadiometricCalibrationNoise(const MetadataSupplierInterface&, const ImageMetadata&, const std::string& b="") const override;
   ArrayIndexType GetRadiometricCalibrationNoisePolynomialDegree() const override;
 
   PointSetPointer GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface&) const override;
   ArrayIndexType  GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override;
-
-  bool CanRead() const override;
-
-  /** Get the 3 spectral band numbers corresponding to the default display for visualization,
-   *  in the order R, G, B */
-  std::vector<unsigned int> GetDefaultDisplay() const override;
 
   void ParseGdal(ImageMetadata &) override;
 
@@ -192,7 +122,6 @@ protected:
 private:
   TerraSarXSarImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
-  int m_NumberOfCornerIncidenceAngles = 0;
 };
 
 } // end namespace otb

@@ -35,7 +35,6 @@
 #include "OTBImageIOExport.h"
 
 #include "otbDefaultConvertPixelTraits.h"
-#include "otbImageKeywordlist.h"
 #include "otbExtendedFilenameToReaderOptions.h"
 #include "otbImageFileReaderException.h"
 #include "otbMetadataSupplierInterface.h"
@@ -170,8 +169,6 @@ private:
   FNameHelperType::Pointer m_FilenameHelper;
 
   unsigned int m_AdditionalNumber;
-
-  bool m_KeywordListUpToDate;
 
   /** Mapping between origin components and output components (before any
    * conversion) */

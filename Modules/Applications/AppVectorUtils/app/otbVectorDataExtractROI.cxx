@@ -154,7 +154,7 @@ private:
     rsRegion.SetOrigin(rsOrigin);
     rsRegion.SetSize(rsSize);
     rsRegion.SetRegionProjection(inImage->GetProjectionRef());
-    rsRegion.SetKeywordList(inImage->GetImageKeywordlist());
+    rsRegion.SetImageMetadata(inImage->GetImageMetadata());
 
     // Set the cartographic region to the extract roi filter
     m_VdExtract->SetRegion(rsRegion);

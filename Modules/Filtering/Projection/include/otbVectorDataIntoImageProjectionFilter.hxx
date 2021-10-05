@@ -158,7 +158,7 @@ void VectorDataIntoImageProjectionFilter<TInputVectorData, TInputImage>::Generat
 
   if (m_InputImage->GetProjectionRef().empty() || boost::algorithm::istarts_with(m_InputImage->GetProjectionRef(), "LOCAL_CS"))
   {
-    rsRegion.SetKeywordList(m_InputImage->GetImageKeywordlist());
+    rsRegion.SetImageMetadata(m_InputImage->GetImageMetadata());
   }
   else
   {
