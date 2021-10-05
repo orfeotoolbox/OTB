@@ -111,6 +111,7 @@ public:
 
   std::string GetWkt() const override;
 
+  bool GetImd( ImageMetadata & imd ) const override;
   const ImageMetadata *GetImd() const;
 
   itkGetMacro(RedIdx,unsigned int);

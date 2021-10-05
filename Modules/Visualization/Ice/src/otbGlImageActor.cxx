@@ -229,6 +229,12 @@ const ImageMetadata * GlImageActor::GetImd() const
   return &(m_FileReader->GetOutput()->m_Imd);
 }
 
+bool GlImageActor::GetImd( ImageMetadata & imd ) const
+{
+  imd = m_FileReader->GetOutput()->GetImageMetadata();
+  return true;
+}
+
 void GlImageActor::Initialize(const std::string & filename)
 {
   // std::cout
