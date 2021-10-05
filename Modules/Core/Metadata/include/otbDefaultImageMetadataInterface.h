@@ -54,46 +54,6 @@ public:
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
 
-  /** Get the solar irradiance from the ossim metadata
-   * \deprecated
-   */
-  VariableLengthVectorType GetSolarIrradiance() const
-  {
-    itkExceptionMacro("GetSolarIrradiance not implemented in DefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the sat elevation from the ossim metadata
-   * \deprecated
-   */
-  double GetSatElevation() const
-  {
-    itkExceptionMacro("GetSatElevation not implemented in DefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the sat azimuth from the ossim metadata
-   * \deprecated
-   */
-  double GetSatAzimuth() const
-  {
-    itkExceptionMacro("GetSatElevation not implemented in DefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the first wavelength for the spectral band definition
-   * \deprecated
-   */
-  VariableLengthVectorType GetFirstWavelengths() const
-  {
-    itkExceptionMacro("GetFirstWavelengths not implemented in DefaultImageMetadataInterface, no captor type found");
-  }
-
-  /** Get the last wavelength for the spectral band definition
-   * \deprecated
-   */
-  VariableLengthVectorType GetLastWavelengths() const
-  {
-    itkExceptionMacro("GetLastWavelengths not implemented in DefaultImageMetadataInterface, no captor type found");
-  }
-
 protected:
   DefaultImageMetadataInterface(){};
   ~DefaultImageMetadataInterface() override
