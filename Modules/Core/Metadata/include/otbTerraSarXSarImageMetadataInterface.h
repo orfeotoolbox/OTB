@@ -122,7 +122,6 @@ protected:
 private:
   TerraSarXSarImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
-  int m_NumberOfCornerIncidenceAngles = 0;
 };
 
 } // end namespace otb
