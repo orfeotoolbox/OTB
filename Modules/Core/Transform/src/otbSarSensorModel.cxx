@@ -20,32 +20,16 @@
 
 #include "otbSarSensorModel.h"
 
-#include "otbGeocentricTransform.h"
 #include "otbDEMHandler.h"
 
 #include <numeric>
 
 namespace otb
 {
-itk::Point<double, 3> EcefToWorld(const itk::Point<double, 3> & ecefPoint)
-{
-  auto transform = otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New();
-  return transform->TransformPoint(ecefPoint);
-}
-
-
-itk::Point<double, 3> WorldToEcef(const itk::Point<double, 3> & worldPoint)
-{
-  auto transform = otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New();
-  return transform->TransformPoint(worldPoint);
-}
-
-
 double DotProduct(const itk::Point<double, 3> & pt1, const itk::Point<double, 3> & pt2)
 {
   return std::inner_product(pt1.Begin(), pt1.End(), pt2.Begin(), 0.);
 }
-
 
 SarSensorModel::SarSensorModel( const std::string & productType,
                                 const SARParam & sarParam,
@@ -54,12 +38,16 @@ SarSensorModel::SarSensorModel( const std::string & productType,
                               m_GCP(gcps),
                               m_SarParam(sarParam),
                               m_AzimuthTimeOffset(MetaData::seconds(0)),
-                              m_RangeTimeOffset(0.)
+                              m_RangeTimeOffset(0.),
+                              m_EcefToWorldTransform(otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New()),
+                              m_WorldToEcefTransform(otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New())
+
 {
   OptimizeTimeOffsetsFromGcps();
 
   const std::vector<std::string> grdProductTypes = {"GRD", "MGD", "GEC", "EEC"};
   m_IsGrd = std::find(grdProductTypes.begin(), grdProductTypes.end(), m_ProductType) != grdProductTypes.end();
+
 }
 
 SarSensorModel::SarSensorModel(const ImageMetadata & imd)
@@ -1162,6 +1150,16 @@ void SarSensorModel::DeburstLineToImageLine(const std::vector<std::pair<unsigned
     ++nit;
   }
   imageLine += lineOffset;
+}
+
+itk::Point<double, 3> SarSensorModel::EcefToWorld(const itk::Point<double, 3> & ecefPoint) const
+{
+  return m_EcefToWorldTransform->TransformPoint(ecefPoint);
+}
+
+itk::Point<double, 3> SarSensorModel::WorldToEcef(const itk::Point<double, 3> & worldPoint) const
+{
+  return m_WorldToEcefTransform->TransformPoint(worldPoint);
 }
 
 } //namespace otb
