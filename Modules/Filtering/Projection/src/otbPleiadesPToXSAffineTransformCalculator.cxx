@@ -20,8 +20,6 @@
 
 #include "otbPleiadesPToXSAffineTransformCalculator.h"
 #include "otbPleiadesImageMetadataInterface.h"
-#include "otbDateTimeAdapter.h"
-#include "otbImageKeywordlist.h"
 #include "itkMetaDataObject.h"
 
 namespace otb

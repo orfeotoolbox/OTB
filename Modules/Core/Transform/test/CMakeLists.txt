@@ -26,13 +26,11 @@ otbGenericRSTransformWithSRID.cxx
 otbLogPolarTransformResample.cxx
 otbLogPolarTransform.cxx
 otbGeocentricTransform.cxx
-otbCreateProjectionWithOTB.cxx
 otbGenericMapProjection.cxx
 otbStreamingWarpImageFilter.cxx
 otbInverseLogPolarTransform.cxx
 otbInverseLogPolarTransformResample.cxx
 otbStreamingResampleImageFilterWithAffineTransform.cxx
-otbSarSensorModelAdapterTest.cxx
 otbRPCTransformTest.cxx
 otbSarTransformTest.cxx
 )
@@ -175,16 +173,6 @@ otb_add_test(NAME prTvGeocentricTransform COMMAND otbTransformTestDriver
   ${TEMP}/prTvGeocentricTransform.txt
   )
 
-otb_add_test(NAME prTvTestCreateProjectionWithOTB_Toulouse COMMAND otbTransformTestDriver
-  otbCreateProjectionWithOTB
-  LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-  )
-
-otb_add_test(NAME prTvTestCreateProjectionWithOTB_Cevennes COMMAND otbTransformTestDriver
-  otbCreateProjectionWithOTB
-  LARGEINPUT{QUICKBIRD/CEVENNES/06FEB12104912-P1BS-005533998070_01_P001.TIF}
-  )
-
 otb_add_test(NAME dmTvStreamingWarpImageFilter COMMAND otbTransformTestDriver
   --compare-image ${EPSILON_10}
   ${BASELINE}/dmStreamingWarpImageFilterOutput.tif
@@ -242,16 +230,6 @@ otb_add_test(NAME bfTvStreamingResampleImageFilterWithAffineTransform COMMAND ot
   ${TEMP}/bfTvotbStreamingResampledImageWithAffineTransform.tif
   )
 
-otb_add_test(NAME uaTvSarSensorModelAdapter COMMAND otbTransformTestDriver
-  otbSarSensorModelAdapterTest
-  ${INPUTDATA}/s1a-iw1-slc-vh-amp_xt.geom
-  )
-
-otb_add_test(NAME uaTvSarSensorModelAdapter2 COMMAND otbTransformTestDriver
-  otbSarSensorModelAdapterTest
-  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.geom
-  )
-
 if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
   add_executable(otbSarSensorModelTest otbSarSensorModelTest.cxx )
   target_link_libraries(
@@ -294,11 +272,14 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
 
   #S1 tests
-  file(GLOB s1_files ${INPUTDATA}/ossimPlugins/s1/*.xml)
+  file(GLOB s1_files ${INPUTDATA}/sentinel1/xml/*.xml)
   #Loop over all S1 annotation files
   foreach(entry ${s1_files})
     get_filename_component(name ${entry} NAME_WE)
-    otb_add_test( NAME prTvSentinel1SensorModel_${name} COMMAND otbSentinel1SensorModelTest ${entry})
+    otb_add_test( NAME prTvSentinel1SensorModel_${name}
+        COMMAND otbSentinel1SensorModelTest
+        ${entry}
+        ${BASELINE_FILES}/prTvSentinel1SensorModel_${name}.xml)
   endforeach()
 
 endif()

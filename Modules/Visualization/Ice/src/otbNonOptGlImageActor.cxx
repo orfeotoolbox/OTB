@@ -74,9 +74,9 @@ std::string NonOptGlImageActor::GetWkt() const
   return m_FileReader->GetOutput()->GetProjectionRef();
 }
 
-NonOptGlImageActor::ImageKeywordlistType NonOptGlImageActor::GetKwl() const
+ImageMetadata & NonOptGlImageActor::GetImd() const
 {
-  return m_FileReader->GetOutput()->GetImageKeywordlist();
+  return m_FileReader->GetOutput()->GetImageMetadata();
 }
 
 void NonOptGlImageActor::Initialize(const std::string & filename)
@@ -729,14 +729,14 @@ void NonOptGlImageActor::UpdateTransforms()
   if(settings->GetUseProjection())
     {
     m_ViewportToImageTransform->SetInputProjectionRef(settings->GetWkt());
-    m_ViewportToImageTransform->SetInputKeywordList(settings->GetKeywordList());
+    m_ViewportToImageTransform->SetInputImageMetadata(settings->GetImageMetadata());
     m_ViewportToImageTransform->SetOutputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
-    m_ViewportToImageTransform->SetOutputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
+    m_ViewportToImageTransform->SetOutputImageMetadata(m_FileReader->GetOutput()->GetImageMetadata());
 
     m_ImageToViewportTransform->SetOutputProjectionRef(settings->GetWkt());
-    m_ImageToViewportTransform->SetOutputKeywordList(settings->GetKeywordList());
+    m_ImageToViewportTransform->SetOutputImageMetadata(settings->GetImageMetadata());
     m_ImageToViewportTransform->SetInputProjectionRef(m_FileReader->GetOutput()->GetProjectionRef());
-    m_ImageToViewportTransform->SetInputKeywordList(m_FileReader->GetOutput()->GetImageKeywordlist());
+    m_ImageToViewportTransform->SetInputImageMetadata(m_FileReader->GetOutput()->GetImageMetadata());
     }
   m_ViewportToImageTransform->InstantiateTransform();
   m_ImageToViewportTransform->InstantiateTransform();

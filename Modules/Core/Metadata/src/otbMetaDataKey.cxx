@@ -50,9 +50,6 @@ char const* ColorTableNameKey  = "ColorTableName";
 char const* ColorEntryCountKey = "ColorEntryCount";
 char const* ColorEntryAsRGBKey = "ColorEntryAsRGB";
 
-char const* OSSIMKeywordlistKey          = "OSSIMKeywordlist";
-char const* OSSIMKeywordlistDelimiterKey = "OSSIMKeywordlistDelimiter";
-
 char const* VectorDataKeywordlistKey          = "VectorDataKeywordlist";
 char const* VectorDataKeywordlistDelimiterKey = "VectorDataKeywordlistDelimiter";
 
@@ -87,8 +84,6 @@ const MetaDataKey::KeyTypeDef Types[] = {
     MetaDataKey::KeyTypeDef(MetaDataKey::ColorTableNameKey, MetaDataKey::TSTRING),
     MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryCountKey, MetaDataKey::TENTIER),
     MetaDataKey::KeyTypeDef(MetaDataKey::ColorEntryAsRGBKey, MetaDataKey::TVECTOR),
-    MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistKey, MetaDataKey::TOSSIMKEYWORDLIST),
-    MetaDataKey::KeyTypeDef(MetaDataKey::OSSIMKeywordlistDelimiterKey, MetaDataKey::TSTRING),
     MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistKey, MetaDataKey::TVECTORDATAKEYWORDLIST),
     MetaDataKey::KeyTypeDef(MetaDataKey::VectorDataKeywordlistDelimiterKey, MetaDataKey::TSTRING),
     MetaDataKey::KeyTypeDef(MetaDataKey::ResolutionFactor, MetaDataKey::TENTIER),
@@ -228,7 +223,6 @@ double Time::GetSecond() const
   return tm_sec + frac_sec;
 }
 
-#if 1
 double Time::GetJulianDay() const
 {
   // Conversion to julian day
@@ -245,21 +239,6 @@ double Time::GetJulianDay() const
 
   return julianDay;
 }
-
-#else // Ossim implementation, which produces slightly different results
-double Time::GetJulianDay() const
-{
-   int J = GetMonth();
-   int K = GetDay();
-   int I = GetYear();
-
-   return (K-32075+1461*(I+4800+(J-14)/12)/4+367*(J-2-(J-14)/12*12)
-           /12-3*((I+4900+(J-14)/12)/100)/4+
-           (GetHour()/24.0)+
-           (GetMinute()/1440.0)+
-           ((GetSecond())/86400.0));
-}
-#endif
 
 double Time::GetModifiedJulian() const
 {
@@ -408,8 +387,6 @@ MDNumBmType MDNumNames = bimapGenerator<MDNum>(std::map<MDNum, std::string> {
   {MDNum::SunAzimuth,"SunAzimuth"},
   {MDNum::SatElevation,"SatElevation"},
   {MDNum::SatAzimuth,"SatAzimuth"},
-  {MDNum::FirstWavelength,"FirstWavelength"},
-  {MDNum::LastWavelength,"LastWavelength"},
   {MDNum::SpectralStep,"SpectralStep"},
   {MDNum::SpectralMin,"SpectralMin"},
   {MDNum::SpectralMax,"SpectralMax"},
@@ -424,12 +401,16 @@ MDNumBmType MDNumNames = bimapGenerator<MDNum>(std::map<MDNum, std::string> {
   {MDNum::PixelSpacing,"PixelSpacing"},
   {MDNum::RangeTimeFirstPixel,"RangeTimeFirstPixel"},
   {MDNum::RangeTimeLastPixel,"RangeTimeLastPixel"},
+  {MDNum::RedDisplayChannel,"RedDisplayChannel"},
+  {MDNum::GreenDisplayChannel,"GreenDisplayChannel"},
+  {MDNum::BlueDisplayChannel,"BlueDisplayChannel"},
 });
 
 MDStrBmType MDStrNames = bimapGenerator<MDStr>(std::map<MDStr, std::string> {
   {MDStr::SensorID,"SensorID"},
   {MDStr::Mission,"Mission"},
   {MDStr::Instrument,"Instrument"},
+  {MDStr::InstrumentIndex,"InstrumentIndex"},
   {MDStr::ProductType,"ProductType"},
   {MDStr::GeometricLevel,"GeometricLevel"},
   {MDStr::RadiometricLevel,"RadiometricLevel"},
@@ -438,6 +419,7 @@ MDStrBmType MDStrNames = bimapGenerator<MDStr>(std::map<MDStr, std::string> {
   {MDStr::Swath, "Swath"},
   {MDStr::OrbitDirection, "OrbitDirection"},
   {MDStr::BandName,"BandName"},
+  {MDStr::EnhancedBandName,"EnhancedBandName"},
   {MDStr::BeamMode, "BeamMode"},
   {MDStr::BeamSwath, "BeamSwath"},
   {MDStr::AreaOrPoint, "AreaOrPoint"},

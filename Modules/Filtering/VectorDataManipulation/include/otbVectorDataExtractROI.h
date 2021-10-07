@@ -107,9 +107,8 @@ public:
 
 protected:
   VectorDataExtractROI();
-  ~VectorDataExtractROI() override
-  {
-  }
+  ~VectorDataExtractROI() override = default;
+
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
 
   /** Method to compare the projection embedded in the cartoRegion And the the InputVectorData*/

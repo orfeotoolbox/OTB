@@ -35,7 +35,6 @@ ENABLE_SHARED
     OTBCommon
     OTBObjectList
     OTBBoostAdapters
-    OTBOSSIMAdapters
     OTBITK
     OTBMetadata
 

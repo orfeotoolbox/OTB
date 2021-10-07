@@ -27,7 +27,6 @@ otb_module(OTBAppProjection
     OTBProjection
     OTBImageBase
     OTBTransform
-    OTBOSSIMAdapters
     OTBCarto
     OTBApplicationEngine
     OTBMathParser

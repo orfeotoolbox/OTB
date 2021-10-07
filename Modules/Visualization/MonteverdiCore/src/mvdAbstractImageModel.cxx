@@ -124,11 +124,11 @@ QStringList AbstractImageModel::GetBandNames(bool enhanced) const
 {
   ImageBaseType::ConstPointer output(ToImageBase());
 
-  otb::ImageMetadataInterfaceBase::ConstPointer metaDataInterface(GetMetaDataInterface());
+  const auto & imd = GetImageMetadata();
 
   //
   // Basic band names.
-  StringVector stdBandNames1(metaDataInterface->GetBandName());
+  auto stdBandNames1 = imd.GetBandNames();
 
   // output band name list
   QStringList qBandNames1(QString(""));
@@ -170,7 +170,7 @@ QStringList AbstractImageModel::GetBandNames(bool enhanced) const
     {
       try
       {
-        stdBandNames2 = metaDataInterface->GetEnhancedBandNames();
+        stdBandNames2 = imd.GetEnhancedBandNames();
       }
       catch (std::exception& exc)
       {

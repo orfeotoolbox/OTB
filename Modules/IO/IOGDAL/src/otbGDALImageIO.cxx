@@ -30,7 +30,6 @@
 #include "itksys/SystemTools.hxx"
 #include "otbImage.h"
 #include "otb_tinyxml.h"
-#include "otbImageKeywordlist.h"
 
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
@@ -1475,10 +1474,10 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   std::ostringstream       oss;
   GDALDataset*             dataset = m_Dataset->GetDataSet();
 
-  // In OTB we can have simultaneously projection ref, sensor keywordlist, GCPs
+  // In OTB we can have simultaneously projection ref, sensor model, GCPs
   // but GDAL can't handle both geotransform and GCP (see issue #303). Here is the priority
   // order we will be using in OTB:
-  // [ProjRef+geotransform] > [SensorKeywordlist+geotransform] > [GCPs]
+  // [ProjRef+geotransform] > [Sensor model+geotransform] > [GCPs]
 
   /* -------------------------------------------------------------------- */
   /* Pre-compute geotransform                                             */
@@ -1500,10 +1499,6 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     std::abs(geoTransform[3]) > Epsilon ||
     std::abs(geoTransform[4]) > Epsilon ||
     std::abs(geoTransform[5] - 1.0) > Epsilon;
-
-  itk::MetaDataDictionary& dict = this->GetMetaDataDictionary();
-  ImageKeywordlist otb_kwl;
-  itk::ExposeMetaData<ImageKeywordlist>(dict, MetaDataKey::OSSIMKeywordlistKey, otb_kwl);
 
   /* -------------------------------------------------------------------- */
   /* Case 1: Set the projection coordinate system of the image            */
@@ -1550,23 +1545,14 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       dataset->SetMetadata(rpcMetadata, "RPC");
       CSLDestroy(rpcMetadata);
     }
-  }
-  // ToDo : remove this part. This case is here for compatibility for images
-  // that still use Ossim for managing the sensor model (with OSSIMKeywordList).
-  else if (otb_kwl.GetSize())
-  {
-    /* -------------------------------------------------------------------- */
-    /* Set the RPC coeffs (since GDAL 1.10.0)                               */
-    /* -------------------------------------------------------------------- */
-    if (m_WriteRPCTags)
+    else if (m_Imd.Has(MDGeom::SAR))
     {
-      GDALRPCInfo gdalRpcStruct;
-      if (otb_kwl.convertToGDALRPC(gdalRpcStruct))
+      MetaData::Keywordlist SARKwl;
+      const auto & param = boost::any_cast<const otb::SARParam&>(m_Imd[MDGeom::SAR]);
+      param.ToKeywordlist(SARKwl, "SAR.");
+      for (auto & key: SARKwl)
       {
-        otbLogMacro(Debug, << "Saving RPC to file (" << m_FileName << ")")
-        char** rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
-        dataset->SetMetadata(rpcMetadata, "RPC");
-        CSLDestroy(rpcMetadata);
+        dataset->SetMetadataItem(key.first.c_str(), key.second.c_str());
       }
     }
   }
@@ -1604,8 +1590,8 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     const std::string & gcpProjectionRef = gcpPrm.GCPProjection;
     dataset->SetGCPs(gdalGcps.size(), gdalGcps.data(), gcpProjectionRef.c_str());
 
-    // disable geotransform with GCP
-    writeGeotransform = false;
+    // disable geotransform with GCP (check that SetGCPs succeed by verifying the the dataset has GCPs)
+    writeGeotransform = writeGeotransform && !dataset->GetGCPCount();
   }
 
   /* -------------------------------------------------------------------- */
@@ -1944,6 +1930,22 @@ void GDALImageIO::ImportMetadata()
     return;
   ImageMetadataBase::Keywordlist kwl;
   GDALMetadataToKeywordlist(m_Dataset->GetDataSet()->GetMetadata(), kwl);
+
+  // Decode SAR metadata
+  if (kwl.find("SAR") != kwl.end())
+  {
+    try
+    {
+      otb::SARParam sar;
+      sar.FromKeywordlist(kwl, "SAR.");
+      m_Imd.Add(MDGeom::SAR, sar);
+    }
+    catch(const std::exception& e) 
+    {
+      otbLogMacro(Warning, << "Input image has SAR sensor metadata, but OTB was not able to read it: " << e.what());
+    }
+  }
+
   m_Imd.FromKeywordlist(kwl);
 
   // Parsing the bands

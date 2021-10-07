@@ -224,7 +224,6 @@ foreach( file ${IMG} )
   otb_test_application(NAME  apTuReadImageInfoTest_${current_testname}
                      APP  ReadImageInfo
                      OPTIONS -in ${file}
-                     -outkwl ${TEMP}/apTvUtReadImageInfoTest_${current_testname}.geom
                      #No baseline, just check that the process finished well
                      )
 endforeach()

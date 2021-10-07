@@ -34,21 +34,6 @@
 
 #include "otbSentinel1ImageMetadataInterface.h"
 
-
-#if defined(__GNUC__) || defined(__clang__)
-# pragma GCC diagnostic push
-#   pragma GCC diagnostic ignored "-Wunused-parameter"
-#   pragma GCC diagnostic ignored "-Woverloaded-virtual"
-#   pragma GCC diagnostic ignored "-Wshadow"
-#include "ossimSentinel1Model.h"
-#include "ossimPluginProjectionFactory.h"
-# pragma GCC diagnostic pop
-#else
-#include "ossimSentinel1Model.h"
-#include "ossimPluginProjectionFactory.h"
-#endif
-
-
 using namespace boost::unit_test;
 
 template<class T>
@@ -62,17 +47,16 @@ void PrintVectorOfPair(T input, const std::string & name)
   std::cout << std::endl;
 }
 
-
-
-
 BOOST_AUTO_TEST_CASE(SARDeburst)
 {
-  BOOST_TEST_REQUIRE( framework::master_test_suite().argc == 2 );
+  BOOST_TEST_REQUIRE( framework::master_test_suite().argc == 3 );
 
   const std::string annotationXml = framework::master_test_suite().argv[1];
+  const std::string baselineXml = framework::master_test_suite().argv[2];
 
   auto imi = otb::Sentinel1ImageMetadataInterface::New();
   otb::XMLMetadataSupplier mds(annotationXml);
+  otb::XMLMetadataSupplier baseline(baselineXml);
 
   const auto & productType = mds.GetAs<std::string>("product.adsHeader.productType");
 
@@ -97,7 +81,7 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
   PrintVectorOfPair(deburstLines, "Deburst lines");
 
   std::cout << "Deburst Samples: " << deburstSamples.first << " " << deburstSamples.second << std::endl;
-  
+
 
   std::cout << "Burst extraction" << std::endl;
   unsigned int burstIndex = 3;
@@ -108,7 +92,7 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
   {
   otb::SarSensorModel model(productType, sarParam, gcpParam);
   // BurstExtraction returns false when the number of burst is 1
-  BOOST_TEST(model.BurstExtraction(burstIndex, burstExtractionLines, burstExtractionSamples, allPixel) 
+  BOOST_TEST(model.BurstExtraction(burstIndex, burstExtractionLines, burstExtractionSamples, allPixel)
               == (numberOfBursts > 1));
   }
 
@@ -129,105 +113,123 @@ BOOST_AUTO_TEST_CASE(SARDeburst)
 
   PrintVectorOfPair(linesBursts, "DeburstAndConcatenate: LinesBursts");
   PrintVectorOfPair(samplesBursts, "DeburstAndConcatenate: SamplesBursts");
-  std::cout << "DeburstAndConcatenate: lines Offset: " << linesOffset << std::endl;
 
-  // the code below uses OssimPlugins to validate the results OTB (see ossimSentinel1ModelTest).
-  // TODO: generate baselines instead.
-
-  std::cout << "Ossim Tests" << std::endl;
-  std::auto_ptr<ossimProjection> projection
-         (ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(annotationXml, 42));
-  if (!projection.get()) 
-  {
-    throw std::runtime_error("Cannot read annotation file ("+annotationXml+"). Cannot create a projection from it.");
-  }
-
-  auto * sensor = dynamic_cast<ossimplugins::ossimSentinel1Model*>(projection.get());
-  if (!sensor) 
-  {
-    throw std::runtime_error(
-      "Unlike Expectations, the annotation file ("+annotationXml+") is not a Sentinel Annotation File");
-  }
-
-  ossimKeywordlist kwl;
-  std::vector<std::pair<unsigned long, unsigned long> > deburstLinesOssim;
   std::pair<unsigned long, unsigned long> deburstSamplesOssim;
-
-  std::cout<<"Trying to deburst data ..."<<std::endl;
-  bool deburstOk = sensor->deburst(deburstLinesOssim, deburstSamplesOssim);
-  std::cout<<"Deburst succeed: "<<(deburstOk?"yes":"no")<<std::endl;
-
-
-  PrintVectorOfPair(deburstLinesOssim, "deburstLinesOssim");
+  deburstSamplesOssim.first = baseline.GetAs<unsigned long>("baseline.ossim.deburstSamples.first");
+  deburstSamplesOssim.second = baseline.GetAs<unsigned long>("baseline.ossim.deburstSamples.second");
   std::cout << deburstSamplesOssim.first << " " << deburstSamplesOssim.second << std::endl;
-
   BOOST_CHECK(deburstSamples == deburstSamplesOssim);
-  BOOST_CHECK(deburstLines.size() == deburstLinesOssim.size() 
-              && std::equal(deburstLines.begin(), deburstLines.end(), deburstLinesOssim.begin()));
 
-
-  std::cout << "Burst extraction" << std::endl;
-
-
-  std::auto_ptr<ossimProjection> projection2
-         (ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(annotationXml, 42));
-  auto * sensor2 = dynamic_cast<ossimplugins::ossimSentinel1Model*>(projection2.get());
-  if (!sensor2) 
+  std::vector<std::pair<unsigned long,unsigned long> > deburstLinesOssim;
+  int deburstLinesCount = baseline.GetAs<int>("baseline.ossim.deburstLines.count");
+  if(deburstLinesCount == 1)
   {
-    throw std::runtime_error(
-      "Unlike Expectations, the annotation file ("+annotationXml+") is not a Sentinel Annotation File");
+    std::pair<unsigned long, unsigned long> deburstLinesPair;
+    deburstLinesPair.first = baseline.GetAs<unsigned long>("baseline.ossim.deburstLines.deburstLine.first");
+    deburstLinesPair.second = baseline.GetAs<unsigned long>("baseline.ossim.deburstLines.deburstLine.second");
+    deburstLinesOssim.push_back(deburstLinesPair);
   }
-  std::pair<unsigned long, unsigned long> ossimBurstExtractionLines;
-  std::pair<unsigned long, unsigned long> ossimBurstExtractionSamples;
-  BOOST_TEST(sensor2->burstExtraction(burstIndex, ossimBurstExtractionLines, ossimBurstExtractionSamples, allPixel)
-      == (numberOfBursts > 1));
+  else
+  {
+    std::ostringstream oss;
+    for (int listId = 1 ; listId <= deburstLinesCount ; ++listId)
+    {
+      oss.str("");
+      oss << listId;
+      std::string path_root = "baseline.ossim.deburstLines.deburstLine_" + oss.str();
+      std::pair<unsigned long, unsigned long> deburstLinesPair;
+      deburstLinesPair.first = baseline.GetAs<unsigned long>(path_root + ".first");
+      deburstLinesPair.second = baseline.GetAs<unsigned long>(path_root + ".second");
+      deburstLinesOssim.push_back(deburstLinesPair);
+    }
+  }
+  PrintVectorOfPair(deburstLinesOssim, "DeburstAndConcatenate: deburstLinesOssim");
+  BOOST_CHECK(deburstLines.size() == deburstLinesOssim.size());
+  BOOST_CHECK(std::equal(deburstLines.begin(), deburstLines.end(), deburstLinesOssim.begin()));
 
-  std::cout << "OTB : burst extraction lines " << burstExtractionLines.first << " " 
-                                                 << burstExtractionLines.second << std::endl;
 
-  std::cout << "OTB : burst extraction samples " << burstExtractionSamples.first << " " 
+  std::pair<unsigned long,unsigned long> burstExtractionLinesOssim;
+  burstExtractionLinesOssim.first = baseline.GetAs<unsigned long>("baseline.ossim.burstExtractionLines.first");
+  burstExtractionLinesOssim.second = baseline.GetAs<unsigned long>("baseline.ossim.burstExtractionLines.second");
+  std::pair<unsigned long,unsigned long> burstExtractionSamplesOssim;
+  burstExtractionSamplesOssim.first = baseline.GetAs<unsigned long>("baseline.ossim.burstExtractionSamples.first");
+  burstExtractionSamplesOssim.second = baseline.GetAs<unsigned long>("baseline.ossim.burstExtractionSamples.second");
+
+  std::cout << "OTB : burst extraction lines " << burstExtractionLines.first << " "
+                                               << burstExtractionLines.second << std::endl;
+
+  std::cout << "OTB : burst extraction samples " << burstExtractionSamples.first << " "
                                                  << burstExtractionSamples.second << std::endl;
 
-  std::cout << "OSSIM : burst extraction lines " << ossimBurstExtractionLines.first << " " 
-                                                 << ossimBurstExtractionLines.second << std::endl;
+  std::cout << "OSSIM : burst extraction lines " << burstExtractionLinesOssim.first << " "
+                                                 << burstExtractionLinesOssim.second << std::endl;
 
-  std::cout << "OSSIM : burst extraction samples " << ossimBurstExtractionSamples.first << " " 
-                                                 << ossimBurstExtractionSamples.second << std::endl;
+  std::cout << "OSSIM : burst extraction samples " << burstExtractionSamplesOssim.first << " "
+                                                   << burstExtractionSamplesOssim.second << std::endl;
 
-  BOOST_CHECK(burstExtractionLines == ossimBurstExtractionLines);
-  BOOST_CHECK(burstExtractionSamples == ossimBurstExtractionSamples);
+  BOOST_CHECK(burstExtractionLines == burstExtractionLinesOssim);
+  BOOST_CHECK(burstExtractionSamples == burstExtractionSamplesOssim);
 
-  std::auto_ptr<ossimProjection> projection3
-         (ossimplugins::ossimPluginProjectionFactory::instance()->createProjection(annotationXml, 42));
-  auto * sensor3 = dynamic_cast<ossimplugins::ossimSentinel1Model*>(projection3.get());
-  if (!sensor3) 
+  std::vector<std::pair<unsigned long,unsigned long> > linesBurstsOssim;
+  int linesBurstsCount = baseline.GetAs<int>("baseline.ossim.linesBursts.count");
+  if(linesBurstsCount == 1)
   {
-    throw std::runtime_error(
-      "Unlike Expectations, the annotation file ("+annotationXml+") is not a Sentinel Annotation File");
+    std::pair<unsigned long, unsigned long> linesBurstsPair;
+    linesBurstsPair.first = baseline.GetAs<unsigned long>("baseline.ossim.linesBursts.linesBurst.first");
+    linesBurstsPair.second = baseline.GetAs<unsigned long>("baseline.ossim.linesBursts.linesBurst.second");
+    linesBurstsOssim.push_back(linesBurstsPair);
   }
+  else
+  {
+    std::ostringstream oss;
+    for (int listId = 1 ; listId <= linesBurstsCount ; ++listId)
+    {
+      oss.str("");
+      oss << listId;
+      std::string path_root = "baseline.ossim.linesBursts.linesBurst_" + oss.str();
+      std::pair<unsigned long, unsigned long> linesBurstsPair;
+      linesBurstsPair.first = baseline.GetAs<unsigned long>(path_root + ".first");
+      linesBurstsPair.second = baseline.GetAs<unsigned long>(path_root + ".second");
+      linesBurstsOssim.push_back(linesBurstsPair);
+    }
+  }
+  PrintVectorOfPair(linesBurstsOssim, "DeburstAndConcatenate: ossimLinesBursts");
+  BOOST_CHECK(linesBursts == linesBurstsOssim);
 
-  std::cout << "Deburst and concatenate" << std::endl;
+  std::vector<std::pair<unsigned long,unsigned long> > samplesBurstsOssim;
+  int samplesBurstsCount = baseline.GetAs<int>("baseline.ossim.samplesBursts.count");
+  if(samplesBurstsCount == 1)
+  {
+    std::pair<unsigned long, unsigned long> samplesBurstsPair;
+    samplesBurstsPair.first = baseline.GetAs<unsigned long>("baseline.ossim.samplesBursts.samplesBurst.first");
+    samplesBurstsPair.second = baseline.GetAs<unsigned long>("baseline.ossim.samplesBursts.samplesBurst.second");
+    samplesBurstsOssim.push_back(samplesBurstsPair);
+  }
+  else
+  {
+    std::ostringstream oss;
+    for (int listId = 1 ; listId <= samplesBurstsCount ; ++listId)
+    {
+      oss.str("");
+      oss << listId;
+      std::string path_root = "baseline.ossim.samplesBursts.samplesBurst_" + oss.str();
+      std::pair<unsigned long, unsigned long> samplesBurstsPair;
+      samplesBurstsPair.first = baseline.GetAs<unsigned long>(path_root + ".first");
+      samplesBurstsPair.second = baseline.GetAs<unsigned long>(path_root + ".second");
+      samplesBurstsOssim.push_back(samplesBurstsPair);
+    }
+  }
+  PrintVectorOfPair(samplesBurstsOssim, "DeburstAndConcatenate: ossimSamplesBursts");
+  BOOST_CHECK(samplesBursts == samplesBurstsOssim);
 
-  unsigned int ossimLinesOffset = 0;
-
-  std::vector<std::pair<unsigned long,unsigned long> > ossimLinesBursts;
-  std::vector<std::pair<unsigned long,unsigned long> > ossimSamplesBursts;
-  BOOST_TEST(sensor3->deburstAndConcatenate(ossimLinesBursts, ossimSamplesBursts, ossimLinesOffset, first_burstInd, inputWithInvalidPixels)
-              == (numberOfBursts > 1));
-
-  PrintVectorOfPair(ossimLinesBursts, "DeburstAndConcatenate: ossimLinesBursts");
-  PrintVectorOfPair(ossimSamplesBursts, "DeburstAndConcatenate: ossimSamplesBursts");
-  std::cout << "DeburstAndConcatenate: lines Offset ossim: " << ossimLinesOffset << std::endl;
-
-  BOOST_CHECK(linesBursts == ossimLinesBursts);
-  BOOST_CHECK(samplesBursts == ossimSamplesBursts);
-  BOOST_CHECK(linesOffset == ossimLinesOffset);
-
+  auto linesOffsetOssim = baseline.GetAs<unsigned int>("baseline.ossim.linesOffsetOssim");
+  std::cout << "DeburstAndConcatenate: lines Offset ossim: " << linesOffsetOssim << std::endl;
+  BOOST_CHECK(linesOffset == linesOffsetOssim);
 }
 
 BOOST_AUTO_TEST_CASE(Sentinel1SensorModel_auto_validate_inverse_transform)
 {
-  BOOST_TEST_REQUIRE( framework::master_test_suite().argc == 2 );
+  BOOST_TEST_REQUIRE( framework::master_test_suite().argc == 3 );
 
   const std::string annotationXml = framework::master_test_suite().argv[1];
 
@@ -261,8 +263,8 @@ BOOST_AUTO_TEST_CASE(Sentinel1SensorModel_auto_validate_inverse_transform)
     const double lineTol = 1.;
     const double sampleTol = 1.;
 
-    BOOST_TEST(std::abs(lineSample[0] - lineSampleBaseline[0]) < lineTol); 
-    BOOST_TEST(std::abs(lineSample[1] - lineSampleBaseline[1]) < sampleTol); 
+    BOOST_TEST(std::abs(lineSample[0] - lineSampleBaseline[0]) < lineTol);
+    BOOST_TEST(std::abs(lineSample[1] - lineSampleBaseline[1]) < sampleTol);
   }
 }
 

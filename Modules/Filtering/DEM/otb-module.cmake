@@ -26,7 +26,6 @@ otb_module(OTBDEM
     OTBITK
     OTBImageBase
     OTBImageManipulation
-    OTBOSSIMAdapters
     OTBTransform
 
   TEST_DEPENDS

@@ -34,6 +34,8 @@
 #include "otbStringUtils.h"
 #include "otbJoinContainer.h"
 
+#include <unordered_map>
+
 namespace otb
 {
 /** \namespace MetaDataKey
@@ -64,9 +66,6 @@ extern OTBMetadata_EXPORT char const* ColorTableNameKey;
 extern OTBMetadata_EXPORT char const* ColorEntryCountKey;
 extern OTBMetadata_EXPORT char const* ColorEntryAsRGBKey;
 
-extern OTBMetadata_EXPORT char const* OSSIMKeywordlistKey;
-extern OTBMetadata_EXPORT char const* OSSIMKeywordlistDelimiterKey;
-
 extern OTBMetadata_EXPORT char const* VectorDataKeywordlistKey;
 extern OTBMetadata_EXPORT char const* VectorDataKeywordlistDelimiterKey;
 
@@ -90,7 +89,6 @@ enum KeyType
   TDOUBLE,
   TGCP,
   TVECTOR,
-  TOSSIMKEYWORDLIST,
   TVECTORDATAKEYWORDLIST,
   TBOOLVECTOR
 };
@@ -135,6 +133,10 @@ enum class MDNum
   NumberOfLines,
   NumberOfColumns,
   AverageSceneHeight,
+// Display
+  RedDisplayChannel,
+  GreenDisplayChannel,
+  BlueDisplayChannel,
 // optical section
   PhysicalGain,
   PhysicalBias,
@@ -143,8 +145,6 @@ enum class MDNum
   SunAzimuth,
   SatElevation,
   SatAzimuth,
-  FirstWavelength,
-  LastWavelength,
   SpectralStep,
   SpectralMin,
   SpectralMax,
@@ -169,7 +169,9 @@ enum class MDStr
   SensorID,
   Mission,
   Instrument,
+  InstrumentIndex,
   BandName,
+  EnhancedBandName,
   ProductType,
   GeometricLevel,
   RadiometricLevel,
@@ -224,6 +226,8 @@ enum class MDGeom
 
 namespace MetaData
 {
+
+using Keywordlist = std::unordered_map<std::string, std::string>;
 
 struct OTBMetadata_EXPORT Time : tm
 {

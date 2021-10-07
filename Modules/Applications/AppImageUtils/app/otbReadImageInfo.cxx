@@ -66,14 +66,14 @@ private:
     AddParameter(ParameterType_InputImage, "in", "Input Image");
     SetParameterDescription("in", "Input image to analyse");
 
-    AddParameter(ParameterType_Bool, "keywordlist", "Display the OSSIM keywordlist");
-    SetParameterDescription("keywordlist",
-                            "Output the OSSIM keyword list. It contains metadata information (sensor model, geometry ). Information is stored in keyword list "
-                            "(pairs of key/value)");
+    AddParameter(ParameterType_Bool, "imagemetadata", "Display the image metadata");
+    SetParameterDescription("imagemetadata",
+                            "Output the image metadata. It contains metadata information (sensor model, geometry ). Information is stored as "
+                            "pairs of key/value.");
 
-    AddParameter(ParameterType_OutputFilename, "outkwl", "Write the OSSIM keywordlist to a geom file");
-    SetParameterDescription("outkwl", "This option allows extracting the OSSIM keywordlist of the image into a geom file.");
-    MandatoryOff("outkwl");
+    AddParameter(ParameterType_OutputFilename, "outgeom", "Write the image metadata to a geom file");
+    SetParameterDescription("outgeom", "This option allows extracting the image metadata of the image into a geom file.");
+    MandatoryOff("outgeom");
 
     // Create output parameters to store image information
     AddParameter(ParameterType_Int, "indexx", "Start index X");
@@ -207,11 +207,6 @@ private:
     SetParameterRole("projectionref", Role_Output);
     EnableParameter("projectionref");
 
-    AddParameter(ParameterType_String, "keyword", "Keywordlist");
-    SetParameterDescription("keyword", "Image keyword list");
-    SetParameterRole("keyword", Role_Output);
-    EnableParameter("keyword");
-
     AddParameter(ParameterType_Group, "gcp", "Ground Control Points information");
     SetParameterDescription("gcp", "This group of parameters provide information about all GCPs.");
     SetParameterRole("gcp", Role_Output);
@@ -265,10 +260,6 @@ private:
 
     ossOutput << std::endl << "Image general information:" << std::endl;
 
-    // Read information
-    typedef otb::ImageMetadataInterfaceBase ImageMetadataInterfaceType;
-    ImageMetadataInterfaceType::Pointer     metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(inImage->GetMetaDataDictionary());
-
     // Get number of bands
     SetParameterInt("numberbands", inImage->GetNumberOfComponentsPerPixel());
     ossOutput << "\tNumber of bands : " << GetParameterInt("numberbands") << std::endl;
@@ -285,7 +276,6 @@ private:
 
     std::vector<double> noDataValues;
     itk::ExposeMetaData<std::vector<double>>(inImage->GetMetaDataDictionary(), MetaDataKey::NoDataValue, noDataValues);
-
 
     ossOutput << "\tNo data flags :";
 
@@ -355,12 +345,19 @@ private:
 
     ossOutput << std::endl << "Image acquisition information:" << std::endl;
 
-    SetParameterString("sensor", metadataInterface->GetSensorID());
+    const auto & imd = inImage->GetImageMetadata();
+
     ossOutput << "\tSensor : ";
-    if (!GetParameterString("sensor").empty())
+
+    if (imd.Has(MDStr::SensorID))
+    {
+      SetParameterString("sensor", imd[MDStr::SensorID]);
       ossOutput << GetParameterString("sensor");
+    }
 
     ossOutput << std::endl;
+#if 0 //TODO The Image ID is not in the metadata dictionary, except for Pleiades where it is parsed as an extra key. Is it really relevant here ?
+      // I am not sure it is actually defined for the other sensors.
 
     ossOutput << "\tImage identification number: ";
     if (metadataInterface->GetImageKeywordlist().HasKey("image_id"))
@@ -369,40 +366,28 @@ private:
       ossOutput << GetParameterString("id");
     }
     ossOutput << std::endl;
-    SetParameterString("projectionref", metadataInterface->GetProjectionRef());
+#endif
+    SetParameterString("projectionref", inImage->GetProjectionRef());
     if (!GetParameterString("projectionref").empty())
       ossOutput << "\tImage projection : " << GetParameterString("projectionref") << std::endl;
 
     // Format acquisition time
     // Test if this information is available and silently catch
     // associated exception
-    try
+    if (imd.Has(MDTime::AcquisitionDate))
     {
-      std::ostringstream osstime;
-      osstime << metadataInterface->GetYear() << "-";
-      if (metadataInterface->GetMonth() < 10)
-        osstime << "0";
-      osstime << metadataInterface->GetMonth() << "-";
-      if (metadataInterface->GetDay() < 10)
-        osstime << "0";
-      osstime << metadataInterface->GetDay() << "T";
-      if (metadataInterface->GetHour() < 10)
-        osstime << "0";
-      osstime << metadataInterface->GetHour() << ":";
-      if (metadataInterface->GetMinute() < 10)
-        osstime << "0";
-      osstime << metadataInterface->GetMinute();
-      osstime << ":00";
-      SetParameterString("time", osstime.str());
+      std::ostringstream oss;
+      oss << imd[MDTime::AcquisitionDate];
+
+      SetParameterString("time", oss.str());
 
       ossOutput << "\tAcquisition time : " << GetParameterString("time") << std::endl;
     }
-    catch (itk::ExceptionObject& /*err*/)
-    {
-    }
-
+#if 0 // TODO: add the bounding box to the IMD
     try
     {
+
+      
       double ullat = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ul_lat").c_str());
       double ullon = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ul_lon").c_str());
       double urlat = atof(metadataInterface->GetImageKeywordlist().GetMetadataByKey("ur_lat").c_str());
@@ -455,7 +440,9 @@ private:
     catch (itk::ExceptionObject& /*err*/)
     {
     }
-    auto rgbVect = metadataInterface->GetDefaultDisplay();
+#endif
+
+    auto rgbVect = imd.GetDefaultDisplay();
     SetParameterInt("rgb.r", rgbVect[0]);
     SetParameterInt("rgb.g", rgbVect[1]);
     SetParameterInt("rgb.b", rgbVect[2]);
@@ -463,8 +450,8 @@ private:
     ossOutput << std::endl << "Image default RGB composition:" << std::endl;
     ossOutput << "\t[R, G, B] = [" << GetParameterInt("rgb.r") << "," << GetParameterInt("rgb.g") << "," << GetParameterInt("rgb.b") << "]" << std::endl;
 
-    SetParameterInt("gcp.count", metadataInterface->GetGCPCount());
-    SetParameterString("gcp.proj", metadataInterface->GetGCPProjection());
+    SetParameterInt("gcp.count", inImage->GetGCPCount());
+    SetParameterString("gcp.proj", inImage->GetGCPProjection());
 
     ossOutput << std::endl << "Ground control points information:" << std::endl;
     ossOutput << "\tNumber of GCPs = " << GetParameterInt("gcp.count") << std::endl;
@@ -474,23 +461,25 @@ private:
     std::vector<std::string> gcp_geocoord;
     std::vector<std::string> gcp_infos;
 
-    for (int gcpIdx = 0; gcpIdx < GetParameterInt("gcp.count"); ++gcpIdx)
+    if (inImage->GetGCPCount() > 0)
     {
-      if (gcpIdx == 0)
-        ossOutput << "\tGCP individual information:" << std::endl;
+      for (const auto & gcp: inImage->GetImageMetadata().GetGCPParam().GCPs)
+      {
+        gcp_ids.push_back(gcp.m_Id);
+        gcp_infos.push_back(gcp.m_Info);
 
-      gcp_ids.push_back(metadataInterface->GetGCPId(gcpIdx));
-      gcp_infos.push_back(metadataInterface->GetGCPInfo(gcpIdx));
-      std::ostringstream oss;
-      oss << "[" << metadataInterface->GetGCPCol(gcpIdx) << ", " << metadataInterface->GetGCPRow(gcpIdx) << "]";
-      gcp_imcoord.push_back(oss.str());
-      oss.str("");
-      oss << "[" << metadataInterface->GetGCPX(gcpIdx) << ", " << metadataInterface->GetGCPY(gcpIdx) << ", " << metadataInterface->GetGCPZ(gcpIdx) << "]";
-      gcp_geocoord.push_back(oss.str());
-      ossOutput << "\t\tID =" << gcp_ids.back() << std::endl;
-      ossOutput << "\t\tInfo =" << gcp_infos.back() << std::endl;
-      ossOutput << "\t\tImage coordinates =" << gcp_imcoord.back() << std::endl;
-      ossOutput << "\t\tGround  coordinates =" << gcp_geocoord.back() << std::endl;
+        std::ostringstream oss;
+        oss << "[" << gcp.m_GCPCol << ", " << gcp.m_GCPRow << "]";
+        gcp_imcoord.push_back(oss.str());
+        oss.str("");
+        oss << "[" << gcp.m_GCPX << ", " << gcp.m_GCPY << ", " << gcp.m_GCPZ << "]";
+
+        gcp_geocoord.push_back(oss.str());
+        ossOutput << "\t\tID =" << gcp_ids.back() << std::endl;
+        ossOutput << "\t\tInfo =" << gcp_infos.back() << std::endl;
+        ossOutput << "\t\tImage coordinates =" << gcp_imcoord.back() << std::endl;
+        ossOutput << "\t\tGround  coordinates =" << gcp_geocoord.back() << std::endl;
+      }
     }
 
     SetParameterStringList("gcp.ids", gcp_ids);
@@ -498,22 +487,22 @@ private:
     SetParameterStringList("gcp.geocoord", gcp_geocoord);
     SetParameterStringList("gcp.info", gcp_infos);
 
-    if (GetParameterInt("keywordlist"))
+    if (GetParameterInt("imagemetadata"))
     {
       std::ostringstream osskeywordlist;
-      osskeywordlist << metadataInterface->GetImageKeywordlist() << std::endl;
-      SetParameterString("keyword", osskeywordlist.str());
+      osskeywordlist << imd << std::endl;
+      SetParameterString("metadata", osskeywordlist.str());
 
-      ossOutput << std::endl << "Image OSSIM keywordlist (optional):" << std::endl;
-      ossOutput << "\t" << GetParameterString("keyword") << std::endl;
+      ossOutput << std::endl << "Image metadata (optional):" << std::endl;
+      ossOutput << "\t" << GetParameterString("metadata") << std::endl;
     }
 
     // Display image information in the dedicated logger
     otbAppLogINFO(<< ossOutput.str());
 
-    if (IsParameterEnabled("outkwl") && HasValue("outkwl"))
+    if (IsParameterEnabled("outgeom") && HasValue("outgeom"))
     {
-      WriteGeometry(metadataInterface->GetImageKeywordlist(), GetParameterString("outkwl"));
+      WriteImageMetadataToGeomFile(imd, GetParameterString("outgeom"));
     }
   }
 };

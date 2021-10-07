@@ -36,7 +36,7 @@
 int main(int argc, char* argv[])
 {
 
-  // We initialize ossim which is required for the orthorectification and we
+  // We initialize the sensor model which is required for the orthorectification and we
   // check that all parameters are provided. Basically, we need:
   // \begin{itemize}
   // \item the name of the input PAN image;

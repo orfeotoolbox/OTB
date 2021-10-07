@@ -69,16 +69,6 @@ set(GEOMGCP
 #"sentinel1/sentinel1-1" #LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff} TODO: Reactivate when new SARModel is implemented
 )
 
-set(NEEDEDKW
-"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #Pleiades
-"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #World view 2
-"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #Spot 6
-"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #QB
-"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #Ikonos
-"line_den_coeff line_num_coeff samp_den_coeff samp_num_coeff" #Rapideye
-"number_lines number_samples orbitList support_data.geom.bursts support_data.geom.gcp support_data.pulse_repetition_frequency support_data.radar_frequency support_data.range_sampling_rate support_data.slant_range_to_first_pixel" # Sentinel1
-)
-
 set(GEOTOL
   1 # Pleiades
   1 # Worldview2
@@ -92,7 +82,6 @@ set(GEOTOL
 set( GEOM_TESTNB 0)
 foreach( file ${GEOMGCP} )
   list(GET GEOMGCP   ${GEOM_TESTNB}  current_geomgcp   )
-  list(GET NEEDEDKW   ${GEOM_TESTNB} current_neededkw   )
   list(GET GEOTOL     ${GEOM_TESTNB} current_geotol )
   math(EXPR GEOM_TESTNB "${GEOM_TESTNB} + 1")
 
@@ -107,11 +96,9 @@ foreach( file ${GEOMGCP} )
     ${INPUTDATA}/${current_geomgcp}.geom
     ${INPUTDATA}/${current_geomgcp}.gcp
     ${TEMP}/${TESTNAME}.gcp # baseline (produced only if argv[7] == 1)
-    ${current_neededkw}
     1 # imgTol
     ${current_geotol} # geoTol
     0 # create baseline (argv[7])
-    1 # 0 : no keyword check  1 : check needed keywords
   )
 endforeach()
 
@@ -151,11 +138,9 @@ foreach( file ${GEOMGCP} )
     ${INPUTDATA}/${current_geomgcp}.geom
     ${INPUTDATA}/${current_geomgcp}.gcp
     ${TEMP}/${TESTNAME}.gcp # baseline (produced only if argv[7] == 1)
-    "Foo"
     1 # imgTol
     1 # geoTol
     0 # create baseline (argv[7])
-    0 # 0 : no keyword check  1 : check needed keywords
   )
 endforeach()
 
@@ -612,9 +597,7 @@ endif()
 
 
 set(VALID_CONDITION err=12)
-if(OTB_OSSIM_VERSION LESS 20200)
-set(VALID_CONDITION err=10)
-endif()
+
 otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithDEM COMMAND otbProjectionTestDriver
   otbGCPsToRPCSensorModelImageFilterCheckRpcModel
   ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
@@ -723,9 +706,7 @@ otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_Wit
   )
 
 set(VALID_CONDITION err=20)
-if(OTB_OSSIM_VERSION LESS 20200)
-set(VALID_CONDITION err=10)
-endif()
+
 otb_add_test(NAME prTvGCPsToRPCSensorModelImageCheckInputGcpPointsProjection_WithoutDEM COMMAND otbProjectionTestDriver
   otbGCPsToRPCSensorModelImageFilterCheckRpcModel
   ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
@@ -857,13 +838,11 @@ otb_add_test(NAME prTvTileImageFilterGenericRSTransformTest_LASVEGAS_DIMAPv1 COM
   LARGEINPUT{PLEIADES/LASVEGAS_JP2_DIMAPv1_PRIMARY_PMS_lossless_12bits/IMGPHR_PHR1A_SENSOR_20120217_IPU_20120217_5374-001_V1/IMG_R3C1.JP2}
   )
 
-set(VALID_CONDITION)
-if(OTB_OSSIM_VERSION LESS 20200)
 set(VALID_CONDITION
   --compare-image ${EPSILON_4}
   ${BASELINE}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif
   ${TEMP}/otbGCPsToRPCSensorModelImageFilterAndOrthoOutput.tif)
-endif()
+
 otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterAndOrtho COMMAND otbProjectionTestDriver
   ${VALID_CONDITION}
   otbGCPsToRPCSensorModelImageFilterAndOrtho
@@ -984,13 +963,11 @@ otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterAndOrtho COMMAND otbProject
   #LARGEINPUT{VECTOR/MidiPyrenees/roads.shp}
   #)
 
-set(VALID_CONDITION)
-if(OTB_OSSIM_VERSION LESS 20200)
 set(VALID_CONDITION
   --compare-ascii ${EPSILON_4}
   ${BASELINE_FILES}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt
   ${TEMP}/otbGCPsToRPCSensorModelImageFilterWithoutDEMOutput.txt)
-endif()
+
 otb_add_test(NAME prTvGCPsToRPCSensorModelImageFilterWithoutDEM COMMAND otbProjectionTestDriver
   ${VALID_CONDITION}
   otbGCPsToRPCSensorModelImageFilterWithoutDEM

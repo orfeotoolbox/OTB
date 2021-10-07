@@ -58,7 +58,21 @@ int otbImageMetadataInterfaceTest(int itkNotUsed(argc), char* argv[])
   file.open(outputFilename);
   otb::testtools::PrintMetadata(imd, file);
   if (imd.Has(otb::MDGeom::GCP))
-    file << boost::any_cast<otb::Projection::GCPParam>(imd[otb::MDGeom::GCP]).ToJSON(true);
+    file << "\nGCP\n" << boost::any_cast<otb::Projection::GCPParam>(imd[otb::MDGeom::GCP]).ToJSON(true) << '\n';
+  if (imd.Has(otb::MDGeom::SAR))
+  {
+    otb::MetaData::Keywordlist kwl;
+    boost::any_cast<otb::SARParam>(imd[otb::MDGeom::SAR]).ToKeywordlist(kwl, "");
+    otb::SARParam sarParam;
+    sarParam.FromKeywordlist(kwl, "");
+  }
+  if (imd.Has(otb::MDGeom::SARCalib))
+  {
+    otb::MetaData::Keywordlist kwl;
+    boost::any_cast<otb::SARCalib>(imd[otb::MDGeom::SARCalib]).ToKeywordlist(kwl, "");
+    otb::SARCalib SARCalib;
+    SARCalib.FromKeywordlist(kwl, "");
+  }
   file.close();
 
   if (dynamic_cast<otb::OpticalImageMetadataInterface*>(imi.GetPointer()))

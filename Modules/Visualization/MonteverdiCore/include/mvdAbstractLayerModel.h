@@ -90,7 +90,7 @@ OTBMonteverdiCore_EXPORT SpatialReferenceType GetSpatialReferenceType(const std:
 
 /**
  */
-OTBMonteverdiCore_EXPORT SpatialReferenceType GetSpatialReferenceType(const std::string& wkt, bool hasKwl);
+OTBMonteverdiCore_EXPORT SpatialReferenceType GetSpatialReferenceType(const std::string& wkt, bool hasSensorModel);
 
 /*****************************************************************************/
 /* CLASS DEFINITION SECTION                                                  */
@@ -168,7 +168,7 @@ protected:
 
   /**
    */
-  bool HasKwl() const;
+  bool HasSensorModel() const;
 
   //
   // Protected attributes.
@@ -184,7 +184,7 @@ private:
 
   /**
    */
-  virtual bool virtual_HasKwl() const;
+  virtual bool virtual_HasSensorModel() const;
 
   /**
    */

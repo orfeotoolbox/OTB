@@ -29,7 +29,6 @@ target_link_libraries(OTBVectorDataBase
   ${OTBGDAL_LIBRARIES}
   ${OTBITK_LIBRARIES}
   ${OTBImageBase_LIBRARIES}
-  ${OTBOSSIMAdapters_LIBRARIES}
   ${OTBObjectList_LIBRARIES}
   )
 

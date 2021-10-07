@@ -25,7 +25,6 @@
 #include "otbMath.h"
 #include "itkIndex.h"
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
 #include "otbXMLMetadataSupplier.h"
 #include "otbSARMetadata.h"
 #include "otbSpatialReference.h"
@@ -100,304 +99,6 @@ std::string GetResourceFile(const std::string & directoryPath, std::string patte
 
 }
 
-bool TerraSarXSarImageMetadataInterface::CanRead() const
-{
-  std::string sensorID = GetSensorID();
-  if (sensorID.find("TSX") != std::string::npos)
-    return true;
-  else
-    return false;
-}
-
-int TerraSarXSarImageMetadataInterface::GetDay() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string key("azimuth_start_time");
-  if (!imageKeywordlist.HasKey(key))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey(key);
-  std::vector<std::string> outputValues;
-
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
-
-  if (outputValues.size() <= 2)
-    itkExceptionMacro(<< "Invalid Day");
-
-  int value = atoi(outputValues[2].c_str());
-  return value;
-}
-
-int TerraSarXSarImageMetadataInterface::GetMonth() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string key("azimuth_start_time");
-  if (!imageKeywordlist.HasKey(key))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey(key);
-  std::vector<std::string> outputValues;
-
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
-
-  if (outputValues.size() <= 2)
-    itkExceptionMacro(<< "Invalid Month");
-
-  int value = atoi(outputValues[1].c_str());
-  return value;
-}
-
-int TerraSarXSarImageMetadataInterface::GetYear() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string key("azimuth_start_time");
-  if (!imageKeywordlist.HasKey(key))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey(key);
-  std::vector<std::string> outputValues;
-
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
-
-  if (outputValues.size() <= 2)
-    itkExceptionMacro(<< "Invalid Year");
-
-  int value = atoi(outputValues[0].c_str());
-  return value;
-}
-
-int TerraSarXSarImageMetadataInterface::GetHour() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string key("azimuth_start_time");
-  if (!imageKeywordlist.HasKey(key))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey(key);
-  std::vector<std::string> outputValues;
-
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
-
-  if (outputValues.size() <= 4)
-    itkExceptionMacro(<< "Invalid Hour");
-
-  int value = atoi(outputValues[3].c_str());
-  return value;
-}
-
-int TerraSarXSarImageMetadataInterface::GetMinute() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string key("azimuth_start_time");
-  if (!imageKeywordlist.HasKey(key))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey(key);
-  std::vector<std::string> outputValues;
-
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
-
-  if (outputValues.size() <= 4)
-    itkExceptionMacro(<< "Invalid Minute");
-
-  int value = atoi(outputValues[4].c_str());
-  return value;
-}
-
-int TerraSarXSarImageMetadataInterface::GetProductionDay() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-  std::string key("generation_time");
-  if (!imageKeywordlist.HasKey(key))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey(key);
-  std::vector<std::string> outputValues;
-
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
-
-  if (outputValues.size() <= 2)
-    itkExceptionMacro(<< "Invalid Production Day");
-
-  int value = atoi(outputValues[2].c_str());
-  return value;
-}
-
-int TerraSarXSarImageMetadataInterface::GetProductionMonth() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string key("generation_time");
-  if (!imageKeywordlist.HasKey(key))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey(key);
-  std::vector<std::string> outputValues;
-
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
-
-  if (outputValues.size() <= 2)
-    itkExceptionMacro(<< "Invalid Production Month");
-
-  int value = atoi(outputValues[1].c_str());
-  return value;
-}
-
-int TerraSarXSarImageMetadataInterface::GetProductionYear() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string key("generation_time");
-  if (!imageKeywordlist.HasKey(key))
-  {
-    return -1;
-  }
-
-  std::string              valueString = imageKeywordlist.GetMetadataByKey(key);
-  std::vector<std::string> outputValues;
-
-  boost::split(outputValues, valueString, boost::is_any_of(" T:-"));
-
-  if (outputValues.size() <= 2)
-    itkExceptionMacro(<< "Invalid Production Year");
-
-  int value = atoi(outputValues[0].c_str());
-  return value;
-}
-
-double TerraSarXSarImageMetadataInterface::GetCalibrationFactor() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string key("calibration.calibrationConstant.calFactor");
-  if (imageKeywordlist.HasKey(key))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
-    double      value       = atof(valueString.c_str());
-    return value;
-  }
-
-  return std::numeric_limits<double>::quiet_NaN(); // Invalid value
-}
-
 unsigned int TerraSarXSarImageMetadataInterface::GetNumberOfNoiseRecords(const MetadataSupplierInterface& mds, const unsigned int polLayer) const
 {
   if(polLayer == 0)
@@ -438,51 +139,6 @@ unsigned int TerraSarXSarImageMetadataInterface::GetNoisePolynomialDegrees(const
   }
   return std::numeric_limits<unsigned int>::quiet_NaN(); // Invalid value
 }
-
-TerraSarXSarImageMetadataInterface::UIntVectorType
-TerraSarXSarImageMetadataInterface::GetNoisePolynomialDegrees(const MetadataSupplierInterface& mds,
-                                                          const unsigned int polLayer) const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  UIntVectorType     polDeg;
-  std::ostringstream oss;
-
-  unsigned int nbRec = this->GetNumberOfNoiseRecords(mds, polLayer);
-  for (unsigned int i = 0; i < nbRec; ++i)
-  {
-    oss.str("");
-    oss << "noise[" << i << "]imageNoise.noiseEstimate.polynomialDegree";
-    std::string  key         = oss.str();
-    std::string  valueString = imageKeywordlist.GetMetadataByKey(key);
-    unsigned int value = 0;
-    try
-    {
-      value = std::stoi(valueString);
-    }
-    catch( ... )
-    {
-      // Throw an exception
-      throw std::runtime_error("Failed to convert polynomial degree.");
-    }
-
-    polDeg.push_back(value);
-  }
-
-  return polDeg;
-}
-
 
 TerraSarXSarImageMetadataInterface::DoubleVectorType
 TerraSarXSarImageMetadataInterface::GetNoisePolynomialCoefficients(const unsigned int noiseRecord,
@@ -606,136 +262,12 @@ double TerraSarXSarImageMetadataInterface::GetNoiseReferencePoint(const unsigned
   return mds.GetAs<double>(std::numeric_limits<double>::min(), oss.str());
 }
 
-double TerraSarXSarImageMetadataInterface::GetRadarFrequency() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("radarFrequency");
-
-  double freq = 0;
-  try
-    {
-      freq = std::stod(valueString);
-    }
-  catch( ... )
-    {
-      // Throw an exception
-      throw std::runtime_error("Failed to convert frequency.");
-    }
-
-  return freq;
-}
-
-double TerraSarXSarImageMetadataInterface::GetPRF() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-  std::string valueString = imageKeywordlist.GetMetadataByKey("sensor_params.prf");
-
-  double freq = 0;
-  try
-    {
-      freq = std::stod(valueString);
-    }
-  catch( ... )
-    {
-      // Throw an exception
-      throw std::runtime_error("Failed to convert PRF.");
-    }
-
-  return freq;
-}
-
-double TerraSarXSarImageMetadataInterface::GetRSF() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("sensor_params.sampling_frequency");
-
-  double freq = 0;
-  try
-    {
-      freq = std::stod(valueString);
-    }
-  catch( ... )
-    {
-      // Throw an exception
-      throw std::runtime_error("Failed to convert RSF.");
-    }
-
-  return freq;
-}
-
 unsigned int TerraSarXSarImageMetadataInterface::GetNumberOfCornerIncidenceAngles(const MetadataSupplierInterface& mds) const
 {
   auto ret = mds.GetAs<unsigned int>(0, "sceneCoord.numberOfSceneCornerCoord");
   if (ret > 0)
     return ret;
   return mds.GetNumberOf("level1Product.productInfo.sceneInfo.sceneCornerCoord");;
-}
-
-double TerraSarXSarImageMetadataInterface::GetMeanIncidenceAngles(const MetadataSupplierInterface& mds) const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-
-  ImageKeywordlistType imageKeywordlist;
-
-  double sum = 0.;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string valueString = imageKeywordlist.GetMetadataByKey("sceneCoord.sceneCenterCoord.incidenceAngle");
-  double      value       = atof(valueString.c_str());
-
-  sum += value;
-
-  unsigned int       nbAngles = this->GetNumberOfCornerIncidenceAngles(mds);
-  std::ostringstream oss;
-  for (unsigned int i = 0; i < nbAngles; ++i)
-  {
-    oss.str("");
-    oss << "sceneCoord.sceneCornerCoord[" << i << "].incidenceAngle";
-    valueString = imageKeywordlist.GetMetadataByKey(oss.str());
-    value       = atof(valueString.c_str());
-    sum += value;
-  }
-
-  return (sum / (nbAngles + 1));
 }
 
 double TerraSarXSarImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface& mds) const
@@ -906,40 +438,6 @@ SarImageMetadataInterface::ArrayIndexType TerraSarXSarImageMetadataInterface::Ge
   return {2, 2};
 }
 
-TerraSarXSarImageMetadataInterface::RealType TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationScale() const
-{
-  const MetaDataDictionaryType& dict = this->GetMetaDataDictionary();
-  if (!this->CanRead())
-  {
-    itkExceptionMacro(<< "Invalid Metadata, no TerraSar Image");
-  }
-
-  ImageKeywordlistType imageKeywordlist;
-
-  if (dict.HasKey(MetaDataKey::OSSIMKeywordlistKey))
-  {
-    itk::ExposeMetaData<ImageKeywordlistType>(dict, MetaDataKey::OSSIMKeywordlistKey, imageKeywordlist);
-  }
-
-  std::string key("calibration.calibrationConstant.calFactor");
-  double value = 0;
-  if (imageKeywordlist.HasKey(key))
-  {
-    std::string valueString = imageKeywordlist.GetMetadataByKey(key);
-
-    try
-      {
-  value = std::stod(valueString);
-      }
-    catch( ... )
-      {
-  // Throw an exception
-  throw std::runtime_error("Failed to convert calibration factor.");
-      }
-  }
-  return value;
-}
-
 TerraSarXSarImageMetadataInterface::PointSetPointer
 TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface& imd) const
 {
@@ -977,17 +475,6 @@ TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAngle(cons
 TerraSarXSarImageMetadataInterface::ArrayIndexType TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const
 {
   return {2, 1};
-}
-
-
-/** Get the R, G, B channel */
-std::vector<unsigned int> TerraSarXSarImageMetadataInterface::GetDefaultDisplay() const
-{
-  std::vector<unsigned int> rgb(3);
-  rgb[0] = 0;
-  rgb[1] = 0;
-  rgb[2] = 0;
-  return rgb;
 }
 
 void TerraSarXSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent indent) const
@@ -1170,6 +657,8 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   imd.Add(MDNum::PRF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonPRF"));
   imd.Add(MDNum::RSF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
 
+  imd.Add(MDStr::Instrument, "TSX-SAR");
+
   // Polarisation
   auto polarization =
       itksys::SystemTools::GetFilenameName(m_MetadataSupplierInterface->GetResourceFile("")).substr(6, 2);
@@ -1200,9 +689,10 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   }
 
   SARCalib sarCalib;
+  std::istringstream("1970-01-01T00:00:00.000000") >> sarCalib.calibrationStartTime;
+  std::istringstream("1970-01-01T00:00:00.000000") >> sarCalib.calibrationStopTime;
   LoadRadiometricCalibrationData(sarCalib, MainXMLFileMetadataSupplier, imd, polarization);
   sarCalib.calibrationLookupFlag = false;
-
   imd.Add(MDGeom::SARCalib, sarCalib);
 
   // Open the georef file containing GCPs
@@ -1235,6 +725,9 @@ void TerraSarXSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   Fetch(MDStr::Polarization, imd, "acquisitionInfo.polarisationList[0]");
   Fetch(MDNum::NumberOfLines, imd, "number_lines");
   Fetch(MDNum::NumberOfColumns, imd, "number_samples");
+  Fetch(MDNum::RadarFrequency, imd, "radarFrequency");
+
+  imd.Add(MDStr::Instrument, "TSX-SAR");
     
   // Main XML file
   std::string MainFilePath = ExtractXMLFiles::GetResourceFile(itksys::SystemTools::GetFilenamePath(m_MetadataSupplierInterface->GetResourceFile("")),
@@ -1242,7 +735,6 @@ void TerraSarXSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   if (!MainFilePath.empty())
   {
     XMLMetadataSupplier MainXMLFileMS(MainFilePath);
-    imd.Add(MDNum::RadarFrequency, MainXMLFileMS.GetAs<double>("level1Product.instrument.radarParameters.centerFrequency"));
     imd.Add(MDStr::OrbitDirection, MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.missionInfo.orbitDirection"));
     imd.Add(MDNum::OrbitNumber, MainXMLFileMS.GetAs<double>("level1Product.productInfo.missionInfo.absOrbit"));
     imd.Add(MDNum::RSF, MainXMLFileMS.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonRSF"));
@@ -1274,6 +766,11 @@ void TerraSarXSarImageMetadataInterface::Parse(ImageMetadata & imd)
   // Try to fetch the metadata from GDAL Metadata Supplier
   else
     this->ParseGdal(imd);
+
+  // Default display
+  imd.Add(MDNum::RedDisplayChannel, 0);
+  imd.Add(MDNum::GreenDisplayChannel, 0);
+  imd.Add(MDNum::BlueDisplayChannel, 0);
 }
 
 

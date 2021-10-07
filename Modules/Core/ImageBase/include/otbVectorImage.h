@@ -48,15 +48,13 @@ class OTBImageBase_EXPORT_TEMPLATE VectorImage
 {
 public:
   /** Standard class typedefs. */
-  typedef VectorImage Self;
-  typedef itk::VectorImage<TPixel, VImageDimension> Superclass;
-  typedef itk::SmartPointer<Self>       Pointer;
-  typedef itk::SmartPointer<const Self> ConstPointer;
-  typedef itk::WeakPointer<const Self>  ConstWeakPointer;
+  using Self = VectorImage;
+  using Superclass = itk::VectorImage<TPixel, VImageDimension>;
+  using Pointer = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
+  using ConstWeakPointer = itk::WeakPointer<const Self>;
 
-  typedef ImageMetadataInterfaceBase::VectorType           VectorType;
-  typedef ImageMetadataInterfaceBase::ImageKeywordlistType ImageKeywordlistType;
-  typedef ImageMetadataInterfaceBase::Pointer              ImageMetadataInterfacePointerType;
+  using VectorType = ImageMetadataInterfaceBase::VectorType;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -141,21 +139,6 @@ public:
   virtual void SetSignedSpacing(SpacingType spacing);
   virtual void SetSignedSpacing(double spacing[VImageDimension]);
 
-  /** Get image keyword list 
-  * \deprecated
-  */
-  virtual ImageKeywordlistType       GetImageKeywordlist(void);
-
-  /** Get image keyword list 
-  * \deprecated
-  */
-  virtual const ImageKeywordlistType GetImageKeywordlist(void) const;
-
-  /** Set the image keywordlist 
-    \deprecated
-   */
-  virtual void SetImageKeywordList(const ImageKeywordlistType& kwl);
-
   virtual void SetNumberOfComponentsPerPixel(unsigned int n) override;
 
   /// Copy metadata from a DataObject
@@ -196,14 +179,6 @@ protected:
 private:
   VectorImage(const Self&) = delete;
   void operator=(const Self&) = delete;
-
-  /** Return the ImageMetadataInterfacePointer associated to the data
-   *  and creates it on first call
-   */
-  ImageMetadataInterfacePointerType GetMetaDataInterface() const;
-
-  // The image metadata accessor object. Don't use it directly. Instead use GetMetaDataInterface()
-  mutable ImageMetadataInterfacePointerType m_ImageMetadataInterface;
 };
 
 } // end namespace otb

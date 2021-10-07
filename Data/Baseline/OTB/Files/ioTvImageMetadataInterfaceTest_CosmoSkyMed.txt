@@ -1,5 +1,6 @@
 SensorID CSK
 Mission CSK
+Instrument SAR-2000
 ProductType SCS_B
 Polarization HH
 Mode ENHANCED SPOTLIGHT
@@ -9,6 +10,9 @@ TileHintX 128
 TileHintY 128
 DataType 1
 OrbitNumber 13415
+RedDisplayChannel 0
+GreenDisplayChannel 0
+BlueDisplayChannel 0
 PRF 3321.52
 RadarFrequency 9.6e+09
 AcquisitionStartTime 2011-04-18T18:03:27.915976Z
@@ -16,5 +20,7 @@ AcquisitionStopTime 2011-04-18T18:03:29.380925Z
 SAR <SARParam>
 SARCalib <SARCalib>
 GCP <GCPParam>
+
+GCP
 {"Projection": "", 
 []}

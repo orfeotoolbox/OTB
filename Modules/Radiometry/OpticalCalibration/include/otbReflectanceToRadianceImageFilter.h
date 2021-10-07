@@ -25,7 +25,6 @@
 #include "otbVarSol.h"
 #include "otbUnaryImageFunctorWithVectorImageFilter.h"
 #include "otbMacro.h"
-#include "otbOpticalImageMetadataInterfaceFactory.h"
 #include <iomanip>
 
 namespace otb

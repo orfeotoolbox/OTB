@@ -16,6 +16,9 @@ OrbitNumber 6447
 NumberOfLines 31106
 NumberOfColumns 17663
 AverageSceneHeight 19
+RedDisplayChannel 0
+GreenDisplayChannel 0
+BlueDisplayChannel 0
 CalScale 1
 PRF 1663.48
 RadarFrequency 5.405e+09
@@ -30,6 +33,8 @@ SAR <SARParam>
 SARCalib <SARCalib>
 GCP <GCPParam>
 Extra.FACILITY_IDENTIFIER UPA_
+
+GCP
 {"Projection": "GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AXIS["Latitude",NORTH],AXIS["Longitude",EAST],AUTHORITY["EPSG","4326"]]", 
 [{"GCP_Id": "1", "GCP_Info": "", "GCP_Row": "0", "GCP_Col": "0", "GCP_X": "-24.4551", "GCP_Y": "14.4996", "GCP_Z": "0", }, 
 {"GCP_Id": "2", "GCP_Info": "", "GCP_Row": "0", "GCP_Col": "884", "GCP_X": "-24.4171", "GCP_Y": "14.5067", "GCP_Z": "0", }, 

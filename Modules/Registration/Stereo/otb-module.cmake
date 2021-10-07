@@ -28,7 +28,6 @@ otb_module(OTBStereo
     OTBITK
     OTBImageBase
     OTBInterpolation
-    OTBOSSIMAdapters
     OTBObjectList
     OTBStatistics
     OTBTransform

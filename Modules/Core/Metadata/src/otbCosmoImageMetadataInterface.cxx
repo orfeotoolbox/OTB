@@ -24,15 +24,6 @@
 
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#include "ossim/ossimTimeUtilities.h"
-#pragma GCC diagnostic pop
-#else
-#include "ossim/ossimTimeUtilities.h"
-#endif
 
 // useful constants
 #include <otbMath.h>
@@ -45,210 +36,6 @@
 
 namespace otb
 {
-
-
-bool CosmoImageMetadataInterface::CanRead() const
-{
-  const std::string sensorID = GetSensorID();
-
-  return sensorID.find("CSK") != std::string::npos;
-}
-
-void CosmoImageMetadataInterface::ParseDateTime(std::string key, std::vector<int>& dateFields) const
-{
-  if (dateFields.empty())
-  {
-    // parse from keyword list
-    if (!this->CanRead())
-    {
-      itkExceptionMacro(<< "Invalid Metadata, not a valid product");
-    }
-
-    const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
-    if (!imageKeywordlist.HasKey(key))
-    {
-      itkExceptionMacro(<< "no key named " << key);
-    }
-
-    const std::string date_time_str = imageKeywordlist.GetMetadataByKey(key);
-    Utils::ConvertStringToVector(date_time_str, dateFields, key, "T:-.");
-  }
-}
-
-int CosmoImageMetadataInterface::GetYear() const
-{
-  int value = 0;
-  if (m_AcquisitionDateFields.empty())
-  {
-    ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-  }
-
-  if (m_AcquisitionDateFields.size() > 0)
-  {
-    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[0], "support_data.image_date:year(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid year");
-  }
-  return value;
-}
-
-int CosmoImageMetadataInterface::GetMonth() const
-{
-  int value = 0;
-  if (m_AcquisitionDateFields.empty())
-  {
-    ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-  }
-
-  if (m_AcquisitionDateFields.size() > 1)
-  {
-    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[1], "support_data.image_date:month(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid month");
-  }
-  return value;
-}
-
-int CosmoImageMetadataInterface::GetDay() const
-{
-  int value = 0;
-  if (m_AcquisitionDateFields.empty())
-  {
-    ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-  }
-
-  if (m_AcquisitionDateFields.size() > 2)
-  {
-    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[2], "support_data.image_date:day(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid day");
-  }
-  return value;
-}
-
-int CosmoImageMetadataInterface::GetHour() const
-{
-  int value = 0;
-  if (m_AcquisitionDateFields.empty())
-  {
-    ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-  }
-
-  if (m_AcquisitionDateFields.size() > 3)
-  {
-    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[3], "support_data.image_date:hour(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid hour");
-  }
-  return value;
-}
-
-int CosmoImageMetadataInterface::GetMinute() const
-{
-  int value = 0;
-  if (m_AcquisitionDateFields.empty())
-  {
-    ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-  }
-
-  if (m_AcquisitionDateFields.size() > 4)
-  {
-    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[4], "support_data.image_date:minute(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid minute");
-  }
-  return value;
-}
-
-int CosmoImageMetadataInterface::GetProductionYear() const
-{
-  int value = 0;
-  ParseDateTime("support_data.date", m_ProductionDateFields);
-  if (m_ProductionDateFields.size() > 0)
-  {
-    value = Utils::LexicalCast<int>(m_ProductionDateFields[0], "support_data.date:year(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid production year");
-  }
-  return value;
-}
-
-int CosmoImageMetadataInterface::GetProductionMonth() const
-{
-  int value = 0;
-  ParseDateTime("support_data.date", m_ProductionDateFields);
-  if (m_ProductionDateFields.size() > 1)
-  {
-    value = Utils::LexicalCast<int>(m_ProductionDateFields[1], "support_data.date:month(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid production month");
-  }
-  return value;
-}
-
-int CosmoImageMetadataInterface::GetProductionDay() const
-{
-  int value = 0;
-  ParseDateTime("support_data.date", m_ProductionDateFields);
-  if (m_ProductionDateFields.size() > 2)
-  {
-    value = Utils::LexicalCast<int>(m_ProductionDateFields[2], "support_data.date:day(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid production day");
-  }
-  return value;
-}
-
-double CosmoImageMetadataInterface::GetPRF() const
-{
-  double                     value            = 0;
-  const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
-  if (!imageKeywordlist.HasKey("support_data.pulse_repetition_frequency"))
-  {
-    return value;
-  }
-
-  value = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("support_data.pulse_repetition_frequency"),
-                                     "support_data.pulse_repetition_frequency(double)");
-
-  return value;
-}
-
-
-CosmoImageMetadataInterface::UIntVectorType CosmoImageMetadataInterface::GetDefaultDisplay() const
-{
-  UIntVectorType rgb(3);
-  rgb[0] = 0;
-  rgb[1] = 0;
-  rgb[2] = 0;
-  return rgb;
-}
-
-double CosmoImageMetadataInterface::GetRSF() const
-{
-  return 0;
-}
-
-double CosmoImageMetadataInterface::GetRadarFrequency() const
-{
-  return 0;
-}
 
 double CosmoImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface &) const
 {
@@ -394,6 +181,7 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 
   imd.Add(MDStr::Mission, "CSK");
   imd.Add(MDStr::SensorID, "CSK");
+  imd.Add(MDStr::Instrument, "SAR-2000");
   Fetch(MDStr::OrbitDirection, imd, "Orbit_Direction");
   bool hasOrbitNumber ;
   std::string orbitNumber =  m_MetadataSupplierInterface->GetMetadataValue("Orbit_Number", hasOrbitNumber) ;
@@ -477,6 +265,8 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 
 
   SARCalib sarCalib;
+  std::istringstream("1970-01-01T00:00:00.000000") >> sarCalib.calibrationStartTime;
+  std::istringstream("1970-01-01T00:00:00.000000") >> sarCalib.calibrationStopTime;
   LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   imd.Add(MDGeom::SARCalib, sarCalib);
 }
@@ -499,6 +289,7 @@ void CosmoImageMetadataInterface::ParseGeom(ImageMetadata &imd)
 
   imd.Add(MDStr::Mission, "CSK");
   imd.Add(MDStr::SensorID, "CSK");
+  imd.Add(MDStr::Instrument, "SAR-2000");
   Fetch(MDStr::OrbitDirection, imd, "support_data.orbit_pass");
   Fetch(MDNum::OrbitNumber, imd, "support_data.abs_orbit");
   Fetch(MDNum::RadarFrequency, imd, "support_data.radar_frequency");
@@ -530,6 +321,12 @@ void CosmoImageMetadataInterface::Parse(ImageMetadata & imd)
   else
     otbGenericExceptionMacro(MissingMetadataException,
              << "Not a CosmoSkyMed product");
+
+
+  // Default display
+  imd.Add(MDNum::RedDisplayChannel, 0);
+  imd.Add(MDNum::GreenDisplayChannel, 0);
+  imd.Add(MDNum::BlueDisplayChannel, 0);
 }
 
 } // end namespace otb

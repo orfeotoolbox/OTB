@@ -97,8 +97,6 @@ set(CTEST_CUSTOM_WARNING_EXCEPTION
   ".*otbCurlHelper.cxx:.*warning.*maxConnect.*"
   ".*include.ITK-4.*warning.*"
   ".*include.curl.curl.h.*warning.*"
-  ".*include.ossim.*warning.*"
-  ".*include.ossim.*note.*"
   ".*include.ogr_core.h.*warning.*"
   ".*include.ogr_srs_api.h.*warning.*"
   ".*include.ogrsf_frmts.h.*warning.*"

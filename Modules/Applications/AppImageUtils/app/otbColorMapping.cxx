@@ -211,7 +211,6 @@ public:
   typedef HistogramFilterType::HistogramType     HistogramType;
   typedef HistogramFilterType::HistogramListType HistogramListType;
   typedef HistogramType::Pointer                 HistogramPointerType;
-  typedef otb::ImageMetadataInterfaceBase        ImageMetadataInterfaceType;
   typedef otb::StreamingStatisticsMapFromLabelImageFilter<FloatVectorImageType, LabelImageType> StreamingStatisticsMapFromLabelImageFilterType;
 
   // Inverse mapper for color->label operation
@@ -568,8 +567,6 @@ private:
       histogramFilter->Update();
       const HistogramListType* histogramList = histogramFilter->GetOutput();
 
-      ImageMetadataInterfaceType::Pointer metadataInterface = ImageMetadataInterfaceFactory::CreateIMI(supportImage->GetMetaDataDictionary());
-
       std::vector<unsigned int> RGBIndex;
 
       if (supportImage->GetNumberOfComponentsPerPixel() < 3)
@@ -579,7 +576,10 @@ private:
         RGBIndex.push_back(0);
       }
       else
-        RGBIndex = metadataInterface->GetDefaultDisplay();
+      {
+        RGBIndex = supportImage->GetImageMetadata().GetDefaultDisplay();
+      }
+
       otbAppLogINFO(" RGB index are " << RGBIndex[0] << " " << RGBIndex[1] << " " << RGBIndex[2] << std::endl);
 
       FloatVectorImageType::PixelType minVal;

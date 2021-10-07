@@ -75,6 +75,9 @@ void DimapMetadataHelper::ParseGeom(const MetadataSupplierInterface & mds)
     m_Data.AcquisitionDate.replace(pos,1,"T");
   }
   
+  m_Data.Instrument = mds.GetAs<std::string>("support_data.instrument");
+  m_Data.InstrumentIndex = mds.GetAs<std::string>("support_data.instrument_index");
+  
   m_Data.SunAzimuth = readVector("support_data.azimuth_angle");
   m_Data.SunElevation = readVector("support_data.elevation_angle");
   

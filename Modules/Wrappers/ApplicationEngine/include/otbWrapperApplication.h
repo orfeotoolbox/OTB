@@ -813,10 +813,6 @@ public:
    *  to select the image in an InputImageList.*/
   std::string GetImageProjection(const std::string& key, unsigned int idx = 0);
 
-  /** Get the keywordlist of the image parameter 'key'. The optional 'idx'
-   * allows selecting the image in an InputImageList.*/
-  otb::ImageKeywordlist GetImageKeywordlist(const std::string& key, unsigned int idx = 0);
-
   /** Set the requested region on the image parameter 'key' and propagate it.
    *  The returned value is an estimate of the RAM usage (in Bytes) to process
    *  this region. It should be assumed that the index of the largest possible

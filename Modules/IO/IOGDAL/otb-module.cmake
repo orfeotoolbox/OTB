@@ -33,7 +33,6 @@ ENABLE_SHARED
     OTBGDAL
     OTBBoostAdapters
     OTBMetadata
-    OTBOSSIMAdapters
 
   TEST_DEPENDS
     OTBTestKernel

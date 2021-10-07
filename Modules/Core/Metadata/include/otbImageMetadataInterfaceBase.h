@@ -23,7 +23,6 @@
 
 #include <string>
 
-#include "otbImageKeywordlist.h"
 #include "itkMetaDataDictionary.h"
 #include "otbMetaDataKey.h"
 #include "itkImageBase.h"
@@ -57,7 +56,6 @@ public:
   typedef itk::MetaDataDictionary               MetaDataDictionaryType;
   typedef MetaDataKey::VectorType               VectorType;
   typedef MetaDataKey::VariableLengthVectorType VariableLengthVectorType;
-  typedef ImageKeywordlist                      ImageKeywordlistType;
   typedef unsigned int                          UnsignedIntType;
   typedef std::vector<std::string>              StringVectorType;
   typedef std::vector<unsigned int>             UIntVectorType;
@@ -134,101 +132,6 @@ public:
   VectorType GetLowerRightCorner() const;
   //  otbMetadataGetMacro(LowerRightCorner, VectorType);
 
-  /** Get the ImageKeywordlist */
-  ImageKeywordlistType GetImageKeywordlist();
-
-  const ImageKeywordlistType GetImageKeywordlist() const;
-
-  /** This method is less performant and has extra copy.
-  Please use bool GetSensorID(std::string& ) **/
-  std::string const GetSensorID() const;
-
-  /** Get the sensor ID from the ossim metadata
-   * \deprecated
-   */
-  bool GetSensorID(std::string& sensorId) const;
-
-  // otbMetadataGetMacro(SensorID, std::string);
-
-  /** Get the number of bands from the ossim metadata
-   * \deprecated
-   */
-  UnsignedIntType GetNumberOfBands() const;
-  // otbMetadataGetMacro(NumberOfBands, unsigned int);
-
-  /** Get the band name from the ossim metadata
-   * \deprecated
-   */
-  StringVectorType GetBandName() const;
-  // otbMetadataGetMacro(BandName, std::vector<std::string>);
-
-  /** Get the x pixel spacing*/
-  double GetXPixelSpacing() const;
-  // otbMetadataGetMacro(XPixelSpacing, double);
-
-  /** Get the y pixel spacing*/
-  double GetYPixelSpacing() const;
-  // otbMetadataGetMacro(YPixelSpacing, double);
-
-  /** Get the imaging acquisition day from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetDay() const {return -1;}
-  //  otbMetadataGetMacro(Day, int);
-
-  /** Get the imaging acquisition month from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetMonth() const {return -1;}
-  // otbMetadataGetMacro(Month, int);
-
-  /** Get the imaging acquisition year from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetYear() const {return -1;}
-  // otbMetadataGetMacro(Year, int);
-
-  /** Get the imaging acquisition hour from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetHour() const {return -1;}
-  // otbMetadataGetMacro(Hour, int);
-
-  /** Get the imaging acquisition minute from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetMinute() const {return -1;}
-  // otbMetadataGetMacro(Minute, int);
-
-  /** Get the imaging production day from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetProductionDay() const {return -1;}
-  // otbMetadataGetMacro(ProductionDay, int);
-
-  /** Get the imaging production month from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetProductionMonth() const {return -1;}
-  // otbMetadataGetMacro(ProductionMonth, int);
-
-  /** Get the imaging production year from the ossim metadata 
-   * \deprecated
-   */
-  virtual int GetProductionYear() const {return -1;}
-  // otbMetadataGetMacro(ProductionYear, int);
-
-  /** Convert the band names provided by ossim to the official band names  
-   * \deprecated
-   */
-  virtual StringVectorType GetEnhancedBandNames() const {return StringVectorType();}
-
-  /** Get the 3 spectral band numbers corresponding to the default display for visualization,
-   *  in the order R, G, B */
-  virtual UIntVectorType GetDefaultDisplay() const {return {0,1,2}; }
-
-  virtual bool CanRead() const {return false;}
-
   /** Parses the metadata using the MetadataSupplierInterface and fill the ImageMetadata object
    * Raises "MissingMetadataException" if parsing failes.
    */
@@ -236,8 +139,6 @@ public:
   {
     otbGenericExceptionMacro(MissingMetadataException,<<"Metadata parsing not implemented")
   }
-
-  static void PrintMetadata(std::ostream& os, itk::Indent indent, const MetaDataDictionaryType& dict);
 
   const std::string& Fetch(MDStr key, ImageMetadata & imd, const char *path, int band=-1);
   bool CheckFetch(MDStr key, ImageMetadata & imd, const char *path, int band=-1);
@@ -253,13 +154,8 @@ public:
 
   const boost::any& FetchRPC(ImageMetadata& imd, const double lineOffset = 0.0, const double sampleOffset = 0.0);
 
-  /** Reads into the MetaDataDictionary to find an OSSIM ImageKeywordlist,
-   * then translate it into ImageMetadata.
-   * Returns true if succeed. */
-  virtual bool ConvertImageKeywordlistToImageMetadata(ImageMetadata&);
-
 protected:
-  ImageMetadataInterfaceBase();
+  ImageMetadataInterfaceBase() = default;
   ~ImageMetadataInterfaceBase() override = default;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;

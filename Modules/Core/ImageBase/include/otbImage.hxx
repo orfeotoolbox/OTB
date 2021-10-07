@@ -23,7 +23,6 @@
 
 
 #include "otbImage.h"
-#include "otbImageMetadataInterfaceFactory.h"
 #include "itkMetaDataObject.h"
 
 namespace otb
@@ -77,31 +76,6 @@ void Image<TPixel, VImageDimension>::SetSignedSpacing(double spacing[VImageDimen
   this->SetSignedSpacing(s);
 }
 
-template <class TPixel, unsigned int                          VImageDimension>
-typename Image<TPixel, VImageDimension>::ImageKeywordlistType Image<TPixel, VImageDimension>::GetImageKeywordlist(void)
-{
-  ImageKeywordlistType kwl;
-
-  itk::ExposeMetaData<ImageKeywordlistType>(this->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwl);
-  return kwl;
-}
-
-template <class TPixel, unsigned int VImageDimension>
-void Image<TPixel, VImageDimension>::SetImageKeywordList(const ImageKeywordlistType& kwl)
-{
-  itk::EncapsulateMetaData<ImageKeywordlistType>(this->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwl);
-}
-
-
-template <class TPixel, unsigned int                                VImageDimension>
-const typename Image<TPixel, VImageDimension>::ImageKeywordlistType Image<TPixel, VImageDimension>::GetImageKeywordlist(void) const
-{
-  ImageKeywordlistType kwl;
-
-  itk::ExposeMetaData<ImageKeywordlistType>(this->GetMetaDataDictionary(), MetaDataKey::OSSIMKeywordlistKey, kwl);
-  return kwl;
-}
-
 template <class TPixel, unsigned int VImageDimension>
 void Image<TPixel, VImageDimension>::CopyInformation(const itk::DataObject* data)
 {
@@ -123,15 +97,6 @@ void Image<TPixel, VImageDimension>::CopyInformation(const itk::DataObject* data
     }
   }
 }
-
-template <class TPixel, unsigned int                                       VImageDimension>
-typename Image<TPixel, VImageDimension>::ImageMetadataInterfacePointerType Image<TPixel, VImageDimension>::GetMetaDataInterface() const
-{
-  if (m_ImageMetadataInterface.IsNull())
-    m_ImageMetadataInterface = ImageMetadataInterfaceFactory::CreateIMI(this->GetMetaDataDictionary());
-  return m_ImageMetadataInterface;
-}
-
 
 template <class TPixel, unsigned int                VImageDimension>
 typename Image<TPixel, VImageDimension>::VectorType Image<TPixel, VImageDimension>::GetGeoTransform(void) const
@@ -205,7 +170,7 @@ template <class TPixel, unsigned int VImageDimension>
 void Image<TPixel, VImageDimension>::PrintSelf(std::ostream& os, itk::Indent indent) const
 {
   Superclass::PrintSelf(os, indent);
-  this->GetMetaDataInterface()->PrintMetadata(os, indent, this->GetMetaDataDictionary());
+  os << indent << this->GetImageMetadata();
 }
 
 } // end namespace otb

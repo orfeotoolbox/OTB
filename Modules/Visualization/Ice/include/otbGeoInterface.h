@@ -29,7 +29,7 @@
 namespace otb
 {
 
-class ImageKeywordlist;
+class ImageMetadata;
 
 
 /**
@@ -108,11 +108,7 @@ public:
 
   /**
    */
-  virtual bool HasKwl() const;
-
-  /**
-   */
-  virtual bool GetKwl( ImageKeywordlist & ) const;
+  virtual bool GetImd( ImageMetadata & ) const;
 
 
 protected:

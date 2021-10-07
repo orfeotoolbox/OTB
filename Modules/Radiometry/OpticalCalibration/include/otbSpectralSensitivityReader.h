@@ -27,6 +27,7 @@
 #include "otbFilterFunctionValues.h"
 #include "OTBOpticalCalibrationExport.h"
 #include <string>
+#include "otbImageMetadata.h"
 
 namespace otb
 {
@@ -59,8 +60,6 @@ public:
   typedef FilterFunctionValues::ValuesVectorType    ValuesVectorType;
   typedef ObjectList<FilterFunctionValues>          WavelengthSpectralBandVectorType;
   typedef WavelengthSpectralBandVectorType::Pointer WavelengthSpectralBandVectorPointerType;
-  typedef itk::ImageBase<2>                         ImageType;
-  typedef ImageType::Pointer                        ImagePointerType;
 
   /** Get/Set filename */
   itkGetConstMacro(FileName, std::string);
@@ -75,8 +74,10 @@ public:
   virtual const WavelengthSpectralBandVectorType* GetOutput(void) const;
 
   /** Image */
-  itkSetObjectMacro(Image, ImageType);
-  itkGetConstObjectMacro(Image, ImageType);
+  void SetImageMetadata(const ImageMetadata * imd)
+  {
+    m_ImageMetadata = imd;
+  }
 
 protected:
   SpectralSensitivityReader();
@@ -111,7 +112,7 @@ private:
 
   std::string      m_FileName;
   std::string      m_DataPath;
-  ImagePointerType m_Image;
+  const ImageMetadata * m_ImageMetadata = nullptr;
 };
 } // end namespace otb
 

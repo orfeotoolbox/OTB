@@ -38,7 +38,6 @@
 
 #include "otbVectorDataFileReader.h"
 #include "otbVectorDataFileWriter.h"
-#include "otbImageMetadataInterfaceFactory.h"
 
 #include "otbImage.h"
 #include "otbImageFileReader.h"
@@ -92,11 +91,9 @@ int main(int argc, char* argv[])
   region.SetSize(size);
   region.SetOrigin(index);
 
-  otb::ImageMetadataInterfaceBase::Pointer imageMetadataInterface =
-      otb::ImageMetadataInterfaceFactory::CreateIMI(imageReader->GetOutput()->GetMetaDataDictionary());
-  region.SetRegionProjection(imageMetadataInterface->GetProjectionRef());
+  region.SetRegionProjection(imageReader->GetOutput()->GetProjectionRef());
 
-  region.SetKeywordList(imageReader->GetOutput()->GetImageKeywordlist());
+  region.SetImageMetadata(imageReader->GetOutput()->GetImageMetadata());
 
   filter->SetRegion(region);
 

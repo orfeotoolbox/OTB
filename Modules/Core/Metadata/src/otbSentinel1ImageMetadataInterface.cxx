@@ -24,20 +24,11 @@
 
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
-#include "otbImageKeywordlist.h"
 #include "otbXMLMetadataSupplier.h"
 
 #include "otbSentinel1CalibrationLookupData.h"
 #include "otbSentinel1ThermalNoiseLookupData.h"
 
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#include "ossim/ossimTimeUtilities.h"
-#pragma GCC diagnostic pop
-#else
-#include "ossim/ossimTimeUtilities.h"
-#endif
 #include "itksys/SystemTools.hxx"
 #include "otbSpatialReference.h"
 
@@ -47,12 +38,6 @@
 
 namespace otb
 {
-bool Sentinel1ImageMetadataInterface::CanRead() const
-{
-  const std::string sensorID = GetSensorID();
-
-  return sensorID.find("SENTINEL-1") != std::string::npos;
-}
 
 bool Sentinel1ImageMetadataInterface::HasCalibrationLookupDataFlag(const MetadataSupplierInterface &mds) const
 {
@@ -348,182 +333,6 @@ bool Sentinel1ImageMetadataInterface::CreateThermalNoiseLookupData(SARCalib& sar
   sarCalib.calibrationLookupData[SarCalibrationLookupData::NOISE] = noiseSarLut;
 
   return true;
-}
-
-void Sentinel1ImageMetadataInterface::ParseDateTime(const char* key, std::vector<int>& dateFields) const
-{
-  if (dateFields.size() < 1)
-  {
-    // parse from keyword list
-    if (!this->CanRead())
-    {
-      itkExceptionMacro(<< "Invalid Metadata, not a valid product");
-    }
-
-    const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
-    if (!imageKeywordlist.HasKey(key))
-    {
-      itkExceptionMacro(<< "no key named " << key);
-    }
-
-    const std::string date_time_str = imageKeywordlist.GetMetadataByKey(key);
-    Utils::ConvertStringToVector(date_time_str, dateFields, key, "T:-.");
-  }
-}
-
-int Sentinel1ImageMetadataInterface::GetYear() const
-{
-  int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-  if (m_AcquisitionDateFields.size() > 0)
-  {
-    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[0], "support_data.image_date:year(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid year");
-  }
-  return value;
-}
-
-int Sentinel1ImageMetadataInterface::GetMonth() const
-{
-  int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-  if (m_AcquisitionDateFields.size() > 1)
-  {
-    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[1], "support_data.image_date:month(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid month");
-  }
-  return value;
-}
-
-int Sentinel1ImageMetadataInterface::GetDay() const
-{
-  int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-  if (m_AcquisitionDateFields.size() > 2)
-  {
-    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[2], "support_data.image_date:day(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid day");
-  }
-  return value;
-}
-
-int Sentinel1ImageMetadataInterface::GetHour() const
-{
-  int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-  if (m_AcquisitionDateFields.size() > 3)
-  {
-    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[3], "support_data.image_date:hour(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid hour");
-  }
-  return value;
-}
-
-int Sentinel1ImageMetadataInterface::GetMinute() const
-{
-  int value = 0;
-  ParseDateTime("support_data.image_date", m_AcquisitionDateFields);
-  if (m_AcquisitionDateFields.size() > 4)
-  {
-    value = Utils::LexicalCast<int>(m_AcquisitionDateFields[4], "support_data.image_date:minute(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid minute");
-  }
-  return value;
-}
-
-int Sentinel1ImageMetadataInterface::GetProductionYear() const
-{
-  int value = 0;
-  ParseDateTime("support_data.date", m_ProductionDateFields);
-  if (m_ProductionDateFields.size() > 0)
-  {
-    value = Utils::LexicalCast<int>(m_ProductionDateFields[0], "support_data.date:year(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid production year");
-  }
-  return value;
-}
-
-int Sentinel1ImageMetadataInterface::GetProductionMonth() const
-{
-  int value = 0;
-  ParseDateTime("support_data.date", m_ProductionDateFields);
-  if (m_ProductionDateFields.size() > 1)
-  {
-    value = Utils::LexicalCast<int>(m_ProductionDateFields[1], "support_data.date:month(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid production month");
-  }
-  return value;
-}
-
-int Sentinel1ImageMetadataInterface::GetProductionDay() const
-{
-  int value = 0;
-  ParseDateTime("support_data.date", m_ProductionDateFields);
-  if (m_ProductionDateFields.size() > 2)
-  {
-    value = Utils::LexicalCast<int>(m_ProductionDateFields[2], "support_data.date:day(int)");
-  }
-  else
-  {
-    itkExceptionMacro(<< "Invalid production day");
-  }
-  return value;
-}
-
-double Sentinel1ImageMetadataInterface::GetPRF() const
-{
-  double                     value            = 0;
-  const ImageKeywordlistType imageKeywordlist = this->GetImageKeywordlist();
-  if (!imageKeywordlist.HasKey("support_data.pulse_repetition_frequency"))
-  {
-    return value;
-  }
-
-  value = Utils::LexicalCast<double>(imageKeywordlist.GetMetadataByKey("support_data.pulse_repetition_frequency"),
-                                     "support_data.pulse_repetition_frequency(double)");
-
-  return value;
-}
-
-
-Sentinel1ImageMetadataInterface::UIntVectorType Sentinel1ImageMetadataInterface::GetDefaultDisplay() const
-{
-  UIntVectorType rgb(3);
-  rgb[0] = 0;
-  rgb[1] = 0;
-  rgb[2] = 0;
-  return rgb;
-}
-
-double Sentinel1ImageMetadataInterface::GetRSF() const
-{
-  return 0;
-}
-
-double Sentinel1ImageMetadataInterface::GetRadarFrequency() const
-{
-  return 0;
 }
 
 double Sentinel1ImageMetadataInterface::GetCenterIncidenceAngle(const MetadataSupplierInterface &) const
@@ -1044,6 +853,11 @@ void Sentinel1ImageMetadataInterface::Parse(ImageMetadata & imd)
   else
     otbGenericExceptionMacro(MissingMetadataException,
            << "Not a Sentinel1 product");
+
+  // Default display
+  imd.Add(MDNum::RedDisplayChannel, 0);
+  imd.Add(MDNum::GreenDisplayChannel, 0);
+  imd.Add(MDNum::BlueDisplayChannel, 0);
 }
 
 } // end namespace otb

@@ -20,8 +20,114 @@
 
 #include "otbSentinel1CalibrationLookupData.h"
 
+namespace
+{
+  constexpr int STRING_PRECISION = 20;
+
+  // the precision of std::to_string is limited to 6 digits
+  template <typename T>
+  std::string to_string_with_precision(const T value)
+  {
+      std::ostringstream out;
+      out.precision(STRING_PRECISION);
+      out << std::fixed << value;
+      return out.str();
+  }
+
+  template <class T>
+  std::string ScalarVectorToString(const std::vector<T> & input)
+  {
+    std::ostringstream oss;
+    oss.precision(STRING_PRECISION);
+    for (auto elem: input)
+    {
+      oss << elem << " ";
+    }
+
+    return oss.str();
+  }
+
+  template <class T>
+  std::vector<T> StringToScalarVector(const std::string & input)
+  {
+    std::vector<T> output;
+
+    const auto parts = otb::split_on(input, ' ');
+    for (const auto & elem : parts)
+    {
+      if (!elem.empty())
+        output.push_back(otb::to<T>(elem, "Cannot cast"));
+    }
+
+    return output;
+  }
+
+  template <class T>
+  void ClassVectorToKeywordList(otb::MetaData::Keywordlist & kwl,
+                                const std::vector<T> & input,
+                                const std::string & prefix)
+  {
+    int i = 0;
+    for (const auto & elem: input)
+    {
+      elem.ToKeywordlist(kwl, prefix + "_" + to_string_with_precision(i) + ".");
+      i++;
+    }
+    kwl.insert({prefix + ".number" , to_string_with_precision(i)});
+  }
+
+  template<class T>
+  void KeywordlistToClassVector(std::vector<T> & vector,
+                                const otb::MetaData::Keywordlist & kwl,
+                                const std::string & prefix)
+  {
+    vector.clear();
+
+    const auto size = std::stoi(kwl.at(prefix + ".number"));
+    for (int i = 0; i < size; i++)
+    {
+      auto t = T::FromKeywordlist(kwl, prefix + "_" + to_string_with_precision(i) + ".");
+      vector.push_back(t);
+    }
+  }
+}
+
 namespace otb
 {
+
+void Sentinel1CalibrationStruct::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const
+{
+  // Double
+  kwl.insert({prefix + "TimeMJD", to_string_with_precision(timeMJD)});
+  kwl.insert({prefix + "DeltaMJD", to_string_with_precision(deltaMJD)});
+
+  // Int
+  kwl.insert({prefix +"Line", boost::lexical_cast<std::string>(line)});
+
+  // std::vector<T>
+  kwl.insert({prefix + "Pixels", ScalarVectorToString(pixels)});
+  kwl.insert({prefix + "DeltaPixels", ScalarVectorToString(deltaPixels)});
+  kwl.insert({prefix + "Vect", ScalarVectorToString(vect)});
+}
+
+Sentinel1CalibrationStruct Sentinel1CalibrationStruct::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
+{
+  Sentinel1CalibrationStruct output;
+
+  // Double
+  output.timeMJD = std::stod(kwl.at(prefix + "TimeMJD"));
+  output.deltaMJD = std::stod(kwl.at(prefix + "DeltaMJD"));
+
+  // Int
+  output.line = std::stoi(kwl.at(prefix + "Line"));
+
+  // std::vector<T>
+  output.pixels = StringToScalarVector<int>(kwl.at(prefix + "Pixels"));
+  output.deltaPixels = StringToScalarVector<double>(kwl.at(prefix + "DeltaPixels"));
+  output.vect = StringToScalarVector<float>(kwl.at(prefix + "Vect"));
+
+  return output;
+}
 
 Sentinel1CalibrationLookupData::Sentinel1CalibrationLookupData() : firstLineTime(0.), lastLineTime(0.), numOfLines(0), count(0), lineTimeInterval(0.)
 {
@@ -70,6 +176,37 @@ int Sentinel1CalibrationLookupData::GetPixelIndex(int x, const Sentinel1Calibrat
   const int                        size = calVec.pixels.size();
   std::vector<int>::const_iterator wh   = std::upper_bound(calVec.pixels.begin(), calVec.pixels.end(), x);
   return wh == calVec.pixels.end() ? size - 2 : std::distance(calVec.pixels.begin(), wh) - 1;
+}
+
+void Sentinel1CalibrationLookupData::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const
+{
+  kwl.insert({prefix + "Sensor", "Sentinel1"});
+  // Double
+  kwl.insert({prefix + "FirstLineTime", to_string_with_precision(firstLineTime)});
+  kwl.insert({prefix + "LastLineTime", to_string_with_precision(lastLineTime)});
+  kwl.insert({prefix + "LineTimeInterval", to_string_with_precision(lineTimeInterval)});
+
+  // Int
+  kwl.insert({prefix +"NumOfLines", boost::lexical_cast<std::string>(numOfLines)});
+  kwl.insert({prefix +"Count", boost::lexical_cast<std::string>(count)});
+
+  // std::vector<Sentinel1CalibrationStruct>
+  ClassVectorToKeywordList(kwl, calibrationVectorList, prefix + "CalibrationVectorList");
+}
+
+void Sentinel1CalibrationLookupData::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
+{
+  // Double
+  firstLineTime = std::stod(kwl.at(prefix + "FirstLineTime"));
+  lastLineTime = std::stod(kwl.at(prefix + "LastLineTime"));
+  lineTimeInterval = std::stod(kwl.at(prefix + "LineTimeInterval"));
+
+  //Int
+  numOfLines = std::stoi(kwl.at(prefix + "NumOfLines"));
+  count = std::stoi(kwl.at(prefix + "Count"));
+
+  // std::vector<Sentinel1CalibrationStruct>
+  KeywordlistToClassVector(calibrationVectorList, kwl, prefix + "CalibrationVectorList");
 }
 
 } // namespace otb

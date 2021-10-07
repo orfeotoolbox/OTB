@@ -80,14 +80,14 @@ SpatialReferenceType GetSpatialReferenceType(const std::string& filename)
   DefaultImageType* image = reader->GetOutput();
   assert(image != NULL);
 
-  return GetSpatialReferenceType(image->GetProjectionRef(), image->GetImageKeywordlist().GetSize() > 0);
+  return GetSpatialReferenceType(image->GetProjectionRef(), image->GetImageMetadata().HasSensorGeometry());
 }
 
 /*****************************************************************************/
-SpatialReferenceType GetSpatialReferenceType(const std::string& wkt, bool hasKwl)
+SpatialReferenceType GetSpatialReferenceType(const std::string& wkt, bool hasSensorModel)
 {
   if (wkt.empty())
-    return hasKwl ? SRT_SENSOR : SRT_UNKNOWN;
+    return hasSensorModel ? SRT_SENSOR : SRT_UNKNOWN;
 
   OGRSpatialReference ogr_sr(wkt.c_str());
 
@@ -115,7 +115,7 @@ AbstractLayerModel::~AbstractLayerModel()
 /*******************************************************************************/
 SpatialReferenceType AbstractLayerModel::GetSpatialReferenceType() const
 {
-  return mvd::GetSpatialReferenceType(GetWkt(), HasKwl());
+  return mvd::GetSpatialReferenceType(GetWkt(), HasSensorModel());
 }
 
 /*******************************************************************************/
@@ -130,7 +130,7 @@ std::string AbstractLayerModel::GetAuthorityCode(bool isEnhanced) const
   std::string wkt(GetWkt());
 
   if (wkt.empty())
-    return !isEnhanced ? std::string() : (HasKwl() ? ToStdString(tr(STR_SENSOR)) : ToStdString(tr(STR_UNKNOWN)));
+    return !isEnhanced ? std::string() : (HasSensorModel() ? ToStdString(tr(STR_SENSOR)) : ToStdString(tr(STR_UNKNOWN)));
 
   int code = otb::SpatialReference::FromDescription(wkt).ToEPSG();
   if (code < 0)
@@ -142,9 +142,9 @@ std::string AbstractLayerModel::GetAuthorityCode(bool isEnhanced) const
 }
 
 /*******************************************************************************/
-bool AbstractLayerModel::HasKwl() const
+bool AbstractLayerModel::HasSensorModel() const
 {
-  return virtual_HasKwl();
+  return virtual_HasSensorModel();
 }
 
 /*****************************************************************************/
@@ -170,7 +170,7 @@ const QString& AbstractLayerModel::GetName() const
 }
 
 /*******************************************************************************/
-bool AbstractLayerModel::virtual_HasKwl() const
+bool AbstractLayerModel::virtual_HasSensorModel() const
 {
   return false;
 }

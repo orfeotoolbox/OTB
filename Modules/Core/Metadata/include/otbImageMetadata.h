@@ -22,6 +22,7 @@
 #define otbImageMetadata_h
 
 #include "otbGeometryMetadata.h"
+#include "otbSARMetadata.h"
 #include "otbMetaDataKey.h"
 #include "OTBMetadataExport.h"
 #include "otbMacro.h"
@@ -231,6 +232,12 @@ public:
    * If a key exists in both ImageMetadataBase, keeps the value of this ImageMetadataBase. */
   void Fuse(const ImageMetadataBase& );
 
+  /** Return the band that should be displayed by default, using the information contained in the
+   *  input ImageMetadata (MDNum::RedDisplayChannel, GreenDisplayChannel and BlueDisplayChannel)
+   *  the first channel being indexed as 0.
+   *  If no information is available the default order (0,1,2) is returned instead */
+  std::vector<unsigned int> GetDefaultDisplay() const;
+
 };
 
 
@@ -308,6 +315,14 @@ public:
 
   /** test wether the metadata corresponding to key is present on each band */
   bool HasBandMetadata(const MDL1D & key) const;
+
+  /** Return a vector containing the name of each band of the ImageMetadata or an empty 
+   * vector if at least one band name is missing */
+  std::vector<std::string> GetBandNames() const;
+
+  /** Return a vector containing the name of each band of the ImageMetadata or an empty 
+   * vector if at least one band name is missing */
+  std::vector<std::string> GetEnhancedBandNames() const;
 };
 
 extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::ImageMetadataBase& imd);
@@ -317,6 +332,7 @@ extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::
 OTBMetadata_EXPORT bool HasOpticalSensorMetadata(const ImageMetadata & imd);
 OTBMetadata_EXPORT bool HasSARSensorMetadata(const ImageMetadata & imd);
 
+OTBMetadata_EXPORT void WriteImageMetadataToGeomFile(const ImageMetadata & imd, const std::string & filename);
 
 } // end namespace otb
 

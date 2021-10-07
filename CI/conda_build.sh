@@ -27,8 +27,6 @@ source /build/anaconda3/bin/activate
 cd /build/staged-recipes/recipes/
 
 conda build ${CONDA_BUILD_OPTIONS} muparserx
-conda build ${CONDA_BUILD_OPTIONS} openthreads
-conda build ${CONDA_BUILD_OPTIONS} ossim
 conda build ${CONDA_BUILD_OPTIONS} shark
 conda build ${CONDA_BUILD_OPTIONS} tinyxml
 conda build ${CONDA_BUILD_OPTIONS} libitk

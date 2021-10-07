@@ -27,7 +27,6 @@
 
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
-#include "otbImageKeywordlist.h"
 
 #include <vnl/algo/vnl_svd.h>
 

@@ -94,7 +94,7 @@ int otbRegionProjectionResampler(int argc, char* argv[])
 
   if (model->IsValidSensorModel() == false)
   {
-    std::cout << "Invalid Model pointer m_Model == NULL!\n The ossim keywordlist is invalid!" << std::endl;
+    std::cout << "Invalid Model pointer m_Model == NULL!\n The metadata is invalid!" << std::endl;
     return EXIT_FAILURE;
   }
 

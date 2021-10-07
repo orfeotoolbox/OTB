@@ -394,6 +394,24 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
       // skip MDGeom::SensorGeometry, MDGeom::RPC, MDGeom::GCP, MDGeom::SAR and MDGeom::SARCalib
       continue;
     }
+
+    auto findGeomPrefix = [&kv](const MetaData::MDGeomBmType & bimap)
+      {
+        for (const auto & elem: bimap.right)
+        {
+          if (kv.first.rfind(elem.first + ".") != std::string::npos)
+          {
+            return true;
+          }
+        }
+        return false;
+      };
+
+    if (findGeomPrefix(MetaData::MDGeomNames))
+    {
+      continue;
+    }
+
   // Converting the StringKeys
     auto strKey = MetaData::MDStrNames.right.find(kv.first);
     if (strKey != MetaData::MDStrNames.right.end())
@@ -460,6 +478,15 @@ void ImageMetadataBase::Fuse(const ImageMetadataBase& imd)
   this->LUT2DKeys.insert(imd.LUT2DKeys.begin(), imd.LUT2DKeys.end());
   this->TimeKeys.insert(imd.TimeKeys.begin(), imd.TimeKeys.end());
   this->ExtraKeys.insert(imd.ExtraKeys.begin(), imd.ExtraKeys.end());
+}
+
+std::vector<unsigned int> ImageMetadataBase::GetDefaultDisplay() const
+{
+  unsigned int redChannel = Has(MDNum::RedDisplayChannel) ? NumericKeys.at(MDNum::RedDisplayChannel) : 0;
+  unsigned int greenChannel = Has(MDNum::GreenDisplayChannel) ? NumericKeys.at(MDNum::GreenDisplayChannel) : 1;
+  unsigned int blueChannel = Has(MDNum::BlueDisplayChannel) ? NumericKeys.at(MDNum::BlueDisplayChannel) : 2;
+
+  return {redChannel, greenChannel, blueChannel};
 }
 
 // ----------------------- [ImageMetadata] ------------------------------
@@ -682,6 +709,7 @@ itk::VariableLengthVector<double> ImageMetadata::GetAsVector(const MDNum& key) c
 }
 
 
+
 bool ImageMetadata::HasBandMetadata(const MDNum & key) const
 {
   return std::all_of(Bands.begin(), Bands.end(),
@@ -693,6 +721,35 @@ bool ImageMetadata::HasBandMetadata(const MDL1D & key) const
   return std::all_of(Bands.begin(), Bands.end(),
                       [key](ImageMetadataBase band){return band.Has(key);});
 }
+
+std::vector<std::string> GetBandInfo(MDStr key, const ImageMetadata & imd)
+{
+  std::vector<std::string> output;
+  for (const auto & band : imd.Bands)
+  {
+    if (band.Has(key))
+    {
+      output.push_back(band[key]);
+    }
+    else
+    {
+      return {};
+    }
+  }
+  return output;
+}
+
+std::vector<std::string> ImageMetadata::GetBandNames() const
+{
+  return GetBandInfo(MDStr::BandName, *this);
+}
+
+std::vector<std::string> ImageMetadata::GetEnhancedBandNames() const
+{
+  return GetBandInfo(MDStr::EnhancedBandName, *this);
+}
+
+
 
 // printing
 std::ostream& operator<<(std::ostream& os, const otb::ImageMetadataBase& imd)
@@ -754,11 +811,37 @@ bool HasSARSensorMetadata(const ImageMetadata & imd)
   return imd.Has(MDStr::SensorID)
     && imd.Has(MDStr::Mission)
     && imd.Has(MDStr::ProductType)
-    && (imd.Has(MDNum::RadarFrequency) || hasBandMetadata(MDNum::RadarFrequency))
-    && (imd.Has(MDNum::PRF) || hasBandMetadata(MDNum::PRF))
+//    && (imd.Has(MDNum::RadarFrequency) || hasBandMetadata(MDNum::RadarFrequency))
+//    && (imd.Has(MDNum::PRF) || hasBandMetadata(MDNum::PRF))
     && imd.Has(MDTime::AcquisitionStartTime)
     && imd.Has(MDStr::OrbitDirection)
     && (hasBandMetadata(MDStr::Polarization) || imd.Has(MDStr::Polarization));
 }
+
+void WriteImageMetadataToGeomFile(const ImageMetadata & imd, const std::string & filename)
+{
+  std::ofstream myfile(filename);
+  auto writeKwl = [&myfile](const MetaData::Keywordlist & kwl, const std::string prefix ="")
+  {
+    for (const auto & kv: kwl)
+    {
+      myfile << prefix << kv.first << ":" << kv.second << std::endl;
+    }
+  };
+
+  MetaData::Keywordlist kwl;
+  imd.ToKeywordlist(kwl);
+  writeKwl(kwl);
+
+  // Band are indexed starting at 1
+  int bIdx = 1;
+  for (const auto& band : imd.Bands)
+  {
+    band.ToKeywordlist(kwl);
+    writeKwl(kwl, "Band_" + std::to_string(bIdx) + ".");
+    ++bIdx;
+  }
+}
+
 
 }

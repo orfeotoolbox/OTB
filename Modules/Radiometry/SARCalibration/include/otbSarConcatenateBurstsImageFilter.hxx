@@ -37,7 +37,7 @@ template <class TImage>
 bool SarConcatenateBurstsImageFilter<TImage>::getDeburstLinesAndSamples(LinesRecordVectorType& linesRecord, LinesRecordVectorType& samplesRecord,
                                                                         unsigned int first_burstInd, bool inputWithInvalidPixels)
 {
-  // Try to create a SarSensorModelAdapter
+  // Try to create a SarSensorModel
   SarSensorModel sarSensorModel(m_SLCImd);
 
   LinesRecordVectorType lines;

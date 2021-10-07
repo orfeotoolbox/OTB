@@ -28,10 +28,11 @@ otb_create_application(
   SOURCES        otbConvertCartoToGeoPoint.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-otb_create_application(
-  NAME           GenerateRPCSensorModel
-  SOURCES        otbGenerateRPCSensorModel.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+# TODO refactor this application
+#otb_create_application(
+#  NAME           GenerateRPCSensorModel
+#  SOURCES        otbGenerateRPCSensorModel.cxx
+#  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
   NAME           GridBasedImageResampling
@@ -48,10 +49,11 @@ otb_create_application(
   SOURCES        otbObtainUTMZoneFromGeoPoint.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-otb_create_application(
-  NAME           RefineSensorModel
-  SOURCES        otbRefineSensorModel.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+# TODO refactor this application
+#otb_create_application(
+#  NAME           RefineSensorModel
+#  SOURCES        otbRefineSensorModel.cxx
+#  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
   NAME           RigidTransformResample

@@ -31,7 +31,6 @@ otb_module(OTBTransform
     OTBGDAL
     OTBITK
     OTBInterpolation
-    OTBOSSIMAdapters
     OTBMetadata
     OTBGdalAdapters
     OTBIOGDAL
@@ -39,7 +38,6 @@ otb_module(OTBTransform
     OTBImageBase
     OTBImageIO
     OTBImageManipulation
-    OTBOssim
     OTBTestKernel
     OTBProjection
 

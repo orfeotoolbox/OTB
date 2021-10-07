@@ -94,10 +94,8 @@ void KmzProductWriter<TInputImage>::Write()
 
   // Do some checks, If no metadata nor projection ref available,
   // input is not usable.
-  bool emptyProjRef = m_VectorImage->GetProjectionRef().empty();
-  bool emptyKWL     = m_VectorImage->GetImageKeywordlist().GetSize() == 0 ? true : false;
-
-  if (emptyProjRef && emptyKWL)
+  if (!(m_VectorImage->GetImageMetadata().HasSensorGeometry()
+        || m_VectorImage->GetImageMetadata().HasProjectedGeometry()))
   {
     itkExceptionMacro(<< "The input image have empty keyword list, please use an image with metadata information");
   }

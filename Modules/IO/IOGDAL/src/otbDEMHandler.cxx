@@ -31,9 +31,6 @@
 //TODO C++ 17 : use std::optional instead
 #include <boost/optional.hpp>
 
-// TODO : RemoveOSSIM
-#include <otbOssimDEMHandler.h>
-
 #include <mutex>
 
 #include "ogr_spatialref.h"
@@ -213,9 +210,6 @@ void DEMHandler::OpenDEMFile(const std::string& path)
 
 void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
 {
-  // TODO : RemoveOSSIM
-  OssimDEMHandler::Instance()->OpenDEMDirectory(DEMDirectory);
-
   // Free the previous in-memory dataset (if any)
   if (!m_DatasetList.empty())
     VSIUnlink(DEM_DATASET_PATH.c_str());
@@ -262,10 +256,6 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
 
 bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
 {
-  // TODO : RemoveOSSIM
-  OssimDEMHandler::Instance()->OpenGeoidFile(geoidFile);
-
-
   int pbError;
   auto ds = GDALOpenVerticalShiftGrid(geoidFile.c_str(), &pbError);
   
@@ -482,10 +472,6 @@ std::string DEMHandler::GetGeoidFile() const
 
 void DEMHandler::ClearDEMs()
 {
-  // TODO : RemoveOSSIM
-  // This should be call, but this causes a segfault ... OssimDEMHandler will
-  // be removed in a near future anyway
-  // OssimDEMHandler::Instance()->ClearDEMs();
   m_DEMDirectories.clear();
 
   // This will call GDALClose on all datasets
@@ -495,8 +481,6 @@ void DEMHandler::ClearDEMs()
 
 void DEMHandler::SetDefaultHeightAboveEllipsoid(double height)
 {
-  OssimDEMHandler::Instance()->SetDefaultHeightAboveEllipsoid(height);
-
   m_DefaultHeightAboveEllipsoid = height;
   Notify();
 }

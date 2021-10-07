@@ -549,7 +549,6 @@ list(APPEND option_list Boost)
 list(APPEND option_list GDAL)
 list(APPEND option_list GEOTIFF)
 list(APPEND option_list ITK)
-list(APPEND option_list OSSIM)
 list(APPEND option_list TINYXML)
 
 #RK

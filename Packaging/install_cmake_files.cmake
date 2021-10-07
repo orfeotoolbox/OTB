@@ -38,4 +38,16 @@ function(install_cmake_files)
     install_without_message("${_qt5_folder}" "lib/cmake")
   endforeach()
 
+  #install boost cmake files
+  file(GLOB _boost_main_cmake "${SUPERBUILD_INSTALL_DIR}/lib/cmake/Boost-*")
+  file(GLOB _boost_modules_cmake "${SUPERBUILD_INSTALL_DIR}/lib/cmake/boost_*")
+  foreach(_boost_cmake_file ${_boost_main_cmake})
+    install_without_message("${_boost_cmake_file}" "lib/cmake")
+  endforeach()
+  foreach(_boost_module_file ${_boost_modules_cmake})
+    install_without_message("${_boost_module_file}" "lib/cmake")
+  endforeach()
+  file(GLOB _boost_detect_file "${SUPERBUILD_INSTALL_DIR}/lib/cmake/BoostDetectToolset-*.cmake")
+  install(FILES ${_boost_detect_file} DESTINATION "${PKG_STAGE_DIR}/lib/cmake")
+
 endfunction()

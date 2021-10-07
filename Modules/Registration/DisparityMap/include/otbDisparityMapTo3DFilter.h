@@ -87,8 +87,6 @@ public:
   typedef typename PointSetType::PointsContainer    PointsContainer;
   typedef typename PointSetType::PointDataContainer LabelContainer;
 
-  typedef otb::ImageKeywordlist ImageKeywordListType;
-
   /** Set horizontal disparity map input */
   void SetHorizontalDisparityMapInput(const TDisparityImage* hmap);
 
@@ -111,30 +109,30 @@ public:
   const TEpipolarGridImage* GetRightEpipolarGridInput() const;
   const TMaskImage*         GetDisparityMaskInput() const;
 
-  /** Set left keywordlist */
-  void SetLeftKeywordList(const ImageKeywordListType kwl)
+  /** Set left imageMetadata */
+  void SetLeftImageMetadata(const ImageMetadata* imd)
   {
-    this->m_LeftKeywordList = kwl;
+    this->m_LeftImageMetadata = imd;
     this->Modified();
   }
 
   /** Get left keywordlist */
-  const ImageKeywordListType& GetLeftKeywordList() const
+  const ImageMetadata* GetLeftImageMetadata() const
   {
-    return this->m_LeftKeywordList;
+    return this->m_LeftImageMetadata;
   }
 
   /** Set right keywordlist */
-  void SetRightKeywordList(const ImageKeywordListType kwl)
+  void SetRightImageMetadata(const ImageMetadata* imd)
   {
-    this->m_RightKeywordList = kwl;
+    this->m_RightImageMetadata = imd;
     this->Modified();
   }
 
   /** Get right keywordlist */
-  const ImageKeywordListType& GetRightKeywordList() const
+  const ImageMetadata* GetRightImageMetadata() const
   {
-    return this->m_RightKeywordList;
+    return this->m_RightImageMetadata;
   }
 
 protected:
@@ -142,7 +140,7 @@ protected:
   DisparityMapTo3DFilter();
 
   /** Destructor */
-  ~DisparityMapTo3DFilter() override;
+  ~DisparityMapTo3DFilter() override = default;
 
   /** Generate output information */
   void GenerateOutputInformation() override;
@@ -170,12 +168,12 @@ private:
   DisparityMapTo3DFilter(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  /** Keywordlist of left sensor image */
-  ImageKeywordListType m_LeftKeywordList;
-
-  /** Keywordlist of right sensor image */
-  ImageKeywordListType m_RightKeywordList;
-
+  /** ImageMetadata of left sensor image */
+  const ImageMetadata*   m_LeftImageMetadata = nullptr;
+  
+  /** ImageMetadata of right sensor image */
+  const ImageMetadata*   m_RightImageMetadata = nullptr;
+  
   /** Left sensor image transform */
   RSTransformType::Pointer m_LeftToGroundTransform;
 

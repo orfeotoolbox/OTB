@@ -1,8 +1,12 @@
 SensorID IKONOS-2
+Instrument OSA
 AreaOrPoint Area
 TileHintX 3667
 TileHintY 256
 DataType 3
+RedDisplayChannel 2
+GreenDisplayChannel 1
+BlueDisplayChannel 0
 SunElevation 60.8726
 SunAzimuth 147.924
 SatElevation 59.3389

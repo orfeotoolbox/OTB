@@ -58,19 +58,8 @@ VectorImage (0x2248fb0)
       Container manages memory: true
       Size: 0
       Capacity: 0
-  ---> CacheSizeInBytes = 412002099
-  ---> DataType = 0
-  ---> DriverLongName = JPEG-2000 driver based on OpenJPEG library
-  ---> DriverShortName = JP2OpenJPEG
-  ---> LowerLeftCorner[0] = 0
-  ---> LowerLeftCorner[1] = 243
-  ---> LowerRightCorner[0] = 324
-  ---> LowerRightCorner[1] = 243
-  ---> ResolutionFactor = 3
-  ---> SubDatasetIndex = 0
-  ---> TileHintX = 80
-  ---> TileHintY = 60
-  ---> UpperLeftCorner[0] = 0
-  ---> UpperLeftCorner[1] = 0
-  ---> UpperRightCorner[0] = 324
-  ---> UpperRightCorner[1] = 0
+  {{"DataType": "1",
+"TileHintY": "60",
+"TileHintX": "80",
+}Bands[{},{},{},]
+}

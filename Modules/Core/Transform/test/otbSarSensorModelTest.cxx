@@ -34,11 +34,6 @@
 #include "otbSarSensorModel.h"
 #include "otbImageFileReader.h"
 
-//TODO: replace by baselines
-#include "otbSarSensorModelAdapter.h"
-
-#include "ossim/ossimSarSensorModel.h"
-
 using namespace boost::unit_test;
 
 

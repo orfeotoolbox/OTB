@@ -53,46 +53,8 @@ public:
   typedef Superclass::MetaDataDictionaryType   MetaDataDictionaryType;
   typedef Superclass::VectorType               VectorType;
   typedef Superclass::VariableLengthVectorType VariableLengthVectorType;
-  typedef Superclass::ImageKeywordlistType     ImageKeywordlistType;
   typedef Superclass::RealType                 RealType;
   typedef Superclass::LookupDataPointerType    LookupDataPointerType;
-
-  /** Get the imaging production day from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable
-   * \deprecated
-   */
-  int GetProductionDay() const override;
-
-  /** Get the imaging production month from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable
-   * \deprecated
-   */
-  int GetProductionMonth() const override;
-
-  /** Get the imaging production year from the ossim metadata : DATASET_PRODUCTION_DATE metadata variable
-   * \deprecated
-   */
-  int GetProductionYear() const override;
-
-  /** check sensor ID */
-  bool CanRead() const override;
-
-  int GetDay() const override;
-
-  int GetMonth() const override;
-
-  int GetYear() const override;
-
-  int GetHour() const override;
-
-  int GetMinute() const override;
-
-  UIntVectorType GetDefaultDisplay() const override;
-
-  /*SarImageMetadataInterface pure virtuals rituals */
-  double GetPRF() const override;
-
-  double GetRSF() const override;
-
-  double GetRadarFrequency() const override;
 
   double GetCenterIncidenceAngle(const MetadataSupplierInterface&) const override;
 
@@ -148,17 +110,6 @@ protected:
 private:
   Sentinel1ImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
-
-  /* Helper function to parse date and time into a std::vector<std::string>
-   * using boost::split() expect date time in yyyy-mm-ddThh:mm:ss.ms
-   * the date-time string is to be found in keywordlist with key 'key'
-   * fills argument dateFields of type std::vector<std::string> which is mutable!
-   * TODO: move this method into base class
-   */
-  void ParseDateTime(const char* key, std::vector<int>& dateFields) const;
-
-  mutable std::vector<int> m_ProductionDateFields;
-  mutable std::vector<int> m_AcquisitionDateFields;
 };
 
 
