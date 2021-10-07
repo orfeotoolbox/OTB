@@ -106,6 +106,8 @@ public:
   const boost::any & operator[](const MDGeom& key) const;
 
   const Projection::GCPParam & GetGCPParam() const;
+  const Projection::RPCParam & GetRPCParam() const;
+  const SARParam & GetSARParam() const;
 
   std::string GetProjectedGeometry() const;
 
@@ -333,6 +335,11 @@ OTBMetadata_EXPORT bool HasOpticalSensorMetadata(const ImageMetadata & imd);
 OTBMetadata_EXPORT bool HasSARSensorMetadata(const ImageMetadata & imd);
 
 OTBMetadata_EXPORT void WriteImageMetadataToGeomFile(const ImageMetadata & imd, const std::string & filename);
+
+/** Comparison test */
+bool HasSameRPCModel(const ImageMetadataBase& a, const ImageMetadataBase& b);
+bool HasSameSARModel(const ImageMetadataBase& a, const ImageMetadataBase& b);
+bool HasSameSensorModel(const ImageMetadataBase& a, const ImageMetadataBase& b);
 
 } // end namespace otb
 

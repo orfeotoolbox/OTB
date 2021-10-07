@@ -165,7 +165,7 @@ struct OTBMetadata_EXPORT RPCParam
     	oss << " \"" << array[loop] << "\", ";
     oss << "]";
     return oss.str();
-  };
+  }
   
   // Equality comparison with tolerance
   template <class BinaryPredicate>
