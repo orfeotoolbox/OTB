@@ -34,6 +34,7 @@ ViewSettings::ViewSettings() :
   m_Spacing.Fill( 1 );
   m_ViewportSize.Fill( 0 );
   m_RotationCenter.Fill( 0 );
+  m_ImageMetadata = nullptr;
 }
 
 ViewSettings::~ViewSettings()
