@@ -31,7 +31,7 @@ message(STATUS "")
 message(STATUS "Configuring Cookbook...")
 
 # Check we have python bindings with python 3+
-if (NOT OTB_WRAP_PYTHON OR ${PYTHONLIBS_VERSION_STRING} STRLESS "3.0.0")
+if (NOT OTB_WRAP_PYTHON)
     message(FATAL_ERROR "CookBook build requires Python 3 wrappers. Try setting OTB_WRAP_PYTHON=ON in the CMake configuration, or disable the CookBook with BUILD_COOKBOOK=OFF.")
 endif()
 
