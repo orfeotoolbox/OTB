@@ -373,8 +373,6 @@ std::string ImageMetadataBase::ToJSON(bool multiline) const
 
 bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
 {
-  // Return value
-  bool all_parsed = true;
   // search iterators
   for (const auto& kv : kwl)
   {
@@ -460,10 +458,10 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
       this->Add(kv.first.substr(prefix.size()), kv.second);
       continue;
     }
-    otbLogMacro(Warning, << "The metadata named '" << kv.first << "' with value '" << kv.second << "' was not parsed.")
-    all_parsed = false;
+    otbLogMacro(Debug, << "The metadata named '" << kv.first << "' with value '" << kv.second << "' was add to ExtraKeys.");
+    this->Add(kv.first, kv.second);
   }
-  return all_parsed;
+  return true;
 }
 
 

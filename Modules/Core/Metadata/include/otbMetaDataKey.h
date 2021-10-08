@@ -182,7 +182,9 @@ enum class MDStr
   BeamMode,
   BeamSwath,
   AreaOrPoint,
-  // ...
+  LayerType,
+  MetadataType,
+  OtbVersion,
   END
 };
 
