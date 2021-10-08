@@ -392,7 +392,6 @@ void SARCalib::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
   // MetaData::Time
   std::ostringstream oss;
   oss << calibrationStartTime;
-  std::cout << "***** " << oss.str() << std::endl;
   kwl.insert({prefix + "CalibrationStartTime", oss.str()});
   oss.str("");
   oss << calibrationStopTime;
