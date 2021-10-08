@@ -41,7 +41,6 @@
 #include "ogr_spatialref.h"
 #include "ogr_srs_api.h"
 
-
 #include "itksys/RegularExpression.hxx"
 
 #include "otbGDALDriverManagerWrapper.h"
@@ -1314,15 +1313,6 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     m_Imd.Bands = bandRangeMetadata;
   }
 
-  // TODO : this should be a warning instead of an exception
-  // For complex pixels the number of bands is twice the number of components (in GDAL sense)
-  if ( !m_Imd.Bands.empty() 
-    && static_cast<std::size_t>(m_NbBands) != m_Imd.Bands.size()
-    && !((m_Imd.Bands.size() == static_cast<std::size_t>(2 * m_NbBands)) && this->GetPixelType() == COMPLEX))
-  {
-      itkExceptionMacro(<< "Number of bands in metadata inconsistent with actual image.");
-  }
-
   if ((m_Dimensions[0] == 0) && (m_Dimensions[1] == 0))
   {
     itkExceptionMacro(<< "Dimensions are not defined.");
@@ -1550,6 +1540,18 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
       MetaData::Keywordlist SARKwl;
       const auto & param = boost::any_cast<const otb::SARParam&>(m_Imd[MDGeom::SAR]);
       param.ToKeywordlist(SARKwl, "SAR.");
+
+
+      // Write GCP as metadata (not GDAL gcps) because SAR sensor images needs GCPs and
+      // might also have a geotransform (e.g. after a ROI extraction), which is undefined
+      // in GDAL. Note that the geotransform is not applied to the GCPs in this case
+      if (m_Imd.Has(MDGeom::GCP))
+      {
+        const Projection::GCPParam & gcpParam =
+          boost::any_cast<const Projection::GCPParam&>(m_Imd[MDGeom::GCP]);
+        gcpParam.ToKeywordlist(SARKwl, "SAR.");
+      }
+
       for (auto & key: SARKwl)
       {
         dataset->SetMetadataItem(key.first.c_str(), key.second.c_str());
@@ -1939,6 +1941,10 @@ void GDALImageIO::ImportMetadata()
       otb::SARParam sar;
       sar.FromKeywordlist(kwl, "SAR.");
       m_Imd.Add(MDGeom::SAR, sar);
+
+      otb::Projection::GCPParam gcps;
+      gcps.FromKeywordlist(kwl, "SAR.");
+      m_Imd.Add(MDGeom::GCP, gcps);
     }
     catch(const std::exception& e) 
     {
@@ -1955,7 +1961,6 @@ void GDALImageIO::ImportMetadata()
     GDALMetadataToKeywordlist(m_Dataset->GetDataSet()->GetRasterBand(band+1)->GetMetadata(), kwl);
     m_Imd.Bands[band].FromKeywordlist(kwl);
   }
-
 }
 
 void GDALImageIO::KeywordlistToMetadata(ImageMetadataBase::Keywordlist kwl, int band)
