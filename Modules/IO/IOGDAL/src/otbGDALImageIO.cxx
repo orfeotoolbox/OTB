@@ -1909,6 +1909,12 @@ void GDALImageIO::ExportMetadata()
   // be prefixed by: MDGeomNames[MDGeom::SensorGeometry] + '.'
   ImageMetadataBase::Keywordlist kwl;
   m_Imd.ToKeywordlist(kwl);
+  if (m_Imd.Has(MDGeom::SARCalib))
+  {
+    const auto & param = boost::any_cast<const otb::SARCalib&>(m_Imd[MDGeom::SARCalib]);
+    param.ToKeywordlist(kwl, "SARCalib.");
+  }
+
   KeywordlistToMetadata(kwl);
 
   int bIdx = 0;
@@ -1952,6 +1958,20 @@ void GDALImageIO::ImportMetadata()
     }
   }
 
+  // Decode SAR metadata
+  if (kwl.find("SARCalib") != kwl.end())
+  {
+    try
+    {
+      otb::SARCalib sarCalib;
+      sarCalib.FromKeywordlist(kwl, "SARCalib.");
+      m_Imd.Add(MDGeom::SARCalib, sarCalib);
+    }
+    catch(const std::exception& e) 
+    {
+      otbLogMacro(Warning, << "Input image has SAR calibration metadata, but OTB was not able to read it: " << e.what());
+    }
+  }
   m_Imd.FromKeywordlist(kwl);
 
   // Parsing the bands
