@@ -23,6 +23,7 @@
 
 #include "otbImageMetadata.h"
 #include "otbSARMetadata.h"
+#include "otbGeocentricTransform.h"
 
 #include "itkPoint.h"
 
@@ -191,6 +192,13 @@ private:
                             const Point2DType & imPt,
                             std::function<double(double, double)> heightFunction) const;
 
+  /** Coordinate transformation from ECEF to geographic */
+  itk::Point<double, 3> EcefToWorld(const itk::Point<double, 3> & ecefPoint) const;
+
+  /** Coordinate transformation from geographic to ECEF */
+  itk::Point<double, 3> WorldToEcef(const itk::Point<double, 3> & worldPoint) const;
+
+
   std::string m_ProductType;
   Projection::GCPParam m_GCP;
   SARParam m_SarParam;
@@ -206,6 +214,9 @@ private:
 
   // True if the input product is a ground product
   bool m_IsGrd;
+
+  otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::Pointer m_EcefToWorldTransform;
+  otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::Pointer m_WorldToEcefTransform;
 };
 
 }
