@@ -84,8 +84,8 @@ necessary to install one of the following packages:
 Python bindings
 ~~~~~~~~~~~~~~~
 
-Since OTB 6.7.0 OTB bindings for Python 3.5 are distributed as a binary
-package.
+Since OTB 8.0.0 OTB bindings for Python 3.8 are distributed as a binary
+package. (From OTB 6.7 to 7.4, bindings are provided for Python 3.5)
 Please note that using a different Python version may not be compatible with
 OTB wrappings. If the installation completes
 without issue, information relating to your Python bindings will be provided. 
@@ -94,12 +94,12 @@ You must have Python NumPy bindings installed in your system. They can be instal
 without admin rights as follows: "pip install --user numpy". This is to give users the option 
 to select their own existing Python installation rather than the one dibstributed by the OTB package.
 
-By default, bindings for Python 3.5 will be enabled with the ``otbenv`` script.
+By default, bindings for Python 3.8 will be enabled with the ``otbenv`` script.
 
 Recompiling Python bindings
 +++++++++++++++++++++++++++
 
-If you are using another version of Python 3 than 3.5, but still want to use OTB Python bindings, it is possible
+If you are using another version of Python 3 than 3.8, but still want to use OTB Python bindings, it is possible
 to compile the python bindings again with your version of Python. CMake is required (it is available in most package
 managers or at [https://cmake.org/]). At the root of the OTB installation run :
 
