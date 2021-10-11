@@ -56,6 +56,16 @@ const Projection::GCPParam & ImageMetadataBase::GetGCPParam() const
   return boost::any_cast<const Projection::GCPParam &>(GeometryKeys.at(MDGeom::GCP));
 }
 
+const Projection::RPCParam & ImageMetadataBase::GetRPCParam() const
+{
+  return boost::any_cast<const Projection::RPCParam &>(GeometryKeys.at(MDGeom::RPC));
+}
+
+const SARParam & ImageMetadataBase::GetSARParam() const
+{
+  return boost::any_cast<const SARParam &>(GeometryKeys.at(MDGeom::SAR));
+}
+
 std::string ImageMetadataBase::GetProjectedGeometry() const
 {
   if (this->Has(MDGeom::ProjectionWKT))
@@ -843,5 +853,43 @@ void WriteImageMetadataToGeomFile(const ImageMetadata & imd, const std::string &
   }
 }
 
+bool HasSameRPCModel(const ImageMetadataBase& a, const ImageMetadataBase& b)
+{
+  bool aHasRpc = a.Has(MDGeom::RPC);
+  bool bHasRpc = b.Has(MDGeom::RPC);
+
+  if (aHasRpc && bHasRpc)
+    // Both have a model
+    return a.GetRPCParam() == b.GetRPCParam();
+
+  else if (aHasRpc != bHasRpc)
+    // One has a model, not the other
+    return false;
+
+  // Both don't have a model
+  return true;
+}
+
+bool HasSameSARModel(const ImageMetadataBase& a, const ImageMetadataBase& b)
+{
+  bool aHasSar = a.Has(MDGeom::SAR);
+  bool bHasSar = b.Has(MDGeom::SAR);
+
+  if (aHasSar && bHasSar)
+    // Both have a model
+    return a.GetSARParam() == b.GetSARParam();
+
+  else if (aHasSar != bHasSar)
+    // One has a model, not the other
+    return false;
+
+  // Both don't have a model
+  return true;
+}
+
+bool HasSameSensorModel(const ImageMetadataBase& a, const ImageMetadataBase& b)
+{
+  return HasSameRPCModel(a, b) && HasSameSARModel(a, b);
+}
 
 }

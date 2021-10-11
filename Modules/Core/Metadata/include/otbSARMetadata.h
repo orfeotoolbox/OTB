@@ -206,6 +206,16 @@ struct OTBMetadata_EXPORT SARParam
 
   /** Keywordlist import */
   void FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix);
+
+  // Equality comparison operator (hidden friend idiom)
+  friend bool operator==(const SARParam & lhs, const SARParam & rhs)
+  {
+    MetaData::Keywordlist lhs_kwl;
+    lhs.ToKeywordlist(lhs_kwl, "");
+    MetaData::Keywordlist rhs_kwl;
+    rhs.ToKeywordlist(rhs_kwl, "");
+    return lhs_kwl == rhs_kwl;
+  }
 };
 
 /** \struct SARCalib

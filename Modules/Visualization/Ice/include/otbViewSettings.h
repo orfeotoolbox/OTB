@@ -157,6 +157,7 @@ private:
   SizeType m_ViewportSize;
   std::string m_Wkt;
   const ImageMetadataType* m_ImageMetadata;
+  const ImageMetadataType m_DefaultImageMetadata;
   PointType m_RotationCenter;
   double m_RotationAngle;
   bool m_UseProjection : 1;

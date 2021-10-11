@@ -723,9 +723,6 @@ void GlImageActor::ImageRegionToViewportExtent(const RegionType& region, double 
 
 void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointType & ul, PointType & ur, PointType & ll, PointType & lr, bool rotate) const
 {
-  // Retrieve settings
-  ViewSettings::ConstPointer settings = this->GetSettings();
-
   itk::ContinuousIndex<double,2> cul,cur,cll,clr;
 
   cul[0] = region.GetIndex()[0];
@@ -780,9 +777,6 @@ void GlImageActor::ImageRegionToViewportQuad(const RegionType & region, PointTyp
 
 void GlImageActor::ViewportExtentToImageRegion(const double& ulx, const double & uly, const double & lrx, const double & lry, RegionType & region) const
 {
-  // Retrieve settings
-  ViewSettings::ConstPointer settings = this->GetSettings();
-
   RegionType largest = m_FileReader->GetOutput()->GetLargestPossibleRegion();
 
   PointType ul,ur,ll,lr,tul,tur,tll,tlr;
@@ -1092,12 +1086,15 @@ void GlImageActor::UpdateTransforms()
   //   << std::hex << this << std::dec
   //   << " WKT-changed: " << isEqualOrNot << std::endl;
 
-  //TODO OSSIM: Replace KeywordList by ImageMetadata in the settings object
     geometryChanged = geometryChanged
   || (m_ViewportToImageTransform.IsNotNull() && m_ViewportToImageTransform->GetInputProjectionRef() != settings->GetWkt())
   || (m_ImageToViewportTransform.IsNotNull() && m_ImageToViewportTransform->GetOutputProjectionRef() != settings->GetWkt())
-    || (m_ViewportToImageTransform.IsNotNull() /*&& !(m_ViewportToImageTransform->GetInputKeywordList() == settings->GetKeywordList())*/)
-        || (m_ImageToViewportTransform.IsNotNull() /*&& !(m_ImageToViewportTransform->GetOutputKeywordList() == settings->GetKeywordList())*/);
+  || (m_ViewportToImageTransform.IsNotNull() && m_ViewportToImageTransform->GetInputImageMetadata() == nullptr)
+  || (m_ImageToViewportTransform.IsNotNull() && m_ImageToViewportTransform->GetInputImageMetadata() == nullptr)
+  || (m_ViewportToImageTransform.IsNotNull() && !HasSameSensorModel(*(m_ViewportToImageTransform->GetInputImageMetadata()),
+                                                                    *(settings->GetImageMetadata())))
+  || (m_ImageToViewportTransform.IsNotNull() && !HasSameSensorModel(*(m_ImageToViewportTransform->GetInputImageMetadata()),
+                                                                    *(settings->GetImageMetadata())));
 
   if(settings->GetUseProjection() && geometryChanged)
     {
