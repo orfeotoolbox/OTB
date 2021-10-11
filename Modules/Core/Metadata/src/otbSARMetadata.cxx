@@ -535,13 +535,13 @@ void SARCalib::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
       if (sensor == "Sentinel1")
       {
         auto lut = Sentinel1CalibrationLookupData::New();
-        lut->FromKeywordlist(kwl, "CalibrationLookupData_" + id + "_");
+        lut->FromKeywordlist(kwl, prefix + "CalibrationLookupData_" + id + "_");
         calibrationLookupData[id_short] = lut;
       }
       else
       {
         auto lut = SarCalibrationLookupData::New();
-        lut->FromKeywordlist(kwl, "CalibrationLookupData_" + id + "_");
+        lut->FromKeywordlist(kwl, prefix + "CalibrationLookupData_" + id + "_");
         calibrationLookupData[id_short] = lut;
       }
     }
