@@ -265,14 +265,16 @@ NoiseVectorLists ReadNoiseVectorListsFromXML(const MetadataSupplierInterface& md
   }
 
   std::string azimuthNoisePrefix = "noise.noiseAzimuthVectorList.";
-  std::string azimuthVectorName = "noiseAzimuthVector_";
+  std::string azimuthVectorName = "noiseAzimuthVector";
   std::string azimuthLUTName = "noiseAzimuthLut";
 
   const int azimuthCount = mds.GetAs<int>(0, azimuthNoisePrefix + "count");
 
   for (int i = 0; i < azimuthCount; i++)
   {
-    const auto prefix = azimuthNoisePrefix + azimuthVectorName + std::to_string(i+1) + ".";
+    const auto prefix = azimuthCount == 1
+                      ? azimuthNoisePrefix + azimuthVectorName + "."
+                      : azimuthNoisePrefix + azimuthVectorName + "_" + std::to_string(i+1) + ".";
 
     Sentinel1AzimuthNoiseStruct azimuthNoiseVector;
     azimuthNoiseVector.firstAzimuthLine = mds.GetAs<int>(prefix + "firstAzimuthLine");

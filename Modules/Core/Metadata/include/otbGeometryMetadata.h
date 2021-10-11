@@ -69,7 +69,14 @@ public:
 
   void Print(std::ostream& os) const;
   std::string ToJSON(bool multiline=false) const;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const;
+
+  /** Keywordlist import */
+  static GCP FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix);
 };
+
 
 namespace Projection
 {
@@ -86,6 +93,12 @@ struct OTBMetadata_EXPORT GCPParam
 
   // JSON export
   std::string ToJSON(bool multiline=false) const;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const;
+
+  /** Keywordlist import */
+  void FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix);
 };
 
 /** \struct RPCParam
