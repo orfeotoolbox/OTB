@@ -458,7 +458,7 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
       this->Add(kv.first.substr(prefix.size()), kv.second);
       continue;
     }
-    otbLogMacro(Debug, << "The metadata named '" << kv.first << "' with value '" << kv.second << "' was add to ExtraKeys.");
+    otbLogMacro(Debug, << "The metadata named '" << kv.first << "' with value '" << kv.second << "' was added to ExtraKeys.");
     this->Add(kv.first, kv.second);
   }
   return true;

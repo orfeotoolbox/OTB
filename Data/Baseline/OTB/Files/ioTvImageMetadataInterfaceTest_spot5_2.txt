@@ -2,7 +2,7 @@ SensorID SPOT 5
 Mission SPOT 5
 Instrument HRG
 InstrumentIndex 2
-AreaOrPoint Point
+AREA_OR_POINT Point
 TileHintX 6000
 TileHintY 128
 DataType 1

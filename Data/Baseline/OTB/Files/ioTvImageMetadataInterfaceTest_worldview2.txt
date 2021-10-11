@@ -2,7 +2,7 @@ SensorID WV02
 Mission WorldView-2
 Instrument WV110
 ProductType Multi
-AreaOrPoint Area
+AREA_OR_POINT Area
 TileHintX 1150
 TileHintY 455
 DataType 3
