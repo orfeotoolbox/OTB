@@ -345,10 +345,9 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
     kwl.emplace(MetaData::MDTimeNames.left.at(kv.first), oss.str());
   }
   // Converting the ExtraKeys
-  std::string prefix("Extra.");
   for (const auto& kv : ExtraKeys)
   {
-    kwl.emplace(prefix + kv.first, kv.second);
+    kwl.emplace(kv.first, kv.second);
   }
 }
 
@@ -449,13 +448,6 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
       MetaData::Time time;
       std::istringstream (kv.second) >> time;
       this->Add(timeKey->second, time);
-      continue;
-    }
-  // Converting the ExtraKeys
-    std::string prefix("Extra.");
-    if (kv.first.compare(0, prefix.size(), prefix) == 0)
-    {
-      this->Add(kv.first.substr(prefix.size()), kv.second);
       continue;
     }
     otbLogMacro(Debug, << "The metadata named '" << kv.first << "' with value '" << kv.second << "' was added to ExtraKeys.");

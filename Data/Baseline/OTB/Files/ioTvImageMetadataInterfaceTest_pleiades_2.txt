@@ -28,12 +28,12 @@ ProjectionWKT GEOGCS["WGS 84",
     AXIS["Longitude",EAST],
     AUTHORITY["EPSG","4326"]]
 RPC <RPCParam>
-Extra.ImageID 559102101-002
-Extra.LinePeriod 0.2968
-Extra.SwathFirstCol 3010
-Extra.SwathLastCol 7298
-Extra.TimeRangeEnd 2012-06-05T06:30:08.7180512Z
-Extra.TimeRangeStart 2012-06-05T06:30:06.5710000Z
+ImageID 559102101-002
+LinePeriod 0.2968
+SwathFirstCol 3010
+SwathLastCol 7298
+TimeRangeEnd 2012-06-05T06:30:08.7180512Z
+TimeRangeStart 2012-06-05T06:30:06.5710000Z
 BandName B0
 EnhancedBandName Blue
 PhysicalGain 9.55

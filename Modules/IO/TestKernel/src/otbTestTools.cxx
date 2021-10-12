@@ -71,9 +71,8 @@ void PrintMetadataBase(ImageMetadataBase imdb, std::ostream& oss)
       oss << It->second << ' ' << Key->second << '\n';
   }
 
-  std::string prefix("Extra.");
   for (const auto& kv : imdb.ExtraKeys)
-    oss << prefix + kv.first << ' ' << kv.second << '\n';
+    oss << kv.first << ' ' << kv.second << '\n';
 }
 
 void PrintMetadata(ImageMetadata imd, std::ostream& oss)
