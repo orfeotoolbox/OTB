@@ -109,13 +109,12 @@ otb_add_test(NAME ioTvImageFileWriterExtendedFileName_StreamingNone COMMAND otbE
   ${TEMP}/ioImageFileWriterExtendedFileName_streamingNone.tif?&streaming:type=none)
 
 otb_add_test(NAME ioTvImageFileReaderExtendedFileName_GEOM COMMAND otbExtendedFilenameTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE}/ioImageFileReaderWithExternalGEOMFile.txt
-  ${TEMP}/ioImageFileReaderWithExternalGEOMFile.txt
+  --compare-metadata ${NOTOL}
+  ${BASELINE}/ioImageFileReaderWithExternalGEOMFile.tiff
+  ${TEMP}/ioImageFileReaderWithExternalGEOMFile.tiff
   otbImageFileReaderWithExtendedFilename
   ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&geom=${INPUTDATA}/ToulouseExtract_ModifiedGeom.geom
-  ${TEMP}/ioImageFileReaderWithExternalGEOMFile.txt
-  ${TEMP}/ioImageFileReaderWithExternalGEOMFile_pr.txt
+  ${TEMP}/ioImageFileReaderWithExternalGEOMFile.tiff
   )
 
 # TODO: This test needs to be removed when the extended filename writegeom is replaced by writeMetadata  
@@ -138,13 +137,12 @@ otb_add_test(NAME ioTvImageFileWriterExtendedFileName_StreamingAuto COMMAND otbE
   ${TEMP}/ioImageFileWriterExtendedFileName_streamingAuto.tif?&streaming:type=auto&streaming:sizevalue=${streaming_sizevalue_auto})
 
 otb_add_test(NAME ioTvImageFileReaderExtendedFileName_mix1 COMMAND otbExtendedFilenameTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE}/ioImageFileReaderExtendedFileName_mix1pr.txt
-  ${TEMP}/ioImageFileReaderExtendedFileName_mix1pr.txt
+  --compare-metadata ${NOTOL}
+  ${BASELINE}/ioImageFileReaderExtendedFileName_mix1pr.tiff
+  ${TEMP}/ioImageFileReaderExtendedFileName_mix1pr.tiff
   otbImageFileReaderWithExtendedFilename
   ${INPUTDATA}/bretagne.j2k?&skipcarto=true&resol=2
-  ${TEMP}/ioImageFileReaderExtendedFileName_mix1kwl.txt
-  ${TEMP}/ioImageFileReaderExtendedFileName_mix1pr.txt
+  ${TEMP}/ioImageFileReaderExtendedFileName_mix1pr.tiff
   )
 
 otb_add_test(NAME ioTvImageFileWriterExtendedFileName_gdalco COMMAND otbExtendedFilenameTestDriver
@@ -157,23 +155,21 @@ otb_add_test(NAME ioTvImageFileWriterExtendedFileName_gdalco COMMAND otbExtended
   )
 
 otb_add_test(NAME ioTvImageFileReaderExtendedFileName_SkipGeom COMMAND otbExtendedFilenameTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE}/ioImageFileReaderExtendedFileName_Skipgeom_pr.txt
-  ${TEMP}/ioImageFileReaderExtendedFileName_Skipgeom_pr.txt
+  --compare-metadata ${NOTOL}
+  ${BASELINE}/ioImageFileReaderExtendedFileName_Skipgeom_pr.tiff
+  ${TEMP}/ioImageFileReaderExtendedFileName_Skipgeom.tiff
   otbImageFileReaderWithExtendedFilename
   ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&skipgeom=true
-  ${TEMP}/ioImageFileReaderExtendedFileName_Skipgeom_kwl.txt
-  ${TEMP}/ioImageFileReaderExtendedFileName_Skipgeom_pr.txt
+  ${TEMP}/ioImageFileReaderExtendedFileName_Skipgeom.tiff
   )
 
 otb_add_test(NAME ioTvImageFileReaderExtendedFileName_SkipPR COMMAND otbExtendedFilenameTestDriver
-  --compare-ascii ${NOTOL}
-  ${BASELINE}/ioImageFileReaderExtendedFileName_SkipPR.txt
-  ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR.txt
+  --compare-metadata ${NOTOL}
+  ${BASELINE}/ioImageFileReaderExtendedFileName_SkipPR.tiff
+  ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR.tiff
   otbImageFileReaderWithExtendedFilename
   ${INPUTDATA}/ToulouseExtract_WithGeom.tif?&skipcarto=true
-  ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR_kwl.txt
-  ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR.txt
+  ${TEMP}/ioImageFileReaderExtendedFileName_SkipPR.tiff
   )
 
 otb_add_test(NAME ioTvImageFileWriterExtendedFileName_NODATA COMMAND otbExtendedFilenameTestDriver

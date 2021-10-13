@@ -355,10 +355,9 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
     kwl.emplace(MetaData::MDTimeNames.left.at(kv.first), oss.str());
   }
   // Converting the ExtraKeys
-  std::string prefix("Extra.");
   for (const auto& kv : ExtraKeys)
   {
-    kwl.emplace(prefix + kv.first, kv.second);
+    kwl.emplace(kv.first, kv.second);
   }
 }
 
@@ -383,8 +382,6 @@ std::string ImageMetadataBase::ToJSON(bool multiline) const
 
 bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
 {
-  // Return value
-  bool all_parsed = true;
   // search iterators
   for (const auto& kv : kwl)
   {
@@ -463,17 +460,10 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
       this->Add(timeKey->second, time);
       continue;
     }
-  // Converting the ExtraKeys
-    std::string prefix("Extra.");
-    if (kv.first.compare(0, prefix.size(), prefix) == 0)
-    {
-      this->Add(kv.first.substr(prefix.size()), kv.second);
-      continue;
-    }
-    otbLogMacro(Warning, << "The metadata named '" << kv.first << "' with value '" << kv.second << "' was not parsed.")
-    all_parsed = false;
+    otbLogMacro(Debug, << "The metadata named '" << kv.first << "' with value '" << kv.second << "' was added to ExtraKeys.");
+    this->Add(kv.first, kv.second);
   }
-  return all_parsed;
+  return true;
 }
 
 

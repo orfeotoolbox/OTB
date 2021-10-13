@@ -1634,16 +1634,6 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   {
     dataset->GetRasterBand(noData.first)->SetNoDataValue(noData.second);
   }
-
-  /* -------------------------------------------------------------------- */
-  /*      AREA_OR_POINT                                                   */
-  /* -------------------------------------------------------------------- */
-
-  // Write AREA_OR_POINT flag from ImageMetadata
-  if (m_Imd.Has(MDStr::AreaOrPoint))
-  {
-    dataset->SetMetadataItem("AREA_OR_POINT", m_Imd[MDStr::AreaOrPoint].c_str());
-  }
 }
 
 std::string GDALImageIO::FilenameToGdalDriverShortName(const std::string& name) const

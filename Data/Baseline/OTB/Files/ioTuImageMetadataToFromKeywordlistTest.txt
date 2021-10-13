@@ -7,7 +7,7 @@ SpectralSensitivity LUT1D.DIM0.SIZE = 3
 LUT1D.DIM0.ORIGIN = 0
 LUT1D.DIM0.SPACING = 1
 LUT1D.ARRAY = 1 2 3
-Extra.Comment Test Extrakeys
+Comment Test Extrakeys
 BandName B0
 NoData -10000
 PhysicalGain 2
