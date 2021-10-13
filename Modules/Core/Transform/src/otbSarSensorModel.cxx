@@ -732,17 +732,17 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
   // Now move GCPs
 
   std::vector<GCP> deburstGCPs;
-  
+
   for (auto gcp : m_GCP.GCPs)
   {
     unsigned long newLine=0;
 
-    unsigned long gcpLine = std::floor(gcp.m_GCPY + 0.5);
-    unsigned long gcpSample = std::floor(gcp.m_GCPX + 0.5);
+    unsigned long gcpLine = std::floor(gcp.m_GCPRow + 0.5);
+    unsigned long gcpSample = std::floor(gcp.m_GCPCol + 0.5);
 
     // Be careful about fractional part of GCPs
-    double fractionalLines = gcp.m_GCPY - gcpLine;
-    double fractionalSamples = gcp.m_GCPX - gcpSample;
+    double fractionalLines = gcp.m_GCPRow - gcpLine;
+    double fractionalSamples = gcp.m_GCPCol - gcpSample;
 
     bool linesOk = ImageLineToDeburstLine(lines, gcpLine, newLine);
 
@@ -762,8 +762,8 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
 
     if(linesOk && samplesOk)
     {
-      gcp.m_GCPY = newLine + fractionalLines;
-      gcp.m_GCPX = newSample + fractionalSamples;
+      gcp.m_GCPRow = newLine + fractionalLines;
+      gcp.m_GCPCol = newSample + fractionalSamples;
       deburstGCPs.push_back(gcp);
     }
   }
@@ -864,12 +864,12 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
   {
     auto currentGCP = token;
 
-    unsigned long gcpLine = std::floor(currentGCP.m_GCPY + 0.5);
-    unsigned long gcpSample = std::floor(currentGCP.m_GCPX + 0.5);
+    unsigned long gcpLine = std::floor(currentGCP.m_GCPRow + 0.5);
+    unsigned long gcpSample = std::floor(currentGCP.m_GCPCol + 0.5);
 
     // Be careful about fractional part of GCPs
-    double fractionalLines = currentGCP.m_GCPY - gcpLine;
-    double fractionalSamples = currentGCP.m_GCPX - gcpSample;
+    double fractionalLines = currentGCP.m_GCPRow - gcpLine;
+    double fractionalSamples = currentGCP.m_GCPCol - gcpSample;
 
     // Gcp into valid samples and valid lines
     unsigned long newSample = gcpSample;
@@ -892,8 +892,8 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
 
     if(linesOk && samplesOk)
     {
-      currentGCP.m_GCPY = newLine + fractionalLines;
-      currentGCP.m_GCPX = newSample + fractionalSamples;
+      currentGCP.m_GCPRow = newLine + fractionalLines;
+      currentGCP.m_GCPCol = newSample + fractionalSamples;
       oneBurstGCPs.push_back(currentGCP);
     }
   }
@@ -1008,12 +1008,12 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
   {
     unsigned long newLine=0;
 
-    unsigned long gcpLine = std::floor(gcp.m_GCPY + 0.5);
-    unsigned long gcpSample = std::floor(gcp.m_GCPX + 0.5);
+    unsigned long gcpLine = std::floor(gcp.m_GCPRow + 0.5);
+    unsigned long gcpSample = std::floor(gcp.m_GCPCol + 0.5);
 
     // Be careful about fractional part of GCPs
-    double fractionalLines = gcp.m_GCPY - gcpLine;
-    double fractionalSamples = gcp.m_GCPX - gcpSample;
+    double fractionalLines = gcp.m_GCPRow - gcpLine;
+    double fractionalSamples = gcp.m_GCPCol - gcpSample;
 
     bool linesOk = ImageLineToDeburstLine(lines,gcpLine,newLine);
 
@@ -1023,8 +1023,8 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
     if (linesOk && gcpSample >= samples.first && gcpSample <= samples.second)
     {
       newSample -= samples.first; // Offset with first valid sample
-      gcp.m_GCPY = newLine + fractionalLines;
-      gcp.m_GCPX = newSample + fractionalSamples;
+      gcp.m_GCPRow = newLine + fractionalLines;
+      gcp.m_GCPCol = newSample + fractionalSamples;
       deburstGCPs.push_back(gcp);
      }
 
