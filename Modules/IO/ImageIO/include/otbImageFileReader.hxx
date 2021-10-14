@@ -405,6 +405,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
     geomSupplier.FetchRPC(imd);
     geomSupplier.FetchGCP(imd);
+    otbLogMacro(Info, << "Loading metadata from external geom file " << m_FilenameHelper->GetExtGEOMFileName());
   }
   // Case 2: attached geom (if present)
   else if (!m_FilenameHelper->GetSkipGeom() && itksys::SystemTools::FileExists(attachedGeom))
@@ -413,6 +414,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
     geomSupplier.FetchRPC(imd);
     geomSupplier.FetchGCP(imd);
+    otbLogMacro(Info, << "Loading metadata from attached geom file " << attachedGeom);
   }
   // Case 3: tags in file
   else
@@ -421,6 +423,7 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
     if (gdalMetadataSupplierPointer)
     {
       ImageMetadataInterfaceFactory::CreateIMI(imd, *gdalMetadataSupplierPointer);
+      otbLogMacro(Info, << "Loading metadata from official product");
     }
   }
 
