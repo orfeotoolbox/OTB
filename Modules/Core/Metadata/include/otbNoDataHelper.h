@@ -26,6 +26,8 @@
 #include <itkVariableLengthVector.h>
 #include "OTBMetadataExport.h"
 
+#include "otbImageMetadata.h"
+
 namespace itk
 {
 class MetaDataDictionary;
@@ -33,20 +35,19 @@ class MetaDataDictionary;
 
 namespace otb
 {
+/**
+ * Reads no data flag from the ImageMetadata to flags and values
+ * vectors. Returns true upon success.
+ */
+bool OTBMetadata_EXPORT ReadNoDataFlags(const ImageMetadata & imd, std::vector<bool>& flags, std::vector<double>& values);
 
 /**
- * Reads no data flag from the MetaDataDictionary dict to flags and values
+ * Write no data flags to the ImageMetadata from flags and values
  * vectors. Returns true upon success.
- * \deprecated
  */
-bool OTBMetadata_EXPORT ReadNoDataFlags(const itk::MetaDataDictionary& dict, std::vector<bool>& flags, std::vector<double>& values);
+void OTBMetadata_EXPORT WriteNoDataFlags(const std::vector<bool>& flags, const std::vector<double>& values, ImageMetadata & imd);
 
-/**
- * Write no data flags to the MetaDataDictionary dict from flags and values
- * vectors. Returns true upon success.
- * \deprecated
- */
-void OTBMetadata_EXPORT WriteNoDataFlags(const std::vector<bool>& flags, const std::vector<double>& values, itk::MetaDataDictionary& dict);
+
 
 /**
 * Test if the pixel corresponds to a no data pixel according to a
