@@ -21,7 +21,6 @@
 
 #include "otbImageMetadataInterfaceBase.h"
 
-#include "otbNoDataHelper.h"
 #include "otbGeometryMetadata.h"
 #include "itkMetaDataObject.h"
 #include "itksys/SystemTools.hxx"
@@ -242,11 +241,6 @@ double ImageMetadataInterfaceBase::GetGCPZ(unsigned int GCPnum) const
   }
   else
     return (0);
-}
-
-bool ImageMetadataInterfaceBase::GetNoDataFlags(std::vector<bool>& flags, std::vector<double>& values) const
-{
-  return ReadNoDataFlags(this->GetMetaDataDictionary(), flags, values);
 }
 
 ImageMetadataInterfaceBase::VectorType ImageMetadataInterfaceBase::GetGeoTransform() const

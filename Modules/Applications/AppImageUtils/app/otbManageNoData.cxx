@@ -162,10 +162,10 @@ private:
       m_MaskFilters.clear();
       UInt8ImageType::Pointer  maskPtr = this->GetParameterUInt8Image("mode.apply.mask");
       unsigned int             nbBands = inputPtr->GetNumberOfComponentsPerPixel();
-      itk::MetaDataDictionary& dict    = inputPtr->GetMetaDataDictionary();
+      const auto & imd                 = inputPtr->GetImageMetadata();
       std::vector<bool>        flags;
       std::vector<double>      values;
-      bool                     ret = otb::ReadNoDataFlags(dict, flags, values);
+      bool                     ret = otb::ReadNoDataFlags(imd, flags, values);
       if (!ret)
       {
         flags.resize(nbBands, true);

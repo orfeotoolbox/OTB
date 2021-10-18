@@ -28,6 +28,8 @@
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
 
+#include "otbNoDataHelper.h"
+
 namespace otb
 {
 /**
@@ -92,9 +94,8 @@ void DSFusionOfClassifiersImageFilter<TInputImage, TOutputImage, TMaskImage>::Ge
   noDataValueAvailable.push_back(true);
   std::vector<double> noDataValue;
   noDataValue.push_back(m_LabelForNoDataPixels);
-  itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<std::vector<bool>>(dict, MetaDataKey::NoDataValueAvailable, noDataValueAvailable);
-  itk::EncapsulateMetaData<std::vector<double>>(dict, MetaDataKey::NoDataValue, noDataValue);
+
+  WriteNoDataFlags(noDataValueAvailable, noDataValue, this->GetOutput()->GetImageMetadata());
 }
 /* ************************************************************************************************************** */
 

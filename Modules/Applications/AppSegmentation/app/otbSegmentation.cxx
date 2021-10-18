@@ -465,8 +465,8 @@ private:
 
     std::vector<bool>        noDataFlags;
     std::vector<double>      noDataValues;
-    itk::MetaDataDictionary& dict = GetParameterFloatVectorImage("in")->GetMetaDataDictionary();
-    bool                     ret  = otb::ReadNoDataFlags(dict, noDataFlags, noDataValues);
+    const auto & imd = GetParameterFloatVectorImage("in")->GetImageMetadata();
+    bool                     ret  = otb::ReadNoDataFlags(imd, noDataFlags, noDataValues);
 
     if (ret)
     {

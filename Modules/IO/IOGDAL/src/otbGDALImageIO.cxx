@@ -1119,12 +1119,6 @@ void GDALImageIO::InternalReadImageInformation()
 
   ImportMetadata();
 
-  if (noDataFound)
-  {
-    itk::EncapsulateMetaData<MetaDataKey::BoolVectorType>(dict, MetaDataKey::NoDataValueAvailable, isNoDataAvailable);
-    itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::NoDataValue, noDataValues);
-  }
-
   // Read AREA_OR_POINT value if present
   papszMetadata = dataset->GetMetadata(nullptr);
   auto areaOrPoint = CSLFetchNameValue(papszMetadata, "AREA_OR_POINT");
