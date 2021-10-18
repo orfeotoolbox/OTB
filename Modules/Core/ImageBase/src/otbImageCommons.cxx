@@ -38,6 +38,11 @@ const ImageMetadata & ImageCommons::GetImageMetadata() const
   return m_Imd;
 }
 
+ImageMetadata & ImageCommons::GetImageMetadata() 
+{
+  return m_Imd;
+}
+
 std::string ImageCommons::GetProjectionRef(void) const
 {
   // TODO: support EPSG and proj as fallback
