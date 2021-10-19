@@ -700,9 +700,6 @@ void GDALImageIO::InternalReadImageInformation()
         blockSizeY = blockSizeY * (1 << m_ResolutionFactor);
       }
 
-      itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, blockSizeX);
-      itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, blockSizeY);
-
       m_Imd.NumericKeys[MDNum::TileHintX] = blockSizeX;
       m_Imd.NumericKeys[MDNum::TileHintY] = blockSizeY;
     }
