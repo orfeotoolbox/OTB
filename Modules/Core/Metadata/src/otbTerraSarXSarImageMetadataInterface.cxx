@@ -608,6 +608,15 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
 
   param.azimuthTimeInterval = td / numberOfRows;
 
+  auto lookSide =  xmlMS.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.lookDirection");
+
+  if (lookSide != "RIGHT" && lookSide != "LEFT")
+  {
+    otbGenericExceptionMacro(MissingMetadataException, "Not an expected look side (only RIGHT or LEFT expected)");
+  }
+
+  param.rightLookingFlag = lookSide == "RIGHT";
+
   //For Terrasar-X only 1 burst is supported for now
   BurstRecord burstRecord;
 
@@ -704,6 +713,7 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   ReadGeorefGCP(MainXMLFileMetadataSupplier, GCPXMLFileMS, imd, sarParam);
 
   ReadSARSensorModel(MainXMLFileMetadataSupplier, polarization, sarParam);
+
   imd.Add(MDGeom::SAR, sarParam);
 }
 

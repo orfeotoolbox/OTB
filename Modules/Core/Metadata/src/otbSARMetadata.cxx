@@ -138,6 +138,7 @@ void SARParam::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
   kwl.insert({prefix + "RangeResolution", to_string_with_precision(rangeResolution)});
   kwl.insert({prefix + "NumberOfLinesPerBurst", to_string_with_precision(numberOfLinesPerBurst)});
   kwl.insert({prefix + "NumberOfSamplesPerBurst", to_string_with_precision(numberOfSamplesPerBurst)});
+  kwl.insert({prefix + "RightLookingFlag", std::to_string(rightLookingFlag)});
 
   VectorToKeywordList(kwl, azimuthFmRates, prefix + "AzimuthFmRates");
   VectorToKeywordList(kwl, dopplerCentroids, prefix + "DopplerCentroid");
@@ -165,6 +166,7 @@ void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
   nearRangeTime = std::stod(kwl.at(prefix + "NearRangeTime"));
   rangeSamplingRate = std::stod(kwl.at(prefix + "RangeSamplingRate"));
   rangeResolution = std::stod(kwl.at(prefix + "RangeResolution"));
+  rightLookingFlag = std::stoi(kwl.at(prefix + "RightLookingFlag"));
 
   numberOfLinesPerBurst = std::stoul(kwl.at(prefix + "NumberOfLinesPerBurst"));
   numberOfSamplesPerBurst = std::stoul(kwl.at(prefix + "NumberOfSamplesPerBurst"));

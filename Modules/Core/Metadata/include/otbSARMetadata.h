@@ -183,6 +183,8 @@ struct OTBMetadata_EXPORT SARParam
   unsigned long numberOfLinesPerBurst;
   unsigned long numberOfSamplesPerBurst;
 
+  bool rightLookingFlag = true;
+
   /** Doppler centroid estimates */
   std::vector<DopplerCentroid> dopplerCentroids;
 

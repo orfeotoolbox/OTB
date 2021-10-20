@@ -676,6 +676,8 @@ void Sentinel1ImageMetadataInterface::ReadSarParamAndGCPs(const XMLMetadataSuppl
   sarParam.numberOfLinesPerBurst = AnnotationMS.GetAs<unsigned long>("product.swathTiming.linesPerBurst");
   sarParam.numberOfSamplesPerBurst = AnnotationMS.GetAs<unsigned long>("product.swathTiming.samplesPerBurst");
 
+  sarParam.rightLookingFlag = true;
+
   // Fetch the GCP
   ReadGCP(AnnotationMS, gcp, sarParam);
 }

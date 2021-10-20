@@ -254,7 +254,15 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
       std::stod(metadataBands[0]["S01_SBI_Line_Time_Interval"])
       * 1e6);
   sarParam.nearRangeTime = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Range_First_Time"]);
+  
+  auto lookSide = m_MetadataSupplierInterface->GetAs<std::string>("Look_Side");
 
+  if (lookSide != "RIGHT" && lookSide != "LEFT")
+  {
+    otbGenericExceptionMacro(MissingMetadataException, "Not an expected look side (only RIGHT or LEFT expected)");
+  }
+
+  sarParam.rightLookingFlag = lookSide == "RIGHT";
   imd.Add(MDGeom::SAR, sarParam);
 
   // TODO: compute a GCP at the center of scene using the inverse sar model like it is done in ossim plugins
