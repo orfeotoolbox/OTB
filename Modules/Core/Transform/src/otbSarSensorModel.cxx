@@ -93,6 +93,67 @@ void SarSensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DTyp
   }
 }
 
+void SarSensorModel::WorldToLineSampleYZ(const Point3DType& inGeoPoint, Point2DType& cr, Point2DType& yz) const
+{
+  TimeType azimuthTime;
+  double rangeTime;
+  Point3DType sensorPos; 
+  Vector3DType sensorVel;
+
+  const bool success = WorldToAzimuthRangeTime(inGeoPoint, azimuthTime, rangeTime, sensorPos, sensorVel);
+
+  if(!success)
+  {
+    //TODO return Nan or throw ?
+    return;
+  }
+
+  // Convert azimuth time to line
+  AzimuthTimeToLine(azimuthTime, cr[1]);
+
+  if (m_IsGrd)
+  {
+    // GRD case
+    double groundRange(0);
+    SlantRangeToGroundRange(rangeTime*C/2,azimuthTime,groundRange);
+
+    // Eq 32 p. 31
+    cr[0] = groundRange/m_SarParam.rangeResolution;
+  }
+  else
+  {
+    // SLC case
+    // Eq 23 and 24 p. 28
+    cr[0] = (rangeTime - m_SarParam.nearRangeTime) 
+                        * m_SarParam.rangeSamplingRate;
+  }
+
+  auto inputPt = WorldToEcef(inGeoPoint);
+
+  // Radar distance
+  double NormeS = std::sqrt(sensorPos[0]*sensorPos[0] + sensorPos[1]*sensorPos[1] + sensorPos[2]*sensorPos[2]);
+  
+  double PS2 = inputPt[0]*sensorPos[0] + inputPt[1]*sensorPos[1] + inputPt[2]*sensorPos[2];
+
+  assert(NormeS>1e-6);
+  yz[1] = NormeS - PS2/NormeS;
+
+  double distance = std::sqrt((sensorPos[0]-inputPt[0])*(sensorPos[0]-inputPt[0]) + 
+                             (sensorPos[1]-inputPt[1])*(sensorPos[1]-inputPt[1]) + 
+                             (sensorPos[2]-inputPt[2])*(sensorPos[2]-inputPt[2]));  
+
+
+
+  yz[0] = std::sqrt(distance*distance - yz[1] * yz[1]);
+
+  // Check view side and change sign of Y accordingly
+  if ( (( sensorVel[0] * (sensorPos[1]* inputPt[2] - sensorPos[2]* inputPt[1]) +
+              sensorVel[1] * (sensorPos[2]* inputPt[0] - sensorPos[0]* inputPt[2]) +
+              sensorVel[2] * (sensorPos[0]* inputPt[1] - sensorPos[1]* inputPt[0])) > 0) ^ m_SarParam.rightLookingFlag )
+  {
+    yz[0] = -yz[0];
+  }
+}
 
 bool SarSensorModel::WorldToAzimuthRangeTime(const Point3DType& inGeoPoint, 
                                         TimeType & azimuthTime, 
@@ -1097,6 +1158,80 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
   m_LastLineTime = deburstBurst.azimuthStopTime;
   
   m_SarParam.nearRangeTime += samples.first*(1/m_SarParam.rangeSamplingRate); 
+
+  return true;
+}
+
+bool SarSensorModel::Overlap(std::pair<unsigned long, unsigned long>& linesUp, std::pair<unsigned long, unsigned long>& linesLow,
+               std::pair<unsigned long, unsigned long>& samplesUp, std::pair<unsigned long, unsigned long>& samplesLow, unsigned int burstIndUp,
+               bool inputWithInvalidPixels)
+{  
+  auto & burstRecords = m_SarParam.burstRecords;
+
+  // Check the no burst record case, the single burst record case or inferior to burstIndUp + 1
+  if(burstRecords.size() <= 1 || burstRecords.size() <= ( burstIndUp + 1))
+  {
+    return false;
+  }
+
+  auto & burstUp = burstRecords[burstIndUp];
+  auto & burstLow = burstRecords[burstIndUp+1];
+
+  // Overlap for samples (valid samples)
+  std::pair<unsigned long,unsigned long> samples = {burstUp.startSample, burstUp.endSample};
+
+  if (burstLow.startSample > samples.first)
+  {
+    samples.first = burstLow.startSample;
+  }
+  if (burstLow.endSample < samples.second)
+  {
+    samples.second = burstLow.endSample;
+  }
+
+  unsigned long currentStartUp_S = 0;
+  unsigned long currentStartLow_S = 0;
+  unsigned long currentStopUp_S = samples.second-samples.first;
+  unsigned long currentStopLow_S = samples.second-samples.first;
+
+  if (inputWithInvalidPixels)
+  {
+    currentStartUp_S = samples.first;
+    currentStartLow_S = samples.first;
+  }
+  else
+  {
+    if (burstUp.startSample < samples.first)
+    {
+      currentStartUp_S = samples.first - burstUp.startSample;
+    }
+    if (burstLow.startSample < samples.first)
+    {
+      currentStartLow_S = samples.first - burstLow.startSample;
+    }
+  }
+
+  currentStopUp_S += currentStartUp_S;
+  currentStopLow_S += currentStartLow_S;
+
+  samplesUp = std::make_pair(currentStartUp_S, currentStopUp_S);
+  samplesLow = std::make_pair(currentStartLow_S, currentStopLow_S);
+
+  // Overlap for lines (valid + overlap IW)
+  auto timeOverlapEnd = (burstUp.azimuthStopTime - burstLow.azimuthStartTime);
+  unsigned long overlapLength = timeOverlapEnd / m_SarParam.azimuthTimeInterval;
+
+  unsigned long lastValidBurstUp = burstUp.endLine - burstUp.startLine;
+  unsigned long firstValidBurstLow = 0;
+
+  if (inputWithInvalidPixels)
+  {
+    lastValidBurstUp = burstUp.endLine - burstIndUp * m_SarParam.numberOfLinesPerBurst;
+    firstValidBurstLow = burstLow.startLine - (burstIndUp+1) * m_SarParam.numberOfLinesPerBurst;
+  }
+
+  linesUp = std::make_pair(lastValidBurstUp - overlapLength, lastValidBurstUp);
+  linesLow = std::make_pair(firstValidBurstLow, firstValidBurstLow + overlapLength);
 
   return true;
 }
