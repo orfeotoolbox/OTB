@@ -44,8 +44,7 @@ int otbChangeNoDataValueFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   // Write no-data flags to it
   std::vector<bool>   flags(1, true);
   std::vector<double> values(1, -10.);
-  otb::WriteNoDataFlags(flags, values, img->GetMetaDataDictionary());
-
+  otb::WriteNoDataFlags(flags, values, img->GetImageMetadata());
   // Fill half of the pixels with no-data values
   itk::ImageRegionIterator<ImageType> it(img, region);
   unsigned int                        count = 0;
@@ -85,7 +84,7 @@ int otbChangeNoDataValueFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
     }
   }
 
-  otb::ReadNoDataFlags(filter->GetOutput()->GetMetaDataDictionary(), flags, values);
+  otb::ReadNoDataFlags(filter->GetOutput()->GetImageMetadata(), flags, values);
 
   if (flags.empty() || !flags[0])
   {

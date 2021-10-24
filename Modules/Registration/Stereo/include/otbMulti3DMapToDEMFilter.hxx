@@ -25,6 +25,7 @@
 #include "itkImageRegionConstIteratorWithIndex.h"
 #include "itkImageRegionIterator.h"
 #include "otbStreamingStatisticsVectorImageFilter.h"
+#include "otbNoDataHelper.h"
 
 namespace otb
 {
@@ -329,9 +330,8 @@ void Multi3DMapToDEMFilter<T3DImage, TMaskImage, TOutputDEMImage>::GenerateOutpu
   noDataValueAvailable.push_back(true);
   std::vector<double> noDataValue;
   noDataValue.push_back(m_NoDataValue);
-  itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<std::vector<bool>>(dict, MetaDataKey::NoDataValueAvailable, noDataValueAvailable);
-  itk::EncapsulateMetaData<std::vector<double>>(dict, MetaDataKey::NoDataValue, noDataValue);
+
+  WriteNoDataFlags(noDataValueAvailable, noDataValue, outputPtr->GetImageMetadata());
 }
 
 template <class T3DImage, class TMaskImage, class TOutputDEMImage>

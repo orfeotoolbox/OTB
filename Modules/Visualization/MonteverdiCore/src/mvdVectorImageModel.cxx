@@ -274,7 +274,7 @@ void VectorImageModel::virtual_BuildModel(void* context)
   std::vector<double> values;
   std::vector<bool>   flags;
 
-  bool ret = otb::ReadNoDataFlags(this->ToImageBase()->GetMetaDataDictionary(), flags, values);
+  bool ret = otb::ReadNoDataFlags(this->GetImageMetadata(), flags, values);
 
   if (ret && !values.empty() && !flags.empty() && flags[0])
   {

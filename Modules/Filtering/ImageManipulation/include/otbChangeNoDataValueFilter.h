@@ -43,9 +43,8 @@ public:
   ChangeNoDataFunctor() : m_Flags(), m_Values(), m_NewValues(), m_NaNIsNoData(false)
   {
   }
-  virtual ~ChangeNoDataFunctor()
-  {
-  }
+
+  virtual ~ChangeNoDataFunctor() = default;
 
   inline TOutputPixel operator()(const TInputPixel& in) const
   {
@@ -134,13 +133,9 @@ public:
   }
 
 protected:
-  ChangeNoDataValueFilter()
-  {
-  }
+  ChangeNoDataValueFilter() = default;
 
-  ~ChangeNoDataValueFilter() override
-  {
-  }
+  ~ChangeNoDataValueFilter() override = default;
 
   void GenerateOutputInformation() override
   {
@@ -149,7 +144,7 @@ protected:
     std::vector<bool>   noDataValueAvailable;
     std::vector<double> noDataValues;
 
-    bool ret = ReadNoDataFlags(this->GetInput()->GetMetaDataDictionary(), noDataValueAvailable, noDataValues);
+    bool ret = ReadNoDataFlags(this->GetInput()->GetImageMetadata(), noDataValueAvailable, noDataValues);
 
     if (!ret)
     {
@@ -167,7 +162,7 @@ protected:
       flags = std::vector<bool>(flags.size(), true);
     }
 
-    WriteNoDataFlags(flags, this->GetFunctor().m_NewValues, this->GetOutput()->GetMetaDataDictionary());
+    WriteNoDataFlags(flags, this->GetFunctor().m_NewValues, this->GetOutput()->GetImageMetadata());
   }
 
 private:

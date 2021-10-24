@@ -28,6 +28,7 @@
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
 #include "otbImage.h"
+#include "otbNoDataHelper.h"
 
 #include "gdal_alg.h"
 #include "stdint.h" //needed for uintptr_t
@@ -152,9 +153,7 @@ void OGRDataSourceToLabelImageFilter<TOutputImage>::GenerateOutputInformation()
   std::vector<double> noDataValue;
   noDataValue.resize(nbBands, static_cast<double>(m_BackgroundValue));
 
-  itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<std::vector<bool>>(dict, MetaDataKey::NoDataValueAvailable, noDataValueAvailable);
-  itk::EncapsulateMetaData<std::vector<double>>(dict, MetaDataKey::NoDataValue, noDataValue);
+  WriteNoDataFlags(noDataValueAvailable, noDataValue, outputPtr->GetImageMetadata());
 }
 
 template <class TOutputImage>

@@ -27,6 +27,7 @@
 #include "itkDefaultConvertPixelTraits.h"
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
+#include "otbNoDataHelper.h"
 
 namespace otb
 {
@@ -253,19 +254,17 @@ void StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>::Ge
   Superclass::GenerateOutputInformation();
 
   // Set the NoData flag to the edge padding value
-  itk::MetaDataDictionary& dict = this->GetOutput()->GetMetaDataDictionary();
   std::vector<bool>        noDataValueAvailable;
-  bool                     ret = itk::ExposeMetaData<std::vector<bool>>(dict, MetaDataKey::NoDataValueAvailable, noDataValueAvailable);
-  if (!ret)
+  std::vector<double>      noDataValue;
+
+  auto res = ReadNoDataFlags(this->GetOutput()->GetImageMetadata(), noDataValueAvailable, noDataValue);
+
+  if (!res)
   {
     noDataValueAvailable.resize(this->GetOutput()->GetNumberOfComponentsPerPixel(), false);
-  }
-  std::vector<double> noDataValue;
-  ret = itk::ExposeMetaData<std::vector<double>>(dict, MetaDataKey::NoDataValue, noDataValue);
-  if (!ret)
-  {
     noDataValue.resize(this->GetOutput()->GetNumberOfComponentsPerPixel(), 0.0);
   }
+
   PixelType edgePadding = this->GetEdgePaddingValue();
   if (itk::NumericTraits<PixelType>::GetLength(edgePadding) != this->GetOutput()->GetNumberOfComponentsPerPixel())
   {
@@ -280,8 +279,8 @@ void StreamingWarpImageFilter<TInputImage, TOutputImage, TDisplacementField>::Ge
       noDataValue[i]          = itk::DefaultConvertPixelTraits<PixelType>::GetNthComponent(i, edgePadding);
     }
   }
-  itk::EncapsulateMetaData<std::vector<bool>>(dict, MetaDataKey::NoDataValueAvailable, noDataValueAvailable);
-  itk::EncapsulateMetaData<std::vector<double>>(dict, MetaDataKey::NoDataValue, noDataValue);
+
+  WriteNoDataFlags(noDataValueAvailable, noDataValue, this->GetOutput()->GetImageMetadata());
 }
 
 template <class TInputImage, class TOutputImage, class TDisplacementField>

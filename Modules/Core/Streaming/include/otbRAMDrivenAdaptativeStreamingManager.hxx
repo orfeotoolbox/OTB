@@ -47,14 +47,23 @@ void RAMDrivenAdaptativeStreamingManager<TImage>::PrepareStreaming(itk::DataObje
 
   typename otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::SizeType tileHint;
 
-  unsigned int tileHintX(0), tileHintY(0);
+  auto inputImage = dynamic_cast<TImage*>(input);
 
-  itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(), MetaDataKey::TileHintX, tileHintX);
+  tileHint[0] = 0;
+  tileHint[1] = 0;
 
-  itk::ExposeMetaData<unsigned int>(input->GetMetaDataDictionary(), MetaDataKey::TileHintY, tileHintY);
-
-  tileHint[0] = tileHintX;
-  tileHint[1] = tileHintY;
+  if (inputImage)
+  {
+    const auto & imd = inputImage->GetImageMetadata();
+    if (imd.Has(MDNum::TileHintX))
+    {
+      tileHint[0] = imd[MDNum::TileHintX];
+    }
+    if (imd.Has(MDNum::TileHintY))
+    {
+      tileHint[1] = imd[MDNum::TileHintY];
+    }
+  }
 
   typename otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::Pointer splitter =
       otb::ImageRegionAdaptativeSplitter<itkGetStaticConstMacro(ImageDimension)>::New();

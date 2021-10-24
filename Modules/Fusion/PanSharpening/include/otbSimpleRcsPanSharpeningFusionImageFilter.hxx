@@ -23,6 +23,7 @@
 #define otbSimpleRcsPanSharpeningFusionImageFilter_hxx
 
 #include "otbSimpleRcsPanSharpeningFusionImageFilter.h"
+#include "otbNoDataHelper.h"
 
 namespace otb
 {
@@ -116,9 +117,7 @@ void SimpleRcsPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutpu
   bool                noDataValuePanAvailable = false;
   PanPixelType        noDataValuePan          = 0;
 
-  bool retPan =
-      itk::ExposeMetaData<std::vector<bool>>(this->GetPanInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValueAvailable, tmpNoDataValuePanAvailable);
-  retPan &= itk::ExposeMetaData<std::vector<double>>(this->GetPanInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValue, tmpNoDataValuePan);
+  bool retPan = ReadNoDataFlags(this->GetPanInput()->GetImageMetadata(), tmpNoDataValuePanAvailable, tmpNoDataValuePan);
 
   if (retPan && tmpNoDataValuePanAvailable.size() > 0 && tmpNoDataValuePan.size() > 0)
   {
@@ -126,14 +125,12 @@ void SimpleRcsPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutpu
     noDataValuePan          = static_cast<PanPixelType>(tmpNoDataValuePan[0]);
   }
 
-
   // Write no-data flags for Xs image
   std::vector<bool>        noDataValuesXsAvailable;
   std::vector<double>      tmpNoDataValuesXs;
   std::vector<XsPixelType> noDataValuesXs;
 
-  bool retXs = itk::ExposeMetaData<std::vector<bool>>(this->GetXsInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValueAvailable, noDataValuesXsAvailable);
-  retXs &= itk::ExposeMetaData<std::vector<double>>(this->GetXsInput()->GetMetaDataDictionary(), MetaDataKey::NoDataValue, tmpNoDataValuesXs);
+  bool retXs = ReadNoDataFlags(this->GetXsInput()->GetImageMetadata(), noDataValuesXsAvailable, tmpNoDataValuesXs);
 
   // Check if noData is needed and update noDataValuesAvailable with return function value
   if (retPan || retXs)

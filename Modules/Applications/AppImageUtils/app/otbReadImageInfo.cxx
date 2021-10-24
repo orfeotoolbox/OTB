@@ -23,6 +23,7 @@
 #include "otbCoordinateToName.h"
 #include "otbGroundSpacingImageFunction.h"
 #include "vnl/vnl_random.h"
+#include "otbNoDataHelper.h"
 
 namespace otb
 {
@@ -272,10 +273,9 @@ private:
     ossOutput << "\tData type : " << GetParameterString("datatype") << std::endl;
 
     std::vector<bool> noDataValueAvailable;
-    bool              ret = itk::ExposeMetaData<std::vector<bool>>(inImage->GetMetaDataDictionary(), MetaDataKey::NoDataValueAvailable, noDataValueAvailable);
-
     std::vector<double> noDataValues;
-    itk::ExposeMetaData<std::vector<double>>(inImage->GetMetaDataDictionary(), MetaDataKey::NoDataValue, noDataValues);
+
+    auto ret = ReadNoDataFlags(inImage->GetImageMetadata(), noDataValueAvailable, noDataValues);
 
     ossOutput << "\tNo data flags :";
 

@@ -35,12 +35,10 @@ Dictionary keys:
   - ProjectionRef
   - ResolutionFactor
   - SubDatasetIndex
-  - TileHintX
-  - TileHintY
   - UpperLeftCorner
   - UpperRightCorner
 RAM usage (in Bytes): 520
-Input requested: ImageRegion (0x7ffcb9287dc0)
+Input requested: ImageRegion (0x7fff772acea0)
   Dimension: 2
   Index: [9, 9]
   Size: [9, 9]
