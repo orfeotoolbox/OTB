@@ -74,6 +74,11 @@ private:
   void operator=(const Self&) = delete;
 
   std::unique_ptr<CoordinateTransformation> m_MapProjection;
+
+  double m_a;
+  double m_b;
+  double m_f;
+  double m_es;
 };
 
 } // namespace otb
