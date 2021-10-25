@@ -43,6 +43,11 @@ SarSensorModel::SarSensorModel( const std::string & productType,
                               m_WorldToEcefTransform(otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New())
 
 {
+  if (m_GCP.GCPs.empty())
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject, <<"no GCP found in the input metadata, at least one is required in SARSensorModel");
+  }
+
   OptimizeTimeOffsetsFromGcps();
 
   const std::vector<std::string> grdProductTypes = {"GRD", "MGD", "GEC", "EEC"};
@@ -957,6 +962,13 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
       currentGCP.m_GCPCol = newSample + fractionalSamples;
       oneBurstGCPs.push_back(currentGCP);
     }
+  }
+
+  // emit a warning if there are no GCP inside the burst, as it makes the output model unusable
+  // See Gitlab issue #2230
+  if (oneBurstGCPs.empty())
+  {
+    otbLogMacro(Warning, << "There are no GCP inside the extracted burst")
   }
 
   m_GCP.GCPs.swap(oneBurstGCPs);
