@@ -24,6 +24,7 @@
 
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
+#include "otbSpatialReference.h"
 
 // useful constants
 #include <otbMath.h>
@@ -282,9 +283,9 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   gcp.m_Id = "1";
   
   Projection::GCPParam gcpParam;
+  gcpParam.GCPProjection = SpatialReference::FromWGS84().ToWkt();
   gcpParam.GCPs.push_back(gcp);
   imd.Add(MDGeom::GCP, gcpParam);
-
 
   SARCalib sarCalib;
   std::istringstream("1970-01-01T00:00:00.000000") >> sarCalib.calibrationStartTime;
