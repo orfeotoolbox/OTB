@@ -268,8 +268,22 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   // TODO: compute a GCP at the center of scene using the inverse sar model like it is done in ossim plugins
   // This require to move IMIs to another higher level module that depends on OTBTransform (which depends 
   // on OTBMetadata) so that SarSensorModel can be used. (this cannot be done while IMIs still depend on Ossim)
-  Projection::GCPParam gcp;
-  imd.Add(MDGeom::GCP, gcp);
+
+  // Add the top left corner as GCP for now
+  std::istringstream output(metadataBands[0]["S01_SBI_Top_Left_Geodetic_Coordinates"]);
+
+  GCP gcp;
+
+  output >> gcp.m_GCPY; // lat
+  output >> gcp.m_GCPY; // lon
+  output >> gcp.m_GCPZ; // height
+  gcp.m_GCPRow = 0;
+  gcp.m_GCPCol = 0;
+  gcp.m_Id = "1";
+  
+  Projection::GCPParam gcpParam;
+  gcpParam.GCPs.push_back(gcp);
+  imd.Add(MDGeom::GCP, gcpParam);
 
 
   SARCalib sarCalib;
