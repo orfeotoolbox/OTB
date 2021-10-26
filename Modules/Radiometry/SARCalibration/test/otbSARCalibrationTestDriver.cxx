@@ -43,4 +43,5 @@ void RegisterTests()
   REGISTER_TEST(otbSarBrightnessToImageFilterTest);
   REGISTER_TEST(otbSarDeburstFilterTest);
   REGISTER_TEST(otbSarBurstExtractionFilterTest);
+  REGISTER_TEST(otbSarConcatenateBurstsImageFilterTest);
 }

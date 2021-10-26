@@ -24,6 +24,7 @@
 
 #include "itkImageToImageFilter.h"
 #include "otbTileImageFilter.h"
+#include "otbImageMetadata.h"
 
 namespace otb
 {
