@@ -40,7 +40,7 @@ using namespace boost::unit_test;
 BOOST_AUTO_TEST_CASE(SARSensorModel_parameters)
 {
   
-  BOOST_TEST_REQUIRE( framework::master_test_suite().argc == 5 );
+  BOOST_TEST_REQUIRE( framework::master_test_suite().argc == 7 );
   //BOOST_TEST_MESSAGE( "'argv[0]' contains " << framework::master_test_suite().argv[0] );
   //BOOST_TEST_REQUIRE( framework::master_test_suite().argv[1] == "--input" );
   std::cout << "argv[1] " << framework::master_test_suite().argv[1] << std::endl;
@@ -75,8 +75,8 @@ BOOST_AUTO_TEST_CASE(SARSensorModel_WorldToLineSample)
 
 BOOST_AUTO_TEST_CASE(SARSensorModel_auto_validate_inverse_transform )
 {
-  double lineTol = 1.;
-  double sampleTol = 1.;
+  double lineTol = std::stod(framework::master_test_suite().argv[5]);
+  double sampleTol = std::stod(framework::master_test_suite().argv[6]);
 
   using ImageType = otb::VectorImage<unsigned int, 2>;
   using ReaderType = otb::ImageFileReader<ImageType>;
@@ -110,8 +110,8 @@ BOOST_AUTO_TEST_CASE(SARSensorModel_auto_validate_inverse_transform )
 
     model.WorldToLineSample(geoPoint, lineSample);
 
-    BOOST_TEST(std::abs(lineSample[0] - lineSampleBaseline[0]) < lineTol); 
-    BOOST_TEST(std::abs(lineSample[1] - lineSampleBaseline[1]) < sampleTol); 
+    BOOST_TEST(std::abs(lineSample[0] - lineSampleBaseline[0]) < lineTol);
+    BOOST_TEST(std::abs(lineSample[1] - lineSampleBaseline[1]) < sampleTol);
   }
 }
 
@@ -129,9 +129,10 @@ BOOST_AUTO_TEST_CASE(SARSensorModel_auto_validate_forward_transform)
   reader->SetFileName(framework::master_test_suite().argv[1]);
   reader->GenerateOutputInformation();
 
-  if (reader->GetOutput()->GetGCPCount() == 0)
+  if (reader->GetOutput()->GetGCPCount() <= 1)
   {
-    otbLogMacro(Info, << "Input product has no gcp, skipping gcp forward transform validation.");
+    otbLogMacro(Info, << "Input product has not enough gcp, at least two are " 
+                         "required for this test. Skipping gcp forward transform validation.");
     return;
   }
 

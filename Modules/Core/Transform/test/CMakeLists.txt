@@ -242,21 +242,27 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
            LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff} 
            -23.9431732671333
            15.7637929806278
-           0)
+           0
+           1
+           1)
   
   otb_add_test(NAME prTvSarSensorModelSentinel1_geom
            COMMAND otbSarSensorModelTest --
            LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/measurement/s1a-s6-slc-vv-20150619t195043-20150619t195101-006447-00887d-001.tiff}?&geom=${INPUTDATA}/sentinel1/sentinel1-2.geom
            -23.9431732671333
            15.7637929806278
-           0)
+           0
+           1
+           1)
 
   otb_add_test(NAME prTvSarSensorModelCosmoSkyMed
            COMMAND otbSarSensorModelTest --
            LARGEINPUT{COSMOSKYMED/Toulouse_spotlight/CSKS3_SCS_B_S2_08_HH_RD_SF_20110418180325_20110418180332.h5} 
            1.3736840073413
            43.5726757080402
-           0)
+           0
+           2
+           2)
 
 #  otb_add_test(NAME prTvSarSensorModelTerraSarX
 #           COMMAND otbSarSensorModelTest --

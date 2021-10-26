@@ -122,7 +122,6 @@ std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const std::string & re
     int hour = static_cast<int> (total_seconds/3600.0);
     int minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
     double seconds = total_seconds - hour*3600 - minutes*60;
-    seconds += 0.5;
 
     std::string timeStr = reference_UTC + "T" + formatTimeInt(hour) + ":" + formatTimeInt(minutes) + ":" + formatTimeDouble(seconds);
 
@@ -251,9 +250,8 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   }
   sarParam.rangeSamplingRate = 1 / rangeTimeInterval;
 
-  sarParam.azimuthTimeInterval = MetaData::DurationType(
-      std::stod(metadataBands[0]["S01_SBI_Line_Time_Interval"])
-      * 1e6);
+  sarParam.azimuthTimeInterval = MetaData::Duration::Seconds(
+      std::stod(metadataBands[0]["S01_SBI_Line_Time_Interval"]));
   sarParam.nearRangeTime = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Range_First_Time"]);
   
   auto lookSide = m_MetadataSupplierInterface->GetAs<std::string>("Look_Side");
@@ -276,7 +274,7 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   GCP gcp;
 
   output >> gcp.m_GCPY; // lat
-  output >> gcp.m_GCPY; // lon
+  output >> gcp.m_GCPX; // lon
   output >> gcp.m_GCPZ; // height
   gcp.m_GCPRow = 0;
   gcp.m_GCPCol = 0;
