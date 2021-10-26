@@ -22,6 +22,7 @@
 #define otbSarInverseTransform_hxx
 
 #include "otbSarInverseTransform.h"
+#include "otbDEMHandler.h"
 
 namespace otb
 {
@@ -40,7 +41,7 @@ SarInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::Transform
   if (NInputDimensions > 2)
     worldPoint[2] = static_cast<double>(point[2]);
   else
-    worldPoint[2] = 0.;
+    worldPoint[2] = otb::DEMHandler::GetInstance().GetHeightAboveEllipsoid(point[0], point[1]);
 
   this->m_Transformer->WorldToLineSample(worldPoint, sensorPoint);
 
