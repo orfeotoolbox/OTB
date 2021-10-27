@@ -39,8 +39,8 @@ using namespace boost::unit_test;
 
 BOOST_AUTO_TEST_CASE(SARSensorModel_parameters)
 {
-  
-  BOOST_TEST_REQUIRE( framework::master_test_suite().argc == 7 );
+  BOOST_TEST_REQUIRE( framework::master_test_suite().argc == 8);
+  // filename lon lat height lineTol sampleTol sqResTol
   //BOOST_TEST_MESSAGE( "'argv[0]' contains " << framework::master_test_suite().argv[0] );
   //BOOST_TEST_REQUIRE( framework::master_test_suite().argv[1] == "--input" );
   std::cout << "argv[1] " << framework::master_test_suite().argv[1] << std::endl;
@@ -119,7 +119,7 @@ BOOST_AUTO_TEST_CASE(SARSensorModel_auto_validate_inverse_transform )
 
 BOOST_AUTO_TEST_CASE(SARSensorModel_auto_validate_forward_transform)
 {
-  double sqResTol = 25;
+  double sqResTol = std::stod(framework::master_test_suite().argv[7]);;
 
   using ImageType = otb::VectorImage<unsigned int, 2>;
   using ReaderType = otb::ImageFileReader<ImageType>;
@@ -146,7 +146,6 @@ BOOST_AUTO_TEST_CASE(SARSensorModel_auto_validate_forward_transform)
 
   for (auto gcp: GCPParam.GCPs)
   {
-    gcp.m_GCPZ = 0.;
     if (odd)
     {
       productGCPs.GCPs.push_back(gcp);

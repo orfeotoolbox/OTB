@@ -244,6 +244,7 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
            15.7637929806278
            0
            1
+           1
            1)
   
   otb_add_test(NAME prTvSarSensorModelSentinel1_geom
@@ -252,6 +253,7 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
            -23.9431732671333
            15.7637929806278
            0
+           1
            1
            1)
 
@@ -262,14 +264,18 @@ if (Boost_UNIT_TEST_FRAMEWORK_FOUND)
            43.5726757080402
            0
            2
-           2)
+           2
+           1)
 
-#  otb_add_test(NAME prTvSarSensorModelTerraSarX
-#           COMMAND otbSarSensorModelTest --
-#           LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228}
-#           -111.664738184032
-#           36.2692959995967
-#           0)
+  otb_add_test(NAME prTvSarSensorModelTerraSarX
+           COMMAND otbSarSensorModelTest --
+           LARGEINPUT{TERRASARX/2008-03-10_GrandCanyon_SSC/TSX1_SAR__SSC______SM_S_SRA_20080310T133220_20080310T133228/IMAGEDATA/IMAGE_HH_SRA_strip_011.cos}
+           -111.664738184032
+           36.2692959995967
+           1800
+           3
+           2
+           1)
 
   add_executable(otbSentinel1SensorModelTest otbSentinel1SensorModelTest.cxx )
   target_link_libraries(
