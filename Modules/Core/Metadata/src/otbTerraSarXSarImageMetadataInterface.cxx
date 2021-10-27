@@ -512,9 +512,6 @@ void ReadGeorefGCP(const XMLMetadataSupplier & xmlMS, const XMLMetadataSupplier 
   // Count the gcps if the given count value is invalid
   if(GCPCount == 0)
     GCPCount = geoXmlMS.GetNumberOf("geoReference.geolocationGrid.gridPoint");
-  // Put some reasonable limits of the number of gcps
-  if(GCPCount > 5000)
-    GCPCount = 5000;
 
   const auto azimuthTimeStart = MetaData::ReadFormattedDate(
       xmlMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC"));
@@ -524,16 +521,16 @@ void ReadGeorefGCP(const XMLMetadataSupplier & xmlMS, const XMLMetadataSupplier 
     ss.str("");
     ss << "geoReference.geolocationGrid.gridPoint_" << i << ".";
     const std::string id = std::to_string(i);
-    gcp.GCPs.emplace_back(id,                                  // id
-                     "",                                       // info
-                     geoXmlMS.GetAs<double>(ss.str() + "col"), // col
-                     geoXmlMS.GetAs<double>(ss.str() + "row"), // row
-                     geoXmlMS.GetAs<double>(ss.str() + "lon"), // px
-                     geoXmlMS.GetAs<double>(ss.str() + "lat"), // py
-                     0);                                       // pz ("height" in the xml file, but GDAL doesn't read it, so we do the same)
+    gcp.GCPs.emplace_back(id,                                      // id
+                     "",                                           // info
+                     geoXmlMS.GetAs<double>(ss.str() + "col"),     // col
+                     geoXmlMS.GetAs<double>(ss.str() + "row"),     // row
+                     geoXmlMS.GetAs<double>(ss.str() + "lon"),     // px
+                     geoXmlMS.GetAs<double>(ss.str() + "lat"),     // py
+                     geoXmlMS.GetAs<double>(ss.str() + "height")); // pz
     
     GCPTime time;
-    auto deltaAz = MetaData::DurationType(geoXmlMS.GetAs<double>(ss.str() + "t"));
+    auto deltaAz = MetaData::Duration::Seconds(geoXmlMS.GetAs<double>(ss.str() + "t"));
 
     time.azimuthTime = azimuthTimeStart + deltaAz;
     time.slantRangeTime = param.nearRangeTime + geoXmlMS.GetAs<double>(ss.str() + "tau"); 
@@ -648,6 +645,7 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   }
 
   XMLMetadataSupplier MainXMLFileMetadataSupplier(MainFilePath);
+
   imd.Add(MDNum::NumberOfLines, MainXMLFileMetadataSupplier.GetAs<int>("level1Product.productInfo.imageDataInfo.imageRaster.numberOfRows"));
   imd.Add(MDNum::NumberOfColumns, MainXMLFileMetadataSupplier.GetAs<int>("level1Product.productInfo.imageDataInfo.imageRaster.numberOfColumns"));
   imd.Add(MDStr::OrbitDirection, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.missionInfo.orbitDirection"));
