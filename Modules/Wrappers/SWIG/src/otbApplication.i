@@ -34,6 +34,8 @@
 %include "itkMacro.i"
 %include "itkBase.i"
 
+%include "otbImageMetadata.i"
+
 #if OTB_SWIGNUMPY
 %include "numpy.i"
 
@@ -144,20 +146,6 @@ public:
   ~VectorDataKeywordlist();
   // VectorDataKeywordlist(const Self& other);
   // TODO : finish wrapping
-};
-
-class GCP
-{
-public:
-  std::string m_Id;
-  std::string m_Info;
-  double m_GCPCol;
-  double m_GCPRow;
-  double m_GCPX;
-  double m_GCPY;
-  double m_GCPZ;
-  GCP();
-  void Print(std::ostream& os) const;
 };
 
 } // end of namespace otb
@@ -310,6 +298,8 @@ public:
   std::string GetImageProjection(const std::string & key, unsigned int idx = 0);
   unsigned long PropagateRequestedRegion(const std::string & key, itk::ImageRegion<2> region, unsigned int idx = 0);
   itk::ImageRegion<2> GetImageRequestedRegion(const std::string & key, unsigned int idx = 0);
+  const otb::ImageMetadata &GetImageMetadata(const std::string& key, unsigned int idx = 0);
+  void SetImageMetadata(const otb::ImageMetadata & imd, const std::string& key, unsigned int idx = 0);
   itkMetaDataDictionary GetImageMetaData(const std::string & key, unsigned int idx = 0);
   otb::Wrapper::ImagePixelType GetImageBasePixelType(const std::string & key, unsigned int idx = 0);
 

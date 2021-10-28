@@ -369,8 +369,6 @@ void LUT<VDim>::FromString(std::string str)
 template class LUT<1>;
 template class LUT<2>;
 
-// array<pair<> >
-// boost::flat_map<> 
 MDNumBmType MDNumNames = bimapGenerator<MDNum>(std::map<MDNum, std::string> {
   {MDNum::TileHintX,"TileHintX"},
   {MDNum::TileHintY,"TileHintY"},

@@ -24,17 +24,18 @@
 #include <string>
 #include <vector>
 #include <cstdio>
+#include <unordered_map>
 
 #include <boost/bimap.hpp>
 #include <boost/algorithm/string.hpp>
 
 #include "itkDataObject.h"
 #include "itkVariableLengthVector.h"
+
 #include "OTBMetadataExport.h"
 #include "otbStringUtils.h"
 #include "otbJoinContainer.h"
-
-#include <unordered_map>
+#include "otbMetaDataEnum.h"
 
 namespace otb
 {
@@ -120,111 +121,6 @@ typedef std::vector<double>               VectorType;
 typedef std::vector<bool>                 BoolVectorType;
 typedef itk::VariableLengthVector<double> VariableLengthVectorType;
 }
-
-/** Metadata as double*/
-enum class MDNum
-{
-// generic
-  TileHintX,
-  TileHintY,
-  DataType,
-  NoData,
-  OrbitNumber,
-  NumberOfLines,
-  NumberOfColumns,
-  AverageSceneHeight,
-// Display
-  RedDisplayChannel,
-  GreenDisplayChannel,
-  BlueDisplayChannel,
-// optical section
-  PhysicalGain,
-  PhysicalBias,
-  SolarIrradiance,
-  SunElevation,
-  SunAzimuth,
-  SatElevation,
-  SatAzimuth,
-  SpectralStep,
-  SpectralMin,
-  SpectralMax,
-// SAR section
-  CalScale,
-  CalFactor,
-  PRF,
-  RSF,
-  RadarFrequency,
-  CenterIncidenceAngle,
-  RescalingFactor,
-  LineSpacing,
-  PixelSpacing,
-  RangeTimeFirstPixel,
-  RangeTimeLastPixel,
-  END
-};
-
-/** Metadata as std::string */
-enum class MDStr
-{
-  SensorID,
-  Mission,
-  Instrument,
-  InstrumentIndex,
-  BandName,
-  EnhancedBandName,
-  ProductType,
-  GeometricLevel,
-  RadiometricLevel,
-  Polarization,
-  Mode,
-  Swath,
-  OrbitDirection,
-  BeamMode,
-  BeamSwath,
-  AreaOrPoint,
-  LayerType,
-  MetadataType,
-  OtbVersion,
-  END
-};
-
-/** Metadata as LUT 1D */
-enum class MDL1D
-{
-  SpectralSensitivity,
-  END
-};
-
-/** Metadata as LUT 2D */
-enum class MDL2D
-{
-  // Sar calibration lut ...
-  END
-};
-
-/** Metadata as Time */
-enum class MDTime
-{
-  AcquisitionDate,
-  ProductionDate,
-  AcquisitionStartTime,
-  AcquisitionStopTime,
-  END
-};
-
-enum class MDGeom
-{
-  ProjectionWKT,  // -> string
-  ProjectionEPSG, // -> int
-  ProjectionProj, // -> string
-  RPC,            // -> RPCParam
-  SAR,            // -> SARParam
-  SARCalib,       // -> SARCalib
-  SensorGeometry, // -> boost::any
-  GCP,            // -> GCPParam
-  Adjustment,     // -> ?
-  END
-};
 
 namespace MetaData
 {
