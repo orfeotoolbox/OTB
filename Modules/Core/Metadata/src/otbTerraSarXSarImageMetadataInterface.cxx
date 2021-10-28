@@ -36,17 +36,11 @@
 #include "itksys/SystemTools.hxx"
 #include "itksys/RegularExpression.hxx"
 
-
+#include "otb_tinyxml.h"
 
 
 namespace otb
 {
-
-TerraSarXSarImageMetadataInterface::TerraSarXSarImageMetadataInterface()
-{
-}
-
-
 
 namespace ExtractXMLFiles {
 
@@ -482,17 +476,29 @@ void TerraSarXSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent
   Superclass::PrintSelf(os, indent);
 }
 
-void ReadGeorefGCP(const XMLMetadataSupplier & xmlMS, const XMLMetadataSupplier & geoXmlMS, ImageMetadata & imd, SARParam & param)
+void ReadGeorefGCP(const otb::MetaData::TimePoint & azimuthTimeStart, const std::string & geoRefXmlFileName, ImageMetadata & imd, SARParam & param)
 {
   Projection::GCPParam gcp;
   std::stringstream ss;
 
-  // Get the ellipsoid and semi-major, semi-minor axes
-  if(geoXmlMS.HasValue("geoReference.referenceFrames.sphere.ellipsoidID"))
+  // Open the xml file
+  TiXmlDocument doc(geoRefXmlFileName);
+  if (!doc.LoadFile())
   {
-    auto ellipsoidID = geoXmlMS.GetAs<std::string>("geoReference.referenceFrames.sphere.ellipsoidID");
-    auto minor_axis = geoXmlMS.GetAs<double>(0, "geoReference.referenceFrames.sphere.semiMinorAxis");
-    auto major_axis = geoXmlMS.GetAs<double>(0, "geoReference.referenceFrames.sphere.semiMajorAxis");
+    otbGenericExceptionMacro(MissingMetadataException, << "Can't open file " << geoRefXmlFileName);
+  }
+
+  TiXmlHandle   hDoc(&doc);
+
+  auto sphereNode = hDoc.FirstChild("geoReference")
+                                 .FirstChild("referenceFrames")
+                                 .FirstChild("sphere").ToNode();
+  if (sphereNode)
+  {
+    const std::string ellipsoidID = sphereNode->FirstChildElement("ellipsoidID")->GetText();
+    const auto minor_axis = std::stod(sphereNode->FirstChildElement("semiMajorAxis")->GetText());
+    const auto major_axis = std::stod(sphereNode->FirstChildElement("semiMinorAxis")->GetText());
+    
     if(ellipsoidID.empty() || minor_axis == 0 || major_axis == 0)
     {
       otbGenericExceptionMacro(MissingMetadataException, << "Cannot read GCP's spatial reference");
@@ -507,36 +513,45 @@ void ReadGeorefGCP(const XMLMetadataSupplier & xmlMS, const XMLMetadataSupplier 
                                                        major_axis/(major_axis - minor_axis)).ToWkt();
     }
   }
-
-  auto GCPCount = geoXmlMS.GetAs<unsigned int>(0, "geoReference.geolocationGrid.numberOfGridPoints.total");
-  // Count the gcps if the given count value is invalid
-  if(GCPCount == 0)
-    GCPCount = geoXmlMS.GetNumberOf("geoReference.geolocationGrid.gridPoint");
-
-  const auto azimuthTimeStart = MetaData::ReadFormattedDate(
-      xmlMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC"));
-
-  for(unsigned int i = 1 ; i <= GCPCount ; ++i)
+  else
   {
-    ss.str("");
-    ss << "geoReference.geolocationGrid.gridPoint_" << i << ".";
-    const std::string id = std::to_string(i);
-    gcp.GCPs.emplace_back(id,                                      // id
-                     "",                                           // info
-                     geoXmlMS.GetAs<double>(ss.str() + "col"),     // col
-                     geoXmlMS.GetAs<double>(ss.str() + "row"),     // row
-                     geoXmlMS.GetAs<double>(ss.str() + "lon"),     // px
-                     geoXmlMS.GetAs<double>(ss.str() + "lat"),     // py
-                     geoXmlMS.GetAs<double>(ss.str() + "height")); // pz
-    
-    GCPTime time;
-    auto deltaAz = MetaData::Duration::Seconds(geoXmlMS.GetAs<double>(ss.str() + "t"));
-
-    time.azimuthTime = azimuthTimeStart + deltaAz;
-    time.slantRangeTime = param.nearRangeTime + geoXmlMS.GetAs<double>(ss.str() + "tau"); 
-
-    param.gcpTimes[id] = time;
+    otbGenericExceptionMacro(MissingMetadataException, << "Cannot find the geoReference/referenceFrames/sphere node in " << geoRefXmlFileName);
   }
+
+  auto gridNode = hDoc.FirstChild("geoReference")
+                      .FirstChild("geolocationGrid").ToNode();
+
+  if (gridNode)
+  {
+    // GCP id starts at 1
+    unsigned int i = 1;
+    for(TiXmlElement* gcpElem = gridNode->FirstChildElement("gridPoint")
+        ; gcpElem != NULL
+        ; gcpElem = gcpElem->NextSiblingElement("gridPoint"), i++)
+    {
+      const std::string id = std::to_string(i);
+      gcp.GCPs.emplace_back(id,                                                          // id
+                            "",                                                          // info
+                            std::stod(gcpElem->FirstChildElement("col")->GetText()),     // col
+                            std::stod(gcpElem->FirstChildElement("row")->GetText()),     // row
+                            std::stod(gcpElem->FirstChildElement("lon")->GetText()),     // px
+                            std::stod(gcpElem->FirstChildElement("lat")->GetText()),     // py
+                            std::stod(gcpElem->FirstChildElement("height")->GetText())); // pz
+
+      GCPTime time;
+      auto deltaAz = MetaData::Duration::Seconds(std::stod(gcpElem->FirstChildElement("t")->GetText()));
+
+      time.azimuthTime = azimuthTimeStart + deltaAz;
+      time.slantRangeTime = param.nearRangeTime + std::stod(gcpElem->FirstChildElement("tau")->GetText()); 
+
+      param.gcpTimes[id] = time;
+    }
+  }
+  else
+  {
+    otbGenericExceptionMacro(MissingMetadataException, << "Cannot find the geoReference/geolocationGrid node in " << geoRefXmlFileName);
+  }
+
   imd.Add(MDGeom::GCP, gcp);
 }
 
@@ -708,7 +723,10 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   SARParam sarParam;
 
   // Fetch the GCP
-  ReadGeorefGCP(MainXMLFileMetadataSupplier, GCPXMLFileMS, imd, sarParam);
+  ReadGeorefGCP(MetaData::ReadFormattedDate(MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC")), 
+                MainDirectory + "/ANNOTATION/GEOREF.xml",
+                imd,
+                sarParam);
 
   ReadSARSensorModel(MainXMLFileMetadataSupplier, polarization, sarParam);
 
@@ -753,7 +771,10 @@ void TerraSarXSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     SARParam sarParam;
 
     // Fetch the GCP
-    ReadGeorefGCP(MainXMLFileMS, GCPXMLFileMS, imd, sarParam);
+    ReadGeorefGCP(MetaData::ReadFormattedDate(MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC")), 
+                  itksys::SystemTools::GetParentDirectory(MainFilePath) + "/ANNOTATION/GEOREF.xml",
+                  imd,
+                  sarParam);
 
     ReadSARSensorModel(MainXMLFileMS, imd[MDStr::Polarization], sarParam);
     imd.Add(MDGeom::SAR, sarParam);

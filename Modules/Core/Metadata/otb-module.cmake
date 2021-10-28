@@ -30,6 +30,7 @@ ENABLE_SHARED
     OTBITK
     OTBCommon
     OTBGdalAdapters
+    OTBTinyXML
     
   TEST_DEPENDS
     OTBTestKernel
