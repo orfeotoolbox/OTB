@@ -685,6 +685,13 @@ void Sentinel1ImageMetadataInterface::ReadSarParamAndGCPs(const XMLMetadataSuppl
 void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 {
   auto imageFilePath = m_MetadataSupplierInterface->GetResourceFile();
+
+  // If path is relative, find the full path to make sure we can retrieve the parent directory.
+  if (!itksys::SystemTools::FileIsFullPath(imageFilePath))
+  {
+    imageFilePath = itksys::SystemTools::CollapseFullPath(imageFilePath);
+  }
+
   auto imageFineName = itksys::SystemTools::GetFilenameWithoutExtension(imageFilePath);
 
   auto pos = imageFineName.find('-');
