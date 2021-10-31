@@ -365,16 +365,17 @@ TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationNoise(const Metadat
 {
   // Retrive the polarisation layer
   unsigned int polLayer = 0;
+  auto numberOfCalFactor = mds.GetNumberOf("level1Product.calibration.calibrationConstant");
   if(bandName != "")
   {
     std::stringstream oss;
-    for(unsigned int band = 1 ; band <= imd.Bands.size() ; ++band)
+    for(unsigned int idx = 1 ; idx <= numberOfCalFactor ; ++idx)
     {
       oss.str("");
-      oss << "level1Product.noise_" << band << ".polLayer";
+      oss << "level1Product.noise_" << idx << ".polLayer";
       if(mds.GetAs<std::string>("", oss.str()) == bandName)
       {
-        polLayer = band;
+        polLayer = idx;
         break;
       }
     }
@@ -489,7 +490,6 @@ void ReadGeorefGCP(const otb::MetaData::TimePoint & azimuthTimeStart, const std:
   }
 
   TiXmlHandle   hDoc(&doc);
-
   auto sphereNode = hDoc.FirstChild("geoReference")
                                  .FirstChild("referenceFrames")
                                  .FirstChild("sphere").ToNode();
@@ -696,7 +696,7 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   {
     // Retrive the polarisation layer
     std::stringstream oss;
-    for(unsigned int band = 1 ; band <= imd.Bands.size() ; ++band)
+    for(unsigned int band = 1 ; band <= numberOfCalFactor ; ++band)
     {
       oss.str("");
       oss << "level1Product.calibration.calibrationConstant_" << band << ".polLayer";
@@ -713,6 +713,7 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   SARCalib sarCalib;
   std::istringstream("1970-01-01T00:00:00.000000") >> sarCalib.calibrationStartTime;
   std::istringstream("1970-01-01T00:00:00.000000") >> sarCalib.calibrationStopTime;
+
   LoadRadiometricCalibrationData(sarCalib, MainXMLFileMetadataSupplier, imd, polarization);
   sarCalib.calibrationLookupFlag = false;
   imd.Add(MDGeom::SARCalib, sarCalib);
@@ -722,13 +723,13 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
 
   SARParam sarParam;
 
+  ReadSARSensorModel(MainXMLFileMetadataSupplier, polarization, sarParam);
+
   // Fetch the GCP
   ReadGeorefGCP(MetaData::ReadFormattedDate(MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC")), 
                 MainDirectory + "/ANNOTATION/GEOREF.xml",
                 imd,
                 sarParam);
-
-  ReadSARSensorModel(MainXMLFileMetadataSupplier, polarization, sarParam);
 
   imd.Add(MDGeom::SAR, sarParam);
 }
