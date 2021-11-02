@@ -9,6 +9,9 @@ said, there are some limitations.
 Raster images
 -------------
 
+Reading a raster image
+~~~~~~~~~~~~~~~~~~~~~~
+
 GDAL provides a very large panel of drivers to access metadata in
 image files. OTB stores the metadata in a special dictionary called
 otbImageMetadata. There is a metadata framework that uses interfaces
@@ -51,12 +54,38 @@ metadata files, etc). For SAR products, OTB takes necessarily an image
 file. For optical sensor, OTB can also take the manifest file as
 input. In that case, OTB will consider all the bands of the product.
 
+Writing a raster image
+~~~~~~~~~~~~~~~~~~~~~~
+
+OTB uses a correspondence table to link a specific file extension to a
+GDAL driver. This means that formats not present in this table can't
+be writen, even if the driver exists in GDAL. The formats available in
+OTB for writing a raster are:
+
+- GTiff (.tif / .tiff)
+
+- ENVI (.hdr)
+
+- HFA (.img)
+
+- NITF (.ntf)
+
+- PNG (.png)
+
+- JPEG (.jpg / .jpeg)
+
+- PCIDSK (.pix)
+
+- ISIS2 (.lbl / .pds)
+
+- JP2OpenJPEG / JP2KAK / JP2ECW (.j2k / .jp2 / .jpx)
+
 A particularity of HDF datasets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When reading a HDF dataset, one needs to select the right subdataset
 using the :doc:`Extended filenames` ``&sdataidx=<(int)idx>``.  For
-example, in some COsmoSkyMed products, the first subDataset is a
+example, in some CosmoSkyMed products, the first subDataset is a
 quicklook, and the actual product is the second subdataset.
 
 
