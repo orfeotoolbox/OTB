@@ -7,7 +7,7 @@ supported by GDAL are theoretically also supported by OTB. That being
 said, there are some limitations.
 
 Raster images
-~~~~~~~~~~~~~
+-------------
 
 GDAL provides a very large panel of drivers to access metadata in
 image files. OTB stores the metadata in a special dictionary called
@@ -17,31 +17,31 @@ otbImageMetadata. Thus, to access metadata for a specific sensor, the
 corresponding interface is required. As this time, available
 interfaces are:
 
-+------------------------+-------------------------+-------------------+
-| Sensor                 | Format                  | Notes             |
-+========================+=========================+===================+
-| CosmoSkyMed            | HDF5 / TIFF             | N/A               |
-+------------------------+-------------------------+-------------------+
-| Formosat               | DIMAP / TIFF            | N/A               |
-+------------------------+-------------------------+-------------------+
-| Ikonos                 | TIFF                    | N/A               |
-+------------------------+-------------------------+-------------------+
-| Pleiades               | JPEG2000 / TIFF         | N/A               |
-+------------------------+-------------------------+-------------------+
-| QuickBird              | TIFF                    | N/A               |
-+------------------------+-------------------------+-------------------+
-| Radarsat 2             | TIFF                    | N/A               |
-+------------------------+-------------------------+-------------------+
-| Sentinel 1             | TIFF                    | N/A               |
-+------------------------+-------------------------+-------------------+
-| Spot 5                 | DIMAP / TIFF            | RPC not available |
-+------------------------+-------------------------+-------------------+
-| Spot 6                 | DIMAP / JPEG2000 / TIFF | N/A               |
-+------------------------+-------------------------+-------------------+
-| TerraSarX              | COS                     | N/A               |
-+------------------------+-------------------------+-------------------+
-| WorldView 2            | TIFF                    | N/A               |
-+------------------------+-------------------------+-------------------+
++------------------------+-------------------------+-----------------------------+
+| Sensor                 | Format                  | Notes                       |
++========================+=========================+=============================+
+| CosmoSkyMed            | HDF5 / TIFF             | See HDF particularity below |
++------------------------+-------------------------+-----------------------------+
+| Formosat               | DIMAP / TIFF            | N/A                         |
++------------------------+-------------------------+-----------------------------+
+| Ikonos                 | TIFF                    | N/A                         |
++------------------------+-------------------------+-----------------------------+
+| Pleiades               | JPEG2000 / TIFF         | N/A                         |
++------------------------+-------------------------+-----------------------------+
+| QuickBird              | TIFF                    | N/A                         |
++------------------------+-------------------------+-----------------------------+
+| Radarsat 2             | TIFF                    | N/A                         |
++------------------------+-------------------------+-----------------------------+
+| Sentinel 1             | TIFF                    | N/A                         |
++------------------------+-------------------------+-----------------------------+
+| Spot 5                 | DIMAP / TIFF            | RPC not available           |
++------------------------+-------------------------+-----------------------------+
+| Spot 6                 | DIMAP / JPEG2000 / TIFF | N/A                         |
++------------------------+-------------------------+-----------------------------+
+| TerraSarX              | COS                     | N/A                         |
++------------------------+-------------------------+-----------------------------+
+| WorldView 2            | TIFF                    | N/A                         |
++------------------------+-------------------------+-----------------------------+
 
 Sensors not in this list can still be used with OTB, but the metadata
 won't be accessible.
@@ -51,8 +51,17 @@ metadata files, etc). For SAR products, OTB takes necessarily an image
 file. For optical sensor, OTB can also take the manifest file as
 input. In that case, OTB will consider all the bands of the product.
 
+A particularity of HDF datasets
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When reading a HDF dataset, one needs to select the right subdataset
+using the :doc:`Extended filenames` ``&sdataidx=<(int)idx>``.  For
+example, in some COsmoSkyMed products, the first subDataset is a
+quicklook, and the actual product is the second subdataset.
+
+
 Vector images
-~~~~~~~~~~~~~
+-------------
 
 OTB can read all vorctor format supported by ORG. But the writting
 process is a little tricky. OTB implements two ways of dealing with
