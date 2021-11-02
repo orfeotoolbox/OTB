@@ -54,11 +54,13 @@ input. In that case, OTB will consider all the bands of the product.
 Vector images
 ~~~~~~~~~~~~~
 
-OTB implements two ways of dealing with vector data. The first one
-uses OGR::Datasource. The second one uses otb::VectorData. Depending
-on which class is used by the application, different formats are
-available. This is confusing, and we plan on fixing this. For now,
-formats fully supported (IE. supported by all applications) are:
+OTB can read all vorctor format supported by ORG. But the writting
+process is a little tricky. OTB implements two ways of dealing with
+writting vector data. The first one uses OGR::Datasource. The second
+one uses otb::VectorData. Depending on which class is used by the
+application, different formats are available. This is confusing, and
+we plan on fixing this. For now, formats fully supported
+(IE. supported by all applications) are:
 
 - ESRI Shapefile (.shp)
 
