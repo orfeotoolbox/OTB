@@ -59,7 +59,7 @@ Writing a raster image
 
 OTB uses a correspondence table to link a specific file extension to a
 GDAL driver. This means that formats not present in this table can't
-be writen, even if the driver exists in GDAL. The formats available in
+be written, even if the driver exists in GDAL. The formats available in
 OTB for writing a raster are:
 
 - GTiff (.tif / .tiff)
@@ -93,9 +93,9 @@ second subdataset.
 Vector data
 -------------
 
-OTB can read all vorctor format supported by ORG. But the writing
+OTB can read all vector format supported by ORG. But the writing
 process is a little tricky. OTB implements two ways of dealing with
-writting vector data. The first one uses OGR::Datasource. The second
+writing vector data. The first one uses OGR::Datasource. The second
 one uses otb::VectorData. Depending on which class is used by the
 application, different formats are available. This is confusing, and
 we plan on fixing this. For now, formats fully supported
