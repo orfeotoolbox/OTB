@@ -128,8 +128,8 @@ GCP GCP::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & 
 
   return GCP(kwl.at(prefix + "Id"),
              info,
-             std::stod(kwl.at(prefix + "Row")),
              std::stod(kwl.at(prefix + "Col")),
+             std::stod(kwl.at(prefix + "Row")),
              std::stod(kwl.at(prefix + "X")),
              std::stod(kwl.at(prefix + "Y")),
              std::stod(kwl.at(prefix + "Z")));
