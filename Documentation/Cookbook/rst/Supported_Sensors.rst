@@ -84,15 +84,16 @@ A particularity of HDF datasets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When reading a HDF dataset, one needs to select the right subdataset
-using the :doc:`Extended filenames` ``&sdataidx=<(int)idx>``.  For
-example, in some CosmoSkyMed products, the first subDataset is a
-quicklook, and the actual product is the second subdataset.
+using the :ref:`Extended Filename <extended-filename-sdataidx>`
+``&sdataidx=<(int)idx>``.  For example, in some CosmoSkyMed products,
+the first subDataset is a quicklook, and the actual product is the
+second subdataset.
 
 
 Vector data
 -------------
 
-OTB can read all vorctor format supported by ORG. But the writting
+OTB can read all vorctor format supported by ORG. But the writing
 process is a little tricky. OTB implements two ways of dealing with
 writting vector data. The first one uses OGR::Datasource. The second
 one uses otb::VectorData. Depending on which class is used by the
