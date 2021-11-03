@@ -1,3 +1,73 @@
+OTB-v 8.0.0-alpha - Changes since version 7.4.0 (November 03rd, 2021)
+---------------------------------------------------------------------
+
+Features added:
+
+   * !862: Add INFO message about metadata source by Julien Osman
+   * !795: Improve opticalibration pleiades by Thibaut Romain
+   * !793: Add a high level OTB_WRAP_QGIS cmake option and Fix BUILD_DEFAULT_MODULE bug when listing module dependencies by Thibaut Romain
+   * !769: Missing kernels parameters in libsvm by Rémi Cresson
+   * !767: Improve QGIS interface for ExtractROI application by Julien Cabieces
+   * !697: Use Boost.SmallVec in BCO interpolator by Laurențiu Nicola
+
+Bugs fixed:
+
+   * !857: Resolve "OTB stand alone package not support the virtual filesystem" by Mickael Savinaud
+   * !842: Superbuild: compatibility between QT5 and MySQL by Cédric Traizet
+   * !826: Treat Parameter_RAM as an integer parameter in SetParameterValue (Swig Wrapper) by Cédric Traizet
+   * !775: Fix CosmoSkyMed ImageMetadataInterface by Cédric Traizet
+   * !764: Deactivate PROJ's test building in the Superbuild by Julien Osman
+   * !752: Fix output image from orthorectification having no projection by Cédric Traizet
+   * !751: Disable noisy std output message by Brad Hards
+
+Refactoring:
+
+   * !863: Use ImageMetadata to manage NoData and TileHint by Cédric Traizet
+   * !858: Optimize coordinate transformations in SARSensorModel by Cédric Traizet"
+   * !851: Remove Ossim by Cédric Traizet and Julien Osman
+   * !845: Refactor GeocentricTransform and remove EllipsoidAdapter by Cédric Traizet
+   * !844: Refactor the superimpose PHR mode by Cédric Traizet
+   * !830: Implement otb::SarTransformBase, otb::SarForwardTransform and otb::SarInverseTransform by Julien Osman
+   * !823: Implement Deburst algorithms by Cédric Traizet
+   * !815: Update expat version in Superbuild by Cédric Traizet
+   * !808: Implement SARSensorModel forward and inverse transforms by Cédric Traizet
+   * !807: Use SAR metadata in SarRadiometricCalibrationToImageFilter by Julien Osman
+   * !806: Implement a factory for sensor transforms by Thibaut Romain
+   * !803: Implement SAR metadata parsing from geom files by Julien Osman
+   * !796: Import capability for OTB metadata by Cédric Traizet
+   * !778: Remove OSSIM dependency from SensorModel tests by Julien Osman
+   * !776: Improve tests prTvTestCreateInverseForwardSensorModel by Julien Osman
+   * !773: Refactor the OpticalCalibration application by Cédric Traizet
+   * !770: Parse optical metadata from geom by Cédric Traizet
+   * !768: Improve qgis parameter integration by Julien Cabieces
+   * !765: Refactor optical image metadata interface by Cédric Traizet
+   * !763: Compare image metadata in --compare-metadata by Cédric Traizet
+   * !761: SAR metadata interfaces by Julie Brossard
+   * !759: Reading the metadata from the geom files without OSSIM by Julien Osman
+   * !744: Implementing an interface for sensor models and the RPC model by Julien Osman and Cédric Traizet
+   * !729: DEM handler based on GDAL by Cédric Traizet
+   * !707: Metadata refactoring by Guillaume Pasero, Julien Osman and Cédric Traizet
+
+CI:
+
+   * !856: Update Python to 3.8 on CI builds by Thibaut Romain
+   * !832: Simplification of the CI : remove jobs CentOS, Debian and Windows8 by Julien Osman
+   * !824: Set new URL for FFTW download by Julien Osman
+   * !822: Update openCV version to 4.5.1 for the SuperBuild, update the baseline for GEOS by Julien Osman
+   * !798: Fix CI launches tests when a build fails by Thibaut Romain
+   * !794: Superbuild archive CI job by Cédric Traizet
+   * !740: Develop package names by Julie Brossard
+
+Documentation:
+
+   * !862: Add INFO message about metadata source by Julien Osman
+   * !860: Fix warning message related to metadata reading by Julien Osman
+   * !802: Deprecate the qgis plugin by Julien Osman
+   * !800: Add legend for output colored images of Hoover Compare Segmentation by Julien Osman
+   * !781: Update the documentation about Remote Modules by Thibaut ROMAIN
+   * !780: Updating the documentation in preparation for OTB 8.0.0-alpha1 by Julien Osman
+   
+
 OTB-v 7.4.0 - Changes since version 7.3.0 (September 3rd, 2021)
 ----------------------------------------------------------------
 
