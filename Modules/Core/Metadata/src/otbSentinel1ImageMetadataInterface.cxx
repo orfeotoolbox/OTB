@@ -676,6 +676,8 @@ void Sentinel1ImageMetadataInterface::ReadSarParamAndGCPs(const XMLMetadataSuppl
   sarParam.numberOfLinesPerBurst = AnnotationMS.GetAs<unsigned long>("product.swathTiming.linesPerBurst");
   sarParam.numberOfSamplesPerBurst = AnnotationMS.GetAs<unsigned long>("product.swathTiming.samplesPerBurst");
 
+  sarParam.rightLookingFlag = true;
+
   // Fetch the GCP
   ReadGCP(AnnotationMS, gcp, sarParam);
 }
@@ -683,6 +685,13 @@ void Sentinel1ImageMetadataInterface::ReadSarParamAndGCPs(const XMLMetadataSuppl
 void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 {
   auto imageFilePath = m_MetadataSupplierInterface->GetResourceFile();
+
+  // If path is relative, find the full path to make sure we can retrieve the parent directory.
+  if (!itksys::SystemTools::FileIsFullPath(imageFilePath))
+  {
+    imageFilePath = itksys::SystemTools::CollapseFullPath(imageFilePath);
+  }
+
   auto imageFineName = itksys::SystemTools::GetFilenameWithoutExtension(imageFilePath);
 
   auto pos = imageFineName.find('-');
@@ -772,7 +781,7 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
     otbGenericExceptionMacro(MissingMetadataException,<<"Missing Calibration file for image '"<<ManifestFilePath<<"'");
   }
   XMLMetadataSupplier CalibrationMS(CalibrationFilePath);
-  imd.Add(MDNum::CalScale, CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant"));
+  imd.Add(MDNum::AbsoluteCalibrationConstant, CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant"));
 
   // Noise file
   std::string NoiseFilePath =
@@ -808,7 +817,7 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   Fetch(MDNum::AverageSceneHeight, imd, "support_data.avg_scene_height");
   Fetch(MDNum::RadarFrequency, imd, "support_data.radar_frequency");
   Fetch(MDNum::PRF, imd, "support_data.pulse_repetition_frequency");
-  Fetch(MDNum::CalScale, imd, "calibration.absoluteCalibrationConstant");
+  Fetch(MDNum::AbsoluteCalibrationConstant, imd, "calibration.absoluteCalibrationConstant");
   
   // Manifest data may not be present in geom file, but support data should be present in that case
   CheckFetch(MDStr::BeamMode, imd, "manifest_data.acquisition_mode") || CheckFetch(MDStr::BeamMode, imd, "support_data.acquisition_mode");

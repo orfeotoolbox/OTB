@@ -57,6 +57,17 @@ public:
   void WorldToLineSample(const Point3DType& inGeoPoint,
                          Point2DType& outLineSample) const;
 
+
+  /** Transform world point (lat,lon,hgt) to input image point
+  (col,row) and YZ frame */
+  void WorldToLineSampleYZ(const Point3DType& inGeoPoint, Point2DType& cr, Point2DType& yz) const;
+
+  /** Transform world point (lat,lon,hgt) to satellite position (x,y,z) and satellite velocity */
+  bool WorldToSatPositionAndVelocity(const Point3DType& inGeoPoint, Point3DType& satellitePosition, Point3DType& satelliteVelocity) const;
+
+  /** Transform line index to satellite position (x,y,z) and satellite velocity */
+  bool LineToSatPositionAndVelocity(double line, Point3DType& satellitePosition, Point3DType& satelliteVelocity) const;
+
   bool WorldToAzimuthRangeTime(const Point3DType& inGeoPoint, 
                                           TimeType & azimuthTime, 
                                           double & rangeTime, 
@@ -110,6 +121,24 @@ public:
             std::vector<std::pair<unsigned long,unsigned long> >& samplesBursts,
             unsigned int & linesOffset, unsigned int first_burstInd,
             bool inputWithInvalidPixels=false);
+
+   /**
+    * This method will estime the overlap area between two bursts and return the
+    * vector of lines and the vector of samples (with two elements : Burst Up and Burst Low). 
+    * Note that this operation has no effect if theBurstRecords
+    * contains a single burst. 
+    * \return true if this operation succeeded. No changes is
+    * made to the object if the operation fails.
+    * \param linesUp A container for the lines ranges to keep into the first Burst
+    * \param linesLow A container for the lines ranges to keep into the second Burst
+    * \param samplesUp A container for the samples ranges to keep into the first Burst.
+    * \param samplesDown A container for the samples ranges to keep into the second Burst.
+    * \param burstIndUp Index of the first Burst
+    * \param inputWithInvalidPixels A Boolean to indicate if invalids pixels are into inputs.
+    */
+  bool Overlap(std::pair<unsigned long, unsigned long>& linesUp, std::pair<unsigned long, unsigned long>& linesLow,
+               std::pair<unsigned long, unsigned long>& samplesUp, std::pair<unsigned long, unsigned long>& samplesLow, unsigned int burstIndUp,
+               bool inputWithInvalidPixels = false);
 
    /** Update a ImageMetadata object with the stored SarParam and GCPs, possibly modified from the 
     * original metadata by the SarSensorModel
@@ -191,6 +220,8 @@ private:
   Point3DType projToSurface(const GCP & gcp,
                             const Point2DType & imPt,
                             std::function<double(double, double)> heightFunction) const;
+
+  void LineToAzimuthTime(double line, TimeType & azimuthTime) const;
 
   /** Coordinate transformation from ECEF to geographic */
   itk::Point<double, 3> EcefToWorld(const itk::Point<double, 3> & ecefPoint) const;

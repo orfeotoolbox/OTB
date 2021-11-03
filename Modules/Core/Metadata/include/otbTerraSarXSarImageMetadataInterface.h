@@ -96,7 +96,7 @@ public:
   void Parse(ImageMetadata &) override;
 
 protected:
-  TerraSarXSarImageMetadataInterface();
+  TerraSarXSarImageMetadataInterface() = default;
   ~TerraSarXSarImageMetadataInterface() override = default;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;

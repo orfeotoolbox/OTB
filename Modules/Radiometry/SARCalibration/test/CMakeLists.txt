@@ -43,6 +43,7 @@ otbSarRadiometricCalibrationToImageFilterWithComplexPixelTest.cxx
 otbSarBrightnessToImageFilterTest.cxx
 otbSarDeburstFilterTest.cxx
 otbSarBurstExtractionFilterTest.cxx
+otbSarConcatenateBurstsImageFilter.cxx
 )
 
 add_executable(otbSARCalibrationTestDriver ${OTBSARCalibrationTests})
@@ -334,3 +335,15 @@ otb_add_test(NAME saTvSarBurstExtractionImageFilterTest2 COMMAND otbSARCalibrati
   ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.tiff
   ${TEMP}/saTvSarBurstImageFilterTest2Output.tif
   1)
+
+otb_add_test(NAME saTvSarConcatenateBurstsImageFilterTest COMMAND otbSARCalibrationTestDriver
+  --compare-image ${NOTOL}
+  ${BASELINE}/apTvRaSarConcatenateBursts_SENTINEL1_output.tif
+  ${TEMP}/saTvSarConcatenateBurstsImageFilterTest.tif
+  otbSarConcatenateBurstsImageFilterTest
+  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst0_amp.tif
+  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst1_amp.tif
+  ${INPUTDATA}/s1a-iw1-slc-vv-20170111_Burst01_amp.tiff
+  0
+  ${TEMP}/saTvSarConcatenateBurstsImageFilterTest.tif)
+

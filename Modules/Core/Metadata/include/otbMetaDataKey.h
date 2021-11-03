@@ -160,6 +160,7 @@ enum class MDNum
   PixelSpacing,
   RangeTimeFirstPixel,
   RangeTimeLastPixel,
+  AbsoluteCalibrationConstant,
   END
 };
 

@@ -24,6 +24,7 @@
 
 #include "otbMacro.h"
 #include "itkMetaDataObject.h"
+#include "otbSpatialReference.h"
 
 // useful constants
 #include <otbMath.h>
@@ -121,7 +122,6 @@ std::vector<Orbit> CosmoImageMetadataInterface::getOrbits(const std::string & re
     int hour = static_cast<int> (total_seconds/3600.0);
     int minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
     double seconds = total_seconds - hour*3600 - minutes*60;
-    seconds += 0.5;
 
     std::string timeStr = reference_UTC + "T" + formatTimeInt(hour) + ":" + formatTimeInt(minutes) + ":" + formatTimeDouble(seconds);
 
@@ -250,19 +250,40 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   }
   sarParam.rangeSamplingRate = 1 / rangeTimeInterval;
 
-  sarParam.azimuthTimeInterval = MetaData::DurationType(
-      std::stod(metadataBands[0]["S01_SBI_Line_Time_Interval"])
-      * 1e6);
+  sarParam.azimuthTimeInterval = MetaData::Duration::Seconds(
+      std::stod(metadataBands[0]["S01_SBI_Line_Time_Interval"]));
   sarParam.nearRangeTime = std::stod(metadataBands[0]["S01_SBI_Zero_Doppler_Range_First_Time"]);
+  
+  auto lookSide = m_MetadataSupplierInterface->GetAs<std::string>("Look_Side");
 
+  if (lookSide != "RIGHT" && lookSide != "LEFT")
+  {
+    otbGenericExceptionMacro(MissingMetadataException, "Not an expected look side (only RIGHT or LEFT expected)");
+  }
+
+  sarParam.rightLookingFlag = lookSide == "RIGHT";
   imd.Add(MDGeom::SAR, sarParam);
 
   // TODO: compute a GCP at the center of scene using the inverse sar model like it is done in ossim plugins
   // This require to move IMIs to another higher level module that depends on OTBTransform (which depends 
   // on OTBMetadata) so that SarSensorModel can be used. (this cannot be done while IMIs still depend on Ossim)
-  Projection::GCPParam gcp;
-  imd.Add(MDGeom::GCP, gcp);
 
+  // Add the top left corner as GCP for now
+  std::istringstream output(metadataBands[0]["S01_SBI_Top_Left_Geodetic_Coordinates"]);
+
+  GCP gcp;
+
+  output >> gcp.m_GCPY; // lat
+  output >> gcp.m_GCPX; // lon
+  output >> gcp.m_GCPZ; // height
+  gcp.m_GCPRow = 0;
+  gcp.m_GCPCol = 0;
+  gcp.m_Id = "1";
+  
+  Projection::GCPParam gcpParam;
+  gcpParam.GCPProjection = SpatialReference::FromWGS84().ToWkt();
+  gcpParam.GCPs.push_back(gcp);
+  imd.Add(MDGeom::GCP, gcpParam);
 
   SARCalib sarCalib;
   std::istringstream("1970-01-01T00:00:00.000000") >> sarCalib.calibrationStartTime;

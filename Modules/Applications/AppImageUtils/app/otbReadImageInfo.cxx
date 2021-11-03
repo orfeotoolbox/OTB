@@ -243,6 +243,12 @@ private:
     SetParameterRole("gcp.geocoord", Role_Output);
     EnableParameter("gcp.geocoord");
 
+    AddParameter(ParameterType_String, "metadata", "Metadata");
+    SetParameterDescription("metadata", "Image metadata");
+    SetParameterRole("metadata", Role_Output);
+    EnableParameter("metadata");
+
+
     // Doc example parameter settings
     SetDocExampleParameterValue("in", "QB_Toulouse_Ortho_XS.tif");
 

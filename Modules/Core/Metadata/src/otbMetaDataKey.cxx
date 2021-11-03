@@ -392,6 +392,7 @@ MDNumBmType MDNumNames = bimapGenerator<MDNum>(std::map<MDNum, std::string> {
   {MDNum::SpectralMax,"SpectralMax"},
   {MDNum::CalScale,"CalScale"},
   {MDNum::CalFactor,"CalFactor"},
+  {MDNum::AbsoluteCalibrationConstant,"AbsoluteCalibrationConstant"},
   {MDNum::PRF,"PRF"},
   {MDNum::RSF,"RSF"},
   {MDNum::RadarFrequency,"RadarFrequency"},
