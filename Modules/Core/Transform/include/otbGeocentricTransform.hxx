@@ -130,26 +130,8 @@ GeocentricTransform<TDirectionOfMapping, TScalarType>::TransformPoint(const Inpu
       }
     }
   }
- // std::cout << "Transformation : " << point << " -> " << outputPoint << std::endl;
-  //OutputPointType outputPoint2;
-  //std::tie(outputPoint2[0], outputPoint2[1], outputPoint2[2]) = m_MapProjection->Transform(std::make_tuple(point[0], point[1], point[2]));
-  //std::cout << "With GDAL : " << point << " -> " << outputPoint2 << std::endl;
   return outputPoint;
 }
-
-/*
-template <TransformDirection TDirectionOfMapping, class TScalarType>
-typename GeocentricTransform<TDirectionOfMapping, TScalarType>::OutputPointType
-GeocentricTransform<TDirectionOfMapping, TScalarType>::TransformPoint(const InputPointType& point) const
-{
-  OutputPointType outputPoint;
-
-  std::tie(outputPoint[0], outputPoint[1], outputPoint[2]) = m_MapProjection->Transform(std::make_tuple(point[0], point[1], point[2]));
-
-  return outputPoint;
-}
-
-*/
 
 } // namespace otb
 #endif
