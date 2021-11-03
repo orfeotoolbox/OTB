@@ -183,6 +183,21 @@ bool SarSensorModel::WorldToAzimuthRangeTime(const Point3DType& inGeoPoint,
 
 }
 
+bool SarSensorModel::WorldToSatPositionAndVelocity(const Point3DType& inGeoPoint,
+                                                   Point3DType& satellitePosition,
+                                                   Point3DType& satelliteVelocity) const
+{
+  TimeType azimuthTime;
+  double   rangeTime;
+
+  return WorldToAzimuthRangeTime(inGeoPoint,
+                                 azimuthTime,
+                                 rangeTime,
+                                 satellitePosition,
+                                 satelliteVelocity);
+}
+
+
 void SarSensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
                                              double  heightAboveEllipsoid,
                                              Point3DType& worldPt) const
@@ -1297,6 +1312,58 @@ void SarSensorModel::DeburstLineToImageLine(const std::vector<std::pair<unsigned
     ++nit;
   }
   imageLine += lineOffset;
+}
+
+void SarSensorModel::LineToAzimuthTime(double line, TimeType & azimuthTime) const
+{
+  assert(!m_SarParam.burstRecords.empty()&&"Burst records are empty (at least one burst should be available)");
+
+  auto currentBurst = m_SarParam.burstRecords.cbegin();
+
+  if(m_SarParam.burstRecords.size() != 1)
+  {
+    // Look for the correct burst. In most cases the number of burst
+    // records will be 1 (except for TOPSAR Sentinel1 products)
+    auto it = m_SarParam.burstRecords.cbegin();
+    auto itend = m_SarParam.burstRecords.cend();
+    for( ; it!= itend; ++it)
+    {
+      if(line >= it->startLine && line < it->endLine)
+      {
+        currentBurst = it;
+        break;
+      }
+    }
+
+    if(it == itend)
+    {
+      if(line < m_SarParam.burstRecords.front().startLine)
+      {
+        currentBurst = m_SarParam.burstRecords.cbegin();
+      }
+      else if (line >= m_SarParam.burstRecords.back().endLine)
+      {
+        currentBurst = m_SarParam.burstRecords.end()-1;
+      }
+    }
+  }
+
+  const auto timeSinceStart = (line - currentBurst->startLine) * m_SarParam.azimuthTimeInterval;
+
+  // Eq 22 p 27
+  azimuthTime = currentBurst->azimuthStartTime + timeSinceStart + m_AzimuthTimeOffset;
+}
+
+
+bool SarSensorModel::LineToSatPositionAndVelocity(double line, Point3DType& satellitePosition, Point3DType& satelliteVelocity) const
+{
+  TimeType azimuthTime;
+
+  LineToAzimuthTime(line, azimuthTime);
+  interpolateSensorPosVel(azimuthTime, satellitePosition, satelliteVelocity);
+
+  return !(vnl_math_isnan(satellitePosition[0]) && vnl_math_isnan(satellitePosition[1]) && vnl_math_isnan(satellitePosition[1])
+           && vnl_math_isnan(satelliteVelocity[0]) && vnl_math_isnan(satelliteVelocity[1]) && vnl_math_isnan(satelliteVelocity[1]));
 }
 
 itk::Point<double, 3> SarSensorModel::EcefToWorld(const itk::Point<double, 3> & ecefPoint) const

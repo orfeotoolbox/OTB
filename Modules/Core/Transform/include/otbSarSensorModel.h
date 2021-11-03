@@ -62,6 +62,12 @@ public:
   (col,row) and YZ frame */
   void WorldToLineSampleYZ(const Point3DType& inGeoPoint, Point2DType& cr, Point2DType& yz) const;
 
+  /** Transform world point (lat,lon,hgt) to satellite position (x,y,z) and satellite velocity */
+  bool WorldToSatPositionAndVelocity(const Point3DType& inGeoPoint, Point3DType& satellitePosition, Point3DType& satelliteVelocity) const;
+
+  /** Transform line index to satellite position (x,y,z) and satellite velocity */
+  bool LineToSatPositionAndVelocity(double line, Point3DType& satellitePosition, Point3DType& satelliteVelocity) const;
+
   bool WorldToAzimuthRangeTime(const Point3DType& inGeoPoint, 
                                           TimeType & azimuthTime, 
                                           double & rangeTime, 
@@ -214,6 +220,8 @@ private:
   Point3DType projToSurface(const GCP & gcp,
                             const Point2DType & imPt,
                             std::function<double(double, double)> heightFunction) const;
+
+  void LineToAzimuthTime(double line, TimeType & azimuthTime) const;
 
   /** Coordinate transformation from ECEF to geographic */
   itk::Point<double, 3> EcefToWorld(const itk::Point<double, 3> & ecefPoint) const;
