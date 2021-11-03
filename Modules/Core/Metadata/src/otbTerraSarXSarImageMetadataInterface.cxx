@@ -778,7 +778,7 @@ void TerraSarXSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     SARParam sarParam;
 
     // Fetch the GCP
-    if (imd[MDStr::SensorID].find("SSC") != std::string::npos)
+    if (imd[MDStr::ProductType].find("SSC") != std::string::npos)
     {
       ReadGeorefGCP(MetaData::ReadFormattedDate(MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC")), 
                     itksys::SystemTools::GetParentDirectory(MainFilePath) + "/ANNOTATION/GEOREF.xml",
