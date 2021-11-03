@@ -21,6 +21,8 @@
 #include "otbGeometryMetadata.h"
 
 #include <iostream>
+#include "otbMacro.h"
+
 
 namespace
 {
@@ -116,6 +118,19 @@ void GCP::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix)
   kwl.insert({prefix + "Z", to_string_with_precision(m_GCPZ)});
 }
 
+const std::string & Get(const std::unordered_map<std::string, std::string> & kwl, const std::string & key)
+{
+  try
+  {
+    return kwl.at(key);
+  }
+  catch (const std::exception & e)
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject,
+             << "Unable to find " << key << "in the input keywordlist");
+  }
+}
+
 GCP GCP::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
 {
   //Info is optional in GCPs, the key might not be in the keywordlist
@@ -126,7 +141,7 @@ GCP GCP::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & 
     info = infoFound->second;
   }
 
-  return GCP(kwl.at(prefix + "Id"),
+  return GCP(Get(kwl, prefix + "Id"),
              info,
              std::stod(kwl.at(prefix + "Col")),
              std::stod(kwl.at(prefix + "Row")),
@@ -162,7 +177,13 @@ void GCPParam::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
 
 void GCPParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
 {
-  GCPProjection = kwl.at(prefix + "GCPProjection");
+  //Handle the empty projection case
+  std::string info;
+  auto projectionFound = kwl.find(prefix + "GCPProjection");
+  if (projectionFound != kwl.end())
+  {
+    GCPProjection = projectionFound->second;
+  }
   KeywordlistToVector(GCPs, kwl, prefix + "GCP");
 }
 
