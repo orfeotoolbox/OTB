@@ -668,6 +668,9 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   imd.Add(MDNum::LineSpacing, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingAzimuth"));
   imd.Add(MDNum::PixelSpacing, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingRange.slantRange"));
   imd.Add(MDStr::Mission, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.generalHeader.mission"));
+
+  // This sensorID corresponds to the sensorID read in OTB 7.3 and below, e.g. MGD_SE_SM_S, but OTB 7.4 read productVariant, i.e. MGD in this case
+  const std::string productVariant = MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.productVariantInfo.productVariant");
   imd.Add(MDStr::ProductType, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.productVariantInfo.productType"));
   imd.Add(MDStr::Mode, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.imagingMode"));
   imd.Add(MDStr::SensorID, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.sensor"));
@@ -725,11 +728,14 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
 
   ReadSARSensorModel(MainXMLFileMetadataSupplier, polarization, sarParam);
 
-  // Fetch the GCP
-  ReadGeorefGCP(MetaData::ReadFormattedDate(MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC")), 
-                MainDirectory + "/ANNOTATION/GEOREF.xml",
-                imd,
-                sarParam);
+  // Fetch the GCP (only for SSC products)
+  if (productVariant == "SSC")
+  {
+    ReadGeorefGCP(MetaData::ReadFormattedDate(MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC")), 
+                  MainDirectory + "/ANNOTATION/GEOREF.xml",
+                  imd,
+                  sarParam);
+  }
 
   imd.Add(MDGeom::SAR, sarParam);
 }
@@ -772,11 +778,14 @@ void TerraSarXSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     SARParam sarParam;
 
     // Fetch the GCP
-    ReadGeorefGCP(MetaData::ReadFormattedDate(MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC")), 
-                  itksys::SystemTools::GetParentDirectory(MainFilePath) + "/ANNOTATION/GEOREF.xml",
-                  imd,
-                  sarParam);
-
+    if (imd[MDStr::SensorID].find("SSC") != std::string::npos)
+    {
+      ReadGeorefGCP(MetaData::ReadFormattedDate(MainXMLFileMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC")), 
+                    itksys::SystemTools::GetParentDirectory(MainFilePath) + "/ANNOTATION/GEOREF.xml",
+                    imd,
+                    sarParam);
+    }
+    
     ReadSARSensorModel(MainXMLFileMS, imd[MDStr::Polarization], sarParam);
     imd.Add(MDGeom::SAR, sarParam);
   }
