@@ -93,7 +93,7 @@ second subdataset.
 Vector data
 -----------
 
-OTB can read all vector format supported by ORG. But the writing
+OTB can read all vector formats supported by OGR. But the writing
 process is a little tricky. OTB implements two ways of dealing with
 writing vector data. The first one uses OGR::Datasource. The second
 one uses otb::VectorData. Depending on which class is used by the
@@ -115,8 +115,8 @@ we plan on fixing this. For now, formats fully supported
 
 - GeoPackage (.gpkg)
 
-Digital Elevation Modele
-------------------------
+Digital Elevation Model
+-----------------------
 
 OTB also relies on GDAL to access DEM data. Therefore, any raster
 format supported by GDAL can be used as DEM. Several DEM tiles can be
