@@ -354,7 +354,9 @@ std::vector<AzimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate(con
     oss.str("");
     oss << listId;
     // Base path to the data, that depends on the iteration number
-    std::string path_root = "product.generalAnnotation.azimuthFmRateList.azimuthFmRate_" + oss.str();
+    const std::string path_root = listCount == 1 ? "product.generalAnnotation.azimuthFmRateList.azimuthFmRate"
+                                                 : "product.generalAnnotation.azimuthFmRateList.azimuthFmRate_" + oss.str();
+
     AzimuthFmRate afr;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> afr.azimuthTime;
     afr.t0 = xmlMS.GetAs<double>(path_root + ".t0");
@@ -377,7 +379,9 @@ std::vector<DopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCentroid
     oss.str("");
     oss << listId;
     // Base path to the data, that depends on the iteration number
-    std::string path_root = "product.dopplerCentroid.dcEstimateList.dcEstimate_" + oss.str();
+    const std::string path_root = listCount == 1 ? "product.dopplerCentroid.dcEstimateList.dcEstimate"
+                                                 : "product.dopplerCentroid.dcEstimateList.dcEstimate_" + oss.str();
+
     DopplerCentroid dopplerCent;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> dopplerCent.azimuthTime;
     dopplerCent.t0 = xmlMS.GetAs<double>(path_root + ".t0");
@@ -402,7 +406,9 @@ std::vector<Orbit> Sentinel1ImageMetadataInterface::GetOrbits(const XMLMetadataS
     oss.str("");
     oss << listId;
     // Base path to the data, that depends on the iteration number
-    std::string path_root = "product.generalAnnotation.orbitList.orbit_" + oss.str();
+    const std::string path_root = listCount == 1 ? "product.generalAnnotation.orbitList.orbit"
+                                                 : "product.generalAnnotation.orbitList.orbit_" + oss.str();
+
     Orbit orbit;
 
     orbit.time = MetaData::ReadFormattedDate(xmlMS.GetAs<std::string>(path_root + ".time"));
