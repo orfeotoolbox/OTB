@@ -1675,10 +1675,12 @@ int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char
   const auto & testImageMetadata = testImPtr->GetImageMetadata();
 
   // Compare string keys (strict equality)
+  // Don't test OTB_VERSION, as it change with the version of OTB used
+  std::vector<MDStr> untestedMDStr = {MDStr::OtbVersion};
   errcount += CompareMetadataDict(baselineImageMetadata.StringKeys,
 				  testImageMetadata.StringKeys,
 				  m_ReportErrors,
-				  {});
+          untestedMDStr);
 
   // Compare numeric keys
   auto compareDouble = [tolerance](double lhs, double rhs)
@@ -1713,12 +1715,10 @@ int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char
 
 
   // Compare extra keys
-  // Don't test OTB_VERSION, as it change with the version of OTB used
-  std::vector<std::string> untestedExtra = {"OTB_VERSION"};
   errcount += CompareMetadataDict(baselineImageMetadata.ExtraKeys, 
 				  testImageMetadata.ExtraKeys,
 				  m_ReportErrors,
-				  untestedExtra);
+          {});
 
 
   if (baselineImageMetadata.Has(MDGeom::RPC))
