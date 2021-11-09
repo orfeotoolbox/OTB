@@ -137,7 +137,7 @@ Depending on the provided parameters, the application will:
 - use the value read in the DEM if only the DEM is provided.
 
 - compute the default elevation + the value of the geoid if only the
-  geoid is povided.
+  geoid is provided.
   
 A note on the egm96.grd file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
