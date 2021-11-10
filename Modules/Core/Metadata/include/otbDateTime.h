@@ -26,6 +26,7 @@
 #include <cmath>
 #include <boost/operators.hpp>
 #include <chrono>
+#include <string>
 
 namespace otb
 {
@@ -225,13 +226,12 @@ public:
   std::ostream & Display(std::ostream & os) const;
   std::istream & Read   (std::istream & is);
 
-  friend Duration Abs(Duration d);
+  friend OTBMetadata_EXPORT Duration Abs(Duration d);
 
 private:
   InternalDurationType m_Duration;
 };
 
-OTBMetadata_EXPORT Duration Abs(Duration d);
 OTBMetadata_EXPORT double Ratio(const Duration & lhs, const Duration & rhs);
 OTBMetadata_EXPORT TimePoint ReadFormattedDate(const std::string & dateStr, const std::string & format = details::timePointFormat);
 
