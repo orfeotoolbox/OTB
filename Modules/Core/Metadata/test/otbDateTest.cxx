@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(Duration)
 
   // Getter tests
   BOOST_TEST(otb::MetaData::Duration::Nanoseconds(10).TotalSeconds() == 10e-9);
-  BOOST_TEST(otb::MetaData::Duration::Nanoseconds(10).TotalNanoseconds() == 10);
+  BOOST_TEST(otb::MetaData::Duration::Nanoseconds(10).NumberOfTicks() == 10);
 }
 
 BOOST_AUTO_TEST_CASE(TimePoint)

@@ -25,6 +25,7 @@
 #include "otbMacro.h"
 
 #include <regex>
+#include <iomanip>
 
 namespace
 {

@@ -19,41 +19,72 @@
  */
 
 #include "otbDateTime.h"
-#include "otbStringUtilities.h"
+#include "date.h"
 
 namespace otb
 {
 namespace MetaData
 {
 
-double ratio_(Duration const& lhs, Duration const& rhs)
+TimePoint ReadFormattedDate(const std::string & dateStr, const std::string & format)
 {
-  return (lhs.TotalNanoseconds() / rhs.TotalNanoseconds());
+  std::istringstream is(dateStr);
+  TimePoint tp;
+  tp.Read(is, format.c_str());
+  return tp;
 }
 
-TimeType ReadFormattedDate(const std::string & dateStr, const std::string & format)
+std::ostream & TimePoint::Display(std::ostream & os, const std::string& format) const 
 {
-  MetaData::TimeType outputDate;
-  std::stringstream ss;
-  auto facet = new boost::posix_time::time_input_facet(format);
-  ss.imbue(std::locale(std::locale(), facet));
-  ss << dateStr;
-  ss >> outputDate;
-  return outputDate;
+  date::to_stream(os, format.c_str(), m_Time);
+  return os;
 }
 
-DurationType seconds(double input)
+std::istream & TimePoint::Read(std::istream & is, const std::string & format)
 {
-  //return boost::posix_time::precise_duration(input * 1e9);
-  return DurationType::Seconds(input);
+  date::from_stream(is, format.c_str(), m_Time);
+  return is;
+}
+
+double Duration::TotalSeconds() const
+{
+  return m_Duration.count() * details::internalPeriod;
+}
+
+Duration::InternalDurationType::rep Duration::NumberOfTicks() const
+{
+  return m_Duration.count();
+}
+
+std::ostream & Duration::Display(std::ostream & os) const 
+{
+  return os << m_Duration.count() * details::internalPeriod;
+}
+
+std::istream & Duration::Read(std::istream & is)
+{
+  double s;
+  is >> s;
+  m_Duration = InternalDurationType(static_cast<long long>(std::round(s * 1e9)));
+  return is;
 }
 
 Duration Abs(Duration d)
 {
-  if(d.m_Duration.is_negative())
-    d.m_Duration = d.m_Duration.invert_sign();
+  if(d.m_Duration.count() < 0)
+    d.m_Duration = -d.m_Duration;
   return d;
 }
 
+double Ratio(const Duration & lhs, const Duration & rhs)
+{
+  return static_cast<double>(lhs.NumberOfTicks()) / rhs.NumberOfTicks();
 }
+
+DurationType seconds(double input)
+{
+  return DurationType::Seconds(input);
 }
+
+} // namespace otb
+} // namespace MetaData

@@ -18,26 +18,13 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module contains a set of classes that allow parsing
-metadata files from different types of sensor (both optical and radar sensor types
-are supported. for instance: Pleiades, SPOT6, TerraSar, and so on).")
+set(DOCUMENTATION "This module imports the date.h header from Howard Hinnant's date library")
 
-otb_module(OTBMetadata
-ENABLE_SHARED
+otb_module(OTBDate
   DEPENDS
-    OTBObjectList
-    OTBBoostAdapters
-    OTBITK
-    OTBCommon
-    OTBGdalAdapters
-    OTBTinyXML
-    OTBDate
     
   TEST_DEPENDS
-    OTBTestKernel
-    OTBImageIO
-    OTBImageBase
     
   DESCRIPTION
     "${DOCUMENTATION}"
-)
+  )
