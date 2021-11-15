@@ -31,6 +31,8 @@
 #endif
 
 #include "otbDateTime.h"
+#include "otbMissingMetadataException.h"
+
 
 BOOST_AUTO_TEST_CASE(Duration)
 {
@@ -61,6 +63,22 @@ BOOST_AUTO_TEST_CASE(TimePoint)
   BOOST_TEST(date1 - date2 == otb::MetaData::Duration::Seconds(86400));
   BOOST_TEST(date1 + otb::MetaData::Duration::Seconds(0.1) == 
     otb::MetaData::ReadFormattedDate("2021-06-22T00:01:04.52578987"));
+
+  // Test Parsing with a different format
+  otb::MetaData::ReadFormattedDate("2021-06-22 00:01:04.42578987", "%Y-%m-%d %H:%M:%S");
+  
+
+  // Test some invalid cases
+  BOOST_REQUIRE_THROW(otb::MetaData::ReadFormattedDate("2021-06-21 00:01:04.42578987"),
+                      otb::MissingMetadataException);
+
+  BOOST_REQUIRE_THROW(otb::MetaData::ReadFormattedDate("2021-06-21"),
+                      otb::MissingMetadataException);
+
+  BOOST_REQUIRE_THROW(otb::MetaData::ReadFormattedDate("2021-6-21 00:1:4.42578987"),
+                      otb::MissingMetadataException);
+
+
 }
 
 BOOST_AUTO_TEST_CASE(TimePointPrecision)

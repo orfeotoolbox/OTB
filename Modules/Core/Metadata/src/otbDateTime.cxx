@@ -20,6 +20,7 @@
 
 #include "otbDateTime.h"
 #include "date.h"
+#include "otbMissingMetadataException.h"
 
 namespace otb
 {
@@ -29,8 +30,21 @@ namespace MetaData
 TimePoint ReadFormattedDate(const std::string & dateStr, const std::string & format)
 {
   std::istringstream is(dateStr);
+  is.exceptions(std::istringstream::failbit | std::istringstream::badbit);
   TimePoint tp;
-  tp.Read(is, format.c_str());
+  
+  try
+  {
+    tp.Read(is, format.c_str());
+  }
+  catch (const std::istringstream::failure &)
+  {
+    otbGenericExceptionMacro(otb::MissingMetadataException,
+            << "Cannot parse the input date "
+            << dateStr
+            << " with input format "
+            << format);
+  }
   return tp;
 }
 
