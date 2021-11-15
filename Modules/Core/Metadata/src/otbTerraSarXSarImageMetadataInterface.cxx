@@ -562,7 +562,7 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
   // Number of entries in the vector
   int listCount = xmlMS.GetAs<int>("level1Product.platform.orbit.orbitHeader.numStateVectors");
 
-  const std::string dateFormat = "%Y-%m-%dT%H:%M:%S%F";
+  const std::string dateFormat = "%Y-%m-%dT%H:%M:%S";
 
   // This streams wild hold the iteration number
   std::ostringstream oss;

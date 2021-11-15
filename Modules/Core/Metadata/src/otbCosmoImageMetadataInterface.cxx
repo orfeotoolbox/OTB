@@ -151,8 +151,8 @@ std::vector<BurstRecord> CosmoImageMetadataInterface::CreateBurstRecord(const st
   record.endLine = endLine;
   record.endSample = endSample;
 
-  record.azimuthStartTime = MetaData::ReadFormattedDate(firstLineTimeStr, "%Y-%m-%dT%H:%M:%S%F");
-  record.azimuthStopTime = MetaData::ReadFormattedDate(lastLineTimeStr, "%Y-%m-%dT%H:%M:%S%F");
+  record.azimuthStartTime = MetaData::ReadFormattedDate(firstLineTimeStr, "%Y-%m-%dT%H:%M:%S");
+  record.azimuthStopTime = MetaData::ReadFormattedDate(lastLineTimeStr, "%Y-%m-%dT%H:%M:%S");
 
   record.azimuthAnxTime = 0.;
 
