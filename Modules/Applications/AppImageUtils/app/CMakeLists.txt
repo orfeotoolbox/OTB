@@ -19,11 +19,6 @@
 #
 
 otb_create_application(
-  NAME           DownloadSRTMTiles
-  SOURCES        otbDownloadSRTMTiles.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
   NAME           PixelValue
   SOURCES        otbPixelValue.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
