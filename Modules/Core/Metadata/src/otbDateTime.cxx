@@ -35,7 +35,7 @@ TimePoint ReadFormattedDate(const std::string & dateStr, const std::string & for
   
   try
   {
-    tp.Read(is, format.c_str());
+    tp.Read(is, format);
   }
   catch (const std::istringstream::failure &)
   {
