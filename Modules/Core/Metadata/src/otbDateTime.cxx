@@ -62,12 +62,14 @@ std::istream & TimePoint::Read(std::istream & is, const std::string & format)
 
 double TimePoint::GetJulianDay() const
 {
-  return (m_Time.time_since_epoch().count() * details::internalPeriod) / 86400.0  + 2440587.5;
+  // 86400 is the number of seconds in a day, 2440587.5 is the offset in days between the UnixTime origin and the Julian day origin
+  return (m_Time.time_since_epoch().count() * details::internalPeriod / 86400.0  + 2440587.5);
 }
 
 double TimePoint::GetModifiedJulianDay() const
 {
-  return (m_Time.time_since_epoch().count() * details::internalPeriod) / 86400.0 + 40587;
+  // 86400 is the number of seconds in a day, 40587 is the offset in days between the UnixTime origin and the modified Julian day origin
+  return (m_Time.time_since_epoch().count() * details::internalPeriod / 86400.0 + 40587);
 }
 
 date::year_month_day ToYMD(details::InternalTimePointType in)

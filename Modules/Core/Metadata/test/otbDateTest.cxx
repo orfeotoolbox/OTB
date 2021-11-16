@@ -86,6 +86,11 @@ BOOST_AUTO_TEST_CASE(TimePoint)
   BOOST_REQUIRE_THROW(otb::MetaData::ReadFormattedDate("2021-6-21 00:1:4.42578987"),
                       otb::MissingMetadataException);
 
+  // Julian day and Modified julian day
+  auto mjdOrigin = otb::MetaData::ReadFormattedDate("1858-11-17T00:00:00");
+
+  BOOST_TEST(mjdOrigin.GetJulianDay() == 2400000.5);
+  BOOST_TEST(mjdOrigin.GetModifiedJulianDay() == 0.);
 }
 
 BOOST_AUTO_TEST_CASE(TimePointPrecision)
