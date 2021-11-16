@@ -235,11 +235,6 @@ private:
 OTBMetadata_EXPORT double Ratio(const Duration & lhs, const Duration & rhs);
 OTBMetadata_EXPORT TimePoint ReadFormattedDate(const std::string & dateStr, const std::string & format = details::timePointFormat);
 
-// TODO: remove these typedefs and methods to make the API cleaner. There are defined here to ease the integration of this version of otbDateTime
-using TimeType = TimePoint;
-using DurationType = Duration;
-OTBMetadata_EXPORT DurationType seconds(double);
-
 } // namespace otb
 } // namespace MetaData
 

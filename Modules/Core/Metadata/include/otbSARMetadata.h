@@ -92,7 +92,7 @@ struct OTBMetadata_EXPORT Orbit
   using PointType = itk::Point<double, 3>;
 
   /** Timestamp at which orbit state vectors apply */
-  MetaData::TimeType time;
+  MetaData::TimePoint time;
   /** Position vector */
   PointType position;
   /** Velocity vector */
@@ -111,8 +111,8 @@ struct OTBMetadata_EXPORT Orbit
  */
 struct OTBMetadata_EXPORT BurstRecord
 {
-  MetaData::TimeType      azimuthStartTime;
-  MetaData::TimeType      azimuthStopTime;
+  MetaData::TimePoint      azimuthStartTime;
+  MetaData::TimePoint      azimuthStopTime;
   unsigned long startLine;
   unsigned long endLine;
   unsigned long startSample;
@@ -134,7 +134,7 @@ struct OTBMetadata_EXPORT BurstRecord
 struct OTBMetadata_EXPORT GCPTime
 {
   /** Azimuth time of the gcp */
-  MetaData::TimeType azimuthTime;
+  MetaData::TimePoint azimuthTime;
 
   /** Slant range time of the gcp */
   double slantRangeTime;
@@ -150,7 +150,7 @@ struct OTBMetadata_EXPORT GCPTime
  */
 struct CoordinateConversionRecord
 {
-  MetaData::TimeType azimuthTime;
+  MetaData::TimePoint azimuthTime;
   double rg0;
   std::vector<double> coeffs;
 
@@ -175,7 +175,7 @@ struct OTBMetadata_EXPORT SARParam
    */
   std::vector<AzimuthFmRate> azimuthFmRates;
 
-  MetaData::DurationType azimuthTimeInterval;
+  MetaData::Duration azimuthTimeInterval;
   double nearRangeTime;
   double rangeSamplingRate;
   double rangeResolution;

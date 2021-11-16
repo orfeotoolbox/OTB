@@ -424,7 +424,7 @@ std::vector<Orbit> Sentinel1ImageMetadataInterface::GetOrbits(const XMLMetadataS
   return orbitVector;
 }
 
-std::vector<BurstRecord> Sentinel1ImageMetadataInterface::GetBurstRecords(const XMLMetadataSupplier &xmlMS, const MetaData::DurationType& azimuthTimeInterval) const
+std::vector<BurstRecord> Sentinel1ImageMetadataInterface::GetBurstRecords(const XMLMetadataSupplier &xmlMS, const MetaData::Duration& azimuthTimeInterval) const
 {
   std::vector<BurstRecord> burstRecords;
 
@@ -461,7 +461,7 @@ std::vector<BurstRecord> Sentinel1ImageMetadataInterface::GetBurstRecords(const 
 
       BurstRecord record;
 
-      MetaData::TimeType azimuthTime = MetaData::ReadFormattedDate(xmlMS.GetAs<std::string>(burstPath + "azimuthTime"));
+      auto azimuthTime = MetaData::ReadFormattedDate(xmlMS.GetAs<std::string>(burstPath + "azimuthTime"));
 
       auto firstValidSamples = xmlMS.GetAsVector<int>(burstPath + "firstValidSample");
       int firstValidSample = 0, lastValidSample = samplesPerBurst - 1;
@@ -608,7 +608,7 @@ void ReadGCP(const XMLMetadataSupplier &AnnotationMS,
     // the image.
     if (sarParam.burstRecords.size() >= 2)
     {
-      otb::MetaData::TimeType acqStart;
+      otb::MetaData::TimePoint acqStart;
       unsigned long acqStartLine = 0;
 
       auto doesContain = [&azimuthTime](const BurstRecord & br)
@@ -669,7 +669,7 @@ void Sentinel1ImageMetadataInterface::ReadSarParamAndGCPs(const XMLMetadataSuppl
   sarParam.slantRangeToGroundRangeRecords = this->GetCoordinateConversionRecord(AnnotationMS, "sr0", "srgrCoefficients");
   sarParam.groundRangeToSlantRangeRecords = this->GetCoordinateConversionRecord(AnnotationMS, "gr0", "grsrCoefficients");
 
-  sarParam.azimuthTimeInterval = MetaData::seconds(
+  sarParam.azimuthTimeInterval = MetaData::Duration::Seconds(
     AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthTimeInterval")
     );
 

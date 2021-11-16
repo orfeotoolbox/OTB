@@ -95,10 +95,5 @@ double Ratio(const Duration & lhs, const Duration & rhs)
   return static_cast<double>(lhs.NumberOfTicks()) / rhs.NumberOfTicks();
 }
 
-DurationType seconds(double input)
-{
-  return DurationType::Seconds(input);
-}
-
 } // namespace otb
 } // namespace MetaData
