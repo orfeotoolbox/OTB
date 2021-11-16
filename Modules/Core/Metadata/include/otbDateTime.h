@@ -121,6 +121,12 @@ public:
     return lhs.m_Time == rhs.m_Time;
   }
 
+  /** Return the julian day corresponding to the time point */
+  double GetJulianDay() const;
+
+  /** Return the modified julian day corresponding to the time point */
+  double GetModifiedJulianDay() const;
+
   friend TimePoint& operator+=(TimePoint & u, Duration const& v);
   friend TimePoint& operator-=(TimePoint & u, Duration const& v);
 

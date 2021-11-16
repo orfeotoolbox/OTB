@@ -60,6 +60,16 @@ std::istream & TimePoint::Read(std::istream & is, const std::string & format)
   return is;
 }
 
+double TimePoint::GetJulianDay() const
+{
+  return (m_Time.time_since_epoch().count() * details::internalPeriod) / 86400.0  + 2440587.5;
+}
+
+double TimePoint::GetModifiedJulianDay() const
+{
+  return (m_Time.time_since_epoch().count() * details::internalPeriod) / 86400.0 + 40587;
+}
+
 double Duration::TotalSeconds() const
 {
   return m_Duration.count() * details::internalPeriod;
