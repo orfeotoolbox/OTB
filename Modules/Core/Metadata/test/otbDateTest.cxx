@@ -57,6 +57,15 @@ BOOST_AUTO_TEST_CASE(Duration)
 BOOST_AUTO_TEST_CASE(TimePoint)
 {
   auto date1 = otb::MetaData::ReadFormattedDate("2021-06-22T00:01:04.42578987");
+
+  // Test date part getters
+  BOOST_TEST(date1.GetYear() == 2021);
+  BOOST_TEST(date1.GetMonth() == 06);
+  BOOST_TEST(date1.GetDay() == 22);
+  BOOST_TEST(date1.GetHour() == 0);
+  BOOST_TEST(date1.GetMinute() == 1);
+  BOOST_TEST(date1.GetSecond() == 4.42578987);
+
   auto date2 = otb::MetaData::ReadFormattedDate("2021-06-21T00:01:04.42578987");
 
   BOOST_TEST(date1 > date2);
@@ -67,7 +76,6 @@ BOOST_AUTO_TEST_CASE(TimePoint)
   // Test Parsing with a different format
   otb::MetaData::ReadFormattedDate("2021-06-22 00:01:04.42578987", "%Y-%m-%d %H:%M:%S");
   
-
   // Test some invalid cases
   BOOST_REQUIRE_THROW(otb::MetaData::ReadFormattedDate("2021-06-21 00:01:04.42578987"),
                       otb::MissingMetadataException);
@@ -77,7 +85,6 @@ BOOST_AUTO_TEST_CASE(TimePoint)
 
   BOOST_REQUIRE_THROW(otb::MetaData::ReadFormattedDate("2021-6-21 00:1:4.42578987"),
                       otb::MissingMetadataException);
-
 
 }
 

@@ -127,6 +127,24 @@ public:
   /** Return the modified julian day corresponding to the time point */
   double GetModifiedJulianDay() const;
 
+  /** Return the year corresponding to the time point */
+  int GetYear() const;
+
+  /** Return the month of the year corresponding to the time point (from 1 to 12) */
+  unsigned int GetMonth() const;
+
+  /** Return the calendar day corresponding to the time point (from 1 to 31) */
+  unsigned int GetDay() const;
+
+  /** Return the hour of the day corresponding to the time point (from 0 to 23) */
+  unsigned int GetHour() const;
+
+  /** Return the minute of the hour of the day corresponding to the time point (from 0 to 59) */
+  unsigned int GetMinute() const;
+
+  /** Return the fractional second of the minute of the hour of the day corresponding to the time point (from 0 and inferior to 60) */
+  double GetSecond() const;
+
   friend TimePoint& operator+=(TimePoint & u, Duration const& v);
   friend TimePoint& operator-=(TimePoint & u, Duration const& v);
 

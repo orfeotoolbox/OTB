@@ -70,6 +70,48 @@ double TimePoint::GetModifiedJulianDay() const
   return (m_Time.time_since_epoch().count() * details::internalPeriod) / 86400.0 + 40587;
 }
 
+date::year_month_day ToYMD(details::InternalTimePointType in)
+{
+  auto dp = date::floor<date::days>(in);
+  return date::year_month_day(dp);
+}
+
+date::hh_mm_ss<details::InternalDurationType> ToHMS(details::InternalTimePointType in)
+{
+  auto dp = date::floor<date::days>(in);
+  return date::make_time(std::chrono::duration_cast<details::InternalDurationType>(in-dp));
+}
+
+int TimePoint::GetYear() const
+{
+  return static_cast<int>(ToYMD(m_Time).year());
+}
+
+unsigned int TimePoint::GetMonth() const
+{
+  return static_cast<unsigned int>(ToYMD(m_Time).month());
+}
+
+unsigned int TimePoint::GetDay() const
+{
+  return static_cast<unsigned int>(ToYMD(m_Time).day());
+}
+
+unsigned int TimePoint::GetHour() const
+{
+  return ToHMS(m_Time).hours().count();
+}
+
+unsigned int TimePoint::GetMinute() const
+{
+  return ToHMS(m_Time).minutes().count();
+}
+
+double TimePoint::GetSecond() const
+{
+  return ToHMS(m_Time).seconds().count() + ToHMS(m_Time).subseconds().count() * details::internalPeriod;
+}
+
 double Duration::TotalSeconds() const
 {
   return m_Duration.count() * details::internalPeriod;
