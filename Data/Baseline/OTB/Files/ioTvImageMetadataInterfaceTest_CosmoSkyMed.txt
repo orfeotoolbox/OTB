@@ -15,8 +15,8 @@ GreenDisplayChannel 0
 BlueDisplayChannel 0
 PRF 3321.52
 RadarFrequency 9.6e+09
-AcquisitionStartTime 2011-04-18T18:03:27.915976Z
-AcquisitionStopTime 2011-04-18T18:03:29.380925Z
+AcquisitionStartTime 2011-04-18T18:03:27.915976000
+AcquisitionStopTime 2011-04-18T18:03:29.380925000
 SAR <SARParam>
 SARCalib <SARCalib>
 GCP <GCPParam>

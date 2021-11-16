@@ -13,8 +13,8 @@ SunElevation 23.0884
 SunAzimuth 158.95
 SatElevation 82.293
 SatAzimuth 61.4817
-AcquisitionDate 2012-12-07T10:20:27.1Z
-ProductionDate 2013-01-23T07:32:36Z
+AcquisitionDate 2012-12-07T10:20:27.100000000
+ProductionDate 2013-01-23T07:32:36.000000000
 ProjectionWKT GEOGCS["WGS 84",
     DATUM["WGS_1984",
         SPHEROID["WGS 84",6378137,298.257223563,

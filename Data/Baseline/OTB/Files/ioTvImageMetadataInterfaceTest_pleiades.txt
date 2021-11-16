@@ -13,8 +13,8 @@ SunElevation 39.2072
 SunAzimuth 32.444
 SatElevation 74.254
 SatAzimuth 102.95
-AcquisitionDate 2012-06-05T06:30:06.4Z
-ProductionDate 2012-06-20T08:39:43.745Z
+AcquisitionDate 2012-06-05T06:30:06.400000000
+ProductionDate 2012-06-20T08:39:43.745000000
 RPC <RPCParam>
 ImageID 559102101-002
 LinePeriod 0.2968

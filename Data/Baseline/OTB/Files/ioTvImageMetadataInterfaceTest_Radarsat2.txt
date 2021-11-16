@@ -19,8 +19,8 @@ CalScale 1
 CenterIncidenceAngle 0
 LineSpacing 4.8254
 PixelSpacing 4.73308
-ProductionDate 2008-04-05T13:35:50Z
-AcquisitionStartTime 2008-04-05T12:49:00.995676Z
+ProductionDate 2008-04-05T13:35:50.000000000
+AcquisitionStartTime 2008-04-05T12:49:00.995676000
 SAR <SARParam>
 SARCalib <SARCalib>
 GCP <GCPParam>

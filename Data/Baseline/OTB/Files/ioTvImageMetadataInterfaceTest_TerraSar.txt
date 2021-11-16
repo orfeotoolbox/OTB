@@ -23,8 +23,8 @@ LineSpacing 1.84541
 PixelSpacing 1.36411
 RangeTimeFirstPixel 0.00422717
 RangeTimeLastPixel 0.00436665
-AcquisitionStartTime 2008-03-10T13:32:20.083162Z
-AcquisitionStopTime 2008-03-10T13:32:28.617747Z
+AcquisitionStartTime 2008-03-10T13:32:20.083162000
+AcquisitionStopTime 2008-03-10T13:32:28.617747000
 SAR <SARParam>
 SARCalib <SARCalib>
 GCP <GCPParam>
