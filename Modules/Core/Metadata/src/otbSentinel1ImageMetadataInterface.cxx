@@ -734,9 +734,9 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
                          + ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:platform.safe:number"));
 
   imd.Add(MDTime::ProductionDate,
-    ManifestMS.GetFirstAs<MetaData::Time>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.start"));
+    MetaData::ReadFormattedDate(ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.start")));
   imd.Add(MDTime::AcquisitionDate,
-    ManifestMS.GetFirstAs<MetaData::Time>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:acquisitionPeriod.safe:startTime"));
+    MetaData::ReadFormattedDate(ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:acquisitionPeriod.safe:startTime")));
   imd.Add(MDStr::BeamMode,
     ManifestMS.GetFirstAs<std::string>(
       "xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:platform.safe:instrument.safe:extension.s1sarl1:instrumentMode.s1sarl1:mode"
@@ -758,8 +758,8 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   }
   XMLMetadataSupplier AnnotationMS(AnnotationFilePath);
 
-  imd.Add(MDTime::AcquisitionStartTime, AnnotationMS.GetAs<MetaData::Time>("product.adsHeader.startTime"));
-  imd.Add(MDTime::AcquisitionStopTime, AnnotationMS.GetAs<MetaData::Time>("product.adsHeader.stopTime"));
+  imd.Add(MDTime::AcquisitionStartTime, MetaData::ReadFormattedDate(AnnotationMS.GetAs<std::string>("product.adsHeader.startTime")));
+  imd.Add(MDTime::AcquisitionStopTime, MetaData::ReadFormattedDate(AnnotationMS.GetAs<std::string>("product.adsHeader.stopTime")));
   imd.Add(MDNum::LineSpacing, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthPixelSpacing"));
   imd.Add(MDStr::Mission, AnnotationMS.GetAs<std::string>("product.adsHeader.missionId"));
   imd.Add(MDStr::OrbitDirection, itksys::SystemTools::UpperCase(AnnotationMS.GetAs<std::string>("product.generalAnnotation.productInformation.pass")));

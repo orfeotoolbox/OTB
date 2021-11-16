@@ -33,7 +33,7 @@ void SetUpImageMetadata(otb::ImageMetadata& md, unsigned int nbBands)
   using namespace otb;
   std::ostringstream oss;
 
-  MetaData::Time mytime = Utils::LexicalCast<MetaData::Time,std::string>(std::string("2009-08-10T10:30:08.142149Z"), std::string("T"));
+  MetaData::TimePoint mytime = MetaData::ReadFormattedDate(std::string("2009-08-10T10:30:08.142149Z"));
 
   md.Add(MDStr::SensorID, "PHR");
   md.Add(MDGeom::ProjectionWKT, std::string("UTM projRef"));
@@ -269,7 +269,7 @@ void otbImageMetadataCompactTest(char* argv[])
   ImageMetadata md;
   md.compact();
   SetUpImageMetadata(md, 3);
-  MetaData::Time mytime = Utils::LexicalCast<MetaData::Time,std::string>(std::string("2009-08-05T20:34:38.236478Z"), std::string("T"));
+  MetaData::TimePoint mytime = MetaData::ReadFormattedDate("2009-08-05T20:34:38.236478Z");
   for (auto& band : md.Bands)
   {
     band.Add(MDStr::Polarization, "Polarization");

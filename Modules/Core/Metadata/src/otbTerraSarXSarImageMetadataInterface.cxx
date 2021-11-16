@@ -675,8 +675,8 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   imd.Add(MDStr::Mode, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.imagingMode"));
   imd.Add(MDStr::SensorID, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.sensor"));
   imd.Add(MDNum::RadarFrequency, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.instrument.radarParameters.centerFrequency"));
-  imd.Add(MDTime::AcquisitionStartTime, MainXMLFileMetadataSupplier.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.start.timeUTC"));
-  imd.Add(MDTime::AcquisitionStopTime, MainXMLFileMetadataSupplier.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.stop.timeUTC"));
+  imd.Add(MDTime::AcquisitionStartTime, MetaData::ReadFormattedDate(MainXMLFileMetadataSupplier.GetFirstAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC")));
+  imd.Add(MDTime::AcquisitionStopTime, MetaData::ReadFormattedDate(MainXMLFileMetadataSupplier.GetFirstAs<std::string>("level1Product.productInfo.sceneInfo.stop.timeUTC")));
   imd.Add(MDNum::RangeTimeFirstPixel, MainXMLFileMetadataSupplier.GetFirstAs<double>("level1Product.productInfo.sceneInfo.rangeTime.firstPixel"));
   imd.Add(MDNum::RangeTimeLastPixel, MainXMLFileMetadataSupplier.GetFirstAs<double>("level1Product.productInfo.sceneInfo.rangeTime.lastPixel"));
   imd.Add(MDNum::PRF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonPRF"));

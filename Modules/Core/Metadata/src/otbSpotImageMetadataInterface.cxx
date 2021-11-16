@@ -342,9 +342,9 @@ void SpotImageMetadataInterface::Parse(ImageMetadata & imd)
   imd.Add(MDStr::InstrumentIndex, dimapData.InstrumentIndex);
 
   imd.Add(MDTime::ProductionDate,
-    boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));
+    MetaData::ReadFormattedDate(dimapData.ProductionDate));
   imd.Add(MDTime::AcquisitionDate,
-    boost::lexical_cast<MetaData::Time>(dimapData.AcquisitionDate));
+    MetaData::ReadFormattedDate(dimapData.AcquisitionDate));
 
   imd.Add(MDNum::SunAzimuth, dimapData.SunAzimuth[0]);
   imd.Add(MDNum::SunElevation, dimapData.SunElevation[0]);
