@@ -188,7 +188,7 @@ double TerraSarXSarImageMetadataInterface::GetNoiseTimeUTC(const unsigned int no
                                                        const unsigned int polLayer) const
 {
   std::ostringstream oss;
-  MetaData::Time time, defaultTime;
+  MetaData::TimePoint time, defaultTime;
   std::istringstream("2000-01-01T00:0:00.000000Z") >> defaultTime;
 
   if(polLayer == 0)
@@ -386,8 +386,8 @@ TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationNoise(const Metadat
   auto numberOfRows = static_cast<unsigned int>(imd[MDNum::NumberOfLines]);
   auto numberOfCols = static_cast<unsigned int>(imd[MDNum::NumberOfColumns]);
 
-  double   startTime      = imd[MDTime::AcquisitionStartTime].GetJulianDay();
-  double   stopTime       = imd[MDTime::AcquisitionStopTime].GetJulianDay();
+  double startTime = imd[MDTime::AcquisitionStartTime].GetJulianDay();
+  double stopTime  = imd[MDTime::AcquisitionStopTime].GetJulianDay();
 
   RealType firstRangeTime = imd[MDNum::RangeTimeFirstPixel];
   RealType lastRangeTime  = imd[MDNum::RangeTimeLastPixel];
