@@ -614,7 +614,7 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
       xmlMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.stop.timeUTC"), dateFormat);
 
   const auto td = azimuthTimeStop - azimuthTimeStart;
-  assert(td > MetaData::seconds(0));
+  assert(td > MetaData::Duration::Seconds(0));
 
   const auto numberOfRows = xmlMS.GetAs<double>("level1Product.productInfo.imageDataInfo.imageRaster.numberOfRows");
 
