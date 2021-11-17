@@ -101,9 +101,9 @@ bool Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarC
 
     // TODO: don't manipulate doubles, but ModifiedJulianDate for a better type
     // safety
-    MetaData::Time tmpDate;
+    MetaData::TimePoint tmpDate;
     std::istringstream(mds.GetAs<std::string>(sPrefix + "azimuthTime")) >> tmpDate;
-    sigmaCalibrationVector.timeMJD = tmpDate.GetModifiedJulian();
+    sigmaCalibrationVector.timeMJD = tmpDate.GetModifiedJulianDay();
     sigmaCalibrationVector.deltaMJD = sigmaCalibrationVector.timeMJD - lastMJD;
     lastMJD                    = sigmaCalibrationVector.timeMJD;
 
@@ -137,23 +137,23 @@ bool Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarC
   }
 
   Sentinel1CalibrationLookupData::Pointer sigmaSarLut = Sentinel1CalibrationLookupData::New();
-  sigmaSarLut->InitParameters(SarCalibrationLookupData::SIGMA, firstLineTime.GetModifiedJulian(),
-                              lastLineTime.GetModifiedJulian(), numOfLines, count, sigmaCalibrationVectorList);
+  sigmaSarLut->InitParameters(SarCalibrationLookupData::SIGMA, firstLineTime.GetModifiedJulianDay(),
+                              lastLineTime.GetModifiedJulianDay(), numOfLines, count, sigmaCalibrationVectorList);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = sigmaSarLut;
 
   Sentinel1CalibrationLookupData::Pointer betaSarLut = Sentinel1CalibrationLookupData::New();
-  betaSarLut->InitParameters(SarCalibrationLookupData::BETA, firstLineTime.GetModifiedJulian(),
-                             lastLineTime.GetModifiedJulian(), numOfLines, count, betaCalibrationVectorList);
+  betaSarLut->InitParameters(SarCalibrationLookupData::BETA, firstLineTime.GetModifiedJulianDay(),
+                             lastLineTime.GetModifiedJulianDay(), numOfLines, count, betaCalibrationVectorList);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = betaSarLut;
 
   Sentinel1CalibrationLookupData::Pointer gammaSarLut = Sentinel1CalibrationLookupData::New();
-  gammaSarLut->InitParameters(SarCalibrationLookupData::GAMMA, firstLineTime.GetModifiedJulian(),
-                              lastLineTime.GetModifiedJulian(), numOfLines, count, gammaCalibrationVectorList);
+  gammaSarLut->InitParameters(SarCalibrationLookupData::GAMMA, firstLineTime.GetModifiedJulianDay(),
+                              lastLineTime.GetModifiedJulianDay(), numOfLines, count, gammaCalibrationVectorList);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = gammaSarLut;
 
   Sentinel1CalibrationLookupData::Pointer dnSarLut = Sentinel1CalibrationLookupData::New();
-  dnSarLut->InitParameters(SarCalibrationLookupData::DN, firstLineTime.GetModifiedJulian(),
-                           lastLineTime.GetModifiedJulian(), numOfLines, count, dnCalibrationVectorList);
+  dnSarLut->InitParameters(SarCalibrationLookupData::DN, firstLineTime.GetModifiedJulianDay(),
+                           lastLineTime.GetModifiedJulianDay(), numOfLines, count, dnCalibrationVectorList);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = dnSarLut;
 
   return true;
@@ -178,7 +178,7 @@ NoiseVectorLists ReadNoiseVectorListsFromGeom(const MetadataSupplierInterface& m
     // Path: noise.noiseVector[<listId>].{azimuthTime,line,noiseLut,pixel,pixel_count}
     const std::string prefix = "noise.noiseVector[" + std::to_string(listId) + "].";
     Sentinel1CalibrationStruct rangeNoiseVector;
-    rangeNoiseVector.timeMJD = mds.GetAs<MetaData::Time>(prefix+ "azimuthTime").GetModifiedJulian();
+    rangeNoiseVector.timeMJD = MetaData::ReadFormattedDate(mds.GetAs<std::string>(prefix+ "azimuthTime")).GetModifiedJulianDay();
     rangeNoiseVector.deltaMJD = rangeNoiseVector.timeMJD - lastMJD;
 
     lastMJD = rangeNoiseVector.timeMJD;
@@ -246,7 +246,7 @@ NoiseVectorLists ReadNoiseVectorListsFromXML(const MetadataSupplierInterface& md
     const auto prefix = rangeNoisePrefix + rangeVectorName + std::to_string(i+1) + ".";
     Sentinel1CalibrationStruct rangeNoiseVector;
 
-    rangeNoiseVector.timeMJD = mds.GetAs<MetaData::Time>(prefix + "azimuthTime").GetModifiedJulian();
+    rangeNoiseVector.timeMJD = MetaData::ReadFormattedDate(mds.GetAs<std::string>(prefix + "azimuthTime")).GetModifiedJulianDay();
     rangeNoiseVector.deltaMJD = rangeNoiseVector.timeMJD - lastMJD;
     lastMJD = rangeNoiseVector.timeMJD;
     rangeNoiseVector.line = mds.GetAs<int>(prefix + "line");
@@ -298,8 +298,8 @@ bool Sentinel1ImageMetadataInterface::CreateThermalNoiseLookupData(SARCalib& sar
                                                                   const MetadataSupplierInterface& mds,
                                                                   const bool geom) const
 {
-  auto firstLineTime = sarCalib.calibrationStartTime.GetModifiedJulian();
-  auto lastLineTime = sarCalib.calibrationStopTime.GetModifiedJulian();
+  auto firstLineTime = sarCalib.calibrationStartTime.GetModifiedJulianDay();
+  auto lastLineTime = sarCalib.calibrationStopTime.GetModifiedJulianDay();
 
   int numOfLines = 0;
   if(imd.Has(MDNum::NumberOfLines))

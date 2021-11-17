@@ -48,7 +48,7 @@ class SarCalibrationLookupData;
 struct OTBMetadata_EXPORT AzimuthFmRate
 {
   /** Zero Doppler azimuth time to which azimuth FM rate parameters apply */
-  MetaData::Time azimuthTime;
+  MetaData::TimePoint azimuthTime;
   /** Two way slant range time origin used for azimuth FM rate calculation */
   double t0;
   /** Azimuth FM rate coefficients c0 c1 c2 */
@@ -68,7 +68,7 @@ struct OTBMetadata_EXPORT AzimuthFmRate
 struct OTBMetadata_EXPORT DopplerCentroid
 {
   /** Zero Doppler azimuth time of this Doppler centroid estimate */
-  MetaData::Time azimuthTime;
+  MetaData::TimePoint azimuthTime;
   /* Two-way slant range time origin for Doppler centroid estimate */
   double t0;
   /* Doppler centroid estimated from data */
@@ -233,8 +233,8 @@ struct OTBMetadata_EXPORT SARCalib
   
   bool calibrationLookupFlag = false;
   double rescalingFactor;
-  MetaData::Time calibrationStartTime;
-  MetaData::Time calibrationStopTime;
+  MetaData::TimePoint calibrationStartTime;
+  MetaData::TimePoint calibrationStopTime;
   ArrayType radiometricCalibrationNoisePolynomialDegree;
   ArrayType radiometricCalibrationAntennaPatternNewGainPolynomialDegree;
   ArrayType radiometricCalibrationAntennaPatternOldGainPolynomialDegree;
