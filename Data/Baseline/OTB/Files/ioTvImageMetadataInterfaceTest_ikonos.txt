@@ -11,8 +11,8 @@ SunElevation 60.8726
 SunAzimuth 147.924
 SatElevation 59.3389
 SatAzimuth 126.994
-AcquisitionDate 2005-06-21T10:53:00.000000000
-ProductionDate 2008-02-12T00:00:00.000000000
+AcquisitionDate 2005-06-21T10:53:00Z
+ProductionDate 2008-02-12T00:00:00Z
 ProjectionWKT PROJCS["WGS 84 / UTM zone 31N",
     GEOGCS["WGS 84",
         DATUM["WGS_1984",
