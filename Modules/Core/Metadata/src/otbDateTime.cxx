@@ -48,9 +48,16 @@ TimePoint ReadFormattedDate(const std::string & dateStr, const std::string & for
   return tp;
 }
 
-std::ostream & TimePoint::Display(std::ostream & os, const std::string& format) const 
+std::ostream & TimePoint::Display(std::ostream & os) const 
 {
-  date::to_stream(os, format.c_str(), m_Time);
+  auto dateStr = date::format( "%Y-%m-%dT%H:%M:%S", m_Time);
+
+  // date::format %S returns the number of seconds with a fixed size format (ns precision)
+  // Remove the trailing zeros in the output.
+  dateStr.erase(dateStr.find_last_not_of('0') + 1, std::string::npos);
+
+  // Add the UTC time identifier
+  os << dateStr << "Z";
   return os;
 }
 

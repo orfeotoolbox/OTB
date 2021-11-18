@@ -102,7 +102,7 @@ public:
   TimePoint(): m_Time(InternalTimePointType::min()) {}
   TimePoint(InternalTimePointType const& t): m_Time(t) {}
 
-  std::ostream & Display(std::ostream & os, const std::string & format = details::timePointFormat) const;
+  std::ostream & Display(std::ostream & os) const;
   std::istream & Read   (std::istream & is, const std::string & format = details::timePointFormat);
 
   template <typename U, typename V> static U diff(V const& lhs, V const& rhs) 
