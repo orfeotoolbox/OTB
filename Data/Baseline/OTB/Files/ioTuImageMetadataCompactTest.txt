@@ -1,8 +1,8 @@
 SensorID PHR
 Polarization Polarization
 NoData -10000
-AcquisitionDate 2009-08-05T20:34:38.236478000
-ProductionDate 2009-08-10T10:30:08.142149000
+AcquisitionDate 2009-08-05T20:34:38.236478Z
+ProductionDate 2009-08-10T10:30:08.142149Z
 ProjectionWKT UTM projRef
 Comment Test Extrakeys
 Information Very important
