@@ -20,7 +20,7 @@ diff -burN gdal-2.4.1_orig/frmts/raw/envidataset.cpp gdal-2.4.1/frmts/raw/envida
 @@ -1530,7 +1533,12 @@
  
      // Fallback to localcs if we don't recognise things.
-     if( oSRS.GetRoot() == nullptr )
+     if( oSRS.IsEmpty() )
 +      {
          oSRS.SetLocalCS(papszFields[0]);
 +      // assume that the Y axis isn't flipped
