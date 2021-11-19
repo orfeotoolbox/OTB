@@ -64,6 +64,13 @@ std::ostream & TimePoint::Display(std::ostream & os) const
 std::istream & TimePoint::Read(std::istream & is, const std::string & format)
 {
   date::from_stream(is, format.c_str(), m_Time);
+
+  // Remove the UTC time identifier from the input istream, if it exists.
+  if (!is.eof() && is.peek() == 'Z')
+  {
+    is.get();
+  }
+
   return is;
 }
 
