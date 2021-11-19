@@ -55,6 +55,8 @@ Reader options
 
 -----------------------------------------------
 
+.. _extended-filename-sdataidx:
+
 ::
 
     &sdataidx=<(int)idx>

@@ -43,6 +43,7 @@ Table of Contents
     :caption: Get Started
 
     Installation
+    Supported_Sensors
     Monteverdi
 
 .. toctree::
