@@ -56,6 +56,12 @@ std::ostream & TimePoint::Display(std::ostream & os) const
   // Remove the trailing zeros in the output.
   dateStr.erase(dateStr.find_last_not_of('0') + 1, std::string::npos);
 
+  // Remove the decimal part separator for time points with an integer number of seconds
+  if (dateStr.back() == '.')
+  {
+    dateStr.pop_back();
+  }
+
   // Add the UTC time identifier
   os << dateStr << "Z";
   return os;
