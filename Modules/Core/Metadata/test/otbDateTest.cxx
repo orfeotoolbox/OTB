@@ -73,6 +73,10 @@ BOOST_AUTO_TEST_CASE(TimePoint)
   BOOST_TEST(date1 + otb::MetaData::Duration::Seconds(0.1) == 
     otb::MetaData::ReadFormattedDate("2021-06-22T00:01:04.52578987"));
 
+  // Test parsing with a UTC time identifier
+  BOOST_TEST(otb::MetaData::ReadFormattedDate("2021-06-22T00:01:04.42Z") 
+              == otb::MetaData::ReadFormattedDate("2021-06-22T00:01:04.42"));
+
   // Test Parsing with a different format
   otb::MetaData::ReadFormattedDate("2021-06-22 00:01:04.42578987", "%Y-%m-%d %H:%M:%S");
   
@@ -91,6 +95,11 @@ BOOST_AUTO_TEST_CASE(TimePoint)
 
   BOOST_TEST(mjdOrigin.GetJulianDay() == 2400000.5);
   BOOST_TEST(mjdOrigin.GetModifiedJulianDay() == 0.);
+
+  // Serialization test
+  std::ostringstream iss;
+  iss << date1;
+  BOOST_TEST(otb::MetaData::ReadFormattedDate(iss.str()) == date1);
 }
 
 BOOST_AUTO_TEST_CASE(TimePointPrecision)
