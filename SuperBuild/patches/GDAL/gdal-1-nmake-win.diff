@@ -1,10 +1,9 @@
-diff -burN gdal-2.4.1_orig/nmake.opt gdal-2.4.1/nmake.opt
---- gdal-2.4.1_orig/nmake.opt	2019-03-15 13:30:03.000000000 +0100
-+++ gdal-2.4.1/nmake.opt	2019-04-02 10:57:50.712191315 +0200
-@@ -276,9 +276,9 @@
- !ENDIF
- 
- # This will enable 12bit libjpeg - use only with internal jpeg builds.
+--- gdal-3.4.0_orig/nmake.opt	2021-11-04 12:55:37.000000000 +0100
++++ gdal-3.4.0/nmake.opt	2021-11-22 16:22:46.247741400 +0100
+@@ -307,9 +307,9 @@
+ # This will enable 12bit libjpeg, using internal IJG libjpeg-6b in 12-bit mode
+ # Note: it is possible to have 12bit JPEG support with this internal IJG libjpeg-6b
+ # and 8bit JPEG support through an external libjpeg, such as libjpeg-turbo
 -!IFNDEF JPEG12_SUPPORTED
 -JPEG12_SUPPORTED = 1
 -!ENDIF
@@ -13,4 +12,4 @@ diff -burN gdal-2.4.1_orig/nmake.opt gdal-2.4.1/nmake.opt
 +#!ENDIF
  
  #if using an external jpeg library uncomment the following lines
- #JPEG_EXTERNAL_LIB = 1
+ # libjpeg-turbo is also supported (and recommended for better performance)
