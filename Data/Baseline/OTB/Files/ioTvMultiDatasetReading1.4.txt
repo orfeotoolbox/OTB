@@ -1,64 +1,67 @@
-VectorImage (000001AA9202E980)
-  RTTI typeinfo:   class otb::VectorImage<double,2>
+VectorImage (0x561e57472650)
+  RTTI typeinfo:   otb::VectorImage<double, 2u>
   Reference Count: 3
   Modified Time: 125
   Debug: Off
-  Object Name:
-  Observers:
+  Object Name: 
+  Observers: 
     none
-  Source: (000001AA9185C130)
+  Source: (0x561e57462450) 
   Source output name: Primary
   Release Data: Off
   Data Released: False
   Global Release Data: Off
   PipelineMTime: 20
   UpdateMTime: 0
-  RealTimeStamp: 0 seconds
-  LargestPossibleRegion:
+  RealTimeStamp: 0 seconds 
+  LargestPossibleRegion: 
     Dimension: 2
     Index: [0, 0]
     Size: [4800, 4800]
-  BufferedRegion:
+  BufferedRegion: 
     Dimension: 2
     Index: [0, 0]
     Size: [0, 0]
-  RequestedRegion:
+  RequestedRegion: 
     Dimension: 2
     Index: [0, 0]
     Size: [0, 0]
   Spacing: [231.65635826375, 231.656358263958]
   Origin: [-12231339.8881539, 6671587.28982087]
-  Direction:
+  Direction: 
 1 0
 0 -1
 
-  IndexToPointMatrix:
+  IndexToPointMatrix: 
 231.65635826375 0
 0 -231.656358263958
 
-  PointToIndexMatrix:
+  PointToIndexMatrix: 
 0.00431673884323719 0
 0 -0.00431673884323331
 
-  Inverse Direction:
+  Inverse Direction: 
 1 0
 0 -1
 
   VectorLength: 1
-  PixelContainer:
-    ImportImageContainer (000001AA920206F0)
-      RTTI typeinfo:   class itk::ImportImageContainer<unsigned __int64,double>
+  PixelContainer: 
+    ImportImageContainer (0x561e574b1340)
+      RTTI typeinfo:   itk::ImportImageContainer<unsigned long, double>
       Reference Count: 1
       Modified Time: 11
       Debug: Off
-      Object Name:
-      Observers:
+      Object Name: 
+      Observers: 
         none
-      Pointer: 0000000000000000
+      Pointer: 0
       Container manages memory: true
       Size: 0
       Capacity: 0
-  {{"ProjectionWKT": "PROJCS["unnamed",
+  {{"DataType": "4",
+"TileHintY": "4800",
+"TileHintX": "4800",
+"ProjectionWKT": "PROJCS["unnamed",
     GEOGCS["Unknown datum based upon the custom spheroid",
         DATUM["Not specified (based on custom spheroid)",
             SPHEROID["Custom spheroid",6371007.181,0]],
@@ -72,9 +75,6 @@ VectorImage (000001AA9202E980)
     UNIT["Meter",1],
     AXIS["Easting",EAST],
     AXIS["Northing",NORTH]]",
-"TileHintX": "4800",
-"TileHintY": "4800",
-"DataType": "4",
 }Bands[{"NoData": "32767",
 },]
 }
