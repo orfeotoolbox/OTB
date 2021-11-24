@@ -1,4 +1,4 @@
-VectorImage (0x561e57472650)
+VectorImage (0x6b89c0)
   RTTI typeinfo:   otb::VectorImage<double, 2u>
   Reference Count: 3
   Modified Time: 125
@@ -6,7 +6,7 @@ VectorImage (0x561e57472650)
   Object Name: 
   Observers: 
     none
-  Source: (0x561e57462450) 
+  Source: (0x6a8820) 
   Source output name: Primary
   Release Data: Off
   Data Released: False
@@ -46,7 +46,7 @@ VectorImage (0x561e57472650)
 
   VectorLength: 1
   PixelContainer: 
-    ImportImageContainer (0x561e574b1340)
+    ImportImageContainer (0x6f7780)
       RTTI typeinfo:   itk::ImportImageContainer<unsigned long, double>
       Reference Count: 1
       Modified Time: 11
@@ -60,7 +60,6 @@ VectorImage (0x561e57472650)
       Capacity: 0
   {{"DataType": "4",
 "TileHintY": "4800",
-"TileHintX": "4800",
 "ProjectionWKT": "PROJCS["unnamed",
     GEOGCS["Unknown datum based upon the custom spheroid",
         DATUM["Not specified (based on custom spheroid)",
@@ -75,6 +74,7 @@ VectorImage (0x561e57472650)
     UNIT["Meter",1],
     AXIS["Easting",EAST],
     AXIS["Northing",NORTH]]",
+"TileHintX": "4800",
 }Bands[{"NoData": "32767",
 },]
 }
