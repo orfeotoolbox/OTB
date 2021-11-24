@@ -1670,6 +1670,18 @@ ImageBaseType::RegionType Application::GetImageRequestedRegion(const std::string
   return requested;
 }
 
+const otb::ImageMetadata& Application::GetImageMetadata(const std::string& key, unsigned int idx)
+{
+  ImageBaseType* image = this->GetParameterImageBase(key, idx);
+  return dynamic_cast<otb::ImageCommons*>(image)->GetImageMetadata();
+}
+
+void Application::SetImageMetadata(const ImageMetadata & imd, const std::string& key, unsigned int idx)
+{
+  ImageBaseType* image = this->GetParameterImageBase(key, idx);
+  dynamic_cast<otb::ImageCommons*>(image)->SetImageMetadata(imd);
+}
+
 itk::MetaDataDictionary Application::GetImageMetaData(const std::string& key, unsigned int idx)
 {
   ImageBaseType* image = this->GetParameterImageBase(key, idx);

@@ -825,6 +825,11 @@ public:
    * the index of the largest possible region starts at (0,0).*/
   ImageBaseType::RegionType GetImageRequestedRegion(const std::string& key, unsigned int idx = 0);
 
+  /** Get/Set the ImageMetadata of the image parameter 'key'. The optional 'idx'
+   * allows selecting the image in an InputImageList.*/
+  const ImageMetadata &GetImageMetadata(const std::string& key, unsigned int idx = 0);
+  void SetImageMetadata(const ImageMetadata & imd, const std::string& key, unsigned int idx = 0);
+
   /** Returns a copy of the metadata dictionary of the image */
   itk::MetaDataDictionary GetImageMetaData(const std::string& key, unsigned int idx = 0);
 
