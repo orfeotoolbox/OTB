@@ -25,7 +25,7 @@
 #include "otbWrapperSWIGIncludes.h"
 #include <string>         // std::string
 #include <locale>
-#include "otbMetaDataEnum.h"
+#include "otbMetaDataKey.h"
 #include "otbImageMetadata.h"
 #define SWIG_FILE_WITH_INIT
 %}
@@ -34,8 +34,6 @@
 %include "Python.i"
 %include "itkMacro.i"
 %include "itkBase.i"
-
-%include "otbMetaDataEnum.h"
 
 namespace otb
 {
