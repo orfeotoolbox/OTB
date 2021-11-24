@@ -827,7 +827,7 @@ public:
 
   /** Get/Set the ImageMetadata of the image parameter 'key'. The optional 'idx'
    * allows selecting the image in an InputImageList.*/
-  const ImageMetadata &GetImageMetadata(const std::string& key, unsigned int idx = 0);
+  ImageMetadata &GetImageMetadata(const std::string& key, unsigned int idx = 0);
   void SetImageMetadata(const ImageMetadata & imd, const std::string& key, unsigned int idx = 0);
 
   /** Returns a copy of the metadata dictionary of the image */
