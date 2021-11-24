@@ -1682,7 +1682,7 @@ void Application::SetImageMetadata(const ImageMetadata & imd, const std::string&
   dynamic_cast<otb::ImageCommons*>(image)->SetImageMetadata(imd);
 }
 
-itk::MetaDataDictionary Application::GetImageMetaData(const std::string& key, unsigned int idx)
+itk::MetaDataDictionary Application::GetMetadataDictionary(const std::string& key, unsigned int idx)
 {
   ImageBaseType* image = this->GetParameterImageBase(key, idx);
   return image->GetMetaDataDictionary();

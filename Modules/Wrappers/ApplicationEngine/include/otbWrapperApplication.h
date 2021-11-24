@@ -831,7 +831,7 @@ public:
   void SetImageMetadata(const ImageMetadata & imd, const std::string& key, unsigned int idx = 0);
 
   /** Returns a copy of the metadata dictionary of the image */
-  itk::MetaDataDictionary GetImageMetaData(const std::string& key, unsigned int idx = 0);
+  itk::MetaDataDictionary GetMetadataDictionary(const std::string& key, unsigned int idx = 0);
 
   /** Find out what is the pixel type from an image parameter
    *  This function assumes that the underlying object is either an otb::Image
