@@ -328,12 +328,14 @@ functions:
 +---------------------------------+---------------------------------------+
 | ``GetImageProjection(...)``     | Projection WKT string                 |
 +---------------------------------+---------------------------------------+
-| ``GetImageMetaData(...)``       | the entire MetaDataDictionary         |
+| ``GetMetadataDictionary(...)``  | the entire MetaDataDictionary         |
 +---------------------------------+---------------------------------------+
 | ``GetImageRequestedRegion(...)``| requested region                      |
 +---------------------------------+---------------------------------------+
 | ``GetImageBasePixelType(...)``  | pixel type of the underlying          |
 |                                 | Image/VectorImage.                    |
++---------------------------------+---------------------------------------+
+| ``GetImageMetadata(...)``       | the ImateMetadata object              |
 +---------------------------------+---------------------------------------+
 
 All these getters functions use the following arguments:
