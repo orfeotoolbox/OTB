@@ -482,7 +482,7 @@ public:
     itk::Vector<SpacePrecisionType,2> spacing,
     itk::Size<2> size,
     itk::ImageRegion<2> bufferRegion,
-    itkMetaDataDictionary metadata)
+    otb::ImageMetadata metadata)
     {
     img->SetOrigin(origin);
     otb::internal::SetSignedSpacing(img, spacing);
@@ -496,7 +496,7 @@ public:
       }
     img->SetRequestedRegion(bufferRegion);
     img->SetBufferedRegion(bufferRegion);
-    img->SetMetaDataDictionary(metadata);
+    dynamic_cast<otb::ImageCommons*>(img)->SetImageMetadata(metadata);
     }
 } /* end of %extend */
 #endif /* OTB_SWIGNUMPY */
@@ -887,7 +887,7 @@ class ApplicationProxy(object):
       output["spacing"] = self.GetImageSpacing(paramKey)
       output["size"] = self.GetImageSize(paramKey)
       output["region"] = self.GetImageRequestedRegion(paramKey)
-      output["metadata"] = self.GetMetadataDictionary(paramKey)
+      output["metadata"] = self.GetImageMetadata(paramKey)
       return output
 
     }
