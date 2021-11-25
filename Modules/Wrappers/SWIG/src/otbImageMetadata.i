@@ -80,6 +80,10 @@ public:
 
 class ImageMetadataBase
 {
+public:
+  std::string GetProjectedGeometry() const;
+  std::string GetProjectionWKT() const;
+  std::string GetProjectionProj() const;
 };
 
 class ImageMetadata: public ImageMetadataBase
@@ -168,10 +172,9 @@ public:
     if (it_time != otb::MetaData::MDTimeNames.right.end())
       return $self->Has(it_time->second);
 
-    /* TODO: the geom part of the Imagemetadata is not wrapped yet
     auto it_geom = otb::MetaData::MDGeomNames.right.find(key);
     if (it_geom != otb::MetaData::MDGeomNames.right.end())
-      return $self->Has(it_geom->second);*/
+      return $self->Has(it_geom->second);
 
     return false;
   }
@@ -214,6 +217,13 @@ public:
       timeStream << val;
       $self->Add(key, timeStream.str());
     }
+  }
+  void __setitem__(const std::string& key, const boost::any val) {
+    auto it = otb::MetaData::MDGeomNames.right.find(key);
+    if (it != otb::MetaData::MDGeomNames.right.end())
+      $self->Add(it->second, val);
+    else
+      throw std::runtime_error("[" + key + "] is not a valid geometric key");
   }
   
   %pythoncode {
