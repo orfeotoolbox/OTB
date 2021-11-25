@@ -30,7 +30,10 @@ add_definitions(-DSQLITE_ENABLE_RTREE=1)
 add_definitions(-DSQLITE_OMIT_LOAD_EXTENSION=1)
 add_definitions(-DSQLITE_THREADSAFE=1)
 
-add_library(sqlite3 sqlite3.c)
+if(WIN32)
+  add_library(sqlite3 STATIC sqlite3.c)
+else()
+  add_library(sqlite3 sqlite3.c)
 
 add_executable(sqlite3-bin shell.c sqlite3.c)
 target_link_libraries(sqlite3-bin sqlite3)
