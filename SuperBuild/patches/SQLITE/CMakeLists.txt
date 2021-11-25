@@ -34,6 +34,7 @@ if(WIN32)
   add_library(sqlite3 STATIC sqlite3.c)
 else()
   add_library(sqlite3 sqlite3.c)
+endif()
 
 add_executable(sqlite3-bin shell.c sqlite3.c)
 target_link_libraries(sqlite3-bin sqlite3)
