@@ -502,7 +502,7 @@ otb_add_test(NAME raTvRadiometryCorrectionParametersToAtmosphericRadiativeTerms 
 
 
 otb_add_test(NAME raTvImageToReflectanceImageFilterAuto COMMAND otbOpticalCalibrationTestDriver
-  --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToReflectanceImageFilterAuto.tif
+  --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToReflectanceImageFilterAuto.img
   ${TEMP}/raTvImageToReflectanceImageFilterAuto.img
   otbImageToReflectanceImageFilterAuto
   LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
