@@ -1,4 +1,4 @@
-OTB-v 8.0.0-alpha - Changes since version 7.4.0 (November 03rd, 2021)
+OTB-v 8.0.0 - Changes since version 7.4.0 (November 03rd, 2021)
 ---------------------------------------------------------------------
 
 Features added:
@@ -15,6 +15,8 @@ Bugs fixed:
    * !857: Resolve "OTB stand alone package not support the virtual filesystem" by Mickael Savinaud
    * !842: Superbuild: compatibility between QT5 and MySQL by Cédric Traizet
    * !826: Treat Parameter_RAM as an integer parameter in SetParameterValue (Swig Wrapper) by Cédric Traizet
+   * !810: Fix K parameter in KNearestNeighborsMachineLearningModel by Cédric Traizet
+   * !788: Fix build issue when libSVM is OFF or libsiftfast is OFF and Testing ON by Thibaut ROMAIN
    * !775: Fix CosmoSkyMed ImageMetadataInterface by Cédric Traizet
    * !764: Deactivate PROJ's test building in the Superbuild by Julien Osman
    * !752: Fix output image from orthorectification having no projection by Cédric Traizet
@@ -22,6 +24,7 @@ Bugs fixed:
 
 Refactoring:
 
+   * !867: Remove DownloadSRTMTiles by Cédric Traizet
    * !863: Use ImageMetadata to manage NoData and TileHint by Cédric Traizet
    * !858: Optimize coordinate transformations in SARSensorModel by Cédric Traizet"
    * !851: Remove Ossim by Cédric Traizet and Julien Osman
@@ -50,6 +53,8 @@ Refactoring:
 
 CI:
 
+   * !869: Update macos version name in CI files by Cédric Traizet
+   * !866: Add new cookbook page about supported formats by Julien Osman
    * !856: Update Python to 3.8 on CI builds by Thibaut Romain
    * !832: Simplification of the CI : remove jobs CentOS, Debian and Windows8 by Julien Osman
    * !824: Set new URL for FFTW download by Julien Osman
