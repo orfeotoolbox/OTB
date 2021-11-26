@@ -31,8 +31,7 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
 {
   app->AddParameter(ParameterType_Group, key, "Elevation management");
   app->SetParameterDescription(key,
-                               "This group of parameters allows managing elevation values. Supported formats are SRTM, DTED or any geotiff. DownloadSRTMTiles "
-                               "application could be a useful tool to list/download tiles related to a product.");
+                               "This group of parameters allows managing elevation values.");
 
   // DEM directory
   std::ostringstream oss;
@@ -40,7 +39,7 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
   app->AddParameter(ParameterType_Directory, oss.str(), "DEM directory");
   app->SetParameterDescription(oss.str(),
                                "This parameter allows selecting a directory containing Digital Elevation Model files. Note that this directory should contain "
-                               "only DEM files. Unexpected behaviour might occurs if other images are found in this directory.");
+                               "only DEM files. Unexpected behaviour might occurs if other images are found in this directory. Input DEM tiles should be in a raster format supported by GDAL.");
   app->MandatoryOff(oss.str());
 
   std::string demDirFromConfig = otb::ConfigurationManager::GetDEMDirectory();

@@ -188,7 +188,7 @@ double TerraSarXSarImageMetadataInterface::GetNoiseTimeUTC(const unsigned int no
                                                        const unsigned int polLayer) const
 {
   std::ostringstream oss;
-  MetaData::Time time, defaultTime;
+  MetaData::TimePoint time, defaultTime;
   std::istringstream("2000-01-01T00:0:00.000000Z") >> defaultTime;
 
   if(polLayer == 0)
@@ -386,8 +386,8 @@ TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationNoise(const Metadat
   auto numberOfRows = static_cast<unsigned int>(imd[MDNum::NumberOfLines]);
   auto numberOfCols = static_cast<unsigned int>(imd[MDNum::NumberOfColumns]);
 
-  double   startTime      = imd[MDTime::AcquisitionStartTime].GetJulianDay();
-  double   stopTime       = imd[MDTime::AcquisitionStopTime].GetJulianDay();
+  double startTime = imd[MDTime::AcquisitionStartTime].GetJulianDay();
+  double stopTime  = imd[MDTime::AcquisitionStopTime].GetJulianDay();
 
   RealType firstRangeTime = imd[MDNum::RangeTimeFirstPixel];
   RealType lastRangeTime  = imd[MDNum::RangeTimeLastPixel];
@@ -562,7 +562,7 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
   // Number of entries in the vector
   int listCount = xmlMS.GetAs<int>("level1Product.platform.orbit.orbitHeader.numStateVectors");
 
-  const std::string dateFormat = "%Y-%m-%dT%H:%M:%S%F";
+  const std::string dateFormat = "%Y-%m-%dT%H:%M:%S";
 
   // This streams wild hold the iteration number
   std::ostringstream oss;
@@ -614,7 +614,7 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
       xmlMS.GetAs<std::string>("level1Product.productInfo.sceneInfo.stop.timeUTC"), dateFormat);
 
   const auto td = azimuthTimeStop - azimuthTimeStart;
-  assert(td > MetaData::seconds(0));
+  assert(td > MetaData::Duration::Seconds(0));
 
   const auto numberOfRows = xmlMS.GetAs<double>("level1Product.productInfo.imageDataInfo.imageRaster.numberOfRows");
 
@@ -675,8 +675,8 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   imd.Add(MDStr::Mode, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.imagingMode"));
   imd.Add(MDStr::SensorID, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.sensor"));
   imd.Add(MDNum::RadarFrequency, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.instrument.radarParameters.centerFrequency"));
-  imd.Add(MDTime::AcquisitionStartTime, MainXMLFileMetadataSupplier.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.start.timeUTC"));
-  imd.Add(MDTime::AcquisitionStopTime, MainXMLFileMetadataSupplier.GetFirstAs<MetaData::Time>("level1Product.productInfo.sceneInfo.stop.timeUTC"));
+  imd.Add(MDTime::AcquisitionStartTime, MetaData::ReadFormattedDate(MainXMLFileMetadataSupplier.GetFirstAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC")));
+  imd.Add(MDTime::AcquisitionStopTime, MetaData::ReadFormattedDate(MainXMLFileMetadataSupplier.GetFirstAs<std::string>("level1Product.productInfo.sceneInfo.stop.timeUTC")));
   imd.Add(MDNum::RangeTimeFirstPixel, MainXMLFileMetadataSupplier.GetFirstAs<double>("level1Product.productInfo.sceneInfo.rangeTime.firstPixel"));
   imd.Add(MDNum::RangeTimeLastPixel, MainXMLFileMetadataSupplier.GetFirstAs<double>("level1Product.productInfo.sceneInfo.rangeTime.lastPixel"));
   imd.Add(MDNum::PRF, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.commonPRF"));

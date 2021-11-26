@@ -193,15 +193,15 @@ macos-xdk-prepare:
   tags:
     - macos
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=macos-10.14.6-clang
 
 macos-xdk-build:
   tags:
     - macos
   extends: .common-build
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=macos-10.11.6-clang
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=macos-10.14.6-clang
+    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=macos-10.14.6-clang
     - mv build_packages/OTB-*.run . || true
   needs:
     - job: macos-xdk-prepare

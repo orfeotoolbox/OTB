@@ -49,8 +49,8 @@ public:
 
   using Vector3DType = itk::Point<double, 3>;
 
-  using TimeType = MetaData::TimeType;
-  using DurationType = MetaData::DurationType;
+  using TimeType = MetaData::TimePoint;
+  using DurationType = MetaData::Duration;
 
   /** Transform world point (lat,lon,hgt) to input image point
   (col,row) */

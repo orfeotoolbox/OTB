@@ -27,13 +27,14 @@
 #include <cstdlib>
 #include "otbStopwatch.h"
 #include "otbTestTools.h"
+#include "otbMissingMetadataException.h"
 
 void SetUpImageMetadata(otb::ImageMetadata& md, unsigned int nbBands)
 {
   using namespace otb;
   std::ostringstream oss;
 
-  MetaData::Time mytime = Utils::LexicalCast<MetaData::Time,std::string>(std::string("2009-08-10T10:30:08.142149Z"), std::string("T"));
+  MetaData::TimePoint mytime = MetaData::ReadFormattedDate(std::string("2009-08-10T10:30:08.142149Z"));
 
   md.Add(MDStr::SensorID, "PHR");
   md.Add(MDGeom::ProjectionWKT, std::string("UTM projRef"));
@@ -62,17 +63,17 @@ void otbMetadataKeyTest(char* argv[])
   const char*   outFileName = argv[2];
   std::ofstream outfile(outFileName);
 
-  MetaData::Time mytime;
+  MetaData::TimePoint mytime;
 
   std::string bufferStr("2009-08-10T10:30:08.142149Z");
 
   try
   {
-    mytime = Utils::LexicalCast<MetaData::Time,std::string>(bufferStr, std::string("T"));
+    mytime = MetaData::ReadFormattedDate(bufferStr);
   }
-  catch(std::runtime_error&)
+  catch(const MissingMetadataException &)
   {
-    outfile << "Bad Utils::LexicalCast into MetaData::Time\n";
+    outfile << "Cannot parse input buffer\n";
   }
 
   outfile << "mytime : "<< mytime << "\n";
@@ -269,7 +270,7 @@ void otbImageMetadataCompactTest(char* argv[])
   ImageMetadata md;
   md.compact();
   SetUpImageMetadata(md, 3);
-  MetaData::Time mytime = Utils::LexicalCast<MetaData::Time,std::string>(std::string("2009-08-05T20:34:38.236478Z"), std::string("T"));
+  MetaData::TimePoint mytime = MetaData::ReadFormattedDate("2009-08-05T20:34:38.236478Z");
   for (auto& band : md.Bands)
   {
     band.Add(MDStr::Polarization, "Polarization");

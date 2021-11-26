@@ -42,7 +42,7 @@ interfaces are:
 +------------------------+-------------------------+--------------------------------------------------------------------+
 | Spot 5                 | DIMAP / TIFF            | RPC not available.                                                 |
 +------------------------+-------------------------+--------------------------------------------------------------------+
-| Spot 6                 | DIMAP / JPEG2000 / TIFF | N/A                                                                |
+| Spot 6/7               | DIMAP / JPEG2000 / TIFF | N/A                                                                |
 +------------------------+-------------------------+--------------------------------------------------------------------+
 | TerraSarX              | COS                     | Use the cos file, not the main XML. MGD products are not supported.|
 +------------------------+-------------------------+--------------------------------------------------------------------+
@@ -121,13 +121,27 @@ we plan on fixing this. For now, formats fully supported
 Digital Elevation Model
 -----------------------
 
-OTB also relies on GDAL to access DEM data. Therefore, any raster
-format supported by GDAL can be used as DEM. Several DEM tiles can be
-provided at the same time by providing a directory. All raster from
-the input directory will be opened by GDAL.
+Many OTB application use an elevation model as input, usually with the
+parameter “-elev.dem”. This parameter accepts any raster file
+supported by GDAL, or a directory containing such files. In this
+second case, all rasters from the input directory will be opened by
+GDAL, so it could be a good idea to use a VRT. Beware that the DEM
+folder should contain only DEM files. It is the same for the geoid
+with the parameter "-elev.geoid". One can usually set a default
+elevation with the parameter "-elev.default".
 
-It is the same for the geoid. 
+Depending on the provided parameters, the application will:
 
+- compute the DEM + the value of the geoid if both the DEM and the
+  geoid are provided.
+
+- use the default value if none is provided.
+
+- use the value read in the DEM if only the DEM is provided.
+
+- compute the default elevation + the value of the geoid if only the
+  geoid is provided.
+  
 A note on the egm96.grd file
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

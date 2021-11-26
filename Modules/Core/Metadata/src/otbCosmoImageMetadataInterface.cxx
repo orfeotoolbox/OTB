@@ -151,8 +151,8 @@ std::vector<BurstRecord> CosmoImageMetadataInterface::CreateBurstRecord(const st
   record.endLine = endLine;
   record.endSample = endSample;
 
-  record.azimuthStartTime = MetaData::ReadFormattedDate(firstLineTimeStr, "%Y-%m-%dT%H:%M:%S%F");
-  record.azimuthStopTime = MetaData::ReadFormattedDate(lastLineTimeStr, "%Y-%m-%dT%H:%M:%S%F");
+  record.azimuthStartTime = MetaData::ReadFormattedDate(firstLineTimeStr, "%Y-%m-%dT%H:%M:%S");
+  record.azimuthStopTime = MetaData::ReadFormattedDate(lastLineTimeStr, "%Y-%m-%dT%H:%M:%S");
 
   record.azimuthAnxTime = 0.;
 
@@ -222,13 +222,10 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   minutes = static_cast<int> ((total_seconds-hour*3600)/60.0);
   seconds = total_seconds - hour*3600 - minutes*60;
 
-
   std::string last_line_time = reference_UTC + "T" + formatTimeInt(hour) + ":" + formatTimeInt(minutes) + ":" + formatTimeDouble(seconds);
-  MetaData::Time startTime = Utils::LexicalCast<MetaData::Time,std::string>(first_line_time, std::string("T"));
-  MetaData::Time stoptTime = Utils::LexicalCast<MetaData::Time,std::string>(last_line_time, std::string("T"));
 
-  imd.Add(MDTime::AcquisitionStartTime, startTime);
-  imd.Add(MDTime::AcquisitionStopTime, stoptTime);
+  imd.Add(MDTime::AcquisitionStartTime, MetaData::ReadFormattedDate(first_line_time));
+  imd.Add(MDTime::AcquisitionStopTime, MetaData::ReadFormattedDate(last_line_time));
 
   // Retrieve the product dimension, as it is not stored in the metadata
   auto dataset = static_cast<GDALDataset*>(GDALOpen(subDsName.c_str(), GA_ReadOnly));

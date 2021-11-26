@@ -37,7 +37,7 @@ SarSensorModel::SarSensorModel( const std::string & productType,
                             : m_ProductType(productType),
                               m_GCP(gcps),
                               m_SarParam(sarParam),
-                              m_AzimuthTimeOffset(MetaData::seconds(0)),
+                              m_AzimuthTimeOffset(MetaData::Duration::Seconds(0)),
                               m_RangeTimeOffset(0.),
                               m_EcefToWorldTransform(otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New()),
                               m_WorldToEcefTransform(otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New())
@@ -392,11 +392,11 @@ void SarSensorModel::OptimizeTimeOffsetsFromGcps()
 {
   assert(m_GCP.GCPs.size());
 
-  DurationType cumulAzimuthTime(MetaData::seconds(0));
+  DurationType cumulAzimuthTime(DurationType::Seconds(0));
   unsigned int count=0;
 
   // reset offsets before optimisation
-  m_AzimuthTimeOffset = MetaData::seconds(0);
+  m_AzimuthTimeOffset = DurationType::Seconds(0);
 
   // First, fix the azimuth time
   for(auto gcpIt = m_GCP.GCPs.begin(); gcpIt!= m_GCP.GCPs.end(); ++gcpIt)
@@ -425,7 +425,7 @@ void SarSensorModel::OptimizeTimeOffsetsFromGcps()
       }
     }
   }
-  m_AzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(MetaData::seconds(0));
+  m_AzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(MetaData::Duration::Seconds(0));
 }
 
 void SarSensorModel::AzimuthTimeToLine(const TimeType & azimuthTime, double & line) const

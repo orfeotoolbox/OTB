@@ -24,21 +24,13 @@
 #include "OTBMetadataExport.h"
 #include <vector>
 #include <string>
-#include "otbMacro.h"
 #include "otbStringUtils.h"
 #include "otbStringUtilities.h"
 #include <boost/algorithm/string.hpp>
+#include "otbMissingMetadataException.h"
 
 namespace otb
 {
-
-
-class MissingMetadataException : public itk::ExceptionObject
-{
-public:
-  using itk::ExceptionObject::ExceptionObject;
-};
-
 /** \class MetadataSupplierInterface
  *
  * \brief Base class to access metadata information in files/images

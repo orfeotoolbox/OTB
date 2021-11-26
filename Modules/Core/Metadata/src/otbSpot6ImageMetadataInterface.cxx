@@ -552,9 +552,9 @@ void Spot6ImageMetadataInterface::Parse(ImageMetadata & imd)
   imd.Add(MDNum::SatAzimuth, dimapData.SceneOrientation[0]);
 
   imd.Add(MDTime::ProductionDate,
-    boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));
+          MetaData::ReadFormattedDate(dimapData.ProductionDate));
   imd.Add(MDTime::AcquisitionDate,
-    boost::lexical_cast<MetaData::Time>(dimapData.AcquisitionDate));
+          MetaData::ReadFormattedDate(dimapData.AcquisitionDate));
 
   auto nbBands = imd.Bands.size();
   if (dimapData.PhysicalBias.size() == nbBands
