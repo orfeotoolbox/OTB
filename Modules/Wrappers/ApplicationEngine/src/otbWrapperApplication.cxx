@@ -1673,13 +1673,20 @@ ImageBaseType::RegionType Application::GetImageRequestedRegion(const std::string
 ImageMetadata &Application::GetImageMetadata(const std::string& key, unsigned int idx)
 {
   ImageBaseType* image = this->GetParameterImageBase(key, idx);
-  return dynamic_cast<otb::ImageCommons*>(image)->m_Imd;
+  otb::ImageCommons* castedImage = dynamic_cast<otb::ImageCommons*>(image);
+  if (castedImage)
+    return castedImage->GetImageMetadata();
+  throw std::runtime_error("Cannot retrieve metadata from the image parameter " + key);
 }
 
 void Application::SetImageMetadata(const ImageMetadata & imd, const std::string& key, unsigned int idx)
 {
   ImageBaseType* image = this->GetParameterImageBase(key, idx);
-  dynamic_cast<otb::ImageCommons*>(image)->SetImageMetadata(imd);
+  otb::ImageCommons* castedImage = dynamic_cast<otb::ImageCommons*>(image);
+  if (castedImage)
+    castedImage->SetImageMetadata(imd);
+  else
+    throw std::runtime_error("Cannot set metadata to the image parameter " + key);
 }
 
 itk::MetaDataDictionary Application::GetMetadataDictionary(const std::string& key, unsigned int idx)
