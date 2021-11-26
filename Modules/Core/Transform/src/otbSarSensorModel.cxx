@@ -37,12 +37,17 @@ SarSensorModel::SarSensorModel( const std::string & productType,
                             : m_ProductType(productType),
                               m_GCP(gcps),
                               m_SarParam(sarParam),
-                              m_AzimuthTimeOffset(MetaData::seconds(0)),
+                              m_AzimuthTimeOffset(MetaData::Duration::Seconds(0)),
                               m_RangeTimeOffset(0.),
                               m_EcefToWorldTransform(otb::GeocentricTransform<otb::TransformDirection::INVERSE, double>::New()),
                               m_WorldToEcefTransform(otb::GeocentricTransform<otb::TransformDirection::FORWARD, double>::New())
 
 {
+  if (m_GCP.GCPs.empty())
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject, <<"no GCP found in the input metadata, at least one is required in SARSensorModel");
+  }
+
   OptimizeTimeOffsetsFromGcps();
 
   const std::vector<std::string> grdProductTypes = {"GRD", "MGD", "GEC", "EEC"};
@@ -93,6 +98,67 @@ void SarSensorModel::WorldToLineSample(const Point3DType& inGeoPoint, Point2DTyp
   }
 }
 
+void SarSensorModel::WorldToLineSampleYZ(const Point3DType& inGeoPoint, Point2DType& cr, Point2DType& yz) const
+{
+  TimeType azimuthTime;
+  double rangeTime;
+  Point3DType sensorPos; 
+  Vector3DType sensorVel;
+
+  const bool success = WorldToAzimuthRangeTime(inGeoPoint, azimuthTime, rangeTime, sensorPos, sensorVel);
+
+  if(!success)
+  {
+    //TODO return Nan or throw ?
+    return;
+  }
+
+  // Convert azimuth time to line
+  AzimuthTimeToLine(azimuthTime, cr[1]);
+
+  if (m_IsGrd)
+  {
+    // GRD case
+    double groundRange(0);
+    SlantRangeToGroundRange(rangeTime*C/2,azimuthTime,groundRange);
+
+    // Eq 32 p. 31
+    cr[0] = groundRange/m_SarParam.rangeResolution;
+  }
+  else
+  {
+    // SLC case
+    // Eq 23 and 24 p. 28
+    cr[0] = (rangeTime - m_SarParam.nearRangeTime) 
+                        * m_SarParam.rangeSamplingRate;
+  }
+
+  auto inputPt = WorldToEcef(inGeoPoint);
+
+  // Radar distance
+  double NormeS = std::sqrt(sensorPos[0]*sensorPos[0] + sensorPos[1]*sensorPos[1] + sensorPos[2]*sensorPos[2]);
+  
+  double PS2 = inputPt[0]*sensorPos[0] + inputPt[1]*sensorPos[1] + inputPt[2]*sensorPos[2];
+
+  assert(NormeS>1e-6);
+  yz[1] = NormeS - PS2/NormeS;
+
+  double distance = std::sqrt((sensorPos[0]-inputPt[0])*(sensorPos[0]-inputPt[0]) + 
+                             (sensorPos[1]-inputPt[1])*(sensorPos[1]-inputPt[1]) + 
+                             (sensorPos[2]-inputPt[2])*(sensorPos[2]-inputPt[2]));  
+
+
+
+  yz[0] = std::sqrt(distance*distance - yz[1] * yz[1]);
+
+  // Check view side and change sign of Y accordingly
+  if ( (( sensorVel[0] * (sensorPos[1]* inputPt[2] - sensorPos[2]* inputPt[1]) +
+              sensorVel[1] * (sensorPos[2]* inputPt[0] - sensorPos[0]* inputPt[2]) +
+              sensorVel[2] * (sensorPos[0]* inputPt[1] - sensorPos[1]* inputPt[0])) > 0) ^ m_SarParam.rightLookingFlag )
+  {
+    yz[0] = -yz[0];
+  }
+}
 
 bool SarSensorModel::WorldToAzimuthRangeTime(const Point3DType& inGeoPoint, 
                                         TimeType & azimuthTime, 
@@ -116,6 +182,21 @@ bool SarSensorModel::WorldToAzimuthRangeTime(const Point3DType& inGeoPoint,
   return true;
 
 }
+
+bool SarSensorModel::WorldToSatPositionAndVelocity(const Point3DType& inGeoPoint,
+                                                   Point3DType& satellitePosition,
+                                                   Point3DType& satelliteVelocity) const
+{
+  TimeType azimuthTime;
+  double   rangeTime;
+
+  return WorldToAzimuthRangeTime(inGeoPoint,
+                                 azimuthTime,
+                                 rangeTime,
+                                 satellitePosition,
+                                 satelliteVelocity);
+}
+
 
 void SarSensorModel::LineSampleHeightToWorld(const Point2DType& imPt,
                                              double  heightAboveEllipsoid,
@@ -311,11 +392,11 @@ void SarSensorModel::OptimizeTimeOffsetsFromGcps()
 {
   assert(m_GCP.GCPs.size());
 
-  DurationType cumulAzimuthTime(MetaData::seconds(0));
+  DurationType cumulAzimuthTime(DurationType::Seconds(0));
   unsigned int count=0;
 
   // reset offsets before optimisation
-  m_AzimuthTimeOffset = MetaData::seconds(0);
+  m_AzimuthTimeOffset = DurationType::Seconds(0);
 
   // First, fix the azimuth time
   for(auto gcpIt = m_GCP.GCPs.begin(); gcpIt!= m_GCP.GCPs.end(); ++gcpIt)
@@ -344,7 +425,7 @@ void SarSensorModel::OptimizeTimeOffsetsFromGcps()
       }
     }
   }
-  m_AzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(MetaData::seconds(0));
+  m_AzimuthTimeOffset = count > 0 ? cumulAzimuthTime / count : DurationType(MetaData::Duration::Seconds(0));
 }
 
 void SarSensorModel::AzimuthTimeToLine(const TimeType & azimuthTime, double & line) const
@@ -732,17 +813,17 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
   // Now move GCPs
 
   std::vector<GCP> deburstGCPs;
-  
+
   for (auto gcp : m_GCP.GCPs)
   {
     unsigned long newLine=0;
 
-    unsigned long gcpLine = std::floor(gcp.m_GCPY + 0.5);
-    unsigned long gcpSample = std::floor(gcp.m_GCPX + 0.5);
+    unsigned long gcpLine = std::floor(gcp.m_GCPRow + 0.5);
+    unsigned long gcpSample = std::floor(gcp.m_GCPCol + 0.5);
 
     // Be careful about fractional part of GCPs
-    double fractionalLines = gcp.m_GCPY - gcpLine;
-    double fractionalSamples = gcp.m_GCPX - gcpSample;
+    double fractionalLines = gcp.m_GCPRow - gcpLine;
+    double fractionalSamples = gcp.m_GCPCol - gcpSample;
 
     bool linesOk = ImageLineToDeburstLine(lines, gcpLine, newLine);
 
@@ -762,8 +843,8 @@ bool SarSensorModel::Deburst(std::vector<std::pair<unsigned long, unsigned long>
 
     if(linesOk && samplesOk)
     {
-      gcp.m_GCPY = newLine + fractionalLines;
-      gcp.m_GCPX = newSample + fractionalSamples;
+      gcp.m_GCPRow = newLine + fractionalLines;
+      gcp.m_GCPCol = newSample + fractionalSamples;
       deburstGCPs.push_back(gcp);
     }
   }
@@ -864,12 +945,12 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
   {
     auto currentGCP = token;
 
-    unsigned long gcpLine = std::floor(currentGCP.m_GCPY + 0.5);
-    unsigned long gcpSample = std::floor(currentGCP.m_GCPX + 0.5);
+    unsigned long gcpLine = std::floor(currentGCP.m_GCPRow + 0.5);
+    unsigned long gcpSample = std::floor(currentGCP.m_GCPCol + 0.5);
 
     // Be careful about fractional part of GCPs
-    double fractionalLines = currentGCP.m_GCPY - gcpLine;
-    double fractionalSamples = currentGCP.m_GCPX - gcpSample;
+    double fractionalLines = currentGCP.m_GCPRow - gcpLine;
+    double fractionalSamples = currentGCP.m_GCPCol - gcpSample;
 
     // Gcp into valid samples and valid lines
     unsigned long newSample = gcpSample;
@@ -892,10 +973,17 @@ bool SarSensorModel::BurstExtraction(const unsigned int burst_index,
 
     if(linesOk && samplesOk)
     {
-      currentGCP.m_GCPY = newLine + fractionalLines;
-      currentGCP.m_GCPX = newSample + fractionalSamples;
+      currentGCP.m_GCPRow = newLine + fractionalLines;
+      currentGCP.m_GCPCol = newSample + fractionalSamples;
       oneBurstGCPs.push_back(currentGCP);
     }
+  }
+
+  // emit a warning if there are no GCP inside the burst, as it makes the output model unusable
+  // See Gitlab issue #2230
+  if (oneBurstGCPs.empty())
+  {
+    otbLogMacro(Warning, << "There are no GCP inside the extracted burst")
   }
 
   m_GCP.GCPs.swap(oneBurstGCPs);
@@ -1008,12 +1096,12 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
   {
     unsigned long newLine=0;
 
-    unsigned long gcpLine = std::floor(gcp.m_GCPY + 0.5);
-    unsigned long gcpSample = std::floor(gcp.m_GCPX + 0.5);
+    unsigned long gcpLine = std::floor(gcp.m_GCPRow + 0.5);
+    unsigned long gcpSample = std::floor(gcp.m_GCPCol + 0.5);
 
     // Be careful about fractional part of GCPs
-    double fractionalLines = gcp.m_GCPY - gcpLine;
-    double fractionalSamples = gcp.m_GCPX - gcpSample;
+    double fractionalLines = gcp.m_GCPRow - gcpLine;
+    double fractionalSamples = gcp.m_GCPCol - gcpSample;
 
     bool linesOk = ImageLineToDeburstLine(lines,gcpLine,newLine);
 
@@ -1023,8 +1111,8 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
     if (linesOk && gcpSample >= samples.first && gcpSample <= samples.second)
     {
       newSample -= samples.first; // Offset with first valid sample
-      gcp.m_GCPY = newLine + fractionalLines;
-      gcp.m_GCPX = newSample + fractionalSamples;
+      gcp.m_GCPRow = newLine + fractionalLines;
+      gcp.m_GCPCol = newSample + fractionalSamples;
       deburstGCPs.push_back(gcp);
      }
 
@@ -1101,6 +1189,80 @@ bool SarSensorModel::DeburstAndConcatenate(std::vector<std::pair<unsigned long,u
   return true;
 }
 
+bool SarSensorModel::Overlap(std::pair<unsigned long, unsigned long>& linesUp, std::pair<unsigned long, unsigned long>& linesLow,
+               std::pair<unsigned long, unsigned long>& samplesUp, std::pair<unsigned long, unsigned long>& samplesLow, unsigned int burstIndUp,
+               bool inputWithInvalidPixels)
+{  
+  auto & burstRecords = m_SarParam.burstRecords;
+
+  // Check the no burst record case, the single burst record case or inferior to burstIndUp + 1
+  if(burstRecords.size() <= 1 || burstRecords.size() <= ( burstIndUp + 1))
+  {
+    return false;
+  }
+
+  auto & burstUp = burstRecords[burstIndUp];
+  auto & burstLow = burstRecords[burstIndUp+1];
+
+  // Overlap for samples (valid samples)
+  std::pair<unsigned long,unsigned long> samples = {burstUp.startSample, burstUp.endSample};
+
+  if (burstLow.startSample > samples.first)
+  {
+    samples.first = burstLow.startSample;
+  }
+  if (burstLow.endSample < samples.second)
+  {
+    samples.second = burstLow.endSample;
+  }
+
+  unsigned long currentStartUp_S = 0;
+  unsigned long currentStartLow_S = 0;
+  unsigned long currentStopUp_S = samples.second-samples.first;
+  unsigned long currentStopLow_S = samples.second-samples.first;
+
+  if (inputWithInvalidPixels)
+  {
+    currentStartUp_S = samples.first;
+    currentStartLow_S = samples.first;
+  }
+  else
+  {
+    if (burstUp.startSample < samples.first)
+    {
+      currentStartUp_S = samples.first - burstUp.startSample;
+    }
+    if (burstLow.startSample < samples.first)
+    {
+      currentStartLow_S = samples.first - burstLow.startSample;
+    }
+  }
+
+  currentStopUp_S += currentStartUp_S;
+  currentStopLow_S += currentStartLow_S;
+
+  samplesUp = std::make_pair(currentStartUp_S, currentStopUp_S);
+  samplesLow = std::make_pair(currentStartLow_S, currentStopLow_S);
+
+  // Overlap for lines (valid + overlap IW)
+  auto timeOverlapEnd = (burstUp.azimuthStopTime - burstLow.azimuthStartTime);
+  unsigned long overlapLength = timeOverlapEnd / m_SarParam.azimuthTimeInterval;
+
+  unsigned long lastValidBurstUp = burstUp.endLine - burstUp.startLine;
+  unsigned long firstValidBurstLow = 0;
+
+  if (inputWithInvalidPixels)
+  {
+    lastValidBurstUp = burstUp.endLine - burstIndUp * m_SarParam.numberOfLinesPerBurst;
+    firstValidBurstLow = burstLow.startLine - (burstIndUp+1) * m_SarParam.numberOfLinesPerBurst;
+  }
+
+  linesUp = std::make_pair(lastValidBurstUp - overlapLength, lastValidBurstUp);
+  linesLow = std::make_pair(firstValidBurstLow, firstValidBurstLow + overlapLength);
+
+  return true;
+}
+
 void SarSensorModel::UpdateImageMetadata(ImageMetadata & imd)
 {
   imd.Add(MDGeom::SAR, m_SarParam);
@@ -1150,6 +1312,58 @@ void SarSensorModel::DeburstLineToImageLine(const std::vector<std::pair<unsigned
     ++nit;
   }
   imageLine += lineOffset;
+}
+
+void SarSensorModel::LineToAzimuthTime(double line, TimeType & azimuthTime) const
+{
+  assert(!m_SarParam.burstRecords.empty()&&"Burst records are empty (at least one burst should be available)");
+
+  auto currentBurst = m_SarParam.burstRecords.cbegin();
+
+  if(m_SarParam.burstRecords.size() != 1)
+  {
+    // Look for the correct burst. In most cases the number of burst
+    // records will be 1 (except for TOPSAR Sentinel1 products)
+    auto it = m_SarParam.burstRecords.cbegin();
+    auto itend = m_SarParam.burstRecords.cend();
+    for( ; it!= itend; ++it)
+    {
+      if(line >= it->startLine && line < it->endLine)
+      {
+        currentBurst = it;
+        break;
+      }
+    }
+
+    if(it == itend)
+    {
+      if(line < m_SarParam.burstRecords.front().startLine)
+      {
+        currentBurst = m_SarParam.burstRecords.cbegin();
+      }
+      else if (line >= m_SarParam.burstRecords.back().endLine)
+      {
+        currentBurst = m_SarParam.burstRecords.end()-1;
+      }
+    }
+  }
+
+  const auto timeSinceStart = (line - currentBurst->startLine) * m_SarParam.azimuthTimeInterval;
+
+  // Eq 22 p 27
+  azimuthTime = currentBurst->azimuthStartTime + timeSinceStart + m_AzimuthTimeOffset;
+}
+
+
+bool SarSensorModel::LineToSatPositionAndVelocity(double line, Point3DType& satellitePosition, Point3DType& satelliteVelocity) const
+{
+  TimeType azimuthTime;
+
+  LineToAzimuthTime(line, azimuthTime);
+  interpolateSensorPosVel(azimuthTime, satellitePosition, satelliteVelocity);
+
+  return !(vnl_math_isnan(satellitePosition[0]) && vnl_math_isnan(satellitePosition[1]) && vnl_math_isnan(satellitePosition[1])
+           && vnl_math_isnan(satelliteVelocity[0]) && vnl_math_isnan(satelliteVelocity[1]) && vnl_math_isnan(satelliteVelocity[1]));
 }
 
 itk::Point<double, 3> SarSensorModel::EcefToWorld(const itk::Point<double, 3> & ecefPoint) const

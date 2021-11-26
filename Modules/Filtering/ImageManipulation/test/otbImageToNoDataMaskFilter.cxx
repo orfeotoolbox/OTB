@@ -44,7 +44,7 @@ int otbImageToNoDataMaskFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   // Write no-data flags to it
   std::vector<bool>   flags(1, true);
   std::vector<double> values(1, -10.);
-  otb::WriteNoDataFlags(flags, values, img->GetMetaDataDictionary());
+  otb::WriteNoDataFlags(flags, values, img->GetImageMetadata());
 
   // Fill half of the pixels with no-data values
   itk::ImageRegionIterator<ImageType> it(img, region);

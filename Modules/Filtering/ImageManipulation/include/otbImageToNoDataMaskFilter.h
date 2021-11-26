@@ -43,9 +43,8 @@ public:
   NoDataFunctor() : m_Flags(), m_Values(), m_OutsideValue(0), m_InsideValue(1), m_NaNIsNoData(false)
   {
   }
-  virtual ~NoDataFunctor()
-  {
-  }
+
+  virtual ~NoDataFunctor() = default;
 
   inline TOutputPixel operator()(const TInputPixel& in) const
   {
@@ -123,20 +122,16 @@ public:
   }
 
 protected:
-  ImageToNoDataMaskFilter()
-  {
-  }
+  ImageToNoDataMaskFilter() = default;
 
-  ~ImageToNoDataMaskFilter() override
-  {
-  }
+  ~ImageToNoDataMaskFilter() = default;
 
   void BeforeThreadedGenerateData() override
   {
     std::vector<bool>   noDataValueAvailable;
     std::vector<double> noDataValues;
 
-    ReadNoDataFlags(this->GetInput()->GetMetaDataDictionary(), noDataValueAvailable, noDataValues);
+    ReadNoDataFlags(this->GetInput()->GetImageMetadata(), noDataValueAvailable, noDataValues);
 
     // don't pass empty containers to the functor
     if (noDataValueAvailable.empty() || noDataValues.empty())

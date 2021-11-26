@@ -192,85 +192,18 @@ namespace
 
 void IkonosImageMetadataInterface::FetchProductionDate(const std::string & productionDate, ImageMetadata& imd)
 {
-    std::vector<std::string> dateParts;
-
-    // Producion date format: MM/DD/YY
-    boost::split(dateParts,
-                  productionDate, 
-                  boost::is_any_of("/"));
-
-    if(dateParts.size() != 3)
-    {
-      otbGenericExceptionMacro(MissingMetadataException, 
-        "Invalid production date: " << productionDate)
-    }
-
-    otb::MetaData::Time productionDateMD;
-
-    productionDateMD.tm_sec = 0;
-    productionDateMD.tm_min = 0;
-    productionDateMD.tm_hour = 0;
-    productionDateMD.frac_sec = 0;
-    productionDateMD.tm_isdst = 0;
-
-    productionDateMD.tm_mday = boost::lexical_cast<int>(dateParts[1]);
-    // tm_mon: number of months since january (0-11)
-    productionDateMD.tm_mon = boost::lexical_cast<int>(dateParts[0]) - 1;
-
-    auto productionYear = boost::lexical_cast<int>(dateParts[2]);
-    // 1999 is the only possible year before 2000 for Ikonos dates
-    // as the satellite was launched the 09/24/1999 
-    if (productionYear != 99)
-    {
-      productionYear += 100;
-    }
-    // tm year: number of years since 1900
-    productionDateMD.tm_year = productionYear;
-
-    imd.Add(MDTime::ProductionDate, productionDateMD);
-
+  // Producion date format: MM/DD/YY
+  imd.Add(MDTime::ProductionDate,MetaData::ReadFormattedDate(productionDate, "%m/%d/%y"));
 }
 
 void IkonosImageMetadataInterface::FetchAcquisitionDate(const std::string & acquisitionDate,
                                                         const std::string & acquisitionTime,
                                                         ImageMetadata& imd)
 {
-  std::vector<std::string> dateParts;
-
-  otb::MetaData::Time acquisitionDateMD;
-
   // Acquisition date format: YYYY-MM-DD
-  boost::split(dateParts,
-                acquisitionDate, 
-                boost::is_any_of("-"));
-
-  if(dateParts.size() != 3)
-  {
-    otbGenericExceptionMacro(MissingMetadataException, 
-        "Invalid acquistion date: " << acquisitionDate)
-  }
-
-  acquisitionDateMD.tm_year = boost::lexical_cast<int>(dateParts[0]) - 1900;
-  acquisitionDateMD.tm_mon = boost::lexical_cast<int>(dateParts[1]) - 1;
-  acquisitionDateMD.tm_mday = boost::lexical_cast<int>(dateParts[2]);
-
   // Acquisition time format: hh:mm
-  boost::split(dateParts,
-                  acquisitionTime , 
-                  boost::is_any_of(":"));
-
-  if(dateParts.size() != 2)
-  {
-    otbGenericExceptionMacro(MissingMetadataException, 
-        "Invalid acquistion time: " << acquisitionTime)
-  }
-
-  acquisitionDateMD.tm_hour = boost::lexical_cast<int>(dateParts[0]);
-  acquisitionDateMD.tm_min = boost::lexical_cast<int>(dateParts[1]);
-  acquisitionDateMD.tm_sec = 0;
-  acquisitionDateMD.frac_sec = 0;
-
-  imd.Add(MDTime::AcquisitionDate, acquisitionDateMD);
+  imd.Add(MDTime::AcquisitionDate, 
+          MetaData::ReadFormattedDate(acquisitionDate + "T" + acquisitionTime, "%Y-%m-%dT%H:%M") );
 }
 
 
@@ -535,16 +468,8 @@ void IkonosImageMetadataInterface::Parse(ImageMetadata &imd)
 
   imd.Bands[0].Add(MDStr::BandName, bandName);
 
-  otb::MetaData::Time date;
-  date.tm_year = 101;
-  date.tm_mon = 0;
-  date.tm_mday = 22;
-  date.tm_hour = 0;
-  date.tm_min = 0;
-  date.tm_sec = 0;
-  date.frac_sec = 0;
 
-  if (imd[MDTime::AcquisitionDate] < date)
+  if (imd[MDTime::AcquisitionDate] < MetaData::ReadFormattedDate("2001-01-22T00:00:00"))
   {
     imd.Bands[0].Add(MDNum::PhysicalGain, ikonosPhysicalGainPre20010122[bandName]);
   }

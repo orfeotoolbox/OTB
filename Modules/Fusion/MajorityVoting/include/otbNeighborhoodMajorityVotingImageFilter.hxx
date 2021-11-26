@@ -29,6 +29,7 @@
 #include "itkDefaultConvertPixelTraits.h"
 #include "itkMetaDataObject.h"
 #include "otbMetaDataKey.h"
+#include "otbNoDataHelper.h"
 
 namespace otb
 {
@@ -146,9 +147,8 @@ void NeighborhoodMajorityVotingImageFilter<TInputImage, TOutputImage, TKernel>::
   {
     noDataValue[i] = itk::DefaultConvertPixelTraits<PixelType>::GetNthComponent(i, m_LabelForNoDataPixels);
   }
-  itk::MetaDataDictionary& dict = outputPtr->GetMetaDataDictionary();
-  itk::EncapsulateMetaData<std::vector<bool>>(dict, MetaDataKey::NoDataValueAvailable, noDataValueAvailable);
-  itk::EncapsulateMetaData<std::vector<double>>(dict, MetaDataKey::NoDataValue, noDataValue);
+
+  WriteNoDataFlags(noDataValueAvailable, noDataValue, outputPtr->GetImageMetadata());
 }
 
 } // end namespace otb

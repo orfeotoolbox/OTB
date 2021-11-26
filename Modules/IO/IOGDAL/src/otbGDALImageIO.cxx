@@ -700,9 +700,6 @@ void GDALImageIO::InternalReadImageInformation()
         blockSizeY = blockSizeY * (1 << m_ResolutionFactor);
       }
 
-      itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintX, blockSizeX);
-      itk::EncapsulateMetaData<unsigned int>(dict, MetaDataKey::TileHintY, blockSizeY);
-
       m_Imd.NumericKeys[MDNum::TileHintX] = blockSizeX;
       m_Imd.NumericKeys[MDNum::TileHintY] = blockSizeY;
     }
@@ -1118,12 +1115,6 @@ void GDALImageIO::InternalReadImageInformation()
   }
 
   ImportMetadata();
-
-  if (noDataFound)
-  {
-    itk::EncapsulateMetaData<MetaDataKey::BoolVectorType>(dict, MetaDataKey::NoDataValueAvailable, isNoDataAvailable);
-    itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::NoDataValue, noDataValues);
-  }
 
   // Read AREA_OR_POINT value if present
   papszMetadata = dataset->GetMetadata(nullptr);

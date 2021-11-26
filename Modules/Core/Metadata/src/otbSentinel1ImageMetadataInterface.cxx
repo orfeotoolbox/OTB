@@ -101,9 +101,9 @@ bool Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarC
 
     // TODO: don't manipulate doubles, but ModifiedJulianDate for a better type
     // safety
-    MetaData::Time tmpDate;
+    MetaData::TimePoint tmpDate;
     std::istringstream(mds.GetAs<std::string>(sPrefix + "azimuthTime")) >> tmpDate;
-    sigmaCalibrationVector.timeMJD = tmpDate.GetModifiedJulian();
+    sigmaCalibrationVector.timeMJD = tmpDate.GetModifiedJulianDay();
     sigmaCalibrationVector.deltaMJD = sigmaCalibrationVector.timeMJD - lastMJD;
     lastMJD                    = sigmaCalibrationVector.timeMJD;
 
@@ -137,23 +137,23 @@ bool Sentinel1ImageMetadataInterface::CreateCalibrationLookupData(SARCalib& sarC
   }
 
   Sentinel1CalibrationLookupData::Pointer sigmaSarLut = Sentinel1CalibrationLookupData::New();
-  sigmaSarLut->InitParameters(SarCalibrationLookupData::SIGMA, firstLineTime.GetModifiedJulian(),
-                              lastLineTime.GetModifiedJulian(), numOfLines, count, sigmaCalibrationVectorList);
+  sigmaSarLut->InitParameters(SarCalibrationLookupData::SIGMA, firstLineTime.GetModifiedJulianDay(),
+                              lastLineTime.GetModifiedJulianDay(), numOfLines, count, sigmaCalibrationVectorList);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::SIGMA] = sigmaSarLut;
 
   Sentinel1CalibrationLookupData::Pointer betaSarLut = Sentinel1CalibrationLookupData::New();
-  betaSarLut->InitParameters(SarCalibrationLookupData::BETA, firstLineTime.GetModifiedJulian(),
-                             lastLineTime.GetModifiedJulian(), numOfLines, count, betaCalibrationVectorList);
+  betaSarLut->InitParameters(SarCalibrationLookupData::BETA, firstLineTime.GetModifiedJulianDay(),
+                             lastLineTime.GetModifiedJulianDay(), numOfLines, count, betaCalibrationVectorList);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::BETA] = betaSarLut;
 
   Sentinel1CalibrationLookupData::Pointer gammaSarLut = Sentinel1CalibrationLookupData::New();
-  gammaSarLut->InitParameters(SarCalibrationLookupData::GAMMA, firstLineTime.GetModifiedJulian(),
-                              lastLineTime.GetModifiedJulian(), numOfLines, count, gammaCalibrationVectorList);
+  gammaSarLut->InitParameters(SarCalibrationLookupData::GAMMA, firstLineTime.GetModifiedJulianDay(),
+                              lastLineTime.GetModifiedJulianDay(), numOfLines, count, gammaCalibrationVectorList);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::GAMMA] = gammaSarLut;
 
   Sentinel1CalibrationLookupData::Pointer dnSarLut = Sentinel1CalibrationLookupData::New();
-  dnSarLut->InitParameters(SarCalibrationLookupData::DN, firstLineTime.GetModifiedJulian(),
-                           lastLineTime.GetModifiedJulian(), numOfLines, count, dnCalibrationVectorList);
+  dnSarLut->InitParameters(SarCalibrationLookupData::DN, firstLineTime.GetModifiedJulianDay(),
+                           lastLineTime.GetModifiedJulianDay(), numOfLines, count, dnCalibrationVectorList);
   sarCalib.calibrationLookupData[SarCalibrationLookupData::DN] = dnSarLut;
 
   return true;
@@ -178,7 +178,7 @@ NoiseVectorLists ReadNoiseVectorListsFromGeom(const MetadataSupplierInterface& m
     // Path: noise.noiseVector[<listId>].{azimuthTime,line,noiseLut,pixel,pixel_count}
     const std::string prefix = "noise.noiseVector[" + std::to_string(listId) + "].";
     Sentinel1CalibrationStruct rangeNoiseVector;
-    rangeNoiseVector.timeMJD = mds.GetAs<MetaData::Time>(prefix+ "azimuthTime").GetModifiedJulian();
+    rangeNoiseVector.timeMJD = MetaData::ReadFormattedDate(mds.GetAs<std::string>(prefix+ "azimuthTime")).GetModifiedJulianDay();
     rangeNoiseVector.deltaMJD = rangeNoiseVector.timeMJD - lastMJD;
 
     lastMJD = rangeNoiseVector.timeMJD;
@@ -246,7 +246,7 @@ NoiseVectorLists ReadNoiseVectorListsFromXML(const MetadataSupplierInterface& md
     const auto prefix = rangeNoisePrefix + rangeVectorName + std::to_string(i+1) + ".";
     Sentinel1CalibrationStruct rangeNoiseVector;
 
-    rangeNoiseVector.timeMJD = mds.GetAs<MetaData::Time>(prefix + "azimuthTime").GetModifiedJulian();
+    rangeNoiseVector.timeMJD = MetaData::ReadFormattedDate(mds.GetAs<std::string>(prefix + "azimuthTime")).GetModifiedJulianDay();
     rangeNoiseVector.deltaMJD = rangeNoiseVector.timeMJD - lastMJD;
     lastMJD = rangeNoiseVector.timeMJD;
     rangeNoiseVector.line = mds.GetAs<int>(prefix + "line");
@@ -298,8 +298,8 @@ bool Sentinel1ImageMetadataInterface::CreateThermalNoiseLookupData(SARCalib& sar
                                                                   const MetadataSupplierInterface& mds,
                                                                   const bool geom) const
 {
-  auto firstLineTime = sarCalib.calibrationStartTime.GetModifiedJulian();
-  auto lastLineTime = sarCalib.calibrationStopTime.GetModifiedJulian();
+  auto firstLineTime = sarCalib.calibrationStartTime.GetModifiedJulianDay();
+  auto lastLineTime = sarCalib.calibrationStopTime.GetModifiedJulianDay();
 
   int numOfLines = 0;
   if(imd.Has(MDNum::NumberOfLines))
@@ -354,7 +354,9 @@ std::vector<AzimuthFmRate> Sentinel1ImageMetadataInterface::GetAzimuthFmRate(con
     oss.str("");
     oss << listId;
     // Base path to the data, that depends on the iteration number
-    std::string path_root = "product.generalAnnotation.azimuthFmRateList.azimuthFmRate_" + oss.str();
+    const std::string path_root = listCount == 1 ? "product.generalAnnotation.azimuthFmRateList.azimuthFmRate"
+                                                 : "product.generalAnnotation.azimuthFmRateList.azimuthFmRate_" + oss.str();
+
     AzimuthFmRate afr;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> afr.azimuthTime;
     afr.t0 = xmlMS.GetAs<double>(path_root + ".t0");
@@ -377,7 +379,9 @@ std::vector<DopplerCentroid> Sentinel1ImageMetadataInterface::GetDopplerCentroid
     oss.str("");
     oss << listId;
     // Base path to the data, that depends on the iteration number
-    std::string path_root = "product.dopplerCentroid.dcEstimateList.dcEstimate_" + oss.str();
+    const std::string path_root = listCount == 1 ? "product.dopplerCentroid.dcEstimateList.dcEstimate"
+                                                 : "product.dopplerCentroid.dcEstimateList.dcEstimate_" + oss.str();
+
     DopplerCentroid dopplerCent;
     std::istringstream(xmlMS.GetAs<std::string>(path_root + ".azimuthTime")) >> dopplerCent.azimuthTime;
     dopplerCent.t0 = xmlMS.GetAs<double>(path_root + ".t0");
@@ -402,7 +406,9 @@ std::vector<Orbit> Sentinel1ImageMetadataInterface::GetOrbits(const XMLMetadataS
     oss.str("");
     oss << listId;
     // Base path to the data, that depends on the iteration number
-    std::string path_root = "product.generalAnnotation.orbitList.orbit_" + oss.str();
+    const std::string path_root = listCount == 1 ? "product.generalAnnotation.orbitList.orbit"
+                                                 : "product.generalAnnotation.orbitList.orbit_" + oss.str();
+
     Orbit orbit;
 
     orbit.time = MetaData::ReadFormattedDate(xmlMS.GetAs<std::string>(path_root + ".time"));
@@ -418,7 +424,7 @@ std::vector<Orbit> Sentinel1ImageMetadataInterface::GetOrbits(const XMLMetadataS
   return orbitVector;
 }
 
-std::vector<BurstRecord> Sentinel1ImageMetadataInterface::GetBurstRecords(const XMLMetadataSupplier &xmlMS, const MetaData::DurationType& azimuthTimeInterval) const
+std::vector<BurstRecord> Sentinel1ImageMetadataInterface::GetBurstRecords(const XMLMetadataSupplier &xmlMS, const MetaData::Duration& azimuthTimeInterval) const
 {
   std::vector<BurstRecord> burstRecords;
 
@@ -455,7 +461,7 @@ std::vector<BurstRecord> Sentinel1ImageMetadataInterface::GetBurstRecords(const 
 
       BurstRecord record;
 
-      MetaData::TimeType azimuthTime = MetaData::ReadFormattedDate(xmlMS.GetAs<std::string>(burstPath + "azimuthTime"));
+      auto azimuthTime = MetaData::ReadFormattedDate(xmlMS.GetAs<std::string>(burstPath + "azimuthTime"));
 
       auto firstValidSamples = xmlMS.GetAsVector<int>(burstPath + "firstValidSample");
       int firstValidSample = 0, lastValidSample = samplesPerBurst - 1;
@@ -602,7 +608,7 @@ void ReadGCP(const XMLMetadataSupplier &AnnotationMS,
     // the image.
     if (sarParam.burstRecords.size() >= 2)
     {
-      otb::MetaData::TimeType acqStart;
+      otb::MetaData::TimePoint acqStart;
       unsigned long acqStartLine = 0;
 
       auto doesContain = [&azimuthTime](const BurstRecord & br)
@@ -663,7 +669,7 @@ void Sentinel1ImageMetadataInterface::ReadSarParamAndGCPs(const XMLMetadataSuppl
   sarParam.slantRangeToGroundRangeRecords = this->GetCoordinateConversionRecord(AnnotationMS, "sr0", "srgrCoefficients");
   sarParam.groundRangeToSlantRangeRecords = this->GetCoordinateConversionRecord(AnnotationMS, "gr0", "grsrCoefficients");
 
-  sarParam.azimuthTimeInterval = MetaData::seconds(
+  sarParam.azimuthTimeInterval = MetaData::Duration::Seconds(
     AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthTimeInterval")
     );
 
@@ -676,6 +682,8 @@ void Sentinel1ImageMetadataInterface::ReadSarParamAndGCPs(const XMLMetadataSuppl
   sarParam.numberOfLinesPerBurst = AnnotationMS.GetAs<unsigned long>("product.swathTiming.linesPerBurst");
   sarParam.numberOfSamplesPerBurst = AnnotationMS.GetAs<unsigned long>("product.swathTiming.samplesPerBurst");
 
+  sarParam.rightLookingFlag = true;
+
   // Fetch the GCP
   ReadGCP(AnnotationMS, gcp, sarParam);
 }
@@ -683,6 +691,13 @@ void Sentinel1ImageMetadataInterface::ReadSarParamAndGCPs(const XMLMetadataSuppl
 void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
 {
   auto imageFilePath = m_MetadataSupplierInterface->GetResourceFile();
+
+  // If path is relative, find the full path to make sure we can retrieve the parent directory.
+  if (!itksys::SystemTools::FileIsFullPath(imageFilePath))
+  {
+    imageFilePath = itksys::SystemTools::CollapseFullPath(imageFilePath);
+  }
+
   auto imageFineName = itksys::SystemTools::GetFilenameWithoutExtension(imageFilePath);
 
   auto pos = imageFineName.find('-');
@@ -719,9 +734,9 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
                          + ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:platform.safe:number"));
 
   imd.Add(MDTime::ProductionDate,
-    ManifestMS.GetFirstAs<MetaData::Time>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.start"));
+    MetaData::ReadFormattedDate(ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.start")));
   imd.Add(MDTime::AcquisitionDate,
-    ManifestMS.GetFirstAs<MetaData::Time>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:acquisitionPeriod.safe:startTime"));
+    MetaData::ReadFormattedDate(ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:acquisitionPeriod.safe:startTime")));
   imd.Add(MDStr::BeamMode,
     ManifestMS.GetFirstAs<std::string>(
       "xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:platform.safe:instrument.safe:extension.s1sarl1:instrumentMode.s1sarl1:mode"
@@ -743,8 +758,8 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   }
   XMLMetadataSupplier AnnotationMS(AnnotationFilePath);
 
-  imd.Add(MDTime::AcquisitionStartTime, AnnotationMS.GetAs<MetaData::Time>("product.adsHeader.startTime"));
-  imd.Add(MDTime::AcquisitionStopTime, AnnotationMS.GetAs<MetaData::Time>("product.adsHeader.stopTime"));
+  imd.Add(MDTime::AcquisitionStartTime, MetaData::ReadFormattedDate(AnnotationMS.GetAs<std::string>("product.adsHeader.startTime")));
+  imd.Add(MDTime::AcquisitionStopTime, MetaData::ReadFormattedDate(AnnotationMS.GetAs<std::string>("product.adsHeader.stopTime")));
   imd.Add(MDNum::LineSpacing, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthPixelSpacing"));
   imd.Add(MDStr::Mission, AnnotationMS.GetAs<std::string>("product.adsHeader.missionId"));
   imd.Add(MDStr::OrbitDirection, itksys::SystemTools::UpperCase(AnnotationMS.GetAs<std::string>("product.generalAnnotation.productInformation.pass")));
@@ -772,7 +787,7 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
     otbGenericExceptionMacro(MissingMetadataException,<<"Missing Calibration file for image '"<<ManifestFilePath<<"'");
   }
   XMLMetadataSupplier CalibrationMS(CalibrationFilePath);
-  imd.Add(MDNum::CalScale, CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant"));
+  imd.Add(MDNum::AbsoluteCalibrationConstant, CalibrationMS.GetAs<double>("calibration.calibrationInformation.absoluteCalibrationConstant"));
 
   // Noise file
   std::string NoiseFilePath =
@@ -808,7 +823,7 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   Fetch(MDNum::AverageSceneHeight, imd, "support_data.avg_scene_height");
   Fetch(MDNum::RadarFrequency, imd, "support_data.radar_frequency");
   Fetch(MDNum::PRF, imd, "support_data.pulse_repetition_frequency");
-  Fetch(MDNum::CalScale, imd, "calibration.absoluteCalibrationConstant");
+  Fetch(MDNum::AbsoluteCalibrationConstant, imd, "calibration.absoluteCalibrationConstant");
   
   // Manifest data may not be present in geom file, but support data should be present in that case
   CheckFetch(MDStr::BeamMode, imd, "manifest_data.acquisition_mode") || CheckFetch(MDStr::BeamMode, imd, "support_data.acquisition_mode");

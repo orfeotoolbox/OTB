@@ -345,7 +345,7 @@ void StreamingMosaicFilterBase<TInputImage, TOutputImage, TInternalValueType>::G
     noDataValueAvailable.push_back(true);
     noDataValues1.push_back(static_cast<double>(m_NoDataOutputPixel[band]));
   }
-  otb::WriteNoDataFlags(noDataValueAvailable, noDataValues1, this->GetOutput()->GetMetaDataDictionary());
+  otb::WriteNoDataFlags(noDataValueAvailable, noDataValues1, this->GetOutput()->GetImageMetadata());
 
   // Get min & max values from output pixel type
   minOutputPixelValue = static_cast<InternalValueType>(itk::NumericTraits<OutputImageInternalPixelType>::NonpositiveMin());

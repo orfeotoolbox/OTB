@@ -23,12 +23,10 @@
 
 #include "OTBMetadataExport.h"
 
-// Use nanosecond precision in boost dates and durations
-#define BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
-#include <boost/date_time/posix_time/posix_time.hpp>
-
-#include <boost/config.hpp>
+#include <cmath>
 #include <boost/operators.hpp>
+#include <chrono>
+#include <string>
 
 namespace otb
 {
@@ -37,6 +35,17 @@ namespace MetaData
 
 namespace details
 {
+using InternalDurationType = std::chrono::nanoseconds;
+using InternalTimePointType = std::chrono::time_point<std::chrono::system_clock, InternalDurationType>;
+
+// the number of second's fractions per tick of InternalDurationType
+constexpr double internalPeriod = static_cast<double>(InternalDurationType::period::num) / InternalDurationType::period::den;
+
+// Standard format used when parsing dates
+const std::string timePointFormat = "%Y-%m-%dT%H:%M:%S";
+
+// Add some operators not defined in boost
+
 // division by a scalar and ratio
 template <typename T, typename R> struct dividable 
 {
@@ -48,10 +57,9 @@ template <typename T, typename R> struct dividable
   }
   friend scalar_type operator/(T const& lhs, T const& rhs)
   {
-    return ratio_(lhs, rhs);
+    return Ratio(lhs, rhs);
   }
 };
-
 
 template <typename U, typename V> struct substractable_asym
 {
@@ -74,19 +82,28 @@ template <typename T> struct streamable
 };
 } // namespace details
 
+
 class Duration;
 
+/** \class TimePoint
+ *
+ * \brief Represents a point in Time
+ *
+ * \ingroup OTBMetadata
+ */
 class OTBMetadata_EXPORT TimePoint : private details::streamable<TimePoint>,
                                      private details::substractable_asym<Duration, TimePoint>,
                                      private boost::equality_comparable<TimePoint>,
                                      private boost::less_than_comparable<TimePoint>
 {
 public:
-  //friend class Duration;
-  TimePoint() = default;
+  using InternalTimePointType = details::InternalTimePointType;
 
-  std::ostream & Display(std::ostream & os) const { return os << m_Time; }
-  std::istream & Read   (std::istream & is)       { return is >> m_Time; }
+  TimePoint(): m_Time(InternalTimePointType::min()) {}
+  TimePoint(InternalTimePointType const& t): m_Time(t) {}
+
+  std::ostream & Display(std::ostream & os) const;
+  std::istream & Read   (std::istream & is, const std::string & format = details::timePointFormat);
 
   template <typename U, typename V> static U diff(V const& lhs, V const& rhs) 
   {
@@ -104,15 +121,44 @@ public:
     return lhs.m_Time == rhs.m_Time;
   }
 
+  /** Return the julian day corresponding to the time point */
+  double GetJulianDay() const;
 
-public:
-  boost::posix_time::ptime m_Time;
+  /** Return the modified julian day corresponding to the time point */
+  double GetModifiedJulianDay() const;
+
+  /** Return the year corresponding to the time point */
+  int GetYear() const;
+
+  /** Return the month of the year corresponding to the time point (from 1 to 12) */
+  unsigned int GetMonth() const;
+
+  /** Return the calendar day corresponding to the time point (from 1 to 31) */
+  unsigned int GetDay() const;
+
+  /** Return the hour of the day corresponding to the time point (from 0 to 23) */
+  unsigned int GetHour() const;
+
+  /** Return the minute of the hour of the day corresponding to the time point (from 0 to 59) */
+  unsigned int GetMinute() const;
+
+  /** Return the fractional second of the minute of the hour of the day corresponding to the time point (from 0 and inferior to 60) */
+  double GetSecond() const;
+
+  friend TimePoint& operator+=(TimePoint & u, Duration const& v);
+  friend TimePoint& operator-=(TimePoint & u, Duration const& v);
+
+private:
+  InternalTimePointType m_Time;
+
 };
 
-using TimeType = TimePoint;
-
-double ratio_(Duration const& lhs, Duration const& rhs);
-
+/** \class Duration
+ *
+ * \brief Represents a duration
+ *
+ * \ingroup OTBMetadata
+ */
 class OTBMetadata_EXPORT Duration : private details::streamable<Duration>,
                                     private boost::addable<Duration>,
                                     private boost::subtractable<Duration>,
@@ -120,37 +166,38 @@ class OTBMetadata_EXPORT Duration : private details::streamable<Duration>,
                                     private details::dividable<Duration, double>,
                                     private boost::equality_comparable<Duration>,
                                     private boost::less_than_comparable<Duration>,
-                                    private boost::addable<TimeType, Duration>,
-                                    private boost::subtractable<TimeType, Duration>
+                                    private boost::addable<TimePoint, Duration>,
+                                    private boost::subtractable<TimePoint, Duration>
 {
 public:
-  using InternalDurationType = boost::posix_time::time_duration;
+  using InternalDurationType = details::InternalDurationType;
 
   Duration() = default;
   Duration(InternalDurationType const& d): m_Duration(d) {}
 
-
-  static Duration Seconds(double d) 
+  static Duration Seconds(double s)
   {
-    return Duration(boost::posix_time::nanoseconds(static_cast<long long>(std::round(d * 1e9))));
+    return Duration(InternalDurationType(static_cast<InternalDurationType::rep>(std::round(s / details::internalPeriod))));
   }
 
-  static Duration Nanoseconds(double d) 
+  static Duration Miliseconds(double ms)
   {
-    return Duration(boost::posix_time::nanoseconds(static_cast<long long>(std::round(d))));
+    return Duration(InternalDurationType(static_cast<InternalDurationType::rep>(std::round(ms / details::internalPeriod * 1e-3))));
   }
 
-  Duration(double d): m_Duration(boost::posix_time::nanoseconds(static_cast<long long>(std::round(d)))) {}
-
-  double TotalNanoseconds() const
+  static Duration Microseconds(double us)
   {
-    return m_Duration.total_nanoseconds();
+    return Duration(InternalDurationType(static_cast<InternalDurationType::rep>(std::round(us / details::internalPeriod * 1e-6))));
   }
 
-  double TotalSeconds() const
+  static Duration Nanoseconds(double ns)
   {
-    return m_Duration.total_nanoseconds() * 1e-9;
+    return Duration(InternalDurationType(static_cast<InternalDurationType::rep>(std::round(ns / details::internalPeriod * 1e-9))));
   }
+
+  double TotalSeconds() const;
+
+  InternalDurationType::rep NumberOfTicks() const;
 
   friend Duration& operator+=(Duration & u, Duration const& v)
   {
@@ -166,16 +213,15 @@ public:
 
   friend Duration& operator*=(Duration & u, double v)
   {
-    u.m_Duration = boost::posix_time::nanoseconds(static_cast<long long>(std::round(
-                            u.m_Duration.total_nanoseconds() * v)));
+    // note: don't use std::chrono::duration::operator* cause it multiplies the input by an integer value.
+    u.m_Duration = InternalDurationType(static_cast<InternalDurationType::rep>(std::round(u.m_Duration.count() * v)));
     return u;
   }
 
-
   friend Duration& operator/=(Duration & u, double v)
   {
-    u.m_Duration = boost::posix_time::nanoseconds(static_cast<long long>(std::round(
-                            u.m_Duration.total_nanoseconds() / v)));
+    // note: don't use std::chrono::duration::operator/ cause it divides the input by an integer value.
+    u.m_Duration = InternalDurationType(static_cast<InternalDurationType::rep>(std::round(u.m_Duration.count() / v)));
     return u;
   }
 
@@ -189,39 +235,31 @@ public:
     return lhs.m_Duration == rhs.m_Duration;
   }
   
-
-  friend TimeType& operator+=(TimeType & u, Duration const& v)
+  friend TimePoint& operator+=(TimePoint & u, Duration const& v)
   {
     u.m_Time += v.m_Duration;
     return u;
   }
 
-  friend TimeType& operator-=(TimeType & u, Duration const& v)
+  friend TimePoint& operator-=(TimePoint & u, Duration const& v)
   {
     u.m_Time -= v.m_Duration;
     return u;
   }
 
-  std::ostream & Display(std::ostream & os) const { return os << m_Duration; }
-  std::istream & Read   (std::istream & is)       { return is >> m_Duration; }
+  std::ostream & Display(std::ostream & os) const;
+  std::istream & Read   (std::istream & is);
 
-  OTBMetadata_EXPORT friend Duration Abs(Duration d);
+  friend OTBMetadata_EXPORT Duration Abs(Duration d);
 
 private:
   InternalDurationType m_Duration;
 };
 
-OTBMetadata_EXPORT Duration Abs(Duration d);
+OTBMetadata_EXPORT double Ratio(const Duration & lhs, const Duration & rhs);
+OTBMetadata_EXPORT TimePoint ReadFormattedDate(const std::string & dateStr, const std::string & format = details::timePointFormat);
 
+} // namespace otb
+} // namespace MetaData
 
-using DurationType = Duration;
-
-OTBMetadata_EXPORT DurationType seconds(double);
-
-OTBMetadata_EXPORT TimeType ReadFormattedDate(const std::string & dateStr, const std::string & format = "%Y-%m-%dT%H:%M:%S%F");
-
-}
-}
-
-
-#endif
+#endif // otbDateTime_h

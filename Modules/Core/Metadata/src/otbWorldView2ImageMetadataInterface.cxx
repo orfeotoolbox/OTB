@@ -626,21 +626,7 @@ void WorldView2ImageMetadataInterface::FetchPhysicalGainQuickBird(int bitsPerPix
     itkExceptionMacro(<< "Invalid Metadata, not a Quickbird product");
   }
 
-  bool isPost20030606 = false;
-
-  otb::MetaData::Time date;
-  date.tm_year = 101;
-  date.tm_mon = 0;
-  date.tm_mday = 22;
-  date.tm_hour = 0;
-  date.tm_min = 0;
-  date.tm_sec = 0;
-  date.frac_sec = 0;
-
-  if (imd[MDTime::ProductionDate] > date)
-  {
-    isPost20030606 = true;
-  }
+  bool isPost20030606 = imd[MDTime::ProductionDate] > MetaData::ReadFormattedDate("2003-06-06T00:00:00");
 
   if ((bitsPerPixel != 16 && bitsPerPixel != 8))
   {
@@ -1019,29 +1005,11 @@ void WorldView2ImageMetadataInterface::Parse(ImageMetadata &imd)
   }
 
   // Acquisition and production dates
-  try
-  {
-    imd.Add(MDTime::AcquisitionDate,
-                boost::lexical_cast<MetaData::Time>(metadata.acquisitionDateStr));
-  }
-  catch (boost::bad_lexical_cast&)
-  {
-    otbGenericExceptionMacro(MissingMetadataException,
-            << "Invalid value for the acquisition date, got: "
-            << metadata.acquisitionDateStr);
-  }
+  imd.Add(MDTime::AcquisitionDate,
+                MetaData::ReadFormattedDate(metadata.acquisitionDateStr));
 
-  try
-  {
-    imd.Add(MDTime::ProductionDate,
-                boost::lexical_cast<MetaData::Time>(metadata.productionDateStr));
-  }
-  catch (boost::bad_lexical_cast&)
-  {
-    otbGenericExceptionMacro(MissingMetadataException,
-            << "Invalid value for the production date, got: "
-            << metadata.productionDateStr);
-  }
+  imd.Add(MDTime::ProductionDate,
+                MetaData::ReadFormattedDate(metadata.productionDateStr));
 
   //Radiometry
   imd.Add(MDNum::SunElevation, metadata.sunElevation);

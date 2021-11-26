@@ -29,14 +29,6 @@ add_executable(otbAppImageUtilsTestDriver ${OTBAppImageUtilsTests})
 target_link_libraries(otbAppImageUtilsTestDriver ${OTBAppImageUtils-Test_LIBRARIES})
 otb_module_target_label(otbAppImageUtilsTestDriver)
 
-#----------- DownloadSRTMTiles TESTS ----------------
-otb_test_application(NAME apTuUtDownloadSRTMTiles
-                     APP  DownloadSRTMTiles
-                     OPTIONS -il LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_MUL/02APR01105228-M1BS-000000128955_01_P001.TIF}
-                             -mode list
-                             -tiledir ${INPUTDATA}/DEM/srtm_directory
-                     )
-
 #----------- DynamicConvert TESTS ------------
 otb_test_application(NAME apTvUtDynamicConvertBasic
                      APP DynamicConvert

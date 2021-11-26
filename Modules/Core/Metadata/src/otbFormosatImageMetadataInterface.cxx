@@ -325,10 +325,10 @@ void FormosatImageMetadataInterface::Parse(ImageMetadata &imd)
   }
 
   imd.Add(MDTime::ProductionDate,
-    boost::lexical_cast<MetaData::Time>(dimapData.ProductionDate));
+          MetaData::ReadFormattedDate(dimapData.ProductionDate));
 
   imd.Add(MDTime::AcquisitionDate,
-    boost::lexical_cast<MetaData::Time>(dimapData.AcquisitionDate));
+          MetaData::ReadFormattedDate(dimapData.AcquisitionDate));
 
   imd.Add(MDStr::Instrument, dimapData.Instrument);
   imd.Add(MDStr::InstrumentIndex, dimapData.InstrumentIndex);

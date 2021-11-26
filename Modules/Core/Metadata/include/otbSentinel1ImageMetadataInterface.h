@@ -91,7 +91,7 @@ protected:
   std::vector<Orbit> GetOrbits(const XMLMetadataSupplier&) const;
 
   /* Fetch the burst records */
-  std::vector<BurstRecord> GetBurstRecords(const XMLMetadataSupplier&, const MetaData::DurationType & azimuthTimeInterval) const;
+  std::vector<BurstRecord> GetBurstRecords(const XMLMetadataSupplier&, const MetaData::Duration & azimuthTimeInterval) const;
 
   /* Fetch coordinate conversion records (Sr0/Gr0) */
   std::vector<CoordinateConversionRecord> GetCoordinateConversionRecord(const XMLMetadataSupplier &xmlMS,

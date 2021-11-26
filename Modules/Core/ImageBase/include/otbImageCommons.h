@@ -38,6 +38,8 @@ public:
 
   const ImageMetadata & GetImageMetadata() const;
 
+  ImageMetadata & GetImageMetadata();
+
   // boilerplate code...
 
   /** Get the projection coordinate system of the image. */

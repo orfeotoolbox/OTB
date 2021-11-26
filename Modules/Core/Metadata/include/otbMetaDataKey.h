@@ -160,6 +160,7 @@ enum class MDNum
   PixelSpacing,
   RangeTimeFirstPixel,
   RangeTimeLastPixel,
+  AbsoluteCalibrationConstant,
   END
 };
 
@@ -230,65 +231,6 @@ namespace MetaData
 {
 
 using Keywordlist = std::unordered_map<std::string, std::string>;
-
-struct OTBMetadata_EXPORT Time : tm
-{
-  double frac_sec;
-
-  friend OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const Time& val);
-
-  friend OTBMetadata_EXPORT std::istream& operator>>(std::istream& is, Time& val);
-
-  friend OTBMetadata_EXPORT bool operator==(const Time & lhs, const Time & rhs)
-  {
-    tm tmLhs = lhs;
-    tm tmRhs = rhs;
-    return mktime(&tmLhs) + lhs.frac_sec == mktime(&tmRhs) + rhs.frac_sec;
-  }
-
-  friend OTBMetadata_EXPORT bool operator!=(const Time & lhs, const Time & rhs)
-  {
-    return !(lhs == rhs);
-  }
-
-  friend OTBMetadata_EXPORT bool operator<(const Time & lhs, const Time & rhs)
-  {
-    tm tmLhs = lhs;
-    tm tmRhs = rhs;
-    return mktime(&tmLhs) + lhs.frac_sec < mktime(&tmRhs) + rhs.frac_sec;
-  }
-
-  friend OTBMetadata_EXPORT bool operator>(const Time & lhs, const Time & rhs)
-  {
-    return rhs < lhs;
-  }
-
-  friend OTBMetadata_EXPORT bool operator<=(const Time & lhs, const Time & rhs)
-  {
-    return !(lhs > rhs);
-  }
-
-  friend OTBMetadata_EXPORT bool operator>=(const Time & lhs, const Time & rhs)
-  {
-    return !(lhs < rhs);
-  }
-
-  /** @name Getters
-   *  Getters on the date components
-   */
-  ///@{
-  int GetDay() const;
-  int GetMonth() const;
-  int GetYear() const;
-  int GetHour() const;
-  int GetMinute() const;
-  double GetSecond() const;
-  double GetJulianDay() const;
-  double GetModifiedJulian() const;
-  ///@}
-
-};
-
 
 struct LUTAxis
 {
@@ -401,25 +343,6 @@ std::string EnumToString(std::string value);
 
 
 } // end namespace MetaData
-
-namespace Utils
-{
-template <>
-inline MetaData::Time LexicalCast<MetaData::Time,std::string>(std::string const& in, std::string const& kind)
-{
-  MetaData::Time output;
-  std::istringstream iss(in);
-  iss >> output;
-  if (iss.fail())
-    {
-    std::ostringstream oss;
-    oss << "Cannot decode '" << in << "' as this is not a valid value for '" << kind << "'";
-    throw std::runtime_error(oss.str());
-    }
-  return output;
-}
-
-} // end namespace Utils
 
 } // end namespace otb
 

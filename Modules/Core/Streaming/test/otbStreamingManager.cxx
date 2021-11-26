@@ -44,10 +44,9 @@ ImageType::Pointer makeImage(ImageType::RegionType region)
   image->SetRegions(region);
   image->SetNumberOfComponentsPerPixel(10);
 
-  itk::MetaDataDictionary& dict = image->GetMetaDataDictionary();
-
-  itk::EncapsulateMetaData<unsigned int>(dict, otb::MetaDataKey::TileHintX, 64);
-  itk::EncapsulateMetaData<unsigned int>(dict, otb::MetaDataKey::TileHintY, 64);
+  auto & imd = image->GetImageMetadata();
+  imd.Add(otb::MDNum::TileHintX, 64);
+  imd.Add(otb::MDNum::TileHintY, 64);
 
   return image;
 }

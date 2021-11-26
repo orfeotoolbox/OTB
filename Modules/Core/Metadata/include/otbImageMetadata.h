@@ -86,7 +86,7 @@ public:
 
   DictType<MDL2D, MetaData::LUT2D> LUT2DKeys;
 
-  DictType<MDTime, MetaData::Time> TimeKeys;
+  DictType<MDTime, MetaData::TimePoint> TimeKeys;
 
   DictType<std::string, std::string> ExtraKeys;
 
@@ -97,7 +97,7 @@ public:
                     DictType<MDStr, std::string> stringKeys,
                     DictType<MDL1D, MetaData::LUT1D> lut1DKeys,
                     DictType<MDL2D, MetaData::LUT2D> lut2DKeys,
-                    DictType<MDTime, MetaData::Time> timeKeys,
+                    DictType<MDTime, MetaData::TimePoint> timeKeys,
                     DictType<std::string, std::string> extraKeys);
 
   // -------------------- Geom utility function ----------------------------
@@ -203,10 +203,10 @@ public:
   // -------------------- Time utility function ----------------------------
 
   /** Read-only accessor to time keys */
-  const MetaData::Time & operator[](const MDTime& key) const;
+  const MetaData::TimePoint & operator[](const MDTime& key) const;
   
   /** Setter for time keys */
-  void Add(const MDTime& key, const MetaData::Time &value);
+  void Add(const MDTime& key, const MetaData::TimePoint &value);
 
   /** Remove a key from the dictionary (even if the key is already missing) */
   size_t Remove(const MDTime& key);
@@ -275,13 +275,13 @@ public:
   ImageMetadataBandsType Bands;
 
   // Constructor
-  ImageMetadata();
+  ImageMetadata() = default;
   ImageMetadata(DictType<MDGeom, boost::any> geometryKeys,
                 DictType<MDNum, double> numericKeys,
                 DictType<MDStr, std::string> stringKeys,
                 DictType<MDL1D, MetaData::LUT1D> lut1DKeys,
                 DictType<MDL2D, MetaData::LUT2D> lut2DKeys,
-                DictType<MDTime, MetaData::Time> timeKeys,
+                DictType<MDTime, MetaData::TimePoint> timeKeys,
                 DictType<std::string, std::string> extraKeys,
                 ImageMetadataBandsType bands);
 

@@ -170,7 +170,7 @@ void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   std::string ImageFilePath = itksys::SystemTools::GetFilenameName(m_MetadataSupplierInterface->GetResourceFile(""));
   imd.Add(MDStr::Polarization, ImageFilePath.substr(8, 2));
 
-  imd.Add(MDTime::AcquisitionStartTime, ProductMS.GetAs<MetaData::Time>("product.sourceAttributes.rawDataStartTime"));
+  imd.Add(MDTime::AcquisitionStartTime, MetaData::ReadFormattedDate(ProductMS.GetAs<std::string>("product.sourceAttributes.rawDataStartTime")));
   imd.Add(MDStr::BeamMode, ProductMS.GetAs<std::string>("product.sourceAttributes.beamModeMnemonic"));
   imd.Add("FACILITY_IDENTIFIER", ProductMS.GetAs<std::string>("product.sourceAttributes.inputDatasetFacilityId"));
   imd.Add(MDNum::LineSpacing, ProductMS.GetAs<double>("product.imageAttributes.rasterAttributes.sampledLineSpacing"));
@@ -182,7 +182,7 @@ void Radarsat2ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Add(MDStr::Mission, ProductMS.GetAs<std::string>("product.sourceAttributes.satellite"));
   imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
   imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));
-  imd.Add(MDTime::ProductionDate, ProductMS.GetFirstAs<MetaData::Time>("product.imageGenerationParameters.generalProcessingInformation.processingTime"));
+  imd.Add(MDTime::ProductionDate, MetaData::ReadFormattedDate(ProductMS.GetFirstAs<std::string>("product.imageGenerationParameters.generalProcessingInformation.processingTime")));
   imd.Add(MDNum::AverageSceneHeight, ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
 //  imd.Add(MDNum::RadarFrequency, this->GetRadarFrequency()); // not parsed
 //  imd.Add(MDNum::PRF, 0.); // not parsed
@@ -225,7 +225,7 @@ void Radarsat2ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
       imd.Add(MDNum::NumberOfLines, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfLines"));
       imd.Add(MDNum::NumberOfColumns, ProductMS.GetAs<int>("product.imageAttributes.rasterAttributes.numberOfSamplesPerLine"));
       imd.Add(MDTime::ProductionDate,
-          ProductMS.GetFirstAs<MetaData::Time>("product.imageGenerationParameters.generalProcessingInformation.processingTime"));
+          MetaData::ReadFormattedDate(ProductMS.GetFirstAs<std::string>("product.imageGenerationParameters.generalProcessingInformation.processingTime")));
       imd.Add(MDNum::AverageSceneHeight,
           ProductMS.GetAs<double>("product.imageAttributes.geographicInformation.referenceEllipsoidParameters.geodeticTerrainHeight"));
 //    imd.Add(MDNum::RadarFrequency, 0.); // not parsed

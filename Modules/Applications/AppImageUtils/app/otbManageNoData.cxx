@@ -26,7 +26,6 @@
 #include "itkMaskImageFilter.h"
 #include "otbVectorImageToImageListFilter.h"
 #include "otbImageListToVectorImageFilter.h"
-#include "otbChangeInformationImageFilter.h"
 
 namespace otb
 {
@@ -55,7 +54,6 @@ public:
   typedef otb::VectorImageToImageListFilter<FloatVectorImageType, ImageListType> VectorToListFilterType;
   typedef otb::ImageListToVectorImageFilter<ImageListType, FloatVectorImageType> ListToVectorFilterType;
   typedef itk::MaskImageFilter<FloatImageType, UInt8ImageType, FloatImageType> MaskFilterType;
-  typedef otb::ChangeInformationImageFilter<FloatVectorImageType> ChangeInfoFilterType;
 
 private:
   void DoInit() override
@@ -135,48 +133,49 @@ private:
   {
     FloatVectorImageType::Pointer inputPtr = this->GetParameterImage("in");
 
-    m_Filter = FilterType::New();
-    m_Filter->SetInsideValue(this->GetParameterFloat("mode.buildmask.inv"));
-    m_Filter->SetOutsideValue(this->GetParameterFloat("mode.buildmask.outv"));
-    m_Filter->SetNaNIsNoData(GetParameterInt("usenan"));
-    m_Filter->SetInput(inputPtr);
-
-    m_ChangeNoDataFilter = ChangeNoDataFilterType::New();
-    m_ChangeNoDataFilter->SetInput(inputPtr);
-    m_ChangeNoDataFilter->SetNaNIsNoData(GetParameterInt("usenan"));
-
-    std::vector<double> newNoData(inputPtr->GetNumberOfComponentsPerPixel(), GetParameterFloat("mode.changevalue.newv"));
-
-    m_ChangeNoDataFilter->SetNewNoDataValues(newNoData);
-
     if (GetParameterString("mode") == "buildmask")
     {
-      SetParameterOutputImage("out", m_Filter->GetOutput());
+      auto filter = FilterType::New();
+      filter->SetInsideValue(this->GetParameterFloat("mode.buildmask.inv"));
+      filter->SetOutsideValue(this->GetParameterFloat("mode.buildmask.outv"));
+      filter->SetNaNIsNoData(GetParameterInt("usenan"));
+      filter->SetInput(inputPtr);
+
+      SetParameterOutputImage("out", filter->GetOutput());
+      RegisterPipeline();
     }
     else if (GetParameterString("mode") == "changevalue")
     {
-      SetParameterOutputImage("out", m_ChangeNoDataFilter->GetOutput());
+      auto changeNoDataFilter = ChangeNoDataFilterType::New();
+      changeNoDataFilter->SetInput(inputPtr);
+      changeNoDataFilter->SetNaNIsNoData(GetParameterInt("usenan"));
+
+      std::vector<double> newNoData(inputPtr->GetNumberOfComponentsPerPixel(), GetParameterFloat("mode.changevalue.newv"));
+      changeNoDataFilter->SetNewNoDataValues(newNoData);
+
+      SetParameterOutputImage("out", changeNoDataFilter->GetOutput());
+      RegisterPipeline();
     }
     else if (GetParameterString("mode") == "apply")
     {
-      m_MaskFilters.clear();
       UInt8ImageType::Pointer  maskPtr = this->GetParameterUInt8Image("mode.apply.mask");
       unsigned int             nbBands = inputPtr->GetNumberOfComponentsPerPixel();
-      itk::MetaDataDictionary& dict    = inputPtr->GetMetaDataDictionary();
+      const auto & imd                 = inputPtr->GetImageMetadata();
       std::vector<bool>        flags;
       std::vector<double>      values;
-      bool                     ret = otb::ReadNoDataFlags(dict, flags, values);
+      bool                     ret = otb::ReadNoDataFlags(imd, flags, values);
       if (!ret)
       {
-        flags.resize(nbBands, true);
-        values.resize(nbBands, GetParameterFloat("mode.apply.ndval"));
+        flags = std::vector<bool>(nbBands, true);
+        values = std::vector<double>(nbBands, GetParameterFloat("mode.apply.ndval"));
       }
 
-      m_V2L = VectorToListFilterType::New();
-      m_V2L->SetInput(inputPtr);
-      ImageListType::Pointer inputList = m_V2L->GetOutput();
+      auto V2L = VectorToListFilterType::New();
+      V2L->SetInput(inputPtr);
+      ImageListType::Pointer inputList = V2L->GetOutput();
       inputList->UpdateOutputInformation();
       ImageListType::Pointer outputList = ImageListType::New();
+      std::vector<MaskFilterType::Pointer> maskFilters;
       for (unsigned int i = 0; i < nbBands; ++i)
       {
         if (flags[i])
@@ -187,36 +186,25 @@ private:
           masker->SetMaskingValue(0);
           masker->SetOutsideValue(values[i]);
           outputList->PushBack(masker->GetOutput());
-          m_MaskFilters.push_back(masker);
+          maskFilters.push_back(masker);
         }
         else
         {
           outputList->PushBack(inputList->GetNthElement(i));
         }
       }
-      m_L2V = ListToVectorFilterType::New();
-      m_L2V->SetInput(outputList);
+      auto L2V = ListToVectorFilterType::New();
+      L2V->SetInput(outputList);
       if (!ret)
       {
-        m_MetaDataChanger = ChangeInfoFilterType::New();
-        m_MetaDataChanger->SetInput(m_L2V->GetOutput());
-        m_MetaDataChanger->SetOutputMetaData<std::vector<bool>>(otb::MetaDataKey::NoDataValueAvailable, &flags);
-        m_MetaDataChanger->SetOutputMetaData<std::vector<double>>(otb::MetaDataKey::NoDataValue, &values);
-        SetParameterOutputImage("out", m_MetaDataChanger->GetOutput());
+        // write the new NoData values in the output metadata (mode.apply.ndval)
+        L2V->UpdateOutputInformation();
+        otb::WriteNoDataFlags(flags, values, L2V->GetOutput()->GetImageMetadata());
       }
-      else
-      {
-        SetParameterOutputImage("out", m_L2V->GetOutput());
-      }
+      SetParameterOutputImage("out", L2V->GetOutput());
+      RegisterPipeline();
     }
   }
-
-  FilterType::Pointer                  m_Filter;
-  ChangeNoDataFilterType::Pointer      m_ChangeNoDataFilter;
-  std::vector<MaskFilterType::Pointer> m_MaskFilters;
-  VectorToListFilterType::Pointer      m_V2L;
-  ListToVectorFilterType::Pointer      m_L2V;
-  ChangeInfoFilterType::Pointer        m_MetaDataChanger;
 };
 }
 }

@@ -63,7 +63,7 @@ private:
   PleiadesImageMetadataInterface(const Self&) = delete;
   void operator=(const Self&) = delete;
 
-  void FetchTabulatedPhysicalGain(const MetaData::Time & date, ImageMetadata& imd);
+  void FetchTabulatedPhysicalGain(const MetaData::TimePoint & date, ImageMetadata& imd);
   void FetchSolarIrradiance(const std::vector<double> & dimapSolarIrradiance, ImageMetadata& imd);
 
   void FetchSatAngles(const std::vector<double> & incidenceAngles,
