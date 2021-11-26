@@ -295,6 +295,20 @@ bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
   sarParam.azimuthTimeInterval = MetaData::DurationType::Seconds(m_MetadataSupplierInterface->GetAs<double>(
                                 supportDataPrefix + "line_time_interval") );
 
+
+  // support_data.look_side for Cosmo geoms (all versions) and TerraSAR-X geoms (OTB 7.4)
+  auto lookSide = m_MetadataSupplierInterface->GetAs<std::string>("",
+                                supportDataPrefix + "look_side");
+
+  if (lookSide.empty())
+  {
+    // TerraSAR-X geoms (OTB < 7.4)
+    lookSide = m_MetadataSupplierInterface->GetAs<std::string>("",
+                                "acquisitionInfo.lookDirection");
+  }
+
+  sarParam.rightLookingFlag = lookSide == "RIGHT";
+
   if (sarParam.burstRecords.size() > 1 && m_MetadataSupplierInterface->GetAs<int>("header.version") > 2)
   {
     sarParam.numberOfLinesPerBurst = m_MetadataSupplierInterface->GetAs<unsigned long>(
