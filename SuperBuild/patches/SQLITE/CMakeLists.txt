@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.10.0)
 
 project(sqlite)
 
@@ -28,7 +28,11 @@ include_directories("${CMAKE_SOURCE_DIR}")
 add_definitions(-DSQLITE_ENABLE_COLUMN_METADATA=1)
 add_definitions(-DSQLITE_ENABLE_RTREE=1)
 add_definitions(-DSQLITE_OMIT_LOAD_EXTENSION=1)
-add_definitions(-DSQLITE_THREADSAFE=1)
+if(WIN32)
+  add_definitions(-DSQLITE_THREADSAFE=0)
+else()
+  add_definitions(-DSQLITE_THREADSAFE=1)
+endif()
 
 if(WIN32)
   add_library(sqlite3 STATIC sqlite3.c)
