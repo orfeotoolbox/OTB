@@ -55,6 +55,14 @@ public:
 namespace MetaData
 {
 
+class TimePoint : private details::streamable<TimePoint>,
+                  private details::substractable_asym<Duration, TimePoint>,
+                  private boost::equality_comparable<TimePoint>,
+                  private boost::less_than_comparable<TimePoint>
+{
+
+};
+
 struct LUTAxis
 {
   int Size;
@@ -147,7 +155,7 @@ public:
     return it != otb::MetaData::MDTimeNames.right.end();
   }
 
-  otb::MetaData::Time get_time(const std::string& key) {
+  otb::MetaData::TimePoint get_time(const std::string& key) {
     auto it = otb::MetaData::MDTimeNames.right.find(key);
     return $self->operator[](it->second);
   }
@@ -213,7 +221,7 @@ public:
     else
       $self->Add(key, val.ToString());
   }
-  void __setitem__(const std::string& key, const otb::MetaData::Time& val) {
+  void __setitem__(const std::string& key, const otb::MetaData::TimePoint& val) {
     auto it = otb::MetaData::MDTimeNames.right.find(key);
     if (it != otb::MetaData::MDTimeNames.right.end())
       $self->Add(it->second, val);
