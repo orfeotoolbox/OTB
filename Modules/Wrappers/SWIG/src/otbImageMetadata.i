@@ -84,6 +84,12 @@ public:
   std::string GetProjectedGeometry() const;
   std::string GetProjectionWKT() const;
   std::string GetProjectionProj() const;
+
+  std::string GetKeyListNum() const;
+  std::string GetKeyListStr() const;
+  std::string GetKeyListL1D() const;
+//  std::string GetKeyListL2D() const;
+  std::string GetKeyListTime() const;
 };
 
 class ImageMetadata: public ImageMetadataBase
