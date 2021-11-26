@@ -28,6 +28,7 @@
 #include "itkEuclideanDistanceMetric.h"
 #include <string>
 #include <vector>
+#include <iomanip>
 
 using Point2DType = itk::Point<double, 2>;
 using Point3DType = itk::Point<double, 3>;

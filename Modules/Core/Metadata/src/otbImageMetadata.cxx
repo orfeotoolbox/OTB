@@ -34,7 +34,7 @@ ImageMetadataBase::ImageMetadataBase(DictType<MDGeom, boost::any> geometryKeys,
                                      DictType<MDStr, std::string> stringKeys,
                                      DictType<MDL1D, MetaData::LUT1D> lut1DKeys,
                                      DictType<MDL2D, MetaData::LUT2D> lut2DKeys,
-                                     DictType<MDTime, MetaData::Time> timeKeys,
+                                     DictType<MDTime, MetaData::TimePoint> timeKeys,
                                      DictType<std::string, std::string> extraKeys)
   : GeometryKeys(std::move(geometryKeys)),
     NumericKeys(std::move(numericKeys)),
@@ -234,12 +234,12 @@ bool ImageMetadataBase::Has(const MDL2D& key) const
 
 // -------------------- Time utility function ----------------------------
 
-const MetaData::Time & ImageMetadataBase::operator[](const MDTime& key) const
+const MetaData::TimePoint & ImageMetadataBase::operator[](const MDTime& key) const
 {
   return TimeKeys.at(key);
 }
 
-void ImageMetadataBase::Add(const MDTime& key, const MetaData::Time &value)
+void ImageMetadataBase::Add(const MDTime& key, const MetaData::TimePoint &value)
 {
   TimeKeys[key] = value;
 }
@@ -455,7 +455,7 @@ bool ImageMetadataBase::FromKeywordlist(const Keywordlist& kwl)
     auto timeKey = MetaData::MDTimeNames.right.find(kv.first);
     if (timeKey != MetaData::MDTimeNames.right.end())
     {
-      MetaData::Time time;
+      MetaData::TimePoint time;
       std::istringstream (kv.second) >> time;
       this->Add(timeKey->second, time);
       continue;
@@ -491,16 +491,13 @@ std::vector<unsigned int> ImageMetadataBase::GetDefaultDisplay() const
 
 // ----------------------- [ImageMetadata] ------------------------------
 
-ImageMetadata::ImageMetadata()
-{
-}
 
 ImageMetadata::ImageMetadata(DictType<MDGeom, boost::any> geometryKeys,
                              DictType<MDNum, double> numericKeys,
                              DictType<MDStr, std::string> stringKeys,
                              DictType<MDL1D, MetaData::LUT1D> lut1DKeys,
                              DictType<MDL2D, MetaData::LUT2D> lut2DKeys,
-                             DictType<MDTime, MetaData::Time> timeKeys,
+                             DictType<MDTime, MetaData::TimePoint> timeKeys,
                              DictType<std::string, std::string> extraKeys,
                              ImageMetadataBandsType bands)
   : ImageMetadataBase(geometryKeys, numericKeys, stringKeys, lut1DKeys, lut2DKeys, timeKeys, extraKeys),
@@ -608,7 +605,7 @@ void ImageMetadata::compact()
     {
       auto otherKey = bandIt->TimeKeys.find(kv.first);
       if ((otherKey == bandIt->TimeKeys.end())
-       || !itk::Math::AlmostEquals(otherKey->second.frac_sec, kv.second.frac_sec))
+       || !itk::Math::AlmostEquals(otherKey->second.GetJulianDay(), kv.second.GetJulianDay()))
       {
         compactVal = false;
         break;

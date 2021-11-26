@@ -372,7 +372,7 @@ ImageMetadataInterfaceBase::CheckFetch(
   return false;
 }
 
-const MetaData::Time&
+const MetaData::TimePoint&
 ImageMetadataInterfaceBase::Fetch(
   MDTime key,
   ImageMetadata& imd,
@@ -382,11 +382,11 @@ ImageMetadataInterfaceBase::Fetch(
   if (band >= 0)
     {
     assert( (size_t)(band) < imd.Bands.size());
-    imd.Bands[band].Add(key, m_MetadataSupplierInterface->GetAs<MetaData::Time>(path, band));
+    imd.Bands[band].Add(key, MetaData::ReadFormattedDate(m_MetadataSupplierInterface->GetAs<std::string>(path, band)));
     return imd.Bands[band][key];
     }
 
-  imd.Add(key, m_MetadataSupplierInterface->GetAs<MetaData::Time>(path));
+  imd.Add(key, MetaData::ReadFormattedDate(m_MetadataSupplierInterface->GetAs<std::string>(path)));
   return imd[key];
 }
 

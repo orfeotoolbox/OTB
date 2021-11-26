@@ -292,7 +292,7 @@ bool SarImageMetadataInterface::GetSAR(SARParam & sarParam) const
   sarParam.rangeResolution = m_MetadataSupplierInterface->GetAs<double>(
                                 supportDataPrefix + "range_spacing");
 
-  sarParam.azimuthTimeInterval = MetaData::DurationType::Seconds(m_MetadataSupplierInterface->GetAs<double>(
+  sarParam.azimuthTimeInterval = MetaData::Duration::Seconds(m_MetadataSupplierInterface->GetAs<double>(
                                 supportDataPrefix + "line_time_interval") );
 
 

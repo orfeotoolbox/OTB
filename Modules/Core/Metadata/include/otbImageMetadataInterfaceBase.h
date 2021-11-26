@@ -140,7 +140,7 @@ public:
   const double& Fetch(MDNum key, ImageMetadata & imd, const char *path, int band=-1);
   bool CheckFetch(MDNum key, ImageMetadata & imd, const char *path, int band=-1);
 
-  const MetaData::Time& Fetch(MDTime key, ImageMetadata & imd, const char *path, int band=-1);
+  const MetaData::TimePoint& Fetch(MDTime key, ImageMetadata & imd, const char *path, int band=-1);
   bool CheckFetch(MDTime key, ImageMetadata & imd, const char *path, int band=-1);
 
   const std::string& Fetch(std::string key, ImageMetadata & imd, const char *path, int band=-1);
