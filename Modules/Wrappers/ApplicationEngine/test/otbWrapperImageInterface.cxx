@@ -64,7 +64,7 @@ int otbWrapperImageInterface(int argc, char* argv[])
   ofs << "ProjectionRef:" << std::endl;
   ofs << app1->GetImageProjection("out") << std::endl;
 
-  itk::MetaDataDictionary dict = app1->GetImageMetaData("out");
+  itk::MetaDataDictionary dict = app1->GetMetadataDictionary("out");
   ofs << "Dictionary keys:" << std::endl;
   for (auto& key : dict.GetKeys())
   {

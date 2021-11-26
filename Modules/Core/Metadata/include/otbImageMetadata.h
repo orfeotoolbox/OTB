@@ -145,6 +145,9 @@ public:
   
   /** Test if a key is available */
   bool Has(const MDNum& key) const;
+
+  /** Return the list of valid keys */
+  std::string GetKeyListNum() const;
   
   // -------------------- String utility function ----------------------------
 
@@ -159,6 +162,9 @@ public:
   
   /** Test if a key is available */
   bool Has(const MDStr& key) const;
+
+  /** Return the list of valid keys */
+  std::string GetKeyListStr() const;
   
   // -------------------- LUT1D utility function ----------------------------
 
@@ -173,6 +179,9 @@ public:
   
   /** Test if a key is available */
   bool Has(const MDL1D& key) const;
+
+  /** Return the list of valid keys */
+  std::string GetKeyListL1D() const;
   
   // -------------------- 2D LUT utility function ----------------------------
 
@@ -187,6 +196,9 @@ public:
   
   /** Test if a key is available */
   bool Has(const MDL2D& key) const;
+
+  /** Return the list of valid keys */
+//  std::string GetKeyListL2D() const;
   
   // -------------------- Time utility function ----------------------------
 
@@ -201,6 +213,9 @@ public:
 
   /** Test if a key is available */
   bool Has(const MDTime& key) const;
+
+  /** Return the list of valid keys */
+  std::string GetKeyListTime() const;
 
   // -------------------- Extra keys utility function --------------------------
 

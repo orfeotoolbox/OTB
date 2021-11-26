@@ -34,6 +34,8 @@
 %include "itkMacro.i"
 %include "itkBase.i"
 
+%include "otbImageMetadata.i"
+
 #if OTB_SWIGNUMPY
 %include "numpy.i"
 
@@ -144,20 +146,6 @@ public:
   ~VectorDataKeywordlist();
   // VectorDataKeywordlist(const Self& other);
   // TODO : finish wrapping
-};
-
-class GCP
-{
-public:
-  std::string m_Id;
-  std::string m_Info;
-  double m_GCPCol;
-  double m_GCPRow;
-  double m_GCPX;
-  double m_GCPY;
-  double m_GCPZ;
-  GCP();
-  void Print(std::ostream& os) const;
 };
 
 } // end of namespace otb
@@ -310,7 +298,9 @@ public:
   std::string GetImageProjection(const std::string & key, unsigned int idx = 0);
   unsigned long PropagateRequestedRegion(const std::string & key, itk::ImageRegion<2> region, unsigned int idx = 0);
   itk::ImageRegion<2> GetImageRequestedRegion(const std::string & key, unsigned int idx = 0);
-  itkMetaDataDictionary GetImageMetaData(const std::string & key, unsigned int idx = 0);
+  otb::ImageMetadata &GetImageMetadata(const std::string& key, unsigned int idx = 0);
+  void SetImageMetadata(const otb::ImageMetadata & imd, const std::string& key, unsigned int idx = 0);
+  itkMetaDataDictionary GetMetadataDictionary(const std::string & key, unsigned int idx = 0);
   otb::Wrapper::ImagePixelType GetImageBasePixelType(const std::string & key, unsigned int idx = 0);
 
   itkProcessObject* GetProgressSource() const;
@@ -492,7 +482,7 @@ public:
     itk::Vector<SpacePrecisionType,2> spacing,
     itk::Size<2> size,
     itk::ImageRegion<2> bufferRegion,
-    itkMetaDataDictionary metadata)
+    otb::ImageMetadata metadata)
     {
     img->SetOrigin(origin);
     otb::internal::SetSignedSpacing(img, spacing);
@@ -506,7 +496,7 @@ public:
       }
     img->SetRequestedRegion(bufferRegion);
     img->SetBufferedRegion(bufferRegion);
-    img->SetMetaDataDictionary(metadata);
+    dynamic_cast<otb::ImageCommons*>(img)->SetImageMetadata(metadata);
     }
 } /* end of %extend */
 #endif /* OTB_SWIGNUMPY */
@@ -897,7 +887,7 @@ class ApplicationProxy(object):
       output["spacing"] = self.GetImageSpacing(paramKey)
       output["size"] = self.GetImageSize(paramKey)
       output["region"] = self.GetImageRequestedRegion(paramKey)
-      output["metadata"] = self.GetImageMetaData(paramKey)
+      output["metadata"] = self.GetImageMetadata(paramKey)
       return output
 
     }
