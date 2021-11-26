@@ -24,8 +24,8 @@ SETUP_SUPERBUILD(SQLITE)
 
 ExternalProject_Add(SQLITE
   PREFIX SQLITE
-  URL "https://www.sqlite.org/2021/sqlite-amalgamation-3360000.zip"
-  URL_MD5 c5d360c74111bafae1b704721ff18fe6
+  URL "https://www.sqlite.org/2020/sqlite-amalgamation-3320000.zip"
+  URL_MD5 c624c1e42b0136f4cd242fe752c5363f
   SOURCE_DIR ${SQLITE_SB_SRC}
   BINARY_DIR ${SQLITE_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

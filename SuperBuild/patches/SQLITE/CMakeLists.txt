@@ -32,7 +32,6 @@ add_definitions(-DSQLITE_THREADSAFE=1)
 
 if(WIN32)
   add_library(sqlite3 STATIC sqlite3.c)
-  add_library(sqlite3 SHARED sqlite3.c)
 else()
   add_library(sqlite3 sqlite3.c)
 endif()
