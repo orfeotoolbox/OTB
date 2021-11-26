@@ -23,7 +23,8 @@
 %{
 #include "itkBase.includes"
 #include "otbWrapperSWIGIncludes.h"
-#include <string>         // std::string
+#include <string>
+#include <sstream>
 #include <locale>
 #include "otbMetaDataKey.h"
 #include "otbImageMetadata.h"
@@ -55,12 +56,12 @@ public:
 namespace MetaData
 {
 
-class TimePoint : private details::streamable<TimePoint>,
-                  private details::substractable_asym<Duration, TimePoint>,
-                  private boost::equality_comparable<TimePoint>,
-                  private boost::less_than_comparable<TimePoint>
+class TimePoint
 {
 
+public:
+  double GetJulianDay() const;
+  double GetModifiedJulianDay() const;
 };
 
 struct LUTAxis
@@ -107,6 +108,14 @@ public:
 };
 
 };
+
+%extend otb::MetaData::TimePoint{
+  std::string __repr__() {
+    std::ostringstream oss;
+    oss << *$self;
+    return oss.str().c_str();
+  }
+}
 
 %extend otb::ImageMetadataBase{
 
