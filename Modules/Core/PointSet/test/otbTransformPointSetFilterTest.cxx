@@ -34,7 +34,7 @@ int otbTransformPointSetFilterTest(int, char* [])
   // Declare the types of the PointSet
   // By default it is a 3D PointSet using itk::Point<float, 3>
   // on the vertices, and an itk::VectorContainter
-  // as containter for points
+  // as container for points
   typedef itk::PointSet<PixelType> PointSetType;
 
   // Declare the type for PointsContainer

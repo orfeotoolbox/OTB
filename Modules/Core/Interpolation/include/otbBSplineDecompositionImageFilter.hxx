@@ -220,7 +220,7 @@ void BSplineDecompositionImageFilter<TInputImage, TOutputImage>::DataToCoefficie
 
   itk::ProgressReporter progress(this, 0, count, 10);
 
-  // Initialize coeffient array
+  // Initialize coefficient array
   this->CopyImageToImage(); // Coefficients are initialized to the input data
 
   for (unsigned int n = 0; n < ImageDimension; ++n)

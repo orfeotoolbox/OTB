@@ -117,7 +117,7 @@ public:
   PixelComponentIterator& operator=(PixelComponentIterator     &&) = default;
 
 #if 1
-  /** Convertion constructor.
+  /** Conversion constructor.
    * Converts from mutable to const iterator
    * \see https://quuxplusone.github.io/blog/2018/12/01/const-iterator-antipatterns/
    */
@@ -128,7 +128,7 @@ public:
     , m_subiter(rhs.m_subiter)
     {}
 
-  /** Convertion move constructor.
+  /** Conversion move constructor.
    * Move converts from mutable to const iterator
    * \see https://quuxplusone.github.io/blog/2018/12/01/const-iterator-antipatterns/
    */
@@ -344,7 +344,7 @@ public:
   PixelComponentIterator& operator=(PixelComponentIterator     &&) = default;
 
 #if 1
-  /** Convertion constructor.
+  /** Conversion constructor.
    * Converts from mutable to const iterator
    * \see https://quuxplusone.github.io/blog/2018/12/01/const-iterator-antipatterns/
    */
@@ -354,7 +354,7 @@ public:
     , m_component(rhs.m_component)
     {}
 
-  /** Convertion move constructor.
+  /** Conversion move constructor.
    * Move converts from mutable to const iterator
    * \see https://quuxplusone.github.io/blog/2018/12/01/const-iterator-antipatterns/
    */
@@ -524,7 +524,7 @@ public:
   PixelComponentIterator& operator=(PixelComponentIterator     &&) = default;
 
 #if 1
-  /** Convertion constructor.
+  /** Conversion constructor.
    * Converts from mutable to const iterator
    * \see https://quuxplusone.github.io/blog/2018/12/01/const-iterator-antipatterns/
    */
@@ -534,7 +534,7 @@ public:
     , m_component(rhs.m_component)
     {}
 
-  /** Convertion move constructor.
+  /** Conversion move constructor.
    * Move converts from mutable to const iterator
    * \see https://quuxplusone.github.io/blog/2018/12/01/const-iterator-antipatterns/
    */

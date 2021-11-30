@@ -197,7 +197,7 @@ public:
   virtual VectorType GetGeoTransform(void) const;
 
   /** Get image corners. */
-  // TODO: GenericRSTransform should be instanciated to translate from physical
+  // TODO: GenericRSTransform should be instantiated to translate from physical
   // space to EPSG:4328 ?
   VectorType GetUpperLeftCorner(void) const;
   VectorType GetUpperRightCorner(void) const;

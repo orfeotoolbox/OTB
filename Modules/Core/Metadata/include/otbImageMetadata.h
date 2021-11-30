@@ -327,10 +327,10 @@ public:
   /** Getter for numeric keys on each band*/
   itk::VariableLengthVector<double> GetAsVector(const MDNum & key) const;
 
-  /** test wether the metadata corresponding to key is present on each band */
+  /** test whether the metadata corresponding to key is present on each band */
   bool HasBandMetadata(const MDNum & key) const;
 
-  /** test wether the metadata corresponding to key is present on each band */
+  /** test whether the metadata corresponding to key is present on each band */
   bool HasBandMetadata(const MDL1D & key) const;
 
   /** Return a vector containing the name of each band of the ImageMetadata or an empty 

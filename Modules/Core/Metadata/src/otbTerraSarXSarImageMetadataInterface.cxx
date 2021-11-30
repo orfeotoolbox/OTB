@@ -363,7 +363,7 @@ TerraSarXSarImageMetadataInterface::PointSetPointer
 TerraSarXSarImageMetadataInterface::GetRadiometricCalibrationNoise(const MetadataSupplierInterface& mds,
                                                                const ImageMetadata& imd, const std::string& bandName) const
 {
-  // Retrive the polarisation layer
+  // Retrieve the polarisation layer
   unsigned int polLayer = 0;
   auto numberOfCalFactor = mds.GetNumberOf("level1Product.calibration.calibrationConstant");
   if(bandName != "")
@@ -591,7 +591,7 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
     param.rangeSamplingRate = xmlMS.GetAs<double>("level1Product.instrument.settings.RSF");
   else
   {
-    // Retrive the polarisation layer
+    // Retrieve the polarisation layer
     auto nbLayers = xmlMS.GetAs<unsigned int>("level1Product.productInfo.imageDataInfo.numberOfLayers");
     for(unsigned int band = 1 ; band <= nbLayers ; ++band)
     {
@@ -697,7 +697,7 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   }
   else
   {
-    // Retrive the polarisation layer
+    // Retrieve the polarisation layer
     std::stringstream oss;
     for(unsigned int band = 1 ; band <= numberOfCalFactor ; ++band)
     {

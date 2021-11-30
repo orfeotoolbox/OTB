@@ -151,7 +151,7 @@ int otbFourierMellinDescriptorsScaleInvariant(int itkNotUsed(argc), char* argv[]
 
   if (error > 1E-2)
   {
-    itkGenericExceptionMacro(<< "Error = " << error << "  > 1E-2     -> TEST FAILLED" << std::endl);
+    itkGenericExceptionMacro(<< "Error = " << error << "  > 1E-2     -> TEST FAILED" << std::endl);
   }
 
   return EXIT_SUCCESS;
@@ -257,7 +257,7 @@ int otbFourierMellinDescriptorsRotationInvariant(int itkNotUsed(argc), char* arg
 
   if (error > 1E-3)
   {
-    itkGenericExceptionMacro(<< "Error = " << error << "  > 1E-3     -> TEST FAILLED" << std::endl);
+    itkGenericExceptionMacro(<< "Error = " << error << "  > 1E-3     -> TEST FAILED" << std::endl);
   }
 
   return EXIT_SUCCESS;

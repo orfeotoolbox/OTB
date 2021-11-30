@@ -193,7 +193,7 @@ private:
    * \brief Set low and high intensitied of controlled widget based on
    * the values stored in the model settings.
    *
-   * \param channels RGB/W channels for which to set low and hight intensities.
+   * \param channels RGB/W channels for which to set low and high intensities.
    */
   void SetIntensities(RgbwChannel channels);
 

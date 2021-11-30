@@ -151,7 +151,7 @@ file](https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/raw/develop/NOTICE).
 Remote Modules are the preferred way if you wish to make your apps and filters available to the
 community while keeping control and maintenance of their sources. Those
 modules are just like regular modules, except they are not distributed inside
-OTB source code. For more informations, see [the CookBook](https://www.orfeo-toolbox.org/CookBook-develop/RemoteModules.html)
+OTB source code. For more information, see [the CookBook](https://www.orfeo-toolbox.org/CookBook-develop/RemoteModules.html)
 
 ## GitLab guidelines
 

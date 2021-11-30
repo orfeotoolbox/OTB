@@ -202,7 +202,7 @@ void StreamingMultibandFeatherMosaicFilter<TInputImage, TOutputImage, TDistanceI
   itkDebugMacro(<< "Extrapolation offset: " << extrapolationOffset);
 
   // Set up mosaic filters offsets and transition distances
-  itkDebugMacro("Level\tDist\tOffest");
+  itkDebugMacro("Level\tDist\tOffset");
   for (unsigned int level = 0; level <= m_NumberOfLevels; level++)
   {
     const double offset = extrapolationOffset + m_TransitionOffsets.at(level);

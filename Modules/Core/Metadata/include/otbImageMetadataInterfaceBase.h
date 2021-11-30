@@ -127,7 +127,7 @@ public:
   //  otbMetadataGetMacro(LowerRightCorner, VectorType);
 
   /** Parses the metadata using the MetadataSupplierInterface and fill the ImageMetadata object
-   * Raises "MissingMetadataException" if parsing failes.
+   * Raises "MissingMetadataException" if parsing fails.
    */
   virtual void Parse(ImageMetadata &)
   {

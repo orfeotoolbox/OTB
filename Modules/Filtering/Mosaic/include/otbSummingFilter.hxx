@@ -34,7 +34,7 @@ namespace otb
 template <class TInputImage, class TOutputImage>
 void SummingFilter<TInputImage, TOutputImage>::GenerateOutputInformation(void)
 {
-  itkDebugMacro(<< "Generate output informations");
+  itkDebugMacro(<< "Generate output information");
   Superclass::GenerateOutputInformation();
 }
 

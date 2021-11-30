@@ -40,7 +40,7 @@ StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage,
 }
 
 /*
- * This method is overrided because one index on two is not an input image, but
+ * This method is overridden because one index on two is not an input image, but
  * an input distance image
  */
 template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType>
@@ -59,7 +59,7 @@ void StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceI
 }
 
 /*
- * This method is overrided because there is twice less input images
+ * This method is overridden because there is twice less input images
  *  (1 input image on 2 is a DistanceImage)
  */
 template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType>

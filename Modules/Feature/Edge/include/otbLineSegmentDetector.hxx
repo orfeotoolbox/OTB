@@ -857,7 +857,7 @@ double LineSegmentDetector<TInputImage, TPrecision>::ComputeRegionOrientation(In
     ++it;
   }
 
-  /** using te itk Eigen analysis*/
+  /** using the itk Eigen analysis*/
   typedef itk::Matrix<double, 2, 2> MatrixType;
   typedef std::vector<double> MatrixEigenType;
   MatrixType                  Inertie, eigenVector;

@@ -90,7 +90,7 @@ private:
     AddParameter(ParameterType_OutputImage, "out", "Output Image");
     SetParameterDescription("out",
                             "The output filename will be used to get the prefix "
-                            "and the extension of thise output written's image. For example with outimage.tif as"
+                            "and the extension of this output written's image. For example with outimage.tif as"
                             "output filename, the generated images will had an indice (corresponding at each "
                             "burst) between the prefix and the extension, such as: outimage_Burst0.tif and "
                             "outimage_Burst1.tif (if 2 bursts).");

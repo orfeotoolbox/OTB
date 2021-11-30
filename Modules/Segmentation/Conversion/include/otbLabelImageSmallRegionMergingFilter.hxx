@@ -95,7 +95,7 @@ void PersistentLabelImageSmallRegionMergingFilter<TInputLabelImage>::Synthetize(
   }
 
   // For each label of the label map, find the "closest" connected label,
-  // according to the euclidian distance between the corresponding
+  // according to the euclidean distance between the corresponding
   // m_labelStatistic elements.
   for (auto const& neighbours : neighboursMap)
   {

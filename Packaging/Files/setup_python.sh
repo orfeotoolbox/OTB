@@ -65,7 +65,7 @@ if [ ! $CUSTOM_PYTHON ]
     then
     python_check_failed
   fi
-else # case wher user provides an OTB_PYTHON_EXE
+else # case where user provides an OTB_PYTHON_EXE
   if [ ! "$python_major_version" -eq 3 ] || [ ! "$python_minor_version" -eq 5 ]
     then
     printf %s\\n "*****Warning******"

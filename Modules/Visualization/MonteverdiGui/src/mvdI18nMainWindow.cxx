@@ -211,7 +211,7 @@ QObject* I18nMainWindow::Import(AbstractWorker* importer)
   // Result.
   int button = progress.Exec();
 
-  // MANTIS-921 (synchronize deletion of BackgroungTask).
+  // MANTIS-921 (synchronize deletion of BackgroundTask).
   task->wait();
   delete task;
   task = NULL;

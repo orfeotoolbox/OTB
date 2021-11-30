@@ -117,7 +117,7 @@ void PatternSampler::ImportPatterns(const std::string& data, ParameterType& para
   param.Pattern1.clear();
   param.Pattern2.clear();
 
-  // split the string on slash caracters
+  // split the string on slash characters
   size_t sep1 = data.find('/');
 
   // convert string into bool sequence

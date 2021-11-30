@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
   // You instantiate the class and pass the name you want to look for as a
   // std::string to the SetPlaceName method.
   //
-  // The call to evaluate will trigger the retrival process.
+  // The call to evaluate will trigger the retrieval process.
 
   otb::PlaceNameToLonLat::Pointer pn2LL = otb::PlaceNameToLonLat::New();
   pn2LL->SetPlaceName(std::string(argv[1]));

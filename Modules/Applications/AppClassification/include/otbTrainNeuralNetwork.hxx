@@ -67,7 +67,7 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitNeuralNetworkParams
   SetParameterString("classifier.ann.f", "sig");
   SetParameterDescription("classifier.ann.f",
                           "This function determine whether the output of the node is positive or not "
-                          "depending on the output of the transfert function.");
+                          "depending on the output of the transfer function.");
 
   // Alpha
   AddParameter(ParameterType_Float, "classifier.ann.a", "Alpha parameter of the activation function");

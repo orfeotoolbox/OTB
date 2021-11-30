@@ -408,10 +408,10 @@ GlView
   //
   // Note SAT:
   //     Formula has been taken from IceViewer::key_callback(). I think
-  // that the norm of the transformed X and Y axises is not
+  // that the norm of the transformed X and Y axes is not
   // the new spacing if transform contains a rotation.
   //     To correct this, transformed X and Y vectors should be
-  // projected against reference actor X and Y axises (using vectorial
+  // projected against reference actor X and Y axes (using vectorial
   // dot product).
 
   x[ 0 ] -= center[ 0 ];

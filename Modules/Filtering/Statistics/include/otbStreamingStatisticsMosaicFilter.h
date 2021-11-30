@@ -95,7 +95,7 @@ public:
   typedef typename itk::DataObject::Pointer                  DataObjectPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
-  /** Overrided methods */
+  /** Overridden methods */
   void AllocateOutputs() override;
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
   void Reset() override;

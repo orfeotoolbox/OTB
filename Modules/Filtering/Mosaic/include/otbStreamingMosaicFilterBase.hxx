@@ -256,7 +256,7 @@ void StreamingMosaicFilterBase<TInputImage, TOutputImage, TInternalValueType>::C
 template <class TInputImage, class TOutputImage, class TInternalValueType>
 void StreamingMosaicFilterBase<TInputImage, TOutputImage, TInternalValueType>::GenerateOutputInformation(void)
 {
-  itkDebugMacro(<< "Generate output informations");
+  itkDebugMacro(<< "Generate output information");
   Superclass::GenerateOutputInformation();
 
   // check interpolator and put a default interpolator if empty

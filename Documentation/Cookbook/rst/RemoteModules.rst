@@ -78,7 +78,7 @@ List of available modules
 
         + Repository:  https://github.com/boussaffawalid/FeatureSelection 
         + Author: Walid Boussafa and Nesrine Chehata 
-        + License: All rights reserverd (without license granting more rights, copyright fully applies, this component can not be used without the explicit and prior authorization of the copyright owner).
+        + License: All rights reserved (without license granting more rights, copyright fully applies, this component can not be used without the explicit and prior authorization of the copyright owner).
         + Description: This module contains a FeatureSelection application based on the `FST3Lib <http://fst.utia.cz/>`__.
 
   - **OTBTensorflow (otbtf)** : generic, multi purpose deep learning framework, targeting remote sensing images processing
@@ -124,7 +124,7 @@ an external CMake project with an existing OTB installation.
 
 * If you choose the *inside OTB build*, your module will be built with the rest of the OTB project. To add the module to the compilation process you have two options:
   
-  * use OTB to retrieve automaticaly the official remote module (not applicable for community/self remote modules) that you want to build. 
+  * use OTB to retrieve automatically the official remote module (not applicable for community/self remote modules) that you want to build. 
     All you have to do is to call cmake configuration in OTB build dir to activate ``Module_TheModuleName``
   
   * clone the module yourself (necessary if you use a community module, or your own) and copy the folder to *OTBSource/Modules/Remote*, this will trigger a new option in CMake config

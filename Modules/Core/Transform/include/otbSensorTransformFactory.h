@@ -26,7 +26,7 @@
 namespace otb
 {
 /** \class SensorTransformFactory
- * \brief Creats an instance of SensorTransform (RPC, SAR ...) object using object factory.
+ * \brief Creates an instance of SensorTransform (RPC, SAR ...) object using object factory.
  *
  * \ingroup OTBTransform
  */

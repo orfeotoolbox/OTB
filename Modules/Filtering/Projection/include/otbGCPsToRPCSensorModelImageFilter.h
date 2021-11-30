@@ -106,14 +106,14 @@ public:
   /** Extract dimension from input and output image. */
   itkStaticConstMacro(ImageDimension, unsigned int, TImage::ImageDimension);
 
-  /** Set/Get/toogle the UseImageGCPs flag */
+  /** Set/Get/toggle the UseImageGCPs flag */
   //  itkSetMacro(UseImageGCPs, bool);
   // itkGetMacro(UseImageGCPs, bool);
   //  itkBooleanMacro(UseImageGCPs);
   void SetUseImageGCPs(bool use);
   void LoadImageGCPs();
 
-  /** Set/Get/toogle the UseDEM flag */
+  /** Set/Get/toggle the UseDEM flag */
   itkSetMacro(UseDEM, bool);
   itkGetMacro(UseDEM, bool);
   itkBooleanMacro(UseDEM);

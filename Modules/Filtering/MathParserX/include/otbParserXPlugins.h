@@ -415,7 +415,7 @@ public:
 
   const mup::char_type* GetDesc() const override
   {
-    return "vmax(m1) - overall maximun";
+    return "vmax(m1) - overall maximum";
   }
 
   mup::IToken* Clone() const override

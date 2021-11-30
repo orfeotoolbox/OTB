@@ -46,7 +46,7 @@ namespace otb
  * p1bX, p2bX, where X denote band index.
  *
  * Specific Functor additional input :
- * distance : euclidian distance
+ * distance : euclidean distance
  * spectralAngle : NOT IMPLEMENTED
  *
  * OTB additional functions:

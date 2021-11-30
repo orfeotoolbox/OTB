@@ -38,7 +38,7 @@
 
 /* without having a compile definition will give an linker error
  * when build otbapp_TrainImagesClassifier or this header test.
- * So define them depending on wheather you have static or shared
+ * So define them depending on whether you have static or shared
  * build of boost.
  *
  * Below is an error message if you don't have define

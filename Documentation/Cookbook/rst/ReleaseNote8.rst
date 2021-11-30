@@ -222,7 +222,7 @@ The DownloadSRTMTiles application was not functional anymore because
 the official API used to retrieve the tiles is not usable without
 authentication anymore. After some discussions, the decision was taken
 to remove this application from OTB. The task performed by this
-application can easily be done by a simple pyhton script, there is no
+application can easily be done by a simple python script, there is no
 need for an OTB application.
 
 What is missing for the release of OTB 8.0?

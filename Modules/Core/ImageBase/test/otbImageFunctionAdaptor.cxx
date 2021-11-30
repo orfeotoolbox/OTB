@@ -318,7 +318,7 @@ int otbImageFunctionAdaptor(int itkNotUsed(argc), char* argv[])
 
   if (error > 1E-3)
   {
-    itkGenericExceptionMacro(<< "Error = " << error << "  > 1E-9     -> TEST FAILLED" << std::endl);
+    itkGenericExceptionMacro(<< "Error = " << error << "  > 1E-9     -> TEST FAILED" << std::endl);
   }
 
   // Testing the use of a user defined InternalImageFunction instead

@@ -99,7 +99,7 @@ protected:
   {
   }
 
-  /* Overrided methods */
+  /* Overridden methods */
   void AddUsedInputImageIndex(unsigned int inputImageIndex) override;
 
   unsigned int GetNumberOfInputImages() override;

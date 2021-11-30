@@ -40,7 +40,7 @@ OTBGdalAdapters_EXPORT bool operator==(Feature const& lhs, Feature const& rhs);
 
 /**\ingroup gGeometry
  * \class Feature proxy class.
- * \brief Geometric objet with descriptive fields.
+ * \brief Geometric object with descriptive fields.
  *
  * It provides an encapsulation of OGR classes. In that particular case, it's an
  * encapsulation of \c OGRFeature.

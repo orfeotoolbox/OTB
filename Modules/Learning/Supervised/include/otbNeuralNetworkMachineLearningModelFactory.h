@@ -29,7 +29,7 @@
 namespace otb
 {
 /** \class NeuralNetworkMachineLearningModelFactory
- * \brief Creation d'un instance d'un objet SVMMachineLearningModel utilisant les object factory.
+ * \brief Create an instance of SVMMachineLearningModel through the object factory.
  *
  * \ingroup OTBSupervised
  */

@@ -111,7 +111,7 @@ protected:
 
   virtual void Modified();
 
-  /** Overrided methods */
+  /** Overridden methods */
   virtual void GenerateData();
 
   virtual void GenerateOutputInformation()

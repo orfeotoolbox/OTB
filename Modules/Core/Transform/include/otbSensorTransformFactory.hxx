@@ -33,7 +33,7 @@ template <class TScalarType, unsigned int NInputDimensions, unsigned int NOutput
 typename otb::SensorTransformBase<TScalarType, NInputDimensions, NOutputDimensions>::Pointer
 SensorTransformFactory::CreateTransform(const ImageMetadata &imd, TransformDirection direction) const
 {
-  // Instanciate the factories
+  // Instantiate the factories
   std::vector<
     std::function<
       typename otb::SensorTransformBase<double, NInputDimensions, NOutputDimensions>::Pointer (const ImageMetadata &,

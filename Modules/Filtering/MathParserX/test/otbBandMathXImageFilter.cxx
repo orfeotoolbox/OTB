@@ -223,7 +223,7 @@ int otbBandMathXImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
   if (vnl_math_isnan(itoutput2.Get()[0]))
     std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Result =  " << itoutput2.Get() << "     Expected =  nan\n";
   else
-    itkGenericExceptionMacro(<< "\nError > Bad Edge Effect Handling -> Test Failled\n"
+    itkGenericExceptionMacro(<< "\nError > Bad Edge Effect Handling -> Test Failed\n"
                              << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Result =  " << itoutput2.Get()
                              << "     Expected =  nan\n");
   std::cout << std::endl;

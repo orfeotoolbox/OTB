@@ -97,7 +97,7 @@ public:
 
   /**
    * @brief Loads the radiometric calibration data to the SARCalib
-   * @param sarCalib The SARCalib objct to complet
+   * @param sarCalib The SARCalib objct to complete
    * @param mds The MetadataSupplierInterface containing the calibration data
    * @param imd The ImageMetadata containing the calibration data
    */

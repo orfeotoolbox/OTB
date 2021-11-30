@@ -115,7 +115,7 @@ protected:
   {
   }
 
-  /** Overrided method */
+  /** Overridden method */
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
 
 }; // end of class

@@ -30,7 +30,7 @@ int otbDEMToImageGeneratorTest(int argc, char* argv[])
   {
     std::cout
         << argv[0]
-        << " folder path , output filename , Longitude Output Orign point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing"
+        << " folder path , output filename , Longitude Output Origin point , Latitude Output Origin point , X Output Size, Y Output size , X Spacing , Y Spacing"
         << std::endl;
     return EXIT_FAILURE;
   }
