@@ -39,7 +39,7 @@ def GenerateRstForPythonAPi(rst_dir):
 
     print("Generating rst for Python API")
 
-    # Instenciate an ImageMetadata object to retrieve the keys
+    # Instentiate an ImageMetadata object to retrieve the keys
     imd = otbApplication.ImageMetadata()
 
     # Render the page
