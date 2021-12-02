@@ -147,10 +147,18 @@ else(MSVC)
 
 endif()
 
+if(WIN32)
+  set(GDAL_URL "https://download.osgeo.org/gdal/3.2.2/gdal-3.2.2.tar.xz"
+  set(GDAL_MD5 c656be582f7beb528c66486cd1fca7a2)
+else()
+  set(GDAL_URL "https://download.osgeo.org/gdal/3.4.0/gdal-3.4.0.tar.xz")
+  set(GDAL_MD5 aae5f3394dcd3ad6ddbe1137121b624b)
+endif()
+
 ExternalProject_Add(GDAL
   PREFIX GDAL
-  URL "https://download.osgeo.org/gdal/3.4.0/gdal-3.4.0.tar.xz"
-  URL_MD5 aae5f3394dcd3ad6ddbe1137121b624b
+  URL ${GDAL_URL}
+  URL_MD5 ${GDAL_MD5}
   SOURCE_DIR ${GDAL_SB_SRC}
   BINARY_DIR ${GDAL_SB_SRC}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

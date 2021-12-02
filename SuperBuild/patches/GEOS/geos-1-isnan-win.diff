@@ -1,0 +1,17 @@
+--- GEOS-orig/CMakeLists.txt	2018-04-30 12:38:44.089392211 +0200
++++ GEOS/CMakeLists.txt	2018-04-30 12:41:18.754980452 +0200
+@@ -189,7 +189,13 @@
+ include(CheckPrototypeExists)
+ include(CheckSymbolExists)
+ 
+-check_prototype_exists(isnan cmath HAVE_STD_ISNAN)
++CHECK_CXX_SOURCE_COMPILES("
++#include <cmath>
++int main()
++{
++ bool a = std::isnan(3.14);
++ return 0;
++}" HAVE_STD_ISNAN)
+ if(NOT HAVE_STD_ISNAN)
+   if(MSVC)
+     check_prototype_exists(_isnan float.h HAVE_ISNAN)
