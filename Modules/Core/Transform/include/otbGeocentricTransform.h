@@ -66,20 +66,31 @@ public:
   OutputPointType TransformPoint(const InputPointType& point) const override;
 
 protected:
-  GeocentricTransform();
+  GeocentricTransform() = default;
   ~GeocentricTransform() override = default;
 
 private:
   GeocentricTransform(const Self&) = delete;
   void operator=(const Self&) = delete;
-
-  std::unique_ptr<CoordinateTransformation> m_MapProjection;
-
-  double m_a;
-  double m_b;
-  double m_f;
-  double m_es;
 };
+
+namespace Projection
+{
+struct Ellipsoid
+{
+  static constexpr double a = 6378137.;
+  static constexpr double b = 6356752.314245;
+  static constexpr double f = (a - b) / a;
+  static constexpr double es = 1 - (b * b) / (a * a);
+};
+
+template <class TScalarType = double, class TEllipsoid = Ellipsoid>
+itk::Point<TScalarType, 3> WorldToEcef(const itk::Point<TScalarType, 3> & worldPoint);
+
+template <class TScalarType = double, class TEllipsoid = Ellipsoid>
+itk::Point<TScalarType, 3> EcefToWorld(const itk::Point<TScalarType, 3> & ecefPoint);
+
+} // namespace Projection
 
 } // namespace otb
 
