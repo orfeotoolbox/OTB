@@ -148,7 +148,7 @@ else(MSVC)
 endif()
 
 if(WIN32)
-  set(GDAL_URL "https://download.osgeo.org/gdal/3.2.2/gdal-3.2.2.tar.xz"
+  set(GDAL_URL "https://download.osgeo.org/gdal/3.2.2/gdal-3.2.2.tar.xz")
   set(GDAL_MD5 c656be582f7beb528c66486cd1fca7a2)
 else()
   set(GDAL_URL "https://download.osgeo.org/gdal/3.4.0/gdal-3.4.0.tar.xz")
