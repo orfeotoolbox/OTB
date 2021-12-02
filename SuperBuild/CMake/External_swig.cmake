@@ -33,8 +33,8 @@ if(MSVC)
   # Use pre-built swig executable (no linking is required, no install done)
   ExternalProject_Add(SWIG
     PREFIX SWIG
-    URL "https://downloads.sourceforge.net/project/swig/swigwin/swigwin-3.0.12/swigwin-3.0.12.zip"
-    URL_MD5 a49524dad2c91ae1920974e7062bfc93
+    URL "https://downloads.sourceforge.net/project/swig/swigwin/swigwin-4.0.2/swigwin-4.0.2.zip"
+    URL_MD5 009926b512aee9318546bdd4c7eab6f9
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
     CONFIGURE_COMMAND ""
@@ -52,8 +52,8 @@ else()
 
   ExternalProject_Add(SWIG
     PREFIX SWIG
-    URL "https://downloads.sourceforge.net/project/swig/swig/swig-3.0.12/swig-3.0.12.tar.gz"
-    URL_MD5 82133dfa7bba75ff9ad98a7046be687c
+    URL "https://downloads.sourceforge.net/project/swig/swig/swig-4.0.2/swig-4.0.2.tar.gz"
+    URL_MD5 7c3e46cb5af2b469722cafa0d91e127b
     BINARY_DIR ${SWIG_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
