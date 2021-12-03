@@ -78,16 +78,20 @@ namespace Projection
 {
 /** \struct WGS84Ellipsoid
  *
- * \brief a structure holding the ellpsoid parameters for WGS84
+ * \brief a structure holding the ellipsoid parameters for WGS84
  * 
  * \ingroup OTBTransform
  * 
  */
 struct WGS84Ellipsoid
 {
+  /** Semi-major axis a */
   static constexpr double a = 6378137.;
+  /** Semi-major axis b */
   static constexpr double b = 6356752.314245;
+  /** flattening */
   static constexpr double f = (a - b) / a;
+  /** first eccentricity squared */
   static constexpr double es = 1 - (b * b) / (a * a);
 };
 
