@@ -76,7 +76,14 @@ private:
 
 namespace Projection
 {
-struct Ellipsoid
+/** \struct WGS84Ellipsoid
+ *
+ * \brief a structure holding the ellpsoid parameters for WGS84
+ * 
+ * \ingroup OTBTransform
+ * 
+ */
+struct WGS84Ellipsoid
 {
   static constexpr double a = 6378137.;
   static constexpr double b = 6356752.314245;
@@ -84,10 +91,27 @@ struct Ellipsoid
   static constexpr double es = 1 - (b * b) / (a * a);
 };
 
-template <class TScalarType = double, class TEllipsoid = Ellipsoid>
+/** \fn WorldToEcef
+ * 
+ * \brief convert from geographic (lon, lat, height) to ECEF coordinates (x, y, z)
+ * 
+ * \param[in] ecefPoint : the input geographic point
+ * 
+ * \ingroup OTBTransform
+ * 
+ */
+template <class TScalarType = double, class TEllipsoid = WGS84Ellipsoid>
 itk::Point<TScalarType, 3> WorldToEcef(const itk::Point<TScalarType, 3> & worldPoint);
 
-template <class TScalarType = double, class TEllipsoid = Ellipsoid>
+/** \fn EcefToWorld
+ * 
+ * \brief convert from ECEF (x, y, z) to geographic coordinates (lon, lat, height)
+ * 
+ * \param[in] ecefPoint : the input ECEF point
+ * 
+ * \ingroup OTBTransform
+ */
+template <class TScalarType = double, class TEllipsoid = WGS84Ellipsoid>
 itk::Point<TScalarType, 3> EcefToWorld(const itk::Point<TScalarType, 3> & ecefPoint);
 
 } // namespace Projection
