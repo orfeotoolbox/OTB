@@ -1,4 +1,4 @@
-OTB-v 8.0.0 - Changes since version 7.4.0 (November 03rd, 2021)
+OTB-v 8.0.0 - Changes since version 7.4.0 (December 8th, 2021)
 ---------------------------------------------------------------------
 
 Features added:
@@ -24,6 +24,10 @@ Bugs fixed:
 
 Refactoring:
 
+   * !868: Use std::chrono and the date library instead of boost date time by Cédric Traizet
+   * !872: Implement a GetSize() function for the ImageMetadata class by Julien Osman
+   * !865: Update geospatial libraries versions in Superbuild by Cédric Traizet and Thibaut Romain
+   * !873: WorldToEcef and EcefToWorld free functions by Cédric Traizet
    * !867: Remove DownloadSRTMTiles by Cédric Traizet
    * !863: Use ImageMetadata to manage NoData and TileHint by Cédric Traizet
    * !858: Optimize coordinate transformations in SARSensorModel by Cédric Traizet"
@@ -65,6 +69,7 @@ CI:
 
 Documentation:
 
+   * !866: Add new cookbook page about supported formats by Julien Osman
    * !862: Add INFO message about metadata source by Julien Osman
    * !860: Fix warning message related to metadata reading by Julien Osman
    * !802: Deprecate the qgis plugin by Julien Osman
