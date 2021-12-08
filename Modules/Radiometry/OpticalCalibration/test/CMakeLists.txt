@@ -200,7 +200,7 @@ otb_add_test(NAME raTvRadianceToReflectanceImageFilterAutoWV2PAN COMMAND otbOpti
   )
 
 otb_add_test(NAME raTvRadianceToReflectanceImageFilterAutoSpot5 COMMAND otbOpticalCalibrationTestDriver
-  --compare-image ${EPSILON_12}  ${BASELINE}/raTvRadianceToReflectanceImageFilterAutoSpot5.tif
+  --compare-image ${EPSILON_12}  ${BASELINE}/raTvRadianceToReflectanceImageFilterAutoSpot5.img
   ${TEMP}/raTvRadianceToReflectanceImageFilterAutoSpot5.img
   otbRadianceToReflectanceImageFilterAuto
   LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
@@ -232,7 +232,7 @@ otb_add_test(NAME raTvRadianceToReflectanceImageFilterAutoQuickbirdXS COMMAND ot
   )
 
 otb_add_test(NAME raTvRadianceToReflectanceImageFilterAutoFORMOSAT COMMAND otbOpticalCalibrationTestDriver
-  --compare-image ${EPSILON_12}  ${BASELINE}/raTvRadianceToReflectanceImageFilterAutoFormosat.tif
+  --compare-image ${EPSILON_12}  ${BASELINE}/raTvRadianceToReflectanceImageFilterAutoFormosat.img
   ${TEMP}/raTvRadianceToReflectanceImageFilterAutoFormosat.img
   otbRadianceToReflectanceImageFilterAuto
   LARGEINPUT{FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF}
@@ -502,7 +502,7 @@ otb_add_test(NAME raTvRadiometryCorrectionParametersToAtmosphericRadiativeTerms 
 
 
 otb_add_test(NAME raTvImageToReflectanceImageFilterAuto COMMAND otbOpticalCalibrationTestDriver
-  --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToReflectanceImageFilterAuto.tif
+  --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToReflectanceImageFilterAuto.img
   ${TEMP}/raTvImageToReflectanceImageFilterAuto.img
   otbImageToReflectanceImageFilterAuto
   LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}
@@ -758,7 +758,7 @@ otb_add_test(NAME raTvReflectanceToSurfaceReflectanceImageFilter COMMAND otbOpti
 
 
 otb_add_test(NAME raTvImageToRadianceImageFilterAutoFORMOSAT COMMAND otbOpticalCalibrationTestDriver
-  --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToRadianceImageFilterAutoFormosat.tif
+  --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToRadianceImageFilterAutoFormosat.img
   ${TEMP}/raTvImageToRadianceImageFilterAutoFormosat.img
   otbImageToRadianceImageFilterAuto
   LARGEINPUT{FORMOSAT/Sudouest_20071013_MS_fmsat/IMAGERY.TIF}
@@ -798,7 +798,7 @@ otb_add_test(NAME raTvImageToRadianceImageFilterAutoWV2MULTI COMMAND otbOpticalC
   )
 
 otb_add_test(NAME raTvImageToRadianceImageFilterAutoSpot5 COMMAND otbOpticalCalibrationTestDriver
-  --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToRadianceImageFilterAutoSpot5.tif
+  --compare-image ${EPSILON_12}  ${BASELINE}/raTvImageToRadianceImageFilterAutoSpot5.img
   ${TEMP}/raTvImageToRadianceImageFilterAutoSpot5.img
   otbImageToRadianceImageFilterAuto
   LARGEINPUT{SPOT5/TEHERAN/IMAGERY.TIF}

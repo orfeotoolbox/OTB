@@ -1,0 +1,85 @@
+<PAMDataset>
+  <Metadata>
+    <MDI key="AcquisitionDate">2007-10-13T10:40:31.793824Z</MDI>
+    <MDI key="AREA_OR_POINT">Point</MDI>
+    <MDI key="BlueDisplayChannel">2</MDI>
+    <MDI key="DataType">1</MDI>
+    <MDI key="GreenDisplayChannel">1</MDI>
+    <MDI key="Instrument">RSI</MDI>
+    <MDI key="InstrumentIndex">1</MDI>
+    <MDI key="METADATATYPE">OTB</MDI>
+    <MDI key="Mission">Formasat 2</MDI>
+    <MDI key="OTB_VERSION">7.4.0</MDI>
+    <MDI key="ProductionDate">2007-10-15T17:58:07Z</MDI>
+    <MDI key="RedDisplayChannel">0</MDI>
+    <MDI key="SatAzimuth">241.823</MDI>
+    <MDI key="SatElevation">57.9678</MDI>
+    <MDI key="SensorID">FORMOSAT 2</MDI>
+    <MDI key="SunAzimuth">160.749</MDI>
+    <MDI key="SunElevation">37.4423</MDI>
+    <MDI key="TileHintX">3000</MDI>
+    <MDI key="TileHintY">500</MDI>
+  </Metadata>
+  <GCPList Projection="GEOGCS[&quot;WGS 84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;degree&quot;,0.0174532925199433,AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],AXIS[&quot;Latitude&quot;,NORTH],AXIS[&quot;Longitude&quot;,EAST],AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]" dataAxisToSRSAxisMapping="2,1">
+    <GCP Id="1" Pixel="-998.5000" Line="-998.5000" X="1.054759912405E+00" Y="4.358962894878E+01" />
+    <GCP Id="2" Pixel="2000.5000" Line="-998.5000" X="1.416787389095E+00" Y="4.352193390314E+01" />
+    <GCP Id="3" Pixel="2000.5000" Line="2000.5000" X="1.320955303185E+00" Y="4.331296133498E+01" />
+    <GCP Id="4" Pixel="-998.5000" Line="2000.5000" X="9.600953105262E-01" Y="4.338034264517E+01" />
+  </GCPList>
+  <PAMRasterBand band="1">
+    <Description>Layer_1</Description>
+    <Metadata>
+      <MDI key="BandName">B1</MDI>
+      <MDI key="LAYER_TYPE">athematic</MDI>
+      <MDI key="PhysicalBias">0</MDI>
+      <MDI key="PhysicalGain">0.255004</MDI>
+      <MDI key="SolarIrradiance">0</MDI>
+      <MDI key="SpectralSensitivity">LUT1D.DIM0.SIZE = 281
+LUT1D.DIM0.ORIGIN = 0.3
+LUT1D.DIM0.SPACING = 0.0025
+LUT1D.ARRAY = 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.000354959 0.000354603 0.000376745 0.000478212 0.0009718 0.002 0.005 0.0124297 0.024 0.0415 0.057 0.0685 0.074 0.074 0.076 0.0795695 0.082 0.084 0.083 0.0825 0.086 0.0910953 0.094 0.096 0.096 0.094 0.094 0.096 0.099 0.0995 0.099 0.098 0.095 0.092 0.095 0.0985 0.092 0.0695 0.037 0.025 0.009 0.0025 0.001 0.000847053 0.000588401 0.00051966 0.00050602 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</MDI>
+    </Metadata>
+  </PAMRasterBand>
+  <PAMRasterBand band="2">
+    <Description>Layer_2</Description>
+    <Metadata>
+      <MDI key="BandName">B2</MDI>
+      <MDI key="LAYER_TYPE">athematic</MDI>
+      <MDI key="PhysicalBias">0</MDI>
+      <MDI key="PhysicalGain">0.354691</MDI>
+      <MDI key="SolarIrradiance">0</MDI>
+      <MDI key="SpectralSensitivity">LUT1D.DIM0.SIZE = 281
+LUT1D.DIM0.ORIGIN = 0.3
+LUT1D.DIM0.SPACING = 0.0025
+LUT1D.ARRAY = 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.000324677 0.000326475 0.000331943 0.000386303 0.000447683 0.001 0.003 0.0045 0.012 0.0205 0.036 0.0615 0.075 0.081 0.082 0.0845 0.087 0.0885 0.088 0.087 0.086 0.0875 0.0908484 0.0925 0.094 0.094 0.093 0.0925 0.093 0.0955 0.097 0.098 0.099 0.099 0.099 0.099 0.099 0.099 0.095 0.0815 0.057 0.032 0.018 0.0112534 0.005 0.0015 0.000758484 0.000604297 0.000512471 0.000475316 0.000453283 0.00044559 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</MDI>
+    </Metadata>
+  </PAMRasterBand>
+  <PAMRasterBand band="3">
+    <Description>Layer_3</Description>
+    <Metadata>
+      <MDI key="BandName">B3</MDI>
+      <MDI key="LAYER_TYPE">athematic</MDI>
+      <MDI key="PhysicalBias">0</MDI>
+      <MDI key="PhysicalGain">0.332615</MDI>
+      <MDI key="SolarIrradiance">0</MDI>
+      <MDI key="SpectralSensitivity">LUT1D.DIM0.SIZE = 281
+LUT1D.DIM0.ORIGIN = 0.3
+LUT1D.DIM0.SPACING = 0.0025
+LUT1D.ARRAY = 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.000461752 0.001 0.001 0.003 0.006 0.013 0.0335 0.063 0.089 0.098 0.099 0.099 0.099 0.099 0.0985 0.097 0.0945 0.092 0.0906796 0.089 0.0907659 0.093 0.0965 0.1 0.097 0.091 0.0865 0.086 0.0910438 0.094 0.092 0.093 0.088 0.064 0.034 0.015 0.0075 0.006 0.0045 0.003 0.001 0.000607601 0.000202927 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</MDI>
+    </Metadata>
+  </PAMRasterBand>
+  <PAMRasterBand band="4">
+    <Description>Layer_4</Description>
+    <Metadata>
+      <MDI key="BandName">B4</MDI>
+      <MDI key="LAYER_TYPE">athematic</MDI>
+      <MDI key="PhysicalBias">0</MDI>
+      <MDI key="PhysicalGain">0.433054</MDI>
+      <MDI key="SolarIrradiance">0</MDI>
+      <MDI key="SpectralSensitivity">LUT1D.DIM0.SIZE = 281
+LUT1D.DIM0.ORIGIN = 0.3
+LUT1D.DIM0.SPACING = 0.0025
+LUT1D.ARRAY = 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.000481456 0.00071923 0.00098303 0.001 0.000947915 0.00090899 0.000887367 0.000576847 0.000470858 0.00052246 0.000713811 0.001 0.0015 0.003 0.005 0.008 0.0145 0.022 0.035 0.049 0.0595 0.075 0.0905 0.098 0.0995 0.097 0.093 0.091 0.0925 0.094 0.096 0.096 0.0955 0.094 0.092 0.0907811 0.089 0.088 0.088 0.088 0.088 0.088 0.0875 0.087 0.086 0.085 0.084 0.083 0.083 0.082 0.081 0.0806396 0.079 0.078 0.077 0.076 0.075 0.074 0.073 0.072 0.071 0.0700369 0.0685 0.067 0.0655 0.064 0.063 0.063 0.062 0.059 0.054 0.043 0.034 0.025 0.016 0.009 0.0055 0.003 0.0015 0.001 0.000691333 0.000432126 0.000356974 0.000265441 0.000219773 0.000195346 0.000192716 0.000188932 0.000185148 0.000181364 0.00017758 0.000173796 0.000170011 0.000166227 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</MDI>
+    </Metadata>
+  </PAMRasterBand>
+</PAMDataset>
