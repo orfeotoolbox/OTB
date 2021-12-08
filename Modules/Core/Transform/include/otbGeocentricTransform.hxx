@@ -93,7 +93,7 @@ itk::Point<TScalarType, 3> EcefToWorld(const itk::Point<TScalarType, 3> & ecefPo
 
   TScalarType s0 = 0.5 * (a2 + b2) * std::sqrt(d/TEllipsoid::a * d/TEllipsoid::a + z/TEllipsoid::b * z/TEllipsoid::b);
 
-  for( int iterIdx = 0; iterIdx < MAX_ITER; ++iterIdx )
+  for (int iterIdx = 0; iterIdx < MAX_ITER; ++iterIdx)
   {
     const TScalarType pol = c5 + s0 * ( c4 + s0 * ( c3 + s0 * s0 ) );
     const TScalarType der = c4 + s0 * ( 2 * c3  + 4 * s0 * s0 );
@@ -101,20 +101,26 @@ itk::Point<TScalarType, 3> EcefToWorld(const itk::Point<TScalarType, 3> & ecefPo
     const TScalarType ds = - pol / der;
     s0 += ds;
 
-    if( std::abs(ds) < tol * s0 )
+    if (std::abs(ds) < tol * s0)
     {
-      const double t = s0 - 0.5 * (a2 + b2);
-      const double x_ell = d / ( 1.0 + t/a2 );
-      const double y_ell = z / ( 1.0 + t/b2 );
+      constexpr TScalarType half = 0.5;
+      constexpr TScalarType one = 1.0;
 
-      double height = ( d - x_ell ) * x_ell/a2 + ( z - y_ell ) * y_ell/b2;
-      height /= std::sqrt( x_ell/a2 * x_ell/a2 + y_ell/b2 * y_ell/b2);
+      const auto t = s0 - half * (a2 + b2);
+      const auto x_ell = d / (one + t/a2);
+      const auto y_ell = z / (one + t/b2);
+
+      auto const xea2 = x_ell / a2;
+      auto const yeb2 = y_ell / b2;
+
+      auto height = (d - x_ell) * xea2 + (z - y_ell) * yeb2;
+      height /= std::sqrt(xea2 * xea2 + yeb2 * yeb2);
 
       //lat
-      worldPoint[1] = std::atan2( y_ell/b2, x_ell/a2 ) * CONST_180_PI;
+      worldPoint[1] = std::atan2(yeb2, xea2) * CONST_180_PI;
 
       //lon
-      worldPoint[0] = std::atan2( y, x ) * CONST_180_PI;
+      worldPoint[0] = std::atan2(y, x) * CONST_180_PI;
       worldPoint[2] = height;
     }
   }
