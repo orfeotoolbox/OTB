@@ -71,43 +71,44 @@ itk::Point<TScalarType, 3> EcefToWorld(const itk::Point<TScalarType, 3> & ecefPo
 {
   itk::Point<TScalarType, 3> worldPoint;
 
-  const auto & x = ecefPoint[0];
-  const auto & y = ecefPoint[1];
-  const auto & z = ecefPoint[2];
+  const auto x = ecefPoint[0];
+  const auto y = ecefPoint[1];
+  const auto z = ecefPoint[2];
 
-  const double tol = 1e-15;
-  const double d = sqrt(x*x + y*y);
+  const TScalarType tol = 1e-15;
+  const TScalarType d2 = x*x + y*y;
+  const TScalarType d = sqrt(d2);
   const int MAX_ITER = 10;
 
-  const double a2 = TEllipsoid::a * TEllipsoid::a;
-  const double b2 = TEllipsoid::b * TEllipsoid::b;
-  const double pa2 = d * d * a2;
-  const double qb2 = z * z * b2;
-  const double ae2 = a2 * TEllipsoid::es;
-  const double ae4 = ae2 * ae2;
+  constexpr TScalarType a2 = TEllipsoid::a * TEllipsoid::a;
+  constexpr TScalarType b2 = TEllipsoid::b * TEllipsoid::b;
+  const TScalarType pa2 = d2 * a2;
+  const TScalarType qb2 = z * z * b2;
+  constexpr TScalarType ae2 = a2 * TEllipsoid::es;
+  constexpr TScalarType ae4 = ae2 * ae2;
 
-  const double c3 = -( ae4/2 + pa2 + qb2 );          // s^2
-  const double c4 = ae2*( pa2 - qb2 );               // s^1
-  const double c5 = ae4/4 * ( ae4/4 - pa2 - qb2 );   // s^0
+  const TScalarType c3 = -( ae4/2 + pa2 + qb2 );          // s^2
+  const TScalarType c4 = ae2*( pa2 - qb2 );               // s^1
+  const TScalarType c5 = ae4/4 * ( ae4/4 - pa2 - qb2 );   // s^0
 
-  double s0 = 0.5 * (a2 + b2) * std::hypot( d/TEllipsoid::a, z/TEllipsoid::b );
+  TScalarType s0 = 0.5 * (a2 + b2) * std::sqrt(d/TEllipsoid::a * d/TEllipsoid::a + z/TEllipsoid::b * z/TEllipsoid::b);
 
   for( int iterIdx = 0; iterIdx < MAX_ITER; ++iterIdx )
   {
-    const double pol = c5 + s0 * ( c4 + s0 * ( c3 + s0 * s0 ) );
-    const double der = c4 + s0 * ( 2 * c3  + 4 * s0 * s0 );
+    const TScalarType pol = c5 + s0 * ( c4 + s0 * ( c3 + s0 * s0 ) );
+    const TScalarType der = c4 + s0 * ( 2 * c3  + 4 * s0 * s0 );
 
-    const double ds = - pol / der;
+    const TScalarType ds = - pol / der;
     s0 += ds;
 
-    if( fabs( ds ) < tol * s0 )
+    if( std::abs(ds) < tol * s0 )
     {
       const double t = s0 - 0.5 * (a2 + b2);
       const double x_ell = d / ( 1.0 + t/a2 );
       const double y_ell = z / ( 1.0 + t/b2 );
 
       double height = ( d - x_ell ) * x_ell/a2 + ( z - y_ell ) * y_ell/b2;
-      height /= std::hypot( x_ell/a2 ,  y_ell/b2 );
+      height /= std::sqrt( x_ell/a2 * x_ell/a2 + y_ell/b2 * y_ell/b2);
 
       //lat
       worldPoint[1] = std::atan2( y_ell/b2, x_ell/a2 ) * CONST_180_PI;

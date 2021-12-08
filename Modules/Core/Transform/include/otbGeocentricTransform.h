@@ -66,7 +66,7 @@ public:
   OutputPointType TransformPoint(const InputPointType& point) const override;
 
 protected:
-  GeocentricTransform() = default;
+  GeocentricTransform() : Superclass(ParametersDimension) {};
   ~GeocentricTransform() override = default;
 
 private:
@@ -83,16 +83,17 @@ namespace Projection
  * \ingroup OTBTransform
  * 
  */
+template <class TScalarType = double>
 struct WGS84Ellipsoid
 {
   /** Semi-major axis a */
-  static constexpr double a = 6378137.;
+  static constexpr TScalarType a = 6378137.;
   /** Semi-major axis b */
-  static constexpr double b = 6356752.314245;
+  static constexpr TScalarType b = 6356752.314245;
   /** flattening */
-  static constexpr double f = (a - b) / a;
+  static constexpr TScalarType f = (a - b) / a;
   /** first eccentricity squared */
-  static constexpr double es = 1 - (b * b) / (a * a);
+  static constexpr TScalarType es = 1 - (b * b) / (a * a);
 };
 
 /** \fn WorldToEcef
@@ -104,7 +105,7 @@ struct WGS84Ellipsoid
  * \ingroup OTBTransform
  * 
  */
-template <class TScalarType = double, class TEllipsoid = WGS84Ellipsoid>
+template <class TScalarType = double, class TEllipsoid = WGS84Ellipsoid<TScalarType>>
 itk::Point<TScalarType, 3> WorldToEcef(const itk::Point<TScalarType, 3> & worldPoint);
 
 /** \fn EcefToWorld
@@ -115,7 +116,7 @@ itk::Point<TScalarType, 3> WorldToEcef(const itk::Point<TScalarType, 3> & worldP
  * 
  * \ingroup OTBTransform
  */
-template <class TScalarType = double, class TEllipsoid = WGS84Ellipsoid>
+template <class TScalarType = double, class TEllipsoid = WGS84Ellipsoid<TScalarType>>
 itk::Point<TScalarType, 3> EcefToWorld(const itk::Point<TScalarType, 3> & ecefPoint);
 
 } // namespace Projection
