@@ -539,6 +539,12 @@ std::vector<unsigned int> ImageMetadataBase::GetDefaultDisplay() const
   return {redChannel, greenChannel, blueChannel};
 }
 
+int ImageMetadataBase::GetSize() const
+{
+  return GeometryKeys.size() + NumericKeys.size() + StringKeys.size() + LUT1DKeys.size()
+      + LUT2DKeys.size() + TimeKeys.size() + ExtraKeys.size();
+}
+
 // ----------------------- [ImageMetadata] ------------------------------
 
 
@@ -796,7 +802,13 @@ std::vector<std::string> ImageMetadata::GetEnhancedBandNames() const
   return GetBandInfo(MDStr::EnhancedBandName, *this);
 }
 
-
+int ImageMetadata::GetSize() const
+{
+  int size = this->ImageMetadataBase::GetSize();
+  for (const auto &band : this->Bands)
+    size += band.GetSize();
+  return size;
+}
 
 // printing
 std::ostream& operator<<(std::ostream& os, const otb::ImageMetadataBase& imd)

@@ -66,20 +66,60 @@ public:
   OutputPointType TransformPoint(const InputPointType& point) const override;
 
 protected:
-  GeocentricTransform();
+  GeocentricTransform() : Superclass(ParametersDimension) {};
   ~GeocentricTransform() override = default;
 
 private:
   GeocentricTransform(const Self&) = delete;
   void operator=(const Self&) = delete;
-
-  std::unique_ptr<CoordinateTransformation> m_MapProjection;
-
-  double m_a;
-  double m_b;
-  double m_f;
-  double m_es;
 };
+
+namespace Projection
+{
+/** \struct WGS84Ellipsoid
+ *
+ * \brief a structure holding the ellipsoid parameters for WGS84
+ * 
+ * \ingroup OTBTransform
+ * 
+ */
+template <class TScalarType = double>
+struct WGS84Ellipsoid
+{
+  /** Semi-major axis a */
+  static constexpr TScalarType a = 6378137.;
+  /** Semi-major axis b */
+  static constexpr TScalarType b = 6356752.314245;
+  /** flattening */
+  static constexpr TScalarType f = (a - b) / a;
+  /** first eccentricity squared */
+  static constexpr TScalarType es = 1 - (b * b) / (a * a);
+};
+
+/** \fn WorldToEcef
+ * 
+ * \brief convert from geographic (lon, lat, height) to ECEF coordinates (x, y, z)
+ * 
+ * \param[in] ecefPoint : the input geographic point
+ * 
+ * \ingroup OTBTransform
+ * 
+ */
+template <class TScalarType = double, class TEllipsoid = WGS84Ellipsoid<TScalarType>>
+itk::Point<TScalarType, 3> WorldToEcef(const itk::Point<TScalarType, 3> & worldPoint);
+
+/** \fn EcefToWorld
+ * 
+ * \brief convert from ECEF (x, y, z) to geographic coordinates (lon, lat, height)
+ * 
+ * \param[in] ecefPoint : the input ECEF point
+ * 
+ * \ingroup OTBTransform
+ */
+template <class TScalarType = double, class TEllipsoid = WGS84Ellipsoid<TScalarType>>
+itk::Point<TScalarType, 3> EcefToWorld(const itk::Point<TScalarType, 3> & ecefPoint);
+
+} // namespace Projection
 
 } // namespace otb
 

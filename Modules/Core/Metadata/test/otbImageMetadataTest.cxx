@@ -283,6 +283,20 @@ void otbImageMetadataCompactTest(char* argv[])
   outfile.close();
 }
 
+void otbImageMetadataGetSizeTest(char* argv[])
+{
+  using namespace otb;
+
+  const char*   outFileName = argv[2];
+  std::ofstream outfile(outFileName);
+
+  ImageMetadata md;
+  SetUpImageMetadata(md, 3);
+  otb::testtools::PrintMetadata(md, outfile);
+  outfile << "\nsize band 1: " << md.Bands[1].GetSize() << "\n";
+  outfile << "\nsize all: " << md.GetSize();
+}
+
 int otbImageMetadataTest(int argc, char* argv[])
 {
   if (argc < 2)
@@ -301,6 +315,8 @@ int otbImageMetadataTest(int argc, char* argv[])
     otbImageMetadataToFromKeywordlistTest(argv);
   else if (testName == "otbImageMetadataCompactTest")
     otbImageMetadataCompactTest(argv);
+  else if (testName == "otbImageMetadataGetSizeTest")
+    otbImageMetadataGetSizeTest(argv);
   else
   {
     std::cout << "Unknown test name " << testName;

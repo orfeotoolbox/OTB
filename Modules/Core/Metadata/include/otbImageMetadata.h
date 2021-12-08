@@ -255,6 +255,9 @@ public:
    *  If no information is available the default order (0,1,2) is returned instead */
   std::vector<unsigned int> GetDefaultDisplay() const;
 
+  /** Return the number of elements in the ImageMetadataBase */
+  int GetSize() const;
+
 };
 
 
@@ -340,6 +343,9 @@ public:
   /** Return a vector containing the name of each band of the ImageMetadata or an empty 
    * vector if at least one band name is missing */
   std::vector<std::string> GetEnhancedBandNames() const;
+
+  /** Return the number of elements in the ImageMetadata */
+  int GetSize() const;
 };
 
 extern OTBMetadata_EXPORT std::ostream& operator<<(std::ostream& os, const otb::ImageMetadataBase& imd);

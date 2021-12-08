@@ -263,7 +263,7 @@ otb_test_application(NAME apTvUtQuicklookSpot5
                              -rsy 200
                              -sr 2
                      VALID   --compare-image ${NOTOL}
-                             ${BASELINE}/apTvUtQuicklookSpot5.tif
+                             ${BASELINE}/apTvUtQuicklookSpot5.img
                              ${TEMP}/apTvUtQuicklookSpot5.img
                      )
 
