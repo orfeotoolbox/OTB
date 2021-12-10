@@ -1089,11 +1089,13 @@ void GlImageActor::UpdateTransforms()
     geometryChanged = geometryChanged
   || (m_ViewportToImageTransform.IsNotNull() && m_ViewportToImageTransform->GetInputProjectionRef() != settings->GetWkt())
   || (m_ImageToViewportTransform.IsNotNull() && m_ImageToViewportTransform->GetOutputProjectionRef() != settings->GetWkt())
-  || (m_ViewportToImageTransform.IsNotNull() && m_ViewportToImageTransform->GetInputImageMetadata() == nullptr)
-  || (m_ImageToViewportTransform.IsNotNull() && m_ImageToViewportTransform->GetInputImageMetadata() == nullptr)
-  || (m_ViewportToImageTransform.IsNotNull() && !HasSameSensorModel(*(m_ViewportToImageTransform->GetInputImageMetadata()),
+  || (m_ViewportToImageTransform.IsNotNull() && m_ViewportToImageTransform->GetInputImageMetadata()
+                                             && settings->GetImageMetadata()
+                                             && !HasSameSensorModel(*(m_ViewportToImageTransform->GetInputImageMetadata()),
                                                                     *(settings->GetImageMetadata())))
-  || (m_ImageToViewportTransform.IsNotNull() && !HasSameSensorModel(*(m_ImageToViewportTransform->GetInputImageMetadata()),
+  || (m_ImageToViewportTransform.IsNotNull() && m_ImageToViewportTransform->GetOutputImageMetadata()
+                                             && settings->GetImageMetadata()
+                                             && !HasSameSensorModel(*(m_ImageToViewportTransform->GetOutputImageMetadata()),
                                                                     *(settings->GetImageMetadata())));
 
   if(settings->GetUseProjection() && geometryChanged)
