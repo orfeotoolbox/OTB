@@ -480,7 +480,6 @@ void TerraSarXSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent
 void ReadGeorefGCP(const otb::MetaData::TimePoint & azimuthTimeStart, const std::string & geoRefXmlFileName, ImageMetadata & imd, SARParam & param)
 {
   Projection::GCPParam gcp;
-  std::stringstream ss;
 
   // Open the xml file
   TiXmlDocument doc(geoRefXmlFileName);
@@ -643,6 +642,70 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
   burstRecord.azimuthAnxTime = 0.;
 
   param.burstRecords.push_back(burstRecord);
+
+  // Read Doppler centroid
+  const auto xmlFileName = xmlMS.GetResourceFile();
+
+  TiXmlDocument doc(xmlFileName);
+  if (!doc.LoadFile())
+  {
+    otbGenericExceptionMacro(MissingMetadataException, << "Can't open file " << xmlFileName);
+  }
+
+  TiXmlHandle   hDoc(&doc);
+  auto processingElem = hDoc.FirstChild("level1Product")
+                            .FirstChild("processing").ToElement();
+
+  auto centroidElem = processingElem->FirstChildElement("doppler")->FirstChildElement("dopplerCentroid");
+
+  // Retrieve the polarisation layer
+  for( ;centroidElem; centroidElem = centroidElem->NextSiblingElement("dopplerCentroid"))
+  {
+    if (centroidElem->FirstChildElement("polLayer")->GetText() == polarization)
+      break;
+  }
+  if (!centroidElem)
+  {
+    otbGenericExceptionMacro(MissingMetadataException, << "Can't find the doppler centroid in the product metadata.");
+  }
+
+  for(auto dopplerEstimateElem = centroidElem->FirstChildElement("dopplerEstimate"); 
+      dopplerEstimateElem; 
+      dopplerEstimateElem = dopplerEstimateElem->NextSiblingElement("dopplerEstimate"))
+  {
+    DopplerCentroid centroid;
+
+    centroid.azimuthTime = MetaData::ReadFormattedDate(dopplerEstimateElem->FirstChildElement("timeUTC")->GetText());
+
+    auto combinedDopplerElem = dopplerEstimateElem->FirstChildElement("combinedDoppler");
+
+    if (!combinedDopplerElem)
+    {
+      otbGenericExceptionMacro(MissingMetadataException, << "Can't find the combined doppler in the product metadata.");
+    }
+
+    centroid.t0 =  std::stod(combinedDopplerElem->FirstChildElement("referencePoint")->GetText());
+
+    unsigned int polynomialDegree = std::stoi(combinedDopplerElem->FirstChildElement("polynomialDegree")->GetText());
+
+    centroid.dopCoef.resize(polynomialDegree + 1);
+
+    for(auto coefficientElem = combinedDopplerElem->FirstChildElement("coefficient"); 
+      coefficientElem; 
+      coefficientElem = coefficientElem->NextSiblingElement("coefficient"))
+    {
+      unsigned int exponent = 0;
+
+      // operator <= is used because a polynomial of degree N has N+1 elements
+      if (coefficientElem->QueryUnsignedAttribute("exponent", &exponent) == TIXML_SUCCESS && exponent <= polynomialDegree)
+      {
+        centroid.dopCoef[exponent] = std::stod(coefficientElem->GetText());
+      }
+    }
+
+    param.dopplerCentroids.push_back(centroid);
+  }
+
 }
 
 
