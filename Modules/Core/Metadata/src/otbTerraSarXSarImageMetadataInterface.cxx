@@ -706,6 +706,44 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
     param.dopplerCentroids.push_back(centroid);
   }
 
+  // Read Azimuth FM rate
+  for(auto dopplerRateElem = processingElem->FirstChildElement("geometry")->FirstChildElement("dopplerRate"); 
+      dopplerRateElem; 
+      dopplerRateElem = dopplerRateElem->NextSiblingElement("dopplerRate"))
+  {
+    AzimuthFmRate rate;
+
+    rate.azimuthTime = MetaData::ReadFormattedDate(dopplerRateElem->FirstChildElement("timeUTC")->GetText());
+
+    auto dopplerRatePolynomialElem = dopplerRateElem->FirstChildElement("dopplerRatePolynomial");
+
+    if (!dopplerRatePolynomialElem)
+    {
+      otbGenericExceptionMacro(MissingMetadataException, << "Can't find the doppler rate polynomial in the product metadata.");
+    }
+
+    rate.t0 =  std::stod(dopplerRatePolynomialElem->FirstChildElement("referencePoint")->GetText());
+
+    unsigned int polynomialDegree = std::stoi(dopplerRatePolynomialElem->FirstChildElement("polynomialDegree")->GetText());
+
+    rate.azimuthFmRatePolynomial.resize(polynomialDegree + 1);
+
+    for(auto coefficientElem = dopplerRatePolynomialElem->FirstChildElement("coefficient"); 
+      coefficientElem; 
+      coefficientElem = coefficientElem->NextSiblingElement("coefficient"))
+    {
+      unsigned int exponent = 0;
+
+      // operator <= is used because a polynomial of degree N has N+1 elements
+      if (coefficientElem->QueryUnsignedAttribute("exponent", &exponent) == TIXML_SUCCESS && exponent <= polynomialDegree)
+      {
+        rate.azimuthFmRatePolynomial[exponent] = std::stod(coefficientElem->GetText());
+      }
+    }
+
+    param.azimuthFmRates.push_back(rate);
+  }
+
 }
 
 
