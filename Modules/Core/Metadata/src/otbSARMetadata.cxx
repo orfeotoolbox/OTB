@@ -152,6 +152,9 @@ void SARParam::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
   kwl.insert({prefix + "RangeResolution", to_string_with_precision(rangeResolution)});
   kwl.insert({prefix + "NumberOfLinesPerBurst", to_string_with_precision(numberOfLinesPerBurst)});
   kwl.insert({prefix + "NumberOfSamplesPerBurst", to_string_with_precision(numberOfSamplesPerBurst)});
+  kwl.insert({prefix + "AzimuthBandwidth", to_string_with_precision(azimuthBandwidth)});
+  kwl.insert({prefix + "RangeBandwidth", to_string_with_precision(rangeBandwidth)});
+  kwl.insert({prefix + "AzimuthSteeringRate", to_string_with_precision(azimuthSteeringRate)});
   kwl.insert({prefix + "RightLookingFlag", std::to_string(rightLookingFlag)});
 
   VectorToKeywordList(kwl, azimuthFmRates, prefix + "AzimuthFmRates");
@@ -181,6 +184,10 @@ void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
   rangeSamplingRate = std::stod(Get(kwl, prefix + "RangeSamplingRate"));
   rangeResolution = std::stod(Get(kwl, prefix + "RangeResolution"));
   rightLookingFlag = std::stoi(Get(kwl, prefix + "RightLookingFlag"));
+
+  azimuthBandwidth = nearRangeTime = std::stod(Get(kwl, prefix + "AzimuthBandwidth"));
+  rangeBandwidth = nearRangeTime = std::stod(Get(kwl, prefix + "RangeBandwidth"));
+  azimuthSteeringRate = nearRangeTime = std::stod(Get(kwl, prefix + "AzimuthSteeringRate"));
 
   numberOfLinesPerBurst = std::stoul(Get(kwl, prefix + "NumberOfLinesPerBurst"));
   numberOfSamplesPerBurst = std::stoul(Get(kwl, prefix + "NumberOfSamplesPerBurst"));

@@ -744,6 +744,13 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
     param.azimuthFmRates.push_back(rate);
   }
 
+  // Azimuth and range Bandwidth
+  param.azimuthBandwidth = std::stod(processingElem->FirstChildElement("processingParameter")
+                                                   ->FirstChildElement("totalProcessedAzimuthBandwidth")
+                                                   ->GetText());
+  param.rangeBandwidth = std::stod(processingElem->FirstChildElement("processingParameter")
+                                                ->FirstChildElement("totalProcessedRangeBandwidth")
+                                                ->GetText());
 }
 
 

@@ -183,6 +183,10 @@ struct OTBMetadata_EXPORT SARParam
   unsigned long numberOfLinesPerBurst;
   unsigned long numberOfSamplesPerBurst;
 
+  double azimuthBandwidth = 0.;
+  double rangeBandwidth = 0.;
+  double azimuthSteeringRate = 0.;
+
   bool rightLookingFlag = true;
 
   /** Doppler centroid estimates */
