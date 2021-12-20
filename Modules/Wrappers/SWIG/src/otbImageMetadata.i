@@ -91,7 +91,6 @@ class ImageMetadataBase
 {
 public:
   std::string GetProjectedGeometry() const;
-  std::string GetProjectionWKT() const;
   std::string GetProjectionProj() const;
 
   std::string GetKeyListNum() const;
@@ -113,7 +112,7 @@ public:
   std::string __repr__() {
     std::ostringstream oss;
     oss << *$self;
-    return oss.str().c_str();
+    return oss.str();
   }
 }
 
@@ -174,6 +173,14 @@ public:
     return it != otb::MetaData::MDGeomNames.right.end();
   }
 
+  bool is_extra(const std::string& key) {
+    return $self->Has(key);
+  }
+
+  std::string get_extra(const std::string& key) {
+    return $self->operator[](key);
+  }
+
   bool has(const std::string& key) const {
     auto it_num = otb::MetaData::MDNumNames.right.find(key);
     if (it_num != otb::MetaData::MDNumNames.right.end())
@@ -199,7 +206,7 @@ public:
     if (it_geom != otb::MetaData::MDGeomNames.right.end())
       return $self->Has(it_geom->second);
 
-    return false;
+    return $self->Has(key);
   }
   
   void __setitem__(const std::string& key, const double val) {
@@ -214,7 +221,13 @@ public:
     if (it != otb::MetaData::MDStrNames.right.end())
       $self->Add(it->second, val);
     else
-      $self->Add(key, val);
+    {
+      auto it2 = otb::MetaData::MDGeomNames.right.find(key);
+      if (it2 != otb::MetaData::MDGeomNames.right.end())
+        $self->Add(it2->second, val);
+      else
+        $self->Add(key, val);
+    }
   }
   void __setitem__(const std::string& key, const otb::MetaData::LUT1D& val) {
     auto it = otb::MetaData::MDL1DNames.right.find(key);
@@ -263,6 +276,8 @@ public:
         return self.get_time(key)
       elif self.is_geom(key):
         return None # TODO: the geom part of the Imagemetadata is not wrapped yet
+      elif self.is_extra(key):
+        return self.get_extra(key)
       else:
         return None
   }
