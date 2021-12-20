@@ -20,6 +20,7 @@
 
 #include "otbImageMetadata.h"
 #include "otbSpatialReference.h"
+#include "otbJoinContainer.h"
 
 namespace otb
 {
@@ -201,11 +202,8 @@ bool ImageMetadataBase::Has(const MDStr& key) const
 std::string ImageMetadataBase::GetKeyListStr() const
 {
   std::ostringstream oss;
-  for (const auto& kv : MetaData::MDStrNames.left)
-    oss << kv.second << " ";
-  auto returnString = oss.str();
-  returnString.pop_back();
-  return returnString;
+  JoinMap(oss, MetaData::MDStrNames.left, " ");
+  return oss.str();
 }
 
 // -------------------- LUT1D utility function ----------------------------
