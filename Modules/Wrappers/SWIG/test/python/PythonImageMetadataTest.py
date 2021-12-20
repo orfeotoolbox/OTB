@@ -71,7 +71,3 @@ def test(otb, argv):
     # GetProjectionProj
     imd["ProjectionProj"] = "Proj String"
     assert imd.GetProjectionProj() == "Proj String"
-
-    # __repr__
-    print(imd)
-    assert repr(imd) == ""
