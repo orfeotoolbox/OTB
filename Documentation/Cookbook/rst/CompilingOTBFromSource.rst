@@ -150,7 +150,7 @@ SuperBuild: Build OTB and all dependencies
 
 OTB’s compilation is customized by specifying configuration variables.
 The most important configuration variables are shown in the
-table above. The simplest way to provide
+table above. The simplest way to provide
 configuration variables is via the command line ``-D`` option:
 
 ::
@@ -285,7 +285,7 @@ FindXXX.cmake scripts, or with the ``XXX_INCLUDEDIR`` and
 ``XXX_LIBRARY`` variables.
 
 Additionally, decide which module you wish to enable, together with tests and
-examples. Refer to table above for the list of CMake variables.
+examples. Refer to table above for the list of CMake variables.
 
 OTB is modular. It is possible to only build some modules
 instead of the whole set. To deactivate a module (and the ones that
@@ -295,7 +295,7 @@ depend on it) switch off the CMake variable
 
 Some of the OTB capabilities are considered as optional, and you can
 deactivate the related modules thanks to a set of CMake variables
-starting with ``OTB_USE_XXX``. The table below shows which modules
+starting with ``OTB_USE_XXX``. The table below shows which modules
 are associated to these variables. It is very important to notice that
 these variable override the variable ``OTB_BUILD_DEFAULT_MODULES``.
 
@@ -366,7 +366,8 @@ hours to run them all, depending on compilation options
 (release mode does make a difference) and hardware.
 
 To run the tests, first make sure to set the option
-``BUILD_TESTING`` to ``ON`` before building the library.
+``BUILD_TESTING`` to ``ON`` before building the library. If you want to run the tests for the
+python API, you will also need to install the python module `pytest`.
 
 For some of the tests, you also need the test data and the baselines (~1GB). These files are stored
 using `git-lfs` in the `Data` folder at the root of otb sources. To download them, you have to make

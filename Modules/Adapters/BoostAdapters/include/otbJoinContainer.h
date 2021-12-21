@@ -58,6 +58,32 @@ inline std::ostream& Join(std::ostream& os, TRange const& range, std::string con
   }
   return os;
 }
+
+/**
+ * Joins elements from a map (second) into a stream.
+ * \tparam Tmap Map type
+ * \param os  destination stream
+ * \param[in] range  Range to print
+ * \param[in] separator  Separator string to use between elements.
+ *
+ * \return the stream
+ * \throw None At least, this function is exception neutral.
+ */
+template <typename Tmap>
+inline std::ostream& JoinMap(std::ostream& os, Tmap const& range, std::string const& separator)
+{
+  if (!boost::empty(range))
+  {
+    typename boost::range_iterator<Tmap const>::type       first = boost::begin(range);
+    typename boost::range_iterator<Tmap const>::type const last  = boost::end(range);
+    os << first->second;
+    for (++first; first != last; ++first)
+    {
+      os << separator << first->second;
+    }
+  }
+  return os;
+}
 } // end namespace otb
 
 #ifndef OTB_MANUAL_INSTANTIATION

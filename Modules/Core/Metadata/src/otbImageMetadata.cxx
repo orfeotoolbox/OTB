@@ -20,6 +20,7 @@
 
 #include "otbImageMetadata.h"
 #include "otbSpatialReference.h"
+#include "otbJoinContainer.h"
 
 namespace otb
 {
@@ -166,6 +167,16 @@ bool ImageMetadataBase::Has(const MDNum& key) const
   return (NumericKeys.find(key) != NumericKeys.end());
 }
 
+std::string ImageMetadataBase::GetKeyListNum() const
+{
+  std::ostringstream oss;
+  for (const auto& kv : MetaData::MDNumNames.left)
+    oss << kv.second << " ";
+  auto returnString = oss.str();
+  returnString.pop_back();
+  return returnString;
+}
+
 // -------------------- String utility function ----------------------------
 
 const std::string & ImageMetadataBase::operator[](const MDStr& key) const
@@ -186,6 +197,13 @@ size_t ImageMetadataBase::Remove(const MDStr& key)
 bool ImageMetadataBase::Has(const MDStr& key) const
 {
   return (StringKeys.find(key) != StringKeys.end());
+}
+
+std::string ImageMetadataBase::GetKeyListStr() const
+{
+  std::ostringstream oss;
+  JoinMap(oss, MetaData::MDStrNames.left, " ");
+  return oss.str();
 }
 
 // -------------------- LUT1D utility function ----------------------------
@@ -210,6 +228,16 @@ bool ImageMetadataBase::Has(const MDL1D& key) const
   return (LUT1DKeys.find(key) != LUT1DKeys.end());
 }
 
+std::string ImageMetadataBase::GetKeyListL1D() const
+{
+  std::ostringstream oss;
+  for (const auto& kv : MetaData::MDL1DNames.left)
+    oss << kv.second << " ";
+  auto returnString = oss.str();
+  returnString.pop_back();
+  return returnString;
+}
+
 // -------------------- 2D LUT utility function ----------------------------
 
 const MetaData::LUT2D & ImageMetadataBase::operator[](const MDL2D& key) const
@@ -232,6 +260,16 @@ bool ImageMetadataBase::Has(const MDL2D& key) const
   return (LUT2DKeys.find(key) != LUT2DKeys.end());
 }
 
+//std::string ImageMetadataBase::GetKeyListL2D() const
+//{
+//  std::ostringstream oss;
+//  for (const auto& kv : MetaData::MDL2DNames.left)
+//    oss << kv.second << " ";
+//  auto returnString = oss.str();
+//  returnString.pop_back();
+//  return returnString;
+//}
+
 // -------------------- Time utility function ----------------------------
 
 const MetaData::TimePoint & ImageMetadataBase::operator[](const MDTime& key) const
@@ -252,6 +290,16 @@ size_t ImageMetadataBase::Remove(const MDTime& key)
 bool ImageMetadataBase::Has(const MDTime& key) const
 {
   return (TimeKeys.find(key) != TimeKeys.end());
+}
+
+std::string ImageMetadataBase::GetKeyListTime() const
+{
+  std::ostringstream oss;
+  for (const auto& kv : MetaData::MDTimeNames.left)
+    oss << kv.second << " ";
+  auto returnString = oss.str();
+  returnString.pop_back();
+  return returnString;
 }
 
 // -------------------- Extra keys utility function --------------------------

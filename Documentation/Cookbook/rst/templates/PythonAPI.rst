@@ -106,7 +106,7 @@ functions *SetParameters()* and *GetParameters()*.
 
 .. code-block:: python
 
-    params = {"in":"myInput.tif", "type.mean.radius":4}
+    params = {{"in":"myInput.tif", "type.mean.radius":4}}
     app.SetParameters(params)
     params2 = app.GetParameters()
 
@@ -328,12 +328,14 @@ functions:
 +---------------------------------+---------------------------------------+
 | ``GetImageProjection(...)``     | Projection WKT string                 |
 +---------------------------------+---------------------------------------+
-| ``GetImageMetaData(...)``       | the entire MetaDataDictionary         |
+| ``GetMetadataDictionary(...)``  | the entire MetaDataDictionary         |
 +---------------------------------+---------------------------------------+
 | ``GetImageRequestedRegion(...)``| requested region                      |
 +---------------------------------+---------------------------------------+
 | ``GetImageBasePixelType(...)``  | pixel type of the underlying          |
 |                                 | Image/VectorImage.                    |
++---------------------------------+---------------------------------------+
+| ``GetImageMetadata(...)``       | the ImateMetadata object              |
 +---------------------------------+---------------------------------------+
 
 All these getters functions use the following arguments:
@@ -372,26 +374,61 @@ The Python dictionary used has the following entries:
   * ``'spacing'``: signed spacing of the image
   * ``'size'``: full size of the image
   * ``'region'``: region of the image present in the buffer
-  * ``'metadata'``: metadata dictionary (contains projection, sensor model,...)
+  * ``'metadata'``: metadata dictionary (contains projection,...)
+
+The metadata dictionary contains various type of data. Here are the available keys of the dictionnary, ordered by type:
+
+* double:
+
+  {key_list_double}
+
+* string:
+
+  {key_list_string}
+
+* LUT 1D:
+
+  {key_list_l1d}
+
+* time object:
+
+  {key_list_time}
+
+This dictionary also contains metadata related to projection and
+sensor model. The coresponding keys are not accessible at the
+moment. But the dictionary offers a few extra methods:
+
+* ``GetProjectedGeometry()`` returns a string representing the
+  projection. It can be a WKN, an EPSG or a PROJ string.
+
+* ``GetProjectionWKT()`` returns a string representing the projection
+  as a WKT.
+
+* ``GetProjectionProj()`` returns a string representing the projection
+  as a PROJ string.
 
 Now some basic Q&A about this interface:
 
-    Q: What portion of the image is exported to Numpy array?
-    A: By default, the whole image is exported. If you had a non-empty requested
-    region (the result of calling PropagateRequestedRegion()), then this region
-    is exported.
+  * **What portion of the image is exported to Numpy array?**
     
-    Q: What is the difference between ImportImage and ImportVectorImage?
-    A: The first one is here for Applications that expect a monoband otb::Image.
-    In most cases, you will use the second one: ImportVectorImage.
+    By default, the whole image is exported. If you had a non-empty
+    requested region (the result of calling
+    PropagateRequestedRegion()), then this region is exported.
     
-    Q: What kind of objects are there in this dictionary export?
-    A: The array is a numpy.ndarray. The other fields are wrapped
-    objects from the OTB library but you can interact with them in a
-    Python way: they support ``len()`` and ``str()`` operator, as well as 
-    bracket operator ``[]``. Some of them also have a ``keys()`` function just like
-    dictionaries.
+  * **What is the difference between ImportImage and ImportVectorImage?**
     
+    The first one is here for Applications that expect a monoband
+    otb::Image.  In most cases, you will use the second one:
+    ImportVectorImage.
+    
+  * **What kind of objects are there in this dictionary export?**
+    
+    The array is a numpy.ndarray. The other fields are wrapped objects
+    from the OTB library but you can interact with them in a Python
+    way: they support ``len()`` and ``str()`` operator, as well as
+    bracket operator ``[]``. Some of them also have a ``keys()``
+    function just like dictionaries.
+
 This interface allows you to export OTB images (or extracts) to Numpy array,
 process them  by other means, and re-import them with preserved metadata. Please
 note that this is different from an in-memory connection.

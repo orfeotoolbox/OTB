@@ -24,17 +24,17 @@
 #include <string>
 #include <vector>
 #include <cstdio>
+#include <unordered_map>
 
 #include <boost/bimap.hpp>
 #include <boost/algorithm/string.hpp>
 
 #include "itkDataObject.h"
 #include "itkVariableLengthVector.h"
+
 #include "OTBMetadataExport.h"
 #include "otbStringUtils.h"
 #include "otbJoinContainer.h"
-
-#include <unordered_map>
 
 namespace otb
 {
