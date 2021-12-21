@@ -169,6 +169,14 @@ the applications will be installed in ``/theModuleInstallFolder/lib`` and the bi
 
 We strongly recommend **adding these exports in your .bashrc** in order to make your applications available system wise
 
+**Notes**
+
+While launching an application from a remote module, you might
+encounter an issue with an error message reporting a "symbol not
+found". This is a known bug, and there is a workaround. To compile the
+remote module, one should add the following option to ``cmake`` /
+``ccmake``: ``-DCMAKE_CXX_FLAGS=-D_GLIBCXX_USE_CXX11_ABI=0``.
+
 
 Writing your own remote module
 ------------------------------
