@@ -25,7 +25,6 @@
 #include "otbMath.h"
 #include "itkIndex.h"
 #include "itkMetaDataObject.h"
-#include "otbXMLMetadataSupplier.h"
 #include "otbSARMetadata.h"
 #include "otbSpatialReference.h"
 
@@ -477,6 +476,24 @@ void TerraSarXSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent
   Superclass::PrintSelf(os, indent);
 }
 
+InfoSceneCoord TerraSarXSarImageMetadataInterface::GetSceneCoord(const MetadataSupplierInterface& supplier, const std::string& path)
+{
+  InfoSceneCoord output;
+  output.referenceRow = supplier.GetAs<unsigned long>(path + ".refRow");
+  output.referenceColumn = supplier.GetAs<unsigned long>(path + ".refColumn");
+  output.latitude = supplier.GetAs<double>(path + ".lat");
+  output.longitude = supplier.GetAs<double>(path + ".lon");
+  output.rangeTime = supplier.GetAs<double>(path + ".rangeTime");
+  output.incidenceAngle = supplier.GetAs<double>(path + ".incidenceAngle");
+  std::istringstream iss(supplier.GetAs<std::string>(path + ".azimuthTimeUTC"));
+  if (!(iss >> output.azimuthTime))
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject,
+           << "Unable to decode " << supplier.GetAs<std::string>(path + ".azimuthTimeUTC"));
+  }
+  return output;
+}
+
 void ReadGeorefGCP(const otb::MetaData::TimePoint & azimuthTimeStart, const std::string & geoRefXmlFileName, ImageMetadata & imd, SARParam & param)
 {
   Projection::GCPParam gcp;
@@ -756,6 +773,7 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
 
 void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
 {
+  std::stringstream oss;
   // Main XML file
   std::string MainDirectory = itksys::SystemTools::GetParentDirectory(
         itksys::SystemTools::GetParentDirectory(m_MetadataSupplierInterface->GetResourceFile("")));
@@ -806,7 +824,6 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   else
   {
     // Retrieve the polarisation layer
-    std::stringstream oss;
     for(unsigned int band = 1 ; band <= numberOfCalFactor ; ++band)
     {
       oss.str("");
@@ -843,6 +860,15 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
                   MainDirectory + "/ANNOTATION/GEOREF.xml",
                   imd,
                   sarParam);
+  }
+
+  // Scene coordinate
+  sarParam.centerSceneCoord = GetSceneCoord(MainXMLFileMetadataSupplier, "level1Product.productInfo.sceneInfo.sceneCenterCoord");
+  for (unsigned int i = 1 ; i <= MainXMLFileMetadataSupplier.GetNumberOf("level1Product.productInfo.sceneInfo.sceneCornerCoord") ; ++i)
+  {
+    oss.str("");
+    oss << "level1Product.productInfo.sceneInfo.sceneCornerCoord_" << i;
+    sarParam.cornerSceneCoord.push_back(GetSceneCoord(MainXMLFileMetadataSupplier, oss.str()));
   }
 
   imd.Add(MDGeom::SAR, sarParam);
@@ -895,6 +921,17 @@ void TerraSarXSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     }
     
     ReadSARSensorModel(MainXMLFileMS, imd[MDStr::Polarization], sarParam);
+
+    // Scene coordinate
+    sarParam.centerSceneCoord = GetSceneCoord(*m_MetadataSupplierInterface, "sceneCoord.sceneCenterCoord");
+    for (unsigned int i = 0 ; i < m_MetadataSupplierInterface->GetAs<unsigned int>("sceneCoord.numberOfSceneCornerCoord") ; ++i)
+    {
+      std::stringstream oss;
+      oss.str("");
+      oss << "sceneCoord.sceneCornerCoord[" << i << "]";
+      sarParam.cornerSceneCoord.push_back(GetSceneCoord(*m_MetadataSupplierInterface, oss.str()));
+    }
+
     imd.Add(MDGeom::SAR, sarParam);
   }
 
