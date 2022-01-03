@@ -161,6 +161,38 @@ struct CoordinateConversionRecord
   static CoordinateConversionRecord FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
 };
 
+/** \struct InfoSceneCoord
+ * \brief Represents an InfoSceneCoord
+ */
+struct InfoSceneCoord
+{
+  /** Reference row (refRow) */
+  unsigned long referenceRow;
+
+  /** Reference column (refColumn) */
+  unsigned long referenceColumn;
+
+  /** Latitude (lat) */
+  double latitude;
+
+  /** Longitude (lon) */
+  double longitude;
+
+  /** Azimuth time (azimuthTimeUTC) */
+  MetaData::TimePoint azimuthTime;
+
+  /** Range time (rangeTime) */
+  double rangeTime;
+
+  /** Incidence angle (incidenceAngle) */
+  double incidenceAngle;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
+
+  /** Keywordlist import */
+  static InfoSceneCoord FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
+};
 
 /** \struct SARParam
  *
@@ -206,6 +238,10 @@ struct OTBMetadata_EXPORT SARParam
 
   /** Conversion coefficients from ground range to slant range */
   std::vector<CoordinateConversionRecord> groundRangeToSlantRangeRecords;
+
+  /** Scene coordinate */
+  InfoSceneCoord centerSceneCoord;
+  std::vector<InfoSceneCoord> cornerSceneCoord;
 
   /** Keywordlist export */
   void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const;

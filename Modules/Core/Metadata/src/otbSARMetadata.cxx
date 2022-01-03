@@ -157,12 +157,15 @@ void SARParam::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
   kwl.insert({prefix + "AzimuthSteeringRate", to_string_with_precision(azimuthSteeringRate)});
   kwl.insert({prefix + "RightLookingFlag", std::to_string(rightLookingFlag)});
 
+  centerSceneCoord.ToKeywordlist(kwl, prefix + "CenterSceneCoord");
+
   VectorToKeywordList(kwl, azimuthFmRates, prefix + "AzimuthFmRates");
   VectorToKeywordList(kwl, dopplerCentroids, prefix + "DopplerCentroid");
   VectorToKeywordList(kwl, orbits, prefix + "Orbits");
   VectorToKeywordList(kwl, burstRecords, prefix + "BurstRecords");
   VectorToKeywordList(kwl, slantRangeToGroundRangeRecords, prefix + "SlantRangeToGroundRangeRecords");
   VectorToKeywordList(kwl, groundRangeToSlantRangeRecords, prefix + "GroundRangeToSlantRangeRecords");
+  VectorToKeywordList(kwl, cornerSceneCoord, prefix + "CornerSceneCoord");
 
   for (const auto & kv : gcpTimes)
   {
@@ -191,12 +194,16 @@ void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
 
   numberOfLinesPerBurst = std::stoul(Get(kwl, prefix + "NumberOfLinesPerBurst"));
   numberOfSamplesPerBurst = std::stoul(Get(kwl, prefix + "NumberOfSamplesPerBurst"));
+
+  centerSceneCoord.FromKeywordlist(kwl, prefix + "CenterSceneCoord");
+
   KeywordlistToVector(azimuthFmRates, kwl, prefix + "AzimuthFmRates");
   KeywordlistToVector(dopplerCentroids, kwl, prefix + "DopplerCentroid");
   KeywordlistToVector(orbits, kwl, prefix + "Orbits");
   KeywordlistToVector(burstRecords, kwl, prefix + "BurstRecords");
   KeywordlistToVector(slantRangeToGroundRangeRecords, kwl, prefix + "SlantRangeToGroundRangeRecords");
   KeywordlistToVector(groundRangeToSlantRangeRecords, kwl, prefix + "GroundRangeToSlantRangeRecords");
+  KeywordlistToVector(cornerSceneCoord, kwl, prefix + "CornerSceneCoord");
 
   for (const auto & kv : kwl)
   {
@@ -400,6 +407,40 @@ CoordinateConversionRecord CoordinateConversionRecord::FromKeywordlist(const Met
 
   output.rg0 = std::stod(Get(kwl, prefix + "rg0"));
   output.coeffs = StringToDoubleVector(Get(kwl, prefix + "coeffs"));
+
+  return output;
+}
+
+void InfoSceneCoord::ToKeywordlist(MetaData::Keywordlist &kwl, const std::string &prefix) const
+{
+  std::ostringstream oss;
+  oss << azimuthTime;
+  kwl.insert({prefix + "AzimuthTime", oss.str()});
+  kwl.insert({prefix + "referenceRow", to_string_with_precision(referenceRow)});
+  kwl.insert({prefix + "referenceColumn", to_string_with_precision(referenceColumn)});
+  kwl.insert({prefix + "latitude", to_string_with_precision(latitude)});
+  kwl.insert({prefix + "longitude", to_string_with_precision(longitude)});
+  kwl.insert({prefix + "rangeTime", to_string_with_precision(rangeTime)});
+  kwl.insert({prefix + "incidenceAngle", to_string_with_precision(incidenceAngle)});
+}
+
+InfoSceneCoord InfoSceneCoord::FromKeywordlist(const MetaData::Keywordlist &kwl, const std::string &prefix)
+{
+  InfoSceneCoord output;
+
+  std::istringstream iss(Get(kwl, prefix + "AzimuthTime"));
+  if (!(iss >> output.azimuthTime))
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject,
+           << "Unable to decode " << Get(kwl, prefix + "AzimuthTime"));
+  }
+
+  output.referenceRow = std::stoul(Get(kwl, prefix + "referenceRow"));
+  output.referenceColumn = std::stoul(Get(kwl, prefix + "referenceColumn"));
+  output.latitude = std::stod(Get(kwl, prefix + "latitude"));
+  output.longitude = std::stod(Get(kwl, prefix + "longitude"));
+  output.rangeTime = std::stod(Get(kwl, prefix + "rangeTime"));
+  output.incidenceAngle = std::stod(Get(kwl, prefix + "incidenceAngle"));
 
   return output;
 }
