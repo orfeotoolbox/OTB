@@ -176,12 +176,8 @@ DEMHandler::DEMHandler() : m_Dataset(nullptr),
 
 DEMHandler::~DEMHandler()
 {
-  if (m_GeoidDS)
-  {
-    GDALClose(m_GeoidDS);
-  }
-
-  ClearDEMs();
+  // Close all elevation datasets
+  ClearElevationParameters();
 
   VSIUnlink(DEM_DATASET_PATH.c_str());
   VSIUnlink(DEM_WARPED_DATASET_PATH.c_str());
@@ -478,6 +474,20 @@ void DEMHandler::ClearDEMs()
   m_DatasetList.clear();
   Notify();
 }
+
+void DEMHandler::ClearElevationParameters()
+{
+  m_DefaultHeightAboveEllipsoid = 0.;
+  m_GeoidFilename.clear();
+
+  if (m_GeoidDS)
+  {
+    GDALClose(m_GeoidDS);
+  }
+
+  ClearDEMs(); // ClearDEMs calls Notify()
+}
+
 
 void DEMHandler::SetDefaultHeightAboveEllipsoid(double height)
 {
