@@ -778,7 +778,7 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   std::string MainDirectory = itksys::SystemTools::GetParentDirectory(
         itksys::SystemTools::GetParentDirectory(m_MetadataSupplierInterface->GetResourceFile("")));
   std::string MainFilePath =
-      ExtractXMLFiles::GetResourceFile(MainDirectory, "T[S|D]X1_SAR__.*.xml", false);
+      ExtractXMLFiles::GetResourceFile(MainDirectory, "(T[SD]X|PAZ)1_SAR__.*\\.xml", false);
   if (MainFilePath.empty())
   {
     otbGenericExceptionMacro(MissingMetadataException,
