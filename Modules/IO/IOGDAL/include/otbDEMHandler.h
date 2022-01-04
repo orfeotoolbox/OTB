@@ -166,9 +166,6 @@ public:
   /** Get Geoid file */
   std::string GetGeoidFile() const;
 
-  /** Clear the DEM list and close all DEM datasets */
-  void ClearDEMs();
-  
   /** Clear the DEM list and geoid filename, close all elevation datasets 
    * and reset the default height above ellipsoid */
   void ClearElevationParameters();
@@ -199,6 +196,9 @@ private:
 
   void CreateShiftedDataset();
 
+  /** Clear the DEM list and close all DEM datasets */
+  void ClearDEMs();
+  
   /** List of RAII capsules on all opened DEM datasets for memory management */
   std::vector<otb::GDALDatasetWrapper::Pointer> m_DatasetList;
   
