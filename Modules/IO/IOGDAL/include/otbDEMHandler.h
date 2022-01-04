@@ -169,6 +169,10 @@ public:
   /** Clear the DEM list and close all DEM datasets */
   void ClearDEMs();
   
+  /** Clear the DEM list and geoid filename, close all elevation datasets 
+   * and reset the default height above ellipsoid */
+  void ClearElevationParameters();
+  
   /** Add an element to the current list of observers. The obsever will be updated whenever the DEM configuration
   is modified*/
   void AttachObserver(DEMObserverInterface *observer) override {m_ObserverList.push_back(observer);};
@@ -188,7 +192,6 @@ protected:
   DEMHandler(); 
 
   ~DEMHandler();
-
 
 private:
   DEMHandler(const Self&) = delete;
