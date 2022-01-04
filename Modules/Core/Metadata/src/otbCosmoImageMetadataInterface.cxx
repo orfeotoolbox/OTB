@@ -259,6 +259,29 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   }
 
   sarParam.rightLookingFlag = lookSide == "RIGHT";
+
+  // Scene coordinate
+  std::vector<std::string> vGeoCoor;
+  otb::Utils::ConvertStringToVector(metadataBands[0]["S01_SBI_Top_Left_Geodetic_Coordinates"], vGeoCoor,
+      "S01_SBI_Top_Left_Geodetic_Coordinates", " ");
+  sarParam.ulSceneCoord.latitude = std::stod(vGeoCoor[0]);
+  sarParam.ulSceneCoord.longitude = std::stod(vGeoCoor[1]);
+  vGeoCoor.clear();
+  otb::Utils::ConvertStringToVector(metadataBands[0]["S01_SBI_Top_Right_Geodetic_Coordinates"], vGeoCoor,
+      "S01_SBI_Top_Right_Geodetic_Coordinates", " ");
+  sarParam.urSceneCoord.latitude = std::stod(vGeoCoor[0]);
+  sarParam.urSceneCoord.longitude = std::stod(vGeoCoor[1]);
+  vGeoCoor.clear();
+  otb::Utils::ConvertStringToVector(metadataBands[0]["S01_SBI_Bottom_Left_Geodetic_Coordinates"], vGeoCoor,
+      "S01_SBI_Bottom_Left_Geodetic_Coordinates", " ");
+  sarParam.llSceneCoord.latitude = std::stod(vGeoCoor[0]);
+  sarParam.llSceneCoord.longitude = std::stod(vGeoCoor[1]);
+  vGeoCoor.clear();
+  otb::Utils::ConvertStringToVector(metadataBands[0]["S01_SBI_Bottom_Right_Geodetic_Coordinates"], vGeoCoor,
+      "S01_SBI_Bottom_Right_Geodetic_Coordinates", " ");
+  sarParam.lrSceneCoord.latitude = std::stod(vGeoCoor[0]);
+  sarParam.lrSceneCoord.longitude = std::stod(vGeoCoor[1]);
+
   imd.Add(MDGeom::SAR, sarParam);
 
   // TODO: compute a GCP at the center of scene using the inverse sar model like it is done in ossim plugins
