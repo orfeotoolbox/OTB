@@ -6,9 +6,9 @@ The ``otb::DEMHandler`` class is a singleton, a reference to the singleton objec
 
 - GetHeightAboveEllipsoid(lon, lat)
     * SRTM and geoid both available: dem_value + geoid_offset
-    * No SRTM but geoid available: default height above ellipsoid + geoid_offset
+    * No SRTM but geoid available: default height above ellipsoid (0 by default) + geoid_offset
     * SRTM available, but no geoid: dem_value
-    * No SRTM and no geoid available: default height above ellipsoid
+    * No SRTM and no geoid available: default height above ellipsoid (0 by default)
 
 - GetHeightAboveMSL(lon, lat)
     * SRTM and geoid both available: dem_value
@@ -17,3 +17,7 @@ The ``otb::DEMHandler`` class is a singleton, a reference to the singleton objec
     * No SRTM and no geoid available: 0
 
 Several DEM tiles can be provided at the same time, using the ``OpenDEMDirectory`` method. All raster from the input directory will be opened by GDAL. Internally, a mosaic of all DEM tiles is then created as a virtual dataset (vrt).
+
+A geoid file can be opened using the ``OpenGeoidFile`` method, and the default height above ellipsoid can be set using ``OpenGeoidFile`` method.
+
+The ``ClearElevationParameters`` method can be used to clear the DEMs, the geoid and the default height above ellipsoid. All associated GDAL datasets will be closed.
