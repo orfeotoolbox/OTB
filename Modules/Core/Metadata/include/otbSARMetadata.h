@@ -241,7 +241,10 @@ struct OTBMetadata_EXPORT SARParam
 
   /** Scene coordinate */
   InfoSceneCoord centerSceneCoord;
-  std::vector<InfoSceneCoord> cornerSceneCoord;
+  InfoSceneCoord ulSceneCoord;
+  InfoSceneCoord urSceneCoord;
+  InfoSceneCoord lrSceneCoord;
+  InfoSceneCoord llSceneCoord;
 
   /** Keywordlist export */
   void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const;

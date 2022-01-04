@@ -868,7 +868,15 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   {
     oss.str("");
     oss << "level1Product.productInfo.sceneInfo.sceneCornerCoord_" << i;
-    sarParam.cornerSceneCoord.push_back(GetSceneCoord(MainXMLFileMetadataSupplier, oss.str()));
+    InfoSceneCoord isc = GetSceneCoord(MainXMLFileMetadataSupplier, oss.str());
+    if (isc.referenceRow == 1 && isc.referenceColumn > 1)
+      sarParam.urSceneCoord = isc;
+    else if (isc.referenceRow == imd[MDNum::NumberOfLines] && isc.referenceColumn > 1)
+      sarParam.lrSceneCoord = isc;
+    else if (isc.referenceRow == imd[MDNum::NumberOfLines] && isc.referenceColumn == 1)
+      sarParam.llSceneCoord = isc;
+    else
+      sarParam.ulSceneCoord = isc;
   }
 
   imd.Add(MDGeom::SAR, sarParam);
@@ -929,7 +937,15 @@ void TerraSarXSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
       std::stringstream oss;
       oss.str("");
       oss << "sceneCoord.sceneCornerCoord[" << i << "]";
-      sarParam.cornerSceneCoord.push_back(GetSceneCoord(*m_MetadataSupplierInterface, oss.str()));
+      InfoSceneCoord isc = GetSceneCoord(*m_MetadataSupplierInterface, oss.str());
+      if (isc.referenceRow == 1 && isc.referenceColumn > 1)
+        sarParam.urSceneCoord = isc;
+      else if (isc.referenceRow == imd[MDNum::NumberOfLines] && isc.referenceColumn > 1)
+        sarParam.lrSceneCoord = isc;
+      else if (isc.referenceRow == imd[MDNum::NumberOfLines] && isc.referenceColumn == 1)
+        sarParam.llSceneCoord = isc;
+      else
+        sarParam.ulSceneCoord = isc;
     }
 
     imd.Add(MDGeom::SAR, sarParam);

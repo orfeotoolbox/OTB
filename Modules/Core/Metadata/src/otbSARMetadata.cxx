@@ -158,6 +158,10 @@ void SARParam::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
   kwl.insert({prefix + "RightLookingFlag", std::to_string(rightLookingFlag)});
 
   centerSceneCoord.ToKeywordlist(kwl, prefix + "CenterSceneCoord");
+  ulSceneCoord.ToKeywordlist(kwl, prefix + "ulSceneCoord");
+  urSceneCoord.ToKeywordlist(kwl, prefix + "urSceneCoord");
+  lrSceneCoord.ToKeywordlist(kwl, prefix + "lrSceneCoord");
+  llSceneCoord.ToKeywordlist(kwl, prefix + "llSceneCoord");
 
   VectorToKeywordList(kwl, azimuthFmRates, prefix + "AzimuthFmRates");
   VectorToKeywordList(kwl, dopplerCentroids, prefix + "DopplerCentroid");
@@ -165,7 +169,6 @@ void SARParam::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
   VectorToKeywordList(kwl, burstRecords, prefix + "BurstRecords");
   VectorToKeywordList(kwl, slantRangeToGroundRangeRecords, prefix + "SlantRangeToGroundRangeRecords");
   VectorToKeywordList(kwl, groundRangeToSlantRangeRecords, prefix + "GroundRangeToSlantRangeRecords");
-  VectorToKeywordList(kwl, cornerSceneCoord, prefix + "CornerSceneCoord");
 
   for (const auto & kv : gcpTimes)
   {
@@ -196,6 +199,10 @@ void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
   numberOfSamplesPerBurst = std::stoul(Get(kwl, prefix + "NumberOfSamplesPerBurst"));
 
   centerSceneCoord.FromKeywordlist(kwl, prefix + "CenterSceneCoord");
+  ulSceneCoord.FromKeywordlist(kwl, prefix + "ulSceneCoord");
+  urSceneCoord.FromKeywordlist(kwl, prefix + "urSceneCoord");
+  lrSceneCoord.FromKeywordlist(kwl, prefix + "lrSceneCoord");
+  llSceneCoord.FromKeywordlist(kwl, prefix + "llSceneCoord");
 
   KeywordlistToVector(azimuthFmRates, kwl, prefix + "AzimuthFmRates");
   KeywordlistToVector(dopplerCentroids, kwl, prefix + "DopplerCentroid");
@@ -203,7 +210,6 @@ void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
   KeywordlistToVector(burstRecords, kwl, prefix + "BurstRecords");
   KeywordlistToVector(slantRangeToGroundRangeRecords, kwl, prefix + "SlantRangeToGroundRangeRecords");
   KeywordlistToVector(groundRangeToSlantRangeRecords, kwl, prefix + "GroundRangeToSlantRangeRecords");
-  KeywordlistToVector(cornerSceneCoord, kwl, prefix + "CornerSceneCoord");
 
   for (const auto & kv : kwl)
   {
