@@ -23,7 +23,7 @@ for the binary packages of OTB 7.1 and above. In this case QGIS 3.14 or more sho
 The table below summarizes which version of OTB can be used with which version of QGIS.
 
 +---------------+-----------------+-----------------+-----------------+-----------------+
-|               | QGIS 3.8 - 3.12 | QGIS 3.14       | QGIS 3.16       | QGIS 3.18       |
+|               | QGIS 3.8 - 3.12 | QGIS 3.14       | QGIS 3.16       | QGIS >= 3.18    |
 +---------------+-----------------+-----------------+-----------------+-----------------+
 | OTB 6.6.1     | Compatible      | Compatible      | Compatible      | Compatible      |
 +---------------+-----------------+-----------------+-----------------+-----------------+
