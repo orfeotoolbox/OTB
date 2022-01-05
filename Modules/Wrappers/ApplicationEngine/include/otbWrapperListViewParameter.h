@@ -173,7 +173,7 @@ public:
 
   void FromString(const std::string& value) override
   {
-    SetValue(value);
+    SetSelectedNames({value});
   }
 
   std::vector<std::string> ToStringList() const override
