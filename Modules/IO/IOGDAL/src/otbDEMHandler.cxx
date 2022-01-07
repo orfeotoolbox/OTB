@@ -226,6 +226,7 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
   if (m_DatasetList.empty())
   {
     m_Dataset = nullptr;
+    otbLogMacro(Warning, << "No DEM found in "<< DEMDirectory)
   }
   else
   {
@@ -264,11 +265,15 @@ bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
     }
     m_GeoidDS = static_cast<GDALDataset*>(ds);
     m_GeoidFilename = geoidFile;
-  }
 
-  if(m_Dataset)
+    if(m_Dataset)
+    {
+      CreateShiftedDataset();
+    }
+  }
+  else
   {
-    CreateShiftedDataset();
+    otbLogMacro(Warning, << "Cannot open geoid file "<< geoidFile)
   }
 
   Notify();
