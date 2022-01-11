@@ -86,7 +86,8 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
             if app.GetListViewSingleSelectionMode(param):
                 output += "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(value)+")"
             else:
-                output += "\t" + appname + ".SetParameterStringList("+EncloseString(param)+", "+EncloseString(value)+")"
+                values = value.split()
+                output += "\t" + appname + ".SetParameterStringList("+EncloseString(param)+", "+ str(values) +")"
         if paramtype == ParameterType_Group:
             pass
         if paramtype ==  ParameterType_Choice:
