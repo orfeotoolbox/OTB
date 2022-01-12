@@ -162,9 +162,29 @@ The following commands can be executed on Ubuntu 18.04 or Ubuntu 20.04, for exam
   source otbenv.profile
   ctest -S share/otb/swig/build_wrapping.cmake -VV
 
+CENTOS 7
+++++++++
 
-TODO: CENTOS
-++++++++++++
+   ..code-block:: bash
+
+   #Add the SCL repositories to install python 3.8 and gcc 8
+   yum -y install epel-release centos-release-scl
+
+   #Install required dependencies for python bindings recompilation
+   yum -y install devtoolset-8 cmake3 rh-python38 rh-python38-python-devel rh-python38-python-numpy swig3 mesa-libGL-devel mesa-libGLU-devel
+
+   #Enable the environement
+   scl enable rh-python38 devtoolset-8 -- /bin/bash
+
+   # Extract the archive
+   chmod +x OTB-8.0.0-rc1-Linux64.run
+   ./OTB-8.0.0-rc1-Linux64.run
+
+   # recompile the Python bindings
+   cd OTB-8.0.0-Linux64
+   source otbenv.profile
+   ctest3 -S share/otb/swig/build_wrapping.cmake -VV
+
 
 FAQ
 ~~~
