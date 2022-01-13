@@ -173,6 +173,10 @@ CENTOS 7
    #Install required dependencies for python bindings recompilation
    yum -y install devtoolset-8 cmake3 rh-python38 rh-python38-python-devel rh-python38-python-numpy swig3 mesa-libGL-devel mesa-libGLU-devel
 
+   #Required dependencies for running OTB GUI tools
+	yum install libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libxcb-devel libxkbcommon-devel libxkbcommon-x11-devel 
+   yum install xcb-util-devel xcb-util-image-devel xcb-util-keysyms-devel xcb-util-renderutil-devel xcb-util-wm-devel
+
    #Enable the environement
    scl enable rh-python38 devtoolset-8 -- /bin/bash
 
