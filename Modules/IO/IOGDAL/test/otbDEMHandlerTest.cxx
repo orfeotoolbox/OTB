@@ -24,9 +24,9 @@
 
 int otbDEMHandlerTest(int argc, char* argv[])
 {
-  if (argc != 9)
+  if (argc != 10)
   {
-    std::cerr << "Usage: " << argv[0] << " demdir[path|no] geoid[path|no] defaultHeight longitude latitude aboveMSLFlag targetValue tolerance" << std::endl;
+    std::cerr << "Usage: " << argv[0] << " demdir[path|no] geoid[path|no] defaultHeight longitude latitude aboveMSLFlag targetValue tolerance clear[yes|no]" << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -39,6 +39,7 @@ int otbDEMHandlerTest(int argc, char* argv[])
   bool        aboveMSL      = atoi(argv[6]);
   double      target        = atof(argv[7]);
   double      tolerance     = atof(argv[8]);
+  std::string clear         = argv[9];
 
   auto& demHandler = otb::DEMHandler::GetInstance();
   demHandler.SetDefaultHeightAboveEllipsoid(defaultHeight);
@@ -108,6 +109,22 @@ int otbDEMHandlerTest(int argc, char* argv[])
     std::cerr << "Target value is " << target << " meters, computed value is " << height << " meters. error (" << error << " meters) > tolerance (" << tolerance
               << " meters)" << std::endl;
     fail = true;
+  }
+
+  // Test clear
+  if (clear == "yes")
+  {
+    demHandler.ClearElevationParameters();
+    if (demHandler.GetDefaultHeightAboveEllipsoid() != 0.0)
+    {
+      std::cerr << "ClearElevationParameters didn't set DefaultHeightAboveEllipsoid to 0" << std::endl;
+      fail = true;
+    }
+    if (!demHandler.GetGeoidFile().empty())
+    {
+      std::cerr << "ClearElevationParameters didn't empty GeoidFile" << std::endl;
+      fail = true;
+    }
   }
 
   if (fail)

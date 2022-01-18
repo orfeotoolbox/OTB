@@ -263,6 +263,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid_NoData COMMAND ot
   0
   40
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveMSL_NoSRTM_Geoid COMMAND otbIOGDALTestDriver
@@ -275,6 +276,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_NoSRTM_Geoid COMMAND otbIOGDALTestDriv
   1
   0
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_BadSRTM_Geoid COMMAND otbIOGDALTestDriver
@@ -287,6 +289,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_BadSRTM_Geoid COMMAND otbIOGDALT
   0
   383.580313671
   0.001
+  no
   )
 set_property(TEST uaTvDEMHandler_AboveEllipsoid_BadSRTM_Geoid PROPERTY WILL_FAIL 1)
 
@@ -300,6 +303,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid COMMAND otbIOGDALTestDr
   1
   0
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_NoSRTM_Geoid COMMAND otbIOGDALTestDriver
@@ -312,6 +316,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_NoSRTM_Geoid COMMAND otbIOGDALTe
   0
   44.067113
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid COMMAND otbIOGDALTestDriver
@@ -324,6 +329,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid COMMAND otbIOGDALTest
   0
   383.580313671
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoSRTMCoverage COMMAND otbIOGDALTestDriver
@@ -336,6 +342,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoSRTMCoverage COMMAND ot
   1
   0
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid_NoSRTMCoverage COMMAND otbIOGDALTestDriver
@@ -348,6 +355,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid_NoSRTMCoverage COMM
   0
   20
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_NoGeoid COMMAND otbIOGDALTestDriver
@@ -360,6 +368,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_NoGeoid COMMAND otbIOGDALTestDriv
   1
   339.513
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid COMMAND otbIOGDALTestDriver
@@ -372,6 +381,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid COMMAND otbIOGDALTe
   0
   339.513
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid_NoData COMMAND otbIOGDALTestDriver
@@ -384,6 +394,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid_NoData COMMAND otbIOG
   0
   45.7464
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid COMMAND otbIOGDALTestDriver
@@ -396,6 +407,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid COMMAND otbIOGDALT
   0
   339.513
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid_2 COMMAND otbIOGDALTestDriver
@@ -408,6 +420,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid_2 COMMAND otbIOGDA
   0
   339.513
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoData COMMAND otbIOGDALTestDriver
@@ -420,6 +433,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoData COMMAND otbIOGDALT
   1
   0
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_BDALTI_TIF_NoGeoid COMMAND otbIOGDALTestDriver
@@ -432,6 +446,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_BDALTI_TIF_NoGeoid COMMAND otbIO
   0
   869
   1
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoData COMMAND otbIOGDALTestDriver
@@ -444,6 +459,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoData COMMAND otbIOGDALTes
   1
   0
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid_NoData COMMAND otbIOGDALTestDriver
@@ -456,6 +472,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_NoSRTM_NoGeoid_NoData COMMAND otbIOGDA
   1
   0
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_Geoid COMMAND otbIOGDALTestDriver
@@ -468,6 +485,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_Geoid COMMAND otbIOGDALTestDriver
   1
   339.513
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid COMMAND otbIOGDALTestDriver
@@ -480,6 +498,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_NoSRTM_NoGeoid COMMAND otbIOGDAL
   0
   40
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoSRTMCoverage COMMAND otbIOGDALTestDriver
@@ -492,6 +511,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_Geoid_NoSRTMCoverage COMMAND otbI
   1
   0
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid_NoSRTMCoverage COMMAND otbIOGDALTestDriver
@@ -504,6 +524,7 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_Geoid_NoSRTMCoverage COMMAN
   0
   21.569 # Geoid offset
   0.001
+  no
   )
 
 otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid_NoData COMMAND otbIOGDALTestDriver
@@ -516,6 +537,20 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_NoGeoid_NoData COMMAND otbI
   0
   40
   0.001
+  no
+  )
+
+otb_add_test(NAME uaTvDEMHandler_ClearElevationParameters COMMAND otbIOGDALTestDriver
+  otbDEMHandlerTest
+  no
+  ${INPUTDATA}/DEM/egm96.grd
+  40
+  8.434583
+  44.647083
+  1
+  0
+  0.001
+  yes
   )
 
 otb_add_test(NAME TuGDALRPCTransformerTest
