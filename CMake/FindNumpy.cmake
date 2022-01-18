@@ -24,8 +24,13 @@
 #   NUMPY_FOUND        - True if Numpy headers are found.
 #   NUMPY_INCLUDE_DIR   - where to find numpy/arrayobject.h, etc.
 
+# The name of the Python variable has changed in cmake 3.12
+if(CMAKE_VERSION VERSION_LESS 3.12.0)
+  set(Python_EXECUTABLE ${PYTHON_EXECUTABLE})
+endif()
+
 execute_process(
-  COMMAND "${PYTHON_EXECUTABLE}" -c "import sys, numpy; sys.stdout.write(numpy.get_include())"
+  COMMAND "${Python_EXECUTABLE}" -c "import sys, numpy; sys.stdout.write(numpy.get_include())"
   OUTPUT_VARIABLE NUMPY_INCLUDE_DIR
   RESULT_VARIABLE NUMPY_NOT_FOUND)
 
