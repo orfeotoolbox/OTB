@@ -254,30 +254,39 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
 bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
 {
   int pbError;
-  auto ds = GDALOpenVerticalShiftGrid(geoidFile.c_str(), &pbError);
-  
-  // pbError is set to TRUE if an error happens.
-  if (pbError == 0)
-  {
-    if (m_GeoidDS)
-    {
-      GDALClose(m_GeoidDS);
-    }
-    m_GeoidDS = static_cast<GDALDataset*>(ds);
-    m_GeoidFilename = geoidFile;
 
-    if(m_Dataset)
-    {
-      CreateShiftedDataset();
-    }
-  }
-  else
+  auto ds = GDALOpenVerticalShiftGrid(geoidFile.c_str(), &pbError);
+
+  // pbError is set to TRUE if an error happens.
+  if (pbError != 0)
   {
     otbLogMacro(Warning, << "Cannot open geoid file "<< geoidFile)
+    return false;
+  }
+  
+  auto gdalds = static_cast<GDALDataset*>(ds);
+
+  if (!(gdalds->GetSpatialRef()) || gdalds->GetSpatialRef()->IsEmpty())
+  {
+    otbLogMacro(Warning, << "input geoid file "<< geoidFile << " will not be used because it has no input projection.")
+    return false;
   }
 
+  if (m_GeoidDS)
+  {
+    GDALClose(m_GeoidDS);
+  }
+  
+  m_GeoidDS = gdalds;
+  m_GeoidFilename = geoidFile;
+
+  if(m_Dataset)
+  {
+    CreateShiftedDataset();
+  }
+  
   Notify();
-  return pbError;
+  return true;
 }
 
 
@@ -317,15 +326,6 @@ void DEMHandler::CreateShiftedDataset()
                       m_Dataset->GetRasterYSize(), 
                       geoTransform, 
                       warpOptions));
-
-/*
-  auto warpedDataset = dynamic_cast<VRTDataset*>(ds);
-  if(warpedDataset)
-  {
-    auto xmlWarpedDs= CPLSerializeXMLTree(warpedDataset->SerializeToXML(nullptr));
-    std::cout << xmlWarpedDs << std::endl;
-  }
-*/
 
   ds->SetDescription(DEM_WARPED_DATASET_PATH.c_str());
   GDALClose(ds);

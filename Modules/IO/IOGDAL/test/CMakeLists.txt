@@ -397,7 +397,18 @@ otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid COMMAND otbIOGDALT
   339.513
   0.001
   )
-set_property(TEST uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid PROPERTY WILL_FAIL true)
+
+otb_add_test(NAME uaTvDEMHandler_AboveEllipsoid_SRTM_BadGeoid_2 COMMAND otbIOGDALTestDriver
+  otbDEMHandlerTest
+  ${INPUTDATA}/DEM/srtm_directory/
+  ${INPUTDATA}/acqui-params.txt
+  40
+  8.434583
+  44.647083
+  0
+  339.513
+  0.001
+  )
 
 otb_add_test(NAME uaTvDEMHandler_AboveMSL_SRTM_NoGeoid_NoData COMMAND otbIOGDALTestDriver
   otbDEMHandlerTest
