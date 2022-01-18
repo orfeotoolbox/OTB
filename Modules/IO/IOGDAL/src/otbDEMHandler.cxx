@@ -266,7 +266,17 @@ bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
   
   auto gdalds = static_cast<GDALDataset*>(ds);
 
+#if GDAL_VERSION_NUM >= 3000000
   if (!(gdalds->GetSpatialRef()) || gdalds->GetSpatialRef()->IsEmpty())
+#else
+  if (strlen(gdalds->GetProjectionRef()) == 0 )
+#endif
+  {
+    otbLogMacro(Warning, << "input geoid file "<< geoidFile << " will not be used because it has no input projection.")
+    return false;
+  }
+
+
   {
     otbLogMacro(Warning, << "input geoid file "<< geoidFile << " will not be used because it has no input projection.")
     return false;
