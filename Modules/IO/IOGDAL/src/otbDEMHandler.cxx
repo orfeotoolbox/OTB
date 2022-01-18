@@ -488,6 +488,7 @@ void DEMHandler::ClearElevationParameters()
   if (m_GeoidDS)
   {
     GDALClose(m_GeoidDS);
+    m_GeoidDS = nullptr;
   }
 
   ClearDEMs(); // ClearDEMs calls Notify()
