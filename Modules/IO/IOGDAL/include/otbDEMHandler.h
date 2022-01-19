@@ -27,8 +27,6 @@
 namespace otb
 {
 
-
-
 /** \class DEMObserverInterface
  *
  * \brief Observer design pattern to keep track of DEM configuration changes
@@ -52,7 +50,6 @@ class DEMSubjectInterface {
   virtual void DetachObserver(DEMObserverInterface *observer) = 0;
   virtual void Notify() const = 0;
 };
-
 
 /** \class DEMHandler
  *
@@ -100,6 +97,8 @@ class DEMHandler : public DEMSubjectInterface
 public:
   using Self =          DEMHandler;
   using PointType =     itk::Point<double, 2>;
+
+  using DatasetUPtr = std::unique_ptr<GDALDataset, void(*)(GDALDataset*)>;
 
   /** Retrieve the singleton instance */
   static DEMHandler & GetInstance();
@@ -203,10 +202,10 @@ private:
   std::vector<otb::GDALDatasetWrapper::Pointer> m_DatasetList;
   
   /** Pointer to the DEM dataset */
-  GDALDataset * m_Dataset;
+  DatasetUPtr m_Dataset = DatasetUPtr(nullptr, [](GDALDataset* DS){GDALClose(DS);DS=nullptr;});
 
   /** Pointer to the geoid dataset */
-  GDALDataset* m_GeoidDS;
+  DatasetUPtr m_GeoidDS = DatasetUPtr(nullptr, [](GDALDataset* DS){GDALClose(DS);DS=nullptr;});
   
   /** Default height above elliposid, used when no DEM or geoid height is available. */
   double m_DefaultHeightAboveEllipsoid;
