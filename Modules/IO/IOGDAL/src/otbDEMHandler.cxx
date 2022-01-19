@@ -276,12 +276,6 @@ bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
     return false;
   }
 
-
-  {
-    otbLogMacro(Warning, << "input geoid file "<< geoidFile << " will not be used because it has no input projection.")
-    return false;
-  }
-
   if (m_GeoidDS)
   {
     GDALClose(m_GeoidDS);
