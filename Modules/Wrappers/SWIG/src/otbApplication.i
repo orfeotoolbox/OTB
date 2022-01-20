@@ -614,25 +614,37 @@ class ApplicationProxy(object):
                        ParameterType_OutputFilename,
                        ParameterType_Directory, ParameterType_InputImage,
                        ParameterType_InputVectorData]:
+        if not isinstance(value, str):
+          raise TypeError("Expected a string for '%s' parameter in %s, got %s for %s" % (paramKey, self.GetName(), type(value), value))
         return self.SetParameterString(paramKey, value)
       elif paramType in [ParameterType_InputImageList, ParameterType_InputVectorDataList,
                          ParameterType_InputFilenameList, ParameterType_StringList,
                          ParameterType_ListView, ParameterType_Field, ParameterType_Band]:
+        if not isinstance(value, list):
+          raise TypeError("Expected a list for '%s' parameter in %s, got %s for %s" % (paramKey, self.GetName(), type(value), value))
         return self.SetParameterStringList(paramKey, value)
       elif paramType in [ParameterType_Int, ParameterType_Radius, ParameterType_RAM]:
+        if not isinstance(value, int):
+          raise TypeError("Expected an int for '%s' parameter in %s, got %s for %s" % (paramKey, self.GetName(), type(value), value))
         return self.SetParameterInt(paramKey, value)
       elif paramType in [ParameterType_Float]:
+        if not isinstance(value, (int, float)):
+          raise TypeError("Expected a float for '%s' parameter in %s, got %s for %s" % (paramKey, self.GetName(), type(value), value))
         return self.SetParameterFloat(paramKey, value)
       elif paramType in [ParameterType_Double]:
+        if not isinstance(value, (int, float)):
+          raise TypeError("Expected a float for '%s' parameter in %s, got %s for %s" % (paramKey, self.GetName(), type(value), value))
         return self.SetParameterDouble(paramKey, value)
       elif paramType in [ParameterType_Bool]:
+        if not isinstance(value, bool):
+          raise TypeError("Expected a bool for '%s' parameter in %s, got %s for %s" % (paramKey, self.GetName(), type(value), value))
         return self.SetParameterString(paramKey, str(value) )
       elif paramType in [ParameterType_Group]:
         return ApplicationProxy(self, paramKey)
       elif paramType in [ParameterType_Choice]:
         return ApplicationProxy(self, paramKey, value)
       else:
-        print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType) ,paramKey))
+        print ("Unsupported parameter type '%s' with key '%s'" %(self.GetParameterTypeAsString(paramType), paramKey))
       return
 
     def GetParameters(self):
