@@ -202,10 +202,10 @@ private:
   std::vector<otb::GDALDatasetWrapper::Pointer> m_DatasetList;
   
   /** Pointer to the DEM dataset */
-  DatasetUPtr m_Dataset = DatasetUPtr(nullptr, [](GDALDataset* DS){if(DS){GDALClose(DS);DS=nullptr;}});
+  DatasetUPtr m_Dataset = DatasetUPtr(nullptr, [](GDALDataset* DS){if(DS){GDALClose(DS);}});
 
   /** Pointer to the geoid dataset */
-  DatasetUPtr m_GeoidDS = DatasetUPtr(nullptr, [](GDALDataset* DS){if(DS){GDALClose(DS);DS=nullptr;}});
+  DatasetUPtr m_GeoidDS = DatasetUPtr(nullptr, [](GDALDataset* DS){if(DS){GDALClose(DS);}});
   
   /** Default height above elliposid, used when no DEM or geoid height is available. */
   double m_DefaultHeightAboveEllipsoid;
