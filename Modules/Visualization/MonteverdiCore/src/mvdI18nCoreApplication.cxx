@@ -395,7 +395,7 @@ bool I18nCoreApplication::ElevationSetup()
 
     try
     {
-      demHandlerInstance.ClearDEMs();
+      demHandlerInstance.ClearElevationParameters();
 
       demHandlerInstance.OpenDEMDirectory(QFile::encodeName(I18nCoreApplication::RetrieveSettingsKey(I18nCoreApplication::SETTINGS_KEY_SRTM_DIR).toString()).toStdString());
     }
@@ -411,7 +411,7 @@ bool I18nCoreApplication::ElevationSetup()
   }
   else
   {
-    otb::DEMHandler::GetInstance().ClearDEMs();
+    otb::DEMHandler::GetInstance().ClearElevationParameters();
   }
 
   return geoidUpdated;

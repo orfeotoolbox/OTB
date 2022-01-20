@@ -27,8 +27,6 @@
 namespace otb
 {
 
-
-
 /** \class DEMObserverInterface
  *
  * \brief Observer design pattern to keep track of DEM configuration changes
@@ -52,7 +50,6 @@ class DEMSubjectInterface {
   virtual void DetachObserver(DEMObserverInterface *observer) = 0;
   virtual void Notify() const = 0;
 };
-
 
 /** \class DEMHandler
  *
@@ -100,6 +97,8 @@ class DEMHandler : public DEMSubjectInterface
 public:
   using Self =          DEMHandler;
   using PointType =     itk::Point<double, 2>;
+
+  using DatasetUPtr = std::unique_ptr<GDALDataset, void(*)(GDALDataset*)>;
 
   /** Retrieve the singleton instance */
   static DEMHandler & GetInstance();
@@ -166,8 +165,9 @@ public:
   /** Get Geoid file */
   std::string GetGeoidFile() const;
 
-  /** Clear the DEM list and close all DEM datasets */
-  void ClearDEMs();
+  /** Clear the DEM list and geoid filename, close all elevation datasets 
+   * and reset the default height above ellipsoid */
+  void ClearElevationParameters();
   
   /** Add an element to the current list of observers. The obsever will be updated whenever the DEM configuration
   is modified*/
@@ -189,21 +189,23 @@ protected:
 
   ~DEMHandler();
 
-
 private:
   DEMHandler(const Self&) = delete;
   void operator=(const Self&) = delete;  
 
   void CreateShiftedDataset();
 
+  /** Clear the DEM list and close all DEM datasets */
+  void ClearDEMs();
+  
   /** List of RAII capsules on all opened DEM datasets for memory management */
   std::vector<otb::GDALDatasetWrapper::Pointer> m_DatasetList;
   
   /** Pointer to the DEM dataset */
-  GDALDataset * m_Dataset;
+  DatasetUPtr m_Dataset = DatasetUPtr(nullptr, [](GDALDataset* DS){if(DS){GDALClose(DS);}});
 
   /** Pointer to the geoid dataset */
-  GDALDataset* m_GeoidDS;
+  DatasetUPtr m_GeoidDS = DatasetUPtr(nullptr, [](GDALDataset* DS){if(DS){GDALClose(DS);}});
   
   /** Default height above elliposid, used when no DEM or geoid height is available. */
   double m_DefaultHeightAboveEllipsoid;

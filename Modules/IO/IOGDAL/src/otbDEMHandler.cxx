@@ -167,21 +167,15 @@ DEMHandler & DEMHandler::GetInstance()
   return s_instance;
 }
 
-DEMHandler::DEMHandler() : m_Dataset(nullptr),
-                           m_GeoidDS(nullptr),
-                           m_DefaultHeightAboveEllipsoid(0.0)
+DEMHandler::DEMHandler() : m_DefaultHeightAboveEllipsoid(0.0)
 {
   GDALAllRegister();
-};
+}
 
 DEMHandler::~DEMHandler()
 {
-  if (m_GeoidDS)
-  {
-    GDALClose(m_GeoidDS);
-  }
-
-  ClearDEMs();
+  // Close all elevation datasets
+  ClearElevationParameters();
 
   VSIUnlink(DEM_DATASET_PATH.c_str());
   VSIUnlink(DEM_WARPED_DATASET_PATH.c_str());
@@ -197,7 +191,7 @@ void DEMHandler::OpenDEMFile(const std::string& path)
                                nullptr, nullptr, nullptr);
   // Need to close the dataset, so it is flushed into memory.
   GDALClose(close_me);
-  m_Dataset = static_cast<GDALDataset*>(GDALOpen(DEM_DATASET_PATH.c_str(), GA_ReadOnly));
+  m_Dataset.reset(static_cast<GDALDataset*>(GDALOpen(DEM_DATASET_PATH.c_str(), GA_ReadOnly)));
   m_DEMDirectories.push_back(path);
 
   if(m_GeoidDS)
@@ -229,7 +223,8 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
   // Don't build a vrt if there is no dataset
   if (m_DatasetList.empty())
   {
-    m_Dataset = nullptr;
+    m_Dataset.reset(nullptr);
+    otbLogMacro(Warning, << "No DEM found in "<< DEMDirectory)
   }
   else
   {
@@ -243,7 +238,7 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
                                  nullptr, nullptr, nullptr);
     // Need to close the dataset, so it is flushed into memory.
     GDALClose(close_me);
-    m_Dataset = static_cast<GDALDataset*>(GDALOpen(DEM_DATASET_PATH.c_str(), GA_ReadOnly));
+    m_Dataset.reset(static_cast<GDALDataset*>(GDALOpen(DEM_DATASET_PATH.c_str(), GA_ReadOnly)));
     m_DEMDirectories.push_back(DEMDirectory);
   }
 
@@ -256,27 +251,34 @@ void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
 
 bool DEMHandler::OpenGeoidFile(const std::string& geoidFile)
 {
-  int pbError;
-  auto ds = GDALOpenVerticalShiftGrid(geoidFile.c_str(), &pbError);
-  
-  // pbError is set to TRUE if an error happens.
-  if (pbError == 0)
+  auto gdalds = static_cast<GDALDataset*>(GDALOpen(geoidFile.c_str(), GA_ReadOnly));
+
+  if (!gdalds)
   {
-    if (m_GeoidDS)
-    {
-      GDALClose(m_GeoidDS);
-    }
-    m_GeoidDS = static_cast<GDALDataset*>(ds);
-    m_GeoidFilename = geoidFile;
+    otbLogMacro(Warning, << "Cannot open geoid file "<< geoidFile)
+    return false;
   }
+
+#if GDAL_VERSION_NUM >= 3000000
+  if (!(gdalds->GetSpatialRef()) || gdalds->GetSpatialRef()->IsEmpty())
+#else
+  if (strlen(gdalds->GetProjectionRef()) == 0 )
+#endif
+  {
+    otbLogMacro(Warning, << "input geoid file "<< geoidFile << " will not be used because it has no input projection.")
+    return false;
+  }
+
+  m_GeoidDS.reset(gdalds);
+  m_GeoidFilename = geoidFile;
 
   if(m_Dataset)
   {
     CreateShiftedDataset();
   }
-
+  
   Notify();
-  return pbError;
+  return true;
 }
 
 
@@ -290,7 +292,7 @@ void DEMHandler::CreateShiftedDataset()
 
   // Warp geoid dataset
   auto warpOptions = GDALCreateWarpOptions();;
-  warpOptions->hSrcDS = m_GeoidDS;
+  warpOptions->hSrcDS = m_GeoidDS.get();
   //warpOptions->hDstDS = m_Dataset;
   warpOptions->eResampleAlg =  GRA_Bilinear;
   warpOptions->eWorkingDataType = GDT_Float64;
@@ -304,27 +306,18 @@ void DEMHandler::CreateShiftedDataset()
 
   // Establish reprojection transformer.
   warpOptions->pTransformerArg =
-        GDALCreateGenImgProjTransformer( m_GeoidDS,
-                                        GDALGetProjectionRef(m_GeoidDS),
-                                        m_Dataset,
-                                        GDALGetProjectionRef(m_Dataset),
+        GDALCreateGenImgProjTransformer( m_GeoidDS.get(),
+                                        GDALGetProjectionRef(m_GeoidDS.get()),
+                                        m_Dataset.get(),
+                                        GDALGetProjectionRef(m_Dataset.get()),
                                         FALSE, 0.0, 1 );
   warpOptions->pfnTransformer = GDALGenImgProjTransform;
 
-  auto ds = static_cast<GDALDataset *> (GDALCreateWarpedVRT(m_GeoidDS, 
+  auto ds = static_cast<GDALDataset *> (GDALCreateWarpedVRT(m_GeoidDS.get(),
                       m_Dataset->GetRasterXSize(), 
                       m_Dataset->GetRasterYSize(), 
                       geoTransform, 
                       warpOptions));
-
-/*
-  auto warpedDataset = dynamic_cast<VRTDataset*>(ds);
-  if(warpedDataset)
-  {
-    auto xmlWarpedDs= CPLSerializeXMLTree(warpedDataset->SerializeToXML(nullptr));
-    std::cout << xmlWarpedDs << std::endl;
-  }
-*/
 
   ds->SetDescription(DEM_WARPED_DATASET_PATH.c_str());
   GDALClose(ds);
@@ -478,6 +471,16 @@ void DEMHandler::ClearDEMs()
   m_DatasetList.clear();
   Notify();
 }
+
+void DEMHandler::ClearElevationParameters()
+{
+  m_DefaultHeightAboveEllipsoid = 0.;
+  m_GeoidFilename.clear();
+  m_GeoidDS.reset(nullptr);
+
+  ClearDEMs(); // ClearDEMs calls Notify()
+}
+
 
 void DEMHandler::SetDefaultHeightAboveEllipsoid(double height)
 {
