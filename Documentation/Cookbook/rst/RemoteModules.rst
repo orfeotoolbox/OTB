@@ -452,7 +452,7 @@ version.
   files provided.
 
   - For that purpose you can **drop** this simplified and generic version of
-    :download:`gdal-config <../Documentation/Cookbook/Scripts/gdal-config>` into the
+    :download:`gdal-config <../Scripts/gdal-config>` into the
     ``bin/`` directory where you've extracted OTB. This will permit :samp:`pip
     install gdal=={vernum}` to work correctly.
   - You'll also have to **patch** ``otbenv.profile`` to **insert** OTB ``lib/``
