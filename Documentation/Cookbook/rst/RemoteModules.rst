@@ -436,6 +436,36 @@ Overall CMakeLists.txt should look like:
                      APP  EmptyApp
                      )
 
+Use Python OTB & GDAL dependency in your module
++++++++++++++++++++++++++++++++++++++++++++++++
+
+If your module have a Python part, which is using OTB python bindings, you should encounter some troubles with the binary version, here is how to fix it:
+
+First install OTB on your platform. See the `related documentation
+<https://www.orfeo-toolbox.org/CookBook-7.4/Installation.html>`_ to install OTB
+on your system..
+
+Then, you'll need a version of GDAL which is compatible with your OTB
+version.
+
+- In case you're using OTB binary distribution, you'll need to **patch** the
+  files provided.
+
+  - For that purpose you can **drop** this simplified and generic version of
+    :download:`gdal-config <../Documentation/Cookbook/Scripts/gdal-config>` into the
+    ``bin/`` directory where you've extracted OTB. This will permit :samp:`pip
+    install gdal=={vernum}` to work correctly.
+  - You'll also have to **patch** ``otbenv.profile`` to **insert** OTB ``lib/``
+    directory at the start of :envvar:`$LD_LIBRARY_PATH`. This will permit
+    ``python3 -c 'from osgeo import gdal'`` to work correctly.
+
+        .. code-block:: bash
+
+            # For instance, type this, once!
+            echo 'LD_LIBRARY_PATH="${CMAKE_PREFIX_PATH}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"' >> otbenv.profile
+
+In case you've compiled OTB from sources, you shouldn't have this kind of troubles.
+
 Sharing your module
 -------------------
 
