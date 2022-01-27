@@ -45,20 +45,6 @@ void MetaImageFunction<TOutputPrecision, TCoordRep>::AddFunction(FunctionType* f
   m_FunctionContainer.push_back(function);
 }
 
-// template <class TOutputPrecision, class TCoordRep, typename T1, typename T2>
-// void
-// MetaImageFunction<TOutputPrecision, TCoordRep>
-//::AddFunction(itk::ImageFunction<T1, T2, TCoordRep> * function)
-// {
-//  // Define the adapter
-//  typedef itk::ImageFunction<T1, T2, TCoordRep> ImageFunctionType;
-//  typedef otb::ImageFunctionAdapter<T1, ImageFunctionType, TCoordRep > AdapterType;
-//
-//  typename AdapterType::Pointer adapter = AdapterType::New();
-//  adapte
-//
-// }
-
 template <class TOutputPrecision, class TCoordRep>
 void MetaImageFunction<TOutputPrecision, TCoordRep>::ClearFunctions()
 {
