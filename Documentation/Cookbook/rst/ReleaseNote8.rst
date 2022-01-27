@@ -67,11 +67,11 @@ CosmoSkyMed
 CosmoSkyMed products contain either HDF5 files or Tiff files. One Tiff
 file per polarization, or one HDF5 file containing all the data. When
 reading a HDF dataset, one needs to select the right subdataset using
-the Extended Filename &sdataidx=<(int)idx>. For example, in some
+the Extended Filename ``&sdataidx=<(int)idx>``. For example, in some
 CosmoSkyMed products, the first subDataset is a quicklook, and the
 actual product is the second subdataset:
 
-.. code-block:: c++
+.. code-block:: bash
 
     -in “<PRODUCT_NAME>.h5?&sdataidx=2”
 
