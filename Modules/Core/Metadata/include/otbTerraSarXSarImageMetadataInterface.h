@@ -25,6 +25,7 @@
 #include <string>
 
 #include "otbSarImageMetadataInterface.h"
+#include "otbXMLMetadataSupplier.h"
 #include "itkImageBase.h"
 
 namespace otb
@@ -89,6 +90,9 @@ public:
   PointSetPointer GetRadiometricCalibrationIncidenceAngle(const MetadataSupplierInterface&) const override;
   ArrayIndexType  GetRadiometricCalibrationIncidenceAnglePolynomialDegree() const override;
 
+  /** Get an InfoSceneCoord from its path */
+  InfoSceneCoord GetSceneCoord(const MetadataSupplierInterface &supplier, const std::string& path);
+
   void ParseGdal(ImageMetadata &) override;
 
   void ParseGeom(ImageMetadata &) override;
@@ -100,8 +104,8 @@ protected:
   ~TerraSarXSarImageMetadataInterface() override = default;
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
-  /** Evaluate polynom with Horner scheme*/
 
+  /** Evaluate polynom with Horner scheme*/
   inline double Horner(std::vector<double>& coefficients, const double tauMinusTauRef) const;
 
   /** convert a TimeUTC string to a julian day */

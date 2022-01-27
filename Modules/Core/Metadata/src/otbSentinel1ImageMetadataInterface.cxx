@@ -682,6 +682,17 @@ void Sentinel1ImageMetadataInterface::ReadSarParamAndGCPs(const XMLMetadataSuppl
   sarParam.numberOfLinesPerBurst = AnnotationMS.GetAs<unsigned long>("product.swathTiming.linesPerBurst");
   sarParam.numberOfSamplesPerBurst = AnnotationMS.GetAs<unsigned long>("product.swathTiming.samplesPerBurst");
 
+  const std::string swathProcParams = "product.imageAnnotation.processingInformation.swathProcParamsList.swathProcParams.";
+
+  sarParam.azimuthBandwidth = AnnotationMS.GetAs<double>(0., swathProcParams + "azimuthProcessing.processingBandwidth");
+  sarParam.rangeBandwidth = AnnotationMS.GetAs<double>(0., swathProcParams + "rangeProcessing.processingBandwidth");
+  
+  // AzimuthSteeringRate for TOPSAR (IW) products
+  if (sarParam.burstRecords.size() >= 2)
+  {
+    sarParam.azimuthSteeringRate = AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.azimuthSteeringRate");
+  }
+
   sarParam.rightLookingFlag = true;
 
   // Fetch the GCP

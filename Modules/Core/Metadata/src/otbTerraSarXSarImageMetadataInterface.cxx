@@ -25,7 +25,6 @@
 #include "otbMath.h"
 #include "itkIndex.h"
 #include "itkMetaDataObject.h"
-#include "otbXMLMetadataSupplier.h"
 #include "otbSARMetadata.h"
 #include "otbSpatialReference.h"
 
@@ -477,10 +476,27 @@ void TerraSarXSarImageMetadataInterface::PrintSelf(std::ostream& os, itk::Indent
   Superclass::PrintSelf(os, indent);
 }
 
+InfoSceneCoord TerraSarXSarImageMetadataInterface::GetSceneCoord(const MetadataSupplierInterface& supplier, const std::string& path)
+{
+  InfoSceneCoord output;
+  output.referenceRow = supplier.GetAs<unsigned long>(path + ".refRow");
+  output.referenceColumn = supplier.GetAs<unsigned long>(path + ".refColumn");
+  output.latitude = supplier.GetAs<double>(path + ".lat");
+  output.longitude = supplier.GetAs<double>(path + ".lon");
+  output.rangeTime = supplier.GetAs<double>(path + ".rangeTime");
+  output.incidenceAngle = supplier.GetAs<double>(path + ".incidenceAngle");
+  std::istringstream iss(supplier.GetAs<std::string>(path + ".azimuthTimeUTC"));
+  if (!(iss >> output.azimuthTime))
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject,
+           << "Unable to decode " << supplier.GetAs<std::string>(path + ".azimuthTimeUTC"));
+  }
+  return output;
+}
+
 void ReadGeorefGCP(const otb::MetaData::TimePoint & azimuthTimeStart, const std::string & geoRefXmlFileName, ImageMetadata & imd, SARParam & param)
 {
   Projection::GCPParam gcp;
-  std::stringstream ss;
 
   // Open the xml file
   TiXmlDocument doc(geoRefXmlFileName);
@@ -643,16 +659,126 @@ void ReadSARSensorModel(const XMLMetadataSupplier & xmlMS,
   burstRecord.azimuthAnxTime = 0.;
 
   param.burstRecords.push_back(burstRecord);
+
+  // Read Doppler centroid
+  const auto xmlFileName = xmlMS.GetResourceFile();
+
+  TiXmlDocument doc(xmlFileName);
+  if (!doc.LoadFile())
+  {
+    otbGenericExceptionMacro(MissingMetadataException, << "Can't open file " << xmlFileName);
+  }
+
+  TiXmlHandle   hDoc(&doc);
+  auto processingElem = hDoc.FirstChild("level1Product")
+                            .FirstChild("processing").ToElement();
+
+  auto centroidElem = processingElem->FirstChildElement("doppler")->FirstChildElement("dopplerCentroid");
+
+  // Retrieve the polarisation layer
+  for( ;centroidElem; centroidElem = centroidElem->NextSiblingElement("dopplerCentroid"))
+  {
+    if (centroidElem->FirstChildElement("polLayer")->GetText() == polarization)
+      break;
+  }
+  if (!centroidElem)
+  {
+    otbGenericExceptionMacro(MissingMetadataException, << "Can't find the doppler centroid in the product metadata.");
+  }
+
+  for(auto dopplerEstimateElem = centroidElem->FirstChildElement("dopplerEstimate"); 
+      dopplerEstimateElem; 
+      dopplerEstimateElem = dopplerEstimateElem->NextSiblingElement("dopplerEstimate"))
+  {
+    DopplerCentroid centroid;
+
+    centroid.azimuthTime = MetaData::ReadFormattedDate(dopplerEstimateElem->FirstChildElement("timeUTC")->GetText());
+
+    auto combinedDopplerElem = dopplerEstimateElem->FirstChildElement("combinedDoppler");
+
+    if (!combinedDopplerElem)
+    {
+      otbGenericExceptionMacro(MissingMetadataException, << "Can't find the combined doppler in the product metadata.");
+    }
+
+    centroid.t0 =  std::stod(combinedDopplerElem->FirstChildElement("referencePoint")->GetText());
+
+    unsigned int polynomialDegree = std::stoi(combinedDopplerElem->FirstChildElement("polynomialDegree")->GetText());
+
+    centroid.dopCoef.resize(polynomialDegree + 1);
+
+    for(auto coefficientElem = combinedDopplerElem->FirstChildElement("coefficient"); 
+      coefficientElem; 
+      coefficientElem = coefficientElem->NextSiblingElement("coefficient"))
+    {
+      unsigned int exponent = 0;
+
+      // operator <= is used because a polynomial of degree N has N+1 elements
+      if (coefficientElem->QueryUnsignedAttribute("exponent", &exponent) == TIXML_SUCCESS && exponent <= polynomialDegree)
+      {
+        centroid.dopCoef[exponent] = std::stod(coefficientElem->GetText());
+      }
+    }
+
+    param.dopplerCentroids.push_back(centroid);
+  }
+
+  // Read Azimuth FM rate
+  for(auto dopplerRateElem = processingElem->FirstChildElement("geometry")->FirstChildElement("dopplerRate"); 
+      dopplerRateElem; 
+      dopplerRateElem = dopplerRateElem->NextSiblingElement("dopplerRate"))
+  {
+    AzimuthFmRate rate;
+
+    rate.azimuthTime = MetaData::ReadFormattedDate(dopplerRateElem->FirstChildElement("timeUTC")->GetText());
+
+    auto dopplerRatePolynomialElem = dopplerRateElem->FirstChildElement("dopplerRatePolynomial");
+
+    if (!dopplerRatePolynomialElem)
+    {
+      otbGenericExceptionMacro(MissingMetadataException, << "Can't find the doppler rate polynomial in the product metadata.");
+    }
+
+    rate.t0 =  std::stod(dopplerRatePolynomialElem->FirstChildElement("referencePoint")->GetText());
+
+    unsigned int polynomialDegree = std::stoi(dopplerRatePolynomialElem->FirstChildElement("polynomialDegree")->GetText());
+
+    rate.azimuthFmRatePolynomial.resize(polynomialDegree + 1);
+
+    for(auto coefficientElem = dopplerRatePolynomialElem->FirstChildElement("coefficient"); 
+      coefficientElem; 
+      coefficientElem = coefficientElem->NextSiblingElement("coefficient"))
+    {
+      unsigned int exponent = 0;
+
+      // operator <= is used because a polynomial of degree N has N+1 elements
+      if (coefficientElem->QueryUnsignedAttribute("exponent", &exponent) == TIXML_SUCCESS && exponent <= polynomialDegree)
+      {
+        rate.azimuthFmRatePolynomial[exponent] = std::stod(coefficientElem->GetText());
+      }
+    }
+
+    param.azimuthFmRates.push_back(rate);
+  }
+
+  // Azimuth and range Bandwidth
+  param.azimuthBandwidth = std::stod(processingElem->FirstChildElement("processingParameter")
+                                                   ->FirstChildElement("totalProcessedAzimuthBandwidth")
+                                                   ->GetText());
+  param.rangeBandwidth = std::stod(processingElem->FirstChildElement("processingParameter")
+                                                ->FirstChildElement("totalProcessedRangeBandwidth")
+                                                ->GetText());
 }
 
 
 void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
 {
+  std::stringstream oss;
   // Main XML file
   std::string MainDirectory = itksys::SystemTools::GetParentDirectory(
         itksys::SystemTools::GetParentDirectory(m_MetadataSupplierInterface->GetResourceFile("")));
   std::string MainFilePath =
-      ExtractXMLFiles::GetResourceFile(MainDirectory, "T[S|D]X1_SAR__.*.xml", false);
+      ExtractXMLFiles::GetResourceFile(MainDirectory, "(T[SD]X|PAZ)1_SAR__.*\\.xml", false);
   if (MainFilePath.empty())
   {
     otbGenericExceptionMacro(MissingMetadataException,
@@ -698,7 +824,6 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   else
   {
     // Retrieve the polarisation layer
-    std::stringstream oss;
     for(unsigned int band = 1 ; band <= numberOfCalFactor ; ++band)
     {
       oss.str("");
@@ -735,6 +860,23 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
                   MainDirectory + "/ANNOTATION/GEOREF.xml",
                   imd,
                   sarParam);
+  }
+
+  // Scene coordinate
+  sarParam.centerSceneCoord = GetSceneCoord(MainXMLFileMetadataSupplier, "level1Product.productInfo.sceneInfo.sceneCenterCoord");
+  for (unsigned int i = 1 ; i <= MainXMLFileMetadataSupplier.GetNumberOf("level1Product.productInfo.sceneInfo.sceneCornerCoord") ; ++i)
+  {
+    oss.str("");
+    oss << "level1Product.productInfo.sceneInfo.sceneCornerCoord_" << i;
+    InfoSceneCoord isc = GetSceneCoord(MainXMLFileMetadataSupplier, oss.str());
+    if (isc.referenceRow == 1 && isc.referenceColumn > 1)
+      sarParam.urSceneCoord = isc;
+    else if (isc.referenceRow == imd[MDNum::NumberOfLines] && isc.referenceColumn > 1)
+      sarParam.lrSceneCoord = isc;
+    else if (isc.referenceRow == imd[MDNum::NumberOfLines] && isc.referenceColumn == 1)
+      sarParam.llSceneCoord = isc;
+    else
+      sarParam.ulSceneCoord = isc;
   }
 
   imd.Add(MDGeom::SAR, sarParam);
@@ -787,6 +929,25 @@ void TerraSarXSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
     }
     
     ReadSARSensorModel(MainXMLFileMS, imd[MDStr::Polarization], sarParam);
+
+    // Scene coordinate
+    sarParam.centerSceneCoord = GetSceneCoord(*m_MetadataSupplierInterface, "sceneCoord.sceneCenterCoord");
+    for (unsigned int i = 0 ; i < m_MetadataSupplierInterface->GetAs<unsigned int>("sceneCoord.numberOfSceneCornerCoord") ; ++i)
+    {
+      std::stringstream oss;
+      oss.str("");
+      oss << "sceneCoord.sceneCornerCoord[" << i << "]";
+      InfoSceneCoord isc = GetSceneCoord(*m_MetadataSupplierInterface, oss.str());
+      if (isc.referenceRow == 1 && isc.referenceColumn > 1)
+        sarParam.urSceneCoord = isc;
+      else if (isc.referenceRow == imd[MDNum::NumberOfLines] && isc.referenceColumn > 1)
+        sarParam.lrSceneCoord = isc;
+      else if (isc.referenceRow == imd[MDNum::NumberOfLines] && isc.referenceColumn == 1)
+        sarParam.llSceneCoord = isc;
+      else
+        sarParam.ulSceneCoord = isc;
+    }
+
     imd.Add(MDGeom::SAR, sarParam);
   }
 
