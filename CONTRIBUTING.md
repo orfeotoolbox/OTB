@@ -182,7 +182,7 @@ Regarding labels, we use the following set:
 | ~usage                                             | Question related to OTB's usage                                                                                                                        |
 | ~patch                                             | A small patch fixing build warnings, compilation errors, typos in logs or documentation                                                                |
 | ~"to investigate"                                  | This issue needs a complete analysis                                                                                                                   |
-| ~"CNES backlog"                                    | The CNES could fund this issue but has not been assigned to a milestone yet                                                                            |
+| ~"CNES backlog"                                    | The CNES could fund this issue but it has not been assigned to a milestone yet                                                                            |
 | ~"To Do"                                           | Action is planned                                                                                                                                      |
 | ~Doing                                             | Work in progress                                                                                                                                       |
 | ~"Waiting for answer"                              | Waiting for an answer or for a detailed context                                                                                                        |
@@ -208,7 +208,7 @@ It happens that the bug is trivial to correct or a workaround is easy
 to set up. In this case, it is corrected directly, or the workaround
 is documented, and the issue is closed. If the bug is not trivial, the
 team will proceed to a second, more complete, analysis. During this
-analysis, the issue is marked as ~"To investigate". This is a time to
+analysis, the issue is marked as ~"to investigate". This is a time to
 iterate with the author of the issue to find the best way to address
 it. At the end of this analysis, the issue's description should
 contain the proposition of correction, the impact for the code and the
@@ -224,7 +224,7 @@ limited. In case of CNES funding, the issue is assigned to a milestone
 ### Feature request
 
 The core development team will proceed to a second, more complete,
-analysis. During this analysis, the issue is marked as ~"To
+analysis. During this analysis, the issue is marked as ~"to
 investigate". This is a time to iterate with the author of the issue
 to find the best way to address it. At the end of this analysis, the
 issue's description should contain the conception of the new feature,
