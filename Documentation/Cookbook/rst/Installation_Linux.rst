@@ -130,7 +130,7 @@ Notes:
 Examples of installation on specific distribution
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Here are provided provide examples of package installations on popular distributions, using package managers to install the required depencies.
+Here are provided provide examples of package installations on popular distributions, using package managers to install the required dependencies.
 
 Ubuntu 18.04 and Ubuntu 20.04
 +++++++++++++++++++++++++++++
@@ -177,7 +177,7 @@ CENTOS 7
 	yum install libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libxcb-devel libxkbcommon-devel libxkbcommon-x11-devel 
    yum install xcb-util-devel xcb-util-image-devel xcb-util-keysyms-devel xcb-util-renderutil-devel xcb-util-wm-devel
 
-   #Enable the environement
+   #Enable the environment
    scl enable rh-python38 devtoolset-8 -- /bin/bash
 
    # Extract the archive

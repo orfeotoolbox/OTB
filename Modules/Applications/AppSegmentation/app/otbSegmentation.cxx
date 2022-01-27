@@ -681,7 +681,7 @@ private:
         if (driverName.find("ESRI Shapefile") != std::string::npos)
         {
           otbAppLogINFO("REPACK the Shapefile ...");
-          // In Shapefile format, the name of the DaaSource is also the name of the Layer.
+          // In Shapefile format, the name of the DataSource is also the name of the Layer.
           std::string shpLayerName = itksys::SystemTools::GetFilenameWithoutExtension(GetParameterString("mode.vector.out"));
           std::string repack("REPACK ");
           repack = repack + shpLayerName;

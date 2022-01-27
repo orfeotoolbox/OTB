@@ -33,7 +33,7 @@ typedef otb::ConcatenateVectorDataFilter<VectorDataType> ConcatenateFilterType;
 int otbConcatenateVectorDataFilter(int argc, char* argv[])
 {
   // Instantiate a concatenate filter
-  // Concatenate the vector datas
+  // Concatenate the vector data
   ConcatenateFilterType::Pointer concatenate = ConcatenateFilterType::New();
   for (int idx = 1; idx < argc - 1; ++idx)
   {
