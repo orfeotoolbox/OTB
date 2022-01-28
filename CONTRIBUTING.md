@@ -188,11 +188,11 @@ Regarding labels, we use the following set:
 | ~"Waiting for answer"                              | Waiting for an answer or for a detailed context                                                                                                        |
 | ~breaking                                          | Changes introduced by this issue will break the API                                                                                                    |
 | ~refactoring                                       | Issue related to improvements like refactoring, tests, maintenance, etc                                                                                |
-| ~documentation                                     | Improvemen tof the documentation                                                                                                                       |
-| ~ci                                                | Issue related to the continuous integration plateform                                                                                                  |
+| ~documentation                                     | Documentation improvements|
+| ~ci                                                | Issue related to the continuous integration platform                                                                                                  |
 | ~api ~app ~legal ~monteverdi <br> ~packaging ~qgis | Optional context information                                                                                                                           |
   
-## Issues life cycle
+## Issue life cycle
 
 When an issue is open, the core development team will review it in a
 first analysis. During this first analysis, the team will evaluate is
