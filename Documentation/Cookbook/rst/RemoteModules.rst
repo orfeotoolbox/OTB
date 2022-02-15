@@ -229,6 +229,7 @@ CMake plumbing of the module:
 .. code-block:: cmake
 
     if(NOT OTB_SOURCE_DIR)
+      find_package(BOOST REQUIRED)
       find_package(OTB REQUIRED)
       list(APPEND CMAKE_MODULE_PATH ${OTB_CMAKE_DIR})
       # The Python interpreter is needed for Python tests
@@ -249,6 +250,7 @@ The overall file should look like this:
     set(OTBTheModuleName_LIBRARIES OTBTheModuleName)
 
     if(NOT OTB_SOURCE_DIR)
+      find_package(BOOST REQUIRED)
       find_package(OTB REQUIRED)
       list(APPEND CMAKE_MODULE_PATH ${OTB_CMAKE_DIR})
       # The Python interpreter is needed for Python tests
@@ -259,6 +261,11 @@ The overall file should look like this:
     else()
       otb_module_impl()
     endif()
+
+    Remarque: the command find_package(BOOST) is called before
+    find_package(OTB). This is due to the fact that FindBoost.cmake is
+    integrated to cmake, so it is better to use the official command
+    rather than the one integrated to the OTB.
 
 **The include folder**
 
