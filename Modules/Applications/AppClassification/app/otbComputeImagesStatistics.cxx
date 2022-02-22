@@ -255,6 +255,7 @@ private:
     }
 
     // Display the pixel value
+    std::ostringstream oss_mean, oss_min, oss_max, oss_std;
     oss_mean << totalMeanPerBand;
     oss_min << totalMinPerBand;
     oss_max << totalMaxPerBand;
@@ -287,9 +288,6 @@ private:
     SetParameterString("min", oss_min.str());
     SetParameterString("max", oss_max.str());
     SetParameterString("std", oss_std.str());
-
-    // Display image information in the dedicated logger
-    otbAppLogINFO(<< oss.str());
 
     if (HasValue("out"))
     {
