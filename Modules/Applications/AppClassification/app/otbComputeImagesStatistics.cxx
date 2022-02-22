@@ -78,6 +78,22 @@ private:
     SetParameterDescription("out", "XML filename where the statistics are saved for future reuse.");
     MandatoryOff("out");
 
+    AddParameter(ParameterType_String, "mean", "Mean pixel Value");
+    SetParameterDescription("mean", "Mean pixel value");
+    SetParameterRole("mean", Role_Output);
+
+    AddParameter(ParameterType_String, "min", "Min pixel Value");
+    SetParameterDescription("min", "Minimum pixel value");
+    SetParameterRole("min", Role_Output);
+
+    AddParameter(ParameterType_String, "max", "Max pixel Value");
+    SetParameterDescription("max", "Maximum pixel value");
+    SetParameterRole("max", Role_Output);
+
+    AddParameter(ParameterType_String, "std", "Standard deviation of pixel Value");
+    SetParameterDescription("std", "Standard deviation of pixel value");
+    SetParameterRole("std", Role_Output);
+
     AddRAMParameter();
 
     // Doc example parameter settings
@@ -115,6 +131,14 @@ private:
     MatrixValueType mean(nbBands, static_cast<unsigned int>(nbImages));
     mean.Fill(itk::NumericTraits<MatrixValueType::ValueType>::Zero);
 
+    // Build a Measurement Vector of min
+    MatrixValueType min(nbBands, static_cast<unsigned int>(nbImages));
+    mean.Fill(itk::NumericTraits<MatrixValueType::ValueType>::max());
+
+    // Build a Measurement Vector of max
+    MatrixValueType max(nbBands, static_cast<unsigned int>(nbImages));
+    max.Fill(itk::NumericTraits<MatrixValueType::ValueType>::min());
+
     // Build a Measurement Matrix of variance
     MatrixValueType variance(nbBands, static_cast<unsigned int>(nbImages));
     variance.Fill(itk::NumericTraits<MatrixValueType::ValueType>::Zero);
@@ -149,10 +173,14 @@ private:
 
       MeasurementType nbRelevantPixels = statsEstimator->GetNbRelevantPixels();
       MeasurementType meanPerBand      = statsEstimator->GetMean();
+      MeasurementType minPerBand       = statsEstimator->GetMinimum();
+      MeasurementType maxPerBand       = statsEstimator->GetMaximum();
 
       for (unsigned int itBand = 0; itBand < nbBands; itBand++)
       {
         mean(itBand, imageId)      = meanPerBand[itBand];
+        min(itBand, imageId)       = minPerBand[itBand];
+        max(itBand, imageId)       = maxPerBand[itBand];
         variance(itBand, imageId)  = (statsEstimator->GetCovariance())(itBand, itBand);
         nbSamples(itBand, imageId) = nbRelevantPixels[itBand];
       }
@@ -167,6 +195,14 @@ private:
     totalMeanPerBand.SetSize(nbBands);
     totalMeanPerBand.Fill(itk::NumericTraits<MeasurementType::ValueType>::Zero);
 
+    MeasurementType totalMinPerBand;
+    totalMinPerBand.SetSize(nbBands);
+    totalMinPerBand.Fill(itk::NumericTraits<MeasurementType::ValueType>::max());
+
+    MeasurementType totalMaxPerBand;
+    totalMaxPerBand.SetSize(nbBands);
+    totalMaxPerBand.Fill(itk::NumericTraits<MeasurementType::ValueType>::min());
+
     MeasurementType totalVariancePerBand;
     totalVariancePerBand.SetSize(nbBands);
     totalVariancePerBand.Fill(itk::NumericTraits<MeasurementType::ValueType>::Zero);
@@ -178,6 +214,8 @@ private:
         MeasurementType::ValueType nbSample = nbSamples(itBand, imageId);
         totalSamplesPerBand[itBand] += nbSample;
         totalMeanPerBand[itBand] += mean(itBand, imageId) * nbSample;
+        totalMinPerBand[itBand] = std::min(totalMinPerBand[itBand], min(itBand, imageId));
+        totalMaxPerBand[itBand] = std::max(totalMaxPerBand[itBand], max(itBand, imageId));
         totalVariancePerBand[itBand] += variance(itBand, imageId) * (nbSample - 1);
       }
     }
@@ -203,6 +241,8 @@ private:
       else
       {
         totalMeanPerBand[itBand] = itk::NumericTraits<ValueType>::Zero;
+        totalMinPerBand[itBand] = itk::NumericTraits<ValueType>::Zero;
+        totalMaxPerBand[itBand] = itk::NumericTraits<ValueType>::Zero;
       }
     }
 
@@ -213,6 +253,43 @@ private:
     {
       stddev[i] = std::sqrt(totalVariancePerBand[i]);
     }
+
+    // Display the pixel value
+    oss_mean << totalMeanPerBand;
+    oss_min << totalMinPerBand;
+    oss_max << totalMaxPerBand;
+    oss_std << stddev;
+
+//    // If the above doesn't work, we can do something like
+//    const std::string separator = ",";
+//    std::ostringstream oss_mean, oss_min, oss_max, oss_std;
+//    oss_mean << "(";
+//    oss_min << "(";
+//    oss_max << "(";
+//    oss_std << "(";
+//    for (unsigned int itBand = 0; itBand < nbBands; itBand++)
+//    {
+//      oss_mean << totalMeanPerBand[itBand] << separator;
+//      oss_min << totalMinPerBand[itBand] << separator;
+//      oss_max << totalMaxPerBand[itBand] << separator;
+//      oss_std << stddev[itBand] << separator;
+//    }
+//    oss_mean.seekp(-1, oss_mean.cur);
+//    oss_min.seekp(-1, oss_min.cur);
+//    oss_max.seekp(-1, oss_max.cur);
+//    oss_std.seekp(-1, oss_std.cur);
+//    oss_mean << ")";
+//    oss_min << ")";
+//    oss_max << ")";
+//    oss_std << ")";
+
+    SetParameterString("mean", oss_mean.str());
+    SetParameterString("min", oss_min.str());
+    SetParameterString("max", oss_max.str());
+    SetParameterString("std", oss_std.str());
+
+    // Display image information in the dedicated logger
+    otbAppLogINFO(<< oss.str());
 
     if (HasValue("out"))
     {
