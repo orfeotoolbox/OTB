@@ -133,7 +133,7 @@ private:
 
     // Build a Measurement Vector of min
     MatrixValueType min(nbBands, static_cast<unsigned int>(nbImages));
-    mean.Fill(itk::NumericTraits<MatrixValueType::ValueType>::max());
+    min.Fill(itk::NumericTraits<MatrixValueType::ValueType>::max());
 
     // Build a Measurement Vector of max
     MatrixValueType max(nbBands, static_cast<unsigned int>(nbImages));
@@ -260,30 +260,6 @@ private:
     oss_min << totalMinPerBand;
     oss_max << totalMaxPerBand;
     oss_std << stddev;
-
-//    // If the above doesn't work, we can do something like
-//    const std::string separator = ",";
-//    std::ostringstream oss_mean, oss_min, oss_max, oss_std;
-//    oss_mean << "(";
-//    oss_min << "(";
-//    oss_max << "(";
-//    oss_std << "(";
-//    for (unsigned int itBand = 0; itBand < nbBands; itBand++)
-//    {
-//      oss_mean << totalMeanPerBand[itBand] << separator;
-//      oss_min << totalMinPerBand[itBand] << separator;
-//      oss_max << totalMaxPerBand[itBand] << separator;
-//      oss_std << stddev[itBand] << separator;
-//    }
-//    oss_mean.seekp(-1, oss_mean.cur);
-//    oss_min.seekp(-1, oss_min.cur);
-//    oss_max.seekp(-1, oss_max.cur);
-//    oss_std.seekp(-1, oss_std.cur);
-//    oss_mean << ")";
-//    oss_min << ")";
-//    oss_max << ")";
-//    oss_std << ")";
-
     SetParameterString("mean", oss_mean.str());
     SetParameterString("min", oss_min.str());
     SetParameterString("max", oss_max.str());
