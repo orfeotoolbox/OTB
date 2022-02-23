@@ -854,8 +854,12 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   auto hasSAR = GetSAR(sarParam);
   if (hasSAR)
   {
+    // Old metadata (from geom) does not contain support_data.look_side for S1 products
+    // Rigth looking flag is always true for S1 products => hard coded value, here
+    sarParam.rightLookingFlag = true;
     imd.Add(MDGeom::SAR, sarParam);
   }
+
   SARCalib sarCalib;
   std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>("calibration.startTime")) >> sarCalib.calibrationStartTime;
   std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>("calibration.stopTime")) >> sarCalib.calibrationStopTime;
