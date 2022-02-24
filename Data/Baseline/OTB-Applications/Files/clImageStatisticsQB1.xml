@@ -6,6 +6,18 @@
         <StatisticVector value="210.884" />
         <StatisticVector value="388.449" />
     </Statistic>
+    <Statistic name="min">
+        <StatisticVector value="185.401" />
+        <StatisticVector value="224.62" />
+        <StatisticVector value="107.775" />
+        <StatisticVector value="99.3083" />
+    </Statistic>
+    <Statistic name="max">
+        <StatisticVector value="1964.89" />
+        <StatisticVector value="1992.82" />
+        <StatisticVector value="1964.4" />
+        <StatisticVector value="2016.54" />
+    </Statistic>
     <Statistic name="stddev">
         <StatisticVector value="39.1969" />
         <StatisticVector value="69.9943" />
