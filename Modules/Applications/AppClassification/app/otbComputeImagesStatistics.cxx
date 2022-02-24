@@ -272,6 +272,8 @@ private:
       StatisticsWriter::Pointer                             writer = StatisticsWriter::New();
       writer->SetFileName(GetParameterString("out"));
       writer->AddInput("mean", totalMeanPerBand);
+      writer->AddInput("min", totalMinPerBand);
+      writer->AddInput("max", totalMaxPerBand);
       writer->AddInput("stddev", stddev);
       writer->Update();
     }
