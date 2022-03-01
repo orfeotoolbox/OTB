@@ -80,11 +80,7 @@ public:
   bool FetchGCP(ImageMetadata & imd);
 
   /** Get the number of keys starting with path */
-  unsigned int GetNumberOf(std::string const&) const override
-  {
-    otbLogMacro(Error, << "GetNumberOf() not yet implemented in otbGeomMetadataSupplier");
-    return 0;
-  }
+  unsigned int GetNumberOf(std::string const&) const override;
 
   /** If multiple keys have the same path, gives the position of the one with value value*/
   unsigned int GetAttributId(std::string const&, std::string const&) const override

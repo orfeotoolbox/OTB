@@ -23,6 +23,7 @@
 #include <fstream>
 #include <boost/algorithm/string.hpp>
 #include <unordered_map>
+#include <algorithm>
 
 #include "otbGeomMetadataSupplier.h"
 #include "otbMetaDataKey.h"
@@ -189,6 +190,14 @@ bool GeomMetadataSupplier::FetchGCP(ImageMetadata & imd)
 
   assert(imd.Has(MDGeom::GCP));
   return true;
+}
+
+unsigned int GeomMetadataSupplier::GetNumberOf(std::string const& pattern) const
+{
+  return std::count_if(m_MetadataDic.cbegin(),
+                       m_MetadataDic.cend(),
+                       [pattern](DictType::value_type u){return u.first.rfind(pattern, 0) == 0;}
+                      );
 }
 
 std::string GeomMetadataSupplier::PrintSelf() const
