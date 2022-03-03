@@ -319,7 +319,7 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   GCPTime time;
   time.azimuthTime = MetaData::ReadFormattedDate(first_line_time);
   time.slantRangeTime = sarParam.nearRangeTime;
-  sarParam.gcpTimes[std::to_string(0)] = time;
+  sarParam.gcpTimes["0"] = time;
 
   imd.Add(MDGeom::SAR, sarParam);
 
