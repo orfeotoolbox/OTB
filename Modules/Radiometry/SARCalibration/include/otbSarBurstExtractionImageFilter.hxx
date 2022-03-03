@@ -121,8 +121,8 @@ void SarBurstExtractionImageFilter<TImage>::GenerateOutputInformation()
   largestPossibleRegion.SetSize(burstSize);
   outputPtr->SetLargestPossibleRegion(largestPossibleRegion);
 
-  imd.Add(MDNum::NumberOfLines, burstSize[0]);
-  imd.Add(MDNum::NumberOfColumns, burstSize[1]);
+  imd.Add(MDNum::NumberOfLines, burstSize[1]);
+  imd.Add(MDNum::NumberOfColumns, burstSize[0]);
 
   if (m_AllPixels)
   {

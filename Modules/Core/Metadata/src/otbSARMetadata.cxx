@@ -191,9 +191,9 @@ void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
   rangeResolution = std::stod(Get(kwl, prefix + "RangeResolution"));
   rightLookingFlag = std::stoi(Get(kwl, prefix + "RightLookingFlag"));
 
-  azimuthBandwidth = nearRangeTime = std::stod(Get(kwl, prefix + "AzimuthBandwidth"));
-  rangeBandwidth = nearRangeTime = std::stod(Get(kwl, prefix + "RangeBandwidth"));
-  azimuthSteeringRate = nearRangeTime = std::stod(Get(kwl, prefix + "AzimuthSteeringRate"));
+  azimuthBandwidth = std::stod(Get(kwl, prefix + "AzimuthBandwidth"));
+  rangeBandwidth = std::stod(Get(kwl, prefix + "RangeBandwidth"));
+  azimuthSteeringRate = std::stod(Get(kwl, prefix + "AzimuthSteeringRate"));
 
   numberOfLinesPerBurst = std::stoul(Get(kwl, prefix + "NumberOfLinesPerBurst"));
   numberOfSamplesPerBurst = std::stoul(Get(kwl, prefix + "NumberOfSamplesPerBurst"));
