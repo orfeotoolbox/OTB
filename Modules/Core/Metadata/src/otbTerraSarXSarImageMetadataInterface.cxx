@@ -794,12 +794,12 @@ void TerraSarXSarImageMetadataInterface::ParseGdal(ImageMetadata &imd)
   imd.Add(MDNum::LineSpacing, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingAzimuth"));
   imd.Add(MDNum::PixelSpacing, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.productSpecific.complexImageInfo.projectedSpacingRange.slantRange"));
   imd.Add(MDStr::Mission, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.generalHeader.mission"));
+  imd.Add(MDStr::SensorID, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.generalHeader.mission"));
 
   // This sensorID corresponds to the sensorID read in OTB 7.3 and below, e.g. MGD_SE_SM_S, but OTB 7.4 read productVariant, i.e. MGD in this case
   const std::string productVariant = MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.productVariantInfo.productVariant");
   imd.Add(MDStr::ProductType, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.productVariantInfo.productType"));
   imd.Add(MDStr::Mode, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.imagingMode"));
-  imd.Add(MDStr::SensorID, MainXMLFileMetadataSupplier.GetAs<std::string>("level1Product.productInfo.acquisitionInfo.sensor"));
   imd.Add(MDNum::RadarFrequency, MainXMLFileMetadataSupplier.GetAs<double>("level1Product.instrument.radarParameters.centerFrequency"));
   imd.Add(MDTime::AcquisitionStartTime, MetaData::ReadFormattedDate(MainXMLFileMetadataSupplier.GetFirstAs<std::string>("level1Product.productInfo.sceneInfo.start.timeUTC")));
   imd.Add(MDTime::AcquisitionStopTime, MetaData::ReadFormattedDate(MainXMLFileMetadataSupplier.GetFirstAs<std::string>("level1Product.productInfo.sceneInfo.stop.timeUTC")));
@@ -886,106 +886,35 @@ void TerraSarXSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
 {
   Fetch(MDNum::LineSpacing, imd, "meters_per_pixel_y");
   Fetch(MDNum::PixelSpacing, imd, "meters_per_pixel_x");
-  std::string acquisition_mode = m_MetadataSupplierInterface->GetAs<std::string>("",
-								     "acquisitionInfo.imagingMode");
-  if (acquisition_mode.empty())
-  {
-    // TerraSAR-X geoms (OTB >= 7.4)
-    Fetch(MDStr::Mode, imd, "support_data.acquisition_mode");
-  }
-  else
-  {
-    // TerraSAR-X geoms (OTB < 7.4)
-    Fetch(MDStr::Mode, imd, "acquisitionInfo.imagingMode");
-  }
-
+  if (!CheckFetch(MDStr::Mode, imd, "acquisitionInfo.imagingMode"))  // TerraSAR-X geoms (OTB < 7.4)
+    Fetch(MDStr::Mode, imd, "support_data.acquisition_mode");       // TerraSAR-X geoms (OTB >= 7.4)
   Fetch(MDStr::Mission, imd, "sensor");
-
-  std::string product_type = m_MetadataSupplierInterface->GetAs<std::string>("",
-									     "product_type");
-
-  if (product_type.empty())
-  {
-    // TerraSAR-X geoms (OTB >= 7.4)
-    Fetch(MDStr::ProductType, imd, "support_data.product_type");
-  }
-  else
-  {
-    // TerraSAR-X geoms (OTB < 7.4)
-    Fetch(MDStr::ProductType, imd, "product_type");
-  }
-  Fetch(MDStr::SensorID, imd, "sensor");
-
-  std::string  azi_start_time = m_MetadataSupplierInterface->GetAs<std::string>("",
-								   "azimuth_start_time");
-  std::string azi_stop_time = m_MetadataSupplierInterface->GetAs<std::string>("",
-								   "azimuth_stop_time");
-
-  if (azi_start_time.empty() && azi_stop_time.empty())
-  {
-    // TerraSAR-X geoms (OTB >= 7.4)
-    Fetch(MDTime::AcquisitionStartTime, imd, "support_data.first_line_time");
-    Fetch(MDTime::AcquisitionStopTime, imd, "support_data.last_line_time");
-  }
-  else
-  {
-    // TerraSAR-X geoms (OTB < 7.4)
-    Fetch(MDTime::AcquisitionStartTime, imd, "azimuth_start_time");
-    Fetch(MDTime::AcquisitionStopTime, imd, "azimuth_stop_time");
-  }
-
-  std::string prf = m_MetadataSupplierInterface->GetAs<std::string>("",
-							"sensor_params.prf");
-
-  if (prf.empty())
-  {
-    // TerraSAR-X geoms (OTB >= 7.4)
-    Fetch(MDNum::PRF, imd, "support_data.pulse_repetition_frequency");
-  }
-  else
-  {
-    // TerraSAR-X geoms (OTB < 7.4)
-    Fetch(MDNum::PRF, imd, "sensor_params.prf");
-  }
-
+  imd.Add(MDStr::Instrument, "TSX-SAR");
+  if (!CheckFetch(MDStr::ProductType, imd, "product_type"))            // TerraSAR-X geoms (OTB < 7.4)
+    Fetch(MDStr::ProductType, imd, "support_data.product_type");  // TerraSAR-X geoms (OTB >= 7.4)
+  if (!CheckFetch(MDTime::AcquisitionStartTime, imd, "azimuth_start_time"))         // TerraSAR-X geoms (OTB < 7.4)
+    Fetch(MDTime::AcquisitionStartTime, imd, "support_data.first_line_time");  // TerraSAR-X geoms (OTB >= 7.4)
+  if (!CheckFetch(MDTime::AcquisitionStopTime, imd, "azimuth_stop_time"))          // TerraSAR-X geoms (OTB < 7.4)
+    Fetch(MDTime::AcquisitionStopTime, imd, "support_data.last_line_time");  // TerraSAR-X geoms (OTB >= 7.4)
+  if (!CheckFetch(MDNum::PRF, imd, "sensor_params.prf"))                // TerraSAR-X geoms (OTB < 7.4)
+    Fetch(MDNum::PRF, imd, "support_data.pulse_repetition_frequency");  // TerraSAR-X geoms (OTB >= 7.4)
   Fetch(MDNum::CalFactor, imd, "calibration.calibrationConstant.calFactor");
   Fetch(MDNum::CalScale, imd, "calibration.calibrationConstant.calFactor");
-
-  std::string pol= m_MetadataSupplierInterface->GetAs<std::string>("",
-							"acquisitionInfo.polarisationList[0]");
-  if (pol.empty())
-  {
-    // TerraSAR-X geoms (OTB >= 7.4)
-    Fetch(MDStr::Polarization, imd, "header.polarisation");
-  }
-  else
-  {
-    // TerraSAR-X geoms (OTB < 7.4)
-    Fetch(MDStr::Polarization, imd, "acquisitionInfo.polarisationList[0]");
-  }
-
+  if (!CheckFetch(MDStr::Polarization, imd, "acquisitionInfo.polarisationList[0]"))  // TerraSAR-X geoms (OTB < 7.4)
+    Fetch(MDStr::Polarization, imd, "header.polarisation");                          // TerraSAR-X geoms (OTB >= 7.4)
   Fetch(MDNum::NumberOfLines, imd, "number_lines");
   Fetch(MDNum::NumberOfColumns, imd, "number_samples");
-
-  std::string radarFreq = m_MetadataSupplierInterface->GetAs<std::string>("",
-							"radarFrequency");
-
-  if (radarFreq.empty())
-  {
-    // TerraSAR-X geoms (OTB >= 7.4)
-    Fetch(MDNum::RadarFrequency, imd, "support_data.radar_frequency");
-  }
-  else
-  {
-    // TerraSAR-X geoms (OTB < 7.4)
-    Fetch(MDNum::RadarFrequency, imd, "radarFrequency");
-  }
+  if (!CheckFetch(MDNum::RadarFrequency, imd, "radarFrequency"))        // TerraSAR-X geoms (OTB < 7.4)
+    Fetch(MDNum::RadarFrequency, imd, "support_data.radar_frequency");  // TerraSAR-X geoms (OTB >= 7.4)
   Fetch(MDStr::OrbitDirection, imd, "support_data.orbit_pass");
   Fetch(MDNum::OrbitNumber, imd, "support_data.abs_orbit");
-  Fetch(MDNum::RangeTimeFirstPixel, imd, "range_first_time");
-  Fetch(MDNum::RangeTimeLastPixel, imd, "range_last_time");
-
-
+  if (!CheckFetch(MDNum::RangeTimeFirstPixel, imd, "support_data.slant_range_to_first_pixel"))  // TerraSAR-X geoms (OTB >= 7.4)
+    Fetch(MDNum::RangeTimeFirstPixel, imd, "range_first_time");                                // TerraSAR-X geoms (OTB < 7.4)
+  if (!CheckFetch(MDNum::RangeTimeLastPixel, imd, "support_data.slant_range_to_last_pixel"))  // TerraSAR-X geoms (OTB >= 7.4)
+    Fetch(MDNum::RangeTimeLastPixel, imd, "range_last_time");                                // TerraSAR-X geoms (OTB < 7.4)
+  if (!CheckFetch(MDNum::RSF, imd, "support_data.range_sampling_rate"))  // TerraSAR-X geoms (OTB >= 7.4)
+    Fetch(MDNum::RSF, imd, "sensor_params.sampling_frequency");          // TerraSAR-X geoms (OTB < 7.4)
+  Fetch(MDStr::SensorID, imd, "sensor");
   imd.Add(MDStr::Instrument, "TSX-SAR");
 
   //SAR Parameters
@@ -1045,9 +974,6 @@ void TerraSarXSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   }
 
   imd.Add(MDGeom::SAR, sarParam);
-
-  Projection::GCPParam gcp;
-  imd.Add(MDGeom::GCP, gcp);
 
   SARCalib sarCalib;
   LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
