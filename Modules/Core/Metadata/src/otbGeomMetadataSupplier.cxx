@@ -31,6 +31,7 @@
 #include "otbStringUtils.h"
 #include "otbSARMetadata.h"
 #include "otbDateTime.h"
+#include "otbSpatialReference.h"
 
 namespace otb
 {
@@ -158,14 +159,15 @@ bool GeomMetadataSupplier::FetchGCP(ImageMetadata & imd)
   Projection::GCPParam gcpPrm;
   std::unordered_map<std::string, GCPTime> gcpTimes;
   std::ostringstream oss;
-  for(int i = 0 ; i < numberOfGcp ; ++i)
+  // GCP id starts at 1
+  for(int i = 1 ; i < numberOfGcp+1 ; ++i)
   {
     oss.str("");
-    oss << "support_data.geom.gcp[" << i << "].";
+    oss << "support_data.geom.gcp[" << i-1 << "].";
     gcpPrm.GCPs.emplace_back(std::to_string(i),                           // ID
                              "",                                          // Comment
-                             GetAs<double>(oss.str() + "im_pt.x"),        // col
-                             GetAs<double>(oss.str() + "im_pt.y"),        // row
+                             GetAs<double>(oss.str() + "im_pt.x") + 1,    // col
+                             GetAs<double>(oss.str() + "im_pt.y") + 1,    // row
                              GetAs<double>(oss.str() + "world_pt.lon"),   // px
                              GetAs<double>(oss.str() + "world_pt.lat"),   // py
                              GetAs<double>(oss.str() + "world_pt.hgt"));  // pz
@@ -174,6 +176,7 @@ bool GeomMetadataSupplier::FetchGCP(ImageMetadata & imd)
     time.slantRangeTime = GetAs<double>((oss.str() + "slant_range_time"));
     gcpTimes[std::to_string(i)] = time;
   }
+  gcpPrm.GCPProjection = otb::SpatialReference::FromWGS84().ToWkt();
   imd.Add(MDGeom::GCP, gcpPrm);  // This step will erase the GCP read by GDAL if any.
   if(imd.Has(MDGeom::SAR))
   {
