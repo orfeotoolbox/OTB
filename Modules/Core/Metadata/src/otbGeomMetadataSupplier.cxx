@@ -156,6 +156,15 @@ bool GeomMetadataSupplier::FetchGCP(ImageMetadata & imd)
   if (numberOfGcp == 0)
     return false;
 
+  double delta_x = 0;
+  double delta_y = 0;
+  // TerrasarX GCP are shifted
+  if (imd[MDStr::Instrument] == "TSX-SAR")
+  {
+      delta_x = 1;
+      delta_y = 1;
+  }
+
   Projection::GCPParam gcpPrm;
   std::unordered_map<std::string, GCPTime> gcpTimes;
   std::ostringstream oss;
@@ -164,13 +173,13 @@ bool GeomMetadataSupplier::FetchGCP(ImageMetadata & imd)
   {
     oss.str("");
     oss << "support_data.geom.gcp[" << i-1 << "].";
-    gcpPrm.GCPs.emplace_back(std::to_string(i),                           // ID
-                             "",                                          // Comment
-                             GetAs<double>(oss.str() + "im_pt.x") + 1,    // col
-                             GetAs<double>(oss.str() + "im_pt.y") + 1,    // row
-                             GetAs<double>(oss.str() + "world_pt.lon"),   // px
-                             GetAs<double>(oss.str() + "world_pt.lat"),   // py
-                             GetAs<double>(oss.str() + "world_pt.hgt"));  // pz
+    gcpPrm.GCPs.emplace_back(std::to_string(i),                              // ID
+                             "",                                             // Comment
+                             GetAs<double>(oss.str() + "im_pt.x") + delta_x, // col
+                             GetAs<double>(oss.str() + "im_pt.y") + delta_y, // row
+                             GetAs<double>(oss.str() + "world_pt.lon"),      // px
+                             GetAs<double>(oss.str() + "world_pt.lat"),      // py
+                             GetAs<double>(oss.str() + "world_pt.hgt"));     // pz
     GCPTime time;
     time.azimuthTime = MetaData::ReadFormattedDate(GetAs<std::string>(oss.str() + "azimuthTime"));
     time.slantRangeTime = GetAs<double>((oss.str() + "slant_range_time"));
