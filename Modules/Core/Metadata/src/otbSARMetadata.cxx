@@ -40,7 +40,7 @@ namespace
     catch (const std::out_of_range & e)
     {
       otbGenericExceptionMacro(itk::ExceptionObject,
-             << "Unable to find " << key << "in the input keywordlist");
+             << "Unable to find '" << key << "' in the input keywordlist");
     }
   }
 
