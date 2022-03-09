@@ -74,31 +74,37 @@ private:
     SetParameterDescription("bv", "Background value to ignore in computation of statistics.");
     MandatoryOff("bv");
 
-    AddParameter(ParameterType_OutputFilename, "out", "Output XML file");
-    SetParameterDescription("out", "XML filename where the statistics are saved for future reuse.");
-    MandatoryOff("out");
+    AddParameter(ParameterType_Group, "out", "Optional outputs");
 
-    AddParameter(ParameterType_String, "mean", "Mean pixel Value");
-    SetParameterDescription("mean", "Mean pixel value");
-    SetParameterRole("mean", Role_Output);
+    AddParameter(ParameterType_OutputFilename, "out.xml", "Output XML file");
+    SetParameterDescription("out.xml", "XML filename where the statistics are saved for future reuse.");
+    MandatoryOff("out.xml");
 
-    AddParameter(ParameterType_String, "min", "Min pixel Value");
-    SetParameterDescription("min", "Minimum pixel value");
-    SetParameterRole("min", Role_Output);
+    AddParameter(ParameterType_String, "out.mean", "Mean pixel Value");
+    SetParameterDescription("out.mean", "Mean pixel value.");
+    SetParameterRole("out.mean", Role_Output);
+    MandatoryOff("out.mean");
 
-    AddParameter(ParameterType_String, "max", "Max pixel Value");
-    SetParameterDescription("max", "Maximum pixel value");
-    SetParameterRole("max", Role_Output);
+    AddParameter(ParameterType_String, "out.min", "Min pixel Value");
+    SetParameterDescription("out.min", "Minimum pixel value.");
+    SetParameterRole("out.min", Role_Output);
+    MandatoryOff("out.min");
 
-    AddParameter(ParameterType_String, "std", "Standard deviation of pixel Value");
-    SetParameterDescription("std", "Standard deviation of pixel value");
-    SetParameterRole("std", Role_Output);
+    AddParameter(ParameterType_String, "out.max", "Max pixel Value");
+    SetParameterDescription("out.max", "Maximum pixel value.");
+    SetParameterRole("out.max", Role_Output);
+    MandatoryOff("out.max");
+
+    AddParameter(ParameterType_String, "out.std", "Standard deviation of pixel Value");
+    SetParameterDescription("out.std", "Standard deviation of pixel value.");
+    SetParameterRole("out.std", Role_Output);
+    MandatoryOff("out.std");
 
     AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("il", "QB_1_ortho.tif");
-    SetDocExampleParameterValue("out", "EstimateImageStatisticsQB1.xml");
+    SetDocExampleParameterValue("out.xml", "EstimateImageStatisticsQB1.xml");
 
     SetOfficialDocLink();
   }
@@ -260,17 +266,17 @@ private:
     oss_min << totalMinPerBand;
     oss_max << totalMaxPerBand;
     oss_std << stddev;
-    SetParameterString("mean", oss_mean.str());
-    SetParameterString("min", oss_min.str());
-    SetParameterString("max", oss_max.str());
-    SetParameterString("std", oss_std.str());
+    SetParameterString("out.mean", oss_mean.str());
+    SetParameterString("out.min", oss_min.str());
+    SetParameterString("out.max", oss_max.str());
+    SetParameterString("out.std", oss_std.str());
 
-    if (HasValue("out"))
+    if (HasValue("out.xml"))
     {
       // Write the Statistics via the statistic writer
       typedef otb::StatisticsXMLFileWriter<MeasurementType> StatisticsWriter;
       StatisticsWriter::Pointer                             writer = StatisticsWriter::New();
-      writer->SetFileName(GetParameterString("out"));
+      writer->SetFileName(GetParameterString("out.xml"));
       writer->AddInput("mean", totalMeanPerBand);
       writer->AddInput("min", totalMinPerBand);
       writer->AddInput("max", totalMaxPerBand);
