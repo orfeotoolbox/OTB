@@ -756,8 +756,10 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
     ManifestMS.GetFirstAs<std::string>(
       "xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:platform.safe:instrument.safe:extension.s1sarl1:instrumentMode.s1sarl1:swath"
     ));
-  imd.Add("FACILITY_IDENTIFIER",
-    ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.safe:facility.name"));
+  auto FIorganisation = ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.safe:facility.organisation");
+  auto FIsoftware = ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.safe:facility.safe:software.name");
+  auto FIversion = ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.safe:facility.safe:software.version");
+  imd.Add("FACILITY_IDENTIFIER", FIorganisation + " " + FIsoftware + " " + FIversion);
 
   // Annotation file
   auto AnnotationFileName = imageFineName + ".xml";
@@ -788,7 +790,6 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Add(MDNum::AverageSceneHeight, this->getBandTerrainHeight(AnnotationFilePath));
   imd.Add(MDNum::RadarFrequency, AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.radarFrequency"));
   imd.Add(MDNum::PRF, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthFrequency"));
-  imd.Add(MDNum::CenterIncidenceAngle, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.incidenceAngleMidSwath"));
 
   // Calibration file
   std::string CalibrationFilePath =
@@ -840,8 +841,9 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   CheckFetch(MDStr::BeamMode, imd, "manifest_data.acquisition_mode") || CheckFetch(MDStr::BeamMode, imd, "support_data.acquisition_mode");
   CheckFetch(MDStr::BeamSwath, imd, "manifest_data.swath") || CheckFetch(MDStr::BeamSwath, imd, "support_data.swath");
   CheckFetch(MDStr::Instrument, imd, "manifest_data.instrument") || CheckFetch(MDStr::Instrument, imd, "support_data.instrument");
+  CheckFetch(MDStr::Mission, imd, "manifest_data.instrument") || CheckFetch(MDStr::Mission, imd, "support_data.instrument");
   CheckFetch(MDStr::OrbitDirection, imd, "manifest_data.orbit_pass") || CheckFetch(MDStr::OrbitDirection, imd, "support_data.orbit_pass");
-  CheckFetch(MDNum::OrbitNumber, imd, "manifest_data.abs_orbit") || CheckFetch(MDStr::OrbitDirection, imd, "support_data.abs_orbit");
+  CheckFetch(MDNum::OrbitNumber, imd, "manifest_data.abs_orbit") || CheckFetch(MDNum::OrbitNumber, imd, "support_data.abs_orbit");
   CheckFetch(MDStr::ProductType, imd, "manifest_data.product_type") || CheckFetch(MDStr::ProductType, imd, "support_data.product_type");
   CheckFetch(MDTime::ProductionDate, imd, "manifest_data.date") || CheckFetch(MDTime::ProductionDate, imd, "support_data.date");
   CheckFetch(MDTime::AcquisitionDate, imd, "manifest_data.image_date") || CheckFetch(MDTime::AcquisitionDate, imd, "support_data.image_date");
@@ -867,9 +869,6 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   CreateCalibrationLookupData(sarCalib, imd, *m_MetadataSupplierInterface, true);
   CreateThermalNoiseLookupData(sarCalib, imd, *m_MetadataSupplierInterface, true);
   imd.Add(MDGeom::SARCalib, sarCalib);
-
-  Projection::GCPParam gcp;
-  imd.Add(MDGeom::GCP, gcp);
 }
 
 void Sentinel1ImageMetadataInterface::Parse(ImageMetadata & imd)

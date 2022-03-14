@@ -23,6 +23,7 @@
 #include <fstream>
 #include <boost/algorithm/string.hpp>
 #include <unordered_map>
+#include <algorithm>
 
 #include "otbGeomMetadataSupplier.h"
 #include "otbMetaDataKey.h"
@@ -30,6 +31,7 @@
 #include "otbStringUtils.h"
 #include "otbSARMetadata.h"
 #include "otbDateTime.h"
+#include "otbSpatialReference.h"
 
 namespace otb
 {
@@ -154,25 +156,36 @@ bool GeomMetadataSupplier::FetchGCP(ImageMetadata & imd)
   if (numberOfGcp == 0)
     return false;
 
+  double delta_x = 0;
+  double delta_y = 0;
+  // TerrasarX GCP are shifted
+  if (imd[MDStr::Instrument] == "TSX-SAR")
+  {
+      delta_x = 1;
+      delta_y = 1;
+  }
+
   Projection::GCPParam gcpPrm;
   std::unordered_map<std::string, GCPTime> gcpTimes;
   std::ostringstream oss;
-  for(int i = 0 ; i < numberOfGcp ; ++i)
+  // GCP id starts at 1
+  for(int i = 1 ; i < numberOfGcp+1 ; ++i)
   {
     oss.str("");
-    oss << "support_data.geom.gcp[" << i << "].";
-    gcpPrm.GCPs.emplace_back(std::to_string(i),                           // ID
-                             "",                                          // Comment
-                             GetAs<double>(oss.str() + "im_pt.x"),        // col
-                             GetAs<double>(oss.str() + "im_pt.y"),        // row
-                             GetAs<double>(oss.str() + "world_pt.lon"),   // px
-                             GetAs<double>(oss.str() + "world_pt.lat"),   // py
-                             GetAs<double>(oss.str() + "world_pt.hgt"));  // pz
+    oss << "support_data.geom.gcp[" << i-1 << "].";
+    gcpPrm.GCPs.emplace_back(std::to_string(i),                              // ID
+                             "",                                             // Comment
+                             GetAs<double>(oss.str() + "im_pt.x") + delta_x, // col
+                             GetAs<double>(oss.str() + "im_pt.y") + delta_y, // row
+                             GetAs<double>(oss.str() + "world_pt.lon"),      // px
+                             GetAs<double>(oss.str() + "world_pt.lat"),      // py
+                             GetAs<double>(oss.str() + "world_pt.hgt"));     // pz
     GCPTime time;
     time.azimuthTime = MetaData::ReadFormattedDate(GetAs<std::string>(oss.str() + "azimuthTime"));
     time.slantRangeTime = GetAs<double>((oss.str() + "slant_range_time"));
     gcpTimes[std::to_string(i)] = time;
   }
+  gcpPrm.GCPProjection = otb::SpatialReference::FromWGS84().ToWkt();
   imd.Add(MDGeom::GCP, gcpPrm);  // This step will erase the GCP read by GDAL if any.
   if(imd.Has(MDGeom::SAR))
   {
@@ -189,6 +202,14 @@ bool GeomMetadataSupplier::FetchGCP(ImageMetadata & imd)
 
   assert(imd.Has(MDGeom::GCP));
   return true;
+}
+
+unsigned int GeomMetadataSupplier::GetNumberOf(std::string const& pattern) const
+{
+  return std::count_if(m_MetadataDic.cbegin(),
+                       m_MetadataDic.cend(),
+                       [pattern](DictType::value_type u){return u.first.rfind(pattern, 0) == 0;}
+                      );
 }
 
 std::string GeomMetadataSupplier::PrintSelf() const

@@ -1909,10 +1909,6 @@ void GDALImageIO::ExportMetadata()
 
 void GDALImageIO::ImportMetadata()
 {
-  // TODO
-  // Check special value METADATATYPE=OTB before continue processing
-  // Keys Starting with: MDGeomNames[MDGeom::SensorGeometry] + '.' should
-  // be decoded by the (future) SensorModelFactory.
   // Use ImageMetadataBase::FromKeywordlist to ingest the metadata
   bool hasValue;
   if (std::string(GetMetadataValue("METADATATYPE", hasValue)) != "OTB")

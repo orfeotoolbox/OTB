@@ -1628,8 +1628,8 @@ int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char
   if (blImPtr->GetGCPProjection().compare(testImPtr->GetGCPProjection()) != 0)
   {
     std::cerr << "The gcp projection of the baseline image and Test image do not match!" << std::endl;
-    std::cerr << "baseline image: " << baselineImageFilename << " has gcp projection " << blImPtr->GetGCPProjection() << std::endl;
-    std::cerr << "Test image:     " << testImageFilename << " has gcp projection " << testImPtr->GetGCPProjection() << std::endl;
+    std::cerr << "baseline image: " << baselineImageFilename << " has gcp projection '" << blImPtr->GetGCPProjection() << "'\n'";
+    std::cerr << "Test image:     " << testImageFilename << " has gcp projection '" << testImPtr->GetGCPProjection() << "'\n";
     errcount++;
   }
 
@@ -1643,29 +1643,30 @@ int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char
   }
   else
   {
+    double tol = 0.0000001;
     for (unsigned int i = 0; i < blImPtr->GetGCPCount(); ++i)
     {
       if ((blImPtr->GetGCPId(i).compare(testImPtr->GetGCPId(i)) != 0) || (blImPtr->GetGCPInfo(i).compare(testImPtr->GetGCPInfo(i)) != 0) ||
           (blImPtr->GetGCPRow(i) != testImPtr->GetGCPRow(i)) || (blImPtr->GetGCPCol(i) != testImPtr->GetGCPCol(i)) ||
-          (blImPtr->GetGCPX(i) != testImPtr->GetGCPX(i)) || (blImPtr->GetGCPY(i) != testImPtr->GetGCPY(i)) || (blImPtr->GetGCPZ(i) != testImPtr->GetGCPZ(i)))
+          (blImPtr->GetGCPX(i) - testImPtr->GetGCPX(i) > tol) || (blImPtr->GetGCPY(i) - testImPtr->GetGCPY(i) > tol) || (blImPtr->GetGCPZ(i) - testImPtr->GetGCPZ(i) > tol))
       {
         std::cerr << "The GCP number " << i << " of the baseline image and Test image do not match!" << std::endl;
         std::cerr << "baseline image: " << baselineImageFilename << " has gcp number " << i << " ("
-                  << "id: " << blImPtr->GetGCPId(i) << ", "
-                  << "info: " << blImPtr->GetGCPInfo(i) << ", "
-                  << "row: " << blImPtr->GetGCPRow(i) << ", "
-                  << "col: " << blImPtr->GetGCPCol(i) << ", "
-                  << "X: " << blImPtr->GetGCPX(i) << ", "
-                  << "Y: " << blImPtr->GetGCPY(i) << ", "
-                  << "Z: " << blImPtr->GetGCPZ(i) << ")" << std::endl;
+                  << "id: '" << blImPtr->GetGCPId(i) << "', "
+                  << "info: '" << blImPtr->GetGCPInfo(i) << "', "
+                  << "row: '" << blImPtr->GetGCPRow(i) << "', "
+                  << "col: '" << blImPtr->GetGCPCol(i) << "', "
+                  << "X: '" << blImPtr->GetGCPX(i) << "', "
+                  << "Y: '" << blImPtr->GetGCPY(i) << "', "
+                  << "Z: '" << blImPtr->GetGCPZ(i) << "')" << std::endl;
         std::cerr << "Test image:     " << testImageFilename << " has gcp  number " << i << " ("
-                  << "id: " << testImPtr->GetGCPId(i) << ", "
-                  << "info: " << testImPtr->GetGCPInfo(i) << ", "
-                  << "row: " << testImPtr->GetGCPRow(i) << ", "
-                  << "col: " << testImPtr->GetGCPCol(i) << ", "
-                  << "X: " << testImPtr->GetGCPX(i) << ", "
-                  << "Y: " << testImPtr->GetGCPY(i) << ", "
-                  << "Z: " << testImPtr->GetGCPZ(i) << ")" << std::endl;
+                  << "id: '" << testImPtr->GetGCPId(i) << "', "
+                  << "info: '" << testImPtr->GetGCPInfo(i) << "', "
+                  << "row: '" << testImPtr->GetGCPRow(i) << "', "
+                  << "col: '" << testImPtr->GetGCPCol(i) << "', "
+                  << "X: '" << testImPtr->GetGCPX(i) << "', "
+                  << "Y: '" << testImPtr->GetGCPY(i) << "', "
+                  << "Z: '" << testImPtr->GetGCPZ(i) << "')" << std::endl;
         errcount++;
       }
     }
@@ -1675,7 +1676,7 @@ int TestHelper::RegressionTestMetaData(const char* testImageFilename, const char
   const auto & testImageMetadata = testImPtr->GetImageMetadata();
 
   // Compare string keys (strict equality)
-  // Don't test OTB_VERSION, as it change with the version of OTB used
+  // Don't test OTB_VERSION, as it changes with the version of OTB used
   std::vector<MDStr> untestedMDStr = {MDStr::OtbVersion};
   errcount += CompareMetadataDict(baselineImageMetadata.StringKeys,
 				  testImageMetadata.StringKeys,
