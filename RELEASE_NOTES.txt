@@ -1,8 +1,9 @@
-OTB-v 8.0.0 - Changes since version 7.4.0 (January 27th, 2022)
+OTB-v 8.0.0 - Changes since version 7.4.0 (March 15th, 2022)
 ---------------------------------------------------------------------
 
 Features added:
 
+   * !890: Improve ComputeImageStatistics by Rémi Cresson
    * !862: Add INFO message about metadata source by Julien Osman
    * !795: Improve opticalibration pleiades by Thibaut Romain
    * !793: Add a high level OTB_WRAP_QGIS cmake option and Fix BUILD_DEFAULT_MODULE bug when listing module dependencies by Thibaut Romain
