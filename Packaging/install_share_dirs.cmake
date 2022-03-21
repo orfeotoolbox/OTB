@@ -27,12 +27,6 @@ function(install_share_dirs)
 
   set(PKG_SHARE_SOURCE_DIR ${SUPERBUILD_INSTALL_DIR}/share)
 
-  ####################### install mvd i18N ############################
-  set(MVD_I18N_SOURCE_DIR ${PKG_SHARE_SOURCE_DIR}/otb/i18n)
-  if(NOT EXISTS "${MVD_I18N_SOURCE_DIR}")
-    message(FATAL_ERROR "Error ${MVD_I18N_SOURCE_DIR} not exists")
-  endif()
-
   ####################### install GDAL data ############################
   set(GDAL_DATA_DIR ${PKG_SHARE_SOURCE_DIR}/gdal)
   #MSVC install gdal-data in in a different directory. So we don't spoil it
