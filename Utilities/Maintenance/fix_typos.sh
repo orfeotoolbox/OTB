@@ -48,6 +48,8 @@ EXCLUDED_FILES="$EXCLUDED_FILES,*/Documentation/SoftwareGuide/Art/*,*/Documentat
 EXCLUDED_FILES="$EXCLUDED_FILES,*/Copyright/*,*/SuperBuild/Copyright/*"
 # exclude maintenance, translation, license
 EXCLUDED_FILES="$EXCLUDED_FILES,*/Utilities/Maintenance/fix_typos.sh,*/fix_typos/*,LICENSE,*/i18n/*"
+# exclude Data directory
+EXCLUDED_FILES="$EXCLUDED_FILES,*/Data/*"
 
 #We use also words white list to handle deprecated classes/methods which are still there and contains some typos
 
@@ -60,6 +62,14 @@ WORDS_WHITE_LIST="Developement"
 WORDS_WHITE_LIST="$WORDS_WHITE_LIST,dum"
 # for pary variable
 WORDS_WHITE_LIST="$WORDS_WHITE_LIST,pary"
+# LaTeX
+WORDS_WHITE_LIST="$WORDS_WHITE_LIST,LaTeX,BibTeX,404"
+# Technical terms
+WORDS_WHITE_LIST="$WORDS_WHITE_LIST,SOM,som,HaA,ND,haa,Hsi,Eyt,VectorDatas,ot,inout,Lod"
+# CMake
+WORDS_WHITE_LIST="$WORDS_WHITE_LIST,DEPENDEES,Te,Alls"
+# Names
+WORDS_WHITE_LIST="$WORDS_WHITE_LIST,bre,Theis,Dout,Pont,Unser"
 
 python3 fix_typos/codespell/codespell.py -w -i 3 -q 2 -S $EXCLUDED_FILES \
         --words-white-list=$WORDS_WHITE_LIST \

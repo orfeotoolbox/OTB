@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -161,6 +161,38 @@ struct CoordinateConversionRecord
   static CoordinateConversionRecord FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
 };
 
+/** \struct InfoSceneCoord
+ * \brief Represents an InfoSceneCoord
+ */
+struct InfoSceneCoord
+{
+  /** Reference row (refRow) */
+  unsigned long referenceRow;
+
+  /** Reference column (refColumn) */
+  unsigned long referenceColumn;
+
+  /** Latitude (lat) */
+  double latitude;
+
+  /** Longitude (lon) */
+  double longitude;
+
+  /** Azimuth time (azimuthTimeUTC) */
+  MetaData::TimePoint azimuthTime;
+
+  /** Range time (rangeTime) */
+  double rangeTime;
+
+  /** Incidence angle (incidenceAngle) */
+  double incidenceAngle;
+
+  /** Keywordlist export */
+  void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix = "") const;
+
+  /** Keywordlist import */
+  static InfoSceneCoord FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix = "");
+};
 
 /** \struct SARParam
  *
@@ -183,6 +215,10 @@ struct OTBMetadata_EXPORT SARParam
   unsigned long numberOfLinesPerBurst;
   unsigned long numberOfSamplesPerBurst;
 
+  double azimuthBandwidth = 0.;
+  double rangeBandwidth = 0.;
+  double azimuthSteeringRate = 0.;
+
   bool rightLookingFlag = true;
 
   /** Doppler centroid estimates */
@@ -202,6 +238,13 @@ struct OTBMetadata_EXPORT SARParam
 
   /** Conversion coefficients from ground range to slant range */
   std::vector<CoordinateConversionRecord> groundRangeToSlantRangeRecords;
+
+  /** Scene coordinate */
+  InfoSceneCoord centerSceneCoord;
+  InfoSceneCoord ulSceneCoord;
+  InfoSceneCoord urSceneCoord;
+  InfoSceneCoord lrSceneCoord;
+  InfoSceneCoord llSceneCoord;
 
   /** Keywordlist export */
   void ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const;

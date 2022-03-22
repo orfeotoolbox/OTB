@@ -84,8 +84,19 @@ add_test( NAME pyTvBug1899
   Bug1899
   ${OTB_DATA_ROOT}/Input/veryverySmallFSATSW.tif
   ${TEMP}/pyTvBug1899Output.tif
-)
+  )
 
+add_test( NAME pyTvBug2262
+  COMMAND ${TEST_DRIVER}
+  --compare-ascii ${NOTOL}
+  ${BASELINE_FILES}/pyTvBug2262Output.txt
+  ${TEMP}/pyTvBug2262Output.txt
+  Execute
+  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
+  Bug2262
+  ${OTB_DATA_ROOT}/Input/Capitole_Rasterization.tif
+  ${TEMP}/pyTvBug2262Output.txt
+  )
 
 add_test( NAME pyTvBandMathOutXML
   COMMAND ${TEST_DRIVER} Execute

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -186,7 +186,7 @@ protected:
    * \snippet auto red   = this->Value(CommonBandNamess::RED,input);
    *
    * As this function is on the critical performance path, no checks
-   * are made to see wether this band is really required for this
+   * are made to see whether this band is really required for this
    * indice. However an assertion will be raised in debug mode.
    *
    * \param band The band for which to retrieve the value

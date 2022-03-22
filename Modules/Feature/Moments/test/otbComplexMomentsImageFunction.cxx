@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -155,7 +155,7 @@ int otbComplexMomentsImageFunctionScaleInvariant(int itkNotUsed(argc), char* arg
 
   if (error > 1E-3)
   {
-    itkGenericExceptionMacro(<< "Error = " << error << "  > 1E-3     -> TEST FAILLED" << std::endl);
+    itkGenericExceptionMacro(<< "Error = " << error << "  > 1E-3     -> TEST FAILED" << std::endl);
   }
 
   return EXIT_SUCCESS;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -140,9 +140,9 @@ private:
   unsigned long m_Index2;
 
   /** Helper function to decode boolean sequence
-   *  Caracters converted into true : '1' 'X' 'y' 'Y' '|' '+'
-   *  Caracters converted into false : '0' '_' 'n' 'N' '.' '-'
-   *  Other caracters will return a 2 */
+   *  Characters converted into true : '1' 'X' 'y' 'Y' '|' '+'
+   *  Characters converted into false : '0' '_' 'n' 'N' '.' '-'
+   *  Other characters will return a 2 */
   static unsigned int ParseSymbol(const char& s);
 };
 

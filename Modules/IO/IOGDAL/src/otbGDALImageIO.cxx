@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2018-2020 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
@@ -1909,10 +1909,6 @@ void GDALImageIO::ExportMetadata()
 
 void GDALImageIO::ImportMetadata()
 {
-  // TODO
-  // Check special value METADATATYPE=OTB before continue processing
-  // Keys Starting with: MDGeomNames[MDGeom::SensorGeometry] + '.' should
-  // be decoded by the (future) SensorModelFactory.
   // Use ImageMetadataBase::FromKeywordlist to ingest the metadata
   bool hasValue;
   if (std::string(GetMetadataValue("METADATATYPE", hasValue)) != "OTB")

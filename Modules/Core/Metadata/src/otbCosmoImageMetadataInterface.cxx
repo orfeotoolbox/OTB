@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -197,7 +197,12 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   Fetch(MDNum::PRF, imd, "S01_PRF");
 
   //getTime
-  auto subDsName = "HDF5:" + m_MetadataSupplierInterface->GetResourceFile() + "://S01/SBI";
+  auto extension = itksys::SystemTools::GetFilenameExtension(m_MetadataSupplierInterface->GetResourceFile());
+  auto subDsName = m_MetadataSupplierInterface->GetResourceFile();
+  if (extension  == ".h5")
+    {
+      subDsName = "HDF5:" + m_MetadataSupplierInterface->GetResourceFile() + "://S01/SBI";
+    }
   auto metadataBands = this->saveMetadataBands(subDsName) ;
   bool hasTimeUTC;
   int pos = m_MetadataSupplierInterface->GetMetadataValue("Reference_UTC", hasTimeUTC).find(" ");;
@@ -227,11 +232,18 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Add(MDTime::AcquisitionStartTime, MetaData::ReadFormattedDate(first_line_time));
   imd.Add(MDTime::AcquisitionStopTime, MetaData::ReadFormattedDate(last_line_time));
 
+  imd.Add(MDNum::LineSpacing, std::stod(metadataBands[0]["S01_SBI_Line_Spacing"]));
+  imd.Add(MDNum::PixelSpacing, std::stod(metadataBands[0]["S01_SBI_Column_Spacing"]));
+
   // Retrieve the product dimension, as it is not stored in the metadata
   auto dataset = static_cast<GDALDataset*>(GDALOpen(subDsName.c_str(), GA_ReadOnly));
 
   int sizex = dataset->GetRasterXSize();
   int sizey = dataset->GetRasterYSize();
+
+  imd.Add(MDNum::NumberOfLines, static_cast<double>(sizey));
+  imd.Add(MDNum::NumberOfColumns, static_cast<double>(sizex));
+
   GDALClose(dataset);
 
   //SAR Parameters
@@ -259,7 +271,28 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   }
 
   sarParam.rightLookingFlag = lookSide == "RIGHT";
-  imd.Add(MDGeom::SAR, sarParam);
+
+  // Scene coordinate
+  std::vector<std::string> vGeoCoor;
+  otb::Utils::ConvertStringToVector(metadataBands[0]["S01_SBI_Top_Left_Geodetic_Coordinates"], vGeoCoor,
+      "S01_SBI_Top_Left_Geodetic_Coordinates", " ");
+  sarParam.ulSceneCoord.latitude = std::stod(vGeoCoor[0]);
+  sarParam.ulSceneCoord.longitude = std::stod(vGeoCoor[1]);
+  vGeoCoor.clear();
+  otb::Utils::ConvertStringToVector(metadataBands[0]["S01_SBI_Top_Right_Geodetic_Coordinates"], vGeoCoor,
+      "S01_SBI_Top_Right_Geodetic_Coordinates", " ");
+  sarParam.urSceneCoord.latitude = std::stod(vGeoCoor[0]);
+  sarParam.urSceneCoord.longitude = std::stod(vGeoCoor[1]);
+  vGeoCoor.clear();
+  otb::Utils::ConvertStringToVector(metadataBands[0]["S01_SBI_Bottom_Left_Geodetic_Coordinates"], vGeoCoor,
+      "S01_SBI_Bottom_Left_Geodetic_Coordinates", " ");
+  sarParam.llSceneCoord.latitude = std::stod(vGeoCoor[0]);
+  sarParam.llSceneCoord.longitude = std::stod(vGeoCoor[1]);
+  vGeoCoor.clear();
+  otb::Utils::ConvertStringToVector(metadataBands[0]["S01_SBI_Bottom_Right_Geodetic_Coordinates"], vGeoCoor,
+      "S01_SBI_Bottom_Right_Geodetic_Coordinates", " ");
+  sarParam.lrSceneCoord.latitude = std::stod(vGeoCoor[0]);
+  sarParam.lrSceneCoord.longitude = std::stod(vGeoCoor[1]);
 
   // TODO: compute a GCP at the center of scene using the inverse sar model like it is done in ossim plugins
   // This require to move IMIs to another higher level module that depends on OTBTransform (which depends 
@@ -281,6 +314,14 @@ void CosmoImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   gcpParam.GCPProjection = SpatialReference::FromWGS84().ToWkt();
   gcpParam.GCPs.push_back(gcp);
   imd.Add(MDGeom::GCP, gcpParam);
+
+  // Left corner => azimuthTime == first_line_time and slantRangeTime == near_range_time
+  GCPTime time;
+  time.azimuthTime = MetaData::ReadFormattedDate(first_line_time);
+  time.slantRangeTime = sarParam.nearRangeTime;
+  sarParam.gcpTimes["0"] = time;
+
+  imd.Add(MDGeom::SAR, sarParam);
 
   SARCalib sarCalib;
   std::istringstream("1970-01-01T00:00:00.000000") >> sarCalib.calibrationStartTime;
@@ -316,11 +357,52 @@ void CosmoImageMetadataInterface::ParseGeom(ImageMetadata &imd)
   Fetch(MDNum::PRF, imd, "support_data.pulse_repetition_frequency");
   Fetch(MDTime::AcquisitionStartTime, imd, "header.first_line_time");
   Fetch(MDTime::AcquisitionStopTime, imd, "header.last_line_time");
+  Fetch(MDTime::AcquisitionStartTime, imd, "support_data.first_line_time");
+  Fetch(MDTime::AcquisitionStopTime, imd, "support_data.last_line_time");
+  Fetch(MDNum::LineSpacing, imd, "support_data.azimuth_spacing");
+  Fetch(MDNum::PixelSpacing, imd, "support_data.range_spacing");
+  Fetch(MDNum::NumberOfLines, imd, "number_lines");
+  Fetch(MDNum::NumberOfColumns, imd, "number_samples");
 
   //SAR Parameters
   SARParam sarParam;
   sarParam.orbits = this->GetOrbitsGeom();
+  sarParam.azimuthFmRates = this->GetAzimuthFmRateGeom();
+  sarParam.dopplerCentroids = this->GetDopplerCentroidGeom();
+
+  // support_data.look_side for Cosmo geoms (all versions) and TerraSAR-X geoms (OTB 7.4)
+  const std::string supportDataPrefix = "support_data.";
+  auto lookSide = m_MetadataSupplierInterface->GetAs<std::string>("",
+                                "support_data.look_side");
+
+
+  sarParam.rightLookingFlag = lookSide == "RIGHT";
+
+  sarParam.rangeSamplingRate = m_MetadataSupplierInterface->GetAs<double>(
+                                supportDataPrefix + "range_sampling_rate");
+
+  sarParam.nearRangeTime = m_MetadataSupplierInterface->GetAs<double>(
+                                supportDataPrefix + "slant_range_to_first_pixel");
+
+  sarParam.rangeResolution = m_MetadataSupplierInterface->GetAs<double>(
+                                supportDataPrefix + "range_spacing");
+
+  sarParam.azimuthTimeInterval = MetaData::Duration::Seconds(m_MetadataSupplierInterface->GetAs<double>(
+                                supportDataPrefix + "line_time_interval") );
+
+
+  sarParam.burstRecords = CreateBurstRecord(m_MetadataSupplierInterface->GetAs<std::string>(
+					     supportDataPrefix + "first_line_time"),
+					    m_MetadataSupplierInterface->GetAs<std::string>(
+					     supportDataPrefix + "last_line_time"),
+					    static_cast<int>(imd[MDNum::NumberOfColumns])-1,
+					    static_cast<int>(imd[MDNum::NumberOfLines])-1);
+
   imd.Add(MDGeom::SAR, sarParam);
+
+  Projection::GCPParam gcp;
+  imd.Add(MDGeom::GCP, gcp);
+
   SARCalib sarCalib;
   LoadRadiometricCalibrationData(sarCalib, *m_MetadataSupplierInterface, imd);
   imd.Add(MDGeom::SARCalib, sarCalib);

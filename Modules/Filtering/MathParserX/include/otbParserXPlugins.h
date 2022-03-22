@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -415,7 +415,7 @@ public:
 
   const mup::char_type* GetDesc() const override
   {
-    return "vmax(m1) - overall maximun";
+    return "vmax(m1) - overall maximum";
   }
 
   mup::IToken* Clone() const override

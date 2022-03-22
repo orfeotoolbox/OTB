@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -137,12 +137,12 @@ public:
   void ConnectKMClassificationParams()
   {
     Connect("training.cfield", "extraction.field");
-    Connect("training.io.stats", "imgstats.out");
+    Connect("training.io.stats", "imgstats.out.xml");
 
     Connect("classif.in", "imgenvelop.in");
     Connect("classif.model", "training.io.out");
     Connect("classif.ram", "polystats.ram");
-    Connect("classif.imstat", "imgstats.out");
+    Connect("classif.imstat", "imgstats.out.xml");
   }
 
   void ConnectKMClassificationMask()
@@ -251,7 +251,7 @@ public:
       GetInternalApplication("training")->SetParameterString("classifier.sharkkm.incentroids", GetParameterString("centroids.in"));
 
       GetInternalApplication("training")
-          ->SetParameterString("classifier.sharkkm.cstats", GetInternalApplication("imgstats")->GetParameterString("out"));
+          ->SetParameterString("classifier.sharkkm.cstats", GetInternalApplication("imgstats")->GetParameterString("out.xml"));
     }
 
 
@@ -269,10 +269,10 @@ public:
   {
     // std::vector<std::string> imageFileNameList = {imageFileName};
     GetInternalApplication("imgstats")->SetParameterImageBase("il", img);
-    GetInternalApplication("imgstats")->SetParameterString("out", imagesStatsFileName);
+    GetInternalApplication("imgstats")->SetParameterString("out.xml", imagesStatsFileName);
 
     ExecuteInternal("imgstats");
-    otbAppLogINFO("image statistics file: " << GetInternalApplication("imgstats")->GetParameterString("out"));
+    otbAppLogINFO("image statistics file: " << GetInternalApplication("imgstats")->GetParameterString("out.xml"));
   }
 
 

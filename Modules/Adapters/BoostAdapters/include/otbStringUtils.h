@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -102,7 +102,7 @@ void ConvertStringToVector(std::string const& str, T& ret, std::string const& er
  * \param[in] str  input string
  * \param key[out] An std::string reference where key will be stored
  * \param value[out] a reference of \cT where value will be stored
- * \param defValue[in] a default value if there is no delimiter fo
+ * \param defValue[in] a default value if there is no delimiter
  * \param[in] errmsg a msg complement used to build the error message to
 be shown if there is \c lexical_cast exception. See \cotb:Utils::LexicalCast().
  * \param delims  delimiter characters (space is default)

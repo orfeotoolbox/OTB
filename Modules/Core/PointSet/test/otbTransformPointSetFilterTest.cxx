@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,8 +33,8 @@ int otbTransformPointSetFilterTest(int, char* [])
 
   // Declare the types of the PointSet
   // By default it is a 3D PointSet using itk::Point<float, 3>
-  // on the vertices, and an itk::VectorContainter
-  // as containter for points
+  // on the vertices, and an itk::VectorContainer
+  // as container for points
   typedef itk::PointSet<PixelType> PointSetType;
 
   // Declare the type for PointsContainer

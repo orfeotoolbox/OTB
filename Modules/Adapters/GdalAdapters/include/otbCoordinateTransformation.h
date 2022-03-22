@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -87,7 +87,7 @@ public:
    * \param source The source spatial reference
    * \param target The target spatial reference
    *
-   * \throws InvalidCoordinateTransfromationException in case of failure
+   * \throws InvalidCoordinateTransformationException in case of failure
    */
   CoordinateTransformation(const SpatialReference& source, const SpatialReference& destination);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -111,7 +111,7 @@ protected:
   ~ImageSeriesFileReader() override = default;
 
   /** TestBandSelection
-   * Tests the coherency of the Meta File (especifically band selection) with the image types
+   * Tests the coherency of the Meta File (especially band selection) with the image types
    */
   virtual void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands))
   {
@@ -222,7 +222,7 @@ protected:
   }
 
   /** TestBandSelection
-   * Tests the coherency of the Meta File (especifically band selection) with the image types
+   * Tests the coherency of the Meta File (especially band selection) with the image types
    */
   virtual void TestBandSelection(std::vector<unsigned int>& bands);
 
@@ -330,7 +330,7 @@ protected:
   }
 
   /**
-   * Tests the coherency of the Meta File (especifically band selection) with the image types
+   * Tests the coherency of the Meta File (especially band selection) with the image types
    */
   virtual void TestBandSelection(std::vector<unsigned int>& bands);
 
@@ -440,7 +440,7 @@ protected:
   }
 
   /**
-   * Tests the coherency of the Meta File (especifically band selection) with the image types
+   * Tests the coherency of the Meta File (especially band selection) with the image types
    */
   void TestBandSelection(std::vector<unsigned int>& itkNotUsed(bands)) override
   {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,20 +44,6 @@ void MetaImageFunction<TOutputPrecision, TCoordRep>::AddFunction(FunctionType* f
 {
   m_FunctionContainer.push_back(function);
 }
-
-// template <class TOutputPrecision, class TCoordRep, typename T1, typename T2>
-// void
-// MetaImageFunction<TOutputPrecision, TCoordRep>
-//::AddFunction(itk::ImageFunction<T1, T2, TCoordRep> * function)
-// {
-//  // Define the adapter
-//  typedef itk::ImageFunction<T1, T2, TCoordRep> ImageFunctionType;
-//  typedef otb::ImageFunctionAdapter<T1, ImageFunctionType, TCoordRep > AdapterType;
-//
-//  typename AdapterType::Pointer adapter = AdapterType::New();
-//  adapte
-//
-// }
 
 template <class TOutputPrecision, class TCoordRep>
 void MetaImageFunction<TOutputPrecision, TCoordRep>::ClearFunctions()

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -89,7 +89,7 @@ public:
 
 
   /**
-    * This method will perform an extration of one burst. It wil return the
+    * This method will perform an extraction of one burst. It will return the
     * lines and samples to extract in the image file.
     * \return true if the extraction operation succeeded. No changes is
     * made to the object if the operation fails.

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -255,7 +255,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   {
     if (reportError == true)
     {
-      itkExceptionMacro(<< "BSQ : the first line of the header file must be contains 'TYPE' caracters.");
+      itkExceptionMacro(<< "BSQ : the first line of the header file must be contains 'TYPE' characters.");
     }
     else
     {
@@ -314,7 +314,7 @@ bool BSQImageIO::InternalReadHeaderInformation(const std::string& file_name, std
   {
     if (reportError == true)
     {
-      itkExceptionMacro(<< "BSQ : the third line of the header file must be contains 'LABEL' caracters.");
+      itkExceptionMacro(<< "BSQ : the third line of the header file must be contains 'LABEL' characters.");
     }
     else
     {
@@ -592,7 +592,7 @@ void BSQImageIO::WriteImageInformation()
 
   // Write LABEL information
   m_HeaderFile << "LABEL" << std::endl;
-  m_HeaderFile << m_TypeBsq << " - This BSQ image file was producted by OTB software." << std::endl;
+  m_HeaderFile << m_TypeBsq << " - This BSQ image file was produced by OTB software." << std::endl;
 
   // Write CHANNELS information
   m_HeaderFile << "CHANNELS" << std::endl;

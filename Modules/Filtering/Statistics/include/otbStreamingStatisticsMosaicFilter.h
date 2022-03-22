@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2016-2019 IRSTEA
  *
  * This file is part of Orfeo Toolbox
@@ -95,7 +95,7 @@ public:
   typedef typename itk::DataObject::Pointer                  DataObjectPointer;
   typedef itk::ProcessObject::DataObjectPointerArraySizeType DataObjectPointerArraySizeType;
 
-  /** Overrided methods */
+  /** Overridden methods */
   void AllocateOutputs() override;
   void ThreadedGenerateData(const OutputImageRegionType& outputRegionForThread, itk::ThreadIdType threadId) override;
   void Reset() override;

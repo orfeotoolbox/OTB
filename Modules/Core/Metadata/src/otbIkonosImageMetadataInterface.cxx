@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -82,7 +82,7 @@ namespace
         {
           std::string metadata = line.substr(metadataPath.size(), line.size()-metadataPath.size());
           
-          // Remove carriage return and new line caracters.
+          // Remove carriage return and new line characters.
           metadata.erase(std::remove(metadata.begin(), metadata.end(), '\r'), metadata.end());
           metadata.erase(std::remove(metadata.begin(), metadata.end(), '\n'), metadata.end());
 
@@ -136,7 +136,7 @@ namespace
         {
           std::string metadata = line.substr(metadataPath.size(), line.size()-metadataPath.size());
           
-          // Remove carriage return and new line caracters.
+          // Remove carriage return and new line characters.
           metadata.erase(std::remove(metadata.begin(), metadata.end(), '\r'), metadata.end());
           metadata.erase(std::remove(metadata.begin(), metadata.end(), '\n'), metadata.end());
 

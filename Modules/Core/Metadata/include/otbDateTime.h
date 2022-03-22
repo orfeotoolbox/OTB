@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -180,7 +180,7 @@ public:
     return Duration(InternalDurationType(static_cast<InternalDurationType::rep>(std::round(s / details::internalPeriod))));
   }
 
-  static Duration Miliseconds(double ms)
+  static Duration Milliseconds(double ms)
   {
     return Duration(InternalDurationType(static_cast<InternalDurationType::rep>(std::round(ms / details::internalPeriod * 1e-3))));
   }

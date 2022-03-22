@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -671,7 +671,7 @@ BOOST_AUTO_TEST_CASE(Add_n_Del_Fields)
     ogr::FieldDefn f4(*defn.GetFieldDefn(4));
     BOOST_CHECK_EQUAL(f4, k_f5);
   }
-  // todo: add reoder tests
+  // todo: add reorder tests
 }
 
 BOOST_AUTO_TEST_CASE(Add_n_Read_Fields)

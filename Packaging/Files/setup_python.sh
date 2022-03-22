@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -65,7 +65,7 @@ if [ ! $CUSTOM_PYTHON ]
     then
     python_check_failed
   fi
-else # case wher user provides an OTB_PYTHON_EXE
+else # case where user provides an OTB_PYTHON_EXE
   if [ ! "$python_major_version" -eq 3 ] || [ ! "$python_minor_version" -eq 5 ]
     then
     printf %s\\n "*****Warning******"
