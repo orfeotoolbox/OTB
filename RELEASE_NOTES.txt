@@ -1,4 +1,4 @@
-OTB-v 8.0.0 - Changes since version 7.4.0 (March 15th, 2022)
+OTB-v 8.0.0 - Changes since version 7.4.0 (March 22th, 2022)
 ---------------------------------------------------------------------
 
 Features added:
