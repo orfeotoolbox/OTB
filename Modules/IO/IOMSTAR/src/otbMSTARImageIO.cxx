@@ -111,7 +111,7 @@ bool MSTARImageIO::CanReadFile(const char* filename)
   std::string fname = filename;
   if (fname == "")
   {
-    itkDebugMacro(<< "Fichier image non specifie.");
+    itkDebugMacro(<< "Image file not specified.");
   }
 
   MSTARname = filename;
@@ -249,13 +249,13 @@ bool MSTARImageIO::CanWriteFile(const char* filename)
 
   if (fname == "")
   {
-    itkDebugMacro(<< "Fichier image non specifie.");
+    itkDebugMacro(<< "Image file not specified.");
   }
 
   if (formatFound == false)
   {
     std::string identificationErreur;
-    identificationErreur = "Format MSTAR non detecte dans l'extension du fichier.";
+    identificationErreur = "MSTAR format not detected in the file's extension.";
     itkDebugMacro(<< identificationErreur.c_str());
   }
 

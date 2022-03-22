@@ -923,7 +923,7 @@ void TerraSarXSarImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   sarParam.azimuthFmRates = this->GetAzimuthFmRateGeom();
   sarParam.dopplerCentroids = this->GetDopplerCentroidGeom();
 
-  // Rigth looking flag is always true for TSX products
+  // Right looking flag is always true for TSX products
   sarParam.rightLookingFlag = true;
 
   const std::string supportDataPrefix = "support_data.";

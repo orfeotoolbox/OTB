@@ -87,7 +87,7 @@ public:
    * \param source The source spatial reference
    * \param target The target spatial reference
    *
-   * \throws InvalidCoordinateTransfromationException in case of failure
+   * \throws InvalidCoordinateTransformationException in case of failure
    */
   CoordinateTransformation(const SpatialReference& source, const SpatialReference& destination);
 

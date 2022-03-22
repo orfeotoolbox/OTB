@@ -50,4 +50,4 @@ using VertexArrayObject = Handle< VertexArrayObjectPolicy >;
 } // end namespace otb.
 
 
-#endif // otb_GlVetexArrayObject_h
+#endif // otb_GlVertexArrayObject_h

@@ -128,7 +128,7 @@ public:
   /**\name Features collection */
   //@{
   /** Returns the number of elements in the layer.
-   * \param[in] doForceCompuation  indicates whether the size shall be computed
+   * \param[in] doForceComputation  indicates whether the size shall be computed
    * even so it's expensive to do so.
    *
    * \return the number of features in the layer, -1 if count is unknown
