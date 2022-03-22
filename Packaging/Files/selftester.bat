@@ -98,6 +98,7 @@ if %nb_tmp_lines_out% gtr 0 (
   echo "ERROR: otb_loader.exe %1"
   type tmp.log
   if %EXIT_ON_ERROR% equ 1 ( exit 1 )
+  goto :check_application_end
 )
 endlocal
 goto :eof

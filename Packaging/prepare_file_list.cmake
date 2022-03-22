@@ -87,7 +87,6 @@ function(prepare_file_list file_list_result)
   
   # special case for msvc: ucrtbase.dll must be explicitly vetted.
   # for proj.dll, see Mantis-1424
-  # libEGL needed by Qt 5 at runtime
   if(MSVC)
     list(APPEND file_list "ucrtbase.dll")
     list(APPEND file_list "proj.dll")
