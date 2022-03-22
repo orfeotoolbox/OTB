@@ -479,7 +479,7 @@ if(UNIX)
     COMMAND ./SuperbuildDownloadList.sh
       ${OTB_BINARY_DIR}/Download
       ${OTB_BINARY_DIR}
-    WORKING_DIRECTORY ${OTB_SOURCE_DIR}/Utilities/Maintenance
+    WORKING_DIRECTORY ${OTB_SOURCE_DIR}/CI
     )
 endif()
 
