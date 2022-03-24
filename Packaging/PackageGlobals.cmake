@@ -107,6 +107,17 @@ set(LINUX_SYSTEM_DLLS
   # libwebp.so*
   # )
 
+set(APPLE_SYSTEM_DLLS
+  libSystem.*dylib
+  libiconv.*dylib
+  libc\\+\\+.*dylib
+  libstdc.*dylib
+  libobjc.*dylib
+  libcups.*dylib
+  libomp.dylib
+  libqcocoa.dylib
+  )
+  
 if(WIN32)
   set(SYSTEM_DLLS "${WINDOWS_SYSTEM_DLLS}")
 else() #case for unixes
