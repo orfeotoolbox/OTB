@@ -98,7 +98,6 @@ if %nb_tmp_lines_out% gtr 0 (
   echo "ERROR: otb_loader.exe %1"
   type tmp.log
   if %EXIT_ON_ERROR% equ 1 ( exit 1 )
-  goto :check_application_end
 )
 endlocal
 goto :eof
@@ -111,6 +110,7 @@ if %TEST_VERBOSE% equ 1 ( echo ":check_application %app%" )
 if not exist bin\otbcli_%app%.bat (
   echo ERROR : missing cli launcher for application %app%
   if %EXIT_ON_ERROR% equ 1 ( exit 1 )
+  goto :check_application_end
 )
 type NUL > tmp.log
 cmd /C bin\otbcli_%app%.bat "-help" ^> tmp.log ^2^>^&^1
