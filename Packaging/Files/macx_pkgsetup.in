@@ -68,7 +68,7 @@ echo "Installing uninstall script for OTB 'tools/uninstall_otb.sh'"
 sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/tools/uninstall_otb.sh"
 chmod +x "$OUT_DIR/tools/uninstall_otb.sh"
 
-mkdir "$OUT_DIR/template.app/Contents/MacOS"
+mkdir -p "$OUT_DIR/template.app/Contents/MacOS"
 mkdir "$OUT_DIR/template.app/Contents/Resources"
 rm -fr "template.app"
 
