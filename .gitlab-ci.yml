@@ -156,7 +156,6 @@ ubuntu-xdk-build-doc:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
-    - export QT_QPA_PLATFORM=offscreen
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
@@ -178,7 +177,6 @@ centos-xdk-build:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base-headless:7.9.2009
   script:
-    - export QT_QPA_PLATFORM=offscreen
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=centos-7.9.2009-gcc
     - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=centos-7.9.2009-gcc
     - mv build_packages/OTB-*.run . || true
@@ -260,9 +258,9 @@ ubuntu-xdk-qa-code-coverage:
       - $SONAR_OTB_TOKEN
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa-headless:20.04
   script:
-    - QT_QPA_PLATFORM=offscreen ctest -V -S CI/main_qa.cmake
-                     -DIMAGE_NAME:string=ubuntu-20.04-llvm-qa
-                     -DQA:BOOL=ON
+    - ctest -V -S CI/main_qa.cmake
+            -DIMAGE_NAME:string=ubuntu-20.04-llvm-qa
+            -DQA:BOOL=ON
     - ./CI/otb_coverage.sh
     - saxon-xslt -o build/ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
