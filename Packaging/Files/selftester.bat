@@ -119,11 +119,6 @@ if %parse_cli_result% equ 0 (
   echo ERROR : error launching application otbcli_%app%
   type results.txt 
   if %EXIT_ON_ERROR% equ 1 ( exit 1 )
-  )
-  
-:check_application_clean
-if not %first_child% == 0 (
-  taskkill /PID %first_child% /F /T > NUL 2>&1
 )
   
 :check_application_end
