@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -177,7 +177,7 @@ int main(int argc, char* argv[])
 
   /*for(int i=0; i<16; ++i)
     {
-    std::cout<<" classe: "<< i <<" nb elements= "<<count[i]<<std::endl;
+    std::cout<<" class: "<< i <<" nb elements= "<<count[i]<<std::endl;
     }*/
 
   int nbclass = membershipSample->GetNumberOfClasses();

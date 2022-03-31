@@ -78,7 +78,7 @@ List of available modules
 
         + Repository:  https://github.com/boussaffawalid/FeatureSelection 
         + Author: Walid Boussafa and Nesrine Chehata 
-        + License: All rights reserverd (without license granting more rights, copyright fully applies, this component can not be used without the explicit and prior authorization of the copyright owner).
+        + License: All rights reserved (without license granting more rights, copyright fully applies, this component can not be used without the explicit and prior authorization of the copyright owner).
         + Description: This module contains a FeatureSelection application based on the `FST3Lib <http://fst.utia.cz/>`__.
 
   - **OTBTensorflow (otbtf)** : generic, multi purpose deep learning framework, targeting remote sensing images processing
@@ -112,19 +112,25 @@ an external CMake project with an existing OTB installation.
 
 * **Building against an installed OTB**
 
-  In this case, only the second behaviour (build as standalone) is available. this requires to specify cmake options for the build : 
+  In this case, only the second behaviour (build as standalone) is available. This requires to specify cmake options for the build : 
     - Set the module to build as standalone with ``OTB_BUILD_MODULE_AS_STANDALONE=ON``
+    - Set the following option ``-DCMAKE_CXX_FLAGS=-D_GLIBCXX_USE_CXX11_ABI=0`` (see bellow)
     - Set the OTB install directory with the variable ``OTB_DIR``
     - Set an install folder for your libraries ``CMAKE_INSTALL_PREFIX=/theModulePath/install``
     - Set the runtime path *RPATH* of your libraries to your install/lib folder ``DCMAKE_INSTALL_RPATH=/theModulePath/install/lib``
     - Tell cmake to set runtime path using link path : ``CMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE`` (permits to avoid modifying your LD_LIBRARY_PATH)
 
+The OTB binaries are compiled with the option
+``GLIBCXX_USE_CXX11_ABI`` set to ``0``. This is why you have to build
+your remote module with the same option. If you don't, you will
+encounter a "symbol not found" error message while running your
+application.
 
 **Compilation and Installation**
 
 * If you choose the *inside OTB build*, your module will be built with the rest of the OTB project. To add the module to the compilation process you have two options:
   
-  * use OTB to retrieve automaticaly the official remote module (not applicable for community/self remote modules) that you want to build. 
+  * use OTB to retrieve automatically the official remote module (not applicable for community/self remote modules) that you want to build. 
     All you have to do is to call cmake configuration in OTB build dir to activate ``Module_TheModuleName``
   
   * clone the module yourself (necessary if you use a community module, or your own) and copy the folder to *OTBSource/Modules/Remote*, this will trigger a new option in CMake config
@@ -168,7 +174,6 @@ the applications will be installed in ``/theModuleInstallFolder/lib`` and the bi
   export PATH=/theModuleInstallFolder/bin:$PATH 
 
 We strongly recommend **adding these exports in your .bashrc** in order to make your applications available system wise
-
 
 Writing your own remote module
 ------------------------------
@@ -224,6 +229,7 @@ CMake plumbing of the module:
 .. code-block:: cmake
 
     if(NOT OTB_SOURCE_DIR)
+      find_package(BOOST REQUIRED)
       find_package(OTB REQUIRED)
       list(APPEND CMAKE_MODULE_PATH ${OTB_CMAKE_DIR})
       # The Python interpreter is needed for Python tests
@@ -244,6 +250,7 @@ The overall file should look like this:
     set(OTBTheModuleName_LIBRARIES OTBTheModuleName)
 
     if(NOT OTB_SOURCE_DIR)
+      find_package(BOOST REQUIRED)
       find_package(OTB REQUIRED)
       list(APPEND CMAKE_MODULE_PATH ${OTB_CMAKE_DIR})
       # The Python interpreter is needed for Python tests
@@ -254,6 +261,11 @@ The overall file should look like this:
     else()
       otb_module_impl()
     endif()
+
+    Remarque: the command find_package(BOOST) is called before
+    find_package(OTB). This is due to the fact that FindBoost.cmake is
+    integrated to cmake, so it is better to use the official command
+    rather than the one integrated to the OTB.
 
 **The include folder**
 
@@ -435,6 +447,36 @@ Overall CMakeLists.txt should look like:
     otb_test_application(NAME otbEmptyAppTest
                      APP  EmptyApp
                      )
+
+Use Python OTB & GDAL dependency in your module
++++++++++++++++++++++++++++++++++++++++++++++++
+
+If your module have a Python part, which is using OTB python bindings, you should encounter some troubles with the binary version, here is how to fix it:
+
+First install OTB on your platform. See the `related documentation
+<https://www.orfeo-toolbox.org/CookBook-7.4/Installation.html>`_ to install OTB
+on your system..
+
+Then, you'll need a version of GDAL which is compatible with your OTB
+version.
+
+- In case you're using OTB binary distribution, you'll need to **patch** the
+  files provided.
+
+  - For that purpose you can find this simplified and generic version of
+    gdal-config in the OTB source tree : Documentation/CookBook/Scripts/gdal-config.
+    Just **drop** it into the ``bin/`` directory where you've extracted OTB. This will permit :samp:`pip
+    install gdal=={vernum}` to work correctly.
+  - You'll also have to **patch** ``otbenv.profile`` to **insert** OTB ``lib/``
+    directory at the start of :envvar:`$LD_LIBRARY_PATH`. This will permit
+    ``python3 -c 'from osgeo import gdal'`` to work correctly.
+
+        .. code-block:: bash
+
+            # For instance, type this, once!
+            echo 'LD_LIBRARY_PATH="${CMAKE_PREFIX_PATH}${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"' >> otbenv.profile
+
+In case you've compiled OTB from sources, you shouldn't have this kind of troubles.
 
 Sharing your module
 -------------------

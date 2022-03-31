@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -123,7 +123,7 @@ int otbPolygon(int itkNotUsed(argc), char* argv[])
   file << "polygon2->NbTouching(" << current << ", " << firstVertex << ") = " << polygon2->NbTouching(current, firstVertex) << std::endl;
 
   file << std::endl << std::endl;
-  file << "Bounding Boxs computation : " << std::endl;
+  file << "Bounding Boxes computation : " << std::endl;
   PolygonType::RegionType r1 = polygon1->GetBoundingRegion();
   file << "Bounding Box 1" << std::endl;
   file << "Index : " << r1.GetIndex() << " , Size : " << r1.GetSize() << std::endl;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -857,7 +857,7 @@ double LineSegmentDetector<TInputImage, TPrecision>::ComputeRegionOrientation(In
     ++it;
   }
 
-  /** using te itk Eigen analysis*/
+  /** using the itk Eigen analysis*/
   typedef itk::Matrix<double, 2, 2> MatrixType;
   typedef std::vector<double> MatrixEigenType;
   MatrixType                  Inertie, eigenVector;

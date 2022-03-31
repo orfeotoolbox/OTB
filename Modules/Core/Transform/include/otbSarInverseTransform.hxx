@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -47,7 +47,7 @@ SarInverseTransform<TScalarType, NInputDimensions, NOutputDimensions>::Transform
 
   OutputPointType pOut;
 
-  // from centered to upper left corner pixel convetion
+  // from centered to upper left corner pixel convention
   pOut[0] = static_cast<TScalarType>(sensorPoint[0]) + 0.5;
   pOut[1] = static_cast<TScalarType>(sensorPoint[1]) + 0.5;
 

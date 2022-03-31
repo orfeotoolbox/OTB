@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,7 +33,7 @@ namespace otb
  *
  * This class can be used to merge each segments of a given size in a label
  * image to the connected segment with the closest radiometry (in the sense of
- * the euclidian squared distance).
+ * the euclidean squared distance).
  * This persistent filter should be used as template parameter of a
  * PersistentFilterStreamingDecorator.
  * It computes from an input label image an equivalence table

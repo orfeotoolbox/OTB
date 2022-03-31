@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -736,7 +736,7 @@ endif()
 otb_test_application(NAME apTvClComputeImagesStatisticsQB1
   APP  ComputeImagesStatistics
   OPTIONS -il ${INPUTDATA}/Classification/QB_1_ortho.tif
-  -out ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
+  -out.xml ${TEMP}/apTvClEstimateImageStatisticsQB1.xml
   VALID   --compare-ascii ${NOTOL}
   ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB1.xml
   ${TEMP}/apTvClEstimateImageStatisticsQB1.xml)
@@ -746,7 +746,7 @@ otb_test_application(NAME apTvClComputeImagesStatisticsQB456
   OPTIONS -il ${INPUTDATA}/Classification/QB_4_extract.tif
   ${INPUTDATA}/Classification/QB_5_extract.tif
   ${INPUTDATA}/Classification/QB_6_extract.tif
-  -out ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
+  -out.xml ${TEMP}/apTvClEstimateImageStatisticsQB456.xml
   VALID   --compare-ascii ${NOTOL}
   ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB456.xml
   ${TEMP}/apTvClEstimateImageStatisticsQB456.xml)
@@ -756,7 +756,7 @@ otb_test_application(NAME apTvClComputeImagesStatisticsQB123
   OPTIONS -il ${INPUTDATA}/Classification/QB_1_ortho.tif
   ${INPUTDATA}/Classification/QB_2_ortho.tif
   ${INPUTDATA}/Classification/QB_3_ortho.tif
-  -out ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
+  -out.xml ${TEMP}/apTvClEstimateImageStatisticsQB123.xml
   VALID   --compare-ascii ${NOTOL}
   ${OTBAPP_BASELINE_FILES}/clImageStatisticsQB123.xml
   ${TEMP}/apTvClEstimateImageStatisticsQB123.xml)

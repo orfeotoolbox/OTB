@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2021 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,7 +40,7 @@ namespace internals
  * without knowing the `N` parameter beforehand, here is this
  * workaround.
  *
- * We take the parameter by pointer to avoid possible convertions.
+ * We take the parameter by pointer to avoid possible conversions.
  * \ingroup OTBCommonInternals
  */
 template <typename T, unsigned int N>
@@ -157,7 +157,7 @@ template <typename RealType>
 struct NumberOfComponents<itk::VariableLengthVector<RealType>>
 {
   // ITK definition of
-  // DefaultConvertPixelTraits<VLV>::GetNumberOfComponents() taks the
+  // DefaultConvertPixelTraits<VLV>::GetNumberOfComponents() takes the
   // parameter by value, and thus create a new VLV by copy.
   // This is too expensive! Let's work around it.
   static unsigned int For(itk::VariableLengthVector<RealType> const& pix)

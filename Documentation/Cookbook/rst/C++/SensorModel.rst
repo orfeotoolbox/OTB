@@ -4,7 +4,7 @@ Sensor model
 The class ``otb::SensorTransformBase`` is the base class for sensor
 models. It inherits from ``otb::Transform``, which inherits from
 ``itk::Transform``. It is templated over the data type, and input and
-output dimentions. All sensor model classes should inherit from it,
+output dimensions. All sensor model classes should inherit from it,
 and implement the methods:
 
 - ``SetMetadataModel`` that takes a ``boost::any`` object representing the model;
@@ -42,7 +42,7 @@ SAR sensor model
 .. image:: /Art/C++/UmlSARSensorModel.png
 
 The structure ``otb::SARParam`` is used to store the parameters of the
-SAR model. For an exhaustive list of the paramaters available in the
+SAR model. For an exhaustive list of the parameters available in the
 ``otb::SARParam``, see the `Doxygen
 <https://www.orfeo-toolbox.org/doxygen/structotb_1_1SARParam.html>`_.
 
@@ -64,7 +64,7 @@ Sensor Transform Factory
 ------------------------
 
 The class ``SensorTransformFactory`` is designed to automatically
-instanciate the best sensor transform based on the available
+instantiate the best sensor transform based on the available
 metadata. One should use the function ``CreateTransform`` which is
 templated over the scalar type used in the transform and the
 dimensions of the input and output spaces. It takes as parameters a

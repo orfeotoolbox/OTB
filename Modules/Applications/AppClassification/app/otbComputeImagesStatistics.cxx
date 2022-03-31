@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -74,15 +74,37 @@ private:
     SetParameterDescription("bv", "Background value to ignore in computation of statistics.");
     MandatoryOff("bv");
 
-    AddParameter(ParameterType_OutputFilename, "out", "Output XML file");
-    SetParameterDescription("out", "XML filename where the statistics are saved for future reuse.");
-    MandatoryOff("out");
+    AddParameter(ParameterType_Group, "out", "Optional outputs");
+
+    AddParameter(ParameterType_OutputFilename, "out.xml", "Output XML file");
+    SetParameterDescription("out.xml", "XML filename where the statistics are saved for future reuse.");
+    MandatoryOff("out.xml");
+
+    AddParameter(ParameterType_String, "out.mean", "Mean pixel Value");
+    SetParameterDescription("out.mean", "Mean pixel value.");
+    SetParameterRole("out.mean", Role_Output);
+    MandatoryOff("out.mean");
+
+    AddParameter(ParameterType_String, "out.min", "Min pixel Value");
+    SetParameterDescription("out.min", "Minimum pixel value.");
+    SetParameterRole("out.min", Role_Output);
+    MandatoryOff("out.min");
+
+    AddParameter(ParameterType_String, "out.max", "Max pixel Value");
+    SetParameterDescription("out.max", "Maximum pixel value.");
+    SetParameterRole("out.max", Role_Output);
+    MandatoryOff("out.max");
+
+    AddParameter(ParameterType_String, "out.std", "Standard deviation of pixel Value");
+    SetParameterDescription("out.std", "Standard deviation of pixel value.");
+    SetParameterRole("out.std", Role_Output);
+    MandatoryOff("out.std");
 
     AddRAMParameter();
 
     // Doc example parameter settings
     SetDocExampleParameterValue("il", "QB_1_ortho.tif");
-    SetDocExampleParameterValue("out", "EstimateImageStatisticsQB1.xml");
+    SetDocExampleParameterValue("out.xml", "EstimateImageStatisticsQB1.xml");
 
     SetOfficialDocLink();
   }
@@ -114,6 +136,14 @@ private:
     // Build a Measurement Vector of mean
     MatrixValueType mean(nbBands, static_cast<unsigned int>(nbImages));
     mean.Fill(itk::NumericTraits<MatrixValueType::ValueType>::Zero);
+
+    // Build a Measurement Vector of min
+    MatrixValueType min(nbBands, static_cast<unsigned int>(nbImages));
+    min.Fill(itk::NumericTraits<MatrixValueType::ValueType>::max());
+
+    // Build a Measurement Vector of max
+    MatrixValueType max(nbBands, static_cast<unsigned int>(nbImages));
+    max.Fill(itk::NumericTraits<MatrixValueType::ValueType>::min());
 
     // Build a Measurement Matrix of variance
     MatrixValueType variance(nbBands, static_cast<unsigned int>(nbImages));
@@ -149,10 +179,14 @@ private:
 
       MeasurementType nbRelevantPixels = statsEstimator->GetNbRelevantPixels();
       MeasurementType meanPerBand      = statsEstimator->GetMean();
+      MeasurementType minPerBand       = statsEstimator->GetMinimum();
+      MeasurementType maxPerBand       = statsEstimator->GetMaximum();
 
       for (unsigned int itBand = 0; itBand < nbBands; itBand++)
       {
         mean(itBand, imageId)      = meanPerBand[itBand];
+        min(itBand, imageId)       = minPerBand[itBand];
+        max(itBand, imageId)       = maxPerBand[itBand];
         variance(itBand, imageId)  = (statsEstimator->GetCovariance())(itBand, itBand);
         nbSamples(itBand, imageId) = nbRelevantPixels[itBand];
       }
@@ -167,6 +201,14 @@ private:
     totalMeanPerBand.SetSize(nbBands);
     totalMeanPerBand.Fill(itk::NumericTraits<MeasurementType::ValueType>::Zero);
 
+    MeasurementType totalMinPerBand;
+    totalMinPerBand.SetSize(nbBands);
+    totalMinPerBand.Fill(itk::NumericTraits<MeasurementType::ValueType>::max());
+
+    MeasurementType totalMaxPerBand;
+    totalMaxPerBand.SetSize(nbBands);
+    totalMaxPerBand.Fill(itk::NumericTraits<MeasurementType::ValueType>::min());
+
     MeasurementType totalVariancePerBand;
     totalVariancePerBand.SetSize(nbBands);
     totalVariancePerBand.Fill(itk::NumericTraits<MeasurementType::ValueType>::Zero);
@@ -178,6 +220,8 @@ private:
         MeasurementType::ValueType nbSample = nbSamples(itBand, imageId);
         totalSamplesPerBand[itBand] += nbSample;
         totalMeanPerBand[itBand] += mean(itBand, imageId) * nbSample;
+        totalMinPerBand[itBand] = std::min(totalMinPerBand[itBand], min(itBand, imageId));
+        totalMaxPerBand[itBand] = std::max(totalMaxPerBand[itBand], max(itBand, imageId));
         totalVariancePerBand[itBand] += variance(itBand, imageId) * (nbSample - 1);
       }
     }
@@ -203,6 +247,8 @@ private:
       else
       {
         totalMeanPerBand[itBand] = itk::NumericTraits<ValueType>::Zero;
+        totalMinPerBand[itBand] = itk::NumericTraits<ValueType>::Zero;
+        totalMaxPerBand[itBand] = itk::NumericTraits<ValueType>::Zero;
       }
     }
 
@@ -214,13 +260,26 @@ private:
       stddev[i] = std::sqrt(totalVariancePerBand[i]);
     }
 
-    if (HasValue("out"))
+    // Display the pixel value
+    std::ostringstream oss_mean, oss_min, oss_max, oss_std;
+    oss_mean << totalMeanPerBand;
+    oss_min << totalMinPerBand;
+    oss_max << totalMaxPerBand;
+    oss_std << stddev;
+    SetParameterString("out.mean", oss_mean.str());
+    SetParameterString("out.min", oss_min.str());
+    SetParameterString("out.max", oss_max.str());
+    SetParameterString("out.std", oss_std.str());
+
+    if (HasValue("out.xml"))
     {
       // Write the Statistics via the statistic writer
       typedef otb::StatisticsXMLFileWriter<MeasurementType> StatisticsWriter;
       StatisticsWriter::Pointer                             writer = StatisticsWriter::New();
-      writer->SetFileName(GetParameterString("out"));
+      writer->SetFileName(GetParameterString("out.xml"));
       writer->AddInput("mean", totalMeanPerBand);
+      writer->AddInput("min", totalMinPerBand);
+      writer->AddInput("max", totalMaxPerBand);
       writer->AddInput("stddev", stddev);
       writer->Update();
     }

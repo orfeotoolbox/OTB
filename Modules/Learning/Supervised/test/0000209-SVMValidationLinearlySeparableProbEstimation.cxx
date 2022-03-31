@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -37,7 +37,7 @@ This test show a problem with the SVM library using the probability
 estimation : bug 209.
 If the probability estimation is activated, the classifier isn't
 abble to find the hyperplan even if the sample are linearly
-seperable.
+separable.
 cf. test leTvBug209_SVMValidationLinearlySeparableWithoutProbEstimate
 => OK
 and leTvBug209_SVMValidationLinearlySeparableWithProbEstimate => KO

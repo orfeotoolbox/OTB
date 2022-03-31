@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -121,8 +121,8 @@ void SarBurstExtractionImageFilter<TImage>::GenerateOutputInformation()
   largestPossibleRegion.SetSize(burstSize);
   outputPtr->SetLargestPossibleRegion(largestPossibleRegion);
 
-  imd.Add(MDNum::NumberOfLines, burstSize[0]);
-  imd.Add(MDNum::NumberOfColumns, burstSize[1]);
+  imd.Add(MDNum::NumberOfLines, burstSize[1]);
+  imd.Add(MDNum::NumberOfColumns, burstSize[0]);
 
   if (m_AllPixels)
   {

@@ -1,3 +1,93 @@
+OTB-v 8.0.0 - Changes since version 7.4.0 (March 22th, 2022)
+---------------------------------------------------------------------
+
+Features added:
+
+   * !890: Improve ComputeImageStatistics by Rémi Cresson
+   * !862: Add INFO message about metadata source by Julien Osman
+   * !795: Improve opticalibration pleiades by Thibaut Romain
+   * !793: Add a high level OTB_WRAP_QGIS cmake option and Fix BUILD_DEFAULT_MODULE bug when listing module dependencies by Thibaut Romain
+   * !769: Missing kernels parameters in libsvm by Rémi Cresson
+   * !767: Improve QGIS interface for ExtractROI application by Julien Cabieces
+   * !697: Use Boost.SmallVec in BCO interpolator by Laurențiu Nicola
+
+Bugs fixed:
+
+   * !886: Fix FindNumpy.cmake by Cédric Traizet"
+   * !857: Resolve "OTB stand alone package not support the virtual filesystem" by Mickael Savinaud
+   * !842: Superbuild: compatibility between QT5 and MySQL by Cédric Traizet
+   * !826: Treat Parameter_RAM as an integer parameter in SetParameterValue (Swig Wrapper) by Cédric Traizet
+   * !810: Fix K parameter in KNearestNeighborsMachineLearningModel by Cédric Traizet
+   * !788: Fix build issue when libSVM is OFF or libsiftfast is OFF and Testing ON by Thibaut romain
+   * !775: Fix CosmoSkyMed ImageMetadataInterface by Cédric Traizet
+   * !764: Deactivate PROJ's test building in the Superbuild by Julien Osman
+   * !752: Fix output image from orthorectification having no projection by Cédric Traizet
+   * !751: Disable noisy std output message by Brad Hards
+
+Refactoring:
+
+   * !881: Add a ClearElevationParameters method to the DEMHandler by Cédric Traizet
+   * !873: WorldToEcef and EcefToWorld free functions by Cédric Traizet
+   * !872: Implement a GetSize() function for the ImageMetadata class by Julien Osman
+   * !868: Use std::chrono and the date library instead of boost date time by Cédric Traizet
+   * !867: Remove DownloadSRTMTiles by Cédric Traizet
+   * !865: Update geospatial libraries versions in Superbuild by Cédric Traizet and Thibaut Romain
+   * !863: Use ImageMetadata to manage NoData and TileHint by Cédric Traizet
+   * !858: Optimize coordinate transformations in SARSensorModel by Cédric Traizet"
+   * !851: Remove Ossim by Cédric Traizet and Julien Osman
+   * !845: Refactor GeocentricTransform and remove EllipsoidAdapter by Cédric Traizet
+   * !844: Refactor the superimpose PHR mode by Cédric Traizet
+   * !830: Implement otb::SarTransformBase, otb::SarForwardTransform and otb::SarInverseTransform by Julien Osman
+   * !823: Implement Deburst algorithms by Cédric Traizet
+   * !815: Update expat version in Superbuild by Cédric Traizet
+   * !808: Implement SARSensorModel forward and inverse transforms by Cédric Traizet
+   * !807: Use SAR metadata in SarRadiometricCalibrationToImageFilter by Julien Osman
+   * !806: Implement a factory for sensor transforms by Thibaut Romain
+   * !803: Implement SAR metadata parsing from geom files by Julien Osman
+   * !796: Import capability for OTB metadata by Cédric Traizet
+   * !778: Remove OSSIM dependency from SensorModel tests by Julien Osman
+   * !776: Improve tests prTvTestCreateInverseForwardSensorModel by Julien Osman
+   * !773: Refactor the OpticalCalibration application by Cédric Traizet
+   * !770: Parse optical metadata from geom by Cédric Traizet
+   * !768: Improve qgis parameter integration by Julien Cabieces
+   * !765: Refactor optical image metadata interface by Cédric Traizet
+   * !763: Compare image metadata in --compare-metadata by Cédric Traizet
+   * !761: SAR metadata interfaces by Julie Brossard
+   * !759: Reading the metadata from the geom files without OSSIM by Julien Osman
+   * !744: Implementing an interface for sensor models and the RPC model by Julien Osman and Cédric Traizet
+   * !729: DEM handler based on GDAL by Cédric Traizet
+   * !707: Metadata refactoring by Guillaume Pasero, Julien Osman and Cédric Traizet
+
+CI:
+
+   * !884: ENH: Update vs2019 to latest build tools version by Thibaut Romain
+   * !875: Update CI to use the latest centos7 version by Thibaut Romain
+   * !869: Update macos version name in CI files by Cédric Traizet
+   * !866: Add new cookbook page about supported formats by Julien Osman
+   * !856: Update Python to 3.8 on CI builds by Thibaut Romain
+   * !832: Simplification of the CI : remove jobs CentOS, Debian and Windows8 by Julien Osman
+   * !824: Set new URL for FFTW download by Julien Osman
+   * !822: Update openCV version to 4.5.1 for the SuperBuild, update the baseline for GEOS by Julien Osman
+   * !798: Fix CI launches tests when a build fails by Thibaut Romain
+   * !794: Superbuild archive CI job by Cédric Traizet
+   * !740: Develop package names by Julie Brossard
+
+Documentation:
+
+   * !883: Improve the installation documentation by Cédric Traizet and Thibaut Romain
+   * !882: Add a section on the QGIS plugin activation for QGIS > 3.22 by Cédric Traizet
+   * !878: Fix the Python examples of string list parameters by Cédric Traizet
+   * !877: Document a workaround for a Remote Module bug by Julien Osman
+   * !867: Remove DownloadSRTMTiles by Cédric Traizet
+   * !866: Add new cookbook page about supported formats by Julien Osman
+   * !862: Add INFO message about metadata source by Julien Osman
+   * !860: Fix warning message related to metadata reading by Julien Osman
+   * !802: Deprecate the qgis plugin by Julien Osman
+   * !800: Add legend for output colored images of Hoover Compare Segmentation by Julien Osman
+   * !781: Update the documentation about Remote Modules by Thibaut romain
+   * !780: Updating the documentation in preparation for OTB 8.0.0-alpha1 by Julien Osman
+   
+
 OTB-v 7.4.0 - Changes since version 7.3.0 (September 3rd, 2021)
 ----------------------------------------------------------------
 
@@ -71,7 +161,7 @@ Bugs fixed:
 
    * !726: "Release the Python Global Interpreter Lock (GIL) during execution" by Luc Hermitte, Julien Osman and Cédric Traizet
    * !730: Freetype and libPNG detection in QT5 by Cédric Traizet
-   * !727: FIX: StreamingMosaicFilter childs can have a different number of components per pixel at output by Rémi Cresson
+   * !727: FIX: StreamingMosaicFilter children can have a different number of components per pixel at output by Rémi Cresson
    * !725: Fix superbuild with OpenCV4 by Cédric Traizet
    * !720: Fix spatial reference equality tests by Cédric Traizet
    * !714: BUG: #2046 Add an epsilon margin to compute the m_ReachableOutputRegion by Julien Osman
@@ -95,7 +185,7 @@ CI:
 Documentation:
 
    * !754: Fix spelling errors by Bas Couwenberg
-   * !738: Update PSC informations by Julien Osman
+   * !738: Update PSC information by Julien Osman
    * !735: Correct menu instructions to open application-browser in Monteverdi by Julien Osman
    * !728: DOC: Deprecate methods that will be removed in OTB 8.0.0 by Julien Osman
    * !722: Clean QGIS interface documentation according migration into QGIS documentation by Mickael Savinaud
@@ -2748,7 +2838,7 @@ OTB-v.3.10.0 - Changes since version 3.8.0 (2011/06/30)
   * Add ConcatenateVectorDataFilter
   * Add OSMDataToVectorDataGenerator : Class implementing the download of
     the OSM file relative to an extent and a parser to generate VectorData
-    from OSM Datas
+    from OSM Data
   * Add ImageToOSMVectorDataGenerator : Helper class to compute the extent
     of an image, use OSMDataToVectorDataGenerator for VectorData generation
   * Add VectorDataTransformFilter : Apply an affine transform to a
@@ -3106,7 +3196,7 @@ OTB-v.3.2.0 - Changes since version 3.0.0 (2010/01/15)
     tie points
   * Support for SVM cross-validation and parameters optimization
   * Box and Whiskey filter to detect outliers on VectorImage
-  * Add several Euclidian distance classes
+  * Add several Euclidean distance classes
   * Exhaustive exponential optimizer for learning
   * Enhanced SOM algorithm taking into account invalid missing values
   * Wavelet transform

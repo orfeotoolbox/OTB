@@ -7,6 +7,12 @@ You can configure OTB for QGIS according to the:
 - `QGIS Provider documentation for latest LTR <https://docs.qgis.org/latest/en/docs/user_manual/processing/3rdParty.html>`_.
 - `QGIS Provider documentation <https://docs.qgis.org/testing/en/docs/user_manual/processing/3rdParty.html>`_.
 
+
+.. warning:: Since QGIS 3.22: the plugin is not activated by default. It should be activated in the plugins settings (``Plugins/Manage and Install Plugins...`` toolbar). The plugin should then be configured as detailed in the QGIS documentation (see the links provided above).
+
+.. image:: Art/plugins.png
+
+
 Compatibility between QGIS and OTB versions
 -------------------------------------------
 
@@ -17,7 +23,7 @@ for the binary packages of OTB 7.1 and above. In this case QGIS 3.14 or more sho
 The table below summarizes which version of OTB can be used with which version of QGIS.
 
 +---------------+-----------------+-----------------+-----------------+-----------------+
-|               | QGIS 3.8 - 3.12 | QGIS 3.14       | QGIS 3.16       | QGIS 3.18       |
+|               | QGIS 3.8 - 3.12 | QGIS 3.14       | QGIS 3.16       | QGIS >= 3.18    |
 +---------------+-----------------+-----------------+-----------------+-----------------+
 | OTB 6.6.1     | Compatible      | Compatible      | Compatible      | Compatible      |
 +---------------+-----------------+-----------------+-----------------+-----------------+

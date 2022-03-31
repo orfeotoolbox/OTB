@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -129,7 +129,7 @@ int otbBandMathImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
     error = (result - expected) * (result - expected) / (result + expected);
     if (error > 1E-9)
     {
-      std::cout << "Error = " << error << "  > 1E-9     -> TEST FAILLED" << std::endl
+      std::cout << "Error = " << error << "  > 1E-9     -> TEST FAILED" << std::endl
                 << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Pixel_3 =  " << it3.Get() << "     Result =  " << it.Get()
                 << "     Expected =  " << expected << std::endl;
       FAIL_FLAG++;
@@ -155,7 +155,7 @@ int otbBandMathImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
     std::cout << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Result =  " << it.Get() << "     Expected =  nan\n" << std::endl;
   else
   {
-    std::cout << "\nError > Bad Edge Effect Handling -> Test Failled\n"
+    std::cout << "\nError > Bad Edge Effect Handling -> Test Failed\n"
               << "Pixel_1 =  " << it1.Get() << "     Pixel_2 =  " << it2.Get() << "     Result =  " << it.Get() << "     Expected =  nan\n"
               << std::endl;
     FAIL_FLAG++;
@@ -163,7 +163,7 @@ int otbBandMathImageFilter(int itkNotUsed(argc), char* itkNotUsed(argv)[])
 
   if (FAIL_FLAG)
   {
-    std::cout << "[FAILLED]" << std::endl;
+    std::cout << "[FAILED]" << std::endl;
     return EXIT_FAILURE;
   }
 

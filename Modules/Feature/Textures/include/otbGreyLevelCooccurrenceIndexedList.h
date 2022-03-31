@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -44,7 +44,7 @@ namespace otb
 * in Vector are unique in terms of the index value in the pair. For any given
 * pixel index, -1 value indicates zero existence of the index in the
 * VectorType. This avoid searching all elements in VectorType for each pixel
-* index added during neighborhood iterator. It is also used to decide wheather
+* index added during neighborhood iterator. It is also used to decide whether
 * to update the frequency of pair or to insert a new element in the vector.
 *
 * Print references:

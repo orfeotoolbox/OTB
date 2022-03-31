@@ -376,7 +376,7 @@ The Python dictionary used has the following entries:
   * ``'region'``: region of the image present in the buffer
   * ``'metadata'``: metadata dictionary (contains projection,...)
 
-The metadata dictionary contains various type of data. Here are the available keys of the dictionnary, ordered by type:
+The metadata dictionary contains various type of data. Here are the available keys of the dictionary, ordered by type:
 
 * double:
 
@@ -395,7 +395,7 @@ The metadata dictionary contains various type of data. Here are the available ke
   {key_list_time}
 
 This dictionary also contains metadata related to projection and
-sensor model. The coresponding keys are not accessible at the
+sensor model. The corresponding keys are not accessible at the
 moment. But the dictionary offers a few extra methods:
 
 * ``GetProjectedGeometry()`` returns a string representing the

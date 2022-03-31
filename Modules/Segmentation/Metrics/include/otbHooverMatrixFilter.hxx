@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -107,7 +107,7 @@ void HooverMatrixFilter<TLabelMap>::ThreadedProcessLabelObject(LabelObjectType* 
       // if found : ++ in the cell [n, p]
       for (unsigned long j = currentRegionMS; j < (currentRegionMS + m_NumberOfRegionsMS); j++)
       {
-        // TODO : optimize here : call GetLabelObjet(label) would be faster
+        // TODO : optimize here : call GetLabelObject(label) would be faster
         const LabelObjectType* regionMS = this->GetMachineSegmentationLabelMap()->GetNthLabelObject(j % m_NumberOfRegionsMS);
         if (regionMS->HasIndex(idx))
         {

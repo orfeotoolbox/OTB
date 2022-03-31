@@ -2,7 +2,7 @@
 #
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -132,6 +132,7 @@ excludedfiles = set([
     './Documentation/Cookbook/Art/residual_registration-figure.tex',
     './Documentation/Cookbook/rst/Makefile.in',
     './Documentation/Cookbook/rst/conf.py.in',
+    './Documentation/Cookbook/Scripts/gdal-config',
     './Modules/Visualization/Ice/README',
     './Modules/Wrappers/SWIG/src/numpy.i',
     './Packaging/Files/Monteverdi.icns',

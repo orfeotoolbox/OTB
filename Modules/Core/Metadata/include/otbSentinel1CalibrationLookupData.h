@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2021 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -51,7 +51,7 @@ public:
 /**
  * \class Sentinel1CalibrationLookupData
  * \brief Computes the Sentinel 1 calibration contribution for the given pixel using a LUT. Depending on how
- * it is intialized, the LUT can be a APLHA, BETA, SIGMA or DN calibration LUT
+ * it is initialized, the LUT can be a ALPHA, BETA, SIGMA or DN calibration LUT
  *
  * \ingroup OTBMetadata
  */
