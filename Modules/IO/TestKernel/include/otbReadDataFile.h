@@ -19,6 +19,7 @@
  */
 
 #include "otbStringUtils.h"
+#include "otbStringUtilities.h"
 #include "otb_boost_string_header.h"
 
 #include "itkListSample.h"
@@ -50,10 +51,8 @@ bool ReadDataFile(const std::string& infname, itk::SmartPointer<itk::Statistics:
   labels->SetMeasurementVectorSize(1);
   unsigned int nbfeatures = 0;
 
-  while (!ifs.eof())
+  for (std::string line; std::getline(ifs, line) ;)
   {
-    std::string line;
-    std::getline(ifs, line);
     boost::algorithm::trim(line);
 
     if (nbfeatures == 0)
@@ -62,46 +61,49 @@ bool ReadDataFile(const std::string& infname, itk::SmartPointer<itk::Statistics:
       samples->SetMeasurementVectorSize(nbfeatures);
     }
 
-    if (line.size() > 1)
-    {
-      TInput sample;
-      itk::NumericTraits<TInput>::SetLength(sample, nbfeatures);
+    if (line.empty())
+      continue;
+   
+    TInput sample;
+    itk::NumericTraits<TInput>::SetLength(sample, nbfeatures);
 
-      std::string::size_type pos = line.find_first_of(" ", 0);
+    auto const parts = otb::split_on(line, ' ');
+    auto       it_parts = parts.begin();
+    auto const end_parts = parts.end();
 
-      // Parse label
-      TTarget label;
-      itk::NumericTraits<TTarget>::SetLength(label, 1);
-      label[0] = boost::lexical_cast<TValueType>(line.substr(0, pos));
-
-      bool         endOfLine = false;
-      unsigned int id        = 0;
-
-      while (!endOfLine)
-      {
-        std::string::size_type nextpos = line.find_first_of(" ", pos + 1);
-        if (nextpos == std::string::npos)
-        {
-          endOfLine = true;
-          nextpos   = line.size();
-        }
-
-        std::string::size_type semicolonpos = line.find_first_of(":", pos + 1, nextpos - pos - 1);
-        if (semicolonpos == std::string::npos)
-        {
-          id++;
-          sample[id - 1] = boost::lexical_cast<IValueType>(line.substr(pos + 1, nextpos - pos - 1));
-        }
-        else
-        {
-          id             = boost::lexical_cast<unsigned int>(line.substr(pos + 1, semicolonpos - pos - 1));
-          sample[id - 1] = boost::lexical_cast<IValueType>(line.substr(semicolonpos + 1, nextpos - semicolonpos - 1));
-        }
-        pos = nextpos;
-      }
-      samples->PushBack(sample);
-      labels->PushBack(label);
+    if (it_parts == end_parts) {
+      throw "Line is not correctly formated.";
     }
+
+    // Parse label
+    TTarget label;
+    itk::NumericTraits<TTarget>::SetLength(label, 1);
+    label[0] = to<TValueType>(*it_parts, "extracting label");
+
+    unsigned int id        = 0;
+    
+    IValueType value;
+    for (++it_parts ; it_parts != end_parts ;  ++it_parts)
+    {
+      auto semicolon_pos = std::find(it_parts->begin(), it_parts->end(), ':');
+      if (semicolon_pos == it_parts->end())
+      {
+          id++;
+          value = to<IValueType>(*it_parts, "extracting field");
+      }
+      else
+      {
+	id = to<unsigned int>(string_view(it_parts->begin(), semicolon_pos), "extracting field id");
+	value = to<IValueType>(string_view(semicolon_pos + 1, it_parts->end()), "extracting field");
+      }
+      if (id > nbfeatures)
+      {
+      	throw "id is higher than the number of features.";
+      }
+      sample[id - 1] = value;
+    }
+    samples->PushBack(sample);
+    labels->PushBack(label);
   }
 
   ifs.close();
