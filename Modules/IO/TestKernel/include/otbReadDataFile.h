@@ -72,7 +72,7 @@ bool ReadDataFile(const std::string& infname, itk::SmartPointer<itk::Statistics:
     auto const end_parts = parts.end();
 
     if (it_parts == end_parts) {
-      throw "Line is not correctly formated.";
+      throw std::runtime_error("Line is not correctly formatted.");
     }
 
     // Parse label
@@ -98,7 +98,7 @@ bool ReadDataFile(const std::string& infname, itk::SmartPointer<itk::Statistics:
       }
       if (id > nbfeatures)
       {
-      	throw "id is higher than the number of features.";
+      	throw std::runtime_error("id is higher than the number of features.");
       }
       sample[id - 1] = value;
     }
