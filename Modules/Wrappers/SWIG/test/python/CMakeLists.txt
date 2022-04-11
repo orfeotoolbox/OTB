@@ -180,3 +180,8 @@ add_test( NAME pyTvNoUpdateParameter
   ${OTB_DATA_ROOT}/Input/training/training.shp
   )
 
+add_test( NAME pyTuImageMetadata
+  COMMAND ${TEST_DRIVER} Execute
+  ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
+  PythonImageMetadataTest
+  )
