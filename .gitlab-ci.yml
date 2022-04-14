@@ -51,6 +51,7 @@ stages:
   - build
   - report
   - deploy
+  - docker
 
 .general:
   retry:
@@ -124,7 +125,7 @@ fast-build:
     - git checkout -f -q $CI_COMMIT_SHA
     - python3 CI/check_twin_pipelines.py
   script:
-    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast -Dci_skip_submit=1
     - ccache -s
 
 legal-check:
@@ -424,3 +425,18 @@ release-container:
            --form ref=master
            --form variables[OTB_TAG]=$CI_COMMIT_TAG
            https://gitlab.orfeo-toolbox.org/api/v4/projects/126/trigger/pipeline
+
+release-docker:
+  image:
+      name: gcr.io/kaniko-project/executor:debug
+      entrypoint: [""]
+  stage: docker
+  only:
+    refs:
+      - /^release-[0-9]+\.[0-9]+$/
+  script:
+      - /kaniko/executor --cleanup
+                       --verbosity warn
+                       --context $CI_PROJECT_DIR/Docker
+                       --dockerfile $CI_PROJECT_DIR/Docker/Dockerfile
+                       --destination $CI_REGISTRY_IMAGE/orfeo-toolbox:$CI_COMMIT_BRANCH
