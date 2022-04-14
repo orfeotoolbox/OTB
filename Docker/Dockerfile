@@ -22,6 +22,7 @@ RUN apt-get update -y \
         libxcb-xinerama0 \
         libxcb-xinput0 \
         libxcb-xkb1 \
+        libxcb-shape0 \
         libx11-xcb1 \
         libglu1-mesa \
         libxrender1 \
