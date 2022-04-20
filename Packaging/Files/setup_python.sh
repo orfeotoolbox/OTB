@@ -29,8 +29,8 @@ python_version_check() {
 
 python_check_failed() {
     printf %s\\n "*****Error occurred during installation******"
-    printf %s\\n "OTB python bindings normally require python 3.8 (or 3.7 for windows users) but current \
-                  detected python version is $python_version"
+    printf %s\\n "OTB python bindings normally require python 3.8 on Linux and MacOS and 3.7 on windows, \
+                  but current detected python version is $python_version"
     printf %s\\n "If you have python 3.8 (or 3.7 for win users) installed in your system you should \
                   set OTB_PYTHON_EXE and re-run this installation script."
     printf %s\\n "eg: OTB_PYTHON_EXE=/path/to/python3 ./OTB-X.Y-Linux64.run"
@@ -69,7 +69,7 @@ else # case where user provides an OTB_PYTHON_EXE
   if [ ! "$python_major_version" -eq 3 ] || [ ! "$python_minor_version" -eq 5 ]
     then
     printf %s\\n "*****Warning******"
-    printf %s\\n "OTB python bindings normally require python3.8 (or 3.7 for windows users)."
+    printf %s\\n "OTB python bindings normally require python3.8 on Linux and MacOS and 3.7 on Microsoft Windows."
     printf %s\\n "The version of OTB_PYTHON_EXE ($OTB_PYTHON_EXE) is \
                   $python_version."
     printf %s\\n "This case is undefined unless you are sure the packages were \
