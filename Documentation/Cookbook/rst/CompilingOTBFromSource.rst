@@ -9,11 +9,11 @@ instructions from the :doc:`Installation` section.
 
 OTB is known to work on:
 
-* Visual Studio 2017/2019 on Windows
+* Visual Studio 2019 on Windows 10
 
 * GCC 5 or higher, Clang 3.4 or higher on GNU/Linux
 
-* AppleClang on macOS (10.8 or higher)
+* AppleClang on macOS 10.8 or higher (intel, no ARM like the M1)
 
 The C++14 standard is required since version 6.2.0.
 
