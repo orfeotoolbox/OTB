@@ -61,12 +61,12 @@ python_version_check
 
 if [ ! $CUSTOM_PYTHON ]
   then
-  if [ ! "$python_major_version" -eq 3 ] && [ ! "$python_minor_version" -eq 5 ]
+  if [ ! "$python_major_version" -eq 3 ] && [ ! "$python_minor_version" -eq 8 ]
     then
     python_check_failed
   fi
 else # case where user provides an OTB_PYTHON_EXE
-  if [ ! "$python_major_version" -eq 3 ] || [ ! "$python_minor_version" -eq 5 ]
+  if [ ! "$python_major_version" -eq 3 ] || [ ! "$python_minor_version" -eq 8 ]
     then
     printf %s\\n "*****Warning******"
     printf %s\\n "OTB python bindings normally require python3.8 on Linux and MacOS and 3.7 on Microsoft Windows."
