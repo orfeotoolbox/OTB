@@ -1,4 +1,5 @@
 FROM ubuntu:20.04 
+ARG OTB_RELEASE=8.0.0
 
 RUN echo "Europe/Paris" > /etc/timezone
 
@@ -36,9 +37,11 @@ RUN apt-get update -y \
         libtool \
  && rm -rf /var/lib/apt/lists/*
  
-RUN curl https://www.orfeo-toolbox.org/packages/OTB-8.0.0-Linux64.run -o OTB-8.0.0-Linux64.run \
-&& chmod +x OTB-8.0.0-Linux64.run \
-&& ./OTB-8.0.0-Linux64.run --target /opt/otb
+# Install pre-compiled OTB binaries
+RUN curl https://www.orfeo-toolbox.org/packages/OTB-$OTB_RELEASE-Linux64.run -o OTB-$OTB_RELEASE-Linux64.run \
+ && chmod +x OTB-$OTB_RELEASE-Linux64.run \
+ && ./OTB-$OTB_RELEASE-Linux64.run --target /opt/otb \
+ && rm OTB-$OTB_RELEASE-Linux64.run
 
 # Symlink Python library to a known path for OTB
 RUN ln -s /usr/lib/x86_64-linux-gnu/libpython3.8.so /opt/otb/lib/libpython3.8.so.rh-python38-1.0
