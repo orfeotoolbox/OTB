@@ -28,5 +28,5 @@ ENV PATH=/opt/otb/bin:$PATH
 ENV OTB_APPLICATION_PATH=/opt/otb/lib/otb/applications
 ENV LC_NUMERIC=C
 
-# Default command fo docker run or docker create
+# Default command when using 'docker run' or 'docker create'
 CMD /bin/bash
