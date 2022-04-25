@@ -1,42 +1,14 @@
 FROM ubuntu:20.04 
 ARG OTB_RELEASE=8.0.0
 
-RUN echo "Europe/Paris" > /etc/timezone
-
+# Install system dependencies
+COPY system-dependencies.txt .
 RUN apt-get update -y \
  && apt-get upgrade -y \
- && apt-get install -y --no-install-recommends \
-        ca-certificates \
-        curl \
-        libxcb1 \
-        libxcb-composite0 \
-        libxcb-glx0 \
-        libxcb-icccm4 \
-        libxcb-image0 \
-        libxcb-keysyms1 \
-        libxcb-randr0 \
-        libxcb-render0 \
-        libxcb-render-util0 \
-        libxcb-util1 \
-        libxcb-shm0 \
-        libxcb-xfixes0 \
-        libxcb-xinerama0 \
-        libxcb-xinput0 \
-        libxcb-xkb1 \
-        libxcb-shape0 \
-        libx11-xcb1 \
-        libglu1-mesa \
-        libxrender1 \
-        libxi6 \
-        libxkbcommon0 \
-        libxkbcommon-x11-0 \
-        libxinerama1 \
-        python3 \ 
-        python3-dev \
-        python3-numpy \
-        libtool \
- && rm -rf /var/lib/apt/lists/*
- 
+ && cat system-dependencies.txt | DEBIAN_FRONTEND=noninteractive xargs apt-get install -y --no-install-recommends \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* system-dependencies.txt
+
 # Install pre-compiled OTB binaries
 RUN curl https://www.orfeo-toolbox.org/packages/OTB-$OTB_RELEASE-Linux64.run -o OTB-$OTB_RELEASE-Linux64.run \
  && chmod +x OTB-$OTB_RELEASE-Linux64.run \
