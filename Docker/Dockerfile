@@ -40,7 +40,17 @@ RUN curl https://www.orfeo-toolbox.org/packages/OTB-8.0.0-Linux64.run -o OTB-8.0
 && chmod +x OTB-8.0.0-Linux64.run \
 && ./OTB-8.0.0-Linux64.run --target /opt/otb
 
-COPY /otb-entrypoint.sh /opt/otb/entrypoint.sh
+# Symlink Python library to a known path for OTB
+RUN ln -s /usr/lib/x86_64-linux-gnu/libpython3.8.so /opt/otb/lib/libpython3.8.so.rh-python38-1.0
 
-ENTRYPOINT ["/opt/otb/entrypoint.sh"]
+# Persistant env
+ENV CMAKE_PREFIX_PATH=/opt/otb
+ENV PYTHONPATH=/opt/otb/lib/python
+ENV GDAL_DRIVER_PATH=disable
+ENV GDAL_DATA=/opt/otb/share/gdal
+ENV PATH=/opt/otb/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV OTB_APPLICATION_PATH=/opt/otb/lib/otb/applications
+ENV LC_NUMERIC=C
 
+# Default command fo docker run or docker create
+CMD /bin/bash
