@@ -23,6 +23,7 @@ ENV CMAKE_PREFIX_PATH=/opt/otb
 ENV PYTHONPATH=/opt/otb/lib/python
 ENV GDAL_DRIVER_PATH=disable
 ENV GDAL_DATA=/opt/otb/share/gdal
+ENV PROJ_LIB=/opt/otb/share/proj
 ENV PATH=/opt/otb/bin:$PATH
 ENV OTB_APPLICATION_PATH=/opt/otb/lib/otb/applications
 ENV LC_NUMERIC=C
