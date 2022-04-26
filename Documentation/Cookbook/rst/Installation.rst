@@ -32,6 +32,29 @@ MacOS X
 
 .. include:: Installation_Macos.rst
 
+Docker image
+------------
+
+A Docker image is available on `DockerHub <https://hub.docker.com/r/orfeotoolbox/otb>`__. It
+can be used on any device running Docker, and provides python 3.8.
+
+::
+
+    docker pull orfeotoolbox/otb
+
+To run CLI tools, you can launch the docker image with:
+
+::
+   
+    docker run -it orfeotoolbox/otb
+
+If you are planning on using the GUI applications, you have to call
+docker with the following arguments:
+
+::
+   
+    docker run -it -e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix/ --device=/dev/dri:/dev/dri orfeotoolbox/otb monteverdi
+
 
 Conda package
 -------------
