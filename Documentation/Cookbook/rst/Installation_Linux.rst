@@ -165,7 +165,7 @@ The following commands can be executed on Ubuntu 18.04 or Ubuntu 20.04, for exam
 CENTOS 7
 ++++++++
 
-   ..code-block:: bash
+.. code-block:: bash
 
    #Add the SCL repositories to install python 3.8 and gcc 8
    yum -y install epel-release centos-release-scl
