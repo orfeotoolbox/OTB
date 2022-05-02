@@ -129,8 +129,7 @@ excludedfiles = set([
     './CMake/exportheader.cmake.in',
     './CMake/pre-commit',
     './CMake/qt.conf.in',
-    './Docker/Dockerfile',
-    './Docker/otb-entrypoint.sh'
+    './Docker/system_requirements.txt',
     './Documentation/Cookbook/Art/residual_registration-figure.tex',
     './Documentation/Cookbook/rst/Makefile.in',
     './Documentation/Cookbook/rst/conf.py.in',
