@@ -125,7 +125,7 @@ fast-build:
     - git checkout -f -q $CI_COMMIT_SHA
     - python3 CI/check_twin_pipelines.py
   script:
-    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast -Dci_skip_submit=1
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
     - ccache -s
 
 legal-check:
@@ -439,4 +439,4 @@ release-docker:
                        --verbosity warn
                        --context $CI_PROJECT_DIR/Docker
                        --dockerfile $CI_PROJECT_DIR/Docker/Dockerfile
-                       --destination $CI_REGISTRY_IMAGE/orfeo-toolbox:$CI_COMMIT_BRANCH
+                       --destination $CI_REGISTRY_IMAGE/orfeotoolbox/otb:$CI_COMMIT_BRANCH
