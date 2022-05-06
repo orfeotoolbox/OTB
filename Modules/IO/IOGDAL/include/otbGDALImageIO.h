@@ -247,6 +247,8 @@ protected:
   void KeywordlistToMetadata(ImageMetadataBase::Keywordlist, int band=-1);
   /** Parses a GDAL Metadata string list to fill a Keywordlist*/
   void GDALMetadataToKeywordlist(const char* const* , ImageMetadataBase::Keywordlist &);
+  /** Parses the RMC from the GDAL Metadata */
+  void GDALMetadataReadRPC();
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Read all information on the image*/
