@@ -98,6 +98,14 @@ otb_test_application(NAME  apTvPrOrthorectification_UTM
                               ${BASELINE}/owTvOrthorectifTest_UTM.tif
                  			  ${TEMP}/apTvPrOrthorectifTest_UTM.tif)
 
+otb_test_application(NAME apTvPrOrthorectification_OTB_Metadata
+                     APP OrthoRectification
+                     OPTIONS -io.in ${INPUTDATA}/QB_TOULOUSE_11_11.tif
+                             -io.out ${TEMP}/apTvPrOrthorectification_OTB_Metadata.tif
+                     VALID --compare-image ${EPSILON_4}
+                           ${BASELINE}/apTvPrOrthorectification_OTB_Metadata.tif
+                           ${TEMP}/apTvPrOrthorectification_OTB_Metadata.tif)
+
 #otb_test_application(NAME  apTvPrOrthorectification_DEMTIF_UTM_OutXML1
                      #APP  OrthoRectification
                      #OPTIONS -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
