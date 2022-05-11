@@ -874,7 +874,6 @@ void GDALImageIO::InternalReadImageInformation()
     for (int cpt = 0; cpt < 6; ++cpt)
       {
       VadfGeoTransform.push_back(adfGeoTransform[cpt]);
-      //~ m_Imd.GeoTransform[cpt] = adfGeoTransform[cpt];
       }
 
     itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, VadfGeoTransform);
