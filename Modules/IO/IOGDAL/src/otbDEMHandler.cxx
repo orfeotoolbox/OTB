@@ -57,14 +57,21 @@ std::vector<std::string> GetFilesInDirectory(const std::string & directoryPath)
   // End iterator : default construction yields past-the-end
   for ( const auto & item : boost::make_iterator_range(boost::filesystem::directory_iterator(directoryPath), {}) )
   {
-    if ( boost::filesystem::is_directory(item.status()) )
+    try
     {
-      auto subDirList = GetFilesInDirectory(item.path().string());
-      fileList.insert(fileList.end(), subDirList.begin(), subDirList.end());
+      if ( boost::filesystem::is_directory(item.status()) )
+      {
+	auto subDirList = GetFilesInDirectory(item.path().string());
+	fileList.insert(fileList.end(), subDirList.begin(), subDirList.end());
+      }
+      else
+      {
+	fileList.push_back(item.path().string());
+      }
     }
-    else
+    catch (boost::filesystem::filesystem_error& e)
     {
-      fileList.push_back(item.path().string());
+      otbLogMacro(Warning, << e.what())
     }
   }
 
