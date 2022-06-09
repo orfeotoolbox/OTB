@@ -211,6 +211,16 @@ void DEMHandler::OpenDEMFile(const std::string& path)
 
 void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
 {
+  auto isSameDirectory = [DEMDirectory](std::string s)
+			 {
+			   return s == DEMDirectory;
+			 };
+  if(std::any_of(std::begin(m_DEMDirectories), std::end(m_DEMDirectories), isSameDirectory))
+  {
+    otbLogMacro(Info, << "Directory '"<< DEMDirectory << "' already opened.")
+    return;
+  }
+  
   // Free the previous in-memory dataset (if any)
   if (!m_DatasetList.empty())
     VSIUnlink(DEM_DATASET_PATH.c_str());
