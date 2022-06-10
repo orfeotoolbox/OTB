@@ -105,6 +105,9 @@ public:
   /** Parse Dimap data from a Dimap v2 product */
   void ParseDimapV2(const MetadataSupplierInterface & mds, const std::string & prefix = "Dimap_Document.");
 
+   /** Parse Dimap data from a Dimap v3 product */
+  void ParseDimapV3(const MetadataSupplierInterface & mds, const std::string & prefix = "Dimap_Document.");
+
 protected:
 
 private:

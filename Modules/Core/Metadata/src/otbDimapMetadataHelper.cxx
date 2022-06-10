@@ -333,4 +333,83 @@ void DimapMetadataHelper::ParseDimapV2(const MetadataSupplierInterface & mds, co
   }
 }
 
+void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, const std::string & prefix)
+{
+  std::vector<std::string> missionVec;
+  ParseVector(mds, prefix + "Dataset_Sources.Source_Identification"
+                  ,"Strip_Source.MISSION", missionVec);
+  m_Data.mission = missionVec[0];
+
+  std::vector<std::string> missionIndexVec;
+  ParseVector(mds, prefix + "Dataset_Sources.Source_Identification"
+                  ,"Strip_Source.MISSION_INDEX", missionIndexVec);
+  m_Data.missionIndex = missionIndexVec[0];
+
+  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
+                     "BAND_ID", m_Data.BandIDs);
+
+  ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
+                     "Solar_Incidences.SUN_ELEVATION", m_Data.SunElevation);
+
+  ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
+                     "Solar_Incidences.SUN_AZIMUTH", m_Data.SunAzimuth);
+
+  ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
+                     "Acquisition_Angles.INCIDENCE_ANGLE", m_Data.IncidenceAngle);
+
+  ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
+                     "Acquisition_Angles.INCIDENCE_ANGLE_ALONG_TRACK", m_Data.AlongTrackIncidenceAngle);
+
+  ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
+                     "Acquisition_Angles.INCIDENCE_ANGLE_ACROSS_TRACK", m_Data.AcrossTrackIncidenceAngle);
+
+  ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
+                     "Acquisition_Angles.VIEWING_ANGLE", m_Data.ViewingAngle);
+
+  ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
+                     "Acquisition_Angles.AZIMUTH_ANGLE", m_Data.AzimuthAngle);
+
+  std::vector<double> gainbiasUnavail={};
+  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
+                     "BIAS", m_Data.PhysicalBias,gainbiasUnavail);
+
+  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
+                     "GAIN", m_Data.PhysicalGain,gainbiasUnavail);
+
+  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Solar_Irradiance",
+                     "VALUE" , m_Data.SolarIrradiance);
+
+  ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
+                     "Acquisition_Angles.AZIMUTH_ANGLE" , m_Data.SceneOrientation);
+
+  std::string path = prefix + "Product_Information.Delivery_Identification.JOB_ID";
+  m_Data.ImageID =mds.GetAs<std::string>(path);
+
+  path = prefix + "Product_Information.Delivery_Identification.PRODUCTION_DATE";
+
+  m_Data.ProductionDate = mds.GetAs<std::string>(path);
+
+  auto imagingDate = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Identification", "Strip_Source.IMAGING_DATE" );
+  auto imagingTime = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Identification", "Strip_Source.IMAGING_TIME" );
+  m_Data.AcquisitionDate = imagingDate + "T" + imagingTime;
+
+  m_Data.Instrument = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Identification", "Strip_Source.INSTRUMENT" );
+  m_Data.InstrumentIndex = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Identification", "Strip_Source.INSTRUMENT_INDEX" );
+
+  m_Data.ProcessingLevel = mds.GetAs<std::string>
+    (prefix + "Processing_Information.Product_Settings.PROCESSING_LEVEL");
+  m_Data.SpectralProcessing = mds.GetAs<std::string>
+    (prefix + "Processing_Information.Product_Settings.SPECTRAL_PROCESSING");
+
+  // These metadata are specific to PHR sensor products
+  if (m_Data.mission == "PHRNEO" && m_Data.ProcessingLevel == "SENSOR")
+  {
+    m_Data.TimeRangeStart = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Time.Time_Range.START");
+    m_Data.TimeRangeEnd = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Time.Time_Range.END");
+    m_Data.LinePeriod = mds.GetAs<std::string>(prefix +"Geometric_Data.Refined_Model.Time.Time_Stamp.LINE_PERIOD");
+    m_Data.SwathFirstCol = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Swath_Range.FIRST_COL");
+    m_Data.SwathLastCol = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Swath_Range.LAST_COL");
+  }
+}
+
 } // end namespace otb
