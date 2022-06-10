@@ -150,10 +150,12 @@ otb_add_test(NAME saTvS1ThermalNoiseLutTest COMMAND otbMetadataTestDriver
 # Additionally, it is possible to compare the metadata of the product with the metadata of a geom file
 # with the --compare-metadata utility by setting ${sensor}_geom_file
 
-set(sensor_list pleiades pleiades_2 spot6 spot6_2 spot5 spot5_2 formosat ikonos worldview2 quickbird Radarsat2 TerraSar CosmoSkyMed Sentinel1)
+set(sensor_list pleiades pleiades_2 pleiadesNeo pleiadesNeo_2 spot6 spot6_2 spot5 spot5_2 formosat ikonos worldview2 quickbird Radarsat2 TerraSar CosmoSkyMed Sentinel1)
 
 set(pleiades_filename LARGEINPUT{PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/IMG_PHR1A_MS_201206050630064_SEN_559102101-002_R1C1.JP2})
 set(pleiades_2_filename LARGEINPUT{PLEIADES/MAIDO_JP2_DIMAPv2_PRIMARY_MS_lossy_12bits/IMG_PHR1A_MS_002/DIM_PHR1A_MS_201206050630064_SEN_559102101-002.XML})
+set(pleiadesNeo_filename LARGEINPUT{PLEIADESNEO/missing.JP2})
+set(pleiadesNeo_2_filename LARGEINPUT{PLEIADESNEO/missing.XML})
 set(spot6_filename LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/IMG_SPOT6_MS_201212071020271_SEN_600143101_R1C1.JP2})
 set(spot6_2_filename LARGEINPUT{SPOT6/600143101-Primary-Bundle-JP2-LOSSLESS/PROD_SPOT6_001/VOL_SPOT6_001_A/IMG_SPOT6_MS_001_A/DIM_SPOT6_MS_201212071020271_SEN_600143101.XML})
 set(spot5_filename LARGEINPUT{SPOT5/Arcachon-SCENE01/IMAGERY.TIF})
@@ -170,6 +172,7 @@ set(Sentinel1_filename LARGEINPUT{SENTINEL1/S1A_S6_SLC__1SSV_20150619T195043/mea
 set(spot5_2_geom_file ${INPUTDATA}/spot5/spot5-1.geom)
 set(formosat_geom_file ${INPUTDATA}/FORMOSAT_ROI_1000_100.geom)
 set(pleiades_geom_file ${INPUTDATA}/pleiades/maido.geom)
+set(pleiadesNeo_geom_file ${INPUTDATA}/pleiadesneo/missing.geom)
 set(spot6_geom_file ${INPUTDATA}/spot6/spot6-2.geom)
 set(ikonos_geom_file ${INPUTDATA}/ikonos/ikonos-2.geom)
 set(worldview2_geom_file ${INPUTDATA}/wv2/wv2-2.geom)

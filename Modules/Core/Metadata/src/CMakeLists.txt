@@ -47,6 +47,9 @@ set(OTBMetadata_SRC
   otbIkonosImageMetadataInterfaceFactory.cxx
   otbIkonosImageMetadataInterface.cxx
 
+  otbPleiadesNeoImageMetadataInterface.cxx
+  otbPleiadesNeoImageMetadataInterfaceFactory.cxx
+
   otbPleiadesImageMetadataInterfaceFactory.cxx
   otbPleiadesImageMetadataInterface.cxx
 
