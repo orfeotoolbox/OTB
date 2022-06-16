@@ -211,7 +211,7 @@ void DEMHandler::OpenDEMFile(const std::string& path)
 
 void DEMHandler::OpenDEMDirectory(const std::string& DEMDirectory)
 {
-  auto isSameDirectory = [DEMDirectory](std::string s)
+  auto isSameDirectory = [&DEMDirectory](std::string const& s)
 			 {
 			   return s == DEMDirectory;
 			 };
