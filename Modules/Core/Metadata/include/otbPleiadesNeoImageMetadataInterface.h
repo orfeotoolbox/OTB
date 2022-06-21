@@ -55,7 +55,7 @@ itkNewMacro(Self);
   void Parse(ImageMetadata &) override;
 
 protected:
-  PleiadesNeoImageMetadataInterface();
+  PleiadesNeoImageMetadataInterface() = default;
   ~PleiadesNeoImageMetadataInterface() = default;
 
 private:
