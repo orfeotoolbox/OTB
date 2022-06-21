@@ -40,10 +40,6 @@ namespace otb
 using boost::lexical_cast;
 using boost::bad_lexical_cast;
 
-PleiadesNeoImageMetadataInterface::PleiadesNeoImageMetadataInterface()
-{
-}
-
 void PleiadesNeoImageMetadataInterface::FetchSatAngles(
                     const std::vector<double> & incidenceAngles,
                     const std::vector<double> & alongTrackIncidenceAngles,
@@ -89,7 +85,7 @@ void PleiadesNeoImageMetadataInterface::FetchTabulatedPhysicalGain(ImageMetadata
   std::unordered_map<std::string, double> bandNameToPhysicalGain;
   // TODO check band order here.
   const auto &  sensorId = imd[MDStr::SensorID];
-  if (sensorId == "PHRNEO" || sensorId == "PNEO3" || sensorId == "PNEO4" || sensorId == "PNEO5" || sensorId == "PNEO6")
+  if (sensorId == "PNEO" || sensorId == "PNEO3" || sensorId == "PNEO4" || sensorId == "PNEO5" || sensorId == "PNEO6")
   {
       bandNameToPhysicalGain = { {"P", 7.996},
           {"B5", 8.039}, {"B1", 6.600}, {"B2", 7.338}, {"B3", 8.132}, {"B6",9.955}, {"B4", 12.089}};
@@ -117,9 +113,19 @@ void PleiadesNeoImageMetadataInterface::FetchSolarIrradiance(const std::vector<d
 {
   std::unordered_map<std::string, double> defaultSolarIrradiance;
 
-  const auto & sensorID = imd[MDStr::SensorID];
+  const auto & sensorId = imd[MDStr::SensorID];
 
-  otbGenericExceptionMacro(MissingMetadataException,<< "Invalid metadata, bad sensor id")
+  //todo : get the default solar irradiance value (for all PNEO sensors)
+  if (sensorId == "PNEO" || sensorId == "PNEO3" || sensorId == "PNEO4" || sensorId == "PNEO5" || sensorId == "PNEO6")
+  {
+    defaultSolarIrradiance =  { {"P", 0},
+          {"B0", 0}, {"B1", 0}, {"B2", 0}, {"B3", 0}};
+  }
+  else
+  {
+    otbGenericExceptionMacro(MissingMetadataException,
+      << "Invalid metadata, bad sensor id")
+  }
 
   // tolerance threshold
   double tolerance = 0.05;
@@ -153,7 +159,7 @@ void PleiadesNeoImageMetadataInterface::Parse(ImageMetadata &imd)
 
   // Satellite ID is either PHR 1A or PHR 1B
   // Product read by the TIFF/JP2 GDAL driver
-  if (m_MetadataSupplierInterface->GetAs<std::string>("", "IMAGERY/SATELLITEID").find("NEO") != std::string::npos)
+  if (m_MetadataSupplierInterface->GetAs<std::string>("", "IMAGERY/SATELLITEID").find("PNEO") != std::string::npos)
   {
     // The driver stored the content of the Dimap XML file as metadatas in the IMD domain.
     helper.ParseDimapV3(*m_MetadataSupplierInterface, "IMD/");
@@ -163,11 +169,11 @@ void PleiadesNeoImageMetadataInterface::Parse(ImageMetadata &imd)
     // fill RPC model
     if (imd[MDStr::GeometricLevel] == "SENSOR")
     {
-      FetchRPC(imd, -0.5, -0.5);
+      FetchRPC(imd);
     }
   }
   // Product read by the DIMAP GDAL driver
-  else if (m_MetadataSupplierInterface->GetAs<std::string> ("","MISSION") == "PHRNEO")
+  else if (m_MetadataSupplierInterface->GetAs<std::string> ("","MISSION") == "PNEO")
   {
     // The DIMAP driver does not read the same metadata as the TIFF/JP2 one, and
     // some required metadata are missing. 
@@ -182,7 +188,7 @@ void PleiadesNeoImageMetadataInterface::Parse(ImageMetadata &imd)
     // fill RPC model
     if (imd[MDStr::GeometricLevel] == "SENSOR")
     {
-      FetchRPC(imd, -0.5, -0.5);
+      FetchRPC(imd);
     }
   }
   // Geom case
@@ -200,7 +206,7 @@ void PleiadesNeoImageMetadataInterface::Parse(ImageMetadata &imd)
   const auto & dimapData = helper.GetDimapData();
 
   imd.Add(MDStr::SensorID, dimapData.mission + " " +dimapData.missionIndex);
-  imd.Add(MDStr::Mission, "Pléiades NEO");
+  imd.Add(MDStr::Mission, "PNEO");
 
   imd.Add(MDStr::Instrument, dimapData.Instrument);
   imd.Add(MDStr::InstrumentIndex, dimapData.InstrumentIndex);

@@ -471,8 +471,8 @@ void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, co
                   ,"Strip_Source.MISSION_INDEX", missionIndexVec);
   m_Data.missionIndex = missionIndexVec[0];
 
-  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
-                     "BAND_ID", m_Data.BandIDs);
+  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration",
+                     "Band_Radiance.BAND_ID", m_Data.BandIDs);
 
   ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
                      "Solar_Incidences.SUN_ELEVATION", m_Data.SunElevation);
@@ -496,13 +496,13 @@ void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, co
                      "Acquisition_Angles.AZIMUTH_ANGLE", m_Data.AzimuthAngle);
 
   std::vector<double> gainbiasUnavail={};
-  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
+  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Radiance",
                      "BIAS", m_Data.PhysicalBias,gainbiasUnavail);
 
-  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
+  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Radiance",
                      "GAIN", m_Data.PhysicalGain,gainbiasUnavail);
 
-  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Solar_Irradiance",
+  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Solar_Irradiance",
                      "VALUE" , m_Data.SolarIrradiance);
 
   ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
@@ -519,22 +519,29 @@ void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, co
   auto imagingTime = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Identification", "Strip_Source.IMAGING_TIME" );
   m_Data.AcquisitionDate = imagingDate + "T" + imagingTime;
 
-  m_Data.Instrument = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Identification", "Strip_Source.INSTRUMENT" );
-  m_Data.InstrumentIndex = GetSingleValueFromList<std::string>(mds, prefix + "Dataset_Sources.Source_Identification", "Strip_Source.INSTRUMENT_INDEX" );
-
   m_Data.ProcessingLevel = mds.GetAs<std::string>
     (prefix + "Processing_Information.Product_Settings.PROCESSING_LEVEL");
   m_Data.SpectralProcessing = mds.GetAs<std::string>
     (prefix + "Processing_Information.Product_Settings.SPECTRAL_PROCESSING");
 
   // These metadata are specific to PHR sensor products
-  if (m_Data.mission == "PHRNEO" && m_Data.ProcessingLevel == "SENSOR")
+  if (m_Data.mission == "PNEO" && m_Data.ProcessingLevel == "SENSOR")
   {
     m_Data.TimeRangeStart = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Time.Time_Range.START");
     m_Data.TimeRangeEnd = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Time.Time_Range.END");
     m_Data.LinePeriod = mds.GetAs<std::string>(prefix +"Geometric_Data.Refined_Model.Time.Time_Stamp.LINE_PERIOD");
-    m_Data.SwathFirstCol = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Swath_Range.FIRST_COL");
-    m_Data.SwathLastCol = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Swath_Range.LAST_COL");
+    // m_Data.SwathFirstCol = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Band_Calibration_List.Band_Calibration.Swath_Range.FIRST_COL");
+    // m_Data.SwathLastCol = mds.GetAs<std::string>(prefix +  "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Band_Calibration_List.Band_Calibration.Swath_Range.LAST_COL");
+    std::vector<std::string> swathRangeLastCol={};
+    ParseVector(mds, prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Band_Calibration_List.Band_Calibration",
+                     "Swath_Range.LAST_COL", swathRangeLastCol);
+    m_Data.SwathLastCol = swathRangeLastCol[0];
+    std::vector<std::string> swathRangeFirstCol={};
+    ParseVector(mds, prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Band_Calibration_List.Band_Calibration",
+                     "Swath_Range.FIRST_COL", swathRangeFirstCol);
+    m_Data.SwathFirstCol = swathRangeFirstCol[0];
+
+
   }
 }
 

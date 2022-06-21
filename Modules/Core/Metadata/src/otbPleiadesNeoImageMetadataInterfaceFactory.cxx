@@ -36,9 +36,6 @@ PleiadesNeoImageMetadataInterfaceFactory::PleiadesNeoImageMetadataInterfaceFacto
                          itk::CreateObjectFunction<PleiadesNeoImageMetadataInterface>::New());
 }
 
-PleiadesNeoImageMetadataInterfaceFactory::~PleiadesNeoImageMetadataInterfaceFactory()
-{
-}
 
 const char* PleiadesNeoImageMetadataInterfaceFactory::GetITKSourceVersion(void) const
 {

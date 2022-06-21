@@ -59,7 +59,7 @@ public:
 
 protected:
   PleiadesNeoImageMetadataInterfaceFactory();
-  ~PleiadesNeoImageMetadataInterfaceFactory() override;
+  ~PleiadesNeoImageMetadataInterfaceFactory() = default;
 
 private:
   PleiadesNeoImageMetadataInterfaceFactory(const Self&) = delete;
