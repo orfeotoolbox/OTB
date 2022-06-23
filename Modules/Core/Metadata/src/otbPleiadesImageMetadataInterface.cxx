@@ -594,7 +594,7 @@ void PleiadesImageMetadataInterface::Parse(ImageMetadata &imd)
     // fill RPC model
     if (imd[MDStr::GeometricLevel] == "SENSOR")
     {
-      FetchRPC(imd, 0.5, 0.5);
+      FetchRPC(imd);
     }
   }
   // Product read by the DIMAP GDAL driver
@@ -613,7 +613,7 @@ void PleiadesImageMetadataInterface::Parse(ImageMetadata &imd)
     // fill RPC model
     if (imd[MDStr::GeometricLevel] == "SENSOR")
     {
-      FetchRPC(imd, 0.5, 0.5);
+      FetchRPC(imd);
     }
   }
   // Geom case
