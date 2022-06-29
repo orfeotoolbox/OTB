@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -128,7 +128,7 @@ public:
   /**\name Features collection */
   //@{
   /** Returns the number of elements in the layer.
-   * \param[in] doForceCompuation  indicates whether the size shall be computed
+   * \param[in] doForceComputation  indicates whether the size shall be computed
    * even so it's expensive to do so.
    *
    * \return the number of features in the layer, -1 if count is unknown

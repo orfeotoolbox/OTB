@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,7 +33,7 @@ typedef otb::ConcatenateVectorDataFilter<VectorDataType> ConcatenateFilterType;
 int otbConcatenateVectorDataFilter(int argc, char* argv[])
 {
   // Instantiate a concatenate filter
-  // Concatenate the vector datas
+  // Concatenate the vector data
   ConcatenateFilterType::Pointer concatenate = ConcatenateFilterType::New();
   for (int idx = 1; idx < argc - 1; ++idx)
   {

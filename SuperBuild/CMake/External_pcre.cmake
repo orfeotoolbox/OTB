@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -25,7 +25,7 @@ if(MSVC)
 else()
   ExternalProject_Add(PCRE
     PREFIX PCRE
-    URL "https://ftp.pcre.org/pub/pcre/pcre-8.44.tar.gz"
+    URL "https://sourceforge.net/projects/pcre/files/pcre/8.44/pcre-8.44.tar.gz"
     URL_MD5 3bcd2441024d00009a5fee43f058987c
     BINARY_DIR ${PCRE_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}

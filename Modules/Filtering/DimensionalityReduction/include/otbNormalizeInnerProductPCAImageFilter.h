@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -93,7 +93,7 @@ protected:
    * execution model.  The original documentation of this method is
    * below.
    *
-   * \sa ProcessObject::GenerateOutputInformaton()  */
+   * \sa ProcessObject::GenerateOutputInformation()  */
   void GenerateOutputInformation() override;
 
   /** NormalizeInnerProductPCAImageFilter can be implemented as a multithreaded filter.

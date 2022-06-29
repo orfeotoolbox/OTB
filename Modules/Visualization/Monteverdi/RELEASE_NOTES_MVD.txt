@@ -73,7 +73,7 @@ Monteverdi 3.0.0 - Changes since version 0.8.1 (December 22nd, 2015)
 * OTB-application features
   - OTB-applications are now loaded on demand via the File/Load OTB-applications menu item.
   - The OTB-applications browser dock-widget is now floating by default but can still be docked.
-  - OTB-applications pannels are now opened as pop-up dialogs (same as in OTB) instead of being tabbed.
+  - OTB-applications panels are now opened as pop-up dialogs (same as in OTB) instead of being tabbed.
 
 * GUI features
 
@@ -101,7 +101,7 @@ Monteverdi 3.0.0 - Changes since version 0.8.1 (December 22nd, 2015)
 * Mapla features
   - Standalone program
   - Consists of a main-window containing the OTB-application browser
-  - Ability to launch several OTB-application pannels as pop-up dialogs.
+  - Ability to launch several OTB-application panels as pop-up dialogs.
 
 * Bugfixes:
   - MANTIS-1104: Crash as soon as I open an image
@@ -140,7 +140,7 @@ Monteverdi 3.0.0 - Changes since version 0.8.1 (December 22nd, 2015)
     (http://bugs.orfeo-toolbox.org/view.php?id=645)
   - MANTIS-646: Viewport is black or diminish when maximising or resizing the window before opening image
     (http://bugs.orfeo-toolbox.org/view.php?id=646)
-  - MANTIS-654: When minimzing the window, all widgets are closed
+  - MANTIS-654: When minimizing the window, all widgets are closed
     (http://bugs.orfeo-toolbox.org/view.php?id=654)
 
 Monteverdi2-0.8.0 - Changes since version 0.6.0 (September 4th, 2014)
@@ -192,7 +192,7 @@ Monteverdi2-0.8.0 - Changes since version 0.6.0 (September 4th, 2014)
     (http://bugs.orfeo-toolbox.org/view.php?id=964)
   - MANTIS-960: Drop from file explorer doest not work.
     (http://bugs.orfeo-toolbox.org/view.php?id=960)
-  - [WORKAROUND] MANTIS-947: Droping dataset to the last subgroup of the data tree crash the application
+  - [WORKAROUND] MANTIS-947: Dropping dataset to the last subgroup of the data tree crash the application
     (http://bugs.orfeo-toolbox.org/view.php?id=947)
   - [WORKAROUND] MANTIS-934: Crash when importing second image into repository.
     (http://bugs.orfeo-toolbox.org/view.php?id=934)
@@ -208,7 +208,7 @@ Monteverdi2-0.8.0 - Changes since version 0.6.0 (September 4th, 2014)
     (http://bugs.orfeo-toolbox.org/view.php?id=920)
   - MANTIS-918: Image-view shift on click
     (http://bugs.orfeo-toolbox.org/view.php?id=918)
-  - MANTIS-915:  In mvd2 applications wrappers InputImageList parameters, only the first item of the list is dropable
+  - MANTIS-915:  In mvd2 applications wrappers InputImageList parameters, only the first item of the list is droppable
     (http://bugs.orfeo-toolbox.org/view.php?id=915)
   - MANTIS-909: Color-setup on PANCHRO images.
     (http://bugs.orfeo-toolbox.org/view.php?id=909)

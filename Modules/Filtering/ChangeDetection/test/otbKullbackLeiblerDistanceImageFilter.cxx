@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -28,7 +28,7 @@ int otbKullbackLeiblerDistanceImageFilter(int argc, char* argv[])
 {
   if (argc != 5)
   {
-    std::cerr << "Detection de changements par mesure de Kullback-Leibler, optimisee par un development de Edgeworth\n";
+    std::cerr << "Change detection by Kullback-Leible measure, optimized by an Edgeworth development\n";
     std::cerr << argv[0] << " imgAv imgAp imgResu winSize\n";
     return 1;
   }

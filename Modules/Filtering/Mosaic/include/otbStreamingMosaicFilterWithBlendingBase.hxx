@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2016-2019 IRSTEA
  *
  * This file is part of Orfeo Toolbox
@@ -40,7 +40,7 @@ StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceImage,
 }
 
 /*
- * This method is overrided because one index on two is not an input image, but
+ * This method is overridden because one index on two is not an input image, but
  * an input distance image
  */
 template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType>
@@ -59,7 +59,7 @@ void StreamingMosaicFilterWithBlendingBase<TInputImage, TOutputImage, TDistanceI
 }
 
 /*
- * This method is overrided because there is twice less input images
+ * This method is overridden because there is twice less input images
  *  (1 input image on 2 is a DistanceImage)
  */
 template <class TInputImage, class TOutputImage, class TDistanceImage, class TInternalValueType>

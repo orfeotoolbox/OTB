@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2016-2019 IRSTEA
  *
  * This file is part of Orfeo Toolbox
@@ -202,7 +202,7 @@ void StreamingMultibandFeatherMosaicFilter<TInputImage, TOutputImage, TDistanceI
   itkDebugMacro(<< "Extrapolation offset: " << extrapolationOffset);
 
   // Set up mosaic filters offsets and transition distances
-  itkDebugMacro("Level\tDist\tOffest");
+  itkDebugMacro("Level\tDist\tOffset");
   for (unsigned int level = 0; level <= m_NumberOfLevels; level++)
   {
     const double offset = extrapolationOffset + m_TransitionOffsets.at(level);

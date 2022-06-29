@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -220,7 +220,7 @@ void BSplineDecompositionImageFilter<TInputImage, TOutputImage>::DataToCoefficie
 
   itk::ProgressReporter progress(this, 0, count, 10);
 
-  // Initialize coeffient array
+  // Initialize coefficient array
   this->CopyImageToImage(); // Coefficients are initialized to the input data
 
   for (unsigned int n = 0; n < ImageDimension; ++n)

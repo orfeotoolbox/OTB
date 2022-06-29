@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -33,7 +33,7 @@ namespace otb
  * defined over the parametric space. The grid is centered on the initial
  * position. The subdivisions of the grid along each one of the dimensions
  * of the parametric space is defined by a exponential progression with
- * scale factor m_ScaleFactor, with the exponant following an
+ * scale factor m_ScaleFactor, with the exponent following an
  * arithmetic progression from 0 to m_NumberOfSteps * m_StepLength in
  * both positive and negative direction.
  *

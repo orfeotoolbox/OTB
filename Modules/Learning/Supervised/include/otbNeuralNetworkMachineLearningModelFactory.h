@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -29,7 +29,7 @@
 namespace otb
 {
 /** \class NeuralNetworkMachineLearningModelFactory
- * \brief Creation d'un instance d'un objet SVMMachineLearningModel utilisant les object factory.
+ * \brief Create an instance of SVMMachineLearningModel through the object factory.
  *
  * \ingroup OTBSupervised
  */

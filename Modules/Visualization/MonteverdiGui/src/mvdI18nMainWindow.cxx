@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -211,7 +211,7 @@ QObject* I18nMainWindow::Import(AbstractWorker* importer)
   // Result.
   int button = progress.Exec();
 
-  // MANTIS-921 (synchronize deletion of BackgroungTask).
+  // MANTIS-921 (synchronize deletion of BackgroundTask).
   task->wait();
   delete task;
   task = NULL;

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -33,11 +33,11 @@ else()
   set(Boost_NO_SYSTEM_PATHS OFF)
 endif()
 
-find_package (Boost 1.35.0 REQUIRED COMPONENTS filesystem date_time serialization)
+find_package (Boost 1.35.0 REQUIRED COMPONENTS filesystem serialization)
 if (BUILD_TESTING)
-  find_package (Boost 1.35.0 QUIET COMPONENTS filesystem date_time serialization unit_test_framework)
+  find_package (Boost 1.35.0 QUIET COMPONENTS filesystem serialization unit_test_framework)
   if (NOT Boost_UNIT_TEST_FRAMEWORK_FOUND)
-    message(STATUS "Boost unit_test_framework not found. Hence otbOGRTests will be skipped")
+    message(STATUS "Boost unit_test_framework not found. Hence test depending on this framework will be skipped")
   else()
     message(STATUS "Found Boost components: unit_test_framework")
   endif()

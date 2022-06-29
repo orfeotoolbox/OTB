@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2021 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -170,17 +170,17 @@ ubuntu-xdk-build-doc:
 ## CentOS superbuild
 centos-xdk-prepare:
   extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:7.6.1810
+  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:7.9.2009
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=centos-7.6.1810-gcc
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=centos-7.9.2009-gcc
 
 centos-xdk-build:
   extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:7.6.1810
+  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:7.9.2009
   script:
     - export QT_QPA_PLATFORM=offscreen
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=centos-7.6.1810-gcc
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=centos-7.6.1810-gcc
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=centos-7.9.2009-gcc
+    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=centos-7.9.2009-gcc
     - mv build_packages/OTB-*.run . || true
   needs:
     - job: centos-xdk-prepare
@@ -247,7 +247,7 @@ windows-10-build:
   needs:
     - job: windows-10-prepare
       artifacts: true
-      
+
 #------------------------- QA related jobs -------------------------------------
 ubuntu-xdk-qa-code-coverage:
   extends: .common-build

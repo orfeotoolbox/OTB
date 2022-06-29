@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -74,7 +74,7 @@ CoordinateTransformation::CoordinateTransformation(const SpatialReference& sourc
   if (!tmpTransform)
   {
     std::ostringstream oss;
-    oss << "(InvalidCoordinateTransfromationException) "
+    oss << "(InvalidCoordinateTransformationException) "
         << "Source: " << source << ", target: " << target;
     throw std::runtime_error(oss.str());
   }
@@ -94,7 +94,7 @@ CoordinateTransformation::CoordinateTransformation(const CoordinateTransformatio
   if (!newTransform)
   {
     std::ostringstream oss;
-    oss << "(InvalidCoordinateTransfromationException) "
+    oss << "(InvalidCoordinateTransformationException) "
         << "Source: " << other.GetSourceSpatialReference() << ", target: " << other.GetTargetSpatialReference();
     throw std::runtime_error(oss.str());
   }

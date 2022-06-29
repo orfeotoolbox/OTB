@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -127,7 +127,7 @@ public:
   //  otbMetadataGetMacro(LowerRightCorner, VectorType);
 
   /** Parses the metadata using the MetadataSupplierInterface and fill the ImageMetadata object
-   * Raises "MissingMetadataException" if parsing failes.
+   * Raises "MissingMetadataException" if parsing fails.
    */
   virtual void Parse(ImageMetadata &)
   {

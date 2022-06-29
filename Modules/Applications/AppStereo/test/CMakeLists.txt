@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -106,7 +106,7 @@ otb_test_application(NAME apTvDmStereoRectificationGridGeneratorTestAvgDEM
                              -epi.elevation.avgdem.step 10
                              -epi.scale 1.0
                              -epi.step 4
-                             # No validation here, purpose is only to see that te avgdem mode works without errors
+                             # No validation here, purpose is only to see that the avgdem mode works without errors
                              )
 
 

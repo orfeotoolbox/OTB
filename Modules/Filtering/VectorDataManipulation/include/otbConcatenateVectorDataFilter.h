@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -72,7 +72,7 @@ public:
 
   typedef typename std::vector<PointType> PointVectorType;
 
-  /** Connects the VectorDatas from which the localizations are going to be extracted. */
+  /** Connects the VectorData from which the localizations are going to be extracted. */
   void AddInput(const VectorDataType*);
   using Superclass::AddInput;
 

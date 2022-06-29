@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -97,6 +97,14 @@ otb_test_application(NAME  apTvPrOrthorectification_UTM
                      VALID   --compare-image ${EPSILON_4}
                               ${BASELINE}/owTvOrthorectifTest_UTM.tif
                  			  ${TEMP}/apTvPrOrthorectifTest_UTM.tif)
+
+otb_test_application(NAME apTvPrOrthorectification_OTB_Metadata
+                     APP OrthoRectification
+                     OPTIONS -io.in ${INPUTDATA}/QB_TOULOUSE_11_11.tif
+                             -io.out ${TEMP}/apTvPrOrthorectification_OTB_Metadata.tif
+                     VALID --compare-image ${EPSILON_4}
+                           ${BASELINE}/apTvPrOrthorectification_OTB_Metadata.tif
+                           ${TEMP}/apTvPrOrthorectification_OTB_Metadata.tif)
 
 #otb_test_application(NAME  apTvPrOrthorectification_DEMTIF_UTM_OutXML1
                      #APP  OrthoRectification

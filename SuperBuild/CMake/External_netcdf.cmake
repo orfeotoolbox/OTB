@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -36,8 +36,8 @@ endif()
 
 ExternalProject_Add(NETCDF
   PREFIX NETCDF
-  URL "https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-4.7.4.tar.gz"
-  URL_MD5 3e0a97e6abb9a989f8a8a2e395473597
+  URL "https://github.com/Unidata/netcdf-c/archive/refs/tags/v4.7.4.tar.gz"
+  URL_MD5 33979e8f0cf4ee31323fc0934282111b
   SOURCE_DIR ${NETCDF_SB_SRC}
   BINARY_DIR ${NETCDF_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

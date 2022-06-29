@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -26,8 +26,8 @@ SETUP_SUPERBUILD(ZLIB)
 # Try official release 1.2.11
 ExternalProject_Add(ZLIB
   PREFIX ZLIB
-  URL "https://downloads.sourceforge.net/project/libpng/zlib/1.2.11/zlib-1.2.11.tar.gz"
-  URL_MD5 1c9f62f0778697a09d36121ead88e08e
+  URL "https://zlib.net/zlib-1.2.12.tar.gz"
+  URL_MD5 5fc414a9726be31427b440b434d05f78
   BINARY_DIR ${ZLIB_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -34,12 +34,12 @@
 namespace otb {
 
 /** \namespace TransformFactories
- * \brief Contains the functions (factories) used to instanciate the transformation classes.
+ * \brief Contains the functions (factories) used to instantiate the transformation classes.
  *
- * Each function is in charge of instanciating a specific transformation classes. It is
+ * Each function is in charge of instantiating a specific transformation classes. It is
  * templated with the scalar type used in the Sensor Model, the dimension of the
  * inpute space, and the dimension of the output space. It takes as parameter a
- * reference to the ImageMetadata object used to instanciate the Sensor Model, and the
+ * reference to the ImageMetadata object used to instantiate the Sensor Model, and the
  * TransformDirection. It returns an instance of otb::SensorTransformBase.
  *
  * \ingroup OTBTransform

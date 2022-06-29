@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -766,7 +766,7 @@ public:
 
   void AddDocTag(const std::string&);
 
-  /** return wether the application has the "deprecated tag or not */
+  /** return whether the application has the "deprecated tag or not */
   bool IsDeprecated();
 
   DocExampleStructure::Pointer GetDocExample();

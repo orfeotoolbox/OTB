@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -682,6 +682,17 @@ void Sentinel1ImageMetadataInterface::ReadSarParamAndGCPs(const XMLMetadataSuppl
   sarParam.numberOfLinesPerBurst = AnnotationMS.GetAs<unsigned long>("product.swathTiming.linesPerBurst");
   sarParam.numberOfSamplesPerBurst = AnnotationMS.GetAs<unsigned long>("product.swathTiming.samplesPerBurst");
 
+  const std::string swathProcParams = "product.imageAnnotation.processingInformation.swathProcParamsList.swathProcParams.";
+
+  sarParam.azimuthBandwidth = AnnotationMS.GetAs<double>(0., swathProcParams + "azimuthProcessing.processingBandwidth");
+  sarParam.rangeBandwidth = AnnotationMS.GetAs<double>(0., swathProcParams + "rangeProcessing.processingBandwidth");
+  
+  // AzimuthSteeringRate for TOPSAR (IW) products
+  if (sarParam.burstRecords.size() >= 2)
+  {
+    sarParam.azimuthSteeringRate = AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.azimuthSteeringRate");
+  }
+
   sarParam.rightLookingFlag = true;
 
   // Fetch the GCP
@@ -745,8 +756,10 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
     ManifestMS.GetFirstAs<std::string>(
       "xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:platform.safe:instrument.safe:extension.s1sarl1:instrumentMode.s1sarl1:swath"
     ));
-  imd.Add("FACILITY_IDENTIFIER",
-    ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.safe:facility.name"));
+  auto FIorganisation = ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.safe:facility.organisation");
+  auto FIsoftware = ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.safe:facility.safe:software.name");
+  auto FIversion = ManifestMS.GetFirstAs<std::string>("xfdu:XFDU.metadataSection.metadataObject_#.metadataWrap.xmlData.safe:processing.safe:facility.safe:software.version");
+  imd.Add("FACILITY_IDENTIFIER", FIorganisation + " " + FIsoftware + " " + FIversion);
 
   // Annotation file
   auto AnnotationFileName = imageFineName + ".xml";
@@ -777,7 +790,6 @@ void Sentinel1ImageMetadataInterface::ParseGdal(ImageMetadata & imd)
   imd.Add(MDNum::AverageSceneHeight, this->getBandTerrainHeight(AnnotationFilePath));
   imd.Add(MDNum::RadarFrequency, AnnotationMS.GetAs<double>("product.generalAnnotation.productInformation.radarFrequency"));
   imd.Add(MDNum::PRF, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.azimuthFrequency"));
-  imd.Add(MDNum::CenterIncidenceAngle, AnnotationMS.GetAs<double>("product.imageAnnotation.imageInformation.incidenceAngleMidSwath"));
 
   // Calibration file
   std::string CalibrationFilePath =
@@ -829,8 +841,9 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   CheckFetch(MDStr::BeamMode, imd, "manifest_data.acquisition_mode") || CheckFetch(MDStr::BeamMode, imd, "support_data.acquisition_mode");
   CheckFetch(MDStr::BeamSwath, imd, "manifest_data.swath") || CheckFetch(MDStr::BeamSwath, imd, "support_data.swath");
   CheckFetch(MDStr::Instrument, imd, "manifest_data.instrument") || CheckFetch(MDStr::Instrument, imd, "support_data.instrument");
+  CheckFetch(MDStr::Mission, imd, "manifest_data.instrument") || CheckFetch(MDStr::Mission, imd, "support_data.instrument");
   CheckFetch(MDStr::OrbitDirection, imd, "manifest_data.orbit_pass") || CheckFetch(MDStr::OrbitDirection, imd, "support_data.orbit_pass");
-  CheckFetch(MDNum::OrbitNumber, imd, "manifest_data.abs_orbit") || CheckFetch(MDStr::OrbitDirection, imd, "support_data.abs_orbit");
+  CheckFetch(MDNum::OrbitNumber, imd, "manifest_data.abs_orbit") || CheckFetch(MDNum::OrbitNumber, imd, "support_data.abs_orbit");
   CheckFetch(MDStr::ProductType, imd, "manifest_data.product_type") || CheckFetch(MDStr::ProductType, imd, "support_data.product_type");
   CheckFetch(MDTime::ProductionDate, imd, "manifest_data.date") || CheckFetch(MDTime::ProductionDate, imd, "support_data.date");
   CheckFetch(MDTime::AcquisitionDate, imd, "manifest_data.image_date") || CheckFetch(MDTime::AcquisitionDate, imd, "support_data.image_date");
@@ -843,8 +856,12 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   auto hasSAR = GetSAR(sarParam);
   if (hasSAR)
   {
+    // Old metadata (from geom) does not contain support_data.look_side for S1 products
+    // Right looking flag is always true for S1 products => hard coded value, here
+    sarParam.rightLookingFlag = true;
     imd.Add(MDGeom::SAR, sarParam);
   }
+
   SARCalib sarCalib;
   std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>("calibration.startTime")) >> sarCalib.calibrationStartTime;
   std::istringstream(m_MetadataSupplierInterface->GetAs<std::string>("calibration.stopTime")) >> sarCalib.calibrationStopTime;
@@ -852,9 +869,6 @@ void Sentinel1ImageMetadataInterface::ParseGeom(ImageMetadata & imd)
   CreateCalibrationLookupData(sarCalib, imd, *m_MetadataSupplierInterface, true);
   CreateThermalNoiseLookupData(sarCalib, imd, *m_MetadataSupplierInterface, true);
   imd.Add(MDGeom::SARCalib, sarCalib);
-
-  Projection::GCPParam gcp;
-  imd.Add(MDGeom::GCP, gcp);
 }
 
 void Sentinel1ImageMetadataInterface::Parse(ImageMetadata & imd)

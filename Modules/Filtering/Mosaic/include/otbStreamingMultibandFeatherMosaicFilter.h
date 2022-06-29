@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2016-2019 IRSTEA
  *
  * This file is part of Orfeo Toolbox
@@ -111,7 +111,7 @@ protected:
 
   virtual void Modified();
 
-  /** Overrided methods */
+  /** Overridden methods */
   virtual void GenerateData();
 
   virtual void GenerateOutputInformation()

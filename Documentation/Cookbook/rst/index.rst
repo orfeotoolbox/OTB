@@ -45,6 +45,7 @@ Table of Contents
     Installation
     Supported_Sensors
     Monteverdi
+    ReleaseNote8
 
 .. toctree::
     :maxdepth: 1

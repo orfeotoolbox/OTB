@@ -1,4 +1,4 @@
-SensorID SAR
+SensorID TSX-1
 Mission TSX-1
 Instrument TSX-SAR
 ProductType SSC____SM_S

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -111,7 +111,7 @@ bool MSTARImageIO::CanReadFile(const char* filename)
   std::string fname = filename;
   if (fname == "")
   {
-    itkDebugMacro(<< "Fichier image non specifie.");
+    itkDebugMacro(<< "Image file not specified.");
   }
 
   MSTARname = filename;
@@ -249,13 +249,13 @@ bool MSTARImageIO::CanWriteFile(const char* filename)
 
   if (fname == "")
   {
-    itkDebugMacro(<< "Fichier image non specifie.");
+    itkDebugMacro(<< "Image file not specified.");
   }
 
   if (formatFound == false)
   {
     std::string identificationErreur;
-    identificationErreur = "Format MSTAR non detecte dans l'extension du fichier.";
+    identificationErreur = "MSTAR format not detected in the file's extension.";
     itkDebugMacro(<< identificationErreur.c_str());
   }
 

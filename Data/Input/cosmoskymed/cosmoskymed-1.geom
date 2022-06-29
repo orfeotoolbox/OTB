@@ -256,12 +256,12 @@ support_data.geom.bursts.number_lines_per_burst:  14380
 support_data.geom.bursts.number_samples_per_burst:  17502
 support_data.geom.gcp.number:  1
 support_data.geom.gcp[0].azimuthTime:  2011-04-18T18:03:28.648636
-support_data.geom.gcp[0].im_pt.x:  8707.88860642676
-support_data.geom.gcp[0].im_pt.y:  7191.48486375724
+support_data.geom.gcp[0].im_pt.x:  0
+support_data.geom.gcp[0].im_pt.y:  0
 support_data.geom.gcp[0].slant_range_time:  0.00494748983592736
-support_data.geom.gcp[0].world_pt.hgt:  8.56061888043765e-11
-support_data.geom.gcp[0].world_pt.lat:  43.6090634900135
-support_data.geom.gcp[0].world_pt.lon:  1.44722199061804
+support_data.geom.gcp[0].world_pt.hgt:  5.53427526028827e-10
+support_data.geom.gcp[0].world_pt.lat:  43.6454490978792
+support_data.geom.gcp[0].world_pt.lon:  1.52085604938497
 support_data.last_line_time:  2011-04-18T18:3:29.380925
 support_data.line_time_interval:  0.000101881160627516
 support_data.look_side:  RIGHT

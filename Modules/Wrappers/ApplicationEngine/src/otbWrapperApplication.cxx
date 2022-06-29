@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -1633,14 +1633,7 @@ unsigned int Application::GetImageNbBands(const std::string& key, unsigned int i
 
 std::string Application::GetImageProjection(const std::string& key, unsigned int idx)
 {
-  std::string                    proj;
-  const itk::MetaDataDictionary& dict = this->GetParameterImageBase(key, idx)->GetMetaDataDictionary();
-
-  if (!dict.HasKey(MetaDataKey::ProjectionRefKey))
-    return std::string("");
-
-  itk::ExposeMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, proj);
-  return proj;
+  return this->GetImageMetadata(key, idx).GetProjectedGeometry();
 }
 
 unsigned long Application::PropagateRequestedRegion(const std::string& key, ImageBaseType::RegionType region, unsigned int idx)

@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -186,7 +186,7 @@ else()
   # goes wrong
   set ( SB_ARTIFACT_GIT "${OTB_SOURCE_DIR}/superbuild-artifact" )
   
-  # REPOSITORY_GIT_URL and REMOTE whould be the same. Right now there are
+  # REPOSITORY_GIT_URL and REMOTE would be the same. Right now there are
   # different because one is https and one is ssh. Both should be ssh.
   set( REPOSITORY_GIT_URL "git@gitlab.orfeo-toolbox.org:orfeotoolbox/superbuild-artifact.git")
   # We clone master to have a basic configuration, mainly a correct .gitattribute

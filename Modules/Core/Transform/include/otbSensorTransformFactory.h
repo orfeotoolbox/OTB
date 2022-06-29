@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2021 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -26,7 +26,7 @@
 namespace otb
 {
 /** \class SensorTransformFactory
- * \brief Creats an instance of SensorTransform (RPC, SAR ...) object using object factory.
+ * \brief Creates an instance of SensorTransform (RPC, SAR ...) object using object factory.
  *
  * \ingroup OTBTransform
  */

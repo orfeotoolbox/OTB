@@ -117,7 +117,7 @@ public:
 
   /** Connect a new input to the multi-writer. Only the input pointer is
    *  required. If the filename list is empty,
-   *  streaming will occur without writing. It the filename list contains more
+   *  streaming will occur without writing. If the filename list contains more
    *  than one element, then the output will be divided into this number of
    *  granule files. The resolution factor specifies the ratio between the height of this image and the
    *  height of a reference image. The number of lines per strip class parameter will be modified according to this factor, so

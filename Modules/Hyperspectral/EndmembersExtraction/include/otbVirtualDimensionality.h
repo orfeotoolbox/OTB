@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -38,7 +38,7 @@ namespace otb
  * This filter applies the HFC-VD (Virtual Dimensionality) algorithm to an
  * hyperspectral image and outputs the number of endmembers.
  * It takes as input the covariance and correlation matrices of the input data,
- * the number of observed pixel for thoses matrices estimations,
+ * the number of observed pixel for those matrices estimations,
  * and outputs the number of endmembers, and the log-likelihood.
  *
  * References :

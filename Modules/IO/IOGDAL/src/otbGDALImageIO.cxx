@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2018-2020 CS Systemes d'Information (CS SI)
  *
  * This file is part of Orfeo Toolbox
@@ -874,7 +874,6 @@ void GDALImageIO::InternalReadImageInformation()
     for (int cpt = 0; cpt < 6; ++cpt)
       {
       VadfGeoTransform.push_back(adfGeoTransform[cpt]);
-      //~ m_Imd.GeoTransform[cpt] = adfGeoTransform[cpt];
       }
 
     itk::EncapsulateMetaData<MetaDataKey::VectorType>(dict, MetaDataKey::GeoTransformKey, VadfGeoTransform);
@@ -1288,7 +1287,6 @@ void GDALImageIO::WriteImageInformation()
 
 void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 {
-  // char **     papszOptions = NULL;
   std::string driverShortName;
   m_NbBands = this->GetNumberOfComponents();
   
@@ -1909,10 +1907,6 @@ void GDALImageIO::ExportMetadata()
 
 void GDALImageIO::ImportMetadata()
 {
-  // TODO
-  // Check special value METADATATYPE=OTB before continue processing
-  // Keys Starting with: MDGeomNames[MDGeom::SensorGeometry] + '.' should
-  // be decoded by the (future) SensorModelFactory.
   // Use ImageMetadataBase::FromKeywordlist to ingest the metadata
   bool hasValue;
   if (std::string(GetMetadataValue("METADATATYPE", hasValue)) != "OTB")
@@ -1920,7 +1914,11 @@ void GDALImageIO::ImportMetadata()
   ImageMetadataBase::Keywordlist kwl;
   GDALMetadataToKeywordlist(m_Dataset->GetDataSet()->GetMetadata(), kwl);
 
-  // Decode SAR metadata
+  // Decode RPC model
+if (m_Dataset->GetDataSet()->GetMetadata("RPC"))
+    GDALMetadataReadRPC();
+
+  // Decode SAR model
   if (kwl.find("SAR") != kwl.end())
   {
     try
@@ -1939,7 +1937,7 @@ void GDALImageIO::ImportMetadata()
     }
   }
 
-  // Decode SAR metadata
+  // Decode SAR calibration data
   if (kwl.find("SARCalib") != kwl.end())
   {
     try
@@ -2010,46 +2008,45 @@ void GDALImageIO::GDALMetadataToKeywordlist(const char* const* metadataList, Ima
       if((fieldName.size() > 36) && (fieldName.substr(0, 36) == "MDGeomNames[MDGeom::SensorGeometry]."))
       {
         // Sensor Geometry is imported directly in the ImageMetadata.
-        // TODO: Keys Starting with: MDGeomNames[MDGeom::SensorGeometry] + '.' should
-        // be decoded by the (future) SensorModelFactory.
-      }
-      else if (fieldName == MetaData::MDGeomNames.left.at(MDGeom::RPC))
-      {
-        // RPC Models are imported directly in the ImageMetadata.
-        Projection::RPCParam rpcStruct;
-        rpcStruct.LineOffset    = this->GetAs<double>("RPC/LINE_OFF");
-        rpcStruct.SampleOffset  = this->GetAs<double>("RPC/SAMP_OFF");
-        rpcStruct.LatOffset     = this->GetAs<double>("RPC/LAT_OFF");
-        rpcStruct.LonOffset     = this->GetAs<double>("RPC/LONG_OFF");
-        rpcStruct.HeightOffset  = this->GetAs<double>("RPC/HEIGHT_OFF");
-
-        rpcStruct.LineScale    = this->GetAs<double>("RPC/LINE_SCALE");
-        rpcStruct.SampleScale  = this->GetAs<double>("RPC/SAMP_SCALE");
-        rpcStruct.LatScale     = this->GetAs<double>("RPC/LAT_SCALE");
-        rpcStruct.LonScale     = this->GetAs<double>("RPC/LONG_SCALE");
-        rpcStruct.HeightScale  = this->GetAs<double>("RPC/HEIGHT_SCALE");
-
-        std::vector<double> coeffs(20);
-
-        coeffs = this->GetAsVector<double>("RPC/LINE_NUM_COEFF",' ',20);
-        std::copy(coeffs.begin(), coeffs.end(), rpcStruct.LineNum);
-
-        coeffs = this->GetAsVector<double>("RPC/LINE_DEN_COEFF",' ',20);
-        std::copy(coeffs.begin(), coeffs.end(), rpcStruct.LineDen);
-
-        coeffs = this->GetAsVector<double>("RPC/SAMP_NUM_COEFF",' ',20);
-        std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleNum);
-
-        coeffs = this->GetAsVector<double>("RPC/SAMP_DEN_COEFF",' ',20);
-        std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleDen);
-
-        m_Imd.Add(MDGeom::RPC, rpcStruct);
       }
       else
       {
         kwl.emplace(fieldName, fieldValue);
       }
     }
+}
+
+void GDALImageIO::GDALMetadataReadRPC()
+{
+    // RPC Models are imported directly in the ImageMetadata.
+    Projection::RPCParam rpcStruct;
+    rpcStruct.LineOffset    = this->GetAs<double>("RPC/LINE_OFF");
+    rpcStruct.SampleOffset  = this->GetAs<double>("RPC/SAMP_OFF");
+    rpcStruct.LatOffset     = this->GetAs<double>("RPC/LAT_OFF");
+    rpcStruct.LonOffset     = this->GetAs<double>("RPC/LONG_OFF");
+    rpcStruct.HeightOffset  = this->GetAs<double>("RPC/HEIGHT_OFF");
+
+    rpcStruct.LineScale    = this->GetAs<double>("RPC/LINE_SCALE");
+    rpcStruct.SampleScale  = this->GetAs<double>("RPC/SAMP_SCALE");
+    rpcStruct.LatScale     = this->GetAs<double>("RPC/LAT_SCALE");
+    rpcStruct.LonScale     = this->GetAs<double>("RPC/LONG_SCALE");
+    rpcStruct.HeightScale  = this->GetAs<double>("RPC/HEIGHT_SCALE");
+
+    std::vector<double> coeffs(20);
+
+    coeffs = this->GetAsVector<double>("RPC/LINE_NUM_COEFF",' ',20);
+    std::copy(coeffs.begin(), coeffs.end(), rpcStruct.LineNum);
+
+    coeffs = this->GetAsVector<double>("RPC/LINE_DEN_COEFF",' ',20);
+    std::copy(coeffs.begin(), coeffs.end(), rpcStruct.LineDen);
+
+    coeffs = this->GetAsVector<double>("RPC/SAMP_NUM_COEFF",' ',20);
+    std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleNum);
+
+    coeffs = this->GetAsVector<double>("RPC/SAMP_DEN_COEFF",' ',20);
+    std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleDen);
+
+    m_Imd.Add(MDGeom::RPC, rpcStruct);
 }
 
 

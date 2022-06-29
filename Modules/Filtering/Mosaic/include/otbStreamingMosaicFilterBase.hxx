@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2016-2019 IRSTEA
  *
  * This file is part of Orfeo Toolbox
@@ -256,7 +256,7 @@ void StreamingMosaicFilterBase<TInputImage, TOutputImage, TInternalValueType>::C
 template <class TInputImage, class TOutputImage, class TInternalValueType>
 void StreamingMosaicFilterBase<TInputImage, TOutputImage, TInternalValueType>::GenerateOutputInformation(void)
 {
-  itkDebugMacro(<< "Generate output informations");
+  itkDebugMacro(<< "Generate output information");
   Superclass::GenerateOutputInformation();
 
   // check interpolator and put a default interpolator if empty

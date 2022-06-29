@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -630,22 +630,22 @@ otb_add_test(NAME   ioTvMultiChannelROI_p1_06_JPEG2000_2_TIF_res0 COMMAND otbIma
 
 # Read an area inside one tile at resolution 0 (quite similar coding parameter with pleiade
 # except it a lossless image with no quatization style).
-otb_add_test(NAME   ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res0 COMMAND otbImageBaseTestDriver
-  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50.tif
-  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50_OUT.tif
+otb_add_test(NAME   ioTvMultiChannelROI_s2_JPEG2000_2_TIF_res0 COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_s2_150_75_100_50.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_s2_150_75_100_50_OUT.tif
   otbMultiChannelExtractROI
-  ${INPUTDATA}/lena512color.jp2?&resol=0
-  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_150_75_100_50_OUT.tif
+  ${INPUTDATA}/s2a_l2a_t30uxu_20220317T111749.jp2?&resol=0
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_s2_150_75_100_50_OUT.tif
   -startX 150 -startY 75 -sizeX 100 -sizeY 50 )
 
 # Read an area inside one tile at resolution 5 (quite similar coding parameter with pleiade
 # except it a lossless image with no quatization style).
-otb_add_test(NAME   ioTvMultiChannelROI_lena_JPEG2000_2_TIF_res1 COMMAND otbImageBaseTestDriver
-  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_lena_res1.tif
-  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res1_OUT.tif
+otb_add_test(NAME   ioTvMultiChannelROI_s2_JPEG2000_2_TIF_res1 COMMAND otbImageBaseTestDriver
+  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_JPEG2K_2_TIF_s2_res1.tif
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_s2_res1_OUT.tif
   otbMultiChannelExtractROI
-  ${INPUTDATA}/lena512color.jp2?&resol=1
-  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_lena_res1_OUT.tif
+  ${INPUTDATA}/s2a_l2a_t30uxu_20220317T111749.jp2?&resol=1
+  ${TEMP}/ioExtractROI_JPEG2K_2_TIF_s2_res1_OUT.tif
   )
 
 

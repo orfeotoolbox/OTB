@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -618,7 +618,7 @@ void IceViewer::DrawHelp()
   oss << "- Show/hide image dataset with space bar" << std::endl;
   oss << "- Highlight selected image by holding backspace" << std::endl;
   oss << "- Zoom to full extent of selected dataset with W" << std::endl;
-  oss << "- Zoom to full resolution fo selected images with Q (images only, as full resolution has no meaning for vectors)" << std::endl;
+  oss << "- Zoom to full resolution for selected images with Q (images only, as full resolution has no meaning for vectors)" << std::endl;
   oss << "- Set rotation angle to perspective view with Y to accommodate heavy off-nadir viewing angle images" << std::endl;
   oss << "- Set rotation angle to north up view with J" << std::endl;
   oss << "- Reset rotation angle with I" << std::endl;
@@ -651,7 +651,7 @@ void IceViewer::DrawHelp()
          "is used in all color channels, the value will be uniform)"
       << std::endl;
   oss << "- Switch to local gradient mode with M (or ',')." << std::endl;
-  oss << "- Press E to apply same shader configuration (color range, local constrast or standard shader configuration) to all other image shaders."
+  oss << "- Press E to apply same shader configuration (color range, local contrast or standard shader configuration) to all other image shaders."
       << std::endl;
   oss << "- Press N to activate/deactivate the use of no-data value (no-data value is set to 0)" << std::endl;
   oss << std::endl;

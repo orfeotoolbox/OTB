@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -119,7 +119,7 @@ protected:
 
   /** MatrixImageFilter can be implemented for a multithreaded filter treatment.
    * Thus, this implementation give the ThreadedGenerateData() method.
-   * that is called for each process thread. Image datas are automatically allocated
+   * that is called for each process thread. Image data are automatically allocated
    * through the parent class calling the ThreadedGenerateData() method.
    * ThreadedGenerateData() can only write the area of the image specified by the parameter "outputRegionForThread"
    *

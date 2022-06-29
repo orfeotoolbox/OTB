@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -40,7 +40,7 @@ void LearningApplicationBase<TInputValue, TOutputValue>::InitLibSVMParams()
   AddChoice("classifier.libsvm.k.rbf", "Gaussian radial basis function");
   SetParameterDescription("classifier.libsvm.k.rbf",
                           "This kernel is a good choice in most of the case. It is "
-                          "an exponential function of the euclidian distance between "
+                          "an exponential function of the euclidean distance between "
                           "the vectors.");
 
   AddChoice("classifier.libsvm.k.poly", "Polynomial");

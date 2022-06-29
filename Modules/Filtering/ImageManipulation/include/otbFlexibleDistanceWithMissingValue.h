@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  * Copyright (C) 2007-2012 Institut Mines Telecom / Telecom Bretagne
  *
  * This file is part of Orfeo Toolbox
@@ -92,7 +92,7 @@ public:
 
   /** Set the value of the parameter a and b.
    * Those parameters are defined as static component in order to call it far
-   * away from the instantiation of the class (through the SOM training for instance) */
+   * away from the instantiation of the class (through the SOME training for instance) */
   static double Alpha;
   static double Beta;
   static void SetAlphaBeta(double a, double b);

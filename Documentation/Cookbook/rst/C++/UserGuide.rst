@@ -63,7 +63,7 @@ Reading and Writing Vector Images
 
 Images whose pixel type is a Vector, a CovariantVector, an Array, or a
 Complex are quite common in image processing. One of the uses of these
-tye of images is the processing of SLC SAR images, which are complex.
+type of images is the processing of SLC SAR images, which are complex.
 
 * Reading and Writing Complex Images. See example :ref:`ComplexImageReadWrite.cxx`.
 

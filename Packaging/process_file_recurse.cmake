@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -54,7 +54,7 @@ function(process_file_recurse input_file)
   endif()
   
   # Install the file with install_rule().
-  # This function has specific "rules" to decide wheather and where to install file  
+  # This function has specific "rules" to decide whether and where to install file  
   install_rule(${input_file_full_path})
   
   set(raw_items)

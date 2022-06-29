@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+# Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
 # This file is part of Orfeo Toolbox
 #
@@ -184,7 +184,7 @@ otb_add_test(NAME dmTvStreamingWarpImageFilter COMMAND otbTransformTestDriver
   5
   )
 
-otb_add_test(NAME dmTvStreamingWarpImageFilterEmtpyRegion COMMAND otbTransformTestDriver
+otb_add_test(NAME dmTvStreamingWarpImageFilterEmptyRegion COMMAND otbTransformTestDriver
                   otbStreamingWarpImageFilterEmptyRegion)
 
 # Forward / Backward projection consistency checking

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2020 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -131,11 +131,15 @@ private:
                             "texture parameters.");
 
     AddParameter(ParameterType_Int, "parameters.xrad", "X Radius");
-    SetParameterDescription("parameters.xrad", "X Radius");
+    SetParameterDescription("parameters.xrad",
+                            "X Radius of the neighborhood window. The formula used to retrieve the size of "
+                            "the window is ``2 * radius + 1``.");
     SetDefaultParameterInt("parameters.xrad", 2);
 
     AddParameter(ParameterType_Int, "parameters.yrad", "Y Radius");
-    SetParameterDescription("parameters.yrad", "Y Radius");
+    SetParameterDescription("parameters.yrad",
+                            "Y Radius of the neighborhood window. The formula used to retrieve the size of "
+                            "the window is ``2 * radius + 1``.");
     SetDefaultParameterInt("parameters.yrad", 2);
 
     AddParameter(ParameterType_Int, "parameters.xoff", "X Offset");
