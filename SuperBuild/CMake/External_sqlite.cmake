@@ -26,8 +26,8 @@ if(WIN32)
   set(SQLITE_URL "https://www.sqlite.org/2015/sqlite-amalgamation-3080801.zip")
   set(SQLITE_MD5 b1cbcbd710bdfd762dc169f1676053b5)
 else()
-  set(SQLITE_URL "https://www.sqlite.org/2021/sqlite-amalgamation-3360000.zip")
-  set(SQLITE_MD5 c5d360c74111bafae1b704721ff18fe6)
+  set(SQLITE_URL "https://www.sqlite.org/2022/sqlite-amalgamation-3390000.zip")
+  set(SQLITE_MD5 e2a318403d402d751fa2359ac6368751)
 endif()
 
 ExternalProject_Add(SQLITE
