@@ -151,8 +151,10 @@ if(WIN32)
   set(GDAL_URL "https://download.osgeo.org/gdal/3.2.2/gdal-3.2.2.tar.xz")
   set(GDAL_MD5 c656be582f7beb528c66486cd1fca7a2)
 else()
-  set(GDAL_URL "https://download.osgeo.org/gdal/3.4.2/gdal-3.4.2.tar.xz")
-  set(GDAL_MD5 4b6ac60068a60059a31e125b2a169d86)
+  # set(GDAL_URL "https://download.osgeo.org/gdal/3.4.2/gdal-3.4.2.tar.xz")
+  # set(GDAL_MD5 4b6ac60068a60059a31e125b2a169d86)
+  set(GDAL_URL "https://download.osgeo.org/gdal/3.5.0/gdal-3.5.0.tar.xz")
+  set(GDAL_MD5 8b59b83bb817f3d500a362d88dd6b1de)
 endif()
 
 ExternalProject_Add(GDAL

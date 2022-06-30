@@ -27,7 +27,6 @@ option(BUILD_SHARED_LIBS "Building shared libs. Default is ON" ON)
 include_directories("${CMAKE_SOURCE_DIR}")
 add_definitions(-DSQLITE_ENABLE_COLUMN_METADATA=1)
 add_definitions(-DSQLITE_ENABLE_RTREE=1)
-add_definitions(-DSQLITE_OMIT_LOAD_EXTENSION=1)
 add_definitions(-DSQLITE_THREADSAFE=1)
 
 if(WIN32)
@@ -37,7 +36,7 @@ else()
 endif()
 
 add_executable(sqlite3-bin shell.c sqlite3.c)
-target_link_libraries(sqlite3-bin sqlite3)
+target_link_libraries(sqlite3-bin sqlite3 ${CMAKE_DL_LIBS})
 
 set_target_properties(sqlite3-bin PROPERTIES OUTPUT_NAME sqlite3)
 set_target_properties(sqlite3-bin sqlite3
