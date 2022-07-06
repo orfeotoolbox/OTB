@@ -32,6 +32,7 @@
 #include "otbMetadataStorageInterface.h"
 
 #include "OTBIOGDALExport.h"
+#include "otbGDALDriverManagerWrapper.h"
 #include "otbSpatialReference.h"
 
 namespace otb
@@ -249,6 +250,8 @@ protected:
   void GDALMetadataToKeywordlist(const char* const* , ImageMetadataBase::Keywordlist &);
   /** Parses the RPC from the GDAL Metadata */
   void GDALMetadataReadRPC();
+  /** Write the RPC to the GDAL Metadata */
+  void GDALMetadataWriteRPC(GDALDataset*);
 
   void PrintSelf(std::ostream& os, itk::Indent indent) const override;
   /** Read all information on the image*/

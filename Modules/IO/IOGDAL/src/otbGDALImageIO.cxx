@@ -43,8 +43,6 @@
 
 #include "itksys/RegularExpression.hxx"
 
-#include "otbGDALDriverManagerWrapper.h"
-
 #include "otb_boost_string_header.h"
 
 #include "otbOGRHelpers.h"
@@ -118,7 +116,7 @@ GDALImageIO::GDALImageIO()
   m_NumberOfOverviews = 0;
   m_ResolutionFactor  = 0;
   m_BytePerPixel      = 0;
-  m_WriteRPCTags      = true;
+  m_WriteRPCTags      = false;
 
   m_epsgCode          = 0;
 }
@@ -1486,11 +1484,15 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   {
     std::string projectionRef( m_Imd.GetProjectionWKT() );
     dataset->SetProjection(projectionRef.c_str());
+    if (m_WriteRPCTags && m_Imd.Has(MDGeom::RPC))
+      GDALMetadataWriteRPC(dataset);
   }
   else if (m_Imd.Has(MDGeom::ProjectionProj))
   {
      std::string projectionRef( m_Imd.GetProjectionProj() );
      dataset->SetProjection(projectionRef.c_str());
+     if (m_WriteRPCTags && m_Imd.Has(MDGeom::RPC))
+       GDALMetadataWriteRPC(dataset);
   }
   /* -------------------------------------------------------------------- */
   /* Case 2: Sensor geometry                                              */
@@ -1500,29 +1502,9 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
     /* -------------------------------------------------------------------- */
     /* Set the RPC coeffs (since GDAL 1.10.0)                               */
     /* -------------------------------------------------------------------- */
-    if (m_WriteRPCTags && m_Imd.Has(MDGeom::RPC))
+    if (m_Imd.Has(MDGeom::RPC))
     {
-      const Projection::RPCParam & rpc = boost::any_cast<const Projection::RPCParam&>(m_Imd[MDGeom::RPC]);
-      otbLogMacro(Debug, << "Saving RPC to file (" << m_FileName << ")")
-      GDALRPCInfo gdalRpcStruct;
-      gdalRpcStruct.dfSAMP_OFF     = rpc.SampleOffset;
-      gdalRpcStruct.dfLINE_OFF     = rpc.LineOffset;
-      gdalRpcStruct.dfSAMP_SCALE   = rpc.SampleScale;
-      gdalRpcStruct.dfLINE_SCALE   = rpc.LineScale;
-      gdalRpcStruct.dfLAT_OFF      = rpc.LatOffset;
-      gdalRpcStruct.dfLONG_OFF     = rpc.LonOffset;
-      gdalRpcStruct.dfHEIGHT_OFF   = rpc.HeightOffset;
-      gdalRpcStruct.dfLAT_SCALE    = rpc.LatScale;
-      gdalRpcStruct.dfLONG_SCALE   = rpc.LonScale;
-      gdalRpcStruct.dfHEIGHT_SCALE = rpc.HeightScale;
-
-      memcpy(gdalRpcStruct.adfLINE_NUM_COEFF, rpc.LineNum, sizeof(double) * 20);
-      memcpy(gdalRpcStruct.adfLINE_DEN_COEFF, rpc.LineDen, sizeof(double) * 20);
-      memcpy(gdalRpcStruct.adfSAMP_NUM_COEFF, rpc.SampleNum, sizeof(double) * 20);
-      memcpy(gdalRpcStruct.adfSAMP_DEN_COEFF, rpc.SampleDen, sizeof(double) * 20);
-      char** rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
-      dataset->SetMetadata(rpcMetadata, "RPC");
-      CSLDestroy(rpcMetadata);
+      GDALMetadataWriteRPC(dataset);
     }
     else if (m_Imd.Has(MDGeom::SAR))
     {
@@ -1583,6 +1565,9 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 
     // disable geotransform with GCP (check that SetGCPs succeed by verifying the the dataset has GCPs)
     writeGeotransform = writeGeotransform && !dataset->GetGCPCount();
+
+    if (m_WriteRPCTags && m_Imd.Has(MDGeom::RPC))
+      GDALMetadataWriteRPC(dataset);
   }
 
   /* -------------------------------------------------------------------- */
@@ -2047,6 +2032,32 @@ void GDALImageIO::GDALMetadataReadRPC()
     std::copy(coeffs.begin(), coeffs.end(), rpcStruct.SampleDen);
 
     m_Imd.Add(MDGeom::RPC, rpcStruct);
+}
+
+void GDALImageIO::GDALMetadataWriteRPC(GDALDataset* dataset)
+{
+  assert(m_Imd.Has(MDGeom::RPC));
+  const Projection::RPCParam & rpc = boost::any_cast<const Projection::RPCParam&>(m_Imd[MDGeom::RPC]);
+  otbLogMacro(Debug, << "Saving RPC to file (" << m_FileName << ")")
+  GDALRPCInfo gdalRpcStruct;
+  gdalRpcStruct.dfSAMP_OFF     = rpc.SampleOffset;
+  gdalRpcStruct.dfLINE_OFF     = rpc.LineOffset;
+  gdalRpcStruct.dfSAMP_SCALE   = rpc.SampleScale;
+  gdalRpcStruct.dfLINE_SCALE   = rpc.LineScale;
+  gdalRpcStruct.dfLAT_OFF      = rpc.LatOffset;
+  gdalRpcStruct.dfLONG_OFF     = rpc.LonOffset;
+  gdalRpcStruct.dfHEIGHT_OFF   = rpc.HeightOffset;
+  gdalRpcStruct.dfLAT_SCALE    = rpc.LatScale;
+  gdalRpcStruct.dfLONG_SCALE   = rpc.LonScale;
+  gdalRpcStruct.dfHEIGHT_SCALE = rpc.HeightScale;
+
+  memcpy(gdalRpcStruct.adfLINE_NUM_COEFF, rpc.LineNum, sizeof(double) * 20);
+  memcpy(gdalRpcStruct.adfLINE_DEN_COEFF, rpc.LineDen, sizeof(double) * 20);
+  memcpy(gdalRpcStruct.adfSAMP_NUM_COEFF, rpc.SampleNum, sizeof(double) * 20);
+  memcpy(gdalRpcStruct.adfSAMP_DEN_COEFF, rpc.SampleDen, sizeof(double) * 20);
+  char** rpcMetadata = RPCInfoToMD(&gdalRpcStruct);
+  dataset->SetMetadata(rpcMetadata, "RPC");
+  CSLDestroy(rpcMetadata);
 }
 
 
