@@ -20,4 +20,4 @@ Several DEM tiles can be provided at the same time, using the ``OpenDEMDirectory
 
 A geoid file can be opened using the ``OpenGeoidFile`` method, and the default height above ellipsoid can be set using ``OpenGeoidFile`` method.
 
-The ``ClearElevationParameters`` method can be used to clear the DEMs, the geoid and the default height above ellipsoid. All associated GDAL datasets will be closed.
+The ``ClearElevationParameters`` method can be used to clear the DEMs, the geoid and the default height above ellipsoid. All associated GDAL datasets will be closed. The ``OpenDEMDirectory`` method won't reopen a directory already loaded, even if the content of the directory changed. To force loading the new tiles, one needs to call ``ClearElevationParameters``.
