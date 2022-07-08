@@ -36,7 +36,11 @@ else()
 endif()
 
 add_executable(sqlite3-bin shell.c sqlite3.c)
-target_link_libraries(sqlite3-bin sqlite3 ${CMAKE_DL_LIBS})
+if(WIN32)
+  target_link_libraries(sqlite3-bin sqlite3)
+else()
+  target_link_libraries(sqlite3-bin sqlite3 ${CMAKE_DL_LIBS})
+endif()
 
 set_target_properties(sqlite3-bin PROPERTIES OUTPUT_NAME sqlite3)
 set_target_properties(sqlite3-bin sqlite3
