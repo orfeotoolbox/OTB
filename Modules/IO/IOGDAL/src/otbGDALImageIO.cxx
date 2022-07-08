@@ -43,6 +43,8 @@
 
 #include "itksys/RegularExpression.hxx"
 
+#include "otbGDALDriverManagerWrapper.h"
+
 #include "otb_boost_string_header.h"
 
 #include "otbOGRHelpers.h"

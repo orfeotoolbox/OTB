@@ -32,8 +32,9 @@
 #include "otbMetadataStorageInterface.h"
 
 #include "OTBIOGDALExport.h"
-#include "otbGDALDriverManagerWrapper.h"
 #include "otbSpatialReference.h"
+
+class GDALDataset;
 
 namespace otb
 {
