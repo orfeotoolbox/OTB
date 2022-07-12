@@ -85,7 +85,7 @@ void PleiadesNeoImageMetadataInterface::FetchTabulatedPhysicalGain(ImageMetadata
   std::unordered_map<std::string, double> bandNameToPhysicalGain;
   // TODO check band order here.
   const auto &  sensorId = imd[MDStr::SensorID];
-  if (sensorId == "PNEO" || sensorId == "PNEO3" || sensorId == "PNEO4" || sensorId == "PNEO5" || sensorId == "PNEO6")
+  if (sensorId == "PNEO" || sensorId == "PNEO 3" || sensorId == "PNEO 4" || sensorId == "PNEO 5" || sensorId == "PNEO 6")
   {
       bandNameToPhysicalGain = { {"P", 7.996},
           {"B5", 8.039}, {"B1", 6.600}, {"B2", 7.338}, {"B3", 8.132}, {"B6",9.955}, {"B4", 12.089}};
@@ -116,7 +116,7 @@ void PleiadesNeoImageMetadataInterface::FetchSolarIrradiance(const std::vector<d
   const auto & sensorId = imd[MDStr::SensorID];
 
   //todo : get the default solar irradiance value (for all PNEO sensors)
-  if (sensorId == "PNEO" || sensorId == "PNEO3" || sensorId == "PNEO4" || sensorId == "PNEO5" || sensorId == "PNEO6")
+  if (sensorId == "PNEO" || sensorId == "PNEO 3" || sensorId == "PNEO 4" || sensorId == "PNEO 5" || sensorId == "PNEO 6")
   {
     defaultSolarIrradiance =  { {"P", 0},
           {"B0", 0}, {"B1", 0}, {"B2", 0}, {"B3", 0}};
@@ -150,7 +150,7 @@ void PleiadesNeoImageMetadataInterface::FetchSolarIrradiance(const std::vector<d
 
 void PleiadesNeoImageMetadataInterface::FetchSpectralSensitivity(const std::string & sensorId, ImageMetadata& imd)
 {
-  otbGenericExceptionMacro(MissingMetadataException, "No Spectral sensitivity data for the PNEO sensor")
+  otbGenericExceptionMacro(MissingMetadataException, "Invalid PNEO Sensor ID")
 }
 
 void PleiadesNeoImageMetadataInterface::Parse(ImageMetadata &imd)
@@ -214,7 +214,7 @@ void PleiadesNeoImageMetadataInterface::Parse(ImageMetadata &imd)
   if (dimapData.BandIDs.size() == imd.Bands.size())
   {
     const std::unordered_map<std::string, std::string> bandNameToEnhancedBandName =
-      {{"P", "PAN"}, {"B5", "Deep Blue"}, {"B1", "Blue"}, {"B2", "Green"}, {"B3", "Red"}, {"B6", "Red edge"}, {"B4", "NIR"} };
+      {{"P", "P"}, {"DB", "B5"}, {"B", "B1"}, {"G", "B2"}, {"R", "B3"}, {"RE", "B6"}, {"NIR", "B4"} };
 
     auto bandId = dimapData.BandIDs.begin();
     for (auto & band: imd.Bands)
@@ -318,7 +318,7 @@ void PleiadesNeoImageMetadataInterface::Parse(ImageMetadata &imd)
     imd.Add(MDNum::DeepBlueDisplayChannel, 0);
     imd.Add(MDNum::BlueDisplayChannel, 1);
     imd.Add(MDNum::GreenDisplayChannel, 2);
-    imd.Add(MDNum::DeepBlueDisplayChannel, 3);
+    imd.Add(MDNum::RedDisplayChannel, 3);
   }
 }
 
@@ -350,6 +350,6 @@ namespace PleiadesNeoUtils
     return output;
   }
 
-} // end namespace PleiadeNeoUtils
+} // end namespace PleiadesNeoUtils
 } // end namespace MetaData
 } // end namespace otb
