@@ -471,8 +471,8 @@ void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, co
                   ,"Strip_Source.MISSION_INDEX", missionIndexVec);
   m_Data.missionIndex = missionIndexVec[0];
 
-  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration",
-                     "Band_Radiance.BAND_ID", m_Data.BandIDs);
+  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Radiance",
+                     "BAND_ID", m_Data.BandIDs);
 
   ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
                      "Solar_Incidences.SUN_ELEVATION", m_Data.SunElevation);
@@ -540,7 +540,6 @@ void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, co
     ParseVector(mds, prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Band_Calibration_List.Band_Calibration",
                      "Swath_Range.FIRST_COL", swathRangeFirstCol);
     m_Data.SwathFirstCol = swathRangeFirstCol[0];
-
 
   }
 }

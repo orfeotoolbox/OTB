@@ -72,7 +72,7 @@ struct DimapData
   std::string softwareVersion;
   double SatAzimuth;
 
-  // phr sensor characteristics
+  // phr and pneo sensor characteristics
   std::string TimeRangeStart;
   std::string TimeRangeEnd;
   std::string LinePeriod;
