@@ -232,6 +232,7 @@ private:
 
     // Set the output image
     SetParameterOutputImage("out", m_Filter->GetOutput());
+    RegisterPipeline();
   }
 
   ExtractROIFilterType::Pointer     m_ExtractROIFilter;
