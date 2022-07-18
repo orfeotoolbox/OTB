@@ -106,6 +106,8 @@ otb_add_test(NAME trTvRPCTransformTest_pl_hnord_geom COMMAND otbTransformTestDri
   ${INPUTDATA}/pleiades/pleiades-1.gcp2 # GCP
   0.02 # GeoTol
   0.1 # ImgTol
+  0.5 # lineOffset
+  0.5 # sampleOffset
   )
 
 otb_add_test(NAME trTvRPCTransformTest_pl_hnord_product COMMAND otbTransformTestDriver
