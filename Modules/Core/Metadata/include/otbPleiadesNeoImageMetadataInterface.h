@@ -24,7 +24,7 @@
 #include "otbOpticalImageMetadataInterface.h"
 #include <string>
 #include "otbDateTime.h"
-
+#include "otbDimapMetadataHelper.h"
 namespace otb
 {
 /** \class PleiadesNeoImageMetadataInterface
@@ -73,7 +73,7 @@ private:
 
   /** Vector that contains the filter function value in 6S format (step of 0.0025 micro m).
      * There values a computed by 6S. */
-  void FetchSpectralSensitivity(const std::string & sensorId, ImageMetadata &imd);
+  void FetchSpectralSensitivity(const std::string & sensorId, ImageMetadata &imd, DimapMetadataHelper & helper);
 };
 
 
