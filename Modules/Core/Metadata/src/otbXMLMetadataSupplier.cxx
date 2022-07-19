@@ -34,6 +34,10 @@ XMLMetadataSupplier::XMLMetadataSupplier(const std::string & fileName)
     otbLogMacro(Warning, <<"Unable to parse XML file " << fileName);
     m_MetadataDic = nullptr;
   }
+  // if(fileName.find("LUT")!= std::string::npos)
+  //   int nbLines = CSLSave(m_MetadataDic, "/home/florian/OTB/test/lut.txt");
+  // else
+  //   int nbLines = CSLSave(m_MetadataDic, "/home/florian/OTB/test/output.txt");
   CPLDestroyXMLNode(psNode);
 }
 

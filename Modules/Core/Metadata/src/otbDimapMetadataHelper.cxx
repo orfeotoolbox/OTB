@@ -416,6 +416,60 @@ void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, co
     m_Data.SwathFirstCol = swathRangeFirstCol[0];
 
   }
+
+  //get LUT filenames
+  std::vector<std::string> componentContent;
+  ParseVector(mds, prefix + "Dataset_Content.Dataset_Components.Component"
+                  ,"COMPONENT_CONTENT", componentContent);
+
+  std::vector<std::string> componentType;
+  ParseVector(mds, prefix + "Dataset_Content.Dataset_Components.Component"
+                  ,"COMPONENT_TYPE", componentType);
+
+  std::vector<std::string> componentPath;
+  ParseVector(mds, prefix + "Dataset_Content.Dataset_Components.Component"
+                  ,"COMPONENT_PATH.href", componentPath);
+
+  int i=0;
+  for(std::string content:componentContent)
+  {
+    if(content=="Look Up Table")
+    {
+      if(i<componentPath.size())
+        m_Data.LUTFileNames.push_back(componentPath[i]);
+    }
+    i++;
+  }
+}
+
+std::vector<double> DimapMetadataHelper::parseLUTStringToArrays(std::string const & s) {
+    std::vector<double> result;
+    std::stringstream ss (s);
+    std::string item;
+
+    while (std::getline (ss, item, ',')) {
+        int index = item.find_first_of(":");
+        std::string strValue = item.substr(0,index);
+        result.push_back(std::stod(item));
+    }
+
+    return result;
+}
+
+
+void DimapMetadataHelper::ParseLUT(const MetadataSupplierInterface & mds)
+{
+  std::vector<std::string> lutData;
+  ParseVector(mds, "Dimap_Document.Raster_Data.Raster_Index_List.Raster_Index",
+                     "LUT",lutData);
+  std::vector<std::string> lutId;
+  ParseVector(mds, "Dimap_Document.Raster_Data.Raster_Index_List.Raster_Index",
+                     "BAND_ID",lutId);
+  for(int i=0;i<lutId.size();i++)
+  {
+    std::vector<double> vectLut = parseLUTStringToArrays(lutData[i]);
+    m_Data.LUTs.insert(std::make_pair(lutId[i],parseLUTStringToArrays(lutData[i])));
+  }
 }
 
 } // end namespace otb

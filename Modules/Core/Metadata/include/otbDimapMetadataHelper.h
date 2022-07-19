@@ -23,7 +23,7 @@
 
 #include "OTBMetadataExport.h"
 #include "otbMetadataSupplierInterface.h"
-
+#include <unordered_map>
 namespace otb
 {
 
@@ -69,6 +69,10 @@ struct DimapData
   std::string softwareVersion;
   double SatAzimuth;
 
+  //specific pneo sensors features
+  std::vector<std::string> LUTFileNames;
+  std::unordered_map<std::string, std::vector<double>> LUTs;
+
   // phr and pneo sensor characteristics
   std::string TimeRangeStart;
   std::string TimeRangeEnd;
@@ -107,6 +111,12 @@ public:
 
    /** Parse Dimap data from a Dimap v3 product */
   void ParseDimapV3(const MetadataSupplierInterface & mds, const std::string & prefix = "Dimap_Document.");
+
+  /** Parse string to array of double*/
+  std::vector<double> parseLUTStringToArrays(std::string const & s);
+
+  /** Parse Dimap data from a LUT Dimap v1.1 product */
+  void ParseLUT(const MetadataSupplierInterface & mds);
 
 protected:
 
