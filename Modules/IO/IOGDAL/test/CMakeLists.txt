@@ -604,6 +604,8 @@ otb_add_test(NAME ioTvGDALRPCTransformerTest_worldview2
   0.1 # ImgTol
   )
 
+#For issue 2293, we had to regenerate the baseline pleaides-1.geom because there was a shift
+#in the geom generated with OTB 7.4, the baseline was wrong. To keep the compatibility, we added this shift in the tests
 otb_add_test(NAME ioTvGDALRPCTransformerTest_pl_hnord_geom
   COMMAND otbIOGDALTestDriver
   otbGDALRPCTransformerTest2
@@ -615,6 +617,9 @@ otb_add_test(NAME ioTvGDALRPCTransformerTest_pl_hnord_geom
   0.5 # sampleOffset
   )
 
+#For issue 2293, we had to regenerate the baseline pleiades-1.gcp2 because there was a shift
+#in the gcps that was fixed by the MR 918
+#To regenerate the gcps, see the wiki on the gitlab
 otb_add_test(NAME ioTvGDALRPCTransformerTest_pl_hnord_product
   COMMAND otbIOGDALTestDriver
   otbGDALRPCTransformerTest2
