@@ -1,7 +1,6 @@
 diff -burN gdal-3.5.1_orig/swig/python/CMakeLists.txt gdal-3.5.1/swig/python/CMakeLists.txt
 --- gdal-3.5.1_orig/swig/python/CMakeLists.txt	2022-07-20 14:48:15.444066736 +0100
 +++ gdal-3.5.1/swig/python/CMakeLists.txt	2022-07-20 14:48:49.556067582 +0100
-
 @@ -103,15 +103,14 @@ 
         ${OSGEO_SOURCE_DIR}gdalconst.py ${OSGEO_SOURCE_DIR}gdalnumeric.py ${OSGEO_SOURCE_DIR}ogr.py
         ${OSGEO_SOURCE_DIR}osr.py ${OSGEO_SOURCE_DIR}gnm.py ${OSGEO_SOURCE_DIR}gdal_array.py ${OSGEO_BINARY_DIR})
@@ -21,10 +20,10 @@ diff -burN gdal-3.5.1_orig/swig/python/CMakeLists.txt gdal-3.5.1/swig/python/CMa
 +      ${GDAL_PYTHON_CSOURCE_SRC_DIR}ogr_wrap.cpp ${GDAL_PYTHON_CSOURCE_SRC_DIR}osr_wrap.cpp
 +      ${GDAL_PYTHON_CSOURCE_SRC_DIR}gdal_array_wrap.cpp ${GDAL_PYTHON_CSOURCE_DIR}
     DEPENDS ${GDAL_PYTHON_CSOURCES_SRC})
-endif ()
+  endif ()
 
-@@ -158,7 +158,6 @@ 
-set(GDAL_PYTHON_VERSION "${GDAL_VERSION_NO_DEV_SUFFIX}")
+@@ -158,8 +158,7 @@ 
+  set(GDAL_PYTHON_VERSION "${GDAL_VERSION_NO_DEV_SUFFIX}")
   if( NOT "${GDAL_VERSION_BUILD}" STREQUAL "0" )
       string(APPEND GDAL_PYTHON_VERSION ".${GDAL_VERSION_BUILD}")
   endif()
