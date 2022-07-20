@@ -1,0 +1,35 @@
+diff -burN gdal-3.5.1_orig/swig/python/CMakeLists.txt gdal-3.5.1/swig/python/CMakeLists.txt
+--- gdal-3.5.1_orig/swig/python/CMakeLists.txt	2022-07-20 14:48:15.444066736 +0100
++++ gdal-3.5.1/swig/python/CMakeLists.txt	2022-07-20 14:48:49.556067582 +0100
+
+@@ -103,15 +103,14 @@ 
+        ${OSGEO_SOURCE_DIR}gdalconst.py ${OSGEO_SOURCE_DIR}gdalnumeric.py ${OSGEO_SOURCE_DIR}ogr.py
+        ${OSGEO_SOURCE_DIR}osr.py ${OSGEO_SOURCE_DIR}gnm.py ${OSGEO_SOURCE_DIR}gdal_array.py ${OSGEO_BINARY_DIR})
+  endif ()
+- file(TO_NATIVE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/extensions/" GDAL_PYTHON_CSOURCE_SRC_DIR_NATIVE_PATH)
+- file(TO_NATIVE_PATH "${GDAL_PYTHON_CSOURCE_DIR}/" GDAL_PYTHON_CSOURCE_DIR_NATIVE_PATH)
++ set(GDAL_PYTHON_CSOURCE_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/extensions/")
+  add_custom_command(
+    OUTPUT ${GDAL_PYTHON_CSOURCES}
+    COMMAND
+-      ${CMAKE_COMMAND} -E copy_if_different ${GDAL_PYTHON_CSOURCE_SRC_DIR_NATIVE_PATH}gdal_wrap.cpp
+-      ${GDAL_PYTHON_CSOURCE_SRC_DIR_NATIVE_PATH}gdalconst_wrap.c ${GDAL_PYTHON_CSOURCE_SRC_DIR_NATIVE_PATH}gnm_wrap.cpp
+-      ${GDAL_PYTHON_CSOURCE_SRC_DIR_NATIVE_PATH}ogr_wrap.cpp ${GDAL_PYTHON_CSOURCE_SRC_DIR_NATIVE_PATH}osr_wrap.cpp
+-      ${GDAL_PYTHON_CSOURCE_SRC_DIR_NATIVE_PATH}gdal_array_wrap.cpp ${GDAL_PYTHON_CSOURCE_DIR_NATIVE_PATH}
++      ${CMAKE_COMMAND} -E copy_if_different ${GDAL_PYTHON_CSOURCE_SRC_DIR}gdal_wrap.cpp
++      ${GDAL_PYTHON_CSOURCE_SRC_DIR}gdalconst_wrap.c ${GDAL_PYTHON_CSOURCE_SRC_DIR}gnm_wrap.cpp
++      ${GDAL_PYTHON_CSOURCE_SRC_DIR}ogr_wrap.cpp ${GDAL_PYTHON_CSOURCE_SRC_DIR}osr_wrap.cpp
++      ${GDAL_PYTHON_CSOURCE_SRC_DIR}gdal_array_wrap.cpp ${GDAL_PYTHON_CSOURCE_DIR}
+    DEPENDS ${GDAL_PYTHON_CSOURCES_SRC})
+endif ()
+
+@@ -158,7 +158,6 @@ 
+set(GDAL_PYTHON_VERSION "${GDAL_VERSION_NO_DEV_SUFFIX}")
+  if( NOT "${GDAL_VERSION_BUILD}" STREQUAL "0" )
+      string(APPEND GDAL_PYTHON_VERSION ".${GDAL_VERSION_BUILD}")
+  endif()
+
+- file(TO_NATIVE_PATH "${GDAL_PYTHON_CSOURCE_DIR}" GDAL_PYTHON_EXT_SOURCE_DIR)
+  if ("${CMAKE_BINARY_DIR}" STREQUAL "${CMAKE_SOURCE_DIR}" AND EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/setup.py)
+    # FIXME: remove this branch when we remove setup.py from source tree
+  elseif (_isMultiConfig)
