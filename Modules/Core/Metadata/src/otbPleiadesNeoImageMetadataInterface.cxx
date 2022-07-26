@@ -72,70 +72,6 @@ void PleiadesNeoImageMetadataInterface::FetchSatAngles(const std::vector<double>
   }
 }
 
-void PleiadesNeoImageMetadataInterface::FetchTabulatedPhysicalGain(ImageMetadata& imd)
-{
-  std::unordered_map<std::string, double> bandNameToPhysicalGain;
-  // TODO check band order here.
-  const auto& sensorId = imd[MDStr::SensorID];
-  if (sensorId == "PNEO" || sensorId == "PNEO 3" || sensorId == "PNEO 4" || sensorId == "PNEO 5" || sensorId == "PNEO 6")
-  {
-    bandNameToPhysicalGain = {{"P", 7.996}, {"B5", 8.039}, {"B1", 6.600}, {"B2", 7.338}, {"B3", 8.132}, {"B6", 9.955}, {"B4", 12.089}};
-  }
-  else
-  {
-    otbGenericExceptionMacro(MissingMetadataException, << "Invalid metadata, bad sensor id");
-  }
-
-  for (auto& band : imd.Bands)
-  {
-    auto gain = bandNameToPhysicalGain.find(band[MDStr::BandName]);
-    if (gain == bandNameToPhysicalGain.end())
-    {
-      otbGenericExceptionMacro(MissingMetadataException, << "Cannot find the physical gain associated with " << band[MDStr::BandName]);
-    }
-    else
-    {
-      band.Add(MDNum::PhysicalGain, gain->second);
-    }
-  }
-}
-
-
-void PleiadesNeoImageMetadataInterface::FetchSolarIrradiance(const std::vector<double>& dimapSolarIrradiance, ImageMetadata& imd)
-{
-  std::unordered_map<std::string, double> defaultSolarIrradiance;
-
-  const auto& sensorId = imd[MDStr::SensorID];
-
-  // todo : get the default solar irradiance value (for all PNEO sensors)
-  if (sensorId == "PNEO" || sensorId == "PNEO 3" || sensorId == "PNEO 4" || sensorId == "PNEO 5" || sensorId == "PNEO 6")
-  {
-    defaultSolarIrradiance = {{"P", 0}, {"B0", 0}, {"B1", 0}, {"B2", 0}, {"B3", 0}};
-  }
-  else
-  {
-    otbGenericExceptionMacro(MissingMetadataException, << "Invalid metadata, bad sensor id")
-  }
-
-  // tolerance threshold
-  double tolerance = 0.05;
-
-  auto solarIrradianceIt = dimapSolarIrradiance.begin();
-  for (auto& band : imd.Bands)
-  {
-    auto defaultValue = defaultSolarIrradiance.find(band[MDStr::BandName]);
-    if (defaultValue != defaultSolarIrradiance.end() && std::abs(*solarIrradianceIt - defaultValue->second) > (tolerance * defaultValue->second))
-    {
-      band.Add(MDNum::SolarIrradiance, defaultValue->second);
-    }
-    else
-    {
-      band.Add(MDNum::SolarIrradiance, *solarIrradianceIt);
-    }
-    solarIrradianceIt++;
-  }
-}
-
 void PleiadesNeoImageMetadataInterface::FetchSpectralSensitivity(const std::string& sensorId, ImageMetadata& imd, DimapMetadataHelper& helper)
 {
   otb::MetaData::LUT1D spectralSensitivity;
@@ -143,14 +79,19 @@ void PleiadesNeoImageMetadataInterface::FetchSpectralSensitivity(const std::stri
   spectralSensitivity.Axis[0].Spacing = 1.0;
   spectralSensitivity.Axis[0].Size    = 255;
   std::string ProductFilePath         = itksys::SystemTools::GetParentDirectory(m_MetadataSupplierInterface->GetResourceFile()) + "/";
-  for (std::string lutPath : helper.GetDimapData().LUTFileNames)
-  {
-    std::cout << lutPath << std::endl;
-    if (itksys::SystemTools::FileExists(ProductFilePath + lutPath))
+  if(helper.GetDimapData().LUTFileNames.size()>0){
+    for (std::string lutPath : helper.GetDimapData().LUTFileNames)
     {
-      XMLMetadataSupplier xmlLut(ProductFilePath + lutPath);
-      helper.ParseLUT(xmlLut);
+      if (itksys::SystemTools::FileExists(ProductFilePath + lutPath))
+      {
+        XMLMetadataSupplier xmlLut(ProductFilePath + lutPath);
+        helper.ParseLUT(xmlLut);
+      }
     }
+  }
+  else// TODO add default LUT according to the type of image RGB or NED
+  {
+    helper.createDefaultLUTs();
   }
 
   if (sensorId.find("NEO") != std::string::npos)
@@ -202,7 +143,6 @@ void PleiadesNeoImageMetadataInterface::Parse(ImageMetadata& imd)
     helper.ParseDimapV3(xmlMds, "Dimap_Document.");
 
     imd.Add(MDStr::GeometricLevel, helper.GetDimapData().ProcessingLevel);
-    std::cout<<"geometric level: "<<imd[MDStr::GeometricLevel]<<std::endl;
 
     // fill RPC model
     if (imd[MDStr::GeometricLevel] == "SENSOR")
@@ -266,23 +206,22 @@ void PleiadesNeoImageMetadataInterface::Parse(ImageMetadata& imd)
   imd.Add(MDTime::ProductionDate, MetaData::ReadFormattedDate(dimapData.ProductionDate));
   imd.Add(MDTime::AcquisitionDate, MetaData::ReadFormattedDate(dimapData.AcquisitionDate));
 
-  FetchSolarIrradiance(dimapData.SolarIrradiance, imd);
-
   // Store gain values from the dimap, if present
   if (dimapData.PhysicalGain.size() == imd.Bands.size())
   {
+    auto solarIrradianceIt = dimapData.SolarIrradiance.begin();
     auto gain = dimapData.PhysicalGain.begin();
     for (auto& band : imd.Bands)
     {
       band.Add(MDNum::PhysicalGain, *gain);
+      band.Add(MDNum::SolarIrradiance,*solarIrradianceIt);
+      solarIrradianceIt++;
       gain++;
     }
   }
   else
   {
-    // Store hard-coded values for gain
-    FetchTabulatedPhysicalGain(imd);
-    otbLogMacro(Info, << "Gain values from DIMAP could not be retrieved, reading hard-coded tables instead");
+    otbGenericExceptionMacro(MissingMetadataException, << "Gain values from DIMAP could not be retrieved")
   }
 
   if (dimapData.PhysicalBias.size() == imd.Bands.size())
@@ -301,8 +240,7 @@ void PleiadesNeoImageMetadataInterface::Parse(ImageMetadata& imd)
     {
       band.Add(MDNum::PhysicalBias, 0.0);
     }
-    // FetchSpectralSensitivity(imd[MDStr::SensorID], imd);
-    otbLogMacro(Info, << "Bias values from DIMAP could not be retrieved, default values not available");
+    otbGenericExceptionMacro(MissingMetadataException, << "Bias values from DIMAP could not be retrieved");
   }
 
   imd.Add(MetaData::PleiadesNeoUtils::IMAGE_ID_KEY, dimapData.ImageID);
