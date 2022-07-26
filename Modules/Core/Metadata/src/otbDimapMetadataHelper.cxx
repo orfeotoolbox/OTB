@@ -476,7 +476,7 @@ void DimapMetadataHelper::createDefaultLUTs()
     for(int i=0;i<m_Data.BandIDs.size();i++)
     {
       std::vector<double> vectLut(256,0.0);
-      m_Data.LUTs.insert(std::make_pair(m_Data.BandIDs[i],vectLut));
+      m_Data.LUTs.emplace(m_Data.BandIDs[i], move(vectLut));
     }
 }
 

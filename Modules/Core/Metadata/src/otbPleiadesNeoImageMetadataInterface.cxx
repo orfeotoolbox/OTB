@@ -80,7 +80,7 @@ void PleiadesNeoImageMetadataInterface::FetchSpectralSensitivity(const std::stri
   spectralSensitivity.Axis[0].Size    = 255;
   std::string ProductFilePath         = itksys::SystemTools::GetParentDirectory(m_MetadataSupplierInterface->GetResourceFile()) + "/";
   if(helper.GetDimapData().LUTFileNames.size()>0){
-    for (std::string lutPath : helper.GetDimapData().LUTFileNames)
+    for (std::string const& lutPath : helper.GetDimapData().LUTFileNames)
     {
       if (itksys::SystemTools::FileExists(ProductFilePath + lutPath))
       {
@@ -215,8 +215,8 @@ void PleiadesNeoImageMetadataInterface::Parse(ImageMetadata& imd)
     {
       band.Add(MDNum::PhysicalGain, *gain);
       band.Add(MDNum::SolarIrradiance,*solarIrradianceIt);
-      solarIrradianceIt++;
-      gain++;
+      ++solarIrradianceIt;
+      ++gain;
     }
   }
   else
