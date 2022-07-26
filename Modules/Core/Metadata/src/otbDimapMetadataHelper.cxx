@@ -593,9 +593,17 @@ void DimapMetadataHelper::ParseLUT(const MetadataSupplierInterface & mds)
                      "BAND_ID",lutId);
   for(int i=0;i<lutId.size();i++)
   {
-    std::vector<double> vectLut = parseLUTStringToArrays(lutData[i]);
-    m_Data.LUTs.insert(std::make_pair(lutId[i],parseLUTStringToArrays(lutData[i])));
+    m_Data.LUTs.insert(std::make_pair(lutId[i], parseLUTStringToArrays(lutData[i])));
   }
+}
+
+void DimapMetadataHelper::createDefaultLUTs()
+{
+    for(int i=0;i<m_Data.BandIDs.size();i++)
+    {
+      std::vector<double> vectLut(256,0.0);
+      m_Data.LUTs.insert(std::make_pair(m_Data.BandIDs[i],vectLut));
+    }
 }
 
 } // end namespace otb

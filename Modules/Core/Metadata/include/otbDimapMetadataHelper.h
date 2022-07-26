@@ -120,6 +120,9 @@ public:
   /** Parse string to array of double*/
   std::vector<double> parseLUTStringToArrays(std::string const & s);
 
+  /** create default LUT data*/
+  void createDefaultLUTs();
+
   /** Parse Dimap data from a LUT Dimap v1.1 product */
   void ParseLUT(const MetadataSupplierInterface & mds);
 
