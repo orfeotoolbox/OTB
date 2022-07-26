@@ -1,0 +1,33 @@
+SensorID PNEO 3
+Mission PNEO
+Instrument 
+InstrumentIndex 
+GeometricLevel SENSOR
+TileHintX 2048
+TileHintY 2048
+DataType 3
+RedDisplayChannel 0
+GreenDisplayChannel 0
+BlueDisplayChannel 0
+SunElevation 29.5354
+SunAzimuth 165.441
+SatElevation 72.7136
+SatAzimuth 7.51228
+AcquisitionDate 2021-11-07T10:29:29.3Z
+ProductionDate 2021-12-20T10:01:58.863Z
+RPC <RPCParam>
+ImageID PWOI_000005961_1_1_F_1
+LinePeriod 43.55529695995581
+SwathFirstCol 10220
+SwathLastCol 33585
+TimeRangeEnd 2021-11-07T10:29:30.222182Z
+TimeRangeStart 2021-11-07T10:29:29.308174Z
+BandName PAN
+EnhancedBandName Unknown
+PhysicalGain 7.996
+PhysicalBias 0
+SolarIrradiance 1569.5
+SpectralSensitivity LUT1D.DIM0.SIZE = 255
+LUT1D.DIM0.ORIGIN = 0
+LUT1D.DIM0.SPACING = 1
+LUT1D.ARRAY = 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
