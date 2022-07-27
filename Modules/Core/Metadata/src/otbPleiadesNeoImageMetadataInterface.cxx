@@ -207,7 +207,7 @@ void PleiadesNeoImageMetadataInterface::Parse(ImageMetadata& imd)
   imd.Add(MDTime::AcquisitionDate, MetaData::ReadFormattedDate(dimapData.AcquisitionDate));
 
   // Store gain values from the dimap, if present
-  if (dimapData.PhysicalGain.size() == imd.Bands.size())
+  if (dimapData.PhysicalGain.size() == imd.Bands.size() && dimapData.SolarIrradiance.size() == imd.Bands.size())
   {
     auto solarIrradianceIt = dimapData.SolarIrradiance.begin();
     auto gain = dimapData.PhysicalGain.begin();
