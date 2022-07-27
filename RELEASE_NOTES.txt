@@ -105,6 +105,13 @@ Documentation:
    * !780: Updating the documentation in preparation for OTB 8.0.0-alpha1 by Julien Osman
    
 
+OTB-v 7.4.1 - Changes since version 7.4.0 (April 27th, 2022)
+----------------------------------------------------------------
+
+Features added:
+
+   * Update DiapOTB to v1.1.0
+
 OTB-v 7.4.0 - Changes since version 7.3.0 (September 3rd, 2021)
 ----------------------------------------------------------------
 
