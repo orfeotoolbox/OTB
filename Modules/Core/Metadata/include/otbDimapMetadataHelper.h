@@ -76,6 +76,8 @@ struct DimapData
   //specific pneo sensors features
   std::vector<std::string> LUTFileNames;
   std::unordered_map<std::string, std::vector<double>> LUTs;
+  std::vector<double>  RangeMin;
+  std::vector<double>  RangeMax;
 
   // phr and pneo sensor characteristics
   std::string TimeRangeStart;
