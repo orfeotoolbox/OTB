@@ -495,12 +495,11 @@ void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, co
   ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
                      "Acquisition_Angles.AZIMUTH_ANGLE", m_Data.AzimuthAngle);
 
-  std::vector<double> gainbiasUnavail={};
   ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Radiance",
-                     "BIAS", m_Data.PhysicalBias,gainbiasUnavail);
+                     "BIAS", m_Data.PhysicalBias);
 
   ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Radiance",
-                     "GAIN", m_Data.PhysicalGain,gainbiasUnavail);
+                     "GAIN", m_Data.PhysicalGain);
 
   ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Solar_Irradiance",
                      "VALUE" , m_Data.SolarIrradiance);
