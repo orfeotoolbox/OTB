@@ -430,14 +430,24 @@ void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, co
                   ,"COMPONENT_PATH.href", componentPath);
 
   int i=0;
+  bool noLUT=true;//check if the LUT are available or not
   for(std::string content:componentContent)
   {
     if(content=="Look Up Table")
     {
       if(i<componentPath.size())
         m_Data.LUTFileNames.push_back(componentPath[i]);
+      noLUT=false;
     }
     i++;
+  }
+  //get the bound range of the band to compute LUT if the LUTs are not available
+  if(noLUT)
+  {
+    ParseVector(mds, prefix + "Radiometric_Data.Histogram_Band_List.Histogram_Band",
+                     "MIN", m_Data.RangeMin);
+    ParseVector(mds, prefix + "Radiometric_Data.Histogram_Band_List.Histogram_Band",
+                     "MAX", m_Data.RangeMax);
   }
 }
 
@@ -475,6 +485,13 @@ void DimapMetadataHelper::createDefaultLUTs()
     for(int i=0;i<m_Data.BandIDs.size();i++)
     {
       std::vector<double> vectLut(256,0.0);
+      if(m_Data.RangeMin.size() == m_Data.BandIDs.size() && m_Data.RangeMax.size() == m_Data.BandIDs.size())
+      {
+        for(int x=0;x<256;x++)
+        {
+          vectLut[x] = x * double(m_Data.RangeMax[i]- m_Data.RangeMin[i]) / 255.0 + m_Data.RangeMin[i];
+        }
+      }
       m_Data.LUTs.emplace(m_Data.BandIDs[i], move(vectLut));
     }
 }
