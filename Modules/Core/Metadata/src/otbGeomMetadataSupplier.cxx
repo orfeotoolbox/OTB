@@ -93,7 +93,9 @@ int GeomMetadataSupplier::GetNbBands() const
   return 1;
 }
 
-bool GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
+bool GeomMetadataSupplier::FetchRPC(ImageMetadata & imd,
+                                    const double lineOffset,
+                                    const double sampleOffset)
 {
   bool hasValue;
   GetMetadataValue("polynomial_format", hasValue);
@@ -101,8 +103,8 @@ bool GeomMetadataSupplier::FetchRPC(ImageMetadata & imd)
     return false;
 
   Projection::RPCParam rpcStruct;
-  rpcStruct.LineOffset    = this->GetAs<double>("line_off");
-  rpcStruct.SampleOffset  = this->GetAs<double>("samp_off");
+  rpcStruct.LineOffset    = this->GetAs<double>("line_off") + lineOffset;
+  rpcStruct.SampleOffset  = this->GetAs<double>("samp_off") + sampleOffset;
   rpcStruct.LatOffset     = this->GetAs<double>("lat_off");
   rpcStruct.LonOffset     = this->GetAs<double>("long_off");
   rpcStruct.HeightOffset  = this->GetAs<double>("height_off");

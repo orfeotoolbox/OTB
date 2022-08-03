@@ -403,7 +403,10 @@ void ImageFileReader<TOutputImage, ConvertPixelTraits>::GenerateOutputInformatio
   {
     GeomMetadataSupplier geomSupplier(m_FilenameHelper->GetExtGEOMFileName(), m_FileName);
     ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
-    geomSupplier.FetchRPC(imd);
+    if(imd.Has(MDStr::Mission) && (imd[MDStr::Mission] == "Pléiades"))
+      geomSupplier.FetchRPC(imd, 0.5, 0.5);
+    else
+      geomSupplier.FetchRPC(imd);
     geomSupplier.FetchGCP(imd);
     otbLogMacro(Info, << "Loading metadata from external geom file " << m_FilenameHelper->GetExtGEOMFileName());
   }
