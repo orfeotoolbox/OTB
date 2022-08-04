@@ -58,6 +58,11 @@ inline unsigned int uint_ceildivpow2(unsigned int a, unsigned int b)
   return (a + (1 << b) - 1) >> b;
 }
 
+// remove when C++17 available
+// Assert 2 array have same size, and return that size
+template<std::size_t N, class T>
+constexpr std::size_t getsize_tabs(const T(&)[N], T(&)[N]) { return N; }
+
 namespace otb
 {
 
@@ -2054,9 +2059,11 @@ void GDALImageIO::GDALMetadataWriteRPC(GDALDataset* dataset)
   gdalRpcStruct.dfHEIGHT_SCALE = rpc.HeightScale;
 
   auto copy_tab = [](auto const& in, auto & out) {
-      constexpr auto in_size = std::extent<decltype(in)>::value; // std::size() in C++17
-      constexpr auto out_size = std::extent<decltype(out)>::value;
-      static_assert(in_size == out_size, "Sizes mismatch!");
+      auto in_size = getsize_tabs(in, out);
+      // With C++17, use std::size()
+      // auto in_size = std::size(in);
+      // auto out_size = std::size(out);
+      // static_assert(in_size == out_size, "Sizes mismatch!");
       std::copy_n(std::begin(in), in_size, std::begin(out));
   };
   copy_tab(rpc.LineNum, gdalRpcStruct.adfLINE_NUM_COEFF);
