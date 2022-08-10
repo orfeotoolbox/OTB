@@ -1,6 +1,12 @@
 We provide for MacOS X through a standalone package. This package is a
-self-extractible archive, quite similar to the Linux one. You may
-uncompress it with the command line:
+self-extractible archive, quite similar to the Linux one.
+
+This package was compiled using an Intel processor, and won't be
+compatible with ARM processors found in the most recent MacOS
+computers. If you want to use OTB on such a device, we recommend using
+the Docker image (see below).
+
+You may uncompress it with the command line:
 
 .. parsed-literal::
 

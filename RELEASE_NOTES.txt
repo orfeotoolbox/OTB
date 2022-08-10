@@ -1,3 +1,20 @@
+OTB-v 8.0.1 - Changes since version 8.0.0 (April 27th, 2022)
+---------------------------------------------------------------------
+
+Bugs fixed:
+
+   * !906: Add missing parts of python API by Julien Osman
+
+CI:
+
+   * !911: Upgrade zlib to version 1.2.12 and GDAL to version 3.4.2 by Julien Osman
+  
+Documentation:
+
+   * !911: Fix formating issue by Julien Osman
+   * !911: Update warning message about python version by Julien Osman
+
+
 OTB-v 8.0.0 - Changes since version 7.4.0 (March 22th, 2022)
 ---------------------------------------------------------------------
 
@@ -87,6 +104,13 @@ Documentation:
    * !781: Update the documentation about Remote Modules by Thibaut romain
    * !780: Updating the documentation in preparation for OTB 8.0.0-alpha1 by Julien Osman
    
+
+OTB-v 7.4.1 - Changes since version 7.4.0 (April 27th, 2022)
+----------------------------------------------------------------
+
+Features added:
+
+   * Update DiapOTB to v1.1.0
 
 OTB-v 7.4.0 - Changes since version 7.3.0 (September 3rd, 2021)
 ----------------------------------------------------------------
