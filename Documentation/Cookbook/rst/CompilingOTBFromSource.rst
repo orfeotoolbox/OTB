@@ -3,9 +3,9 @@
 Compiling OTB from source
 =========================
 
-This section covers the compilation of OTB from source code using `CMake
-<http://www.cmake.org>`_. If you just need to install OTB and Monteverdi, follow
-instructions from the :doc:`Installation` section.
+This section covers the compilation of OTB from source code using
+`CMake <http://www.cmake.org>`_. If you just need to install OTB,
+follow instructions from the :doc:`Installation` section.
 
 OTB is known to work on:
 
@@ -43,12 +43,6 @@ process:
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `FFTW <http://www.fftw.org>`_                                    | No                    |                            | 3.3.9                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `GLEW <http://glew.sourceforge.net/>`_                           | No                    |                            | 1.13                     |
-    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `GLFW <http://www.glfw.org/>`_                                   | No                    | 3                          | 3.1.2                    |
-    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `GLUT <https://www.opengl.org/resources/libraries/glut/>`_       | No                    |                            | 2.8.1                    |
-    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `libKML <https://github.com/google/libkml>`_                     | No                    | 1.2                        | 1.3.0                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `libSVM <http://www.csie.ntu.edu.tw/~cjlin/libsvm>`_             | No                    | 2.0                        | 3.22                     |
@@ -60,12 +54,6 @@ process:
     | `MuParserX <http://muparserx.beltoforion.de>`_                   | No                    | 4.0.7                      | 4.0.8                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `OpenCV <http://opencv.org>`_                                    | No                    | 3.0.0                      | 4.5.1                    |
-    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `OPENGL <https://www.opengl.org/>`_                              | No                    |                            |                          |
-    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `Qt <https://www.qt.io/developers/>`_                            | No                    | 5                          | 5.11.3                   |
-    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `QWT <http://qwt.sourceforge.net>`_                              | No                    | 6                          | 6.1.6                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `Shark <http://image.diku.dk/shark/>`_                           | No                    | 4                          | 4.0                      |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
@@ -200,25 +188,6 @@ corresponding to the OTB version you want to build).
 
     apt-get install pkg-config
 
-**Notes about Qt:** Unlike other dependencies, building Qt5 on all platforms is
-not a trivial task but OTB SuperBuild does its best to facilitate this for the
-user. So there is still some additional package installation, one has to do as a
-pre-requistie for SuperBuild On a GNU/Linux you must have Qt X11 dependencies
-installed. See `Qt 5 documentation
-<https://doc.qt.io/qt-5/linux-requirements.html>`_ for the list of packages that
-need to be installed before starting SuperBuild.
-
-For example for a Debian 8.1 system, all Qt5 dependencies can be installed with the
-following ’apt-get install’ command:
-
-::
-
-    apt-get install libx11-dev libxext-dev libxt-dev libxi-dev libxrandr-dev libgl-dev libglu-dev libxinerama-dev libxcursor-dev
-
-You can also deactivate Qt5 and skip this by passing
-``-DOTB_USE_QT=OFF`` to CMake, but this will install OTB without
-Monteverdi, Mapla and the GUI application launchers.
-
 You are now ready to compile OTB! Simply use the make command (other
 targets can be generated with CMake’s ``-G`` option):
 
@@ -238,10 +207,6 @@ while:
 
 ::
 
-    ~/OTB/install/bin/otbgui_ExtractROI
-
-will launch the graphical version.
-
 In order to ensure access to your OTB build from anywhere within your
 system, we recommend setting the following environment variables.
 First, add ``bin/`` directory to your PATH for easy access:
@@ -255,17 +220,6 @@ Second, add the ``lib/`` directory to your ``LD_LIBRARY_PATH``:
 ::
 
     export LD_LIBRARY_PATH=~/OTB/install/lib:$LD_LIBRARY_PATH
-
-Monteverdi is part of OTB module and is compiled by the SuperBuild if GLEW, GLUT, OPENGL, Qt and QWT
-modules are activated.
-
-To use OTB applications from within Monteverdi you will need to define
-the ``OTB_APPLICATION_PATH`` environment variable:
-
-::
-
-    export OTB_APPLICATION_PATH=~/OTB/install/lib/otb/applications
-    monteverdi
 
 Normal build: Build only OTB
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -317,14 +271,6 @@ installation location:
 | **CMake variable**        | **3rd party module**   | **Modules depending on it**                                                                                                                                               |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **OTB\_USE\_LIBKML**      | OTBlibkml              | OTBKMZWriter OTBIOKML OTBAppKMZ                                                                                                                                           |
-+---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_QT**          | OTBQt                  | OTBQtWidget                                                                                                                                                               |
-+---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_QWT**         | OTBQwt                 | OTBMonteverdiGUI OTBMonteverdi                                                                                                                                            |
-+---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_GLEW**        | OTBGlew                | OTBIce OTBMonteverdiGUI OTBMonteverdi                                                                                                                                     |
-+---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_OPENGL**      | OTBOpenGL              | OTBIce OTBMonteverdiGUI OTBMonteverdi                                                                                                                                     |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **OTB\_USE\_CURL**        | OTBCurl                |                                                                                                                                                                           |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
