@@ -46,8 +46,8 @@ endif()
 
 ExternalProject_Add(JPEG
   PREFIX JPEG
-  URL "https://downloads.sourceforge.net/project/libjpeg-turbo/1.4.2/libjpeg-turbo-1.4.2.tar.gz"
-  URL_MD5 86b0d5f7507c2e6c21c00219162c3c44
+  URL "https://downloads.sourceforge.net/project/libjpeg-turbo/1.5.3/libjpeg-turbo-1.5.3.tar.gz"
+  URL_MD5 7c82f0f6a3130ec06b8a4d0b321cbca3
   SOURCE_DIR ${JPEG_SB_SRC}
   BINARY_DIR ${JPEG_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
