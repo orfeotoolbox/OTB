@@ -221,7 +221,7 @@ private:
     defaultValue.Fill(GetParameterFloat("fv"));
 
     // If the origin product is in sensor geometry, superimpose should keep the RPC parameters for orthorectification for exemple
-    if (refImage->GetImageMetadata().HasSensorGeometry())
+    if (refImage->GetProjectionRef().empty() && refImage->GetImageMetadata().HasSensorGeometry())
     {
       std::string out_FileName = GetParameterString("out");
       out_FileName.append("?&writerpctags=true");
