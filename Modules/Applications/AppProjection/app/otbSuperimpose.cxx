@@ -220,6 +220,14 @@ private:
     itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, movingImage->GetNumberOfComponentsPerPixel());
     defaultValue.Fill(GetParameterFloat("fv"));
 
+    // If the origin product is in sensor geometry, superimpose should keep the RPC parameters for orthorectification for exemple
+    if (refimage->GetImageMetadata().HasSensorGeometry())
+    {
+      std::string out_FileName = GetParameterString("out");
+      out_FileName.append("?&writerpctags=true");
+      SetParameterString("out",out_FileName);
+    }
+    
     if (GetParameterString("mode") == "default")
     {
       FloatVectorImageType::SpacingType defSpacing;
