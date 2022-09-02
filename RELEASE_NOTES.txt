@@ -1,8 +1,9 @@
-OTB-v 8.1.0 - Changes since version 8.0.1 (August 11th, 2022)
+OTB-v 8.1.0 - Changes since version 8.0.1 (September 2nd, 2022)
 ---------------------------------------------------------------------
 
 Features added:
 
+   * !926: rpcSolver: Avoid setting equation system multiple times by Julien Osman
    * !917: Avoid reloading the same DEM directory by Julien Osman
    * !904: Add default radius value to NewFunctorFilter overload by Laurențiu Nicola
 
@@ -16,8 +17,13 @@ Bugs fixed:
 
 Documentation:
 
+   * !915: Some documentation adjustments by Julien Osman
    * !889: HaralickTextureExtraction: Clarify the definition of the parameters xrad and yrad by Julien Osman
    * !887: Improve Python errors of mismatched types by Luc Hermitte
+
+Refactoring:
+
+   * !925: Remove code related to GenerateRPCSensorModel by Julien Osman
 
 Licence and legislation matters:
 
