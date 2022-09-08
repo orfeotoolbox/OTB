@@ -20,7 +20,7 @@ Documentation:
    * !915: Some documentation adjustments by Julien Osman
    * !889: HaralickTextureExtraction: Clarify the definition of the parameters xrad and yrad by Julien Osman
    * !887: Improve Python errors of mismatched types by Luc Hermitte
-   * !927: Multiple documentation improvvements
+   * !927: Multiple documentation improvements by Julien Osman
 
 Refactoring:
 
