@@ -17,10 +17,10 @@ Bugs fixed:
 
 Documentation:
 
+   * !927: Multiple documentation improvements by Julien Osman
    * !915: Some documentation adjustments by Julien Osman
    * !889: HaralickTextureExtraction: Clarify the definition of the parameters xrad and yrad by Julien Osman
    * !887: Improve Python errors of mismatched types by Luc Hermitte
-   * !927: Multiple documentation improvements by Julien Osman
 
 Refactoring:
 
@@ -29,6 +29,11 @@ Refactoring:
 Licence and legislation matters:
 
    * !905: Remove the 'Lena' image by Julien Osman
+
+Known issues:
+
+   * #2306: BundleToPerfectSensor needs default mode for some PHR images
+   * #2304: With some PHR and SPOT6-7 products, the DIMAP driver from GDAL does not handle all the needed metadata
 
 OTB-v 8.0.1 - Changes since version 8.0.0 (April 27th, 2022)
 ---------------------------------------------------------------------
