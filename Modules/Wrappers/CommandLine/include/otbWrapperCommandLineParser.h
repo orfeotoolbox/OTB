@@ -35,7 +35,7 @@ namespace Wrapper
  *
  * To be valid, the expression must be as follow:
  * ModuleName (ModulePaths) --attribut1_Key attrubut1_Value --attribut2_Key attrubut2_Value
- * After the attribut key, if the user give several values (expression without \"--\" separated by space), it will automacally be interpreted as a list.
+ * After the attribute key, if the user give several values (expression without \"--\" separated by space), it will automacally be interpreted as a list.
  *
  * \ingroup OTBCommandLine
  */
@@ -58,10 +58,10 @@ public:
   /** Parse result enum */
   typedef enum { OK, NOMODULENAME, MULTIPLEMODULENAME, INVALIDMODULENAME, NOMODULEPATH, INVALIDMODULEPATH, DEFAULT } ParseResultType;
 
-  /** Get the attribut associated to a key (list of element after the key and before the next "--") as a vector of string. */
+  /** Get the attribute associated to a key (list of element after the key and before the next "--") as a vector of string. */
   std::vector<std::string> GetAttribut(const std::string& key, const std::string& exp);
   std::vector<std::string> GetAttribut(const std::string& key, const std::vector<std::string>& exp);
-  /** Get the attribut associated to a key (list of element after the key and before the next "--") as a string separated by spaces. */
+  /** Get the attribute associated to a key (list of element after the key and before the next "--") as a string separated by spaces. */
   std::string GetAttributAsString(const std::string& key, const std::string& exp);
   std::string GetAttributAsString(const std::string& key, const std::vector<std::string>& exp);
   /** Look if a given key is in an expression. */
@@ -77,7 +77,7 @@ public:
   std::string GetPathsAsString(const std::vector<std::string>& vexp);
 
 
-  /** Get the module name in an expression. It can be the first element of the expression (if the expression doesn't start with a "--" or the attribut
+  /** Get the module name in an expression. It can be the first element of the expression (if the expression doesn't start with a "--" or the attribute
    * associated to the key m_ModuleNameKey). */
   CommandLineParser::ParseResultType GetModuleName(std::string& modName, const std::string& exp);
   CommandLineParser::ParseResultType GetModuleName(std::string& modName, const std::vector<std::string>& exp);
