@@ -26,6 +26,9 @@
 #include "otbWrapperInputImageParameter.h"
 #include "otbImageFileReader.h"
 #include "otbWrapperTypes.h"
+#include "otbWrapperApplicationRegistry.h"
+#include "itkExceptionObject.h"
+#include <boost/test/unit_test.hpp>
 #include <vector>
 
 
@@ -54,6 +57,34 @@ int otbWrapperOutputImageParameterTest1(int itkNotUsed(argc), char* argv[])
   return EXIT_SUCCESS;
 }
 
+
+int otbWrapperOutputImageParameterTest2(int argc, char* argv[])
+{
+  if (argc != 3)
+  {
+    std::cout << "Usage: otbWrapperOutputImageParameterTest2 TestImage PathToBandMathApp\n";
+    return EXIT_FAILURE;
+  }
+
+  otb::Wrapper::ApplicationRegistry::SetApplicationPath(argv[2]);
+  auto app = otb::Wrapper::ApplicationRegistry::CreateApplication("BandMath");
+  app->SetParameterStringList("il", {argv[1]});
+  otb::Wrapper::ImageBaseType::RegionType region;
+  const otb::ImageMetadata imd;
+
+  // The following instructions should raise an exception
+  BOOST_CHECK_THROW (app->GetImageOrigin("out"), itk::ExceptionObject);
+  BOOST_CHECK_THROW (app->GetImageSpacing("out"), itk::ExceptionObject);
+  BOOST_CHECK_THROW (app->GetImageSize("out"), itk::ExceptionObject);
+  BOOST_CHECK_THROW (app->GetImageNbBands("out"), itk::ExceptionObject);
+  BOOST_CHECK_THROW (app->PropagateRequestedRegion("out", region), itk::ExceptionObject);
+  BOOST_CHECK_THROW (app->GetImageRequestedRegion("out"), itk::ExceptionObject);
+  BOOST_CHECK_THROW (app->SetImageMetadata(imd, "out"), itk::ExceptionObject);
+  BOOST_CHECK_THROW (app->GetMetadataDictionary("out"), itk::ExceptionObject);
+  BOOST_CHECK_THROW (app->GetImageBasePixelType("out"), itk::ExceptionObject);
+
+  return EXIT_SUCCESS;
+}
 
 // template < typename ImageType >
 // void Cross( int p , std::string inputfilename, std::string outputfilename)
