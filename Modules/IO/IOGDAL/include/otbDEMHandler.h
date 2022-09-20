@@ -22,7 +22,7 @@
 #define otbDEMHandler_h
 
 #include "otbImage.h"
-#include "otbGDALDriverManagerWrapper.h"
+#include <memory>
 
 namespace otb
 {
@@ -51,6 +51,8 @@ class DEMSubjectInterface {
   virtual void Notify() const = 0;
 };
 
+class DEMHandlerTLS;
+
 /** \class DEMHandler
  *
  * \brief Single access point for DEM data retrieval
@@ -65,8 +67,8 @@ class DEMSubjectInterface {
  * functionalities.
  *
  * The class allows configuring a directory containing DEM tiles
- * (raster tiles will be opened by GDAL drivers) using the OpenDEMDirectory() 
- * method. the OpenGeoidFile() method allows inputting a geoid file as well. 
+ * (raster tiles will be opened by GDAL drivers) using the OpenDEMDirectory()
+ * method. the OpenGeoidFile() method allows inputting a geoid file as well.
  * Last, a default height above ellipsoid can be set using the
  * SetDefaultHeightAboveEllipsoid() method.
  *
@@ -95,33 +97,31 @@ class DEMSubjectInterface {
 class DEMHandler : public DEMSubjectInterface
 {
 public:
-  using Self =          DEMHandler;
-  using PointType =     itk::Point<double, 2>;
-
-  using DatasetUPtr = std::unique_ptr<GDALDataset, void(*)(GDALDataset*)>;
+  using Self      = DEMHandler;
+  using PointType = itk::Point<double, 2>;
 
   /** Retrieve the singleton instance */
   static DEMHandler & GetInstance();
 
-  /** Try to open the DEM directory. 
-  * \param path input path
-  */
-  void OpenDEMFile(const std::string & path);
+  /** Open all raster in the directory.
+   * \param DEMDirectory input directory
+   */
+  void OpenDEMDirectory(std::string DEMDirectory);
 
-  /** Open all raster in the directory. 
-  * \param DEMDirectory input directory
-  */
-  void OpenDEMDirectory(const std::string& DEMDirectory);
+  /** Try to open the DEM directory.
+   * \param path input path
+   */
+  void OpenDEMFile(std::string path);
 
   /** Tells whether the directory contains a raster
-  * \param DEMDirectory input directory
-  */
+   * \param DEMDirectory input directory
+   */
   bool IsValidDEMDirectory(const std::string& DEMDirectory) const;
 
-  /** Try to open a geoid file 
-  * \param geoidFile input geoid path
-  */
-  bool OpenGeoidFile(const std::string& geoidFile);
+  /** Try to open a geoid file
+   * \param geoidFile input geoid path
+   */
+  void OpenGeoidFile(std::string geoidFile);
 
   /** Return the height above the ellipsoid :
    * - SRTM and geoid both available: srtm_value + geoid_offset
@@ -135,7 +135,7 @@ public:
   double GetHeightAboveEllipsoid(double lon, double lat) const;
 
   double GetHeightAboveEllipsoid(const PointType& geoPoint) const;
- 
+
   /** Return the height above the mean sea level :
    * - SRTM and geoid both available: srtm_value
    * - No SRTM but geoid available: 0
@@ -149,64 +149,60 @@ public:
 
   double GetHeightAboveMSL(const PointType& geoPoint) const;
 
+  double GetGeoidHeight(double lon, double lat) const;
+  double GetGeoidHeight(const PointType& geoPoint) const;
+
   /** Return the number of DEM opened */
   unsigned int GetDEMCount() const;
-  
+
   double GetDefaultHeightAboveEllipsoid() const;
 
   void SetDefaultHeightAboveEllipsoid(double height);
 
-  /** Get DEM directory 
+  /** Get DEM directory
    * \param idx directory index
    * \return the DEM directory corresponding to index idx
    */
-  std::string GetDEMDirectory(unsigned int idx = 0) const;
+  std::string const& GetDEMDirectory(unsigned int idx = 0) const;
 
   /** Get Geoid file */
-  std::string GetGeoidFile() const;
+  std::string const& GetGeoidFile() const;
 
-  /** Clear the DEM list and geoid filename, close all elevation datasets 
+  /** Clear the DEM list and geoid filename, close all elevation datasets
    * and reset the default height above ellipsoid */
   void ClearElevationParameters();
-  
-  /** Add an element to the current list of observers. The obsever will be updated whenever the DEM configuration
-  is modified*/
+
+  /** Add an element to the current list of observers.
+   * The obsever will be updated whenever the DEM configuration is
+   * modified
+   */
   void AttachObserver(DEMObserverInterface *observer) override {m_ObserverList.push_back(observer);};
-  
+
   /** Remove an element of the current list of observers. */
   void DetachObserver(DEMObserverInterface *observer) override {m_ObserverList.remove(observer);};
-  
+
   /** Update all observers */
   void Notify() const override;
 
   /** Path to the in-memory vrt */
-  const std::string DEM_DATASET_PATH = "/vsimem/otb_dem_dataset.vrt";
-  const std::string DEM_WARPED_DATASET_PATH = "/vsimem/otb_dem_warped_dataset.vrt";
-  const std::string DEM_SHIFTED_DATASET_PATH = "/vsimem/otb_dem_shifted_dataset.vrt";
+  static constexpr char const* DEM_DATASET_PATH         = "/vsimem/otb_dem_dataset.vrt";
+  static constexpr char const* DEM_WARPED_DATASET_PATH  = "/vsimem/otb_dem_warped_dataset.vrt";
+  static constexpr char const* DEM_SHIFTED_DATASET_PATH = "/vsimem/otb_dem_shifted_dataset.vrt";
 
-protected: 
-  DEMHandler(); 
-
+protected:
+  DEMHandler();
   ~DEMHandler();
 
+  friend class DEMHandlerTLS;
+  void RegisterTLS(DEMHandlerTLS* tls);
+  void UnregisterTLS(DEMHandlerTLS* tls);
+
 private:
+  DEMHandlerTLS & GetHandlerForCurrentThread() const;
+
   DEMHandler(const Self&) = delete;
-  void operator=(const Self&) = delete;  
+  void operator=(const Self&) = delete;
 
-  void CreateShiftedDataset();
-
-  /** Clear the DEM list and close all DEM datasets */
-  void ClearDEMs();
-  
-  /** List of RAII capsules on all opened DEM datasets for memory management */
-  std::vector<otb::GDALDatasetWrapper::Pointer> m_DatasetList;
-  
-  /** Pointer to the DEM dataset */
-  DatasetUPtr m_Dataset = DatasetUPtr(nullptr, [](GDALDataset* DS){if(DS){GDALClose(DS);}});
-
-  /** Pointer to the geoid dataset */
-  DatasetUPtr m_GeoidDS = DatasetUPtr(nullptr, [](GDALDataset* DS){if(DS){GDALClose(DS);}});
-  
   /** Default height above elliposid, used when no DEM or geoid height is available. */
   double m_DefaultHeightAboveEllipsoid;
 
@@ -218,6 +214,10 @@ private:
 
   /** Observers on the DEM */
   std::list<DEMObserverInterface *> m_ObserverList;
+
+  std::set<DEMHandlerTLS*> m_tlses;
+
+  static thread_local std::unique_ptr<DEMHandlerTLS> m_tls;
 };
 
 }
