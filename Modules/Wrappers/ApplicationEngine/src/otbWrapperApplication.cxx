@@ -1703,6 +1703,10 @@ ImageBaseType* Application::GetParameterImageBase(const std::string& key, unsign
   }
   else if (dynamic_cast<OutputImageParameter*>(param))
   {
+    if (!m_ExecuteDone)
+      itkExceptionMacro(
+          "Call Execute() or ExecuteAndWriteOutput() before "
+          "trying to reach output image information.");
     OutputImageParameter* paramDown = dynamic_cast<OutputImageParameter*>(param);
     return paramDown->GetValue();
   }
