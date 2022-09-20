@@ -84,53 +84,105 @@ std::vector<std::string> GetFilesInDirectory(const std::string & directoryPath)
   return fileList;
 }
 
-boost::optional<double> GetDEMValue(double lon, double lat, GDALDataset& ds)
+struct DatasetCache
 {
-#if GDAL_VERSION_NUM >= 3000000
-  auto srs = ds.GetSpatialRef();
-#else
-  auto projRef = ds.GetProjectionRef();
+  GDALDataset * get          () const { return m_Dataset.get();}
+  GDALDataset * operator->   () const { return m_Dataset.get();}
+  GDALDataset & operator*    () const { assert(m_Dataset); return *m_Dataset;}
+  explicit      operator bool() const { return bool(m_Dataset); }
 
-  std::unique_ptr<OGRSpatialReference> srsUniquePtr;
-  OGRSpatialReference* srs = nullptr;
-  // GetProjectionRef() returns an empty non null string if no projection is available
-  if (strlen(projRef) != 0 )
+  DatasetCache() = default;
+  ~DatasetCache() = default;
+
+  void reset(GDALDataset* ds)
   {
-    // TODO: cache
-    srsUniquePtr = std::make_unique<OGRSpatialReference>(ds.GetProjectionRef());
-    srs = srsUniquePtr.get();
-  }
+    m_Dataset.reset(ds);
+    if (m_Dataset)
+    {
+#if GDAL_VERSION_NUM >= 3000000
+      auto srs = ds->GetSpatialRef();
+#else
+      auto projRef = ds->GetProjectionRef();
+
+      std::unique_ptr<OGRSpatialReference> srsUniquePtr;
+      OGRSpatialReference* srs = nullptr;
+      // GetProjectionRef() returns an empty non null string if no projection is available
+      if (strlen(projRef) != 0 )
+      {
+        srsUniquePtr = std::make_unique<OGRSpatialReference>(ds->GetProjectionRef());
+        srs = srsUniquePtr.get();
+      }
 #endif
 
-  auto wgs84Srs = OGRSpatialReference::GetWGS84SRS(); // 1%
+      auto wgs84Srs = OGRSpatialReference::GetWGS84SRS(); // 1%
+      m_isWGS84 = false;
 
-  // Convert input lon lat into the coordinates defined by the dataset if needed.
-  if (srs && !srs->IsSame(wgs84Srs)) // 10% of the time
-  {
-    // TODO: cache
-    auto poCT = std::unique_ptr<OGRCoordinateTransformation>
-      (OGRCreateCoordinateTransformation(wgs84Srs, srs));
+      // Convert input lon lat into the coordinates defined by the dataset if needed.
+      if (srs && !srs->IsSame(wgs84Srs)) // 10% of the time
+      {
+        m_isWGS84 = true;
+        m_poCT = std::unique_ptr<OGRCoordinateTransformation>
+          (OGRCreateCoordinateTransformation(wgs84Srs, srs));
+      }
 
-    if (poCT && !poCT->Transform( 1, &lon, &lat ) )
+      m_Dataset->GetGeoTransform(m_geoTransform);
+    }
+    else
     {
-      return boost::none;
+      m_poCT.reset(nullptr);
     }
   }
 
-  // => struct avec
-  // - ds
-  // - geoTransform
-  // - poCT + srs
-  // - DX, DY
-  // - nodata
-  double geoTransform[6];
+  bool convert_lon_lat(double & lon, double & lat) const
+  {
+    if (isWGS84())
+    {
+      if (m_poCT && !m_poCT->Transform( 1, &lon, &lat ) )
+      {
+        return false;
+      }
+    }
+    return true;
+  }
 
-  ds.GetGeoTransform(geoTransform);
+  std::pair<double, double> transform(double lon, double lat) const
+  {
+    auto const x = (lon - m_geoTransform[0]) / m_geoTransform[1] - 0.5;
+    auto const y = (lat - m_geoTransform[3]) / m_geoTransform[5] - 0.5;
+    return std::make_pair(x, y);
+  }
 
-  auto const x = (lon - geoTransform[0]) / geoTransform[1] - 0.5;
-  auto const y = (lat - geoTransform[3]) / geoTransform[5] - 0.5;
+  bool isWGS84() const noexcept { return m_isWGS84; }
 
-  if (x < 0 || y < 0 || x > ds.GetRasterXSize() || y > ds.GetRasterYSize())
+  double * getGeoTransform() noexcept { return m_geoTransform;}
+private:
+  using DatasetUPtr = std::unique_ptr<GDALDataset, void(*)(GDALDataset*)>;
+  using OCT_ptr     = std::unique_ptr<OGRCoordinateTransformation>;
+  DatasetUPtr m_Dataset = DatasetUPtr(nullptr, [](GDALDataset* DS){if(DS){GDALClose(DS);}});
+  OCT_ptr     m_poCT;
+  bool        m_isWGS84 = false;
+  double      m_geoTransform[6] = {};
+};
+
+boost::optional<double> GetDEMValue(double lon, double lat, DatasetCache const& dsc)
+{
+  if (!dsc.convert_lon_lat(lon, lat))
+  {
+    return boost::none;
+  }
+
+  auto const xy = dsc.transform(lon, lat);
+  auto const x = xy.first;
+  auto const y = xy.second;
+
+  auto is_out_raster = [&](auto x, auto y, GDALDataset & ds) {
+    return x < 0
+      ||   y < 0
+      || 1+x > ds.GetRasterXSize()   // no need to test x > size
+      || 1+y > ds.GetRasterYSize();  // no need to test Y > size
+  };
+
+  if (is_out_raster(x, y, *dsc))
   {
     return boost::none;
   }
@@ -141,15 +193,10 @@ boost::optional<double> GetDEMValue(double lon, double lat, GDALDataset& ds)
   auto const deltaX = x - x_int;
   auto const deltaY = y - y_int;
 
-  if (x < 0 || y < 0 || x+1 > ds.GetRasterXSize() || y+1 > ds.GetRasterYSize())
-  {
-    return boost::none;
-  }
-
   // Bilinear interpolation.
   double elevData[4];
 
-  auto const err = ds.GetRasterBand(1)->RasterIO( GF_Read, x_int, y_int, 2, 2,
+  auto const err = dsc->GetRasterBand(1)->RasterIO( GF_Read, x_int, y_int, 2, 2,
       elevData, 2, 2, GDT_Float64,
       0, 0, nullptr);
 
@@ -162,7 +209,7 @@ boost::optional<double> GetDEMValue(double lon, double lat, GDALDataset& ds)
   // of the interpolation is no data.
   for (int i =0; i<4; i++)
   {
-    if (elevData[i] == ds.GetRasterBand(1)->GetNoDataValue())
+    if (elevData[i] == dsc->GetRasterBand(1)->GetNoDataValue())
     {
       return boost::none;
     }
@@ -255,10 +302,10 @@ private:
   std::vector<otb::GDALDatasetWrapper::Pointer> m_DatasetList;
 
   /** Pointer to the DEM dataset */
-  DatasetUPtr m_Dataset = DatasetUPtr(nullptr, [](GDALDataset* DS){if(DS){GDALClose(DS);}});
+  DEMDetails::DatasetCache m_DEMDS;
 
   /** Pointer to the geoid dataset */
-  DatasetUPtr m_GeoidDS = DatasetUPtr(nullptr, [](GDALDataset* DS){if(DS){GDALClose(DS);}});
+  DEMDetails::DatasetCache m_GeoidDS;
 };
 
 thread_local std::unique_ptr<DEMHandlerTLS> DEMHandler::m_tls;
@@ -308,7 +355,7 @@ void DEMHandlerTLS::OpenDEMFile(std::string const& path)
       nullptr, nullptr, nullptr);
   // Need to close the dataset, so it is flushed into memory.
   GDALClose(close_me);
-  m_Dataset.reset(static_cast<GDALDataset*>(GDALOpen(DEMHandler::DEM_DATASET_PATH, GA_ReadOnly)));
+  m_DEMDS.reset(static_cast<GDALDataset*>(GDALOpen(DEMHandler::DEM_DATASET_PATH, GA_ReadOnly)));
 
   if(m_GeoidDS)
   {
@@ -384,7 +431,7 @@ bool DEMHandlerTLS::OpenDEMDirectory(const std::string& DEMDirectory)
   // Don't build a vrt if there is no dataset
   if (m_DatasetList.empty())
   {
-    m_Dataset.reset(nullptr);
+    m_DEMDS.reset(nullptr);
     otbLogMacro(Warning, << "No DEM found in "<< DEMDirectory)
   }
   else
@@ -399,7 +446,7 @@ bool DEMHandlerTLS::OpenDEMDirectory(const std::string& DEMDirectory)
         nullptr, nullptr, nullptr);
     // Need to close the dataset, so it is flushed into memory.
     GDALClose(close_me);
-    m_Dataset.reset(static_cast<GDALDataset*>(GDALOpen(DEMHandler::DEM_DATASET_PATH, GA_ReadOnly)));
+    m_DEMDS.reset(static_cast<GDALDataset*>(GDALOpen(DEMHandler::DEM_DATASET_PATH, GA_ReadOnly)));
     is_new_and_valid = true;
   }
 
@@ -433,7 +480,7 @@ bool DEMHandlerTLS::OpenGeoidFile(const std::string& geoidFile)
 
   m_GeoidDS.reset(gdalds);
 
-  if(m_Dataset)
+  if(m_DEMDS)
   {
     CreateShiftedDataset();
   }
@@ -469,9 +516,6 @@ void DEMHandlerTLS::CreateShiftedDataset()
 {
   // WIP : no data is not handled at the moment
 
-  double geoTransform[6];
-  m_Dataset->GetGeoTransform(geoTransform);
-
   // Warp geoid dataset
   auto warpOptions = GDALCreateWarpOptions();;
   warpOptions->hSrcDS           = m_GeoidDS.get();
@@ -490,15 +534,15 @@ void DEMHandlerTLS::CreateShiftedDataset()
   warpOptions->pTransformerArg =
     GDALCreateGenImgProjTransformer( m_GeoidDS.get(),
         GDALGetProjectionRef(m_GeoidDS.get()),
-        m_Dataset.get(),
-        GDALGetProjectionRef(m_Dataset.get()),
+        m_DEMDS.get(),
+        GDALGetProjectionRef(m_DEMDS.get()),
         FALSE, 0.0, 1 );
   warpOptions->pfnTransformer = GDALGenImgProjTransform;
 
   auto ds = static_cast<GDALDataset *> (GDALCreateWarpedVRT(m_GeoidDS.get(),
-        m_Dataset->GetRasterXSize(),
-        m_Dataset->GetRasterYSize(),
-        geoTransform,
+        m_DEMDS->GetRasterXSize(),
+        m_DEMDS->GetRasterYSize(),
+        m_DEMDS.getGeoTransform(),
         warpOptions));
 
   ds->SetDescription(DEMHandler::DEM_WARPED_DATASET_PATH);
@@ -507,11 +551,11 @@ void DEMHandlerTLS::CreateShiftedDataset()
   GDALDriver *poDriver = (GDALDriver *) GDALGetDriverByName( "VRT" );
   GDALDataset *poVRTDS;
 
-  poVRTDS = poDriver->Create( DEMHandler::DEM_SHIFTED_DATASET_PATH, m_Dataset->GetRasterXSize(), m_Dataset->GetRasterYSize(), 0, GDT_Float64, NULL );
+  poVRTDS = poDriver->Create( DEMHandler::DEM_SHIFTED_DATASET_PATH, m_DEMDS->GetRasterXSize(), m_DEMDS->GetRasterYSize(), 0, GDT_Float64, NULL );
 
-  poVRTDS->SetGeoTransform(geoTransform);
+  poVRTDS->SetGeoTransform(m_DEMDS.getGeoTransform());
 
-  poVRTDS->SetProjection(m_Dataset->GetProjectionRef());
+  poVRTDS->SetProjection(m_DEMDS->GetProjectionRef());
 
   char** derivedBandOptions = NULL;
 
@@ -551,9 +595,9 @@ void DEMHandlerTLS::CreateShiftedDataset()
 
 boost::optional<double> DEMHandlerTLS::GetHeightAboveMSL(double lon, double lat) const
 {
-  if (m_Dataset)
+  if (m_DEMDS)
   {
-    return DEMDetails::GetDEMValue(lon, lat, *m_Dataset);
+    return DEMDetails::GetDEMValue(lon, lat, m_DEMDS);
   }
   return boost::none;
 }
@@ -562,7 +606,7 @@ boost::optional<double> DEMHandlerTLS::GetGeoidHeight(double lon, double lat) co
 {
   if (m_GeoidDS)
   {
-    return DEMDetails::GetDEMValue(lon, lat, *m_GeoidDS);
+    return DEMDetails::GetDEMValue(lon, lat, m_GeoidDS);
   }
   return boost::none;
 }
