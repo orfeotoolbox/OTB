@@ -125,7 +125,7 @@ public:
   /** Try to open a geoid file
    * \param geoidFile input geoid path
    */
-  void OpenGeoidFile(std::string geoidFile);
+  bool OpenGeoidFile(std::string geoidFile);
 
   /** Return the height above the ellipsoid :
    * - SRTM and geoid both available: srtm_value + geoid_offset
