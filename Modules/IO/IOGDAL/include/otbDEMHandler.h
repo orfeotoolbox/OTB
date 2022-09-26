@@ -23,6 +23,10 @@
 
 #include "otbImage.h"
 #include <memory>
+#include <string>
+#include <list>
+#include <set>
+#include <vector>
 
 namespace otb
 {
