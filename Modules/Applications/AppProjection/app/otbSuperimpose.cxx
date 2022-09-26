@@ -220,7 +220,7 @@ private:
     itk::NumericTraits<FloatVectorImageType::PixelType>::SetLength(defaultValue, movingImage->GetNumberOfComponentsPerPixel());
     defaultValue.Fill(GetParameterFloat("fv"));
 
-    // If the origin product is in sensor geometry, superimpose should keep the RPC parameters for orthorectification for exemple
+    // If the origin product is in sensor geometry, superimpose should keep the RPC parameters for orthorectification for example
     if (refImage->GetProjectionRef().empty() && refImage->GetImageMetadata().HasSensorGeometry())
     {
       std::string out_FileName = GetParameterString("out");
