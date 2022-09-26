@@ -488,7 +488,7 @@ bool DEMHandlerTLS::OpenGeoidFile(const std::string& geoidFile)
   return true;
 }
 
-void DEMHandler::OpenGeoidFile(std::string geoidFile)
+bool DEMHandler::OpenGeoidFile(std::string geoidFile)
 {
   // std::cout << "DEMHandler::OpenGeoidFile(" << geoidFile << ")\n";
 
@@ -510,6 +510,7 @@ void DEMHandler::OpenGeoidFile(std::string geoidFile)
     m_GeoidFilename = move(geoidFile); // => parameter voluntary taken by value
   }
   Notify();
+  return success;
 }
 
 void DEMHandlerTLS::CreateShiftedDataset()
