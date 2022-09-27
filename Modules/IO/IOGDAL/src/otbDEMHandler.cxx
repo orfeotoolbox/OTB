@@ -35,6 +35,7 @@
 
 #include <mutex>
 #include <thread>
+#include <memory>
 
 namespace
 { // Anonymous namespace
@@ -308,10 +309,11 @@ private:
   DEMDetails::DatasetCache m_GeoidDS;
 };
 
-thread_local std::unique_ptr<DEMHandlerTLS> DEMHandler::m_tls;
+// thread_local std::unique_ptr<DEMHandlerTLS> DEMHandler::m_tls;
 
 DEMHandlerTLS & DEMHandler::GetHandlerForCurrentThread() const
 {
+#if 0
   // std::cout << "DEMHandler::GetHandlerForCurrentThread("<<std::this_thread::get_id() << "); tls: "<< m_tls.get() << "\n";
   if (!m_tls) {
     // TODO: find a way to pre-contruct every thing
@@ -319,6 +321,10 @@ DEMHandlerTLS & DEMHandler::GetHandlerForCurrentThread() const
     // std::cout << "DEMHandler::GetHandlerForCurrentThread("<<std::this_thread::get_id() << "); tls built "<< m_tls.get() << "\n";
   }
   return *m_tls;
+#else
+  static thread_local auto tls = std::make_unique<DEMHandlerTLS>(); // no need to lock as this is a static TLS
+  return *tls;
+#endif
 }
 
 // Meyer singleton design pattern
