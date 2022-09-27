@@ -22,7 +22,6 @@
 #define otbDEMHandler_h
 
 #include "otbImage.h"
-#include <memory>
 #include <string>
 #include <list>
 #include <set>
@@ -36,10 +35,15 @@ namespace otb
  * \brief Observer design pattern to keep track of DEM configuration changes
  * \ingroup OTBIOGDAL
  */
-class DEMObserverInterface {
- public:
-  virtual ~DEMObserverInterface() = default;
+class DEMObserverInterface
+{
+public:
   virtual void Update() = 0;
+protected:
+  DEMObserverInterface() = default;
+  ~DEMObserverInterface() = default;
+  DEMObserverInterface(DEMObserverInterface const&) = delete;
+  DEMObserverInterface& operator=(DEMObserverInterface const&) = delete;
 };
 
 /** \class DEMSubjectInterface
@@ -47,12 +51,17 @@ class DEMObserverInterface {
  * \brief Observer design pattern to keep track of DEM configuration changes
  * \ingroup OTBIOGDAL
  */
-class DEMSubjectInterface {
- public:
-  virtual ~DEMSubjectInterface() = default;
+class DEMSubjectInterface
+{
+public:
   virtual void AttachObserver(DEMObserverInterface *observer) = 0;
   virtual void DetachObserver(DEMObserverInterface *observer) = 0;
   virtual void Notify() const = 0;
+protected:
+  DEMSubjectInterface() = default;
+  ~DEMSubjectInterface() = default;
+  DEMSubjectInterface(DEMSubjectInterface const&) = delete;
+  DEMSubjectInterface& operator=(DEMSubjectInterface const&) = delete;
 };
 
 class DEMHandlerTLS;
@@ -108,22 +117,22 @@ public:
   static DEMHandler & GetInstance();
 
   /** Open all raster in the directory.
-   * \param DEMDirectory input directory
+   * \param[in] DEMDirectory input directory
    */
   void OpenDEMDirectory(std::string DEMDirectory);
 
   /** Try to open the DEM directory.
-   * \param path input path
+   * \param[in] path input path
    */
   void OpenDEMFile(std::string path);
 
   /** Tells whether the directory contains a raster
-   * \param DEMDirectory input directory
+   * \param[in] DEMDirectory input directory
    */
   bool IsValidDEMDirectory(const std::string& DEMDirectory) const;
 
   /** Try to open a geoid file
-   * \param geoidFile input geoid path
+   * \param[in] geoidFile input geoid path
    */
   bool OpenGeoidFile(std::string geoidFile);
 
@@ -132,8 +141,8 @@ public:
    * - No SRTM but geoid available: geoid_offset
    * - SRTM available, but no geoid: srtm_value
    * - No SRTM and no geoid available: default height above ellipsoid
-   * \param lon input longitude
-   * \param lat input latitude
+   * \param[in] lon input longitude
+   * \param[in] lat input latitude
    * \return height above ellipsoid
   */
   double GetHeightAboveEllipsoid(double lon, double lat) const;
@@ -145,8 +154,8 @@ public:
    * - No SRTM but geoid available: 0
    * - SRTM available, but no geoid: srtm_value
    * - No SRTM and no geoid available: 0
-   * \param lon input longitude
-   * \param lat input latitude
+   * \param[in] lon input longitude
+   * \param[in] lat input latitude
    * \return height above mean sea level
   */
   double GetHeightAboveMSL(double lon, double lat) const;
@@ -164,7 +173,7 @@ public:
   void SetDefaultHeightAboveEllipsoid(double height);
 
   /** Get DEM directory
-   * \param idx directory index
+   * \param[in] idx directory index
    * \return the DEM directory corresponding to index idx
    */
   std::string const& GetDEMDirectory(unsigned int idx = 0) const;
@@ -220,8 +229,6 @@ private:
   std::list<DEMObserverInterface *> m_ObserverList;
 
   std::set<DEMHandlerTLS*> m_tlses;
-
-  static thread_local std::unique_ptr<DEMHandlerTLS> m_tls;
 };
 
 }
