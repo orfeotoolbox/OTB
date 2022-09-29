@@ -514,6 +514,13 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
     msg << "The file format of " << m_FileName << " does not support streaming. ";
     if (ConfigurationManager::GetForceStreaming())
     {
+      // When the OTB_FORCE_STREAMING environment variable is set,
+      // the whole pipeline is triggered using explicit streaming by the
+      // otb::StreamingBufferGenerator filter, and only the final output of
+      // the pipeline is kept in memory.
+      // After that, when `m_BufferGenerator` is other than `nullptr`, 
+      // `this->GetInput()` returns `m_BufferGenerator->GetOutput()` instead of
+      // the original input image pointer.
       msg << "All data will be streamed into the output buffer before writting.";
       m_BufferGenerator = BufferGeneratorType::New();
       m_BufferGenerator->SetInput(inputPtr);
