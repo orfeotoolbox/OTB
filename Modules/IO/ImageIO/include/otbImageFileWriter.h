@@ -29,6 +29,7 @@
 #include "itkFastMutexLock.h"
 #include <string>
 #include "OTBImageIOExport.h"
+#include "otbStreamingBufferGenerator.h"
 
 namespace otb
 {
@@ -99,6 +100,9 @@ public:
   /** Streaming manager base class pointer */
   typedef StreamingManager<InputImageType>       StreamingManagerType;
   typedef typename StreamingManagerType::Pointer StreamingManagerPointerType;
+
+  /** Filter that can fill a buffer when the streaming is not supported */
+  typedef typename otb::StreamingBufferGenerator<InputImageType> BufferGeneratorType;
 
   /**  Return the StreamingManager object responsible for dividing
    *   the region to write */
@@ -285,6 +289,9 @@ private:
 
   /** Lock to ensure thread-safety (added for the AbortGenerateData flag) */
   itk::SimpleFastMutexLock m_Lock;
+
+  /** Buffer generator */
+  typename BufferGeneratorType::Pointer m_BufferGenerator;
 };
 
 } // end namespace otb

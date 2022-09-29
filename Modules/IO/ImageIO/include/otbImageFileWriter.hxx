@@ -51,6 +51,8 @@
 #include "otbStringUtils.h"
 #include "otbUtils.h"
 
+#include "otbConfigurationManager.h"
+
 namespace otb
 {
 
@@ -223,6 +225,7 @@ template <class TInputImage>
 void ImageFileWriter<TInputImage>::SetInput(const InputImageType* input)
 {
   this->ProcessObject::SetNthInput(0, const_cast<InputImageType*>(input));
+  m_BufferGenerator = nullptr;
 }
 
 template <class TInputImage>
@@ -231,6 +234,11 @@ const TInputImage* ImageFileWriter<TInputImage>::GetInput()
   if (this->GetNumberOfInputs() < 1)
   {
     return nullptr;
+  }
+
+  if (m_BufferGenerator != nullptr)
+  {
+    return m_BufferGenerator->GetOutput();
   }
 
   return static_cast<const InputImageType*>(this->ProcessObject::GetInput(0));
@@ -502,7 +510,21 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
   /** Control if the ImageIO is CanStreamWrite */
   if (m_ImageIO->CanStreamWrite() == false)
   {
-    otbLogMacro(Warning, << "The file format of " << m_FileName << " does not support streaming. All data will be loaded to memory");
+    std::ostringstream msg;
+    msg << "The file format of " << m_FileName << " does not support streaming. ";
+    if (ConfigurationManager::GetForceStreaming())
+    {
+      msg << "All data will be streamed into the output buffer before writting.";
+      m_BufferGenerator = BufferGeneratorType::New();
+      m_BufferGenerator->SetInput(inputPtr);
+      m_BufferGenerator->UpdateOutputInformation();
+    }
+    else
+    {
+      msg << "All data will be loaded to memory. ";
+      msg << "Set `OTB_FORCE_STREAMING=1` to stream the data into a temporary buffer before writting.";
+    }
+    otbLogMacro(Warning, msg.str());
     this->SetNumberOfDivisionsStrippedStreaming(1);
   }
 
@@ -574,6 +596,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
 template <class TInputImage>
 void ImageFileWriter<TInputImage>::Update()
 {
+  otbLogMacro(Warning, << "Entering Update()");
   this->UpdateOutputInformation();
 
   this->SetAbortGenerateData(0);
@@ -800,6 +823,7 @@ void ImageFileWriter<TInputImage>::SetFileName(const std::string& extendedFileNa
   this->m_FilenameHelper->SetExtendedFileName(extendedFileName);
   m_FileName = this->m_FilenameHelper->GetSimpleFileName();
   m_ImageIO  = nullptr;
+  m_BufferGenerator = nullptr;
   this->Modified();
 }
 
