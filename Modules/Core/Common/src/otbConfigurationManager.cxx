@@ -68,8 +68,9 @@ ConfigurationManager::RAMValueType ConfigurationManager::GetMaxRAMHint()
 bool ConfigurationManager::GetForceStreaming()
 {
   std::string svalue;
-  itksys::SystemTools::GetEnv("OTB_FORCE_STREAMING", svalue);
-  return std::stoul(svalue) != 0;
+  if (itksys::SystemTools::GetEnv("OTB_FORCE_STREAMING", svalue))
+    return std::stoul(svalue) != 0;
+  return false;
 }
 
 itk::LoggerBase::PriorityLevelType ConfigurationManager::GetLoggerLevel()
