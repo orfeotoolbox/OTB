@@ -524,7 +524,7 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
       msg << "All data will be loaded to memory. ";
       msg << "Set `OTB_FORCE_STREAMING=1` to stream the data into a temporary buffer before writting.";
     }
-    otbLogMacro(Warning, msg.str());
+    otbLogMacro(Warning, << msg.str());
     this->SetNumberOfDivisionsStrippedStreaming(1);
   }
 
