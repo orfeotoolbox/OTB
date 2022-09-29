@@ -603,7 +603,6 @@ void ImageFileWriter<TInputImage>::GenerateOutputInformation(void)
 template <class TInputImage>
 void ImageFileWriter<TInputImage>::Update()
 {
-  otbLogMacro(Warning, << "Entering Update()");
   this->UpdateOutputInformation();
 
   this->SetAbortGenerateData(0);
