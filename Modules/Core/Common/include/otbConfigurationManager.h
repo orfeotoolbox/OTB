@@ -85,6 +85,18 @@ public:
   static RAMValueType GetMaxRAMHint();
 
   /**
+   * ForceStreaming denotes is the streaming is enforced for output
+   * rasters that can't be written directly using the streaming 
+   * mechanism (i.e. their `m_ImageIO.CanStreamWrite()` is `false`).
+   * 
+   * If environment OTB_FORCE_STREAMING is defined and set to any 
+   * other value that 0, the streaming of the pipelines is ensured
+   * using a buffer before writting the raster file.
+   * 
+   */
+  static bool GetForceStreaming();
+
+  /**
    * Logger level controls the level of logging that OTB will output.
    *
    * This is used to set-up the otb::Logger class.
