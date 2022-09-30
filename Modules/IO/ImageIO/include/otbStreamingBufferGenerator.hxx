@@ -58,7 +58,7 @@ StreamingBufferGenerator<TInputImage>::GenerateData()
   for (int currentDivision = 0; currentDivision < numberOfDivisions; currentDivision++)
   {
     otbDebugMacro("Processing region " << (currentDivision + 1) << " over " << numberOfDivisions);
-    streamRegion = m_StreamingManager->GetSplit(currentDivision);
+    RegionType streamRegion = m_StreamingManager->GetSplit(currentDivision);
 
     // Propagate region
     inputPtr->SetRequestedRegion(streamRegion);
