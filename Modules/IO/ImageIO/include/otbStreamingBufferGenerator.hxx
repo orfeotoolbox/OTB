@@ -55,8 +55,7 @@ StreamingBufferGenerator<TInputImage>::GenerateData()
    */
   itk::ProgressReporter progress(this, 0, numberOfDivisions);
   RegionType streamRegion;
-  int currentDivision = 0;
-  for (currentDivision = 0; currentDivision < numberOfDivisions; currentDivision++)
+  for (int currentDivision = 0; currentDivision < numberOfDivisions; currentDivision++)
   {
     otbDebugMacro("Processing region " << (currentDivision + 1) << " over " << numberOfDivisions);
     streamRegion = m_StreamingManager->GetSplit(currentDivision);
