@@ -61,6 +61,8 @@ public:
 
 protected:
   StreamingBufferGenerator(){
+    this->ReleaseDataFlagOn();
+    this->ReleaseDataBeforeUpdateFlagOn();
     m_StreamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
   };
   virtual ~StreamingBufferGenerator(){};

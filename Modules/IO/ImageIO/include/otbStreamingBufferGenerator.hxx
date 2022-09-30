@@ -36,7 +36,7 @@ StreamingBufferGenerator<TInputImage>::GenerateData()
   // Output pointer and requested region
   ImageType * inputPtr = static_cast<ImageType *>(Superclass::ProcessObject::GetInput(0));
   ImageType * outputPtr = this->GetOutput();
-  RegionType reqRegion = inputPtr->GetLargestPossibleRegion();
+  const RegionType reqRegion = outputPtr->GetRequestedRegion();
   otbDebugMacro("Allocate a buffer of size " << reqRegion.GetSize(0) << "x" << reqRegion.GetSize(1));
   outputPtr->SetBufferedRegion(reqRegion);
   outputPtr->Allocate();
@@ -60,6 +60,7 @@ StreamingBufferGenerator<TInputImage>::GenerateData()
   {
     otbDebugMacro("Processing region " << (currentDivision + 1) << " over " << numberOfDivisions);
     streamRegion = m_StreamingManager->GetSplit(currentDivision);
+    otbDebugMacro("Region start: " << streamRegion.GetIndex() << " size: " << streamRegion.GetSize());
 
     // Propagate region
     inputPtr->SetRequestedRegion(streamRegion);
@@ -69,6 +70,8 @@ StreamingBufferGenerator<TInputImage>::GenerateData()
     // Copy the subregion to output
     itk::ImageAlgorithm::Copy(inputPtr, outputPtr, streamRegion, streamRegion);
     progress.CompletedPixel();
+
+    inputPtr->ReleaseData();
   }
 }
 
