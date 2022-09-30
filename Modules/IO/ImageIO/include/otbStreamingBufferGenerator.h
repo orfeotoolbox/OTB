@@ -63,7 +63,7 @@ protected:
   StreamingBufferGenerator(){
     m_StreamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
   };
-  virtual ~StreamingBufferGenerator(){};
+  ~StreamingBufferGenerator() override = default;
 
   virtual void
   UpdateOutputData(itk::DataObject * output)
