@@ -40,10 +40,10 @@ class ITK_EXPORT StreamingBufferGenerator : public itk::ImageToImageFilter<TInpu
 
 public:
   /** Standard class typedefs. */
-  typedef StreamingBufferGenerator                          Self;
-  typedef itk::ImageToImageFilter<TInputImage, TInputImage> Superclass;
-  typedef itk::SmartPointer<Self>                           Pointer;
-  typedef itk::SmartPointer<const Self>                     ConstPointer;
+  using Self = StreamingBufferGenerator;
+  using Superclass = itk::ImageToImageFilter<TInputImage, TInputImage>;
+  using Pointer = itk::SmartPointer<Self>;
+  using ConstPointer = itk::SmartPointer<const Self>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -52,12 +52,12 @@ public:
   itkTypeMacro(StreamingBufferGenerator, itk::ImageToImageFilter);
 
   /** Images typedefs */
-  typedef typename Superclass::InputImageType       ImageType;
-  typedef typename Superclass::InputImageRegionType RegionType;
+  using ImageType = typename Superclass::InputImageType;
+  using RegionType = typename Superclass::InputImageRegionType;
 
   /** Streaming manager base class pointer */
-  typedef RAMDrivenAdaptativeStreamingManager<TInputImage>  RAMDrivenAdaptativeStreamingManagerType;
-  typedef typename RAMDrivenAdaptativeStreamingManagerType::Pointer StreamingManagerPointerType;
+  using RAMDrivenAdaptativeStreamingManagerType = RAMDrivenAdaptativeStreamingManager<TInputImage>;
+  using StreamingManagerPointerType = typename RAMDrivenAdaptativeStreamingManagerType::Pointer;
 
 protected:
   StreamingBufferGenerator(){
@@ -67,15 +67,13 @@ protected:
   };
   ~StreamingBufferGenerator() override = default;
 
-  virtual void
-  UpdateOutputData(itk::DataObject * output)
+  void UpdateOutputData(itk::DataObject * output) override
   {
     (void) output;
     this->GenerateData();
   }
 
-  virtual void
-  GenerateData();
+  void GenerateData() override;
 
   StreamingManagerPointerType m_StreamingManager;
 
