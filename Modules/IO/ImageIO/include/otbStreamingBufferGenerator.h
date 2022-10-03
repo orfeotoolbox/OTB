@@ -65,7 +65,7 @@ protected:
     this->ReleaseDataBeforeUpdateFlagOn();
     m_StreamingManager = RAMDrivenAdaptativeStreamingManagerType::New();
   };
-  virtual ~StreamingBufferGenerator(){};
+  ~StreamingBufferGenerator() override = default;
 
   virtual void
   UpdateOutputData(itk::DataObject * output)
@@ -80,9 +80,8 @@ protected:
   StreamingManagerPointerType m_StreamingManager;
 
 private:
-  StreamingBufferGenerator(const Self &); // purposely not implemented
-  void
-  operator=(const Self &); // purposely not implemented
+  StreamingBufferGenerator(const Self &) = delete;
+  Self & operator=(const Self &) = delete;
 
 }; // end class
 

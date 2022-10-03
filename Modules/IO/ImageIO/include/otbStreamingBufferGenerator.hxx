@@ -46,20 +46,18 @@ StreamingBufferGenerator<TInputImage>::GenerateData()
   int numberOfDivisions = m_StreamingManager->GetNumberOfSplits();
 
   const auto firstSplitSize = m_StreamingManager->GetSplit(0).GetSize();
-  otbLogMacro(Info, << "Buffer will be written in " << numberOfDivisions << " blocks of " << firstSplitSize[0] << "x" << firstSplitSize[1]
-                    << " pixels");
+  otbLogMacro(Info, << "Buffer will be written in " << numberOfDivisions << " blocks of " 
+                    << firstSplitSize[0] << "x" << firstSplitSize[1] << " pixels");
 
   /**
    * Loop over the number of pieces, execute the upstream pipeline on each
    * piece, and copy the results into the output image.
    */
   itk::ProgressReporter progress(this, 0, numberOfDivisions);
-  RegionType streamRegion;
-  int currentDivision = 0;
-  for (currentDivision = 0; currentDivision < numberOfDivisions; currentDivision++)
+  for (int currentDivision = 0; currentDivision < numberOfDivisions; currentDivision++)
   {
     otbDebugMacro("Processing region " << (currentDivision + 1) << " over " << numberOfDivisions);
-    streamRegion = m_StreamingManager->GetSplit(currentDivision);
+    RegionType streamRegion = m_StreamingManager->GetSplit(currentDivision);
     otbDebugMacro("Region start: " << streamRegion.GetIndex() << " size: " << streamRegion.GetSize());
 
     // Propagate region
