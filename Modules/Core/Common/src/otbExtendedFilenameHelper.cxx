@@ -47,10 +47,12 @@ void ExtendedFilenameHelper::SetExtendedFileName(const std::string& extFname)
   std::vector<std::string> splits;
   if (!m_ExtendedFileName.empty())
   {
-    // We consider that everything before "?&" is the file path, and
-    // everything after (if any) are the extended filename options.
-    // This is more secure than considering only "?" since the path
-    // can be a vsicurl URI containing some "?" chars.
+    // We consider that everything before the last occurrence of "?&" is 
+    // the file path, and everything after (if any) are the extended 
+    // filename options. This is more secure than considering only "?" since 
+    // the path can be a vsicurl URI containing some "?" chars, and the
+    // documentation clearly states that the right pattern for extended
+    // filenames is "file.tif?&key1=value1&...&keyN=valueN".
     auto locator = m_ExtendedFileName.rfind("?&");
     auto fileName = m_ExtendedFileName.substr(0, locator);
     this->SetSimpleFileName(fileName);
@@ -58,11 +60,11 @@ void ExtendedFilenameHelper::SetExtendedFileName(const std::string& extFname)
     {
       auto extension = m_ExtendedFileName.substr(locator + 1);
       boost::split(splits, extension, boost::is_any_of("&"), boost::token_compress_on);
-      for (unsigned int i = 0; i < splits.size(); i++)
-        if (!splits[i].empty())
+      for (const auto& split: splits)
+        if (!split.empty())
         {
           std::vector<std::string> tmp;
-          boost::split(tmp, splits[i], boost::is_any_of("="), boost::token_compress_on);
+          boost::split(tmp, split, boost::is_any_of("="), boost::token_compress_on);
           if (tmp.size() > 1)
           {
             auto key = tmp[0];
