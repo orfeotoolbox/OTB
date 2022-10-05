@@ -44,35 +44,42 @@ void ExtendedFilenameHelper::SetExtendedFileName(const std::string& extFname)
 {
   this->m_ExtendedFileName = extFname;
   this->m_OptionMap.clear();
-  std::vector<std::string> tmp1;
-  std::vector<std::string> tmp2;
+  std::vector<std::string> splits;
   if (!m_ExtendedFileName.empty())
   {
-    boost::split(tmp1, m_ExtendedFileName, boost::is_any_of("?"), boost::token_compress_on);
-    this->SetSimpleFileName(tmp1[0]);
-    if (tmp1.size() > 1)
+    // We consider that everything before "?&" is the file path, and
+    // everything after (if any) are the extended filename options.
+    // This is more secure than considering only "?" since the path
+    // can be a vsicurl URI containing some "?" chars.
+    auto locator = m_ExtendedFileName.rfind("?&");
+    auto fileName = m_ExtendedFileName.substr(0, locator);
+    this->SetSimpleFileName(fileName);
+    if (locator != std::string::npos)
     {
-      boost::split(tmp2, tmp1[1], boost::is_any_of("&"), boost::token_compress_on);
-      for (unsigned int i = 0; i < tmp2.size(); i++)
-        if (!tmp2[i].empty())
+      auto extension = m_ExtendedFileName.substr(locator + 1);
+      boost::split(splits, extension, boost::is_any_of("&"), boost::token_compress_on);
+      for (unsigned int i = 0; i < splits.size(); i++)
+        if (!splits[i].empty())
         {
           std::vector<std::string> tmp;
-          boost::split(tmp, tmp2[i], boost::is_any_of("="), boost::token_compress_on);
+          boost::split(tmp, splits[i], boost::is_any_of("="), boost::token_compress_on);
           if (tmp.size() > 1)
           {
-            if (!tmp[1].empty())
+            auto key = tmp[0];
+            auto value = tmp[1];
+            if (!value.empty())
             {
-              if (m_OptionMap[tmp[0]].empty())
+              if (m_OptionMap[key].empty())
               {
-                m_OptionMap[tmp[0]] = tmp[1];
+                m_OptionMap[key] = value;
               }
               else
               {
-                itkWarningMacro("Duplicated option detected: " << tmp[0] << ". Using value " << tmp[1] << ".");
+                itkWarningMacro("Duplicated option detected: " << key << ". Using value " << value << ".");
               }
             }
             else
-              itkGenericExceptionMacro(<< "Value for option '" << tmp[0] << "' is not set.");
+              itkGenericExceptionMacro(<< "Value for option '" << key << "' is not set.");
           }
         }
     }
