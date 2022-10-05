@@ -916,7 +916,7 @@ otb_add_test(NAME ioTvImageFileWriterTIF2TIF COMMAND otbImageIOTestDriver
   ${TEMP}/ioImageFileWriterTIF2TIF_QB_Toulouse_Ortho_PAN.tif
   otbImageFileWriterTest
   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
-  ${TEMP}/ioImageFileWriterTIF2TIF_QB_Toulouse_Ortho_PAN.tif?epsg=4326 )
+  ${TEMP}/ioImageFileWriterTIF2TIF_QB_Toulouse_Ortho_PAN.tif?&epsg=4326 )
 
 otb_add_test(NAME ioTvCompareWritingComplexImage_TIF COMMAND otbImageIOTestDriver
   otbCompareWritingComplexImageTest
@@ -1222,7 +1222,7 @@ otb_add_test(NAME ioTvImageIOToReaderOptions_OptBandTest COMMAND otbImageIOTestD
   --compare-image ${EPSILON_9} ${BASELINE}/QB_Toulouse_Ortho_XS_OptBand2to4.tif
                                ${TEMP}/QB_Toulouse_Ortho_XS_OptBand2to4.tif
   otbImageFileReaderOptBandTest
-  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif?bands=2:4
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif?&bands=2:4
   ${TEMP}/QB_Toulouse_Ortho_XS_OptBand2to4.tif
   4
   )
@@ -1231,7 +1231,7 @@ otb_add_test(NAME ioTvImageIOToReaderOptions_OptBandReorgTest COMMAND otbImageIO
   --compare-image ${EPSILON_9} ${BASELINE}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
                                ${TEMP}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
   otbImageFileReaderOptBandTest
-  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif?bands=2,:,-3,2:-1
+  ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif?&bands=2,:,-3,2:-1
   ${TEMP}/QB_Toulouse_Ortho_XS_OptBandReorg.tif
   4
   )
@@ -1241,7 +1241,7 @@ otb_add_test(NAME ioTvImageIOToWriterOptions_OptBandTest COMMAND otbImageIOTestD
                                ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBand2to4.tif
   otbImageFileWriterOptBandTest
   ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-  ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBand2to4.tif?bands=2:4
+  ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBand2to4.tif?&bands=2:4
   4
   )
 
@@ -1250,7 +1250,7 @@ otb_add_test(NAME ioTvImageIOToWriterOptions_OptBandReorgTest COMMAND otbImageIO
                                ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBandReorg.tif
   otbImageFileWriterOptBandTest
   ${INPUTDATA}/QB_Toulouse_Ortho_XS.tif
-  ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBandReorg.tif?bands=2,:,-3,2:-1
+  ${TEMP}/QB_Toulouse_Ortho_XS_WriterOptBandReorg.tif?&bands=2,:,-3,2:-1
   4
   )
 
