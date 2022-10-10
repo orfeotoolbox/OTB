@@ -1,3 +1,40 @@
+OTB-v 8.1.0 - Changes since version 8.0.1 (September 14th, 2022)
+---------------------------------------------------------------------
+
+Features added:
+
+   * !926: rpcSolver: Avoid setting equation system multiple times by Julien Osman
+   * !917: Avoid reloading the same DEM directory by Julien Osman
+   * !904: Add default radius value to NewFunctorFilter overload by Laurențiu Nicola
+
+Bugs fixed:
+
+   * !922: Fix strange behavior of BandMath in python pipeline by calling RegisterPipeline() by Rémi Cresson
+   * !920: Correctly take into account the extended filename writerpctag by Julien Osman
+   * !918: Fix Pixel shift in pleiades orthorectification by Thibaut ROMAIN
+   * !914: Read RPC model from images written by OTB by Julien Osman
+   * !879: Fix SetParameterString for listview parameters by Cédric Traizet
+
+Documentation:
+
+   * !927: Multiple documentation improvements by Julien Osman
+   * !915: Some documentation adjustments by Julien Osman
+   * !889: HaralickTextureExtraction: Clarify the definition of the parameters xrad and yrad by Julien Osman
+   * !887: Improve Python errors of mismatched types by Luc Hermitte
+
+Refactoring:
+
+   * !925: Remove code related to GenerateRPCSensorModel by Julien Osman
+
+Licence and legislation matters:
+
+   * !905: Remove the 'Lena' image by Julien Osman
+
+Known issues:
+
+   * #2306: BundleToPerfectSensor needs default mode for some PHR images
+   * #2304: With some PHR and SPOT6-7 products, the DIMAP driver from GDAL does not handle all the needed metadata
+
 OTB-v 8.0.1 - Changes since version 8.0.0 (April 27th, 2022)
 ---------------------------------------------------------------------
 
@@ -11,7 +48,7 @@ CI:
   
 Documentation:
 
-   * !911: Fix formating issue by Julien Osman
+   * !911: Fix formatting issue by Julien Osman
    * !911: Update warning message about python version by Julien Osman
 
 

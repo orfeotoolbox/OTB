@@ -399,3 +399,4 @@ endif()
 
 message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "To install to a different directory, re-run cmake -DCMAKE_INSTALL_PREFIX=/your/preferred/path")
+include(Packaging_OTB)

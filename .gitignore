@@ -8,3 +8,7 @@ syntax: glob
 tags
 *vim*
 *.template
+archives*
+.vscode*
+CMakeLists.txt.user
+.directory*

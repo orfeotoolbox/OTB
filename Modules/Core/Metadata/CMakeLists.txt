@@ -22,3 +22,13 @@ project(OTBMetadata)
 
 set(OTBMetadata_LIBRARIES OTBMetadata)
 otb_module_impl()
+
+install(DIRECTORY ${OTBMetadata_SOURCE_DIR}/include/
+        DESTINATION ${OTBMetadata_INSTALL_INCLUDE_DIR}
+        COMPONENT Metadata
+        )
+
+install(TARGETS ${OTBMetadata_LIBRARIES}
+        DESTINATION ${OTB_INSTALL_LIBRARY_DIR}
+        COMPONENT Metadata
+        )

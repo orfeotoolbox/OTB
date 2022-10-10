@@ -622,3 +622,6 @@ message("======================= End of OTB cmake summary ======================
 
 #don't need this one anymore. so unset it.
 unset(option_list)
+
+#----------------------------------------------------------------------------
+include(Packaging_OTB)

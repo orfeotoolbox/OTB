@@ -1,0 +1,67 @@
+# these are cache variables, so they could be overwritten with -D,
+set(CPACK_PACKAGE_NAME "otb"
+    CACHE STRING "The OTB full package"
+)
+# which is useful in case of packing only selected components instead of the whole thing
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Light OTB Package"
+    CACHE STRING "This package contains only a part of OTB"
+)
+set(CPACK_PACKAGE_VENDOR "CS Group")
+
+set(CPACK_VERBATIM_VARIABLES YES)
+
+set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CPACK_PACKAGE_NAME})
+SET(CPACK_OUTPUT_FILE_PREFIX "${CMAKE_SOURCE_DIR}/_packages")
+
+# https://unix.stackexchange.com/a/11552/254512
+set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/otb")#/${CMAKE_PROJECT_VERSION}")
+
+set(CPACK_PACKAGE_VERSION_MAJOR ${OTB_VERSION_MAJOR})
+set(CPACK_PACKAGE_VERSION_MINOR ${OTB_VERSION_MINOR})
+set(CPACK_PACKAGE_VERSION_PATCH ${OTB_VERSION_PATCH})
+
+set(CPACK_PACKAGE_CONTACT "thibaut.romain@csgroup.eu")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Thibaut ROMAIN")
+
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_RESOURCE_FILE_README "${CMAKE_CURRENT_SOURCE_DIR}/README.md")
+
+# package name for deb. If set, then instead of some-application-0.9.2-Linux.deb
+# you'll get some-application_0.9.2_amd64.deb (note the underscores too)
+set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
+# that is if you want every group to have its own package,
+# although the same will happen if this is not set (so it defaults to ONE_PER_GROUP)
+# and CPACK_DEB_COMPONENT_INSTALL is set to YES
+set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
+# without this you won't be able to pack only specified component
+set(CPACK_DEB_COMPONENT_INSTALL ON)
+set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+set(CPACK_COMPONENTS_ALL "IO" "Common" "Metadata")
+set(CPACK_GENERATOR "ZIP")
+
+include(CPack)
+
+cpack_add_component_group(Core
+                         [DISPLAY_NAME CoreGroup]
+                         [DESCRIPTION "Main Group for Core of OTB"]
+                         [EXPANDED]
+                         [BOLD_TITLE])
+
+cpack_add_component(Common
+                    [DISPLAY_NAME Core_Common]
+                    [DESCRIPTION "Contains all core libraries required for OTB"]
+                    [REQUIRED]
+                    [GROUP Core])
+                 
+cpack_add_component(IO
+                    [DISPLAY_NAME Core_IO]
+                    [DESCRIPTION "Contains all IO executables required for OTB"]
+                    [REQUIRED]
+                    [GROUP Core])
+
+cpack_add_component(Metadata
+                    [DISPLAY_NAME Core_Metadata]
+                    [DESCRIPTION "Contains all Metadata executables required for OTB"]
+                    [REQUIRED]
+                    [DEPENDS Common]
+                    [GROUP Core])
