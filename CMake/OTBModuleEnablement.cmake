@@ -26,6 +26,10 @@ set(OTB_MODULES_ALL)
 file(GLOB meta RELATIVE "${OTB_SOURCE_DIR}"
    "${OTB_SOURCE_DIR}/*/*/*/otb-module.cmake" # grouped modules
   )
+file(GLOB submod RELATIVE "${OTB_SOURCE_DIR}"
+   "${OTB_SOURCE_DIR}/*/*/*/*/otb-module.cmake" # grouped modules
+  )
+list(APPEND meta ${submod})
 foreach(f ${meta})
   include(${OTB_SOURCE_DIR}/${f})
   list(APPEND OTB_MODULES_ALL ${otb-module})
