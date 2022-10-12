@@ -61,11 +61,11 @@ void ExtendedFilenameToReaderOptions::SetExtendedFileName(const std::string& ext
   }
   if (!map["sdataidx"].empty())
   {
-    m_Options.subDatasetIndex = {true, atoi(map["sdataidx"].c_str())};
+    m_Options.subDatasetIndex = {true, std::stoi(map["sdataidx"])};
   }
   if (!map["resol"].empty())
   {
-    m_Options.resolutionFactor = {true, atoi(map["resol"].c_str())};
+    m_Options.resolutionFactor = {true, std::stoi(map["resol"])};
   }
 
   if (!map["skipcarto"].empty())
