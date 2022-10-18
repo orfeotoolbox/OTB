@@ -22,6 +22,7 @@
 #define otbWrapperNumericalParameter_h
 
 #include "otbWrapperParameter.h"
+#include "otbAlgoClamp.h"
 #include "itkNumericTraits.h"
 #include <boost/optional.hpp>
 
@@ -56,7 +57,7 @@ public:
   /** Set the value */
   void SetValue(ScalarType value)
   {
-    m_Value = (value < m_MinimumValue) ? m_MinimumValue : (value < m_MaximumValue) ? value : m_MaximumValue;
+    m_Value = otb::clamp(value, m_MinimumValue, m_MaximumValue);
 
     // Set Active only if the parameter is not automatically set
     if (!GetAutomaticValue())
