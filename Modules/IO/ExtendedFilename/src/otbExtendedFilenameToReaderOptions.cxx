@@ -27,37 +27,16 @@ namespace otb
 
 ExtendedFilenameToReaderOptions::ExtendedFilenameToReaderOptions() : ExtendedFilenameHelper()
 {
-  m_Options.simpleFileName.first  = false;
-  m_Options.simpleFileName.second = "";
+  m_Options.simpleFileName = {false, ""};
+  m_Options.extGEOMFileName = {false, ""};
+  m_Options.subDatasetIndex = {false, 0};
+  m_Options.resolutionFactor = {false, 0};
+  m_Options.skipCarto = {false, false};
+  m_Options.skipGeom = {false, false};
+  m_Options.skipRpcTag = {false, false};
+  m_Options.bandRange = {false, ""};
 
-  m_Options.extGEOMFileName.first  = false;
-  m_Options.extGEOMFileName.second = "";
-
-  m_Options.subDatasetIndex.first  = false;
-  m_Options.subDatasetIndex.second = 0;
-
-  m_Options.resolutionFactor.first  = false;
-  m_Options.resolutionFactor.second = 0;
-
-  m_Options.skipCarto.first  = false;
-  m_Options.skipCarto.second = false;
-
-  m_Options.skipGeom.first  = false;
-  m_Options.skipGeom.second = false;
-
-  m_Options.skipRpcTag.first  = false;
-  m_Options.skipRpcTag.second = false;
-
-  m_Options.bandRange.first  = false;
-  m_Options.bandRange.second = "";
-
-  m_Options.optionList.push_back("geom");
-  m_Options.optionList.push_back("sdataidx");
-  m_Options.optionList.push_back("resol");
-  m_Options.optionList.push_back("skipcarto");
-  m_Options.optionList.push_back("skipgeom");
-  m_Options.optionList.push_back("skiprpctag");
-  m_Options.optionList.push_back("bands");
+  m_Options.optionList = {"geom", "sdataidx", "resol", "skipcarto", "skipgeom", "skiprpctag", "bands"};
 }
 
 void ExtendedFilenameToReaderOptions::SetExtendedFileName(const char* extFname)
@@ -78,18 +57,15 @@ void ExtendedFilenameToReaderOptions::SetExtendedFileName(const std::string& ext
 
   if (!map["geom"].empty())
   {
-    m_Options.extGEOMFileName.first  = true;
-    m_Options.extGEOMFileName.second = map["geom"];
+    m_Options.extGEOMFileName = {true, map["geom"]};
   }
   if (!map["sdataidx"].empty())
   {
-    m_Options.subDatasetIndex.first  = true;
-    m_Options.subDatasetIndex.second = atoi(map["sdataidx"].c_str());
+    m_Options.subDatasetIndex = {true, std::stoi(map["sdataidx"])};
   }
   if (!map["resol"].empty())
   {
-    m_Options.resolutionFactor.first  = true;
-    m_Options.resolutionFactor.second = atoi(map["resol"].c_str());
+    m_Options.resolutionFactor = {true, std::stoi(map["resol"])};
   }
 
   if (!map["skipcarto"].empty())
@@ -129,8 +105,7 @@ void ExtendedFilenameToReaderOptions::SetExtendedFileName(const std::string& ext
     reg.compile("^((\\-?[0-9]+)?(:(\\-?[0-9]+)?)?)(,(\\-?[0-9]+)?(:(\\-?[0-9]+)?)?)*$");
     if (reg.find(map["bands"]))
     {
-      m_Options.bandRange.first  = true;
-      m_Options.bandRange.second = map["bands"];
+      m_Options.bandRange = {true, map["bands"]};
     }
     else
     {
