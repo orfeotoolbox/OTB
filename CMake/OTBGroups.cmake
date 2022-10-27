@@ -20,7 +20,6 @@
 
 # Set a list of group names
 set(group_list
-  Adapters
   Applications
   Core
   Detection
@@ -28,17 +27,22 @@ set(group_list
   Filtering
   Fusion
   Hyperspectral
-  IO
+  IOPlugins
   Learning
-  OBIA
   Radiometry
   Registration
   Remote
   Segmentation
   ThirdParty
-  Visualization
-  Wrappers
   )
+
+set(light_group_list
+  Core
+  IOPlugins
+  Learning
+  Segmentation
+  Hyperspectral
+)
 
 set(Adapters_documentation "This group contains adapters class to third party software")
 set(Applications_documentation "This group contains the applications shipped with Orfeo TooLBox")

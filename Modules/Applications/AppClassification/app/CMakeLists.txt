@@ -126,11 +126,6 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           ZonalStatistics
-  SOURCES        otbZonalStatistics.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
   NAME           TrainImagesRegression
   SOURCES        otbTrainImagesRegression.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})

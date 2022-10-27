@@ -19,6 +19,21 @@
 #
 
 otb_create_application(
+  NAME           OpticalCalibration
+  SOURCES        otbOpticalCalibration.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           BundleToPerfectSensor
+  SOURCES        otbBundleToPerfectSensor.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           Pansharpening
+  SOURCES        otbPansharpening.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
   NAME           PixelValue
   SOURCES        otbPixelValue.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
@@ -97,3 +112,59 @@ OTB_CREATE_APPLICATION(
   NAME           Synthetize
   SOURCES        otbSynthetize.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+  
+otb_create_application(
+  NAME           VectorDataTransform
+  SOURCES        otbVectorDataTransform.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           VectorDataExtractROI
+  SOURCES        otbVectorDataExtractROI.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           VectorDataSetField
+  SOURCES        otbVectorDataSetField.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           ConcatenateVectorData
+  SOURCES        otbConcatenateVectorData.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           ZonalStatistics
+  SOURCES        otbZonalStatistics.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           OrthoRectification
+  SOURCES        otbOrthoRectification.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           GridBasedImageResampling
+  SOURCES        otbGridBasedImageResampling.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           RigidTransformResample
+  SOURCES        otbRigidTransformResample.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           ImageEnvelope
+  SOURCES        otbImageEnvelope.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           Superimpose
+  SOURCES        otbSuperimpose.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+      
+# TODO refactor this application
+#otb_create_application(
+#  NAME           RefineSensorModel
+#  SOURCES        otbRefineSensorModel.cxx
+#  LINK_LIBRARIES ${${otb-module}_LIBRARIES})

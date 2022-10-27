@@ -18,19 +18,10 @@
 # limitations under the License.
 #
 
-otb_create_application(
-  NAME           OrthoRectification
-  SOURCES        otbOrthoRectification.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
   NAME           ConvertCartoToGeoPoint
   SOURCES        otbConvertCartoToGeoPoint.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
-  NAME           GridBasedImageResampling
-  SOURCES        otbGridBasedImageResampling.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
@@ -43,28 +34,7 @@ otb_create_application(
   SOURCES        otbObtainUTMZoneFromGeoPoint.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-# TODO refactor this application
-#otb_create_application(
-#  NAME           RefineSensorModel
-#  SOURCES        otbRefineSensorModel.cxx
-#  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
-  NAME           RigidTransformResample
-  SOURCES        otbRigidTransformResample.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
-  NAME           ImageEnvelope
-  SOURCES        otbImageEnvelope.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
 otb_create_application(
   NAME           ConvertSensorToGeoPoint
   SOURCES        otbConvertSensorToGeoPoint.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
-  NAME           Superimpose
-  SOURCES        otbSuperimpose.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})

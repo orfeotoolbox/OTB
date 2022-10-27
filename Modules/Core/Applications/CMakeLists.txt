@@ -18,5 +18,5 @@
 # limitations under the License.
 #
 
-project(OTBAppOpticalCalibration)
+project(OTBAppCore)
 otb_module_impl()

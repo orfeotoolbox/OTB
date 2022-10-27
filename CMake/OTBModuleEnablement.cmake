@@ -120,7 +120,7 @@ endforeach()
 # However, if you choose to customize which modules will be built, OTB also
 # allows you to manually enable modules by using either individual Module_*
 # options or OTBGroup_* options.
-option(OTB_BUILD_DEFAULT_MODULES "Build the default OTB modules." ON)
+option(OTB_BUILD_DEFAULT_MODULES "Build the default OTB modules." OFF)
 
 #----------------------------------------------------------------------
 # Provide an option to build the tests of dependencies of a module when

@@ -18,5 +18,39 @@
 # limitations under the License.
 #
 
-project(OTBAppImageUtils)
-otb_module_impl()
+
+set(DOCUMENTATION "Core OTB Applications")
+
+otb_module(OTBAppCore
+  DEPENDS
+    OTBApplicationEngine
+    OTBCarto
+    OTBCommon
+    OTBITK
+    OTBImageBase
+    OTBProjection
+    OTBVectorDataBase
+    OTBVectorDataManipulation
+    OTBOpticalCalibration
+    OTBImageManipulation
+    OTBConversion
+    OTBBoostAdapters
+    OTBColorMap
+    OTBCurlAdapters
+    OTBObjectList
+    OTBStatistics
+    OTBStreaming
+    OTBTransform
+    OTBFunctor
+    OTBMosaic
+    OTBPanSharpening
+    OTBIOXML
+    OTBMathParser
+    
+  TEST_DEPENDS
+    OTBTestKernel
+    OTBCommandLine
+
+  DESCRIPTION
+    "${DOCUMENTATION}"
+)
