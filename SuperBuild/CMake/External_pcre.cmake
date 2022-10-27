@@ -25,8 +25,8 @@ if(MSVC)
 else()
   ExternalProject_Add(PCRE
     PREFIX PCRE
-    URL "https://sourceforge.net/projects/pcre/files/pcre/8.44/pcre-8.44.tar.gz"
-    URL_MD5 3bcd2441024d00009a5fee43f058987c
+    URL "https://sourceforge.net/projects/pcre/files/pcre/8.45/pcre-8.45.tar.gz"
+    URL_MD5 01b80f8177ab91da63e7e5c5d5dfcb83
     BINARY_DIR ${PCRE_SB_BUILD_DIR}
     INSTALL_DIR ${SB_INSTALL_PREFIX}
     DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

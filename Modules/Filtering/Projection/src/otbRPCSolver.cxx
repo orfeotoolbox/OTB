@@ -148,15 +148,15 @@ void computeCoefficients(const std::vector<PrecisionType> & f,
   PrecisionType res = std::numeric_limits<PrecisionType>::max();
   VectorType coeffs;
 
+  UpdateMatrix(r, x, y ,z ,M);
   for (int i =0; i<10; i++)
   {
     if (res < epsilon)
     {
       break;
     }
+
     auto w2 = weights * weights;
-    
-    UpdateMatrix(r, x, y ,z ,M);
 
     vnl_svd<PrecisionType>    svd(M.transpose()*w2*M);
 
