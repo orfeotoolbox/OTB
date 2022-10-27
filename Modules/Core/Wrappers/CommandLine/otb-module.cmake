@@ -32,7 +32,7 @@ otb_module(OTBCommandLine
     
   TEST_DEPENDS
     OTBTestKernel
-    OTBAppImageUtils
+    OTBAppCore
 
   DESCRIPTION
     "${DOCUMENTATION}"

@@ -46,7 +46,7 @@ ENABLE_SHARED
     OTBTestKernel
     OTBCommandLine
     OTBEdge
-    OTBAppImageUtils
+    OTBAppCore
     OTBAppFiltering
     
   DESCRIPTION
