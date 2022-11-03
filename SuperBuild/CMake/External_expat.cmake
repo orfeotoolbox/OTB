@@ -24,8 +24,8 @@ SETUP_SUPERBUILD(EXPAT)
 
 ExternalProject_Add(EXPAT
   PREFIX EXPAT
-  URL "https://downloads.sourceforge.net/project/expat/expat/2.4.6/expat-2.4.6.tar.gz"
-  URL_MD5 f1a94f57311ba32e7a525ab0a098cccf
+  URL "https://github.com/libexpat/libexpat/releases/download/R_2_4_8/expat-2.4.8.tar.gz"
+  URL_MD5 ce5fa3fa4d866d83ab0cfb00bb95b77a
   BINARY_DIR ${EXPAT_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

@@ -155,29 +155,7 @@ otb_test_application(NAME  apTvPrConvertCartoToGeoPoint
                      TESTENVOPTIONS ${TEMP}/apTvPrConvertCartoToGeoPoint.txt
                      VALID   --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvPrConvertCartoToGeoPoint.txt
-                	     ${TEMP}/apTvPrConvertCartoToGeoPoint.txt)
-
-
-#----------- GenerateRPCSensorModel TESTS ----------------
-# Remove baseline for OSSIM >= 2.2, as ossimRPCProjection.optimizeFit() is broken
-# set(VALID_CONDITION)
-# if(OTB_OSSIM_VERSION LESS 20200)
-# set(VALID_CONDITION
-#   VALID --compare-ascii ${EPSILON_3}
-#         ${BASELINE_FILES}/apTvPrGenerateRPCSensorModelGeomOutput.geom
-#         ${TEMP}/apTvPrGenerateRPCSensorModelGeomOutput.geom)
-# endif()
-# otb_test_application(NAME  apTvPrGenerateRPCSensorModel
-#                      APP  GenerateRPCSensorModel
-#                      OPTIONS -inpoints  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500_in_tie_points.txt
-#                  	     -outgeom   ${TEMP}/apTvPrGenerateRPCSensorModelGeomOutput.geom
-#                              -outstat   ${TEMP}/apTvPrGenerateRPCSensorModelStatsOutput.txt
-#                              -outvector ${TEMP}/apTvPrGenerateRPCSensorModelVectorOutput.shp
-#                              -map utm -map.utm.zone 31 -map.utm.northhem 1
-#                              -elev.dem ${INPUTDATA}/DEM/srtm_directory
-#                              -elev.geoid ${INPUTDATA}/DEM/egm96.grd
-#                      ${VALID_CONDITION})
-
+                             ${TEMP}/apTvPrConvertCartoToGeoPoint.txt)
 
 #----------- GridBasedImageResampling TESTS ----------------
 

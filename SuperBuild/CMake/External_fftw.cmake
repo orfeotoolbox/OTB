@@ -36,8 +36,8 @@ endif()
 # Compile the float version of FFTW
 ExternalProject_Add(FFTWF
   PREFIX FFTW/FFTWF
-  URL "https://fftw.org/fftw-3.3.9.tar.gz"
-  URL_MD5 50145bb68a8510b5d77605f11cadf8dc
+  URL "https://fftw.org/fftw-3.3.10.tar.gz"
+  URL_MD5 8ccbf6a5ea78a16dbc3e1306e234cc5c
   SOURCE_DIR ${FFTWF_SB_SRC}
   BINARY_DIR ${FFTWF_SB_BUILD}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -61,8 +61,8 @@ ExternalProject_Add(FFTWF
 # Compile the double version of FFTW
 ExternalProject_Add(FFTWD
   PREFIX FFTW/FFTWD
-  URL "https://fftw.org/fftw-3.3.9.tar.gz"
-  URL_MD5 50145bb68a8510b5d77605f11cadf8dc
+  URL "https://fftw.org/fftw-3.3.10.tar.gz"
+  URL_MD5 8ccbf6a5ea78a16dbc3e1306e234cc5c
   SOURCE_DIR ${FFTWD_SB_SRC}
   BINARY_DIR ${FFTWD_SB_BUILD}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

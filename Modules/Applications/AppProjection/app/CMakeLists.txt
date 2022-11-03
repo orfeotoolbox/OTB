@@ -28,12 +28,6 @@ otb_create_application(
   SOURCES        otbConvertCartoToGeoPoint.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-# TODO refactor this application
-#otb_create_application(
-#  NAME           GenerateRPCSensorModel
-#  SOURCES        otbGenerateRPCSensorModel.cxx
-#  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
 otb_create_application(
   NAME           GridBasedImageResampling
   SOURCES        otbGridBasedImageResampling.cxx

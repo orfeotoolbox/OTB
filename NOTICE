@@ -65,40 +65,6 @@ This software includes code from the GeoTIFF project.
   https://trac.osgeo.org/geotiff/browser/trunk/libgeotiff/LICENSE
 
 
-This software includes code from the OpenThreads library, an OpenSceneGraph
-sub-project.
-  Copyright (c) 2002-2008, The Open Thread Group
-  http://www.openscenegraph.org/
-  OpenThreads is released under OpenSceneGraph Public License (OSGPL) 0.0,
-  i.e. the wxWindows library license:
-  https://github.com/openscenegraph/OpenSceneGraph/blob/master/LICENSE.txt
-
-
-This software includes code from the OSSIM project.
-  Copyright (c) 2015-2016, OSSIM Contributors
-  http://www.ossim.org/
-  OSSIM is released under MIT license:
-  https://github.com/ossimlabs/ossim/blob/dev/LICENSE.txt
-
-
-This software includes code contributed by the CNES to the "OSSIM Plugins"
-project under MIT license. These plugins are derivated from several
-third-party works now released under the same MIT license. All the related
-copyrights are listed below:
-  Copyright (C) 2005-2016, Centre National d'Etudes Spatiales (CNES)
-  Copyright (C) 2008-2010, Centre for Remote Imaging, Sensing and Processing (CRISP)
-  Copyright (C) 2010-2016, David A. Horner
-  Copyright (C) 2010-2016, David Burken
-  Copyright (C) 2010-2016, Frank Warmerdam
-  Copyright (C) 2010-2016, Garrett Potts
-  Copyright (C) 2010-2016, John Stastny
-  https://github.com/ossimlabs/ossim-plugins
-  These OSSIM plugins source code is embedded in Modules/ThirdParty/OssimPlugins
-  directory.
-  These OSSIM plugins are released under MIT license:
-  https://github.com/ossimlabs/ossim-plugins/blob/dev/LICENSE
-
-
 This software includes code from the TinyXML project.
   Copyright (c) 2001-2010, Lee Thomason
   http://www.grinninglizard.com/tinyxml
@@ -339,12 +305,6 @@ binaries:
     Copyright 2009 Mathieu Malaterre <mathieu.malaterre@gmail.com>
     BSD 3-Clause license
     https://opensource.org/licenses/BSD-3-Clause
-
-
-* Modules/Adapters/OSSIMAdapters/test/otbPlatformPositionAdapter.cxx
-    Copyright 2011 Emmanuel Christophe
-    Apache Software License (ASL) v2.0
-    http://www.apache.org/licenses/LICENSE-2.0
 
 
 * Modules/Wrappers/SWIG/src/numpy.i

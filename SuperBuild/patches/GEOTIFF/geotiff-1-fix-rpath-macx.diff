@@ -1,7 +1,7 @@
-diff -burN libgeotiff-1.5.1.orig/CMakeLists.txt libgeotiff-1.5.1/CMakeLists.txt
---- libgeotiff-1.5.1.orig/CMakeLists.txt	2019-03-29 21:09:12.000000000 +0100
-+++ libgeotiff-1.5.1/CMakeLists.txt	2019-11-08 11:17:08.520146442 +0100
-@@ -345,12 +345,12 @@
+diff -burN libgeotiff-1.7.1.orig/CMakeLists.txt libgeotiff-1.7.1/CMakeLists.txt
+--- libgeotiff-1.7.1.orig/CMakeLists.txt	2022-03-10 09:32:14.000000000 +0100
++++ libgeotiff-1.7.1/CMakeLists.txt	2022-06-29 16:32:45.867700159 +0200
+@@ -319,12 +319,12 @@
        VERSION ${LINK_VERSION}
        SOVERSION ${LINK_SOVERSION}
        CLEAN_DIRECT_OUTPUT 1 )
@@ -9,14 +9,14 @@ diff -burN libgeotiff-1.5.1.orig/CMakeLists.txt libgeotiff-1.5.1/CMakeLists.txt
 -      set_target_properties(
 -        ${GEOTIFF_LIBRARY_TARGET}
 -        PROPERTIES
--        INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+-        INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${GEOTIFF_LIB_DIR}")
 -   endif()
 +   # if (APPLE)
 +   #    set_target_properties(
 +   #      ${GEOTIFF_LIBRARY_TARGET}
 +   #      PROPERTIES
-+   #      INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
++   #      INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/${GEOTIFF_LIB_DIR}")
 +   # endif()
+ endif()
  
- ELSE(UNIX)
- # Default:
+ SET_TARGET_PROPERTIES(${GEOTIFF_LIBRARY_TARGET} PROPERTIES
