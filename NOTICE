@@ -134,13 +134,6 @@ library.
   https://github.com/opencv/opencv/blob/master/LICENSE
 
 
-This software includes code from the Qt project.
-  Copyright (c) 2015, The Qt Company Ltd.
-  https://www.qt.io/
-  Qt 4 is released under GNU LGPL v2.1 license:
-  http://doc.qt.io/qt-4.8/lgpl.html
-
-
 This software includes code from the SiftFast project.
   Copyright (c) 2008-2010, zerofrog(@gmail.com)
   http://libsift.sourceforge.net
@@ -148,34 +141,6 @@ This software includes code from the SiftFast project.
   directory.
   SiftFast is released under the GNU LGPL 3.0 license:
   https://sourceforge.net/p/libsift/code/HEAD/tree/trunk/LICENSE
-
-
-This software includes code from the Mesa 3D project.
-  Copyright (c) 1999-2017 Brian Paul and many other contributors
-  https://www.mesa3d.org/
-  FreeGLUT is released under MIT License:
-  https://www.mesa3d.org/license.html
-
-
-This software includes code from the FreeGLUT project.
-  Copyright (c) 1999-2000 Pawel W. Olszta
-  http://freeglut.sourceforge.net/
-  FreeGLUT is released under X11/MIT derivate License:
-  https://sourceforge.net/p/freeglut/code/HEAD/tree/trunk/freeglut/freeglut/COPYING
-
-
-This software includes code from the GLFW project.
-  Copyright (c) 2002-2006, Marcus Geelnard
-  Copyright (c) 2006-2016, Camilla Berglund
-  http://www.glfw.org/
-  GLFW is released under zlib/libpng license:
-  http://www.glfw.org/license.html
-
-
-This software includes code from the GLEW project.
-  http://glew.sourceforge.net/
-  The GLEW source code is licensed under the BSD 3-Clause license.
-  https://github.com/nigels-com/glew/blob/master/LICENSE.txt
 
 
 This software includes code from the Open MPI project.
@@ -251,12 +216,6 @@ binaries:
     Copyright (c) 2011 Harvard Medical School, Arnaud Gelas <arnaud_gelas@hms.harvard.edu>
     Boost Software License (BSL), v1.0
     http://www.boost.org/LICENSE_1_0.txt
-
-
-* CMake/FindGLEW.cmake
-    Copyright (c) 2012-2013 Jakob Progsch
-    ZLib license
-    https://opensource.org/licenses/Zlib
 
 
 * CMake/FindKWStyle.cmake
