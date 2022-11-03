@@ -23,11 +23,11 @@ INCLUDE_ONCE_MACRO(ZLIB)
 SETUP_SUPERBUILD(ZLIB)
 
 
-# Try official release 1.2.11
+# Try official release 1.2.13
 ExternalProject_Add(ZLIB
   PREFIX ZLIB
-  URL "https://zlib.net/zlib-1.2.12.tar.gz"
-  URL_MD5 5fc414a9726be31427b440b434d05f78
+  URL "https://zlib.net/zlib-1.2.13.tar.gz"
+  URL_MD5 9b8aa094c4e5765dabf4da391f00d15c
   BINARY_DIR ${ZLIB_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
