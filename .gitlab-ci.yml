@@ -119,13 +119,13 @@ fast-build:
     - merge_requests
     - branches
   stage: precheck
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop:latest
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-native-develop-headless:20.04
   before_script:
     - export GIT_LFS_SKIP_SMUDGE=1
     - git checkout -f -q $CI_COMMIT_SHA
     - python3 CI/check_twin_pipelines.py
   script:
-    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-18.04-fast
+    - ctest -V -S CI/main_ci.cmake -DIMAGE_NAME:string=ubuntu-20.04-fast
     - ccache -s
 
 legal-check:
@@ -149,20 +149,19 @@ legal-check:
 ## Ubuntu superbuild
 ubuntu-xdk-prepare:
   extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm
 
 ubuntu-xdk-build-doc:
   extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
-    - export QT_QPA_PLATFORM=offscreen
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk -DNAME_SUFFIX:string=-glibc-2.27
+    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk -DNAME_SUFFIX:string=-glibc-2.27
     - mv build_packages/OTB-*.run . || true
   needs:
     - job: ubuntu-xdk-prepare
@@ -171,15 +170,14 @@ ubuntu-xdk-build-doc:
 ## CentOS superbuild
 centos-xdk-prepare:
   extends: .common-prepare
-  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:7.9.2009
+  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base-headless:7.9.2009
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=centos-7.9.2009-gcc
 
 centos-xdk-build:
   extends: .common-build
-  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base:7.9.2009
+  image: $BUILD_IMAGE_REGISTRY/otb-centos-superbuild-base-headless:7.9.2009
   script:
-    - export QT_QPA_PLATFORM=offscreen
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=centos-7.9.2009-gcc
     - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=centos-7.9.2009-gcc
     - mv build_packages/OTB-*.run . || true
@@ -259,11 +257,11 @@ ubuntu-xdk-qa-code-coverage:
       - /^release-[0-9]+\.[0-9]+$/
     variables:
       - $SONAR_OTB_TOKEN
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa-headless:20.04
   script:
-    - QT_QPA_PLATFORM=offscreen ctest -V -S CI/main_qa.cmake
-                     -DIMAGE_NAME:string=ubuntu-18.04-llvm-qa
-                     -DQA:BOOL=ON
+    - ctest -V -S CI/main_qa.cmake
+            -DIMAGE_NAME:string=ubuntu-20.04-llvm-qa
+            -DQA:BOOL=ON
     - ./CI/otb_coverage.sh
     - saxon-xslt -o build/ctest_report.xml
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
@@ -281,7 +279,7 @@ ubuntu-xdk-qa-static-analysis:
       - /^release-[0-9]+\.[0-9]+$/
     variables:
       - $SONAR_OTB_TOKEN
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa-headless:20.04
   script:
     - find Modules -type f -regextype posix-extended -regex '.*\.(h|hxx)$' -exec dirname '{}' \; |
           grep -vE '^Modules/ThirdParty/' |
@@ -300,7 +298,7 @@ ubuntu-xdk-report:
   extends: .common
   variables:
     GIT_DEPTH: ""
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa:18.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-qa-headless:20.04
   stage: report
   only:
     refs:
@@ -391,7 +389,7 @@ deploy:
 update-archive:
   tags:
     - deploy
-  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   stage: deploy
   extends: .general
   only:

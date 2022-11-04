@@ -1,4 +1,3 @@
-#!/bin/bash
 #
 # Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
 #
@@ -19,19 +18,20 @@
 # limitations under the License.
 #
 
-# usage : call CI/otb_coverage.sh from source dir
-OTB_DIR="$(dirname $0)/.."
-OTB_DIR="$(readlink -f $OTB_DIR)"
+# Configuration options for ubuntu-20.04-fast
 
-if [ -z "$BUILD_DIR" ]; then
-BUILD_DIR=${OTB_DIR}/build
-fi
+set(site_option
+"opencv_INCLUDE_DIR:PATH=/usr/include/opencv4
+CMAKE_C_COMPILER:STRING=clang
+CMAKE_CXX_COMPILER:STRING=clang++
+CMAKE_EXE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_MODULE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_SHARED_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_C_COMPILER_LAUNCHER:STRING=ccache
+CMAKE_CXX_COMPILER_LAUNCHER:STRING=ccache
+OTB_USE_SHARK:BOOL=OFF
+BUILD_EXAMPLES:BOOL=OFF")
 
-echo Generating gcov reports in $BUILD_DIR ...
-cd $BUILD_DIR
-find $BUILD_DIR -name "*.gcda" -exec llvm-cov gcov -p '{}' > /dev/null \;
-ls *.gcov | grep -E -v '#Modules#[a-zA-Z0-9]+#[a-zA-Z0-9]+#(include|src|app)#' | xargs -L 1 rm
-echo Filtered $(ls $BUILD_DIR/*.gcov | wc -l) gcov reports
+set(ci_skip_testing ON)
 
-gcovr -r $OTB_DIR -x -g --gcov-ignore-parse-errors --object-directory=$BUILD_DIR  > $BUILD_DIR/coverage_report.xml
-echo Generated $BUILD_DIR/coverage_report.xml with $(grep -c '<class ' $BUILD_DIR/coverage_report.xml) classes
+set(ci_skip_install ON)

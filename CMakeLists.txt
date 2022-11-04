@@ -95,9 +95,6 @@ include(PreventInBuildInstalls)
 include(OTBModuleMacros)
 include(OTBModuleRemote)
 include(OTBModuleTest)
-include( i18n_qt )
-
-reset_qt_i18n_sources()
 
 repository_status(${PROJECT_SOURCE_DIR} OTB_GIT_STATUS_MESSAGE)
 
@@ -151,22 +148,12 @@ set(main_project_name ${_OTBModuleMacros_DEFAULT_LABEL})
 
 #-----------------------------------------------------------------------------
 # OTB version number.
-set(OTB_VERSION_MAJOR "8")
-set(OTB_VERSION_MINOR "1")
+set(OTB_VERSION_MAJOR "9")
+set(OTB_VERSION_MINOR "0")
 set(OTB_VERSION_PATCH "0")
 set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_PATCH}")
 
 get_package_name(${OTB_SOURCE_DIR} ${PROJECT_NAME} OTB_VERSION_STRING2)
-
-# Monteverdi version number (follows OTB)
-set( Monteverdi_VERSION_MAJOR ${OTB_VERSION_MAJOR} )
-set( Monteverdi_VERSION_MINOR ${OTB_VERSION_MINOR} )
-set( Monteverdi_VERSION_PATCH ${OTB_VERSION_PATCH} )
-set( Monteverdi_VERSION_SUFFIX "" )
-
-set( Monteverdi_VERSION_STRING
-  "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}"
-  )
 
 #-----------------------------------------------------------------------------
 string(TIMESTAMP OTB_BUILD_TIMESTAMP)
@@ -553,13 +540,6 @@ list(APPEND option_list GEOTIFF)
 list(APPEND option_list ITK)
 list(APPEND option_list TINYXML)
 
-#RK
-#Q: Why these two guys here? we already have option_list
-#A: Because cmake case sensitivity with variables.
-
-if(OTB_USE_QT)
-  list(APPEND option_list QT)
-endif()
 #sort again!
 list(SORT option_list)
 
@@ -625,7 +605,3 @@ message("======================= End of OTB cmake summary ======================
 
 #don't need this one anymore. so unset it.
 unset(option_list)
-
-#----------------------------------------------------------------------------
-# I18N
-add_subdirectory( i18n )

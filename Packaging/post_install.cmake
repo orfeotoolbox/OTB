@@ -85,7 +85,6 @@ foreach( p_dir ${P_DIRS} )
     file(STRINGS "${cmake_file}" MATCH_FOUND REGEX "${P_MATCH}")
     if(MATCH_FOUND)
       message(STATUS "Patching: ${cmake_file}")
-      #message("Patch: Replace '${P_MATCH}' with '${P_REPLACE}' in ${cmake_file}")
       file(STRINGS "${cmake_file}" cmake_file_CONTENTS NEWLINE_CONSUME)
       string(REPLACE "${P_MATCH}" "$${}{${P_REPLACE}}" cmake_file_CONTENTS ${cmake_file_CONTENTS})
       file(WRITE "${cmake_file}"  "# This file is modified by OTB after installation.

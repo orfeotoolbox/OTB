@@ -8,5 +8,3 @@ Remote sensing processing library developed by CNES ORFEO Toolbox (OTB) is
   Unix and Windows. Most functionnalies are also adapted to process huge
   images using streaming and multithreading as often as possible.
   .
-  This package provide the new version of the Monteverdi GUI application
-  developed in Qt around the OTB library.
