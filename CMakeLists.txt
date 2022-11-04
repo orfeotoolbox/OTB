@@ -155,16 +155,6 @@ set(OTB_VERSION_STRING "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}.${OTB_VERSION_
 
 get_package_name(${OTB_SOURCE_DIR} ${PROJECT_NAME} OTB_VERSION_STRING2)
 
-# Monteverdi version number (follows OTB)
-set( Monteverdi_VERSION_MAJOR ${OTB_VERSION_MAJOR} )
-set( Monteverdi_VERSION_MINOR ${OTB_VERSION_MINOR} )
-set( Monteverdi_VERSION_PATCH ${OTB_VERSION_PATCH} )
-set( Monteverdi_VERSION_SUFFIX "" )
-
-set( Monteverdi_VERSION_STRING
-  "${Monteverdi_VERSION_MAJOR}.${Monteverdi_VERSION_MINOR}.${Monteverdi_VERSION_PATCH}${Monteverdi_VERSION_SUFFIX}"
-  )
-
 #-----------------------------------------------------------------------------
 string(TIMESTAMP OTB_BUILD_TIMESTAMP)
 
@@ -550,13 +540,6 @@ list(APPEND option_list GEOTIFF)
 list(APPEND option_list ITK)
 list(APPEND option_list TINYXML)
 
-#RK
-#Q: Why these two guys here? we already have option_list
-#A: Because cmake case sensitivity with variables.
-
-if(OTB_USE_QT)
-  list(APPEND option_list QT)
-endif()
 #sort again!
 list(SORT option_list)
 

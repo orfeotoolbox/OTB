@@ -12,6 +12,8 @@ You can configure OTB for QGIS according to the:
 
 .. image:: Art/plugins.png
 
+.. image:: Art/plugins_config.png
+
 
 Compatibility between QGIS and OTB versions
 -------------------------------------------
