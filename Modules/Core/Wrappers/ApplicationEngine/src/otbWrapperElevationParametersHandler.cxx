@@ -62,8 +62,8 @@ void ElevationParametersHandler::AddElevationParameters(Application::Pointer app
                                "Use a geoid grid to get the height "
                                "above the ellipsoid in case there is no DEM available, no coverage for "
                                "some points or pixels with no_data in the DEM tiles. A version of the "
-                               "geoid can be found on the OTB website"
-                               "(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd).");
+                               "geoid can be found on the OTB website (egm96.grd and egm96.grd.hdr at "
+                               "https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/tree/master/Data/Input/DEM).");
   app->MandatoryOff(oss.str());
 
   std::string geoidFromConfig = otb::ConfigurationManager::GetGeoidFile();
