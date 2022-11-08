@@ -25,11 +25,6 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           VectorDataReprojection
-  SOURCES        otbVectorDataReprojection.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
   NAME           ObtainUTMZoneFromGeoPoint
   SOURCES        otbObtainUTMZoneFromGeoPoint.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})

@@ -35,14 +35,12 @@ otb_module(OTBAppCore
     OTBImageManipulation
     OTBConversion
     OTBBoostAdapters
-    OTBColorMap
     OTBCurlAdapters
     OTBObjectList
     OTBStatistics
     OTBStreaming
     OTBTransform
     OTBFunctor
-    OTBMosaic
     OTBPanSharpening
     OTBIOXML
     OTBMathParser

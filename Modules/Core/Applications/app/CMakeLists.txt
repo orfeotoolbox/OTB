@@ -34,33 +34,14 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           PixelValue
-  SOURCES        otbPixelValue.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
   NAME           ExtractROI
   SOURCES        otbExtractROI.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-otb_create_application(
-  NAME           Rescale
-  SOURCES        otbRescale.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
-  NAME           TileFusion
-  SOURCES        otbTileFusion.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
   NAME           ReadImageInfo
   SOURCES        otbReadImageInfo.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
-  NAME           Quicklook
-  SOURCES        otbQuicklook.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
@@ -69,23 +50,13 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           MultiResolutionPyramid
-  SOURCES        otbMultiResolutionPyramid.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
-  NAME           ColorMapping
-  SOURCES        otbColorMapping.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+    NAME           Rasterization
+    SOURCES        otbRasterization.cxx
+    LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
   NAME           CompareImages
   SOURCES        otbCompareImages.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
-  NAME           SplitImage
-  SOURCES        otbSplitImage.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
@@ -108,10 +79,6 @@ OTB_CREATE_APPLICATION(
   SOURCES        otbResetMargin.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-OTB_CREATE_APPLICATION(
-  NAME           Synthetize
-  SOURCES        otbSynthetize.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
   
 otb_create_application(
   NAME           VectorDataTransform
@@ -162,6 +129,11 @@ otb_create_application(
   NAME           Superimpose
   SOURCES        otbSuperimpose.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+  otb_create_application(
+    NAME           VectorDataReprojection
+    SOURCES        otbVectorDataReprojection.cxx
+    LINK_LIBRARIES ${${otb-module}_LIBRARIES})
       
 # TODO refactor this application
 #otb_create_application(

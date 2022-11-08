@@ -18,5 +18,39 @@
 # limitations under the License.
 #
 
-project(OTBAppVectorDataTranslation)
-otb_module_impl()
+
+set(DOCUMENTATION "OTB Image Processing Applications")
+
+otb_module(OTBAppImageProcessing
+  DEPENDS
+    OTBApplicationEngine
+    OTBCarto
+    OTBCommon
+    OTBITK
+    OTBImageBase
+    OTBProjection
+    OTBVectorDataBase
+    OTBVectorDataManipulation
+    OTBOpticalCalibration
+    OTBImageManipulation
+    OTBConversion
+    OTBBoostAdapters
+    OTBColorMap
+    OTBCurlAdapters
+    OTBObjectList
+    OTBStatistics
+    OTBStreaming
+    OTBTransform
+    OTBFunctor
+    OTBMosaic
+    OTBPanSharpening
+    OTBIOXML
+    OTBMathParser
+    
+  TEST_DEPENDS
+    OTBTestKernel
+    OTBCommandLine
+
+  DESCRIPTION
+    "${DOCUMENTATION}"
+)

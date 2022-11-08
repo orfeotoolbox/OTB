@@ -18,18 +18,10 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "VectorDataTranslation application (translation, rotation and
-scale).")
 
-otb_module(OTBAppVectorDataTranslation 
+set(DOCUMENTATION "Image processing module of OTB")
+
+otb_module(OTBImageProcessing
   DEPENDS
-    OTBConversion
     OTBApplicationEngine
-    OTBTransform
-  TEST_DEPENDS
-    OTBTestKernel
-    OTBCommandLine
-  
-  DESCRIPTION
-    "${DOCUMENTATION}"
-  )
+)

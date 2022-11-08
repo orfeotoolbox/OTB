@@ -18,7 +18,5 @@
 # limitations under the License.
 #
 
-otb_create_application(
-  NAME           Rasterization
-  SOURCES        otbRasterization.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+project(OTBAppImageProcessing)
+otb_module_impl()
