@@ -37,3 +37,28 @@ otb_create_application(
   NAME           SARConcatenateBursts
   SOURCES        otbSARConcatenateBursts.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+  otb_create_application(
+  NAME           SARDecompositions
+  SOURCES        otbSARDecompositions.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+  otb_create_application(
+  NAME           SARPolarMatrixConvert
+  SOURCES        otbSARPolarMatrixConvert.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+  otb_create_application(
+  NAME           SARPolarSynth
+  SOURCES        otbSARPolarSynth.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+  otb_create_application(
+  NAME           ComputeModulusAndPhase
+  SOURCES        otbComputeModulusAndPhase.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           Despeckle
+  SOURCES        otbDespeckle.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})

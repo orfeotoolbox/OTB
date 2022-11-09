@@ -27,18 +27,20 @@ otb_module(OTBImageIO
     OTBBoostAdapters
     OTBCommon
     OTBExtendedFilename
-    OTBIOBSQ
     OTBIOGDAL
-    OTBIOLUM
-    OTBIOMSTAR
-    OTBIOONERA
-    OTBIORAD
     OTBITK
     OTBImageBase
     OTBMetadata
     OTBObjectList
     OTBStreaming
 
+  OPTIONAL_DEPENDS
+    OTBIOLUM
+    OTBIOMSTAR
+    OTBIOONERA
+    OTBIORAD
+    OTBIOBSQ
+    
   TEST_DEPENDS
     OTBStatistics
     OTBTestKernel
