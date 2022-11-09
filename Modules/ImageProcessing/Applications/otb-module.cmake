@@ -31,7 +31,6 @@ otb_module(OTBAppImageProcessing
     OTBProjection
     OTBVectorDataBase
     OTBVectorDataManipulation
-    OTBOpticalCalibration
     OTBImageManipulation
     OTBConversion
     OTBBoostAdapters
@@ -42,10 +41,14 @@ otb_module(OTBAppImageProcessing
     OTBStreaming
     OTBTransform
     OTBFunctor
-    OTBMosaic
-    OTBPanSharpening
     OTBIOXML
     OTBMathParser
+    OTBContrast
+    OTBConvolution
+    OTBSmoothing
+    OTBMathParserX
+    OTBEdge
+    OTBIndices
     
   TEST_DEPENDS
     OTBTestKernel

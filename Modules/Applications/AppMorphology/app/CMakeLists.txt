@@ -18,10 +18,6 @@
 # limitations under the License.
 #
 
-otb_create_application(
-  NAME           BinaryMorphologicalOperation
-  SOURCES        otbBinaryMorphologicalOperation.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
   NAME           GrayScaleMorphologicalOperation

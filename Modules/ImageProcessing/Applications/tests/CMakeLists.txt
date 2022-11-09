@@ -240,3 +240,190 @@ OTB_TEST_APPLICATION(NAME apTvUtPixelValueEpsg
                                 ${BASELINE_FILES}/apTvUtPixelValue.txt
                         ${TEMP}/apTvUtPixelValueEpsg.txt
                                 )
+
+#----------- Smoothing TESTS ----------------
+
+otb_test_application(NAME  apTvUtSmoothingTest_OutXML
+                     APP  Smoothing
+                     OPTIONS -in ${INPUTDATA}/poupees.tif
+               	             -out ${TEMP}/apTvUtSmoothingTest_OutXML.tif
+                             -type mean
+                             -outxml ${TEMP}/apTvUtSmoothingTest_OutXML.xml
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtSmoothingTest.tif
+                             ${TEMP}/apTvUtSmoothingTest_OutXML.tif)
+
+otb_test_application(NAME  apTvUtSmoothingTest_InXML
+                     APP  Smoothing
+                     OPTIONS -inxml ${TEMP}/apTvUtSmoothingTest_OutXML.xml
+               	             -in ${INPUTDATA}/poupees.tif
+               	             -out ${TEMP}/apTvUtSmoothingTest_InXML.tif
+                             -type mean
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtSmoothingTest.tif
+                             ${TEMP}/apTvUtSmoothingTest_InXML.tif)
+
+set_tests_properties( apTvUtSmoothingTest_InXML
+    PROPERTIES DEPENDS apTvUtSmoothingTest_OutXML)
+
+otb_test_application(NAME  apTvUtSmoothingTestGaussian
+                     APP  Smoothing
+                     OPTIONS -in ${INPUTDATA}/poupees.tif
+               	             -out ${TEMP}/apTvUtSmoothingTestGaussian.tif
+                             -type gaussian
+                             -type.gaussian.stdev 2.0
+                             -type.gaussian.maxerror 0.1
+                             -type.gaussian.maxwidth 64
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtSmoothingTestGaussian.tif
+                             ${TEMP}/apTvUtSmoothingTestGaussian.tif)
+
+otb_test_application(NAME  apTvUtSmoothingTestAnisotropic
+                     APP  Smoothing
+                     OPTIONS -in ${INPUTDATA}/poupees.tif
+               	             -out ${TEMP}/apTvUtSmoothingTestAnisotropic.tif
+                             -type anidif
+                             -type.anidif.timestep 0.125
+                             -type.anidif.nbiter 10
+                             -type.anidif.conductance 1.
+                     VALID   --compare-image ${EPSILON_6}
+                             ${BASELINE}/apTvUtSmoothingTestAnisotropic.tif
+                             ${TEMP}/apTvUtSmoothingTestAnisotropic.tif)
+
+#----------- Contrast TESTS ----------------
+
+otb_test_application(NAME  apTvUtContrastTest_base
+                     APP  ContrastEnhancement
+                     OPTIONS -in ${INPUTDATA}/QB_Suburb.png
+                             -out ${TEMP}/apTvUtContrastTest_base.tif int16
+                             -bins 256
+                             -spatial.local.h 51
+                             -spatial.local.w 67
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtContrastTest_base.tif
+                             ${TEMP}/apTvUtContrastTest_base.tif)
+
+otb_test_application(NAME  apTvUtContrastTest_base_glob
+                     APP  ContrastEnhancement
+                     OPTIONS -in ${INPUTDATA}/QB_Suburb.png
+                             -out ${TEMP}/apTvUtContrastTest_base_glob.tif int16
+                             -bins 256
+                             -spatial global
+                             -minmax manual
+                             -minmax.manual.min 0 
+                             -minmax.manual.max 255
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtContrastTest_base_glob.tif
+                             ${TEMP}/apTvUtContrastTest_base_glob.tif)
+
+otb_test_application(NAME  apTvUtContrastTest_lum_glob
+                     APP  ContrastEnhancement
+                     OPTIONS -in ${INPUTDATA}/anaglyphInput1.tif
+                             -out ${TEMP}/apTvUtContrastTest_lum_glob.tif int16
+                             -bins 256
+                             -spatial global
+                             -hfact 2.7
+                             -nodata 0
+                             -mode lum
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtContrastTest_lum_glob.tif
+                             ${TEMP}/apTvUtContrastTest_lum_glob.tif)
+
+otb_test_application(NAME  apTvUtContrastTest_lum
+                     APP  ContrastEnhancement
+                     OPTIONS -in ${INPUTDATA}/anaglyphInput1.tif
+                             -out ${TEMP}/apTvUtContrastTest_lum.tif int16
+                             -bins 256
+                             -spatial.local.h 33
+                             -spatial.local.w 47
+                             -hfact 2.1
+                             -nodata 0
+                             -mode lum
+                     VALID   --compare-image ${NOTOL}
+                             ${BASELINE}/apTvUtContrastTest_lum.tif
+                             ${TEMP}/apTvUtContrastTest_lum.tif)
+                             
+#----------- NL Means TESTS ----------------
+
+otb_test_application(NAME  nlMeansTest_base
+                     APP  FastNLMeans
+                     OPTIONS -in ${INPUTDATA}/GomaAvant.tif
+                             -out ${TEMP}/GomaAvant_NLMeans.tif
+                             -patchradius 2
+                             -searchradius 11
+                             -thresh 30
+                     VALID   --compare-image ${EPSILON_7}
+                             ${BASELINE}/GomaAvant_NLMeans.tif
+                             ${TEMP}/GomaAvant_NLMeans.tif)
+
+
+#----------- BandMath TESTS ----------------
+otb_test_application(NAME apTvUtBandMath
+                     APP  BandMath
+                     OPTIONS -il ${INPUTDATA}/poupees_sub_c1.png
+                                  ${INPUTDATA}/poupees_sub_c2.png
+                                  ${INPUTDATA}/poupees_sub.png
+                             -out ${TEMP}/apTvUtBandMathOutput.tif
+                             -exp "cos(im1b1)+im2b1*im3b1-im3b2+ndvi(im3b3,im3b4)"
+                     VALID   --compare-image ${NOTOL}
+                             ${INPUTDATA}/apTvUtBandMathOutput.tif
+                             ${TEMP}/apTvUtBandMathOutput.tif)
+
+#----------- BandMathX TESTS ----------------                             
+set(OTBBandMathXAppTest
+otbBandMathXAppTests.cxx
+)
+
+add_executable(OTBBandMathXAppTest ${OTBBandMathXAppTest})
+target_link_libraries(OTBBandMathXAppTest ${OTBAppMathParserX-Test_LIBRARIES})
+otb_module_target_label(OTBBandMathXAppTest)
+
+otb_add_test(NAME apTvUtBandMathX COMMAND OTBBandMathXAppTest
+$<TARGET_FILE_DIR:otbapp_BandMathX>
+${INPUTDATA}/apTvUtExportBandMathX.txt
+)
+
+#----------- LineSegmentDetection TESTS ----------------
+otb_test_application(NAME   apTvFeLineSegmentDetectionNoRescale
+                     APP  LineSegmentDetection
+                     OPTIONS -in ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
+                             -out ${TEMP}/feTvLineSegmentDetection_LI_NoRescale.shp
+                             -norescale true
+                     VALID   --compare-ogr ${EPSILON_9}
+                             ${OTBAPP_BASELINE_FILES}/feTvLineSegmentDetection_LI_NoRescale.shp
+                             ${TEMP}/feTvLineSegmentDetection_LI_NoRescale.shp)
+
+otb_test_application(NAME   apTvFeLineSegmentDetection
+                     APP  LineSegmentDetection
+                     OPTIONS -in ${INPUTDATA}/QB_MUL_ROI_1000_100.tif
+                             -out ${TEMP}/feTvLineSegmentDetection_LI.shp
+                     VALID   --compare-ogr ${EPSILON_9}
+                             ${OTBAPP_BASELINE_FILES}/feTvLineSegmentDetection_LI.shp
+                             ${TEMP}/feTvLineSegmentDetection_LI.shp)
+
+
+#----------- EdgeExtraction TESTS ----------------
+otb_test_application(NAME  apTvFEEdgeExtraction
+                     APP  EdgeExtraction
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -channel 1
+                             -filter sobel
+                             -out ${TEMP}/apTvFEEdgeExtraction.tif
+                     VALID   --compare-image ${NOTOL}
+                   			 ${BASELINE}/apTvFEEdgeExtraction.tif
+                 		     ${TEMP}/apTvFEEdgeExtraction.tif)
+
+#----------- BinaryMorphologicalOperation TESTS ----------------
+otb_test_application(NAME  apTvFEBinaryMorphologicalOperation
+APP  BinaryMorphologicalOperation
+OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN_Mask.tif
+        -channel 1
+        -structype ball
+        -xradius 10
+        -filter opening
+        -foreval 1.0
+        -backval 0.0
+        -out ${TEMP}/apTvFEBinaryMorphologicalOperation.tif
+VALID   --compare-image ${NOTOL}
+                       ${BASELINE}/apTvFEBinaryMorphologicalOperation.tif
+                 ${TEMP}/apTvFEBinaryMorphologicalOperation.tif)

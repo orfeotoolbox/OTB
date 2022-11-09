@@ -114,13 +114,6 @@ set(SUPERBUILD_OTB_VERSION "${SUPERBUILD_OTB_VERSION_MAJOR}.${SUPERBUILD_OTB_VER
 
 message("OTB version : ${SUPERBUILD_OTB_VERSION}")
 
-# Special setting for low kernel versions
-if(UNIX)
-  option(USE_LOW_KERNEL_VERSION "Try to keep the minimal kernel version as low as possible" ON)
-  mark_as_advanced(USE_LOW_KERNEL_VERSION)
-endif()
-
-
 # Default install prefix
 get_filename_component(PARENT_OF_BINARY_DIR ${CMAKE_BINARY_DIR} PATH)
 if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT AND NOT USE_DEFAULT_INSTALL_PREFIX)
@@ -263,41 +256,11 @@ list(REMOVE_DUPLICATES SB_ENV_CONFIGURE_CMD)
 
 message(STATUS "Environment setup for CMake (SB_CMAKE_COMMAND) : ${SB_CMAKE_COMMAND}")
 
+set(USE_SYSTEM_DEPENDENCIES OFF)
 set(FROM_SYSTEM_LIST)
 set(FROM_SUPERBUILD_LIST)
-
-#TODO: enforce check from ITK on directory length
-# Setup third parties
-option(USE_SYSTEM_ZLIB "Use a system build of zlib" OFF)
-option(USE_SYSTEM_JPEG "Use a system build of JPEG" OFF)
-option(USE_SYSTEM_EXPAT "Use a system build of expat" OFF)
-option(USE_SYSTEM_PNG "Use a system build of libpng" OFF)
-option(USE_SYSTEM_TIFF "Use a system build of libtiff" OFF)
-option(USE_SYSTEM_PROJ  "Use a system build of Proj.4" OFF)
-option(USE_SYSTEM_GEOTIFF  "Use a system build of GeoTIFF" OFF)
-option(USE_SYSTEM_SQLITE  "Use a system build of sqlite" OFF)
-option(USE_SYSTEM_GEOS "Use a system build of GEOS" OFF)
-option(USE_SYSTEM_OPENJPEG "Use a system build of OpenJPEG" OFF)
-option(USE_SYSTEM_BOOST "Use a system build of Boost" OFF)
-option(USE_SYSTEM_LIBKML  "Use a system build of LibKML" OFF)
-option(USE_SYSTEM_CURL  "Use a system build of cURL" OFF)
-option(USE_SYSTEM_OPENSSL  "Use a system build of OpenSSL" OFF)
-option(USE_SYSTEM_GDAL "Use a system build of GDAL" OFF)
-option(USE_SYSTEM_FFTW "Use a system build of FFTW" OFF)
-option(USE_SYSTEM_ITK "Use a system build of ITK" OFF)
-option(USE_SYSTEM_MUPARSER  "Use a system build of muParser" OFF)
-option(USE_SYSTEM_MUPARSERX "Use a system build of  muParserX" OFF)
-option(USE_SYSTEM_TINYXML  "Use a system build of TinyXML" OFF)
-option(USE_SYSTEM_OPENCV  "Use a system build of OpenCV" OFF)
-option(USE_SYSTEM_LIBSVM  "Use a system build of libsvm" OFF)
-option(USE_SYSTEM_PCRE "Use a system build of PCRE" ON)
-option(USE_SYSTEM_SWIG "Use a system build of swig" ON)
-option(USE_SYSTEM_FREETYPE "Use a system build of freetype" OFF)
-option(USE_SYSTEM_SHARK "Use a system build of Shark" OFF)
-option(USE_SYSTEM_HDF4 "Use a system build of HDF4" OFF)
-option(USE_SYSTEM_HDF5 "Use a system build of HDF5" OFF)
-option(USE_SYSTEM_NETCDF "Use a system build of NetCDF" OFF)
-option(USE_SYSTEM_GSL "Use a system build of GSL" OFF)
+set(USE_SYSTEM_PCRE ON)
+set(USE_SYSTEM_SWIG ON)
 
 # Call OTB
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
@@ -397,4 +360,3 @@ endif()
 
 message(STATUS "SuperBuild will be installed to ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "To install to a different directory, re-run cmake -DCMAKE_INSTALL_PREFIX=/your/preferred/path")
-include(Packaging_OTB)
