@@ -22,16 +22,14 @@
 set(group_list
   Applications
   Core
-  Detection
-  Feature
-  Filtering
-  Fusion
+  ImageProcessing
   Hyperspectral
   IOPlugins
   Learning
   Radiometry
   Registration
   Remote
+  SAR
   Segmentation
   ThirdParty
   )
