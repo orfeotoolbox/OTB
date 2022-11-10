@@ -49,6 +49,7 @@ otb_module(OTBAppImageProcessing
     OTBMathParserX
     OTBEdge
     OTBIndices
+    OTBTextures
     
   TEST_DEPENDS
     OTBTestKernel

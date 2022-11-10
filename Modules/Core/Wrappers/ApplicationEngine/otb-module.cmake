@@ -47,7 +47,6 @@ ENABLE_SHARED
     OTBCommandLine
     OTBEdge
     OTBAppCore
-    OTBAppFiltering
     
   DESCRIPTION
     "${DOCUMENTATION}"
