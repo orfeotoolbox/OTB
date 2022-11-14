@@ -34,32 +34,16 @@ set(group_list
   ThirdParty
   )
 
-set(light_group_list
-  Core
-  IOPlugins
-  Learning
-  Segmentation
-  Hyperspectral
-)
-
-set(Adapters_documentation "This group contains adapters class to third party software")
 set(Applications_documentation "This group contains the applications shipped with Orfeo TooLBox")
 set(Core_documentation "This group contains the core module used in Orfeo ToolBox")
-set(Detection_documentation "This group contains algorithms related to detection of low or high level objects")
-set(Feature_documentation "This group contains algorithms related to the computation of features")
-set(Filtering_documentation "This group contains algorithms for classical image to image processing")
-set(Fusion_documentation "This group contains algorithms for data fusion, including pan-sharpening")
 set(Hyperspectral_documentation "This group contains algorithms dedicated to hyperspectral remote sensing")
 set(IO_documentation "This group contains everything related to input/output")
 set(Learning_documentation "This group contains algorithms and frameworks related to supervised or unsupervised learning")
-set(OBIA_documentation "This group contains algorithms related to Object Based Image Analysis")
 set(Radiometry_documentation "This group contains algorithms related to the processing of image radiometry")
 set(Registration_documentation "This group contains algorithms related to registration of images")
+set(SAR_documentation "This group contains algorithms related to SAR processing")
 set(Segmentation_documentation "This group contains algorithms related to image segmentaiton")
 set(ThirdParty_documentation "This group contains all Orfeo ToolBox third parties")
-set(Visualization_documentation "This group contains Ice (visualization framework) and IceViewer (visualization tool)")
-set(Wrappers_documentation "This group contains the application framework and the wrappers to use it")
-
 
 set(Remote_documentation "This group of modules is for OTB based code that have
 additional third-party dependencies not bundled with the toolkit,

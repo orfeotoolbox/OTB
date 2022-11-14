@@ -84,3 +84,19 @@ otb_create_application(
     NAME           BinaryMorphologicalOperation
     SOURCES        otbBinaryMorphologicalOperation.cxx
     LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+    otb_create_application(
+      NAME           HaralickTextureExtraction
+      SOURCES        otbHaralickTextureExtraction.cxx
+      LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+    
+    otb_create_application(
+      NAME           SFSTextureExtraction
+      SOURCES        otbSFSTextureExtraction.cxx
+      LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+    
+    otb_create_application(
+      NAME           PantexTextureExtraction
+      SOURCES        otbPantexTextureExtraction.cxx
+      LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+    
