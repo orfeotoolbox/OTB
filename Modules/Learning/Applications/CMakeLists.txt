@@ -18,5 +18,5 @@
 # limitations under the License.
 #
 
-project(OTBAppClassification)
+project(OTBAppLearning)
 otb_module_impl()

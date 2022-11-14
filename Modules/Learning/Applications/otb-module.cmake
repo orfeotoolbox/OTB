@@ -20,7 +20,7 @@
 
 set(DOCUMENTATION "Classification application.")
 
-otb_module(OTBAppClassification
+otb_module(OTBAppLearning
   DEPENDS
     OTBVectorDataBase
     OTBConversion
