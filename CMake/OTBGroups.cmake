@@ -26,26 +26,26 @@ set(group_list
   Hyperspectral
   IOPlugins
   Learning
-  Radiometry
-  Registration
-  Remote
+  RemoteModules
   SAR
   Segmentation
+  StereoProcessing
   ThirdParty
   )
 
 set(Applications_documentation "This group contains the applications shipped with Orfeo TooLBox")
 set(Core_documentation "This group contains the core module used in Orfeo ToolBox")
+set(ImageProcessing_documentation "This group contains algorithms dedicated to hyperspectral remote sensing")
 set(Hyperspectral_documentation "This group contains algorithms dedicated to hyperspectral remote sensing")
 set(IO_documentation "This group contains everything related to input/output")
 set(Learning_documentation "This group contains algorithms and frameworks related to supervised or unsupervised learning")
 set(Radiometry_documentation "This group contains algorithms related to the processing of image radiometry")
-set(Registration_documentation "This group contains algorithms related to registration of images")
+set(StereoProcessing_documentation "This group contains algorithms related to registration of images")
 set(SAR_documentation "This group contains algorithms related to SAR processing")
 set(Segmentation_documentation "This group contains algorithms related to image segmentaiton")
 set(ThirdParty_documentation "This group contains all Orfeo ToolBox third parties")
 
-set(Remote_documentation "This group of modules is for OTB based code that have
+set(RemoteModules_documentation "This group of modules is for OTB based code that have
 additional third-party dependencies not bundled with the toolkit,
 new algorithms or implementations seeking greater exposure and adoption,
 algorithms that hope to eventually be integrated into the toolkit,
