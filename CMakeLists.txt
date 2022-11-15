@@ -335,10 +335,12 @@ set(OTB_EXAMPLE_DATA_ROOT "${OTB_SOURCE_DIR}/Examples/Data")
 #----------------------------------------------------------------------
 # Make sure remote modules are downloaded before sorting out the module
 # dependencies.
-add_subdirectory(Modules/Remote)
+add_subdirectory(Modules/RemoteModules)
 
 # Enable modules according to user inputs and the module dependency DAG.
 include(OTBModuleEnablement)
+
+option(USE_SYSTEM_DEPENDENCIES "Use system version of OTB dependencies" ON)
 
 #----------------------------------------------------------------------
 # Generate OTBConfig.cmake for the build tree.
