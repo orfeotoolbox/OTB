@@ -26,10 +26,7 @@ otb_module(OTBCommandLine
     OTBITK
     OTBTinyXML
     OTBApplicationEngine
-
-    OPTIONAL_DEPENDS
-    OTBMPIConfig
-    
+  
   TEST_DEPENDS
     OTBTestKernel
     OTBAppCore

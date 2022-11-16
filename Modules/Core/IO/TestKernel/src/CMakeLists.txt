@@ -26,7 +26,6 @@ target_link_libraries(OTBTestKernel
   ${OTBCommon_LIBRARIES}
   ${OTBGDAL_LIBRARIES}
   ${OTBImageManipulation_LIBRARIES}
-  ${OTBMPIConfig_LIBRARIES}
   )
 otb_module_target(OTBTestKernel)
 

@@ -24,10 +24,6 @@
 #include "otb_tinyxml.h"
 #include <vector>
 
-#ifdef OTB_USE_MPI
-#include "otbMPIConfig.h"
-#endif
-
 std::string CleanWord(const std::string& word)
 {
   std::string res("");
@@ -76,10 +72,6 @@ int main(int argc, char* argv[])
     return EXIT_FAILURE;
   }
 
-#ifdef OTB_USE_MPI
-  if (std::find(vexp.begin(), vexp.end(), "-testenv") == vexp.end())
-    otb::MPIConfig::Instance()->Init(argc, argv);
-#endif
 
   otb::ConfigurationManager::InitOpenMPThreads();
 
@@ -88,9 +80,5 @@ int main(int argc, char* argv[])
 
   bool success = launcher->Load(vexp) && launcher->ExecuteAndWriteOutput();
 
-// shutdown MPI after application finished
-#ifdef OTB_USE_MPI
-  otb::MPIConfig::Instance()->terminate();
-#endif
   return success ? EXIT_SUCCESS : EXIT_FAILURE;
 }

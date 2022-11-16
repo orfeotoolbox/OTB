@@ -33,13 +33,6 @@ otb_module(OTBImageIO
     OTBMetadata
     OTBObjectList
     OTBStreaming
-
-  OPTIONAL_DEPENDS
-    OTBIOLUM
-    OTBIOMSTAR
-    OTBIOONERA
-    OTBIORAD
-    OTBIOBSQ
     
   TEST_DEPENDS
     OTBStatistics

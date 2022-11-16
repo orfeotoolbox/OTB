@@ -36,9 +36,6 @@ otb_module(OTBTestKernel
     OTBMetadata
     OTBImageManipulation
 
-    OPTIONAL_DEPENDS
-    OTBMPIConfig
-
   DESCRIPTION
     "${DOCUMENTATION}"
 )

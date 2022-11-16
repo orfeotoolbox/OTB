@@ -37,10 +37,6 @@ ENABLE_SHARED
     OTBBoostAdapters
     OTBITK
     OTBMetadata
-
-    OPTIONAL_DEPENDS
-    OTBMPIVrtWriter
-    OTBMPITiffWriter
     
   TEST_DEPENDS
     OTBTestKernel

@@ -74,10 +74,6 @@ target_link_libraries(OTBApplicationEngine
   ${OTBCommon_LIBRARIES}
   ${OTBImageBase_LIBRARIES}
   ${OTBBoost_LIBRARIES}
-  ${OTBMPI_LIBRARIES}
-  ${OTBMPIConfig_LIBRARIES}
-  ${OTBMPITiffWriter_LIBRARIES}
-  ${OTBMPIVrtWriter_LIBRARIES}
   )
 
 otb_module_target(OTBApplicationEngine)

@@ -23,14 +23,6 @@
 #include "otbImageIOFactory.h"
 #include "otbWrapperCastImage.h"
 
-#ifdef OTB_USE_MPI
-#include "otbMPIConfig.h"
-#include "otbMPIVrtWriter.h"
-#ifdef OTB_USE_SPTW
-#include "otbSimpleParallelTiffWriter.h"
-#endif
-#endif
-
 #include "itksys/SystemTools.hxx"
 
 
@@ -179,68 +171,6 @@ void OutputImageParameter::ClampAndWriteVectorImage(TInputImage* in)
 
   // Use metaprogramming to choose optimized pipeline.
   details::CastImage<TOutputImage, TInputImage> clamp(in);
-
-
-#ifdef OTB_USE_MPI
-
-  otb::MPIConfig::Pointer mpiConfig = otb::MPIConfig::Instance();
-
-  if (mpiConfig->GetNbProcs() > 1)
-  {
-    std::string extension = itksys::SystemTools::GetFilenameExtension(m_FileName);
-
-    if (extension == ".vrt")
-    {
-      // Use the MPIVrtWriter
-
-      auto vrtWriter = otb::MPIVrtWriter<TOutputImage>::New();
-
-      vrtWriter->SetInput(clamp.out);
-      vrtWriter->SetFileName(m_FileName);
-      vrtWriter->SetAvailableRAM(m_RAMValue);
-
-      // Change internal state only when everything has been setup
-      // without raising exception.
-
-      m_OutputCaster = clamp.ocif;
-
-      m_Writer = vrtWriter;
-
-      return;
-    }
-
-#ifdef OTB_USE_SPTW
-
-    else if (extension == ".tif")
-    {
-      // Use simple parallel tiff writer
-
-      auto sptWriter = otb::SimpleParallelTiffWriter<TOutputImage>::New();
-
-      sptWriter->SetFileName(m_FileName);
-      sptWriter->SetInput(clamp.out);
-      sptWriter->GetStreamingManager()->SetDefaultRAM(m_RAMValue);
-
-      // Change internal state only when everything has been setup
-      // without raising exception.
-
-      m_OutputCaster = clamp.ocif;
-
-      m_Writer = sptWriter;
-
-      return;
-    }
-
-#endif // OTB_USE_SPTW
-
-    else
-    {
-      itkGenericExceptionMacro("File format " << extension << " not supported for parallel writing with MPI. Supported formats are "
-                                                              ".vrt and .tif. Extended filenames are not supported.");
-    }
-  }
-
-#endif // OTB_USE_MPI
 
   //
   // Use default OTB writer.

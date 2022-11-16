@@ -25,12 +25,7 @@
 #include "otbImageIOFactory.h"
 #include "otbConfigure.h"
 
-#include "otbONERAImageIOFactory.h"
-#include "otbMSTARImageIOFactory.h"
 #include "otbGDALImageIOFactory.h"
-#include "otbLUMImageIOFactory.h"
-#include "otbBSQImageIOFactory.h"
-#include "otbRADImageIOFactory.h"
 
 namespace otb
 {
@@ -85,12 +80,7 @@ void ImageIOFactory::RegisterBuiltInFactories()
     itk::MutexLockHolder<itk::SimpleMutexLock> mutexHolder(mutex);
     if (firstTime)
     {
-      itk::ObjectFactoryBase::RegisterFactory(RADImageIOFactory::New());
-      itk::ObjectFactoryBase::RegisterFactory(BSQImageIOFactory::New());
-      itk::ObjectFactoryBase::RegisterFactory(LUMImageIOFactory::New());
       itk::ObjectFactoryBase::RegisterFactory(GDALImageIOFactory::New());
-      itk::ObjectFactoryBase::RegisterFactory(ONERAImageIOFactory::New());
-      itk::ObjectFactoryBase::RegisterFactory(MSTARImageIOFactory::New());
       firstTime = false;
     }
   }

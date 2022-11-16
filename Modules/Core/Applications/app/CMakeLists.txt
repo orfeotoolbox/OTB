@@ -38,7 +38,6 @@ otb_create_application(
   SOURCES        otbExtractROI.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-
 otb_create_application(
   NAME           ReadImageInfo
   SOURCES        otbReadImageInfo.cxx

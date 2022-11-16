@@ -30,8 +30,7 @@ CMAKE_C_COMPILER_LAUNCHER=buildcache
 CMAKE_CXX_COMPILER_LAUNCHER=buildcache")
 endif()
 
-set ( temporary_option
-"OTB_USE_MPI=OFF")
+set ( temporary_option )
 
 set(concat_options
 "${cmake_configure_option}

@@ -20,11 +20,9 @@
 
 # Set a list of group names
 set(group_list
-  Applications
   Core
   ImageProcessing
   Hyperspectral
-  IOPlugins
   Learning
   RemoteModules
   SAR
@@ -33,7 +31,6 @@ set(group_list
   ThirdParty
   )
 
-set(Applications_documentation "This group contains the applications shipped with Orfeo TooLBox")
 set(Core_documentation "This group contains the core module used in Orfeo ToolBox")
 set(ImageProcessing_documentation "This group contains algorithms dedicated to hyperspectral remote sensing")
 set(Hyperspectral_documentation "This group contains algorithms dedicated to hyperspectral remote sensing")

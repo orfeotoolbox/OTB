@@ -36,10 +36,6 @@
 
 #include "itkMersenneTwisterRandomVariateGenerator.h"
 
-#ifdef OTB_USE_MPI
-#include "otbMPIConfig.h"
-#endif
-
 typedef int (*MainFuncPointer)(int, char* []);
 std::map<std::string, MainFuncPointer> StringToTestFunctionMap;
 
@@ -90,10 +86,6 @@ bool CheckOption(char* arg, const char* token, int ac, int min)
 
 int main(int ac, char* av[])
 {
-#ifdef OTB_USE_MPI
-  otb::MPIConfig::Instance()->Init(ac, av);
-#endif
-
   bool                lFlagRegression(false);
   std::vector<double> toleranceDiffValues;
   std::vector<double> toleranceOgrValues;
@@ -346,12 +338,6 @@ int main(int ac, char* av[])
       result        = -1;
     }
 
-#ifdef OTB_USE_MPI
-    if (otb::MPIConfig::Instance()->GetMyRank() != 0)
-    {
-      checkBaseline = false;
-    }
-#endif
 
     if (checkBaseline)
     {
@@ -437,9 +423,6 @@ int main(int ac, char* av[])
     } // if checkBaseline
   }   // if test function exists
 
-#ifdef OTB_USE_MPI
-  otb::MPIConfig::Instance()->terminate();
-#endif
   return result;
 }
 
