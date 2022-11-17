@@ -123,12 +123,8 @@ set(LINUX_SYSTEM_DLLS
   libEGL.so*
   libxkbcommon*
   libxcb-*
+  libpcre.so*
   )
-  # libexpat.so.*
-  # libfontconfig.so*
-  # libfreetype.so*
-  # libwebp.so*
-  # )
 
 # libgcc_s.*dylib and other *.framework are dragged by QT
 set(APPLE_SYSTEM_DLLS
