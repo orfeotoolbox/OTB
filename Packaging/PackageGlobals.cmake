@@ -100,12 +100,8 @@ set(LINUX_SYSTEM_DLLS
   libmysqlclient.so*
   libodbc.so*
   libpq.so*
+  libpcre.so*
   )
-  # libexpat.so.*
-  # libfontconfig.so*
-  # libfreetype.so*
-  # libwebp.so*
-  # )
 
 set(APPLE_SYSTEM_DLLS
   libSystem.*dylib
