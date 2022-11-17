@@ -79,4 +79,3 @@ ExternalProject_Add(GDAL
    LOG_INSTALL 1
    )
 
-SUPERBUILD_PATCH_SOURCE(GDAL)
