@@ -65,38 +65,12 @@ done
 
 #install uninstall_otb script
 echo "Installing uninstall script for OTB 'tools/uninstall_otb.sh'"
-sed -i "" "s,mapla.sh,Mapla.app -r,g" "$OUT_DIR/tools/uninstall_otb.sh"
-sed -i "" "s,monteverdi.sh,Monteverdi.app -r,g" "$OUT_DIR/tools/uninstall_otb.sh"
 sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/tools/uninstall_otb.sh"
 chmod +x "$OUT_DIR/tools/uninstall_otb.sh"
 
-mkdir "$OUT_DIR/template.app/Contents/MacOS"
+mkdir -p "$OUT_DIR/template.app/Contents/MacOS"
 mkdir "$OUT_DIR/template.app/Contents/Resources"
-cp -r "$OUT_DIR/template.app" "$OUT_DIR/Mapla.app"
-cp -r "$OUT_DIR/template.app" "$OUT_DIR/Monteverdi.app"
-mv "$OUT_DIR/mapla.sh" "Mapla.app/Contents/MacOS/Mapla"
-mv "$OUT_DIR/monteverdi.sh" "Monteverdi.app/Contents/MacOS/Monteverdi"
 rm -fr "template.app"
-LONG_VERSION_STRING=@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@.@Monteverdi_VERSION_PATCH@
-SHORT_VERSION_STRING=@Monteverdi_VERSION_MAJOR@.@Monteverdi_VERSION_MINOR@
-#sed qt.conf
-sed -i "" "s,Prefix=..,Prefix=$OUT_DIR,g" "$OUT_DIR/bin/qt.conf"
-
-cp "$OUT_DIR/bin/qt.conf" "$OUT_DIR/Mapla.app/Contents/Resources/qt.conf"
-cp "$OUT_DIR/Monteverdi.icns" "Mapla.app/Contents/Resources/"
-sed -i "" "s,STARTUP_FILE,Mapla,g" "Mapla.app/Contents/Info.plist"
-sed -i "" "s,LONG_VERSION,$LONG_VERSION_STRING,g" "Mapla.app/Contents/Info.plist"
-sed -i "" "s,SHORT_VERSION,$SHORT_VERSION_STRING,g" "Mapla.app/Contents/Info.plist"
-sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/Mapla.app/Contents/MacOS/Mapla"
-chmod +x "$OUT_DIR/Mapla.app/Contents/MacOS/Mapla"
-
-cp "$OUT_DIR/bin/qt.conf" "$OUT_DIR/Monteverdi.app/Contents/Resources/qt.conf"
-cp "$OUT_DIR/Monteverdi.icns" "Monteverdi.app/Contents/Resources/"
-sed -i "" "s,STARTUP_FILE,Monteverdi,g" "Monteverdi.app/Contents/Info.plist"
-sed -i "" "s,LONG_VERSION,$LONG_VERSION_STRING,g" "Monteverdi.app/Contents/Info.plist"
-sed -i "" "s,SHORT_VERSION,$SHORT_VERSION_STRING,g" "Monteverdi.app/Contents/Info.plist"
-sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi"
-chmod +x "$OUT_DIR/Monteverdi.app/Contents/MacOS/Monteverdi"
 
 sed -i "" "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/otbenv.profile"
 chmod +x "$OUT_DIR/otbenv.profile"
@@ -112,7 +86,6 @@ printf %s\\n "More documentation can be found in $OUT_DIR/README"
 . "./make_symlinks"
 rm -f "$OUT_DIR/make_symlinks"
 rm -f "$OUT_DIR/setup_python.sh"
-rm -f "$OUT_DIR/Monteverdi.icns"
 rm -f "$OUT_DIR/pkgsetup"
 
 #open "$OUT_DIR"

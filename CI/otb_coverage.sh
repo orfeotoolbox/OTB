@@ -33,5 +33,5 @@ find $BUILD_DIR -name "*.gcda" -exec llvm-cov gcov -p '{}' > /dev/null \;
 ls *.gcov | grep -E -v '#Modules#[a-zA-Z0-9]+#[a-zA-Z0-9]+#(include|src|app)#' | xargs -L 1 rm
 echo Filtered $(ls $BUILD_DIR/*.gcov | wc -l) gcov reports
 
-gcovr -r $OTB_DIR -x -g --object-directory=$BUILD_DIR > $BUILD_DIR/coverage_report.xml
+gcovr -r $OTB_DIR -x -g --gcov-ignore-parse-errors --object-directory=$BUILD_DIR  > $BUILD_DIR/coverage_report.xml
 echo Generated $BUILD_DIR/coverage_report.xml with $(grep -c '<class ' $BUILD_DIR/coverage_report.xml) classes

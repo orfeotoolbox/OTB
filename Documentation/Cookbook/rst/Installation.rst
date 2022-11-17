@@ -86,8 +86,6 @@ repositories:
 
 -  otb-bin for command line applications
 
--  otb-bin-qt for Qt applications
-
 -  python-otb for python applications
 
 Due to license issues, the OTB package built in Debian doesn’t contain
@@ -101,8 +99,6 @@ For Ubuntu 12.04 and higher, OTB Applications packages may be available
 as Debian packages through APT repositories:
 
 -  otb-bin for command line applications
-
--  otb-bin-qt for Qt applications
 
 -  python-otb for python applications
 
@@ -124,7 +120,7 @@ You will then need to run:
 
 ::
 
-    sudo aptitude install otb-bin otb-bin-qt python-otb
+    sudo aptitude install otb-bin python-otb
 
 If you are using *Synaptic*, you can add the repositories, update and
 install the packages through the graphical user interface.

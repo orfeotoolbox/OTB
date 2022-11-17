@@ -96,7 +96,7 @@ macro(otb_create_application)
    endif()
 
    # ----- Create and install launcher scripts ------
-   foreach(type CLI GUI)
+   foreach(type CLI)
      string(TOLOWER "${type}" type_lower)
      set(SCRIPT_NAME otb${type_lower}_${APPLICATION_NAME}${SCRIPT_EXT})
      otb_write_app_launcher(
@@ -149,10 +149,8 @@ macro(otb_write_app_launcher)
   cmake_parse_arguments(APPLAUNCHER  "" "NAME;OUTPUT;TYPE" "" ${ARGN} )
   if("${APPLAUNCHER_TYPE}" STREQUAL "CLI")
     set(_launcher_type "otbcli")
-  elseif("${APPLAUNCHER_TYPE}" STREQUAL "GUI")
-    set(_launcher_type "otbgui")
   else()
-    message(FATAL_ERROR "Unknown launcher type : ${APPLAUNCHER_TYPE}, only support CLI and GUI")
+    message(FATAL_ERROR "Unknown launcher type : ${APPLAUNCHER_TYPE}, only support CLI")
   endif()
 
   if(WIN32)

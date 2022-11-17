@@ -193,8 +193,10 @@ private:
 
     AddParameter(ParameterType_String, "filter.cc.expr", "Condition");
     SetParameterDescription("filter.cc.expr",
-                            "User defined connection condition, written as a mathematical expression. Available variables are p(i)b(i), intensity_p(i) and "
-                            "distance (example of expression: distance < 10 )");
+                            "User defined connection condition, written as a mathematical expression. "
+                            "Available variables are 'p(i)b(i)', 'intensity_p(i)' and "
+                            "'distance'. Substitute (i) by the desired value. "
+                            "Example of expression: intensity_p2 > 0.5.");
 
     // Watershed
     AddChoice("filter.watershed", "Watershed");

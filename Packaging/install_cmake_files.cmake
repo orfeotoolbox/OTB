@@ -32,12 +32,6 @@ function(install_cmake_files)
    REPLACE_VAR "OTB_INSTALL_PREFIX"
    )
 
-  # install Qt5 cmake files (no patching required)
-  file(GLOB _qt5_cmake_folders "${SUPERBUILD_INSTALL_DIR}/lib/cmake/Qt5*")
-  foreach(_qt5_folder ${_qt5_cmake_folders})
-    install_without_message("${_qt5_folder}" "lib/cmake")
-  endforeach()
-
   #install boost cmake files
   file(GLOB _boost_main_cmake "${SUPERBUILD_INSTALL_DIR}/lib/cmake/Boost-*")
   file(GLOB _boost_modules_cmake "${SUPERBUILD_INSTALL_DIR}/lib/cmake/boost_*")

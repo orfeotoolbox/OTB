@@ -507,8 +507,8 @@ T to(string_view const& v, string_view const& context)
    if (ss << v && (ss >> res >> std::ws).eof())  {
       return res;
    }
-   throw std::runtime_error("Cannot decode "+v+" as "+
-         typeid(T).name() + " while " + context);
+   throw std::runtime_error("Cannot decode \""+v+"\" as \""+
+         typeid(T).name() + "\" while " + context);
 }
 
 /**

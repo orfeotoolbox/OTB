@@ -70,7 +70,7 @@ public:
    *
    * @param imd The ImageMetadata to fill
    */
-  bool FetchRPC(ImageMetadata & imd);
+  bool FetchRPC(ImageMetadata & imd, const double lineOffset=0, const double sampleOffset=0);
 
   /**
    * @brief Fill the ImageMetadata with the GCP from the geom file

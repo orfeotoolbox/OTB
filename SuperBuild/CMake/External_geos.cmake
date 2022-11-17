@@ -22,8 +22,13 @@ INCLUDE_ONCE_MACRO(GEOS)
 
 SETUP_SUPERBUILD(GEOS)
 
-set(GEOS_URL "https://download.osgeo.org/geos/geos-3.9.1.tar.bz2")
-set(GEOS_MD5 efc4ce81bdbaa5e5c1caefe6c9b8553c)
+if(WIN32)
+  set(GEOS_URL "https://download.osgeo.org/geos/geos-3.6.5.tar.bz2")
+  set(GEOS_MD5 5ddbbe9dbaf0ac45a36856c185c56b23)
+else()
+  set(GEOS_URL "https://download.osgeo.org/geos/geos-3.9.3.tar.bz2")
+  set(GEOS_MD5 80555366e6d7a518d8b79de773f70bc8)
+endif()
 
 ExternalProject_Add(GEOS
    PREFIX GEOS

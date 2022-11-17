@@ -540,7 +540,7 @@ roofs. Data is available in the OTB-Data
 |        |image_21|         |         |image_22|        |          |image_23|       |
 +---------------------------+---------------------------+---------------------------+
 
-Figure 2: From left to right: Original image, result image with fusion (with monteverdi viewer) of original image and fancy classification and input image with fancy color classification from labeled image.
+Figure 2: From left to right: Original image, result image with fusion of original image and fancy classification and input image with fancy color classification from labeled image.
 
 Unsupervised learning
 ---------------------

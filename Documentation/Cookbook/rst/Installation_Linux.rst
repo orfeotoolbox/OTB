@@ -1,5 +1,5 @@
 We provide a binary package for GNU/Linux x86_64. This package includes
-all of the OTB applications along with command line and graphical launchers.
+all of the OTB applications along with command line launchers.
 It can be downloaded from `OTB's download page
 <https://www.orfeo-toolbox.org/download>`__.
 
@@ -20,15 +20,10 @@ Please note that the resulting installation is not meant to be moved,
 you should uncompress the archive in its final location. Once the
 archive is extracted, the directory structure consists of:
 
--  ``monteverdi.sh``: A launcher script for Monteverdi
-
--  ``mapla.sh``: A launcher script for Mapla
-
 -  ``otbenv.profile``: A script to initialize the environment for OTB
    executables
 
--  ``bin``: A folder containing application launchers (otbcli.sh,
-   otbgui.sh), Monteverdi and Mapla.
+-  ``bin``: A folder containing application launcher (otbcli.sh)
 
 -  ``lib``: A folder containing all shared libraries and OTB
    applications.
@@ -42,32 +37,14 @@ archive is extracted, the directory structure consists of:
 -  ``tool``: A folder containing useful scripts to test the installation or
    to uninstall OTB libraries and headers while keeping all the dependencies.
 
-The applications can be launched from the Mapla launcher. If you want to
-use the otbcli and otbgui launchers, you can initialize your environment
-with ``source otbenv.profile``.
+If you want to use the otbcli launchers, you can initialize your
+environment with ``source otbenv.profile``.
 
 The package can be used to compile other projects using OTB (binaries, libraries
 and headers are included). If you want to build OTB from source using this
 package, you should first uninstall the specific OTB files from the package to
 leave only the dependencies (what we call an XDK). You can do it using the
 supplied script ``tools/uninstall_otb.sh``.
-
-System dependencies
-~~~~~~~~~~~~~~~~~~~
-
-In order to run the command line launchers, this package doesn’t require
-any special library that is not present in most modern Linux
-distributions. The graphical executable (otbgui launchers, Monteverdi
-and Mapla) use the X11 libraries, which are widely used in a lot of
-distributions:
-
-::
-
-    libx11-6 libxext6 libxau6 libxxf86vm1 libxdmcp6 libdrm2
-
-Monteverdi also requires the standard graphics libraries **libgl1** and
-**libglu1**, as well as the xcb library. Make sure you have at least one version of them installed
-in your system. See :`Examples of installation on specific distribution`_ for guidelines on some distributions.
 
 Caveat on OTB 6.0
 ~~~~~~~~~~~~~~~~~
@@ -117,10 +94,6 @@ Also see `Examples of installation on specific distribution`_ for examples on so
 Notes:
 ~~~~~~
 
-- You must use monteverdi and mapla through ``mapla.sh`` and ``monteverdi.sh`` helper scripts in extracted directory.
-
-- The helper scripts for monteverdi and mapla set required environment variables
-
 - You might be tempted to move "OTB-|release|-Linux64" into another location say /usr/local/ after extraction. But avoid this action!
 
 - To have "OTB-|release|-Linux64" installed in /usr/local or /opt execute "OTB-|release|-Linux64.run" in that directory.
@@ -143,9 +116,6 @@ The following commands can be executed on Ubuntu 18.04 or Ubuntu 20.04, for exam
 
   # Required packages to extract OTB from the archive
   apt-get install -y --no-install-recommends file python3 python3-dev python3-numpy
-
-  # Required packages to run OTB GUI tools AND recompile the Python bindings
-  apt-get install -y --no-install-recommends '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev
 
   # optional: prevent tzdata from asking the timezone during cmake installation
   export DEBIAN_FRONTEND=noninteractive 
@@ -172,10 +142,6 @@ CENTOS 7
 
    #Install required dependencies for python bindings recompilation
    yum -y install devtoolset-8 cmake3 rh-python38 rh-python38-python-devel rh-python38-python-numpy swig3 mesa-libGL-devel mesa-libGLU-devel
-
-   #Required dependencies for running OTB GUI tools
-	yum install libXcursor-devel libXi-devel libXinerama-devel libXrandr-devel libxcb-devel libxkbcommon-devel libxkbcommon-x11-devel 
-   yum install xcb-util-devel xcb-util-image-devel xcb-util-keysyms-devel xcb-util-renderutil-devel xcb-util-wm-devel
 
    #Enable the environment
    scl enable rh-python38 devtoolset-8 -- /bin/bash

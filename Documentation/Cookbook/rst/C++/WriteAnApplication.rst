@@ -353,11 +353,6 @@ CommandLine :
     *otbApplicationLauncherCommandLine* executable followed by the
     classname, the application dir and the application parameters.
 
-QT :
-    Application can be encapsuled in Qt framework using
-    *otbApplicationLauncherQt* executable followed by the classname and
-    the application dir.
-
 Python :
     A Python wrapper is also available.
 

@@ -99,7 +99,7 @@ function(process_file_recurse input_file)
     setif_value_in_list(is_system "${raw_item}" SYSTEM_DLLS)
     if(APPLE AND NOT is_system)
       if(("${input_file_full_path}" MATCHES "/plugins/") AND ("${raw_item}" MATCHES "${input_file}"))
-        # ignore the check for @rpath on Qt plugins for the library own name
+        # ignore the check for @rpath on plugins for the library own name
       else()
         if("${raw_item}" MATCHES "@rpath")
           string(REGEX REPLACE "@rpath." "" raw_item "${raw_item}")

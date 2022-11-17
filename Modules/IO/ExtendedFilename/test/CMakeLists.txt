@@ -77,7 +77,7 @@ otb_add_test(NAME ioTvExtendedFilenameToReaderOptions_BandList COMMAND otbExtend
   ${BASELINE}/ioTvExtendedFilenameToReaderOptions_BandList.txt
   ${TEMP}/ioTvExtendedFilenameToReaderOptions_BandList.txt
   otbExtendedFilenameToReaderOptions
-  /home/data/filename.tif?bands=3,5:,-3,2:-2
+  /home/data/filename.tif?&bands=3,5:,-3,2:-2
   ${TEMP}/ioTvExtendedFilenameToReaderOptions_BandList.txt
   6
   )
@@ -175,5 +175,5 @@ otb_add_test(NAME ioTvImageFileReaderExtendedFileName_SkipPR COMMAND otbExtended
 otb_add_test(NAME ioTvImageFileWriterExtendedFileName_NODATA COMMAND otbExtendedFilenameTestDriver
   otbImageFileWriterWithExtendedFilename
   ${INPUTDATA}/ToulouseExtract_WithGeom.tif
-  ${TEMP}/ioImageFileWriterExtendedFileName_NODATA.tif?nodata=1:-99999,2:-88888
+  ${TEMP}/ioImageFileWriterExtendedFileName_NODATA.tif?&nodata=1:-99999,2:-88888
   )

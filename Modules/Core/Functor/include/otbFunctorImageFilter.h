@@ -107,7 +107,7 @@ struct IsSuitableType<itk::RGBAPixel<T>> : IsSuitableType<T>::type
  * T                                                -> PixelType = T
  * const ConstNeighborhoodIterator<Image::T>&       -> PixelType = T
  * const ConstNeighborhoodIterator<VectorImage::T>& -> PixelType = itk::VariableLengthVector<T>
-*/
+ */
 template <class T>
 struct PixelTypeDeduction
 {
@@ -158,13 +158,13 @@ template <typename T>
 using RemoveCVRef = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
 
 /**
-* \struct RetrieveOperator
-*
-* \brief Struct to retrieve the operator type
-*
-* \tparam T the type to retrieve operator() from
-*
-*/
+ * \struct RetrieveOperator
+ *
+ * \brief Struct to retrieve the operator type
+ *
+ * \tparam T the type to retrieve operator() from
+ *
+ */
 template <typename T>
 struct RetrieveOperator
 {
@@ -173,17 +173,17 @@ struct RetrieveOperator
 };
 
 /**
-* \struct FunctorFilterSuperclassHelper
-* \brief Struct allowing to derive the superclass prototype for the
-*        FunctorImageFilter class
-*
-* Provides the following:
-* - OutputImageType : type of the output image
-* - FilterType : correct instantiation of VariadicInputsImageFilter from
-* - the operator() prototype
-* - InputHasNeighborhood a tuple of N false_type or true_type to denote
-* - if Ith arg of operator() expects a neighborhood.
-*/
+ * \struct FunctorFilterSuperclassHelper
+ * \brief Struct allowing to derive the superclass prototype for the
+ *        FunctorImageFilter class
+ *
+ * Provides the following:
+ * - OutputImageType : type of the output image
+ * - FilterType : correct instantiation of VariadicInputsImageFilter from
+ * - the operator() prototype
+ * - InputHasNeighborhood a tuple of N false_type or true_type to denote
+ * - if Ith arg of operator() expects a neighborhood.
+ */
 template <typename T, typename TNameMap>
 struct FunctorFilterSuperclassHelper : public FunctorFilterSuperclassHelper<typename RetrieveOperator<T>::Type, TNameMap>
 {
@@ -316,7 +316,7 @@ auto NewFunctorFilter(Functor f, itk::Size<2> radius = {{0, 0}});
  * \ingroup IntensityImageFilters   Multithreaded Streamed
  *
  * \ingroup OTBFunctor
-*/
+ */
 template <class TFunction, class TNameMap = void>
 class ITK_EXPORT FunctorImageFilter : public FunctorFilterSuperclassHelper<TFunction, TNameMap>::FilterType
 {
@@ -487,7 +487,7 @@ private:
  */
 
 template <typename Functor, typename TNameMap = void>
-auto NewFunctorFilter(Functor f, unsigned int numberOfOutputBands, itk::Size<2> radius)
+auto NewFunctorFilter(Functor f, unsigned int numberOfOutputBands, itk::Size<2> radius = {{0, 0}})
 {
   using FunctorType = NumberOfOutputBandsDecorator<Functor>;
   FunctorType decoratedF(f, numberOfOutputBands);

@@ -43,7 +43,6 @@ set(DOWNLOAD_LOCATION "" CACHE PATH "path to superbuild download archives")
 if ( NOT OTB_BINARY_DIR )
   set(OTB_BINARY_DIR "${SUPERBUILD_BINARY_DIR}/OTB/build")
 endif()
-set(QT_TRANSLATIONS_DIR "${SUPERBUILD_INSTALL_DIR}/translations")
 get_filename_component(PACKAGE_OTB_SRC_DIR ${OTBPackaging_SOURCE_DIR} PATH)
 set(SUPERBUILD_SOURCE_DIR "${PACKAGE_OTB_SRC_DIR}/SuperBuild")
 
@@ -146,7 +145,6 @@ include(install_importlibs)
 include(install_python_bindings)
 include(install_share_dirs)
 include(install_cmake_files)
-include(install_qtdev_files)
 include(install_vstudio_files)
 include(installer_files)
 include(create_package)
@@ -169,16 +167,6 @@ endif()
 check_cmake_variables()
 
 cleanup_package()
-
-set(HAVE_QT FALSE CACHE INTERNAL "HAVE_QT")
-if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/otbApplicationLauncherQt${EXE_EXT}")
-  set(HAVE_QT TRUE)
-endif()
-
-set(HAVE_MVD FALSE  CACHE INTERNAL "HAVE_MVD")
-if(EXISTS "${SUPERBUILD_INSTALL_DIR}/bin/monteverdi${EXE_EXT}")
-  set(HAVE_MVD TRUE)
-endif()
 
 set(HAVE_PYTHON FALSE CACHE INTERNAL "Python wrappings")
 if(EXISTS "${SUPERBUILD_INSTALL_DIR}/lib/otb/python/_otbApplication${PYMODULE_EXT}")
@@ -211,8 +199,6 @@ install_python_bindings()
 install_share_dirs()
 
 install_cmake_files()
-
-install_qtdev_files()
 
 install_vstudio_files()
 
