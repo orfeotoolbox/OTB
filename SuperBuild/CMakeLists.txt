@@ -256,30 +256,42 @@ list(REMOVE_DUPLICATES SB_ENV_CONFIGURE_CMD)
 
 message(STATUS "Environment setup for CMake (SB_CMAKE_COMMAND) : ${SB_CMAKE_COMMAND}")
 
-set(USE_SYSTEM_DEPENDENCIES OFF)
 set(FROM_SYSTEM_LIST)
 set(FROM_SUPERBUILD_LIST)
 set(USE_SYSTEM_PCRE ON)
 set(USE_SYSTEM_SWIG ON)
 
+option(OTB_BUILD_CORE "Enable building only core modules" ON)
+option(OTB_BUILD_IMAGEPROCESSING "Enable building image processing module" OFF)
+option(OTB_BUILD_HYPERSPECTRAL "Enable building Hyperspectral module" OFF)
+option(OTB_BUILD_LEARNING "Enable building of the machine learning module" OFF)
+option(OTB_BUILD_SAR "Enable building of SAR module" OFF)
+option(OTB_BUILD_SEGMENTATION "Enable building of segmentation module" OFF)
+option(OTB_BUILD_STEREO "Enable building of Stereo module" OFF)
 # Call OTB
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
 option(OTB_USE_CURL "Enable module Curl in OTB" ON)
+option(OTB_USE_MUPARSER "Enable module muparser in OTB" ON)
+option(OTB_USE_MUPARSERX "Enable module muparserX in OTB" OFF)
+option(OTB_USE_LIBSVM "Enable module libSVM in OTB" OFF)
+option(OTB_USE_OPENCV "Enable module OpenCV in OTB" OFF)
+option(OTB_USE_SHARK "Enable module Shark in OTB" OFF)
+option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
+option(OTB_USE_GSL "Enable module GSL in OTB" ON)
+if(OTB_BUILD_LEARNING)
+  set(OTB_USE_LIBSVM ON)
+  set(OTB_USE_OPENCV ON)
+  set(OTB_USE_SHARK ON)
+endif()
+if(OTB_BUILD_IMAGEPROCESSING)
+  set(OTB_USE_MUPARSERX ON)
+endif()
 #RK: disabled libkml. problems on windows msvc
 if(MSVC)
   option(OTB_USE_LIBKML "Enable module libKML in OTB" OFF)
 else()
   option(OTB_USE_LIBKML "Enable module libKML in OTB" ON)
 endif()
-option(OTB_USE_LIBSVM "Enable module libSVM in OTB" ON)
-option(OTB_USE_MUPARSER "Enable module muparser in OTB" ON)
-option(OTB_USE_MUPARSERX "Enable module muparserX in OTB" ON)
-option(OTB_USE_OPENCV "Enable module OpenCV in OTB" ON)
-option(OTB_USE_SIFTFAST "Enable module Siftfast in OTB" ON)
-
-
-option(OTB_USE_SHARK "Enable module Shark in OTB" ON)
-option(OTB_USE_GSL "Enable module GSL in OTB" ON)
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT
