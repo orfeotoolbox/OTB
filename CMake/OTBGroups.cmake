@@ -124,7 +124,3 @@ foreach( group ${group_list})
       set_property(CACHE OTBGroup_${group} PROPERTY TYPE BOOL)
     endif()
 endforeach()
-
-#By default enable groups core and thirdparty
-set(OTBGroup_Core ON)
-set(OTBGroup_ThirdParty ON)

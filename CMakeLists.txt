@@ -548,6 +548,10 @@ list(APPEND option_list TINYXML)
 #sort again!
 list(SORT option_list)
 
+#by default enable Core and Thirdparty modules
+set(OTBGroup_Core ON)
+set(OTBGroup_ThirdParty ON)
+
 foreach(dep ${option_list})
 
   string(REGEX REPLACE "OTB_USE_" "" dep ${dep})
