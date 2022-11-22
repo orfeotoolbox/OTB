@@ -340,8 +340,6 @@ add_subdirectory(Modules/RemoteModules)
 # Enable modules according to user inputs and the module dependency DAG.
 include(OTBModuleEnablement)
 
-option(USE_SYSTEM_DEPENDENCIES "Use system version of OTB dependencies" ON)
-
 #----------------------------------------------------------------------
 # Generate OTBConfig.cmake for the build tree.
 set(OTB_CONFIG_CODE "
@@ -435,7 +433,7 @@ install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR})
 configure_file(VERSION VERSION @ONLY)
 install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_INSTALL_DOC_DIR})
 
-install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION share)
+install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION ${OTB_INSTALL_DATA_DIR})
 
 if(BUILD_TESTING)
   add_subdirectory(Utilities/InstallTest)
