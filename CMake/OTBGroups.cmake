@@ -110,8 +110,14 @@ foreach( group ${group_list} )
   endforeach()
 endforeach()
 
+#by default enable Core and Thirdparty modules
+option(OTBGroup_Core  "Request building Core modules" ON)
+option(OTBGroup_ThirdParty "Request using thirdparty modules" ON)
+
 foreach( group ${group_list})
-    option(OTBGroup_${group} "Request building ${group} modules" OFF)
+    if(NOT EXISTS OTBGroup_${group})
+      option(OTBGroup_${group} "Request building ${group} modules" OFF)
+    endif()
     if (OTBGroup_${group})
       foreach (otb-module ${_${group}_on_module_list} )
          list(APPEND OTB_MODULE_${otb-module}_REQUEST_BY OTBGroup_${group})
