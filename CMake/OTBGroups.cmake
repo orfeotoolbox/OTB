@@ -110,10 +110,6 @@ foreach( group ${group_list} )
   endforeach()
 endforeach()
 
-if("$ENV{DASHBOARD_TEST_FROM_CTEST}" STREQUAL "")
-  # developer build
-  option(OTBGroup_Core "Request building core modules" ON)
-endif()
 foreach( group ${group_list})
     option(OTBGroup_${group} "Request building ${group} modules" OFF)
     if (OTBGroup_${group})
@@ -128,3 +124,7 @@ foreach( group ${group_list})
       set_property(CACHE OTBGroup_${group} PROPERTY TYPE BOOL)
     endif()
 endforeach()
+
+#By default enable groups core and thirdparty
+option(OTBGroup_Core "Request building core modules" ON)
+option(OTBGroup_ThirdParty "Request building core modules" ON)
