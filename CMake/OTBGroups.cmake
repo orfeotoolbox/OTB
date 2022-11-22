@@ -126,5 +126,5 @@ foreach( group ${group_list})
 endforeach()
 
 #By default enable groups core and thirdparty
-option(OTBGroup_Core "Request building core modules" ON)
-option(OTBGroup_ThirdParty "Request building core modules" ON)
+set(OTBGroup_Core ON)
+set(OTBGroup_ThirdParty ON)
