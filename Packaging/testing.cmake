@@ -61,13 +61,13 @@ add_test(
   WORKING_DIRECTORY ${pkg_extracted_dir}
   )
 
-add_test(
-  NAME Tu_build_examples
-  COMMAND ${CMAKE_COMMAND}
-  -DSRC_DIR=${CMAKE_SOURCE_DIR}/../Examples
-  -P ${pkg_extracted_dir}/tools/build_examples.cmake
-  WORKING_DIRECTORY ${testing_dir}
-  )
+# add_test(
+#   NAME Tu_build_examples
+#   COMMAND ${CMAKE_COMMAND}
+#   -DSRC_DIR=${CMAKE_SOURCE_DIR}/../Examples
+#   -P ${pkg_extracted_dir}/tools/build_examples.cmake
+#   WORKING_DIRECTORY ${testing_dir}
+#   )
 
 add_test(
   NAME Tu_uninstall_otb
@@ -77,8 +77,8 @@ add_test(
 
 #configure test dependencies..
 set_tests_properties ( Tu_selftester PROPERTIES DEPENDS Tu_install_package)
-set_tests_properties ( Tu_build_examples PROPERTIES DEPENDS Tu_selftester)
-set_tests_properties ( Tu_uninstall_otb PROPERTIES DEPENDS Tu_build_examples)
+#set_tests_properties ( Tu_build_examples PROPERTIES DEPENDS Tu_selftester)
+set_tests_properties ( Tu_uninstall_otb PROPERTIES DEPENDS Tu_selftester)
 
 #if(UNIX)
   #TODO: add test with shellcheck for script files
