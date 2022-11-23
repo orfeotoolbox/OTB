@@ -36,32 +36,49 @@ set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
 # without this you won't be able to pack only specified component
 set(CPACK_DEB_COMPONENT_INSTALL ON)
 set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
-set(CPACK_COMPONENTS_ALL "Core" "Stereo" "ImageProcessing" "Hyperspectral" "Learning" "Segmentation" "Runtime" "RuntimeLibraries")
+set(CPACK_COMPONENTS_ALL "Core" "ImageProcessing" "Hyperspectral" "Learning" "Segmentation" "SAR" "StereoProcessing" "Runtime" "RuntimeLibraries")
 set(CPACK_GENERATOR "ZIP")
 
 include(CPack)
 
 cpack_add_component_group(Core
-                         [DISPLAY_NAME CoreGroup]
-                         [DESCRIPTION "Main Group for Core of OTB"]
+                         [DISPLAY_NAME Core]
+                         [DESCRIPTION "Main Group for Core of OTB" ]
                          [EXPANDED]
-                         [BOLD_TITLE])
+                         [BOLD_TITLE]
+                         [REQUIRED])
 
-cpack_add_component(Common
-                    [DISPLAY_NAME Core_Common]
-                    [DESCRIPTION "Contains all core libraries required for OTB"]
-                    [REQUIRED]
-                    [GROUP Core])
+cpack_add_component(ImageProcessing
+                    [DISPLAY_NAME ImageProcessing]
+                    [DESCRIPTION "Contains all Image processing libraries and applications for OTB" ]
+                    [OPTIONAL])
                  
-cpack_add_component(IO
-                    [DISPLAY_NAME Core_IO]
-                    [DESCRIPTION "Contains all IO executables required for OTB"]
-                    [REQUIRED]
-                    [GROUP Core])
+cpack_add_component(Learning
+                    [DISPLAY_NAME Machine_Learning]
+                    [DESCRIPTION "Contains all Machine learning libraries and applications for OTB" ]
+                    [OPTIONAL])
+                    
+cpack_add_component(Hyperspectral
+                    [DISPLAY_NAME Hyperspectral]
+                    [DESCRIPTION "Contains all Hyperspectral libraries and applications for OTB" ]
+                    [OPTIONAL])
 
-cpack_add_component(Metadata
-                    [DISPLAY_NAME Core_Metadata]
-                    [DESCRIPTION "Contains all Metadata executables required for OTB"]
-                    [REQUIRED]
-                    [DEPENDS Common]
-                    [GROUP Core])
+cpack_add_component(Miscellaneous
+                    [DISPLAY_NAME Misc]
+                    [DESCRIPTION "Contains Miscellaneous libraries and applications for OTB" ]
+                    [OPTIONAL])
+
+cpack_add_component(Segmentation
+                    [DISPLAY_NAME Segmentation]
+                    [DESCRIPTION "Contains all Segmentation libraries and applications for OTB" ]
+                    [OPTIONAL])
+
+cpack_add_component(SAR
+                    [DISPLAY_NAME SAR]
+                    [DESCRIPTION "Contains all SAR libraries and applications for OTB" ]
+                    [OPTIONAL])
+
+cpack_add_component(StereoProcessing
+                    [DISPLAY_NAME Stereo]
+                    [DESCRIPTION "Contains all Stereo libraries and applications for OTB" ]
+                    [OPTIONAL])

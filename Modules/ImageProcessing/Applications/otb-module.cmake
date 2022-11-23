@@ -42,7 +42,6 @@ otb_module(OTBAppImageProcessing
     OTBTransform
     OTBFunctor
     OTBIOXML
-    OTBMathParser
     OTBContrast
     OTBConvolution
     OTBSmoothing

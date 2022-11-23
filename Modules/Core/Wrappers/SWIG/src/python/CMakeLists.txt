@@ -77,7 +77,7 @@ install( FILES ${CMAKE_SWIG_OUTDIR}/otbApplication.py
          DESTINATION ${OTB_INSTALL_PYTHON_DIR}
          COMPONENT RuntimeLibraries )
 
-if(Python_VERSION_STRING VERSION_LESS "3.2.0")
+if(Python_VERSION VERSION_LESS "3.2.0")
   install( FILES ${CMAKE_SWIG_OUTDIR}/otbApplication.pyc
          DESTINATION ${OTB_INSTALL_PYTHON_DIR}
          COMPONENT RuntimeLibraries )
