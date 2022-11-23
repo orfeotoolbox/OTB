@@ -45,6 +45,7 @@ endif()
 set(WINDOWS_SYSTEM_DLLS
   WTSAPI32.dll
   advapi32.dll
+  bcrypt.dll
   comdlg32.dll
   crypt32.dll
   d2d1.dll
