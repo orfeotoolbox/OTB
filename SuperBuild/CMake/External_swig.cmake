@@ -22,8 +22,8 @@ INCLUDE_ONCE_MACRO(SWIG)
 
 SETUP_SUPERBUILD(SWIG)
 
-if( PYTHON_EXECUTABLE )
-  set(SWIG_SB_PYTHON_CONFIG "--with-python=${PYTHON_EXECUTABLE}")
+if( Python_EXECUTABLE )
+  set(SWIG_SB_PYTHON_CONFIG "--with-python=${Python_EXECUTABLE}")
 else()
   set(SWIG_SB_PYTHON_CONFIG)
   message(WARNING "  No suitable python interpreter was found !")

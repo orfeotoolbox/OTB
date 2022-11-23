@@ -17,11 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-if(CMAKE_VERSION VERSION_LESS 3.12.0)
-  include_directories ( ${PYTHON_INCLUDE_DIR} )
-else()
-  include_directories( ${Python_INCLUDE_DIRS} )
-endif()
+include_directories( ${Python_INCLUDE_DIRS} )
 include_directories ( ${CMAKE_CURRENT_SOURCE_DIR})
 set_source_files_properties ( ../otbApplication.i PROPERTIES CPLUSPLUS ON )
 # Get target name
@@ -51,7 +47,7 @@ swig_add_library( otbApplication
             itkPyCommand.cxx
             otbPythonLogOutput.cxx
             otbProgressReporterManager.cxx)
-swig_link_libraries( otbApplication ${PYTHON_LIBRARIES} OTBApplicationEngine )
+swig_link_libraries( otbApplication ${Python_LIBRARIES} OTBApplicationEngine )
 set_target_properties(${extension_target} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SWIG_OUTDIR})
 
 if(MSVC)
@@ -65,7 +61,7 @@ add_custom_command(
     TARGET ${extension_target}
     POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E echo "Byte-compiling otbApplication.py"
-    COMMAND ${PYTHON_EXECUTABLE}
+    COMMAND ${Python_EXECUTABLE}
     ${CMAKE_SOURCE_DIR}/CMake/PythonCompile.py
     ${CMAKE_SWIG_OUTDIR}/otbApplication.py
     DEPENDS ${extension_target}
@@ -81,7 +77,7 @@ install( FILES ${CMAKE_SWIG_OUTDIR}/otbApplication.py
          DESTINATION ${OTB_INSTALL_PYTHON_DIR}
          COMPONENT RuntimeLibraries )
 
-if(PYTHON_VERSION_STRING VERSION_LESS "3.2.0")
+if(Python_VERSION_STRING VERSION_LESS "3.2.0")
   install( FILES ${CMAKE_SWIG_OUTDIR}/otbApplication.pyc
          DESTINATION ${OTB_INSTALL_PYTHON_DIR}
          COMPONENT RuntimeLibraries )

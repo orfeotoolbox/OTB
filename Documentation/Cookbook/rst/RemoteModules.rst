@@ -420,7 +420,7 @@ To add a **test executed by a Python script** using OTB Applications bindings:
         --add-before-env OTB_APPLICATION_PATH $<TARGET_FILE_DIR:otbapp_EmptyApp> )
 
     otb_add_test(NAME otbEmptyScriptTest
-      COMMAND ${TEST_DRIVER} Execute ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/EmptyScript.py)
+      COMMAND ${TEST_DRIVER} Execute ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/EmptyScript.py)
 
 Overall CMakeLists.txt should look like:
 
