@@ -19,92 +19,6 @@
 #
 
 otb_module_test()
-#----------- OrthoRectification TESTS ----------------
-otb_test_application(NAME  apTvPrOrthorectification_UTM_OutXML1
-                     APP  OrthoRectification
-                     OPTIONS -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-                 			 -io.out ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.tif
-                 			 -elev.dem ${INPUTDATA}/DEM/srtm_directory/
-                 		     -outputs.ulx  374100.8
-                 			 -outputs.uly  4829184.8
-                 			 -outputs.sizex 500
-                 			 -outputs.sizey 500
-                 			 -outputs.spacingx  0.5
-                 			 -outputs.spacingy  -0.5
-                 			 -map utm
-                 			 -opt.gridspacing 4 # Spacing of the deformation field equal to 4 meters
-                       -outxml  ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.xml
-                       -interpolator linear
-                     VALID   --compare-image ${EPSILON_4}
-                              ${BASELINE}/owTvOrthorectifTest_UTM.tif
-                 			  ${TEMP}/apTvPrOrthorectifTest_UTM_OutXML1.tif)
-
-otb_test_application(NAME  apTvPrOrthorectification_UTM_InXML1
-                     APP  OrthoRectification
-                     OPTIONS
-                       -inxml  ${INPUTDATA}/apTvPrOrthorectifTest_UTM_OutXML1.xml
-                 			 -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-                 			 -io.out ${TEMP}/apTvPrOrthorectifTest_UTM_InXML1.tif
-                 			 -elev.dem ${INPUTDATA}/DEM/srtm_directory/
-                        VALID   --compare-image ${EPSILON_4}
-                              ${BASELINE}/owTvOrthorectifTest_UTM.tif
-                 			  ${TEMP}/apTvPrOrthorectifTest_UTM_InXML1.tif)
-
-#otb_test_application(NAME  apTvPrOrthorectification_DEMTIF_UTM_InXML1
-                     #APP  OrthoRectification
-                     #OPTIONS
-                       #-inxml  ${INPUTDATA}/apTvPrOrthorectifTest_DEMTIF_UTM_OutXML1.xml
-                       #-io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-                       #-io.out ${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM_InXML1.tif
-                       #-elev.dem ${INPUTDATA}/DEM/tif_directory/
-                        #VALID   --compare-image ${EPSILON_4}
-                              #${BASELINE}/owTvOrthorectifTest_UTM.tif
-                        #${TEMP}/apTvPrOrthorectifTest_DEMTIF_UTM_InXML1.tif)
-
-otb_test_application(NAME  apTvPrOrthorectification_WGS84
-                     APP  OrthoRectification
-                     OPTIONS -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-                       -io.out ${TEMP}/apTvPrOrthorectifTest_WGS84.tif
-                       -elev.dem ${INPUTDATA}/DEM/srtm_directory/
-                       -outputs.ulx  1.35404
-                       -outputs.uly  43.65414
-                       -outputs.sizex 500
-                       -outputs.sizey 500
-                       -outputs.spacingx  0.00000621314
-                       -outputs.spacingy  -0.00000621314
-                       -map wgs
-                       -opt.gridspacing 0.00001242628 # Spacing of the deformation field equal to |2*outputs.spacingx| degrees
-                       -interpolator linear
-                     VALID   --compare-image ${EPSILON_4}
-                        ${BASELINE}/owTvOrthorectifTest_WGS84.tif
-                        ${TEMP}/apTvPrOrthorectifTest_WGS84.tif
-                     )
-
-otb_test_application(NAME  apTvPrOrthorectification_UTM
-                     APP  OrthoRectification
-                     OPTIONS -io.in LARGEINPUT{QUICKBIRD/TOULOUSE/000000128955_01_P001_PAN/02APR01105228-P1BS-000000128955_01_P001.TIF}
-                 			 -io.out ${TEMP}/apTvPrOrthorectifTest_UTM.tif
-                 			 -elev.dem ${INPUTDATA}/DEM/srtm_directory/
-                 		     -outputs.ulx  374100.8
-                 			 -outputs.uly  4829184.8
-                 			 -outputs.sizex 500
-                 			 -outputs.sizey 500
-                 			 -outputs.spacingx  0.5
-                 			 -outputs.spacingy  -0.5
-                 			 -map utm
-                 			 -opt.gridspacing 4 # Spacing of the displacement field equal to 4 meters
-                       -interpolator linear
-                     VALID   --compare-image ${EPSILON_4}
-                              ${BASELINE}/owTvOrthorectifTest_UTM.tif
-                 			  ${TEMP}/apTvPrOrthorectifTest_UTM.tif)
-
-otb_test_application(NAME apTvPrOrthorectification_OTB_Metadata
-                     APP OrthoRectification
-                     OPTIONS -io.in ${INPUTDATA}/QB_TOULOUSE_11_11.tif
-                             -io.out ${TEMP}/apTvPrOrthorectification_OTB_Metadata.tif
-                     VALID --compare-image ${EPSILON_4}
-                           ${BASELINE}/apTvPrOrthorectification_OTB_Metadata.tif
-                           ${TEMP}/apTvPrOrthorectification_OTB_Metadata.tif)
 
 #otb_test_application(NAME  apTvPrOrthorectification_DEMTIF_UTM_OutXML1
                      #APP  OrthoRectification
@@ -156,27 +70,6 @@ otb_test_application(NAME  apTvPrConvertCartoToGeoPoint
                      VALID   --compare-ascii ${EPSILON_7}
                              ${BASELINE_FILES}/apTvPrConvertCartoToGeoPoint.txt
                              ${TEMP}/apTvPrConvertCartoToGeoPoint.txt)
-
-#----------- GridBasedImageResampling TESTS ----------------
-
-otb_test_application(NAME apTuDmGridBasedImageResamplingLeftTest
-                     APP  GridBasedImageResampling
-                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_left.tif
-                             -io.out ${TEMP}/apTvDmGridBasedImageResamplingLeftTest.tif
-                             -grid.in ${INPUTDATA}/sensor_stereo_rectif_left.tif
-                             -out.sizex 158
-                             -out.sizey 158
-                     )
-
-
-otb_test_application(NAME apTuDmGridBasedImageResamplingRightTest
-                     APP  GridBasedImageResampling
-                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_right.tif
-                             -io.out ${TEMP}/apTvDmGridBasedImageResamplingRightTest.tif
-                             -grid.in ${INPUTDATA}/sensor_stereo_rectif_right.tif
-                             -out.sizex 158
-                             -out.sizey 158
-                     )
 
 #----------- ObtainUTMZoneFromGeoPoint TESTS ----------------
 otb_test_application(NAME apTvPrObtainUTMZoneFromGeoPoint

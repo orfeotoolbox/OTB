@@ -139,18 +139,6 @@ VALID   --compare-n-images ${NOTOL} 3
         ${INPUTDATA}/poupees_sub_c3.png
         ${TEMP}/apTvUtSplitImageOutput_2.tif)
 
-#----------- Rescale TESTS ----------------
-otb_test_application(NAME  apTvUtRescaleTest
-                        APP  Rescale
-                        OPTIONS -in ${INPUTDATA}/poupees.tif
-                                -out ${TEMP}/apTvUtRescaleTest.png uint8
-                                -outmin 20
-                                -outmax 150
-                        VALID   --compare-image ${NOTOL}
-                                ${BASELINE}/apTvUtRescaleTest.png
-                                ${TEMP}/apTvUtRescaleTest.png)
-
-
 #----------- TileFusion TESTS ----------------
 otb_test_application(NAME apTvUtTileFusion
                         APP TileFusion

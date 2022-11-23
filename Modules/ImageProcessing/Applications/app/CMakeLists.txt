@@ -19,11 +19,6 @@ otb_create_application(
   SOURCES        otbPixelValue.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
-otb_create_application(
-  NAME           Rescale
-  SOURCES        otbRescale.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
   otb_create_application(
   NAME           TileFusion
   SOURCES        otbTileFusion.cxx
