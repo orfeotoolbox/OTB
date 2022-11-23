@@ -145,7 +145,7 @@ find_package_handle_standard_args(Shark
 
 if(SHARK_FOUND)
   set(SHARK_INCLUDE_DIRS ${SHARK_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
-  if(Boost_MINOR_VERSION STREQUAL "72")
+  if(Boost_MINOR_VERSION STREQUAL "78")
     get_target_property(Boost_current_LIB ${Boost_SERIALIZATION_LIBRARY} IMPORTED_LOCATION_RELEASE)
     set(SHARK_BOOST_LIBRARY "${Boost_current_LIB}")
   else()
