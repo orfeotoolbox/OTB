@@ -43,7 +43,6 @@ otb_module(OTBAppCore
     OTBFunctor
     OTBPanSharpening
     OTBIOXML
-    OTBMathParser
     
   TEST_DEPENDS
     OTBTestKernel

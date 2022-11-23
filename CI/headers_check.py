@@ -127,6 +127,7 @@ excludedfiles = set([
     './CMake/TopologicalSort.cmake',
     './CMake/exportheader.cmake.in',
     './CMake/pre-commit',
+    './CMake/Packaging_OTB.cmake',
     './Docker/Dockerfile',
     './Docker/system-dependencies.txt',
     './Documentation/Cookbook/Art/residual_registration-figure.tex',

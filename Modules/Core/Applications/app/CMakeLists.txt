@@ -110,11 +110,6 @@ otb_create_application(
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 otb_create_application(
-  NAME           GridBasedImageResampling
-  SOURCES        otbGridBasedImageResampling.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
-
-otb_create_application(
   NAME           RigidTransformResample
   SOURCES        otbRigidTransformResample.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})

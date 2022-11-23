@@ -182,7 +182,14 @@ ExternalProject_Add(OTB
   -DOTB_USE_SIFTFAST:BOOL=${OTB_USE_SIFTFAST}
   -DOTB_USE_OPENMP:BOOL=${OTB_USE_OPENMP}
   -DOTB_USE_GSL:BOOL=${OTB_USE_GSL}
-  -DOTBGroup_Core:BOOL=ON
+  -DOTBGroup_Core:BOOL=${OTB_BUILD_Core}
+  -DOTBGroup_ImageProcessing:BOOL=${OTB_BUILD_ImageProcessing}
+  -DOTBGroup_Hyperspectral:BOOL=${OTB_BUILD_Hyperspectral}
+  -DOTBGroup_Leaning:BOOL=${OTB_BUILD_Learning}
+  -DOTBGroup_Miscellaneous:BOOL=${OTB_BUILD_Miscellaneous}
+  -DOTBGroup_SAR:BOOL=${OTB_BUILD_SAR}
+  -DOTBGroup_Segmentation:BOOL=${OTB_BUILD_Segmentation}
+  -DOTBGroup_Stereo:BOOL=${OTB_BUILD_Stereo}
   -DOTBGroup_ThirdParty:BOOL=ON
   -DOTB_WRAP_PYTHON:BOOL=${OTB_WRAP_PYTHON}
   -DOTB_WRAP_QGIS:BOOL=${OTB_WRAP_QGIS}

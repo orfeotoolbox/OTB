@@ -787,27 +787,6 @@ otb_test_application(NAME apTvPrOrthorectification_OTB_Metadata
                            ${BASELINE}/apTvPrOrthorectification_OTB_Metadata.tif
                            ${TEMP}/apTvPrOrthorectification_OTB_Metadata.tif)
 
-#----------- GridBasedImageResampling TESTS ----------------
-otb_test_application(NAME apTuDmGridBasedImageResamplingLeftTest
-                     APP  GridBasedImageResampling
-                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_left.tif
-                             -io.out ${TEMP}/apTvDmGridBasedImageResamplingLeftTest.tif
-                             -grid.in ${INPUTDATA}/sensor_stereo_rectif_left.tif
-                             -out.sizex 158
-                             -out.sizey 158
-                     )
-
-
-otb_test_application(NAME apTuDmGridBasedImageResamplingRightTest
-                     APP  GridBasedImageResampling
-                     OPTIONS -io.in ${INPUTDATA}/sensor_stereo_right.tif
-                             -io.out ${TEMP}/apTvDmGridBasedImageResamplingRightTest.tif
-                             -grid.in ${INPUTDATA}/sensor_stereo_rectif_right.tif
-                             -out.sizex 158
-                             -out.sizey 158
-                     )
-
-
 #----------- Superimpose TESTS ----------------
 otb_test_application(NAME apTvPrSuperimpose
                      APP Superimpose

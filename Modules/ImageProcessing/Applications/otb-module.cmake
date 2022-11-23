@@ -46,6 +46,7 @@ otb_module(OTBAppImageProcessing
     OTBContrast
     OTBConvolution
     OTBSmoothing
+    OTBMathParser
     OTBMathParserX
     OTBEdge
     OTBIndices
