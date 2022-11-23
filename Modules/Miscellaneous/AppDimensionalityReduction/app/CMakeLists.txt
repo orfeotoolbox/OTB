@@ -18,10 +18,6 @@
 # limitations under the License.
 #
 
-otb_create_application(
-  NAME           DimensionalityReduction
-  SOURCES        otbDimensionalityReduction.cxx
-  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
 
 OTB_CREATE_APPLICATION(
   NAME TrainDimensionalityReduction

@@ -109,4 +109,9 @@ otb_create_application(
   NAME           HomologousPointsExtraction
   SOURCES        otbHomologousPointsExtraction.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           DimensionalityReduction
+  SOURCES        otbDimensionalityReduction.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
     
