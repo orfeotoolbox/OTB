@@ -42,7 +42,6 @@ otb_module(OTBImageManipulation
     OTBDensity
     OTBImageIO
     OTBTestKernel
-    OTBTextures
 
   DESCRIPTION
     "${DOCUMENTATION}"

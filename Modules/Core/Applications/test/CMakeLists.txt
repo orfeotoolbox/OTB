@@ -82,7 +82,7 @@ otbExtractROIAppTests.cxx
 )
 
 add_executable(otbAppImageUtilsTestDriver ${OTBAppImageUtilsTests})
-target_link_libraries(otbAppImageUtilsTestDriver ${OTBAppImageUtils-Test_LIBRARIES})
+target_link_libraries(otbAppImageUtilsTestDriver ${OTBAppCore-Test_LIBRARIES})
 otb_module_target_label(otbAppImageUtilsTestDriver)
 
 #----------- DynamicConvert TESTS ------------
