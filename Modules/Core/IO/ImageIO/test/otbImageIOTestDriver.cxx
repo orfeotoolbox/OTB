@@ -23,8 +23,6 @@
 void RegisterTests()
 {
   REGISTER_TEST(otbImageFileWriterWithExtendedOptionBox);
-  REGISTER_TEST(otbImageFileReaderONERAComplex);
-  REGISTER_TEST(otbImageFileReaderRADComplexFloat);
   REGISTER_TEST(otbShortRGBImageIOTest);
   REGISTER_TEST(otbPipelineMetadataHandlingWithUFFilterTest);
   REGISTER_TEST(otbImageMetadataFileWriterTest);
@@ -45,16 +43,11 @@ void RegisterTests()
   REGISTER_TEST(otbVectorImageStreamingFileWriterComplexTestWithoutInputFloat);
   REGISTER_TEST(otbVectorImageStreamingFileWriterComplexTestWithoutInputDouble);
   REGISTER_TEST(otbReadingComplexDataIntoComplexImageTest);
-  REGISTER_TEST(otbImageFileReaderRADInt);
-  REGISTER_TEST(otbImageFileReaderRGBTest);
   REGISTER_TEST(otbImageMetadataStreamingFileWriterTest);
   REGISTER_TEST(otbFloatImageIOTest);
-  REGISTER_TEST(otbImageFileReaderMSTAR);
   REGISTER_TEST(otbGDALDriverDoubleWritingTest);
   REGISTER_TEST(otbDoubleImageIOTest);
   REGISTER_TEST(otbImageFileWriterTestCalculateNumberOfDivisions);
-  REGISTER_TEST(otbImageFileReaderRADComplexFloatExtract);
-  REGISTER_TEST(otbImageFileReaderRADComplexInt);
   REGISTER_TEST(otbImageScalarStreamingFileWriterTestWithoutInputShort);
   REGISTER_TEST(otbImageScalarStreamingFileWriterTestWithoutInputInt);
   REGISTER_TEST(otbImageScalarStreamingFileWriterTestWithoutInputFloat);
@@ -64,7 +57,6 @@ void RegisterTests()
   REGISTER_TEST(otbImageComplexStreamingFileWriterTestWithoutInputFloat);
   REGISTER_TEST(otbImageComplexStreamingFileWriterTestWithoutInputDouble);
   REGISTER_TEST(otbScalarBufferToImageFileWriterTest);
-  REGISTER_TEST(otbImageFileWriterONERAComplex);
   REGISTER_TEST(otbPipelineMetadataHandlingTest);
   REGISTER_TEST(otbMultiResolutionReadingInfo);
   REGISTER_TEST(otbImageFileReaderTestFloat);
@@ -74,17 +66,13 @@ void RegisterTests()
   REGISTER_TEST(otbImageComplexDoubleTest);
   REGISTER_TEST(otbVectorImageComplexIntoRealFloatTest);
   REGISTER_TEST(otbVectorImageComplexIntoRealDoubleTest);
-  REGISTER_TEST(otbImageFileReaderRADChar);
   REGISTER_TEST(otbShortImageIOTest);
   REGISTER_TEST(otbImageSeriesFileReader);
   REGISTER_TEST(otbStreamingShortImageFileWriterTest);
-  REGISTER_TEST(otbImageFileWriterStreamingONERAComplex);
   REGISTER_TEST(otbImageFileReaderWithComplexPixelTest);
   REGISTER_TEST(otbVectorImageFileReaderWithComplexPixelTest);
-  REGISTER_TEST(otbImageFileReaderRADFloat);
   REGISTER_TEST(otbVectorImageFileReaderWriterTest);
   REGISTER_TEST(otbIntImageIOTest);
-  REGISTER_TEST(otbImageFileReaderONERATest);
   REGISTER_TEST(otbPNGIndexedNbBandsTest);
   REGISTER_TEST(otbImageFileReaderTest);
   REGISTER_TEST(otbVectorImageFileWriterScalarTestWithoutInputShort);
@@ -97,7 +85,6 @@ void RegisterTests()
   REGISTER_TEST(otbVectorImageFileWriterComplexTestWithoutInputDouble);
   REGISTER_TEST(otbWritingComplexDataWithComplexImageTest);
   REGISTER_TEST(otbImageFileWriterWithFilterTest);
-  REGISTER_TEST(otbImageFileReaderRADComplexDouble);
   REGISTER_TEST(otbPipeline);
   REGISTER_TEST(otbStreamingImageFilterTest);
   REGISTER_TEST(otbStreamingImageFileWriterTest);
