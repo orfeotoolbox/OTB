@@ -215,7 +215,7 @@ establishing a fully functioning PSC. PSC has now 6 members.
 Agustin Lobo                | ICTJA-CSIC        | Agustin DOT Lobo AT ictja.csic.es  | User perspective, documentation            |
 Julien Radoux               | UCLouvain         | jradoux AT hotmail DOT com         | User perpsective, documentation            |
 Rémi Cresson                | INRAE             | cresson.r AT gmail DOT com         | Release Manager for release 5.2            |
-Julien Osman                | CS GROUP - France | julien.osman AT csgroup DOT fr     |                                            |
+Julien Osman                | CS GROUP - France | julien.osman AT csgroup DOT eu     |                                            |
 Julien Michel               | CNES/CESBIO       | julien.michel AT cnes DOT fr       | Communication, contributions               |
 Yannick Tanguy              | CNES              | yannick.tanguy AT cnes DOT fr      |                                            |
 Guillaume Pasero (resigned) | CS GROUP - France | guillaume.pasero AT csgroup DOT eu | release planner                            |
