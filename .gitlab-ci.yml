@@ -391,7 +391,7 @@ deploy:
   script:
     - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
   needs:
-    - job: ubuntu-xdk-build-doc
+    - job: ubuntu-xdk-build-core
       artifacts: true
     - job: macos-xdk-build
       artifacts: true
