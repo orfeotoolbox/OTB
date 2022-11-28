@@ -26,12 +26,13 @@ CMAKE_CXX_COMPILER:STRING=clang++
 CMAKE_EXE_LINKER_FLAGS:STRING=-fuse-ld=lld
 CMAKE_MODULE_LINKER_FLAGS:STRING=-fuse-ld=lld
 CMAKE_SHARED_LINKER_FLAGS:STRING=-fuse-ld=lld
-OTB_BUILD_ImageProcessing=ON
-OTB_BUILD_Learning=ON
-OTB_BUILD_Miscellanous=ON
-OTB_BUILD_SAR=ON
-OTB_BUILD_Segmentation=ON 
-OTB_BUILD_StereoProcessing=ON
+OTB_BUILD_ImageProcessing:BOOL=ON
+OTB_BUILD_Hyperspectral:BOOL=ON
+OTB_BUILD_Learning:BOOL=ON
+OTB_BUILD_Miscellaneous:BOOL=ON
+OTB_BUILD_SAR:BOOL=ON
+OTB_BUILD_Segmentation:BOOL=ON 
+OTB_BUILD_StereoProcessing:BOOL=ON
 ")
 
 if(NOT ${ci_do_cookbook} EQUAL -1)
