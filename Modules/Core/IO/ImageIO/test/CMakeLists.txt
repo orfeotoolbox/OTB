@@ -55,6 +55,7 @@ otbWritingComplexDataWithComplexImageTest.cxx
 otbStreamingImageFileWriterWithFilterTest.cxx
 otbPipeline.cxx
 otbStreamingImageFilterTest.cxx
+otbImageFileReaderRGBTest.cxx
 otbImageFileWriterRGBTest.cxx
 otbComplexImageManipulationTest.cxx
 otbImageFileWriterTest.cxx
