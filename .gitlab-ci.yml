@@ -157,7 +157,7 @@ ubuntu-xdk-prepare-full:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-full -DOTB_FULL_BUILD:ON
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
 
 ubuntu-xdk-build-core:
   extends: .common-build

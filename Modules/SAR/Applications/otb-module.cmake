@@ -25,6 +25,7 @@ otb_module(OTBAppSAR
     OTBApplicationEngine
     OTBSARCalibration
     OTBImageNoise
+    OTBPolarimetry
 
   TEST_DEPENDS
     OTBTestKernel

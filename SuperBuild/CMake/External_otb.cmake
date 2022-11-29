@@ -185,7 +185,7 @@ ExternalProject_Add(OTB
   -DOTBGroup_Core:BOOL=${OTB_BUILD_Core}
   -DOTBGroup_ImageProcessing:BOOL=${OTB_BUILD_ImageProcessing}
   -DOTBGroup_Hyperspectral:BOOL=${OTB_BUILD_Hyperspectral}
-  -DOTBGroup_Leaning:BOOL=${OTB_BUILD_Learning}
+  -DOTBGroup_Learning:BOOL=${OTB_BUILD_Learning}
   -DOTBGroup_Miscellaneous:BOOL=${OTB_BUILD_Miscellaneous}
   -DOTBGroup_SAR:BOOL=${OTB_BUILD_SAR}
   -DOTBGroup_Segmentation:BOOL=${OTB_BUILD_Segmentation}
