@@ -153,6 +153,12 @@ ubuntu-xdk-prepare:
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm
 
+ubuntu-xdk-prepare-full:
+  extends: .common-prepare
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-full -DOTB_FULL_BUILD:ON
+
 ubuntu-xdk-build-core:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
@@ -178,7 +184,7 @@ ubuntu-xdk-build-full:
     - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full -DNAME_SUFFIX:string=-full-glibc-2.31
     - mv build_packages/OTB-*.run . || true
   needs:
-    - job: ubuntu-xdk-prepare
+    - job: ubuntu-xdk-prepare-full
       artifacts: true
 
 ## CentOS superbuild
