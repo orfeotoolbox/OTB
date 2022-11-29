@@ -31,6 +31,7 @@ otbImageFileWriterTestWithoutInput.cxx
 otbVectorImageStreamingFileWriterTestWithoutInput.cxx
 otbReadingComplexDataIntoComplexImageTest.cxx
 otbStreamingImageFileWriterTest.cxx
+otbImageFileReaderRGBTest.cxx
 otbImageMetadataStreamingFileWriterTest.cxx
 otbFloatImageIOTest.cxx
 otbGDALDriverDoubleWritingTest.cxx
@@ -55,7 +56,6 @@ otbWritingComplexDataWithComplexImageTest.cxx
 otbStreamingImageFileWriterWithFilterTest.cxx
 otbPipeline.cxx
 otbStreamingImageFilterTest.cxx
-otbImageFileReaderRGBTest.cxx
 otbImageFileWriterRGBTest.cxx
 otbComplexImageManipulationTest.cxx
 otbImageFileWriterTest.cxx
@@ -319,19 +319,6 @@ otb_add_test(NAME ioTvStreamingImageFileWriterCalculateNumberOfDivisions_SetAuto
   10
   )
 
-otb_add_test(NAME ioTvImageFileReaderRADCI22TIF COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}
-  ${BASELINE}/ioImageFileReaderRADCI22TIF.tif
-  ${TEMP}/ioImageFileReaderRADCI22TIF.tif
-  otbImageFileReaderRADComplexFloatExtract
-  LARGEINPUT{RAD_CI2/3017_HH.rad}
-  ${TEMP}/ioImageFileReaderRADCI22TIF.tif )
-
-otb_add_test(NAME ioTvImageFileReaderTIF2RADCI4 COMMAND otbImageIOTestDriver
-  otbImageFileReaderRADComplexInt
-  ${INPUTDATA}/RSAT_imagery_VH.tif
-  ${TEMP}/ioImageFileReaderTIF2RADCI4.rad )
-
 otb_add_test(NAME ioTvScalarBufferToImageFileWriterTest COMMAND otbImageIOTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/ioTvScalarBufferToImageFileWriterTest.tif
@@ -528,11 +515,6 @@ otb_add_test(NAME ioTvWritingComplexDataWithComplexImage COMMAND otbImageIOTestD
   1000 1000
   500  500
   )
-
-otb_add_test(NAME ioTvImageFileReaderCR42CR8 COMMAND otbImageIOTestDriver
-  otbImageFileReaderRADComplexDouble
-  ${INPUTDATA}/RADCR4_image.rad
-  ${TEMP}/ioImageFileReaderCR42CR8.rad )
 
 otb_add_test(NAME ioTvStreamingPipeline_TIF2PNG COMMAND otbImageIOTestDriver
   otbPipeline

@@ -75,6 +75,7 @@ void RegisterTests()
   REGISTER_TEST(otbIntImageIOTest);
   REGISTER_TEST(otbPNGIndexedNbBandsTest);
   REGISTER_TEST(otbImageFileReaderTest);
+  REGISTER_TEST(otbImageFileReaderRGBTest);
   REGISTER_TEST(otbVectorImageFileWriterScalarTestWithoutInputShort);
   REGISTER_TEST(otbVectorImageFileWriterScalarTestWithoutInputInt);
   REGISTER_TEST(otbVectorImageFileWriterScalarTestWithoutInputFloat);
