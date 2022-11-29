@@ -19,8 +19,13 @@
 #
 
 set(TEST_DRIVER otbTestDriver
-    --add-before-env PYTHONPATH        ${CMAKE_BINARY_DIR}/${OTB_INSTALL_PYTHON_DIR})
-#    --add-before-env OTB_APPLICATION_PATH $<TARGET_FILE_DIR:otbapp_Smoothing> )
+    --add-before-env PYTHONPATH        ${CMAKE_BINARY_DIR}/${OTB_INSTALL_PYTHON_DIR}
+    --add-before-env OTB_APPLICATION_PATH $<TARGET_FILE_DIR:otbapp_OrthoRectification>)
+
+if(OTB_BUILD_ImageProcessing)
+  set(TEST_DRIVER ${TEST_DRIVER} 
+  --add-before-env OTB_APPLICATION_PATH $<TARGET_FILE_DIR:otbapp_Smoothing> )
+endif()
 
 if(WIN32)
   # on windows, loading the module _otbApplication requires the otbossimplugins*.dll
@@ -120,7 +125,7 @@ endif(WIN32)
 
 # set_tests_properties(pyTvBandMathInXML PROPERTIES DEPENDS pyTvBandMathOutXML)
 
-if ( NUMPY_FOUND )
+if ( NUMPY_FOUND AND OTB_BUILD_ImageProcessing )
 
 add_test( NAME pyTvNumpyIO
   COMMAND ${TEST_DRIVER} Execute
