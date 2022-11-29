@@ -89,7 +89,7 @@ ctest_start (Experimental TRACK CI_Prepare)
 
 ctest_update( SOURCE "${OTB_SOURCE_DIR}" )
 
-option(OTB_FULL_BUILD "Make a full build of OTB" OFF)
+set(OTB_FULL_BUILD "Make a full build of OTB" OFF)
 
 set ( SB_CONFIGURE_OPTIONS "")
 include( "${CMAKE_CURRENT_LIST_DIR}/sb_configure_options.cmake" )

@@ -52,6 +52,7 @@ otb_module(OTBAppImageProcessing
     OTBTextures
     OTBChangeDetection
     OTBDescriptors
+    OTBDimensionalityReduction
     
   TEST_DEPENDS
     OTBTestKernel

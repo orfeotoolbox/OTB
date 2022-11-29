@@ -23,6 +23,9 @@ set(DOCUMENTATION "SAR Calibration application.")
 otb_module(OTBAppSAR
   DEPENDS
     OTBApplicationEngine
+    OTBSARCalibration
+    OTBImageNoise
+
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine

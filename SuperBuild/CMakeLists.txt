@@ -269,7 +269,7 @@ option(OTB_BUILD_Learning "Enable building of the machine learning module" OFF)
 option(OTB_BUILD_Miscellaneous "Enable building of the miscelanous algorithms module" OFF)
 option(OTB_BUILD_SAR "Enable building of SAR module" OFF)
 option(OTB_BUILD_Segmentation "Enable building of segmentation module" OFF)
-option(OTB_BUILD_Stereo "Enable building of Stereo module" OFF)
+option(OTB_BUILD_StereoProcessing "Enable building of Stereo module" OFF)
 
 # Dependencies options
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
