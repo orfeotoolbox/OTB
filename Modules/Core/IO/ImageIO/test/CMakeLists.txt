@@ -230,13 +230,6 @@ otb_add_test(NAME ioTvImageMetadataStreamingWriterTest_TIF COMMAND otbImageIOTes
   ${TEMP}/ioTvImageMetadataStreamingWriterTIF.tif
   )
 
-otb_add_test(NAME ioTvImageFileReaderMSTAR COMMAND otbImageIOTestDriver
-  --compare-image ${EPSILON_9}   ${BASELINE}/ioImageFileReaderMSTAR_rescal_chanel1.png
-  ${TEMP}/ioImageFileReaderMSTAR_rescal_chanel1.png
-  otbImageFileReaderMSTAR
-  ${INPUTDATA}/MSTAR/HB19896.016
-  ${TEMP}/ioImageFileReaderMSTAR_rescal_chanel1.png )
-
 otb_add_test(NAME ioTvGDALDriverDoubleWritingTest COMMAND otbImageIOTestDriver
   --compare-n-images ${EPSILON_9} 4
   ${INPUTDATA}/poupees.tif

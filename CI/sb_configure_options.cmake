@@ -33,13 +33,13 @@ endif()
 set ( full_otb_options )
 if(OTB_FULL_BUILD)
   set(full_otb_options "OTB_BUILD_ImageProcessing:BOOL=ON
-  OTB_BUILD_Hyperspectral:BOOL=ON
-  OTB_BUILD_Learning:BOOL=ON
-  OTB_BUILD_Miscellaneous:BOOL=ON
-  OTB_BUILD_SAR:BOOL=ON
-  OTB_BUILD_Segmentation:BOOL=ON 
-  OTB_BUILD_StereoProcessing:BOOL=ON"
-  )
+OTB_BUILD_Hyperspectral:BOOL=ON
+OTB_BUILD_Learning:BOOL=ON
+OTB_BUILD_Miscellaneous:BOOL=ON
+OTB_BUILD_SAR:BOOL=ON
+OTB_BUILD_Segmentation:BOOL=ON 
+OTB_BUILD_StereoProcessing:BOOL=ON"
+)
 endif()
 
 set(concat_options
