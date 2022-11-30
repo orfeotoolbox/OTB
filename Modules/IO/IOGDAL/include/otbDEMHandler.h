@@ -24,8 +24,8 @@
 #include "otbImage.h"
 #include <string>
 #include <list>
-#include <set>
 #include <vector>
+#include <memory>
 
 namespace otb
 {
@@ -72,18 +72,18 @@ class DEMHandlerTLS;
  *
  * This class is the single configuration and access point for
  * elevation handling in images projections and localization
- * functions. Since this class is a singleton, there is no New() method. The
- * DEMHandler::GetInstance() method should be used instead.
+ * functions. Since this class is a singleton, there is no `New()` function.
+ * The `DEMHandler::GetInstance()` function should be used instead.
  *
  * Please be aware that a proper instantiation and parameter setting
  * of this class is advised before any call to geometric filters or
  * functionalities.
  *
- * The class allows configuring a directory containing DEM tiles
- * (raster tiles will be opened by GDAL drivers) using the OpenDEMDirectory()
- * method. the OpenGeoidFile() method allows inputting a geoid file as well.
+ * The class allows configuring a directory containing DEM tiles (raster tiles
+ * will be opened by GDAL drivers) using the `OpenDEMDirectory()` function.
+ * The `OpenGeoidFile()` function allows inputting a geoid file as well.
  * Last, a default height above ellipsoid can be set using the
- * SetDefaultHeightAboveEllipsoid() method.
+ * `SetDefaultHeightAboveEllipsoid()` function.
  *
  * The class allows retrieving either height above ellipsoid or
  * height above Mean Sea Level (MSL).
@@ -93,13 +93,13 @@ class DEMHandlerTLS;
  * SRTM means DEMDirectory not set, or no coverage for point, or
  * srtm_value is no_data).
  *
- * GetHeightAboveEllipsoid():
+ * `GetHeightAboveEllipsoid()`:
  * - SRTM and geoid both available: srtm_value + geoid_offset
  * - No SRTM but geoid available: geoid_offset
  * - SRTM available, but no geoid: srtm_value
  * - No SRTM and no geoid available: default height above ellipsoid
  *
- * GetHeightAboveMSL():
+ * `GetHeightAboveMSL()`:
  * - SRTM and geoid both available: srtm_value
  * - No SRTM but geoid available: 0
  * - SRTM available, but no geoid: srtm_value
@@ -136,7 +136,7 @@ public:
    */
   bool OpenGeoidFile(std::string geoidFile);
 
-  /** Return the height above the ellipsoid :
+  /** Return the height above the ellipsoid.
    * - SRTM and geoid both available: srtm_value + geoid_offset
    * - No SRTM but geoid available: geoid_offset
    * - SRTM available, but no geoid: srtm_value
@@ -149,7 +149,7 @@ public:
 
   double GetHeightAboveEllipsoid(const PointType& geoPoint) const;
 
-  /** Return the height above the mean sea level :
+  /** Return the height above the mean sea level.
    * - SRTM and geoid both available: srtm_value
    * - No SRTM but geoid available: 0
    * - SRTM available, but no geoid: srtm_value
@@ -187,7 +187,7 @@ public:
 
   /** Add an element to the current list of observers.
    * The obsever will be updated whenever the DEM configuration is
-   * modified
+   * modified.
    */
   void AttachObserver(DEMObserverInterface *observer) override {m_ObserverList.push_back(observer);};
 
@@ -198,20 +198,40 @@ public:
   void Notify() const override;
 
   /** Path to the in-memory vrt */
-  static constexpr char const* DEM_DATASET_PATH         = "/vsimem/otb_dem_dataset.vrt";
-  static constexpr char const* DEM_WARPED_DATASET_PATH  = "/vsimem/otb_dem_warped_dataset.vrt";
-  static constexpr char const* DEM_SHIFTED_DATASET_PATH = "/vsimem/otb_dem_shifted_dataset.vrt";
+  char const* get_DEM_DATASET_PATH        () const;
+  char const* get_DEM_WARPED_DATASET_PATH () const;
+  char const* get_DEM_SHIFTED_DATASET_PATH() const;
 
 protected:
   DEMHandler();
   ~DEMHandler();
 
-  friend class DEMHandlerTLS;
-  void RegisterTLS(DEMHandlerTLS* tls);
-  void UnregisterTLS(DEMHandlerTLS* tls);
-
 private:
+  /** Internal accessor to the current (thread-wise) DEM handler.
+   * If no handler has been attributed to the current thread, one will be
+   * picked from the `m_tlses` pool, or created on the fly thanks to
+   * `DoFetchOrCreateHandler`.
+   *
+   * This function is just a facade that caches the static thread local
+   * `DEMHandlerTLS` attributed to the current thread.
+   */
   DEMHandlerTLS & GetHandlerForCurrentThread() const;
+
+  /** Internal function to fetch from the pool or create a new
+   * `DEMHandlerTLS.
+   */
+  std::shared_ptr<DEMHandlerTLS> DoFetchOrCreateHandler() const;
+
+  /** (Re)sets GEOID and DEM directory information in the handler.
+   * This function is meant to be called from `DoFetchOrCreateHandler` only:
+   * when a thread needs a new `DEMHandlerTLS` which is created on the fly.
+   * It's not thread safe!
+   *
+   * @warning DO NOT change the GEOID filename or the list of DEM directories
+   * while this function is being executed. These informations should only be
+   * changed from a main thread, not from processing threads!
+   */
+  void RegisterConfigurationInHandler(DEMHandlerTLS & handler) const;
 
   DEMHandler(const Self&) = delete;
   void operator=(const Self&) = delete;
@@ -228,7 +248,8 @@ private:
   /** Observers on the DEM */
   std::list<DEMObserverInterface *> m_ObserverList;
 
-  std::set<DEMHandlerTLS*> m_tlses;
+  /** Pool of actual thread local DEM handlers. */
+  mutable std::vector<std::shared_ptr<DEMHandlerTLS>> m_tlses;
 };
 
 }

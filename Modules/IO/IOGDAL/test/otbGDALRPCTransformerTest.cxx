@@ -165,7 +165,7 @@ int otbGDALRPCTransformerTest(int itkNotUsed(argc), char* argv[])
   zePoint[2] = 0.0;
   exp_x = 125.64828521533849;
   exp_y = 39.869345204440144;
-  transformer.SetOption("RPC_DEM", dem.DEM_DATASET_PATH);
+  transformer.SetOption("RPC_DEM", dem.get_DEM_DATASET_PATH());
   transformer.SetOption("RPC_HEIGHT_SCALE", "2");
 
   std::cout << "Test ForwardTransform with DEM." << '\n';
