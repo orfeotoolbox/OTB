@@ -28,7 +28,7 @@
 #  https://bugs.orfeo-toolbox.org//view.php?id=440)
 #
 def test(otb, argv):
-	app = otb.Registry.CreateApplication("Rescale")
+	app = otb.Registry.CreateApplication("DynamicConvert")
 	app.SetParameterString("in", argv[1])
 	app.SetParameterFloat("outmin", 1)
 	app.SetParameterFloat("outmax", 100)

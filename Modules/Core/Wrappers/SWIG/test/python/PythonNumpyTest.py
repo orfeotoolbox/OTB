@@ -55,7 +55,7 @@ def test(otbApplication, argv):
 	#write RGB image to file via python
 	#misc.imsave('ExtractROIOut.jpg', ExtractROIOut)
 
-	Rescale = otbApplication.Registry.CreateApplication("Rescale")
+	Rescale = otbApplication.Registry.CreateApplication("DynamicConvert")
 	#take numpy array from ExtractROI and feed into Rescale
 	Rescale.SetVectorImageFromNumpyArray("in", ExtractROIOut)
 	Rescale.SetParameterFloat("outmin", 50, True)
