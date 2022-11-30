@@ -80,7 +80,7 @@ otb_add_test(NAME bfTvFunctionToImageFilterTest COMMAND otbImageBaseTestDriver
   ${BASELINE}/bfTvFunctionToImageFilterTest.tif
   ${TEMP}/bfTvFunctionToImageFilterTest.tif
   otbFunctionToImageFilter
-  ${INPUTDATA}/poupees_1canal.hd
+  ${INPUTDATA}/poupees.tif
   ${TEMP}/bfTvFunctionToImageFilterTest.tif
   2 # radius
   )

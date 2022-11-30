@@ -201,7 +201,7 @@ otb_add_test(NAME bfTvStreamingCompareImageFilter COMMAND otbStatisticsTestDrive
   ${BASELINE_FILES}/bfStreamingCompareImageFilterResults.txt
   ${TEMP}/bfStreamingCompareImageFilterResults.txt
   otbStreamingCompareImageFilter
-  ${INPUTDATA}/small_poupees_1canal.hd
+  ${INPUTDATA}/poupees.tif
   ${TEMP}/bfStreamingCompareImageFilterResults.txt)
 
 
@@ -233,7 +233,7 @@ otb_add_test(NAME bfTvStreamingStatisticsImageFilter COMMAND otbStatisticsTestDr
   ${BASELINE_FILES}/bfStreamingStatisticsImageFilterResults.txt
   ${TEMP}/bfStreamingStatisticsImageFilterResults.txt
   otbStreamingStatisticsImageFilter
-  ${INPUTDATA}/small_poupees_1canal.hd
+  ${INPUTDATA}/poupees.tif
   ${TEMP}/bfStreamingStatisticsImageFilterResults.txt)
 
 foreach(inputFileType "UINT8" "UINT16" "INT16" "UINT32" "INT32" "FLOAT" "DOUBLE")

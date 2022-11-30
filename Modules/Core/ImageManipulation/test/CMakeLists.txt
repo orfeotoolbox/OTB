@@ -108,7 +108,7 @@ otb_add_test(NAME bfTvFunctionWithNeighborhoodToImageFilter COMMAND otbImageMani
   ${BASELINE}/bfTvFunctionWithNeighborhoodToImageFilterTest.tif
   ${TEMP}/bfTvFunctionWithNeighborhoodToImageFilterTest.tif
   otbFunctionWithNeighborhoodToImageFilter
-  ${INPUTDATA}/poupees_1canal.hd
+  ${INPUTDATA}/poupees.tif
   ${TEMP}/bfTvFunctionWithNeighborhoodToImageFilterTest.tif
   2 # radius
   )
