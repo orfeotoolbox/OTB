@@ -197,7 +197,7 @@ otb_add_test(NAME bfTvInnerProductPCAImageFilterDisableCenterData COMMAND otbDim
   ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData_pc2.tif
   ${TEMP}/bfInnerProductPCAImageFilterDisableCenterData_pc3.tif
   )
-
+  
 otb_add_test(NAME bfTvInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfInnerProductPCAImageFilterAllsOutputs.tif
@@ -214,6 +214,27 @@ otb_add_test(NAME bfTvInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstima
   ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc3.tif
   ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_MEAN.tif
   )
+
+otb_add_test(NAME bfTvItkImagePCAShapeModelEstimatorTest COMMAND otbImageBaseTestDriver
+  --compare-n-images ${EPSILON_7} 4
+  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors1.tif
+  ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc1.tif
+  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors2.tif
+  ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc2.tif
+  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors3.tif
+  ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc3.tif
+  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_mean.tif
+  ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_MEAN.tif
+  otbImagePCAShapeModelEstimatorTest
+  ${INPUTDATA}/poupees_sub_c1.png
+  ${INPUTDATA}/poupees_sub_c2.png
+  ${INPUTDATA}/poupees_sub_c3.png
+  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_mean.tif
+  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors1.tif
+  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors2.tif
+  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors3.tif
+  )
+set_property(TEST bfTvItkImagePCAShapeModelEstimatorTest PROPERTY DEPENDS bfTvInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator)
 
 otb_add_test(NAME bfTvInnerProductPCAImageFilterAllsOutputs COMMAND otbDimensionalityReductionTestDriver
   --compare-image ${EPSILON_7}

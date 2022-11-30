@@ -143,11 +143,6 @@ otb_add_test(NAME bfTvStreamingShrinkImageFilterQBMUL COMMAND otbImageManipulati
   20
   )
 
-
-
-
-
-
 otb_add_test(NAME bfTvUnaryImageFunctorWithVectorImageFilter COMMAND otbImageManipulationTestDriver
   --compare-image ${NOTOL}
   ${BASELINE}/bfTvUnaryImageFunctorWithVectorImageFilter.tif

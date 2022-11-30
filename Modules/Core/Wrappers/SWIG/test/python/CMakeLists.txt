@@ -135,6 +135,15 @@ add_test( NAME pyTvBug2262
   ${OTB_DATA_ROOT}/Input/Capitole_Rasterization.tif
   ${TEMP}/pyTvBug2262Output.txt
   )
+
+add_test( NAME pyTvBug1899
+  COMMAND ${TEST_DRIVER}
+  Execute
+  ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
+  Bug1899
+  ${OTB_DATA_ROOT}/Input/veryverySmallFSATSW.tif
+  ${TEMP}/pyTvBug1899Output.tif
+  )
 endif()
 
 if(OTBGroup_Hyperspectral)
@@ -182,15 +191,6 @@ add_test( NAME pyTvBug1498
   Bug823
   ${OTB_DATA_ROOT}/Input/poupees.tif
   ${TEMP}/Bu1498-output.tif)
-  
-add_test( NAME pyTvBug1899
-  COMMAND ${TEST_DRIVER}
-  Execute
-  ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
-  Bug1899
-  ${OTB_DATA_ROOT}/Input/veryverySmallFSATSW.tif
-  ${TEMP}/pyTvBug1899Output.tif
-  )
 
 add_test( NAME pyTuImageMetadata
   COMMAND ${TEST_DRIVER} Execute
