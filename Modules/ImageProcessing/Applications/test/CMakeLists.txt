@@ -384,7 +384,7 @@ otbBandMathXAppTests.cxx
 )
 
 add_executable(OTBBandMathXAppTest ${OTBBandMathXAppTest})
-target_link_libraries(OTBBandMathXAppTest ${OTBAppMathParserX-Test_LIBRARIES})
+target_link_libraries(OTBBandMathXAppTest ${OTBAppImageProcessing-Test_LIBRARIES})
 otb_module_target_label(OTBBandMathXAppTest)
 
 otb_add_test(NAME apTvUtBandMathX COMMAND OTBBandMathXAppTest
