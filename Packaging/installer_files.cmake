@@ -47,9 +47,6 @@ macro(installer_files)
       ${CMAKE_CURRENT_BINARY_DIR}/pkgsetup @ONLY
       )
 
-    #install icon file for .app file. Monteverdi and Mapla has same icon!
-    install(FILES
-      Files/Monteverdi.icns DESTINATION ${PKG_STAGE_DIR})
   endif()
 
   #start installing script and other stuff related to package
@@ -63,26 +60,7 @@ macro(installer_files)
       )
   endif()
 
-  # We also need wrapper script to start mapla & monteverdi
-  #if(NOT HAVE_MVD)
-  #  message(FATAL_ERROR "not have mvd")
-  #endif()
-  if(HAVE_MVD)
-    install(PROGRAMS
-      Files/mapla${SCRIPT_EXT}
-      Files/monteverdi${SCRIPT_EXT}
-      DESTINATION ${PKG_STAGE_DIR}
-      )
-
-    #for mac osx, we have a template.app which is
-    # later processed in pkgsetup (macx_pkgsetup.in)
-    if(APPLE)
-      install(DIRECTORY Files/template.app
-	DESTINATION "${PKG_STAGE_DIR}")
-    endif()
-  endif() #HAVE_MVD
-
-  #my_file_ext is required for otbcli and otbgui files which has
+  #my_file_ext is required for otbcli files which has
   # no extension on linux. (hence we cannot use SCRIPT_EXT
 
   #For windows otbenv.bash and otbenv.bat is required.
@@ -102,7 +80,6 @@ macro(installer_files)
   #could this be move them to somewhere else?
   install(PROGRAMS
     "${SUPERBUILD_INSTALL_DIR}/bin/otbcli${my_file_ext}"
-    "${SUPERBUILD_INSTALL_DIR}/bin/otbgui${my_file_ext}"
     DESTINATION ${PKG_STAGE_DIR}/bin)
 
   install(PROGRAMS

@@ -62,16 +62,8 @@ echo "Installing uninstall script for OTB 'tools/uninstall_otb.sh'"
 sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/tools/uninstall_otb.sh"
 chmod +x "$OUT_DIR/tools/uninstall_otb.sh"
 
-sed -i -E  "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/monteverdi.sh"
-chmod +x "$OUT_DIR/monteverdi.sh"
-
-sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/mapla.sh"
-chmod +x "$OUT_DIR/mapla.sh"
-
 sed -i -E "s,OUT_DIR,$OUT_DIR,g" "$OUT_DIR/otbenv.profile"
 chmod +x "$OUT_DIR/otbenv.profile"
-
-sed -i  -E "s,Prefix=..,Prefix=$OUT_DIR,g" "$OUT_DIR/bin/qt.conf"
 
 #echo "Creating symbolic links..."
 . ./make_symlinks
@@ -89,4 +81,3 @@ printf %s\\n "More documentation can be found in $OUT_DIR/README"
 rm -f  "$OUT_DIR/patchelf"
 rm -f  "$OUT_DIR/setup_python.sh"
 rm -f  "$OUT_DIR/pkgsetup"
-

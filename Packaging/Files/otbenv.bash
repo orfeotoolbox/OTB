@@ -35,8 +35,7 @@ cat_path()
 }
 
 # The below environment variables only affect current shell
-# So if you run again from a terminal. you need to run the script again
-# see how this is sourced in monteverdi.sh and mapla.sh
+# So if you run again from a terminal, you need to run the script again
 
 CURRENT_DIR=$(cd -P -- "$(dirname -- "$BASH_SOURCE")" && printf '%s\n' "$(pwd -P)")
 

@@ -9,18 +9,13 @@ Notes:
 - You must have "Visual C++ Redistributable for Visual Studio 2019" installed for using this package.
   It can be downloaded freely from `microsoft <https://aka.ms/vs/16/release/vc_redist.x64.exe>`_
 
-Extract the archive and use one of the launchers, they contain all applications
-and their launchers (both command line and graphical launchers are provided):
-
--  ``monteverdi.bat``: A launcher script for Monteverdi
-
--  ``mapla.bat``: A launcher script for Mapla
+Extract the archive and use the launcher, it contains all applications
+and their launchers:
 
 -  ``otbenv.bat``: A script to initialize the environment for OTB
    executables
 
--  ``bin``: A folder containing application launchers (otbcli.bat,
-   otbgui.bat) and the DLLs.
+-  ``bin``: A folder containing application launchers (otbcli.bat) and the DLLs.
 
 -  ``lib``: A folder containing application DLLs.
 
@@ -30,9 +25,8 @@ and their launchers (both command line and graphical launchers are provided):
 -  ``tool``: A folder containing useful scripts to test the installation or
    to uninstall OTB libraries and headers while keeping all the dependencies.
 
-The applications can be launched from the Mapla launcher. If you want to
-use the otbcli and otbgui launchers, you can initialize a command prompt
-with ``otbenv.bat``.
+If you want to use the otbcli launcher, you can initialize a command
+prompt with ``otbenv.bat``.
 
 The package can be used to compile other projects using OTB (binaries, libraries
 and headers are included). If you want to build OTB from source using this
@@ -51,7 +45,7 @@ Python bindings
 
 Since OTB 6.7.0 OTB bindings for Python 3.5 are distributed as a binary
 package.
-Since OTB 8.0.0, the bindings for Python 3.7 are distributed
+Since OTB 8.0.0, the bindings for Python 3.7 are distributed.
 Please note that using a different Python version may not be compatible with
 OTB wrappings. If the installation completes
 without issue, information relating to your Python bindings will be provided.

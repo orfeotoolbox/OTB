@@ -18,10 +18,15 @@
 # limitations under the License.
 #
 
-# Configuration options for macOS
+# Configuration options for ubuntu-20.04-llvm-nodoc
 
 set(site_option
-"CMAKE_C_COMPILER_LAUNCHER:STRING=ccache
+"opencv_INCLUDE_DIR:PATH=/usr/include/opencv4
+CMAKE_C_COMPILER:STRING=clang
+CMAKE_CXX_COMPILER:STRING=clang++
+CMAKE_EXE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_MODULE_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_SHARED_LINKER_FLAGS:STRING=-fuse-ld=lld
+CMAKE_C_COMPILER_LAUNCHER:STRING=ccache
 CMAKE_CXX_COMPILER_LAUNCHER:STRING=ccache
-OTB_DATA_USE_LARGEINPUT:BOOL=ON") 
-# Large input path are in an environment variable on macOS
+OTB_USE_SHARK:BOOL=OFF")

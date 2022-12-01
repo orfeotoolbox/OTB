@@ -59,7 +59,7 @@ REM Check 1 : check binaries
 for /R %%i in (*.dll) do (
   call :check_binary %%i
 )
-for %%i in (bin\mapla.exe,bin\monteverdi.exe,bin\otbApplicationLauncherCommandLine.exe,bin\otbApplicationLauncherQt.exe) do (
+for %%i in (bin\otbApplicationLauncherCommandLine.exe) do (
   call :check_binary %%i
 )
 call :check_binary lib\python\_otbApplication.pyd
@@ -75,10 +75,6 @@ if %app_count% leq 90 (
 )
 call :check_python_wrapping
 
-:: -----------------------------------------------------------------------------------
-rem Check 3 : check monteverdi & mapla
-call :check_desktop_app monteverdi
-call :check_desktop_app mapla 20
 
 if /i not -%1-==-/q- (
   goto :skip_restore_error
@@ -114,7 +110,7 @@ if %TEST_VERBOSE% equ 1 ( echo ":check_application %app%" )
 if not exist bin\otbcli_%app%.bat (
   echo ERROR : missing cli launcher for application %app%
   if %EXIT_ON_ERROR% equ 1 ( exit 1 )
-  goto :check_gui
+  goto :check_application_end
 )
 type NUL > tmp.log
 cmd /C bin\otbcli_%app%.bat "-help" ^> tmp.log ^2^>^&^1
@@ -123,37 +119,6 @@ if %parse_cli_result% equ 0 (
   echo ERROR : error launching application otbcli_%app%
   type results.txt 
   if %EXIT_ON_ERROR% equ 1 ( exit 1 )
-  )
-
-:check_gui
-if not exist bin\otbgui_%app%.bat (
-  echo ERROR : missing gui launcher for application %app%
-  if %EXIT_ON_ERROR% equ 1 ( exit 1 )
-  goto :check_application_end
-)
-if %app_count% geq 2 goto :check_application_end
-type NUL > tmp.log
-start "otbgui application" /b bin\otbgui_%app%.bat ^> tmp.log ^2^>^&^1
-timeout 5 >nul
-call :get_child_pid %CURRENT_PID% cmd.exe
-set first_child=0
-if %child_pid% gtr 1 (
-  set first_child=%child_pid%
-) else (
-  echo ERROR : could not launch otbgui_%app%
-  type tmp.log 
-  goto :check_application_clean
-)
-call :get_child_pid %first_child% otbApplicationLauncherQt.exe
-if not %child_pid% gtr 1 (
-  echo ERROR : could not launch otbApplicationLauncherQt %app%
-  type tmp.log
-  if %EXIT_ON_ERROR% equ 1 ( exit 1 )
-)
-  
-:check_application_clean
-if not %first_child% == 0 (
-  taskkill /PID %first_child% /F /T > NUL 2>&1
 )
   
 :check_application_end

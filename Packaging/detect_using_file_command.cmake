@@ -35,11 +35,6 @@ function(detect_using_file_command input_file result_type result_dir)
   string(REPLACE "${input_file}" " _file_full_ " file_ov "${file_ov}")
   string(TOLOWER "${file_ov}" file_ov_lower)
 
-  # message( "input_file: '${input_file}'" )
-  # message( "input_file_NAME: '${input_file_NAME}'" )
-  # message( "file_ov: '${file_ov}'" )
-  # message( "file_ov_lower: '${file_ov_lower}'" )
-
   set(detected_type)
   set(detected_dir)
   # below executable check works for both mac osx and linux

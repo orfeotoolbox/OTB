@@ -55,7 +55,6 @@ set(WINDOWS_SYSTEM_DLLS
   dwrite.dll
   dxgi.dll
   gdi32.dll
-  glu32.dll
   imm32.dll
   iphlpapi.dll
   kernel32.dll
@@ -65,7 +64,6 @@ set(WINDOWS_SYSTEM_DLLS
   odbc32.dll
   ole32.dll
   oleaut32.dll
-  opengl32.dll
   psapi.dll
   python...dll
   rpcrt4.dll
@@ -96,33 +94,12 @@ set(LINUX_SYSTEM_DLLS
   libgomp.so*
   ld-linux-x86-64.so*
   libgssapi_krb5.so*
-  libX11.so*
-  libXi.so*  #GLUT
-  libXcursor.so* #GLFW
-  libXinerama.so*  #GLFW
-  libXext.so*
-  libXau.so*
-  libXdmcp.so*
-  libXxf86vm.so*
   libdrm.so.2
-  libGL.so*
-  libGLX.so*
-  libOpenGL.so*
-  libGLU.so*
-  libXrender.so*
   libSM.so*
-  libICE.so*
-  libXrandr.so*
   libpython*
-  libxcb.so*
-  libxcb-glx.so*
-  libX11-xcb.so*
   libmysqlclient.so*
   libodbc.so*
   libpq.so*
-  libEGL.so*
-  libxkbcommon*
-  libxcb-*
   )
   # libexpat.so.*
   # libfontconfig.so*
@@ -130,29 +107,17 @@ set(LINUX_SYSTEM_DLLS
   # libwebp.so*
   # )
 
-# libgcc_s.*dylib and other *.framework are dragged by QT
 set(APPLE_SYSTEM_DLLS
   libSystem.*dylib
   libiconv.*dylib
   libc\\+\\+.*dylib
   libstdc.*dylib
   libobjc.*dylib
-  ApplicationServices.framework
-  CoreFoundation.framework
-  CoreServices.framework
-  Security.framework
-  Carbon.framework
-  AppKit.framework
-  Foundation.framework
-  Python.framework
-  AGL.framework
-  OpenGL.framework
-  libgcc_s.*dylib
   libcups.*dylib
   libomp.dylib
   libqcocoa.dylib
   )
-
+  
 if(WIN32)
   set(SYSTEM_DLLS "${WINDOWS_SYSTEM_DLLS}")
 else() #case for unixes
@@ -171,28 +136,3 @@ set(PKG_GTK_SEARCHDIRS
   /lib/x86_64-linux-gnu/
   /usr/lib/x86_64-linux-gnu/
   )
-
-#superbuild cannot manage build of gtk2+ just for qt gtkstyle.
-# -gtkstyle option is deactivated by default in build of QT4
-# So the list of requirements on building OTB with superbuild stays same.
-#For our user base, we need monteverdi with a nice look and feel
-# rather than simply X11 based windows. Hence we need -gtkstyle
-# This forces us to have system gtk+ installed on the system.
-# OTB package manager 'this script' will pick them up and put
-# into the binary package. Below cmake variable controls the list of
-#libraries coming from /usr/lib a.k.a system.
-
-set(GTK_LIB_LIST_1
-  libgthread-2.0.so.0
-  libglib-2.0.so.0
-  libgobject-2.0.so.0
-  libXrender.so.1
-  libpcre.so.3
-  libffi.so.6
-  )
-# set(GTK_LIB_LIST_2
-#   libz.so.1
-#   libpng12.so.0
-#   )
-
-set(ALLOWED_SYSTEM_DLLS ${GTK_LIB_LIST_1}) # ${GTK_LIB_LIST_2})

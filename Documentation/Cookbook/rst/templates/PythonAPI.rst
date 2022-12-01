@@ -17,13 +17,13 @@ becomes available from Python.
 On Windows, you can install the ``otb-python`` package, and the module
 will be automatically available from an OSGeo4W shell.
 
-As for the command line and GUI launchers, the path to the application
-modules needs to be properly set with the ``OTB_APPLICATION_PATH``
-environment variable. The standard location on Unix systems is
+As for the command line, the path to the application modules needs to
+be properly set with the ``OTB_APPLICATION_PATH`` environment
+variable. The standard location on Unix systems is
 ``/usr/lib/otb/applications``. On Windows, the applications are
 available in the ``otb-bin`` OSGeo4W package, and the environment is
-configured automatically so ``OTB_APPLICATION_PATH`` doesn't need to be modified
-``OTB_APPLICATION_PATH``.
+configured automatically so ``OTB_APPLICATION_PATH`` doesn't need to
+be modified ``OTB_APPLICATION_PATH``.
 
 Once your environment is set, you can use OTB applications from Python, just
 like this small example:
