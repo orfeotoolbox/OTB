@@ -152,7 +152,7 @@ if(OTB_USE_OPENCV)
     -classifier.rf.max 6
     -classifier.rf.acc 0.0005
     TESTENVOPTIONS ${TEMP}/apTvClTrainRegressionTest_monovar.txt
-    VALID    ${ascii_comparison}
+    VALID  --compare-ascii ${EPSILON_6}
     ${OTBAPP_BASELINE_FILES}/apTvClTrainRegressionTest_monovar.txt
     ${TEMP}/apTvClTrainRegressionTest_monovar.txt)
 
@@ -217,7 +217,7 @@ if(OTB_USE_OPENCV)
     -classifier rf
     -io.confmatout ${TEMP}/apTvClTrainVectorClassifierConfMat.txt
     -io.out ${TEMP}/apTvClTrainVectorClassifierModel.rf
-    VALID   ${ascii_comparison}
+    VALID  --compare-ascii ${EPSILON_6}
     ${OTBAPP_BASELINE_FILES}/apTvClTrainVectorClassifierModel.rf
     ${TEMP}/apTvClTrainVectorClassifierModel.rf)
 endif()
@@ -233,7 +233,7 @@ if(OTB_USE_OPENCV)
     -io.out ${TEMP}/apTvClTrainVectorRegressionModel.rf
     -io.mse ${TEMP}/apTvClTrainVectorRegressionModel.txt
     TESTENVOPTIONS ${TEMP}/apTvClTrainVectorRegressionModel.txt
-    VALID   ${ascii_comparison}
+    VALID   --compare-ascii ${EPSILON_6}
     ${OTBAPP_BASELINE_FILES}/apTvClTrainVectorRegressionModel.txt
     ${TEMP}/apTvClTrainVectorRegressionModel.txt)
 endif()
@@ -252,7 +252,7 @@ if(OTB_USE_OPENCV)
     -io.out ${TEMP}/apTvClTrainImagesRegressionModel.rf
     -io.mse ${TEMP}/apTvClTrainImagesRegressionModel.txt
     TESTENVOPTIONS ${TEMP}/apTvClTrainImagesRegressionModel.txt
-    VALID   ${ascii_comparison}
+    VALID   --compare-ascii ${EPSILON_6}
     ${OTBAPP_BASELINE_FILES}/apTvClTrainImagesRegressionModel.txt
     ${TEMP}/apTvClTrainImagesRegressionModel.txt)
 endif()
@@ -269,7 +269,7 @@ if(OTB_USE_OPENCV)
     -io.out ${TEMP}/apTvClTrainImagesRegressionNoVD.rf
     -io.mse ${TEMP}/apTvClTrainImagesRegressionNoVD.txt
     TESTENVOPTIONS ${TEMP}/apTvClTrainImagesRegressionNoVD.txt
-    VALID   ${ascii_comparison}
+    VALID   --compare-ascii ${EPSILON_6}
     ${OTBAPP_BASELINE_FILES}/apTvClTrainImagesRegressionNoVD.txt
     ${TEMP}/apTvClTrainImagesRegressionNoVD.txt)
 endif()
