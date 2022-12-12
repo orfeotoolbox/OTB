@@ -21,7 +21,13 @@
 #ifndef otbDEMHandler_h
 #define otbDEMHandler_h
 
+/// Define to say: open the DEMs only once
+#define OPEN_DEM_ONCE
+
 #include "otbImage.h"
+#if defined(OPEN_DEM_ONCE)
+#  include "otbGDALDatasetWrapper.h"
+#endif
 #include <string>
 #include <list>
 #include <set>
@@ -221,6 +227,11 @@ private:
 
   /** List of the DEM directories currently opened */
   std::vector<std::string> m_DEMDirectories;
+
+#if defined(OPEN_DEM_ONCE)
+  /** List of RAII capsules on all opened DEM datasets for memory management */
+  std::vector<otb::GDALDatasetWrapper::Pointer> m_DatasetList;
+#endif
 
   /** Filename of the current geoid */
   std::string m_GeoidFilename;

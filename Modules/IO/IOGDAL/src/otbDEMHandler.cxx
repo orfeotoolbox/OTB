@@ -40,6 +40,16 @@
 namespace
 { // Anonymous namespace
 std::mutex demMutex;
+
+#if defined(OPEN_DEM_ONCE)
+static constexpr char const* DEM_DATASET_PATH         = "/vsimem/otb_dem_dataset.vrt";
+static constexpr char const* DEM_WARPED_DATASET_PATH  = "/vsimem/otb_dem_warped_dataset.vrt";
+static constexpr char const* DEM_SHIFTED_DATASET_PATH = "/vsimem/otb_dem_shifted_dataset.vrt";
+#else
+static constexpr char const* DEM_DATASET_PATH         = "/vsimem/otb_dem_dataset_";
+static constexpr char const* DEM_WARPED_DATASET_PATH  = "/vsimem/otb_dem_warped_dataset_";
+static constexpr char const* DEM_SHIFTED_DATASET_PATH = "/vsimem/otb_dem_shifted_dataset_";
+#endif
 } // Anonymous namespace
 
 namespace otb {
@@ -95,6 +105,14 @@ struct DatasetCache
   DatasetCache() = default;
   ~DatasetCache() = default;
 
+  explicit DatasetCache(GDALDataset *ds)
+  { reset(ds); }
+
+  void release()
+  {
+    m_Dataset.release();
+    m_poCT.release();
+  }
   void reset(GDALDataset* ds)
   {
     m_Dataset.reset(ds);
@@ -130,7 +148,7 @@ struct DatasetCache
     }
     else
     {
-      m_poCT.reset(nullptr);
+      m_poCT.release();
     }
   }
 
@@ -231,7 +249,14 @@ boost::optional<double> GetDEMValueSynchronized(double lon, double lat, GDALData
 }
 #endif
 
+bool HasGeoTransform(GDALDataset & gdalds)
+{
+  std::array<double, 6> a;
+  return gdalds.GetGeoTransform(a.data()) == CE_None;
+}
+
 }  // namespace DEMDetails
+
 
 /** Internal actual instance of DEM handling wrapper for current thread.
  * \ingroup OTBIOGDAL
@@ -259,11 +284,44 @@ public:
   boost::optional<double> GetHeightAboveMSL(double lon, double lat) const;
   boost::optional<double> GetGeoidHeight(double lon, double lat) const;
 
-  // TODO: simplify: no back-registration, but instead the DEMHAndler
-  // passes all the relevant construction parameters
-  DEMHandlerTLS() { Register(); }
-  ~DEMHandlerTLS() { Unregister(); }
+  DEMHandlerTLS() {
+    // std::cout << std::this_thread::get_id() << " § DEMHandlerTLS::Create(" << this << ")\n";
+#if defined(OPEN_DEM_ONCE)
+    m_DEM_DATASET_PATH         = ::DEM_DATASET_PATH;
+    m_DEM_WARPED_DATASET_PATH  = ::DEM_WARPED_DATASET_PATH;
+    m_DEM_SHIFTED_DATASET_PATH = ::DEM_SHIFTED_DATASET_PATH;
+#else
+    std::ostringstream oss;
+    oss << ::DEM_DATASET_PATH << std::this_thread::get_id() << ".vrt";
+    m_DEM_DATASET_PATH = oss.str();
 
+    oss.str("");
+    oss << ::DEM_WARPED_DATASET_PATH << std::this_thread::get_id() << ".vrt";
+    m_DEM_WARPED_DATASET_PATH = oss.str();
+
+    oss.str("");
+    oss << ::DEM_SHIFTED_DATASET_PATH << std::this_thread::get_id() << ".vrt";
+    m_DEM_SHIFTED_DATASET_PATH = oss.str();
+#endif
+
+    // std::cout << "m_DEM_DATASET_PATH        : " << m_DEM_DATASET_PATH << "\n";
+    // std::cout << "m_DEM_WARPED_DATASET_PATH : " << m_DEM_WARPED_DATASET_PATH << "\n";
+    // std::cout << "m_DEM_SHIFTED_DATASET_PATH: " << m_DEM_SHIFTED_DATASET_PATH << "\n";
+  }
+  ~DEMHandlerTLS() {
+    // std::cout << std::this_thread::get_id() << " § DEMHandlerTLS::Destroy(" << this << ")\n";
+#if ! defined(OPEN_DEM_ONCE)
+    VSIUnlink(m_DEM_DATASET_PATH.c_str());
+    VSIUnlink(m_DEM_WARPED_DATASET_PATH.c_str());
+    VSIUnlink(m_DEM_SHIFTED_DATASET_PATH.c_str());
+#endif
+  }
+
+#if defined(OPEN_DEM_ONCE)
+  void CloseDEMVRTFile();
+  bool OpenDEMVRTFile();
+
+#else
   /** Try to open the DEM directory.
    * \param path input path
    */
@@ -274,33 +332,40 @@ public:
    */
   bool OpenDEMDirectory(const std::string& DEMDirectory);
 
+  /** Return the number of DEM opened */
+  unsigned int GetDEMCount() const;
+#endif
+
   /** Try to open a geoid file
    * \param geoidFile input geoid path
    */
   bool OpenGeoidFile(std::string const& geoidFile);
 
-  /** Return the number of DEM opened */
-  unsigned int GetDEMCount() const;
 
   /** Clear the DEM list and geoid filename, close all elevation datasets
    * and reset the default height above ellipsoid */
   void ClearElevationParameters();
 
+#if defined(OPEN_DEM_ONCE)
+  void CreateShiftedDatasetOnce();
+#endif
 private:
   DEMHandlerTLS(DEMHandlerTLS const&) = delete;
   void operator=(DEMHandlerTLS const&) = delete;
 
   using DatasetUPtr = std::unique_ptr<GDALDataset, void(*)(GDALDataset*)>;
 
-  void Register();
-  void Unregister();
+#if ! defined(OPEN_DEM_ONCE)
   void CreateShiftedDataset();
+#endif
 
+#if ! defined(OPEN_DEM_ONCE)
   /** Clear the DEM list and close all DEM datasets */
   void ClearDEMs();
 
   /** List of RAII capsules on all opened DEM datasets for memory management */
   std::vector<otb::GDALDatasetWrapper::Pointer> m_DatasetList;
+#endif
 
   /** Pointer to the DEM dataset */
   DEMDetails::DatasetCache m_DEMDS;
@@ -313,18 +378,65 @@ private:
 
 DEMHandlerTLS & DEMHandler::GetHandlerForCurrentThread() const
 {
-#if 0
-  // std::cout << "DEMHandler::GetHandlerForCurrentThread("<<std::this_thread::get_id() << "); tls: "<< m_tls.get() << "\n";
-  if (!m_tls) {
-    // TODO: find a way to pre-contruct every thing
-    m_tls = std::make_unique<DEMHandlerTLS>(); // no need to lock as this is a TLS
-    // std::cout << "DEMHandler::GetHandlerForCurrentThread("<<std::this_thread::get_id() << "); tls built "<< m_tls.get() << "\n";
-  }
-  return *m_tls;
-#else
-  static thread_local auto tls = std::make_unique<DEMHandlerTLS>(); // no need to lock as this is a static TLS
+  static thread_local auto tls = DoFetchOrCreateHandler(); // no need to lock as this is a static TLS
   return *tls;
+}
+
+std::shared_ptr<DEMHandlerTLS> DEMHandler::DoFetchOrCreateHandler() const
+{
+  // DEMHandlerTLS instances are shared between the global DEMHandler
+  // singleton and the (unique) thread they are associated to.
+  // When a thread terminates, its TLS are destroyed. And as such the
+  // shared_ptr DEMHandlerTLS are destroyed, which decrements the owning count
+  // by 1.
+  // When the DEMHandler singleton is destroyed, each DEMHandlerTLS shared_ptr
+  // is destroyed, and the count is decreased by 1.
+  // When the count reached 0, the DEMHandlerTLS is actually destroyed.
+  // Infortunately we cannot be sure TLS variables are destroyed before the
+  // DEMHandler singleton. Hence the convoluted approach.
+
+  // Which the chosen (shared_ptr based) approach, when the owning count is 1,
+  // this means only the DEMHandler singleton owns the TLS handler. And as
+  // such, it could be attributed to another thread.
+  auto handler_is_not_attributed_to_a_thread = [](auto const& h) { return h.use_count() == 1; };
+
+  std::unique_lock<std::mutex> lock(demMutex); // protecting m_tlses
+  for (auto & tls : m_tlses) {
+    if (handler_is_not_attributed_to_a_thread(tls)) {
+      return tls;
+    }
+  }
+  m_tlses.emplace_back(std::make_unique<DEMHandlerTLS>());
+  auto res = m_tlses.back();
+  lock.unlock(); // No need to keep the lock any more thanks to the copy
+  RegisterConfigurationInHandler(*res);
+  return res;
+}
+
+void DEMHandler::RegisterConfigurationInHandler(DEMHandlerTLS & tls) const {
+  // std::cout << std::this_thread::get_id() << " § DEMHandler::RegisterConfigurationInHandler(" << &tls << ")\n";
+#if defined(OPEN_DEM_ONCE)
+  if (! m_DatasetList.empty()) {
+    if (! tls.OpenDEMVRTFile())
+    {
+      otbLogMacro(Warning, << "An unexpected situation has occured: trying to open a VRT created from incompatible DEM files");
+      assert(false);
+      // The following should not be necessary. In the impossible case
+      // the VRT file could not be opened, we just clear everything.
+      const_cast<DEMHandler*>(this)->m_DatasetList.clear();
+      const_cast<DEMHandler*>(this)->m_DEMDirectories.clear();
+    }
+  }
 #endif
+  if (!m_GeoidFilename.empty()) {
+    tls.OpenGeoidFile(m_GeoidFilename);
+  }
+#if ! defined(OPEN_DEM_ONCE)
+  for (auto const& dir : m_DEMDirectories) {
+    tls.OpenDEMDirectory(dir);
+  }
+#endif
+  // std::cout << std::this_thread::get_id() << " § DEMHandler::RegisterConfigurationInHandler(" << &tls << ") END\n";
 }
 
 // Meyer singleton design pattern
@@ -347,11 +459,40 @@ DEMHandler::~DEMHandler()
   // Close all elevation datasets
   ClearElevationParameters();
 
-  VSIUnlink(DEMHandler::DEM_DATASET_PATH);
-  VSIUnlink(DEMHandler::DEM_WARPED_DATASET_PATH);
-  VSIUnlink(DEMHandler::DEM_SHIFTED_DATASET_PATH);
+#if defined(OPEN_DEM_ONCE)
+  VSIUnlink(::DEM_DATASET_PATH);
+  VSIUnlink(::DEM_WARPED_DATASET_PATH);
+  VSIUnlink(::DEM_SHIFTED_DATASET_PATH);
+#endif
+
+  {
+    const std::lock_guard<std::mutex> lock(demMutex);
+    m_tlses.clear();
+  }
+  // std::cout << std::this_thread::get_id() << " § DEMHandler::destructor() --> " << this << "  END!!!" << std::endl;
 }
 
+#if defined(OPEN_DEM_ONCE)
+void DEMHandlerTLS::CloseDEMVRTFile()
+{
+  m_DEMDS.release();
+}
+
+bool DEMHandlerTLS::OpenDEMVRTFile()
+{
+  // std::cout << std::this_thread::get_id() << " § DEMHandler::OpenDEMVRTFile() --> " << this << std::endl;
+  // As we are reopening the same file: we should close it first!
+  assert(! m_DEMDS);
+  // std::cout << std::this_thread::get_id() << " § Open " << ::DEM_DATASET_PATH << "\n";
+  m_DEMDS.reset(static_cast<GDALDataset*>(GDALOpen(::DEM_DATASET_PATH, GA_ReadOnly)));
+  // std::cout << "DEM DS @ = " << m_DEMDS.get() << std::endl;
+  if (m_DEMDS && m_GeoidDS) {
+    // CreateShiftedDatasetOnce();
+  }
+  // std::cout << std::this_thread::get_id() << " § DEMHandler::OpenDEMVRTFile() --> " << this << "  END!!!" << std::endl;
+  return !! m_DEMDS;
+}
+#else
 void DEMHandlerTLS::OpenDEMFile(std::string const& path)
 {
   // std::cout << "DEMHandlerTLS::OpenDEMFile(" << path << ")\n";
@@ -368,15 +509,40 @@ void DEMHandlerTLS::OpenDEMFile(std::string const& path)
     CreateShiftedDataset();
   }
 }
+#endif
 
 void DEMHandler::OpenDEMFile(std::string path)
 {
-  // std::cout << "DEMHandler::OpenDEMFile(" << path << ")\n";
-  const std::lock_guard<std::mutex> lock(demMutex);
+  // std::cout << std::this_thread::get_id() << " § DEMHandler::OpenDEMFile(" << path << ")\n";
+  std::unique_lock<std::mutex> lock(demMutex); // protecting m_tlses
+#if defined(OPEN_DEM_ONCE)
+  m_DatasetList.push_back(otb::GDALDriverManagerWrapper::GetInstance().Open(path));
+  for (auto tls : m_tlses) {
+    tls->CloseDEMVRTFile();
+  }
+  // TODO: why [0] and not back()???
+  std::array<GDALDatasetH, 1> vrtDatasetList { m_DatasetList[0]->GetDataSet() };
+  auto close_me = GDALBuildVRT(::DEM_DATASET_PATH, 1, vrtDatasetList.data(),
+      nullptr, nullptr, nullptr);
+  // Need to close the dataset, so it is flushed into memory.
+  GDALClose(close_me);
+  for (auto tls : m_tlses)
+  {
+    if (! tls->OpenDEMVRTFile())
+    {
+      // Sometimes ungeoreferenced images are pushed into the VRT files,
+      // but as they are not supported, no VRT is produced
+      m_DatasetList.clear();
+      return ; // no push_back, no notification
+    }
+  }
+#else
   for (auto tls : m_tlses) {
     tls->OpenDEMFile(path);
   }
+#endif
   m_DEMDirectories.push_back(move(path));
+  lock.unlock();
   Notify();
 }
 
@@ -389,10 +555,104 @@ void DEMHandler::OpenDEMDirectory(std::string DEMDirectory)
   };
   if(std::any_of(std::begin(m_DEMDirectories), std::end(m_DEMDirectories), isSameDirectory))
   {
-    otbLogMacro(Info, << "Directory '"<< DEMDirectory << "' already opened.");
+    otbLogMacro(Info, << "DEM Directory '"<< DEMDirectory << "' is already opened.");
     return;
   }
 
+#if defined(OPEN_DEM_ONCE)
+  // Free the previous in-memory dataset (if any)
+  if (!m_DatasetList.empty())
+  {
+    const std::lock_guard<std::mutex> lock(demMutex);
+    for (auto tls : m_tlses) {
+      tls->CloseDEMVRTFile();
+    }
+    VSIUnlink(::DEM_DATASET_PATH);
+  }
+
+  auto demFiles = DEMDetails::GetFilesInDirectory(DEMDirectory);
+  // Check and open every dem files found in DEMDirectory
+  for (const auto & file : demFiles)
+  {
+    // std::cout << "Try open: " << file << " ...\n";
+    auto ds = otb::GDALDriverManagerWrapper::GetInstance().Open(file);
+    if (ds)
+    {
+      if (DEMDetails::HasGeoTransform(*ds->GetDataSet()))
+      {
+        m_DatasetList.push_back(ds);
+        m_DEMDirectories.push_back(move(DEMDirectory)); // => parameter voluntary taken by value
+      }
+      else
+      {
+        // GDAL VRT files cannot contain references to ungeoreferenced
+        // images, otherwise GDAL will issue messages like:
+        // > 662: Warning 1: gdalbuildvrt does not support ungeoreferenced image. Skipping BLA/BLA.TIF
+        // > ERROR 4: No such file or directory
+        otbLogMacro(Debug, << "Input image "<< file << " will not be used because it is ungeoreferenced.");
+      }
+    }
+    else {
+      // std::cout << "... ignoring "<<file <<"!\n";
+    }
+  }
+
+  // Don't build a vrt if there is no dataset
+  if (m_DatasetList.empty())
+  {
+    otbLogMacro(Warning, << "No DEM found in "<< DEMDirectory)
+  }
+  else
+  {
+    int const vrtSize = m_DatasetList.size();
+
+    std::vector<GDALDatasetH> vrtDatasetList(vrtSize);
+    for (int i = 0; i < vrtSize; i++)
+    {
+      vrtDatasetList[i] = m_DatasetList[i]->GetDataSet();
+    }
+
+    // std::cout << "Building " << ::DEM_DATASET_PATH << "...\n";
+    auto close_me = GDALBuildVRT(::DEM_DATASET_PATH, vrtSize, vrtDatasetList.data(),
+        nullptr, nullptr, nullptr);
+    // Need to close the dataset, so it is flushed into memory.
+    GDALClose(close_me);
+
+    const std::lock_guard<std::mutex> lock(demMutex);
+    {
+      // Check all requirements are satisfied to open de the VRT file.
+      // If not, clear everything.
+      DEMDetails::DatasetCache vrt(static_cast<GDALDataset*>(GDALOpen(::DEM_DATASET_PATH, GA_ReadOnly)));
+      if (!vrt)
+      {
+        // Note: DEMDirectory has been moved into m_DEMDirectories
+        otbLogMacro(Warning, << "Input images from '"<< m_DEMDirectories.back() <<"' cannot be used to create a DEM VRT file, and as such they will be ignored.");
+        m_DatasetList.clear();
+        m_DEMDirectories.clear();
+        return ;
+      }
+    } // make sure to close the vrt (thanks to RAII)
+
+    for (auto tls : m_tlses)
+    {
+      if (! tls->OpenDEMVRTFile())
+      {
+        assert(false); // Should have been handled by the previous tests
+                       // (HasGeoTransform + VRT validity tests)
+        // Sometimes ungeoreferenced images are pushed into the VRT files,
+        // but as they are not supported, no VRT is produced
+        m_DatasetList.clear();
+        m_DEMDirectories.clear();
+        return ;
+      }
+    }
+
+    if(! m_tlses.empty() && !m_GeoidFilename.empty()) // still locked
+    { // Should be done from only one thread!!
+      m_tlses.front()->CreateShiftedDatasetOnce();
+    }
+  }
+#else
   // In case the directory is not valid, we still try to open it for
   // real, even if the DEMHandlerTLS will not serve to anything...
   auto & tls = GetHandlerForCurrentThread();
@@ -410,10 +670,12 @@ void DEMHandler::OpenDEMDirectory(std::string DEMDirectory)
   if (is_new_and_valid) {
     m_DEMDirectories.push_back(move(DEMDirectory)); // => parameter voluntary taken by value
   }
+#endif
 
   Notify();
 }
 
+#if ! defined(OPEN_DEM_ONCE)
 bool DEMHandlerTLS::OpenDEMDirectory(const std::string& DEMDirectory)
 {
   // std::cout << "DEMHandlerTLS::OpenDEMDirectory(" << DEMDirectory << ")\n";
@@ -462,6 +724,19 @@ bool DEMHandlerTLS::OpenDEMDirectory(const std::string& DEMDirectory)
   }
   return is_new_and_valid;
 }
+#endif
+
+
+bool HasInputProjection(GDALDataset const& gdalds)
+{
+  return
+#if GDAL_VERSION_NUM >= 3000000
+    gdalds.GetSpatialRef() && ! gdalds.GetSpatialRef()->IsEmpty()
+#else
+    gdalds.GetProjectionRef()[0] != '\0'   // strlen(gdalds.GetProjectionRef()) != 0
+#endif
+      ;
+}
 
 bool DEMHandlerTLS::OpenGeoidFile(const std::string& geoidFile)
 {
@@ -474,22 +749,20 @@ bool DEMHandlerTLS::OpenGeoidFile(const std::string& geoidFile)
     return false;
   }
 
-#if GDAL_VERSION_NUM >= 3000000
-  if (!(gdalds->GetSpatialRef()) || gdalds->GetSpatialRef()->IsEmpty())
-#else
-    if (strlen(gdalds->GetProjectionRef()) == 0 )
-#endif
-    {
-      otbLogMacro(Warning, << "input geoid file "<< geoidFile << " will not be used because it has no input projection.")
-        return false;
-    }
+  if (! HasInputProjection(*gdalds))
+  {
+    otbLogMacro(Warning, << "Input geoid file "<< geoidFile << " will not be used because it has no input projection.");
+    return false;
+  }
 
   m_GeoidDS.reset(gdalds);
 
+#if ! defined(OPEN_DEM_ONCE)
   if(m_DEMDS)
   {
     CreateShiftedDataset();
   }
+#endif
 
   return true;
 }
@@ -514,35 +787,49 @@ bool DEMHandler::OpenGeoidFile(std::string geoidFile)
 
   if (success) {
     m_GeoidFilename = move(geoidFile); // => parameter voluntary taken by value
+#if defined(OPEN_DEM_ONCE)
+    if (! m_DatasetList.empty())
+    { // In that case, we could expect TLS.m_DEMDS to be non-null
+      const std::lock_guard<std::mutex> lock(demMutex);
+      if (!m_tlses.empty()) {
+        m_tlses.front()->CreateShiftedDatasetOnce();
+      }
+    }
+#endif
   }
   Notify();
   return success;
 }
 
+#if defined(OPEN_DEM_ONCE)
+void DEMHandlerTLS::CreateShiftedDatasetOnce()
+#else
 void DEMHandlerTLS::CreateShiftedDataset()
+#endif
 {
+  // std::cout << std::this_thread::get_id() << " § DEMHandler::CreateShiftedDataset()\n";
+
+  assert(m_DEMDS);
+  assert(m_GeoidDS);
   // WIP : no data is not handled at the moment
 
   // Warp geoid dataset
   auto warpOptions = GDALCreateWarpOptions();;
   warpOptions->hSrcDS           = m_GeoidDS.get();
   //warpOptions->hDstDS         = m_Dataset;
-  warpOptions->eResampleAlg     =  GRA_Bilinear;
+  warpOptions->eResampleAlg     = GRA_Bilinear;
   warpOptions->eWorkingDataType = GDT_Float64;
   warpOptions->nBandCount       = 1;
-  warpOptions->panSrcBands      =
-    (int *) CPLMalloc(sizeof(int) * warpOptions->nBandCount );
+  warpOptions->panSrcBands      = (int *) CPLMalloc(sizeof(int) * warpOptions->nBandCount );
   warpOptions->panSrcBands[0]   = 1;
-  warpOptions->panDstBands      =
-    (int *) CPLMalloc(sizeof(int) * warpOptions->nBandCount );
+  warpOptions->panDstBands      = (int *) CPLMalloc(sizeof(int) * warpOptions->nBandCount );
   warpOptions->panDstBands[0]   = 1;
 
   // Establish reprojection transformer.
   warpOptions->pTransformerArg =
-    GDALCreateGenImgProjTransformer( m_GeoidDS.get(),
-        GDALGetProjectionRef(m_GeoidDS.get()),
-        m_DEMDS.get(),
-        GDALGetProjectionRef(m_DEMDS.get()),
+    GDALCreateGenImgProjTransformer(
+        m_GeoidDS.get(), GDALGetProjectionRef(m_GeoidDS.get()),
+        m_DEMDS.get(),   GDALGetProjectionRef(m_DEMDS.get()),
         FALSE, 0.0, 1 );
   warpOptions->pfnTransformer = GDALGenImgProjTransform;
 
@@ -564,7 +851,7 @@ void DEMHandlerTLS::CreateShiftedDataset()
 
   poVRTDS->SetProjection(m_DEMDS->GetProjectionRef());
 
-  char** derivedBandOptions = NULL;
+  char** derivedBandOptions = nullptr;
 
   derivedBandOptions = CSLAddNameValue(derivedBandOptions, "subclass", "VRTDerivedRasterBand");
   derivedBandOptions = CSLAddNameValue(derivedBandOptions, "PixelFunctionType", "sum");
@@ -598,6 +885,36 @@ void DEMHandlerTLS::CreateShiftedDataset()
   poBand->SetMetadataItem( "source_1", geoidVrtXml, "new_vrt_sources" );
 
   GDALClose(poVRTDS);
+}
+
+char const* DEMHandler::get_DEM_DATASET_PATH() const
+{
+#if defined(OPEN_DEM_ONCE)
+  return ::DEM_DATASET_PATH;
+#else
+  auto & tls = GetHandlerForCurrentThread();
+  return tls.get_DEM_DATASET_PATH();
+#endif
+}
+
+char const* DEMHandler::get_DEM_WARPED_DATASET_PATH() const
+{
+#if defined(OPEN_DEM_ONCE)
+  return ::DEM_WARPED_DATASET_PATH;
+#else
+  auto & tls = GetHandlerForCurrentThread();
+  return tls.get_DEM_WARPED_DATASET_PATH();
+#endif
+}
+
+char const* DEMHandler::get_DEM_SHIFTED_DATASET_PATH() const
+{
+#if defined(OPEN_DEM_ONCE)
+  return ::DEM_SHIFTED_DATASET_PATH;
+#else
+  auto & tls = GetHandlerForCurrentThread();
+  return tls.get_DEM_SHIFTED_DATASET_PATH();
+#endif
 }
 
 boost::optional<double> DEMHandlerTLS::GetHeightAboveMSL(double lon, double lat) const
@@ -671,16 +988,22 @@ double DEMHandler::GetHeightAboveMSL(const PointType& geoPoint) const
   return GetHeightAboveMSL(geoPoint[0], geoPoint[1]);
 }
 
+#if ! defined(OPEN_DEM_ONCE)
 unsigned int DEMHandlerTLS::GetDEMCount() const
 {
   return m_DatasetList.size();
 }
+#endif
 
 unsigned int DEMHandler::GetDEMCount() const
 {
-  // std::cout << "DEMHandler::GetDEMCount()\n";
+#if defined(OPEN_DEM_ONCE)
+  return m_DatasetList.size();
+#else
+  // std::cout << std::this_thread::get_id() << " § DEMHandler::GetDEMCount()\n";
   auto & tls = GetHandlerForCurrentThread();
   return tls.GetDEMCount();
+#endif
 }
 
 bool DEMHandler::IsValidDEMDirectory(const std::string& DEMDirectory) const
@@ -718,17 +1041,23 @@ std::string const& DEMHandler::GetGeoidFile() const
   return m_GeoidFilename;
 }
 
+#if ! defined(OPEN_DEM_ONCE)
 void DEMHandlerTLS::ClearDEMs()
 {
   // This will call GDALClose on all datasets
   m_DatasetList.clear();
 }
+#endif
 
 void DEMHandlerTLS::ClearElevationParameters()
 {
-  m_GeoidDS.reset(nullptr);
+  m_GeoidDS.release();
+  m_DEMDS.release();
+  // TODO: ¿ shouldn't we erase the files as well ?
 
+#if ! defined(OPEN_DEM_ONCE)
   ClearDEMs(); // ClearDEMs calls Notify()
+#endif
 }
 
 void DEMHandler::ClearElevationParameters()
@@ -736,11 +1065,17 @@ void DEMHandler::ClearElevationParameters()
   m_DefaultHeightAboveEllipsoid = 0.;
   m_GeoidFilename.clear();
 
-  const std::lock_guard<std::mutex> lock(demMutex);
-  for (auto tls : m_tlses) {
-    tls->ClearElevationParameters();
+#if defined(OPEN_DEM_ONCE)
+  // This will call GDALClose on all datasets
+  m_DatasetList.clear();
+#endif
+  {
+    const std::lock_guard<std::mutex> lock(demMutex);
+    for (auto tls : m_tlses) {
+      tls->ClearElevationParameters();
+    }
+    m_DEMDirectories.clear();
   }
-  m_DEMDirectories.clear();
 
   Notify();
 }
