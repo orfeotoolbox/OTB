@@ -375,10 +375,15 @@ private:
   DEMDetails::DatasetCache m_GeoidDS;
 };
 
-DEMHandlerTLS & DEMHandler::GetHandlerForCurrentThread() const
+DEMHandlerTLS & DEMHandler::DoGetHandlerForCurrentThread() const
 {
   static thread_local auto tls = DoFetchOrCreateHandler(); // no need to lock as this is a static TLS
   return *tls;
+}
+
+DEMHandlerTLS const& DEMHandler::GetHandlerForCurrentThread() const
+{
+  return DoGetHandlerForCurrentThread();
 }
 
 std::shared_ptr<DEMHandlerTLS> DEMHandler::DoFetchOrCreateHandler() const
@@ -1103,5 +1108,24 @@ void DEMHandler::Notify() const
     observer->Update();
   }
 };
+
+
+double GetHeightAboveEllipsoid(DEMHandlerTLS const& tls, double lon, double lat)
+{ return tls.GetHeightAboveEllipsoid(lon, lat, DEMHandler::GetInstance().GetDefaultHeightAboveEllipsoid()); }
+
+double GetHeightAboveMSL      (DEMHandlerTLS const& tls, double lon, double lat)
+{ return tls.GetHeightAboveMSL(lon, lat).value_or(0); }
+
+double GetGeoidHeight         (DEMHandlerTLS const& tls, double lon, double lat)
+{ return tls.GetGeoidHeight(lon, lat).value_or(0); }
+
+double GetHeightAboveEllipsoid(DEMHandlerTLS const& tls, itk::Point<double, 2> geoPoint)
+{ return GetHeightAboveEllipsoid(tls, geoPoint[0], geoPoint[1]); }
+
+double GetHeightAboveMSL      (DEMHandlerTLS const& tls, itk::Point<double, 2> geoPoint)
+{ return GetHeightAboveMSL(tls, geoPoint[0], geoPoint[1]); }
+
+double GetGeoidHeight         (DEMHandlerTLS const& tls, itk::Point<double, 2> geoPoint)
+{ return GetGeoidHeight(tls, geoPoint[0], geoPoint[1]); }
 
 } // namespace otb

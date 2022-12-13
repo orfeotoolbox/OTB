@@ -208,6 +208,7 @@ public:
   char const* get_DEM_WARPED_DATASET_PATH () const;
   char const* get_DEM_SHIFTED_DATASET_PATH() const;
 
+  DEMHandlerTLS const& GetHandlerForCurrentThread() const;
 protected:
   DEMHandler();
   ~DEMHandler();
@@ -221,7 +222,7 @@ private:
    * This function is just a facade that caches the static thread local
    * `DEMHandlerTLS` attributed to the current thread.
    */
-  DEMHandlerTLS & GetHandlerForCurrentThread() const;
+  DEMHandlerTLS & DoGetHandlerForCurrentThread() const;
 
   /** Internal function to fetch from the pool or create a new
    * `DEMHandlerTLS.
@@ -262,6 +263,14 @@ private:
   /** Pool of actual thread local DEM handlers. */
   mutable std::vector<std::shared_ptr<DEMHandlerTLS>> m_tlses;
 };
+
+
+double GetHeightAboveEllipsoid(DEMHandlerTLS const&, double lon, double lat);
+double GetHeightAboveMSL      (DEMHandlerTLS const&, double lon, double lat);
+double GetGeoidHeight         (DEMHandlerTLS const&, double lon, double lat);
+double GetHeightAboveEllipsoid(DEMHandlerTLS const&, itk::Point<double, 2> geoPoint);
+double GetHeightAboveMSL      (DEMHandlerTLS const&, itk::Point<double, 2> geoPoint);
+double GetGeoidHeight         (DEMHandlerTLS const&, itk::Point<double, 2> geoPoint);
 
 }
 #endif
