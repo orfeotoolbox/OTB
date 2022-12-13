@@ -208,6 +208,7 @@ public:
   static constexpr char const* DEM_WARPED_DATASET_PATH  = "/vsimem/otb_dem_warped_dataset.vrt";
   static constexpr char const* DEM_SHIFTED_DATASET_PATH = "/vsimem/otb_dem_shifted_dataset.vrt";
 
+  DEMHandlerTLS const& GetHandlerForCurrentThread() const;
 protected:
   DEMHandler();
   ~DEMHandler();
@@ -217,7 +218,15 @@ protected:
   void UnregisterTLS(DEMHandlerTLS* tls);
 
 private:
-  DEMHandlerTLS & GetHandlerForCurrentThread() const;
+  /** Internal accessor to the current (thread-wise) DEM handler.
+   * If no handler has been attributed to the current thread, one will be
+   * picked from the `m_tlses` pool, or created on the fly thanks to
+   * `DoFetchOrCreateHandler`.
+   *
+   * This function is just a facade that caches the static thread local
+   * `DEMHandlerTLS` attributed to the current thread.
+   */
+  DEMHandlerTLS & DoGetHandlerForCurrentThread() const;
 
   DEMHandler(const Self&) = delete;
   void operator=(const Self&) = delete;
@@ -241,6 +250,14 @@ private:
 
   std::set<DEMHandlerTLS*> m_tlses;
 };
+
+
+double GetHeightAboveEllipsoid(DEMHandlerTLS const&, double lon, double lat);
+double GetHeightAboveMSL      (DEMHandlerTLS const&, double lon, double lat);
+double GetGeoidHeight         (DEMHandlerTLS const&, double lon, double lat);
+double GetHeightAboveEllipsoid(DEMHandlerTLS const&, itk::Point<double, 2> geoPoint);
+double GetHeightAboveMSL      (DEMHandlerTLS const&, itk::Point<double, 2> geoPoint);
+double GetGeoidHeight         (DEMHandlerTLS const&, itk::Point<double, 2> geoPoint);
 
 }
 #endif

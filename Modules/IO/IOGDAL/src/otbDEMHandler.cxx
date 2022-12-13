@@ -374,12 +374,15 @@ private:
   DEMDetails::DatasetCache m_GeoidDS;
 };
 
-// thread_local std::unique_ptr<DEMHandlerTLS> DEMHandler::m_tls;
-
-DEMHandlerTLS & DEMHandler::GetHandlerForCurrentThread() const
+DEMHandlerTLS & DEMHandler::DoGetHandlerForCurrentThread() const
 {
   static thread_local auto tls = DoFetchOrCreateHandler(); // no need to lock as this is a static TLS
   return *tls;
+}
+
+DEMHandlerTLS const& DEMHandler::GetHandlerForCurrentThread() const
+{
+  return DoGetHandlerForCurrentThread();
 }
 
 std::shared_ptr<DEMHandlerTLS> DEMHandler::DoFetchOrCreateHandler() const
@@ -1100,36 +1103,23 @@ void DEMHandler::Notify() const
   }
 };
 
-// TODO: optimize the registration of DEMHandlerTLS
-// Indeed. In current version of OTB, new set of threads are spwaned for
-// each stream. The result is that we will create and destroy
-// DEMHandlerTLS more than needed. Instead, we should be able to reuse
-// the previous ones constructed for the last stream
-// -> pool to DEMHandlerTLS??
-void DEMHandlerTLS::Register() {
-  DEMHandler::GetInstance().RegisterTLS(this);
-}
 
-void DEMHandlerTLS::Unregister() {
-  DEMHandler::GetInstance().UnregisterTLS(this);
-}
+double GetHeightAboveEllipsoid(DEMHandlerTLS const& tls, double lon, double lat)
+{ return tls.GetHeightAboveEllipsoid(lon, lat, DEMHandler::GetInstance().GetDefaultHeightAboveEllipsoid()); }
 
-void DEMHandler::RegisterTLS(DEMHandlerTLS *tls) {
-  // std::cout << "DEMHandler::RegisterTLS(" << tls << ")\n";
-  const std::lock_guard<std::mutex> lock(demMutex);
-  m_tlses.insert(tls);
-  if (!m_GeoidFilename.empty()) {
-    tls->OpenGeoidFile(m_GeoidFilename);
-  }
-  for (auto const& dir : m_DEMDirectories) {
-    tls->OpenDEMDirectory(dir);
-  }
-}
+double GetHeightAboveMSL      (DEMHandlerTLS const& tls, double lon, double lat)
+{ return tls.GetHeightAboveMSL(lon, lat).value_or(0); }
 
-void DEMHandler::UnregisterTLS(DEMHandlerTLS *tls) {
-  // std::cout << "DEMHandler::UnregisterTLS(" << tls << ")\n";
-  const std::lock_guard<std::mutex> lock(demMutex);
-  m_tlses.erase(tls);
-}
+double GetGeoidHeight         (DEMHandlerTLS const& tls, double lon, double lat)
+{ return tls.GetGeoidHeight(lon, lat).value_or(0); }
+
+double GetHeightAboveEllipsoid(DEMHandlerTLS const& tls, itk::Point<double, 2> geoPoint)
+{ return GetHeightAboveEllipsoid(tls, geoPoint[0], geoPoint[1]); }
+
+double GetHeightAboveMSL      (DEMHandlerTLS const& tls, itk::Point<double, 2> geoPoint)
+{ return GetHeightAboveMSL(tls, geoPoint[0], geoPoint[1]); }
+
+double GetGeoidHeight         (DEMHandlerTLS const& tls, itk::Point<double, 2> geoPoint)
+{ return GetGeoidHeight(tls, geoPoint[0], geoPoint[1]); }
 
 } // namespace otb
