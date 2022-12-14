@@ -104,11 +104,11 @@ void GDALRPCTransformer::Update()
     {
       if (demHandler.GetGeoidFile().empty())
       {
-        this->SetOption("RPC_DEM", demHandler.get_DEM_DATASET_PATH());
+        this->SetOption("RPC_DEM", DEMHandler::DEM_DATASET_PATH);
       }
       else
       {
-        this->SetOption("RPC_DEM", demHandler.get_DEM_SHIFTED_DATASET_PATH());
+        this->SetOption("RPC_DEM", DEMHandler::DEM_SHIFTED_DATASET_PATH);
       }
       this->SetOption("RPC_DEM_MISSING_VALUE", std::to_string(demHandler.GetDefaultHeightAboveEllipsoid()));
     }
