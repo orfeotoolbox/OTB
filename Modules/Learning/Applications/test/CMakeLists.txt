@@ -62,10 +62,6 @@ otb_test_application(NAME apTvClSOMClassificationFull
   ${BASELINE}/apTvClSOMClassificationMap.tif
   ${TEMP}/apTvClSOMClassificationMap.tif)
 
-
-
-
-
 #----------- KMeansClassification TESTS ----------------
 if(OTB_USE_SHARK)
   otb_test_application(NAME apTvClKMeansImageClassification_composite
@@ -221,6 +217,505 @@ if(OTB_USE_OPENCV)
     ${OTBAPP_BASELINE_FILES}/apTvClTrainVectorClassifierModel.rf
     ${TEMP}/apTvClTrainVectorClassifierModel.rf)
 endif()
+
+
+#----------- ImageClassifier TESTS ----------------
+
+# Input file types
+set(raster_input_format ".tif")
+set(vector_input_format ".sqlite")
+set(stat_input_format ".xml")
+
+# Input file depending on classifier
+set(libsvm_input "")
+set(svm_input "")
+set(boost_input "Water_Vegetation")
+set(dt_input "")
+set(ann_input "")
+set(bayes_input "")
+set(rf_input "")
+set(knn_input "")
+
+# Output type
+set(raster_output_format ".tif")
+set(raster_output_option "uint8")
+
+# Output model type depending on classifier
+set(libsvm_output_format ".libsvm")
+set(svm_output_format ".svm")
+set(boost_output_format ".boost")
+set(dt_output_format ".dt")
+set(ann_output_format ".ann")
+set(bayes_output_format ".bayes")
+set(rf_output_format ".rf")
+set(knn_output_format ".knn")
+set(sharkrf_output_format ".txt")
+set(sharkkm_output_format ".txt")
+
+# Training algorithms parameters
+set(libsvm_parameters "-classifier.libsvm.opt" "true" "-classifier.libsvm.prob" "true")
+#set(svm_parameters "-classifier.svm.opt" "true")
+set(boost_parameters "")
+set(dt_parameters "")
+set(ann_parameters "-classifier.ann.sizes" "100")
+set(bayes_parameters "")
+set(rf_parameters "")
+set(knn_parameters "")
+set(sharkrf_parameters "")
+set(sharkkm_parameters "")
+
+# Validation depending on mode
+set(ascii_comparison --compare-ascii ${EPSILON_6})
+set(ascii_confmat_comparison --compare-ascii 2)
+set(raster_comparison --compare-image ${NOTOL})
+set(raster_comparison_two --compare-n-images ${NOTOL} 2)
+set(raster_comparison_three --compare-n-images ${NOTOL} 3)
+
+# Reference ffiles depending on modes
+set(ascii_ref_path ${OTBAPP_BASELINE_FILES})
+set(raster_ref_path ${OTBAPP_BASELINE})
+
+set(classifierList)
+#if(OTB_USE_LIBSVM)
+#list(APPEND classifierList "LIBSVM")
+#endif()
+if(OTB_USE_OPENCV)
+  #list(APPEND classifierList "SVM" "BOOST" "DT" "ANN" "BAYES" "RF" "KNN")
+  list(APPEND classifierList "BOOST" "DT" "ANN" "BAYES" "RF" "KNN")
+endif()
+if(OTB_USE_SHARK)
+  list(APPEND classifierList "SHARKRF" "SHARKKM")
+endif()
+
+set(classifier_with_confmap "LIBSVM" "BOOST" "KNN" "ANN" "RF")
+set(classifier_with_probamap "SHARKRF")
+
+# This is a black list for classifier that can not have a baseline
+# because they are using randomness and seed can not be set
+set(classifier_without_baseline "")
+
+# Loop on classifiers
+foreach(classifier ${classifierList})
+  string(TOLOWER ${classifier} lclassifier)
+
+  # Derive output file name
+  set(OUTMODELFILE cl${classifier}_ModelQB1${${lclassifier}_output_format})
+
+  # Derive confusion matrix file name
+  set(OUTCONFMATFILE cl${classifier}_ConfMatQB1${${lclassifier}_output_format})
+
+
+  set(OUTRASTER cl${classifier}LabeledImageQB1${raster_output_format})
+  set(OUTCONFMAP cl${classifier}ConfidenceMapQB1${raster_output_format})
+  set(OUTPROBAMAP cl${classifier}ProbabilityMapQB1${raster_output_format})
+
+  list(FIND classifier_without_baseline ${classifier} _classifier_has_baseline)
+  if(${_classifier_has_baseline} EQUAL -1)
+    set(valid ${ascii_confmat_comparison} ${ascii_ref_path}/${OUTCONFMATFILE} ${TEMP}/${OUTCONFMATFILE})
+  else()
+    set(valid "")
+  endif()
+
+  otb_test_application(
+    NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1
+    APP      TrainImagesClassifier
+    OPTIONS  -io.il ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+    -io.vd ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1_utm31n${vector_input_format}
+    -io.imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
+    -classifier ${lclassifier}
+    ${${lclassifier}_parameters}
+    -io.out ${TEMP}/${OUTMODELFILE}
+    -sample.vfn class
+    -rand 121212
+    -outxml ${TEMP}/cl${classifier}_OutXML1.xml
+    -io.confmatout ${TEMP}/${OUTCONFMATFILE}
+    VALID    ${valid}
+  )
+
+  set_tests_properties(apTvClTrainMethod${classifier}ImagesClassifierQB1 PROPERTIES
+    RESOURCE_LOCK ${INPUTDATA}/Classification/VectorData_${${lclassifier}_input}QB1_utm31n${vector_input_format})
+
+  if(${_classifier_has_baseline} EQUAL -1)
+    set(valid ${ascii_confmat_comparison} ${ascii_ref_path}/${OUTCONFMATFILE} ${TEMP}/${OUTCONFMATFILE})
+  else()
+    set(valid "")
+  endif()
+
+  otb_test_application(
+    NAME     apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1
+    APP      TrainImagesClassifier
+    OPTIONS  -inxml ${TEMP}/cl${classifier}_OutXML1.xml
+    -io.out ${TEMP}/OutXML1_${OUTMODELFILE}
+    -io.confmatout ${TEMP}/${OUTCONFMATFILE}
+    VALID    ${valid}
+  )
+
+  set_tests_properties(apTvClTrainMethod${classifier}ImagesClassifierQB1_InXML1 PROPERTIES DEPENDS apTvClTrainMethod${classifier}ImagesClassifierQB1)
+
+  list(FIND classifier_with_confmap ${classifier} _classifier_has_confmap)
+  list(FIND classifier_with_probamap ${classifier} _classifier_has_probamap)
+  if(${_classifier_has_confmap} EQUAL -1)
+    otb_test_application(
+      NAME     apTvClMethod${classifier}ImageClassifierQB1
+      APP      ImageClassifier
+      OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+      -model ${INPUTDATA}/Classification/${OUTMODELFILE}
+      -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
+      -out ${TEMP}/${OUTRASTER} ${raster_output_option}
+
+      VALID    ${raster_comparison}
+      ${raster_ref_path}/${OUTRASTER}
+      ${TEMP}/${OUTRASTER}
+    )
+  else()
+    if(${_classifier_has_probamap} EQUAL -1)
+      otb_test_application(
+        NAME     apTvClMethod${classifier}ImageClassifierQB1
+        APP      ImageClassifier
+        OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+        -model ${INPUTDATA}/Classification/${OUTMODELFILE}
+        -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
+        -out ${TEMP}/${OUTRASTER} ${raster_output_option}
+        -confmap ${TEMP}/${OUTCONFMAP}
+
+        VALID    ${raster_comparison_two}
+        ${raster_ref_path}/${OUTRASTER}
+        ${TEMP}/${OUTRASTER}
+        ${raster_ref_path}/${OUTCONFMAP}
+        ${TEMP}/${OUTCONFMAP}
+        )
+    else()
+      message(${classifier})
+      otb_test_application(
+        NAME     apTvClMethod${classifier}ImageClassifierQB1
+        APP      ImageClassifier
+        OPTIONS  -in ${INPUTDATA}/Classification/QB_1_ortho${raster_input_format}
+        -model ${INPUTDATA}/Classification/${OUTMODELFILE}
+        -imstat ${INPUTDATA}/Classification/clImageStatisticsQB1${stat_input_format}
+        -out ${TEMP}/${OUTRASTER} ${raster_output_option}
+        -confmap ${TEMP}/${OUTCONFMAP}
+        -nbclasses 4
+        -probamap ${TEMP}/${OUTPROBAMAP}
+
+        VALID    ${raster_comparison_three}
+        ${raster_ref_path}/${OUTRASTER}
+        ${TEMP}/${OUTRASTER}
+        ${raster_ref_path}/${OUTCONFMAP}
+        ${TEMP}/${OUTCONFMAP}
+        ${raster_ref_path}/${OUTPROBAMAP}
+        ${TEMP}/${OUTPROBAMAP}
+        )
+    endif()
+  endif()
+
+endforeach()
+
+#----------- LIBSVM Classifier TESTS ----------------
+
+if(OTB_USE_LIBSVM)
+  otb_test_application(NAME apTvClImageSVMClassifierQB2
+    APP  ImageClassifier
+    OPTIONS -in      ${INPUTDATA}/Classification/QB_2_ortho.tif
+    -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
+    -model   ${INPUTDATA}/Classification/clsvmModelQB1.svm
+    -out     ${TEMP}/clLabeledImageQB2.tif
+    VALID   --compare-image ${NOTOL}
+    ${OTBAPP_BASELINE}/clLabeledImageQB2.tif
+    ${TEMP}/clLabeledImageQB2.tif)
+
+  otb_test_application(NAME apTvClImageSVMClassifierQB3
+    APP  ImageClassifier
+    OPTIONS -in      ${INPUTDATA}/Classification/QB_3_ortho.tif
+    -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
+    -model   ${INPUTDATA}/Classification/clsvmModelQB1.svm
+    -out     ${TEMP}/clLabeledImageQB3.tif
+    VALID   --compare-image ${NOTOL}
+    ${OTBAPP_BASELINE}/clLabeledImageQB3.tif
+    ${TEMP}/clLabeledImageQB3.tif)
+
+  otb_test_application(NAME apTvClImageSVMClassifierQB1
+    APP  ImageClassifier
+    OPTIONS -in      ${INPUTDATA}/Classification/QB_1_ortho.tif
+    -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB1.xml
+    -model   ${INPUTDATA}/Classification/clsvmModelQB1.svm
+    -out     ${TEMP}/clLabeledImageQB1.tif
+    VALID   --compare-image ${NOTOL}
+    ${OTBAPP_BASELINE}/clLabeledImageQB1.tif
+    ${TEMP}/clLabeledImageQB1.tif)
+
+  otb_test_application(NAME apTvClImageSVMClassifierQB456_6
+    APP  ImageClassifier
+    OPTIONS -in      ${INPUTDATA}/Classification/QB_6_extract.tif
+    -mask    ${INPUTDATA}/Classification/QB_6_mask.tif
+    -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB456.xml
+    -model   ${INPUTDATA}/Classification/clsvmModelQB456.svm
+    -out     ${TEMP}/clLabeledImageQB456_6.tif
+    VALID   --compare-image ${NOTOL}
+    ${OTBAPP_BASELINE}/clLabeledImageQB456_6.tif
+    ${TEMP}/clLabeledImageQB456_6.tif)
+
+  otb_test_application(NAME apTvClImageSVMClassifierQB456_4
+    APP  ImageClassifier
+    OPTIONS -in      ${INPUTDATA}/Classification/QB_4_extract.tif
+    -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB456.xml
+    -model   ${INPUTDATA}/Classification/clsvmModelQB456.svm
+    -out     ${TEMP}/clLabeledImageQB456_4.tif
+    VALID   --compare-image ${NOTOL}
+    ${OTBAPP_BASELINE}/clLabeledImageQB456_4.tif
+    ${TEMP}/clLabeledImageQB456_4.tif)
+
+  otb_test_application(NAME apTvClImageSVMClassifierQB456_5
+    APP  ImageClassifier
+    OPTIONS -in      ${INPUTDATA}/Classification/QB_5_extract.tif
+    -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB456.xml
+    -model   ${INPUTDATA}/Classification/clsvmModelQB456.svm
+    -out     ${TEMP}/clLabeledImageQB456_5.tif
+    VALID   --compare-image ${NOTOL}
+    ${OTBAPP_BASELINE}/clLabeledImageQB456_5.tif
+    ${TEMP}/clLabeledImageQB456_5.tif)
+
+  otb_test_application(NAME apTvClImageSVMClassifierQB123_6
+    APP  ImageClassifier
+    OPTIONS -in      ${INPUTDATA}/Classification/QB_6_extract.tif
+    -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB123.xml
+    -model   ${INPUTDATA}/Classification/clsvmModelQB123.svm
+    -out     ${TEMP}/clLabeledImageQB123_6.tif
+    VALID   --compare-image ${NOTOL}
+    ${OTBAPP_BASELINE}/clLabeledImageQB123_6.tif
+    ${TEMP}/clLabeledImageQB123_6.tif)
+
+  otb_test_application(NAME apTvClImageSVMClassifierQB456_1
+    APP  ImageClassifier
+    OPTIONS -in      ${INPUTDATA}/Classification/QB_1_ortho.tif
+    -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB456.xml
+    -model   ${INPUTDATA}/Classification/clsvmModelQB456.svm
+    -out     ${TEMP}/clLabeledImageQB456_1.tif
+    VALID   --compare-image ${NOTOL}
+    ${OTBAPP_BASELINE}/clLabeledImageQB456_1.tif
+    ${TEMP}/clLabeledImageQB456_1.tif)
+
+  otb_test_application(NAME apTvClImageSVMClassifierQB123_3
+    APP  ImageClassifier
+    OPTIONS -in      ${INPUTDATA}/Classification/QB_3_ortho.tif
+    -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB123.xml
+    -model   ${INPUTDATA}/Classification/clsvmModelQB123.svm
+    -out     ${TEMP}/clLabeledImageQB123_3.tif
+    VALID   --compare-image ${NOTOL}
+    ${OTBAPP_BASELINE}/clLabeledImageQB123_3.tif
+    ${TEMP}/clLabeledImageQB123_3.tif)
+
+  otb_test_application(NAME apTvClImageSVMClassifierQB123_2
+    APP  ImageClassifier
+    OPTIONS -in      ${INPUTDATA}/Classification/QB_2_ortho.tif
+    -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB123.xml
+    -model   ${INPUTDATA}/Classification/clsvmModelQB123.svm
+    -out     ${TEMP}/clLabeledImageQB123_2.tif
+    VALID   --compare-image ${NOTOL}
+    ${OTBAPP_BASELINE}/clLabeledImageQB123_2.tif
+    ${TEMP}/clLabeledImageQB123_2.tif)
+
+  otb_test_application(NAME apTvClImageSVMClassifierQB123_1
+    APP  ImageClassifier
+    OPTIONS -in      ${INPUTDATA}/Classification/QB_1_ortho.tif
+    -imstat  ${INPUTDATA}/Classification/clImageStatisticsQB123.xml
+    -model   ${INPUTDATA}/Classification/clsvmModelQB123.svm
+    -out     ${TEMP}/clLabeledImageQB123_1.tif
+    VALID   --compare-image ${NOTOL}
+    ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
+    ${TEMP}/clLabeledImageQB123_1.tif)
+
+endif()
+
+#----------- ComputeConfusionMatrix TESTS ----------------
+otb_test_application(NAME apTvComputeConfusionMatrixV
+  APP  ComputeConfusionMatrix
+  OPTIONS -in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
+  -ref vector
+  -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter_utm31n.sqlite
+  -ref.vector.field class
+  -out ${TEMP}/apTvComputeConfusionMatrixTconfusionVOut.csv
+  VALID   --compare-ascii ${NOTOL}
+  ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixTconfusionVOut.csv
+  ${TEMP}/apTvComputeConfusionMatrixTconfusionVOut.csv)
+
+otb_test_application(NAME apTvComputeConfusionMatrixExtraReferenceLabelsV
+  APP  ComputeConfusionMatrix
+  OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho_C7.tif
+  -ref vector
+  -ref.vector.in ${INPUTDATA}/Classification/VectorData_QB1_ter_utm31n.sqlite
+  -ref.vector.field class
+  -out ${TEMP}/apTvComputeConfusionMatrixExtraRefLabelsVOut.csv
+  VALID   --compare-ascii ${NOTOL}
+  ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixExtraRefLabelsVOut.csv
+  ${TEMP}/apTvComputeConfusionMatrixExtraRefLabelsVOut.csv)
+
+otb_test_application(NAME apTvComputeConfusionMatrixExtraReferenceLabelsR
+  APP  ComputeConfusionMatrix
+  OPTIONS -in ${INPUTDATA}/Classification/QB_1_ortho_C7.tif
+  -ref raster
+  -ref.raster.in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
+  -ref.raster.nodata 255
+  -nodatalabel 255
+  -out ${TEMP}/apTvComputeConfusionMatrixExtraRefLabelsROut.csv
+  VALID   --compare-ascii ${NOTOL}
+  ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixExtraRefLabelsROut.csv
+  ${TEMP}/apTvComputeConfusionMatrixExtraRefLabelsROut.csv)
+
+otb_test_application(NAME apTvComputeConfusionMatrixR
+  APP  ComputeConfusionMatrix
+  OPTIONS -in ${OTBAPP_BASELINE}/clLabeledImageQB123_1.tif
+  -ref raster
+  -ref.raster.in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
+  -ref.raster.nodata 255
+  -nodatalabel 255
+  -out ${TEMP}/apTvComputeConfusionMatrixTconfusionROut.csv
+  VALID   --compare-ascii ${NOTOL}
+  ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixTconfusionROut.csv
+  ${TEMP}/apTvComputeConfusionMatrixTconfusionROut.csv)
+
+otb_test_application(NAME apTvComputeConfusionMatrixExtraProducedLabelsR
+  APP  ComputeConfusionMatrix
+  OPTIONS -in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
+  -ref raster
+  -ref.raster.in ${INPUTDATA}/Classification/QB_1_ortho_C8.tif
+  -ref.raster.nodata 255
+  -nodatalabel 255
+  -out ${TEMP}/apTvComputeConfusionMatrixExtraProdLabelsROut.csv
+  VALID   --compare-ascii ${NOTOL}
+  ${OTBAPP_BASELINE_FILES}/apTvComputeConfusionMatrixExtraProdLabelsROut.csv
+  ${TEMP}/apTvComputeConfusionMatrixExtraProdLabelsROut.csv)
+
+#----------- ComputeContingencyTable TESTS ----------------
+
+otb_test_application(NAME apTvComputeContingencyTableExtraProducedLabelsR
+  APP  ComputeConfusionMatrix
+  OPTIONS -in ${INPUTDATA}/Classification/clLabeledImageQB456_1_NoData_255.tif
+  -ref raster
+  -ref.raster.in ${INPUTDATA}/Classification/QB_1_ortho_C8.tif
+  -ref.raster.nodata 255
+  -nodatalabel 255
+  -format contingencytable
+  -out ${TEMP}/apTvComputeContingencyTableExtraProdLabelsROut.csv
+  VALID   --compare-ascii ${NOTOL}
+  ${OTBAPP_BASELINE_FILES}/apTvComputeContingencyTableExtraProdLabelsROut.csv
+  ${TEMP}/apTvComputeContingencyTableExtraProdLabelsROut.csv)
+
+#----------- FusionOfClassifications TESTS ----------------
+otb_test_application(NAME apTvFusionOfClassificationsDSPrecision6Inputs
+  APP  FusionOfClassifications
+  OPTIONS -il  ${INPUTDATA}/Classification/QB_1_ortho_C1.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C2.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C3.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C4.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C5.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C6.tif
+  -method dempstershafer
+  -method.dempstershafer.cmfl ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+  -method.dempstershafer.mob precision
+  -nodatalabel 10
+  -undecidedlabel 7
+  -out ${TEMP}/apTvFusionOfClassificationsDS6InputsPrecisionOutput.tif uint8
+  VALID   --compare-image ${NOTOL}
+  ${BASELINE}/QB_1_ortho_DS_FUSED_PRECISION.tif
+  ${TEMP}/apTvFusionOfClassificationsDS6InputsPrecisionOutput.tif)
+
+otb_test_application(NAME apTvFusionOfClassificationsMV3Inputs
+  APP  FusionOfClassifications
+  OPTIONS -il ${INPUTDATA}/Classification/clLabeledImageQB123_1.tif
+  ${INPUTDATA}/Classification/clLabeledImageQB456_1.tif
+  ${INPUTDATA}/Classification/clLabeledImageQB1.tif
+  -method majorityvoting
+  -undecidedlabel 100
+  -out ${TEMP}/apTvFusionOfClassificationsMV3InputsOutput.tif uint16
+  VALID   --compare-image ${NOTOL}
+  ${OTBAPP_BASELINE}/apTvFusionOfClassifications3InputsOutput.tif
+  ${TEMP}/apTvFusionOfClassificationsMV3InputsOutput.tif)
+
+otb_test_application(NAME apTvFusionOfClassificationsDSKappa6Inputs
+  APP  FusionOfClassifications
+  OPTIONS -il  ${INPUTDATA}/Classification/QB_1_ortho_C1.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C2.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C3.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C4.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C5.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C6.tif
+  -method dempstershafer
+  -method.dempstershafer.cmfl ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+  -method.dempstershafer.mob kappa
+  -nodatalabel 10
+  -undecidedlabel 7
+  -out ${TEMP}/apTvFusionOfClassificationsDS6InputsKappaOutput.tif uint8
+  VALID   --compare-image ${NOTOL}
+  ${BASELINE}/QB_1_ortho_DS_FUSED_KAPPA.tif
+  ${TEMP}/apTvFusionOfClassificationsDS6InputsKappaOutput.tif)
+
+otb_test_application(NAME apTvFusionOfClassificationsDSRecall6Inputs
+  APP  FusionOfClassifications
+  OPTIONS -il  ${INPUTDATA}/Classification/QB_1_ortho_C1.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C2.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C3.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C4.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C5.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C6.tif
+  -method dempstershafer
+  -method.dempstershafer.cmfl ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+  -method.dempstershafer.mob recall
+  -nodatalabel 10
+  -undecidedlabel 7
+  -out ${TEMP}/apTvFusionOfClassificationsDS6InputsRecallOutput.tif uint8
+  VALID   --compare-image ${NOTOL}
+  ${BASELINE}/QB_1_ortho_DS_FUSED_RECALL.tif
+  ${TEMP}/apTvFusionOfClassificationsDS6InputsRecallOutput.tif)
+
+otb_test_application(NAME apTvFusionOfClassificationsDSAccuracy6Inputs
+  APP  FusionOfClassifications
+  OPTIONS -il  ${INPUTDATA}/Classification/QB_1_ortho_C1.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C2.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C3.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C4.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C5.tif
+  ${INPUTDATA}/Classification/QB_1_ortho_C6.tif
+  -method dempstershafer
+  -method.dempstershafer.cmfl ${INPUTDATA}/Classification/QB_1_ortho_C1.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C2.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C3.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C4.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C5.csv
+  ${INPUTDATA}/Classification/QB_1_ortho_C6.csv
+  -method.dempstershafer.mob accuracy
+  -nodatalabel 10
+  -undecidedlabel 7
+  -out ${TEMP}/apTvFusionOfClassificationsDS6InputsAccuracyOutput.tif uint8
+  VALID   --compare-image ${NOTOL}
+  ${BASELINE}/QB_1_ortho_DS_FUSED_ACCURACY.tif
+  ${TEMP}/apTvFusionOfClassificationsDS6InputsAccuracyOutput.tif)
+
+otb_test_application(NAME apTvFusionOfClassificationsMV2Inputs
+  APP  FusionOfClassifications
+  OPTIONS -il ${INPUTDATA}/Classification/clLabeledImageQB123_1.tif
+  ${INPUTDATA}/Classification/clLabeledImageQB456_1.tif
+  -method majorityvoting
+  -undecidedlabel 100
+  -out ${TEMP}/apTvFusionOfClassificationsMV2InputsOutput.tif uint16
+  VALID   --compare-image ${NOTOL}
+  ${OTBAPP_BASELINE}/apTvFusionOfClassifications2InputsOutput.tif
+  ${TEMP}/apTvFusionOfClassificationsMV2InputsOutput.tif)
+
 
 #----------- TrainVectorRegression TESTS ----------------
 if(OTB_USE_OPENCV)
