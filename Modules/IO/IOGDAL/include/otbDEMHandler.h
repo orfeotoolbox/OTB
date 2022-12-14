@@ -21,13 +21,8 @@
 #ifndef otbDEMHandler_h
 #define otbDEMHandler_h
 
-/// Define to say: open the DEMs only once
-#define OPEN_DEM_ONCE
-
 #include "otbImage.h"
-#if defined(OPEN_DEM_ONCE)
-#  include "otbGDALDatasetWrapper.h"
-#endif
+#include "otbGDALDatasetWrapper.h"
 #include <string>
 #include <list>
 #include <set>
@@ -70,11 +65,13 @@ protected:
   DEMSubjectInterface& operator=(DEMSubjectInterface const&) = delete;
 };
 
+// Forward declaration of the class at this point. No need to expose the
+// full class definition.
 class DEMHandlerTLS;
 
 /** \class DEMHandler
  *
- * \brief Single access point for DEM data retrieval
+ * \brief Single access point for DEM data retrieval.
  *
  * This class is the single configuration and access point for
  * elevation handling in images projections and localization
@@ -94,7 +91,7 @@ class DEMHandlerTLS;
  * The class allows retrieving either height above ellipsoid or
  * height above Mean Sea Level (MSL).
  *
- * Here is the complete description of both methods output depending
+ * Here is the complete description of both functions output depending
  * on the class configuration for the SRTM DEM (in the following, no
  * SRTM means DEMDirectory not set, or no coverage for point, or
  * srtm_value is no_data).
@@ -165,30 +162,34 @@ public:
    * \return height above mean sea level
   */
   double GetHeightAboveMSL(double lon, double lat) const;
-
   double GetHeightAboveMSL(const PointType& geoPoint) const;
 
   double GetGeoidHeight(double lon, double lat) const;
   double GetGeoidHeight(const PointType& geoPoint) const;
 
   /** Return the number of DEM opened */
-  unsigned int GetDEMCount() const;
+  std::size_t GetDEMCount() const noexcept;
 
-  double GetDefaultHeightAboveEllipsoid() const;
+  double GetDefaultHeightAboveEllipsoid() const noexcept;
 
   void SetDefaultHeightAboveEllipsoid(double height);
 
-  /** Get DEM directory
+  /** Get DEM directory.
    * \param[in] idx directory index
    * \return the DEM directory corresponding to index idx
+   * \throw std::out_of_range if `idx >= GetNumberOfDEMDirectories()`
    */
-  std::string const& GetDEMDirectory(unsigned int idx = 0) const;
+  std::string const& GetDEMDirectory(std::size_t idx = 0) const;
+
+  std::size_t GetNumberOfDEMDirectories() const noexcept
+  { return m_DEMDirectories.size(); }
 
   /** Get Geoid file */
-  std::string const& GetGeoidFile() const;
+  std::string const& GetGeoidFile() const noexcept;
 
   /** Clear the DEM list and geoid filename, close all elevation datasets
-   * and reset the default height above ellipsoid */
+   * and reset the default height above ellipsoid.
+   */
   void ClearElevationParameters();
 
   /** Add an element to the current list of observers.
@@ -208,17 +209,18 @@ public:
   static constexpr char const* DEM_WARPED_DATASET_PATH  = "/vsimem/otb_dem_warped_dataset.vrt";
   static constexpr char const* DEM_SHIFTED_DATASET_PATH = "/vsimem/otb_dem_shifted_dataset.vrt";
 
-  DEMHandlerTLS const& GetHandlerForCurrentThread() const;
-protected:
-  DEMHandler();
-  ~DEMHandler();
-
-  friend class DEMHandlerTLS;
-  void RegisterTLS(DEMHandlerTLS* tls);
-  void UnregisterTLS(DEMHandlerTLS* tls);
-
-private:
-  /** Internal accessor to the current (thread-wise) DEM handler.
+  /** Accessor to the current (thread-wise) DEM handler.
+   *
+   * Returns the instance of `DEMHandlerTLS` that is meant to be used
+   * exclusively from the current thread.
+   *
+   * As a microoptimisation, this function is public and can be used
+   * from places like `ThreadedGenerateData()` to extract a local
+   * reference to the instance of the handler, which could then be used
+   * with `GetHeightAboveEllipsoid(DEMHandlerTLS const&, double lon,
+   * double lat)` and so on.
+   *
+   * \internal
    * If no handler has been attributed to the current thread, one will be
    * picked from the `m_tlses` pool, or created on the fly thanks to
    * `DoFetchOrCreateHandler`.
@@ -226,7 +228,13 @@ private:
    * This function is just a facade that caches the static thread local
    * `DEMHandlerTLS` attributed to the current thread.
    */
-  DEMHandlerTLS & DoGetHandlerForCurrentThread() const;
+  DEMHandlerTLS const& GetHandlerForCurrentThread() const;
+
+protected:
+  DEMHandler();
+  ~DEMHandler();
+
+private:
 
   DEMHandler(const Self&) = delete;
   void operator=(const Self&) = delete;
@@ -237,10 +245,8 @@ private:
   /** List of the DEM directories currently opened */
   std::vector<std::string> m_DEMDirectories;
 
-#if defined(OPEN_DEM_ONCE)
   /** List of RAII capsules on all opened DEM datasets for memory management */
   std::vector<otb::GDALDatasetWrapper::Pointer> m_DatasetList;
-#endif
 
   /** Filename of the current geoid */
   std::string m_GeoidFilename;
@@ -252,12 +258,26 @@ private:
 };
 
 
+/**\name Fast conviennce access functions
+ * \ingroup OTBIOGDAL
+ *
+ * DEM fast conviennce access functions.
+ *
+ * These functions are provided to be used with a `DEMHandlerTLS`
+ * instance that could (and should) be obtained in any
+ * `ThreadedGenerateData()` function where `DEMHandler` would be used.
+ *
+ * \see the eponym functions from `DEMHandler` for what they actually
+ * return
+ */
+/// @{
 double GetHeightAboveEllipsoid(DEMHandlerTLS const&, double lon, double lat);
 double GetHeightAboveMSL      (DEMHandlerTLS const&, double lon, double lat);
 double GetGeoidHeight         (DEMHandlerTLS const&, double lon, double lat);
 double GetHeightAboveEllipsoid(DEMHandlerTLS const&, itk::Point<double, 2> geoPoint);
 double GetHeightAboveMSL      (DEMHandlerTLS const&, itk::Point<double, 2> geoPoint);
 double GetGeoidHeight         (DEMHandlerTLS const&, itk::Point<double, 2> geoPoint);
+/// @}
 
 }
 #endif
