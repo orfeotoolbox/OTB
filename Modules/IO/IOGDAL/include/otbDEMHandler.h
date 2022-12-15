@@ -164,6 +164,11 @@ public:
   double GetHeightAboveMSL(double lon, double lat) const;
   double GetHeightAboveMSL(const PointType& geoPoint) const;
 
+  /** Return the offset information from the Geoid.
+   * \param[in] lon input longitude
+   * \param[in] lat input latitude
+   * \return Geoid offset
+  */
   double GetGeoidHeight(double lon, double lat) const;
   double GetGeoidHeight(const PointType& geoPoint) const;
 
@@ -174,7 +179,7 @@ public:
 
   void SetDefaultHeightAboveEllipsoid(double height);
 
-  /** Get DEM directory.
+  /** Get n-th DEM directory name.
    * \param[in] idx directory index
    * \return the DEM directory corresponding to index idx
    * \throw std::out_of_range if `idx >= GetNumberOfDEMDirectories()`
@@ -231,7 +236,16 @@ public:
   DEMHandlerTLS const& GetHandlerForCurrentThread() const;
 
 protected:
+  /**
+   * Default constructor.
+   * Takes care of calling `GDALAllRegister()`.
+   */
   DEMHandler();
+  /** Destructor.
+   * \post `DEM_DATASET_PATH`, `DEM_WARPED_DATASET_PATH` and
+   * `DEM_SHIFTED_DATASET_PATH` files are deleted.
+   * \post release shared ownership of the `DEMHandlerTLS` instances.
+   */
   ~DEMHandler();
 
 private:
@@ -247,7 +261,7 @@ private:
    * It's not thread safe!
    *
    * @warning DO NOT change the GEOID filename or the list of DEM directories
-   * while this function is being executed. These informations should only be
+   * while this function is being executed. These information should only be
    * changed from a main thread, not from processing threads!
    */
   void RegisterConfigurationInHandler(DEMHandlerTLS & handler) const;
