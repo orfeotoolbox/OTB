@@ -203,7 +203,8 @@ struct DatasetCache
   bool isWGS84() const noexcept { return m_isWGS84; }
 
   /// Accessor to Geo Transformation.
-  double * getGeoTransform() noexcept { return m_geoTransform;}
+  double      * getGeoTransform()       noexcept { return m_geoTransform;}
+  double const* getGeoTransform() const noexcept { return m_geoTransform;}
 
   DatasetCache & operator=(DatasetCache const&) = delete;
   DatasetCache & operator=(DatasetCache &&    ) = default;
@@ -356,7 +357,7 @@ public:
    * and reset the default height above ellipsoid */
   void ClearElevationParameters();
 
-  void CreateShiftedDatasetOnce();
+  void CreateShiftedDatasetOnce() const;
 
 private:
   DEMHandlerTLS(DEMHandlerTLS const&) = delete;
@@ -477,9 +478,14 @@ bool DEMHandlerTLS::OpenDEMVRTFile()
   // As we are reopening the same file: we should close it first!
   assert(! m_DEMDS);
   m_DEMDS = DEMDetails::DatasetCache(DEMHandler::DEM_DATASET_PATH);
-  if (m_DEMDS && m_GeoidDS) {
-    // CreateShiftedDatasetOnce();
-  }
+
+  // Note: we don't try to call CreateShiftedDatasetOnce() as the
+  // current implementation of DEMHandler::OpenGeoidFile() indirectly
+  // makes sure to do so by enforcing the existence of a DEMHandlerTLS
+  // instance. This will then trigger the call to
+  // CreateShiftedDatasetOnce() either from DEMHandler::OpenGeoidFile()
+  // and DEMHandler::OpenDEMDirectory()
+  // So... we can just exit
   return !! m_DEMDS;
 }
 
@@ -620,11 +626,14 @@ void DEMHandler::OpenDEMDirectory(std::string DEMDirectory)
       }
     }
 
-    // TODO: ¿ Do we need to call GetHandlerForCurrentThread() to be
-    // sure there is at least one to call CreateShiftedDatasetOnce() ?
-    // If so, beware of the lock...
-    if(! m_tlses.empty() && !m_GeoidFilename.empty()) // still locked
-    { // Should be done from only one thread!!
+    if(!m_GeoidFilename.empty()) // still locked
+    { // Should be done from only one thread, and ... once!!
+      assert(! m_tlses.empty()); // Given OpenGeoidFile() implementation
+                                 // (where an instance of DEMHandlerTLS
+                                 // is fetched locally (to be sure there
+                                 // is at least one), we know that
+                                 // !m_GeoidFilename.empty() =>
+                                 // !m_tlses.empty()
       m_tlses.front()->CreateShiftedDatasetOnce();
     }
   }
@@ -674,40 +683,42 @@ bool DEMHandler::OpenGeoidFile(std::string geoidFile)
 
   // In case the geoid is not valid, we still try to open it for real,
   // even if the DEMHandlerTLS will not serve to anything...
+  // tls will also serve to call CreateShiftedDatasetOnce()
   auto & tls = GetHandlerForCurrentThread();
   (void) tls;
 
-  bool success = false;
+  int nb_success = 0;
   {
     const std::lock_guard<std::mutex> lock(demMutex);
     for (auto tls : m_tlses)
     {
-      success = tls->OpenGeoidFile(geoidFile);
+      nb_success += tls->OpenGeoidFile(geoidFile) ? 1 : 0;
       // if any is true, all should be!
     }
-  } // } <- release lock
+  } // <- release lock
 
-  if (success)
+  if (nb_success != 0)
   {
     m_GeoidFilename = move(geoidFile); // => parameter voluntary taken by value
     if (! m_DatasetList.empty())
     { // In that case, we could expect TLS.m_DEMDS to be non-null
       const std::lock_guard<std::mutex> lock(demMutex);
-      if (!m_tlses.empty())
+      assert(!m_tlses.empty()); //
+      if (! m_DatasetList.empty())
       {
-        // We just need to create it once, in any thread. The first
-        // being goog enough...
-        m_tlses.front()->CreateShiftedDatasetOnce();
+        // We just need to create it once, in any thread. The one created
+        // locally being good enough...
+        tls.CreateShiftedDatasetOnce();
       }
     }
   }
   Notify();
-  return success;
+  return nb_success != 0;
 }
 
-void DEMHandlerTLS::CreateShiftedDatasetOnce()
+void DEMHandlerTLS::CreateShiftedDatasetOnce() const
 {
-  otbMsgDevMacro(<<std::this_thread::get_id() << " § DEMHandlerTLS::CreateShiftedDataset() --> " << this);
+  otbMsgDevMacro(<<std::this_thread::get_id() << " § DEMHandlerTLS::CreateShiftedDatasetOnce() --> " << this);
 
   assert(m_DEMDS);
   assert(m_GeoidDS);
@@ -736,7 +747,7 @@ void DEMHandlerTLS::CreateShiftedDatasetOnce()
   auto ds = static_cast<GDALDataset *> (GDALCreateWarpedVRT(m_GeoidDS.get(),
         m_DEMDS->GetRasterXSize(),
         m_DEMDS->GetRasterYSize(),
-        m_DEMDS.getGeoTransform(),
+        const_cast<double*>(m_DEMDS.getGeoTransform()), // not const-correct?
         warpOptions));
 
   ds->SetDescription(DEMHandler::DEM_WARPED_DATASET_PATH);
@@ -747,7 +758,7 @@ void DEMHandlerTLS::CreateShiftedDatasetOnce()
 
   poVRTDS = poDriver->Create( DEMHandler::DEM_SHIFTED_DATASET_PATH, m_DEMDS->GetRasterXSize(), m_DEMDS->GetRasterYSize(), 0, GDT_Float64, NULL );
 
-  poVRTDS->SetGeoTransform(m_DEMDS.getGeoTransform());
+  poVRTDS->SetGeoTransform(const_cast<double*>(m_DEMDS.getGeoTransform()));
 
   poVRTDS->SetProjection(m_DEMDS->GetProjectionRef());
 
