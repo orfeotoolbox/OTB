@@ -285,7 +285,7 @@ boost::optional<double> GetDEMValue(double lon, double lat, DatasetCache const& 
     }
   }
 
-  // C++20: use std::lerp
+  // C++20: use std::lerp for better precision (expected to be slower)
   auto const xBil1 = elevData[0] * (1-deltaX) + elevData[1] * deltaX;
   auto const xBil2 = elevData[2] * (1-deltaX) + elevData[3] * deltaX;
 
@@ -386,9 +386,10 @@ std::shared_ptr<DEMHandlerTLS> DEMHandler::DoFetchOrCreateHandler() const
   // by 1.
   // When the DEMHandler singleton is destroyed, each DEMHandlerTLS shared_ptr
   // is destroyed, and the count is decreased by 1.
-  // When the count reached 0, the DEMHandlerTLS is actually destroyed.
+  // When the count reaches 0, the DEMHandlerTLS is actually destroyed.
   // Infortunately we cannot be sure TLS variables are destroyed before the
-  // DEMHandler singleton. Hence the convoluted approach.
+  // DEMHandler singleton. Hence this convoluted approach with
+  // shared_ptr.
 
   // With the chosen (shared_ptr based) approach, when the owning count is 1,
   // this means only the DEMHandler singleton owns the TLS handler. And as
@@ -411,7 +412,8 @@ std::shared_ptr<DEMHandlerTLS> DEMHandler::DoFetchOrCreateHandler() const
   return res;
 }
 
-void DEMHandler::RegisterConfigurationInHandler(DEMHandlerTLS & tls) const {
+void DEMHandler::RegisterConfigurationInHandler(DEMHandlerTLS & tls) const
+{
   otbMsgDevMacro(<<std::this_thread::get_id() << " § DEMHandler::RegisterConfigurationInHandler(" << &tls <<")");
   if (! m_DatasetList.empty()) {
     if (! tls.OpenDEMVRTFile())
@@ -524,17 +526,8 @@ void DEMHandler::OpenDEMDirectory(std::string DEMDirectory)
     return;
   }
 
-  // Free the previous in-memory dataset (if any)
-  if (!m_DatasetList.empty())
-  {
-    const std::lock_guard<std::mutex> lock(demMutex);
-    for (auto tls : m_tlses) {
-      tls->CloseDEMVRTFile();
-    }
-    VSIUnlink(DEMHandler::DEM_DATASET_PATH);
-  }
-
   auto demFiles = DEMDetails::GetFilesInDirectory(DEMDirectory);
+  std::size_t nb_new_DEM_opened = 0;
   // Check and open every dem files found in DEMDirectory
   for (const auto & file : demFiles)
   {
@@ -545,7 +538,7 @@ void DEMHandler::OpenDEMDirectory(std::string DEMDirectory)
       if (DEMDetails::HasGeoTransform(*ds->GetDataSet()))
       {
         m_DatasetList.push_back(ds);
-        m_DEMDirectories.push_back(move(DEMDirectory)); // => parameter voluntary taken by value
+        ++nb_new_DEM_opened;
       }
       else
       {
@@ -563,21 +556,34 @@ void DEMHandler::OpenDEMDirectory(std::string DEMDirectory)
   }
 
   // Don't build a vrt if there is no dataset
-  if (m_DatasetList.empty())
+  if (nb_new_DEM_opened == 0)
   {
     otbLogMacro(Warning, << "No DEM found in "<< DEMDirectory)
   }
   else
   {
-    int const vrtSize = m_DatasetList.size();
+    otbLogMacro(Info, << nb_new_DEM_opened << " DEM found in "<< DEMDirectory)
+    m_DEMDirectories.push_back(move(DEMDirectory)); // => parameter voluntary taken by value
 
+    // Clean before anything else: Free the previous in-memory dataset (if any)
+    if (m_DatasetList.size() != nb_new_DEM_opened)
+    {
+      const std::lock_guard<std::mutex> lock(demMutex);
+      for (auto tls : m_tlses) {
+        tls->CloseDEMVRTFile();
+      }
+      VSIUnlink(DEMHandler::DEM_DATASET_PATH);
+    }
+
+    // (Re-)Create the VRT from a list of opened dataset
+    std::size_t const vrtSize = m_DatasetList.size();
     std::vector<GDALDatasetH> vrtDatasetList(vrtSize);
-    for (int i = 0; i < vrtSize; i++)
+    for (std::size_t i = 0; i < vrtSize; i++)
     {
       vrtDatasetList[i] = m_DatasetList[i]->GetDataSet();
     }
 
-    otbMsgDevMacro("Building VRT from datasets: " << DEMHandler::DEM_DATASET_PATH);
+    otbMsgDevMacro("Building VRT from " << vrtSize << " datasets: " << DEMHandler::DEM_DATASET_PATH);
     auto close_me = GDALBuildVRT(DEMHandler::DEM_DATASET_PATH, vrtSize, vrtDatasetList.data(),
         nullptr, nullptr, nullptr);
     // Need to close the dataset, so it is flushed into memory.
