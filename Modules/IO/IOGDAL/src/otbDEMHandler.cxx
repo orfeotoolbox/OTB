@@ -170,6 +170,8 @@ struct DatasetCache
       }
 
       m_Dataset->GetGeoTransform(m_geoTransform);
+
+      m_NoDataValue = m_Dataset->GetRasterBand(1)->GetNoDataValue();
     }
     else
     {
@@ -202,9 +204,13 @@ struct DatasetCache
 
   bool isWGS84() const noexcept { return m_isWGS84; }
 
-  /// Accessor to Geo Transformation.
+  /// Accessors to Geo Transformation.
   double      * getGeoTransform()       noexcept { return m_geoTransform;}
   double const* getGeoTransform() const noexcept { return m_geoTransform;}
+
+  /// Accessor to No Data value
+  double GetNoDataValue() const noexcept { return m_NoDataValue;}
+
 
   DatasetCache & operator=(DatasetCache const&) = delete;
   DatasetCache & operator=(DatasetCache &&    ) = default;
@@ -216,6 +222,7 @@ private:
   OCT_ptr     m_poCT;
   bool        m_isWGS84 = false;
   double      m_geoTransform[6] = {};
+  double      m_NoDataValue     = {};
 };
 
 /**
@@ -276,14 +283,13 @@ boost::optional<double> GetDEMValue(double lon, double lat, DatasetCache const& 
     return boost::none;
   }
 
-  // Test for no data. Don't return a value if one pixel
-  // of the interpolation is no data.
-  for (int i =0; i<4; i++)
+  // Test for no data. Don't return a value if any pixel of the
+  // interpolation has no data.
+  auto const no_data = dsc.GetNoDataValue();
+  auto const has_no_data = [=](auto const v){ return  v == no_data; };
+  if(std::any_of(std::begin(elevData), std::end(elevData), has_no_data))
   {
-    if (elevData[i] == dsc->GetRasterBand(1)->GetNoDataValue())
-    {
-      return boost::none;
-    }
+    return boost::none;
   }
 
   // C++20: use std::lerp for better precision (expected to be slower)
