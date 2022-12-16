@@ -288,8 +288,8 @@ boost::optional<double> GetDEMValue(double lon, double lat, DatasetCache const& 
   }
 
   // C++20: use std::lerp for better precision (expected to be slower)
-  auto const xBil1 = elevData[0] * (1-deltaX) + elevData[1] * deltaX;
-  auto const xBil2 = elevData[2] * (1-deltaX) + elevData[3] * deltaX;
+  auto const xBil1 = elevData[0] * (1.0 - deltaX) + elevData[1] * deltaX;
+  auto const xBil2 = elevData[2] * (1.0 - deltaX) + elevData[3] * deltaX;
 
   auto const yBil = xBil1 * (1.0 - deltaY) + xBil2 * deltaY;
   return yBil;
