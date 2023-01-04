@@ -924,6 +924,8 @@ public:
             application.SetupLogger()
             if application.IsDeprecated():
                 application.GetLogger().Warning("This application is deprecated and will be removed in a future OTB release")
+        else:
+            raise AttributeError("Application %s not found, please verify it is present in the bin folder of OTB install, did you install the module containing this application?" % name)
         return application
   }
   #else

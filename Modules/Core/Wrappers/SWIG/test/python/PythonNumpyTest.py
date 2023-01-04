@@ -55,19 +55,9 @@ def test(otbApplication, argv):
 	#write RGB image to file via python
 	#misc.imsave('ExtractROIOut.jpg', ExtractROIOut)
 
-	Rescale = otbApplication.Registry.CreateApplication("DynamicConvert")
-	#take numpy array from ExtractROI and feed into Rescale
-	Rescale.SetVectorImageFromNumpyArray("in", ExtractROIOut)
-	Rescale.SetParameterFloat("outmin", 50, True)
-	Rescale.SetParameterFloat("outmax", 100, True)
-	Rescale.Execute()
-
-	RescaleOut = Rescale.GetVectorImageAsNumpyArray("out", 'float')
-	# misc.imsave('RescaleOut.jpg', RescaleOut)
-
 	DynamicConvert = otbApplication.Registry.CreateApplication("DynamicConvert")
-	# take numpy output from Rescale application and feed into DynamicConvert
-	DynamicConvert.SetVectorImageFromNumpyArray("in", RescaleOut)
+	# take numpy output from ExtractROI application and feed into DynamicConvert
+	DynamicConvert.SetVectorImageFromNumpyArray("in", ExtractROIOut)
 	DynamicConvert.SetParameterString("out", "ConvertOut.png")
 	DynamicConvert.ExecuteAndWriteOutput()
 	DynamicConvertOut = DynamicConvert.GetVectorImageAsNumpyArray("out", 'float')
