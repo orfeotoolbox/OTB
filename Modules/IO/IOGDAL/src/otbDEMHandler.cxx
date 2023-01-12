@@ -657,7 +657,7 @@ bool HasInputProjection(GDALDataset const& gdalds)
 #if GDAL_VERSION_NUM >= 3000000
     gdalds.GetSpatialRef() && ! gdalds.GetSpatialRef()->IsEmpty()
 #else
-    GDALDataset gdal_ds_for_v2_API=const_cast<GDALDataset*>(gdalds);
+    GDALDataset& gdal_ds_for_v2_API=const_cast<GDALDataset&>(gdalds);
     gdal_ds_for_v2_API.GetProjectionRef()[0] != '\0'   // strlen(gdalds.GetProjectionRef()) != 0
 #endif
       ;
