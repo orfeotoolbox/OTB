@@ -25,8 +25,8 @@
 #include "otbGDALDatasetWrapper.h"
 #include <string>
 #include <list>
-#include <set>
 #include <vector>
+#include <memory>
 
 namespace otb
 {
