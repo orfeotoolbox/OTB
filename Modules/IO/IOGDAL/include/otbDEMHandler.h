@@ -284,7 +284,9 @@ private:
   /** Observers on the DEM */
   std::list<DEMObserverInterface *> m_ObserverList;
 
-  std::set<DEMHandlerTLS*> m_tlses;
+  /** Pool of actual thread local DEM handlers. */
+  mutable std::vector<std::shared_ptr<DEMHandlerTLS>> m_tlses;
+
 };
 
 
