@@ -1,4 +1,4 @@
-OTB-v8.1.1 - Changes since version 8.1.0 (Wednesday 13th, 2023)
+OTB-v8.1.1 - Changes since version 8.1.0 (January 13th, 2023)
 
 Bugs fixed:
   * !933: Improve DEMHandler performances which fixes #2307 Spatial shifting with Orthorectifcation of Sentinel 1 products by Luc Hermitte

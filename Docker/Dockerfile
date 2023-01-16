@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 FROM ubuntu:20.04
-ARG OTB_RELEASE=8.0.0
+ARG OTB_RELEASE=8.1.1
 
 # Install system dependencies
 COPY system-dependencies.txt .
