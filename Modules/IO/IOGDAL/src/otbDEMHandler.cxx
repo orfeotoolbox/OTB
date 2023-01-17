@@ -426,7 +426,7 @@ void DEMHandler::RegisterConfigurationInHandler(DEMHandlerTLS & tls) const
   if (! m_DatasetList.empty()) {
     if (! tls.OpenDEMVRTFile())
     {
-      otbLogMacro(Warning, << "An unexpected situation has occured: trying to open a VRT created from incompatible DEM files");
+      otbLogMacro(Warning, << "An unexpected situation has occurred: trying to open a VRT created from incompatible DEM files");
       assert(false);
       // The following should not be necessary. In the impossible case
       // the VRT file could not be opened, we just clear everything in
