@@ -383,7 +383,11 @@ private:
     {
       bool        newInputImage = false;
       std::string tempName      = GetParameterString("in");
-
+      //In case the parameter "in" is a pointer to memory, tempName will be "" 
+      if(tempName == "" && (GetParameterImage("in")!=NULL))
+      {
+        tempName = "From memory";
+      }
       // Check if the input image change
       if (tempName != m_inImageName)
       {
