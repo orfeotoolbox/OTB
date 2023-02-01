@@ -151,6 +151,7 @@ else()
 endif()
 
 find_package(OTB REQUIRED)
+find_package(Boost REQUIRED)
 include(${OTB_USE_FILE})
 message(STATUS "Found OTB: ${OTB_USE_FILE}")
 
