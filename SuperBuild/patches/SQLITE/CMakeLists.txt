@@ -25,9 +25,9 @@ project(sqlite)
 option(BUILD_SHARED_LIBS "Building shared libs. Default is ON" ON)
 
 include_directories("${CMAKE_SOURCE_DIR}")
-add_definitions(SQLITE_ENABLE_COLUMN_METADATA)
-add_definitions(SQLITE_ENABLE_RTREE)
-add_definitions(SQLITE_THREADSAFE=1)
+add_definitions(-DSQLITE_ENABLE_COLUMN_METADATA=1)
+add_definitions(-DSQLITE_ENABLE_RTREE=1)
+add_definitions(-DSQLITE_THREADSAFE=1)
 
 if(WIN32)
   add_library(sqlite3 STATIC sqlite3.c)
