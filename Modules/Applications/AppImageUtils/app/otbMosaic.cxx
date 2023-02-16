@@ -800,7 +800,7 @@ private:
       tmpdir.append("/");
     }
 
-    m_TempFilesPrefix = tmpdir + outbfname;
+    m_TempFilesPrefix = (tmpdir == "/") ? outbfname : tmpdir + outbfname;
     otbAppLogINFO(<< "Temporary files prefix is: " << m_TempFilesPrefix);
   }
 
