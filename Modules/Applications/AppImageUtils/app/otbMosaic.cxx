@@ -280,7 +280,6 @@ private:
     AddParameter(ParameterType_Float, "comp.feather.slim.length", "Transition length (In cartographic units)");
     MandatoryOn("comp.feather.slim.length");
     SetMinimumParameterFloatValue("comp.feather.slim.length", 0);
-    MandatoryOff("comp.feather.slim.length");
 
     // harmo (harmonization)
     AddParameter(ParameterType_Group, "harmo", "Spectral bands harmonization mode");
