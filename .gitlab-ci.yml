@@ -383,7 +383,7 @@ deploy:
       artifacts: true
     - job: windows-10-build
       artifacts: true
-    - job: centos-xdk-build
+    - job: redhat8-xdk-build
       artifacts: true
 
 update-archive:
