@@ -117,6 +117,8 @@ find_program(PATCHELF_PROGRAM NAMES patchelf)
 if(NOT PATCHELF_PROGRAM)
   set(PATCHELF_PROGRAM "${CMAKE_BINARY_DIR}/PATCHELF/src/patchelf/src/patchelf")
   include(External_patchelf)
+else()
+  set(__EXTERNAL_PATCHELF__ 1)
 endif()
 
 include(PackageGlobals)
