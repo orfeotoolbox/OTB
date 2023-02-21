@@ -174,7 +174,7 @@ redhat8-xdk-prepare:
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc
 
-readhat8-xdk-build:
+redhat8-xdk-build:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-redhat-superbuild-base:8
   script:
