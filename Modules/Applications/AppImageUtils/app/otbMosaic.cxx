@@ -798,7 +798,7 @@ private:
     }
 
     // Check that it ends with a POSIX separator
-    if tmpdir.size() > 0:
+    if (tmpdir.size() > 0)
       if (tmpdir[tmpdir.size() - 1] != '/')
       {
         tmpdir.append("/");
