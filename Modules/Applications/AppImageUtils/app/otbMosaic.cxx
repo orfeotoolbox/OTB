@@ -280,7 +280,6 @@ private:
     AddParameter(ParameterType_Float, "comp.feather.slim.length", "Transition length (In cartographic units)");
     MandatoryOn("comp.feather.slim.length");
     SetMinimumParameterFloatValue("comp.feather.slim.length", 0);
-    MandatoryOff("comp.feather.slim.length");
 
     // harmo (harmonization)
     AddParameter(ParameterType_Group, "harmo", "Spectral bands harmonization mode");
@@ -793,13 +792,17 @@ private:
     {
       // If tmpdir is empty, we use the same output directory as for the output image
       tmpdir = itksys::SystemTools::GetFilenamePath(outfname.c_str());
+      if (tmpdir.size() == 1)
+        // No path has been found -> "/"
+        tmpdir = "";
     }
 
     // Check that it ends with a POSIX separator
-    if (tmpdir[tmpdir.size() - 1] != '/')
-    {
-      tmpdir.append("/");
-    }
+    if (tmpdir.size() > 0)
+      if (tmpdir[tmpdir.size() - 1] != '/')
+      {
+        tmpdir.append("/");
+      }
 
     m_TempFilesPrefix = tmpdir + outbfname;
     otbAppLogINFO(<< "Temporary files prefix is: " << m_TempFilesPrefix);
