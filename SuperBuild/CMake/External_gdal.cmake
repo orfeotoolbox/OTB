@@ -25,8 +25,8 @@ SETUP_SUPERBUILD(GDAL)
 # declare dependencies
 ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(GDAL CURL OPENJPEG TIFF GEOTIFF PNG JPEG SQLITE GEOS ZLIB EXPAT HDF5 NETCDF HDF4 PROJ)
 
-set(GDAL_URL "https://download.osgeo.org/gdal/3.6.2/gdal-3.6.2.tar.xz")
-set(GDAL_MD5 6f22ffdbd8e00059ddb2b825c5920c4c)
+set(GDAL_URL "https://download.osgeo.org/gdal/3.6.3/gdal-3.6.3.tar.xz")
+set(GDAL_MD5 a6ccbcd5c90bf18dc1bf9b726583c505)
 
 set(GDAL_CONFIG_LIBS "-DGDAL_USE_CURL:BOOL=ON
 -DGDAL_USE_EXPAT:BOOL=ON
