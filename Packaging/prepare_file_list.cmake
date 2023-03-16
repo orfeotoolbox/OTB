@@ -89,7 +89,7 @@ function(prepare_file_list file_list_result)
   # for proj.dll, see Mantis-1424
   if(MSVC)
     list(APPEND file_list "ucrtbase.dll")
-    list(APPEND file_list "proj.dll")
+    list(APPEND file_list "proj_8_2.dll")
   endif()
 
   set(${file_list_result} ${file_list} PARENT_SCOPE)
