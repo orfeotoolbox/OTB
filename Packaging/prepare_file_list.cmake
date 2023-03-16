@@ -106,7 +106,7 @@ function(prepare_file_list file_list_result)
   # libEGL needed by Qt 5 at runtime
   if(MSVC)
     list(APPEND file_list "ucrtbase.dll")
-    list(APPEND file_list "proj.dll")
+    list(APPEND file_list "proj_8_2.dll")
   endif()
 
   # Qt plugins
