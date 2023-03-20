@@ -101,12 +101,8 @@ set(LINUX_SYSTEM_DLLS
   libmysqlclient.so*
   libodbc.so*
   libpq.so*
+  libpcre.so*
   )
-  # libexpat.so.*
-  # libfontconfig.so*
-  # libfreetype.so*
-  # libwebp.so*
-  # )
 
 set(APPLE_SYSTEM_DLLS
   libSystem.*dylib
@@ -117,6 +113,8 @@ set(APPLE_SYSTEM_DLLS
   libcups.*dylib
   libomp.dylib
   libqcocoa.dylib
+  libxml2.*dylib
+  libpcre.0.*dylib
   )
   
 if(WIN32)
