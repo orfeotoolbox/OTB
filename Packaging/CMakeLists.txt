@@ -28,8 +28,8 @@ include(GetPrerequisites)
 include(CTest)
 
 #setting this variable prints a lot of debug information
-#set(PKG_DEBUG OFF)
-set( PKG_DEBUG 1)
+set(PKG_DEBUG OFF)
+#set( PKG_DEBUG 1)
 
 set(CMAKE_BUILD_TYPE Release)
 
