@@ -35,10 +35,6 @@ function(install_share_dirs)
 
   ####################### install GDAL data ############################
   set(GDAL_DATA_DIR ${PKG_SHARE_SOURCE_DIR}/gdal)
-  #MSVC install gdal-data in in a different directory. So we don't spoil it
-  if(MSVC)
-    set(GDAL_DATA_DIR ${SUPERBUILD_INSTALL_DIR}/data)
-  endif()
   if(NOT EXISTS "${GDAL_DATA_DIR}/epsg.wkt")
     message(FATAL_ERROR
       "Cannot generate package without GDAL_DATA : ${GDAL_DATA_DIR}")
