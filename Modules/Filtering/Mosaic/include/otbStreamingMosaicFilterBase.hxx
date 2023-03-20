@@ -331,7 +331,7 @@ void StreamingMosaicFilterBase<TInputImage, TOutputImage, TInternalValueType>::G
   }
   if (m_NoDataOutputPixel.GetSize() == 0)
   {
-    itkWarningMacro(<< "NoDataOutputPixel not set. Using zeros");
+    itkDebugMacro(<< "NoDataOutputPixel not set. Using zeros");
     m_NoDataOutputPixel.SetSize(nbOfBands);
     m_NoDataOutputPixel.Fill(itk::NumericTraits<InputImageInternalPixelType>::Zero);
   }
