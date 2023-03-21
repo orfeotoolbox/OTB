@@ -101,7 +101,6 @@ set(LINUX_SYSTEM_DLLS
   libmysqlclient.so*
   libodbc.so*
   libpq.so*
-  libpcre.so*
   libpcre2*
   )
 
