@@ -112,8 +112,14 @@ get_package_name(${PACKAGE_OTB_SRC_DIR} PKG_OTB OTB_VERSION_STRING2)
 # We stage/keep files that goes into final package in this directory
 set(PKG_STAGE_DIR ${PACKAGE_NAME}-${OTB_VERSION_STRING2}-${PACKAGE_PLATFORM_NAME}${PACKAGE_ARCH}${NAME_SUFFIX})
 
-set(PATCHELF_PROGRAM "${CMAKE_BINARY_DIR}/PATCHELF/src/patchelf/src/patchelf")
-include(External_patchelf)
+# try to detect patchelf
+find_program(PATCHELF_PROGRAM NAMES patchelf)
+if(NOT PATCHELF_PROGRAM)
+  set(PATCHELF_PROGRAM "${CMAKE_BINARY_DIR}/PATCHELF/src/patchelf/src/patchelf")
+  include(External_patchelf)
+else()
+  set(__EXTERNAL_PATCHELF__ 1)
+endif()
 
 include(PackageGlobals)
 
