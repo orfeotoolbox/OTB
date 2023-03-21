@@ -102,6 +102,7 @@ set(LINUX_SYSTEM_DLLS
   libodbc.so*
   libpq.so*
   libpcre.so*
+  libomp.so*
   )
 
 set(APPLE_SYSTEM_DLLS
