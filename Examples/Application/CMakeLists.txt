@@ -23,7 +23,7 @@ project(ApplicationExamples)
 otb_create_application(
   NAME           ApplicationExample
   SOURCES        ApplicationExample.cxx
-  LINK_LIBRARIES ${OTBApplicationEngine_LIBRARIES})
+  LINK_LIBRARIES ${OTBApplicationEngine_LIBRARIES} ${OTBBoost_LIBRARIES})
 
 if(BUILD_TESTING)
   add_subdirectory(test)
