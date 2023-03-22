@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.10.1)
+cmake_minimum_required(VERSION 3.12)
 project(OTBPythonWrappers)
 
 if(POLICY CMP0072)
@@ -29,15 +29,14 @@ get_filename_component(PKG_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}" PATH)
 get_filename_component(PKG_PREFIX "${PKG_PREFIX}" PATH)
 get_filename_component(PKG_PREFIX "${PKG_PREFIX}" PATH)
 
+find_package(Boost REQUIRED COMPONENTS filesystem serialization unit_test_framework)
 find_package(OTB REQUIRED HINTS ${PKG_PREFIX}/@OTB_INSTALL_PACKAGE_DIR@)
 list(APPEND CMAKE_MODULE_PATH ${OTB_CMAKE_DIR})
 include(${OTB_USE_FILE})
 
-if(WIN32)
-  set(Python_ROOT_DIR "C:/tools/Python37-x64")
-endif()
 find_package( Python REQUIRED COMPONENTS Interpreter Development)
 include_directories(${Python_INCLUDE_DIRS})
+set(PYTHON_LIBRARIES ${Python_LIBRARIES})
 
 find_package(Numpy)
 if ( NUMPY_FOUND )

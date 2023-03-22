@@ -101,8 +101,8 @@ set(LINUX_SYSTEM_DLLS
   libmysqlclient.so*
   libodbc.so*
   libpq.so*
-  libpcre.so*
   libomp.so*
+  libpcre2*
   )
 
 set(APPLE_SYSTEM_DLLS
