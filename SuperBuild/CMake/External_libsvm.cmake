@@ -24,8 +24,8 @@ SETUP_SUPERBUILD(LIBSVM)
 
 ExternalProject_Add(LIBSVM
   PREFIX LIBSVM
-  URL "https://github.com/cjlin1/libsvm/archive/v322.tar.gz"
-  URL_MD5 d9617d29efad013573f63ca9a517f490
+  URL "https://github.com/cjlin1/libsvm/archive/v325.tar.gz"
+  URL_MD5 1d28a30dded4e5c0c857abe431418198
   BINARY_DIR ${LIBSVM_SB_BUILD_DIR}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

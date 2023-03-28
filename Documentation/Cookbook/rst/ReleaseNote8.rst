@@ -1,6 +1,9 @@
 What is new with OTB 8.0
 ========================
 
+.. note:: To see the complete list of updates, see the `RELEASE NOTES
+          <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/blob/develop/RELEASE_NOTES.txt>`_.
+
 OSSIM is used for geometric **sensor modelling** and **metadata
 parsing**. It has been a dependency of the OTB since its
 beginning. Then adapter classes have been added to hide OSSIM headers

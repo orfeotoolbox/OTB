@@ -36,7 +36,7 @@ typedef std::vector<itk::Point<double, 3>> pointsContainerType;
 typedef itk::Statistics::EuclideanDistanceMetric<otb::GDALRPCTransformer::PointType> DistanceType;
 typedef otb::GeographicalDistance<otb::GDALRPCTransformer::PointType> GeographicalDistanceType;
 
-int otbGDALRPCTransformerTest2(int itkNotUsed(argc), char* argv[])
+int otbGDALRPCTransformerTest2(int argc, char* argv[])
 {
   bool success = true;
   otb::GDALRPCTransformer::PointType imagePoint;
@@ -47,6 +47,14 @@ int otbGDALRPCTransformerTest2(int itkNotUsed(argc), char* argv[])
   std::string gcpFileName(argv[2]);
   double geoTol(atof(argv[3]));
   double imgTol(atof(argv[4]));
+  double lineOffset(0);
+  double sampleOffset(0);
+
+  if(argc == 7)
+  {
+    lineOffset = atof(argv[5]);
+    sampleOffset = atof(argv[6]);
+  }
 
   // Tools
   auto distance = DistanceType::New();
@@ -60,7 +68,7 @@ int otbGDALRPCTransformerTest2(int itkNotUsed(argc), char* argv[])
     for (int loop = 0 ; loop < geomSupplier.GetNbBands() ; ++loop)
       imd.Bands.emplace_back();
     otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
-    geomSupplier.FetchRPC(imd);
+    geomSupplier.FetchRPC(imd, lineOffset, sampleOffset);
   }
   else
   {

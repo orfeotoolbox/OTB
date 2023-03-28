@@ -90,7 +90,7 @@ public:
   {
     if (this->m_NumberOfClasses == 0)
     {
-      itkExceptionMacro(<< "NumberOfClasse has to be greater than 0.");
+      itkExceptionMacro(<< "NumberOfClasses has to be greater than 0.");
     }
 
     this->m_EnergyBefore = this->m_EnergyFidelity->GetValue(itData, itRegul.GetCenterPixel());

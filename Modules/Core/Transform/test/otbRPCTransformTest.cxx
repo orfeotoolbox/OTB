@@ -41,7 +41,7 @@ using GenericRSTransformType = otb::GenericRSTransform<double, 3, 3>;
 using DistanceType = itk::Statistics::EuclideanDistanceMetric<PointType>;
 using GeographicalDistanceType = otb::GeographicalDistance<PointType>;
 
-int otbRPCTransformTest(int itkNotUsed(argc), char* argv[])
+int otbRPCTransformTest(int argc, char* argv[])
 {
   bool success = true;
   PointType imagePoint;
@@ -52,6 +52,13 @@ int otbRPCTransformTest(int itkNotUsed(argc), char* argv[])
   std::string gcpFileName(argv[2]);
   double geoTol(atof(argv[3]));
   double imgTol(atof(argv[4]));
+  double lineOffset(0);
+  double sampleOffset(0);
+  if(argc == 7)
+  {
+    lineOffset = atof(argv[5]);
+    sampleOffset = atof(argv[6]);
+  }
 
   // Tools
   auto imgDistance = DistanceType::New();
@@ -69,7 +76,7 @@ int otbRPCTransformTest(int itkNotUsed(argc), char* argv[])
     for (int loop = 0 ; loop < geomSupplier.GetNbBands() ; ++loop)
       imd.Bands.emplace_back();
     otb::ImageMetadataInterfaceFactory::CreateIMI(imd, geomSupplier);
-    geomSupplier.FetchRPC(imd);
+    geomSupplier.FetchRPC(imd, lineOffset, sampleOffset);
   }
   else
   {

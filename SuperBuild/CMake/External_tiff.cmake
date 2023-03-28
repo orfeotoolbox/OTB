@@ -31,8 +31,8 @@ endif()
 
 ExternalProject_Add(TIFF
   PREFIX TIFF
-  URL "https://download.osgeo.org/libtiff/tiff-4.2.0.tar.gz"
-  URL_MD5 2bbf6db1ddc4a59c89d6986b368fc063
+  URL "https://download.osgeo.org/libtiff/tiff-4.4.0.tar.gz"
+  URL_MD5 376f17f189e9d02280dfe709b2b2bbea
   SOURCE_DIR ${TIFF_SB_SRC}
   BINARY_DIR ${TIFF_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}

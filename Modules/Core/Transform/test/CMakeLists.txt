@@ -100,14 +100,21 @@ otb_add_test(NAME trTvRPCTransformTest_worldview2 COMMAND otbTransformTestDriver
   0.1 # ImgTol
   )
 
+#For issue 2293, the baseline pleaides-1.geom had a shift of 0.5 pixels
+#in the geom generated with OTB 7.4, the baseline was wrong. To keep the compatibility, we added this shift in the tests
 otb_add_test(NAME trTvRPCTransformTest_pl_hnord_geom COMMAND otbTransformTestDriver
   otbRPCTransformTest
   ${INPUTDATA}/pleiades/pleiades-1.geom # Geom
   ${INPUTDATA}/pleiades/pleiades-1.gcp2 # GCP
   0.02 # GeoTol
   0.1 # ImgTol
+  0.5 # lineOffset
+  0.5 # sampleOffset
   )
 
+#For issue 2293, we had to regenerate the baseline pleiades-1.gcp2 because there was a shift
+#in the gcps that was fixed by the MR 918
+#To regenerate the gcps, see the wiki on the gitlab
 otb_add_test(NAME trTvRPCTransformTest_pl_hnord_product COMMAND otbTransformTestDriver
   otbRPCTransformTest
   LARGEINPUT{PLEIADES/TLSE_JP2_DIMAPv2_PRIMARY_PMS_lossless_12bits/IMGPHR_201222215194743808/IMG_PHR1A_PMS_201201151100183_SEN_IPU_20120222_0901-001_R1C1.JP2} # Product

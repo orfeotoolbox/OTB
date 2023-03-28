@@ -27,7 +27,7 @@
 namespace otb
 {
 /** \class LibSVMMachineLearningModelFactory
- * \brief Creation d'un instance d'un objet SVMMachineLearningModel utilisant les object factory.
+ * \brief Creation of an instance of an object SVMMachineLearningModel using the objects factory.
  *
  * \ingroup OTBSupervised
  */
