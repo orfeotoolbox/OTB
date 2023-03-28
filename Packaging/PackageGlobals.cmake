@@ -147,6 +147,8 @@ set(APPLE_SYSTEM_DLLS
   libcups.*dylib
   libomp.dylib
   libqcocoa.dylib
+  libxml2.*dylib
+  libpcre.0.*dylib
   )
 
 if(WIN32)
