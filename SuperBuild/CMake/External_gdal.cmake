@@ -50,6 +50,13 @@ set(GDAL_CONFIG_LIBS "-DGDAL_USE_CURL:BOOL=ON
 -DGDAL_USE_LIBKML:BOOL=OFF"
 )
 
+if(WIN32)
+   #on windows it is necessary to specify HDF5 cmake files path because they are not recognized by default
+   set(GDAL_CONFIG_HDF5 -DHDF5_DIR:PATH=${SB_INSTALL_PREFIX}/cmake/hdf5)
+else()
+   set(GDAL_CONFIG_HDF5)
+endif()
+
 ExternalProject_Add(GDAL
    PREFIX GDAL
    DEPENDS ${GDAL_DEPENDENCIES}
@@ -72,6 +79,7 @@ ExternalProject_Add(GDAL
    -DSQLite3_HAS_COLUMN_METADATA:BOOL=ON
    -DSQLite3_HAS_MUTEX_ALLOC:BOOL=ON
    -DCMAKE_INSTALL_LIBDIR:STRING=lib
+   ${GDAL_CONFIG_HDF5}
    CMAKE_COMMAND ${SB_CMAKE_COMMAND}
    LOG_DOWNLOAD 1
    LOG_CONFIGURE 1
