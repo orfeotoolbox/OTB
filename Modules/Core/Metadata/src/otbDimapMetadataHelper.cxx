@@ -471,8 +471,17 @@ void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, co
                   ,"Strip_Source.MISSION_INDEX", missionIndexVec);
   m_Data.missionIndex = missionIndexVec[0];
 
-  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Radiance",
-                     "BAND_ID", m_Data.BandIDs);
+  try
+  {
+    ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Radiance",
+                    "BAND_ID", m_Data.BandIDs);
+  }
+  catch(const std::exception& e)
+  {
+    // try other tag path (PNEO pan-sharpened)
+    ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
+                    "BAND_ID", m_Data.BandIDs);
+  }
 
   ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
                      "Solar_Incidences.SUN_ELEVATION", m_Data.SunElevation);
@@ -495,14 +504,41 @@ void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, co
   ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
                      "Acquisition_Angles.AZIMUTH_ANGLE", m_Data.AzimuthAngle);
 
-  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Radiance",
+  try
+  {
+    ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Radiance",
                      "BIAS", m_Data.PhysicalBias);
+  }
+  catch(const std::exception& e)
+  {
+    // try other tag path (PNEO pan-sharpened)
+    ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
+                     "BIAS", m_Data.PhysicalBias);
+  }
 
-  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Radiance",
+  try
+  {
+    ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Radiance",
                      "GAIN", m_Data.PhysicalGain);
-
-  ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Solar_Irradiance",
+  }
+  catch(const std::exception& e)
+  {
+    // try other tag path (PNEO pan-sharpened)
+    ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Radiance",
+                     "GAIN", m_Data.PhysicalGain);
+  }
+  
+  try
+  {
+    ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Band_Solar_Irradiance",
                      "VALUE" , m_Data.SolarIrradiance);
+  }
+  catch(const std::exception& e)
+  {
+    // try other tag path (PNEO pan-sharpened)
+    ParseVector(mds, prefix + "Radiometric_Data.Radiometric_Calibration.Instrument_Calibration.Band_Measurement_List.Band_Solar_Irradiance",
+                     "VALUE" , m_Data.SolarIrradiance);
+  }
 
   ParseVector(mds, prefix + "Geometric_Data.Use_Area.Located_Geometric_Values",
                      "Acquisition_Angles.AZIMUTH_ANGLE" , m_Data.SceneOrientation);
@@ -529,8 +565,6 @@ void DimapMetadataHelper::ParseDimapV3(const MetadataSupplierInterface & mds, co
     m_Data.TimeRangeStart = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Time.Time_Range.START");
     m_Data.TimeRangeEnd = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Time.Time_Range.END");
     m_Data.LinePeriod = mds.GetAs<std::string>(prefix +"Geometric_Data.Refined_Model.Time.Time_Stamp.LINE_PERIOD");
-    // m_Data.SwathFirstCol = mds.GetAs<std::string>(prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Band_Calibration_List.Band_Calibration.Swath_Range.FIRST_COL");
-    // m_Data.SwathLastCol = mds.GetAs<std::string>(prefix +  "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Band_Calibration_List.Band_Calibration.Swath_Range.LAST_COL");
     std::vector<std::string> swathRangeLastCol={};
     ParseVector(mds, prefix + "Geometric_Data.Refined_Model.Geometric_Calibration.Instrument_Calibration.Band_Calibration_List.Band_Calibration",
                      "Swath_Range.LAST_COL", swathRangeLastCol);
