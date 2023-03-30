@@ -15,6 +15,18 @@ SatElevation 72.7136
 SatAzimuth 7.51228
 AcquisitionDate 2021-11-07T10:29:29.3Z
 ProductionDate 2021-12-20T10:01:58.863Z
+ProjectionWKT GEOGCS["WGS 84",
+    DATUM["WGS_1984",
+        SPHEROID["WGS 84",6378137,298.257223563,
+            AUTHORITY["EPSG","7030"]],
+        AUTHORITY["EPSG","6326"]],
+    PRIMEM["Greenwich",0,
+        AUTHORITY["EPSG","8901"]],
+    UNIT["degree",0.0174532925199433,
+        AUTHORITY["EPSG","9122"]],
+    AXIS["Latitude",NORTH],
+    AXIS["Longitude",EAST],
+    AUTHORITY["EPSG","4326"]]
 RPC <RPCParam>
 ImageID PWOI_000005961_1_1_F_1
 LinePeriod 43.55529695995581
