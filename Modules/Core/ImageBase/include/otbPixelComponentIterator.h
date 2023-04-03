@@ -215,7 +215,7 @@ public:
       ++m_component;
       return *this;
     }
-#endif
+#else
     ++m_subiter;
     if (m_subiter.is_at_end())
     {
@@ -223,6 +223,7 @@ public:
       m_subiter = SubPixelComponentIteratorType{get_current_pixel()};
     }
     return *this;
+#endif
   }
 
   /** Post-increments the iterator.
@@ -244,8 +245,9 @@ public:
     {
       return get_current_pixel();
     }
-#endif
+#else
     return *m_subiter;
+#endif
   }
   decltype(auto) operator*() const
   {
@@ -257,9 +259,9 @@ public:
     {
       return get_current_pixel();
     }
-#endif
-
+#else
     return *m_subiter;
+#endif
   }
   //@}
 
