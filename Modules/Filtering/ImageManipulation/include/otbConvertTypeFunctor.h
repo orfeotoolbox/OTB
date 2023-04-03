@@ -131,7 +131,7 @@ public:
       // clamp<OutputType>(300) would yield 300-256=44 instead of 255.
       // Hence the use of ThresholdPixelValueType which is the common
       // type between Input and Output PixelValueTypes.
-      *dfirst = static_cast<OutputPixelValueType>(otb::clamp<ThresholdPixelValueType>(*first, lo, hi));
+      *dfirst = static_cast<OutputPixelValueType>(std::clamp<ThresholdPixelValueType>(*first, lo, hi));
     }
     // complete with extra 0 (case where we have less input bands, and we store into complex)
 #if 0
