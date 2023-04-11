@@ -166,7 +166,7 @@ private:
     case 0:
     {
       SimpleRCSFilterType::Pointer filter = SimpleRCSFilterType::New();
-      m_Ref.push_back(filter.GetPointer());
+      //m_Ref.push_back(filter.GetPointer());
 
       filter->SetPanInput(panchro);
       filter->SetXsInput(xs);

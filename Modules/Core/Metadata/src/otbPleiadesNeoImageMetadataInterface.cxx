@@ -170,6 +170,10 @@ void PleiadesNeoImageMetadataInterface::Parse(ImageMetadata& imd)
   imd.Add(MDStr::Instrument, dimapData.Instrument);
   imd.Add(MDStr::InstrumentIndex, dimapData.InstrumentIndex);
 
+  // gdal computes wrong number of bands with some PNEO products (3 instead of 6 for Primary Full Bundle MS for example)
+  // next line is a temporary fix for this issue
+  imd.Bands.resize(dimapData.BandIDs.size());
+
   if (dimapData.BandIDs.size() == imd.Bands.size())
   {
     const std::unordered_map<std::string, std::string> bandNameToEnhancedBandName = {{"P", "P"},  {"DB", "B5"}, {"B", "B1"},  {"G", "B2"},
