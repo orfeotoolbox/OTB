@@ -40,7 +40,7 @@ SimpleRcsPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImag
 
   // Set-up default parameters
   m_Radius.Fill(9);
-  m_Filter.SetSize(7 * 7);
+  m_Filter.SetSize((2 * m_Radius[0] + 1) * (2 * m_Radius[1] + 1));
   m_Filter.Fill(1);
 }
 
