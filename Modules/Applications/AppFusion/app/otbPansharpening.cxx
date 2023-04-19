@@ -98,6 +98,15 @@ private:
 
     AddChoice("method.rcs", "RCS");
     SetParameterDescription("method.rcs", "Simple RCS Pan sharpening operation.");
+    AddParameter(ParameterType_Int, "method.rcs.radiusx", "X radius");
+    SetParameterDescription("method.rcs.radiusx", "Set the x radius of the sliding window.");
+    SetMinimumParameterIntValue("method.rcs.radiusx", 1);
+    SetDefaultParameterInt("method.rcs.radiusx", 9);
+
+    AddParameter(ParameterType_Int, "method.rcs.radiusy", "Y radius");
+    SetParameterDescription("method.rcs.radiusy", "Set the y radius of the sliding window.");
+    SetMinimumParameterIntValue("method.rcs.radiusy", 1);
+    SetDefaultParameterInt("method.rcs.radiusy", 9);
 
     AddChoice("method.lmvm", "LMVM");
     SetParameterDescription("method.lmvm", "Local Mean and Variance Matching (LMVM) Pan sharpening.");
@@ -170,6 +179,20 @@ private:
 
       filter->SetPanInput(panchro);
       filter->SetXsInput(xs);
+
+      double radiusx = static_cast<unsigned int>(GetParameterInt("method.rcs.radiusx"));
+      double radiusy = static_cast<unsigned int>(GetParameterInt("method.rcs.radiusy"));
+
+      InternalFloatImageType::SizeType radius;
+      radius[0] = radiusx;
+      radius[1] = radiusy;
+
+      filter->SetRadius(radius);
+
+      itk::Array<double> filterCoeffs;
+      filterCoeffs.SetSize((2 * radius[0] + 1) * (2 * radius[1] + 1));
+      filterCoeffs.Fill(1);
+      filter->SetFilter(filterCoeffs);
 
       filter->UpdateOutputInformation();
       otbAppLogINFO(<< "Simple RCS algorithm");
