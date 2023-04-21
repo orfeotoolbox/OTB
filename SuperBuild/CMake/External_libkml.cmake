@@ -34,8 +34,8 @@ ADD_SUPERBUILD_CMAKE_VAR(LIBKML Boost_INCLUDE_DIR)
 
 ExternalProject_Add(LIBKML
   PREFIX LIBKML
-  URL "http://ftp.de.debian.org/debian/pool/main/libk/libkml/libkml_1.3.0~r864+dfsg.orig.tar.gz"
-  URL_MD5 487e3c8dd1ad03551e361ab6a1b4e083
+  URL "https://github.com/libkml/libkml/archive/refs/tags/1.3.0.tar.gz"
+  URL_MD5 e663141e9ebd480538b25d226e1b2979
   BINARY_DIR ${LIBKML_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}
