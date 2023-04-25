@@ -29,7 +29,7 @@ process:
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `ITK <http://www.itk.org>`_                                      | Yes                   | 4.6.0                      | 4.13.1                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `GDAL <http://www.gdal.org>`_                                    | Yes                   | 2.4.1                      | 3.2.2                    |
+    | `GDAL <http://www.gdal.org>`_                                    | Yes                   | 2.4.1                      | 3.4.1                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `OSSIM <http://www.ossim.org>`_                                  | Yes                   | 1.8.20-3                   | 1.8.20                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
@@ -156,6 +156,20 @@ OTB’s compilation is customized by specifying configuration variables.
 The most important configuration variables are shown in the
 table above. The simplest way to provide
 configuration variables is via the command line ``-D`` option:
+
+**Notes about Ubuntu 22**
+The release 7.4.2 added support for Ubuntu 22 by upgrading some libs such as GDAL and HDF4. 
+The Cmake version in Ubuntu 22 is 3.22 and cannot recognize the old Boost 1.69 properly,
+So if you build otb via the Superbuild you HAVE TO ACTIVATE the following option in your superbuild configuration :
+``USE_SYSTEM_BOOST=ON``.
+
+It is recommended to build this version with gcc-9 maximum. OTB 7.4 includes an old version of Qt and other libs, 
+that cannot compile with gcc > 10
+
+**Notes about LIBKML**
+libKML was disabled because the project is deprecated since 2015, and the source files are gone from the server
+it depends on very old version of zlib / minizip with some known CVEs so we had to deactivate this support in the Superbuild
+You can continue building OTB with KML support by using your system version of libkml by adding the option : ``USE_SYSTEM_LIBKML=ON``
 
 ::
 
