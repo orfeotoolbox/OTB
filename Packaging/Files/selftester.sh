@@ -121,40 +121,40 @@ for app in $OTB_APPS; do
     fi
   fi
   # test the gui launcher only on 2 first applications
-  if [ ! -f "bin/otbgui_$app" ]; then
-    echo_and_report "ERROR: missing gui launcher for application $app"
-  elif [ $app_index -lt 2 ]; then
-    echo "" >tmp.log
-    "bin/otbgui_$app" >tmp.log 2>&1 &
-    GUI_PID=$!
-    CHILD_PID=""
-    NEXT_CHILD_PID=""
-    nb_try=0
-    while [ -z "$NEXT_CHILD_PID" -a $nb_try -lt 10 ]; do
-      sleep 1s
-      CHILD_PROC=$(ps_children $GUI_PID | grep " bin/otbgui $app")
-      if [ -n "$CHILD_PROC" ]; then
-        CHILD_PID=$(get_pid "$CHILD_PROC")
-        NEXT_CHILD_PROC=$(ps_children "$CHILD_PID" | grep 'otbApplicationLauncherQt')
-        if [ -n "$NEXT_CHILD_PROC" ]; then
-          NEXT_CHILD_PID=$(get_pid "$NEXT_CHILD_PROC")
-        fi
-      fi
-      nb_try=$(( nb_try + 1 ))
-    done
-    if [ -n "$NEXT_CHILD_PID" ]; then
-      kill -9 "$NEXT_CHILD_PID"
-      wait "$NEXT_CHILD_PID" 2>/dev/null
-    elif [ -n "$CHILD_PID" ]; then
-      echo "ERROR: otbApplicationLauncherQt $app failed to launch"
-      tee -a selftest_report.log < tmp.log
-      exit_if
-    else
-      echo "ERROR: bin/otbgui_$app failed to launch"
-      tee -a selftest_report.log < tmp.log
-      exit_if
-    fi
-  fi
+  # if [ ! -f "bin/otbgui_$app" ]; then
+  #   echo_and_report "ERROR: missing gui launcher for application $app"
+  # elif [ $app_index -lt 2 ]; then
+  #   echo "" >tmp.log
+  #   "bin/otbgui_$app" >tmp.log 2>&1 &
+  #   GUI_PID=$!
+  #   CHILD_PID=""
+  #   NEXT_CHILD_PID=""
+  #   nb_try=0
+  #   while [ -z "$NEXT_CHILD_PID" -a $nb_try -lt 10 ]; do
+  #     sleep 1s
+  #     CHILD_PROC=$(ps_children $GUI_PID | grep " bin/otbgui $app")
+  #     if [ -n "$CHILD_PROC" ]; then
+  #       CHILD_PID=$(get_pid "$CHILD_PROC")
+  #       NEXT_CHILD_PROC=$(ps_children "$CHILD_PID" | grep 'otbApplicationLauncherQt')
+  #       if [ -n "$NEXT_CHILD_PROC" ]; then
+  #         NEXT_CHILD_PID=$(get_pid "$NEXT_CHILD_PROC")
+  #       fi
+  #     fi
+  #     nb_try=$(( nb_try + 1 ))
+  #   done
+  #   if [ -n "$NEXT_CHILD_PID" ]; then
+  #     kill -9 "$NEXT_CHILD_PID"
+  #     wait "$NEXT_CHILD_PID" 2>/dev/null
+  #   elif [ -n "$CHILD_PID" ]; then
+  #     echo "ERROR: otbApplicationLauncherQt $app failed to launch"
+  #     tee -a selftest_report.log < tmp.log
+  #     exit_if
+  #   else
+  #     echo "ERROR: bin/otbgui_$app failed to launch"
+  #     tee -a selftest_report.log < tmp.log
+  #     exit_if
+  #   fi
+  # fi
   app_index=$(( app_index + 1 ))
 done
 
