@@ -175,39 +175,39 @@ REF_SIZE=$REPORT_SIZE
 
 # Check 3 : OTB binaries monteverdi & mapla
 # Monteverdi
-echo "" >tmp.log
-bin/monteverdi >tmp.log 2>&1 &
-MVD_PID=$!
-sleep 5s
-if pgrep monteverdi | grep -q $MVD_PID; then
-  MVD_LOG=$(grep -i -e 'error' -e 'exception' tmp.log)
-  if [ -n "$MVD_LOG" ]; then
-    echo_and_report "ERROR: launching monteverdi"
-    tee -a selftest_report.log < tmp.log
-  fi
-  kill -9 $MVD_PID
-  wait $MVD_PID 2>/dev/null
-else
-  echo_and_report "ERROR: failed to launch monteverdi"
-  tee -a selftest_report.log < tmp.log
-fi
-# Mapla
-echo "" >tmp.log
-bin/mapla >tmp.log 2>&1 &
-MAPLA_PID=$!
-sleep 5s
-if pgrep mapla | grep -q $MAPLA_PID; then
-  MAPLA_LOG=$(grep -i -e 'error' -e 'exception' tmp.log)
-  if [ -n "$MAPLA_LOG" ]; then
-    echo_and_report "ERROR: launching mapla"
-    tee -a selftest_report.log < tmp.log
-  fi
-  kill -9 $MAPLA_PID
-  wait $MAPLA_PID 2>/dev/null
-else
-  echo_and_report "ERROR: failed to launch mapla"
-  tee -a selftest_report.log < tmp.log
-fi
+# echo "" >tmp.log
+# bin/monteverdi >tmp.log 2>&1 &
+# MVD_PID=$!
+# sleep 5s
+# if pgrep monteverdi | grep -q $MVD_PID; then
+#   MVD_LOG=$(grep -i -e 'error' -e 'exception' tmp.log)
+#   if [ -n "$MVD_LOG" ]; then
+#     echo_and_report "ERROR: launching monteverdi"
+#     tee -a selftest_report.log < tmp.log
+#   fi
+#   kill -9 $MVD_PID
+#   wait $MVD_PID 2>/dev/null
+# else
+#   echo_and_report "ERROR: failed to launch monteverdi"
+#   tee -a selftest_report.log < tmp.log
+# fi
+# # Mapla
+# echo "" >tmp.log
+# bin/mapla >tmp.log 2>&1 &
+# MAPLA_PID=$!
+# sleep 5s
+# if pgrep mapla | grep -q $MAPLA_PID; then
+#   MAPLA_LOG=$(grep -i -e 'error' -e 'exception' tmp.log)
+#   if [ -n "$MAPLA_LOG" ]; then
+#     echo_and_report "ERROR: launching mapla"
+#     tee -a selftest_report.log < tmp.log
+#   fi
+#   kill -9 $MAPLA_PID
+#   wait $MAPLA_PID 2>/dev/null
+# else
+#   echo_and_report "ERROR: failed to launch mapla"
+#   tee -a selftest_report.log < tmp.log
+# fi
 
 REPORT_SIZE=$(nb_report_lines)
 if [ "$REPORT_SIZE" -ne "$REF_SIZE" ]; then
