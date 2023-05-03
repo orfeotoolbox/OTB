@@ -309,12 +309,7 @@ option(USE_SYSTEM_GSL "Use a system build of GSL" OFF)
 # Call OTB
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
 option(OTB_USE_CURL "Enable module Curl in OTB" ON)
-#RK: disabled libkml. problems on windows msvc
-if(MSVC)
-  option(OTB_USE_LIBKML "Enable module libKML in OTB" OFF)
-else()
-  option(OTB_USE_LIBKML "Enable module libKML in OTB" ON)
-endif()
+option(OTB_USE_LIBKML "Enable module libKML in OTB" OFF)
 option(OTB_USE_LIBSVM "Enable module libSVM in OTB" ON)
 option(OTB_USE_MUPARSER "Enable module muparser in OTB" ON)
 option(OTB_USE_MUPARSERX "Enable module muparserX in OTB" ON)
