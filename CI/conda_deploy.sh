@@ -22,7 +22,7 @@
 # check if they have already signed the contributor license agreement (CLA).
 # When this is done, the author must be added to the reference list.
 
-source /build/anaconda3/bin/activate
+source /opt/conda/bin/activate
 
 ANACONDA_ORGANIZATION="orfeotoolbox"
 
