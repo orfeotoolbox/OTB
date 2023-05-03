@@ -35,4 +35,4 @@ conda build ${CONDA_BUILD_OPTIONS} libitk
 conda build ${CONDA_BUILD_OPTIONS} otb
 
 mkdir ${CI_PROJECT_DIR}/conda-bld
-mv /build/anaconda3/conda-bld/linux-64/*.tar.bz2 ${CI_PROJECT_DIR}/conda-bld
+mv /opt/conda/conda-bld/linux-64/*.tar.bz2 ${CI_PROJECT_DIR}/conda-bld
