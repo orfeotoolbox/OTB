@@ -1,3 +1,5 @@
+** Before extracting the package, make sure that you have been through the "First Step" page **
+
 We provide a binary package for GNU/Linux x86_64. This package includes
 all of the OTB applications along with command line launchers.
 It can be downloaded from `OTB's download page
@@ -46,18 +48,6 @@ package, you should first uninstall the specific OTB files from the package to
 leave only the dependencies (what we call an XDK). You can do it using the
 supplied script ``tools/uninstall_otb.sh``.
 
-Caveat on OTB 6.0
-~~~~~~~~~~~~~~~~~
-
-In OTB 6.0 binaries, there is a small caveat for "expat" as the supplied binaries
-depend on "libexpat.so", which is not contained in the package. It can be
-supplied by most package managers (apt, yum, ...). If not already present, it is
-necessary to install one of the following packages:
-
-::
-
-    libexpat-dev   libexpat1-dev
-
 Python bindings
 ~~~~~~~~~~~~~~~
 
@@ -100,79 +90,23 @@ Notes:
 
 - Multiple installation of OTB can exists in same system without one conflicting the other!
 
-Examples of installation on specific distribution
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Here are provided provide examples of package installations on popular distributions, using package managers to install the required dependencies.
-
-Ubuntu 18.04 and Ubuntu 20.04
-+++++++++++++++++++++++++++++
-
-The following commands can be executed on Ubuntu 18.04 or Ubuntu 20.04, for example in a docker container, to install OTB in a folder containing the OTB package self-extractable archive:
-
-.. code-block:: bash
-
-  apt-get update
-
-  # Required packages to extract OTB from the archive
-  apt-get install -y --no-install-recommends file python3 python3-dev python3-numpy
-
-  # optional: prevent tzdata from asking the timezone during cmake installation
-  export DEBIAN_FRONTEND=noninteractive 
-
-  # Required tools to recompile the bindings
-  apt-get install -y --no-install-recommends g++ cmake make
-
-  # Extract the archive
-  chmod +x OTB-8.0.0-rc1-Linux64.run
-  ./OTB-8.0.0-rc1-Linux64.run
-
-  # recompile the Python bindings
-  cd OTB-8.0.0-Linux64
-  source otbenv.profile
-  ctest -S share/otb/swig/build_wrapping.cmake -VV
-
-CENTOS 7
-++++++++
-
-.. code-block:: bash
-
-   #Add the SCL repositories to install python 3.8 and gcc 8
-   yum -y install epel-release centos-release-scl
-
-   #Install required dependencies for python bindings recompilation
-   yum -y install devtoolset-8 cmake3 rh-python38 rh-python38-python-devel rh-python38-python-numpy swig3 mesa-libGL-devel mesa-libGLU-devel
-
-   #Enable the environment
-   scl enable rh-python38 devtoolset-8 -- /bin/bash
-
-   # Extract the archive
-   chmod +x OTB-8.0.0-rc1-Linux64.run
-   ./OTB-8.0.0-rc1-Linux64.run
-
-   # recompile the Python bindings
-   cd OTB-8.0.0-Linux64
-   source otbenv.profile
-   ctest3 -S share/otb/swig/build_wrapping.cmake -VV
-
-
 FAQ
 ~~~
 
-Q: Unable to import otbApplication library with Python3.5
+Q: Unable to import otbApplication library with Python3.8
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 ::
 
-   ImportError: libpython3.5m.so.rh-python35-1.0: cannot open shared object file: No such file or directory
+   ImportError: libpython3.8m.so.rh-python38-1.0: cannot open shared object file: No such file or directory
 
-A: You need to add a symlink to libpython3.5m.so.rh-python35-1.0 to make it works. 
+A: You need to add a symlink to libpython3.8m.so.rh-python38-1.0 to make it works. 
 
 Here is the solution:
 
-- Find the libpython3.5XX on your system : ``find /usr/lib -iname *libpython3.5*``
-  (on Ubuntu 14.04, it is ``/usr/lib/x86_64-linux-gnu/libpython3.5m.so``)
-- Create a symlink : ``ln -s path/to/lib/python3.5XX path/to/lib/libpython3.5m.so.rh-python35-1.0``
+- Find the libpython3.8XX on your system : ``find /usr/lib -iname *libpython3.8*``
+  (on Ubuntu 20.04, it is ``/usr/lib/x86_64-linux-gnu/libpython3.8m.so``)
+- Create a symlink : ``ln -s path/to/lib/python3.5XX path/to/lib/libpython3.8m.so.rh-python38-1.0``
 - Try to import otbApplication again
 
 See this discussion on `OTB issue tracker <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues/1540#note_67864>`_
