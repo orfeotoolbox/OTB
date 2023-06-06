@@ -1,13 +1,7 @@
-Windows binary packages are available for Windows 7 or higher. They can
+** Before extracting the package, make sure that you have been through the "First Step" page **
+
+Windows binary packages are available for Windows 10 or higher. They can
 be downloaded from `otb download page <https://www.orfeo-toolbox.org/download>`_ .
-
-Pick the correct version (32 bit or 64 bit) depending on your system.
-
-Notes:
-~~~~~~
-
-- You must have "Visual C++ Redistributable for Visual Studio 2019" installed for using this package.
-  It can be downloaded freely from `microsoft <https://aka.ms/vs/16/release/vc_redist.x64.exe>`_
 
 Extract the archive and use one of the launchers, they contain all applications
 and their launchers (both command line and graphical launchers are provided):
