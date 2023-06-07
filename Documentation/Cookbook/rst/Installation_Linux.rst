@@ -74,7 +74,9 @@ Recompiling Python bindings
 
 If you are using another version of Python 3 than 3.8, but still want to use OTB Python bindings, it is possible
 to compile the python bindings again with your version of Python. CMake is required (it is available in most package
-managers or at [https://cmake.org/]). At the root of the OTB installation run :
+managers or at [https://cmake.org/]). Make sure you installed the necessary dependencies in the `First Step`_ page
+
+At the root of the OTB installation run :
 
 .. parsed-literal::
 
@@ -84,8 +86,6 @@ managers or at [https://cmake.org/]). At the root of the OTB installation run :
 You should now be able to import ``otbApplication`` through Python !
 
 Alternatively, you could use a virtual env or otb Conda Package to use the OTB Python bindings.
-
-Also see `Examples of installation on specific distribution`_ for examples on some distributions.
 
 Notes:
 ~~~~~~
