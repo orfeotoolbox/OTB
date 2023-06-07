@@ -10,7 +10,7 @@ Here are provided provide examples of package installations on popular distribut
 The following commands can be executed separatly, depending on your needs
 
 Ubuntu 20.04 and 22.04
-++++++++++++++++++++++
+----------------------
 
 .. code-block:: bash
 
@@ -24,7 +24,7 @@ Ubuntu 20.04 and 22.04
   apt install -y --no-install-recommends libgl-dev libgl1 libxcb1 '^libxcb.*' libx11-xcb1 libglu1-mesa libxrender1 libxi6 libxkbcommon0 libxkbcommon-x11-0 libxinerama1
 
 RedHat 8 / Fedora 37+
-++++++++++++++++++++
+---------------------
 
 .. code-block:: bash
 
@@ -57,8 +57,8 @@ You have two choices to build from source, they are detailed in the "Compile OTB
 Common dependencies
 +++++++++++++++++++
 
-  Ubuntu 20.04 and 22.04
-  ++++++++++++++++++++++
+Ubuntu 20.04 and 22.04
+----------------------
 
   .. code-block:: bash
 
@@ -68,8 +68,8 @@ Common dependencies
     apt install -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended doxygen graphviz gnuplot dvipng
 
 
-  RedHat 8 / Fedora 37+
-  ++++++++++++++++++++
+RedHat 8 / Fedora 37+
+---------------------
 
   .. code-block:: bash
 
@@ -81,13 +81,13 @@ Common dependencies
 Dependencies for a native build
 ++++++++++++++++++++++++++++++++
 
-  Ubuntu 20.04 and 22.04
-  ++++++++++++++++++++++
+Ubuntu 20.04 and 22.04
+----------------------
 
   .. code-block:: bash
 
     # Install mandatory dependencies
-    apt install -y --no-install-recommends libboost-filesystem-dev libboost-serialization-dev libboost-system-dev libboost-thread-dev libcurl4-gnutls-dev libgdal-dev python3-gdal libexpat1-dev libfftw3-dev libgeotiff-dev libgsl-dev libinsighttoolkit4-dev libgeotiff-dev libopenthreads-dev libossim-dev libpng-dev libtinyxml-dev
+    apt install -y --no-install-recommends libboost-filesystem-dev libboost-serialization-dev libboost-system-dev libboost-thread-dev libcurl4-gnutls-dev libgdal-dev python3-gdal libexpat1-dev libfftw3-dev libgeotiff-dev libgsl-dev libinsighttoolkit4-dev libgeotiff-dev libpng-dev libtinyxml-dev
     
     # Install optional dependencies
     apt install -y --no-install-recommends libmuparser-dev libmuparserx-dev libkml-dev libopencv-core-dev libopencv-ml-dev libopenmpi-dev libsvm-dev
@@ -96,25 +96,33 @@ Dependencies for a native build
     apt install -y --no-install-recommends libegl1-mesa-dev libglvnd-dev libglu1-mesa-dev libglx-dev libgles2-mesa-dev libglew-dev libglfw3-dev freeglut3-dev qtbase5-dev qttools5-dev libqt5opengl5-dev libqwt-qt5-dev
          
 
-  RedHat 8 / Fedora 37+
-  ++++++++++++++++++++
+RedHat 8 / Fedora 37+
+---------------------
 
   .. code-block:: bash
 
+    # Install mandatory dependencies
+    dnf install -y boost-devel gdal-devel python3-gdal expat-devel libgeotiff-devel fftw-devel InsightToolkit-devel gsl-devel libpng-devel tinyxml-devel
+
+    # Install optional dependencies (for muparserX, you have to manually add a third party repository)
+    dnf install -y muParser-devel opencv-devel libsvm-devel libkml-devel
+
+    # Install graphical dependencies
+    dnf install -y mesa-libGL mesa-libGLU libXcursor libXi libXinerama libXrandr libpnglibjpeg libxcb libxkbcommon libxkbcommon-x11 xcb-util xcb-util-image xcb-util-keysyms xcb-util-renderutil xcb-util-wm
 
 Dependencies for a SuperBuild build
 +++++++++++++++++++++++++++++++++++
 
-  Ubuntu 20.04 and 22.04
-  ++++++++++++++++++++++
+Ubuntu 20.04 and 22.04
+----------------------
 
   .. code-block:: bash
 
     # Install graphical dependencies
     apt install '^libxcb.*-dev' libglvnd-dev libglu1-mesa-dev libegl1-mesa-dev mesa-utils libgles2-mesa-dev libperl-dev libwayland-dev libxi-dev libxrandr-dev libxinerama-dev libxcursor-dev libxkbcommon-x11-dev libxkbcommon-dev libxcb-xinerama0-dev libx11-xcb-dev
 
-  RedHat 8 / Fedora 37+
-  ++++++++++++++++++++
+RedHat 8 / Fedora 37+
+---------------------
 
   .. code-block:: bash
 
