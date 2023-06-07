@@ -4,7 +4,7 @@ You can install and use OTB via 3 different methods :
     - the docker image
     - building from source
 
-In this page, we describe the necessary system dependencies for these use cases
+In this page, we describe the necessary system dependencies to install for these use cases
 You can follow these tutorials depending on your operating system
 
 Linux
