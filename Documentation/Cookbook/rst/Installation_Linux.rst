@@ -74,7 +74,7 @@ Recompiling Python bindings
 
 If you are using another version of Python 3 than 3.8, but still want to use OTB Python bindings, it is possible
 to compile the python bindings again with your version of Python. CMake is required (it is available in most package
-managers or at [https://cmake.org/]). Make sure you installed the necessary dependencies in the `First Step`_ page
+managers or at [https://cmake.org/]). Make sure you installed the necessary dependencies in the **First Step** page
 
 At the root of the OTB installation run :
 
@@ -85,7 +85,27 @@ At the root of the OTB installation run :
 
 You should now be able to import ``otbApplication`` through Python !
 
-Alternatively, you could use a virtual env or otb Conda Package to use the OTB Python bindings.
+Create an healthy Python environment for OTB
+++++++++++++++++++++++++++++++++++++++++++++
+
+We strongly recommend to use a virtual env to **avoid conflicts between OTB and GDAL when you develop python scripts that uses other dependencies like rasterio, scikit...**
+
+.. code-block:: bash
+
+   # Source your OTB environment
+   . <your installation directory>/otbenv.profile
+   # Create a virtual env and install some libraries
+   python -m venv otb_venv
+   . otb_venv/bin/activate
+   pip install --upgrade pip
+   pip install scikit-image scikit-learn geopandas 
+   # Rastero depends on GDAL and need to be compiled on the flight with current OTB's own GDAL
+   pip install rasterio --no-binary :all:
+   # Use your libraries within Python
+   python
+   > import rasterio
+   > import otbApplication as otb
+
 
 Notes:
 ~~~~~~
