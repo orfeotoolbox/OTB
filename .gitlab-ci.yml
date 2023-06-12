@@ -179,6 +179,8 @@ redhat-xdk-build:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-redhat-superbuild-base:8
   script:
+    - export DISPLAY=:99.0
+    - Xvfb :99 -screen 0 1600x1200x32
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc
     - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=redhat-8-gcc
     - mv build_packages/OTB-*.run . || true
