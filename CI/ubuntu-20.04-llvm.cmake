@@ -18,10 +18,10 @@
 # limitations under the License.
 #
 
-# Configuration options for ubuntu-18.04-llvm
+# Configuration options for ubuntu-20.04-llvm
 
 set(site_option
-"opencv_INCLUDE_DIR:PATH=/usr/include
+"opencv_INCLUDE_DIR:PATH=/usr/include/opencv4
 CMAKE_C_COMPILER:STRING=clang
 CMAKE_CXX_COMPILER:STRING=clang++
 CMAKE_EXE_LINKER_FLAGS:STRING=-fuse-ld=lld

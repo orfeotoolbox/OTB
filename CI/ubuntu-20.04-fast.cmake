@@ -18,14 +18,20 @@
 # limitations under the License.
 #
 
-# Configuration options for ubuntu-18.04-llvm-qa
+# Configuration options for ubuntu-20.04-fast
 
 set(site_option
-"CMAKE_C_COMPILER:STRING=clang
+"opencv_INCLUDE_DIR:PATH=/usr/include/opencv4
+CMAKE_C_COMPILER:STRING=clang
 CMAKE_CXX_COMPILER:STRING=clang++
-CMAKE_C_FLAGS:STRING=--coverage
-CMAKE_CXX_FLAGS:STRING=--coverage
 CMAKE_EXE_LINKER_FLAGS:STRING=-fuse-ld=lld
 CMAKE_MODULE_LINKER_FLAGS:STRING=-fuse-ld=lld
 CMAKE_SHARED_LINKER_FLAGS:STRING=-fuse-ld=lld
-")
+CMAKE_C_COMPILER_LAUNCHER:STRING=ccache
+CMAKE_CXX_COMPILER_LAUNCHER:STRING=ccache
+OTB_USE_SHARK:BOOL=OFF
+BUILD_EXAMPLES:BOOL=OFF")
+
+set(ci_skip_testing ON)
+
+set(ci_skip_install ON)

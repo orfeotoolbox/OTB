@@ -18,8 +18,8 @@
 # limitations under the License.
 #
 
-# Configuration options for ubuntu-18.04-gcc
+# Configuration options for ubuntu-20.04-gcc
 
 set(site_option
-"opencv_INCLUDE_DIR:PATH=/usr/include
+"opencv_INCLUDE_DIR:PATH=/usr/include/opencv4
 OTB_USE_SHARK:BOOL=OFF")

@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-# Configuration options for ubuntu-18.04-llvm-xdk
+# Configuration options for ubuntu-20.04-llvm-xdk
 
 set(site_option
 "CMAKE_C_COMPILER:STRING=clang
