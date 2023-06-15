@@ -23,7 +23,7 @@ how to start using Monteverdi and OTB applications to view and process your
 data, and recipes on how to accomplish typical remote sensing tasks.
 Finally, there is also documentation on every application shipped with OTB.
 
-Get started now with the :doc:`Installation` chapter.
+Get started now with the :doc:`First_Step` chapter.
 
 Get help, share your experience and contribute to the Orfeo-Toolbox project by
 joining `our community <https://www.orfeo-toolbox.org/community/>`_ and
@@ -42,6 +42,7 @@ Table of Contents
     :maxdepth: 1
     :caption: Get Started
 
+    First_Step
     Installation
     Supported_Sensors
     Monteverdi
