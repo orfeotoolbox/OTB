@@ -65,18 +65,19 @@ Ubuntu 20.04 and 22.04
     apt update -y && apt install -y --no-install-recommends ca-certificates curl make cmake g++ gcc git git-lfs libtool swig python3 python3-dev python3-pip python3-numpy pkg-config patch
 
     # Additional dependencies if you need to build the documentation
-    apt install -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended doxygen graphviz gnuplot dvipng
-
+    apt install -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended doxygen graphviz gnuplot dvipng python3-sphinx sphinx-rtd-theme-common
+    pip install sphinx_rtd_theme
 
 RedHat 8 / Fedora 37+
 ---------------------
 
   .. code-block:: bash
 
-    dnf -y update && dnf install -y git git-lfs cmake3 which procps swig gcc gcc-c++ make glibc-static patch patchelf pcre-devel python38 python38-devel python38-numpy openssl-devel perl-devel zlib-devel curl-devel
+    dnf -y update && dnf install -y git git-lfs cmake3 which procps swig gcc gcc-c++ make glibc-static patch patchelf pcre-devel python38 python38-devel python38-numpy python38-pip openssl-devel perl-devel zlib-devel curl-devel
     
     # Additional dependencies if you need to build the documentation
-    dnf install -y texlive texlive-dvipng doxygen graphviz gnuplot 
+    dnf install -y texlive texlive-dvipng doxygen graphviz gnuplot python38-sphinx
+    pip install sphinx_rtd_theme
 
 Dependencies for a native build
 ++++++++++++++++++++++++++++++++
