@@ -1,5 +1,5 @@
-First Step
-==========
+First Steps
+===========
 
 You can install and use OTB via 3 different methods :
 
