@@ -55,10 +55,10 @@ You have two choices to build from source, they are detailed in the "Compile OTB
   - **Superbuild build**: you need to install the packages required to build all the OTB dependencies
 
 Common dependencies
-~~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++
 
 Ubuntu 20.04 and 22.04
-++++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~~
 
   .. code-block:: bash
 
@@ -69,7 +69,7 @@ Ubuntu 20.04 and 22.04
     pip install sphinx_rtd_theme
 
 RedHat 8 / Fedora 37+
-+++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~
 
   .. code-block:: bash
 
@@ -80,10 +80,10 @@ RedHat 8 / Fedora 37+
     pip install sphinx_rtd_theme
 
 Dependencies for a native build
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++++++++++++++
 
 Ubuntu 20.04 and 22.04
-++++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~~
 
   .. code-block:: bash
 
@@ -98,7 +98,7 @@ Ubuntu 20.04 and 22.04
          
 
 RedHat 8 / Fedora 37+
-+++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~
 
   .. code-block:: bash
 
@@ -112,10 +112,10 @@ RedHat 8 / Fedora 37+
     dnf install -y mesa-libGL mesa-libGLU libXcursor libXi libXinerama libXrandr libpnglibjpeg libxcb libxkbcommon libxkbcommon-x11 xcb-util xcb-util-image xcb-util-keysyms xcb-util-renderutil xcb-util-wm
 
 Dependencies for a SuperBuild build
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
++++++++++++++++++++++++++++++++++++
 
 Ubuntu 20.04 and 22.04
-++++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~~
 
   .. code-block:: bash
 
@@ -123,7 +123,7 @@ Ubuntu 20.04 and 22.04
     apt install '^libxcb.*-dev' libglvnd-dev libglu1-mesa-dev libegl1-mesa-dev mesa-utils libgles2-mesa-dev libperl-dev libwayland-dev libxi-dev libxrandr-dev libxinerama-dev libxcursor-dev libxkbcommon-x11-dev libxkbcommon-dev libxcb-xinerama0-dev libx11-xcb-dev
 
 RedHat 8 / Fedora 37+
-+++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~
 
   .. code-block:: bash
 
