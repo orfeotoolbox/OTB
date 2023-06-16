@@ -1,4 +1,4 @@
-** Before extracting the package, make sure that you have been through the "First Step" page **
+**Before extracting the package, make sure that you have been through the** :doc:`First_Step` page
 
 We provide a binary package for GNU/Linux x86_64. This package includes
 all of the OTB applications along with command line and graphical launchers.
