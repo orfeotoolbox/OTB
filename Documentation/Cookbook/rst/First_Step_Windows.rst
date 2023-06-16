@@ -9,3 +9,8 @@ Installation of required dependencies
 
 - If you plan to run the graphical interface, monteverdi could crash if you run Windows on a VM because of the lack of OpenGL support.
   to cope with that problem you can `download here <https://downloads.fdossena.com/geth.php?r=mesa64-latest>`__ the MESA project opensource OpenGL dll , and put it in the 'bin' folder of the OTB installation, before launching any OTB graphical app
+
+Important Note
+++++++++++++++
+
+Monteverdi will be deprecated in the future OTB 9 version, we strongly recommend to switch to QGIS which will be the default viewer for OTB
