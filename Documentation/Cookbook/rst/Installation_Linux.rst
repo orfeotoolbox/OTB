@@ -120,13 +120,13 @@ Q: Unable to import otbApplication library with Python3.8
 
    ImportError: libpython3.8m.so.rh-python38-1.0: cannot open shared object file: No such file or directory
 
-A: You need to add a symlink to libpython3.8m.so.rh-python38-1.0 to make it works. 
+A: You need to add a symlink to libpython3.8m.so.rh-python38-1.0 to make it work. 
 
 Here is the solution:
 
 - Find the libpython3.8XX on your system : ``find /usr/lib -iname *libpython3.8*``
   (on Ubuntu 20.04, it is ``/usr/lib/x86_64-linux-gnu/libpython3.8m.so``)
-- Create a symlink : ``ln -s path/to/lib/python3.5XX path/to/lib/libpython3.8m.so.rh-python38-1.0``
+- Create a symlink : ``ln -s path/to/lib/python3.8XX path/to/lib/libpython3.8m.so.rh-python38-1.0``
 - Try to import otbApplication again
 
 See this discussion on `OTB issue tracker <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues/1540#note_67864>`_
