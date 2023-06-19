@@ -195,10 +195,11 @@ private:
       }
       auto L2V = ListToVectorFilterType::New();
       L2V->SetInput(outputList);
+      L2V->UpdateOutputInformation();
+      L2V->GetOutput()->GetImageMetadata().Bands = imd.Bands;
       if (!ret)
       {
         // write the new NoData values in the output metadata (mode.apply.ndval)
-        L2V->UpdateOutputInformation();
         otb::WriteNoDataFlags(flags, values, L2V->GetOutput()->GetImageMetadata());
       }
       SetParameterOutputImage("out", L2V->GetOutput());

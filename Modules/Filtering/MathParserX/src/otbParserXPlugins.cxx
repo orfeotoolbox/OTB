@@ -728,7 +728,7 @@ void vmax::Eval(mup::ptr_val_type& ret, const mup::ptr_val_type* a_pArg, int a_i
 
   assert(a_pArg[0]->GetType() == 'm');
 
-  max = itk::NumericTraits<double>::min();
+  max = itk::NumericTraits<double>::NonpositiveMin();
 
   m1 = a_pArg[0]->GetArray();
 
