@@ -156,6 +156,45 @@ temporary file.
    output_pil_image = PILImage.fromarray(np.uint8(ExtractOutput))
    imshow(output_pil_image)
 
+Mix OTB with other libraries 
+----------------------------
+
+It's now possible to mix Python libraries (rasterio to open images, scikit-image, scikit-learn for processings) with OTB. 
+In order to build efficient code, here are some tips illustrated by a small example.
+
+- **OTB expects "(height, width, channels)" shaped arrays** while rasterio and other libs usually use "(channels, height, width)" arrays. The Numpy ``np.transpose(x,y,z)`` helps you transpose axis
+- For single-band images, use ``otbapp.SetImageFromNumpyArray(..)`` method and ``otbapp.SetVectorImageFromNumpyArray(..)`` otherwise. 
+- ***OTB returns a reference** on the numpy array output : depending on your use-case, you may copy the array (``numpy.copy()``)
+- **OTB expects C contiguous arrays** : sometimes it's not the case, for example if multiple process use a shared_memory array. In that specific case, you may use Numpy.ascontiguousarray method to make it work properly
+
+.. code-block:: python
+
+    ds = rio.open(image)
+    np_image_raw = ds.read()
+    print(">> shape rio.open().read() "+str(np_image_raw.shape))
+    
+    nbchannels = np_image_raw.shape[0]
+    heigth = np_image_raw.shape[1]
+    width = np_image_raw.shape[2]
+    # use np.transpose to switch axis : OTB expects [height, width, nb channels] images
+    np_image=np_image_raw.transpose(1, 2, 0) 
+    [ ... ]
+    app_rindices = otb.Registry.CreateApplication("RadiometricIndices")
+    app_rindices.SetVectorImageFromNumpyArray('in', np_image)
+    # OTB expects C contiguous arrays and in certain conditions (ex : shared_memory arrays), 
+    # the ndarray should be transform as following
+    app_rindices.SetVectorImageFromNumpyArray('in', np.ascontiguousarray(np_image))
+    [ ... set parameters ..]
+    app_rindices.Execute() # we don't write output
+    # Get output result
+    res_indices = app_rindices.GetVectorImageAsNumpyArray("out")
+    # to write it with rasterio or pass it to another library, you may switch back axis
+    res_indices = res_indices.transpose(2,0,1)
+    # Be aware that as soon as OTB application is deleted from memory, the ndarray is deallocated...
+    # You should consider making a copy of the array
+    res_indices = app_rindices.GetVectorImageAsNumpyArray("out").copy()
+
+
 In-memory connection
 --------------------
 
