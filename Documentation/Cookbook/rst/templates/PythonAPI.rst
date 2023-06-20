@@ -522,6 +522,15 @@ There are a few corner cases to be aware of when using Python wrappers. They are
 often limitations, that one day may be solved in future versions. If it
 happens, this documentation will report the OTB version that fixes the issue.
 
+Multithreading problem when calling ZonalStatistics application
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+There is a known multithreading problem that occurs only in python when you call, with python >= 3.8,
+where you can get the error "free() : invalid next size". It is due to a python GIL problem, that sometimes invalidates
+a part of the memory before a thread tries to access it. For more information, refer to the issue 2334 on the forge
+
+A workaround for this problem is to use the ZonalStatistics application in C++ / via the command line or graphical tool.
+
 Calling UpdateParameters()
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
