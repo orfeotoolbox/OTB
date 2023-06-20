@@ -56,7 +56,7 @@ enum
   Mode_OrthoFit
 };
 
-const Double DefaultGridSpacingMeter = 4.0;
+const double DefaultGridSpacingMeter = 4.0;
 
 namespace Wrapper
 {
@@ -76,12 +76,12 @@ public:
   itkTypeMacro(OrthoRectification, otb::Application);
 
   /** Generic Remote Sensor Resampler */
-  typedef otb::GenericRSResampleImageFilter<DoubleVectorImageType, DoubleVectorImageType> ResampleFilterType;
+  typedef otb::GenericRSResampleImageFilter<FloatVectorImageType, FloatVectorImageType> ResampleFilterType;
 
   /** Interpolators typedefs*/
-  typedef itk::LinearInterpolateImageFunction<DoubleVectorImageType, double>          LinearInterpolationType;
-  typedef itk::NearestNeighborInterpolateImageFunction<DoubleVectorImageType, double> NearestNeighborInterpolationType;
-  typedef otb::BCOInterpolateImageFunction<DoubleVectorImageType> BCOInterpolationType;
+  typedef itk::LinearInterpolateImageFunction<FloatVectorImageType, double>          LinearInterpolationType;
+  typedef itk::NearestNeighborInterpolateImageFunction<FloatVectorImageType, double> NearestNeighborInterpolationType;
+  typedef otb::BCOInterpolateImageFunction<FloatVectorImageType> BCOInterpolationType;
 
 private:
   void DoInit() override
@@ -259,7 +259,7 @@ private:
       otb::Wrapper::ElevationParametersHandler::SetupDEMHandlerFromElevationParameters(this, "elev");
 
       // input image
-      DoubleVectorImageType::Pointer inImage = GetParameterImage("io.in");
+      FloatVectorImageType::Pointer inImage = GetParameterImage("io.in");
 
       // Update the UTM zone params
       MapProjectionParametersHandler::InitializeUTMParameters(this, "io.in", "map");
@@ -268,7 +268,7 @@ private:
       m_OutputProjectionRef = MapProjectionParametersHandler::GetProjectionRefFromChoice(this, "map");
 
       // Compute the output image spacing and size
-      typedef otb::ImageToGenericRSOutputParameters<DoubleVectorImageType> OutputParametersEstimatorType;
+      typedef otb::ImageToGenericRSOutputParameters<FloatVectorImageType> OutputParametersEstimatorType;
       OutputParametersEstimatorType::Pointer                              genericRSEstimator = OutputParametersEstimatorType::New();
 
       if (GetParameterInt("outputs.isotropic"))
@@ -484,7 +484,7 @@ private:
         if (HasValue("outputs.ortho"))
         {
           // input image
-          DoubleVectorImageType::Pointer inOrtho = GetParameterImage("outputs.ortho");
+          FloatVectorImageType::Pointer inOrtho = GetParameterImage("outputs.ortho");
 
           ResampleFilterType::OriginType  orig    = inOrtho->GetOrigin();
           ResampleFilterType::SpacingType spacing = inOrtho->GetSignedSpacing();
@@ -513,7 +513,7 @@ private:
         if (m_OutputProjectionRef == otb::SpatialReference::FromWGS84().ToWkt())
         {
           // How much is 4 meters in degrees ?
-          typedef itk::Point<Double, 2> DoublePointType;
+          typedef itk::Point<double, 2> DoublePointType;
           DoublePointType point1, point2;
 
           typedef otb::GeographicalDistance<DoublePointType> GeographicalDistanceType;
@@ -557,7 +557,7 @@ private:
   void DoExecute() override
   {
     // Get the input image
-    DoubleVectorImageType* inImage = GetParameterImage("io.in");
+    FloatVectorImageType::Pointer inImage = GetParameterImage("io.in");
 
     // Resampler Instantiation
     m_ResampleFilter = ResampleFilterType::New();
@@ -633,7 +633,7 @@ private:
     otbAppLogINFO("Generating output with origin = " << origin);
 
     // Build the default pixel
-    DoubleVectorImageType::PixelType defaultValue;
+    FloatVectorImageType::PixelType defaultValue;
     defaultValue.SetSize(inImage->GetNumberOfComponentsPerPixel());
     defaultValue.Fill(GetParameterDouble("outputs.default"));
     m_ResampleFilter->SetEdgePaddingValue(defaultValue);
@@ -685,7 +685,7 @@ private:
     }
 
     // Output Image
-    SetParameterOutputImage("io.out", m_ResampleFilter->GetOutput());
+    SetParameterOutputImage<FloatVectorImageType>("io.out", m_ResampleFilter->GetOutput());
   }
 
   ResampleFilterType::Pointer m_ResampleFilter;
