@@ -123,6 +123,7 @@ set(LINUX_SYSTEM_DLLS
   libEGL.so*
   libxkbcommon*
   libxcb-*
+  libpcre2*
   )
   # libexpat.so.*
   # libfontconfig.so*

@@ -1,0 +1,10 @@
+--- a/qtbase/src/corelib/global/qglobal.h	2018-11-25 13:51:11.000000000 +0100
++++ b/qtbase/src/corelib/global/qglobal.h	2023-06-07 14:56:00.401417544 +0200
+@@ -45,6 +45,7 @@
+ #  include <type_traits>
+ #  include <cstddef>
+ #  include <utility>
++#  include <limits>
+ #endif
+ #ifndef __ASSEMBLER__
+ #  include <assert.h>
