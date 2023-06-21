@@ -158,7 +158,7 @@ ubuntu-xdk-build-doc:
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base:18.04
   script:
     - export QT_QPA_PLATFORM=offscreen
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
+    - ctest -VV -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-18.04-llvm-xdk
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
