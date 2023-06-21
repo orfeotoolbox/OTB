@@ -25,7 +25,7 @@ import argparse
 import re
 
 import otbApplication
-from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_Radius, ParameterType_RAM, ParameterType_Float, ParameterType_String, ParameterType_StringList, ParameterType_InputFilename, ParameterType_OutputFilename, ParameterType_InputImage, ParameterType_OutputImage, ParameterType_InputVectorData, ParameterType_OutputVectorData, ParameterType_Directory, ParameterType_Choice, ParameterType_InputImageList, ParameterType_InputVectorDataList, ParameterType_InputFilenameList, ParameterType_ListView, ParameterType_Band, ParameterType_Field, ParameterType_Group
+from otbApplication import ParameterType_Bool, ParameterType_Int, ParameterType_Radius, ParameterType_RAM, ParameterType_Float, ParameterType_Double, ParameterType_String, ParameterType_StringList, ParameterType_InputFilename, ParameterType_OutputFilename, ParameterType_InputImage, ParameterType_OutputImage, ParameterType_InputVectorData, ParameterType_OutputVectorData, ParameterType_Directory, ParameterType_Choice, ParameterType_InputImageList, ParameterType_InputVectorDataList, ParameterType_InputFilenameList, ParameterType_ListView, ParameterType_Band, ParameterType_Field, ParameterType_Group
 
 from otb_warnings import application_documentation_warnings
 
@@ -103,6 +103,9 @@ def GetApplicationExamplePythonSnippet(app,idx,expand = False, inputpath="",outp
         if paramtype == ParameterType_Float:
             # app.SetParameterString(param,value)
             output += "\t" + appname + ".SetParameterFloat("+EncloseString(param)+", "+value + ")"
+        if paramtype == ParameterType_Double:
+            # app.SetParameterString(param,value)
+            output += "\t" + appname + ".SetParameterDouble("+EncloseString(param)+", "+value + ")"
         if paramtype == ParameterType_String:
             # app.SetParameterString(param,value)
             output+= "\t" + appname + ".SetParameterString("+EncloseString(param)+", "+EncloseString(value)+")"
@@ -195,6 +198,7 @@ def rst_parameter_value(app, key):
     values.update({ParameterType_Bool: "bool"})
     values.update(dict.fromkeys([ParameterType_Int, ParameterType_Radius, ParameterType_RAM], "int"))
     values.update({ParameterType_Float: "float"})
+    values.update({ParameterType_Double: "double"})
     values.update({ParameterType_String: "string"})
     values.update({ParameterType_StringList: "string1 string2..."})
     values.update(dict.fromkeys([ParameterType_InputFilename, ParameterType_OutputFilename], "filename [dtype]"))
