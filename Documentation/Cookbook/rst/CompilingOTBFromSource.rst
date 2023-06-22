@@ -184,6 +184,9 @@ SuperBuild only:
 SuperBuild: Build OTB and all dependencies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+**IMPORTANT NOTE** : the LIBKML sources are no longer available, but some distributions such as Ubuntu until 22.04
+still packages it, so to build with LIBKML support, you should set ``OTB_USE_LIBKML=ON`` and ``USE_SYSTEM_LIBKML=ON``
+
 OTB’s compilation is customized by specifying configuration variables.
 The most important configuration variables are shown in the
 table above. The simplest way to provide

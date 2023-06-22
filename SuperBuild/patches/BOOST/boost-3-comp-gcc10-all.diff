@@ -1,0 +1,8 @@
+--- boost_1_69_0.orig/boost/thread/pthread/thread_data.hpp
++++ boost_1_69_0/boost/thread/pthread/thread_data.hpp
+@@ -59,4 +59,4 @@
+ #endif
+-#if PTHREAD_STACK_MIN > 0
++#ifdef PTHREAD_STACK_MIN
+          if (size<PTHREAD_STACK_MIN) size=PTHREAD_STACK_MIN;
+ #endif
