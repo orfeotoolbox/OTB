@@ -1,4 +1,24 @@
-OTB-v 8.1.1 - Changes since version 8.1.0 (January 13th, 2023)
+OTB-v 8.1.2 - Changes since version 8.1.1 (June 22th, 2023)
+
+Bugs fixed:
+  * !960: BUG: Fix precision from float to double on the orthorectification app by Thibaut ROMAIN
+  * !954: BUG: calling vmax on an image with negative values returns 0 as max instead of the real max by Thibaut ROMAIN
+  * !949: Mosaic application fixes by Rémi CRESSON
+  * !945: BUG: Fix wrong in-memory connection to OpticalCalibration by Thibaut ROMAIN
+  * !944: Fix band metadata drop in ManageNoData application by Thibaut ROMAIN
+  * !948: BUG: Fix segmentation fault with some S1 products with SarCalibration app by Thibaut ROMAIN
+
+Documentation:
+  * !961: add a caption on python APi about the zonalstatistics app problem by Thibaut ROMAIN
+  * !956: add a before installation step in documentation to describe system dependencies to install by Thibaut ROMAIN
+  * !952: Add some tips to use OTB python interfaces with rasterio and numpy by Yannick TANGUY
+  * !947: Update Documentation/Cookbook/rst/recipes/sarprocessing.rst by Mickaël SAVINAUD 
+
+CI:
+  * !959: Update CI to replace CentOS7 with RedHat 8, minor dependencies updates for compilation compatibility with Ubuntu 22 by Thibaut ROMAIN
+
+OTB-v 8.1.1 - Changes since version 8.1.0 (January 13th, 2023) 
+--------------------------------------------------------------
 
 Bugs fixed:
   * !933: Improve DEMHandler performances which fixes #2307 Spatial shifting with Orthorectifcation of Sentinel 1 products by Luc Hermitte
@@ -10,8 +30,7 @@ CI:
   * Update ZLIB to 1.2.13 by Thibaut ROMAIN (backport from !902)
 
 OTB-v 8.1.0 - Changes since version 8.0.1 (September 14th, 2022)
----------------------------------------------------------------------
-
+----------------------------------------------------------------
 Features added:
 
    * !926: rpcSolver: Avoid setting equation system multiple times by Julien Osman
