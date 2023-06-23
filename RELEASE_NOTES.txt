@@ -1,6 +1,7 @@
-OTB-v 8.1.2 - Changes since version 8.1.1 (June 22th, 2023)
+OTB-v 8.1.2 - Changes since version 8.1.1 (June 23th, 2023)
 
 Bugs fixed:
+  * !964: BUG: Fix default RCS parameter for PHR pansharpening by Thibaut ROMAIN
   * !960: BUG: Fix precision from float to double on the orthorectification app by Thibaut ROMAIN
   * !954: BUG: calling vmax on an image with negative values returns 0 as max instead of the real max by Thibaut ROMAIN
   * !949: Mosaic application fixes by Rémi CRESSON
