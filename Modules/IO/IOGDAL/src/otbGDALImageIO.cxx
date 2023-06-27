@@ -511,6 +511,10 @@ void GDALImageIO::InternalReadImageInformation()
   {
     SetComponentType(UCHAR);
   }
+  else if (m_PxType->pixType == GDT_Int8)
+  {
+    SetComponentType(CHAR);
+  }
   else if (m_PxType->pixType == GDT_UInt16)
   {
     SetComponentType(USHORT);
