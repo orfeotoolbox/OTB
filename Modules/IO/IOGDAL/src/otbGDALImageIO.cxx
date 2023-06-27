@@ -511,10 +511,12 @@ void GDALImageIO::InternalReadImageInformation()
   {
     SetComponentType(UCHAR);
   }
+#if GDAL_VERSION_NUM >= 3070000
   else if (m_PxType->pixType == GDT_Int8)
   {
     SetComponentType(CHAR);
   }
+#endif
   else if (m_PxType->pixType == GDT_UInt16)
   {
     SetComponentType(USHORT);
