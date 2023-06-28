@@ -69,17 +69,13 @@ Monteverdi also requires the standard graphics libraries **libgl1** and
 **libglu1**. Make sure you have at least one version of them installed
 in your system.
 
-Caveat on OTB 6.0
+Caveat on OTB 7.4.2
 ~~~~~~~~~~~~~~~~~
 
-In OTB 6.0 binaries, there is a small caveat for "expat" as the supplied binaries
-depend on "libexpat.so", which is not contained in the package. It can be
-supplied by most package managers (apt, yum, ...). If not already present, it is
-necessary to install one of the following packages:
-
-::
-
-    libexpat-dev   libexpat1-dev
+In OTB 7.4.2, libKML was disabled because the project is deprecated since 2015, and the source files are gone from the server
+it depends on very old version of zlib / minizip with some known CVEs so we had to deactivate this support.
+If you build OTB from source you can activate the option ``USE_SYSTEM_LIBKML`` to build with this support. It will use the version
+included in your operating system.
 
 Python bindings
 ~~~~~~~~~~~~~~~

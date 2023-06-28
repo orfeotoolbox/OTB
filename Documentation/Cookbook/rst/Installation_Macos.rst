@@ -41,6 +41,15 @@ package, you should first uninstall the specific OTB files from the package to
 leave only the dependencies (what we call an XDK). You can do it using the
 supplied script ``tools/uninstall_otb.sh``.
 
+
+Caveat on OTB 7.4.2
+~~~~~~~~~~~~~~~~~
+
+In OTB 7.4.2, libKML was disabled because the project is deprecated since 2015, and the source files are gone from the server
+it depends on very old version of zlib / minizip with some known CVEs so we had to deactivate this support.
+If you build OTB from source you can activate the option ``USE_SYSTEM_LIBKML`` to build with this support. It will use the version
+included in your operating system.
+
 Python bindings
 ~~~~~~~~~~~~~~~
 

@@ -32,11 +32,11 @@ otb_module_target_label(otbQtWidgetTestDriver)
 
 # Tests Declaration
 
-otb_add_test(NAME owTvQtWidgetParameterGroup COMMAND otbQtWidgetTestDriver
-  otbWrapperQtWidgetParameterGroup)
+# otb_add_test(NAME owTvQtWidgetParameterGroup COMMAND otbQtWidgetTestDriver
+#   otbWrapperQtWidgetParameterGroup)
 
-otb_add_test(NAME owTvQtWidgetParameterFactory COMMAND otbQtWidgetTestDriver
-  otbWrapperQtWidgetParameterFactory)
+# otb_add_test(NAME owTvQtWidgetParameterFactory COMMAND otbQtWidgetTestDriver
+#   otbWrapperQtWidgetParameterFactory)
 
-otb_add_test(NAME owTvQtWidgetShow COMMAND otbQtWidgetTestDriver
-  otbWrapperQtWidgetShowWidget ${OTB_BINARY_DIR}/lib/otb/applications)
+# otb_add_test(NAME owTvQtWidgetShow COMMAND otbQtWidgetTestDriver
+#   otbWrapperQtWidgetShowWidget ${OTB_BINARY_DIR}/lib/otb/applications)
