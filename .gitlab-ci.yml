@@ -426,7 +426,7 @@ release-container:
            --form ref=master
            --form variables[OTB_TAG]=$CI_COMMIT_TAG
            https://gitlab.orfeo-toolbox.org/api/v4/projects/126/trigger/pipeline
-
+ 
 release-docker:
   image:
       name: gcr.io/kaniko-project/executor:debug
@@ -435,6 +435,13 @@ release-docker:
   only:
     refs:
       - /^release-[0-9]+\.[0-9]+$/
+  needs:
+      - job: redhat-xdk-build
+        artifacts: true
+  artifacts:
+    paths:
+      - OTB-8.1.2-Linux64.run
+    when: always
   script:
       - /kaniko/executor --cleanup
                        --verbosity warn
