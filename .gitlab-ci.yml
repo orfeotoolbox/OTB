@@ -432,9 +432,9 @@ release-docker:
       name: gcr.io/kaniko-project/executor:debug
       entrypoint: [""]
   stage: docker
-  only:
-    refs:
-      - /^release-[0-9]+\.[0-9]+$/
+  # only:
+  #   refs:
+  #     - /^release-[0-9]+\.[0-9]+$/
   needs:
       - job: redhat-xdk-build
         artifacts: true
