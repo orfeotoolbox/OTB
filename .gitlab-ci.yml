@@ -93,6 +93,7 @@ stages:
       - build/coverage_report.xml
       - build/Testing/Temporary/*.txt #DEBUG
       - Docker/Dockerfile
+      - Docker/system-dependencies.txt
 
 .common-prepare:
   extends: .general
