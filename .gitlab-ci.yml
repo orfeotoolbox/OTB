@@ -438,7 +438,7 @@ release-docker:
   #   refs:
   #     - /^release-[0-9]+\.[0-9]+$/
   needs:
-      - job: redhat-xdk-prepare
+      - job: redhat-xdk-build
         artifacts: true
   script:
       - /kaniko/executor --cleanup
