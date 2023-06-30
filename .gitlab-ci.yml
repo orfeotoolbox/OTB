@@ -437,10 +437,10 @@ release-docker:
   #   refs:
   #     - /^release-[0-9]+\.[0-9]+$/
   needs:
-      - job: redhat-xdk-build
+      - job: redhat-xdk-prepare
         artifacts: true
   before_script:
-    - echo $CI_PROJECT_DIR
+    - ls -al $CI_PROJECT_DIR
   script:
       - /kaniko/executor --cleanup
                        --verbosity warn
