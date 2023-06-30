@@ -432,7 +432,6 @@ release-docker:
   image:
       name: gcr.io/kaniko-project/executor:debug
       entrypoint: [""]
-  extends: .common-build
   stage: docker
   # only:
   #   refs:
