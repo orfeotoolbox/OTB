@@ -92,6 +92,7 @@ stages:
       - build/cppcheck_report.xml
       - build/coverage_report.xml
       - build/Testing/Temporary/*.txt #DEBUG
+      - Docker/Dockerfile
 
 .common-prepare:
   extends: .general
@@ -439,11 +440,9 @@ release-docker:
   needs:
       - job: redhat-xdk-prepare
         artifacts: true
-  before_script:
-    - ls -al $CI_PROJECT_DIR
   script:
       - /kaniko/executor --cleanup
                        --verbosity warn
-                       --context $CI_PROJECT_DIR/build/otb/Docker
-                       --dockerfile $CI_PROJECT_DIR/build/otb/Docker/Dockerfile
+                       --context $CI_PROJECT_DIR/Docker
+                       --dockerfile $CI_PROJECT_DIR/Docker/Dockerfile
                        --destination $CI_REGISTRY_IMAGE/orfeotoolbox/otb:$CI_COMMIT_BRANCH
