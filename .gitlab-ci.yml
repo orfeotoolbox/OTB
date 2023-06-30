@@ -431,6 +431,7 @@ release-docker:
   image:
       name: gcr.io/kaniko-project/executor:debug
       entrypoint: [""]
+  extends: .common-build
   stage: docker
   # only:
   #   refs:
@@ -438,12 +439,6 @@ release-docker:
   needs:
       - job: redhat-xdk-build
         artifacts: true
-  artifacts:
-    paths:
-      - OTB-8.1.2-Linux64.run
-    when: always
-  before_script: 
-    - git checkout -f -q %CI_COMMIT_SHA%
   script:
       - /kaniko/executor --cleanup
                        --verbosity warn
