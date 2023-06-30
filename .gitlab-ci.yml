@@ -439,6 +439,8 @@ release-docker:
   needs:
       - job: redhat-xdk-build
         artifacts: true
+  before_script:
+    - echo $CI_PROJECT_DIR
   script:
       - /kaniko/executor --cleanup
                        --verbosity warn
