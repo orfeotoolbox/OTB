@@ -21,7 +21,7 @@ FROM ubuntu:20.04
 ARG OTB_RELEASE=8.1.2
 
 # Install system dependencies
-COPY system-dependencies.txt .
+COPY Docker/system-dependencies.txt .
 RUN apt-get update -y \
  && apt-get upgrade -y \
  && cat system-dependencies.txt | DEBIAN_FRONTEND=noninteractive xargs apt-get install -y --no-install-recommends \
