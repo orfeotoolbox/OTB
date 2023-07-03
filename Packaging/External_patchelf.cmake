@@ -50,8 +50,8 @@ set(PATCHELF_ENV_COMMAND env CC=${CMAKE_C_COMPILER} CXX=${CMAKE_CXX_COMPILER} CX
 
 ExternalProject_Add(PATCHELF
   PREFIX "${PATCHELF_PREFIX_DIR}"
-  URL                 "http://nixos.org/releases/patchelf/patchelf-0.9/patchelf-0.9.tar.bz2"
-  URL_MD5             d02687629c7e1698a486a93a0d607947
+  URL                 "https://github.com/NixOS/patchelf/releases/download/0.12/patchelf-0.12.tar.bz2"
+  URL_MD5             4fed3f12040da79f59ecf337d5e99fbc
   PATCH_COMMAND       "${PATCH_COMMAND}"
   DOWNLOAD_DIR        "${DOWNLOAD_LOCATION}"
   SOURCE_DIR          "${PATCHELF_SOURCE_DIR}"

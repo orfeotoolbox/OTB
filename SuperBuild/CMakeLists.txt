@@ -290,12 +290,7 @@ if(OTB_BUILD_ImageProcessing MATCHES ON)
   set(OTB_USE_MUPARSER ON)
   set(OTB_USE_MUPARSERX ON)
 endif()
-#RK: disabled libkml. problems on windows msvc
-if(MSVC)
-  option(OTB_USE_LIBKML "Enable module libKML in OTB" OFF)
-else()
-  option(OTB_USE_LIBKML "Enable module libKML in OTB" ON)
-endif()
+option(OTB_USE_LIBKML "Enable module libKML in OTB" OFF)
 
 # set OTB_DATA_ROOT to run test
 find_path(OTB_DATA_ROOT
