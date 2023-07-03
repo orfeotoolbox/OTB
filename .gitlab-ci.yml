@@ -445,5 +445,5 @@ release-docker:
                        --verbosity warn
                        --context $CI_PROJECT_DIR
                        --dockerfile $CI_PROJECT_DIR/Docker/Dockerfile
-                       --build-arg OTB_RELEASE=$CI_COMMIT_BRANCH-$CI_COMMIT_SHORT_SHA
-                       --destination $CI_REGISTRY_IMAGE/orfeotoolbox/otb:$CI_COMMIT_BRANCH
+                       --build-arg OTB_RELEASE=$CI_COMMIT_REF_NAME-$CI_COMMIT_SHORT_SHA
+                       --destination $CI_REGISTRY_IMAGE/orfeotoolbox/otb:$CI_COMMIT_TAG
