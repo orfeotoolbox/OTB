@@ -24,11 +24,13 @@ function(install_python_bindings)
       PATTERN "*.pyc" EXCLUDE
       PATTERN "__pycache__" EXCLUDE
       )
-    install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/lib/python3
-      DESTINATION ${PKG_STAGE_DIR}/lib
-      PATTERN "*.pyc" EXCLUDE
-      PATTERN "__pycache__" EXCLUDE
-      )
+    if( EXISTS ${SUPERBUILD_INSTALL_DIR}/lib/python3)
+      install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/lib/python3
+        DESTINATION ${PKG_STAGE_DIR}/lib
+        PATTERN "*.pyc" EXCLUDE
+        PATTERN "__pycache__" EXCLUDE
+        )
+    endif()
     install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/share/otb/swig
       DESTINATION ${PKG_STAGE_DIR}/share/otb
       )
@@ -43,14 +45,5 @@ function(install_python_bindings)
   foreach(_script ${gdal_python_scripts})
     install(PROGRAMS ${_script}
       DESTINATION ${PKG_STAGE_DIR}/bin)
-  endforeach()
-  #file(GLOB gdal_python_wrappings "${SUPERBUILD_INSTALL_DIR}/lib/python[2|3]*")
-  # Do we need to get rid of gdal python 2 bindings too?
-  file(GLOB gdal_python_wrappings "${SUPERBUILD_INSTALL_DIR}/lib/python3")
-  foreach(_wrap ${gdal_python_wrappings})
-      install(DIRECTORY ${_wrap}
-        DESTINATION ${PKG_STAGE_DIR}/lib/python3
-        PATTERN "*.pyc" EXCLUDE
-        PATTERN "__pycache__" EXCLUDE)
   endforeach()
 endfunction()
