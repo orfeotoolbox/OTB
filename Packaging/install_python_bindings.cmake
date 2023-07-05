@@ -24,6 +24,11 @@ function(install_python_bindings)
       PATTERN "*.pyc" EXCLUDE
       PATTERN "__pycache__" EXCLUDE
       )
+    install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/lib/python3
+      DESTINATION ${PKG_STAGE_DIR}/lib
+      PATTERN "*.pyc" EXCLUDE
+      PATTERN "__pycache__" EXCLUDE
+      )
     install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/share/otb/swig
       DESTINATION ${PKG_STAGE_DIR}/share/otb
       )
