@@ -92,8 +92,8 @@ Due to license issues, the OTB package built in Debian doesn’t contain
 6S. As a consequence, the package does not contain the
 OpticalCalibration application.
 
-Ubuntu 12.04 and higher
-~~~~~~~~~~~~~~~~~~~~~~~
+Ubuntu
+~~~~~~
 
 For Ubuntu 12.04 and higher, OTB Applications packages may be available
 as Debian packages through APT repositories:
@@ -137,8 +137,8 @@ the update step. Following this, aptitude update will issue a warning
 about a signature problem. This warning won’t prevent you from
 installing the packages.
 
-OpenSuse 12.X and higher
-~~~~~~~~~~~~~~~~~~~~~~~~
+OpenSuse
+~~~~~~~~
 
 For OpenSuse 12.X and higher, OTB Applications packages are available
 through *zypper*.

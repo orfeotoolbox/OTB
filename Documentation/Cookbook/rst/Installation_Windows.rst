@@ -1,4 +1,4 @@
-** Before extracting the package, make sure that you have been through the "First Step" page **
+**Before extracting the package, make sure that you have been through the** :doc:`First_Steps` page
 
 Windows binary packages are available for Windows 10 or higher. They can
 be downloaded from `otb download page <https://www.orfeo-toolbox.org/download>`_ .
