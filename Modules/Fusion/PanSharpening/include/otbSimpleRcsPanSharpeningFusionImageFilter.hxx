@@ -39,8 +39,8 @@ SimpleRcsPanSharpeningFusionImageFilter<TPanImageType, TXsImageType, TOutputImag
   m_ConvolutionFilter->NormalizeFilterOn();
 
   // Set-up default parameters
-  m_Radius.Fill(3);
-  m_Filter.SetSize(7 * 7);
+  m_Radius.Fill(9);
+  m_Filter.SetSize((2 * m_Radius[0] + 1) * (2 * m_Radius[1] + 1));
   m_Filter.Fill(1);
 }
 
