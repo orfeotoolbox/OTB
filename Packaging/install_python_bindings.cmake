@@ -24,12 +24,20 @@ function(install_python_bindings)
       PATTERN "*.pyc" EXCLUDE
       PATTERN "__pycache__" EXCLUDE
       )
+    # Debian and derivatives
     if( EXISTS ${SUPERBUILD_INSTALL_DIR}/lib/python3)
       install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/lib/python3
         DESTINATION ${PKG_STAGE_DIR}/lib
         PATTERN "*.pyc" EXCLUDE
         PATTERN "__pycache__" EXCLUDE
         )
+    #Redhat case
+    elseif( EXISTS ${SUPERBUILD_INSTALL_DIR}/lib64/python3)
+      install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/lib64/python3
+      DESTINATION ${PKG_STAGE_DIR}/lib
+      PATTERN "*.pyc" EXCLUDE
+      PATTERN "__pycache__" EXCLUDE
+      )
     endif()
     install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/share/otb/swig
       DESTINATION ${PKG_STAGE_DIR}/share/otb
