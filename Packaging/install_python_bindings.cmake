@@ -32,8 +32,8 @@ function(install_python_bindings)
         PATTERN "__pycache__" EXCLUDE
         )
     #Redhat case
-    elseif( EXISTS ${SUPERBUILD_INSTALL_DIR}/lib64/python3)
-      install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/lib64/python3
+    elseif( EXISTS ${SUPERBUILD_INSTALL_DIR}/lib64/python3.8)
+      install(DIRECTORY ${SUPERBUILD_INSTALL_DIR}/lib64/python3.8
       DESTINATION ${PKG_STAGE_DIR}/lib
       PATTERN "*.pyc" EXCLUDE
       PATTERN "__pycache__" EXCLUDE
