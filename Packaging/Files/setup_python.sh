@@ -119,3 +119,12 @@ else
     printf %s\\n "If you don't have python headers and so installed on a custom location, then make a symlink"
     printf %s\\n "eg: ln -s /usr/lib/x86_64-linux-gnu/$python_INSTSONAME $CWD/lib/$python_INSTSONAME"
 fi
+
+if [ "$found_python_lib" -eq "1" ]; then
+  site_import_result="$($OTB_PYTHON_EXE -c 'import site; site.addsitedir($CWD/lib/python3.8)' 2>&1)"
+  if [ -z "$site_import_result" ]; then
+    printf %s\\n "New site package set to $CWD/lib/python3.8"
+  else
+    printf %s\\n "Error during site package set"
+  fi
+fi

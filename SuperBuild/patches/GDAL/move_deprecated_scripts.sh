@@ -27,6 +27,6 @@ cd $SCRIPTS_DIR
 for f in *.py;
 do
 if [ $f != "gdal2tiles.py" ]; then
-    ln -sf /usr/lib/python3/dist-packages/osgeo_utils/$f $f 
+    cp /usr/lib/python3/dist-packages/osgeo_utils/$f $f 
 fi
 done
