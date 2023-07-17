@@ -49,7 +49,7 @@ function(install_python_bindings)
             RENAME README.md)
   endif()
   # Handle GDAL python bindings
-  file(GLOB gdal_python_scripts "${SUPERBUILD_INSTALL_DIR}/bin/gdal*.py")
+  file(GLOB gdal_python_scripts "${SUPERBUILD_INSTALL_DIR}/lib/python3/site-packages/osgeo_utils/gdal*.py")
   foreach(_script ${gdal_python_scripts})
     install(PROGRAMS ${_script}
       DESTINATION ${PKG_STAGE_DIR}/bin)

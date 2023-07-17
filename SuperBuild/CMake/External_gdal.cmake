@@ -175,14 +175,14 @@ ExternalProject_Add(GDAL
 
 SUPERBUILD_PATCH_SOURCE(GDAL)
 
-if(UNIX)
-  ExternalProject_Add_Step(GDAL move_deprecated_scripts
-    COMMAND /bin/sh -x
-    ${CMAKE_SOURCE_DIR}/patches/GDAL/move_deprecated_scripts.sh
-    ${SB_INSTALL_PREFIX}/bin
-    DEPENDEES install
-  )
-endif()
+# if(UNIX)
+#   ExternalProject_Add_Step(GDAL move_deprecated_scripts
+#     COMMAND /bin/sh -x
+#     ${CMAKE_SOURCE_DIR}/patches/GDAL/move_deprecated_scripts.sh
+#     ${SB_INSTALL_PREFIX}/bin
+#     DEPENDEES install
+#   )
+# endif()
 
 set(_SB_GDAL_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 if(WIN32)
