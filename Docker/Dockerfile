@@ -18,10 +18,10 @@
 # limitations under the License.
 #
 FROM ubuntu:20.04
-ARG OTB_RELEASE=8.1.1
+ARG OTB_RELEASE=8.1.2
 
 # Install system dependencies
-COPY system-dependencies.txt .
+COPY Docker/system-dependencies.txt .
 RUN apt-get update -y \
  && apt-get upgrade -y \
  && cat system-dependencies.txt | DEBIAN_FRONTEND=noninteractive xargs apt-get install -y --no-install-recommends \
@@ -29,10 +29,10 @@ RUN apt-get update -y \
  && rm -rf /var/lib/apt/lists/* system-dependencies.txt
 
 # Install pre-compiled OTB binaries
-RUN curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux64.run -o OTB-$OTB_RELEASE-Linux64.run \
- && chmod +x OTB-$OTB_RELEASE-Linux64.run \
- && ./OTB-$OTB_RELEASE-Linux64.run --target /opt/otb \
- && rm OTB-$OTB_RELEASE-Linux64.run
+COPY OTB-$OTB_RELEASE-Linux64-glibc-2.27.run .
+RUN chmod +x OTB-$OTB_RELEASE-Linux64-glibc-2.27.run \
+ && ./OTB-$OTB_RELEASE-Linux64-glibc-2.27.run --target /opt/otb \
+ && rm OTB-$OTB_RELEASE-Linux64-glibc-2.27.run
 
 # Symlink Python library to a known path for OTB
 RUN ln -s /usr/lib/x86_64-linux-gnu/libpython3.8.so /opt/otb/lib/libpython3.8.so.rh-python38-1.0
