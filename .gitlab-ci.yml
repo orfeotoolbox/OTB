@@ -92,6 +92,8 @@ stages:
       - build/cppcheck_report.xml
       - build/coverage_report.xml
       - build/Testing/Temporary/*.txt #DEBUG
+      - Docker/Dockerfile
+      - Docker/system-dependencies.txt
 
 .common-prepare:
   extends: .general
@@ -426,18 +428,22 @@ release-container:
            --form ref=master
            --form variables[OTB_TAG]=$CI_COMMIT_TAG
            https://gitlab.orfeo-toolbox.org/api/v4/projects/126/trigger/pipeline
-
-# release-docker:
-#   image:
-#       name: gcr.io/kaniko-project/executor:debug
-#       entrypoint: [""]
-#   stage: docker
-#   only:
-#     refs:
-#       - /^release-[0-9]+\.[0-9]+$/
-#   script:
-#       - /kaniko/executor --cleanup
-#                        --verbosity warn
-#                        --context $CI_PROJECT_DIR/Docker
-#                        --dockerfile $CI_PROJECT_DIR/Docker/Dockerfile
-#                        --destination $CI_REGISTRY_IMAGE/orfeotoolbox/otb:$CI_COMMIT_BRANCH
+ 
+release-docker:
+  image:
+      name: gcr.io/kaniko-project/executor:debug
+      entrypoint: [""]
+  stage: docker
+  only:
+    refs:
+      - /^release-[0-9]+\.[0-9]+$/
+  needs:
+      - job: ubuntu-xdk-build-doc
+        artifacts: true
+  script:
+      - /kaniko/executor --cleanup
+                       --verbosity warn
+                       --context $CI_PROJECT_DIR
+                       --dockerfile $CI_PROJECT_DIR/Docker/Dockerfile
+                       --build-arg OTB_RELEASE=$CI_COMMIT_TAG
+                       --destination $CI_REGISTRY_IMAGE/orfeotoolbox/otb:$CI_COMMIT_TAG
