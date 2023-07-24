@@ -1,4 +1,4 @@
-OTB-v 8.1.2 - Changes since version 8.1.1 (June 23th, 2023)
+OTB-v 8.1.2 - Changes since version 8.1.1 (July 24th, 2023)
 
 Bugs fixed:
   * !964: BUG: Fix default RCS parameter for PHR pansharpening by Thibaut ROMAIN
