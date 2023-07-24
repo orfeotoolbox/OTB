@@ -7,7 +7,7 @@ System dependencies to run the standalone package
 OTB 8 has both command line and graphical interface, the latter needs some system dependencies to run properly.
 Here are provided provide examples of package installations on popular distributions, using package managers to install the required dependencies.
 
-The following commands can be executed separatly, depending on your needs
+The following commands can be executed separately, depending on your needs
 
 Ubuntu 20.04 and 22.04
 ++++++++++++++++++++++

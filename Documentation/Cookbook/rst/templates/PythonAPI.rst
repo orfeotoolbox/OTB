@@ -174,7 +174,7 @@ In order to build efficient code, here are some tips illustrated by a small exam
     print(">> shape rio.open().read() "+str(np_image_raw.shape))
     
     nbchannels = np_image_raw.shape[0]
-    heigth = np_image_raw.shape[1]
+    height = np_image_raw.shape[1]
     width = np_image_raw.shape[2]
     # use np.transpose to switch axis : OTB expects [height, width, nb channels] images
     np_image=np_image_raw.transpose(1, 2, 0) 

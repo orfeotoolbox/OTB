@@ -37,7 +37,7 @@ RUN chmod +x OTB-$OTB_RELEASE-Linux64-glibc-2.27.run \
 # Symlink Python library to a known path for OTB
 RUN ln -s /usr/lib/x86_64-linux-gnu/libpython3.8.so /opt/otb/lib/libpython3.8.so.rh-python38-1.0
 
-# Persistant env
+# Persistent env
 ENV CMAKE_PREFIX_PATH=/opt/otb
 ENV PYTHONPATH=/opt/otb/lib/python
 ENV GDAL_DRIVER_PATH=disable
