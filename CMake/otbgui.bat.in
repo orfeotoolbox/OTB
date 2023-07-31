@@ -25,9 +25,9 @@
 
 set CURRENT_SCRIPT_DIR=%~dp0
 
-if exist %CURRENT_SCRIPT_DIR%otbApplicationLauncherQt.exe (
+if exist "%CURRENT_SCRIPT_DIR%otbApplicationLauncherQt.exe" (
   :: Prefer using the launcher inside the script dir
-  set OTB_GUI_LAUNCHER=%CURRENT_SCRIPT_DIR%otbApplicationLauncherQt.exe
+  set OTB_GUI_LAUNCHER="%CURRENT_SCRIPT_DIR%otbApplicationLauncherQt.exe"
 ) else (
   :: Use the one from the PATH
   set OTB_GUI_LAUNCHER=otbApplicationLauncherQt.exe
@@ -35,15 +35,15 @@ if exist %CURRENT_SCRIPT_DIR%otbApplicationLauncherQt.exe (
 
 setlocal
 :: works for install tree
-if exist %CURRENT_SCRIPT_DIR%../@OTB_INSTALL_APP_DIR@ (
-  set OTB_APPLICATION_PATH=%CURRENT_SCRIPT_DIR%../@OTB_INSTALL_APP_DIR@;%OTB_APPLICATION_PATH%
+if exist "%CURRENT_SCRIPT_DIR%../@OTB_INSTALL_APP_DIR@" (
+  set OTB_APPLICATION_PATH="%CURRENT_SCRIPT_DIR%../@OTB_INSTALL_APP_DIR@;%OTB_APPLICATION_PATH%"
 )
 
 set LC_NUMERIC=C
 
 ::set GDAL_DATA and update PATH
-if exist %CURRENT_SCRIPT_DIR%\..\otbenv.bat (
-    call %CURRENT_SCRIPT_DIR%\..\otbenv.bat
+if exist "%CURRENT_SCRIPT_DIR%\..\otbenv.bat" (
+    call "%CURRENT_SCRIPT_DIR%\..\otbenv.bat"
 )
 
 :: start the application
