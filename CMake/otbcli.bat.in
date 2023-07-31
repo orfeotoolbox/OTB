@@ -25,9 +25,9 @@
 
 set CURRENT_SCRIPT_DIR=%~dp0
 
-if exist %CURRENT_SCRIPT_DIR%otbApplicationLauncherCommandLine.exe (
+if exist "%CURRENT_SCRIPT_DIR%otbApplicationLauncherCommandLine.exe" (
   :: Prefer using the launcher inside the script dir
-  set OTB_CLI_LAUNCHER=%CURRENT_SCRIPT_DIR%otbApplicationLauncherCommandLine.exe
+  set OTB_CLI_LAUNCHER="%CURRENT_SCRIPT_DIR%otbApplicationLauncherCommandLine.exe"
 ) else (
   :: Use the one from the PATH
   set OTB_CLI_LAUNCHER=otbApplicationLauncherCommandLine.exe
@@ -40,8 +40,8 @@ if exist %CURRENT_SCRIPT_DIR%..\@OTB_INSTALL_APP_DIR_NATIVE@ (
 )
 
 ::set GDAL_DATAs and update PATH
-if exist %CURRENT_SCRIPT_DIR%\..\otbenv.bat (
-    call %CURRENT_SCRIPT_DIR%\..\otbenv.bat
+if exist "%CURRENT_SCRIPT_DIR%\..\otbenv.bat" (
+    call "%CURRENT_SCRIPT_DIR%\..\otbenv.bat"
 )
 
 set LC_NUMERIC=C
