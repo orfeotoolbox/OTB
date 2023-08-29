@@ -33,4 +33,4 @@ if (OTBCurl_ENABLED)
   target_link_libraries(OTBCurlAdapters ${OTBCurl_LIBRARIES})
 endif()
 
-otb_module_target(OTBCurlAdapters)
+otb_module_target(OTBCurlAdapters Core)

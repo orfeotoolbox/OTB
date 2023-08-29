@@ -27,8 +27,8 @@ target_link_libraries(OTBTestKernel
   ${OTBGDAL_LIBRARIES}
   ${OTBImageManipulation_LIBRARIES}
   )
-otb_module_target(OTBTestKernel)
+otb_module_target(OTBTestKernel Core)
 
 add_executable(otbTestDriver otbTestDriver.cxx)
 target_link_libraries(otbTestDriver OTBTestKernel)
-otb_module_target(otbTestDriver)
+otb_module_target(otbTestDriver Core)

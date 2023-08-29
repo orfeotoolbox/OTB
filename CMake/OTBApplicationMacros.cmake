@@ -59,7 +59,7 @@ macro(otb_create_application)
        install(TARGETS ${APPLICATION_TARGET_NAME}
                EXPORT ${${otb-module}-targets}
                LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
-               COMPONENT RuntimeLibraries)
+               COMPONENT Runtime)
      else()
        install(TARGETS ${APPLICATION_TARGET_NAME}
                LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}

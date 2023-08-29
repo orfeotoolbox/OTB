@@ -19,7 +19,7 @@
 
 add_executable(otbQgisDescriptor otbQgisDescriptor.cxx)
 target_link_libraries(otbQgisDescriptor ${OTBQGIS_LIBRARIES})
-otb_module_target(otbQgisDescriptor)
+otb_module_target(otbQgisDescriptor Core)
 
 add_custom_command(TARGET otbQgisDescriptor PRE_BUILD
   COMMAND "${CMAKE_COMMAND}" "-E" "echo" "Cleaning ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR}/description/"

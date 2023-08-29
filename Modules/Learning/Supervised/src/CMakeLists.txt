@@ -35,4 +35,4 @@ target_link_libraries(OTBSupervised
   ${OTBLearningBase_LIBRARIES}
   )
 
-otb_module_target(OTBSupervised)
+otb_module_target(OTBSupervised "Learning")

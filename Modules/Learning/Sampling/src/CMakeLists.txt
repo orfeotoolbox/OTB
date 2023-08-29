@@ -32,4 +32,4 @@ target_link_libraries(OTBSampling
   ${OTBIOGDAL_LBRARIES}
   )
 
-otb_module_target(OTBSampling)
+otb_module_target(OTBSampling "Learning")

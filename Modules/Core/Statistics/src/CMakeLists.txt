@@ -35,4 +35,4 @@ target_link_libraries(OTBStatistics
   ${OTBStreaming_LIBRARIES}
   )
 
-otb_module_target(OTBStatistics)
+otb_module_target(OTBStatistics Core)

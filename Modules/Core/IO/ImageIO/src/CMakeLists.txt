@@ -36,4 +36,4 @@ target_link_libraries(OTBImageIO
   ${OTBExtendedFilename_LIBRARIES}
   )
 
-otb_module_target(OTBImageIO)
+otb_module_target(OTBImageIO Core)

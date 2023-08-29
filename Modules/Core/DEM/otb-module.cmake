@@ -34,4 +34,6 @@ otb_module(OTBDEM
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

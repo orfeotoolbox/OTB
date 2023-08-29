@@ -39,4 +39,4 @@ target_link_libraries(OTBCarto
   ${OTBImageManipulation_LIBRARIES}
   )
 
-otb_module_target(OTBCarto)
+otb_module_target(OTBCarto Core)

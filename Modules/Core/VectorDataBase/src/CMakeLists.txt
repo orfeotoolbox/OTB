@@ -32,4 +32,4 @@ target_link_libraries(OTBVectorDataBase
   ${OTBObjectList_LIBRARIES}
   )
 
-otb_module_target(OTBVectorDataBase)
+otb_module_target(OTBVectorDataBase Core)

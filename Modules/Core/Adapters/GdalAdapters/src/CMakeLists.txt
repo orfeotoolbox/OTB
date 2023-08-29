@@ -41,4 +41,4 @@ target_link_libraries(OTBGdalAdapters
   ${OTBGDAL_LIBRARIES}
   )
 
-otb_module_target(OTBGdalAdapters)
+otb_module_target(OTBGdalAdapters Core)

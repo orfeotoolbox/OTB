@@ -123,4 +123,4 @@ install(FILES otb_siftfast.h
   COMPONENT Development
   )
 
-otb_module_target( otbsiftfast NO_INSTALL )
+otb_module_target( otbsiftfast "ThirdParty" NO_INSTALL )

@@ -31,4 +31,4 @@ target_link_libraries(OTBMathParserX
   ${OTBStatistics_LIBRARIES}
   )
 
-otb_module_target(OTBMathParserX)
+otb_module_target(OTBMathParserX "ImageProcessing")

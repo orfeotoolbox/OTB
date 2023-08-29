@@ -29,4 +29,4 @@ target_link_libraries(OTBFuzzy
 
   )
 
-otb_module_target(OTBFuzzy)
+otb_module_target(OTBFuzzy Core)

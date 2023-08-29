@@ -34,4 +34,4 @@ target_link_libraries(OTBImageManipulation
   ${OTBTransform_LIBRARIES}
   )
 
-otb_module_target(OTBImageManipulation)
+otb_module_target(OTBImageManipulation Core)

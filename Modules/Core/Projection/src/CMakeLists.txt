@@ -38,4 +38,4 @@ target_link_libraries(OTBProjection
 
   )
 
-otb_module_target(OTBProjection)
+otb_module_target(OTBProjection Core)

@@ -50,4 +50,6 @@ otb_module(OTBAppCore
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

@@ -14,7 +14,7 @@ set(CPACK_PACKAGE_INSTALL_DIRECTORY ${CPACK_PACKAGE_NAME})
 SET(CPACK_OUTPUT_FILE_PREFIX "${CMAKE_SOURCE_DIR}/_packages")
 
 # https://unix.stackexchange.com/a/11552/254512
-set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/otb")#/${CMAKE_PROJECT_VERSION}")
+#set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/otb")#/${CMAKE_PROJECT_VERSION}")
 
 set(CPACK_PACKAGE_VERSION_MAJOR ${OTB_VERSION_MAJOR})
 set(CPACK_PACKAGE_VERSION_MINOR ${OTB_VERSION_MINOR})
@@ -36,7 +36,7 @@ set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
 # without this you won't be able to pack only specified component
 set(CPACK_DEB_COMPONENT_INSTALL ON)
 set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
-set(CPACK_COMPONENTS_ALL "Core" "ImageProcessing" "Hyperspectral" "Learning" "Segmentation" "SAR" "StereoProcessing" "Runtime" "RuntimeLibraries")
+set(CPACK_COMPONENTS_ALL Core ImageProcessing Hyperspectral Learning Segmentation SAR StereoProcessing Runtime RuntimeLibraries Development)
 set(CPACK_GENERATOR "ZIP")
 
 include(CPack)

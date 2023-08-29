@@ -28,4 +28,4 @@ target_link_libraries(OTBPolarimetry
 
   )
 
-otb_module_target(OTBPolarimetry)
+otb_module_target(OTBPolarimetry "ImageProcessing")

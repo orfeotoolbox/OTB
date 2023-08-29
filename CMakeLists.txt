@@ -398,6 +398,18 @@ else()
           DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Development)
 endif()
 
+if(INSTALL_DIR)
+    # In order to package the external libraries built by the SuperBuild, we have to "unpack" this xdk in the current build directory and tell
+    # Cmake it is here
+    message(STATUS "Installing xdk for packaging...")
+    install(DIRECTORY ${INSTALL_DIR}/lib
+            DESTINATION .
+            COMPONENT RuntimeLibraries)
+    install(DIRECTORY ${INSTALL_DIR}/bin
+            DESTINATION .
+            COMPONENT Runtime)
+endif()
+
 # install FindXXX.cmake
 file(GLOB OTB_FIND_PACKAGE_SCRIPTS CMake/Find*.cmake)
 install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Development)
