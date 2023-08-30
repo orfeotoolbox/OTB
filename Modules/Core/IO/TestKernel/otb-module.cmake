@@ -38,4 +38,6 @@ otb_module(OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core   
 )

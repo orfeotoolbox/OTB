@@ -34,4 +34,6 @@ otb_module(OTBObjectList
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

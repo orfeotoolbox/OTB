@@ -385,17 +385,17 @@ install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBConfig.cmake
               CMake/exportheader.cmake.in
               CMake/NamespaceHandler.cmake
   DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
-  COMPONENT Development)
+  COMPONENT Core)
 get_property(OTBTargets_MODULES GLOBAL PROPERTY OTBTargets_MODULES)
 if(OTBTargets_MODULES)
   install(EXPORT OTBTargets DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
-          COMPONENT Development)
+          COMPONENT Core)
 else()
   set(CMAKE_CONFIGURABLE_FILE_CONTENT "# No targets!")
   configure_file(${CMAKE_ROOT}/Modules/CMakeConfigurableFile.in
                  ${OTB_BINARY_DIR}/CMakeFiles/OTBTargets.cmake @ONLY)
   install(FILES ${OTB_BINARY_DIR}/CMakeFiles/OTBTargets.cmake
-          DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Development)
+          DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Core)
 endif()
 
 if(INSTALL_DIR)
@@ -405,6 +405,9 @@ if(INSTALL_DIR)
     install(DIRECTORY ${INSTALL_DIR}/lib
             DESTINATION .
             COMPONENT RuntimeLibraries)
+    install(DIRECTORY ${INSTALL_DIR}/include
+            DESTINATION .
+            COMPONENT Runtime)        
     install(DIRECTORY ${INSTALL_DIR}/bin
             DESTINATION .
             COMPONENT Runtime)
@@ -412,7 +415,7 @@ endif()
 
 # install FindXXX.cmake
 file(GLOB OTB_FIND_PACKAGE_SCRIPTS CMake/Find*.cmake)
-install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Development)
+install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Core)
 
 # TODO : install release notes, copyright notice, ...
 # install(FILES "LICENSE" "NOTICE" "README.txt" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)

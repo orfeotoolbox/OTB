@@ -35,4 +35,6 @@ otb_module(OTBFuzzy
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

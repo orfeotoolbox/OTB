@@ -45,4 +45,6 @@ otb_module(OTBImageManipulation
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

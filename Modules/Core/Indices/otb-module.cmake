@@ -44,4 +44,6 @@ otb_module(OTBIndices
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

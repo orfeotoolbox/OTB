@@ -46,4 +46,7 @@ ENABLE_SHARED
     
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Core
 )

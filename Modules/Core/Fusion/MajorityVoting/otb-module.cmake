@@ -34,4 +34,6 @@ otb_module(OTBMajorityVoting
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

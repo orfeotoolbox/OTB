@@ -30,4 +30,7 @@ otb_module(OTBQGIS
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Core
 )

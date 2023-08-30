@@ -40,4 +40,6 @@ otb_module(OTBImageIO
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

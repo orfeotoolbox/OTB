@@ -33,4 +33,6 @@ otb_module(OTBMosaic
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

@@ -32,4 +32,6 @@ otb_module(OTBIOXML
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
   )

@@ -39,4 +39,7 @@ otb_module(OTBPanSharpening
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Core
 )

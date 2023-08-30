@@ -33,4 +33,7 @@ otb_module(OTBCommandLine
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Core
 )

@@ -27,4 +27,7 @@ otb_module(OTBSWIGWrapper
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Core
 )

@@ -39,4 +39,6 @@ otb_module(OTBVectorDataIO
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

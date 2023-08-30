@@ -45,4 +45,7 @@ otb_module(OTBStatistics
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Core
 )

@@ -25,4 +25,6 @@ otb_module(OTBBoostAdapters
     OTBBoost
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
   )

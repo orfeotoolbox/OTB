@@ -40,4 +40,7 @@ otb_module(OTBVectorDataManipulation
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Core
 )

@@ -37,4 +37,6 @@ otb_module(OTBExtendedFilename
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

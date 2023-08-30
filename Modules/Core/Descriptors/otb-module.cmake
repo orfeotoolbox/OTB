@@ -43,4 +43,6 @@ otb_module(OTBDescriptors
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )
