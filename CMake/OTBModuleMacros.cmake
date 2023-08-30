@@ -165,7 +165,7 @@ macro(otb_module_impl)
 
   if(EXISTS ${${otb-module}_SOURCE_DIR}/include)
     list(APPEND ${otb-module}_INCLUDE_DIRS ${${otb-module}_SOURCE_DIR}/include)
-    install(DIRECTORY include/ DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR} COMPONENT Development)
+    install(DIRECTORY include/ DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR} COMPONENT ${${otb-module}_COMPONENT})
   endif()
 
   if(NOT OTB_SOURCE_DIR)
@@ -232,7 +232,7 @@ macro(otb_module_impl)
     install(FILES
       ${_export_header_file}
       DESTINATION ${${otb-module}_INSTALL_INCLUDE_DIR}
-      COMPONENT Development
+      COMPONENT ${${otb-module}_COMPONENT}
       )
 
     if (BUILD_SHARED_LIBS)
@@ -273,7 +273,7 @@ macro(otb_module_impl)
   install(FILES
     ${${otb-module}_BINARY_DIR}/CMakeFiles/${otb-module}.cmake
     DESTINATION ${OTB_INSTALL_PACKAGE_DIR}/Modules
-    COMPONENT Development
+    COMPONENT ${${otb-module}_COMPONENT}
     )
   otb_module_doxygen(${otb-module})   # module name
 endmacro()
@@ -341,17 +341,17 @@ endmacro()
 macro(otb_module_target_install _name _component)
   #Use specific runtime components for executables and libraries separately when installing a module,
   #considering that the target of a module could be either an executable or a library.
-  get_property(_ttype TARGET ${_name} PROPERTY TYPE)
-  if("${_ttype}" STREQUAL EXECUTABLE)
-    set(_component Runtime)
-  else()
-    set(_component RuntimeLibraries)
-  endif()
+  # get_property(_ttype TARGET ${_name} PROPERTY TYPE)
+  # if("${_ttype}" STREQUAL EXECUTABLE)
+  #   set(_component Runtime)
+  # else()
+  #   set(_component RuntimeLibraries)
+  # endif()
   install(TARGETS ${_name}
     EXPORT  ${${otb-module}-targets}
     RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${_component}
     LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT ${_component}
-    ARCHIVE DESTINATION ${${otb-module}_INSTALL_ARCHIVE_DIR} COMPONENT Development
+    ARCHIVE DESTINATION ${${otb-module}_INSTALL_ARCHIVE_DIR} COMPONENT ${_component}
     )
 endmacro()
 
