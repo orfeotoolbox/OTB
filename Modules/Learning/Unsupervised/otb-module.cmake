@@ -38,4 +38,7 @@ otb_module(OTBUnsupervised
 
   DESCRIPTION
   "${DOCUMENTATION}"
+
+  COMPONENT
+    Learning
   )

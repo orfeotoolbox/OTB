@@ -58,4 +58,6 @@ otb_module(OTBAppLearning
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Learning
 )

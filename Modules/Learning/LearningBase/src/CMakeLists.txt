@@ -29,4 +29,4 @@ target_link_libraries(OTBLearningBase
   ${OTBITK_LIBRARIES}
   )
 
-otb_module_target(OTBLearningBase "Learning")
+otb_module_target(OTBLearningBase COMPONENT_Learning)

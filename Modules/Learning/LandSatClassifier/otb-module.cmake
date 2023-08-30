@@ -32,4 +32,7 @@ otb_module(OTBLandSatClassifier
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Learning
 )

@@ -407,10 +407,10 @@ if(INSTALL_DIR)
             COMPONENT RuntimeLibraries)
     install(DIRECTORY ${INSTALL_DIR}/include
             DESTINATION .
-            COMPONENT Runtime)        
+            COMPONENT Core)        
     install(DIRECTORY ${INSTALL_DIR}/bin
             DESTINATION .
-            COMPONENT Runtime)
+            COMPONENT Core)
 endif()
 
 # install FindXXX.cmake

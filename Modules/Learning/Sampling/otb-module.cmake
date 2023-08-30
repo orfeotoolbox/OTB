@@ -37,4 +37,7 @@ otb_module(OTBSampling
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Learning
 )

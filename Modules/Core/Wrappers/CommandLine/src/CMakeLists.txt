@@ -55,7 +55,7 @@ file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/otbcli.bat
 # TODO : test if NO_INSTALL is set
 install(PROGRAMS ${CLI_OUTPUT_DIR}/otbcli.bat
         DESTINATION ${OTBCommandLine_INSTALL_RUNTIME_DIR}
-        COMPONENT Runtime)
+        COMPONENT Core)
 
 else()
 configure_file( ${CMAKE_SOURCE_DIR}/CMake/otbcli.sh.in
@@ -68,6 +68,6 @@ file(COPY ${CMAKE_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/Scripts/otbcli
 # TODO : test if NO_INSTALL is set
 install(PROGRAMS ${CLI_OUTPUT_DIR}/otbcli
         DESTINATION ${OTBCommandLine_INSTALL_RUNTIME_DIR}
-        COMPONENT Runtime)
+        COMPONENT Core)
 
 endif()
