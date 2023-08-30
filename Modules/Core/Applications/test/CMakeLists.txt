@@ -71,7 +71,7 @@ otb_test_application(NAME  apTvFuPansharpening_RCS
                        -out ${TEMP}/apTvFuPanSharpeningRcs.tif double
                        -method rcs
                      VALID   --compare-image ${EPSILON_6}
-                             ${BASELINE}/fuTvRcsPanSharpeningFusion.tif
+                             ${BASELINE}/apTvFuPanSharpeningRcs.tif
                             ${TEMP}/apTvFuPanSharpeningRcs.tif
                      )
 
