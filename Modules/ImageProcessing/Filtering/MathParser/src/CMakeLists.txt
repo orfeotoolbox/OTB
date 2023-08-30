@@ -32,4 +32,4 @@ target_link_libraries(OTBMathParser
   ${OTBVectorDataBase_LIBRARIES}
   )
 
-otb_module_target(OTBMathParser "ImageProcessing")
+otb_module_target(OTBMathParser "COMPONENT_ImageProcessing")

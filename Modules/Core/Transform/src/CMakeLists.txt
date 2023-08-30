@@ -31,4 +31,4 @@ target_link_libraries(OTBTransform
   ${OTBBoostAdapters_LIBRARIES}
   )
 
-otb_module_target(OTBTransform Core)
+otb_module_target(OTBTransform COMPONENT_Core)

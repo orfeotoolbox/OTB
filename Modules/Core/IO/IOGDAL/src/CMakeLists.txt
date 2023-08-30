@@ -43,4 +43,4 @@ target_link_libraries(OTBIOGDAL
   ${OTBBoost_LIBRARIES}
   )
 
-otb_module_target(OTBIOGDAL Core)
+otb_module_target(OTBIOGDAL COMPONENT_Core)

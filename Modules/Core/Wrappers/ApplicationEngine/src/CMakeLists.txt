@@ -76,4 +76,4 @@ target_link_libraries(OTBApplicationEngine
   ${OTBBoost_LIBRARIES}
   )
 
-otb_module_target(OTBApplicationEngine Core)
+otb_module_target(OTBApplicationEngine COMPONENT_Core)

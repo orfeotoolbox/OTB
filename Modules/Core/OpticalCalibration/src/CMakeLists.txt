@@ -41,4 +41,4 @@ target_link_libraries(OTBOpticalCalibration
   ${OTBObjectList_LIBRARIES}
   )
 
-otb_module_target(OTBOpticalCalibration Core)
+otb_module_target(OTBOpticalCalibration COMPONENT_Core)

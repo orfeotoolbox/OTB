@@ -29,4 +29,4 @@ target_link_libraries(OTBExtendedFilename
   ${OTBIOGDAL_LIBRARIES}
   )
 
-otb_module_target(OTBExtendedFilename Core)
+otb_module_target(OTBExtendedFilename COMPONENT_Core)

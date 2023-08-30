@@ -33,4 +33,4 @@ target_link_libraries(OTBIOKML
 
   )
 
-otb_module_target(OTBIOKML Core)
+otb_module_target(OTBIOKML COMPONENT_Core)

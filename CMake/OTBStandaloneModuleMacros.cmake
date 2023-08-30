@@ -147,26 +147,24 @@ macro(otb_module_target_name _name)
   endif()
 endmacro()
 
-macro(otb_module_target_install _name _module)
+macro(otb_module_target_install _name)
   #Use specific runtime components for executables and libraries separately when installing a module,
   #considering that the target of a module could be either an executable or a library.
   get_property(_ttype TARGET ${_name} PROPERTY TYPE)
-  if(NOT _module)
-    if("${_ttype}" STREQUAL EXECUTABLE)
-      set(_module Runtime)
-    else()
-      set(_module RuntimeLibraries)
-    endif()
+  if("${_ttype}" STREQUAL EXECUTABLE)
+    set(runtime_component Runtime)
+  else()
+    set(runtime_component RuntimeLibraries)
   endif()
   install(TARGETS ${_name}
     EXPORT  ${${otb-module}-targets}
-    RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${_module}
-    LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT ${_module}
+    RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${runtime_component}
+    LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT RuntimeLibraries
     ARCHIVE DESTINATION ${${otb-module}_INSTALL_ARCHIVE_DIR} COMPONENT Development
     )
 endmacro()
 
-macro(otb_module_target _name _module)
+macro(otb_module_target _name)
   set(_install 1)
   foreach(arg ${ARGN})
     if("${arg}" MATCHES "^(NO_INSTALL)$")
@@ -178,7 +176,7 @@ macro(otb_module_target _name _module)
   otb_module_target_name(${_name})
   otb_module_target_label(${_name})
   if(_install)
-    otb_module_target_install(${_name} ${_module})
+    otb_module_target_install(${_name})
   endif()
 endmacro()
 

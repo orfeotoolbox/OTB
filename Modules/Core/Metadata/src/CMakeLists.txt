@@ -94,4 +94,4 @@ target_link_libraries(OTBMetadata
   ${OTBTinyXML_LIBRARIES}
   )
 
-otb_module_target(OTBMetadata Core)
+otb_module_target(OTBMetadata COMPONENT_Core)

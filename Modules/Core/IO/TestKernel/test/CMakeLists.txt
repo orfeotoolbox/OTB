@@ -49,7 +49,7 @@ target_link_libraries(otbTestKernelTestDriver ${OTBTestKernel-Test_LIBRARIES})
 # see the documentation of GNU ld -as-needed for details on this behaviour.
 
 # Our problem is that we need these ignored ones in the some header-only modules.
-# Eg: Modules/Core/LabelMap
+# Eg: Modules/COMPONENT_Core/LabelMap
 # This module depends on ITKLabelMap but does not link with it as it doesn't create any module (lib, exe)
 # All it use is a couple of headers from ITKLabelMap. So removing that dependency is out of question.
 

@@ -39,4 +39,4 @@ target_link_libraries(OTBCommon
   ${OTBITK_LIBRARIES} ${OTBGDAL_LIBRARIES}
   )
 
-otb_module_target(OTBCommon Core)
+otb_module_target(OTBCommon COMPONENT_Core)

@@ -28,4 +28,4 @@ target_link_libraries(OTBStreaming
   ${OTBCommon_LIBRARIES}
   )
 
-otb_module_target(OTBStreaming Core)
+otb_module_target(OTBStreaming COMPONENT_Core)

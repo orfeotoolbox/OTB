@@ -29,11 +29,11 @@ target_link_libraries(OTBCommandLine
   ${OTBTinyXML_LIBRARIES}
   ${OTBCommon_LIBRARIES}
   )
-otb_module_target(OTBCommandLine Core)
+otb_module_target(OTBCommandLine COMPONENT_Core)
 
 add_executable(otbApplicationLauncherCommandLine otbApplicationLauncherCommandLine.cxx)
 target_link_libraries(otbApplicationLauncherCommandLine OTBCommandLine)
-otb_module_target(otbApplicationLauncherCommandLine Core)
+otb_module_target(otbApplicationLauncherCommandLine COMPONENT_Core)
 
 set_linker_stack_size_flag(otbApplicationLauncherCommandLine 10000000)
 

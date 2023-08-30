@@ -29,4 +29,4 @@ target_link_libraries(OTBWavelet
   ${OTBObjectList_LIBRARIES}
   )
 
-otb_module_target(OTBWavelet "ImageProcessing")
+otb_module_target(OTBWavelet "COMPONENT_ImageProcessing")

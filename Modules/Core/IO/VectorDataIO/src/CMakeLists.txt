@@ -31,4 +31,4 @@ target_link_libraries(OTBVectorDataIO
 
   )
 
-otb_module_target(OTBVectorDataIO Core)
+otb_module_target(OTBVectorDataIO COMPONENT_Core)
