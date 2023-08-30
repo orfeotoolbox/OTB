@@ -32,4 +32,7 @@ otb_module(OTBWatersheds
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Segmentation
 )

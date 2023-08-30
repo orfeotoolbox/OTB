@@ -35,4 +35,7 @@ otb_module(OTBMorphologicalProfiles
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Segmentation
 )

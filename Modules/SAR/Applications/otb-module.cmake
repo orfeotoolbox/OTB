@@ -33,4 +33,7 @@ otb_module(OTBAppSAR
   
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    SAR
   )

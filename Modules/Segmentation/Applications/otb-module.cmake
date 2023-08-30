@@ -49,4 +49,7 @@ otb_module(OTBAppSegmentation
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Segmentation
 )

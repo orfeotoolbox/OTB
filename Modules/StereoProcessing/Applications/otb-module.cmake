@@ -42,4 +42,7 @@ otb_module(OTBAppStereo
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    StereoProcessing
 )

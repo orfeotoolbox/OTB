@@ -41,4 +41,7 @@ otb_module(OTBDisparityMap
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    StereoProcessing
 )

@@ -33,4 +33,7 @@ otb_module(OTBAppHyperspectral
   
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Hyperspectral
   )

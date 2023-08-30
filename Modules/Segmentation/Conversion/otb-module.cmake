@@ -46,4 +46,7 @@ otb_module(OTBConversion
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Segmentation
 )

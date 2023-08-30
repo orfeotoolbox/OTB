@@ -1,5 +1,5 @@
 # these are cache variables, so they could be overwritten with -D,
-set(CPACK_PACKAGE_NAME "otb"
+set(CPACK_PACKAGE_NAME "OTB"
     CACHE STRING "The OTB full package"
 )
 # which is useful in case of packing only selected components instead of the whole thing

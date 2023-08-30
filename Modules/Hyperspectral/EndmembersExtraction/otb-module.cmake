@@ -39,4 +39,7 @@ otb_module(OTBEndmembersExtraction
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Hyperspectral
 )

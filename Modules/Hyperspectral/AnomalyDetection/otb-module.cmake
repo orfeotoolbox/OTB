@@ -36,4 +36,7 @@ otb_module(OTBAnomalyDetection
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Hyperspectral
 )

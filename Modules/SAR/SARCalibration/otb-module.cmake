@@ -36,4 +36,7 @@ otb_module(OTBSARCalibration
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    SAR
 )
