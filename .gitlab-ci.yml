@@ -167,7 +167,7 @@ ubuntu-xdk-build-core:
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - ctest -VV -S CI/packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk -DNAME_SUFFIX:string=-core-glibc-2.31
+    #- ctest -VV -S CI/packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk -DNAME_SUFFIX:string=-core-glibc-2.31
     - mv build_packages/OTB-*.zip . || true
   needs:
     - job: ubuntu-xdk-prepare

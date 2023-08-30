@@ -185,3 +185,10 @@ if(ENABLE_DOXYGEN)
               CAPTURE_CMAKE_ERROR _doxy_error
               )
 endif()
+
+ctest_build(
+  BUILD "${CTEST_BINARY_DIRECTORY}"
+  TARGET package
+  RETURN_VALUE _build_rv
+  CAPTURE_CMAKE_ERROR _build_error
+  )
