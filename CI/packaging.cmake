@@ -26,10 +26,8 @@ set (ENV{LANG} "C") # Only ascii output
 
 get_filename_component( OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY )
 
-# retrieve XDK
-get_xdk()
-
-set( INSTALL_DIR "${XDK_PATH}" )
+#XDK already exists, we have to set INSTALL_DIR for the packaging of the xdk
+set( INSTALL_DIR "${OTB_SOURCE_DIR}/xdk" )
 
 # if(WIN32)
 #   file(TO_NATIVE_PATH "${XDK_PATH}" XDK_PATH_NATIVE)
