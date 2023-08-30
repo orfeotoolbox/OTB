@@ -38,4 +38,7 @@ otb_module(OTBPolarimetry
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
 )

@@ -34,4 +34,10 @@ otb_module(OTBCloudDetection
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
+
+  COMPONENT
+    ImageProcessing
 )

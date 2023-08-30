@@ -33,4 +33,7 @@ otb_module(OTBSmoothing
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
 )

@@ -36,4 +36,7 @@ otb_module(OTBColorMap
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
 )

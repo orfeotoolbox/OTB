@@ -38,4 +38,10 @@ otb_module(OTBDensity
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
+
+  COMPONENT
+    ImageProcessing
 )

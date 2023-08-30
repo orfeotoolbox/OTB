@@ -32,4 +32,7 @@ otb_module(OTBImageNoise
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
 )

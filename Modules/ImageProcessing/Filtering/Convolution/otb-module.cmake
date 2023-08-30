@@ -34,4 +34,7 @@ otb_module(OTBConvolution
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
 )

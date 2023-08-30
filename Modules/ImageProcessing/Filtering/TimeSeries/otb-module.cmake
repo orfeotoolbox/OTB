@@ -29,4 +29,7 @@ otb_module(OTBTimeSeries
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
 )

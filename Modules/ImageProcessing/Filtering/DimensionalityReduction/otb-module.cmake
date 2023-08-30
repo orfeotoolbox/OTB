@@ -41,4 +41,7 @@ otb_module(OTBDimensionalityReduction
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
 )

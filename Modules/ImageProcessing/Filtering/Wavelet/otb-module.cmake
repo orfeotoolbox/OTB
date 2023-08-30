@@ -33,4 +33,7 @@ otb_module(OTBWavelet
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
 )

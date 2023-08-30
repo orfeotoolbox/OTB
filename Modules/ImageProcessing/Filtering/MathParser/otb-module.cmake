@@ -41,4 +41,7 @@ otb_module(OTBMathParser
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
 )

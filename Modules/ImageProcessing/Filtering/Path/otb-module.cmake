@@ -39,4 +39,7 @@ otb_module(OTBPath
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
 )

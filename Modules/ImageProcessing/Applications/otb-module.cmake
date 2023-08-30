@@ -60,4 +60,10 @@ otb_module(OTBAppImageProcessing
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
+
+  COMPONENT
+    ImageProcessing
 )

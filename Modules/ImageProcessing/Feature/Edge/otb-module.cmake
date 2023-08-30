@@ -42,4 +42,10 @@ otb_module(OTBEdge
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
+
+  COMPONENT
+    ImageProcessing
 )

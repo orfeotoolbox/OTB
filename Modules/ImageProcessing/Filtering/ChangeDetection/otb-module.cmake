@@ -41,4 +41,7 @@ otb_module(OTBChangeDetection
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
 )

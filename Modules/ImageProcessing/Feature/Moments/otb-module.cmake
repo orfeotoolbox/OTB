@@ -38,4 +38,10 @@ otb_module(OTBMoments
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
+
+  COMPONENT
+    ImageProcessing
 )

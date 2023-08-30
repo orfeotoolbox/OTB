@@ -33,4 +33,7 @@ otb_module(OTBTextures
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
 )

@@ -34,4 +34,7 @@ otb_module(OTBContrast
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    ImageProcessing
 )
