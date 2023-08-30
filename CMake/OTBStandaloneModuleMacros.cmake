@@ -147,24 +147,26 @@ macro(otb_module_target_name _name)
   endif()
 endmacro()
 
-macro(otb_module_target_install _name)
+macro(otb_module_target_install _name _module)
   #Use specific runtime components for executables and libraries separately when installing a module,
   #considering that the target of a module could be either an executable or a library.
   get_property(_ttype TARGET ${_name} PROPERTY TYPE)
-  if("${_ttype}" STREQUAL EXECUTABLE)
-    set(runtime_component Runtime)
-  else()
-    set(runtime_component RuntimeLibraries)
+  if(NOT _module)
+    if("${_ttype}" STREQUAL EXECUTABLE)
+      set(_module Runtime)
+    else()
+      set(_module RuntimeLibraries)
+    endif()
   endif()
   install(TARGETS ${_name}
     EXPORT  ${${otb-module}-targets}
-    RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${runtime_component}
-    LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT RuntimeLibraries
+    RUNTIME DESTINATION ${${otb-module}_INSTALL_RUNTIME_DIR} COMPONENT ${_module}
+    LIBRARY DESTINATION ${${otb-module}_INSTALL_LIBRARY_DIR} COMPONENT ${_module}
     ARCHIVE DESTINATION ${${otb-module}_INSTALL_ARCHIVE_DIR} COMPONENT Development
     )
 endmacro()
 
-macro(otb_module_target _name)
+macro(otb_module_target _name _module)
   set(_install 1)
   foreach(arg ${ARGN})
     if("${arg}" MATCHES "^(NO_INSTALL)$")
@@ -176,7 +178,7 @@ macro(otb_module_target _name)
   otb_module_target_name(${_name})
   otb_module_target_label(${_name})
   if(_install)
-    otb_module_target_install(${_name})
+    otb_module_target_install(${_name} ${_module})
   endif()
 endmacro()
 
@@ -194,7 +196,7 @@ macro(otb_module _name)
   set(OTB_MODULE_${otb-module}_EXCLUDE_FROM_DEFAULT 0)
   set(OTB_MODULE_${otb-module}_ENABLE_SHARED 0)
   foreach(arg ${ARGN})
-    if("${arg}" MATCHES "^(DEPENDS|OPTIONAL_DEPENDS|TEST_DEPENDS|DESCRIPTION|DEFAULT)$")
+    if("${arg}" MATCHES "^(DEPENDS|OPTIONAL_DEPENDS|TEST_DEPENDS|DESCRIPTION|DEFAULT|COMPONENT)$")
       set(_doing "${arg}")
     elseif("${arg}" MATCHES "^EXCLUDE_FROM_DEFAULT$")
       set(_doing "")
@@ -220,6 +222,9 @@ macro(otb_module _name)
       set(OTB_MODULE_${otb-module}_DESCRIPTION "${arg}")
     elseif("${_doing}" MATCHES "^DEFAULT")
       message(FATAL_ERROR "Invalid argument [DEFAULT]")
+    elseif("${_doing}" MATCHES "^COMPONENT$")
+      set(_doing "")
+      set(OTB_MODULE_${otb-module}_COMPONENT "${arg}")
     else()
       set(_doing "")
       message(AUTHOR_WARNING "Unknown argument [${arg}]")
