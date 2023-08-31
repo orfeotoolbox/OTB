@@ -401,7 +401,7 @@ endif()
 if(INSTALL_DIR)
     # In order to package the external libraries built by the SuperBuild, we have to "unpack" this xdk in the current build directory and tell
     # Cmake it is here
-    message(STATUS "Installing xdk for packaging...")
+    message(STATUS "XDK FOUND, preparing it for packaging")
     install(DIRECTORY ${INSTALL_DIR}/lib
             DESTINATION .
             COMPONENT RuntimeLibraries)
@@ -411,6 +411,8 @@ if(INSTALL_DIR)
     install(DIRECTORY ${INSTALL_DIR}/bin
             DESTINATION .
             COMPONENT Core)
+else()
+    message(WARNING "XDK NOT FOUND, it will not be packaged")
 endif()
 
 # install FindXXX.cmake
