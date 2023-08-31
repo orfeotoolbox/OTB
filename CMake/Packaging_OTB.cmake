@@ -36,7 +36,7 @@ set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
 # without this you won't be able to pack only specified component
 set(CPACK_DEB_COMPONENT_INSTALL ON)
 set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
-set(CPACK_COMPONENTS_ALL Core ImageProcessing Hyperspectral Learning Segmentation SAR StereoProcessing Runtime RuntimeLibraries Development)
+set(CPACK_COMPONENTS_ALL Core ImageProcessing Hyperspectral Learning Segmentation Sar StereoProcessing Runtime RuntimeLibraries)
 set(CPACK_GENERATOR "ZIP")
 
 include(CPack)
