@@ -73,8 +73,8 @@ cpack_add_component(Segmentation
                     [DESCRIPTION "Contains all Segmentation libraries and applications for OTB" ]
                     [OPTIONAL])
 
-cpack_add_component(SAR
-                    [DISPLAY_NAME SAR]
+cpack_add_component(Sar
+                    [DISPLAY_NAME Sar]
                     [DESCRIPTION "Contains all SAR libraries and applications for OTB" ]
                     [OPTIONAL])
 

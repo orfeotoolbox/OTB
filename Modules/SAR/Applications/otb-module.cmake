@@ -35,5 +35,5 @@ otb_module(OTBAppSAR
     "${DOCUMENTATION}"
 
   COMPONENT
-    SAR
+    Sar
   )
