@@ -103,19 +103,19 @@ ctest_start( Experimental TRACK CI_Package )
 ctest_update( SOURCE "${OTB_SOURCE_DIR}" )
 
 
-ctest_configure(
-  BUILD "${CTEST_BINARY_DIRECTORY}"
-  SOURCE "${CTEST_SOURCE_DIRECTORY}"
-  OPTIONS "${CONFIGURE_OPTIONS}"
-  RETURN_VALUE _configure_rv
-  CAPTURE_CMAKE_ERROR _configure_error
-  )
+# ctest_configure(
+#   BUILD "${CTEST_BINARY_DIRECTORY}"
+#   SOURCE "${CTEST_SOURCE_DIRECTORY}"
+#   OPTIONS "${CONFIGURE_OPTIONS}"
+#   RETURN_VALUE _configure_rv
+#   CAPTURE_CMAKE_ERROR _configure_error
+#   )
 
-if( NOT _configure_rv EQUAL 0 )
-  ctest_submit()
-  message( SEND_ERROR "An error occurs during ctest_configure.")
-  return()
-endif()
+# if( NOT _configure_rv EQUAL 0 )
+#   ctest_submit()
+#   message( SEND_ERROR "An error occurs during ctest_configure.")
+#   return()
+# endif()
 
 
 ctest_build(

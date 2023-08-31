@@ -30,7 +30,7 @@ set (CMAKE_COMMAND "cmake")
 # retrieve XDK
 get_xdk()
 
-set( INSTALL_DIR "${XDK_PATH}" )
+set( XDK_INSTALL_PATH "${XDK_PATH}" )
 
 if(WIN32)
   file(TO_NATIVE_PATH "${XDK_PATH}" XDK_PATH_NATIVE)

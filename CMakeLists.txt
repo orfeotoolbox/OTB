@@ -398,17 +398,17 @@ else()
           DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Core)
 endif()
 
-if(INSTALL_DIR)
+if(XDK_INSTALL_PATH)
     # In order to package the external libraries built by the SuperBuild, we have to "unpack" this xdk in the current build directory and tell
     # Cmake it is here
     message(STATUS "XDK FOUND, preparing it for packaging")
-    install(DIRECTORY ${INSTALL_DIR}/lib
+    install(DIRECTORY ${XDK_INSTALL_PATH}/lib
             DESTINATION .
             COMPONENT RuntimeLibraries)
-    install(DIRECTORY ${INSTALL_DIR}/include
+    install(DIRECTORY ${XDK_INSTALL_PATH}/include
             DESTINATION .
             COMPONENT Core)        
-    install(DIRECTORY ${INSTALL_DIR}/bin
+    install(DIRECTORY ${XDK_INSTALL_PATH}/bin
             DESTINATION .
             COMPONENT Core)
 else()
