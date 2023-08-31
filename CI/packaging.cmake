@@ -26,30 +26,27 @@ set (ENV{LANG} "C") # Only ascii output
 
 get_filename_component( OTB_SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR} DIRECTORY )
 
-#XDK already exists, we have to set INSTALL_DIR for the packaging of the xdk
-set( INSTALL_DIR "${OTB_SOURCE_DIR}/xdk" )
-
-# if(WIN32)
-#   file(TO_NATIVE_PATH "${XDK_PATH}" XDK_PATH_NATIVE)
-#   file(TO_NATIVE_PATH "${CTEST_BINARY_DIRECTORY}/bin" OTB_BUILD_BIN_DIR_NATIVE)
-#   set(ENV{PATH} "$ENV{PATH};${OTB_BUILD_BIN_DIR_NATIVE}" )
-#   set(ENV{PATH} "${XDK_PATH_NATIVE}\\bin;$ENV{PATH}" )
-#   set(ENV{PATH} "$ENV{PATH};${XDK_PATH_NATIVE}\\lib" )
-#   set(ENV{GDAL_DATA} "${XDK_PATH_NATIVE}\\data" )
-#   set(ENV{PROJ_LIB} "${XDK_PATH_NATIVE}\\share\\proj" )
-#   set( CTEST_ENVIRONMENT
-# "PATH=$ENV{PATH}
-# GDAL_DATA=$ENV{GDAL_DATA}
-# PROJ_LIB=$ENV{PROJ_LIB}
-# ")
-# else()
-#   set(ENV{PATH} "${XDK_PATH}/lib:${XDK_PATH}/bin:$ENV{PATH}" )
-#   set( GDAL_DATA "${XDK_PATH}/share/gdal" )
-#   set( PROJ_LIB "${XDK_PATH}/share" )
-#   set( CTEST_ENVIRONMENT
-# "PATH=$ENV{PATH}
-# ")
-# endif()
+if(WIN32)
+  file(TO_NATIVE_PATH "${XDK_PATH}" XDK_PATH_NATIVE)
+  file(TO_NATIVE_PATH "${CTEST_BINARY_DIRECTORY}/bin" OTB_BUILD_BIN_DIR_NATIVE)
+  set(ENV{PATH} "$ENV{PATH};${OTB_BUILD_BIN_DIR_NATIVE}" )
+  set(ENV{PATH} "${XDK_PATH_NATIVE}\\bin;$ENV{PATH}" )
+  set(ENV{PATH} "$ENV{PATH};${XDK_PATH_NATIVE}\\lib" )
+  set(ENV{GDAL_DATA} "${XDK_PATH_NATIVE}\\data" )
+  set(ENV{PROJ_LIB} "${XDK_PATH_NATIVE}\\share\\proj" )
+  set( CTEST_ENVIRONMENT
+"PATH=$ENV{PATH}
+GDAL_DATA=$ENV{GDAL_DATA}
+PROJ_LIB=$ENV{PROJ_LIB}
+")
+else()
+  set(ENV{PATH} "${XDK_PATH}/lib:${XDK_PATH}/bin:$ENV{PATH}" )
+  set( GDAL_DATA "${XDK_PATH}/share/gdal" )
+  set( PROJ_LIB "${XDK_PATH}/share" )
+  set( CTEST_ENVIRONMENT
+"PATH=$ENV{PATH}
+")
+endif()
 
 set ( CTEST_BUILD_CONFIGURATION "Release" )
 if(WIN32)
@@ -91,6 +88,7 @@ set ( CONFIGURE_OPTIONS
 -DOTB_BINARY_DIR=${OTB_SOURCE_DIR}/build;\
 -DSUPERBUILD_INSTALL_DIR=${OTB_SOURCE_DIR}/xdk;\
 -DSUPERBUILD_BINARY_DIR=${OTB_SOURCE_DIR}/build;\
+-DINSTALL_DIR=${OTB_SOURCE_DIR}/xdk;\
 -DNAME_SUFFIX=${NAME_SUFFIX};" )
 
 # Look for a GIT command-line client.
