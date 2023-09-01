@@ -37,7 +37,11 @@ set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
 set(CPACK_DEB_COMPONENT_INSTALL ON)
 set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 set(CPACK_COMPONENTS_ALL Core ImageProcessing Hyperspectral Learning Segmentation Sar StereoProcessing Runtime RuntimeLibraries)
-set(CPACK_GENERATOR "ZIP")
+if(WIN32)
+    set(CPACK_GENERATOR "NSIS")
+else()
+    set(CPACK_GENERATOR "ZIP")
+endif()
 
 include(CPack)
 
