@@ -405,12 +405,18 @@ if(XDK_INSTALL_PATH)
     install(DIRECTORY ${XDK_INSTALL_PATH}/lib
             DESTINATION .
             COMPONENT RuntimeLibraries)
+    install(DIRECTORY ${XDK_INSTALL_PATH}/share
+            DESTINATION .
+            COMPONENT Core)       
     install(DIRECTORY ${XDK_INSTALL_PATH}/include
             DESTINATION .
             COMPONENT Core)        
     install(DIRECTORY ${XDK_INSTALL_PATH}/bin
             DESTINATION .
             COMPONENT Core)
+    install(DIRECTORY ${XDK_INSTALL_PATH}/cmake
+            DESTINATION ./lib
+            COMPONENT Core)    
 else()
     message(WARNING "XDK NOT FOUND, it will not be packaged")
 endif()
@@ -432,7 +438,46 @@ if(EXISTS ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR})
 else()
   file(MAKE_DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR})
 endif()
-install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION share)
+install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION share COMPONENT Core)
+
+#start installing script and other stuff related to package
+if(UNIX)
+  install( PROGRAMS
+    ${CMAKE_BINARY_DIR}/pkgsetup
+    ${CMAKE_BINARY_DIR}/make_symlinks
+    Files/setup_python.sh
+    Files/otbenv.profile
+    DESTINATION .
+    )
+endif()
+
+#my_file_ext is required for otbcli files which has
+# no extension on linux. (hence we cannot use SCRIPT_EXT
+
+#For windows otbenv.bash and otbenv.bat is required.
+# Former is for windows shell users and latter is for other
+# linux emulator such as bash for windows or mobxterm
+set(my_file_ext "")
+if(WIN32)
+  set(my_file_ext ".bat")
+  install( PROGRAMS
+    Files/otbenv.bat
+    Files/otbenv.bash
+    DESTINATION .
+    )
+endif()
+
+# #configure README from rst docs
+# set(RSTDOC_DIR "${CMAKE_SOURCE_DIR}/Documentation/Cookbook/rst")
+# if(APPLE)
+#   set(README_FILE ${RSTDOC_DIR}/Installation_Macos.rst)
+# elseif(LINUX) #not osx
+#   set(README_FILE ${RSTDOC_DIR}/Installation_Linux.rst)
+# elseif(WIN32) #windows
+#   set(README_FILE ${RSTDOC_DIR}/Installation_Windows.rst)
+# endif()
+# configure_file("${README_FILE}" ${CMAKE_BINARY_DIR}/README )
+# install(FILES ${CMAKE_BINARY_DIR}/README DESTINATION . )
 
 if(BUILD_TESTING)
   add_subdirectory(Utilities/InstallTest)
