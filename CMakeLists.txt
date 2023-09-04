@@ -404,18 +404,23 @@ if(XDK_INSTALL_PATH)
     message(STATUS "XDK FOUND, preparing it for packaging")
     install(DIRECTORY ${XDK_INSTALL_PATH}/lib
             DESTINATION .
+            USE_SOURCE_PERMISSIONS
             COMPONENT RuntimeLibraries)
     install(DIRECTORY ${XDK_INSTALL_PATH}/share
             DESTINATION .
+            USE_SOURCE_PERMISSIONS
             COMPONENT Core)       
     install(DIRECTORY ${XDK_INSTALL_PATH}/include
             DESTINATION .
+            USE_SOURCE_PERMISSIONS
             COMPONENT Core)        
     install(DIRECTORY ${XDK_INSTALL_PATH}/bin
             DESTINATION .
+            USE_SOURCE_PERMISSIONS
             COMPONENT Core)
     install(DIRECTORY ${XDK_INSTALL_PATH}/cmake
             DESTINATION ./lib
+            USE_SOURCE_PERMISSIONS
             COMPONENT Core)    
 else()
     message(WARNING "XDK NOT FOUND, it will not be packaged")
@@ -443,11 +448,10 @@ install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION share CO
 #start installing script and other stuff related to package
 if(UNIX)
   install( PROGRAMS
-    ${CMAKE_BINARY_DIR}/pkgsetup
-    ${CMAKE_BINARY_DIR}/make_symlinks
-    Files/setup_python.sh
-    Files/otbenv.profile
+    ${OTB_SOURCE_DIR}/Packaging/Files/setup_python.sh
+    ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.profile
     DESTINATION .
+    COMPONENT Core
     )
 endif()
 
@@ -461,9 +465,10 @@ set(my_file_ext "")
 if(WIN32)
   set(my_file_ext ".bat")
   install( PROGRAMS
-    Files/otbenv.bat
-    Files/otbenv.bash
+    ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.bat
+    ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.bash
     DESTINATION .
+    COMPONENT Core
     )
 endif()
 

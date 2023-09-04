@@ -48,5 +48,5 @@ otb_module(OTBConversion
     "${DOCUMENTATION}"
   
   COMPONENT
-    Segmentation
+    Core
 )
