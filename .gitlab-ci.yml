@@ -85,7 +85,7 @@ stages:
       - CookBook-*-html.tar.gz
       - CookBook-*.pdf
       - OTB-Doxygen-*.tar.bz2
-      - OTB-*.run
+      - OTB-*.tar.gz
       - OTB-*.zip
       - build/compile_commands.json
       - build/ctest_report.xml
@@ -220,8 +220,8 @@ macos-xdk-build:
   extends: .common-build
   script:
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=macos-10.14.6-clang
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=macos-10.14.6-clang
-    - mv build_packages/OTB-*.run . || true
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=macos-10.14.6-clang
+    - mv build_packages/OTB-*.tar.gz . || true
   needs:
     - job: macos-xdk-prepare
       artifacts: true
