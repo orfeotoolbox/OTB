@@ -168,7 +168,7 @@ ubuntu-xdk-build-core:
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
     - ctest -VV -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk -DNAME_SUFFIX:string=-core-glibc-2.31
-    - mv build_packages/OTB-*.zip . || true
+    - mv build_packages/OTB-*.tar.gz . || true
   needs:
     - job: ubuntu-xdk-prepare
       artifacts: true
@@ -182,7 +182,7 @@ ubuntu-xdk-build-full:
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full -DNAME_SUFFIX:string=-full-glibc-2.31
-    - mv build_packages/OTB-*.zip . || true
+    - mv build_packages/OTB-*.tar.gz . || true
   needs:
     - job: ubuntu-xdk-prepare-full
       artifacts: true
@@ -200,7 +200,7 @@ redhat-xdk-build:
   script:
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=redhat-8-gcc
-    - mv build_packages/OTB-*.zip . || true
+    - mv build_packages/OTB-*.tar.gz . || true
   needs:
     - job: redhat-xdk-prepare
       artifacts: true
