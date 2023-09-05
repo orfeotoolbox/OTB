@@ -426,6 +426,14 @@ else()
     message(WARNING "XDK NOT FOUND, it will not be packaged")
 endif()
 
+install(FILES Packaging/Files/build_wrapping.cmake
+DESTINATION ./share/otb/swig
+COMPONENT Core)
+install(FILES Packaging/Files/build_wrapping.md
+DESTINATION ./share/otb/swig
+RENAME README.md
+COMPONENT Core)
+
 # install FindXXX.cmake
 file(GLOB OTB_FIND_PACKAGE_SCRIPTS CMake/Find*.cmake)
 install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Core)
