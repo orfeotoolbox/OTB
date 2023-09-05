@@ -169,6 +169,7 @@ ubuntu-xdk-build-core:
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
     - ctest -VV -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk -DNAME_SUFFIX:string=-core-glibc-2.31
     - mv build_packages/OTB-*.tar.gz . || true
+    - mv OTB-9.0.0-Linux-RuntimeLibraries.tar.gz OTB-9.0.0-Linux-CoreDepends.tar.gz
   needs:
     - job: ubuntu-xdk-prepare
       artifacts: true
@@ -183,6 +184,7 @@ ubuntu-xdk-build-full:
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full -DNAME_SUFFIX:string=-full-glibc-2.31
     - mv build_packages/OTB-*.tar.gz . || true
+    - mv OTB-9.0.0-Linux-RuntimeLibraries.tar.gz OTB-9.0.0-Linux-Depends.tar.gz
   needs:
     - job: ubuntu-xdk-prepare-full
       artifacts: true
