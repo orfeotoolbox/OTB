@@ -270,6 +270,7 @@ option(OTB_BUILD_Miscellaneous "Enable building of the miscelanous algorithms mo
 option(OTB_BUILD_SAR "Enable building of SAR module" OFF)
 option(OTB_BUILD_Segmentation "Enable building of segmentation module" OFF)
 option(OTB_BUILD_StereoProcessing "Enable building of Stereo module" OFF)
+option(OTB_BUILD_RemoteModules "Enable building of Remote modules" OFF)
 
 # Dependencies options
 option(OTB_USE_6S "Enable module 6S in OTB" ON)
