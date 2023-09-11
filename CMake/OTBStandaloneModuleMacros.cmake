@@ -166,7 +166,7 @@ endmacro()
 
 macro(otb_module_target _name)
   set(_install 1)
-  set(_component Runtime)
+  set(_component Remote)
   foreach(arg ${ARGN})
     if("${arg}" MATCHES "^(NO_INSTALL)$")
       set(_install 0)

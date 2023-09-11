@@ -40,7 +40,7 @@ if(UNIX)
 else()
     set(CPACK_ARCHIVE_COMPONENT_INSTALL OFF)
 endif()
-set(CPACK_COMPONENTS_ALL Core ImageProcessing Hyperspectral Learning Segmentation Sar StereoProcessing Runtime RuntimeLibraries)
+set(CPACK_COMPONENTS_ALL Core ImageProcessing Hyperspectral Learning Segmentation Sar StereoProcessing Remote RuntimeLibraries)
 if(WIN32)
     set(CPACK_GENERATOR "ZIP")
 else()
@@ -84,6 +84,11 @@ cpack_add_component(Segmentation
 cpack_add_component(Sar
                     [DISPLAY_NAME Sar]
                     [DESCRIPTION "Contains all SAR libraries and applications for OTB" ]
+                    [OPTIONAL])
+
+cpack_add_component(Remote
+                    [DISPLAY_NAME Remote]
+                    [DESCRIPTION "Contains all Remote modules libraries and applications for OTB" ]
                     [OPTIONAL])
 
 cpack_add_component(StereoProcessing
