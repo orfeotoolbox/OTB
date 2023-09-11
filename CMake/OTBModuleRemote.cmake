@@ -177,7 +177,7 @@ function(otb_fetch_module _name _description)
     _fetch_with_git("${GIT_EXECUTABLE}"
       "${_fetch_options_GIT_REPOSITORY}"
       "${_fetch_options_GIT_TAG}"
-      "${OTB_SOURCE_DIR}/Modules/RemoteModules/${_name}"
+      "${OTB_SOURCE_DIR}/Modules/Remote/${_name}"
       )
   endif()
 endfunction()

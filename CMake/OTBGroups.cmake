@@ -25,7 +25,7 @@ set(group_list
   Hyperspectral
   Learning
   Miscellaneous
-  RemoteModules
+  Remote
   SAR
   Segmentation
   StereoProcessing
@@ -44,7 +44,7 @@ set(SAR_documentation "This group contains algorithms related to SAR processing"
 set(Segmentation_documentation "This group contains algorithms related to image segmentaiton")
 set(ThirdParty_documentation "This group contains all Orfeo ToolBox third parties")
 
-set(RemoteModules_documentation "This group of modules is for OTB based code that have
+set(Remote_documentation "This group of modules is for OTB based code that have
 additional third-party dependencies not bundled with the toolkit,
 new algorithms or implementations seeking greater exposure and adoption,
 algorithms that hope to eventually be integrated into the toolkit,
