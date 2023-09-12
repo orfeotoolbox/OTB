@@ -35,4 +35,7 @@ otb_module(OTBAppDimensionalityReduction
   
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Miscellaneous
   )

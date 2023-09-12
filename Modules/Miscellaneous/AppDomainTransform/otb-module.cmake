@@ -32,5 +32,8 @@ DEPENDS
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Miscellaneous
 )
 

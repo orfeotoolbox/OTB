@@ -33,4 +33,7 @@ otb_module(OTBAppMoments
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Miscellaneous
 )

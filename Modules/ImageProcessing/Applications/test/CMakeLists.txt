@@ -554,3 +554,38 @@ otb_test_application(NAME   apTvFEDimensionalityReductionPCA
                      VALID   --compare-image 0.025
                              ${BASELINE}/apTvChDimensionalityReductionPCA.tif
                              ${TEMP}/apTvChDimensionalityReductionPCA.tif)
+#----------- ConvertCartoToGeoPoint TESTS ----------------
+otb_test_application(NAME  apTvPrConvertCartoToGeoPoint
+                     APP  ConvertCartoToGeoPoint
+                     OPTIONS -carto.x 374100.828
+                             -carto.y 4829184.806
+                 	           -mapproj utm
+                 	           -mapproj.utm.northhem true
+                 	           -mapproj.utm.zone 31
+                     TESTENVOPTIONS ${TEMP}/apTvPrConvertCartoToGeoPoint.txt
+                     VALID   --compare-ascii ${EPSILON_7}
+                             ${BASELINE_FILES}/apTvPrConvertCartoToGeoPoint.txt
+                             ${TEMP}/apTvPrConvertCartoToGeoPoint.txt)
+
+#----------- ObtainUTMZoneFromGeoPoint TESTS ----------------
+otb_test_application(NAME apTvPrObtainUTMZoneFromGeoPoint
+                     APP ObtainUTMZoneFromGeoPoint
+                     OPTIONS -lat 10.0
+                             -lon 124.0
+                     TESTENVOPTIONS ${TEMP}/apTvPrObtainUTMZoneFromGeoPoint.txt
+                     VALID  --compare-ascii ${EPSILON_7}
+                        ${BASELINE_FILES}/apTvPrObtainUTMZoneFromGeoPoint.txt
+                        ${TEMP}/apTvPrObtainUTMZoneFromGeoPoint.txt)
+
+
+#----------- ConvertSensorToGeoPoint TESTS ----------------
+otb_test_application(NAME apTvPrConvertSensorToGeoPoint
+                     APP ConvertSensorToGeoPoint
+                     OPTIONS -in  ${INPUTDATA}/QB_TOULOUSE_MUL_Extract_500_500.tif
+                             -input.idx 500
+                             -input.idy 500
+                     TESTENVOPTIONS ${TEMP}/apTvPrConvertSensorToGeoPoint.txt
+                     VALID  --compare-ascii ${EPSILON_7}
+                        ${BASELINE_FILES}/apTvPrConvertSensorToGeoPoint.txt
+                        ${TEMP}/apTvPrConvertSensorToGeoPoint.txt
+                        --ignore-lines-with 2 town country)

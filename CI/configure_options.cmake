@@ -63,10 +63,10 @@ set (cmake_configure_option
 CMAKE_INSTALL_PREFIX:PATH=${CTEST_INSTALL_DIRECTORY}")
 
 # extra options for XDK builds
-if(XDK_PATH)
+if(XDK_INSTALL_PATH)
 set(cmake_configure_option
 "${cmake_configure_option}
-CMAKE_PREFIX_PATH=${XDK_PATH}")
+CMAKE_PREFIX_PATH=${XDK_INSTALL_PATH}")
 foreach(remote_module OTBTemporalGapFilling SertitObject otbGRM S1TilingSupportApplications) #DiapOTBModule
   set(cmake_configure_option
 "${cmake_configure_option}

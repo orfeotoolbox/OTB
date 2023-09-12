@@ -31,4 +31,7 @@ otb_module(OTBAppKMZ
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Miscellaneous
 )

@@ -34,4 +34,7 @@ otb_module(OTBAppMorphology
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Miscellaneous
 )

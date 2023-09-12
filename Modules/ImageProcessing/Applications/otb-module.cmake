@@ -36,6 +36,7 @@ otb_module(OTBAppImageProcessing
     OTBBoostAdapters
     OTBColorMap
     OTBCurlAdapters
+    OTBGdalAdapters
     OTBObjectList
     OTBStatistics
     OTBStreaming
@@ -53,6 +54,7 @@ otb_module(OTBAppImageProcessing
     OTBChangeDetection
     OTBDescriptors
     OTBDimensionalityReduction
+    OTBGDAL
     
   TEST_DEPENDS
     OTBTestKernel

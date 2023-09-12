@@ -52,4 +52,7 @@ ENABLE_SHARED
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Miscellaneous
 )

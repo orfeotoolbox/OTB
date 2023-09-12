@@ -77,14 +77,6 @@ install( FILES ${CMAKE_SWIG_OUTDIR}/otbApplication.py
          DESTINATION ${OTB_INSTALL_PYTHON_DIR}
          COMPONENT RuntimeLibraries )
 
-if(Python_VERSION VERSION_LESS "3.2.0")
-  install( FILES ${CMAKE_SWIG_OUTDIR}/otbApplication.pyc
-         DESTINATION ${OTB_INSTALL_PYTHON_DIR}
-         COMPONENT RuntimeLibraries )
-else()
-  # TODO : pyc file is in a subfolder.
-endif()
-
 configure_file(StandaloneWrapper.in CMakeLists.txt @ONLY)
 
 install( FILES ${CMAKE_SWIG_OUTDIR}/otbApplicationPYTHON_wrap.cxx

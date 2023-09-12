@@ -128,3 +128,17 @@ otb_create_application(
   SOURCES        otbDimensionalityReduction.cxx
   LINK_LIBRARIES ${${otb-module}_LIBRARIES})
     
+otb_create_application(
+  NAME           ConvertCartoToGeoPoint
+  SOURCES        otbConvertCartoToGeoPoint.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           ObtainUTMZoneFromGeoPoint
+  SOURCES        otbObtainUTMZoneFromGeoPoint.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})
+
+otb_create_application(
+  NAME           ConvertSensorToGeoPoint
+  SOURCES        otbConvertSensorToGeoPoint.cxx
+  LINK_LIBRARIES ${${otb-module}_LIBRARIES})

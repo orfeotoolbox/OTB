@@ -40,7 +40,7 @@ if(UNIX)
 else()
     set(CPACK_ARCHIVE_COMPONENT_INSTALL OFF)
 endif()
-set(CPACK_COMPONENTS_ALL Core ImageProcessing Hyperspectral Learning Segmentation Sar StereoProcessing Remote RuntimeLibraries)
+set(CPACK_COMPONENTS_ALL Core ImageProcessing Hyperspectral Miscellaneous Learning Segmentation Sar StereoProcessing Remote RuntimeLibraries)
 if(WIN32)
     set(CPACK_GENERATOR "ZIP")
 else()
@@ -72,7 +72,7 @@ cpack_add_component(Hyperspectral
                     [OPTIONAL])
 
 cpack_add_component(Miscellaneous
-                    [DISPLAY_NAME Misc]
+                    [DISPLAY_NAME Miscellaneous]
                     [DESCRIPTION "Contains Miscellaneous libraries and applications for OTB" ]
                     [OPTIONAL])
 
