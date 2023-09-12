@@ -118,7 +118,7 @@ option(OTBGroup_ThirdParty "Request using thirdparty modules" ON)
 
 foreach( group ${group_list})
     if(NOT DEFINED OTBGroup_${group})
-      if(DEFINED(OTB_BUILD_${group}))
+      if(DEFINED OTB_BUILD_${group})
         option(OTBGroup_${group} "Request building ${group} modules" ${OTB_BUILD_${group}})
       else()
         option(OTBGroup_${group} "Request building ${group} modules" OFF)
