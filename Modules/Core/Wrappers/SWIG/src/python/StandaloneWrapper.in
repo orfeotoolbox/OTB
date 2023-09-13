@@ -68,5 +68,5 @@ if(NUMPY_FOUND)
 endif()
 
 install(TARGETS PythonWrapperLib
-        DESTINATION lib/python
+        DESTINATION lib/otb/python
         COMPONENT RuntimeLibraries )

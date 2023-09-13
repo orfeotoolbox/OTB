@@ -440,14 +440,14 @@ install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR}
 
 # TODO : install release notes, copyright notice, ...
 # install(FILES "LICENSE" "NOTICE" "README.txt" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
-install(FILES "LICENSE" DESTINATION ${OTB_INSTALL_DOC_DIR})
+install(FILES "LICENSE" DESTINATION . COMPONENT Core)
 
 # Configure and install VERSION file
 configure_file(VERSION VERSION @ONLY)
 install(FILES ${OTB_BINARY_DIR}/VERSION DESTINATION ${OTB_INSTALL_DOC_DIR})
 
 if(EXISTS ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR})
-  message("Directory share/otb already existes")
+  message("Directory share/otb already exists")
 else()
   file(MAKE_DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR})
 endif()
@@ -481,16 +481,16 @@ if(WIN32)
 endif()
 
 # #configure README from rst docs
-# set(RSTDOC_DIR "${CMAKE_SOURCE_DIR}/Documentation/Cookbook/rst")
-# if(APPLE)
-#   set(README_FILE ${RSTDOC_DIR}/Installation_Macos.rst)
-# elseif(LINUX) #not osx
-#   set(README_FILE ${RSTDOC_DIR}/Installation_Linux.rst)
-# elseif(WIN32) #windows
-#   set(README_FILE ${RSTDOC_DIR}/Installation_Windows.rst)
-# endif()
-# configure_file("${README_FILE}" ${CMAKE_BINARY_DIR}/README )
-# install(FILES ${CMAKE_BINARY_DIR}/README DESTINATION . )
+set(RSTDOC_DIR "${OTB_SOURCE_DIR}/Documentation/Cookbook/rst")
+if(APPLE)
+  set(README_FILE ${RSTDOC_DIR}/Installation_Macos.rst)
+elseif(WIN32) #windows
+  set(README_FILE ${RSTDOC_DIR}/Installation_Windows.rst)
+else()
+  set(README_FILE ${RSTDOC_DIR}/Installation_Linux.rst)
+endif()
+configure_file("${README_FILE}" ${CMAKE_BINARY_DIR}/README )
+install(FILES ${CMAKE_BINARY_DIR}/README DESTINATION . COMPONENT Core)
 
 if(BUILD_TESTING)
   add_subdirectory(Utilities/InstallTest)
