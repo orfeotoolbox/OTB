@@ -50,6 +50,7 @@ PATH=$(cat_path "$OUT_DIR/bin" "$PATH")
 
 # export PYTHONPATH to import otbApplication.py
 PYTHONPATH=$(cat_path "$OUT_DIR/lib/otb/python" "$PYTHONPATH")
+PYTHONPATH=$(cat_path "$OUT_DIR/lib/python3/dist-packages" "$PYTHONPATH")
 
 # set numeric locale to C
 LC_NUMERIC=C

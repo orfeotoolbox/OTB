@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-cmake_minimum_required(VERSION 3.10.2)
+cmake_minimum_required(VERSION 3.13.0)
 
 foreach(p
     CMP0072 # CMake 3.11
@@ -456,7 +456,8 @@ install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION share CO
 #start installing script and other stuff related to package
 if(UNIX)
   install( PROGRAMS
-    ${OTB_SOURCE_DIR}/Packaging/Files/setup_python.sh
+    ${OTB_SOURCE_DIR}/Packaging/Files/check_python_env.sh
+    ${OTB_SOURCE_DIR}/Packaging/Files/recompile_bindings.sh
     ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.profile
     DESTINATION .
     COMPONENT Core
