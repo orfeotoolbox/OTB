@@ -18,20 +18,22 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "In some situation, it is desirable to represent a gray level
-image in color for easier interpretation. This is particularly the case if pixel
-values in the image are used to represent some data such as elevation,
-deformation map, interferogram. In this case, it is important to ensure that similar
-values will get similar colors. This module contains classes that can meet these
-requirements.")
+set(DOCUMENTATION "Geometric moments are widely used in image processing and
+pattern recognition. This module contains classes that implement many moments: Hu,
+Flusser, and so on. Note that some of them can be evaluated along a path, instead
+of an image.")
 
-otb_module(OTBColorMap
+otb_module(OTBMoments
   DEPENDS
+    OTBCommon
     OTBITK
+    OTBPath
 
   TEST_DEPENDS
     OTBImageBase
     OTBImageIO
+    OTBImageManipulation
+    OTBInterpolation
     OTBTestKernel
 
   DESCRIPTION
@@ -39,4 +41,7 @@ otb_module(OTBColorMap
 
   COMPONENT
     ImageProcessing
+
+  COMPONENT
+    Core
 )

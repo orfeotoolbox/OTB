@@ -41,5 +41,5 @@ otb_module(OTBPath
     "${DOCUMENTATION}"
 
   COMPONENT
-    ImageProcessing
+    Core
 )

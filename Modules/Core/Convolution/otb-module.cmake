@@ -36,5 +36,5 @@ otb_module(OTBConvolution
     "${DOCUMENTATION}"
 
   COMPONENT
-    ImageProcessing
+    Core
 )
