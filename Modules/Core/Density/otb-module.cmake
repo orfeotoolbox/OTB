@@ -18,22 +18,27 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "This module contains classes that allow image smoothing (it
-contains mean shift smoothing for instance).")
+set(DOCUMENTATION "This module contains tools to computes a local density of
+keypoints (SIFT or SURF, for instance). Many estimators are implemented
+(Epanechnikov / simple cut off / gaussian function, ratio of the number of keypoints over
+the total number of pixels within a region). Note that the estimated density can be
+represented as an image or quiered at particular points (function).")
 
-otb_module(OTBSmoothing
+otb_module(OTBDensity
   DEPENDS
-    OTBImageBase
+    OTBPointSet
     OTBCommon
     OTBITK
 
   TEST_DEPENDS
+    OTBDescriptors
     OTBTestKernel
     OTBImageIO
+    OTBImageBase
 
   DESCRIPTION
     "${DOCUMENTATION}"
 
   COMPONENT
-    ImageProcessing
+    Core
 )

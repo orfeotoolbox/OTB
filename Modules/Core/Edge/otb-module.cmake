@@ -44,8 +44,5 @@ otb_module(OTBEdge
     "${DOCUMENTATION}"
 
   COMPONENT
-    ImageProcessing
-
-  COMPONENT
-    ImageProcessing
+    Core
 )
