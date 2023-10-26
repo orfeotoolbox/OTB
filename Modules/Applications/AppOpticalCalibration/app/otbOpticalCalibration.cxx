@@ -32,8 +32,6 @@
 #include "otbClampImageFilter.h"
 #include "otbSurfaceAdjacencyEffectCorrectionSchemeFilter.h"
 #include "otbGroundSpacingImageFunction.h"
-#include "vnl/vnl_random.h"
-
 
 #include <fstream>
 #include <sstream>
@@ -530,10 +528,9 @@ private:
         // Estimate ground spacing in kilometers
         GroundSpacingImageType::Pointer groundSpacing = GroundSpacingImageType::New();
         groundSpacing->SetInputImage(inImage);
-        IndexType  index;
-        vnl_random rand;
-        index[0]                        = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[0]));
-        index[1]                        = static_cast<IndexValueType>(rand.lrand32(0, inImage->GetLargestPossibleRegion().GetSize()[1]));
+        IndexType index;
+        index[0]                        = static_cast<IndexValueType>(.5f * inImage->GetLargestPossibleRegion().GetSize()[0]) + 1;
+        index[1]                        = static_cast<IndexValueType>(.5f * inImage->GetLargestPossibleRegion().GetSize()[1]) + 1;
         FloatType   tmpSpacing          = groundSpacing->EvaluateAtIndex(index);
         const float spacingInKilometers = (std::max(tmpSpacing[0], tmpSpacing[1])) / 1000.;
         SetDefaultParameterFloat("atmo.pixsize", spacingInKilometers);
@@ -597,6 +594,20 @@ private:
         m_currentEnabledStateOfSolarDistanceParam = false;
       }
     }
+
+    // "atmo" parameter group is only used for TOC calibration
+    if (GetParameterInt("level") != Level_TOC)
+    {
+      for (auto const & key : GetParametersKeys(true))
+      {
+        if (key.rfind("atmo.", 0) == 0)
+        {
+          MandatoryOff(key);
+          DisableParameter(key);
+          ClearValue(key);
+        }  // in "atmo" group
+      }  // parameters keys
+    }  // level is TOC
 
     if (!ossOutput.str().empty())
       otbAppLogINFO(<< ossOutput.str());
