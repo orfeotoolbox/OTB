@@ -30,116 +30,136 @@
 
 namespace
 {
-  constexpr int STRING_PRECISION = 20;
+using dict_t = std::unordered_map<std::string, std::string>;
+constexpr int STRING_PRECISION = 20;
 
-  const std::string & Get(const std::unordered_map<std::string, std::string> & kwl, const std::string & key)
+const std::string & Get(const dict_t & kwl, const std::string & key)
+{
+  auto const& wh = kwl.find(key);
+  if (wh != kwl.end())
   {
-    try
-    {
-      return kwl.at(key);
-    }
-    catch (const std::out_of_range & e)
-    {
-      otbGenericExceptionMacro(itk::ExceptionObject,
-             << "Unable to find '" << key << "' in the input keywordlist");
-    }
+    return wh->second;
+  }
+  else
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject,
+        << "Unable to find '" << key << "' in the input keywordlist");
+  }
+}
+
+template <typename T> inline T value_or_throw(
+    dict_t const& kwl,
+    std::string const& key,
+    otb::string_view context)
+{
+  auto const& wh = kwl.find(key);
+  if (wh != kwl.end())
+  {
+    auto const& value = wh->second;
+    return otb::to<T>(value, "converting metadata '"+key+"' "+context);
+  }
+  else
+  {
+    otbGenericExceptionMacro(itk::ExceptionObject,
+        << "Unable to find '" << key << "' in the input keywordlist " << context);
+  }
+}
+
+// the precision of std::to_string is limited to 6 digits
+template <typename T>
+std::string to_string_with_precision(const T value)
+{
+  std::ostringstream out;
+  out.precision(STRING_PRECISION);
+  out << std::fixed << value;
+  return out.str();
+}
+
+std::string DoubleVectorToString(otb::Span<double const> input)
+{
+  std::ostringstream oss;
+  oss.precision(STRING_PRECISION);
+  for (auto elem: input)
+  {
+    oss << elem << " ";
   }
 
-  // the precision of std::to_string is limited to 6 digits
-  template <typename T>
-  std::string to_string_with_precision(const T value)
+  return oss.str();
+}
+
+std::vector<double> StringToDoubleVector(const std::string & input)
+{
+  std::vector<double> output;
+
+  const auto parts = otb::split_on(input, ' ');
+  for (const auto & elem : parts)
   {
-      std::ostringstream out;
-      out.precision(STRING_PRECISION);
-      out << std::fixed << value;
-      return out.str();
+    if (!elem.empty())
+      output.push_back(otb::to<double>(elem, "Cannot cast"));
   }
 
-  std::string DoubleVectorToString(const std::vector<double> & input)
+  return output;
+}
+
+template <class T>
+void VectorToKeywordList(otb::MetaData::Keywordlist & kwl,
+                         std::vector<T> const& input,
+                         const std::string & prefix)
+{
+  int i = 0;
+  for (const auto & elem: input)
   {
-    std::ostringstream oss;
-    oss.precision(STRING_PRECISION);
-    for (auto elem: input)
+    elem.ToKeywordlist(kwl, prefix + "_" + to_string_with_precision(i) + ".");
+    i++;
+  }
+  kwl.emplace(prefix + ".number" , to_string_with_precision(i));
+}
+
+template<class T>
+void KeywordlistToVector(std::vector<T> & vector,
+                         const otb::MetaData::Keywordlist & kwl,
+                         const std::string & prefix)
+{
+  vector.clear();
+
+  const auto size = std::stoi(Get(kwl, prefix + ".number"));
+  for (int i = 0; i < size; i++)
+  {
+    auto t = T::FromKeywordlist(kwl, prefix + "_" + to_string_with_precision(i) + ".");
+    vector.push_back(t);
+  }
+}
+
+std::string IntArrayToString(otb::Span<int const> input)
+{
+  std::ostringstream oss;
+  for (auto elem: input)
+  {
+    oss << elem << " ";
+  }
+
+  return oss.str();
+}
+
+void StringToIntArray(const std::string & input, otb::Span<int> output)
+{
+  const auto parts = otb::split_on(input, ' ');
+  auto arrayIt = output.begin();
+  for (const auto & elem : parts)
+  {
+    if(arrayIt > output.end())
     {
-      oss << elem << " ";
+      otbLogMacro(Warning, << "StringToIntArray: Exceeded size of array ("<<output.size()<<") with string " << input);
+      break;
     }
-
-    return oss.str();
-  }
-
-  std::vector<double> StringToDoubleVector(const std::string & input)
-  {
-    std::vector<double> output;
-
-    const auto parts = otb::split_on(input, ' ');
-    for (const auto & elem : parts)
+    if (!elem.empty())
     {
-      if (!elem.empty())
-        output.push_back(otb::to<double>(elem, "Cannot cast"));
-    }
-
-    return output;
-  }
-
-  template <class T>
-  void VectorToKeywordList(otb::MetaData::Keywordlist & kwl,
-                           const std::vector<T> & input,
-                           const std::string & prefix)
-  {
-    int i = 0;
-    for (const auto & elem: input)
-    {
-      elem.ToKeywordlist(kwl, prefix + "_" + to_string_with_precision(i) + ".");
-      i++;
-    }
-    kwl.insert({prefix + ".number" , to_string_with_precision(i)});
-  }
-
-  template<class T>
-  void KeywordlistToVector(std::vector<T> & vector,
-                           const otb::MetaData::Keywordlist & kwl,
-                           const std::string & prefix)
-  {
-    vector.clear();
-
-    const auto size = std::stoi(Get(kwl, prefix + ".number"));
-    for (int i = 0; i < size; i++)
-    {
-      auto t = T::FromKeywordlist(kwl, prefix + "_" + to_string_with_precision(i) + ".");
-      vector.push_back(t);
-    }
-  }
-
-  std::string IntArrayToString(const std::array<int, 2> & input)
-  {
-    std::ostringstream oss;
-    for (auto elem: input)
-    {
-      oss << elem << " ";
-    }
-
-    return oss.str();
-  }
-
-  void StringToIntArray(const std::string & input, otb::Span<int> output)
-  {
-    const auto parts = otb::split_on(input, ' ');
-    auto arrayIt = output.begin();
-    for (const auto & elem : parts)
-    {
-      if(arrayIt > output.end())
-      {
-        otbLogMacro(Warning, << "StringToIntArray: Exceeded size of array ("<<output.size()<<") with string " << input);
-        break;
-      }
-      if (!elem.empty())
-      {
-        *arrayIt = otb::to<int>(elem, "Cannot cast");
-        ++arrayIt;
-      }
+      *arrayIt = otb::to<int>(elem, "Cannot cast");
+      ++arrayIt;
     }
   }
 }
+} // anonymous namespace 
 
 namespace otb
 {
@@ -147,16 +167,16 @@ void SARParam::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
 {
   std::ostringstream oss;
   oss << azimuthTimeInterval;
-  kwl.insert({prefix + "AzimuthTimeInterval", oss.str()});
-  kwl.insert({prefix +"NearRangeTime", to_string_with_precision(nearRangeTime)});
-  kwl.insert({prefix + "RangeSamplingRate", to_string_with_precision(rangeSamplingRate)});
-  kwl.insert({prefix + "RangeResolution", to_string_with_precision(rangeResolution)});
-  kwl.insert({prefix + "NumberOfLinesPerBurst", to_string_with_precision(numberOfLinesPerBurst)});
-  kwl.insert({prefix + "NumberOfSamplesPerBurst", to_string_with_precision(numberOfSamplesPerBurst)});
-  kwl.insert({prefix + "AzimuthBandwidth", to_string_with_precision(azimuthBandwidth)});
-  kwl.insert({prefix + "RangeBandwidth", to_string_with_precision(rangeBandwidth)});
-  kwl.insert({prefix + "AzimuthSteeringRate", to_string_with_precision(azimuthSteeringRate)});
-  kwl.insert({prefix + "RightLookingFlag", std::to_string(rightLookingFlag)});
+  kwl.emplace(prefix + "AzimuthTimeInterval",     oss.str());
+  kwl.emplace(prefix + "NearRangeTime",           to_string_with_precision(nearRangeTime));
+  kwl.emplace(prefix + "RangeSamplingRate",       to_string_with_precision(rangeSamplingRate));
+  kwl.emplace(prefix + "RangeResolution",         to_string_with_precision(rangeResolution));
+  kwl.emplace(prefix + "NumberOfLinesPerBurst",   to_string_with_precision(numberOfLinesPerBurst));
+  kwl.emplace(prefix + "NumberOfSamplesPerBurst", to_string_with_precision(numberOfSamplesPerBurst));
+  kwl.emplace(prefix + "AzimuthBandwidth",        to_string_with_precision(azimuthBandwidth));
+  kwl.emplace(prefix + "RangeBandwidth",          to_string_with_precision(rangeBandwidth));
+  kwl.emplace(prefix + "AzimuthSteeringRate",     to_string_with_precision(azimuthSteeringRate));
+  kwl.emplace(prefix + "RightLookingFlag",        std::to_string(rightLookingFlag));
 
   centerSceneCoord.ToKeywordlist(kwl, prefix + "CenterSceneCoord");
   ulSceneCoord.ToKeywordlist(kwl, prefix + "ulSceneCoord");
@@ -164,10 +184,10 @@ void SARParam::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
   lrSceneCoord.ToKeywordlist(kwl, prefix + "lrSceneCoord");
   llSceneCoord.ToKeywordlist(kwl, prefix + "llSceneCoord");
 
-  VectorToKeywordList(kwl, azimuthFmRates, prefix + "AzimuthFmRates");
-  VectorToKeywordList(kwl, dopplerCentroids, prefix + "DopplerCentroid");
-  VectorToKeywordList(kwl, orbits, prefix + "Orbits");
-  VectorToKeywordList(kwl, burstRecords, prefix + "BurstRecords");
+  VectorToKeywordList(kwl, azimuthFmRates,                 prefix + "AzimuthFmRates");
+  VectorToKeywordList(kwl, dopplerCentroids,               prefix + "DopplerCentroid");
+  VectorToKeywordList(kwl, orbits,                         prefix + "Orbits");
+  VectorToKeywordList(kwl, burstRecords,                   prefix + "BurstRecords");
   VectorToKeywordList(kwl, slantRangeToGroundRangeRecords, prefix + "SlantRangeToGroundRangeRecords");
   VectorToKeywordList(kwl, groundRangeToSlantRangeRecords, prefix + "GroundRangeToSlantRangeRecords");
 
@@ -179,25 +199,31 @@ void SARParam::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
 
 void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
 {
+#if 1
+  azimuthTimeInterval = value_or_throw<MetaData::Duration>(kwl, prefix + "AzimuthTimeInterval", "(FromKeywordlist)");
+#else
   std::istringstream iss(Get(kwl, prefix + "AzimuthTimeInterval"));
 
   if (!(iss >> azimuthTimeInterval))
   {
     otbGenericExceptionMacro(itk::ExceptionObject,
-           << "Unable to decode " << Get(kwl, prefix + "AzimuthTimeInterval"));
+        << "Unable to decode " << Get(kwl, prefix + "AzimuthTimeInterval"));
   }
+#endif
 
-  nearRangeTime = std::stod(Get(kwl, prefix + "NearRangeTime"));
-  rangeSamplingRate = std::stod(Get(kwl, prefix + "RangeSamplingRate"));
-  rangeResolution = std::stod(Get(kwl, prefix + "RangeResolution"));
-  rightLookingFlag = std::stoi(Get(kwl, prefix + "RightLookingFlag"));
 
-  azimuthBandwidth = std::stod(Get(kwl, prefix + "AzimuthBandwidth"));
-  rangeBandwidth = std::stod(Get(kwl, prefix + "RangeBandwidth"));
-  azimuthSteeringRate = std::stod(Get(kwl, prefix + "AzimuthSteeringRate"));
+  // TODO: use to<>
+  nearRangeTime           = value_or_throw<double>(kwl, prefix + "NearRangeTime",       "(FromKeywordlist)");
+  rangeSamplingRate       = value_or_throw<double>(kwl, prefix + "RangeSamplingRate",   "(FromKeywordlist)");
+  rangeResolution         = value_or_throw<double>(kwl, prefix + "RangeResolution",     "(FromKeywordlist)");
+  rightLookingFlag        = value_or_throw<int>   (kwl, prefix + "RightLookingFlag",    "(FromKeywordlist)");
 
-  numberOfLinesPerBurst = std::stoul(Get(kwl, prefix + "NumberOfLinesPerBurst"));
-  numberOfSamplesPerBurst = std::stoul(Get(kwl, prefix + "NumberOfSamplesPerBurst"));
+  azimuthBandwidth        = value_or_throw<double>(kwl, prefix + "AzimuthBandwidth",    "(FromKeywordlist)");
+  rangeBandwidth          = value_or_throw<double>(kwl, prefix + "RangeBandwidth",      "(FromKeywordlist)");
+  azimuthSteeringRate     = value_or_throw<double>(kwl, prefix + "AzimuthSteeringRate", "(FromKeywordlist)");
+
+  numberOfLinesPerBurst   = value_or_throw<unsigned long>(kwl, prefix + "NumberOfLinesPerBurst", "(FromKeywordlist)");
+  numberOfSamplesPerBurst = value_or_throw<unsigned long>(kwl, prefix + "NumberOfSamplesPerBurst", "(FromKeywordlist)");
 
   centerSceneCoord.FromKeywordlist(kwl, prefix + "CenterSceneCoord");
   ulSceneCoord.FromKeywordlist(kwl, prefix + "ulSceneCoord");
@@ -205,10 +231,10 @@ void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
   lrSceneCoord.FromKeywordlist(kwl, prefix + "lrSceneCoord");
   llSceneCoord.FromKeywordlist(kwl, prefix + "llSceneCoord");
 
-  KeywordlistToVector(azimuthFmRates, kwl, prefix + "AzimuthFmRates");
-  KeywordlistToVector(dopplerCentroids, kwl, prefix + "DopplerCentroid");
-  KeywordlistToVector(orbits, kwl, prefix + "Orbits");
-  KeywordlistToVector(burstRecords, kwl, prefix + "BurstRecords");
+  KeywordlistToVector(azimuthFmRates,                 kwl, prefix + "AzimuthFmRates");
+  KeywordlistToVector(dopplerCentroids,               kwl, prefix + "DopplerCentroid");
+  KeywordlistToVector(orbits,                         kwl, prefix + "Orbits");
+  KeywordlistToVector(burstRecords,                   kwl, prefix + "BurstRecords");
   KeywordlistToVector(slantRangeToGroundRangeRecords, kwl, prefix + "SlantRangeToGroundRangeRecords");
   KeywordlistToVector(groundRangeToSlantRangeRecords, kwl, prefix + "GroundRangeToSlantRangeRecords");
 
@@ -238,20 +264,24 @@ void AzimuthFmRate::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string
 {
   std::ostringstream oss;
   oss << azimuthTime;
-  kwl.insert({prefix + "AzimuthTime", oss.str()});
-  kwl.insert({prefix + "AzimuthFmRatePolynomial", DoubleVectorToString(azimuthFmRatePolynomial)});
+  kwl.emplace(prefix + "AzimuthTime", oss.str());
+  kwl.emplace(prefix + "AzimuthFmRatePolynomial", DoubleVectorToString(azimuthFmRatePolynomial));
 }
 
 AzimuthFmRate AzimuthFmRate::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
 {
   AzimuthFmRate output;
+#if 1
+  output.azimuthTime = value_or_throw<MetaData::TimePoint>(kwl, prefix + "AzimuthTime", "(AzimuthFmRate::FromKeywordlist)");
+#else
   std::istringstream iss(Get(kwl, prefix + "AzimuthTime"));
 
   if (!(iss >> output.azimuthTime))
   {
     otbGenericExceptionMacro(itk::ExceptionObject,
-           << "Unable to decode " << Get(kwl, prefix + "AzimuthTime"));
+        << "Unable to decode " << Get(kwl, prefix + "AzimuthTime"));
   }
+#endif
 
   output.azimuthFmRatePolynomial = StringToDoubleVector(Get(kwl, prefix + "AzimuthFmRatePolynomial"));
 
@@ -262,25 +292,28 @@ void DopplerCentroid::ToKeywordlist(MetaData::Keywordlist & kwl, const std::stri
 {
   std::ostringstream oss;
   oss << azimuthTime;
-  kwl.insert({prefix + "AzimuthTime", oss.str()});
-  kwl.insert({prefix + "t0", to_string_with_precision(t0)});
-  kwl.insert({prefix + "DopCoef", DoubleVectorToString(dopCoef)});
-  kwl.insert({prefix + "GeoDopCoef", DoubleVectorToString(geoDopCoef)});
+  kwl.emplace(prefix + "AzimuthTime", oss.str());
+  kwl.emplace(prefix + "t0",          to_string_with_precision(t0));
+  kwl.emplace(prefix + "DopCoef",     DoubleVectorToString(dopCoef));
+  kwl.emplace(prefix + "GeoDopCoef",  DoubleVectorToString(geoDopCoef));
 }
 
 DopplerCentroid DopplerCentroid::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
 {
   DopplerCentroid output;
-
+#if 1
+  output.azimuthTime = value_or_throw<MetaData::TimePoint>(kwl, prefix + "AzimuthTime", "(DopplerCentroid::FromKeywordlist)");
+#else
   std::istringstream iss(Get(kwl, prefix + "AzimuthTime"));
 
   if (!(iss >> output.azimuthTime))
   {
     otbGenericExceptionMacro(itk::ExceptionObject,
-           << "Unable to decode " << Get(kwl, prefix + "AzimuthTime"));
+        << "Unable to decode " << Get(kwl, prefix + "AzimuthTime"));
   }
+#endif
 
-  output.t0 = std::stod(Get(kwl, prefix + "t0"));
+  output.t0 = value_or_throw<double>(kwl, prefix + "t0", "(DopplerCentroid::FromKeywordlist)");
 
   auto dopCoefIt = kwl.find(prefix + "DopCoef");
   if (dopCoefIt != kwl.end())
@@ -307,9 +340,9 @@ void Orbit::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefi
 
   std::ostringstream oss;
   oss << time;
-  kwl.insert({prefix + "Time", oss.str()});
-  kwl.insert({prefix + "Position", pointToString(position)});
-  kwl.insert({prefix + "Velocity", pointToString(velocity)});
+  kwl.emplace(prefix + "Time",     oss.str());
+  kwl.emplace(prefix + "Position", pointToString(position));
+  kwl.emplace(prefix + "Velocity", pointToString(velocity));
 }
 
 
@@ -317,12 +350,18 @@ Orbit Orbit::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::strin
 {
   Orbit output;
 
+#if 1
+  output.time = value_or_throw<MetaData::TimePoint>(kwl, prefix + "Time", "(Orbit::FromKeywordlist)");
+
+  output.position = value_or_throw<Orbit::PointType>(kwl, prefix + "Position", "(Orbit::FromKeywordlist)");
+  output.velocity = value_or_throw<Orbit::PointType>(kwl, prefix + "Velocity", "(Orbit::FromKeywordlist)");
+#else
   std::istringstream iss(Get(kwl, prefix + "Time"));
 
   if (!(iss >> output.time))
   {
     otbGenericExceptionMacro(itk::ExceptionObject,
-           << "Unable to decode " << Get(kwl, prefix + "Time"));
+        << "Unable to decode " << Get(kwl, prefix + "Time"));
   }
 
   auto stringToPoint = [](const std::string & input)
@@ -337,6 +376,7 @@ Orbit Orbit::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::strin
 
   output.position = stringToPoint(Get(kwl, prefix + "Position"));
   output.velocity = stringToPoint(Get(kwl, prefix + "Velocity"));
+#endif
 
   return output;
 }
@@ -345,42 +385,46 @@ void BurstRecord::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string &
 {
   std::ostringstream oss;
   oss << azimuthStartTime;
-  kwl.insert({prefix + "AzimuthStartTime", oss.str()});
-  std::ostringstream oss2;
-  oss2 << azimuthStopTime;
-  kwl.insert({prefix + "AzimuthStopTime", oss2.str()});
+  kwl.emplace(prefix + "AzimuthStartTime", oss.str());
+  oss.str("");
+  oss << azimuthStopTime;
+  kwl.emplace(prefix + "AzimuthStopTime", oss.str());
 
-  kwl.insert({prefix + "StartLine", to_string_with_precision(startLine)});
-  kwl.insert({prefix + "EndLine", to_string_with_precision(endLine)});
-  kwl.insert({prefix + "StartSample", to_string_with_precision(startSample)});
-  kwl.insert({prefix + "EndSample", to_string_with_precision(endSample)});
-  kwl.insert({prefix + "AzimuthAnxTime", to_string_with_precision(azimuthAnxTime)});
+  kwl.emplace(prefix + "StartLine",       to_string_with_precision(startLine));
+  kwl.emplace(prefix + "EndLine",         to_string_with_precision(endLine));
+  kwl.emplace(prefix + "StartSample",     to_string_with_precision(startSample));
+  kwl.emplace(prefix + "EndSample",       to_string_with_precision(endSample));
+  kwl.emplace(prefix + "AzimuthAnxTime",  to_string_with_precision(azimuthAnxTime));
 }
 
 BurstRecord BurstRecord::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
 {
   BurstRecord output;
 
+#if 1
+  output.azimuthStartTime = value_or_throw<MetaData::TimePoint>(kwl, prefix + "AzimuthStartTime", "(BurstRecord::FromKeywordlist)");
+  output.azimuthStopTime  = value_or_throw<MetaData::TimePoint>(kwl, prefix + "AzimuthStopTime" , "(BurstRecord::FromKeywordlist)");
+#else
   std::istringstream iss(Get(kwl, prefix + "AzimuthStartTime"));
   if (!(iss >> output.azimuthStartTime))
   {
     otbGenericExceptionMacro(itk::ExceptionObject,
-           << "Unable to decode " << Get(kwl, prefix + "AzimuthStartTime"));
+        << "Unable to decode " << Get(kwl, prefix + "AzimuthStartTime"));
   }
 
   std::istringstream iss2(Get(kwl, prefix + "AzimuthStopTime"));
   if (!(iss2 >> output.azimuthStopTime))
   {
     otbGenericExceptionMacro(itk::ExceptionObject,
-           << "Unable to decode " << Get(kwl, prefix + "AzimuthStopTime"));
+        << "Unable to decode " << Get(kwl, prefix + "AzimuthStopTime"));
   }
+#endif
 
-
-  output.startLine = std::stoi(Get(kwl, prefix + "StartLine"));
-  output.endLine = std::stoi(Get(kwl, prefix + "EndLine"));
-  output.startSample = std::stoi(Get(kwl, prefix + "StartSample"));
-  output.endSample = std::stoi(Get(kwl, prefix + "EndSample"));
-  output.azimuthAnxTime = std::stod(Get(kwl, prefix + "AzimuthAnxTime"));
+  output.startLine      = value_or_throw<int>   (kwl, prefix + "StartLine",      "(BurstRecord::FromKeywordlist)");
+  output.endLine        = value_or_throw<int>   (kwl, prefix + "EndLine",        "(BurstRecord::FromKeywordlist)");
+  output.startSample    = value_or_throw<int>   (kwl, prefix + "StartSample",    "(BurstRecord::FromKeywordlist)");
+  output.endSample      = value_or_throw<int>   (kwl, prefix + "EndSample",      "(BurstRecord::FromKeywordlist)");
+  output.azimuthAnxTime = value_or_throw<double>(kwl, prefix + "AzimuthAnxTime", "(BurstRecord::FromKeywordlist)");
 
   return output;
 }
@@ -389,30 +433,34 @@ void GCPTime::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pre
 {
   std::ostringstream oss;
   oss << azimuthTime << " " << to_string_with_precision(slantRangeTime);
-  kwl.insert({prefix, oss.str()});
+  kwl.emplace(prefix, oss.str());
 }
 
 void CoordinateConversionRecord::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const
 {
   std::ostringstream oss;
   oss << azimuthTime;
-  kwl.insert({prefix + "AzimuthTime", oss.str()});
-  kwl.insert({prefix + "rg0", to_string_with_precision(rg0)});
-  kwl.insert({prefix + "coeffs", DoubleVectorToString(coeffs)});
+  kwl.emplace(prefix + "AzimuthTime", oss.str());
+  kwl.emplace(prefix + "rg0",         to_string_with_precision(rg0));
+  kwl.emplace(prefix + "coeffs",      DoubleVectorToString(coeffs));
 }
 
 CoordinateConversionRecord CoordinateConversionRecord::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
 {
   CoordinateConversionRecord output;
 
+#if 1
+  output.azimuthTime = value_or_throw<MetaData::TimePoint>(kwl, prefix + "AzimuthTime", "(CoordinateConversionRecord::FromKeywordlist)");
+#else
   std::istringstream iss(Get(kwl, prefix + "AzimuthTime"));
   if (!(iss >> output.azimuthTime))
   {
     otbGenericExceptionMacro(itk::ExceptionObject,
-           << "Unable to decode " << Get(kwl, prefix + "AzimuthTime"));
+        << "Unable to decode " << Get(kwl, prefix + "AzimuthTime"));
   }
+#endif
 
-  output.rg0 = std::stod(Get(kwl, prefix + "rg0"));
+  output.rg0 = value_or_throw<double>(kwl, prefix + "rg0", "(CoordinateConversionRecord::FromKeywordlist)");
   output.coeffs = StringToDoubleVector(Get(kwl, prefix + "coeffs"));
 
   return output;
@@ -422,32 +470,36 @@ void InfoSceneCoord::ToKeywordlist(MetaData::Keywordlist &kwl, const std::string
 {
   std::ostringstream oss;
   oss << azimuthTime;
-  kwl.insert({prefix + "AzimuthTime", oss.str()});
-  kwl.insert({prefix + "referenceRow", to_string_with_precision(referenceRow)});
-  kwl.insert({prefix + "referenceColumn", to_string_with_precision(referenceColumn)});
-  kwl.insert({prefix + "latitude", to_string_with_precision(latitude)});
-  kwl.insert({prefix + "longitude", to_string_with_precision(longitude)});
-  kwl.insert({prefix + "rangeTime", to_string_with_precision(rangeTime)});
-  kwl.insert({prefix + "incidenceAngle", to_string_with_precision(incidenceAngle)});
+  kwl.emplace(prefix + "AzimuthTime",     oss.str());
+  kwl.emplace(prefix + "referenceRow",    to_string_with_precision(referenceRow));
+  kwl.emplace(prefix + "referenceColumn", to_string_with_precision(referenceColumn));
+  kwl.emplace(prefix + "latitude",        to_string_with_precision(latitude));
+  kwl.emplace(prefix + "longitude",       to_string_with_precision(longitude));
+  kwl.emplace(prefix + "rangeTime",       to_string_with_precision(rangeTime));
+  kwl.emplace(prefix + "incidenceAngle",  to_string_with_precision(incidenceAngle));
 }
 
 InfoSceneCoord InfoSceneCoord::FromKeywordlist(const MetaData::Keywordlist &kwl, const std::string &prefix)
 {
   InfoSceneCoord output;
 
+#if 1
+  output.azimuthTime = value_or_throw<MetaData::TimePoint>(kwl, prefix + "AzimuthTime", "(InfoSceneCoord::FromKeywordlist)");
+#else
   std::istringstream iss(Get(kwl, prefix + "AzimuthTime"));
   if (!(iss >> output.azimuthTime))
   {
     otbGenericExceptionMacro(itk::ExceptionObject,
-           << "Unable to decode " << Get(kwl, prefix + "AzimuthTime"));
+        << "Unable to decode " << Get(kwl, prefix + "AzimuthTime"));
   }
+#endif
 
-  output.referenceRow = std::stoul(Get(kwl, prefix + "referenceRow"));
-  output.referenceColumn = std::stoul(Get(kwl, prefix + "referenceColumn"));
-  output.latitude = std::stod(Get(kwl, prefix + "latitude"));
-  output.longitude = std::stod(Get(kwl, prefix + "longitude"));
-  output.rangeTime = std::stod(Get(kwl, prefix + "rangeTime"));
-  output.incidenceAngle = std::stod(Get(kwl, prefix + "incidenceAngle"));
+  output.referenceRow    = value_or_throw<unsigned long>(kwl, prefix + "referenceRow", "(InfoSceneCoord::FromKeywordlist)");
+  output.referenceColumn = value_or_throw<unsigned long>(kwl, prefix + "referenceColumn", "(InfoSceneCoord::FromKeywordlist)");
+  output.latitude        = value_or_throw<double>(kwl, prefix + "latitude", "(InfoSceneCoord::FromKeywordlist)");
+  output.longitude       = value_or_throw<double>(kwl, prefix + "longitude", "(InfoSceneCoord::FromKeywordlist)");
+  output.rangeTime       = value_or_throw<double>(kwl, prefix + "rangeTime", "(InfoSceneCoord::FromKeywordlist)");
+  output.incidenceAngle  = value_or_throw<double>(kwl, prefix + "incidenceAngle", "(InfoSceneCoord::FromKeywordlist)");
 
   return output;
 }
@@ -455,30 +507,30 @@ InfoSceneCoord InfoSceneCoord::FromKeywordlist(const MetaData::Keywordlist &kwl,
 void SARCalib::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & prefix) const
 {
   // Boolean
-  kwl.insert({prefix +"CalibrationLookupFlag", boost::lexical_cast<std::string>(calibrationLookupFlag)});
+  kwl.emplace(prefix +"CalibrationLookupFlag", boost::lexical_cast<std::string>(calibrationLookupFlag));
 
   // Double
-  kwl.insert({prefix + "RescalingFactor", to_string_with_precision(rescalingFactor)});
+  kwl.emplace(prefix + "RescalingFactor", to_string_with_precision(rescalingFactor));
 
   // MetaData::Time
   std::ostringstream oss;
   oss << calibrationStartTime;
-  kwl.insert({prefix + "CalibrationStartTime", oss.str()});
+  kwl.emplace(prefix + "CalibrationStartTime", oss.str());
   oss.str("");
   oss << calibrationStopTime;
-  kwl.insert({prefix + "CalibrationStopTime", oss.str()});
+  kwl.emplace(prefix + "CalibrationStopTime", oss.str());
 
   // std::array<int>
-  kwl.insert({prefix + "RadiometricCalibrationNoisePolynomialDegree",
-              IntArrayToString(radiometricCalibrationNoisePolynomialDegree)});
-  kwl.insert({prefix + "RadiometricCalibrationAntennaPatternNewGainPolynomialDegree",
-              IntArrayToString(radiometricCalibrationAntennaPatternNewGainPolynomialDegree)});
-  kwl.insert({prefix + "RadiometricCalibrationAntennaPatternOldGainPolynomialDegree",
-              IntArrayToString(radiometricCalibrationAntennaPatternOldGainPolynomialDegree)});
-  kwl.insert({prefix + "RadiometricCalibrationIncidenceAnglePolynomialDegree",
-              IntArrayToString(radiometricCalibrationIncidenceAnglePolynomialDegree)});
-  kwl.insert({prefix + "RadiometricCalibrationRangeSpreadLossPolynomialDegree",
-              IntArrayToString(radiometricCalibrationRangeSpreadLossPolynomialDegree)});
+  kwl.emplace(prefix + "RadiometricCalibrationNoisePolynomialDegree",
+              IntArrayToString(radiometricCalibrationNoisePolynomialDegree));
+  kwl.emplace(prefix + "RadiometricCalibrationAntennaPatternNewGainPolynomialDegree",
+              IntArrayToString(radiometricCalibrationAntennaPatternNewGainPolynomialDegree));
+  kwl.emplace(prefix + "RadiometricCalibrationAntennaPatternOldGainPolynomialDegree",
+              IntArrayToString(radiometricCalibrationAntennaPatternOldGainPolynomialDegree));
+  kwl.emplace(prefix + "RadiometricCalibrationIncidenceAnglePolynomialDegree",
+              IntArrayToString(radiometricCalibrationIncidenceAnglePolynomialDegree));
+  kwl.emplace(prefix + "RadiometricCalibrationRangeSpreadLossPolynomialDegree",
+              IntArrayToString(radiometricCalibrationRangeSpreadLossPolynomialDegree));
 
   // itk::PointSet<double, 2>
   auto pointsetToString = [](const PointSetType::Pointer input)
@@ -495,16 +547,16 @@ void SARCalib::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
     }
     return oss.str();
   };
-  kwl.insert({prefix + "RadiometricCalibrationNoise",
-              pointsetToString(radiometricCalibrationNoise)});
-  kwl.insert({prefix + "RadiometricCalibrationAntennaPatternNewGain",
-              pointsetToString(radiometricCalibrationAntennaPatternNewGain)});
-  kwl.insert({prefix + "RadiometricCalibrationAntennaPatternOldGain",
-              pointsetToString(radiometricCalibrationAntennaPatternOldGain)});
-  kwl.insert({prefix + "RadiometricCalibrationIncidenceAngle",
-              pointsetToString(radiometricCalibrationIncidenceAngle)});
-  kwl.insert({prefix + "RadiometricCalibrationRangeSpreadLoss",
-              pointsetToString(radiometricCalibrationRangeSpreadLoss)});
+  kwl.emplace(prefix + "RadiometricCalibrationNoise",
+              pointsetToString(radiometricCalibrationNoise));
+  kwl.emplace(prefix + "RadiometricCalibrationAntennaPatternNewGain",
+              pointsetToString(radiometricCalibrationAntennaPatternNewGain));
+  kwl.emplace(prefix + "RadiometricCalibrationAntennaPatternOldGain",
+              pointsetToString(radiometricCalibrationAntennaPatternOldGain));
+  kwl.emplace(prefix + "RadiometricCalibrationIncidenceAngle",
+              pointsetToString(radiometricCalibrationIncidenceAngle));
+  kwl.emplace(prefix + "RadiometricCalibrationRangeSpreadLoss",
+              pointsetToString(radiometricCalibrationRangeSpreadLoss));
 
   // std::unordered_map<short, LookupDataType::Pointer>
   for (const auto & kv : calibrationLookupData)
@@ -520,21 +572,27 @@ void SARCalib::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::str
   calibrationLookupFlag = boost::lexical_cast<bool>(Get(kwl, prefix + "CalibrationLookupFlag"));
 
   // Double
-  rescalingFactor = std::stod(Get(kwl, prefix + "RescalingFactor"));
+  rescalingFactor = value_or_throw<double>(kwl, prefix + "RescalingFactor", "(SARCalib::FromKeywordlist)");
 
-  // MetaData::Time
+  // MetaData::TimePoint
+#if 1
+  calibrationStartTime = value_or_throw<MetaData::TimePoint>(kwl, prefix + "CalibrationStartTime", "(SARCalib::FromKeywordlist)");
+  calibrationStopTime  = value_or_throw<MetaData::TimePoint>(kwl, prefix + "CalibrationStopTime",  "(SARCalib::FromKeywordlist)");
+#else
   std::istringstream iss(Get(kwl, prefix + "CalibrationStartTime"));
   if (!(iss >> calibrationStartTime))
   {
     otbGenericExceptionMacro(itk::ExceptionObject,
-           << "Unable to decode " << Get(kwl, prefix + "CalibrationStartTime"));
+        << "Unable to decode " << Get(kwl, prefix + "CalibrationStartTime"));
   }
   std::istringstream iss2(Get(kwl, prefix + "CalibrationStopTime"));
   if (!(iss2 >> calibrationStopTime))
   {
     otbGenericExceptionMacro(itk::ExceptionObject,
-           << "Unable to decode " << Get(kwl, prefix + "CalibrationStopTime"));
+        << "Unable to decode " << Get(kwl, prefix + "CalibrationStopTime"));
   }
+#endif
+
 
   // std::array<int>
   StringToIntArray(Get(kwl, prefix + "RadiometricCalibrationNoisePolynomialDegree"),

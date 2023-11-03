@@ -54,17 +54,29 @@ const boost::any & ImageMetadataBase::operator[](const MDGeom& key) const
 
 const Projection::GCPParam & ImageMetadataBase::GetGCPParam() const
 {
-  return boost::any_cast<const Projection::GCPParam &>(GeometryKeys.at(MDGeom::GCP));
+  auto const& wh = GeometryKeys.find(MDGeom::GCP);
+  if (wh == GeometryKeys.end()) {
+    otbGenericExceptionMacro(itk::ExceptionObject, << "No GCP Parameter present in the geometry");
+  }
+  return boost::any_cast<const Projection::GCPParam &>(wh->second);
 }
 
 const Projection::RPCParam & ImageMetadataBase::GetRPCParam() const
 {
-  return boost::any_cast<const Projection::RPCParam &>(GeometryKeys.at(MDGeom::RPC));
+  auto const& wh = GeometryKeys.find(MDGeom::RPC);
+  if (wh == GeometryKeys.end()) {
+    otbGenericExceptionMacro(itk::ExceptionObject, << "No RPC Parameter present in the geometry");
+  }
+  return boost::any_cast<const Projection::RPCParam &>(wh->second);
 }
 
 const SARParam & ImageMetadataBase::GetSARParam() const
 {
-  return boost::any_cast<const SARParam &>(GeometryKeys.at(MDGeom::SAR));
+  auto const& wh = GeometryKeys.find(MDGeom::SAR);
+  if (wh == GeometryKeys.end()) {
+    otbGenericExceptionMacro(itk::ExceptionObject, << "No SAR Parameter present in the geometry");
+  }
+  return boost::any_cast<const SARParam &>(wh->second);
 }
 
 std::string ImageMetadataBase::GetProjectedGeometry() const
