@@ -22,6 +22,7 @@
 #include "otbSarCalibrationLookupData.h"
 #include "otbSentinel1CalibrationLookupData.h"
 #include "otbStringUtilities.h"
+#include "otbSpan.h"
 #include "otbMacro.h"
 
 #include <regex>
@@ -120,7 +121,7 @@ namespace
     return oss.str();
   }
 
-  void StringToIntArray(const std::string & input, std::array<int, 2> output)
+  void StringToIntArray(const std::string & input, otb::Span<int> output)
   {
     const auto parts = otb::split_on(input, ' ');
     auto arrayIt = output.begin();
@@ -128,7 +129,7 @@ namespace
     {
       if(arrayIt > output.end())
       {
-        otbLogMacro(Warning, << "StringToIntArray: Exceeded size of array with string " << input);
+        otbLogMacro(Warning, << "StringToIntArray: Exceeded size of array ("<<output.size()<<") with string " << input);
         break;
       }
       if (!elem.empty())
@@ -179,7 +180,7 @@ void SARParam::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string & pr
 void SARParam::FromKeywordlist(const MetaData::Keywordlist & kwl, const std::string & prefix)
 {
   std::istringstream iss(Get(kwl, prefix + "AzimuthTimeInterval"));
-  
+
   if (!(iss >> azimuthTimeInterval))
   {
     otbGenericExceptionMacro(itk::ExceptionObject,
@@ -348,7 +349,7 @@ void BurstRecord::ToKeywordlist(MetaData::Keywordlist & kwl, const std::string &
   std::ostringstream oss2;
   oss2 << azimuthStopTime;
   kwl.insert({prefix + "AzimuthStopTime", oss2.str()});
-  
+
   kwl.insert({prefix + "StartLine", to_string_with_precision(startLine)});
   kwl.insert({prefix + "EndLine", to_string_with_precision(endLine)});
   kwl.insert({prefix + "StartSample", to_string_with_precision(startSample)});
