@@ -780,12 +780,12 @@ void GDALImageIO::InternalReadImageInformation()
     {
       char* pszPrettyWkt = nullptr;
       OSRExportToPrettyWkt(pSR, &pszPrettyWkt, FALSE);
-
-      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, static_cast<std::string>(pszPrettyWkt));
-
-      m_Imd.Add(MDGeom::ProjectionWKT, std::string(pszPrettyWkt));
-
+      std::string const prettyWkt = pszPrettyWkt;
       CPLFree(pszPrettyWkt);
+
+      itk::EncapsulateMetaData<std::string>(dict, MetaDataKey::ProjectionRefKey, prettyWkt);
+
+      m_Imd.Add(MDGeom::ProjectionWKT, prettyWkt);
     }
     else
     {
@@ -1103,7 +1103,6 @@ void GDALImageIO::InternalReadImageInformation()
   std::vector<bool>   isNoDataAvailable(dataset->GetRasterCount(), false);
   std::vector<double> noDataValues(dataset->GetRasterCount(), 0);
 
-  bool noDataFound = false;
   ImageMetadataBase bmd;
 
   for (int iBand = 0; iBand < dataset->GetRasterCount(); iBand++)
@@ -1116,7 +1115,6 @@ void GDALImageIO::InternalReadImageInformation()
 
     if (success)
     {
-      noDataFound              = true;
       isNoDataAvailable[iBand] = true;
       noDataValues[iBand]      = ndv;
       bmd.Add(MDNum::NoData, ndv);
@@ -1300,7 +1298,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
 {
   std::string driverShortName;
   m_NbBands = this->GetNumberOfComponents();
-  
+
   // If the band mapping is different from the one of the input (e.g. because an extended filename
   // has been set, the bands in the imageMetadata object needs to be reorganized.
   if (!m_BandList.empty())
@@ -1349,6 +1347,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   }
   else
   {
+    // TODO: use switch /case
     if (this->GetComponentType() == CHAR)
     {
       m_BytePerPixel    = 1;
@@ -1604,7 +1603,7 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   /* -------------------------------------------------------------------- */
   /*      No Data.                                                        */
   /* -------------------------------------------------------------------- */
-  
+
   // Write no-data flags from ImageMetadata
   int iBand = 0;
   for (auto const&  bandMD : m_Imd.Bands)
@@ -1913,7 +1912,7 @@ void GDALImageIO::ImportMetadata()
   GDALMetadataToKeywordlist(m_Dataset->GetDataSet()->GetMetadata(), kwl);
 
   // Decode RPC model
-if (m_Dataset->GetDataSet()->GetMetadata("RPC"))
+  if (m_Dataset->GetDataSet()->GetMetadata("RPC"))
     GDALMetadataReadRPC();
 
   // Decode SAR model
@@ -1929,7 +1928,7 @@ if (m_Dataset->GetDataSet()->GetMetadata("RPC"))
       gcps.FromKeywordlist(kwl, "SAR.");
       m_Imd.Add(MDGeom::GCP, gcps);
     }
-    catch(const std::exception& e) 
+    catch(const std::exception& e)
     {
       otbLogMacro(Warning, << "Input image has SAR sensor metadata, but OTB was not able to read it: " << e.what());
     }
@@ -1944,7 +1943,7 @@ if (m_Dataset->GetDataSet()->GetMetadata("RPC"))
       sarCalib.FromKeywordlist(kwl, "SARCalib.");
       m_Imd.Add(MDGeom::SARCalib, sarCalib);
     }
-    catch(const std::exception& e) 
+    catch(const std::exception& e)
     {
       otbLogMacro(Warning, << "Input image has SAR calibration metadata, but OTB was not able to read it: " << e.what());
     }
