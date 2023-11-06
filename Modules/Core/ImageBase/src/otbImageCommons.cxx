@@ -38,7 +38,7 @@ const ImageMetadata & ImageCommons::GetImageMetadata() const
   return m_Imd;
 }
 
-ImageMetadata & ImageCommons::GetImageMetadata() 
+ImageMetadata & ImageCommons::GetImageMetadata()
 {
   return m_Imd;
 }
@@ -53,7 +53,12 @@ std::string ImageCommons::GetProjectionRef(void) const
 void ImageCommons::SetProjectionRef(const std::string& proj)
 {
   // TODO: support EPSG and proj as fallback
-  m_Imd.Add(MDGeom::ProjectionWKT, proj);
+  if (!proj.empty()) {
+    m_Imd.Add(MDGeom::ProjectionWKT, proj);
+  }
+  else {
+    m_Imd.Remove(MDGeom::ProjectionWKT);
+  }
 }
 
 
