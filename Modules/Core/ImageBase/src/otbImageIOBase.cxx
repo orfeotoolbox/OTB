@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2023 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -1291,7 +1291,7 @@ void ImageIOBase::PrintSelf(std::ostream& os, itk::Indent indent) const
   }
 }
 
-const ImageMetadata & ImageIOBase::GetImageMetadata()
+const ImageMetadata & ImageIOBase::GetImageMetadata() const
 {
   return m_Imd;
 }

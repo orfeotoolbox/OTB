@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1999-2011 Insight Software Consortium
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2023 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -443,7 +443,7 @@ public:
   /** Returns a const ref to the list of attached files*/
   itkGetConstReferenceMacro(AttachedFileNames, std::vector<std::string>);
 
-  const ImageMetadata & GetImageMetadata();
+  const ImageMetadata & GetImageMetadata() const;
 
   void SetImageMetadata(ImageMetadata);
 
