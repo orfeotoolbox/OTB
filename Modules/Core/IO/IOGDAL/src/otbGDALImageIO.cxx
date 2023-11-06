@@ -770,12 +770,12 @@ void GDALImageIO::InternalReadImageInformation()
   {
     OGRSpatialReferenceH pSR = OSRNewSpatialReference(nullptr);
     if (strncmp(pszProjection, "LOCAL_CS",8) == 0)
-      {
+    {
       // skip local coordinate system as they will cause crashed later
       // In GDAL 3, they begin to do special processing for Transmercator local
       // coordinate system
       otbLogMacro(Debug, << "Skipping LOCAL_CS projection")
-      }
+    }
     else if (OSRImportFromWkt(pSR, (char**)(&pszProjection)) == OGRERR_NONE)
     {
       char* pszPrettyWkt = nullptr;
@@ -1492,20 +1492,49 @@ void GDALImageIO::InternalWriteImageInformation(const void* buffer)
   /* -------------------------------------------------------------------- */
   /* Case 1: Set the projection coordinate system of the image            */
   /* -------------------------------------------------------------------- */
-  if (m_Imd.Has(MDGeom::ProjectionWKT))
+#if ((defined(_MSVC_LANG) && _MSVC_LANG >= 201703L) || __cplusplus >= 201703L)
+  if (std::string const projectionRef = m_Imd.Has(MDGeom::ProjectionWKT) ? m_Imd.GetProjectionWKT() : ""
+      ; !projectionRef.empty())
   {
-    std::string projectionRef( m_Imd.GetProjectionWKT() );
+    otbMsgDevMacro(<<"GDALImageIO::InternalWriteImageInformation -> Has ProjectionWKT: '" << projectionRef << "'");
     dataset->SetProjection(projectionRef.c_str());
     if (m_WriteRPCTags && m_Imd.Has(MDGeom::RPC))
       GDALMetadataWriteRPC(dataset);
+    if (m_Imd.Has(MDGeom::SAR))
+      otbLogMacro(Warning, << "SAR metadata will be lost because a WKT projection has been set for " << m_FileName);
   }
-  else if (m_Imd.Has(MDGeom::ProjectionProj))
+  else if (std::string const projectionRef = m_Imd.Has(MDGeom::ProjectionProj) ? m_Imd.GetProjectionProj()  : ""
+      ; !projectionRef.empty())
   {
-     std::string projectionRef( m_Imd.GetProjectionProj() );
-     dataset->SetProjection(projectionRef.c_str());
-     if (m_WriteRPCTags && m_Imd.Has(MDGeom::RPC))
-       GDALMetadataWriteRPC(dataset);
+    otbMsgDevMacro(<<"GDALImageIO::InternalWriteImageInformation -> Has ProjectionProj");
+    dataset->SetProjection(projectionRef.c_str());
+    if (m_WriteRPCTags && m_Imd.Has(MDGeom::RPC))
+      GDALMetadataWriteRPC(dataset);
+    if (m_Imd.Has(MDGeom::SAR))
+      otbLogMacro(Warning, << "SAR metadata will be lost because a projection has been set for " << m_FileName);
   }
+#else
+  // work around C++ < 17
+  auto handle_projection = [&](MDGeom proj_type, std::function<std::string (ImageMetadata const&)> getter) -> bool
+  {
+    if (! m_Imd.Has(proj_type)) return false;
+    std::string const projectionRef = getter(m_Imd);
+    if (projectionRef.empty()) return false;
+    otbMsgDevMacro(<<"GDALImageIO::InternalWriteImageInformation -> Has Projection"<<MetaData::EnumToString(proj_type)<<": '" << projectionRef << "'");
+    dataset->SetProjection(projectionRef.c_str());
+    if (m_WriteRPCTags && m_Imd.Has(MDGeom::RPC))
+      GDALMetadataWriteRPC(dataset);
+    if (m_Imd.Has(MDGeom::SAR))
+      otbLogMacro(Warning, << "SAR metadata will be lost because a projection has been set for " << m_FileName);
+    return true;
+  };
+  if (handle_projection(MDGeom::ProjectionWKT, &ImageMetadata::GetProjectionWKT)) {
+    // already handled
+  }
+  else if (handle_projection(MDGeom::ProjectionProj, &ImageMetadata::GetProjectionProj)) {
+    // already handled
+  }
+#endif
   /* -------------------------------------------------------------------- */
   /* Case 2: Sensor geometry                                              */
   /* -------------------------------------------------------------------- */
