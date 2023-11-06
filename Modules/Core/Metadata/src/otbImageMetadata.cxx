@@ -368,43 +368,34 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
   // Converting the GeomKeys
   for (const auto& kv : GeometryKeys)
   {
-    oss.str("");
-    if (kv.first == MDGeom::RPC)
+    std::string value = [&]() -> std::string
     {
-      // To be completed by ImageIO
-      oss << std::string("<RPCParam>");
-    }
-    else if (kv.first == MDGeom::ProjectionEPSG)
-    {
-      oss << std::to_string(boost::any_cast<int>(kv.second));
-    }
-    else if (kv.first == MDGeom::GCP)
-    {
-      // To be completed by ImageIO
-      oss << std::string("<GCPParam>");
-    }
-    else if (kv.first == MDGeom::SensorGeometry)
-    {
-    // MDGeom::SensorGeometry should be exported as "<typeinfo>" where typeinfo is boost::any::type().name()
-      oss << kv.second.type().name();
-    }
-    else if (kv.first == MDGeom::SAR)
-    {
-      // To be completed by ImageIO
-      oss << std::string("<SARParam>");
-    }
-    else if (kv.first == MDGeom::SARCalib)
-    {
-      // To be completed by ImageIO
-      oss << std::string("<SARCalib>");
-    }
-    // TODO : MDGeom::Adjustment
-    else
-    {
-      oss << boost::any_cast<std::string>(kv.second);
-    }
-    kwl.emplace(MetaData::MDGeomNames.left.at(kv.first), oss.str());
-  }
+      switch (kv.first)
+      {
+        case MDGeom::RPC:
+          // To be completed by ImageIO
+          return "<RPCParam>";
+        case MDGeom::ProjectionEPSG:
+          return std::to_string(boost::any_cast<int>(kv.second));
+        case MDGeom::GCP:
+          // To be completed by ImageIO
+          return "<GCPParam>";
+        case MDGeom::SensorGeometry:
+          // MDGeom::SensorGeometry should be exported as "<typeinfo>" where typeinfo is boost::any::type().name()
+          return kv.second.type().name();
+        case MDGeom::SAR:
+          // To be completed by ImageIO
+          return "<SARParam>";
+        case MDGeom::SARCalib:
+          // To be completed by ImageIO
+          return "<SARCalib>";
+        default:
+          // TODO : MDGeom::Adjustment
+          return boost::any_cast<std::string>(kv.second);
+      }
+    }();
+    kwl.emplace(MetaData::MDGeomNames.left.at(kv.first), value);
+  }  // ∀ GeometryKeys
   // Converting the StringKeys
   for (const auto& kv : StringKeys)
   {
@@ -420,16 +411,12 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
   // Converting the LUT1DKeys
   for (const auto& kv : LUT1DKeys)
   {
-    oss.str("");
-    oss << kv.second.ToString();
-    kwl.emplace(MetaData::MDL1DNames.left.at(kv.first), oss.str());
+    kwl.emplace(MetaData::MDL1DNames.left.at(kv.first), kv.second.ToString());
   }
   // Converting the LUT2DKeys
   for (const auto& kv : LUT2DKeys)
   {
-    oss.str("");
-    oss << kv.second.ToString();
-    kwl.emplace(MetaData::MDL2DNames.left.at(kv.first), oss.str());
+    kwl.emplace(MetaData::MDL2DNames.left.at(kv.first), kv.second.ToString());
   }
   // Converting the TimeKeys
   for (const auto& kv : TimeKeys)
@@ -609,7 +596,7 @@ ImageMetadata ImageMetadata::slice(int start, int end) const
 void ImageMetadata::append(const ImageMetadata& imd)
 {
   ImageMetadataBase::Fuse(imd);
-  
+
   // Copy the bands
   this->Bands.insert(this->Bands.end(), imd.Bands.begin(), imd.Bands.end());
 }
@@ -617,7 +604,7 @@ void ImageMetadata::append(const ImageMetadata& imd)
 void ImageMetadata::Merge(const ImageMetadata& imd)
 {
   ImageMetadataBase::Fuse(imd);
-  
+
   for (unsigned int i = 0; i < std::min(Bands.size(), imd.Bands.size()); ++i)
   {
     Bands[i].Fuse(imd.Bands[i]);
