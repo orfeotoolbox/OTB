@@ -19,12 +19,10 @@ Simple OTB use case : Compute NDVI with the CLI interface
 Download OTB
 ++++++++++++
 
-OTB9 is composed of a Core package and optional modules. Depending on your needs, you can only use the Core package and its dependencies.
-On this simple use case, we will use only the Core package.
-
 .. code-block:: bash
-    curl otb-depends-core.tar.gz -o /Path/You/Want/otb-deps.tar.gz
-    curl otb-core.tar.gz -o /Path/You/Want/otb-core.tar.gz
+
+    curl https://www.orfeo-toolbox.org/download/packages/OTB-Core-Depends-9.0.tar.gz -o /Path/You/Want/otb-deps.tar.gz
+    curl https://www.orfeo-toolbox.org/download/packages/OTB-Core-9.0.tar.gz -o /Path/You/Want/otb-core.tar.gz
 
 Installation
 ++++++++++++

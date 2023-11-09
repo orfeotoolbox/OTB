@@ -1,14 +1,51 @@
-**Before extracting the package, make sure that you have been through the** :doc:`First_Steps` page
+Installing OTB
+~~~~~~~~~~~~~~
 
-We provide a binary package for GNU/Linux x86_64. This package includes
+We provide a Core package and standalone optional packages to install over the Core for GNU/Linux x86_64. These packages includes
 all of the OTB applications along with command line launchers.
 It can be downloaded from `OTB's download page
 <https://www.orfeo-toolbox.org/download>`__.
 
+Since OTB 9.0, the installation is modular, you have to choose what package to download depending on your use case.
+
+This is the list of the different modules available :
+
++-----------------------------------------------------------------------------------------------------------------------------------------+
+| **Module Name**           | **Description**                                                                     | **Criticity**         |
++-----------------------------------------------------------------------------------------------------------------------------------------+
+| OTB_Core and Dependencies | Contains all Core applications and modules + the required dependencies to run OTB   | **Mandatory**         |
++-----------------------------------------------------------------------------------------------------------------------------------------+
+| OTB_ImageProcessing       | Test                                                                                | Optional              |
++-----------------------------------------------------------------------------------------------------------------------------------------+
+| OTB_Learning              | Test                                                                                | Optional              |
++-----------------------------------------------------------------------------------------------------------------------------------------+
+| OTB_SAR                   | Test                                                                                | Optional              |
++-----------------------------------------------------------------------------------------------------------------------------------------+
+| OTB_StereoProcessing      | Test                                                                                | Optional              |
++-----------------------------------------------------------------------------------------------------------------------------------------+
+
+Depending on your use case, you have to choose what package to download :
+
+Default choice : Core + Optional packages 
+++++++++++++++++++++++++++++++++++++++++++
+
+In most cases, you should take the mandatory **OTB-Core-9.0.tar.gz** package, along with the **OTB-All-Dependencies-9.0.tar.gz** one, which permits you
+to install optional packages afterwards. Let's say you want to start using OTB only with the Core applications, and some months later
+you realize that you need to do more specific operations such as Learning. 
+In that case you will just need to download the OTB-Learning package, and unzip it where you installed the Core package. 
+You can then use directly the applications packaged in the Learning package alongside the other Core apps.
+
+Core Only
++++++++++
+
+In that case, you are sure you only need the core applications of OTB, resulting in a lighter install because there are less dependencies needed.
+You only have to download **OTB-Core-9.0.tar.gz** and **OTB-Core-Dependencies-9.0.tar.gz**
+
+
 This package is a self-extractable tar.gz archive. You may uncompress the files with a
 right-click => Extract to => create OTB-|release| folder and click OK, or from the command line as follows:
 
-.. parsed-literal::
+.. code-block:: bash
 
    for f in *.tar.gz; do tar xvf "$f" --one-top-level="/Path/To/Install/OTB"; done
 
