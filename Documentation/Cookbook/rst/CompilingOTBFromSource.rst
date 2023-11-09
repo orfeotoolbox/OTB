@@ -92,8 +92,46 @@ process:
     | `SWIG <https://www.swig.org/>`_                                  | No                    |                            | 4.0.2                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
 
-GNU/Linux and macOS
--------------------
+GNU/Linux
+---------
+
+System dependencies to build from source
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You have two choices to build from source :
+
+  - **Native build**: you need to install the OTB dependencies packaged in your OS.
+  - **Superbuild build**: you need to install the packages required to build all the OTB dependencies
+
+Common dependencies
++++++++++++++++++++
+
+Debian / Ubuntu
+~~~~~~~~~~~~~~~
+
+  .. code-block:: bash
+
+    apt update -y && apt install -y --no-install-recommends ca-certificates curl make cmake g++ gcc git git-lfs libtool swig python3 python3-dev python3-pip python3-numpy pkg-config patch
+
+    # Additional dependencies if you need to build the documentation
+    apt install -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended doxygen graphviz gnuplot dvipng python3-sphinx sphinx-rtd-theme-common
+    pip install sphinx_rtd_theme
+
+
+Additional dependencies for a native build
+++++++++++++++++++++++++++++++++++++++++++
+
+Debian / Ubuntu
+~~~~~~~~~~~~~~~
+
+  .. code-block:: bash
+
+    # Install mandatory dependencies
+    apt install -y --no-install-recommends libboost-filesystem-dev libboost-serialization-dev libboost-system-dev libboost-thread-dev libcurl4-gnutls-dev libgdal-dev python3-gdal libexpat1-dev libfftw3-dev libgeotiff-dev libgsl-dev libinsighttoolkit4-dev libgeotiff-dev libpng-dev libtinyxml-dev
+    
+    # Install optional dependencies
+    apt install -y --no-install-recommends libmuparser-dev libmuparserx-dev libkml-dev libopencv-core-dev libopencv-ml-dev libopenmpi-dev libsvm-dev
+         
 
 Setting up the build environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -212,12 +250,6 @@ of all our dependencies on `the Orfeo ToolBox website
 <https://www.orfeo-toolbox.org/packages>`_ (pick the ’SuperBuild-archives’
 corresponding to the OTB version you want to build).
 
-**Notes about GDAL:** Since OTB 7.0, SuperBuild's GDAL version is 2.4.1. This version needs pkg-config to correctly find OpenJPEG (needed to read and write images with formats such as .jp2, .j2k), the minimal version is 0.21 for GDAL 2.4.1. You can install it with:
-
-::
-
-    apt-get install pkg-config
-
 You are now ready to compile OTB! Simply use the make command (other
 targets can be generated with CMake’s ``-G`` option):
 
@@ -299,9 +331,7 @@ installation location:
 
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **CMake variable**        | **3rd party module**   | **Modules depending on it**                                                                                                                                               |
-+---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_LIBKML**      | OTBlibkml              | OTBKMZWriter OTBIOKML OTBAppKMZ                                                                                                                                           |
-+---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+                                                                                                                                 |
 | **OTB\_USE\_CURL**        | OTBCurl                |                                                                                                                                                                           |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **OTB\_USE\_MUPARSER**    | OTBMuParser            | OTBMathParser OTBDempsterShafer OTBAppClassification OTBAppMathParser OTBAppStereo OTBAppProjection OTBAppSegmentation OTBRoadExtraction OTBRCC8 OTBCCOBIA OTBMeanShift   |
@@ -321,14 +351,6 @@ installation location:
 
 Table: Third parties and related modules.
 
-Windows
--------
-
-Everything that is needed for OTB development on Windows, including
-compiling from source, is covered in details on the OTB wiki at:
-
-http://wiki.orfeo-toolbox.org/index.php/OTB_development_on_Windows
-
 Known issues
 ------------
 
@@ -337,7 +359,7 @@ Please check `our gitlab tracker <https://gitlab.orfeo-toolbox.org/orfeotoolbox/
 Tests
 -----
 
-There are more than 2500 tests for OTB. It can take from 20 minutes to 3
+There are more than 2100 tests for OTB. It can take from 20 minutes to 3
 hours to run them all, depending on compilation options
 (release mode does make a difference) and hardware.
 
@@ -365,14 +387,7 @@ files or ``ctest -I 1,10`` to run tests from 1 to 10.
 Compiling documentation
 -----------------------
 
-To build the CookBook documentation, the following python packages are required:
-``numpy, sphinx, sphinx_rtd_theme``. They are available on pip:
-
-::
-
-    pip install numpy sphinx sphinx_rtd_theme
-
-Enable Python bindings and set ``BUILD_COOKBOOK``:
+Enable Python bindings and set ``BUILD_COOKBOOK`` option to ON:
 
 ::
 
@@ -384,5 +399,4 @@ Then, build the target:
 
     make CookbookHTML
 
-.. _devtoolset6: https://www.softwarecollections.org/en/scls/rhscl/devtoolset-6/
 .. _devtoolset7: https://www.softwarecollections.org/en/scls/rhscl/devtoolset-7/

@@ -152,7 +152,6 @@ the applications of your module will be installed in the same folder as OTB appl
 
   mkdir /Path/to/Module/build && cd /Path/to/Module/build
   cmake -DOTB_DIR=/PathTo/OTB/install -DOTB_BUILD_MODULE_AS_STANDALONE=ON
-  -DCMAKE_CXX_FLAGS=-D_GLIBCXX_USE_CXX11_ABI=0
   -DCMAKE_INSTALL_PREFIX=/theModulePath/install -DCMAKE_INSTALL_RPATH=/theModulePath/install/lib 
   -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE ../
   make install

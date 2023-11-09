@@ -5,25 +5,22 @@ all of the OTB applications along with command line launchers.
 It can be downloaded from `OTB's download page
 <https://www.orfeo-toolbox.org/download>`__.
 
-This package is a self-extractable archive. You may uncompress it with a
-double-click on the file, or from the command line as follows:
+This package is a self-extractable tar.gz archive. You may uncompress the files with a
+right-click => Extract to => create OTB-|release| folder and click OK, or from the command line as follows:
 
 .. parsed-literal::
 
-   chmod +x OTB-|release|-Linux64.run
-   ./OTB-|release|-Linux64.run
+   mkdir OTB-|release|
+   for f in *.tar.gz; do tar xvf "$f" -C OTB-|release|; done
 
-The self-extractable archive only needs common tools found on most Linux
-distributions ("sed", "grep", "find", "cat", "printf", "ln", ...). However, be
-aware that it requires tools such as "which" and "file" (they are not always
-present, for instance when building a container).
-
-Please note that the resulting installation is not meant to be moved,
-you should uncompress the archive in its final location. Once the
-archive is extracted, the directory structure consists of:
+Please note that the resulting installation can be moved elsewhere on the disk. Just move the OTB-|release|
+elsewhere and source the otbenv.profile.
+Once the archive is extracted, the directory structure consists of:
 
 -  ``otbenv.profile``: A script to initialize the environment for OTB
    executables
+
+- ``recompile_bindings.sh`` : A script to recompile the python bindings with your system's Python
 
 -  ``bin``: A folder containing application launcher (otbcli.sh)
 
@@ -75,7 +72,7 @@ At the root of the OTB installation run :
 .. parsed-literal::
 
     source otbenv.profile 
-    ctest -S share/otb/swig/build_wrapping.cmake -VV
+    sh recompile_bindings.sh
 
 You should now be able to import ``otbApplication`` through Python !
 
@@ -103,12 +100,7 @@ We strongly recommend to use a virtual env to **avoid conflicts between OTB and 
 
 Notes:
 ~~~~~~
-
-- You might be tempted to move "OTB-|release|-Linux64" into another location say /usr/local/ after extraction. But avoid this action!
-
-- To have "OTB-|release|-Linux64" installed in /usr/local or /opt execute "OTB-|release|-Linux64.run" in that directory.
-
-- Multiple installation of OTB can exists in same system without one conflicting the other!
+   - Multiple installation of OTB can exists in same system without one conflicting the other!
 
 FAQ
 ~~~
@@ -121,8 +113,10 @@ Q: Unable to import otbApplication library with Python3.8
    ImportError: libpython3.8m.so.rh-python38-1.0: cannot open shared object file: No such file or directory
 
 A: You need to add a symlink to libpython3.8m.so.rh-python38-1.0 to make it work. 
+The recommended solution is to **recompile the bindings with your systems' python version**, because this symbolic link will work only
+if you have Python 3.8 in your system which is the case on Ubuntu 20.04.
 
-Here is the solution:
+Here is the solution for the symbolic link:
 
 - Find the libpython3.8XX on your system : ``find /usr/lib -iname *libpython3.8*``
   (on Ubuntu 20.04, it is ``/usr/lib/x86_64-linux-gnu/libpython3.8m.so``)
