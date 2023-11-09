@@ -47,11 +47,6 @@ else()
     set(CPACK_GENERATOR "TGZ")
 endif()
 
-install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/share/otb/swig
- DESTINATION ./share/otb
- COMPONENT Core
- )
-
 include(CPack)
 
 cpack_add_component_group(Core
