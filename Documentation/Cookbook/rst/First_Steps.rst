@@ -3,14 +3,15 @@ First Steps
 
 You can install and use OTB via 3 different methods :
 
-    - the standalone package
+    - the standalone packages
     - the docker image
     - building from source
 
-In this page, we describe common use cases covering OTB installation and launch of applications.
+In this page, we describe simple use cases to make your first steps in the OTB world. This chapter covers OTB Core installation (including its required dependencies) and launch of applications.
+For a more detailed installation process, you can refer to the :doc:`Installation_Linux` page after installing the required dependencies
 
 Docker
------
+------
 
 .. include:: First_Step_Docker.rst
 

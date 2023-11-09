@@ -10,10 +10,9 @@ right-click => Extract to => create OTB-|release| folder and click OK, or from t
 
 .. parsed-literal::
 
-   mkdir OTB-|release|
-   for f in *.tar.gz; do tar xvf "$f" -C OTB-|release|; done
+   for f in *.tar.gz; do tar xvf "$f" --one-top-level="/Path/To/Install/OTB"; done
 
-Please note that the resulting installation can be moved elsewhere on the disk. Just move the OTB-|release|
+Please note that the resulting installation can be moved elsewhere on the disk. Just move the folder
 elsewhere and source the otbenv.profile.
 Once the archive is extracted, the directory structure consists of:
 
