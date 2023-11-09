@@ -88,4 +88,4 @@ install( FILES ${CMAKE_SWIG_OUTDIR}/otbApplicationPYTHON_wrap.cxx
                ../otbWrapperSWIGIncludes.h
                ${CMAKE_CURRENT_BINARY_DIR}/CMakeLists.txt
          DESTINATION ${OTB_INSTALL_DATA_DIR}/swig
-         COMPONENT Resources )
+         COMPONENT Core )
