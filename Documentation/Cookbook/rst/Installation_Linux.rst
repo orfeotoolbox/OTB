@@ -1,6 +1,3 @@
-Installing OTB
-~~~~~~~~~~~~~~
-
 We provide a Core package and standalone optional packages to install over the Core for GNU/Linux x86_64. These packages includes
 all of the OTB applications along with command line launchers.
 It can be downloaded from `OTB's download page
@@ -8,26 +5,35 @@ It can be downloaded from `OTB's download page
 
 Since OTB 9.0, the installation is modular, you have to choose what package to download depending on your use case.
 
-This is the list of the different modules available :
+This is the list of the different modules available to download :
 
-+-----------------------------------------------------------------------------------------------------------------------------------------+
-| **Module Name**           | **Description**                                                                     | **Criticity**         |
-+-----------------------------------------------------------------------------------------------------------------------------------------+
-| OTB_Core and Dependencies | Contains all Core applications and modules + the required dependencies to run OTB   | **Mandatory**         |
-+-----------------------------------------------------------------------------------------------------------------------------------------+
-| OTB_ImageProcessing       | Test                                                                                | Optional              |
-+-----------------------------------------------------------------------------------------------------------------------------------------+
-| OTB_Learning              | Test                                                                                | Optional              |
-+-----------------------------------------------------------------------------------------------------------------------------------------+
-| OTB_SAR                   | Test                                                                                | Optional              |
-+-----------------------------------------------------------------------------------------------------------------------------------------+
-| OTB_StereoProcessing      | Test                                                                                | Optional              |
-+-----------------------------------------------------------------------------------------------------------------------------------------+
++-----------------------+-------------------------------------------------------------------------------------+-----------------------+
+| **Module Name**       | **Description**                                                                     | **Criticity**         |
++=======================+=====================================================================================+=======================+
+| Core and Dependencies | Contains all Core applications,modules and the required dependencies to run OTB     | **Mandatory**         |
++-----------------------+-------------------------------------------------------------------------------------+-----------------------+
+| ImageProcessing       | Contains apps related to MuParser and MuParserX                                     | Optional              |
++-----------------------+-------------------------------------------------------------------------------------+-----------------------+
+| Learning              | Learning apps using OpenCV, SVM, Shark                                              | Optional              |
++-----------------------+-------------------------------------------------------------------------------------+-----------------------+
+| SAR                   | Apps and modules used for Radar processing                                          | Optional              |
++-----------------------+-------------------------------------------------------------------------------------+-----------------------+
+| StereoProcessing      | Apps and modules for stereo operations                                              | Optional              |
++-----------------------+-------------------------------------------------------------------------------------+-----------------------+
+| Hyperspectral         | Apps and modules to perform calculations on hyperspectral images                    | Optional              |
++-----------------------+-------------------------------------------------------------------------------------+-----------------------+
 
-Depending on your use case, you have to choose what package to download :
+Download packages
+~~~~~~~~~~~~~~~~~
 
 Recommended Installation : Core + Optional packages 
 ```````````````````````````````````````````````````
+
+In most cases, you will need the **OTB-All-Dependencies-9.0.tar.gz** package in order to run Core **AND** optional packages that you can install afterwards.
+Let's say you want to start using OTB only with the Core applications, and some months lateryou realize that you need to do more specific operations such as Learning. 
+In that case you will just need to download the OTB-Learning package, and untar it where you installed the Core package. 
+You can then use directly the applications packaged in the Learning package alongside the other Core apps.
+If you want your installation to be the same as with OTB < 9, you can download all the optional packages.
 
 .. code-block:: bash
 
@@ -38,14 +44,13 @@ Recommended Installation : Core + Optional packages
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-Learning-9.0.tar.gz
    ...
 
-In most cases, you will need the **OTB-All-Dependencies-9.0.tar.gz** package in order to run Core **AND** optional packages that you can install afterwards.
-Let's say you want to start using OTB only with the Core applications, and some months lateryou realize that you need to do more specific operations such as Learning. 
-In that case you will just need to download the OTB-Learning package, and untar it where you installed the Core package. 
-You can then use directly the applications packaged in the Learning package alongside the other Core apps.
-If you want your installation to be the same as with OTB < 9, you can download all the optional packages.
 
 Core Only install
 `````````````````
+
+In this use case, you'll only be able to run Core applications, you **CANNOT** install any optional package over it as the necessary dependencies are not installed.
+it is possible to make your installation available to optional modules by downloading the **All-Dependencies** package and install it in the current OTB core install.
+This installation will prompt you to replace the existing dependencies, just click OK.  
 
 .. code-block:: bash
 
@@ -53,9 +58,9 @@ Core Only install
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-Core-9.0.tar.gz
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-Core-Dependencies-9.0.tar.gz
 
-In this use case, you'll only be able to run Core applications, you **CANNOT** install any optional package over it as the necessary dependencies are not installed.
-it is possible to make your installation available to optional modules by downloading the **All-Dependencies** package and install it in the current OTB core install.
-This installation will prompt you to replace the existing dependencies, just click OK.  
+
+Installation
+~~~~~~~~~~~~
 
 This package is a self-extractable tar.gz archive. You may uncompress the files with a
 right-click => Extract to => create OTB-|release| folder and click OK, or from the command line as follows:
@@ -112,7 +117,7 @@ to select their own existing Python installation rather than the one dibstribute
 By default, bindings for Python 3.8 will be enabled with the ``otbenv`` script.
 
 Recompiling Python bindings
-+++++++++++++++++++++++++++
+```````````````````````````
 
 If you are using another version of Python 3 than 3.8, but still want to use OTB Python bindings, it is possible
 to compile the python bindings again with your version of Python. CMake is required (it is available in most package
@@ -128,7 +133,7 @@ At the root of the OTB installation run :
 You should now be able to import ``otbApplication`` through Python !
 
 Create an healthy Python environment for OTB
-++++++++++++++++++++++++++++++++++++++++++++
+````````````````````````````````````````````
 
 We strongly recommend to use a virtual env to **avoid conflicts between OTB and GDAL when you develop python scripts that uses other dependencies like rasterio, scikit...**
 
