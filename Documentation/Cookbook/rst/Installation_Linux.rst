@@ -26,21 +26,36 @@ This is the list of the different modules available :
 
 Depending on your use case, you have to choose what package to download :
 
-Default choice : Core + Optional packages 
-++++++++++++++++++++++++++++++++++++++++++
+Recommended Installation : Core + Optional packages 
+```````````````````````````````````````````````````
 
-In most cases, you should take the mandatory **OTB-Core-9.0.tar.gz** package, along with the **OTB-All-Dependencies-9.0.tar.gz** one, which permits you
-to install optional packages afterwards. Let's say you want to start using OTB only with the Core applications, and some months later
-you realize that you need to do more specific operations such as Learning. 
-In that case you will just need to download the OTB-Learning package, and unzip it where you installed the Core package. 
+.. code-block:: bash
+
+   # Download mandatory packages to run OTB
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-Core-9.0.tar.gz
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-All-Dependencies-9.0.tar.gz
+   # Download optional package
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-Learning-9.0.tar.gz
+   ...
+
+In most cases, you will need the **OTB-All-Dependencies-9.0.tar.gz** package in order to run Core **AND** optional packages that you can install afterwards.
+Let's say you want to start using OTB only with the Core applications, and some months lateryou realize that you need to do more specific operations such as Learning. 
+In that case you will just need to download the OTB-Learning package, and untar it where you installed the Core package. 
 You can then use directly the applications packaged in the Learning package alongside the other Core apps.
+If you want your installation to be the same as with OTB < 9, you can download all the optional packages.
 
-Core Only
-+++++++++
+Core Only install
+`````````````````
 
-In that case, you are sure you only need the core applications of OTB, resulting in a lighter install because there are less dependencies needed.
-You only have to download **OTB-Core-9.0.tar.gz** and **OTB-Core-Dependencies-9.0.tar.gz**
+.. code-block:: bash
 
+   # Download mandatory packages to run OTB
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-Core-9.0.tar.gz
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-Core-Dependencies-9.0.tar.gz
+
+In this use case, you'll only be able to run Core applications, you **CANNOT** install any optional package over it as the necessary dependencies are not installed.
+it is possible to make your installation available to optional modules by downloading the **All-Dependencies** package and install it in the current OTB core install.
+This installation will prompt you to replace the existing dependencies, just click OK.  
 
 This package is a self-extractable tar.gz archive. You may uncompress the files with a
 right-click => Extract to => create OTB-|release| folder and click OK, or from the command line as follows:
@@ -85,10 +100,10 @@ Python bindings
 ~~~~~~~~~~~~~~~
 
 Since OTB 8.0.0 OTB bindings for Python 3.8 are distributed as a binary
-package. (From OTB 6.7 to 7.4, bindings are provided for Python 3.5)
-Please note that using a different Python version may not be compatible with
-OTB wrappings. If the installation completes
+package. Please note that using a different Python version may not be compatible with
+OTB wrappings directly after installation. If the installation completes
 without issue, information relating to your Python bindings will be provided. 
+**Our recommendation is to always recompile the python bindings when you install OTB**
 
 You must have Python NumPy bindings installed in your system. They can be installed locally
 without admin rights as follows: "pip install --user numpy". This is to give users the option 
@@ -101,11 +116,11 @@ Recompiling Python bindings
 
 If you are using another version of Python 3 than 3.8, but still want to use OTB Python bindings, it is possible
 to compile the python bindings again with your version of Python. CMake is required (it is available in most package
-managers or at [https://cmake.org/]). Make sure you installed the necessary dependencies in the **First Step** page
+managers or at [https://cmake.org/]). Make sure you installed the necessary dependencies in the :doc:`First Step` page
 
 At the root of the OTB installation run :
 
-.. parsed-literal::
+.. code-block:: bash
 
     source otbenv.profile 
     sh recompile_bindings.sh
