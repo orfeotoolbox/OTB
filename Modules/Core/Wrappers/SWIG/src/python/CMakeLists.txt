@@ -67,11 +67,11 @@ otb_module_target_label( ${extension_target} )
 
 install( TARGETS ${extension_target}
          DESTINATION ${OTB_INSTALL_PYTHON_DIR}
-         COMPONENT RuntimeLibraries )
+         COMPONENT Dependencies )
 
 install( FILES ${CMAKE_SWIG_OUTDIR}/otbApplication.py
          DESTINATION ${OTB_INSTALL_PYTHON_DIR}
-         COMPONENT RuntimeLibraries )
+         COMPONENT Dependencies )
 
 configure_file(StandaloneWrapper.in CMakeLists.txt @ONLY)
 

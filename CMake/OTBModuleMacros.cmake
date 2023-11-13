@@ -345,7 +345,7 @@ macro(otb_module_target_install _name _component)
   # if("${_ttype}" STREQUAL EXECUTABLE)
   #   set(_component Runtime)
   # else()
-  #   set(_component RuntimeLibraries)
+  #   set(_component Dependencies)
   # endif()
   install(TARGETS ${_name}
     EXPORT  ${${otb-module}-targets}

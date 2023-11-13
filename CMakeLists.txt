@@ -405,7 +405,7 @@ if(XDK_INSTALL_PATH)
     install(DIRECTORY ${XDK_INSTALL_PATH}/lib
             DESTINATION .
             USE_SOURCE_PERMISSIONS
-            COMPONENT RuntimeLibraries)
+            COMPONENT Dependencies)
     install(DIRECTORY ${XDK_INSTALL_PATH}/share
             DESTINATION .
             USE_SOURCE_PERMISSIONS
@@ -425,6 +425,11 @@ if(XDK_INSTALL_PATH)
 else()
     message(WARNING "XDK NOT FOUND, it will not be packaged")
 endif()
+
+install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/share/otb/swig
+ DESTINATION ./share/otb
+ COMPONENT Core
+ )
 
 install(FILES Packaging/Files/build_wrapping.cmake
 DESTINATION ./share/otb/swig

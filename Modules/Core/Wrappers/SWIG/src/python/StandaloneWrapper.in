@@ -69,4 +69,4 @@ endif()
 
 install(TARGETS PythonWrapperLib
         DESTINATION lib/otb/python
-        COMPONENT RuntimeLibraries )
+        COMPONENT Dependencies )
