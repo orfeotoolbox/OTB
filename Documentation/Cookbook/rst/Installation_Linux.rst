@@ -1,8 +1,5 @@
 We provide a Core package and standalone optional packages to install over the Core for GNU/Linux x86_64. These packages includes
 all of the OTB applications along with command line launchers.
-It can be downloaded from `OTB's download page
-<https://www.orfeo-toolbox.org/download>`__.
-
 Since OTB 9.0, the installation is modular, you have to choose what package to download depending on your use case.
 
 This is the list of the different modules available to download :
@@ -30,7 +27,7 @@ Recommended Installation : Core + Optional packages
 ```````````````````````````````````````````````````
 
 In most cases, you will need the **OTB-All-Dependencies-9.0.tar.gz** package in order to run Core **AND** optional packages that you can install afterwards.
-Let's say you want to start using OTB only with the Core applications, and some months lateryou realize that you need to do more specific operations such as Learning. 
+Let's say you want to start using OTB only with the Core applications, and some months later you realize that you need to do more specific operations such as Learning. 
 In that case you will just need to download the OTB-Learning package, and untar it where you installed the Core package. 
 You can then use directly the applications packaged in the Learning package alongside the other Core apps.
 If you want your installation to be the same as with OTB < 9, you can download all the optional packages.
@@ -45,8 +42,8 @@ If you want your installation to be the same as with OTB < 9, you can download a
    ...
 
 
-Core Only install
-`````````````````
+Core Only
+`````````
 
 In this use case, you'll only be able to run Core applications, you **CANNOT** install any optional package over it as the necessary dependencies are not installed.
 it is possible to make your installation available to optional modules by downloading the **All-Dependencies** package and install it in the current OTB core install.
@@ -158,25 +155,3 @@ Notes:
 ~~~~~~
    - Multiple installation of OTB can exists in same system without one conflicting the other!
 
-FAQ
-~~~
-
-Q: Unable to import otbApplication library with Python3.8
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-::
-
-   ImportError: libpython3.8m.so.rh-python38-1.0: cannot open shared object file: No such file or directory
-
-A: You need to add a symlink to libpython3.8m.so.rh-python38-1.0 to make it work. 
-The recommended solution is to **recompile the bindings with your systems' python version**, because this symbolic link will work only
-if you have Python 3.8 in your system which is the case on Ubuntu 20.04.
-
-Here is the solution for the symbolic link:
-
-- Find the libpython3.8XX on your system : ``find /usr/lib -iname *libpython3.8*``
-  (on Ubuntu 20.04, it is ``/usr/lib/x86_64-linux-gnu/libpython3.8m.so``)
-- Create a symlink : ``ln -s path/to/lib/python3.8XX path/to/lib/libpython3.8m.so.rh-python38-1.0``
-- Try to import otbApplication again
-
-See this discussion on `OTB issue tracker <https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/issues/1540#note_67864>`_
