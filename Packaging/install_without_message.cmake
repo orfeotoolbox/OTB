@@ -36,5 +36,5 @@ function(install_without_message src_dir dst_dir_suffix)
   install(
     DIRECTORY   ${src_dir}
     DESTINATION ${dst_dir}
-    MESSAGE_NEVER )
+    COMPONENT Core )
 endfunction() #install_without_message

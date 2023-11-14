@@ -47,6 +47,22 @@ else()
     set(CPACK_GENERATOR "TGZ")
 endif()
 
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Packaging)
+include(patch_cmake_files)
+include(install_without_message)
+
+patch_cmake_files(NAME "ITK"
+VERSION "${ITK_VERSION_MAJOR}.${ITK_VERSION_MINOR}"
+MATCH_STRING  "${XDK_INSTALL_PATH}"
+REPLACE_VAR "ITK_INSTALL_PREFIX"
+)
+
+patch_cmake_files(NAME "OTB"
+VERSION "${OTB_VERSION_MAJOR}.${OTB_VERSION_MINOR}"
+MATCH_STRING  "${XDK_INSTALL_PATH}"
+REPLACE_VAR "OTB_INSTALL_PREFIX"
+)
+
 include(CPack)
 
 cpack_add_component_group(Core

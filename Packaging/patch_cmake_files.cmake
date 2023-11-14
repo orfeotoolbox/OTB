@@ -21,7 +21,7 @@ function(patch_cmake_files)
   cmake_parse_arguments(PATCH  "" "NAME;VERSION;MATCH_STRING;REPLACE_VAR" "" ${ARGN} )
 
   set(PATCH_DIR_NAME ${PATCH_NAME}-${PATCH_VERSION})
-  set(PATCH_DIR "${SUPERBUILD_INSTALL_DIR}/lib/cmake/${PATCH_DIR_NAME}")
+  set(PATCH_DIR "${XDK_INSTALL_PATH}/lib/cmake/${PATCH_DIR_NAME}")
   set(PATCH_STAGE_DIR ${CMAKE_CURRENT_BINARY_DIR}/patched/${PATCH_DIR_NAME})
 
   ##message("COPY ${PATCH_DIR} to ${PATCH_STAGE_DIR} for patching")
@@ -37,7 +37,7 @@ function(patch_cmake_files)
     -DP_DIRS=${DIR_LIST}
     -DP_MATCH=${PATCH_MATCH_STRING}
     -DP_REPLACE=${PATCH_REPLACE_VAR}
-    -P ${CMAKE_CURRENT_SOURCE_DIR}/post_install.cmake
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/Packaging/post_install.cmake
     RESULT_VARIABLE patch_${PATCH_NAME}_cmake_rv
     )
 
@@ -45,18 +45,6 @@ function(patch_cmake_files)
     message(FATAL_ERROR "    execute_process() failed.")
   endif()
 
-  install_without_message("${PATCH_STAGE_DIR}" "lib/cmake")
-
-  #patch for ABI compatibility , deprecated after gcc 9 / ubuntu 20.04
-  if(EXISTS "${PATCH_STAGE_DIR}/UseOTB.cmake")
-    file(APPEND "${PATCH_STAGE_DIR}/UseOTB.cmake" 
-"\n\n# ABI compatibility \
-\nif ( CMAKE_CXX_COMPILER_ID STREQUAL \"GNU\") \
-\n  if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 10.0 ) \
-\n    add_definitions(-D_GLIBCXX_USE_CXX11_ABI=0) \
-\n  endif() \
-\nendif()" )
-  endif()
-
-  
+  install_without_message("${PATCH_STAGE_DIR}" "${XDK_INSTALL_PATH}/lib/cmake/")
+ 
 endfunction()
