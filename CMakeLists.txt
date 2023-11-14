@@ -426,19 +426,6 @@ else()
     message(WARNING "XDK NOT FOUND, it will not be packaged")
 endif()
 
-install(DIRECTORY ${CMAKE_INSTALL_PREFIX}/share/otb/swig
- DESTINATION ./share/otb
- COMPONENT Core
- )
-
-install(FILES Packaging/Files/build_wrapping.cmake
-DESTINATION ./share/otb/swig
-COMPONENT Core)
-install(FILES Packaging/Files/build_wrapping.md
-DESTINATION ./share/otb/swig
-RENAME README.md
-COMPONENT Core)
-
 # install FindXXX.cmake
 file(GLOB OTB_FIND_PACKAGE_SCRIPTS CMake/Find*.cmake)
 install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Core)
@@ -457,6 +444,14 @@ else()
   file(MAKE_DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR})
 endif()
 install(DIRECTORY ${OTB_BINARY_DIR}/${OTB_INSTALL_DATA_DIR} DESTINATION share COMPONENT Core)
+
+install(FILES Packaging/Files/build_wrapping.cmake
+DESTINATION ./share/otb/swig
+COMPONENT Core)
+install(FILES Packaging/Files/build_wrapping.md
+DESTINATION ./share/otb/swig
+RENAME README.md
+COMPONENT Core)
 
 #start installing script and other stuff related to package
 if(UNIX)
