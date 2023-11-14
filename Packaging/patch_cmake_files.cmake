@@ -45,6 +45,6 @@ function(patch_cmake_files)
     message(FATAL_ERROR "    execute_process() failed.")
   endif()
 
-  install_without_message("${PATCH_STAGE_DIR}" "${XDK_INSTALL_PATH}/lib/cmake/")
+  install_without_message("${PATCH_STAGE_DIR}" "${XDK_INSTALL_PATH}/lib/cmake")
  
 endfunction()
