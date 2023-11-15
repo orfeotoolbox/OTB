@@ -407,7 +407,7 @@ if(XDK_INSTALL_PATH)
             USE_SOURCE_PERMISSIONS
             COMPONENT Dependencies)
     if( EXISTS ${XDK_INSTALL_PATH}/lib64)
-      install(DIRECTORY ${XDK_INSTALL_PATH}/lib64/python3.8/site-packages
+      install(DIRECTORY ${XDK_INSTALL_PATH}/lib64/python3.8/
               DESTINATION ./lib/python3
               USE_SOURCE_PERMISSIONS
               COMPONENT Dependencies)
