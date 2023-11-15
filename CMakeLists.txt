@@ -406,6 +406,12 @@ if(XDK_INSTALL_PATH)
             DESTINATION .
             USE_SOURCE_PERMISSIONS
             COMPONENT Dependencies)
+    if( EXISTS ${XDK_INSTALL_PATH}/lib64)
+      install(DIRECTORY ${XDK_INSTALL_PATH}/lib64/python3.8/site-packages
+              DESTINATION ./lib/python3
+              USE_SOURCE_PERMISSIONS
+              COMPONENT Dependencies)
+    endif()
     install(DIRECTORY ${XDK_INSTALL_PATH}/share
             DESTINATION .
             USE_SOURCE_PERMISSIONS
@@ -431,7 +437,6 @@ file(GLOB OTB_FIND_PACKAGE_SCRIPTS CMake/Find*.cmake)
 install(FILES ${OTB_FIND_PACKAGE_SCRIPTS} DESTINATION ${OTB_INSTALL_PACKAGE_DIR} COMPONENT Core)
 
 # TODO : install release notes, copyright notice, ...
-# install(FILES "LICENSE" "NOTICE" "README.txt" DESTINATION ${OTB_INSTALL_DOC_DIR} COMPONENT Runtime)
 install(FILES "LICENSE" DESTINATION . COMPONENT Core)
 
 # Configure and install VERSION file
