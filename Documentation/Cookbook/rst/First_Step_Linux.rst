@@ -21,8 +21,8 @@ Download OTB
 
 .. code-block:: bash
 
-    curl https://www.orfeo-toolbox.org/download/packages/OTB-Core-Depends-9.0.tar.gz -o /Path/You/Want/otb-deps.tar.gz
-    curl https://www.orfeo-toolbox.org/download/packages/OTB-Core-9.0.tar.gz -o /Path/You/Want/otb-core.tar.gz
+    curl https://www.orfeo-toolbox.org/download/packages/OTB-Core-Dependencies-9.0.tar.gz -o /Path/Download/OTB-Core-Dependencies-9.0.tar.gz
+    curl https://www.orfeo-toolbox.org/download/packages/OTB-Core-9.0.tar.gz -o /Path/Download/OTB-Core-9.0.tar.gz
 
 Installation
 ++++++++++++
@@ -30,8 +30,9 @@ Installation
 .. code-block:: bash
 
    # Install otb
-   cd /Path/You/Want/
-   for f in *.tar.gz; do tar xvf "$f" --one-top-level="OTB-9.0"; done
+   cd /Path/Download
+   tar xvf OTB-Core-9.0.tar.gz --one-top-level="/Path/To/Install/OTB"
+   tar xvf OTB-Core-Dependencies-9.0.tar.gz --one-top-level="/Path/To/Install/OTB"
 
 Download an example image
 +++++++++++++++++++++++++

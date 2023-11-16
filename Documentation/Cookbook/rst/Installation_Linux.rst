@@ -25,7 +25,7 @@ Download packages
 
 **Important note**
 
-If you are using Fedora/Redhat8, please download the package Linux_RH8-Core which contains GDAL bindings in a different folder than the Core package.
+If you are using Fedora/Redhat8, please download the package **Linux_RH8-Dependencies** which contains GDAL bindings in a different folder than the standard Dependencies package.
 It is because the default system Python user site in Redhat8 is lib/python3.8/site-packages and in ubuntu/debian it is lib/python3/dist-packages
 
 Recommended Installation : Core + Optional packages 
@@ -105,6 +105,18 @@ and headers are included). If you want to build OTB from source using this
 package, you should first uninstall the specific OTB files from the package to
 leave only the dependencies (what we call an XDK). You can do it using the
 supplied script ``tools/uninstall_otb.sh``.
+
+Note for RedHat 8 users
+```````````````````````
+By default otbenv.profile file sets the PYTHONPATH to /Path/To/Install/OTB/lib/python3/dist-packages, but Python in RedHat searches for lib/python3.X/site-packages,
+In order to have the correct GDAL python bindings and be able to call "from osgeo import gdal" without problem, you have to modify the PYTHONPATH in otvbenv.profile
+before calling source.
+
+.. code-block:: bash
+
+   # Install each tar gz in the same "one top level" folder
+   cd "/Path/To/Install/OTB"
+   sed -e "s/python3\/dist-packages/python3.8\/site-packages/g" otbenv.profile
 
 Python bindings
 ~~~~~~~~~~~~~~~
