@@ -1,4 +1,4 @@
-What is new with OTB 8.0
+What is new with OTB 9.0
 ========================
 
 .. note:: To see the complete list of updates, see the `RELEASE NOTES

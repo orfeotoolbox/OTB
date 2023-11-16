@@ -51,22 +51,8 @@ docker with the following arguments:
     docker run -it -e DISPLAY=$DISPLAY -v /tmp/.X11-unix/:/tmp/.X11-unix/ --device=/dev/dri:/dev/dri orfeotoolbox/otb monteverdi
 
 
-Conda package
--------------
-
-A conda package is available for Orfeo Toolbox on Linux. It can be found at https://anaconda.org/orfeotoolbox/otb 
-and can be installed with the command. 
-
-Note : it is a 7.1 version that is old. The conda package is hard to maintain as the conda base evolves often
-which breaks the build sometimes. 
-
-::
-
-    conda install -c orfeotoolbox otb 
-
-
-Other packages
---------------
+Distribution packages
+---------------------
 
 Warning! These packages may not be up-to-date with latest OTB
 releases. In addition, some features of the library may not be available
@@ -101,4 +87,3 @@ You will then need to run (if you use yaourt, you could use trizen instead):
 ::
 
     yaourt -S orfeo-toolbox
-

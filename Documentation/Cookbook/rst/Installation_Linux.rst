@@ -7,7 +7,7 @@ This is the list of the different modules available to download :
 +-----------------------+-------------------------------------------------------------------------------------+-----------------------+
 | **Module Name**       | **Description**                                                                     | **Criticity**         |
 +=======================+=====================================================================================+=======================+
-| Core and Dependencies | Contains all Core applications,modules and the required dependencies to run OTB     | **Mandatory**         |
+| Core and Dependencies | Core applications,modules and the required dependencies to run OTB                  | **Mandatory**         |
 +-----------------------+-------------------------------------------------------------------------------------+-----------------------+
 | ImageProcessing       | Contains apps related to MuParser and MuParserX                                     | Optional              |
 +-----------------------+-------------------------------------------------------------------------------------+-----------------------+
@@ -25,7 +25,7 @@ Download packages
 
 **Important note**
 
-If you are using Fedora/Redhat8, please download the package Core_RH8 which contains GDAL bindings in a different folder than the Core package.
+If you are using Fedora/Redhat8, please download the package Linux_RH8-Core which contains GDAL bindings in a different folder than the Core package.
 It is because the default system Python user site in Redhat8 is lib/python3.8/site-packages and in ubuntu/debian it is lib/python3/dist-packages
 
 Recommended Installation : Core + Optional packages 
@@ -109,11 +109,12 @@ supplied script ``tools/uninstall_otb.sh``.
 Python bindings
 ~~~~~~~~~~~~~~~
 
+**Our recommendation is to always recompile the python bindings when you install OTB**
+
 Since OTB 8.0.0 OTB bindings for Python 3.8 are distributed as a binary
 package. Please note that using a different Python version may not be compatible with
 OTB wrappings directly after installation. If the installation completes
 without issue, information relating to your Python bindings will be provided. 
-**Our recommendation is to always recompile the python bindings when you install OTB**
 
 You must have Python NumPy bindings installed in your system. They can be installed locally
 without admin rights as follows: "pip install --user numpy". This is to give users the option 
@@ -160,6 +161,5 @@ We strongly recommend to use a virtual env to **avoid conflicts between OTB and 
 
 
 Notes:
-~~~~~~
+```````
    - Multiple installation of OTB can exists in same system without one conflicting the other!
-

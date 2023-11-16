@@ -203,6 +203,7 @@ redhat-xdk-build:
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=redhat-8-gcc
     - mv build_packages/OTB-*.tar.gz . || true
+    - mv OTB-9.0.0-Linux-Core.tar.gz OTB-9.0.0-Linux_RH8-Core.tar.gz
   needs:
     - job: redhat-xdk-prepare
       artifacts: true
