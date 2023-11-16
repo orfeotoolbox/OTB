@@ -23,6 +23,11 @@ This is the list of the different modules available to download :
 Download packages
 ~~~~~~~~~~~~~~~~~
 
+**Important note**
+
+If you are using Fedora/Redhat8, please download the package Core_RH8 which contains GDAL bindings in a different folder than the Core package.
+It is because the default system Python user site in Redhat8 is lib/python3.8/site-packages and in ubuntu/debian it is lib/python3/dist-packages
+
 Recommended Installation : Core + Optional packages 
 ```````````````````````````````````````````````````
 
@@ -64,7 +69,10 @@ right-click => Extract to => create OTB-|release| folder and click OK, or from t
 
 .. code-block:: bash
 
-   for f in *.tar.gz; do tar xvf "$f" --one-top-level="/Path/To/Install/OTB"; done
+   # Install each tar gz in the same "one top level" folder
+   tar xvf OTB-Core-9.0.tar.gz --one-top-level="/Path/To/Install/OTB"
+   tar xvf OTB-All-Dependencies-9.0.tar.gz --one-top-level="/Path/To/Install/OTB"
+   ...
 
 Please note that the resulting installation can be moved elsewhere on the disk. Just move the folder
 elsewhere and source the otbenv.profile.

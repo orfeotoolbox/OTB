@@ -3,12 +3,8 @@
 Windows binary packages are available for Windows 10 or higher. They can
 be downloaded from `otb download page <https://www.orfeo-toolbox.org/download>`_ .
 
-Extract the archive and use one of the launchers, they contain all applications
+Extract the zip archive and use one of the launchers, they contain all applications
 and their launchers (both command line and graphical launchers are provided):
-
--  ``monteverdi.bat``: A launcher script for Monteverdi
-
--  ``mapla.bat``: A launcher script for Mapla
 
 -  ``otbenv.bat``: A script to initialize the environment for OTB
    executables
@@ -32,17 +28,9 @@ package, you should first uninstall the specific OTB files from the package to
 leave only the dependencies (what we call an XDK). You can do it using the
 supplied script ``tools/uninstall_otb.bat``.
 
-In the package you also have a template project for Visual 2015
-``OTB Project.zip``. This template can be placed in your user Visual 2015 template
-directory : ``%USERPROFILE%\Documents\Visual Studio 2015\Templates\ProjectTemplates``.
-The script ``start_devenv.bat`` allows to copy the template in that folder and
-start Visual Studio.
-
 Python bindings
 ~~~~~~~~~~~~~~~
 
-Since OTB 6.7.0 OTB bindings for Python 3.5 are distributed as a binary
-package.
 Since OTB 8.0.0, the bindings for Python 3.7 are distributed.
 Please note that using a different Python version may not be compatible with
 OTB wrappings. If the installation completes

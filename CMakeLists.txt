@@ -406,9 +406,10 @@ if(XDK_INSTALL_PATH)
             DESTINATION .
             USE_SOURCE_PERMISSIONS
             COMPONENT Dependencies)
+    # Redhat8 case : the bindings are installed by default in lib64/python3.8
     if( EXISTS ${XDK_INSTALL_PATH}/lib64)
-      install(DIRECTORY ${XDK_INSTALL_PATH}/lib64/python3.8/
-              DESTINATION ./lib/python3
+      install(DIRECTORY ${XDK_INSTALL_PATH}/lib64/python3.8
+              DESTINATION ./lib
               USE_SOURCE_PERMISSIONS
               COMPONENT Dependencies)
     endif()
