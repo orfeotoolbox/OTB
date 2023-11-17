@@ -61,9 +61,6 @@ want to get involved in the packaging of OTB for your favourite
 platform, please contact us through the developer’s mailing list:
 otb-developers@googlegroups.com.
 
-Debian and Ubuntu
-~~~~~~~~~~~~~~~~~
-
 There are OTB packages for Debian (unstable) since version 5.2.0. OTB
 Applications packages may be available as Debian packages through APT
 repositories:
@@ -72,18 +69,12 @@ repositories:
 
 -  python-otb for python applications
 
+::
+
+    apt install otb-bin python-otb
+
 Due to license issues, the OTB package built in Debian doesn’t contain
 6S. As a consequence, the package does not contain the
 OpticalCalibration application.
 
 **This is why it is recommended to use the official binary package.**
-
-Archlinux
-~~~~~~~~~~
-
-Package is in AUR (Arch User Repository).
-You will then need to run (if you use yaourt, you could use trizen instead):
-
-::
-
-    yaourt -S orfeo-toolbox
