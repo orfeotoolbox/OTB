@@ -425,7 +425,7 @@ def GenerateRstForApplications(rst_dir):
     appNames = [app for app in allApps if app not in blackList]
 
     appIndexFile = open(rst_dir + '/Applications.rst', 'w')
-    appIndexFile.write(RstPageHeading("All Applications", "2", ref="apprefdoc"))
+    appIndexFile.write(RstPageHeading("Applications List", "2", ref="apprefdoc"))
 
     print("Generating rst for {} applications".format(len(appNames)))
 
