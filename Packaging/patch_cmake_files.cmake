@@ -21,7 +21,7 @@ function(patch_cmake_files)
   cmake_parse_arguments(PATCH  "" "NAME;VERSION;MATCH_STRING;REPLACE_VAR" "" ${ARGN} )
 
   set(PATCH_DIR_NAME ${PATCH_NAME}-${PATCH_VERSION})
-  set(PATCH_DIR "${XDK_INSTALL_PATH}/lib/cmake/${PATCH_DIR_NAME}")
+  set(PATCH_DIR "${CMAKE_INSTALL_PREFIX}/lib/cmake/${PATCH_DIR_NAME}")
   set(PATCH_STAGE_DIR ${CMAKE_CURRENT_BINARY_DIR}/patched/${PATCH_DIR_NAME})
 
   ##message("COPY ${PATCH_DIR} to ${PATCH_STAGE_DIR} for patching")
@@ -45,6 +45,6 @@ function(patch_cmake_files)
     message(FATAL_ERROR "    execute_process() failed.")
   endif()
 
-  install_without_message("${PATCH_STAGE_DIR}" "${XDK_INSTALL_PATH}/lib/cmake")
- 
+  install_without_message("${PATCH_STAGE_DIR}" "${CMAKE_INSTALL_PREFIX}/lib/cmake")
+
 endfunction()
