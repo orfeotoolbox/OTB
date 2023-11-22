@@ -66,9 +66,11 @@ it can be installed along with the Core package with a simple tar extract comman
 
 SAR
 ```
+This package adds the possibility to do handle Radar processing (SAR). 
 
 StereoProcessing
 ````````````````
+This package adds the stereo processing possibilities to the toolbox, with apps to do Coregistration
 
 Hyperspectral
 `````````````

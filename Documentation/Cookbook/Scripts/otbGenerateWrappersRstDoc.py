@@ -333,6 +333,24 @@ def render_all_examples_python(app):
         output += GetApplicationExamplePythonSnippet(app, i)
     return output
 
+def render_heading(otb_root,app,delimiter):
+    "Render app heading"
+
+    #Find the module corresponding to the app
+    cxxappname = "otb" + app.GetName() + ".cxx"
+    appmodule = "Core"
+    otb_modules_dir = os.path.join(otb_root,"Modules")
+    moduleslist = [modname for modname in os.listdir(otb_modules_dir)
+            if os.path.isdir(os.path.join(otb_modules_dir, modname))]
+    for mod in moduleslist:
+        moduleappDir = mod + "/Applications/app"
+        currentModuleDir = os.path.join(otb_modules_dir,moduleappDir)
+        if os.path.isdir(currentModuleDir) and cxxappname in os.listdir(currentModuleDir):
+            appmodule = mod
+            break
+
+    return app.GetName() + " [" + appmodule + "]" + "\n" + delimiter * (len(app.GetName()) + len(appmodule)+ 3) + "\n\n"
+
 def render_limitations(app):
     "Render app DocLimitations to rst"
 
@@ -380,7 +398,7 @@ def render_multiwriting_string(app):
     else:
         return ""
 
-def render_application(appname, allapps):
+def render_application(otb_root,appname, allapps):
     "Render app to rst"
 
     # Create the application without logger to avoid the deprecation warning log
@@ -395,7 +413,7 @@ def render_application(appname, allapps):
         label=appname,
         deprecation_string=render_deprecation_string(app),
         multiwriting_string=render_multiwriting_string(app),
-        heading=rst_section(app.GetName(), '='),
+        heading=render_heading(otb_root,app, '='),
         description=app.GetDescription(),
         longdescription=make_links(app.GetDocLongDescription(), allapps),
         parameters=render_parameters(app),
@@ -412,7 +430,7 @@ def GetApplicationTags(appname):
     app = otbApplication.Registry.CreateApplicationWithoutLogger(appname)
     return app.GetDocTags()
 
-def GenerateRstForApplications(rst_dir):
+def GenerateRstForApplications(rst_dir,otb_root):
     "Generate .rst files for all applications"
 
     blackList = ["TestApplication", "Example", "ApplicationExample"]
@@ -458,11 +476,12 @@ def GenerateRstForApplications(rst_dir):
 
         # Write application rst
         with open(rst_dir + '/Applications/app_'  + appName + '.rst', 'w',encoding='utf-8') as appFile:
-            appFile.write(render_application(appName, appNames))
+            appFile.write(render_application(otb_root,appName, appNames))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(usage="Export application(s) to rst file")
     parser.add_argument("rst_dir", help="Directory where rst files are generated")
+    parser.add_argument("otb_root", help="Directory of OTB")
     args = parser.parse_args()
 
     # Load rst templates
@@ -472,4 +491,4 @@ if __name__ == "__main__":
     template_parameter_choice_entry = open("templates/parameter_choice_entry.rst").read()
     template_parameter_choice = open("templates/parameter_choice.rst").read()
 
-    GenerateRstForApplications(args.rst_dir)
+    GenerateRstForApplications(args.rst_dir,args.otb_root)

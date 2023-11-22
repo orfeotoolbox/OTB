@@ -116,7 +116,7 @@ before calling source.
 
    # Install each tar gz in the same "one top level" folder
    cd "/Path/To/Install/OTB"
-   sed -e "s/python3\/dist-packages/python3.8\/site-packages/g" otbenv.profile
+   sed -i "s/python3\/dist-packages/python3.8\/site-packages/g" otbenv.profile
 
 Python bindings
 ~~~~~~~~~~~~~~~

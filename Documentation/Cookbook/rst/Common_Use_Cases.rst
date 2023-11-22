@@ -11,11 +11,10 @@ Use OTB in QGIS
 ~~~~~~~~~~~~~~~
 
 
-
 Use Python API
 ~~~~~~~~~~~~~~
 
-This use case is based on a raw Pleides product that you want to orthorectify and extract an ROI from.
+This use case is based on a raw Pleiades product that you want to orthorectify and extract an ROI from.
 That product is typically composed of an Panchromatic image (high resolution black and white image) and an XS image (lower resolution with colors) requiering
 a BundleToPerfectSensor step, in order to have only one colored image to orthorectify.
 
