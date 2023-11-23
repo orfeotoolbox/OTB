@@ -2,23 +2,7 @@ We provide a Core package and standalone optional packages to install over the C
 all of the OTB applications along with command line launchers.
 Since OTB 9.0, the installation is modular, you have to choose what package to download depending on your use case.
 
-This is the list of the different modules available to download :
-
-+-----------------------+-------------------------------------------------------------------------------------+-----------------------+
-| **Module Name**       | **Description**                                                                     | **Criticity**         |
-+=======================+=====================================================================================+=======================+
-| Core and Dependencies | Core applications,modules and the required dependencies to run OTB                  | **Mandatory**         |
-+-----------------------+-------------------------------------------------------------------------------------+-----------------------+
-| ImageProcessing       | Contains apps related to MuParser and MuParserX                                     | Optional              |
-+-----------------------+-------------------------------------------------------------------------------------+-----------------------+
-| Learning              | Learning apps using OpenCV, SVM, Shark                                              | Optional              |
-+-----------------------+-------------------------------------------------------------------------------------+-----------------------+
-| SAR                   | Apps and modules used for Radar processing                                          | Optional              |
-+-----------------------+-------------------------------------------------------------------------------------+-----------------------+
-| StereoProcessing      | Apps and modules for stereo operations                                              | Optional              |
-+-----------------------+-------------------------------------------------------------------------------------+-----------------------+
-| Hyperspectral         | Apps and modules to perform calculations on hyperspectral images                    | Optional              |
-+-----------------------+-------------------------------------------------------------------------------------+-----------------------+
+See the page :doc:`Modules` for pick the ones you need.
 
 Download packages
 ~~~~~~~~~~~~~~~~~

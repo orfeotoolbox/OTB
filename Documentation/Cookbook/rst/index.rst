@@ -42,6 +42,7 @@ Table of Contents
     First_Steps
     Installation
     Common_Use_Cases
+    Modules
     Supported_Sensors
     ReleaseNote9
 
