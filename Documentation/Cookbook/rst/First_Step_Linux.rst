@@ -42,14 +42,14 @@ Download an example image
     curl https://www.orfeo-toolbox.org/download/data_example/xt_PHR.tif -o /Path/You/Want/xt_PHR.tif
 
 Compute NDVI using the CLI interface
-+++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++
 
 .. code-block:: bash
 
     otbcli_BandMath –il /Path/You/Want/xt_PHR.tif –out ndvi.tif –exp “(im1b4-im1b1)/ (im1b4+im1b1)”
 
 Use Python API to compute NDVI
-++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++
 
 To use the Python API you have first to recompile the bindings for your version of Python. By default they are compiled for Python 3.8
 

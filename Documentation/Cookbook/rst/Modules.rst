@@ -24,12 +24,11 @@ Core and Dependencies
 These are the two only mandatory modules for OTB.
 
 **OTB-Core** contains optical image preprocessing applications (Pansharpening, Calibration, Orthorectification, etc.), most useful images manipulation tools (ExtractROI, Superimpose, Mosaic, Concatenate, ..) and various applications to manipulate vector data.
-**OTB-Depencies** contains all third-parties libraries needed to execute Core / All applications
+**OTB-Dependencies** contains all third-parties libraries needed to execute Core / All applications
 
 For the dependencies, there are two packages available depending on your needs :
 
-- **OTB-All-Dependencies** package contains the dependencies for the core **and** optional modules.If you install the Core and decide to use an optional module afterwards, you just need to install this optional module over the current OTB install. 
- This is the **package that you should install by default**
+- **OTB-All-Dependencies** this is the **package that you should install by default** : contains the dependencies for the core **and** optional modules.If you install the Core and decide to use an optional module afterwards, you just need to install this optional module over the current OTB install. 
 
 - **OTB-Core-Dependencies** suits to users who only need the core fonctionnalities of OTB.If you plan to install optional module afterwards, you need to download and install le All-Dependencies package before installing the module.
 

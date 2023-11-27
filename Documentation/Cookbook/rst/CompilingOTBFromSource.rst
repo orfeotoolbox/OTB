@@ -258,8 +258,6 @@ Applications will be located in the ``CMAKE_INSTALL_PREFIX/bin/`` directory:
 will launch the command line version of the **ExtractROI** application,
 while:
 
-::
-
 In order to ensure access to your OTB build from anywhere within your
 system, we recommend setting the following environment variables.
 First, add ``bin/`` directory to your PATH for easy access:

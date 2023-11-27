@@ -6,6 +6,16 @@ You are now ready to use OTB. In this page we describe simple use cases that you
 Use Command Line Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+This use case shows how to orthorectify a Sentinel-2 image and perform an Edge extraction on a specific ROI.
+
+.. code-block:: bash
+
+    # let's orthorectify this image 
+    otbcli_OrthoRectification -io.in /Path/To/S2Product/SENTINEL2B_20171008-105012-463_L2A_T31TCH_C_V1-0_SRE_B2.tif -io.out /Path/To/Output/s2_ortho.tif 
+    # get the Region we want to extract the edges from
+    otbcli_ExtractROI -in /Path/To/Output/s2_ortho.tif -out /Path/to/Output/s2_extract.tif
+    # Extract the edges from that cropped image
+    otbcli_EdgeExtraction -in  -out /Path/To/Output/s2_edges.tif
 
 Use OTB in QGIS
 ~~~~~~~~~~~~~~~

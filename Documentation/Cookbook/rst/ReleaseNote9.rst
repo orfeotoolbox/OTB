@@ -8,7 +8,7 @@ No more Qt GUI
 --------------
 
 QT based GUI were not widely used by the community and this library (Qt5) is now outdated and replaced by Qt6 so we decided to remove GUI and move to QGIS.
-QGIS is also the recommended image viewer : Monteverdi is not maintained anymore.
+QGIS is now the recommended image viewer : Monteverdi, based on Qt, is removed from OTB 9 
 
 A new modular Toolbox
 ---------------------
