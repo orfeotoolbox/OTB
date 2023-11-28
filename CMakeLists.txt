@@ -489,9 +489,7 @@ endif()
 
 # #configure README from rst docs
 set(RSTDOC_DIR "${OTB_SOURCE_DIR}/Documentation/Cookbook/rst")
-if(APPLE)
-  set(README_FILE ${RSTDOC_DIR}/Installation_Macos.rst)
-elseif(WIN32) #windows
+if(WIN32) #windows
   set(README_FILE ${RSTDOC_DIR}/Installation_Windows.rst)
 else()
   set(README_FILE ${RSTDOC_DIR}/Installation_Linux.rst)
