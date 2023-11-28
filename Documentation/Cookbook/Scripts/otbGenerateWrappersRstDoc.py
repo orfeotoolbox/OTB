@@ -407,9 +407,6 @@ def render_application(otb_root,appname, allapps, display_module_name=False):
     # Create the application without logger to avoid the deprecation warning log
     app = otbApplication.Registry.CreateApplicationWithoutLogger(appname)
 
-    # TODO: remove this when bug 440 is fixed
-    app.Init()
-
     application_documentation_warnings(app)
 
     output = template_application.format(

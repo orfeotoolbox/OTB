@@ -21,9 +21,7 @@ macro(installer_files)
 
   #configure README from rst docs
   set(RSTDOC_DIR "${PACKAGE_OTB_SRC_DIR}/Documentation/Cookbook/rst")
-  if(APPLE)
-    set(README_FILE ${RSTDOC_DIR}/Installation_Macos.rst)
-  elseif(LINUX) #not osx
+  if(LINUX) #not osx
     set(README_FILE ${RSTDOC_DIR}/Installation_Linux.rst)
   elseif(WIN32) #windows
     set(README_FILE ${RSTDOC_DIR}/Installation_Windows.rst)
