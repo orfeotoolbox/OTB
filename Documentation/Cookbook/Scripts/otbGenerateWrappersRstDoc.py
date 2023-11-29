@@ -407,21 +407,24 @@ def render_application(otb_root,appname, allapps, display_module_name=False):
     # Create the application without logger to avoid the deprecation warning log
     app = otbApplication.Registry.CreateApplicationWithoutLogger(appname)
 
-    application_documentation_warnings(app)
+    output = ""
+    
+    if app is not None: 
+        application_documentation_warnings(app)
 
-    output = template_application.format(
-        label=appname,
-        deprecation_string=render_deprecation_string(app),
-        multiwriting_string=render_multiwriting_string(app),
-        heading=render_heading(otb_root,app, '=',display_module_name),
-        description=app.GetDescription(),
-        longdescription=make_links(app.GetDocLongDescription(), allapps),
-        parameters=render_parameters(app),
-        examples_cli=render_all_examples_cli(app),
-        examples_python=render_all_examples_python(app),
-        limitations=render_limitations(app),
-        see_also=make_links(render_see_also(app), allapps)
-    )
+        output = template_application.format(
+            label=appname,
+            deprecation_string=render_deprecation_string(app),
+            multiwriting_string=render_multiwriting_string(app),
+            heading=render_heading(otb_root,app, '=',display_module_name),
+            description=app.GetDescription(),
+            longdescription=make_links(app.GetDocLongDescription(), allapps),
+            parameters=render_parameters(app),
+            examples_cli=render_all_examples_cli(app),
+            examples_python=render_all_examples_python(app),
+            limitations=render_limitations(app),
+            see_also=make_links(render_see_also(app), allapps)
+        )
 
     return output
 
