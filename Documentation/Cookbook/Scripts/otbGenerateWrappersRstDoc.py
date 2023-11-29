@@ -408,7 +408,7 @@ def render_application(otb_root,appname, allapps, display_module_name=False):
     app = otbApplication.Registry.CreateApplicationWithoutLogger(appname)
 
     output = ""
-    
+
     if app is not None: 
         application_documentation_warnings(app)
 
@@ -447,6 +447,7 @@ def GenerateRstForModules(rst_dir,otb_root):
     moduleslist.remove("ThirdParty")
     moduleslist.remove("Remote")
     moduleslist.remove("Miscellaneous")
+    moduleslist.sort()
 
     for mod in moduleslist:
         appIndexFile.write('\tApplications/' + mod + '.rst\n')
