@@ -194,7 +194,7 @@ redhat-xdk-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-redhat-superbuild-base:8
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc -DOTB_FULL_BUILD:BOOL=ON
 
 redhat-xdk-build:
   extends: .common-build
@@ -206,27 +206,6 @@ redhat-xdk-build:
     - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux_RH8-Dependencies.tar.gz
   needs:
     - job: redhat-xdk-prepare
-      artifacts: true
-
-
-## MacOS superbuild
-macos-xdk-prepare:
-  extends: .common-prepare
-  tags:
-    - macos
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=macos-10.14.6-clang
-
-macos-xdk-build:
-  tags:
-    - macos
-  extends: .common-build
-  script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=macos-10.14.6-clang
-    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=macos-10.14.6-clang
-    - mv build_packages/OTB-*.tar.gz . || true
-  needs:
-    - job: macos-xdk-prepare
       artifacts: true
 
 ## Windows
@@ -345,44 +324,6 @@ ubuntu-xdk-report:
     - job: ubuntu-xdk-qa-static-analysis
       artifacts: true
 
-# #------------------------- Conda packages jobs ---------------------------------
-# conda-linux-build:
-#   extends: .common
-#   stage: build
-#   only:
-#     - nightly
-#     - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
-#   image: $BUILD_IMAGE_REGISTRY/otb-conda-build:latest
-#   allow_failure: true
-#   script:
-#     - export otb_tag=${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
-#     - ./CI/conda_build.sh
-#   after_script: []
-#   needs:
-#     - job: fast-build
-#       artifacts: false
-#   artifacts:
-#     when: always
-#     expire_in: 24 hrs
-#     paths:
-#       - conda-bld/*
-
-# conda-linux-deploy:
-#   extends: .general
-#   stage: deploy
-#   only:
-#     - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
-#   image: $BUILD_IMAGE_REGISTRY/otb-conda-build:latest
-#   before_script:
-#     # Provision efficiently the local LFS cache before checkout
-#     - git lfs fetch origin $CI_COMMIT_SHA
-#     - git checkout -f -q $CI_COMMIT_SHA
-#   script:
-#     - ./CI/conda_deploy.sh
-#   needs:
-#     - job: conda-linux-build
-#       artifacts: yes
-
 #---------------------------- Deploy job ---------------------------------------
 deploy:
   tags:
@@ -400,9 +341,7 @@ deploy:
   script:
     - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
   needs:
-    - job: ubuntu-xdk-build-core
-      artifacts: true
-    - job: macos-xdk-build
+    - job: ubuntu-xdk-build-full
       artifacts: true
     - job: windows-10-build
       artifacts: true
