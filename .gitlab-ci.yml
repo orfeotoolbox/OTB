@@ -147,19 +147,19 @@ legal-check:
 #------------------------- prepare & build jobs --------------------------------
 
 ## Ubuntu superbuild
-ubuntu-xdk-prepare:
+ubuntu-prepare-core:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm
 
-ubuntu-xdk-prepare-full:
+ubuntu-prepare-full:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
 
-ubuntu-xdk-build-core:
+ubuntu-build-core:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
@@ -171,10 +171,10 @@ ubuntu-xdk-build-core:
     - mv build_packages/OTB-*.tar.gz . || true
     - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux-Core-Dependencies.tar.gz
   needs:
-    - job: ubuntu-xdk-prepare
+    - job: ubuntu-prepare-core
       artifacts: true
 
-ubuntu-xdk-build-full:
+ubuntu-build-full:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
@@ -182,21 +182,21 @@ ubuntu-xdk-build-full:
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full -DNAME_SUFFIX:string=-full-glibc-2.31
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full -DNAME_SUFFIX:string=-glibc-2.31
     - mv build_packages/OTB-*.tar.gz . || true
     - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux-All-Dependencies.tar.gz
   needs:
-    - job: ubuntu-xdk-prepare-full
+    - job: ubuntu-prepare-full
       artifacts: true
 
 ## CentOS superbuild
-redhat-xdk-prepare:
+redhat-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-redhat-superbuild-base:8
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc -DOTB_FULL_BUILD:BOOL=ON
 
-redhat-xdk-build:
+redhat-build:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-redhat-superbuild-base:8
   script:
@@ -205,7 +205,7 @@ redhat-xdk-build:
     - mv build_packages/OTB-*.tar.gz . || true
     - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux_RH8-Dependencies.tar.gz
   needs:
-    - job: redhat-xdk-prepare
+    - job: redhat-prepare
       artifacts: true
 
 ## Windows
@@ -250,7 +250,7 @@ windows-10-build:
       artifacts: true
 
 #------------------------- QA related jobs -------------------------------------
-ubuntu-xdk-qa-code-coverage:
+ubuntu-qa-code-coverage:
   extends: .common-build
   only:
     refs:
@@ -269,10 +269,10 @@ ubuntu-xdk-qa-code-coverage:
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
   needs:
-    - job: ubuntu-xdk-prepare
+    - job: ubuntu-prepare-full
       artifacts: true
 
-ubuntu-xdk-qa-static-analysis:
+ubuntu-qa-static-analysis:
   extends: .common-build
   only:
     refs:
@@ -293,10 +293,10 @@ ubuntu-xdk-qa-static-analysis:
                2> build/cppcheck_report.xml
   after_script: []
   needs:
-    - job: ubuntu-xdk-prepare
+    - job: ubuntu-prepare-full
       artifacts: true
 
-ubuntu-xdk-report:
+ubuntu-sonar-report:
   extends: .common
   variables:
     GIT_DEPTH: ""
@@ -319,9 +319,9 @@ ubuntu-xdk-report:
 
   after_script: []
   needs:
-    - job: ubuntu-xdk-qa-code-coverage
+    - job: ubuntu-qa-code-coverage
       artifacts: true
-    - job: ubuntu-xdk-qa-static-analysis
+    - job: ubuntu-qa-static-analysis
       artifacts: true
 
 #---------------------------- Deploy job ---------------------------------------
@@ -341,11 +341,11 @@ deploy:
   script:
     - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
   needs:
-    - job: ubuntu-xdk-build-full
+    - job: ubuntu-build-full
       artifacts: true
     - job: windows-10-build
       artifacts: true
-    - job: redhat-xdk-build
+    - job: redhat-build
       artifacts: true
 
 update-archive:
@@ -366,7 +366,7 @@ update-archive:
     - ./CI/deploy-archive.sh build_archive
   needs:
     # don't push the archive if Superbuild was not successful
-    - job: ubuntu-xdk-prepare
+    - job: ubuntu-prepare
       artifacts: false
 
 
