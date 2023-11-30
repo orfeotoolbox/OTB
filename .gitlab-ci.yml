@@ -366,7 +366,7 @@ update-archive:
     - ./CI/deploy-archive.sh build_archive
   needs:
     # don't push the archive if Superbuild was not successful
-    - job: ubuntu-prepare
+    - job: ubuntu-prepare-full
       artifacts: false
 
 
