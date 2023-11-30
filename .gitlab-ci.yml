@@ -200,7 +200,7 @@ redhat-build:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-redhat-superbuild-base:8
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc -DOTB_FULL_BUILD:BOOL=ON
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=redhat-8-gcc
     - mv build_packages/OTB-*.tar.gz . || true
     - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux_RH8-Dependencies.tar.gz
