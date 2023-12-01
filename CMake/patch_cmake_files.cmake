@@ -37,7 +37,7 @@ function(patch_cmake_files)
     -DP_DIRS=${DIR_LIST}
     -DP_MATCH=${PATCH_MATCH_STRING}
     -DP_REPLACE=${PATCH_REPLACE_VAR}
-    -P ${CMAKE_CURRENT_SOURCE_DIR}/Packaging/post_install.cmake
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/CMake/post_install.cmake
     RESULT_VARIABLE patch_${PATCH_NAME}_cmake_rv
     )
 

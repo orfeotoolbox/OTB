@@ -48,7 +48,6 @@ else()
 endif()
 
 if(XDK_INSTALL_PATH AND NOT WIN32)
-    list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/Packaging)
     include(patch_cmake_files)
     include(install_without_message)
 
