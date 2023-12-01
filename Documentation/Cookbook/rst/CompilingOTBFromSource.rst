@@ -203,7 +203,7 @@ configuration variables is via the command line ``-D`` option:
 ::
 
     $ cd ~/OTB/build
-    $ cmake -D CMAKE_INSTALL_PREFIX=~/OTB/install ../otb/SuperBuild
+    $ cmake -DCMAKE_INSTALL_PREFIX=~/OTB/install -DXDK_INSTALL_PATH=~/OTB/install ../otb/SuperBuild
 
 You can also set variables manually with ``cmake-gui`` or ``ccmake``.
 
