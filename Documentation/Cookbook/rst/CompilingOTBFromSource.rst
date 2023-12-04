@@ -183,9 +183,11 @@ Important CMake configuration variables:
 * ``BUILD_TESTING``: Activate compilation of the tests
 * ``OTB_BUILD_DEFAULT_MODULES``: Activate all usual modules, required to build the examples
 * ``OTB_USE_XXX``: Activate module *XXX*
-* ``OTBGroup_XXX``: Enable modules in the group *XXX*
+* ``OTB_BUILD_ModuleName``: Enable building of optional modules (SAR,ImageProcessing...) used in the superbuild
+* ``OTBGroup_XXX``: Enable modules in the group *XXX* used in a native build
 * ``OTB_DATA_ROOT``: otb-data repository
 * ``OTB_WRAP_PYTHON``: Enable Python wrapper
+* ``XDK_INSTALL_PATH``: You can choose to build the dependencies in another folder than the otb install prefix. In order to package the dependencies you build, you have to position that variable where you installed the dependencies
 
 SuperBuild only:
 
@@ -244,9 +246,29 @@ corresponding to the OTB version you want to build).
 You are now ready to compile OTB! Simply use the make command (other
 targets can be generated with CMake’s ``-G`` option):
 
+You have to choice for building : have the dependencies installed in another folder than otb or install everything in the same folder.
+The first method is recommended for clarity.
+
+Build the dependencies in another folder than otb install path
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ::
 
-    $ cd ~/OTB/build
+    $ cd ~/OTB/buildxdk
+    $ cmake ../otb/SuperBuild -DXDK_INSTALL_PATH=~/OTB/xdk -DCMAKE_INSTALL_PREFIX=~/OTB/xdk
+    $ make OTB_DEPENDS
+    # now build OTB 
+    $ mkdir ~/OTB/build
+    $ cmake ../otb -DXDK_INSTALL_PATH=/Path/To/xdk -DCMAKE_INSTALL_PREFIX=~/OTB/install
+    $ make
+
+Build the dependencies in the same folder as otb install
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+    
+    $ mkdir ~/OTB/build
+    $ cmake ../otb/SuperBuild -DXDK_INSTALL_PATH=~/OTB/install -DCMAKE_INSTALL_PREFIX=~/OTB/install
     $ make
 
 Applications will be located in the ``CMAKE_INSTALL_PREFIX/bin/`` directory:
