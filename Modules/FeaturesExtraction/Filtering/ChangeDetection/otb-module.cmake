@@ -18,27 +18,30 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Geometric moments are widely used in image processing and
-pattern recognition. This module contains classes that implement many moments: Hu,
-Flusser, and so on. Note that some of them can be evaluated along a path, instead
-of an image.")
+set(DOCUMENTATION "Change detection techniques try to detect and locate areas
+which have changed between two or more observations of the same scene. These
+changes can be of different types, with different origins and of different temporal
+length. This module contains algorithms that can be used for different situations:
+abrupt changes in an image pair, abrupt changes within an image series and a
+known date, abrupt changes within an image series and an unknown date, progressive
+changes within an image series.")
 
-otb_module(OTBMoments
+otb_module(OTBChangeDetection
   DEPENDS
     OTBCommon
+    OTBStatistics
     OTBITK
-    OTBPath
+    OTBProjection
+    OTBImageManipulation
 
   TEST_DEPENDS
-    OTBImageBase
-    OTBImageIO
-    OTBImageManipulation
-    OTBInterpolation
     OTBTestKernel
+    OTBImageIO
+    OTBImageBase
 
   DESCRIPTION
     "${DOCUMENTATION}"
 
   COMPONENT
-    Core
+    FeaturesExtraction
 )

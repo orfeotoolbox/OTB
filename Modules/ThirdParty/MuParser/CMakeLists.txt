@@ -64,5 +64,5 @@ otb_module_impl()
 
 install(FILES ${OTBMuParser_BINARY_DIR}/src/otb_muparser.h
   DESTINATION ${OTBMuParser_INSTALL_INCLUDE_DIR}
-  COMPONENT ImageProcessing
+  COMPONENT FeaturesExtraction
   )

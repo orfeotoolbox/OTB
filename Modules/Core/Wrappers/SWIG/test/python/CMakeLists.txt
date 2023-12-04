@@ -22,7 +22,7 @@ set(TEST_DRIVER otbTestDriver
     --add-before-env PYTHONPATH        ${CMAKE_BINARY_DIR}/${OTB_INSTALL_PYTHON_DIR}
     --add-before-env OTB_APPLICATION_PATH $<TARGET_FILE_DIR:otbapp_OrthoRectification>)
 
-if(OTBGroup_ImageProcessing)
+if(OTBGroup_FeaturesExtraction)
   set(TEST_DRIVER ${TEST_DRIVER} 
   --add-before-env OTB_APPLICATION_PATH $<TARGET_FILE_DIR:otbapp_Smoothing> )
 endif()
@@ -35,7 +35,7 @@ if(WIN32)
 endif(WIN32)
 
 
-if(OTBGroup_ImageProcessing)
+if(OTBGroup_FeaturesExtraction)
 add_test( NAME pyTvSmoothing
   COMMAND ${TEST_DRIVER} Execute
   ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/PythonTestDriver.py
@@ -166,7 +166,7 @@ add_test( NAME pyTvBug804
   )
 endif()
 
-if ( NUMPY_FOUND AND OTBGroup_ImageProcessing )
+if ( NUMPY_FOUND AND OTBGroup_FeaturesExtraction )
 
 add_test( NAME pyTvNumpyIO
   COMMAND ${TEST_DRIVER} Execute

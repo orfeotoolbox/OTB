@@ -21,7 +21,7 @@
 # Set a list of group names
 set(group_list
   Core
-  ImageProcessing
+  FeaturesExtraction
   Hyperspectral
   Learning
   Miscellaneous
@@ -33,7 +33,7 @@ set(group_list
   )
 
 set(Core_documentation "This group contains the core module used in Orfeo ToolBox")
-set(ImageProcessing_documentation "This group contains algorithms dedicated to hyperspectral remote sensing")
+set(FeaturesExtraction_documentation "This group contains algorithms dedicated to hyperspectral remote sensing")
 set(Hyperspectral_documentation "This group contains algorithms dedicated to hyperspectral remote sensing")
 set(IO_documentation "This group contains everything related to input/output")
 set(Learning_documentation "This group contains algorithms and frameworks related to supervised or unsupervised learning")

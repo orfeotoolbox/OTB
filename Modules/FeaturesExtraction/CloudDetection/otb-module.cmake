@@ -18,27 +18,23 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Geometric moments are widely used in image processing and
-pattern recognition. This module contains classes that implement many moments: Hu,
-Flusser, and so on. Note that some of them can be evaluated along a path, instead
-of an image.")
+set(DOCUMENTATION "This module contains classes to estimate and detect clouds.
+The implemented filters rely on the spectral angle principle to measure the
+radiometric gap between a reference pixel and the other pixels of the image.")
 
-otb_module(OTBMoments
+otb_module(OTBCloudDetection
   DEPENDS
-    OTBCommon
     OTBITK
-    OTBPath
+    OTBImageManipulation
 
   TEST_DEPENDS
     OTBImageBase
     OTBImageIO
-    OTBImageManipulation
-    OTBInterpolation
     OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"
 
   COMPONENT
-    Core
+    FeaturesExtraction
 )

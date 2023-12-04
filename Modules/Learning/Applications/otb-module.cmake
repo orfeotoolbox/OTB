@@ -54,7 +54,7 @@ otb_module(OTBAppLearning
   TEST_DEPENDS
     OTBTestKernel
     OTBCommandLine
-    OTBAppImageProcessing
+    OTBAppFeaturesExtraction
 
   DESCRIPTION
     "${DOCUMENTATION}"

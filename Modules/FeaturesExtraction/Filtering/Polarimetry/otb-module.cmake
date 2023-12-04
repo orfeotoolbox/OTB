@@ -18,27 +18,27 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Geometric moments are widely used in image processing and
-pattern recognition. This module contains classes that implement many moments: Hu,
-Flusser, and so on. Note that some of them can be evaluated along a path, instead
-of an image.")
+set(DOCUMENTATION "This module is concerned with Synthetic Aperture Radar
+images. The ability of radar polarimetry to obtain more information about physical
+properties of the surface than single-channel SAR data has led to a wide range of
+applications. Here, the user can find (for instance) classes to handle different
+representations of a polarisation state, to perform polarimetry synthesis, and so
+on.")
 
-otb_module(OTBMoments
+otb_module(OTBPolarimetry
   DEPENDS
     OTBCommon
     OTBITK
-    OTBPath
+    OTBFunctor
 
   TEST_DEPENDS
     OTBImageBase
     OTBImageIO
-    OTBImageManipulation
-    OTBInterpolation
     OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"
 
   COMPONENT
-    Core
+    FeaturesExtraction
 )

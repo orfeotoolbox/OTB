@@ -18,27 +18,30 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Geometric moments are widely used in image processing and
-pattern recognition. This module contains classes that implement many moments: Hu,
-Flusser, and so on. Note that some of them can be evaluated along a path, instead
-of an image.")
+set(DOCUMENTATION "Dimension reduction is a statistical process, which
+concentrates the amount of information in multivariate data into a fewer number of
+variables (or dimensions). This module implements methods such as Principal Component
+Analysis (PCA), Noise-Adjusted Principal Components Analysis (NAPCA), Maximum
+Noise Fraction (MNF), Fast Independent Component Analysis (FICA), Maximum
+Autocorrelation Factor (MAF), and so on.")
 
-otb_module(OTBMoments
+otb_module(OTBDimensionalityReduction
   DEPENDS
     OTBCommon
     OTBITK
-    OTBPath
+    OTBImageBase
+    OTBImageManipulation
+    OTBObjectList
+    OTBStatistics
 
   TEST_DEPENDS
-    OTBImageBase
     OTBImageIO
-    OTBImageManipulation
-    OTBInterpolation
     OTBTestKernel
+    OTBWavelet
 
   DESCRIPTION
     "${DOCUMENTATION}"
 
   COMPONENT
-    Core
+    FeaturesExtraction
 )

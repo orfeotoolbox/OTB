@@ -18,27 +18,17 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Geometric moments are widely used in image processing and
-pattern recognition. This module contains classes that implement many moments: Hu,
-Flusser, and so on. Note that some of them can be evaluated along a path, instead
-of an image.")
+set(OTBMathParserX_SRC
+  otbParserX.cxx
+  otbParserXPlugins.cxx
+  )
 
-otb_module(OTBMoments
-  DEPENDS
-    OTBCommon
-    OTBITK
-    OTBPath
+add_library(OTBMathParserX ${OTBMathParserX_SRC})
+target_link_libraries(OTBMathParserX
+  ${OTBCommon_LIBRARIES}
+  ${OTBITK_LIBRARIES}
+  ${OTBMuParserX_LIBRARIES}
+  ${OTBStatistics_LIBRARIES}
+  )
 
-  TEST_DEPENDS
-    OTBImageBase
-    OTBImageIO
-    OTBImageManipulation
-    OTBInterpolation
-    OTBTestKernel
-
-  DESCRIPTION
-    "${DOCUMENTATION}"
-
-  COMPONENT
-    Core
-)
+otb_module_target(OTBMathParserX "COMPONENT_FeaturesExtraction")

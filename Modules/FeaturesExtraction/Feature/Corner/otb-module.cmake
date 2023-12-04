@@ -18,27 +18,30 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Geometric moments are widely used in image processing and
-pattern recognition. This module contains classes that implement many moments: Hu,
-Flusser, and so on. Note that some of them can be evaluated along a path, instead
-of an image.")
+set(DOCUMENTATION "This module contains classes that implement classical corner
+detection algorithms (Harris for instance). It also contains classes to detect
+right angle by exploiting the output of a line detection algorithm.")
 
-otb_module(OTBMoments
+otb_module(OTBCorner
   DEPENDS
-    OTBCommon
+    OTBVectorDataBase
     OTBITK
-    OTBPath
+    OTBDescriptors
+    OTBVectorDataManipulation
+    OTBPointSet
+    OTBImageManipulation
+    OTBCommon
 
   TEST_DEPENDS
-    OTBImageBase
-    OTBImageIO
-    OTBImageManipulation
-    OTBInterpolation
+    OTBVectorDataIO
     OTBTestKernel
+    OTBImageIO
+    OTBImageBase
 
   DESCRIPTION
     "${DOCUMENTATION}"
 
   COMPONENT
-    Core
+    FeaturesExtraction
+
 )

@@ -40,7 +40,7 @@ if(UNIX)
 else()
     set(CPACK_ARCHIVE_COMPONENT_INSTALL OFF)
 endif()
-set(CPACK_COMPONENTS_ALL Core ImageProcessing Hyperspectral Miscellaneous Learning Segmentation Sar StereoProcessing Remote Dependencies)
+set(CPACK_COMPONENTS_ALL Core FeaturesExtraction Hyperspectral Miscellaneous Learning Segmentation Sar StereoProcessing Remote Dependencies)
 if(WIN32)
     set(CPACK_GENERATOR "ZIP")
 else()
@@ -73,8 +73,8 @@ cpack_add_component_group(Core
                          [BOLD_TITLE]
                          [REQUIRED])
 
-cpack_add_component(ImageProcessing
-                    [DISPLAY_NAME ImageProcessing]
+cpack_add_component(FeaturesExtraction
+                    [DISPLAY_NAME FeaturesExtraction]
                     [DESCRIPTION "Contains all Image processing libraries and applications for OTB" ]
                     [OPTIONAL])
                  

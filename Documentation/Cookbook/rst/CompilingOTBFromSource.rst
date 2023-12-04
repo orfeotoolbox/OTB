@@ -183,7 +183,7 @@ Important CMake configuration variables:
 * ``BUILD_TESTING``: Activate compilation of the tests
 * ``OTB_BUILD_DEFAULT_MODULES``: Activate all usual modules, required to build the examples
 * ``OTB_USE_XXX``: Activate module *XXX*
-* ``OTB_BUILD_ModuleName``: Enable building of optional modules (SAR,ImageProcessing...) used in the superbuild
+* ``OTB_BUILD_ModuleName``: Enable building of optional modules (SAR,FeaturesExtraction...) used in the superbuild
 * ``OTBGroup_XXX``: Enable modules in the group *XXX* used in a native build
 * ``OTB_DATA_ROOT``: otb-data repository
 * ``OTB_WRAP_PYTHON``: Enable Python wrapper

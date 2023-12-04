@@ -18,27 +18,23 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Geometric moments are widely used in image processing and
-pattern recognition. This module contains classes that implement many moments: Hu,
-Flusser, and so on. Note that some of them can be evaluated along a path, instead
-of an image.")
+set(DOCUMENTATION "TODO")
 
-otb_module(OTBMoments
+otb_module(OTBMathParserX
   DEPENDS
     OTBCommon
     OTBITK
-    OTBPath
+    OTBMuParserX
+    OTBStatistics
 
   TEST_DEPENDS
     OTBImageBase
     OTBImageIO
-    OTBImageManipulation
-    OTBInterpolation
     OTBTestKernel
 
   DESCRIPTION
     "${DOCUMENTATION}"
 
   COMPONENT
-    Core
+    FeaturesExtraction
 )

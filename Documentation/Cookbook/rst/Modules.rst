@@ -8,7 +8,7 @@ Since OTB 9.0, the toolbox is split in packages that can be installed independen
 +=======================+=======================+
 | Core and Dependencies | **Mandatory**         |
 +-----------------------+-----------------------+
-| ImageProcessing       | Optional              |
+| FeaturesExtraction    | Optional              |
 +-----------------------+-----------------------+
 | Learning              | Optional              |
 +-----------------------+-----------------------+
@@ -34,8 +34,8 @@ For the dependencies, there are two packages available depending on your needs :
 
 The application list for each package is described in the Usage section
 
-ImageProcessing
-```````````````
+FeaturesExtraction
+```````````````````
 This optional module contains classical filtering applications, such as texture extraction, edge extraction, smoothing, morphological operations. This module relies on external libraries (MuParser / MuParserX) contained in OTB-All-Dependencies.
 it can be installed along with the Core package with a simple tar extract command and directly available after sourcing the otbenv.profile
 

@@ -18,27 +18,15 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Geometric moments are widely used in image processing and
-pattern recognition. This module contains classes that implement many moments: Hu,
-Flusser, and so on. Note that some of them can be evaluated along a path, instead
-of an image.")
+set(OTBWavelet_SRC
+  otbWaveletGenerator.cxx
+  )
 
-otb_module(OTBMoments
-  DEPENDS
-    OTBCommon
-    OTBITK
-    OTBPath
+add_library(OTBWavelet ${OTBWavelet_SRC})
+target_link_libraries(OTBWavelet
+  ${OTBCommon_LIBRARIES}
+  ${OTBITK_LIBRARIES}
+  ${OTBObjectList_LIBRARIES}
+  )
 
-  TEST_DEPENDS
-    OTBImageBase
-    OTBImageIO
-    OTBImageManipulation
-    OTBInterpolation
-    OTBTestKernel
-
-  DESCRIPTION
-    "${DOCUMENTATION}"
-
-  COMPONENT
-    Core
-)
+otb_module_target(OTBWavelet "COMPONENT_FeaturesExtraction")

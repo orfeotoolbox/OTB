@@ -21,7 +21,7 @@
 # Configuration options for redhat 8
 
 set(site_option
-"OTB_BUILD_ImageProcessing:BOOL=ON
+"OTB_BUILD_FeaturesExtraction:BOOL=ON
 OTB_BUILD_Hyperspectral:BOOL=ON
 OTB_BUILD_Learning:BOOL=ON
 OTB_BUILD_Miscellaneous:BOOL=ON

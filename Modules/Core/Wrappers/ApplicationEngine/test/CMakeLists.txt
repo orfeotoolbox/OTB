@@ -132,7 +132,7 @@ otb_add_test(NAME owTvDocExampleStructureTest COMMAND otbApplicationEngineTestDr
 
 
 # Warning this test require otbapp_Smoothing and otbapp_ConcatenateImages to be built
-# TODO: Move these tests to ImageProcessing
+# TODO: Move these tests to FeaturesExtraction
 # otb_add_test(NAME owTvOutputImageParameter2 COMMAND otbApplicationEngineTestDriver
 #   otbWrapperOutputImageParameterTest2
 #   ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif

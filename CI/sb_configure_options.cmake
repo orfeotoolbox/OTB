@@ -32,7 +32,7 @@ endif()
 
 set ( full_otb_options )
 if(OTB_FULL_BUILD)
-  set(full_otb_options "OTB_BUILD_ImageProcessing:BOOL=ON
+  set(full_otb_options "OTB_BUILD_FeaturesExtraction:BOOL=ON
 OTB_BUILD_Hyperspectral:BOOL=ON
 OTB_BUILD_Learning:BOOL=ON
 OTB_BUILD_Miscellaneous:BOOL=ON

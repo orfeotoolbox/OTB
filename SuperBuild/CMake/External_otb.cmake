@@ -183,7 +183,7 @@ ExternalProject_Add(OTB
   -DOTB_USE_OPENMP:BOOL=${OTB_USE_OPENMP}
   -DOTB_USE_GSL:BOOL=${OTB_USE_GSL}
   -DOTBGroup_Core:BOOL=ON
-  -DOTBGroup_ImageProcessing:BOOL=${OTB_BUILD_ImageProcessing}
+  -DOTBGroup_FeaturesExtraction:BOOL=${OTB_BUILD_FeaturesExtraction}
   -DOTBGroup_Hyperspectral:BOOL=${OTB_BUILD_Hyperspectral}
   -DOTBGroup_Learning:BOOL=${OTB_BUILD_Learning}
   -DOTBGroup_Miscellaneous:BOOL=${OTB_BUILD_Miscellaneous}
