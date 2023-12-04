@@ -453,7 +453,8 @@ def GenerateRstForModules(rst_dir,otb_root):
         appIndexFile.write('\tApplications/' + mod + '.rst\n')
         moduleappDir = mod + "/Applications/app"
         currentModuleDir = os.path.join(otb_modules_dir,moduleappDir)
-        for currentApp in os.listdir(currentModuleDir):
+        sortedapplist = sorted(os.listdir(currentModuleDir))
+        for currentApp in sortedapplist:
             if ".cxx" in currentApp and not "RefineSensorModel" in currentApp:
                 appName = currentApp.split('.')[0][3:]
                 modFileName = rst_dir + '/Applications/'  + mod + '.rst'
