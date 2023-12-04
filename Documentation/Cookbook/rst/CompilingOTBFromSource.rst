@@ -254,7 +254,7 @@ Build the dependencies in another folder than otb install path
 
 ::
 
-    $ cd ~/OTB/buildxdk
+    $ mkdir ~/OTB/buildxdk && cd ~/OTB/buildxdk
     $ cmake ../otb/SuperBuild -DXDK_INSTALL_PATH=~/OTB/xdk -DCMAKE_INSTALL_PREFIX=~/OTB/xdk
     $ make OTB_DEPENDS
     # now build OTB 
@@ -267,7 +267,7 @@ Build the dependencies in the same folder as otb install
 
 ::
     
-    $ mkdir ~/OTB/build
+    $ mkdir ~/OTB/build && cd ~/OTB/build
     $ cmake ../otb/SuperBuild -DXDK_INSTALL_PATH=~/OTB/install -DCMAKE_INSTALL_PREFIX=~/OTB/install
     $ make
 
