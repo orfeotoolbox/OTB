@@ -6,20 +6,42 @@ You are now ready to use OTB. In this page we describe simple use cases that you
 Use Command Line Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This use case shows how to orthorectify a Sentinel-2 image and perform an Edge extraction on a specific ROI.
+This use case shows how to orthorectify a Pleiades Image and perform an Edge extraction on a specific ROI.
 
 .. code-block:: bash
 
-    # let's orthorectify this image 
-    otbcli_OrthoRectification -io.in /Path/To/S2Product/SENTINEL2B_20171008-105012-463_L2A_T31TCH_C_V1-0_SRE_B2.tif -io.out /Path/To/Output/s2_ortho.tif 
+    # First do a BundleToPerfectSensor to have one colored image in full resolution
+    otbcli_BundleToPerfectSensor -inp /Path/To/PleiadesProduct/IMG_PHR1B_P_201308051042194_SEN_690908101-001_R1C1.JP2 -inxs /Path/To/PleiadesProduct/IMG_PHR1B_MS_201308051042194_SEN_690908101-004_R1C1.JP2 -out /Path/To/Output/img_pxs.tif -method "bayes"
+    # let's orthorectify this image, the use of dem and geoid is recommended to avoid precision problems, specially on mountainous areas
+    otbcli_OrthoRectification -io.in /Path/To/Output/img_pxs.tif -io.out /Path/To/Output/pxs_ortho.tif -elev.dem /PathToDEMDirectory -elev.geoid /PathToGeoidFile
     # get the Region we want to extract the edges from
-    otbcli_ExtractROI -in /Path/To/Output/s2_ortho.tif -out /Path/to/Output/s2_extract.tif
+    otbcli_ExtractROI -in /Path/To/Output/pxs_ortho.tif -out /Path/to/Output/pxs_extract.tif -startx 50 -starty 50 -sizex 500 -sizey 500
     # Extract the edges from that cropped image
-    otbcli_EdgeExtraction -in  -out /Path/To/Output/s2_edges.tif
+    otbcli_EdgeExtraction -in /Path/to/Output/pxs_extract.tif -out /Path/To/Output/pxs_extract_edges.tif
 
 Use OTB in QGIS
 ~~~~~~~~~~~~~~~
 
+This use case covers the QGIS configuration and an example of an ExtractROI
+
+To configure the QGIS plugin, follow the :doc:`QGISInterface`
+
+**Note: in a near future this page will be moved as the OTB provider for QGIS will be integrated and maintained in the OTB project**
+
+Open your image and select the extractROI application
+-----------------------------------------------------
+
+.. image:: Art/qgis_openExtractROI.png
+
+Set the parameters for a simple extract of a 500x500 pixels zone, starting at 4000,4000
+---------------------------------------------------------------------------------------
+
+.. image:: Art/qgis_extractROI.png
+
+Display the result
+------------------
+
+.. image:: Art/qgis_result.png
 
 Use Python API
 ~~~~~~~~~~~~~~
