@@ -27,13 +27,6 @@ include(${_OTBModuleMacros_DIR}/OTBModuleDoxygen.cmake)
 include(${_OTBModuleMacros_DIR}/OTBModuleHeaderTest.cmake)
 include(${_OTBModuleMacros_DIR}/OTBApplicationMacros.cmake)
 
-# TODO check if this is still the case:
-if(APPLE)
-  #RK:  compiler visibility nor woking on osx with appleclang xcode.
-  #gcc is a symlink to clang
-  set( USE_COMPILER_HIDDEN_VISIBILITY OFF CACHE INTERNAL "" )
-endif()
-
 include(GenerateExportHeaderCustom)
 
 if(OTB_CPPCHECK_TEST)

@@ -20,9 +20,7 @@
 
 function(sanitize_system_paths input_file)
   # does not support Windows ...
-  if(APPLE)
-    set(SHARED_EXT "\\.dylib")
-  elseif(UNIX)
+  if(UNIX)
     set(SHARED_EXT "\\.so")
   endif()
   set(filtered_content)

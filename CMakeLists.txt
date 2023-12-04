@@ -53,15 +53,6 @@ include(CMakeDependentOption)
 # use ExternalProject
 include(ExternalProject)
 
-#mantis: 1193
-if(APPLE)
-  # https://cmake.org/cmake/help/v3.10/variable/CMAKE_SYSTEM_FRAMEWORK_PATH.html
-  # By default it contains the standard directories for the current system. It
-  # is not intended to be modified by the project, use CMAKE_FRAMEWORK_PATH
-  # for this.
-  set(CMAKE_SYSTEM_FRAMEWORK_PATH "" CACHE PATH "" FORCE)
-endif()
-
 if( CMAKE_HOST_WIN32 )
 
   string( LENGTH "${CMAKE_CURRENT_SOURCE_DIR}" n )

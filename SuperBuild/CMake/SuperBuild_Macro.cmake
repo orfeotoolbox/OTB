@@ -121,11 +121,7 @@ macro(SUPERBUILD_PATCH_SOURCE project)
       set(PATCH_ARGS "--binary")
     endif()
   else()
-    if(APPLE)
-      set(DIFF_FILE_MATCH_STRING "macx")
-    else() #Linux
-      set(DIFF_FILE_MATCH_STRING "linux")
-    endif()
+     set(DIFF_FILE_MATCH_STRING "linux")
   endif() #WIN32
 
   #if an optional diff file is mentioned. then only that is applied
