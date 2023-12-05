@@ -22,6 +22,7 @@
 set CURRENT_SCRIPT_DIR=%~dp0
 
 call :prefix_path PATH "%CURRENT_SCRIPT_DIR%bin"
+call :prefix_path PATH "%CURRENT_SCRIPT_DIR%lib"
 call :prefix_path PYTHONPATH "%CURRENT_SCRIPT_DIR%lib\otb\python"
 call :prefix_path OTB_APPLICATION_PATH "%CURRENT_SCRIPT_DIR%lib\otb\applications"
 
