@@ -56,11 +56,6 @@ option(WITH_REMOTE_MODULES "Build with specific list of remote modules." OFF)
 option(OTB_USE_OPENMP "use openmp" OFF)
 set(OTB_ADDITIONAL_CACHE "" CACHE STRING "Additional cmake options for OTB with the syntax (semi-colon used as a separator): -D<var>:<type>=<value>;-D<var>:<type>=<value>")
 
-
-if(APPLE)
-  set(CMAKE_MACOSX_RPATH TRUE)
-endif()
-
 # use, i.e. don't skip the full RPATH for the build tree
 set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 # when building, don't use the install RPATH already
@@ -174,10 +169,6 @@ list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_BUILD_TYPE:STRING=${CMAKE_BUILD_TYPE}")
 list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_INSTALL_PREFIX:PATH=${SB_INSTALL_PREFIX}")
 list(APPEND SB_CMAKE_CACHE_ARGS "-DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}")
 list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_PREFIX_PATH:PATH=${SB_CMAKE_PREFIX_PATH}")
-
-if(APPLE)
-  list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_MACOSX_RPATH:BOOL=${CMAKE_MACOSX_RPATH}")
-endif()
 
 if(UNIX)
   list(APPEND SB_CMAKE_CACHE_ARGS "-DCMAKE_SKIP_BUILD_RPATH:BOOL=${CMAKE_SKIP_BUILD_RPATH}")
@@ -311,9 +302,6 @@ configure_file(${CMAKE_SOURCE_DIR}/CMake/CTestCustom.cmake.in
   ${CMAKE_BINARY_DIR}/CTestCustom.cmake @ONLY)
 
 # Python
-if(WIN32)
-  set(Python_ROOT_DIR "C:/tools/Python37-x64")
-endif()
 find_package( Python REQUIRED COMPONENTS Interpreter Development)
 if(Python_FOUND)
   message(STATUS "Python Library directory : ${Python_LIBRARY_DIRS}")
