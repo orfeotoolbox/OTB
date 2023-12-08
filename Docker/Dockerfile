@@ -46,6 +46,7 @@ ENV PROJ_LIB=/opt/otb/share/proj
 ENV PATH=/opt/otb/bin:$PATH
 ENV OTB_APPLICATION_PATH=/opt/otb/lib/otb/applications
 ENV LC_NUMERIC=C
+ENV LD_LIBRARY_PATH=/opt/otb/lib:$LD_LIBRARY_PATH
 
 # Default command when using 'docker run' or 'docker create'
 CMD /bin/bash
