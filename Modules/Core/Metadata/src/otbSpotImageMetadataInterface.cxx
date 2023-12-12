@@ -321,6 +321,7 @@ void SpotImageMetadataInterface::Parse(ImageMetadata & imd)
     XMLMetadataSupplier xmlMds(metadataFile);
 
     helper.ParseDimapV1(xmlMds, "Dimap_Document.");
+    helper.ParseSpot5Model(xmlMds, "Dimap_Document.");
 
   }
   // geom metadata case
