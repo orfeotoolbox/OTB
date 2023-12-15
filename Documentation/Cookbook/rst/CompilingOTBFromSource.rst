@@ -362,6 +362,24 @@ installation location:
 
 Table: Third parties and related modules.
 
+Packaging
+---------
+
+Before OTB 9, the packaging was done using makeself which delivers a .run self extractable file. The main problem of this method was the huge number of 
+steps required to have a single package (a successive call to 12 cmake files). In OTB9 we decided to do the packaging with CPack which is included in CMake, making it very simple to package OTB.
+The packaging is done via the "install" routines in the CMake Code. 
+The file describing the packaging is Package_OTB.cmake that you can find in the CMake folder.
+
+To make the packages for OTB, you should simply call :
+
+:: 
+
+    $ cd ~/OTB/build
+    $ make package
+
+By default the packages will be delivered in the subfolder build_packages.
+If you want only one package for OTB, you can set the variable ``CPACK_ARCHIVE_COMPONENT_INSTALL`` to *OFF*.
+
 Known issues
 ------------
 
