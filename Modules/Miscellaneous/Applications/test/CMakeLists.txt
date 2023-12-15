@@ -19,6 +19,113 @@
 #
 
 otb_module_test()
+#----------- LocalStatisticExtraction TESTS ----------------
+otb_test_application(NAME  apTvFELocalStatisticExtraction
+                     APP  LocalStatisticExtraction
+                     OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+                             -channel 1
+                             -radius 3
+                             -out ${TEMP}/apTvFELocalStatisticExtraction.tif
+                     VALID   --compare-image ${NOTOL}
+                   			 ${BASELINE}/feTvRadiometricMomentsImageFilter.tif
+                 		     ${TEMP}/apTvFELocalStatisticExtraction.tif)
+#------------ DomainTransform TESTS -----------------------
+otb_test_application(NAME apTvDomainTransform_wav_db20_fwd
+APP  DomainTransform
+OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+-mode wavelet
+-mode.wavelet.form db20
+-mode.wavelet.nlevels 2
+-direction forward
+-out ${TEMP}/apTvDomainTransform_wav_db20_fwd.tif
+)
+
+otb_test_application(NAME apTvDomainTransform_wav_haar_inv
+APP  DomainTransform
+OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+-mode wavelet
+-mode.wavelet.form haar
+-direction inverse
+-out ${TEMP}/apTvDomainTransform_wav_haar_inv.tif
+)
+
+otb_test_application(NAME apTvDomainTransform_fft_shift_fwd
+APP  DomainTransform
+OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+-mode fft
+-mode.fft.shift true
+-direction forward
+-out ${TEMP}/apTvDomainTransform_fft_shift_fwd.tif
+)
+
+
+otb_test_application(NAME apTvDomainTransform_fft_inv
+APP  DomainTransform
+OPTIONS -in ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+-mode fft
+-direction inverse
+-out ${TEMP}/apTvDomainTransform_fft_shift_inv.tif
+)
+
+#----------------------Dimensionnality reduction TESTS-------------------
+set(algos som)
+
+set(som_params
+-algorithm som
+-algorithm.som.s 10 10
+-algorithm.som.n 3 3
+-algorithm.som.ni 10)
+
+if(OTB_USE_SHARK)
+  list(APPEND classifierList ae pca)
+
+  set(ae_params
+  -algorithm autoencoder
+  -algorithm.autoencoder.nbneuron 8
+  -algorithm.autoencoder.regularization 0.01
+  -algorithm.autoencoder.noise 0
+  -algorithm.autoencoder.rho 0
+  -algorithm.autoencoder.beta 0)
+
+  set(pca_params
+  -algorithm pca
+  -algorithm.pca.dim 8)
+endif()
+
+foreach(algo ${algos})
+  string(TOUPPER ${algo} ualgo)
+  #------------------ TrainDimensionalityReduction TESTS------------------------
+  otb_test_application(NAME apTvDrTrainDimensionalityReduction${ualgo}
+    APP TrainDimensionalityReduction
+    OPTIONS -io.vd ${INPUTDATA}/cuprite_samples.sqlite
+            -io.out ${TEMP}/cuprite_DRModel.${algo}
+            -io.stats ${INPUTDATA}/cupriteStats.xml
+            -feat value_0 value_1 value_2 value_3 value_4 value_5 value_6 value_7 value_8 value_9
+            ${${algo}_params})
+
+  #------------------ ImageDimensionalityReduction TESTS------------------------
+  otb_test_application(NAME apTvDrImageDimensionalityReduction${ualgo}
+    APP ImageDimensionalityReduction
+    OPTIONS -in ${INPUTDATA}/cupriteSubHsi.tif
+            -model ${TEMP}/cuprite_DRModel.${algo}
+            -imstat ${INPUTDATA}/cupriteStats.xml
+            -out ${TEMP}/cupriteReduced_${algo}.tif)
+
+  set_tests_properties( apTvDrImageDimensionalityReduction${ualgo}
+    PROPERTIES DEPENDS apTvDrTrainDimensionalityReduction${ualgo})
+
+  #------------------ VectorDimensionalityReduction TESTS-----------------------
+  otb_test_application(NAME apTvDrVectorDimensionalityReduction${ualgo}
+    APP VectorDimensionalityReduction
+    OPTIONS -in ${INPUTDATA}/cuprite_samples.sqlite
+            -model ${TEMP}/cuprite_DRModel.${algo}
+            -instat ${INPUTDATA}/cupriteStats.xml
+            -out ${TEMP}/cupriteReduced_${algo}.sqlite
+            -feat value_0 value_1 value_2 value_3 value_4 value_5 value_6 value_7 value_8 value_9)
+
+  set_tests_properties( apTvDrVectorDimensionalityReduction${ualgo}
+    PROPERTIES DEPENDS apTvDrTrainDimensionalityReduction${ualgo})
+endforeach()
 
 #----------- GrayScaleMorphologicalOperation TESTS ----------------
 otb_test_application(NAME  apTvFEGrayScaleMorphologicalOperation

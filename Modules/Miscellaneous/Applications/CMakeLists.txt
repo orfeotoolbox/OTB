@@ -18,22 +18,5 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Geometric moments (for pattern recognition) application.")
-
-otb_module(OTBAppMoments
-  DEPENDS
-    OTBMoments
-    OTBImageBase
-    OTBApplicationEngine
-    OTBITK
-
-  TEST_DEPENDS
-    OTBTestKernel
-    OTBCommandLine
-
-  DESCRIPTION
-    "${DOCUMENTATION}"
-
-  COMPONENT
-    Miscellaneous
-)
+project(OTBAppMiscellaneous)
+otb_module_impl()

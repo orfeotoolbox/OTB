@@ -18,14 +18,22 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Morphomath application.")
+set(DOCUMENTATION "Geometric moments (for pattern recognition) application.")
 
-otb_module(OTBAppMorphology
+otb_module(OTBAppMiscellaneous
   DEPENDS
+    OTBMoments
     OTBImageBase
-    OTBObjectList
-    OTBITK
     OTBApplicationEngine
+    OTBITK
+    OTBWavelet
+    OTBFunctor
+    OTBImageManipulation
+    OTBStatistics
+    OTBIOXML
+    OTBDimensionalityReduction
+    OTBDimensionalityReductionLearning
+    OTBObjectList
     OTBMorphologicalProfiles
 
   TEST_DEPENDS
@@ -34,7 +42,7 @@ otb_module(OTBAppMorphology
 
   DESCRIPTION
     "${DOCUMENTATION}"
-  
+
   COMPONENT
     Miscellaneous
 )
