@@ -19,7 +19,7 @@
 #
 
 
-set(DOCUMENTATION "OTB Image Processing Applications")
+set(DOCUMENTATION "OTB Features Extraction Applications")
 
 otb_module(OTBAppFeaturesExtraction
   DEPENDS

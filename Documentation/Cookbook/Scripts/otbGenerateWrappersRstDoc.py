@@ -446,7 +446,6 @@ def GenerateRstForModules(rst_dir,otb_root):
     #Create the rst for each module
     moduleslist.remove("ThirdParty")
     moduleslist.remove("Remote")
-    moduleslist.remove("Miscellaneous")
     moduleslist.sort()
 
     for mod in moduleslist:

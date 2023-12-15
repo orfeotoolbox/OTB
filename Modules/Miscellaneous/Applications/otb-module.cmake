@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 
-set(DOCUMENTATION "Geometric moments (for pattern recognition) application.")
+set(DOCUMENTATION "Miscellaneous applications, will be deprecated soon.")
 
 otb_module(OTBAppMiscellaneous
   DEPENDS
