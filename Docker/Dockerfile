@@ -18,7 +18,7 @@
 # limitations under the License.
 #
 FROM ubuntu:20.04
-ARG OTB_RELEASE=8.0.0
+ARG OTB_RELEASE=9.0.0
 
 # Install system dependencies
 COPY system-dependencies.txt .
@@ -29,13 +29,21 @@ RUN apt-get update -y \
  && rm -rf /var/lib/apt/lists/* system-dependencies.txt
 
 # Install pre-compiled OTB binaries
-RUN curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux64.run -o OTB-$OTB_RELEASE-Linux64.run \
- && chmod +x OTB-$OTB_RELEASE-Linux64.run \
- && ./OTB-$OTB_RELEASE-Linux64.run --target /opt/otb \
- && rm OTB-$OTB_RELEASE-Linux64.run
+RUN curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-Core.tar.gz \
+ && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-FeaturesExtraction.tar.gz \
+ && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-Hyperspectral.tar.gz \
+ && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-SAR.tar.gz  \
+  && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-StereoProcessing.tar.gz  \
+ && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-All-Dependencies.tar.gz
 
-# Symlink Python library to a known path for OTB
-RUN ln -s /usr/lib/x86_64-linux-gnu/libpython3.8.so /opt/otb/lib/libpython3.8.so.rh-python38-1.0
+RUN tar xvf OTB-$OTB_RELEASE-Linux-Core.tar.gz --one-top-level="/opt/otb" \
+ && tar xvf OTB-$OTB_RELEASE-Linux-FeaturesExtraction.tar.gz --one-top-level="/opt/otb" \
+ && tar xvf OTB-$OTB_RELEASE-Linux-Hyperspectral.tar.gz --one-top-level="/opt/otb" \
+ && tar xvf OTB-$OTB_RELEASE-Linux-SAR.tar.gz --one-top-level="/opt/otb" \
+ && tar xvf OTB-$OTB_RELEASE-Linux-StereoProcessing.tar.gz --one-top-level="/opt/otb" \
+ && tar xvf OTB-$OTB_RELEASE-Linux-All-Dependencies.tar.gz --one-top-level="/opt/otb"
+
+RUN cd /opt/otb && sh recompile_bindings.sh
 
 # Persistant env
 ENV CMAKE_PREFIX_PATH=/opt/otb
@@ -44,6 +52,7 @@ ENV GDAL_DRIVER_PATH=disable
 ENV GDAL_DATA=/opt/otb/share/gdal
 ENV PROJ_LIB=/opt/otb/share/proj
 ENV PATH=/opt/otb/bin:$PATH
+ENV LD_LIBRARY_PATH=/opt/otb/lib:$LD_LIBRARY_PATH
 ENV OTB_APPLICATION_PATH=/opt/otb/lib/otb/applications
 ENV LC_NUMERIC=C
 
