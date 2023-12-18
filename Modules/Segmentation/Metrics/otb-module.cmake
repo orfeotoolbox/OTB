@@ -34,4 +34,7 @@ otb_module(OTBMetrics
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Segmentation
 )

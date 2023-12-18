@@ -31,7 +31,7 @@ import time
 import xml.etree.ElementTree as ET
 
 
-trace = False
+trace = True
 
 """
 Check needed environment parameters
@@ -131,7 +131,7 @@ class Handler:
       raise CDashException("Missing argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
     elif trace:
       print( "Argument for buildid request site:"+site+", stamp:"+stamp+", name:"+name+", project:"+project+".")
-    buildid_api = "/api/v1/getbuildid.php?"
+    buildid_api = "/api/getbuildid.php?"
     buildid_params = urllib.parse.urlencode({'project': project, 'site': site, 'stamp': stamp , 'name': name})
     full_url = self.url + buildid_api + buildid_params
     if trace:
@@ -181,7 +181,7 @@ class Handler:
     if ( buildid == "" ):
       print( "Missing argument to build Status")
       return
-    full_url = self.url + "/api/v1/buildSummary.php?buildid=" + buildid
+    full_url = self.url + "/api/buildSummary.php?buildid=" + buildid
     response = urllib.request.urlopen(full_url).read().decode()
     full_status = json.loads(response)
     state = "success"

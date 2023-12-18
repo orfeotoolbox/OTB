@@ -17,7 +17,7 @@ image files. OTB stores the metadata in a special dictionary called
 otbImageMetadata. There is a metadata framework that uses interfaces
 (ImageMetadataInterface) to link data read by GDAL to the
 otbImageMetadata. Thus, to access metadata for a specific sensor, the
-corresponding interface is required. As this time, available
+corresponding interface is required. At this time, available
 interfaces are:
 
 +------------------------+-------------------------+--------------------------------------------------------------------+

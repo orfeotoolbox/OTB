@@ -35,7 +35,7 @@ ctest -S build_wrapping.cmake
 If you want to use a specific Python interpreter:
 
 ```
-ctest -DPYTHON_EXECUTABLE=/my/own/python -S build_wrapping.cmake
+ctest -DPython_EXECUTABLE=/my/own/python -S build_wrapping.cmake
 ```
 
 Note: on Windows, you have to setup MSVC compiler before calling `ctest`. Use

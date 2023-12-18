@@ -381,25 +381,7 @@ else()
         )
       string(REGEX REPLACE "([0-9])\\.([0-9])\\.[0-9]" "\\1\\2"
         _boost_COMPILER_VERSION ${_boost_COMPILER_VERSION})
-      if(APPLE)
-        if(Boost_MINOR_VERSION)
-          if(${Boost_MINOR_VERSION} GREATER 35)
-            # In Boost 1.36.0 and newer, the mangled compiler name used
-            # on Mac OS X/Darwin is "xgcc".
-            set(_boost_COMPILER "-xgcc${_boost_COMPILER_VERSION}")
-          else()
-            # In Boost <= 1.35.0, there is no mangled compiler name for
-            # the Mac OS X/Darwin version of GCC.
-            set(_boost_COMPILER "")
-          endif()
-        else()
-          # We don't know the Boost version, so assume it's
-          # pre-1.36.0.
-          set(_boost_COMPILER "")
-        endif()
-      else()
-        set(_boost_COMPILER "-gcc${_boost_COMPILER_VERSION}")
-      endif()
+      set(_boost_COMPILER "-gcc${_boost_COMPILER_VERSION}")
     endif()
   endif()
 

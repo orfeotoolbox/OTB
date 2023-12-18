@@ -85,7 +85,7 @@ stages:
       - CookBook-*-html.tar.gz
       - CookBook-*.pdf
       - OTB-Doxygen-*.tar.bz2
-      - OTB-*.run
+      - OTB-*.tar.gz
       - OTB-*.zip
       - build/compile_commands.json
       - build/ctest_report.xml
@@ -147,13 +147,19 @@ legal-check:
 #------------------------- prepare & build jobs --------------------------------
 
 ## Ubuntu superbuild
-ubuntu-xdk-prepare:
+ubuntu-prepare-core:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
     - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm
 
-ubuntu-xdk-build-doc:
+ubuntu-prepare-full:
+  extends: .common-prepare
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
+  script:
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-full -DOTB_FULL_BUILD:BOOL=ON
+
+ubuntu-build-core:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
@@ -161,49 +167,45 @@ ubuntu-xdk-build-doc:
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk -DNAME_SUFFIX:string=-glibc-2.27
-    - mv build_packages/OTB-*.run . || true
+    - ctest -VV -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk -DNAME_SUFFIX:string=-core-glibc-2.31
+    - mv build_packages/OTB-*.tar.gz . || true
+    - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux-Core-Dependencies.tar.gz
   needs:
-    - job: ubuntu-xdk-prepare
+    - job: ubuntu-prepare-core
       artifacts: true
 
-## CentOS superbuild
-redhat-xdk-prepare:
+ubuntu-build-full:
+  extends: .common-build
+  image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
+  script:
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full
+    - mv build/CookBook-*-html.tar.gz . || true
+    - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
+    - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full -DNAME_SUFFIX:string=-glibc-2.31
+    - mv build_packages/OTB-*.tar.gz . || true
+    - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux-All-Dependencies.tar.gz
+  needs:
+    - job: ubuntu-prepare-full
+      artifacts: true
+
+## RedHat superbuild
+redhat-prepare:
   extends: .common-prepare
   image: $BUILD_IMAGE_REGISTRY/otb-redhat-superbuild-base:8
   script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc
+    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc -DOTB_FULL_BUILD:BOOL=ON
 
-redhat-xdk-build:
+redhat-build:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-redhat-superbuild-base:8
   script:
     - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=redhat-8-gcc
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=redhat-8-gcc
-    - mv build_packages/OTB-*.run . || true
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=redhat-8-gcc
+    - mv build_packages/OTB-*.tar.gz . || true
+    - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux_RH8-Dependencies.tar.gz
   needs:
-    - job: redhat-xdk-prepare
-      artifacts: true
-
-
-## MacOS superbuild
-macos-xdk-prepare:
-  extends: .common-prepare
-  tags:
-    - macos
-  script:
-    - ctest -VV -S CI/prepare_superbuild.cmake -DIMAGE_NAME:string=macos-10.14.6-clang
-
-macos-xdk-build:
-  tags:
-    - macos
-  extends: .common-build
-  script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=macos-10.14.6-clang
-    - ctest -V -S CI/main_packages.cmake -DIMAGE_NAME:string=macos-10.14.6-clang
-    - mv build_packages/OTB-*.run . || true
-  needs:
-    - job: macos-xdk-prepare
+    - job: redhat-prepare
       artifacts: true
 
 ## Windows
@@ -229,7 +231,7 @@ windows-10-prepare:
   script:
     - call ./CI/dev_env.bat x64 xdk 10
     - buildcache.exe -s
-    - ctest -C Release -V -S CI/prepare_superbuild.cmake
+    - ctest -C Release -V -S CI/prepare_superbuild.cmake -DOTB_FULL_BUILD:BOOL=ON -DPython_ROOT_DIR:STRING="C:/tools/Python37-x64"
     - buildcache.exe -s
 
 windows-10-build:
@@ -239,16 +241,16 @@ windows-10-build:
   script:
     - call ./CI/dev_env.bat x64 otb 10
     - buildcache.exe -s
-    - ctest -V -S CI/main_superbuild.cmake
+    - ctest -V -S CI/main_superbuild.cmake -DPython_ROOT_DIR:STRING="C:/tools/Python37-x64"
     - buildcache.exe -s
-    - ctest -V -S CI/main_packages.cmake
+    - ctest -V -S CI/superbuild_packaging.cmake
     - move "build_packages\OTB-*.zip" . || dir build_packages
   needs:
     - job: windows-10-prepare
       artifacts: true
 
 #------------------------- QA related jobs -------------------------------------
-ubuntu-xdk-qa-code-coverage:
+ubuntu-qa-code-coverage:
   extends: .common-build
   only:
     refs:
@@ -267,10 +269,10 @@ ubuntu-xdk-qa-code-coverage:
                  build/Testing/`head -n 1 build/Testing/TAG`/Test.xml
                  CI/ctest2junit.xsl
   needs:
-    - job: ubuntu-xdk-prepare
+    - job: ubuntu-prepare-full
       artifacts: true
 
-ubuntu-xdk-qa-static-analysis:
+ubuntu-qa-static-analysis:
   extends: .common-build
   only:
     refs:
@@ -291,10 +293,10 @@ ubuntu-xdk-qa-static-analysis:
                2> build/cppcheck_report.xml
   after_script: []
   needs:
-    - job: ubuntu-xdk-prepare
+    - job: ubuntu-prepare-full
       artifacts: true
 
-ubuntu-xdk-report:
+ubuntu-sonar-report:
   extends: .common
   variables:
     GIT_DEPTH: ""
@@ -317,48 +319,10 @@ ubuntu-xdk-report:
 
   after_script: []
   needs:
-    - job: ubuntu-xdk-qa-code-coverage
+    - job: ubuntu-qa-code-coverage
       artifacts: true
-    - job: ubuntu-xdk-qa-static-analysis
+    - job: ubuntu-qa-static-analysis
       artifacts: true
-
-# #------------------------- Conda packages jobs ---------------------------------
-# conda-linux-build:
-#   extends: .common
-#   stage: build
-#   only:
-#     - nightly
-#     - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
-#   image: $BUILD_IMAGE_REGISTRY/otb-conda-build:latest
-#   allow_failure: true
-#   script:
-#     - export otb_tag=${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
-#     - ./CI/conda_build.sh
-#   after_script: []
-#   needs:
-#     - job: fast-build
-#       artifacts: false
-#   artifacts:
-#     when: always
-#     expire_in: 24 hrs
-#     paths:
-#       - conda-bld/*
-
-# conda-linux-deploy:
-#   extends: .general
-#   stage: deploy
-#   only:
-#     - /^release-[0-9]+\.[0-9]+$/@orfeotoolbox/otb
-#   image: $BUILD_IMAGE_REGISTRY/otb-conda-build:latest
-#   before_script:
-#     # Provision efficiently the local LFS cache before checkout
-#     - git lfs fetch origin $CI_COMMIT_SHA
-#     - git checkout -f -q $CI_COMMIT_SHA
-#   script:
-#     - ./CI/conda_deploy.sh
-#   needs:
-#     - job: conda-linux-build
-#       artifacts: yes
 
 #---------------------------- Deploy job ---------------------------------------
 deploy:
@@ -377,13 +341,11 @@ deploy:
   script:
     - ./CI/deploy.sh $CI_COMMIT_REF_NAME $RC_NUMBER
   needs:
-    - job: ubuntu-xdk-build-doc
-      artifacts: true
-    - job: macos-xdk-build
+    - job: ubuntu-build-full
       artifacts: true
     - job: windows-10-build
       artifacts: true
-    - job: redhat-xdk-build
+    - job: redhat-build
       artifacts: true
 
 update-archive:
@@ -404,7 +366,7 @@ update-archive:
     - ./CI/deploy-archive.sh build_archive
   needs:
     # don't push the archive if Superbuild was not successful
-    - job: ubuntu-xdk-prepare
+    - job: ubuntu-prepare-full
       artifacts: false
 
 

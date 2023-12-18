@@ -119,6 +119,7 @@ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/_static DESTINATION ${CMAKE_CURRENT_BINARY
 add_custom_target(generate_otbapps_rst
   COMMAND ${SH_INTERP} ${CMAKE_CURRENT_BINARY_DIR}/RunApplicationsRstGenerator.sh
   ${RST_BINARY_DIR}
+  ${CMAKE_SOURCE_DIR}
   WORKING_DIRECTORY ${RST_BINARY_DIR}
   COMMENT "Auto-generating Application Documentation in RST"
   DEPENDS OTBSWIGWrapper-all

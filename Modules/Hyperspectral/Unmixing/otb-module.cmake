@@ -42,4 +42,7 @@ otb_module(OTBUnmixing
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Hyperspectral
 )

@@ -3,12 +3,12 @@ First Steps
 
 You can install and use OTB via 3 different methods :
 
-    - the standalone package
+    - the standalone packages
     - the docker image
     - building from source
 
-In this page, we describe the **necessary system dependencies** to install for these use cases
-You can follow these tutorials depending on your operating system
+In this page, we describe simple use cases to make your first steps in the OTB world. This chapter covers OTB Core installation (including its required dependencies) and launch of applications.
+For a more detailed installation process, you can refer to the :doc:`Installation` page after installing the required dependencies
 
 Linux
 -----
@@ -19,6 +19,12 @@ Windows
 -------
 
 .. include:: First_Step_Windows.rst
+
+Docker
+------
+
+.. include:: First_Step_Docker.rst
+
 
 MacOS
 -----

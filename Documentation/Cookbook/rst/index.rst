@@ -41,12 +41,14 @@ Table of Contents
 
     First_Steps
     Installation
+    Common_Use_Cases
+    Modules
     Supported_Sensors
-    ReleaseNote8
+    ReleaseNote9
 
 .. toctree::
     :maxdepth: 1
-    :caption: Applications
+    :caption: Usage
 
     CliInterface
     PythonAPI

@@ -31,4 +31,4 @@ target_link_libraries(OTBImageBase
   ${OTBMetadata_LIBRARIES}
   )
 
-otb_module_target(OTBImageBase)
+otb_module_target(OTBImageBase COMPONENT_Core)

@@ -43,4 +43,7 @@ otb_module(OTBTransform
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Core
 )
