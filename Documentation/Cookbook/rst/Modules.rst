@@ -23,16 +23,16 @@ Core and Dependencies
 `````````````````````
 These are the two only mandatory modules for OTB.
 
-**OTB-Core** contains optical image preprocessing applications (Pansharpening, Calibration, Orthorectification, etc.), most useful images manipulation tools (ExtractROI, Superimpose, Mosaic, Concatenate, ..) and various applications to manipulate vector data.
+**OTB-Core** contains optical image preprocessing applications (Pansharpening, Calibration, Orthorectification, etc.), most useful image manipulation tools (ExtractROI, Superimpose, Mosaic, Concatenate, ..) and various applications to manipulate vector data.
 **OTB-Dependencies** contains all third-parties libraries needed to execute Core / All applications
 
 For the dependencies, there are two packages available depending on your needs :
 
 - **OTB-All-Dependencies** this is the **package that you should install by default** : contains the dependencies for the core **and** optional modules.If you install the Core and decide to use an optional module afterwards, you just need to install this optional module over the current OTB install. 
 
-- **OTB-Core-Dependencies** suits to users who only need the core fonctionnalities of OTB.If you plan to install optional module afterwards, you need to download and install le All-Dependencies package before installing the module.
+- **OTB-Core-Dependencies** suits users who only need the core fonctionnalities of OTB.If you plan to install an optional module afterwards, you need to download and install the "All-Dependencies" package before installing the module.
 
-The application list for each package is described in the Usage section
+The application list for each package is described in the ::doc::`Applications`` section
 
 FeaturesExtraction
 ```````````````````
@@ -49,8 +49,8 @@ This module allows to register stereoscopic images and compute disparity in orde
 
 SAR
 ```
-This module contains SAR (Synthetic Aperture Radar) applications and cover all the scope of SAR imagery manipulation : SAR Calibration, Unspeckle with temporal filtering, Interferogram, etc.).
+This module contains SAR (Synthetic Aperture Radar) applications and covers all the scope of SAR imagery manipulation : SAR Calibration, Unspeckle with temporal filtering, Interferogram, etc.
 
 Hyperspectral
 `````````````
-This modules contains specific applications to handle hyperspectral images : spectral angle classification, end member number estimation or unmixing.
+This module contains specific applications to handle hyperspectral images : spectral angle classification, end member number estimation or unmixing.

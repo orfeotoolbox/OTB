@@ -1,8 +1,8 @@
-We provide a Core package and standalone optional packages to install over the Core for GNU/Linux x86_64. These packages includes
+We provide a Core package and standalone optional packages to install over the Core for GNU/Linux x86_64. They include
 all of the OTB applications along with command line launchers.
-Since OTB 9.0, the installation is modular, you have to choose what package to download depending on your use case.
+Since OTB 9.0, the installation is modular, you have to choose which package to download depending on your use case.
 
-See the page :doc:`Modules` for pick the ones you need.
+See the page :doc:`Modules` to pick the ones you need.
 
 Download packages
 ~~~~~~~~~~~~~~~~~
@@ -26,7 +26,8 @@ If you want your installation to be the same as with OTB < 9, you can download a
    # Download mandatory packages to run OTB
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-Core-9.0.tar.gz
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-All-Dependencies-9.0.tar.gz
-   # Download optional package
+   # Download optional packages
+   curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-FeaturesExtraction-9.0.tar.gz
    curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-Learning-9.0.tar.gz
    ...
 
@@ -53,12 +54,14 @@ right-click => Extract to => create OTB-|release| folder and click OK, or from t
 
 .. code-block:: bash
 
-   # Install each tar gz in the same "one top level" folder
+   # Install each tar gz in the same "top level" folder
    tar xvf OTB-Core-9.0.tar.gz --one-top-level="/Path/To/Install/OTB"
+   # It is necessary to install the dependencies AFTER the other modules*
    tar xvf OTB-All-Dependencies-9.0.tar.gz --one-top-level="/Path/To/Install/OTB"
    ...
 
-Please note that the resulting installation can be moved elsewhere on the disk. Just move the folder
+Be careful to install the dependencies *AFTER* the modules because the paths in the cmake files are made modular only when you install
+the dependencies : the resulting installation can be moved elsewhere on the disk. Just move the folder
 elsewhere and source the otbenv.profile.
 Once the archive is extracted, the directory structure consists of:
 
@@ -77,9 +80,6 @@ Once the archive is extracted, the directory structure consists of:
 
 -  ``share``: A folder containing common resources and copyright
    mentions.
-
--  ``tool``: A folder containing useful scripts to test the installation or
-   to uninstall OTB libraries and headers while keeping all the dependencies.
 
 If you want to use the otbcli launchers, you can initialize your
 environment with ``source otbenv.profile``.
