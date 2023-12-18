@@ -59,16 +59,16 @@ macro(otb_create_application)
        install(TARGETS ${APPLICATION_TARGET_NAME}
                EXPORT ${${otb-module}-targets}
                LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
-               COMPONENT RuntimeLibraries)
+               COMPONENT ${${otb-module}_COMPONENT})
      else()
        install(TARGETS ${APPLICATION_TARGET_NAME}
                LIBRARY DESTINATION ${APPLICATION_INSTALL_PATH}
-               COMPONENT RuntimeLibraries)
+               COMPONENT Dependencies)
      endif()
    else()
      install(TARGETS ${APPLICATION_TARGET_NAME}
              LIBRARY DESTINATION lib
-             COMPONENT RuntimeLibraries)
+             COMPONENT Dependencies)
    endif()
 
    # What is the path to the applications
@@ -110,7 +110,7 @@ macro(otb_create_application)
      # Install a version of this script if we are inside the OTB build
      install(PROGRAMS ${_script_output_dir}/${SCRIPT_NAME}
              DESTINATION ${_script_install_dir}
-             COMPONENT Runtime)
+             COMPONENT ${${otb-module}_COMPONENT})
    endforeach()
 
    list(APPEND OTB_APPLICATIONS_NAME_LIST ${APPLICATION_NAME})

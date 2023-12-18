@@ -36,4 +36,7 @@ otb_module(OTBMeanShift
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Segmentation
 )

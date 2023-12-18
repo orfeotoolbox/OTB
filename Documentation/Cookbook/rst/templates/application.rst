@@ -1,4 +1,4 @@
-.. _{label}:
+.. _{label}: 
 
 {heading}
 

@@ -29,4 +29,4 @@ otb_module(OTBMuParser
     "${DOCUMENTATION}"
   )
 
-otb_module_activation_option("Enable MuParser dependent modules" OFF)
+otb_module_activation_option("Enable MuParser dependent modules" ON)

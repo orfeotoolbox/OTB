@@ -35,4 +35,7 @@ otb_module(OTBDimensionalityReductionLearning
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Learning
 )

@@ -54,33 +54,12 @@ otb_add_test(NAME bfTvFlexibleDistanceWithMissingValue COMMAND otbImageBaseTestD
   0.000001
   )
 
-otb_add_test(NAME bfTvItkImagePCAShapeModelEstimatorTest COMMAND otbImageBaseTestDriver
-  --compare-n-images ${EPSILON_7} 4
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors1.tif
-  ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc1.tif
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors2.tif
-  ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc2.tif
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors3.tif
-  ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_pc3.tif
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_mean.tif
-  ${TEMP}/bfInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator_MEAN.tif
-  otbImagePCAShapeModelEstimatorTest
-  ${INPUTDATA}/poupees_sub_c1.png
-  ${INPUTDATA}/poupees_sub_c2.png
-  ${INPUTDATA}/poupees_sub_c3.png
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_mean.tif
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors1.tif
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors2.tif
-  ${TEMP}/bfITKimagePCAShapeModelEstimatorTest_eigen_vectors3.tif
-  )
-set_property(TEST bfTvItkImagePCAShapeModelEstimatorTest PROPERTY DEPENDS bfTvInnerProductPCAImageFilterAllsOutputsWithoutUnbiasedEstimator)
-
 otb_add_test(NAME bfTvFunctionToImageFilterTest COMMAND otbImageBaseTestDriver
   --compare-image ${EPSILON_7}
   ${BASELINE}/bfTvFunctionToImageFilterTest.tif
   ${TEMP}/bfTvFunctionToImageFilterTest.tif
   otbFunctionToImageFilter
-  ${INPUTDATA}/poupees_1canal.hd
+  ${INPUTDATA}/poupees.tif
   ${TEMP}/bfTvFunctionToImageFilterTest.tif
   2 # radius
   )
@@ -130,14 +109,6 @@ otb_add_test(NAME coTvMultiChannelROI_RGB2RGB_PNG COMMAND otbImageBaseTestDriver
   ${INPUTDATA}/couleurs_extrait.png
   ${TEMP}/coMultiChannelExtractROI_RGB2RGB_PNG.png
   -channels 1 2 3 )
-
-otb_add_test(NAME coTvMultiChannelROI_5c_BSQ COMMAND otbImageBaseTestDriver
-  --compare-image ${NOTOL} ${BASELINE}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.tif
-  ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.tif
-  otbMultiChannelExtractROI
-  ${INPUTDATA}/poupees.raw.hdr
-  ${TEMP}/coMultiChannelExtractROI_RGB_ENVI_poupees_303_2_134_330_channels_12321.tif
-  -startX 303 -startY 2 -sizeX 134  -sizeY 330 -channels 1 2 3 2 1 )
 
 otb_add_test(NAME coTvMultiChannelROI_RGB2NG_PNG1 COMMAND otbImageBaseTestDriver
   --compare-image ${NOTOL}  ${BASELINE}/coMultiChannelExtractROI_RGB2NG_PNG_300_10_250_50_channel_1.png
@@ -552,26 +523,6 @@ otb_add_test(NAME   ioTvMultiChannelROI_IkonosNIR2PNG COMMAND otbImageBaseTestDr
   otbMultiChannelExtractROI
   LARGEINPUT{IKONOS/PARIS/po_79039_nir_0000000.tif}
   ${TEMP}/ioExtractROI_IkonosNIR2PNG_100_100_77_300.png
-  -startX 100 -startY 100 -sizeX 77 -sizeY 300
-  -channels 1)
-
-# ---  LUM ----
-otb_add_test(NAME   ioTvMultiChannelROI_IkonosNIR2LUM COMMAND otbImageBaseTestDriver
-  --compare-image ${EPSILON_9}   ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300_nogeoinfo.png
-  ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
-  otbMultiChannelExtractROI
-  LARGEINPUT{IKONOS/PARIS/po_79039_nir_0000000.tif}
-  ${TEMP}/ioExtractROI_IkonosNIR2LUM_100_100_77_300.lum
-  -startX 100 -startY 100 -sizeX 77 -sizeY 300
-  -channels 1)
-
-# ---  BSQ ----
-otb_add_test(NAME   ioTvMultiChannelROI_IkonosNIR2BSQ COMMAND otbImageBaseTestDriver
-  --compare-image ${EPSILON_9}       ${BASELINE}/ioExtractROI_IkonosNIR2PNG_100_100_77_300_nogeoinfo.png
-  ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
-  otbMultiChannelExtractROI
-  LARGEINPUT{IKONOS/PARIS/po_79039_nir_0000000.tif}
-  ${TEMP}/ioExtractROI_IkonosNIR2BSQ_100_100_77_300.hd
   -startX 100 -startY 100 -sizeX 77 -sizeY 300
   -channels 1)
 

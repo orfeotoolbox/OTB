@@ -242,11 +242,6 @@ macro(check_compiler_platform_flags)
     endif()
   endif()
 
-  if(APPLE)
-    option(OTB_USE_64BITS_APPLE_TRUNCATION_WARNING "Turn on warnings on 64bits to 32bits truncations." OFF)
-    mark_as_advanced(OTB_USE_64BITS_APPLE_TRUNCATION_WARNING)
-  endif()
-
   #-----------------------------------------------------------------------------
 
   # for the gnu compiler a -D_PTHREADS is needed on sun

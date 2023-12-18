@@ -26,6 +26,10 @@ set(OTB_MODULES_ALL)
 file(GLOB meta RELATIVE "${OTB_SOURCE_DIR}"
    "${OTB_SOURCE_DIR}/*/*/*/otb-module.cmake" # grouped modules
   )
+file(GLOB submod RELATIVE "${OTB_SOURCE_DIR}"
+   "${OTB_SOURCE_DIR}/*/*/*/*/otb-module.cmake" # grouped modules
+  )
+list(APPEND meta ${submod})
 foreach(f ${meta})
   include(${OTB_SOURCE_DIR}/${f})
   list(APPEND OTB_MODULES_ALL ${otb-module})
@@ -116,7 +120,7 @@ endforeach()
 # However, if you choose to customize which modules will be built, OTB also
 # allows you to manually enable modules by using either individual Module_*
 # options or OTBGroup_* options.
-option(OTB_BUILD_DEFAULT_MODULES "Build the default OTB modules." ON)
+option(OTB_BUILD_DEFAULT_MODULES "Build the default OTB modules." OFF)
 
 #----------------------------------------------------------------------
 # Provide an option to build the tests of dependencies of a module when
@@ -159,7 +163,7 @@ macro(otb_module_enable otb-module _needed_by)
       foreach(dep IN LISTS OTB_MODULE_${otb-module}_OPTIONAL_DEPENDS)
         otb_module_enable(${dep} ${otb-module})
       endforeach()
-      if(${otb-module}_TESTED_BY AND (OTB_BUILD_DEFAULT_MODULES OR OTB_BUILD_ALL_MODULES_FOR_TESTS OR Module_${otb-module}))
+      if(${otb-module}_TESTED_BY AND (BUILD_TESTING OR Module_${otb-module}))
         otb_module_enable(${${otb-module}_TESTED_BY} "")
       endif()
     endif()

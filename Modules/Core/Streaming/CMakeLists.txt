@@ -22,3 +22,13 @@ project(OTBStreaming)
 
 set(OTBStreaming_LIBRARIES OTBStreaming)
 otb_module_impl()
+
+install(DIRECTORY ${OTBStreaming_SOURCE_DIR}/include/
+        DESTINATION ${OTBStreaming_INSTALL_INCLUDE_DIR}
+        COMPONENT Common
+        )
+
+install(TARGETS ${OTBStreaming_LIBRARIES}
+        DESTINATION ${OTB_INSTALL_LIBRARY_DIR}
+        COMPONENT Common
+        )

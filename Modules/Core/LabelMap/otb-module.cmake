@@ -40,4 +40,6 @@ otb_module(OTBLabelMap
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  COMPONENT
+    Core
 )

@@ -38,27 +38,31 @@ cat_path()
 # The below environment variables only affect current shell
 # So if you run again from a terminal, you need to run the script again
 
+OUT_DIR=$(pwd)
 CMAKE_PREFIX_PATH=OUT_DIR
 export CMAKE_PREFIX_PATH
 
 # check and set OTB_APPLICATION_PATH
-OTB_APPLICATION_PATH=$(cat_path "OUT_DIR/lib/otb/applications" "$OTB_APPLICATION_PATH")
+OTB_APPLICATION_PATH=$(cat_path "$OUT_DIR/lib/otb/applications" "$OTB_APPLICATION_PATH")
 
 # Add bin directory to system PATH
-PATH=$(cat_path "OUT_DIR/bin" "$PATH")
+PATH=$(cat_path "$OUT_DIR/bin" "$PATH")
 
 # export PYTHONPATH to import otbApplication.py
-PYTHONPATH=$(cat_path "OUT_DIR/lib/python" "$PYTHONPATH")
+PYTHONPATH=$(cat_path "$OUT_DIR/lib/otb/python" "$PYTHONPATH")
+PYTHONPATH=$(cat_path "$OUT_DIR/lib/python3/dist-packages" "$PYTHONPATH")
 
 # set numeric locale to C
 LC_NUMERIC=C
 
 # set GDAL_DATA variable used by otb application
-GDAL_DATA=OUT_DIR/share/gdal
+GDAL_DATA=$OUT_DIR/share/gdal
 
-PROJ_LIB=OUT_DIR/share/proj
+PROJ_LIB=$OUT_DIR/share/proj
 
 export GDAL_DRIVER_PATH=disable
+
+export LD_LIBRARY_PATH=$OUT_DIR/lib:$LD_LIBRARY_PATH
 
 # export variables
 export LC_NUMERIC

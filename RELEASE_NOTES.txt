@@ -12,7 +12,7 @@ Bugs fixed:
    * !922: Fix strange behavior of BandMath in python pipeline by calling RegisterPipeline() by Rémi Cresson
    * !920: Correctly take into account the extended filename writerpctag by Julien Osman
    * !918: Fix Pixel shift in pleiades orthorectification by Thibaut ROMAIN
-   * !914: Read RPC model from images writen by OTB by Julien Osman
+   * !914: Read RPC model from images written by OTB by Julien Osman
    * !879: Fix SetParameterString for listview parameters by Cédric Traizet
 
 Documentation:
@@ -48,7 +48,7 @@ CI:
   
 Documentation:
 
-   * !911: Fix formating issue by Julien Osman
+   * !911: Fix formatting issue by Julien Osman
    * !911: Update warning message about python version by Julien Osman
 
 

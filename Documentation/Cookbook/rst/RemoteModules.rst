@@ -152,7 +152,6 @@ the applications of your module will be installed in the same folder as OTB appl
 
   mkdir /Path/to/Module/build && cd /Path/to/Module/build
   cmake -DOTB_DIR=/PathTo/OTB/install -DOTB_BUILD_MODULE_AS_STANDALONE=ON
-  -DCMAKE_CXX_FLAGS=-D_GLIBCXX_USE_CXX11_ABI=0
   -DCMAKE_INSTALL_PREFIX=/theModulePath/install -DCMAKE_INSTALL_RPATH=/theModulePath/install/lib 
   -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE ../
   make install
@@ -420,7 +419,7 @@ To add a **test executed by a Python script** using OTB Applications bindings:
         --add-before-env OTB_APPLICATION_PATH $<TARGET_FILE_DIR:otbapp_EmptyApp> )
 
     otb_add_test(NAME otbEmptyScriptTest
-      COMMAND ${TEST_DRIVER} Execute ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/EmptyScript.py)
+      COMMAND ${TEST_DRIVER} Execute ${Python_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/EmptyScript.py)
 
 Overall CMakeLists.txt should look like:
 

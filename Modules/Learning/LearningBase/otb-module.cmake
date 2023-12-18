@@ -38,4 +38,7 @@ otb_module(OTBLearningBase
 
   DESCRIPTION
     "${DOCUMENTATION}"
+
+  COMPONENT
+    Learning
 )

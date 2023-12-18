@@ -65,7 +65,7 @@ WORDS_WHITE_LIST="$WORDS_WHITE_LIST,pary"
 # LaTeX
 WORDS_WHITE_LIST="$WORDS_WHITE_LIST,LaTeX,BibTeX,404"
 # Technical terms
-WORDS_WHITE_LIST="$WORDS_WHITE_LIST,SOM,som,HaA,ND,haa,Hsi,Eyt,VectorDatas,ot,inout,Lod"
+WORDS_WHITE_LIST="$WORDS_WHITE_LIST,SOM,som,Som,HaA,ND,haa,Hsi,Eyt,VectorDatas,ot,inout,Lod,LOD"
 # CMake
 WORDS_WHITE_LIST="$WORDS_WHITE_LIST,DEPENDEES,Te,Alls"
 # Names

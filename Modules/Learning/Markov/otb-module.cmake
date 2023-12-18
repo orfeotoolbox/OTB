@@ -36,4 +36,7 @@ otb_module(OTBMarkov
 
   DESCRIPTION
     "${DOCUMENTATION}"
+  
+  COMPONENT
+    Learning
 )

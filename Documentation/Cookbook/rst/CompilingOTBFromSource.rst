@@ -31,8 +31,6 @@ process:
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `Expat <https://sourceforge.net/projects/expat/>`_               | Yes                   |                            | 2.4.8                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `FreeType <https://freetype.org/>`_                              | Yes                   |                            | 2.6.0                    |
-    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `Geos <https://libgeos.org/>`_                                   | Yes                   |                            | 3.9.3 / 3.6.5 (windows)  |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `ITK <http://www.itk.org>`_                                      | Yes                   | 4.6.0                      | 4.13.3                   |
@@ -53,8 +51,6 @@ process:
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `NetCDF <https://github.com/Unidata/netcdf-c>`_                  | Yes                   |                            | 4.7.4                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `Noto Fonts <https://fonts.google.com/noto>`_                    | Yes                   |                            |                          |
-    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `OpenJPEG <https://github.com/uclouvain/openjpeg>`_              | Yes                   |                            | 2.3.1                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `PROJ <https://proj.org/>`_                                      | Yes                   |                            | 8.2.0 / 6.2.1 (windows)  |
@@ -70,8 +66,6 @@ process:
     | `Curl <http://www.curl.haxx.se>`_                                | No                    |                            | 7.54.1                   |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `FFTW <http://www.fftw.org>`_                                    | No                    |                            | 3.3.10                   |
-    +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
-    | `libKML <https://github.com/google/libkml>`_                     | No                    | 1.2                        | 1.3.0                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
     | `libSVM <http://www.csie.ntu.edu.tw/~cjlin/libsvm>`_             | No                    | 2.0                        | 3.25                     |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
@@ -92,14 +86,49 @@ process:
     | `SWIG <https://www.swig.org/>`_                                  | No                    |                            | 4.0.2                    |
     +------------------------------------------------------------------+-----------------------+----------------------------+--------------------------+
 
-GNU/Linux and macOS
--------------------
+GNU/Linux
+---------
+
+System dependencies to build from source
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You have two choices to build from source :
+
+  - **Native build**: you need to install the OTB dependencies packaged in your OS.
+  - **Superbuild build**: you need to install the packages required to build all the OTB dependencies
+
+Common dependencies
++++++++++++++++++++
+
+Debian / Ubuntu
+~~~~~~~~~~~~~~~
+
+  .. code-block:: bash
+
+    apt update -y && apt install -y --no-install-recommends ca-certificates curl make cmake g++ gcc git git-lfs libtool swig python3 python3-dev python3-pip python3-numpy pkg-config patch
+
+    # Additional dependencies if you need to build the documentation
+    apt install -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended doxygen graphviz gnuplot dvipng python3-sphinx sphinx-rtd-theme-common
+    pip install sphinx_rtd_theme
+
+
+Additional dependencies for a native build
+++++++++++++++++++++++++++++++++++++++++++
+
+Debian / Ubuntu
+~~~~~~~~~~~~~~~
+
+  .. code-block:: bash
+
+    # Install mandatory dependencies
+    apt install -y --no-install-recommends libboost-filesystem-dev libboost-serialization-dev libboost-system-dev libboost-thread-dev libcurl4-gnutls-dev libgdal-dev python3-gdal libexpat1-dev libfftw3-dev libgeotiff-dev libgsl-dev libinsighttoolkit4-dev libgeotiff-dev libpng-dev libtinyxml-dev
+    
+    # Install optional dependencies
+    apt install -y --no-install-recommends libmuparser-dev libmuparserx-dev libkml-dev libopencv-core-dev libopencv-ml-dev libopenmpi-dev libsvm-dev
+         
 
 Setting up the build environment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Note: On some distributions, gcc 5+ is not available by default. For example in CentOS 7 the default version
-is 4.8 (gcc 7 can be installed using devtoolset, see devtoolset6_ and devtoolset7_).
 
 The first thing to do is to create a directory for working with OTB.
 This guide will use ``~/OTB`` but you are free to choose something
@@ -154,9 +183,11 @@ Important CMake configuration variables:
 * ``BUILD_TESTING``: Activate compilation of the tests
 * ``OTB_BUILD_DEFAULT_MODULES``: Activate all usual modules, required to build the examples
 * ``OTB_USE_XXX``: Activate module *XXX*
-* ``OTBGroup_XXX``: Enable modules in the group *XXX*
+* ``OTB_BUILD_ModuleName``: Enable building of optional modules (SAR,FeaturesExtraction...) used in the superbuild
+* ``OTBGroup_XXX``: Enable modules in the group *XXX* used in a native build
 * ``OTB_DATA_ROOT``: otb-data repository
 * ``OTB_WRAP_PYTHON``: Enable Python wrapper
+* ``XDK_INSTALL_PATH``: You can choose to build the dependencies in another folder than the otb install prefix. In order to package the dependencies you build, you have to position that variable where you installed the dependencies
 
 SuperBuild only:
 
@@ -174,7 +205,7 @@ configuration variables is via the command line ``-D`` option:
 ::
 
     $ cd ~/OTB/build
-    $ cmake -D CMAKE_INSTALL_PREFIX=~/OTB/install ../otb/SuperBuild
+    $ cmake -DCMAKE_INSTALL_PREFIX=~/OTB/install -DXDK_INSTALL_PATH=~/OTB/install ../otb/SuperBuild
 
 You can also set variables manually with ``cmake-gui`` or ``ccmake``.
 
@@ -212,18 +243,32 @@ of all our dependencies on `the Orfeo ToolBox website
 <https://www.orfeo-toolbox.org/packages>`_ (pick the ’SuperBuild-archives’
 corresponding to the OTB version you want to build).
 
-**Notes about GDAL:** Since OTB 7.0, SuperBuild's GDAL version is 2.4.1. This version needs pkg-config to correctly find OpenJPEG (needed to read and write images with formats such as .jp2, .j2k), the minimal version is 0.21 for GDAL 2.4.1. You can install it with:
-
-::
-
-    apt-get install pkg-config
-
 You are now ready to compile OTB! Simply use the make command (other
 targets can be generated with CMake’s ``-G`` option):
 
+You have to choice for building : have the dependencies installed in another folder than otb or install everything in the same folder.
+The first method is recommended for clarity.
+
+Build the dependencies in another folder than otb install path
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ::
 
-    $ cd ~/OTB/build
+    $ mkdir ~/OTB/buildxdk && cd ~/OTB/buildxdk
+    $ cmake ../otb/SuperBuild -DXDK_INSTALL_PATH=~/OTB/xdk -DCMAKE_INSTALL_PREFIX=~/OTB/xdk
+    $ make OTB_DEPENDS
+    # now build OTB 
+    $ mkdir ~/OTB/build
+    $ cmake ../otb -DXDK_INSTALL_PATH=/Path/To/xdk -DCMAKE_INSTALL_PREFIX=~/OTB/install
+    $ make
+
+Build the dependencies in the same folder as otb install
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+::
+    
+    $ mkdir ~/OTB/build && cd ~/OTB/build
+    $ cmake ../otb/SuperBuild -DXDK_INSTALL_PATH=~/OTB/install -DCMAKE_INSTALL_PREFIX=~/OTB/install
     $ make
 
 Applications will be located in the ``CMAKE_INSTALL_PREFIX/bin/`` directory:
@@ -234,8 +279,6 @@ Applications will be located in the ``CMAKE_INSTALL_PREFIX/bin/`` directory:
 
 will launch the command line version of the **ExtractROI** application,
 while:
-
-::
 
 In order to ensure access to your OTB build from anywhere within your
 system, we recommend setting the following environment variables.
@@ -300,8 +343,6 @@ installation location:
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **CMake variable**        | **3rd party module**   | **Modules depending on it**                                                                                                                                               |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **OTB\_USE\_LIBKML**      | OTBlibkml              | OTBKMZWriter OTBIOKML OTBAppKMZ                                                                                                                                           |
-+---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **OTB\_USE\_CURL**        | OTBCurl                |                                                                                                                                                                           |
 +---------------------------+------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **OTB\_USE\_MUPARSER**    | OTBMuParser            | OTBMathParser OTBDempsterShafer OTBAppClassification OTBAppMathParser OTBAppStereo OTBAppProjection OTBAppSegmentation OTBRoadExtraction OTBRCC8 OTBCCOBIA OTBMeanShift   |
@@ -321,13 +362,23 @@ installation location:
 
 Table: Third parties and related modules.
 
-Windows
--------
+Packaging
+---------
 
-Everything that is needed for OTB development on Windows, including
-compiling from source, is covered in details on the OTB wiki at:
+Before OTB 9, the packaging was done using makeself which delivers a .run self extractable file. The main problem of this method was the huge number of 
+steps required to have a single package (a successive call to 12 cmake files). In OTB9 we decided to do the packaging with CPack which is included in CMake, making it very simple to package OTB.
+The packaging is done via the "install" routines in the CMake Code. 
+The file describing the packaging is Package_OTB.cmake that you can find in the CMake folder.
 
-http://wiki.orfeo-toolbox.org/index.php/OTB_development_on_Windows
+To make the packages for OTB, you should simply call :
+
+:: 
+
+    $ cd ~/OTB/build
+    $ make package
+
+By default the packages will be delivered in the subfolder build_packages.
+If you want only one package for OTB, you can set the variable ``CPACK_ARCHIVE_COMPONENT_INSTALL`` to *OFF*.
 
 Known issues
 ------------
@@ -337,7 +388,7 @@ Please check `our gitlab tracker <https://gitlab.orfeo-toolbox.org/orfeotoolbox/
 Tests
 -----
 
-There are more than 2500 tests for OTB. It can take from 20 minutes to 3
+There are more than 2100 tests for OTB. It can take from 20 minutes to 3
 hours to run them all, depending on compilation options
 (release mode does make a difference) and hardware.
 
@@ -365,14 +416,7 @@ files or ``ctest -I 1,10`` to run tests from 1 to 10.
 Compiling documentation
 -----------------------
 
-To build the CookBook documentation, the following python packages are required:
-``numpy, sphinx, sphinx_rtd_theme``. They are available on pip:
-
-::
-
-    pip install numpy sphinx sphinx_rtd_theme
-
-Enable Python bindings and set ``BUILD_COOKBOOK``:
+Enable Python bindings and set ``BUILD_COOKBOOK`` option to ON:
 
 ::
 
@@ -384,5 +428,3 @@ Then, build the target:
 
     make CookbookHTML
 
-.. _devtoolset6: https://www.softwarecollections.org/en/scls/rhscl/devtoolset-6/
-.. _devtoolset7: https://www.softwarecollections.org/en/scls/rhscl/devtoolset-7/
