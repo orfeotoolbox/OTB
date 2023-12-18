@@ -296,6 +296,7 @@ void StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>::Gene
 
   // Setup the DEM handler if needed
   auto & demHandler = DEMHandler::GetInstance();
+  auto const& threadDemHandler = demHandler.GetHandlerForCurrentThread();
 
   // Set-up a transform to use the DEMHandler
   typedef otb::GenericRSTransform<> RSTransform2DType;
@@ -463,7 +464,7 @@ void StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>::Gene
       RSTransform2DType::InputPointType tmpPoint;
       tmpPoint[0]    = currentPoint1[0];
       tmpPoint[1]    = currentPoint1[1];
-      localElevation = demHandler.GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(tmpPoint));
+      localElevation = GetHeightAboveEllipsoid(threadDemHandler, leftToGroundTransform->TransformPoint(tmpPoint));
     }
     currentPoint1[2] = localElevation;
 
@@ -489,7 +490,7 @@ void StereorectificationDisplacementFieldSource<TInputImage, TOutputImage>::Gene
         RSTransform2DType::InputPointType tmpPoint;
         tmpPoint[0]       = nextLineStart1[0];
         tmpPoint[1]       = nextLineStart1[1];
-        nextLineStart1[2] = demHandler.GetHeightAboveEllipsoid(leftToGroundTransform->TransformPoint(tmpPoint));
+        nextLineStart1[2] = GetHeightAboveEllipsoid(threadDemHandler, leftToGroundTransform->TransformPoint(tmpPoint));
       }
 
 

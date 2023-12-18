@@ -22,7 +22,6 @@
 #define otbPhysicalToRPCSensorModelImageFilter_hxx
 
 #include "otbPhysicalToRPCSensorModelImageFilter.h"
-#include "otbDEMHandler.h"
 
 namespace otb
 {
