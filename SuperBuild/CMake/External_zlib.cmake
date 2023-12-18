@@ -26,8 +26,8 @@ SETUP_SUPERBUILD(ZLIB)
 # Try official release 1.2.13
 ExternalProject_Add(ZLIB
   PREFIX ZLIB
-  URL "https://zlib.net/zlib-1.2.13.tar.gz"
-  URL_MD5 9b8aa094c4e5765dabf4da391f00d15c
+  URL "https://zlib.net/zlib-1.3.tar.gz"
+  URL_MD5 60373b133d630f74f4a1f94c1185a53f
   BINARY_DIR ${ZLIB_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
   DOWNLOAD_DIR ${DOWNLOAD_LOCATION}

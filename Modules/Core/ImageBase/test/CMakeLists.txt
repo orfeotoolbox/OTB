@@ -406,7 +406,7 @@ if(OTB_DATA_USE_LARGEINPUT)
         --compare-image ${EPSILON_9}  ${BASELINE}/ioTvJP22TIF_Extract_${current_type}_res5.tif
         ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif
         otbMultiChannelExtractROI
-        -ushort ${current_file}?resol=5
+        -ushort ${current_file}?&resol=5
         -ushort ${TEMP}/ioTvJP22TIF_Extract_${current_type}_res5_OUT.tif?&box=0:0:128:128
         -channels 1
         -time

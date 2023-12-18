@@ -116,6 +116,12 @@ otb_add_test(NAME owTvOutputImageParameter COMMAND otbApplicationEngineTestDrive
   "my description"
   )
 
+otb_add_test(NAME owTvOutputImageParameter2 COMMAND otbApplicationEngineTestDriver
+  otbWrapperOutputImageParameterTest2
+  ${INPUTDATA}/QB_Toulouse_Ortho_PAN.tif
+  $<TARGET_FILE_DIR:otbapp_BandMath>
+  )
+
 #~ otb_add_test(NAME owTvOutputImageParameterConversion COMMAND otbApplicationEngineTestDriver
   #~ otbWrapperOutputImageParameterConversionTest
   #~ ${INPUTDATA}/poupees.tif
