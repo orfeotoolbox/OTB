@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2022 Centre National d'Etudes Spatiales (CNES)
+ * Copyright (C) 2005-2023 Centre National d'Etudes Spatiales (CNES)
  *
  * This file is part of Orfeo Toolbox
  *
@@ -188,13 +188,22 @@ namespace otb
 
 //
 // Unused variable warnings in Debug/Release management.
-// see http://stackoverflow.com/questions/2290509/debug-vs-ndebug#2290616
-#ifdef OTB_DEBUG
+// assert() macros are defined on NDEBUG and nothing else => stay standard and use NDEBUG instead of OTB_DEBUG
+#if !defined(NDEBUG)
 #define otbUseInDebug(name) name
 #define otbUseInRelease(name)
 #else // NDEBUG
 #define otbUseInDebug(name)
 #define otbUseInRelease(name) name
 #endif // NDEBUG
+
+
+#if __has_cpp_attribute(fallthrough)
+#  define OTB_FALLTHROUGH [[fallthrough]]
+#elif __has_attribute(fallthrough)
+#  define OTB_FALLTHROUGH __attribute__((fallthrough))
+#else
+#  define OTB_FALLTHROUGH
+#endif
 
 #endif // end of otbMacro.h

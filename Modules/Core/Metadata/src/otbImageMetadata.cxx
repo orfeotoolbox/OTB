@@ -26,10 +26,6 @@ namespace otb
 {
 // ---------------------- [ImageMetadataBase] ------------------------------
 
-ImageMetadataBase::ImageMetadataBase()
-{
-}
-
 ImageMetadataBase::ImageMetadataBase(DictType<MDGeom, boost::any> geometryKeys,
                                      DictType<MDNum, double> numericKeys,
                                      DictType<MDStr, std::string> stringKeys,
@@ -47,24 +43,40 @@ ImageMetadataBase::ImageMetadataBase(DictType<MDGeom, boost::any> geometryKeys,
 {}
 
 // -------------------- Geom utility function ----------------------------
-const boost::any & ImageMetadataBase::operator[](const MDGeom& key) const
+const boost::any & ImageMetadataBase::operator[](MDGeom key) const
 {
-  return GeometryKeys.at(key);
+  auto const& wh = GeometryKeys.find(key);
+  if (wh == GeometryKeys.end()) {
+    otbGenericExceptionMacro(itk::ExceptionObject, << "No " << MetaData::EnumToString(key) << " Parameter present in the geometry");
+  }
+  return wh->second;
 }
 
 const Projection::GCPParam & ImageMetadataBase::GetGCPParam() const
 {
-  return boost::any_cast<const Projection::GCPParam &>(GeometryKeys.at(MDGeom::GCP));
+  auto const& wh = GeometryKeys.find(MDGeom::GCP);
+  if (wh == GeometryKeys.end()) {
+    otbGenericExceptionMacro(itk::ExceptionObject, << "No GCP Parameter present in the geometry");
+  }
+  return boost::any_cast<const Projection::GCPParam &>(wh->second);
 }
 
 const Projection::RPCParam & ImageMetadataBase::GetRPCParam() const
 {
-  return boost::any_cast<const Projection::RPCParam &>(GeometryKeys.at(MDGeom::RPC));
+  auto const& wh = GeometryKeys.find(MDGeom::RPC);
+  if (wh == GeometryKeys.end()) {
+    otbGenericExceptionMacro(itk::ExceptionObject, << "No RPC Parameter present in the geometry");
+  }
+  return boost::any_cast<const Projection::RPCParam &>(wh->second);
 }
 
 const SARParam & ImageMetadataBase::GetSARParam() const
 {
-  return boost::any_cast<const SARParam &>(GeometryKeys.at(MDGeom::SAR));
+  auto const& wh = GeometryKeys.find(MDGeom::SAR);
+  if (wh == GeometryKeys.end()) {
+    otbGenericExceptionMacro(itk::ExceptionObject, << "No SAR Parameter present in the geometry");
+  }
+  return boost::any_cast<const SARParam &>(wh->second);
 }
 
 std::string ImageMetadataBase::GetProjectedGeometry() const
@@ -110,12 +122,12 @@ std::string ImageMetadataBase::GetProjectionProj() const
   }
 }
 
-void ImageMetadataBase::Add(const MDGeom& key, const boost::any &value)
+void ImageMetadataBase::Add(MDGeom key, const boost::any &value)
 {
   GeometryKeys[key] = value;
 }
 
-size_t ImageMetadataBase::Remove(const MDGeom& key)
+size_t ImageMetadataBase::Remove(MDGeom key)
 {
   return GeometryKeys.erase(key);
 }
@@ -130,9 +142,9 @@ size_t ImageMetadataBase::RemoveProjectedGeometry()
   return Remove(MDGeom::ProjectionWKT) + Remove(MDGeom::ProjectionEPSG) + Remove(MDGeom::ProjectionProj);
 }
 
-bool ImageMetadataBase::Has(const MDGeom& key) const
+bool ImageMetadataBase::Has(MDGeom key) const
 {
-  return (GeometryKeys.find(key) != GeometryKeys.end());
+  return GeometryKeys.find(key) != GeometryKeys.end();
 }
 
 bool ImageMetadataBase::HasSensorGeometry() const
@@ -147,24 +159,28 @@ bool ImageMetadataBase::HasProjectedGeometry() const
 
 // -------------------- Double utility function ----------------------------
 
-const double & ImageMetadataBase::operator[](const MDNum& key) const
+const double & ImageMetadataBase::operator[](MDNum key) const
 {
-  return NumericKeys.at(key);
+  auto const& wh = NumericKeys.find(key);
+  if (wh == NumericKeys.end()) {
+    otbGenericExceptionMacro(itk::ExceptionObject, << "No "<< MetaData::EnumToString(key) << " Parameter present in the metadata");
+  }
+  return wh->second;
 }
 
-void ImageMetadataBase::Add(const MDNum& key, const double &value)
+void ImageMetadataBase::Add(MDNum key, const double &value)
 {
   NumericKeys[key] = value;
 }
 
-size_t ImageMetadataBase::Remove(const MDNum& key)
+size_t ImageMetadataBase::Remove(MDNum key)
 {
   return NumericKeys.erase(key);
 }
 
-bool ImageMetadataBase::Has(const MDNum& key) const
+bool ImageMetadataBase::Has(MDNum key) const
 {
-  return (NumericKeys.find(key) != NumericKeys.end());
+  return NumericKeys.find(key) != NumericKeys.end();
 }
 
 std::string ImageMetadataBase::GetKeyListNum() const
@@ -179,24 +195,28 @@ std::string ImageMetadataBase::GetKeyListNum() const
 
 // -------------------- String utility function ----------------------------
 
-const std::string & ImageMetadataBase::operator[](const MDStr& key) const
+const std::string & ImageMetadataBase::operator[](MDStr key) const
 {
-  return StringKeys.at(key);
+  auto const& wh = StringKeys.find(key);
+  if (wh == StringKeys.end()) {
+    otbGenericExceptionMacro(itk::ExceptionObject, << "No "<< MetaData::EnumToString(key) << " Parameter present in the metadata");
+  }
+  return wh->second;
 }
 
-void ImageMetadataBase::Add(const MDStr& key, const std::string &value)
+void ImageMetadataBase::Add(MDStr key, const std::string &value)
 {
   StringKeys[key] = value;
 }
 
-size_t ImageMetadataBase::Remove(const MDStr& key)
+size_t ImageMetadataBase::Remove(MDStr key)
 {
   return StringKeys.erase(key);
 }
 
-bool ImageMetadataBase::Has(const MDStr& key) const
+bool ImageMetadataBase::Has(MDStr key) const
 {
-  return (StringKeys.find(key) != StringKeys.end());
+  return StringKeys.find(key) != StringKeys.end();
 }
 
 std::string ImageMetadataBase::GetKeyListStr() const
@@ -208,24 +228,28 @@ std::string ImageMetadataBase::GetKeyListStr() const
 
 // -------------------- LUT1D utility function ----------------------------
 
-const MetaData::LUT1D & ImageMetadataBase::operator[](const MDL1D& key) const
+const MetaData::LUT1D & ImageMetadataBase::operator[](MDL1D key) const
 {
-  return LUT1DKeys.at(key);
+  auto const& wh = LUT1DKeys.find(key);
+  if (wh == LUT1DKeys.end()) {
+    otbGenericExceptionMacro(itk::ExceptionObject, << "No "<< MetaData::EnumToString(key) << " Parameter present in the metadata");
+  }
+  return wh->second;
 }
 
-void ImageMetadataBase::Add(const MDL1D& key, const MetaData::LUT1D &value)
+void ImageMetadataBase::Add(MDL1D key, const MetaData::LUT1D &value)
 {
   LUT1DKeys[key] = value;
 }
 
-size_t ImageMetadataBase::Remove(const MDL1D& key)
+size_t ImageMetadataBase::Remove(MDL1D key)
 {
   return LUT1DKeys.erase(key);
 }
 
-bool ImageMetadataBase::Has(const MDL1D& key) const
+bool ImageMetadataBase::Has(MDL1D key) const
 {
-  return (LUT1DKeys.find(key) != LUT1DKeys.end());
+  return LUT1DKeys.find(key) != LUT1DKeys.end();
 }
 
 std::string ImageMetadataBase::GetKeyListL1D() const
@@ -240,24 +264,28 @@ std::string ImageMetadataBase::GetKeyListL1D() const
 
 // -------------------- 2D LUT utility function ----------------------------
 
-const MetaData::LUT2D & ImageMetadataBase::operator[](const MDL2D& key) const
+const MetaData::LUT2D & ImageMetadataBase::operator[](MDL2D key) const
 {
-  return LUT2DKeys.at(key);
+  auto const& wh = LUT2DKeys.find(key);
+  if (wh == LUT2DKeys.end()) {
+    otbGenericExceptionMacro(itk::ExceptionObject, << "No "<< MetaData::EnumToString(key) << " Parameter present in the metadata");
+  }
+  return wh->second;
 }
 
-void ImageMetadataBase::Add(const MDL2D& key, const MetaData::LUT2D &value)
+void ImageMetadataBase::Add(MDL2D key, const MetaData::LUT2D &value)
 {
   LUT2DKeys[key] = value;
 }
 
-size_t ImageMetadataBase::Remove(const MDL2D& key)
+size_t ImageMetadataBase::Remove(MDL2D key)
 {
   return LUT2DKeys.erase(key);
 }
 
-bool ImageMetadataBase::Has(const MDL2D& key) const
+bool ImageMetadataBase::Has(MDL2D key) const
 {
-  return (LUT2DKeys.find(key) != LUT2DKeys.end());
+  return LUT2DKeys.find(key) != LUT2DKeys.end();
 }
 
 //std::string ImageMetadataBase::GetKeyListL2D() const
@@ -272,24 +300,28 @@ bool ImageMetadataBase::Has(const MDL2D& key) const
 
 // -------------------- Time utility function ----------------------------
 
-const MetaData::TimePoint & ImageMetadataBase::operator[](const MDTime& key) const
+const MetaData::TimePoint & ImageMetadataBase::operator[](MDTime key) const
 {
-  return TimeKeys.at(key);
+  auto const& wh = TimeKeys.find(key);
+  if (wh == TimeKeys.end()) {
+    otbGenericExceptionMacro(itk::ExceptionObject, << "No "<< MetaData::EnumToString(key) << " Parameter present in the metadata");
+  }
+  return wh->second;
 }
 
-void ImageMetadataBase::Add(const MDTime& key, const MetaData::TimePoint &value)
+void ImageMetadataBase::Add(MDTime key, const MetaData::TimePoint &value)
 {
   TimeKeys[key] = value;
 }
 
-size_t ImageMetadataBase::Remove(const MDTime& key)
+size_t ImageMetadataBase::Remove(MDTime key)
 {
   return TimeKeys.erase(key);
 }
 
-bool ImageMetadataBase::Has(const MDTime& key) const
+bool ImageMetadataBase::Has(MDTime key) const
 {
-  return (TimeKeys.find(key) != TimeKeys.end());
+  return TimeKeys.find(key) != TimeKeys.end();
 }
 
 std::string ImageMetadataBase::GetKeyListTime() const
@@ -306,7 +338,11 @@ std::string ImageMetadataBase::GetKeyListTime() const
 
 const std::string & ImageMetadataBase::operator[](const std::string & key) const
 {
-  return ExtraKeys.at(key);
+  auto const& wh = ExtraKeys.find(key);
+  if (wh == ExtraKeys.end()) {
+    otbGenericExceptionMacro(itk::ExceptionObject, << "No "<< MetaData::EnumToString(key) << " Parameter present in the metadata");
+  }
+  return wh->second;
 }
 
 void ImageMetadataBase::Add(const std::string& key, const std::string &value)
@@ -321,7 +357,7 @@ size_t ImageMetadataBase::Remove(const std::string& key)
 
 bool ImageMetadataBase::Has(const std::string& key) const
 {
-  return (ExtraKeys.find(key) != ExtraKeys.end());
+  return ExtraKeys.find(key) != ExtraKeys.end();
 }
 
 void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
@@ -332,43 +368,34 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
   // Converting the GeomKeys
   for (const auto& kv : GeometryKeys)
   {
-    oss.str("");
-    if (kv.first == MDGeom::RPC)
+    std::string value = [&]() -> std::string
     {
-      // To be completed by ImageIO
-      oss << std::string("<RPCParam>");
-    }
-    else if (kv.first == MDGeom::ProjectionEPSG)
-    {
-      oss << std::to_string(boost::any_cast<int>(kv.second));
-    }
-    else if (kv.first == MDGeom::GCP)
-    {
-      // To be completed by ImageIO
-      oss << std::string("<GCPParam>");
-    }
-    else if (kv.first == MDGeom::SensorGeometry)
-    {
-    // MDGeom::SensorGeometry should be exported as "<typeinfo>" where typeinfo is boost::any::type().name()
-      oss << kv.second.type().name();
-    }
-    else if (kv.first == MDGeom::SAR)
-    {
-      // To be completed by ImageIO
-      oss << std::string("<SARParam>");
-    }
-    else if (kv.first == MDGeom::SARCalib)
-    {
-      // To be completed by ImageIO
-      oss << std::string("<SARCalib>");
-    }
-    // TODO : MDGeom::Adjustment
-    else
-    {
-      oss << boost::any_cast<std::string>(kv.second);
-    }
-    kwl.emplace(MetaData::MDGeomNames.left.at(kv.first), oss.str());
-  }
+      switch (kv.first)
+      {
+        case MDGeom::RPC:
+          // To be completed by ImageIO
+          return "<RPCParam>";
+        case MDGeom::ProjectionEPSG:
+          return std::to_string(boost::any_cast<int>(kv.second));
+        case MDGeom::GCP:
+          // To be completed by ImageIO
+          return "<GCPParam>";
+        case MDGeom::SensorGeometry:
+          // MDGeom::SensorGeometry should be exported as "<typeinfo>" where typeinfo is boost::any::type().name()
+          return kv.second.type().name();
+        case MDGeom::SAR:
+          // To be completed by ImageIO
+          return "<SARParam>";
+        case MDGeom::SARCalib:
+          // To be completed by ImageIO
+          return "<SARCalib>";
+        default:
+          // TODO : MDGeom::Adjustment
+          return boost::any_cast<std::string>(kv.second);
+      }
+    }();
+    kwl.emplace(MetaData::MDGeomNames.left.at(kv.first), value);
+  }  // ∀ GeometryKeys
   // Converting the StringKeys
   for (const auto& kv : StringKeys)
   {
@@ -384,16 +411,12 @@ void ImageMetadataBase::ToKeywordlist(Keywordlist& kwl) const
   // Converting the LUT1DKeys
   for (const auto& kv : LUT1DKeys)
   {
-    oss.str("");
-    oss << kv.second.ToString();
-    kwl.emplace(MetaData::MDL1DNames.left.at(kv.first), oss.str());
+    kwl.emplace(MetaData::MDL1DNames.left.at(kv.first), kv.second.ToString());
   }
   // Converting the LUT2DKeys
   for (const auto& kv : LUT2DKeys)
   {
-    oss.str("");
-    oss << kv.second.ToString();
-    kwl.emplace(MetaData::MDL2DNames.left.at(kv.first), oss.str());
+    kwl.emplace(MetaData::MDL2DNames.left.at(kv.first), kv.second.ToString());
   }
   // Converting the TimeKeys
   for (const auto& kv : TimeKeys)
@@ -573,7 +596,7 @@ ImageMetadata ImageMetadata::slice(int start, int end) const
 void ImageMetadata::append(const ImageMetadata& imd)
 {
   ImageMetadataBase::Fuse(imd);
-  
+
   // Copy the bands
   this->Bands.insert(this->Bands.end(), imd.Bands.begin(), imd.Bands.end());
 }
@@ -581,7 +604,7 @@ void ImageMetadata::append(const ImageMetadata& imd)
 void ImageMetadata::Merge(const ImageMetadata& imd)
 {
   ImageMetadataBase::Fuse(imd);
-  
+
   for (unsigned int i = 0; i < std::min(Bands.size(), imd.Bands.size()); ++i)
   {
     Bands[i].Fuse(imd.Bands[i]);
@@ -735,7 +758,7 @@ bool ImageMetadata::FromKeywordlists(const KeywordlistVector& kwlVect)
   return all_parsed;
 }
 
-void ImageMetadata::Add(const MDNum& key, const MetaDataKey::VariableLengthVectorType vlv)
+void ImageMetadata::Add(MDNum key, const MetaDataKey::VariableLengthVectorType vlv)
 {
   assert(this->Bands.size() == vlv.Size());
   const double* vlvIt = vlv.GetDataPointer();
@@ -746,7 +769,7 @@ void ImageMetadata::Add(const MDNum& key, const MetaDataKey::VariableLengthVecto
 }
 
 
-itk::VariableLengthVector<double> ImageMetadata::GetAsVector(const MDNum& key) const
+itk::VariableLengthVector<double> ImageMetadata::GetAsVector(MDNum key) const
 {
   itk::VariableLengthVector<double> output(Bands.size());
   int i = 0;
@@ -761,13 +784,13 @@ itk::VariableLengthVector<double> ImageMetadata::GetAsVector(const MDNum& key) c
 
 
 
-bool ImageMetadata::HasBandMetadata(const MDNum & key) const
+bool ImageMetadata::HasBandMetadata(MDNum key) const
 {
   return std::all_of(Bands.begin(), Bands.end(),
                       [key](ImageMetadataBase band){return band.Has(key);});
 }
 
-bool ImageMetadata::HasBandMetadata(const MDL1D & key) const
+bool ImageMetadata::HasBandMetadata(MDL1D key) const
 {
   return std::all_of(Bands.begin(), Bands.end(),
                       [key](ImageMetadataBase band){return band.Has(key);});
