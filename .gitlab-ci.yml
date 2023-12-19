@@ -397,6 +397,7 @@ release-docker:
   script:
       - /kaniko/executor --cleanup
                        --verbosity warn
-                       --context $CI_PROJECT_DIR/Docker
+                       --context $CI_PROJECT_DIR
                        --dockerfile $CI_PROJECT_DIR/Docker/Dockerfile
-                       --destination $CI_REGISTRY_IMAGE/orfeotoolbox/otb:$CI_COMMIT_BRANCH
+                       --build-arg OTB_RELEASE=9.0.0
+                       --destination $CI_REGISTRY_IMAGE/orfeotoolbox/otb:$OTB_RELEASE

@@ -33,7 +33,7 @@ RUN curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Li
  && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-FeaturesExtraction.tar.gz \
  && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-Hyperspectral.tar.gz \
  && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-SAR.tar.gz  \
-  && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-StereoProcessing.tar.gz  \
+ && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-StereoProcessing.tar.gz  \
  && curl https://www.orfeo-toolbox.org/packages/archives/OTB/OTB-$OTB_RELEASE-Linux-All-Dependencies.tar.gz
 
 RUN tar xvf OTB-$OTB_RELEASE-Linux-Core.tar.gz --one-top-level="/opt/otb" \

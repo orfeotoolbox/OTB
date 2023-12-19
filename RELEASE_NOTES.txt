@@ -1,14 +1,15 @@
 OTB-v9.0.0 - Changes since version 8.1.2 ()
 -------------------------------------------
 Features added:
-  * !939: Refactor OTB in Core and Optional modules by Thibaut ROMAIN
+  * !939: Refactor OTB in Core and Optional modules, use Cmake for packaging by Thibaut ROMAIN
+  * !902: Remove GUI modules by Julien Osman
 
 Bugs fixed:
   * !979: Update GDAL to 3.8.1 by Thibaut ROMAIN
   * !976: Fix handling of SAR Metadata (with empty projection) by Luc Hermitte
 
 Documentation:
-  * !939: Refactor cookbook for more clarity and user friendlyness by Thibaut ROMAIN
+  * !939: Refactor cookbook for more clarity , add a first step page by Thibaut ROMAIN
 
 OTB-v 8.1.2 - Changes since version 8.1.1 (July 24th, 2023)
 -----------------------------------------------------------
