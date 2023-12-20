@@ -71,11 +71,7 @@ if(BUILD_DIR)
 else()
   set (CTEST_BINARY_DIRECTORY "${OTB_SOURCE_DIR}/build/")
 endif()
-if(XDK_INSTALL_PATH)
-  set (CTEST_INSTALL_DIRECTORY "${XDK_INSTALL_PATH}")
-else()
-  set (CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install/")
-endif()
+set (CTEST_INSTALL_DIRECTORY "${OTB_SOURCE_DIR}/install/")
 set (PROJECT_SOURCE_DIR "${OTB_SOURCE_DIR}")
 
 # Ctest command value
