@@ -57,7 +57,7 @@ rm ${jobs_directory}/OTB-*.zip \
 ${jobs_directory}/OTB-*.tar.*
 # Push package
 echo "Pushing new binary and sources packages"
-scp OTB-*.{run,zip} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
+scp OTB-*.{tar.gz,zip} otbpush@otb5-vm2.orfeo-toolbox.org:${jobs_directory}/.
 
 
 echo "Removing old CookBook"
