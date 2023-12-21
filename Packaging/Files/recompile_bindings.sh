@@ -20,4 +20,5 @@
 #
 
 echo "************ Recompiling OTB python bindings with your version of Python ************"
+sed -i "s/FATAL_ERROR/WARNING/g" "$(pwd)/lib/cmake/OTB-9.0/OTBTargets.cmake"
 ctest -S "$(pwd)/share/otb/swig/build_wrapping.cmake" -VV
