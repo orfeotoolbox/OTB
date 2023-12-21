@@ -36,7 +36,7 @@ set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
 # without this you won't be able to pack only specified component
 set(CPACK_DEB_COMPONENT_INSTALL ON)
 if(UNIX)
-    set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
+    set(CPACK_ARCHIVE_COMPONENT_INSTALL OFF)
 else()
     set(CPACK_ARCHIVE_COMPONENT_INSTALL OFF)
 endif()
