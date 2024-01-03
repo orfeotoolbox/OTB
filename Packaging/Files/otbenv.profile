@@ -38,7 +38,7 @@ cat_path()
 # The below environment variables only affect current shell
 # So if you run again from a terminal, you need to run the script again
 
-OUT_DIR=$(pwd)
+OUT_DIR=$(dirname "$0")
 CMAKE_PREFIX_PATH=OUT_DIR
 export CMAKE_PREFIX_PATH
 
