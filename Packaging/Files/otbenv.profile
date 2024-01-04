@@ -72,3 +72,4 @@ export OTB_APPLICATION_PATH
 export PATH
 export PYTHONPATH
 
+source $OUT_DIR/tools/post_install.sh

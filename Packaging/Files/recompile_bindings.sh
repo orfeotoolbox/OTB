@@ -20,13 +20,4 @@
 #
 
 echo "************ Recompiling OTB python bindings with your version of Python ************"
-# Apply necessary patches for a modular install because cmake generates these file at configure time, not at packaging time
-OTB_INSTALL_DIR=$( dirname -- "$( readlink -f -- "$0"; )"; )
-export OTB_INSTALL_DIR
-sed -i "s/FATAL_ERROR/WARNING/g" "$OTB_INSTALL_DIR/lib/cmake/OTB-9.0/OTBTargets.cmake"
-sed -i "s/FATAL_ERROR/WARNING/g" "$OTB_INSTALL_DIR/lib/cmake/OTB-9.0/OTBModuleAPI.cmake"
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" $OTB_INSTALL_DIR/lib/cmake/OTB-9.0/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" $OTB_INSTALL_DIR/lib/cmake/OTB-9.0/Modules/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" $OTB_INSTALL_DIR/lib/cmake/ITK-4.13/*.cmake
-sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" $OTB_INSTALL_DIR/lib/cmake/ITK-4.13/Modules/*.cmake
 ctest -S "$OTB_INSTALL_DIR/share/otb/swig/build_wrapping.cmake" -VV

@@ -450,10 +450,15 @@ COMPONENT Core)
 #start installing script and other stuff related to package
 if(UNIX)
   install( PROGRAMS
-    ${OTB_SOURCE_DIR}/Packaging/Files/check_python_env.sh
     ${OTB_SOURCE_DIR}/Packaging/Files/recompile_bindings.sh
     ${OTB_SOURCE_DIR}/Packaging/Files/otbenv.profile
     DESTINATION .
+    COMPONENT Core
+    )
+    install( PROGRAMS
+    ${OTB_SOURCE_DIR}/Packaging/Files/check_python_env.sh
+    ${OTB_SOURCE_DIR}/Packaging/Files/post_install.sh
+    DESTINATION ./tools
     COMPONENT Core
     )
 endif()
