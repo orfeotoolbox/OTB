@@ -38,31 +38,31 @@ cat_path()
 # The below environment variables only affect current shell
 # So if you run again from a terminal, you need to run the script again
 
-OUT_DIR=$( dirname -- "$( readlink -f -- "$0"; )"; )
-CMAKE_PREFIX_PATH=$OUT_DIR
+OTB_INSTALL_DIR=$( dirname -- "$( readlink -f -- "$0"; )"; )
+CMAKE_PREFIX_PATH=$OTB_INSTALL_DIR
 export CMAKE_PREFIX_PATH
 
 # check and set OTB_APPLICATION_PATH
-OTB_APPLICATION_PATH=$(cat_path "$OUT_DIR/lib/otb/applications" "$OTB_APPLICATION_PATH")
+OTB_APPLICATION_PATH=$(cat_path "$OTB_INSTALL_DIR/lib/otb/applications" "$OTB_APPLICATION_PATH")
 
 # Add bin directory to system PATH
-PATH=$(cat_path "$OUT_DIR/bin" "$PATH")
+PATH=$(cat_path "$OTB_INSTALL_DIR/bin" "$PATH")
 
 # export PYTHONPATH to import otbApplication.py
-PYTHONPATH=$(cat_path "$OUT_DIR/lib/otb/python" "$PYTHONPATH")
-PYTHONPATH=$(cat_path "$OUT_DIR/lib/python3/dist-packages" "$PYTHONPATH")
+PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/otb/python" "$PYTHONPATH")
+PYTHONPATH=$(cat_path "$OTB_INSTALL_DIR/lib/python3/dist-packages" "$PYTHONPATH")
 
 # set numeric locale to C
 LC_NUMERIC=C
 
 # set GDAL_DATA variable used by otb application
-GDAL_DATA=$OUT_DIR/share/gdal
+GDAL_DATA=$OTB_INSTALL_DIR/share/gdal
 
-PROJ_LIB=$OUT_DIR/share/proj
+PROJ_LIB=$OTB_INSTALL_DIR/share/proj
 
 export GDAL_DRIVER_PATH=disable
 
-export LD_LIBRARY_PATH=$OUT_DIR/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$OTB_INSTALL_DIR/lib:$LD_LIBRARY_PATH
 
 # export variables
 export LC_NUMERIC
@@ -71,5 +71,6 @@ export PROJ_LIB
 export OTB_APPLICATION_PATH
 export PATH
 export PYTHONPATH
+export OTB_INSTALL_DIR
 
-source $OUT_DIR/tools/post_install.sh
+source $OTB_INSTALL_DIR/tools/post_install.sh
