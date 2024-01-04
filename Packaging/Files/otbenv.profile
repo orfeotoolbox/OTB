@@ -39,7 +39,7 @@ cat_path()
 # So if you run again from a terminal, you need to run the script again
 
 OUT_DIR=$( dirname -- "$( readlink -f -- "$0"; )"; )
-CMAKE_PREFIX_PATH=OUT_DIR
+CMAKE_PREFIX_PATH=$OUT_DIR
 export CMAKE_PREFIX_PATH
 
 # check and set OTB_APPLICATION_PATH
