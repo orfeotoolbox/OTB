@@ -165,11 +165,11 @@ ubuntu-build-core:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk -DCPACK_ARCHIVE_COMPONENT_INSTALL=ON
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
-    - ctest -VV -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk -DCPACK_ARCHIVE_COMPONENT_INSTALL=ON
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk
     - mv build_packages/OTB-*.tar.gz . || true
     #- mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux-Core-Dependencies.tar.gz
   needs:
@@ -180,10 +180,11 @@ ubuntu-build-full:
   extends: .common-build
   image: $BUILD_IMAGE_REGISTRY/otb-ubuntu-superbuild-base-headless:20.04
   script:
-    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full
+    - ctest -V -S CI/main_superbuild.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full -DCPACK_ARCHIVE_COMPONENT_INSTALL=ON
     - mv build/CookBook-*-html.tar.gz . || true
     - mv build/Documentation/Cookbook/latex/CookBook-*.pdf . || true
     - mv build/Documentation/Doxygen/OTB-Doxygen-*.tar.bz2 . || true
+    - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full 
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=ubuntu-20.04-llvm-xdk-full -DCPACK_ARCHIVE_COMPONENT_INSTALL=OFF
     - mv build_packages/OTB-*.tar.gz . || true
     #- mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux-All-Dependencies.tar.gz
