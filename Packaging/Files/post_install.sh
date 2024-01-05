@@ -18,7 +18,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-echo "************ Sanitizing cmake files and gdal-config files for further use ************"
 # Apply necessary patches for a modular install because cmake generates these file at configure time, not at packaging time
 sed -i "s/FATAL_ERROR/WARNING/g" "$OTB_INSTALL_DIR/lib/cmake/OTB-9.0/OTBTargets.cmake"
 sed -i "s/FATAL_ERROR/WARNING/g" "$OTB_INSTALL_DIR/lib/cmake/OTB-9.0/OTBModuleAPI.cmake"
@@ -28,3 +27,4 @@ sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" $OTB_INSTALL_DIR/lib/cmak
 sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" $OTB_INSTALL_DIR/lib/cmake/ITK-4.13/Modules/*.cmake
 sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" $OTB_INSTALL_DIR/bin/gdal-config
 sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" $OTB_INSTALL_DIR/bin/curl-config
+echo "OK" > $OTB_INSTALL_DIR/tools/install_done.txt

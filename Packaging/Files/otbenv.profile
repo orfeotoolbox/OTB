@@ -73,4 +73,9 @@ export PATH
 export PYTHONPATH
 export OTB_INSTALL_DIR
 
-source $OTB_INSTALL_DIR/tools/post_install.sh
+# The first time after install, run that script to patch cmake files with the right install path. This cannot be done until OTB is installed
+# This call permits to the user not to launch this by hand
+if [ ! -e $OTB_INSTALL_DIR/tools/install_done.txt ]
+then
+  source $OTB_INSTALL_DIR/tools/post_install.sh
+fi
