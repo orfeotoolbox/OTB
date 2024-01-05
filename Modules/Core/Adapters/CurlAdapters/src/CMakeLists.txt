@@ -26,11 +26,11 @@ set(OTBCurlAdapters_SRC
 
 add_library(OTBCurlAdapters ${OTBCurlAdapters_SRC})
 target_link_libraries(OTBCurlAdapters
-  ${OTBCommon_LIBRARIES}
+  ${OTBCommon_LIBRARIES} CURL::libcurl
   )
 
 if (OTBCurl_ENABLED)
-  target_link_libraries(OTBCurlAdapters ${OTBCurl_LIBRARIES})
+  target_link_libraries(OTBCurlAdapters CURL::libcurl)
 endif()
 
 otb_module_target(OTBCurlAdapters COMPONENT_Core)
