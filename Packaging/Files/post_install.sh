@@ -27,4 +27,5 @@ sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" $OTB_INSTALL_DIR/lib/cmak
 sed -i "s/\/builds\/otb\/xdk/\${OTB_INSTALL_PREFIX}/g" $OTB_INSTALL_DIR/lib/cmake/ITK-4.13/Modules/*.cmake
 sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" $OTB_INSTALL_DIR/bin/gdal-config
 sed -i "s/\/builds\/otb\/xdk/\$OTB_INSTALL_DIR/g" $OTB_INSTALL_DIR/bin/curl-config
+source sanitize_rpath.sh
 echo "OK" > $OTB_INSTALL_DIR/tools/install_done.txt
