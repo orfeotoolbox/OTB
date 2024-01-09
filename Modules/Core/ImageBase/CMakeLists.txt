@@ -22,13 +22,3 @@ project(OTBImageBase)
 
 set(OTBImageBase_LIBRARIES OTBImageBase)
 otb_module_impl()
-
-install(DIRECTORY ${OTBImageBase_SOURCE_DIR}/include/
-        DESTINATION ${OTBImageBase_INSTALL_INCLUDE_DIR}
-        COMPONENT Common
-        )
-
-install(TARGETS ${OTBImageBase_LIBRARIES}
-        DESTINATION ${OTB_INSTALL_LIBRARY_DIR}
-        COMPONENT Common
-        )

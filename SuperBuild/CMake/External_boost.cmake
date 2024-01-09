@@ -107,7 +107,12 @@ ExternalProject_Add(BOOST
 # and depend on much saner CMAKE_PREFIX_PATH for cmake projects.
 if(MSVC)
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_82)
+  ExternalProject_Add_Step(BOOST move_dlls_bin
+    COMMAND ${CMAKE_COMMAND} -E copy 
+    ${SB_INSTALL_PREFIX}/lib/boost_*.dll
+    ${SB_INSTALL_PREFIX}/bin
+    DEPENDEES install
+  )
 else()
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include)
 endif()
-SUPERBUILD_PATCH_SOURCE(BOOST)
