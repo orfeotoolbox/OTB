@@ -92,7 +92,7 @@ stages:
       - build/cppcheck_report.xml
       - build/coverage_report.xml
       - build/Testing/Temporary/*.txt #DEBUG
-      - Docker/Dockerfile
+      - Docker/Dockerfile_CI
       - Docker/system-dependencies.txt
 
 .common-prepare:
