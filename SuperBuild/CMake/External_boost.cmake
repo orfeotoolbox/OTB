@@ -107,9 +107,10 @@ ExternalProject_Add(BOOST
 # and depend on much saner CMAKE_PREFIX_PATH for cmake projects.
 if(MSVC)
   set(_SB_Boost_INCLUDE_DIR ${SB_INSTALL_PREFIX}/include/boost-1_82)
+  file(GLOB boost_dlls ${XDK_INSTALL_PATH}/lib/boost*.dll)
   ExternalProject_Add_Step(BOOST move_dlls_bin
     COMMAND ${CMAKE_COMMAND} -E copy 
-    ${SB_INSTALL_PREFIX}/lib/boost_*.dll
+    ${boost_dlls}
     ${SB_INSTALL_PREFIX}/bin
     DEPENDEES install
   )
