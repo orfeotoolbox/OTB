@@ -34,12 +34,6 @@ set(CPACK_DEBIAN_FILE_NAME DEB-DEFAULT)
 # and CPACK_DEB_COMPONENT_INSTALL is set to YES
 set(CPACK_COMPONENTS_GROUPING ONE_PER_GROUP)
 # without this you won't be able to pack only specified component
-set(CPACK_DEB_COMPONENT_INSTALL ON)
-if(UNIX)
-    set(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
-else()
-    set(CPACK_ARCHIVE_COMPONENT_INSTALL OFF)
-endif()
 set(CPACK_COMPONENTS_ALL Core FeaturesExtraction Hyperspectral Miscellaneous Learning Segmentation Sar StereoProcessing Miscellaneous Dependencies)
 if(WIN32)
     set(CPACK_GENERATOR "ZIP")

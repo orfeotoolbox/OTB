@@ -20,4 +20,4 @@
 #
 
 echo "************ Recompiling OTB python bindings with your version of Python ************"
-ctest -S "$(pwd)/share/otb/swig/build_wrapping.cmake" -VV
+ctest -S "$OTB_INSTALL_DIR/share/otb/swig/build_wrapping.cmake" -VV

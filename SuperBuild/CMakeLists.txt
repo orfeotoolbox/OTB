@@ -251,6 +251,7 @@ set(FROM_SYSTEM_LIST)
 set(FROM_SUPERBUILD_LIST)
 set(USE_SYSTEM_PCRE ON)
 set(USE_SYSTEM_SWIG ON)
+set(USE_SYSTEM_OPENSSL OFF)
 
 # Modular building options
 option(OTB_BUILD_Core "Enable building only core modules" ON)

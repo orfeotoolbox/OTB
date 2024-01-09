@@ -29,8 +29,8 @@ set(HDF5_SB_CONFIG)
 
 ExternalProject_Add(HDF5
   PREFIX HDF5
-  URL "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.9/src/hdf5-1.10.9.tar.gz"
-  URL_MD5 a2734f06c3e526feaa4bfd1f7ab4247e
+  URL "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.12/hdf5-1.12.3/src/hdf5-1.12.3.tar.gz"
+  URL_MD5 4da24fcd281b9eeb05dae9b258f72a72
   SOURCE_DIR ${HDF5_SB_SRC}
   BINARY_DIR ${HDF5_SB_BUILD_DIR}
   INSTALL_DIR ${SB_INSTALL_PREFIX}
@@ -47,6 +47,8 @@ ExternalProject_Add(HDF5
     -DHDF5_BUILD_TOOLS:BOOL=OFF
     -DHDF5_ENABLE_SZIP_SUPPORT:BOOL=OFF
     -DHDF5_ENABLE_Z_LIB_SUPPORT:BOOL=ON
+    –DH5_USE_110_API:BOOL=ON
+    -DDEFAULT_API_VERSION:STRING=v110
     ${HDF5_SB_CONFIG}
   CMAKE_COMMAND ${SB_CMAKE_COMMAND}
   LOG_DOWNLOAD 1

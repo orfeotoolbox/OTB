@@ -41,5 +41,5 @@ otb_module_impl()
 install(FILES
   ${OTBCommon_BINARY_DIR}/otbConfigure.h
   DESTINATION ${OTBCommon_INSTALL_INCLUDE_DIR}
-  COMPONENT Common
+  COMPONENT Core
   )
