@@ -8,3 +8,4 @@ cmake
 gcc
 g++
 swig
+findutils

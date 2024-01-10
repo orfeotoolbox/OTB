@@ -406,5 +406,4 @@ release-docker:
                        --verbosity warn
                        --context $CI_PROJECT_DIR
                        --dockerfile $CI_PROJECT_DIR/Docker/Dockerfile_CI
-                       --build-arg OTB_RELEASE=9.0.0
-                       --destination $CI_REGISTRY_IMAGE/orfeotoolbox/otb:$OTB_RELEASE
+                       --destination $CI_REGISTRY_IMAGE/orfeotoolbox/otb:$CI_COMMIT_TAG
