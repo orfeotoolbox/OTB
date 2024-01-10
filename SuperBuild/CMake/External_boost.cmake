@@ -110,10 +110,9 @@ if(WIN32)
   file(GLOB boost_dlls ${SB_INSTALL_PREFIX}/lib/boost*.dll)
   message("Boost Dlls to move : " ${boost_dlls})
   foreach(file_i ${boost_dlls})
-    add_custom_command(OUTPUT boost_dll_moved.txt
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${file_i} ${SB_INSTALL_PREFIX}/bin
-    DEPENDS install
+    ExternalProject_Add_Step(BOOST boost_dll_move
+    COMMAND ${CMAKE_COMMAND} -E copy ${file_i} ${SB_INSTALL_PREFIX}/lib/
+    DEPENDEES install
     )
   endforeach( file_i )
 else()
