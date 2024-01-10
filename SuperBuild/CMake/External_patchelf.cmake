@@ -25,8 +25,8 @@ ADDTO_DEPENDENCIES_IF_NOT_SYSTEM(PATCHELF ZLIB)
 
 ExternalProject_Add(PATCHELF
   PREFIX PATCHELF
-  URL                 "https://github.com/NixOS/patchelf/releases/download/0.18.0/patchelf-0.18.0.tar.gz"
-  URL_MD5             b02099b0d63f06b3fe370f4edfc0c085
+  URL                 "https://github.com/NixOS/patchelf/releases/download/0.14.3/patchelf-0.14.3.tar.gz"
+  URL_MD5             3e0e8c12ede45843269b0a1ef457dd4a
   DOWNLOAD_DIR        ${DOWNLOAD_LOCATION}
   BINARY_DIR          ${PATCHELF_SB_BUILD_DIR}
   INSTALL_DIR         ${SB_INSTALL_PREFIX}
