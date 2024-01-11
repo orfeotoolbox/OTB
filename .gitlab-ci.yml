@@ -207,7 +207,8 @@ redhat-build:
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=redhat-8-gcc -DPACKAGE_BY_MODULE:BOOL=ON
     - ctest -V -S CI/superbuild_packaging.cmake -DIMAGE_NAME:string=redhat-8-gcc -DPACKAGE_BY_MODULE:BOOL=OFF
     - mv build_packages/OTB-*.tar.gz . || true
-    - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux_RH8-Dependencies.tar.gz
+    - mv OTB-9.0.0-Linux-Dependencies.tar.gz OTB-9.0.0-Linux_RedHat-Dependencies.tar.gz
+    - mv OTB-9.0.0-Linux.tar.gz 0TB-9.0.0-Linux_RedHat.tar.gz
   needs:
     - job: redhat-prepare
       artifacts: true

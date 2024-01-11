@@ -144,10 +144,10 @@ the applications of your module will be installed in the same folder as OTB appl
 .. code-block:: bash
 
   mkdir /Path/to/Module/build && cd /Path/to/Module/build
-  cmake -DOTB_DIR=/PathTo/OTB/install -DOTB_BUILD_MODULE_AS_STANDALONE=ON
+  cmake -DOTB_DIR=/PathTo/OTB/install/lib/cmake/OTB-9.0 -DOTB_BUILD_MODULE_AS_STANDALONE=ON
   -DCMAKE_INSTALL_PREFIX=/theModulePath/install -DCMAKE_INSTALL_RPATH=/theModulePath/install/lib 
   -DCMAKE_INSTALL_RPATH_USE_LINK_PATH=TRUE ../
-  make install
+  make -j8 install
 
 the applications will be installed in ``/theModuleInstallFolder/lib`` and the binaries will be available in ``/theModuleInstallFolder/bin`` 
 

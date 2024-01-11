@@ -255,12 +255,13 @@ Build the dependencies in another folder than otb install path
 ::
 
     $ mkdir ~/OTB/buildxdk && cd ~/OTB/buildxdk
-    $ cmake ../otb/SuperBuild -DXDK_INSTALL_PATH=~/OTB/xdk -DCMAKE_INSTALL_PREFIX=~/OTB/xdk
+    # here use the OTB_BUILD var that will take care to build all dependencies needed for them
+    $ cmake ../otb/Superbuild -DCMAKE_INSTALL_PREFIX=$PWD/../xdk -DOTB_BUILD_FeaturesExtraction=ON -DOTB_BUILD_Hyperspectral=ON -DOTB_BUILD_Learning=ON -DOTB_BUILD_Miscellaneous=ON -DOTB_BUILD_SAR=ON -DOTB_BUILD_Segmentation=ON -DOTB_BUILD_StereoProcessing=ON
     $ make OTB_DEPENDS
     # now build OTB 
-    $ mkdir ~/OTB/build
-    $ cmake ../otb -DXDK_INSTALL_PATH=/Path/To/xdk -DCMAKE_INSTALL_PREFIX=~/OTB/install
-    $ make
+    $ cd .. && mkdir otb_build && cd otb_build
+    $ cmake ../otb -DXDK_INSTALL_PATH=/Path/To/xdk -DCMAKE_PREFIX_PATH=~/Workspace/xdk -DCMAKE_INSTALL_PREFIX=~/OTB/install
+    $ make -j8
 
 Build the dependencies in the same folder as otb install
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -268,8 +269,8 @@ Build the dependencies in the same folder as otb install
 ::
     
     $ mkdir ~/OTB/build && cd ~/OTB/build
-    $ cmake ../otb/SuperBuild -DXDK_INSTALL_PATH=~/OTB/install -DCMAKE_INSTALL_PREFIX=~/OTB/install
-    $ make
+    $ cmake ../otb/SuperBuild -DCMAKE_INSTALL_PREFIX=~/OTB/install
+    $ make -j8
 
 Applications will be located in the ``CMAKE_INSTALL_PREFIX/bin/`` directory:
 
